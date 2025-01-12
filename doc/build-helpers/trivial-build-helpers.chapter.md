@@ -754,10 +754,6 @@ This creates a derivation with a directory structure like the following:
 ...
 ```
 
-## `writeReferencesToFile` {#trivial-builder-writeReferencesToFile}
-
-Deprecated. Use [`writeClosure`](#trivial-builder-writeClosure) instead.
-
 ## `writeClosure` {#trivial-builder-writeClosure}
 
 Given a list of [store paths](https://nixos.org/manual/nix/stable/glossary#gloss-store-path) (or string-like expressions coercible to store paths), write their collective [closure](https://nixos.org/manual/nix/stable/glossary#gloss-closure) to a text file.

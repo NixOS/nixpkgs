@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jgosmann";
     repo = "bite-parser";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-C508csRbjCeLgkp66TwDuxUtMITTmub5/TFv8x80HLA=";
   };
 

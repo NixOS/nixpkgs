@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, gtk_engines, gtk-engine-murrine }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gtk_engines,
+  gtk-engine-murrine,
+}:
 
 stdenv.mkDerivation rec {
   pname = "shades-of-gray-theme";

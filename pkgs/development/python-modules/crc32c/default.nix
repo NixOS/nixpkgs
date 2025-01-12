@@ -4,7 +4,7 @@
   fetchFromGitHub,
   pythonOlder,
   pytestCheckHook,
-  setuptools
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ICRAR";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-rWR2MtTLhqqvgdqEyevg/i8ZHM3OU1bJb27JkBx1J3w=";
   };
 

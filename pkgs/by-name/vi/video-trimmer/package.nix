@@ -15,6 +15,7 @@
   libadwaita,
   gst_all_1,
   ffmpeg-headless,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -69,13 +70,19 @@ stdenv.mkDerivation (finalAttrs: {
     )
   '';
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = {
     homepage = "https://gitlab.gnome.org/YaLTeR/video-trimmer";
     description = "Trim videos quickly";
-    maintainers = with lib.maintainers; [
-      doronbehar
-      aleksana
-    ];
+    maintainers =
+      with lib.maintainers;
+      [
+        doronbehar
+      ]
+      ++ lib.teams.gnome-circle.members;
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     mainProgram = "video-trimmer";

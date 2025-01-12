@@ -1,23 +1,24 @@
-{ lib
-, clangStdenv
-, cmake
-, fetchFromGitHub
-, llvmPackages_13
-# Libraries
-, argparse
-, cling
-, cppzmq
-, libuuid
-, ncurses
-, openssl
-, pugixml
-, xeus
-, xeus-zmq
-, xtl
-, zeromq
-, zlib
-# Settings
-, debug ? false
+{
+  lib,
+  clangStdenv,
+  cmake,
+  fetchFromGitHub,
+  llvmPackages_13,
+  # Libraries
+  argparse,
+  cling,
+  cppzmq,
+  libuuid,
+  ncurses,
+  openssl,
+  pugixml,
+  xeus,
+  xeus-zmq,
+  xtl,
+  zeromq,
+  zlib,
+  # Settings
+  debug ? false,
 }:
 
 let

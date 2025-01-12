@@ -4,10 +4,7 @@
 , cmake
 , enableVTK ? true
 , vtk
-, ApplicationServices
-, Cocoa
 , DarwinTools # sw_vers
-, libiconv
 , enablePython ? false
 , python ? null
 , swig
@@ -25,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "malaterre";
     repo = "GDCM";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Zlb6UCP4aFZOJJNhFQBBrwzst+f37gs1zaCBMTOUgZE=";
   };
 
@@ -60,10 +57,6 @@ stdenv.mkDerivation rec {
     zlib
   ] ++ lib.optionals enableVTK [
     vtk
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    ApplicationServices
-    Cocoa
-    libiconv
   ] ++ lib.optionals enablePython [ swig python ];
 
   postInstall = lib.optionalString enablePython ''

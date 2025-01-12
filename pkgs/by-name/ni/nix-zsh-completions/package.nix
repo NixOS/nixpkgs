@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation rec {
   pname = "nix-zsh-completions";
@@ -7,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nix-zsh-completions";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-bgbMc4HqigqgdkvUe/CWbUclwxpl17ESLzCIP8Sz+F8=";
   };
 
@@ -23,6 +27,11 @@ stdenv.mkDerivation rec {
     description = "ZSH completions for Nix, NixOS, and NixOps";
     license = licenses.bsd3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ olejorgenb hedning ma27 sebtm ];
+    maintainers = with maintainers; [
+      olejorgenb
+      hedning
+      ma27
+      sebtm
+    ];
   };
 }

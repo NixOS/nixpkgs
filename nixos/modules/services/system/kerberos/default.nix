@@ -1,16 +1,26 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   inherit (lib) mkOption types;
   cfg = config.services.kerberos_server;
   inherit (config.security.krb5) package;
 
-  format = import ../../../security/krb5/krb5-conf-format.nix { inherit pkgs lib; } { enableKdcACLEntries = true; };
+  format = import ../../../security/krb5/krb5-conf-format.nix { inherit pkgs lib; } {
+    enableKdcACLEntries = true;
+  };
 in
 
 {
   imports = [
-    (lib.mkRenamedOptionModule [ "services" "kerberos_server" "realms" ] [ "services" "kerberos_server" "settings" "realms" ])
+    (lib.mkRenamedOptionModule
+      [ "services" "kerberos_server" "realms" ]
+      [ "services" "kerberos_server" "settings" "realms" ]
+    )
 
     ./mit.nix
     ./heimdal.nix

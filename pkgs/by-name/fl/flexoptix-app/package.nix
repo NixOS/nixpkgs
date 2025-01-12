@@ -1,4 +1,10 @@
-{ lib, appimageTools, fetchurl, asar }: let
+{
+  lib,
+  appimageTools,
+  fetchurl,
+  asar,
+}:
+let
   pname = "flexoptix-app";
   version = "5.21.2-latest";
 
@@ -24,7 +30,8 @@
     '';
   });
 
-in appimageTools.wrapAppImage {
+in
+appimageTools.wrapAppImage {
   inherit pname version;
   src = appimageContents;
 

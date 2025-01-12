@@ -1,12 +1,14 @@
-{ lib, stdenv
-, fetchurl
-, gnome-icon-theme
-, adwaita-icon-theme
-, gtk-engine-murrine
-, gtk3
-, hicolor-icon-theme
-, humanity-icon-theme
-, python3Packages
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gnome-icon-theme,
+  adwaita-icon-theme,
+  gtk-engine-murrine,
+  gtk3,
+  hicolor-icon-theme,
+  humanity-icon-theme,
+  python3Packages,
 }:
 
 stdenv.mkDerivation rec {
@@ -69,7 +71,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Ubuntu monochrome and Suru icon themes, Ambiance and Radiance themes, and Ubuntu artwork";
     homepage = "https://launchpad.net/ubuntu-themes";
-    license = with licenses; [ cc-by-sa-40 gpl3 ];
+    license = with licenses; [
+      cc-by-sa-40
+      gpl3
+    ];
     platforms = platforms.linux;
     maintainers = [ maintainers.romildo ];
   };

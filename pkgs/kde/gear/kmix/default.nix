@@ -1,6 +1,16 @@
-{ mkKdeDerivation }:
+{
+  mkKdeDerivation,
+
+  alsa-lib,
+  libcanberra,
+  libpulseaudio,
+}:
 mkKdeDerivation {
   pname = "kmix";
-  # FIXME(qt5)
-  meta.broken = true;
+
+  extraBuildInputs = [
+    alsa-lib
+    libcanberra
+    libpulseaudio
+  ];
 }

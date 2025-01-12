@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tr4nt0r";
     repo = "pyloadapi";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-USSTXHHhtUc8QF9U3t3rARXn5Iqo6KOGBa3VAfRMbiQ=";
   };
 
@@ -60,4 +60,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ fab ];
   };
 }
-

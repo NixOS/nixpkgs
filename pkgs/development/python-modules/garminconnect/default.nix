@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "garminconnect";
-  version = "0.2.20";
+  version = "0.2.25";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -19,9 +19,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cyberjunky";
     repo = "python-garminconnect";
-    rev = "refs/tags/${version}";
-    hash = "sha256-PFasW2rOfKwAjkqd690UXE3NNIjO3njBVYy5m+aXcfk=";
+    tag = version;
+    hash = "sha256-V+i+e1McE9YFVuq2fuQtD3RKTHw9u3u0bZ2zCi9yZCM=";
   };
+
+  pythonRelaxDeps = [ "withings-sync" ];
 
   build-system = [ pdm-backend ];
 

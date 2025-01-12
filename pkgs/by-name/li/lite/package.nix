@@ -1,11 +1,13 @@
-{ lib, stdenv
-, fetchFromGitHub
-, SDL2
-, lua52Packages
-, pkg-config
-, makeWrapper
-, openlibm
-} :
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  SDL2,
+  lua52Packages,
+  pkg-config,
+  makeWrapper,
+  openlibm,
+}:
 
 stdenv.mkDerivation rec {
   pname = "lite";
@@ -18,9 +20,16 @@ stdenv.mkDerivation rec {
     sha256 = "0wxqfb4ly8g7w5qph76xys95b55ackkags8jgd1nasmiyi8gcd5a";
   };
 
-  nativeBuildInputs = [ makeWrapper pkg-config ];
+  nativeBuildInputs = [
+    makeWrapper
+    pkg-config
+  ];
 
-  buildInputs = [ SDL2 lua52Packages.lua openlibm ];
+  buildInputs = [
+    SDL2
+    lua52Packages.lua
+    openlibm
+  ];
 
   postPatch = ''
     # use system Lua 5.2

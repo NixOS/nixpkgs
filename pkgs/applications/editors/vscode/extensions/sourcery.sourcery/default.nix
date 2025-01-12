@@ -10,8 +10,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "sourcery";
     publisher = "sourcery";
-    version = "1.24.0";
-    hash = "sha256-T2AbGxBytHXWP/ZKBhglRRbvPZ6px90XnSadwZTe/BM=";
+    version = "1.28.0";
+    hash = "sha256-wQt2T7RhQ5qU4P7J0vQwzc9mL40pDY5tS0HILhy4twg=";
   };
 
   postPatch = ''

@@ -30,13 +30,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "fido2-manage";
-  version = "0-unstable-2024-09-24";
+  version = "0-unstable-2024-11-22";
 
   src = fetchFromGitHub {
     owner = "token2";
     repo = "fido2-manage";
-    rev = "6aef9ceccdf7bcc60a9298e51a4db633256925df";
-    hash = "sha256-rXTL6wpdvCifakmxH14wBLbhTptNYNFGEPskpUy3IjA=";
+    rev = "2c14b222a432e34750bb3929c620bbdffd1c75be";
+    hash = "sha256-xdElYXx+F2XCP5zsbRTmTRyHKGnEt97jNRrQM0Oab5E=";
   };
 
   icon = fetchurl {
@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
     '';
 
   desktopItems = lib.optionals stdenv.hostPlatform.isLinux [
-    (makeDesktopItem rec {
+    (makeDesktopItem {
       desktopName = "Fido2 Manager";
       name = "fido2-manage";
       exec = "fido2-manage-gui";

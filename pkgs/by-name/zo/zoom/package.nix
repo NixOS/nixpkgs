@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchurl
-, perl
-, expat
-, fontconfig
-, freetype
-, xorg
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+  expat,
+  fontconfig,
+  freetype,
+  xorg,
 }:
 
 # !!! assert freetype == xorg.freetype

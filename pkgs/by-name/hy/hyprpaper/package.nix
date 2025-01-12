@@ -1,49 +1,53 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, cairo
-, expat
-, file
-, fribidi
-, hyprlang
-, libdatrie
-, libGL
-, libjpeg
-, libselinux
-, libsepol
-, libthai
-, libwebp
-, libXdmcp
-, pango
-, pcre
-, pcre2
-, pkg-config
-, util-linux
-, wayland
-, wayland-protocols
-, wayland-scanner
-, hyprwayland-scanner
-, hyprutils
+{
+  lib,
+  gcc14Stdenv,
+  fetchFromGitHub,
+  fetchpatch2,
+  cmake,
+  cairo,
+  expat,
+  file,
+  fribidi,
+  hyprlang,
+  libdatrie,
+  libGL,
+  libjpeg,
+  libjxl,
+  libselinux,
+  libsepol,
+  libthai,
+  libwebp,
+  libXdmcp,
+  pango,
+  pcre,
+  pcre2,
+  pkg-config,
+  util-linux,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
+  hyprwayland-scanner,
+  hyprutils,
+  hyprgraphics,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+gcc14Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprpaper";
-  version = "0.7.1";
+  version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprpaper";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-HIK7XJWQCM0BAnwW5uC7P0e7DAkVTy5jlxQ0NwoSy4M=";
+    hash = "sha256-IRZ5NrKFwBVueYrZYUQfpTwp2rZHgAkPwgvdnfVBF8E=";
   };
 
   patches = [
-    # CMakeLists: look for wayland.xml protocol in wayland-scanner pkgdata
-    (fetchpatch {
-      url = "https://github.com/hyprwm/hyprpaper/commit/6c6e54faa84d2de94d2321eda43a8a669ebf3312.patch";
-      hash = "sha256-Ns7HlUPVgBDIocZRGR6kIW58Mt92kJPQRMSKTvp6Vik=";
+    # FIXME: remove in next release
+    (fetchpatch2 {
+      name = "fix-hypr-wayland-scanner-0.4.4-build.patch";
+      url = "https://github.com/hyprwm/hyprpaper/commit/505e447b6c48e6b49f3aecf5da276f3cc5780054.patch?full_index=1";
+      hash = "sha256-Vk2P2O4XQiCYqV0KbK/ADe8KPmaTs3Mg7JRJ3cGW9lM=";
     })
   ];
 
@@ -63,6 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     libdatrie
     libGL
     libjpeg
+    libjxl
     libselinux
     libsepol
     libthai
@@ -75,11 +80,12 @@ stdenv.mkDerivation (finalAttrs: {
     wayland
     wayland-protocols
     hyprutils
+    hyprgraphics
   ];
 
   prePatch = ''
     substituteInPlace src/main.cpp \
-      --replace GIT_COMMIT_HASH '"${finalAttrs.src.rev}"'
+      --replace-fail GIT_COMMIT_HASH '"${finalAttrs.src.rev}"'
   '';
 
   meta = with lib; {
@@ -92,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
       wozeparrot
     ];
     inherit (wayland.meta) platforms;
-    broken = stdenv.hostPlatform.isDarwin;
+    broken = gcc14Stdenv.hostPlatform.isDarwin;
     mainProgram = "hyprpaper";
   };
 })

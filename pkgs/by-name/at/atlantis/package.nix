@@ -1,21 +1,25 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "atlantis";
-  version = "0.28.5";
+  version = "0.32.0";
 
   src = fetchFromGitHub {
     owner = "runatlantis";
     repo = "atlantis";
     rev = "v${version}";
-    hash = "sha256-oyECtP/YeEhvsltWZq52YNq+Gbbpko9bbbUTh5NA/9c=";
+    hash = "sha256-7D7msKDnHym3uiMJur2kCRf6MurwkMEKI+aYcwqOVX0=";
   };
   ldflags = [
     "-X=main.version=${version}"
     "-X=main.date=1970-01-01T00:00:00Z"
   ];
 
-  vendorHash = "sha256-oiRpmGfuc37s3ZD8R7L9EFieqJP7mYvDsiJBzruCSkA=";
+  vendorHash = "sha256-wPsEE6sR1GDD3Npdcf/JmeZc451+x9UBE8+DwXkj/qE=";
 
   subPackages = [ "." ];
 

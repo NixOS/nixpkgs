@@ -1,26 +1,41 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  versionCheckHook,
+  nix-update-script,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "obs-do";
-  version = "0.1.1";
+  version = "0.1.6";
 
   src = fetchFromGitHub {
     owner = "jonhoo";
     repo = "obs-do";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Wqz+oR/FIShSgF4xbXMMCxFUscOnoQr1aHQBCCacJgo=";
+    tag = "v${version}";
+    hash = "sha256-t6m/PX4GMCFH9wFrOaU/dcrbKitUXQlOcU7aUyJPpxA=";
   };
 
-  cargoHash = "sha256-J1bj4TQzEB8qoR6cNyW/fK9Vi0l+wRZlP/2smzbYhVg=";
+  cargoHash = "sha256-GZsTDG5lS6XpVT6mobMOCKsJ4iXAVW2NIsm4s+v52SU=";
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     description = "CLI for common OBS operations while streaming using WebSocket";
     homepage = "https://github.com/jonhoo/obs-do";
-    license = with licenses; [ asl20 mit ];
-    maintainers = with maintainers; [ GaetanLepage ];
+    license = with lib.licenses; [
+      asl20
+      mit
+    ];
+    maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "obs-do";
   };
 }

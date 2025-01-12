@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, lldb
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  lldb,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

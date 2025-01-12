@@ -1,26 +1,27 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, gettext
-, itstool
-, glib
-, gtk-layer-shell
-, gtk3
-, libmateweather
-, libwnck
-, librsvg
-, libxml2
-, dconf
-, dconf-editor
-, mate-desktop
-, mate-menus
-, hicolor-icon-theme
-, wayland
-, gobject-introspection
-, wrapGAppsHook3
-, marco
-, mateUpdateScript
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gettext,
+  itstool,
+  glib,
+  gtk-layer-shell,
+  gtk3,
+  libmateweather,
+  libwnck,
+  librsvg,
+  libxml2,
+  dconf,
+  dconf-editor,
+  mate-desktop,
+  mate-menus,
+  hicolor-icon-theme,
+  wayland,
+  gobject-introspection,
+  wrapGAppsHook3,
+  marco,
+  mateUpdateScript,
 }:
 
 stdenv.mkDerivation rec {
@@ -85,7 +86,11 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "MATE panel";
     homepage = "https://github.com/mate-desktop/mate-panel";
-    license = with licenses; [ gpl2Plus lgpl2Plus fdl11Plus ];
+    license = with licenses; [
+      gpl2Plus
+      lgpl2Plus
+      fdl11Plus
+    ];
     platforms = platforms.unix;
     maintainers = teams.mate.members;
   };

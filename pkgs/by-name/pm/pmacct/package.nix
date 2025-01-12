@@ -1,19 +1,28 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, autoreconfHook
-, libtool
-, libpcap
-, libcdada
-# Optional Dependencies
-, withJansson ? true, jansson
-, withNflog ? true, libnetfilter_log
-, withSQLite ? true, sqlite
-, withPgSQL ? true, postgresql
-, withMysql ? true, libmysqlclient, zlib, numactl
-, gnutlsSupport ? false, gnutls
-, testers
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  autoreconfHook,
+  libtool,
+  libpcap,
+  libcdada,
+  # Optional Dependencies
+  withJansson ? true,
+  jansson,
+  withNflog ? true,
+  libnetfilter_log,
+  withSQLite ? true,
+  sqlite,
+  withPgSQL ? true,
+  postgresql,
+  withMysql ? true,
+  libmysqlclient,
+  zlib,
+  numactl,
+  gnutlsSupport ? false,
+  gnutls,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -32,29 +41,40 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     libtool
   ];
-  buildInputs = [
-    libcdada
-    libpcap
-  ] ++ lib.optional withJansson jansson
-  ++ lib.optional withNflog libnetfilter_log
-  ++ lib.optional withSQLite sqlite
-  ++ lib.optional withPgSQL postgresql
-  ++ lib.optionals withMysql [ libmysqlclient zlib numactl ]
-  ++ lib.optional gnutlsSupport gnutls;
+  buildInputs =
+    [
+      libcdada
+      libpcap
+    ]
+    ++ lib.optional withJansson jansson
+    ++ lib.optional withNflog libnetfilter_log
+    ++ lib.optional withSQLite sqlite
+    ++ lib.optional withPgSQL postgresql
+    ++ lib.optionals withMysql [
+      libmysqlclient
+      zlib
+      numactl
+    ]
+    ++ lib.optional gnutlsSupport gnutls;
 
   MYSQL_CONFIG = lib.optionalString withMysql "${lib.getDev libmysqlclient}/bin/mysql_config";
 
-  configureFlags = [
-    "--with-pcap-includes=${libpcap}/include"
-  ] ++ lib.optional withJansson "--enable-jansson"
-  ++ lib.optional withNflog "--enable-nflog"
-  ++ lib.optional withSQLite "--enable-sqlite3"
-  ++ lib.optional withPgSQL "--enable-pgsql"
-  ++ lib.optional withMysql "--enable-mysql"
-  ++ lib.optional gnutlsSupport "--enable-gnutls";
+  configureFlags =
+    [
+      "--with-pcap-includes=${libpcap}/include"
+    ]
+    ++ lib.optional withJansson "--enable-jansson"
+    ++ lib.optional withNflog "--enable-nflog"
+    ++ lib.optional withSQLite "--enable-sqlite3"
+    ++ lib.optional withPgSQL "--enable-pgsql"
+    ++ lib.optional withMysql "--enable-mysql"
+    ++ lib.optional gnutlsSupport "--enable-gnutls";
 
   passthru.tests = {
-    version = testers.testVersion { package = finalAttrs.finalPackage; command = "pmacct -V"; };
+    version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+      command = "pmacct -V";
+    };
   };
 
   meta = with lib; {

@@ -1,9 +1,10 @@
-{ rustPlatform
-, lib
-, stdenv
-, fetchFromGitHub
-, CoreServices
-, Security
+{
+  rustPlatform,
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  CoreServices,
+  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -28,7 +29,10 @@ rustPlatform.buildRustPackage rec {
     description = "MozillaVPN configuration manager giving Linux, macOS users (among others), access to MozillaVPN";
     homepage = "https://github.com/NilsIrl/MozWire";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ siraben nilsirl ];
+    maintainers = with maintainers; [
+      siraben
+      nilsirl
+    ];
     mainProgram = "mozwire";
   };
 }

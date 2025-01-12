@@ -43,10 +43,14 @@ buildPythonPackage rec {
       "version = getattr(getattr(_bcrypt, '__about__', _bcrypt), '__version__', '<unknown>')"
   '';
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    pytest-xdist
-  ] ++ optional-dependencies.argon2 ++ optional-dependencies.bcrypt ++ optional-dependencies.totp;
+  nativeCheckInputs =
+    [
+      pytestCheckHook
+      pytest-xdist
+    ]
+    ++ optional-dependencies.argon2
+    ++ optional-dependencies.bcrypt
+    ++ optional-dependencies.totp;
 
   pythonImportsCheck = [ "passlib" ];
 

@@ -1,4 +1,8 @@
-{ stdenvNoCC, callPackage, lib }:
+{
+  stdenvNoCC,
+  callPackage,
+  lib,
+}:
 
 let
   pname = "postman";
@@ -8,12 +12,23 @@ let
     description = "API Development Environment";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.postman;
-    platforms = [ "x86_64-linux" "aarch64-linux" "aarch64-darwin" "x86_64-darwin" ];
-    maintainers = with maintainers; [ johnrichardrinehart evanjs tricktron Crafter ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "aarch64-darwin"
+      "x86_64-darwin"
+    ];
+    maintainers = with maintainers; [
+      johnrichardrinehart
+      evanjs
+      tricktron
+      Crafter
+    ];
   };
 
 in
 
-if stdenvNoCC.hostPlatform.isDarwin
-then callPackage ./darwin.nix { inherit pname version meta; }
-else callPackage ./linux.nix { inherit pname version meta; }
+if stdenvNoCC.hostPlatform.isDarwin then
+  callPackage ./darwin.nix { inherit pname version meta; }
+else
+  callPackage ./linux.nix { inherit pname version meta; }

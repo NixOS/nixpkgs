@@ -1,39 +1,42 @@
-{ lib
-, fetchFromGitHub
-, unixtools
-, php82
-, python3
-, makeWrapper
-, nixosTests
-# run-time dependencies
-, graphviz
-, ipmitool
-, libvirt
-, monitoring-plugins
-, mtr
-, net-snmp
-, nfdump
-, nmap
-, rrdtool
-, system-sendmail
-, whois
-, dataDir ? "/var/lib/librenms", logDir ? "/var/log/librenms" }:
-
+{
+  lib,
+  fetchFromGitHub,
+  unixtools,
+  php82,
+  python3,
+  makeWrapper,
+  nixosTests,
+  # run-time dependencies
+  graphviz,
+  ipmitool,
+  libvirt,
+  monitoring-plugins,
+  mtr,
+  net-snmp,
+  nfdump,
+  nmap,
+  rrdtool,
+  system-sendmail,
+  whois,
+  dataDir ? "/var/lib/librenms",
+  logDir ? "/var/log/librenms",
+}:
 
 let
   phpPackage = php82.withExtensions ({ enabled, all }: enabled ++ [ all.memcached ]);
-in phpPackage.buildComposerProject rec {
+in
+phpPackage.buildComposerProject rec {
   pname = "librenms";
-  version = "24.9.1";
+  version = "24.12.0";
 
   src = fetchFromGitHub {
     owner = "librenms";
     repo = pname;
     rev = "${version}";
-    sha256 = "sha256-6LNhMtw2U7/31Qsd1C8u+iT99CCdoz3qQh0hjsDM+9A=";
+    sha256 = "sha256-/0mc4wTx9WDxgDxqq+Kut8uX/Yr+bxqZ1BeJvmFDxG8=";
   };
 
-  vendorHash = "sha256-VWf1gN2VczS/4+aO+QFjBMjeritO/3dF6oeaOfSQibo=";
+  vendorHash = "sha256-DNiTSXt/1Qr67BdlTu3ccP4Whw5pyybeFJ045c/e8Dc=";
 
   php = phpPackage;
 
@@ -50,15 +53,17 @@ in phpPackage.buildComposerProject rec {
     system-sendmail
     unixtools.whereis
     whois
-    (python3.withPackages (ps: with ps; [
-      pymysql
-      python-dotenv
-      python-memcached
-      redis
-      setuptools
-      psutil
-      command-runner
-    ]))
+    (python3.withPackages (
+      ps: with ps; [
+        pymysql
+        python-dotenv
+        python-memcached
+        redis
+        setuptools
+        psutil
+        command-runner
+      ]
+    ))
   ];
 
   nativeBuildInputs = [ makeWrapper ];
@@ -95,13 +100,15 @@ in phpPackage.buildComposerProject rec {
       --replace '"default": "/usr/lib/nagios/plugins",' '"default": "${monitoring-plugins}/bin",' \
       --replace '"default": "/usr/sbin/sendmail",' '"default": "${system-sendmail}/bin/sendmail",'
 
-    substituteInPlace $out/LibreNMS/wrapper.py --replace '/usr/bin/env php' '${phpPackage}/bin/php'
-    substituteInPlace $out/LibreNMS/__init__.py --replace '"/usr/bin/env", "php"' '"${phpPackage}/bin/php"'
-    substituteInPlace $out/snmp-scan.py --replace '"/usr/bin/env", "php"' '"${phpPackage}/bin/php"'
+    substituteInPlace $out/LibreNMS/wrapper.py --replace-fail '/usr/bin/env php' '${phpPackage}/bin/php'
+    substituteInPlace $out/LibreNMS/__init__.py --replace-fail '"/usr/bin/env", "php"' '"${phpPackage}/bin/php"'
+    substituteInPlace $out/snmp-scan.py --replace-fail '"/usr/bin/env", "php"' '"${phpPackage}/bin/php"'
 
-    substituteInPlace $out/lnms --replace '\App\Checks::runningUser();' '//\App\Checks::runningUser(); //removed as nix forces ownership to root'
+    substituteInPlace $out/lnms --replace-fail '\App\Checks::runningUser();' '//\App\Checks::runningUser(); //removed as nix forces ownership to root'
 
     wrapProgram $out/daily.sh --prefix PATH : ${phpPackage}/bin
+
+    php $out/artisan vue-i18n:generate --multi-locales --format=umd
 
     rm -rf $out/logs $out/rrd $out/bootstrap/cache $out/storage $out/.env
     ln -s ${logDir} $out/logs
@@ -121,9 +128,9 @@ in phpPackage.buildComposerProject rec {
 
   meta = with lib; {
     description = "Auto-discovering PHP/MySQL/SNMP based network monitoring";
-    homepage    = "https://www.librenms.org/";
-    license     = licenses.gpl3Only;
-    maintainers = teams.wdz.members;
-    platforms   = platforms.linux;
+    homepage = "https://www.librenms.org/";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ netali ] ++ teams.wdz.members;
+    platforms = platforms.linux;
   };
 }

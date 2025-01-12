@@ -283,6 +283,9 @@ let
     vk = super.vk.overrideLispAttrs (o: {
       nativeLibs = [ pkgs.vulkan-loader ];
     });
+    _3d-math = super._3d-math.overrideLispAttrs (o: {
+      flags = o.flags ++ (if o.program == "sbcl" then [ "--dynamic-space-size 4096" ] else [ ]);
+    });
   });
 
   qlpkgs =

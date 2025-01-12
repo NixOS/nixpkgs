@@ -8,18 +8,18 @@
 
 rustPlatform.buildRustPackage {
   pname = "wayfreeze";
-  version = "0-unstable-2024-09-20";
+  version = "0-unstable-2024-12-26";
 
   src = fetchFromGitHub {
     owner = "Jappie3";
     repo = "wayfreeze";
-    rev = "dcbe2690ce41a286ef1eed54747bac47cee6dc2c";
-    hash = "sha256-XlZSVN/kTSA5X/kTpD/Hr5YBXdfh8gJPq5Da4tL0Gpk=";
+    rev = "5f7b7f50b69962b41a685c82fc9e82370d02275a";
+    hash = "sha256-ARnA0R5wZqHDIY+0le0F9okpJS4OI9XpLjN3vsmqUkY=";
   };
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
-  cargoHash = "sha256-DOG/IMtHYjdzfPVyFDN20+VB4oEzdSle28F07DydETc=";
+  cargoHash = "sha256-khbayCb0M3vOx00a7M0tOTQ+AKumioCBtoJs2/Ca0+g=";
 
   buildInputs = [
     libxkbcommon
@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage {
     license = licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       purrpurrn
-      jappie3 /* upstream dev */
+      jappie3 # upstream dev
     ];
     mainProgram = "wayfreeze";
     platforms = platforms.linux;

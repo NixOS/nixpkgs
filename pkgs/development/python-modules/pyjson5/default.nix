@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Kijewski";
     repo = "pyjson5";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-QggO1go9iQIy235I9CYOeC6JCoOT2sfDsrbSySN3mMw=";
     fetchSubmodules = true;
   };

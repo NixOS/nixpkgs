@@ -1,10 +1,13 @@
-{ fetchurl
-, lib
-, stdenv
+{
+  fetchurl,
+  lib,
+  stdenv,
 }:
 
-let version = "0.7";
-in stdenv.mkDerivation {
+let
+  version = "0.7";
+in
+stdenv.mkDerivation {
   inherit version;
   pname = "iomelt";
   src = fetchurl {

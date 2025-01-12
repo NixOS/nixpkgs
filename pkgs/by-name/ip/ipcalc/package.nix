@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, ronn
-, withGeo ? true
-, geoip
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  pkg-config,
+  ronn,
+  withGeo ? true,
+  geoip,
 }:
 
 # In order for the geoip part to work, you need to set up a link from
@@ -37,7 +38,12 @@ stdenv.mkDerivation rec {
       --replace /usr/share/GeoIP /var/lib/GeoIP
   '';
 
-  nativeBuildInputs = [ meson ninja pkg-config ronn ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    ronn
+  ];
 
   buildInputs = [ geoip ];
 

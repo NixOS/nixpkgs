@@ -1,4 +1,16 @@
-{ lib, stdenv, fetchurl, fetchpatch, libX11, libXext, xorgproto, libICE, libSM, libpng12, zlib }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  libX11,
+  libXext,
+  xorgproto,
+  libICE,
+  libSM,
+  libpng12,
+  zlib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "lincity";
@@ -10,8 +22,13 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    libICE libpng12 libSM libX11 libXext
-    xorgproto zlib
+    libICE
+    libpng12
+    libSM
+    libX11
+    libXext
+    xorgproto
+    zlib
   ];
 
   patches = [

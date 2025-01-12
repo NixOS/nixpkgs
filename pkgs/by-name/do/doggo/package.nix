@@ -1,8 +1,9 @@
-{ buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, nix-update-script
-, lib
+{
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  nix-update-script,
+  lib,
 }:
 
 buildGoModule rec {
@@ -43,6 +44,9 @@ buildGoModule rec {
       It outputs information in a neat concise manner and supports protocols like DoH, DoT, DoQ, and DNSCrypt as well
     '';
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ georgesalkhouri ma27 ];
+    maintainers = with maintainers; [
+      georgesalkhouri
+      ma27
+    ];
   };
 }

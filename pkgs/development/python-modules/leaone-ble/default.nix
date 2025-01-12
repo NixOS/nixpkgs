@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bluetooth-devices";
     repo = "leaone-ble";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-usFjI0zU89dEAbmx9mVemoxlYS8mmLTKIMhH26Rvkeg=";
   };
 

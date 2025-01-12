@@ -20,7 +20,7 @@ buildGoModule {
   src = fetchFromGitHub {
     owner = "ente-io";
     repo = "ente";
-    rev = "refs/tags/cli-v${version}";
+    tag = "cli-v${version}";
     hash = "sha256-ynbljYl73XwCnt3RUNmOYdrN8FX3sJ+3qDhWa8m2YJs=";
     sparseCheckout = [ "cli" ];
   };
@@ -29,7 +29,7 @@ buildGoModule {
 
   vendorHash = "sha256-Gg1mifMVt6Ma8yQ/t0R5nf6NXbzLZBpuZrYsW48p0mw=";
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   ldflags = [
     "-s"

@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, cmake, eigen, boost, libnabo, yaml-cpp }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  eigen,
+  boost,
+  libnabo,
+  yaml-cpp,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libpointmatcher";
@@ -12,7 +21,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ eigen boost libnabo yaml-cpp ];
+  buildInputs = [
+    eigen
+    boost
+    libnabo
+    yaml-cpp
+  ];
 
   cmakeFlags = [
     (lib.cmakeFeature "EIGEN_INCLUDE_DIR" "${eigen}/include/eigen3")

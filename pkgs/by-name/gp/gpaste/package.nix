@@ -1,20 +1,21 @@
-{ stdenv
-, lib
-, fetchurl
-, gjs
-, glib
-, gobject-introspection
-, gtk3
-, gtk4
-, gcr_4
-, libadwaita
-, meson
-, ninja
-, pango
-, pkg-config
-, vala
-, desktop-file-utils
-, wrapGAppsHook3
+{
+  stdenv,
+  lib,
+  fetchurl,
+  gjs,
+  glib,
+  gobject-introspection,
+  gtk3,
+  gtk4,
+  gcr_4,
+  libadwaita,
+  meson,
+  ninja,
+  pango,
+  pkg-config,
+  vala,
+  desktop-file-utils,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -71,10 +72,10 @@ stdenv.mkDerivation (finalAttrs: {
     mv "$extensionDir/"{prefs,.prefs-wrapped}.js
     substitute "${./wrapper.js}" "$extensionDir/extension.js" \
       --subst-var-by originalName "extension" \
-      --subst-var-by typelibPath "${placeholder "out"}/lib/girepository-1.0"
+      --subst-var-by typelibDir "${placeholder "out"}/lib/girepository-1.0"
     substitute "${./wrapper.js}" "$extensionDir/prefs.js" \
       --subst-var-by originalName "prefs" \
-      --subst-var-by typelibPath "${placeholder "out"}/lib/girepository-1.0"
+      --subst-var-by typelibDir "${placeholder "out"}/lib/girepository-1.0"
   '';
 
   meta = with lib; {

@@ -1,13 +1,14 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cargo
-, pkg-config
-, rustPlatform
-, bzip2
-, curl
-, zlib
-, zstd
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cargo,
+  pkg-config,
+  rustPlatform,
+  bzip2,
+  curl,
+  zlib,
+  zstd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

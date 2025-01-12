@@ -1,6 +1,16 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 
-let bins = [ "crane" "gcrane" ]; in
+let
+  bins = [
+    "crane"
+    "gcrane"
+  ];
+in
 
 buildGoModule rec {
   pname = "go-containerregistry";
@@ -16,13 +26,23 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  subPackages = [ "cmd/crane" "cmd/gcrane" ];
+  subPackages = [
+    "cmd/crane"
+    "cmd/gcrane"
+  ];
 
   outputs = [ "out" ] ++ bins;
 
   ldflags =
-    let t = "github.com/google/go-containerregistry"; in
-    [ "-s" "-w" "-X ${t}/cmd/crane/cmd.Version=v${version}" "-X ${t}/pkg/v1/remote/transport.Version=${version}" ];
+    let
+      t = "github.com/google/go-containerregistry";
+    in
+    [
+      "-s"
+      "-w"
+      "-X ${t}/cmd/crane/cmd.Version=v${version}"
+      "-X ${t}/pkg/v1/remote/transport.Version=${version}"
+    ];
 
   postInstall =
     lib.concatStringsSep "\n" (
@@ -31,7 +51,8 @@ buildGoModule rec {
         mv $out/bin/${bin} ''$${bin}/bin/ &&
         ln -s ''$${bin}/bin/${bin} $out/bin/
       '') bins
-    ) + ''
+    )
+    + ''
       for cmd in crane gcrane; do
         installShellCompletion --cmd "$cmd" \
           --bash <($GOPATH/bin/$cmd completion bash) \

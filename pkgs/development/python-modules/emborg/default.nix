@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "KenKundert";
     repo = "emborg";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ViELR5pbGZc1vMxluHWBARuP6N031u+75WmJEYdckJo=";
   };
 

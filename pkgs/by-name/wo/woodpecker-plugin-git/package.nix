@@ -1,8 +1,9 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, testers
-, woodpecker-plugin-git
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  woodpecker-plugin-git,
 }:
 
 buildGoModule rec {
@@ -12,13 +13,13 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "woodpecker-ci";
     repo = "plugin-git";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-ffP4CmvoxmXdwrWWOG2HIoz1pgmxTUdG5rPsgJ1+3do=";
   };
 
   vendorHash = "sha256-wB1Uv7ZSIEHzR8z96hwXScoGA31uhoql/wwAH3Olj2E=";
 
-  CGO_ENABLED = "0";
+  env.CGO_ENABLED = "0";
 
   ldflags = [
     "-s"

@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, texinfo, which }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  texinfo,
+  which,
+}:
 
 stdenv.mkDerivation rec {
   pname = "wdiff";

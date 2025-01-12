@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, wxGTK32
-, texinfo
-, tetex
-, wrapGAppsHook3
-, autoconf-archive
-, autoreconfHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  wxGTK32,
+  texinfo,
+  tetex,
+  wrapGAppsHook3,
+  autoconf-archive,
+  autoreconfHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

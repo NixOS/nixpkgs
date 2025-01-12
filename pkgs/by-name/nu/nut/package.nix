@@ -1,25 +1,26 @@
-{ lib
-, stdenv
-, autoreconfHook
-, avahi
-, coreutils
-, fetchurl
-, freeipmi
-, gd
-, i2c-tools
-, libgpiod_1
-, libmodbus
-, libtool
-, libusb1
-, makeWrapper
-, neon
-, net-snmp
-, openssl
-, pkg-config
-, substituteAll
-, systemd
-, udev
-, gnused
+{
+  lib,
+  stdenv,
+  autoreconfHook,
+  avahi,
+  coreutils,
+  fetchurl,
+  freeipmi,
+  gd,
+  i2c-tools,
+  libgpiod_1,
+  libmodbus,
+  libtool,
+  libusb1,
+  makeWrapper,
+  neon,
+  net-snmp,
+  openssl,
+  pkg-config,
+  substituteAll,
+  systemd,
+  udev,
+  gnused,
 }:
 
 stdenv.mkDerivation rec {
@@ -51,25 +52,50 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ neon libusb1 openssl udev avahi freeipmi libgpiod_1 libmodbus libtool i2c-tools net-snmp gd ];
+  buildInputs = [
+    neon
+    libusb1
+    openssl
+    udev
+    avahi
+    freeipmi
+    libgpiod_1
+    libmodbus
+    libtool
+    i2c-tools
+    net-snmp
+    gd
+  ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config makeWrapper ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    makeWrapper
+  ];
 
-  configureFlags =
-    [ "--with-all"
-      "--with-ssl"
-      "--without-powerman" # Until we have it ...
-      "--with-systemdsystemunitdir=$(out)/lib/systemd/system"
-      "--with-systemdshutdowndir=$(out)/lib/systemd/system-shutdown"
-      "--with-systemdtmpfilesdir=$(out)/lib/tmpfiles.d"
-      "--with-udev-dir=$(out)/etc/udev"
-    ];
+  configureFlags = [
+    "--with-all"
+    "--with-ssl"
+    "--without-powerman" # Until we have it ...
+    "--with-systemdsystemunitdir=$(out)/lib/systemd/system"
+    "--with-systemdshutdowndir=$(out)/lib/systemd/system-shutdown"
+    "--with-systemdtmpfilesdir=$(out)/lib/tmpfiles.d"
+    "--with-udev-dir=$(out)/etc/udev"
+  ];
 
   enableParallelBuilding = true;
 
   # Add `cgi-bin` to the default list to avoid pulling in whole
   # of `gcc` into build closure.
-  stripDebugList = [ "cgi-bin" "lib" "lib32" "lib64" "libexec" "bin" "sbin" ];
+  stripDebugList = [
+    "cgi-bin"
+    "lib"
+    "lib32"
+    "lib64"
+    "libexec"
+    "bin"
+    "sbin"
+  ];
 
   postInstall = ''
     substituteInPlace $out/lib/systemd/system-shutdown/nutshutdown \
@@ -99,7 +125,11 @@ stdenv.mkDerivation rec {
     homepage = "https://networkupstools.org/";
     platforms = platforms.linux;
     maintainers = [ maintainers.pierron ];
-    license = with licenses; [ gpl1Plus gpl2Plus gpl3Plus ];
+    license = with licenses; [
+      gpl1Plus
+      gpl2Plus
+      gpl3Plus
+    ];
     priority = 10;
   };
 }

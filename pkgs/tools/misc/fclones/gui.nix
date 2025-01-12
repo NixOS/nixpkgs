@@ -1,13 +1,14 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, wrapGAppsHook4
-, gdk-pixbuf
-, gtk4
-, libadwaita
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  wrapGAppsHook4,
+  gdk-pixbuf,
+  gtk4,
+  libadwaita,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -28,13 +29,15 @@ rustPlatform.buildRustPackage rec {
     wrapGAppsHook4
   ];
 
-  buildInputs = [
-    gdk-pixbuf
-    gtk4
-    libadwaita
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk_11_0.frameworks.IOKit
-  ];
+  buildInputs =
+    [
+      gdk-pixbuf
+      gtk4
+      libadwaita
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk_11_0.frameworks.IOKit
+    ];
 
   postInstall = ''
     substituteInPlace snap/gui/fclones-gui.desktop \

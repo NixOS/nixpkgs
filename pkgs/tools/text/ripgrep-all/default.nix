@@ -1,15 +1,16 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, rustPlatform
-, makeWrapper
-, ffmpeg
-, pandoc
-, poppler_utils
-, ripgrep
-, Security
-, zip
-, fzf
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  makeWrapper,
+  ffmpeg,
+  pandoc,
+  poppler_utils,
+  ripgrep,
+  Security,
+  zip,
+  fzf,
 }:
 
 let
@@ -21,7 +22,8 @@ let
     zip
     fzf
   ];
-in rustPlatform.buildRustPackage rec {
+in
+rustPlatform.buildRustPackage rec {
   pname = "ripgrep-all";
   version = "0.10.6";
 
@@ -42,7 +44,10 @@ in rustPlatform.buildRustPackage rec {
   # override debug=true set in Cargo.toml upstream
   RUSTFLAGS = "-C debuginfo=none";
 
-  nativeBuildInputs = [ makeWrapper poppler_utils ];
+  nativeBuildInputs = [
+    makeWrapper
+    poppler_utils
+  ];
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
 
   nativeCheckInputs = path;
@@ -66,7 +71,10 @@ in rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/phiresky/ripgrep-all";
     license = with licenses; [ agpl3Plus ];
-    maintainers = with maintainers; [ zaninime ma27 ];
+    maintainers = with maintainers; [
+      zaninime
+      ma27
+    ];
     mainProgram = "rga";
   };
 }

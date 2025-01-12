@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "fake-useragent";
-  version = "1.5.1";
+  version = "2.0.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fake-useragent";
     repo = "fake-useragent";
-    rev = "refs/tags/${version}";
-    hash = "sha256-BDXJJeT29GWkN9DoVl8sxXFpV/eMqu3mqlvMr2lzJM8=";
+    tag = version;
+    hash = "sha256-FmGk3Cc1Y2j6+JQsc2JK6D78ktuNCLmfkfY6dNLmpQ4=";
   };
 
   postPatch = ''

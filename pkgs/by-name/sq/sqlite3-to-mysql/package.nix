@@ -1,15 +1,16 @@
-{ lib
-, fetchFromGitHub
-, python3Packages
-, nixosTests
-, testers
-, sqlite3-to-mysql
-, mysql80
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  nixosTests,
+  testers,
+  sqlite3-to-mysql,
+  mysql80,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "sqlite3-to-mysql";
-  version = "2.3.1";
+  version = "2.3.2";
   format = "pyproject";
 
   disabled = python3Packages.pythonOlder "3.8";
@@ -17,8 +18,8 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "techouse";
     repo = "sqlite3-to-mysql";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-13NLtP9gDd9hrwY09+7CuM4Rl+Hce82TETdfwBC/5HI=";
+    tag = "v${version}";
+    hash = "sha256-2zylVnPlptPCxUFwU9j9g//T5fzPJgXc3hQc6iMoLLE=";
   };
 
   build-system = with python3Packages; [

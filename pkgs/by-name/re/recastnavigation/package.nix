@@ -1,4 +1,13 @@
-{ stdenv, lib, fetchFromGitHub, cmake, libGL, SDL2, libGLU, catch }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  libGL,
+  SDL2,
+  libGLU,
+  catch,
+}:
 
 stdenv.mkDerivation rec {
   pname = "recastai";
@@ -13,25 +22,31 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-WVzDI7+UuAl10Tm1Zjkea/FMk0cIe7pWg0iyFLbwAdI=";
   };
 
-  postPatch = ''
-    cp ${catch}/include/catch/catch.hpp Tests/catch.hpp
+  postPatch =
+    ''
+      cp ${catch}/include/catch/catch.hpp Tests/catch.hpp
 
-    # https://github.com/recastnavigation/recastnavigation/issues/524
-    substituteInPlace CMakeLists.txt \
-      --replace '\$'{exec_prefix}/'$'{CMAKE_INSTALL_LIBDIR} '$'{CMAKE_INSTALL_FULL_LIBDIR} \
-      --replace '\$'{prefix}/'$'{CMAKE_INSTALL_INCLUDEDIR} '$'{CMAKE_INSTALL_FULL_INCLUDEDIR}
-  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    # Expects SDL2.framework in specific location, which we don't have
-    # Change where SDL2 headers are searched for to match what we do have
-    substituteInPlace RecastDemo/CMakeLists.txt \
-      --replace 'include_directories(''${SDL2_LIBRARY}/Headers)' 'include_directories(${SDL2.dev}/include/SDL2)'
-  '';
+      # https://github.com/recastnavigation/recastnavigation/issues/524
+      substituteInPlace CMakeLists.txt \
+        --replace '\$'{exec_prefix}/'$'{CMAKE_INSTALL_LIBDIR} '$'{CMAKE_INSTALL_FULL_LIBDIR} \
+        --replace '\$'{prefix}/'$'{CMAKE_INSTALL_INCLUDEDIR} '$'{CMAKE_INSTALL_FULL_INCLUDEDIR}
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      # Expects SDL2.framework in specific location, which we don't have
+      # Change where SDL2 headers are searched for to match what we do have
+      substituteInPlace RecastDemo/CMakeLists.txt \
+        --replace 'include_directories(''${SDL2_LIBRARY}/Headers)' 'include_directories(${SDL2.dev}/include/SDL2)'
+    '';
 
   doCheck = true;
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ libGL SDL2 libGLU ];
+  buildInputs = [
+    libGL
+    SDL2
+    libGLU
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/recastnavigation/recastnavigation";

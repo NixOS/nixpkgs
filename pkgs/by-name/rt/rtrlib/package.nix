@@ -1,4 +1,11 @@
-{ lib, fetchFromGitHub, stdenv, cmake, libssh, openssl }:
+{
+  lib,
+  fetchFromGitHub,
+  stdenv,
+  cmake,
+  libssh,
+  openssl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "rtrlib";
@@ -12,7 +19,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ libssh openssl ];
+  buildInputs = [
+    libssh
+    openssl
+  ];
 
   postFixup = ''
     substituteInPlace "$out"/lib/pkgconfig/rtrlib.pc \

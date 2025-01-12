@@ -1,17 +1,22 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+}:
 
 buildGoModule rec {
   pname = "process-exporter";
-  version = "0.8.4";
+  version = "0.8.5";
 
   src = fetchFromGitHub {
     owner = "ncabatoff";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-l767shpUFTLJV3yd9MhG5h7QTIKonwCPDW4PYQ2lTcg=";
+    sha256 = "sha256-WGfKF7GE9RHrMiqbx5c3WtHEKUA2SShwuUUAqAeiMts=";
   };
 
-  vendorHash = "sha256-Mmcc7Tp71OH5BQgMYMRhokqNDOqCudaUaCNzjOGoQ68=";
+  vendorHash = "sha256-ZxN9BAn6b7OFXMiIbMqpEQsN9lTzt/A2LDu/Vtggtqs=";
 
   postPatch = ''
     substituteInPlace proc/read_test.go --replace /bin/cat cat

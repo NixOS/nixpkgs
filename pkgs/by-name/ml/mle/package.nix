@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pcre2
-, uthash
-, lua5_4
-, makeWrapper
-, installShellFiles
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pcre2,
+  uthash,
+  lua5_4,
+  makeWrapper,
+  installShellFiles,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,9 +27,16 @@ stdenv.mkDerivation rec {
     patchShebangs tests/*
   '';
 
-  nativeBuildInputs = [ makeWrapper installShellFiles ];
+  nativeBuildInputs = [
+    makeWrapper
+    installShellFiles
+  ];
 
-  buildInputs = [ pcre2 uthash lua5_4 ];
+  buildInputs = [
+    pcre2
+    uthash
+    lua5_4
+  ];
 
   doCheck = true;
 

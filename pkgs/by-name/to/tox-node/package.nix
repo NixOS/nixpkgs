@@ -1,4 +1,9 @@
-{ lib, rustPlatform, fetchFromGitHub, nix-update-script }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  nix-update-script,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "tox-node";
@@ -22,7 +27,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/tox-rs/tox";
     license = [ licenses.gpl3Plus ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ suhr kurnevsky ];
+    maintainers = with maintainers; [
+      suhr
+      kurnevsky
+    ];
     mainProgram = "tox-node";
   };
 }

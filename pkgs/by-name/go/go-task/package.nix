@@ -9,16 +9,16 @@
 
 buildGoModule rec {
   pname = "go-task";
-  version = "3.39.2";
+  version = "3.40.1";
 
   src = fetchFromGitHub {
     owner = "go-task";
     repo = "task";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-B5o3oAey7zJg5JBf4GO69cLmVbnkKedkjWP108XRGR8=";
+    tag = "v${version}";
+    hash = "sha256-jQKPTKEzTfzqPlNlKFMduaAhvDsogRv3vCGtZ4KP/O4=";
   };
 
-  vendorHash = "sha256-P9J69WJ2C2xgdU9xydiaY8iSKB7ZfexLNYi7dyHDTIk=";
+  vendorHash = "sha256-bw9NaJOMMKcKth0hRqNq8mqib/5zLpjComo0oj22A/U=";
 
   doCheck = false;
 
@@ -32,19 +32,15 @@ buildGoModule rec {
     "-X=github.com/go-task/task/v3/internal/version.version=${version}"
   ];
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   postInstall = ''
     ln -s $out/bin/task $out/bin/go-task
 
-    installShellCompletion completion/{bash,fish,zsh}/*
-
-    substituteInPlace $out/share/bash-completion/completions/task.bash \
-      --replace-fail 'complete -F _task task' 'complete -F _task task go-task'
-    substituteInPlace $out/share/fish/vendor_completions.d/task.fish \
-      --replace-fail 'complete -c $GO_TASK_PROGNAME' 'complete -c $GO_TASK_PROGNAME -c go-task'
-    substituteInPlace $out/share/zsh/site-functions/_task \
-      --replace-fail '#compdef task' '#compdef task go-task'
+    installShellCompletion --cmd task \
+      --bash <($out/bin/task --completion bash) \
+      --fish <($out/bin/task --completion fish) \
+      --zsh <($out/bin/task --completion zsh)
   '';
 
   passthru = {

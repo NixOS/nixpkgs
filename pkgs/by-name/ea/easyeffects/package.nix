@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "easyeffects";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-It+kldlhThWF9y/rTgKt9QlIouH1cQcCtSHQTsaGjfo=";
   };
 
@@ -130,7 +130,10 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/wwmm/easyeffects";
     changelog = "https://github.com/wwmm/easyeffects/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ getchoo ];
+    maintainers = with lib.maintainers; [
+      getchoo
+      aleksana
+    ];
     mainProgram = "easyeffects";
     platforms = lib.platforms.linux;
   };

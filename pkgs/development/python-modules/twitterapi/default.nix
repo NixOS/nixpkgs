@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "geduldig";
     repo = "TwitterAPI";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-4Z8XfgRhQXawCvaXM+kyMO3fejvXIF2LgVdmfXDDqIA=";
   };
 

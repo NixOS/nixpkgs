@@ -1,7 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, curl, expat
-, jansson, libpng, libjpeg, libGLU, libGL
-, libsndfile, libXxf86vm, pcre, pkg-config, SDL2
-, vim, speex }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  curl,
+  expat,
+  jansson,
+  libpng,
+  libjpeg,
+  libGLU,
+  libGL,
+  libsndfile,
+  libXxf86vm,
+  pcre,
+  pkg-config,
+  SDL2,
+  vim,
+  speex,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ezquake";
@@ -17,17 +32,31 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    expat curl jansson libpng libjpeg libGLU libGL libsndfile libXxf86vm pcre SDL2 vim speex
+    expat
+    curl
+    jansson
+    libpng
+    libjpeg
+    libGLU
+    libGL
+    libsndfile
+    libXxf86vm
+    pcre
+    SDL2
+    vim
+    speex
   ];
 
-  installPhase = let
-    sys = lib.last (lib.splitString "-" stdenv.hostPlatform.system);
-    arch = lib.head (lib.splitString "-" stdenv.hostPlatform.system);
-  in ''
-    mkdir -p $out/bin
-    find .
-    mv ezquake-${sys}-${arch} $out/bin/ezquake
-  '';
+  installPhase =
+    let
+      sys = lib.last (lib.splitString "-" stdenv.hostPlatform.system);
+      arch = lib.head (lib.splitString "-" stdenv.hostPlatform.system);
+    in
+    ''
+      mkdir -p $out/bin
+      find .
+      mv ezquake-${sys}-${arch} $out/bin/ezquake
+    '';
 
   enableParallelBuilding = true;
 

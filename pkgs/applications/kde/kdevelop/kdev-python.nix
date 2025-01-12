@@ -1,5 +1,12 @@
-{ mkDerivation, lib, cmake, extra-cmake-modules
-, threadweaver, ktexteditor, kdevelop-unwrapped, python39
+{
+  mkDerivation,
+  lib,
+  cmake,
+  extra-cmake-modules,
+  threadweaver,
+  ktexteditor,
+  kdevelop-unwrapped,
+  python39,
 }:
 let
   # FIXME: stick with python 3.9 until MR supporting 3.10 is ready:
@@ -13,8 +20,15 @@ mkDerivation rec {
     "-DPYTHON_EXECUTABLE=${python}/bin/python"
   ];
 
-  nativeBuildInputs = [ cmake extra-cmake-modules ];
-  buildInputs = [ threadweaver ktexteditor kdevelop-unwrapped ];
+  nativeBuildInputs = [
+    cmake
+    extra-cmake-modules
+  ];
+  buildInputs = [
+    threadweaver
+    ktexteditor
+    kdevelop-unwrapped
+  ];
 
   dontWrapQtApps = true;
 

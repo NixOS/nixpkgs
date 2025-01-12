@@ -1,14 +1,15 @@
-{ lib
-, mkXfceDerivation
-, gobject-introspection
-, glib
-, gtk3
-, gtksourceview4
-, gspell
-, libxfce4ui
-, xfconf
-, enablePolkit ? true
-, polkit
+{
+  lib,
+  mkXfceDerivation,
+  gobject-introspection,
+  glib,
+  gtk3,
+  gtksourceview4,
+  gspell,
+  libxfce4ui,
+  xfconf,
+  enablePolkit ? true,
+  polkit,
 }:
 
 mkXfceDerivation {
@@ -21,16 +22,18 @@ mkXfceDerivation {
 
   nativeBuildInputs = [ gobject-introspection ];
 
-  buildInputs = [
-    glib
-    gtk3
-    gtksourceview4
-    gspell
-    libxfce4ui # for shortcut plugin
-    xfconf # required by libxfce4kbd-private-3
-  ] ++ lib.optionals enablePolkit [
-    polkit
-  ];
+  buildInputs =
+    [
+      glib
+      gtk3
+      gtksourceview4
+      gspell
+      libxfce4ui # for shortcut plugin
+      xfconf # required by libxfce4kbd-private-3
+    ]
+    ++ lib.optionals enablePolkit [
+      polkit
+    ];
 
   # Use the GSettings keyfile backend rather than DConf
   configureFlags = [ "--enable-keyfile-settings" ];

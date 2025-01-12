@@ -15,11 +15,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tiran";
     repo = "defusedxml";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-X88A5V9uXP3wJQ+olK6pZJT66LP2uCXLK8goa5bPARA=";
   };
 
-  build-system = [ setuptools ] ;
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ lxml ];
 

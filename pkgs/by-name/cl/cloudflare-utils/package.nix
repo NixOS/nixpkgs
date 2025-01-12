@@ -20,6 +20,6 @@ buildGoModule rec {
     description = "Helpful Cloudflare utility program";
     homepage = "https://github.com/Cyb3r-Jak3/cloudflare-utils";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [yelite];
+    maintainers = with lib.maintainers; [ yelite ];
   };
 }

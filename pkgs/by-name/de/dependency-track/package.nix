@@ -2,6 +2,7 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
+  nodejs_20,
   jre_headless,
   protobuf,
   cyclonedx-cli,
@@ -11,11 +12,14 @@
   nixosTests,
 }:
 let
-  version = "4.12.1";
+  version = "4.12.2";
 
   frontend = buildNpmPackage {
     pname = "dependency-track-frontend";
     inherit version;
+
+    # TODO: pinned due to build error on node 22
+    nodejs = nodejs_20;
 
     src = fetchFromGitHub {
       owner = "DependencyTrack";
@@ -41,7 +45,7 @@ maven.buildMavenPackage rec {
     owner = "DependencyTrack";
     repo = "dependency-track";
     rev = version;
-    hash = "sha256-Gx7tGkibSu+v4gGKC61EFwUsdruMh0t2gTnnNazjqco=";
+    hash = "sha256-wn4HnOFhV02oq66LwBIOVzU+ehXemCuzOWcDASG/47c=";
   };
 
   patches = [
@@ -56,7 +60,7 @@ maven.buildMavenPackage rec {
   '';
 
   mvnJdk = jre_headless;
-  mvnHash = "sha256-4QtWvsIFiS4d55y45tj3RLE4YYdXLrqpzqS7mOqRWYw=";
+  mvnHash = "sha256-x1/b8LoXyGxCQiu7QB60XSpiufTk/y4492mOraFnRKY=";
   manualMvnArtifacts = [ "com.coderplus.maven.plugins:copy-rename-maven-plugin:1.0.1" ];
   buildOffline = true;
 

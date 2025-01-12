@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, unstableGitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation {
   name = "nixos-bgrt-plymouth";
-  version = "0-unstable-2023-03-10";
+  version = "0-unstable-2024-10-25";
 
   src = fetchFromGitHub {
     repo = "plymouth-theme-nixos-bgrt";
     owner = "helsinki-systems";
-    rev = "0771e04f13b6b908d815b506472afb1c9a2c81ae";
-    hash = "sha256-aF4Ro5z4G6LS40ENwFDH8CgV7ldfhzqekuSph/DMQoo=";
+    rev = "9b3913c38212463f3e21e8e805eead8f332215fa";
+    hash = "sha256-VmNATLInItV2uMYJgpo8ywBUtfiqgcspPkRL9ws5zag=";
   };
 
   dontConfigure = true;

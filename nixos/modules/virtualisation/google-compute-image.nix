@@ -22,6 +22,7 @@ in
   imports = [
     ./google-compute-config.nix
     ./disk-size-option.nix
+    ../image/file-options.nix
     (lib.mkRenamedOptionModuleWith {
       sinceRelease = 2411;
       from = [
@@ -72,8 +73,12 @@ in
       fsType = "vfat";
     };
 
+    system.nixos.tags = [ "google-compute" ];
+    image.extension = "raw.tar.gz";
+    system.build.image = config.system.build.googleComputeImage;
     system.build.googleComputeImage = import ../../lib/make-disk-image.nix {
       name = "google-compute-image";
+      inherit (config.image) baseName;
       postVM = ''
         PATH=$PATH:${
           with pkgs;
@@ -83,10 +88,13 @@ in
           ]
         }
         pushd $out
+        # RTFM:
+        # https://cloud.google.com/compute/docs/images/create-custom
+        # https://cloud.google.com/compute/docs/import/import-existing-image
         mv $diskImage disk.raw
         tar -Sc disk.raw | gzip -${toString cfg.compressionLevel} > \
-          nixos-image-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}.raw.tar.gz
-        rm $out/disk.raw
+          ${config.image.fileName}
+        rm disk.raw
         popd
       '';
       format = "raw";

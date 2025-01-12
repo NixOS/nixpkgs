@@ -26,16 +26,16 @@
 
 buildPythonPackage rec {
   pname = "weaviate-client";
-  version = "4.9.3";
+  version = "4.10.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "weaviate";
     repo = "weaviate-python-client";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-F5vU5JKAOztoJwTe+OL3QKHbuhbbXL5WMia2AYrkRS0=";
+    tag = "v${version}";
+    hash = "sha256-c2ZO5n/sMrq8f1V+MSwv+pYSzPa9cTBHU8INXHcB8gk=";
   };
 
   pythonRelaxDeps = [
@@ -67,7 +67,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-httpserver
     pytest-asyncio
-    pytestCheckHook # pytestCheckHook won't work
+    pytestCheckHook
   ];
 
   preCheck = ''
@@ -81,6 +81,7 @@ buildPythonPackage rec {
   disabledTests = [
     # Need network
     "test_bearer_token"
+    "test_auth_header_with_catchall_proxy"
     "test_token_refresh_timeout"
     "test_with_simple_auth_no_oidc_via_api_key"
     "test_client_with_extra_options"

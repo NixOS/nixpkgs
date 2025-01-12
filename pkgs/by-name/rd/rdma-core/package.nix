@@ -1,32 +1,37 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, docutils
-, pandoc
-, ethtool
-, iproute2
-, libnl
-, udev
-, python3
-, perl
-} :
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  docutils,
+  pandoc,
+  ethtool,
+  iproute2,
+  libnl,
+  udev,
+  python3,
+  perl,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rdma-core";
-  version = "54.0";
+  version = "55.0";
 
   src = fetchFromGitHub {
     owner = "linux-rdma";
     repo = "rdma-core";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-nxpqF9I8GGni1Tsjw3ATlRl6ZdVKfRMccuGWUb8IAkA=";
+    hash = "sha256-ZXs0yxwL00Kyp8b516sKslm4yvyQEm/UMtag2a2X+5c=";
   };
 
   strictDeps = true;
 
-  outputs = [ "out" "man" "dev" ];
+  outputs = [
+    "out"
+    "man"
+    "dev"
+  ];
 
   nativeBuildInputs = [
     cmake

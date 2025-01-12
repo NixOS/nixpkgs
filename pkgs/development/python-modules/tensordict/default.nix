@@ -31,7 +31,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "tensordict";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-jnRlN9gefR77pioIXf0qM1CP6EtpeQkBvVIecGkb/pw=";
   };
 
@@ -70,13 +70,11 @@ buildPythonPackage rec {
       # +  where tensor(False) = <built-in method all of Tensor object at 0x7ffe49bf87d0>()
       "test_mp"
 
-      # torch._dynamo.exc.BackendCompilerFailed
-      # Requires a more recent version of triton
-      # Re-enable when https://github.com/NixOS/nixpkgs/pull/328247 is merged
+      # torch._dynamo.exc.InternalTorchDynamoError: RuntimeError: to_module requires TORCHDYNAMO_INLINE_INBUILT_NN_MODULES to be set.
       "test_functional"
-      "test_linear"
-      "test_seq"
-      "test_seq_lmbda"
+
+      # hangs forever on some CPUs
+      "test_map_iter_interrupt_early"
     ]
     ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
       # RuntimeError: internal error
@@ -86,9 +84,6 @@ buildPythonPackage rec {
 
       # _queue.Empty errors in multiprocessing tests
       "test_isend"
-
-      # hangs forever
-      "test_map_iter_interrupt_early"
     ];
 
   disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [

@@ -1,25 +1,26 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, nasm
-, pkg-config
-, xxHash
-, withTools ? false # "dav1d" binary
-, withExamples ? false
-, SDL2 # "dav1dplay" binary
-, useVulkan ? false
-, libplacebo
-, vulkan-loader
-, vulkan-headers
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  nasm,
+  pkg-config,
+  xxHash,
+  withTools ? false, # "dav1d" binary
+  withExamples ? false,
+  SDL2, # "dav1dplay" binary
+  useVulkan ? false,
+  libplacebo,
+  vulkan-loader,
+  vulkan-headers,
 
   # for passthru.tests
-, ffmpeg
-, gdal
-, handbrake
-, libavif
-, libheif
+  ffmpeg,
+  gdal,
+  handbrake,
+  libavif,
+  libheif,
 }:
 
 assert useVulkan -> withExamples;
@@ -35,13 +36,26 @@ stdenv.mkDerivation rec {
     hash = "sha256-eOMQj88vlgoxguV+eK4iWXFjUPiXwqRTJlhehev+yGY=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
-  nativeBuildInputs = [ meson ninja nasm pkg-config ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    nasm
+    pkg-config
+  ];
   # TODO: doxygen (currently only HTML and not build by default).
-  buildInputs = [ xxHash ]
+  buildInputs =
+    [ xxHash ]
     ++ lib.optional withExamples SDL2
-    ++ lib.optionals useVulkan [ libplacebo vulkan-loader vulkan-headers ];
+    ++ lib.optionals useVulkan [
+      libplacebo
+      vulkan-loader
+      vulkan-headers
+    ];
 
   mesonFlags = [
     "-Denable_tools=${lib.boolToString withTools}"
@@ -56,7 +70,8 @@ stdenv.mkDerivation rec {
       gdal
       handbrake
       libavif
-      libheif;
+      libheif
+      ;
   };
 
   meta = with lib; {

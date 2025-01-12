@@ -1,22 +1,23 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, rustfmt
-, perl
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  rustfmt,
+  perl,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cairo";
-  version = "2.8.4";
+  version = "2.9.2";
 
   src = fetchFromGitHub {
     owner = "starkware-libs";
     repo = "cairo";
     rev = "v${version}";
-    hash = "sha256-xHvBbm1ewNu96TyK//l2emiq+jaPhSWvvbVK9Q/O5lo=";
+    hash = "sha256-zjgCOrTlIPN4aU0+FCohJmISPiwpppj3zO/7unVi/iU=";
   };
 
-  cargoHash = "sha256-E6nnT+I5ur4PPvLjwfebR1Tdm206hI05HCVc3IWDqFY=";
+  cargoHash = "sha256-2qm2hL4M2xHidRYF9Fhxxn2IG22mPEBZW5yhu6wPVDY=";
 
   # openssl crate requires perl during build process
   nativeBuildInputs = [

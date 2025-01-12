@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, fpc, openssl }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fpc,
+  openssl,
+}:
 
 let
   flreSrc = fetchFromGitHub {
@@ -31,7 +37,8 @@ let
     rev = "1696f0a2b822fef26c8992f96620f1be129cfa99";
     hash = "sha256-x0AjOTa1g7gJOR2iBO76yBt1kzcRNujHRUsq5QOlfP0=";
   };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "xidel";
   version = "unstable-2022-11-01";
 

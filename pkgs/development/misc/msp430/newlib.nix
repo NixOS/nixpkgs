@@ -1,4 +1,9 @@
-{ stdenvNoCC, xorg, newlib, msp430GccSupport }:
+{
+  stdenvNoCC,
+  xorg,
+  newlib,
+  msp430GccSupport,
+}:
 
 stdenvNoCC.mkDerivation {
   name = "msp430-${newlib.name}";

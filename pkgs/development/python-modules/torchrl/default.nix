@@ -53,7 +53,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "rl";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-uDpOdOuHTqKFKspHOpl84kD9adEKZjvO2GnYuL27H5c=";
   };
 
@@ -167,6 +167,10 @@ buildPythonPackage rec {
     # assert torch.get_num_threads() == max(1, init_threads - 3)
     # AssertionError: assert 23 == 21
     "test_auto_num_threads"
+
+    # Flaky (hangs indefinitely on some CPUs)
+    "test_gae_multidim"
+    "test_gae_param_as_tensor"
   ];
 
   meta = {

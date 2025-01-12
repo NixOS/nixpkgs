@@ -15,22 +15,25 @@ let
 in
 py.pkgs.buildPythonApplication rec {
   pname = "netbox";
-  version = "4.1.3";
+  version = "4.1.7";
 
   format = "other";
 
   src = fetchFromGitHub {
     owner = "netbox-community";
     repo = "netbox";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-SRzkmRkniVDu6vYGa9Kd9exob/LHpGBPd+lRA/pbCFo=";
+    tag = "v${version}";
+    hash = "sha256-0AyIXSiNsAHELM8Ry/bcm7sd7K+ApeoEguiEm8ecAU0=";
   };
 
   patches = [
     ./custom-static-root.patch
+
+    # Rebase of PR 17620 "Upgrade to Django 5.1"
+    # https://github.com/netbox-community/netbox/pull/17620
     (fetchpatch {
-      url = "https://github.com/netbox-community/netbox/pull/17620.patch";
-      hash = "sha256-zN2zke4qlNJUbxI8mSV+zGmEv0Qtd0zSCbCXWyE1L2k=";
+      url = "https://github.com/netbox-community/netbox/commit/cda9e0525dc850ddd82bf46762a64607bf97df83.patch";
+      hash = "sha256-iJiz5f926Np1k4c9DpfPe0HefJy1CH6c0wjwBIt1vWQ=";
     })
   ];
 
@@ -126,7 +129,6 @@ py.pkgs.buildPythonApplication rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       minijackson
-      n0emis
       raitobezarius
     ];
   };

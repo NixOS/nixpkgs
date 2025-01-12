@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, slurp
-, grim
-, zenity
-, wl-clipboard
-, imagemagick
-, makeWrapper
-, bash
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  slurp,
+  grim,
+  zenity,
+  wl-clipboard,
+  imagemagick,
+  makeWrapper,
+  bash,
 }:
 
 stdenv.mkDerivation rec {
@@ -41,13 +42,15 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/usr/bin/wl-color-picker \
-      --prefix PATH : ${lib.makeBinPath [
-         grim
-         slurp
-         imagemagick
-         zenity
-         wl-clipboard
-       ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          grim
+          slurp
+          imagemagick
+          zenity
+          wl-clipboard
+        ]
+      }
     mkdir -p $out/bin
     ln -s $out/usr/bin/wl-color-picker $out/bin/wl-color-picker
   '';

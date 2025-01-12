@@ -1,10 +1,11 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, coreutils
-, gnused
-, postgresql
-, makeWrapper
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  coreutils,
+  gnused,
+  postgresql,
+  makeWrapper,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -28,7 +29,13 @@ stdenvNoCC.mkDerivation rec {
 
     install -Dm755 -t $out/bin psql2csv
     wrapProgram $out/bin/psql2csv \
-      --prefix PATH : ${lib.makeBinPath [ coreutils gnused postgresql ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          coreutils
+          gnused
+          postgresql
+        ]
+      }
 
     runHook postInstall
   '';

@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "outscale";
     repo = "osc-sdk-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-HOYIt4kLKAR8zYmIhjLQoibL3qp9uruFKgkgfnmZOfc=";
     fetchSubmodules = true;
   };

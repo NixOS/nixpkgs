@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, makeWrapper, python3, exif, imagemagick }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  python3,
+  exif,
+  imagemagick,
+}:
 
 stdenv.mkDerivation rec {
   pname = "recoverjpeg";
@@ -15,7 +23,12 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     wrapProgram $out/bin/sort-pictures \
-      --prefix PATH : ${lib.makeBinPath [ exif imagemagick ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          exif
+          imagemagick
+        ]
+      }
   '';
 
   meta = with lib; {

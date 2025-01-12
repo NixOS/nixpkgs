@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "gitlab-ci-pipelines-exporter";
@@ -25,6 +29,9 @@ buildGoModule rec {
     mainProgram = "gitlab-ci-pipelines-exporter";
     homepage = "https://github.com/mvisonneau/gitlab-ci-pipelines-exporter";
     license = licenses.asl20;
-    maintainers = with maintainers; [ mmahut mvisonneau ];
+    maintainers = with maintainers; [
+      mmahut
+      mvisonneau
+    ];
   };
 }

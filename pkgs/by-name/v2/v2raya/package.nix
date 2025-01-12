@@ -17,13 +17,13 @@
 }:
 let
   pname = "v2raya";
-  version = "2.2.5.8";
+  version = "2.2.6.3";
 
   src = fetchFromGitHub {
     owner = "v2rayA";
     repo = "v2rayA";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-yFN7mG5qS7BAuCSvSSZFFiyytd7XZ4kJvctc8cU72Oc=";
+    tag = "v${version}";
+    hash = "sha256-Du7DqOkneOFBiPK5BeQtnKRsX0Tcuhq8iiugDMGTk7o=";
     postFetch = "sed -i -e 's/npmmirror/yarnpkg/g' $out/gui/yarn.lock";
   };
 
@@ -34,7 +34,7 @@ let
 
     offlineCache = fetchYarnDeps {
       yarnLock = "${src}/gui/yarn.lock";
-      hash = "sha256-AZIYkW2u1l9IaDpR9xiKNpc0sGAarLKwHf5kGnzdpKw=";
+      hash = "sha256-AexW4FFGkQBQlci/FAm9rpfbPn76v+O3nMX3xHymhPw=";
     };
 
     env.OUTPUT_DIR = placeholder "out";
@@ -60,7 +60,7 @@ buildGoModule {
 
   sourceRoot = "${src.name}/service";
 
-  vendorHash = "sha256-Oa7YmxcZr5scbhNeqGxJOkryL2uHQQ3RkLGWJaIXq3s=";
+  vendorHash = "sha256-kK99Y0CgesvlaM2WsFIPgdtWo2975m9TqyJXoNv43yU=";
 
   ldflags = [
     "-s"
@@ -87,12 +87,12 @@ buildGoModule {
       --prefix XDG_DATA_DIRS ":" ${assetsDir}/share
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Linux web GUI client of Project V which supports V2Ray, Xray, SS, SSR, Trojan and Pingtunnel";
     homepage = "https://github.com/v2rayA/v2rayA";
     mainProgram = "v2rayA";
-    license = licenses.agpl3Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ ChaosAttractor ];
+    license = lib.licenses.agpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ ChaosAttractor ];
   };
 }

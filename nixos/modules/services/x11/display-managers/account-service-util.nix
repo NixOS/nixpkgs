@@ -1,9 +1,10 @@
-{ accountsservice
-, glib
-, gobject-introspection
-, python3
-, wrapGAppsNoGuiHook
-, lib
+{
+  accountsservice,
+  glib,
+  gobject-introspection,
+  python3,
+  wrapGAppsNoGuiHook,
+  lib,
 }:
 
 python3.pkgs.buildPythonApplication {

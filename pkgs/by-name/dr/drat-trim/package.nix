@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation {
   pname = "drat-trim";
@@ -7,7 +11,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "marijnheule";
     repo = "drat-trim";
-    rev = "refs/tags/v05.22.2023";
+    tag = "v05.22.2023";
     hash = "sha256-sV3A0f1TLSaTIdAtT6y8rU3ZS2UqEePJYSf3UySOlSA=";
   };
 

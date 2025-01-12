@@ -1,4 +1,12 @@
-{ fetchurl, lib, stdenv, perl, openssh, rsync, logger }:
+{
+  fetchurl,
+  lib,
+  stdenv,
+  perl,
+  openssh,
+  rsync,
+  logger,
+}:
 
 stdenv.mkDerivation rec {
   pname = "rsnapshot";
@@ -9,7 +17,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ELdeAcolUR6CZqrNSVUxl1rRqK1VYha2pXx20CizgkI=";
   };
 
-  propagatedBuildInputs = [perl openssh rsync logger];
+  propagatedBuildInputs = [
+    perl
+    openssh
+    rsync
+    logger
+  ];
 
   configureFlags = [ "--sysconfdir=/etc --prefix=/" ];
   makeFlags = [ "DESTDIR=$(out)" ];

@@ -28,14 +28,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "fittrackee";
-  version = "0.8.10";
+  version = "0.8.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SamR1";
     repo = "FitTrackee";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-K110H5Y8vQrRx2/O+2ezhpGp4G5sJUlzE+1cSYu7+4I=";
+    tag = "v${version}";
+    hash = "sha256-knhXFhBb11KWidw6ym8EdZJJ9CDSU4TarupegYJx94A=";
   };
 
   build-system = [
@@ -50,6 +50,7 @@ python.pkgs.buildPythonApplication rec {
     "pyopenssl"
     "pytz"
     "sqlalchemy"
+    "ua-parser"
   ];
 
   dependencies =
@@ -107,7 +108,7 @@ python.pkgs.buildPythonApplication rec {
   meta = {
     description = "Self-hosted outdoor activity tracker";
     homepage = "https://github.com/SamR1/FitTrackee";
-    changelog = "https://github.com/SamR1/FitTrackee/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/SamR1/FitTrackee/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ traxys ];
   };

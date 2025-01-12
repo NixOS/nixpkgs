@@ -48,11 +48,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-software";
-  version = "47.1";
+  version = "47.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-software/${lib.versions.major finalAttrs.version}/gnome-software-${finalAttrs.version}.tar.xz";
-    hash = "sha256-k8pQA2YxZ0VZTvBfytHAXPQ/Au+PZggMF/fruMo/NL8=";
+    hash = "sha256-ESM4+KmOflEl3j9XIphzU0IVt37u830/1CYvAhUcfOo=";
   };
 
   patches = [

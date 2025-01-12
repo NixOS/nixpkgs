@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, fixDarwinDylibNames, validatePkgConfig }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fixDarwinDylibNames,
+  validatePkgConfig,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "duktape";
@@ -11,8 +17,9 @@ stdenv.mkDerivation (finalAttrs: {
   # https://github.com/svaarala/duktape/issues/2464
   LDFLAGS = [ "-lm" ];
 
-  nativeBuildInputs = [ validatePkgConfig ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ];
+  nativeBuildInputs = [
+    validatePkgConfig
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ];
 
   buildPhase = ''
     make -f Makefile.sharedlibrary

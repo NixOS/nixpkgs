@@ -1,7 +1,8 @@
-{ stdenv
-, fetchFromGitHub
-, lib
-, python3
+{
+  stdenv,
+  fetchFromGitHub,
+  lib,
+  python3,
 }:
 
 let
@@ -52,12 +53,11 @@ stdenv.mkDerivation rec {
     ${lib.concatStringsSep "\n" (map (b: "install -D ${b} $out/bin/${b}") binaries)}
   '';
 
-  meta = with lib;
-    {
-      description = "Collection of scripts used for BlueField SoC system management";
-      homepage = "https://github.com/Mellanox/bfscripts";
-      license = licenses.bsd2;
-      platforms = platforms.linux;
-      maintainers = with maintainers; [ nikstur ];
-    };
+  meta = with lib; {
+    description = "Collection of scripts used for BlueField SoC system management";
+    homepage = "https://github.com/Mellanox/bfscripts";
+    license = licenses.bsd2;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ nikstur ];
+  };
 }

@@ -42,8 +42,9 @@
   pylint,
   pyperclip,
   pyserial,
-  python3,
+  python,
   python-daemon,
+  pythonOlder,
   pyyaml,
   requests,
   setuptools,
@@ -85,7 +86,7 @@ stdenv.mkDerivation rec {
 
       # Initialize only necessary submodules.
       cd connectedhomeip
-      ${python3}/bin/python3 scripts/checkout_submodules.py --platform linux --shallow
+      ${python.interpreter} scripts/checkout_submodules.py --platform linux --shallow
 
       # Keep the output deterministic.
       cd $out
@@ -105,7 +106,7 @@ stdenv.mkDerivation rec {
     zap-chip
     # gdbus-codegen
     glib
-    python3
+    python
     # dependencies of build scripts
     click
     jinja2
@@ -200,7 +201,7 @@ stdenv.mkDerivation rec {
         pyelftools
         pygments
         pykwalify
-        pylint
+        (pylint.overridePythonAttrs { doCheck = pythonOlder "3.13"; })
         pyperclip
         pyserial
         python-daemon
@@ -254,7 +255,7 @@ stdenv.mkDerivation rec {
     ''chip_config_memory_debug_dmalloc=false''
     ''chip_mdns="minimal"''
     ''chip_minmdns_default_policy="libnl"''
-    ''chip_python_version="${lib.versions.majorMinor python3.version}"''
+    ''chip_python_version="${lib.versions.majorMinor python.version}"''
     ''chip_python_platform_tag="any"''
     ''chip_python_package_prefix="home-assistant-chip"''
     ''custom_toolchain="custom"''

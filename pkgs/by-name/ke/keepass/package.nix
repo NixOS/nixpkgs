@@ -1,7 +1,22 @@
-{ lib, stdenv, fetchurl
-, unzip, mono, makeWrapper, icoutils
-, substituteAll, xsel, xorg, xdotool, coreutils, unixtools, glib
-, gtk2, makeDesktopItem, plugins ? [] }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  mono,
+  makeWrapper,
+  icoutils,
+  substituteAll,
+  xsel,
+  xorg,
+  xdotool,
+  coreutils,
+  unixtools,
+  glib,
+  gtk2,
+  makeDesktopItem,
+  plugins ? [ ],
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "keepass";
@@ -39,21 +54,28 @@ stdenv.mkDerivation (finalAttrs: {
   #
   # This derivation patches KeePass to search for plugins in specified
   # plugin derivations in the Nix store and nowhere else.
-  pluginLoadPathsPatch = let
-    inherit (builtins) toString;
-    inherit (lib.strings) readFile concatStrings replaceStrings unsafeDiscardStringContext;
-    inherit (lib.lists) map length;
-    inherit (lib) add;
+  pluginLoadPathsPatch =
+    let
+      inherit (builtins) toString;
+      inherit (lib.strings)
+        readFile
+        concatStrings
+        replaceStrings
+        unsafeDiscardStringContext
+        ;
+      inherit (lib.lists) map length;
+      inherit (lib) add;
 
-    outputLc = toString (add 7 (length plugins));
-    patchTemplate = readFile ./keepass-plugins.patch;
-    loadTemplate  = readFile ./keepass-plugins-load.patch;
-    loads = concatStrings
-      (map
-        (p: replaceStrings ["$PATH$"] [ (unsafeDiscardStringContext (toString p)) ] loadTemplate)
-          plugins);
-  in
-  replaceStrings ["$OUTPUT_LC$" "$DO_LOADS$"] [outputLc loads] patchTemplate;
+      outputLc = toString (add 7 (length plugins));
+      patchTemplate = readFile ./keepass-plugins.patch;
+      loadTemplate = readFile ./keepass-plugins-load.patch;
+      loads = concatStrings (
+        map (
+          p: replaceStrings [ "$PATH$" ] [ (unsafeDiscardStringContext (toString p)) ] loadTemplate
+        ) plugins
+      );
+    in
+    replaceStrings [ "$OUTPUT_LC$" "$DO_LOADS$" ] [ outputLc loads ] patchTemplate;
 
   passAsFile = [ "pluginLoadPathsPatch" ];
   postPatch = ''
@@ -143,7 +165,10 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "GUI password manager with strong cryptography";
     homepage = "http://www.keepass.info/";
-    maintainers = with lib.maintainers; [ amorsillo obadz ];
+    maintainers = with lib.maintainers; [
+      amorsillo
+      obadz
+    ];
     platforms = with lib.platforms; all;
     license = lib.licenses.gpl2;
     mainProgram = "keepass";

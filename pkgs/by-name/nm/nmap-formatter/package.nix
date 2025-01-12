@@ -1,17 +1,18 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
   pname = "nmap-formatter";
-  version = "3.0.1";
+  version = "3.0.2";
 
   src = fetchFromGitHub {
     owner = "vdjagilev";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-2XbqpvtlNAYrgtaMnFklYRoHCj3nkltEZlwbZzvfdFU=";
+    hash = "sha256-tB3FPb0k7jJ8RECsT3eLGjVpHqNclOvlh1MgoV6bbwo=";
   };
 
   vendorHash = "sha256-PKoe4rpwPy3omfRRhN70iEJJ/sHliIwxPUHGxRJqrf4=";

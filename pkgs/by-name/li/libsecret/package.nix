@@ -1,33 +1,40 @@
-{ stdenv
-, lib
-, fetchurl
-, fetchpatch2
-, glib
-, meson
-, ninja
-, pkg-config
-, gettext
-, libxslt
-, python3
-, docbook-xsl-nons
-, docbook_xml_dtd_42
-, libgcrypt
-, gobject-introspection
-, buildPackages
-, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
-, vala
-, gi-docgen
-, gnome
-, gjs
-, libintl
-, dbus
+{
+  stdenv,
+  lib,
+  fetchurl,
+  fetchpatch2,
+  glib,
+  meson,
+  ninja,
+  pkg-config,
+  gettext,
+  libxslt,
+  python3,
+  python3Packages,
+  docbook-xsl-nons,
+  docbook_xml_dtd_42,
+  libgcrypt,
+  gobject-introspection,
+  buildPackages,
+  withIntrospection ?
+    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages,
+  vala,
+  gi-docgen,
+  gnome,
+  gjs,
+  libintl,
+  dbus,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libsecret";
   version = "0.21.4";
 
-  outputs = [ "out" "dev" ] ++ lib.optional withIntrospection "devdoc";
+  outputs = [
+    "out"
+    "dev"
+  ] ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -46,21 +53,23 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    gettext
-    libxslt # for xsltproc for building man pages
-    docbook-xsl-nons
-    docbook_xml_dtd_42
-    libintl
-    vala
-    glib
-  ] ++ lib.optionals withIntrospection [
-    gi-docgen
-    gobject-introspection
-  ];
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+      pkg-config
+      gettext
+      libxslt # for xsltproc for building man pages
+      docbook-xsl-nons
+      docbook_xml_dtd_42
+      libintl
+      vala
+      glib
+    ]
+    ++ lib.optionals withIntrospection [
+      gi-docgen
+      gobject-introspection
+    ];
 
   buildInputs = [
     libgcrypt
@@ -72,8 +81,8 @@ stdenv.mkDerivation rec {
 
   nativeCheckInputs = [
     python3
-    python3.pkgs.dbus-python
-    python3.pkgs.pygobject3
+    python3Packages.dbus-python
+    python3Packages.pygobject3
     dbus
     gjs
   ];

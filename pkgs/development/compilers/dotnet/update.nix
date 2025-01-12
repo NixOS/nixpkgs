@@ -18,7 +18,7 @@
 }:
 
 let
-  inherit (lib.importJSON releaseManifestFile) channel release;
+  inherit (lib.importJSON releaseManifestFile) channel tag;
 
   pkg = stdenvNoCC.mkDerivation {
     name = "update-dotnet-vmr-env";
@@ -93,15 +93,11 @@ writeScript "update-dotnet-vmr.sh" ''
       tmp="$(mktemp -d)"
       trap 'rm -rf "$tmp"' EXIT
 
-      echo ${lib.escapeShellArg (toString ./update.sh)} \
-          -o ${lib.escapeShellArg (toString bootstrapSdkFile)} --sdk foo
-
       cd "$tmp"
 
       curl -fsSL "$releaseUrl" -o release.json
-      release=$(jq -r .release release.json)
 
-      if [[ -z $tag && "$release" == "${release}" ]]; then
+      if [[ -z $tag && "$tagName" == "${tag}" ]]; then
           >&2 echo "release is already $release"
           exit
       fi
@@ -127,12 +123,13 @@ writeScript "update-dotnet-vmr.sh" ''
           | .[] | .PrivateSourceBuiltArtifactsVersion' eng/Versions.props)
 
       if [[ "$artifactsVersion" != "" ]]; then
-          artifactsUrl=https://dotnetcli.azureedge.net/source-built-artifacts/assets/Private.SourceBuilt.Artifacts.$artifactsVersion.centos.9-x64.tar.gz
+          artifactsUrl=https://builds.dotnet.microsoft.com/source-built-artifacts/assets/Private.SourceBuilt.Artifacts.$artifactsVersion.centos.9-x64.tar.gz
       else
           artifactsUrl=$(xq -r '.Project.PropertyGroup |
               map(select(.PrivateSourceBuiltArtifactsUrl))
               | .[] | .PrivateSourceBuiltArtifactsUrl' eng/Versions.props)
       fi
+      artifactsUrl="''${artifactsUrl/dotnetcli.azureedge.net/builds.dotnet.microsoft.com}"
 
       artifactsHash=$(nix-hash --to-sri --type sha256 "$(nix-prefetch-url "$artifactsUrl")")
 

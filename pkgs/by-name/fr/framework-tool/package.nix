@@ -1,4 +1,10 @@
-{ lib, rustPlatform, fetchFromGitHub, pkg-config, udev }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  udev,
+}:
 
 rustPlatform.buildRustPackage {
   pname = "framework-tool";
@@ -17,8 +23,7 @@ rustPlatform.buildRustPackage {
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "smbios-lib-0.9.1" =
-        "sha256-3L8JaA75j9Aaqg1z9lVs61m6CvXDeQprEFRq+UDCHQo=";
+      "smbios-lib-0.9.1" = "sha256-3L8JaA75j9Aaqg1z9lVs61m6CvXDeQprEFRq+UDCHQo=";
       "uefi-0.20.0" = "sha256-/3WNHuc27N89M7s+WT64SHyFOp7YRyzz6B+neh1vejY=";
     };
   };
@@ -31,7 +36,11 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/FrameworkComputer/framework-system";
     license = licenses.bsd3;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ nickcao leona kloenk ];
+    maintainers = with maintainers; [
+      nickcao
+      leona
+      kloenk
+    ];
     mainProgram = "framework_tool";
   };
 }

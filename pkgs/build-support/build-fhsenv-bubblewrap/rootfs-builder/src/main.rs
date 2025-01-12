@@ -159,7 +159,7 @@ fn collect_candidate_paths(
 }
 
 fn remap_native_path(root: &Path, p: &Path) -> Option<PathBuf> {
-    if p.starts_with("bin/") || p.starts_with("sbin/") {
+    if p.starts_with("bin/") || p.starts_with("sbin/") || p.starts_with("libexec/") {
         return Some(PathBuf::from("usr/").join(p));
     }
 

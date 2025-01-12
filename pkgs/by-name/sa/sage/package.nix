@@ -1,7 +1,8 @@
-{ pkgs
-, withDoc ? false
-, requireSageTests ? true
-, extraPythonPackages ? ps: []
+{
+  pkgs,
+  withDoc ? false,
+  requireSageTests ? true,
+  extraPythonPackages ? ps: [ ],
 }:
 
 # Here sage and its dependencies are put together. Some dependencies may be pinned
@@ -12,24 +13,26 @@ let
   inherit (pkgs) symlinkJoin callPackage nodePackages;
 
   python3 = pkgs.python3 // {
-    pkgs = pkgs.python3.pkgs.overrideScope (self: super: {
-      # `sagelib`, i.e. all of sage except some wrappers and runtime dependencies
-      sagelib = self.callPackage ./sagelib.nix {
-        inherit flint3;
-        inherit sage-src env-locations singular;
-        inherit (maxima) lisp-compiler;
-        linbox = pkgs.linbox;
-        pkg-config = pkgs.pkg-config; # not to confuse with pythonPackages.pkg-config
-      };
+    pkgs = pkgs.python3.pkgs.overrideScope (
+      self: super: {
+        # `sagelib`, i.e. all of sage except some wrappers and runtime dependencies
+        sagelib = self.callPackage ./sagelib.nix {
+          inherit flint3;
+          inherit sage-src env-locations singular;
+          inherit (maxima) lisp-compiler;
+          linbox = pkgs.linbox;
+          pkg-config = pkgs.pkg-config; # not to confuse with pythonPackages.pkg-config
+        };
 
-      sage-docbuild = self.callPackage ./python-modules/sage-docbuild.nix {
-        inherit sage-src;
-      };
+        sage-docbuild = self.callPackage ./python-modules/sage-docbuild.nix {
+          inherit sage-src;
+        };
 
-      sage-setup = self.callPackage ./python-modules/sage-setup.nix {
-        inherit sage-src;
-      };
-    });
+        sage-setup = self.callPackage ./python-modules/sage-setup.nix {
+          inherit sage-src;
+        };
+      }
+    );
   };
 
   # matches src/sage/repl/ipython_kernel/install.py:kernel_spec
@@ -73,7 +76,14 @@ let
     sagelib = python3.pkgs.sagelib;
     sage-docbuild = python3.pkgs.sage-docbuild;
     inherit env-locations;
-    inherit python3 singular palp flint3 pythonEnv maxima;
+    inherit
+      python3
+      singular
+      palp
+      flint3
+      pythonEnv
+      maxima
+      ;
     pkg-config = pkgs.pkg-config; # not to confuse with pythonPackages.pkg-config
   };
 
@@ -100,31 +110,38 @@ let
     pytest = python3.pkgs.pytest;
   };
 
-  sage-src = callPackage ./sage-src.nix {};
+  sage-src = callPackage ./sage-src.nix { };
 
-  pythonRuntimeDeps = with python3.pkgs; [
-    sagelib
-    sage-docbuild
-    cvxopt
-    networkx
-    service-identity
-    psutil
-    sympy
-    fpylll
-    matplotlib
-    tkinter # optional, as a matplotlib backend (use with `%matplotlib tk`)
-    scipy
-    ipywidgets
-    notebook # for "sage -n"
-    rpy2
-    sphinx
-    pillow
-  ] ++ extraPythonPackages python3.pkgs;
+  pythonRuntimeDeps =
+    with python3.pkgs;
+    [
+      sagelib
+      sage-docbuild
+      cvxopt
+      networkx
+      service-identity
+      psutil
+      sympy
+      fpylll
+      matplotlib
+      tkinter # optional, as a matplotlib backend (use with `%matplotlib tk`)
+      scipy
+      ipywidgets
+      notebook # for "sage -n"
+      rpy2
+      sphinx
+      pillow
+    ]
+    ++ extraPythonPackages python3.pkgs;
 
-  pythonEnv = python3.buildEnv.override {
-    extraLibs = pythonRuntimeDeps;
-    ignoreCollisions = true;
-  } // { extraLibs = pythonRuntimeDeps; }; # make the libs accessible
+  pythonEnv =
+    python3.buildEnv.override {
+      extraLibs = pythonRuntimeDeps;
+      ignoreCollisions = true;
+    }
+    // {
+      extraLibs = pythonRuntimeDeps;
+    }; # make the libs accessible
 
   singular = pkgs.singular.override { inherit flint3; };
 
@@ -155,10 +172,22 @@ let
   palp = symlinkJoin {
     name = "palp-${pkgs.palp.version}";
     paths = [
-      (pkgs.palp.override { dimensions = 4; doSymlink = false; })
-      (pkgs.palp.override { dimensions = 5; doSymlink = false; })
-      (pkgs.palp.override { dimensions = 6; doSymlink = true; })
-      (pkgs.palp.override { dimensions = 11; doSymlink = false; })
+      (pkgs.palp.override {
+        dimensions = 4;
+        doSymlink = false;
+      })
+      (pkgs.palp.override {
+        dimensions = 5;
+        doSymlink = false;
+      })
+      (pkgs.palp.override {
+        dimensions = 6;
+        doSymlink = true;
+      })
+      (pkgs.palp.override {
+        dimensions = 11;
+        doSymlink = false;
+      })
     ];
   };
 
@@ -173,6 +202,12 @@ let
 in
 # A wrapper around sage that makes sure sage finds its docs (if they were build).
 callPackage ./sage.nix {
-  inherit sage-tests sage-with-env sagedoc jupyter-kernel-definition jupyter-kernel-specs;
+  inherit
+    sage-tests
+    sage-with-env
+    sagedoc
+    jupyter-kernel-definition
+    jupyter-kernel-specs
+    ;
   inherit withDoc requireSageTests;
 }

@@ -1,19 +1,24 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rocmUpdateScript
-, cmake
-, rocm-cmake
-, rocm-device-libs
-, libxml2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rocmUpdateScript,
+  cmake,
+  rocm-cmake,
+  rocm-device-libs,
+  libxml2,
 }:
 
 let
   llvmNativeTarget =
-    if stdenv.hostPlatform.isx86_64 then "X86"
-    else if stdenv.hostPlatform.isAarch64 then "AArch64"
-    else throw "Unsupported ROCm LLVM platform";
-in stdenv.mkDerivation (finalAttrs: {
+    if stdenv.hostPlatform.isx86_64 then
+      "X86"
+    else if stdenv.hostPlatform.isAarch64 then
+      "AArch64"
+    else
+      throw "Unsupported ROCm LLVM platform";
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-comgr";
   version = "6.0.2";
 
@@ -50,6 +55,8 @@ in stdenv.mkDerivation (finalAttrs: {
     license = licenses.ncsa;
     maintainers = with maintainers; [ lovesegfault ] ++ teams.rocm.members;
     platforms = platforms.linux;
-    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version || versionAtLeast finalAttrs.version "7.0.0";
+    broken =
+      versions.minor finalAttrs.version != versions.minor stdenv.cc.version
+      || versionAtLeast finalAttrs.version "7.0.0";
   };
 })

@@ -1,22 +1,28 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "argocd-autopilot";
-  version = "0.4.17";
+  version = "0.4.18";
 
   src = fetchFromGitHub {
     owner = "argoproj-labs";
     repo = "argocd-autopilot";
     rev = "v${version}";
-    sha256 = "sha256-txbs1SzAaV1nCl104m0Ht5DwzCmK+sBDn4rZ1newdLc=";
+    sha256 = "sha256-vG2m0HhT9Pd9qzOAE2BbFf8zluH7btAVexznBCETvxA=";
   };
 
-  vendorHash = "sha256-QbjiQVclT8paEKYQmMwj5MLq40mAVh5Ji5VJJTOmEZI=";
+  vendorHash = "sha256-gyjxZiccaB5ZfEzxrYYYFx7Z6lhszzNL4ugltAMsfag=";
 
   proxyVendor = true;
 
   ldflags =
-    let package_url = "github.com/argoproj-labs/argocd-autopilot/pkg/store"; in
+    let
+      package_url = "github.com/argoproj-labs/argocd-autopilot/pkg/store";
+    in
     [
       "-s"
       "-w"
@@ -50,6 +56,9 @@ buildGoModule rec {
     downloadPage = "https://github.com/argoproj-labs/argocd-autopilot";
     homepage = "https://argocd-autopilot.readthedocs.io/en/stable/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ sagikazarmark bryanasdev000 ];
+    maintainers = with maintainers; [
+      sagikazarmark
+      bryanasdev000
+    ];
   };
 }

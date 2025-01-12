@@ -1,32 +1,39 @@
-{ lib
-, stdenv
-, fetchurl
-, autoPatchelfHook
-, fontconfig
-, freetype
-, libICE
-, libSM
-, libX11
-, libXcursor
-, libXfixes
-, libXrandr
-, libXrender
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoPatchelfHook,
+  fontconfig,
+  freetype,
+  libICE,
+  libSM,
+  libX11,
+  libXcursor,
+  libXfixes,
+  libXrandr,
+  libXrender,
 }:
 
 stdenv.mkDerivation rec {
   pname = "segger-ozone";
   version = "3.30b";
 
-  src = {
-    x86_64-linux = fetchurl {
-      url = "https://www.segger.com/downloads/jlink/Ozone_Linux_V${builtins.replaceStrings ["."] [""] version}_x86_64.tgz";
-      hash = "sha256-W8Fo0q58pAn1aB92CjYARcN3vMLEguvsyozsS7VRArQ=";
-    };
-    i686-linux = fetchurl {
-      url = "https://www.segger.com/downloads/jlink/Ozone_Linux_V${builtins.replaceStrings ["."] [""] version}_i386.tgz";
-      hash = "sha256-Xq/69lwF2Ll5VdkYMDNRtc0YUUvWc+XR0FHJXxOLNQ4=";
-    };
-  }.${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
+  src =
+    {
+      x86_64-linux = fetchurl {
+        url = "https://www.segger.com/downloads/jlink/Ozone_Linux_V${
+          builtins.replaceStrings [ "." ] [ "" ] version
+        }_x86_64.tgz";
+        hash = "sha256-W8Fo0q58pAn1aB92CjYARcN3vMLEguvsyozsS7VRArQ=";
+      };
+      i686-linux = fetchurl {
+        url = "https://www.segger.com/downloads/jlink/Ozone_Linux_V${
+          builtins.replaceStrings [ "." ] [ "" ] version
+        }_i386.tgz";
+        hash = "sha256-Xq/69lwF2Ll5VdkYMDNRtc0YUUvWc+XR0FHJXxOLNQ4=";
+      };
+    }
+    .${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -82,6 +89,9 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = [ maintainers.bmilanov ];
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+    ];
   };
 }

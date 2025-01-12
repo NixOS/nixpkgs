@@ -14,7 +14,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "timvisee";
     repo = "send";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-bqQEXLwUvTKX+m2yNHRnrl+eeaGmcovXpXugxd+j14A=";
   };
 

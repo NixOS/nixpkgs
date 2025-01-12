@@ -1,34 +1,35 @@
-{ lib
-, fetchFromGitHub
-, glibcLocales
-, glib-networking
-, gobject-introspection
-, gtk3
-, libnotify
-, python3Packages
-, steam-run
-, substituteAll
-, unzip
-, webkitgtk_4_0
-, wrapGAppsHook3
+{
+  lib,
+  fetchFromGitHub,
+  glibcLocales,
+  glib-networking,
+  gobject-introspection,
+  gtk3,
+  libnotify,
+  python3Packages,
+  steam-run,
+  substituteAll,
+  unzip,
+  webkitgtk_4_0,
+  wrapGAppsHook3,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "minigalaxy";
-  version = "1.3.0";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "sharkwouter";
     repo = "minigalaxy";
-    rev = "refs/tags/${version}";
-    hash = "sha256-CMPBKnNrcjHVpsbBjY97FiygEJNG9jKHR/LoVMfuxG4=";
+    tag = version;
+    hash = "sha256-nxWJm+CkxZqRMUYQA0ZJKOb2fD1tPYXnYhy+DOnDbkQ=";
   };
 
   patches = [
     (substituteAll {
       src = ./inject-launcher-steam-run.diff;
       steamrun = lib.getExe steam-run;
-     })
+    })
   ];
 
   postPatch = ''

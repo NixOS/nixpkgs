@@ -2,23 +2,29 @@
   lib,
   stdenv,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pytestCheckHook,
   pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pebble";
-  version = "5.0.7";
-  format = "setuptools";
+  version = "5.1.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    pname = "Pebble";
-    inherit version;
-    hash = "sha256-J4TBR3ZvBjiM6nhAhLFL7JP9uqeTgw8ZgxVaozCipuQ=";
+  src = fetchFromGitHub {
+    owner = "noxdafox";
+    repo = "pebble";
+    tag = version;
+    hash = "sha256-Y6E+Mu5Ch+VTHryTY3pvHQD6GzaTLrtf78DqUWa7nt0=";
   };
+
+  build-system = [
+    setuptools
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -26,11 +32,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pebble" ];
 
-  meta = with lib; {
+  meta = {
     description = "API to manage threads and processes within an application";
     homepage = "https://github.com/noxdafox/pebble";
     changelog = "https://github.com/noxdafox/pebble/releases/tag/${version}";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ orivej ];
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ orivej ];
   };
 }

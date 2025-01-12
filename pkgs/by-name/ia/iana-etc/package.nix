@@ -1,4 +1,9 @@
-{ lib, fetchzip, stdenvNoCC, writeText }:
+{
+  lib,
+  fetchzip,
+  stdenvNoCC,
+  writeText,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "iana-etc";

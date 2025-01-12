@@ -16,35 +16,35 @@
 
 {
   # Build dependencies
-  appimageTools
-, autoPatchelfHook
-, fetchzip
-, lib
-, stdenv
+  appimageTools,
+  autoPatchelfHook,
+  fetchzip,
+  lib,
+  stdenv,
 
   # Runtime dependencies;
   # A few additional ones (e.g. Node) are already shipped together with the
   # AppImage, so we don't have to duplicate them here.
-, alsa-lib
-, dbus-glib
-, fuse
-, gsettings-desktop-schemas
-, gtk3
-, libdbusmenu-gtk2
-, libXdamage
-, nss
-, udev
+  alsa-lib,
+  dbus-glib,
+  fuse,
+  gsettings-desktop-schemas,
+  gtk3,
+  libdbusmenu-gtk2,
+  libXdamage,
+  nss,
+  udev,
 }:
 
 let
   pname = "pcloud";
-  version = "1.14.7";
-  code = "XZhPkU0Zh5gulxHfMn4j1dYBS4dh45iDQHby";
+  version = "1.14.8";
+  code = "XZxqNX5Z7nKd4XMTlkbMbnuRDuhyfL1g5efk";
 
   # Archive link's codes: https://www.pcloud.com/release-notes/linux.html
   src = fetchzip {
     url = "https://api.pcloud.com/getpubzip?code=${code}&filename=pcloud-${version}.zip";
-    hash = "sha256-fzQVuCI3mK93Y3Fwzc0WM5rti0fTZhRm+Qj1CHC8CJ4=";
+    hash = "sha256-+uWvaNA9mCF9vkBbNnsak+h11mcl9QBamBhMzt68Rfc=";
   };
 
   appimageContents = appimageTools.extractType2 {

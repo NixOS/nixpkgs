@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromSourcehut
-, pkg-config
-, scdoc
-, libX11
-, cairo
-, pango
+{
+  lib,
+  stdenv,
+  fetchFromSourcehut,
+  pkg-config,
+  scdoc,
+  libX11,
+  cairo,
+  pango,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -19,9 +20,16 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-uggIoO6rgotkLi6lSJTR4d3NtidXsAC1Kjay9YsT9ps=";
   };
 
-  nativeBuildInputs = [ pkg-config scdoc ];
+  nativeBuildInputs = [
+    pkg-config
+    scdoc
+  ];
 
-  buildInputs = [ libX11 cairo pango ];
+  buildInputs = [
+    libX11
+    cairo
+    pango
+  ];
 
   installFlags = [ "PREFIX=$(out)" ];
 

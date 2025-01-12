@@ -1,4 +1,9 @@
-{ buildNpmPackage, fetchFromGitHub, lib, ... }:
+{
+  buildNpmPackage,
+  fetchFromGitHub,
+  lib,
+  ...
+}:
 
 buildNpmPackage rec {
   pname = "rtlcss";

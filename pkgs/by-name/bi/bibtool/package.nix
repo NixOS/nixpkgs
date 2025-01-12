@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, perl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "bibtool";
@@ -12,7 +17,10 @@ stdenv.mkDerivation rec {
   # Perl for running test suite.
   buildInputs = [ perl ];
 
-  installTargets = [ "install" "install.man" ];
+  installTargets = [
+    "install"
+    "install.man"
+  ];
 
   doCheck = true;
   checkTarget = "test";

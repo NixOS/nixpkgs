@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, libxcb, libXrandr
-, xcbutil, xcbutilkeysyms, xcbutilwm, xcbproto
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libxcb,
+  libXrandr,
+  xcbutil,
+  xcbutilkeysyms,
+  xcbutilwm,
+  xcbproto,
 }:
 
 stdenv.mkDerivation rec {
@@ -7,13 +15,20 @@ stdenv.mkDerivation rec {
   version = "0.5.2";
 
   src = fetchFromGitHub {
-    owner  = "tudurom";
-    repo   = "windowchef";
-    rev    = "v${version}";
+    owner = "tudurom";
+    repo = "windowchef";
+    rev = "v${version}";
     sha256 = "1m4vly7w2f28lrj26rhh3x9xsp3d97m5cxj91fafgh5rds4ygyhp";
   };
 
-  buildInputs = [ libxcb libXrandr xcbutil xcbutilkeysyms xcbutilwm xcbproto];
+  buildInputs = [
+    libxcb
+    libXrandr
+    xcbutil
+    xcbutilkeysyms
+    xcbutilwm
+    xcbproto
+  ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 

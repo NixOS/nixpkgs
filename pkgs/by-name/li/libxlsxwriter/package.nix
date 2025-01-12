@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, minizip
-, python3
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  minizip,
+  python3,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "jmcnamara";
     repo = "libxlsxwriter";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ZXVNW5cEWgMXKLnE0IpwWS0RIWBta5uhuGh4R9uFJ14=";
   };
 

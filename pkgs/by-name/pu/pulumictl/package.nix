@@ -1,20 +1,26 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "pulumictl";
-  version = "0.0.46";
+  version = "0.0.47";
 
   src = fetchFromGitHub {
     owner = "pulumi";
     repo = "pulumictl";
     rev = "v${version}";
-    sha256 = "sha256-7A6dx/5091FIQ2AB6C+Z2CjhTBx2e6iB21Du2u9EiHY=";
+    sha256 = "sha256-bZ7Di1DcvGECfOzW72QnfWRn76U+agsNsdsprBjx5Rw=";
   };
 
-  vendorHash = "sha256-Wktr3TXSIIzbkiT3Gk5i4K58gahnxySi6ht30li+Z0o=";
+  vendorHash = "sha256-QYQk36e7NLZnl00fRW4i4UMy7jFVaGHlXcxXt/wqw3M=";
 
   ldflags = [
-    "-s" "-w" "-X=github.com/pulumi/pulumictl/pkg/version.Version=${src.rev}"
+    "-s"
+    "-w"
+    "-X=github.com/pulumi/pulumictl/pkg/version.Version=${src.rev}"
   ];
 
   subPackages = [ "cmd/pulumictl" ];

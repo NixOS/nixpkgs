@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, autoreconfHook }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+}:
 
 stdenv.mkDerivation rec {
   pname = "oniguruma";
@@ -10,7 +15,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-YBYr07n8b0iG1MegeSX/03QWdzL1Xc6MSRv9nNgYps8=";
   };
 
-  outputs = [ "dev" "lib" "out" ];
+  outputs = [
+    "dev"
+    "lib"
+    "out"
+  ];
   outputBin = "dev"; # onig-config
 
   nativeBuildInputs = [ autoreconfHook ];

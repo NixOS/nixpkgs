@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-examples";
-  version = "0.0.14";
+  version = "0.0.15";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pydantic";
     repo = "pytest-examples";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-MAiTNz2Ygk+JOiiT5DGhJ15xITbS+4Gk23YCKJm7OKE=";
+    tag = "v${version}";
+    hash = "sha256-FLcvPa3vBldNINFM5hOraczrZCjSmlrEqkBj+f/sU1k=";
   };
 
   build-system = [

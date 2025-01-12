@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "amazon-ion";
     repo = "ion-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     # Test vectors require git submodule
     fetchSubmodules = true;
     hash = "sha256-L21FYl4Q+nhB3CU1maOxBHSLU+ox1POHtMio8SSZ/r0=";

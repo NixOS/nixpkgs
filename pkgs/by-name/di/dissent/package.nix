@@ -1,16 +1,17 @@
-{ buildGoModule
-, fetchFromGitLab
-, fetchFromGitHub
-, gobject-introspection
-, gst_all_1
-, lib
-, libadwaita
-, libcanberra-gtk3
-, pkg-config
-, sound-theme-freedesktop
-, libspelling
-, gtksourceview5
-, wrapGAppsHook4
+{
+  buildGoModule,
+  fetchFromGitLab,
+  fetchFromGitHub,
+  gobject-introspection,
+  gst_all_1,
+  lib,
+  libadwaita,
+  libcanberra-gtk3,
+  pkg-config,
+  sound-theme-freedesktop,
+  libspelling,
+  gtksourceview5,
+  wrapGAppsHook4,
 }:
 
 let
@@ -28,13 +29,13 @@ let
 in
 buildGoModule rec {
   pname = "dissent";
-  version = "0.0.30";
+  version = "0.0.31";
 
   src = fetchFromGitHub {
     owner = "diamondburned";
     repo = "dissent";
     rev = "v${version}";
-    hash = "sha256-wBDN9eUPOr9skTTgA0ea50Byta3qVr1loRrfMWhnxP8=";
+    hash = "sha256-mI0rZ7w2a6fzELYRHgeekTWYDaQGcDYectRWUdOmlYc=";
   };
 
   nativeBuildInputs = [
@@ -69,13 +70,20 @@ buildGoModule rec {
     install -D -m 444 -t $out/share/dbus-1/services nix/so.libdb.dissent.service
   '';
 
-  vendorHash = "sha256-TXqdO+DjnDD/+zwm3gK3+sxMTEVSHuceKz4ZJVH5Y34=";
+  vendorHash = "sha256-JISIS8k/veBAqZ0DlxVBrc+25IVM6BpY4eE5uxsjo+Y=";
 
   meta = with lib; {
     description = "A third-party Discord client designed for a smooth, native experience (formerly gtkcord4)";
     homepage = "https://github.com/diamondburned/dissent";
-    license = with licenses; [ gpl3Plus cc0 ];
+    license = with licenses; [
+      gpl3Plus
+      cc0
+    ];
     mainProgram = "dissent";
-    maintainers = with maintainers; [ hmenke urandom aleksana ];
+    maintainers = with maintainers; [
+      hmenke
+      urandom
+      aleksana
+    ];
   };
 }

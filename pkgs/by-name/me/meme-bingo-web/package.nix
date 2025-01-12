@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitea
-, rustPlatform
-, makeWrapper
-, nix-update-script
+{
+  lib,
+  fetchFromGitea,
+  rustPlatform,
+  makeWrapper,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {

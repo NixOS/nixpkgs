@@ -93,46 +93,6 @@ in
   };
 
   config = mkIf cfg.enable {
-
-    assertions = [
-      # We removed our module-level default for replication_mode. If a user upgraded
-      # to garage 1.0.0 while relying on the module-level default, they would be left
-      # with a config which evaluates and builds, but then garage refuses to start
-      # because either replication_factor or replication_mode is required.
-      # The replication_factor option also was `toString`'ed before, which is
-      # now not possible anymore, so we prompt the user to change it to a string
-      # if present.
-      # These assertions can be removed in NixOS 24.11, when all users have been
-      # warned once.
-      {
-        assertion =
-          (cfg.settings ? replication_factor || cfg.settings ? replication_mode)
-          || lib.versionOlder cfg.package.version "1.0.0";
-        message = ''
-          Garage 1.0.0 requires an explicit replication factor to be set.
-          Please set replication_factor to 1 explicitly to preserve the previous behavior.
-          https://git.deuxfleurs.fr/Deuxfleurs/garage/src/tag/v1.0.0/doc/book/reference-manual/configuration.md#replication_factor
-
-        '';
-      }
-      {
-        assertion = lib.isString (cfg.settings.replication_mode or "");
-        message = ''
-          The explicit `replication_mode` option in `services.garage.settings`
-          has been removed and is now handled by the freeform settings in order
-          to allow it being completely absent (for Garage 1.x).
-          That module option previously `toString`'ed the value it's configured
-          with, which is now no longer possible.
-
-          You're still using a non-string here, please manually set it to
-          a string, or migrate to the separate setting keys introduced in 1.x.
-
-          Refer to https://garagehq.deuxfleurs.fr/documentation/working-documents/migration-1/
-          for the migration guide.
-        '';
-      }
-    ];
-
     environment.etc."garage.toml" = {
       source = configFile;
     };

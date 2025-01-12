@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   inherit version doCheck;
 
   # Blank llvm dir just so relative path works
-  src = runCommand "${pname}-src-${version}" { } (''
+  src = runCommand "${pname}-src-${version}" { inherit (monorepoSrc) passthru; } (''
     mkdir -p "$out"
   '' + lib.optionalString (lib.versionAtLeast release_version "14") ''
     cp -r ${monorepoSrc}/cmake "$out"

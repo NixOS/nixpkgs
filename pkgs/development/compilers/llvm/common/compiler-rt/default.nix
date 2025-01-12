@@ -7,12 +7,11 @@
 , src ? null
 , monorepoSrc ? null
 , runCommand
-, apple-sdk
-, apple-sdk_10_13
 , cmake
 , ninja
 , python3
 , libllvm
+, jq
 , libcxx
 , linuxHeaders
 , freebsd
@@ -47,44 +46,29 @@ let
   baseName = "compiler-rt";
   pname = baseName + lib.optionalString (haveLibc) "-libc";
 
-  # Sanitizers require 10.13 or newer. Instead of disabling them for most x86_64-darwin users,
-  # build them with a newer SDK and the default (10.12) deployment target.
-  apple-sdk' =
-    if lib.versionOlder (lib.getVersion apple-sdk) "10.13" then
-      apple-sdk_10_13.override { enableBootstrap = true; }
-    else
-      apple-sdk.override { enableBootstrap = true; };
-
   src' = if monorepoSrc != null then
-    runCommand "${baseName}-src-${version}" {} (''
+    runCommand "${baseName}-src-${version}" { inherit (monorepoSrc) passthru; } (''
       mkdir -p "$out"
     '' + lib.optionalString (lib.versionAtLeast release_version "14") ''
       cp -r ${monorepoSrc}/cmake "$out"
     '' + ''
       cp -r ${monorepoSrc}/${baseName} "$out"
     '') else src;
-
-  preConfigure = lib.optionalString (!haveLibc) ''
-    cmakeFlagsArray+=(-DCMAKE_C_FLAGS="-nodefaultlibs -ffreestanding")
-  '';
 in
 
-stdenv.mkDerivation ({
+stdenv.mkDerivation {
   inherit pname version patches;
 
   src = src';
-  sourceRoot = if lib.versionOlder release_version "13" then null
-    else "${src'.name}/${baseName}";
+  sourceRoot = "${src'.name}/${baseName}";
 
   nativeBuildInputs = [ cmake ]
     ++ (lib.optional (lib.versionAtLeast release_version "15") ninja)
-    ++ [ python3 libllvm.dev ];
+    ++ [ python3 libllvm.dev ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ jq ];
   buildInputs =
     lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isRiscV) linuxHeaders
-    ++ lib.optional (stdenv.hostPlatform.isFreeBSD) freebsd.include
-    # Adding the bootstrap SDK to `buildInputs` on static builds  propagates it, breaking `xcrun`.
-    # This can be removed once the minimum SDK >10.12 on x86_64-darwin.
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isStatic) [ apple-sdk' ];
+    ++ lib.optional (stdenv.hostPlatform.isFreeBSD) freebsd.include;
 
   env = {
     NIX_CFLAGS_COMPILE = toString ([
@@ -149,8 +133,6 @@ stdenv.mkDerivation ({
     # Darwin support, so force it to be enabled during the first stage of the compiler-rt bootstrap.
     "-DCOMPILER_RT_HAS_G_FLAG=ON"
   ] ++ [
-    "-DDARWIN_macosx_CACHED_SYSROOT=${apple-sdk'.sdkroot}"
-    "-DDARWIN_macosx_OVERRIDE_SDK_VERSION=${lib.versions.majorMinor (lib.getVersion apple-sdk)}"
     "-DDARWIN_osx_ARCHS=${stdenv.hostPlatform.darwinArch}"
     "-DDARWIN_osx_BUILTIN_ARCHS=${stdenv.hostPlatform.darwinArch}"
     "-DSANITIZER_MIN_OSX_VERSION=${stdenv.hostPlatform.darwinMinVersion}"
@@ -167,7 +149,7 @@ stdenv.mkDerivation ({
   postPatch = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     substituteInPlace cmake/builtin-config-ix.cmake \
       --replace 'set(X86 i386)' 'set(X86 i386 i486 i586 i686)'
-  '' + lib.optionalString (!haveLibc) ((lib.optionalString (lib.versionAtLeast release_version "18") ''
+  '' + lib.optionalString (!haveLibc) ((lib.optionalString (lib.versions.major release_version == "18") ''
     substituteInPlace lib/builtins/aarch64/sme-libc-routines.c \
       --replace "<stdlib.h>" "<stddef.h>"
   '') + ''
@@ -180,7 +162,7 @@ stdenv.mkDerivation ({
     ''
     substituteInPlace lib/builtins/clear_cache.c \
       --replace "#include <assert.h>" ""
-    substituteInPlace lib/builtins/cpu_model${lib.optionalString (lib.versionAtLeast version "18") "/x86"}.c \
+    substituteInPlace lib/builtins/cpu_model${lib.optionalString (lib.versionAtLeast release_version "18") "/x86"}.c \
       --replace "#include <assert.h>" ""
   '')) + lib.optionalString (lib.versionAtLeast release_version "13" && lib.versionOlder release_version "14") ''
     # https://github.com/llvm/llvm-project/blob/llvmorg-14.0.6/libcxx/utils/merge_archives.py
@@ -195,6 +177,15 @@ stdenv.mkDerivation ({
     ''
     substituteInPlace cmake/Modules/AddCompilerRT.cmake \
       --replace-fail 'find_program(CODESIGN codesign)' ""
+  '';
+
+  preConfigure = lib.optionalString (lib.versionOlder release_version "16" && !haveLibc) ''
+    cmakeFlagsArray+=(-DCMAKE_C_FLAGS="-nodefaultlibs -ffreestanding")
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    cmakeFlagsArray+=(
+      "-DDARWIN_macosx_CACHED_SYSROOT=$SDKROOT"
+      "-DDARWIN_macosx_OVERRIDE_SDK_VERSION=$(jq -r .Version "$SDKROOT/SDKSettings.json")"
+    )
   '';
 
   # Hack around weird upsream RPATH bug
@@ -239,4 +230,4 @@ stdenv.mkDerivation ({
       # `enable_execute_stack.c` Also doesn't sound like something WASM would support.
       || (stdenv.hostPlatform.isWasm && haveLibc);
   };
-} // (if lib.versionOlder release_version "16" then { inherit preConfigure; } else {}))
+}

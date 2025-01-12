@@ -1,8 +1,9 @@
-{ lib
-, fetchzip
-, mkTclDerivation
-, critcl
-, withCritcl ? true
+{
+  lib,
+  fetchzip,
+  mkTclDerivation,
+  critcl,
+  withCritcl ? true,
 }:
 
 mkTclDerivation rec {

@@ -33,7 +33,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.ponylang.io";
     changelog = "https://github.com/ponylang/corral/blob/${finalAttrs.version}/CHANGELOG.md";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ redvers numinit ];
+    maintainers = with maintainers; [
+      redvers
+      numinit
+    ];
     inherit (ponyc.meta) platforms;
   };
 })

@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, libGLU
-, libGL
-, libglut
-, Cocoa
-, OpenGL
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libGLU,
+  libGL,
+  libglut,
+  Cocoa,
+  OpenGL,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,34 +22,45 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libGLU libGL libglut ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa OpenGL ];
+  buildInputs =
+    lib.optionals stdenv.hostPlatform.isLinux [
+      libGLU
+      libGL
+      libglut
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Cocoa
+      OpenGL
+    ];
 
-  postPatch = ''
-    substituteInPlace examples/ThirdPartyLibs/Gwen/CMakeLists.txt \
-      --replace "-DGLEW_STATIC" "-DGLEW_STATIC -Wno-narrowing"
-  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    sed -i 's/FIND_PACKAGE(OpenGL)//' CMakeLists.txt
-    sed -i 's/FIND_LIBRARY(COCOA_LIBRARY Cocoa)//' CMakeLists.txt
-  '';
+  postPatch =
+    ''
+      substituteInPlace examples/ThirdPartyLibs/Gwen/CMakeLists.txt \
+        --replace "-DGLEW_STATIC" "-DGLEW_STATIC -Wno-narrowing"
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      sed -i 's/FIND_PACKAGE(OpenGL)//' CMakeLists.txt
+      sed -i 's/FIND_LIBRARY(COCOA_LIBRARY Cocoa)//' CMakeLists.txt
+    '';
 
-  cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=ON"
-    "-DBUILD_CPU_DEMOS=OFF"
-    "-DINSTALL_EXTRA_LIBS=ON"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "-DOPENGL_FOUND=true"
-    "-DOPENGL_LIBRARIES=${OpenGL}/Library/Frameworks/OpenGL.framework"
-    "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks/OpenGL.framework"
-    "-DOPENGL_gl_LIBRARY=${OpenGL}/Library/Frameworks/OpenGL.framework"
-    "-DCOCOA_LIBRARY=${Cocoa}/Library/Frameworks/Cocoa.framework"
-    "-DBUILD_BULLET2_DEMOS=OFF"
-    "-DBUILD_UNIT_TESTS=OFF"
-    "-DBUILD_BULLET_ROBOTICS_GUI_EXTRA=OFF"
-  ];
+  cmakeFlags =
+    [
+      "-DBUILD_SHARED_LIBS=ON"
+      "-DBUILD_CPU_DEMOS=OFF"
+      "-DINSTALL_EXTRA_LIBS=ON"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "-DOPENGL_FOUND=true"
+      "-DOPENGL_LIBRARIES=${OpenGL}/Library/Frameworks/OpenGL.framework"
+      "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks/OpenGL.framework"
+      "-DOPENGL_gl_LIBRARY=${OpenGL}/Library/Frameworks/OpenGL.framework"
+      "-DCOCOA_LIBRARY=${Cocoa}/Library/Frameworks/Cocoa.framework"
+      "-DBUILD_BULLET2_DEMOS=OFF"
+      "-DBUILD_UNIT_TESTS=OFF"
+      "-DBUILD_BULLET_ROBOTICS_GUI_EXTRA=OFF"
+    ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang
-    "-Wno-error=argument-outside-range -Wno-error=c++11-narrowing";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=argument-outside-range -Wno-error=c++11-narrowing";
 
   meta = with lib; {
     description = "Professional free 3D Game Multiphysics Library";

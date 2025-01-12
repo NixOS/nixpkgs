@@ -6,11 +6,6 @@ import ./make-test-python.nix (
 
     nodes = {
       ids = {
-        imports = [
-          ../modules/profiles/minimal.nix
-          ../modules/services/networking/suricata/default.nix
-        ];
-
         networking.interfaces.eth1 = {
           useDHCP = false;
           ipv4.addresses = [

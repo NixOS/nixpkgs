@@ -1,34 +1,35 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
-, makeDesktopItem
-, copyDesktopItems
-, makeWrapper
-, electron
-, python3
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  makeDesktopItem,
+  copyDesktopItems,
+  makeWrapper,
+  electron,
+  python3,
 }:
 
 let
-  version = "1.2.41";
+  version = "1.2.46";
   electronSrc = fetchFromGitHub {
     owner = "threema-ch";
     repo = "threema-web-electron";
     rev = "refs/tags/${version}";
-    hash = "sha256-gV64rNBwQxPpREi0NFzfCA7lSO65/h0CVRw2EcbFedM=";
+    hash = "sha256-Qv40l6TyYZL9WcRQeIYUgMFsJrr0XYC2nmtYBgQKXvY=";
   };
 
   threema-web = buildNpmPackage rec {
     pname = "threema-web";
-    version = "2.5.3";
+    version = "2.5.7";
 
     src = fetchFromGitHub {
       owner = "threema-ch";
       repo = "threema-web";
       rev = "refs/tags/v${version}";
-      hash = "sha256-RIYyDoEck+a0kPUzTpdNLdyd4+ZYGjjkAlkCp9/S7FY=";
+      hash = "sha256-WuPOOchFZtnLVoB+i4LKFkeSujYXpQN8RLrt9xG9/W0=";
     };
 
-    npmDepsHash = "sha256-OqiPpjIdLwBfxEmbI+YFmYGt3beMqXyGZc9FCwbng4U=";
+    npmDepsHash = "sha256-eJIVX2W0Fgk/OmkaN2cR+qFoHTOmu4RmluR3BEuPOAU=";
     npmBuildScript = "dist";
 
     nativeBuildInputs = [
@@ -53,7 +54,7 @@ let
     inherit version;
     src = electronSrc;
     sourceRoot = "${src.name}/app";
-    npmDepsHash = "sha256-AaUxnvrVCgKWCtMzeXexVBxs/NuVwWH67x4eBGAcsxk=";
+    npmDepsHash = "sha256-CRYcmly8S+waeCf2fRWM2o3IuBVdpk2gZ/djHhxLLTQ=";
     env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     dontNpmBuild = true;
     prePatch = ''
@@ -72,7 +73,7 @@ buildNpmPackage rec {
   inherit version;
   src = electronSrc;
 
-  npmDepsHash = "sha256-f/Oy9cHBc9k54MDSeilPcTJe0txOS2sqNt2UCUf5+M8=";
+  npmDepsHash = "sha256-OdxDAy9ybBUEFuQQtihEvUXCVtVtveksLlOBD8F1RP0=";
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 

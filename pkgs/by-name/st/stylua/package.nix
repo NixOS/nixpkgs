@@ -1,22 +1,27 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
   # lua54 implies lua52/lua53
-, features ? [ "lua54" "luau" ]
+  features ? [
+    "lua54"
+    "luajit"
+    "luau"
+  ],
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "stylua";
-  version = "0.20.0";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "johnnymorganz";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-bqUmLtJLjImWqe06CeIWIU4FP+/Vxszp2yKMosVeyZM=";
+    sha256 = "sha256-sZrymo1RRfDLz8fPa7FnbutSpOCFoyQPoFVjA6BH5qQ=";
   };
 
-  cargoHash = "sha256-EMHt9oskPJCeAu/5VG6PaMt/4NTmNOaFTM5TMOy0BV8=";
+  cargoHash = "sha256-fgj6C9Mq8Xyg1nuMZ5GtT4GkK+kUFtGfP8V8B8sLEgY=";
 
   # remove cargo config so it can find the linker on aarch64-unknown-linux-gnu
   postPatch = ''

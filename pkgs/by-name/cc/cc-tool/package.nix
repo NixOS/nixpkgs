@@ -1,9 +1,11 @@
-{ lib, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, boost
-, libusb1
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  boost,
+  libusb1,
+  pkg-config,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,8 +19,14 @@ stdenv.mkDerivation rec {
     hash = "sha256:1f78j498fdd36xbci57jkgh25gq14g3b6xmp76imdpar0jkpyljv";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ boost libusb1 ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+  buildInputs = [
+    boost
+    libusb1
+  ];
 
   postPatch = ''
     substituteInPlace udev/90-cc-debugger.rules \

@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, installShellFiles
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  installShellFiles,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zpaqfranz";
-  version = "60.7";
+  version = "60.10";
 
   src = fetchFromGitHub {
     owner = "fcorbelli";
     repo = "zpaqfranz";
     rev = finalAttrs.version;
-    hash = "sha256-tlMbCHlrGPvRSqdfItdCkxLPm1LtVWcGTQMUoZTCsIg=";
+    hash = "sha256-crUXsIFQwGwH6hxqaO1KLzRRWphcUxmkvNlRT6lXlBg=";
   };
 
   nativeBuildInputs = [

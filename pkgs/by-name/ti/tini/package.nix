@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+}:
 
 stdenv.mkDerivation rec {
   version = "0.19.0";
@@ -8,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "krallin";
     repo = "tini";
     rev = "v${version}";
-    sha256 ="1hnnvjydg7gi5gx6nibjjdnfipblh84qcpajc08nvr44rkzswck4";
+    sha256 = "1hnnvjydg7gi5gx6nibjjdnfipblh84qcpajc08nvr44rkzswck4";
   };
 
   postPatch = "sed -i /tini-static/d CMakeLists.txt";

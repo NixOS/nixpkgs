@@ -1,4 +1,8 @@
-{ lib, callPackage, stdenvNoCC }:
+{
+  lib,
+  callPackage,
+  stdenvNoCC,
+}:
 let
   pname = "caprine";
   version = "2.59.1";
@@ -18,10 +22,13 @@ let
     sha256 = "sha256-WMT4yrLjDSMsI/lFbYODu3/0whcF+++4ShoChfMyLfQ=";
   };
 in
-(if stdenvNoCC.hostPlatform.isDarwin then x86_64-dmg else x86_64-appimage).overrideAttrs (oldAttrs: {
-  passthru = (oldAttrs.passthru or { }) // { inherit x86_64-appimage x86_64-dmg; };
-  meta = oldAttrs.meta // {
-    platforms = x86_64-appimage.meta.platforms ++ x86_64-dmg.meta.platforms;
-    mainProgram = "caprine";
-  };
-})
+(if stdenvNoCC.hostPlatform.isDarwin then x86_64-dmg else x86_64-appimage).overrideAttrs
+  (oldAttrs: {
+    passthru = (oldAttrs.passthru or { }) // {
+      inherit x86_64-appimage x86_64-dmg;
+    };
+    meta = oldAttrs.meta // {
+      platforms = x86_64-appimage.meta.platforms ++ x86_64-dmg.meta.platforms;
+      mainProgram = "caprine";
+    };
+  })

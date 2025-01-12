@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, autoreconfHook
-, libarchive
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  autoreconfHook,
+  libarchive,
+  pkg-config,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -17,7 +18,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Dg+KGZcqbE1nBPaemZlWQPaUQQJmaSe0nyDQRXJzwuE=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
 
   buildInputs = [ libarchive ];
 

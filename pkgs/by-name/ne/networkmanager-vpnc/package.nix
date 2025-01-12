@@ -1,9 +1,8 @@
 { stdenv
 , lib
 , fetchurl
-, substituteAll
+, replaceVars
 , vpnc
-, intltool
 , pkg-config
 , networkmanager
 , libsecret
@@ -20,22 +19,20 @@
 
 stdenv.mkDerivation rec {
   pname = "NetworkManager-vpnc";
-  version = "1.2.8";
+  version = "1.4.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/NetworkManager-vpnc/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1l4xqlPI/cP95++EpNqpeaYFwj/THO/2R79+qqma+8w=";
+    sha256 = "47KpiIAnWht1FUvDF6eGQ8/fnqfnDfTu2WSPKeolNzA=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       inherit vpnc kmod;
     })
   ];
 
   nativeBuildInputs = [
-    intltool
     pkg-config
     file
   ];

@@ -1,8 +1,9 @@
-{ config
-, lib
-, pkgs
-, utils
-, ...
+{
+  config,
+  lib,
+  pkgs,
+  utils,
+  ...
 }:
 
 let
@@ -26,9 +27,10 @@ let
     optionalString
     recursiveUpdate
     types
-  ;
+    ;
 
-  filterRecursiveNull = o:
+  filterRecursiveNull =
+    o:
     if isAttrs o then
       mapAttrs (_: v: filterRecursiveNull v) (filterAttrs (_: v: v != null) o)
     else if isList o then
@@ -46,13 +48,15 @@ let
   };
 
   pythonEnv = cfg.package.python.buildEnv.override {
-    extraLibs = with cfg.package.python.pkgs; [
-      (toPythonModule finalPackage)
-      gunicorn
-    ]
-    ++ lib.optionals (cfg.settings.memcached.location != null)
-      cfg.package.optional-dependencies.memcached
-    ;
+    extraLibs =
+      with cfg.package.python.pkgs;
+      [
+        (toPythonModule finalPackage)
+        gunicorn
+      ]
+      ++ lib.optionals (
+        cfg.settings.memcached.location != null
+      ) cfg.package.optional-dependencies.memcached;
   };
 
   withRedis = cfg.settings.redis.location != null;
@@ -96,7 +100,7 @@ in
 
     plugins = mkOption {
       type = types.listOf types.package;
-      default = [];
+      default = [ ];
       example = literalExpression ''
         with config.services.pretix.package.plugins; [
           passbook
@@ -455,128 +459,132 @@ in
 
       postgresql = mkIf (cfg.database.createLocally && cfg.settings.database.backend == "postgresql") {
         enable = true;
-        ensureUsers = [ {
-          name = cfg.settings.database.user;
-          ensureDBOwnership = true;
-        } ];
+        ensureUsers = [
+          {
+            name = cfg.settings.database.user;
+            ensureDBOwnership = true;
+          }
+        ];
         ensureDatabases = [ cfg.settings.database.name ];
       };
 
       redis.servers.pretix.enable = withRedis;
     };
 
-    systemd.services = let
-      commonUnitConfig = {
-        environment.PRETIX_CONFIG_FILE = configFile;
-        serviceConfig = {
-          User = "pretix";
-          Group = "pretix";
-          EnvironmentFile = optionals (cfg.environmentFile != null) [
-            cfg.environmentFile
-          ];
-          StateDirectory = [
-            "pretix"
-          ];
-          StateDirectoryMode = "0750";
-          CacheDirectory = "pretix";
-          LogsDirectory = "pretix";
-          WorkingDirectory = cfg.settings.pretix.datadir;
-          SupplementaryGroups = optionals withRedis [
-            "redis-pretix"
-          ];
-          AmbientCapabilities = "";
-          CapabilityBoundingSet = [ "" ];
-          DevicePolicy = "closed";
-          LockPersonality = true;
-          MemoryDenyWriteExecute = false; # required by pdftk
-          NoNewPrivileges = true;
-          PrivateDevices = true;
-          PrivateTmp = true;
-          ProcSubset = "pid";
-          ProtectControlGroups = true;
-          ProtectHome = true;
-          ProtectHostname = true;
-          ProtectKernelLogs = true;
-          ProtectKernelModules = true;
-          ProtectKernelTunables = true;
-          ProtectProc = "invisible";
-          ProtectSystem = "strict";
-          RemoveIPC = true;
-          RestrictAddressFamilies = [
-            "AF_INET"
-            "AF_INET6"
-            "AF_UNIX"
-          ];
-          RestrictNamespaces = true;
-          RestrictRealtime = true;
-          RestrictSUIDSGID = true;
-          SystemCallArchitectures = "native";
-          SystemCallFilter = [
-            "@system-service"
-            "~@privileged"
-            "@chown"
-          ];
-          UMask = "0027";
+    systemd.services =
+      let
+        commonUnitConfig = {
+          environment.PRETIX_CONFIG_FILE = configFile;
+          serviceConfig = {
+            User = "pretix";
+            Group = "pretix";
+            EnvironmentFile = optionals (cfg.environmentFile != null) [
+              cfg.environmentFile
+            ];
+            StateDirectory = [
+              "pretix"
+            ];
+            StateDirectoryMode = "0750";
+            CacheDirectory = "pretix";
+            LogsDirectory = "pretix";
+            WorkingDirectory = cfg.settings.pretix.datadir;
+            SupplementaryGroups = optionals withRedis [
+              "redis-pretix"
+            ];
+            AmbientCapabilities = "";
+            CapabilityBoundingSet = [ "" ];
+            DevicePolicy = "closed";
+            LockPersonality = true;
+            MemoryDenyWriteExecute = false; # required by pdftk
+            NoNewPrivileges = true;
+            PrivateDevices = true;
+            PrivateTmp = true;
+            ProcSubset = "pid";
+            ProtectControlGroups = true;
+            ProtectHome = true;
+            ProtectHostname = true;
+            ProtectKernelLogs = true;
+            ProtectKernelModules = true;
+            ProtectKernelTunables = true;
+            ProtectProc = "invisible";
+            ProtectSystem = "strict";
+            RemoveIPC = true;
+            RestrictAddressFamilies = [
+              "AF_INET"
+              "AF_INET6"
+              "AF_UNIX"
+            ];
+            RestrictNamespaces = true;
+            RestrictRealtime = true;
+            RestrictSUIDSGID = true;
+            SystemCallArchitectures = "native";
+            SystemCallFilter = [
+              "@system-service"
+              "~@privileged"
+              "@chown"
+            ];
+            UMask = "0027";
+          };
         };
-      };
-    in {
-      pretix-web = recursiveUpdate commonUnitConfig {
-        description = "pretix web service";
-        after = [
-          "network.target"
-          "redis-pretix.service"
-          "postgresql.service"
-        ];
-        wantedBy = [ "multi-user.target" ];
-        preStart = ''
-          versionFile="${cfg.settings.pretix.datadir}/.version"
-          version=$(cat "$versionFile" 2>/dev/null || echo 0)
+      in
+      {
+        pretix-web = recursiveUpdate commonUnitConfig {
+          description = "pretix web service";
+          after = [
+            "network.target"
+            "redis-pretix.service"
+            "postgresql.service"
+          ];
+          wantedBy = [ "multi-user.target" ];
+          preStart = ''
+            versionFile="${cfg.settings.pretix.datadir}/.version"
+            version=$(cat "$versionFile" 2>/dev/null || echo 0)
 
-          pluginsFile="${cfg.settings.pretix.datadir}/.plugins"
-          plugins=$(cat "$pluginsFile" 2>/dev/null || echo "")
-          configuredPlugins="${concatMapStringsSep "|" (package: package.name) cfg.plugins}"
+            pluginsFile="${cfg.settings.pretix.datadir}/.plugins"
+            plugins=$(cat "$pluginsFile" 2>/dev/null || echo "")
+            configuredPlugins="${concatMapStringsSep "|" (package: package.name) cfg.plugins}"
 
-          if [[ $version != ${cfg.package.version} || $plugins != $configuredPlugins ]]; then
-            ${getExe' pythonEnv "pretix-manage"} migrate
+            if [[ $version != ${cfg.package.version} || $plugins != $configuredPlugins ]]; then
+              ${getExe' pythonEnv "pretix-manage"} migrate
 
-            echo "${cfg.package.version}" > "$versionFile"
-            echo "$configuredPlugins" > "$pluginsFile"
-          fi
-        '';
-        serviceConfig = {
-          TimeoutStartSec = "15min";
-          ExecStart = "${getExe' pythonEnv "gunicorn"} --bind unix:/run/pretix/pretix.sock ${cfg.gunicorn.extraArgs} pretix.wsgi";
-          RuntimeDirectory = "pretix";
-          Restart = "on-failure";
+              echo "${cfg.package.version}" > "$versionFile"
+              echo "$configuredPlugins" > "$pluginsFile"
+            fi
+          '';
+          serviceConfig = {
+            TimeoutStartSec = "15min";
+            ExecStart = "${getExe' pythonEnv "gunicorn"} --bind unix:/run/pretix/pretix.sock ${cfg.gunicorn.extraArgs} pretix.wsgi";
+            RuntimeDirectory = "pretix";
+            Restart = "on-failure";
+          };
         };
-      };
 
-      pretix-periodic = recursiveUpdate commonUnitConfig {
-        description = "pretix periodic task runner";
-        # every 15 minutes
-        startAt = [ "*:3,18,33,48" ];
-        serviceConfig = {
-          Type = "oneshot";
-          ExecStart = "${getExe' pythonEnv "pretix-manage"} runperiodic";
+        pretix-periodic = recursiveUpdate commonUnitConfig {
+          description = "pretix periodic task runner";
+          # every 15 minutes
+          startAt = [ "*:3,18,33,48" ];
+          serviceConfig = {
+            Type = "oneshot";
+            ExecStart = "${getExe' pythonEnv "pretix-manage"} runperiodic";
+          };
         };
-      };
 
-      pretix-worker = recursiveUpdate commonUnitConfig {
-        description = "pretix asynchronous job runner";
-        after = [
-          "network.target"
-          "redis-pretix.service"
-          "postgresql.service"
-        ];
-        wantedBy = [ "multi-user.target" ];
-        serviceConfig = {
-          ExecStart = "${getExe' pythonEnv "celery"} -A pretix.celery_app worker ${cfg.celery.extraArgs}";
-          Restart = "on-failure";
+        pretix-worker = recursiveUpdate commonUnitConfig {
+          description = "pretix asynchronous job runner";
+          after = [
+            "network.target"
+            "redis-pretix.service"
+            "postgresql.service"
+          ];
+          wantedBy = [ "multi-user.target" ];
+          serviceConfig = {
+            ExecStart = "${getExe' pythonEnv "celery"} -A pretix.celery_app worker ${cfg.celery.extraArgs}";
+            Restart = "on-failure";
+          };
         };
-      };
 
-      nginx.serviceConfig.SupplementaryGroups = mkIf cfg.nginx.enable [ "pretix" ];
-    };
+        nginx.serviceConfig.SupplementaryGroups = mkIf cfg.nginx.enable [ "pretix" ];
+      };
 
     systemd.sockets.pretix-web.socketConfig = {
       ListenStream = "/run/pretix/pretix.sock";
@@ -584,7 +592,7 @@ in
     };
 
     users = {
-      groups.${cfg.group} = {};
+      groups.${cfg.group} = { };
       users.${cfg.user} = {
         isSystemUser = true;
         inherit (cfg) group;

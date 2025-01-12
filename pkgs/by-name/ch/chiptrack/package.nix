@@ -34,13 +34,13 @@
 
 rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
   pname = "chiptrack";
-  version = "0.3.1";
+  version = "0.5";
 
   src = fetchFromGitHub {
     owner = "jturcotte";
     repo = "chiptrack";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Iehe4dD7nWoBB6RaYLvPvV6bBKEc3Kdkwrhb8Ry+s9s=";
+    hash = "sha256-yQP5hFM5qBWdaF192PBvM4il6qpmlgUCeuwDCiw/LaQ=";
   };
 
   strictDeps = true;
@@ -65,7 +65,7 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
 
   # Has git dependencies
   useFetchCargoVendor = true;
-  cargoHash = "sha256-K1Fio9xu0fxVYZZmZ4IpI5n5gBCogwTEWwUaJPBi35Y=";
+  cargoHash = "sha256-3LRyAY5NmXiJRrN+jwaUX65ArBCl8BiFoaWU2fVRMA8=";
 
   env = {
     SKIA_SOURCE_DIR =
@@ -74,8 +74,8 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
           owner = "rust-skia";
           repo = "skia";
           # see rust-skia:skia-bindings/Cargo.toml#package.metadata skia
-          rev = "refs/tags/m121-0.69.1";
-          hash = "sha256-OviOIiw3RvQx1dvtQ9kWIc/mGVPOOsLVCIRoBJrC72M=";
+          rev = "refs/tags/m129-0.77.1";
+          hash = "sha256-WRVuQpfRnYrE7KGFRFx66fXtMFmtJbC3xUcRPK1JoOM=";
         };
         # The externals for skia are taken from skia/DEPS
         # Reduced to only what's necessary

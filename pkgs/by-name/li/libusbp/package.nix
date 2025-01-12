@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, udev
-, cmake
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  udev,
+  cmake,
+  pkg-config,
 }:
 
-stdenv.mkDerivation(finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libusbp";
   version = "1.3.1";
 
@@ -17,7 +18,10 @@ stdenv.mkDerivation(finalAttrs: {
     hash = "sha256-hFvQceUapzlD021KIOJbSXX7qv1IQMuEudRHYeCkbS8=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   nativeBuildInputs = [
     cmake

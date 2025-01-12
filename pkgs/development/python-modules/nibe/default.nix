@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "nibe";
-  version = "2.13.0";
+  version = "2.15.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -27,9 +27,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "yozik04";
     repo = "nibe";
-    rev = "refs/tags/${version}";
-    hash = "sha256-azAVvVAlG74wgH/96+sc6S9XQLRFZgR4aU6d4gy43PQ=";
+    tag = version;
+    hash = "sha256-lV5Wp2Qp1v6RE/zA1VqvdWHFZXb+aeFdmhA87wnF46U=";
   };
+
+  pythonRelaxDeps = [ "async-modbus" ];
 
   build-system = [ setuptools ];
 

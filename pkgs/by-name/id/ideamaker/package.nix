@@ -131,12 +131,6 @@ stdenv.mkDerivation (finalAttrs: {
       libsForQt5.quazip
     ];
 
-  unpackPhase = ''
-    runHook preUnpack
-    dpkg-deb -x $src .
-    runHook postUnpack
-  '';
-
   installPhase = ''
     runHook preInstall
 

@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitLab, gitUpdater, asciidoctor }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  gitUpdater,
+  asciidoctor,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ascii";

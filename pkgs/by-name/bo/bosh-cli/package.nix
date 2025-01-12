@@ -1,20 +1,21 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
-, makeWrapper
-, openssh
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  makeWrapper,
+  openssh,
 }:
 
 buildGoModule rec {
   pname = "bosh-cli";
 
-  version = "7.8.2";
+  version = "7.8.6";
 
   src = fetchFromGitHub {
     owner = "cloudfoundry";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ABoqJr2HDhox1ylTvAf5sQkYYzEWAnmXWavw0jXrRgo=";
+    sha256 = "sha256-rrYB8W1Zq9rCRgVyAPFZ5i37uEKXvV83hpkLaB7N9zQ=";
   };
   vendorHash = null;
 

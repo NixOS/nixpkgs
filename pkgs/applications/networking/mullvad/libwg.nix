@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, mullvad
+{
+  lib,
+  buildGoModule,
+  mullvad,
 }:
 buildGoModule {
   pname = "libwg";
@@ -21,7 +22,11 @@ buildGoModule {
   GOBIN = "${placeholder "out"}/lib";
 
   subPackages = [ "." ];
-  ldflags = [ "-s" "-w" "-buildmode=c-archive" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-buildmode=c-archive"
+  ];
   tags = [ "daita" ];
 
   postInstall = ''

@@ -1,4 +1,8 @@
-{ lib, buildDunePackage, reason }:
+{
+  lib,
+  buildDunePackage,
+  reason,
+}:
 
 buildDunePackage rec {
   pname = "helloreason";

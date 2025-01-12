@@ -1,4 +1,9 @@
-{ lib, python3Packages, fetchurl, git }:
+{
+  lib,
+  python3Packages,
+  fetchurl,
+  git,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "nox";
@@ -12,15 +17,18 @@ python3Packages.buildPythonApplication rec {
 
   patches = [ ./nox-review-wip.patch ];
 
-  buildInputs = [ python3Packages.pbr git ];
+  buildInputs = [
+    python3Packages.pbr
+    git
+  ];
 
   propagatedBuildInputs = with python3Packages; [
-      dogpile-cache
-      click
-      requests
-      characteristic
-      setuptools
-    ];
+    dogpile-cache
+    click
+    requests
+    characteristic
+    setuptools
+  ];
 
   meta = {
     homepage = "https://github.com/madjar/nox";

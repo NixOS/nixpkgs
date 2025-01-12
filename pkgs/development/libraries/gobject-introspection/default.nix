@@ -1,27 +1,28 @@
-{ stdenv
-, lib
-, fetchurl
-, glib
-, flex
-, bison
-, meson
-, ninja
-, gtk-doc
-, docbook-xsl-nons
-, docbook_xml_dtd_45
-, pkg-config
-, libffi
-, python3
-, cctools
-, cairo
-, gnome
-, substituteAll
-, buildPackages
-, gobject-introspection-unwrapped
-, nixStoreDir ? builtins.storeDir
-, x11Support ? true
-, testers
-, propagateFullGlib ? true
+{
+  stdenv,
+  lib,
+  fetchurl,
+  glib,
+  flex,
+  bison,
+  meson,
+  ninja,
+  gtk-doc,
+  docbook-xsl-nons,
+  docbook_xml_dtd_45,
+  pkg-config,
+  libffi,
+  python3,
+  cctools,
+  cairo,
+  gnome,
+  substituteAll,
+  buildPackages,
+  gobject-introspection-unwrapped,
+  nixStoreDir ? builtins.storeDir,
+  x11Support ? true,
+  testers,
+  propagateFullGlib ? true,
 }:
 
 # now that gobject-introspection creates large .gir files (eg gtk3 case)
@@ -44,7 +45,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   # outputs TODO: share/gobject-introspection-1.0/tests is needed during build
   # by pygobject3 (and maybe others), but it's only searched in $out
-  outputs = [ "out" "dev" "devdoc" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+    "man"
+  ];
   outputBin = "dev";
 
   src = fetchurl {
@@ -52,39 +58,43 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-D1pMGQhCS/JrxB6TYRaMNjaFCA+9uHoZbIkchAHKLwk=";
   };
 
-  patches = [
-    # Make g-ir-scanner put absolute path to GIR files it generates
-    # so that programs can just dlopen them without having to muck
-    # with LD_LIBRARY_PATH environment variable.
-    (substituteAll {
-      src = ./absolute_shlib_path.patch;
-      inherit nixStoreDir;
-    })
-  ] ++ lib.optionals x11Support [
-    # Hardcode the cairo shared library path in the Cairo gir shipped with this package.
-    # https://github.com/NixOS/nixpkgs/issues/34080
-    (substituteAll {
-      src = ./absolute_gir_path.patch;
-      cairoLib = "${lib.getLib cairo}/lib";
-    })
-  ];
+  patches =
+    [
+      # Make g-ir-scanner put absolute path to GIR files it generates
+      # so that programs can just dlopen them without having to muck
+      # with LD_LIBRARY_PATH environment variable.
+      (substituteAll {
+        src = ./absolute_shlib_path.patch;
+        inherit nixStoreDir;
+      })
+    ]
+    ++ lib.optionals x11Support [
+      # Hardcode the cairo shared library path in the Cairo gir shipped with this package.
+      # https://github.com/NixOS/nixpkgs/issues/34080
+      (substituteAll {
+        src = ./absolute_gir_path.patch;
+        cairoLib = "${lib.getLib cairo}/lib";
+      })
+    ];
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    flex
-    bison
-    gtk-doc
-    docbook-xsl-nons
-    docbook_xml_dtd_45
-    # Build definition checks for the Python modules needed at runtime by importing them.
-    (buildPackages.python3.withPackages pythonModules)
-    finalAttrs.setupHook # move .gir files
-    # can't use canExecute, we need prebuilt when cross
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ gobject-introspection-unwrapped ];
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+      pkg-config
+      flex
+      bison
+      gtk-doc
+      docbook-xsl-nons
+      docbook_xml_dtd_45
+      # Build definition checks for the Python modules needed at runtime by importing them.
+      (buildPackages.python3.withPackages pythonModules)
+      finalAttrs.setupHook # move .gir files
+      # can't use canExecute, we need prebuilt when cross
+    ]
+    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ gobject-introspection-unwrapped ];
 
   buildInputs = [
     (python3.withPackages pythonModules)
@@ -99,23 +109,28 @@ stdenv.mkDerivation (finalAttrs: {
     (if propagateFullGlib then glib else glib')
   ];
 
-  mesonFlags = [
-    "--datadir=${placeholder "dev"}/share"
-    "-Dcairo=disabled"
-    "-Dgtk_doc=${lib.boolToString (stdenv.hostPlatform == stdenv.buildPlatform)}"
-  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-    "-Dgi_cross_ldd_wrapper=${substituteAll {
-      name = "g-ir-scanner-lddwrapper";
-      isExecutable = true;
-      src = ./wrappers/g-ir-scanner-lddwrapper.sh;
-      inherit (buildPackages) bash;
-      buildlddtree = "${buildPackages.pax-utils}/bin/lddtree";
-    }}"
-    "-Dgi_cross_binary_wrapper=${stdenv.hostPlatform.emulator buildPackages}"
-    # can't use canExecute, we need prebuilt when cross
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    "-Dgi_cross_use_prebuilt_gi=true"
-  ];
+  mesonFlags =
+    [
+      "--datadir=${placeholder "dev"}/share"
+      "-Dcairo=disabled"
+      "-Dgtk_doc=${lib.boolToString (stdenv.hostPlatform == stdenv.buildPlatform)}"
+    ]
+    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+      "-Dgi_cross_ldd_wrapper=${
+        substituteAll {
+          name = "g-ir-scanner-lddwrapper";
+          isExecutable = true;
+          src = ./wrappers/g-ir-scanner-lddwrapper.sh;
+          inherit (buildPackages) bash;
+          buildlddtree = "${buildPackages.pax-utils}/bin/lddtree";
+        }
+      }"
+      "-Dgi_cross_binary_wrapper=${stdenv.hostPlatform.emulator buildPackages}"
+      # can't use canExecute, we need prebuilt when cross
+    ]
+    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+      "-Dgi_cross_use_prebuilt_gi=true"
+    ];
 
   doCheck = !stdenv.hostPlatform.isAarch64;
 
@@ -159,11 +174,19 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Middleware layer between C libraries and language bindings";
     homepage = "https://gi.readthedocs.io/";
-    maintainers = teams.gnome.members ++ (with maintainers; [ lovek323 artturin ]);
+    maintainers =
+      teams.gnome.members
+      ++ (with maintainers; [
+        lovek323
+        artturin
+      ]);
     pkgConfigModules = [ "gobject-introspection-1.0" ];
     platforms = platforms.unix;
     badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
-    license = with licenses; [ gpl2 lgpl2 ];
+    license = with licenses; [
+      gpl2
+      lgpl2
+    ];
 
     longDescription = ''
       GObject introspection is a middleware layer between C libraries (using

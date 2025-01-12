@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, libusb-compat-0_1
-, readline
-, cmake
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libusb-compat-0_1,
+  readline,
+  cmake,
+  pkg-config,
 }:
 
 stdenv.mkDerivation rec {

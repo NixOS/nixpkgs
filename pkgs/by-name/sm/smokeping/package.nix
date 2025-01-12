@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchurl, fetchpatch, fping, rrdtool, perlPackages, autoreconfHook, nixosTests }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  fping,
+  rrdtool,
+  perlPackages,
+  autoreconfHook,
+  nixosTests,
+}:
 
 stdenv.mkDerivation rec {
   pname = "smokeping";
@@ -15,9 +25,24 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  propagatedBuildInputs = [ rrdtool ] ++
-    (with perlPackages; [ perl FCGI CGI CGIFast ConfigGrammar DigestHMAC NetTelnet
-      NetOpenSSH NetSNMP LWP IOTty fping NetDNS perlldap ]);
+  propagatedBuildInputs =
+    [ rrdtool ]
+    ++ (with perlPackages; [
+      perl
+      FCGI
+      CGI
+      CGIFast
+      ConfigGrammar
+      DigestHMAC
+      NetTelnet
+      NetOpenSSH
+      NetSNMP
+      LWP
+      IOTty
+      fping
+      NetDNS
+      perlldap
+    ]);
 
   nativeBuildInputs = [ autoreconfHook ];
 

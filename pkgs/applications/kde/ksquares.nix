@@ -1,4 +1,13 @@
-{ mkDerivation, lib, extra-cmake-modules, kdoctools, libkdegames, kconfig, kcrash, kxmlgui }:
+{
+  mkDerivation,
+  lib,
+  extra-cmake-modules,
+  kdoctools,
+  libkdegames,
+  kconfig,
+  kcrash,
+  kxmlgui,
+}:
 
 mkDerivation {
   pname = "ksquares";

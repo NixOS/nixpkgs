@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "enthought";
     repo = "sat-solver";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-/fBnpf1DtaF+wQYZztcB8Y20/ZMYxrF3fH5qRsMucL0=";
   };
 

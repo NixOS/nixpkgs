@@ -17,7 +17,7 @@ buildNpmPackage' rec {
   src = fetchFromGitHub {
     owner = "eslint";
     repo = "eslint";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-R5DO4xN3PkwGAIfyMkohs9SvFiLjWf1ddOwkY6wbsjA=";
   };
 

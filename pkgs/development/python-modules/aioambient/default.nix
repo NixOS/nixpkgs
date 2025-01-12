@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bachya";
     repo = "aioambient";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-GedGwG4Lm28BvfSBOGcspUQ3LCmdb2IC2rLifuKGOes=";
   };
 

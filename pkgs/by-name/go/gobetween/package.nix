@@ -1,5 +1,9 @@
-{ stdenv, buildGoModule, fetchFromGitHub, lib
-, enableStatic ? stdenv.hostPlatform.isStatic
+{
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+  enableStatic ? stdenv.hostPlatform.isStatic,
 }:
 
 buildGoModule rec {

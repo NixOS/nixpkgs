@@ -30,11 +30,17 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ cmake ];
   buildInputs = lib.optional withCurl curl ++ lib.optional withOpenSSL openssl;
 
-  cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=ON"
-  ] ++ lib.optional withCurl "-DWITH_LIBCURL=ON" ++ lib.optional withOpenSSL "-DWITH_OPENSSL=ON";
+  cmakeFlags =
+    [
+      "-DBUILD_SHARED_LIBS=ON"
+    ]
+    ++ lib.optional withCurl "-DWITH_LIBCURL=ON"
+    ++ lib.optional withOpenSSL "-DWITH_OPENSSL=ON";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
   passthru.updateScript = gitUpdater { };
 
   meta = with lib; {

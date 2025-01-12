@@ -1,8 +1,9 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
-, makeBinaryWrapper
-, nodejs
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  makeBinaryWrapper,
+  nodejs,
 }:
 
 buildNpmPackage rec {

@@ -1,11 +1,27 @@
-{ lib, stdenv, fetchurl, ocaml, zlib, which, eprover, makeWrapper, coq }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ocaml,
+  zlib,
+  which,
+  eprover,
+  makeWrapper,
+  coq,
+}:
 stdenv.mkDerivation rec {
   pname = "satallax";
   version = "2.7";
 
   strictDeps = true;
 
-  nativeBuildInputs = [ makeWrapper ocaml which eprover coq ];
+  nativeBuildInputs = [
+    makeWrapper
+    ocaml
+    which
+    eprover
+    coq
+  ];
   buildInputs = [ zlib ];
 
   src = fetchurl {
@@ -55,7 +71,12 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/share/doc/satallax" "$out/bin" "$out/lib" "$out/lib/satallax"
     cp bin/satallax.opt "$out/bin/satallax"
     wrapProgram "$out/bin/satallax" \
-      --suffix PATH : "${lib.makeBinPath [ coq eprover ]}:$out/libexec/satallax" \
+      --suffix PATH : "${
+        lib.makeBinPath [
+          coq
+          eprover
+        ]
+      }:$out/libexec/satallax" \
       --add-flags "-M" --add-flags "$out/lib/satallax/modes"
 
     cp LICENSE README "$out/share/doc/satallax"

@@ -13,7 +13,7 @@ let
   src = fetchFromGitHub {
     owner = "SamuelYvon";
     repo = "netifaces-2";
-    rev = "refs/tags/V${version}";
+    tag = "V${version}";
     hash = "sha256-XO3HWq8FOVzvpbK8mIBOup6hFMnhDpqOK/5bPziPZQ8=";
   };
 in

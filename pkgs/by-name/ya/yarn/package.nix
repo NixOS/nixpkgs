@@ -1,11 +1,12 @@
-{ lib
-, fetchFromGitHub
-, fetchzip
-, nodejs
-, stdenvNoCC
-, testers
-, gitUpdater
-, withNode ? true
+{
+  lib,
+  fetchFromGitHub,
+  fetchzip,
+  nodejs,
+  stdenvNoCC,
+  testers,
+  gitUpdater,
+  withNode ? true,
 }:
 
 let
@@ -36,9 +37,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    tests.version = lib.optionalAttrs withNode (testers.testVersion {
-      package = finalAttrs.finalPackage;
-    });
+    tests.version = lib.optionalAttrs withNode (
+      testers.testVersion {
+        package = finalAttrs.finalPackage;
+      }
+    );
 
     updateScript = gitUpdater {
       url = "https://github.com/yarnpkg/yarn.git";
@@ -51,7 +54,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://classic.yarnpkg.com/";
     changelog = "https://github.com/yarnpkg/yarn/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ offline screendriver ];
+    maintainers = with maintainers; [
+      offline
+      screendriver
+    ];
     platforms = platforms.all;
     mainProgram = "yarn";
   };

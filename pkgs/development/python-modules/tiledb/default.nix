@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "TileDB-Inc";
     repo = "TileDB-Py";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-9UgT09KnCqQ7ip7sSp64Yy8Pstf1GCOVYOG0WM2P840=";
   };
 

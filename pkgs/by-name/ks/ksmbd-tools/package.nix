@@ -1,30 +1,39 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, glib
-, libkrb5
-, libnl
-, libtool
-, pkg-config
-, withKerberos ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  glib,
+  libkrb5,
+  libnl,
+  libtool,
+  pkg-config,
+  withKerberos ? false,
 }:
 
 stdenv.mkDerivation rec {
   pname = "ksmbd-tools";
-  version = "3.5.2";
+  version = "3.5.3";
 
   src = fetchFromGitHub {
     owner = "cifsd-team";
     repo = pname;
     rev = version;
-    sha256 = "sha256-QE/Pnba4zgeInlVqOEjT3EqV6NPkQTp6xeYU3dsIl4M=";
+    sha256 = "sha256-f2B+24AboAWLIrtuHWn8YMEPzWahIafc3kfx0zKyz8g=";
   };
 
-  buildInputs = [ glib libnl ] ++ lib.optional withKerberos libkrb5;
+  buildInputs = [
+    glib
+    libnl
+  ] ++ lib.optional withKerberos libkrb5;
 
-  nativeBuildInputs = [ meson ninja libtool pkg-config ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    libtool
+    pkg-config
+  ];
   patches = [ ./0001-skip-installing-example-configuration.patch ];
   mesonFlags = [
     "-Drundir=/run"

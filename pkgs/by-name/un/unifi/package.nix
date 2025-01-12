@@ -4,6 +4,7 @@
   dpkg,
   fetchurl,
   nixosTests,
+  systemd,
 }:
 
 stdenv.mkDerivation rec {
@@ -13,16 +14,10 @@ stdenv.mkDerivation rec {
   # see https://community.ui.com/releases / https://www.ui.com/download/unifi
   src = fetchurl {
     url = "https://dl.ui.com/unifi/${version}/unifi_sysvinit_all.deb";
-    sha256 = "sha256-004ZJEoj23FyFEBznqrpPzQ9E6DYpD7gBxa3ewSunIo=";
+    hash = "sha256-004ZJEoj23FyFEBznqrpPzQ9E6DYpD7gBxa3ewSunIo=";
   };
 
   nativeBuildInputs = [ dpkg ];
-
-  unpackPhase = ''
-    runHook preUnpack
-    dpkg-deb -x $src ./
-    runHook postUnpack
-  '';
 
   installPhase = ''
     runHook preInstall
@@ -33,6 +28,18 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  postInstall =
+    if stdenv.hostPlatform.system == "x86_64-linux" then
+      ''
+        patchelf --add-needed "${systemd}/lib/libsystemd.so.0" "$out/lib/native/Linux/x86_64/libubnt_sdnotify_jni.so"
+      ''
+    else if stdenv.hostPlatform.system == "aarch64-linux" then
+      ''
+        patchelf --add-needed "${systemd}/lib/libsystemd.so.0" "$out/lib/native/Linux/aarch64/libubnt_sdnotify_jni.so"
+      ''
+    else
+      null;
 
   passthru.tests = {
     unifi = nixosTests.unifi;
@@ -48,6 +55,5 @@ stdenv.mkDerivation rec {
       globin
       patryk27
     ];
-    knownVulnerabilities = [ ];
   };
 }

@@ -6,8 +6,6 @@
   pkg-config,
   openssl,
   xz,
-  stdenv,
-  darwin,
   nix-update-script,
   versionCheckHook,
 }:
@@ -19,15 +17,13 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "typst";
     repo = "typst";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-OfTMJ7ylVOJjL295W3Flj2upTiUQXmfkyDFSE1v8+a4=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "typst-dev-assets-0.12.0" = "sha256-YLxLuhpAUzktjyprZAhZ4GjcXEDUDdLtSzc5onzLuto=";
-    };
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-dphMJ1KkZARSntvyEayAtlYw8lL39K7Iw0X4n8nz3z8=";
   };
 
   nativeBuildInputs = [
@@ -35,16 +31,10 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      openssl
-      xz
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.CoreFoundation
-      darwin.apple_sdk.frameworks.CoreServices
-      darwin.apple_sdk.frameworks.Security
-    ];
+  buildInputs = [
+    openssl
+    xz
+  ];
 
   env = {
     GEN_ARTIFACTS = "artifacts";

@@ -792,7 +792,7 @@ lib.mapAttrs mkLicense ({
 
   lens = {
     fullName = "Lens Terms of Service Agreement";
-    url = "https://k8slens.dev/licenses/tos";
+    url = "https://k8slens.dev/legal/tos";
     free = false;
   };
 

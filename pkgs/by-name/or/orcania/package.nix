@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, cmake, check, subunit }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  check,
+  subunit,
+}:
 stdenv.mkDerivation rec {
   pname = "orcania";
   version = "2.3.3";
@@ -12,9 +19,18 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  nativeCheckInputs = [ check subunit ];
+  nativeCheckInputs = [
+    check
+    subunit
+  ];
 
   cmakeFlags = [ "-DBUILD_ORCANIA_TESTING=on" ];
+
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals stdenv.cc.isClang [
+      "-Wno-error=constant-conversion"
+    ]
+  );
 
   doCheck = true;
 

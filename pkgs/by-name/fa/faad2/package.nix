@@ -1,13 +1,14 @@
-{lib
-, stdenv
-, fetchFromGitHub
-, cmake
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
 
-# for passthru.tests
-, gst_all_1
-, mpd
-, ocamlPackages
-, vlc
+  # for passthru.tests
+  gst_all_1,
+  mpd,
+  ocamlPackages,
+  vlc,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +22,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-E6oe7yjYy1SJo8xQkyUk1sSucKDMPxwUFVSAyrf4Pd8=";
   };
 
-  outputs = [ "out" "dev" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "man"
+  ];
 
   nativeBuildInputs = [ cmake ];
 
@@ -34,9 +39,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Open source MPEG-4 and MPEG-2 AAC decoder";
     homepage = "https://sourceforge.net/projects/faac/";
-    license     = licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ codyopel ];
     mainProgram = "faad";
-    platforms   = platforms.all;
+    platforms = platforms.all;
   };
 }

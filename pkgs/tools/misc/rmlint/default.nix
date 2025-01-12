@@ -1,21 +1,24 @@
-{ lib, stdenv
-, cairo
-, elfutils
-, fetchFromGitHub
-, glib
-, gobject-introspection
-, gtksourceview3
-, json-glib
-, makeWrapper
-, pango
-, pkg-config
-, polkit
-, python3
-, scons
-, sphinx
-, util-linux
-, wrapGAppsHook3
-, withGui ? false }:
+{
+  lib,
+  stdenv,
+  cairo,
+  elfutils,
+  fetchFromGitHub,
+  glib,
+  gobject-introspection,
+  gtksourceview3,
+  json-glib,
+  makeWrapper,
+  pango,
+  pkg-config,
+  polkit,
+  python3,
+  scons,
+  sphinx,
+  util-linux,
+  wrapGAppsHook3,
+  withGui ? false,
+}:
 
 assert withGui -> !stdenv.hostPlatform.isDarwin;
 
@@ -35,30 +38,35 @@ stdenv.mkDerivation rec {
     ./scons-nix-env.patch
   ];
 
-  nativeBuildInputs = [
-    pkg-config
-    sphinx
-    scons
-  ] ++ lib.optionals withGui [
-    makeWrapper
-    wrapGAppsHook3
-    gobject-introspection
-  ];
+  nativeBuildInputs =
+    [
+      pkg-config
+      sphinx
+      scons
+    ]
+    ++ lib.optionals withGui [
+      makeWrapper
+      wrapGAppsHook3
+      gobject-introspection
+    ];
 
-  buildInputs = [
-    glib
-    json-glib
-    util-linux
-  ] ++ lib.optionals withGui [
-    cairo
-    gtksourceview3
-    pango
-    polkit
-    python3
-    python3.pkgs.pygobject3
-  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
-    elfutils
-  ];
+  buildInputs =
+    [
+      glib
+      json-glib
+      util-linux
+    ]
+    ++ lib.optionals withGui [
+      cairo
+      gtksourceview3
+      pango
+      polkit
+      python3
+      python3.pkgs.pygobject3
+    ]
+    ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
+      elfutils
+    ];
 
   prePatch = ''
     # remove sources of nondeterminism
@@ -85,7 +93,10 @@ stdenv.mkDerivation rec {
     homepage = "https://rmlint.readthedocs.org";
     platforms = platforms.unix;
     license = licenses.gpl3;
-    maintainers = with maintainers; [ aaschmid koral ];
+    maintainers = with maintainers; [
+      aaschmid
+      koral
+    ];
     mainProgram = "rmlint";
   };
 }

@@ -1,6 +1,13 @@
-{ stdenv, cmake, fetchFromGitHub, lib }: let
+{
+  stdenv,
+  cmake,
+  fetchFromGitHub,
+  lib,
+}:
+let
   version = "0.2.0";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   name = "scope-lite-${version}";
 
   src = fetchFromGitHub {

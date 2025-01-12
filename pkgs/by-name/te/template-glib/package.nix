@@ -1,26 +1,31 @@
-{ stdenv
-, lib
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, glib
-, gobject-introspection
-, flex
-, bison
-, vala
-, gettext
-, gnome
-, gtk-doc
-, docbook_xsl
-, docbook_xml_dtd_43
+{
+  stdenv,
+  lib,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  glib,
+  gobject-introspection,
+  flex,
+  bison,
+  vala,
+  gettext,
+  gnome,
+  gtk-doc,
+  docbook_xsl,
+  docbook_xml_dtd_43,
 }:
 
 stdenv.mkDerivation rec {
   pname = "template-glib";
   version = "3.36.2";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";

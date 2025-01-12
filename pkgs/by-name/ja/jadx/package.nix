@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  gradle,
+  gradle_8,
   jdk,
   quark-engine,
   makeBinaryWrapper,
@@ -11,7 +11,10 @@
   copyDesktopItems,
   desktopToDarwinBundle,
 }:
-
+let
+  # "Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0."
+  gradle = gradle_8;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "jadx";
   version = "1.5.0";

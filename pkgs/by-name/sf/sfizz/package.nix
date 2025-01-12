@@ -1,6 +1,23 @@
-{ lib, stdenv, fetchFromGitHub, libjack2, libsndfile, xorg, freetype
-, libxkbcommon, cairo, glib, zenity, flac, libogg, libvorbis, libopus, cmake
-, pango, pkg-config, catch2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libjack2,
+  libsndfile,
+  xorg,
+  freetype,
+  libxkbcommon,
+  cairo,
+  glib,
+  zenity,
+  flac,
+  libogg,
+  libvorbis,
+  libopus,
+  cmake,
+  pango,
+  pkg-config,
+  catch2,
 }:
 
 stdenv.mkDerivation rec {
@@ -38,10 +55,13 @@ stdenv.mkDerivation rec {
     freetype
     pango
   ];
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   # Fix missing include
-  patches = [./gcc13.patch];
+  patches = [ ./gcc13.patch ];
 
   postPatch = ''
     cp ${catch2}/include/catch2/catch.hpp tests/catch2/catch.hpp

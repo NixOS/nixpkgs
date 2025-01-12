@@ -1,12 +1,13 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, gfortran
-, meson
-, ninja
-, pkg-config
-, python3
-, json-fortran
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  gfortran,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  json-fortran,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,11 +21,20 @@ stdenv.mkDerivation rec {
     hash = "sha256-dJYKnGlcc4N40h1RnP6MJyBj70/8kb1q4OyKTmlvS70=";
   };
 
-  nativeBuildInputs = [ gfortran meson ninja pkg-config python3 ];
+  nativeBuildInputs = [
+    gfortran
+    meson
+    ninja
+    pkg-config
+    python3
+  ];
 
   buildInputs = [ json-fortran ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   doCheck = true;
 

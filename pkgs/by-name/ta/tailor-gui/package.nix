@@ -1,17 +1,18 @@
-{ stdenv
-, lib
-, rustPlatform
-, cargo
-, rustc
-, pkg-config
-, desktop-file-utils
-, appstream-glib
-, wrapGAppsHook4
-, meson
-, ninja
-, libadwaita
-, gtk4
-, tuxedo-rs
+{
+  stdenv,
+  lib,
+  rustPlatform,
+  cargo,
+  rustc,
+  pkg-config,
+  desktop-file-utils,
+  appstream-glib,
+  wrapGAppsHook4,
+  meson,
+  ninja,
+  libadwaita,
+  gtk4,
+  tuxedo-rs,
 }:
 let
   src = tuxedo-rs.src;
@@ -21,7 +22,12 @@ let
 in
 stdenv.mkDerivation {
 
-  inherit src sourceRoot pname version;
+  inherit
+    src
+    sourceRoot
+    pname
+    version
+    ;
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src sourceRoot;
@@ -55,7 +61,10 @@ stdenv.mkDerivation {
     '';
     homepage = "https://github.com/AaronErhardt/tuxedo-rs";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ mrcjkb xaverdh ];
+    maintainers = with maintainers; [
+      mrcjkb
+      xaverdh
+    ];
     platforms = platforms.linux;
   };
 }

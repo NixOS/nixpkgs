@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -10,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "padok-team";
     repo = "YATAS";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-gw4aZ7SLUz5WLUb1z4zDtI6Ca0tEWhE5wobp5NRvjkg=";
   };
 

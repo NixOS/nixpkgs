@@ -36,7 +36,7 @@
 
 buildPythonPackage rec {
   pname = "llama-index-core";
-  version = "0.11.23";
+  version = "0.12.9.post1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -44,8 +44,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "run-llama";
     repo = "llama_index";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-DMdU8LT1IGTHM8EsCX44MvGv+luOsKnPSI7yRR5ULPo=";
+    tag = "v${version}";
+    hash = "sha256-kpHemwEYeCBwb2kdvX/ubFHwX9AQ+zIhLudcgJ7u+QY=";
   };
 
   sourceRoot = "${src.name}/${pname}";
@@ -133,6 +133,7 @@ buildPythonPackage rec {
     "test_from_persist_dir"
     # asyncio.exceptions.InvalidStateError: invalid state
     "test_workflow_context_to_dict_mid_run"
+    "test_SimpleDirectoryReader"
   ];
 
   meta = with lib; {

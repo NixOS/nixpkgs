@@ -1,9 +1,10 @@
-{ autoPatchelfHook
-, cups
-, dpkg
-, fetchurl
-, lib
-, stdenv
+{
+  autoPatchelfHook,
+  cups,
+  dpkg,
+  fetchurl,
+  lib,
+  stdenv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -15,9 +16,6 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Q0qB4gvEWa10KGt6SngVqraxFePxIQ62nTrFZ44vyrU=";
     curlOpts = "--user-agent Mozilla/5.0"; # HTTP 410 otherwise
   };
-
-  sourceRoot = ".";
-  unpackCmd = "dpkg-deb -x $curSrc .";
 
   nativeBuildInputs = [
     autoPatchelfHook

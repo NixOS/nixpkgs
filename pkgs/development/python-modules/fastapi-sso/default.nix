@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tomasvotava";
     repo = "fastapi-sso";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-CkYAF2GmVCooyHt3Tua6ClYMbgyLosqSa8z/zkV2eIE=";
   };
 

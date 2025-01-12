@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, gitUpdater, pkg-config, autoreconfHook
-, libX11, pam, libgcrypt, libXrender, imlib2 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gitUpdater,
+  pkg-config,
+  autoreconfHook,
+  libX11,
+  pam,
+  libgcrypt,
+  libXrender,
+  imlib2,
+}:
 
 stdenv.mkDerivation rec {
   pname = "alock";
@@ -8,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Arkq";
     repo = "alock";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-xfPhsXZrTlEqea75SvacDfjM9o21MTudrqfNN9xtdcg=";
   };
 
@@ -21,10 +32,16 @@ stdenv.mkDerivation rec {
     "--enable-imlib2"
   ];
 
-  nativeBuildInputs = [ pkg-config autoreconfHook ];
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
+  ];
   buildInputs = [
     libX11
-    pam libgcrypt libXrender imlib2
+    pam
+    libgcrypt
+    libXrender
+    imlib2
   ];
 
   passthru.updateScript = gitUpdater {
@@ -46,7 +63,10 @@ stdenv.mkDerivation rec {
       X session.
     '';
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ftrvxmtrx chris-martin ];
+    maintainers = with maintainers; [
+      ftrvxmtrx
+      chris-martin
+    ];
     license = licenses.mit;
   };
 }

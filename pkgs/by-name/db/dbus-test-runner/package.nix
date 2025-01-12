@@ -1,16 +1,17 @@
-{ stdenv
-, lib
-, fetchbzr
-, testers
-, autoreconfHook
-, bash
-, dbus
-, dbus-glib
-, glib
-, intltool
-, pkg-config
-, python3
-, xvfb-run
+{
+  stdenv,
+  lib,
+  fetchbzr,
+  testers,
+  autoreconfHook,
+  bash,
+  dbus,
+  dbus-glib,
+  glib,
+  intltool,
+  pkg-config,
+  python3,
+  xvfb-run,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -50,9 +51,11 @@ stdenv.mkDerivation (finalAttrs: {
   nativeCheckInputs = [
     bash
     dbus
-    (python3.withPackages (ps: with ps; [
-      python-dbusmock
-    ]))
+    (python3.withPackages (
+      ps: with ps; [
+        python-dbusmock
+      ]
+    ))
     xvfb-run
   ];
 

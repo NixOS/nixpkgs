@@ -11,7 +11,6 @@
   openimageio,
   imath,
   python,
-  darwinMinVersionHook,
   apple-sdk_14,
 }:
 
@@ -40,7 +39,6 @@ buildPythonPackage rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       apple-sdk_14
-      (darwinMinVersionHook "10.15")
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       libX11

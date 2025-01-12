@@ -1,44 +1,52 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, makeWrapper
-, pkg-config
-, stdenv
-, openssl
-, withALSA ? stdenv.hostPlatform.isLinux
-, alsa-lib
-, alsa-plugins
-, withPortAudio ? false
-, portaudio
-, withPulseAudio ? false
-, libpulseaudio
-, withRodio ? true
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  makeWrapper,
+  pkg-config,
+  stdenv,
+  openssl,
+  withALSA ? stdenv.hostPlatform.isLinux,
+  alsa-lib,
+  alsa-plugins,
+  withPortAudio ? false,
+  portaudio,
+  withPulseAudio ? false,
+  libpulseaudio,
+  withRodio ? true,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "librespot";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "librespot-org";
     repo = "librespot";
     rev = "v${version}";
-    sha256 = "sha256-/YMICsrUMYqiL5jMlb5BbZPlHfL9btbWiv/Kt2xhRW4=";
+    sha256 = "sha256-dGQDRb7fgIkXelZKa+PdodIs9DxbgEMlVGJjK/hU3Mo=";
   };
 
-  cargoHash = "sha256-UOvGvseWaEqqjuvTewDfkBeR730cKMQCq55weYmu15Y=";
+  cargoHash = "sha256-GScAUqALoocqvsHz4XgPytI8cl0hiuWjqaO/ItNo4v4=";
 
-  nativeBuildInputs = [ pkg-config makeWrapper ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    rustPlatform.bindgenHook
-  ];
+  nativeBuildInputs =
+    [
+      pkg-config
+      makeWrapper
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      rustPlatform.bindgenHook
+    ];
 
-  buildInputs = [ openssl ]
+  buildInputs =
+    [ openssl ]
     ++ lib.optional withALSA alsa-lib
     ++ lib.optional withPortAudio portaudio
     ++ lib.optional withPulseAudio libpulseaudio;
 
   buildNoDefaultFeatures = true;
-  buildFeatures = lib.optional withRodio "rodio-backend"
+  buildFeatures =
+    lib.optional withRodio "rodio-backend"
     ++ lib.optional withALSA "alsa-backend"
     ++ lib.optional withPortAudio "portaudio-backend"
     ++ lib.optional withPulseAudio "pulseaudio-backend";

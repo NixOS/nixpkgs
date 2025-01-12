@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-ZZwb5WHKFMAP5yPT1DDi+nWy7rjM/UI6ahagNqTDDMM=";
 
   meta = {
-    homepage = "https://github.com/rustic-rs/rustic";
+    homepage = "https://codeberg.org/keyoxide/kx-aspe-cli";
     changelog = "https://codeberg.org/keyoxide/kx-aspe-cli/src/commit/${src.rev}/CHANGELOG.md";
     description = "Keyoxide profile generator CLI using ASPE";
     mainProgram = "kx-aspe";

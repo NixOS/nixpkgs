@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, cairo
-, glib
-, gobject-introspection
-, libgtop
-, pkg-config
-, rofi-unwrapped
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  cairo,
+  glib,
+  gobject-introspection,
+  libgtop,
+  pkg-config,
+  rofi-unwrapped,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {

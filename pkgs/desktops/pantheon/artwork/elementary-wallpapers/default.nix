@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, gettext
-, meson
-, ninja
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  gettext,
+  meson,
+  ninja,
+  python3,
 }:
 
 stdenv.mkDerivation rec {
@@ -43,4 +44,3 @@ stdenv.mkDerivation rec {
     maintainers = teams.pantheon.members;
   };
 }
-

@@ -1,11 +1,17 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.erigon;
 
   settingsFormat = pkgs.formats.toml { };
   configFile = settingsFormat.generate "config.toml" cfg.settings;
-in {
+in
+{
 
   options = {
     services.erigon = {
@@ -41,7 +47,14 @@ in {
           chain = "mainnet";
           http = true;
           "http.port" = 8545;
-          "http.api" = ["eth" "debug" "net" "trace" "web3" "erigon"];
+          "http.api" = [
+            "eth"
+            "debug"
+            "net"
+            "trace"
+            "web3"
+            "erigon"
+          ];
           ws = true;
           port = 30303;
           "authrpc.port" = 8551;
@@ -76,7 +89,14 @@ in {
       chain = lib.mkDefault "mainnet";
       http = lib.mkDefault true;
       "http.port" = lib.mkDefault 8545;
-      "http.api" = lib.mkDefault ["eth" "debug" "net" "trace" "web3" "erigon"];
+      "http.api" = lib.mkDefault [
+        "eth"
+        "debug"
+        "net"
+        "trace"
+        "web3"
+        "erigon"
+      ];
       ws = lib.mkDefault true;
       port = lib.mkDefault 30303;
       "authrpc.port" = lib.mkDefault 8551;
@@ -113,7 +133,10 @@ in {
         RestrictNamespaces = true;
         LockPersonality = true;
         RemoveIPC = true;
-        SystemCallFilter = [ "@system-service" "~@privileged" ];
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
+        ];
       };
     };
   };

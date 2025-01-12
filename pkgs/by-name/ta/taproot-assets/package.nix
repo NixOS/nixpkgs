@@ -1,24 +1,31 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
 }:
 
 buildGoModule rec {
   pname = "taproot-assets";
-  version = "0.4.1";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "lightninglabs";
     repo = "taproot-assets";
     rev = "v${version}";
-    hash = "sha256-aQYVPSDudLK4ZBcBN/wNjVoF/9inOaJRbcyTP6VMdA0=";
+    hash = "sha256-XOEbrz0kFJKoYG91VUeSAuMVJRfGRNTQ8jucMtnvxJo=";
   };
 
-  vendorHash = "sha256-IFzYW5vAtBoUC2ebFYnxS/TojQR4kXxQACNbyn2ZkCs=";
+  vendorHash = "sha256-hDmRyWSf4jokomfJQBLlIbm9I3v2/sg/xD52BW3Wvy4=";
 
-  subPackages = [ "cmd/tapcli" "cmd/tapd" ];
+  subPackages = [
+    "cmd/tapcli"
+    "cmd/tapd"
+  ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   meta = with lib; {
     description = "Daemon for the Taro protocol specification";

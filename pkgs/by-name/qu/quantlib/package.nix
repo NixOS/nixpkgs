@@ -1,15 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, boost186 # (boost181) breaks on darwin
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  boost,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "quantlib";
   version = "1.36";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchFromGitHub {
     owner = "lballabio";
@@ -19,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ boost186 ];
+  buildInputs = [ boost ];
 
   # Required by RQuantLib, may be beneficial for others too
   cmakeFlags = [ "-DQL_HIGH_RESOLUTION_DATE=ON" ];

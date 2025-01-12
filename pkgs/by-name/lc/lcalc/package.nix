@@ -1,9 +1,11 @@
-{ lib, stdenv
-, autoreconfHook
-, gengetopt
-, pkg-config
-, fetchFromGitLab
-, pari
+{
+  lib,
+  stdenv,
+  autoreconfHook,
+  gengetopt,
+  pkg-config,
+  fetchFromGitLab,
+  pari,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,6 +18,10 @@ stdenv.mkDerivation rec {
     rev = version;
     hash = "sha256-RxWZ7T0I9zV7jUVnL6jV/PxEoU32KY7Q1UsOL5Lonuc=";
   };
+
+  # workaround for vendored GCC <complex> on libc++
+  # https://gitlab.com/sagemath/lcalc/-/issues/16
+  patches = [ ./libcxx-compat.patch ];
 
   nativeBuildInputs = [
     autoreconfHook

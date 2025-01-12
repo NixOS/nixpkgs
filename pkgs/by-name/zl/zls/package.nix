@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, zig_0_13
-, callPackage
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  zig_0_13,
+  callPackage,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -33,7 +34,11 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/zigtools/zls/releases/tag/${finalAttrs.version}";
     homepage = "https://github.com/zigtools/zls";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ figsoda moni _0x5a4 ];
+    maintainers = with lib.maintainers; [
+      figsoda
+      moni
+      _0x5a4
+    ];
     platforms = lib.platforms.unix;
   };
 })

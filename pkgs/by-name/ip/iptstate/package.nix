@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, libnetfilter_conntrack, ncurses }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libnetfilter_conntrack,
+  ncurses,
+}:
 
 stdenv.mkDerivation rec {
   pname = "iptstate";
@@ -9,7 +15,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-iW3wYCiFRWomMfeV1jT8ITEeUF+MkQNI5jEoYPIJeVU=";
   };
 
-  buildInputs = [ libnetfilter_conntrack ncurses ];
+  buildInputs = [
+    libnetfilter_conntrack
+    ncurses
+  ];
 
   meta = with lib; {
     description = "Conntrack top like tool";
@@ -25,4 +34,3 @@ stdenv.mkDerivation rec {
     install -m755 -D iptstate $out/bin/iptstate
   '';
 }
-

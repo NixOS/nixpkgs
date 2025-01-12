@@ -7,15 +7,15 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "dmarc-metrics-exporter";
-  version = "1.1.0";
+  version = "1.2.0";
 
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jgosmann";
     repo = "dmarc-metrics-exporter";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-xzIYlOZ1HeW+jbVDVlUPTIooFraQ0cJltsDoCzVMNsA=";
+    tag = "v${version}";
+    hash = "sha256-cIsI4TNYuLK0fpUg9lnbl5KSBtzQoT/pTByI9hiy/7o=";
   };
 
   pythonRelaxDeps = true;

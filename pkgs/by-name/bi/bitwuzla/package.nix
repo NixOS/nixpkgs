@@ -1,34 +1,40 @@
-{ stdenv
-, fetchFromGitHub
-, lib
-, python3
-, meson
-, ninja
-, git
-, btor2tools
-, symfpu
-, gtest
-, gmp
-, cadical
-, cryptominisat
-, zlib
-, pkg-config
+{
+  stdenv,
+  fetchFromGitHub,
+  lib,
+  python3,
+  meson,
+  ninja,
+  git,
+  btor2tools,
+  symfpu,
+  gtest,
+  gmp,
+  cadical,
+  cryptominisat,
+  zlib,
+  pkg-config,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bitwuzla";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "bitwuzla";
     repo = "bitwuzla";
     rev = finalAttrs.version;
-    hash = "sha256-xO9+hixboGaCAIi01sWuIYtPamIwUpiTujmOD60NEm0=";
+    hash = "sha256-S8CtK8WEehUdOoqOmu5KnoqHFpCGrYWjZKv1st4M7bo=";
   };
 
   strictDeps = true;
 
-  nativeBuildInputs = [ meson pkg-config git ninja ];
+  nativeBuildInputs = [
+    meson
+    pkg-config
+    git
+    ninja
+  ];
   buildInputs = [
     cadical
     cryptominisat

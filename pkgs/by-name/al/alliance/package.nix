@@ -1,5 +1,17 @@
-{ lib, stdenv, fetchFromGitLab, xorgproto, motif, libX11, libXt, libXpm, bison
-, flex, automake, autoconf, libtool
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  xorgproto,
+  motif,
+  libX11,
+  libXt,
+  libXpm,
+  bison,
+  flex,
+  automake,
+  autoconf,
+  libtool,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,8 +28,20 @@ stdenv.mkDerivation rec {
 
   prePatch = "cd alliance/src";
 
-  nativeBuildInputs = [ libtool automake autoconf flex ];
-  buildInputs = [ xorgproto motif libX11 libXt libXpm bison ];
+  nativeBuildInputs = [
+    libtool
+    automake
+    autoconf
+    flex
+  ];
+  buildInputs = [
+    xorgproto
+    motif
+    libX11
+    libXt
+    libXpm
+    bison
+  ];
 
   # Disable parallel build, errors:
   #  ./pat_decl_y.y:736:5: error: expected '=', ...
@@ -26,7 +50,8 @@ stdenv.mkDerivation rec {
   ALLIANCE_TOP = placeholder "out";
 
   configureFlags = [
-    "--prefix=${placeholder "out"}" "--enable-alc-shared"
+    "--prefix=${placeholder "out"}"
+    "--enable-alc-shared"
   ];
 
   postPatch = ''

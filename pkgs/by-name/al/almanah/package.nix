@@ -1,28 +1,29 @@
-{ stdenv
-, lib
-, fetchurl
-, fetchpatch
-, atk
-, cairo
-, desktop-file-utils
-, evolution-data-server-gtk4
-, evolution
-, gcr_4
-, gettext
-, glib
-, gnome
-, gpgme
-, gtk3
-, gtksourceview4
-, gtkspell3
-, libcryptui
-, libxml2
-, meson
-, ninja
-, pkg-config
-, python3
-, sqlite
-, wrapGAppsHook3
+{
+  stdenv,
+  lib,
+  fetchurl,
+  fetchpatch,
+  atk,
+  cairo,
+  desktop-file-utils,
+  evolution-data-server-gtk4,
+  evolution,
+  gcr_4,
+  gettext,
+  glib,
+  gnome,
+  gpgme,
+  gtk3,
+  gtksourceview4,
+  gtkspell3,
+  libcryptui,
+  libxml2,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  sqlite,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {
@@ -55,6 +56,13 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       url = "https://gitlab.gnome.org/GNOME/almanah/-/commit/0ba7f05cba7feaf2ae2c220596aead5dfc676675.patch";
       sha256 = "5uvHTPzQloEq8SVt3EnZ+8mziBdXsDmu/e92/RtyFzE=";
+    })
+
+    # Add missing GtkSourceView include
+    # https://gitlab.gnome.org/GNOME/almanah/-/merge_requests/23
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/almanah/-/commit/533f30c7e60437cbea7ca5ae901e768922c1a710.patch";
+      hash = "sha256-Ekhn4nRMC+fXLn4kqNwyCAg2cZru5QUcdzR1yJbcZGc=";
     })
   ];
 

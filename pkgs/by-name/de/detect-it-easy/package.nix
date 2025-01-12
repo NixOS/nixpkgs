@@ -62,7 +62,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/horsicq/Detect-It-Easy";
     changelog = "https://github.com/horsicq/Detect-It-Easy/blob/master/changelog.txt";
     maintainers = with lib.maintainers; [ ivyfanchiang ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     license = lib.licenses.mit;
   };
 })

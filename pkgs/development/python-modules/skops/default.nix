@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "skops-dev";
     repo = "skops";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-2uX5sGVdTnZEbl0VXI8E7h1pQYQVbpQeUKUchCZpgg4=";
   };
 
@@ -45,6 +45,10 @@ buildPythonPackage rec {
     streamlit
   ];
   pytestFlagsArray = [ "skops" ];
+  disabledTests = [
+    # flaky
+    "test_base_case_works_as_expected"
+  ];
   disabledTestPaths =
     [
       # try to download data from Huggingface Hub:

@@ -1,4 +1,8 @@
-{ lib, fetchFromGitHub, buildGoModule }:
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+}:
 
 buildGoModule rec {
   pname = "zk";
@@ -15,9 +19,14 @@ buildGoModule rec {
 
   doCheck = false;
 
-  CGO_ENABLED = 1;
+  env.CGO_ENABLED = 1;
 
-  ldflags = [ "-s" "-w" "-X=main.Build=${version}" "-X=main.Version=${version}"];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X=main.Build=${version}"
+    "-X=main.Version=${version}"
+  ];
 
   tags = [ "fts5" ];
 

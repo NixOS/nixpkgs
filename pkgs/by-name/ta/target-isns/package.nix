@@ -1,4 +1,10 @@
-{ lib, stdenv, cmake, fetchFromGitHub, fetchpatch } :
+{
+  lib,
+  stdenv,
+  cmake,
+  fetchFromGitHub,
+  fetchpatch,
+}:
 
 stdenv.mkDerivation rec {
   pname = "target-isns";

@@ -1,14 +1,20 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub, installShellFiles }:
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 
 buildGoModule rec {
   pname = "k6";
-  version = "0.55.0";
+  version = "0.55.2";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-SWmKtnpG/MvSGllZSv3EJjVjOVUWcWFVLqz/FcvEl9Y=";
+    hash = "sha256-BuZsz5+vp4obL/Gj/gJSgA0xxdYmqd+MKggS62Jo+bM=";
   };
 
   subPackages = [ "./" ];
@@ -35,6 +41,10 @@ buildGoModule rec {
     homepage = "https://k6.io/";
     changelog = "https://github.com/grafana/k6/releases/tag/v${version}";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ offline bryanasdev000 kashw2 ];
+    maintainers = with maintainers; [
+      offline
+      bryanasdev000
+      kashw2
+    ];
   };
 }

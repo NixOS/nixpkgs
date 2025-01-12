@@ -1,18 +1,19 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, gitUpdater
-, nixosTests
-, cmake
-, gsettings-qt
-, lomiri-ui-extras
-, lomiri-ui-toolkit
-, pkg-config
-, qmltermwidget
-, qtbase
-, qtdeclarative
-, qtsystems
-, wrapQtAppsHook
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  gitUpdater,
+  nixosTests,
+  cmake,
+  gsettings-qt,
+  lomiri-ui-extras,
+  lomiri-ui-toolkit,
+  pkg-config,
+  qmltermwidget,
+  qtbase,
+  qtdeclarative,
+  qtsystems,
+  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,12 +1,12 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
-, pkg-config
-, withNativeTls ? true
-, stdenv
-, darwin
-, openssl
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  pkg-config,
+  withNativeTls ? true,
+  stdenv,
+  openssl,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,13 +24,17 @@ rustPlatform.buildRustPackage rec {
 
   buildFeatures = lib.optional withNativeTls "native-tls";
 
-  nativeBuildInputs = [ installShellFiles pkg-config ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ];
 
-  buildInputs = lib.optionals withNativeTls
-    (if stdenv.hostPlatform.isDarwin then [ darwin.apple_sdk.frameworks.SystemConfiguration ] else [ openssl ]);
+  buildInputs = lib.optionals (withNativeTls && !stdenv.hostPlatform.isDarwin) [ openssl ];
 
-  # Get openssl-sys to use pkg-config
-  OPENSSL_NO_VENDOR = 1;
+  env = {
+    # Get openssl-sys to use pkg-config
+    OPENSSL_NO_VENDOR = 1;
+  };
 
   postInstall = ''
     installShellCompletion \
@@ -54,12 +58,15 @@ rustPlatform.buildRustPackage rec {
     $out/bin/xhs --help > /dev/null
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Friendly and fast tool for sending HTTP requests";
     homepage = "https://github.com/ducaale/xh";
     changelog = "https://github.com/ducaale/xh/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda aaronjheng ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      figsoda
+      aaronjheng
+    ];
     mainProgram = "xh";
   };
 }

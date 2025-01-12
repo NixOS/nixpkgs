@@ -1,12 +1,13 @@
-{ mkDerivation
-, lib
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, extra-cmake-modules
-, kauth
-, krunner
-, pass
+{
+  mkDerivation,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  extra-cmake-modules,
+  kauth,
+  krunner,
+  pass,
 }:
 
 mkDerivation rec {
@@ -27,7 +28,10 @@ mkDerivation rec {
     (pass.withExtensions (p: with p; [ pass-otp ]))
   ];
 
-  nativeBuildInputs = [ cmake extra-cmake-modules ];
+  nativeBuildInputs = [
+    cmake
+    extra-cmake-modules
+  ];
 
   patches = [
     (fetchpatch {

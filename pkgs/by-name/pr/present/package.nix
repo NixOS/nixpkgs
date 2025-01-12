@@ -1,15 +1,19 @@
-{ lib, python3Packages, fetchPypi }:
+{
+  lib,
+  python3Packages,
+  fetchPypi,
+}:
 
 let
-    # https://github.com/NixOS/nixpkgs/issues/348788
-    mistune_2 = python3Packages.mistune.overridePythonAttrs(oldAttrs: rec {
-      version = "2.0.5";
-      src =  fetchPypi {
-        inherit (oldAttrs) pname;
-        inherit version;
-        hash = "sha256-AkYRPLJJLbh1xr5Wl0p8iTMzvybNkokchfYxUc7gnTQ=";
-      };
-    });
+  # https://github.com/NixOS/nixpkgs/issues/348788
+  mistune_2 = python3Packages.mistune.overridePythonAttrs (oldAttrs: rec {
+    version = "2.0.5";
+    src = fetchPypi {
+      inherit (oldAttrs) pname;
+      inherit version;
+      hash = "sha256-AkYRPLJJLbh1xr5Wl0p8iTMzvybNkokchfYxUc7gnTQ=";
+    };
+  });
 in
 python3Packages.buildPythonPackage rec {
   pname = "present";

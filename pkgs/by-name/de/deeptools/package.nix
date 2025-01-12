@@ -1,6 +1,7 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -11,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "deeptools";
     repo = "deepTools";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-2kSlL7Y5f/FjVtStnmz+GlTw2oymrtxOCaXlqgbQ7FU=";
   };
 
@@ -59,7 +60,10 @@ python3.pkgs.buildPythonApplication rec {
       publication-ready visualizations to identify enrichments and for functional
       annotations of the genome.
     '';
-    license = with licenses; [ mit bsd3 ];
+    license = with licenses; [
+      mit
+      bsd3
+    ];
     maintainers = with maintainers; [ scalavision ];
   };
 }

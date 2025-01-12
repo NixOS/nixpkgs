@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tetienne";
     repo = "somfy-open-api";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-G/4aBtsN20QtQnMiBBQWg0mqrmR8FuU2f9g77qvk8nI=";
   };
 

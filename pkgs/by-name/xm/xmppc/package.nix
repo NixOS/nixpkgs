@@ -1,4 +1,14 @@
-{lib, stdenv, fetchFromGitea, autoconf-archive, autoreconfHook, pkg-config, libstrophe, glib, gpgme }:
+{
+  lib,
+  stdenv,
+  fetchFromGitea,
+  autoconf-archive,
+  autoreconfHook,
+  pkg-config,
+  libstrophe,
+  glib,
+  gpgme,
+}:
 
 stdenv.mkDerivation rec {
   pname = "xmppc";

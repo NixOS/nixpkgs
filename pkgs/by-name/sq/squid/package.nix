@@ -1,37 +1,65 @@
-{ lib, stdenv, fetchurl, perl, openldap, pam, db, cyrus_sasl, libcap
-, expat, libxml2, openssl, pkg-config, systemd
-, cppunit
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+  openldap,
+  pam,
+  db,
+  cyrus_sasl,
+  libcap,
+  expat,
+  libxml2,
+  openssl,
+  pkg-config,
+  systemd,
+  cppunit,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "squid";
-  version = "6.10";
+  version = "6.12";
 
   src = fetchurl {
     url = "http://www.squid-cache.org/Versions/v6/squid-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Cwexh+cj8Edw3SW+uJrsEgMKFYaWqoiS2HyLJoU0CKc=";
+    hash = "sha256-8986uyYDpRMmbySl1Gmanw12ufVU0YSLZ/nFHNOzy1A=";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [
-    perl openldap db cyrus_sasl expat libxml2 openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ libcap pam systemd ];
+  buildInputs =
+    [
+      perl
+      openldap
+      db
+      cyrus_sasl
+      expat
+      libxml2
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libcap
+      pam
+      systemd
+    ];
 
   enableParallelBuilding = true;
 
-  configureFlags = [
-    "--enable-ipv6"
-    "--disable-strict-error-checking"
-    "--disable-arch-native"
-    "--with-openssl"
-    "--enable-ssl-crtd"
-    "--enable-storeio=ufs,aufs,diskd,rock"
-    "--enable-removal-policies=lru,heap"
-    "--enable-delay-pools"
-    "--enable-x-accelerator-vary"
-    "--enable-htcp"
-  ] ++ lib.optional (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isMusl)
-    "--enable-linux-netfilter";
+  configureFlags =
+    [
+      "--enable-ipv6"
+      "--disable-strict-error-checking"
+      "--disable-arch-native"
+      "--with-openssl"
+      "--enable-ssl-crtd"
+      "--enable-storeio=ufs,aufs,diskd,rock"
+      "--enable-removal-policies=lru,heap"
+      "--enable-delay-pools"
+      "--enable-x-accelerator-vary"
+      "--enable-htcp"
+    ]
+    ++ lib.optional (
+      stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isMusl
+    ) "--enable-linux-netfilter";
 
   doCheck = true;
   nativeCheckInputs = [ cppunit ];
@@ -55,6 +83,8 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ raskin ];
-    knownVulnerabilities = [ "Squid has multiple unresolved security vulnerabilities, for more information see https://megamansec.github.io/Squid-Security-Audit/" ];
+    knownVulnerabilities = [
+      "Squid has multiple unresolved security vulnerabilities, for more information see https://megamansec.github.io/Squid-Security-Audit/"
+    ];
   };
 })

@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchpatch, fetchurl, pkg-config, perl, cups, dbus, enscript }:
+{
+  lib,
+  stdenv,
+  fetchpatch,
+  fetchurl,
+  pkg-config,
+  perl,
+  cups,
+  dbus,
+  enscript,
+}:
 
 stdenv.mkDerivation rec {
   pname = "foomatic-filters";
@@ -10,7 +20,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ perl cups dbus enscript ];
+  buildInputs = [
+    perl
+    cups
+    dbus
+    enscript
+  ];
 
   patches = [
     (fetchpatch {
@@ -20,10 +35,9 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  preConfigure =
-    ''
-      substituteInPlace foomaticrip.c --replace /bin/bash ${stdenv.shell}
-    '';
+  preConfigure = ''
+    substituteInPlace foomaticrip.c --replace /bin/bash ${stdenv.shell}
+  '';
 
   # Workaround build failure on -fno-common toolchains like upstream
   # gcc-10. Otherwise build fails as:

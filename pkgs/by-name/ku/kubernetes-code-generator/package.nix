@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "code-generator";
@@ -13,7 +17,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-zjgTtGen6a8TPi/DrwheTS1VQ+hd+KI7UHoyMZ4W4+k=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/kubernetes/code-generator";

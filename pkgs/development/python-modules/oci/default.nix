@@ -7,23 +7,20 @@
   fetchFromGitHub,
   pyopenssl,
   python-dateutil,
-  pythonOlder,
   pytz,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "oci";
-  version = "2.135.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "2.141.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "oracle";
     repo = "oci-python-sdk";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-PAEHJ92aspRYMqFR9upFmILcqAWCVnR9yiOoLys0GWA=";
+    tag = "v${version}";
+    hash = "sha256-D2iaEK25ryU1oRRahnlC3wuEIxtyjR6rAa7TXFTaRi4=";
   };
 
   pythonRelaxDeps = [
@@ -31,11 +28,9 @@ buildPythonPackage rec {
     "pyOpenSSL"
   ];
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     certifi
     circuitbreaker
     cryptography
@@ -49,14 +44,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "oci" ];
 
-  meta = with lib; {
+  meta = {
     description = "Oracle Cloud Infrastructure Python SDK";
     homepage = "https://github.com/oracle/oci-python-sdk";
     changelog = "https://github.com/oracle/oci-python-sdk/blob/v${version}/CHANGELOG.rst";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       upl
     ];
-    maintainers = with maintainers; [ ilian ];
+    maintainers = with lib.maintainers; [ ilian ];
   };
 }

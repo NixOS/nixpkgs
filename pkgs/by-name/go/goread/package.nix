@@ -1,17 +1,21 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "goread";
-  version = "1.6.5";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "TypicalAM";
     repo = "goread";
     rev = "v${version}";
-    hash = "sha256-SRVXcdgtRpWqvO28CnUcx40nFJnG+Hd94Ezgaj5xK6A=";
+    hash = "sha256-8QjroS0aKALcrDJkpihD70iJJBdiVP4Q2j2n3BsY71w=";
   };
 
-  vendorHash = "sha256-/kxEnw8l9S7WNMcPh1x7xqiQ3L61DSn6DCIvJlyrip0=";
+  vendorHash = "sha256-S/0uuy/G7ZT239OgKaOT1dmY+u5/lnZKL4GtbEi2zCI=";
 
   env.TEST_OFFLINE_ONLY = 1;
 

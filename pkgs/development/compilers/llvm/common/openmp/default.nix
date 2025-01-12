@@ -21,7 +21,7 @@ let
   pname = "openmp";
   src' =
     if monorepoSrc != null then
-      runCommand "${pname}-src-${version}" {} (''
+      runCommand "${pname}-src-${version}" { inherit (monorepoSrc) passthru; } (''
         mkdir -p "$out"
       '' + lib.optionalString (lib.versionAtLeast release_version "14") ''
         cp -r ${monorepoSrc}/cmake "$out"
@@ -34,9 +34,7 @@ stdenv.mkDerivation (rec {
 
   src = src';
 
-  sourceRoot =
-    if lib.versionOlder release_version "13" then null
-    else "${src.name}/${pname}";
+  sourceRoot = "${src.name}/${pname}";
 
   outputs = [ "out" ]
     ++ lib.optionals (lib.versionAtLeast release_version "14") [ "dev" ];

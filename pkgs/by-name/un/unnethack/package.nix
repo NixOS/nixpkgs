@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, util-linux, ncurses, flex, bison }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  util-linux,
+  ncurses,
+  flex,
+  bison,
+}:
 
 stdenv.mkDerivation rec {
   pname = "unnethack";
@@ -14,14 +23,19 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses ];
 
-  nativeBuildInputs = [ util-linux flex bison ];
+  nativeBuildInputs = [
+    util-linux
+    flex
+    bison
+  ];
 
-  configureFlags = [ "--enable-curses-graphics"
-                     "--disable-tty-graphics"
-                     "--with-owner=no"
-                     "--with-group=no"
-                     "--with-gamesdir=/tmp/unnethack"
-                   ];
+  configureFlags = [
+    "--enable-curses-graphics"
+    "--disable-tty-graphics"
+    "--with-owner=no"
+    "--with-group=no"
+    "--with-gamesdir=/tmp/unnethack"
+  ];
 
   makeFlags = [ "GAMEPERM=744" ];
   patches = [

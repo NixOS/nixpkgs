@@ -27,7 +27,7 @@ in
 
 ps.buildPythonApplication rec {
   pname = "normcap";
-  version = "0.5.8";
+  version = "0.5.9";
   format = "pyproject";
 
   disabled = ps.pythonOlder "3.9";
@@ -35,8 +35,8 @@ ps.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "dynobo";
     repo = "normcap";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-iMlW8oEt4OSipJaQ2XzBZeBVqiZP/C1sM0f5LYjv7/A=";
+    tag = "v${version}";
+    hash = "sha256-K8BkPRHmcJSzYPxv49a1whKpe+StK7m0ea7t2YNUESw=";
   };
 
   pythonRemoveDeps = [
@@ -61,6 +61,7 @@ ps.buildPythonApplication rec {
   dependencies = [
     ps.pyside6
     ps.jeepney
+    ps.toml
   ];
 
   preFixup = ''
@@ -68,6 +69,28 @@ ps.buildPythonApplication rec {
       "''${qtWrapperArgs[@]}"
       --set QT_QPA_PLATFORM xcb
       --prefix PATH : ${lib.makeBinPath wrapperDeps}
+    )
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    # cursed fix on GNOME+wayland
+    # this works because systemd-run runs the command as an ad-hoc service named run-1234567890.service
+    # FIXME: make something like `--slice=app-com.github.dynobo.normcap.slice`
+    #        work such that the "screenshot screenshot" permission in
+    #        `flatpak permissions` is associated with the xdg app id
+    #        "com.github.dynobo.normcap" and not ""
+    makeWrapperArgs+=(
+      --run '
+        if command -v systemd-run >/dev/null; then
+            exec -a "$0" systemd-run --wait --user \
+              --setenv=PATH="$PATH" \
+              --setenv=PYTHONNOUSERSITE="$PYTHONNOUSERSITE" \
+              --setenv=QT_QPA_PLATFORM="$QT_QPA_PLATFORM" \
+              ${placeholder "out"}/bin/.normcap-wrapped "$@"
+        else
+            exec -a "$0" ${placeholder "out"}/bin/.normcap-wrapped "$@"
+        fi
+        exit $?
+      '
     )
   '';
 
@@ -81,7 +104,6 @@ ps.buildPythonApplication rec {
     ps.pytest-cov-stub
     ps.pytest-instafail
     ps.pytest-qt
-    ps.toml
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     ps.pytest-xvfb
     xorg.xvfb
@@ -175,6 +197,7 @@ ps.buildPythonApplication rec {
   meta = with lib; {
     description = "OCR powered screen-capture tool to capture information instead of images";
     homepage = "https://dynobo.github.io/normcap/";
+    changelog = "https://github.com/dynobo/normcap/releases/tag/v${version}";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ cafkafk pbsds ];
     mainProgram = "normcap";

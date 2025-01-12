@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, fetchpatch, librsync }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  librsync,
+}:
 
 stdenv.mkDerivation rec {
   pname = "btar";
@@ -30,7 +36,7 @@ stdenv.mkDerivation rec {
     description = "Tar-compatible block-based archiver";
     mainProgram = "btar";
     license = lib.licenses.gpl3Plus;
-    homepage = "https://viric.name/cgi-bin/btar";
+    homepage = "https://briantracy.xyz/writing/btar.html";
     platforms = platforms.all;
     maintainers = [ ];
   };

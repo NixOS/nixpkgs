@@ -1,12 +1,13 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, wrapGAppsHook4
-, libadwaita
-, libpanel
-, gtksourceview5
-, poppler
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  wrapGAppsHook4,
+  libadwaita,
+  libpanel,
+  gtksourceview5,
+  poppler,
 }:
 
 rustPlatform.buildRustPackage {

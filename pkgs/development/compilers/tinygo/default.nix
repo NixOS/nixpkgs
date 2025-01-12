@@ -1,22 +1,28 @@
-{ stdenv
-, lib
-, buildGoModule
-, fetchFromGitHub
-, makeWrapper
-, llvmPackages
-, go
-, xar
-, binaryen
-, avrdude
-, gdb
-, openocd
-, runCommand
-, tinygoTests ? [ "smoketest" ]
+{
+  stdenv,
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  makeWrapper,
+  llvmPackages,
+  go,
+  xar,
+  binaryen,
+  avrdude,
+  gdb,
+  openocd,
+  runCommand,
+  tinygoTests ? [ "smoketest" ],
 }:
 
 let
   llvmMajor = lib.versions.major llvm.version;
-  inherit (llvmPackages) llvm clang compiler-rt lld;
+  inherit (llvmPackages)
+    llvm
+    clang
+    compiler-rt
+    lld
+    ;
 
   # only doing this because only on darwin placing clang.cc in nativeBuildInputs
   # doesn't build
@@ -28,13 +34,13 @@ in
 
 buildGoModule rec {
   pname = "tinygo";
-  version = "0.34.0";
+  version = "0.35.0";
 
   src = fetchFromGitHub {
     owner = "tinygo-org";
     repo = "tinygo";
     rev = "v${version}";
-    hash = "sha256-jntixwHGg9buWQuu9I47DHUxK1xJbDRHxRMEwKoOhHo=";
+    hash = "sha256-oy6797o3lMMRJ+bPHY59Bv7mX25aEwBn4OslAohfY2g=";
     fetchSubmodules = true;
     # The public hydra server on `hydra.nixos.org` is configured with
     # `max_output_size` of 3GB. The purpose of this `postFetch` step
@@ -52,9 +58,14 @@ buildGoModule rec {
   ];
 
   nativeCheckInputs = [ binaryen ];
-  nativeBuildInputs = [ makeWrapper lld ];
-  buildInputs = [ llvm clang.cc ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ xar ];
+  nativeBuildInputs = [
+    makeWrapper
+    lld
+  ];
+  buildInputs = [
+    llvm
+    clang.cc
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xar ];
 
   doCheck = (stdenv.buildPlatform.canExecute stdenv.hostPlatform);
   inherit tinygoTests;
@@ -111,8 +122,14 @@ buildGoModule rec {
   '';
 
   # GDB upstream does not support ARM darwin
-  runtimeDeps = [ go clang.cc lld avrdude openocd binaryen ]
-    ++ lib.optionals (!(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)) [ gdb ];
+  runtimeDeps = [
+    go
+    clang.cc
+    lld
+    avrdude
+    openocd
+    binaryen
+  ] ++ lib.optionals (!(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)) [ gdb ];
 
   installPhase = ''
     runHook preInstall
@@ -120,7 +137,7 @@ buildGoModule rec {
     make build/release USE_SYSTEM_BINARYEN=1
 
     wrapProgram $out/bin/tinygo \
-      --prefix PATH : ${lib.makeBinPath runtimeDeps }
+      --prefix PATH : ${lib.makeBinPath runtimeDeps}
 
     runHook postInstall
   '';
@@ -129,6 +146,9 @@ buildGoModule rec {
     homepage = "https://tinygo.org/";
     description = "Go compiler for small places";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ Madouura muscaln ];
+    maintainers = with maintainers; [
+      Madouura
+      muscaln
+    ];
   };
 }

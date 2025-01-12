@@ -1,23 +1,24 @@
-{ lib
-, stdenv
-, fetchurl
-, cmake
-, pkg-config
-, boost
-, curl
-, SDL2
-, SDL2_image
-, libSM
-, libXext
-, libpng
-, freetype
-, libGLU
-, libGL
-, glew
-, glm
-, openal
-, libogg
-, libvorbis
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  pkg-config,
+  boost,
+  curl,
+  SDL2,
+  SDL2_image,
+  libSM,
+  libXext,
+  libpng,
+  freetype,
+  libGLU,
+  libGL,
+  glew,
+  glm,
+  openal,
+  libogg,
+  libvorbis,
 }:
 
 stdenv.mkDerivation rec {
@@ -33,7 +34,10 @@ stdenv.mkDerivation rec {
     sed '1i#include <memory>' -i external/partio_zip/zip_manager.hpp # gcc12
   '';
 
-  nativeBuildInputs = [ pkg-config cmake ];
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+  ];
 
   buildInputs = [
     boost

@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, jdk, runtimeShell }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jdk,
+  runtimeShell,
+}:
 
 stdenv.mkDerivation rec {
   pname = "polylith";
@@ -47,7 +53,10 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/polyfy/polylith";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.epl10;
-    maintainers = with maintainers; [ ericdallo jlesquembre ];
+    maintainers = with maintainers; [
+      ericdallo
+      jlesquembre
+    ];
     platforms = jdk.meta.platforms;
   };
 }

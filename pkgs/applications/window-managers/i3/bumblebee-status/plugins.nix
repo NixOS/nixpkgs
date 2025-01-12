@@ -1,6 +1,7 @@
-{ pkgs
-, python
-, ...
+{
+  pkgs,
+  python,
+  ...
 }:
 # propagatedBuildInputs are for Python libraries and executables
 # buildInputs are for libraries
@@ -11,7 +12,11 @@ in
   amixer.propagatedBuildInputs = [ pkgs.alsa-utils ];
   # aptitude is unpackaged
   # apt.propagatedBuildInputs = [aptitude];
-  arandr.propagatedBuildInputs = [ py.tkinter pkgs.arandr pkgs.xorg.xrandr ];
+  arandr.propagatedBuildInputs = [
+    py.tkinter
+    pkgs.arandr
+    pkgs.xorg.xrandr
+  ];
   # checkupdates is unpackaged
   # arch-update.propagatedBuildInputs = [checkupdates];
   # checkupdates is unpackaged
@@ -21,20 +26,46 @@ in
   battery = { };
   battery-upower = { };
   battery_upower = { };
-  bluetooth.propagatedBuildInputs = [ pkgs.bluez pkgs.blueman pkgs.dbus ];
-  bluetooth2.propagatedBuildInputs = [ pkgs.bluez pkgs.blueman pkgs.dbus py.dbus-python ];
+  bluetooth.propagatedBuildInputs = [
+    pkgs.bluez
+    pkgs.blueman
+    pkgs.dbus
+  ];
+  bluetooth2.propagatedBuildInputs = [
+    pkgs.bluez
+    pkgs.blueman
+    pkgs.dbus
+    py.dbus-python
+  ];
   blugon.propagatedBuildInputs = [ pkgs.blugon ];
   # If you do not allow this plugin to query the system's ACPI, i.e. the plugin option `use_acpi` is set to `False`, then you need at least one of [ brightnessctl light xbacklight ]
   brightness.propagatedBuildInputs = [ ];
-  caffeine.propagatedBuildInputs = [ pkgs.xdg-utils pkgs.xdotool pkgs.xorg.xprop pkgs.libnotify ];
+  caffeine.propagatedBuildInputs = [
+    pkgs.xdg-utils
+    pkgs.xdotool
+    pkgs.xorg.xprop
+    pkgs.libnotify
+  ];
   cmus.propagatedBuildInputs = [ pkgs.cmus ];
-  cpu.propagatedBuildInputs = [ py.psutil pkgs.gnome-system-monitor ];
-  cpu2.propagatedBuildInputs = [ py.psutil pkgs.lm_sensors ];
-  cpu3.propagatedBuildInputs = [ py.psutil pkgs.lm_sensors ];
+  cpu.propagatedBuildInputs = [
+    py.psutil
+    pkgs.gnome-system-monitor
+  ];
+  cpu2.propagatedBuildInputs = [
+    py.psutil
+    pkgs.lm_sensors
+  ];
+  cpu3.propagatedBuildInputs = [
+    py.psutil
+    pkgs.lm_sensors
+  ];
   currency.propagatedBuildInputs = [ py.requests ];
   date = { };
   datetime = { };
-  datetimetz.propagatedBuildInputs = [ py.tzlocal py.pytz ];
+  datetimetz.propagatedBuildInputs = [
+    py.tzlocal
+    py.pytz
+  ];
   datetz = { };
   deadbeef.propagatedBuildInputs = [ pkgs.deadbeef ];
   debug = { };
@@ -54,7 +85,10 @@ in
     py.google-auth-oauthlib
   ];
   getcrypto.propagatedBuildInputs = [ py.requests ];
-  git.propagatedBuildInputs = [ pkgs.xcwd pkgs.pygit2 ];
+  git.propagatedBuildInputs = [
+    pkgs.xcwd
+    pkgs.pygit2
+  ];
   github.propagatedBuildInputs = [ py.requests ];
   gitlab.propagatedBuildInputs = [ py.requests ];
   # gpmdp-remote is unpackaged
@@ -90,16 +124,25 @@ in
   messagereceiver = { };
   mocp.propagatedBuildInputs = [ pkgs.moc ];
   mpd.propagatedBuildInputs = [ pkgs.mpc ];
-  network.propagatedBuildInputs = [ py.netifaces pkgs.iw ];
+  network.propagatedBuildInputs = [
+    py.netifaces
+    pkgs.iw
+  ];
   network_traffic.propagatedBuildInputs = [ py.netifaces ];
-  nic.propagatedBuildInputs = [ py.netifaces pkgs.iw ];
+  nic.propagatedBuildInputs = [
+    py.netifaces
+    pkgs.iw
+  ];
   notmuch_count.propagatedBuildInputs = [ pkgs.notmuch ];
   # nvidian-smi is unpackaged
   # nvidiagpu.propagatedBuildInputs = [nvidia-smi];
   octoprint.propagatedBuildInputs = [ py.tkinter ];
   # optimus-manager is unpackaged
   # optman.propagatedBuildInputs = [optimus-manager];
-  pacman.propagatedBuildInputs = [ pkgs.fakeroot pkgs.pacman ];
+  pacman.propagatedBuildInputs = [
+    pkgs.fakeroot
+    pkgs.pacman
+  ];
   pamixer.propagatedBuildInputs = [ pkgs.pamixer ];
   persian_date.propagatedBuildInputs = [ py.jdatetime ];
   pihole = { };
@@ -148,9 +191,15 @@ in
   # Needs `systemctl`
   twmn.propagatedBuildInputs = [ ];
   uptime = { };
-  usage.propagatedBuildInputs = [ py.sqlite pkgs.activitywatch ];
+  usage.propagatedBuildInputs = [
+    py.sqlite
+    pkgs.activitywatch
+  ];
   vault.propagatedBuildInputs = [ pkgs.pass ];
-  vpn.propagatedBuildInputs = [ py.tkinter pkgs.networkmanager ];
+  vpn.propagatedBuildInputs = [
+    py.tkinter
+    pkgs.networkmanager
+  ];
   wakatime.propagatedBuildInputs = [ py.requests ];
   watson.propagatedBuildInputs = [ pkgs.watson ];
   weather.propagatedBuildInputs = [ py.requests ];

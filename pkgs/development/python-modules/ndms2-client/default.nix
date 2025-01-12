@@ -2,7 +2,9 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
   setuptools,
+  standard-telnetlib,
   pytestCheckHook,
 }:
 
@@ -18,6 +20,8 @@ buildPythonPackage rec {
     rev = version;
     hash = "sha256-A19olC1rTHTy0xyeSP45fqvv9GUynQSrMgXBgW8ySOs=";
   };
+
+  dependencies = lib.optionals (pythonAtLeast "3.13") [ standard-telnetlib ];
 
   nativeBuildInputs = [ setuptools ];
 

@@ -1,10 +1,16 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.static-web-server;
-  toml = pkgs.formats.toml {};
+  toml = pkgs.formats.toml { };
   configFilePath = toml.generate "config.toml" cfg.configuration;
-in {
+in
+{
   options = {
     services.static-web-server = {
       enable = lib.mkEnableOption ''Static Web Server'';
@@ -28,7 +34,10 @@ in {
         default = { };
         type = toml.type;
         example = {
-          general = { log-level = "error"; directory-listing = true; };
+          general = {
+            log-level = "error";
+            directory-listing = true;
+          };
         };
         description = ''
           Configuration for Static Web Server. See
@@ -47,14 +56,20 @@ in {
     systemd.sockets.static-web-server = {
       wantedBy = [ "sockets.target" ];
       # Start with empty string to reset upstream option
-      listenStreams = [ "" cfg.listen ];
+      listenStreams = [
+        ""
+        cfg.listen
+      ];
     };
     systemd.services.static-web-server = {
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         # Remove upstream sample environment file; use config.toml exclusively
         EnvironmentFile = [ "" ];
-        ExecStart = [ "" "${pkgs.static-web-server}/bin/static-web-server --fd 0 --config-file ${configFilePath} --root ${cfg.root}" ];
+        ExecStart = [
+          ""
+          "${pkgs.static-web-server}/bin/static-web-server --fd 0 --config-file ${configFilePath} --root ${cfg.root}"
+        ];
         # Supplementary groups doesn't work unless we create the group ourselves
         SupplementaryGroups = [ "" ];
         # If the user is serving files from their home dir, override ProtectHome to allow that

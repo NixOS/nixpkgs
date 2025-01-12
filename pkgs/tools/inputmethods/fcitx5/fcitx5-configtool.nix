@@ -1,30 +1,31 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, extra-cmake-modules
-, pkg-config
-, fcitx5
-, fcitx5-qt
-, qtbase
-, qtsvg
-, qtwayland
-, qtdeclarative
-, qtx11extras ? null
-, kitemviews
-, kwidgetsaddons
-, qtquickcontrols2 ? null
-, kcoreaddons
-, kdeclarative
-, kirigami ? null
-, kirigami2 ? null
-, isocodes
-, xkeyboardconfig
-, libxkbfile
-, libplasma ? null
-, plasma-framework ? null
-, wrapQtAppsHook
-, kcmSupport ? true
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  extra-cmake-modules,
+  pkg-config,
+  fcitx5,
+  fcitx5-qt,
+  qtbase,
+  qtsvg,
+  qtwayland,
+  qtdeclarative,
+  qtx11extras ? null,
+  kitemviews,
+  kwidgetsaddons,
+  qtquickcontrols2 ? null,
+  kcoreaddons,
+  kdeclarative,
+  kirigami ? null,
+  kirigami2 ? null,
+  isocodes,
+  xkeyboardconfig,
+  libxkbfile,
+  libplasma ? null,
+  plasma-framework ? null,
+  wrapQtAppsHook,
+  kcmSupport ? true,
 }:
 
 stdenv.mkDerivation rec {
@@ -51,31 +52,38 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
   ];
 
-  buildInputs = [
-    fcitx5
-    fcitx5-qt
-    qtbase
-    qtsvg
-    qtwayland
-    kitemviews
-    kwidgetsaddons
-    isocodes
-    xkeyboardconfig
-    libxkbfile
-  ] ++ lib.optionals (lib.versions.major qtbase.version == "5") [
-    qtx11extras
-  ] ++ lib.optionals kcmSupport ([
-    qtdeclarative
-    kcoreaddons
-    kdeclarative
-  ] ++ lib.optionals (lib.versions.major qtbase.version == "5") [
-    qtquickcontrols2
-    plasma-framework
-    kirigami2
-  ] ++ lib.optionals (lib.versions.major qtbase.version == "6") [
-    libplasma
-    kirigami
-  ]);
+  buildInputs =
+    [
+      fcitx5
+      fcitx5-qt
+      qtbase
+      qtsvg
+      qtwayland
+      kitemviews
+      kwidgetsaddons
+      isocodes
+      xkeyboardconfig
+      libxkbfile
+    ]
+    ++ lib.optionals (lib.versions.major qtbase.version == "5") [
+      qtx11extras
+    ]
+    ++ lib.optionals kcmSupport (
+      [
+        qtdeclarative
+        kcoreaddons
+        kdeclarative
+      ]
+      ++ lib.optionals (lib.versions.major qtbase.version == "5") [
+        qtquickcontrols2
+        plasma-framework
+        kirigami2
+      ]
+      ++ lib.optionals (lib.versions.major qtbase.version == "6") [
+        libplasma
+        kirigami
+      ]
+    );
 
   meta = with lib; {
     description = "Configuration Tool for Fcitx5";

@@ -1,5 +1,9 @@
-{ lib, buildDunePackage, ocaml, fetchurl
-, alcotest
+{
+  lib,
+  buildDunePackage,
+  ocaml,
+  fetchurl,
+  alcotest,
 }:
 
 buildDunePackage rec {

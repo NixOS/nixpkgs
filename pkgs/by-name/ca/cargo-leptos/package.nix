@@ -1,29 +1,31 @@
-{ darwin
-, fetchFromGitHub
-, lib
-, rustPlatform
-, stdenv
+{
+  darwin,
+  fetchFromGitHub,
+  lib,
+  rustPlatform,
+  stdenv,
 }:
 let
   inherit (darwin.apple_sdk.frameworks)
     CoreServices
     SystemConfiguration
-    Security;
+    Security
+    ;
   inherit (lib) optionals;
   inherit (stdenv.hostPlatform) isDarwin;
 in
 rustPlatform.buildRustPackage rec {
   pname = "cargo-leptos";
-  version = "0.2.21";
+  version = "0.2.24";
 
   src = fetchFromGitHub {
     owner = "leptos-rs";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-Oe65m9io7ihymUjylaWHQM/x7r0y/xXqD313H3oyjN8=";
+    hash = "sha256-KNasxy/hEU04H/xAV3y92OtxBmYgA0RZjCQnC/XvBoo=";
   };
 
-  cargoHash = "sha256-wZNtEr6IAy+OABpTm93rOhKAP1NEEYUvokjaVdoaSG4=";
+  cargoHash = "sha256-dxDmJVkkdT6hbhboyn8XwMJp379xAVZ8GFVp3F+LtWA=";
 
   buildInputs = optionals isDarwin [
     SystemConfiguration

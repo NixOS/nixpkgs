@@ -1,19 +1,30 @@
-{ mkDerivation, lib, fetchFromGitHub, qmake, qttools, qtx11extras, stdenv }:
+{
+  mkDerivation,
+  lib,
+  fetchFromGitHub,
+  qmake,
+  qttools,
+  qtx11extras,
+  stdenv,
+}:
 
 mkDerivation rec {
   pname = "notepad-next";
-  version = "0.8";
+  version = "0.9";
 
   src = fetchFromGitHub {
     owner = "dail8859";
     repo = "NotepadNext";
     rev = "v${version}";
-    hash = "sha256-fwHTsTKcVaeIv0NQQBjzfXscGDfXr3X/yH07YnYh3fU=";
+    hash = "sha256-3BCLPY104zxALd3wFH8e9PitjmFbPcOfKsLqXowXqnY=";
     # External dependencies - https://github.com/dail8859/NotepadNext/issues/135
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ qmake qttools ];
+  nativeBuildInputs = [
+    qmake
+    qttools
+  ];
   buildInputs = [ qtx11extras ];
 
   qmakeFlags = [

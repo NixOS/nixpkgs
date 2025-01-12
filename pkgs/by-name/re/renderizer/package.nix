@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "renderizer";
@@ -12,7 +16,11 @@ buildGoModule rec {
   };
 
   ldflags = [
-    "-s" "-w" "-X main.version=${version}" "-X main.commitHash=${src.rev}" "-X main.date=19700101T000000"
+    "-s"
+    "-w"
+    "-X main.version=${version}"
+    "-X main.commitHash=${src.rev}"
+    "-X main.date=19700101T000000"
   ];
 
   vendorHash = null;

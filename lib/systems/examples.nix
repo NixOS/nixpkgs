@@ -329,10 +329,16 @@ rec {
   ucrtAarch64 = {
     config = "aarch64-w64-mingw32";
     libc = "ucrt";
+    rust.rustcTarget = "aarch64-pc-windows-gnullvm";
     useLLVM = true;
   };
 
   # BSDs
+
+  aarch64-freebsd = {
+    config = "aarch64-unknown-freebsd";
+    useLLVM = true;
+  };
 
   x86_64-freebsd = {
     config = "x86_64-unknown-freebsd";

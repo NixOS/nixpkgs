@@ -13,34 +13,41 @@
   libnotify,
   lm_sensors,
   procps,
-  pydbus,
   pygobject3,
   pyserial,
   pytz,
   requests,
   setuptools,
   tzlocal,
+  wrapGAppsHook3,
   xorg,
+  glib,
+  gobject-introspection,
 }:
 
 buildPythonPackage rec {
   pname = "py3status";
-  version = "3.59";
+  version = "3.61";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-3m/34xfPpe8T4yicbTtQtTqfq5Zz2T0AZl8fCKRg/CE=";
+    hash = "sha256-CL7bD+w8F59aVHAC9k4yG0qaSqJZdkFdEDKkyKkCBTs=";
   };
 
-  nativeBuildInputs = [ hatchling ];
+  nativeBuildInputs = [
+    hatchling
+    wrapGAppsHook3
+    gobject-introspection
+  ];
+
+  buildInputs = [ glib ];
 
   propagatedBuildInputs = [
     pytz
     requests
     tzlocal
     i3ipc
-    pydbus
     pygobject3
     pyserial
     setuptools
@@ -59,6 +66,12 @@ buildPythonPackage rec {
     sed -i -e "s|'sensors|'${lm_sensors}/bin/sensors|" py3status/modules/sysdata.py
     sed -i -e "s|'setxkbmap|'${xorg.setxkbmap}/bin/setxkbmap|" py3status/modules/keyboard_layout.py
     sed -i -e "s|'xset|'${xorg.xset}/bin/xset|" py3status/modules/keyboard_layout.py
+  '';
+
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
   doCheck = false;

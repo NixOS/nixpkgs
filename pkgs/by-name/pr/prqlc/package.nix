@@ -1,13 +1,14 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, openssl
-, sqlite
-, zlib
-, stdenv
-, darwin
-, python3
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  sqlite,
+  zlib,
+  stdenv,
+  darwin,
+  python3,
 }:
 
 rustPlatform.buildRustPackage rec {

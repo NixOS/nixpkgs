@@ -1,8 +1,21 @@
-{ stdenv, lib, makeWrapper, fetchzip, testdisk, imagemagick, jdk, findutils, sleuthkit, ... }:
+{
+  stdenv,
+  lib,
+  makeWrapper,
+  fetchzip,
+  testdisk,
+  imagemagick,
+  jdk,
+  findutils,
+  sleuthkit,
+  ...
+}:
 let
-  jdkWithJfx = jdk.override (lib.optionalAttrs stdenv.hostPlatform.isLinux {
-    enableJavaFX = true;
-  });
+  jdkWithJfx = jdk.override (
+    lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      enableJavaFX = true;
+    }
+  );
 in
 stdenv.mkDerivation rec {
   pname = "autopsy";
@@ -13,8 +26,15 @@ stdenv.mkDerivation rec {
     hash = "sha256-32iOQA3+ykltCYW/MpqCVxyhh3mm6eYzY+t0smAsWRw=";
   };
 
-  nativeBuildInputs = [ makeWrapper findutils ];
-  buildInputs = [ testdisk imagemagick jdkWithJfx ];
+  nativeBuildInputs = [
+    makeWrapper
+    findutils
+  ];
+  buildInputs = [
+    testdisk
+    imagemagick
+    jdkWithJfx
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -29,7 +49,13 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/autopsy \
       --run 'export SOLR_LOGS_DIR="$HOME/.autopsy/dev/var/log"' \
       --run 'export SOLR_PID_DIR="$HOME/.autopsy/dev"' \
-      --prefix PATH : "${lib.makeBinPath [ testdisk imagemagick jdkWithJfx ]}"
+      --prefix PATH : "${
+        lib.makeBinPath [
+          testdisk
+          imagemagick
+          jdkWithJfx
+        ]
+      }"
 
     runHook postInstall
   '';
@@ -39,7 +65,18 @@ stdenv.mkDerivation rec {
     homepage = "https://www.sleuthkit.org/autopsy";
     changelog = "https://github.com/sleuthkit/autopsy/releases/tag/autopsy-${version}";
     # Autopsy brings a lot of vendored dependencies
-    license = with lib.licenses; [ asl20 ipl10 lgpl3Only lgpl21Only zlib wtfpl bsd3 cc-by-30 mit gpl2Only ];
+    license = with lib.licenses; [
+      asl20
+      ipl10
+      lgpl3Only
+      lgpl21Only
+      zlib
+      wtfpl
+      bsd3
+      cc-by-30
+      mit
+      gpl2Only
+    ];
     maintainers = with lib.maintainers; [ zebreus ];
     mainProgram = "autopsy";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];

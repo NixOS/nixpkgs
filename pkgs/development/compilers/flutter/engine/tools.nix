@@ -1,5 +1,7 @@
 {
   stdenv,
+  buildPlatform,
+  hostPlatform,
   callPackage,
   fetchgit,
   fetchurl,
@@ -29,8 +31,8 @@
   },
 }:
 let
-  constants = callPackage ./constants.nix { platform = stdenv.buildPlatform; };
-  host-constants = callPackage ./constants.nix { platform = stdenv.hostPlatform; };
+  constants = callPackage ./constants.nix { platform = buildPlatform; };
+  host-constants = callPackage ./constants.nix { platform = hostPlatform; };
   stdenv-constants = callPackage ./constants.nix { platform = stdenv.hostPlatform; };
 in
 {

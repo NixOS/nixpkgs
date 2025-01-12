@@ -1,13 +1,14 @@
-{ lib
-, fetchFromGitHub
-, buildGo122Module
-, buildNpmPackage
-, makeWrapper
-, exiftool
-, ffmpeg
-, testers
-, photofield
-, nix-update-script
+{
+  lib,
+  fetchFromGitHub,
+  buildGo122Module,
+  buildNpmPackage,
+  makeWrapper,
+  exiftool,
+  ffmpeg,
+  testers,
+  photofield,
+  nix-update-script,
 }:
 
 let
@@ -16,7 +17,7 @@ let
   src = fetchFromGitHub {
     owner = "SmilyOrg";
     repo = "photofield";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-leCXj8vETlrU1fwTqLcjcCGvhWWC1ESjpNDWSytAq4s=";
   };
 
@@ -60,7 +61,12 @@ buildGo122Module {
 
   postInstall = ''
     wrapProgram $out/bin/photofield \
-      --prefix PATH : "${lib.makeBinPath [exiftool ffmpeg]}"
+      --prefix PATH : "${
+        lib.makeBinPath [
+          exiftool
+          ffmpeg
+        ]
+      }"
   '';
 
   passthru = {

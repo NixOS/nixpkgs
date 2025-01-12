@@ -1,26 +1,31 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, testers
-, toxiproxy
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  toxiproxy,
 }:
 
 buildGoModule rec {
   pname = "toxiproxy";
-  version = "2.9.0";
+  version = "2.11.0";
 
   src = fetchFromGitHub {
     owner = "Shopify";
     repo = "toxiproxy";
     rev = "v${version}";
-    sha256 = "sha256-zwKeJ8LMMSSHvE0x0/9j3wBdAJG43RiGcszKz0B3dG8=";
+    sha256 = "sha256-1z4a69KnBurTrudqXiOPgrlICICu1ts86WrnFUlRWXE=";
   };
 
-  vendorHash = "sha256-eSQvLsSWWypA5vXR/GiEf5j7TzzsL8ZFRPOeICsIrlY=";
+  vendorHash = "sha256-LQV+TFFcrq4Px580yOWU+8EuGt/7bFJYi35He2es6Q8=";
 
   excludedPackages = [ "test/e2e" ];
 
-  ldflags = [ "-s" "-w" "-X github.com/Shopify/toxiproxy/v2.Version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/Shopify/toxiproxy/v2.Version=${version}"
+  ];
 
   # Fixes tests on Darwin
   __darwinAllowLocalNetworking = true;

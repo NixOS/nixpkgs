@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, fftwSinglePrec
-, libsndfile
-, sigutils
-, soapysdr-with-plugins
-, libxml2
-, volk
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  fftwSinglePrec,
+  libsndfile,
+  sigutils,
+  soapysdr-with-plugins,
+  libxml2,
+  volk,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
@@ -47,6 +48,9 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/BatchDrake/suscan";
     license = licenses.gpl3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ polygon oxapentane ];
+    maintainers = with maintainers; [
+      polygon
+      oxapentane
+    ];
   };
 }

@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, pkg-config, gtk2, libxml2 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gtk2,
+  libxml2,
+}:
 
 stdenv.mkDerivation rec {
   pname = "verbiste";
@@ -12,7 +19,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ gtk2 libxml2 ];
+  buildInputs = [
+    gtk2
+    libxml2
+  ];
 
   enableParallelBuilding = true;
 

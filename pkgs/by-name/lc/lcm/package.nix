@@ -1,17 +1,28 @@
-{ lib, stdenv, fetchFromGitHub, cmake, glib, pkg-config }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  glib,
+  pkg-config,
+}:
 
 stdenv.mkDerivation rec {
   pname = "lcm";
-  version = "1.5.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "lcm-proj";
     repo = "lcm";
     rev = "v${version}";
-    hash = "sha256-IFHoJl5OtnUb+w3gLG5f578yAektjgrY9Uj2eUVoIrc=";
+    hash = "sha256-043AJzalfx+qcCoxQgPU4T/DcUH0pXOE4v1aJaW3aXs=";
   };
 
-  outputs = [ "out" "dev" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "man"
+  ];
 
   nativeBuildInputs = [
     pkg-config

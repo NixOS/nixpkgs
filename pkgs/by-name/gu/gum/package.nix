@@ -1,4 +1,10 @@
-{ lib, stdenv, buildGoModule, installShellFiles, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  installShellFiles,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "gum";
@@ -17,17 +23,23 @@ buildGoModule rec {
     installShellFiles
   ];
 
-  ldflags = [ "-s" "-w" "-X=main.Version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X=main.Version=${version}"
+  ];
 
-  postInstall = ''
-    $out/bin/gum man > gum.1
-    installManPage gum.1
-  '' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd gum \
-      --bash <($out/bin/gum completion bash) \
-      --fish <($out/bin/gum completion fish) \
-      --zsh <($out/bin/gum completion zsh)
-  '';
+  postInstall =
+    ''
+      $out/bin/gum man > gum.1
+      installManPage gum.1
+    ''
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd gum \
+        --bash <($out/bin/gum completion bash) \
+        --fish <($out/bin/gum completion fish) \
+        --zsh <($out/bin/gum completion zsh)
+    '';
 
   meta = with lib; {
     description = "Tasty Bubble Gum for your shell";

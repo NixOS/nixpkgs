@@ -7,6 +7,7 @@
   cpp-jwt,
   doxygen,
   enet,
+  fetchpatch,
   fetchzip,
   fmt,
   ffmpeg_6-headless,
@@ -55,11 +56,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lime3ds";
-  version = "2119";
+  version = "2119.1";
 
   src = fetchzip {
-    url = "https://github.com/Lime3DS/Lime3DS/releases/download/${finalAttrs.version}/lime3ds-unified-source-${finalAttrs.version}.tar.xz";
-    hash = "sha256-cBPSzkvvivWGTD2E7fjeY3uJ1nSlALbOgIalGdk6xLU=";
+    url = "https://github.com/Lime3DS/Lime3ds-archive/releases/download/${finalAttrs.version}/lime3ds-unified-source-${finalAttrs.version}.tar.xz";
+    hash = "sha256-37KFGCVyc4QW+D00CzN1+lpNYZxCWRkflt7rkIFcdM8=";
   };
 
   nativeBuildInputs = [
@@ -112,6 +113,14 @@ stdenv.mkDerivation (finalAttrs: {
     ++ optionals enableCubeb [ cubeb ]
     ++ optional useDiscordRichPresence rapidjson;
 
+  patches = [
+    # Fix boost errors
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/Tatsh/tatsh-overlay/fa2f92b888f8c0aab70414ca560b823ffb33b122/games-emulation/lime3ds/files/lime3ds-0002-boost-fix.patch";
+      hash = "sha256-XJogqvQE7I5lVHtvQja0woVlO40blhFOqnoYftIQwJs=";
+    })
+  ];
+
   postPatch = ''
     # Fix file not found when looking in var/empty instead of opt
     mkdir externals/dynarmic/src/dynarmic/ir/var
@@ -163,7 +172,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "A Nintendo 3DS emulator based on Citra";
-    homepage = "https://github.com/Lime3DS/Lime3DS";
+    homepage = "https://github.com/Lime3DS/Lime3ds-archive";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ arthsmn ];
     mainProgram = "lime3ds";

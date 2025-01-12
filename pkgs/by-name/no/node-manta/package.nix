@@ -1,9 +1,10 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
-, installShellFiles
-, testers
-, node-manta
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  installShellFiles,
+  testers,
+  node-manta,
 }:
 
 buildNpmPackage rec {

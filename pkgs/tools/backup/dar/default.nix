@@ -22,12 +22,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.7.15";
+  version = "2.7.16";
   pname = "dar";
 
   src = fetchzip {
     url = "mirror://sourceforge/dar/${pname}-${version}.tar.gz";
-    sha256 = "sha256-2CuPqb17E2bHBuwRPA0QoIeTUq/lJZ3pFKbtqsRPktk=";
+    sha256 = "sha256-U1SjboFx1KJs3Ve62cQRj4kkURTUGZmQD077WzldkD0=";
   };
 
   outputs = [ "out" "dev" ];

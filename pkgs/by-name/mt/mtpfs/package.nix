@@ -1,11 +1,27 @@
-{ lib, stdenv, fetchurl, pkg-config, fuse, libmtp, glib, libmad, libid3tag }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  fuse,
+  libmtp,
+  glib,
+  libmad,
+  libid3tag,
+}:
 
 stdenv.mkDerivation rec {
   pname = "mtpfs";
   version = "1.1";
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ fuse libmtp glib libid3tag libmad ];
+  buildInputs = [
+    fuse
+    libmtp
+    glib
+    libid3tag
+    libmad
+  ];
 
   src = fetchurl {
     url = "https://www.adebenham.com/files/mtp/mtpfs-${version}.tar.gz";

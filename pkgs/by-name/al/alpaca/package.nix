@@ -18,14 +18,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "alpaca";
-  version = "2.7.0";
+  version = "3.2.0";
   pyproject = false; # Built with meson
 
   src = fetchFromGitHub {
     owner = "Jeffser";
     repo = "Alpaca";
-    rev = "refs/tags/${version}";
-    hash = "sha256-gEQUVSNf8u92qIg0+5fsLIOPgIASdYdlTRDpzl61P+Q=";
+    tag = version;
+    hash = "sha256-Mh+LYslVmb4l+ZCB1Si7hxugzHPz/mULUMBNeJI12r0=";
   };
 
   nativeBuildInputs = [
@@ -49,16 +49,23 @@ python3Packages.buildPythonApplication rec {
     requests
     pillow
     pypdf
-    pytube
     html2text
     youtube-transcript-api
+    pydbus
+    odfpy
+    pyicu
   ];
 
   dontWrapGApps = true;
 
   makeWrapperArgs = [
     "\${gappsWrapperArgs[@]}"
-    "--prefix PATH : ${lib.makeBinPath [ xdg-utils ollama ]}"
+    "--prefix PATH : ${
+      lib.makeBinPath [
+        xdg-utils
+        ollama
+      ]
+    }"
     # Declared but not used in src/window.py, for later reference
     # https://github.com/flatpak/flatpak/issues/3229
     "--set FLATPAK_DEST ${placeholder "out"}"
@@ -78,7 +85,10 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://jeffser.com/alpaca";
     license = lib.licenses.gpl3Plus;
     mainProgram = "alpaca";
-    maintainers = with lib.maintainers; [ aleksana ];
+    maintainers = with lib.maintainers; [
+      aleksana
+      Gliczy
+    ];
     platforms = lib.platforms.linux;
   };
 }

@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, scons, pkg-config, wrapGAppsHook3
-, glfw3, gtk3, libpng }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  scons,
+  pkg-config,
+  wrapGAppsHook3,
+  glfw3,
+  gtk3,
+  libpng,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "goxel";
@@ -12,8 +21,16 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-mNSkQisWL3wXb+IsClWFTMbpeiRC4xteePXNP+GkUnU=";
   };
 
-  nativeBuildInputs = [ scons pkg-config wrapGAppsHook3 ];
-  buildInputs = [ glfw3 gtk3 libpng ];
+  nativeBuildInputs = [
+    scons
+    pkg-config
+    wrapGAppsHook3
+  ];
+  buildInputs = [
+    glfw3
+    gtk3
+    libpng
+  ];
 
   dontUseSconsBuild = true;
   dontUseSconsInstall = true;
@@ -28,6 +45,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://guillaumechereau.github.io/goxel/";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ tilpner fgaz ];
+    maintainers = with maintainers; [
+      tilpner
+      fgaz
+    ];
   };
 })

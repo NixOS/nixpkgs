@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, libpng, libjpeg, giflib, perl, pkg-config }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libpng,
+  libjpeg,
+  giflib,
+  perl,
+  pkg-config,
+}:
 
 stdenv.mkDerivation rec {
   pname = "metapixel";
@@ -15,7 +24,12 @@ stdenv.mkDerivation rec {
   makeFlags = [ "metapixel" ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libpng libjpeg giflib perl ];
+  buildInputs = [
+    libpng
+    libjpeg
+    giflib
+    perl
+  ];
 
   installPhase = ''
     mkdir -p $out/bin

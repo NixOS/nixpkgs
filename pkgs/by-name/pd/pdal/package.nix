@@ -2,6 +2,7 @@
 , stdenv
 , callPackage
 , fetchFromGitHub
+, fetchurl
 , testers
 
 , enableE57 ? lib.meta.availableOn stdenv.hostPlatform libe57format
@@ -28,13 +29,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pdal";
-  version = "2.8.1";
+  version = "2.8.3";
 
   src = fetchFromGitHub {
     owner = "PDAL";
     repo = "PDAL";
     rev = finalAttrs.version;
-    hash = "sha256-aRWVBCMGr/FX3g8tF7PP3sarN2DHx7AG3vvGAkQTuAM=";
+    hash = "sha256-i4Kk9T9MwMGshyGtHrSDhnzqeeThRCKXsjpW3rIDVVc=";
   };
 
   nativeBuildInputs = [
@@ -49,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     laszip
     libgeotiff
     libtiff
-    (libxml2.override { enableHttp = true; })
+    libxml2
     openscenegraph
     postgresql
     proj

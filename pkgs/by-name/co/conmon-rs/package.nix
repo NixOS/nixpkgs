@@ -1,8 +1,9 @@
-{ capnproto
-, lib
-, fetchFromGitHub
-, protobuf
-, rustPlatform
+{
+  capnproto,
+  lib,
+  fetchFromGitHub,
+  protobuf,
+  rustPlatform,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -16,7 +17,10 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-1kGAUAmiPI9zE8LE7G2r0Gy0YM+BUy2MxY7IQOu2ZDQ=";
   };
 
-  nativeBuildInputs = [ capnproto protobuf ];
+  nativeBuildInputs = [
+    capnproto
+    protobuf
+  ];
   doCheck = false;
 
   cargoVendorDir = ".cargo-vendor";

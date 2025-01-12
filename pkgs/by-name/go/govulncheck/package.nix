@@ -1,7 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, substituteAll
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  replaceVars,
 }:
 
 buildGoModule rec {
@@ -11,14 +12,13 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "golang";
     repo = "vuln";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ydJ8AeoCnLls6dXxjI05+THEqPPdJqtAsKTriTIK9Uc=";
   };
 
   patches = [
     # patch in version information
-    (substituteAll {
-      src = ./version.patch;
+    (replaceVars ./version.patch {
       inherit version;
     })
   ];
@@ -65,6 +65,9 @@ buildGoModule rec {
       reported for a Linux build.
     '';
     license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ jk SuperSandro2000 ];
+    maintainers = with maintainers; [
+      jk
+      SuperSandro2000
+    ];
   };
 }

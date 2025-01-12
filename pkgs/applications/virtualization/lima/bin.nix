@@ -1,11 +1,12 @@
-{ stdenvNoCC
-, lib
-, fetchurl
-, writeScript
-, installShellFiles
-, qemu
-, makeBinaryWrapper
-, autoPatchelfHook
+{
+  stdenvNoCC,
+  lib,
+  fetchurl,
+  writeScript,
+  installShellFiles,
+  qemu,
+  makeBinaryWrapper,
+  autoPatchelfHook,
 }:
 
 let
@@ -41,35 +42,45 @@ stdenvNoCC.mkDerivation {
   inherit version;
   pname = "lima";
   src = fetchurl {
-    inherit (dist.${stdenvNoCC.hostPlatform.system} or
-      (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}")) url sha256;
+    inherit
+      (dist.${stdenvNoCC.hostPlatform.system}
+        or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}")
+      )
+      url
+      sha256
+      ;
   };
 
   sourceRoot = ".";
 
-  nativeBuildInputs = [ makeBinaryWrapper installShellFiles ]
-    ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [ autoPatchelfHook ];
+  nativeBuildInputs = [
+    makeBinaryWrapper
+    installShellFiles
+  ] ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [ autoPatchelfHook ];
 
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out
-    cp -r bin share $out
-    chmod +x $out/bin/limactl
-    wrapProgram $out/bin/limactl \
-      --prefix PATH : ${lib.makeBinPath [ qemu ]}
-  '' + lib.optionalString (stdenvNoCC.buildPlatform.canExecute stdenvNoCC.hostPlatform) ''
-    # the shell completion only works with a patched $out/bin/limactl and so
-    # needs to run after the autoPatchelfHook is executed in postFixup.
-    doShellCompletion() {
-      installShellCompletion --cmd limactl \
-        --bash <($out/bin/limactl completion bash) \
-        --fish <($out/bin/limactl completion fish) \
-        --zsh <($out/bin/limactl completion zsh)
-    }
-    postFixupHooks+=(doShellCompletion)
-  '' + ''
-    runHook postInstall
-  '';
+  installPhase =
+    ''
+      runHook preInstall
+      mkdir -p $out
+      cp -r bin share $out
+      chmod +x $out/bin/limactl
+      wrapProgram $out/bin/limactl \
+        --prefix PATH : ${lib.makeBinPath [ qemu ]}
+    ''
+    + lib.optionalString (stdenvNoCC.buildPlatform.canExecute stdenvNoCC.hostPlatform) ''
+      # the shell completion only works with a patched $out/bin/limactl and so
+      # needs to run after the autoPatchelfHook is executed in postFixup.
+      doShellCompletion() {
+        installShellCompletion --cmd limactl \
+          --bash <($out/bin/limactl completion bash) \
+          --fish <($out/bin/limactl completion fish) \
+          --zsh <($out/bin/limactl completion zsh)
+      }
+      postFixupHooks+=(doShellCompletion)
+    ''
+    + ''
+      runHook postInstall
+    '';
 
   doInstallCheck = true;
   installCheckPhase = ''

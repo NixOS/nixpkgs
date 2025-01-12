@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, cmake
-, fetchFromGitHub
-, llvmPackages
-, enableSse4_1 ? stdenv.hostPlatform.sse4_1Support
-, enableAvx ? stdenv.hostPlatform.avxSupport
-, enableAvx2 ? stdenv.hostPlatform.avx2Support
+{
+  lib,
+  stdenv,
+  cmake,
+  fetchFromGitHub,
+  llvmPackages,
+  enableSse4_1 ? stdenv.hostPlatform.sse4_1Support,
+  enableAvx ? stdenv.hostPlatform.avxSupport,
+  enableAvx2 ? stdenv.hostPlatform.avx2Support,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -15,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "TimoLassmann";
     repo = "kalign";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-QcFNaCTqj6CFiOzQ6ezfBL0mu8PDU11hyNdkcsLOPzA=";
   };
 
@@ -39,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Fast multiple sequence alignment program";
     mainProgram = "kalign";
     homepage = "https://github.com/TimoLassmann/kalign";
-    changelog = "https://github.com/TimoLassmann/kalign/releases/tag/${lib.removePrefix "refs/tags/" finalAttrs.src.rev}";
+    changelog = "https://github.com/TimoLassmann/kalign/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ natsukium ];
     platforms = lib.platforms.unix;

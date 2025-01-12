@@ -16,7 +16,7 @@ buildGo123Module rec {
   src = fetchFromGitHub {
     owner = "creativeprojects";
     repo = "resticprofile";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Ab+XesAw/GkNEGwAp1ERUlfDlI9Kxmd0UnS52v+nWIs=";
   };
 

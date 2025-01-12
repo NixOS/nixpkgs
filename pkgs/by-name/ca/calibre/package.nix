@@ -16,6 +16,8 @@
   libstemmer,
   libuchardet,
   libusb1,
+  libwebp,
+  optipng,
   piper-tts,
   pkg-config,
   podofo,
@@ -33,11 +35,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "calibre";
-  version = "7.21.0";
+  version = "7.22.0";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${finalAttrs.version}/calibre-${finalAttrs.version}.tar.xz";
-    hash = "sha256-61Nbclkt59sh8VHh3uRw0GvlDjlyOz1jrsFMMIuzPLE=";
+    hash = "sha256-RmCte6tok0F/ts5cacAFBksNYfnLylY4JCmTyb+6IUk=";
   };
 
   patches = [
@@ -96,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
       ps:
       with ps;
       [
-        (apsw.overrideAttrs (oldAttrs: {
+        (apsw.overrideAttrs (_oldAttrs: {
           setupPyBuildFlags = [ "--enable=load_extension" ];
         }))
         beautifulsoup4
@@ -115,6 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
         netifaces
         pillow
         pychm
+        pykakasi
         pyqt-builder
         pyqt6
         python
@@ -136,10 +139,10 @@ stdenv.mkDerivation (finalAttrs: {
             # does not support by simply omitting qtwebengine.
             pyqt6-webengine
           ]
-      ++ lib.optional (unrarSupport) unrardll
+      ++ lib.optional unrarSupport unrardll
     ))
     xdg-utils
-  ] ++ lib.optional (speechSupport) speechd-minimal;
+  ] ++ lib.optional speechSupport speechd-minimal;
 
   installPhase = ''
     runHook preInstall
@@ -190,6 +193,13 @@ stdenv.mkDerivation (finalAttrs: {
         wrapProgram $program \
           ''${qtWrapperArgs[@]} \
           ''${gappsWrapperArgs[@]} \
+          --prefix PATH : ${
+            lib.makeBinPath [
+              libjpeg
+              libwebp
+              optipng
+            ]
+          } \
           ${if popplerSupport then popplerArgs else ""}
       done
     '';

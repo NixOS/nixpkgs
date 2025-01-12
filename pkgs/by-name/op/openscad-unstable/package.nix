@@ -1,61 +1,69 @@
-{ lib
-, clangStdenv
-, llvmPackages
-, fetchFromGitHub
-, cmake
-, ninja
-, pkg-config
-, bison
-, boost
-, cairo
-, cgal_5
-, clipper2
-, double-conversion
-, eigen
-, flex
-, fontconfig
-, freetype
-, ghostscript
-, glib
-, glm
-, gmp
-, harfbuzz
-, hidapi
-, lib3mf
-, libGLU
-, libICE
-, libSM
-, libsForQt5
-, libspnav
-, libzip
-, manifold
-, mesa
-, mpfr
-, python3
-, tbb_2021_11
-, wayland
-, wayland-protocols
-, wrapGAppsHook3
-, xorg
-, mimalloc
-, opencsg
+{
+  lib,
+  clangStdenv,
+  llvmPackages,
+  fetchFromGitHub,
+  cmake,
+  ninja,
+  pkg-config,
+  bison,
+  boost,
+  cairo,
+  cgal,
+  clipper2,
+  double-conversion,
+  eigen,
+  flex,
+  fontconfig,
+  freetype,
+  ghostscript,
+  glib,
+  glm,
+  gmp,
+  harfbuzz,
+  hidapi,
+  lib3mf,
+  libGLU,
+  libICE,
+  libSM,
+  libsForQt5,
+  libspnav,
+  libzip,
+  manifold,
+  mesa,
+  mpfr,
+  python3,
+  tbb_2021_11,
+  wayland,
+  wayland-protocols,
+  wrapGAppsHook3,
+  xorg,
+  mimalloc,
+  opencsg,
 }:
 # clang consume much less RAM than GCC
 clangStdenv.mkDerivation rec {
   pname = "openscad-unstable";
-  version = "2024-11-10";
+  version = "2025-01-05";
   src = fetchFromGitHub {
     owner = "openscad";
     repo = "openscad";
-    rev = "681fff1cdcd5f67253958c39d9fefdc3762b38d8";
-    hash = "sha256-aFrlFFbpEBt4JJ3HCZLmaptomZBpCTqLD7vKIspDX74=";
-    fetchSubmodules = true;  # Only really need sanitizers-cmake and MCAD
+    rev = "92a13b4f06221ef26c901130c0c52658976cdfb2";
+    hash = "sha256-803pDT/yq7eBk4J3E1JwKdhurnupPdB4A9xroLRg3+0=";
+    # Unfortunately, we can't selectively fetch submodules. It would be good
+    # to see that we don't accidentally depend on it.
+    fetchSubmodules = true; # Only really need sanitizers-cmake and MCAD
   };
 
   patches = [ ./test.diff ];
 
   nativeBuildInputs = [
-    (python3.withPackages (ps: with ps; [ numpy pillow ]))
+    (python3.withPackages (
+      ps: with ps; [
+        numpy
+        pillow
+      ]
+    ))
     bison
     cmake
     flex
@@ -65,50 +73,53 @@ clangStdenv.mkDerivation rec {
     ninja
     pkg-config
   ];
-  buildInputs = with libsForQt5; with qt5; [
-    clipper2
-    glm
-    tbb_2021_11
-    mimalloc
-    boost
-    cairo
-    cgal_5
-    double-conversion
-    eigen
-    fontconfig
-    freetype
-    ghostscript
-    glib
-    gmp
-    opencsg
-    harfbuzz
-    hidapi
-    lib3mf
-    libspnav
-    libzip
-    manifold
-    mpfr
-    qscintilla
-    qtbase
-    qtmultimedia
-  ]
-  ++ lib.optionals clangStdenv.hostPlatform.isLinux [
-    xorg.libXdmcp
-    libICE
-    libSM
-    wayland
-    wayland-protocols
-    qtwayland
-    libGLU
-  ]
-  ++ lib.optional clangStdenv.hostPlatform.isDarwin qtmacextras
-  ;
+  buildInputs =
+    with libsForQt5;
+    with qt5;
+    [
+      clipper2
+      glm
+      tbb_2021_11
+      mimalloc
+      boost
+      cairo
+      cgal
+      double-conversion
+      eigen
+      fontconfig
+      freetype
+      ghostscript
+      glib
+      gmp
+      opencsg
+      harfbuzz
+      hidapi
+      lib3mf
+      libspnav
+      libzip
+      manifold
+      mpfr
+      qscintilla
+      qtbase
+      qtmultimedia
+    ]
+    ++ lib.optionals clangStdenv.hostPlatform.isLinux [
+      xorg.libXdmcp
+      libICE
+      libSM
+      wayland
+      wayland-protocols
+      qtwayland
+      libGLU
+    ]
+    ++ lib.optional clangStdenv.hostPlatform.isDarwin qtmacextras;
   cmakeFlags = [
     "-DEXPERIMENTAL=ON" # enable experimental options
     "-DSNAPSHOT=ON" # nightly icons
     "-DUSE_BUILTIN_OPENCSG=OFF"
     "-DUSE_BUILTIN_MANIFOLD=OFF"
-    "-DOPENSCAD_VERSION=\"${builtins.replaceStrings ["-"] ["."] version}\""
+    "-DUSE_BUILTIN_CLIPPER2=OFF"
+    "-DOPENSCAD_VERSION=\"${builtins.replaceStrings [ "-" ] [ "." ] version}\""
     "-DCMAKE_UNITY_BUILD=OFF" # broken compile with unity
     # IPO
     "-DCMAKE_EXE_LINKER_FLAGS=-fuse-ld=lld"
@@ -142,7 +153,10 @@ clangStdenv.mkDerivation rec {
     # note that the *binary license* is gpl3 due to CGAL
     license = lib.licenses.gpl3;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ pca006132 raskin ];
+    maintainers = with lib.maintainers; [
+      pca006132
+      raskin
+    ];
     mainProgram = "openscad";
   };
 }

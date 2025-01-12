@@ -34,7 +34,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "UKPLab";
     repo = "sentence-transformers";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-D8LHzEVHRuayod084B05cL3OvZiO1ByDZLxROGxTD0I=";
   };
 
@@ -103,7 +103,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/UKPLab/sentence-transformers/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dit7ya ];
-    # Segmentation fault at import
-    broken = stdenv.hostPlatform.system == "x86_64-darwin";
   };
 }

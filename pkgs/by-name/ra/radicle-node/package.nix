@@ -18,15 +18,19 @@
 , xdg-utils
 }: rustPlatform.buildRustPackage rec {
   pname = "radicle-node";
-  version = "1.0.0";
+  version = "1.1.0";
   env.RADICLE_VERSION = version;
 
   src = fetchgit {
     url = "https://seed.radicle.xyz/z3gqcJUoA1n9HaHKufZs5FCSGazv5.git";
     rev = "refs/namespaces/z6MksFqXN3Yhqk8pTJdUGLwATkRfQvwZXPqR2qMEhbS9wzpT/refs/tags/v${version}";
-    hash = "sha256-sb0GroWfZWC9YCGby88eiPnhFCdDA9EUhVpoyuAA+Mk=";
+    hash = "sha256-M4oz9tWjI/eqV4Gz1b512MEmvsZ5u3R9y6P9VeeH9CA=";
   };
-  cargoHash = "sha256-+VjYX1gGf5aIGSQRMtvK6JI118X50HaxFwg5H14Vq7g=";
+  cargoHash = "sha256-QhTolHEzhdIkM5dn1o2CdbFy7JLCLHxd+IwcWl7MLQo=";
+
+  patches = [
+    ./61865b5b5ad715e2b812087947281f0add9aa05e.patch
+  ];
 
   nativeBuildInputs = [ asciidoctor installShellFiles makeWrapper ];
   nativeCheckInputs = [ git ];

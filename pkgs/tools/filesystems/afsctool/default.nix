@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, cmake
-, git
-, zlib
-, sparsehash
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  git,
+  zlib,
+  sparsehash,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,8 +20,15 @@ stdenv.mkDerivation rec {
     hash = "sha256-cZ0P9cygj+5GgkDRpQk7P9z8zh087fpVfrYXMRRVUAI=";
   };
 
-  nativeBuildInputs = [ pkg-config cmake git ];
-  buildInputs = [ zlib sparsehash ];
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    git
+  ];
+  buildInputs = [
+    zlib
+    sparsehash
+  ];
 
   meta = with lib; {
     description = "Utility that allows end-users to leverage HFS+/APFS compression";

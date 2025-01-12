@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, ncurses, pkg-config }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ncurses,
+  pkg-config,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ttyplot";

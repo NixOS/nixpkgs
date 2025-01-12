@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, fftw
-, zita-convolver
-, fftwFloat
-, libsndfile
-, ffmpeg
-, alsa-lib
-, libao
-, libmad
-, ladspaH
-, libtool
-, libpulseaudio
-, fetchpatch
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  fftw,
+  zita-convolver,
+  fftwFloat,
+  libsndfile,
+  ffmpeg,
+  alsa-lib,
+  libao,
+  libmad,
+  ladspaH,
+  libtool,
+  libpulseaudio,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -52,12 +53,12 @@ stdenv.mkDerivation (finalAttrs: {
     libpulseaudio
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/bmc0/dsp";
     description = "Audio processing program with an interactive mode";
-    license = licenses.isc;
-    maintainers = with maintainers; [ aaronjheng ];
-    platforms = platforms.linux;
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ aaronjheng ];
+    platforms = lib.platforms.linux;
     mainProgram = "dsp";
   };
 })

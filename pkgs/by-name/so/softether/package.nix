@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "SoftEtherVPN";
     repo = "SoftEtherVPN_Stable";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-yvN5hlfAtE+gWm0s/TY/Lp53By5SDHyQIvvDutRnDNQ=";
   };
 

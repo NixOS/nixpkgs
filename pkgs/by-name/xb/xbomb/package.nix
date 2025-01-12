@@ -1,14 +1,23 @@
-{ lib, stdenv, fetchurl, libX11, libXaw }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libX11,
+  libXaw,
+}:
 
 stdenv.mkDerivation rec {
   pname = "xbomb";
   version = "2.2b";
   src = fetchurl {
-    url    = "https://www.gedanken.org.uk/software/xbomb/download/xbomb-${version}.tgz";
+    url = "https://www.gedanken.org.uk/software/xbomb/download/xbomb-${version}.tgz";
     sha256 = "0692gjw28qvh8wj9l58scjw6kxj7jdyb3yzgcgs9wcznq11q839m";
   };
 
-  buildInputs = [ libX11 libXaw ];
+  buildInputs = [
+    libX11
+    libXaw
+  ];
 
   makeFlags = [
     "INSTDIR=${placeholder "out"}"

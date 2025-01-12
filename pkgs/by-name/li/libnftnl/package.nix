@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, pkg-config, libmnl, gitUpdater }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libmnl,
+  gitUpdater,
+}:
 
 stdenv.mkDerivation rec {
   version = "1.2.8";
@@ -9,7 +16,9 @@ stdenv.mkDerivation rec {
     hash = "sha256-N/6l1rXJsI3nkg0pjePNyULnrmSxo+i4gLLTkK5nrZU=";
   };
 
-  configureFlags = lib.optional (stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17") "LDFLAGS=-Wl,--undefined-version";
+  configureFlags = lib.optional (
+    stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17"
+  ) "LDFLAGS=-Wl,--undefined-version";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libmnl ];

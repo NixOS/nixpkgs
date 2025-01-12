@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchFromGitHub
-, autoreconfHook
-, glib
-, db
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchFromGitHub,
+  autoreconfHook,
+  glib,
+  db,
+  pkg-config,
 }:
 
 let
@@ -45,7 +46,10 @@ stdenv.mkDerivation rec {
     description = "Library for intelligent sentence-based Chinese pinyin input method";
     homepage = "https://github.com/libpinyin/libpinyin";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ linsui ericsagnes ];
+    maintainers = with maintainers; [
+      linsui
+      ericsagnes
+    ];
     platforms = platforms.linux;
   };
 }

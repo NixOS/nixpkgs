@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   stdenv,
+  replaceVars,
 }:
 
 { version, src, ... }:
@@ -16,6 +17,8 @@ let
     cargoHash =
       {
         _0_9_1 = "sha256-Gl3ArdSuw3/yi/JX6oloKJqerSJjTfK8HXRNei/LO+4=";
+        _0_9_6 = "sha256-a11UxG8nbIng+6uOWq/BZxdtRmRINl/7UOc6ap2mgrk=";
+        _0_9_8 = "sha256-/1qj0N83wgkPSQnGb3CHTS/ox6OpJCKF5mVpuKTqUBQ=";
       }
       .${"_" + (lib.replaceStrings [ "." ] [ "_" ] version)} or (throw ''
         Unsupported version of pub 'rhttp': '${version}'
@@ -34,17 +37,16 @@ stdenv.mkDerivation {
   inherit version src;
   inherit (src) passthru;
 
-  patches = [ ./cargokit.patch ];
-
-  postPatch = ''
-    substituteInPlace ./cargokit/cmake/cargokit.cmake --replace-fail "OUTPUT_LIB" "${rustDep}/${rustDep.passthru.libraryPath}"
-  '';
+  patches = [
+    (replaceVars ./cargokit.patch {
+      output_lib = "${rustDep}/${rustDep.passthru.libraryPath}";
+    })
+  ];
 
   installPhase = ''
     runHook preInstall
 
-    mkdir $out/
-    cp -r ./* $out/
+    cp -r . $out
 
     runHook postInstall
   '';

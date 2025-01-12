@@ -1,12 +1,13 @@
-{ fetchFromGitHub
-, git
-, jdk_headless
-, jre_headless
-, makeWrapper
-, python3
-, stdenvNoCC
-, lib
-, testers
+{
+  fetchFromGitHub,
+  git,
+  jdk_headless,
+  jre_headless,
+  makeWrapper,
+  python3,
+  stdenvNoCC,
+  lib,
+  testers,
 }:
 
 let
@@ -25,7 +26,12 @@ let
     pname = "${pname}-deps";
     inherit version src;
 
-    nativeBuildInputs = [ git jdk_headless python3 python3.pkgs.certifi ];
+    nativeBuildInputs = [
+      git
+      jdk_headless
+      python3
+      python3.pkgs.certifi
+    ];
 
     buildPhase = ''
       python checker.py dldeps
@@ -44,7 +50,12 @@ in
 stdenvNoCC.mkDerivation (finalAttrs: {
   inherit pname version src;
 
-  nativeBuildInputs = [ git jdk_headless makeWrapper python3 ];
+  nativeBuildInputs = [
+    git
+    jdk_headless
+    makeWrapper
+    python3
+  ];
 
   postPatch = ''
     substituteInPlace build/build.py --replace-warn \
@@ -76,9 +87,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Helps you catch problems in your HTML/CSS/SVG";
     homepage = "https://validator.github.io/validator/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ andersk ivan ];
+    maintainers = with lib.maintainers; [
+      andersk
+      ivan
+    ];
     mainProgram = "vnu";
     platforms = lib.platforms.all;
-    sourceProvenance = with lib.sourceTypes; [ binaryBytecode fromSource ];
+    sourceProvenance = with lib.sourceTypes; [
+      binaryBytecode
+      fromSource
+    ];
   };
 })

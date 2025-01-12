@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, writeText, conf ? null }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  writeText,
+  conf ? null,
+}:
 
 stdenv.mkDerivation rec {
   pname = "sfm";
@@ -11,9 +17,9 @@ stdenv.mkDerivation rec {
     hash = "sha256-VwPux6n+azpR4qDkzZJia95pJJOaFDBBoz6/VwlC0zw=";
   };
 
-  configFile = lib.optionalString (conf!=null) (writeText "config.def.h" conf);
+  configFile = lib.optionalString (conf != null) (writeText "config.def.h" conf);
 
-  postPatch = lib.optionalString (conf!=null) "cp ${configFile} config.def.h";
+  postPatch = lib.optionalString (conf != null) "cp ${configFile} config.def.h";
 
   makeFlags = [ "CC:=$(CC)" ];
 

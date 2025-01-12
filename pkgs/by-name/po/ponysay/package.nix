@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, python3, texinfo, makeWrapper }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
+  texinfo,
+  makeWrapper,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ponysay";
@@ -12,7 +19,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ python3 texinfo ];
+  buildInputs = [
+    python3
+    texinfo
+  ];
 
   inherit python3;
 
@@ -23,6 +33,9 @@ stdenv.mkDerivation rec {
     substituteInPlace setup.py --replace \
         "fileout.write(('#!/usr/bin/env %s\n' % env).encode('utf-8'))" \
         "fileout.write(('#!%s/bin/%s\n' % (os.environ['python3'], env)).encode('utf-8'))"
+    substituteInPlace src/balloon.py --replace-fail \
+        $'\'\'\'\n        Constructor' \
+        $'r\'\'\'\n        Constructor'
     python3 setup.py --prefix=$out --freedom=partial install \
         --with-shared-cache=$out/share/ponysay \
         --with-bash

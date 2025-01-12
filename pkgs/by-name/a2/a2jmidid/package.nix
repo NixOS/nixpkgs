@@ -1,5 +1,17 @@
-{ lib, stdenv, fetchFromGitea, makeWrapper, pkg-config, alsa-lib, dbus, libjack2
-, python3Packages , meson, ninja, gitUpdater }:
+{
+  lib,
+  stdenv,
+  fetchFromGitea,
+  makeWrapper,
+  pkg-config,
+  alsa-lib,
+  dbus,
+  libjack2,
+  python3Packages,
+  meson,
+  ninja,
+  gitUpdater,
+}:
 
 stdenv.mkDerivation rec {
   pname = "a2jmidid";
@@ -14,9 +26,22 @@ stdenv.mkDerivation rec {
     hash = "sha256-PZKGhHmPMf0AucPruOLB9DniM5A3BKdghFCrd5pTzeM=";
   };
 
-  nativeBuildInputs = [ pkg-config makeWrapper meson ninja ];
-  buildInputs = [ alsa-lib dbus libjack2 ] ++
-                (with python3Packages; [ python dbus-python ]);
+  nativeBuildInputs = [
+    pkg-config
+    makeWrapper
+    meson
+    ninja
+  ];
+  buildInputs =
+    [
+      alsa-lib
+      dbus
+      libjack2
+    ]
+    ++ (with python3Packages; [
+      python
+      dbus-python
+    ]);
 
   postInstall = ''
     wrapProgram $out/bin/a2j_control --set PYTHONPATH $PYTHONPATH
@@ -30,6 +55,10 @@ stdenv.mkDerivation rec {
     homepage = "https://a2jmidid.ladish.org/";
     license = licenses.gpl2Only;
     maintainers = [ ];
-    platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
   };
 }

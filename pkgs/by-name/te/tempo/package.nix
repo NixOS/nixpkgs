@@ -1,4 +1,8 @@
-{ lib, buildGo122Module, fetchFromGitHub }:
+{
+  lib,
+  buildGo122Module,
+  fetchFromGitHub,
+}:
 
 # Does not build with Go 1.23
 # FIXME: check again for next release

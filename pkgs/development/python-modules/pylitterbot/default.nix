@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "natekspencer";
     repo = "pylitterbot";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Mpqa7pMxnFdSL1KGTUbgjh1zd8bAcoyzgxRZZ4SGfYc=";
   };
 

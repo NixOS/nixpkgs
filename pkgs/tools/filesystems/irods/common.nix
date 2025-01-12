@@ -28,7 +28,7 @@
   curl,
   spdlog_rods,
   bison,
-  flex
+  flex,
 }:
 
 # Common attributes of irods packages

@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pylast";
     repo = "pylast";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-dgqTNISeyBkZ2m68pqw5rsoyPxLW4wWkv6iqq9bD5Ek=";
   };
 

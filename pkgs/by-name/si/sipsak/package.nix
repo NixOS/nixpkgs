@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, c-ares, openssl ? null }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  c-ares,
+  openssl ? null,
+}:
 
 stdenv.mkDerivation rec {
   pname = "sipsak";
@@ -33,4 +40,3 @@ stdenv.mkDerivation rec {
   };
 
 }
-

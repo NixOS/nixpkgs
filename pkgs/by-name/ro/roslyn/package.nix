@@ -21,7 +21,7 @@ buildDotnetModule rec {
 
   projectFile = [ "src/NuGet/Microsoft.Net.Compilers.Toolset/Microsoft.Net.Compilers.Toolset.Package.csproj" ];
 
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   dontDotnetFixup = true;
 

@@ -1,22 +1,23 @@
-{ stdenv
-, lib
+{
+  stdenv,
+  lib,
 
-, fetchFromGitHub
+  fetchFromGitHub,
 
-, pkg-config
-, meson
-, ninja
+  pkg-config,
+  meson,
+  ninja,
 
-, jack
-, alsa-lib
-, libopus
-, libsamplerate
-, libsndfile
-, readline
-, zita-alsa-pcmi
-, zita-resampler
+  jack,
+  alsa-lib,
+  libopus,
+  libsamplerate,
+  libsndfile,
+  readline,
+  zita-alsa-pcmi,
+  zita-resampler,
 
-, enableAlsa ? stdenv.hostPlatform.isLinux
+  enableAlsa ? stdenv.hostPlatform.isLinux,
 }:
 
 stdenv.mkDerivation (final: {
@@ -34,18 +35,24 @@ stdenv.mkDerivation (final: {
     patchShebangs scripts
   '';
 
-  nativeBuildInputs = [ pkg-config meson ninja ];
-  buildInputs = [
-    jack
-    libopus
-    libsamplerate
-    libsndfile
-    readline
-  ] ++ lib.optionals enableAlsa [
-    alsa-lib
-    zita-alsa-pcmi
-    zita-resampler
+  nativeBuildInputs = [
+    pkg-config
+    meson
+    ninja
   ];
+  buildInputs =
+    [
+      jack
+      libopus
+      libsamplerate
+      libsndfile
+      readline
+    ]
+    ++ lib.optionals enableAlsa [
+      alsa-lib
+      zita-alsa-pcmi
+      zita-resampler
+    ];
 
   mesonFlags = [
     (lib.mesonEnable "alsa_in_out" enableAlsa)

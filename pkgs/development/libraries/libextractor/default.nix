@@ -1,20 +1,42 @@
-{ lib, stdenv, fetchurl, fetchpatch2, substituteAll
-, libtool, gettext, zlib, bzip2, flac, libvorbis
-, exiv2, libgsf, pkg-config
-, rpmSupport ? stdenv.hostPlatform.isLinux, rpm
-, gstreamerSupport ? true, gst_all_1
-# ^ Needed e.g. for proper id3 and FLAC support.
-#   Set to `false` to decrease package closure size by about 87 MB (53%).
-, gstPlugins ? (gst: [ gst.gst-plugins-base gst.gst-plugins-good ])
-# If an application needs additional gstreamer plugins it can also make them
-# available by adding them to the environment variable
-# GST_PLUGIN_SYSTEM_PATH_1_0, e.g. like this:
-# postInstall = ''
-#   wrapProgram $out/bin/extract --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0"
-# '';
-# See also <https://nixos.org/nixpkgs/manual/#sec-language-gnome>.
-, gtkSupport ? true, glib, gtk3
-, videoSupport ? true, libmpeg2
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch2,
+  substituteAll,
+  libtool,
+  gettext,
+  zlib,
+  bzip2,
+  flac,
+  libvorbis,
+  exiv2,
+  libgsf,
+  pkg-config,
+  rpmSupport ? stdenv.hostPlatform.isLinux,
+  rpm,
+  gstreamerSupport ? true,
+  gst_all_1,
+  # ^ Needed e.g. for proper id3 and FLAC support.
+  #   Set to `false` to decrease package closure size by about 87 MB (53%).
+  gstPlugins ? (
+    gst: [
+      gst.gst-plugins-base
+      gst.gst-plugins-good
+    ]
+  ),
+  # If an application needs additional gstreamer plugins it can also make them
+  # available by adding them to the environment variable
+  # GST_PLUGIN_SYSTEM_PATH_1_0, e.g. like this:
+  # postInstall = ''
+  #   wrapProgram $out/bin/extract --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0"
+  # '';
+  # See also <https://nixos.org/nixpkgs/manual/#sec-language-gnome>.
+  gtkSupport ? true,
+  glib,
+  gtk3,
+  videoSupport ? true,
+  libmpeg2,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,23 +48,25 @@ stdenv.mkDerivation rec {
     hash = "sha256-u48xLFHSAlciQ/ETxrYtghAwGrMMuu5gT5g32HjN91U=";
   };
 
-  patches = [
-    # 0008513: test_exiv2 fails with Exiv2 0.28
-    # https://bugs.gnunet.org/view.php?id=8513
-    (fetchpatch2 {
-      url = "https://sources.debian.org/data/main/libe/libextractor/1%3A1.13-4/debian/patches/exiv2-0.28.diff";
-      hash = "sha256-Re5iwlSyEpWu3PcHibaRKSfmdyHSZGMOdMZ6svTofvs=";
-    })
-  ] ++ lib.optionals gstreamerSupport [
+  patches =
+    [
+      # 0008513: test_exiv2 fails with Exiv2 0.28
+      # https://bugs.gnunet.org/view.php?id=8513
+      (fetchpatch2 {
+        url = "https://sources.debian.org/data/main/libe/libextractor/1%3A1.13-4/debian/patches/exiv2-0.28.diff";
+        hash = "sha256-Re5iwlSyEpWu3PcHibaRKSfmdyHSZGMOdMZ6svTofvs=";
+      })
+    ]
+    ++ lib.optionals gstreamerSupport [
 
-    # Libraries cannot be wrapped so we need to hardcode the plug-in paths.
-    (substituteAll {
-      src = ./gst-hardcode-plugins.patch;
-      load_gst_plugins = lib.concatMapStrings
-        (plugin: ''gst_registry_scan_path(gst_registry_get(), "${lib.getLib plugin}/lib/gstreamer-1.0");'')
-        (gstPlugins gst_all_1);
-    })
-  ];
+      # Libraries cannot be wrapped so we need to hardcode the plug-in paths.
+      (substituteAll {
+        src = ./gst-hardcode-plugins.patch;
+        load_gst_plugins = lib.concatMapStrings (
+          plugin: ''gst_registry_scan_path(gst_registry_get(), "${lib.getLib plugin}/lib/gstreamer-1.0");''
+        ) (gstPlugins gst_all_1);
+      })
+    ];
 
   preConfigure = ''
     echo "patching installation directory in \`extractor.c'..."
@@ -53,13 +77,23 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs =
-   [ libtool gettext zlib bzip2 flac libvorbis exiv2
-     libgsf
-   ] ++ lib.optionals rpmSupport [ rpm ]
-     ++ lib.optionals gstreamerSupport
-          ([ gst_all_1.gstreamer ] ++ gstPlugins gst_all_1)
-     ++ lib.optionals gtkSupport [ glib gtk3 ]
-     ++ lib.optionals videoSupport [ libmpeg2 ];
+    [
+      libtool
+      gettext
+      zlib
+      bzip2
+      flac
+      libvorbis
+      exiv2
+      libgsf
+    ]
+    ++ lib.optionals rpmSupport [ rpm ]
+    ++ lib.optionals gstreamerSupport ([ gst_all_1.gstreamer ] ++ gstPlugins gst_all_1)
+    ++ lib.optionals gtkSupport [
+      glib
+      gtk3
+    ]
+    ++ lib.optionals videoSupport [ libmpeg2 ];
 
   # Checks need to be run after "make install", otherwise plug-ins are not in
   # the search path, etc.

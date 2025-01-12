@@ -1,23 +1,24 @@
-{ stdenv
-, cmake
-, fetchFromGitHub
-, fetchpatch
-, lib
-, alsa-lib
-, libGL
-, libX11
-, libXinerama
-, libXi
-, zlib
-, rtaudio
-, rapidjson
-, ilmbase
-, glm
-, glfw3
-, libpng
-, opencolorio_1
-, freetype
-, openexr
+{
+  stdenv,
+  cmake,
+  fetchFromGitHub,
+  fetchpatch,
+  lib,
+  alsa-lib,
+  libGL,
+  libX11,
+  libXinerama,
+  libXi,
+  zlib,
+  rtaudio,
+  rapidjson,
+  ilmbase,
+  glm,
+  glfw3,
+  libpng,
+  opencolorio_1,
+  freetype,
+  openexr,
 }:
 
 let

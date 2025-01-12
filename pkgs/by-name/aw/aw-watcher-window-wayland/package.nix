@@ -1,43 +1,43 @@
 {
-  lib,
   fetchFromGitHub,
-  rustPlatform,
-  pkg-config,
+  lib,
   openssl,
+  pkg-config,
+  rustPlatform,
+  unstableGitUpdater,
+  wayland,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "aw-watcher-window-wayland";
-  version = "6108ad3df8e157965a43566fa35cdaf144b1c51b";
+  version = "0-unstable-2024-10-08";
 
   src = fetchFromGitHub {
     owner = "ActivityWatch";
-    repo = pname;
-    rev = version;
-    hash = "sha256-xl9+k6xJp5/t1QPOYfnBLyYprhhrzjzByDKkT3dtVVQ=";
+    repo = "aw-watcher-window-wayland";
+    rev = "58bf86a6984cb01fa750c84ce468c7ccb167f796";
+    hash = "sha256-SnlShM44jnQiZGg5mjreZg1bsjFLNYMjC/krR1TXTE4=";
   };
 
-  cargoPatches = [ ./rustc-serialize-fix.patch ];
+  cargoHash = "sha256-WWT8tOrHPf5x3bXsVPt32VKut4qK+K8gickBfEc0zmk=";
+  useFetchCargoVendor = true;
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "aw-client-rust-0.1.0" = "sha256-9tlVesnBeTlazKE2UAq6dzivjo42DT7p7XMuWXHHlnU=";
-    };
-  };
+  passthru.updateScript = unstableGitUpdater { };
+
   nativeBuildInputs = [
     pkg-config
   ];
 
   buildInputs = [
     openssl
+    wayland
   ];
 
-  meta = with lib; {
-    description = "WIP window and afk watcher for wayland";
+  meta = {
+    description = "WIP window and afk watcher for some Wayland compositors";
     homepage = "https://github.com/ActivityWatch/aw-watcher-window-wayland";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ esau79p ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ esau79p ];
     mainProgram = "aw-watcher-window-wayland";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

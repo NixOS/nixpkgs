@@ -1,11 +1,12 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, llvmPackages_13
-, libxml2
-, ncurses
-, zlib
-, stdenv
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  llvmPackages_13,
+  libxml2,
+  ncurses,
+  zlib,
+  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {

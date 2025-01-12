@@ -3,7 +3,7 @@
   fetchFromGitHub,
   lib,
   callPackage,
-  gradle,
+  gradle_8,
   makeBinaryWrapper,
   openjdk21,
   unzip,
@@ -72,6 +72,9 @@ let
     }
     HERE
   '';
+
+  # "Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0."
+  gradle = gradle_8;
 
 in
 stdenv.mkDerivation (finalAttrs: {

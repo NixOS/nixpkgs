@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -10,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "nullt3r";
     repo = "udpx";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-IRnGi3TmCyxmJKAd8ZVRoSHDao+3Xt4F5QfHvNahvGo=";
   };
 

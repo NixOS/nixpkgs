@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -11,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "L1ghtn1ng";
     repo = "sslstrip";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-iPWpbRmAUf0Yf5MDlpln1JLBxMIdmr/Ggk2ZGeQzm8s=";
   };
 
@@ -33,7 +34,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   # Project has no test
-  doCheck= false;
+  doCheck = false;
 
   pythonImportsCheck = [
     "sslstrip"

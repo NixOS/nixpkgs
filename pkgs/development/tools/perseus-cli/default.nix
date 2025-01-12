@@ -1,8 +1,9 @@
-{ lib
-, rustPlatform
-, fetchCrate
-, makeWrapper
-, wasm-pack
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+  makeWrapper,
+  wasm-pack,
 }:
 
 rustPlatform.buildRustPackage rec {

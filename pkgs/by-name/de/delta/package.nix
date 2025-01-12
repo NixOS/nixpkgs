@@ -1,12 +1,13 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
-, pkg-config
-, oniguruma
-, stdenv
-, apple-sdk_11
-, git
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  pkg-config,
+  oniguruma,
+  stdenv,
+  git,
+  zlib,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -16,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "dandavison";
     repo = "delta";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-fJSKGa935kwLG8WYmT9Ncg2ozpSNMzUJx0WLo1gtVAA=";
   };
 
@@ -27,11 +28,13 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs = [
-    oniguruma
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_11
-  ];
+  buildInputs =
+    [
+      oniguruma
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      zlib
+    ];
 
   nativeCheckInputs = [ git ];
 
@@ -60,7 +63,11 @@ rustPlatform.buildRustPackage rec {
     description = "Syntax-highlighting pager for git";
     changelog = "https://github.com/dandavison/delta/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ zowoq SuperSandro2000 figsoda ];
+    maintainers = with maintainers; [
+      zowoq
+      SuperSandro2000
+      figsoda
+    ];
     mainProgram = "delta";
   };
 }

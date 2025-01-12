@@ -1,14 +1,19 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 
 buildGoModule rec {
   pname = "starboard";
-  version = "0.15.21";
+  version = "0.15.23";
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-XSxmF3dDTKVnZI4yt686LA0E3mIVdamGMX5EqIQ2qQE=";
+    hash = "sha256-eBAOrIGlAJ7r9UviCZUELG5p3k08OqvFUGZ8Ovnxsis=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -20,7 +25,7 @@ buildGoModule rec {
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
-  vendorHash = "sha256-eDAJyOj3P1dJ0h/Y0O+8JrHw2S+8MPj4NikzrI7eDrk=";
+  vendorHash = "sha256-meZMuo+3Qv95TYYDslMpdfFG0KAbY/tufjcT7HgZB2c=";
 
   nativeBuildInputs = [ installShellFiles ];
 

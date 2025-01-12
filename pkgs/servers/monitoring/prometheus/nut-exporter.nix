@@ -1,14 +1,18 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "nut-exporter";
-  version = "3.1.1";
+  version = "3.1.3";
 
   src = fetchFromGitHub {
     owner = "DRuggeri";
     repo = "nut_exporter";
     rev = "v${version}";
-    sha256 = "sha256-izD2Ks29/4/FBsZoH0raFzqb0DgPR8hXRYBZQEvET+s=";
+    sha256 = "sha256-sX0yNuUg/x8BtMLbbq1gz+4//Cce+n5Qi/zspC7/scI=";
   };
 
   vendorHash = "sha256-DGCNYklINPPzC7kCdEUS7TqVvg2SnKFqe0qHs5RSmzY=";

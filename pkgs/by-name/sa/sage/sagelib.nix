@@ -1,85 +1,88 @@
-{ sage-src
-, env-locations
-, python
-, buildPythonPackage
-, m4
-, perl
-, pkg-config
-, sage-setup
-, setuptools
-, gd
-, iml
-, libpng
-, readline
-, blas
-, boost
-, brial
-, cliquer
-, eclib
-, ecm
-, fflas-ffpack
-, flint3
-, gap
-, giac
-, givaro
-, glpk
-, gsl
-, lapack
-, lcalc
-, libbraiding
-, libhomfly
-, libmpc
-, linbox
-, lisp-compiler
-, lrcalc
-, m4ri
-, m4rie
-, mpfi
-, mpfr
-, ntl
-, pari
-, planarity
-, ppl
-, rankwidth
-, ratpoints
-, singular
-, sqlite
-, symmetrica
-, conway-polynomials
-, cvxopt
-, cypari2
-, cysignals
-, cython
-, fpylll
-, gmpy2
-, importlib-metadata
-, importlib-resources
-, ipykernel
-, ipython
-, ipywidgets
-, jinja2
-, jupyter-client
-, jupyter-core
-, lrcalc-python
-, matplotlib
-, memory-allocator
-, meson-python
-, mpmath
-, networkx
-, numpy
-, pexpect
-, pillow
-, pip
-, pkgconfig
-, pplpy
-, primecountpy
-, ptyprocess
-, requests
-, rpy2
-, scipy
-, sphinx
-, sympy
-, typing-extensions
+{
+  lib,
+  stdenv,
+  sage-src,
+  env-locations,
+  python,
+  buildPythonPackage,
+  m4,
+  perl,
+  pkg-config,
+  sage-setup,
+  setuptools,
+  gd,
+  iml,
+  libpng,
+  readline,
+  blas,
+  boost,
+  brial,
+  cliquer,
+  eclib,
+  ecm,
+  fflas-ffpack,
+  flint3,
+  gap,
+  giac,
+  givaro,
+  glpk,
+  gsl,
+  lapack,
+  lcalc,
+  libbraiding,
+  libhomfly,
+  libmpc,
+  linbox,
+  lisp-compiler,
+  lrcalc,
+  m4ri,
+  m4rie,
+  mpfi,
+  mpfr,
+  ntl,
+  pari,
+  planarity,
+  ppl,
+  rankwidth,
+  ratpoints,
+  singular,
+  sqlite,
+  symmetrica,
+  conway-polynomials,
+  cvxopt,
+  cypari2,
+  cysignals,
+  cython,
+  fpylll,
+  gmpy2,
+  importlib-metadata,
+  importlib-resources,
+  ipykernel,
+  ipython,
+  ipywidgets,
+  jinja2,
+  jupyter-client,
+  jupyter-core,
+  lrcalc-python,
+  matplotlib,
+  memory-allocator,
+  meson-python,
+  mpmath,
+  networkx,
+  numpy,
+  pexpect,
+  pillow,
+  pip,
+  pkgconfig,
+  pplpy,
+  primecountpy,
+  ptyprocess,
+  requests,
+  rpy2,
+  scipy,
+  sphinx,
+  sympy,
+  typing-extensions,
 }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);
@@ -116,6 +119,13 @@ buildPythonPackage rec {
     libpng
     readline
   ];
+
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    # code tries to assign a unsigned long to an int in an initialized list
+    # leading to this error.
+    # https://github.com/sagemath/sage/pull/39249
+    NIX_CFLAGS_COMPILE = "-Wno-error=c++11-narrowing-const-reference";
+  };
 
   propagatedBuildInputs = [
     # native dependencies (TODO: determine which ones need to be propagated)

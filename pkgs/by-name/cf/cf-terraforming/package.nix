@@ -1,4 +1,12 @@
-{ buildGoModule, fetchFromGitHub, lib, cf-terraforming, testers, installShellFiles, stdenv }:
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+  cf-terraforming,
+  testers,
+  installShellFiles,
+  stdenv,
+}:
 
 buildGoModule rec {
   pname = "cf-terraforming";
@@ -12,7 +20,9 @@ buildGoModule rec {
   };
 
   vendorHash = "sha256-NNeJ6QfTV8X3WIFge+Ln38ym9uagLl3IpNWuPqMjeBA=";
-  ldflags = [ "-X github.com/cloudflare/cf-terraforming/internal/app/cf-terraforming/cmd.versionString=${version}" ];
+  ldflags = [
+    "-X github.com/cloudflare/cf-terraforming/internal/app/cf-terraforming/cmd.versionString=${version}"
+  ];
 
   # The test suite insists on downloading a binary release of Terraform from
   # Hashicorp at runtime, which isn't going to work in a nix build
@@ -25,7 +35,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform)''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd cf-terraforming \
       --bash <($out/bin/cf-terraforming completion bash) \
       --fish <($out/bin/cf-terraforming completion fish) \

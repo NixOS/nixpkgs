@@ -1,25 +1,26 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, cairo
-, glib
-, libxkbcommon
-, pango
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  cairo,
+  glib,
+  libxkbcommon,
+  pango,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wlr-which-key";
-  version = "1.0.1";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "MaxVerevkin";
     repo = "wlr-which-key";
     rev = "v${version}";
-    hash = "sha256-+LOu1iJ4ciqJMemNKV0cNpAxn857izu9j8pu+3Z0msk=";
+    hash = "sha256-BEf1qpy0bVPi5nmu3UUiv8k0bJvE5VFB5Zqb5lS0+t4=";
   };
 
-  cargoHash = "sha256-4aVBaKwvGSpePw64UwrqHhDYcSvM8zADrXAK5SBEfm0=";
+  cargoHash = "sha256-QWYqZT6ptxGkDqRAXnT1pWXiuk7j/6KVBBzuFJOB81M=";
 
   nativeBuildInputs = [
     pkg-config

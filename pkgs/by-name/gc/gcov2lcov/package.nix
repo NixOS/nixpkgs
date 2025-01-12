@@ -1,22 +1,26 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
   pname = "gcov2lcov";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "jandelgado";
     repo = "gcov2lcov";
     rev = "v${version}";
-    hash = "sha256-E8TPxaKJTd+5OP9e5S1FD5aZP42nJvjiqqNs4xP9gm4=";
+    hash = "sha256-ifXpT5jGNaStqvzP5Rq6Hf6PFhpiKMRC+eSYOZfzt+s=";
   };
 
   vendorHash = "sha256-/2OIBWXbNch6lmw0C1jkyJfNefJXOVG9/jNW8CYHTsc=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   # Some checks depend on looking up vcs root
   checkPhase = false;

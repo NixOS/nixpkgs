@@ -33,7 +33,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "NabuCasa";
     repo = "universal-silabs-flasher";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-fmm5QrRpZIYmPO4GK/JrP7w0Utlw52pfh524pgESliM=";
   };
 
@@ -42,7 +42,6 @@ buildPythonPackage rec {
       --replace-fail '"setuptools-git-versioning<2"' "" \
       --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
   '';
-
 
   build-system = [ setuptools ];
 

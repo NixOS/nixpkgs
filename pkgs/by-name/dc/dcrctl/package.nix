@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "dcrctl";
@@ -13,7 +17,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-Ry3wR2u+vr97icP9jwAVWcFO98JVDo9TrDg9D8hfv5I=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   meta = {
     homepage = "https://decred.org";

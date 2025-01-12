@@ -1,46 +1,46 @@
-{ stdenv
-, lib
-, makeWrapper
-, fetchurl
-, dpkg
-, wrapGAppsHook3
-, autoPatchelfHook
-, gtk3
-, cairo
-, pango
-, atk
-, gdk-pixbuf
-, glib
-, at-spi2-atk
-, dbus
-, libX11
-, libxcb
-, libXi
-, libXcursor
-, libXdamage
-, libXrandr
-, libXcomposite
-, libXext
-, libXfixes
-, libXrender
-, libXtst
-, libXScrnSaver
-, nss
-, nspr
-, alsa-lib
-, cups
-, fontconfig
-, expat
-, libudev0-shim
-, glibc
-, curl
-, openssl
-, libnghttp2
-, gsettings-desktop-schemas
-, libdrm
-, mesa
+{
+  stdenv,
+  lib,
+  makeWrapper,
+  fetchurl,
+  dpkg,
+  wrapGAppsHook3,
+  autoPatchelfHook,
+  gtk3,
+  cairo,
+  pango,
+  atk,
+  gdk-pixbuf,
+  glib,
+  at-spi2-atk,
+  dbus,
+  libX11,
+  libxcb,
+  libXi,
+  libXcursor,
+  libXdamage,
+  libXrandr,
+  libXcomposite,
+  libXext,
+  libXfixes,
+  libXrender,
+  libXtst,
+  libXScrnSaver,
+  nss,
+  nspr,
+  alsa-lib,
+  cups,
+  fontconfig,
+  expat,
+  libudev0-shim,
+  glibc,
+  curl,
+  openssl,
+  libnghttp2,
+  gsettings-desktop-schemas,
+  libdrm,
+  libgbm,
 }:
-
 
 stdenv.mkDerivation rec {
   pname = "polar-bookshelf";
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libdrm
-    mesa
+    libgbm
     gsettings-desktop-schemas
     glib
     gtk3
@@ -91,9 +91,13 @@ stdenv.mkDerivation rec {
     dpkg
   ];
 
-  runtimeLibs = lib.makeLibraryPath [ libudev0-shim glibc curl openssl libnghttp2 ];
-
-  unpackPhase = "dpkg-deb -x $src .";
+  runtimeLibs = lib.makeLibraryPath [
+    libudev0-shim
+    glibc
+    curl
+    openssl
+    libnghttp2
+  ];
 
   installPhase = ''
     runHook preInstall

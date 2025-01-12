@@ -8,55 +8,63 @@
   autoPatchelfHook,
 
   # dependencies
-  aiohttp,
-  aiohttp-cors,
   aiosignal,
-  attrs,
   click,
-  cloudpickle,
-  colorama,
-  colorful,
-  cython,
   filelock,
   frozenlist,
-  gpustat,
-  grpcio,
   jsonschema,
   msgpack,
-  numpy,
-  opencensus,
   packaging,
-  prometheus-client,
-  psutil,
-  pydantic,
-  py-spy,
+  protobuf,
   pyyaml,
   requests,
-  setproctitle,
-  smart-open,
-  virtualenv,
+  watchfiles,
 
   # optional-dependencies
+  # adag
+  cupy,
+  # client
+  grpcio,
+  # data
   fsspec,
+  numpy,
   pandas,
   pyarrow,
+  # default
+  aiohttp,
+  aiohttp-cors,
+  colorful,
+  opencensus,
+  prometheus-client,
+  pydantic,
+  py-spy,
+  smart-open,
+  virtualenv,
+  # observability
+  opentelemetry-api,
+  opentelemetry-sdk,
+  opentelemetry-exporter-otlp,
+  # rllib
   dm-tree,
-  gym,
+  gymnasium,
   lz4,
-  matplotlib,
   scikit-image,
   scipy,
-  aiorwlock,
+  typer,
+  rich,
+  # serve
   fastapi,
   starlette,
   uvicorn,
-  tabulate,
+  # serve-grpc
+  pyopenssl,
+  # tune
   tensorboardx,
 }:
 
 let
   pname = "ray";
-  version = "2.38.0";
+  version = "2.40.0";
 in
 buildPythonPackage rec {
   inherit pname version;
@@ -67,85 +75,103 @@ buildPythonPackage rec {
   src =
     let
       pyShortVersion = "cp${builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion}";
-      binary-hash = (import ./binary-hashes.nix)."${pyShortVersion}" or { };
+      binary-hashes = {
+        cp310 = "sha256-9uqxHchJD4jnjgaqZFkFslnN4foDsV6EJhVcR4K6C74=";
+        cp311 = "sha256-cXEcvywVYhP9SbD5zJMYCnukJBEAcKNL3qPcCVJ/Md8=";
+        cp312 = "sha256-Z0dVgU9WkjBsVUytvCQBWvgj3AUW40ve8kzKydemVuM=";
+      };
     in
-    fetchPypi (
-      {
-        inherit pname version format;
-        dist = pyShortVersion;
-        python = pyShortVersion;
-        abi = pyShortVersion;
-        platform = "manylinux2014_x86_64";
-      }
-      // binary-hash
-    );
+    fetchPypi {
+      inherit pname version format;
+      dist = pyShortVersion;
+      python = pyShortVersion;
+      abi = pyShortVersion;
+      platform = "manylinux2014_x86_64";
+      hash = binary-hashes.${pyShortVersion} or { };
+    };
 
   nativeBuildInputs = [
     autoPatchelfHook
   ];
 
-  pythonRelaxDeps = [
-    "click"
-    "grpcio"
-    "protobuf"
-    "virtualenv"
-  ];
-
   dependencies = [
-    aiohttp
-    aiohttp-cors
-    aiosignal
-    attrs
     click
-    cloudpickle
-    colorama
-    colorful
-    cython
+    aiosignal
     filelock
     frozenlist
-    gpustat
-    grpcio
     jsonschema
     msgpack
-    numpy
-    opencensus
     packaging
-    prometheus-client
-    psutil
-    pydantic
-    py-spy
+    protobuf
     pyyaml
     requests
-    setproctitle
-    smart-open
-    virtualenv
+    watchfiles
   ];
 
   optional-dependencies = rec {
-    air-deps = data-deps ++ serve-deps ++ tune-deps ++ rllib-deps;
-    data-deps = [
+    adag = [
+      cupy
+    ];
+    air = lib.unique (data ++ serve ++ tune ++ train);
+    all = lib.flatten (builtins.attrValues optional-dependencies);
+    client = [ grpcio ];
+    data = [
       fsspec
+      numpy
       pandas
       pyarrow
     ];
-    rllib-deps = tune-deps ++ [
+    default = [
+      aiohttp
+      aiohttp-cors
+      colorful
+      grpcio
+      opencensus
+      prometheus-client
+      pydantic
+      py-spy
+      requests
+      smart-open
+      virtualenv
+    ];
+    observability = [
+      opentelemetry-api
+      opentelemetry-sdk
+      opentelemetry-exporter-otlp
+    ];
+    rllib = [
       dm-tree
-      gym
+      gymnasium
       lz4
-      matplotlib
       pyyaml
       scikit-image
       scipy
+      typer
+      rich
     ];
-    serve-deps = [
-      aiorwlock
-      fastapi
+    serve = lib.unique (
+      [
+        fastapi
+        requests
+        starlette
+        uvicorn
+        watchfiles
+      ]
+      ++ default
+    );
+    serve-grpc = lib.unique (
+      [
+        grpcio
+        pyopenssl
+      ]
+      ++ serve
+    );
+    train = tune;
+    tune = [
+      fsspec
       pandas
-      starlette
-      uvicorn
-    ];
-    tune-deps = [
-      tabulate
+      pyarrow
+      requests
       tensorboardx
     ];
   };

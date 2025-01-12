@@ -1,9 +1,10 @@
-{ lib
-, buildGraalvmNativeImage
-, fetchurl
-, nix-update-script
-, testers
-, cljfmt
+{
+  lib,
+  buildGraalvmNativeImage,
+  fetchurl,
+  nix-update-script,
+  testers,
+  cljfmt,
 }:
 
 buildGraalvmNativeImage rec {

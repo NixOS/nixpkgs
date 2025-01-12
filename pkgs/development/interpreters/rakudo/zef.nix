@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rakudo
-, makeBinaryWrapper
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rakudo,
+  makeBinaryWrapper,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zef";
-  version = "0.22.4";
+  version = "0.22.6";
 
   src = fetchFromGitHub {
     owner = "ugexe";
     repo = "zef";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-blreXcpKvatu5Vo5YViIz5Yv2OAsQgs/SGEI2rABDoc=";
+    hash = "sha256-lq3jSoV1/zD7TMOtvfZZTVJ5cjsaod5Tzvb+GyiMJs4=";
   };
 
   nativeBuildInputs = [
@@ -35,16 +36,16 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  postFixup =''
+  postFixup = ''
     wrapProgram $out/bin/zef --prefix RAKUDOLIB , "inst#$out"
   '';
 
   meta = {
     description = "Raku / Perl6 Module Management";
-    homepage    = "https://github.com/ugexe/zef";
-    license     = lib.licenses.artistic2;
+    homepage = "https://github.com/ugexe/zef";
+    license = lib.licenses.artistic2;
     mainProgram = "zef";
     maintainers = with lib.maintainers; [ sgo ];
-    platforms   = lib.platforms.unix;
+    platforms = lib.platforms.unix;
   };
 })

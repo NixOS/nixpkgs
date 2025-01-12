@@ -3,18 +3,18 @@
   stdenv,
   fetchFromGitHub,
   python3Packages,
-  unstableGitUpdater,
+  gitUpdater,
 }:
-python3Packages.buildPythonApplication {
+python3Packages.buildPythonApplication rec {
   pname = "exo";
-  version = "0-unstable-2024-11-14";
+  version = "0.0.4-alpha";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "exo-explore";
     repo = "exo";
-    rev = "f1eec9fa64a0c14e0ef2eec092b799009b3d4a1e";
-    hash = "sha256-WrJrhMtq+S5VD3oyW1k3fkOHunTzdFk0HavjOXLhIKU=";
+    tag = "v${version}";
+    hash = "sha256-tB+/MtAAyBwoculoToiUgwqHOKEOu6Ip1Jvx0+FqC8o=";
   };
 
   build-system = with python3Packages; [ setuptools ];
@@ -27,13 +27,14 @@ python3Packages.buildPythonApplication {
     aiohttp
     aiohttp-cors
     aiofiles
-    blobfile
     grpcio
     grpcio-tools
     jinja2
     netifaces
     numpy
+    nuitka
     nvidia-ml-py
+    opencv-python
     pillow
     prometheus-client
     protobuf
@@ -41,7 +42,6 @@ python3Packages.buildPythonApplication {
     pydantic
     requests
     rich
-    safetensors
     tenacity
     tqdm
     transformers
@@ -66,8 +66,8 @@ python3Packages.buildPythonApplication {
   doCheck = stdenv.hostPlatform.isDarwin;
 
   passthru = {
-    updateScript = unstableGitUpdater {
-      hardcodeZeroVersion = true;
+    updateScript = gitUpdater {
+      rev-prefix = "v-";
     };
   };
 

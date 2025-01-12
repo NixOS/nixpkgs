@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromSourcehut, wayland-scanner, wayland }:
+{
+  lib,
+  stdenv,
+  fetchFromSourcehut,
+  wayland-scanner,
+  wayland,
+}:
 
 stdenv.mkDerivation rec {
   pname = "lswt";

@@ -18,6 +18,6 @@ buildFishPlugin rec {
     description = "Abbreviations for git for the fish shell 🐟";
     homepage = "https://github.com/lewisacidic/fish-git-abbr";
     license = licenses.mit;
-    maintainers = with maintainers; [hmajid2301];
+    maintainers = with maintainers; [ hmajid2301 ];
   };
 }

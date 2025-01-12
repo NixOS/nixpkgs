@@ -1,20 +1,25 @@
-{ lib, stdenv
-, autoconf
-, automake
-, fetchFromGitHub
-, glib
-, intltool
-, json_c
-, libtool
-, pkg-config
-, python3
+{
+  lib,
+  stdenv,
+  autoconf,
+  automake,
+  fetchFromGitHub,
+  glib,
+  intltool,
+  json_c,
+  libtool,
+  pkg-config,
+  python3,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libmypaint";
   version = "1.6.1";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchFromGitHub {
     owner = "mypaint";
@@ -23,9 +28,12 @@ stdenv.mkDerivation rec {
     sha256 = "1ppgpmnhph9h8ayx9776f79a0bxbdszfw9c6bw7c3ffy2yk40178";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     autoconf
     automake
+    glib # AM_GLIB_GNU_GETTEXT
     intltool
     libtool
     pkg-config

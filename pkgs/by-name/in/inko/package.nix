@@ -1,14 +1,15 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, llvm_16
-, libffi
-, libz
-, libxml2
-, ncurses
-, stdenv
-, makeWrapper
-, callPackage
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  llvm_16,
+  libffi,
+  libz,
+  libxml2,
+  ncurses,
+  stdenv,
+  makeWrapper,
+  callPackage,
 }:
 
 rustPlatform.buildRustPackage rec {

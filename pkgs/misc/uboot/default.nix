@@ -608,6 +608,13 @@ in {
     filesToInstall = [ "u-boot.itb" "idbloader.img" "u-boot-rockchip.bin" ];
   };
 
+  ubootRockPiE = buildUBoot {
+    defconfig = "rock-pi-e-rk3328_defconfig";
+    extraMeta.platforms = [ "aarch64-linux" ];
+    BL31="${armTrustedFirmwareRK3328}/bl31.elf";
+    filesToInstall = [ "u-boot.itb" "idbloader.img" "u-boot-rockchip.bin" ];
+  };
+
   ubootRockPro64 = buildUBoot {
     extraPatches = [
       # https://patchwork.ozlabs.org/project/uboot/list/?series=237654&archive=both&state=*

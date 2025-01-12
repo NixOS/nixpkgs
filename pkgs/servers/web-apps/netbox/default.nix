@@ -18,7 +18,6 @@ in
 
     maintainers = with lib.maintainers; [
       minijackson
-      n0emis
       raitobezarius
     ];
     eol = true;

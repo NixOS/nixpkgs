@@ -1,33 +1,35 @@
-{ lib
-, stdenv
-, fetchCrate
-, rustPlatform
-, pkg-config
-, rustfmt
-, cacert
-, openssl
-, darwin
-, nix-update-script
-, testers
-, dioxus-cli
+{
+  lib,
+  stdenv,
+  fetchCrate,
+  rustPlatform,
+  pkg-config,
+  rustfmt,
+  cacert,
+  openssl,
+  nix-update-script,
+  testers,
+  dioxus-cli,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "dioxus-cli";
-  version = "0.5.7";
+  version = "0.6.0";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-/LeMh5WX4dvkveu5w6qBQLbtoi5yUW6iad0YatA/tMQ=";
+    hash = "sha256-0Kg2/+S8EuMYZQaK4Ao+mbS7K48VhVWjPL+LnoVJMSw=";
   };
 
-  cargoHash = "sha256-D6y2NiFqSf0u6icSKCRZK7ycR+GswOX627M7PEy/D6U=";
+  cargoHash = "sha256-RMo6q/GSAV1bCMWtR+wu9xGKCgz/Ie6t/8oirBly/LQ=";
+  buildFeatures = [ "optimizations" ];
 
-  nativeBuildInputs = [ pkg-config cacert ];
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.CoreServices
-    darwin.apple_sdk.frameworks.SystemConfiguration
+  nativeBuildInputs = [
+    pkg-config
+    cacert
   ];
+
+  buildInputs = [ openssl ];
 
   OPENSSL_NO_VENDOR = 1;
 
@@ -35,8 +37,7 @@ rustPlatform.buildRustPackage rec {
 
   checkFlags = [
     # requires network access
-    "--skip=server::web::proxy::test::add_proxy"
-    "--skip=server::web::proxy::test::add_proxy_trailing_slash"
+    "--skip=serve::proxy::test"
   ];
 
   passthru = {
@@ -47,8 +48,15 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     homepage = "https://dioxuslabs.com";
     description = "CLI tool for developing, testing, and publishing Dioxus apps";
-    license = with licenses; [ mit asl20 ];
-    maintainers = with maintainers; [ xanderio cathalmullan ];
+    changelog = "https://github.com/DioxusLabs/dioxus/releases";
+    license = with licenses; [
+      mit
+      asl20
+    ];
+    maintainers = with maintainers; [
+      xanderio
+      cathalmullan
+    ];
     mainProgram = "dx";
   };
 }

@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jcreinhold";
     repo = "pymedio";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-x3CHoWASDrUoCXfj73NF+0Y/3Mb31dK2Lh+o4OD9ryk=";
   };
 

@@ -1,4 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub, testers, terraform-inventory }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  terraform-inventory,
+}:
 
 buildGoModule rec {
   pname = "terraform-inventory";
@@ -13,7 +19,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-pj9XLzaGU1PuNnpTL/7XaKJZUymX+i8hFMroZtHIqTc=";
 
-  ldflags = [ "-s" "-w" "-X main.build_version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.build_version=${version}"
+  ];
 
   doCheck = false;
 

@@ -1,18 +1,23 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, buildPackages
-, pkg-config
-, cairo
-, imagemagick
-, zopfli
-, pngquant
-, which
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  buildPackages,
+  pkg-config,
+  cairo,
+  imagemagick,
+  zopfli,
+  pngquant,
+  which,
 }:
 
 let
-  emojiPythonEnv =
-    buildPackages.python3.withPackages (p: with p; [ fonttools nototools ]);
+  emojiPythonEnv = buildPackages.python3.withPackages (
+    p: with p; [
+      fonttools
+      nototools
+    ]
+  );
 in
 stdenvNoCC.mkDerivation rec {
   pname = "noto-fonts-color-emoji";
@@ -64,8 +69,14 @@ stdenvNoCC.mkDerivation rec {
   meta = {
     description = "Color emoji font";
     homepage = "https://github.com/googlefonts/noto-emoji";
-    license = with lib.licenses; [ ofl asl20 ];
+    license = with lib.licenses; [
+      ofl
+      asl20
+    ];
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ mathnerd314 sternenseemann ];
+    maintainers = with lib.maintainers; [
+      mathnerd314
+      sternenseemann
+    ];
   };
 }

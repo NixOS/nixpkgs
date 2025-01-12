@@ -10,7 +10,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "decke";
     repo = "smtprelay";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-2fZA2vYJ6c5oaNImvS0KKZo1+Eu7LFO6jCRnChReMcE=";
   };
 
@@ -20,7 +20,7 @@ buildGoModule rec {
     "."
   ];
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   # We do not supply the build time as the build wouldn't be reproducible otherwise.
   ldflags = [

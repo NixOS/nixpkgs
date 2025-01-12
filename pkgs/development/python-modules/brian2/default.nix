@@ -9,21 +9,42 @@
   setuptools,
   sympy,
   pytest,
+  pythonOlder,
   pytest-xdist,
+  setuptools-scm,
   python,
+  scipy,
+  fetchpatch,
 }:
 
 buildPythonPackage rec {
   pname = "brian2";
-  version = "2.7.1";
+  version = "2.8.0";
   pyproject = true;
+
+  # https://github.com/python/cpython/issues/117692
+  disabled = pythonOlder "3.12";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-mp1xo6ooYm21s6FYcegQdsHmVgH81usV9IfIM0GM7lc=";
+    hash = "sha256-1JSE58y1T0YLuFMgVv2qf7bZoLddeyoyxF2dzgsbuUg=";
   };
 
-  build-system = [ setuptools ];
+  patches = [
+    ./0001-remove-invalidxyz.patch # invalidxyz are reported as error so I remove it
+  ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "numpy>=2.0.0rc1" "numpy"
+
+    substituteInPlace brian2/codegen/cpp_prefs.py \
+      --replace-fail "distutils" "setuptools._distutils"
+  '';
+
+  build-system = [
+    setuptools-scm
+  ];
 
   dependencies = [
     cython
@@ -32,6 +53,7 @@ buildPythonPackage rec {
     pyparsing
     setuptools
     sympy
+    scipy
   ];
 
   nativeCheckInputs = [
@@ -47,10 +69,10 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Clock-driven simulator for spiking neural networks";
     homepage = "https://briansimulator.org/";
-    license = licenses.cecill21;
-    maintainers = with maintainers; [ jiegec ];
+    license = lib.licenses.cecill21;
+    maintainers = with lib.maintainers; [ jiegec ];
   };
 }

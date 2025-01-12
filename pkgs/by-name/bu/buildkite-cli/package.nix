@@ -1,17 +1,21 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "buildkite-cli";
-  version = "3.2.0";
+  version = "3.4.2";
 
   src = fetchFromGitHub {
     owner = "buildkite";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "sha256-lmsL73jck3vt6oDP699BrMq0RyrXAUuTjKtvHcNtcZc=";
+    sha256 = "sha256-Tb9Hyhyf+ib/tLUHc+gUccZ7TuXltxxjaIpCfvnoVkA=";
   };
 
-  vendorHash = "sha256-PZHMJpyZ2w3GFHQW56m+9POyXR6wMt3TmNaQENg9lWw=";
+  vendorHash = "sha256-1QXcRykXoNGYCR8+6ut1eU8TVNtx8b2O2MIjmL8rfQk=";
 
   doCheck = false;
 
@@ -21,7 +25,11 @@ buildGoModule rec {
 
   subPackages = [ "cmd/bk" ];
 
-  ldflags = [ "-s" "-w" "-X main.VERSION=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.VERSION=${version}"
+  ];
 
   meta = with lib; {
     description = "Command line interface for Buildkite";

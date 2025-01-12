@@ -2,7 +2,7 @@
   lib,
   buildPythonApplication,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   writeShellScript,
   steam-run,
   fetchpatch2,
@@ -24,14 +24,13 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Matoking";
     repo = "protontricks";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-dCb8mcwXoxD4abJjLEwk5tGp65XkvepmOX+Kc9Dl7fQ=";
   };
 
   patches = [
     # Use steam-run to run Proton binaries
-    (substituteAll {
-      src = ./steam-run.patch;
+    (replaceVars ./steam-run.patch {
       steamRun = lib.getExe steam-run;
       bash = writeShellScript "steam-run-bash" ''
         exec ${lib.getExe steam-run} bash "$@"

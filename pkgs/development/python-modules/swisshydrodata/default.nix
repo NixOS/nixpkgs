@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Bouni";
     repo = "swisshydrodata";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-RcVwo61HZ02JEOHsSY/W8j2OTBN25oR2JunLZ5i6yVI=";
   };
 

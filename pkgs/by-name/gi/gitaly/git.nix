@@ -1,22 +1,23 @@
-{ stdenv
-, lib
-, gitaly
-, fetchFromGitLab
-, curl
-, pcre2
-, zlib
+{
+  stdenv,
+  lib,
+  gitaly,
+  fetchFromGitLab,
+  curl,
+  pcre2,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gitaly-git";
-  version = "2.45.2";
+  version = "2.47.0";
 
   # `src` attribute for nix-update
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "git";
     rev = "v${version}";
-    hash = "sha256-R4K5b4d1DQw+pwoOCAK4EJtVPXQDPossTUmVv0LJtUs=";
+    hash = "sha256-KG8YYGVWkfazVm8lOGs+Tg79wDl5O33JLkKrYBSIZYk=";
   };
 
   # we actually use the gitaly build system

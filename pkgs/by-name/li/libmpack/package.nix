@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, libtool }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libtool,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libmpack";

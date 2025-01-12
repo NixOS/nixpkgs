@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "rakkess";
@@ -12,7 +16,11 @@ buildGoModule rec {
   };
   vendorHash = "sha256-lVxJ4wFBhHc8JVpkmqphLYPE9Z8Cr6o+aAHvC1naqyE=";
 
-  ldflags = [ "-s" "-w" "-X github.com/corneliusweig/rakkess/internal/version.version=v${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/corneliusweig/rakkess/internal/version.version=v${version}"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/corneliusweig/rakkess";

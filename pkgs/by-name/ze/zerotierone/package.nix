@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, buildPackages
-, cargo
-, lzo
-, openssl
-, pkg-config
-, ronn
-, rustc
-, zlib
-, libiconv
-, darwin
-, fetchpatch
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  buildPackages,
+  cargo,
+  lzo,
+  openssl,
+  pkg-config,
+  ronn,
+  rustc,
+  zlib,
+  libiconv,
+  darwin,
+  fetchpatch,
 }:
 
 let
@@ -26,7 +27,8 @@ let
     hash = "sha256-YWcqALUB3ZEukL4er2FKcyNdEbuaf//QU5hRbKAfxDA=";
   };
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   inherit pname version src;
 
   cargoDeps = rustPlatform.importCargoLock {
@@ -48,7 +50,6 @@ in stdenv.mkDerivation {
     cp ${./Cargo.lock} Cargo.lock
     cp ${./Cargo.lock} rustybits/Cargo.lock
   '';
-
 
   preConfigure = ''
     cmp ./Cargo.lock ./rustybits/Cargo.lock || {
@@ -73,47 +74,56 @@ in stdenv.mkDerivation {
     rustc
   ];
 
-  buildInputs = [
-    lzo
-    openssl
-    zlib
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libiconv
-    darwin.apple_sdk.frameworks.SystemConfiguration
-    darwin.apple_sdk.frameworks.CoreServices
-  ];
+  buildInputs =
+    [
+      lzo
+      openssl
+      zlib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libiconv
+      darwin.apple_sdk.frameworks.SystemConfiguration
+      darwin.apple_sdk.frameworks.CoreServices
+    ];
 
   enableParallelBuilding = true;
 
   # Ensure Rust compiles for the right target
   env.CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTarget;
 
-  preBuild = if stdenv.hostPlatform.isDarwin then ''
-    makeFlagsArray+=("ARCH_FLAGS=") # disable multi-arch build
-    if ! grep -q MACOS_VERSION_MIN=10.13 make-mac.mk; then
-      echo "You may need to update MACOSX_DEPLOYMENT_TARGET to match the value in make-mac.mk"
-      exit 1
-    fi
-    (cd rustybits && MACOSX_DEPLOYMENT_TARGET=10.13 cargo build -p zeroidc --release)
+  preBuild =
+    if stdenv.hostPlatform.isDarwin then
+      ''
+        makeFlagsArray+=("ARCH_FLAGS=") # disable multi-arch build
+        if ! grep -q MACOS_VERSION_MIN=10.13 make-mac.mk; then
+          echo "You may need to update MACOSX_DEPLOYMENT_TARGET to match the value in make-mac.mk"
+          exit 1
+        fi
+        (cd rustybits && MACOSX_DEPLOYMENT_TARGET=10.13 cargo build -p zeroidc --release)
 
-    cp \
-      ./rustybits/target/${stdenv.hostPlatform.rust.rustcTarget}/release/libzeroidc.a \
-      ./rustybits/target
+        cp \
+          ./rustybits/target/${stdenv.hostPlatform.rust.rustcTarget}/release/libzeroidc.a \
+          ./rustybits/target
 
-    # zerotier uses the "FORCE" target as a phony target to force rebuilds.
-    # We don't want to rebuild libzeroidc.a as we build want to build this library ourself for a single architecture
-    touch FORCE
-  '' else ''
-    # Cargo won't compile to target/release but to target/<RUST_TARGET>/release when a target is
-    # explicitly defined. The build-system however expects target/release. Hence we just symlink from
-    # the latter to the former.
-    mkdir -p rustybits/target/release
-    ln -rs \
-      ./rustybits/target/${stdenv.hostPlatform.rust.rustcTarget}/release/libzeroidc.a \
-      ./rustybits/target/release/
-  '';
+        # zerotier uses the "FORCE" target as a phony target to force rebuilds.
+        # We don't want to rebuild libzeroidc.a as we build want to build this library ourself for a single architecture
+        touch FORCE
+      ''
+    else
+      ''
+        # Cargo won't compile to target/release but to target/<RUST_TARGET>/release when a target is
+        # explicitly defined. The build-system however expects target/release. Hence we just symlink from
+        # the latter to the former.
+        mkdir -p rustybits/target/release
+        ln -rs \
+          ./rustybits/target/${stdenv.hostPlatform.rust.rustcTarget}/release/libzeroidc.a \
+          ./rustybits/target/release/
+      '';
 
-  buildFlags = [ "all" "selftest" ];
+  buildFlags = [
+    "all"
+    "selftest"
+  ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   checkPhase = ''
@@ -124,7 +134,8 @@ in stdenv.mkDerivation {
 
   installFlags = [
     # only linux has an install target, we borrow this for macOS as well
-    "-f" "make-linux.mk"
+    "-f"
+    "make-linux.mk"
     "DESTDIR=$$out/upstream"
   ];
 
@@ -137,7 +148,10 @@ in stdenv.mkDerivation {
     rm -rf $out/upstream
   '';
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   passthru.updateScript = ./update.sh;
 
@@ -146,7 +160,11 @@ in stdenv.mkDerivation {
     homepage = "https://www.zerotier.com";
     license = licenses.bsl11;
     maintainers = with maintainers; [
-      sjmackenzie zimbatm ehmry obadz danielfullmer
+      sjmackenzie
+      zimbatm
+      ehmry
+      obadz
+      danielfullmer
       mic92 # also can test darwin
     ];
     platforms = platforms.unix;

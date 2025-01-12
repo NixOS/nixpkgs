@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bagel897";
     repo = "pytoolconfig";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-h21SDgVsnCDZQf5GS7sFE19L/p+OlAFZGEYKc0RHn30=";
   };
 

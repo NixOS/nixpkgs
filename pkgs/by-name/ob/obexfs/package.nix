@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, pkg-config, bluez, fuse, obexftp }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  bluez,
+  fuse,
+  obexftp,
+}:
 
 stdenv.mkDerivation rec {
   pname = "obexfs";
@@ -10,7 +18,11 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ fuse obexftp bluez ];
+  buildInputs = [
+    fuse
+    obexftp
+    bluez
+  ];
 
   meta = with lib; {
     homepage = "http://dev.zuckschwerdt.org/openobex/wiki/ObexFs";

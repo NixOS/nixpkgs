@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchpatch, substituteAll, buildEnv, fetchFromGitHub, python3Packages }:
+{
+  lib,
+  stdenv,
+  fetchpatch,
+  replaceVars,
+  buildEnv,
+  fetchFromGitHub,
+  python3Packages,
+}:
 
 stdenv.mkDerivation rec {
   pname = "wee-slack";
@@ -12,15 +20,16 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./libpath.patch;
-      env = "${buildEnv {
-        name = "wee-slack-env";
-        paths = with python3Packages; [
-          websocket-client
-          six
-        ];
-      }}/${python3Packages.python.sitePackages}";
+    (replaceVars ./libpath.patch {
+      env = "${
+        buildEnv {
+          name = "wee-slack-env";
+          paths = with python3Packages; [
+            websocket-client
+            six
+          ];
+        }
+      }/${python3Packages.python.sitePackages}";
     })
     ./load_weemoji_path.patch
   ];

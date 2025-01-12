@@ -6,7 +6,7 @@
   cargo-tauri,
   cargo-tauri_1,
   gtk3,
-  libsoup,
+  libsoup_2_4,
   openssl,
   webkitgtk_4_0,
 }:
@@ -40,7 +40,7 @@ cargo-tauri.overrideAttrs (
       [ openssl ]
       ++ lib.optionals stdenv.hostPlatform.isLinux [
         gtk3
-        libsoup
+        libsoup_2_4
         webkitgtk_4_0
       ];
 

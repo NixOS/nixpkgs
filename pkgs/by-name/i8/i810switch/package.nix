@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, pciutils }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pciutils,
+}:
 
 stdenv.mkDerivation {
   pname = "i810switch";

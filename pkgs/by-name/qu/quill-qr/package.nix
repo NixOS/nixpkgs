@@ -1,11 +1,12 @@
-{ coreutils
-, fetchFromGitHub
-, gzip
-, jq
-, lib
-, makeWrapper
-, qrencode
-, stdenvNoCC
+{
+  coreutils,
+  fetchFromGitHub,
+  gzip,
+  jq,
+  lib,
+  makeWrapper,
+  qrencode,
+  stdenvNoCC,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -28,12 +29,14 @@ stdenvNoCC.mkDerivation rec {
     cp -a quill-qr.sh $out/bin/quill-qr.sh
     patchShebangs $out/bin
 
-    wrapProgram $out/bin/quill-qr.sh --prefix PATH : "${lib.makeBinPath [
-      qrencode
-      coreutils
-      jq
-      gzip
-    ]}"
+    wrapProgram $out/bin/quill-qr.sh --prefix PATH : "${
+      lib.makeBinPath [
+        qrencode
+        coreutils
+        jq
+        gzip
+      ]
+    }"
   '';
 
   meta = with lib; {

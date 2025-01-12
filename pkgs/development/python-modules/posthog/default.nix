@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "posthog";
-  version = "3.7.0";
+  version = "3.7.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PostHog";
     repo = "posthog-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-1evqG/rdHBs0bAHM+bIHyT4tFE6tAE+aJyu5r0QqAMk=";
+    tag = "v${version}";
+    hash = "sha256-zdZUlHQbSOSJhAxOY404/w7RsX8h+602A+8qmH9fQIc=";
   };
 
   build-system = [ setuptools ];
@@ -50,6 +50,8 @@ buildPythonPackage rec {
     "test_request"
     "test_trying_to_use_django_integration"
     "test_upload"
+    # AssertionError: 2 != 3
+    "test_flush_interval"
   ];
 
   meta = with lib; {

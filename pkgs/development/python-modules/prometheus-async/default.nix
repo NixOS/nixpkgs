@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-, flit-core
+  flit-core,
 
-, prometheus-client
-, typing-extensions
-, wrapt
-, aiohttp
-, twisted
+  prometheus-client,
+  typing-extensions,
+  wrapt,
+  aiohttp,
+  twisted,
 
-, pytestCheckHook
-, pytest-asyncio
+  pytestCheckHook,
+  pytest-asyncio,
 }:
 
 buildPythonPackage rec {

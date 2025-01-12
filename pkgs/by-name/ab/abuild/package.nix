@@ -1,29 +1,30 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, gitUpdater
-, makeWrapper
-, pkg-config
-, file
-, scdoc
-, openssl
-, zlib
-, busybox
-, apk-tools
-, perl
-, findutils
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  gitUpdater,
+  makeWrapper,
+  pkg-config,
+  file,
+  scdoc,
+  openssl,
+  zlib,
+  busybox,
+  apk-tools,
+  perl,
+  findutils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "abuild";
-  version = "3.13.0";
+  version = "3.14.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.alpinelinux.org";
     owner = "alpine";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-xVxgcBchGfeVo1cgP9iVsWjZ6SHVN6R8zWaE1k3DcXQ=";
+    repo = "abuild";
+    rev = finalAttrs.version;
+    hash = "sha256-gNmje4USaklwmsVGs4NMFoharEk2syCmDdQ/SCSMKsI=";
   };
 
   buildInputs = [
@@ -31,13 +32,15 @@ stdenv.mkDerivation rec {
     zlib
     busybox
     # for $out/bin/apkbuild-cpan and $out/bin/apkbuild-pypi
-    (perl.withPackages (ps: with ps; [
-      LWP
-      JSON
-      ModuleBuildTiny
-      LWPProtocolHttps
-      IPCSystemSimple
-    ]))
+    (perl.withPackages (
+      ps: with ps; [
+        LWP
+        JSON
+        ModuleBuildTiny
+        LWPProtocolHttps
+        IPCSystemSimple
+      ]
+    ))
   ];
 
   nativeBuildInputs = [
@@ -82,12 +85,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Alpine Linux build tools";
     homepage = "https://gitlab.alpinelinux.org/alpine/abuild";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ onny ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ onny ];
+    platforms = lib.platforms.unix;
   };
-
-}
+})

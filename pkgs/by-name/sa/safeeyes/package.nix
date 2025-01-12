@@ -1,27 +1,28 @@
-{ lib
-, python3
-, fetchPypi
-, alsa-utils
-, gobject-introspection
-, libnotify
-, wlrctl
-, gtk3
-, safeeyes
-, testers
-, xprintidle
-, xprop
-, wrapGAppsHook3
+{
+  lib,
+  python3,
+  fetchPypi,
+  alsa-utils,
+  gobject-introspection,
+  libnotify,
+  wlrctl,
+  gtk3,
+  safeeyes,
+  testers,
+  xprintidle,
+  xprop,
+  wrapGAppsHook3,
 }:
 
 with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "safeeyes";
-  version = "2.2.2";
+  version = "2.2.3";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-k/CNxLScZDCXiwJhP5qh5HD5VUKlOLaYV8ICYgz6NKI=";
+    hash = "sha256-VE+pcCSblj5CADJppyM1mUchOibUtr7NrVwINrSprY0=";
   };
 
   postPatch = ''
@@ -59,7 +60,14 @@ buildPythonApplication rec {
   preFixup = ''
     makeWrapperArgs+=(
       "''${gappsWrapperArgs[@]}"
-      --prefix PATH : ${lib.makeBinPath [ alsa-utils wlrctl xprintidle xprop ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          alsa-utils
+          wlrctl
+          xprintidle
+          xprop
+        ]
+      }
     )
   '';
 

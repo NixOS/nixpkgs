@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jeeftor";
     repo = "weatherflow4py";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-NOruMysLm0Pu2fsaA/qCNdeCTacomvJ51oqI8V2WFWI=";
   };
 

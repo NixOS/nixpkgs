@@ -15,23 +15,23 @@
 
 buildPythonPackage rec {
   pname = "cachecontrol";
-  version = "0.14.0";
+  version = "0.14.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   __darwinAllowLocalNetworking = true;
 
   src = fetchFromGitHub {
     owner = "ionrock";
     repo = "cachecontrol";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-myyqiUGna+5S2GJGnwZTOfLh49NhjfHAvpUB49dQbgY=";
+    tag = "v${version}";
+    hash = "sha256-qeTq2NfMOmNtjBItLmjxlaxqqy/Uvb6JfBpCBRvRLh4=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     msgpack
     requests
   ];

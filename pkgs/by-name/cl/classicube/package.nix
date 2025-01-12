@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, dos2unix
-, makeWrapper
-, makeDesktopItem
-, copyDesktopItems
-, libX11
-, libXi
-, libGL
-, curl
-, openal
-, liberation_ttf
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  dos2unix,
+  makeWrapper,
+  makeDesktopItem,
+  copyDesktopItems,
+  libX11,
+  libXi,
+  libGL,
+  curl,
+  openal,
+  liberation_ttf,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +25,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ZITyfxkQB4Jpm2ZsQyM+ouPLqCVmGB7UZRXDSU/BX0k=";
   };
 
-  nativeBuildInputs = [ dos2unix makeWrapper copyDesktopItems ];
+  nativeBuildInputs = [
+    dos2unix
+    makeWrapper
+    copyDesktopItems
+  ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -68,7 +73,14 @@ stdenv.mkDerivation rec {
       --replace 'JOBS=1' "JOBS=$NIX_BUILD_CORES"
   '';
 
-  buildInputs = [ libX11 libXi libGL curl openal liberation_ttf ];
+  buildInputs = [
+    libX11
+    libXi
+    libGL
+    curl
+    openal
+    liberation_ttf
+  ];
 
   installPhase = ''
     runHook preInstall

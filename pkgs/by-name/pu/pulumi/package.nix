@@ -1,19 +1,25 @@
-{ stdenv
-, lib
-, buildGoModule
-, coreutils
-, fetchFromGitHub
-, fetchpatch
-, installShellFiles
-, git
+{
+  stdenv,
+  lib,
+  buildGo122Module,
+  coreutils,
+  fetchFromGitHub,
+  fetchpatch,
+  installShellFiles,
+  git,
   # passthru
-, runCommand
-, makeWrapper
-, pulumi
-, pulumiPackages
+  runCommand,
+  makeWrapper,
+  pulumi,
+  pulumiPackages,
 }:
 
-buildGoModule rec {
+# Using go 1.22 as pulumi 3.122.0 will not build with 1.23.
+# Issue: https://github.com/NixOS/nixpkgs/issues/351955
+# Upgrading pulumi version should fix it, but requires more involved changes, so
+# this is a temporary workaround.
+# Upgrade: https://github.com/NixOS/nixpkgs/pull/352221
+buildGo122Module rec {
   pname = "pulumi";
   version = "3.122.0";
 
@@ -57,26 +63,28 @@ buildGoModule rec {
     git
   ];
 
-  preCheck = ''
-    # The tests require `version.Version` to be unset
-    ldflags=''${ldflags//"$importpathFlags"/}
+  preCheck =
+    ''
+      # The tests require `version.Version` to be unset
+      ldflags=''${ldflags//"$importpathFlags"/}
 
-    # Create some placeholders for plugins used in tests. Otherwise, Pulumi
-    # tries to donwload them and fails, resulting in really long test runs
-    dummyPluginPath=$(mktemp -d)
-    for name in pulumi-{resource-pkg{A,B},-pkgB}; do
-      ln -s ${coreutils}/bin/true "$dummyPluginPath/$name"
-    done
+      # Create some placeholders for plugins used in tests. Otherwise, Pulumi
+      # tries to donwload them and fails, resulting in really long test runs
+      dummyPluginPath=$(mktemp -d)
+      for name in pulumi-{resource-pkg{A,B},-pkgB}; do
+        ln -s ${coreutils}/bin/true "$dummyPluginPath/$name"
+      done
 
-    export PATH=$dummyPluginPath''${PATH:+:}$PATH
+      export PATH=$dummyPluginPath''${PATH:+:}$PATH
 
-    # Code generation tests also download dependencies from network
-    rm codegen/{docs,dotnet,go,nodejs,python,schema}/*_test.go
-    rm -R codegen/{dotnet,go,nodejs,python}/gen_program_test
+      # Code generation tests also download dependencies from network
+      rm codegen/{docs,dotnet,go,nodejs,python,schema}/*_test.go
+      rm -R codegen/{dotnet,go,nodejs,python}/gen_program_test
 
-  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    export PULUMI_HOME=$(mktemp -d)
-  '';
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      export PULUMI_HOME=$(mktemp -d)
+    '';
 
   checkFlags =
     let
@@ -124,16 +132,18 @@ buildGoModule rec {
 
   passthru = {
     pkgs = pulumiPackages;
-    withPackages = f: runCommand "${pulumi.name}-with-packages"
-      {
-        nativeBuildInputs = [ makeWrapper ];
-      }
-      ''
-        mkdir -p $out/bin
-        makeWrapper ${pulumi}/bin/pulumi $out/bin/pulumi \
-          --suffix PATH : ${lib.makeBinPath (f pulumiPackages)} \
-          --set LD_LIBRARY_PATH "${lib.getLib stdenv.cc.cc}/lib"
-      '';
+    withPackages =
+      f:
+      runCommand "${pulumi.name}-with-packages"
+        {
+          nativeBuildInputs = [ makeWrapper ];
+        }
+        ''
+          mkdir -p $out/bin
+          makeWrapper ${pulumi}/bin/pulumi $out/bin/pulumi \
+            --suffix PATH : ${lib.makeBinPath (f pulumiPackages)} \
+            --set LD_LIBRARY_PATH "${lib.getLib stdenv.cc.cc}/lib"
+        '';
   };
 
   meta = with lib; {

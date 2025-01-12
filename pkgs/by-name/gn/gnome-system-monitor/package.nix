@@ -1,25 +1,26 @@
-{ lib
-, stdenv
-, gettext
-, fetchurl
-, pkg-config
-, gtkmm4
-, libxml2
-, bash
-, gtk4
-, libadwaita
-, glib
-, wrapGAppsHook4
-, meson
-, ninja
-, gsettings-desktop-schemas
-, itstool
-, gnome
-, adwaita-icon-theme
-, librsvg
-, gdk-pixbuf
-, libgtop
-, systemd
+{
+  lib,
+  stdenv,
+  gettext,
+  fetchurl,
+  pkg-config,
+  gtkmm4,
+  libxml2,
+  bash,
+  gtk4,
+  libadwaita,
+  glib,
+  wrapGAppsHook4,
+  meson,
+  ninja,
+  gsettings-desktop-schemas,
+  itstool,
+  gnome,
+  adwaita-icon-theme,
+  librsvg,
+  gdk-pixbuf,
+  libgtop,
+  systemd,
 }:
 
 stdenv.mkDerivation rec {

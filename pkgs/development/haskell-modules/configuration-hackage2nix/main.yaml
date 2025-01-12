@@ -109,6 +109,7 @@ extra-packages:
   - tls < 2.1.0                         # 2024-07-19: requested by darcs == 2.18.3
   - extensions == 0.1.0.2               # 2024-10-20: for GHC 9.10/Cabal 3.12
   - network-run == 0.4.0                # 2024-10-20: for GHC 9.10/network == 3.1.*
+  - typst-symbols >=0.1.6 && <0.1.7     # 2024-11-20: for pandoc 3.5 and quarto
 
 package-maintainers:
   abbradar:

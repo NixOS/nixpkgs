@@ -1,11 +1,30 @@
-{ lib, nodejs, pnpm, fetchFromGitHub, buildGoModule, installShellFiles, callPackage, nixosTests }:
+{
+  lib,
+  nodejs,
+  pnpm,
+  fetchFromGitHub,
+  buildGoModule,
+  installShellFiles,
+  callPackage,
+  nixosTests,
+}:
 
 let
-  inherit (import ./sources.nix { inherit fetchFromGitHub; }) pname version src vendorHash;
+  inherit (import ./sources.nix { inherit fetchFromGitHub; })
+    pname
+    version
+    src
+    vendorHash
+    ;
   web = callPackage ./web.nix { inherit nodejs pnpm fetchFromGitHub; };
 in
 buildGoModule rec {
-  inherit pname version src vendorHash;
+  inherit
+    pname
+    version
+    src
+    vendorHash
+    ;
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -74,7 +93,11 @@ buildGoModule rec {
       authentication.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ jk dit7ya nicomem ];
+    maintainers = with maintainers; [
+      jk
+      dit7ya
+      nicomem
+    ];
     mainProgram = "authelia";
   };
 }

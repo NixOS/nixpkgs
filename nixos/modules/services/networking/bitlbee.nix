@@ -1,16 +1,20 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.bitlbee;
   bitlbeeUid = config.ids.uids.bitlbee;
 
   bitlbeePkg = pkgs.bitlbee.override {
-    enableLibPurple = cfg.libpurple_plugins != [];
+    enableLibPurple = cfg.libpurple_plugins != [ ];
     enablePam = cfg.authBackend == "pam";
   };
 
-  bitlbeeConfig = pkgs.writeText "bitlbee.conf"
-    ''
+  bitlbeeConfig = pkgs.writeText "bitlbee.conf" ''
     [settings]
     RunMode = Daemon
     ConfigDir = ${cfg.configDir}
@@ -25,13 +29,11 @@ let
 
     [defaults]
     ${cfg.extraDefaults}
-    '';
+  '';
 
-  purple_plugin_path =
-    lib.concatMapStringsSep ":"
-      (plugin: "${plugin}/lib/pidgin/:${plugin}/lib/purple-2/")
-      cfg.libpurple_plugins
-    ;
+  purple_plugin_path = lib.concatMapStringsSep ":" (
+    plugin: "${plugin}/lib/pidgin/:${plugin}/lib/purple-2/"
+  ) cfg.libpurple_plugins;
 
 in
 
@@ -73,7 +75,10 @@ in
 
       authBackend = lib.mkOption {
         default = "storage";
-        type = lib.types.enum [ "storage" "pam" ];
+        type = lib.types.enum [
+          "storage"
+          "pam"
+        ];
         description = ''
           How users are authenticated
             storage -- save passwords internally
@@ -83,7 +88,11 @@ in
 
       authMode = lib.mkOption {
         default = "Open";
-        type = lib.types.enum [ "Open" "Closed" "Registered" ];
+        type = lib.types.enum [
+          "Open"
+          "Closed"
+          "Registered"
+        ];
         description = ''
           The following authentication modes are available:
             Open -- Accept connections from anyone, use NickServ for user authentication.
@@ -104,7 +113,7 @@ in
 
       plugins = lib.mkOption {
         type = lib.types.listOf lib.types.package;
-        default = [];
+        default = [ ];
         example = lib.literalExpression "[ pkgs.bitlbee-facebook ]";
         description = ''
           The list of bitlbee plugins to install.
@@ -113,7 +122,7 @@ in
 
       libpurple_plugins = lib.mkOption {
         type = lib.types.listOf lib.types.package;
-        default = [];
+        default = [ ];
         example = lib.literalExpression "[ pkgs.purple-matrix ]";
         description = ''
           The list of libpurple plugins to install.
@@ -160,7 +169,7 @@ in
 
   ###### implementation
 
-  config =  lib.mkMerge [
+  config = lib.mkMerge [
     (lib.mkIf config.services.bitlbee.enable {
       systemd.services.bitlbee = {
         environment.PURPLE_PLUGIN_PATH = purple_plugin_path;
@@ -180,7 +189,7 @@ in
 
     })
     (lib.mkIf (config.services.bitlbee.authBackend == "pam") {
-      security.pam.services.bitlbee = {};
+      security.pam.services.bitlbee = { };
     })
   ];
 

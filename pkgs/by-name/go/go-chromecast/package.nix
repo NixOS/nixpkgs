@@ -14,13 +14,13 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "vishen";
     repo = "go-chromecast";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-R1VGgustsKRoVZFiH2wuYRRSOolWIYq33H0DyQXHDvg=";
   };
 
   vendorHash = "sha256-EI37KPdNxPXdgmxvawTiRQ516dLxt5o0iYvGcAHXdUw=";
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   ldflags = [
     "-s"

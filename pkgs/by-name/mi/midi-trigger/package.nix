@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, lv2 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  lv2,
+}:
 
 stdenv.mkDerivation rec {
   pname = "midi-trigger";

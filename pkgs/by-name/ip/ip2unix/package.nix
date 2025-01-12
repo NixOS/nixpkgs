@@ -1,6 +1,21 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, meson, ninja, pkg-config, yaml-cpp, systemd
-, python3Packages, asciidoc, libxslt, docbook_xml_dtd_45, docbook_xsl
-, libxml2, docbook5, mesonEmulatorHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  meson,
+  ninja,
+  pkg-config,
+  yaml-cpp,
+  systemd,
+  python3Packages,
+  asciidoc,
+  libxslt,
+  docbook_xml_dtd_45,
+  docbook_xsl,
+  libxml2,
+  docbook5,
+  mesonEmulatorHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,8 +39,17 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    meson ninja pkg-config asciidoc libxslt.bin docbook_xml_dtd_45 docbook_xsl
-    libxml2.bin docbook5 python3Packages.pytest python3Packages.pytest-timeout
+    meson
+    ninja
+    pkg-config
+    asciidoc
+    libxslt.bin
+    docbook_xml_dtd_45
+    docbook_xsl
+    libxml2.bin
+    docbook5
+    python3Packages.pytest
+    python3Packages.pytest-timeout
     systemd
   ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [ mesonEmulatorHook ];
 

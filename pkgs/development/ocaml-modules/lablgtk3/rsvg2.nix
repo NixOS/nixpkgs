@@ -1,8 +1,9 @@
-{ buildDunePackage
-, dune-configurator
-, lablgtk3
-, librsvg
-, pkg-config
+{
+  buildDunePackage,
+  dune-configurator,
+  lablgtk3,
+  librsvg,
+  pkg-config,
 }:
 
 buildDunePackage rec {
@@ -12,7 +13,10 @@ buildDunePackage rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ dune-configurator ];
-  propagatedBuildInputs = [ lablgtk3 librsvg ];
+  propagatedBuildInputs = [
+    lablgtk3
+    librsvg
+  ];
 
   meta = lablgtk3.meta // {
     description = "OCaml interface to Gnome rsvg2 library";

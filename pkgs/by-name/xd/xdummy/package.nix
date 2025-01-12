@@ -1,5 +1,12 @@
-{ writeText, writeScriptBin, xorg, xkeyboard_config, runtimeShell
-, unfreeFonts ? false, lib}:
+{
+  writeText,
+  writeScriptBin,
+  xorg,
+  xkeyboard_config,
+  runtimeShell,
+  unfreeFonts ? false,
+  lib,
+}:
 
 let
   xorgConfig = writeText "dummy-xorg.conf" ''
@@ -75,7 +82,8 @@ let
     EndSection
   '';
 
-in writeScriptBin "xdummy" ''
+in
+writeScriptBin "xdummy" ''
   #!${runtimeShell}
   exec ${xorg.xorgserver.out}/bin/Xorg \
     -noreset \

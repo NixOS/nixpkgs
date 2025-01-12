@@ -1,23 +1,24 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, appstream-glib
-, dblatex
-, desktop-file-utils
-, graphene
-, gtk3
-, gtk-mac-integration-gtk3
-, intltool
-, libxml2
-, libxslt
-, meson
-, ninja
-, pkg-config
-, poppler
-, python3
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  appstream-glib,
+  dblatex,
+  desktop-file-utils,
+  graphene,
+  gtk3,
+  gtk-mac-integration-gtk3,
+  intltool,
+  libxml2,
+  libxslt,
+  meson,
+  ninja,
+  pkg-config,
+  poppler,
+  python3,
+  wrapGAppsHook3,
   # Building with docs are still failing in unstable-2023-09-28
-, withDocs ? false
+  withDocs ? false,
 }:
 
 stdenv.mkDerivation {
@@ -39,32 +40,34 @@ stdenv.mkDerivation {
     patchShebangs .
   '';
 
-  buildInputs = [
-    graphene
-    gtk3
-    libxml2
-    python3
-    poppler
-  ] ++
-  lib.optionals withDocs [
-    libxslt
-  ] ++
-  lib.optionals stdenv.hostPlatform.isDarwin [
-    gtk-mac-integration-gtk3
-  ];
+  buildInputs =
+    [
+      graphene
+      gtk3
+      libxml2
+      python3
+      poppler
+    ]
+    ++ lib.optionals withDocs [
+      libxslt
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      gtk-mac-integration-gtk3
+    ];
 
-  nativeBuildInputs = [
-    appstream-glib
-    desktop-file-utils
-    intltool
-    meson
-    ninja
-    pkg-config
-    wrapGAppsHook3
-  ] ++
-  lib.optionals withDocs [
-    dblatex
-  ];
+  nativeBuildInputs =
+    [
+      appstream-glib
+      desktop-file-utils
+      intltool
+      meson
+      ninja
+      pkg-config
+      wrapGAppsHook3
+    ]
+    ++ lib.optionals withDocs [
+      dblatex
+    ];
 
   meta = with lib; {
     description = "Gnome Diagram drawing software";

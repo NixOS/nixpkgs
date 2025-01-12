@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "fivexl";
     repo = "lprobe";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-WC0MDTyd5tRtSQ1LQsYJgV9CwJwtvnIO6tQnPrjpfcY=";
   };
 

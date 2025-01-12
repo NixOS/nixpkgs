@@ -5,25 +5,36 @@
   fetchFromGitHub,
   installShellFiles,
   buildPackages,
-  testers,
+  versionCheckHook,
   nix-update-script,
   hugo,
 }:
 
 buildGoModule rec {
   pname = "hugo";
-  version = "0.138.0";
+  version = "0.140.2";
 
   src = fetchFromGitHub {
     owner = "gohugoio";
     repo = "hugo";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-IDWQRPJrTCkvcTcsaGuyQraVoWWUe0d6FTQvvYHZcD0=";
+    tag = "v${version}";
+    hash = "sha256-4W/iUJHVsmCrIR5z0qSQ/Fsa4qtiuSie6/cot6oYQNM=";
   };
 
-  vendorHash = "sha256-5YS76L7kisyPz8yv2RCgZHpY/AkjdHE+SUwMOuo3uLg=";
+  vendorHash = "sha256-gyXvxg1pKf0MYbwf2FTUnDLSBf0Bcb4uNZ5rDq/2QGY=";
 
-  doCheck = false;
+  checkFlags =
+    let
+      skippedTestPrefixes = [
+        # Workaround for "failed to load modules"
+        "TestCommands/mod"
+        # Server tests are flaky, at least in x86_64-darwin. See #368072
+        # We can try testing again after updating the `httpget` helper
+        # ref: https://github.com/gohugoio/hugo/blob/v0.140.1/main_test.go#L220-L233
+        "TestCommands/server"
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "|^" skippedTestPrefixes}" ];
 
   proxyVendor = true;
 
@@ -55,11 +66,12 @@ buildGoModule rec {
         --zsh  <(${emulator} $out/bin/hugo completion zsh)
     '';
 
-  passthru.tests.version = testers.testVersion {
-    package = hugo;
-    command = "hugo version";
-    version = "v${version}";
-  };
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
+  versionCheckProgramArg = [ "version" ];
 
   passthru.updateScript = nix-update-script { };
 
@@ -73,6 +85,7 @@ buildGoModule rec {
       schneefux
       Br1ght0ne
       Frostman
+      kachick
     ];
   };
 }

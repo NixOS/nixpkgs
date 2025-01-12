@@ -15,6 +15,7 @@
   libadwaita,
   gettext,
   appstream,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -24,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "FineFindus";
     repo = "Hieroglyphic";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-8UUFatJwtxqumhHd0aiPk6nKsaaF/jIIqMFxXye0X8U=";
   };
 
@@ -54,13 +55,17 @@ stdenv.mkDerivation (finalAttrs: {
   # needed for darwin
   env.GETTEXT_DIR = "${gettext}";
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = {
     changelog = "https://github.com/FineFindus/Hieroglyphic/releases/tag/v${finalAttrs.version}";
     description = "Tool based on detexify for finding LaTeX symbols from drawings";
     homepage = "https://apps.gnome.org/en/Hieroglyphic/";
     license = lib.licenses.gpl3Only;
     mainProgram = "hieroglyphic";
-    maintainers = with lib.maintainers; [ tomasajt ];
+    maintainers = with lib.maintainers; [ tomasajt ] ++ lib.teams.gnome-circle.members;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

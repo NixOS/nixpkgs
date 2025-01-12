@@ -1,16 +1,17 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, crystal
-, wrapGAppsHook4
-, gobject-introspection
-, desktopToDarwinBundle
-, webkitgtk_6_0
-, sqlite
-, libadwaita
-, gtk4
-, pango
-, substituteAll
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  crystal,
+  wrapGAppsHook4,
+  gobject-introspection,
+  desktopToDarwinBundle,
+  webkitgtk_6_0,
+  sqlite,
+  libadwaita,
+  gtk4,
+  pango,
+  replaceVars,
 }:
 let
   gtk4' = gtk4.override { x11Support = true; };
@@ -32,8 +33,7 @@ crystal.buildCrystalPackage rec {
     # 1) fixed gi-crystal binding generator command
     # 2) fixed docset generator command
     # 3) added commands to build gschemas and update icon-cache
-    (substituteAll {
-      src = ./make.patch;
+    (replaceVars ./make.patch {
       inherit crystal;
     })
     # added chmod +w for copied docs to prevent error:
@@ -62,7 +62,11 @@ crystal.buildCrystalPackage rec {
     pango'
   ];
 
-  buildTargets = [ "configure" "rtfm" "docsets" ];
+  buildTargets = [
+    "configure"
+    "rtfm"
+    "docsets"
+  ];
 
   preBuild = ''
     mkdir gtk-doc/

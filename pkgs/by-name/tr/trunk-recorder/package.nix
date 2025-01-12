@@ -40,17 +40,20 @@ stdenv.mkDerivation rec {
     pkg-config
     makeWrapper
   ];
-  buildInputs = [
-    boost
-    curl
-    gmp
-    gnuradio
-    gnuradioPackages.osmosdr
-    openssl
-    spdlog
-    uhd
-    volk
-  ] ++ lib.optionals hackrfSupport [ hackrf ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ mpir ];
+  buildInputs =
+    [
+      boost
+      curl
+      gmp
+      gnuradio
+      gnuradioPackages.osmosdr
+      openssl
+      spdlog
+      uhd
+      volk
+    ]
+    ++ lib.optionals hackrfSupport [ hackrf ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ mpir ];
 
   postFixup = ''
     wrapProgram $out/bin/trunk-recorder --prefix PATH : ${

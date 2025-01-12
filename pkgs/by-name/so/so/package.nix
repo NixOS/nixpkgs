@@ -59,7 +59,6 @@ let
       mainProgram = "so";
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
-        AndersonTorres
         unsolvedcypher
       ];
     };

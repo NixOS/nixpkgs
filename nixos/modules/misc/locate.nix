@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.locate;
@@ -175,7 +180,13 @@ in
 
     pruneNames = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      default = lib.optionals (!isFindutils) [ ".bzr" ".cache" ".git" ".hg" ".svn" ];
+      default = lib.optionals (!isFindutils) [
+        ".bzr"
+        ".cache"
+        ".git"
+        ".hg"
+        ".svn"
+      ];
       defaultText = lib.literalMD ''
         `[ ".bzr" ".cache" ".git" ".hg" ".svn" ]`, if
         supported by the locate implementation (i.e. mlocate or plocate).
@@ -219,8 +230,17 @@ in
         };
       in
       lib.mkIf isMorPLocate {
-        locate = lib.mkMerge [ common mlocate plocate ];
-        plocate = lib.mkIf isPLocate (lib.mkMerge [ common plocate ]);
+        locate = lib.mkMerge [
+          common
+          mlocate
+          plocate
+        ];
+        plocate = lib.mkIf isPLocate (
+          lib.mkMerge [
+            common
+            plocate
+          ]
+        );
       };
 
     environment = {
@@ -239,12 +259,15 @@ in
       };
     };
 
-    warnings = lib.optional (isMorPLocate && cfg.localuser != null)
-      "mlocate and plocate do not support the services.locate.localuser option. updatedb will run as root. Silence this warning by setting services.locate.localuser = null."
-    ++ lib.optional (isFindutils && cfg.pruneNames != [ ])
-      "findutils locate does not support pruning by directory component"
-    ++ lib.optional (isFindutils && cfg.pruneBindMounts)
-      "findutils locate does not support skipping bind mounts";
+    warnings =
+      lib.optional (isMorPLocate && cfg.localuser != null)
+        "mlocate and plocate do not support the services.locate.localuser option. updatedb will run as root. Silence this warning by setting services.locate.localuser = null."
+      ++ lib.optional (
+        isFindutils && cfg.pruneNames != [ ]
+      ) "findutils locate does not support pruning by directory component"
+      ++ lib.optional (
+        isFindutils && cfg.pruneBindMounts
+      ) "findutils locate does not support skipping bind mounts";
 
     systemd.services.update-locatedb = {
       description = "Update Locate Database";
@@ -255,10 +278,15 @@ in
       script =
         if isMorPLocate then
           let
-            toFlags = x:
-              lib.optional (cfg.${x} != [ ])
-                "--${lib.toLower x} '${lib.concatStringsSep " " cfg.${x}}'";
-            args = lib.concatLists (map toFlags [ "pruneFS" "pruneNames" "prunePaths" ]);
+            toFlags =
+              x: lib.optional (cfg.${x} != [ ]) "--${lib.toLower x} '${lib.concatStringsSep " " cfg.${x}}'";
+            args = lib.concatLists (
+              map toFlags [
+                "pruneFS"
+                "pruneNames"
+                "prunePaths"
+              ]
+            );
           in
           ''
             exec ${cfg.package}/bin/updatedb \
@@ -266,11 +294,12 @@ in
               --prune-bind-mounts ${if cfg.pruneBindMounts then "yes" else "no"} \
               ${lib.concatStringsSep " " cfg.extraFlags}
           ''
-        else ''
-          exec ${cfg.package}/bin/updatedb \
-            ${lib.optionalString (cfg.localuser != null && !isMorPLocate) "--localuser=${cfg.localuser}"} \
-            --output=${toString cfg.output} ${lib.concatStringsSep " " cfg.extraFlags}
-        '';
+        else
+          ''
+            exec ${cfg.package}/bin/updatedb \
+              ${lib.optionalString (cfg.localuser != null && !isMorPLocate) "--localuser=${cfg.localuser}"} \
+              --output=${toString cfg.output} ${lib.concatStringsSep " " cfg.extraFlags}
+          '';
       environment = lib.optionalAttrs (!isMorPLocate) {
         PRUNEFS = lib.concatStringsSep " " cfg.pruneFS;
         PRUNEPATHS = lib.concatStringsSep " " cfg.prunePaths;
@@ -278,11 +307,23 @@ in
         PRUNE_BIND_MOUNTS = if cfg.pruneBindMounts then "yes" else "no";
       };
       serviceConfig = {
+        CapabilityBoundingSet = "CAP_DAC_READ_SEARCH CAP_CHOWN";
         Nice = 19;
         IOSchedulingClass = "idle";
+        IPAddressDeny = "any";
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        NoNewPrivileges = true;
         PrivateTmp = "yes";
+        PrivateDevices = true;
         PrivateNetwork = "yes";
-        NoNewPrivileges = "yes";
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHostname = true;
+        RestrictAddressFamilies = "AF_UNIX";
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
         ReadOnlyPaths = "/";
         # Use dirOf cfg.output because mlocate creates temporary files next to
         # the actual database. We could specify and create them as well,
@@ -290,6 +331,8 @@ in
         # NOTE: If /var/cache does not exist, this leads to the misleading error message:
         # update-locatedb.service: Failed at step NAMESPACE spawning …/update-locatedb-start: No such file or directory
         ReadWritePaths = dirOf cfg.output;
+        SystemCallArchitectures = "native";
+        SystemCallFilter = "@system-service @chown";
       };
     };
 

@@ -41,7 +41,7 @@
 
 buildPythonPackage rec {
   pname = "sqlalchemy";
-  version = "2.0.34";
+  version = "2.0.36";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -49,8 +49,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sqlalchemy";
     repo = "sqlalchemy";
-    rev = "refs/tags/rel_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-5nnMh8pEG6rXiy0nk9SKjIOY+htXNx9eHTEtNOkLrd8=";
+    tag = "rel_${lib.replaceStrings [ "." ] [ "_" ] version}";
+    hash = "sha256-i1yyAVBXz0efAdpFvUPvdzS+4IRU94akmePoprb8Is0=";
   };
 
   postPatch = ''

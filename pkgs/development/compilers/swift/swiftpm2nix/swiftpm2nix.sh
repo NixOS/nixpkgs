@@ -23,9 +23,9 @@ hashes=""
 jq -r '.object.dependencies[] | "\(.subpath) \(.packageRef.location) \(.state.checkoutState.revision)"' $stateFile \
 | while read -r name url rev; do
   echo >&2 "-- Fetching $name"
-  sha256="$(nix-prefetch-git --fetch-submodules $url $rev | jq -r .sha256)"
-  hashes+="
-    \"$name\" = \"$sha256\";"
+  hash="$(nurl "$url" "$rev" --json --submodules=true --fetcher=fetchgit | jq -r .args.hash)"
+hashes+="
+    \"$name\" = \"$hash\";"
   echo >&2
 done
 hashes+=$'\n'"  "

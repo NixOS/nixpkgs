@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, darwin
-, libgit2
-, git
-, pkg-config
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  darwin,
+  libgit2,
+  git,
+  pkg-config,
+  zlib,
 }:
 
 rustPlatform.buildRustPackage {
@@ -22,11 +23,15 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-FmlJeWMIIyTsg3TTLUia14et+aTgFCTkOr1J5dp0SGY=";
 
-  nativeBuildInputs = [ pkg-config git ];
+  nativeBuildInputs = [
+    pkg-config
+    git
+  ];
 
-  buildInputs = [ libgit2 zlib ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Security;
-
+  buildInputs = [
+    libgit2
+    zlib
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Security;
 
   meta = with lib; {
     description = "Alternative to git-crypt using age instead of GPG";

@@ -1,16 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, vulkan-headers
-, glfw
-, catch2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  vulkan-headers,
+  glfw,
+  catch2,
 }:
 
 stdenv.mkDerivation rec {
   pname = "vk-bootstrap";
   version = "0.7";
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchFromGitHub {
     owner = "charles-lunarg";
@@ -22,12 +26,16 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # Upstream uses cmake FetchContent to resolve glfw and catch2
     # needed for examples and tests
-    sed -iE 's=add_subdirectory(ext)==g' CMakeLists.txt
-    sed -iE 's=Catch2==g' tests/CMakeLists.txt
+    sed -i 's=add_subdirectory(ext)==g' CMakeLists.txt
+    sed -i 's=Catch2==g' tests/CMakeLists.txt
   '';
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ vulkan-headers glfw catch2 ];
+  buildInputs = [
+    vulkan-headers
+    glfw
+    catch2
+  ];
 
   cmakeFlags = [
     "-DVK_BOOTSTRAP_VULKAN_HEADER_DIR=${vulkan-headers}/include"

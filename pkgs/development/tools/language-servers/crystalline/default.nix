@@ -1,9 +1,10 @@
-{ lib
-, crystal
-, fetchFromGitHub
-, llvmPackages
-, openssl
-, makeWrapper
+{
+  lib,
+  crystal,
+  fetchFromGitHub,
+  llvmPackages,
+  openssl,
+  makeWrapper,
 }:
 
 let
@@ -23,20 +24,27 @@ crystal.buildCrystalPackage {
   format = "crystal";
   shardsFile = ./shards.nix;
 
-  nativeBuildInputs = [ llvmPackages.llvm openssl makeWrapper ];
+  nativeBuildInputs = [
+    llvmPackages.llvm
+    openssl
+    makeWrapper
+  ];
 
   doCheck = false;
   doInstallCheck = false;
 
   crystalBinaries.crystalline = {
     src = "src/crystalline.cr";
-    options = [ "--release" "--no-debug" "--progress" "-Dpreview_mt" ];
+    options = [
+      "--release"
+      "--no-debug"
+      "--progress"
+      "-Dpreview_mt"
+    ];
   };
 
   postInstall = ''
-    wrapProgram "$out/bin/crystalline" --prefix PATH : '${
-      lib.makeBinPath [llvmPackages.llvm.dev]
-    }'
+    wrapProgram "$out/bin/crystalline" --prefix PATH : '${lib.makeBinPath [ llvmPackages.llvm.dev ]}'
   '';
 
   meta = with lib; {

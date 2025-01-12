@@ -1,13 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, makeWrapper
-, python3
-, bison
-, flex
-, zlib
-, apple-sdk_11
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  makeWrapper,
+  python3,
+  bison,
+  flex,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
@@ -35,8 +35,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     flex
     zlib
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_11
   ];
 
   postPatch = ''
@@ -49,7 +47,12 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     for b in $out/bin/*
-      do wrapProgram "$b" --prefix PATH : "${lib.makeBinPath [ bison flex ]}"
+      do wrapProgram "$b" --prefix PATH : "${
+        lib.makeBinPath [
+          bison
+          flex
+        ]
+      }"
     done
   '';
 

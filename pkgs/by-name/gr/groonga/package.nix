@@ -1,7 +1,25 @@
-{ lib, stdenv, cmake, fetchurl, kytea, msgpack-c, mecab, pkg-config, rapidjson, testers, xxHash, zstd, postgresqlPackages
-, suggestSupport ? false, zeromq, libevent, openssl
-, lz4Support  ? false, lz4
-, zlibSupport ? true, zlib
+{
+  lib,
+  stdenv,
+  cmake,
+  fetchurl,
+  kytea,
+  msgpack-c,
+  mecab,
+  pkg-config,
+  rapidjson,
+  testers,
+  xxHash,
+  zstd,
+  postgresqlPackages,
+  suggestSupport ? false,
+  zeromq,
+  libevent,
+  openssl,
+  lz4Support ? false,
+  lz4,
+  zlibSupport ? true,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -23,21 +41,25 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [
-    rapidjson
-    xxHash
-    zstd
-    mecab
-    kytea
-    msgpack-c
-  ] ++ lib.optionals lz4Support [
-    lz4
-  ] ++ lib.optional zlibSupport [
-    zlib
-  ] ++ lib.optionals suggestSupport [
-    zeromq
-    libevent
-  ];
+  buildInputs =
+    [
+      rapidjson
+      xxHash
+      zstd
+      mecab
+      kytea
+      msgpack-c
+    ]
+    ++ lib.optionals lz4Support [
+      lz4
+    ]
+    ++ lib.optional zlibSupport [
+      zlib
+    ]
+    ++ lib.optionals suggestSupport [
+      zeromq
+      libevent
+    ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString zlibSupport "-I${zlib.dev}/include";
 

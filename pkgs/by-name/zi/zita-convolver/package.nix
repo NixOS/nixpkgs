@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, fftwFloat }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fftwFloat,
+}:
 
 stdenv.mkDerivation rec {
   pname = "zita-convolver";

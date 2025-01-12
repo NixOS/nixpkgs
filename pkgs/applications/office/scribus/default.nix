@@ -1,34 +1,33 @@
-{ boost
-, cairo
-, cmake
-, cups
-, fetchurl
-, fontconfig
-, freetype
-, harfbuzzFull
-, hunspell
-, lcms2
-, libjpeg
-, libtiff
-, libxml2
-, pixman
-, pkg-config
-, podofo
-, poppler
-, poppler_data
-, python3
-, lib
-, stdenv
-, qt5
+{
+  boost,
+  cairo,
+  cmake,
+  cups,
+  fetchurl,
+  fontconfig,
+  freetype,
+  harfbuzzFull,
+  hunspell,
+  lcms2,
+  libjpeg,
+  libtiff,
+  libxml2,
+  pixman,
+  pkg-config,
+  podofo,
+  poppler,
+  poppler_data,
+  python3,
+  lib,
+  stdenv,
+  qt5,
 }:
 
 let
-  pythonEnv = python3.withPackages (
-    ps: [
-      ps.pillow
-      ps.tkinter
-    ]
-  );
+  pythonEnv = python3.withPackages (ps: [
+    ps.pillow
+    ps.tkinter
+  ]);
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "scribus";

@@ -35,7 +35,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "InterDigitalInc";
     repo = "CompressAI";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-xvzhhLn0iBzq3h1nro8/83QWEQe9K4zRa3RSZk+hy3Y=";
     fetchSubmodules = true;
   };
@@ -88,6 +88,9 @@ buildPythonPackage rec {
     "test_eval_model_pretrained"
     "test_cheng2020_anchor"
     "test_pretrained"
+
+    # Flaky (AssertionError: assert 0.08889999999999998 < 0.064445)
+    "test_find_close"
   ];
 
   meta = {

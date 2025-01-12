@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, openssl
-, git
-, gitls
-, darwin
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  git,
+  gitls,
+  darwin,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "licensure";
@@ -21,10 +22,15 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-Ywfn+6qdKD9CG2/xdHR2XDsj5LF5XPJ2+XR5H1o2iXk=";
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl git gitls ]
+  buildInputs =
+    [
+      openssl
+      git
+      gitls
+    ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.SystemConfiguration
-  ];
+      darwin.apple_sdk.frameworks.SystemConfiguration
+    ];
 
   checkFlags = [
     # Checking for files in the git repo (git ls-files),

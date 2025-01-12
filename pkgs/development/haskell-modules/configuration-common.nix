@@ -102,20 +102,33 @@ self: super: {
   #######################################
 
   # All jailbreaks in this section due to: https://github.com/haskell/haskell-language-server/pull/4316#discussion_r1667684895
-  haskell-language-server = doJailbreak (dontCheck (super.haskell-language-server.overrideScope (lself: lsuper: {
-    # For most ghc versions, we overrideScope Cabal in the configuration-ghc-???.nix,
-    # because some packages, like ormolu, need a newer Cabal version.
-    # ghc-paths is special because it depends on Cabal for building
-    # its Setup.hs, and therefor declares a Cabal dependency, but does
-    # not actually use it as a build dependency.
-    # That means ghc-paths can just use the ghc included Cabal version,
-    # without causing package-db incoherence and we should do that because
-    # otherwise we have different versions of ghc-paths
-    # around which have the same abi-hash, which can lead to confusions and conflicts.
-    ghc-paths = lsuper.ghc-paths.override { Cabal = null; };
-  })));
+  haskell-language-server =
+    lib.pipe
+      (super.haskell-language-server.overrideScope (lself: lsuper: {
+        # For most ghc versions, we overrideScope Cabal in the configuration-ghc-???.nix,
+        # because some packages, like ormolu, need a newer Cabal version.
+        # ghc-paths is special because it depends on Cabal for building
+        # its Setup.hs, and therefor declares a Cabal dependency, but does
+        # not actually use it as a build dependency.
+        # That means ghc-paths can just use the ghc included Cabal version,
+        # without causing package-db incoherence and we should do that because
+        # otherwise we have different versions of ghc-paths
+        # around which have the same abi-hash, which can lead to confusions and conflicts.
+        ghc-paths = lsuper.ghc-paths.override { Cabal = null; };
+      }))
+      [
+        doJailbreak
+        dontCheck
+      ];
+
   hls-plugin-api = doJailbreak super.hls-plugin-api;
-  ghcide = doJailbreak super.ghcide;
+  ghcide = doJailbreak (appendPatch (pkgs.fetchpatch {
+    name = "ghcide-ghc-9.8.3.patch";
+    url = "https://github.com/haskell/haskell-language-server/commit/6d0a6f220226fe6c1cb5b6533177deb55e755b0b.patch";
+    sha256 = "1jwxldar9qzkg2z6vsx8f2yih3vkf4yjk9p3mryv0azn929qn3h1";
+    stripLen = 1;
+    excludes = [ "cabal.project" ];
+  }) super.ghcide);
 
   # For -f-auto see cabal.project in haskell-language-server.
   ghc-lib-parser-ex = addBuildDepend self.ghc-lib-parser (disableCabalFlag "auto" super.ghc-lib-parser-ex);
@@ -160,6 +173,14 @@ self: super: {
 
   # 2024-07-09: rhine 1.4.* needs newer monad-schedule than stackage (and is only consumer)
   monad-schedule = assert super.monad-schedule.version == "0.1.2.2"; doDistribute self.monad-schedule_0_2_0_1;
+
+  # Test suite hangs on 32bit. Unclear if this is a bug or not, but if so, then
+  # it has been present in past versions as well.
+  # https://github.com/haskell-unordered-containers/unordered-containers/issues/491
+  unordered-containers =
+    if pkgs.stdenv.hostPlatform.is32bit
+    then dontCheck super.unordered-containers
+    else super.unordered-containers;
 
   aeson =
     # aeson's test suite includes some tests with big numbers that fail on 32bit
@@ -218,6 +239,34 @@ self: super: {
       "-p" "! (/Pearson correlation/ || /t_qr/ || /Tests for: FDistribution.1-CDF is correct/)"
     ];
   }) super.statistics;
+
+  # Work around -Werror failures until a more permanent solution is released
+  # https://github.com/haskell-cryptography/HsOpenSSL/issues/88
+  # https://github.com/haskell-cryptography/HsOpenSSL/issues/93
+  # https://github.com/haskell-cryptography/HsOpenSSL/issues/95
+  HsOpenSSL = appendConfigureFlags [
+    "--ghc-option=-optc=-Wno-error=incompatible-pointer-types"
+  ] super.HsOpenSSL;
+  # Work around compilation failures with gcc >= 14
+  # https://github.com/audreyt/hssyck/issues/5
+  HsSyck = appendConfigureFlags [
+    "--ghc-option=-optc=-Wno-error=implicit-function-declaration"
+  ] super.HsSyck;
+  # https://github.com/rethab/bindings-dsl/issues/46
+  bindings-libcddb = appendConfigureFlags [
+    "--ghc-option=-optc=-Wno-error=incompatible-pointer-types"
+  ] super.bindings-libcddb;
+  # https://github.com/ocramz/hdf5-lite/issues/3
+  hdf5-lite = appendConfigureFlags [
+    "--ghc-option=-optc=-Wno-error=implicit-function-declaration"
+  ] super.hdf5-lite;
+  # https://github.com/awkward-squad/termbox/issues/5
+  termbox-bindings-c = appendConfigureFlags [
+    "--ghc-option=-optc=-Wno-error=implicit-function-declaration"
+  ] super.termbox-bindings-c;
+  libxml-sax = appendConfigureFlags [
+    "--ghc-option=-optc=-Wno-error=implicit-function-declaration"
+  ] super.libxml-sax;
 
   # There are numerical tests on random data, that may fail occasionally
   lapack = dontCheck super.lapack;
@@ -301,6 +350,16 @@ self: super: {
   ghc-heap-view = disableLibraryProfiling super.ghc-heap-view;
   ghc-datasize = disableLibraryProfiling super.ghc-datasize;
   ghc-vis = disableLibraryProfiling super.ghc-vis;
+
+  # Fix 32bit struct being used for 64bit syscall on 32bit platforms
+  # https://github.com/haskellari/lukko/issues/15
+  lukko = appendPatches [
+    (fetchpatch {
+      name = "lukko-ofd-locking-32bit.patch";
+      url = "https://github.com/haskellari/lukko/pull/32/commits/4e69ffad996c3771f50017b97375af249dd17c85.patch";
+      sha256 = "0n8vig48irjz0jckc20dzc23k16fl5hznrc0a81y02ms72msfwi1";
+    })
+  ] super.lukko;
 
   # Fixes compilation for basement on i686 for GHC >= 9.4
   # https://github.com/haskell-foundation/foundation/pull/573
@@ -1943,6 +2002,24 @@ self: super: {
       )
     ];
 
+  # Pandoc 3.5 improves the quality of PDF rendering in Quarto >=1.6.30.
+  # https://github.com/NixOS/nixpkgs/pull/349683
+  pandoc-cli_3_5 = super.pandoc-cli_3_5.overrideScope (
+    self: super: {
+      doclayout = self.doclayout_0_5;
+      hslua-module-doclayout = self.hslua-module-doclayout_1_2_0;
+      lpeg = self.lpeg_1_1_0;
+      pandoc = self.pandoc_3_5;
+      pandoc-lua-engine = self.pandoc-lua-engine_0_3_3;
+      pandoc-server = self.pandoc-server_0_1_0_9;
+      texmath = self.texmath_0_12_8_11;
+      tls = self.tls_2_0_6;
+      toml-parser = self.toml-parser_2_0_1_0;
+      typst = self.typst_0_6;
+      typst-symbols = self.typst-symbols_0_1_6;
+    }
+  );
+
   # 2020-12-06: Restrictive upper bounds w.r.t. pandoc-types (https://github.com/owickstrom/pandoc-include-code/issues/27)
   pandoc-include-code = doJailbreak super.pandoc-include-code;
 
@@ -2578,9 +2655,36 @@ self: super: {
     testTarget = "tests";
   }) super.conduit-aeson;
 
-  # Upper bounds are too strict:
-  # https://github.com/velveteer/hermes/pull/22
-  hermes-json = doJailbreak super.hermes-json;
+  hermes-json = overrideCabal (drv: {
+    # Upper bounds are too strict:
+    # https://github.com/velveteer/hermes/pull/22
+    jailbreak = true;
+
+    # vendored simdjson breaks with clang-19. apply patches that work with
+    # a more recent simdjson so we can un-vendor it
+    patches = drv.patches or [] ++ [
+      (fetchpatch {
+        url = "https://github.com/velveteer/hermes/commit/6fd9904d93a5c001aadb27c114345a6958904d71.patch";
+        hash = "sha256-Pv09XP0/VjUiAFp237Adj06PIZU21mQRh7guTlKksvA=";
+        excludes = [
+          ".github/*"
+          "hermes-bench/*"
+        ];
+      })
+      (fetchpatch {
+        url = "https://github.com/velveteer/hermes/commit/ca8dddbf52f9d7788460a056fefeb241bcd09190.patch";
+        hash = "sha256-tDDGS0QZ3YWe7+SP09wnxx6lIWL986ce5Zhqr7F2sBk=";
+        excludes = [
+          "README.md"
+          ".github/*"
+          "hermes-bench/*"
+        ];
+      })
+    ];
+    postPatch = drv.postPatch or "" + ''
+      ln -fs ${pkgs.simdjson.src} simdjson
+    '';
+  }) super.hermes-json;
 
   # Disabling doctests.
   regex-tdfa = overrideCabal {
@@ -2891,12 +2995,6 @@ self: super: {
 
   # 2024-03-17: broken
   vaultenv = dontDistribute super.vaultenv;
-
-  # Support base16 1.0
-  nix-serve-ng = appendPatch (fetchpatch {
-    url = "https://github.com/aristanetworks/nix-serve-ng/commit/4d9eacfcf753acbcfa0f513bec725e9017076270.patch";
-    hash = "sha256-zugyUpEq/iVkxghrvguL95+lJDEpE8MLvZivken0p24=";
-  }) super.nix-serve-ng;
 
   # 2024-01-24: support optparse-applicative 0.18
   niv = appendPatches [

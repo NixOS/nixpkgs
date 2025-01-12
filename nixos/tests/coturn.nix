@@ -1,22 +1,23 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
-  name = "coturn";
-  nodes = {
-    default = {
-      services.coturn.enable = true;
-    };
-    secretsfile = {
-      boot.postBootCommands = ''
-        echo "some-very-secret-string" > /run/coturn-secret
-      '';
-      services.coturn = {
-        enable = true;
-        static-auth-secret-file = "/run/coturn-secret";
+import ./make-test-python.nix (
+  { pkgs, ... }:
+  {
+    name = "coturn";
+    nodes = {
+      default = {
+        services.coturn.enable = true;
+      };
+      secretsfile = {
+        boot.postBootCommands = ''
+          echo "some-very-secret-string" > /run/coturn-secret
+        '';
+        services.coturn = {
+          enable = true;
+          static-auth-secret-file = "/run/coturn-secret";
+        };
       };
     };
-  };
 
-  testScript =
-    ''
+    testScript = ''
       start_all()
 
       with subtest("by default works without configuration"):
@@ -33,4 +34,5 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
       default.log(default.execute("systemd-analyze security coturn.service | grep -v '✓'")[1])
     '';
-})
+  }
+)

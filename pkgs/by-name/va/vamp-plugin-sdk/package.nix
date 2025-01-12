@@ -1,7 +1,13 @@
 # set VAMP_PATH ?
 # plugins availible on sourceforge and http://www.vamp-plugins.org/download.html (various licenses)
 
-{ lib, stdenv, fetchFromGitHub, pkg-config, libsndfile }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  libsndfile,
+}:
 
 stdenv.mkDerivation rec {
   pname = "vamp-plugin-sdk";

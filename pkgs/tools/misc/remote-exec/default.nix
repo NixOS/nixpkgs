@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchpatch
-, fetchFromGitHub
-, buildPythonApplication
-, click
-, pydantic
-, toml
-, watchdog
-, pytestCheckHook
-, pytest-cov-stub
-, rsync
+{
+  lib,
+  stdenv,
+  fetchpatch,
+  fetchFromGitHub,
+  buildPythonApplication,
+  click,
+  pydantic,
+  toml,
+  watchdog,
+  pytestCheckHook,
+  pytest-cov-stub,
+  rsync,
 }:
 
 buildPythonApplication rec {
@@ -19,7 +20,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "remote-cli";
     repo = "remote";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-rsboHJLOHXnpXtsVsvsfKsav8mSbloaq2lzZnU2pw6c=";
   };
 

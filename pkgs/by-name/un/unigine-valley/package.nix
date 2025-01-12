@@ -1,24 +1,25 @@
-{ lib
-, stdenv
-, fetchurl
+{
+  lib,
+  stdenv,
+  fetchurl,
 
   # Build-time dependencies
-, makeWrapper
-, file
-, makeDesktopItem
-, imagemagick
-, copyDesktopItems
+  makeWrapper,
+  file,
+  makeDesktopItem,
+  imagemagick,
+  copyDesktopItems,
 
   # Runtime dependencies
-, fontconfig
-, freetype
-, libX11
-, libXext
-, libXinerama
-, libXrandr
-, libXrender
-, libglvnd
-, openal
+  fontconfig,
+  freetype,
+  libX11,
+  libXext,
+  libXinerama,
+  libXrandr,
+  libXrender,
+  libglvnd,
+  openal,
 }:
 
 let
@@ -45,7 +46,12 @@ stdenv.mkDerivation rec {
   sourceRoot = "Unigine_Valley-${version}";
   instPath = "lib/unigine/valley";
 
-  nativeBuildInputs = [ file makeWrapper imagemagick copyDesktopItems ];
+  nativeBuildInputs = [
+    file
+    makeWrapper
+    imagemagick
+    copyDesktopItems
+  ];
 
   libPath = lib.makeLibraryPath [
     stdenv.cc.cc # libstdc++.so.6
@@ -131,8 +137,10 @@ stdenv.mkDerivation rec {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree; # see also: $out/$instPath/documentation/License.pdf
     maintainers = [ ];
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+    ];
     mainProgram = "valley";
   };
 }
-

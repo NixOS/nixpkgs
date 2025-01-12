@@ -1,30 +1,39 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pcre2
-, sqlite
-, ncurses
-, readline
-, zlib
-, bzip2
-, autoconf
-, automake
-, curl
-, buildPackages
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pcre2,
+  sqlite,
+  ncurses,
+  readline,
+  zlib,
+  bzip2,
+  autoconf,
+  automake,
+  curl,
+  buildPackages,
+  re2c,
+  gpm,
+  libarchive,
+  nix-update-script,
+  cargo,
+  rustPlatform,
+  rustc,
 }:
 
 stdenv.mkDerivation rec {
   pname = "lnav";
-  version = "0.12.2";
+  version = "0.12.3";
 
   src = fetchFromGitHub {
     owner = "tstack";
     repo = "lnav";
     rev = "v${version}";
-    sha256 = "sha256-grEW3J50osKJzulNQFN7Gir5+wk1qFPc/YaT+EZMAqs=";
+    sha256 = "sha256-m0r7LAo9pYFpS+oimVCNCipojxPzMMsLLjhjkitEwow=";
   };
 
   enableParallelBuilding = true;
+  separateDebugInfo = true;
 
   strictDeps = true;
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -33,19 +42,37 @@ stdenv.mkDerivation rec {
     automake
     zlib
     curl.dev
+    re2c
+    cargo
+    rustPlatform.cargoSetupHook
+    rustc
   ];
-  buildInputs = [
-    bzip2
-    ncurses
-    pcre2
-    readline
-    sqlite
-    curl
-  ];
+  buildInputs =
+    [
+      bzip2
+      ncurses
+      pcre2
+      readline
+      sqlite
+      curl
+      libarchive
+    ]
+    ++ lib.optionals (!stdenv.isDarwin) [
+      gpm
+    ];
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    src = "${src}/src/third-party/prqlc-c";
+    hash = "sha256-jfmr6EuNW2mEHTEVHn6YnBDMzKxKI097vEFHXC4NT2Y=";
+  };
+
+  cargoRoot = "src/third-party/prqlc-c";
 
   preConfigure = ''
     ./autogen.sh
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://github.com/tstack/lnav";
@@ -61,7 +88,11 @@ stdenv.mkDerivation rec {
     '';
     downloadPage = "https://github.com/tstack/lnav/releases";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ dochang ];
+    maintainers = with maintainers; [
+      dochang
+      symphorien
+      pcasaretto
+    ];
     platforms = platforms.unix;
     mainProgram = "lnav";
   };

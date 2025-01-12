@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -11,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "volatilityfoundation";
     repo = "volatility3";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-XMoVfT1Wd8r684y4crTOjW9GklSTkivOGv1Ii10KzII=";
   };
 

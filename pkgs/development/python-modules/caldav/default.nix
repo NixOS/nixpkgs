@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-caldav";
     repo = "caldav";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-rixhEIcl37ZIiYFOnJY0Ww75xZy3o/436JcgLmoOGi0=";
   };
 

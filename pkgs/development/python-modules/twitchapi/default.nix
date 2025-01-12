@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "twitchapi";
-  version = "4.3.1";
+  version = "4.4.0";
 
   disabled = pythonOlder "3.7";
 
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Teekeks";
     repo = "pyTwitchAPI";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-pXbrI4WbId6nYbDSpF9cYnQBOkbNGvzW6/opCztZ1ck=";
+    tag = "v${version}";
+    hash = "sha256-yN7KsiPnhGSm8wj44zn1TzGhRDIMflkKiRnBlVT5i2o=";
   };
 
   postPatch = ''

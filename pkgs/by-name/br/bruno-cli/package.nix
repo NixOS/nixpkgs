@@ -1,11 +1,9 @@
 {
   lib,
-  stdenv,
   buildNpmPackage,
   bruno,
   pkg-config,
   pango,
-  apple-sdk_11,
   testers,
   bruno-cli,
 }:
@@ -28,14 +26,9 @@ buildNpmPackage {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      pango
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # fix for: https://github.com/NixOS/nixpkgs/issues/272156
-      apple-sdk_11
-    ];
+  buildInputs = [
+    pango
+  ];
 
   ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
 

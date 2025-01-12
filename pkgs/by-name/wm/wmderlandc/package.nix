@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libX11, xorgproto }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libX11,
+  xorgproto,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wmderlandc";

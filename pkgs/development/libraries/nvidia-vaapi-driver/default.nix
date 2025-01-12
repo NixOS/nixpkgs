@@ -1,15 +1,16 @@
-{ stdenv
-, fetchFromGitHub
-, lib
-, meson
-, ninja
-, pkg-config
-, libdrm
-, libGL
-, gst_all_1
-, nv-codec-headers-11
-, libva
-, addDriverRunpath
+{
+  stdenv,
+  fetchFromGitHub,
+  lib,
+  meson,
+  ninja,
+  pkg-config,
+  libdrm,
+  libGL,
+  gst_all_1,
+  nv-codec-headers-11,
+  libva,
+  addDriverRunpath,
 }:
 
 stdenv.mkDerivation rec {
@@ -47,11 +48,11 @@ stdenv.mkDerivation rec {
     addDriverRunpath "$out/lib/dri/nvidia_drv_video.so"
   '';
 
-  meta = with lib;{
+  meta = with lib; {
     homepage = "https://github.com/elFarto/nvidia-vaapi-driver";
     description = "VA-API implemention using NVIDIA's NVDEC";
     changelog = "https://github.com/elFarto/nvidia-vaapi-driver/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers;[ nickcao ];
+    maintainers = with maintainers; [ nickcao ];
   };
 }

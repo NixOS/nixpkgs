@@ -1,5 +1,4 @@
 {
-  stdenv,
   lib,
   callPackage,
   fetchgit,
@@ -15,16 +14,18 @@
   version,
   hashes,
   url,
+  hostPlatform,
+  targetPlatform,
+  buildPlatform,
 }@pkgs:
 let
-  target-constants = callPackage ./constants.nix { platform = stdenv.targetPlatform; };
-  build-constants = callPackage ./constants.nix { platform = stdenv.buildPlatform; };
-  tools = pkgs.tools or (callPackage ./tools.nix { });
+  target-constants = callPackage ./constants.nix { platform = targetPlatform; };
+  build-constants = callPackage ./constants.nix { platform = buildPlatform; };
+  tools = pkgs.tools or (callPackage ./tools.nix { inherit hostPlatform buildPlatform; });
 
   boolOption = value: if value then "True" else "False";
 in
-runCommand
-  "flutter-engine-source-${version}-${stdenv.buildPlatform.system}-${stdenv.targetPlatform.system}"
+runCommand "flutter-engine-source-${version}-${buildPlatform.system}-${targetPlatform.system}"
   {
     pname = "flutter-engine-source";
     inherit version;
@@ -52,7 +53,7 @@ runCommand
         "custom_vars": {
           "download_fuchsia_deps": False,
           "download_android_deps": False,
-          "download_linux_deps": ${boolOption stdenv.targetPlatform.isLinux},
+          "download_linux_deps": ${boolOption targetPlatform.isLinux},
           "setup_githooks": False,
           "download_esbuild": False,
           "download_dart_sdk": False,
@@ -82,8 +83,8 @@ runCommand
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
     outputHash =
-      (hashes."${stdenv.buildPlatform.system}" or { })."${stdenv.targetPlatform.system}"
-        or (throw "Hash not set for ${stdenv.targetPlatform.system} on ${stdenv.buildPlatform.system}");
+      (hashes."${buildPlatform.system}" or { })."${targetPlatform.system}"
+        or (throw "Hash not set for ${targetPlatform.system} on ${buildPlatform.system}");
   }
   ''
     source ${../../../../build-support/fetchgit/deterministic-git}

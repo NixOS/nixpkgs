@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchpatch, fetchFromGitHub, cmake, fftw, catch2_3 }:
+{
+  lib,
+  stdenv,
+  fetchpatch,
+  fetchFromGitHub,
+  cmake,
+  fftw,
+  catch2_3,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libkeyfinder";

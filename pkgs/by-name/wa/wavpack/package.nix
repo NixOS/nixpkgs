@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, gettext, autoreconfHook, libiconv }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gettext,
+  autoreconfHook,
+  libiconv,
+}:
 
 stdenv.mkDerivation rec {
   pname = "wavpack";
@@ -19,14 +26,19 @@ stdenv.mkDerivation rec {
     hash = "sha256-vFZxg1mVqE7Kp38vEGA5V8m2tjqhssFsUZURixhlfk0=";
   };
 
-  outputs = [ "out" "dev" "doc" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+    "man"
+  ];
 
   meta = with lib; {
     description = "Hybrid audio compression format";
-    homepage    = "https://www.wavpack.com/";
-    changelog   = "https://github.com/dbry/WavPack/releases/tag/${version}";
-    license     = licenses.bsd3;
-    platforms   = platforms.unix;
+    homepage = "https://www.wavpack.com/";
+    changelog = "https://github.com/dbry/WavPack/releases/tag/${version}";
+    license = licenses.bsd3;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ codyopel ];
   };
 }

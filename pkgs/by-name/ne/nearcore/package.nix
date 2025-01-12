@@ -1,6 +1,11 @@
-{ rustPlatform, lib, fetchFromGitHub
-, zlib, openssl
-, pkg-config, protobuf
+{
+  rustPlatform,
+  lib,
+  fetchFromGitHub,
+  zlib,
+  openssl,
+  pkg-config,
+  protobuf,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "nearcore";
@@ -11,7 +16,7 @@ rustPlatform.buildRustPackage rec {
     owner = "near";
     repo = "nearcore";
     # there is also a branch for this version number, so we need to be explicit
-    rev = "refs/tags/${version}";
+    tag = version;
 
     sha256 = "sha256-VjvHCiWjsx5Y7xxqck/O9gSNrL8mxCTosLwLqC85ywY=";
   };

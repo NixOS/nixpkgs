@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchurl
-, glib
-, jre
-, unzip
-, makeWrapper
-, makeDesktopItem
-, copyDesktopItems
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchurl,
+  glib,
+  jre,
+  unzip,
+  makeWrapper,
+  makeDesktopItem,
+  copyDesktopItems,
+  wrapGAppsHook3,
 }:
 
 let
@@ -15,7 +16,8 @@ let
     url = "https://imagej.net/media/icons/imagej.png";
     sha256 = "sha256-nU2nWI1wxZB/xlOKsZzdUjj+qiCTjO6GwEKYgZ5Risg=";
   };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "imagej";
   version = "153";
 
@@ -23,7 +25,12 @@ in stdenv.mkDerivation rec {
     url = "https://wsr.imagej.net/distros/cross-platform/ij${version}.zip";
     sha256 = "sha256-MGuUdUDuW3s/yGC68rHr6xxzmYScUjdXRawDpc1UQqw=";
   };
-  nativeBuildInputs = [ copyDesktopItems makeWrapper unzip wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    makeWrapper
+    unzip
+    wrapGAppsHook3
+  ];
   buildInputs = [ glib ];
   dontWrapGApps = true;
 
@@ -32,7 +39,11 @@ in stdenv.mkDerivation rec {
       name = "ImageJ";
       desktopName = "ImageJ";
       icon = "imagej";
-      categories = [ "Science" "Utility" "Graphics" ];
+      categories = [
+        "Science"
+        "Utility"
+        "Graphics"
+      ];
       exec = "imagej";
     })
   ];

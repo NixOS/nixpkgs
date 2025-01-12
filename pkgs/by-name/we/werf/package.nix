@@ -32,7 +32,7 @@ buildGoModule rec {
     lib.optionals stdenv.hostPlatform.isLinux [ btrfs-progs ]
     ++ lib.optionals stdenv.hostPlatform.isGnu [ stdenv.cc.libc.static ];
 
-  CGO_ENABLED = if stdenv.hostPlatform.isLinux then 1 else 0;
+  env.CGO_ENABLED = if stdenv.hostPlatform.isLinux then 1 else 0;
 
   ldflags =
     [
@@ -40,7 +40,7 @@ buildGoModule rec {
       "-w"
       "-X github.com/werf/werf/v2/pkg/werf.Version=v${version}"
     ]
-    ++ lib.optionals (CGO_ENABLED == 1) [
+    ++ lib.optionals (env.CGO_ENABLED == 1) [
       "-extldflags=-static"
       "-linkmode external"
     ];
@@ -53,7 +53,7 @@ buildGoModule rec {
       "dfrunsecurity"
       "dfssh"
     ]
-    ++ lib.optionals (CGO_ENABLED == 1) [
+    ++ lib.optionals (env.CGO_ENABLED == 1) [
       "cni"
       "exclude_graphdriver_devicemapper"
       "netgo"
@@ -73,7 +73,7 @@ buildGoModule rec {
         pkg/true_git/*test.go \
         test/e2e
     ''
-    + lib.optionalString (CGO_ENABLED == 0) ''
+    + lib.optionalString (env.CGO_ENABLED == 0) ''
       # A workaround for osusergo.
       export USER=nixbld
     '';

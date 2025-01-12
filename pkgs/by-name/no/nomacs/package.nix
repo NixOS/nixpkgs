@@ -1,55 +1,79 @@
-{ lib
-, cmake
-, exiv2
-, fetchFromGitHub
-, libraw
-, libsForQt5
-, libtiff
-, opencv4
-, pkg-config
-, stdenv
+{
+  lib,
+  cmake,
+  exiv2,
+  fetchFromGitHub,
+  libraw,
+  libsForQt5,
+  kdePackages,
+  libtiff,
+  opencv4,
+  pkg-config,
+  stdenv,
+  qtVersion ? 5,
 }:
-
+let
+  myQt = if qtVersion == 5 then libsForQt5 else kdePackages;
+  inherit (myQt) wrapQtAppsHook;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nomacs";
   version = "3.19.1";
+  hash = "sha256-NRwZ/ShJaLCMFv7QdfRoJY5zQFo18cAVWGRpS3ap3Rw=";
 
   src = fetchFromGitHub {
     owner = "nomacs";
     repo = "nomacs";
     rev = finalAttrs.version;
     fetchSubmodules = false; # We'll use our own
-    hash = "sha256-NRwZ/ShJaLCMFv7QdfRoJY5zQFo18cAVWGRpS3ap3Rw=";
+    inherit (finalAttrs) hash;
   };
 
-  outputs = [ "out" ]
+  plugins = fetchFromGitHub {
+    owner = "novomesk";
+    repo = "nomacs-plugins";
+    rev = "40d0f7089b7f108077dac5dede52e8a303b243b3";
+    hash = "sha256-7+JMmHaTvWjVTkLwXGtQHnoaC/3vK7haCzNvVIZ9F/g=";
+  };
+
+  outputs =
+    [ "out" ]
     # man pages are not installed on Darwin, see cmake/{Mac,Unix}BuildTarget.cmake
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ "man" ];
 
   sourceRoot = "${finalAttrs.src.name}/ImageLounge";
 
+  postUnpack = ''
+    rm -rf $sourceRoot/plugins
+    mkdir $sourceRoot/plugins
+    cp -r ${finalAttrs.plugins}/* $sourceRoot/plugins/
+    chmod -R +w $sourceRoot/plugins
+  '';
+
   nativeBuildInputs = [
     cmake
-    libsForQt5.wrapQtAppsHook
+    wrapQtAppsHook
     pkg-config
   ];
 
-  buildInputs = [
-    exiv2
-    libraw
-    libtiff
-    # Once python stops relying on `propagatedBuildInputs` (https://github.com/NixOS/nixpkgs/issues/272178), deprecate `cxxdev` and switch to `dev`;
-    # note `dev` is selected by `mkDerivation` automatically, so one should omit `getOutput "dev"`;
-    # see: https://github.com/NixOS/nixpkgs/pull/314186#issuecomment-2129974277
-    (lib.getOutput "cxxdev" opencv4)
-  ] ++ (with libsForQt5; [
-    kimageformats
-    qtbase
-    qtimageformats
-    qtsvg
-    qttools
-    quazip
-  ]);
+  buildInputs =
+    [
+      exiv2
+      libraw
+      libtiff
+      # Once python stops relying on `propagatedBuildInputs` (https://github.com/NixOS/nixpkgs/issues/272178), deprecate `cxxdev` and switch to `dev`;
+      # note `dev` is selected by `mkDerivation` automatically, so one should omit `getOutput "dev"`;
+      # see: https://github.com/NixOS/nixpkgs/pull/314186#issuecomment-2129974277
+      (lib.getOutput "cxxdev" opencv4)
+    ]
+    ++ (with myQt; [
+      kimageformats
+      qtbase
+      qtimageformats
+      qtsvg
+      qttools
+      quazip
+    ]);
 
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_OPENCV" true)
@@ -64,6 +88,13 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/{Applications,lib}
     mv $out/nomacs.app $out/Applications/nomacs.app
     mv $out/libnomacsCore.dylib $out/lib/libnomacsCore.dylib
+  '';
+  # FIXME:
+  # why can't we have nomacs look in the "standard" plugin directory???
+  # None of the wrap stuff worked...
+  # Let's just instead move the plugin dir brute force
+  postFixup = ''
+    mv $out/lib/nomacs-plugins $out/bin/plugins
   '';
 
   meta = {
@@ -88,7 +119,10 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/nomacs/nomacs/releases/tag/${finalAttrs.src.rev}";
     license = with lib.licenses; [ gpl3Plus ];
     mainProgram = "nomacs";
-    maintainers = with lib.maintainers; [ AndersonTorres mindavi ];
-    inherit (libsForQt5.qtbase.meta) platforms;
+    maintainers = with lib.maintainers; [
+      mindavi
+      ppenguin
+    ];
+    inherit (myQt.qtbase.meta) platforms;
   };
 })

@@ -1,29 +1,33 @@
-{ lib
-, stdenv
-, fetchurl
-, substituteAll
-, pkg-config
-, glib
-, shadow
-, gobject-introspection
-, polkit
-, systemd
-, coreutils
-, meson
-, mesonEmulatorHook
-, dbus
-, ninja
-, python3
-, vala
-, gettext
-, libxcrypt
+{
+  lib,
+  stdenv,
+  fetchurl,
+  substituteAll,
+  pkg-config,
+  glib,
+  shadow,
+  gobject-introspection,
+  polkit,
+  systemd,
+  coreutils,
+  meson,
+  mesonEmulatorHook,
+  dbus,
+  ninja,
+  python3,
+  vala,
+  gettext,
+  libxcrypt,
 }:
 
 stdenv.mkDerivation rec {
   pname = "accountsservice";
   version = "23.13.9";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/accountsservice/accountsservice-${version}.tar.xz";
@@ -52,18 +56,20 @@ stdenv.mkDerivation rec {
     ./get-dm-type-from-config.patch
   ];
 
-  nativeBuildInputs = [
-    gettext
-    gobject-introspection
-    meson
-    ninja
-    pkg-config
-    python3
-    vala
-  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-    #  meson.build:88:2: ERROR: Can not run test applications in this cross environment.
-    mesonEmulatorHook
-  ];
+  nativeBuildInputs =
+    [
+      gettext
+      gobject-introspection
+      meson
+      ninja
+      pkg-config
+      python3
+      vala
+    ]
+    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+      #  meson.build:88:2: ERROR: Can not run test applications in this cross environment.
+      mesonEmulatorHook
+    ];
 
   buildInputs = [
     dbus
@@ -74,13 +80,15 @@ stdenv.mkDerivation rec {
     libxcrypt
   ];
 
-  env = lib.optionalAttrs (stdenv.cc.isGNU && (lib.versionAtLeast (lib.getVersion stdenv.cc.cc) "14")) {
-    NIX_CFLAGS_COMPILE = toString [
-      "-Wno-error=deprecated-declarations"
-      "-Wno-error=implicit-function-declaration"
-      "-Wno-error=return-mismatch"
-    ];
-  };
+  env =
+    lib.optionalAttrs (stdenv.cc.isGNU && (lib.versionAtLeast (lib.getVersion stdenv.cc.cc) "14"))
+      {
+        NIX_CFLAGS_COMPILE = toString [
+          "-Wno-error=deprecated-declarations"
+          "-Wno-error=implicit-function-declaration"
+          "-Wno-error=return-mismatch"
+        ];
+      };
 
   mesonFlags = [
     "-Dadmin_group=wheel"

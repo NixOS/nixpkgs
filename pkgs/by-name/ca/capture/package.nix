@@ -1,4 +1,11 @@
-{ lib, stdenv, slop, ffmpeg, fetchFromGitHub, makeWrapper}:
+{
+  lib,
+  stdenv,
+  slop,
+  ffmpeg,
+  fetchFromGitHub,
+  makeWrapper,
+}:
 
 stdenv.mkDerivation {
   pname = "capture-unstable";
@@ -7,7 +14,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "buhman";
     repo = "capture";
-    rev  = "80dd9e7195aad5c132badef610f19509f3935b24";
+    rev = "80dd9e7195aad5c132badef610f19509f3935b24";
     sha256 = "0zyyg4mvrny7cc2xgvfip97b6yc75ka5ni39rwls93971jbk83d6";
   };
 
@@ -18,7 +25,12 @@ stdenv.mkDerivation {
 
     patchShebangs $out/bin/capture
     wrapProgram $out/bin/capture \
-      --prefix PATH : '${lib.makeBinPath [ slop ffmpeg ]}'
+      --prefix PATH : '${
+        lib.makeBinPath [
+          slop
+          ffmpeg
+        ]
+      }'
   '';
 
   meta = with lib; {

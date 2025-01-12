@@ -1,27 +1,25 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
-, libiconv
-, Security
-, iputils
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  iputils,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "gping";
-  version = "1.17.3";
+  version = "1.18.0";
 
   src = fetchFromGitHub {
     owner = "orf";
     repo = "gping";
     rev = "gping-v${version}";
-    hash = "sha256-DJ+5WoizFF3K9drFc955bDMXnlW+okYrZos/+dRVtjw=";
+    hash = "sha256-JZMgbCwEGfngCQVmuZX1tu3he/f/TBLitcP/Ea3S6yI=";
   };
 
-  cargoHash = "sha256-pQ95sS2dGVzZUOyuUpJPamW7RLiUTGu9KgpWLg4wn/w=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv Security ];
+  cargoHash = "sha256-I9rcC2sotrdHMCCiDgfycKRnJxZLuA5OLZPZC0zFiLc=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -32,9 +30,10 @@ rustPlatform.buildRustPackage rec {
   '';
 
   doInstallCheck = true;
-  installCheckPhase = ''
-    $out/bin/gping --version | grep "${version}"
-  '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  versionCheckProgramArg = [ "--version" ];
 
   meta = with lib; {
     description = "Ping, but with a graph";

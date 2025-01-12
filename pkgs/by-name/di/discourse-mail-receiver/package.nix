@@ -1,4 +1,11 @@
-{ stdenv, lib, fetchFromGitHub, ruby, makeWrapper, replace }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  ruby,
+  makeWrapper,
+  replace,
+}:
 
 stdenv.mkDerivation rec {
   pname = "discourse-mail-receiver";
@@ -11,7 +18,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ob4Hb88odlFf5vSC9qhikhJowo4C5LksVmMuJRMNoI4=";
   };
 
-  nativeBuildInputs = [ replace makeWrapper ];
+  nativeBuildInputs = [
+    replace
+    makeWrapper
+  ];
   buildInputs = [ ruby ];
 
   dontBuild = true;

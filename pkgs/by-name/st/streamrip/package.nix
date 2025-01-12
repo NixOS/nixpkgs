@@ -1,8 +1,9 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
 
-, ffmpeg
+  ffmpeg,
 }:
 
 python3Packages.buildPythonApplication rec {

@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, makeWrapper, SDL, SDL_image }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  SDL,
+  SDL_image,
+}:
 
 stdenv.mkDerivation rec {
   pname = "airstrike-pre";
@@ -10,7 +17,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ SDL SDL_image ];
+  buildInputs = [
+    SDL
+    SDL_image
+  ];
 
   NIX_LDFLAGS = "-lm";
 

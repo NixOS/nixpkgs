@@ -1,13 +1,14 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, qtbase
-, qttools
-, qmake
-, qtserialbus
-, qtserialport
-, qtdeclarative
-, wrapQtAppsHook
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  qtbase,
+  qttools,
+  qmake,
+  qtserialbus,
+  qtserialport,
+  qtdeclarative,
+  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,9 +23,18 @@ stdenv.mkDerivation rec {
     hash = "sha256-duITY6s/uadeBCFuG42JbLCaq7yaYv1qB8Q3GA8UJ0A=";
   };
 
-  buildInputs = [ qtbase qttools qtserialbus qtserialport qtdeclarative ];
+  buildInputs = [
+    qtbase
+    qttools
+    qtserialbus
+    qtserialport
+    qtdeclarative
+  ];
 
-  nativeBuildInputs = [ qmake wrapQtAppsHook ];
+  nativeBuildInputs = [
+    qmake
+    wrapQtAppsHook
+  ];
 
   meta = with lib; {
     description = "QT based cross platform canbus tool";

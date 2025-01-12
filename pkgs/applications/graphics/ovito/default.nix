@@ -26,14 +26,16 @@
 
 stdenv.mkDerivation rec {
   pname = "ovito";
-  version = "3.11.0";
+  version = "3.11.1";
 
   src = fetchFromGitLab {
     owner = "stuko";
     repo = "ovito";
     rev = "v${version}";
-    hash = "sha256-egiA6z1e8ZS7i4CIVjsCKJP1wQSRpmSKitoVTszu0Mc=";
+    hash = "sha256-ulzcsFAiZDg8nABQXNB2/MS7lZdK3czGHLKgKDWS15E=";
+    fetchSubmodules = true;
   };
+  patches = [ ./zstd.patch ];
 
   nativeBuildInputs = [
     cmake

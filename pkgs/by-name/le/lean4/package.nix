@@ -1,22 +1,25 @@
-{ lib
-, stdenv
-, cmake
-, fetchFromGitHub
-, git
-, gmp
-, perl
-, testers
+{
+  lib,
+  stdenv,
+  cmake,
+  fetchFromGitHub,
+  git,
+  gmp,
+  cadical,
+  libuv,
+  perl,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lean4";
-  version = "4.10.0";
+  version = "4.12.0";
 
   src = fetchFromGitHub {
     owner = "leanprover";
     repo = "lean4";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-lNWr84aeVpI/p/oxkNAUlUMUROGGzHAkb2D9q8BzHeA=";
+    hash = "sha256-O2Egyh2D0TfQWzQKfHUeAh7qAjMfeLVwXwGUw5QqcvE=";
   };
 
   postPatch = ''
@@ -34,10 +37,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    cadical
   ];
 
   buildInputs = [
     gmp
+    libuv
   ];
 
   nativeCheckInputs = [
@@ -63,7 +68,10 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/leanprover/lean4/blob/${finalAttrs.src.rev}/RELEASES.md";
     license = licenses.asl20;
     platforms = platforms.all;
-    maintainers = with maintainers; [ danielbritten jthulhu ];
+    maintainers = with maintainers; [
+      danielbritten
+      jthulhu
+    ];
     mainProgram = "lean";
   };
 })

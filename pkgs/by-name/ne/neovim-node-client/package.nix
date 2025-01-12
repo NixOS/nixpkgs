@@ -12,7 +12,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "neovim";
     repo = "node-client";
-    rev = "02a5fdef8e3ec2812d295981db38dbccf82e0728";
+    tag = "v${version}";
     hash = "sha256-0vPw2hCGUDepSpF1gp/lI71EgwGsCSnw7ePP7ElHsTQ=";
   };
 
@@ -29,7 +29,7 @@ buildNpmPackage rec {
   '';
 
   meta = {
-    mainProgram = "node-client";
+    mainProgram = "neovim-node-host";
     description = "Nvim msgpack API client and remote plugin provider";
     homepage = "https://github.com/neovim/node-client";
     changelog = "https://github.com/neovim/node-client/releases/tag/v${version}";

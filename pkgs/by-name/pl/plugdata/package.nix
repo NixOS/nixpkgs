@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, ensureNewerSourcesForZipFilesHook
-, makeDesktopItem
-, imagemagick
-, cmake
-, pkg-config
-, alsa-lib
-, freetype
-, webkitgtk_4_0
-, zenity
-, curl
-, xorg
-, python3
-, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ensureNewerSourcesForZipFilesHook,
+  makeDesktopItem,
+  imagemagick,
+  cmake,
+  pkg-config,
+  alsa-lib,
+  freetype,
+  webkitgtk_4_0,
+  zenity,
+  curl,
+  xorg,
+  python3,
+  makeWrapper,
 }:
 
 let
@@ -25,7 +26,10 @@ let
     icon = "plugdata_logo.png";
     comment = "Pure Data as a plugin, with a new GUI";
     type = "Application";
-    categories = [ "AudioVideo" "Music" ];
+    categories = [
+      "AudioVideo"
+      "Music"
+    ];
   };
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -61,14 +65,16 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libXrandr
   ];
   # Standard fix for JUCE programs: https://github.com/NixOS/nixpkgs/blob/5014727e62ae7b22fb1afc61d789ca6ad9170435/pkgs/applications/audio/bespokesynth/default.nix#L137
-  env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isLinux "-rpath ${lib.makeLibraryPath ([
-    xorg.libX11
-    xorg.libXrandr
-    xorg.libXinerama
-    xorg.libXext
-    xorg.libXcursor
-    xorg.libXrender
-  ])}";
+  env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isLinux "-rpath ${
+    lib.makeLibraryPath ([
+      xorg.libX11
+      xorg.libXrandr
+      xorg.libXinerama
+      xorg.libXext
+      xorg.libXcursor
+      xorg.libXrender
+    ])
+  }";
   dontPatchELF = true; # needed or nix will try to optimize the binary by removing "useless" rpath
 
   postPatch = ''
@@ -98,18 +104,22 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postInstall = ''
-      # Ensure zenity is available, or it won't be able to open new files.
-      # These X11 libs get dlopen'd, they cause visual bugs when unavailable.
-      wrapProgram $out/bin/plugdata \
-        --prefix PATH : '${lib.makeBinPath [
+    # Ensure zenity is available, or it won't be able to open new files.
+    # These X11 libs get dlopen'd, they cause visual bugs when unavailable.
+    wrapProgram $out/bin/plugdata \
+      --prefix PATH : '${
+        lib.makeBinPath [
           zenity
-        ]}' \
-        --prefix LD_LIBRARY_PATH : '${lib.makeLibraryPath [
-        xorg.libXrandr
-        xorg.libXinerama
-        xorg.libXcursor
-        xorg.libXrender
-      ]}'
+        ]
+      }' \
+      --prefix LD_LIBRARY_PATH : '${
+        lib.makeLibraryPath [
+          xorg.libXrandr
+          xorg.libXinerama
+          xorg.libXcursor
+          xorg.libXrender
+        ]
+      }'
   '';
 
   meta = with lib; {

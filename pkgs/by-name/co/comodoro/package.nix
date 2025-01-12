@@ -1,11 +1,12 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, stdenv
-, installShellFiles
-, installShellCompletions ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
-, installManPages ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
-, withTcp ? true
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  installShellFiles,
+  installShellCompletions ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
+  installManPages ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
+  withTcp ? true,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -26,16 +27,18 @@ rustPlatform.buildRustPackage rec {
   buildNoDefaultFeatures = true;
   buildFeatures = lib.optional withTcp "tcp";
 
-  postInstall = lib.optionalString installManPages ''
-    mkdir -p $out/man
-    $out/bin/comodoro man $out/man
-    installManPage $out/man/*
-  '' + lib.optionalString installShellCompletions ''
-    installShellCompletion --cmd comodoro \
-      --bash <($out/bin/comodoro completion bash) \
-      --fish <($out/bin/comodoro completion fish) \
-      --zsh <($out/bin/comodoro completion zsh)
-  '';
+  postInstall =
+    lib.optionalString installManPages ''
+      mkdir -p $out/man
+      $out/bin/comodoro man $out/man
+      installManPage $out/man/*
+    ''
+    + lib.optionalString installShellCompletions ''
+      installShellCompletion --cmd comodoro \
+        --bash <($out/bin/comodoro completion bash) \
+        --fish <($out/bin/comodoro completion fish) \
+        --zsh <($out/bin/comodoro completion zsh)
+    '';
 
   meta = with lib; {
     description = "CLI to manage your time";

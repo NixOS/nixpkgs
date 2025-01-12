@@ -1,10 +1,23 @@
-{ stdenv, lib, fetchFromGitHub, pkg-config, autoreconfHook
-, curl, apacheHttpd, pcre, apr, aprutil, libxml2
-, luaSupport ? false, lua5, perl
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  autoreconfHook,
+  curl,
+  apacheHttpd,
+  pcre,
+  apr,
+  aprutil,
+  libxml2,
+  luaSupport ? false,
+  lua5,
+  perl,
 }:
 
-let luaValue = if luaSupport then lua5 else "no";
-    optional = lib.optional;
+let
+  luaValue = if luaSupport then lua5 else "no";
+  optional = lib.optional;
 in
 
 stdenv.mkDerivation rec {
@@ -18,9 +31,18 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-hJ8wYeC83dl85bkUXGZKHpHzw9QRgtusj1/+Coxsx0k=";
   };
 
-  nativeBuildInputs = [ pkg-config autoreconfHook ];
-  buildInputs = [  curl apacheHttpd pcre apr aprutil libxml2 ] ++
-    optional luaSupport lua5;
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
+  ];
+  buildInputs = [
+    curl
+    apacheHttpd
+    pcre
+    apr
+    aprutil
+    libxml2
+  ] ++ optional luaSupport lua5;
 
   configureFlags = [
     "--enable-standalone-module"
@@ -34,7 +56,10 @@ stdenv.mkDerivation rec {
     "--with-lua=${luaValue}"
   ];
 
-  outputs = ["out" "nginx"];
+  outputs = [
+    "out"
+    "nginx"
+  ];
   # by default modsecurity's install script copies compiled output to httpd's modules folder
   # this patch removes those lines
   patches = [ ./Makefile.am.patch ];
@@ -51,7 +76,7 @@ stdenv.mkDerivation rec {
     description = "Open source, cross-platform web application firewall (WAF)";
     license = licenses.asl20;
     homepage = "https://github.com/owasp-modsecurity/ModSecurity";
-    maintainers = with maintainers; [offline];
-    platforms   = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with maintainers; [ offline ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

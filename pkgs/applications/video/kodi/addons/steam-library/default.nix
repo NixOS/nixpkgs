@@ -1,4 +1,11 @@
-{ lib, buildKodiAddon, fetchFromGitHub, requests, requests-cache, routing }:
+{
+  lib,
+  buildKodiAddon,
+  fetchFromGitHub,
+  requests,
+  requests-cache,
+  routing,
+}:
 
 buildKodiAddon rec {
   pname = "steam-library";

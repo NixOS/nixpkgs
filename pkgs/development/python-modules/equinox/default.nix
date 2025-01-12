@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -21,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "equinox";
-  version = "0.11.8";
+  version = "0.11.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "patrick-kidger";
     repo = "equinox";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-lZb2NobSELz8kviPd4Z8PPEEaydaEC5Z6eb9pzC7Ki8=";
+    tag = "v${version}";
+    hash = "sha256-xCAk9qac2ZmevUMMRgBokLKuGWyrF4fGpN03li49cR8=";
   };
 
   build-system = [ hatchling ];
@@ -45,6 +46,11 @@ buildPythonPackage rec {
     optax
     pytest-xdist
     pytestCheckHook
+  ];
+
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # SystemError: nanobind::detail::nb_func_error_except(): exception could not be translated!
+    "test_filter"
   ];
 
   pythonImportsCheck = [ "equinox" ];

@@ -120,7 +120,7 @@ buildPythonPackage rec {
     export PLAYWRIGHT_BROWSERS_PATH="${playwright-driver.browsers}"
   '';
 
-  pythonImportCheck = [ "filingcabinet" ];
+  pythonImportsCheck = [ "filingcabinet" ];
 
   meta = {
     description = "Django app that manages documents with pages, annotations and collections";

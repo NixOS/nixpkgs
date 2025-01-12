@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "kiota-serialization-text-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-jPuRfvqO4n5/PjSOS5NMCawaYRhXmrZtfg6LgYFCv7o=";
   };
 

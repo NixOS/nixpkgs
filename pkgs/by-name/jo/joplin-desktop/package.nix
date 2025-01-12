@@ -2,7 +2,7 @@
 
 let
   pname = "joplin-desktop";
-  version = "3.0.15";
+  version = "3.1.24";
 
   inherit (stdenv.hostPlatform) system;
   throwSystem = throw "Unsupported system: ${system}";
@@ -16,9 +16,9 @@ let
   src = fetchurl {
     url = "https://github.com/laurent22/joplin/releases/download/v${version}/Joplin-${version}${suffix}";
     sha256 = {
-      x86_64-linux = "sha256-rNKYihIbdfGZEIGURyty+hS82ftHsqV1YjqM8VYB6RU=";
-      x86_64-darwin = "sha256-s7gZSr/5VOg8bqxGPckK7UxDpvmsNgdhjDg+lxnO/lU=";
-      aarch64-darwin = "sha256-UzAGYIKd5swtl6XNFVTPeg0nqwKKtu0e36+LA0Qiusw=";
+      x86_64-linux = "sha256-ImFB4KwJ/vAHtZUbLAdnIRpd+o2ZaXKy9luw/jnPLSE=";
+      x86_64-darwin = "sha256-Of6VXX40tCis+ou26LtJKOZm/87P3rsTHtnvSDwF8VY=";
+      aarch64-darwin = "sha256-HtHuZQhIkiI8GrhB9nCOTAN1hOs+9POJFRIsRUNikYs=";
     }.${system} or throwSystem;
   };
 
@@ -52,7 +52,7 @@ let
 
     extraInstallCommands = ''
       wrapProgram $out/bin/${pname} \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations}}"
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
       install -Dm444 ${appimageContents}/@joplinapp-desktop.desktop -t $out/share/applications
       install -Dm444 ${appimageContents}/@joplinapp-desktop.png -t $out/share/pixmaps
       substituteInPlace $out/share/applications/@joplinapp-desktop.desktop \
@@ -66,11 +66,19 @@ let
 
     nativeBuildInputs = [ _7zz ];
 
-    sourceRoot = "Joplin.app";
+    unpackPhase = ''
+      runHook preUnpack
+      7zz x -x'!Joplin ${version}/Applications' $src
+      runHook postUnpack
+    '';
+
+    sourceRoot = if stdenv.hostPlatform.isx86_64 then "Joplin ${version}" else ".";
 
     installPhase = ''
-      mkdir -p $out/Applications/Joplin.app
-      cp -R . $out/Applications/Joplin.app
+      runHook preInstall
+      mkdir -p $out/Applications
+      cp -R Joplin.app $out/Applications
+      runHook postInstall
     '';
   };
 in

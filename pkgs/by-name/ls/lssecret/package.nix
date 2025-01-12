@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, pkg-config
-, libsecret
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  pkg-config,
+  libsecret,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +20,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libsecret ];
 
-  makeFlags = ["DESTDIR=$(out)"];
+  makeFlags = [ "DESTDIR=$(out)" ];
 
   meta = {
     description = "Tool to list passwords and other secrets stored using the org.freedesktop.secrets dbus api";

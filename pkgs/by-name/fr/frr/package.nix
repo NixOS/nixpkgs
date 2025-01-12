@@ -33,15 +33,9 @@
 , nettools
 , nixosTests
 
-# FRR's configure.ac gets SNMP options by executing net-snmp-config on the build host
-# This leads to compilation errors when cross compiling.
-# E.g. net-snmp-config for x86_64 does not return the ARM64 paths.
-#
-#   SNMP_LIBS="`${NETSNMP_CONFIG} --agent-libs`"
-#   SNMP_CFLAGS="`${NETSNMP_CONFIG} --base-cflags`"
-, snmpSupport ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
 
-# other general options besides snmp support
+# general options
+, snmpSupport ? true
 , rpkiSupport ? true
 , numMultipath ? 64
 , watchfrrSupport ? true
@@ -80,9 +74,6 @@
 # OSPF options
 , ospfApi ? true
 }:
-
-lib.warnIf (!(stdenv.buildPlatform.canExecute stdenv.hostPlatform))
-  "cannot enable SNMP support due to cross-compilation issues with net-snmp-config"
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "frr";
@@ -194,6 +185,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.strings.enableFeature ospfApi "ospfapi")
     # Cumulus options
     (lib.strings.enableFeature cumulusSupport "cumulus")
+  ] ++ lib.optionals snmpSupport [
+    # Used during build for paths, `dev` has build shebangs so can be run during build.
+    "NETSNMP_CONFIG=${lib.getDev net-snmp}/bin/net-snmp-config"
   ];
 
   postPatch = ''

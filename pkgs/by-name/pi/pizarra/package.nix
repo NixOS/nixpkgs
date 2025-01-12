@@ -1,13 +1,14 @@
-{ lib
-, fetchFromGitLab
-, rustPlatform
-, pkg-config
-, gtk3-x11
-, atk
-, glib
-, librsvg
-, gdk-pixbuf
-, wrapGAppsHook3
+{
+  lib,
+  fetchFromGitLab,
+  rustPlatform,
+  pkg-config,
+  gtk3-x11,
+  atk,
+  glib,
+  librsvg,
+  gdk-pixbuf,
+  wrapGAppsHook3,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,9 +25,18 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-btvMUKADGHlXLmeKF1K9Js44SljZ0MejGId8aDwPhVU=";
 
-  nativeBuildInputs = [ wrapGAppsHook3 pkg-config gdk-pixbuf ];
+  nativeBuildInputs = [
+    wrapGAppsHook3
+    pkg-config
+    gdk-pixbuf
+  ];
 
-  buildInputs = [ gtk3-x11 atk glib librsvg ];
+  buildInputs = [
+    gtk3-x11
+    atk
+    glib
+    librsvg
+  ];
 
   postInstall = ''
     install -Dm444 res/icons/tk.categulario.pizarra.svg $out/share/icons/hicolor/scalable/apps/pizarra.svg

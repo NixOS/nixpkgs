@@ -1,32 +1,37 @@
-{ lib, stdenv, fetchurl, gmp4, ncurses, zlib, clang }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoPatchelfHook,
+  makeWrapper,
+  gmp,
+  ncurses,
+  zlib,
+  readline,
+  testers,
+}:
 
-let
-  libPath = lib.makeLibraryPath
-    [ stdenv.cc.libc
-      stdenv.cc.cc
-      gmp4
-      ncurses
-      zlib
-    ] + ":${lib.getLib stdenv.cc.cc}/lib64";
-
-  url = "https://github.com/GaloisInc/saw-script/releases/download";
-
-  saw-bin =
-    if stdenv.hostPlatform.system == "i686-linux"
-    then fetchurl {
-      url    = url + "/v0.1.1-dev/saw-0.1.1-dev-2015-07-31-CentOS6-32.tar.gz";
-      sha256 = "126iag5nnvndi78c921z7vjrjfwcspn1hlxwwhzmqm4rvbhhr9v9";
-    }
-    else fetchurl {
-      url    = url + "/v0.1.1-dev/saw-0.1.1-dev-2015-07-31-CentOS6-64.tar.gz";
-      sha256 = "07gyf319v6ama6n1aj96403as04bixi8mbisfy7f7va689zklflr";
-    };
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "saw-tools";
-  version = "0.1.1-20150731";
+  version = "1.2";
 
-  src = saw-bin;
+  src = fetchurl {
+    url = "https://github.com/GaloisInc/saw-script/releases/download/v${finalAttrs.version}/saw-${finalAttrs.version}-ubuntu-22.04-X64-with-solvers.tar.gz";
+    hash = "sha256-A99BCiVV5Ep/PL7VSDNYcvr177Q+FKdDrxhFJLW/iU4=";
+  };
+
+  buildInputs = [
+    gmp
+    ncurses
+    readline
+    stdenv.cc.libc
+    zlib
+  ];
+
+  nativeBuildInputs = [
+    autoPatchelfHook
+    makeWrapper
+  ];
 
   installPhase = ''
     mkdir -p $out/lib $out/share
@@ -34,26 +39,20 @@ stdenv.mkDerivation {
     mv bin $out/bin
     mv doc $out/share
 
-    ln -s ${ncurses.out}/lib/libtinfo.so.5       $out/lib/libtinfo.so.5
-    ln -s ${stdenv.cc.libc}/lib/libpthread.so.0 $out/lib/libpthread.so.0
-
-    # Add a clang symlink for easy building with a suitable compiler.
-    ln -s ${clang}/bin/clang $out/bin/saw-clang
+    wrapProgram "$out/bin/saw" --prefix PATH : "$out/bin/"
   '';
 
-  fixupPhase = ''
-    for x in bin/bcdump bin/extcore-info bin/jss bin/llvm-disasm bin/lss bin/saw; do
-      patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-        --set-rpath "$out/lib:${libPath}" $out/$x;
-    done
-  '';
+  passthru.tests.version = testers.testVersion {
+    package = finalAttrs.finalPackage;
+    command = "saw --version";
+  };
 
   meta = {
     description = "Tools for software verification and analysis";
-    homepage    = "https://saw.galois.com";
+    homepage = "https://saw.galois.com";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license     = lib.licenses.bsd3;
-    platforms   = lib.platforms.linux;
+    license = lib.licenses.bsd3;
+    platforms = [ "x86_64-linux" ];
     maintainers = [ lib.maintainers.thoughtpolice ];
   };
-}
+})

@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchgit, libX11, xorgproto }:
+{
+  lib,
+  stdenv,
+  fetchgit,
+  libX11,
+  xorgproto,
+}:
 
 stdenv.mkDerivation rec {
   pname = "seturgent";

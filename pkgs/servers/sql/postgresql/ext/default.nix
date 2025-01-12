@@ -72,6 +72,8 @@ in {
 
     pg_net = super.callPackage ./pg_net.nix { };
 
+    pg-gvm = super.callPackage ./pg-gvm.nix { };
+
     pg-semver = super.callPackage ./pg-semver.nix { };
 
     pgtap = super.callPackage ./pgtap.nix { };
@@ -86,8 +88,6 @@ in {
     timescaledb-apache = super.callPackage ./timescaledb.nix { enableUnfree = false; };
 
     timescaledb_toolkit = super.callPackage ./timescaledb_toolkit.nix { };
-
-    tsearch_extras = super.callPackage ./tsearch_extras.nix { };
 
     tds_fdw = super.callPackage ./tds_fdw.nix { };
 

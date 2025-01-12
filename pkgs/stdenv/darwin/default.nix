@@ -28,14 +28,7 @@ assert crossSystem == localSystem;
 let
   inherit (localSystem) system;
 
-  sdkMajorVersion =
-    let
-      inherit (localSystem) darwinSdkVersion;
-    in
-    if lib.versionOlder darwinSdkVersion "11" then
-      lib.versions.majorMinor darwinSdkVersion
-    else
-      lib.versions.major darwinSdkVersion;
+  sdkMajorVersion = lib.versions.major localSystem.darwinSdkVersion;
 
   commonImpureHostDeps = [
     "/bin/sh"
@@ -326,6 +319,7 @@ let
       libllvm
       lld
       llvm
+      llvm-manpages
       ;
   };
 
@@ -548,6 +542,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
                     '';
                     passthru.isFromBootstrapFiles = true;
                   };
+                  llvm-manpages = self.llvmPackages.libllvm;
                   lld = self.stdenv.mkDerivation {
                     name = "bootstrap-stage0-lld";
                     buildCommand = "";
@@ -676,8 +671,6 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
           self = self.python3-bootstrap;
           pythonAttr = "python3-bootstrap";
           enableLTO = false;
-          # Workaround for ld64 crashes on x86_64-darwin. Remove after 11.0 is made the default.
-          inherit (prevStage) apple-sdk_11;
         };
 
         scons = super.scons.override { python3Packages = self.python3.pkgs; };
@@ -689,12 +682,6 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
             signingUtils = prevStage.darwin.signingUtils.override { inherit (selfDarwin) sigtool; };
 
             postLinkSignHook = prevStage.darwin.postLinkSignHook.override { inherit (selfDarwin) sigtool; };
-
-            adv_cmds = superDarwin.adv_cmds.override {
-              # Break an infinite recursion between CMake and libtapi. CMake requires adv_cmds.ps, and adv_cmds
-              # requires a newer SDK that requires libtapi to build, which requires CMake.
-              inherit (prevStage) apple-sdk_11;
-            };
 
             # Rewrap binutils with the real libSystem
             binutils = superDarwin.binutils.override {
@@ -952,33 +939,38 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
               selfDarwin: superDarwin:
               darwinPackages prevStage
               // sdkDarwinPackages prevStage
+              # Rebuild darwin.binutils with the new LLVM, so only inherit libSystem from the previous stage.
               // {
                 inherit (prevStage.darwin) libSystem;
-
-                # binutils-unwrapped needs to build the LLVM man pages, which requires a lot of Python stuff
-                # that ultimately ends up depending on git. Fortunately, the git dependency is only for check
-                # inputs. The following set of overrides allow the LLVM documentation to be built without
-                # pulling curl (and other packages like ffmpeg) into the stdenv bootstrap.
-                binutils-unwrapped = superDarwin.binutils-unwrapped.override (old: {
-                  llvm-manpages = super.llvmPackages.llvm-manpages.override {
-                    python3Packages = self.python3.pkgs.overrideScope (
-                      _: superPython: {
-                        hatch-vcs = superPython.hatch-vcs.overrideAttrs { doInstallCheck = false; };
-                        markdown-it-py = superPython.markdown-it-py.overrideAttrs { doInstallCheck = false; };
-                        mdit-py-plugins = superPython.mdit-py-plugins.overrideAttrs { doInstallCheck = false; };
-                        myst-parser = superPython.myst-parser.overrideAttrs { doInstallCheck = false; };
-                      }
-                    );
-                  };
-                });
               }
             );
 
             llvmPackages =
               let
+                tools = super.llvmPackages.tools.extend (
+                  _: superTools: {
+                    # darwin.binutils-unwrapped needs to build the LLVM man pages, which requires a lot of Python stuff
+                    # that ultimately ends up depending on git. Fortunately, the git dependency is only for check
+                    # inputs. The following set of overrides allow the LLVM documentation to be built without
+                    # pulling curl (and other packages like ffmpeg) into the stdenv bootstrap.
+                    #
+                    # However, even without darwin.binutils-unwrapped, this has to be overriden in the LLVM package set
+                    # because otherwise llvmPackages.llvm-manpages on its own is broken.
+                    llvm-manpages = superTools.llvm-manpages.override {
+                      python3Packages = self.python3.pkgs.overrideScope (
+                        _: superPython: {
+                          hatch-vcs = superPython.hatch-vcs.overrideAttrs { doInstallCheck = false; };
+                          markdown-it-py = superPython.markdown-it-py.overrideAttrs { doInstallCheck = false; };
+                          mdit-py-plugins = superPython.mdit-py-plugins.overrideAttrs { doInstallCheck = false; };
+                          myst-parser = superPython.myst-parser.overrideAttrs { doInstallCheck = false; };
+                        }
+                      );
+                    };
+                  }
+                );
                 libraries = super.llvmPackages.libraries.extend (_: _: llvmLibrariesPackages prevStage);
               in
-              super.llvmPackages // { inherit libraries; } // libraries;
+              super.llvmPackages // { inherit tools libraries; } // tools // libraries;
           }
         ];
 
@@ -1289,24 +1281,32 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
                 }
               );
             }
-            (lib.optionalAttrs (super.stdenv.targetPlatform == localSystem) (
-              (bintoolsPackages prevStage)
+            # These have to be dropped from the overlay when cross-compiling. Wrappers are obviously target-specific.
+            # darwin.binutils is not yet ready to be target-independent.
+            (
+              lib.optionalAttrs (super.stdenv.targetPlatform == localSystem) (bintoolsPackages prevStage)
               // {
                 inherit (prevStage.llvmPackages) clang;
-                # Need to get rid of these when cross-compiling.
-                "llvmPackages_${lib.versions.major prevStage.llvmPackages.release_version}" =
-                  let
-                    llvmVersion = lib.versions.major prevStage.llvmPackages.release_version;
-                    tools = super."llvmPackages_${llvmVersion}".tools.extend (
-                      _: _: llvmToolsPackages prevStage // { inherit (prevStage.llvmPackages) clang; }
-                    );
-                    libraries = super."llvmPackages_${llvmVersion}".libraries.extend (
-                      _: _: llvmLibrariesPackages prevStage
-                    );
-                  in
-                  super."llvmPackages_${llvmVersion}" // { inherit tools libraries; } // tools // libraries;
               }
-            ))
+            )
+            # Since LLVM should be the same regardless of target platform, overlay it to avoid an unnecessary
+            # rebuild when cross-compiling from Darwin to another platform using clang.
+            {
+
+              "llvmPackages_${lib.versions.major prevStage.llvmPackages.release_version}" =
+                let
+                  llvmVersion = lib.versions.major prevStage.llvmPackages.release_version;
+                  tools = super."llvmPackages_${llvmVersion}".tools.extend (_: _: llvmToolsPackages prevStage);
+                  libraries = super."llvmPackages_${llvmVersion}".libraries.extend (
+                    _: _:
+                    llvmLibrariesPackages prevStage
+                    // lib.optionalAttrs (super.stdenv.targetPlatform == localSystem) {
+                      inherit (prevStage.llvmPackages) clang;
+                    }
+                  );
+                in
+                super."llvmPackages_${llvmVersion}" // { inherit tools libraries; } // tools // libraries;
+            }
           ];
       };
     }

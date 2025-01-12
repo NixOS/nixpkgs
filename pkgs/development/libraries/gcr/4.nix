@@ -1,35 +1,41 @@
-{ stdenv
-, lib
-, fetchurl
-, pkg-config
-, meson
-, ninja
-, gettext
-, gnupg
-, p11-kit
-, glib
-, libgcrypt
-, libtasn1
-, gtk4
-, pango
-, libsecret
-, openssh
-, systemd
-, gobject-introspection
-, wrapGAppsHook4
-, vala
-, gi-docgen
-, gnome
-, python3
-, shared-mime-info
-, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
+{
+  stdenv,
+  lib,
+  fetchurl,
+  pkg-config,
+  meson,
+  ninja,
+  gettext,
+  gnupg,
+  p11-kit,
+  glib,
+  libgcrypt,
+  libtasn1,
+  gtk4,
+  pango,
+  libsecret,
+  openssh,
+  systemd,
+  gobject-introspection,
+  wrapGAppsHook4,
+  vala,
+  gi-docgen,
+  gnome,
+  python3,
+  shared-mime-info,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gcr";
   version = "4.3.0";
 
-  outputs = [ "out" "bin" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "bin"
+    "dev"
+    "devdoc"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -51,16 +57,18 @@ stdenv.mkDerivation rec {
     shared-mime-info
   ];
 
-  buildInputs = [
-    libgcrypt
-    libtasn1
-    pango
-    libsecret
-    openssh
-    gtk4
-  ] ++ lib.optionals systemdSupport [
-    systemd
-  ];
+  buildInputs =
+    [
+      libgcrypt
+      libtasn1
+      pango
+      libsecret
+      openssh
+      gtk4
+    ]
+    ++ lib.optionals systemdSupport [
+      systemd
+    ];
 
   propagatedBuildInputs = [
     glib

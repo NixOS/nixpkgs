@@ -45,7 +45,7 @@
 
 buildPythonPackage rec {
   pname = "mitmproxy";
-  version = "11.0.0";
+  version = "11.0.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -53,8 +53,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mitmproxy";
     repo = "mitmproxy";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-f5TudaLlHtIMAvS7s5mWgqpdi7/vWNF0EdlYNuG67hM=";
+    tag = "v${version}";
+    hash = "sha256-qcsPOISQjHVHh4TrQ/UihZaxB/jWBfq7AVI4U1gQPVs=";
   };
 
   pythonRelaxDeps = [
@@ -123,6 +123,7 @@ buildPythonPackage rec {
     "test_statusbar"
     # FileNotFoundError: [Errno 2] No such file or directory
     # likely wireguard is also not working in the sandbox
+    "test_tun_mode"
     "test_wireguard"
     # test require a DNS server
     # RuntimeError: failed to get dns servers: io error: entity not found

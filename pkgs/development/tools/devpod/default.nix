@@ -9,7 +9,7 @@
 , installShellFiles
 , jq
 , libayatana-appindicator
-, libsoup
+, libsoup_2_4
 , makeDesktopItem
 , mkYarnPackage
 , openssl
@@ -46,7 +46,7 @@ rec {
 
     vendorHash = null;
 
-    CGO_ENABLED = 0;
+    env.CGO_ENABLED = 0;
 
     ldflags = [
       "-X github.com/loft-sh/devpod/pkg/version.version=v${version}"
@@ -141,7 +141,7 @@ rec {
       ];
 
       buildInputs = [
-        libsoup
+        libsoup_2_4
         openssl
       ] ++ lib.optionals stdenv.hostPlatform.isLinux [
         gtk3

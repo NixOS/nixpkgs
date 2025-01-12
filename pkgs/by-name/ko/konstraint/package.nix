@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 
 buildGoModule rec {
   pname = "konstraint";
@@ -17,7 +22,11 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  ldflags = [ "-s" "-w" "-X github.com/plexsystems/konstraint/internal/commands.version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/plexsystems/konstraint/internal/commands.version=${version}"
+  ];
 
   postInstall = ''
     installShellCompletion --cmd konstraint \

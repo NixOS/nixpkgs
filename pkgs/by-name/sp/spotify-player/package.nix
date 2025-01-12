@@ -15,7 +15,6 @@
   dbus,
   fontconfig,
   libsixel,
-  apple-sdk_11,
 
   # build options
   withStreaming ? true,
@@ -48,16 +47,16 @@ assert lib.assertOneOf "withAudioBackend" withAudioBackend [
 
 rustPlatform.buildRustPackage rec {
   pname = "spotify-player";
-  version = "0.20.1";
+  version = "0.20.3";
 
   src = fetchFromGitHub {
     owner = "aome510";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-SKlESIw8eAyAqR1HVW004yyL2nNVEnb4/xmf0ch3ZMo=";
+    tag = "v${version}";
+    hash = "sha256-9iXsZod1aLdCQYUKBjdRayQfRUz770Xw3/M85Rp/OCw=";
   };
 
-  cargoHash = "sha256-VlJ8Bz4EY2rERyOn6ifC7JAL5Mvjt0ZOzlPBOwiH6WA=";
+  cargoHash = "sha256-e9MAq31FTmukHjP5VoAuHRGf28vX9aPUWjOFfH9uY9g=";
 
   nativeBuildInputs =
     [
@@ -74,9 +73,6 @@ rustPlatform.buildRustPackage rec {
       openssl
       dbus
       fontconfig
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_11 # can be removed once x86_64-darwin defaults to a newer SDK
     ]
     ++ lib.optionals withSixel [ libsixel ]
     ++ lib.optionals (withAudioBackend == "alsa") [ alsa-lib ]

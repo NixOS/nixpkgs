@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -6,29 +11,36 @@ let
   cfg = config.services.webhook;
   defaultUser = "webhook";
 
-  hookFormat = pkgs.formats.json {};
+  hookFormat = pkgs.formats.json { };
 
-  hookType = types.submodule ({ name, ... }: {
-    freeformType = hookFormat.type;
-    options = {
-      id = mkOption {
-        type = types.str;
-        default = name;
-        description = ''
-          The ID of your hook. This value is used to create the HTTP endpoint (`protocol://yourserver:port/prefix/''${id}`).
-        '';
+  hookType = types.submodule (
+    { name, ... }:
+    {
+      freeformType = hookFormat.type;
+      options = {
+        id = mkOption {
+          type = types.str;
+          default = name;
+          description = ''
+            The ID of your hook. This value is used to create the HTTP endpoint (`protocol://yourserver:port/prefix/''${id}`).
+          '';
+        };
+        execute-command = mkOption {
+          type = types.str;
+          description = "The command that should be executed when the hook is triggered.";
+        };
       };
-      execute-command = mkOption {
-        type = types.str;
-        description = "The command that should be executed when the hook is triggered.";
-      };
-    };
-  });
+    }
+  );
 
-  hookFiles = mapAttrsToList (name: hook: hookFormat.generate "webhook-${name}.json" [ hook ]) cfg.hooks
-           ++ mapAttrsToList (name: hook: pkgs.writeText "webhook-${name}.json.tmpl" "[${hook}]") cfg.hooksTemplated;
+  hookFiles =
+    mapAttrsToList (name: hook: hookFormat.generate "webhook-${name}.json" [ hook ]) cfg.hooks
+    ++ mapAttrsToList (
+      name: hook: pkgs.writeText "webhook-${name}.json.tmpl" "[${hook}]"
+    ) cfg.hooksTemplated;
 
-in {
+in
+{
   options = {
     services.webhook = {
       enable = mkEnableOption ''
@@ -36,7 +48,7 @@ in {
         which execute configured commands for any person or service that knows the URL
       '';
 
-      package = mkPackageOption pkgs "webhook" {};
+      package = mkPackageOption pkgs "webhook" { };
       user = mkOption {
         type = types.str;
         default = defaultUser;
@@ -79,7 +91,7 @@ in {
       };
       enableTemplates = mkOption {
         type = types.bool;
-        default = cfg.hooksTemplated != {};
+        default = cfg.hooksTemplated != { };
         defaultText = literalExpression "hooksTemplated != {}";
         description = ''
           Enable the generated hooks file to be parsed as a Go template.
@@ -95,7 +107,7 @@ in {
       };
       hooks = mkOption {
         type = types.attrsOf hookType;
-        default = {};
+        default = { };
         example = {
           echo = {
             execute-command = "echo";
@@ -118,7 +130,7 @@ in {
       };
       hooksTemplated = mkOption {
         type = types.attrsOf types.str;
-        default = {};
+        default = { };
         example = {
           echo-template = ''
             {
@@ -144,7 +156,7 @@ in {
       };
       extraArgs = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         example = [ "-secure" ];
         description = ''
           These are arguments passed to the webhook command in the systemd service.
@@ -155,37 +167,38 @@ in {
       };
       environment = mkOption {
         type = types.attrsOf types.str;
-        default = {};
+        default = { };
         description = "Extra environment variables passed to webhook.";
       };
     };
   };
 
   config = mkIf cfg.enable {
-    assertions = let
-      overlappingHooks = builtins.intersectAttrs cfg.hooks cfg.hooksTemplated;
-    in [
-      {
-        assertion = hookFiles != [];
-        message = "At least one hook needs to be configured for webhook to run.";
-      }
-      {
-        assertion = overlappingHooks == {};
-        message = "`services.webhook.hooks` and `services.webhook.hooksTemplated` have overlapping attribute(s): ${concatStringsSep ", " (builtins.attrNames overlappingHooks)}";
-      }
-    ];
+    assertions =
+      let
+        overlappingHooks = builtins.intersectAttrs cfg.hooks cfg.hooksTemplated;
+      in
+      [
+        {
+          assertion = hookFiles != [ ];
+          message = "At least one hook needs to be configured for webhook to run.";
+        }
+        {
+          assertion = overlappingHooks == { };
+          message = "`services.webhook.hooks` and `services.webhook.hooksTemplated` have overlapping attribute(s): ${concatStringsSep ", " (builtins.attrNames overlappingHooks)}";
+        }
+      ];
 
     users.users = mkIf (cfg.user == defaultUser) {
-      ${defaultUser} =
-        {
-          isSystemUser = true;
-          group = cfg.group;
-          description = "Webhook daemon user";
-        };
+      ${defaultUser} = {
+        isSystemUser = true;
+        group = cfg.group;
+        description = "Webhook daemon user";
+      };
     };
 
     users.groups = mkIf (cfg.user == defaultUser && cfg.group == defaultUser) {
-      ${defaultUser} = {};
+      ${defaultUser} = { };
     };
 
     networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];
@@ -195,15 +208,28 @@ in {
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       environment = config.networking.proxy.envVars // cfg.environment;
-      script = let
-        args = [ "-ip" cfg.ip "-port" (toString cfg.port) "-urlprefix" cfg.urlPrefix ]
-            ++ concatMap (hook: [ "-hooks" hook ]) hookFiles
+      script =
+        let
+          args =
+            [
+              "-ip"
+              cfg.ip
+              "-port"
+              (toString cfg.port)
+              "-urlprefix"
+              cfg.urlPrefix
+            ]
+            ++ concatMap (hook: [
+              "-hooks"
+              hook
+            ]) hookFiles
             ++ optional cfg.enableTemplates "-template"
             ++ optional cfg.verbose "-verbose"
             ++ cfg.extraArgs;
-      in ''
-        ${cfg.package}/bin/webhook ${escapeShellArgs args}
-      '';
+        in
+        ''
+          ${cfg.package}/bin/webhook ${escapeShellArgs args}
+        '';
       serviceConfig = {
         Restart = "on-failure";
         User = cfg.user;

@@ -1,23 +1,24 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, substituteAll
-, c-ares
-, cmake
-, crc32c
-, curl
-, gbenchmark
-, grpc
-, gtest
-, ninja
-, nlohmann_json
-, openssl
-, pkg-config
-, protobuf
-, pkgsBuildHost
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  substituteAll,
+  c-ares,
+  cmake,
+  crc32c,
+  curl,
+  gbenchmark,
+  grpc,
+  gtest,
+  ninja,
+  nlohmann_json,
+  openssl,
+  pkg-config,
+  protobuf,
+  pkgsBuildHost,
   # default list of APIs: https://github.com/googleapis/google-cloud-cpp/blob/v1.32.1/CMakeLists.txt#L173
-, apis ? [ "*" ]
-, staticOnly ? stdenv.hostPlatform.isStatic
+  apis ? [ "*" ],
+  staticOnly ? stdenv.hostPlatform.isStatic,
 }:
 let
   # defined in cmake/GoogleapisConfig.cmake
@@ -48,18 +49,20 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [
-    cmake
-    ninja
-    pkg-config
-  ] ++ lib.optionals (!doInstallCheck) [
-    # enable these dependencies when doInstallCheck is false because we're
-    # unconditionally building tests and benchmarks
-    #
-    # when doInstallCheck is true, these deps are added to nativeInstallCheckInputs
-    gbenchmark
-    gtest
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+      ninja
+      pkg-config
+    ]
+    ++ lib.optionals (!doInstallCheck) [
+      # enable these dependencies when doInstallCheck is false because we're
+      # unconditionally building tests and benchmarks
+      #
+      # when doInstallCheck is true, these deps are added to nativeInstallCheckInputs
+      gbenchmark
+      gtest
+    ];
 
   buildInputs = [
     c-ares
@@ -98,41 +101,46 @@ stdenv.mkDerivation rec {
       ''
     );
 
-  installCheckPhase = let
-    disabledTests = lib.optionalString stdenv.hostPlatform.isDarwin ''
-      common_internal_async_connection_ready_test
-      bigtable_async_read_stream_test
-      bigtable_metadata_update_policy_test
-      bigtable_bigtable_benchmark_test
-      bigtable_embedded_server_test
+  installCheckPhase =
+    let
+      disabledTests = lib.optionalString stdenv.hostPlatform.isDarwin ''
+        common_internal_async_connection_ready_test
+        bigtable_async_read_stream_test
+        bigtable_metadata_update_policy_test
+        bigtable_bigtable_benchmark_test
+        bigtable_embedded_server_test
+      '';
+    in
+    ''
+      runHook preInstallCheck
+
+      # Disable any integration tests, which need to contact the internet.
+      ctest \
+        --label-exclude integration-test \
+        --exclude-from-file <(echo '${disabledTests}')
+
+      runHook postInstallCheck
     '';
-  in ''
-    runHook preInstallCheck
-
-    # Disable any integration tests, which need to contact the internet.
-    ctest \
-      --label-exclude integration-test \
-      --exclude-from-file <(echo '${disabledTests}')
-
-    runHook postInstallCheck
-  '';
 
   nativeInstallCheckInputs = lib.optionals doInstallCheck [
     gbenchmark
     gtest
   ];
 
-  cmakeFlags = [
-    "-DBUILD_SHARED_LIBS:BOOL=${if staticOnly then "OFF" else "ON"}"
-    # unconditionally build tests to catch linker errors as early as possible
-    # this adds a good chunk of time to the build
-    "-DBUILD_TESTING:BOOL=ON"
-    "-DGOOGLE_CLOUD_CPP_ENABLE_EXAMPLES:BOOL=OFF"
-  ] ++ lib.optionals (apis != [ "*" ]) [
-    "-DGOOGLE_CLOUD_CPP_ENABLE=${lib.concatStringsSep ";" apis}"
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    "-DGOOGLE_CLOUD_CPP_GRPC_PLUGIN_EXECUTABLE=${lib.getBin pkgsBuildHost.grpc}/bin/grpc_cpp_plugin"
-  ];
+  cmakeFlags =
+    [
+      "-DBUILD_SHARED_LIBS:BOOL=${if staticOnly then "OFF" else "ON"}"
+      # unconditionally build tests to catch linker errors as early as possible
+      # this adds a good chunk of time to the build
+      "-DBUILD_TESTING:BOOL=ON"
+      "-DGOOGLE_CLOUD_CPP_ENABLE_EXAMPLES:BOOL=OFF"
+    ]
+    ++ lib.optionals (apis != [ "*" ]) [
+      "-DGOOGLE_CLOUD_CPP_ENABLE=${lib.concatStringsSep ";" apis}"
+    ]
+    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+      "-DGOOGLE_CLOUD_CPP_GRPC_PLUGIN_EXECUTABLE=${lib.getBin pkgsBuildHost.grpc}/bin/grpc_cpp_plugin"
+    ];
 
   requiredSystemFeatures = [ "big-parallel" ];
 

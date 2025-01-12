@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, perl, xterm, coreutils }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  perl,
+  xterm,
+  coreutils,
+}:
 
 stdenv.mkDerivation {
   pname = "tagtime";

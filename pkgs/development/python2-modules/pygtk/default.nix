@@ -1,9 +1,24 @@
-{ lib, stdenv, fetchurl, fetchpatch, python, pkg-config, gtk2, pygobject2, pycairo, pango
-, buildPythonPackage, isPy3k }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  python,
+  pkg-config,
+  gtk2,
+  pygobject2,
+  pycairo,
+  pango,
+  buildPythonPackage,
+  isPy3k,
+}:
 
 buildPythonPackage rec {
   pname = "pygtk";
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
   version = "2.24.0";
   format = "other";
 
@@ -31,13 +46,18 @@ buildPythonPackage rec {
     pango
   ];
 
-  propagatedBuildInputs = [ gtk2 pygobject2 pycairo ];
+  propagatedBuildInputs = [
+    gtk2
+    pygobject2
+    pycairo
+  ];
 
   configurePhase = "configurePhase";
 
   buildPhase = "buildPhase";
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-ObjC"
+  env.NIX_CFLAGS_COMPILE =
+    lib.optionalString stdenv.hostPlatform.isDarwin "-ObjC"
     + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) " -lpython2.7";
 
   installPhase = "installPhase";
@@ -50,7 +70,8 @@ buildPythonPackage rec {
              -e "s/.*testGlade.*//" \
              -e "s/.*(glade.*//" \
              tests/test_api.py
-    '' + ''
+    ''
+    + ''
       sed -i -e "s/sys.path.insert(0, os.path.join(buildDir, 'gtk'))//" \
              -e "s/sys.path.insert(0, buildDir)//" \
              tests/common.py

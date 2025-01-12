@@ -1,7 +1,9 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p bash nixVersions.latest curl coreutils jq common-updater-scripts
 
-latestVersion=$(curl -s ${GITHUB_TOKEN:+" -u \":$GITHUB_TOKEN\""} https://api.github.com/repos/bblanchon/pdfium-binaries/releases/latest | jq -r '.tag_name | ltrimstr("chromium/")')
+set -eou pipefail
+
+latestVersion=$(curl ${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} -sL https://api.github.com/repos/bblanchon/pdfium-binaries/releases/latest | jq -r '.tag_name | ltrimstr("chromium/")')
 currentVersion=$(nix-instantiate --eval -E "with import ./. {}; pdfium-binaries.version" | tr -d '"')
 
 echo "latest  version: $latestVersion"
@@ -11,6 +13,7 @@ if [[ "$latestVersion" == "$currentVersion" ]]; then
     echo "package is up-to-date"
     exit 0
 fi
+
 for i in \
     "x86_64-linux linux-x64" \
     "aarch64-linux linux-arm64" \

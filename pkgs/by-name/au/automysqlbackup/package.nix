@@ -1,4 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, mariadb, mailutils, pbzip2, pigz, bzip2, gzip }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  mariadb,
+  mailutils,
+  pbzip2,
+  pigz,
+  bzip2,
+  gzip,
+}:
 
 stdenv.mkDerivation rec {
   pname = "automysqlbackup";
@@ -19,7 +30,16 @@ stdenv.mkDerivation rec {
     cp automysqlbackup $out/bin/
     cp automysqlbackup.conf $out/etc/
 
-    wrapProgram $out/bin/automysqlbackup --prefix PATH : ${lib.makeBinPath [ mariadb mailutils pbzip2 pigz bzip2 gzip ]}
+    wrapProgram $out/bin/automysqlbackup --prefix PATH : ${
+      lib.makeBinPath [
+        mariadb
+        mailutils
+        pbzip2
+        pigz
+        bzip2
+        gzip
+      ]
+    }
   '';
 
   meta = with lib; {

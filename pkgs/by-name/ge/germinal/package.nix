@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, appstream-glib
-, autoreconfHook
-, dbus
-, pango
-, pcre2
-, pkg-config
-, tmux
-, vte
-, wrapGAppsHook3
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  appstream-glib,
+  autoreconfHook,
+  dbus,
+  pango,
+  pcre2,
+  pkg-config,
+  tmux,
+  vte,
+  wrapGAppsHook3,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

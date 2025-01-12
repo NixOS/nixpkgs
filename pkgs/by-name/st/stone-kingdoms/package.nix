@@ -1,12 +1,13 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitLab
-, copyDesktopItems
-, love
-, makeDesktopItem
-, makeWrapper
-, strip-nondeterminism
-, zip
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitLab,
+  copyDesktopItems,
+  love,
+  makeDesktopItem,
+  makeWrapper,
+  strip-nondeterminism,
+  zip,
 }:
 
 stdenvNoCC.mkDerivation rec {

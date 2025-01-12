@@ -1,13 +1,17 @@
-{ lib, stdenvNoCC, fetchzip }:
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "cascadia-code";
-  version = "2404.23";
+  version = "2407.24";
 
   src = fetchzip {
     url = "https://github.com/microsoft/cascadia-code/releases/download/v${version}/CascadiaCode-${version}.zip";
     stripRoot = false;
-    hash = "sha256-Z2AzBeNiM6mc1OHCJRv0rUvH8WRygyQGSOvwbAISYHE=";
+    hash = "sha256-bCQzGCvjSQ1TXFVC3w9VPXNtjM4h7lRvljVjX/w1TJ4=";
   };
 
   installPhase = ''

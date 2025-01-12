@@ -14,7 +14,7 @@ let
   src = fetchFromGitHub {
     owner = "garethgeorge";
     repo = "backrest";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-qxEZkRKkwKZ+EZ3y3aGcX2ioKOz19SRdi3+9mjF1LpE=";
   };
 

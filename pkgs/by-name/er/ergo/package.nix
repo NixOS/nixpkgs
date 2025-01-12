@@ -1,12 +1,19 @@
-{ lib, stdenv, fetchurl, makeWrapper, jre, nixosTests }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  jre,
+  nixosTests,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ergo";
-  version = "5.0.23";
+  version = "5.0.24";
 
   src = fetchurl {
     url = "https://github.com/ergoplatform/ergo/releases/download/v${version}/ergo-${version}.jar";
-    sha256 = "sha256-bVvqsgfsIlAUwbTbFAYbI+Dtgbxv71cMlDpaReTE56Q=";
+    sha256 = "sha256-+dpSgqJGHUNzIBQBbfbeclB5t+NyaluGRTCZ4OESZu8=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

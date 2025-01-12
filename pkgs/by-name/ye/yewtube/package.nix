@@ -1,4 +1,8 @@
-{ lib, python3Packages, fetchFromGitHub }:
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "yewtube";
@@ -7,7 +11,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "mps-youtube";
     repo = "yewtube";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-66cGnEEISC+lZAYhFXuVdDtwh1TgwvCP6nBD84z2z0I=";
   };
 
@@ -43,6 +47,9 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "yt";
     homepage = "https://github.com/mps-youtube/yewtube";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ fgaz koral ];
+    maintainers = with maintainers; [
+      fgaz
+      koral
+    ];
   };
 }

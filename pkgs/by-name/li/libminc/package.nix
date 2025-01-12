@@ -1,13 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, cmake, zlib, netcdf, nifticlib, hdf5 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  zlib,
+  netcdf,
+  nifticlib,
+  hdf5,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname   = "libminc";
+  pname = "libminc";
   version = "2.4.06";
 
   src = fetchFromGitHub {
     owner = "BIC-MNI";
     repo = "libminc";
-    rev = "refs/tags/release-${finalAttrs.version}";
+    tag = "release-${finalAttrs.version}";
     hash = "sha256-HTt3y0AFM9pkEkWPb9cDmvUz4iBQWfpX7wLF9Vlg8hc=";
   };
 
@@ -33,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = !stdenv.hostPlatform.isDarwin;
-    # -j1: see https://github.com/BIC-MNI/libminc/issues/110
+  # -j1: see https://github.com/BIC-MNI/libminc/issues/110
   checkPhase = ''
     ctest -j1 --output-on-failure
   '';

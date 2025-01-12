@@ -1,4 +1,21 @@
-{ lib, stdenv, fetchgit, fetchpatch2, autoreconfHook, ffmpeg, flac, libvorbis, libogg, libid3tag, libexif, libjpeg, sqlite, gettext, nixosTests, zlib }:
+{
+  lib,
+  stdenv,
+  fetchgit,
+  fetchpatch2,
+  autoreconfHook,
+  ffmpeg,
+  flac,
+  libvorbis,
+  libogg,
+  libid3tag,
+  libexif,
+  libjpeg,
+  sqlite,
+  gettext,
+  nixosTests,
+  zlib,
+}:
 
 let
   pname = "minidlna";
@@ -26,7 +43,18 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  buildInputs = [ ffmpeg flac libvorbis libogg libid3tag libexif libjpeg sqlite gettext zlib ];
+  buildInputs = [
+    ffmpeg
+    flac
+    libvorbis
+    libogg
+    libid3tag
+    libexif
+    libjpeg
+    sqlite
+    gettext
+    zlib
+  ];
 
   postInstall = ''
     mkdir -p $out/share/man/man{5,8}

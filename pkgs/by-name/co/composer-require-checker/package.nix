@@ -1,6 +1,7 @@
-{ lib
-, fetchgit
-, php
+{
+  lib,
+  fetchgit,
+  php,
 }:
 
 php.buildComposerProject2 (finalAttrs: {
@@ -10,7 +11,7 @@ php.buildComposerProject2 (finalAttrs: {
   # Upstream no longer provides the composer.lock in their release artifact
   src = fetchgit {
     url = "https://github.com/maglnet/ComposerRequireChecker";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-dBUDkgbuUBKA3MKB4fxwHhDoT9wYRl49m/2ZCvIcNMM=";
   };
 

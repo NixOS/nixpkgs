@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fontconfig
-, gfortran
-, pkg-config
-, blas
-, bzip2
-, cbc
-, clp
-, doxygen
-, graphviz
-, ipopt
-, lapack
-, libamplsolver
-, osi
-, texliveSmall
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fontconfig,
+  gfortran,
+  pkg-config,
+  blas,
+  bzip2,
+  cbc,
+  clp,
+  doxygen,
+  graphviz,
+  ipopt,
+  lapack,
+  libamplsolver,
+  osi,
+  texliveSmall,
+  zlib,
 }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);

@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, bzip2
-, coreutils
-, gnutar
-, gzip
-, makeWrapper
-, nix
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  bzip2,
+  coreutils,
+  gnutar,
+  gzip,
+  makeWrapper,
+  nix,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,12 +1,18 @@
-{ lib, stdenvNoCC, fetchurl, jre, makeWrapper }:
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  jre,
+  makeWrapper,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "karate";
-  version = "1.5.0";
+  version = "1.5.1";
 
   src = fetchurl {
     url = "https://github.com/karatelabs/karate/releases/download/v${version}/karate-${version}.jar";
-    sha256 = "sha256-3uz51dQvyvK7gcmRoUjfszghBaPfVc/SJaKSEWkfgr8=";
+    sha256 = "sha256-Dk7rd9exdTSvauqcAldT3N597TeF+MNoLTx4OmOGcxE=";
   };
   dontUnpack = true;
 

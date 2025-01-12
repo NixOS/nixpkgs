@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, cmake
-, fetchgit
-, libnl
-, libubox
-, uci
-, ubus
-, json_c
-, pkg-config
-, udebug
+{
+  lib,
+  stdenv,
+  cmake,
+  fetchgit,
+  libnl,
+  libubox,
+  uci,
+  ubus,
+  json_c,
+  pkg-config,
+  udebug,
 }:
 
 stdenv.mkDerivation {
@@ -44,9 +45,11 @@ stdenv.mkDerivation {
     sed "s|./ethtool-modes.h|$PWD/ethtool-modes.h|g" -i CMakeLists.txt
   '';
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12") [
-    "-Wno-error=maybe-uninitialized"
-  ]);
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12") [
+      "-Wno-error=maybe-uninitialized"
+    ]
+  );
 
   meta = with lib; {
     description = "OpenWrt Network interface configuration daemon";

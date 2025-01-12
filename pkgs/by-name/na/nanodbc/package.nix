@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, catch2, cmake, unixODBC }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  catch2,
+  cmake,
+  unixODBC,
+}:
 
 stdenv.mkDerivation rec {
   pname = "nanodbc";
@@ -19,10 +26,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ unixODBC ];
 
-  cmakeFlags = if (stdenv.hostPlatform.isStatic) then
-    [ "-DBUILD_STATIC_LIBS=ON" ]
-  else
-    [ "-DBUILD_SHARED_LIBS=ON" ];
+  cmakeFlags =
+    if (stdenv.hostPlatform.isStatic) then
+      [ "-DBUILD_STATIC_LIBS=ON" ]
+    else
+      [ "-DBUILD_SHARED_LIBS=ON" ];
 
   meta = with lib; {
     homepage = "https://github.com/nanodbc/nanodbc";

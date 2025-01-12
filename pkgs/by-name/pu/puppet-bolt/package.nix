@@ -42,9 +42,13 @@
     changelog = "https://github.com/puppetlabs/bolt/blob/main/CHANGELOG.md";
     license = lib.licenses.asl20;
     mainProgram = "bolt";
-    maintainers = with lib.maintainers; [ uvnikita anthonyroussel ];
+    maintainers = with lib.maintainers; [
+      uvnikita
+      anthonyroussel
+    ];
     platforms = lib.platforms.unix;
   };
-}).overrideAttrs (old: {
-  name = "puppet-bolt-${(import ./gemset.nix).bolt.version}";
-})
+}).overrideAttrs
+  (old: {
+    name = "puppet-bolt-${(import ./gemset.nix).bolt.version}";
+  })

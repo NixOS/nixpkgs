@@ -1,4 +1,9 @@
-{ lib, kernel, rtl8189es, fetchFromGitHub }:
+{
+  lib,
+  kernel,
+  rtl8189es,
+  fetchFromGitHub,
+}:
 
 # rtl8189fs is a branch of the rtl8189es driver
 rtl8189es.overrideAttrs (drv: rec {

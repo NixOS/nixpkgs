@@ -16,16 +16,16 @@
 
 buildGoModule rec {
   pname = "booster";
-  version = "0.11";
+  version = "0.12";
 
   src = fetchFromGitHub {
     owner = "anatol";
     repo = pname;
     rev = version;
-    hash = "sha256-+0pY4/f/qfIT1lLn2DXmJBZcDDEOil4H3zNY3911ACQ=";
+    hash = "sha256-uHxPzuD3PxKAI2JOZd7lcLvcqYqk9gW9yeZgOS1Y7x4=";
   };
 
-  vendorHash = "sha256-RmRY+HoNuijfcK8gNbOIyWCOa50BVJd3IZv2+Pc3FYw=";
+  vendorHash = "sha256-uI6TvBtky7Bpt4SbbtwT3vdMYbI/Awy3wgPfOla1qMw=";
 
   postPatch = ''
     substituteInPlace init/main.go --replace "/usr/bin/fsck" "${unixtools.fsck}/bin/fsck"

@@ -1,10 +1,18 @@
-{ fetchFromGitHub, fetchgit, fetchHex, rebar3Relx
-, buildRebar3, writeScript, lib }:
+{
+  fetchFromGitHub,
+  fetchgit,
+  fetchHex,
+  rebar3Relx,
+  buildRebar3,
+  writeScript,
+  lib,
+}:
 
 let
   owner = "inaka";
   repo = "elvis";
-in rebar3Relx rec {
+in
+rebar3Relx rec {
   releaseType = "escript";
   # The package name "elvis" is already taken
   pname = "elvis-erlang";
@@ -14,10 +22,12 @@ in rebar3Relx rec {
     sha256 = "13QM6UbH+1PxzhY/ufi5PEP2pKqSl5+g6tMvKmOUMb0=";
     rev = version;
   };
-  beamDeps = builtins.attrValues (import ./rebar-deps.nix {
-    inherit fetchHex fetchgit fetchFromGitHub;
-    builder = buildRebar3;
-  });
+  beamDeps = builtins.attrValues (
+    import ./rebar-deps.nix {
+      inherit fetchHex fetchgit fetchFromGitHub;
+      builder = buildRebar3;
+    }
+  );
   passthru.updateScript = writeScript "update.sh" ''
     #!/usr/bin/env nix-shell
     #!nix-shell -i bash -p bash common-updater-scripts git nix-prefetch-git gnutar gzip "rebar3WithPlugins {globalPlugins = [beamPackages.rebar3-nix];}"

@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
-, pkg-config
-, libxcb
-, openssl
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  pkg-config,
+  libxcb,
+  openssl,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,11 +22,13 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-QERnohWpkJ0LWkdxHrY6gKxdGqxDkLla7jlG44laojk=";
 
-  nativeBuildInputs = [
-    installShellFiles
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    pkg-config
-  ];
+  nativeBuildInputs =
+    [
+      installShellFiles
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      pkg-config
+    ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     libxcb
@@ -45,7 +48,10 @@ rustPlatform.buildRustPackage rec {
     description = "CLI spelling corrector for when you're unsure";
     homepage = "https://github.com/hisbaan/didyoumean";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ evanjs wegank ];
+    maintainers = with maintainers; [
+      evanjs
+      wegank
+    ];
     mainProgram = "dym";
   };
 }

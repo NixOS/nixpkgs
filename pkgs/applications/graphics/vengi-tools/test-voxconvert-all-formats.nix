@@ -1,5 +1,6 @@
-{ stdenv
-, vengi-tools
+{
+  stdenv,
+  vengi-tools,
 }:
 
 stdenv.mkDerivation {

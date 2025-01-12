@@ -1,4 +1,8 @@
-{ lib, fetchFromGitHub, buildGoModule }:
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+}:
 
 buildGoModule rec {
   pname = "pg_featureserv";
@@ -25,7 +29,11 @@ buildGoModule rec {
       --replace-fail "AssetsPath = \"./assets\"" "AssetsPath = \"$out/share/assets\""
   '';
 
-  ldflags = [ "-s" "-w" "-X github.com/CrunchyData/pg_featureserv/conf.setVersion=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/CrunchyData/pg_featureserv/conf.setVersion=${version}"
+  ];
 
   postInstall = ''
     mkdir -p $out/share

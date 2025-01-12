@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "aioopenexchangerates";
-  version = "0.6.10";
+  version = "0.6.19";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -22,14 +22,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "MartinHjelmare";
     repo = "aioopenexchangerates";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-GDAeBk4h0YLFbLSGEjomvzR94y0JGsRzd15J4sv6i6o=";
+    tag = "v${version}";
+    hash = "sha256-Rb5oCheiTZ737nKDwSpoRZcgpWPt5YMzplD6Wb6kZxY=";
   };
 
   pythonRelaxDeps = [ "pydantic" ];
 
   build-system = [ poetry-core ];
-
 
   dependencies = [
     aiohttp

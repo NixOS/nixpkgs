@@ -1,9 +1,10 @@
-{ stdenv
-, lib
-, buildGoModule
-, fetchFromGitHub
-, libobjc
-, IOKit
+{
+  stdenv,
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  libobjc,
+  IOKit,
 }:
 
 buildGoModule rec {
@@ -36,10 +37,15 @@ buildGoModule rec {
   vendorHash = "sha256-pcIydpKWZt3vwShwzGlPKGq+disdxYFOB8gxHou3mVU=";
 
   # Fix for usb-related segmentation faults on darwin
-  propagatedBuildInputs =
-    lib.optionals stdenv.hostPlatform.isDarwin [ libobjc IOKit ];
+  propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    libobjc
+    IOKit
+  ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   meta = with lib; {
     description = "";

@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, zlib, libarchive, openssl }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  zlib,
+  libarchive,
+  openssl,
+}:
 
 stdenv.mkDerivation rec {
   version = "1.0";
@@ -9,7 +16,11 @@ stdenv.mkDerivation rec {
     cp makerpm $out/bin
   '';
 
-  buildInputs = [ zlib libarchive openssl ];
+  buildInputs = [
+    zlib
+    libarchive
+    openssl
+  ];
 
   src = fetchFromGitHub {
     owner = "ivan-tkatchev";

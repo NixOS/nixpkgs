@@ -1,9 +1,10 @@
-{ lib
-, rustPlatform
-, fetchCrate
-, dbus
-, installShellFiles
-, pkg-config
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+  dbus,
+  installShellFiles,
+  pkg-config,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,7 +20,10 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ dbus ];
 
-  nativeBuildInputs = [ installShellFiles pkg-config ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ];
 
   postInstall = ''
     installManPage doc/citron.1

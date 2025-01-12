@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromSourcehut
-, meson
-, ninja
-, pkg-config
-, scdoc
-, wayland
-, wayland-scanner
-, libvarlink
-, libscfg
+{
+  lib,
+  stdenv,
+  fetchFromSourcehut,
+  meson,
+  ninja,
+  pkg-config,
+  scdoc,
+  wayland,
+  wayland-scanner,
+  libvarlink,
+  libscfg,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,8 +27,18 @@ stdenv.mkDerivation rec {
   depsBuildBuild = [
     pkg-config
   ];
-  nativeBuildInputs = [ meson ninja pkg-config scdoc wayland-scanner ];
-  buildInputs = [ wayland libvarlink libscfg ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    scdoc
+    wayland-scanner
+  ];
+  buildInputs = [
+    wayland
+    libvarlink
+    libscfg
+  ];
 
   env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=maybe-uninitialized"
@@ -46,7 +57,10 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.mit;
     mainProgram = "kanshi";
-    maintainers = with maintainers; [ balsoft danielbarter ];
+    maintainers = with maintainers; [
+      balsoft
+      danielbarter
+    ];
     platforms = platforms.linux;
   };
 }

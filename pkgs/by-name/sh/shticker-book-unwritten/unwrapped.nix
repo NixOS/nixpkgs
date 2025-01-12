@@ -1,4 +1,9 @@
-{ rustPlatform, fetchCrate, pkg-config, openssl }:
+{
+  rustPlatform,
+  fetchCrate,
+  pkg-config,
+  openssl,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "shticker-book-unwritten";

@@ -7,7 +7,7 @@
   apiEndpoint ? "http://localhost:3000",
   yarnConfigHook,
   yarnBuildHook,
-  nodejs
+  nodejs,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     nodejs
   ];
 
-  API_ENDPOINT="${apiEndpoint}";
+  API_ENDPOINT = "${apiEndpoint}";
   preBuild = ''
     pushd ./apps/client/
   '';

@@ -1,9 +1,10 @@
-{ lib
-, SDL
-, SDL_mixer
-, directoryListingUpdater
-, fetchurl
-, stdenv
+{
+  lib,
+  SDL,
+  SDL_mixer,
+  directoryListingUpdater,
+  fetchurl,
+  stdenv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

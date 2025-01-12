@@ -1,15 +1,16 @@
-{ stdenvNoCC
-, lib
-, fetchFromGitHub
-, hyprland
-, jq
-, grim
-, slurp
-, wl-clipboard
-, libnotify
-, withFreeze ? true
-, hyprpicker
-, makeWrapper
+{
+  stdenvNoCC,
+  lib,
+  fetchFromGitHub,
+  hyprland,
+  jq,
+  grim,
+  slurp,
+  wl-clipboard,
+  libnotify,
+  withFreeze ? true,
+  hyprpicker,
+  makeWrapper,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -30,9 +31,19 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     install -Dm755 hyprshot -t "$out/bin"
     wrapProgram "$out/bin/hyprshot" \
-      --prefix PATH ":" ${lib.makeBinPath ([
-          hyprland jq grim slurp wl-clipboard libnotify
-        ] ++ lib.optionals withFreeze [ hyprpicker ])}
+      --prefix PATH ":" ${
+        lib.makeBinPath (
+          [
+            hyprland
+            jq
+            grim
+            slurp
+            wl-clipboard
+            libnotify
+          ]
+          ++ lib.optionals withFreeze [ hyprpicker ]
+        )
+      }
 
     runHook postInstall
   '';

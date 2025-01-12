@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, meson
-, ninja
-, rustc
-, cargo
-, wrapGAppsHook4
-, python3
-, libadwaita
-, graphene
-, gst_all_1
-, glib-networking
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  meson,
+  ninja,
+  rustc,
+  cargo,
+  wrapGAppsHook4,
+  python3,
+  libadwaita,
+  graphene,
+  gst_all_1,
+  glib-networking,
 }:
 
 stdenv.mkDerivation rec {

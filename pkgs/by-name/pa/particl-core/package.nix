@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, autoreconfHook
-, boost
-, db48
-, fetchFromGitHub
-, fetchpatch2
-, libevent
-, miniupnpc
-, openssl
-, pkg-config
-, zeromq
-, zlib
-, unixtools
-, python3
+{
+  lib,
+  stdenv,
+  autoreconfHook,
+  boost,
+  db48,
+  fetchFromGitHub,
+  fetchpatch2,
+  libevent,
+  miniupnpc,
+  openssl,
+  pkg-config,
+  zeromq,
+  zlib,
+  unixtools,
+  python3,
 }:
 
 stdenv.mkDerivation rec {
@@ -34,15 +35,30 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ pkg-config autoreconfHook ];
-  buildInputs = [ openssl db48 boost zlib miniupnpc libevent zeromq unixtools.hexdump python3 ];
-
-  configureFlags = [
-    "--disable-bench"
-    "--with-boost-libdir=${boost.out}/lib"
-  ] ++ lib.optionals (!doCheck) [
-    "--enable-tests=no"
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
   ];
+  buildInputs = [
+    openssl
+    db48
+    boost
+    zlib
+    miniupnpc
+    libevent
+    zeromq
+    unixtools.hexdump
+    python3
+  ];
+
+  configureFlags =
+    [
+      "--disable-bench"
+      "--with-boost-libdir=${boost.out}/lib"
+    ]
+    ++ lib.optionals (!doCheck) [
+      "--enable-tests=no"
+    ];
 
   # Always check during Hydra builds
   doCheck = true;

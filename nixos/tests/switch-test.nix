@@ -1,6 +1,7 @@
 # Test configuration switching.
+{ lib, pkgs, ...}:
 
-import ./make-test-python.nix ({ lib, pkgs, ng, ...} : let
+let
 
   # Simple service that can either be socket-activated or that will
   # listen on port 1234 if not socket-activated.
@@ -48,8 +49,6 @@ in {
 
   nodes = {
     machine = { pkgs, lib, ... }: {
-      system.switch.enableNg = ng;
-
       environment.systemPackages = [ pkgs.socat ]; # for the socket activation stuff
       users.mutableUsers = false;
 
@@ -612,6 +611,10 @@ in {
     other = {
       system.switch.enable = true;
       users.mutableUsers = true;
+      specialisation.failingCheck.configuration.system.preSwitchChecks.failEveryTime = ''
+        echo this will fail
+        false
+      '';
     };
   };
 
@@ -683,6 +686,11 @@ in {
     )
 
     boot_loader_text = "Warning: do not know how to make this configuration bootable; please enable a boot loader."
+
+    with subtest("pre-switch checks"):
+        machine.succeed("${stderrRunner} ${otherSystem}/bin/switch-to-configuration check")
+        out = switch_to_specialisation("${otherSystem}", "failingCheck", action="check", fail=True)
+        assert_contains(out, "this will fail")
 
     with subtest("actions"):
         # boot action
@@ -1446,4 +1454,4 @@ in {
         assert_lacks(out, "\nstarting the following units:")
         assert_lacks(out, "the following new units were started:")
   '';
-})
+}

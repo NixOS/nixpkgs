@@ -70,14 +70,14 @@
 
 buildPythonPackage rec {
   pname = "mlflow";
-  version = "2.17.2";
+  version = "2.19.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mlflow";
     repo = "mlflow";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-s3t6RAJh129d5XJKtMNxS0wgGO4mKbAfMCXDBXEKBxM=";
+    tag = "v${version}";
+    hash = "sha256-QUyoT6tl/kv/RAntKYZ83p/lvssX1dJb45VpklAVQT4=";
   };
 
   # Remove currently broken dependency `shap`, a model explainability package.

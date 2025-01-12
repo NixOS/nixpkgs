@@ -1,4 +1,8 @@
-{ lib, stdenv, nodejs }:
+{
+  lib,
+  stdenv,
+  nodejs,
+}:
 
 stdenv.mkDerivation {
   pname = "corepack-nodejs";

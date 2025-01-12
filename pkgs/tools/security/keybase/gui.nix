@@ -1,7 +1,33 @@
-{ stdenv, lib, fetchurl, alsa-lib, atk, cairo, cups, udev, libdrm, mesa
-, dbus, expat, fontconfig, freetype, gdk-pixbuf, glib, gtk3, libappindicator-gtk3
-, libnotify, nspr, nss, pango, systemd, xorg, autoPatchelfHook, wrapGAppsHook3
-, runtimeShell, gsettings-desktop-schemas }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  alsa-lib,
+  atk,
+  cairo,
+  cups,
+  udev,
+  libdrm,
+  libgbm,
+  dbus,
+  expat,
+  fontconfig,
+  freetype,
+  gdk-pixbuf,
+  glib,
+  gtk3,
+  libappindicator-gtk3,
+  libnotify,
+  nspr,
+  nss,
+  pango,
+  systemd,
+  xorg,
+  autoPatchelfHook,
+  wrapGAppsHook3,
+  runtimeShell,
+  gsettings-desktop-schemas,
+}:
 
 let
   versionSuffix = "20240821175720.3212f60cc5";
@@ -53,7 +79,7 @@ stdenv.mkDerivation rec {
     xorg.libXtst
     xorg.libxcb
     libdrm
-    mesa.out
+    libgbm
   ];
 
   runtimeDependencies = [
@@ -98,7 +124,7 @@ stdenv.mkDerivation rec {
       checkFailed
     fi
 
-    exec $out/share/keybase/Keybase \''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}} "\$@"
+    exec $out/share/keybase/Keybase \''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}} "\$@"
     EOF
     chmod +x $out/bin/keybase-gui
 
@@ -111,7 +137,15 @@ stdenv.mkDerivation rec {
     description = "Keybase official GUI";
     mainProgram = "keybase-gui";
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ avaq rvolosatovs puffnfresh np Br1ght0ne shofius ryand56 ];
+    maintainers = with maintainers; [
+      avaq
+      rvolosatovs
+      puffnfresh
+      np
+      Br1ght0ne
+      shofius
+      ryand56
+    ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.bsd3;
   };

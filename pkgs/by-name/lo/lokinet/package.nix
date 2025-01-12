@@ -1,19 +1,20 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, libevent
-, libsodium
-, libuv
-, nlohmann_json
-, pkg-config
-, spdlog
-, fmt_9
-, sqlite
-, systemd
-, unbound
-, zeromq
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  libevent,
+  libsodium,
+  libuv,
+  nlohmann_json,
+  pkg-config,
+  spdlog,
+  fmt_9,
+  sqlite,
+  systemd,
+  unbound,
+  zeromq,
 }:
 let
   # Upstream has received reports of incompatibilities with fmt, and other
@@ -22,14 +23,15 @@ let
     fmt = fmt_9;
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "lokinet";
   version = "0.9.11";
 
   src = fetchFromGitHub {
     owner = "oxen-io";
     repo = "lokinet";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     fetchSubmodules = true;
     hash = "sha256-aVFLDGTbRUOw2XWDpl+ojwHBG7c0miGeoKMLwMpqVtg=";
   };

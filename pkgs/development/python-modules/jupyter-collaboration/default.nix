@@ -17,13 +17,13 @@
 
 buildPythonPackage rec {
   pname = "jupyter-collaboration";
-  version = "3.0.0";
+  version = "3.1.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "jupyter_collaboration";
     inherit version;
-    hash = "sha256-eewAsh/EI8DV4FNWgjEhT61RUbaYE6suOAny4bf1CCw=";
+    hash = "sha256-BDmG5vzdikFh342XFqk92q/smidKqbUDWEx6gORh7p8=";
   };
 
   build-system = [ hatchling ];

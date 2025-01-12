@@ -1,14 +1,15 @@
-{ stdenv
-, lib
-, fetchFromGitea
-, rustPlatform
-, makeWrapper
-, protobuf
-, darwin
-, imagemagick
-, ffmpeg
-, exiftool
-, nixosTests
+{
+  stdenv,
+  lib,
+  fetchFromGitea,
+  rustPlatform,
+  makeWrapper,
+  protobuf,
+  darwin,
+  imagemagick,
+  ffmpeg,
+  exiftool,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -34,7 +35,13 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     wrapProgram "$out/bin/pict-rs" \
-        --prefix PATH : "${lib.makeBinPath [ imagemagick ffmpeg exiftool ]}"
+        --prefix PATH : "${
+          lib.makeBinPath [
+            imagemagick
+            ffmpeg
+            exiftool
+          ]
+        }"
   '';
 
   passthru.tests = { inherit (nixosTests) pict-rs; };

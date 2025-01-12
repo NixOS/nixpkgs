@@ -2,11 +2,12 @@
   lib,
   python3Packages,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   gobject-introspection,
   wrapGAppsHook3,
   gtk3,
   getent,
+  nixosTests,
 }:
 python3Packages.buildPythonPackage rec {
   pname = "auto-cpufreq";
@@ -16,7 +17,7 @@ python3Packages.buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "AdnanHodzic";
     repo = "auto-cpufreq";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Xsh3d7rQY7RKzZ7J0swrgxZEyITb7B3oX5F/tcBGjfk=";
   };
 
@@ -48,8 +49,7 @@ python3Packages.buildPythonPackage rec {
 
   patches = [
     # hardcodes version output
-    (substituteAll {
-      src = ./fix-version-output.patch;
+    (replaceVars ./fix-version-output.patch {
       inherit version;
     })
 
@@ -92,6 +92,10 @@ python3Packages.buildPythonPackage rec {
     mkdir -p $out/share/polkit-1/actions
     cp scripts/org.auto-cpufreq.pkexec.policy $out/share/polkit-1/actions
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) auto-cpufreq;
+  };
 
   meta = {
     mainProgram = "auto-cpufreq";

@@ -1,4 +1,10 @@
-{ callPackage, lib, fetchurl, fetchpatch, autoreconfHook }:
+{
+  callPackage,
+  lib,
+  fetchurl,
+  fetchpatch,
+  autoreconfHook,
+}:
 let
   common = opts: callPackage (import ./common.nix opts) { };
 in
@@ -26,27 +32,30 @@ in
       hash = "sha256-s0P7zb/4fxWxmG5uFdbU/Jp9NgZr5rf7UHCHuo+WbAI=";
     };
 
-    extraPatches = let url = "https://raw.githubusercontent.com/freebsd/freebsd-ports/7ba88c964b6e5724eec462021d984da3989e6a08/security/openssh-portable/files/extra-patch-hpn"; in
-    [
-      ./ssh-keysign-8.5.patch
+    extraPatches =
+      let
+        url = "https://raw.githubusercontent.com/freebsd/freebsd-ports/7ba88c964b6e5724eec462021d984da3989e6a08/security/openssh-portable/files/extra-patch-hpn";
+      in
+      [
+        ./ssh-keysign-8.5.patch
 
-      # HPN Patch from FreeBSD ports
-      (fetchpatch {
-        name = "ssh-hpn-wo-channels.patch";
-        inherit url;
-        stripLen = 1;
-        excludes = [ "channels.c" ];
-        hash = "sha256-zk7t6FNzTE+8aDU4QuteR1x0W3O2gjIQmeCkTNbaUfA=";
-      })
+        # HPN Patch from FreeBSD ports
+        (fetchpatch {
+          name = "ssh-hpn-wo-channels.patch";
+          inherit url;
+          stripLen = 1;
+          excludes = [ "channels.c" ];
+          hash = "sha256-zk7t6FNzTE+8aDU4QuteR1x0W3O2gjIQmeCkTNbaUfA=";
+        })
 
-      (fetchpatch {
-        name = "ssh-hpn-channels.patch";
-        inherit url;
-        extraPrefix = "";
-        includes = [ "channels.c" ];
-        hash = "sha256-pDLUbjv5XIyByEbiRAXC3WMUPKmn15af1stVmcvr7fE=";
-      })
-    ];
+        (fetchpatch {
+          name = "ssh-hpn-channels.patch";
+          inherit url;
+          extraPrefix = "";
+          includes = [ "channels.c" ];
+          hash = "sha256-pDLUbjv5XIyByEbiRAXC3WMUPKmn15af1stVmcvr7fE=";
+        })
+      ];
 
     extraNativeBuildInputs = [ autoreconfHook ];
 

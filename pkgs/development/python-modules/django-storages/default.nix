@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jschneier";
     repo = "django-storages";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-nlM/XPot3auLzNsnHCVtog2WmiaibDRgbPOw9A5F9QI=";
   };
 
@@ -40,6 +40,13 @@ buildPythonPackage rec {
       url = "https://github.com/jschneier/django-storages/commit/e1aedcf2d137f164101d31f2f430f1594eedd78c.patch";
       hash = "sha256-jSb/uJ0RXvPsXl+WUAzAgDvJl9Y3ad2F30X1SbsCc04=";
       name = "add_moto_5_support.patch";
+    })
+    # Fix Google Cloud tests
+    # https://github.com/jschneier/django-storages/pull/1476
+    (fetchpatch {
+      url = "https://github.com/jschneier/django-storages/commit/fda4e2375bfc5b400593ce01f6516dc3264d0357.patch";
+      hash = "sha256-Dga4xvCjeKEwuH0ynyJeM0criBtKT6Z+4gINXMKh4Ng=";
+      name = "fix_google_cloud_tests.patch";
     })
   ];
 
@@ -69,12 +76,6 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "storages" ];
 
   env.DJANGO_SETTINGS_MODULE = "tests.settings";
-
-  disabledTests = [
-    # AttributeError: 'str' object has no attribute 'universe_domain'
-    # https://github.com/jschneier/django-storages/issues/1463
-    "test_storage_save_gzip"
-  ];
 
   meta = {
     description = "Collection of custom storage backends for Django";

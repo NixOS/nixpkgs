@@ -1,33 +1,33 @@
 {
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  glslang,
-  pkg-config,
-  flac,
-  libopus,
-  opusfile,
-  makeWrapper,
   SDL2,
+  fetchFromGitHub,
+  flac,
+  glslang,
   gzip,
+  lib,
+  libmpg123,
+  libopus,
   libvorbis,
-  libmad,
+  makeWrapper,
+  meson,
+  moltenvk,
+  ninja,
+  opusfile,
+  pkg-config,
+  stdenv,
   vulkan-headers,
   vulkan-loader,
-  moltenvk,
 }:
 
 stdenv.mkDerivation rec {
   pname = "vkquake";
-  version = "1.31.2";
+  version = "1.31.3";
 
   src = fetchFromGitHub {
     owner = "Novum";
     repo = "vkQuake";
     rev = version;
-    sha256 = "sha256-7JE1KBavZt8u55KpWMmQOJJuxlW99ICnaQI4MbTgGdw=";
+    sha256 = "sha256-VqTfcwt6/VTotD2Y7x7WiVwISRGOLfmMWh6EO5DSMX4=";
   };
 
   nativeBuildInputs = [
@@ -38,19 +38,21 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [
-    SDL2
-    flac
-    gzip
-    libmad
-    libopus
-    libvorbis
-    opusfile
-    vulkan-loader
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    moltenvk
-    vulkan-headers
-  ];
+  buildInputs =
+    [
+      SDL2
+      flac
+      gzip
+      libmpg123
+      libopus
+      libvorbis
+      opusfile
+      vulkan-loader
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      moltenvk
+      vulkan-headers
+    ];
 
   buildFlags = [ "DO_USERDIRS=1" ];
 
@@ -84,7 +86,10 @@ stdenv.mkDerivation rec {
     '';
 
     platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [ PopeRigby ylh ];
+    maintainers = with maintainers; [
+      PopeRigby
+      ylh
+    ];
     mainProgram = "vkquake";
   };
 }

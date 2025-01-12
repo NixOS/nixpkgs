@@ -27,13 +27,13 @@ let
   # 2) nix-build -A tree-sitter.updater.update-all-grammars
   # 3) Set GITHUB_TOKEN env variable to avoid api rate limit (Use a Personal Access Token from https://github.com/settings/tokens It does not need any permissions)
   # 4) run the ./result script that is output by that (it updates ./grammars)
-  version = "0.24.3";
-  hash = "sha256-2Pg4D1Pf1Ex6ykXouAJvD1NVfg5CH4rCQcSTAJmYwd4=";
+  version = "0.24.4";
+  hash = "sha256-DIlPEz8oTzLm5BZHPjIQCHDHUXdUhL+LRrkld11HzXw=";
 
   src = fetchFromGitHub {
     owner = "tree-sitter";
     repo = "tree-sitter";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     inherit hash;
     fetchSubmodules = true;
   };
@@ -66,11 +66,11 @@ let
         { tree-sitter-latex = grammars'.tree-sitter-latex // { generate = true; }; } //
         { tree-sitter-ocaml = grammars'.tree-sitter-ocaml // { location = "grammars/ocaml"; }; } //
         { tree-sitter-ocaml-interface = grammars'.tree-sitter-ocaml // { location = "grammars/interface"; }; } //
-        { tree-sitter-org-nvim = grammars'.tree-sitter-org-nvim // { language = "org"; }; } //
+        { tree-sitter-org-nvim = grammars'.tree-sitter-org-nvim // { language = "tree-sitter-org"; }; } //
         { tree-sitter-typescript = grammars'.tree-sitter-typescript // { location = "typescript"; }; } //
         { tree-sitter-tsx = grammars'.tree-sitter-typescript // { location = "tsx"; }; } //
         { tree-sitter-markdown = grammars'.tree-sitter-markdown // { location = "tree-sitter-markdown"; }; } //
-        { tree-sitter-markdown-inline = grammars'.tree-sitter-markdown // { language = "markdown_inline"; location = "tree-sitter-markdown-inline"; }; } //
+        { tree-sitter-markdown-inline = grammars'.tree-sitter-markdown // { language = "tree-sitter-markdown_inline"; location = "tree-sitter-markdown-inline"; }; } //
         { tree-sitter-php = grammars'.tree-sitter-php // { location = "php"; }; } //
         { tree-sitter-sql = grammars'.tree-sitter-sql // { generate = true; }; };
     in
@@ -111,7 +111,7 @@ rustPlatform.buildRustPackage {
   pname = "tree-sitter";
   inherit src version;
 
-  cargoHash = "sha256-0ZoXf0eV3kmHaRoHcWrVEgoWnYNBsY9GiFfy84H+0mc=";
+  cargoHash = "sha256-32CcOb5op+7QOgLSw+8rvMW3GjJ0jaQsryX5DiW+bIk=";
 
   buildInputs =
     lib.optionals stdenv.hostPlatform.isDarwin [ Security CoreServices ];

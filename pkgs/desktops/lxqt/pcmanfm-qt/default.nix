@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, layer-shell-qt
-, libexif
-, libfm-qt
-, lxqt-build-tools
-, lxqt-menu-data
-, menu-cache
-, pkg-config
-, qtbase
-, qtimageformats
-, qttools
-, qtwayland
-, qtsvg
-, wrapQtAppsHook
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  layer-shell-qt,
+  libexif,
+  libfm-qt,
+  lxqt-build-tools,
+  lxqt-menu-data,
+  menu-cache,
+  pkg-config,
+  qtbase,
+  qtimageformats,
+  qttools,
+  qtwayland,
+  qtsvg,
+  wrapQtAppsHook,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {

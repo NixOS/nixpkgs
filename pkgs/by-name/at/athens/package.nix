@@ -19,7 +19,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-W65lQYGrRg8LwFERj5MBOPFAn2j+FE7ep4ANuAGmfgM=";
 
-  CGO_ENABLED = "0";
+  env.CGO_ENABLED = "0";
   ldflags = [
     "-s"
     "-X github.com/gomods/athens/pkg/build.version=${version}"

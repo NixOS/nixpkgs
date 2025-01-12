@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchurl, autoreconfHook, pkg-config
-, libglvnd, SDL, SDL_image, SDL_mixer, xorg
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  pkg-config,
+  libglvnd,
+  SDL,
+  SDL_image,
+  SDL_mixer,
+  xorg,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,8 +24,17 @@ stdenv.mkDerivation rec {
     sed -i 's/^AUTOMAKE_OPTIONS = gnu$/AUTOMAKE_OPTIONS = foreign/' Makefile.am
   '';
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ libglvnd SDL SDL_image SDL_mixer xorg.libSM ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+  buildInputs = [
+    libglvnd
+    SDL
+    SDL_image
+    SDL_mixer
+    xorg.libSM
+  ];
   strictDeps = true;
 
   configureFlags = [

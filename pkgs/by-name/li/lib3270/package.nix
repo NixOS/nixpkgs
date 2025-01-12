@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, which
-, pkg-config
-, autoconf
-, automake
-, libtool
-, gettext
-, openssl
-, curl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  which,
+  pkg-config,
+  autoconf,
+  automake,
+  libtool,
+  gettext,
+  openssl,
+  curl,
 }:
 
 stdenv.mkDerivation rec {

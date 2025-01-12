@@ -1,4 +1,10 @@
-{lib, stdenv, fetchurl, cmake, perl}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  perl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "halibut";
@@ -9,7 +15,10 @@ stdenv.mkDerivation rec {
     sha256 = "0ciikn878vivs4ayvwvr63nnhpcg12m8023xv514zxqpdxlzg85a";
   };
 
-  nativeBuildInputs = [ cmake perl ];
+  nativeBuildInputs = [
+    cmake
+    perl
+  ];
 
   meta = with lib; {
     description = "Documentation production system for software manuals";

@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, doxygen
-, gbenchmark
-, graphviz
-, gtest
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  doxygen,
+  gbenchmark,
+  graphviz,
+  gtest,
 }:
 
 stdenv.mkDerivation rec {

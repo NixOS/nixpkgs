@@ -8,6 +8,7 @@
   glib-networking,
   gobject-introspection,
   pipewire,
+  nixosTests,
 }:
 
 pythonPackages.buildPythonApplication rec {
@@ -30,12 +31,11 @@ pythonPackages.buildPythonApplication rec {
     gst-plugins-good
     gst-plugins-ugly
     gst-plugins-rs
+    pipewire
   ];
 
   propagatedBuildInputs =
-    [
-      gobject-introspection
-    ]
+    [ gobject-introspection ]
     ++ (
       with pythonPackages;
       [
@@ -49,18 +49,14 @@ pythonPackages.buildPythonApplication rec {
       ++ lib.optional (!stdenv.hostPlatform.isDarwin) dbus-python
     );
 
-  propagatedNativeBuildInputs = [
-    gobject-introspection
-  ];
+  propagatedNativeBuildInputs = [ gobject-introspection ];
 
   # There are no tests
   doCheck = false;
 
-  preFixup = ''
-    gappsWrapperArgs+=(
-      --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "${pipewire}/lib/gstreamer-1.0"
-    )
-  '';
+  passthru.tests = {
+    inherit (nixosTests) mopidy;
+  };
 
   meta = with lib; {
     homepage = "https://www.mopidy.com/";

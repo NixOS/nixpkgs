@@ -1,43 +1,54 @@
-{ lib, stdenv, fetchFromGitHub, boost, gtkmm2, lv2, pkg-config, python3, wafHook }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  boost,
+  gtkmm2,
+  lv2,
+  pkg-config,
+  python3,
+  meson,
+  pugl,
+  ninja,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lvtk";
-  version = "1.2.0";
+  version = "1.2.0-unstable-2024-11-06";
 
   src = fetchFromGitHub {
     owner = "lvtk";
     repo = "lvtk";
-    rev = version;
-    sha256 = "sha256-6IoyhBig3Nvc4Y8F0w8b1up6sn8O2RmoUVaBQ//+Aaw=";
+    rev = "0797fdcabef84f57b064c7b4507743afebc66589";
+    hash = "sha256-Z79zy2/OZTO6RTrAqgTHTzB00LtFTFiJ272RvQRpbH8=";
   };
 
-  nativeBuildInputs = [ pkg-config python3 wafHook ];
-  buildInputs = [ boost gtkmm2 lv2 ];
+  nativeBuildInputs = [
+    pkg-config
+    python3
+    meson
+    ninja
+  ];
+
+  buildInputs = [
+    boost
+    gtkmm2
+    lv2
+    pugl
+  ];
 
   enableParallelBuilding = true;
 
-  postPatch = ''
-    # Fix including the boost libraries during linking
-    sed -i '/target[ ]*= "ttl2c"/ ilib=["boost_system"],' tools/wscript_build
-
-    # don't use bundled waf
-    rm waf
-
-    # remove (useless) python2 based print
-    sed -e '/print/d' -i wscript
-  '';
-
-  wafConfigureFlags = [
-    "--boost-includes=${boost.dev}/include"
-    "--boost-libs=${boost.out}/lib"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Set C++ wrappers around the LV2 C API";
     mainProgram = "ttl2c";
     homepage = "https://lvtk.org/";
-    license = licenses.gpl3;
-    maintainers = [ ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ bot-wxt1221 ];
+    platforms = lib.platforms.unix;
+    badPlatforms = [
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
   };
-}
+})

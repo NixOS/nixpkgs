@@ -1,4 +1,10 @@
-{ lib, fetchFromGitHub, python3Packages, makeWrapper, metasploit }:
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  makeWrapper,
+  metasploit,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "social-engineer-toolkit";

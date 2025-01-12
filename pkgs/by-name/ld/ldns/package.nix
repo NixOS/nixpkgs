@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, openssl, perl, which, dns-root-data }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  openssl,
+  perl,
+  which,
+  dns-root-data,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ldns";
@@ -13,21 +21,28 @@ stdenv.mkDerivation rec {
     patchShebangs doc/doxyparse.pl
   '';
 
-  outputs = [ "out" "dev" "man" "examples" ];
+  outputs = [
+    "out"
+    "dev"
+    "man"
+    "examples"
+  ];
 
   nativeBuildInputs = [ perl ];
   buildInputs = [ openssl ];
 
-  configureFlags = [
-    "--with-ssl=${openssl.dev}"
-    "--with-trust-anchor=${dns-root-data}/root.key"
-    "--with-drill"
-    "--disable-gost"
-    "--with-examples"
-  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    "ac_cv_func_malloc_0_nonnull=yes"
-    "ac_cv_func_realloc_0_nonnull=yes"
-  ];
+  configureFlags =
+    [
+      "--with-ssl=${openssl.dev}"
+      "--with-trust-anchor=${dns-root-data}/root.key"
+      "--with-drill"
+      "--disable-gost"
+      "--with-examples"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+      "ac_cv_func_malloc_0_nonnull=yes"
+      "ac_cv_func_realloc_0_nonnull=yes"
+    ];
 
   nativeCheckInputs = [ which ];
   doCheck = false; # fails. missing some files

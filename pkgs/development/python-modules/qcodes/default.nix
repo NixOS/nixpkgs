@@ -59,14 +59,14 @@
 
 buildPythonPackage rec {
   pname = "qcodes";
-  version = "0.49.0";
+  version = "0.50.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "Qcodes";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-AlrQH0yKbEz+ICdvWWjMD7LQvWl36cFWlp+fegAmtL8=";
+    tag = "v${version}";
+    hash = "sha256-oNJVOz2FMMhUkYIajeWwRmHzLcXu5qTSQzjk0gciOnE=";
   };
 
   build-system = [

@@ -1,17 +1,18 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, gitUpdater
-, accountsservice
-, cmake
-, cmake-extras
-, deviceinfo
-, libgbinder
-, libglibutil
-, pkg-config
-, qtbase
-, qtdeclarative
-, qtfeedback
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  gitUpdater,
+  accountsservice,
+  cmake,
+  cmake-extras,
+  deviceinfo,
+  libgbinder,
+  libglibutil,
+  pkg-config,
+  qtbase,
+  qtdeclarative,
+  qtfeedback,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

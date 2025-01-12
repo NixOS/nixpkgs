@@ -1,39 +1,40 @@
-{ fetchFromGitHub
-, lib
-, stdenv
-, cmake
-, glib-networking
-, gst_all_1
-, gtkmm3
-, libayatana-appindicator
-, libcanberra
-, libepoxy
-, libpsl
-, libdatrie
-, libdeflate
-, libselinux
-, libsepol
-, libsysprof-capture
-, libthai
-, libxkbcommon
-, sqlite
-, pcre
-, pcre2
-, pkg-config
-, webkitgtk_4_0
-, wrapGAppsHook3
-, xorg
+{
+  fetchFromGitHub,
+  lib,
+  stdenv,
+  cmake,
+  glib-networking,
+  gst_all_1,
+  gtkmm3,
+  libayatana-appindicator,
+  libcanberra,
+  libepoxy,
+  libpsl,
+  libdatrie,
+  libdeflate,
+  libselinux,
+  libsepol,
+  libsysprof-capture,
+  libthai,
+  libxkbcommon,
+  sqlite,
+  pcre,
+  pcre2,
+  pkg-config,
+  webkitgtk_4_0,
+  wrapGAppsHook3,
+  xorg,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "whatsapp-for-linux";
-  version = "1.6.5";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "eneshecan";
     repo = "whatsapp-for-linux";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-hUIyn6BhAPoszBTHKa4qSj6IRa+8cUS0Gis/qjDDnyk=";
+    hash = "sha256-h07Qf34unwtyc1VDtCCkukgBDJIvYNgESwAylbsjVsQ=";
   };
 
   nativeBuildInputs = [
@@ -74,6 +75,9 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "whatsapp-for-linux";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ bartuka ];
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
   };
 })

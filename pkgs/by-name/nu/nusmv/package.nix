@@ -1,22 +1,30 @@
-{ stdenv
-, lib
-, fetchurl
-, autoPatchelfHook
+{
+  stdenv,
+  lib,
+  fetchurl,
+  autoPatchelfHook,
 }:
 
 stdenv.mkDerivation rec {
   pname = "NuSMV";
   version = "2.6.0";
 
-  src = with stdenv; fetchurl (
-    if isx86_64 && isLinux then {
-      url = "https://nusmv.fbk.eu/distrib/NuSMV-${version}-linux64.tar.gz";
-      sha256 = "1370x2vwjndv9ham5q399nn84hvhm1gj1k7pq576qmh4pi12xc8i";
-    } else if isx86_32 && isLinux then {
-      url = "https://nusmv.fbk.eu/distrib/NuSMV-${version}-linux32.tar.gz";
-      sha256 = "1qf41czwbqxlrmv0rv2daxgz2hljza5xks85sx3dhwpjy2iav9jb";
-    } else throw "only linux x86_64 and x86_32 are currently supported") ;
-
+  src =
+    with stdenv;
+    fetchurl (
+      if isx86_64 && isLinux then
+        {
+          url = "https://nusmv.fbk.eu/distrib/NuSMV-${version}-linux64.tar.gz";
+          sha256 = "1370x2vwjndv9ham5q399nn84hvhm1gj1k7pq576qmh4pi12xc8i";
+        }
+      else if isx86_32 && isLinux then
+        {
+          url = "https://nusmv.fbk.eu/distrib/NuSMV-${version}-linux32.tar.gz";
+          sha256 = "1qf41czwbqxlrmv0rv2daxgz2hljza5xks85sx3dhwpjy2iav9jb";
+        }
+      else
+        throw "only linux x86_64 and x86_32 are currently supported"
+    );
 
   nativeBuildInputs = [ autoPatchelfHook ];
 

@@ -130,7 +130,10 @@ rec {
           "--disable-shared"
         ];
         cmakeFlags = (args.cmakeFlags or []) ++ [ "-DBUILD_SHARED_LIBS:BOOL=OFF" ];
-        mesonFlags = (args.mesonFlags or []) ++ [ "-Ddefault_library=static" ];
+        mesonFlags = (args.mesonFlags or []) ++ [
+          "-Ddefault_library=static"
+          "-Ddefault_both_libraries=static"
+        ];
       });
     });
 

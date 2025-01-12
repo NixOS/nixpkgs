@@ -6,13 +6,14 @@
   nodejs,
   stdenv,
   meta,
+  npm-hash,
 }:
 stdenv.mkDerivation {
   inherit version src meta;
   pname = "${pname}-webui";
   pnpmDeps = pnpm.fetchDeps {
     inherit pname version src;
-    hash = "sha256-ZKDhBdVyLIPf7CQaYUvj9dJd3lA3zsqroSjTyvOmunQ=";
+    hash = npm-hash;
   };
 
   nativeBuildInputs = [

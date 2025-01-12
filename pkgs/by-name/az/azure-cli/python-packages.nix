@@ -137,6 +137,26 @@ let
         overrideAzureMgmtPackage super.azure-mgmt-cdn "12.0.0" "zip"
           "sha256-t8PuIYkjS0r1Gs4pJJJ8X9cz8950imQtbVBABnyMnd0=";
 
+      # ImportError: cannot import name 'ConfigMap' from 'azure.mgmt.containerinstance.models'
+      azure-mgmt-containerinstance = super.azure-mgmt-containerinstance.overridePythonAttrs (attrs: rec {
+        version = "10.2.0b1";
+        src = fetchPypi {
+          pname = "azure_mgmt_containerinstance"; # Different from src.pname in the original package.
+          inherit version;
+          hash = "sha256-v0u3e9ZoEnDdCnM6o6fD7N+suo5hbTqMO5jM6cSMx8A=";
+        };
+      });
+
+      # ModuleNotFoundError: No module named 'azure.mgmt.containerservice.v2024_09_01'
+      azure-mgmt-containerservice = super.azure-mgmt-containerservice.overridePythonAttrs (attrs: rec {
+        version = "33.0.0";
+        src = fetchPypi {
+          pname = "azure_mgmt_containerservice"; # Different from src.pname in the original package.
+          inherit version;
+          hash = "sha256-hoWD3NuKSQXeA6hKm3kD12octZrNnDc28CvHQ7UEfJ4=";
+        };
+      });
+
       # ValueError: The operation 'azure.mgmt.devtestlabs.operations#VirtualMachinesOperations.delete' is invalid.
       azure-mgmt-devtestlabs =
         overrideAzureMgmtPackage super.azure-mgmt-devtestlabs "4.0.0" "zip"
@@ -180,9 +200,14 @@ let
           "sha256-05PUV8ouAKq/xhGxVEWIzDop0a7WDTV5mGVSC4sv9P4=";
 
       # ImportError: cannot import name 'AdvancedThreatProtectionName' from 'azure.mgmt.sql.models'
-      azure-mgmt-sql =
-        overrideAzureMgmtPackage super.azure-mgmt-sql "4.0.0b17" "tar.gz"
-          "sha256-i9VNbYJ3TgzURbtYYrXw+ez4ubK7BH39/EIL5kqb9Xg=";
+      azure-mgmt-sql = super.azure-mgmt-sql.overridePythonAttrs (attrs: rec {
+        version = "4.0.0b20";
+        src = fetchPypi {
+          pname = "azure_mgmt_sql"; # Different from src.pname in the original package.
+          inherit version;
+          hash = "sha256-mphqHUet4AhmL8aUoRbrGOjbookCHR3Ex+unpOq7aQM=";
+        };
+      });
 
       # ValueError: The operation 'azure.mgmt.sqlvirtualmachine.operations#SqlVirtualMachinesOperations.begin_create_or_update' is invalid.
       azure-mgmt-sqlvirtualmachine =

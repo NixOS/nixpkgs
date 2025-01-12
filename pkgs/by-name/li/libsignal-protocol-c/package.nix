@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, cmake, openssl }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  openssl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libsignal-protocol-c";
@@ -17,7 +23,10 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   meta = with lib; {
     description = "Signal Protocol C Library";

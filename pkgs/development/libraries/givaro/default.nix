@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, automake
-, autoconf
-, libtool
-, autoreconfHook
-, gmpxx
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  automake,
+  autoconf,
+  libtool,
+  autoreconfHook,
+  gmpxx,
 }:
 stdenv.mkDerivation rec {
   pname = "givaro";
@@ -30,27 +31,46 @@ stdenv.mkDerivation rec {
       url = "https://github.com/linbox-team/givaro/commit/a81d44b3b57c275bcb04ab00db79be02561deaa2.patch";
       hash = "sha256-sSk+VWffoEjZRTJcHRISLHPyW6yuvI1u8knBOfxNUIE=";
     })
+    # https://github.com/linbox-team/givaro/issues/226
+    (fetchpatch {
+      name = "gcc-14.patch";
+      url = "https://github.com/linbox-team/givaro/commit/b0cf33e1d4437530c7e4b3db90b6c80057a7f2f3.patch";
+      includes = [ "src/kernel/integer/random-integer.h" ];
+      hash = "sha256-b2Q8apP9ueEqIUtibTeP47x6TlroRzLgAxuv5ZM1EUw=";
+    })
+    # https://github.com/linbox-team/givaro/issues/232
+    (fetchpatch {
+      name = "clang-19.patch";
+      url = "https://github.com/linbox-team/givaro/commit/a18baf5227d4f3e81a50850fe98e0d954eaa3ddb.patch";
+      hash = "sha256-IR0IHhCqbxgtsST30vxM9ak1nGtt0apxcLUQ1kS1DHw=";
+    })
   ];
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ autoreconfHook autoconf automake ];
-  buildInputs = [libtool];
+  nativeBuildInputs = [
+    autoreconfHook
+    autoconf
+    automake
+  ];
+  buildInputs = [ libtool ];
   propagatedBuildInputs = [ gmpxx ];
 
-  configureFlags = [
-    "--without-archnative"
-  ] ++ lib.optionals stdenv.hostPlatform.isx86_64 [
-    # disable SIMD instructions (which are enabled *when available* by default)
-    "--${if stdenv.hostPlatform.sse3Support   then "enable" else "disable"}-sse3"
-    "--${if stdenv.hostPlatform.ssse3Support  then "enable" else "disable"}-ssse3"
-    "--${if stdenv.hostPlatform.sse4_1Support then "enable" else "disable"}-sse41"
-    "--${if stdenv.hostPlatform.sse4_2Support then "enable" else "disable"}-sse42"
-    "--${if stdenv.hostPlatform.avxSupport    then "enable" else "disable"}-avx"
-    "--${if stdenv.hostPlatform.avx2Support   then "enable" else "disable"}-avx2"
-    "--${if stdenv.hostPlatform.fmaSupport    then "enable" else "disable"}-fma"
-    "--${if stdenv.hostPlatform.fma4Support   then "enable" else "disable"}-fma4"
-  ];
+  configureFlags =
+    [
+      "--without-archnative"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isx86_64 [
+      # disable SIMD instructions (which are enabled *when available* by default)
+      "--${if stdenv.hostPlatform.sse3Support then "enable" else "disable"}-sse3"
+      "--${if stdenv.hostPlatform.ssse3Support then "enable" else "disable"}-ssse3"
+      "--${if stdenv.hostPlatform.sse4_1Support then "enable" else "disable"}-sse41"
+      "--${if stdenv.hostPlatform.sse4_2Support then "enable" else "disable"}-sse42"
+      "--${if stdenv.hostPlatform.avxSupport then "enable" else "disable"}-avx"
+      "--${if stdenv.hostPlatform.avx2Support then "enable" else "disable"}-avx2"
+      "--${if stdenv.hostPlatform.fmaSupport then "enable" else "disable"}-fma"
+      "--${if stdenv.hostPlatform.fma4Support then "enable" else "disable"}-fma4"
+    ];
 
   # On darwin, tests are linked to dylib in the nix store, so we need to make
   # sure tests run after installPhase.
@@ -62,7 +82,7 @@ stdenv.mkDerivation rec {
     description = "C++ library for arithmetic and algebraic computations";
     mainProgram = "givaro-config";
     license = lib.licenses.cecill-b;
-    maintainers = [lib.maintainers.raskin];
+    maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.unix;
   };
 }

@@ -10,17 +10,18 @@
   komac,
   dbus,
   zstd,
+  installShellFiles,
   versionCheckHook,
   nix-update-script,
 }:
 
 let
-  version = "2.6.0";
+  version = "2.8.0";
   src = fetchFromGitHub {
     owner = "russellbanks";
     repo = "Komac";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-YFaa2kU42NlhRivBEPV1mSr3j95P4NFwUKM0Xx8tpfg=";
+    tag = "v${version}";
+    hash = "sha256-yAf89GtKu500VPn+CKF6sGC+TPhJcGz2lR7C30/YBRI=";
   };
 in
 rustPlatform.buildRustPackage {
@@ -28,9 +29,15 @@ rustPlatform.buildRustPackage {
 
   pname = "komac";
 
-  cargoHash = "sha256-kb18phtY5rRNUw0ZaZu2tipAaOURSy+2duf/+cOj5Y8=";
+  cargoHash = "sha256-wgOZoKsbYkbbCKS+2pfqgsHD5Azw72gPJXHhfw5mNqo=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs =
+    [
+      pkg-config
+    ]
+    ++ lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+      installShellFiles
+    ];
 
   buildInputs =
     [
@@ -52,6 +59,13 @@ rustPlatform.buildRustPackage {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/komac";
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd komac \
+      --bash <($out/bin/komac complete bash) \
+      --zsh <($out/bin/komac complete zsh) \
+      --fish <($out/bin/komac complete fish)
+  '';
 
   passthru = {
     tests.version = testers.testVersion {

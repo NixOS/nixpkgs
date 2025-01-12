@@ -1,7 +1,8 @@
-{ python3Packages
-, fetchFromGitHub
-, gcc
-, lib
+{
+  python3Packages,
+  fetchFromGitHub,
+  gcc,
+  lib,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -11,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "hartwork";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-02d7ip5E/vkOMkkeHOx1m7FdpurXT9O6HdwrygNPHdY=";
   };
 

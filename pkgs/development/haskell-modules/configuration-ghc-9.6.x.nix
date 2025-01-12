@@ -5,19 +5,25 @@ with haskellLib;
 let
   inherit (pkgs) lib;
 
-  jailbreakWhileRevision = rev:
+  jailbreakWhileRevision =
+    rev:
     overrideCabal (old: {
-      jailbreak = assert old.revision or "0" == toString rev; true;
+      jailbreak =
+        assert old.revision or "0" == toString rev;
+        true;
     });
-  checkAgainAfter = pkg: ver: msg: act:
-    if builtins.compareVersions pkg.version ver <= 0 then act
+  checkAgainAfter =
+    pkg: ver: msg: act:
+    if builtins.compareVersions pkg.version ver <= 0 then
+      act
     else
       builtins.throw "Check if '${msg}' was resolved in ${pkg.pname} ${pkg.version} and update or remove this";
   jailbreakForCurrentVersion = p: v: checkAgainAfter p v "bad bounds" (doJailbreak p);
 
 in
 
-self: super: {
+self: super:
+{
   llvmPackages = lib.dontRecurseIntoAttrs self.ghc.llvmPackages;
 
   # Disable GHC core libraries
@@ -52,7 +58,11 @@ self: super: {
   system-cxx-std-lib = null;
   template-haskell = null;
   # terminfo is not built if GHC is a cross compiler
-  terminfo = if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then null else doDistribute self.terminfo_0_4_1_6;
+  terminfo =
+    if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then
+      null
+    else
+      doDistribute self.terminfo_0_4_1_6;
   text = null;
   time = null;
   transformers = null;
@@ -99,13 +109,13 @@ self: super: {
   # https://github.com/kowainik/relude/issues/436
   relude = dontCheck (doJailbreak super.relude);
 
-  inherit (pkgs.lib.mapAttrs (_: doJailbreak ) super)
+  inherit (pkgs.lib.mapAttrs (_: doJailbreak) super)
     ghc-trace-events
-    gi-cairo-connector          # mtl <2.3
-    ghc-prof                    # base <4.18
-    env-guard                   # doctest <0.21
-    package-version             # doctest <0.21, tasty-hedgehog <1.4
-  ;
+    gi-cairo-connector # mtl <2.3
+    ghc-prof # base <4.18
+    env-guard # doctest <0.21
+    package-version # doctest <0.21, tasty-hedgehog <1.4
+    ;
 
   # Pending text-2.0 support https://github.com/gtk2hs/gtk2hs/issues/327
   gtk = doJailbreak super.gtk;
@@ -119,54 +129,58 @@ self: super: {
 
   # This can be removed once https://github.com/typeclasses/ascii-predicates/pull/1
   # is merged and in a release that's being tracked.
-  ascii-predicates = appendPatch
-    (pkgs.fetchpatch
-      { url = "https://github.com/typeclasses/ascii-predicates/commit/2e6d9ed45987a8566f3a77eedf7836055c076d1a.patch";
-        name = "ascii-predicates-pull-1.patch";
-        relative = "ascii-predicates";
-        sha256 = "sha256-4JguQFZNRQpjZThLrAo13jNeypvLfqFp6o7c1bnkmZo=";
-      })
-    super.ascii-predicates;
+  ascii-predicates = appendPatch (pkgs.fetchpatch {
+    url = "https://github.com/typeclasses/ascii-predicates/commit/2e6d9ed45987a8566f3a77eedf7836055c076d1a.patch";
+    name = "ascii-predicates-pull-1.patch";
+    relative = "ascii-predicates";
+    sha256 = "sha256-4JguQFZNRQpjZThLrAo13jNeypvLfqFp6o7c1bnkmZo=";
+  }) super.ascii-predicates;
 
   # This can be removed once https://github.com/typeclasses/ascii-numbers/pull/1
   # is merged and in a release that's being tracked.
-  ascii-numbers = appendPatch
-    (pkgs.fetchpatch
-      { url = "https://github.com/typeclasses/ascii-numbers/commit/e9474ad91bc997891f1a46afd5d0bdf9b9f7d768.patch";
-        name = "ascii-numbers-pull-1.patch";
-        relative = "ascii-numbers";
-        sha256 = "sha256-buw1UeW57CFefEfqdDUraSyQ+H/NvCZOv6WF2ORiYQg=";
-      })
-    super.ascii-numbers;
+  ascii-numbers = appendPatch (pkgs.fetchpatch {
+    url = "https://github.com/typeclasses/ascii-numbers/commit/e9474ad91bc997891f1a46afd5d0bdf9b9f7d768.patch";
+    name = "ascii-numbers-pull-1.patch";
+    relative = "ascii-numbers";
+    sha256 = "sha256-buw1UeW57CFefEfqdDUraSyQ+H/NvCZOv6WF2ORiYQg=";
+  }) super.ascii-numbers;
 
   # Apply patch from PR with mtl-2.3 fix.
   ConfigFile = overrideCabal (drv: {
     editedCabalFile = null;
-    buildDepends = drv.buildDepends or [] ++ [ self.HUnit ];
-    patches = [(pkgs.fetchpatch {
-      # https://github.com/jgoerzen/configfile/pull/12
-      name = "ConfigFile-pr-12.patch";
-      url = "https://github.com/jgoerzen/configfile/compare/d0a2e654be0b73eadbf2a50661d00574ad7b6f87...83ee30b43f74d2b6781269072cf5ed0f0e00012f.patch";
-      sha256 = "sha256-b7u9GiIAd2xpOrM0MfILHNb6Nt7070lNRIadn2l3DfQ=";
-    })];
+    buildDepends = drv.buildDepends or [ ] ++ [ self.HUnit ];
+    patches = [
+      (pkgs.fetchpatch {
+        # https://github.com/jgoerzen/configfile/pull/12
+        name = "ConfigFile-pr-12.patch";
+        url = "https://github.com/jgoerzen/configfile/compare/d0a2e654be0b73eadbf2a50661d00574ad7b6f87...83ee30b43f74d2b6781269072cf5ed0f0e00012f.patch";
+        sha256 = "sha256-b7u9GiIAd2xpOrM0MfILHNb6Nt7070lNRIadn2l3DfQ=";
+      })
+    ];
   }) super.ConfigFile;
 
   # Compatibility with core libs of GHC 9.6
   # Jailbreak to lift bound on time
-  kqueue = doJailbreak (appendPatches [
-    (pkgs.fetchpatch {
-      name = "kqueue-ghc-9.6.patch";
-      url = "https://github.com/hesselink/kqueue/pull/10/commits/a2735e807d761410e776482ec04515d9cf76a7f5.patch";
-      sha256 = "18rilz4nrwcmlvll3acjx2lp7s129pviggb8fy3hdb0z34ls5j84";
-      excludes = [ ".gitignore" ];
-    })
-  ] super.kqueue);
+  kqueue = doJailbreak (
+    appendPatches [
+      (pkgs.fetchpatch {
+        name = "kqueue-ghc-9.6.patch";
+        url = "https://github.com/hesselink/kqueue/pull/10/commits/a2735e807d761410e776482ec04515d9cf76a7f5.patch";
+        sha256 = "18rilz4nrwcmlvll3acjx2lp7s129pviggb8fy3hdb0z34ls5j84";
+        excludes = [ ".gitignore" ];
+      })
+    ] super.kqueue
+  );
 
   # This runs into the following GHC bug currently affecting 9.6.* and 9.8.* as
   # well as 9.10.1: https://gitlab.haskell.org/ghc/ghc/-/issues/24432
-  inherit (lib.mapAttrs (_: overrideCabal (drv: {
-      badPlatforms = drv.badPlatforms or [ ] ++ [ "aarch64-linux" ];
-    })) super)
+  inherit
+    (lib.mapAttrs (
+      _:
+      overrideCabal (drv: {
+        badPlatforms = drv.badPlatforms or [ ] ++ [ "aarch64-linux" ];
+      })
+    ) super)
     mueval
     lambdabot
     lambdabot-haskell-plugins
@@ -175,13 +189,15 @@ self: super: {
   singletons-base = dontCheck super.singletons-base;
 }
 # super.ghc is required to break infinite recursion as Nix is strict in the attrNames
-// lib.optionalAttrs (pkgs.stdenv.hostPlatform.isAarch64 && lib.versionOlder super.ghc.version "9.6.4") {
-  # The NCG backend for aarch64 generates invalid jumps in some situations,
-  # the workaround on 9.6 is to revert to the LLVM backend (which is used
-  # for these sorts of situations even on 9.2 and 9.4).
-  # https://gitlab.haskell.org/ghc/ghc/-/issues/23746#note_525318
-  inherit (lib.mapAttrs (_: self.forceLlvmCodegenBackend) super)
-    tls
-    mmark
-    ;
-}
+//
+  lib.optionalAttrs (pkgs.stdenv.hostPlatform.isAarch64 && lib.versionOlder super.ghc.version "9.6.4")
+    {
+      # The NCG backend for aarch64 generates invalid jumps in some situations,
+      # the workaround on 9.6 is to revert to the LLVM backend (which is used
+      # for these sorts of situations even on 9.2 and 9.4).
+      # https://gitlab.haskell.org/ghc/ghc/-/issues/23746#note_525318
+      inherit (lib.mapAttrs (_: self.forceLlvmCodegenBackend) super)
+        tls
+        mmark
+        ;
+    }

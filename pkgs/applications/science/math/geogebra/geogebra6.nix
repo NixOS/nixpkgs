@@ -63,7 +63,7 @@ let
       cp -r GeoGebra-linux-x64/{resources,locales} "$out/"
       makeWrapper ${lib.getBin electron}/bin/electron $out/bin/geogebra \
         --add-flags "$out/resources/app" \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
       install -Dm644 "${desktopItem}/share/applications/"* \
         -t $out/share/applications/
 

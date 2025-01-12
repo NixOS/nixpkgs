@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, makeWrapper, jre }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  jre,
+}:
 
 let
   version = "2021.2.1";
@@ -21,7 +27,6 @@ stdenv.mkDerivation rec {
       --replace "/usr/share/flexibee" $out \
       --replace "/var/run" "/run"
   '';
-
 
   installPhase = ''
     runHook preInstall

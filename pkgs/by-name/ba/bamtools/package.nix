@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, jsoncpp
-, pkg-config
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  jsoncpp,
+  pkg-config,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -14,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "pezmaster31";
     repo = "bamtools";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-l2DmA4P1kPneTCL9YVACE6LcQHT0F+mufPyM69VkksE=";
   };
 
@@ -34,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "C++ API & command-line toolkit for working with BAM data";
     mainProgram = "bamtools";
     homepage = "https://github.com/pezmaster31/bamtools";
-    changelog = "https://github.com/pezmaster31/bamtools/releases/tag/${lib.removePrefix "refs/tags/" finalAttrs.src.rev}";
+    changelog = "https://github.com/pezmaster31/bamtools/releases/tag/v${finalAttrs.version}";
     license = licenses.mit;
     maintainers = with maintainers; [ natsukium ];
     platforms = platforms.unix;

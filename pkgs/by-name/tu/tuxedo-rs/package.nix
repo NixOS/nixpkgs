@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, testers
-, tuxedo-rs
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  testers,
+  tuxedo-rs,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "tuxedo-rs";
@@ -16,7 +17,6 @@ rustPlatform.buildRustPackage rec {
     rev = "tailor-v${version}";
     hash = "sha256-+NzwUs8TZsA0us9hI1UmEKdiOo9IqTRmTOHs4xmC7MY=";
   };
-
 
   # Some of the tests are impure and rely on files in /etc/tailord
   doCheck = false;
@@ -44,7 +44,10 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/AaronErhardt/tuxedo-rs";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ mrcjkb xaverdh ];
+    maintainers = with maintainers; [
+      mrcjkb
+      xaverdh
+    ];
     platforms = platforms.linux;
     mainProgram = "tailor";
   };

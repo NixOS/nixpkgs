@@ -1,11 +1,12 @@
-{ fetchFromGitHub
-, lib
-, stdenv
-, flex
-, bison
-, autoreconfHook
-, pkg-config
-, libtirpc
+{
+  fetchFromGitHub,
+  lib,
+  stdenv,
+  flex,
+  bison,
+  autoreconfHook,
+  pkg-config,
+  libtirpc,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,13 +20,18 @@ stdenv.mkDerivation rec {
     hash = "sha256-5iAriIutBhwyZVS7AG2fnkrHOI7pNAKfYv062Cy0WXw=";
   };
 
-  nativeBuildInputs = [ flex bison autoreconfHook pkg-config ];
+  nativeBuildInputs = [
+    flex
+    bison
+    autoreconfHook
+    pkg-config
+  ];
 
   buildInputs = [ libtirpc ];
 
   configureFlags = [ "--disable-shared" ];
 
-  doCheck = false;                                # no test suite
+  doCheck = false; # no test suite
 
   meta = {
     description = "User-space NFSv3 file system server";

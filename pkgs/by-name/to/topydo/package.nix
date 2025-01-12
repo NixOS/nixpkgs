@@ -1,4 +1,10 @@
-{ lib, python3, fetchFromGitHub, fetchpatch, glibcLocales }:
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  fetchpatch,
+  glibcLocales,
+}:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "topydo";

@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +18,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-BpuYK9fbWSpeF8iPT8ImrV3CKKaA5RQ2W0ZQ03TciR0=";
   };
 
-  nativeBuildInputs = [ meson ninja ];
+  nativeBuildInputs = [
+    meson
+    ninja
+  ];
 
   # frozen has a simple Makefile and a GN BUILD file as building scripts.
   # Since it has only two source files, the best course of action to support

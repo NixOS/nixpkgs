@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, libX11, cairo, lv2, pkg-config, libsndfile }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libX11,
+  cairo,
+  lv2,
+  pkg-config,
+  libsndfile,
+}:
 
 stdenv.mkDerivation rec {
   pname = "bjumblr";
@@ -13,7 +22,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    libX11 cairo lv2 libsndfile
+    libX11
+    cairo
+    lv2
+    libsndfile
   ];
 
   installFlags = [ "PREFIX=$(out)" ];

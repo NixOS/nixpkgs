@@ -1,23 +1,24 @@
-{ lib
-, git
-, python3
-, fetchFromGitHub
+{
+  lib,
+  git,
+  python3,
+  fetchFromGitHub,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "copier";
-  version = "9.2.0";
+  version = "9.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "copier-org";
     repo = "copier";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     # Conflict on APFS on darwin
     postFetch = ''
       rm $out/tests/demo/doc/ma*ana.txt
     '';
-    hash = "sha256-fjZ2ieyyFvm5LdCoKLhOffWZusYbZEGebR8o7PDF8wc=";
+    hash = "sha256-bNz3xFYksgdN9iXbkZIHWsHpRa9aICxBZmzy/t0+3z0=";
   };
 
   POETRY_DYNAMIC_VERSIONING_BYPASS = version;
@@ -49,7 +50,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   makeWrapperArgs = [
-    "--suffix PATH : ${lib.makeBinPath [ git ] }"
+    "--suffix PATH : ${lib.makeBinPath [ git ]}"
   ];
 
   meta = with lib; {

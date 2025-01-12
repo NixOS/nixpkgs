@@ -1,14 +1,18 @@
-{ lib, fetchFromGitHub, buildGoModule }:
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+}:
 
 buildGoModule rec {
   pname = "butane";
-  version = "0.22.0";
+  version = "0.23.0";
 
   src = fetchFromGitHub {
     owner = "coreos";
     repo = "butane";
     rev = "v${version}";
-    hash = "sha256-ELCERcgw01RcSMQjM0PL8CyTKrdfEPV9U8/RSf7YxCs=";
+    hash = "sha256-UJRHqvfCeKxbE+SRQZEm797WqwGpwjlqol8z36l3nS4=";
   };
 
   vendorHash = null;
@@ -30,6 +34,9 @@ buildGoModule rec {
     mainProgram = "butane";
     license = licenses.asl20;
     homepage = "https://github.com/coreos/butane";
-    maintainers = with maintainers; [ elijahcaine ruuda ];
+    maintainers = with maintainers; [
+      elijahcaine
+      ruuda
+    ];
   };
 }

@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, vulkan-loader
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  vulkan-loader,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,7 +22,9 @@ rustPlatform.buildRustPackage rec {
   # It doesn't discover this on its own :/
   # https://github.com/GpuZelenograd/memtest_vulkan/issues/36
   postFixup = lib.optionalString stdenv.targetPlatform.isElf ''
-    patchelf $out/bin/memtest_vulkan --add-needed libvulkan.so --add-rpath ${lib.makeLibraryPath [ vulkan-loader ]}
+    patchelf $out/bin/memtest_vulkan --add-needed libvulkan.so --add-rpath ${
+      lib.makeLibraryPath [ vulkan-loader ]
+    }
   '';
 
   meta = with lib; {

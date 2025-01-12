@@ -1,21 +1,35 @@
-{ buildGoModule, fetchFromGitHub, lib, installShellFiles, git, makeWrapper}:
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+  installShellFiles,
+  git,
+  makeWrapper,
+}:
 
 buildGoModule rec {
   pname = "mani";
-  version = "0.25.0";
+  version = "0.30.0";
 
   src = fetchFromGitHub {
     owner = "alajmo";
     repo = "mani";
     rev = "v${version}";
-    sha256 = "sha256-TqxoU2g4ZegJGHrnNO+ivPu209NDFcLnxpHGj8pOA4E=";
+    sha256 = "sha256-LxW9LPK4cXIXhBWPhOYWLeV5PIf+o710SWX8JVpZhPI=";
   };
 
-  vendorHash = "sha256-mFan09oJ+BPVJHAxoROj282WJ+4e7TD0ZqeQH1kDabQ=";
+  vendorHash = "sha256-8ckflry+KsEu+QgqjocXg6yyfS9R7fCfCMXwUqUSlhE=";
 
-  nativeBuildInputs = [ installShellFiles makeWrapper ];
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
+  ];
 
-  ldflags = [ "-s" "-w" "-X github.com/alajmo/mani/cmd.version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/alajmo/mani/cmd.version=${version}"
+  ];
 
   postInstall = ''
     installShellCompletion --cmd mani \

@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, sphinx
-, setuptools
-, unittestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  sphinx,
+  setuptools,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -22,7 +23,6 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
   dependencies = [ sphinx ];
-  nativeCheckInputs = [ unittestCheckHook ];
 
   pythonImportsCheck = [ "sphinx_multiversion" ];
 

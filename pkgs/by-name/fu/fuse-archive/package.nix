@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fuse
-, libarchive
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fuse,
+  libarchive,
+  pkg-config,
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = "fuse-archive";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-l4tIK157Qo4m611etwMSk564+eC28x4RbmjX3J57/7Q=";
   };
 

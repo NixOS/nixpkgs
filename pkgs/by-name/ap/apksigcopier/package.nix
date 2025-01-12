@@ -1,10 +1,11 @@
-{ lib
-, apksigner
-, bash
-, fetchFromGitHub
-, installShellFiles
-, pandoc
-, python3
+{
+  lib,
+  apksigner,
+  bash,
+  fetchFromGitHub,
+  installShellFiles,
+  pandoc,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -14,7 +15,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "obfusk";
     repo = "apksigcopier";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-VuwSaoTv5qq1jKwgBTKd1y9RKUzz89n86Z4UBv7Q51o=";
   };
 

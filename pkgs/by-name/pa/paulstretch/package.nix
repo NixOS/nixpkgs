@@ -1,6 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
-, audiofile, libvorbis, fltk, fftw, fftwFloat
-, minixml, pkg-config, libmad, libjack2, portaudio, libsamplerate
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  audiofile,
+  libvorbis,
+  fltk,
+  fftw,
+  fftwFloat,
+  minixml,
+  pkg-config,
+  libmad,
+  libjack2,
+  portaudio,
+  libsamplerate,
 }:
 
 stdenv.mkDerivation {

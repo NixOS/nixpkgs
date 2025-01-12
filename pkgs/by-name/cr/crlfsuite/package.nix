@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -11,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Nefcore";
     repo = "CRLFsuite";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-mK20PbVGhTEjhY5L6coCzSMIrG/PHHmNq30ZoJEs6uI=";
   };
 
@@ -32,6 +33,9 @@ python3.pkgs.buildPythonApplication rec {
     mainProgram = "crlfsuite";
     homepage = "https://github.com/Nefcore/CRLFsuite";
     license = licenses.mit;
-    maintainers = with maintainers; [ c0bw3b fab ];
+    maintainers = with maintainers; [
+      c0bw3b
+      fab
+    ];
   };
 }

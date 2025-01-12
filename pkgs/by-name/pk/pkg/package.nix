@@ -1,5 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, m4, pkg-config, tcl
-, bzip2, elfutils, libarchive, libbsd, xz, openssl, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  m4,
+  pkg-config,
+  tcl,
+  bzip2,
+  elfutils,
+  libarchive,
+  libbsd,
+  xz,
+  openssl,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -16,9 +28,19 @@ stdenv.mkDerivation (finalAttrs: {
   setOutputFlags = false;
   separateDebugInfo = true;
 
-  nativeBuildInputs = [ m4 pkg-config tcl ];
-  buildInputs = [ bzip2 elfutils libarchive openssl xz zlib ]
-    ++ lib.optional stdenv.hostPlatform.isLinux libbsd;
+  nativeBuildInputs = [
+    m4
+    pkg-config
+    tcl
+  ];
+  buildInputs = [
+    bzip2
+    elfutils
+    libarchive
+    openssl
+    xz
+    zlib
+  ] ++ lib.optional stdenv.hostPlatform.isLinux libbsd;
 
   enableParallelBuilding = true;
 

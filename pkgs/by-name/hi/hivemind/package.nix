@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, runtimeShell }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  runtimeShell,
+}:
 
 buildGoModule rec {
   pname = "hivemind";

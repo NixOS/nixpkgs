@@ -1,10 +1,11 @@
-{ lib
-, perlPackages
-, fetchFromGitHub
-, wrapGAppsHook3
-, gobject-introspection
-, perl
-, clamav
+{
+  lib,
+  perlPackages,
+  fetchFromGitHub,
+  wrapGAppsHook3,
+  gobject-introspection,
+  perl,
+  clamav,
 }:
 
 perlPackages.buildPerlPackage rec {
@@ -18,14 +19,31 @@ perlPackages.buildPerlPackage rec {
     hash = "sha256-ClBsBXbGj67zgrkA9EjgK7s3OmXOJA+xV5xLGOcMsbI=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook3 gobject-introspection ];
-  buildInputs = [ perl clamav ];
-  propagatedBuildInputs = with perlPackages; [ Glib LWP LWPProtocolHttps TextCSV JSON LocaleGettext Gtk3 ];
+  nativeBuildInputs = [
+    wrapGAppsHook3
+    gobject-introspection
+  ];
+  buildInputs = [
+    perl
+    clamav
+  ];
+  propagatedBuildInputs = with perlPackages; [
+    Glib
+    LWP
+    LWPProtocolHttps
+    TextCSV
+    JSON
+    LocaleGettext
+    Gtk3
+  ];
 
   preConfigure = "touch Makefile.PL";
   # no tests implemented
   doCheck = false;
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   postPatch = ''
     # Set correct nix paths in perl scripts
@@ -71,7 +89,10 @@ perlPackages.buildPerlPackage rec {
     license = licenses.gpl1Plus;
     homepage = "https://github.com/dave-theunsub/clamtk";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ chewblacka ShamrockLee ];
+    maintainers = with maintainers; [
+      chewblacka
+      ShamrockLee
+    ];
   };
 
 }

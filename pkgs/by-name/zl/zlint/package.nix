@@ -1,8 +1,9 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, testers
-, zlint
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  zlint,
 }:
 
 buildGoModule rec {
@@ -12,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "zmap";
     repo = "zlint";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-FFgBRuNvm4Cnjls9y+L256vMGGNu10x7Vh+V9HBon70=";
   };
 
@@ -48,7 +49,7 @@ buildGoModule rec {
       requirements (e.g. CA/Browser Forum Baseline Requirements).
     '';
     homepage = "https://github.com/zmap/zlint";
-    changelog = "https://github.com/zmap/zlint/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
+    changelog = "https://github.com/zmap/zlint/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ baloo ];
   };

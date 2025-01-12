@@ -1,71 +1,93 @@
-{ stdenv
-, lib
-, fetchFromSourcehut
-, asciidoc
-, cmocka
-, docbook_xsl
-, libxslt
-, meson
-, ninja
-, pkg-config
-, icu
-, pango
-, inih
-, withWindowSystem ? null
-, xorg
-, libxkbcommon
-, libGLU
-, wayland
-# "libnsgif" is disabled until https://todo.sr.ht/~exec64/imv/55 is solved
-, withBackends ? [ "libjxl" "libtiff" "libjpeg" "libpng" "librsvg" "libheif" ]
-, freeimage
-, libtiff
-, libjpeg_turbo
-, libjxl
-, libpng
-, librsvg
-, netsurf
-, libheif
+{
+  stdenv,
+  lib,
+  fetchFromSourcehut,
+  asciidoc,
+  cmocka,
+  docbook_xsl,
+  libxslt,
+  meson,
+  ninja,
+  pkg-config,
+  icu,
+  pango,
+  inih,
+  withWindowSystem ? null,
+  xorg,
+  libxkbcommon,
+  libGLU,
+  wayland,
+  # "libnsgif" is disabled until https://todo.sr.ht/~exec64/imv/55 is solved
+  withBackends ? [
+    "libjxl"
+    "libtiff"
+    "libjpeg"
+    "libpng"
+    "librsvg"
+    "libheif"
+  ],
+  freeimage,
+  libtiff,
+  libjpeg_turbo,
+  libjxl,
+  libpng,
+  librsvg,
+  netsurf,
+  libheif,
 }:
 
 let
   # default value of withWindowSystem
   withWindowSystem' =
-         if withWindowSystem != null then withWindowSystem
-    else if stdenv.hostPlatform.isLinux then "all"
-    else "x11";
+    if withWindowSystem != null then
+      withWindowSystem
+    else if stdenv.hostPlatform.isLinux then
+      "all"
+    else
+      "x11";
 
   windowSystems = {
     all = windowSystems.x11 ++ windowSystems.wayland;
-    x11 = [ libGLU xorg.libxcb xorg.libX11 ];
+    x11 = [
+      libGLU
+      xorg.libxcb
+      xorg.libX11
+    ];
     wayland = [ wayland ];
   };
 
   backends = {
-    inherit freeimage libtiff libpng librsvg libheif libjxl;
+    inherit
+      freeimage
+      libtiff
+      libpng
+      librsvg
+      libheif
+      libjxl
+      ;
     libjpeg = libjpeg_turbo;
     inherit (netsurf) libnsgif;
   };
 
-  backendFlags = builtins.map
-    (b: if builtins.elem b withBackends
-        then "-D${b}=enabled"
-        else "-D${b}=disabled")
-    (builtins.attrNames backends);
+  backendFlags = builtins.map (
+    b: if builtins.elem b withBackends then "-D${b}=enabled" else "-D${b}=disabled"
+  ) (builtins.attrNames backends);
 in
 
 # check that given window system is valid
-assert lib.assertOneOf "withWindowSystem" withWindowSystem'
-  (builtins.attrNames windowSystems);
+assert lib.assertOneOf "withWindowSystem" withWindowSystem' (builtins.attrNames windowSystems);
 # check that every given backend is valid
-assert builtins.all
-  (b: lib.assertOneOf "each backend" b (builtins.attrNames backends))
-  withBackends;
+assert builtins.all (
+  b: lib.assertOneOf "each backend" b (builtins.attrNames backends)
+) withBackends;
 
 stdenv.mkDerivation rec {
   pname = "imv";
   version = "4.5.0";
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   src = fetchFromSourcehut {
     owner = "~exec64";
@@ -91,13 +113,15 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [
-    cmocka
-    icu
-    libxkbcommon
-    pango
-    inih
-  ] ++ windowSystems."${withWindowSystem'}"
+  buildInputs =
+    [
+      cmocka
+      icu
+      libxkbcommon
+      pango
+      inih
+    ]
+    ++ windowSystems."${withWindowSystem'}"
     ++ builtins.map (b: backends."${b}") withBackends;
 
   postInstall = ''
@@ -119,7 +143,10 @@ stdenv.mkDerivation rec {
     description = "Command line image viewer for tiling window managers";
     homepage = "https://sr.ht/~exec64/imv/";
     license = licenses.mit;
-    maintainers = with maintainers; [ rnhmjoj markus1189 ];
+    maintainers = with maintainers; [
+      rnhmjoj
+      markus1189
+    ];
     platforms = platforms.all;
     badPlatforms = platforms.darwin;
     mainProgram = "imv";

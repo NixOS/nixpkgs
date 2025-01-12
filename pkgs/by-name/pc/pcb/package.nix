@@ -1,23 +1,25 @@
-{ lib, stdenv
-, fetchurl
-, pkg-config
-, gtk2
-, bison
-, intltool
-, flex
-, netpbm
-, imagemagick
-, dbus
-, freetype
-, fontconfig
-, libGLU
-, libGL
-, shared-mime-info
-, tcl
-, tk
-, gnome2
-, gd
-, xorg
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gtk2,
+  bison,
+  intltool,
+  flex,
+  netpbm,
+  imagemagick,
+  dbus,
+  freetype,
+  fontconfig,
+  libGLU,
+  libGL,
+  shared-mime-info,
+  tcl,
+  tk,
+  gnome2,
+  gd,
+  xorg,
 }:
 
 stdenv.mkDerivation rec {
@@ -60,7 +62,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Printed Circuit Board editor";
-    homepage = "http://pcb.geda-project.org/";
+    homepage = "https://sourceforge.net/projects/pcb/";
     maintainers = with maintainers; [ mog ];
     platforms = platforms.linux;
     license = licenses.gpl2;

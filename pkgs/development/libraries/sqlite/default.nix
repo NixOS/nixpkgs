@@ -2,7 +2,7 @@
 , updateAutotoolsGnuConfigScriptsHook
 
 # for tests
-, python3Packages, sqldiff, sqlite-analyzer, tinysparql
+, python3Packages, sqldiff, sqlite-analyzer, sqlite-rsync, tinysparql
 
 # uses readline & ncurses for a better interactive experience if set to true
 , interactive ? false
@@ -16,17 +16,17 @@ in
 
 stdenv.mkDerivation rec {
   pname = "sqlite${lib.optionalString interactive "-interactive"}";
-  version = "3.46.1";
+  version = "3.47.0";
 
   # nixpkgs-update: no auto update
   # NB! Make sure to update ./tools.nix src (in the same directory).
   src = fetchurl {
     url = "https://sqlite.org/2024/sqlite-autoconf-${archiveVersion version}.tar.gz";
-    hash = "sha256-Z9P+bSaObq3crjcn/OWPzI6cU4ab3Qegxh443fKWUHE=";
+    hash = "sha256-g+shpvamSfUG34vTqrhaCPdVbO7V29jep0PqAD/DqVc=";
   };
   docsrc = fetchurl {
     url = "https://sqlite.org/2024/sqlite-doc-${archiveVersion version}.zip";
-    hash = "sha256-6WkTH5PKefvGTVdyShA1c1iBVVpSYA2+acaeq3LJ/NE=";
+    hash = "sha256-3yXJb6+4Cck7jhwlxs/XSPRJ99SmV+jBJNOO/v5Ws04=";
   };
 
   outputs = [ "bin" "dev" "man" "doc" "out" ];
@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
   passthru = {
     tests = {
       inherit (python3Packages) sqlalchemy;
-      inherit sqldiff sqlite-analyzer tinysparql;
+      inherit sqldiff sqlite-analyzer sqlite-rsync tinysparql;
     };
 
     updateScript = gitUpdater {

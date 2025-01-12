@@ -1,20 +1,22 @@
-{ lib
-, writeText
-, rustPlatform
-, fetchFromGitHub
-, curl
-, installShellFiles
-, pkg-config
-, bzip2
-, libgit2
-, openssl
-, zlib
-, zstd
-, stdenv
-, darwin
-, spdx-license-list-data
-, nix
-, nurl
+{
+  lib,
+  writeText,
+  rustPlatform,
+  fetchFromGitHub,
+  curl,
+  installShellFiles,
+  pkg-config,
+  bzip2,
+  libgit2,
+  openssl,
+  zlib,
+  zstd,
+  stdenv,
+  spdx-license-list-data,
+  nix,
+  nurl,
+  testers,
+  nix-init,
 }:
 
 let
@@ -51,10 +53,6 @@ rustPlatform.buildRustPackage rec {
     openssl
     zlib
     zstd
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-    darwin.apple_sdk.frameworks.CoreFoundation
   ];
 
   buildNoDefaultFeatures = true;
@@ -86,6 +84,10 @@ rustPlatform.buildRustPackage rec {
     NIX = lib.getExe nix;
     NURL = lib.getExe nurl;
     ZSTD_SYS_USE_PKG_CONFIG = true;
+  };
+
+  passthru.tests.version = testers.testVersion {
+    package = nix-init;
   };
 
   meta = with lib; {

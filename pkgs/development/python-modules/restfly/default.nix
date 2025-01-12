@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "stevemcgrath";
     repo = "restfly";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Zdn/hUvAZ9TaAWyDpNiEiA9mYDbWmiXBUa+IV/g8n2M=";
   };
 

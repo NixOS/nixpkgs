@@ -1,6 +1,7 @@
-{ lib
-, stdenv
-, libusb1
+{
+  lib,
+  stdenv,
+  libusb1,
 }:
 
 stdenv.mkDerivation rec {

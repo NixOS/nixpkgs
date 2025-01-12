@@ -37,7 +37,7 @@
   libuuid,
   libxkbcommon,
   libxshmfence,
-  mesa,
+  libgbm,
   nspr,
   nss,
   pango,
@@ -94,50 +94,53 @@ let
     escapeShellArg
     ;
 
-  deps = [
-    alsa-lib
-    at-spi2-atk
-    at-spi2-core
-    atk
-    cairo
-    cups
-    dbus
-    expat
-    fontconfig
-    freetype
-    gdk-pixbuf
-    glib
-    gtk3
-    gtk4
-    libdrm
-    libX11
-    libGL
-    libxkbcommon
-    libXScrnSaver
-    libXcomposite
-    libXcursor
-    libXdamage
-    libXext
-    libXfixes
-    libXi
-    libXrandr
-    libXrender
-    libxshmfence
-    libXtst
-    libuuid
-    mesa
-    nspr
-    nss
-    pango
-    pipewire
-    udev
-    wayland
-    xorg.libxcb
-    zlib
-    snappy
-    libkrb5
-    qt6.qtbase
-  ] ++ optional pulseSupport libpulseaudio ++ optional libvaSupport libva;
+  deps =
+    [
+      alsa-lib
+      at-spi2-atk
+      at-spi2-core
+      atk
+      cairo
+      cups
+      dbus
+      expat
+      fontconfig
+      freetype
+      gdk-pixbuf
+      glib
+      gtk3
+      gtk4
+      libdrm
+      libX11
+      libGL
+      libxkbcommon
+      libXScrnSaver
+      libXcomposite
+      libXcursor
+      libXdamage
+      libXext
+      libXfixes
+      libXi
+      libXrandr
+      libXrender
+      libxshmfence
+      libXtst
+      libuuid
+      libgbm
+      nspr
+      nss
+      pango
+      pipewire
+      udev
+      wayland
+      xorg.libxcb
+      zlib
+      snappy
+      libkrb5
+      qt6.qtbase
+    ]
+    ++ optional pulseSupport libpulseaudio
+    ++ optional libvaSupport libva;
 
   rpath = makeLibraryPath deps + ":" + makeSearchPathOutput "lib" "lib64" deps;
   binpath = makeBinPath deps;
@@ -188,12 +191,6 @@ stdenv.mkDerivation {
     # needed for XDG_ICON_DIRS
     adwaita-icon-theme
   ];
-
-  unpackPhase =
-    if stdenv.hostPlatform.isLinux then
-      "dpkg-deb --fsys-tarfile $src | tar -x --no-same-permissions --no-same-owner"
-    else
-      "unzip $src";
 
   installPhase =
     lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -248,7 +245,7 @@ stdenv.mkDerivation {
 
       mkdir -p $out/{Applications,bin}
 
-      cp -r "Brave Browser.app" $out/Applications/
+      cp -r . "$out/Applications/Brave Browser.app"
 
       makeWrapper "$out/Applications/Brave Browser.app/Contents/MacOS/Brave Browser" $out/bin/brave
 
@@ -266,16 +263,12 @@ stdenv.mkDerivation {
           coreutils
         ]
       }
-      ${
-        optionalString (enableFeatures != [ ]) ''
-          --add-flags "--enable-features=${strings.concatStringsSep "," enableFeatures}\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+,WaylandWindowDecorations}}"
-        ''
-      }
-      ${
-        optionalString (disableFeatures != [ ]) ''
-          --add-flags "--disable-features=${strings.concatStringsSep "," disableFeatures}"
-        ''
-      }
+      ${optionalString (enableFeatures != [ ]) ''
+        --add-flags "--enable-features=${strings.concatStringsSep "," enableFeatures}\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+,WaylandWindowDecorations --enable-wayland-ime=true}}"
+      ''}
+      ${optionalString (disableFeatures != [ ]) ''
+        --add-flags "--disable-features=${strings.concatStringsSep "," disableFeatures}"
+      ''}
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto}}"
       ${optionalString vulkanSupport ''
         --prefix XDG_DATA_DIRS  : "${addDriverRunpath.driverLink}/share"

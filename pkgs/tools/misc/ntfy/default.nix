@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, python39
-, fetchFromGitHub
-, fetchpatch
-, withXmpp ? !stdenv.hostPlatform.isDarwin
-, withMatrix ? true
-, withSlack ? true
-, withEmoji ? true
-, withPid ? true
-, withDbus ? stdenv.hostPlatform.isLinux
+{
+  lib,
+  stdenv,
+  python39,
+  fetchFromGitHub,
+  fetchpatch,
+  withXmpp ? !stdenv.hostPlatform.isDarwin,
+  withMatrix ? true,
+  withSlack ? true,
+  withEmoji ? true,
+  withPid ? true,
+  withDbus ? stdenv.hostPlatform.isLinux,
 }:
 
 let
@@ -23,7 +24,8 @@ let
       django = super.django_3;
     };
   };
-in python.pkgs.buildPythonApplication rec {
+in
+python.pkgs.buildPythonApplication rec {
   pname = "ntfy";
   version = "2.7.0";
 
@@ -40,22 +42,35 @@ in python.pkgs.buildPythonApplication rec {
     mock
   ];
 
-  propagatedBuildInputs = with python.pkgs; ([
-    requests ruamel-yaml appdirs
-    ntfy-webpush
-  ] ++ (lib.optionals withXmpp [
-    sleekxmpp dnspython
-  ]) ++ (lib.optionals withMatrix [
-    matrix-client
-  ]) ++ (lib.optionals withSlack [
-    slack-sdk
-  ]) ++ (lib.optionals withEmoji [
-    emoji
-  ]) ++ (lib.optionals withPid [
-    psutil
-  ]) ++ (lib.optionals withDbus [
-    dbus-python
-  ]));
+  propagatedBuildInputs =
+    with python.pkgs;
+    (
+      [
+        requests
+        ruamel-yaml
+        appdirs
+        ntfy-webpush
+      ]
+      ++ (lib.optionals withXmpp [
+        sleekxmpp
+        dnspython
+      ])
+      ++ (lib.optionals withMatrix [
+        matrix-client
+      ])
+      ++ (lib.optionals withSlack [
+        slack-sdk
+      ])
+      ++ (lib.optionals withEmoji [
+        emoji
+      ])
+      ++ (lib.optionals withPid [
+        psutil
+      ])
+      ++ (lib.optionals withDbus [
+        dbus-python
+      ])
+    );
 
   patches = [
     # Fix Slack integration no longer working.

@@ -1,6 +1,7 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -11,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "wyoming-satellite";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-KIWhWE9Qaxs72fJ1LRTkvk6QtpBJOFlmZv2od69O15g=";
   };
 
@@ -47,7 +48,6 @@ python3Packages.buildPythonApplication rec {
     pytest-asyncio
     pytestCheckHook
   ];
-
 
   meta = with lib; {
     description = "Remote voice satellite using Wyoming protocol";

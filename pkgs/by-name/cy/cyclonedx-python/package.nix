@@ -12,20 +12,23 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "CycloneDX";
     repo = "cyclonedx-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-EcCxw3SppuGUgN7AIU9NhpRw7dLDhTHHT5emGOgkDFU=";
   };
 
   build-system = with python3Packages; [ poetry-core ];
 
-  dependencies = with python3Packages; [
-    chardet
-    cyclonedx-python-lib
-    packageurl-python
-    pip-requirements-parser
-    packaging
-    tomli
-  ] ++ cyclonedx-python-lib.optional-dependencies.validation;
+  dependencies =
+    with python3Packages;
+    [
+      chardet
+      cyclonedx-python-lib
+      packageurl-python
+      pip-requirements-parser
+      packaging
+      tomli
+    ]
+    ++ cyclonedx-python-lib.optional-dependencies.validation;
 
   pythonImportsCheck = [ "cyclonedx" ];
 

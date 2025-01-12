@@ -1,6 +1,7 @@
-{ lib
-, python3Packages
-, fetchPypi
+{
+  lib,
+  python3Packages,
+  fetchPypi,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -12,7 +13,11 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-B7IB1TWfZ0StH2zo/tXfDAaPlgLvr4ciIv7B8EQyp8w=";
   };
 
-  propagatedBuildInputs = with python3Packages; [ six requests python-dateutil ];
+  propagatedBuildInputs = with python3Packages; [
+    six
+    requests
+    python-dateutil
+  ];
 
   # uses network
   doCheck = false;

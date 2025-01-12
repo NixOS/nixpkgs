@@ -1,13 +1,30 @@
-{ lib, stdenvNoCC, gx, gx-go, go, cacert }:
+{
+  lib,
+  stdenvNoCC,
+  gx,
+  gx-go,
+  go,
+  cacert,
+}:
 
 lib.fetchers.withNormalizedHash { } (
-  { name, src, outputHash, outputHashAlgo }:
+  {
+    name,
+    src,
+    outputHash,
+    outputHashAlgo,
+  }:
 
   stdenvNoCC.mkDerivation {
     name = "${name}-gxdeps";
     inherit src;
 
-    nativeBuildInputs = [ cacert go gx gx-go ];
+    nativeBuildInputs = [
+      cacert
+      go
+      gx
+      gx-go
+    ];
 
     inherit outputHash outputHashAlgo;
     outputHashMode = "recursive";

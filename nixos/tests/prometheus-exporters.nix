@@ -219,7 +219,7 @@ let
           succeed(
               'echo \'${postData}\'> /tmp/data.json'
           )
-          succeed('sed -ie "s DATE $(date +%s) " /tmp/data.json')
+          succeed('sed -i -e "s DATE $(date +%s) " /tmp/data.json')
           succeed(
               "curl -sSfH 'Content-Type: application/json' -X POST --data @/tmp/data.json localhost:9103/collectd"
           )
@@ -399,7 +399,7 @@ let
     fastly = {
       exporterConfig = {
         enable = true;
-        tokenPath = pkgs.writeText "token" "abc123";
+        environmentFile = pkgs.writeText "fastly-exporter-env" "FASTLY_API_TOKEN=abc123";
       };
 
       exporterTest = ''
@@ -800,6 +800,38 @@ let
         wait_for_open_port(9539)
         succeed(
             "curl -sSf http://localhost:9539/metrics | grep 'modemmanager_info'"
+        )
+      '';
+    };
+
+    mqtt = {
+      exporterConfig = {
+        enable = true;
+        environmentFile = pkgs.writeText "mqtt-exporter-envfile" ''
+          MQTT_PASSWORD=testpassword
+        '';
+      };
+      metricProvider = {
+        services.mosquitto = {
+          enable = true;
+          listeners = [{
+            users.exporter = {
+              acl = [ "read #" ];
+              passwordFile = pkgs.writeText "mosquitto-password" "testpassword";
+            };
+          }];
+        };
+        systemd.services.prometheus-mqtt-exporter ={
+          wants = [ "mosquitto.service" ];
+          after = [ "mosquitto.service" ];
+        };
+      };
+      exporterTest = ''
+        wait_for_unit("mosquitto.service")
+        wait_for_unit("prometheus-mqtt-exporter.service")
+        wait_for_open_port(9000)
+        succeed(
+          "curl -sSf http://localhost:9000/metrics | grep '^python_info'"
         )
       '';
     };

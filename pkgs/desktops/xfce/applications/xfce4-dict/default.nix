@@ -1,10 +1,11 @@
-{ lib
-, mkXfceDerivation
-, glib
-, gtk3
-, libxfce4ui
-, libxfce4util
-, xfce4-panel
+{
+  lib,
+  mkXfceDerivation,
+  glib,
+  gtk3,
+  libxfce4ui,
+  libxfce4util,
+  xfce4-panel,
 }:
 
 mkXfceDerivation {

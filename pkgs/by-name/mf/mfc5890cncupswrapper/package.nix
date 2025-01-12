@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchurl
-, dpkg
-, makeWrapper
-, coreutils
-, gnugrep
-, gnused
-, mfc5890cnlpr
-, pkgsi686Linux
-, psutils
+{
+  lib,
+  stdenv,
+  fetchurl,
+  dpkg,
+  makeWrapper,
+  coreutils,
+  gnugrep,
+  gnused,
+  mfc5890cnlpr,
+  pkgsi686Linux,
+  psutils,
 }:
 
 stdenv.mkDerivation rec {
@@ -54,14 +55,21 @@ stdenv.mkDerivation rec {
     $dir/cupswrapper/cupswrappermfc5890cn
 
     chmod +x $out/usr/lib64/cups/filter/brlpdwrappermfc5890cn
-    wrapProgram $out/usr/lib64/cups/filter/brlpdwrappermfc5890cn --prefix PATH : ${lib.makeBinPath [coreutils psutils gnugrep gnused]}
+    wrapProgram $out/usr/lib64/cups/filter/brlpdwrappermfc5890cn --prefix PATH : ${
+      lib.makeBinPath [
+        coreutils
+        psutils
+        gnugrep
+        gnused
+      ]
+    }
 
     mkdir -p $out/lib/cups/filter
     mkdir -p $out/share/cups/model
     ln $out/usr/lib64/cups/filter/brlpdwrappermfc5890cn $out/lib/cups/filter
     ln $dir/cupswrapper/cupswrappermfc5890cn $out/lib/cups/filter
     ln $out/usr/share/ppd/brmfc5890cn.ppd $out/share/cups/model
-    '';
+  '';
 
   meta = with lib; {
     description = "Brother MFC-5890CN CUPS wrapper driver";

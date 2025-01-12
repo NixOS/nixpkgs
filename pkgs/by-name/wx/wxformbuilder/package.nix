@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, darwin
-, makeWrapper
-, shared-mime-info
-, boost
-, wxGTK32
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  darwin,
+  makeWrapper,
+  shared-mime-info,
+  boost,
+  wxGTK32,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -35,21 +36,26 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i '/fixup_bundle/d' cmake/macros.cmake
   '';
 
-  nativeBuildInputs = [
-    cmake
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.sigtool
-    makeWrapper
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    shared-mime-info
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.sigtool
+      makeWrapper
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      shared-mime-info
+    ];
 
-  buildInputs = [
-    boost
-    wxGTK32
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Cocoa
-  ];
+  buildInputs =
+    [
+      boost
+      wxGTK32
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.Cocoa
+    ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/{Applications,bin}
@@ -62,7 +68,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/wxFormBuilder/wxFormBuilder";
     license = licenses.gpl2Only;
     mainProgram = "wxformbuilder";
-    maintainers = with maintainers; [ matthuszagh wegank ];
+    maintainers = with maintainers; [
+      matthuszagh
+      wegank
+    ];
     platforms = platforms.unix;
   };
 })

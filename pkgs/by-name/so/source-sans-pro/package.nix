@@ -1,4 +1,8 @@
-{ lib, stdenvNoCC, fetchzip }:
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
+}:
 
 # Source Sans Pro got renamed to Source Sans 3 (see
 # https://github.com/adobe-fonts/source-sans/issues/192). This is the

@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, writeText
-, shellspec
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  writeText,
+  shellspec,
   # usage:
   # pkgs.mommy.override {
   #  mommySettings.sweetie = "catgirl";
@@ -11,13 +12,13 @@
   #
   # $ mommy
   # who's my good catgirl~
-, mommySettings ? null
+  mommySettings ? null,
 }:
 
 let
-  variables = lib.mapAttrs'
-    (name: value: lib.nameValuePair "MOMMY_${lib.toUpper name}" value)
-    mommySettings;
+  variables = lib.mapAttrs' (
+    name: value: lib.nameValuePair "MOMMY_${lib.toUpper name}" value
+  ) mommySettings;
   configFile = writeText "mommy-config" (lib.toShellVars variables);
 in
 stdenv.mkDerivation rec {

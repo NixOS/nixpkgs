@@ -1,48 +1,48 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, gtk3
-, vala
-, enchant2
-, wrapGAppsHook3
-, meson
-, ninja
-, desktop-file-utils
-, gnome-online-accounts
-, gsettings-desktop-schemas
-, adwaita-icon-theme
-, libpeas
-, libsecret
-, gmime3
-, isocodes
-, icu
-, libxml2
-, gettext
-, sqlite
-, gcr
-, json-glib
-, itstool
-, libgee
-, gnome
-, webkitgtk_4_1
-, python3
-, gnutls
-, cacert
-, xvfb-run
-, glibcLocales
-, dbus
-, shared-mime-info
-, libunwind
-, folks
-, glib-networking
-, gobject-introspection
-, gspell
-, appstream-glib
-, libstemmer
-, libytnef
-, libhandy
-, gsound
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gtk3,
+  vala,
+  enchant2,
+  wrapGAppsHook3,
+  meson,
+  ninja,
+  desktop-file-utils,
+  gnome-online-accounts,
+  gsettings-desktop-schemas,
+  adwaita-icon-theme,
+  libpeas,
+  libsecret,
+  gmime3,
+  isocodes,
+  icu,
+  libxml2,
+  gettext,
+  sqlite,
+  gcr,
+  json-glib,
+  itstool,
+  libgee,
+  gnome,
+  webkitgtk_4_1,
+  python3,
+  gnutls,
+  cacert,
+  xvfb-run,
+  glibcLocales,
+  dbus,
+  shared-mime-info,
+  libunwind,
+  folks,
+  glib-networking,
+  gobject-introspection,
+  gspell,
+  libstemmer,
+  libytnef,
+  libhandy,
+  gsound,
 }:
 
 stdenv.mkDerivation rec {
@@ -55,12 +55,11 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    appstream-glib
     desktop-file-utils
     gettext
     gobject-introspection
     itstool
-    libxml2
+    libxml2 # for xmllint for xml-stripblanks preprocessing
     meson
     ninja
     pkg-config
@@ -90,6 +89,7 @@ stdenv.mkDerivation rec {
     libsecret
     libunwind
     libstemmer
+    libxml2
     libytnef
     sqlite
     webkitgtk_4_1
@@ -108,12 +108,17 @@ stdenv.mkDerivation rec {
     "-Dcontractor=enabled" # install the contractor file (Pantheon specific)
   ];
 
-  # NOTE: Remove `build-auxyaml_to_json.py` when no longer needed, see:
-  # https://gitlab.gnome.org/GNOME/geary/commit/f7f72143e0f00ca5e0e6a798691805c53976ae31#0cc1139e3347f573ae1feee5b73dbc8a8a21fcfa
+  strictDeps = true;
+
   postPatch = ''
     chmod +x build-aux/git_version.py
 
     patchShebangs build-aux/git_version.py
+
+    # Only used for generating .pot file
+    # https://gitlab.gnome.org/GNOME/geary/-/merge_requests/856
+    substituteInPlace meson.build \
+      --replace-fail "appstream_glib = dependency('appstream-glib', version: '>=0.7.10')" ""
 
     chmod +x desktop/geary-attach
   '';

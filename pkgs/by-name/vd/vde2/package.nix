@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, libpcap, wolfssl }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  autoreconfHook,
+  libpcap,
+  wolfssl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "vde2";
@@ -24,7 +32,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  buildInputs = [ libpcap wolfssl ];
+  buildInputs = [
+    libpcap
+    wolfssl
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/virtualsquare/vde-2";

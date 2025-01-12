@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "awsrm";
@@ -14,8 +18,16 @@ buildGoModule rec {
   vendorHash = "sha256-CldEAeiFH7gdFNLbIe/oTzs8Pdnde7EqLr7vP7SMDGU=";
 
   ldflags =
-    let t = "github.com/jckuester/awsrm/internal";
-    in [ "-s" "-w" "-X ${t}.version=${version}" "-X ${t}.commit=${src.rev}" "-X ${t}.date=unknown" ];
+    let
+      t = "github.com/jckuester/awsrm/internal";
+    in
+    [
+      "-s"
+      "-w"
+      "-X ${t}.version=${version}"
+      "-X ${t}.commit=${src.rev}"
+      "-X ${t}.date=unknown"
+    ];
 
   doCheck = false;
 

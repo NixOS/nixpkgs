@@ -8,7 +8,6 @@ project('patch_cmds', 'c', version : '@version@')
 # Dependencies
 cc = meson.get_compiler('c')
 
-libbsd = dependency('libbsd-overlay', required : false)
 libutil = cc.find_library('util')
 
 
@@ -30,7 +29,6 @@ install_man('cmp/cmp.1')
 
 executable(
     'diff',
-    dependencies : [ libbsd ],
     include_directories : 'diff',
     install : true,
     sources : [
@@ -79,7 +77,6 @@ install_man('diffstat/diffstat.1')
 
 executable(
     'patch',
-    dependencies : [ libbsd ],
     include_directories : 'patch',
     install : true,
     sources : [
@@ -96,7 +93,6 @@ install_man('patch/patch.1')
 
 executable(
     'sdiff',
-    dependencies : [ libbsd ],
     include_directories : 'sdiff',
     install : true,
     sources : [

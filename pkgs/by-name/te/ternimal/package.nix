@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustc
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustc,
 }:
 stdenv.mkDerivation {
   pname = "ternimal";

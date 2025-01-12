@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, readline, gettext, ncurses }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  readline,
+  gettext,
+  ncurses,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnu-apl";
@@ -9,23 +16,30 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-KRhn8bGTdpOrtXvn2aN2GLA3bj4nCVdIVKe75Suyjrg=";
   };
 
-  buildInputs = [ readline gettext ncurses ];
+  buildInputs = [
+    readline
+    gettext
+    ncurses
+  ];
 
-  env.NIX_CFLAGS_COMPILE = toString ((lib.optionals stdenv.cc.isGNU [
-    # Needed with GCC 8
-    "-Wno-error=int-in-bool-context"
-    "-Wno-error=class-memaccess"
-    "-Wno-error=restrict"
-    "-Wno-error=format-truncation"
-    # Needed with GCC 10
-    "-Wno-error=maybe-uninitialized"
-    # Needed with GCC 11
-    "-Wno-error=misleading-indentation"
-    # Needed with GCC 12
-    "-Wno-error=nonnull"
-    "-Wno-error=stringop-overflow"
-    "-Wno-error=use-after-free"
-   ]) ++ lib.optional stdenv.cc.isClang "-Wno-error=null-dereference");
+  env.NIX_CFLAGS_COMPILE = toString (
+    (lib.optionals stdenv.cc.isGNU [
+      # Needed with GCC 8
+      "-Wno-error=int-in-bool-context"
+      "-Wno-error=class-memaccess"
+      "-Wno-error=restrict"
+      "-Wno-error=format-truncation"
+      # Needed with GCC 10
+      "-Wno-error=maybe-uninitialized"
+      # Needed with GCC 11
+      "-Wno-error=misleading-indentation"
+      # Needed with GCC 12
+      "-Wno-error=nonnull"
+      "-Wno-error=stringop-overflow"
+      "-Wno-error=use-after-free"
+    ])
+    ++ lib.optional stdenv.cc.isClang "-Wno-error=null-dereference"
+  );
 
   patchPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace src/LApack.cc --replace "malloc.h" "malloc/malloc.h"
@@ -39,10 +53,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Free interpreter for the APL programming language";
-    homepage    = "https://www.gnu.org/software/apl/";
-    license     = licenses.gpl3Plus;
+    homepage = "https://www.gnu.org/software/apl/";
+    license = licenses.gpl3Plus;
     maintainers = [ maintainers.kovirobi ];
-    platforms   = with platforms; linux ++ darwin;
+    platforms = with platforms; linux ++ darwin;
     mainProgram = "apl";
 
     longDescription = ''

@@ -18,7 +18,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.18.1";
+  version = "1.19.0";
   pname = "librepo";
 
   outputs = [
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     owner = "rpm-software-management";
     repo = "librepo";
     rev = version;
-    sha256 = "sha256-b5f6zfQu5GQ9bZPnWgmLZLH0YFFLQu7bHwMQUt4Q4Q8=";
+    sha256 = "sha256-ws57vFoK5yBMHHNQ9W48Icp4am0/5k3n4ybem1aAzVM=";
   };
 
   nativeBuildInputs = [

@@ -7,13 +7,13 @@
 with python3.pkgs;
 buildPythonApplication rec {
   pname = "mapproxy";
-  version = "3.1.0";
+  version = "3.1.3";
 
   src = fetchFromGitHub {
     owner = "mapproxy";
     repo = "mapproxy";
-    rev = version;
-    hash = "sha256-hSktJnYRPA2R6gpmZCUpGeZYDcBL5bhq4B3ev7xDjPc=";
+    tag = version;
+    hash = "sha256-Dltr4JlgE1aJfSybTbAxlUyjqkfaobupNNSj90j9taE=";
   };
 
   prePatch = ''

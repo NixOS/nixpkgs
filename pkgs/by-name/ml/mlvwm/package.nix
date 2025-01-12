@@ -1,4 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, gccmakedep, libX11, libXext, libXpm, imake, installShellFiles, ... }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gccmakedep,
+  libX11,
+  libXext,
+  libXpm,
+  imake,
+  installShellFiles,
+  ...
+}:
 
 stdenv.mkDerivation rec {
   pname = "mlvwm";
@@ -13,7 +24,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = [ gccmakedep libX11 libXext libXpm imake ];
+  buildInputs = [
+    gccmakedep
+    libX11
+    libXext
+    libXpm
+    imake
+  ];
 
   buildPhase = ''
     (cd man && xmkmf)

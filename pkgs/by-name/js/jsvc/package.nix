@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, commonsDaemon, jdk, makeWrapper, jre }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  commonsDaemon,
+  jdk,
+  makeWrapper,
+  jre,
+}:
 
 stdenv.mkDerivation rec {
   pname = "jsvc";
@@ -10,7 +18,10 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ commonsDaemon ];
-  nativeBuildInputs = [ jdk makeWrapper ];
+  nativeBuildInputs = [
+    jdk
+    makeWrapper
+  ];
 
   preConfigure = ''
     cd ./src/native/unix/
@@ -31,10 +42,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage    = "https://commons.apache.org/proper/commons-daemon";
+    homepage = "https://commons.apache.org/proper/commons-daemon";
     description = "Part of the Apache Commons Daemon software, a set of utilities and Java support classes for running Java applications as server processes";
     maintainers = with lib.maintainers; [ rsynnest ];
-    license     = lib.licenses.asl20;
+    license = lib.licenses.asl20;
     platforms = with lib.platforms; unix;
     mainProgram = "jsvc";
   };

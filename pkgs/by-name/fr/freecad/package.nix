@@ -63,13 +63,13 @@ let
 in
 freecad-utils.makeCustomizable (stdenv.mkDerivation (finalAttrs: {
   pname = "freecad";
-  version = "1.0rc4";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "FreeCAD";
     repo = "FreeCAD";
     rev = finalAttrs.version;
-    hash = "sha256-b7aeVQkgdsDRdnVIr+5ZNuWAm6GLH7sepa8kFp2Zm2U=";
+    hash = "sha256-u7RYSImUMAgKaAQSAGCFha++RufpZ/QuHAirbSFOUCI=";
     fetchSubmodules = true;
   };
 
@@ -155,7 +155,7 @@ freecad-utils.makeCustomizable (stdenv.mkDerivation (finalAttrs: {
 
   # This should work on both x86_64, and i686 linux
   preBuild = ''
-    export NIX_LDFLAGS="-L${gfortran.cc}/lib64 -L${gfortran.cc}/lib $NIX_LDFLAGS";
+    export NIX_LDFLAGS="-L${gfortran.cc.lib}/lib64 -L${gfortran.cc.lib}/lib $NIX_LDFLAGS";
   '';
 
   preConfigure = ''

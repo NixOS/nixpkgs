@@ -1,21 +1,22 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, python3
-, wrapGAppsHook3
-, gtkmm3
-, gtksourceview
-, gtksourceviewmm
-, gspell
-, libxmlxx
-, sqlite
-, curl
-, libuchardet
-, spdlog
-, fribidi
-, vte
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  python3,
+  wrapGAppsHook3,
+  gtkmm3,
+  gtksourceview,
+  gtksourceviewmm,
+  gspell,
+  libxmlxx,
+  sqlite,
+  curl,
+  libuchardet,
+  spdlog,
+  fribidi,
+  vte,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,7 +26,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "giuspen";
     repo = "cherrytree";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-JiSGoEVGotaPqEKFHjTagi+sZPgdX+tKI0FIHRmJKHE=";
   };
 

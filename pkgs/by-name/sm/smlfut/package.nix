@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, mlton, mlkit, futhark }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  mlton,
+  mlkit,
+  futhark,
+}:
 
 stdenv.mkDerivation rec {
   pname = "smlfut";
@@ -17,11 +24,14 @@ stdenv.mkDerivation rec {
 
   env.MLCOMP = "mlton";
 
-  installFlags = ["PREFIX=$(out)"];
+  installFlags = [ "PREFIX=$(out)" ];
 
   doCheck = true;
 
-  nativeCheckInputs = [ futhark mlkit ];
+  nativeCheckInputs = [
+    futhark
+    mlkit
+  ];
 
   checkTarget = "run_test";
 

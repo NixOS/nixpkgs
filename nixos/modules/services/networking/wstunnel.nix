@@ -168,7 +168,7 @@ let
         };
 
         localToRemote = lib.mkOption {
-          description = ''Listen on local and forwards traffic from remote.'';
+          description = "Listen on local and forwards traffic from remote.";
           type = lib.types.listOf (lib.types.str);
           default = [ ];
           example = [
@@ -468,10 +468,11 @@ in
 
         (lib.mapAttrsToList (name: serverCfg: {
           assertion =
-            (serverCfg.tlsCertificate == null && serverCfg.tlsKey == null)
-            || (serverCfg.tlsCertificate != null && serverCfg.tlsKey != null);
+            serverCfg.enableHTTPS
+            ->
+              (serverCfg.useACMEHost != null) || (serverCfg.tlsCertificate != null && serverCfg.tlsKey != null);
           message = ''
-            services.wstunnel.servers."${name}".tlsCertificate and services.wstunnel.servers."${name}".tlsKey need to be set together.
+            If services.wstunnel.servers."${name}".enableHTTPS is set to true, either services.wstunnel.servers."${name}".useACMEHost or both services.wstunnel.servers."${name}".tlsKey and services.wstunnel.servers."${name}".tlsCertificate need to be set.
           '';
         }) cfg.servers)
       ++

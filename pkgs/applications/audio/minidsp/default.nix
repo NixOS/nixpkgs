@@ -21,19 +21,25 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-GUrYEFpTo83lKuDyENaVN3VhnZ2Y/igtsbEY7kNa1os=";
 
-  cargoBuildFlags = ["-p minidsp -p minidsp-daemon"];
+  cargoBuildFlags = [ "-p minidsp -p minidsp-daemon" ];
 
   buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [libusb1]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [AppKit IOKit];
+    lib.optionals stdenv.hostPlatform.isLinux [ libusb1 ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      AppKit
+      IOKit
+    ];
 
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [pkg-config];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
 
   meta = with lib; {
     description = "Control interface for some MiniDSP products";
     homepage = "https://github.com/mrene/minidsp-rs";
     license = licenses.asl20;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = [maintainers.adamcstephens maintainers.mrene];
+    maintainers = [
+      maintainers.adamcstephens
+      maintainers.mrene
+    ];
   };
 }

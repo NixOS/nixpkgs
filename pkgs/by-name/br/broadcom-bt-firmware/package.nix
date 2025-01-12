@@ -1,4 +1,10 @@
-{ lib, stdenvNoCC, fetchurl, cabextract, bt-fw-converter }:
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  cabextract,
+  bt-fw-converter,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "broadcom-bt-firmware";
@@ -9,7 +15,10 @@ stdenvNoCC.mkDerivation rec {
     sha256 = "1b1qjwxjk4y91l3iz157kms8601n0mmiik32cs6w9b1q4sl4pxx9";
   };
 
-  nativeBuildInputs = [ cabextract bt-fw-converter ];
+  nativeBuildInputs = [
+    cabextract
+    bt-fw-converter
+  ];
 
   unpackCmd = ''
     mkdir -p ${pname}-${version}

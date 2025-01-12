@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
-, nix-update-script
-, nixosTests
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  nix-update-script,
+  nixosTests,
 }:
 
 buildGoModule rec {
@@ -31,6 +32,9 @@ buildGoModule rec {
     changelog = "https://github.com/dutchcoders/transfer.sh/releases";
     mainProgram = "transfer.sh";
     license = licenses.mit;
-    maintainers = with maintainers; [ ocfox pinpox ];
+    maintainers = with maintainers; [
+      ocfox
+      pinpox
+    ];
   };
 }

@@ -1,30 +1,33 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, docbook_xsl
-, libxslt
-, c-ares
-, cjson
-, libuuid
-, libuv
-, libwebsockets
-, openssl
-, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
-, systemd
-, uthash
-, nixosTests
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  docbook_xsl,
+  libxslt,
+  c-ares,
+  cjson,
+  libuuid,
+  libuv,
+  libwebsockets,
+  openssl,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  systemd,
+  uthash,
+  nixosTests,
 }:
 
 let
   # Mosquitto needs external poll enabled in libwebsockets.
-  libwebsockets' = (libwebsockets.override {
-    withExternalPoll = true;
-  }).overrideAttrs (old: {
-    # Avoid bug in firefox preventing websockets being created over http/2 connections
-    # https://github.com/eclipse/mosquitto/issues/1211#issuecomment-958137569
-    cmakeFlags = old.cmakeFlags ++ [ "-DLWS_WITH_HTTP2=OFF" ];
-  });
+  libwebsockets' =
+    (libwebsockets.override {
+      withExternalPoll = true;
+    }).overrideAttrs
+      (old: {
+        # Avoid bug in firefox preventing websockets being created over http/2 connections
+        # https://github.com/eclipse/mosquitto/issues/1211#issuecomment-958137569
+        cmakeFlags = old.cmakeFlags ++ [ "-DLWS_WITH_HTTP2=OFF" ];
+      });
 
 in
 stdenv.mkDerivation rec {
@@ -45,9 +48,17 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  outputs = [ "out" "dev" "lib" ];
+  outputs = [
+    "out"
+    "dev"
+    "lib"
+  ];
 
-  nativeBuildInputs = [ cmake docbook_xsl libxslt ];
+  nativeBuildInputs = [
+    cmake
+    docbook_xsl
+    libxslt
+  ];
 
   buildInputs = [
     c-ares

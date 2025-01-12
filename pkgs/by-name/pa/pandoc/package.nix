@@ -1,13 +1,22 @@
-{ stdenv, lib, haskellPackages, haskell, removeReferencesTo, installShellFiles }:
+{
+  stdenv,
+  lib,
+  haskellPackages,
+  haskell,
+  removeReferencesTo,
+  installShellFiles,
+  selectPandocCLI ? (p: p.pandoc-cli), # The version of pandoc-cli choosen from haskellPackages.
+}:
 
 let
   # Since pandoc 3.0 the pandoc binary resides in the pandoc-cli package.
-  static = haskell.lib.compose.justStaticExecutables haskellPackages.pandoc-cli;
+  static = haskell.lib.compose.justStaticExecutables pandoc-cli;
+  pandoc-cli = selectPandocCLI haskellPackages;
 
 in
   (haskell.lib.compose.overrideCabal (drv: {
     configureFlags = drv.configureFlags or [] ++ ["-fembed_data_files"];
-    buildDepends = drv.buildDepends or [] ++ [haskellPackages.file-embed];
+    buildDepends = drv.buildDepends or [] ++ [pandoc-cli.scope.file-embed];
     buildTools = (drv.buildTools or []) ++ [
       removeReferencesTo
       installShellFiles
@@ -22,13 +31,13 @@ in
     # For details see: https://github.com/NixOS/nixpkgs/issues/34376
     postInstall = drv.postInstall or "" + ''
       remove-references-to \
-        -t ${haskellPackages.pandoc-types} \
+        -t ${pandoc-cli.scope.pandoc-types} \
         $out/bin/pandoc
       remove-references-to \
-        -t ${haskellPackages.warp} \
+        -t ${pandoc-cli.scope.warp} \
         $out/bin/pandoc
       remove-references-to \
-        -t ${haskellPackages.pandoc} \
+        -t ${pandoc-cli.scope.pandoc} \
         $out/bin/pandoc
     '' + lib.optionalString (stdenv.buildPlatform == stdenv.hostPlatform) ''
       mkdir -p $out/share/bash-completion/completions
@@ -44,5 +53,5 @@ in
     # lead to a transitive runtime dependency on the whole GHC distribution.
     # This should ideally be fixed in haskellPackages (or even Cabal),
     # but a minimal pandoc is important enough to patch it manually.
-    disallowedReferences = [ haskellPackages.pandoc-types haskellPackages.warp haskellPackages.pandoc ];
+    disallowedReferences = [ pandoc-cli.scope.pandoc-types pandoc-cli.scope.warp pandoc-cli.scope.pandoc ];
   })

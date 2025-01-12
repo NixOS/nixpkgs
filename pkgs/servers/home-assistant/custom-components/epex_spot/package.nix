@@ -1,22 +1,23 @@
-{ lib
-, fetchFromGitHub
-, buildHomeAssistantComponent
-, beautifulsoup4
+{
+  lib,
+  fetchFromGitHub,
+  buildHomeAssistantComponent,
+  beautifulsoup4,
 }:
 
 buildHomeAssistantComponent rec {
   owner = "mampfes";
   domain = "epex_spot";
-  version = "2.3.8";
+  version = "2.3.9";
 
   src = fetchFromGitHub {
     owner = "mampfes";
     repo = "ha_epex_spot";
-    rev = "refs/tags/${version}";
-    hash = "sha256-BwNDI2OMF6bXqFcdr0AJgj9Gb6Uz8BWOfE7M4jqzQJc=";
+    tag = version;
+    hash = "sha256-PY3udPgvsaXdDRh4+NQmVlqhERswcMpaJTq5azaUFf4=";
   };
 
-  propagatedBuildInputs = [
+  dependencies = [
     beautifulsoup4
   ];
 

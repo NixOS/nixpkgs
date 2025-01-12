@@ -1,27 +1,28 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, python3
-, jq
-, expat
-, jsoncpp
-, libX11
-, libXdmcp
-, libXrandr
-, libffi
-, libxcb
-, pkg-config
-, wayland
-, which
-, xcbutilkeysyms
-, xcbutilwm
-, valijson
-, vulkan-headers
-, vulkan-loader
-, vulkan-utility-libraries
-, writeText
-, libsForQt5
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  python3,
+  jq,
+  expat,
+  jsoncpp,
+  libX11,
+  libXdmcp,
+  libXrandr,
+  libffi,
+  libxcb,
+  pkg-config,
+  wayland,
+  which,
+  xcbutilkeysyms,
+  xcbutilwm,
+  valijson,
+  vulkan-headers,
+  vulkan-loader,
+  vulkan-utility-libraries,
+  writeText,
+  libsForQt5,
 }:
 
 stdenv.mkDerivation rec {
@@ -29,13 +30,20 @@ stdenv.mkDerivation rec {
   version = "1.3.296.0";
 
   src = fetchFromGitHub {
-   owner = "LunarG";
-   repo = "VulkanTools";
-   rev = "vulkan-sdk-${version}";
-   hash = "sha256-RaL7sqy5Rc8syPoM3SedZ6UilV9JUAA96JZh5/gIfPU=";
- };
+    owner = "LunarG";
+    repo = "VulkanTools";
+    rev = "vulkan-sdk-${version}";
+    hash = "sha256-RaL7sqy5Rc8syPoM3SedZ6UilV9JUAA96JZh5/gIfPU=";
+  };
 
-  nativeBuildInputs = [ cmake python3 jq which pkg-config libsForQt5.qt5.wrapQtAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    python3
+    jq
+    which
+    pkg-config
+    libsForQt5.qt5.wrapQtAppsHook
+  ];
 
   buildInputs = [
     expat
@@ -88,6 +96,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/LunarG/VulkanTools";
     platforms = platforms.linux;
     license = licenses.asl20;
-    maintainers = [];
+    maintainers = [ ];
   };
 }

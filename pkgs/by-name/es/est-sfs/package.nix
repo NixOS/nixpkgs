@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, gsl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gsl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "est-sfs";

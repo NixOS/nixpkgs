@@ -1,11 +1,12 @@
-{ autoreconfHook
-, fetchFromGitHub
-, gensio
-, lib
-, libyaml
-, nix-update-script
-, pkg-config
-, stdenv
+{
+  autoreconfHook,
+  fetchFromGitHub,
+  gensio,
+  lib,
+  libyaml,
+  nix-update-script,
+  pkg-config,
+  stdenv,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,9 +24,15 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  nativeBuildInputs = [ pkg-config autoreconfHook ];
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
+  ];
 
-  buildInputs = [ gensio libyaml ];
+  buildInputs = [
+    gensio
+    libyaml
+  ];
 
   meta = with lib; {
     description = "Serial to network connection server";

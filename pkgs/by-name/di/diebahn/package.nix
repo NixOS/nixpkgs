@@ -1,23 +1,25 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, cargo
-, desktop-file-utils
-, meson
-, ninja
-, pkg-config
-, rustPlatform
-, rustc
-, wrapGAppsHook4
-, cairo
-, gdk-pixbuf
-, glib
-, gtk4
-, libadwaita
-, pango
-, gettext
-, darwin
-, blueprint-compiler
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  cargo,
+  desktop-file-utils,
+  meson,
+  ninja,
+  pkg-config,
+  rustPlatform,
+  rustc,
+  wrapGAppsHook4,
+  cairo,
+  gdk-pixbuf,
+  glib,
+  gtk4,
+  libadwaita,
+  pango,
+  gettext,
+  darwin,
+  blueprint-compiler,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -49,18 +51,23 @@ stdenv.mkDerivation rec {
     blueprint-compiler
   ];
 
-  buildInputs = [
-    cairo
-    gdk-pixbuf
-    glib
-    gtk4
-    libadwaita
-    pango
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
-    CoreFoundation
-    Foundation
-    Security
-  ]);
+  buildInputs =
+    [
+      cairo
+      gdk-pixbuf
+      glib
+      gtk4
+      libadwaita
+      pango
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
+      with darwin.apple_sdk.frameworks;
+      [
+        CoreFoundation
+        Foundation
+        Security
+      ]
+    );
 
   # Darwin needs to link against gettext from nixpkgs instead of the one vendored by gettext-sys
   # because the vendored copy does not build with newer versions of clang.
@@ -70,12 +77,22 @@ stdenv.mkDerivation rec {
     GETTEXT_LIB_DIR = "${lib.getLib gettext}/lib";
   };
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = {
     changelog = "https://gitlab.com/schmiddi-on-mobile/railway/-/blob/${src.rev}/CHANGELOG.md";
     description = "Travel with all your train information in one place. Also known as Railway";
     homepage = "https://gitlab.com/schmiddi-on-mobile/railway";
     license = lib.licenses.gpl3Plus;
     mainProgram = "diebahn";
-    maintainers = with lib.maintainers; [ dotlambda lilacious ];
+    maintainers =
+      with lib.maintainers;
+      [
+        dotlambda
+        lilacious
+      ]
+      ++ lib.teams.gnome-circle.members;
   };
 }

@@ -21,14 +21,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "blivet-gui";
-  version = "2.5.0";
+  version = "2.6.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "storaged-project";
     repo = "blivet-gui";
-    rev = version;
-    hash = "sha256-fKd2Vj8clZ6Q7bZipfN5umyMW2rBXMUnpAuDE70p67U=";
+    tag = version;
+    hash = "sha256-e9YdfFHmKXsbqkzs4++nNlvqm/p6lZmc01A+g+NtuDI=";
   };
 
   postPatch = ''

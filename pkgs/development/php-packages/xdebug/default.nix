@@ -1,12 +1,11 @@
 {
   buildPecl,
   lib,
-  php,
   fetchFromGitHub,
 }:
 
 let
-  version = "3.3.2";
+  version = "3.4.1";
 in
 buildPecl {
   inherit version;
@@ -17,7 +16,7 @@ buildPecl {
     owner = "xdebug";
     repo = "xdebug";
     rev = version;
-    hash = "sha256-3Hj/6pFLwJkVfsUIkX9lP8cOa1cVjobqHZd/cnH0TaU=";
+    hash = "sha256-yOqVS58bsFXGhdkQ20LK0E80bV7O2r/BE76CfBoeEqA=";
   };
 
   doCheck = true;
@@ -30,6 +29,5 @@ buildPecl {
     homepage = "https://xdebug.org/";
     license = lib.licenses.php301;
     maintainers = lib.teams.php.members;
-    broken = lib.versionAtLeast php.version "8.4";
   };
 }

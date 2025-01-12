@@ -1,25 +1,41 @@
-{ stdenv, lib, fetchurl, ocamlPackages, mpfr, ppl }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  ocamlPackages,
+  mpfr,
+  ppl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "jasmin-compiler";
-  version = "2024.07.1";
+  version = "2024.07.2";
 
   src = fetchurl {
     url = "https://github.com/jasmin-lang/jasmin/releases/download/v${version}/jasmin-compiler-v${version}.tar.bz2";
-    hash = "sha256-at6jWm/Dv/duKmBBCIFkKborMxsQEpqEDO6NrJgzhz8=";
+    hash = "sha256-I8z5/Ggj5GSyvD7b9YYMh3My4vXAYVcP53BCFwCNxwQ=";
   };
 
   sourceRoot = "jasmin-compiler-v${version}/compiler";
 
-  nativeBuildInputs = with ocamlPackages; [ ocaml findlib dune_3 menhir camlidl cmdliner ];
+  nativeBuildInputs = with ocamlPackages; [
+    ocaml
+    findlib
+    dune_3
+    menhir
+    camlidl
+    cmdliner
+  ];
 
-  buildInputs = [
-    mpfr
-    ppl
-  ] ++ (with ocamlPackages; [
-    apron
-    yojson
-  ]);
+  buildInputs =
+    [
+      mpfr
+      ppl
+    ]
+    ++ (with ocamlPackages; [
+      apron
+      yojson
+    ]);
 
   propagatedBuildInputs = with ocamlPackages; [
     angstrom
@@ -28,7 +44,11 @@ stdenv.mkDerivation rec {
     zarith
   ];
 
-  outputs = [ "bin" "lib" "out" ];
+  outputs = [
+    "bin"
+    "lib"
+    "out"
+  ];
 
   installPhase = ''
     runHook preInstall

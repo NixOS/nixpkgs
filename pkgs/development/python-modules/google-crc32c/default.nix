@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "python-crc32c";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-uGW4gWIpTVQ+f52WBA9H+K3+sHNa4JdgO9qi1Ds7WEU=";
   };
 

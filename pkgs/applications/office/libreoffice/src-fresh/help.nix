@@ -1,5 +1,5 @@
 { fetchurl, ... }:
 fetchurl {
-  sha256 = "1xlfs1380h9axqx37kp9nwq4bwlg08rm136ayzglaz57vx87vxsg";
-  url = "https://download.documentfoundation.org/libreoffice/src/24.8.2/libreoffice-help-24.8.2.1.tar.xz";
+  sha256 = "04z77jzn816r19ig54fhl0p1arh3fpamn5bh2wc2v17rz73chp8y";
+  url = "https://download.documentfoundation.org/libreoffice/src/24.8.3/libreoffice-help-24.8.3.2.tar.xz";
 }

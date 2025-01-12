@@ -1,7 +1,19 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
-  inherit (lib) mkRemovedOptionModule mkOption mkPackageOption types mkIf optionalString;
+  inherit (lib)
+    mkRemovedOptionModule
+    mkOption
+    mkPackageOption
+    types
+    mkIf
+    optionalString
+    ;
 
   cfg = config.programs.gnupg;
 
@@ -11,7 +23,12 @@ let
 in
 {
   imports = [
-    (mkRemovedOptionModule [ "programs" "gnupg" "agent" "pinentryFlavor" ] "Use programs.gnupg.agent.pinentryPackage instead")
+    (mkRemovedOptionModule [
+      "programs"
+      "gnupg"
+      "agent"
+      "pinentryFlavor"
+    ] "Use programs.gnupg.agent.pinentryPackage instead")
   ];
 
   options.programs.gnupg = {
@@ -58,7 +75,7 @@ in
       defaultText = lib.literalMD "matching the configured desktop environment or `pkgs.pinentry-curses`";
       description = ''
         Which pinentry package to use. The path to the mainProgram as defined in
-        the package's meta attriutes will be set in /etc/gnupg/gpg-agent.conf.
+        the package's meta attributes will be set in /etc/gnupg/gpg-agent.conf.
         If not set by the user, it'll pick an appropriate flavor depending on the
         system configuration (qt flavor for lxqt and plasma5, gtk2 for xfce,
         gnome3 on all other systems with X enabled, curses otherwise).
@@ -191,7 +208,9 @@ in
       wantedBy = [ "sockets.target" ];
     };
 
-    services.dbus.packages = mkIf (lib.elem "gnome3" (cfg.agent.pinentryPackage.flavors or [])) [ pkgs.gcr ];
+    services.dbus.packages = mkIf (lib.elem "gnome3" (cfg.agent.pinentryPackage.flavors or [ ])) [
+      pkgs.gcr
+    ];
 
     environment.systemPackages = [ cfg.package ];
 

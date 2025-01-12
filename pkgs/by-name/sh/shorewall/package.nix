@@ -1,23 +1,25 @@
-{ coreutils
-, fetchurl
-, gnugrep
-, gnused
-, iproute2
-, iptables
-, perl
-, perlPackages
-, lib, stdenv
-, util-linux
+{
+  coreutils,
+  fetchurl,
+  gnugrep,
+  gnused,
+  iproute2,
+  iptables,
+  perl,
+  perlPackages,
+  lib,
+  stdenv,
+  util-linux,
 }:
 let
-  PATH = lib.concatStringsSep ":"
-           [ "${coreutils}/bin"
-             "${iproute2}/bin"
-             "${iptables}/bin"
-             "${util-linux}/bin"
-             "${gnugrep}/bin"
-             "${gnused}/bin"
-           ];
+  PATH = lib.concatStringsSep ":" [
+    "${coreutils}/bin"
+    "${iproute2}/bin"
+    "${iptables}/bin"
+    "${util-linux}/bin"
+    "${gnugrep}/bin"
+    "${gnused}/bin"
+  ];
 in
 stdenv.mkDerivation rec {
   pname = "shorewall";
@@ -39,17 +41,19 @@ stdenv.mkDerivation rec {
   ];
   sourceRoot = ".";
 
-  buildInputs = [
-    coreutils
-    iproute2
-    iptables
-    util-linux
-    gnugrep
-    gnused
-    perl
-  ] ++ (with perlPackages; [
-    DigestSHA1
-  ]);
+  buildInputs =
+    [
+      coreutils
+      iproute2
+      iptables
+      util-linux
+      gnugrep
+      gnused
+      perl
+    ]
+    ++ (with perlPackages; [
+      DigestSHA1
+    ]);
   prePatch = ''
     # Patch configure and install.sh files
     patchShebangs .

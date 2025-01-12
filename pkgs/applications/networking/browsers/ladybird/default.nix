@@ -15,18 +15,17 @@
 , libpulseaudio
 , libwebp
 , libxcrypt
+, openssl
 , python3
 , qt6Packages
 , woff2
 , ffmpeg
+, fontconfig
 , simdutf
 , skia
 , nixosTests
-, AppKit
-, Cocoa
-, Foundation
-, OpenGL
 , unstableGitUpdater
+, apple-sdk_14
 }:
 
 let
@@ -49,17 +48,17 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ladybird";
-  version = "0-unstable-2024-11-06";
+  version = "0-unstable-2024-12-30";
 
   src = fetchFromGitHub {
     owner = "LadybirdWebBrowser";
     repo = "ladybird";
-    rev = "ad1ba30b27ff2802b6e743c6b8970e4bd1309dfc";
-    hash = "sha256-vrRkUTWHm+2GTJ3axO2oPJ0gKyMSH8Reh3TjYYze/Io=";
+    rev = "4324439006a6df1179440ce4f415b67658919957";
+    hash = "sha256-vg2Nb85+fegs7Idika9Mbq+f27wrIO48pWQSUidLKwE=";
   };
 
   postPatch = ''
-    sed -i '/iconutil/d' Ladybird/CMakeLists.txt
+    sed -i '/iconutil/d' UI/CMakeLists.txt
 
     # Don't set absolute paths in RPATH
     substituteInPlace Meta/CMake/lagom_install_options.cmake \
@@ -107,23 +106,29 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = with qt6Packages; [
     curl
     ffmpeg
+    fontconfig
     libavif
     libjxl
     libwebp
     libxcrypt
+    openssl
     qtbase
     qtmultimedia
     simdutf
-    skia
+    (skia.overrideAttrs (prev: {
+      gnFlags = prev.gnFlags ++ [
+        # https://github.com/LadybirdBrowser/ladybird/commit/af3d46dc06829dad65309306be5ea6fbc6a587ec
+        # https://github.com/LadybirdBrowser/ladybird/commit/4d7b7178f9d50fff97101ea18277ebc9b60e2c7c
+        # Remove when/if this gets upstreamed in skia.
+        "extra_cflags+=[\"-DSKCMS_API=__attribute__((visibility(\\\"default\\\")))\"]"
+      ];
+    }))
     woff2
   ] ++ lib.optional stdenv.hostPlatform.isLinux [
     libpulseaudio.dev
     qtwayland
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    AppKit
-    Cocoa
-    Foundation
-    OpenGL
+    apple-sdk_14
   ];
 
   cmakeFlags = [
@@ -158,7 +163,5 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ fgaz ];
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
     mainProgram = "Ladybird";
-    # use of undeclared identifier 'NSBezelStyleAccessoryBarAction'
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })

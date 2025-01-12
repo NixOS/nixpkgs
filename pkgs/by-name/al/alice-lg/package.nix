@@ -4,7 +4,7 @@
   buildGoModule,
   fetchYarnDeps,
   stdenv,
-  gitUpdater,
+  nix-update-script,
   yarn,
   nodejs,
   nixosTests,
@@ -83,7 +83,7 @@ buildGoModule rec {
 
   passthru = {
     tests = nixosTests.alice-lg;
-    updateScript = gitUpdater { };
+    updateScript = nix-update-script { };
   };
 
   meta = {

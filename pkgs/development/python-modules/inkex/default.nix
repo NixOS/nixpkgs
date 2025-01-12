@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   inkscape,
-  fetchpatch,
   poetry-core,
   cssselect,
   lxml,
@@ -14,9 +13,11 @@
   pyparsing,
   pyserial,
   scour,
+  tinycss2,
   gobject-introspection,
   pytestCheckHook,
   gtk3,
+  fetchpatch2,
 }:
 
 buildPythonPackage {
@@ -28,17 +29,18 @@ buildPythonPackage {
   inherit (inkscape) src;
 
   patches = [
-    # Fix “distribute along path” test with Python 3.12.
-    # https://gitlab.com/inkscape/extensions/-/issues/580
-    (fetchpatch {
-      url = "https://gitlab.com/inkscape/extensions/-/commit/c576043c195cd044bdfc975e6367afb9b655eb14.patch";
-      extraPrefix = "share/extensions/";
+    (fetchpatch2 {
+      name = "add-numpy-2-support.patch";
+      url = "https://gitlab.com/inkscape/extensions/-/commit/13ebc1e957573fea2c3360f676b0f1680fad395d.patch";
+      hash = "sha256-0n8L8dUaYYPBsmHlAxd60c5zqfK6NmXJfWZVBXPbiek=";
       stripLen = 1;
-      hash = "sha256-D9HxBx8RNkD7hHuExJqdu3oqlrXX6IOUw9m9Gx6+Dr8=";
+      extraPrefix = "share/extensions/";
     })
   ];
 
   nativeBuildInputs = [ poetry-core ];
+
+  pythonRelaxDeps = [ "numpy" ];
 
   propagatedBuildInputs = [
     cssselect
@@ -46,6 +48,7 @@ buildPythonPackage {
     numpy
     pygobject3
     pyserial
+    tinycss2
   ];
 
   pythonImportsCheck = [ "inkex" ];
@@ -87,8 +90,7 @@ buildPythonPackage {
     cd share/extensions
 
     substituteInPlace pyproject.toml \
-      --replace-fail 'scour = "^0.37"' 'scour = ">=0.37"' \
-      --replace-fail 'lxml = "^4.5.0"' 'lxml = "^4.5.0 || ^5.0.0"'
+      --replace-fail 'scour = "^0.37"' 'scour = ">=0.37"'
   '';
 
   meta = {

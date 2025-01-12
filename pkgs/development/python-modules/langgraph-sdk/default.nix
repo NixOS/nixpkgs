@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "langgraph-sdk";
-  version = "0.1.35";
+  version = "0.1.43";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
-    rev = "refs/tags/sdk==${version}";
-    hash = "sha256-HWUGRoe5S0HPfOEbqUnFYLVrHe3SJtk3U8cy1JON050=";
+    tag = "sdk==${version}";
+    hash = "sha256-mG04V36Aa5Df5pUgr+xWej8i2XYx+O/N61sSzxwN9Go=";
   };
 
   sourceRoot = "${src.name}/libs/sdk-py";
@@ -36,6 +36,8 @@ buildPythonPackage rec {
     httpx-sse
     orjson
   ];
+
+  disabledTests = [ "test_aevaluate_results" ]; # Compares execution time to magic number
 
   pythonImportsCheck = [ "langgraph_sdk" ];
 

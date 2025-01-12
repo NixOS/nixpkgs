@@ -1,23 +1,24 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, qmake
-, vulkan-loader
-, wayland
-, wrapQtAppsHook
-, x11Support ? true
-, qtx11extras
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qmake,
+  vulkan-loader,
+  wayland,
+  wrapQtAppsHook,
+  x11Support ? true,
+  qtx11extras,
 }:
 
 stdenv.mkDerivation rec {
   pname = "vulkan-caps-viewer";
-  version = "3.43";
+  version = "4.00";
 
   src = fetchFromGitHub {
     owner = "SaschaWillems";
     repo = "VulkanCapsViewer";
     rev = version;
-    hash = "sha256-GwE/E8GgVIeZtCefLNvacDUxI2C+Uf8zgpOQ1NpiSmM=";
+    hash = "sha256-fliiNeZPEP4uNMRDgG093fvU01ZTxwv08YLGwBooOLA=";
     # Note: this derivation strictly requires vulkan-header to be the same it was developed against.
     # To help us, they've put it in a git-submodule.
     # The result will work with any vulkan-loader version.

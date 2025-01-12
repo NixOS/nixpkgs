@@ -1,19 +1,20 @@
-{ lib
-, mkDerivation
-, fetchurl
-, fetchpatch
-, cmake
-, flatbuffers
-, gettext
-, pkg-config
-, libdigidocpp
-, opensc
-, openldap
-, openssl
-, pcsclite
-, qtbase
-, qtsvg
-, qttools
+{
+  lib,
+  mkDerivation,
+  fetchurl,
+  fetchpatch,
+  cmake,
+  flatbuffers,
+  gettext,
+  pkg-config,
+  libdigidocpp,
+  opensc,
+  openldap,
+  openssl,
+  pcsclite,
+  qtbase,
+  qtsvg,
+  qttools,
 }:
 
 mkDerivation rec {
@@ -21,8 +22,7 @@ mkDerivation rec {
   version = "4.6.0";
 
   src = fetchurl {
-    url =
-      "https://github.com/open-eid/DigiDoc4-Client/releases/download/v${version}/qdigidoc4-${version}.tar.gz";
+    url = "https://github.com/open-eid/DigiDoc4-Client/releases/download/v${version}/qdigidoc4-${version}.tar.gz";
     hash = "sha256-szFLY9PpZMMYhfV5joueShfu92YDVmcCC3MOWIOAKVg=";
   };
 
@@ -38,7 +38,12 @@ mkDerivation rec {
     ./sandbox.patch
   ];
 
-  nativeBuildInputs = [ cmake gettext pkg-config qttools ];
+  nativeBuildInputs = [
+    cmake
+    gettext
+    pkg-config
+    qttools
+  ];
 
   buildInputs = [
     flatbuffers
@@ -67,6 +72,9 @@ mkDerivation rec {
     homepage = "https://www.id.ee/";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ flokli mmahut ];
+    maintainers = with maintainers; [
+      flokli
+      mmahut
+    ];
   };
 }

@@ -9,7 +9,7 @@
 buildHomeAssistantComponent {
   owner = "cyberjunky";
   domain = "garmin_connect";
-  version = "unstable-2024-08-31";
+  version = "0.2.22";
 
   src = fetchFromGitHub {
     owner = "cyberjunky";
@@ -18,7 +18,7 @@ buildHomeAssistantComponent {
     hash = "sha256-KqbP6TpH9B0/AjtsW5TcWSNgUhND+w8rO6X8fHqtsDI=";
   };
 
-  propagatedBuildInputs = [
+  dependencies = [
     garminconnect
     tzlocal
   ];

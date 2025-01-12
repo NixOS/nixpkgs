@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, libtool, pkg-config, zlib, serd }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  autoreconfHook,
+  libtool,
+  pkg-config,
+  zlib,
+  serd,
+}:
 
 stdenv.mkDerivation rec {
   pname = "hdt";
@@ -21,9 +31,16 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ zlib serd ];
+  buildInputs = [
+    zlib
+    serd
+  ];
 
-  nativeBuildInputs = [ autoreconfHook libtool pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    libtool
+    pkg-config
+  ];
 
   enableParallelBuilding = true;
 

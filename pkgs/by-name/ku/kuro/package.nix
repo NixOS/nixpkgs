@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchYarnDeps
-, yarnConfigHook
-, yarnBuildHook
-, nodejs
-, makeWrapper
-, makeDesktopItem
-, copyDesktopItems
-, electron
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchYarnDeps,
+  yarnConfigHook,
+  yarnBuildHook,
+  nodejs,
+  makeWrapper,
+  makeDesktopItem,
+  copyDesktopItems,
+  electron,
 }:
 
 stdenv.mkDerivation rec {
@@ -57,7 +58,7 @@ stdenv.mkDerivation rec {
     # executable wrapper
     makeWrapper '${electron}/bin/electron' "$out/bin/kuro" \
       --add-flags "$out/share/lib/kuro/resources/app.asar" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --inherit-argv0
 
     runHook postInstall

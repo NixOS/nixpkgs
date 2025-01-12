@@ -72,7 +72,7 @@ let
     src = fetchFromGitHub {
       owner = "pandas-dev";
       repo = "pandas";
-      rev = "refs/tags/v${version}";
+      tag = "v${version}";
       hash = "sha256-6YUROcqOV2P1AbJF9IMBIqTt7/PSTeXDwGgE4uI9GME=";
     };
 
@@ -80,7 +80,6 @@ let
       substituteInPlace pyproject.toml \
         --replace-fail "meson-python==0.13.1" "meson-python>=0.13.1" \
         --replace-fail "meson==1.2.1" "meson>=1.2.1" \
-        --replace-fail "numpy>=2.0" "numpy"
     '';
 
     nativeBuildInputs = [
@@ -253,7 +252,6 @@ let
       '';
       maintainers = with maintainers; [
         raskin
-        knedlsepp
       ];
     };
   };

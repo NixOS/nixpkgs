@@ -1,17 +1,23 @@
-{ lib, rustPlatform, fetchFromGitHub, installShellFiles, libxcb }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  libxcb,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "kmon";
-  version = "1.6.5";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "orhun";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-1OsQT3RMNLQMjr4aA2u5knp/HhOUOJ/oZYHG/+cTQFQ=";
+    sha256 = "sha256-DzbbeVZifuxgmIu3yNv6EI7Jyh8MA0/oSaR5IEPNUN8=";
   };
 
-  cargoHash = "sha256-9xRlm5pWWRRPq6MMwiMADmm8Bg2FqKNSfv7tm1ONiiQ=";
+  cargoHash = "sha256-ykY0QGK3fUqzxgX8HNmi6J50kM+iTRj3SS7p4mNEOBg=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -29,7 +35,10 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/orhun/kmon/blob/v${version}/CHANGELOG.md";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ figsoda matthiasbeyer ];
+    maintainers = with maintainers; [
+      figsoda
+      matthiasbeyer
+    ];
     mainProgram = "kmon";
   };
 }

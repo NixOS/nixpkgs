@@ -1,10 +1,11 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, buildGoModule
-, installShellFiles
-, testers
-, kaniko
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  installShellFiles,
+  testers,
+  kaniko,
 }:
 
 buildGoModule rec {
@@ -21,7 +22,8 @@ buildGoModule rec {
   vendorHash = null;
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X github.com/GoogleContainerTools/kaniko/pkg/version.version=${version}"
   ];
 
@@ -47,7 +49,10 @@ buildGoModule rec {
     homepage = "https://github.com/GoogleContainerTools/kaniko";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ jk qjoly ];
+    maintainers = with lib.maintainers; [
+      jk
+      qjoly
+    ];
     mainProgram = "executor";
   };
 }

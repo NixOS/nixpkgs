@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Fraunhofer-AISEC";
     repo = "gallia";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-izMTTZrp4aizq5jS51BNtq3lv9Kr+xI7scZfYKXA/oY=";
   };
 

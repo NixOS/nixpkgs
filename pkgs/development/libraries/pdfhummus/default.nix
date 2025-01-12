@@ -1,24 +1,25 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, qtbase
-, zlib
-, freetype
-, libjpeg
-, libtiff
-, libpng
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  qtbase,
+  zlib,
+  freetype,
+  libjpeg,
+  libtiff,
+  libpng,
 }:
 
 stdenv.mkDerivation rec {
   pname = "pdfhummus";
-  version = "4.6.7";
+  version = "4.6.8";
 
   src = fetchFromGitHub {
     owner = "galkahana";
     repo = "PDF-Writer";
     rev = "v${version}";
-    hash = "sha256-XOoMh1YL4wJQ6Uliy0sdcrlqJbbbnZ0gmjuaXS1h+qQ=";
+    hash = "sha256-sCa/yu+DVggN7Sha7dP9FXzZUJ2tGLYEFrq87dD4tsE=";
   };
 
   nativeBuildInputs = [
@@ -53,4 +54,3 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ rewine ];
   };
 }
-

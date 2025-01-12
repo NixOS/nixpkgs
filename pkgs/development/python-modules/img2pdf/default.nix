@@ -88,6 +88,28 @@ buildPythonPackage rec {
   disabledTests = [
     # https://gitlab.mister-muffin.de/josch/img2pdf/issues/178
     "test_miff_cmyk16"
+    # https://gitlab.mister-muffin.de/josch/img2pdf/issues/205
+    "test_miff_cmyk8"
+    "test_miff_rgb8"
+    "test_tiff_ccitt_lsb_m2l_white"
+    "test_tiff_ccitt_msb_l2m_white"
+    "test_tiff_ccitt_msb_m2l_white"
+    "test_tiff_ccitt_nometa1"
+    "test_tiff_ccitt_nometa2"
+    "test_tiff_cmyk8"
+    "test_tiff_cmyk16"
+    "test_tiff_float"
+    "test_tiff_gray1"
+    "test_tiff_gray2"
+    "test_tiff_gray4"
+    "test_tiff_gray8"
+    "test_tiff_gray16"
+    "test_tiff_multipage"
+    "test_tiff_palette8"
+    "test_tiff_rgb8"
+    "test_tiff_rgb12"
+    "test_tiff_rgb14"
+    "test_tiff_rgb16"
   ];
 
   pythonImportsCheck = [ "img2pdf" ];

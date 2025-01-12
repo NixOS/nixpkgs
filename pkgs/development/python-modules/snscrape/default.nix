@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "JustAnotherArchivist";
     repo = "snscrape";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-9xAUMr1SWFePEvIz6DFEexk9Txex3u8wPNfMAdxEUCA=";
   };
 
@@ -37,12 +37,15 @@ buildPythonPackage rec {
 
   build-system = [ setuptools-scm ];
 
-  dependencies = [
-    beautifulsoup4
-    filelock
-    lxml
-    requests
-  ] ++ requests.optional-dependencies.socks ++ lib.optionals (pythonOlder "3.9") [ pytz ];
+  dependencies =
+    [
+      beautifulsoup4
+      filelock
+      lxml
+      requests
+    ]
+    ++ requests.optional-dependencies.socks
+    ++ lib.optionals (pythonOlder "3.9") [ pytz ];
 
   # There are no tests; make sure the executable works.
   checkPhase = ''

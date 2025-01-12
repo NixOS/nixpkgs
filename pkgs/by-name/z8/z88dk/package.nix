@@ -26,7 +26,10 @@ let
     };
     meta = {
       description = "A date object with as little code as possible (and rw accessors)";
-      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
     };
   };
 
@@ -38,11 +41,15 @@ let
       hash = "sha256-FmPE1xdU8LAXS21+H4DJaQ87qDi4Q4UkLawsUAqseZw=";
     };
     propagatedBuildInputs = with perlPackages; [
-      ClassAccessor IteratorSimple
+      ClassAccessor
+      IteratorSimple
     ];
     meta = {
       description = "Simple iterator with lookahead and unget";
-      license = with lib.licenses; [ artistic1 gpl2Only ];
+      license = with lib.licenses; [
+        artistic1
+        gpl2Only
+      ];
     };
   };
 
@@ -53,9 +60,11 @@ let
       url = "mirror://cpan/authors/id/P/PS/PSCUST/Asm-Preproc-1.03.tar.gz";
       hash = "sha256-pVTpIqGxZpBxZlAbXuGDapuOxsp3uM/AM5dKUxlej1M=";
     };
-    propagatedBuildInputs = [
+    propagatedBuildInputs =
+      [
         IteratorSimpleLookahead
-      ] ++ (with perlPackages; [
+      ]
+      ++ (with perlPackages; [
         IteratorSimple
         TextTemplate
         DataDump
@@ -63,7 +72,10 @@ let
       ]);
     meta = {
       description = "Preprocessor to be called from an assembler";
-      license = with lib.licenses; [ artistic1 gpl2Only ];
+      license = with lib.licenses; [
+        artistic1
+        gpl2Only
+      ];
     };
   };
 
@@ -74,7 +86,9 @@ let
       url = "mirror://cpan/authors/id/P/PS/PSCUST/CPU-Z80-Assembler-2.25.tar.gz";
       hash = "sha256-cJ8Fl2KZw9/bnBDUzFuwwdw9x23OUvcftk78kw7abdU=";
     };
-    buildInputs = [ AsmPreproc ] ++ (with perlPackages; [
+    buildInputs =
+      [ AsmPreproc ]
+      ++ (with perlPackages; [
         CaptureTiny
         RegexpTrie
         PathTiny
@@ -82,7 +96,10 @@ let
       ]);
     meta = {
       description = "Functions to assemble a set of Z80 assembly instructions";
-      license = with lib.licenses; [ artistic1 gpl2Only ];
+      license = with lib.licenses; [
+        artistic1
+        gpl2Only
+      ];
     };
   };
 in
@@ -139,27 +156,29 @@ stdenv.mkDerivation (finalAttrs: {
     "git_count=0"
   ];
 
-  nativeBuildInputs = [
-    which
-    unzip
-    m4
-    perl
-    pkg-config
+  nativeBuildInputs =
+    [
+      which
+      unzip
+      m4
+      perl
+      pkg-config
 
-    # Local perl packages
-    AsmPreproc
-    CPUZ80Assembler
-    ObjectTinyRW
-  ] ++ (with perlPackages; [
-    CaptureTiny
-    DataHexDump
-    ModernPerl
-    PathTiny
-    RegexpCommon
-    TestHexDifferences
-    TextDiff
-    RegexpTrie
-  ]);
+      # Local perl packages
+      AsmPreproc
+      CPUZ80Assembler
+      ObjectTinyRW
+    ]
+    ++ (with perlPackages; [
+      CaptureTiny
+      DataHexDump
+      ModernPerl
+      PathTiny
+      RegexpCommon
+      TestHexDifferences
+      TextDiff
+      RegexpTrie
+    ]);
 
   buildInputs = [
     libxml2

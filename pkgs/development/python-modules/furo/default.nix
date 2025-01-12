@@ -22,7 +22,6 @@ buildPythonPackage rec {
     hash = "sha256-bNl8WLR4E9NhnmPpCBFpiA++Mx8MqIPIcf8fPxGBT1w=";
   };
 
-
   pythonRelaxDeps = [ "sphinx" ];
 
   propagatedBuildInputs = [

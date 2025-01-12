@@ -1,4 +1,11 @@
-{ stdenv, lib, fzf, gawk, fetchFromGitHub, makeWrapper }:
+{
+  stdenv,
+  lib,
+  fzf,
+  gawk,
+  fetchFromGitHub,
+  makeWrapper,
+}:
 
 stdenv.mkDerivation rec {
   pname = "sway-launcher-desktop";
@@ -15,14 +22,22 @@ stdenv.mkDerivation rec {
     patchShebangs ${pname}.sh
   '';
 
-  buildInputs = [ fzf gawk ];
+  buildInputs = [
+    fzf
+    gawk
+  ];
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     install -d $out/bin
     install ${pname}.sh $out/bin/${pname}
     wrapProgram $out/bin/${pname} \
-      --prefix PATH : ${lib.makeBinPath [ gawk fzf ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          gawk
+          fzf
+        ]
+      }
   '';
 
   meta = with lib; {

@@ -1,10 +1,20 @@
-{ lib, stdenv, cmake, llvmPackages, llvm, irony }:
+{
+  lib,
+  stdenv,
+  cmake,
+  llvmPackages,
+  llvm,
+  irony,
+}:
 
 stdenv.mkDerivation {
   pname = "irony-server";
   inherit (irony) src version;
 
-  nativeBuildInputs = [ cmake llvm ];
+  nativeBuildInputs = [
+    cmake
+    llvm
+  ];
   buildInputs = [ llvmPackages.libclang ];
 
   dontUseCmakeBuildDir = true;

@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, libkrb5
-, openssl
-, pam
-, pkg-config
-, postgresql
-, readline
-, sqlite
-, testers
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libkrb5,
+  openssl,
+  pam,
+  pkg-config,
+  postgresql,
+  readline,
+  sqlite,
+  testers,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,16 +28,18 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [
-    libkrb5
-    openssl
-    postgresql
-    readline
-    sqlite
-    zlib
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    pam
-  ];
+  buildInputs =
+    [
+      libkrb5
+      openssl
+      postgresql
+      readline
+      sqlite
+      zlib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      pam
+    ];
 
   hardeningDisable = [ "format" ];
 

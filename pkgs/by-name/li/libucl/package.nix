@@ -1,11 +1,13 @@
-{ lib, stdenv
-, fetchFromGitHub
-, pkg-config
-, autoreconfHook
-, curl
-, lua
-, openssl
-, features ? {
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  autoreconfHook,
+  curl,
+  lua,
+  openssl,
+  features ? {
     urls = false;
     # Upstream enables regex by default
     regex = true;
@@ -13,7 +15,7 @@
     signatures = false;
     lua = false;
     utils = false;
-  }
+  },
 }:
 
 let
@@ -34,17 +36,20 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-esNEVBa660rl3Oo2SLaLrFThFkjbqtZ1r0tjMq3h6cM=";
   };
 
-  nativeBuildInputs = [ pkg-config autoreconfHook ];
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
+  ];
 
   buildInputs = lib.concatLists (
-      lib.mapAttrsToList (feat: enabled:
-        lib.optionals enabled (featureDeps."${feat}" or [])
-      ) features
-    );
+    lib.mapAttrsToList (feat: enabled: lib.optionals enabled (featureDeps."${feat}" or [ ])) features
+  );
 
   enableParallelBuilding = true;
 
-  configureFlags = lib.mapAttrsToList (feat: enabled: lib.strings.enableFeature enabled feat) features;
+  configureFlags = lib.mapAttrsToList (
+    feat: enabled: lib.strings.enableFeature enabled feat
+  ) features;
 
   meta = with lib; {
     description = "Universal configuration library parser";

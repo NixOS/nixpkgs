@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, darwin
-, testers
-, nix-update-script
-, committed
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  darwin,
+  testers,
+  nix-update-script,
+  committed,
 }:
 let
-  version = "1.0.20";
+  version = "1.1.2";
 in
 rustPlatform.buildRustPackage {
   pname = "committed";
@@ -17,10 +18,10 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "crate-ci";
     repo = "committed";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-HqZYxV2YjnK7Q3A7B6yVFXME0oc3DZ4RfMkDGa2IQxA=";
+    tag = "v${version}";
+    hash = "sha256-dBNtzKqaaqJrKMNwamUY0DO9VCVqDyf45lT82nOn8UM=";
   };
-  cargoHash = "sha256-AmAEGVWq6KxLtiHDGIFVcoP1Wck8z+P9mnDy0SSSJNM=";
+  cargoHash = "sha256-F+6pTxgr/I3DcDGZsfDjLe0+5wj9Mu7nqghyOzSWlvc=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 

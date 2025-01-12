@@ -1,8 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitea, fetchYarnDeps
-, fixup-yarn-lock, yarn, nodejs
-, jpegoptim, oxipng, nodePackages
+{
+  lib,
+  stdenv,
+  fetchFromGitea,
+  fetchYarnDeps,
+  fixup-yarn-lock,
+  yarn,
+  nodejs,
+  jpegoptim,
+  oxipng,
+  nodePackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -33,7 +39,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     # Build scripts assume to be used within a Git repository checkout
-    sed -E -i '/^let commitHash =/,/;$/clet commitHash = "${builtins.substring 0 7 finalAttrs.src.rev}";' \
+    sed -E -i '/^let commitHash =/,/;$/clet commitHash = "${
+      builtins.substring 0 7 finalAttrs.src.rev
+    }";' \
       build/webpack.prod.conf.js
   '';
 

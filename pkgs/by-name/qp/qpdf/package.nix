@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, libjpeg
-, perl
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libjpeg,
+  perl,
+  zlib,
 
-# for passthru.tests
-, cups-filters
-, pdfmixtool
-, pdfslicer
-, python3
-, testers
-, versionCheckHook
+  # for passthru.tests
+  cups-filters,
+  pdfmixtool,
+  pdfslicer,
+  python3,
+  testers,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -34,9 +35,15 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
   ];
 
-  nativeBuildInputs = [ cmake perl ];
+  nativeBuildInputs = [
+    cmake
+    perl
+  ];
 
-  buildInputs = [ zlib libjpeg ];
+  buildInputs = [
+    zlib
+    libjpeg
+  ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
@@ -57,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
       cups-filters
       pdfmixtool
       pdfslicer
-    ;
+      ;
   };
 
   meta = {

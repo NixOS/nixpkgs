@@ -550,6 +550,13 @@ let
           '';
         });
 
+        treemacs = super.treemacs.overrideAttrs (attrs: {
+          postPatch = (attrs.postPatch or "") + ''
+            substituteInPlace src/elisp/treemacs-customization.el \
+              --replace 'treemacs-python-executable (treemacs--find-python3)' 'treemacs-python-executable "${lib.getExe pkgs.python3}"'
+          '';
+        });
+
         treemacs-magit = super.treemacs-magit.overrideAttrs (attrs: {
           # searches for Git at build time
           nativeBuildInputs =
@@ -754,6 +761,9 @@ let
         # Optimizer error: too much on the stack
         ack-menu = ignoreCompilationError super.ack-menu;
 
+        # https://github.com/skeeto/emacs-aio/issues/31
+        aio = ignoreCompilationError super.aio;
+
         # https://github.com/gongo/airplay-el/issues/2
         airplay = addPackageRequires super.airplay [ self.request-deferred ];
 
@@ -792,6 +802,18 @@ let
 
         # depends on distel which is not on any ELPA https://github.com/massemanet/distel/issues/21
         auto-complete-distel = ignoreCompilationError super.auto-complete-distel;
+
+        auto-virtualenv = super.auto-virtualenv.overrideAttrs (
+          finalAttrs: previousAttrs: {
+            patches = previousAttrs.patches or [ ] ++ [
+              (pkgs.fetchpatch {
+                name = "do-not-error-if-the-optional-projectile-is-not-available.patch";
+                url = "https://github.com/marcwebbie/auto-virtualenv/pull/14/commits/9a068974a4e12958200c12c6a23372fa736523c1.patch";
+                hash = "sha256-bqrroFf5AD5SHx6uzBFdVwTv3SbFiO39T+0x03Ves/k=";
+              })
+            ];
+          }
+        );
 
         aws-ec2 = ignoreCompilationError super.aws-ec2; # elisp error
 
@@ -1495,6 +1517,18 @@ let
         sakura-theme = addPackageRequiresIfOlder super.sakura-theme [ self.autothemer ] "20240921.1028";
 
         scad-preview = ignoreCompilationError super.scad-preview; # elisp error
+
+        sdml-mode = super.sdml-mode.overrideAttrs (
+          finalAttrs: previousAttrs: {
+            patches = previousAttrs.patches or [ ] ++ [
+              (pkgs.fetchpatch {
+                name = "make-pretty-hydra-optional.patch";
+                url = "https://github.com/sdm-lang/emacs-sdml-mode/pull/3/commits/2368afe31c72073488411540e212c70aae3dd468.patch";
+                hash = "sha256-Wc4pquKV9cTRey9SdjY++UgcP+pGI0hVOOn1Cci8dpk=";
+              })
+            ];
+          }
+        );
 
         # https://github.com/wanderlust/semi/pull/29
         # missing optional dependencies

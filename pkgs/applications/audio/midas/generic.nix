@@ -1,11 +1,37 @@
-{ stdenv, fetchurl, lib, libX11, libXext, alsa-lib, freetype, brand, type, version, homepage, url, sha256, ... }:
+{
+  stdenv,
+  fetchurl,
+  lib,
+  brand,
+  type,
+  version,
+  homepage,
+  url,
+  hash,
+  runCommand,
+  dpkg,
+  vmTools,
+  runtimeShell,
+  bubblewrap,
+  ...
+}:
+let
+  debian =
+    let
+      debs = lib.flatten (import ./deps.nix { inherit fetchurl; });
+    in
+    runCommand "x32edit-debian" { nativeBuildInputs = [ dpkg ]; } (
+      lib.concatMapStringsSep "\n" (deb: ''
+        dpkg-deb -x ${deb} $out
+      '') debs
+    );
+in
 stdenv.mkDerivation rec {
   pname = "${lib.toLower type}-edit";
   inherit version;
 
   src = fetchurl {
-    inherit url;
-    inherit sha256;
+    inherit url hash;
   };
 
   sourceRoot = ".";
@@ -14,23 +40,38 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    cp ${type}-Edit $out/bin/${pname}
+    cp ${type}-Edit $out/bin/.${pname}
+
+    cat >$out/bin/${pname} <<EOF
+    #!${runtimeShell} -eu
+    exec ${lib.getExe bubblewrap} \
+      --dev-bind / / \
+      --ro-bind "${debian}/lib" /lib \
+      --ro-bind "${debian}/lib64" /lib64 \
+      --tmpfs /usr \
+      --ro-bind "${debian}/usr/lib" /usr/lib \
+      $out/bin/.${pname}
+    EOF
+    chmod 755 $out/bin/${pname}
   '';
-  preFixup = let
-    # we prepare our library path in the let clause to avoid it become part of the input of mkDerivation
-    libPath = lib.makeLibraryPath [
-      libX11           # libX11.so.6
-      libXext          # libXext.so.6
-      alsa-lib          # libasound.so.2
-      freetype         # libfreetype.so.6
-      (lib.getLib stdenv.cc.cc) # libstdc++.so.6
-    ];
-  in ''
-    patchelf \
-      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath "${libPath}" \
-      $out/bin/${pname}
-  '';
+
+  passthru.deps =
+    let
+      distro = vmTools.debDistros.debian11x86_64;
+    in
+    vmTools.debClosureGenerator {
+      name = "x32edit-dependencies";
+      inherit (distro) urlPrefix;
+      packagesLists = [ distro.packagesList ];
+      packages = [
+        "libstdc++6"
+        "libcurl3-gnutls"
+        "libfreetype6"
+        "libasound2"
+        "libx11-6"
+        "libxext6"
+      ];
+    };
 
   meta = with lib; {
     inherit homepage;

@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl, dpkg, autoPatchelfHook, makeWrapper
-, gtk3-x11 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  dpkg,
+  autoPatchelfHook,
+  makeWrapper,
+  gtk3-x11,
+}:
 
 stdenv.mkDerivation rec {
   pname = "pixeluvo";
@@ -25,10 +32,6 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
   dontConfigure = true;
-
-  unpackPhase = ''
-    dpkg-deb -x ${src} ./
-  '';
 
   installPhase = ''
     runHook preInstall

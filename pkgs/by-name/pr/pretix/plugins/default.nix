@@ -1,8 +1,11 @@
-{ callPackage
-, ...
+{
+  callPackage,
+  ...
 }:
 
 {
+  mollie = callPackage ./mollie.nix { };
+
   pages = callPackage ./pages.nix { };
 
   passbook = callPackage ./passbook.nix { };

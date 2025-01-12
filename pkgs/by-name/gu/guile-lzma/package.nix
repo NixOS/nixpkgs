@@ -1,10 +1,11 @@
-{ stdenv
-, lib
-, fetchurl
-, xz
-, pkg-config
-, guile
-, scheme-bytestructures
+{
+  stdenv,
+  lib,
+  fetchurl,
+  xz,
+  pkg-config,
+  guile,
+  scheme-bytestructures,
 }:
 
 stdenv.mkDerivation rec {

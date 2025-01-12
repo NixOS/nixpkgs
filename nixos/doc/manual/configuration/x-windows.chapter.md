@@ -116,47 +116,33 @@ using lightdm for a user `alice`:
 
 ## Intel Graphics drivers {#sec-x11--graphics-cards-intel}
 
-There are two choices for Intel Graphics drivers in X.org: `modesetting`
-(included in the xorg-server itself) and `intel` (provided by the
-package xf86-video-intel).
-
-The default and recommended is `modesetting`. It is a generic driver
-which uses the kernel [mode
-setting](https://en.wikipedia.org/wiki/Mode_setting) (KMS) mechanism. It
+The default and recommended driver for Intel Graphics in X.org is `modesetting`
+(included in the xorg-server package itself).
+This is a generic driver which uses the kernel [mode
+setting](https://en.wikipedia.org/wiki/Mode_setting) (KMS) mechanism, it
 supports Glamor (2D graphics acceleration via OpenGL) and is actively
-maintained but may perform worse in some cases (like in old chipsets).
+maintained, it may perform worse in some cases (like in old chipsets).
 
-The second driver, `intel`, is specific to Intel GPUs, but not
-recommended by most distributions: it lacks several modern features (for
-example, it doesn't support Glamor) and the package hasn't been
-officially updated since 2015.
+::: {.note}
+The `modesetting` driver doesn't currently provide a `TearFree` option (this
+will become available in an upcoming X.org release), So, without using a
+compositor (for example, see [](#opt-services.picom.enable)) you will
+experience screen tearing.
+:::
 
-The results vary depending on the hardware, so you may have to try both
-drivers. Use the option
-[](#opt-services.xserver.videoDrivers)
-to set one. The recommended configuration for modern systems is:
-
-```nix
-{
-  services.xserver.videoDrivers = [ "modesetting" ];
-}
-```
-
-If you experience screen tearing no matter what, this configuration was
-reported to resolve the issue:
+There also used to be a second driver, `intel` (provided by the
+xf86-video-intel package), specific to older Intel iGPUs from generation 2 to
+9.
+This driver hasn't been maintained in years and was removed in NixOS 24.11
+after it stopped working. If you chipset is too old to be supported by
+`modesetting` and have no other choice you may try an unsupported NixOS version
+(reportedly working up to NixOS 24.05) and set
 
 ```nix
 {
   services.xserver.videoDrivers = [ "intel" ];
-  services.xserver.deviceSection = ''
-    Option "DRI" "2"
-    Option "TearFree" "true"
-  '';
 }
 ```
-
-Note that this will likely downgrade the performance compared to
-`modesetting` or `intel` with DRI 3 (default).
 
 ## Proprietary NVIDIA drivers {#sec-x11-graphics-cards-nvidia}
 

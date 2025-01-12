@@ -50,7 +50,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "optuna";
     repo = "optuna";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-wIgYExxJEWFxEadBuCsxEIcW2/J6EVybW1jp83gIMjY=";
   };
 
@@ -105,13 +105,16 @@ buildPythonPackage rec {
     export PATH=$out/bin:$PATH
   '';
 
-  nativeCheckInputs = [
-    fakeredis
-    moto
-    pytest-xdist
-    pytestCheckHook
-    scipy
-  ] ++ fakeredis.optional-dependencies.lua ++ optional-dependencies.optional;
+  nativeCheckInputs =
+    [
+      fakeredis
+      moto
+      pytest-xdist
+      pytestCheckHook
+      scipy
+    ]
+    ++ fakeredis.optional-dependencies.lua
+    ++ optional-dependencies.optional;
 
   pytestFlagsArray = [ "-m 'not integration'" ];
 

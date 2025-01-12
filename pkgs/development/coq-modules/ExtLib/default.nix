@@ -1,10 +1,10 @@
-{ lib, mkCoqDerivation, coq, version ? null }:
+{ lib, mkCoqDerivation, coq, stdlib, version ? null }:
 
 mkCoqDerivation rec {
   pname = "coq-ext-lib";
   inherit version;
   defaultVersion = with lib.versions; lib.switch coq.coq-version [
-    { case = range "8.14" "8.20"; out = "0.12.2"; }
+    { case = range "8.14" "8.20"; out = "0.13.0"; }
     { case = range "8.11" "8.19"; out = "0.12.0"; }
     { case = range "8.8" "8.16"; out = "0.11.6"; }
     { case = range "8.8" "8.14"; out = "0.11.4"; }
@@ -13,6 +13,7 @@ mkCoqDerivation rec {
     { case = "8.6";              out = "0.9.5"; }
     { case = "8.5";              out = "0.9.4"; }
   ] null;
+  release."0.13.0".sha256 = "sha256-vqVSu+nyGjRVXe2tnE6MPl0kcg4LHfgFwRCpTQAP/is=";
   release."0.12.2".sha256 = "sha256-lSTlbpkSuAY6B9cqofXSlDk2VchtqfZpRQ0+y/BAbEY=";
   release."0.12.1".sha256 = "sha256-YIHyiRUHPy/LGM2DMTRKRwP7j6OSBYKpu6wO2mZOubo=";
   release."0.12.0".sha256 = "sha256-9szpnWoS83bDc+iLqElfgz0LNRo9hSRQwUFIgpTca4c=";
@@ -31,6 +32,8 @@ mkCoqDerivation rec {
   release."0.9.5".sha256  = "1b4cvz3llxin130g13calw5n1zmvi6wdd5yb8a41q7yyn2hd3msg";
   release."0.9.4".sha256  = "1y66pamgsdxlq2w1338lj626ln70cwj7k53hxcp933g8fdsa4hp0";
   releaseRev = v: "v${v}";
+
+  propagatedBuildInputs = [ stdlib ];
 
   meta = {
     description = "Collection of theories and plugins that may be useful in other Coq developments";

@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, wxGTK32
-, ffmpeg
-, lua5_1
-, curl
-, libpng
-, xorg
-, pkg-config
-, flam3
-, libgtop
-, boost179
-, tinyxml
-, libglut
-, libGLU
-, libGL
-, glee
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  wxGTK32,
+  ffmpeg,
+  lua5_1,
+  curl,
+  libpng,
+  xorg,
+  pkg-config,
+  flam3,
+  libgtop,
+  boost,
+  tinyxml,
+  libglut,
+  libGLU,
+  libGL,
+  glee,
 }:
 
 stdenv.mkDerivation {
@@ -30,7 +31,15 @@ stdenv.mkDerivation {
     hash = "sha256-X3EZ1/VcLEU1GkZbskWSsqQWYTnsH3pbFDvDLpdLmcU=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  patches = [
+    # <https://github.com/scottdraves/electricsheep/pull/126>
+    ./boost-1.85.patch
+  ];
+
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
 
   buildInputs = [
     wxGTK32
@@ -41,7 +50,7 @@ stdenv.mkDerivation {
     xorg.libXrender
     flam3
     libgtop
-    boost179
+    boost
     tinyxml
     libglut
     libGLU

@@ -1,8 +1,9 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
-, installShellFiles
-, python3
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  installShellFiles,
+  python3,
 }:
 
 buildNpmPackage rec {

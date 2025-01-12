@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "ha-mqtt-discoverable";
-  version = "0.16.0";
+  version = "0.16.4";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -21,14 +21,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "unixorn";
     repo = "ha-mqtt-discoverable";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-IdyrcqRX5YXS6tx5qP7vOnAJpvy5sOsCwFpWMdyYaeI=";
+    tag = "v${version}";
+    hash = "sha256-9JRgg2A/tcZyAkuddQ/v3Dhxe60O47Y4VZY3Yb6/49g=";
   };
 
   pythonRelaxDeps = [ "pyaml" ];
 
   build-system = [ poetry-core ];
-
 
   dependencies = [
     gitlike-commands

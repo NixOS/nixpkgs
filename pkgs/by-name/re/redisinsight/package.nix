@@ -138,7 +138,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     makeWrapper '${electron}/bin/electron' "$out/bin/redisinsight" \
       --add-flags "$out/share/redisinsight/app/resources/app.asar" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
       --inherit-argv0
 

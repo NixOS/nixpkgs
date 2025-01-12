@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "wlcrs";
     repo = "python-afsapi";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-eE5BsXNtSU6YUhRn4/SKpMrqaYf8tyfLKdxxGOmNJ9I=";
   };
 

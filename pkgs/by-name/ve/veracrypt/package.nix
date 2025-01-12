@@ -8,7 +8,7 @@
   fuse,
   wxGTK32,
   lvm2,
-  substituteAll,
+  replaceVars,
   e2fsprogs,
   exfat,
   ntfs3g,
@@ -27,8 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       ext2 = "${e2fsprogs}/bin/mkfs.ext2";
       ext3 = "${e2fsprogs}/bin/mkfs.ext3";
       ext4 = "${e2fsprogs}/bin/mkfs.ext4";

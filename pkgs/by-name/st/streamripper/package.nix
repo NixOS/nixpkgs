@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchurl , glib, pkg-config, libogg, libvorbis, libmad }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  glib,
+  pkg-config,
+  libogg,
+  libvorbis,
+  libmad,
+}:
 
 stdenv.mkDerivation rec {
   pname = "streamripper";
@@ -10,7 +19,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ glib libogg libvorbis libmad ];
+  buildInputs = [
+    glib
+    libogg
+    libvorbis
+    libmad
+  ];
 
   makeFlags = [
     "AR:=$(AR)"

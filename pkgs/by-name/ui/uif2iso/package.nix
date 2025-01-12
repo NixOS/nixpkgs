@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, unzip, zlib }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  zlib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "uif2iso";
@@ -10,7 +16,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ unzip ];
-  buildInputs = [zlib];
+  buildInputs = [ zlib ];
 
   installPhase = ''
     make -C . prefix="$out" install;

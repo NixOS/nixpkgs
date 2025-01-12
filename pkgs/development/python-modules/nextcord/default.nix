@@ -2,6 +2,7 @@
   lib,
   stdenv,
   buildPythonPackage,
+  pythonAtLeast,
   pythonOlder,
   fetchFromGitHub,
   substituteAll,
@@ -9,6 +10,7 @@
   libopus,
   aiohttp,
   aiodns,
+  audioop-lts,
   brotli,
   faust-cchardet,
   orjson,
@@ -26,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nextcord";
     repo = "nextcord";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-bv4I+Ol/N4kbp/Ch7utaUpo0GmF+Mpx4zWmHL7uIveM=";
   };
 
@@ -42,15 +44,19 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  dependencies = [
-    aiodns
-    aiohttp
-    brotli
-    faust-cchardet
-    orjson
-    pynacl
-    setuptools # for pkg_resources, remove with next release
-  ];
+  dependencies =
+    [
+      aiodns
+      aiohttp
+      brotli
+      faust-cchardet
+      orjson
+      pynacl
+      setuptools # for pkg_resources, remove with next release
+    ]
+    ++ lib.optionals (pythonAtLeast "3.13") [
+      audioop-lts
+    ];
 
   # upstream has no tests
   doCheck = false;

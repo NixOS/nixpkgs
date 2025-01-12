@@ -1,4 +1,7 @@
 {
+  "chap-release-notes": [
+    "release-notes.html#chap-release-notes"
+  ],
   "nixpkgs-manual": [
     "index.html#nixpkgs-manual"
   ],
@@ -49,6 +52,27 @@
   ],
   "chap-overlays": [
     "index.html#chap-overlays"
+  ],
+  "sec-nixpkgs-release-25.05": [
+    "release-notes.html#sec-nixpkgs-release-25.05"
+  ],
+  "sec-nixpkgs-release-25.05-incompatibilities": [
+    "release-notes.html#sec-nixpkgs-release-25.05-incompatibilities"
+  ],
+  "sec-nixpkgs-release-25.05-incompatibilities-titanium-removed": [
+    "release-notes.html#sec-nixpkgs-release-25.05-incompatibilities-titanium-removed",
+    "index.html#titanium",
+    "index.html#building-a-titanium-app",
+    "index.html#emulating-or-simulating-the-app"
+  ],
+  "sec-nixpkgs-release-25.05-lib": [
+    "release-notes.html#sec-nixpkgs-release-25.05-lib"
+  ],
+  "sec-nixpkgs-release-25.05-lib-breaking": [
+    "release-notes.html#sec-nixpkgs-release-25.05-lib-breaking"
+  ],
+  "sec-nixpkgs-release-25.05-lib-deprecations": [
+    "release-notes.html#sec-nixpkgs-release-25.05-lib-deprecations"
   ],
   "sec-overlays-install": [
     "index.html#sec-overlays-install"
@@ -154,6 +178,9 @@
   ],
   "sec-functions-library-cli": [
     "index.html#sec-functions-library-cli"
+  ],
+  "sec-functions-library-fetchers": [
+    "index.html#sec-functions-library-fetchers"
   ],
   "sec-functions-library-generators": [
     "index.html#sec-functions-library-generators"
@@ -1421,11 +1448,9 @@
   "trivial-builder-symlinkJoin": [
     "index.html#trivial-builder-symlinkJoin"
   ],
-  "trivial-builder-writeReferencesToFile": [
-    "index.html#trivial-builder-writeReferencesToFile"
-  ],
   "trivial-builder-writeClosure": [
-    "index.html#trivial-builder-writeClosure"
+    "index.html#trivial-builder-writeClosure",
+    "index.html#trivial-builder-writeReferencesToFile"
   ],
   "trivial-builder-writeDirectReferencesToFile": [
     "index.html#trivial-builder-writeDirectReferencesToFile"
@@ -3192,6 +3217,12 @@
   "maven-buildmavenpackage": [
     "index.html#maven-buildmavenpackage"
   ],
+  "maven-overriding-package-attributes": [
+    "index.html#maven-overriding-package-attributes"
+  ],
+  "maven-offline-build": [
+    "index.html#maven-offline-build"
+  ],
   "stable-maven-plugins": [
     "index.html#stable-maven-plugins"
   ],
@@ -3219,14 +3250,23 @@
   "manifest-file-via-maven-plugin": [
     "index.html#manifest-file-via-maven-plugin"
   ],
-  "nim": [
-    "index.html#nim"
+  "sec-language-nim": [
+    "index.html#sec-language-nim"
+  ],
+  "buildNimPackage": [
+    "index.html#buildNimPackage"
   ],
   "buildnimpackage-parameters": [
     "index.html#buildnimpackage-parameters"
   ],
   "nim-lockfiles": [
     "index.html#nim-lockfiles"
+  ],
+  "buildNimSbom": [
+    "index.html#buildNimSbom"
+  ],
+  "generating-nim-sboms": [
+    "index.html#generating-nim-sboms"
   ],
   "nim-overrides": [
     "index.html#nim-overrides"
@@ -3720,15 +3760,6 @@
   "sec-language-texlive-lualatex-font-cache": [
     "index.html#sec-language-texlive-lualatex-font-cache"
   ],
-  "titanium": [
-    "index.html#titanium"
-  ],
-  "building-a-titanium-app": [
-    "index.html#building-a-titanium-app"
-  ],
-  "emulating-or-simulating-the-app": [
-    "index.html#emulating-or-simulating-the-app"
-  ],
   "vim": [
     "index.html#vim"
   ],
@@ -3755,6 +3786,9 @@
   ],
   "testing-neovim-plugins": [
     "index.html#testing-neovim-plugins"
+  ],
+  "testing-neovim-plugins-neovim-require-check": [
+    "index.html#testing-neovim-plugins-neovim-require-check"
   ],
   "vim-plugin-required-snippet": [
     "index.html#vim-plugin-required-snippet"

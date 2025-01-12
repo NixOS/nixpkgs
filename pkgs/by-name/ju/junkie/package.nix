@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, pkg-config, libpcap, guile_2_2, openssl }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  autoreconfHook,
+  pkg-config,
+  libpcap,
+  guile_2_2,
+  openssl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "junkie";
@@ -21,12 +31,19 @@ stdenv.mkDerivation rec {
   ];
 
   # IP_DONTFRAG is defined on macOS from Big Sur
-  postPatch = lib.optionalString (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11") ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     sed -i '10i#undef IP_DONTFRAG' include/junkie/proto/ip.h
   '';
 
-  buildInputs = [ libpcap guile_2_2 openssl ];
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  buildInputs = [
+    libpcap
+    guile_2_2
+    openssl
+  ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
   configureFlags = [
     "GUILELIBDIR=\${out}/${guile_2_2.siteDir}"
     "GUILECACHEDIR=\${out}/${guile_2_2.siteCcacheDir}"

@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   VERSION = version;
 
-  doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64);
+  doCheck = true;
 
   nativeBuildInputs = [
     autoreconfHook

@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, libusb1, pico-sdk, mbedtls_2 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  libusb1,
+  pico-sdk,
+  mbedtls_2,
+}:
 
 stdenv.mkDerivation rec {
   pname = "picotool";
@@ -19,8 +28,14 @@ stdenv.mkDerivation rec {
       --replace-fail "''$"'{PICO_SDK_PATH}/lib/mbedtls' '${mbedtls_2.src}'
   '';
 
-  buildInputs = [ libusb1 pico-sdk ];
-  nativeBuildInputs = [ cmake pkg-config ];
+  buildInputs = [
+    libusb1
+    pico-sdk
+  ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
   cmakeFlags = [ "-DPICO_SDK_PATH=${pico-sdk}/lib/pico-sdk" ];
 
   postInstall = ''

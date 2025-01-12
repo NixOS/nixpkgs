@@ -1,14 +1,15 @@
-{ stdenv
-, lib
-, fetchurl
-, fetchzip
-, copyDesktopItems
-, gccmakedep
-, imake
-, installShellFiles
-, libX11
-, libXext
-, makeDesktopItem
+{
+  stdenv,
+  lib,
+  fetchurl,
+  fetchzip,
+  copyDesktopItems,
+  gccmakedep,
+  imake,
+  installShellFiles,
+  libX11,
+  libXext,
+  makeDesktopItem,
 }:
 
 let
@@ -26,8 +27,16 @@ stdenv.mkDerivation rec {
     hash = "sha256-w2+T/q/uvVmYO/RBACQOZ6hKi6yr1+5SjJMEbe/kohs=";
   };
 
-  nativeBuildInputs = [ imake gccmakedep installShellFiles copyDesktopItems ];
-  buildInputs = [ libX11 libXext ];
+  nativeBuildInputs = [
+    imake
+    gccmakedep
+    installShellFiles
+    copyDesktopItems
+  ];
+  buildInputs = [
+    libX11
+    libXext
+  ];
 
   # Debian maintains lots of patches for koules. Let's include all of them.
   prePatch = ''
@@ -37,13 +46,13 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # We do not want to depend on that particular font to be available in the
     # xserver, hence substitute it by a font which is always available
-    sed -ie 's:-schumacher-clean-bold-r-normal--8-80-75-75-c-80-\*iso\*:fixed:' xlib/init.c
+    sed -i -e 's:-schumacher-clean-bold-r-normal--8-80-75-75-c-80-\*iso\*:fixed:' xlib/init.c
   '';
 
   preBuild = ''
     cp xkoules.6 xkoules.man  # else "make" will not succeed
-    sed -ie "s:^SOUNDDIR\s*=.*:SOUNDDIR=$out/lib:" Makefile
-    sed -ie "s:^KOULESDIR\s*=.*:KOULESDIR=$out:" Makefile
+    sed -i -e "s:^SOUNDDIR\s*=.*:SOUNDDIR=$out/lib:" Makefile
+    sed -i -e "s:^KOULESDIR\s*=.*:KOULESDIR=$out:" Makefile
   '';
 
   installPhase = ''
@@ -63,7 +72,10 @@ stdenv.mkDerivation rec {
       exec = "xkoules";
       icon = "koules";
       comment = "Push your enemies away, but stay away from obstacles";
-      categories = [ "Game" "ArcadeGame" ];
+      categories = [
+        "Game"
+        "ArcadeGame"
+      ];
     })
   ];
 

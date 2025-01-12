@@ -1,6 +1,12 @@
-{ lib, fetchFromGitHub, buildDunePackage
-, lwt, lwt_ppx, stringext
-, alcotest }:
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  lwt,
+  lwt_ppx,
+  stringext,
+  alcotest,
+}:
 
 buildDunePackage rec {
   pname = "multipart-form-data";
@@ -14,7 +20,10 @@ buildDunePackage rec {
   };
 
   buildInputs = [ lwt_ppx ];
-  propagatedBuildInputs = [ lwt stringext ];
+  propagatedBuildInputs = [
+    lwt
+    stringext
+  ];
 
   duneVersion = "3";
 

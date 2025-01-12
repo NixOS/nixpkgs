@@ -1,24 +1,25 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchsvn
-, pkg-config
-, scons
-, libGLU
-, libGL
-, SDL2
-, SDL2_image
-, libvorbis
-, bullet
-, curl
-, gettext
-, writeShellScriptBin
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchsvn,
+  pkg-config,
+  scons,
+  libGLU,
+  libGL,
+  SDL2,
+  SDL2_image,
+  libvorbis,
+  bullet,
+  curl,
+  gettext,
+  writeShellScriptBin,
 
-, data ? fetchsvn {
+  data ? fetchsvn {
     url = "svn://svn.code.sf.net/p/vdrift/code/vdrift-data";
     rev = "1446";
     sha256 = "sha256-KEu49GAOfenPyuaUItt6W9pkuqUNpXgmTSFuc7ThljQ=";
-  }
+  },
 }:
 let
   version = "unstable-2021-09-05";
@@ -33,8 +34,20 @@ let
       sha256 = "sha256-DrzRF4WzwEXCNALq0jz8nHWZ1oYTEsdrvSYVYI1WkTI=";
     };
 
-    nativeBuildInputs = [ pkg-config scons ];
-    buildInputs = [ libGLU libGL SDL2 SDL2_image libvorbis bullet curl gettext ];
+    nativeBuildInputs = [
+      pkg-config
+      scons
+    ];
+    buildInputs = [
+      libGLU
+      libGL
+      SDL2
+      SDL2_image
+      libvorbis
+      bullet
+      curl
+      gettext
+    ];
 
     patches = [
       ./0001-Ignore-missing-data-for-installation.patch
@@ -58,14 +71,15 @@ let
   };
   wrappedName = "vdrift-${version}-with-data-${toString data.rev}";
 in
-(writeShellScriptBin "vdrift"  ''
+(writeShellScriptBin "vdrift" ''
   export VDRIFT_DATA_DIRECTORY="${data}"
   exec ${bin}/bin/vdrift "$@"
-'').overrideAttrs (_: {
-  name = wrappedName;
-  meta = bin.meta // {
-    hydraPlatforms = [ ];
-  };
-  unwrapped = bin;
-  inherit bin data;
-})
+'').overrideAttrs
+  (_: {
+    name = wrappedName;
+    meta = bin.meta // {
+      hydraPlatforms = [ ];
+    };
+    unwrapped = bin;
+    inherit bin data;
+  })

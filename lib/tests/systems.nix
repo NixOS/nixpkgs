@@ -52,7 +52,7 @@ lib.runTests (
 
   testcygwin = mseteq cygwin [ "i686-cygwin" "x86_64-cygwin" ];
   testdarwin = mseteq darwin [ "x86_64-darwin" "i686-darwin" "aarch64-darwin" "armv7a-darwin" ];
-  testfreebsd = mseteq freebsd [ "i686-freebsd" "x86_64-freebsd" ];
+  testfreebsd = mseteq freebsd [ "aarch64-freebsd" "i686-freebsd" "x86_64-freebsd" ];
   testgenode = mseteq genode [ "aarch64-genode" "i686-genode" "x86_64-genode" ];
   testredox = mseteq redox [ "x86_64-redox" ];
   testgnu = mseteq gnu (linux /* ++ kfreebsd ++ ... */);
@@ -77,6 +77,18 @@ lib.runTests (
   test_toLosslessStringMaybe_fail = {
     expr = toLosslessStringMaybe (lib.systems.elaborate "x86_64-linux" // { something = "extra"; });
     expected = null;
+  };
+  test_elaborate_config_over_system = {
+    expr = (lib.systems.elaborate { config = "i686-unknown-linux-gnu"; system = "x86_64-linux"; }).system;
+    expected = "i686-linux";
+  };
+  test_elaborate_config_over_parsed = {
+    expr = (lib.systems.elaborate { config = "i686-unknown-linux-gnu"; parsed = (lib.systems.elaborate "x86_64-linux").parsed; }).parsed.cpu.arch;
+    expected = "i686";
+  };
+  test_elaborate_system_over_parsed = {
+    expr = (lib.systems.elaborate { system = "i686-linux"; parsed = (lib.systems.elaborate "x86_64-linux").parsed; }).parsed.cpu.arch;
+    expected = "i686";
   };
 }
 

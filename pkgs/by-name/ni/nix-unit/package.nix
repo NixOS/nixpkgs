@@ -1,16 +1,17 @@
-{ stdenv
-, lib
-, boost
-, clang-tools
-, cmake
-, difftastic
-, makeWrapper
-, meson
-, ninja
-, nixVersions
-, nlohmann_json
-, pkg-config
-, fetchFromGitHub
+{
+  stdenv,
+  lib,
+  boost,
+  clang-tools,
+  cmake,
+  difftastic,
+  makeWrapper,
+  meson,
+  ninja,
+  nixVersions,
+  nlohmann_json,
+  pkg-config,
+  fetchFromGitHub,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -50,7 +51,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Nix unit test runner";
     homepage = "https://github.com/nix-community/nix-unit";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ mic92 adisbladis ];
+    maintainers = with lib.maintainers; [
+      mic92
+      adisbladis
+    ];
     platforms = lib.platforms.unix;
     mainProgram = "nix-unit";
   };

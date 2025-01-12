@@ -20,7 +20,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  nativeBuildInputs = [ bison installShellFiles ];
+  nativeBuildInputs = [
+    bison
+    installShellFiles
+  ];
 
   outputs = [
     "out"

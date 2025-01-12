@@ -1,4 +1,15 @@
-{ lib, stdenv, fetchurl, dpkg, makeWrapper, coreutils, gnugrep, gnused, perl, mfcl2740dwlpr }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  dpkg,
+  makeWrapper,
+  coreutils,
+  gnugrep,
+  gnused,
+  perl,
+  mfcl2740dwlpr,
+}:
 
 stdenv.mkDerivation rec {
   pname = "mfcl2740dwcupswrapper";
@@ -9,7 +20,10 @@ stdenv.mkDerivation rec {
     sha256 = "078453e19f20ab6c7fc4d63c3e09f162f3d1410c04c23a294b6ffbd720b35ffb";
   };
 
-  nativeBuildInputs = [ dpkg makeWrapper ];
+  nativeBuildInputs = [
+    dpkg
+    makeWrapper
+  ];
 
   unpackPhase = "dpkg-deb -x $src $out";
 
@@ -26,7 +40,13 @@ stdenv.mkDerivation rec {
       --replace /usr/bin/perl ${perl}/bin/perl
 
     wrapProgram $dir/cupswrapper/brother_lpdwrapper_MFCL2740DW \
-      --prefix PATH : ${lib.makeBinPath [ coreutils gnugrep gnused ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          coreutils
+          gnugrep
+          gnused
+        ]
+      }
 
     mkdir -p $out/lib/cups/filter
     mkdir -p $out/share/cups/model
@@ -39,7 +59,10 @@ stdenv.mkDerivation rec {
     description = "Brother MFC-L2740DW CUPS wrapper driver";
     homepage = "http://www.brother.com/";
     license = lib.licenses.gpl2Plus;
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+    ];
     maintainers = [ ];
   };
 }

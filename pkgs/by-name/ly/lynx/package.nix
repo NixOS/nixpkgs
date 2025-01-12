@@ -1,25 +1,26 @@
-{ lib
-, stdenv
-, buildPackages
-, fetchurl
-, pkg-config
-, ncurses
-, gzip
-, sslSupport ? true
-, openssl
-, nukeReferences
+{
+  lib,
+  stdenv,
+  buildPackages,
+  fetchurl,
+  pkg-config,
+  ncurses,
+  gzip,
+  sslSupport ? true,
+  openssl,
+  nukeReferences,
 }:
 
 stdenv.mkDerivation rec {
   pname = "lynx";
-  version = "2.9.0dev.12";
+  version = "2.9.2";
 
   src = fetchurl {
     urls = [
       "ftp://ftp.invisible-island.net/lynx/tarballs/lynx${version}.tar.bz2"
       "https://invisible-mirror.net/archives/lynx/tarballs/lynx${version}.tar.bz2"
     ];
-    hash = "sha256-pkVbFZ0Ad22OwQUShcly3B8MVS0FcaDP8Coj7BRu6OU=";
+    hash = "sha256-c3S4mTbZkWaeEB9Ol/LJWSA24ejNqnuvwlmnerb7B84=";
   };
 
   enableParallelBuilding = true;
@@ -33,11 +34,12 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional sslSupport "--with-ssl";
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ nukeReferences ]
-    ++ lib.optional sslSupport pkg-config;
+  nativeBuildInputs = [ nukeReferences ] ++ lib.optional sslSupport pkg-config;
 
-  buildInputs = [ ncurses gzip ]
-    ++ lib.optional sslSupport openssl;
+  buildInputs = [
+    ncurses
+    gzip
+  ] ++ lib.optional sslSupport openssl;
 
   # cfg_defs.h captures lots of references to build-only dependencies, derived
   # from config.cache.

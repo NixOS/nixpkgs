@@ -17,9 +17,9 @@ in
         type = lib.types.bool;
         default = true;
         description = ''
-            Whether to enable power management.  This includes support
-            for suspend-to-RAM and powersave features on laptops.
-          '';
+          Whether to enable power management.  This includes support
+          for suspend-to-RAM and powersave features on laptops.
+        '';
       };
 
       resumeCommands = lib.mkOption {
@@ -35,10 +35,10 @@ in
           "''${pkgs.hdparm}/sbin/hdparm -B 255 /dev/sda"
         '';
         description = ''
-            Commands executed when the machine powers up.  That is,
-            they're executed both when the system first boots and when
-            it resumes from suspend or hibernation.
-          '';
+          Commands executed when the machine powers up.  That is,
+          they're executed both when the system first boots and when
+          it resumes from suspend or hibernation.
+        '';
       };
 
       powerDownCommands = lib.mkOption {
@@ -48,16 +48,15 @@ in
           "''${pkgs.hdparm}/sbin/hdparm -B 255 /dev/sda"
         '';
         description = ''
-            Commands executed when the machine powers down.  That is,
-            they're executed both when the system shuts down and when
-            it goes to suspend or hibernation.
-          '';
+          Commands executed when the machine powers down.  That is,
+          they're executed both when the system shuts down and when
+          it goes to suspend or hibernation.
+        '';
       };
 
     };
 
   };
-
 
   ###### implementation
 
@@ -72,28 +71,31 @@ in
     };
 
     # Service executed before suspending/hibernating.
-    systemd.services.pre-sleep =
-      { description = "Pre-Sleep Actions";
-        wantedBy = [ "sleep.target" ];
-        before = [ "sleep.target" ];
-        script =
-          ''
-            ${cfg.powerDownCommands}
-          '';
-        serviceConfig.Type = "oneshot";
-      };
+    systemd.services.pre-sleep = {
+      description = "Pre-Sleep Actions";
+      wantedBy = [ "sleep.target" ];
+      before = [ "sleep.target" ];
+      script = ''
+        ${cfg.powerDownCommands}
+      '';
+      serviceConfig.Type = "oneshot";
+    };
 
-    systemd.services.post-resume =
-      { description = "Post-Resume Actions";
-        after = [ "suspend.target" "hibernate.target" "hybrid-sleep.target" "suspend-then-hibernate.target" ];
-        script =
-          ''
-            /run/current-system/systemd/bin/systemctl try-restart --no-block post-resume.target
-            ${cfg.resumeCommands}
-            ${cfg.powerUpCommands}
-          '';
-        serviceConfig.Type = "oneshot";
-      };
+    systemd.services.post-resume = {
+      description = "Post-Resume Actions";
+      after = [
+        "suspend.target"
+        "hibernate.target"
+        "hybrid-sleep.target"
+        "suspend-then-hibernate.target"
+      ];
+      script = ''
+        /run/current-system/systemd/bin/systemctl try-restart --no-block post-resume.target
+        ${cfg.resumeCommands}
+        ${cfg.powerUpCommands}
+      '';
+      serviceConfig.Type = "oneshot";
+    };
 
   };
 

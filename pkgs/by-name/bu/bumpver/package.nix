@@ -1,4 +1,10 @@
-{ lib, python3, fetchPypi, git, mercurial }:
+{
+  lib,
+  python3,
+  fetchPypi,
+  git,
+  mercurial,
+}:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "bumpver";
@@ -16,9 +22,20 @@ python3.pkgs.buildPythonApplication rec {
       --replace "package_dir = lib3to6.fix(package_dir)" ""
   '';
 
-  propagatedBuildInputs = with python3.pkgs; [ pathlib2 click toml lexid colorama setuptools ];
+  propagatedBuildInputs = with python3.pkgs; [
+    pathlib2
+    click
+    toml
+    lexid
+    colorama
+    setuptools
+  ];
 
-  nativeCheckInputs = [ python3.pkgs.pytestCheckHook git mercurial ];
+  nativeCheckInputs = [
+    python3.pkgs.pytestCheckHook
+    git
+    mercurial
+  ];
 
   disabledTests = [
     # fails due to more aggressive setuptools version specifier validation

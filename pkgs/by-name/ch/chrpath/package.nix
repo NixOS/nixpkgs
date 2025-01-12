@@ -1,12 +1,17 @@
-{ lib, stdenv, fetchurl, autoreconfHook }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+}:
 
 stdenv.mkDerivation rec {
   pname = "chrpath";
-  version = "0.17";
+  version = "0.18";
 
   src = fetchurl {
     url = "https://codeberg.org/pere/chrpath/archive/release-${version}.tar.gz";
-    hash = "sha256-Sh2syR9OrxyMP3Z/2IHrH+OlCaINBii/l2DZCsEkvQw=";
+    hash = "sha256-8JxJ8GGGYMoR/G2VgN3ekExyJNTG0Pby0fm83JECyao=";
   };
 
   nativeBuildInputs = [

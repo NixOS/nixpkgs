@@ -2,7 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  fetchurl,
+  fetchzip,
   fuse,
   stdenv,
   installShellFiles,
@@ -10,13 +10,14 @@
 }:
 buildGoModule rec {
   pname = "alist";
-  version = "3.39.2";
+  version = "3.41.0";
+  webVersion = "3.41.0";
 
   src = fetchFromGitHub {
     owner = "AlistGo";
     repo = "alist";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ayIbmoemaDKZu+jYJ33GXq5XORNn6rJ3yOpDgFeXA/4=";
+    tag = "v${version}";
+    hash = "sha256-DzqSkcyDRyiHM0yh7A+dZj7TnjhDVQoHHgV5piVcu1g=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -28,13 +29,13 @@ buildGoModule rec {
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
-  web = fetchurl {
-    url = "https://github.com/AlistGo/alist-web/releases/download/${version}/dist.tar.gz";
-    hash = "sha256-2ZgxWv9VROfXJIIU0Co7BKkjZr8KxQ+0eRsjgz6LVDo=";
+  web = fetchzip {
+    url = "https://github.com/AlistGo/alist-web/releases/download/${webVersion}/dist.tar.gz";
+    hash = "sha256-1IXvst9VfxuIjUrgmJxTYm8jJQStMK+RlQibQ3fTDGs=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-S8TPu+pOljrA8GAeCzxgv09pb5rauSYvRm8gt8oMPTs=";
+  vendorHash = "sha256-p6JqYmcQR6W7RE7F6NGxoiTxSOESuYjpke0rLRlxeSM=";
 
   buildInputs = [ fuse ];
 
@@ -45,14 +46,12 @@ buildGoModule rec {
     "-w"
     "-X \"github.com/alist-org/alist/v3/internal/conf.GitAuthor=Xhofe <i@nn.ci>\""
     "-X github.com/alist-org/alist/v3/internal/conf.Version=${version}"
-    "-X github.com/alist-org/alist/v3/internal/conf.WebVersion=${version}"
+    "-X github.com/alist-org/alist/v3/internal/conf.WebVersion=${webVersion}"
   ];
 
   preConfigure = ''
-    # use matched web files
     rm -rf public/dist
-    tar -xzf ${web}
-    mv -f dist public
+    cp -r ${web} public/dist
   '';
 
   preBuild = ''

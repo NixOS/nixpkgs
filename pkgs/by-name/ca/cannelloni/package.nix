@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, cmake, lksctp-tools, sctpSupport ? true }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  lksctp-tools,
+  sctpSupport ? true,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cannelloni";

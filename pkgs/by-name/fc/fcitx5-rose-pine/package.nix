@@ -1,6 +1,7 @@
-{ stdenvNoCC
-, fetchFromGitHub
-, lib
+{
+  stdenvNoCC,
+  fetchFromGitHub,
+  lib,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -22,7 +23,6 @@ stdenvNoCC.mkDerivation {
 
     runHook postInstall
   '';
-
 
   meta = {
     description = "Fcitx5 themes based on Rosé Pine";

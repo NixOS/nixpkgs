@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, python3
-, capnproto
-, gtest
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  python3,
+  capnproto,
+  gtest,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -18,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     # After we're back on a stable tag, use v${finalAttrs.version}
     rev = "857f68de3ce5b6f919f3a0f489c93072751b1578";
     hash = "sha256-qHcRncsvMiSJji+JLOlfQ87+pfKg+zvlqMTXKpImvTM=";
-    fetchSubmodules = false;  # we use all dependencies from nix
+    fetchSubmodules = false; # we use all dependencies from nix
   };
 
   nativeBuildInputs = [
@@ -43,7 +44,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Universal Hardware Data Model";
     homepage = "https://github.com/chipsalliance/UHDM";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ matthuszagh hzeller ];
+    maintainers = with lib.maintainers; [
+      matthuszagh
+      hzeller
+    ];
     platforms = lib.platforms.all;
   };
 })

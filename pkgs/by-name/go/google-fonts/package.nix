@@ -1,7 +1,8 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, fonts ? []
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  fonts ? [ ],
 }:
 
 stdenvNoCC.mkDerivation {
@@ -11,7 +12,10 @@ stdenvNoCC.mkDerivation {
   # Adobe Blank is split out in a separate output,
   # because it causes crashes with `libfontconfig`.
   # It has an absurd number of symbols
-  outputs = [ "out" "adobeBlank" ];
+  outputs = [
+    "out"
+    "adobeBlank"
+  ];
 
   src = fetchFromGitHub {
     owner = "google";
@@ -44,26 +48,37 @@ stdenvNoCC.mkDerivation {
   # FamilyName-StyleName.ttf, FamilyName[param1,param2,...].ttf, and
   # FamilyName.ttf. This installs all fonts if fonts is empty and otherwise
   # only the specified fonts by FamilyName.
-  fonts = map (font: builtins.replaceStrings [" "] [""] font) fonts;
-  installPhase = ''
-    adobeBlankDest=$adobeBlank/share/fonts/truetype
-    install -m 444 -Dt $adobeBlankDest ofl/adobeblank/AdobeBlank-Regular.ttf
-    rm -r ofl/adobeblank
-    dest=$out/share/fonts/truetype
-  '' + (if fonts == [] then ''
-    find . -name '*.ttf' -exec install -m 444 -Dt $dest '{}' +
-  '' else ''
-    for font in $fonts; do
-      find . \( -name "$font-*.ttf" -o -name "$font[*.ttf" -o -name "$font.ttf" \) -exec install -m 444 -Dt $dest '{}' +
-    done
-  '');
+  fonts = map (font: builtins.replaceStrings [ " " ] [ "" ] font) fonts;
+  installPhase =
+    ''
+      adobeBlankDest=$adobeBlank/share/fonts/truetype
+      install -m 444 -Dt $adobeBlankDest ofl/adobeblank/AdobeBlank-Regular.ttf
+      rm -r ofl/adobeblank
+      dest=$out/share/fonts/truetype
+    ''
+    + (
+      if fonts == [ ] then
+        ''
+          find . -name '*.ttf' -exec install -m 444 -Dt $dest '{}' +
+        ''
+      else
+        ''
+          for font in $fonts; do
+            find . \( -name "$font-*.ttf" -o -name "$font[*.ttf" -o -name "$font.ttf" \) -exec install -m 444 -Dt $dest '{}' +
+          done
+        ''
+    );
 
   meta = with lib; {
     homepage = "https://fonts.google.com";
     description = "Font files available from Google Fonts";
-    license = with licenses; [ asl20 ofl ufl ];
+    license = with licenses; [
+      asl20
+      ofl
+      ufl
+    ];
     platforms = platforms.all;
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
     maintainers = with maintainers; [ manveru ];
     sourceProvenance = [ sourceTypes.binaryBytecode ];
   };

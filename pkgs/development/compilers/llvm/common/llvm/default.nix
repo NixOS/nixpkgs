@@ -4,7 +4,6 @@
 , pkgsBuildBuild
 , pollyPatches ? []
 , patches ? []
-, polly_src ? null
 , src ? null
 , monorepoSrc ? null
 , runCommand
@@ -14,9 +13,6 @@
 , python3
 , python3Packages
 , libffi
-  # TODO: Can this memory corruption bug still occur?
-  # <https://github.com/llvm/llvm-project/issues/61350>
-, enableGoldPlugin ? libbfd.hasPluginAPI
 , ld64
 , libbfd
 , libpfm
@@ -85,7 +81,7 @@ let
 
   # TODO: simplify versionAtLeast condition for cmake and third-party via rebuild
   src' = if monorepoSrc != null then
-    runCommand "${pname}-src-${version}" {} (''
+    runCommand "${pname}-src-${version}" { inherit (monorepoSrc) passthru; } (''
       mkdir -p "$out"
     '' + lib.optionalString (lib.versionAtLeast release_version "14") ''
       cp -r ${monorepoSrc}/cmake "$out"
@@ -107,8 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = src';
   patches = patches';
 
-  sourceRoot = if lib.versionOlder release_version "13" then null
-    else "${finalAttrs.src.name}/${pname}";
+  sourceRoot = "${finalAttrs.src.name}/${pname}";
 
   outputs = [ "out" "lib" "dev" "python" ];
 
@@ -375,8 +370,13 @@ stdenv.mkDerivation (finalAttrs: {
     "-DSPHINX_OUTPUT_MAN=ON"
     "-DSPHINX_OUTPUT_HTML=OFF"
     "-DSPHINX_WARNINGS_AS_ERRORS=OFF"
-  ] ++ optionals (enableGoldPlugin) [
-    "-DLLVM_BINUTILS_INCDIR=${libbfd.dev}/include"
+  ] ++ optionals (libbfd != null) [
+    # LLVM depends on binutils only through libbfd/include/plugin-api.h, which
+    # is meant to be a stable interface. Depend on that file directly rather
+    # than through a build of BFD to break the dependency of clang on the target
+    # triple. The result of this is that a single clang build can be used for
+    # multiple targets.
+    "-DLLVM_BINUTILS_INCDIR=${libbfd.plugin-api-header}/include"
   ] ++ optionals stdenv.hostPlatform.isDarwin [
     "-DLLVM_ENABLE_LIBCXX=ON"
     "-DCAN_TARGET_i386=false"
@@ -493,18 +493,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = null;
   postInstall = null;
-})) // lib.optionalAttrs (lib.versionOlder release_version "13") {
-  inherit polly_src;
-
-  unpackPhase = ''
-    unpackFile $src
-    mv llvm-${release_version}* llvm
-    sourceRoot=$PWD/llvm
-  '' + optionalString enablePolly ''
-    unpackFile $polly_src
-    mv polly-* $sourceRoot/tools/polly
-  '';
-} // lib.optionalAttrs (lib.versionAtLeast release_version "13") {
+})) // lib.optionalAttrs (lib.versionAtLeast release_version "13") {
   nativeCheckInputs = [ which ] ++ lib.optional (stdenv.hostPlatform.isDarwin && lib.versionAtLeast release_version "15") sysctl;
 } // lib.optionalAttrs (lib.versionOlder release_version "15") {
   # hacky fix: created binaries need to be run before installation

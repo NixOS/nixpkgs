@@ -1,22 +1,23 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, pkg-config
-, meson
-, ninja
-, vala
-, glib
-, itstool
-, wrapGAppsHook3
-, desktop-file-utils
-, libsoup
-, json-glib
-, geoclue2
-, geocode-glib
-, libgee
-, gtk3
-, pantheon
-, gst_all_1
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  meson,
+  ninja,
+  vala,
+  glib,
+  itstool,
+  wrapGAppsHook3,
+  desktop-file-utils,
+  libsoup_2_4,
+  json-glib,
+  geoclue2,
+  geocode-glib,
+  libgee,
+  gtk3,
+  pantheon,
+  gst_all_1,
 }:
 
 stdenv.mkDerivation rec {
@@ -42,7 +43,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libsoup
+    libsoup_2_4
     json-glib
     geoclue2
     geocode-glib
@@ -63,6 +64,9 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     mainProgram = "com.github.louis77.tuner";
-    maintainers = [ maintainers.abbe ];
+    maintainers = with maintainers; [
+      abbe
+      aleksana
+    ];
   };
 }

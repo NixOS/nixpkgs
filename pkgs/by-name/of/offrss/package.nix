@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, curl, libmrss, podofo, libiconv }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  curl,
+  libmrss,
+  podofo,
+  libiconv,
+}:
 
 stdenv.mkDerivation rec {
   pname = "offrss";
@@ -9,7 +17,11 @@ stdenv.mkDerivation rec {
     cp offrss $out/bin
   '';
 
-  buildInputs = [ curl libmrss ]
+  buildInputs =
+    [
+      curl
+      libmrss
+    ]
     ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) podofo
     ++ lib.optional (!stdenv.hostPlatform.isLinux) libiconv;
 
@@ -18,14 +30,17 @@ stdenv.mkDerivation rec {
   #     offrss.o:offrss.h:75: first defined here
   env.NIX_CFLAGS_COMPILE = "-fcommon";
 
-  configurePhase = ''
-    substituteInPlace Makefile \
-      --replace '$(CC) $(CFLAGS) $(LDFLAGS)' '$(CXX) $(CFLAGS) $(LDFLAGS)'
-  '' + lib.optionalString (!stdenv.hostPlatform.isLinux) ''
-    sed 's/#EXTRA/EXTRA/' -i Makefile
-  '' + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
-    sed 's/^PDF/#PDF/' -i Makefile
-  '';
+  configurePhase =
+    ''
+      substituteInPlace Makefile \
+        --replace '$(CC) $(CFLAGS) $(LDFLAGS)' '$(CXX) $(CFLAGS) $(LDFLAGS)'
+    ''
+    + lib.optionalString (!stdenv.hostPlatform.isLinux) ''
+      sed 's/#EXTRA/EXTRA/' -i Makefile
+    ''
+    + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+      sed 's/^PDF/#PDF/' -i Makefile
+    '';
 
   src = fetchurl {
     url = "http://vicerveza.homeunix.net/~viric/soft/offrss/offrss-${version}.tar.gz";

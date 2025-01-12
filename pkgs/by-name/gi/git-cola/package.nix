@@ -1,23 +1,24 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, python3Packages
-, gettext
-, git
-, qt5
-, gitUpdater
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  gettext,
+  git,
+  qt5,
+  gitUpdater,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "git-cola";
-  version = "4.8.2";
+  version = "4.10.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "git-cola";
     repo = "git-cola";
     rev = "v${version}";
-    hash = "sha256-8OErZ6uKTWE245BoBu9lQyTLA43DfWaYDv3wbPWaufg=";
+    hash = "sha256-tOd+LSS6inGLRb6Wm92tta0JbjSZw+88hqFDJmSSJlY=";
   };
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
@@ -44,12 +45,14 @@ python3Packages.buildPythonApplication rec {
     pytestCheckHook
   ];
 
-  disabledTestPaths = [
-    "qtpy/"
-    "contrib/win32"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "cola/inotify.py"
-  ];
+  disabledTestPaths =
+    [
+      "qtpy/"
+      "contrib/win32"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "cola/inotify.py"
+    ];
 
   preFixup = ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")

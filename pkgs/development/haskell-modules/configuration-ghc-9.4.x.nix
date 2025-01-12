@@ -2,16 +2,20 @@
 
 let
   inherit (pkgs) fetchpatch lib;
-  checkAgainAfter = pkg: ver: msg: act:
-    if builtins.compareVersions pkg.version ver <= 0 then act
+  checkAgainAfter =
+    pkg: ver: msg: act:
+    if builtins.compareVersions pkg.version ver <= 0 then
+      act
     else
       builtins.throw "Check if '${msg}' was resolved in ${pkg.pname} ${pkg.version} and update or remove this";
 in
 
 with haskellLib;
-self: super: let
+self: super:
+let
   jailbreakForCurrentVersion = p: v: checkAgainAfter p v "bad bounds" (doJailbreak p);
-in {
+in
+{
   llvmPackages = lib.dontRecurseIntoAttrs self.ghc.llvmPackages;
 
   # Disable GHC core libraries.
@@ -46,7 +50,11 @@ in {
   system-cxx-std-lib = null;
   template-haskell = null;
   # GHC only builds terminfo if it is a native compiler
-  terminfo = if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then null else doDistribute self.terminfo_0_4_1_6;
+  terminfo =
+    if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then
+      null
+    else
+      doDistribute self.terminfo_0_4_1_6;
   text = null;
   time = null;
   transformers = null;
@@ -75,7 +83,7 @@ in {
     # 2021-10-10: 9.2.1 is not yet supported (also no issue)
     testFlags = [
       "--skip=/Hpack/renderCabalFile/is inverse to readCabalFile/"
-    ] ++ drv.testFlags or [];
+    ] ++ drv.testFlags or [ ];
   }) (doJailbreak super.hpack);
 
   # https://github.com/sjakobi/bsb-http-chunked/issues/38
@@ -119,17 +127,14 @@ in {
     ormolu
     hlint
     stylish-haskell
-  ;
+    ;
 
   # Packages which need compat library for GHC < 9.6
-  inherit
-    (lib.mapAttrs
-      (_: addBuildDepends [ self.foldable1-classes-compat ])
-      super)
+  inherit (lib.mapAttrs (_: addBuildDepends [ self.foldable1-classes-compat ]) super)
     indexed-traversable
     OneTuple
     these
-  ;
+    ;
   base-compat-batteries = addBuildDepends [
     self.foldable1-classes-compat
     self.OneTuple

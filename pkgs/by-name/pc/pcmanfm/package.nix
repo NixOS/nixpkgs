@@ -1,17 +1,19 @@
-{ lib
-, stdenv
-, fetchurl
-, glib
-, intltool
-, libfm
-, libX11
-, pango
-, pkg-config
-, wrapGAppsHook3
-, adwaita-icon-theme
-, withGtk3 ? true
-, gtk2
-, gtk3
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  glib,
+  intltool,
+  libfm,
+  libX11,
+  pango,
+  pkg-config,
+  wrapGAppsHook3,
+  adwaita-icon-theme,
+  withGtk3 ? true,
+  gtk2,
+  gtk3,
 }:
 
 let
@@ -28,8 +30,27 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-FMt7JHSTxMzmX7tZAmEeOtAKeocPvB5QrcUEKMUUDPc=";
   };
 
-  buildInputs = [ glib gtk libfm' libX11 pango adwaita-icon-theme ];
-  nativeBuildInputs = [ pkg-config wrapGAppsHook3 intltool ];
+  patches = [
+    # Fix build with gcc14 -Werror=incompatible-pointer-types
+    (fetchpatch {
+      url = "https://github.com/lxde/pcmanfm/commit/12abd7e179adb9e31d999824048a5f40f90218fd.patch";
+      hash = "sha256-iuNejg211VOiaIVSNkIV64VIrs6oOp+qwjqz3JFxOTI=";
+    })
+  ];
+
+  buildInputs = [
+    glib
+    gtk
+    libfm'
+    libX11
+    pango
+    adwaita-icon-theme
+  ];
+  nativeBuildInputs = [
+    pkg-config
+    wrapGAppsHook3
+    intltool
+  ];
 
   configureFlags = optional withGtk3 "--with-gtk=3";
 

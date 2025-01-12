@@ -3,7 +3,8 @@
   lib,
   pkgs,
   ...
-}: let
+}:
+let
   cfg = config.services.headscale;
 
   dataDir = "/var/lib/headscale";
@@ -17,20 +18,22 @@
     unix_socket = "${runDir}/headscale.sock";
   };
 
-  settingsFormat = pkgs.formats.yaml {};
+  settingsFormat = pkgs.formats.yaml { };
   configFile = settingsFormat.generate "headscale.yaml" cfg.settings;
   cliConfigFile = settingsFormat.generate "headscale.yaml" cliConfig;
 
   assertRemovedOption = option: message: {
     assertion = !lib.hasAttrByPath option cfg;
-    message = "The option `services.headscale.${lib.options.showOption option}` was removed. " + message;
+    message =
+      "The option `services.headscale.${lib.options.showOption option}` was removed. " + message;
   };
-in {
+in
+{
   options = {
     services.headscale = {
       enable = lib.mkEnableOption "headscale, Open Source coordination server for Tailscale";
 
-      package = lib.mkPackageOption pkgs "headscale" {};
+      package = lib.mkPackageOption pkgs "headscale" { };
 
       user = lib.mkOption {
         default = "headscale";
@@ -105,42 +108,47 @@ in {
               '';
             };
 
-            prefixes = let
-              prefDesc = ''
-                Each prefix consists of either an IPv4 or IPv6 address,
-                and the associated prefix length, delimited by a slash.
-                It must be within IP ranges supported by the Tailscale
-                client - i.e., subnets of 100.64.0.0/10 and fd7a:115c:a1e0::/48.
-              '';
-            in {
-              v4 = lib.mkOption {
-                type = lib.types.str;
-                default = "100.64.0.0/10";
-                description = prefDesc;
-              };
-
-              v6 = lib.mkOption {
-                type = lib.types.str;
-                default = "fd7a:115c:a1e0::/48";
-                description = prefDesc;
-              };
-
-              allocation = lib.mkOption {
-                type = lib.types.enum ["sequential" "random"];
-                example = "random";
-                default = "sequential";
-                description = ''
-                  Strategy used for allocation of IPs to nodes, available options:
-                  - sequential (default): assigns the next free IP from the previous given IP.
-                  - random: assigns the next free IP from a pseudo-random IP generator (crypto/rand).
+            prefixes =
+              let
+                prefDesc = ''
+                  Each prefix consists of either an IPv4 or IPv6 address,
+                  and the associated prefix length, delimited by a slash.
+                  It must be within IP ranges supported by the Tailscale
+                  client - i.e., subnets of 100.64.0.0/10 and fd7a:115c:a1e0::/48.
                 '';
+              in
+              {
+                v4 = lib.mkOption {
+                  type = lib.types.str;
+                  default = "100.64.0.0/10";
+                  description = prefDesc;
+                };
+
+                v6 = lib.mkOption {
+                  type = lib.types.str;
+                  default = "fd7a:115c:a1e0::/48";
+                  description = prefDesc;
+                };
+
+                allocation = lib.mkOption {
+                  type = lib.types.enum [
+                    "sequential"
+                    "random"
+                  ];
+                  example = "random";
+                  default = "sequential";
+                  description = ''
+                    Strategy used for allocation of IPs to nodes, available options:
+                    - sequential (default): assigns the next free IP from the previous given IP.
+                    - random: assigns the next free IP from a pseudo-random IP generator (crypto/rand).
+                  '';
+                };
               };
-            };
 
             derp = {
               urls = lib.mkOption {
                 type = lib.types.listOf lib.types.str;
-                default = ["https://controlplane.tailscale.com/derpmap/default"];
+                default = [ "https://controlplane.tailscale.com/derpmap/default" ];
                 description = ''
                   List of urls containing DERP maps.
                   See [How Tailscale works](https://tailscale.com/blog/how-tailscale-works/) for more information on DERP maps.
@@ -149,7 +157,7 @@ in {
 
               paths = lib.mkOption {
                 type = lib.types.listOf lib.types.path;
-                default = [];
+                default = [ ];
                 description = ''
                   List of file paths containing DERP maps.
                   See [How Tailscale works](https://tailscale.com/blog/how-tailscale-works/) for more information on DERP maps.
@@ -194,7 +202,11 @@ in {
 
             database = {
               type = lib.mkOption {
-                type = lib.types.enum ["sqlite" "sqlite3" "postgres"];
+                type = lib.types.enum [
+                  "sqlite"
+                  "sqlite3"
+                  "postgres"
+                ];
                 example = "postgres";
                 default = "sqlite";
                 description = ''
@@ -310,7 +322,7 @@ in {
               nameservers = {
                 global = lib.mkOption {
                   type = lib.types.listOf lib.types.str;
-                  default = [];
+                  default = [ ];
                   description = ''
                     List of nameservers to pass to Tailscale clients.
                   '';
@@ -319,11 +331,11 @@ in {
 
               search_domains = lib.mkOption {
                 type = lib.types.listOf lib.types.str;
-                default = [];
+                default = [ ];
                 description = ''
                   Search domains to inject to Tailscale clients.
                 '';
-                example = ["mydomain.internal"];
+                example = [ "mydomain.internal" ];
               };
             };
 
@@ -355,7 +367,11 @@ in {
 
               scope = lib.mkOption {
                 type = lib.types.listOf lib.types.str;
-                default = ["openid" "profile" "email"];
+                default = [
+                  "openid"
+                  "profile"
+                  "email"
+                ];
                 description = ''
                   Scopes used in the OIDC flow.
                 '';
@@ -363,7 +379,7 @@ in {
 
               extra_params = lib.mkOption {
                 type = lib.types.attrsOf lib.types.str;
-                default = {};
+                default = { };
                 description = ''
                   Custom query parameters to send with the Authorize Endpoint request.
                 '';
@@ -374,21 +390,21 @@ in {
 
               allowed_domains = lib.mkOption {
                 type = lib.types.listOf lib.types.str;
-                default = [];
+                default = [ ];
                 description = ''
                   Allowed principal domains. if an authenticated user's domain
                   is not in this list authentication request will be rejected.
                 '';
-                example = ["example.com"];
+                example = [ "example.com" ];
               };
 
               allowed_users = lib.mkOption {
                 type = lib.types.listOf lib.types.str;
-                default = [];
+                default = [ ];
                 description = ''
                   Users allowed to authenticate even if not in allowedDomains.
                 '';
-                example = ["alice@example.com"];
+                example = [ "alice@example.com" ];
               };
 
               strip_email_domain = lib.mkOption {
@@ -409,7 +425,10 @@ in {
             };
 
             tls_letsencrypt_challenge_type = lib.mkOption {
-              type = lib.types.enum ["TLS-ALPN-01" "HTTP-01"];
+              type = lib.types.enum [
+                "TLS-ALPN-01"
+                "HTTP-01"
+              ];
               default = "HTTP-01";
               description = ''
                 Type of ACME challenge to use, currently supported types:
@@ -445,7 +464,10 @@ in {
 
             policy = {
               mode = lib.mkOption {
-                type = lib.types.enum ["file" "database"];
+                type = lib.types.enum [
+                  "file"
+                  "database"
+                ];
                 default = "file";
                 description = ''
                   The mode can be "file" or "database" that defines
@@ -469,23 +491,68 @@ in {
   };
 
   imports = with lib; [
-    (mkRenamedOptionModule ["services" "headscale" "derp" "autoUpdate"] ["services" "headscale" "settings" "derp" "auto_update_enable"])
-    (mkRenamedOptionModule ["services" "headscale" "derp" "paths"] ["services" "headscale" "settings" "derp" "paths"])
-    (mkRenamedOptionModule ["services" "headscale" "derp" "updateFrequency"] ["services" "headscale" "settings" "derp" "update_frequency"])
-    (mkRenamedOptionModule ["services" "headscale" "derp" "urls"] ["services" "headscale" "settings" "derp" "urls"])
-    (mkRenamedOptionModule ["services" "headscale" "ephemeralNodeInactivityTimeout"] ["services" "headscale" "settings" "ephemeral_node_inactivity_timeout"])
-    (mkRenamedOptionModule ["services" "headscale" "logLevel"] ["services" "headscale" "settings" "log" "level"])
-    (mkRenamedOptionModule ["services" "headscale" "openIdConnect" "clientId"] ["services" "headscale" "settings" "oidc" "client_id"])
-    (mkRenamedOptionModule ["services" "headscale" "openIdConnect" "clientSecretFile"] ["services" "headscale" "settings" "oidc" "client_secret_path"])
-    (mkRenamedOptionModule ["services" "headscale" "openIdConnect" "issuer"] ["services" "headscale" "settings" "oidc" "issuer"])
-    (mkRenamedOptionModule ["services" "headscale" "serverUrl"] ["services" "headscale" "settings" "server_url"])
-    (mkRenamedOptionModule ["services" "headscale" "tls" "certFile"] ["services" "headscale" "settings" "tls_cert_path"])
-    (mkRenamedOptionModule ["services" "headscale" "tls" "keyFile"] ["services" "headscale" "settings" "tls_key_path"])
-    (mkRenamedOptionModule ["services" "headscale" "tls" "letsencrypt" "challengeType"] ["services" "headscale" "settings" "tls_letsencrypt_challenge_type"])
-    (mkRenamedOptionModule ["services" "headscale" "tls" "letsencrypt" "hostname"] ["services" "headscale" "settings" "tls_letsencrypt_hostname"])
-    (mkRenamedOptionModule ["services" "headscale" "tls" "letsencrypt" "httpListen"] ["services" "headscale" "settings" "tls_letsencrypt_listen"])
+    (mkRenamedOptionModule
+      [ "services" "headscale" "derp" "autoUpdate" ]
+      [ "services" "headscale" "settings" "derp" "auto_update_enable" ]
+    )
+    (mkRenamedOptionModule
+      [ "services" "headscale" "derp" "paths" ]
+      [ "services" "headscale" "settings" "derp" "paths" ]
+    )
+    (mkRenamedOptionModule
+      [ "services" "headscale" "derp" "updateFrequency" ]
+      [ "services" "headscale" "settings" "derp" "update_frequency" ]
+    )
+    (mkRenamedOptionModule
+      [ "services" "headscale" "derp" "urls" ]
+      [ "services" "headscale" "settings" "derp" "urls" ]
+    )
+    (mkRenamedOptionModule
+      [ "services" "headscale" "ephemeralNodeInactivityTimeout" ]
+      [ "services" "headscale" "settings" "ephemeral_node_inactivity_timeout" ]
+    )
+    (mkRenamedOptionModule
+      [ "services" "headscale" "logLevel" ]
+      [ "services" "headscale" "settings" "log" "level" ]
+    )
+    (mkRenamedOptionModule
+      [ "services" "headscale" "openIdConnect" "clientId" ]
+      [ "services" "headscale" "settings" "oidc" "client_id" ]
+    )
+    (mkRenamedOptionModule
+      [ "services" "headscale" "openIdConnect" "clientSecretFile" ]
+      [ "services" "headscale" "settings" "oidc" "client_secret_path" ]
+    )
+    (mkRenamedOptionModule
+      [ "services" "headscale" "openIdConnect" "issuer" ]
+      [ "services" "headscale" "settings" "oidc" "issuer" ]
+    )
+    (mkRenamedOptionModule
+      [ "services" "headscale" "serverUrl" ]
+      [ "services" "headscale" "settings" "server_url" ]
+    )
+    (mkRenamedOptionModule
+      [ "services" "headscale" "tls" "certFile" ]
+      [ "services" "headscale" "settings" "tls_cert_path" ]
+    )
+    (mkRenamedOptionModule
+      [ "services" "headscale" "tls" "keyFile" ]
+      [ "services" "headscale" "settings" "tls_key_path" ]
+    )
+    (mkRenamedOptionModule
+      [ "services" "headscale" "tls" "letsencrypt" "challengeType" ]
+      [ "services" "headscale" "settings" "tls_letsencrypt_challenge_type" ]
+    )
+    (mkRenamedOptionModule
+      [ "services" "headscale" "tls" "letsencrypt" "hostname" ]
+      [ "services" "headscale" "settings" "tls_letsencrypt_hostname" ]
+    )
+    (mkRenamedOptionModule
+      [ "services" "headscale" "tls" "letsencrypt" "httpListen" ]
+      [ "services" "headscale" "settings" "tls_letsencrypt_listen" ]
+    )
 
-    (mkRemovedOptionModule ["services" "headscale" "openIdConnect" "domainMap"] ''
+    (mkRemovedOptionModule [ "services" "headscale" "openIdConnect" "domainMap" ] ''
       Headscale no longer uses domain_map. If you're using an old version of headscale you can still set this option via services.headscale.settings.oidc.domain_map.
     '')
   ];
@@ -495,24 +562,35 @@ in {
       {
         # This is stricter than it needs to be but is exactly what upstream does:
         # https://github.com/kradalby/headscale/blob/adc084f20f843d7963c999764fa83939668d2d2c/hscontrol/types/config.go#L799
-        assertion = with cfg.settings; dns.use_username_in_magic_dns or false || dns.base_domain == "" || !lib.hasInfix dns.base_domain server_url;
+        assertion =
+          with cfg.settings;
+          dns.use_username_in_magic_dns or false
+          || dns.base_domain == ""
+          || !lib.hasInfix dns.base_domain server_url;
         message = "server_url cannot contain the base_domain, this will cause the headscale server and embedded DERP to become unreachable from the Tailscale node.";
       }
       {
         assertion = with cfg.settings; dns.magic_dns -> dns.base_domain != "";
         message = "dns.base_domain must be set when using MagicDNS";
       }
-      (assertRemovedOption ["settings" "acl_policy_path"] "Use `policy.path` instead.")
-      (assertRemovedOption ["settings" "db_host"] "Use `database.postgres.host` instead.")
-      (assertRemovedOption ["settings" "db_name"] "Use `database.postgres.name` instead.")
-      (assertRemovedOption ["settings" "db_password_file"] "Use `database.postgres.password_file` instead.")
-      (assertRemovedOption ["settings" "db_path"] "Use `database.sqlite.path` instead.")
-      (assertRemovedOption ["settings" "db_port"] "Use `database.postgres.port` instead.")
-      (assertRemovedOption ["settings" "db_type"] "Use `database.type` instead.")
-      (assertRemovedOption ["settings" "db_user"] "Use `database.postgres.user` instead.")
-      (assertRemovedOption ["settings" "dns_config"] "Use `dns` instead.")
-      (assertRemovedOption ["settings" "dns_config" "domains"] "Use `dns.search_domains` instead.")
-      (assertRemovedOption ["settings" "dns_config" "nameservers"] "Use `dns.nameservers.global` instead.")
+      (assertRemovedOption [ "settings" "acl_policy_path" ] "Use `policy.path` instead.")
+      (assertRemovedOption [ "settings" "db_host" ] "Use `database.postgres.host` instead.")
+      (assertRemovedOption [ "settings" "db_name" ] "Use `database.postgres.name` instead.")
+      (assertRemovedOption [
+        "settings"
+        "db_password_file"
+      ] "Use `database.postgres.password_file` instead.")
+      (assertRemovedOption [ "settings" "db_path" ] "Use `database.sqlite.path` instead.")
+      (assertRemovedOption [ "settings" "db_port" ] "Use `database.postgres.port` instead.")
+      (assertRemovedOption [ "settings" "db_type" ] "Use `database.type` instead.")
+      (assertRemovedOption [ "settings" "db_user" ] "Use `database.postgres.user` instead.")
+      (assertRemovedOption [ "settings" "dns_config" ] "Use `dns` instead.")
+      (assertRemovedOption [ "settings" "dns_config" "domains" ] "Use `dns.search_domains` instead.")
+      (assertRemovedOption [
+        "settings"
+        "dns_config"
+        "nameservers"
+      ] "Use `dns.nameservers.global` instead.")
     ];
 
     services.headscale.settings = lib.mkMerge [
@@ -529,10 +607,10 @@ in {
       # to talk to the server instance.
       etc."headscale/config.yaml".source = cliConfigFile;
 
-      systemPackages = [cfg.package];
+      systemPackages = [ cfg.package ];
     };
 
-    users.groups.headscale = lib.mkIf (cfg.group == "headscale") {};
+    users.groups.headscale = lib.mkIf (cfg.group == "headscale") { };
 
     users.users.headscale = lib.mkIf (cfg.user == "headscale") {
       description = "headscale user";
@@ -543,9 +621,9 @@ in {
 
     systemd.services.headscale = {
       description = "headscale coordination server for Tailscale";
-      wants = ["network-online.target"];
-      after = ["network-online.target"];
-      wantedBy = ["multi-user.target"];
+      wants = [ "network-online.target" ];
+      after = [ "network-online.target" ];
+      wantedBy = [ "multi-user.target" ];
 
       script = ''
         ${lib.optionalString (cfg.settings.database.postgres.password_file != null) ''
@@ -555,51 +633,60 @@ in {
         exec ${lib.getExe cfg.package} serve --config ${configFile}
       '';
 
-      serviceConfig = let
-        capabilityBoundingSet = ["CAP_CHOWN"] ++ lib.optional (cfg.port < 1024) "CAP_NET_BIND_SERVICE";
-      in {
-        Restart = "always";
-        Type = "simple";
-        User = cfg.user;
-        Group = cfg.group;
+      serviceConfig =
+        let
+          capabilityBoundingSet = [ "CAP_CHOWN" ] ++ lib.optional (cfg.port < 1024) "CAP_NET_BIND_SERVICE";
+        in
+        {
+          Restart = "always";
+          Type = "simple";
+          User = cfg.user;
+          Group = cfg.group;
 
-        # Hardening options
-        RuntimeDirectory = "headscale";
-        # Allow headscale group access so users can be added and use the CLI.
-        RuntimeDirectoryMode = "0750";
+          # Hardening options
+          RuntimeDirectory = "headscale";
+          # Allow headscale group access so users can be added and use the CLI.
+          RuntimeDirectoryMode = "0750";
 
-        StateDirectory = "headscale";
-        StateDirectoryMode = "0750";
+          StateDirectory = "headscale";
+          StateDirectoryMode = "0750";
 
-        ProtectSystem = "strict";
-        ProtectHome = true;
-        PrivateTmp = true;
-        PrivateDevices = true;
-        ProtectKernelTunables = true;
-        ProtectControlGroups = true;
-        RestrictSUIDSGID = true;
-        PrivateMounts = true;
-        ProtectKernelModules = true;
-        ProtectKernelLogs = true;
-        ProtectHostname = true;
-        ProtectClock = true;
-        ProtectProc = "invisible";
-        ProcSubset = "pid";
-        RestrictNamespaces = true;
-        RemoveIPC = true;
-        UMask = "0077";
+          ProtectSystem = "strict";
+          ProtectHome = true;
+          PrivateTmp = true;
+          PrivateDevices = true;
+          ProtectKernelTunables = true;
+          ProtectControlGroups = true;
+          RestrictSUIDSGID = true;
+          PrivateMounts = true;
+          ProtectKernelModules = true;
+          ProtectKernelLogs = true;
+          ProtectHostname = true;
+          ProtectClock = true;
+          ProtectProc = "invisible";
+          ProcSubset = "pid";
+          RestrictNamespaces = true;
+          RemoveIPC = true;
+          UMask = "0077";
 
-        CapabilityBoundingSet = capabilityBoundingSet;
-        AmbientCapabilities = capabilityBoundingSet;
-        NoNewPrivileges = true;
-        LockPersonality = true;
-        RestrictRealtime = true;
-        SystemCallFilter = ["@system-service" "~@privileged" "@chown"];
-        SystemCallArchitectures = "native";
-        RestrictAddressFamilies = "AF_INET AF_INET6 AF_UNIX";
-      };
+          CapabilityBoundingSet = capabilityBoundingSet;
+          AmbientCapabilities = capabilityBoundingSet;
+          NoNewPrivileges = true;
+          LockPersonality = true;
+          RestrictRealtime = true;
+          SystemCallFilter = [
+            "@system-service"
+            "~@privileged"
+            "@chown"
+          ];
+          SystemCallArchitectures = "native";
+          RestrictAddressFamilies = "AF_INET AF_INET6 AF_UNIX";
+        };
     };
   };
 
-  meta.maintainers = with lib.maintainers; [kradalby misterio77];
+  meta.maintainers = with lib.maintainers; [
+    kradalby
+    misterio77
+  ];
 }

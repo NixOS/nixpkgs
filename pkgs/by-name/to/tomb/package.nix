@@ -27,7 +27,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "dyne";
     repo = "Tomb";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-H9etbodTKxROJAITbViQQ6tkEr9rKNITTHfsGGQbyR0=";
   };
 

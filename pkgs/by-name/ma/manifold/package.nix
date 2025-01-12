@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "manifold";
-  version = "2.5.1-unstable-2024-11-08";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "elalish";
     repo = "manifold";
-    rev = "66bca6e3fdfce0f590ca84edc1a6256502636f4b";
-    hash = "sha256-XgmJtkBf5SOgvtwU2x1cJLjEQKEmKnB40oIaoYrUYEQ=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-wbeWxAeKyqjEPemc2e5n357gwq83pQlASOvMd0ZCE7g=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -49,6 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
       hzeller
       pca006132
     ];
-    platforms = lib.platforms.linux; # currently issues with Darwin
+    platforms = lib.platforms.unix;
   };
 })

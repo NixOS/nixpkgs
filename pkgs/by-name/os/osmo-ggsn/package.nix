@@ -1,14 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, libosmocore
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  libosmocore,
 }:
-
-let
-  inherit (stdenv.hostPlatform) isLinux;
-in
 
 stdenv.mkDerivation rec {
   pname = "osmo-ggsn";
@@ -25,7 +22,6 @@ stdenv.mkDerivation rec {
     echo "${version}" > .tarball-version
   '';
 
-
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
@@ -41,7 +37,7 @@ stdenv.mkDerivation rec {
     description = "Osmocom Gateway GPRS Support Node (GGSN), successor of OpenGGSN";
     homepage = "https://osmocom.org/projects/openggsn";
     license = lib.licenses.gpl2Only;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.markuskowa ];
     platforms = lib.platforms.linux;
     mainProgram = "osmo-ggsn";
   };

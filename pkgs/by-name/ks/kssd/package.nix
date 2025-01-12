@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, zlib
-, kssd
-, runCommand
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  zlib,
+  kssd,
+  runCommand,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -48,8 +49,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "K-mer substring space decomposition";
-    license     = licenses.asl20;
-    homepage    = "https://github.com/yhg926/public_kssd";
+    license = licenses.asl20;
+    homepage = "https://github.com/yhg926/public_kssd";
     maintainers = with maintainers; [ unode ];
     platforms = platforms.linux;
     mainProgram = "kssd";

@@ -1,11 +1,12 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, ninja
-, qttools
-, qtwebengine
-, wrapQtAppsHook
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  ninja,
+  qttools,
+  qtwebengine,
+  wrapQtAppsHook,
 }:
 
 let

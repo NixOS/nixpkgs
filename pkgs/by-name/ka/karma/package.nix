@@ -1,10 +1,11 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, fetchNpmDeps
-, nixosTests
-, nodejs
-, npmHooks
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  fetchNpmDeps,
+  nixosTests,
+  nodejs,
+  npmHooks,
 }:
 
 buildGoModule rec {

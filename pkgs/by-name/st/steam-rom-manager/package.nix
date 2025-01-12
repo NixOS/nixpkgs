@@ -1,20 +1,20 @@
 { lib, appimageTools, fetchurl }:
 
 appimageTools.wrapType2 rec {
-  name = "steam-rom-manager";
-  version = "2.5.22";
+  pname = "steam-rom-manager";
+  version = "2.5.29";
 
   src = fetchurl {
     url = "https://github.com/SteamGridDB/steam-rom-manager/releases/download/v${version}/Steam-ROM-Manager-${version}.AppImage";
-    sha256 = "sha256-XC4earHVsDioQRJIrAFl5a+UFHjS7U5zt2PqfDxEg9s=";
+    sha256 = "sha256-6ZJ+MGIgr2osuQuqD6N9NnPiJFNq/HW6ivG8tyXUhvs=";
   };
 
   extraInstallCommands = let
-    appimageContents = appimageTools.extract { inherit name src; };
+    appimageContents = appimageTools.extract { inherit pname version src; };
     in ''
-      install -m 444 -D ${appimageContents}/${name}.desktop -t $out/share/applications
-      substituteInPlace $out/share/applications/${name}.desktop \
-        --replace 'Exec=AppRun' 'Exec=${name}'
+      install -m 444 -D ${appimageContents}/steam-rom-manager.desktop -t $out/share/applications
+      substituteInPlace $out/share/applications/steam-rom-manager.desktop \
+        --replace 'Exec=AppRun' 'Exec=steam-rom-manager'
       cp -r ${appimageContents}/usr/share/icons $out/share
     '';
 

@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, libX11
-, libXmu
-, libXpm
-, gtk2
-, libpng
-, libjpeg
-, libtiff
-, librsvg
-, gdk-pixbuf
-, gdk-pixbuf-xlib
-, pypy2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  libX11,
+  libXmu,
+  libXpm,
+  gtk2,
+  libpng,
+  libjpeg,
+  libtiff,
+  librsvg,
+  gdk-pixbuf,
+  gdk-pixbuf-xlib,
+  pypy2,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +25,10 @@ stdenv.mkDerivation rec {
     rev = "478754b687e2b48b111507ea22e8e2a001be5199";
     hash = "sha256-+KcVcrh1aV6kjLGyiDnRHXSzJfelXWrhJS0DitG4yPA=";
   };
-  nativeBuildInputs = [ pkg-config pypy2 ];
+  nativeBuildInputs = [
+    pkg-config
+    pypy2
+  ];
   buildInputs = [
     libX11
     libXmu
@@ -44,8 +48,11 @@ stdenv.mkDerivation rec {
     sed -i 's/struct\ \_plugin_instance \*stam\;//' panel/plugin.h
   '';
 
-  makeFlags = ["V=1"];
-  NIX_CFLAGS_COMPILE = ["-Wno-error" "-I${gdk-pixbuf-xlib.dev}/include/gdk-pixbuf-2.0"];
+  makeFlags = [ "V=1" ];
+  NIX_CFLAGS_COMPILE = [
+    "-Wno-error"
+    "-I${gdk-pixbuf-xlib.dev}/include/gdk-pixbuf-2.0"
+  ];
 
   meta = with lib; {
     description = "Stand-alone panel";

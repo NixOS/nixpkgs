@@ -1,26 +1,27 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, boost
-, cmake
-, git
-, hyperscan
-, openssl
-, pkg-config
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  boost,
+  cmake,
+  git,
+  hyperscan,
+  openssl,
+  pkg-config,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "noseyparker";
-  version = "0.20.0";
+  version = "0.22.0";
 
   src = fetchFromGitHub {
     owner = "praetorian-inc";
     repo = "noseyparker";
     rev = "v${version}";
-    hash = "sha256-pFAtyvnqCLTY3l7c47rpN1jHjQon0fTPT3KaV9mcs3Q=";
+    hash = "sha256-HRuqeKV0Y8kf/KBSHIK25Xrpr7tJODQQa4BoqxiulzU=";
   };
 
-  cargoHash = "sha256-t4tZDww6aySlTBq1BB4OGhi9w6fGY2gi7mPM1SR2mt8=";
+  cargoHash = "sha256-/EeKoR4IHNwQj8Ohs46U2BYJWkutJ1XWhW6xsR+k7Yg=";
 
   nativeCheckInputs = [
     git

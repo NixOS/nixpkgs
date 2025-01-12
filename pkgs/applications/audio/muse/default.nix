@@ -1,29 +1,30 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, extra-cmake-modules
-, pkg-config
-, qttools
-, wrapQtAppsHook
-, alsa-lib
-, dssi
-, fluidsynth
-, ladspaH
-, lash
-, libinstpatch
-, libjack2
-, liblo
-, libsamplerate
-, libsndfile
-, lilv
-, lrdf
-, lv2
-, qtsvg
-, rtaudio
-, rubberband
-, sord
-, serd
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  extra-cmake-modules,
+  pkg-config,
+  qttools,
+  wrapQtAppsHook,
+  alsa-lib,
+  dssi,
+  fluidsynth,
+  ladspaH,
+  lash,
+  libinstpatch,
+  libjack2,
+  liblo,
+  libsamplerate,
+  libsndfile,
+  lilv,
+  lrdf,
+  lv2,
+  qtsvg,
+  rtaudio,
+  rubberband,
+  sord,
+  serd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,9 +1,10 @@
-{ lib
-, stdenvNoCC
-, rustPlatform
-, fetchFromGitHub
-, Foundation
-, DiskArbitration
+{
+  lib,
+  stdenvNoCC,
+  rustPlatform,
+  fetchFromGitHub,
+  Foundation,
+  DiskArbitration,
 }:
 
 rustPlatform.buildRustPackage rec {

@@ -13,16 +13,18 @@
   pytest-timeout,
   importlib-metadata,
   psutil,
+  untangle,
   django,
-  requests,
+  flask,
   gevent,
   numpy,
-  flask,
+  requests,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "debugpy";
-  version = "1.8.8";
+  version = "1.8.11";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -30,8 +32,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "debugpy";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-zkNV+tFRAxTdl+lCPD4XYI1Oz0dVyX4GGuNdfzy2sJU=";
+    tag = "v${version}";
+    hash = "sha256-C/cLUMQNmiLn3z93LOg++3WeDUihMR9O3XKouL4uPqw=";
   };
 
   patches =
@@ -104,6 +106,7 @@ buildPythonPackage rec {
     ## Used by test helpers:
     importlib-metadata
     psutil
+    untangle
 
     ## Used in Python code that is run/debugged by the tests:
     django
@@ -111,6 +114,7 @@ buildPythonPackage rec {
     gevent
     numpy
     requests
+    typing-extensions
   ];
 
   preCheck =

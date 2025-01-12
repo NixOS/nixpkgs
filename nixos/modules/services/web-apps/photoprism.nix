@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.photoprism;
 
@@ -8,9 +13,7 @@ let
     PHOTOPRISM_IMPORT_PATH = cfg.importPath;
     PHOTOPRISM_HTTP_HOST = cfg.address;
     PHOTOPRISM_HTTP_PORT = toString cfg.port;
-  } // (
-    lib.mapAttrs (_: toString) cfg.settings
-  );
+  } // (lib.mapAttrs (_: toString) cfg.settings);
 
   manage = pkgs.writeShellScript "manage" ''
     set -o allexport # Export the following env vars
@@ -104,10 +107,15 @@ in
         StateDirectory = "photoprism";
         WorkingDirectory = "/var/lib/photoprism";
         RuntimeDirectory = "photoprism";
-        ReadWritePaths = [ cfg.originalsPath cfg.importPath cfg.storagePath ];
+        ReadWritePaths = [
+          cfg.originalsPath
+          cfg.importPath
+          cfg.storagePath
+        ];
 
-        LoadCredential = lib.optionalString (cfg.passwordFile != null)
-          "PHOTOPRISM_ADMIN_PASSWORD:${cfg.passwordFile}";
+        LoadCredential = lib.optionalString (
+          cfg.passwordFile != null
+        ) "PHOTOPRISM_ADMIN_PASSWORD:${cfg.passwordFile}";
 
         LockPersonality = true;
         PrivateDevices = true;
@@ -119,11 +127,18 @@ in
         ProtectKernelLogs = true;
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
-        RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
+        RestrictAddressFamilies = [
+          "AF_UNIX"
+          "AF_INET"
+          "AF_INET6"
+        ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         SystemCallArchitectures = "native";
-        SystemCallFilter = [ "@system-service" "~@setuid @keyring" ];
+        SystemCallFilter = [
+          "@system-service"
+          "~@setuid @keyring"
+        ];
         UMask = "0066";
       };
 
@@ -149,4 +164,3 @@ in
     };
   };
 }
-

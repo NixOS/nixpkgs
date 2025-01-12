@@ -19,7 +19,6 @@
   jbig2dec,
   libjpeg_turbo,
   gumbo,
-  memstreamHook,
 
   # dependencies
   mupdf,
@@ -42,7 +41,7 @@ let
 in
 buildPythonPackage rec {
   pname = "pymupdf";
-  version = "1.24.10";
+  version = "1.24.14";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -50,8 +49,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pymupdf";
     repo = "PyMuPDF";
-    rev = "refs/tags/${version}";
-    hash = "sha256-QAcQPWzPTnTg3l5lGJ8me4FUbK7xgXgyYHep+rF3wf4=";
+    tag = version;
+    hash = "sha256-M7Ca3nqnqeClp4MGJqTAVGZhAGRniregjRrjtAhRkBc=";
   };
 
   # swig is not wrapped as Python package
@@ -75,7 +74,7 @@ buildPythonPackage rec {
     jbig2dec
     libjpeg_turbo
     gumbo
-  ] ++ lib.optionals (stdenv.system == "x86_64-darwin") [ memstreamHook ];
+  ];
 
   propagatedBuildInputs = [ mupdf-cxx ];
 

@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, darwin }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  darwin,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "nixdoc";
@@ -18,12 +24,12 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Generate documentation for Nix functions";
     mainProgram = "nixdoc";
-    homepage    = "https://github.com/nix-community/nixdoc";
-    license     = [ licenses.gpl3 ];
+    homepage = "https://github.com/nix-community/nixdoc";
+    license = [ licenses.gpl3 ];
     maintainers = with maintainers; [
       infinisil
       hsjobeki
     ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

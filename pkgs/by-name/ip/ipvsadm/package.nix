@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, pkg-config, libnl, popt, gnugrep }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libnl,
+  popt,
+  gnugrep,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ipvsadm";
@@ -14,7 +22,10 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libnl popt ];
+  buildInputs = [
+    libnl
+    popt
+  ];
 
   # Disable parallel build, errors:
   #  *** No rule to make target 'libipvs/libipvs.a', needed by 'ipvsadm'.  Stop.

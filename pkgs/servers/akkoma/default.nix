@@ -20,6 +20,8 @@ beamPackages.mixRelease rec {
     hash = "sha256-WZAkpJIPzAbqXawNiM3JqE9tJzxrNs/2dGAWVMwLpN4=";
   };
 
+  patches = [ ./0001-fix-tzdata.patch ];
+
   postPatch = ''
     # Remove dependency on OS_Mon
     sed -E -i 's/(^|\s):os_mon,//' \
