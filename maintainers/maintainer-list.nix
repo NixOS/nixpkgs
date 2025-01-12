@@ -7024,6 +7024,13 @@
     githubId = 2544204;
     name = "Erik Skytthe";
   };
+  esrh = {
+    name = "Eshan Ramesh";
+    email = "esrh@esrh.me";
+    github = "eshrh";
+    githubId = 16175276;
+    keys = [ { fingerprint = "E4CE B0F0 B2EC 09A3 9678  F294 CC7A 7E3C 6CF3 1343"; } ];
+  };
   ethancedwards8 = {
     email = "ethan@ethancedwards.com";
     github = "ethancedwards8";
@@ -7925,6 +7932,12 @@
     github = "ftrvxmtrx";
     githubId = 248148;
     name = "Sigrid Solveig Haflínudóttir";
+  };
+  ftsimas = {
+    name = "Filippos Tsimas";
+    email = "filippos.tsimas@outlook.com";
+    github = "ftsimas";
+    githubId = 47324723;
   };
   fuerbringer = {
     email = "severin@fuerbringer.info";
@@ -11757,6 +11770,12 @@
     github = "kayhide";
     githubId = 1730718;
     name = "Hideaki Kawai";
+  };
+  kaylorben = {
+    email = "blkaylor22@gmail.com";
+    github = "kaylorben";
+    githubId = 41012641;
+    name = "Benjamin Kaylor";
   };
   kazcw = {
     email = "kaz@lambdaverse.org";
@@ -21053,6 +21072,12 @@
     github = "SigmaSquadron";
     githubId = 174749595;
     keys = [ { fingerprint = "E3CD E225 47C6 2DB6 6CCD  BC06 CC3A E2EA 0000 0000"; } ];
+  };
+  sigmike = {
+    email = "mike+nixpkgs@lepton.fr";
+    github = "sigmike";
+    githubId = 28259;
+    name = "Michael Witrant";
   };
   sikmir = {
     email = "sikmir@disroot.org";
