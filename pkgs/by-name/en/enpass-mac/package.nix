@@ -10,6 +10,10 @@
   cacert,
   gawk,
   common-updater-scripts,
+  versionCheckHook,
+  writeShellScript,
+  coreutils,
+  xcbuild,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -64,6 +68,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       update-source-version enpass-mac "$version"
     '';
   });
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgram = writeShellScript "version-check" ''
+    marketing_version=$(${xcbuild}/bin/PlistBuddy -c "Print :CFBundleShortVersionString" "$1" | ${coreutils}/bin/tr -d '"')
+    build_version=$(${xcbuild}/bin/PlistBuddy -c "Print :CFBundleVersion" "$1")
+
+    echo $marketing_version.$build_version
+  '';
+  versionCheckProgramArg = [ "${placeholder "out"}/Applications/Enpass.app/Contents/Info.plist" ];
+  doInstallCheck = true;
 
   meta = {
     description = "Choose your own safest place to store passwords";
