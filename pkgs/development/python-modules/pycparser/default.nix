@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchPypi,
   setuptools,
@@ -22,6 +23,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [ unittestCheckHook ];
   disabled = pythonOlder "3.8";
 
+  preCheck = ''
+    substituteInPlace examples/using_gcc_E_libc.py \
+      --replace-fail "'gcc'" "'${stdenv.cc.targetPrefix}cc'"
+  '';
   unittestFlagsArray = [
     "-s"
     "tests"
