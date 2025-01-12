@@ -72,8 +72,11 @@ vimUtils.buildVimPlugin {
     inherit avante-nvim-lib;
   };
 
-  doInstallCheck = true;
-  nvimRequireCheck = "avante";
+  nvimSkipModule = [
+    # Requires setup with corresponding provider
+    "avante.providers.azure"
+    "avante.providers.copilot"
+  ];
 
   meta = {
     description = "Neovim plugin designed to emulate the behaviour of the Cursor AI IDE";
