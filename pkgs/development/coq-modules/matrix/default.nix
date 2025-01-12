@@ -4,7 +4,7 @@
   coq
 }:
 mkCoqDerivation {
-  pname = "coq-matrix";
+  pname = "matrix";
   owner = "zhengpushi";
   defaultVersion = "1.0.6";
   release = {
