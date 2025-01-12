@@ -1,0 +1,26 @@
+--- a/CMakeLists.txt      2019-10-11 12:12:27.445417039 -0400
++++ b/CMakeLists.txt      2019-10-11 12:27:26.630691742 -0400
+@@ -22,14 +22,6 @@
+ message("BLOSC_CMAKE_ARGS='${BLOSC_CMAKE_ARGS}'")
+ message("GIT_EXECUTABLE='${GIT_EXECUTABLE}'")
+
+-ExternalProject_Add(project_blosc
+-  PREFIX ${BLOSC_PREFIX}
+-  GIT_REPOSITORY https://github.com/Blosc/c-blosc.git
+-  INSTALL_DIR ${BLOSC_INSTALL_DIR}
+-  CMAKE_ARGS ${BLOSC_CMAKE_ARGS}
+-)
+-
+-
+ # sources
+ set(SOURCES src/blosc_filter.c)
+ set(PLUGIN_SOURCES src/blosc_filter.c src/blosc_plugin.c )
+@@ -53,7 +45,6 @@
+ # add blosc libraries
+ add_library(blosc_shared SHARED IMPORTED)
+ set_property(TARGET blosc_shared PROPERTY IMPORTED_LOCATION ${BLOSC_INSTALL_DIR}/lib/${CMAKE_SHARED_LIBRARY_PREFIX}blosc${CMAKE_SHARED_LIBRARY_SUFFIX})
+-add_dependencies(blosc_shared project_blosc)
+ include_directories(${BLOSC_INSTALL_DIR}/include)
+
+ add_library(blosc_filter_shared SHARED ${SOURCES})
+

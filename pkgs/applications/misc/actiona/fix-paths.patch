@@ -1,0 +1,39 @@
+diff --git a/executer/src/executer.cpp b/executer/src/executer.cpp
+index da848dad..5bd7e986 100644
+--- a/executer/src/executer.cpp
++++ b/executer/src/executer.cpp
+@@ -45,7 +45,7 @@ bool Executer::start(QIODevice *device, const QString &filename)
+ 	QSettings settings;
+ 	QString locale = settings.value(QStringLiteral("gui/locale"), QLocale::system().name()).toString();
+ 
+-    mActionFactory->loadActionPacks(QApplication::applicationDirPath() + QStringLiteral("/actions"), locale);
++    mActionFactory->loadActionPacks(QStringLiteral("@out@/lib/actions"), locale);
+ #ifndef Q_OS_WIN
+ 	if(mActionFactory->actionPackCount() == 0)
+ 		mActionFactory->loadActionPacks(QStringLiteral("actiona/actions/"), locale);
+diff --git a/gui/src/mainwindow.cpp b/gui/src/mainwindow.cpp
+index 6052648e..3c802d93 100644
+--- a/gui/src/mainwindow.cpp
++++ b/gui/src/mainwindow.cpp
+@@ -322,7 +322,7 @@ void MainWindow::postInit()
+ 	if(mSplashScreen)
+ 		mSplashScreen->showMessage(tr("Loading actions..."));
+ 
+-    mActionFactory->loadActionPacks(QApplication::applicationDirPath() + QStringLiteral("/actions"), mUsedLocale);
++    mActionFactory->loadActionPacks(QStringLiteral("@out@/lib/actions"), mUsedLocale);
+ #ifndef Q_OS_WIN
+ 	if(mActionFactory->actionPackCount() == 0)
+ 		mActionFactory->loadActionPacks(QStringLiteral("actiona/actions/"), mUsedLocale);
+diff --git a/tools/src/languages.cpp b/tools/src/languages.cpp
+index 4926936e..18e9aabb 100644
+--- a/tools/src/languages.cpp
++++ b/tools/src/languages.cpp
+@@ -79,7 +79,7 @@ namespace Tools
+     void Languages::installTranslator(const QString &componentName, const QString &locale)
+     {
+         auto translator = new QTranslator(QCoreApplication::instance());
+-		if(!translator->load(QStringLiteral("%1/translations/%2_%3").arg(QCoreApplication::applicationDirPath()).arg(componentName).arg(locale)))
++		if(!translator->load(QStringLiteral("@out@/share/actiona/translations/%1_%2").arg(componentName).arg(locale)))
+         {
+             auto path = QStringLiteral("%1/translations/%2_%3").arg(QDir::currentPath()).arg(componentName).arg(locale);
+             if(!translator->load(path))
