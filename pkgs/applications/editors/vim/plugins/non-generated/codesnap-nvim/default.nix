@@ -51,9 +51,6 @@ vimUtils.buildVimPlugin {
       cp ${codesnap-lib}/lib/libgenerator.${extension} $out/lua/generator.so
     '';
 
-  doInstallCheck = true;
-  nvimRequireCheck = "codesnap";
-
   passthru = {
     updateScript = nix-update-script {
       attrPath = "vimPlugins.codesnap-nvim.codesnap-lib";
