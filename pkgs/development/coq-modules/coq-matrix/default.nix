@@ -2,16 +2,15 @@
   lib,
   mkCoqDerivation,
   coq,
-  version ? null
+  version ? "8.19"
 }:
 mkCoqDerivation {
   pname = "matrix";
   owner = "zhengpushi";
   repo = "CoqMatrix";
   inherit version;  
-  defaultVersion =  with version; switch [ coq.version ] [
-      { cases = [ (range "8.7" "8.18")  "1.11.0" ];             out = "1.0.6"; }
-    ] null;
+  defaultVersion =  "1.0.6";
+
   release = {
     "1.0.6".sha256 = "sha256-XsM3fSstvB6GE5OqT7CFro+RWiYEgJsoQ5gXd74VaK0=";
   };
