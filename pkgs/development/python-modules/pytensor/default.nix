@@ -187,5 +187,8 @@ buildPythonPackage rec {
       bcdarwin
       ferrine
     ];
+    # Not yet compatible with numpy >= 2.0
+    # https://github.com/pymc-devs/pytensor/issues/688
+    broken = true;
   };
 }
