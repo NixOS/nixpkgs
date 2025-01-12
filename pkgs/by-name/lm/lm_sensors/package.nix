@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   bash,
   bison,
   flex,
@@ -26,6 +27,15 @@ stdenv.mkDerivation rec {
     inherit tag;
     hash = "sha256-9lfHCcODlS7sZMjQhK0yQcCBEoGyZOChx/oM0CU37sY=";
   };
+
+  patches = lib.optionals sensord [
+    # Fix compile failure on GCC 14 with `sensord` enabled.
+    # From: https://github.com/lm-sensors/lm-sensors/pull/483
+    (fetchpatch {
+      url = "https://github.com/lm-sensors/lm-sensors/pull/483/commits/7a6170f07d05cc6601b4668f211e9389f2e75286.patch";
+      hash = "sha256-Q49quv3eXeMvY3jgZFs/F7Rljbq4YyehIDIlsgmloBQ=";
+    })
+  ];
 
   outputs = [
     "bin"
