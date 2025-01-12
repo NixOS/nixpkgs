@@ -290,11 +290,10 @@ in
       `callPackage <directory>/package.nix { }` is returned.
     - Otherwise, the input directory's contents are listed and transformed into
       an attribute set.
-      - If a file name has the `.nix` extension, it is turned into attribute
+      - If a regular file's name has the `.nix` extension, it is turned into attribute
         where:
         - The attribute name is the file name without the `.nix` extension
         - The attribute value is `callPackage <file path> { }`
-      - Other files are ignored.
       - Directories are turned into an attribute where:
         - The attribute name is the name of the directory
         - The attribute value is the result of calling
@@ -302,6 +301,8 @@ in
 
         As a result, directories with no `.nix` files (including empty
         directories) will be transformed into empty attribute sets.
+      - Other files are ignored, including symbolic links to directories and to regular `.nix`
+        files; this is because nixlang code cannot distinguish the type of a link's target.
 
     # Type
 
