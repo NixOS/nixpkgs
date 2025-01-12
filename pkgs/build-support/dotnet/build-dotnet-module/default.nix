@@ -92,6 +92,9 @@ let
       projectFiles = lib.optionals (projectFile != null) (lib.toList projectFile);
       testProjectFiles = lib.optionals (testProjectFile != null) (lib.toList testProjectFile);
 
+      hostRuntimeId =
+        if runtimeId != null then runtimeId else systemToDotnetRid stdenvNoCC.hostPlatform.system;
+
       platforms =
         if args ? meta.platforms then
           lib.intersectLists args.meta.platforms dotnet-sdk.meta.platforms
@@ -117,9 +120,7 @@ let
       dotnetTestProjectFiles = testProjectFiles;
       dotnetTestFilters = testFilters;
       dotnetDisabledTests = disabledTests;
-      dotnetRuntimeIds = lib.singleton (
-        if runtimeId != null then runtimeId else systemToDotnetRid stdenvNoCC.hostPlatform.system
-      );
+      dotnetRuntimeIds = lib.singleton hostRuntimeId;
       dotnetRuntimeDeps = map lib.getLib runtimeDeps;
       dotnetSelfContainedBuild = selfContainedBuild;
       dotnetUseAppHost = useAppHost;
@@ -192,6 +193,9 @@ let
       propagatedSandboxProfile = lib.optionalString (dotnet-runtime != null) (
         toString dotnet-runtime.__propagatedSandboxProfile
       );
+
+      # Implicit autoPatchcilHook compatibility
+      autoPatchcilRuntimeId = args.autoPatchcilRuntimeId or hostRuntimeId;
 
       meta = (args.meta or { }) // {
         inherit platforms;
