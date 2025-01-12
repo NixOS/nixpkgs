@@ -8,6 +8,10 @@
   cacert,
   gnugrep,
   common-updater-scripts,
+  versionCheckHook,
+  writeShellScript,
+  xcbuild,
+  coreutils,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -52,6 +56,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       update-source-version rapidapi "$version"
     '';
   });
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgram = writeShellScript "version-check" ''
+    marketing_version=$(${xcbuild}/bin/PlistBuddy -c "Print :CFBundleShortVersionString" "$1" | ${coreutils}/bin/tr -d '"')
+    build_version=$(${xcbuild}/bin/PlistBuddy -c "Print :CFBundleVersion" "$1")
+    echo $marketing_version-$build_version
+  '';
+  versionCheckProgramArg = [ "${placeholder "out"}/Applications/RapidAPI.app/Contents/Info.plist" ];
+  doInstallCheck = true;
 
   meta = {
     description = "Full-featured HTTP client that lets you test and describe the APIs you build or consume";
