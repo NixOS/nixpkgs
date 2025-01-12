@@ -65,6 +65,7 @@ stdenv.mkDerivation {
     description = "Mattermost Desktop client";
     mainProgram = "mattermost-desktop";
     homepage = "https://about.mattermost.com/";
+    changelog = "https://github.com/mattermost/desktop/releases/tag/${src.tag}";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.asl20;
     platforms = [
