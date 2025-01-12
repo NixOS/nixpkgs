@@ -1,0 +1,11 @@
+{
+  "packageVersion": "132.0.1",
+  "source": {
+    "rev": "132.0.1",
+    "sha256": "hjtzX6jMJh1pnnO6WsLiOqwfpVYmCTZcEEXAmdBm180="
+  },
+  "firefox": {
+    "version": "132.0",
+    "sha512": "JU/7oW1ubGHP+qgTH4Gpp4iA5XI7fueKw2JRon2C5v8IgjiuKJ0HRpujpRtbWWmgjs0fwC3LTZMyWgj6wc/JFg=="
+  }
+}

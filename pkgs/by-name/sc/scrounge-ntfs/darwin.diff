@@ -1,0 +1,42 @@
+diff -ur a/src/compat.h b/src/compat.h
+--- a/src/compat.h	2007-05-27 00:59:43.000000000 +0000
++++ b/src/compat.h	2024-02-17 11:53:01.541895388 +0000
+@@ -27,6 +27,7 @@
+ #ifdef HAVE_CONFIG_H
+ #include "config.h"
+ #endif
++#include <sys/stat.h>
+ #endif
+ 
+ #include <sys/types.h>
+@@ -186,6 +187,8 @@
+ void vwarnc(int code, const char *fmt, va_list ap);
+ void warnx(const char *fmt, ...);
+ void vwarnx(const char *fmt, va_list ap);
++#else
++#include <err.h>
+ #endif
+ 
+ #ifndef HAVE_REALLOCF
+@@ -323,7 +326,8 @@
+   #ifdef _WIN32
+     #define lseek64 _lseeki64
+   #else 
+-    #if SIZEOF_OFF_T == 8 
++    #if SIZEOF_OFF_T == 8 || defined(__APPLE__)
++      _Static_assert(sizeof(off_t) == 8, "off_t must be 8 bytes");
+       #define lseek64 lseek
+     #else
+       #error ERROR: Must have a working 64 bit seek function
+diff -ur a/src/ntfs.c b/src/ntfs.c
+--- a/src/ntfs.c	2007-05-27 01:00:08.000000000 +0000
++++ b/src/ntfs.c	2024-02-17 11:48:19.402694507 +0000
+@@ -20,7 +20,7 @@
+ #include "usuals.h"
+ #include "ntfs.h"
+ 
+-#include "malloc.h"
++#include "stdlib.h"
+ #include "string.h"
+ 
+ 

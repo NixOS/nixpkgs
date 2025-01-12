@@ -1,0 +1,25 @@
+diff -urd a/aclocal.m4 b/aclocal.m4
+--- a/aclocal.m4
++++ b/aclocal.m4
+@@ -1199,7 +1199,8 @@
+ # thinks that target == host so it never checks the unqualified
+ # tools for Windows. See #14274.
+ AC_DEFUN([FP_PROG_AR],
+-[if test -z "$fp_prog_ar"; then
++[AC_SUBST(fp_prog_ar,$AR)
++if test -z "$fp_prog_ar"; then
+   if test "$HostOS" = "mingw32"
+   then
+     AC_PATH_PROG([fp_prog_ar], [ar])
+diff -urd a/configure b/configure
+--- a/configure
++++ b/configure
+@@ -10744,6 +10744,8 @@
+ test -z "$INSTALL_DATA" && INSTALL_DATA='${INSTALL} -m 644'
+ 
+ 
++fp_prog_ar=$AR
++
+ if test -z "$fp_prog_ar"; then
+   if test "$HostOS" = "mingw32"
+   then
