@@ -31,6 +31,9 @@ in
     services.cloud-init.network.enable = true;
     systemd.services.cloud-config.serviceConfig.Restart = "on-failure";
 
+    # cloud-init.network.enable also enables systemd-networkd
+    networking.useNetworkd = true;
+
     # Ensure kernel outputs to ttyS0 (Azure Serial Console),
     # and reboot machine upon fatal boot issues
     boot.kernelParams = [
