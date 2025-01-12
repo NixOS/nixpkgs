@@ -4,20 +4,22 @@
   fetchFromGitHub,
   buildDotnetModule,
   dotnetCorePackages,
-  libX11,
+  fontconfig,
+  glibc,
+  gtk3,
+  libGL,
   libICE,
   libSM,
-  libXi,
+  libX11,
   libXcursor,
-  libXext,
+  libXi,
   libXrandr,
-  fontconfig,
-  glew,
   makeDesktopItem,
   copyDesktopItems,
   icoutils,
   bintools,
   fixDarwinDylibNames,
+  autoPatchcilHook,
   autoSignDarwinBinariesHook,
 }:
 
@@ -41,6 +43,7 @@ buildDotnetModule rec {
 
   nativeBuildInputs =
     [
+      autoPatchcilHook
       copyDesktopItems
       icoutils
     ]
@@ -56,19 +59,43 @@ buildDotnetModule rec {
     # Dependencies of nuget packages w/ native binaries
     (lib.getLib stdenv.cc.cc)
     fontconfig
+
+    # autoPatchcil
+    glibc # libdl
+    gtk3 # libglib-2.0.so.0 libgobject-2.0.so.0 libgtk-3.so.0 libgdk-3.so.0
+    libGL # libGL.so.1
+    libICE # libICE.so.6
+    libSM # libSM.so.6
+    libX11 # libX11 libX11.so.6
+    libXcursor # libXcursor.so.1
+    libXi # libXi.so.6
+    libXrandr # libXrandr.so.2
+  ];
+
+  autoPatchcilIgnoreMissingDeps = [
+    # libc is loaded in a different way, but it works without patchcil
+    "c"
+    "libc"
+
+    # Windows libraries
+    "gdi32"
+    "kernel32"
+    "ntdll"
+    "shell32"
+    "user32"
+    "Windows.UI.Composition"
+    "winspool.drv"
+
+    # Darwin libraries
+    "libAvaloniaNative"
+
+    # .NET Runtime
+    "clr"
   ];
 
   runtimeDeps = [
-    # Avalonia UI
-    libX11
-    libICE
-    libSM
-    libXi
-    libXcursor
-    libXext
-    libXrandr
+    # Skia
     fontconfig
-    glew
   ];
 
   postInstall =
