@@ -8,21 +8,31 @@
   fetchNpmDeps,
   jq,
   nixosTests,
+
+  versionInfo ? {
+    # ESR releases only.
+    # See https://docs.mattermost.com/upgrade/extended-support-release.html
+    # When a new ESR version is available (e.g. 8.1.x -> 9.5.x), update
+    # the version regex here as well.
+    #
+    # Ensure you also check ../mattermostLatest/package.nix.
+    regex = "^v(9\.11\.[0-9]+)$";
+    version = "9.11.6";
+    srcHash = "sha256-G9RYktnnVXdhNWp8q+bNbdlHB9ZOGtnESnZVOA7lDvE=";
+    vendorHash = "sha256-Gwv6clnq7ihoFC8ox8iEM5xp/us9jWUrcmqA9/XbxBE=";
+    npmDepsHash = "sha256-ysz38ywGxJ5DXrrcDmcmezKbc5Y7aug9jOWUzHRAs/0=";
+  },
 }:
 
 buildGoModule rec {
   pname = "mattermost";
-  # ESR releases only.
-  # See https://docs.mattermost.com/upgrade/extended-support-release.html
-  # When a new ESR version is available (e.g. 8.1.x -> 9.5.x), update
-  # the version regex in passthru.updateScript as well.
-  version = "9.11.6";
+  inherit (versionInfo) version;
 
   src = fetchFromGitHub {
     owner = "mattermost";
     repo = "mattermost";
-    rev = "v${version}";
-    hash = "sha256-G9RYktnnVXdhNWp8q+bNbdlHB9ZOGtnESnZVOA7lDvE=";
+    tag = "v${version}";
+    hash = versionInfo.srcHash;
     postFetch = ''
       cd $out/webapp
 
@@ -54,7 +64,7 @@ buildGoModule rec {
   npmDeps = fetchNpmDeps {
     inherit src;
     sourceRoot = "${src.name}/webapp";
-    hash = "sha256-ysz38ywGxJ5DXrrcDmcmezKbc5Y7aug9jOWUzHRAs/0=";
+    hash = versionInfo.npmDepsHash;
     makeCacheWritable = true;
     forceGitDeps = true;
   };
@@ -99,7 +109,7 @@ buildGoModule rec {
     '';
   };
 
-  vendorHash = "sha256-Gwv6clnq7ihoFC8ox8iEM5xp/us9jWUrcmqA9/XbxBE=";
+  inherit (versionInfo) vendorHash;
 
   modRoot = "./server";
   preBuild = ''
@@ -142,10 +152,15 @@ buildGoModule rec {
 
   passthru = {
     updateScript = nix-update-script {
-      extraArgs = [
-        "--version-regex"
-        "^v(9\\.11\\.[0-9]+)$"
-      ];
+      extraArgs =
+        [
+          "--version-regex"
+          versionInfo.regex
+        ]
+        ++ lib.optionals (versionInfo.autoUpdate or null != null) [
+          "--override-filename"
+          versionInfo.autoUpdate
+        ];
     };
     tests.mattermost = nixosTests.mattermost;
   };
