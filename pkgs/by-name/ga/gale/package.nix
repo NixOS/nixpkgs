@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gale";
-  version = "1.1.4";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "Kesomannen";
     repo = "gale";
     tag = finalAttrs.version;
-    hash = "sha256-yAfQuLfucz522ln0YNMy8nppp2jk6tGJnP/WhK7JdhI=";
+    hash = "sha256-bpeRbsbC1x1AXSyEPs1pUqwMouHQqJ/OtXXlNOVYcEA=";
   };
 
   postPatch = ''
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
       src
       cargoRoot
       ;
-    hash = "sha256-u7UbC9TyEQwYpcVWt8/NsweDNWbQi6NuD9ay9gmMDjg=";
+    hash = "sha256-xaqNps2AimGWKSwtnfkP3RkLgTNlkaAUtOgDWpB2yEg=";
   };
 
   cargoRoot = "src-tauri";
