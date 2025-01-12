@@ -421,8 +421,8 @@ in
       recurseIntoDirectory = processDir: args: let
         result = processDir args;
       in result // {
-        recurseForDerivations = with lib;
-          any (child: isDerivation child || child.recurseForDerivations or false) result;
+        recurseForDerivations =
+          lib.any (child: lib.isDerivation child || child.recurseForDerivations or false) result;
       };
     }
     ```
