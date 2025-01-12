@@ -10,7 +10,6 @@
 , desktopName ? name
 , url ? "about:blank"
 , description ? "This is a wrapper for Electron"
-, icon ? null
 }:
 
 stdenv.mkDerivation rec {
