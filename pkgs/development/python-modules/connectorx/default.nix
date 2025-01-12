@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, rustPlatform
-, pytestCheckHook
-, fetchFromGitHub
-, krb5-c
-, openssl
-, libkrb5
-,
+{
+  lib,
+  buildPythonPackage,
+  rustPlatform,
+  pytestCheckHook,
+  fetchFromGitHub,
+  krb5-c,
+  openssl,
+  libkrb5,
 }:
 buildPythonPackage rec {
   pname = "connectorx";
@@ -56,8 +56,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "connectorx" ];
 
   meta = {
-    description =
-      "Fastest library to load data from DB to DataFrames in Rust and Python";
+    description = "Fastest library to load data from DB to DataFrames in Rust and Python";
     homepage = "https://sfu-db.github.io/connector-x";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ coastalwhite ];
