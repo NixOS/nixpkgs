@@ -11,6 +11,11 @@ poc-foo.overrideAttrs (
       echo hello world $someVal
     '';
 
+    outputs = [
+      "out"
+      "dev"
+    ];
+
     someVal = "123";
 
     sayer = pkgsBuildHost.kittysay;

@@ -58,11 +58,11 @@ let
       };
     };
 
-  # IMPORTANT: we cannot generate .out and friends because those names are taken from finalAttrs.outputs
   makeDrvAttrs =
     finalAttrs: prevAttrs:
     let
       outputs = finalAttrs.drvAttrs.outputs or [ "out" ];
+      # someone should really document derivationStrict!!!
       backingDrv = builtins.derivationStrict finalAttrs.drvAttrs;
     in
     prevAttrs
@@ -71,7 +71,16 @@ let
       inherit (backingDrv) drvPath;
       outPath = backingDrv.${finalAttrs.outputName};
       type = "derivation";
+
+      # note: since the names of outputSet depend on finalAttrs we have to use outputSet, we cannot merge with other attributes, like with mkDerivation
+      outputSet = lib.listToAttrs (
+        lib.map (output: {
+          name = output;
+          value = finalAttrs.overrideAttrs (_: _: { outputName = output; });
+        }) outputs
+      );
     };
+
 in
 
 /*
