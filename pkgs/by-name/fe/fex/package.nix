@@ -10,14 +10,14 @@
   python3,
 }:
 
-llvmPackages.stdenv.mkDerivation (finalAttrs: rec {
+llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "fex";
   version = "2502";
 
   src = fetchFromGitHub {
     owner = "FEX-Emu";
     repo = "FEX";
-    tag = "FEX-${version}";
+    tag = "FEX-${finalAttrs.version}";
     hash = "sha256-w+Kqk+IQsVNbOqYDTpxDeoPyeIgqX2IfZv9zqAJEMVc=";
     fetchSubmodules = true;
   };
