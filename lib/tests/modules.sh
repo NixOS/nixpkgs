@@ -586,6 +586,42 @@ checkConfigOutput '^38|27$' options.submoduleLine38.declarationPositions.1.line 
 # nested options work
 checkConfigOutput '^34$' options.nested.nestedLine34.declarationPositions.0.line ./declaration-positions.nix
 
+# types.pathWith { inStore = true; }
+checkConfigOutput '".*/store/0lz9p8xhf89kb1c1kk6jxrzskaiygnlh-bash-5.2-p15.drv"' config.pathInStore.ok1 ./pathWith.nix
+checkConfigOutput '".*/store/0fb3ykw9r5hpayd05sr0cizwadzq1d8q-bash-5.2-p15"' config.pathInStore.ok2 ./pathWith.nix
+checkConfigOutput '".*/store/0fb3ykw9r5hpayd05sr0cizwadzq1d8q-bash-5.2-p15/bin/bash"' config.pathInStore.ok3 ./pathWith.nix
+checkConfigError 'A definition for option .* is not of type .path in the Nix store.. Definition values:\n\s*- In .*: ""' config.pathInStore.bad1 ./pathWith.nix
+checkConfigError 'A definition for option .* is not of type .path in the Nix store.. Definition values:\n\s*- In .*: ".*/store"' config.pathInStore.bad2 ./pathWith.nix
+checkConfigError 'A definition for option .* is not of type .path in the Nix store.. Definition values:\n\s*- In .*: ".*/store/"' config.pathInStore.bad3 ./pathWith.nix
+checkConfigError 'A definition for option .* is not of type .path in the Nix store.. Definition values:\n\s*- In .*: ".*/store/.links"' config.pathInStore.bad4 ./pathWith.nix
+checkConfigError 'A definition for option .* is not of type .path in the Nix store.. Definition values:\n\s*- In .*: "/foo/bar"' config.pathInStore.bad5 ./pathWith.nix
+
+# types.pathWith { inStore = false; }
+checkConfigOutput '"/foo/bar"' config.pathNotInStore.ok1 ./pathWith.nix
+checkConfigOutput '".*/store"' config.pathNotInStore.ok2 ./pathWith.nix
+checkConfigOutput '".*/store/"' config.pathNotInStore.ok3 ./pathWith.nix
+checkConfigOutput '""' config.pathNotInStore.ok4 ./pathWith.nix
+checkConfigOutput '".*/store/.links"' config.pathNotInStore.ok5 ./pathWith.nix
+checkConfigError 'A definition for option .* is not of type .path not in the Nix store.. Definition values:\n\s*- In .*: ".*/0lz9p8xhf89kb1c1kk6jxrzskaiygnlh-bash-5.2-p15.drv"' config.pathNotInStore.bad1 ./pathWith.nix
+checkConfigError 'A definition for option .* is not of type .path not in the Nix store.. Definition values:\n\s*- In .*: ".*/0fb3ykw9r5hpayd05sr0cizwadzq1d8q-bash-5.2-p15"' config.pathNotInStore.bad2 ./pathWith.nix
+checkConfigError 'A definition for option .* is not of type .path not in the Nix store.. Definition values:\n\s*- In .*: ".*/0fb3ykw9r5hpayd05sr0cizwadzq1d8q-bash-5.2-p15/bin/bash"' config.pathNotInStore.bad3 ./pathWith.nix
+checkConfigError 'A definition for option .* is not of type .path not in the Nix store.. Definition values:\n\s*- In .*: .*/pathWith.nix' config.pathNotInStore.bad4 ./pathWith.nix
+
+# types.pathWith { }
+checkConfigOutput '"/this/is/absolute"' config.anyPath.ok1 ./pathWith.nix
+checkConfigOutput '"./this/is/relative"' config.anyPath.ok2 ./pathWith.nix
+checkConfigError 'A definition for option .anyPath.bad1. is not of type .path.' config.anyPath.bad1 ./pathWith.nix
+
+# types.pathWith { absolute = true; }
+checkConfigOutput '"/this/is/absolute"' config.absolutePathNotInStore.ok1 ./pathWith.nix
+checkConfigError 'A definition for option .absolutePathNotInStore.bad1. is not of type .absolute path not in the Nix store.' config.absolutePathNotInStore.bad1 ./pathWith.nix
+checkConfigError 'A definition for option .absolutePathNotInStore.bad2. is not of type .absolute path not in the Nix store.' config.absolutePathNotInStore.bad2 ./pathWith.nix
+
+# types.pathWith failed type merge
+checkConfigError 'The option .conflictingPathOptionType. in .*/pathWith.nix. is already declared in .*/pathWith.nix' config.conflictingPathOptionType ./pathWith.nix
+
+# types.pathWith { inStore = true; absolute = false; }
+checkConfigError 'In pathWith, inStore means the path must be absolute' config.impossiblePathOptionType ./pathWith.nix
 
 cat <<EOF
 ====== module tests ======
