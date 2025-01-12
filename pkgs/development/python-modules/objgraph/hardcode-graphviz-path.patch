@@ -1,0 +1,61 @@
+diff --git a/objgraph.py b/objgraph.py
+index 88e307b..0369f49 100755
+--- a/objgraph.py
++++ b/objgraph.py
+@@ -1045,12 +1045,12 @@ def _present_graph(dot_filename, filename=None):
+     if not filename and _program_in_path('xdot'):
+         print("Spawning graph viewer (xdot)")
+         subprocess.Popen(['xdot', dot_filename], close_fds=True)
+-    elif _program_in_path('dot'):
++    elif True: # path to dot is hardcoded and hence always in $PATH
+         if not filename:
+             print("Graph viewer (xdot) not found, generating a png instead")
+             filename = dot_filename[:-4] + '.png'
+         stem, ext = os.path.splitext(filename)
+-        cmd = ['dot', '-T' + ext[1:], '-o' + filename, dot_filename]
++        cmd = ['@graphviz@/bin/dot', '-T' + ext[1:], '-o' + filename, dot_filename]
+         dot = subprocess.Popen(cmd, close_fds=False)
+         dot.wait()
+         if dot.returncode != 0:
+diff --git a/tests.py b/tests.py
+index 7db2888..bdb666e 100755
+--- a/tests.py
++++ b/tests.py
+@@ -557,7 +557,7 @@ class PresentGraphTest(CaptureMixin, TemporaryDirectoryMixin,
+         self.programsInPath(['dot'])
+         objgraph._present_graph('foo.dot', 'bar.png')
+         self.assertOutput("""
+-            subprocess.Popen(['dot', '-Tpng', '-obar.png', 'foo.dot'])
++            subprocess.Popen(['@graphviz@/bin/dot', '-Tpng', '-obar.png', 'foo.dot'])
+             Image generated as bar.png
+         """)
+ 
+@@ -566,11 +566,12 @@ class PresentGraphTest(CaptureMixin, TemporaryDirectoryMixin,
+         objgraph.subprocess.should_fail = True
+         objgraph._present_graph('f.dot', 'b.png')
+         self.assertOutput("""
+-            subprocess.Popen(['dot', '-Tpng', '-ob.png', 'f.dot'])
+-            dot failed (exit code 1) while executing "dot -Tpng -ob.png f.dot"
++            subprocess.Popen(['@graphviz@/bin/dot', '-Tpng', '-ob.png', 'f.dot'])
++            dot failed (exit code 1) while executing "@graphviz@/bin/dot -Tpng -ob.png f.dot"
+         """)
+ 
+-    def test_present_png_no_dot(self):
++    @unittest.skip("empty $PATH has no effect")
++    def no_test_present_png_no_dot(self):
+         self.programsInPath([])
+         objgraph._present_graph('foo.dot', 'bar.png')
+         self.assertOutput("""
+@@ -591,10 +592,11 @@ class PresentGraphTest(CaptureMixin, TemporaryDirectoryMixin,
+         objgraph._present_graph('foo.dot')
+         self.assertOutput("""
+             Graph viewer (xdot) not found, generating a png instead
+-            subprocess.Popen(['dot', '-Tpng', '-ofoo.png', 'foo.dot'])
++            subprocess.Popen(['@graphviz@/bin/dot', '-Tpng', '-ofoo.png', 'foo.dot'])
+             Image generated as foo.png
+         """)
+ 
++    @unittest.skip("empty $PATH has no effect")
+     def test_present_no_xdot_and_no_not(self):
+         self.programsInPath([])
+         objgraph._present_graph('foo.dot')

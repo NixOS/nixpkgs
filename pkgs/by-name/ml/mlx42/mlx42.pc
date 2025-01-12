@@ -1,0 +1,10 @@
+prefix=@out@
+exec_prefix=${prefix}
+libdir=${prefix}/lib
+includedir=${prefix}/include
+
+Name: mlx42
+Description: A simple cross-platform graphics library that uses GLFW and OpenGL
+Version: @version@
+Libs: -L${libdir} -lmlx42
+Cflags: -I${includedir}

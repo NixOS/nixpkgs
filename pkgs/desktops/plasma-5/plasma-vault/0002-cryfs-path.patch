@@ -1,0 +1,25 @@
+From a89a0d3f9088d272c01ccb9b730d1dbb500f9cb8 Mon Sep 17 00:00:00 2001
+From: Thomas Tuegel <ttuegel@mailbox.org>
+Date: Tue, 2 Nov 2021 05:59:34 -0500
+Subject: [PATCH 2/3] cryfs path
+
+---
+ kded/engine/backends/cryfs/cryfsbackend.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/kded/engine/backends/cryfs/cryfsbackend.cpp b/kded/engine/backends/cryfs/cryfsbackend.cpp
+index 64138b6..1a9fde2 100644
+--- a/kded/engine/backends/cryfs/cryfsbackend.cpp
++++ b/kded/engine/backends/cryfs/cryfsbackend.cpp
+@@ -207,7 +207,7 @@ QProcess *CryFsBackend::cryfs(const QStringList &arguments) const
+     auto config = KSharedConfig::openConfig(PLASMAVAULT_CONFIG_FILE);
+     KConfigGroup backendConfig(config, "CryfsBackend");
+ 
+-    return process("cryfs", arguments + backendConfig.readEntry("extraMountOptions", QStringList{}), {{"CRYFS_FRONTEND", "noninteractive"}});
++    return process(NIXPKGS_CRYFS, arguments + backendConfig.readEntry("extraMountOptions", QStringList{}), {{"CRYFS_FRONTEND", "noninteractive"}});
+ }
+ 
+ } // namespace PlasmaVault
+-- 
+2.33.1
+
