@@ -9,7 +9,7 @@ mkCoqDerivation {
   owner = "zhengpushi";
   repo = "CoqMatrix";
   inherit version;  
-  defaultVersion =  with version; switch [ coq.version ] [
+  defaultVersion =  switch [ coq.version ] [
       { cases = [ (range "8.7" "8.18")  "1.11.0" ];             out = "1.0.6"; }
     ] null;
   release = {
