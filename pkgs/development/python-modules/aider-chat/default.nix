@@ -13,7 +13,7 @@ let
     packageOverrides = _: super: { tree-sitter = super.tree-sitter_0_21; };
   };
   version = "0.70.0";
-  aider-chat = python3.pkgs.buildPythonApplication {
+  aider-chat = python3.pkgs.buildPythonPackage {
     pname = "aider-chat";
     inherit version;
     pyproject = true;
