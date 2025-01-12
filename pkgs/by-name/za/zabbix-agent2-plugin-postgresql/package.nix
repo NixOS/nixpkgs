@@ -6,11 +6,11 @@
 
 buildGoModule rec {
   pname = "zabbix-agent2-plugin-postgresql";
-  version = "7.0.6";
+  version = "7.2.2";
 
   src = fetchurl {
     url = "https://cdn.zabbix.com/zabbix-agent2-plugins/sources/postgresql/zabbix-agent2-plugin-postgresql-${version}.tar.gz";
-    hash = "sha256-35w2KIiECaVBUw5PGXyc9T6l1ATMeAntOf+KrxK7PaY=";
+    hash = "sha256-s7NU8EA0/Ydwxq42EPz+Jrgc1+iiW9vwV+6QUXGsyqQ=";
   };
 
   vendorHash = null;
