@@ -45,13 +45,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-ui-toolkit";
-  version = "1.3.5100";
+  version = "1.3.5110";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-ui-toolkit";
     rev = finalAttrs.version;
-    hash = "sha256-r+wUCl+ywFcgFYo7BjBoXiulQptd1Zd3LJchXiMtx4I=";
+    hash = "sha256-j2Fowwj+ArdfJacqBSWksPk+wXRoTpL/Jrgme2tUSC8=";
   };
 
   outputs = [

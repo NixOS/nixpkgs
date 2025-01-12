@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -106,14 +107,20 @@ buildPythonPackage rec {
     "tests/tensorboard_test.py"
   ];
 
-  disabledTests = [
-    # ValueError: Checkpoint path should be absolute
-    "test_overwrite_checkpoints0"
-    # Fixed in more recent versions of jax: https://github.com/google/flax/issues/4211
-    # TODO: Re-enable when jax>0.4.28 will be available in nixpkgs
-    "test_vmap_and_cond_passthrough" # ValueError: vmap has mapped output but out_axes is None
-    "test_vmap_and_cond_passthrough_error" # AssertionError: "at vmap.*'broadcast'.*got axis spec ...
-  ];
+  disabledTests =
+    [
+      # ValueError: Checkpoint path should be absolute
+      "test_overwrite_checkpoints0"
+      # Fixed in more recent versions of jax: https://github.com/google/flax/issues/4211
+      # TODO: Re-enable when jax>0.4.28 will be available in nixpkgs
+      "test_vmap_and_cond_passthrough" # ValueError: vmap has mapped output but out_axes is None
+      "test_vmap_and_cond_passthrough_error" # AssertionError: "at vmap.*'broadcast'.*got axis spec ...
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # SystemError: nanobind::detail::nb_func_error_except(): exception could not be translated!
+      "test_ref_changed"
+      "test_structure_changed"
+    ];
 
   passthru = {
     updateScript = writeScript "update.sh" ''

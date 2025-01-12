@@ -1,9 +1,9 @@
 {
   lib,
   stdenv,
-  rustPlatform,
+  darwin,
   fetchFromGitHub,
-  Security,
+  rustPlatform,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -15,18 +15,19 @@ rustPlatform.buildRustPackage rec {
     owner = "fpco";
     repo = "amber";
     rev = "v${version}";
-    sha256 = "sha256-nduSnDhLvHpZD7Y1zeZC4nNL7P1qfLWc0yMpsdqrKHM=";
+    hash = "sha256-nduSnDhLvHpZD7Y1zeZC4nNL7P1qfLWc0yMpsdqrKHM=";
   };
 
   cargoHash = "sha256-DxTsbJ51TUMvc/NvsUYhRG9OxxEGrWfEPYCOYaG9PXo=";
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
-  meta = with lib; {
+  meta = {
     description = "Manage secret values in-repo via public key cryptography";
     homepage = "https://github.com/fpco/amber";
-    license = licenses.mit;
-    maintainers = with maintainers; [ psibi ];
+    changelog = "https://github.com/fpco/amber/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ psibi ];
     mainProgram = "amber";
   };
 }
