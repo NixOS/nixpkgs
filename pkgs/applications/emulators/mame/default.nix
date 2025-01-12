@@ -223,7 +223,10 @@ stdenv.mkDerivation rec {
       bsd3
       gpl2Plus
     ];
-    maintainers = with lib.maintainers; [ thiagokokada ];
+    maintainers = with lib.maintainers; [
+      thiagokokada
+      DimitarNestorov
+    ];
     platforms = lib.platforms.unix;
     mainProgram = "mame";
   };
