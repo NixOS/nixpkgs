@@ -8,6 +8,7 @@
   pystring,
   imath,
   minizip-ng,
+  zlib,
   # Only required on Linux
   glew,
   libglut,
@@ -36,9 +37,6 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    # Workaround for https://gitlab.kitware.com/cmake/cmake/-/issues/25200.
-    # Needed for zlib >= 1.3 && cmake < 3.27.4.
-    ./broken-cmake-zlib-version.patch
     # Fix incorrect line number in test
     ./line-numbers.patch
   ];
@@ -59,6 +57,7 @@ stdenv.mkDerivation rec {
       pystring
       imath
       minizip-ng
+      zlib
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       glew
