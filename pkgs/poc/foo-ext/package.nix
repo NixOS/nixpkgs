@@ -1,9 +1,13 @@
 { poc-foo, ... }:
 
 (poc-foo.overrideLayer3 (
-  finalAttrs:
+  {
+    layer0Attrs,
+    layer3Attrs,
+    ...
+  }:
   let
-    inherit (finalAttrs.finalLayer1Attrs.__pkgs) pkgsBuildHost pkgsHostTarget;
+    inherit (layer0Attrs.__pkgs) pkgsBuildHost pkgsHostTarget;
   in
   prevAttrs:
   prevAttrs
@@ -21,6 +25,9 @@
       "out2"
     ];
 
+    currentOutput = layer0Attrs; # use this to refer to current output
+    theOutOutput = layer0Attrs.outputSet.out; # use this to refer to a specific output
+
     someVal = "123";
 
     sayer = pkgsBuildHost.kittysay;
@@ -30,27 +37,26 @@
     };
 
     shellVars = prevAttrs.shellVars or { } // {
-      inherit (finalAttrs) someVal;
+      inherit (layer0Attrs) someVal;
     };
 
-    #myself = finalAttrs;
+    bruv = layer0Attrs.__pkgs;
 
-    bruv = finalAttrs.finalLayer1Attrs.__pkgs;
-
-    lowerOutputz = finalAttrs.finalLayer1Attrs.outputs;
-    currentLayerOutputz = finalAttrs.outputs;
+    lowerOutputz = layer0Attrs.outputs;
+    currentLayerOutputz = layer3Attrs.outputs;
   }
 ))
 
 .overrideLayer1
   (
-    finalAttrs: prevAttrs:
+    { layer0Attrs, ... }:
+    prevAttrs:
     prevAttrs
     // {
 
-      stdenv = finalAttrs.__pkgs.stdenvNoCC; # we could have overwritten it on higher layers btw
+      stdenv = layer0Attrs.__pkgs.stdenvNoCC; # we could have overwritten it on higher layers btw
 
       x = prevAttrs;
-      y = finalAttrs;
+      y = layer0Attrs;
     }
   )

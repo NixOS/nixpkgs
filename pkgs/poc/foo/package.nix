@@ -6,27 +6,30 @@
   ...
 }:
 
-mkPackage (finalAttrs: {
-  name = "foooooo";
+mkPackage (
+  { layer0Attrs, ... }:
+  {
+    name = "foooooo";
 
-  src = pkgsHostTarget.balls.src;
+    src = pkgsHostTarget.balls.src;
 
-  sayer = pkgsBuildHost.cowsay;
+    sayer = pkgsBuildHost.cowsay;
 
-  installPhase = ''
-    ${lib.getExe finalAttrs.sayer} "My javac version is: $(javac -version 2>&1)"
-    touch $out
-  '';
+    installPhase = ''
+      ${lib.getExe layer0Attrs.sayer} "My javac version is: $(javac -version 2>&1)"
+      touch $out
+    '';
 
-  depsInPath = {
-    jdk = pkgsBuildHost.jdk8;
-  };
+    depsInPath = {
+      jdk = pkgsBuildHost.jdk8;
+    };
 
-  ## this should probably go in mkPackage's definition
-  nativeBuildInputs = lib.attrValues finalAttrs.depsInPath;
+    ## this should probably go in mkPackage's definition
+    nativeBuildInputs = lib.attrValues layer0Attrs.depsInPath;
 
-  shellVars = {
-    inherit (finalAttrs) src installPhase nativeBuildInputs;
-  };
+    shellVars = {
+      inherit (layer0Attrs) src installPhase nativeBuildInputs;
+    };
 
-})
+  }
+)

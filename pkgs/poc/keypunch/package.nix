@@ -5,10 +5,10 @@
 }:
 
 mkPackage (
-  finalAttrs:
+  { layer0Attrs, layer3Attrs, ... }:
 
   let
-    inherit (finalAttrs.finalLayer1Attrs.__pkgs) pkgsBuildHost pkgsHostTarget;
+    inherit (layer0Attrs.__pkgs) pkgsBuildHost pkgsHostTarget;
   in
   {
     pname = "keypunch";
@@ -17,7 +17,7 @@ mkPackage (
     src = pkgsHostTarget.fetchFromGitHub {
       owner = "bragefuglseth";
       repo = "keypunch";
-      tag = "v${finalAttrs.version}";
+      tag = "v${layer0Attrs.version}";
       hash = "sha256-C0WD8vBPlKvCJHVJHSfEbMIxNARoRrCn7PNebJ0rkoI=";
     };
 
@@ -43,16 +43,16 @@ mkPackage (
 
     # we use the value directly, so it's not overridable
     cargoDeps = pkgsHostTarget.rustPlatform.fetchCargoTarball {
-      inherit (finalAttrs) pname version src;
+      inherit (layer0Attrs) pname version src;
       hash = "sha256-RufJy5mHuirAO056p5/w63jw5h00E41t+H4VQP3kPks=";
     };
 
-    nativeBuildInputs = lib.attrValues finalAttrs.depsInPath;
+    nativeBuildInputs = lib.attrValues layer0Attrs.depsInPath;
 
-    buildInputs = map lib.getDev (lib.attrValues finalAttrs.deps);
+    buildInputs = map lib.getDev (lib.attrValues layer0Attrs.deps);
 
     shellVars = {
-      inherit (finalAttrs)
+      inherit (layer0Attrs)
         src
         cargoDeps
         nativeBuildInputs
@@ -60,7 +60,7 @@ mkPackage (
         ;
     };
 
-    lay3 = finalAttrs.finalLayer3Attrs;
+    lay3 = layer0Attrs.layer3Attrs;
 
     # TODO: check if this works or not
     updateScript = pkgsBuildHost.nix-update-script { };

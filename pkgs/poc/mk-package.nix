@@ -15,65 +15,66 @@ let
   composeManyTransformations = lib.foldr composeTransformations (final: prev: prev);
 in
 
-# all builder-wrappers should implement something similar to this: transform attributes that will be passed to the builder one step below
-
 let
 
   layer3ToLayer2 =
-    finalAttrs: prevAttrs:
+    { layer0Attrs, ... }:
+    prevAttrs:
     prevAttrs
     // {
-      name = prevAttrs.name or "${finalAttrs.pname}-${finalAttrs.version}";
+      name = prevAttrs.name or "${layer0Attrs.pname}-${layer0Attrs.version}";
 
       # doCheck = finalAttrs.stdenv.buildPlatform.canExecute finalAttrs.stdenv.hostPlatform;
       # TODO: more stuff
     };
 
   layer2ToLayer1 =
-    finalAttrs: prevAttrs:
+    { layer0Attrs, ... }:
+    prevAttrs:
     assert !(prevAttrs ? drvAttrs); # wrappers shouldn't set drvAttrs directly
     prevAttrs
     // {
       outputs = prevAttrs.outputs or [ "out" ]; # should we always set this?
 
       __pkgs = defaultPkgs;
-      stdenv = prevAttrs.stdenv or finalAttrs.__pkgs.stdenv;
+      stdenv = prevAttrs.stdenv or layer0Attrs.__pkgs.stdenv;
       builder = prevAttrs.builder or ../stdenv/generic/default-builder.sh;
-      realBuilder = finalAttrs.stdenv.shell;
+      realBuilder = layer0Attrs.stdenv.shell;
 
-      drvAttrs = finalAttrs.shellVars or { } // {
+      drvAttrs = layer0Attrs.shellVars or { } // {
         # TODO: figure out what to do about env.* and __structuredAttrs
         __structuredAttrs = false;
-        inherit (finalAttrs) name outputs;
-        inherit (finalAttrs.stdenv.buildPlatform) system; # don't get from stdenv
-        builder = finalAttrs.realBuilder;
+        inherit (layer0Attrs) name outputs;
+        inherit (layer0Attrs.stdenv.buildPlatform) system; # don't get from stdenv
+        builder = layer0Attrs.realBuilder;
         args = [
           "-e"
-          finalAttrs.builder
+          layer0Attrs.builder
         ];
-        inherit (finalAttrs) stdenv; # maybe should be part of shellVars, but it's very important, so this is probably better
+        inherit (layer0Attrs) stdenv; # maybe should be part of shellVars, but it's very important, so this is probably better
       };
     };
 
   layer1ToLayer0 =
-    finalAttrs: prevAttrs:
+    { layer0Attrs, ... }:
+    prevAttrs:
     let
-      outputs = finalAttrs.drvAttrs.outputs or [ "out" ];
+      outputs = layer0Attrs.drvAttrs.outputs or [ "out" ];
       # someone should really document derivationStrict!!!
-      backingDrv = builtins.derivationStrict finalAttrs.drvAttrs;
+      backingDrv = builtins.derivationStrict layer0Attrs.drvAttrs;
     in
     prevAttrs
     // {
       outputName = prevAttrs.outputName or (lib.head outputs);
       inherit (backingDrv) drvPath;
-      outPath = backingDrv.${finalAttrs.outputName};
+      outPath = backingDrv.${layer0Attrs.outputName};
       type = "derivation";
 
       # note: since the names of outputSet depend on finalAttrs we have to use outputSet, we cannot merge with other attributes, like with mkDerivation
       outputSet = lib.listToAttrs (
         lib.map (output: {
           name = output;
-          value = finalAttrs.overrideLayer0 (_: _: { outputName = output; });
+          value = layer0Attrs.overrideLayer0 (_: prev: prev // { outputName = output; });
         }) outputs
       );
     };
@@ -83,40 +84,34 @@ in
 let
 
   makeExtensible' =
-    origRattrs:
     {
       layer3ExtraTransformation ? (final: prev: prev),
       layer2ExtraTransformation ? (final: prev: prev),
       layer1ExtraTransformation ? (final: prev: prev),
       layer0ExtraTransformation ? (final: prev: prev),
     }:
+    origRattrs:
     let
       # maybe dont expand usage of 'transforms'
-      rattrs3 = origRattrs;
-      rattrs3' = finalAttrs: layer3ExtraTransformation finalAttrs (rattrs3 finalAttrs);
-      finalLayer3Attrs = rattrs3' (finalLayer3Attrs // invisibleHelperAttrs) // visibleHelperAttrs;
 
-      rattrs2 = finalAttrs: layer3ToLayer2 finalAttrs finalLayer3Attrs;
-      rattrs2' = finalAttrs: layer2ExtraTransformation finalAttrs (rattrs2 finalAttrs);
-      finalLayer2Attrs = rattrs2' (finalLayer2Attrs // invisibleHelperAttrs) // visibleHelperAttrs;
+      startLayer3Attrs = origRattrs layerAttrsSet;
+      finalLayer3Attrs = layer3ExtraTransformation layerAttrsSet startLayer3Attrs // visibleHelperAttrs;
 
-      rattrs1 = finalAttrs: layer2ToLayer1 finalAttrs finalLayer2Attrs;
-      rattrs1' = finalAttrs: layer1ExtraTransformation finalAttrs (rattrs1 finalAttrs);
-      finalLayer1Attrs = rattrs1' (finalLayer1Attrs // invisibleHelperAttrs) // visibleHelperAttrs;
+      startLayer2Attrs = layer3ToLayer2 layerAttrsSet finalLayer3Attrs;
+      finalLayer2Attrs = layer2ExtraTransformation layerAttrsSet startLayer2Attrs // visibleHelperAttrs;
 
-      rattrs0 = finalAttrs: layer1ToLayer0 finalAttrs finalLayer1Attrs;
-      rattrs0' = finalAttrs: layer1ExtraTransformation finalAttrs (rattrs0 finalAttrs);
-      finalLayer0Attrs = rattrs0' (finalLayer0Attrs // invisibleHelperAttrs) // visibleHelperAttrs;
+      startLayer1Attrs = layer2ToLayer1 layerAttrsSet finalLayer2Attrs;
+      finalLayer1Attrs = layer1ExtraTransformation layerAttrsSet startLayer1Attrs // visibleHelperAttrs;
 
-      invisibleHelperAttrs = layerAttrsSet;
+      startLayer0Attrs = layer1ToLayer0 layerAttrsSet finalLayer1Attrs;
+      finalLayer0Attrs = layer0ExtraTransformation layerAttrsSet startLayer0Attrs // visibleHelperAttrs;
 
+      # TODO: decide if layers should have access to all layers or just the ones below
       layerAttrsSet = {
-        inherit
-          finalLayer3Attrs
-          finalLayer2Attrs
-          finalLayer1Attrs
-          finalLayer0Attrs
-          ;
+        layer3Attrs = finalLayer3Attrs;
+        layer2Attrs = finalLayer2Attrs;
+        layer1Attrs = finalLayer1Attrs;
+        layer0Attrs = finalLayer0Attrs;
       };
 
       visibleHelperAttrs = {
@@ -137,7 +132,7 @@ let
           ;
       };
 
-      makeSelfWithModifiedExtra = modExtra: makeExtensible' origRattrs (extraTransformations // modExtra);
+      makeSelfWithModifiedExtra = modExtra: makeExtensible' (extraTransformations // modExtra) origRattrs;
 
       overrideLayer3 =
         transformation:
@@ -168,7 +163,7 @@ let
 in
 
 let
-  mkPackage = rattrs: makeExtensible' rattrs { };
+  mkPackage = rattrs: makeExtensible' { } rattrs;
 in
 
 mkPackage
