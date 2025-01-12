@@ -4,6 +4,9 @@
   fetchurl,
   undmg,
   nix-update-script,
+  versionCheckHook,
+  writeShellScript,
+  xcbuild,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -31,6 +34,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgram = writeShellScript "version-check" ''
+    ${xcbuild}/bin/PlistBuddy -c "Print :CFBundleShortVersionString" "$1"
+  '';
+  versionCheckProgramArg = [
+    "${placeholder "out"}/Applications/BetterDisplay.app/Contents/Info.plist"
+  ];
+  doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
 
