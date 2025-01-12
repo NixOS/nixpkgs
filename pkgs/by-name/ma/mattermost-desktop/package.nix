@@ -4,6 +4,8 @@
   fetchurl,
   electron,
   makeWrapper,
+  testers,
+  mattermost-desktop,
 }:
 
 let
@@ -60,6 +62,14 @@ stdenv.mkDerivation {
 
     runHook postInstall
   '';
+
+  passthru = {
+    tests.version = testers.testVersion {
+      package = mattermost-desktop;
+      # Invoking with `--version` insists on being able to write to a log file.
+      command = "env HOME=/tmp ${mattermost-desktop.meta.mainProgram} --version";
+    };
+  };
 
   meta = with lib; {
     description = "Mattermost Desktop client";
