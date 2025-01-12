@@ -28,6 +28,7 @@ in {
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       script = ''
+        set -uo pipefail
         timedatectl set-timezone "$(${lib.getExe pkgs.tzupdate} --print-only)"
       '';
 
