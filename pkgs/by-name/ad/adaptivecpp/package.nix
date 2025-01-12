@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  llvmPackages_17,
+  llvmPackages_18,
   python3,
   cmake,
   boost,
@@ -24,7 +24,7 @@
 let
   inherit (llvmPackages) stdenv;
   rocmPackages = rocmPackages_6;
-  llvmPackages = llvmPackages_17;
+  llvmPackages = llvmPackages_18;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "adaptivecpp";
@@ -98,8 +98,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests =
-        # Loosely based on the AdaptiveCpp GitHub CI: https://github.com/AdaptiveCpp/AdaptiveCpp/blob/develop/.github/workflows/linux.yml
-        # This may be overkill, especially as this won't be run on GPU on the CI
+      # Loosely based on the AdaptiveCpp GitHub CI: https://github.com/AdaptiveCpp/AdaptiveCpp/blob/develop/.github/workflows/linux.yml
+      # This may be overkill, especially as this won't be run on GPU on the CI
       let
         runner = targets: enablePstlTests: callPackage ./tests.nix { inherit enablePstlTests; };
         run =
