@@ -487,6 +487,22 @@ in
           {manpage}`systemd.time(7)`
         '';
       };
+
+      persistent = lib.mkOption {
+        default = true;
+        type = lib.types.bool;
+        example = false;
+        description = ''
+          Takes a boolean argument. If true, the time when the service
+          unit was last triggered is stored on disk. When the timer is
+          activated, the service unit is triggered immediately if it
+          would have been triggered at least once during the time when
+          the timer was inactive. Such triggering is nonetheless
+          subject to the delay imposed by RandomizedDelaySec=. This is
+          useful to catch up on missed runs of the service when the
+          system was powered down.
+        '';
+      };
     };
 
     services.zfs.autoScrub = {
@@ -941,7 +957,7 @@ in
       };
 
       systemd.timers.zpool-trim.timerConfig = {
-        Persistent = "yes";
+        Persistent = cfgTrim.persistent;
         RandomizedDelaySec = cfgTrim.randomizedDelaySec;
       };
     })
