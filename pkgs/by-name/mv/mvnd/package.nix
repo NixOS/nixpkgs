@@ -1,7 +1,7 @@
 {
   darwin,
   fetchFromGitHub,
-  graalvmCEPackages,
+  graalvmPackages,
   installShellFiles,
   lib,
   makeWrapper,
@@ -33,11 +33,11 @@ maven.buildMavenPackage rec {
   };
 
   # need graalvm at build-time for the `native-image` tool
-  mvnJdk = graalvmCEPackages.graalvm-ce;
+  mvnJdk = graalvmPackages.graalvm-ce;
   mvnHash = "sha256-Bx0XSnpHNxNX07uVPc18py9qbnG5b3b7J4vs44ty034=";
 
   nativeBuildInputs = [
-    graalvmCEPackages.graalvm-ce
+    graalvmPackages.graalvm-ce
     installShellFiles
     makeWrapper
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk_11_0.frameworks.Foundation ];
