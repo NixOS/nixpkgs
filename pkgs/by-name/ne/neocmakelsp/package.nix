@@ -1,39 +1,32 @@
 {
   lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  python3,
   rustPlatform,
-  rustc,
-  cargo,
+  fetchFromGitHub,
+  installShellFiles,
 }:
 
-stdenv.mkDerivation rec {
+rustPlatform.buildRustPackage rec {
   pname = "neocmakelsp";
-  version = "0.8.13";
+  version = "0.8.15";
 
   src = fetchFromGitHub {
     owner = "Decodetalkers";
     repo = "neocmakelsp";
     rev = "v${version}";
-    hash = "sha256-MRno86pi389p2lBTu86LCPx5yFN76CbM5AXAs4bsl7c=";
+    hash = "sha256-TCzW8QPSCGufLQanwcvgA5YsTV/QqDs7NKgOMPOgGho=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit pname version src;
-    hash = "sha256-UVXJF8jvZUcEWbsL+UmrO2VSlvowkXNGRbxCEmB89OU=";
-  };
+  cargoHash = "sha256-oRt4af7KqPIckzZ8FhCNjkVC/j2PdprFL91K/qUWV3g=";
 
   nativeBuildInputs = [
-    meson
-    ninja
-    python3
-    rustPlatform.cargoSetupHook
-    rustc
-    cargo
+    installShellFiles
   ];
+
+  postInstall = ''
+    installShellCompletion --bash completions/bash/neocmakelsp
+    installShellCompletion --fish completions/fish/neocmakelsp.fish
+    installShellCompletion --zsh completions/zsh/_neocmakelsp
+  '';
 
   meta = {
     description = "CMake lsp based on tower-lsp and treesitter";
