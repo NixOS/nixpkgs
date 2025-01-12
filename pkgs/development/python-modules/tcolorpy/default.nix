@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "tcolorpy";
-  version = "0.1.6";
+  version = "0.1.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "thombashi";
     repo = pname;
     tag = "v${version}";
-    hash = "sha256-esucU+So1YKzkuMt6ICCrQ5SzQVv24lh12SE1Jl5Y/w=";
+    hash = "sha256-0AXpwRQgBisO4360J+Xd4+EWzDtDJ64UpSUmDnSYjKE=";
   };
 
   build-system = [
