@@ -12,6 +12,7 @@
   fuse3,
   macfuse-stubs,
   librclone,
+  nix-update-script,
 }:
 
 buildGoModule rec {
@@ -91,8 +92,11 @@ buildGoModule rec {
   versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
   versionCheckProgramArg = [ "version" ];
 
-  passthru.tests = {
-    inherit librclone;
+  passthru = {
+    tests = {
+      inherit librclone;
+    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
