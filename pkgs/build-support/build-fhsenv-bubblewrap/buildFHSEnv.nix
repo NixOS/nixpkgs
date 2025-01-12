@@ -219,6 +219,12 @@ let
       ${pkgs.pkgsBuildBuild.glib.dev}/bin/glib-compile-schemas $out/usr/share/glib-2.0/schemas
     fi
 
+    # Prevent the loader from finding drivers and layers in two different places,
+    # which REALLY confuses some modules (gamescope-wsi) that are not reentrant.
+    # This is kind of a hack, because we WANT to search those paths when on non-NixOS,
+    # but not when in a fhsenv. FIXME: maybe we should just make the loader check?
+    rm -rf $out/usr/share/vulkan
+
     ${extraBuildCommands}
     ${lib.optionalString isMultiBuild extraBuildCommandsMulti}
   '';
