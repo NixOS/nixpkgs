@@ -20,6 +20,7 @@ permissions:
 
 jobs:
   periodic-merge:
+    if: github.repository_owner == 'NixOS'
     strategy:
       # don't fail fast, so that all pairs are tried
       fail-fast: false
