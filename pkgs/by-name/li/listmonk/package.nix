@@ -26,10 +26,12 @@ buildGoModule rec {
   # Run stuffbin to stuff the frontend and the static in the binary.
   postFixup =
     let
+      # See https://github.com/knadh/listmonk/blob/c87715628d8400a9c8ab20369dfadf8ae25afe5e/Makefile#L23-L28
       vfsMappings = [
         "config.toml.sample"
         "schema.sql"
         "queries.sql"
+        "permissions.json"
         "static/public:/public"
         "static/email-templates"
         "${passthru.frontend}:/admin"
