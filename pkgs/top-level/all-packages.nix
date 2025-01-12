@@ -13501,7 +13501,7 @@ with pkgs;
 
   bluejeans-gui = callPackage ../applications/networking/instant-messengers/bluejeans { };
 
-  electron-wrapper = callPackage ../applications/networking/instant-messengers/electron-wrapper.nix {};
+  electron-wrapper = callPackage ../applications/networking/instant-messengers/electron-wrapper/electron-wrapper.nix {};
 
   bottles = callPackage ../applications/misc/bottles/fhsenv.nix { };
 
