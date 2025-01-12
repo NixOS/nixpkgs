@@ -73,7 +73,7 @@ let
       outputSet = lib.listToAttrs (
         lib.map (output: {
           name = output;
-          value = finalAttrs.overrideAttrs (_: _: { outputName = output; });
+          value = finalAttrs.overrideLayer0 (_: _: { outputName = output; });
         }) outputs
       );
     };
@@ -107,6 +107,26 @@ let
       rattrs0 = finalAttrs: layer1ToLayer0 finalAttrs finalLayer1Attrs;
       rattrs0' = finalAttrs: layer1ExtraTransformation finalAttrs (rattrs0 finalAttrs);
       finalLayer0Attrs = rattrs0' (finalLayer0Attrs // invisibleHelperAttrs) // visibleHelperAttrs;
+
+      invisibleHelperAttrs = layerAttrsSet;
+
+      layerAttrsSet = {
+        inherit
+          finalLayer3Attrs
+          finalLayer2Attrs
+          finalLayer1Attrs
+          finalLayer0Attrs
+          ;
+      };
+
+      visibleHelperAttrs = {
+        inherit
+          overrideLayer3
+          overrideLayer2
+          overrideLayer1
+          overrideLayer0
+          ;
+      };
 
       extraTransformations = {
         inherit
@@ -142,24 +162,6 @@ let
         makeSelfWithModifiedExtra {
           layer0ExtraTransformation = composeTransformations layer0ExtraTransformation transformation;
         };
-
-      invisibleHelperAttrs = {
-        inherit
-          finalLayer3Attrs
-          finalLayer2Attrs
-          finalLayer1Attrs
-          finalLayer0Attrs
-          ;
-      };
-
-      visibleHelperAttrs = {
-        inherit
-          overrideLayer3
-          overrideLayer2
-          overrideLayer1
-          overrideLayer0
-          ;
-      };
 
     in
     finalLayer0Attrs;

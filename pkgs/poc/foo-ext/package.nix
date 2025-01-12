@@ -8,15 +8,17 @@
   prevAttrs:
   prevAttrs
   // {
+
     installPhase = ''
       ${prevAttrs.installPhase or ""}
       echo hello world $someVal
-      touch $lib
+      touch $out2
+
     '';
 
     outputs = [
       "out"
-      "dev"
+      "out2"
     ];
 
     someVal = "123";
@@ -31,21 +33,24 @@
       inherit (finalAttrs) someVal;
     };
 
-    myself = finalAttrs;
+    #myself = finalAttrs;
 
     bruv = finalAttrs.finalLayer1Attrs.__pkgs;
 
     lowerOutputz = finalAttrs.finalLayer1Attrs.outputs;
     currentLayerOutputz = finalAttrs.outputs;
   }
-)).overrideLayer1
+))
+
+.overrideLayer1
   (
     finalAttrs: prevAttrs:
     prevAttrs
     // {
-      outputs = [
-        "out"
-        "lib"
-      ];
+
+      stdenv = finalAttrs.__pkgs.stdenvNoCC; # we could have overwritten it on higher layers btw
+
+      x = prevAttrs;
+      y = finalAttrs;
     }
   )
