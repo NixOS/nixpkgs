@@ -28,7 +28,7 @@ stdenv.mkDerivation {
     hash = "sha256-9lfHCcODlS7sZMjQhK0yQcCBEoGyZOChx/oM0CU37sY=";
   };
 
-  patches = lib.optionals sensord [
+  patches = [
     # Fix compile failure on GCC 14 with `sensord` enabled.
     # From: https://github.com/lm-sensors/lm-sensors/pull/483
     (fetchpatch {
