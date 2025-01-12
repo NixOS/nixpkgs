@@ -5,6 +5,7 @@
   installShellFiles,
   pkg-config,
   cmake,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -37,6 +38,8 @@ rustPlatform.buildRustPackage rec {
       --zsh target/completions/_rmpc
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     changelog = "https://github.com/mierak/rmpc/releases/tag/${src.rev}";
     description = "TUI music player client for MPD with album art support via kitty image protocol";
@@ -53,6 +56,6 @@ rustPlatform.buildRustPackage rec {
       bloxx12
     ];
     mainProgram = "rmpc";
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    platforms = with lib.platforms; linux ++ darwin;
   };
 }
