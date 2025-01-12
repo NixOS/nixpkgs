@@ -530,6 +530,22 @@ in
         '';
       };
 
+      persistent = lib.mkOption {
+        default = true;
+        type = lib.types.bool;
+        example = false;
+        description = ''
+          Takes a boolean argument. If true, the time when the service
+          unit was last triggered is stored on disk. When the timer is
+          activated, the service unit is triggered immediately if it
+          would have been triggered at least once during the time when
+          the timer was inactive. Such triggering is nonetheless
+          subject to the delay imposed by RandomizedDelaySec=. This is
+          useful to catch up on missed runs of the service when the
+          system was powered down.
+        '';
+      };
+
       pools = lib.mkOption {
         default = [];
         type = lib.types.listOf lib.types.str;
@@ -937,7 +953,7 @@ in
         after = [ "multi-user.target" ]; # Apparently scrubbing before boot is complete hangs the system? #53583
         timerConfig = {
           OnCalendar = cfgScrub.interval;
-          Persistent = "yes";
+          Persistent = cfgScrub.persistent;
           RandomizedDelaySec = cfgScrub.randomizedDelaySec;
         };
       };
