@@ -43,8 +43,8 @@ def dict_to_flags(d: Args | None) -> list[str]:
                 flags.append(flag)
                 flags.append(value)
             case list():
-                flags.append(flag)
                 for v in value:
+                    flags.append(flag)
                     flags.append(v)
             case _:
                 assert_never(value)
