@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bdr99";
     repo = "py-aosmith";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-6wgPj3e3nbv0LM4qgZsj70F4nKy9LmY3RCvs++n1KbE=";
   };
 

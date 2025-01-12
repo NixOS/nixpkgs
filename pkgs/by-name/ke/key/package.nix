@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "KeYProject";
     repo = "key";
-    rev = "refs/tags/KeY-${version}";
+    tag = "KeY-${version}";
     hash = "sha256-veqaWyWEiTot2cAjvyPG+Ra8/pqS4i6w6iR+qhozIM4=";
   };
 

@@ -64,7 +64,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "transformers";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-5bYjgrW2ITJ/bc8BP/tWjzwLrLQHgvKSVyUCNsRniFM=";
   };
 

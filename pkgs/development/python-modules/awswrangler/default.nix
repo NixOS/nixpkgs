@@ -33,7 +33,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-sdk-pandas";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-k+jQj/EajjjvvXZJd8c/3vtaGrQJedbYSDIzel0Sp44=";
   };
 

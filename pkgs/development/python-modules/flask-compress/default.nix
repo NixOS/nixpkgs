@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "colour-science";
     repo = "flask-compress";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-87fjJxaS7eJbOkSUljnhqFIeahoS4L2tAOhmv4ryVUM=";
   };
 

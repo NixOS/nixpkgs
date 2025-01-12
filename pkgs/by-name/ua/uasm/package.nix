@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     # Specifying only the tag results in the following error during download:
     # the given path has multiple possibilities: #<Git::Ref:0x00007f618689c378>, #<Git::Ref:0x00007f618689c1e8>
     # Probably because upstream has both a tag and a branch with the same name
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-QiRBscY6zefeLDDVhS/+j9yIJ+5QhgkDQh1CLl/CslM=";
   };
 

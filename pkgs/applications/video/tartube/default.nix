@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "axcore";
     repo = "tartube";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-yFsQbEXjWPxLYqFxsI6MjK1hE8Lk2Z0sPj3peLBs7r8=";
   };
 

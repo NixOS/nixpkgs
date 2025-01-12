@@ -17,7 +17,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "kannibalox";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-lEtyt7i8MyL2VffxNFQkL9RkmGeo6Nof0AOQwf6BUSE=";
   };
 

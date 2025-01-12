@@ -46,7 +46,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "great-expectations";
     repo = "great_expectations";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-TV07vmc0XdP6ICv7Kws79zACCsahZ6FlhplJHbpDFNk=";
   };
 

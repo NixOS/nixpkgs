@@ -51,7 +51,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "optuna";
     repo = "optuna";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ZCK6otX90s8SB91TLkKwJ4net2dGmAKdIESeHXy87K0=";
   };
 

@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication rec {
     inherit version;
     owner = "openapi-generators";
     repo = "openapi-python-client";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-hmVRPQ3+20ZBRCkQltX+S+pGGy2unsBSztyif93sKsw=";
   };
 

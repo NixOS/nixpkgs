@@ -35,7 +35,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zha";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-PY4TJIG5NtJdQuQYmoZG3NgcH3WfCkpkcoJTbJ5jdr0=";
   };
 

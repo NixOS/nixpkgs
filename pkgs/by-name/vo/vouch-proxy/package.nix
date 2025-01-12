@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "vouch";
     repo = "vouch-proxy";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-HQ1NaAHY1YRbNUThW983V8x3ptzTc/zNP6yIMyDiq1s=";
   };
 

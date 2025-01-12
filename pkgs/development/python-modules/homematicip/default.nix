@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hahn-th";
     repo = "homematicip-rest-api";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-f1KjBYwLqQbA6TbQ3ZZ8TgvGe1USbYYNjsni2vsnTP8=";
   };
 

@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "fangfufu";
     repo = "httpdirfs";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-4Tp9DTYWUHElO0YNeINgzmbI0tpXxmKfZ1Jhz5UYn5M=";
   };
 

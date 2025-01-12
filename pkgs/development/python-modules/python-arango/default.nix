@@ -41,7 +41,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "arangodb";
     repo = "python-arango";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-EK1jZajACdc5IWF/Tgg3albUAH566G0IwUsHk4dZpoQ=";
   };
 

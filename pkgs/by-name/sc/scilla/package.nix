@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "edoardottt";
     repo = "scilla";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ms52ii2cbZSZtcyxhVN+FbGP6hysoLvS7XwdPqxYymU=";
   };
 

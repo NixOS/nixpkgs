@@ -41,7 +41,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "meshtastic";
     repo = "Meshtastic-python";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-A1C+xkQFjoEMKyz9S7T/GzZYrcznpi/9yjBmue1Ahu4=";
   };
 

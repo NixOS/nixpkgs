@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "zwave-js-server-python";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-hszt14ymZQsUg0zfJ7+cY08DlXNaWzxKwV/i4i29DtI=";
   };
 

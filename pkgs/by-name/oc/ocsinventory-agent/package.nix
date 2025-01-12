@@ -29,7 +29,7 @@ perlPackages.buildPerlPackage rec {
   src = fetchFromGitHub {
     owner = "OCSInventory-NG";
     repo = "UnixAgent";
-    rev = "refs/tags/v${version}-MAC";
+    tag = "v${version}-MAC";
     hash = "sha256-aFzBrUsVttUhpYGEYd/yYuXmE90PGCiBmBsVjtHcHLg=";
   };
 

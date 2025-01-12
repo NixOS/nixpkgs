@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nfcpy";
     repo = "ndeflib";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-cpfztE+/AW7P0J7QeTDfVGYc2gEkr7gzA352hC9bdTM=";
   };
 

@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "stumpylog";
     repo = "gotenberg-client";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-pkxu9WIsyHW2iTepv5B2naKkK+yw8lT+i3EwobE+u1M=";
   };
 

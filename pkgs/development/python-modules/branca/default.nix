@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-visualization";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-9imrW4u2Ea1q7VKgk6Vs8y2OiSzAPr3W6471pi/gVm4=";
   };
 

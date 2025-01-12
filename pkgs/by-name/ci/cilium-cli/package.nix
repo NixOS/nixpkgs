@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "cilium";
     repo = "cilium-cli";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-I5HC1H517oCizZf2mcHOKmgJqnvPjkNVfDy2/9Kkw44=";
   };
 

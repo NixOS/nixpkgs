@@ -34,7 +34,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "scikit-rf";
     repo = "scikit-rf";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-tUMOTRazs531OKGUZbh+Ee1omkFY3CAUAMmpKcNCdZU=";
   };
 

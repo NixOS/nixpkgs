@@ -14,7 +14,7 @@ let
   src = fetchFromGitHub {
     owner = "daeuniverse";
     repo = "daed";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-h1j91XIumuzuJnMxgkCjhuXYPLXoDuFFsfmDwmzlTEI=";
     fetchSubmodules = true;
   };

@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "greatscottgadgets";
     repo = "facedancer";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Cl6cohelJkpr2Nokfwwm7GQIg7ZipPL3v44JVWsHUNI=";
   };
 

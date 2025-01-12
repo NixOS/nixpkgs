@@ -23,7 +23,7 @@ pythonPackages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "svsdval";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     sha256 = "sha256-1q4d136pvEWTOCY7Dv8Ux2HV9zqz5pWRhMrHKGLQ5ic=";
   };
 

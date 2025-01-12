@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "michelcrypt4d4mus";
     repo = "yaralyzer";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-rDb09XJOGWNARR0hhQQ91KXWepsLyR2a6/o3jagh6nA=";
   };
 

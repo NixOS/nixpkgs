@@ -10,7 +10,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "qdrant";
     repo = "qdrant-web-ui";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-NNX//0ZkXYMaP14TI4BLMQI4jN+Mxc7uZu4rDZTXHG8=";
   };
 

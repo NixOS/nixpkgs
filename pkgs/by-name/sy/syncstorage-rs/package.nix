@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "mozilla-services";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-hvKbKbRa5zk+80xmKWeMRjshaS6uybFzb5KdBY19Sl8=";
   };
 

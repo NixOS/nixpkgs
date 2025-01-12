@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sysid";
     repo = "sse-starlette";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-cnUx3wYawyqt/m/FB6abxknMbc64k09a1kAJoA4yN6w=";
   };
 

@@ -171,7 +171,7 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "neuml";
     repo = "txtai";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-DQB12mFUMsKJ8cACowI1Vc7k2n1npdTOQknRmHd5EIM=";
   };
 

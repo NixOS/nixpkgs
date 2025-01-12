@@ -13,7 +13,7 @@ buildHomeAssistantComponent rec {
   src = fetchFromGitHub {
     owner = "mampfes";
     repo = "ha_epex_spot";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-BwNDI2OMF6bXqFcdr0AJgj9Gb6Uz8BWOfE7M4jqzQJc=";
   };
 

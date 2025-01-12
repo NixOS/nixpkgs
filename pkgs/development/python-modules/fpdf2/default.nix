@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "py-pdf";
     repo = "fpdf2";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-MYurl/nEZhdhGxeNalwTWnZ8lr9SYJBR7hIjBZLOrJU=";
   };
 

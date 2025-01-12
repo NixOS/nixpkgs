@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "common-workflow-language";
     repo = "cwltool";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-MocgfELgis9b+byeDU7mDQcXnLhaWBtvGbqm7MtRdf8=";
   };
 

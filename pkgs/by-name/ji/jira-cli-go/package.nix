@@ -18,7 +18,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "ankitpokhrel";
     repo = "jira-cli";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Wp6uDvnTiNixn8GyEn8SeKPdXanUNN3b7yr9dT1D6uo=";
   };
 

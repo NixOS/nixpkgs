@@ -34,7 +34,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "weaviate";
     repo = "weaviate-python-client";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-lKb8oxWK8y73zPpPJVX25MYBa6C9n96ZkGxLm3Z9r9U=";
   };
 

@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Foldex";
     repo = "AdwSteamGtk";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-f7+2gTpG5Ntgq+U2AkQihzSTrO+oMsLWxgxe4dVyz8A=";
   };
 

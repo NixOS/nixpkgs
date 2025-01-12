@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rr-";
     repo = "urwid_readline";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-ZTg+GZnu7R6Jf2+SIwVo57yHnjwuY92DElTJs8oRErE=";
   };
 

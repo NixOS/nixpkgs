@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "AIM-Harvard";
     repo = "pyradiomics";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-/qFNN63Bbq4DUZDPmwUGj1z5pY3ujsbqFJpVXbO+b8E=";
     name = "pyradiomics";
   };

@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jadolg";
     repo = "rocketchat_API";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-t1t0uksmdPTrksDF0K3/f3KxAv0fX2W8wDIIcWAPEVs=";
   };
 

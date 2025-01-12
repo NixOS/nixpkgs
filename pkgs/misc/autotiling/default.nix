@@ -13,7 +13,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-k+UiAGMB/fJiE+C737yGdyTpER1ciZrMkZezkcn/4yk=";
   };
 

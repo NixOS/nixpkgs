@@ -47,7 +47,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "uilibs";
     repo = "uiprotect";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-+BHxcwQhx4lOqS0ATk1PjLbyTu7xQakM3HMrydXeGUc=";
   };
 

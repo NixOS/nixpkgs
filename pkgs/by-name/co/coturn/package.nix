@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "coturn";
     repo = "coturn";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-BKIto762W7UkKjzIm3eVU18oiHpYUMQYJihebYxBOZs=";
   };
 

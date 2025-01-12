@@ -49,7 +49,7 @@ php.buildComposerProject (finalAttrs: {
   src = fetchFromGitHub {
     owner = "movim";
     repo = "movim";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-mjBeBu1seH5XMls+e4ON13ayVeugKogbNTzbjp1pUjE=";
   };
 

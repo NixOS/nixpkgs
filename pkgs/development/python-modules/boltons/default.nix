@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mahmoud";
     repo = "boltons";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Ie5CPT2u/2/hAIhDzXT6CPzJwmbgt3B6q3oxqKYb27o=";
   };
 

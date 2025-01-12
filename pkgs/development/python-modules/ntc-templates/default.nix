@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "networktocode";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-E8n4ZcCH8xxU5XXVxQUl8844RnRpnbHy/LnjHlz7Eeg=";
   };
 

@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "barrust";
     repo = "pyspellchecker";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-8IwTMj/RqMc9UqhzyvmrirPGuMEwj3iMr+FmF+8312U=";
   };
 

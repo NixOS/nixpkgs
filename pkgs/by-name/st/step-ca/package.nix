@@ -18,7 +18,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "smallstep";
     repo = "certificates";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-0KIAO9KPP9Lrrw9IIaRdlmmfJ0mwQK0ne//Zofu3TfE=";
   };
 

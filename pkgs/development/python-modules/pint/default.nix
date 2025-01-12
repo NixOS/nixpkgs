@@ -33,7 +33,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hgrecco";
     repo = "pint";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-PJEgwshTBIqmKMEro+IT+7v4dab3qD7I45OuTOJloR0=";
   };
 

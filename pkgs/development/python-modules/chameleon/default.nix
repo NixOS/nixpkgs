@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "malthe";
     repo = "chameleon";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-TbXx3reRpUqnMVDsr38FM1SLgARjqXAduO3k87U5TIg=";
   };
 

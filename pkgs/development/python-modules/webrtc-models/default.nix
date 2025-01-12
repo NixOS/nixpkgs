@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "python-webrtc-models";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-6fVcp9kWr5nV4wOKov3ObqyPJo+u3jN443qv++sJ0TQ=";
   };
 

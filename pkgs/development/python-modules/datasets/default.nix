@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-b84Y7PixZUG1VXW11Q4fKxEcsWJjpXEHZIYugf2MSUU=";
   };
 

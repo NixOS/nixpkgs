@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dsoftwareinc";
     repo = "fakeredis-py";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-HjId4SueqkbC319Eel8G85ZOj72ZKEVEH2D8V/GfXi4=";
   };
 

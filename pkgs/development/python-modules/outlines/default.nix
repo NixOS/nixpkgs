@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "outlines-dev";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-6VH9BcMRVRf2xvLcK3GNA1pGgAOs95UOlFQ6KxHXwKo=";
   };
 

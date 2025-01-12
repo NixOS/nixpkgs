@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "Myriad-Dreamin";
     repo = "tinymist";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-z0JfHEG01q83iHAQA/Ke/DPhKQYwkWv9HRpeUdXmTxs=";
   };
 

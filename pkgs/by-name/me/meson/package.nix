@@ -33,7 +33,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "mesonbuild";
     repo = "meson";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-st0dbb+GfF0KEyF+Qn/PIE2462ZrrXy8YcnrulHTI8M=";
   };
 

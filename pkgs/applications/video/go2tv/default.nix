@@ -20,7 +20,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "alexballas";
     repo = "go2tv";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-h0q2VhnU7CPCD0Co9rLPmGh4BK4eP5QUMep7AaJ3weY=";
   };
 

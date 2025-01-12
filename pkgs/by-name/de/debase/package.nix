@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     (fetchFromGitHub {
       owner = "toasterllc";
       repo = "debase";
-      rev = "refs/tags/v${version}";
+      tag = "v${version}";
       hash = "sha256-6AavH8Ag+879ntcxJDbVgsg8V6U4cxwPQYPKvq2PpoQ=";
       fetchSubmodules = true;
     }).overrideAttrs

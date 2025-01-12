@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tree-sitter";
     repo = "py-tree-sitter";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-OMCiHX1ZK9MknUcscEMg1Oie0qFpPQ9lMn8m/D0QF7g=";
     fetchSubmodules = true;
   };

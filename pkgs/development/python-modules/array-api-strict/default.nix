@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "data-apis";
     repo = "array-api-strict";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-sGuMhtxhXXFD6KAiujuWdDe2+gKYN3ijiXvi07a2AgA=";
   };
 

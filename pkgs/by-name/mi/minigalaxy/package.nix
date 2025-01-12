@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "sharkwouter";
     repo = "minigalaxy";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-CMPBKnNrcjHVpsbBjY97FiygEJNG9jKHR/LoVMfuxG4=";
   };
 

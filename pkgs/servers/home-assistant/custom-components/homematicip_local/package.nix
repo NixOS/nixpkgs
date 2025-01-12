@@ -13,7 +13,7 @@ buildHomeAssistantComponent rec {
   src = fetchFromGitHub {
     owner = "danielperna84";
     repo = "custom_homematic";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-WDppel1nbl35oKiJfudhdU9LU9ZATwju1nALtDBefYk=";
   };
 

@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "nobbz";
     repo = "nix-janitor";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-xoVByI17rt2SCY3ULg12S8QsoXGhQWZlOpPpK2mfcPY=";
   };
 

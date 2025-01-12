@@ -12,7 +12,7 @@ buildOctavePackage rec {
   src = fetchFromGitHub {
     owner = "gnu-octave";
     repo = "statistics";
-    rev = "refs/tags/release-${version}";
+    tag = "release-${version}";
     hash = "sha256-cXAjUiv4xWPrWf7HQg9Y+JkR7ON9iefKFUGbEr9FGNA=";
   };
 

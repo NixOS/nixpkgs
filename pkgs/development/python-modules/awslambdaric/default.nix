@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-lambda-python-runtime-interface-client";
-    rev = "refs/tags/${version}";
+    tag = version;
     sha256 = "sha256-IA2Kx4+U0+8lPl9TTTZC46Y3WhSUb5HR5Hr9QZSJIDU=";
   };
 

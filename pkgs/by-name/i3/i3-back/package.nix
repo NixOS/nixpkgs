@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "Cretezy";
     repo = "i3-back";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-xGfX7ttWrcIVhy+MkR5RZr2DCAwIKwGu7zkafHcrjaE=";
   };
 

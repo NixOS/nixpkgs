@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "confluentinc";
     repo = "confluent-kafka-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-b9RTz4wUtDzGkoeB0cp5vbZEBk8jSw2JiXEx6tUuPVw=";
   };
 

@@ -12,7 +12,7 @@
     # Upstream no longer provides the composer.lock in their release artifact
     src = fetchgit {
       url = "https://github.com/phingofficial/phing";
-      rev = "refs/tags/${finalAttrs.version}";
+      tag = finalAttrs.version;
       hash = "sha256-PEJuEsVl6H4tdqOUvkuazVmyvsRvhBD5AA7EWkMHmFk=";
     };
 

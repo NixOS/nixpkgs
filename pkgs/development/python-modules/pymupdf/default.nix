@@ -50,7 +50,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pymupdf";
     repo = "PyMuPDF";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-QAcQPWzPTnTg3l5lGJ8me4FUbK7xgXgyYHep+rF3wf4=";
   };
 

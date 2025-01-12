@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "fragglet";
     repo = "sdl-sopwith";
-    rev = "refs/tags/sdl-sopwith-${version}";
+    tag = "sdl-sopwith-${version}";
     hash = "sha256-sjg61QgcQDSQ/qrR+4PEZIf8OOnGBZvUSLCKGpS1bwg=";
   };
 

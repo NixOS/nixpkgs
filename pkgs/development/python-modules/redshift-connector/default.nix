@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aws";
     repo = "amazon-redshift-python-driver";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-NjUgmvmy0buBFpXjcEsZU0F2JNeXE3GBpkaxClvo4T0=";
   };
 

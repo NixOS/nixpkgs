@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "keras-team";
     repo = "keras";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-zbeGa4g2psAofYAVuM7BNWI2gI21e739N5ZtxVfnVUg=";
   };
 

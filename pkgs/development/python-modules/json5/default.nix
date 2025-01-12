@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dpranke";
     repo = "pyjson5";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-2JAZHayPyi2RI4apODQ9QDXSUI8n54SwQAxZiBhuJrE=";
   };
 

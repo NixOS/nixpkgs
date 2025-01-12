@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gurumitts";
     repo = "pylutron-caseta";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-8NO1IAm16b5jxjVPSQqOSx5hJjAOAXyOknqwkgPT5Zo=";
   };
 

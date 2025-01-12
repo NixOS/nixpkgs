@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "CDrummond";
     repo = "melodeon";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-CwJd77FAEcfCvxHeh3V1SIsgSam3S5WtpSLj9WrOOyI=";
     fetchSubmodules = true;
   };

@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "radvd-project";
     repo = "radvd";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-+cZn4pE4hBZDckfcQJzYdZxHkexWl/AmufCN5BiwWwA=";
   };
 

@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "data-apis";
     repo = "array-api-compat";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-X6y6hX/HdkiLZkj9AOEYsZOlYhR7wUt9kQjHfMfWqIc=";
   };
 
