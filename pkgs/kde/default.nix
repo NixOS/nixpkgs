@@ -87,6 +87,7 @@ let
 
         applet-window-buttons6 = self.callPackage ./third-party/applet-window-buttons6 { };
         karousel = self.callPackage ./third-party/karousel { };
+        kde-geometry-change = self.callPackage ./third-party/kde-geometry-change { };
         koi = self.callPackage ./third-party/koi { };
         krohnkite = self.callPackage ./third-party/krohnkite { };
         kzones = self.callPackage ./third-party/kzones { };
