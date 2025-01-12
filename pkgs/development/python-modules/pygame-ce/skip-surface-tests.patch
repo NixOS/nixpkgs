@@ -1,0 +1,26 @@
+diff --git a/test/surface_test.py b/test/surface_test.py
+index 5ce78b6e..8b8f7ed5 100644
+--- a/test/surface_test.py
++++ b/test/surface_test.py
+@@ -1091,6 +1091,10 @@ class GeneralSurfaceTests(unittest.TestCase):
+         finally:
+             pygame.display.quit()
+ 
++    @unittest.skipIf(
++        os.environ.get("SDL_VIDEODRIVER") == "dummy",
++        'requires a non-"dummy" SDL_VIDEODRIVER',
++    )
+     def test_convert_init(self):
+         """Ensure initialization exceptions are raised
+         for surf.convert()."""
+@@ -1118,6 +1122,10 @@ class GeneralSurfaceTests(unittest.TestCase):
+         finally:
+             pygame.display.quit()
+ 
++    @unittest.skipIf(
++        os.environ.get("SDL_VIDEODRIVER") == "dummy",
++        'requires a non-"dummy" SDL_VIDEODRIVER',
++    )
+     def test_convert_alpha_init(self):
+         """Ensure initialization exceptions are raised
+         for surf.convert_alpha()."""
