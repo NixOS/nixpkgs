@@ -4,6 +4,7 @@
   fetchurl,
   unzip,
   nix-update-script,
+  makeBinaryWrapper,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -17,12 +18,17 @@ stdenvNoCC.mkDerivation rec {
 
   sourceRoot = ".";
 
-  nativeBuildInputs = [ unzip ];
+  nativeBuildInputs = [
+    unzip
+    makeBinaryWrapper
+  ];
 
   installPhase = ''
     runHook preInstall
     mkdir -p $out/Applications
     cp -R NetNewsWire.app $out/Applications/
+    mkdir -p $out/bin
+    makeWrapper $out/Applications/NetNewsWire.app/Contents/MacOS/NetNewsWire $out/bin/net-news-wire
     runHook postInstall
   '';
 
