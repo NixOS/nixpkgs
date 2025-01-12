@@ -3,6 +3,11 @@
   stdenvNoCC,
   fetchurl,
   unzip,
+  writeShellApplication,
+  curl,
+  cacert,
+  gnugrep,
+  common-updater-scripts,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -32,6 +37,21 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = lib.getExe (writeShellApplication {
+    name = "rapidapi-update-script";
+    runtimeInputs = [
+      curl
+      cacert
+      gnugrep
+      common-updater-scripts
+    ];
+    text = ''
+      url="https://paw.cloud/download"
+      version=$(curl -Ls -o /dev/null -w "%{url_effective}" "$url" | grep -oP '\d+\.\d+\.\d+-\d+')
+      update-source-version rapidapi "$version"
+    '';
+  });
 
   meta = {
     description = "Full-featured HTTP client that lets you test and describe the APIs you build or consume";
