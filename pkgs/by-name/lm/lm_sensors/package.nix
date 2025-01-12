@@ -17,7 +17,7 @@ let
   tag = lib.replaceStrings [ "." ] [ "-" ] version;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "lm-sensors";
   inherit version;
 
@@ -84,8 +84,8 @@ stdenv.mkDerivation rec {
   # complicated, it is easier to remove them post-install.
   postInstall =
     ''
-      mkdir -p $doc/share/doc/${pname}
-      cp -r configs doc/* $doc/share/doc/${pname}
+      mkdir -p $doc/share/doc/lm_sensors
+      cp -r configs doc/* $doc/share/doc/lm_sensors
     ''
     + lib.optionalString stdenv.hostPlatform.isStatic ''
       rm $out/lib/*.so*
