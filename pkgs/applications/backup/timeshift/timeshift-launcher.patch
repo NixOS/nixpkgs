@@ -1,0 +1,26 @@
+diff --git a/src/timeshift-launcher b/src/timeshift-launcher
+index 29b8fc4..5f6cb17 100755
+--- a/src/timeshift-launcher
++++ b/src/timeshift-launcher
+@@ -1,6 +1,6 @@
+ #!/bin/bash
+ 
+-app_command='timeshift-gtk'
++app_command=''"$(realpath "$(dirname "$0")")"'/timeshift-gtk'
+ 
+ if [ "$(id -u)" -eq 0 ]; then
+ 	# user is admin
+@@ -14,11 +14,11 @@ else
+ 		# script is running in non-interactive mode
+ 		if [ "$XDG_SESSION_TYPE" = "wayland" ] ; then
+ 			xhost +SI:localuser:root
+-			pkexec ${app_command}
++			pkexec env DISPLAY="$DISPLAY" XAUTHORITY="$XAUTHORITY" "${app_command}"
+ 			xhost -SI:localuser:root
+ 			xhost
+ 		elif command -v pkexec >/dev/null 2>&1; then
+-			pkexec ${app_command}
++			pkexec env DISPLAY="$DISPLAY" XAUTHORITY="$XAUTHORITY" "${app_command}"
+ 		elif command -v sudo >/dev/null 2>&1; then
+ 			x-terminal-emulator -e "sudo ${app_command}"
+ 		elif command -v su >/dev/null 2>&1; then
