@@ -5554,7 +5554,7 @@ with pkgs;
   wring = nodePackages.wring;
 
   wyrd = callPackage ../tools/misc/wyrd {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_14_unsafe_string;
+    ocamlPackages = ocaml-ng.ocamlPackages_4_14;
   };
 
   xbursttools = callPackage ../tools/misc/xburst-tools {
