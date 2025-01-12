@@ -7,45 +7,51 @@
   cargo,
   rustc,
   setuptools-rust,
-  unittestCheckHook,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "gb-io";
-  version = "0.2.1";
-  format = "setuptools";
+  version = "0.3.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "althonos";
     repo = "gb-io.py";
-    rev = "v${version}";
-    hash = "sha256-1B7BUJ8H+pTtmDtazfPfYtlXzL/x4rAHtRIFAAsSoWs=";
+    tag = "v${version}";
+    hash = "sha256-JWwH8ykMKSg1ztYodPzlnl8mpFXlQ9JFCf1LxqcNQvc=";
   };
+
+  patches = [
+    # Generate with cargo update pyo3 -Z unstable-options --breaking
+    ./0001-Update-pyo3.patch
+  ];
 
   cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src sourceRoot;
+    inherit src patches;
     name = "${pname}-${version}";
-    hash = "sha256-lPnOFbEJgcaPPl9bTngugubhW//AUFp9RAjyiFHxC70=";
+    hash = "sha256-dX/rzL1rDjvHKoiaqtoX22t29TS9XR5aLW6fTabzLhc=";
   };
 
-  sourceRoot = src.name;
+  build-system = [
+    setuptools-rust
+  ];
 
   nativeBuildInputs = [
-    setuptools-rust
     rustPlatform.cargoSetupHook
     cargo
     rustc
   ];
 
-  nativeCheckInputs = [ unittestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "gb_io" ];
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://github.com/althonos/gb-io.py";
     description = "Python interface to gb-io, a fast GenBank parser written in Rust";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dlesl ];
   };
 }
