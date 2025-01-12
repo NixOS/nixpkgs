@@ -5,6 +5,7 @@
   fetchFromGitHub,
   buildPackages,
   installShellFiles,
+  versionCheckHook,
   makeWrapper,
   enableCmount ? true,
   fuse,
@@ -82,6 +83,13 @@ buildGoModule rec {
           wrapProgram $out/bin/rclone \
             --suffix PATH : "${lib.makeBinPath [ fuse3 ]}"
         '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
+  versionCheckProgramArg = [ "version" ];
 
   passthru.tests = {
     inherit librclone;
