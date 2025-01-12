@@ -1438,6 +1438,11 @@ with pkgs;
     withWayland = true;
   };
 
+  shadps4 = callPackage ../by-name/sh/shadps4/package.nix {
+    # relies on std::sinf & co, which was broken in GCC until GCC 14: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=79700
+    stdenv = gcc14Stdenv;
+  };
+
   snes9x-gtk = snes9x.override {
     withGtk = true;
   };
@@ -2651,8 +2656,8 @@ with pkgs;
 
   patool = with python3Packages; toPythonApplication patool;
 
-  pocket-casts = callPackage ../applications/audio/pocket-casts {
-    electron = electron_31;
+  pocket-casts = callPackage ../by-name/po/pocket-casts/package.nix {
+    electron = electron_32;
   };
 
   pueue = darwin.apple_sdk_11_0.callPackage ../applications/misc/pueue {
@@ -9744,10 +9749,6 @@ with pkgs;
   laurel = callPackage ../servers/monitoring/laurel/default.nix { };
 
   lcms = lcms2;
-
-  lib2geom = callPackage ../development/libraries/lib2geom {
-    stdenv = if stdenv.cc.isClang then llvmPackages_13.stdenv else stdenv;
-  };
 
   libacr38u = callPackage ../tools/security/libacr38u {
     inherit (darwin.apple_sdk.frameworks) IOKit;
