@@ -5,49 +5,73 @@
   pythonOlder,
 
   # build-system
-  setuptools-scm,
+  hatchling,
+  hatch-vcs,
 
   # dependencies
   asciitree,
+  donfig,
   numpy,
   fasteners,
   numcodecs,
+  typing-extensions,
 
   # tests
   pytestCheckHook,
+  pytest-asyncio,
+  pytest-cov-stub,
+  hypothesis,
+  aiohttp,
+  fsspec,
+  moto,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "zarr";
-  version = "2.18.7";
+  version = "3.0.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-srj2bxTaxK9msYDSM4gZmBuYH3Dhlsmmbmv6qeWVcvU=";
+    hash = "sha256-A2stq/+p8BSMrVenvmxp2XYfazuDO2G30pwu6Kg2tGw=";
   };
 
   build-system = [
-    setuptools-scm
+    hatchling
+    hatch-vcs
   ];
 
   dependencies = [
     asciitree
+    donfig
     numpy
     fasteners
     numcodecs
-  ] ++ numcodecs.optional-dependencies.msgpack;
+    typing-extensions
+  ] ++ numcodecs.optional-dependencies.crc32c;
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  optional-dependencies = {
+    remote = [ fsspec ];
+  };
+
+  nativeCheckInputs =
+    [
+      pytestCheckHook
+      pytest-asyncio
+      pytest-cov-stub
+      hypothesis
+      aiohttp
+      moto
+      requests
+    ]
+    ++ moto.optional-dependencies.s3
+    ++ moto.optional-dependencies.server
+    ++ optional-dependencies.remote;
 
   pythonImportsCheck = [ "zarr" ];
-
-  # FIXME remove once zarr's reverse dependencies support v3
-  passthru.skipBulkUpdate = true;
 
   meta = {
     description = "Implementation of chunked, compressed, N-dimensional arrays for Python";
