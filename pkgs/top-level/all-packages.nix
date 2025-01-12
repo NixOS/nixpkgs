@@ -14272,8 +14272,6 @@ with pkgs;
 
   libkiwix = callPackage ../applications/misc/kiwix/lib.nix { };
 
-  librecad = libsForQt5.callPackage ../applications/misc/librecad { };
-
   libreoffice-bin = callPackage ../applications/office/libreoffice/darwin { };
 
   libreoffice = hiPrio libreoffice-still;
