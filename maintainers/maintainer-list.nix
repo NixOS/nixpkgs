@@ -5969,6 +5969,13 @@
     githubId = 466723;
     name = "David Reiss";
   };
+  docbobo = {
+    email = "docbobo@pm.me";
+    github = "docbobo";
+    githubId = 1257060;
+    name = "Boris Prüßmann";
+    keys = [ { fingerprint = "FEA5 C6A4 7600 A6ED 0052 5169 F45C 18DC 37EC 0AB0"; } ];
+  };
   dochang = {
     email = "dochang@gmail.com";
     github = "dochang";
