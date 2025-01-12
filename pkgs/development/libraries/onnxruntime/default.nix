@@ -275,5 +275,9 @@ effectiveStdenv.mkDerivation rec {
     platforms = platforms.unix;
     license = licenses.mit;
     maintainers = with maintainers; [ puffnfresh ck3d cbourjau ];
+    badPlatforms = [
+      # error: implicit capture of 'this' with a capture default of '=' is deprecated [-Werror,-Wdeprecated-this-capture]
+      lib.systems.inspect.patterns.isDarwin
+    ];
   };
 }
