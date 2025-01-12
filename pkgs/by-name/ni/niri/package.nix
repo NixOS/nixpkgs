@@ -104,6 +104,8 @@ rustPlatform.buildRustPackage rec {
 
   preCheck = ''
     export XDG_RUNTIME_DIR=$(mktemp -d)
+    # See https://github.com/YaLTeR/niri/issues/953
+    export RAYON_NUM_THREADS=1
   '';
 
   passthru = {
