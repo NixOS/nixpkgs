@@ -57,8 +57,6 @@ vimUtils.buildVimPlugin {
 
   propagatedBuildInputs = [ sniprun-bin ];
 
-  nvimRequireCheck = "sniprun";
-
   passthru = {
     updateScript = nix-update-script {
       attrPath = "vimPlugins.sniprun.sniprun-bin";
