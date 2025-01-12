@@ -79,6 +79,6 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/pimalaya/himalaya";
     changelog = "https://github.com/pimalaya/himalaya/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ soywod toastal yanganto ];
+    maintainers = with maintainers; [ soywod yanganto ];
   };
 }
