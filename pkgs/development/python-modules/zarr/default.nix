@@ -5,44 +5,67 @@
   pythonOlder,
 
   # build-system
-  setuptools-scm,
+  hatchling,
+  hatch-vcs,
 
   # dependencies
   asciitree,
+  donfig,
   numpy,
   fasteners,
   numcodecs,
+  typing-extensions,
 
   # tests
   pytestCheckHook,
+  pytest-asyncio,
+  pytest-cov-stub,
+  hypothesis,
+  fsspec,
+  moto,
 }:
 
 buildPythonPackage rec {
   pname = "zarr";
-  version = "2.18.3";
-  format = "pyproject";
+  version = "3.0.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-JYDYy23YRiF3GhDTHE13fcqKJ3BqGomyn0LS034t9c4=";
+    hash = "sha256-1JFIDjXTRBJWcdcwDdzV/YbV7AYEgNeb1FDSA6mLnNo=";
   };
 
   build-system = [
-    setuptools-scm
+    hatchling
+    hatch-vcs
   ];
 
   dependencies = [
     asciitree
+    donfig
     numpy
     fasteners
     numcodecs
-  ] ++ numcodecs.optional-dependencies.msgpack;
+    typing-extensions
+  ] ++ numcodecs.optional-dependencies.crc32c;
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  optional-dependencies = {
+    remote = [ fsspec ];
+  };
+
+  nativeCheckInputs =
+    [
+      pytestCheckHook
+      pytest-asyncio
+      pytest-cov-stub
+      hypothesis
+      moto
+    ]
+    ++ moto.optional-dependencies.s3
+    ++ moto.optional-dependencies.server
+    ++ optional-dependencies.remote;
 
   pythonImportsCheck = [ "zarr" ];
 
