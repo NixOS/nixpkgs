@@ -5541,7 +5541,7 @@ with pkgs;
   wring = nodePackages.wring;
 
   wyrd = callPackage ../tools/misc/wyrd {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_14_unsafe_string;
+    ocamlPackages = ocaml-ng.ocamlPackages_4_14;
   };
 
   xbursttools = callPackage ../tools/misc/xburst-tools {
@@ -6734,7 +6734,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
   cargo-lambda = callPackage ../development/tools/rust/cargo-lambda {
-    zig = buildPackages.zig_0_12;
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
   };
   cargo-ndk = callPackage ../development/tools/rust/cargo-ndk {
@@ -6757,9 +6756,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  cargo-zigbuild = callPackage ../development/tools/rust/cargo-zigbuild {
-    zig = buildPackages.zig_0_12;
-  };
+  cargo-zigbuild = callPackage ../development/tools/rust/cargo-zigbuild { };
 
   opensmalltalk-vm = callPackage ../development/compilers/opensmalltalk-vm { };
 
@@ -14979,9 +14976,7 @@ with pkgs;
 
   qtemu = libsForQt5.callPackage ../applications/virtualization/qtemu { };
 
-  qtox = libsForQt5.callPackage ../applications/networking/instant-messengers/qtox {
-    inherit (darwin.apple_sdk.frameworks) AVFoundation;
-  };
+  qtox = callPackage ../applications/networking/instant-messengers/qtox { };
 
   qtpass = libsForQt5.callPackage ../applications/misc/qtpass { };
 
@@ -15746,7 +15741,7 @@ with pkgs;
 
   webcamoid = libsForQt5.callPackage ../applications/video/webcamoid { };
 
-  webcord = callPackage ../by-name/we/webcord/package.nix { electron = electron_32; };
+  webcord = callPackage ../by-name/we/webcord/package.nix { electron = electron; };
 
   webcord-vencord = callPackage ../by-name/we/webcord-vencord/package.nix { electron = electron_31; };
 
