@@ -104,6 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
         beautifulsoup4
         css-parser
         cssselect
+        fonttools
         python-dateutil
         dnspython
         faust-cchardet
@@ -206,7 +207,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   doInstallCheck = true;
   installCheckInputs = with python3Packages; [
-    fonttools
     psutil
   ];
   installCheckPhase = ''
