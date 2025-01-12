@@ -14,21 +14,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cpptrace";
-  version = "0.7.4";
+  version = "0.7.5";
 
   src = fetchFromGitHub {
     owner = "jeremy-rifkin";
     repo = "cpptrace";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JBgus66duh+a8Cr1NubNsMHE7CP13uML8DTgXW9jwIc=";
+    hash = "sha256-2rDyH9vo47tbqqZrTupAOrMySj4IGKeWX8HBTGjFf+g=";
   };
-
-  postPatch = ''
-    # https://www.github.com/jeremy-rifkin/cpptrace/pull/196
-    substituteInPlace test/unit/stacktrace.cpp --replace-fail \
-        "#define CPPTRACE_FORCE_INLINE [[gnu::always_inline]]" \
-        "#define CPPTRACE_FORCE_INLINE [[gnu::always_inline]] static"
-  '';
 
   nativeBuildInputs = [
     cmake
