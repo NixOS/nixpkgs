@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchurl,
-  substituteAll,
+  replaceVars,
   meson,
   ninja,
   nixosTests,
@@ -33,8 +33,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./hardcode-gsettings.patch;
+    (replaceVars ./hardcode-gsettings.patch {
       gds_gsettings_path = glib.getSchemaPath gsettings-desktop-schemas;
     })
 

@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
 
   # build-system
   pretix-plugin-build,
@@ -29,8 +29,7 @@ buildPythonPackage rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./passbook-openssl.patch;
+    (replaceVars ./passbook-openssl.patch {
       openssl = lib.getExe openssl;
     })
   ];

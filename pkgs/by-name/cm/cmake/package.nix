@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchurl
-, substituteAll
+, replaceVars
 , buildPackages
 , bzip2
 , curlMinimal
@@ -75,8 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional stdenv.hostPlatform.isDarwin ./006-darwin-always-set-runtime-c-flag.diff
   # On platforms where ps is not part of stdenv, patch the invocation of ps to use an absolute path.
   ++ lib.optional (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isFreeBSD) (
-    substituteAll {
-      src = ./007-darwin-bsd-ps-abspath.diff;
+    replaceVars ./007-darwin-bsd-ps-abspath.diff {
       ps = lib.getExe ps;
     })
   ++ [

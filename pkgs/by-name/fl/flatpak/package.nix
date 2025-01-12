@@ -46,7 +46,7 @@
   python3,
   shared-mime-info,
   socat,
-  substituteAll,
+  replaceVars,
   systemd,
   testers,
   valgrind,
@@ -84,8 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # Hardcode paths used by tests and change test runtime generation to use files from Nix store.
     # https://github.com/flatpak/flatpak/issues/1460
-    (substituteAll {
-      src = ./fix-test-paths.patch;
+    (replaceVars ./fix-test-paths.patch {
       inherit
         coreutils
         gettext
@@ -98,8 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
     })
 
     # Hardcode paths used by Flatpak itself.
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       p11kit = "${p11-kit.bin}/bin/p11-kit";
     })
 
@@ -235,8 +233,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   passthru = {
-    icon-validator-patch = substituteAll {
-      src = ./fix-icon-validation.patch;
+    icon-validator-patch = replaceVars ./fix-icon-validation.patch {
       inherit (builtins) storeDir;
     };
 

@@ -10,7 +10,7 @@
   glib,
   gnome,
   gnome-menus,
-  substituteAll,
+  replaceVars,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -23,12 +23,10 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix_gmenu.patch;
+    (replaceVars ./fix_gmenu.patch {
       gmenu_path = "${gnome-menus}/lib/girepository-1.0";
     })
-    (substituteAll {
-      src = ./fix_gtop.patch;
+    (replaceVars ./fix_gtop.patch {
       gtop_path = "${libgtop}/lib/girepository-1.0";
     })
   ];

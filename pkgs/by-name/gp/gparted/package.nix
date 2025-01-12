@@ -20,7 +20,7 @@
   util-linux,
   polkit,
   wrapGAppsHook3,
-  substituteAll,
+  replaceVars,
   mtools,
   dosfstools,
   xhost,
@@ -39,8 +39,7 @@ stdenv.mkDerivation rec {
   # however the binary won't be suid so it returns
   # an error preventing the program from detection
   patches = [
-    (substituteAll {
-      src = ./polkit.patch;
+    (replaceVars ./polkit.patch {
       polkit_version = polkit.version;
     })
   ];
