@@ -170,6 +170,16 @@ checkConfigError 'A definition for option .* is not of type .path in the Nix sto
 checkConfigError 'A definition for option .* is not of type .path in the Nix store.. Definition values:\n\s*- In .*: ".*/store/.links"' config.pathInStore.bad4 ./types.nix
 checkConfigError 'A definition for option .* is not of type .path in the Nix store.. Definition values:\n\s*- In .*: "/foo/bar"' config.pathInStore.bad5 ./types.nix
 
+# types.pathNotInStore
+checkConfigOutput '"/foo/bar"' config.pathNotInStore.ok1 ./types.nix
+checkConfigOutput '".*/store"' config.pathNotInStore.ok2 ./types.nix
+checkConfigOutput '".*/store/"' config.pathNotInStore.ok3 ./types.nix
+checkConfigError 'A definition for option .* is not of type .path not in the Nix store.. Definition values:\n\s*- In .*: ".*/0lz9p8xhf89kb1c1kk6jxrzskaiygnlh-bash-5.2-p15.drv"' config.pathNotInStore.bad1 ./types.nix
+checkConfigError 'A definition for option .* is not of type .path not in the Nix store.. Definition values:\n\s*- In .*: ".*/0fb3ykw9r5hpayd05sr0cizwadzq1d8q-bash-5.2-p15"' config.pathNotInStore.bad2 ./types.nix
+checkConfigError 'A definition for option .* is not of type .path not in the Nix store.. Definition values:\n\s*- In .*: ".*/0fb3ykw9r5hpayd05sr0cizwadzq1d8q-bash-5.2-p15/bin/bash"' config.pathNotInStore.bad3 ./types.nix
+checkConfigError 'A definition for option .* is not of type .path not in the Nix store.. Definition values:\n\s*- In .*: ""' config.pathNotInStore.bad4 ./types.nix
+checkConfigError 'A definition for option .* is not of type .path not in the Nix store.. Definition values:\n\s*- In .*: ".*/\.links"' config.pathNotInStore.bad5 ./types.nix
+
 # Check boolean option.
 checkConfigOutput '^false$' config.enable ./declare-enable.nix
 checkConfigError 'The option .* does not exist. Definition values:\n\s*- In .*: true' config.enable ./define-enable.nix
