@@ -116,8 +116,9 @@ self: super: builtins.intersectAttrs super {
   audacity = enableCabalFlag "buildExamples" (overrideCabal (drv: {
       executableHaskellDepends = [self.optparse-applicative self.soxlib];
     }) super.audacity);
-  # 2023-04-27: Deactivating examples for now because they cause a non-trivial build failure.
-  # med-module = enableCabalFlag "buildExamples" super.med-module;
+  med-module = enableCabalFlag "buildExamples" (overrideCabal (drv: {
+      executableHaskellDepends = [self.HPDF self.optparse-applicative self.shell-utility self.filepath self.non-empty self.array];
+    }) super.med-module;
   spreadsheet = enableCabalFlag "buildExamples" (overrideCabal (drv: {
       executableHaskellDepends = [self.optparse-applicative self.shell-utility];
     }) super.spreadsheet);
