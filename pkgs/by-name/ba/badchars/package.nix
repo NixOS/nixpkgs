@@ -1,33 +1,30 @@
 {
   lib,
-  buildPythonApplication,
-  fetchPypi,
+  fetchFromGitHub,
+  gitUpdater,
   python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "badchars";
-  version = "0.4.0";
+  version = "0.5.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-4neV1S5gwQ03kEXEyZezNSj+PVXJyA5MO4lyZzGKE/c=";
+  src = fetchFromGitHub {
+    owner = "cytopia";
+    repo = "badchars";
+    tag = version;
+    hash = "sha256-VWe3k34snEviBK7VBCDTWAu3YjZfh1gXHXjlnFlefJw=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail "argparse" ""
-  '';
-
-  build-system = with python3.pkgs; [
-    setuptools
-  ];
+  build-system = with python3.pkgs; [ setuptools ];
 
   # no tests are available and it can't be imported (it's only a script, not a module)
   doCheck = false;
 
-  meta = with lib; {
+  passthru.updateScript = gitUpdater { };
+
+  meta = {
     description = "HEX badchar generator for different programming languages";
     longDescription = ''
       A HEX bad char generator to instruct encoders such as shikata-ga-nai to
@@ -35,8 +32,8 @@ python3.pkgs.buildPythonApplication rec {
     '';
     homepage = "https://github.com/cytopia/badchars";
     changelog = "https://github.com/cytopia/badchars/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "badchars";
   };
 }

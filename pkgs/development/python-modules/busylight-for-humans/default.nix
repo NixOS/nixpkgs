@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "busylight-for-humans";
-  version = "0.33.0";
+  version = "0.33.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "JnyJny";
     repo = "busylight";
     tag = version;
-    hash = "sha256-gwhN8aFwxRdA6fPuCDVdBJ8yl8Zq6DAfSRW88Yk7IUk=";
+    hash = "sha256-66XJumC++/Wa6hY/A3m6IR2ALCH4vLSut9ERW8msLY4=";
   };
 
   build-system = [ poetry-core ];

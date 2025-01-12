@@ -2,21 +2,19 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pytestCheckHook,
   pytest-asyncio,
-  nix-update-script,
+  pytest-cov-stub,
+  pytestCheckHook,
+  pythonOlder,
   setuptools,
-  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "result";
   version = "0.17.0";
   pyproject = true;
-  build-system = [
-    setuptools
-    wheel
-  ];
+
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "rustedpy";
@@ -25,27 +23,20 @@ buildPythonPackage rec {
     hash = "sha256-o+7qKxGQCeMUnsmEReggvf+XwQWFHRCYArYk3DxCa50=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace '"--flake8",' "" \
-      --replace '"--tb=short",' "" \
-      --replace '"--cov=result",' "" \
-      --replace '"--cov=tests",' "" \
-      --replace '"--cov-report=term",' "" \
-      --replace '"--cov-report=xml",' ""
-  '';
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
-    pytestCheckHook
     pytest-asyncio
+    pytest-cov-stub
+    pytestCheckHook
   ];
 
-  passthru.updateScript = nix-update-script { };
   pythonImportsCheck = [ "result" ];
 
   meta = with lib; {
-    description = "A simple Result type for Python 3 inspired by Rust, fully type annotated";
+    description = "A Rust-like result type for Python";
     homepage = "https://github.com/rustedpy/result";
+    changelog = "https://github.com/rustedpy/result/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with lib.maintainers; [ emattiza ];
   };
