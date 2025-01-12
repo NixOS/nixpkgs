@@ -459,7 +459,7 @@ in
       newScope ? throw "lib.packagesFromDirectoryRecursive: newScope wasn't passed in args",
       directory,
       # recurseIntoDirectory can modify the function used when processing directory entries
-      #  and recurseArgs can (optionally) hold data for its use ; see nixdoc above
+      #  and recurseArgs can (optionally) hold data for its use ; see function documentation
       recurseArgs ? throw "lib.packagesFromDirectoryRecursive: recurseArgs wasn't passed in args",
       recurseIntoDirectory ?
         if args ? newScope then
