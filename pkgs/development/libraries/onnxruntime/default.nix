@@ -218,11 +218,7 @@ effectiveStdenv.mkDerivation rec {
   ];
 
   env = lib.optionalAttrs effectiveStdenv.cc.isClang {
-    NIX_CFLAGS_COMPILE = toString [
-      "-Wno-error=deprecated-declarations"
-      "-Wno-error=deprecated-pragma"
-      "-Wno-error=unused-but-set-variable"
-    ];
+    NIX_CFLAGS_COMPILE = "-Wno-error";
   };
 
   # aarch64-linux fails cpuinfo test, because /sys/devices/system/cpu/ does not exist in the sandbox
@@ -275,9 +271,5 @@ effectiveStdenv.mkDerivation rec {
     platforms = platforms.unix;
     license = licenses.mit;
     maintainers = with maintainers; [ puffnfresh ck3d cbourjau ];
-    badPlatforms = [
-      # error: implicit capture of 'this' with a capture default of '=' is deprecated [-Werror,-Wdeprecated-this-capture]
-      lib.systems.inspect.patterns.isDarwin
-    ];
   };
 }
