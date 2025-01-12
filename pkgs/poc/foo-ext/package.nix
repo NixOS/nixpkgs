@@ -1,14 +1,17 @@
 { poc-foo, ... }:
 
-poc-foo.overrideAttrs (
+(poc-foo.overrideLayer3 (
   finalAttrs:
   let
-    inherit (finalAttrs.__pkgs) pkgsBuildHost pkgsHostTarget;
+    inherit (finalAttrs.finalLayer1Attrs.__pkgs) pkgsBuildHost pkgsHostTarget;
   in
-  prevAttrs: {
+  prevAttrs:
+  prevAttrs
+  // {
     installPhase = ''
       ${prevAttrs.installPhase or ""}
       echo hello world $someVal
+      touch $lib
     '';
 
     outputs = [
@@ -30,8 +33,19 @@ poc-foo.overrideAttrs (
 
     myself = finalAttrs;
 
-    bruv = finalAttrs.__pkgs;
+    bruv = finalAttrs.finalLayer1Attrs.__pkgs;
 
-    outputz = finalAttrs.outputs; # outputs is actually set to [ "out" ] by default, even inside finalAttrs
+    lowerOutputz = finalAttrs.finalLayer1Attrs.outputs;
+    currentLayerOutputz = finalAttrs.outputs;
   }
-)
+)).overrideLayer1
+  (
+    finalAttrs: prevAttrs:
+    prevAttrs
+    // {
+      outputs = [
+        "out"
+        "lib"
+      ];
+    }
+  )

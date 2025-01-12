@@ -5,10 +5,7 @@ let
   # maybe unneeded, but maybe better than lib.extends
   transforms =
     transformation: rattrs: finalAttrs:
-    let
-      prevAttrs = rattrs finalAttrs;
-    in
-    transformation finalAttrs prevAttrs;
+    transformation finalAttrs (rattrs finalAttrs);
 
   composeTransformations =
     f: g: # <- inputs
@@ -22,7 +19,7 @@ in
 
 let
 
-  makeAdvAttrs =
+  layer3ToLayer2 =
     finalAttrs: prevAttrs:
     prevAttrs
     // {
@@ -32,7 +29,7 @@ let
       # TODO: more stuff
     };
 
-  makeStdenvAttrs =
+  layer2ToLayer1 =
     finalAttrs: prevAttrs:
     assert !(prevAttrs ? drvAttrs); # wrappers shouldn't set drvAttrs directly
     prevAttrs
@@ -58,7 +55,7 @@ let
       };
     };
 
-  makeDrvAttrs =
+  layer1ToLayer0 =
     finalAttrs: prevAttrs:
     let
       outputs = finalAttrs.drvAttrs.outputs or [ "out" ];
@@ -83,43 +80,93 @@ let
 
 in
 
-/*
+let
+
+  makeExtensible' =
+    origRattrs:
+    {
+      layer3ExtraTransformation ? (final: prev: prev),
+      layer2ExtraTransformation ? (final: prev: prev),
+      layer1ExtraTransformation ? (final: prev: prev),
+      layer0ExtraTransformation ? (final: prev: prev),
+    }:
     let
+      # maybe dont expand usage of 'transforms'
+      rattrs3 = origRattrs;
+      rattrs3' = finalAttrs: layer3ExtraTransformation finalAttrs (rattrs3 finalAttrs);
+      finalLayer3Attrs = rattrs3' (finalLayer3Attrs // invisibleHelperAttrs) // visibleHelperAttrs;
 
-      # CURRENTLY UNUSED
-    # Based on lib.makeExtensible, with modifications
-    makeExtensible' =
-      rattrs:
-      let
-        overrideAttrs = f0: makeExtensible' (lib.extends (lib.toExtension f0) rattrs);
+      rattrs2 = finalAttrs: layer3ToLayer2 finalAttrs finalLayer3Attrs;
+      rattrs2' = finalAttrs: layer2ExtraTransformation finalAttrs (rattrs2 finalAttrs);
+      finalLayer2Attrs = rattrs2' (finalLayer2Attrs // invisibleHelperAttrs) // visibleHelperAttrs;
 
-        # NOTE: The following is a hint that will be printed by the Nix cli when
-        # encountering an infinite recursion. It must not be formatted into
-        # separate lines, because Nix would only show the last line of the comment.
+      rattrs1 = finalAttrs: layer2ToLayer1 finalAttrs finalLayer2Attrs;
+      rattrs1' = finalAttrs: layer1ExtraTransformation finalAttrs (rattrs1 finalAttrs);
+      finalLayer1Attrs = rattrs1' (finalLayer1Attrs // invisibleHelperAttrs) // visibleHelperAttrs;
 
-        helperAttrs = { inherit overrideAttrs; };
+      rattrs0 = finalAttrs: layer1ToLayer0 finalAttrs finalLayer1Attrs;
+      rattrs0' = finalAttrs: layer1ExtraTransformation finalAttrs (rattrs0 finalAttrs);
+      finalLayer0Attrs = rattrs0' (finalLayer0Attrs // invisibleHelperAttrs) // visibleHelperAttrs;
 
-        # An infinite recursion here can be caused by having the attribute names of expression `e` in `.overrideAttrs(finalAttrs: previousAttrs: e)` depend on `finalAttrs`. Only the attribute values of `e` can depend on `finalAttrs`.
-        finalAttrs = (rattrs finalAttrs) // helperAttrs;
-      in
-      finalAttrs;
-  in
-*/
+      extraTransformations = {
+        inherit
+          layer3ExtraTransformation
+          layer2ExtraTransformation
+          layer1ExtraTransformation
+          layer0ExtraTransformation
+          ;
+      };
+
+      makeSelfWithModifiedExtra = modExtra: makeExtensible' origRattrs (extraTransformations // modExtra);
+
+      overrideLayer3 =
+        transformation:
+        makeSelfWithModifiedExtra {
+          layer3ExtraTransformation = composeTransformations layer3ExtraTransformation transformation;
+        };
+
+      overrideLayer2 =
+        transformation:
+        makeSelfWithModifiedExtra {
+          layer2ExtraTransformation = composeTransformations layer2ExtraTransformation transformation;
+        };
+
+      overrideLayer1 =
+        transformation:
+        makeSelfWithModifiedExtra {
+          layer1ExtraTransformation = composeTransformations layer1ExtraTransformation transformation;
+        };
+
+      overrideLayer0 =
+        transformation:
+        makeSelfWithModifiedExtra {
+          layer0ExtraTransformation = composeTransformations layer0ExtraTransformation transformation;
+        };
+
+      invisibleHelperAttrs = {
+        inherit
+          finalLayer3Attrs
+          finalLayer2Attrs
+          finalLayer1Attrs
+          finalLayer0Attrs
+          ;
+      };
+
+      visibleHelperAttrs = {
+        inherit
+          overrideLayer3
+          overrideLayer2
+          overrideLayer1
+          overrideLayer0
+          ;
+      };
+
+    in
+    finalLayer0Attrs;
+in
 
 let
-  mkPackage =
-    rattrs:
-    let
-      combinedTransformation = composeManyTransformations [
-        makeAdvAttrs
-        makeStdenvAttrs
-        makeDrvAttrs
-      ];
-
-      rattrs' = transforms combinedTransformation rattrs;
-    in
-
-    lib.makeExtensibleWithCustomName "overrideAttrs" rattrs';
+  mkPackage = rattrs: makeExtensible' rattrs { };
 in
 
 mkPackage
