@@ -1,7 +1,6 @@
 {
   lib,
   fetchzip,
-  fetchpatch,
   fetchYarnDeps,
   yarn2nix-moretea,
   nodejs_18,
