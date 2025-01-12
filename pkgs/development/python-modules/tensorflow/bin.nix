@@ -29,7 +29,6 @@
   cudaPackages,
   zlib,
   python,
-  keras-preprocessing,
   addDriverRunpath,
   astunparse,
   flatbuffers,
@@ -89,7 +88,6 @@ buildPythonPackage rec {
     wrapt
     tensorflow-estimator-bin
     tensorboard
-    keras-preprocessing
     h5py
   ] ++ lib.optional (!isPy3k) mock;
 
