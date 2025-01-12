@@ -1,11 +1,20 @@
 {
-  stdenv,
   lib,
+  stdenv,
   fetchurl,
-  makeWrapper,
   jre_headless,
+  linkFarm,
+  makeWrapper,
+  plugins ? [ ],
 }:
-
+let
+  pluginsDir = linkFarm "reposilite-plugins" (
+    builtins.map (p: {
+      name = (builtins.parseDrvName p.name).name + ".jar";
+      path = p.outPath or p;
+    }) plugins
+  );
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "Reposilite";
   version = "3.5.20";
@@ -25,7 +34,9 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/lib
     cp $src $out/lib/reposilite
     makeWrapper ${jre_headless}/bin/java $out/bin/reposilite \
-      --add-flags "-Xmx40m -jar $out/lib/reposilite"
+      --add-flags "-Xmx40m -jar $out/lib/reposilite ${
+        lib.optionalString (plugins != [ ]) "--plugin-directory ${pluginsDir}"
+      }"
 
     runHook postInstall
   '';
