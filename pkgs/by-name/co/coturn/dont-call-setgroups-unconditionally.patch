@@ -1,0 +1,46 @@
+From 1b5da9c7c5423eed7a567a02e66c244705116724 Mon Sep 17 00:00:00 2001
+From: networkException <git@nwex.de>
+Date: Thu, 30 May 2024 02:07:04 +0200
+Subject: [PATCH] Don't call `setgroups` unconditionally in mainrelay
+
+This patch moves the call to `setgroups` from the beginning of the
+`drop_priviliges` function to branch in which `setuid` is actually
+called. This still fulfills the intention of
+acbf7e15c9290e0891a6b6b5ce6e81bbaa77ce5a, initially introducting
+the call to `setgroups`:
+
+> Fix related to POS36-C and rpmlint error
+> "missing-call-to-setgroups-before-setuid".
+
+As per this intention is is not required to call `setgroups`
+otherwise, reducing the more exotic (as in not part of POSIX and
+considered priviliged by systemd) system calls coturn needs to make
+at startup.
+---
+ src/apps/relay/mainrelay.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/src/apps/relay/mainrelay.c b/src/apps/relay/mainrelay.c
+index cf370ec8a..56eaf82d0 100644
+--- a/src/apps/relay/mainrelay.c
++++ b/src/apps/relay/mainrelay.c
+@@ -2913,7 +2913,6 @@ static void drop_privileges(void) {
+ #if defined(WINDOWS)
+   // TODO: implement it!!!
+ #else
+-  setgroups(0, NULL);
+   if (procgroupid_set) {
+     if (getgid() != procgroupid) {
+       if (setgid(procgroupid) != 0) {
+@@ -2929,6 +2928,11 @@ static void drop_privileges(void) {
+ 
+   if (procuserid_set) {
+     if (procuserid != getuid()) {
++      if (setgroups(0, NULL) != 0) {
++        perror("setgroups: Unable drop supplementary groups");
++        exit(-1);
++      }
++
+       if (setuid(procuserid) != 0) {
+         perror("setuid: Unable to change user privileges");
+         exit(-1);
