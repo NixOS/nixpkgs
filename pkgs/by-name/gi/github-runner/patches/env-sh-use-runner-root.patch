@@ -1,0 +1,76 @@
+From 84b2fcdf042771ae8adc0f59f1a3ecd9788a808d Mon Sep 17 00:00:00 2001
+From: Vincent Haupert <mail@vincent-haupert.de>
+Date: Sun, 26 Feb 2023 11:37:01 +0100
+Subject: [PATCH] Access `.env` and `.path` relative to `$RUNNER_ROOT`, if set
+
+---
+ src/Misc/layoutbin/runsvc.sh   |  4 ++--
+ src/Misc/layoutroot/env.sh     | 10 +++++-----
+ src/Runner.Listener/Program.cs |  2 +-
+ 3 files changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/src/Misc/layoutbin/runsvc.sh b/src/Misc/layoutbin/runsvc.sh
+index c135645..bb0fbf6 100755
+--- a/src/Misc/layoutbin/runsvc.sh
++++ b/src/Misc/layoutbin/runsvc.sh
+@@ -4,9 +4,9 @@
+ # for more info on how to propagate SIGTERM to a child process see: http://veithen.github.io/2014/11/16/sigterm-propagation.html
+ trap 'kill -INT $PID' TERM INT
+ 
+-if [ -f ".path" ]; then
++if [ -f "${RUNNER_ROOT:-"."}/.path" ]; then
+     # configure
+-    export PATH=`cat .path`
++    export PATH=`cat "${RUNNER_ROOT:-"."}/.path"`
+     echo ".path=${PATH}"
+ fi
+ 
+diff --git a/src/Misc/layoutroot/env.sh b/src/Misc/layoutroot/env.sh
+index 641d244..85379bf 100755
+--- a/src/Misc/layoutroot/env.sh
++++ b/src/Misc/layoutroot/env.sh
+@@ -16,10 +16,10 @@ varCheckList=(
+ 
+ envContents=""
+ 
+-if [ -f ".env" ]; then
+-    envContents=`cat .env`
++if [ -f "${RUNNER_ROOT:-"."}/.env" ]; then
++    envContents=`cat "${RUNNER_ROOT:-"."}/.env"`
+ else
+-    touch .env
++    touch "${RUNNER_ROOT:-"."}/.env"
+ fi
+ 
+ function writeVar()
+@@ -29,12 +29,12 @@ function writeVar()
+     if test "${envContents#*$checkDelim}" = "$envContents"
+     then
+         if [ ! -z "${!checkVar}" ]; then
+-            echo "${checkVar}=${!checkVar}">>.env
++            echo "${checkVar}=${!checkVar}">>"${RUNNER_ROOT:-"."}/.env"
+         fi
+     fi 
+ }
+ 
+-echo $PATH>.path
++echo $PATH>"${RUNNER_ROOT:-"."}/.path"
+ 
+ for var_name in ${varCheckList[@]}
+ do
+diff --git a/src/Runner.Listener/Program.cs b/src/Runner.Listener/Program.cs
+index d4d5e43..beacc9d 100644
+--- a/src/Runner.Listener/Program.cs
++++ b/src/Runner.Listener/Program.cs
+@@ -148,7 +148,7 @@ namespace GitHub.Runner.Listener
+         private static void LoadAndSetEnv()
+         {
+             var binDir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+-            var rootDir = new DirectoryInfo(binDir).Parent.FullName;
++            var rootDir = Environment.GetEnvironmentVariable("RUNNER_ROOT") ?? new DirectoryInfo(binDir).Parent.FullName;
+             string envFile = Path.Combine(rootDir, ".env");
+             if (File.Exists(envFile))
+             {
+-- 
+2.38.1
+
