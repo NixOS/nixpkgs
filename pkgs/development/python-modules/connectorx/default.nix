@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sfu-db";
     repo = "connector-x";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-L/tI2Lux+UnXZrpBxXX193pvb34hr5kqWo0Ncb1V+R0=";
   };
 
