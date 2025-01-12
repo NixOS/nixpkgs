@@ -4962,6 +4962,12 @@
     name = "Dov Alperin";
     keys = [ { fingerprint = "4EED 5096 B925 86FA 1101  6673 7F2C 07B9 1B52 BB61"; } ];
   };
+  da-luce = {
+    email = "daltonluce42@gmail.com";
+    github = "da-luce";
+    githubId = 102048662;
+    name = "Dalton Luce";
+  };
   damhiya = {
     name = "SoonWon Moon";
     email = "damhiya@gmail.com";
