@@ -7,6 +7,7 @@
   SDL2_ttf,
   copyDesktopItems,
   expat,
+  fetchurl,
   flac,
   fontconfig,
   glm,
@@ -18,7 +19,6 @@
   libpulseaudio,
   makeDesktopItem,
   makeWrapper,
-  papirus-icon-theme,
   pkg-config,
   portaudio,
   portmidi,
@@ -156,7 +156,10 @@ stdenv.mkDerivation rec {
   # to the final package after we figure out how they work
   installPhase =
     let
-      icon = "${papirus-icon-theme}/share/icons/Papirus/32x32/apps/mame.svg";
+      icon = fetchurl {
+        url = "https://raw.githubusercontent.com/PapirusDevelopmentTeam/papirus-icon-theme/refs/heads/master/Papirus/32x32/apps/mame.svg";
+        hash = "sha256-s44Xl9UGizmddd/ugwABovM8w35P0lW9ByB69MIpG+E=";
+      };
     in
     ''
       runHook preInstall
@@ -222,7 +225,6 @@ stdenv.mkDerivation rec {
     ];
     maintainers = with maintainers; [ thiagokokada ];
     platforms = platforms.unix;
-    broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "mame";
   };
 }
