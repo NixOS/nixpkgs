@@ -63,7 +63,9 @@ python.pkgs.buildPythonApplication rec {
     "cryptography"
     "mashumaro"
     "orjson"
+    "pillow"
     "xmltodict"
+    "zeroconf"
   ];
 
   dependencies =
