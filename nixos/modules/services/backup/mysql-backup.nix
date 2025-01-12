@@ -90,10 +90,13 @@ in
           Compression level to use for ${lib.concatStringsSep ", " (lib.init (lib.attrNames compressionAlgs))} or ${lib.last (lib.attrNames compressionAlgs)}.
           ${lib.concatStringsSep "\n" (
             lib.mapAttrsToList (
-              name: algo: "  For ${name}: ${toString algo.minLevel}-${toString algo.maxLevel}"
+              name: algo: "- For ${name}: ${toString algo.minLevel}-${toString algo.maxLevel}"
             ) compressionAlgs
           )}
-          (note: if compression level is also specified in gzipOptions, the gzipOptions value will be overwritten)
+          
+          :::{.note}
+          If compression level is also specified in gzipOptions, the gzipOptions value will be overwritten
+          :::
         '';
       };
 
