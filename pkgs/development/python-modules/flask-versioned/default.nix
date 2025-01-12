@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "flask-versioned";
-  version = "0.9.4-20101221";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
     owner = "pilt";
