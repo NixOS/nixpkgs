@@ -6,13 +6,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "rpl";
-  version = "1.15.7";
+  version = "1.16";
 
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Xq3GLa1TnS4nobPHHCkFUEo9vgI4DGyY2/hQWtkwNRA=";
+    hash = "sha256-uBpzKYfdGu2j1ZEaw4TN1fH+W9VLrJf7a87vzZBBU3Y=";
   };
 
   nativeBuildInputs = [
