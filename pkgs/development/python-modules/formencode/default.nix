@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  isPy27,
+  pythonOlder,
   fetchPypi,
   setuptools-scm,
   six,
@@ -14,9 +14,9 @@
 buildPythonPackage rec {
   pname = "formencode";
   version = "2.1.0";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = isPy27;
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "FormEncode";
