@@ -13,7 +13,7 @@ let
         src = fetchFromGitHub {
           owner = "python-validators";
           repo = "validators";
-          rev = version;
+          tag = version;
           hash = "sha256-ZnLyTHlsrXthGnaPzlV2ga/UTm5SSEHLTwC/tobiPak=";
         };
         propagatedBuildInputs = [ super.decorator super.six ];
@@ -35,7 +35,7 @@ let
       lxml = super.lxml.overridePythonAttrs (oldAttrs: rec {
         version = "5.1.0";
         src = oldAttrs.src.override {
-          rev = version;
+          tag = version;
           hash = "sha256-eWLYzZWatYDmhuBTZynsdytlNFKKmtWQ1XIyzVD8sDY=";
         };
       });
