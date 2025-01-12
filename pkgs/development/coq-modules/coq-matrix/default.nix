@@ -6,7 +6,7 @@
 mkCoqDerivation {
   pname = "matrix";
   owner = "zhengpushi";
-  repo = "https://github.com/zhengpushi/CoqMatrix":
+  repo = "CoqMatrix":
   defaultVersion = "1.0.6";
   release = {
     "1.0.6".sha256 = "sha256-Myxwy749ZCBpqia6bf91cMTyJn0nRzXskD7Ue8kc37c="
