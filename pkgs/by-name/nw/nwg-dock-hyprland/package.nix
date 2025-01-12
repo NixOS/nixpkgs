@@ -10,7 +10,7 @@
 
 buildGoModule rec {
   pname = "nwg-dock-hyprland";
-  version = "0.4.0";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
