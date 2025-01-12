@@ -39,6 +39,7 @@ mapAliases ({
   acoustics = throw "acoustics has been removed because the upstream repository was archived in 2024"; # Added 2024-10-04
   adafruit-nrfutil = throw "adafruit-nrfutil has been promoted to a top-level attribute name: `pkgs.adafruit-nrfutil`."; # Added 2023-11-19
   aeppl = throw "aeppl was removed as it depends on aesara, which is unmaintained"; # added 2025-01-12
+  aesara = throw "aesara was removed as the upstream repository is unmaintained"; # added 2025-01-12
   aioaladdinconnect = throw "aioaladdinconnect has been removed, as the API is supported was obsoleted on 2024-01-24."; # Added 2024-06-07
   aiohttp-isal = throw "aiohttp-isal has been removed, as it has been archived and replace by aiohttp-fast-zlib"; # Added 2024-08-11
   aiohttp-zlib-ng = throw "aiohttp-zlib-ng has been removed, as it has been archived and replaced by aiohttp-fast-zlib"; # Added 2024-11-14

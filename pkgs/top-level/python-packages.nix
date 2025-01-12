@@ -101,8 +101,6 @@ self: super: with self; {
 
   aerosandbox = callPackage ../development/python-modules/aerosandbox { };
 
-  aesara = callPackage ../development/python-modules/aesara { };
-
   aesedb = callPackage ../development/python-modules/aesedb { };
 
   aetcd = callPackage ../development/python-modules/aetcd { };
