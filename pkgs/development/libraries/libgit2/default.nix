@@ -16,6 +16,7 @@
 , python3Packages
 , gitstatus
 , llhttp
+, gitMinimal
 , withGssapi ? false
 , krb5
 }:
@@ -46,13 +47,33 @@ stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_LIBRARY_PATH=${stdenv.cc.libc}/lib"
   ];
 
-  nativeBuildInputs = [ cmake python3 pkg-config ];
+  nativeBuildInputs = [ cmake python3 pkg-config ] ++ lib.optionals (!stdenv.hostPlatform.isWindows) [
+    # Needed for `git apply`; see `prePatch`
+    gitMinimal
+  ];
 
   buildInputs = [ zlib libssh2 openssl pcre2 llhttp ]
     ++ lib.optional withGssapi krb5
     ++ lib.optional stdenv.hostPlatform.isDarwin Security;
 
   propagatedBuildInputs = lib.optional (!stdenv.hostPlatform.isLinux) libiconv;
+
+  patches = [
+    # Required by nix. Will be included in the next release of libgit2
+    ./libgit2-mempack-thin-packfile.patch
+  ] ++ lib.optionals (!stdenv.hostPlatform.isWindows) [
+    ./libgit2-packbuilder-callback-interruptible.patch
+  ];
+
+  # Only `git apply` can handle git binary patches
+  prePatch = lib.optionalString (!stdenv.hostPlatform.isWindows) ''
+    patch() {
+      git apply
+    }
+  '';
+  postPatch = lib.optionalString (!stdenv.hostPlatform.isWindows) ''
+    unset -f patch
+  '';
 
   doCheck = true;
   checkPhase = ''
