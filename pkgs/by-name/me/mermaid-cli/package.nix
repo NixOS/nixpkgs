@@ -1,63 +1,49 @@
 {
+  buildNpmPackage,
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchYarnDeps,
   makeWrapper,
   nodejs,
-  fixup-yarn-lock,
-  yarn,
   chromium,
 }:
-
-stdenv.mkDerivation rec {
+let
+  version = "11.4.2";
+in
+buildNpmPackage {
   pname = "mermaid-cli";
-  version = "10.9.0";
+  version = version;
 
   src = fetchFromGitHub {
     owner = "mermaid-js";
     repo = "mermaid-cli";
     rev = version;
-    hash = "sha256-o9QaJsJlfqsAguYGHAdf8aqZWbOgDJs+0KVQAVtRlA0=";
+    hash = "sha256-hj6pnucms6OcLuIebnlHMQj2K8zMbyuWzvVkZh029Sw=";
   };
 
-  offlineCache = fetchYarnDeps {
-    yarnLock = "${src}/yarn.lock";
-    hash = "sha256-SfRzn5FxO+Ls+ne7ay3tySNLr+awEJ9fo/nwcAY11qA=";
-  };
+  patches = [
+    ./integrity.patch # https://github.com/mermaid-js/mermaid-cli/issues/828
+    ./remove-puppeteer-from-dev-deps.patch # https://github.com/mermaid-js/mermaid-cli/issues/830
+  ];
+
+  npmDepsHash = "sha256-lrj3lSCfqUfUFvtnJ/ELNUFE9kNTC4apnGrYxYmkUtE=";
 
   nativeBuildInputs = [
     makeWrapper
     nodejs
-    fixup-yarn-lock
-    yarn
   ];
 
-  configurePhase = ''
-    runHook preConfigure
+  env = {
+    PUPPETEER_SKIP_DOWNLOAD = true;
+  };
 
-    export HOME=$(mktemp -d)
-    yarn config --offline set yarn-offline-mirror "$offlineCache"
-    fixup-yarn-lock yarn.lock
-    yarn --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive install
-    patchShebangs node_modules
-
-    runHook postConfigure
-  '';
-
-  buildPhase = ''
-    runHook preBuild
-
-    yarn --offline prepare
-
-    runHook postBuild
-  '';
+  npmBuildScript = "prepare";
 
   installPhase =
     ''
       runHook preInstall
 
-      yarn --offline --production install
+      npm --omit=dev --include=peer --ignore-scripts install
 
       mkdir -p "$out/lib/node_modules/@mermaid-js/mermaid-cli"
       cp -r . "$out/lib/node_modules/@mermaid-js/mermaid-cli"
