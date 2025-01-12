@@ -1,41 +1,38 @@
 {
   lib,
+  stdenv,
   boost,
   fetchFromGitHub,
   installShellFiles,
-  mkDerivation,
   muparser,
   pkg-config,
-  qmake,
-  qtbase,
-  qtsvg,
-  qttools,
-  runtimeShell,
+  qt5,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "librecad";
   version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "LibreCAD";
     repo = "LibreCAD";
-    rev = version;
-    sha256 = "sha256-GBn4lduzaKWEWzeTNjC9TpioSouVj+jVl32PLjc8FBc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-GBn4lduzaKWEWzeTNjC9TpioSouVj+jVl32PLjc8FBc=";
   };
 
   buildInputs = [
     boost
     muparser
-    qtbase
-    qtsvg
+    qt5.qtbase
+    qt5.qtsvg
   ];
 
   nativeBuildInputs = [
     installShellFiles
     pkg-config
-    qmake
-    qttools
+    qt5.qmake
+    qt5.qttools
+    qt5.wrapQtAppsHook
   ];
 
   qmakeFlags = [
@@ -44,11 +41,8 @@ mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace scripts/postprocess-unix.sh \
-      --replace /bin/sh ${runtimeShell}
-
     substituteInPlace librecad/src/main/qc_applicationwindow.cpp \
-      --replace __DATE__ 0
+      --replace-warn __DATE__ 0
   '';
 
   installPhase = ''
@@ -68,11 +62,11 @@ mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "2D CAD package based on Qt";
     homepage = "https://librecad.org";
-    license = licenses.gpl2Only;
-    maintainers = [ ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ sikmir ];
+    platforms = lib.platforms.linux;
   };
-}
+})
