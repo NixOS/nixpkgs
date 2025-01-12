@@ -1,9 +1,7 @@
 {
   lib,
-  runtimeShell,
   stdenvNoCC,
   callPackage,
-  writeShellScript,
   makeWrapper,
   dotnetCorePackages,
   cacert,
@@ -211,7 +209,6 @@ stdenvNoCC.mkDerivation (
     args' = transformArgs finalAttrs args;
     inherit (args')
       nugetDeps
-      runtimeId
       meta
       dotnet-sdk
       ;
