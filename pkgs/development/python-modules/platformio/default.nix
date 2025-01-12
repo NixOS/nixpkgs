@@ -8,19 +8,18 @@
   spdx-license-list-data,
   substituteAll,
 }:
-
 with python3.pkgs;
 buildPythonPackage rec {
   pname = "platformio";
 
-  version = "6.1.11";
+  version = "6.1.16";
 
   # pypi tarballs don't contain tests - https://github.com/platformio/platformio-core/issues/1964
   src = fetchFromGitHub {
     owner = "platformio";
     repo = "platformio-core";
     rev = "v${version}";
-    sha256 = "sha256-NR4UyAt8q5sUGtz1Sy6E8Of7y9WrH9xpcAWzLBeDQmo=";
+    sha256 = "sha256-hZgbLUk2Krynut5uD6GMxWA+95y8ONNUmv4kaAltumk=";
   };
 
   # outputs = [ "out" ];
@@ -91,6 +90,7 @@ buildPythonPackage rec {
     "tests/misc/test_maintenance.py"
     # requires internet connection
     "tests/misc/ino2cpp/test_ino2cpp.py"
+    "tests/project/test_metadata.py"
   ];
 
   disabledTests = [
@@ -160,6 +160,7 @@ buildPythonPackage rec {
       "test_misc.py::test_ping_internet_ips"
       "test_misc.py::test_platformio_cli"
       "test_pkgmanifest.py::test_packages"
+      "test_metadata.py::test_metadata_dump"
     ]);
 
   meta = with lib; {
