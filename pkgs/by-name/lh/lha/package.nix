@@ -24,6 +24,7 @@ stdenv.mkDerivation {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
       sander
+      momeemt
     ];
     # Some of the original LHa code has been rewritten and the current author
     # considers adopting a "true" free and open source license for it.
