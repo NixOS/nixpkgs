@@ -42,8 +42,6 @@ vimUtils.buildVimPlugin {
     ln -s ${spectre_oxi}/lib/libspectre_oxi.* $out/lua/spectre_oxi.so
   '';
 
-  nvimRequireCheck = "spectre";
-
   passthru = {
     updateScript = nix-update-script {
       extraArgs = [ "--version=branch" ];
