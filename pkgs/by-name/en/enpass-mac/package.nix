@@ -5,6 +5,11 @@
   gzip,
   xar,
   cpio,
+  writeShellApplication,
+  curl,
+  cacert,
+  gawk,
+  common-updater-scripts,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -44,6 +49,21 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = lib.getExe (writeShellApplication {
+    name = "enpass-mac-update-script";
+    runtimeInputs = [
+      curl
+      cacert
+      gawk
+      common-updater-scripts
+    ];
+    text = ''
+      url="https://www.enpass.io/download/macos/website/stable"
+      version=$(curl -Ls -o /dev/null -w "%{url_effective}" "$url" | awk -F'/' '{print $7}')
+      update-source-version enpass-mac "$version"
+    '';
+  });
 
   meta = {
     description = "Choose your own safest place to store passwords";
