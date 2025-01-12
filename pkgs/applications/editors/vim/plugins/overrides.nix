@@ -1015,6 +1015,17 @@ in
     nvimSkipModule = "dropbar.menu";
   };
 
+  easy-dotnet-nvim = super.easy-dotnet-nvim.overrideAttrs {
+    dependencies = with self; [
+      plenary-nvim
+      telescope-nvim
+    ];
+    checkInputs = with self; [
+      # Pickers, can use telescope or fzf-lua
+      fzf-lua
+    ];
+  };
+
   efmls-configs-nvim = super.efmls-configs-nvim.overrideAttrs {
     dependencies = [ self.nvim-lspconfig ];
   };
