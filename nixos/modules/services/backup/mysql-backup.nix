@@ -93,7 +93,7 @@ in
               name: algo: "- For ${name}: ${toString algo.minLevel}-${toString algo.maxLevel}"
             ) compressionAlgs
           )}
-          
+
           :::{.note}
           If compression level is also specified in gzipOptions, the gzipOptions value will be overwritten
           :::
@@ -148,7 +148,9 @@ in
     # assert config to be correct
     assertions = [
       {
-        assertion = cfg.compressionLevel == null || selectedAlg.minLevel <= cfg.compressionLevel && cfg.compressionLevel <= selectedAlg.maxLevel;
+        assertion =
+          cfg.compressionLevel == null
+          || selectedAlg.minLevel <= cfg.compressionLevel && cfg.compressionLevel <= selectedAlg.maxLevel;
         message = "${cfg.compressionAlg} compression level must be between ${toString selectedAlg.minLevel} and ${toString selectedAlg.maxLevel}";
       }
     ];
