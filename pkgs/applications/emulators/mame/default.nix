@@ -28,6 +28,7 @@
   rapidjson,
   sqlite,
   utf8proc,
+  versionCheckHook,
   which,
   writeScript,
   zlib,
@@ -190,6 +191,10 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = [ "-h" ];
 
   passthru.updateScript = writeScript "mame-update-script" ''
     #!/usr/bin/env nix-shell
