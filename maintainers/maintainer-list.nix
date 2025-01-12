@@ -11074,12 +11074,6 @@
     github = "johnpyp";
     githubId = 20625636;
   };
-  johnramsden = {
-    email = "johnramsden@riseup.net";
-    github = "johnramsden";
-    githubId = 8735102;
-    name = "John Ramsden";
-  };
   johnrichardrinehart = {
     email = "johnrichardrinehart@gmail.com";
     github = "johnrichardrinehart";
