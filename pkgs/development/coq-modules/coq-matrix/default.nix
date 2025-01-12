@@ -2,13 +2,12 @@
   lib,
   mkCoqDerivation,
   coq,
-  version ? "8.19"
+  version ? null
 }:
 mkCoqDerivation {
   pname = "matrix";
   owner = "zhengpushi";
   repo = "CoqMatrix";
-  inherit version;  
   defaultVersion =  "1.0.6";
 
   release = {
