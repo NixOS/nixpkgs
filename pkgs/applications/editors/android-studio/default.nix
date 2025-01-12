@@ -9,8 +9,8 @@ let
     inherit tiling_wm;
   };
   stableVersion = {
-    version = "2024.2.1.12"; # "Android Studio Ladybug | 2024.2.1 Patch 3"
-    sha256Hash = "sha256-TfUax9c+RSAzg0GKU3yVYsWL72q4DUB0zZiss4flyqY=";
+    version = "2024.2.2.13"; # "Android Studio Ladybug Feature Drop | 2024.2.2"
+    sha256Hash = "sha256-t/4e1KeVm9rKeo/VdGHbv5ogXrI8whjtgo7YjouZjLU=";
   };
   betaVersion = {
     version = "2024.2.2.12"; # "Android Studio Ladybug Feature Drop | 2024.2.2 RC 2"
