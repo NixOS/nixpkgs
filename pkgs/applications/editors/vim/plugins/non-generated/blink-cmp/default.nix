@@ -61,6 +61,9 @@ vimUtils.buildVimPlugin {
       redxtech
     ];
   };
-  doInstallCheck = true;
-  nvimRequireCheck = "blink-cmp";
+
+  nvimSkipModule = [
+    # Module for reproducing issues
+    "repro"
+  ];
 }
