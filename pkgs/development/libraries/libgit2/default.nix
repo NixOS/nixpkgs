@@ -22,7 +22,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libgit2";
-  version = "1.8.4";
+  version = "1.9.0";
   # also check the following packages for updates: python3Packages.pygit2 and libgit2-glib
 
   outputs = ["lib" "dev" "out"];
@@ -31,12 +31,12 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "libgit2";
     repo = "libgit2";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-AVhDq9nC2ccwFYJmejr0hmnyV4AxZLamuHktYPlkzUs=";
+    hash = "sha256-v32yGMo5oFEl6HUdg8czCsCLDL+sy9PPT0AEWmKxUhk=";
   };
 
   cmakeFlags = [
     "-DREGEX_BACKEND=pcre2"
-    "-DUSE_HTTP_PARSER=system"
+    "-DUSE_HTTP_PARSER=llhttp"
     "-DUSE_SSH=ON"
     (lib.cmakeBool "USE_GSSAPI" withGssapi)
     "-DBUILD_SHARED_LIBS=${if staticBuild then "OFF" else "ON"}"
@@ -44,6 +44,9 @@ stdenv.mkDerivation (finalAttrs: {
     "-DDLLTOOL=${stdenv.cc.bintools.targetPrefix}dlltool"
     # For ws2_32, refered to by a `*.pc` file
     "-DCMAKE_LIBRARY_PATH=${stdenv.cc.libc}/lib"
+  ] ++ lib.optionals stdenv.hostPlatform.isOpenBSD [
+    # openbsd headers fail with default c90
+    "-DCMAKE_C_STANDARD=99"
   ];
 
   nativeBuildInputs = [ cmake python3 pkg-config ];
