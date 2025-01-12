@@ -16486,6 +16486,12 @@
     githubId = 810877;
     name = "Tom Doggett";
   };
+  noghartt = {
+    name = "noghartt";
+    email = "nix@noghartt.dev";
+    github = "noghartt";
+    githubId = 47952043;
+  };
   noisersup = {
     email = "patryk@kwiatek.xyz";
     github = "noisersup";
