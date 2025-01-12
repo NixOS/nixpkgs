@@ -8,6 +8,7 @@ mkCoqDerivation {
   pname = "matrix";
   owner = "zhengpushi";
   repo = "CoqMatrix";
+  inherit version;
   defaultVersion =
     with lib.versions;
     lib.switch coq.version [
