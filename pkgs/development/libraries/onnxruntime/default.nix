@@ -186,6 +186,8 @@ effectiveStdenv.mkDerivation rec {
     "-DFETCHCONTENT_SOURCE_DIR_RE2=${re2.src}"
     "-DFETCHCONTENT_SOURCE_DIR_SAFEINT=${safeint}"
     "-DFETCHCONTENT_TRY_FIND_PACKAGE_MODE=ALWAYS"
+    # fails to find protoc on darwin, so specify it
+    "-DONNX_CUSTOM_PROTOC_EXECUTABLE=${protobuf_21}/bin/protoc"
     "-Donnxruntime_BUILD_SHARED_LIB=ON"
     (lib.cmakeBool "onnxruntime_BUILD_UNIT_TESTS" doCheck)
     "-Donnxruntime_ENABLE_LTO=ON"
