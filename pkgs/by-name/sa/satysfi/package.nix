@@ -90,7 +90,10 @@ ocamlPackages.buildDunePackage {
     description = "Statically-typed, functional typesetting system";
     changelog = "https://github.com/gfngfn/SATySFi/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.lgpl3Only;
-    maintainers = with lib.maintainers; [ mt-caret ];
+    maintainers = with lib.maintainers; [
+      mt-caret
+      momeemt
+    ];
     platforms = lib.platforms.all;
     mainProgram = "satysfi";
   };
