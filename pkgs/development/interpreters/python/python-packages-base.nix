@@ -14,7 +14,23 @@ let
 
   # Derivations built with `buildPythonPackage` can already be overridden with `override`, `overrideAttrs`, and `overrideDerivation`.
   # This function introduces `overridePythonAttrs` and it overrides the call to `buildPythonPackage`.
-  makeOverridablePythonPackage =
+  makeOverridablePython3Package =
+    f:
+    lib.mirrorFunctionArgs f (
+      origArgs':
+      let
+        origArgs = lib.toFunction origArgs';
+        args = lib.extends (_: prev: {
+          passthru = (prev.passthru or { }) // {
+            overridePythonAttrs =
+              overlay: makeOverridablePython3Package f (lib.extends (lib.toExtension overlay) origArgs);
+          };
+        }) origArgs;
+      in
+      f args
+    );
+  # let's not backport https://github.com/NixOS/nixpkgs/pull/370232 to python 2
+  makeOverridablePython2Package =
     f:
     lib.mirrorFunctionArgs f (
       origArgs:
@@ -22,7 +38,7 @@ let
         args = lib.fix (
           lib.extends (_: previousAttrs: {
             passthru = (previousAttrs.passthru or { }) // {
-              overridePythonAttrs = newArgs: makeOverridablePythonPackage f (overrideWith newArgs);
+              overridePythonAttrs = newArgs: makeOverridablePython2Package f (overrideWith newArgs);
             };
           }) (_: origArgs)
         );
@@ -33,12 +49,15 @@ let
         result
       else if builtins.isFunction result then
         {
-          overridePythonAttrs = newArgs: makeOverridablePythonPackage f (overrideWith newArgs);
+          overridePythonAttrs = newArgs: makeOverridablePython2Package f (overrideWith newArgs);
           __functor = self: result;
         }
       else
         result
     );
+
+  makeOverridablePythonPackage =
+    if python.isPy3k then makeOverridablePython3Package else makeOverridablePython2Package;
 
   mkPythonDerivation =
     if python.isPy3k then ./mk-python-derivation.nix else ./python2/mk-python-derivation.nix;
