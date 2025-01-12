@@ -23,7 +23,7 @@ poc-foo.overrideAttrs (
       inherit (finalAttrs) someVal;
     };
 
-    myself = finalAttrs.finalPackage;
+    myself = finalAttrs;
 
     bruv = finalAttrs.__pkgs;
 

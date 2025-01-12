@@ -29,5 +29,4 @@ mkPackage (finalAttrs: {
     inherit (finalAttrs) src installPhase nativeBuildInputs;
   };
 
-  justTheAttrs = finalAttrs;
 })

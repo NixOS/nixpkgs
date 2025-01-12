@@ -1,76 +1,116 @@
-{ lib, mkBaseDerivation, ... }:
+{ lib, ... }@defaultPkgs:
 
 let
   # similar to lib.extends, but we don't `//` on top of prevAttrs
+  # maybe unneeded, but maybe better than lib.extends
   transforms =
     transformation: rattrs: finalAttrs:
     let
       prevAttrs = rattrs finalAttrs;
     in
     transformation finalAttrs prevAttrs;
+
+  composeTransformations =
+    f: g: # <- inputs
+    final: prev:
+    g final (f final prev);
+
+  composeManyTransformations = lib.foldr composeTransformations (final: prev: prev);
 in
+
+# all builder-wrappers should implement something similar to this: transform attributes that will be passed to the builder one step below
 
 let
 
-  # opinion:
-  # stdenv.*Platform should probably not be part of stdenv, but part of pkgs
-  # perhaps something like pkgs.platforms.{build,host,target}
-
-  # takes in the finalAttrs of a package and outputs what the inputs of `derivation` should be
-  mkAttrsForRealDrv =
-    {
-      name,
-      outputs,
-      shellVars,
-      stdenv,
-      realBuilder,
-      args,
-      ...
-    }:
-
-    ## TODO: don't allow special values in shellVars or envVars
-    {
-      __structuredAttrs = false; # TODO
-      inherit name outputs;
-      inherit (stdenv.buildPlatform) system; # don't get from stdenv
-      builder = realBuilder;
-      inherit args;
-    }
-    // shellVars; # TODO: __structuredAttrs & .env
-
-  # all builder-wrappers should implement something similar to this: transform attributes that will be passed to the builder one step below
-  transformAttrs =
+  makeAdvAttrs =
     finalAttrs: prevAttrs:
-    {
-      # TODO: perhaps these kinds of default values have unoptimal error messages
-      name = "${finalAttrs.pname}-${finalAttrs.version}";
-      outputs = [ "out" ];
-      doCheck = finalAttrs.stdenv.buildPlatform.canExecute finalAttrs.stdenv.hostPlatform;
-
-      realBuilder = finalAttrs.stdenv.shell;
-      builder = ../stdenv/generic/default-builder.sh;
-      inherit (finalAttrs.__pkgs) stdenv;
-
-      args = [
-        "-e"
-        finalAttrs.builder
-      ];
-    }
-    // prevAttrs
+    prevAttrs
     // {
-      shellVars = prevAttrs.shellVars // {
-        inherit (finalAttrs) stdenv;
+      name = prevAttrs.name or "${finalAttrs.pname}-${finalAttrs.version}";
+
+      # doCheck = finalAttrs.stdenv.buildPlatform.canExecute finalAttrs.stdenv.hostPlatform;
+      # TODO: more stuff
+    };
+
+  makeStdenvAttrs =
+    finalAttrs: prevAttrs:
+    assert !(prevAttrs ? drvAttrs); # wrappers shouldn't set drvAttrs directly
+    prevAttrs
+    // {
+      outputs = prevAttrs.outputs or [ "out" ]; # should we always set this?
+
+      __pkgs = defaultPkgs;
+      stdenv = prevAttrs.stdenv or finalAttrs.__pkgs.stdenv;
+      builder = prevAttrs.builder or ../stdenv/generic/default-builder.sh;
+      realBuilder = finalAttrs.stdenv.shell;
+
+      drvAttrs = finalAttrs.shellVars or { } // {
+        # TODO: figure out what to do about env.* and __structuredAttrs
+        __structuredAttrs = false;
+        inherit (finalAttrs) name outputs;
+        inherit (finalAttrs.stdenv.buildPlatform) system; # don't get from stdenv
+        builder = finalAttrs.realBuilder;
+        args = [
+          "-e"
+          finalAttrs.builder
+        ];
+        inherit (finalAttrs) stdenv; # maybe should be part of shellVars, but it's very important, so this is probably better
       };
     };
 
+  # IMPORTANT: we cannot generate .out and friends because those names are taken from finalAttrs.outputs
+  makeDrvAttrs =
+    finalAttrs: prevAttrs:
+    let
+      outputs = finalAttrs.drvAttrs.outputs or [ "out" ];
+      backingDrv = builtins.derivationStrict finalAttrs.drvAttrs;
+    in
+    prevAttrs
+    // {
+      outputName = prevAttrs.outputName or (lib.head outputs);
+      inherit (backingDrv) drvPath;
+      outPath = backingDrv.${finalAttrs.outputName};
+      type = "derivation";
+    };
 in
+
+/*
+    let
+
+      # CURRENTLY UNUSED
+    # Based on lib.makeExtensible, with modifications
+    makeExtensible' =
+      rattrs:
+      let
+        overrideAttrs = f0: makeExtensible' (lib.extends (lib.toExtension f0) rattrs);
+
+        # NOTE: The following is a hint that will be printed by the Nix cli when
+        # encountering an infinite recursion. It must not be formatted into
+        # separate lines, because Nix would only show the last line of the comment.
+
+        helperAttrs = { inherit overrideAttrs; };
+
+        # An infinite recursion here can be caused by having the attribute names of expression `e` in `.overrideAttrs(finalAttrs: previousAttrs: e)` depend on `finalAttrs`. Only the attribute values of `e` can depend on `finalAttrs`.
+        finalAttrs = (rattrs finalAttrs) // helperAttrs;
+      in
+      finalAttrs;
+  in
+*/
 
 let
   mkPackage =
     rattrs:
     let
-      rattrs' = transforms transformAttrs rattrs;
+      combinedTransformation = composeManyTransformations [
+        makeAdvAttrs
+        makeStdenvAttrs
+        makeDrvAttrs
+      ];
+
+      rattrs' = transforms combinedTransformation rattrs;
     in
-    mkBaseDerivation mkAttrsForRealDrv rattrs';
+
+    lib.makeExtensibleWithCustomName "overrideAttrs" rattrs';
 in
+
 mkPackage
