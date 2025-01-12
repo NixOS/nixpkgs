@@ -14,6 +14,7 @@
   which,
   darwin,
   ncurses,
+  makeWrapper,
 }:
 
 let
@@ -44,6 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     getopt
     gfortran
     which
+    makeWrapper
   ];
 
   buildInputs = [
@@ -56,7 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches =
     [
-      ./wrapper.patch
       ./python-ldflags.patch
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin ([
@@ -74,19 +75,21 @@ stdenv.mkDerivation (finalAttrs: {
   );
 
   configurePhase = ''
-    substituteInPlace admin/wrapper.sh \
-      --subst-var out \
-      --subst-var-by PYTHONHOME ${python3Env}
     substituteInPlace utilities/main/gag-makedepend.pl --replace-fail '/usr/bin/perl' ${lib.getExe perl}
     source admin/gildas-env.sh -c gfortran -o openmp
     echo "gag_doc:        $out/share/doc/" >> kernel/etc/gag.dico.lcl
   '';
 
   postInstall = ''
-    mkdir -p $out/bin
     cp -a ../gildas-exe/* $out
     mv $out/$GAG_EXEC_SYSTEM $out/libexec
-    install -Dm755 admin/wrapper.sh $out/bin/imager
+    makeWrapper $out/libexec/bin/imager $out/bin/imager \
+       --set GAG_ROOT_DIR $out \
+       --set GAG_PATH $out/etc \
+       --set GAG_GAG \$HOME/.gag \
+       --set PYTHONHOME ${python3Env} \
+       --prefix PYTHONPATH : $out/libexec/python \
+       --set LD_LIBRARY_PATH $out/libexec/lib/
   '';
 
   meta = {
