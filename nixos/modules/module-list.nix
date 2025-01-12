@@ -1433,6 +1433,7 @@
   ./services/web-apps/agorakit.nix
   ./services/web-apps/alps.nix
   ./services/web-apps/anuko-time-tracker.nix
+  ./services/web-apps/archivebox.nix
   ./services/web-apps/artalk.nix
   ./services/web-apps/audiobookshelf.nix
   ./services/web-apps/bluemap.nix
