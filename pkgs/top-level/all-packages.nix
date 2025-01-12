@@ -508,6 +508,7 @@ with pkgs;
     buildDotnetGlobalTool
     mkNugetSource
     mkNugetDeps
+    autoPatchcilHook
     ;
 
   fable = callPackage ../development/tools/fable { };

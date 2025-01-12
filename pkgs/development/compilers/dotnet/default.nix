@@ -60,6 +60,7 @@ makeScopeWithSplicing' {
 
       patchNupkgs = callPackage ./patch-nupkgs.nix { };
       nugetPackageHook = callPackage ./nuget-package-hook.nix { };
+      autoPatchcilHook = callPackage ../../../build-support/dotnet/auto-patchcil-hook { };
 
       buildDotnetModule = callPackage ../../../build-support/dotnet/build-dotnet-module { };
       buildDotnetGlobalTool = callPackage ../../../build-support/dotnet/build-dotnet-global-tool { };
