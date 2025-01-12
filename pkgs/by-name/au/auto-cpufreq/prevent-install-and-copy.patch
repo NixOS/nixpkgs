@@ -1,0 +1,49 @@
+diff --git a/auto_cpufreq/bin/auto_cpufreq.py b/auto_cpufreq/bin/auto_cpufreq.py
+index d9fcd37..7436a7e 100755
+--- a/auto_cpufreq/bin/auto_cpufreq.py
++++ b/auto_cpufreq/bin/auto_cpufreq.py
+@@ -136,20 +136,7 @@ def main(monitor, live, daemon, install, update, remove, force, config, stats, g
+                 except KeyboardInterrupt: break
+             conf.notifier.stop()
+         elif install:
+-            root_check()
+-            if IS_INSTALLED_WITH_SNAP:
+-                running_daemon_check()
+-                gnome_power_detect_snap()
+-                tlp_service_detect_snap()
+-                bluetooth_notif_snap()
+-                gov_check()
+-                run("snapctl set daemon=enabled", shell=True)
+-                run("snapctl start --enable auto-cpufreq", shell=True)
+-            else:
+-                running_daemon_check()
+-                gov_check()
+-                deploy_daemon()
+-            deploy_complete_msg()
++            print("install is disabled in the nix package")
+         elif update:
+             root_check()
+             custom_dir = "/opt/auto-cpufreq/source"
+@@ -187,21 +174,7 @@ def main(monitor, live, daemon, install, update, remove, force, config, stats, g
+                     run(["auto-cpufreq", "--version"])
+                 else: print("Aborted")
+         elif remove:
+-            root_check()
+-            if IS_INSTALLED_WITH_SNAP:
+-                run("snapctl set daemon=disabled", shell=True)
+-                run("snapctl stop --disable auto-cpufreq", shell=True)
+-                if auto_cpufreq_stats_path.exists():
+-                    if auto_cpufreq_stats_file is not None:
+-                        auto_cpufreq_stats_file.close()
+-
+-                    auto_cpufreq_stats_path.unlink()
+-                # ToDo: 
+-                # {the following snippet also used in --update, update it there too(if required)}
+-                # * undo bluetooth boot disable
+-                gnome_power_rm_reminder_snap()
+-            else: remove_daemon()
+-            remove_complete_msg()
++            print("remove is disabled in the nix package")
+         elif stats:
+             not_running_daemon_check()
+             config_info_dialog()

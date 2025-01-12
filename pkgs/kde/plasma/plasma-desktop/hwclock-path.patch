@@ -1,0 +1,24 @@
+Index: plasma-desktop-5.8.5/kcms/dateandtime/helper.cpp
+===================================================================
+--- plasma-desktop-5.8.5.orig/kcms/dateandtime/helper.cpp
++++ plasma-desktop-5.8.5/kcms/dateandtime/helper.cpp
+@@ -48,10 +48,6 @@
+ #include <sys/types.h>
+ #endif
+
+-// We cannot rely on the $PATH environment variable, because D-Bus activation
+-// clears it. So we have to use a reasonable default.
+-static const QString exePath = QStringLiteral("/usr/sbin:/usr/bin:/sbin:/bin");
+-
+ int ClockHelper::ntp(const QStringList &ntpServers, bool ntpEnabled)
+ {
+     int ret = 0;
+@@ -227,7 +223,7 @@ int ClockHelper::tzreset()
+ 
+ void ClockHelper::toHwclock()
+ {
+-    QString hwclock = QStandardPaths::findExecutable(QStringLiteral("hwclock"), exePath.split(QLatin1Char(':')));
++    QString hwclock = QLatin1String("@hwclock@");
+     if (!hwclock.isEmpty()) {
+         KProcess::execute(hwclock, QStringList() << QStringLiteral("--systohc"));
+     }
