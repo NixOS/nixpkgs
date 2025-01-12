@@ -14,7 +14,6 @@ on:
 
 jobs:
   merge:
-    if: github.repository_owner == 'NixOS'
     runs-on: ubuntu-24.04
     name: ${{ inputs.from }} → ${{ inputs.into }}
     steps:
