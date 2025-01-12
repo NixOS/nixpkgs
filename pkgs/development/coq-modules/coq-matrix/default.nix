@@ -7,7 +7,6 @@ mkCoqDerivation {
   pname = "matrix";
   owner = "zhengpushi";
   repo = "CoqMatrix";
-  version = "8.19";
   defaultVersion = "1.0.6";
   release = {
     "1.0.6".sha256 = "sha256-XsM3fSstvB6GE5OqT7CFro+RWiYEgJsoQ5gXd74VaK0=";
