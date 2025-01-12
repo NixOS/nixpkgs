@@ -71,6 +71,9 @@ stdenv.mkDerivation {
       "x86_64-linux"
       "aarch64-linux"
     ];
-    maintainers = [ maintainers.joko ];
+    maintainers = with lib.maintainers; [
+      joko
+      liff
+    ];
   };
 }
