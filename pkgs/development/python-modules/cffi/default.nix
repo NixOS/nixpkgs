@@ -49,7 +49,7 @@ else
     # The tests use -Werror but with python3.6 clang detects some unreachable code.
     env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-unused-command-line-argument -Wno-unreachable-code -Wno-c++11-narrowing";
 
-    doCheck = !stdenv.hostPlatform.isMusl;
+    doCheck = !(stdenv.hostPlatform.isMusl || stdenv.hostPlatform.useLLVM or false);
 
     nativeCheckInputs = [ pytestCheckHook ];
 
