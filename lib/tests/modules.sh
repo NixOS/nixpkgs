@@ -586,6 +586,10 @@ checkConfigOutput '^38|27$' options.submoduleLine38.declarationPositions.1.line 
 # nested options work
 checkConfigOutput '^34$' options.nested.nestedLine34.declarationPositions.0.line ./declaration-positions.nix
 
+# Set an option with `default = [ "foo" ]` with `= [ "bar" ]` again with varying defaultPriorities
+checkConfigOutput '^\["bar"\]$' config.values.default ./defaultPriority.nix
+checkConfigOutput '^\["foo","bar"\]$' config.values.baseline ./defaultPriority.nix
+checkConfigOutput '^\["foo"\]$' config.values.force ./defaultPriority.nix
 
 cat <<EOF
 ====== module tests ======

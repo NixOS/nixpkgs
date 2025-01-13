@@ -817,9 +817,11 @@ let
   evalOptionValue = loc: opt: defs:
     let
       # Add in the default value for this option, if any.
-      defs' =
-          (optional (opt ? default)
-            { file = head opt.declarations; value = mkOptionDefault opt.default; }) ++ defs;
+      defs' = (optional (opt ? default) {
+        file = head opt.declarations;
+        value = mkOverride (opt.defaultPriority or priorities.optionDefault) opt.default;
+      })
+      ++ defs;
 
       # Handle properties, check types, and merge everything together.
       res =
@@ -1053,14 +1055,49 @@ let
       inherit priority content;
     };
 
-  mkOptionDefault = mkOverride 1500; # priority of option defaults
-  mkDefault = mkOverride 1000; # used in config sections of non-user modules to set a default
-  defaultOverridePriority = 100;
-  mkImageMediaOverride = mkOverride 60; # image media profiles can be derived by inclusion into host config, hence needing to override host config, but do allow user to mkForce
-  mkForce = mkOverride 50;
-  mkVMOverride = mkOverride 10; # used by ‘nixos-rebuild build-vm’
+  # This set contains the conventional override priority values that can be
+  # applied to definitions using `mkOverride`. Pre-applied `mkOverride`
+  # functions following the pattern of `mkPriorityName` also exist for
+  # convenience.
+  priorities = {
+    # Priority of options' default values. They get overridden by everything.
+    optionDefault = 1500;
+    # This priority exists to facilitate providing default values inside of
+    # config sections. These may get overridden if they are set with a greater
+    # priority definition elsewhere in much the same way as the optionDefault
+    # priority would but do override optionDefault values. This is *not* the
+    # default priority assigned to values when you don't explicitly provide one.
+    configDefault = 1000;
+    # This is the priority which definitions get assigned by default in config
+    # sections if you don't explicitly provide an override priority. This is the
+    # true "default" priority. The other priorities scale around this value.
+    baseline = 100;
+    # Image media profiles need to override host config in some regards but
+    # should still allow the user to forcibly override them.
+    mediaOverride = 60;
+    # Forcefully override a value
+    force = 50;
+    # VM profiles (i.e. `nixos-rebuild build-vm`) need to override some
+    # definitions regardless of the user's config.
+    vmOverride = 10;
+  };
+  mkOptionDefault = mkOverride priorities.optionDefault;
+  mkConfigDefault = mkOverride priorities.configDefault;
+  mkBaseline = mkOverride priorities.baseline;
+  mkImageMediaOverride = mkOverride priorities.mediaOverride;
+  mkForce = mkOverride priorities.force;
+  mkVMOverride = mkOverride priorities.vmOverride;
 
-  defaultPriority = warnIf (oldestSupportedReleaseIsAtLeast 2305) "lib.modules.defaultPriority is deprecated, please use lib.modules.defaultOverridePriority instead." defaultOverridePriority;
+  # Legacy aliases
+  defaultOverridePriority =
+    warnIf (oldestSupportedReleaseIsAtLeast 2505)
+      "`lib.modules.defaultOverridePriority` is deprecated, please use `lib.modules.priorities.baseline` instead."
+      priorities.baseline;
+  defaultPriority = warnIf (oldestSupportedReleaseIsAtLeast 2305) "lib.modules.defaultPriority is deprecated, please use lib.modules.priorities.baseline instead." lib.modules.priorities.baseline;
+  # Usage of this function is extremely wide-spread. While the new name is
+  # clearer and should be preferred, there isn't any great need to force people
+  # who are used to the old name to change either.
+  mkDefault = mkConfigDefault;
 
   mkFixStrictness = warn "lib.mkFixStrictness has no effect and will be removed. It returns its argument unmodified, so you can just remove any calls." id;
 
@@ -1610,8 +1647,10 @@ private //
     mkAliasOptionModule
     mkAliasOptionModuleMD
     mkAssert
+    mkBaseline
     mkBefore
     mkChangedOptionModule
+    mkConfigDefault
     mkDefault
     mkDerivedConfig
     mkFixStrictness
@@ -1627,6 +1666,7 @@ private //
     mkRenamedOptionModule
     mkRenamedOptionModuleWith
     mkVMOverride
+    priorities
     setDefaultModuleLocation
     sortProperties;
 }

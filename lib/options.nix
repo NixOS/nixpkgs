@@ -67,6 +67,8 @@ rec {
     {
     # Default value used when no definition is given in the configuration.
     default ? null,
+    # Which priority to assign to the default value. This can be used to control whether the default is be merged or overridden when the option is set.
+    defaultPriority ? lib.modules.priorities.optionDefault,
     # Textual representation of the default, for the manual.
     defaultText ? null,
     # Example value used in the manual.

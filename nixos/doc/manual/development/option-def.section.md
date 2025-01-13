@@ -68,11 +68,34 @@ be "pushed down" into the individual definitions, as if you had written:
 
 ## Setting Priorities {#sec-option-definitions-setting-priorities}
 
-A module can override the definitions of an option in other modules by
-setting an *override priority*. All option definitions that do not have the lowest
-priority value are discarded. By default, option definitions have
-priority 100 and option defaults have priority 1500.
-You can specify an explicit priority by using `mkOverride`, e.g.
+A module can override the definitions of an option in other modules by setting
+an *override priority*. All option definitions that do not have the lowest
+priority value are discarded. Definitions that have the same override priority
+are merged according to the option's type's merge rules.
+
+By default, defining an option's value will assign
+priority 100 (`baseline`) and options' default values have priority 1500
+(`optionDefault`). Thereby, an options' default value is overridden by the
+config value (this may be changed by adjusting the option's `defaultPriority`).
+
+These and further conventional override priority values are available in
+`lib.modules.priorities`. Convenience functions such as `lib.mkConfigDefault`,
+`lib.mkForce` etc. also exist to assign the priorities to a definition.
+
+```nix
+{
+  services.openssh.enable = mkForce false;
+}
+```
+
+This definition causes all other definitions with priorities above 50 (such as
+those with the baseline priority) to be discarded. If another module were to
+define `services.openssh.enable = true`, the option's value would remain false
+because the `mkForce`'d `false` definition's override priority value is lower
+than the baseline value (100).
+
+You can also specify a custom priority value outside of the conventional values
+through `mkOverride`:
 
 ```nix
 {
@@ -80,9 +103,8 @@ You can specify an explicit priority by using `mkOverride`, e.g.
 }
 ```
 
-This definition causes all other definitions with priorities above 10 to
-be discarded. The function `mkForce` is equal to `mkOverride 50`, and
-`mkDefault` is equal to `mkOverride 1000`.
+This definition causes all other definitions with priorities above 10 to be
+discarded.
 
 ## Ordering Definitions {#sec-option-definitions-ordering}
 

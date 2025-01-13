@@ -50,6 +50,15 @@ The function `mkOption` accepts the following arguments.
     a plain English description in [Nixpkgs-flavored Markdown](
     https://nixos.org/nixpkgs/manual/#sec-contributing-markup) format.
 
+`defaultPriority`
+
+:   The priority applied to the default value when merging. The conventional
+    priorities are available in `lib.modules.priorities`, e.g.
+    `lib.modules.priorities.force` as in `lib.mkForce`. This is most useful to
+    make the values set in `config` merge with the option's default value rather
+    than overriding it by setting `defaultPriority =
+    lib.modules.priorities.baseline;` but any priority may be passed.
+
 `example`
 
 :   An example value that will be shown in the NixOS manual.
