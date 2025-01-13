@@ -12864,7 +12864,7 @@ with pkgs;
 
   qmapshack = libsForQt5.callPackage ../applications/gis/qmapshack { };
 
-  spatialite-gui = callPackage ../applications/gis/spatialite-gui {
+  spatialite-gui = callPackage ../by-name/sp/spatialite-gui/package.nix {
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa IOKit;
     wxGTK = wxGTK32;
   };
