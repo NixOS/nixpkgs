@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   openssl,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -23,6 +24,8 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     install -Dm755 bootgen $out/bin/bootgen
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Generate Boot Images for Xilinx Zynq and ZU+ SoCs";
