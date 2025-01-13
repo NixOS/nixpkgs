@@ -9,6 +9,13 @@ import ./make-test-python.nix (
         -subj '/CN=machine.${domain}'
       install -D -t $out key.pem cert.pem
     '';
+
+    # Git repositories paths in Gitolite.
+    # Here only their baseNameOf is used for configuring public-inbox inboxes.
+    gitRepositories = [
+      "user/repo1"
+      "user/repo2"
+    ];
   in
   {
     name = "public-inbox";
@@ -23,13 +30,7 @@ import ./make-test-python.nix (
         ...
       }:
       let
-        inherit (config.services) gitolite public-inbox;
-        # Git repositories paths in Gitolite.
-        # Only their baseNameOf is used for configuring public-inbox.
-        repositories = [
-          "user/repo1"
-          "user/repo2"
-        ];
+        inherit (config.services) public-inbox;
       in
       {
         virtualisation.diskSize = 1 * 1024;
@@ -80,7 +81,7 @@ import ./make-test-python.nix (
           };
           inboxes =
             lib.recursiveUpdate
-              (lib.genAttrs (map baseNameOf repositories) (repo: {
+              (lib.genAttrs (map baseNameOf gitRepositories) (repo: {
                 address = [
                   # Routed to the "public-inbox:" transport in services.postfix.transport
                   "${repo}@${domain}"
@@ -104,22 +105,13 @@ import ./make-test-python.nix (
               };
           settings.coderepo = lib.listToAttrs (
             map (
-              path:
-              lib.nameValuePair (baseNameOf path) {
-                dir = "/var/lib/gitolite/repositories/${path}.git";
-                cgitUrl = "https://git.${domain}/${path}.git";
+              repositoryName:
+              lib.nameValuePair (baseNameOf repositoryName) {
+                dir = "/var/lib/public-inbox/repositories/${repositoryName}.git";
+                cgitUrl = "https://git.${domain}/${repositoryName}.git";
               }
-            ) repositories
+            ) gitRepositories
           );
-        };
-
-        # Use gitolite to store Git repositories listed in coderepo entries
-        services.gitolite = {
-          enable = true;
-          adminPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJmoTOQnGqX+//us5oye8UuE+tQBx9QEM7PN13jrwgqY root@localhost";
-        };
-        systemd.services.public-inbox-httpd = {
-          serviceConfig.SupplementaryGroups = [ gitolite.group ];
         };
 
         # Use nginx as a reverse proxy for public-inbox-httpd
@@ -181,6 +173,7 @@ import ./make-test-python.nix (
         };
 
         environment.systemPackages = [
+          pkgs.gitMinimal
           pkgs.mailutils
           pkgs.openssl
         ];
@@ -189,12 +182,15 @@ import ./make-test-python.nix (
 
     testScript = ''
       start_all()
+
       machine.wait_for_unit("multi-user.target")
       machine.wait_for_unit("public-inbox-init.service")
 
-      # Very basic check that Gitolite can work;
-      # Gitolite is not needed for the rest of this testScript
-      machine.wait_for_unit("gitolite-init.service")
+      machine.succeed(
+        ${lib.concatMapStrings (repositoryName: ''
+          "sudo -u public-inbox git init --bare -b main /var/lib/public-inbox/repositories/${repositoryName}.git",
+        '') gitRepositories}
+      )
 
       # List inboxes through public-inbox-httpd
       machine.wait_for_unit("nginx.service")
