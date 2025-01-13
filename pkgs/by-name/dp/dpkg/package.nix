@@ -49,10 +49,14 @@ stdenv.mkDerivation rec {
     for i in $(find . -name Makefile.in); do
       substituteInPlace $i --replace "install-data-local:" "disabled:" ;
     done
+
+    # Skip check broken when cross-compiling.
+    substituteInPlace configure \
+      --replace-fail 'as_fn_error $? "cannot find a GNU tar program"' "#"
   '';
 
   postPatch = ''
-    patchShebangs .
+    patchShebangs --host .
 
     # Dpkg commands sometimes calls out to shell commands
     substituteInPlace lib/dpkg/dpkg.h \
