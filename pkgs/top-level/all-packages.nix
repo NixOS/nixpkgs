@@ -3873,8 +3873,6 @@ with pkgs;
 
   kio-fuse = libsForQt5.callPackage ../tools/filesystems/kio-fuse { };
 
-  kphotoalbum = libsForQt5.callPackage ../applications/graphics/kphotoalbum { };
-
   krename = libsForQt5.callPackage ../applications/misc/krename { };
 
   krunner-pass = libsForQt5.callPackage ../tools/security/krunner-pass { };
@@ -6318,10 +6316,6 @@ with pkgs;
     inherit (emacs.pkgs.melpaStablePackages) irony;
   };
 
-  heptagon = callPackage ../development/compilers/heptagon {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_14;
-  };
-
   openjfx17 = openjfx;
   openjfx21 = callPackage ../by-name/op/openjfx/package.nix { featureVersion = "21"; };
   openjfx23 = callPackage ../by-name/op/openjfx/package.nix { featureVersion = "23"; };
@@ -8551,6 +8545,8 @@ with pkgs;
   aspellWithDicts = callPackage ../development/libraries/aspell/aspell-with-dicts.nix {
     aspell = aspell.override { searchNixProfiles = false; };
   };
+
+  astal = recurseIntoAttrs (lib.makeScope newScope (callPackage ../development/libraries/astal { }));
 
   attr = callPackage ../development/libraries/attr { };
 
