@@ -18,6 +18,7 @@
   # Build dependencies
   appimageTools,
   autoPatchelfHook,
+  patchelfUnstable,
   fetchzip,
   lib,
   stdenv,
@@ -63,6 +64,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     autoPatchelfHook
+    patchelfUnstable
   ];
 
   buildInputs = [
