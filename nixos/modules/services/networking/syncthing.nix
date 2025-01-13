@@ -59,17 +59,15 @@ let
             let
               folderDevices = folder.devices;
             in
-            if builtins.isList folderDevices then
-              map (
-                device:
-                if builtins.isString device then { deviceId = cfg.settings.devices.${device}.id; } else device
-              ) folderDevices
-            else if builtins.isAttrs folderDevices then
-              mapAttrsToList (
-                deviceName: deviceValue: deviceValue // { deviceId = cfg.settings.devices.${deviceName}.id; }
-              ) folderDevices
-            else
-              throw "Invalid type for devices in folder '${folderName}'; expected list or attrset.";
+            map (
+              device:
+              if builtins.isString device then
+                { deviceId = cfg.settings.devices.${device}.id; }
+              else if builtins.isAttrs device then
+                { deviceId = cfg.settings.devices.${device.name}.id; } // device
+              else
+                throw "Invalid type for devices in folder '${folderName}'; expected list or attrset."
+            ) folderDevices;
         }
   ) (filterAttrs (_: folder: folder.enable) cfg.settings.folders);
 
@@ -142,68 +140,74 @@ let
               (map (
                 new_cfg:
                 let
-                  isSecret = attr: value: builtins.isString value && attr == "encryptionPassword";
-
-                  resolveSecrets =
-                    attr: value:
-                    if builtins.isAttrs value then
-                      # Attribute set: process each attribute
-                      builtins.mapAttrs (name: val: resolveSecrets name val) value
-                    else if builtins.isList value then
-                      # List: process each element
-                      map (item: resolveSecrets "" item) value
-                    else if isSecret attr value then
-                      # String that looks like a path: replace with placeholder
-                      let
-                        varName = "secret_${builtins.hashString "sha256" value}";
-                      in
-                      "\${${varName}}"
-                    else
-                      # Other types: return as is
-                      value;
-
-                  # Function to collect all file paths from the configuration
-                  collectPaths =
-                    attr: value:
-                    if builtins.isAttrs value then
-                      concatMap (name: collectPaths name value.${name}) (builtins.attrNames value)
-                    else if builtins.isList value then
-                      concatMap (name: collectPaths "" name) value
-                    else if isSecret attr value then
-                      [ value ]
-                    else
-                      [ ];
-
-                  # Function to generate variable assignments for the secrets
-                  generateSecretVars =
-                    paths:
-                    concatStringsSep "\n" (
-                      map (
-                        path:
+                  jsonPreSecretsFile = pkgs.writeTextFile {
+                    name = "${conf_type}-${new_cfg.id}-conf-pre-secrets.json";
+                    text = builtins.toJSON new_cfg;
+                  };
+                  injectSecretsJqCmd =
+                    {
+                      # There are no secrets in `devs`, so no massaging needed.
+                      "devs" = "${jq} .";
+                      "dirs" =
                         let
-                          varName = "secret_${builtins.hashString "sha256" path}";
+                          folder = new_cfg;
+                          devicesWithSecrets = lib.pipe folder.devices [
+                            (lib.filter (device: (builtins.isAttrs device) && device ? encryptionPasswordFile))
+                            (map (device: {
+                              deviceId = device.deviceId;
+                              variableName = "secret_${builtins.hashString "sha256" device.encryptionPasswordFile}";
+                              secretPath = device.encryptionPasswordFile;
+                            }))
+                          ];
+                          # At this point, `jsonPreSecretsFile` looks something like this:
+                          #
+                          #   {
+                          #     ...,
+                          #     "devices": [
+                          #       {
+                          #         "deviceId": "id1",
+                          #         "encryptionPasswordFile": "/etc/bar-encryption-password",
+                          #         "name": "..."
+                          #       }
+                          #     ],
+                          #   }
+                          #
+                          # We now generate a `jq` command that can replace those
+                          # `encryptionPasswordFile`s with `encryptionPassword`.
+                          # The `jq` command ends up looking like this:
+                          #
+                          #   jq --rawfile secret_DEADBEEF /etc/bar-encryption-password '
+                          #     .devices[] |= (
+                          #       if .deviceId == "id1" then
+                          #         del(.encryptionPasswordFile) |
+                          #         .encryptionPassword = $secret_DEADBEEF
+                          #       else
+                          #         .
+                          #       end
+                          #     )
+                          #   '
+                          jqUpdates = map (device: ''
+                            .devices[] |= (
+                              if .deviceId == "${device.deviceId}" then
+                                del(.encryptionPasswordFile) |
+                                .encryptionPassword = ''$${device.variableName}
+                              else
+                                .
+                              end
+                            )
+                          '') devicesWithSecrets;
+                          jqRawFiles = map (
+                            device: "--rawfile ${device.variableName} ${lib.escapeShellArg device.secretPath}"
+                          ) devicesWithSecrets;
                         in
-                        ''
-                          if [ ! -r ${path} ]; then
-                            echo "${path} does not exist"
-                            exit 1
-                          fi
-                          ${varName}=$(<${path})
-                        ''
-                      ) paths
-                    );
-
-                  resolved_cfg = resolveSecrets "" new_cfg;
-                  secretPaths = collectPaths "" new_cfg;
-                  secretVarsScript = generateSecretVars secretPaths;
-
-                  jsonString = builtins.toJSON resolved_cfg;
-                  escapedJson = builtins.replaceStrings [ "\"" ] [ "\\\"" ] jsonString;
+                        "${jq} ${lib.concatStringsSep " " jqRawFiles} ${
+                          lib.escapeShellArg (lib.concatStringsSep "|" ([ "." ] ++ jqUpdates))
+                        }";
+                    }
+                    .${conf_type};
                 in
                 ''
-                  ${secretVarsScript}
-
-                  curl -d "${escapedJson}" -X POST ${s.baseAddress}
+                  ${injectSecretsJqCmd} ${jsonPreSecretsFile} | curl --json @- -X POST ${s.baseAddress}
                 ''
               ))
               (lib.concatStringsSep "\n")
@@ -513,16 +517,30 @@ in
                       };
 
                       devices = mkOption {
-                        type = types.oneOf [
-                          (types.listOf types.str)
-                          (types.attrsOf (
-                            types.submodule (
-                              { name, ... }:
+                        type = types.listOf (
+                          types.oneOf [
+                            types.str
+                            (types.submodule (
+                              { ... }:
                               {
                                 freeformType = settingsFormat.type;
                                 options = {
-                                  encryptionPassword = mkOption {
-                                    type = types.nullOr types.str;
+                                  name = mkOption {
+                                    type = types.str;
+                                    default = null;
+                                    description = ''
+                                      The name of a device defined in the
+                                      [devices](#opt-services.syncthing.settings.devices)
+                                      option.
+                                    '';
+                                  };
+                                  encryptionPasswordFile = mkOption {
+                                    type = types.nullOr (
+                                      types.pathWith {
+                                        inStore = false;
+                                        absolute = true;
+                                      }
+                                    );
                                     default = null;
                                     description = ''
                                       Path to encryption password. If set, the file will be read during
@@ -531,17 +549,16 @@ in
                                   };
                                 };
                               }
-                            )
-                          ))
-                        ];
+                            ))
+                          ]
+                        );
                         default = [ ];
                         description = ''
                           The devices this folder should be shared with. Each device must
                           be defined in the [devices](#opt-services.syncthing.settings.devices) option.
 
-                          Either a list of strings, or an attribute set, where keys are defined in the
-                          [devices](#opt-services.syncthing.settings.devices) option, and values are
-                          device configurations.
+                          A list of either strings or attribute sets, where values
+                          are device names or device configurations.
                         '';
                       };
 
