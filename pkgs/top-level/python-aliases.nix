@@ -692,6 +692,7 @@ mapAliases ({
   tissue = throw "tissue has been removed, because it is archived since October 2022"; # added 2024-07-27
   torchgpipe = throw "torchgpipe has been removed, because it appears unmaintained and Pytorch now includes pipeline parallelism support"; # added 2024-05-18
   tornado_4 = throw "tornado_4 has been removed, use tornado instead"; # added 2025-01-13
+  tornado_5 = throw "tornado_5 has been removed, use tornado instead"; # added 2025-01-13
   torrent_parser = torrent-parser; # added 2023-11-04
   transip = throw "transip has been removed because it is no longer maintained. TransIP SOAP V5 API was marked as deprecated"; # added 2023-02-27
   py-tree-sitter = throw "Was merged with tree-sitter."; # added 2024-03-20
