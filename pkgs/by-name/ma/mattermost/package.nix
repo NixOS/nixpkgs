@@ -144,7 +144,7 @@ buildGoModule rec {
     updateScript = nix-update-script {
       extraArgs = [
         "--version-regex"
-        "^v(9\.11\.[0-9]+)$"
+        "^v(9\\.11\\.[0-9]+)$"
       ];
     };
     tests.mattermost = nixosTests.mattermost;
