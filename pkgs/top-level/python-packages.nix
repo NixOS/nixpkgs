@@ -18298,8 +18298,6 @@ self: super: with self; {
 
   yabadaba = callPackage ../development/python-modules/yabadaba { };
 
-  yahooweather = callPackage ../development/python-modules/yahooweather { };
-
   yalesmartalarmclient = callPackage ../development/python-modules/yalesmartalarmclient { };
 
   yalexs = callPackage ../development/python-modules/yalexs { };
