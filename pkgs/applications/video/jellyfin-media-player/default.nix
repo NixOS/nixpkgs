@@ -82,7 +82,14 @@ mkDerivation rec {
     ln -s ${jellyfin-web}/share/jellyfin-web .
   '';
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = ''
+    # Upstream PR: https://github.com/jellyfin/jellyfin-media-player/pull/771
+    substituteInPlace \
+        "$out/share/applications/com.github.iwalton3.jellyfin-media-player.desktop" \
+        --replace-fail \
+        StartupWMClass=com.github.iwalton3.jellyfin-media-player \
+        StartupWMClass=jellyfinmediaplayer
+  '' + lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/bin $out/Applications
     mv "$out/Jellyfin Media Player.app" $out/Applications
     ln -s "$out/Applications/Jellyfin Media Player.app/Contents/MacOS/Jellyfin Media Player" $out/bin/jellyfinmediaplayer
