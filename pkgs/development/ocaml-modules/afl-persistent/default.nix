@@ -13,16 +13,16 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "stedolan";
     repo = "ocaml-${pname}";
-    rev = "v${version}";
-    sha256 = "sha256-kksGXaoO7lhaPI+rDOOQ39BUJjk6MGPBYQLumuW9gTg=";
+    tag = "v${version}";
+    hash = "sha256-kksGXaoO7lhaPI+rDOOQ39BUJjk6MGPBYQLumuW9gTg=";
   };
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/stedolan/ocaml-afl-persistent";
     description = "persistent-mode afl-fuzz for ocaml";
-    license = licenses.mit;
-    maintainers = [ maintainers.sternenseemann ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sternenseemann ];
   };
 }
