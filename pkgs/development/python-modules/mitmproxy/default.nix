@@ -18,7 +18,7 @@
   kaitaistruct,
   ldap3,
   mitmproxy-macos,
-  mitmproxy-rs,
+  mitmproxy-linux,
   msgpack,
   passlib,
   protobuf5,
@@ -45,7 +45,7 @@
 
 buildPythonPackage rec {
   pname = "mitmproxy";
-  version = "11.0.2";
+  version = "11.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -54,7 +54,7 @@ buildPythonPackage rec {
     owner = "mitmproxy";
     repo = "mitmproxy";
     tag = "v${version}";
-    hash = "sha256-qcsPOISQjHVHh4TrQ/UihZaxB/jWBfq7AVI4U1gQPVs=";
+    hash = "sha256-8PqyxTwDk8pJjBh+NUB5BkuTeeA51gxmzqT450Y1d4Q=";
   };
 
   pythonRelaxDeps = [
@@ -63,35 +63,37 @@ buildPythonPackage rec {
     "urwid"
   ];
 
-  propagatedBuildInputs = [
-    aioquic
-    asgiref
-    blinker
-    brotli
-    certifi
-    cryptography
-    flask
-    h11
-    h2
-    hyperframe
-    kaitaistruct
-    ldap3
-    mitmproxy-rs
-    msgpack
-    passlib
-    protobuf5
-    publicsuffix2
-    pyopenssl
-    pyparsing
-    pyperclip
-    ruamel-yaml
-    setuptools
-    sortedcontainers
-    tornado
-    urwid
-    wsproto
-    zstandard
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ mitmproxy-macos ];
+  propagatedBuildInputs =
+    [
+      aioquic
+      asgiref
+      blinker
+      brotli
+      certifi
+      cryptography
+      flask
+      h11
+      h2
+      hyperframe
+      kaitaistruct
+      ldap3
+      msgpack
+      passlib
+      protobuf5
+      publicsuffix2
+      pyopenssl
+      pyparsing
+      pyperclip
+      ruamel-yaml
+      setuptools
+      sortedcontainers
+      tornado
+      urwid
+      wsproto
+      zstandard
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ mitmproxy-linux ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ mitmproxy-macos ];
 
   nativeCheckInputs = [
     hypothesis
