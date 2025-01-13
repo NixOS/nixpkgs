@@ -1,0 +1,31 @@
+diff --git a/gnome-panel/gp-module-manager.c b/gnome-panel/gp-module-manager.c
+index 58447fd84..7af99de7d 100644
+--- a/gnome-panel/gp-module-manager.c
++++ b/gnome-panel/gp-module-manager.c
+@@ -49,8 +49,16 @@ load_modules (GpModuleManager *self)
+ {
+   GDir *dir;
+   const gchar *name;
++  const gchar *modules_dir;
+ 
+-  dir = g_dir_open (MODULESDIR, 0, NULL);
++  modules_dir = g_getenv ("NIX_GNOME_PANEL_MODULESDIR");
++
++  if (!modules_dir) {
++    g_warning ("The NIX_GNOME_PANEL_MODULESDIR environment variable was not set, modules will not be loaded.");
++    return;
++  }
++
++  dir = g_dir_open (modules_dir, 0, NULL);
+   if (!dir)
+     return;
+ 
+@@ -63,7 +71,7 @@ load_modules (GpModuleManager *self)
+       if (!g_str_has_suffix (name, ".so"))
+         continue;
+ 
+-      path = g_build_filename (MODULESDIR, name, NULL);
++      path = g_build_filename (modules_dir, name, NULL);
+       module = gp_module_new_from_path (path);
+       g_free (path);
+ 

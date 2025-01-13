@@ -1,0 +1,20 @@
+--- a/plugins/remote-dev-server/bin/launcher.sh
++++ b/plugins/remote-dev-server/bin/launcher.sh
+@@ -322,7 +322,7 @@ fi
+ # ---------------------------------------------------------------------
+ # Configure fonts and fontconfig
+ # ---------------------------------------------------------------------
+-if [ $IS_DARWIN -ne 1 ]; then
++if false; then
+   FONTS_CONFIGURATION_BASE_PATH="$REMOTE_DEV_SERVER_DIR/selfcontained/fontconfig"
+   if [ ! -d "$FONTS_CONFIGURATION_BASE_PATH" ]; then
+     echo "ERROR! Unable to locate font configuration source directory in self-contained distribution: '$FONTS_CONFIGURATION_BASE_PATH'." 1>&2
+@@ -371,6 +371,8 @@ else
+   REMOTE_DEV_SERVER_USE_SELF_CONTAINED_LIBS=1
+ fi
+ 
++REMOTE_DEV_SERVER_USE_SELF_CONTAINED_LIBS=0
++
+ if [ $REMOTE_DEV_SERVER_USE_SELF_CONTAINED_LIBS -eq 1 ]; then
+   SELFCONTAINED_LIBS="$REMOTE_DEV_SERVER_DIR/selfcontained/lib"
+   if [ ! -d "$SELFCONTAINED_LIBS" ]; then
