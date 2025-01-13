@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "xfsprogs";
-  version = "6.1.1";
+  version = "6.12.0";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/fs/xfs/xfsprogs/${pname}-${version}.tar.xz";
-    hash = "sha256-BeihN4cNsdYYLfct2pirenEA3rN2lH6FS51ZyRTCx7s=";
+    hash = "sha256-CDJAckfbeRzHDe+W5+JUvW7fBD3ISoCmLzzNbj3/0yk=";
   };
 
   outputs = [ "bin" "dev" "out" "doc" ];
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   # @sbindir@ is replaced with /run/current-system/sw/bin to fix dependency cycles
   preConfigure = ''
-    for file in scrub/{xfs_scrub_all.cron.in,xfs_scrub@.service.in,xfs_scrub_all.service.in}; do
+    for file in scrub/{xfs_scrub_all.cron.in,xfs_scrub@.service.in,xfs_scrub_all.service.in,xfs_scrub_all.in,xfs_scrub_media@.service.in}; do
       substituteInPlace "$file" \
         --replace '@sbindir@' '/run/current-system/sw/bin'
     done
