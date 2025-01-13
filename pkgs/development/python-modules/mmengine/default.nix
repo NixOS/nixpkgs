@@ -1,9 +1,7 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch2,
 
   # build-system
   setuptools,
@@ -32,30 +30,15 @@
 
 buildPythonPackage rec {
   pname = "mmengine";
-  version = "0.10.5";
+  version = "0.10.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "open-mmlab";
     repo = "mmengine";
     tag = "v${version}";
-    hash = "sha256-bZ6O4UOYUCwq11YmgRWepOIngYxYD/fNfM/VmcyUv9k=";
+    hash = "sha256-J9p+JCtNoBlBvvv4p57/DHUIifYs/jdo+pK+paD+iXI=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      name = "mmengine-torch-2.5-compat.patch";
-      url = "https://github.com/open-mmlab/mmengine/commit/4c22f78cdea2981a2b48a167e9feffe4721f8901.patch";
-      hash = "sha256-k+IFLeqTEVUGGiqmZg56LK64H/UTvpGN20GJT59wf4A=";
-    })
-    (fetchpatch2 {
-      # Bug reported upstream in https://github.com/open-mmlab/mmengine/issues/1575
-      # PR: https://github.com/open-mmlab/mmengine/pull/1589
-      name = "adapt-to-pytest-breaking-change";
-      url = "https://patch-diff.githubusercontent.com/raw/open-mmlab/mmengine/pull/1589.patch";
-      hash = "sha256-lyKf1GCLOPMpDttJ4s9hbATIGCVkiQhtyLfH9WzMWrw=";
-    })
-  ];
 
   build-system = [ setuptools ];
 
@@ -131,7 +114,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/open-mmlab/mmengine/releases/tag/v${version}";
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ rxiao ];
-    broken =
-      stdenv.hostPlatform.isDarwin || (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
   };
 }
