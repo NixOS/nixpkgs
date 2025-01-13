@@ -37,8 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # FIXME: Switch back to cargoHash when https://github.com/NixOS/nixpkgs/issues/356811 is fixed
   cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit (finalAttrs) pname version src;
-    sourceRoot = "${finalAttrs.src.name}/${finalAttrs.cargoRoot}";
+    inherit (finalAttrs) pname version src cargoRoot;
     hash = "sha256-Lr/0GkWHvfDy/leRLxisuTzGPZYFo2beHq9UCl6XlDo=";
 
     nativeBuildInputs = [ yq ];
