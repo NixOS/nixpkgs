@@ -12017,6 +12017,8 @@ self: super: with self; {
 
   pyleri = callPackage ../development/python-modules/pyleri { };
 
+  pylette = callPackage ../development/python-modules/pylette { };
+
   pylev = callPackage ../development/python-modules/pylev { };
 
   pylgnetcast = callPackage ../development/python-modules/pylgnetcast { };
