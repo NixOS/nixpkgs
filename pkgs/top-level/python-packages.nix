@@ -584,6 +584,8 @@ self: super: with self; {
 
   amqtt = callPackage ../development/python-modules/amqtt { };
 
+  amshan = callPackage ../development/python-modules/amshan { };
+
   anchor-kr = callPackage ../development/python-modules/anchor-kr { };
 
   ancp-bids = callPackage ../development/python-modules/ancp-bids { };
@@ -6944,6 +6946,8 @@ self: super: with self; {
   keras-preprocessing = callPackage ../development/python-modules/keras-preprocessing { };
 
   kerberos = callPackage ../development/python-modules/kerberos { };
+
+  kestra = callPackage ../development/python-modules/kestra { };
 
   keyboard = callPackage ../development/python-modules/keyboard { };
 
@@ -18287,8 +18291,6 @@ self: super: with self; {
   y-py = callPackage ../development/python-modules/y-py { };
 
   yabadaba = callPackage ../development/python-modules/yabadaba { };
-
-  yahooweather = callPackage ../development/python-modules/yahooweather { };
 
   yalesmartalarmclient = callPackage ../development/python-modules/yalesmartalarmclient { };
 

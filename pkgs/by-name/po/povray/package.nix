@@ -57,6 +57,12 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i -e 's/^povgroup.*/povgroup=nogroup/' Makefile.{am,in}
   '';
 
+  # https://github.com/POV-Ray/povray/issues/460
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-fno-finite-math-only"
+    "-DBOOST_BIND_GLOBAL_PLACEHOLDERS"
+  ];
+
   configureFlags = [
     "COMPILED_BY=NixOS"
     "--with-boost-thread=boost_thread"
