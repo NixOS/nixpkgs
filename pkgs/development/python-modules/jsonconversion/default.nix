@@ -5,6 +5,7 @@
   numpy,
   pdm-backend,
   pytestCheckHook,
+  pythonAtLeast,
   pythonOlder,
   setuptools,
 }:
@@ -40,6 +41,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "jsonconversion" ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.13") [ "test_dict" ];
 
   meta = with lib; {
     description = "This python module helps converting arbitrary Python objects into JSON strings and back";
