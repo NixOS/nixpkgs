@@ -37,6 +37,10 @@ stdenv.mkDerivation rec {
       url = "https://github.com/Tencent/rapidjson/commit/862c39be371278a45a88d4d1d75164be57bb7e2d.patch";
       hash = "sha256-V5zbq/THUY75p1RdEPKJK2NVnxbZs07MMwJBAH7nAMg=";
     })
+    (fetchpatch {
+      url = "https://github.com/osmcode/osmium-tool/commit/1c62771a62f260b07c1b9a52338a24a978dcd967.patch";
+      hash = "sha256-/2HUu4tLRZzoCcGVEM61gE4RjiA2XGalr9OnhCUhKj8=";
+    })
   ];
 
   nativeBuildInputs = [
