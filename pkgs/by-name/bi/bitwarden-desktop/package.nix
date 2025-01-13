@@ -73,15 +73,13 @@ buildNpmPackage rec {
   npmDepsHash = "sha256-EtIcqbubAYN9I9wbw17oHiVshd3GtQayFtdgqWP7Pgg=";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    patches = map (
-      patch:
-      runCommand (builtins.baseNameOf patch) { nativeBuildInputs = [ patchutils_0_4_2 ]; } ''
-        < ${patch} filterdiff -p1 --include=${lib.escapeShellArg cargoRoot}'/*' > $out
-      ''
-    ) patches;
-    patchFlags = [ "-p4" ];
-    sourceRoot = "${src.name}/${cargoRoot}";
+    inherit
+      pname
+      version
+      src
+      patches
+      cargoRoot
+      ;
     hash = "sha256-Fh6pbmFof/qIhVETtBA1fGlC45fuu1n7g9hosvmfHZc=";
   };
   cargoRoot = "apps/desktop/desktop_native";
