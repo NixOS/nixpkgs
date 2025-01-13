@@ -1,37 +1,39 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
   cmake,
-  qtbase,
+  qt6,
   cfitsio,
   gsl,
   wcslib,
   withTester ? false,
 }:
-
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "stellarsolver";
   version = "2.6";
 
   src = fetchFromGitHub {
     owner = "rlancaste";
-    repo = pname;
-    rev = version;
+    repo = finalAttrs.pname;
+    rev = finalAttrs.version;
     sha256 = "sha256-6WDiHaBhi9POtXynGU/eTeuqZSK81JJeuZv4SxOeVoE=";
   };
 
   nativeBuildInputs = [ cmake ];
 
+  dontWrapQtApps = true;
+
   buildInputs = [
-    qtbase
+    qt6.qtbase
     cfitsio
     gsl
     wcslib
   ];
 
   cmakeFlags = [
-    "-DBUILD_TESTER=${if withTester then "on" else "off"}"
+    (lib.strings.cmakeBool "BUILD_TESTER" withTester)
+    (lib.strings.cmakeBool "USE_QT5" false)
   ];
 
   meta = with lib; {
@@ -41,4 +43,4 @@ mkDerivation rec {
     maintainers = with maintainers; [ hjones2199 ];
     platforms = platforms.unix;
   };
-}
+})
