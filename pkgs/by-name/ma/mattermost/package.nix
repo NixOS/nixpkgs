@@ -6,7 +6,6 @@
   nix-update-script,
   npm-lockfile-fix,
   fetchNpmDeps,
-  diffutils,
   jq,
   nixosTests,
 }:
@@ -94,7 +93,7 @@ buildGoModule rec {
       runHook preInstall
 
       mkdir -p $out
-      cp -r channels/dist/* $out
+      cp -a channels/dist/* $out
 
       runHook postInstall
     '';
@@ -123,11 +122,20 @@ buildGoModule rec {
   ];
 
   postInstall = ''
-    mkdir -p $out/{client,i18n,fonts,templates,config}
-    cp -r ${webapp}/* $out/client/
-    cp -r ${src}/server/i18n/* $out/i18n/
-    cp -r ${src}/server/fonts/* $out/fonts/
-    cp -r ${src}/server/templates/* $out/templates/
+    shopt -s extglob
+    mkdir -p $out/{i18n,fonts,templates,config}
+
+    # Link in the client and copy the language packs.
+    ln -sf $webapp $out/client
+    cp -a $src/server/i18n/* $out/i18n/
+
+    # Fonts have the execute bit set, remove it.
+    cp --no-preserve=mode $src/server/fonts/* $out/fonts/
+
+    # Don't copy the Makefile.
+    cp -a $src/server/templates/!(Makefile) $out/templates/
+
+    # Generate the config.
     OUTPUT_CONFIG=$out/config/config.json \
       go run -tags production ./scripts/config_generator
   '';
