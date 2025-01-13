@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xilinx-bootgen";
-  version = "xilinx_v2024.1";
+  version = "xilinx_v2024.2";
 
   src = fetchFromGitHub {
     owner = "xilinx";
     repo = "bootgen";
     rev = finalAttrs.version;
-    hash = "sha256-/gNAqjwfaD2NWxs2536XGv8g2IyRcQRHzgLcnCr4a34=";
+    hash = "sha256-t165nTG4IkI3WrcS3ZryINmAOVzfctxg5zY3oqmNtLw=";
   };
 
   buildInputs = [ openssl ];
