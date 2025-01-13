@@ -9,10 +9,12 @@
   xclip,
   darwin,
 }:
-
-rustPlatform.buildRustPackage rec {
+let
   pname = "gitui";
   version = "0.26.3";
+in
+rustPlatform.buildRustPackage {
+  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "extrawurst";
@@ -55,11 +57,11 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = {
+    changelog = "https://github.com/extrawurst/gitui/blob/v${version}/CHANGELOG.md";
     description = "Blazing fast terminal-ui for Git written in Rust";
     homepage = "https://github.com/extrawurst/gitui";
-    changelog = "https://github.com/extrawurst/gitui/blob/v${version}/CHANGELOG.md";
-    mainProgram = "gitui";
     license = lib.licenses.mit;
+    mainProgram = "gitui";
     maintainers = with lib.maintainers; [
       Br1ght0ne
       yanganto
