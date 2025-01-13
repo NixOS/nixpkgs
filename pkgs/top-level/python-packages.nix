@@ -6947,6 +6947,8 @@ self: super: with self; {
 
   kerberos = callPackage ../development/python-modules/kerberos { };
 
+  kestra = callPackage ../development/python-modules/kestra { };
+
   keyboard = callPackage ../development/python-modules/keyboard { };
 
   keyring = callPackage ../development/python-modules/keyring { };
