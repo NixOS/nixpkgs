@@ -10,6 +10,9 @@
         coreutils
         procps # kill collides with coreutils' to test https://github.com/NixOS/nixpkgs/issues/56432
       ];
+
+      # Avoid slow man cache build
+      documentation.man.enable = false;
     };
 
   testScript =
