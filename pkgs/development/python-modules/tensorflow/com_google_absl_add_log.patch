@@ -1,7 +1,16 @@
 diff -Naurd x/third_party/absl/system.absl.base.BUILD y/third_party/absl/system.absl.base.BUILD
 --- x/third_party/absl/system.absl.base.BUILD	2023-09-17 09:12:05.499753364 +0000
 +++ y/third_party/absl/system.absl.base.BUILD	2023-09-17 09:16:01.200082822 +0000
-@@ -22,7 +22,12 @@
+@@ -12,6 +12,8 @@
+     "atomic_hook",
+     "errno_saver",
+     "fast_type_id",
++    "nullability",
++    "prefetch",
+     "pretty_function",
+ ]]
+ 
+@@ -22,7 +24,13 @@
  
  cc_library(
      name = "raw_logging_internal",
@@ -11,14 +20,51 @@ diff -Naurd x/third_party/absl/system.absl.base.BUILD y/third_party/absl/system.
 +        "-labsl_log_internal_conditions",
 +        "-labsl_log_internal_message",
 +        "-labsl_log_internal_nullguard",
++        "-labsl_log_internal_check_op",
 +    ],
      visibility = [
          "//absl:__subpackages__",
      ],
+diff -Naurd x/third_party/absl/system.absl.crc.BUILD y/third_party/absl/system.absl.crc.BUILD
+--- x/third_party/absl/system.absl.crc.BUILD	1970-01-01 00:00:00.000000000 +0000
++++ y/third_party/absl/system.absl.crc.BUILD	2024-10-10 20:08:56.809477492 +0000
+@@ -0,0 +1,7 @@
++load("@rules_cc//cc:defs.bzl", "cc_library")
++
++cc_library(
++    name = "crc32c",
++    linkopts = ["-labsl_crc32c"],
++    visibility = ["//visibility:public"],
++)
+diff -Naurd x/third_party/absl/system.absl.flags.BUILD y/third_party/absl/system.absl.flags.BUILD
+--- x/third_party/absl/system.absl.flags.BUILD	2024-12-15 19:38:44.723946610 +0000
++++ y/third_party/absl/system.absl.flags.BUILD	2024-12-15 19:45:17.312776851 +0000
+@@ -97,7 +97,6 @@
+ 
+ cc_library(
+     name = "flag",
+-    linkopts = ["-labsl_flags"],
+     deps = [
+         ":config",
+         ":flag_internal",
+diff -Naurd x/third_party/absl/system.absl.functional.BUILD y/third_party/absl/system.absl.functional.BUILD
+--- x/third_party/absl/system.absl.functional.BUILD	2024-12-23 22:57:02.844616004 +0000
++++ y/third_party/absl/system.absl.functional.BUILD	2024-12-24 09:07:15.229655674 +0000
+@@ -3,10 +3,6 @@
+ package(default_visibility = ["//visibility:public"])
+ 
+ cc_library(
+-    name = "any_invocable",
+-)
+-
+-cc_library(
+     name = "bind_front",
+ )
+ 
 diff -Naurd x/third_party/absl/system.absl.log.BUILD y/third_party/absl/system.absl.log.BUILD
 --- x/third_party/absl/system.absl.log.BUILD	1970-01-01 00:00:00.000000000 +0000
 +++ y/third_party/absl/system.absl.log.BUILD	2023-09-17 09:12:11.795762177 +0000
-@@ -0,0 +1,134 @@
+@@ -0,0 +1,135 @@
 +load("@rules_cc//cc:defs.bzl", "cc_library")
 +
 +package(default_visibility = ["//visibility:public"])
@@ -43,6 +89,7 @@ diff -Naurd x/third_party/absl/system.absl.log.BUILD y/third_party/absl/system.a
 +
 +cc_library(
 +    name = "die_if_null",
++    linkopts = ["-labsl_die_if_null"],
 +    deps = [
 +        ":log",
 +        "//absl/base:config",
@@ -153,10 +200,40 @@ diff -Naurd x/third_party/absl/system.absl.log.BUILD y/third_party/absl/system.a
 +        "//absl/strings",
 +    ],
 +)
-diff -Naurd x/third_party/absl/workspace.bzl y/third_party/absl/workspace.bzl
---- x/third_party/absl/workspace.bzl	2023-09-17 09:12:05.499753364 +0000
-+++ y/third_party/absl/workspace.bzl	2023-09-17 09:12:11.795762177 +0000
+diff -Naurd x/third_party/absl/system.absl.strings.BUILD y/third_party/absl/system.absl.strings.BUILD
+--- x/third_party/absl/system.absl.strings.BUILD	2024-10-10 10:15:40.644185074 +0000
++++ y/third_party/absl/system.absl.strings.BUILD	2024-10-10 18:52:37.648334488 +0000
+@@ -3,6 +3,10 @@
+ package(default_visibility = ["//visibility:public"])
+ 
+ cc_library(
++    name = "string_view",
++)
++
++cc_library(
+     name = "strings",
+     linkopts = ["-labsl_strings"],
+     deps = [
+diff -Naurd x/third_party/absl/system.absl.synchronization.BUILD y/third_party/absl/system.absl.synchronization.BUILD
+--- x/third_party/absl/system.absl.synchronization.BUILD	2024-12-15 19:38:44.723946610 +0000
++++ y/third_party/absl/system.absl.synchronization.BUILD	2024-12-15 19:46:27.336925847 +0000
 @@ -20,6 +20,7 @@
+     name = "synchronization",
+     linkopts = [
+         "-labsl_synchronization",
++        "-labsl_kernel_timeout_internal",
+         "-pthread",
+     ],
+     deps = [
+diff -Naurd x/third_party/absl/workspace.bzl y/third_party/absl/workspace.bzl
+--- x/third_party/absl/workspace.bzl	2024-10-10 10:16:56.508840929 +0000
++++ y/third_party/absl/workspace.bzl	2024-10-10 20:09:16.685514935 +0000
+@@ -16,10 +16,12 @@
+         "base",
+         "cleanup",
+         "container",
++        "crc",
+         "debugging",
          "flags",
          "functional",
          "hash",

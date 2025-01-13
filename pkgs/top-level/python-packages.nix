@@ -15878,8 +15878,9 @@ self: super: with self; {
 
   tensorflow-build = let
     compat = rec {
+      abseil-cppTF = pkgs.abseil-cpp_202401;
       protobufTF = pkgs.protobuf_21.override {
-        abseil-cpp = pkgs.abseil-cpp_202301;
+        abseil-cpp = abseil-cppTF;
       };
       # https://www.tensorflow.org/install/source#gpu
       cudaPackagesTF = pkgs.cudaPackages_11;
@@ -15924,6 +15925,7 @@ self: super: with self; {
   callPackage ../development/python-modules/tensorflow {
     inherit (pkgs.config) cudaSupport;
     inherit (pkgs.darwin.apple_sdk.frameworks) Foundation Security;
+    llvmPackages = pkgs.llvmPackages_16;
     flatbuffers-core = pkgs.flatbuffers;
     flatbuffers-python = self.flatbuffers;
     cudaPackages = compat.cudaPackagesTF;
@@ -15932,7 +15934,8 @@ self: super: with self; {
     grpc = compat.grpcTF;
     grpcio = compat.grpcioTF;
     tensorboard = compat.tensorboardTF;
-    abseil-cpp = pkgs.abseil-cpp_202301;
+    abseil-cpp = compat.abseil-cppTF;
+
 
     # Tensorflow 2.13 doesn't support gcc13:
     # https://github.com/tensorflow/tensorflow/issues/61289

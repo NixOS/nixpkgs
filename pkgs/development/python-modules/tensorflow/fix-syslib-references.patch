@@ -1,0 +1,18 @@
+diff -Naurd x/tensorflow/tools/pip_package/BUILD y/tensorflow/tools/pip_package/BUILD
+--- x/tensorflow/tools/pip_package/BUILD	2023-10-14 20:09:43.001857258 +0000
++++ y/tensorflow/tools/pip_package/BUILD	2023-10-14 20:15:17.894102008 +0000
+@@ -89,13 +89,12 @@
+         "@com_google_protobuf//:LICENSE",
+         "@curl//:COPYING",
+         "@ducc//:LICENSE",
+-        "@flatbuffers//:LICENSE",
++        "@flatbuffers//:LICENSE.txt",
+         "@gemmlowp//:LICENSE",
+         "@libjpeg_turbo//:LICENSE.md",
+         "@llvm-project//llvm:LICENSE.TXT",
+         "@llvm-project//mlir:LICENSE.TXT",
+         "@local_config_tensorrt//:LICENSE",
+-        "@ml_dtypes//:LICENSE",
+         "@org_brotli//:LICENSE",
+         "@pasta//:LICENSE",
+         "@png//:LICENSE",

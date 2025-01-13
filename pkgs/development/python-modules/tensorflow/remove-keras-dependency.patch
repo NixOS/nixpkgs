@@ -1,0 +1,13 @@
+diff -Naurd x/setup.py y/setup.py
+--- x/setup.py	2023-12-01 20:07:55.694564265 +0000
++++ y/setup.py	2023-12-01 20:09:08.526682512 +0000
+@@ -121,9 +121,6 @@
+         'tensorflow_estimator >= 2.14.0, < 2.15',
+         'tf-estimator-nightly ~= 2.15.0.dev',
+     ),
+-    standard_or_nightly(
+-        'keras >= 2.14.0, < 2.15', 'keras-nightly ~= 2.15.0.dev'
+-    ),
+ ]
+ REQUIRED_PACKAGES = [p for p in REQUIRED_PACKAGES if p is not None]
+ 
