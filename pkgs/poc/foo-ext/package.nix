@@ -56,6 +56,6 @@
 
       stdenv = finalAttrs.__pkgs.stdenvNoCC; # we could have overwritten it on higher layers btw
 
-      x = prevAttrs; # prevAttrs is layer2 here
+      x = prevAttrs; # prevAttrs is the previous version of layer1
     }
   )
