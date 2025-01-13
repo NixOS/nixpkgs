@@ -12,7 +12,7 @@ let
     self = python3;
     packageOverrides = _: super: { tree-sitter = super.tree-sitter_0_21; };
   };
-  version = "0.70.0";
+  version = "0.71.0";
   aider-chat = python3.pkgs.buildPythonPackage {
     pname = "aider-chat";
     inherit version;
@@ -22,7 +22,7 @@ let
       owner = "Aider-AI";
       repo = "aider";
       tag = "v${version}";
-      hash = "sha256-wGm6JV9ISRi/p1lA3JyzOdHQKFHFxEhfr+NdShUxm0M=";
+      hash = "sha256-UptGAR0q3JlzYS5QJVeQo/uxBPaivsvOBBjoX869BRU=";
     };
 
     pythonRelaxDeps = true;
