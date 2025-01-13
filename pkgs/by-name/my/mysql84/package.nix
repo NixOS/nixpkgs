@@ -42,6 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./no-force-outline-atomics.patch # Do not force compilers to turn on -moutline-atomics switch
+    ./clang_libcpp19.patch # Fix compilation with LLVM 19 https://bugs.freebsd.org/bugzilla/show_bug.cgi?id=280695
   ];
 
   ## NOTE: MySQL upstream frequently twiddles the invocations of libtool. When updating, you might proactively grep for libtool references.
@@ -83,6 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
+    "-DCMAKE_CXX_FLAGS='-Wno-missing-template-arg-list-after-template-kw'"
     "-DFORCE_UNSUPPORTED_COMPILER=1" # To configure on Darwin.
     "-DWITH_ROUTER=OFF" # It may be packaged separately.
     "-DWITH_SYSTEM_LIBS=ON"

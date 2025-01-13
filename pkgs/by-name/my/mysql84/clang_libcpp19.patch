@@ -1,0 +1,440 @@
+commit 40263a3d0e0c2be8e1bd6ff9dd4333786acac448
+Author: Dimitry Andric <dim@FreeBSD.org>
+Date:   2024-08-08T16:08:38+02:00
+
+    databases/mysql84-server: fix build with clang and libc++ 19
+    
+    As noted in the libc++ 19 release notes [1], std::char_traits<> is now
+    only provided for char, char8_t, char16_t, char32_t and wchar_t, and any
+    instantiation for other types will fail.
+    
+    This causes databases/mysql84-server to fail to compile with clang 19
+    and libc++ 19, resulting in errors similar to:
+    
+        /usr/include/c++/v1/string:820:42: error: implicit instantiation of undefined template 'std::char_traits<unsigned char>'
+          820 |   static_assert(is_same<_CharT, typename traits_type::char_type>::value,
+              |                                          ^
+        /wrkdirs/usr/ports/databases/mysql84-server/work/mysql-8.4.2/sql/rpl_log_encryption.h:821:14: note: in instantiation of template class 'std::basic_string<unsigned char>' requested here
+          821 |   Key_string m_encrypted_password;
+              |              ^
+        /usr/include/c++/v1/__fwd/string.h:23:29: note: template is declared here
+           23 | struct _LIBCPP_TEMPLATE_VIS char_traits;
+              |                             ^
+    
+    `Key_string` is defined as `std::basic_string<unsigned char>`, which is
+    no longer possible. So redefine it as a `std::vector<unsigned char>`
+    instead.
+    
+    This requires only a few small adjustments in other places: replacing
+    the `length()` method with the equivalent `size()` method, and adjusting
+    the arguments for the `assign()` method, which for `std::vector` takes a
+    begin and end iterator, instead of a begin iterator and a size.
+    
+    Another issue is that clang 19 now implements CWG 96 [2], which requires
+    a template argument list after a 'template' keyword, resulting in errors
+    similar to:
+    
+        /wrkdirs/usr/ports/databases/mysql84-server/work/mysql-8.4.2/libs/mysql/serialization/archive.h:84:43: error: a template argument list is expected after a name prefixed by the template keyword [-Wmissing-template-arg-list-after-template-kw]
+           84 |     return Archive_derived_type::template get_size(std::forward<Type>(arg));
+              |                                           ^
+        /wrkdirs/usr/ports/databases/mysql84-server/work/mysql-8.4.2/libs/mysql/serialization/archive.h:91:43: error: a template argument list is expected after a name prefixed by the template keyword [-Wmissing-template-arg-list-after-template-kw]
+           91 |     return Archive_derived_type::template get_size_written();
+              |                                           ^
+    
+    This requires a number of adjustments to various template invocations.
+    
+    [1] https://libcxx.llvm.org/ReleaseNotes/19.html#deprecations-and-removals
+    [2] https://www.open-std.org/jtc1/sc22/wg21/docs/cwg_defects.html#96
+
+diff --git a/libs/mysql/serialization/archive.h b/libs/mysql/serialization/archive.h
+--- a/libs/mysql/serialization/archive.h
++++ b/libs/mysql/serialization/archive.h
+@@ -81,14 +81,14 @@ class Archive {
+   /// @note To be implemented in Archive_derived_type
+   template <typename Type>
+   static std::size_t get_size(Type &&arg) {
+-    return Archive_derived_type::template get_size(std::forward<Type>(arg));
++    return Archive_derived_type::template get_size<>(std::forward<Type>(arg));
+   }
+ 
+   /// @brief Returns archive size - size of data written to the archive
+   /// @return archive size - size of data written to the archive
+   /// @note To be implemented in Archive_derived_type
+   inline std::size_t get_size_written() const {
+-    return Archive_derived_type::template get_size_written();
++    return Archive_derived_type::template get_size_written<>();
+   }
+ 
+   /// @brief Function returns maximum size of the Type
+
+diff --git a/libs/mysql/serialization/serializer_default_impl.hpp b/libs/mysql/serialization/serializer_default_impl.hpp
+--- a/libs/mysql/serialization/serializer_default_impl.hpp
++++ b/libs/mysql/serialization/serializer_default_impl.hpp
+@@ -233,7 +233,7 @@ std::size_t Serializer_default<Archive_concrete_type>:
+ template <class Field_type, Field_size field_size_defined, typename Enabler>
+ std::size_t Serializer_default<Archive_concrete_type>::get_field_size(
+     const Field_type &field) {
+-  return Archive_concrete_type::template get_size(
++  return Archive_concrete_type::template get_size<>(
+       Field_wrapper<const Field_type, field_size_defined>(field));
+ }
+ 
+@@ -473,7 +473,7 @@ std::size_t Serializer_default<Archive_concrete_type>:
+   std::size_t calculated_size = 0;
+   bool is_provided = field_definition.run_encode_predicate();
+   if (is_provided) {
+-    auto size_id_type = Archive_concrete_type::template get_size(
++    auto size_id_type = Archive_concrete_type::template get_size<>(
+         create_varlen_field_wrapper(field_id));
+     calculated_size = get_field_size<Field_type, field_size_defined>(
+                           field_definition.get_ref()) +
+@@ -489,18 +489,18 @@ std::size_t Serializer_default<Archive_concrete_type>:
+     bool skip_id) {
+   std::size_t serializable_overhead_type = 0;
+   if (skip_id == false) {
+-    serializable_overhead_type = Archive_concrete_type::template get_size(
++    serializable_overhead_type = Archive_concrete_type::template get_size<>(
+         create_varlen_field_wrapper(field_id));
+   }
+   auto serializable_size = serializable.template get_size_internal<Base_type>();
+-  auto serializable_overhead_size = Archive_concrete_type::template get_size(
++  auto serializable_overhead_size = Archive_concrete_type::template get_size<>(
+       create_varlen_field_wrapper(serializable_size));
+ 
+   Field_id_type last_non_ignorable_field_id =
+       find_last_non_ignorable_field_id(serializable);
+ 
+   auto serializable_overhead_last_non_ignorable_field_id =
+-      Archive_concrete_type::template get_size(
++      Archive_concrete_type::template get_size<>(
+           create_varlen_field_wrapper(last_non_ignorable_field_id));
+   return serializable_overhead_type + serializable_overhead_size +
+          serializable_overhead_last_non_ignorable_field_id + serializable_size;
+
+diff --git a/libs/mysql/serialization/serializer_impl.hpp b/libs/mysql/serialization/serializer_impl.hpp
+--- a/libs/mysql/serialization/serializer_impl.hpp
++++ b/libs/mysql/serialization/serializer_impl.hpp
+@@ -51,8 +51,8 @@ Serializer<Serializer_derived_type, Archive_type>::get
+ Serializer<Serializer_derived_type, Archive_type>::get_size_field_def(
+     Field_id_type field_id,
+     const Field_definition<Field_type, field_size_defined> &field_definition) {
+-  return Serializer_derived_type::template get_size_field_def(field_id,
+-                                                              field_definition);
++  return Serializer_derived_type::template get_size_field_def<>(
++      field_id, field_definition);
+ }
+ 
+ template <class Serializer_derived_type, class Archive_type>
+@@ -61,7 +61,7 @@ Serializer<Serializer_derived_type, Archive_type>::get
+ Serializer<Serializer_derived_type, Archive_type>::get_size_serializable(
+     Field_id_type field_id, const Serializable_concrete_type &serializable,
+     bool skip_id) {
+-  return Serializer_derived_type::template get_size_serializable(
++  return Serializer_derived_type::template get_size_serializable<>(
+       field_id, serializable, skip_id);
+ }
+
+diff --git a/sql/binlog_ostream.cc b/sql/binlog_ostream.cc 
+--- a/sql/binlog_ostream.cc
++++ b/sql/binlog_ostream.cc
+@@ -240,7 +240,7 @@ bool IO_CACHE_binlog_cache_storage::setup_ciphers_pass
+ 
+   /* Generate password, it is a random string. */
+   if (my_rand_buffer(password, sizeof(password))) return true;
+-  password_str.append(password, sizeof(password));
++  password_str.insert(password_str.end(), password, password + sizeof(password));
+ 
+   m_io_cache.m_encryptor->close();
+   m_io_cache.m_decryptor->close();
+
+diff --git a/sql/mdl_context_backup.cc b/sql/mdl_context_backup.cc
+--- a/sql/mdl_context_backup.cc
++++ b/sql/mdl_context_backup.cc
+@@ -160,7 +160,7 @@ bool MDL_context_backup_manager::create_backup(const M
+   DBUG_TRACE;
+ 
+   try {
+-    MDL_context_backup_key key_obj(key, keylen);
++    MDL_context_backup_key key_obj(key, key + keylen);
+ 
+     /*
+       Since this method is called as part of THD cleaning up, every XA
+@@ -193,7 +193,7 @@ bool MDL_context_backup_manager::create_backup(MDL_req
+ 
+   bool result = false;
+   try {
+-    MDL_context_backup_key key_obj(key, keylen);
++    MDL_context_backup_key key_obj(key, key + keylen);
+     /*
+       Check for presence a record with specified key in the collection of
+       MDL_context_backup elements. It is ok to already have a record with
+@@ -239,7 +239,7 @@ bool MDL_context_backup_manager::restore_backup(MDL_co
+ 
+   MUTEX_LOCK(guard, &m_LOCK_mdl_context_backup);
+ 
+-  auto result = m_backup_map.find(MDL_context_backup_key(key, keylen));
++  auto result = m_backup_map.find(MDL_context_backup_key(key, key + keylen));
+   if (result != m_backup_map.end()) {
+     element = result->second.get();
+     res = mdl_context->clone_tickets(element->get_context(), MDL_TRANSACTION);
+@@ -252,5 +252,5 @@ void MDL_context_backup_manager::delete_backup(const u
+                                                const size_t keylen) {
+   DBUG_TRACE;
+   MUTEX_LOCK(guard, &m_LOCK_mdl_context_backup);
+-  m_backup_map.erase(MDL_context_backup_key(key, keylen));
++  m_backup_map.erase(MDL_context_backup_key(key, key + keylen));
+ }
+
+diff --git a/sql/mdl_context_backup.h b/sql/mdl_context_backup.h
+--- a/sql/mdl_context_backup.h
++++ b/sql/mdl_context_backup.h
+@@ -47,7 +47,7 @@ class MDL_context_backup_manager {
+   /**
+     Key for uniquely identifying MDL_context in the MDL_context_backup map.
+   */
+-  typedef std::basic_string<uchar> MDL_context_backup_key;
++  typedef std::vector<uchar> MDL_context_backup_key;
+ 
+   class MDL_context_backup;
+
+diff --git a/sql/range_optimizer/index_range_scan_plan.cc b/sql/range_optimizer/index_range_scan_plan.cc
+--- a/sql/range_optimizer/index_range_scan_plan.cc
++++ b/sql/range_optimizer/index_range_scan_plan.cc
+@@ -1016,11 +1016,11 @@ static bool null_part_in_key(KEY_PART *key_part, const
+   return false;
+ }
+
+-// TODO(sgunders): This becomes a bit simpler with C++20's string_view
+-// constructors.
+-static inline std::basic_string_view<uchar> make_string_view(const uchar *start,
+-                                                             const uchar *end) {
+-  return {start, static_cast<size_t>(end - start)};
++static inline bool equal(const uchar *start1, const uchar *end1,
++                         const uchar *start2, const uchar *end2) {
++  auto diff1 = end1 - start1;
++  auto diff2 = end2 - start2;
++  return diff1 == diff2 && memcmp(start1, start2, diff1) == 0;
+ }
+ 
+ /**
+@@ -1083,8 +1083,7 @@ static bool get_ranges_from_tree_given_base(
+         node->next_key_part->type == SEL_ROOT::Type::KEY_RANGE &&
+         node->next_key_part->root->part == part + 1) {
+       if (node->min_flag == 0 && node->max_flag == 0 &&
+-          make_string_view(min_key, tmp_min_key) ==
+-              make_string_view(max_key, tmp_max_key)) {
++          equal(min_key, tmp_min_key, max_key, tmp_max_key)) {
+         // This range was an equality predicate, and we have more
+         // keyparts to scan, so use its range as a base for ranges on
+         // the next keypart(s). E.g. if we have (a = 3) on this keypart,
+@@ -1160,8 +1159,7 @@ static bool get_ranges_from_tree_given_base(
+       else
+         flag |= NO_MAX_RANGE;
+     }
+-    if (flag == 0 && make_string_view(base_min_key, tmp_min_key) ==
+-                         make_string_view(base_max_key, tmp_max_key)) {
++    if (flag == 0 && equal(base_min_key, tmp_min_key, base_max_key, tmp_max_key)) {
+       flag |= EQ_RANGE;
+       /*
+         Note that keys which are extended with PK parts have no
+
+diff --git a/sql/rpl_log_encryption.cc b/sql/rpl_log_encryption.cc
+--- a/sql/rpl_log_encryption.cc
++++ b/sql/rpl_log_encryption.cc
+@@ -213,7 +213,7 @@ bool Rpl_encryption::recover_master_key() {
+         Rpl_encryption_header::seqno_to_key_id(m_master_key_seqno);
+     auto master_key =
+         get_key(m_master_key.m_id, Rpl_encryption_header::get_key_type());
+-    m_master_key.m_value.assign(master_key.second);
++    m_master_key.m_value = master_key.second;
+     /* No keyring error */
+     if (master_key.first == Keyring_status::KEYRING_ERROR_FETCHING) goto err1;
+   }
+@@ -290,7 +290,7 @@ bool Rpl_encryption::recover_master_key() {
+ 
+     if (new_master_key.first == Keyring_status::SUCCESS) {
+       m_master_key.m_id = new_master_key_id;
+-      m_master_key.m_value.assign(new_master_key.second);
++      m_master_key.m_value = new_master_key.second;
+       if (new_master_key_seqno.second > m_master_key_seqno &&
+           new_master_key_seqno.second > old_master_key_seqno.second) {
+         if (m_master_key_seqno > 0) {
+@@ -380,8 +380,8 @@ std::pair<Rpl_encryption::Keyring_status, Key_string> 
+           reinterpret_cast<unsigned char *>(std::get<1>(tuple));
+       first[0] = ~(first[0]);
+     });
+-    key_str.append(reinterpret_cast<unsigned char *>(std::get<1>(tuple)),
+-                   std::get<2>(tuple));
++    auto *first = reinterpret_cast<unsigned char *>(std::get<1>(tuple));
++    key_str.insert(key_str.end(), first, first + std::get<2>(tuple));
+     my_free(std::get<1>(tuple));
+   }
+ 
+@@ -396,7 +396,7 @@ std::pair<Rpl_encryption::Keyring_status, Key_string> 
+   if (pair.first == Keyring_status::SUCCESS) {
+     DBUG_EXECUTE_IF("corrupt_replication_encryption_key_size",
+                     { pair.second.resize(key_size / 2); });
+-    if (pair.second.length() != key_size)
++    if (pair.second.size() != key_size)
+       pair.first = Keyring_status::UNEXPECTED_KEY_SIZE;
+   }
+   return pair;
+@@ -743,7 +743,7 @@ Rpl_encryption::get_seqno_from_keyring(std::string key
+   auto fetched_key = get_key(key_id, SEQNO_KEY_TYPE, SEQNO_KEY_LENGTH);
+   uint32_t seqno = 0;
+   if (fetched_key.first == Keyring_status::SUCCESS) {
+-    const void *key = fetched_key.second.c_str();
++    const void *key = fetched_key.second.data();
+     memcpy(&seqno, key, sizeof(seqno));
+     seqno = le32toh(seqno);
+   }
+@@ -948,7 +948,7 @@ bool Rpl_encryption::generate_master_key_on_keyring(ui
+ 
+   /* Store the generated key as the new master key */
+   m_master_key.m_id = key_id;
+-  m_master_key.m_value.assign(pair.second);
++  m_master_key.m_value = pair.second;
+ 
+   return false;
+ }
+@@ -1051,12 +1051,12 @@ bool Rpl_encryption_header_v1::serialize(Basic_ostream
+ 
+   assert(m_encrypted_password.length() == PASSWORD_FIELD_SIZE);
+   *ptr++ = ENCRYPTED_FILE_PASSWORD;
+-  memcpy(ptr, m_encrypted_password.data(), m_encrypted_password.length());
++  memcpy(ptr, m_encrypted_password.data(), m_encrypted_password.size());
+   ptr += PASSWORD_FIELD_SIZE;
+ 
+   assert(m_iv.length() == IV_FIELD_SIZE);
+   *ptr++ = IV_FOR_FILE_PASSWORD;
+-  memcpy(ptr, m_iv.data(), m_iv.length());
++  memcpy(ptr, m_iv.data(), m_iv.size());
+ 
+   bool res = DBUG_EVALUATE_IF("fail_to_serialize_encryption_header", true,
+                               ostream->write(header, HEADER_SIZE));
+@@ -1111,13 +1111,13 @@ bool Rpl_encryption_header_v1::deserialize(Basic_istre
+             reinterpret_cast<const unsigned char *>(
+                 reader.ptr(PASSWORD_FIELD_SIZE));
+         if (!reader.has_error())
+-          m_encrypted_password.assign(password_ptr, PASSWORD_FIELD_SIZE);
++          m_encrypted_password.assign(password_ptr, password_ptr + PASSWORD_FIELD_SIZE);
+         break;
+       }
+       case IV_FOR_FILE_PASSWORD: {
+         const unsigned char *iv_ptr =
+             reinterpret_cast<const unsigned char *>(reader.ptr(IV_FIELD_SIZE));
+-        if (!reader.has_error()) m_iv.assign(iv_ptr, IV_FIELD_SIZE);
++        if (!reader.has_error()) m_iv.assign(iv_ptr, iv_ptr + IV_FIELD_SIZE);
+         break;
+       }
+       default:
+@@ -1177,11 +1177,11 @@ Key_string Rpl_encryption_header_v1::decrypt_file_pass
+       unsigned char buffer[Aes_ctr::PASSWORD_LENGTH];
+ 
+       if (my_aes_decrypt(m_encrypted_password.data(),
+-                         m_encrypted_password.length(), buffer,
++                         m_encrypted_password.size(), buffer,
+                          error_and_key.second.data(),
+-                         error_and_key.second.length(), my_aes_256_cbc,
++                         error_and_key.second.size(), my_aes_256_cbc,
+                          m_iv.data(), false) != MY_AES_BAD_DATA)
+-        file_password.append(buffer, Aes_ctr::PASSWORD_LENGTH);
++        file_password.insert(file_password.end(), buffer, buffer + Aes_ctr::PASSWORD_LENGTH);
+     }
+   }
+ #endif
+@@ -1212,16 +1212,16 @@ bool Rpl_encryption_header_v1::encrypt_file_password(K
+ 
+   /* Generate iv, it is a random string. */
+   error = my_rand_buffer(iv, Aes_ctr::AES_BLOCK_SIZE);
+-  m_iv = Key_string(iv, sizeof(iv));
++  m_iv = Key_string(iv, iv + sizeof(iv));
+ 
+   /* Encrypt password */
+   if (!error) {
+-    error = (my_aes_encrypt(password_str.data(), password_str.length(),
++    error = (my_aes_encrypt(password_str.data(), password_str.size(),
+                             encrypted_password, master_key.m_value.data(),
+-                            master_key.m_value.length(), my_aes_256_cbc, iv,
++                            master_key.m_value.size(), my_aes_256_cbc, iv,
+                             false) == MY_AES_BAD_DATA);
+     m_encrypted_password =
+-        Key_string(encrypted_password, sizeof(encrypted_password));
++        Key_string(encrypted_password, encrypted_password + sizeof(encrypted_password));
+   }
+ 
+   return error;
+@@ -1237,7 +1237,7 @@ Key_string Rpl_encryption_header_v1::generate_new_file
+   /* Generate password, it is a random string. */
+   error = my_rand_buffer(password, sizeof(password));
+   if (!error) {
+-    password_str.append(password, sizeof(password));
++    password_str.insert(password_str.end(), password, password + sizeof(password));
+   }
+ 
+   if (error || encrypt_file_password(password_str) ||
+
+diff --git a/sql/stream_cipher.cc b/sql/stream_cipher.cc
+--- a/sql/stream_cipher.cc
++++ b/sql/stream_cipher.cc
+@@ -46,7 +46,7 @@ bool Aes_ctr_cipher<TYPE>::open(const Key_string &pass
+   m_header_size = header_size;
+ #ifdef HAVE_BYTESTOKEY_SHA512_HANDLING
+   if (EVP_BytesToKey(Aes_ctr::get_evp_cipher(), Aes_ctr::get_evp_md(), nullptr,
+-                     password.data(), password.length(), 1, m_file_key,
++                     password.data(), password.size(), 1, m_file_key,
+                      m_iv) == 0)
+     return true;
+ #else
+
+diff --git a/sql/stream_cipher.h b/sql/stream_cipher.h
+--- a/sql/stream_cipher.h
++++ b/sql/stream_cipher.h
+@@ -27,6 +27,7 @@
+ #include <openssl/evp.h>
+ #include <memory>
+ #include <string>
++#include <vector>
+ 
+ /**
+   @file stream_cipher.h
+@@ -35,7 +36,7 @@
+          binary log files.
+ */
+ 
+-typedef std::basic_string<unsigned char> Key_string;
++typedef std::vector<unsigned char> Key_string;
+ 
+ /**
+   @class Stream_cipher
+
+diff --git a/unittest/gunit/binlogevents/transaction_compression-t.cc b/unittest/gunit/binlogevents/transaction_compression-t.cc
+--- a/unittest/gunit/binlogevents/transaction_compression-t.cc
++++ b/unittest/gunit/binlogevents/transaction_compression-t.cc
+@@ -49,7 +49,7 @@ class TransactionPayloadCompressionTest : public ::tes
+   using Managed_buffer_t = Decompressor_t::Managed_buffer_t;
+   using Size_t = Decompressor_t::Size_t;
+   using Char_t = Decompressor_t::Char_t;
+-  using String_t = std::basic_string<Char_t>;
++  using String_t = std::vector<Char_t>;
+   using Decompress_status_t =
+       mysql::binlog::event::compression::Decompress_status;
+   using Compress_status_t = mysql::binlog::event::compression::Compress_status;
+
+diff --git a/unittest/gunit/stream_cipher-t.cc b/unittest/gunit/stream_cipher-t.cc
+--- a/unittest/gunit/stream_cipher-t.cc
++++ b/unittest/gunit/stream_cipher-t.cc
+@@ -251,10 +251,10 @@ void SetKeyStr(Key_string &key_str, const unsigned cha
+ template <typename T>
+ void SetKeyStr(Key_string &key_str, const unsigned char *key) {
+   if (key) {
+-    key_str.assign(key, T::PASSWORD_LENGTH);
++    key_str.assign(key, key + T::PASSWORD_LENGTH);
+   } else {
+     const unsigned char new_key[T::PASSWORD_LENGTH]{0};
+-    key_str.assign(new_key, T::PASSWORD_LENGTH);
++    key_str.assign(new_key, new_key + T::PASSWORD_LENGTH);
+   }
+ }
+ 
+
