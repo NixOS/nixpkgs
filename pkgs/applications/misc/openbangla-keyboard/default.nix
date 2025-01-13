@@ -62,12 +62,14 @@ stdenv.mkDerivation rec {
     ];
 
   cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    postPatch = ''
-      cp ${./Cargo.lock} Cargo.lock
-    '';
-    sourceRoot = "${src.name}/${cargoRoot}";
-    hash = "sha256-XMleyP2h1aBhtjXhuGHyU0BN+tuL12CGoj+kLY5uye0=";
+    inherit
+      pname
+      version
+      src
+      cargoRoot
+      postPatch
+      ;
+    hash = "sha256-4zK+l7znd+i76md7ktNpdHyFFWHsABe7l3IcEF1SZus=";
   };
 
   cmakeFlags =
