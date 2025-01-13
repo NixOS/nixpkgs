@@ -17,7 +17,7 @@ buildPythonPackage rec {
   version = "0.6.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "pytest_md_report";
