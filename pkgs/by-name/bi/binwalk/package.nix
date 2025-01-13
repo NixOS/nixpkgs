@@ -6,6 +6,7 @@
   fontconfig,
   bzip2,
   stdenv,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -50,6 +51,10 @@ rustPlatform.buildRustPackage rec {
       "--skip=extractors::common::Chroot::create_symlink"
       "--skip=extractors::common::Chroot::make_executable"
     ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "-V";
 
   meta = {
     description = "Firmware Analysis Tool";
