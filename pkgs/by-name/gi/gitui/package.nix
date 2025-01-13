@@ -8,6 +8,7 @@
   pkg-config,
   xclip,
   darwin,
+  nix-update-script,
 }:
 let
   pname = "gitui";
@@ -55,6 +56,10 @@ rustPlatform.buildRustPackage {
   checkFlags = [
     "--skip=keys::key_config::tests::test_symbolic_links"
   ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=unstable" ];
+  };
 
   meta = {
     changelog = "https://github.com/extrawurst/gitui/blob/v${version}/CHANGELOG.md";
