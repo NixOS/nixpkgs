@@ -45,6 +45,7 @@
   ./config/xdg/sounds.nix
   ./config/xdg/terminal-exec.nix
   ./config/zram.nix
+  ./hardware/acceleration/opengl.nix
   ./hardware/acpilight.nix
   ./hardware/all-firmware.nix
   ./hardware/all-hardware.nix
@@ -63,6 +64,8 @@
   ./hardware/decklink.nix
   ./hardware/device-tree.nix
   ./hardware/digitalbitbox.nix
+  ./hardware/drivers/default.nix
+  ./hardware/drivers/mesa.nix
   ./hardware/flipperzero.nix
   ./hardware/flirc.nix
   ./hardware/glasgow.nix

@@ -42,15 +42,6 @@ in
       default = false;
     };
 
-    enable32Bit = lib.mkOption {
-      description = ''
-        On 64-bit systems, whether to also install 32-bit drivers for
-        32-bit applications (such as Wine).
-      '';
-      type = lib.types.bool;
-      default = false;
-    };
-
     package = lib.mkOption {
       description = ''
         The package that provides the default driver set.
@@ -109,16 +100,16 @@ in
       }
     ];
 
-    systemd.tmpfiles.settings.graphics-driver = {
-      "/run/opengl-driver"."L+".argument = toString driversEnv;
-      "/run/opengl-driver-32" =
-        if pkgs.stdenv.hostPlatform.isi686 then
-          { "L+".argument = "opengl-driver"; }
-        else if cfg.enable32Bit then
-          { "L+".argument = toString driversEnv32; }
-        else
-          { "r" = {}; };
-    };
+    # Implement these legacy options using the new drivers options infra
+    # TODO VK and VAAPI too
+    hardware.acceleration.api.opengl.enable = lib.mkDefault true;
+
+    hardware.drivers.mesa.enable = lib.mkDefault true;
+    hardware.drivers.mesa.package =
+      pkgs: if pkgs.stdenv.hostPlatform.is32bit then cfg.package32 else cfg.package;
+    hardware.drivers.packages = [
+      (pkgs: if pkgs.stdenv.hostPlatform.is32bit then cfg.extraPackages32 else cfg.extraPackages)
+    ];
 
     hardware.graphics.package = lib.mkDefault pkgs.mesa.drivers;
     hardware.graphics.package32 = lib.mkDefault pkgs.pkgsi686Linux.mesa.drivers;
