@@ -1228,6 +1228,7 @@ mapAliases {
   SP800-90B_EntropyAssessment = sp800-90b-entropyassessment; # Added on 2024-06-12
   SPAdes = spades; # Added 2024-06-12
   spark2014 = gnatprove; # Added 2024-02-25
+  spatialite_gui = throw "spatialite_gui has been renamed to spatialite-gui"; # Added 2025-01-12
 
   # Added 2020-02-10
   sourceHanSansPackages = {
