@@ -10,6 +10,8 @@
   openssl,
 
   disableDocs ? false,
+
+  newScope,
 }:
 
 let
@@ -37,10 +39,15 @@ bc.overrideAttrs (
         stopPred =
           _: lhs: rhs:
           notUpdated lhs || notUpdated rhs;
+        callWithRacket = newScope { racket = finalAttrs.finalPackage; };
       in
       lib.recursiveUpdateUntil stopPred prevAttrs.passthru {
-        tests.get-version-and-variant = prevAttrs.passthru.tests.get-version-and-variant.override {
-          variant = "cs";
+        tests = {
+          get-version-and-variant = prevAttrs.passthru.tests.get-version-and-variant.override {
+            variant = "cs";
+          };
+          nix-make-package = callWithRacket ../tests/nix-make-package.nix { };
+          nix-with-packages = callWithRacket ../tests/nix-with-packages.nix { };
         };
       };
   }
