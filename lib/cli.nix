@@ -118,6 +118,8 @@ rec {
 
       mkList ? k: v: lib.concatMap (mkOption k) v,
 
+      optionValueSeparator ? null,
+
       mkOption ?
         k: v:
         if v == null then
@@ -128,9 +130,13 @@ rec {
             (lib.generators.mkValueStringDefault { } v)
           ]
         else
-          [ "${mkOptionName k}${optionValueSeparator}${lib.generators.mkValueStringDefault { } v}" ],
-
-      optionValueSeparator ? null,
+          [
+            (lib.concatStrings [
+              (mkOptionName k)
+              optionValueSeparator
+              (lib.generators.mkValueStringDefault { } v)
+            ])
+          ],
     }:
     options:
     let
