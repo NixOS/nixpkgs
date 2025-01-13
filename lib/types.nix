@@ -760,7 +760,8 @@ rec {
             if tags?${choice}
             then
               { ${choice} =
-                  (lib.modules.evalOptionValue
+                  (lib.modules.evalOptionValue'
+                    { }  # Would need something like `attrTagWith { optionMeta = { }; }`, and a good way to retrieve the `meta`s
                     (loc ++ [choice])
                     tags.${choice}
                     checkedValueDefs

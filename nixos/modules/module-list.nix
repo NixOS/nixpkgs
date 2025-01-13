@@ -138,6 +138,7 @@
   ./misc/man-db.nix
   ./misc/mandoc.nix
   ./misc/meta.nix
+  ./misc/register-optionMeta.nix
   ./misc/nixops-autoluks.nix
   ./misc/nixpkgs.nix
   ./misc/nixpkgs-flake.nix
