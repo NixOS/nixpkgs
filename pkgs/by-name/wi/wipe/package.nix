@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/wipe/${version}/${pname}-${version}.tar.bz2";
-    sha256 = "180snqvh6k6il6prb19fncflf2jcvkihlb4w84sbndcv1wvicfa6";
+    hash = "sha256-RjkWNw+bNbs0QZwsCuPcTApHHbMuhZWvodFMAze2GqA=";
   };
 
   postPatch = ''
