@@ -33,7 +33,7 @@
 
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "aseprite";
-  version = "1.3.7";
+  version = "1.3.9.1";
 
   src = fetchFromGitHub {
     owner = "aseprite";
