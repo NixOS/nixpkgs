@@ -3728,7 +3728,7 @@ with pkgs;
     boost = boost178.override { inherit stdenv; };
     fmt = fmt_9.override { inherit stdenv; };
     nanodbc_llvm = nanodbc.override { inherit stdenv; };
-    avro-cpp_llvm = avro-cpp.override { inherit stdenv boost; };
+    avro-cpp_llvm = avro-cpp.override { inherit stdenv boost fmt; };
     spdlog_llvm = spdlog.override { inherit stdenv fmt; };
   })
     irods
