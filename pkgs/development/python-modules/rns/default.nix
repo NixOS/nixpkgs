@@ -1,5 +1,6 @@
 {
   lib,
+  bleak,
   buildPythonPackage,
   cryptography,
   esptool,
@@ -34,6 +35,7 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
+    bleak
     cryptography
     netifaces
     pyserial
