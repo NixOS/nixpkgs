@@ -17,12 +17,12 @@
 
 let
   pname = "openshot-qt";
-  version = "3.2.1";
+  version = "3.3.0";
   src = fetchFromGitHub {
     owner = "OpenShot";
     repo = "openshot-qt";
     tag = "v${version}";
-    hash = "sha256-zZZ7C/1+Qh7KS1WJ8YWkhFgw0+UHJhjk+145u9/TBcI=";
+    hash = "sha256-+QI1772ys1Czd+KSVBAdAUjLg9mUcMZs+UhkNljY7nQ=";
   };
 in
 mkDerivationWith python3.pkgs.buildPythonApplication {

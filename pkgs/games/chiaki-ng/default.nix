@@ -36,13 +36,13 @@
 
 stdenv.mkDerivation rec {
   pname = "chiaki-ng";
-  version = "1.9.3";
+  version = "1.9.4";
 
   src = fetchFromGitHub {
     owner = "streetpea";
     repo = "chiaki-ng";
     rev = "v${version}";
-    hash = "sha256-0oclfGxlLlZMmpiYvsMV3ftn7Vir94G+5Xv0/B7YfPg=";
+    hash = "sha256-IkmNl2zoC/1ZF3QuTFtfmqD+oq4HJfM5uRdhgQSNkcI=";
     fetchSubmodules = true;
   };
 
