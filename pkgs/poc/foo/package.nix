@@ -7,7 +7,7 @@
 }:
 
 mkPackage (
-  { layer0Attrs, ... }:
+  { finalAttrs, ... }:
   {
     name = "foooooo";
 
@@ -17,7 +17,7 @@ mkPackage (
 
     installPhase = ''
       echo $nums
-      ${lib.getExe layer0Attrs.sayer} "My javac version is: $(javac -version 2>&1)"
+      ${lib.getExe finalAttrs.sayer} "My javac version is: $(javac -version 2>&1)"
       touch $out
     '';
 
@@ -30,7 +30,7 @@ mkPackage (
     };
 
     ## this should probably go in mkPackage's definition
-    nativeBuildInputs = lib.attrValues layer0Attrs.depsInPath;
+    nativeBuildInputs = lib.attrValues finalAttrs.depsInPath;
 
   }
 )

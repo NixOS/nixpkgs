@@ -21,32 +21,32 @@ in
 let
 
   layer3ToLayer2 =
-    { layer0Attrs, ... }:
+    { finalAttrs, ... }:
     prevAttrs:
     prevAttrs
     // {
-      name = prevAttrs.name or "${layer0Attrs.pname}-${layer0Attrs.version}";
+      name = prevAttrs.name or "${finalAttrs.pname}-${finalAttrs.version}";
 
       # NOTE: these things below should probably be part of the layer below, or a new layer separately, since they are very stdenv-centric
 
       # should we do prevAttrs.doCheck && canExecute (like with mkDerivation) or should we just trust prevAttrs to also do canExecute manually
       doCheck =
-        prevAttrs.doCheck or (layer0Attrs.stdenv.buildPlatform.canExecute layer0Attrs.stdenv.hostPlatform);
+        prevAttrs.doCheck or (finalAttrs.stdenv.buildPlatform.canExecute finalAttrs.stdenv.hostPlatform);
 
       doInstallCheck =
         prevAttrs.doInstallCheck
-          or (layer0Attrs.stdenv.buildPlatform.canExecute layer0Attrs.stdenv.hostPlatform);
+          or (finalAttrs.stdenv.buildPlatform.canExecute finalAttrs.stdenv.hostPlatform);
 
       # should we do this? IMO this logic should be done by the consumer, manually
       nativeBuildInputs =
         prevAttrs.nativeBuildInputs or [ ]
-        ++ lib.optionals layer0Attrs.doCheck (layer0Attrs.nativeCheckInputs or [ ])
-        ++ lib.optionals layer0Attrs.doInstallCheck (layer0Attrs.nativeInstallCheckInputs or [ ]);
+        ++ lib.optionals finalAttrs.doCheck (finalAttrs.nativeCheckInputs or [ ])
+        ++ lib.optionals finalAttrs.doInstallCheck (finalAttrs.nativeInstallCheckInputs or [ ]);
 
       buildInputs =
         prevAttrs.buildInputs or [ ]
-        ++ lib.optionals layer0Attrs.doCheck (layer0Attrs.checkInputs or [ ])
-        ++ lib.optionals layer0Attrs.doInstallCheck (layer0Attrs.installCheckInputs or [ ]);
+        ++ lib.optionals finalAttrs.doCheck (finalAttrs.checkInputs or [ ])
+        ++ lib.optionals finalAttrs.doInstallCheck (finalAttrs.installCheckInputs or [ ]);
 
       shellVars =
         prevAttrs.shellVars or { }
@@ -81,11 +81,11 @@ let
           "preFixup"
           "fixupPhase"
           "postFixup"
-        ] layer0Attrs;
+        ] finalAttrs;
     };
 
   layer2ToLayer1 =
-    { layer0Attrs, ... }:
+    { finalAttrs, ... }:
     prevAttrs:
     assert !(prevAttrs ? drvAttrs); # wrappers shouldn't set drvAttrs directly
     prevAttrs
@@ -93,44 +93,44 @@ let
       outputs = prevAttrs.outputs or [ "out" ]; # should we always set this?
 
       __pkgs = defaultPkgs;
-      stdenv = prevAttrs.stdenv or layer0Attrs.__pkgs.stdenv;
+      stdenv = prevAttrs.stdenv or finalAttrs.__pkgs.stdenv;
       builder = prevAttrs.builder or ../stdenv/generic/default-builder.sh;
-      realBuilder = layer0Attrs.stdenv.shell;
+      realBuilder = finalAttrs.stdenv.shell;
 
-      drvAttrs = layer0Attrs.shellVars or { } // {
+      drvAttrs = finalAttrs.shellVars or { } // {
         # TODO: figure out what to do about env.* and __structuredAttrs
         __structuredAttrs = false;
-        inherit (layer0Attrs) name outputs;
-        inherit (layer0Attrs.stdenv.buildPlatform) system; # don't get from stdenv
-        builder = layer0Attrs.realBuilder;
+        inherit (finalAttrs) name outputs;
+        inherit (finalAttrs.stdenv.buildPlatform) system; # don't get from stdenv
+        builder = finalAttrs.realBuilder;
         args = [
           "-e"
-          layer0Attrs.builder
+          finalAttrs.builder
         ];
-        inherit (layer0Attrs) stdenv; # maybe should be part of shellVars, but it's very important, so this is probably better
+        inherit (finalAttrs) stdenv; # maybe should be part of shellVars, but it's very important, so this is probably better
       };
     };
 
   layer1ToLayer0 =
-    { layer0Attrs, ... }:
+    { finalAttrs, ... }:
     prevAttrs:
     let
-      outputs = layer0Attrs.drvAttrs.outputs or [ "out" ];
+      outputs = finalAttrs.drvAttrs.outputs or [ "out" ];
       # someone should really document derivationStrict!!!
-      backingDrv = builtins.derivationStrict layer0Attrs.drvAttrs;
+      backingDrv = builtins.derivationStrict finalAttrs.drvAttrs;
     in
     prevAttrs
     // {
       outputName = prevAttrs.outputName or (lib.head outputs);
       inherit (backingDrv) drvPath;
-      outPath = backingDrv.${layer0Attrs.outputName};
+      outPath = backingDrv.${finalAttrs.outputName};
       type = "derivation";
 
       # note: since the names of outputSet depend on finalAttrs we have to use outputSet, we cannot merge with other attributes, like with mkDerivation
       outputSet = lib.listToAttrs (
         lib.map (output: {
           name = output;
-          value = layer0Attrs.overrideLayer0 (_: prev: prev // { outputName = output; });
+          value = finalAttrs.overrideAttrs (_: prev: prev // { outputName = output; });
         }) outputs
       );
     };
@@ -160,7 +160,7 @@ let
       origLayer0Attrs = layer1ToLayer0 layerAttrsSet finalLayer1Attrs;
       finalLayer0Attrs = layer0ExtraTransformation layerAttrsSet origLayer0Attrs // helperAttrs;
 
-      # TODO: decide if we should ever reference anything other than layer0Attrs
+      # TODO: decide if we should ever reference anything other than layer0Attrs/finalAttrs
       # (multiple sources of truth are bad)
       # (which layer should the consumer override when a value is just inherited?)
       # (or more imporantly, which layer should a layer->layer transformer reference?)
@@ -173,9 +173,10 @@ let
         layer2Attrs = finalLayer2Attrs;
         layer1Attrs = finalLayer1Attrs;
         layer0Attrs = finalLayer0Attrs;
+        finalAttrs = finalLayer0Attrs;
       };
 
-      # these would still be useful even if they were only able to reference layer0Attrs
+      # these would still be useful even if they were only able to reference layer0Attrs/finalAttrs
       helperAttrs = {
         inherit
           overrideLayer3
@@ -183,6 +184,7 @@ let
           overrideLayer1
           overrideLayer0
           ;
+        overrideAttrs = overrideLayer0; # IMPORTANT: currently implemented in terms of transformations and not extensions (meaning you have to do `prevAttrs //` manually)
       };
 
       extraTransformations = {

@@ -2,12 +2,12 @@
 
 (poc-foo.overrideLayer3 (
   {
-    layer0Attrs,
+    finalAttrs,
     layer3Attrs,
     ...
   }:
   let
-    inherit (layer0Attrs.__pkgs) pkgsBuildHost pkgsHostTarget;
+    inherit (finalAttrs.__pkgs) pkgsBuildHost pkgsHostTarget;
   in
   prevAttrs:
   prevAttrs
@@ -24,8 +24,9 @@
       "out2"
     ];
 
-    currentOutput = layer0Attrs; # use this to refer to current output
-    theOutOutput = layer0Attrs.outputSet.out; # use this to refer to a specific output
+    # THIS IS NOT HOW IT WORKS WITH MKDERIVATION
+    currentOutput = finalAttrs; # use this to refer to currently selected output
+    theOutOutput = finalAttrs.outputSet.out; # use this to refer to a specific output
 
     someVal = "123";
 
@@ -36,26 +37,25 @@
     };
 
     shellVars = prevAttrs.shellVars or { } // {
-      inherit (layer0Attrs) someVal;
+      inherit (finalAttrs) someVal;
     };
 
-    bruv = layer0Attrs.__pkgs;
+    bruv = finalAttrs.__pkgs;
 
-    lowerOutputz = layer0Attrs.outputs;
-    currentLayerOutputz = layer3Attrs.outputs;
+    lowerOutputz = finalAttrs.outputs;
+    currentLayerOutputz = layer3Attrs.outputs; # if we want to keep the ability to reference layers other than layer0, maybe add a way to reference current layer
   }
 ))
 
 .overrideLayer1
   (
-    { layer0Attrs, ... }:
+    { finalAttrs, ... }:
     prevAttrs:
     prevAttrs
     // {
 
-      stdenv = layer0Attrs.__pkgs.stdenvNoCC; # we could have overwritten it on higher layers btw
+      stdenv = finalAttrs.__pkgs.stdenvNoCC; # we could have overwritten it on higher layers btw
 
-      x = prevAttrs;
-      y = layer0Attrs;
+      x = prevAttrs; # prevAttrs is layer2 here
     }
   )
