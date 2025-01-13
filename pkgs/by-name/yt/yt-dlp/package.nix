@@ -17,13 +17,13 @@ python3Packages.buildPythonApplication rec {
   # The websites yt-dlp deals with are a very moving target. That means that
   # downloads break constantly. Because of that, updates should always be backported
   # to the latest stable release.
-  version = "2024.12.23";
+  version = "2025.1.12";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "yt_dlp";
-    hash = "sha256-rA5ytakBe6EEtCWFRiAafO3DjovSByfgxjt3yCm0Jek=";
+    hash = "sha256-jn4kbipaLP8KnBPbRoRKN6VHaAcCASBYyU7Bj84Molo=";
   };
 
   build-system = with python3Packages; [
