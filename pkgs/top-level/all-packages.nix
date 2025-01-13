@@ -3868,8 +3868,6 @@ with pkgs;
 
   ksmoothdock = libsForQt5.callPackage ../applications/misc/ksmoothdock { };
 
-  kstars = libsForQt5.callPackage ../applications/science/astronomy/kstars { };
-
   ligo =
     let ocaml_p = ocaml-ng.ocamlPackages_4_14.overrideScope (self: super: {
       zarith = super.zarith.override { version = "1.13"; };
@@ -17277,8 +17275,6 @@ with pkgs;
   spyder = with python3.pkgs; toPythonApplication spyder;
 
   stellarium = qt6Packages.callPackage ../applications/science/astronomy/stellarium { };
-
-  stellarsolver = libsForQt5.callPackage ../development/libraries/science/astronomy/stellarsolver { };
 
   tulip = libsForQt5.callPackage ../applications/science/misc/tulip { };
 
