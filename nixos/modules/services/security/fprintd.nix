@@ -38,6 +38,15 @@ in
           '';
         };
       };
+
+      authSkipLidClose = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Disable fprint auth when laptop lid is closed.
+        '';
+      };
+
     };
   };
 
