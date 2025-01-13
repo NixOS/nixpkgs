@@ -1,0 +1,13 @@
+diff --git a/pyproject.toml b/pyproject.toml
+index 2192a68..6a7ba95 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -27,7 +27,7 @@ dependencies = [
+     "ruamel.yaml>0.15.69",
+     "jsonschema>=4.1.2,<4.18",
+     "rfc3987",
+-    "pylibfdt",
++    "libfdt",
+ ]
+ 
+ [project.scripts]

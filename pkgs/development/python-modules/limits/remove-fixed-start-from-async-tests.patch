@@ -1,0 +1,87 @@
+diff --git a/tests/aio/test_storage.py b/tests/aio/test_storage.py
+index 1040d18..7015278 100644
+--- a/tests/aio/test_storage.py
++++ b/tests/aio/test_storage.py
+@@ -17,7 +17,6 @@ from limits.aio.storage import (
+ from limits.aio.strategies import MovingWindowRateLimiter
+ from limits.errors import StorageError
+ from limits.storage import storage_from_string
+-from tests.utils import fixed_start
+ 
+ 
+ @pytest.mark.asyncio
+@@ -197,7 +196,6 @@ class TestConcreteStorages:
+     async def test_storage_string(self, uri, args, expected_instance, fixture):
+         assert isinstance(storage_from_string(uri, **args), expected_instance)
+ 
+-    @fixed_start
+     async def test_expiry_incr(self, uri, args, expected_instance, fixture):
+         storage = storage_from_string(uri, **args)
+         limit = RateLimitItemPerSecond(1)
+@@ -205,7 +203,6 @@ class TestConcreteStorages:
+         time.sleep(1.1)
+         assert await storage.get(limit.key_for()) == 0
+ 
+-    @fixed_start
+     async def test_expiry_acquire_entry(self, uri, args, expected_instance, fixture):
+         if not issubclass(expected_instance, MovingWindowSupport):
+             pytest.skip("%s does not support acquire entry" % expected_instance)
+diff --git a/tests/aio/test_strategy.py b/tests/aio/test_strategy.py
+index b21f808..efa3b95 100644
+--- a/tests/aio/test_strategy.py
++++ b/tests/aio/test_strategy.py
+@@ -18,14 +18,12 @@ from tests.utils import (
+     async_all_storage,
+     async_moving_window_storage,
+     async_window,
+-    fixed_start,
+ )
+ 
+ 
+ @pytest.mark.asyncio
+ class TestAsyncWindow:
+     @async_all_storage
+-    @fixed_start
+     async def test_fixed_window(self, uri, args, fixture):
+         storage = storage_from_string(uri, **args)
+         limiter = FixedWindowRateLimiter(storage)
+@@ -37,7 +35,6 @@ class TestAsyncWindow:
+         assert (await limiter.get_window_stats(limit)).reset_time == start + 2
+ 
+     @async_all_storage
+-    @fixed_start
+     async def test_fixed_window_empty_stats(self, uri, args, fixture):
+         storage = storage_from_string(uri, **args)
+         limiter = FixedWindowRateLimiter(storage)
+@@ -61,7 +58,6 @@ class TestAsyncWindow:
+         ) == 58
+ 
+     @async_all_storage
+-    @fixed_start
+     async def test_fixed_window_multiple_cost(self, uri, args, fixture):
+         storage = storage_from_string(uri, **args)
+         limiter = FixedWindowRateLimiter(storage)
+@@ -73,7 +69,6 @@ class TestAsyncWindow:
+         assert not await limiter.hit(limit, "k2", cost=6)
+ 
+     @async_all_storage
+-    @fixed_start
+     async def test_fixed_window_with_elastic_expiry(self, uri, args, fixture):
+         storage = storage_from_string(uri, **args)
+         limiter = FixedWindowElasticExpiryRateLimiter(storage)
+@@ -90,7 +85,6 @@ class TestAsyncWindow:
+         assert (await limiter.get_window_stats(limit)).reset_time == end + 2
+ 
+     @async_all_storage
+-    @fixed_start
+     async def test_fixed_window_with_elastic_expiry_multiple_cost(
+         self, uri, args, fixture
+     ):
+@@ -179,7 +173,6 @@ class TestAsyncWindow:
+             MovingWindowRateLimiter(storage)
+ 
+     @async_all_storage
+-    @fixed_start
+     @pytest.mark.flaky
+     async def test_test_fixed_window(self, uri, args, fixture):
+         storage = storage_from_string(uri, **args)
