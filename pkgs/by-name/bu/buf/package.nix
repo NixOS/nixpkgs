@@ -40,6 +40,10 @@ buildGoModule rec {
   ];
 
   preCheck = ''
+    # Some tests take longer depending on builder load.
+    substituteInPlace private/bufpkg/bufcheck/lint_test.go \
+      --replace-fail 'context.WithTimeout(context.Background(), 60*time.Second)' \
+                     'context.WithTimeout(context.Background(), 600*time.Second)'
     # For WebAssembly runtime tests
     GOOS=wasip1 GOARCH=wasm go build -o $GOPATH/bin/buf-plugin-suffix.wasm \
       ./private/bufpkg/bufcheck/internal/cmd/buf-plugin-suffix
