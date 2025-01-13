@@ -35,14 +35,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = if withGui then "bitcoin" else "bitcoind";
-  version = "28.0";
+  version = "28.1";
 
   src = fetchurl {
     urls = [
       "https://bitcoincore.org/bin/bitcoin-core-${version}/bitcoin-${version}.tar.gz"
     ];
     # hash retrieved from signed SHA256SUMS
-    sha256 = "700ae2d1e204602eb07f2779a6e6669893bc96c0dca290593f80ff8e102ff37f";
+    sha256 = "c5ae2dd041c7f9d9b7c722490ba5a9d624f7e9a089c67090615e1ba4ad0883ba";
   };
 
   nativeBuildInputs =
