@@ -1,6 +1,6 @@
 /*
   How to combine packages for use in development:
-  dotnetCombined = with dotnetCorePackages; combinePackages [ sdk_6_0 aspnetcore_7_0 ];
+  dotnetCombined = with dotnetCorePackages; combinePackages [ sdk_9_0 aspnetcore_8_0 ];
 
   Hashes and urls are retrieved from:
   https://dotnet.microsoft.com/download/dotnet
@@ -33,10 +33,14 @@ makeScopeWithSplicing' {
         };
 
       ## Files in versions/ are generated automatically by update.sh ##
-      dotnet_6_0 = buildDotnetSdk ./versions/6.0.nix;
-      dotnet_7_0 = buildDotnetSdk ./versions/7.0.nix;
-      dotnet_8_0 = buildDotnetSdk ./versions/8.0.nix;
-      dotnet_9_0 = buildDotnetSdk ./versions/9.0.nix;
+      dotnet-bin = lib.mergeAttrsList (
+        map buildDotnetSdk [
+          ./versions/6.0.nix
+          ./versions/7.0.nix
+          ./versions/8.0.nix
+          ./versions/9.0.nix
+        ]
+      );
 
       runtimeIdentifierMap = {
         "x86_64-linux" = "linux-x64";
@@ -48,7 +52,19 @@ makeScopeWithSplicing' {
       };
 
     in
-    {
+    lib.optionalAttrs config.allowAliases (
+      {
+        # EOL
+        sdk_2_1 = throw "Dotnet SDK 2.1 is EOL, please use 8.0 (LTS) or 9.0 (Current)";
+        sdk_2_2 = throw "Dotnet SDK 2.2 is EOL, please use 8.0 (LTS) or 9.0 (Current)";
+        sdk_3_0 = throw "Dotnet SDK 3.0 is EOL, please use 8.0 (LTS) or 9.0 (Current)";
+        sdk_3_1 = throw "Dotnet SDK 3.1 is EOL, please use 8.0 (LTS) or 9.0 (Current)";
+        sdk_5_0 = throw "Dotnet SDK 5.0 is EOL, please use 8.0 (LTS) or 9.0 (Current)";
+      }
+      // dotnet-bin
+    )
+    // lib.mapAttrs' (k: v: lib.nameValuePair "${k}-bin" v) dotnet-bin
+    // rec {
       inherit callPackage fetchNupkg buildDotnetSdk;
 
       # Convert a "stdenv.hostPlatform.system" to a dotnet RID
@@ -69,18 +85,38 @@ makeScopeWithSplicing' {
 
       dotnet_8 = recurseIntoAttrs (callPackage ./8 { });
       dotnet_9 = recurseIntoAttrs (callPackage ./9 { });
+
+      # use binary SDK here to avoid downgrading feature band
+      sdk_8_0 = sdk_8_0_4xx;
+      sdk_8_0-source = dotnet_8.sdk;
+      sdk_8_0_1xx = dotnet_8.sdk;
+      # source-built SDK only exists for _1xx feature band
+      sdk_8_0_4xx = callPackage ./wrapper.nix { } "sdk" (
+        dotnet-bin.sdk_8_0_4xx.unwrapped.overrideAttrs (old: {
+          passthru =
+            old.passthru
+            // {
+              inherit (dotnet_8.sdk)
+                runtime
+                aspnetcore
+                ;
+            }
+            # We can't use the source-built packages until ilcompiler is fixed (see vmr.nix)
+            // lib.optionalAttrs dotnet_8.sdk.hasILCompiler {
+              inherit (dotnet_8.sdk)
+                packages
+                targetPackages
+                ;
+            };
+        })
+      );
+      runtime_8_0 = dotnet_8.runtime;
+      aspnetcore_8_0 = dotnet_8.aspnetcore;
+
+      sdk_9_0 = dotnet_9.sdk;
+      sdk_9_0_1xx = dotnet_9.sdk;
+      runtime_9_0 = dotnet_9.runtime;
+      aspnetcore_9_0 = dotnet_9.aspnetcore;
     }
-    // lib.optionalAttrs config.allowAliases {
-      # EOL
-      sdk_2_1 = throw "Dotnet SDK 2.1 is EOL, please use 8.0 (LTS) or 9.0 (Current)";
-      sdk_2_2 = throw "Dotnet SDK 2.2 is EOL, please use 8.0 (LTS) or 9.0 (Current)";
-      sdk_3_0 = throw "Dotnet SDK 3.0 is EOL, please use 8.0 (LTS) or 9.0 (Current)";
-      sdk_3_1 = throw "Dotnet SDK 3.1 is EOL, please use 8.0 (LTS) or 9.0 (Current)";
-      sdk_5_0 = throw "Dotnet SDK 5.0 is EOL, please use 8.0 (LTS) or 9.0 (Current)";
-    }
-    // dotnet_6_0
-    // dotnet_7_0
-    // dotnet_8_0
-    // dotnet_9_0
   );
 }

@@ -22,8 +22,8 @@ buildDotnetModule rec {
   projectFile = "WalletWasabi.Backend/WalletWasabi.Backend.csproj";
   nugetDeps = ./deps.json;
 
-  dotnet-sdk = dotnetCorePackages.sdk_7_0;
-  dotnet-runtime = dotnetCorePackages.aspnetcore_7_0;
+  dotnet-sdk = dotnetCorePackages.sdk_7_0-bin;
+  dotnet-runtime = dotnetCorePackages.aspnetcore_7_0-bin;
 
   buildInputs = [(lib.getLib stdenv.cc.cc) zlib];
 

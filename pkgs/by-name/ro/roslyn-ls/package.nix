@@ -20,7 +20,7 @@ let
           sdk_8_0
           # NOTE: we should be able to remove net6.0 after upstream removes from here:
           # https://github.com/dotnet/roslyn/blob/6cc106c0eaa9b0ae070dba3138a23aeab9b50c13/eng/targets/TargetFrameworks.props#L20
-          sdk_6_0
+          sdk_6_0-bin
         ])
         packages
         targetPackages
