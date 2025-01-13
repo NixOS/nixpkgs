@@ -60,10 +60,9 @@
 /pkgs/build-support/setup-hooks                  @Ericson2314
 /pkgs/build-support/setup-hooks/auto-patchelf.sh @layus
 /pkgs/by-name/au/auto-patchelf                   @layus
-/pkgs/pkgs-lib                                   @infinisil
+
 ## Format generators/serializers
-/pkgs/pkgs-lib/formats/libconfig                 @h7x4
-/pkgs/pkgs-lib/formats/hocon                     @h7x4
+/pkgs/pkgs-lib                                   @Stunkymonkey @h7x4
 
 # Nixpkgs build-support
 /pkgs/build-support/writers @lassulus @Profpatsch
