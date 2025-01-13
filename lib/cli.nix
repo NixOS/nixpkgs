@@ -137,6 +137,7 @@ rec {
         in
         if v == null then
           [ ]
+        # We need the option and its value in different list elements, to play nice with `lib.escapeShellArgs`
         else if optionValueSeparator == null then
           [
             (mkOptionName k)
