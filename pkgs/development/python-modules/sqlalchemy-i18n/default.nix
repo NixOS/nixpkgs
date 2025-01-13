@@ -49,5 +49,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/kvesteri/sqlalchemy-i18n";
     description = "Internationalization extension for SQLAlchemy models";
     license = lib.licenses.bsd3;
+    # sqlalchemy.exc.InvalidRequestError: The 'sqlalchemy.orm.mapper()' function is removed as of SQLAlchemy 2.0.
+    broken = lib.versionAtLeast sqlalchemy.version "2";
   };
 }
