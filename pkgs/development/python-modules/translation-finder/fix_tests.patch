@@ -1,0 +1,25 @@
+diff --git a/translation_finder/test_api.py b/translation_finder/test_api.py
+index c3b020c..9be070d 100644
+--- a/translation_finder/test_api.py
++++ b/translation_finder/test_api.py
+@@ -173,6 +173,7 @@ class APITest(DiscoveryTestCase):
+                     "filemask": "json/gotext-*.json",
+                     "template": "json/gotext-en.json",
+                 },
++                {'filemask': 'linked/*.po', 'new_base': 'linked/messages.pot', 'file_format': 'po'},
+             ],
+         )
+ 
+diff --git a/translation_finder/test_discovery.py b/translation_finder/test_discovery.py
+index 1a0ca40..14caa4f 100644
+--- a/translation_finder/test_discovery.py
++++ b/translation_finder/test_discovery.py
+@@ -945,6 +945,9 @@ class JSONDiscoveryTest(DiscoveryTestCase):
+                     "file_format": "json-nested",
+                     "template": "src/app/[locale]/_translations/en.json",
+                 },
++                {'filemask': '*/app/[locale]/_translations/cs.json', 'file_format': 'json-nested'},
++                {'filemask': '*/app/[locale]/_translations/de.json', 'file_format': 'json-nested'},
++                {'filemask': '*/app/[locale]/_translations/en.json', 'file_format': 'json-nested'}
+             ],
+         )
