@@ -54,9 +54,6 @@ vimUtils.buildVimPlugin {
     runHook postInstall
   '';
 
-  doInstallCheck = true;
-  nvimRequireCheck = "cord";
-
   passthru = {
     updateScript = nix-update-script {
       extraArgs = [ "--version=branch" ];
