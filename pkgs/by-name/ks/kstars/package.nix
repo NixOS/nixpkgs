@@ -1,41 +1,25 @@
 {
   lib,
   stdenv,
-  extra-cmake-modules,
   fetchurl,
   fetchFromGitLab,
   fetchpatch,
-  kconfig,
-  kdoctools,
-  kguiaddons,
-  ki18n,
-  kinit,
-  kiconthemes,
-  kio,
-  knewstuff,
-  kplotting,
-  kwidgetsaddons,
-  kxmlgui,
-  knotifyconfig,
-  qtx11extras,
-  qtwebsockets,
-  qtkeychain,
-  qtdatavis3d,
-  wrapQtAppsHook,
-  breeze-icons,
-  libsecret,
-  eigen,
-  zlib,
   cfitsio,
+  cmake,
+  curl,
+  eigen,
+  gsl,
   indi-full,
-  xplanet,
+  kdePackages,
   libnova,
   libraw,
-  gsl,
-  wcslib,
-  stellarsolver,
+  libsecret,
   libxisf,
-  curl,
+  opencv,
+  stellarsolver,
+  wcslib,
+  xplanet,
+  zlib,
 }:
 
 let
@@ -76,47 +60,51 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-WdVsPCwDQWW/NIRehuqk5f8rgtucAbGLSbmwZLMLiHM=";
   };
 
-  nativeBuildInputs = [
+  nativeBuildInputs = with kdePackages; [
     extra-cmake-modules
     kdoctools
     wrapQtAppsHook
+    cmake
   ];
-  buildInputs = [
+  buildInputs = with kdePackages; [
+    breeze-icons
+    cfitsio
+    curl
+    eigen'
+    gsl
+    indi-full
     kconfig
     kdoctools
     kguiaddons
     ki18n
-    kinit
     kiconthemes
     kio
     knewstuff
+    knotifyconfig
     kplotting
     kwidgetsaddons
     kxmlgui
-    knotifyconfig
-    qtx11extras
-    qtwebsockets
-    qtkeychain
-    qtdatavis3d
-    breeze-icons
-    libsecret
-    eigen'
-    zlib
-    cfitsio
-    indi-full
-    xplanet
     libnova
     libraw
-    gsl
-    wcslib
-    stellarsolver
+    libsecret
     libxisf
-    curl
+    opencv
+    qtdatavis3d
+    qtkeychain
+    qtsvg
+    qtwayland
+    qtwebsockets
+    stellarsolver
+    wcslib
+    xplanet
+    zlib
   ];
 
-  cmakeFlags = [
-    "-DINDI_PREFIX=${indi-full}"
-    "-DXPLANET_PREFIX=${xplanet}"
+  cmakeFlags = with lib.strings; [
+    (cmakeBool "BUILD_QT5" false)
+    (cmakeFeature "INDI_PREFIX" "${indi-full}")
+    (cmakeFeature "XPLANET_PREFIX" "${xplanet}")
+    (cmakeFeature "DATA_INSTALL_DIR" "$out/share/kstars/")
   ];
 
   meta = with lib; {
