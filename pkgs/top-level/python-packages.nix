@@ -5560,6 +5560,8 @@ self: super: with self; {
 
   graphene-django = callPackage ../development/python-modules/graphene-django { };
 
+  graphlan = callPackage ../development/python-modules/graphlan { };
+
   graphlib-backport = callPackage ../development/python-modules/graphlib-backport { };
 
   graphqlclient= callPackage ../development/python-modules/graphqlclient { };
