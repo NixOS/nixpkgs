@@ -1,4 +1,4 @@
-{ config, options, pkgs, lib, ... }:
+{ config, pkgs, lib, ... }:
 let
   cfg = config.services.paperless;
 
@@ -259,7 +259,7 @@ in
       directory = lib.mkOption {
         type = lib.types.str;
         default = cfg.dataDir + "/export";
-        defaultText = "\${dataDir}/export";
+        defaultText = lib.literalExpression "$''{config.services.paperless.dataDir}/export";
         description = "Directory to store export.";
       };
 
@@ -276,11 +276,11 @@ in
 
       settings = lib.mkOption {
         type = with lib.types; attrsOf anything;
-        default = {
-          "no-progress-bar" = true;
-          "no-color" = true;
-          "compare-checksums" = true;
-          "delete" = true;
+        defaultText = {
+          no-progress-bar = true;
+          no-color = true;
+          compare-checksums = true;
+          delete = true;
         };
         description = "Settings to pass to the document exporter as CLI arguments.";
       };
@@ -479,7 +479,12 @@ in
       "d '${cfg.exporter.directory}' - ${cfg.user} ${config.users.users.${cfg.user}.group} - -"
     ];
 
-    services.paperless.exporter.settings = options.services.paperless.exporter.settings.default;
+    services.paperless.exporter.settings = {
+      "no-progress-bar" = true;
+      "no-color" = true;
+      "compare-checksums" = true;
+      "delete" = true;
+    };
 
     systemd.services.paperless-exporter = {
       startAt = lib.defaultTo [] cfg.exporter.onCalendar;
