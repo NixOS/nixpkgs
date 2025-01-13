@@ -11,7 +11,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "ljmerza";
     repo = "light-entity-card";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-DtpNKcnxMWbKwfIwo9R2g2Vux9oAjTI0URixGC41qeA=";
   };
 

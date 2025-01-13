@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "jorchube";
     repo = "monitorets";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Y6cd9Wf2IzHwdxzLUP/U4rervlPUr8s2gKSW8y5I7bg=";
   };
 

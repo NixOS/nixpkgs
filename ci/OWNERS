@@ -102,6 +102,7 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 /nixos/default.nix                                    @infinisil
 /nixos/lib/from-env.nix                               @infinisil
 /nixos/lib/eval-config.nix                            @infinisil
+/nixos/modules/misc/ids.nix                           @R-VdP
 /nixos/modules/system/activation/bootspec.nix         @grahamc @cole-h @raitobezarius
 /nixos/modules/system/activation/bootspec.cue         @grahamc @cole-h @raitobezarius
 
@@ -134,14 +135,16 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 /nixos/modules/installer/sd-card/
 
 # Amazon
-/nixos/modules/virtualisation/amazon-init.nix     @arianvp
-/nixos/modules/virtualisation/ec2-data.nix        @arianvp
-/nixos/modules/virtualisation/amazon-options.nix  @arianvp
-/nixos/modules/virtualisation/amazon-image.nix    @arianvp
-/nixos/maintainers/scripts/ec2/                   @arianvp
-/nixos/modules/services/misc/amazon-ssm-agent.nix @arianvp
-/nixos/tests/amazon-ssm-agent.nix                 @arianvp
-/nixos/modules/system/boot/grow-partition.nix     @arianvp
+/nixos/modules/virtualisation/amazon-init.nix                  @arianvp
+/nixos/modules/virtualisation/ec2-data.nix                     @arianvp
+/nixos/modules/virtualisation/amazon-options.nix               @arianvp
+/nixos/modules/virtualisation/amazon-image.nix                 @arianvp
+/nixos/maintainers/scripts/ec2/                                @arianvp
+/nixos/modules/services/misc/amazon-ssm-agent.nix              @arianvp
+/nixos/tests/amazon-ssm-agent.nix                              @arianvp
+/nixos/modules/system/boot/grow-partition.nix                  @arianvp
+/nixos/modules/services/monitoring/amazon-cloudwatch-agent.nix @philipmw
+/nixos/tests/amazon-cloudwatch-agent.nix                       @philipmw
 
 # nixos-rebuild-ng
 /pkgs/by-name/ni/nixos-rebuild-ng                 @thiagokokada

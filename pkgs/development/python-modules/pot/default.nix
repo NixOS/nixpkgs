@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "PythonOT";
     repo = "POT";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Yx9hjniXebn7ZZeqou0JEsn2Yf9hyJSu/acDlM4kCCI=";
   };
 
@@ -86,9 +86,6 @@ buildPythonPackage rec {
       --replace " --cov-report= --cov=ot" "" \
       --replace " --durations=20" "" \
       --replace " --junit-xml=junit-results.xml" ""
-
-    substituteInPlace pyproject.toml \
-      --replace-fail "numpy>=2.0.0" "numpy"
 
     # we don't need setup.py to find the macos sdk for us
     sed -i '/sdk_path/d' setup.py

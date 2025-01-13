@@ -22,7 +22,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     inherit owner repo;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ql0tDaMc/1NgsLUpPHZB6GoXJj9DwUpadTX3AYufR/o=";
   };
 

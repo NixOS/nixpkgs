@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "saghul";
     repo = "aiodns";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-aXae9/x0HVp4KqydCf5/+p5PlSKUQ5cE3iVeD08rtf0=";
   };
 

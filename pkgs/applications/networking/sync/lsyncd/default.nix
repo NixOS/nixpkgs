@@ -11,11 +11,11 @@
   docbook_xml_dtd_45,
   docbook_xsl,
   libxslt,
-  apple-sdk_11,
+  apple-sdk,
 }:
 
 let
-  xnu = apple-sdk_11.sourceRelease "xnu";
+  xnu = apple-sdk.sourceRelease "xnu";
 in
 stdenv.mkDerivation rec {
   pname = "lsyncd";
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     docbook_xml_dtd_45
     docbook_xsl
     libxslt
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin apple-sdk_11;
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/axkibe/lsyncd";

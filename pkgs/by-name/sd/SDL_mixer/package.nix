@@ -4,7 +4,7 @@
   fetchpatch,
   fetchurl,
   fluidsynth,
-  libmikmod,
+  libopenmpt-modplug,
   libogg,
   libvorbis,
   pkg-config,
@@ -63,6 +63,12 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  # Fix location of modplug header
+  postPatch = ''
+    substituteInPlace music_modplug.h \
+      --replace-fail '#include "modplug.h"' '#include <libmodplug/modplug.h>'
+  '';
+
   nativeBuildInputs = [
     SDL
     pkg-config
@@ -72,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     SDL
     fluidsynth
-    libmikmod
+    libopenmpt-modplug
     libogg
     libvorbis
     smpeg
@@ -81,6 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags = [
     (lib.enableFeature false "music-ogg-shared")
     (lib.enableFeature false "music-mod-shared")
+    (lib.enableFeature true "music-mod-modplug")
     (lib.enableFeature enableNativeMidi "music-native-midi-gpl")
     (lib.enableFeature enableSdltest "sdltest")
     (lib.enableFeature enableSmpegtest "smpegtest")

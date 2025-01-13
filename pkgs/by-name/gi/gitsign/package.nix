@@ -10,15 +10,15 @@
 
 buildGoModule rec {
   pname = "gitsign";
-  version = "0.11.0";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "sigstore";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-103sW7X5Bddvqat9oHfkpG2BReu7g24xGH2ia0JLAjQ=";
+    hash = "sha256-MOj3bpVgeZlsvJqPD5mAud7jSHsRPCKvYAe2aQ4rWcw=";
   };
-  vendorHash = "sha256-XzKpzEYAKQUkGT+/XQJPzEp/qYuBOnE7jWHXtmitZDI=";
+  vendorHash = "sha256-POB8mSGyW45RSbNq9Vp/LW3jEtnHi7zufihXFTnWEfw=";
 
   subPackages = [
     "."

@@ -126,7 +126,7 @@ buildFHSEnv {
       # Libretro
       fluidsynth
       hidapi
-      mesa
+      libgbm
       libdrm
 
       # MAME

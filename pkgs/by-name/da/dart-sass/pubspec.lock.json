@@ -180,11 +180,11 @@
       "dependency": "direct dev",
       "description": {
         "name": "dart_style",
-        "sha256": "7856d364b589d1f08986e140938578ed36ed948581fbc3bc9aef1805039ac5ab",
+        "sha256": "27eb0ae77836989a3bc541ce55595e8ceee0992807f14511552a898ddd0d88ac",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "2.3.7"
+      "version": "3.0.1"
     },
     "dartdoc": {
       "dependency": "direct dev",
@@ -290,11 +290,11 @@
       "dependency": "transitive",
       "description": {
         "name": "http_parser",
-        "sha256": "76d306a1c3afb33fe82e2bbacad62a61f409b5634c915fceb0d799de1a913360",
+        "sha256": "178d74305e7866013777bab2c3d8726205dc5a4dd935297175b19a23a2e66571",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "4.1.1"
+      "version": "4.1.2"
     },
     "io": {
       "dependency": "transitive",
@@ -510,11 +510,11 @@
       "dependency": "direct dev",
       "description": {
         "name": "pub_api_client",
-        "sha256": "d9ced27bb5b933012a5218120f1fbee2a7d3bd234a7d5cc6fe29dedf4df6127a",
+        "sha256": "1b95df9b91bc1d5edf21a46e74b7aad64eaf33d56467781bfd8d730539a1f57d",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "3.0.0"
+      "version": "3.1.0"
     },
     "pub_semver": {
       "dependency": "direct main",
@@ -530,11 +530,11 @@
       "dependency": "direct dev",
       "description": {
         "name": "pubspec_parse",
-        "sha256": "c799b721d79eb6ee6fa56f00c04b472dcd44a30d258fac2174a6ec57302678f8",
+        "sha256": "81876843eb50dc2e1e5b151792c9a985c5ed2536914115ed04e9c8528f6647b0",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "1.3.0"
+      "version": "1.4.0"
     },
     "retry": {
       "dependency": "transitive",
@@ -620,21 +620,21 @@
       "dependency": "direct main",
       "description": {
         "name": "stack_trace",
-        "sha256": "9f47fd3630d76be3ab26f0ee06d213679aa425996925ff3feffdec504931c377",
+        "sha256": "8b27215b45d22309b5cddda1aa2b19bdfec9df0e765f2de506401c071d38d1b1",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "1.12.0"
+      "version": "1.12.1"
     },
     "stream_channel": {
       "dependency": "direct main",
       "description": {
         "name": "stream_channel",
-        "sha256": "ba2aa5d8cc609d96bbb2899c28934f9e1af5cddbd60a827822ea467161eb54e7",
+        "sha256": "969e04c80b8bcdf826f8f16579c7b14d780458bd97f56d107d3950fdbeef059d",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "2.1.2"
+      "version": "2.1.4"
     },
     "stream_transform": {
       "dependency": "direct main",
@@ -670,11 +670,11 @@
       "dependency": "direct dev",
       "description": {
         "name": "test",
-        "sha256": "43490fe4c0f5ecb898f3fa1cdcdad8d521d7f6ff17ebdc4e8cd32b2e99524a20",
+        "sha256": "8391fbe68d520daf2314121764d38e37f934c02fd7301ad18307bd93bd6b725d",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "1.25.13"
+      "version": "1.25.14"
     },
     "test_api": {
       "dependency": "transitive",
@@ -700,11 +700,11 @@
       "dependency": "direct dev",
       "description": {
         "name": "test_descriptor",
-        "sha256": "abe245e8b0d61245684127fe32343542c25dc2a1ce8f405531637241d98d07e4",
+        "sha256": "9ce468c97ae396e8440d26bb43763f84e2a2a5331813ee5a397cb4da481aaf9a",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "2.0.1"
+      "version": "2.0.2"
     },
     "test_process": {
       "dependency": "direct dev",
@@ -810,11 +810,11 @@
       "dependency": "direct dev",
       "description": {
         "name": "yaml",
-        "sha256": "75769501ea3489fca56601ff33454fe45507ea3bfb014161abc3b43ae25989d5",
+        "sha256": "b9da305ac7c39faa3f030eccd175340f968459dae4af175130b3fc47e40d76ce",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "3.1.2"
+      "version": "3.1.3"
     }
   },
   "sdks": {

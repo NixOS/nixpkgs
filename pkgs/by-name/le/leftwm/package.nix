@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "leftwm";
     repo = "leftwm";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-3voGKM6MKisc+ZVdZ5sCrs3XVfeRayozIk4SXNjw820=";
   };
 

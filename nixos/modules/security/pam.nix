@@ -1191,7 +1191,7 @@ in
 
       control = lib.mkOption {
         default = "sufficient";
-        type = lib.types.enum [ "required" "requisite" "sufficient" "lib.optional" ];
+        type = lib.types.enum [ "required" "requisite" "sufficient" "optional" ];
         description = ''
           This option sets pam "control".
           If you want to have multi factor authentication, use "required".

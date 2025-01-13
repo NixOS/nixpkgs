@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "rapidfuzz";
-  version = "3.10.1";
+  version = "3.11.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -27,8 +27,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "maxbachmann";
     repo = "RapidFuzz";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-0L8nkjgWdP/w//M69ZRxYk9If3CIEcnAl9mkJKJ4o1g=";
+    tag = "v${version}";
+    hash = "sha256-wsY0JCY8unLIMs01SLgQMOu9RQ0qTdPAZ71e6TigTVQ=";
   };
 
   postPatch = ''

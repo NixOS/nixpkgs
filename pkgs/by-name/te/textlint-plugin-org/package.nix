@@ -14,7 +14,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "kijimaD";
     repo = "textlint-plugin-org";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-BW+b09nv9Mzl3cUcOOpHoRz8tGLxuGGo4UCY6kdUlXA=";
   };
 

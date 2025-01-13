@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "khers";
     repo = "py-opensonic";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-lVErs5f2LoCrMNr+f8Bm2Q6xQRNuisloqyRHchYTukk=";
   };
 

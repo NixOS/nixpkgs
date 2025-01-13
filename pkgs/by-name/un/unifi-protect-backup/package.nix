@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "ep1cman";
     repo = "unifi-protect-backup";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-t4AgPFqKS6u9yITIkUUB19/SxVwR7X8Cc01oPx3M+E0=";
   };
 

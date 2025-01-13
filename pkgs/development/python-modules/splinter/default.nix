@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cobrateam";
     repo = "splinter";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-PGGql8yI1YosoUBAyDoI/8k7s4sVYnXEV7eow3GHH88=";
   };
 

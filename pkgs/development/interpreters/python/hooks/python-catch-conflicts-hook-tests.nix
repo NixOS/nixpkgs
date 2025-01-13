@@ -98,7 +98,7 @@ in
   cyclic-dependencies = generatePythonPackage {
     pname = "cyclic-dependencies";
     preFixup = ''
-      propagatedBuildInputs+=("$out")
+      appendToVar propagatedBuildInputs "$out"
     '';
   };
 

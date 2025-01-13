@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "killer0071234";
     repo = "python-zamg";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-j864+3c0GDDftdLqLDD0hizT54c0IgTjT77jOneXlq0=";
   };
 

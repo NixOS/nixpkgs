@@ -42,7 +42,6 @@
   psmisc,
   mesa-demos,
   vulkan-tools,
-  xboxdrv,
   pulseaudio,
   p7zip,
   xgamma,
@@ -61,7 +60,6 @@ let
     psmisc
     mesa-demos
     vulkan-tools
-    xboxdrv
     pulseaudio
     p7zip
     xgamma

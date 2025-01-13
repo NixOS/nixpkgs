@@ -645,10 +645,10 @@
   },
   "managednetworkfabric": {
     "pname": "managednetworkfabric",
-    "version": "6.4.0",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/managednetworkfabric-6.4.0-py3-none-any.whl",
-    "hash": "sha256-nUEHjgZUqq42pfDyg/Ud6YzENgWCkgU2VCVG7TTKC8Q=",
-    "description": "Support for managednetworkfabric commands based on 2023-06-15 API version"
+    "version": "7.0.0",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/managednetworkfabric-7.0.0-py3-none-any.whl",
+    "hash": "sha256-I+K24xxpm8DoyNsvqjv9Yi1ewVZeCDCVIizYUB7TKW8=",
+    "description": "Support for managednetworkfabric commands based on 2024-02-15-preview API version"
   },
   "managementpartner": {
     "pname": "managementpartner",
@@ -729,9 +729,9 @@
   },
   "networkcloud": {
     "pname": "networkcloud",
-    "version": "2.0.0b6",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/networkcloud-2.0.0b6-py3-none-any.whl",
-    "hash": "sha256-1T+IepVTU7DLHQ7CfcEltQG+/lryktzUFB7RY9O9hzM=",
+    "version": "2.0.0",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/networkcloud-2.0.0-py3-none-any.whl",
+    "hash": "sha256-8ntKTSkGJwdhHJCeClEd7A0cUgRed8sV/l7qP5jAQhQ=",
     "description": "Support for Azure Operator Nexus network cloud commands based on 2024-07-01 API version"
   },
   "new-relic": {
@@ -841,9 +841,9 @@
   },
   "qumulo": {
     "pname": "qumulo",
-    "version": "1.0.0",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/qumulo-1.0.0-py3-none-any.whl",
-    "hash": "sha256-mXP1gKP8IMwv5VWKHP3BDd/GVnmC0S83AIu/7Hqvz5s=",
+    "version": "2.0.0",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/qumulo-2.0.0-py3-none-any.whl",
+    "hash": "sha256-fsUZyd0s+Rv1Sy6Lm2iq2xNMsrv+xU6KLLCOo6DkfmI=",
     "description": "Microsoft Azure Command-Line Tools Qumulo Extension"
   },
   "quota": {
@@ -953,9 +953,9 @@
   },
   "stack-hci-vm": {
     "pname": "stack-hci-vm",
-    "version": "1.4.3",
-    "url": "https://hciarcvmsstorage.z13.web.core.windows.net/cli-extensions/stack_hci_vm-1.4.3-py3-none-any.whl",
-    "hash": "sha256-T1ulOOgw3O8ZUUfIunHHObK9SUy7moq1HoMcQLwfMyk=",
+    "version": "1.5.0",
+    "url": "https://hciarcvmsstorage.z13.web.core.windows.net/cli-extensions/stack_hci_vm-1.5.0-py3-none-any.whl",
+    "hash": "sha256-otixJPDbQp0+eugYFcVEzgAjGrFkDCHdqRUwT3WQ+Pg=",
     "description": "Microsoft Azure Command-Line Tools Stack-HCi-VM Extension"
   },
   "standbypool": {

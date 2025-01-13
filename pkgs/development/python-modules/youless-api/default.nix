@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gjong";
     repo = "youless-python-bridge";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-MvGLIhkBbcGThKeqtlzVZct2o9PBLwcAELmn5pW3R6I=";
   };
 

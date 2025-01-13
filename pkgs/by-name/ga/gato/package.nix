@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "praetorian-inc";
     repo = "gato";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-vXQFgP0KDWo1VWe7tMGCB2yEYlr/1KMXsiNupBVLBqc=";
   };
 

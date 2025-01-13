@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   postPatch =
     ''
-      sed -ie '/sys\/sysctl.h/d' source/Irrlicht/COSOperator.cpp
+      sed -i -e '/sys\/sysctl.h/d' source/Irrlicht/COSOperator.cpp
     ''
     + lib.optionalString stdenv.hostPlatform.isAarch64 ''
       substituteInPlace source/Irrlicht/Makefile \

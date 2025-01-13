@@ -9,7 +9,7 @@
   gperf,
   gawk,
   pkg-config,
-  boost182,
+  boost,
   fmt,
   luajit_openresty,
   ncurses,
@@ -47,8 +47,6 @@ let
       EOF
     '';
   };
-
-  boost = boost182;
 in
 
 stdenv.mkDerivation (self: {

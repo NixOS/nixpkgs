@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "yhino";
     repo = "pipenv-poetry-migrate";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-E93A3EfbCb+oOYB61CGhBLwB5m6pvZaSXt9wdnUBSFQ=";
   };
 

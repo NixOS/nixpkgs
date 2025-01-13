@@ -13,7 +13,10 @@ let
   gnat_version = lib.versions.major gnat.version;
 
   # gnatprove fsf-14 requires gpr2 from a special branch
-  gpr2_24_2_next = gpr2.overrideAttrs(old: rec {
+  gpr2_24_2_next = (gpr2.override {
+    # pregenerated kb db is not included
+    gpr2kbdir = "${gprbuild}/share/gprconfig";
+  }).overrideAttrs(old: rec {
     version = "24.2.0-next";
     src = fetchFromGitHub {
       owner = "AdaCore";

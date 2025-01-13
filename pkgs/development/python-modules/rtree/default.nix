@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Toblerity";
     repo = "rtree";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-yuSPRb8SRz+FRmwFCKDx+gtp9IWaneQ84jDuZP7TX0A=";
   };
 

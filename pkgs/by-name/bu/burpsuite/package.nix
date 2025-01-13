@@ -72,7 +72,7 @@ buildFHSEnv {
       libdrm
       udev
       libxkbcommon
-      mesa
+      libgbm
       nspr
       nss
       pango

@@ -31,7 +31,7 @@ Fixing bit-by-bit reproducibility also has additional advantages, such as
 avoiding hard-to-reproduce bugs, making content-addressed storage more effective
 and reducing rebuilds in such systems.
 
-## Steps To Reproduce
+## Steps to reproduce
 
 In the following steps, replace `<package>` with the canonical name of the
 package.

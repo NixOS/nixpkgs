@@ -8,7 +8,7 @@
 
 let
   pname = "gfold";
-  version = "4.5.1";
+  version = "4.6.0";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -17,10 +17,10 @@ rustPlatform.buildRustPackage {
     owner = "nickgerace";
     repo = pname;
     rev = version;
-    hash = "sha256-lIEYz5ngARzpJ4I1iN2bGd4eha1BiSmREJG6Cy2Lqrs=";
+    hash = "sha256-z5E+YS2zO4zgsW7mZbVN0z4HOurqoXwXn8hQc++9tks=";
   };
 
-  cargoHash = "sha256-9/Ro5aYKJCJ+5wvv6PmfWMrhYfc3a3d0DAhGDwMrvq4=";
+  cargoHash = "sha256-mSqqtHZDm1ySu48DdI2sF7i7A8rDkFS/4/9uB30JOI8=";
 
   passthru.tests.version = testers.testVersion {
     package = gfold;

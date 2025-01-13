@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "eerimoq";
     repo = "asn1tools";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-86bdBYlAVJfd3EY8s0t6ZDRA/qZVWuHD4Jxa1n1Ke5E=";
   };
 

@@ -26,7 +26,7 @@
   # Runtime dependencies
   arrow-cpp,
   babeltrace,
-  boost182, # using the version installed by ceph's `install-deps.sh`
+  boost,
   bzip2,
   cryptsetup,
   cunit,
@@ -240,13 +240,12 @@ let
         });
 
         # We pin the older `cryptography` 40 here;
-        # this also forces us to pin an older `pyopenssl` because the current one
-        # is not compatible with older `cryptography`, see:
-        #     https://github.com/pyca/pyopenssl/blob/d9752e44127ba36041b045417af8a0bf16ec4f1e/CHANGELOG.rst#2320-2023-05-30
+        # this also forces us to pin other packages, see below
         cryptography = self.callPackage ./old-python-packages/cryptography.nix { };
 
         # This is the most recent version of `pyopenssl` that's still compatible with `cryptography` 40.
         # See https://github.com/NixOS/nixpkgs/pull/281858#issuecomment-1899358602
+        # and https://github.com/pyca/pyopenssl/blob/d9752e44127ba36041b045417af8a0bf16ec4f1e/CHANGELOG.rst#2320-2023-05-30
         pyopenssl = super.pyopenssl.overridePythonAttrs (old: rec {
           version = "23.1.1";
           src = fetchPypi {
@@ -262,7 +261,12 @@ let
           ];
         });
 
-        fastapi = super.fastapi.overridePythonAttrs (old: rec {
+        # This is the most recent version of `trustme` that's still compatible with `cryptography` 40.
+        # See https://github.com/NixOS/nixpkgs/issues/359723
+        # and https://github.com/python-trio/trustme/commit/586f7759d5c27beb44da60615a71848eb2a5a490
+        trustme = self.callPackage ./old-python-packages/trustme.nix { };
+
+        fastapi = super.fastapi.overridePythonAttrs (old: {
           # Flaky test:
           #     ResourceWarning: Unclosed <MemoryObjectSendStream>
           # Unclear whether it's flaky in general or only in this overridden package set.
@@ -285,7 +289,7 @@ let
       };
   };
 
-  boost = boost182.override {
+  boost' = boost.override {
     enablePython = true;
     inherit python;
   };
@@ -354,6 +358,26 @@ rec {
         stripLen = 1;
         extraPrefix = "src/s3select/";
       })
+
+      (fetchpatch2 {
+        name = "ceph-gcc-14.patch";
+        url = "https://github.com/ceph/ceph/commit/0eace4ea9ea42412d4d6a16d24a8660642e41173.patch?full_index=1";
+        hash = "sha256-v+AExf/npe4NgmVl2j6o8860nwF9YuzC/vR0TWxTrIE=";
+      })
+
+      ./boost-1.85.patch
+
+      (fetchpatch2 {
+        name = "ceph-boost-1.86-uuid.patch";
+        url = "https://github.com/ceph/ceph/commit/01306208eac492ee0e67bff143fc32d0551a2a6f.patch?full_index=1";
+        hash = "sha256-OnDrr72inzGXXYxPFQevsRZImSvI0uuqFHqtFU2dPQE=";
+      })
+
+      # See:
+      # * <https://github.com/boostorg/python/issues/394>
+      # * <https://aur.archlinux.org/cgit/aur.git/commit/?h=ceph&id=8c5cc7d8deec002f7596b6d0860859a0a718f12b>
+      # * <https://github.com/ceph/ceph/pull/60999>
+      ./boost-1.86-PyModule.patch
     ];
 
     nativeBuildInputs = [
@@ -381,7 +405,7 @@ rec {
       ++ [
         arrow-cpp
         babeltrace
-        boost
+        boost'
         bzip2
         # Adding `ceph-python-env` here adds the env's `site-packages` to `PYTHONPATH` during the build.
         # This is important, otherwise the build system may not find the Python deps and then

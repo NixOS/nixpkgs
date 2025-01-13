@@ -40,7 +40,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "GoldenCheetah";
     repo = "GoldenCheetah";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-6JAdnYaKULJsc/zdcTMbCkbOCbiVtnJivEazDKL721c=";
   };
 

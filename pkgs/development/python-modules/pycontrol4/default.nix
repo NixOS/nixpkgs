@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lawtancool";
     repo = "pyControl4";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-0ZuztqHbrd+kMDGv3xyUYoTF/Ho+oHkycjSrKz8JABM=";
   };
 

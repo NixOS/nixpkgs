@@ -4,12 +4,12 @@
   fetchFromGitHub,
   cairo,
   fontconfig,
+  libdrm,
   libevdev,
   libinput,
   libxkbcommon,
   xcbutilwm,
   makeWrapper,
-  mesa,
   meson,
   ninja,
   nixosTests,
@@ -49,11 +49,11 @@ stdenv.mkDerivation rec {
   buildInputs = [
     cairo
     fontconfig
+    libdrm
     libevdev
     libinput
     libxkbcommon
     xcbutilwm
-    mesa # for libEGL headers
     pango
     pixman
     systemd

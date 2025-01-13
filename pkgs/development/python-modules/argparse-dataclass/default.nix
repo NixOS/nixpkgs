@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mivade";
     repo = "argparse_dataclass";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-ASdP6LOEeTszyppYV6vRQX8BKOHYUimI36tMSZTQfTk=";
   };
 

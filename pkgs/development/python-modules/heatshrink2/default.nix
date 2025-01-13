@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "eerimoq";
     repo = "pyheatshrink";
-    rev = "refs/tags/${version}";
+    tag = version;
     fetchSubmodules = true;
     hash = "sha256-gspMd3Fyxe2/GhZYdKjVcZXRlslay3jO4jZuVG79G44=";
   };

@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fsspec";
     repo = "adlfs";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-V0Uzfj9xuPfLgfILwVbtId+B81w/25cO+G1Y/KOEOyI=";
   };
 

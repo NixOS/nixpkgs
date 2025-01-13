@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "astropy";
     repo = "extension-helpers";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-qneulhSYB2gYiCdgoU7Dqg1luLWhVouFVihcKeOA37E=";
   };
 

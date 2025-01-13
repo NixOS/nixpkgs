@@ -19,7 +19,7 @@
 , xcbuild
 , cctools
 , zlib
-, apple-sdk_11
+, fixDarwinDylibNames
 
 , enableVulkan ? !stdenv.hostPlatform.isDarwin
 }:
@@ -49,7 +49,12 @@ stdenv.mkDerivation (finalAttrs: {
     gn
     ninja
     python3
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild cctools.libtool zlib ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    xcbuild
+    cctools.libtool
+    zlib
+    fixDarwinDylibNames
+  ];
 
   buildInputs = [
     expat
@@ -64,9 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals enableVulkan [
     vulkan-headers
     vulkan-memory-allocator
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_11 # can be removed once x86_64-darwin defaults to a newer SDK
-  ];
+  ] ;
 
   gnFlags = let
     cpu = {
@@ -95,6 +98,10 @@ stdenv.mkDerivation (finalAttrs: {
     "libwebp"
   ] ++ lib.optionals enableVulkan [
     "skia_use_vulkan=true"
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "skia_use_fontconfig=true"
+    "skia_use_freetype=true"
+    "skia_use_metal=true"
   ];
 
   env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-lz";

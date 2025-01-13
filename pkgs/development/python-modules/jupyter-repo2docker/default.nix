@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jupyterhub";
     repo = "repo2docker";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-ZzZBuJBPDG4to1fSYn2xysupXbPS9Q6wqWr3Iq/Vds8=";
   };
 

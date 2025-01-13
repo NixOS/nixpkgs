@@ -890,6 +890,7 @@ self: super:
         configureFlags = [
           # note: --enable-xquartz is auto
           "CPPFLAGS=-I${./darwin/dri}"
+          "--disable-libunwind" # libunwind on darwin is missing unw_strerror
           "--disable-glamor"
           "--with-default-font-path="
           "--with-apple-application-name=XQuartz"

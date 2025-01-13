@@ -10,7 +10,7 @@
 }@args:
 
 let
-  version = "6.1.120-rt46"; # updated by ./update-rt.sh
+  version = "6.1.120-rt47"; # updated by ./update-rt.sh
   branch = lib.versions.majorMinor version;
   kversion = builtins.elemAt (lib.splitString "-" version) 0;
 in
@@ -38,7 +38,7 @@ buildLinux (
           name = "rt";
           patch = fetchurl {
             url = "mirror://kernel/linux/kernel/projects/rt/${branch}/older/patch-${version}.patch.xz";
-            sha256 = "0pkjmxch6m8df9dnij3mvgq0ks4xc3a6sn0ia9bkfnanp6cikql2";
+            sha256 = "0nq8diqbanlkglb0liva3s43wx8g6pr9znvl9cq6df093by4gcya";
           };
         };
       in

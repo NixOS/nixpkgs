@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ImagingDataCommons";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-D3j5EujrEdGTfR8/V3o2VJ/VkGdZ8IifPYMhP4ppXhw=";
   };
 

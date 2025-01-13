@@ -41,7 +41,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "qtile";
     repo = "qtile";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-EqrvBXigMjevPERTcz3EXSRaZP2xSEsOxjuiJ/5QOz0=";
   };
 

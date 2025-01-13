@@ -15,6 +15,8 @@
   libpulseaudio,
   withRodio ? true,
   withLibmDNS ? true,
+  withAvahi ? false,
+  avahi-compat,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -42,6 +44,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs =
     [ openssl ]
     ++ lib.optional withALSA alsa-lib
+    ++ lib.optional withAvahi avahi-compat
     ++ lib.optional withPortAudio portaudio
     ++ lib.optional withPulseAudio libpulseaudio;
 
@@ -49,6 +52,7 @@ rustPlatform.buildRustPackage rec {
   buildFeatures =
     lib.optional withRodio "rodio-backend"
     ++ lib.optional withALSA "alsa-backend"
+    ++ lib.optional withAvahi "with-avahi"
     ++ lib.optional withPortAudio "portaudio-backend"
     ++ lib.optional withPulseAudio "pulseaudio-backend"
     ++ lib.optional withLibmDNS "with-libmdns";

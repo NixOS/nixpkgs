@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "acmesh-official";
     repo = "acme.sh";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-BPZ+5xvKqEaz+tkccVL0hEDAxLkICW5O+qPf73bOqRU=";
   };
 

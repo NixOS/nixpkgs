@@ -1,23 +1,23 @@
-{ lib
-, stdenvNoCC
-, fetchurl
-, unzip
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  unzip,
+  nix-update-script,
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "net-news-wire";
-  version = "6.1.4";
+  version = "6.1.8";
 
   src = fetchurl {
     url = "https://github.com/Ranchero-Software/NetNewsWire/releases/download/mac-${version}/NetNewsWire${version}.zip";
-    hash = "sha256-dNdbniXGre8G2/Ac0GB3GHJ2k1dEiHmAlTX3dJOEC7s=";
+    hash = "sha256-/xhy0gF2YHYBVPUAlwySH0/yIelMNeFlU7Ya/ADx1NI=";
   };
 
   sourceRoot = ".";
 
-  nativeBuildInputs = [
-    unzip
-  ];
+  nativeBuildInputs = [ unzip ];
 
   installPhase = ''
     runHook preInstall
@@ -26,17 +26,27 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^mac-(\\d+\\.\\d+\\.\\d+)$"
+    ];
+  };
+
+  meta = {
     description = "RSS reader for macOS and iOS";
     longDescription = ''
       It's like podcasts — but for reading.
       NetNewsWire shows you articles from your favorite blogs and news sites and keeps track of what you've read.
     '';
     homepage = "https://github.com/Ranchero-Software/NetNewsWire";
-    changelog =
-      "https://github.com/Ranchero-Software/NetNewsWire/releases/tag/mac-${version}";
-    license = licenses.mit;
-    platforms = platforms.darwin;
-    maintainers = with maintainers; [ jakuzure ];
+    changelog = "https://github.com/Ranchero-Software/NetNewsWire/releases/tag/mac-${version}";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.darwin;
+    maintainers = with lib.maintainers; [
+      jakuzure
+      DimitarNestorov
+    ];
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
 }

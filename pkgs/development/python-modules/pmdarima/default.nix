@@ -14,25 +14,45 @@
   pythonOlder,
   python,
   pytest7CheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pmdarima";
   version = "2.0.4";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "alkaline-ml";
     repo = "pmdarima";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-LHwPgQRB/vP3hBM8nqafoCrN3ZSRIMWLzqTqDOETOEc=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "numpy==" "numpy>=" \
+      --replace-fail "scipy==" "scipy>=" \
+      --replace-fail "statsmodels==" "statsmodels>="
+  '';
+
+  env = {
+    GITHUB_REF = "refs/tags/v${version}";
+  };
+
+  preBuild = ''
+    python build_tools/get_tag.py
+  '';
+
   nativeBuildInputs = [ cython ];
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     joblib
     numpy
     pandas
@@ -60,11 +80,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pmdarima" ];
 
-  meta = with lib; {
+  meta = {
     description = "Statistical library designed to fill the void in Python's time series analysis capabilities, including the equivalent of R's auto.arima function";
     homepage = "https://github.com/alkaline-ml/pmdarima";
     changelog = "https://github.com/alkaline-ml/pmdarima/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mbalatsko ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mbalatsko ];
   };
 }

@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "jcli";
-  version = "0.0.42";
+  version = "0.0.46";
 
   src = fetchFromGitHub {
     owner = "jenkins-zh";
     repo = "jenkins-cli";
-    rev = "v${version}";
-    hash = "sha256-t9NE911TjAvoCsmf9F989DNQ+s9GhgUF7cwuyHefWts=";
+    tag = "v${version}";
+    hash = "sha256-l0qpyrggDJSzaJMbhgJYVK2Y3A/R+xS0Qoy3afA/eGo=";
   };
 
-  vendorHash = "sha256-bmPnxFvdKU5zuMsCDboSOxP5f7NnMRwS/gN0sW7eTRA=";
+  vendorHash = "sha256-0x0Cl6cqullGIvtQTlHTGnWz9dBCT7aMEIRSB/Cuy8k=";
 
   ldflags = [
     "-s"
@@ -36,6 +36,7 @@ buildGoModule rec {
     + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
       installShellCompletion --cmd jcli \
         --bash <($out/bin/jcli completion --type bash) \
+        --fish <($out/bin/jcli completion --type fish) \
         --zsh <($out/bin/jcli completion --type zsh)
     '';
 
@@ -43,7 +44,7 @@ buildGoModule rec {
     description = "Jenkins CLI allows you to manage your Jenkins in an easy way";
     mainProgram = "jcli";
     homepage = "https://github.com/jenkins-zh/jenkins-cli";
-    changelog = "https://github.com/jenkins-zh/jenkins-cli/releases/tag/${src.rev}";
+    changelog = "https://github.com/jenkins-zh/jenkins-cli/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sikmir ];
   };

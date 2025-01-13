@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "MyreMylar";
     repo = "pygame_gui";
-    rev = "refs/tags/v_${version}";
+    tag = "v_${version}";
     hash = "sha256-6Ps3pmQ8tYwQyv0TliOvUNLy3GjSJ2jdDQTTxfYej0o=";
   };
 

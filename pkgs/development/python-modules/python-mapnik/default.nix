@@ -53,8 +53,7 @@ buildPythonPackage rec {
     ./python-mapnik_std_optional.patch
   ];
 
-  stdenv =
-    if python.stdenv.hostPlatform.isDarwin then darwin.apple_sdk_11_0.stdenv else python.stdenv;
+  stdenv = python.stdenv;
 
   build-system = [ setuptools ];
 

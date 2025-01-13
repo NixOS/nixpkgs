@@ -16,7 +16,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "casualsnek";
     repo = "onthespot";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-VaJBNsT7uNOGY43GnzhUqDQNiPoFZcc2UaIfOKgkufg=";
   };
 

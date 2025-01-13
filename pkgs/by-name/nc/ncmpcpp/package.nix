@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ncmpcpp";
     repo = "ncmpcpp";
-    rev = "refs/tags/${version}";
+    tag = version;
     sha256 = "sha256-HRJQ+IOQ8xP1QkPlLI+VtDUWaI2m0Aw0fCDWHhgsOLY=";
   };
 

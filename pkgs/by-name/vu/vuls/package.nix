@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "future-architect";
     repo = "vuls";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-mrptQSTxTdste6UgbkAm3aqgpYfaoOykHX0eYOTojgA=";
     fetchSubmodules = true;
   };

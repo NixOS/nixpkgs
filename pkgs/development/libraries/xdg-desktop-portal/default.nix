@@ -74,12 +74,6 @@ stdenv.mkDerivation (finalAttrs: {
     ./installed-tests-share.patch
   ];
 
-  # until/unless bubblewrap ships a pkg-config file, meson has no way to find it when cross-compiling.
-  postPatch = ''
-    substituteInPlace meson.build \
-      --replace-fail "find_program('bwrap'"  "find_program('${lib.getExe bubblewrap}'"
-  '';
-
   nativeBuildInputs = [
     docbook_xml_dtd_412
     docbook_xml_dtd_43
@@ -148,6 +142,20 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   doCheck = true;
+
+  postPatch = ''
+    # until/unless bubblewrap ships a pkg-config file, meson has no way to find it when cross-compiling.
+    substituteInPlace meson.build \
+      --replace-fail "find_program('bwrap'"  "find_program('${lib.getExe bubblewrap}'"
+
+    # Disable test failing with libportal 0.9.0
+    ${
+      assert (lib.versionOlder finalAttrs.version "1.20.0");
+      "# TODO: Remove when updating to x-d-p 1.20.0"
+    }
+    substituteInPlace tests/test-portals.c \
+      --replace-fail 'g_test_add_func ("/portal/notification/bad-arg", test_notification_bad_arg);' ""
+  '';
 
   preCheck = ''
     # For test_trash_file

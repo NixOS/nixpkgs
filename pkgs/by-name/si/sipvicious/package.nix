@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "EnableSecurity";
     repo = "sipvicious";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-O8/9Vz/u8BoF1dfGceOJdzPPYLfkdBp2DkwA5WQ3dgo=";
   };
 

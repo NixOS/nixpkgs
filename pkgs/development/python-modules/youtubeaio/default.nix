@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "joostlek";
     repo = "python-youtube";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-utkf5t6yrf0f9QBIaDH6MxKduNZOsjfEWfQnuVyUoRM=";
   };
 

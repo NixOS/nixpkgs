@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ppomes";
     repo = "myanon";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-sB6ykRywaoG2gfHOEQ9UoVn62nMciBWgCM9DhovBoe0=";
   };
 

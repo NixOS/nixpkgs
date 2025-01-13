@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "trailofbits";
     repo = "sigstore-rekor-types";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-vOGKDWhOg8dsgxyxOtM+czR+NOM26v0T0ctkFPUAYEo=";
   };
 

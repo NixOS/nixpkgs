@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Quansight-Labs";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-6dOi7+quWvASl2RHetULK5zixHFJlj/D6667o99ceSs=";
   };
 

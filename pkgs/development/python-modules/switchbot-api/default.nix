@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SeraphicCorp";
     repo = "py-switchbot-api";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-jpm01wDVLgGr5SMaevxiYGfv8tVa1ibRtcHkEK3yb58=";
   };
 

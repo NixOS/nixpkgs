@@ -31,7 +31,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Instagram";
     repo = "LibCST";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-fveY4ah94pv9ImI36MNrrxTpZv/DtLb45pXm67L8/GA=";
   };
 

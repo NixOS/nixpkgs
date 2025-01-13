@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "soedinglab";
     repo = "mmseqs2";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-O7tx+gdVAmZLihPnWSo9RWNVzfPjI61LGY/XeaGHrI0=";
   };
 

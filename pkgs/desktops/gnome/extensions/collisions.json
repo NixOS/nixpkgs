@@ -24,6 +24,10 @@
     "nepali-date@biplab",
     "nepali-calendar-gs-extension@subashghimire.info.np"
   ],
+  "mouse-follows-focus": [
+    "mouse-follows-focus@crisidev.org",
+    "mousefollowsfocus@matthes.biz"
+  ],
   "power-profile-indicator": [
     "power-profile-indicator@laux.wtf",
     "power-profile@fthx"

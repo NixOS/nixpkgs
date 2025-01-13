@@ -19,14 +19,9 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "PyWavelets";
     repo = "pywt";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-oWAF8YDvb0SdlRzSjG2BNEekBkvR3U6KQ+e2FoIs+tw=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "numpy>=2.0.0" "numpy"
-  '';
 
   build-system = [
     meson-python

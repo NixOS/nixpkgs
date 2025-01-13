@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "kpetremann";
     repo = "mqtt-exporter";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-3gUAiujfBXJpVailx8cMmSJS7l69XpE4UGK/aebcQqY=";
   };
 

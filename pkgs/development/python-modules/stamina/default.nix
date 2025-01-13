@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hynek";
     repo = "stamina";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-DasubVqKRhX4CRyKyJ3fIA9Rxmy+kGxkW0pDdu8OPPo=";
   };
 

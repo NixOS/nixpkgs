@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "graphia";
-  version = "5.1";
+  version = "5.2";
 
   src = fetchFromGitHub {
     owner = "graphia-app";
     repo = "graphia";
     rev = version;
-    sha256 = "sha256-gAJwAz3iKa4auRtsrPS9dz3ieiB09FeL6VN5Psq1i8Y=";
+    sha256 = "sha256-tS5oqpwpqvWGu67s8OuA4uQR3Zb5VzHTY/GnfVQki6k=";
   };
 
   nativeBuildInputs = [

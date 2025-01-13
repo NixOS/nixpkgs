@@ -28,24 +28,9 @@ target_prefix = get_option('target_prefix')
 # Dependencies
 cc = meson.get_compiler('c')
 
+libcxx = cc.find_library('c++')
 libcodedirectory = cc.find_library('codedirectory')
 libprunetrie = cc.find_library('prunetrie')
-
-
-# Feature tests
-# Add compatibility header for Darwin SDKs that don’t define `utimensat`.
-utimensat_test = '''
-#include <fcntl.h>
-#include <sys/stat.h>
-int main(int argc, char* argv[]) {
-    utimensat(AT_FDCWD, NULL, NULL, 0);
-    return 0;
-}
-'''
-if host_machine.system() == 'darwin' and not cc.compiles(utimensat_test, name : 'supports utimensat')
-    add_project_arguments('-include', 'compat.h', language : 'c')
-    add_project_link_arguments('-undefined', 'dynamic_lookup', language : 'c')
-endif
 
 
 incdirs = include_directories('include')
@@ -454,6 +439,7 @@ install_man('man/nmedit.1')
 otool = executable(
     f'@target_prefix@otool',
     c_args : ['-DEFI_SUPPORT'],
+    dependencies : [libcxx],
     include_directories : incdirs,
     install : true,
     link_with : [libstuff],
@@ -553,7 +539,7 @@ install_man('man/strings.1')
 strip = executable(
     f'@target_prefix@strip',
     c_args : ['-DTRIE_SUPPORT'],
-    dependencies : [libcodedirectory, libprunetrie],
+    dependencies : [libcxx, libcodedirectory, libprunetrie],
     include_directories : incdirs,
     install : true,
     link_with : [libstuff],

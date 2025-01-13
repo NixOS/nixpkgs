@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "olucurious";
     repo = "pyfcm";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-lpSbb0DDXLHne062s7g27zRpvTuOHiqQkqGOtWvuWdI=";
   };
 

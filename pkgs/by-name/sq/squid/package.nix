@@ -18,11 +18,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "squid";
-  version = "6.10";
+  version = "6.12";
 
   src = fetchurl {
     url = "http://www.squid-cache.org/Versions/v6/squid-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Cwexh+cj8Edw3SW+uJrsEgMKFYaWqoiS2HyLJoU0CKc=";
+    hash = "sha256-8986uyYDpRMmbySl1Gmanw12ufVU0YSLZ/nFHNOzy1A=";
   };
 
   nativeBuildInputs = [ pkg-config ];

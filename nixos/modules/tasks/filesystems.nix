@@ -32,6 +32,10 @@ let
   coreFileSystemOpts = { name, config, ... }: {
 
     options = {
+      enable = mkEnableOption "the filesystem mount" // {
+        default = true;
+      };
+
       mountPoint = mkOption {
         example = "/mnt/usb";
         type = nonEmptyWithoutTrailingSlash;
@@ -234,6 +238,7 @@ in
         }
       '';
       type = types.attrsOf (types.submodule [coreFileSystemOpts fileSystemOpts]);
+      apply = lib.filterAttrs (_: fs: fs.enable);
       description = ''
         The file systems to be mounted.  It must include an entry for
         the root directory (`mountPoint = "/"`).  Each
@@ -280,6 +285,7 @@ in
     boot.specialFileSystems = mkOption {
       default = {};
       type = types.attrsOf (types.submodule coreFileSystemOpts);
+      apply = lib.filterAttrs (_: fs: fs.enable);
       internal = true;
       description = ''
         Special filesystems that are mounted very early during boot.

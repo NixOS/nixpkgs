@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aws-cloudformation";
     repo = "cfn-lint";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-e06ytX1scIsmw/SezIVVnGn0day1l6kQ/wb05E8O7h0=";
   };
 

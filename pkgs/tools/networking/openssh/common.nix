@@ -122,6 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional stdenv.hostPlatform.isDarwin "--disable-libutil"
     ++ lib.optional (!linkOpenssl) "--without-openssl"
     ++ lib.optional withLdns "--with-ldns"
+    ++ lib.optional stdenv.hostPlatform.isOpenBSD "--with-bsd-auth"
     ++ extraConfigureFlags;
 
   ${if stdenv.hostPlatform.isStatic then "NIX_LDFLAGS" else null} =

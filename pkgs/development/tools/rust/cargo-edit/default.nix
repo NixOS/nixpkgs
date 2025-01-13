@@ -49,6 +49,7 @@ rustPlatform.buildRustPackage rec {
       gerschtli
       jb55
       killercup
+      matthiasbeyer
     ];
   };
 }

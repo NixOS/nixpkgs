@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "firefly-cpp";
     repo = "FireflyAlgorithm";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-dJnjeJN9NI8G/haYeOiMtAl56cExqMk0iTWpaybl4nE=";
   };
 

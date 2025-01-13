@@ -15,7 +15,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "apache";
     repo = "incubator-answer";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-nS3ZDwY221axzo1HAz369f5jWZ/mpCn4r3OPPqjiohI=";
   };
 

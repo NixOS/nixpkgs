@@ -83,11 +83,11 @@ stdenv.mkDerivation rec {
     bsdiff
   ];
 
-  postConfigure = ''
-    sconsFlags+=" BINDIR=$out/bin"
-    sconsFlags+=" INSTALLDIR=$out/share/globulation2"
-    sconsFlags+=" DATADIR=$out/share/globulation2/glob2"
-  '';
+  sconsFlags = [
+    "BINDIR=${placeholder "out"}/bin"
+    "INSTALLDIR=${placeholder "out"}/share/globulation2"
+    "DATADIR=${placeholder "out"}/share/globulation2/glob2"
+  ];
 
   NIX_LDFLAGS = "-lboost_system";
 

@@ -43,6 +43,9 @@ stdenv.mkDerivation rec {
     ++ lib.optional withNetworking "--enable-networking"
     ++ lib.optional withALSA "--enable-alsa";
 
+  # Fix GCC 14 build
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration -Wno-error=incompatible-pointer-types";
+
   meta = with lib; {
     description = "Emulator for IBM PC computers and clones";
     mainProgram = "pcem";

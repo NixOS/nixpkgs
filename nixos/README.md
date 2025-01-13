@@ -40,7 +40,7 @@ Module updates are submissions changing modules in some ways. These often contai
 Reviewing process:
 
 - Ensure that the module maintainers are notified.
-  - [CODEOWNERS](https://help.github.com/articles/about-codeowners/) will make GitHub notify users based on the submitted changes, but it can happen that it misses some of the package maintainers.
+  - The continuous integration system will make GitHub notify users based on the submitted changes, but it can happen that it misses some of the package maintainers.
 - Ensure that the module tests, if any, are succeeding.
   - You may invoke OfBorg with `@ofborg test <module>` to build `nixosTests.<module>`
 - Ensure that the introduced options are correct.

@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gr-framework";
-  version = "0.73.8";
+  version = "0.73.10";
 
   src = fetchFromGitHub {
     owner = "sciapp";
     repo = "gr";
     rev = "v${version}";
-    hash = "sha256-6RgNFGRprke7AUu24VS9iYUcWMWJ/DQ/LIvleyQgza4=";
+    hash = "sha256-vCcXWgoaWcaNRgIk9CrXp8eTII/CBOHR1iDncC/Cd4k=";
   };
 
   nativeBuildInputs = [

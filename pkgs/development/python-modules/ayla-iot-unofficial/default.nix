@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rewardone";
     repo = "ayla-iot-unofficial";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-LYHfu02FYoL2D9dEL3CM3llRXMa2M3EMU9CAsl1Cgoo=";
   };
 

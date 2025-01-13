@@ -24,10 +24,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ gettext gnutls nettle libxcrypt ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ApplicationServices ];
 
-  preBuild = lib.optionalString (stdenv.hostPlatform.isDarwin) ''
-    export MACOSX_DEPLOYMENT_TARGET=11.0
-  '';
-
   enableParallelBuilding = true;
 
   meta = with lib; {

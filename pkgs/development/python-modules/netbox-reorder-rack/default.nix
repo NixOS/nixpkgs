@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "netbox-community";
     repo = "netbox-reorder-rack";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-G1WGmEsKfz9HT6D6cCWJADm7pFaIV/jKYkYudEmUWJk=";
   };
 

@@ -3,7 +3,8 @@
   stdenv,
   buildPythonPackage,
   fetchPypi,
-  substituteAll,
+  replaceVars,
+  setuptools,
   setuptools-scm,
   freetype,
   pytestCheckHook,
@@ -11,24 +12,32 @@
 
 buildPythonPackage rec {
   pname = "freetype-py";
-  version = "2.1.0.post1";
-  format = "setuptools";
+  version = "2.3.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1k62fx53qrv9nb73mpqi2r11wzbx41qfv5qppvh6rylywnrknf3n";
+    hash = "sha256-+bZM4ycqXDWNzugkgAoy1wmX+4cqCWWlV63KIPznpdA=";
+    extension = "zip";
   };
 
   patches = [
-    (substituteAll {
-      src = ./library-paths.patch;
+    (replaceVars ./library-paths.patch {
       freetype = "${freetype.out}/lib/libfreetype${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
   ];
 
-  nativeBuildInputs = [ setuptools-scm ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail ', "certifi", "cmake"' ""
+  '';
 
-  propagatedBuildInputs = [ freetype ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
+  dependencies = [ freetype ];
 
   preCheck = ''
     cd tests
@@ -38,10 +47,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "freetype" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/rougier/freetype-py";
     description = "FreeType (high-level Python API)";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ goertzenator ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ goertzenator ];
   };
 }

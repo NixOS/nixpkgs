@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "awawa-dev";
     repo = "HyperHDR";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-agIWtDlMwjD0sGX2ntFwqROzUsl8tY3nRbmFvvOVh4o=";
   };
 

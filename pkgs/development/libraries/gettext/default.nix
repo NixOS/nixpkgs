@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gettext";
-  version = "0.21.1";
+  version = "0.22.5";
 
   src = fetchurl {
     url = "mirror://gnu/gettext/${pname}-${version}.tar.gz";
-    sha256 = "sha256-6MNlDh2M7odcTzVWQjgsHfgwWL1aEe6FVcDPJ21kbUU=";
+    hash = "sha256-7BcFselpuDqfBzFE7IBhUduIEn9eQP5alMtsj6SJlqA=";
   };
   patches = [
     ./absolute-paths.diff
@@ -33,8 +33,6 @@ stdenv.mkDerivation rec {
     "doc"
     "info"
   ];
-
-  hardeningDisable = [ "format" ];
 
   LDFLAGS = lib.optionalString stdenv.hostPlatform.isSunOS "-lm -lmd -lmp -luutil -lnvpair -lnsl -lidmap -lavl -lsec";
 
@@ -52,6 +50,21 @@ stdenv.mkDerivation rec {
 
   postPatch =
     ''
+      # Older versions of gettext come with a copy of `extern-inline.m4` that is not compatible with clang 18.
+      # When a project uses gettext + autoreconfPhase, autoreconfPhase will invoke `autopoint -f`, which will
+      # replace whatever (probably compatible) version of `extern-inline.m4` with one that probalby won’t work
+      # because `autopoint` will copy the autoconf macros from the project’s required version of gettext.
+      # Fixing this requires replacing all the older copies of the problematic file with a new one.
+      #
+      # This is ugly, but it avoids requiring workarounds in every package using gettext and autoreconfPhase.
+      declare -a oldFiles=($(tar tf gettext-tools/misc/archive.dir.tar | grep '^gettext-0\.[19].*/extern-inline.m4'))
+      oldFilesDir=$(mktemp -d)
+      for oldFile in "''${oldFiles[@]}"; do
+        mkdir -p "$oldFilesDir/$(dirname "$oldFile")"
+        cp gettext-tools/gnulib-m4/extern-inline.m4 "$oldFilesDir/$oldFile"
+      done
+      tar uf gettext-tools/misc/archive.dir.tar -C "$oldFilesDir" "''${oldFiles[@]}"
+
       substituteAllInPlace gettext-runtime/src/gettext.sh.in
       substituteInPlace gettext-tools/projects/KDE/trigger --replace "/bin/pwd" pwd
       substituteInPlace gettext-tools/projects/GNOME/trigger --replace "/bin/pwd" pwd

@@ -23,9 +23,9 @@
 let unwrapped = mkXfceDerivation {
   category = "xfce";
   pname = "thunar";
-  version = "4.20.0";
+  version = "4.20.1";
 
-  sha256 = "sha256-TCroFesFD0IKGdfuootd1BwEsWVECE2XQfUovJqPEh0=";
+  sha256 = "sha256-+Iz9tkP8foEtor1HFBB1/fyMXdLm3mXCoP9j9bug8po=";
 
   nativeBuildInputs = [
     docbook_xsl

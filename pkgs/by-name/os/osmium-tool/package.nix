@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   installShellFiles,
   pandoc,
@@ -24,6 +25,19 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-DObqbzdPA4RlrlcZhqA0MQtWBE+D6GRD1pd9U4DARIk=";
   };
+
+  patches = [
+    # Work around https://github.com/osmcode/osmium-tool/issues/276
+    # by applying changes from https://github.com/Tencent/rapidjson/pull/719
+    (fetchpatch {
+      url = "https://github.com/Tencent/rapidjson/commit/3b2441b87f99ab65f37b141a7b548ebadb607b96.patch";
+      hash = "sha256-Edmq+hdJQFQ4hT3Oz1cv5gX95qQxPLD4aY8QMTonDe8=";
+    })
+    (fetchpatch {
+      url = "https://github.com/Tencent/rapidjson/commit/862c39be371278a45a88d4d1d75164be57bb7e2d.patch";
+      hash = "sha256-V5zbq/THUY75p1RdEPKJK2NVnxbZs07MMwJBAH7nAMg=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake

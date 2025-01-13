@@ -45,6 +45,7 @@ stdenv.mkDerivation rec {
     flex
   ];
 
+  NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
   NIX_LDFLAGS = "-lbluetooth";
 
   postInstall = ''

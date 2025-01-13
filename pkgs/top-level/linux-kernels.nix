@@ -375,6 +375,8 @@ in {
 
     e1000e = if lib.versionOlder kernel.version "4.10" then  callPackage ../os-specific/linux/e1000e {} else null;
 
+    iio-utils = if lib.versionAtLeast kernel.version "4.1" then callPackage ../os-specific/linux/iio-utils { } else null;
+
     intel-speed-select = if lib.versionAtLeast kernel.version "5.3" then callPackage ../os-specific/linux/intel-speed-select { } else null;
 
     ipu6-drivers = callPackage ../os-specific/linux/ipu6-drivers {};
@@ -612,6 +614,8 @@ in {
     nullfs = callPackage ../os-specific/linux/nullfs { };
 
     msi-ec = callPackage ../os-specific/linux/msi-ec { };
+
+    tsme-test = callPackage ../os-specific/linux/tsme-test { };
 
   } // lib.optionalAttrs config.allowAliases {
     ati_drivers_x11 = throw "ati drivers are no longer supported by any kernel >=4.1"; # added 2021-05-18;

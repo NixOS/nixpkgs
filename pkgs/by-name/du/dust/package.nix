@@ -1,9 +1,7 @@
 {
-  stdenv,
   lib,
   fetchFromGitHub,
   rustPlatform,
-  apple-sdk_11,
   installShellFiles,
 }:
 
@@ -30,8 +28,6 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_11 ];
-
   doCheck = false;
 
   postInstall = ''
@@ -39,11 +35,11 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion completions/dust.{bash,fish} --zsh completions/_dust
   '';
 
-  meta = with lib; {
+  meta = {
     description = "du + rust = dust. Like du but more intuitive";
     homepage = "https://github.com/bootandy/dust";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ aaronjheng ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ aaronjheng ];
     mainProgram = "dust";
   };
 }

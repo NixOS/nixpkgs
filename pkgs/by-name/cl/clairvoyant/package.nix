@@ -10,6 +10,7 @@
   stdenv,
   vala,
   wrapGAppsHook4,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -36,6 +37,10 @@ stdenv.mkDerivation (finalAttrs: {
     libadwaita
     libportal
   ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     changelog = "https://github.com/cassidyjames/clairvoyant/releases/tag/${finalAttrs.version}";

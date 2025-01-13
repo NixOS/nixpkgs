@@ -3,6 +3,7 @@
 , runCommand
 , runCommandWith
 , runCommandCC
+, bintools
 , hello
 , debian-devscripts
 }:
@@ -130,6 +131,56 @@ let
   '';
 
   brokenIf = cond: drv: if cond then drv.overrideAttrs (old: { meta = old.meta or {} // { broken = true; }; }) else drv;
+  overridePlatforms = platforms: drv: drv.overrideAttrs (old: { meta = old.meta or {} // { inherit platforms; }; });
+
+  instructionPresenceTest = label: mnemonicPattern: testBin: expectFailure: runCommand "${label}-instr-test" {
+    nativeBuildInputs = [
+      bintools
+    ];
+    buildInputs = [
+      testBin
+    ];
+  } ''
+    touch $out
+    if $OBJDUMP -d \
+      --no-addresses \
+      --no-show-raw-insn \
+      "$(PATH=$HOST_PATH type -P test-bin)" \
+      | grep -E '${mnemonicPattern}' > /dev/null ; then
+      echo "Found ${label} instructions" >&2
+      ${lib.optionalString expectFailure "exit 1"}
+    else
+      echo "Did not find ${label} instructions" >&2
+      ${lib.optionalString (!expectFailure) "exit 1"}
+    fi
+  '';
+
+  pacRetTest = testBin: expectFailure: overridePlatforms [ "aarch64-linux" ] (
+    instructionPresenceTest "pacret" "\\bpaciasp\\b" testBin expectFailure
+  );
+
+  elfNoteTest = label: pattern: testBin: expectFailure: runCommand "${label}-elf-note-test" {
+    nativeBuildInputs = [
+      bintools
+    ];
+    buildInputs = [
+      testBin
+    ];
+  } ''
+    touch $out
+    if $READELF -n "$(PATH=$HOST_PATH type -P test-bin)" \
+      | grep -E '${pattern}' > /dev/null ; then
+      echo "Found ${label} note" >&2
+      ${lib.optionalString expectFailure "exit 1"}
+    else
+      echo "Did not find ${label} note" >&2
+      ${lib.optionalString (!expectFailure) "exit 1"}
+    fi
+  '';
+
+  shadowStackTest = testBin: expectFailure: brokenIf stdenv.hostPlatform.isMusl (overridePlatforms [ "x86_64-linux" ] (
+    elfNoteTest "shadowstack" "\\bSHSTK\\b" testBin expectFailure
+  ));
 
 in nameDrvAfterAttrName ({
   bindNowExplicitEnabled = brokenIf stdenv.hostPlatform.isStatic (checkTestBin (f2exampleWithStdEnv stdenv {
@@ -204,6 +255,14 @@ in nameDrvAfterAttrName ({
     ignoreStackClashProtection = false;
   });
 
+  pacRetExplicitEnabled = pacRetTest (helloWithStdEnv stdenv {
+    hardeningEnable = [ "pacret" ];
+  }) false;
+
+  shadowStackExplicitEnabled = shadowStackTest (f1exampleWithStdEnv stdenv {
+    hardeningEnable = [ "shadowstack" ];
+  }) false;
+
   bindNowExplicitDisabled = checkTestBin (f2exampleWithStdEnv stdenv {
     hardeningDisable = [ "bindnow" ];
   }) {
@@ -270,6 +329,14 @@ in nameDrvAfterAttrName ({
     ignoreStackClashProtection = false;
     expectFailure = true;
   };
+
+  pacRetExplicitDisabled = pacRetTest (helloWithStdEnv stdenv {
+    hardeningDisable = [ "pacret" ];
+  }) true;
+
+  shadowStackExplicitDisabled = shadowStackTest (f1exampleWithStdEnv stdenv {
+    hardeningDisable = [ "shadowstack" ];
+  }) true;
 
   # most flags can't be "unsupported" by compiler alone and
   # binutils doesn't have an accessible hardeningUnsupportedFlags
@@ -472,4 +539,12 @@ in {
     ignoreStackClashProtection = false;
     expectFailure = true;
   };
+
+  allExplicitDisabledPacRet = pacRetTest (helloWithStdEnv stdenv {
+    hardeningDisable = [ "all" ];
+  }) true;
+
+  allExplicitDisabledShadowStack = shadowStackTest (f1exampleWithStdEnv stdenv {
+    hardeningDisable = [ "all" ];
+  }) true;
 }))

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     (fetchurl {
-      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/app-misc/bfr/files/bfr-1.6-perl.patch";
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/app-misc/bfr/files/bfr-1.6-perl.patch?id=dec60bb6900d6ebdaaa6aa1dcb845b30b739f9b5";
       sha256 = "1pk9jm3c1qzs727lh0bw61w3qbykaqg4jblywf9pvq5bypk88qfj";
     })
   ];

@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "iterative";
     repo = "scmrepo";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-HrJraiETYC7U2IB9ykjGUOg3khA4lBIH18r7btvXRH8=";
   };
 

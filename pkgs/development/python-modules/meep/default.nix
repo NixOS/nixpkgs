@@ -40,7 +40,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "NanoComp";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-TB85obdk8pSWRaz3+3I6P6+dQtCHosWHRnKGck/wG9Q=";
   };
 
@@ -126,7 +126,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     mpiCheckPhaseHook
   ];
-  pythonImportCheck = [
+  pythonImportsCheck = [
     "meep.mpb"
   ];
   checkPhase = ''

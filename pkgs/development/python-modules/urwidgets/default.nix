@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "AnonymouX47";
     repo = "urwidgets";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-RgY7m0smcdUspGkCdzepxruEMDq/mAsVFNjHMLoWAyc=";
   };
 

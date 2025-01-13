@@ -12,11 +12,14 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "coin-or";
     repo = "ADOL-C";
-    rev = "refs/tags/releases/${finalAttrs.version}";
+    tag = "releases/${finalAttrs.version}";
     hash = "sha256-oU229SuOl/gHoRT8kiWfd5XFiByjeypgdVWFLMYFHfA=";
   };
 
-  configureFlags = [ "--with-openmp-flag=-fopenmp" ];
+  configureFlags = [
+    "--with-openmp-flag=-fopenmp"
+    "--enable-sparse"
+  ];
 
   buildInputs = lib.optional stdenv.cc.isClang llvmPackages.openmp;
 

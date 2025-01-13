@@ -234,13 +234,11 @@ in stdenv.mkDerivation {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       apple-sdk_swift
-      (darwinMinVersionHook deploymentVersion)
     ];
 
   # Will effectively be `buildInputs` when swift is put in `nativeBuildInputs`.
   depsTargetTargetPropagated = lib.optionals stdenv.targetPlatform.isDarwin [
     apple-sdk_swift
-    (darwinMinVersionHook deploymentVersion)
   ];
 
   # This is a partial reimplementation of our setup hook. Because we reuse

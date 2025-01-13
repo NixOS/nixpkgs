@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Vladimir-csp";
     repo = "uwsm";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-RHxA0X3cqHtp4NZl7qlqBYkqOJay8IPoaj12bdouVkc=";
   };
 

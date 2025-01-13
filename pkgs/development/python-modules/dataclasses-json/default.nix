@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lidatong";
     repo = "dataclasses-json";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-AH/T6pa/CHtQNox67fqqs/BBnUcmThvbnSHug2p33qM=";
   };
 

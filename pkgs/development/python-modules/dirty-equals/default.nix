@@ -21,7 +21,7 @@ let
     src = fetchFromGitHub {
       owner = "samuelcolvin";
       repo = "dirty-equals";
-      rev = "refs/tags/v${version}";
+      tag = "v${version}";
       hash = "sha256-DZuzZ8cLYpVdivMh+zNJKpHe+0fpxM3ulKiCpN2S6co=";
     };
 

@@ -35,7 +35,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sigstore";
     repo = "sigstore-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-pAzS/LU5me3qoJo6EmuSFPDO/lqRDKIl5hjFiysWTdM=";
   };
 

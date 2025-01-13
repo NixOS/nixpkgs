@@ -3,7 +3,6 @@
   runtimeShell,
   stdenvNoCC,
   callPackage,
-  substituteAll,
   writeShellScript,
   makeWrapper,
   dotnetCorePackages,

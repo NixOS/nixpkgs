@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyppeteer";
     repo = "pyppeteer";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-izMaWtJdkLHMQbyq7o7n46xB8dOHXZ5uO0UXt+twjL4=";
   };
 

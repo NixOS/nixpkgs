@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "getkin";
     repo = "kin-openapi";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-4pYrg75dFFdFS2SC1BvFoHcLFNGgBumXd3Vd7jHvUJg=";
   };
 

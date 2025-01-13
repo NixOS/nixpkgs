@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "materialsvirtuallab";
     repo = "monty";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ydt1T2agKUCBiMZ4uvQ3qshEiAQ0PP9EjPiWDXgH3Wo=";
   };
 

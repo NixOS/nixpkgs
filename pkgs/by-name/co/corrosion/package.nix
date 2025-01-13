@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "corrosion";
-  version = "0.5";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "corrosion-rs";
     repo = "corrosion";
     rev = "v${version}";
-    hash = "sha256-vaNXXXaGqYNmhonU+ANN857LAUgwv+PMcON+nBuUoeo=";
+    hash = "sha256-/Xq0SKaKuOgrMXbgw+Aa59NEnU1mPQhARoh7EqV01K8=";
   };
 
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;

@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pythological";
     repo = "etuples";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-dl+exar98PnqEiCNX+Ydllp7aohsAYrFtxb2Q1Lxx6Y=";
   };
 

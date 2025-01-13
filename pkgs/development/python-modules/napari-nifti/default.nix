@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "MIC-DKFZ";
     repo = "napari-nifti";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-JDyJMg6rsGkfEHBwqKc2L6oRO5Y1MJJlEjUuuqp7URQ=";
   };
 

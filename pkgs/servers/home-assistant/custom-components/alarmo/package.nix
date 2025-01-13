@@ -12,7 +12,7 @@ buildHomeAssistantComponent rec {
   src = fetchFromGitHub {
     owner = "nielsfaber";
     repo = "alarmo";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-EFR8GveMNpwhrIA0nP+Ny3YUTHAOFw+IF72hH1+wMSM=";
   };
 

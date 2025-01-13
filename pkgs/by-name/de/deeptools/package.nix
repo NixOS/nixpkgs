@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "deeptools";
     repo = "deepTools";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-2kSlL7Y5f/FjVtStnmz+GlTw2oymrtxOCaXlqgbQ7FU=";
   };
 

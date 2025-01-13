@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "python-tado";
-  version = "0.17.6";
+  version = "0.17.7";
   pyproject = true;
 
   disabled = pythonOlder "3.5";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "wmalgadey";
     repo = "PyTado";
-    rev = "refs/tags/${version}";
-    hash = "sha256-KcYxUKQuO7TLS4YPg2mrBjP+DMnvZeJokGzwmeM/CvE=";
+    tag = version;
+    hash = "sha256-WpGznYNVpis1pM9PRXHnQVev3JW6baUT5J9iPxwd0Uk=";
   };
 
   build-system = [ setuptools ];

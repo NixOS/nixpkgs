@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "jeromerobert";
     repo = "hmat-oss";
-    rev = "refs/tags/${version}";
+    tag = version;
     sha256 = "sha256-GnFlvZCEzSCcBVLjFWLe+AKXVA6UMs/gycrOJ2TBqrE=";
   };
 

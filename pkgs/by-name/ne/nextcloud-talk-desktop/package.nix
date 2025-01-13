@@ -1,15 +1,18 @@
 {
   lib,
   stdenv,
+  fetchurl,
   fetchzip,
   autoPatchelfHook,
+  copyDesktopItems,
+  makeDesktopItem,
   nss,
   cairo,
   xorg,
   libxkbcommon,
   alsa-lib,
   at-spi2-core,
-  mesa,
+  libgbm,
   pango,
   libdrm,
   vivaldi-ffmpeg-codecs,
@@ -21,17 +24,25 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nextcloud-talk-desktop";
-  version = "1.0.0";
+  version = "1.0.1";
 
   # Building from source would require building also building Server and Talk components
   # See https://github.com/nextcloud/talk-desktop?tab=readme-ov-file#%EF%B8%8F-prerequisites
   src = fetchzip {
     url = "https://github.com/nextcloud-releases/talk-desktop/releases/download/v${finalAttrs.version}/Nextcloud.Talk-linux-x64.zip";
-    hash = "sha256-XQa4Fa9eEaFlYrWa00S9aMWKJOPPFGSo4NAlRqE23jM=";
+    hash = "sha256-ZSNeuKZ+oi6tHO61RshtJ6ndtxvUJbY4gyhDwKpHXZI=";
     stripRoot = false;
   };
 
-  nativeBuildInputs = [ autoPatchelfHook ];
+  icon = fetchurl {
+    url = "https://raw.githubusercontent.com/nextcloud/talk-desktop/refs/tags/v1.0.0/img/icons/icon.png";
+    hash = "sha256-DteSSuxIs0ukIJrvUO/3Mrh5F2GG5UAVvGRZUuZonkg=";
+  };
+
+  nativeBuildInputs = [
+    autoPatchelfHook
+    copyDesktopItems
+  ];
 
   buildInputs =
     [
@@ -44,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
       libxkbcommon
       gtk3
       vivaldi-ffmpeg-codecs
-      mesa
+      libgbm
       libGL
       libglvnd
     ]
@@ -61,6 +72,18 @@ stdenv.mkDerivation (finalAttrs: {
   # Fixes `Zygote could not fork`
   runtimeDependencies = [ systemd ];
 
+  desktopItems = [
+    (makeDesktopItem {
+      type = "Application";
+      name = "nextcloud-talk-desktop";
+      desktopName = "Nextcloud Talk";
+      comment = finalAttrs.meta.description;
+      exec = finalAttrs.meta.mainProgram;
+      icon = "nextcloud-talk-desktop";
+      categories = [ "Chat" ];
+    })
+  ];
+
   preInstall = ''
     mkdir -p $out/bin
     mkdir -p $out/opt
@@ -73,6 +96,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Link the application in $out/bin away from contents of `preInstall`
     ln -s "$out/opt/Nextcloud Talk-linux-x64/Nextcloud Talk" $out/bin/nextcloud-talk-desktop
+    mkdir -p $out/share/icons/hicolor/512x512/apps
+    cp $icon $out/share/icons/hicolor/512x512/apps/nextcloud-talk-desktop.png
 
     runHook postInstall
   '';

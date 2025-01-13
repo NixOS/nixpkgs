@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "torchsnapshot";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-F8OaxLH8BL6MPNLFv1hBuVmeEdnEQ5w2Qny6by1wP6k=";
   };
 

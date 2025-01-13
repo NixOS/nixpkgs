@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "danirod";
     repo = "cartero";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-fXFrxaqHgf7XWX1guySsaP6PxmAPwVxoPaEOTpz4OqY=";
   };
 

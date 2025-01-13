@@ -15,6 +15,7 @@
   libadwaita,
   gst_all_1,
   ffmpeg-headless,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -68,6 +69,10 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix PATH : "${lib.makeBinPath [ ffmpeg-headless ]}"
     )
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     homepage = "https://gitlab.gnome.org/YaLTeR/video-trimmer";

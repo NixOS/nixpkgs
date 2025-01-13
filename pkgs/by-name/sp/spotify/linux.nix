@@ -33,7 +33,7 @@
   at-spi2-core,
   libpulseaudio,
   libdrm,
-  mesa,
+  libgbm,
   libxkbcommon,
   pname,
   meta,
@@ -87,7 +87,7 @@ let
     libpng
     libpulseaudio
     libxkbcommon
-    mesa
+    libgbm
     nss_latest
     pango
     stdenv.cc.cc

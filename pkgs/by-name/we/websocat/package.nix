@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "vi";
     repo = "websocat";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-v5+9cbKe3c12/SrW7mgN6tvQIiAuweqvMIl46Ce9f2A=";
   };
 

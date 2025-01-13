@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "xrootd";
     repo = "xrootd";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-ZU31nsQgs+Gz9mV8LVv4utJ7g8TXN5OxHjNDfQlt38M=";
   };

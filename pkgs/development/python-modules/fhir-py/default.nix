@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "beda-software";
     repo = "fhir-py";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ts4BT/YVfejyemEy8B9aAJuA9h1a5F/SoIAkDVem7mQ=";
   };
 

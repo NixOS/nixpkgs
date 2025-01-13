@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage rec {
       installManPage rgr.1
       popd
     ''
-    + lib.optionalString (stdenv.hostPlatform.canExecute stdenv.buildPlatform) ''
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
       # As it can be seen here: https://github.com/acheronfail/repgrep/blob/0.15.0/.github/workflows/release.yml#L206, the completions are just the same as ripgrep
       installShellCompletion --cmd rgr \
         --bash <(${lib.getExe ripgrep} --generate complete-bash | sed 's/-c rg/-c rgr/') \

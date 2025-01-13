@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pallets-eco";
     repo = "flask-principal";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-E9urzZc7/QtzAohSNAJsQtykrplb+MC189VGZI5kmEE=";
   };
 

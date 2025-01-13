@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Project-MONAI";
     repo = "MONAI";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-PovYyRLgoYwxqGeCBpWxX/kdClYtYK1bgy8yRa9eue8=";
     # note: upstream consistently seems to modify the tag shortly after release,
     # so best to wait a few days before updating

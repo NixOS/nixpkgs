@@ -31,7 +31,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-ldap";
     repo = "python-ldap";
-    rev = "refs/tags/python-ldap-${version}";
+    tag = "python-ldap-${version}";
     hash = "sha256-v1cWoRGxbvvFnHqnwoIfmiQQcxfaA8Bf3+M5bE5PtuU=";
   };
 

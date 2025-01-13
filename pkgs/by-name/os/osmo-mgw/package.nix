@@ -9,10 +9,6 @@
   libosmoabis,
 }:
 
-let
-  inherit (stdenv.hostPlatform) isLinux;
-in
-
 stdenv.mkDerivation rec {
   pname = "osmo-mgw";
   version = "1.13.1";
@@ -46,7 +42,7 @@ stdenv.mkDerivation rec {
     mainProgram = "osmo-mgw";
     homepage = "https://osmocom.org/projects/osmo-mgw";
     license = lib.licenses.agpl3Plus;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.markuskowa ];
     platforms = lib.platforms.linux;
   };
 }

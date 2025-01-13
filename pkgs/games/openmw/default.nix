@@ -78,6 +78,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-zkjVt3GfQZsFXl2Ht3lCuQtDMYQWxhdFO4aGSb3rsyo=";
   };
 
+  patches = [ ./0001-function-inclusion-fixes-for-gcc14.patch ];
+
   postPatch =
     ''
       sed '1i#include <memory>' -i components/myguiplatform/myguidatamanager.cpp # gcc12

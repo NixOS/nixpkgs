@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "prowler";
-  version = "5.0.2";
+  version = "5.0.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "prowler-cloud";
     repo = "prowler";
     tag = version;
-    hash = "sha256-8sQodEh12aEcIgBMC9kvI/aBTqttCC0lcQUl+D+k+XA=";
+    hash = "sha256-rjx0s+qUnpGQoUlvsEqwlJWZbC8Gb72s9MF0lRvJKZU=";
   };
 
   pythonRelaxDeps = true;

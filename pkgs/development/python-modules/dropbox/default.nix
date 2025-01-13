@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dropbox";
     repo = "dropbox-sdk-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-9Fsh06V226vIyJhrlLkh9Xr4UGoEIISnIFCtuKqI218=";
   };
 

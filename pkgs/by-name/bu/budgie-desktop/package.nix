@@ -25,7 +25,7 @@
   libuuid,
   libwnck,
   magpie,
-  mesa,
+  libgbm,
   meson,
   mutter,
   ninja,
@@ -106,7 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
     libuuid
     libwnck
     magpie
-    mesa
+    libgbm
     polkit
     sassc
     upower

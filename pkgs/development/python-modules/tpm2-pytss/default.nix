@@ -4,6 +4,7 @@
   substituteAll,
   buildPythonPackage,
   fetchPypi,
+  fetchpatch,
   pythonOlder,
   asn1crypto,
   cffi,
@@ -37,6 +38,12 @@ buildPythonPackage rec {
     [
       # Fix hardcoded `fapi-config.json` configuration path
       ./fapi-config.patch
+      # libtpms (underneath swtpm) bumped the TPM revision
+      # https://github.com/tpm2-software/tpm2-pytss/pull/593
+      (fetchpatch {
+        url = "https://github.com/tpm2-software/tpm2-pytss/pull/593.patch";
+        hash = "sha256-CNJnSIvUQ0Yvy0o7GdVfFZ7kHJd2hBt5Zv1lqgOeoks=";
+      })
     ]
     ++ lib.optionals isCross [
       # pytss will regenerate files from headers of tpm2-tss.

@@ -6,6 +6,7 @@
   lib,
   fetchFromGitHub,
   fetchurl,
+  fetchpatch,
   copyDesktopItems,
   makeDesktopItem,
   python3,
@@ -26,7 +27,6 @@
   zenity,
   makeWrapper,
   darwin,
-  apple-sdk_11,
   libicns,
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -36,13 +36,18 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "harbourmasters";
     repo = "shipwright";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-bA+Bm7M6udeZLpFhGa8fCtagfYBeRxWWqFuAj62XwGQ=";
     fetchSubmodules = true;
   };
 
   patches = [
     ./darwin-fixes.patch
+    (fetchpatch {
+      name = "gcc14.patch";
+      url = "https://github.com/HarbourMasters/Shipwright/commit/1bc15d5bf3042d4fd64e1952eb68c47a7d5d8061.patch";
+      hash = "sha256-OpjP+rGqx56DB4W8yzLkxuxSAQa6oXQqtbQ2cNcFjYQ=";
+    })
   ];
 
   # This would get fetched at build time otherwise, see:
@@ -88,8 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
       libXext
       libpulseaudio
       zenity
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin apple-sdk_11;
+    ];
 
   cmakeFlags = [
     (lib.cmakeBool "NON_PORTABLE" true)

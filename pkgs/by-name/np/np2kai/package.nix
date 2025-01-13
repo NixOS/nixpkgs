@@ -148,7 +148,9 @@ stdenv.mkDerivation rec {
   configurePhase =
     ''
       export GIT_VERSION=${builtins.substring 0 7 src.rev}
-      buildFlags="$buildFlags ''${enableParallelBuilding:+-j$NIX_BUILD_CORES}"
+    ''
+    + optionalString enableParallelBuilding ''
+      appendToVar buildFlags "-j$NIX_BUILD_CORES"
     ''
     + optionalString enableX11 ''
       cd x11

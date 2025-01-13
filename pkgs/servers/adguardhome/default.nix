@@ -13,7 +13,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "adguardhome";
-  version = "0.107.54";
+  version = "0.107.55";
   src = sources.${system} or (throw "Source for ${pname} is not available for ${system}");
 
   installPhase = ''

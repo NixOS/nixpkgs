@@ -8,12 +8,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "streamlink";
-  version = "7.0.0";
+  version = "7.1.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-UaQGKGLmeV1pQEbKbnBUnW0TWDxkDRUFlmgEsOA/7/I=";
+    hash = "sha256-YcCORSs6DTKmX2NrMI+mQDpHcoI4fp8jM8/OPDhFb9c=";
   };
 
   patches = [
@@ -50,7 +50,6 @@ python3Packages.buildPythonApplication rec {
     requests
     trio
     trio-websocket
-    typing-extensions
     urllib3
     websocket-client
   ];

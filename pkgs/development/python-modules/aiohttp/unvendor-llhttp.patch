@@ -1,22 +1,22 @@
 diff --git a/Makefile b/Makefile
-index 5769d2a1..f505dd81 100644
+index b0a3ef32..f36132c6 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -71,7 +71,7 @@ vendor/llhttp/node_modules: vendor/llhttp/package.json
+@@ -79,7 +79,7 @@ vendor/llhttp/node_modules: vendor/llhttp/package.json
  generate-llhttp: .llhttp-gen
  
  .PHONY: cythonize
--cythonize: .install-cython $(PYXS:.pyx=.c)
-+cythonize: $(PYXS:.pyx=.c)
+-cythonize: .install-cython $(PYXS:.pyx=.c) aiohttp/_websocket/reader_c.c
++cythonize: $(PYXS:.pyx=.c) aiohttp/_websocket/reader_c.c
  
- .install-deps: .install-cython $(PYXS:.pyx=.c) $(call to-hash,$(CYS) $(REQS))
- 	@python -m pip install -r requirements/dev.txt -c requirements/constraints.txt
+ .install-deps: .install-cython $(PYXS:.pyx=.c) aiohttp/_websocket/reader_c.c $(call to-hash,$(CYS) $(REQS))
+ 	@python -m pip install -r requirements/dev.in -c requirements/dev.txt
 diff --git a/aiohttp/_cparser.pxd b/aiohttp/_cparser.pxd
-index 165dd61d..bc6bf86d 100644
+index c2cd5a92..9184ac60 100644
 --- a/aiohttp/_cparser.pxd
 +++ b/aiohttp/_cparser.pxd
-@@ -10,7 +10,7 @@ from libc.stdint cimport (
- )
+@@ -1,7 +1,7 @@
+ from libc.stdint cimport int32_t, uint8_t, uint16_t, uint64_t
  
  
 -cdef extern from "../vendor/llhttp/build/llhttp.h":
@@ -25,7 +25,7 @@ index 165dd61d..bc6bf86d 100644
      struct llhttp__internal_s:
          int32_t _index
 diff --git a/setup.py b/setup.py
-index 4d59a022..d87d5b69 100644
+index 2f024e87..feebc638 100644
 --- a/setup.py
 +++ b/setup.py
 @@ -17,13 +17,6 @@ if sys.implementation.name != "cpython":
@@ -56,5 +56,5 @@ index 4d59a022..d87d5b69 100644
 +        library_dirs=["@llhttpLib@/lib"],
 +        libraries=["llhttp"],
      ),
-     Extension("aiohttp._helpers", ["aiohttp/_helpers.c"]),
      Extension("aiohttp._http_writer", ["aiohttp/_http_writer.c"]),
+     Extension("aiohttp._websocket.reader_c", ["aiohttp/_websocket/reader_c.c"]),

@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Bionus";
     repo = "imgbrd-grabber";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-6XfIaASfbvdPovtdDEJtsk4pEL4Dhmyq8ml4X7KZ4DE=";
     fetchSubmodules = true;
   };

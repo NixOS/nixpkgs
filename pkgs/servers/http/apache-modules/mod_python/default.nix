@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "grisha";
     repo = "mod_python";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-++yHNKVe1u3w47DaB0zvYyuTrBcQdmuDm22areAeejs=";
   };
 

@@ -172,8 +172,6 @@ stdenv.mkDerivation (
 
     cargoCheckFeatures = checkFeatures;
 
-    patchRegistryDeps = ./patch-registry-deps;
-
     nativeBuildInputs =
       nativeBuildInputs
       ++ lib.optionals auditable [

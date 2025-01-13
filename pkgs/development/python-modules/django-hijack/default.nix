@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "django-hijack";
-  version = "3.7.0";
+  version = "3.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django-hijack";
     repo = "django-hijack";
-    rev = "refs/tags/${version}";
-    hash = "sha256-WQ6s5s4Gccog78++tZX2IZ1605OHGhYSb2aTuU7LyBc=";
+    tag = version;
+    hash = "sha256-3P7SCKS+ThBRNfXpN17N1y5vhYYWRL2JGVBOUHRdhK8=";
   };
 
   build-system = [

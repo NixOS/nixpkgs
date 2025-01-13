@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "Checkmarx";
     repo = "kics";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-/trhDDY2jyN0o92fjy/ScEbYpcuBPPIaHx+wNW3cWA0=";
   };
 

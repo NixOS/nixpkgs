@@ -47,13 +47,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "radare2";
-  version = "5.9.6";
+  version = "5.9.8";
 
   src = fetchFromGitHub {
     owner = "radare";
     repo = "radare2";
-    rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-t/BMsYqNLMAlBBYm6JCDkFYL5YwJBwmEaaIY4KFYxY4=";
+    tag = finalAttrs.version;
+    hash = "sha256-XSnv0yWEPlXHUPjf1Qu50AN3Gvgr0o6Q4e0dOyRdO9A=";
   };
 
   preBuild = ''
@@ -78,6 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Duse_sys_openssl=true"
     "-Duse_sys_xxhash=true"
     "-Duse_sys_zip=true"
+    "-Duse_sys_zlib=true"
   ];
 
   enableParallelBuilding = true;

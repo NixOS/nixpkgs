@@ -13,6 +13,7 @@
   libsoup_3,
   meson,
   ninja,
+  nix-update-script,
   pkg-config,
   python3,
   python3Packages,
@@ -62,6 +63,10 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.pygobject3
     python3Packages.brotli
   ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Webfont Kit Generator is a simple utility that allows you to generate woff, woff2 and the necessary CSS boilerplate from non-web font formats (otf & ttf)";

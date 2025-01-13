@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "microformats";
     repo = "mf2py";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-mhJ+s1rtXEJ6DqVmiyWNEK+3cdDLpR63Q4QGmD9wVio=";
   };
 

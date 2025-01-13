@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "datreeio";
     repo = "datree";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-W1eX7eUMdPGbHA/f08xkG2EUeZmaunEAQn7/LRBe2nk=";
   };
 

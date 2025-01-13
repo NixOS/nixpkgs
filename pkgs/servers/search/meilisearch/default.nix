@@ -1,9 +1,7 @@
 {
-  stdenv,
   lib,
   rustPlatform,
   fetchFromGitHub,
-  apple-sdk_11,
   nixosTests,
   nix-update-script,
 }:
@@ -18,7 +16,7 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "meilisearch";
     repo = "meiliSearch";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-CVofke9tOGeDEhRHEt6EYwT52eeAYNqlEd9zPpmXQ2U=";
   };
 
@@ -37,8 +35,6 @@ rustPlatform.buildRustPackage {
   buildNoDefaultFeatures = true;
 
   nativeBuildInputs = [ rustPlatform.bindgenHook ];
-
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin apple-sdk_11;
 
   passthru = {
     updateScript = nix-update-script { };

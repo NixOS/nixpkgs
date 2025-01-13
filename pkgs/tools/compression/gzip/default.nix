@@ -1,6 +1,6 @@
 { lib, stdenv
 , fetchurl
-, makeWrapper
+, makeShellWrapper
 , updateAutotoolsGnuConfigScriptsHook
 , runtimeShellPackage
 }:
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook makeWrapper ];
+  nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook makeShellWrapper ];
   buildInputs = [ runtimeShellPackage ];
 
   makeFlags = [

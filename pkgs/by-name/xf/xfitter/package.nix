@@ -19,8 +19,6 @@
   qcdnum,
   root,
   zlib,
-  memorymappingHook,
-  memstreamHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -60,10 +58,6 @@ stdenv.mkDerivation rec {
     ++ lib.optionals ("5" == lib.versions.major root.version) [
       apfelgrid
       applgrid
-    ]
-    ++ lib.optionals (stdenv.system == "x86_64-darwin") [
-      memorymappingHook
-      memstreamHook
     ]
     ++ lib.optional (stdenv.hostPlatform.libc == "glibc") libtirpc;
 

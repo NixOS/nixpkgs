@@ -41,9 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   setupHook = lib.optional (bootstrap-chicken != null) ./setup-hook.sh;
 
-  # -fno-strict-overflow is not a supported argument in clang
-  hardeningDisable = lib.optionals stdenv.cc.isClang [ "strictoverflow" ];
-
   makeFlags =
     [
       "PLATFORM=${platform}"

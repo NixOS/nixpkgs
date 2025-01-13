@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "OpenVPN";
     repo = "openvpn3-linux";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-e3NRLrznTEolTzMO+kGEh48MCrcEr8p7JG3hG889aK4=";
     # `openvpn3-core` is a submodule.
     # TODO: make it into a separate package

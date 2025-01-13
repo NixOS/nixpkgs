@@ -19,21 +19,21 @@
 
 buildPythonPackage rec {
   pname = "google-api-core";
-  version = "2.20.0";
+  version = "2.24.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "python-api-core";
-    rev = "v${version}";
-    hash = "sha256-ccjkGQNaPRefI6+j/O+NwdBGEVNuZ5q5m1d8EAJGcbs=";
+    tag = "v${version}";
+    hash = "sha256-6U5rNhF4AYWae50pNIqDdlMzRhW4iV9vPlMPXN11DqQ=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     googleapis-common-protos
     google-auth
     protobuf
@@ -42,6 +42,7 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
+    async_rest = [ google-auth ] ++ google-auth.optional-dependencies.aiohttp;
     grpc = [
       grpcio
       grpcio-status

@@ -6,7 +6,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   flake8,
-  flask-sockets,
   moto,
   psutil,
   pytest-asyncio,
@@ -19,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "slack-sdk";
-  version = "3.33.5";
+  version = "3.34.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "slackapi";
     repo = "python-slack-sdk";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-kpilxg/S9/U6lJW8FsMvcdGh+qqDH0Kr66sc+HsY2DM=";
+    tag = "v${version}";
+    hash = "sha256-aL8XOlvnAxT9cgPf8EvJT80FmlgL2Vhu7JxDRHkUoSM=";
   };
 
   postPatch = ''
@@ -49,7 +48,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     flake8
-    flask-sockets
     moto
     psutil
     pytest-asyncio

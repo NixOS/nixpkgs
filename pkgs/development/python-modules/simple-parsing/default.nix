@@ -33,7 +33,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lebrice";
     repo = "SimpleParsing";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-RDS1sWzaQqXp/0a7dXlUHnd6z+GTIpUN1MnUCTI9LGw=";
   };
 

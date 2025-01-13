@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "skelsec";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-mZEnYVM5r4utiGwM7bp2SwaDjYsH8AR/Qm5UdPNke0w=";
   };
 

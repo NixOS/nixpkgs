@@ -91,7 +91,7 @@ stdenv.mkDerivation {
     # The Addon generation (AsyncRequest and a others checked) seems to have
     # trouble with building on Virtual machines. Disabling them until it
     # can be fully investigated.
-    sed -ie \
+    sed -i -e \
           "s/add_subdirectory(addons)/#add_subdirectory(addons)/g" \
           CMakeLists.txt
     # Bind Libs STATIC to avoid a segfault when relinking

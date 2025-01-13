@@ -11,7 +11,7 @@
 
 let
   pname = "rustus";
-  version = "0.7.6-unstable-2024-05-10";
+  version = "1.0.0";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage {
     hash = "sha256-S3hq6G78HRQVLJuuwfC6U7NQXMSdllrC/ZolVPZRTsA=";
   };
 
-  cargoHash = "sha256-uN0nXI15LxtSQpUCOJ8QIdgw2OyQO3i5alTik/fI8GI=";
+  cargoHash = "sha256-yFYDSgfNbm4a9oMG/ZeENhYTfpMxKH7TmPImFlBWwJ8=";
 
   env.OPENSSL_NO_VENDOR = 1;
 

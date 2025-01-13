@@ -9,6 +9,7 @@
   fetchFromGitLab,
   autoconf269,
   automake,
+  bash,
   libtool,
   libsigsegv,
   gettext,
@@ -77,7 +78,10 @@ stdenv.mkDerivation {
     libtool
   ];
   buildInputs =
-    [ libsigsegv ]
+    [
+      bash
+      libsigsegv
+    ]
     ++ lib.optional (gettext != null) gettext
     ++ lib.optional (ncurses != null) ncurses
     ++ lib.optional (pcre != null) pcre
@@ -141,10 +145,15 @@ stdenv.mkDerivation {
     cd builddir
   '';
 
+  # ;; Loading file ../src/defmacro.lisp ...
+  # *** - handle_fault error2 ! address = 0x8 not in [0x1000000c0000,0x1000000c0000) !
+  # SIGSEGV cannot be cured. Fault address = 0x8.
+  hardeningDisable = [ "pie" ];
+
   doCheck = true;
 
   postInstall = lib.optionalString (withModules != [ ]) (
-    ''./clisp-link add "$out"/lib/clisp*/base "$(dirname "$out"/lib/clisp*/base)"/full''
+    ''bash ./clisp-link add "$out"/lib/clisp*/base "$(dirname "$out"/lib/clisp*/base)"/full''
     + lib.concatMapStrings (x: " " + x) withModules
   );
 

@@ -223,6 +223,7 @@ import ./make-test-python.nix (
       ''
         start_all()
         router.wait_for_unit("kea-dhcp4-server.service")
+        client.systemctl("start systemd-networkd-wait-online.service")
         client.wait_for_unit("systemd-networkd-wait-online.service")
         client.wait_until_succeeds("ping -c 5 10.0.0.1")
         router.wait_until_succeeds("ping -c 5 10.0.0.3")

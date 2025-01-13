@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "linux-integrity";
     repo = "ima-evm-utils";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-vIu12Flc2DiEqUSKAfoUi7Zg6D25pURvlYKEQKHER4I=";
   };
 

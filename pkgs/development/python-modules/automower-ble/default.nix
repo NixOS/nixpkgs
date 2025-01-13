@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "alistair23";
     repo = "AutoMower-BLE";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-BWfRXz78e1Xq0fNOGJ2IFnjNqfH3oD5VIGMxyCPtEUw=";
   };
 

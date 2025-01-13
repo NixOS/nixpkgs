@@ -9,7 +9,7 @@
   libasn1c,
   libosmoabis,
   libosmo-netif,
-  libosmo-sccp,
+  libosmo-sigtran,
   osmo-iuh,
 }:
 
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     libasn1c
     libosmoabis
     libosmo-netif
-    libosmo-sccp
+    libosmo-sigtran
     osmo-iuh
   ];
 

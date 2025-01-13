@@ -13,6 +13,7 @@
   libadwaita,
   openssl,
   darwin,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -56,6 +57,10 @@ stdenv.mkDerivation (finalAttrs: {
   env.NIX_CFLAGS_COMPILE = toString (
     lib.optionals stdenv.hostPlatform.isDarwin [ "-Wno-error=incompatible-function-pointer-types" ]
   );
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Preview and debug websites metadata tags for social media share";

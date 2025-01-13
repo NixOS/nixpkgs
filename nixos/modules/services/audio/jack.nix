@@ -258,7 +258,7 @@ in
           {
             User = "jackaudio";
             SupplementaryGroups = lib.optional (
-              config.hardware.pulseaudio.enable && !config.hardware.pulseaudio.systemWide
+              config.services.pulseaudio.enable && !config.services.pulseaudio.systemWide
             ) "users";
             ExecStart = "${cfg.jackd.package}/bin/jackd ${lib.escapeShellArgs cfg.jackd.extraOptions}";
             LimitRTPRIO = 99;

@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "cdown";
     repo = "tzupdate";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-eod4yFzX7pATNQmG7jU+r9mnC9nprJ55ufMXpKjw/YI=";
   };
 

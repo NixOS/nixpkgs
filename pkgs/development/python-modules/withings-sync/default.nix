@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jaroslawhartman";
     repo = "withings-sync";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ySl2nRR8t7c3NhjgjSzLQ+hcJuh+kx5aoaVPJF56HR0=";
   };
 

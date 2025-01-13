@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "stlehmann";
     repo = "pyads";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-OvDh92fwHW+UzEO5iqVOY7d5H0Es6CJK/f/HCyLO9J4=";
   };
 

@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyannote";
     repo = "pyannote-pipeline";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-0wSgy6kbKi9Wa5dimOz34IV5/8fSwaHDMUpaBW7tm2Y=";
   };
 

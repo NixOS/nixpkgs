@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "matthewwardrop";
     repo = "formulaic";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-1Ygu4o6RXXTnvve8XZi+QMhCjvUyMspYWTyUH3p6+dg=";
   };
 

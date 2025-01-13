@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "bitcoin-core";
     repo = "secp256k1";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-pCSNUSrPyN/lLYZm7zK/b9LICkThXOr6JAyFvHZSPW0=";
   };
 

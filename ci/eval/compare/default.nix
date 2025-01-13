@@ -5,7 +5,11 @@
   writeText,
   ...
 }:
-{ beforeResultDir, afterResultDir }:
+{
+  beforeResultDir,
+  afterResultDir,
+  touchedFilesJson,
+}:
 let
   /*
     Derivation that computes which packages are affected (added, changed or removed) between two revisions of nixpkgs.
@@ -77,11 +81,11 @@ let
   # - values: lists of `packagePlatformPath`s
   diffAttrs = diff beforeAttrs afterAttrs;
 
+  rebuilds = uniqueStrings (diffAttrs.added ++ diffAttrs.changed);
+  rebuildsPackagePlatformAttrs = convertToPackagePlatformAttrs rebuilds;
+
   changed-paths =
     let
-      rebuilds = uniqueStrings (diffAttrs.added ++ diffAttrs.changed);
-      rebuildsPackagePlatformAttrs = convertToPackagePlatformAttrs rebuilds;
-
       rebuildsByPlatform = groupByPlatform rebuildsPackagePlatformAttrs;
       rebuildsByKernel = groupByKernel rebuildsPackagePlatformAttrs;
       rebuildCountByKernel = lib.mapAttrs (
@@ -96,13 +100,25 @@ let
           rebuildsByKernel
           rebuildCountByKernel
           ;
-        labels = getLabels rebuildCountByKernel;
+        labels =
+          (getLabels rebuildCountByKernel)
+          # Adds "10.rebuild-*-stdenv" label if the "stdenv" attribute was changed
+          ++ lib.mapAttrsToList (kernel: _: "10.rebuild-${kernel}-stdenv") (
+            lib.filterAttrs (_: kernelRebuilds: kernelRebuilds ? "stdenv") rebuildsByKernel
+          );
       }
     );
+
+  maintainers = import ./maintainers.nix {
+    changedattrs = lib.unique (map (a: a.packagePath) rebuildsPackagePlatformAttrs);
+    changedpathsjson = touchedFilesJson;
+  };
 in
 runCommand "compare"
   {
     nativeBuildInputs = [ jq ];
+    maintainers = builtins.toJSON maintainers;
+    passAsFile = [ "maintainers" ];
   }
   ''
     mkdir $out
@@ -110,5 +126,8 @@ runCommand "compare"
     cp ${changed-paths} $out/changed-paths.json
 
     jq -r -f ${./generate-step-summary.jq} < ${changed-paths} > $out/step-summary.md
+
+    cp "$maintainersPath" "$out/maintainers.json"
+
     # TODO: Compare eval stats
   ''

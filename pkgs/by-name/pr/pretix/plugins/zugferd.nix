@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pretix-zugferd";
-  version = "2.2.1";
+  version = "2.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "pretix-zugferd";
     rev = "v${version}";
-    hash = "sha256-AJbrx1n32YAZnJGYX67qqaEnOeegYfSUEekvQnmjt+0=";
+    hash = "sha256-urf5HrC3Y64hH+U738t9fchoeR2sawlJAQoLFtwebA4=";
   };
 
   postPatch = ''

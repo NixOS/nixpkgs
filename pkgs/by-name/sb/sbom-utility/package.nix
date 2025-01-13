@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "CycloneDX";
     repo = "sbom-utility";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-LiHCA5q9IJ67jZ2JUcbCFVCYnT36nyq9QzgH9PMr9kM=";
   };
 

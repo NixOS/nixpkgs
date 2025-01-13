@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "textile";
     repo = "python-textile";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-KVDppsvX48loV9OJ70yqmQ5ZSypzcxrjH1j31DcyfM8=";
   };
 

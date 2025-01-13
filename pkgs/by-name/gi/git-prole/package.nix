@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "9999years";
     repo = "git-prole";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-QwLkByC8gdAnt6geZS285ErdH8nfV3vsWjMF4hTzq9Y=";
   };
 

@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Danielhiversen";
     repo = "PyMetno";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-0QODCJmGxgSKsTbsq4jsoP3cTy/0y6hq63j36bj7Dvo=";
   };
 

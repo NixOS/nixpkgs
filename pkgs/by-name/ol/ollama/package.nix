@@ -19,7 +19,9 @@
   cudaPackages,
   darwin,
   autoAddDriverRunpath,
+  versionCheckHook,
 
+  # passthru
   nixosTests,
   testers,
   ollama,
@@ -41,13 +43,13 @@ assert builtins.elem acceleration [
 let
   pname = "ollama";
   # don't forget to invalidate all hashes each update
-  version = "0.5.1";
+  version = "0.5.4";
 
   src = fetchFromGitHub {
     owner = "ollama";
     repo = "ollama";
-    rev = "v${version}";
-    hash = "sha256-llsK/rMK1jf2uneqgon9gqtZcbC9PuCDxoYfC7Ta6PY=";
+    tag = "v${version}";
+    hash = "sha256-JyP7A1+u9Vs6ynOKDwun1qLBsjN+CVHIv39Hh2TYa2U=";
     fetchSubmodules = true;
   };
 
@@ -169,14 +171,10 @@ goBuild {
     ++ lib.optionals enableCuda cudaLibs
     ++ lib.optionals stdenv.hostPlatform.isDarwin metalFrameworks;
 
-  patches = [
-    # ollama's build script is unable to find hipcc
-    ./rocm.patch
-  ];
-
+  # replace inaccurate version number with actual release version
   postPatch = ''
-    # replace inaccurate version number with actual release version
-    substituteInPlace version/version.go --replace-fail 0.0.0 '${version}'
+    substituteInPlace version/version.go \
+      --replace-fail 0.0.0 '${version}'
   '';
 
   overrideModAttrs = (
@@ -186,25 +184,28 @@ goBuild {
     }
   );
 
-  preBuild = ''
+  preBuild =
+    let
+      dist_cmd =
+        if cudaRequested then
+          "dist_cuda_v${cudaMajorVersion}"
+        else if rocmRequested then
+          "dist_rocm"
+        else
+          "dist";
+    in
     # build llama.cpp libraries for ollama
-    make -j $NIX_BUILD_CORES
-  '';
-
-  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
-    # copy libggml_*.so and runners into lib
-    # https://github.com/ollama/ollama/blob/v0.4.4/llama/make/gpu.make#L90
-    mkdir -p $out/lib
-    cp -r dist/*/lib/* $out/lib/
-  '';
+    ''
+      make ${dist_cmd} -j $NIX_BUILD_CORES
+    '';
 
   postFixup =
+    # the app doesn't appear functional at the moment, so hide it
     ''
-      # the app doesn't appear functional at the moment, so hide it
       mv "$out/bin/app" "$out/bin/.ollama-app"
     ''
+    # expose runtime libraries necessary to use the gpu
     + lib.optionalString (enableRocm || enableCuda) ''
-      # expose runtime libraries necessary to use the gpu
       wrapProgram "$out/bin/ollama" ${wrapperArgs}
     '';
 
@@ -214,6 +215,14 @@ goBuild {
     "-X=github.com/ollama/ollama/version.Version=${version}"
     "-X=github.com/ollama/ollama/server.mode=release"
   ];
+
+  __darwinAllowLocalNetworking = true;
+
+  nativeInstallCheck = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
 
   passthru = {
     tests =

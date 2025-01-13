@@ -14,7 +14,7 @@ flutter324.buildFlutterApplication rec {
   src = fetchFromGitHub {
     owner = "ubuntu-flutter-community";
     repo = "musicpod";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-gsreA8ZTLcSvIAtODZ2gopZ78iyoN18gsSi9/IoY5/0=";
   };
 

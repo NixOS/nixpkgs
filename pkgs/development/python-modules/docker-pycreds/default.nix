@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "shin-";
     repo = "dockerpy-creds";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-yYsMsRW6Bb8vmwT0mPjs0pRqBbznGtHnGb3JNHjLjys=";
   };
 

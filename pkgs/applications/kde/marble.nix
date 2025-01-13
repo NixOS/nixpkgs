@@ -47,7 +47,7 @@ mkDerivation {
     knewstuff
     gpsd
   ];
-  preConfigure = ''
-    cmakeFlags+=" -DINCLUDE_INSTALL_DIR=''${!outputDev}/include"
-  '';
+  cmakeFlags = [
+    "-DINCLUDE_INSTALL_DIR=${placeholder "dev"}/include"
+  ];
 }

@@ -124,6 +124,8 @@ let
         "ssl/certs"
         "ca-certificates"
         "pki"
+        # Custom dconf profiles
+        "dconf"
       ];
     in
     map (path: "/etc/${path}") files;

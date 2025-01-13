@@ -1,45 +1,50 @@
-{ fetchFromGitHub
-, makeWrapper
-, stdenvNoCC
-, lib
-, gnugrep
-, gnused
-, curl
-, catt
-, syncplay
-, ffmpeg
-, fzf
-, aria2
-, withMpv ? true, mpv
-, withVlc ? false, vlc
-, withIina ? false, iina
-, chromecastSupport ? false
-, syncSupport ? false
+{
+  fetchFromGitHub,
+  makeWrapper,
+  stdenvNoCC,
+  lib,
+  gnugrep,
+  gnused,
+  curl,
+  catt,
+  syncplay,
+  ffmpeg,
+  fzf,
+  aria2,
+  mpv,
+  vlc,
+  iina,
+  withMpv ? true,
+  withVlc ? false,
+  withIina ? false,
+  chromecastSupport ? false,
+  syncSupport ? false,
 }:
 
-assert withMpv || withVlc || withIina;
+let
+  players = lib.optional withMpv mpv ++ lib.optional withVlc vlc ++ lib.optional withIina iina;
+in
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "ani-cli";
   version = "4.9";
 
   src = fetchFromGitHub {
     owner = "pystardust";
     repo = "ani-cli";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-7zuepWTtrFp9RW3zTSjPzyJ9e+09PdKgwcnV+DqPEUY=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  runtimeDependencies =
-    let player = []
-        ++ lib.optional withMpv mpv
-        ++ lib.optional withVlc vlc
-        ++ lib.optional withIina iina;
-    in [ gnugrep gnused curl fzf ffmpeg aria2 ]
-      ++ player
-      ++ lib.optional chromecastSupport catt
-      ++ lib.optional syncSupport syncplay;
+  runtimeInputs = [
+    gnugrep
+    gnused
+    curl
+    fzf
+    ffmpeg
+    aria2
+  ] ++ lib.optional chromecastSupport catt ++ lib.optional syncSupport syncplay;
 
   installPhase = ''
     runHook preInstall
@@ -47,17 +52,21 @@ stdenvNoCC.mkDerivation rec {
     install -Dm755 ani-cli $out/bin/ani-cli
 
     wrapProgram $out/bin/ani-cli \
-      --prefix PATH : ${lib.makeBinPath runtimeDependencies}
+      --prefix PATH : ${lib.makeBinPath finalAttrs.runtimeInputs} \
+      ${lib.optionalString (builtins.length players > 0) "--suffix PATH : ${lib.makeBinPath players}"}
 
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pystardust/ani-cli";
     description = "Cli tool to browse and play anime";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ skykanin ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
+      skykanin
+      diniamo
+    ];
+    platforms = lib.platforms.unix;
     mainProgram = "ani-cli";
   };
-}
+})

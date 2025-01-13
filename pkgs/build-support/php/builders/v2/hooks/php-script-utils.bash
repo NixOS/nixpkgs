@@ -22,9 +22,9 @@ setComposerEnvVariables() {
 
 checkComposerValidate() {
     if [ "1" == "${composerGlobal-}" ]; then
-      global="global";
+        global="global";
     else
-      global="";
+        global="";
     fi
 
     command="composer ${global} validate --strict --quiet --no-interaction --no-check-all --no-check-lock"

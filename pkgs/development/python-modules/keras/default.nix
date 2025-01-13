@@ -39,7 +39,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "keras-team";
     repo = "keras";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-qidY1OmlOYPKVoxryx1bEukA7IS6rPV4jqlnuf3y39w=";
   };
 
@@ -86,8 +86,14 @@ buildPythonPackage rec {
 
       # TypeError: this __dict__ descriptor does not support '_DictWrapper' objects
       "test_reloading_default_saved_model"
+
+      # ValueError: The truth value of an empty array is ambiguous.
+      # Use `array.size > 0` to check that an array is not empty.
+      "test_min_max_norm"
     ]
     ++ lib.optionals stdenv.isDarwin [
+      # TypeError: Cannot convert a MPS Tensor to float64 dtype as the MPS framework doesn't support float64. Please use float32 instead.
+      "test_dynamic_backend_torch"
       # AttributeError: module 'numpy' has no attribute 'float128'. Did you mean: 'float16'?
       "test_spectrogram_error"
     ];

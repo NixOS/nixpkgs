@@ -11,9 +11,11 @@
   double-conversion,
   gtest,
   lib,
+  inkscape,
+  pkgsCross,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lib2geom";
   version = "1.4";
 
@@ -25,7 +27,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "inkscape";
     repo = "lib2geom";
-    rev = "refs/tags/${version}";
+    rev = "refs/tags/${finalAttrs.version}";
     hash = "sha256-kbcnefzNhUj/ZKZaB9r19bpI68vxUKOLVAwUXSr/zz0=";
   };
 
@@ -49,9 +51,11 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-D2GEOM_BUILD_SHARED=ON"
+    # For cross compilation.
+    (lib.cmakeBool "2GEOM_TESTING" finalAttrs.doCheck)
   ];
 
-  doCheck = true;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   # TODO: Update cmake hook to make it simpler to selectively disable cmake tests: #113829
   checkPhase =
@@ -85,6 +89,17 @@ stdenv.mkDerivation rec {
       runHook postCheck
     '';
 
+  passthru = {
+    tests =
+      {
+        inherit inkscape;
+      }
+      # Make sure x86_64-linux -> aarch64-linux cross compilation works
+      // lib.optionalAttrs (stdenv.buildPlatform.system == "x86_64-linux") {
+        aarch64-cross = pkgsCross.aarch64-multiplatform.lib2geom;
+      };
+  };
+
   meta = with lib; {
     description = "Easy to use 2D geometry library in C++";
     homepage = "https://gitlab.com/inkscape/lib2geom";
@@ -95,4 +110,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.unix;
   };
-}
+})

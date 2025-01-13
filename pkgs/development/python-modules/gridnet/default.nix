@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "klaasnicolaas";
     repo = "python-gridnet";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-HVBUAasK7lFsj/tT0j70x/2w4RJtnHWfX/1XbfKKLf8=";
   };
 

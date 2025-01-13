@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "nvarner";
     repo = "typst-lsp";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-OubKtSHw9L4GzVzZY0AVdHY7LzKg/XQIhUfUc2OYAG0=";
   };
 
@@ -71,7 +71,7 @@ rustPlatform.buildRustPackage rec {
     description = "Brand-new language server for Typst";
     homepage = "https://github.com/nvarner/typst-lsp";
     mainProgram = "typst-lsp";
-    changelog = "https://github.com/nvarner/typst-lsp/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
+    changelog = "https://github.com/nvarner/typst-lsp/releases/tag/v${version}";
     license = with lib.licenses; [
       asl20
       mit

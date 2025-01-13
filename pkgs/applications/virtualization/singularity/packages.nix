@@ -15,7 +15,7 @@ let
         src = fetchFromGitHub {
           owner = "apptainer";
           repo = "apptainer";
-          rev = "refs/tags/v${version}";
+          tag = "v${version}";
           hash = "sha256-ZdSo9bKZ7Q1xwMe4SR840U3+fVpKwtiZQA5KDM5qF9M=";
         };
 
@@ -46,19 +46,19 @@ let
     callPackage
       (import ./generic.nix rec {
         pname = "singularity-ce";
-        version = "4.2.1";
+        version = "4.2.2";
         projectName = "singularity";
 
         src = fetchFromGitHub {
           owner = "sylabs";
           repo = "singularity";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-Go4um/bIgq2lCZvjJ2GR81XpA/JvjPholi1PzNG9Hz8=";
+          tag = "v${version}";
+          hash = "sha256-BW+oUZh82m2QDf0tUKRLcPk3mUpkukZkVzSIfXtQwio=";
         };
 
         # Override vendorHash with overrideAttrs.
         # See https://nixos.org/manual/nixpkgs/unstable/#buildGoModule-vendorHash
-        vendorHash = "sha256-CRZ42NdmJhAkV6bkl5n7rEV4Tu/h65qF5qaQ4W5wQ3w=";
+        vendorHash = "sha256-ed779LFPL38i/+pGlGIty9I/SvOtjF4/dOAx8zY7Y5E=";
 
         # Do not build conmon and squashfuse from the Git submodule sources,
         # Use Nixpkgs provided version

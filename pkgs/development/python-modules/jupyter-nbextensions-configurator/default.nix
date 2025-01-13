@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jupyter-contrib";
     repo = "jupyter_nbextensions_configurator";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-U4M6pGV/DdE+DOVMVaoBXOhfRERt+yUa+gADgqRRLn4=";
   };
 

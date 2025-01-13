@@ -726,7 +726,7 @@ rec {
     {name, packagesLists, urlPrefix, packages}:
 
     runCommand "${name}.nix"
-      { nativeBuildInputs = [ buildPackages.perl buildPackages.dpkg ]; } ''
+      { nativeBuildInputs = [ buildPackages.perl buildPackages.dpkg pkgs.nixfmt-rfc-style ]; } ''
       for i in ${toString packagesLists}; do
         echo "adding $i..."
         case $i in
@@ -744,6 +744,7 @@ rec {
 
       perl -w ${deb/deb-closure.pl} \
         ./Packages ${urlPrefix} ${toString packages} > $out
+      nixfmt $out
     '';
 
 

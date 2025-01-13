@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ukBaz";
     repo = "python-btsocket";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-/T89GZJth7pBGQuN1ytCf649oWv7aZcfPHjYoftbLw8=";
   };
 

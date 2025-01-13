@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "meichthys";
     repo = "nextcloud_monitor";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-HQLaHuvXWtHkG1dzD7ldvYKepTB4qQqzpKLYMR+lor4=";
   };
 

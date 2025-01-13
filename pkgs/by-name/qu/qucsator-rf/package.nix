@@ -22,6 +22,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-IvB4CTvK6x4wwUXMoXIqBku1Hh9em6ITTpwFllYsTEg=";
   };
 
+  # Upstream forces NO_DEFAULT_PATH on APPLE
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail '"/usr/local/opt/bison/bin/"' '"${bison}/bin"'
+  '';
+
   nativeBuildInputs = [
     cmake
     flex
@@ -43,6 +49,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     mainProgram = "qucsator_rf";
     maintainers = with lib.maintainers; [ thomaslepoix ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 }

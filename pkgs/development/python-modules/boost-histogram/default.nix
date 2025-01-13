@@ -33,7 +33,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "boost-histogram";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-GsgzJqZTrtc4KRkGn468m0e+sgX9rzJdwA9JMPSSPWk=";
   };
 

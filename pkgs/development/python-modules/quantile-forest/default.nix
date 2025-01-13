@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zillow";
     repo = "quantile-forest";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-0gdXjr+mRInZtvmgH1vRjLCkXZmTn1zWmD3E1ass9hQ=";
   };
 

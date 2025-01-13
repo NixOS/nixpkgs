@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ perl ];
 
+  strictDeps = true;
+
   installPhase = ''
     runHook preInstall
 
@@ -31,9 +33,15 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  nativeCheckInputs = [
+    perl
+  ];
+
   checkPhase = ''
-    patchShebangs ./test.sh
+    runHook preCheck
+    patchShebangs --build ./test.sh
     ./test.sh
+    runHook postCheck
   '';
 
   meta = with lib; {

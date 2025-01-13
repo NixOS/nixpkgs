@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "xZise";
     repo = "flake8-future-import";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-2EcCOx3+PCk9LYpQjHCFNpQVI2Pdi+lWL8R6bNadFe0=";
   };
 

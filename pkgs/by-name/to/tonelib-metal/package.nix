@@ -1,38 +1,33 @@
-{ lib
-, stdenv
-, fetchurl
-, autoPatchelfHook
-, dpkg
-, alsa-lib
-, freetype
-, libglvnd
-, mesa
-, curl
-, libXcursor
-, libXinerama
-, libXrandr
-, libXrender
-, libjack2
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoPatchelfHook,
+  dpkg,
+  alsa-lib,
+  freetype,
+  libglvnd,
+  libgbm,
+  curl,
+  libXcursor,
+  libXinerama,
+  libXrandr,
+  libXrender,
+  libjack2,
 }:
-
 stdenv.mkDerivation rec {
   pname = "tonelib-metal";
-  version = "1.2.6";
+  version = "1.3.0";
 
   src = fetchurl {
-    url = "https://tonelib.net/download/221222/ToneLib-Metal-amd64.deb";
-    sha256 = "sha256-G80EKAsXomdk8GsnNyvjN8shz3YMKhqdWWYyVB7xTsU=";
+    url = "https://tonelib.vip/download/24-10-24/ToneLib-Metal-amd64.deb";
+    hash = "sha256-H19ZUOFI7prQJPo9NWWAHSOwpZ4RIbpRJHfQVjDp/VA=";
   };
 
-  nativeBuildInputs = [ autoPatchelfHook dpkg ];
-
-  buildInputs = [
-    (lib.getLib stdenv.cc.cc)
-    alsa-lib
-    freetype
-    libglvnd
-    mesa
-  ] ++ runtimeDependencies;
+  nativeBuildInputs = [
+    autoPatchelfHook
+    dpkg
+  ];
 
   runtimeDependencies = map lib.getLib [
     curl
@@ -43,19 +38,30 @@ stdenv.mkDerivation rec {
     libjack2
   ];
 
-  unpackCmd = "dpkg -x $curSrc source";
+  buildInputs = [
+    (lib.getLib stdenv.cc.cc)
+    alsa-lib
+    freetype
+    libglvnd
+    libgbm
+  ] ++ runtimeDependencies;
 
   installPhase = ''
-    mv usr $out
-    substituteInPlace $out/share/applications/ToneLib-Metal.desktop --replace /usr/ $out/
- '';
+    runHook preInstall
 
-  meta = with lib; {
+    cp -r usr $out
+    substituteInPlace $out/share/applications/ToneLib-Metal.desktop \
+      --replace-fail "/usr/" "$out/"
+
+    runHook postInstall
+  '';
+
+  meta = {
     description = "ToneLib Metal – Guitar amp simulator targeted at metal players";
-    homepage = "https://tonelib.net/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [ dan4ik605743 ];
+    homepage = "https://tonelib.net";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ dan4ik605743 ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "ToneLib-Metal";
   };

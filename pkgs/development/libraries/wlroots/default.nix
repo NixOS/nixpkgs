@@ -13,7 +13,7 @@
   libxkbcommon,
   pixman,
   libcap,
-  mesa,
+  libgbm,
   xorg,
   libpng,
   ffmpeg,
@@ -81,7 +81,7 @@ let
           libinput
           libpng
           libxkbcommon
-          mesa
+          libgbm
           pixman
           seatd
           vulkan-loader

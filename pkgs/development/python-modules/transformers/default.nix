@@ -58,14 +58,14 @@
 
 buildPythonPackage rec {
   pname = "transformers";
-  version = "4.47.1";
+  version = "4.48.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "transformers";
     tag = "v${version}";
-    hash = "sha256-xwc84wFUSRJ8SNCLiI7FQ1v/JKnXkTW4EpNCjgUbZ8E=";
+    hash = "sha256-jh2bMmvTC0G0kLJl7xXpsvXvBmlbZEDA88AfosoE9sA=";
   };
 
   build-system = [ setuptools ];

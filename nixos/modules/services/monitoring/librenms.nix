@@ -603,11 +603,10 @@ in
         ''
       )
       + ''
-        # clear cache after update
+        # clear cache after update (before migrations)
         OLD_VERSION=$(cat ${cfg.dataDir}/version)
         if [[ $OLD_VERSION != "${package.version}" ]]; then
           rm -r ${cfg.dataDir}/cache/*
-          echo "${package.version}" > ${cfg.dataDir}/version
         fi
 
         # convert rrd files when the oneMinutePolling option is changed
@@ -619,6 +618,15 @@ in
 
         # migrate db
         ${artisanWrapper}/bin/librenms-artisan migrate --force --no-interaction
+
+        # regenerate cache after migrations after update
+        if [[ $OLD_VERSION != "${package.version}" ]]; then
+          ${artisanWrapper}/bin/librenms-artisan view:clear
+          ${artisanWrapper}/bin/librenms-artisan optimize:clear
+          ${artisanWrapper}/bin/librenms-artisan view:cache
+          ${artisanWrapper}/bin/librenms-artisan optimize
+          echo "${package.version}" > ${cfg.dataDir}/version
+        fi
       '';
     };
 

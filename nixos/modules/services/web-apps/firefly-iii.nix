@@ -31,6 +31,7 @@ let
     ${lib.optionalString (
       cfg.settings.DB_CONNECTION == "sqlite"
     ) "touch ${cfg.dataDir}/storage/database/database.sqlite"}
+    ${artisan} optimize:clear
     rm ${cfg.dataDir}/cache/*.php
     ${artisan} package:discover
     ${artisan} firefly-iii:upgrade-database
@@ -318,6 +319,7 @@ in
       } // commonServiceConfig;
       unitConfig.JoinsNamespaceOf = "phpfpm-firefly-iii.service";
       restartTriggers = [ cfg.package ];
+      partOf = [ "phpfpm-firefly-iii.service" ];
     };
 
     systemd.services.firefly-iii-cron = {
@@ -359,7 +361,7 @@ in
               sendfile off;
             '';
           };
-          "~ \.php$" = {
+          "~ \\.php$" = {
             extraConfig = ''
               include ${config.services.nginx.package}/conf/fastcgi_params ;
               fastcgi_param SCRIPT_FILENAME $request_filename;

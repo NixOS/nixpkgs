@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-mouse-touchpad";
-  version = "8.0.1";
+  version = "8.0.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-aOJnjHCyc1tSyF7AuW5nXUXcvzBnZ+pwU91Mk+veusg=";
+    sha256 = "sha256-332y3D3T90G6bDVacRm3a1p4mLK3vsW8sBvre5lW/mk=";
   };
 
   patches = [

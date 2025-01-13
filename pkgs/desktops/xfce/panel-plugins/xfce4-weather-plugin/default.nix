@@ -2,8 +2,8 @@
   lib,
   stdenv,
   fetchurl,
+  gettext,
   pkg-config,
-  intltool,
   glib,
   gtk3,
   json_c,
@@ -32,8 +32,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    gettext
     pkg-config
-    intltool
   ];
 
   buildInputs = [

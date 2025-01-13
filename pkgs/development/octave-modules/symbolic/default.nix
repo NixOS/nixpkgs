@@ -20,7 +20,7 @@ buildOctavePackage rec {
   src = fetchFromGitHub {
     owner = "cbm755";
     repo = "octsympy";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-H2242+1zlke4aLoS3gsHpDfopM5oSZ4IpVR3+xxQ0Dc=";
   };
 

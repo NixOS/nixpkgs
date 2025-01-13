@@ -43,6 +43,8 @@ in
       "${variant}Support" = true;
       inHydra = true;
     };
+
+    __allowFileset = false;
   },
   ...
 }@args:
@@ -119,7 +121,6 @@ let
         boxx = linux;
         bpycv = linux;
         catboost = linux;
-        chainer = linux;
         cupy = linux;
         faiss = linux;
         faster-whisper = linux;

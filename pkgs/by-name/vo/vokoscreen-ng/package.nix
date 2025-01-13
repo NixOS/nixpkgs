@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "vkohaupt";
     repo = "vokoscreenNG";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-efgvq/jl/ecjtINy5BdqtYRp2gxEvOsMzQVyCZ3ig+Q=";
   };
 

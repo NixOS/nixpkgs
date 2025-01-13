@@ -16,37 +16,32 @@
   # python3-config exclusively
   enablePython ? stdenv.hostPlatform == stdenv.buildPlatform,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "audit";
-  version = "4.0";
+  version = "4.0.2";
 
   src = fetchurl {
     url = "https://people.redhat.com/sgrubb/audit/audit-${finalAttrs.version}.tar.gz";
-    hash = "sha256-v0ItQSard6kqTDrDneVHPyeNw941ck0lGKSMe+FdVNg=";
+    hash = "sha256-1dG11Q7kotDReHW8aua9an1bNNlVfqhHo5+uxTH6qgo=";
   };
 
   patches = [
     (fetchpatch {
-      name = "musl.patch";
-      url = "https://github.com/linux-audit/audit-userspace/commit/64cb48e1e5137b8a389c7528e611617a98389bc7.patch";
-      hash = "sha256-DN2F5w+2Llm80FZntH9dvdyT00pVBSgRu8DDFILyrlU=";
-    })
-    (fetchpatch {
-      name = "musl.patch";
-      url = "https://github.com/linux-audit/audit-userspace/commit/4192eb960388458c85d76e5e385cfeef48f02c79.patch";
-      hash = "sha256-G6CJ9nBJSsTyJ0qq14PVo+YdInAvLLQtXcR25Q8V5/4=";
+      name = "static.patch";
+      url = "https://github.com/linux-audit/audit-userspace/commit/a89664b45c30a853a6f80b19730984bd78432142.patch";
+      hash = "sha256-HsaL9Bfo1MQ1JBKIS9ckNTapGk5eshjWWKh4M+e+Y9c=";
     })
   ];
 
   postPatch = ''
     substituteInPlace bindings/swig/src/auditswig.i \
-      --replace "/usr/include/linux/audit.h" \
-                "${linuxHeaders}/include/linux/audit.h"
+      --replace-fail "/usr/include/linux/audit.h" \
+                     "${linuxHeaders}/include/linux/audit.h"
   '';
 
   outputs = [
     "bin"
+    "lib"
     "dev"
     "out"
     "man"

@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "niapy";
-  version = "2.5.1";
+  version = "2.5.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "NiaOrg";
     repo = "NiaPy";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-+5tXwubKdhkcv5NjO/DglK+WJfsJ3AzVx/Y/byDBmGo=";
+    tag = "v${version}";
+    hash = "sha256-8hKT0WxnJijm22w4DkzicvtikaTL/mL3VhQX/WVHL58=";
   };
 
   build-system = [ poetry-core ];
@@ -33,6 +33,10 @@ buildPythonPackage rec {
     numpy
     openpyxl
     pandas
+  ];
+
+  pythonRelaxDeps = [
+    "numpy"
   ];
 
   nativeCheckInputs = [

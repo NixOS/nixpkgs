@@ -4,6 +4,7 @@ import nixos_rebuild.utils as u
 
 
 def test_dict_to_flags() -> None:
+    assert u.dict_to_flags(None) == []
     r1 = u.dict_to_flags(
         {
             "test_flag_1": True,
@@ -22,6 +23,7 @@ def test_dict_to_flags() -> None:
         "value",
         "--test-flag-4",
         "v1",
+        "--test-flag-4",
         "v2",
         "-t",
         "-vvvvv",

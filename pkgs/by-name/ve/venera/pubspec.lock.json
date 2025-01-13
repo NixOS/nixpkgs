@@ -4,11 +4,11 @@
       "dependency": "direct main",
       "description": {
         "name": "app_links",
-        "sha256": "ad1a6d598e7e39b46a34f746f9a8b011ee147e4c275d407fa457e7a62f84dd99",
+        "sha256": "433df2e61b10519407475d7f69e470789d23d593f28224c38ba1068597be7950",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "6.3.2"
+      "version": "6.3.3"
     },
     "app_links_linux": {
       "dependency": "transitive",
@@ -84,11 +84,11 @@
       "dependency": "direct main",
       "description": {
         "name": "battery_plus",
-        "sha256": "220c8f1961efb01d6870493b5ac5a80afaeaffc8757f7a11ed3025a8570d29e7",
+        "sha256": "a0409fe7d21905987eb1348ad57c634f913166f14f0c8936b73d3f5940fac551",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "6.2.0"
+      "version": "6.2.1"
     },
     "battery_plus_platform_interface": {
       "dependency": "transitive",
@@ -528,11 +528,11 @@
       "dependency": "transitive",
       "description": {
         "name": "flutter_rust_bridge",
-        "sha256": "fb9d3c9395eae3c71d4fe3ec343b9f30636c9988150c8bb33b60047549b34e3d",
+        "sha256": "35c257fc7f98e34c1314d6c145e5ed54e7c94e8a9f469947e31c9298177d546f",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "2.6.0"
+      "version": "2.7.0"
     },
     "flutter_saf": {
       "dependency": "direct main",
@@ -555,11 +555,11 @@
       "dependency": "direct dev",
       "description": {
         "name": "flutter_to_arch",
-        "sha256": "656cffc182b05af38aa96a1115931620b8865c4b0cfe00813b26fcff0875f2ab",
+        "sha256": "b68b2757a89a517ae2141cbc672acdd1f69721dd686cacad03876b6f436ff040",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "1.0.0"
+      "version": "1.0.1"
     },
     "flutter_to_debian": {
       "dependency": "direct dev",
@@ -993,11 +993,11 @@
       "dependency": "direct main",
       "description": {
         "name": "rhttp",
-        "sha256": "581d57b5b6056d31489af94db8653a1c11d7b59050cbbc41ece4279e50414de5",
+        "sha256": "8212cbc816cc3e761eecb8d4dbbaa1eca95de715428320a198a4e7a89acdcd2e",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "0.9.6"
+      "version": "0.9.8"
     },
     "screen_retriever": {
       "dependency": "transitive",
@@ -1064,21 +1064,21 @@
       "dependency": "direct main",
       "description": {
         "name": "share_plus",
-        "sha256": "9c9bafd4060728d7cdb2464c341743adbd79d327cb067ec7afb64583540b47c8",
+        "sha256": "6327c3f233729374d0abaafd61f6846115b2a481b4feddd8534211dc10659400",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "10.1.2"
+      "version": "10.1.3"
     },
     "share_plus_platform_interface": {
       "dependency": "transitive",
       "description": {
         "name": "share_plus_platform_interface",
-        "sha256": "c57c0bbfec7142e3a0f55633be504b796af72e60e3c791b44d5a017b985f7a48",
+        "sha256": "cc012a23fc2d479854e6c80150696c4a5f5bb62cb89af4de1c505cf78d0a5d0b",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "5.0.1"
+      "version": "5.0.2"
     },
     "shimmer": {
       "dependency": "direct main",
@@ -1140,11 +1140,11 @@
       "dependency": "direct main",
       "description": {
         "name": "sqlite3_flutter_libs",
-        "sha256": "636b0fe8a2de894e5455572f6cbbc458f4ffecfe9f860b79439e27041ea4f0b9",
+        "sha256": "73016db8419f019e807b7a5e5fbf2a7bd45c165fed403b8e7681230f3a102785",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "0.5.27"
+      "version": "0.5.28"
     },
     "stack_trace": {
       "dependency": "transitive",

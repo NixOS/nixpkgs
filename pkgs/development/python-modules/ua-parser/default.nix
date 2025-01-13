@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ua-parser";
     repo = "uap-python";
-    rev = "refs/tags/${version}";
+    tag = version;
     fetchSubmodules = true;
     hash = "sha256-byKtxmuYIsEYyuUmfnbLhfe7EKj0k7QGkK5HewiTiy4=";
   };
@@ -45,7 +45,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "ua_parser" ];
 
   meta = {
-    changelog = "https://github.com/ua-parser/uap-python/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
+    changelog = "https://github.com/ua-parser/uap-python/releases/tag/${version}";
     description = "Python implementation of the UA Parser";
     homepage = "https://github.com/ua-parser/uap-python";
     license = lib.licenses.asl20;

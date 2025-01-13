@@ -2,7 +2,6 @@
   lib,
   alsa-lib,
   boost,
-  curl,
   meson,
   config,
   expat,
@@ -42,13 +41,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "aegisub";
-  version = "3.4.0";
+  version = "3.4.1";
 
   src = fetchFromGitHub {
     owner = "TypesettingTools";
     repo = "aegisub";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HvBbHUWKUFpne7Dj8CB2V9agBSBbB24BXnnYWUjHSDI=";
+    hash = "sha256-3yWtBuCwr1OPOg/nh2s8SFg62vt8zuBMMp0gfOZrjqk=";
   };
 
   nativeBuildInputs = [
@@ -63,7 +62,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     boost
-    curl
     expat
     ffmpeg
     ffms
@@ -115,10 +113,6 @@ stdenv.mkDerivation (finalAttrs: {
     # system version?
     substituteInPlace meson.build \
       --replace-fail "subdir('tests')" "# subdir('tests')"
-
-    # https://github.com/TypesettingTools/Aegisub/issues/191
-    substituteInPlace src/dialog_colorpicker.cpp \
-      --replace-fail "NSUInteger" "size_t"
   '';
 
   # Inject the version, per the AUR package:
