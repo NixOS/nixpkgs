@@ -15,13 +15,11 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "ReFirmLabs";
     repo = "binwalk";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-em+jOnhCZH5EEJrhXTHmxiwpMcBr5oNU1+5IJ1H/oco=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-  };
+  cargoHash = "sha256-7+2TdlfCHJHXn0+q74JhmY3/lC0WfCG2FFmQFQNf4k8=";
 
   nativeBuildInputs = [ pkg-config ];
 
