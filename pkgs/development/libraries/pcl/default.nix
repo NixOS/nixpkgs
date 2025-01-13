@@ -17,9 +17,6 @@
   libtiff,
   libXt,
   libpng,
-  Cocoa,
-  AGL,
-  OpenGL,
   config,
   cudaSupport ? config.cudaSupport,
   cudaPackages,
@@ -66,18 +63,13 @@ stdenv.mkDerivation (finalAttrs: {
     wrapQtAppsHook
   ] ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ];
 
-  buildInputs =
-    [
-      eigen
-      libusb1
-      libpcap
-      qtbase
-      libXt
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Cocoa
-      AGL
-    ];
+  buildInputs = [
+    eigen
+    libusb1
+    libpcap
+    qtbase
+    libXt
+  ];
 
   propagatedBuildInputs = [
     boost
@@ -88,14 +80,10 @@ stdenv.mkDerivation (finalAttrs: {
     vtk
   ];
 
-  cmakeFlags =
-    [
-      (lib.cmakeBool "PCL_ENABLE_MARCHNATIVE" false)
-      (lib.cmakeBool "WITH_CUDA" cudaSupport)
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks"
-    ];
+  cmakeFlags = [
+    (lib.cmakeBool "PCL_ENABLE_MARCHNATIVE" false)
+    (lib.cmakeBool "WITH_CUDA" cudaSupport)
+  ];
 
   meta = {
     homepage = "https://pointclouds.org/";
