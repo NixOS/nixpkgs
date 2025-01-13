@@ -35,14 +35,14 @@ declare -A users=()
 
 for path in "${touchedFiles[@]}"; do
     while true; do
-        result="$(grep -oP "(?<=^|/)\Q$file\E\s.*$" "$tmp"/codeowners || echo "$file (unowned)")"
+        result="$(grep -oP "(?<=^|/)\Q$path\E\s.*$" "$tmp"/codeowners || echo "$path (unowned)")"
 
-        # Remove the file prefix and trim the surrounding spaces
-        read -r owners <<< "${result#"$file"}"
+        # Remove the path prefix and trim the surrounding spaces
+        read -r owners <<< "${result#"$path"}"
         if [[ "$owners" == "(unowned)" ]]; then
-            log "File $file is unowned"
+            log "Path $path is unowned"
         else
-            log "File $file is owned by $owners"
+            log "Path $path is owned by $owners"
 
             # Split up multiple owners, separated by arbitrary amounts of spaces
             IFS=" " read -r -a entries <<< "$owners"
@@ -51,7 +51,7 @@ for path in "${touchedFiles[@]}"; do
                 # GitHub technically also supports Emails as code owners,
                 # but we can't easily support that, so let's not
                 if [[ ! "$entry" =~ @(.*) ]]; then
-                    warn -e "\e[33mCodeowner \"$entry\" for file $file is not valid: Must start with \"@\"\e[0m" >&2
+                    echo -e "\e[33mCodeowner \"$entry\" for path $path is not valid: Must start with \"@\"\e[0m" >&2
                     # Don't fail, because the PR for which this script runs can't fix it,
                     # it has to be fixed in the base branch
                     continue
@@ -94,8 +94,8 @@ for path in "${touchedFiles[@]}"; do
         fi
 
         # Check all parent paths, too.
-        file="$(dirname "$file")"
-        if [[ "$file" == "." ]]; then
+        path="$(dirname "$path")"
+        if [[ "$path" == "." ]]; then
             break
         fi
     done
