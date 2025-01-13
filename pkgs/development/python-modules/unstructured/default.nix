@@ -113,7 +113,7 @@
   grpcio,
 }:
 let
-  version = "0.16.11";
+  version = "0.16.13";
 in
 buildPythonPackage {
   pname = "unstructured";
@@ -124,7 +124,7 @@ buildPythonPackage {
     owner = "Unstructured-IO";
     repo = "unstructured";
     tag = version;
-    hash = "sha256-+I5eXG/ICmYPDTavDnyLlopIvoABjdDwOyfotrNs6qs=";
+    hash = "sha256-VVgSrXqfWEOjZAU54rGBW3m4FxZKJDmbFsWdgjiqMSs=";
   };
 
   propagatedBuildInputs = [
