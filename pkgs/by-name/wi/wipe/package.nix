@@ -14,6 +14,12 @@ stdenv.mkDerivation rec {
     sha256 = "180snqvh6k6il6prb19fncflf2jcvkihlb4w84sbndcv1wvicfa6";
   };
 
+  postPatch = ''
+    # Do not strip binary during install
+    substituteInPlace Makefile.in \
+      --replace-fail '$(INSTALL_BIN) -s' '$(INSTALL_BIN)'
+  '';
+
   nativeBuildInputs = [ autoreconfHook ];
 
   # fdatasync is undocumented on darwin with no header file which breaks the build.
