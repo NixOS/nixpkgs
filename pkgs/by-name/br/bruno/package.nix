@@ -17,20 +17,20 @@
 
 buildNpmPackage rec {
   pname = "bruno";
-  version = "1.37.0";
+  version = "1.38.1";
 
   src = fetchFromGitHub {
     owner = "usebruno";
     repo = "bruno";
     tag = "v${version}";
-    hash = "sha256-+CLop9fU0fk5n5jNkLbTXZfXyfOXyigukRhTHnML4t0=";
+    hash = "sha256-VZRVmOJkNjZLpIG5oBIbDVJl8EZhOtBMywwJKdfD9Hc=";
 
     postFetch = ''
       ${lib.getExe npm-lockfile-fix} $out/package-lock.json
     '';
   };
 
-  npmDepsHash = "sha256-K7M4eZQpI79TUI2rf0UP2hEipqaOVjhjMRjIVlcy7c8=";
+  npmDepsHash = "sha256-qgg/dpkBAbOgBeGC0BiKQTyLsOOKwfsJD3fhs/cXYHo=";
   npmFlags = [ "--legacy-peer-deps" ];
 
   nativeBuildInputs =
