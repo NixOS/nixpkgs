@@ -3,11 +3,10 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
-  fetchpatch,
   pkg-config,
+  installShellFiles,
   libgit2,
   openssl,
-  installShellFiles,
   buildPackages,
   versionCheckHook,
   nix-update-script,
@@ -15,26 +14,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pixi";
-  version = "0.39.5";
+  version = "0.40.0";
 
   src = fetchFromGitHub {
     owner = "prefix-dev";
     repo = "pixi";
     tag = "v${version}";
-    hash = "sha256-Y4d8eMfsag2cNTaK8qnOGfi35kwwPrUy2y51EwVFrss=";
+    hash = "sha256-LuRnPG8vag8SNSChZlWBBavxAlLRk1P73N+VpO0SeTA=";
   };
 
-  # TODO: Remove this patch when the next version is released.
-  cargoPatches = [
-    (fetchpatch {
-      # chore: make sure we only build one version of version-ranges
-      # https://github.com/prefix-dev/pixi/commit/82fc219be3f5d1499922e89a5c458b7c154a7b8e
-      url = "https://github.com/prefix-dev/pixi/commit/82fc219be3f5d1499922e89a5c458b7c154a7b8e.patch";
-      hash = "sha256-fKDqUJtjxIQsCez95RObnJHQvdlxhmjJ+G7fJitE6v0=";
-    })
-  ];
   useFetchCargoVendor = true;
-  cargoHash = "sha256-oGlPxFwJVpBajJQ5XED98SUP8qw312nUSRND6ycEOjk=";
+  cargoHash = "sha256-I3TnZ9ZHU4TUOUkBIeeRjP+sc/k2qVNtltzkyN87aZo=";
 
   nativeBuildInputs = [
     pkg-config
@@ -77,6 +67,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Package management made easy";
     homepage = "https://pixi.sh/";
+    changelog = "https://pixi.sh/latest/CHANGELOG";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       aaronjheng
