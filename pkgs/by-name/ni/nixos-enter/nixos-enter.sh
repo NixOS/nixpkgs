@@ -58,10 +58,11 @@ if [[ ! -e $mountPoint/etc/NIXOS ]]; then
     exit 126
 fi
 
-mkdir -p "$mountPoint/dev" "$mountPoint/sys"
-chmod 0755 "$mountPoint/dev" "$mountPoint/sys"
+mkdir -p "$mountPoint/dev" "$mountPoint/sys" "$mountPoint/proc"
+chmod 0755 "$mountPoint/dev" "$mountPoint/sys" "$mountPoint/proc"
 mount --rbind /dev "$mountPoint/dev"
 mount --rbind /sys "$mountPoint/sys"
+mount --rbind /proc "$mountPoint/proc"
 
 # modified from https://github.com/archlinux/arch-install-scripts/blob/bb04ab435a5a89cd5e5ee821783477bc80db797f/arch-chroot.in#L26-L52
 chroot_add_resolv_conf() {

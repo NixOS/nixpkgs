@@ -43,12 +43,22 @@ vimUtils.buildVimPlugin {
   pname = "sg.nvim";
   inherit version src;
 
+  checkInputs = with vimPlugins; [
+    telescope-nvim
+    nvim-cmp
+  ];
+
   dependencies = [ vimPlugins.plenary-nvim ];
 
   postInstall = ''
     mkdir -p $out/target/debug
     ln -s ${sg-nvim-rust}/{bin,lib}/* $out/target/debug
   '';
+
+  nvimSkipModule = [
+    # Dependent on active fuzzy search state
+    "sg.cody.fuzzy"
+  ];
 
   passthru = {
     updateScript = nix-update-script {
@@ -59,7 +69,6 @@ vimUtils.buildVimPlugin {
     # needed for the update script
     inherit sg-nvim-rust;
   };
-  nvimRequireCheck = "sg";
 
   meta = {
     description = "Neovim plugin designed to emulate the behaviour of the Cursor AI IDE";

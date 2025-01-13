@@ -250,78 +250,100 @@ in
         );
       in
       if config.system.etc.overlay.enable then
+        #bash
         ''
-          # This script atomically remounts /etc when switching configuration. On a (re-)boot
-          # this should not run because /etc is mounted via a systemd mount unit
-          # instead. To a large extent this mimics what composefs does. Because
+          # This script atomically remounts /etc when switching configuration.
+          # On a (re-)boot this should not run because /etc is mounted via a
+          # systemd mount unit instead.
+          # The activation script can also be called in cases where we didn't have
+          # an initrd though, like for instance when using  nixos-enter,
+          # so we cannot assume that /etc has already been mounted.
+          #
+          # To a large extent this mimics what composefs does. Because
           # it's relatively simple, however, we avoid the composefs dependency.
           # Since this script is not idempotent, it should not run when etc hasn't
           # changed.
           if [[ ! $IN_NIXOS_SYSTEMD_STAGE1 ]] && [[ "${config.system.build.etc}/etc" != "$(readlink -f /run/current-system/etc)" ]]; then
             echo "remounting /etc..."
 
-            tmpMetadataMount=$(mktemp --directory -t nixos-etc-metadata.XXXXXXXXXX)
+            ${lib.optionalString config.system.etc.overlay.mutable ''
+              # These directories are usually created in initrd,
+              # but we need to create them here when we didn't we're called directly,
+              # for instance by nixos-enter
+              mkdir --parents /.rw-etc/upper /.rw-etc/work
+              chmod --recursive 0755 /.rw-etc
+            ''}
+
+            tmpMetadataMount=$(TMPDIR="/run" mktemp --directory -t nixos-etc-metadata.XXXXXXXXXX)
             mount --type erofs -o ro ${config.system.build.etcMetadataImage} $tmpMetadataMount
 
-            # Mount the new /etc overlay to a temporary private mount.
-            # This needs the indirection via a private bind mount because you
-            # cannot move shared mounts.
-            tmpEtcMount=$(mktemp --directory -t nixos-etc.XXXXXXXXXX)
-            mount --bind --make-private $tmpEtcMount $tmpEtcMount
-            mount --type overlay overlay \
-              --options lowerdir=$tmpMetadataMount::${config.system.build.etcBasedir},${etcOverlayOptions} \
-              $tmpEtcMount
+            # There was no previous /etc mounted. This happens when we're called
+            # directly without an initrd, like with nixos-enter.
+            if ! mountpoint -q /etc; then
+              mount --type overlay overlay \
+                --options lowerdir=$tmpMetadataMount::${config.system.build.etcBasedir},${etcOverlayOptions} \
+                /etc
+            else
+              # Mount the new /etc overlay to a temporary private mount.
+              # This needs the indirection via a private bind mount because you
+              # cannot move shared mounts.
+              tmpEtcMount=$(TMPDIR="/run" mktemp --directory -t nixos-etc.XXXXXXXXXX)
+              mount --bind --make-private $tmpEtcMount $tmpEtcMount
+              mount --type overlay overlay \
+                --options lowerdir=$tmpMetadataMount::${config.system.build.etcBasedir},${etcOverlayOptions} \
+                $tmpEtcMount
 
-            # Before moving the new /etc overlay under the old /etc, we have to
-            # move mounts on top of /etc to the new /etc mountpoint.
-            findmnt /etc --submounts --list --noheading --kernel --output TARGET | while read -r mountPoint; do
-              if [[ "$mountPoint" = "/etc" ]]; then
-                continue
-              fi
+              # Before moving the new /etc overlay under the old /etc, we have to
+              # move mounts on top of /etc to the new /etc mountpoint.
+              findmnt /etc --submounts --list --noheading --kernel --output TARGET | while read -r mountPoint; do
+                if [[ "$mountPoint" = "/etc" ]]; then
+                  continue
+                fi
 
-              tmpMountPoint="$tmpEtcMount/''${mountPoint:5}"
-                ${
-                  if config.system.etc.overlay.mutable then
-                    ''
-                      if [[ -f "$mountPoint" ]]; then
-                        touch "$tmpMountPoint"
-                      elif [[ -d "$mountPoint" ]]; then
-                        mkdir -p "$tmpMountPoint"
-                      fi
-                    ''
-                  else
-                    ''
-                      if [[ ! -e "$tmpMountPoint" ]]; then
-                        echo "Skipping undeclared mountpoint in environment.etc: $mountPoint"
-                        continue
-                      fi
-                    ''
-                }
-              mount --bind "$mountPoint" "$tmpMountPoint"
-            done
+                tmpMountPoint="$tmpEtcMount/''${mountPoint:5}"
+                  ${
+                    if config.system.etc.overlay.mutable then
+                      ''
+                        if [[ -f "$mountPoint" ]]; then
+                          touch "$tmpMountPoint"
+                        elif [[ -d "$mountPoint" ]]; then
+                          mkdir -p "$tmpMountPoint"
+                        fi
+                      ''
+                    else
+                      ''
+                        if [[ ! -e "$tmpMountPoint" ]]; then
+                          echo "Skipping undeclared mountpoint in environment.etc: $mountPoint"
+                          continue
+                        fi
+                      ''
+                  }
+                mount --bind "$mountPoint" "$tmpMountPoint"
+              done
 
-            # Move the new temporary /etc mount underneath the current /etc mount.
-            #
-            # This should eventually use util-linux to perform this move beneath,
-            # however, this functionality is not yet in util-linux. See this
-            # tracking issue: https://github.com/util-linux/util-linux/issues/2604
-            ${pkgs.move-mount-beneath}/bin/move-mount --move --beneath $tmpEtcMount /etc
+              # Move the new temporary /etc mount underneath the current /etc mount.
+              #
+              # This should eventually use util-linux to perform this move beneath,
+              # however, this functionality is not yet in util-linux. See this
+              # tracking issue: https://github.com/util-linux/util-linux/issues/2604
+              ${pkgs.move-mount-beneath}/bin/move-mount --move --beneath $tmpEtcMount /etc
 
-            # Unmount the top /etc mount to atomically reveal the new mount.
-            umount --lazy --recursive /etc
+              # Unmount the top /etc mount to atomically reveal the new mount.
+              umount --lazy --recursive /etc
 
-            # Unmount the temporary mount
-            umount --lazy "$tmpEtcMount"
-            rmdir "$tmpEtcMount"
+              # Unmount the temporary mount
+              umount --lazy "$tmpEtcMount"
+              rmdir "$tmpEtcMount"
+            fi
 
             # Unmount old metadata mounts
             # For some reason, `findmnt /tmp --submounts` does not show the nested
             # mounts. So we'll just find all mounts of type erofs and filter on the
             # name of the mountpoint.
             findmnt --type erofs --list --kernel --output TARGET | while read -r mountPoint; do
-              if [[ "$mountPoint" =~ ^/tmp/nixos-etc-metadata\..{10}$ &&
+              if [[ ("$mountPoint" =~ ^/run/nixos-etc-metadata\..{10}$ || "$mountPoint" =~ ^/run/nixos-etc-metadata$ ) &&
                     "$mountPoint" != "$tmpMetadataMount" ]]; then
-                umount --lazy $mountPoint
+                umount --lazy "$mountPoint"
                 rmdir "$mountPoint"
               fi
             done
