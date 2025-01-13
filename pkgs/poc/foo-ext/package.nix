@@ -17,7 +17,6 @@
       ${prevAttrs.installPhase or ""}
       echo hello world $someVal
       touch $out2
-
     '';
 
     outputs = [

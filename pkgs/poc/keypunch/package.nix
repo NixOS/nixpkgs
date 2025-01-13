@@ -51,15 +51,6 @@ mkPackage (
 
     buildInputs = map lib.getDev (lib.attrValues layer0Attrs.deps);
 
-    shellVars = {
-      inherit (layer0Attrs)
-        src
-        cargoDeps
-        nativeBuildInputs
-        buildInputs
-        ;
-    };
-
     lay3 = layer0Attrs.layer3Attrs;
 
     # TODO: check if this works or not

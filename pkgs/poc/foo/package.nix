@@ -16,6 +16,7 @@ mkPackage (
     sayer = pkgsBuildHost.cowsay;
 
     installPhase = ''
+      echo $nums
       ${lib.getExe layer0Attrs.sayer} "My javac version is: $(javac -version 2>&1)"
       touch $out
     '';
@@ -24,12 +25,12 @@ mkPackage (
       jdk = pkgsBuildHost.jdk8;
     };
 
+    shellVars = {
+      nums = "012345";
+    };
+
     ## this should probably go in mkPackage's definition
     nativeBuildInputs = lib.attrValues layer0Attrs.depsInPath;
-
-    shellVars = {
-      inherit (layer0Attrs) src installPhase nativeBuildInputs;
-    };
 
   }
 )

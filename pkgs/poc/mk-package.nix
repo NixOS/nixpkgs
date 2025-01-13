@@ -13,6 +13,9 @@ let
     g final (f final prev);
 
   composeManyTransformations = lib.foldr composeTransformations (final: prev: prev);
+
+  # inherit the listed names of an attrset into an new attrset, but only if the name actually exists
+  takeAttrs = names: lib.filterAttrs (n: _: lib.elem n names);
 in
 
 let
@@ -24,8 +27,61 @@ let
     // {
       name = prevAttrs.name or "${layer0Attrs.pname}-${layer0Attrs.version}";
 
-      # doCheck = finalAttrs.stdenv.buildPlatform.canExecute finalAttrs.stdenv.hostPlatform;
-      # TODO: more stuff
+      # NOTE: these things below should probably be part of the layer below, or a new layer separately, since they are very stdenv-centric
+
+      # should we do prevAttrs.doCheck && canExecute (like with mkDerivation) or should we just trust prevAttrs to also do canExecute manually
+      doCheck =
+        prevAttrs.doCheck or (layer0Attrs.stdenv.buildPlatform.canExecute layer0Attrs.stdenv.hostPlatform);
+
+      doInstallCheck =
+        prevAttrs.doInstallCheck
+          or (layer0Attrs.stdenv.buildPlatform.canExecute layer0Attrs.stdenv.hostPlatform);
+
+      # should we do this? IMO this logic should be done by the consumer, manually
+      nativeBuildInputs =
+        prevAttrs.nativeBuildInputs or [ ]
+        ++ lib.optionals layer0Attrs.doCheck (layer0Attrs.nativeCheckInputs or [ ])
+        ++ lib.optionals layer0Attrs.doInstallCheck (layer0Attrs.nativeInstallCheckInputs or [ ]);
+
+      buildInputs =
+        prevAttrs.buildInputs or [ ]
+        ++ lib.optionals layer0Attrs.doCheck (layer0Attrs.checkInputs or [ ])
+        ++ lib.optionals layer0Attrs.doInstallCheck (layer0Attrs.installCheckInputs or [ ]);
+
+      shellVars =
+        prevAttrs.shellVars or { }
+        // takeAttrs [
+          "pname"
+          "version"
+          "src"
+          "srcs"
+          "sourceRoot"
+          "nativeBuildInputs"
+          "buildInputs"
+          "nativeCheckInputs"
+          "checkInputs"
+          "doCheck"
+          "doInstallCheck"
+          "env"
+          "preUnpack"
+          "unpackPhase"
+          "postUnpack"
+          "prePatch"
+          "patchPhase"
+          "postPatch"
+          "preConfigure"
+          "configurePhase"
+          "postConfigure"
+          "preBuild"
+          "buildPhase"
+          "postBuild"
+          "preInstall"
+          "installPhase"
+          "postInstall"
+          "preFixup"
+          "fixupPhase"
+          "postFixup"
+        ] layer0Attrs;
     };
 
   layer2ToLayer1 =
@@ -92,19 +148,24 @@ let
     }:
     origRattrs:
     let
-      # maybe dont expand usage of 'transforms'
+      origLayer3Attrs = origRattrs layerAttrsSet;
+      finalLayer3Attrs = layer3ExtraTransformation layerAttrsSet origLayer3Attrs // helperAttrs;
 
-      startLayer3Attrs = origRattrs layerAttrsSet;
-      finalLayer3Attrs = layer3ExtraTransformation layerAttrsSet startLayer3Attrs // visibleHelperAttrs;
+      origLayer2Attrs = layer3ToLayer2 layerAttrsSet finalLayer3Attrs;
+      finalLayer2Attrs = layer2ExtraTransformation layerAttrsSet origLayer2Attrs // helperAttrs;
 
-      startLayer2Attrs = layer3ToLayer2 layerAttrsSet finalLayer3Attrs;
-      finalLayer2Attrs = layer2ExtraTransformation layerAttrsSet startLayer2Attrs // visibleHelperAttrs;
+      origLayer1Attrs = layer2ToLayer1 layerAttrsSet finalLayer2Attrs;
+      finalLayer1Attrs = layer1ExtraTransformation layerAttrsSet origLayer1Attrs // helperAttrs;
 
-      startLayer1Attrs = layer2ToLayer1 layerAttrsSet finalLayer2Attrs;
-      finalLayer1Attrs = layer1ExtraTransformation layerAttrsSet startLayer1Attrs // visibleHelperAttrs;
+      origLayer0Attrs = layer1ToLayer0 layerAttrsSet finalLayer1Attrs;
+      finalLayer0Attrs = layer0ExtraTransformation layerAttrsSet origLayer0Attrs // helperAttrs;
 
-      startLayer0Attrs = layer1ToLayer0 layerAttrsSet finalLayer1Attrs;
-      finalLayer0Attrs = layer0ExtraTransformation layerAttrsSet startLayer0Attrs // visibleHelperAttrs;
+      # TODO: decide if we should ever reference anything other than layer0Attrs
+      # (multiple sources of truth are bad)
+      # (which layer should the consumer override when a value is just inherited?)
+      # (or more imporantly, which layer should a layer->layer transformer reference?)
+      # # (maybe the lowest layer the value still exists in (usually layer0))
+      # (this should probably be discouraged, but currently there are situations like with buildRustPackage, when the uppermost layer's attribute names are unprefixed, but converted to a prefixed version later: e.g buildType -> cargoBuildType)
 
       # TODO: decide if layers should have access to all layers or just the ones below
       layerAttrsSet = {
@@ -114,7 +175,8 @@ let
         layer0Attrs = finalLayer0Attrs;
       };
 
-      visibleHelperAttrs = {
+      # these would still be useful even if they were only able to reference layer0Attrs
+      helperAttrs = {
         inherit
           overrideLayer3
           overrideLayer2
