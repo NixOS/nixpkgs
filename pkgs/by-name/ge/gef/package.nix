@@ -25,13 +25,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gef";
-  version = "2024.06";
+  version = "2025.01";
 
   src = fetchFromGitHub {
     owner = "hugsy";
     repo = "gef";
     rev = version;
-    sha256 = "sha256-fo8hC2T2WDcG0MQffPm2QBPR89EPiqctkUJC40PeyWg=";
+    sha256 = "sha256-JM9zH1wWEdjpBafnxMIFtePjXWf3UOXhBSWZCXEOzKw=";
   };
 
   dontBuild = true;
