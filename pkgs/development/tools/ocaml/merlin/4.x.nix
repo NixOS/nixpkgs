@@ -28,6 +28,7 @@
       "5.1.1" = "4.17.1-501";
       "5.2.0" = "5.2.1-502";
       "5.2.1" = "5.2.1-502";
+      "5.3.0" = "5.4.1-503";
     }
     ."${ocaml.version}",
 }:
@@ -43,6 +44,7 @@ let
     "4.17.1-414" = "sha256-vz+AbvSGMgU4YdVLc73vlTm6QhivAh2LCsrY435kX8Y=";
     "4.17.1-501" = "sha256-N2cHqocfCeljlFbT++S4miHJrXXHdOlMu75n+EKwpQA=";
     "5.2.1-502" = "sha256-XALccbLTG2GYUcFKlluRxlCk281Jv1YATu5h4MWNWEw=";
+    "5.4.1-503" = "sha256-SbO0x3jBISX8dAXnN5CwsxLV15dJ3XPUg4tlYqJTMCI=";
   };
 
 in
