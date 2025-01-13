@@ -11068,12 +11068,6 @@
     github = "johnpyp";
     githubId = 20625636;
   };
-  johnramsden = {
-    email = "johnramsden@riseup.net";
-    github = "johnramsden";
-    githubId = 8735102;
-    name = "John Ramsden";
-  };
   johnrichardrinehart = {
     email = "johnrichardrinehart@gmail.com";
     github = "johnrichardrinehart";
@@ -13868,6 +13862,13 @@
     githubId = 1678126;
     name = "Marco A L Barbosa";
   };
+  malik = {
+    name = "Malik";
+    email = "abdelmalik.najhi@stud.hs-kempten.de";
+    github = "malikwirin";
+    githubId = 117918464;
+    keys = [ { fingerprint = "B5ED 595C 8C7E 133C 6B68  63C8 CFEF 1E35 0351 F72D"; } ];
+  };
   malo = {
     email = "mbourgon@gmail.com";
     github = "malob";
@@ -15911,6 +15912,12 @@
     githubId = 7277663;
     email = "nathaniel.brough@gmail.com";
     name = "Nathaniel Brough";
+  };
+  nathanregner = {
+    email = "nathanregner@gmail.com";
+    github = "nathanregner";
+    githubId = 9659564;
+    name = "Nathan Regner";
   };
   nathanruiz = {
     email = "nathanruiz@protonmail.com";
@@ -23193,6 +23200,12 @@
     github = "tomberek";
     githubId = 178444;
     name = "Thomas Bereknyei";
+  };
+  tombert = {
+    email = "thomas@gebert.app";
+    github = "tombert";
+    githubId = 2027925;
+    name = "Thomas Gebert";
   };
   tomfitzhenry = {
     email = "tom@tom-fitzhenry.me.uk";

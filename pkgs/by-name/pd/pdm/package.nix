@@ -24,7 +24,7 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "pdm";
-  version = "2.22.1";
+  version = "2.22.2";
   pyproject = true;
 
   disabled = python.pkgs.pythonOlder "3.8";
@@ -33,7 +33,7 @@ python.pkgs.buildPythonApplication rec {
     owner = "pdm-project";
     repo = "pdm";
     tag = version;
-    hash = "sha256-khAS/OpuvZTJGh9/lIGtKONajIonCwc/M9D9lSwzFvw=";
+    hash = "sha256-se0Xvziyg4CU6wENO0oYVAI4f2uBv3Ubadiptf/uPgQ=";
   };
 
   pythonRelaxDeps = [ "hishel" ];
@@ -117,6 +117,7 @@ python.pkgs.buildPythonApplication rec {
     "test_lock_all_with_excluded_groups"
     "test_find_interpreters_with_PDM_IGNORE_ACTIVE_VENV"
     "test_build_distributions"
+    "test_init_project_respect"
   ];
 
   __darwinAllowLocalNetworking = true;

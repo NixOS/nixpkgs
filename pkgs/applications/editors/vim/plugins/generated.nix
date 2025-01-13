@@ -3763,6 +3763,18 @@ final: prev:
     meta.homepage = "https://github.com/earthly/earthly.vim/";
   };
 
+  easy-dotnet-nvim = buildVimPlugin {
+    pname = "easy-dotnet.nvim";
+    version = "2025-01-11";
+    src = fetchFromGitHub {
+      owner = "GustavEikaas";
+      repo = "easy-dotnet.nvim";
+      rev = "b689ea29d112e91d33cdf11ba702dfc9adfb10de";
+      sha256 = "1vc4qr9h97rmhmhsfviihx8kv7c2d0kzvvfnq7qqpmfgw44xjq0x";
+    };
+    meta.homepage = "https://github.com/GustavEikaas/easy-dotnet.nvim/";
+  };
+
   echodoc-vim = buildVimPlugin {
     pname = "echodoc.vim";
     version = "2022-11-27";

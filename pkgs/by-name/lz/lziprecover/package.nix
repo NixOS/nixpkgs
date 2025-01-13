@@ -5,13 +5,14 @@
   lzip,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lziprecover";
-  version = "1.24";
+  version = "1.25";
 
   src = fetchurl {
-    url = "mirror://savannah/lzip/lziprecover/${pname}-${version}.tar.gz";
-    sha256 = "sha256-HWmc+u/pLrJiSjZSWAvK/gu7mP54GMJebegjvN0NRY8=";
+    url = "mirror://savannah/lzip/lziprecover/lziprecover-${finalAttrs.version}.tar.gz";
+    sha256 = "4f392f9c780ae266ee3d0db166b0f1b4d3ae07076e401dc2b199dc3a0fff8b45";
+    # This hash taken from the mailing list announcement.
   };
 
   configureFlags = [
@@ -26,12 +27,15 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.nongnu.org/lzip/lziprecover.html";
     description = "Data recovery tool for lzip compressed files";
     license = lib.licenses.gpl2Plus;
-    maintainers = with maintainers; [ vlaci ];
+    maintainers = with lib.maintainers; [
+      vlaci
+      ehmry
+    ];
     platforms = lib.platforms.all;
     mainProgram = "lziprecover";
   };
-}
+})
