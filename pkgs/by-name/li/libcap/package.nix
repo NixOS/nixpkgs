@@ -1,7 +1,8 @@
 { stdenv, lib, buildPackages, fetchurl, runtimeShell
+, pkgsBuildHost
 , usePam ? !isStatic, pam ? null
 , isStatic ? stdenv.hostPlatform.isStatic
-, withGo ? go.meta.available, go
+, withGo ? pkgsBuildHost.go.meta.available
 
 # passthru.tests
 , bind
@@ -35,7 +36,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = lib.optionals withGo [
-    go
+    pkgsBuildHost.go
   ];
 
   buildInputs = lib.optional usePam pam;
@@ -50,8 +51,8 @@ stdenv.mkDerivation rec {
     "GOLANG=yes"
     ''GOCACHE=''${TMPDIR}/go-cache''
     "GOFLAGS=-trimpath"
-    "GOARCH=${go.GOARCH}"
-    "GOOS=${go.GOOS}"
+    "GOARCH=${pkgsBuildHost.go.GOARCH}"
+    "GOOS=${pkgsBuildHost.go.GOOS}"
   ] ++ lib.optionals isStatic [ "SHARED=no" "LIBCSTATIC=yes" ];
 
   postPatch = ''
@@ -87,7 +88,7 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   disallowedReferences = lib.optionals withGo [
-    go
+    pkgsBuildHost.go
   ];
 
   passthru.tests = {
