@@ -631,9 +631,9 @@
   },
   "maintenance": {
     "pname": "maintenance",
-    "version": "1.7.0b1",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/maintenance-1.7.0b1-py3-none-any.whl",
-    "hash": "sha256-cZmLfV3nIjxeKuehwARFtBHROaAjh2+EeI9R8fUQsts=",
+    "version": "1.7.0b2",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/maintenance-1.7.0b2-py3-none-any.whl",
+    "hash": "sha256-ebiJ8U5FyRLG9VHBGB75AqkjPVars8kGxWnjUCMiiCI=",
     "description": "Microsoft Azure Command-Line Tools MaintenanceManagementClient Extension"
   },
   "managedccfs": {
