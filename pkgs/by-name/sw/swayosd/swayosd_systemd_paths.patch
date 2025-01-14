@@ -1,0 +1,17 @@
+diff --git a/data/meson.build b/data/meson.build
+index fc687a5..68decdf 100644
+--- a/data/meson.build
++++ b/data/meson.build
+@@ -41,11 +42,7 @@ configure_file(
+ 
+ # Systemd service unit
+ systemd = dependency('systemd', required: false)
+-if systemd.found()
+-  systemd_service_install_dir = systemd.get_variable(pkgconfig :'systemdsystemunitdir')
+-else
+-  systemd_service_install_dir = join_paths(libdir, 'systemd', 'system')
+-endif
++systemd_service_install_dir = join_paths(libdir, 'systemd', 'system')
+ 
+ configure_file(
+   configuration: conf_data,

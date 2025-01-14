@@ -1,0 +1,13 @@
+diff --git a/plugin/sensible.vim b/plugin/sensible.vim
+index c9387ae..a226760 100644
+--- a/plugin/sensible.vim
++++ b/plugin/sensible.vim
+@@ -26,7 +26,7 @@ function! s:MaySet(option) abort
+     silent verbose execute 'setglobal all' a:option . '?'
+     redir END
+   endif
+-  return out !~# " \\(\\~[\\/]\\|Lua\\)[^\n]*$"
++  return out !~# "/nix/store/.*" && out !~# " \\(\\~[\\/][^\n]*\\|Lua\\)$"
+ endfunction
+ 
+ if s:MaySet('backspace')
