@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "liblapack";
-  version = "3.12.0";
+  version = "3.12.1";
 
   src = fetchFromGitHub {
     owner = "Reference-LAPACK";
     repo = "lapack";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-xn9HL4YF8JPka1gwet5bGGo2k505H3RfWpxkUIYNecQ=";
+    sha256 = "sha256-SfKsvZ07v87tFFd9bnkIEdervyX/ucLfs/TOsl08aKQ=";
   };
 
   nativeBuildInputs = [
