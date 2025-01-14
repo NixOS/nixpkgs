@@ -6653,8 +6653,6 @@ with pkgs;
     inherit (linuxPackages) perf;
   };
 
-  defaultCrateOverrides = callPackage ../build-support/rust/default-crate-overrides.nix { };
-
   cargo-audit = callPackage ../development/tools/rust/cargo-audit {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
