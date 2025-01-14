@@ -6,16 +6,17 @@
   nixosTests,
   seafile-server,
 }:
+
 python3.pkgs.buildPythonApplication rec {
   pname = "seahub";
-  version = "11.0.12";
+  version = "12.0.6-pro";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "haiwen";
     repo = "seahub";
-    rev = "d998361dd890cac3f6d6ebec3af47a589e0332bc"; # using a fixed revision because upstream may re-tag releases :/
-    hash = "sha256-n56sRZ9TVb37JA0+12ZoF2Mt7dADjaYk7V0PmdBY0EU=";
+    rev = "cb1460c0d5c2ec909587ff8ecb66381e330ff3cc"; # Using a fixed revision because upstream may re-tag releases
+    hash = "sha256-pqKMuWO5r1TfLFyZOdRC0lN1y9+cVcrr1b8jKiBjT8g=";
   };
 
   dontBuild = true;
