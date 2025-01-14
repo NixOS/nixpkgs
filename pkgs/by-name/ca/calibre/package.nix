@@ -2,6 +2,8 @@
   lib,
   stdenv,
   fetchurl,
+  apple-sdk_12,
+  buildEnv,
   cmake,
   fetchpatch,
   ffmpeg,
@@ -33,6 +35,13 @@
   unrarSupport ? false,
 }:
 
+let
+  sw = buildEnv {
+    name = "calibre-dependencies";
+    paths = [ hunspell libuchardet ];
+    extraOutputsToInstall = [ "dev" ];
+  };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "calibre";
   version = "7.22.0";
@@ -54,7 +63,28 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://raw.githubusercontent.com/debian-calibre/calibre/debian/${finalAttrs.version}+ds-1/debian/patches/hardening/0007-Hardening-Qt-code.patch";
       hash = "sha256-9hi4T9LB7aklWASMR8hIuKBgZm2arDvORfmk9S8wgCA=";
     })
-  ] ++ lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
+
+    # On Darwin, use the Linux-style file layout instead of creating a macOS app
+    # bundle.
+    #
+    # Here are the reasons:
+    #
+    # 1. To avoid bloating the closure size with bundled dependencies
+    # 2. To avoid esoteric dependencies like the macOS framework build of Python
+    # 3. For easier packaging. It would require non-trivial amount of effort to
+    #    try to untangle the build script for macOS app bundles from upstream's
+    #    unique build setup. It requires a macOS VM running on top of a Linux
+    #    environment.
+    #
+    # The build script includes a check to prevent us doing what we want because
+    # the two file layouts are incompatible with each other. So the following
+    # patches remove that restriction from the build script and also removes
+    # special handling for app bundles from the application code.
+    ./lift-build-platform-restrictions.patch
+    ./darwin-use-linux-layout.patch
+  ] ++ lib.optionals (!unrarSupport) [
+    ./dont_build_unrar_plugin.patch
+  ];
 
   prePatch = ''
     sed -i "s@\[tool.sip.project\]@[tool.sip.project]\nsip-include-dirs = [\"${python3Packages.pyqt6}/${python3Packages.python.sitePackages}/PyQt6/bindings\"]@g" \
@@ -92,7 +122,6 @@ stdenv.mkDerivation (finalAttrs: {
     podofo
     poppler_utils
     qt6.qtbase
-    qt6.qtwayland
     sqlite
     (python3Packages.python.withPackages (
       ps:
@@ -131,24 +160,33 @@ stdenv.mkDerivation (finalAttrs: {
         xxhash
         # the following are distributed with calibre, but we use upstream instead
         odfpy
+      ] ++ lib.optionals (lib.lists.any (p: p == stdenv.hostPlatform.system) pyqt6-webengine.meta.platforms) [
+        # much of calibre's functionality is usable without a web
+        # browser, so we enable building on platforms which qtwebengine
+        # does not support by simply omitting qtwebengine.
+        pyqt6-webengine
+      ] ++ lib.optionals unrarSupport [
+        unrardll
+      ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        macfsevents
       ]
-      ++
-        lib.optionals (lib.lists.any (p: p == stdenv.hostPlatform.system) pyqt6-webengine.meta.platforms)
-          [
-            # much of calibre's functionality is usable without a web
-            # browser, so we enable building on platforms which qtwebengine
-            # does not support by simply omitting qtwebengine.
-            pyqt6-webengine
-          ]
-      ++ lib.optional unrarSupport unrardll
     ))
     xdg-utils
-  ] ++ lib.optional speechSupport speechd-minimal;
+  ] ++ lib.optionals speechSupport [
+    speechd-minimal
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_12
+  ];
 
   installPhase = ''
     runHook preInstall
 
     export HOME=$TMPDIR/fakehome
+  '' + lib.optionalString stdenv.isDarwin ''
+    # some dependencies have to be placed under ~/sw on Darwin
+    mkdir -p ~
+    ln -s ${sw} ~/sw
+  '' + ''
     export POPPLER_INC_DIR=${poppler_utils.dev}/include/poppler
     export POPPLER_LIB_DIR=${poppler_utils.out}/lib
     export MAGICK_INC=${imagemagick.dev}/include/ImageMagick
@@ -219,6 +257,9 @@ stdenv.mkDerivation (finalAttrs: {
       $ETN 'test_qt'  # we don't include svg or webp support
       $ETN 'test_import_of_all_python_modules'  # explores actual file paths, gets confused
       $ETN 'test_websocket_basic'  # flakey
+      $ETN 'test_recipe_browser_webengine'  # hangs (on aarch64-darwin) but succeeds inside `nix develop …`
+      $ETN 'test_mem_leaks'  # fails (on aarch64-darwin) but succeeds inside `nix develop …`
+      $ETN 'test_openssl'  # checks for a default cafile under macOS that is not available
       ${lib.optionalString (!unrarSupport) "$ETN 'test_unrar'"}
     )
 
@@ -240,6 +281,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = if unrarSupport then lib.licenses.unfreeRedistributable else lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ pSub ];
     platforms = lib.platforms.unix;
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })
