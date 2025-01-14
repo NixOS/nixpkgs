@@ -519,9 +519,9 @@
   },
   "healthcareapis": {
     "pname": "healthcareapis",
-    "version": "1.0.0",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/healthcareapis-1.0.0-py3-none-any.whl",
-    "hash": "sha256-RSFMiiNWGMw4PjI+PKQ7UxGn00Jb5CUxRyKK/fRLruc=",
+    "version": "1.0.1",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/healthcareapis-1.0.1-py3-none-any.whl",
+    "hash": "sha256-VTL1/L/UfORNWvyY0hvSJrvoz5zHabLPFX/sEdQaLhI=",
     "description": "Microsoft Azure Command-Line Tools HealthcareApisManagementClient Extension"
   },
   "hpc-cache": {
