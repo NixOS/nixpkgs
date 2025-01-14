@@ -46,6 +46,7 @@ buildFHSEnv {
     SDL2
   ];
   runScript = "${bigpemu-unwrapped}/bin/bigpemu";
+  meta = meta;
   passthru = {
     unwrapped = bigpemu-unwrapped;
     updateScript = ./update.sh;
