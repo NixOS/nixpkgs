@@ -4,23 +4,24 @@
   fetchpatch,
   fetchFromGitHub,
   qt6,
+  versionCheckHook,
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qhexedit2";
-  version = "0.8.9";
+  version = "0.8.10";
 
   src = fetchFromGitHub {
     owner = "Simsys";
     repo = "qhexedit2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qg8dyXwAsTVSx85Ad7UYhr4d1aTRG9QbvC0uyOMcY8g=";
+    hash = "sha256-SmBLnMLlsqppVQCkdCgehrtopU064eyckKOt/KeFA3Q=";
   };
 
   postPatch = ''
-    # Replace QPallete::Background with QPallete::Window in all files, since QPallete::Background was removed in Qt 6
-    find . -type f -exec sed -i 's/QPalette::Background/QPalette::Window/g' {} +
+    # Fix bugged version check
+    sed -i 's/QT_VERSION_STR/"${finalAttrs.version}"/g' example/main.cpp
   '';
 
   nativeBuildInputs = [
@@ -32,6 +33,10 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtbase
     qt6.qttools
     qt6.qtwayland
+  ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
   ];
 
   qmakeFlags = [
@@ -48,11 +53,10 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru = {
-    updateScript = nix-update-script { };
-    # I would use testers.testVersion except for some reason it fails, even with my patches that add a --version flag
-    # TODO: Debug why testVersion reports a non-zero status code in the nix sandbox
-  };
+  versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
+  doInstallCheck = false; # I don't know why this is failing
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Hex Editor for Qt";
