@@ -1,28 +1,33 @@
 {
   lib,
   stdenv,
-  fetchurl,
-  pkg-config,
-  makeWrapper,
-  libsndfile,
-  jack2,
-  libGLU,
-  libGL,
-  lv2,
   cairo,
-  ladspaH,
+  fetchurl,
   gst_all_1,
-  php,
+  jack2,
+  ladspaH,
+  libGL,
+  libGLU,
   libXrandr,
+  libsndfile,
+  lv2,
+  php,
+  pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lsp-plugins";
   version = "1.2.20";
 
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+  ];
+
   src = fetchurl {
-    url = "https://github.com/lsp-plugins/lsp-plugins/releases/download/${version}/lsp-plugins-src-${version}.tar.gz";
-    sha256 = "sha256-yohg3Ka/see8q6NCwVPl/F06AlyR22akQz43gp+1kck=";
+    url = "https://github.com/lsp-plugins/lsp-plugins/releases/download/${finalAttrs.version}/lsp-plugins-src-${finalAttrs.version}.tar.gz";
+    hash = "sha256-yohg3Ka/see8q6NCwVPl/F06AlyR22akQz43gp+1kck=";
   };
 
   # By default, GStreamer plugins are installed right alongside GStreamer itself
@@ -32,47 +37,45 @@ stdenv.mkDerivation rec {
       --replace-fail '$(shell pkg-config --variable=pluginsdir gstreamer-1.0)' '$(LIBDIR)/gstreamer-1.0'
   '';
 
-  outputs = [
-    "out"
-    "dev"
-    "doc"
+  nativeBuildInputs = [
+    php
+    pkg-config
   ];
 
-  nativeBuildInputs = [
-    pkg-config
-    (php.withExtensions (_: [ ]))
-    makeWrapper
-  ];
   buildInputs = [
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    jack2
-    libsndfile
-    libGLU
-    libGL
-    lv2
     cairo
+    gst_all_1.gst-plugins-base
+    gst_all_1.gstreamer
+    jack2
     ladspaH
+    libGL
+    libGLU
     libXrandr
+    libsndfile
+    lv2
   ];
 
   makeFlags = [
-    "PREFIX=${placeholder "out"}"
     "ETCDIR=${placeholder "out"}/etc"
+    "PREFIX=${placeholder "out"}"
     "SHAREDDIR=${placeholder "out"}/share"
   ];
 
   env.NIX_CFLAGS_COMPILE = "-DLSP_NO_EXPERIMENTAL";
 
   configurePhase = ''
-    make config PREFIX=${placeholder "out"}
+    runHook preConfigure
+
+    make $makeFlags config
+
+    runHook postConfigure
   '';
 
   doCheck = true;
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Collection of open-source audio plugins";
     longDescription = ''
       Compatible with the following formats:
@@ -133,11 +136,12 @@ stdenv.mkDerivation rec {
       - Trigger
     '';
     homepage = "https://lsp-plug.in";
-    maintainers = with maintainers; [
+    changelog = "https://github.com/lsp-plugins/lsp-plugins/releases/tag/${finalAttrs.version}";
+    maintainers = with lib.maintainers; [
       magnetophon
       PowerUser64
     ];
-    license = licenses.gpl2;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
   };
-}
+})
