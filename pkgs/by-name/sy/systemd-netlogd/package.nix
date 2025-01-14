@@ -13,6 +13,7 @@
   sphinx,
   systemd,
   systemdLibs,
+  testers,
   opensslSupport ? true,
 }:
 
@@ -69,9 +70,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     # Make sure x86_64-linux -> aarch64-linux cross compilation works
-    tests = lib.optionalAttrs (stdenv.buildPlatform.system == "x86_64-linux") {
-      aarch64-cross = pkgsCross.aarch64-multiplatform.systemd-netlogd;
-    };
+    tests =
+      {
+        version = testers.testVersion { package = finalAttrs.finalPackage; };
+      }
+      // lib.optionalAttrs (stdenv.buildPlatform.system == "x86_64-linux") {
+        aarch64-cross = pkgsCross.aarch64-multiplatform.systemd-netlogd;
+      };
 
     updateScript = nix-update-script { };
   };
