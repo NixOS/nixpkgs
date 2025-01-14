@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [
       flokli
       zimbatm
+      felixsinger
     ];
     platforms = platforms.unix;
   };
