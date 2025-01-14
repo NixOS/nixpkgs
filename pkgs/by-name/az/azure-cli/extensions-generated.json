@@ -659,9 +659,9 @@
   },
   "mcc": {
     "pname": "mcc",
-    "version": "1.0.0b1",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/mcc-1.0.0b1-py3-none-any.whl",
-    "hash": "sha256-anNMf7Gdca1dIQFGSyR8e//doeWcJlHphUf/eesZ7U0=",
+    "version": "1.0.0b2",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/mcc-1.0.0b2-py3-none-any.whl",
+    "hash": "sha256-z8u9+D5A5bq8WAUqeZx1H1Y+2ukQQXnAyefW51OvEU0=",
     "description": "Microsoft Connected Cache CLI Commands"
   },
   "mdp": {
