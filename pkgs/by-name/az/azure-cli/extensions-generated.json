@@ -225,9 +225,9 @@
   },
   "connectedvmware": {
     "pname": "connectedvmware",
-    "version": "1.2.0",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/connectedvmware-1.2.0-py2.py3-none-any.whl",
-    "hash": "sha256-tzGoIcYJqui/q34EcLNCuReefgxlSC9KQypg2HpMOV8=",
+    "version": "1.2.1",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/connectedvmware-1.2.1-py2.py3-none-any.whl",
+    "hash": "sha256-zEljltE9NdxAg2KUbDYJ4D9NMb1fGhQ0SmPdM6OhXvo=",
     "description": "Microsoft Azure Command-Line Tools Connectedvmware Extension"
   },
   "cosmosdb-preview": {
