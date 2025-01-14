@@ -27,7 +27,10 @@ in {
       }
     ];
 
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [
+      cfg.package
+      pkgs.fuse3
+    ];
 
     security.polkit.enable = true;
 
