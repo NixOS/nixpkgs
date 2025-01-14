@@ -8,7 +8,6 @@
   libblocksruntime,
   llvmPackages,
   libxcrypt,
-  openldap,
   ninja,
   pkg-config,
   python3,
@@ -104,7 +103,6 @@ python3.pkgs.buildPythonApplication rec {
       LDAP
       OpenAL
       OpenGL
-      openldap
     ]
     ++ lib.optionals (stdenv.cc.isClang && !stdenv.hostPlatform.isDarwin) [
       # https://github.com/mesonbuild/meson/blob/bd3f1b2e0e70ef16dfa4f441686003212440a09b/test%20cases/common/184%20openmp/meson.build
