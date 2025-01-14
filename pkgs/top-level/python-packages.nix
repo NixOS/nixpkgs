@@ -10245,6 +10245,14 @@ self: super: with self; {
 
   pkg-about = callPackage ../development/python-modules/pkg-about { };
 
+  plover = callPackage ../development/python-modules/plover {
+    inherit (pkgs.libsForQt5) wrapQtAppsHook;
+  };
+
+  plover-last-translation = callPackage ../development/python-modules/plover-last-translation { };
+
+  plover-stroke = callPackage ../development/python-modules/plover-stroke { };
+
   micloud = callPackage ../development/python-modules/micloud { };
 
   mqtt2influxdb = callPackage ../development/python-modules/mqtt2influxdb { };
@@ -14295,6 +14303,8 @@ self: super: with self; {
   rstcheck-core = callPackage ../development/python-modules/rstcheck-core { };
 
   rstr = callPackage ../development/python-modules/rstr { };
+
+  rtf-tokenize = callPackage ../development/python-modules/rtf-tokenize { };
 
   rtmidi-python = callPackage ../development/python-modules/rtmidi-python {
     inherit (pkgs.darwin.apple_sdk.frameworks) CoreAudio CoreMIDI CoreServices;
