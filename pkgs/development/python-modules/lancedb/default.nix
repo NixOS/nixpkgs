@@ -24,19 +24,20 @@
   polars,
   pytest-asyncio,
   pytestCheckHook,
+  duckdb,
   nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "lancedb";
-  version = "0.14.0";
+  version = "0.18.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lancedb";
     repo = "lancedb";
     tag = "python-v${version}";
-    hash = "sha256-lw2tZ26Py6JUxuetaokJKnxOv/WoLK4spxssLKxvxJA=";
+    hash = "sha256-URgJFSrCccp9DBdW2VQgft1GZHu48pb8RrLHmBBow5Q=";
   };
 
   buildAndTestSubdir = "python";
@@ -86,6 +87,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     aiohttp
+    duckdb
     pandas
     polars
     pytest-asyncio
@@ -106,6 +108,9 @@ buildPythonPackage rec {
       # polars.exceptions.ComputeError: TypeError: _scan_pyarrow_dataset_impl() got multiple values for argument 'batch_size'
       # https://github.com/lancedb/lancedb/issues/1539
       "test_polars"
+
+      # Requires tantivy which is not packaged in nixpkgs
+      "test_fts_native"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # fail with darwin sandbox
