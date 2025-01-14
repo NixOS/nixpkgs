@@ -11,11 +11,8 @@
   zstd,
   rust-jemalloc-sys,
   rust-jemalloc-sys-unprefixed,
-  Security,
   libiconv,
   coreutils,
-  CoreServices,
-  SystemConfiguration,
   tzdata,
   cmake,
   perl,
@@ -39,18 +36,8 @@ rustPlatform.buildRustPackage {
     hash = "sha256-BFVRaHNd9LMJQnkHHfNtvGKkv8q7GjnT+FzNwSc8GZw=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "greptime-proto-0.1.0" = "sha256-QT3PZnHJoVghuRCGoZIH6L8jnX7Wn9eSuQqHIyrUY4E=";
-      "greptimedb-ingester-0.1.0" = "sha256-1M9yWXDZ6U9JTVyXQg9ZcSSGJp7GXtaCfQHdtjhw6FY=";
-      "heim-0.1.0-rc.1" = "sha256-pMraYKr6srTQqEzoBx9gGHHlJ7nMKwj50ftimQAkfL0=";
-      "nix-0.26.2" = "sha256-uquYvRT56lhupkrESpxwKEimRFhmYvri10n3dj0f2yg=";
-      "ntapi-0.3.7" = "sha256-G6ZCsa3GWiI/FeGKiK9TWkmTxen7nwpXvm5FtjNtjWU=";
-      "tokio-util-0.7.11" = "sha256-oV9fSPjLMY1KbcbDP2WTVjF/N0qlQBPDIYHOp3aNCTY=";
-      "tracing-0.2.0" = "sha256-YAxeEofFA43PX2hafh3RY+C81a2v6n1fGzYz2FycC3M=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-1xxEu4/IxUe10Wngz1RUT6Iu982pueRteiOwg6BZ1/E=";
 
   nativeBuildInputs =
     [
@@ -73,11 +60,8 @@ rustPlatform.buildRustPackage {
     ++ lib.optionals stdenv.hostPlatform.isLinux [ rust-jemalloc-sys-unprefixed ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       rust-jemalloc-sys
-      Security
       libiconv
       coreutils
-      CoreServices
-      SystemConfiguration
     ];
 
   # Rust 1.80.0 introduced the unexepcted_cfgs lint, which requires crates to allowlist custom cfg options that they inspect.

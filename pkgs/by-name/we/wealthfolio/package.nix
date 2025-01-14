@@ -3,7 +3,9 @@
   stdenv,
   fetchFromGitHub,
   cargo-tauri,
+  jq,
   libsoup_3,
+  moreutils,
   nodejs,
   openssl,
   pkg-config,
@@ -41,6 +43,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cargo-tauri.hook
+    jq
+    moreutils
     nodejs
     pkg-config
     pnpm.configHook
@@ -53,6 +57,14 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
     webkitgtk_4_1
   ];
+
+  postPatch = ''
+    jq \
+      '.plugins.updater.endpoints = [ ]
+      | .bundle.createUpdaterArtifacts = false' \
+      src-tauri/tauri.conf.json \
+      | sponge src-tauri/tauri.conf.json
+  '';
 
   passthru.updateScript = nix-update-script { };
 
