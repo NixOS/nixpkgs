@@ -4,6 +4,7 @@
   nodejs,
   pnpm_9,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -53,6 +54,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Language server for emmet.io";
