@@ -26,10 +26,12 @@
   pythonSupport ? true,
   cudaSupport ? config.cudaSupport,
   ncclSupport ? cudaSupport && cudaPackages.nccl.meta.available,
+  openvinoSupport ? stdenv.isLinux,
   rocmSupport ? config.rocmSupport,
   withFullProtobuf ? false,
   cudaPackages ? { },
   rocmPackages,
+  openvino,
 }@inputs:
 
 let
@@ -187,6 +189,9 @@ effectiveStdenv.mkDerivation rec {
     rocmPackages.rocm-smi
     rocmPackages.roctracer
   ]
+  ++ lib.optionals openvinoSupport [
+    openvino
+  ]
   ++ lib.optionals effectiveStdenv.hostPlatform.isDarwin [
     (darwinMinVersionHook "13.3")
   ];
@@ -236,8 +241,14 @@ effectiveStdenv.mkDerivation rec {
     (lib.cmakeBool "onnxruntime_USE_NCCL" (cudaSupport && ncclSupport))
     (lib.cmakeBool "onnxruntime_USE_ROCM" rocmSupport)
     (lib.cmakeBool "onnxruntime_ENABLE_LTO" (!cudaSupport || cudaPackages.cudaOlder "12.8"))
-  ]
-  ++ lib.optionals pythonSupport [
+  ] ++ lib.optionals openvinoSupport [
+    (lib.cmakeBool "onnxruntime_USE_OPENVINO" true)
+    (lib.cmakeFeature "onnxruntime_USE_OPENVINO_AUTO" (if effectiveStdenv.hostPlatform.system == "x86_64-linux" then "NPU,GPU,CPU" else "GPU"))
+    (lib.cmakeBool "onnxruntime_USE_OPENVINO_GPU" true)
+    (lib.cmakeBool "onnxruntime_USE_OPENVINO_CPU" (effectiveStdenv.hostPlatform.system == "x86_64-linux"))
+    (lib.cmakeBool "onnxruntime_USE_OPENVINO_NPU" (effectiveStdenv.hostPlatform.system == "x86_64-linux"))
+    (lib.cmakeFeature "OpenVINO_DIR" "${lib.getDev openvino}/runtime/cmake")
+  ] ++ lib.optionals pythonSupport [
     (lib.cmakeBool "onnxruntime_ENABLE_PYTHON" true)
   ]
   ++ lib.optionals cudaSupport [
@@ -261,7 +272,7 @@ effectiveStdenv.mkDerivation rec {
   ];
 
   env =
-    lib.optionalAttrs effectiveStdenv.cc.isClang {
+    {
       NIX_CFLAGS_COMPILE = "-Wno-error";
     }
     // lib.optionalAttrs rocmSupport {
@@ -284,6 +295,8 @@ effectiveStdenv.mkDerivation rec {
     !(
       cudaSupport
       || rocmSupport
+      # - enoent $out/lib/libonnxruntime_provider_shared.so when built with openvino support
+      || openvinoSupport
       || builtins.elem effectiveStdenv.buildPlatform.system [
         # aarch64-linux fails cpuinfo test, because /sys/devices/system/cpu/ does not exist in the sandbox
         "aarch64-linux"
@@ -340,6 +353,7 @@ effectiveStdenv.mkDerivation rec {
     inherit protobuf;
     tests = lib.optionalAttrs pythonSupport {
       python = python3Packages.onnxruntime;
+      withTests = onnxruntime.override { openvinoSupport = false; };
     };
   };
 

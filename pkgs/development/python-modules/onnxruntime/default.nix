@@ -10,6 +10,7 @@
   re2,
 
   # dependencies
+  openvino,
   coloredlogs,
   numpy,
   packaging,
@@ -72,6 +73,7 @@ buildPythonPackage {
     ++ lib.optionals onnxruntime.passthru.ncclSupport [
       nccl # libnccl.so.XX
     ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ openvino ]
   );
 
   dependencies = [
