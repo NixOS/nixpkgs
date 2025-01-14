@@ -43,14 +43,14 @@ let
 
 in
 stdenv.mkDerivation rec {
-  version = "7.2";
+  version = "7.4";
   pname = "quantum-espresso";
 
   src = fetchFromGitLab {
     owner = "QEF";
     repo = "q-e";
     rev = "qe-${version}";
-    hash = "sha256-0q0QWX4BVjVHjcbKOBpjbBADuL+2S5LAALyrxmjVs4c=";
+    hash = "sha256-LACibzoNFE1N3X06SyTX2RuziZ/TO0kRxVVivRIhdVI=";
   };
 
   # add git submodules manually and fix pkg-config file
@@ -76,6 +76,10 @@ stdenv.mkDerivation rec {
     substituteInPlace cmake/quantum_espresso.pc.in \
       --replace 'libdir="''${prefix}/@CMAKE_INSTALL_LIBDIR@"' 'libdir="@CMAKE_INSTALL_FULL_LIBDIR@"'
   '';
+
+  patches = [
+    ./findLibxc.patch
+  ];
 
   passthru = { inherit mpi; };
 
