@@ -85,6 +85,7 @@ let
             }
           );
 
+        # TODO: Support legacy attrs like passthru?
         overrideAttrs =
           f:
           this.extend (
@@ -150,7 +151,7 @@ let
     };
 
   layers.withDeps =
-    f: this: old:
+    f: externalArgs: this: old:
     let
       fargs = lib.functionArgs f;
       spy = lib.setFunctionArgs (args: { inherit args; }) (
@@ -162,11 +163,21 @@ let
         ) fargs
       );
       # TODO: make callPackage a parameter?
-      values = (callPackage spy { }).args;
+      values = (callPackage spy externalArgs).args;
       old2 = old // {
         deps = old.deps or { } // values;
+        inherit values;
       };
-      r = f (lib.mapAttrs (name: value: this.deps.${name}) fargs);
+      r = f (
+        lib.mapAttrs (
+          name: hasDefault:
+          builtins.addErrorContext "while evaluating the package function argument `${name}`" (
+            externalArgs.${name} or (this.deps.${name}
+              or (throw "Dependency ${name} went missing from the package internal `deps` attribute. Did you forget to preserve previous deps? Write e.g. `deps = prev.deps // { ... }`")
+            )
+          )
+        ) fargs
+      );
       r' = if lib.isList r then lib.composeManyExtensions r else r;
     in
     old2 // r' this old2;
@@ -177,13 +188,68 @@ let
   # TODO: layers.pkg-config
   # TODO: layers.<some language>
 
-  mkPackage = f: lib.encapsulate (lib.extends f baseLayer);
-  mkPackageWithDeps = f: mkPackage (layers.withDeps f);
+  layers.noop = _this: _old: { };
+
+  mkPackageWith =
+    {
+      # these are not overridable by the layer implementations - not suited for `deps`
+      externalDeps ? { inherit layers; },
+    }:
+    f:
+    lib.encapsulate (
+      this:
+      let
+        baseLayer' =
+          x:
+          baseLayer x
+          // {
+            /**
+              Extend the package layers with the given function.
+            */
+            extend =
+              f:
+              this.extend (
+                this: old: {
+                  userLayer = lib.composeExtensions old.userLayer f;
+                }
+              );
+          };
+      in
+      # The root of the mkPackage fixpoint is responsible for managing the deps,
+      # and combining the layers (without adding an extra fixpoint).
+      # Virtually all package logic happens in userLayer.
+      {
+        userLayer =
+          final: prev:
+          this.externalDeps.layers.withDeps f (
+            this.externalDeps
+            // {
+              # Package attributes
+              inherit final prev;
+              # Dependencies
+              /**
+                Override the package dependencies that are not overridable by the individual layer implementations,
+                Notably, the `layers` attribute.
+              */
+              overrideExternalDeps =
+                newDeps:
+                this.extend (
+                  this: old: {
+                    externalDeps = old.externalDeps // newDeps;
+                  }
+                );
+            }
+          ) final prev;
+        inherit externalDeps;
+        package = lib.extends this.userLayer baseLayer' this.package;
+        inherit (this.package) public;
+      }
+    );
+  mkPackage = mkPackageWith { };
 in
 {
   inherit
     layers
     mkPackage
-    mkPackageWithDeps
     ;
 }
