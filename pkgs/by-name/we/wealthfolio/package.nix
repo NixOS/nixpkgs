@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wealthfolio";
-  version = "1.0.22";
+  version = "1.0.23";
 
   src = fetchFromGitHub {
     owner = "afadil";
     repo = "wealthfolio";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-2g5zfRRxRm7/pCyut7weC4oTegwxCbvYpWSC2+qfcR8=";
+    hash = "sha256-+jJtvE28P/hoRIFP/fMUs8qVQU3QLxRTPGgGCNIYrtk=";
   };
 
   pnpmDeps = pnpm_9.fetchDeps {
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit (finalAttrs) pname version src;
     sourceRoot = "${finalAttrs.src.name}/${finalAttrs.cargoRoot}";
-    hash = "sha256-569k7s6h8eJABNy2+xkNQegEXUhBOlX+zkf1pzNX3ZU=";
+    hash = "sha256-Teno9y+busOGbreer2RzT+3sigRKvJbO1obfo0QpcPU=";
   };
 
   nativeBuildInputs = [
