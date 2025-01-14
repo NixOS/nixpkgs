@@ -1185,6 +1185,7 @@ in
   v2ray = handleTest ./v2ray.nix { };
   varnish60 = handleTest ./varnish.nix { package = pkgs.varnish60; };
   varnish75 = handleTest ./varnish.nix { package = pkgs.varnish75; };
+  varnish76 = handleTest ./varnish.nix { package = pkgs.varnish76; };
   vault = handleTest ./vault.nix { };
   vault-agent = handleTest ./vault-agent.nix { };
   vault-dev = handleTest ./vault-dev.nix { };
