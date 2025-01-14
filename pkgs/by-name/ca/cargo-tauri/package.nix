@@ -4,7 +4,6 @@
   callPackage,
   rustPlatform,
   fetchFromGitHub,
-  cargo-tauri,
   gtk4,
   nix-update-script,
   openssl,
@@ -14,21 +13,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tauri";
-  version = "2.1.1";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "tauri-apps";
     repo = "tauri";
     tag = "tauri-v${version}";
-    hash = "sha256-HPmViOowP1xAjDJ89YS0BTjNnKI1P0L777ywkqAhhc4=";
+    hash = "sha256-v9o+oqs6OZWhHv+PExo9juzTt7W80YOTkynzwvxpHGM=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "schemars_derive-0.8.21" = "sha256-AmxBKZXm2Eb+w8/hLQWTol5f22uP8UqaIh+LVLbS20g=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-SmM3G0WpNcb+B5uo+2Nczg/Htx5eY5JnxF0Tkwz8k0M=";
 
   nativeBuildInputs = [ pkg-config ];
 

@@ -3,18 +3,18 @@
   stdenv,
   fetchFromGitHub,
   python3Packages,
-  unstableGitUpdater,
+  gitUpdater,
 }:
-python3Packages.buildPythonApplication {
+python3Packages.buildPythonApplication rec {
   pname = "exo";
-  version = "0-unstable-2024-12-28";
+  version = "0.0.5-alpha";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "exo-explore";
     repo = "exo";
-    rev = "a174c78004e5fc62220dd4e9734e8ad4eaa75e39";
-    hash = "sha256-q68dcAz4QPS5mSuHSlQ3BnXkPzOi+2X2XgKLZs6SKhE=";
+    tag = "v${version}";
+    hash = "sha256-bAbKmLoJbDVwGoWTxA3a0CUzVFoso6/Uz6e48MSJDgw=";
   };
 
   build-system = with python3Packages; [ setuptools ];
@@ -66,8 +66,8 @@ python3Packages.buildPythonApplication {
   doCheck = stdenv.hostPlatform.isDarwin;
 
   passthru = {
-    updateScript = unstableGitUpdater {
-      hardcodeZeroVersion = true;
+    updateScript = gitUpdater {
+      rev-prefix = "v-";
     };
   };
 

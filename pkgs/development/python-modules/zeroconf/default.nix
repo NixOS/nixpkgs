@@ -7,6 +7,7 @@
   ifaddr,
   poetry-core,
   pytest-asyncio,
+  pytest-codspeed,
   pytest-cov-stub,
   pytest-timeout,
   pythonOlder,
@@ -16,16 +17,16 @@
 
 buildPythonPackage rec {
   pname = "zeroconf";
-  version = "0.136.2";
+  version = "0.139.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "jstasiak";
     repo = "python-zeroconf";
     tag = version;
-    hash = "sha256-gSoxrG+5LCI0DCEGqrQvzFfnKhlJV5kyqLH6IrN7Zjs=";
+    hash = "sha256-qhfr4MIBSOyXCQ+RP43016gedXo8bCgxz1tt5oSHAgo=";
   };
 
   build-system = [
@@ -38,6 +39,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-codspeed
     pytest-cov-stub
     pytest-timeout
     pytestCheckHook

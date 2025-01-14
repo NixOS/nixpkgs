@@ -314,6 +314,103 @@ def test_edit(mock_run: Any, monkeypatch: Any, tmpdir: Any) -> None:
         mock_run.assert_called_with(["editor", default_nix], check=False)
 
 
+@patch(
+    get_qualified_name(n.run_wrapper, n),
+    autospec=True,
+    return_value=CompletedProcess(
+        [],
+        0,
+        """
+        {
+          "azure": "nixos-image-azure-25.05.20250102.6df2492-x86_64-linux.vhd",
+          "vmware": "nixos-image-vmware-25.05.20250102.6df2492-x86_64-linux.vmdk"
+        }
+        """,
+    ),
+)
+def test_get_build_image_variants(mock_run: Any) -> None:
+    build_attr = m.BuildAttr("<nixpkgs/nixos>", None)
+    assert n.get_build_image_variants(build_attr) == {
+        "azure": "nixos-image-azure-25.05.20250102.6df2492-x86_64-linux.vhd",
+        "vmware": "nixos-image-vmware-25.05.20250102.6df2492-x86_64-linux.vmdk",
+    }
+    mock_run.assert_called_with(
+        [
+            "nix-instantiate",
+            "--eval",
+            "--strict",
+            "--json",
+            "--expr",
+            textwrap.dedent("""
+            let
+              value = import <nixpkgs/nixos>;
+              set = if builtins.isFunction value then value {} else value;
+            in
+              builtins.mapAttrs (n: v: v.passthru.filePath) set.config.system.build.images
+            """),
+        ],
+        stdout=PIPE,
+    )
+
+    build_attr = m.BuildAttr(Path("/tmp"), "preAttr")
+    assert n.get_build_image_variants(build_attr, {"inst_flag": True}) == {
+        "azure": "nixos-image-azure-25.05.20250102.6df2492-x86_64-linux.vhd",
+        "vmware": "nixos-image-vmware-25.05.20250102.6df2492-x86_64-linux.vmdk",
+    }
+    mock_run.assert_called_with(
+        [
+            "nix-instantiate",
+            "--eval",
+            "--strict",
+            "--json",
+            "--expr",
+            textwrap.dedent("""
+            let
+              value = import "/tmp";
+              set = if builtins.isFunction value then value {} else value;
+            in
+              builtins.mapAttrs (n: v: v.passthru.filePath) set.preAttr.config.system.build.images
+            """),
+            "--inst-flag",
+        ],
+        stdout=PIPE,
+    )
+
+
+@patch(
+    get_qualified_name(n.run_wrapper, n),
+    autospec=True,
+    return_value=CompletedProcess(
+        [],
+        0,
+        """
+        {
+          "azure": "nixos-image-azure-25.05.20250102.6df2492-x86_64-linux.vhd",
+          "vmware": "nixos-image-vmware-25.05.20250102.6df2492-x86_64-linux.vmdk"
+        }
+        """,
+    ),
+)
+def test_get_build_image_variants_flake(mock_run: Any) -> None:
+    flake = m.Flake(Path("flake.nix"), "myAttr")
+    assert n.get_build_image_variants_flake(flake, {"eval_flag": True}) == {
+        "azure": "nixos-image-azure-25.05.20250102.6df2492-x86_64-linux.vhd",
+        "vmware": "nixos-image-vmware-25.05.20250102.6df2492-x86_64-linux.vmdk",
+    }
+    mock_run.assert_called_with(
+        [
+            "nix",
+            "eval",
+            "--json",
+            "flake.nix#myAttr.config.system.build.images",
+            "--apply",
+            "builtins.mapAttrs (n: v: v.passthru.filePath)",
+            "--eval-flag",
+        ],
+        stdout=PIPE,
+    )
+
+
 def test_get_nixpkgs_rev() -> None:
     assert n.get_nixpkgs_rev(None) is None
 

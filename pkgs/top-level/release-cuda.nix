@@ -121,7 +121,6 @@ let
         boxx = linux;
         bpycv = linux;
         catboost = linux;
-        chainer = linux;
         cupy = linux;
         faiss = linux;
         faster-whisper = linux;

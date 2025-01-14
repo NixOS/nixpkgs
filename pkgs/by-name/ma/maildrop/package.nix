@@ -3,22 +3,26 @@
   lib,
   stdenv,
   pkg-config,
-  pcre,
+  courier-unicode,
+  pcre2,
+  libidn2,
   perl,
 }:
 
 stdenv.mkDerivation rec {
   pname = "maildrop";
-  version = "2.6.0";
+  version = "3.1.8";
 
   src = fetchurl {
     url = "mirror://sourceforge/courier/maildrop/${version}/maildrop-${version}.tar.bz2";
-    sha256 = "1a94p2b41iy334cwfwmzi19557dn5j61abh0cp2rfc9dkc8ibhdg";
+    sha256 = "sha256-foJsAxkXRE8berccH82QODWVZEhG4rOyYONSsc4D6VA=";
   };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    pcre
+    courier-unicode
+    libidn2
+    pcre2
     perl
   ];
 

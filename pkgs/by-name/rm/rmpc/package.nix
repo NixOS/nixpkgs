@@ -53,6 +53,6 @@ rustPlatform.buildRustPackage rec {
       bloxx12
     ];
     mainProgram = "rmpc";
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

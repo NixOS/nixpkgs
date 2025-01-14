@@ -36,7 +36,8 @@ declare -A users=()
 for file in "${touchedFiles[@]}"; do
     result=$(codeowners --file "$tmp"/codeowners "$file")
 
-    read -r file owners <<< "$result"
+    # Remove the file prefix and trim the surrounding spaces
+    read -r owners <<< "${result#"$file"}"
     if [[ "$owners" == "(unowned)" ]]; then
         log "File $file is unowned"
         continue

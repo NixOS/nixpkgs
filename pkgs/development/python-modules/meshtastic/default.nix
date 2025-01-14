@@ -34,7 +34,7 @@
 
 buildPythonPackage rec {
   pname = "meshtastic";
-  version = "2.5.9";
+  version = "2.5.10";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     owner = "meshtastic";
     repo = "Meshtastic-python";
     tag = version;
-    hash = "sha256-q5hGAe3kJk1E/u2l8uCMyHHVuQmlwODkyZDiqxFn3Bo=";
+    hash = "sha256-uXyHblcV5qm/NJ/zYsPIr12lqI914n6KYxl4gun7XdM=";
   };
 
   pythonRelaxDeps = [

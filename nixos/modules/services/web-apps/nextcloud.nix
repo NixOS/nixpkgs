@@ -770,15 +770,17 @@ in {
       description = ''
         Extra options which should be appended to Nextcloud's config.php file.
       '';
-      example = literalExpression '' {
-        redis = {
-          host = "/run/redis/redis.sock";
-          port = 0;
-          dbindex = 0;
-          password = "secret";
-          timeout = 1.5;
-        };
-      } '';
+      example = literalExpression ''
+        {
+          redis = {
+            host = "/run/redis/redis.sock";
+            port = 0;
+            dbindex = 0;
+            password = "secret";
+            timeout = 1.5;
+          };
+        }
+      '';
     };
 
     secretFile = mkOption {

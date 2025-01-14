@@ -11,16 +11,16 @@
 
 buildGoModule rec {
   pname = "matrix-dendrite";
-  version = "0.13.8";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
-    owner = "matrix-org";
+    owner = "element-hq";
     repo = "dendrite";
     rev = "v${version}";
-    hash = "sha256-zUpZdG2cdZ95L70qLG2HaUlD+G66XTi4f1V4+ZZAh30=";
+    hash = "sha256-B8ODjhL2XuAkTjggqr7re3oJohDnq1mWgms5bZFV/AI=";
   };
 
-  vendorHash = "sha256-rGOB1ikY3BgChvD1YZUF66g8P6gE29b/k9kxvHR0+WQ=";
+  vendorHash = "sha256-vLdSOSxIvfiVZfM7nRnKNwiklxHBSG7KybC35k4GcaQ=";
 
   subPackages = [
     # The server
@@ -66,10 +66,10 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    homepage = "https://matrix-org.github.io/dendrite";
+    homepage = "https://element-hq.github.io/dendrite";
     description = "Second-generation Matrix homeserver written in Go";
-    changelog = "https://github.com/matrix-org/dendrite/releases/tag/v${version}";
-    license = licenses.asl20;
+    changelog = "https://github.com/element-hq/dendrite/releases/tag/v${version}";
+    license = licenses.agpl3Plus;
     maintainers = teams.matrix.members;
     platforms = platforms.unix;
   };

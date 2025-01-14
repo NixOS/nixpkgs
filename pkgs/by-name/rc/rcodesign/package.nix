@@ -4,39 +4,44 @@
   rustPlatform,
   fetchFromGitHub,
   uutils-coreutils,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rcodesign";
-  version = "0.28.0";
+  version = "0.29.0";
 
   src = fetchFromGitHub {
     owner = "indygreg";
     repo = "apple-platform-rs";
-    rev = "apple-codesign/${version}";
-    hash = "sha256-xyjq5mdc29OwzlUAQZWSg1k68occ81i7KBGUiiq0ke0=";
+    tag = "apple-codesign/${version}";
+    hash = "sha256-NyO0HkldXh94Y16E+SX1VE/OOx0zgO6VYoRLJrEQUm0=";
   };
 
-  patches = [
-    # Disable cli_tests test that requires network access.
-    ./disable-sign-for-notarization-test.patch
-  ];
-
-  cargoHash = "sha256-xMhyKovXoBPZp6epWQ+CYODpyvHgpv6eZfdWPTuDnK8=";
+  cargoHash = "sha256-loWN0Pc46sr2/ZZCz2Uqf2AeGUP67EzGFQsPVLAKsfo=";
 
   cargoBuildFlags = [
     # Only build the binary we want
-    "--bin"
-    "rcodesign"
+    "--bin=rcodesign"
   ];
 
-  checkFlags = [
-    # Does network IO
-    "--skip=ticket_lookup::test::lookup_ticket"
-    # These tests require Xcode to be installed
-    "--skip=find_all_platform_directories"
-    "--skip=find_all_sdks"
-  ];
+  checkFlags =
+    [
+      # Does network IO
+      "--skip=cli_tests"
+      "--skip=ticket_lookup::test::lookup_ticket"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # These tests require Xcode to be installed
+      "--skip=parsed_sdk::test::find_all_sdks"
+      "--skip=simple_sdk::test::find_all_sdks"
+      "--skip=test::find_all_platform_directories"
+
+      # Error: Io(Os { code: 1, kind: PermissionDenied, message: "Operation not permitted" })
+      "--skip=test::find_system_xcode_applications"
+      "--skip=test::find_system_xcode_developer_directories"
+    ];
 
   # Set up uutils-coreutils for cli_tests. Without this, it will be installed with `cargo install`, which will fail
   # due to the lack of network access in the build environment.
@@ -46,7 +51,17 @@ rustPlatform.buildRustPackage rec {
     ln -s '${lib.getExe' uutils-coreutils "uutils-coreutils"}' "$coreutils_dir/coreutils"
   '';
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     description = "Cross-platform CLI interface to interact with Apple code signing";
     mainProgram = "rcodesign";
     longDescription = ''
@@ -57,7 +72,8 @@ rustPlatform.buildRustPackage rec {
       For more information, refer to the [documentation](https://gregoryszorc.com/docs/apple-codesign/stable/apple_codesign_rcodesign.html).
     '';
     homepage = "https://github.com/indygreg/apple-platform-rs";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ euank ];
+    changelog = "https://github.com/indygreg/apple-platform-rs/releases/tag/apple-codesign%2F${version}";
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ euank ];
   };
 }

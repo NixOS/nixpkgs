@@ -64,6 +64,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "numpyro" ];
 
   pytestFlagsArray = [
+    # Tests memory consumption grows significantly with the number of parallel processes (reaches ~200GB with 80 jobs)
+    "--maxprocesses=8"
+
     # A few tests fail with:
     # UserWarning: There are not enough devices to run parallel chains: expected 2 but got 1.
     # Chains will be drawn sequentially. If you are running MCMC in CPU, consider using `numpyro.set_host_device_count(2)` at the beginning of your program.

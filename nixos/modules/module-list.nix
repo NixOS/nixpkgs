@@ -571,7 +571,13 @@
   ./services/editors/emacs.nix
   ./services/editors/haste.nix
   ./services/editors/infinoted.nix
+  ./services/finance/libeufin/bank.nix
+  ./services/finance/libeufin/module.nix
+  ./services/finance/libeufin/nexus.nix
   ./services/finance/odoo.nix
+  ./services/finance/taler/exchange.nix
+  ./services/finance/taler/merchant.nix
+  ./services/finance/taler/module.nix
   ./services/games/archisteamfarm.nix
   ./services/games/armagetronad.nix
   ./services/games/crossfire-server.nix
@@ -893,6 +899,7 @@
   ./services/misc/workout-tracker.nix
   ./services/misc/whisparr.nix
   ./services/misc/xmrig.nix
+  ./services/misc/ytdl-sub.nix
   ./services/misc/zoneminder.nix
   ./services/misc/zookeeper.nix
   ./services/monitoring/alerta.nix
@@ -1458,6 +1465,7 @@
   ./services/web-apps/documize.nix
   ./services/web-apps/dokuwiki.nix
   ./services/web-apps/dolibarr.nix
+  ./services/web-apps/echoip.nix
   ./services/web-apps/eintopf.nix
   ./services/web-apps/engelsystem.nix
   ./services/web-apps/ethercalc.nix
@@ -1575,6 +1583,7 @@
   ./services/web-apps/your_spotify.nix
   ./services/web-apps/youtrack.nix
   ./services/web-apps/zabbix.nix
+  ./services/web-apps/zipline.nix
   ./services/web-apps/zitadel.nix
   ./services/web-servers/agate.nix
   ./services/web-servers/apache-httpd/default.nix

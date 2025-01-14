@@ -15,11 +15,11 @@ jobs:
     name: "This PR is is targeting a channel branch"
     runs-on: ubuntu-24.04
     steps:
-    - run: |
-        cat <<EOF
-        The nixos-* and nixpkgs-* branches are pushed to by the channel
-        release script and should not be merged into directly.
+      - run: |
+          cat <<EOF
+          The nixos-* and nixpkgs-* branches are pushed to by the channel
+          release script and should not be merged into directly.
 
-        Please target the equivalent release-* branch or master instead.
-        EOF
-        exit 1
+          Please target the equivalent release-* branch or master instead.
+          EOF
+          exit 1

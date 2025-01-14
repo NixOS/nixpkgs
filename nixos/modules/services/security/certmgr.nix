@@ -123,7 +123,7 @@ in
               service = lib.mkOption {
                 type = nullOr str;
                 default = null;
-                description = "The service on which to perform \<action\> after fetching.";
+                description = "The service on which to perform \\<action\\> after fetching.";
               };
 
               action = lib.mkOption {

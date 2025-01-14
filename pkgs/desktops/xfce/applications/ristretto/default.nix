@@ -5,6 +5,7 @@
   glib,
   gnome,
   libexif,
+  libheif,
   libjxl,
   librsvg,
   libxfce4ui,
@@ -31,11 +32,12 @@ mkXfceDerivation {
   ];
 
   postInstall = ''
-    # Pull in JXL and WebP support for ristretto.
+    # Pull in HEIF, JXL and WebP support for ristretto.
     # In postInstall to run before gappsWrapperArgsHook.
     export GDK_PIXBUF_MODULE_FILE="${
       gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
         extraLoaders = [
+          libheif.out
           libjxl
           librsvg
           webp-pixbuf-loader

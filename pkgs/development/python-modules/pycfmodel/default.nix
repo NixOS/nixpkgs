@@ -44,7 +44,6 @@ buildPythonPackage rec {
     "test_loose_ip"
     "test_extra_fields_not_allowed_s3_bucket"
     "test_raise_error_if_invalid_fields_in_resource"
-    ""
   ];
 
   pythonImportsCheck = [ "pycfmodel" ];

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  nix-update-script,
   rustPlatform,
   appstream,
   makeBinaryWrapper,
@@ -24,18 +25,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cosmic-store";
-  version = "1.0.0-alpha.2";
+  version = "1.0.0-alpha.4";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-store";
     rev = "epoch-${version}";
-    hash = "sha256-mq94ZMVOdXAPR52ID5x8nppJ9mNoTOPBfn7Eouj3T1U=";
+    hash = "sha256-VaOKF3cCnNbfUfJeuhx0wXRvprAnSspTe8gIiR/t2Ng=";
     fetchSubmodules = true;
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-lhMMzT6igjEEvwpcc7d8JyyHU0DcWVIh3z9KR6eCv7c=";
+  cargoHash = "sha256-Zt2199zlxNbrN/S6bogp4JPM3ZMZpQL5jTXKMki6LQE=";
 
   postPatch = ''
     substituteInPlace justfile --replace '#!/usr/bin/env' "#!$(command -v env)"
@@ -98,6 +99,10 @@ rustPlatform.buildRustPackage rec {
         ]
       }
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     homepage = "https://github.com/pop-os/cosmic-store";

@@ -294,6 +294,7 @@ in {
   early-mount-options = handleTest ./early-mount-options.nix {};
   ec2-config = (handleTestOn ["x86_64-linux"] ./ec2.nix {}).boot-ec2-config or {};
   ec2-nixops = (handleTestOn ["x86_64-linux"] ./ec2.nix {}).boot-ec2-nixops or {};
+  echoip = handleTest ./echoip.nix {};
   ecryptfs = handleTest ./ecryptfs.nix {};
   fscrypt = handleTest ./fscrypt.nix {};
   fastnetmon-advanced = runTest ./fastnetmon-advanced.nix;
@@ -360,11 +361,7 @@ in {
   freenet = handleTest ./freenet.nix {};
   freeswitch = handleTest ./freeswitch.nix {};
   freetube = discoverTests (import ./freetube.nix);
-  freshrss-extensions = handleTest ./freshrss-extensions.nix {};
-  freshrss-sqlite = handleTest ./freshrss-sqlite.nix {};
-  freshrss-pgsql = handleTest ./freshrss-pgsql.nix {};
-  freshrss-http-auth = handleTest ./freshrss-http-auth.nix {};
-  freshrss-none-auth = handleTest ./freshrss-none-auth.nix {};
+  freshrss = handleTest ./freshrss {};
   frigate = handleTest ./frigate.nix {};
   frp = handleTest ./frp.nix {};
   frr = handleTest ./frr.nix {};
@@ -802,6 +799,7 @@ in {
   patroni = handleTestOn ["x86_64-linux"] ./patroni.nix {};
   pantalaimon = handleTest ./matrix/pantalaimon.nix {};
   pantheon = handleTest ./pantheon.nix {};
+  pantheon-wayland = handleTest ./pantheon-wayland.nix {};
   paperless = handleTest ./paperless.nix {};
   parsedmarc = handleTest ./parsedmarc {};
   password-option-override-ordering = handleTest ./password-option-override-ordering.nix {};
@@ -1067,6 +1065,7 @@ in {
   systemd-userdbd = handleTest ./systemd-userdbd.nix {};
   systemd-homed = handleTest ./systemd-homed.nix {};
   systemtap = handleTest ./systemtap.nix {};
+  taler = handleTest ./taler {};
   tandoor-recipes = handleTest ./tandoor-recipes.nix {};
   tandoor-recipes-script-name = handleTest ./tandoor-recipes-script-name.nix {};
   tang = handleTest ./tang.nix {};
@@ -1197,6 +1196,7 @@ in {
   zeronet-conservancy = handleTest ./zeronet-conservancy.nix {};
   zfs = handleTest ./zfs.nix {};
   zigbee2mqtt = handleTest ./zigbee2mqtt.nix {};
+  zipline = handleTest ./zipline.nix {};
   zoneminder = handleTest ./zoneminder.nix {};
   zookeeper = handleTest ./zookeeper.nix {};
   zram-generator = handleTest ./zram-generator.nix {};

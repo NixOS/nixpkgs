@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
-  pkg-config,
   testers,
   zizmor,
 }:
@@ -19,8 +18,6 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-feAfHkcLvEdFblehPGtLO01Vl9QpOueuJrpEujlv4qY=";
-
-  nativeBuildInputs = [ pkg-config ];
 
   passthru.tests.version = testers.testVersion {
     package = zizmor;
