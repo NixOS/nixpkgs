@@ -714,13 +714,13 @@
     "vendorHash": "sha256-F78OR8EG0Vy3WVJWTOlAsIBazsSXGD6KeceYuGnBqjQ="
   },
   "kubectl": {
-    "hash": "sha256-5r8ZpifNJZ+UHys7jWVZCd6f9ylT3NBiccsCSQbNy6o=",
+    "hash": "sha256-UQ/xvhs7II+EGH5bKdrVC47hp5dhLqQZeqSBz06ho1s=",
     "homepage": "https://registry.terraform.io/providers/gavinbunney/kubectl",
     "owner": "gavinbunney",
     "repo": "terraform-provider-kubectl",
-    "rev": "v1.18.0",
+    "rev": "v1.19.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-pE0WujGxCMW0/27F8aaNtyIHdsOJTwEJL+bdiHpzu7s="
+    "vendorHash": "sha256-FcxAh8EOvnT8r1GHu0Oj2C5Jgbr2WPwD7/vY4/qIvTA="
   },
   "kubernetes": {
     "hash": "sha256-eSAgeN/ExP75Kbhb099t3vW0XQA2TXIhiyv1RUt4ziM=",
