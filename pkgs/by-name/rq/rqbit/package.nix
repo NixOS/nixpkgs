@@ -12,7 +12,7 @@
 let
   pname = "rqbit";
 
-  version = "7.0.1";
+  version = "8.0.0";
 
   src = fetchFromGitHub {
     owner = "ikatson";
@@ -45,7 +45,7 @@ in
 rustPlatform.buildRustPackage {
   inherit pname version src;
 
-  cargoHash = "sha256-esDUzzVm5J8fKftBfk5StJzN1YzLa1p0t7BsoxzrowI=";
+  cargoHash = "sha256-ey+2rSWI03LKic9FXF8L60RbSsvOr72tqQgN+MI++Cw=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     pkg-config
