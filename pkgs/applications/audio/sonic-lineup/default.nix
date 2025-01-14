@@ -72,9 +72,12 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
+    capnproto # capnp
     pkg-config
     wrapQtAppsHook
   ];
+
+  strictDeps = true;
 
   enableParallelBuilding = true;
 
