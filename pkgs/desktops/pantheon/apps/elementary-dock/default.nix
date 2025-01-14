@@ -13,11 +13,12 @@
   gtk4,
   libadwaita,
   wayland,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "elementary-dock";
-  version = "8.0.1";
+  version = "8.0.2";
 
   outputs = [
     "out"
@@ -28,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "elementary";
     repo = "dock";
     rev = finalAttrs.version;
-    hash = "sha256-Q4Y9FVqzPXoz2Nti1qB5SOJQ0tETPcv2fZPOMkJaND8=";
+    hash = "sha256-bixNYpPdWU2FndiCPX7SxNTz2MEttRuj35NaWn3GJrI=";
   };
 
   depsBuildBuild = [ pkg-config ];
@@ -49,6 +50,10 @@ stdenv.mkDerivation (finalAttrs: {
     libadwaita
     wayland
   ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Elegant, simple, clean dock";
