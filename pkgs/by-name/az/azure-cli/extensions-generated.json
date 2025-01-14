@@ -274,9 +274,9 @@
   },
   "databricks": {
     "pname": "databricks",
-    "version": "1.0.1",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/databricks-1.0.1-py3-none-any.whl",
-    "hash": "sha256-VRZddDXNeg3IdYfoL8IC15Kl8oycRDmGVbCkdw0DjDA=",
+    "version": "1.1.0",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/databricks-1.1.0-py3-none-any.whl",
+    "hash": "sha256-JOyOqiRtMscqYPJYVh8D9HNMB3irp5eqYs19gSt9RbI=",
     "description": "Microsoft Azure Command-Line Tools DatabricksClient Extension"
   },
   "datadog": {
