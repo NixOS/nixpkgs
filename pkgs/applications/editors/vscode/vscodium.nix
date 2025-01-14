@@ -57,6 +57,11 @@ callPackage ./generic.nix rec {
 
   updateScript = ./update-vscodium.sh;
 
+  # Editing the `codium` binary (and shell scripts) within the app bundle causes the bundle's signature
+  # to be invalidated, which prevents launching starting with macOS Ventura, because VSCodium is notarized.
+  # See https://eclecticlight.co/2022/06/17/app-security-changes-coming-in-ventura/ for more information.
+  dontFixup = stdenv.hostPlatform.isDarwin;
+
   meta = with lib; {
     description = ''
       Open source source code editor developed by Microsoft for Windows,
