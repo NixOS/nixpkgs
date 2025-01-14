@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-YYCxTyoZGMnqC2nKkRi5Z1uofldGvJDGY2/sO9iMNIo=";
   };
 
+  patches = [ ./fix-linux-6.12-build.patch ];
+
   postPatch = ''
     sed 's/udevadm /true /' -i Makefile
     sed 's/depmod /true /' -i Makefile
