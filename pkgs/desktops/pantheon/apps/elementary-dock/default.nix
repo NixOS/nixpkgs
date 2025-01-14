@@ -13,6 +13,7 @@
   gtk4,
   libadwaita,
   wayland,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -49,6 +50,10 @@ stdenv.mkDerivation (finalAttrs: {
     libadwaita
     wayland
   ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Elegant, simple, clean dock";
