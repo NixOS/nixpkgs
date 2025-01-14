@@ -124,7 +124,9 @@ package-maintainers:
     - Agda
   alexfmpe:
     - aeson-gadt-th
+    - android-activity
     - basic-sop
+    - bytestring-aeson-orphans
     - cli-extras
     - cli-git
     - cli-nix
@@ -158,6 +160,7 @@ package-maintainers:
     - large-records
     - lens-sop
     - linux-namespaces
+    - monoid-map
     - monoidal-containers
     - nix-thunk
     - patch
@@ -169,6 +172,8 @@ package-maintainers:
     - reflex-dom
     - reflex-dom-core
     - reflex-gadt-api
+    - reflex-fsnotify
+    - th-abstraction
     - universe
     - universe-some
     - vessel
