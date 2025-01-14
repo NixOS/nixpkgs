@@ -11,9 +11,13 @@
   libXrandr,
   libsndfile,
   lv2,
-  php,
+  php82,
   pkg-config,
 }:
+
+let
+  php = php82;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lsp-plugins";
