@@ -4,7 +4,7 @@
   fetchFromGitHub,
   nodejs_20,
   callPackage,
-  nix-update-script
+  nix-update-script,
 }:
 let
   npmHooks = callPackage ./hooks.nix { };
@@ -28,9 +28,7 @@ in
 
   sourceRoot = "${src.name}/server";
 
-  nativeBuildInputs = [
-    nodejs
-  ];
+  nativeBuildInputs = [ nodejs ];
 
   makeWrapperArgs = [ "--set NODE_ENV production" ];
 
@@ -44,12 +42,12 @@ in
 
   meta = {
     description = ''
-      Scrypted is a high performance home video integration platform and NVR with smart detections.
+      Scrypted is a high performance home video integration platform and NVR with smart detections
     '';
     mainProgram = "scrypted-serve";
     homepage = "https://github.com/koush/scrypted";
     license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.all;
     # maintainers = lib.maintainers [ ];
   };
 }
