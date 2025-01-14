@@ -4,42 +4,40 @@
   fetchFromGitHub,
   intltool,
   pkg-config,
-  qmake,
-  wrapQtAppsHook,
+  qt6,
   libqalculate,
-  qtbase,
-  qttools,
-  qtsvg,
-  qtwayland,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qalculate-qt";
-  version = "5.4.0";
+  version = "5.5.0";
 
   src = fetchFromGitHub {
     owner = "qalculate";
     repo = "qalculate-qt";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Tpb/ZN5p3JfPug9NpBHguOi6Okek+g87orD4ISkV+ac=";
+    hash = "sha256-IfdD3Nk+feLnILgEpccjEBlWfcW8ps7U+V7pTRG3LwM=";
   };
 
-  nativeBuildInputs = [
+  nativeBuildInputs = with qt6; [
     qmake
     intltool
     pkg-config
     qttools
     wrapQtAppsHook
   ];
-  buildInputs = [
-    libqalculate
-    qtbase
-    qtsvg
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ qtwayland ];
+  buildInputs =
+    with qt6;
+    [
+      libqalculate
+      qtbase
+      qtsvg
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ qtwayland ];
 
   postPatch = ''
     substituteInPlace qalculate-qt.pro\
-      --replace "LRELEASE" "${qttools.dev}/bin/lrelease"
+      --replace "LRELEASE" "${qt6.qttools.dev}/bin/lrelease"
   '';
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''

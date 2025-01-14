@@ -446,8 +446,8 @@ rec {
       "sha256-wBlz4YrLaKwcv7O1DkInNhq7Hg79vBTr4PGeECHBLPY=";
 
   mypy-boto3-ec2 =
-    buildMypyBoto3Package "ec2" "1.35.93"
-      "sha256-BPsvnQKZJvcnN7PVLqUF2zpWZ5n4lGgu8XZBHNnxmIA=";
+    buildMypyBoto3Package "ec2" "1.35.98"
+      "sha256-4ugpFujY6a/wuPvR/Rj5wSfq9OJIIpZBHvKw/eBko14=";
 
   mypy-boto3-ec2-instance-connect =
     buildMypyBoto3Package "ec2-instance-connect" "1.35.93"
@@ -714,8 +714,8 @@ rec {
       "sha256-i1vARhAsw7mXRBVMVicEgz+7hHWTdjqyF5qf+QVXjCI=";
 
   mypy-boto3-kafkaconnect =
-    buildMypyBoto3Package "kafkaconnect" "1.35.93"
-      "sha256-+BthrsgeHHKf6O6CWsi9CaxA3HW+DY0BGIc7uACnJTQ=";
+    buildMypyBoto3Package "kafkaconnect" "1.35.98"
+      "sha256-P2PMe4zzm4pUSa9GsuwNksl/4Ry/KuDJUOqO9f3phog=";
 
   mypy-boto3-kendra =
     buildMypyBoto3Package "kendra" "1.35.93"
@@ -1366,8 +1366,8 @@ rec {
       "sha256-bTp/f0/MyQz4ThQoKWmPZRHF640/tCGyXOUQKGOqkuc=";
 
   mypy-boto3-transcribe =
-    buildMypyBoto3Package "transcribe" "1.35.93"
-      "sha256-9q2oQG9xFFOQQJTUxDlaG1JESstcT3sRZb76V0gFmcI=";
+    buildMypyBoto3Package "transcribe" "1.35.98"
+      "sha256-6yZCljyU/Gi2+PI3B4//EHaaomIFREwG6N15py1SVCs=";
 
   mypy-boto3-transfer =
     buildMypyBoto3Package "transfer" "1.35.93"
