@@ -2711,9 +2711,6 @@ broken-packages:
   - Hmpf # failure in job https://hydra.nixos.org/build/233212948 at 2023-09-02
   - hmumps # failure in job https://hydra.nixos.org/build/233209336 at 2023-09-02
   - hnetcdf # failure in job https://hydra.nixos.org/build/252727915 at 2024-03-16
-  - hnix-store-db # failure in job https://hydra.nixos.org/build/269658818 at 2024-08-19
-  - hnix-store-readonly # failure in job https://hydra.nixos.org/build/269661646 at 2024-08-19
-  - hnix-store-tests # failure in job https://hydra.nixos.org/build/269680318 at 2024-08-19
   - hnn # failure in job https://hydra.nixos.org/build/233253882 at 2023-09-02
   - hnock # failure in job https://hydra.nixos.org/build/233247419 at 2023-09-02
   - hnop # failure in job https://hydra.nixos.org/build/233214340 at 2023-09-02
