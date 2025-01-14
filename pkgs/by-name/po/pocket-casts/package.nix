@@ -10,20 +10,22 @@
 
 buildNpmPackage rec {
   pname = "pocket-casts";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "felicianotech";
     repo = "pocket-casts-desktop-app";
     rev = "v${version}";
-    hash = "sha256-PwM9B2Qx4TxlcahQM/KEBTzWKc4cNrleDEYKg0m8bVE=";
+    hash = "sha256-5xn2uAjqIyWKQAruHLyho72HCYpbxyWlcTQ3LXXZy6M=";
   };
 
-  npmDepsHash = "sha256-WPuXTcHCKrwepITGtZFCIwylVAdYlI3cNsuhqx1AEYI=";
+  npmDepsHash = "sha256-nfTn2rs0XGraebI0rKlTECccc7KpRXf/+qOjj/5GPAw=";
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
   dontNpmBuild = true;
+
+  makeCacheWritable = true;
 
   desktopItems = [
     (makeDesktopItem {
