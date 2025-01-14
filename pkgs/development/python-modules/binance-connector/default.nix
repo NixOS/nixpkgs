@@ -5,10 +5,10 @@
   pycryptodome,
   pythonOlder,
   requests,
+  setuptools,
   websocket-client,
   # dependencies for tests
   pytest-cov-stub,
-  pytest,
   sure,
   responses,
   pytestCheckHook,
@@ -17,7 +17,7 @@
 buildPythonPackage rec {
   pname = "binance-connector";
   version = "3.12.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -28,7 +28,9 @@ buildPythonPackage rec {
     hash = "sha256-8O73+fli0HNbvGBcyg79ZGOTQvL0TF5SCfogI6btlrA=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     requests
     pycryptodome
     websocket-client
@@ -36,7 +38,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-cov-stub
-    pytest
     sure
     responses
     pytestCheckHook
