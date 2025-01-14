@@ -12556,12 +12556,16 @@ with pkgs;
       zfs_2_2 = callPackage ../os-specific/linux/zfs/2_2.nix {
         configFile = "user";
       };
+      zfs_2_3 = callPackage ../os-specific/linux/zfs/2_3.nix {
+        configFile = "user";
+      };
       zfs_unstable = callPackage ../os-specific/linux/zfs/unstable.nix {
         configFile = "user";
       };
     })
     zfs_2_1
     zfs_2_2
+    zfs_2_3
     zfs_unstable;
   zfs = zfs_2_2;
 
