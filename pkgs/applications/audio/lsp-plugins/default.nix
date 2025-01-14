@@ -11,18 +11,26 @@
   lv2,
   cairo,
   ladspaH,
+  gst_all_1,
   php,
   libXrandr,
 }:
 
 stdenv.mkDerivation rec {
   pname = "lsp-plugins";
-  version = "1.2.16";
+  version = "1.2.20";
 
   src = fetchurl {
     url = "https://github.com/lsp-plugins/lsp-plugins/releases/download/${version}/lsp-plugins-src-${version}.tar.gz";
-    sha256 = "sha256-w2BUIF44z78syLroQk2asVXA5bt9P9POiuwxpnlkc8o=";
+    sha256 = "sha256-yohg3Ka/see8q6NCwVPl/F06AlyR22akQz43gp+1kck=";
   };
+
+  # By default, GStreamer plugins are installed right alongside GStreamer itself
+  # We can't do that in Nixpkgs, so lets install it to $out/lib like other plugins
+  postPatch = ''
+    substituteInPlace modules/lsp-plugin-fw/src/Makefile \
+      --replace-fail '$(shell pkg-config --variable=pluginsdir gstreamer-1.0)' '$(LIBDIR)/gstreamer-1.0'
+  '';
 
   outputs = [
     "out"
@@ -36,6 +44,8 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
   buildInputs = [
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
     jack2
     libsndfile
     libGLU
