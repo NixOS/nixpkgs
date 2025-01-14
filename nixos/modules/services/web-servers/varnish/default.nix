@@ -8,6 +8,24 @@
 let
   cfg = config.services.varnish;
 
+  # Varnish has very strong opinions and very complicated code around handling
+  # the stateDir. After a lot of back and forth, we decided that we a)
+  # do not want a configurable option here, as most of the handling depends
+  # on the version and the compile time options. Putting everything into
+  # /var/run (RAM backed) is absolutely recommended by Varnish anyways.
+  # We do need to pay attention to the version-dependend variations, though!
+  stateDir =
+    if
+      (lib.versionOlder cfg.package.version "7")
+    # Remove after Varnish 6.0 is gone. In 6.0 varnishadm always appends the
+    # hostname (by default) and can't be nudged to not use any name. This has
+    # long changed by 7.5 and can be used without the host name.
+    then
+      "/var/run/varnish/${config.networking.hostName}"
+    # Newer varnish uses this:
+    else
+      "/var/run/varnishd";
+
   commandLine =
     "-f ${pkgs.writeText "default.vcl" cfg.config}"
     +
@@ -17,6 +35,14 @@ let
          }' -r vmod_path";
 in
 {
+  imports = [
+    (lib.mkRemovedOptionModule [
+      "services"
+      "varnish"
+      "stateDir"
+    ] "The `stateDir` option never was functional or useful. varnish uses compile-time settings.")
+  ];
+
   options = {
     services.varnish = {
       enable = lib.mkEnableOption "Varnish Server";
@@ -42,14 +68,6 @@ in
         '';
       };
 
-      stateDir = lib.mkOption {
-        type = lib.types.path;
-        default = "/run/varnish/${config.networking.hostName}";
-        defaultText = lib.literalExpression ''"/run/varnish/''${config.networking.hostName}"'';
-        description = ''
-          Directory holding all state for Varnish to run. Note that this should be a tmpfs in order to avoid performance issues and crashes.
-        '';
-      };
       extraModules = lib.mkOption {
         type = lib.types.listOf lib.types.package;
         default = [ ];
@@ -76,24 +94,15 @@ in
       description = "Varnish";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
-      preStart = lib.mkIf (!(lib.hasPrefix "/run/" cfg.stateDir)) ''
-        mkdir -p ${cfg.stateDir}
-        chown -R varnish:varnish ${cfg.stateDir}
-      '';
-      postStop = lib.mkIf (!(lib.hasPrefix "/run/" cfg.stateDir)) ''
-        rm -rf ${cfg.stateDir}
-      '';
       serviceConfig = {
         Type = "simple";
         PermissionsStartOnly = true;
-        ExecStart = "${cfg.package}/sbin/varnishd -a ${cfg.http_address} -n ${cfg.stateDir} -F ${cfg.extraCommandLine} ${commandLine}";
+        ExecStart = "${cfg.package}/sbin/varnishd -a ${cfg.http_address} -n ${stateDir} -F ${cfg.extraCommandLine} ${commandLine}";
         Restart = "always";
         RestartSec = "5s";
         User = "varnish";
         Group = "varnish";
-        RuntimeDirectory = lib.mkIf (lib.hasPrefix "/run/" cfg.stateDir) (
-          lib.removePrefix "/run/" cfg.stateDir
-        );
+        RuntimeDirectory = lib.removePrefix "/var/run/" stateDir;
         AmbientCapabilities = "cap_net_bind_service";
         NoNewPrivileges = true;
         LimitNOFILE = 131072;
