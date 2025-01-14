@@ -16,6 +16,7 @@
   openssl,
   curl,
   portmidi,
+  autoPatchelfHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -36,7 +37,10 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'live365_logo, 124, 61, 4,' 'nullptr, 0, 0, 0,'
   '';
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    autoPatchelfHook
+    pkg-config
+  ];
 
   buildInputs = [
     fltk13
@@ -52,6 +56,10 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
     curl
     portmidi
+  ];
+
+  runtimeDependencies = [
+    fdk_aac
   ];
 
   postInstall = ''
