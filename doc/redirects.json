@@ -3679,21 +3679,6 @@
   "rust-package-built-with-meson": [
     "index.html#rust-package-built-with-meson"
   ],
-  "compiling-rust-crates-using-nix-instead-of-cargo": [
-    "index.html#compiling-rust-crates-using-nix-instead-of-cargo"
-  ],
-  "simple-operation": [
-    "index.html#simple-operation"
-  ],
-  "handling-external-dependencies": [
-    "index.html#handling-external-dependencies"
-  ],
-  "options-and-phases-configuration": [
-    "index.html#options-and-phases-configuration"
-  ],
-  "setting-up-nix-shell": [
-    "index.html#setting-up-nix-shell"
-  ],
   "using-community-maintained-rust-toolchains": [
     "index.html#using-community-maintained-rust-toolchains"
   ],
