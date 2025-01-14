@@ -594,6 +594,8 @@ self: super:
   xf86videonouveau = super.xf86videonouveau.overrideAttrs (attrs: {
     nativeBuildInputs = attrs.nativeBuildInputs ++ [ autoreconfHook ];
     buildInputs =  attrs.buildInputs ++ [ xorg.utilmacros ];
+    # fixes `implicit declaration of function 'wfbScreenInit'; did you mean 'fbScreenInit'?`
+    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
   });
 
   xf86videoglint = super.xf86videoglint.overrideAttrs (attrs: {
