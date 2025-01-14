@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "systemd-netlogd";
-  version = "1.4.3";
+  version = "1.4.4";
 
   outputs = [
     "out"
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "systemd";
     repo = "systemd-netlogd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NwDmNrq2rLing5BQrSXoNDErcLK0Q8go9TN9zLSW5rE=";
+    hash = "sha256-Kgr6KZp2SSLG8xnqXNWsDgIa9rNnBGcN+TkuAbr+yAA=";
   };
 
   # Fixup a few installation paths
