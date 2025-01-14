@@ -16093,8 +16093,6 @@ with pkgs;
 
   phonemizer = with python3Packages; toPythonApplication phonemizer;
 
-  wyoming-openwakeword = callPackage ../tools/audio/wyoming/openwakeword.nix { };
-
   wyoming-piper = callPackage ../tools/audio/wyoming/piper.nix { };
 
   ### GAMES
