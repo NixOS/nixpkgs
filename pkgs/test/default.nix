@@ -148,7 +148,6 @@ with pkgs;
     __recurseIntoDerivationForReleaseJobs = true;
   };
 
-  buildRustCrate = callPackage ../build-support/rust/build-rust-crate/test { };
   importCargoLock = callPackage ../build-support/rust/test/import-cargo-lock { };
 
   vim = callPackage ./vim { };
