@@ -5,6 +5,7 @@
   numpy,
   scipy,
   setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -25,6 +26,8 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "rmsd" ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Calculate root-mean-square deviation (RMSD) between two sets of cartesian coordinates";
