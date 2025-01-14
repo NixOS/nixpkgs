@@ -509,7 +509,7 @@ let
           with stdenv.hostPlatform;
           (lib.versionAtLeast version "5.13" && (isx86 || isPower64))
           || (lib.versionAtLeast version "6.2" && isAarch64 && !stdenv.cc.isClang)
-          || (lib.versionAtLeast version "6.5" && isLoongarch64 && !stdenv.cc.isClang)
+          || (lib.versionAtLeast version "6.5" && isLoongArch64 && !stdenv.cc.isClang)
           || (lib.versionAtLeast version "6.10" && isRiscV64 && !stdenv.cc.isClang)
         ) yes;
 
