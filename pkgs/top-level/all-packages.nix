@@ -14209,8 +14209,6 @@ with pkgs;
     portaudio = null;
   };
 
-  lsp-plugins = callPackage ../applications/audio/lsp-plugins { php = php82; };
-
   luminanceHDR = libsForQt5.callPackage ../applications/graphics/luminance-hdr { };
 
   luddite = with python3Packages; toPythonApplication luddite;
