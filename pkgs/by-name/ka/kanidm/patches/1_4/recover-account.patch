@@ -1,0 +1,173 @@
+From c8ed69efe3f702b19834c2659be1dd3ec2d41c17 Mon Sep 17 00:00:00 2001
+From: oddlama <oddlama@oddlama.org>
+Date: Fri, 1 Nov 2024 12:27:43 +0100
+Subject: [PATCH 2/2] recover account
+
+---
+ server/core/src/actors/internal.rs |  3 ++-
+ server/core/src/admin.rs           |  6 +++---
+ server/daemon/src/main.rs          | 14 +++++++++++++-
+ server/daemon/src/opt.rs           |  4 ++++
+ 4 files changed, 22 insertions(+), 5 deletions(-)
+
+diff --git a/server/core/src/actors/internal.rs b/server/core/src/actors/internal.rs
+index 420e72c6c..5c4353116 100644
+--- a/server/core/src/actors/internal.rs
++++ b/server/core/src/actors/internal.rs
+@@ -171,25 +171,26 @@ impl QueryServerWriteV1 {
+     }
+ 
+     #[instrument(
+         level = "info",
+         skip(self, eventid),
+         fields(uuid = ?eventid)
+     )]
+     pub(crate) async fn handle_admin_recover_account(
+         &self,
+         name: String,
++        password: Option<String>,
+         eventid: Uuid,
+     ) -> Result<String, OperationError> {
+         let ct = duration_from_epoch_now();
+         let mut idms_prox_write = self.idms.proxy_write(ct).await?;
+-        let pw = idms_prox_write.recover_account(name.as_str(), None)?;
++        let pw = idms_prox_write.recover_account(name.as_str(), password.as_deref())?;
+ 
+         idms_prox_write.commit().map(|()| pw)
+     }
+ 
+     #[instrument(
+         level = "info",
+         skip_all,
+         fields(uuid = ?eventid)
+     )]
+     pub(crate) async fn handle_domain_raise(&self, eventid: Uuid) -> Result<u32, OperationError> {
+diff --git a/server/core/src/admin.rs b/server/core/src/admin.rs
+index 90ccb1927..85e31ddef 100644
+--- a/server/core/src/admin.rs
++++ b/server/core/src/admin.rs
+@@ -17,21 +17,21 @@ use tokio_util::codec::{Decoder, Encoder, Framed};
+ use tracing::{span, Instrument, Level};
+ use uuid::Uuid;
+ 
+ pub use kanidm_proto::internal::{
+     DomainInfo as ProtoDomainInfo, DomainUpgradeCheckReport as ProtoDomainUpgradeCheckReport,
+     DomainUpgradeCheckStatus as ProtoDomainUpgradeCheckStatus,
+ };
+ 
+ #[derive(Serialize, Deserialize, Debug)]
+ pub enum AdminTaskRequest {
+-    RecoverAccount { name: String },
++    RecoverAccount { name: String, password: Option<String> },
+     ShowReplicationCertificate,
+     RenewReplicationCertificate,
+     RefreshReplicationConsumer,
+     DomainShow,
+     DomainUpgradeCheck,
+     DomainRaise,
+     DomainRemigrate { level: Option<u32> },
+ }
+ 
+ #[derive(Serialize, Deserialize, Debug)]
+@@ -302,22 +302,22 @@ async fn handle_client(
+     let mut reqs = Framed::new(sock, ServerCodec);
+ 
+     trace!("Waiting for requests ...");
+     while let Some(Ok(req)) = reqs.next().await {
+         // Setup the logging span
+         let eventid = Uuid::new_v4();
+         let nspan = span!(Level::INFO, "handle_admin_client_request", uuid = ?eventid);
+ 
+         let resp = async {
+             match req {
+-                AdminTaskRequest::RecoverAccount { name } => {
+-                    match server_rw.handle_admin_recover_account(name, eventid).await {
++                AdminTaskRequest::RecoverAccount { name, password } => {
++                    match server_rw.handle_admin_recover_account(name, password, eventid).await {
+                         Ok(password) => AdminTaskResponse::RecoverAccount { password },
+                         Err(e) => {
+                             error!(err = ?e, "error during recover-account");
+                             AdminTaskResponse::Error
+                         }
+                     }
+                 }
+                 AdminTaskRequest::ShowReplicationCertificate => match repl_ctrl_tx.as_mut() {
+                     Some(ctrl_tx) => show_replication_certificate(ctrl_tx).await,
+                     None => {
+diff --git a/server/daemon/src/main.rs b/server/daemon/src/main.rs
+index 7486d34a8..784106352 100644
+--- a/server/daemon/src/main.rs
++++ b/server/daemon/src/main.rs
+@@ -903,27 +903,39 @@ async fn kanidm_main(
+             } else {
+                 let output_mode: ConsoleOutputMode = commonopts.output_mode.to_owned().into();
+                 submit_admin_req(
+                     config.adminbindpath.as_str(),
+                     AdminTaskRequest::RefreshReplicationConsumer,
+                     output_mode,
+                 )
+                 .await;
+             }
+         }
+-        KanidmdOpt::RecoverAccount { name, commonopts } => {
++        KanidmdOpt::RecoverAccount { name, from_environment, commonopts } => {
+             info!("Running account recovery ...");
+             let output_mode: ConsoleOutputMode = commonopts.output_mode.to_owned().into();
++            let password = if *from_environment {
++                match std::env::var("KANIDM_RECOVER_ACCOUNT_PASSWORD") {
++                    Ok(val) => Some(val),
++                    _ => {
++                        error!("Environment variable KANIDM_RECOVER_ACCOUNT_PASSWORD not set");
++                        return ExitCode::FAILURE;
++                    }
++                }
++            } else {
++                None
++            };
+             submit_admin_req(
+                 config.adminbindpath.as_str(),
+                 AdminTaskRequest::RecoverAccount {
+                     name: name.to_owned(),
++                    password,
+                 },
+                 output_mode,
+             )
+             .await;
+         }
+         KanidmdOpt::Database {
+             commands: DbCommands::Reindex(_copt),
+         } => {
+             info!("Running in reindex mode ...");
+             reindex_server_core(&config).await;
+diff --git a/server/daemon/src/opt.rs b/server/daemon/src/opt.rs
+index f1b45a5b3..9c013e32e 100644
+--- a/server/daemon/src/opt.rs
++++ b/server/daemon/src/opt.rs
+@@ -229,20 +229,24 @@ enum KanidmdOpt {
+     /// Create a self-signed ca and tls certificate in the locations listed from the
+     /// configuration. These certificates should *not* be used in production, they
+     /// are for testing and evaluation only!
+     CertGenerate(CommonOpt),
+     #[clap(name = "recover-account")]
+     /// Recover an account's password
+     RecoverAccount {
+         #[clap(value_parser)]
+         /// The account name to recover credentials for.
+         name: String,
++        /// Use the password given in the environment variable
++        /// `KANIDM_RECOVER_ACCOUNT_PASSWORD` instead of generating one.
++        #[clap(long = "from-environment")]
++        from_environment: bool,
+         #[clap(flatten)]
+         commonopts: CommonOpt,
+     },
+     /// Display this server's replication certificate
+     ShowReplicationCertificate {
+         #[clap(flatten)]
+         commonopts: CommonOpt,
+     },
+     /// Renew this server's replication certificate
+     RenewReplicationCertificate {
+-- 
+2.46.1
+
