@@ -249,7 +249,6 @@ let
       m4
       meson
       ninja
-      openldap
       openssh
       patchutils
       pbzx
@@ -604,8 +603,10 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
         # Avoid pulling in a full python and its extra dependencies for the llvm/clang builds.
         libxml2 = super.libxml2.override { pythonSupport = false; };
 
-        # Avoid pulling in openldap just to run Meson’s tests.
+        # TODO: The Meson tests fail when using pkgconf, as we do in
+        # the bootstrap. Remove this once that’s fixed.
         meson = super.meson.overrideAttrs { doInstallCheck = false; };
+
         ninja = super.ninja.override { buildDocs = false; };
 
         # pkg-config builds glib, which checks for `arpa/nameser.h` and fails to build if it can’t find it.
