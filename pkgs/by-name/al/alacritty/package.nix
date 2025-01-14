@@ -134,7 +134,7 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "alacritty";
     maintainers = with maintainers; [
       Br1ght0ne
-      mic92
+      rvdp
     ];
     platforms = platforms.unix;
     changelog = "https://github.com/alacritty/alacritty/blob/v${version}/CHANGELOG.md";
