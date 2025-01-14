@@ -2,6 +2,7 @@
   lib,
   buildGo122Module,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 # Does not build with Go 1.23
@@ -38,6 +39,8 @@ buildGo122Module rec {
 
   # tests use docker
   doCheck = false;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "High volume, minimal dependency trace storage";
