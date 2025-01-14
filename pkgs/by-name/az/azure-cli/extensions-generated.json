@@ -414,9 +414,9 @@
   },
   "eventgrid": {
     "pname": "eventgrid",
-    "version": "1.0.0b1",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/eventgrid-1.0.0b1-py2.py3-none-any.whl",
-    "hash": "sha256-Ziyio4Hvz4IaFmSP87ie2+IfTpiH4Y/6fuDbuvAzLt4=",
+    "version": "1.0.0b2",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/eventgrid-1.0.0b2-py2.py3-none-any.whl",
+    "hash": "sha256-x9Q9JDXHEic5pZVSEphx+4HoM7dxE5b/0bby879XiGg=",
     "description": "Microsoft Azure Command-Line Tools EventGrid Command Module"
   },
   "express-route-cross-connection": {
