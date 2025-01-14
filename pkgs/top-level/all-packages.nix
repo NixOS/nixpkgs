@@ -924,7 +924,6 @@ with pkgs;
 
   aegisub = callPackage ../by-name/ae/aegisub/package.nix ({
     luajit = luajit.override { enable52Compat = true; };
-    wxGTK = wxGTK32;
   } // (config.aegisub or {}));
 
   acme-client = callPackage ../tools/networking/acme-client {
