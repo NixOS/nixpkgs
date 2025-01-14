@@ -1479,10 +1479,19 @@ self: super: builtins.intersectAttrs super {
     mpi-hs-binary
     ;
 
-  postgresql-libpq = overrideCabal (drv: {
-    # Using use-pkg-config flag, because pg_config won't work when cross-compiling.
-    configureFlags = drv.configureFlags or [] ++ [ "-fuse-pkg-config" ];
-  }) super.postgresql-libpq;
+  postgresql-libpq = lib.pipe super.postgresql-libpq [
+    (x: x.override { postgresql-libpq-configure = null; })
+    (appendConfigureFlag "-fuse-pkg-config")
+    (addBuildDepend self.postgresql-libpq-pkgconfig)
+  ];
+
+  postgresql-libpq-configure = overrideCabal
+    (drv: {
+      librarySystemDepends = (drv.librarySystemDepends or [ ]) ++ [ pkgs.postgresql ];
+    })
+    super.postgresql-libpq-configure;
+
+  postgresql-libpq-pkgconfig = addPkgconfigDepend pkgs.postgresql super.postgresql-libpq-pkgconfig;
 
   # Test failure is related to a GHC implementation detail of primitives and doesn't
   # cause actual problems in dependent packages, see https://github.com/lehins/pvar/issues/4
