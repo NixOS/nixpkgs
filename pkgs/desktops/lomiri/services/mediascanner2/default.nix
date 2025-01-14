@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitLab,
+  fetchpatch,
   gitUpdater,
   testers,
   boost,
@@ -40,6 +41,16 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [
     "out"
     "dev"
+  ];
+
+  patches = [
+    # Fix taglib 2.x compat
+    # Remove when version > 0.117
+    (fetchpatch {
+      name = "0001-mediascanner2-Fix-taglib-2.x-compat.patch";
+      url = "https://gitlab.com/ubports/development/core/mediascanner2/-/commit/0ce744ecb32abb39516d1b9f98d47c3e86690158.patch";
+      hash = "sha256-hz/EB83yNoxhxkEcg7ZMezknpKajhH1BNkYD3wrf/eY=";
+    })
   ];
 
   postPatch = ''

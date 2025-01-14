@@ -3,33 +3,33 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  utf8cpp,
   zlib,
   testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "taglib";
-  version = "2.0.2";
+  version = "1.13.1";
 
   src = fetchFromGitHub {
     owner = "taglib";
     repo = "taglib";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-3cJwCo2nUSRYkk8H8dzyg7UswNPhjfhyQ704Fn9yNV8=";
+    hash = "sha256-QX0EpHGT36UsgIfRf5iALnwxe0jjLpZvCTbk8vSMFF4=";
   };
 
   strictDeps = true;
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [
-    zlib
-    utf8cpp
-  ];
+  buildInputs = [ zlib ];
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+    # Workaround unconditional ${prefix} until upstream is fixed:
+    #   https://github.com/taglib/taglib/issues/1098
+    (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
+    (lib.cmakeFeature "CMAKE_INSTALL_INCLUDEDIR" "include")
   ];
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;

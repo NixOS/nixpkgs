@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  taglib,
+  taglib_1,
   cython,
   pytestCheckHook,
   pythonOlder,
@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   buildInputs = [
     cython
-    taglib
+    taglib_1
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
