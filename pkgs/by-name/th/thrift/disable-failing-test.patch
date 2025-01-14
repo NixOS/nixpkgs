@@ -1,0 +1,12 @@
+diff --git i/lib/cpp/test/CMakeLists.txt w/lib/cpp/test/CMakeLists.txt
+index 19854e1a3..9d428a166 100644
+--- i/lib/cpp/test/CMakeLists.txt
++++ w/lib/cpp/test/CMakeLists.txt
+@@ -77,7 +77,6 @@ set(UnitTest_SOURCES
+     TMemoryBufferTest.cpp
+     TBufferBaseTest.cpp
+     Base64Test.cpp
+-    ToStringTest.cpp
+     TypedefTest.cpp
+     TServerSocketTest.cpp
+     TServerTransportTest.cpp

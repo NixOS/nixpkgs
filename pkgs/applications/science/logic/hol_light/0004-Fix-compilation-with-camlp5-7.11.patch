@@ -1,0 +1,66 @@
+From: Stephane Glondu <steph@glondu.net>
+Date: Wed, 12 Feb 2020 05:42:32 +0100
+Subject: Fix compilation with camlp5 7.11
+
+---
+ pa_j_4.xx_7.xx.ml | 17 +++++++++++------
+ 1 file changed, 11 insertions(+), 6 deletions(-)
+
+diff --git a/pa_j_4.xx_7.xx.ml b/pa_j_4.xx_7.xx.ml
+index 4f7ed60..e834058 100755
+--- a/pa_j/pa_j_4.xx_7.xx.ml
++++ b/pa_j/pa_j_4.xx_7.xx.ml
+@@ -410,9 +410,10 @@ and reloc_module_type floc sh =
+     | MtApp loc x1 x2 →
+         let loc = floc loc in
+         MtApp loc (self x1) (self x2)
+-    | MtFun loc x1 x2 x3 →
++    | MtFun loc x x3 →
+         let loc = floc loc in
+-        MtFun loc x1 (self x2) (self x3)
++        let x = vala_map (option_map (fun (x1, x2) -> (x1, self x2))) x in
++        MtFun loc x (self x3)
+     | MtLid loc x1 →
+         let loc = floc loc in
+         MtLid loc x1
+@@ -507,9 +508,10 @@ and reloc_module_expr floc sh =
+     | MeApp loc x1 x2 →
+         let loc = floc loc in
+         MeApp loc (self x1) (self x2)
+-    | MeFun loc x1 x2 x3 →
++    | MeFun loc x x3 →
+         let loc = floc loc in
+-        MeFun loc x1 (reloc_module_type floc sh x2) (self x3)
++        let x = vala_map (option_map (fun (x1, x2) -> (x1, reloc_module_type floc sh x2))) x in
++        MeFun loc x (self x3)
+     | MeStr loc x1 →
+         let loc = floc loc in
+         MeStr loc (vala_map (List.map (reloc_str_item floc sh)) x1)
+@@ -2007,7 +2009,7 @@ EXTEND
+       | -> <:vala< [] >> ] ]
+   ;
+   mod_binding:
+-    [ [ i = V UIDENT; me = mod_fun_binding -> (i, me) ] ]
++    [ [ i = V uidopt "uidopt"; me = mod_fun_binding -> (i, me) ] ]
+   ;
+   mod_fun_binding:
+     [ RIGHTA
+@@ -2070,7 +2072,7 @@ EXTEND
+           <:sig_item< value $lid:i$ : $t$ >> ] ]
+   ;
+   mod_decl_binding:
+-    [ [ i = V UIDENT; mt = module_declaration -> (i, mt) ] ]
++    [ [ i = V uidopt "uidopt"; mt = module_declaration -> (i, mt) ] ]
+   ;
+   module_declaration:
+     [ RIGHTA
+@@ -2092,6 +2094,9 @@ EXTEND
+       | "module"; i = V mod_ident ""; ":="; me = module_expr ->
+           <:with_constr< module $_:i$ := $me$ >> ] ]
+   ;
++  uidopt:
++    [ [ m = V UIDENT -> Some m ] ]
++  ;
+   (* Core expressions *)
+   expr:
+     [ "top" RIGHTA

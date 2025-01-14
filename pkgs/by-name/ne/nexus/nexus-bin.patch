@@ -1,0 +1,48 @@
+diff --git a/bin/nexus b/bin/nexus
+index d06cb44..37c606e 100755
+--- a/bin/nexus
++++ b/bin/nexus
+@@ -88,7 +88,7 @@ create_db_entry() {
+   fi
+   db_new_file=${db_file}_new
+   if [ -f "$db_file" ]; then
+-    awk '$2 != "'"$test_dir"'" {print $0}' $db_file > $db_new_file
++    awk '$2 != "'"$test_dir"'" {print $scriptname}' $db_file > $db_new_file
+     rm "$db_file"
+     mv "$db_new_file" "$db_file"
+   fi
+@@ -246,7 +246,7 @@ read_vmoptions() {
+ 
+ unpack_file() {
+   if [ -f "$1" ]; then
+-    jar_file=`echo "$1" | awk '{ print substr($0,1,length-5) }'`
++    jar_file=`echo "$1" | awk '{ print substr($scriptname,1,length-5) }'`
+     bin/unpack200 -r "$1" "$jar_file"
+ 
+     if [ $? -ne 0 ]; then
+@@ -377,9 +377,14 @@ fi
+ 
+ old_pwd=`pwd`
+ 
+-progname=`basename "$0"`
+-linkdir=`dirname "$0"`
++scriptname=$0
+ 
++if [ ! -z "$ALTERNATIVE_NAME" ]; then
++  scriptname=`dirname "$0"`"/"$ALTERNATIVE_NAME
++fi
++
++progname=`basename "$scriptname"`
++linkdir=`dirname "$scriptname"`
+ cd "$linkdir"
+ prg="$progname"
+ 
+@@ -590,7 +595,7 @@ return_code=$?
+ 
+     ;;
+     *)
+-        echo "Usage: $0 {start|stop|run|run-redirect|status|restart|force-reload}"
++        echo "Usage: $scriptname {start|stop|run|run-redirect|status|restart|force-reload}"
+         exit 1
+     ;;
+ esac

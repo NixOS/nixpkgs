@@ -1,0 +1,19 @@
+diff -Naur a/bazel/protobuf.patch b/bazel/protobuf.patch
+--- a/bazel/protobuf.patch	2025-01-06 23:00:26.683972526 +0100
++++ b/bazel/protobuf.patch	2025-01-07 00:53:33.997482569 +0100
+@@ -149,3 +149,15 @@
+  #if PROTOBUF_ENABLE_DEBUG_LOGGING_MAY_LEAK_PII
+  #define PROTOBUF_DEBUG true
+  #else
++diff -Naur a/build_defs/cpp_opts.bzl b/build_defs/cpp_opts.bzl
++--- a/build_defs/cpp_opts.bzl	2025-01-06 23:02:56.356552216 +0100
+++++ b/build_defs/cpp_opts.bzl	2025-01-07 00:23:30.534047300 +0100
++@@ -22,7 +22,7 @@
++         "-Woverloaded-virtual",
++         "-Wno-sign-compare",
++         "-Wno-nonnull",
++-        "-Werror",
+++        "-Wno-maybe-uninitialized",
++     ],
++ })
++ 
