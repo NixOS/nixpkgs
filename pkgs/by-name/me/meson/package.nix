@@ -7,7 +7,6 @@
   darwin,
   libblocksruntime,
   llvmPackages,
-  libxcrypt,
   ninja,
   pkg-config,
   python3,
@@ -76,10 +75,6 @@ python3.pkgs.buildPythonApplication rec {
 
     # This edge case is explicitly part of meson but is wrong for nix
     ./007-freebsd-pkgconfig-path.patch
-  ];
-
-  buildInputs = lib.optionals (python3.pythonOlder "3.9") [
-    libxcrypt
   ];
 
   nativeBuildInputs = [ installShellFiles ];
