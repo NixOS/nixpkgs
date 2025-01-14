@@ -112,7 +112,7 @@ let
       "sleep.target"
       "hybrid-sleep.target"
       "systemd-hibernate.service"
-      "systemd-hibernate-clear.service"
+      ] ++ (optional cfg.package.withEfi "systemd-hibernate-clear.service") ++ [
       "systemd-hybrid-sleep.service"
       "systemd-suspend.service"
       "systemd-suspend-then-hibernate.service"
