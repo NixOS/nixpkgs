@@ -4845,8 +4845,6 @@ with pkgs;
 
   quickbms = pkgsi686Linux.callPackage ../tools/archivers/quickbms { };
 
-  qalculate-qt = qt6Packages.callPackage ../applications/science/math/qalculate-qt { };
-
   qastools = libsForQt5.callPackage ../tools/audio/qastools { };
 
   qdigidoc = libsForQt5.callPackage ../tools/security/qdigidoc { } ;
@@ -17632,10 +17630,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  vector = callPackage ../tools/misc/vector {
-    inherit (darwin.apple_sdk.frameworks) Security CoreServices SystemConfiguration;
-  };
-
   hjson = with python3Packages; toPythonApplication hjson;
 
   epkowa = callPackage ../misc/drivers/epkowa { };
@@ -18006,10 +18000,6 @@ with pkgs;
   mkSaneConfig = callPackage ../applications/graphics/sane/config.nix { };
 
   sane-frontends = callPackage ../applications/graphics/sane/frontends.nix { };
-
-  satysfi = callPackage ../tools/typesetting/satysfi {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_14;
-  };
 
   sc-controller = python3Packages.callPackage ../misc/drivers/sc-controller {
     inherit libusb1; # Shadow python.pkgs.libusb1.

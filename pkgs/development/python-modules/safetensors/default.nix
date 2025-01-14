@@ -19,20 +19,20 @@
 
 buildPythonPackage rec {
   pname = "safetensors";
-  version = "0.5.0";
+  version = "0.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "safetensors";
     tag = "v${version}";
-    hash = "sha256-rs9mYl/2KNdV9e+L/kZr59kLw7ckW9UQPZwkaGyl1Iw=";
+    hash = "sha256-dtHHLiTgrg/a/SQ/Z1w0BsuFDClgrMsGiSTCpbJasUs=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     sourceRoot = "${src.name}/bindings/python";
-    hash = "sha256-bQkLBiuhVm2dzrf6hq+S04+zoXUszA7be8iS0WJSoOU=";
+    hash = "sha256-GL8tSXyP9xIWOLPCWiI5lUyfZXQRo77lJ2BmJCcj3uw=";
   };
 
   sourceRoot = "${src.name}/bindings/python";
