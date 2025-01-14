@@ -2,20 +2,27 @@
   buildPythonPackage,
   lib,
   fetchPypi,
+  numpy,
   scipy,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "rmsd";
   version = "1.6.4";
-  format = "setuptools";
-
-  propagatedBuildInputs = [ scipy ];
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-dhLsFGts45PitSVZxXw5FND3EOeHHWYrH8PZJEYoq+M=";
   };
+
+  build-system = [ setuptools ];
+
+  dependencies = [
+    numpy
+    scipy
+  ];
 
   pythonImportsCheck = [ "rmsd" ];
 
