@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation rec {
   pname = "stenc";
-  version = "2.0.0";
+  version = "2.0.0_rc";
 
   outputs = [
     "out"
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     owner = "scsitape";
     repo = "stenc";
     tag = version;
-    sha256 = "sha256-L0g285H8bf3g+HDYUDRWBZMOBCnWz3Vm38Ijttu404U=";
+    sha256 = "sha256-oecFM/8q3m3dQpEn5LmqNhAoh/WR1B00NrPXSyJBRGs=";
   };
 
   nativeBuildInputs = [
