@@ -7,6 +7,8 @@
   xdg-utils,
   electron,
   makeDesktopItem,
+  jack2,
+  alsa-lib
 }:
 
 buildNpmPackage rec {
@@ -25,6 +27,8 @@ buildNpmPackage rec {
   nativeBuildInputs = [
     copyDesktopItems
     python3
+    jack2
+    alsa-lib
   ];
 
   # npm install will error when electron tries to download its binary
