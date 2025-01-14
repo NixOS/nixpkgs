@@ -93,13 +93,13 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "zed-editor";
-  version = "0.168.2";
+  version = "0.168.3";
 
   src = fetchFromGitHub {
     owner = "zed-industries";
     repo = "zed";
     tag = "v${version}";
-    hash = "sha256-ar1JpLbfKdFZFszCCmYMzTQx6yhVIFFT+EbeA7H5H2g=";
+    hash = "sha256-YGHbka8kCKOquY2I17N8oS7ckhX/uY6QXJ21+kQjQBg=";
   };
 
   patches = [
@@ -119,7 +119,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-Vw/WUOLiIOuULSMT57G8MsubQR63J+oh88lmlPNkRYs=";
+  cargoHash = "sha256-pZK2PzR39fMAiqhfA0WtZnIRzAVbqxnViQnWKmZoRV0=";
 
   nativeBuildInputs =
     [

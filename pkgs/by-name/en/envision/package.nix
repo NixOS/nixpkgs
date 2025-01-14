@@ -94,6 +94,7 @@ let
         x264
         glslang
         libdrm
+        libnotify
         openssl
       ])
     );
