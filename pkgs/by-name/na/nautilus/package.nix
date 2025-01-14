@@ -11,6 +11,7 @@
   desktop-file-utils,
   wayland-scanner,
   wrapGAppsHook4,
+  writeText,
   gtk4,
   libadwaita,
   libportal-gtk4,
@@ -100,6 +101,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     "-Ddocs=true"
+    "--cross-file=${writeText "crossfile.conf" ''
+      [binaries]
+      localsearch = '${lib.getExe localsearch}'
+    ''}"
   ];
 
   preFixup = ''
