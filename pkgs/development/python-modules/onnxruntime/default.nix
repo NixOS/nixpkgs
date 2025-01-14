@@ -4,6 +4,7 @@
   buildPythonPackage,
   autoPatchelfHook,
   onnxruntime,
+  openvino,
   coloredlogs,
   numpy,
   packaging,
@@ -48,6 +49,7 @@ buildPythonPackage {
   buildInputs =
     [
       oneDNN
+      openvino
       re2
       onnxruntime.protobuf
 
