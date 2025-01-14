@@ -24,16 +24,6 @@ let
       tar -xvf $src -C $out/bin --strip-components=1
     '';
 
-    meta = {
-      description = "Atari Jaguar Emulator (BigPEmu) by Richard Whitehouse";
-      homepage = "https://www.richwhitehouse.com/jaguar/index.php";
-      license = lib.licenses.unfree;
-      maintainers = with lib.maintainers; [
-        tombert
-        hughobrien
-      ];
-      platforms = with lib.platforms; [ "x86_64-linux" ];
-    };
   };
 in
 buildFHSEnv {
@@ -45,6 +35,16 @@ buildFHSEnv {
     libGLU
     SDL2
   ];
+  meta = {
+    description = "Atari Jaguar Emulator (BigPEmu) by Richard Whitehouse";
+    homepage = "https://www.richwhitehouse.com/jaguar/index.php";
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
+      tombert
+      hughobrien
+    ];
+    platforms = with lib.platforms; [ "x86_64-linux" ];
+  };
   runScript = "${bigpemu-unwrapped}/bin/bigpemu";
   passthru = {
     unwrapped = bigpemu-unwrapped;
