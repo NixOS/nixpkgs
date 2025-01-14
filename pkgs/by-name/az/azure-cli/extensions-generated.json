@@ -1016,9 +1016,9 @@
   },
   "subscription": {
     "pname": "subscription",
-    "version": "1.0.0b1",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/subscription-1.0.0b1-py2.py3-none-any.whl",
-    "hash": "sha256-Pzu0+7dhF00ToPhjNit084i8ZI9/KW+bbiGRs1UHrk8=",
+    "version": "1.0.0b2",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/subscription-1.0.0b2-py2.py3-none-any.whl",
+    "hash": "sha256-G5N/S3Ng0vKStpXab6If8tiajJANZp8SyXz5jDg2XR8=",
     "description": "Microsoft Azure Command-Line Tools Subscription  Extension"
   },
   "support": {
