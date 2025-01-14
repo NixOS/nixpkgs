@@ -29,7 +29,7 @@ buildPythonPackage rec {
     idna
   ];
 
-  propagatedNativeBuildInputs = [ cffi ];
+  nativeBuildInputs = [ cffi ];
 
   # Requires network access
   doCheck = false;

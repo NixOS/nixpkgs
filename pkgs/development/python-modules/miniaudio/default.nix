@@ -50,7 +50,7 @@ buildPythonPackage rec {
     CoreAudio
   ];
 
-  propagatedNativeBuildInputs = [ cffi ];
+  nativeBuildInputs = [ cffi ];
   dependencies = [ cffi ];
 
   nativeCheckInputs = [ pytestCheckHook ];

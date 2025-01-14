@@ -32,8 +32,6 @@ buildPythonPackage rec {
     pycryptodomex
   ];
 
-  propagatedNativeBuildInputs = [ argon2-cffi ];
-
   nativeCheckInputs = [
     pyotp
     unittestCheckHook

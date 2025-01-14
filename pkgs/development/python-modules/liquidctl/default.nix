@@ -51,8 +51,6 @@ buildPythonPackage rec {
     pillow
   ];
 
-  propagatedNativeBuildInputs = [ smbus-cffi ];
-
   outputs = [
     "out"
     "man"
