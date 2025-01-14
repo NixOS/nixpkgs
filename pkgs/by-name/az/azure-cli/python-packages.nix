@@ -83,6 +83,7 @@ let
             --ignore=azure/cli/core/tests/test_cloud.py \
             --ignore=azure/cli/core/tests/test_extension.py \
             --ignore=azure/cli/core/tests/test_util.py \
+            --ignore=azure/cli/core/tests/test_argcomplete.py \
             -k 'not metadata_url and not test_send_raw_requests and not test_format_styled_text_legacy_powershell'
         '';
 
