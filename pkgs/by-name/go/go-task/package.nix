@@ -1,10 +1,12 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, testers
-, nix-update-script
-, go-task
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  testers,
+  nix-update-script,
+  go-task,
 }:
 
 buildGoModule rec {
@@ -34,14 +36,16 @@ buildGoModule rec {
 
   env.CGO_ENABLED = 0;
 
-  postInstall = ''
-    ln -s $out/bin/task $out/bin/go-task
-
-    installShellCompletion --cmd task \
-      --bash <($out/bin/task --completion bash) \
-      --fish <($out/bin/task --completion fish) \
-      --zsh <($out/bin/task --completion zsh)
-  '';
+  postInstall =
+    ''
+      ln -s $out/bin/task $out/bin/go-task
+    ''
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd task \
+        --bash <($out/bin/task --completion bash) \
+        --fish <($out/bin/task --completion fish) \
+        --zsh <($out/bin/task --completion zsh)
+    '';
 
   passthru = {
     tests = {
