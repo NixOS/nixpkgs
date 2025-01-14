@@ -74,9 +74,6 @@ python3.pkgs.buildPythonApplication rec {
     # https://github.com/NixOS/nixpkgs/issues/86131#issuecomment-711051774
     ./005-boost-Do-not-add-system-paths-on-nix.patch
 
-    # Nixpkgs cctools does not have bitcode support.
-    ./006-disable-bitcode.patch
-
     # This edge case is explicitly part of meson but is wrong for nix
     ./007-freebsd-pkgconfig-path.patch
   ];
