@@ -931,10 +931,7 @@ with pkgs;
     stdenv = gccStdenv;
   };
 
-  honggfuzz = callPackage ../tools/security/honggfuzz {
-    clang = clang_16;
-    llvm = llvm_16;
-  };
+  honggfuzz = callPackage ../tools/security/honggfuzz { };
 
   aflplusplus = callPackage ../tools/security/aflplusplus { wine = null; };
 
