@@ -62,7 +62,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://github.com/olrtg/emmet-language-server";
     changelog = "https://github.com/olrtg/emmet-language-server/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      gepbird
+    ];
     mainProgram = "emmet-language-server";
   };
 })
