@@ -89,7 +89,7 @@ buildGoModule rec {
   meta = {
     description = "Daemon to control runC";
     homepage = "https://containerd.io/";
-    changelog = "https://github.com/containerd/containerd/releases/tag/${version}";
+    changelog = "https://github.com/containerd/containerd/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       offline
