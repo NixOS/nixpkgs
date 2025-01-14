@@ -38,6 +38,18 @@ stdenv.mkDerivation rec {
   patches = [
     # https://github.com/WayneD/rsync/pull/558
     ./configure.ac-fix-failing-IPv6-check.patch
+    ./CVE-2024-12084/0001-Some-checksum-buffer-fixes.patch
+    ./CVE-2024-12084/0002-Another-cast-when-multiplying-integers.patch
+    ./CVE-2024-12085/0001-prevent-information-leak-off-the-stack.patch
+    ./CVE-2024-12086/0001-refuse-fuzzy-options-when-fuzzy-not-selected.patch
+    ./CVE-2024-12086/0002-added-secure_relative_open.patch
+    ./CVE-2024-12086/0003-receiver-use-secure_relative_open-for-basis-file.patch
+    ./CVE-2024-12086/0004-disallow-.-elements-in-relpath-for-secure_relative_o.patch
+    ./CVE-2024-12087/0001-Refuse-a-duplicate-dirlist.patch
+    ./CVE-2024-12087/0002-range-check-dir_ndx-before-use.patch
+    ./CVE-2024-12088/0001-make-safe-links-stricter.patch
+    ./CVE-2024-12747/0001-fixed-symlink-race-condition-in-sender.patch
+    ./raise-protocol-version-to-32.patch
   ];
 
   buildInputs =
