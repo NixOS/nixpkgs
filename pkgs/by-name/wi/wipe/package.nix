@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     description = "Secure file wiping utility";
     homepage = "https://wipe.sourceforge.net/";
     license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.all;
+    platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.abbradar ];
     mainProgram = "wipe";
   };
