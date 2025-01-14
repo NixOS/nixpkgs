@@ -1,9 +1,10 @@
-{ mkPackageWithDeps, layers }:
-mkPackageWithDeps (
+{ mkPackage }:
+mkPackage (
   {
     stdenv,
     fetchurl,
     testers,
+    layers,
     lib,
     callPackage,
     versionCheckHook,
