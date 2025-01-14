@@ -16114,8 +16114,6 @@ with pkgs;
 
   phonemizer = with python3Packages; toPythonApplication phonemizer;
 
-  wyoming-piper = callPackage ../tools/audio/wyoming/piper.nix { };
-
   ### GAMES
 
   _2048-cli = _2048-cli-terminal;
