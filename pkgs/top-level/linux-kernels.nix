@@ -591,6 +591,10 @@ in {
       configFile = "kernel";
       inherit pkgs kernel;
     };
+    zfs_2_3 = callPackage ../os-specific/linux/zfs/2_3.nix {
+      configFile = "kernel";
+      inherit pkgs kernel;
+    };
     zfs_unstable = callPackage ../os-specific/linux/zfs/unstable.nix {
       configFile = "kernel";
       inherit pkgs kernel;
