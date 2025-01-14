@@ -1,0 +1,63 @@
+From 9f82b88e17f5e04929eff96c673dac5810006c87 Mon Sep 17 00:00:00 2001
+From: Reno Dakota <paparodeo@proton.me>
+Date: Thu, 5 Dec 2024 09:49:40 +0000
+Subject: [PATCH] configure fixes for gcc-14
+
+---
+ Configure | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
+
+diff --git a/Configure b/Configure
+index fbc57a8..e8cea16 100755
+--- a/Configure
++++ b/Configure
+@@ -76,7 +76,7 @@ done
+ CFLAGS="$COPT $CEXTRA"
+ 
+ echo "Checking for libraries"
+-echo 'main(){}' > test.c
++echo 'int main(void){ return 0; }' > test.c
+ LFLAGS=""
+ for lib in -lcurses -lncurses; do
+ 	if $CC $CFLAGS $LEXTRA test.c $lib > /dev/null 2>&1; then
+@@ -91,8 +91,9 @@ done
+ 
+ echo "Checking for on_exit()"
+ cat << END > test.c
++#include <stdlib.h>
+ void handler(void) {}
+-main() { on_exit(handler, (void *)0); }
++int main(void) { on_exit(handler, (void *)0); return 0; }
+ END
+ if $CC $CFLAGS $LEXTRA test.c > /dev/null 2>&1; then
+ 	HAS_ON_EXIT=true
+@@ -103,7 +104,7 @@ fi
+ echo "Checking for sigprocmask()"
+ cat << END > test.c
+ #include <signal.h>
+-main() { sigset_t set; sigprocmask(SIG_BLOCK, &set, &set); }
++int main(void) { sigset_t set; sigprocmask(SIG_BLOCK, &set, &set); return 0; }
+ END
+ if $CC $CFLAGS $LEXTRA test.c > /dev/null 2>&1; then
+ 	HAS_SIGPROCMASK=true
+@@ -114,7 +115,7 @@ fi
+ echo "Checking for getopt.h"
+ cat << END > test.c
+ #include <getopt.h>
+-main(){}
++int main(void){ return 0; }
+ END
+ 
+ if $CC $CFLAGS $LEXTRA test.c > /dev/null 2>&1; then
+@@ -126,7 +127,7 @@ fi
+ echo "Checking for memory.h"
+ cat << END > test.c
+ #include <memory.h>
+-main(){}
++int main(void){ return 0; }
+ END
+ 
+ if $CC $CFLAGS $LEXTRA test.c > /dev/null 2>&1; then
+-- 
+2.47.0
+

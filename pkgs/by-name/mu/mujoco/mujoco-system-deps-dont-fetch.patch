@@ -1,0 +1,519 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index eea180c0..efb39178 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -93,7 +93,7 @@ add_subdirectory(src/render)
+ add_subdirectory(src/thread)
+ add_subdirectory(src/ui)
+ 
+-target_compile_definitions(mujoco PRIVATE _GNU_SOURCE CCD_STATIC_DEFINE MUJOCO_DLL_EXPORTS -DMC_IMPLEM_ENABLE)
++target_compile_definitions(mujoco PRIVATE _GNU_SOURCE MUJOCO_DLL_EXPORTS -DMC_IMPLEM_ENABLE)
+ if(MUJOCO_ENABLE_AVX_INTRINSICS)
+   target_compile_definitions(mujoco PUBLIC mjUSEPLATFORMSIMD)
+ endif()
+@@ -118,7 +118,7 @@ target_link_libraries(
+           lodepng
+           qhullstatic_r
+           tinyobjloader
+-          tinyxml2
++          tinyxml2::tinyxml2
+ )
+ 
+ set_target_properties(
+diff --git a/cmake/MujocoDependencies.cmake b/cmake/MujocoDependencies.cmake
+index 44962272..656beeb8 100644
+--- a/cmake/MujocoDependencies.cmake
++++ b/cmake/MujocoDependencies.cmake
+@@ -93,28 +93,36 @@ set(BUILD_SHARED_LIBS
+ if(NOT TARGET lodepng)
+   FetchContent_Declare(
+     lodepng
+-    GIT_REPOSITORY https://github.com/lvandeve/lodepng.git
+-    GIT_TAG ${MUJOCO_DEP_VERSION_lodepng}
+   )
++endif()
+ 
+-  FetchContent_GetProperties(lodepng)
+-  if(NOT lodepng_POPULATED)
+-    FetchContent_Populate(lodepng)
+-    # This is not a CMake project.
+-    set(LODEPNG_SRCS ${lodepng_SOURCE_DIR}/lodepng.cpp)
+-    set(LODEPNG_HEADERS ${lodepng_SOURCE_DIR}/lodepng.h)
+-    add_library(lodepng STATIC ${LODEPNG_HEADERS} ${LODEPNG_SRCS})
+-    target_compile_options(lodepng PRIVATE ${MUJOCO_MACOS_COMPILE_OPTIONS})
+-    target_link_options(lodepng PRIVATE ${MUJOCO_MACOS_LINK_OPTIONS})
+-    target_include_directories(lodepng PUBLIC ${lodepng_SOURCE_DIR})
++if(NOT TARGET lodepng)
++  if(NOT MUJOCO_USE_SYSTEM_lodepng)
++    fetchcontent_declare(
++      lodepng
++      GIT_REPOSITORY https://github.com/lvandeve/lodepng.git
++      GIT_TAG ${MUJOCO_DEP_VERSION_lodepng}
++    )
++
++    FetchContent_GetProperties(lodepng)
++    if(NOT lodepng_POPULATED)
++      FetchContent_Populate(lodepng)
++      # This is not a CMake project.
++      set(LODEPNG_SRCS ${lodepng_SOURCE_DIR}/lodepng.cpp)
++      set(LODEPNG_HEADERS ${lodepng_SOURCE_DIR}/lodepng.h)
++      add_library(lodepng STATIC ${LODEPNG_HEADERS} ${LODEPNG_SRCS})
++      target_compile_options(lodepng PRIVATE ${MUJOCO_MACOS_COMPILE_OPTIONS})
++      target_link_options(lodepng PRIVATE ${MUJOCO_MACOS_LINK_OPTIONS})
++      target_include_directories(lodepng PUBLIC ${lodepng_SOURCE_DIR})
++    endif()
++  else()
++    find_package(lodepng REQUIRED)
+   endif()
+ endif()
+ 
+ if(NOT TARGET marchingcubecpp)
+   FetchContent_Declare(
+     marchingcubecpp
+-    GIT_REPOSITORY https://github.com/aparis69/MarchingCubeCpp.git
+-    GIT_TAG ${MUJOCO_DEP_VERSION_MarchingCubeCpp}
+   )
+ 
+   FetchContent_GetProperties(marchingcubecpp)
+@@ -124,119 +132,158 @@ if(NOT TARGET marchingcubecpp)
+   endif()
+ endif()
+ 
++option(MUJOCO_USE_SYSTEM_qhull "Use installed qhull version." OFF)
++mark_as_advanced(MUJOCO_USE_SYSTEM_qhull)
++
+ set(QHULL_ENABLE_TESTING OFF)
+ 
+ findorfetch(
+   USE_SYSTEM_PACKAGE
+-  OFF
++  ${MUJOCO_USE_SYSTEM_qhull}
+   PACKAGE_NAME
+-  qhull
++  Qhull
+   LIBRARY_NAME
+   qhull
+-  GIT_REPO
+-  https://github.com/qhull/qhull.git
+-  GIT_TAG
+-  ${MUJOCO_DEP_VERSION_qhull}
+   TARGETS
+   qhull
+   EXCLUDE_FROM_ALL
+ )
+-# MuJoCo includes a file from libqhull_r which is not exported by the qhull include directories.
+-# Add it to the target.
+-target_include_directories(
+-  qhullstatic_r INTERFACE $<BUILD_INTERFACE:${qhull_SOURCE_DIR}/src/libqhull_r>
+-)
+-target_compile_options(qhullstatic_r PRIVATE ${MUJOCO_MACOS_COMPILE_OPTIONS})
+-target_link_options(qhullstatic_r PRIVATE ${MUJOCO_MACOS_LINK_OPTIONS})
++if(NOT MUJOCO_USE_SYSTEM_qhull)
++  # MuJoCo includes a file from libqhull_r which is not exported by the qhull include directories.
++  # Add it to the target.
++  target_include_directories(
++    qhullstatic_r INTERFACE $<BUILD_INTERFACE:${qhull_SOURCE_DIR}/src/libqhull_r>
++  )
++  target_compile_options(qhullstatic_r PRIVATE ${MUJOCO_MACOS_COMPILE_OPTIONS})
++  target_link_options(qhullstatic_r PRIVATE ${MUJOCO_MACOS_LINK_OPTIONS})
++else()
++  if(NOT TARGET qhullstatic_r)
++    add_library(qhullstatic_r INTERFACE)
++    set_target_properties(qhullstatic_r PROPERTIES INTERFACE_LINK_LIBRARIES Qhull::qhull_r)
++
++    # Workaround as headers are installed in <prefix>/include/libqhull_r/something.h
++    # but mujoco include them as #include <something.h>
++    get_property(qhull_include_dirs TARGET Qhull::qhull_r PROPERTY INTERFACE_INCLUDE_DIRECTORIES)
++    foreach(qhull_include_dir IN LISTS qhull_include_dirs)
++      target_include_directories(qhullstatic_r INTERFACE ${qhull_include_dirs}/libqhull_r)
++    endforeach()
++    target_include_directories(qhullstatic_r INTERFACE )
++  endif()
++endif()
++
++option(MUJOCO_USE_SYSTEM_tinyxml2 "Use installed tinyxml2 version." OFF)
++mark_as_advanced(MUJOCO_USE_SYSTEM_tinyxml2)
+ 
+ set(tinyxml2_BUILD_TESTING OFF)
+ findorfetch(
+   USE_SYSTEM_PACKAGE
+-  OFF
++  ${MUJOCO_USE_SYSTEM_tinyxml2}
+   PACKAGE_NAME
+   tinyxml2
+   LIBRARY_NAME
+   tinyxml2
+-  GIT_REPO
+-  https://github.com/leethomason/tinyxml2.git
+-  GIT_TAG
+-  ${MUJOCO_DEP_VERSION_tinyxml2}
+   TARGETS
+-  tinyxml2
++  tinyxml2::tinyxml2
+   EXCLUDE_FROM_ALL
+ )
+-target_compile_options(tinyxml2 PRIVATE ${MUJOCO_MACOS_COMPILE_OPTIONS})
+-target_link_options(tinyxml2 PRIVATE ${MUJOCO_MACOS_LINK_OPTIONS})
++if(NOT MUJOCO_USE_SYSTEM_tinyxml2)
++  target_compile_options(tinyxml2 PRIVATE ${MUJOCO_MACOS_COMPILE_OPTIONS})
++  target_link_options(tinyxml2 PRIVATE ${MUJOCO_MACOS_LINK_OPTIONS})
++endif()
++
++option(MUJOCO_USE_SYSTEM_tinyobjloader "Use installed tinyobjloader version." OFF)
++mark_as_advanced(MUJOCO_USE_SYSTEM_tinyobjloader)
+ 
+ findorfetch(
+   USE_SYSTEM_PACKAGE
+-  OFF
++  ${MUJOCO_USE_SYSTEM_tinyobjloader}
+   PACKAGE_NAME
+   tinyobjloader
+   LIBRARY_NAME
+   tinyobjloader
+-  GIT_REPO
+-  https://github.com/tinyobjloader/tinyobjloader.git
+-  GIT_TAG
+-  ${MUJOCO_DEP_VERSION_tinyobjloader}
+   TARGETS
+   tinyobjloader
+   EXCLUDE_FROM_ALL
+ )
+ 
++if(MUJOCO_USE_SYSTEM_tinyobjloader)
++  # As of tinyobjloader v2.0.0rc10, the tinyobjloader target is named tinyobjloader in the build,
++  # but tinyobjloader::tinyobjloader when it is installed. To deal with this, if tinyobjloader is
++  # found in the system, we create an ALIAS
++  # The following is equivalent to add_library(tinyobjloader ALIAS tinyobjloader::tinyobjloader),
++  # but compatible with CMake 3.16 . Once the minimum CMake is bumped to CMake 3.18, we can use
++  # the simpler version
++  add_library(tinyobjloader INTERFACE IMPORTED)
++  set_target_properties(tinyobjloader PROPERTIES INTERFACE_LINK_LIBRARIES tinyobjloader::tinyobjloader)
++endif()
++
++option(MUJOCO_USE_SYSTEM_sdflib "Use installed sdflib version." OFF)
++mark_as_advanced(MUJOCO_USE_SYSTEM_sdflib)
++
+ option(SDFLIB_USE_ASSIMP OFF)
+ option(SDFLIB_USE_OPENMP OFF)
+ option(SDFLIB_USE_ENOKI OFF)
++
+ findorfetch(
+   USE_SYSTEM_PACKAGE
+-  OFF
++  ${MUJOCO_USE_SYSTEM_sdflib}
+   PACKAGE_NAME
+-  sdflib
++  SdfLib
+   LIBRARY_NAME
+   sdflib
+-  GIT_REPO
+-  https://github.com/UPC-ViRVIG/SdfLib.git
+-  GIT_TAG
+-  ${MUJOCO_DEP_VERSION_sdflib}
+   TARGETS
+-  SdfLib
++  SdfLib::SdfLib
+   EXCLUDE_FROM_ALL
+ )
+-target_compile_options(SdfLib PRIVATE ${MUJOCO_MACOS_COMPILE_OPTIONS})
+-target_link_options(SdfLib PRIVATE ${MUJOCO_MACOS_LINK_OPTIONS})
++
++if(NOT MUJOCO_USE_SYSTEM_sdflib)
++  target_compile_options(SdfLib PRIVATE ${MUJOCO_MACOS_COMPILE_OPTIONS})
++  target_link_options(SdfLib PRIVATE ${MUJOCO_MACOS_LINK_OPTIONS})
++endif()
++
++option(MUJOCO_USE_SYSTEM_ccd "Use installed ccd version." OFF)
++mark_as_advanced(MUJOCO_USE_SYSTEM_ccd)
+ 
+ set(ENABLE_DOUBLE_PRECISION ON)
+ set(CCD_HIDE_ALL_SYMBOLS ON)
+ findorfetch(
+   USE_SYSTEM_PACKAGE
+-  OFF
++  ${MUJOCO_USE_SYSTEM_ccd}
+   PACKAGE_NAME
+   ccd
+   LIBRARY_NAME
+   ccd
+-  GIT_REPO
+-  https://github.com/danfis/libccd.git
+-  GIT_TAG
+-  ${MUJOCO_DEP_VERSION_ccd}
+   TARGETS
+   ccd
+   EXCLUDE_FROM_ALL
+ )
+-target_compile_options(ccd PRIVATE ${MUJOCO_MACOS_COMPILE_OPTIONS})
+-target_link_options(ccd PRIVATE ${MUJOCO_MACOS_LINK_OPTIONS})
+-
+-# libCCD has an unconditional `#define _CRT_SECURE_NO_WARNINGS` on Windows.
+-# TODO(stunya): Remove this after https://github.com/danfis/libccd/pull/77 is merged.
+-if(WIN32)
+-  if(MSVC)
+-    # C4005 is the MSVC equivalent of -Wmacro-redefined.
+-    target_compile_options(ccd PRIVATE /wd4005)
+-  else()
+-    target_compile_options(ccd PRIVATE -Wno-macro-redefined)
++
++if(NOT MUJOCO_USE_SYSTEM_ccd)
++  target_compile_options(ccd PRIVATE ${MUJOCO_MACOS_COMPILE_OPTIONS})
++  target_link_options(ccd PRIVATE ${MUJOCO_MACOS_LINK_OPTIONS})
++  # This is necessary to ensure that the any library that consumes the ccd
++  # compiled internally by MuJoCo (as static library) has CCD_EXPORT correctly
++  # defined as an empty string. For ccd itself, this is ensured by the variable
++  # CCD_HIDE_ALL_SYMBOLS set to ON before the call to findorfetch
++  # See https://github.com/danfis/libccd/pull/79
++  target_compile_definitions(ccd INTERFACE CCD_STATIC_DEFINE)
++
++  # libCCD has an unconditional `#define _CRT_SECURE_NO_WARNINGS` on Windows.
++  # TODO(stunya): Remove this after https://github.com/danfis/libccd/pull/77 is merged.
++  if(WIN32)
++    if(MSVC)
++      # C4005 is the MSVC equivalent of -Wmacro-redefined.
++      target_compile_options(ccd PRIVATE /wd4005)
++    else()
++      target_compile_options(ccd PRIVATE -Wno-macro-redefined)
++    endif()
+   endif()
+ endif()
+ 
+ if(MUJOCO_BUILD_TESTS)
++  option(MUJOCO_USE_SYSTEM_abseil "Use installed abseil version." OFF)
++  mark_as_advanced(MUJOCO_USE_SYSTEM_abseil)
++
+   set(ABSL_PROPAGATE_CXX_STD ON)
+ 
+   # This specific version of Abseil does not have the following variable. We need to work with BUILD_TESTING
+@@ -249,15 +296,11 @@ if(MUJOCO_BUILD_TESTS)
+   set(ABSL_BUILD_TESTING OFF)
+   findorfetch(
+     USE_SYSTEM_PACKAGE
+-    OFF
++    ${MUJOCO_USE_SYSTEM_abseil}
+     PACKAGE_NAME
+     absl
+     LIBRARY_NAME
+     abseil-cpp
+-    GIT_REPO
+-    https://github.com/abseil/abseil-cpp.git
+-    GIT_TAG
+-    ${MUJOCO_DEP_VERSION_abseil}
+     TARGETS
+     absl::core_headers
+     EXCLUDE_FROM_ALL
+@@ -268,6 +311,9 @@ if(MUJOCO_BUILD_TESTS)
+       CACHE BOOL "Build tests." FORCE
+   )
+ 
++  option(MUJOCO_USE_SYSTEM_gtest "Use installed gtest version." OFF)
++  mark_as_advanced(MUJOCO_USE_SYSTEM_gtest)
++
+   # Avoid linking errors on Windows by dynamically linking to the C runtime.
+   set(gtest_force_shared_crt
+       ON
+@@ -276,22 +322,20 @@ if(MUJOCO_BUILD_TESTS)
+ 
+   findorfetch(
+     USE_SYSTEM_PACKAGE
+-    OFF
++    ${MUJOCO_USE_SYSTEM_gtest}
+     PACKAGE_NAME
+     GTest
+     LIBRARY_NAME
+     googletest
+-    GIT_REPO
+-    https://github.com/google/googletest.git
+-    GIT_TAG
+-    ${MUJOCO_DEP_VERSION_gtest}
+     TARGETS
+-    gtest
+-    gmock
+-    gtest_main
++    GTest::gmock
++    GTest::gtest_main
+     EXCLUDE_FROM_ALL
+   )
+ 
++  option(MUJOCO_USE_SYSTEM_benchmark "Use installed benchmark version." OFF)
++  mark_as_advanced(MUJOCO_USE_SYSTEM_benchmark)
++
+   set(BENCHMARK_EXTRA_FETCH_ARGS "")
+   if(WIN32 AND NOT MSVC)
+     set(BENCHMARK_EXTRA_FETCH_ARGS
+@@ -310,15 +354,11 @@ if(MUJOCO_BUILD_TESTS)
+ 
+   findorfetch(
+     USE_SYSTEM_PACKAGE
+-    OFF
++    ${MUJOCO_USE_SYSTEM_benchmark}
+     PACKAGE_NAME
+     benchmark
+     LIBRARY_NAME
+     benchmark
+-    GIT_REPO
+-    https://github.com/google/benchmark.git
+-    GIT_TAG
+-    ${MUJOCO_DEP_VERSION_benchmark}
+     TARGETS
+     benchmark::benchmark
+     benchmark::benchmark_main
+@@ -328,15 +368,18 @@ if(MUJOCO_BUILD_TESTS)
+ endif()
+ 
+ if(MUJOCO_TEST_PYTHON_UTIL)
++  option(MUJOCO_USE_SYSTEM_Eigen3 "Use installed Eigen3 version." OFF)
++  mark_as_advanced(MUJOCO_USE_SYSTEM_Eigen3)
++
+   add_compile_definitions(EIGEN_MPL2_ONLY)
+-  if(NOT TARGET eigen)
+-    # Support new IN_LIST if() operator.
+-    set(CMAKE_POLICY_DEFAULT_CMP0057 NEW)
++  if(NOT TARGET Eigen3::Eigen)
++    if(NOT MUJOCO_USE_SYSTEM_Eigen3)
++      # Support new IN_LIST if() operator.
++      set(CMAKE_POLICY_DEFAULT_CMP0057 NEW)
++    endif()
+ 
+     FetchContent_Declare(
+       Eigen3
+-      GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
+-      GIT_TAG ${MUJOCO_DEP_VERSION_Eigen3}
+     )
+ 
+     FetchContent_GetProperties(Eigen3)
+@@ -348,6 +391,19 @@ if(MUJOCO_TEST_PYTHON_UTIL)
+       set_target_properties(
+         Eigen3::Eigen PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${eigen3_SOURCE_DIR}"
+       )
++
++      fetchcontent_getproperties(Eigen3)
++      # if(NOT Eigen3_POPULATED)
++      #   fetchcontent_populate(Eigen3)
++
++      #   # Mark the library as IMPORTED as a workaround for https://gitlab.kitware.com/cmake/cmake/-/issues/15415
++      #   add_library(Eigen3::Eigen INTERFACE IMPORTED)
++      #   set_target_properties(
++      #     Eigen3::Eigen PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${eigen3_SOURCE_DIR}"
++      #   )
++      # endif()
++    else()
++      find_package(Eigen3 REQUIRED)
+     endif()
+   endif()
+ endif()
+diff --git a/plugin/sdf/CMakeLists.txt b/plugin/sdf/CMakeLists.txt
+index 3e216fc4..e7e3a1eb 100644
+--- a/plugin/sdf/CMakeLists.txt
++++ b/plugin/sdf/CMakeLists.txt
+@@ -37,7 +37,7 @@ set(MUJOCO_SDF_SRCS
+ add_library(sdf SHARED)
+ target_sources(sdf PRIVATE ${MUJOCO_SDF_SRCS})
+ target_include_directories(sdf PRIVATE ${MUJOCO_SDF_INCLUDE})
+-target_link_libraries(sdf PRIVATE mujoco SdfLib)
++target_link_libraries(sdf PRIVATE mujoco SdfLib::SdfLib)
+ target_compile_options(
+   sdf
+   PRIVATE ${AVX_COMPILE_OPTIONS}
+diff --git a/python/mujoco/util/CMakeLists.txt b/python/mujoco/util/CMakeLists.txt
+index 666a3725..d89bb499 100644
+--- a/python/mujoco/util/CMakeLists.txt
++++ b/python/mujoco/util/CMakeLists.txt
+@@ -63,8 +63,8 @@ if(BUILD_TESTING)
+   target_link_libraries(
+     array_traits_test
+     array_traits
+-    gmock
+-    gtest_main
++    GTest::gmock
++    GTest::gtest_main
+   )
+   gtest_add_tests(TARGET array_traits_test SOURCES array_traits_test.cc)
+ 
+@@ -72,8 +72,8 @@ if(BUILD_TESTING)
+   target_link_libraries(
+     func_traits_test
+     func_traits
+-    gmock
+-    gtest_main
++    GTest::gmock
++    GTest::gtest_main
+   )
+   gtest_add_tests(TARGET func_traits_test SOURCES func_traits_test.cc)
+ 
+@@ -81,8 +81,8 @@ if(BUILD_TESTING)
+   target_link_libraries(
+     func_wrap_test
+     func_wrap
+-    gmock
+-    gtest_main
++    GTest::gmock
++    GTest::gtest_main
+   )
+   gtest_add_tests(TARGET func_wrap_test SOURCES func_wrap_test.cc)
+ 
+@@ -90,8 +90,8 @@ if(BUILD_TESTING)
+   target_link_libraries(
+     tuple_tools_test
+     func_wrap
+-    gmock
+-    gtest_main
++    GTest::gmock
++    GTest::gtest_main
+   )
+   gtest_add_tests(TARGET tuple_tools_test SOURCES tuple_tools_test.cc)
+ endif()
+diff --git a/simulate/cmake/SimulateDependencies.cmake b/simulate/cmake/SimulateDependencies.cmake
+index 5141406c..75ff7884 100644
+--- a/simulate/cmake/SimulateDependencies.cmake
++++ b/simulate/cmake/SimulateDependencies.cmake
+@@ -81,10 +81,6 @@ findorfetch(
+   glfw3
+   LIBRARY_NAME
+   glfw3
+-  GIT_REPO
+-  https://github.com/glfw/glfw.git
+-  GIT_TAG
+-  ${MUJOCO_DEP_VERSION_glfw3}
+   TARGETS
+   glfw
+   EXCLUDE_FROM_ALL
+diff --git a/test/CMakeLists.txt b/test/CMakeLists.txt
+index 122760a9..ddd90819 100644
+--- a/test/CMakeLists.txt
++++ b/test/CMakeLists.txt
+@@ -30,7 +30,7 @@ macro(mujoco_test name)
+   )
+ 
+   add_executable(${name} ${name}.cc)
+-  target_link_libraries(${name} gtest_main mujoco)
++  target_link_libraries(${name} GTest::gtest_main mujoco)
+   target_include_directories(${name} PRIVATE ${MUJOCO_TEST_INCLUDE})
+   set_target_properties(${name} PROPERTIES BUILD_RPATH ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
+   # gtest_discover_tests is recommended over gtest_add_tests, but has some issues in Windows.
+@@ -60,20 +60,20 @@ target_link_libraries(
+          absl::synchronization
+          absl::flat_hash_map
+          absl::flat_hash_set
+-         gtest
+-         gmock
++         GTest::gtest
++         GTest::gmock
+          mujoco::mujoco
+ )
+ target_include_directories(fixture PRIVATE ${mujoco_SOURCE_DIR}/include gmock)
+ 
+ mujoco_test(fixture_test)
+-target_link_libraries(fixture_test fixture gmock)
++target_link_libraries(fixture_test fixture GTest::gmock)
+ 
+ mujoco_test(header_test)
+-target_link_libraries(header_test fixture gmock)
++target_link_libraries(fixture_test fixture GTest::gmock)
+ 
+ mujoco_test(pipeline_test)
+-target_link_libraries(pipeline_test fixture gmock)
++target_link_libraries(fixture_test fixture GTest::gmock)
+ 
+ add_subdirectory(benchmark)
+ add_subdirectory(engine)

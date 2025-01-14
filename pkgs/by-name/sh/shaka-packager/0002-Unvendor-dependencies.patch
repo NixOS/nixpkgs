@@ -1,0 +1,78 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 5b96a2429e..181df0bf2d 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -9,6 +9,8 @@
+ # Minimum CMake version.  This must be in the root level CMakeLists.txt.
+ cmake_minimum_required(VERSION 3.24)
+ 
++set(CMAKE_CXX_STANDARD 17)
++
+ # These policy settings should be included before the project definition.
+ include("packager/policies.cmake")
+ 
+@@ -28,6 +30,28 @@ enable_testing()
+ 
+ option(SKIP_INTEGRATION_TESTS "Skip the packager integration tests" OFF)
+ 
++find_package(absl REQUIRED)
++find_package(MbedTLS REQUIRED)
++find_package(GTest REQUIRED)
++find_package(CURL REQUIRED)
++find_package(LibXml2 REQUIRED)
++find_package(PNG REQUIRED)
++find_package(nlohmann_json REQUIRED)
++find_package(Protobuf CONFIG REQUIRED)
++find_package(webm REQUIRED)
++
++# Alias to same names as vendored dependencies
++add_library(mbedtls ALIAS MbedTLS::mbedtls)
++add_library(gmock ALIAS GTest::gmock)
++add_library(gtest ALIAS GTest::gtest)
++add_library(gtest_main ALIAS GTest::gtest_main)
++add_library(libcurl ALIAS CURL::libcurl)
++add_library(LibXml2 ALIAS LibXml2::LibXml2)
++add_library(png_static ALIAS PNG::PNG) # not static but the expected library name
++add_library(libprotobuf ALIAS protobuf::libprotobuf)
++add_executable(protoc ALIAS protobuf::protoc)
++add_library(webm ALIAS webm::webm)
++
+ # Subdirectories with their own CMakeLists.txt
+ add_subdirectory(packager)
+ add_subdirectory(link-test)
+diff --git a/packager/CMakeLists.txt b/packager/CMakeLists.txt
+index 7238d243bb..722217bbc4 100644
+--- a/packager/CMakeLists.txt
++++ b/packager/CMakeLists.txt
+@@ -78,7 +78,6 @@ add_subdirectory(media)
+ add_subdirectory(hls)
+ add_subdirectory(mpd)
+ add_subdirectory(status)
+-add_subdirectory(third_party)
+ add_subdirectory(tools)
+ add_subdirectory(utils)
+ add_subdirectory(version)
+diff --git a/packager/tools/pssh/CMakeLists.txt b/packager/tools/pssh/CMakeLists.txt
+index 9ec3a39d26..0b981cec29 100644
+--- a/packager/tools/pssh/CMakeLists.txt
++++ b/packager/tools/pssh/CMakeLists.txt
+@@ -14,7 +14,6 @@ set(PSSH_BOX_OUTPUTS
+ 
+ add_custom_command(
+     DEPENDS
+-        protobuf_py
+         widevine_protos
+         pssh-box.py
+     OUTPUT ${PSSH_BOX_OUTPUTS}
+@@ -26,10 +25,6 @@ add_custom_command(
+         ${CMAKE_BINARY_DIR}/packager/media/base/widevine_common_encryption_pb2.py
+         ${CMAKE_BINARY_DIR}/packager/media/base/widevine_pssh_data_pb2.py
+         ${CMAKE_BINARY_DIR}/packager/pssh-box-protos/
+-    COMMAND
+-        ${CMAKE_COMMAND} -E copy_directory
+-        ${CMAKE_BINARY_DIR}/packager/third_party/protobuf/py/google
+-        ${CMAKE_BINARY_DIR}/packager/pssh-box-protos/google
+     COMMAND
+         ${CMAKE_COMMAND} -E copy
+         ${CMAKE_CURRENT_SOURCE_DIR}/pssh-box.py
+

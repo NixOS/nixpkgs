@@ -1,0 +1,36 @@
+diff --git a/meson.build b/meson.build
+index a8153a2ee5..787cbfae06 100644
+--- a/meson.build
++++ b/meson.build
+@@ -197,7 +197,7 @@ endif
+ 
+ # Handle PCRE2
+ cpu_jit_supported = [ 'aarch64', 'arm', 'mips', 'mips64', 'ppc', 'ppc64', 'riscv32', 'riscv64', 's390x', 'x86', 'x86_64' ]
+-pcre2_jit_supported = target_machine.cpu_family() in cpu_jit_supported and cc.get_id() != 'tcc' and target_machine.system() != 'darwin'
++pcre2_jit_supported = false
+ if pcre2_jit_supported
+   add_project_arguments(['-DSUPPORTS_PCRE2_JIT'], language: 'c')
+ endif
+diff --git a/subprojects/packagefiles/pcre2/meson.build b/subprojects/packagefiles/pcre2/meson.build
+index b40ea85740..f3ee7a02ed 100644
+--- a/subprojects/packagefiles/pcre2/meson.build
++++ b/subprojects/packagefiles/pcre2/meson.build
+@@ -60,18 +60,6 @@ cpu_jit_supported = [ 'aarch64', 'arm', 'mips', 'mips64', 'ppc', 'ppc64', 'riscv
+ # tcc doesn't support the MSVC asm syntax PCRE2 uses (`__asm { ... }`).
+ # Darwin kernel not as well, because of forbidden wx memory.
+ # It is used in the JIT compiler code.
+-if cc.get_id() != 'tcc' and target_machine.cpu_family() in cpu_jit_supported and target_machine.system() != 'darwin'
+-  libpcre2_c_args += ['-DSUPPORT_JIT']
+-  pcre2_files += ['src/pcre2_jit_compile.c']
+-endif
+-
+-if target_machine.system() == 'openbsd'
+-  # jit compilation fails with "no more memory" if wx allocations are allowed.
+-  libpcre2_c_args += ['-DSLJIT_WX_EXECUTABLE_ALLOCATOR']
+-elif target_machine.system() == 'netbsd'
+-  # jit compilation fails with "no more memory" if wx allocations are allowed.
+-  libpcre2_c_args += ['-DSLJIT_PROT_EXECUTABLE_ALLOCATOR']
+-endif
+ 
+ pcre2_includes = [
+   include_directories('.'),
