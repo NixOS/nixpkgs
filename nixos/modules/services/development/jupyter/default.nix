@@ -61,10 +61,10 @@ in
           pkgs.python3.pkgs.playwright
         ]
       '';
-      description = ''Extra packages to be available in the jupyter runtime enviroment'';
+      description = "Extra packages to be available in the jupyter runtime environment";
     };
     extraEnvironmentVariables = lib.mkOption {
-      description = ''Extra enviroment variables to be set in the runtime context of jupyter notebook'';
+      description = "Extra environment variables to be set in the runtime context of jupyter notebook";
       default = { };
       example = lib.literalExpression ''
         {
