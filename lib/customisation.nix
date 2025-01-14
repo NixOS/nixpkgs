@@ -170,17 +170,7 @@ rec {
       in
       if isAttrs result then
         result
-        # Overriding `overrideDerivation` and `overrideAttrs` is a hack:
-        # `callPackage` shouldn't have to be aware of those functions and then
-        # fix them up, but it has to because the package arguments aren't part of
-        # the package fixpoint in `mkDerivation`.
-        #
-        # If the original package defines its own `override` method, but not
-        # `overrideDerivation`, we can assume it's a callPackage-aware `mkPackage`
-        # call.
-        # Otherwise, it is a legacy package, for which we still need to perform
-        # the hacky fixup.
-        // optionalAttrs (!(result ? override) || (result ? overrideDerivation)) {
+        // {
           override = overrideArgs;
           overrideDerivation = fdrv: overrideResult (x: overrideDerivation x fdrv);
           ${if result ? overrideAttrs then "overrideAttrs" else null} =
@@ -311,7 +301,22 @@ rec {
 
     in
     if missingArgs == { } then
-      makeOverridable f allArgs
+      if fargs ? mkPackage then
+        if fargs != { mkPackage = false; } then
+          throw ''
+            callPackage: A package function that uses `mkPackage` must only have `{ mkPackage }:` as its arguments.
+            Any other dependencies should be taken from the `mkPackage` callback.
+            Otherwise, such dependencies will not be overridable.
+
+            To illustrate, a dependency `foo` can be retrieved with:
+            { mkPackage }: mkPackage ({ layers, foo }: [
+              ...
+            ])
+          ''
+        else
+          f allArgs
+      else
+        makeOverridable f allArgs
     # This needs to be an abort so it can't be caught with `builtins.tryEval`,
     # which is used by nix-env and ofborg to filter out packages that don't evaluate.
     # This way we're forced to fix such errors in Nixpkgs,
