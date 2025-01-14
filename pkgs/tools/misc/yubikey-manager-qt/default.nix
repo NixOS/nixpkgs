@@ -87,6 +87,9 @@ mkDerivation rec {
   meta = with lib; {
     description = "Cross-platform application for configuring any YubiKey over all USB interfaces";
     homepage = "https://developers.yubico.com/yubikey-manager-qt/";
+    knownVulnerabilities = [
+      "The YubiKey Manager is no longer under active development, install `yubioath-flutter` instead."
+    ];
     license = licenses.bsd2;
     maintainers = [ maintainers.cbley ];
     mainProgram = "ykman-gui";
