@@ -36,6 +36,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postBuild
   '';
 
+  # remove unnecessary and non-deterministic files
+  preInstall = ''
+    pnpm --ignore-scripts --prod prune
+    find -type f \( -name "*.ts" -o -name "*.map" \) -exec rm -rf {} +
+    # https://github.com/pnpm/pnpm/issues/3645
+    find node_modules -xtype l -delete
+
+    rm node_modules/.modules.yaml
+  '';
+
   installPhase = ''
     runHook preInstall
 
