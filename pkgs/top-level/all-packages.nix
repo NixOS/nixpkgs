@@ -12564,7 +12564,7 @@ with pkgs;
     zfs_2_2
     zfs_2_3
     zfs_unstable;
-  zfs = zfs_2_2;
+  zfs = zfs_2_3;
 
   ### DATA
 
