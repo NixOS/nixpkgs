@@ -57,8 +57,22 @@ buildPythonPackage rec {
   pytestFlagsArray = [ "-m 'not slow'" ];
 
   preCheck = ''
-    ${lib.getExe' redis-server "redis-server"} --port 6390 &
+    # Note for Darwin: unless the output is redirected, the parent process becomes launchd.
+    # In case of a test failure, that prevents killing the Redis process,
+    # hanging the build forever (that would happen before postCheck).
+    ${redis-server}/bin/redis-server --port 6390 >/dev/null 2>&1 &
     REDIS_PID=$!
+    MAX_RETRIES=30
+    RETRY_COUNT=0
+    until ${redis-server}/bin/redis-cli --scan -p 6390 || [ $RETRY_COUNT -eq $MAX_RETRIES ]; do
+      echo "Waiting for redis to be ready"
+      sleep 1
+      RETRY_COUNT=$((RETRY_COUNT + 1))
+    done
+    if [ $RETRY_COUNT -eq $MAX_RETRIES ]; then
+      echo "Redis failed to start after $MAX_RETRIES retries"
+      exit 1
+    fi
   '';
 
   postCheck = ''

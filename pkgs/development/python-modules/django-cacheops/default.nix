@@ -19,14 +19,16 @@
 
 buildPythonPackage rec {
   pname = "django-cacheops";
-  version = "7.0.2";
+  version = "7.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-d6N8c9f6z8cpk2XtZqEr56SH3XRd2GwdM8ouv9OzKHg=";
+    # package name used to be django-cacheops before version 7.1, this might be a one-time mistake
+    pname = "django_cacheops";
+    inherit version;
+    hash = "sha256-7Aeau5aFVzIe4gjGJ0ggIxgg+YymN33alx8EmBvCq1I=";
   };
 
   pythonRelaxDeps = [ "funcy" ];
@@ -52,12 +54,22 @@ buildPythonPackage rec {
   ];
 
   preCheck = ''
-    redis-server &
+    # Note for Darwin: unless the output is redirected, the parent process becomes launchd.
+    # In case of a test failure, that prevents killing the Redis process,
+    # hanging the build forever (that would happen before postCheck).
+    ${pkgs.redis}/bin/redis-server >/dev/null 2>&1 &
     REDIS_PID=$!
-    while ! redis-cli --scan ; do
-      echo waiting for redis to be ready
+    MAX_RETRIES=30
+    RETRY_COUNT=0
+    until ${pkgs.redis}/bin/redis-cli --scan || [ $RETRY_COUNT -eq $MAX_RETRIES ]; do
+      echo "Waiting for redis to be ready"
       sleep 1
+      RETRY_COUNT=$((RETRY_COUNT + 1))
     done
+    if [ $RETRY_COUNT -eq $MAX_RETRIES ]; then
+      echo "Redis failed to start after $MAX_RETRIES retries"
+      exit 1
+    fi
   '';
 
   postCheck = ''
