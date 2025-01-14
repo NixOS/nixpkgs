@@ -54,7 +54,7 @@ let
         ++ lib.optional stdenv.hostPlatform.isDarwin libunwind
         ++ lib.optional stdenv.hostPlatform.isLinux jemalloc;
 
-      buildFlags = [ "localstatedir=/var/spool" ];
+      buildFlags = [ "localstatedir=/var/run" ];
 
       postPatch = ''
         substituteInPlace bin/varnishtest/vtc_main.c --replace /bin/rm "${coreutils}/bin/rm"
