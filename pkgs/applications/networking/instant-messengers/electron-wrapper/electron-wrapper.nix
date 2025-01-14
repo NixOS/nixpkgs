@@ -134,7 +134,7 @@ stdenv.mkDerivation rec {
       --inherit-argv0
 
     # Prepare desktop item
-  
+
 
     runHook postInstall
   '';
