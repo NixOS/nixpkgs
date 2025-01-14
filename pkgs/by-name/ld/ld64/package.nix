@@ -40,7 +40,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ld64";
-  version = "951.9";
+  version = "954.16";
 
   outputs = [
     "out"
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "apple-oss-distributions";
     repo = "ld64";
     tag = "ld64-${finalAttrs.version}";
-    hash = "sha256-hLkfqgBwVPlO4gfriYOawTO5E1zSD63ZcNetm1E5I70";
+    hash = "sha256-CVIyL2J9ISZnI4+r+wp4QtOb3+3Tmz2z2Z7/qeRqHS0=";
   };
 
   patches =
@@ -116,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
     echo 'static const char compile_stubs[] = "";' >> src/ld/compile_stubs.h
   '';
 
-  xcodeHash = "sha256-+j7Ed/6aD46SJnr3DWPfWuYWylb2FNJRPmWsUVxZJHM=";
+  xcodeHash = "sha256-qip/1eiGn8PdLThonhPq3oq2veN4E1zOiamDPBfTeNE=";
   xcodeProject = "ld64.xcodeproj";
 
   nativeBuildInputs = [
