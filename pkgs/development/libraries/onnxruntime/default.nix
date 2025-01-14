@@ -25,6 +25,7 @@
 , pythonSupport ? true
 , cudaSupport ? config.cudaSupport
 , ncclSupport ? config.cudaSupport
+, openvinoSupport ? stdenv.isLinux, openvino
 , cudaPackages ? {}
 }@inputs:
 
@@ -160,6 +161,8 @@ effectiveStdenv.mkDerivation rec {
   ]) ++ lib.optionals effectiveStdenv.hostPlatform.isDarwin [
     Foundation
     libiconv
+  ] ++ lib.optionals openvinoSupport [
+    openvino
   ] ++ lib.optionals cudaSupport (with cudaPackages; [
     cuda_cccl # cub/cub.cuh
     libcublas # cublas_v2.h
@@ -208,6 +211,11 @@ effectiveStdenv.mkDerivation rec {
     "-Donnxruntime_USE_FULL_PROTOBUF=OFF"
     (lib.cmakeBool "onnxruntime_USE_CUDA" cudaSupport)
     (lib.cmakeBool "onnxruntime_USE_NCCL" (cudaSupport && ncclSupport))
+    (lib.cmakeBool "onnxruntime_USE_OPENVINO" openvinoSupport)
+    (lib.cmakeBool "onnxruntime_USE_OPENVINO_GPU" openvinoSupport)
+    (lib.cmakeBool "onnxruntime_USE_OPENVINO_CPU" openvinoSupport)
+    (lib.cmakeBool "onnxruntime_USE_OPENVINO_NPU" openvinoSupport)
+    (lib.cmakeFeature "OpenVINO_DIR" "${lib.getDev openvino}/runtime/cmake")
   ] ++ lib.optionals pythonSupport [
     "-Donnxruntime_ENABLE_PYTHON=ON"
   ] ++ lib.optionals cudaSupport [
@@ -217,9 +225,7 @@ effectiveStdenv.mkDerivation rec {
     (lib.cmakeFeature "onnxruntime_NVCC_THREADS" "1")
   ];
 
-  env = lib.optionalAttrs effectiveStdenv.cc.isClang {
-    NIX_CFLAGS_COMPILE = "-Wno-error";
-  };
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   # aarch64-linux fails cpuinfo test, because /sys/devices/system/cpu/ does not exist in the sandbox
   doCheck = !(cudaSupport || effectiveStdenv.buildPlatform.system == "aarch64-linux");
