@@ -708,6 +708,9 @@ in {
           "zha"
           "zwave"
           "zwave_js"
+
+          # Custom components, maintained manually.
+          "amshan"
         ];
       in {
         ExecStart = escapeSystemdExecArgs ([

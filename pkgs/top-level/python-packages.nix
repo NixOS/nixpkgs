@@ -99,11 +99,7 @@ self: super: with self; {
 
   aenum = callPackage ../development/python-modules/aenum { };
 
-  aeppl = callPackage ../development/python-modules/aeppl { };
-
   aerosandbox = callPackage ../development/python-modules/aerosandbox { };
-
-  aesara = callPackage ../development/python-modules/aesara { };
 
   aesedb = callPackage ../development/python-modules/aesedb { };
 
@@ -587,6 +583,8 @@ self: super: with self; {
   amqplib = callPackage ../development/python-modules/amqplib { };
 
   amqtt = callPackage ../development/python-modules/amqtt { };
+
+  amshan = callPackage ../development/python-modules/amshan { };
 
   anchor-kr = callPackage ../development/python-modules/anchor-kr { };
 
@@ -6948,6 +6946,8 @@ self: super: with self; {
   keras-preprocessing = callPackage ../development/python-modules/keras-preprocessing { };
 
   kerberos = callPackage ../development/python-modules/kerberos { };
+
+  kestra = callPackage ../development/python-modules/kestra { };
 
   keyboard = callPackage ../development/python-modules/keyboard { };
 
@@ -16327,12 +16327,6 @@ self: super: with self; {
 
   tornado = callPackage ../development/python-modules/tornado { };
 
-  # Used by circus and grab-site, 2020-08-29
-  tornado_4 = callPackage ../development/python-modules/tornado/4.nix { };
-
-  # Used by streamlit, 2021-01-29
-  tornado_5 = callPackage ../development/python-modules/tornado/5.nix { };
-
   torchprofile = callPackage ../development/python-modules/torchprofile { };
 
   torpy = callPackage ../development/python-modules/torpy { };
@@ -18297,8 +18291,6 @@ self: super: with self; {
   y-py = callPackage ../development/python-modules/y-py { };
 
   yabadaba = callPackage ../development/python-modules/yabadaba { };
-
-  yahooweather = callPackage ../development/python-modules/yahooweather { };
 
   yalesmartalarmclient = callPackage ../development/python-modules/yalesmartalarmclient { };
 
