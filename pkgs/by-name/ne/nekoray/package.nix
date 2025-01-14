@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libsForQt5,
+  qt6,
 
   cmake,
   ninja,
@@ -82,19 +82,21 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     copyDesktopItems
-    libsForQt5.wrapQtAppsHook
     ninja
+    qt6.qtsvg
+    qt6.qttools
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
-    libsForQt5.qtbase
-    libsForQt5.qttools
-    libsForQt5.qtwayland
-    libsForQt5.qtx11extras
     protobuf
+    qt6.qtbase
+    qt6.qtsvg
     yaml-cpp
     zxing-cpp
   ];
+
+  cmakeFlags = [ "-DQT_VERSION_MAJOR=6" ];
 
   installPhase = ''
     runHook preInstall
