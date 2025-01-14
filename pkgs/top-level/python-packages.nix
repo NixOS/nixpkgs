@@ -3759,6 +3759,8 @@ self: super: with self; {
 
   doc8 = callPackage ../development/python-modules/doc8 { };
 
+  docarray = callPackage ../development/python-modules/docarray { };
+
   docformatter = callPackage ../development/python-modules/docformatter { };
 
   docker = callPackage ../development/python-modules/docker { };
@@ -11679,6 +11681,8 @@ self: super: with self; {
   pyephember = callPackage ../development/python-modules/pyephember { };
 
   pyepsg = callPackage ../development/python-modules/pyepsg { };
+
+  pyepsilla = callPackage ../development/python-modules/pyepsilla { };
 
   pyerfa = callPackage ../development/python-modules/pyerfa { };
 
