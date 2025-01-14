@@ -70,16 +70,16 @@ let
       projectArch = "x86_64";
     };
   };
-  platforms."aarch64-linux".sha256 = "16sbfk599h96wcsmpbxlwsvq0n1pssmm8dpwmjsqfrn1464dvs68";
-  platforms."x86_64-linux".sha256 = "1wa4nv28saz96kar9svdarfz6c4rnbcqz0rqxzl9zclnhfzhqdiw";
+  platforms."aarch64-linux".sha256 = "1v2jq90bzmig5ydry3s7fzrvrpdjq4h2ykdfxfqdr5k928n969sb";
+  platforms."x86_64-linux".sha256 = "10s0lxa702x9bf4q6nm0pjf9wjqz31qii1d1rsdvghc5jl24fc5x";
 
   platformInfo = platforms.${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
 in
 stdenv.mkDerivation rec {
   pname = "cef-binary";
-  version = "121.3.13";
-  gitRevision = "5c4a81b";
-  chromiumVersion = "121.0.6167.184";
+  version = "131.4.1";
+  gitRevision = "437feba";
+  chromiumVersion = "131.0.6778.265";
 
   src = fetchurl {
     url = "https://cef-builds.spotifycdn.com/cef_binary_${version}+g${gitRevision}+chromium-${chromiumVersion}_${platformInfo.platformStr}_minimal.tar.bz2";
