@@ -8,6 +8,7 @@
   pystring,
   imath,
   minizip-ng,
+  zlib,
   # Only required on Linux
   glew,
   libglut,
@@ -51,7 +52,7 @@ stdenv.mkDerivation rec {
       --replace 'OCIO_ADD_TEST(Config, virtual_display_with_active_displays)' 'static void _skip_virtual_display_with_active_displays()'
   '';
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ] ++ lib.optionals pythonBindings [ python3Packages.python ];
   buildInputs =
     [
       expat
@@ -59,6 +60,7 @@ stdenv.mkDerivation rec {
       pystring
       imath
       minizip-ng
+      zlib
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       glew
