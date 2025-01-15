@@ -100,6 +100,9 @@ rustPlatform.buildRustPackage rec {
       }
   '';
 
+  env.VERGEN_GIT_COMMIT_DATE = "2025-01-13";
+  env.VERGEN_GIT_SHA = src.rev;
+
   passthru = {
     updateScript = nix-update-script { };
   };
