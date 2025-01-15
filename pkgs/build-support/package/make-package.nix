@@ -190,6 +190,8 @@ let
 
   layers.noop = _this: _old: { };
 
+  layers.buildNpmPackage = callPackage ../node/build-npm-package/layer.nix { };
+
   mkPackageWith =
     {
       # these are not overridable by the layer implementations - not suited for `deps`
