@@ -7,6 +7,7 @@
   SystemConfiguration,
   installShellFiles,
   nix-update-script,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -38,6 +39,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   passthru.updateScript = nix-update-script { };
+
+  passthru.tests.nixos = nixosTests.rustic;
 
   meta = {
     homepage = "https://github.com/rustic-rs/rustic";
