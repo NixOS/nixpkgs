@@ -7,7 +7,6 @@
   kdePackages,
   qt6,
   libsecret,
-  xdg-utils,
   amneziawg-go,
   openvpn,
   shadowsocks-rust,
@@ -20,6 +19,7 @@
   zlib,
   tun2socks,
   xray,
+  nix-update-script,
 }:
 let
   amnezia-tun2socks = tun2socks.overrideAttrs (
@@ -35,13 +35,6 @@ let
       };
 
       vendorHash = "sha256-VvOaTJ6dBFlbGZGxnHy2sCtds1tyhu6VsPewYpsDBiM=";
-
-      ldflags = [
-        "-w"
-        "-s"
-        "-X github.com/amnezia-vpn/amnezia-tun2socks/v2/internal/version.Version=v${finalAttrs.version}"
-        "-X github.com/amnezia-vpn/amnezia-tun2socks/v2/internal/version.GitCommit=v${finalAttrs.version}"
-      ];
     }
   );
 
@@ -63,17 +56,15 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "amnezia-vpn";
-  version = "4.8.2.3";
+  version = "4.8.3.1";
 
   src = fetchFromGitHub {
     owner = "amnezia-vpn";
     repo = "amnezia-client";
     tag = finalAttrs.version;
-    hash = "sha256-bCWPyRW2xnnopcwfPHgQrdP85Ct0CDufJRQ1PvCAiDE=";
+    hash = "sha256-U/fVO9GcSdxFg5r57vX5Ylgu6CMjG4GKyInIgBNUiEw=";
     fetchSubmodules = true;
   };
-
-  patches = [ ./router.patch ];
 
   postPatch =
     ''
@@ -82,8 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
       substituteInPlace client/utilities.cpp \
         --replace-fail 'return Utils::executable("../../client/bin/openvpn", true);' 'return Utils::executable("${openvpn}/bin/openvpn", false);' \
         --replace-fail 'return Utils::executable("../../client/bin/tun2socks", true);' 'return Utils::executable("${amnezia-tun2socks}/bin/amnezia-tun2socks", false);' \
-        --replace-fail 'return Utils::usrExecutable("wg-quick");' 'return Utils::executable("${wireguard-tools}/bin/wg-quick", false);' \
-        --replace-fail 'QProcess::execute(QString("pkill %1").arg(name));' 'return QProcess::execute(QString("pkill -f %1").arg(name)) == 0;'
+        --replace-fail 'return Utils::usrExecutable("wg-quick");' 'return Utils::executable("${wireguard-tools}/bin/wg-quick", false);'
       substituteInPlace client/protocols/xrayprotocol.cpp \
         --replace-fail 'return Utils::executable(QString("xray"), true);' 'return Utils::executable(QString("${amnezia-xray}/bin/xray"), false);'
       substituteInPlace client/protocols/openvpnovercloakprotocol.cpp \
@@ -91,11 +81,10 @@ stdenv.mkDerivation (finalAttrs: {
       substituteInPlace client/protocols/shadowsocksvpnprotocol.cpp \
         --replace-fail 'return Utils::executable(QString("/ss-local"), true);' 'return Utils::executable(QString("${shadowsocks-rust}/bin/sslocal"), false);'
       substituteInPlace client/configurators/openvpn_configurator.cpp \
-        --replace-fail ".arg(qApp->applicationDirPath());" ".arg(\"$out/local/bin\");"
+        --replace-fail ".arg(qApp->applicationDirPath());" ".arg(\"$out/libexec\");"
       substituteInPlace client/ui/qautostart.cpp \
         --replace-fail "/usr/share/pixmaps/AmneziaVPN.png" "$out/share/pixmaps/AmneziaVPN.png"
       substituteInPlace deploy/installer/config/AmneziaVPN.desktop.in \
-        --replace-fail "#!/usr/bin/env xdg-open" "#!${xdg-utils}/bin/xdg-open" \
         --replace-fail "/usr/share/pixmaps/AmneziaVPN.png" "$out/share/pixmaps/AmneziaVPN.png"
       substituteInPlace deploy/data/linux/AmneziaVPN.service \
         --replace-fail "ExecStart=/opt/AmneziaVPN/service/AmneziaVPN-service.sh" "ExecStart=$out/bin/AmneziaVPN-service" \
@@ -137,13 +126,25 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postInstall = ''
-    mkdir -p $out/bin $out/local/bin $out/share/applications $out/share/pixmaps $out/lib/systemd/system
+    mkdir -p $out/bin $out/libexec $out/share/applications $out/share/pixmaps $out/lib/systemd/system
     cp client/AmneziaVPN service/server/AmneziaVPN-service $out/bin/
-    cp ../deploy/data/linux/client/bin/update-resolv-conf.sh $out/local/bin/
+    cp ../deploy/data/linux/client/bin/update-resolv-conf.sh $out/libexec/
     cp ../AppDir/AmneziaVPN.desktop $out/share/applications/
     cp ../deploy/data/linux/AmneziaVPN.png $out/share/pixmaps/
     cp ../deploy/data/linux/AmneziaVPN.service $out/lib/systemd/system/
   '';
+
+  passthru = {
+    inherit amnezia-tun2socks amnezia-xray;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "amnezia-tun2socks"
+        "--subpackage"
+        "amnezia-xray"
+      ];
+    };
+  };
 
   meta = with lib; {
     description = "Amnezia VPN Client";
