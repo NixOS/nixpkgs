@@ -34,12 +34,12 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
     common_flags.add_argument("--keep-failed", "-K", action="store_true")
     common_flags.add_argument("--fallback", action="store_true")
     common_flags.add_argument("--repair", action="store_true")
-    common_flags.add_argument("--option", nargs=2)
+    common_flags.add_argument("--option", nargs=2, action="append")
 
     common_build_flags = argparse.ArgumentParser(add_help=False)
     common_build_flags.add_argument("--builders")
     common_build_flags.add_argument("--include", "-I", action="append")
-    common_build_flags.add_argument("--quiet", action="store_true")
+    common_build_flags.add_argument("--quiet", action="count", default=0)
     common_build_flags.add_argument("--print-build-logs", "-L", action="store_true")
     common_build_flags.add_argument("--show-trace", action="store_true")
 
