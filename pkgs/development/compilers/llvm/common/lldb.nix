@@ -127,13 +127,13 @@ stdenv.mkDerivation (rec {
 
   # TODO: cleanup with mass-rebuild
   installCheckPhase = ''
-    if [ ! -e $lib/${python3.sitePackages}/lldb/_lldb*.so ] ; then
+    if [ ! -e ''${!outputLib}/${python3.sitePackages}/lldb/_lldb*.so ] ; then
         echo "ERROR: python files not installed where expected!";
         return 1;
     fi
   '' # Something lua is built on older versions but this file doesn't exist.
   + lib.optionalString (lib.versionAtLeast release_version "14") ''
-    if [ ! -e "$lib/lib/lua/${lua5_3.luaversion}/lldb.so" ] ; then
+    if [ ! -e "''${!outputLib}/lib/lua/${lua5_3.luaversion}/lldb.so" ] ; then
         echo "ERROR: lua files not installed where expected!";
         return 1;
     fi
