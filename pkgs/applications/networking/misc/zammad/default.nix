@@ -4,6 +4,7 @@
   nixosTests,
   fetchFromGitHub,
   fetchYarnDeps,
+  fetchpatch2,
   applyPatches,
   bundlerEnv,
   defaultGemConfig,
@@ -32,6 +33,12 @@ let
 
     patches = [
       ./fix-sendmail-location.diff
+      # patch for ZAA-2024-05
+      (fetchpatch2 {
+        name = "ZAA-2024-05.patch";
+        url = "https://github.com/zammad/zammad/commit/880049b555c0aeb65e6413c513a44557b1c3df12.diff";
+        hash = "sha256-OZkeINcN9h4cp6uadpdTdKkEP4XX2gB0G5u9Es4Uabg=";
+      })
     ];
 
     postPatch = ''
