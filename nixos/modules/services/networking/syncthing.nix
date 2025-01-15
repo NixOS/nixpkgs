@@ -85,6 +85,7 @@ let
       override = cfg.overrideFolders;
       conf = folders;
       baseAddress = curlAddressArgs "/rest/config/folders";
+      ignoreAddress = curlAddressArgs "/rest/db/ignores";
     };
   } [
     # Now for each of these attributes, write the curl commands that are
@@ -103,9 +104,20 @@ let
         # don't exist in the array given. That's why we use here `POST`, and
         # only if s.override == true then we DELETE the relevant folders
         # afterwards.
-        (map (new_cfg: ''
-          curl -d ${lib.escapeShellArg (builtins.toJSON new_cfg)} -X POST ${s.baseAddress}
-        ''))
+        (map (new_cfg:
+          ''
+            curl -d ${lib.escapeShellArg (builtins.toJSON ((builtins.removeAttrs new_cfg) [ "ignore" ]))} -X POST ${s.baseAddress}
+          ''
+          + (
+            # The request to set ignore patterns requires a different command with an additional URL parameter.
+            # We only send this command if there actually are any ignore patterns so that we do not override a previous list of patterns.
+            if ( (builtins.hasAttr "ignore" new_cfg) && (new_cfg.ignore != [ ]) )
+            then ''
+              curl -d '{"ignore": ${builtins.toJSON new_cfg.ignore}}' -X POST ${s.ignoreAddress}?folder=${new_cfg.id}
+            ''
+            else ""
+          )
+        ))
         (lib.concatStringsSep "\n")
       ]
       /* If we need to override devices/folders, we iterate all currently configured
@@ -450,6 +462,21 @@ in {
                       On Unix systems, tries to copy file/folder ownership from the parent directory (the directory it’s located in).
                       Requires running Syncthing as a privileged user, or granting it additional capabilities (e.g. CAP_CHOWN on Linux).
                     '';
+                  };
+
+                  ignore = mkOption {
+                    type = types.listOf types.str;
+                    default = [ ];
+                    description = ''
+                      Syncthing can be configured to ignore certain files in a folder via ignore patterns. See the documentation on ignore patterns: https://docs.syncthing.net/users/ignoring.html
+                      Patterns can be entered as a list of strings, one line per string.
+                      Ignore patterns are only written if the list is not empty.
+                    '';
+                    example = [
+                      "// This is a comment"
+                      "*.part // Firefox downloads and other things"
+                      "*.crdownload // Chrom(ium|e) downloads"
+                    ];
                   };
                 };
               }));
