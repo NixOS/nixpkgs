@@ -51,6 +51,10 @@ def test_parse_args() -> None:
             "--override-input",
             "override2",
             "input2",
+            "--update-input",
+            "input1",
+            "--update-input",
+            "input2",
         ]
     )
     assert nr.logger.level == logging.INFO
@@ -69,6 +73,10 @@ def test_parse_args() -> None:
         "bar2",
     ]
     assert nr.utils.dict_to_flags(vars(g1["flake_common_flags"])) == [
+        "--update-input",
+        "input1",
+        "--update-input",
+        "input2",
         "--override-input",
         "override1",
         "input1",
