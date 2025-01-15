@@ -57,6 +57,7 @@
   tmux,
   tup,
   typescript,
+  typescript-language-server,
   vim,
   which,
   xdg-utils,
@@ -3297,6 +3298,9 @@ in
     dependencies = with self; [
       nvim-lspconfig
       plenary-nvim
+    ];
+    runtimeDeps = [
+      typescript-language-server
     ];
   };
 
