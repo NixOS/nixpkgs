@@ -7520,10 +7520,10 @@ with pkgs;
   ansible = ansible_2_17;
   ansible_2_17 = python3Packages.toPythonApplication python3Packages.ansible-core;
   ansible_2_16 = python3Packages.toPythonApplication (python3Packages.ansible-core.overridePythonAttrs (oldAttrs: rec {
-    version = "2.16.8";
+    version = "2.16.14";
     src = oldAttrs.src.override {
       inherit version;
-      hash = "sha256-WeSqQO1azbTvm789BYkY//k/ZqFJNz2BWciilgRBC9o=";
+      hash = "sha256-gCef/9mGhrrfqjLh7HhdmKbfGy/B5Al97AWXZA10ZBU=";
     };
   }));
 
