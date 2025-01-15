@@ -25,18 +25,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cosmic-store";
-  version = "1.0.0-alpha.4";
+  version = "1.0.0-alpha.5.1";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-store";
     rev = "epoch-${version}";
-    hash = "sha256-VaOKF3cCnNbfUfJeuhx0wXRvprAnSspTe8gIiR/t2Ng=";
+    hash = "sha256-FK7faWiRNuQT8lIuRciP37U01csvtRGC9LyOXQCTjYk=";
     fetchSubmodules = true;
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-Zt2199zlxNbrN/S6bogp4JPM3ZMZpQL5jTXKMki6LQE=";
+  cargoHash = "sha256-8m9zEkaaM0bnA1cOVMyIFE1EdztWqkpGEuHd1fRaass=";
 
   postPatch = ''
     substituteInPlace justfile --replace '#!/usr/bin/env' "#!$(command -v env)"
