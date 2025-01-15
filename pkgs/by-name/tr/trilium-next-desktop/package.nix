@@ -115,12 +115,16 @@ let
   darwin = stdenv.mkDerivation {
     inherit pname version meta;
 
-    src = fetchzip darwinSource;
+    src = fetchurl darwinSource;
+
+    nativeBuildInputs = [
+      unzip
+    ];
 
     installPhase = ''
       runHook preInstall
-      mkdir -p $out/Applications
-      cp -r *.app $out/Applications
+      mkdir -p "$out/Applications/TriliumNext Notes.app"
+      cp -r * "$out/Applications/TriliumNext Notes.app/"
       runHook postInstall
     '';
   };
