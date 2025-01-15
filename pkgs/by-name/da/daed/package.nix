@@ -6,6 +6,8 @@
   buildGoModule,
   fetchFromGitHub,
   lib,
+  _experimental-update-script-combinators,
+  nix-update-script,
 }:
 
 let
@@ -47,7 +49,12 @@ let
   };
 in
 buildGoModule rec {
-  inherit pname version src;
+  inherit
+    pname
+    version
+    src
+    web
+    ;
   sourceRoot = "${src.name}/wing";
 
   vendorHash = "sha256-TBR3MmpTdwIwyekU+nrHhzsN31E30+Rqd3FoBL3dl4U=";
@@ -80,6 +87,15 @@ buildGoModule rec {
 
     runHook postBuild
   '';
+
+  passthru.updateScript = _experimental-update-script-combinators.sequence [
+    (nix-update-script {
+      attrPath = "daed.web";
+    })
+    (nix-update-script {
+      extraArgs = [ "--version=skip" ];
+    })
+  ];
 
   meta = {
     description = "Modern dashboard with dae";
