@@ -2,7 +2,7 @@
 , buildNpmPackage
 , fetchFromGitHub
 , nixosTests
-, pnpm
+, pnpm_9
 , nix-update-script
 }:
 
@@ -17,9 +17,9 @@ buildNpmPackage rec {
     hash = "sha256-lm+vPo7V99OSUAVEvdiTNMlD/+iHGPIyPLc1WzO1aTU=";
   };
 
-  npmConfigHook = pnpm.configHook;
+  npmConfigHook = pnpm_9.configHook;
   npmDeps = pnpmDeps;
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version src;
     hash = "sha256-NuU9O3bEboxmuEuk1WSUeZRNgVK5cwFiUAN3+7vACGw=";
   };
