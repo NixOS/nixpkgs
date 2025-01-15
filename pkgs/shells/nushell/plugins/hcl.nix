@@ -28,9 +28,7 @@ rustPlatform.buildRustPackage rec {
     CoreFoundation
   ];
 
-  passthru = {
-    updateScript = nix-update-script { };
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Nushell plugin for parsing Hashicorp Configuration Language files";
