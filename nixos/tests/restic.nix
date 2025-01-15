@@ -45,7 +45,10 @@ import ./make-test-python.nix (
     name = "restic";
 
     meta = with pkgs.lib.maintainers; {
-      maintainers = [ bbigras i077 ];
+      maintainers = [
+        bbigras
+        i077
+      ];
     };
 
     nodes = {
@@ -54,7 +57,14 @@ import ./make-test-python.nix (
         {
           services.restic.backups = {
             remotebackup = {
-              inherit passwordFile paths exclude pruneOpts backupPrepareCommand backupCleanupCommand;
+              inherit
+                passwordFile
+                paths
+                exclude
+                pruneOpts
+                backupPrepareCommand
+                backupCleanupCommand
+                ;
               repository = remoteRepository;
               initialize = true;
               timerConfig = null; # has no effect here, just checking that it doesn't break the service
@@ -72,18 +82,33 @@ import ./make-test-python.nix (
               '';
             };
             inhibit-test = {
-              inherit passwordFile paths exclude pruneOpts;
+              inherit
+                passwordFile
+                paths
+                exclude
+                pruneOpts
+                ;
               repository = remoteInhibitTestRepository;
               initialize = true;
               inhibitsSleep = true;
             };
             remote-noinit-backup = {
-              inherit passwordFile exclude pruneOpts paths;
+              inherit
+                passwordFile
+                exclude
+                pruneOpts
+                paths
+                ;
               initialize = false;
               repository = remoteNoInitRepository;
             };
             rclonebackup = {
-              inherit passwordFile paths exclude pruneOpts;
+              inherit
+                passwordFile
+                paths
+                exclude
+                pruneOpts
+                ;
               initialize = true;
               repository = rcloneRepository;
               rcloneConfig = {
@@ -111,6 +136,16 @@ import ./make-test-python.nix (
 
               pruneOpts = [ "--keep-last 1" ];
               checkOpts = [ "--some-check-option" ];
+            };
+            customUnitConfig = {
+              inherit passwordFile paths;
+              repository = remoteRepository;
+              unitConfig = {
+                documentation = [ "https://custom-unit-config-was-written.example.com" ];
+                serviceConfig = {
+                  ExecStartPre = "${pkgs.coreutils}/bin/touch /tmp/custom-service-config-survived-custom-unit-config";
+                };
+              };
             };
           };
 
@@ -211,6 +246,15 @@ import ./make-test-python.nix (
           "systemctl start restic-backups-remoteprune.service",
           'restic-remotebackup snapshots --json | ${pkgs.jq}/bin/jq "length | . == 1"',
 
+          # test that custom unit config is present
+          "systemctl cat restic-backups-customUnitConfig",
+          "systemctl cat restic-backups-customUnitConfig | grep custom-unit-config-was-written",
+          # confirms that ExecStart was not clobbered by UnitConfig block
+          "systemctl start restic-backups-customUnitConfig",
+          # this check that the extra ServiceConfig survived doesn't work b/c of PrivateTmp
+          # "ls /tmp/custom-service-config-survived-custom-unit-config"
+          # so we have to simply grep for it instead
+          "systemctl cat restic-backups-customUnitConfig | grep /tmp/custom-service-config-survived-custom-unit-config"
       )
 
       # test that the inhibit option is working
