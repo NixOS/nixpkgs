@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-store";
-    rev = "epoch-${version}";
+    tag = "epoch-${version}";
     hash = "sha256-FK7faWiRNuQT8lIuRciP37U01csvtRGC9LyOXQCTjYk=";
     fetchSubmodules = true;
   };
