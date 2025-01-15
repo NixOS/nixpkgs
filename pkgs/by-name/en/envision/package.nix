@@ -82,6 +82,7 @@ buildFHSEnv {
         glslang
         gst_all_1.gstreamer
         libdrm
+        libnotify
         openssl
         openxr-loader
         vulkan-loader
