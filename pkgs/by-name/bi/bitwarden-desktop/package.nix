@@ -115,6 +115,10 @@ buildNpmPackage rec {
     pushd apps/desktop/desktop_native/napi
     npm run build
     popd
+
+    pushd apps/desktop/desktop_native/proxy
+    cargo build --bin desktop_proxy --release
+    popd
   '';
 
   postBuild = ''
@@ -154,7 +158,8 @@ buildNpmPackage rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir $out
+    mkdir -p $out/bin
+    cp -r apps/desktop/desktop_native/target/release/desktop_proxy $out/bin
 
     pushd apps/desktop/dist/linux-${lib.optionalString stdenv.hostPlatform.isAarch64 "arm64-"}unpacked
     mkdir -p $out/opt/Bitwarden
