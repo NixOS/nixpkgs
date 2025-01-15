@@ -26,6 +26,11 @@ let
     };
     postPatch = "";
   });
+  urlPrefix =
+    version:
+    "https://github.com/ruffle-rs/ruffle/releases/download/${version}/ruffle-nightly-${
+      builtins.replaceStrings [ "-" ] [ "_" ] (lib.strings.removePrefix "nightly-" version)
+    }";
   x86_64-linux = stdenvNoCC.mkDerivation (finalAttrs: {
     inherit
       pname
@@ -34,9 +39,7 @@ let
       ;
 
     src = fetchurl {
-      url = "https://github.com/ruffle-rs/ruffle/releases/download/${finalAttrs.version}/ruffle-nightly-${
-        builtins.replaceStrings [ "-" ] [ "_" ] (lib.strings.removePrefix "nightly-" finalAttrs.version)
-      }-linux-x86_64.tar.gz";
+      url = "${urlPrefix finalAttrs.version}-linux-x86_64.tar.gz";
       hash = "sha256-pn+3cWgMnH06VCBgRxVGB9Dx9Kxq5IAm6ytLa744OOY=";
     };
 
