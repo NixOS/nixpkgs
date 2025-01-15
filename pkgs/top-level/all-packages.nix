@@ -4539,7 +4539,7 @@ with pkgs;
   openvpn_learnaddress = callPackage ../tools/networking/openvpn/openvpn_learnaddress.nix { };
 
   openvpn-auth-ldap = callPackage ../tools/networking/openvpn/openvpn-auth-ldap.nix {
-    inherit (llvmPackages_17) stdenv;
+    inherit (llvmPackages) stdenv;
   };
 
   namespaced-openvpn = python3Packages.callPackage ../tools/networking/namespaced-openvpn { };
@@ -12545,18 +12545,18 @@ with pkgs;
 
   inherit
     ({
-      zfs_2_1 = callPackage ../os-specific/linux/zfs/2_1.nix {
+      zfs_2_2 = callPackage ../os-specific/linux/zfs/2_2.nix {
         configFile = "user";
       };
-      zfs_2_2 = callPackage ../os-specific/linux/zfs/2_2.nix {
+      zfs_2_3 = callPackage ../os-specific/linux/zfs/2_3.nix {
         configFile = "user";
       };
       zfs_unstable = callPackage ../os-specific/linux/zfs/unstable.nix {
         configFile = "user";
       };
     })
-    zfs_2_1
     zfs_2_2
+    zfs_2_3
     zfs_unstable;
   zfs = zfs_2_2;
 
@@ -12855,8 +12855,7 @@ with pkgs;
 
   qmapshack = libsForQt5.callPackage ../applications/gis/qmapshack { };
 
-  spatialite_gui = callPackage ../applications/gis/spatialite-gui {
-    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa IOKit;
+  spatialite-gui = callPackage ../by-name/sp/spatialite-gui/package.nix {
     wxGTK = wxGTK32;
   };
 
