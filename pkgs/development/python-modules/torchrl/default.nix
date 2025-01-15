@@ -175,7 +175,8 @@ buildPythonPackage rec {
       "test_gae_param_as_tensor"
     ]
     ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
-      # Flaky (AssertionError)
+      # Flaky
+      # AssertionError: assert tensor([51.]) == ((5 * 11) + 2)
       "test_vecnorm_parallel_auto"
     ];
 
