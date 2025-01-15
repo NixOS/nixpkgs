@@ -102,7 +102,7 @@ stdenv.mkDerivation {
       "-DVTK_MODULE_ENABLE_VTK_RenderingExternal=YES"
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      "-DOPENGL_INCLUDE_DIR=${libGL}/include"
+      "-DOPENGL_INCLUDE_DIR=${lib.getInclude libGL}/include"
       (lib.cmakeBool "VTK_OPENGL_HAS_EGL" enableEgl)
     ]
     ++ [
@@ -119,8 +119,13 @@ stdenv.mkDerivation {
       "-DVTK_PYTHON_VERSION:STRING=${pythonMajor}"
     ];
 
-  env = lib.optionalAttrs stdenv.cc.isClang {
-    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-function-pointer-types";
+  env = {
+    # Lots of warnings in vendored code…
+    NIX_CFLAGS_COMPILE =
+      if stdenv.cc.isClang then
+        "-Wno-error=incompatible-function-pointer-types"
+      else
+        "-Wno-error=incompatible-pointer-types";
   };
 
   postInstall = optionalString enablePython ''
@@ -135,7 +140,6 @@ stdenv.mkDerivation {
     homepage = "https://www.vtk.org/";
     license = licenses.bsd3;
     maintainers = with maintainers; [
-      knedlsepp
       tfmoraes
     ];
     platforms = platforms.unix;

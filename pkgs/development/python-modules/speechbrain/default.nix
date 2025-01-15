@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "speechbrain";
     repo = "speechbrain";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Un7RPxMq1sD7uD3jcw3Bjp+Oo8ld+XC5g2I89gF6jxs=";
   };
 

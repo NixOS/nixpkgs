@@ -18,7 +18,7 @@ python3Packages.buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = "nwg-clipman";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-bAE9E6P+qfKrfRxb134k4r7DtIWGB+4JdiXKpI7gJ5M=";
   };
 

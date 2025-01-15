@@ -87,7 +87,7 @@ buildPythonPackage rec {
       python = pyShortVersion;
       abi = pyShortVersion;
       platform = "manylinux2014_x86_64";
-      hash = binary-hashes.${pyShortVersion};
+      hash = binary-hashes.${pyShortVersion} or { };
     };
 
   nativeBuildInputs = [

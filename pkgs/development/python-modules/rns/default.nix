@@ -1,5 +1,6 @@
 {
   lib,
+  bleak,
   buildPythonPackage,
   cryptography,
   esptool,
@@ -13,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "rns";
-  version = "0.8.8";
+  version = "0.8.9";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "markqvist";
     repo = "Reticulum";
-    rev = "refs/tags/${version}";
-    hash = "sha256-Vsh5C0IlOz8/Jw0ya1bOGsNiBQTXJwTWUBcDFs5Zp+0=";
+    tag = version;
+    hash = "sha256-yUn7tDAu4DJZFJAMdsSnEjlvCHxp1y7OO8xR86lus54=";
   };
 
   patches = [
@@ -34,6 +35,7 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
+    bleak
     cryptography
     netifaces
     pyserial

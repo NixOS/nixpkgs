@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "gtimelog";
     repo = "gtimelog";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-NlKAgAnZWodXF4eybcNOSxexjhegRgQEWoAPd+KWzsw=";
   };
 

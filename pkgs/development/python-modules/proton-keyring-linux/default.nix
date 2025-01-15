@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "python-proton-keyring-linux";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-wT+0S3dGanLwqRrpCooAwy/RDyZDn1aEdJ7eWvwVfiY=";
   };
 

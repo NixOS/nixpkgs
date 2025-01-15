@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # Upstream uses cmake FetchContent to resolve glfw and catch2
     # needed for examples and tests
-    sed -iE 's=add_subdirectory(ext)==g' CMakeLists.txt
-    sed -iE 's=Catch2==g' tests/CMakeLists.txt
+    sed -i 's=add_subdirectory(ext)==g' CMakeLists.txt
+    sed -i 's=Catch2==g' tests/CMakeLists.txt
   '';
 
   nativeBuildInputs = [ cmake ];

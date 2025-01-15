@@ -3,7 +3,7 @@
   lib,
   fetchFromGitHub,
   postgresql,
-  boost182,
+  boost,
   postgresqlTestExtension,
   buildPostgresqlExtension,
 }:
@@ -39,7 +39,7 @@ buildPostgresqlExtension (finalAttrs: {
 
   sourceRoot = main_src.name;
 
-  buildInputs = [ boost182 ];
+  buildInputs = [ boost ];
 
   patchPhase = ''
     runHook prePatch

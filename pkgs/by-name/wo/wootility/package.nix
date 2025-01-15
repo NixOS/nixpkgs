@@ -1,15 +1,16 @@
-{ appimageTools
-, fetchurl
-, lib
-, makeWrapper
+{
+  appimageTools,
+  fetchurl,
+  lib,
+  makeWrapper,
 }:
 
 let
   pname = "wootility";
-  version = "4.6.21";
+  version = "4.7.2";
   src = fetchurl {
     url = "https://s3.eu-west-2.amazonaws.com/wooting-update/wootility-lekker-linux-latest/wootility-lekker-${version}.AppImage";
-    sha256 = "sha256-ockTQLZWbYvsLzv+D0exD5W/yMaIdse4/JQshbkVzAU=";
+    sha256 = "sha256-2xIiSMFyJjmjBQ6GJYtc0VbZkTadV2Ov/mXQcJ8yq2U=";
   };
 in
 
@@ -19,8 +20,10 @@ appimageTools.wrapType2 {
   nativeBuildInputs = [ makeWrapper ];
 
   extraInstallCommands =
-    let contents = appimageTools.extract { inherit pname version src; };
-    in ''
+    let
+      contents = appimageTools.extract { inherit pname version src; };
+    in
+    ''
       wrapProgram $out/bin/wootility \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
 
@@ -35,16 +38,21 @@ appimageTools.wrapType2 {
     export LC_ALL=C.UTF-8
   '';
 
-  extraPkgs = pkgs: with pkgs; ([
-    xorg.libxkbfile
-  ]);
+  extraPkgs =
+    pkgs: with pkgs; ([
+      xorg.libxkbfile
+    ]);
 
   meta = {
     homepage = "https://wooting.io/wootility";
     description = "Customization and management software for Wooting keyboards";
     platforms = lib.platforms.linux;
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ davidtwco sodiboo ];
+    maintainers = with lib.maintainers; [
+      davidtwco
+      sodiboo
+      returntoreality
+    ];
     mainProgram = "wootility";
   };
 }

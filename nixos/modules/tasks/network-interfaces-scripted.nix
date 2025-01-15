@@ -192,7 +192,7 @@ let
             script =
               ''
                 state="/run/nixos/network/addresses/${i.name}"
-                mkdir -p $(dirname "$state")
+                mkdir -p "$(dirname "$state")"
 
                 ip link set dev "${i.name}" up
 
@@ -206,14 +206,14 @@ let
                     if out=$(ip addr replace "${cidr}" dev "${i.name}" 2>&1); then
                       echo "done"
                     else
-                      echo "'ip addr replace "${cidr}" dev "${i.name}"' failed: $out"
+                      echo "'ip addr replace \"${cidr}\" dev \"${i.name}\"' failed: $out"
                       exit 1
                     fi
                   ''
                 )}
 
                 state="/run/nixos/network/routes/${i.name}"
-                mkdir -p $(dirname "$state")
+                mkdir -p "$(dirname "$state")"
 
                 ${flip concatMapStrings (i.ipv4.routes ++ i.ipv6.routes) (route:
                   let
@@ -228,7 +228,7 @@ let
                      if out=$(ip route add ${type} "${cidr}" ${options} ${via} dev "${i.name}" proto static 2>&1); then
                        echo "done"
                      elif ! echo "$out" | grep "File exists" >/dev/null 2>&1; then
-                       echo "'ip route add ${type} "${cidr}" ${options} ${via} dev "${i.name}"' failed: $out"
+                       echo "'ip route add ${type} \"${cidr}\" ${options} ${via} dev \"${i.name}\"' failed: $out"
                        exit 1
                      fi
                   ''

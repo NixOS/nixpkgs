@@ -2,7 +2,7 @@
   dbus,
   openssl,
   gtk3,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   pkg-config,
   wrapGAppsHook3,
   fetchFromGitHub,
@@ -14,21 +14,22 @@
   makeDesktopItem,
   alsa-lib,
   darwin,
+  nix-update-script,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "lrcget";
-  version = "0.5.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "tranxuanthang";
     repo = "lrcget";
     rev = "${version}";
-    hash = "sha256-phsiVscbgQwMVWwVizb1n/6OlftQYWvkJ5+As5ITFrQ=";
+    hash = "sha256-XaQV3YwG15VLcgFJLGsRxCz4n50vAIYxXk09c0GKn5g=";
   };
 
   sourceRoot = "${src.name}/src-tauri";
 
-  cargoHash = "sha256-mHti3KLjKe25qPLFf0ofzcM2wU4nvhiusIC4bpUdtiY=";
+  cargoHash = "sha256-l8HMkMMXiYlmaZx+tHE0CXZa2bZakSO/uvJ1lq44Ybk=";
 
   frontend = buildNpmPackage {
     inherit version src;
@@ -41,7 +42,7 @@ rustPlatform.buildRustPackage rec {
     # To fix `npm ERR! Your cache folder contains root-owned files`
     makeCacheWritable = true;
 
-    npmDepsHash = "sha256-vjDj3b7GVZvM9ioVBp5JpRbWUa33EK6qFTDVgCZkGRA=";
+    npmDepsHash = "sha256-N48+C3NNPYg/rOpnRNmkZfZU/ZHp8imrG/tiDaMGsCE=";
 
     postBuild = ''
       cp -r dist/ $out
@@ -53,7 +54,8 @@ rustPlatform.buildRustPackage rec {
   postPatch = ''
     cp -r $frontend ./frontend
 
-    substituteInPlace tauri.conf.json --replace-fail '"distDir": "../dist"' '"distDir": "./frontend"'
+    substituteInPlace tauri.conf.json \
+      --replace-fail '"frontendDist": "../dist"' '"frontendDist": "./frontend"'
   '';
 
   nativeBuildInputs = [
@@ -70,7 +72,7 @@ rustPlatform.buildRustPackage rec {
       gtk3
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      webkitgtk_4_0
+      webkitgtk_4_1
       alsa-lib
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -102,6 +104,8 @@ rustPlatform.buildRustPackage rec {
       comment = meta.description;
     })
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Utility for mass-downloading LRC synced lyrics for your offline music library";

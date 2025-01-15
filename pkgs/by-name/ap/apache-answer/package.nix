@@ -2,7 +2,7 @@
   buildGoModule,
   lib,
   fetchFromGitHub,
-  pnpm,
+  pnpm_9,
   nodejs,
   fetchpatch,
   stdenv,
@@ -15,7 +15,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "apache";
     repo = "incubator-answer";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-nS3ZDwY221axzo1HAz369f5jWZ/mpCn4r3OPPqjiohI=";
   };
 
@@ -25,14 +25,14 @@ buildGoModule rec {
 
     sourceRoot = "${src.name}/ui";
 
-    pnpmDeps = pnpm.fetchDeps {
+    pnpmDeps = pnpm_9.fetchDeps {
       inherit src version pname;
       sourceRoot = "${src.name}/ui";
       hash = "sha256-/se6IWeHdazqS7PzOpgtT4IxCJ1WptqBzZ/BdmGb4BA=";
     };
 
     nativeBuildInputs = [
-      pnpm.configHook
+      pnpm_9.configHook
       nodejs
     ];
 

@@ -142,7 +142,7 @@ python311Packages.buildPythonApplication {
     # Remove all ImageProcessor functionality since that is closed source
     (fetchurl {
       url = "https://web.archive.org/web/20230226174550/https://sources.debian.org/data/main/h/hplip/3.22.10+dfsg0-1/debian/patches/0028-Remove-ImageProcessor-binary-installs.patch";
-      sha256 = "sha256:18njrq5wrf3fi4lnpd1jqmaqr7ph5d7jxm7f15b1wwrbxir1rmml";
+      hash = "sha256-tNYccuwrcx5WCe7ULk8r8J6MVcUytGspiW64zAvO0qI=";
     })
   ];
 
@@ -223,6 +223,16 @@ python311Packages.buildPythonApplication {
 
   enableParallelBuilding = true;
   enableParallelInstalling = false;
+
+  env = {
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=implicit-int"
+      "-Wno-error=implicit-function-declaration"
+      "-Wno-error=return-mismatch"
+      "-Wno-error=int-conversion"
+      "-Wno-error=incompatible-pointer-types"
+    ];
+  };
 
   #
   # Running `hp-diagnose_plugin -g` can be used to diagnose

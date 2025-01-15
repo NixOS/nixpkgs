@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "function-runner";
-  version = "6.4.0";
+  version = "7.0.0";
 
   src = fetchFromGitHub {
     owner = "Shopify";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-4XbwKtxgRVztCIqxj712wlZQpBkK060fltEcNuUVgos=";
+    sha256 = "sha256-ZdblRMvUeMcuW6Tji2FQe9Nfg1yRMvbeRiPABsQGBcI=";
   };
 
-  cargoHash = "sha256-Ak32+DudcKD8io89mQHnrzScH+d7MLWGFY0BcIMC3N8=";
+  cargoHash = "sha256-A30ApbAjPn7d+LzYp+Yms3nydHW9kc7bUmQ3oXMdcyw=";
 
   meta = with lib; {
     description = "CLI tool which allows you to run Wasm Functions intended for the Shopify Functions infrastructure";

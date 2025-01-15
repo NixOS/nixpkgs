@@ -7,6 +7,7 @@
   electron,
   libsecret,
   asar,
+  python3,
   glib,
   desktop-file-utils,
   callPackage,
@@ -53,6 +54,13 @@ stdenv.mkDerivation rec {
       mkdir -p $out/bin $out/share/standardnotes
       cp -R usr/share/{applications,icons} $out/share
       cp -R opt/Standard\ Notes/resources/app.asar $out/share/standardnotes/
+      cp -R opt/Standard\ Notes/resources/app.asar.unpacked $out/share/standardnotes/
+      rm $out/share/standardnotes/app.asar.unpacked/node_modules/cbor-extract/build/node_gyp_bins/python3
+      ln -s ${python3.interpreter} $out/share/standardnotes/app.asar.unpacked/node_modules/cbor-extract/build/node_gyp_bins/python3
+      ${lib.optionalString stdenv.hostPlatform.isAarch64 ''
+        rm $out/share/standardnotes/app.asar.unpacked/node_modules/microtime/build/node_gyp_bins/python3
+        ln -s ${python3.interpreter} $out/share/standardnotes/app.asar.unpacked/node_modules/microtime/build/node_gyp_bins/python3
+      ''}
       asar e $out/share/standardnotes/app.asar asar-unpacked
       find asar-unpacked -name '*.node' -exec patchelf \
         --add-rpath "${libPath}" \

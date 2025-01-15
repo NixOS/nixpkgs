@@ -20,6 +20,7 @@
   sqlite,
   gst_all_1,
   wrapGAppsHook4,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -68,6 +69,10 @@ stdenv.mkDerivation rec {
 
   # tests require network
   doCheck = false;
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Listen to your favorite podcasts";

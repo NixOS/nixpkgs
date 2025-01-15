@@ -38,5 +38,11 @@ stdenv.mkDerivation rec {
     description = "Reiser4 utilities";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
+
+    # error: initialization of
+    # 'int (*)(uint64_t *, uint64_t,  uint32_t,  int,  int)' {aka 'int (*)(long unsigned int *, long unsigned int,  unsigned int,  int,  int)'}
+    # from incompatible pointer type
+    # 'int (*)(uint64_t *, uint32_t,  uint64_t,  int,  int)' {aka 'int (*)(long unsigned int *, unsigned int,  long unsigned int,  int,  int)'}
+    broken = true;
   };
 }

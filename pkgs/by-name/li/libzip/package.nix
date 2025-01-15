@@ -19,11 +19,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libzip";
-  version = "1.11.1";
+  version = "1.11.2";
 
   src = fetchurl {
     url = "https://libzip.org/download/libzip-${finalAttrs.version}.tar.gz";
-    hash = "sha256-wOb6UqYroR79MCYikNxpcJR67zLgzClO5Q6QBc6sCSo=";
+    hash = "sha256-aypDg3AF4cI/3+5TK3j4BoY+QS0gibnEK0mrCMvNdmU=";
   };
 
   outputs = [

@@ -57,7 +57,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "msticpy";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-jYLAF+6yhZo74LYDaoA/+JTd05s6VCheYpHk6ilufBM=";
   };
 

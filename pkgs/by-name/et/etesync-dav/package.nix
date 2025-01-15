@@ -8,13 +8,13 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "etesync-dav";
-  version = "0.33.4";
+  version = "0.33.6";
 
   src = fetchFromGitHub {
     owner = "etesync";
     repo = "etesync-dav";
     tag = "v${version}";
-    hash = "sha256-g+rK762tSWPDaBsaTwpTzfK/lqVs+Z/Qrpq2HCpipQE=";
+    hash = "sha256-CkdO/63IgUOf8AC2fUDKPyax0CHWVs8AkoTaperWxFk=";
   };
 
   dependencies = with python3Packages; [

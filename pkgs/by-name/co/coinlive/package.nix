@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "mayeranalytics";
     repo = "coinlive";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-llw97jjfPsDd4nYi6lb9ug6sApPoD54WlzpJswvdbRs=";
   };
 

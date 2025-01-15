@@ -3,18 +3,19 @@
   buildPythonPackage,
   cairocffi,
   cython,
-  fetchPypi,
+  en_core_web_sm,
+  fetchFromGitHub,
   igraph,
   leidenalg,
   pandas,
   poetry-core,
+  pyarrow,
   pytestCheckHook,
   pythonOlder,
   scipy,
   setuptools,
-  spacy,
   spacy-lookups-data,
-  en_core_web_sm,
+  spacy,
   toolz,
   tqdm,
   wasabi,
@@ -22,17 +23,19 @@
 
 buildPythonPackage rec {
   pname = "textnets";
-  version = "0.9.4";
-  format = "pyproject";
+  version = "0.9.5";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-4154ytzo1QpwhKA1BkVMss9fNIkysnClW/yfSVlX33M=";
+  src = fetchFromGitHub {
+    owner = "jboynyc";
+    repo = "textnets";
+    tag = "v${version}";
+    hash = "sha256-MdKPxIshSx6U2EFGDTUS4EhoByyuVf0HKqvm9cS2KNY=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     cython
     poetry-core
     setuptools
@@ -41,13 +44,16 @@ buildPythonPackage rec {
   pythonRelaxDeps = [
     "igraph"
     "leidenalg"
+    "pyarrow"
+    "toolz"
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cairocffi
     igraph
     leidenalg
     pandas
+    pyarrow
     scipy
     spacy
     spacy-lookups-data

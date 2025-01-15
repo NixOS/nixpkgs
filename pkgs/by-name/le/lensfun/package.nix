@@ -8,6 +8,7 @@
   libpng,
   cmake,
   python3,
+  python3Packages,
 }:
 
 let
@@ -50,8 +51,8 @@ stdenv.mkDerivation {
     cmake
     pkg-config
     python3
-    python3.pkgs.setuptools
-    python3.pkgs.lxml # For the db converison
+    python3Packages.setuptools
+    python3Packages.lxml # For the db converison
   ];
 
   buildInputs = [

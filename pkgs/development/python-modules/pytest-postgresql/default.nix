@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ClearcodeHQ";
     repo = "pytest-postgresql";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-6D9QNcfq518ORQDYCH5G+LLJ7tVWPFwB6ylZR3LOZ5g=";
   };
 

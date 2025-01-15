@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "atcoder";
     repo = "ac-library";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-AIqG98c1tcxxhYcX+NSf6Rw3onw61T5NTZtqQzT9jls=";
   };
 

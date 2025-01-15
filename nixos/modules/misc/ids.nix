@@ -2,12 +2,15 @@
 # central list to prevent id collisions.
 
 # IMPORTANT!
-# We only add static uids and gids for services where it is not feasible
-# to change uids/gids on service start, for example a service with a lot of
-# files. Please also check if the service is applicable for systemd's
-# DynamicUser option and does not need a uid/gid allocation at all.
-# Systemd can also change ownership of service directories using the
-# RuntimeDirectory/StateDirectory options.
+#
+# https://github.com/NixOS/rfcs/blob/master/rfcs/0052-dynamic-ids.md
+#
+# Use of static ids is deprecated within NixOS. Dynamic allocation is
+# required, barring special circumstacnes. Please check if the service
+# is applicable for systemd's DynamicUser option and does not need a
+# uid/gid allocation at all.  Systemd can also change ownership of
+# service directories using the RuntimeDirectory/StateDirectory
+# options.
 
 { lib, ... }:
 
@@ -355,7 +358,6 @@ in
       rstudio-server = 324;
       localtimed = 325;
       automatic-timezoned = 326;
-      whisparr = 328;
 
       # When adding a uid, make sure it doesn't match an existing gid.
       #
@@ -683,8 +685,6 @@ in
       rstudio-server = 324;
       localtimed = 325;
       automatic-timezoned = 326;
-      uinput = 327;
-      whisparr = 328;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal

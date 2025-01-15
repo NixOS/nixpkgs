@@ -30,11 +30,18 @@
   useDune = true;
 
   configurePhase = ''
-    echo "no configure phase"
+    patchShebangs stdlib/dev/with-rocq-wrap.sh
   ''; # don't run Coq's configure
 
-  preBuild = ''
-    echo "(dirs stdlib)" > dune
+  buildPhase = ''
+    cd stdlib
+    dev/with-rocq-wrap.sh dune build -p coq-stdlib @install ''${enableParallelBuilding:+-j $NIX_BUILD_CORES}
+  '';
+
+  installPhase = ''
+    dev/with-rocq-wrap.sh dune install --root . coq-stdlib --prefix=$out --libdir $OCAMLFIND_DESTDIR
+    mkdir $out/lib/coq/
+    mv $OCAMLFIND_DESTDIR/coq $out/lib/coq/${coq.coq-version}
   '';
 
   meta = {

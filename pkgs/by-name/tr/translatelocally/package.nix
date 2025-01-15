@@ -88,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://translatelocally.com/";
     description = "Fast and secure translation on your local machine, powered by marian and Bergamot";
     license = licenses.mit;
-    maintainers = with maintainers; [ pacien ];
+    maintainers = with maintainers; [ euxane ];
     platforms = platforms.linux;
   };
 })

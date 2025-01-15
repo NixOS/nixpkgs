@@ -39,7 +39,9 @@ import ./make-test-python.nix (
 
     testScript = ''
       start_all()
+      node1.systemctl("start systemd-networkd-wait-online.service")
       node1.wait_for_unit("systemd-networkd-wait-online.service")
+      node2.systemctl("start systemd-networkd-wait-online.service")
       node2.wait_for_unit("systemd-networkd-wait-online.service")
 
       with subtest("test RestrictNetworkInterfaces= works"):

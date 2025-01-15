@@ -598,7 +598,7 @@ in
     ];
 
     systemd.services.NetworkManager = {
-      wantedBy = [ "network.target" ];
+      wantedBy = [ "multi-user.target" ];
       restartTriggers = [ configFile ];
 
       aliases = [ "dbus-org.freedesktop.NetworkManager.service" ];
@@ -614,7 +614,7 @@ in
     };
 
     systemd.services.NetworkManager-dispatcher = {
-      wantedBy = [ "network.target" ];
+      wantedBy = [ "multi-user.target" ];
       restartTriggers = [
         configFile
         overrideNameserversScript

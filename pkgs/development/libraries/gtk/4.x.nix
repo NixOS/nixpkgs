@@ -53,8 +53,6 @@
 , libexecinfo
 , broadwaySupport ? true
 , testers
-, apple-sdk
-, apple-sdk_10_15
 , darwinMinVersionHook
 }:
 
@@ -162,11 +160,6 @@ stdenv.mkDerivation (finalAttrs: {
     # Required for GSettings schemas at runtime.
     # Will be picked up by wrapGAppsHook4.
     gsettings-desktop-schemas
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    (darwinMinVersionHook "10.15")
-  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin
-                   && lib.versionOlder apple-sdk.version "10.15") [
-      apple-sdk_10_15
   ];
 
   mesonFlags = [

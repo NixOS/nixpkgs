@@ -2,6 +2,7 @@
   cmake,
   copyPkgconfigItems,
   fetchFromGitHub,
+  fetchpatch,
   fmt,
   git,
   gitUpdater,
@@ -29,9 +30,17 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "v-novaltd";
     repo = "LCEVCdec";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-Nf0YntB1A3AH0MTXlfUHhxYbzZqeB0EH9Fe9Xrqdsts=";
   };
+
+  patches = [
+    # fix for build with GCC 14
+    (fetchpatch {
+      url = "https://github.com/v-novaltd/LCEVCdec/commit/43ef5a17ec1ced77f834136945b3cbfe2e46b9b4.patch";
+      hash = "sha256-8OgPh6v+nmRIUB6flR93qOjvaL8fUJdqIe48ZA+8Pr0=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace cmake/tools/version_files.py \

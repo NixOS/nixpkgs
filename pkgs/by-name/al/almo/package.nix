@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "abap34";
     repo = "almo";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-Cz+XDJmdp+utzwm1c7ThTNS6kfNF6r4B16tnGQSCVMc=";
   };
 

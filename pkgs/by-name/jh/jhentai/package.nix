@@ -13,7 +13,7 @@ flutter.buildFlutterApplication rec {
   src = fetchFromGitHub {
     owner = "jiangtian616";
     repo = "JHenTai";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-LL1TyLF37NtwTRN9vhHBY+xHDg0E0ACt2ilacIKpduU=";
   };
 

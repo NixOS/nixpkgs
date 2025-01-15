@@ -43,6 +43,7 @@
           alacritty
           contour
           foot
+          ghostty
           kitty
           mtm
           rio

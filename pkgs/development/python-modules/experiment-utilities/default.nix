@@ -33,7 +33,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ChrisReinke";
     repo = "exputils";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-fo8kwxm5/oEuLXVKhBrvKg18S0Yh6SkkNRaHUGJfdw4=";
   };
 

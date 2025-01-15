@@ -4,24 +4,25 @@
   fetchFromGitHub,
   nibabel,
   pydicom,
-  pylibjpeg-libjpeg,
+  pylibjpeg,
+  pint,
   pytestCheckHook,
   pythonOlder,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "dcmstack";
-  version = "0.9";
+  version = "0.9-unstable-2024-12-05";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "moloney";
     repo = "dcmstack";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-GVzih9H2m2ZGSuZMRuaDG78b95PI3j0WQw5M3l4KNCs=";
+    rev = "68575996c8956152865e3598b15f621d7c803a96";
+    hash = "sha256-QXnBtlXkxYDJFdjiqCoEuBMcHnq+87YmHX8j5EPW7HU=";
   };
 
   build-system = [ setuptools ];
@@ -29,7 +30,8 @@ buildPythonPackage rec {
   dependencies = [
     nibabel
     pydicom
-    pylibjpeg-libjpeg
+    pylibjpeg
+    pint
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];

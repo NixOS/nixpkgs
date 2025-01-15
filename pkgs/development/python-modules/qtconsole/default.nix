@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jupyter";
     repo = "qtconsole";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-esCt7UQ0va/FJ0gdSrcc/k/FgyBVqKy7ttrN6E6mx+E=";
   };
 

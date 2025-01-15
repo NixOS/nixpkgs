@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "deibit";
     repo = "cansina";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-vDlYJSRBVFtEdE/1bN8PniFYkpggIKMcEakphHmaTos=";
   };
 

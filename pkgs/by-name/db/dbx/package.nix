@@ -18,7 +18,7 @@ python.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "databrickslabs";
     repo = "dbx";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-5qjEABNTSUD9I2uAn49HQ4n+gbAcmfnqS4Z2M9MvFXQ=";
   };
 

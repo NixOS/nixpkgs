@@ -32,7 +32,7 @@ gem 'bundler-checksum', '~> 0.1.0', path: 'vendor/gems/bundler-checksum', requir
 if next?
   gem 'rails', '~> 7.1.4', feature_category: :shared
 else
-  gem 'rails', '~> 7.0.8.4', feature_category: :shared
+  gem 'rails', '~> 7.0.8.6', feature_category: :shared
 end
 
 gem 'activerecord-gitlab', path: 'gems/activerecord-gitlab' # rubocop:todo Gemfile/MissingFeatureCategory
@@ -89,8 +89,8 @@ gem 'coverband', '6.1.4', require: false, feature_category: :shared
 gem 'devise', '~> 4.9.3', feature_category: :system_access
 gem 'devise-pbkdf2-encryptable', '~> 0.0.0', path: 'vendor/gems/devise-pbkdf2-encryptable' # rubocop:todo Gemfile/MissingFeatureCategory
 gem 'bcrypt', '~> 3.1', '>= 3.1.14' # rubocop:todo Gemfile/MissingFeatureCategory
-gem 'doorkeeper', '~> 5.6', '>= 5.6.6' # rubocop:todo Gemfile/MissingFeatureCategory
-gem 'doorkeeper-openid_connect', '~> 1.8', '>= 1.8.7' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'doorkeeper', '~> 5.8', '>= 5.8.1', feature_category: :system_access
+gem 'doorkeeper-openid_connect', '~> 1.8.10', feature_category: :system_access
 gem 'doorkeeper-device_authorization_grant', '~> 1.0.0', feature_category: :system_access
 gem 'rexml', '~> 3.3.2' # rubocop:todo Gemfile/MissingFeatureCategory
 gem 'ruby-saml', '~> 1.17.0', feature_category: :system_access
@@ -130,10 +130,10 @@ gem 'rqrcode', '~> 2.2', feature_category: :system_access
 gem 'attr_encrypted', '~> 3.2.4', path: 'vendor/gems/attr_encrypted' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # GitLab Pages
-gem 'validates_hostname', '~> 1.0.13' # rubocop:todo Gemfile/MissingFeatureCategory
-gem 'rubyzip', '~> 2.3.2', require: 'zip' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'validates_hostname', '~> 1.0.13', feature_category: :pages
+gem 'rubyzip', '~> 2.3.2', require: 'zip', feature_category: :pages
 # GitLab Pages letsencrypt support
-gem 'acme-client', '~> 2.0.18' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'acme-client', '~> 2.0.19', feature_category: :pages
 
 # Browser detection
 gem 'browser', '~> 5.3.1' # rubocop:todo Gemfile/MissingFeatureCategory
@@ -203,7 +203,7 @@ gem 'fog-local', '~> 0.8' # rubocop:todo Gemfile/MissingFeatureCategory
 # We may want to update this dependency if this is ever addressed upstream, e.g. via
 # https://github.com/aliyun/aliyun-oss-ruby-sdk/pull/93
 gem 'fog-aliyun', '~> 0.4' # rubocop:todo Gemfile/MissingFeatureCategory
-gem 'gitlab-fog-azure-rm', '~> 2.1.0', require: 'fog/azurerm', feature_category: :shared
+gem 'gitlab-fog-azure-rm', '~> 2.2.0', require: 'fog/azurerm', feature_category: :shared
 
 # for Google storage
 
@@ -234,9 +234,9 @@ gem 'seed-fu', '~> 2.3.7' # rubocop:todo Gemfile/MissingFeatureCategory
 gem 'elasticsearch-model', '~> 7.2', feature_category: :global_search
 gem 'elasticsearch-rails', '~> 7.2', require: 'elasticsearch/rails/instrumentation', feature_category: :global_search
 gem 'elasticsearch-api', '7.17.11', feature_category: :global_search
-gem 'aws-sdk-core', '~> 3.211.0' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'aws-sdk-core', '~> 3.213.0' # rubocop:todo Gemfile/MissingFeatureCategory
 gem 'aws-sdk-cloudformation', '~> 1' # rubocop:todo Gemfile/MissingFeatureCategory
-gem 'aws-sdk-s3', '~> 1.169.0' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'aws-sdk-s3', '~> 1.172.0' # rubocop:todo Gemfile/MissingFeatureCategory
 gem 'faraday-typhoeus', '~> 1.1', feature_category: :global_search
 gem 'faraday_middleware-aws-sigv4', '~> 1.0.1', feature_category: :global_search
 # Used with Elasticsearch to support http keep-alive connections
@@ -276,7 +276,7 @@ gem 'rack', '~> 2.2.9' # rubocop:todo Gemfile/MissingFeatureCategory
 gem 'rack-timeout', '~> 0.7.0', require: 'rack/timeout/base' # rubocop:todo Gemfile/MissingFeatureCategory
 
 group :puma do
-  gem 'puma', '= 6.4.3', require: false, feature_category: :shared
+  gem 'puma', '= 6.5.0', require: false, feature_category: :shared
   gem 'sd_notify', '~> 0.1.0', require: false # rubocop:todo Gemfile/MissingFeatureCategory
 end
 
@@ -292,7 +292,7 @@ gem 'gitlab-sidekiq-fetcher',
   feature_category: :scalability
 
 # Cron Parser
-gem 'fugit', '~> 1.8.1' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'fugit', '~> 1.11.1', feature_category: :continuous_integration
 
 # HTTP requests
 gem 'httparty', '~> 0.21.0' # rubocop:todo Gemfile/MissingFeatureCategory
@@ -325,7 +325,7 @@ gem 'redis-clustering', '~> 5.3.0', feature_category: :redis
 gem 'connection_pool', '~> 2.4' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # Redis session store
-gem 'redis-actionpack', '~> 5.4.0', feature_category: :redis
+gem 'redis-actionpack', '~> 5.5.0', feature_category: :redis
 
 # Discord integration
 gem 'discordrb-webhooks', '~> 3.5', require: false, feature_category: :integrations
@@ -380,7 +380,7 @@ gem 'addressable', '~> 2.8' # rubocop:todo Gemfile/MissingFeatureCategory
 gem 'gon', '~> 6.4.0' # rubocop:todo Gemfile/MissingFeatureCategory
 gem 'request_store', '~> 1.5.1' # rubocop:todo Gemfile/MissingFeatureCategory
 gem 'base32', '~> 0.3.0' # rubocop:todo Gemfile/MissingFeatureCategory
-gem 'gitlab-license', '~> 2.5', feature_category: :shared
+gem 'gitlab-license', '~> 2.6', feature_category: :shared
 
 # Protect against bruteforcing
 gem 'rack-attack', '~> 6.7.0' # rubocop:todo Gemfile/MissingFeatureCategory
@@ -392,13 +392,13 @@ gem 'sentry-sidekiq', '~> 5.21.0', feature_category: :observability
 
 # PostgreSQL query parsing
 #
-gem 'pg_query', '~> 5.1.0', feature_category: :database
+gem 'pg_query', '~> 6.0.0', feature_category: :database
 
 gem 'gitlab-schema-validation', path: 'gems/gitlab-schema-validation' # rubocop:todo Gemfile/MissingFeatureCategory
 gem 'gitlab-http', path: 'gems/gitlab-http' # rubocop:todo Gemfile/MissingFeatureCategory
 
 gem 'premailer-rails', '~> 1.12.0', feature_category: :notifications
-gem 'gitlab-labkit', '~> 0.36.0', feature_category: :shared
+gem 'gitlab-labkit', '~> 0.37.0', feature_category: :shared
 gem 'thrift', '>= 0.16.0' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # I18n
@@ -424,7 +424,7 @@ gem 'snowplow-tracker', '~> 0.8.0' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # Metrics
 gem 'webrick', '~> 1.8.1', require: false # rubocop:todo Gemfile/MissingFeatureCategory
-gem 'prometheus-client-mmap', '~> 1.1', '>= 1.1.1', require: 'prometheus/client' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'prometheus-client-mmap', '1.1.2', require: 'prometheus/client' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # Event-driven reactor for Ruby
 # Required manually in config/initializers/require_async_gem
@@ -480,7 +480,7 @@ group :development do
 
   gem 'listen', '~> 3.7' # rubocop:todo Gemfile/MissingFeatureCategory
 
-  gem 'ruby-lsp', "~> 0.19.0", require: false, feature_category: :tooling
+  gem 'ruby-lsp', "~> 0.21.0", require: false, feature_category: :tooling
 
   gem 'ruby-lsp-rails', "~> 0.3.6", feature_category: :tooling
 
@@ -509,7 +509,7 @@ group :development, :test do
   gem 'spring', '~> 4.1.0' # rubocop:todo Gemfile/MissingFeatureCategory
   gem 'spring-commands-rspec', '~> 1.0.4' # rubocop:todo Gemfile/MissingFeatureCategory
 
-  gem 'gitlab-styles', '~> 13.0.1', feature_category: :tooling
+  gem 'gitlab-styles', '~> 13.0.2', feature_category: :tooling
   gem 'haml_lint', '~> 0.58', feature_category: :tooling
 
   gem 'bundler-audit', '~> 0.9.1', require: false # rubocop:todo Gemfile/MissingFeatureCategory
@@ -592,7 +592,7 @@ group :test do
   # Moved in `test` because https://gitlab.com/gitlab-org/gitlab/-/issues/217527
   gem 'derailed_benchmarks', require: false # rubocop:todo Gemfile/MissingFeatureCategory
 
-  gem 'gitlab_quality-test_tooling', '~> 2.1.0', require: false, feature_category: :tooling
+  gem 'gitlab_quality-test_tooling', '~> 2.4.0', require: false, feature_category: :tooling
 end
 
 gem 'octokit', '~> 9.0', feature_category: :importers
@@ -632,7 +632,7 @@ gem 'spamcheck', '~> 1.3.0' # rubocop:todo Gemfile/MissingFeatureCategory
 gem 'gitaly', '~> 17.5.0.pre.rc1', feature_category: :gitaly
 
 # KAS GRPC protocol definitions
-gem 'gitlab-kas-grpc', '~> 17.5.0', feature_category: :deployment_management
+gem 'gitlab-kas-grpc', '~> 17.6.1', feature_category: :deployment_management
 
 # Lock the version before issues below are resolved:
 # https://gitlab.com/gitlab-org/gitlab/-/issues/473169#note_2028352939
@@ -685,7 +685,7 @@ gem 'lockbox', '~> 1.3.0' # rubocop:todo Gemfile/MissingFeatureCategory
 gem 'valid_email', '~> 0.1' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # JSON
-gem 'jsonb_accessor', '~> 1.3.10' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'jsonb_accessor', '~> 1.4' # rubocop:todo Gemfile/MissingFeatureCategory
 gem 'json', '~> 2.7.2', feature_category: :shared
 gem 'json_schemer', '~> 2.3.0', feature_category: :shared
 gem 'oj', '~> 3.13.21' # rubocop:todo Gemfile/MissingFeatureCategory
@@ -741,3 +741,5 @@ gem 'openbao_client', path: 'gems/openbao_client' # rubocop:todo Gemfile/Missing
 gem 'paper_trail', '~> 15.0' # rubocop:todo Gemfile/MissingFeatureCategory
 
 gem "i18n_data", "~> 0.13.1", feature_category: :system_access
+
+gem "gitlab-cloud-connector", "~> 0.2.5", require: 'cloud_connector', feature_category: :cloud_connector

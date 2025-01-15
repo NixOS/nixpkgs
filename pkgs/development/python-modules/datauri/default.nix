@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fcurella";
     repo = "python-datauri";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-9BCYC8PW44pB348kkH7aB1YqXXN1VNcBHphlN503M6g=";
   };
 

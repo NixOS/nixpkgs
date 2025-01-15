@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "kynikos";
     repo = "repocheck";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-pCz+oAfDFyDeuXumfNzLTXnftM9+IG+lZzWSKtbZ9dg=";
   };
 

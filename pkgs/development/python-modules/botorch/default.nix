@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "botorch";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-CKlerCUadObpPq4jQAiFDBOZMHZ4QccAKQz30OFe64E=";
   };
 

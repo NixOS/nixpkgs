@@ -45,7 +45,7 @@ buildPythonPackage rec {
     sqlite
   ];
 
-  pythonImportCheck = [ "cangjie" ];
+  pythonImportsCheck = [ "cangjie" ];
 
   # `buildPythonApplication` skips checkPhase
   postInstallCheck = ''

@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "EntilZha";
     repo = "PyFunctional";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-utUmHQw7Y5pQJkwuy8CbPnCrAd/esaf0n1Exr/trcRg=";
   };
 

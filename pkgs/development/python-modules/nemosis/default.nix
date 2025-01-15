@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "UNSW-CEEM";
     repo = "NEMOSIS";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-7jIPBTvL7Y3945GEpa1/DQVdbPsSxVdYoOFTIaIgPag=";
   };
 

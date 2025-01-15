@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "carletes";
     repo = "mock-ssh-server";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-yJd+WDidW5ouofytAKTlSiZhIQg2cLs8BvEp15qwtjo=";
   };
 

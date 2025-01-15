@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "johnpaulett";
     repo = "python-hl7";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-9uFdyL4+9KSWXflyOMOeUudZTv4NwYPa0ADNTmuVbqo=";
   };
 

@@ -6,7 +6,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "litestar";
-  version = "2.12.1";
+  version = "2.13.0";
   pyproject = true;
 
   build-system = with python3Packages; [
@@ -16,8 +16,8 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "litestar-org";
     repo = "litestar";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-bWo+hhSij0H9XGxpqg1/h7O8U8jjTmlaIHfCU5I4RSI=";
+    tag = "v${version}";
+    hash = "sha256-PR2DVNRtILHs7XwVi9/ZCVRJQFqfGLn1x2gpYtYjHDo=";
   };
 
   dependencies = with python3Packages; [
@@ -34,6 +34,7 @@ python3Packages.buildPythonApplication rec {
     typing-extensions
     psutil
     polyfactory
+    litestar-htmx
     trio
     cryptography
     psycopg

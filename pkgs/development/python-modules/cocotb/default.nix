@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cocotb";
     repo = "cocotb";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-7KCo7g2I1rfm8QDHRm3ZKloHwjDIICnJCF8KhaFdvqY=";
   };
 

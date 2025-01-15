@@ -130,22 +130,22 @@ in
       xfce.xfce4-taskmanager
       xfce.xfce4-terminal
     ] # TODO: NetworkManager doesn't belong here
-      ++ optional config.networking.networkmanager.enable networkmanagerapplet
-      ++ optional config.powerManagement.enable xfce.xfce4-power-manager
-      ++ optionals (config.hardware.pulseaudio.enable || config.services.pipewire.pulse.enable) [
+      ++ lib.optional config.networking.networkmanager.enable networkmanagerapplet
+      ++ lib.optional config.powerManagement.enable xfce.xfce4-power-manager
+      ++ lib.optionals (config.services.pulseaudio.enable || config.services.pipewire.pulse.enable) [
         pavucontrol
         # volume up/down keys support:
         # xfce4-pulseaudio-plugin includes all the functionalities of xfce4-volumed-pulse
         # but can only be used with xfce4-panel, so for no-desktop usage we still include
         # xfce4-volumed-pulse
         (if cfg.noDesktop then xfce.xfce4-volumed-pulse else xfce.xfce4-pulseaudio-plugin)
-      ] ++ optionals cfg.enableXfwm [
+      ] ++ lib.optionals cfg.enableXfwm [
         xfce.xfwm4
         xfce.xfwm4-themes
-      ] ++ optionals (!cfg.noDesktop) [
+      ] ++ lib.optionals (!cfg.noDesktop) [
         xfce.xfce4-panel
         xfce.xfdesktop
-      ] ++ optional cfg.enableScreensaver xfce.xfce4-screensaver) excludePackages;
+      ] ++ lib.optional cfg.enableScreensaver xfce.xfce4-screensaver) excludePackages;
 
     programs.gnupg.agent.pinentryPackage = mkDefault pkgs.pinentry-gtk2;
     programs.xfconf.enable = true;

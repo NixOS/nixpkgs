@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "cyrusimap";
     repo = "cyrus-imapd";
-    rev = "refs/tags/cyrus-imapd-${finalAttrs.version}";
+    tag = "cyrus-imapd-${finalAttrs.version}";
     hash = "sha256-dyybRqmrVX+ERGpToS5JjGC6S/B0t967dLCWfeUrLKA=";
   };
 
@@ -126,6 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
         [
           zlib
           cyrus_sasl
+          sqlite
         ]
         # Darwin doesn't have libuuid, try to build without it
         ++ lib.optional (!stdenv.hostPlatform.isDarwin) libuuid;

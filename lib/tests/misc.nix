@@ -854,6 +854,30 @@ runTests {
     ([ 1 2 3 ] == (take 4 [  1 2 3 ]))
   ];
 
+  testDrop = let inherit (lib) drop; in testAllTrue [
+    # list index -1 is out of bounds
+    # ([ 1 2 3 ] == (drop (-1) [  1 2 3 ]))
+    (drop 0 [ 1 2 3 ] == [ 1 2 3 ])
+    (drop 1 [ 1 2 3 ] == [ 2 3 ])
+    (drop 2 [ 1 2 3 ] == [ 3 ])
+    (drop 3 [ 1 2 3 ] == [ ])
+    (drop 4 [ 1 2 3 ] == [ ])
+    (drop 0 [ ] == [ ])
+    (drop 1 [ ] == [ ])
+  ];
+
+  testDropEnd = let inherit (lib) dropEnd; in testAllTrue [
+    (dropEnd 0 [ 1 2 3 ] == [ 1 2 3 ])
+    (dropEnd 1 [ 1 2 3 ] == [ 1 2 ])
+    (dropEnd 2 [ 1 2 3 ] == [ 1 ])
+    (dropEnd 3 [ 1 2 3 ] == [ ])
+    (dropEnd 4 [ 1 2 3 ] == [ ])
+    (dropEnd 0 [ ] == [ ])
+    (dropEnd 1 [ ] == [ ])
+    (dropEnd (-1) [ 1 2 3 ] == [ 1 2 3 ])
+    (dropEnd (-1) [ ] == [ ])
+  ];
+
   testListHasPrefixExample1 = {
     expr = lists.hasPrefix [ 1 2 ] [ 1 2 3 4 ];
     expected = true;
@@ -1641,7 +1665,7 @@ runTests {
     expected  = "«foo»";
   };
 
-  testToPlist = {
+  testToPlistUnescaped = {
     expr = mapAttrs (const (generators.toPlist { })) {
       value = {
         nested.values = {
@@ -1657,10 +1681,34 @@ runTests {
           emptylist = [];
           attrs = { foo = null; "foo b/ar" = "baz"; };
           emptyattrs = {};
+          "keys are not <escaped>" = "and < neither are string values";
         };
       };
     };
-    expected = { value = builtins.readFile ./test-to-plist-expected.plist; };
+    expected = { value = builtins.readFile ./test-to-plist-unescaped-expected.plist; };
+  };
+
+  testToPlistEscaped = {
+    expr = mapAttrs (const (generators.toPlist { escape = true; })) {
+      value = {
+        nested.values = {
+          int = 42;
+          float = 0.1337;
+          bool = true;
+          emptystring = "";
+          string = "fn\${o}\"r\\d";
+          newlinestring = "\n";
+          path = /. + "/foo";
+          null_ = null;
+          list = [ 3 4 "test" ];
+          emptylist = [];
+          attrs = { foo = null; "foo b/ar" = "baz"; };
+          emptyattrs = {};
+          "keys are <escaped>" = "and < so are string values";
+        };
+      };
+    };
+    expected = { value = builtins.readFile ./test-to-plist-escaped-expected.plist; };
   };
 
   testToLuaEmptyAttrSet = {

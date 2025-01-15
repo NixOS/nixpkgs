@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "nelsonjchen";
     repo = "speedtest-rs";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-1FAFYiWDD/KG/7/UTv/EW6Nj2GnU0GZFFq6ouMc0URA=";
   };
 

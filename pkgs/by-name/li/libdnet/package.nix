@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ofalk";
     repo = "libdnet";
-    rev = "refs/tags/libdnet-${finalAttrs.version}";
+    tag = "libdnet-${finalAttrs.version}";
     hash = "sha256-oPlBQB9e8vGJ/rVydMqsZqdInhrpm2sNWkDl9JkkXCI=";
   };
 
@@ -26,9 +26,11 @@ stdenv.mkDerivation (finalAttrs: {
     automake
     autoconf
     pkg-config
-    check
   ];
-  buildInputs = [ libtool ];
+  buildInputs = [
+    check
+    libtool
+  ];
 
   # .so endings are missing (quick and dirty fix)
   postInstall = ''

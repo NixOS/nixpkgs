@@ -19,6 +19,7 @@
   enableDebuginfod ? lib.meta.availableOn stdenv.hostPlatform libarchive,
   sqlite,
   curl,
+  json_c,
   libmicrohttpd,
   libarchive,
   gitUpdater,
@@ -28,11 +29,11 @@
 # TODO: Look at the hardcoded paths to kernel, modules etc.
 stdenv.mkDerivation rec {
   pname = "elfutils";
-  version = "0.191";
+  version = "0.192";
 
   src = fetchurl {
     url = "https://sourceware.org/elfutils/ftp/${version}/${pname}-${version}.tar.bz2";
-    hash = "sha256-33bbcTZtHXCDZfx6bGDKSDmPFDZ+sriVTvyIlxR62HE=";
+    hash = "sha256-YWCZvq4kq6Efm2PYbKbMjVZtlouAI5EzTJHfVOq0FrQ=";
   };
 
   patches =
@@ -109,6 +110,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals enableDebuginfod [
       sqlite
       curl
+      json_c
       libmicrohttpd
       libarchive
     ];

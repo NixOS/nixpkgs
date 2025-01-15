@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   # Maintenance repo for libtar (Arch Linux uses this)
   src = fetchgit {
     url = "git://repo.or.cz/libtar.git";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "1pjsqnqjaqgkzf1j8m6y5h76bwprffsjjj6gk8rh2fjsha14rqn9";
   };
 

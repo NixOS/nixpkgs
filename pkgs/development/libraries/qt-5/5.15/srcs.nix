@@ -5,7 +5,7 @@
 }:
 
 let
-  version = "5.15.15";
+  version = "5.15.16";
 
   mk = name: args: {
     inherit version;
@@ -67,24 +67,24 @@ lib.mapAttrs mk (lib.importJSON ./srcs-generated.json)
   };
 
   qtscript = rec {
-    version = "5.15.17";
+    version = "5.15.18";
 
     src = fetchFromGitHub {
       owner = "qt";
       repo = "qtscript";
       rev = "v${version}-lts";
-      hash = "sha256-wXEKdu2gdlkVsWr3nb/tCBwyo9H8GPHWTUele1cP0ks=";
+      hash = "sha256-tq9dH76ArLO4avFCl8h0vCWDOPyJuV+z4geikCZM7J8=";
     };
   };
 
   qtwebengine = rec {
-    version = "5.15.17";
+    version = "5.15.18";
 
     src = fetchFromGitHub {
       owner = "qt";
       repo = "qtwebengine";
       rev = "v${version}-lts";
-      hash = "sha256-1be8Y96yHYBCxQsRC/PD2X0TVWpA2/r1hvi8sBKOais=";
+      hash = "sha256-l5sE+9I5H6XLJXUoPfrq2ImTtL8TZhtun5O97AhdLO4=";
       fetchSubmodules = true;
     };
   };

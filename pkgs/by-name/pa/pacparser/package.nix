@@ -15,10 +15,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-X842+xPjM404aQJTc2JwqU4vq8kgyKhpnqVu70pNLks=";
   };
 
-  makeFlags = [ "NO_INTERNET=1" ];
+  makeFlags = [
+    "NO_INTERNET=1"
+    "PREFIX=${placeholder "out"}"
+  ];
 
   preConfigure = ''
-    export makeFlags="$makeFlags PREFIX=$out"
     patchShebangs tests/runtests.sh
     cd src
   '';

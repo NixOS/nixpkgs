@@ -181,6 +181,7 @@
         - pkgs/development/compilers/corretto/**/*
         - pkgs/development/compilers/graalvm/**/*
         - pkgs/development/compilers/openjdk/**/*
+        - pkgs/by-name/op/openjfx/**/*
         - pkgs/development/compilers/semeru-bin/**/*
         - pkgs/development/compilers/temurin-bin/**/*
         - pkgs/development/compilers/zulu/**/*

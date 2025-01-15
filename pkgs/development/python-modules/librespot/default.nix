@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kokarare1212";
     repo = "librespot-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-k9qVsxjRlUZ7vCBx00quiAR7S+YkfyoZiAKVnOOG4xM=";
   };
 

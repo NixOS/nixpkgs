@@ -4,6 +4,7 @@
   gitUpdater,
   lib,
   libiconv,
+  libintl,
   stdenv,
   testers,
   validatePkgConfig,
@@ -11,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zvbi";
-  version = "0.2.42";
+  version = "0.2.43";
 
   src = fetchFromGitHub {
     owner = "zapping-vbi";
     repo = "zvbi";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-IeSGscgz51IndX6Xbu8Kw8GcJ9MLXXFhV+4LvnVkrLE=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Pj37lJSa1spjC/xrf+yu/ecFCuajb8ingszp6ib2WC8=";
   };
 
   nativeBuildInputs = [
@@ -25,7 +26,10 @@ stdenv.mkDerivation (finalAttrs: {
     validatePkgConfig
   ];
 
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
+  propagatedBuildInputs = [
+    libiconv
+    libintl
+  ];
 
   outputs = [
     "out"
@@ -41,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Vertical Blanking Interval (VBI) utilities";
     homepage = "https://github.com/zapping-vbi/zvbi";
-    changelog = "https://github.com/zapping-vbi/zvbi/blob/v${finalAttrs.version}/ChangeLog";
+    changelog = "https://github.com/zapping-vbi/zvbi/blob/${finalAttrs.src.rev}/ChangeLog";
     pkgConfigModules = [ "zvbi-0.2" ];
     license = with lib.licenses; [
       bsd2

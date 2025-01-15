@@ -1,27 +1,36 @@
 {
   lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchPypi,
   aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  json-api-doc,
   python-dateutil,
+  setuptools-scm,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pyflick";
-  version = "0.0.2";
-  format = "setuptools";
+  version = "1.1.3";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
-  src = fetchPypi {
-    pname = "PyFlick";
-    inherit version;
-    sha256 = "705c82d8caedfff19117c8859cc1b4f56e15ab8dbc0d64d63b79d8634007897f";
+  src = fetchFromGitHub {
+    owner = "ZephireNZ";
+    repo = "PyFlick";
+    tag = "v${version}";
+    hash = "sha256-JROtklRimr6I1/6+yYaDL6rNGSj7O15nI/C9ZSj6eFo=";
   };
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [ "aiohttp" ];
+
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
+  dependencies = [
     aiohttp
+    json-api-doc
     python-dateutil
   ];
 
@@ -33,10 +42,11 @@ buildPythonPackage rec {
     "pyflick.authentication"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API For Flick Electric in New Zealand";
     homepage = "https://github.com/ZephireNZ/PyFlick";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    changelog = "https://github.com/ZephireNZ/PyFlick/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

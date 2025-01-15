@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "glue-viz";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-IKd5n8+U6+0dgV4PbLcPaormXCX4srGcXmvYSrnCt60=";
   };
 

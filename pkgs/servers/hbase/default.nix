@@ -51,13 +51,13 @@ in
     tests.standalone = nixosTests.hbase_2_4;
   };
   hbase_2_5 = common {
-    version = "2.5.9";
-    hash = "sha256-rJGeJ9zmUn28q1Sfk5cdEdEZxbAnvFjRjdcTCx9x1Qc=";
+    version = "2.5.10";
+    hash = "sha256-uYc5IZGQdLOm5gAEyyGtJtcgf+GxADEEuxjixZbG3Qs=";
     tests.standalone = nixosTests.hbase_2_5;
   };
   hbase_2_6 = common {
-    version = "2.6.0";
-    hash = "sha256-zjQ5HgUCiHmrMQuyMN4IAuLR0fVrJ+YKDUfPQb05Dp4=";
+    version = "2.6.1";
+    hash = "sha256-dubu/4Ilk82NtNEcKt8uLbcH8n81EncxOvkZOwk2kVA=";
     tests.standalone = nixosTests.hbase2;
   };
   hbase_3_0 = common {

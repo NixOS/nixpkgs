@@ -4,7 +4,7 @@
   callPackage,
   fetchFromGitHub,
   fetchPypi,
-  python312,
+  python313,
   substituteAll,
   ffmpeg-headless,
   inetutils,
@@ -43,21 +43,6 @@ let
         nativeCheckInputs = with self; [
           aresponses
         ];
-      });
-
-      aiopurpleair = super.aiopurpleair.overridePythonAttrs (oldAttrs: rec {
-        version = "2022.12.1";
-        src = fetchFromGitHub {
-          owner = "bachya";
-          repo = "aiopurpleair";
-          rev = "refs/tags/${version}";
-          hash = "sha256-YmJH4brWkTpgzyHwu9UnIWrY5qlDCmMtvF+KxQFXwfk=";
-        };
-        postPatch = ''
-          substituteInPlace pyproject.toml --replace-fail \
-            '"setuptools >= 35.0.2", "wheel >= 0.29.0", "poetry>=0.12"' \
-            '"poetry-core"'
-        '';
       });
 
       aioskybell = super.aioskybell.overridePythonAttrs (oldAttrs: rec {
@@ -115,13 +100,6 @@ let
         ];
       });
 
-      inline-snapshot = super.inline-snapshot.overridePythonAttrs (oldAttrs: {
-        disabledTests = oldAttrs.disabledTests or [ ] ++ [
-          # fixture does not expect pydantic<2
-          "test_pydantic_repr"
-        ];
-      });
-
       openhomedevice = super.openhomedevice.overridePythonAttrs (oldAttrs: rec {
         version = "2.2";
         src = fetchFromGitHub {
@@ -163,15 +141,6 @@ let
         doCheck = false; # no tests
       });
 
-      plugwise = super.plugwise.overridePythonAttrs (oldAttrs: rec {
-        version = "1.4.4";
-        src = fetchFromGitHub {
-          inherit (oldAttrs.src) owner repo;
-          rev = "refs/tags/v${version}";
-          hash = "sha256-dlDytOSp/7npanxXH5uaDv29AP21UciEzIzDlMf6jf8=";
-        };
-      });
-
       # Pinned due to API changes in 0.1.0
       poolsense = super.poolsense.overridePythonAttrs (oldAttrs: rec {
         version = "0.0.8";
@@ -192,18 +161,6 @@ let
           sha256 = "00ly4injmgrj34p0lyx7cz2crgnfcijmzc0540gf7hpwha0marf6";
         };
       });
-
-      pyaussiebb = super.pyaussiebb.overridePythonAttrs (oldAttrs: rec {
-        version = "0.0.18";
-        src = fetchFromGitHub {
-          owner = "yaleman";
-          repo = "aussiebb";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-tEdddVsLFCHRvyLCctDakioiop2xWaJlfGE16P1ukHc=";
-        };
-      });
-
-      pydantic = super.pydantic_1;
 
       pydexcom = super.pydexcom.overridePythonAttrs (oldAttrs: rec {
         version = "0.2.3";
@@ -237,15 +194,6 @@ let
         };
       });
 
-      pymodbus = super.pymodbus.overridePythonAttrs (oldAttrs: rec {
-        version = "3.6.9";
-        src = fetchFromGitHub {
-          inherit (oldAttrs.src) owner repo;
-          rev = "refs/tags/v${version}";
-          hash = "sha256-ScqxDO0hif8p3C6+vvm7FgSEQjCXBwUPOc7Y/3OfkoI=";
-        };
-      });
-
       pyoctoprintapi = super.pyoctoprintapi.overridePythonAttrs (oldAttrs: rec {
         version = "0.1.12";
         src = fetchFromGitHub {
@@ -266,16 +214,6 @@ let
         };
       });
 
-      # newer versions require pydantic>=2
-      python-on-whales = super.python-on-whales.overridePythonAttrs (oldAttrs: rec {
-        version = "0.72.0";
-        src = fetchFromGitHub {
-          inherit (oldAttrs.src) owner repo;
-          rev = "refs/tags/v${version}";
-          hash = "sha256-oKI7zXfoUVmJXLQvyoDEmoCL4AwaYgaFcLKNlFFrC9o=";
-        };
-      });
-
       pytradfri = super.pytradfri.overridePythonAttrs (oldAttrs: rec {
         version = "9.0.1";
         src = fetchFromGitHub {
@@ -285,45 +223,6 @@ let
           hash = "sha256-xOdTzG0bF5p1QpkXv2btwrVugQRjSwdAj8bXcC0IoQg=";
         };
       });
-
-      # newer sigstore version transitivevly require pydantic>=2
-      sigstore = super.sigstore.overridePythonAttrs (oldAttrs: rec {
-        version = "1.1.2";
-        src = fetchFromGitHub {
-          owner = "sigstore";
-          repo = "sigstore-python";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-QqY5GOBS75OkbSaF5Ua5jnJAhsYfVRuWLUoWDxX8Ino=";
-        };
-        dependencies = with self; [
-          appdirs
-          cryptography
-          id
-          pydantic
-          pyjwt
-          pyopenssl
-          requests
-          securesystemslib
-          sigstore-protobuf-specs
-          tuf
-        ];
-        doCheck = false; # pytest too new
-      });
-
-      sigstore-protobuf-specs = super.sigstore-protobuf-specs.overridePythonAttrs {
-        version = "0.1.0";
-        src = fetchPypi {
-          pname = "sigstore-protobuf-specs";
-          version = "0.1.0";
-          hash = "sha256-YistIxYToo7T5mYKzYeBhnW06DSG9JoPDBmKxUdfy4E=";
-        };
-        nativeBuildInputs = with self; [
-          flit-core
-        ];
-        pythonRelaxDeps = [
-          "betterproto"
-        ];
-      };
 
       slack-sdk = super.slack-sdk.overridePythonAttrs (oldAttrs: rec {
         version = "2.5.0";
@@ -339,31 +238,6 @@ let
         '';
         pythonImportsCheck = [ "slack" ];
         doCheck = false; # Tests changed a lot for > 3
-      });
-
-      # pinned for sigstore
-      tuf = super.tuf.overridePythonAttrs rec {
-        version = "2.1.0";
-        src = fetchFromGitHub {
-          owner = "theupdateframework";
-          repo = "python-tuf";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-MdPctAZuKn/YAwpMJ5gWU7PXJD3iK7bYprLXV52wNQQ=";
-        };
-        disabledTests = [
-          "test_sign_failures"
-        ];
-      };
-
-      voip-utils = super.voip-utils.overridePythonAttrs (oldAttrs: rec {
-        version = "0.1.0";
-        src = fetchFromGitHub {
-          inherit (oldAttrs.src) owner repo;
-          rev = "refs/tags/v${version}";
-          hash = "sha256-PG4L6KphH9JIZO76cCN8eClFE2CneEIExlXS+x79k3U=";
-        };
-        # tests were not implemented until version 0.2.0
-        doCheck = false;
       });
 
       vulcan-api = super.vulcan-api.overridePythonAttrs (oldAttrs: rec {
@@ -386,36 +260,6 @@ let
         };
       });
 
-      xbox-webapi = super.xbox-webapi.overridePythonAttrs (oldAttrs: rec {
-        version = "2.0.11";
-        src = fetchFromGitHub {
-          owner = "OpenXbox";
-          repo = "xbox-webapi-python";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-fzMB+I8+ZTJUiZovcuj+d5GdHY9BJyJd6j92EhJeIFI=";
-        };
-        postPatch = ''
-          sed -i '/pytest-runner/d' setup.py
-        '';
-        propagatedBuildInputs = with self; [
-          aiohttp
-          appdirs
-          ms-cv
-          pydantic
-          ecdsa
-        ];
-        nativeCheckInputs = with self; [
-          aresponses
-        ];
-      });
-
-      youtubeaio = super.youtubeaio.overridePythonAttrs (old: {
-        pytestFlagsArray = [
-          # fails with pydantic v1
-          "--deselect=tests/test_video.py::test_fetch_video"
-        ];
-      });
-
       # internal python packages only consumed by home-assistant itself
       home-assistant-frontend = self.callPackage ./frontend.nix { };
       home-assistant-intents = self.callPackage ./intents.nix { };
@@ -426,7 +270,7 @@ let
     })
   ];
 
-  python = python312.override {
+  python = python313.override {
     self = python;
     packageOverrides = lib.composeManyExtensions (defaultOverrides ++ [ packageOverrides ]);
   };
@@ -445,7 +289,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2024.11.3";
+  hassVersion = "2025.1.2";
 
 in
 python.pkgs.buildPythonApplication rec {
@@ -466,13 +310,13 @@ python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-9b4HPSCPYUUwKxn0JBw5uN6nI97jvgqBHFRUNhDue/k=";
+    hash = "sha256-dEjTSByjv8+YwAcztFwCvQp+GWcS0QZxP1norxd8MmY=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-W7Z6C3kMyEIkY/3zQHm1OMMN7Tuj3ThsubLo6KjVotw=";
+    hash = "sha256-AO2n3t2QobFuN2IrlYcwBA4LRxsMr7B/T0dc2IWZrfg=";
   };
 
   build-system = with python.pkgs; [
@@ -536,10 +380,12 @@ python.pkgs.buildPythonApplication rec {
     async-interrupt
     atomicwrites-homeassistant
     attrs
+    audioop-lts
     awesomeversion
     bcrypt
     certifi
     ciso8601
+    cronsim
     cryptography
     fnv-hash-fast
     hass-nabucasa
@@ -558,7 +404,10 @@ python.pkgs.buildPythonApplication rec {
     python-slugify
     pyyaml
     requests
+    securetar
     sqlalchemy
+    standard-aifc
+    standard-telnetlib
     typing-extensions
     ulid-transform
     urllib3

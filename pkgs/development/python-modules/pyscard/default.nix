@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "LudovicRousseau";
     repo = "pyscard";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-yZeP4Tcxnwb2My+XOsMtj+H8mNIf6JYf5tpOVUYjev0=";
   };
 

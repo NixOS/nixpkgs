@@ -1,20 +1,32 @@
 {
   lib,
   rustPlatform,
+  pkg-config,
+  udev,
+  lvm2,
   fetchFromGitHub,
   nixosTests,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "thin-provisioning-tools";
-  version = "1.0.12";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "jthornber";
     repo = "thin-provisioning-tools";
     rev = "v${version}";
-    hash = "sha256-wliyTWo3iOonqf4UW50V5co0RQlc75VwLofF9FHV2LI=";
+    hash = "sha256-gpUiLUdg+EpVkJzDg43gI5oXhy611QwndwZZVVgg4Lg=";
   };
+
+  nativeBuildInputs = [
+    pkg-config
+    rustPlatform.bindgenHook
+  ];
+  buildInputs = [
+    udev
+    lvm2
+  ];
 
   cargoLock = {
     lockFile = ./Cargo.lock;

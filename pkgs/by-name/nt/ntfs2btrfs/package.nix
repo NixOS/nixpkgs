@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "maharmstone";
     repo = "ntfs2btrfs";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-sZ8AWREe2jasy3hqLTjaLcOMCNsrDjz2eIuknA2TsEs=";
   };
 

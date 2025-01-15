@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kubernetes-client";
     repo = "python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-zOooibXkk0iA6IYJViz+SIMgHwG0fr4WR3ZjhgIeUjE=";
   };
 

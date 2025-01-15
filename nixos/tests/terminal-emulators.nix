@@ -44,6 +44,8 @@ let
 
     germinal.pkg = p: p.germinal;
 
+    ghostty.pkg = p: p.ghostty;
+
     gnome-terminal.pkg = p: p.gnome-terminal;
 
     guake.pkg = p: p.guake;

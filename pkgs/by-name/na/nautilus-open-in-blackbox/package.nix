@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ppvan";
     repo = "nautilus-open-in-blackbox";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-5rvh3qNalpjamcBVQrnAW6GxhwPPlRxP5h045YDqvrM=";
   };
 

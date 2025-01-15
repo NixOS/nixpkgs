@@ -462,6 +462,20 @@ in
         llvmPackages = pkgs.llvmPackages_15;
       };
       ghc910 = compiler.ghc9101;
+      ghc9121 = callPackage ../development/compilers/ghc/9.12.1.nix {
+        bootPkgs =
+          # No suitable bindist packaged yet
+          bb.packages.ghc9101;
+        inherit (buildPackages.python3Packages) sphinx;
+        # Need to use apple's patched xattr until
+        # https://github.com/xattr/xattr/issues/44 and
+        # https://github.com/xattr/xattr/issues/55 are solved.
+        inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
+        # 2024-12-21: Support range >= 13 && < 20
+        buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_19;
+        llvmPackages = pkgs.llvmPackages_19;
+      };
+      ghc912 = compiler.ghc9121;
       ghcHEAD = callPackage ../development/compilers/ghc/head.nix {
         bootPkgs =
           # No suitable bindist packaged yet
@@ -648,6 +662,12 @@ in
         compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.10.x.nix { };
       };
       ghc910 = packages.ghc9101;
+      ghc9121 = callPackage ../development/haskell-modules {
+        buildHaskellPackages = bh.packages.ghc9121;
+        ghc = bh.compiler.ghc9121;
+        compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.12.x.nix { };
+      };
+      ghc912 = packages.ghc9121;
       ghcHEAD = callPackage ../development/haskell-modules {
         buildHaskellPackages = bh.packages.ghcHEAD;
         ghc = bh.compiler.ghcHEAD;

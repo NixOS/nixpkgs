@@ -36,9 +36,6 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "numpy>=2" "numpy"
-
     substituteInPlace meson.build --replace-fail \
       "run_command('sklearn/_build_utils/version.py', check: true).stdout().strip()," \
       "'${version}',"

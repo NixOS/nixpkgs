@@ -20,7 +20,7 @@
   libnotify,
   libpulseaudio,
   libxkbcommon,
-  mesa,
+  libgbm,
   nss,
   udev,
   xorg,
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     libnotify
     libpulseaudio
     libxkbcommon
-    mesa
+    libgbm
     nss
     xorg.libX11
     xorg.libXScrnSaver

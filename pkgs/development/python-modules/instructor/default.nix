@@ -36,7 +36,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jxnl";
     repo = "instructor";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-iPTZFXypcpO+PkcJHTdpkpiIU589XPcy+aNO/JqASCQ=";
   };
 
@@ -94,7 +94,7 @@ buildPythonPackage rec {
     broken = lib.versionOlder pydantic.version "2"; # ImportError: cannot import name 'TypeAdapter' from 'pydantic'
     description = "Structured outputs for llm";
     homepage = "https://github.com/jxnl/instructor";
-    changelog = "https://github.com/jxnl/instructor/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
+    changelog = "https://github.com/jxnl/instructor/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mic92 ];
     mainProgram = "instructor";

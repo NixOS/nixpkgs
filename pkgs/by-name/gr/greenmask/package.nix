@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "GreenmaskIO";
     repo = "greenmask";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-gSwXwU0YF+0mqRvq+6D+qosLGUNb6/RIRavZpI1BSQM=";
   };
 

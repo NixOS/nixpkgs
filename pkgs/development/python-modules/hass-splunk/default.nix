@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Bre77";
     repo = "hass_splunk";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-bgF6gHAA57MiWdmpwilGa+l05/ETKdpyi2naVagkRlc=";
   };
 

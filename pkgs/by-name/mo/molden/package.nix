@@ -27,6 +27,9 @@ stdenv.mkDerivation rec {
 
   patches = [ ./dont_register_file_types.patch ];
 
+  # fix build with GCC 14
+  env.NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration -Wno-implicit-int -Wno-return-mismatch";
+
   postPatch = ''
     substituteInPlace ./makefile --replace '-L/usr/X11R6/lib'  "" \
                                  --replace '-I/usr/X11R6/include' "" \
@@ -37,7 +40,7 @@ stdenv.mkDerivation rec {
 
     substituteInPlace ambfor/makefile --replace 'FFLAGS =' 'FFLAGS = -fallow-argument-mismatch'
 
-    sed -in '/^# DO NOT DELETE THIS LINE/q;' surf/Makefile
+    sed -i '/^# DO NOT DELETE THIS LINE/q;' surf/Makefile
   '';
 
   preInstall = ''

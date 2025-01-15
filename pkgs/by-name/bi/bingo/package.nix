@@ -21,11 +21,11 @@ buildGoModule rec {
 
   ldflags = [ "-s" "-w" ];
 
-  meta = with lib; {
+  meta = {
     description = "Like `go get` but for Go tools! CI Automating versioning of Go binaries in a nested, isolated Go modules";
     mainProgram = "bingo";
     homepage = "https://github.com/bwplotka/bingo";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ aaronjheng ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ aaronjheng ];
   };
 }

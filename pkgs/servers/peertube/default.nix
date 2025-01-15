@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Chocobozzz";
     repo = "PeerTube";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-kPZcCJtnoqE1g0fAuM98IhuDy1E9QBDkFNWrWIpFIDA=";
   };
 

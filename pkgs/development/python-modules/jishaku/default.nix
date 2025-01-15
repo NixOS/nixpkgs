@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Gorialis";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-BWnuk6h80cKwRECyTuRvnYnTC78219oraeTNoqWDd1c=";
   };
 

@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mxmlnkn";
     repo = "ratarmount";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-2LPGKdofx2ID8BU0dZhGiZ3tUkd+niEVGvTSBFX4InU=";
     fetchSubmodules = true;
   };

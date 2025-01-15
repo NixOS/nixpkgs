@@ -13,7 +13,6 @@
   freetype,
   alsa-lib,
   libjack2,
-  apple-sdk_11,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -23,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "asb2m10";
     repo = "dexed";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-mXr1KGzA+DF2dEgAJE4lpnefPqO8pqfnKa43vyjSJgU=";
   };
@@ -49,18 +48,16 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [
-      libX11
-      libXext
-      libXcursor
-      libXinerama
-      libXrandr
-      freetype
-      alsa-lib
-      libjack2
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_11 ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    libX11
+    libXext
+    libXcursor
+    libXinerama
+    libXrandr
+    freetype
+    alsa-lib
+    libjack2
+  ];
 
   # JUCE insists on only dlopen'ing these
   NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isLinux (toString [

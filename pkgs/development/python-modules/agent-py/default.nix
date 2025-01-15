@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ispysoftware";
     repo = "agent-py";
-    rev = "refs/tags/agent-py.${version}";
+    tag = "agent-py.${version}";
     hash = "sha256-PP4gQ3AFYLJPUt9jhhiV9HkfBhIzd+JIsGpgK6FNmaE=";
   };
 

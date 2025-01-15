@@ -21,7 +21,7 @@ python3Packages.buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hydrusnetwork";
     repo = "hydrus";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-i9XeZJgB0oDimoc0D5UTYSBs9C55QXC6HIxv2gP8vWY=";
   };
 

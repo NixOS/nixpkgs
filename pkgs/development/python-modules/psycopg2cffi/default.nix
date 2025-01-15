@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "chtd";
     repo = "psycopg2cffi";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-9r5MYxw9cvdbLVj8StmMmn0AKQepOpCc7TIBGXZGWe4=";
   };
 

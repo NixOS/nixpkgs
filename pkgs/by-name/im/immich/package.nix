@@ -5,7 +5,7 @@
   fetchFromGitHub,
   fetchpatch2,
   python3,
-  nodejs,
+  nodejs_20,
   node-gyp,
   runCommand,
   nixosTests,
@@ -27,6 +27,7 @@
   vips,
 }:
 let
+  nodejs = nodejs_20;
   buildNpmPackage' = buildNpmPackage.override { inherit nodejs; };
   sources = lib.importJSON ./sources.json;
   inherit (sources) version;
@@ -186,7 +187,7 @@ buildNpmPackage' {
     mkdir node_modules
     ln -s ${node-addon-api} node_modules/node-addon-api
 
-    ${lib.getExe nodejs} install/check
+    node install/check
 
     rm -r node_modules
 

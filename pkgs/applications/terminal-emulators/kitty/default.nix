@@ -35,14 +35,14 @@
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.38.0";
+  version = "0.38.1";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-XURoUYo0Nejcfi49s9AlyoG5fpE0/mjMke2UWG8lUiA=";
+    tag = "v${version}";
+    hash = "sha256-0M4Bvhh3j9vPedE/d+8zaiZdET4mXcrSNUgLllhaPJw=";
   };
 
   goModules = (buildGo123Module {
@@ -146,7 +146,6 @@ buildPythonApplication rec {
     mkdir ./fonts/
     cp "${nerd-fonts.symbols-only}/share/fonts/truetype/NerdFonts/Symbols/SymbolsNerdFontMono-Regular.ttf" ./fonts/
 
-    ${ lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) "export MACOSX_DEPLOYMENT_TARGET=11" }
     ${if stdenv.hostPlatform.isDarwin then ''
       ${python.pythonOnBuildForHost.interpreter} setup.py build ${darwinOptions}
       make docs

@@ -39,7 +39,6 @@
   glib-networking,
   gobject-introspection,
   gspell,
-  appstream-glib,
   libstemmer,
   libytnef,
   libhandy,
@@ -60,6 +59,7 @@ stdenv.mkDerivation rec {
     gettext
     gobject-introspection
     itstool
+    libxml2 # for xmllint for xml-stripblanks preprocessing
     meson
     ninja
     pkg-config
@@ -70,7 +70,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     adwaita-icon-theme
-    appstream-glib
     enchant2
     folks
     gcr
@@ -111,12 +110,15 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  # NOTE: Remove `build-auxyaml_to_json.py` when no longer needed, see:
-  # https://gitlab.gnome.org/GNOME/geary/commit/f7f72143e0f00ca5e0e6a798691805c53976ae31#0cc1139e3347f573ae1feee5b73dbc8a8a21fcfa
   postPatch = ''
     chmod +x build-aux/git_version.py
 
     patchShebangs build-aux/git_version.py
+
+    # Only used for generating .pot file
+    # https://gitlab.gnome.org/GNOME/geary/-/merge_requests/856
+    substituteInPlace meson.build \
+      --replace-fail "appstream_glib = dependency('appstream-glib', version: '>=0.7.10')" ""
 
     chmod +x desktop/geary-attach
   '';

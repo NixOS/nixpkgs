@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "muicss";
     repo = "starlette-wtf";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-88zU2NAsdty2OhHauwQ5+6LazuRDYPoqN9IIipI1t2Q=";
   };
 

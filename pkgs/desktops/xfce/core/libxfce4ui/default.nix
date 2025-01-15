@@ -2,6 +2,7 @@
   mkXfceDerivation,
   lib,
   gobject-introspection,
+  perl,
   vala,
   libICE,
   libSM,
@@ -23,6 +24,7 @@ mkXfceDerivation {
 
   nativeBuildInputs = [
     gobject-introspection
+    perl
     vala
   ];
 

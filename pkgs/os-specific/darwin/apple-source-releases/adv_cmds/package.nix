@@ -1,7 +1,6 @@
 {
   lib,
   apple-sdk,
-  apple-sdk_11,
   bison,
   flex,
   libxo,
@@ -12,9 +11,9 @@
 }:
 
 let
-  Libc = apple-sdk_11.sourceRelease "Libc";
-  libplatform = apple-sdk_11.sourceRelease "libplatform";
-  xnu = apple-sdk_11.sourceRelease "xnu";
+  Libc = apple-sdk.sourceRelease "Libc";
+  libplatform = apple-sdk.sourceRelease "libplatform";
+  xnu = apple-sdk.sourceRelease "xnu";
 
   privateHeaders = stdenvNoCC.mkDerivation {
     name = "adv_cmds-deps-private-headers";
@@ -41,11 +40,6 @@ mkAppleDerivation {
 
   xcodeHash = "sha256-2p/JyMPw6acHphvzkaJXPXGwxCUEoxryCejww5kPHvQ=";
 
-  patches = [
-    # Use older API when running on systems prior to 11.3.
-    ./patches/0001-Fall-back-to-task_read_pid-on-older-systems.patch
-  ];
-
   postPatch = ''
     # Meson generators require using @BASENAME@ in the output.
     substituteInPlace mklocale/lex.l \
@@ -67,8 +61,6 @@ mkAppleDerivation {
   env.NIX_CFLAGS_COMPILE = "-I${privateHeaders}/include";
 
   buildInputs = [
-    # Use the 11.3 SDK because CMake depends on adv_cmds.ps, so it can’t simply be omitted when using an older SDK.
-    apple-sdk_11
     libxo
     ncurses
   ];
@@ -77,12 +69,6 @@ mkAppleDerivation {
     bison
     flex
     pkg-config
-  ];
-
-  mesonFlags = [
-    # Even though adv_cmds is built with a newer SDK, the default SDK is still the deployment target.
-    # Don’t build packages that use newer APIs unnecessarily.
-    (lib.mesonOption "sdk_version" (lib.getVersion apple-sdk))
   ];
 
   postInstall = ''

@@ -15,7 +15,7 @@ maven.buildMavenPackage rec {
   src = fetchFromGitHub {
     owner = "schemaspy";
     repo = "schemaspy";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-yEqhLpGrJ4hki8o+u+bigVXv+3YvEb8TvHDTYsEl8z4=";
   };
 

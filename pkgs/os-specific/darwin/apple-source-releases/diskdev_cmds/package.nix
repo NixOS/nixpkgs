@@ -1,7 +1,6 @@
 {
   lib,
   apple-sdk,
-  apple-sdk_11,
   libutil,
   mkAppleDerivation,
   removefile,
@@ -9,8 +8,8 @@
 }:
 
 let
-  Libc = apple-sdk_11.sourceRelease "Libc";
-  xnu = apple-sdk_11.sourceRelease "xnu";
+  Libc = apple-sdk.sourceRelease "Libc";
+  xnu = apple-sdk.sourceRelease "xnu";
 
   privateHeaders = stdenvNoCC.mkDerivation {
     name = "diskdev_cmds-deps-private-headers";
@@ -55,13 +54,6 @@ mkAppleDerivation {
     ''
       substituteInPlace mount.tproj/mount.c \
         --replace-fail 'sysctlbyname ("vfs.generic.apfs.rosp", &is_rosp, &rospsize, NULL, NULL);' 'sysctlbyname ("vfs.generic.apfs.rosp", &is_rosp, &rospsize, NULL, 0);'
-    ''
-    # The first reserved uint32 is used for the extended flags on 11.0 and newer, and
-    # only use sysexit_np when the version is 10.14 or newer.
-    + lib.optionalString (lib.versionOlder (lib.getVersion apple-sdk) "11.0") ''
-      substituteInPlace mount.tproj/mount.c \
-        --replace-fail 'sfp->f_flags_ext' 'sfp->f_reserved[0]' \
-        --replace-fail 'sysexit == -1' '__builtin_available(macOS 10.14, *) && sysexit == -1'
     '';
 
   env.NIX_CFLAGS_COMPILE = "-I${privateHeaders}/include";

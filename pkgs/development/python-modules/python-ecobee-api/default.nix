@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nkgilley";
     repo = "python-ecobee-api";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-ffCd109hweeKJn+nnsVo/kDVg3bam/WONZWJOA2EibE=";
   };
 

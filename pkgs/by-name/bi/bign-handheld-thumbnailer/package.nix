@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "MateusRodCosta";
     repo = "bign-handheld-thumbnailer";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-rRKMIkeTBb16GF8DgQ36Vdx/1I6zuzpuL/jusFJ0OZw=";
   };
 

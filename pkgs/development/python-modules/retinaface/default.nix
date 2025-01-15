@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "serengil";
     repo = "retinaface";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-0s1CSGlK2bF1F2V/IuG2ZqD7CkNfHGvp1M5C3zDnuKs=";
   };
 

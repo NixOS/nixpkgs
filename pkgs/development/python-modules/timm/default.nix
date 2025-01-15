@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "timm";
-  version = "1.0.12";
+  version = "1.0.13";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "pytorch-image-models";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Csw9Al9AHZbqfadch6JXSsjKfEj0KcLKxFbteDkcyng=";
+    tag = "v${version}";
+    hash = "sha256-VRQerCaTiOvS3Mm+Fksua7KUhNcH1Zxc2+4jaSbVj+c=";
   };
 
   build-system = [ pdm-backend ];

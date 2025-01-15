@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     (fetchurl {
-      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/media-sound/bitmeter/files/bitmeter-1.2-fix-build-system.patch";
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/media-sound/bitmeter/files/bitmeter-1.2-fix-build-system.patch?id=dec60bb6900d6ebdaaa6aa1dcb845b30b739f9b5";
       sha256 = "021mz6933iw7mpk6b9cbjr8naj6smbq1hwqjszlyx72qbwrrid7k";
     })
   ];

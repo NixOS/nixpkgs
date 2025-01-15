@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "j3ssie";
     repo = "metabigor";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-JFt9PC6VHWTYuaIWh2t2BiGFm1tGwZDdhhdp2xtmXSI=";
   };
 

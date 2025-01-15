@@ -15,13 +15,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mdcat";
-  version = "2.7.0";
+  version = "2.7.1";
 
   src = fetchFromGitHub {
     owner = "swsnr";
     repo = "mdcat";
     rev = "mdcat-${version}";
-    hash = "sha256-gZwTvtZ5au8i0bZIMJa/mLWZRSGbik9nHlNEHMkqpa0=";
+    hash = "sha256-j6BFXx5cyjE3+fo1gGKlqpsxrm3i9HfQ9tJGNNjjLwo=";
   };
 
   nativeBuildInputs = [
@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage rec {
       SystemConfiguration
     ];
 
-  cargoHash = "sha256-GcJGO5WJpyVHqcoiQUN+oRybzllbGsiiq5Yjo6Q5rOw=";
+  cargoHash = "sha256-TvGGu9mSKT5y4b2JuoUUxsK8J7W/bMa9MOe1y0Idy7g=";
 
   nativeCheckInputs = [ ansi2html ];
   # Skip tests that use the network and that include files.

@@ -43,6 +43,10 @@ stdenv.mkDerivation rec {
     "--with-c-client-target=slx"
   ];
 
+  # Fixes https://github.com/NixOS/nixpkgs/issues/372699
+  # See also https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1074804
+  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-incompatible-pointer-types" ];
+
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = with lib; {

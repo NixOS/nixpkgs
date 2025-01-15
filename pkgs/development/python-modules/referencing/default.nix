@@ -23,7 +23,7 @@ let
     src = fetchFromGitHub {
       owner = "python-jsonschema";
       repo = "referencing";
-      rev = "refs/tags/v${version}";
+      tag = "v${version}";
       fetchSubmodules = true;
       hash = "sha256-Ix0cpdOs7CtersdfW9daF/+BEJaV/na1WRTlYywUJV8=";
     };

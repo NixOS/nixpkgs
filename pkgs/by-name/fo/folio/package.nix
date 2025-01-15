@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "toolstack";
     repo = "Folio";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-A0vUM6oIchpC/1NEjPmZkT2/f/CmEWmPsMHQrGkDKXQ=";
   };
 

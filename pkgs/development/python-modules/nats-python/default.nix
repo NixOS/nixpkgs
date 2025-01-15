@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Gr1N";
     repo = "nats-python";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-7/AGQfPEuSeoRGUXeyDZNbLhapfQa7vhrSPHRruf+sg=";
   };
 

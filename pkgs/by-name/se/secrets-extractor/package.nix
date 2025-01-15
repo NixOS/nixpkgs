@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "Xenios91";
     repo = "Secrets-Extractor";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-xtxhatxNK9bRnT1R/5BJkTcubO58sg5ssrziLYvw6mQ=";
   };
 

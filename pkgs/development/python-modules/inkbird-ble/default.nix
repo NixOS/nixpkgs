@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "inkbird-ble";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-cUqU4XaY7CORhzy0AGjXI5c5ka+PnF4cHdyopyEBcLo=";
   };
 

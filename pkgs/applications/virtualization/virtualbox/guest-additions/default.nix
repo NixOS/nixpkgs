@@ -8,13 +8,11 @@
   zlib,
   patchelf,
   makeWrapper,
+  wayland,
+  libX11,
 }:
 let
   virtualBoxNixGuestAdditionsBuilder = callPackage ./builder.nix { };
-
-  # Forced to 1.18; vboxvideo doesn't seem to provide any newer ABI,
-  # and nixpkgs doesn't support older ABIs anymore.
-  xserverABI = "118";
 
   # Specifies how to patch binaries to make sure that libraries loaded using
   # dlopen are found. We grep binaries for specific library names and patch
@@ -31,6 +29,18 @@ let
     {
       name = "libXrandr.so";
       pkg = xorg.libXrandr;
+    }
+    {
+      name = "libwayland-client.so";
+      pkg = wayland;
+    }
+    {
+      name = "libX11.so";
+      pkg = libX11;
+    }
+    {
+      name = "libXt.so";
+      pkg = xorg.libXt;
     }
   ];
 in

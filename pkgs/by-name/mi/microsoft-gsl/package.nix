@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [ gtest ];
 
-  # error: unsafe buffer access
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-unsafe-buffer-usage";
+  # negate the `-Werror` flag as Microsoft doesn't build with clang
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error";
 
   patches = [
     # nvcc doesn't recognize the "gsl" attribute namespace (microsoft/onnxruntime#13573)

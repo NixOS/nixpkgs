@@ -7,23 +7,19 @@
   libosmocore,
   libosmoabis,
   libosmo-netif,
-  libosmo-sccp,
+  libosmo-sigtran,
   osmo-mgw,
 }:
 
-let
-  inherit (stdenv.hostPlatform) isLinux;
-in
-
 stdenv.mkDerivation rec {
   pname = "osmo-bsc";
-  version = "1.12.2";
+  version = "1.12.4";
 
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "osmo-bsc";
     rev = version;
-    hash = "sha256-V1URXatXYaItv1X5VAuWpaeTNJjK6qb9DqmecDm2PQ0=";
+    hash = "sha256-46riudURcWwm9HuC8t0A2WWnkmSL9yvZFKRgVMxNzrc=";
   };
 
   postPatch = ''
@@ -39,7 +35,7 @@ stdenv.mkDerivation rec {
     libosmocore
     libosmoabis
     libosmo-netif
-    libosmo-sccp
+    libosmo-sigtran
     osmo-mgw
   ];
 
@@ -49,7 +45,7 @@ stdenv.mkDerivation rec {
     description = "GSM Base Station Controller";
     homepage = "https://projects.osmocom.org/projects/osmobsc";
     license = lib.licenses.agpl3Plus;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.markuskowa ];
     platforms = lib.platforms.linux;
     mainProgram = "osmo-bsc";
   };

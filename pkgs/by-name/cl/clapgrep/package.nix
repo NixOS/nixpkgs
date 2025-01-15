@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "luleyleo";
     repo = "clapgrep";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-MYV8MrCIpa8eqp2iCLTNLZrVQOyGsMEGqlnEF43fyls=";
   };
 

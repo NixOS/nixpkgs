@@ -39,7 +39,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/siedentop/git-quickfix";
     license = licenses.gpl3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ cafkafk ];
+    maintainers = with maintainers; [
+      cafkafk
+      matthiasbeyer
+    ];
     mainProgram = "git-quickfix";
   };
 }

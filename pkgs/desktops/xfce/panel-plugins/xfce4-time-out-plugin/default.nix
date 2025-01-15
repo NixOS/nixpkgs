@@ -12,10 +12,10 @@
 mkXfceDerivation {
   category = "panel-plugins";
   pname = "xfce4-time-out-plugin";
-  version = "1.1.3";
+  version = "1.1.4";
   rev-prefix = "xfce4-time-out-plugin-";
   odd-unstable = false;
-  sha256 = "sha256-sm6y3t4nngZDg4Q8S3SVkNR++XkCKysQePN6Qei1OY8=";
+  sha256 = "sha256-FYcmeOBSBxcPSm/4j294DSi8XZBTKHvAwTBdj0yCY7o=";
 
   buildInputs = [
     glib

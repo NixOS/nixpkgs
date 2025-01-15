@@ -4,6 +4,7 @@
   fetchFromGitHub,
   poetry-core,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
 }:
@@ -18,19 +19,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "aionut";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-DCWfa5YfrB7MTf78AeSHDgiZzLNXoiNLnty9a+Sr9tQ=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail " --cov=aionut --cov-report=term-missing:skip-covered" ""
-  '';
 
   build-system = [ poetry-core ];
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
   ];
 

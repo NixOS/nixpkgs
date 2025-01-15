@@ -2,48 +2,57 @@
   lib,
   fetchFromGitHub,
   buildGoModule,
-  testers,
+  versionCheckHook,
   nix-update-script,
-  pinact,
 }:
 
 let
   pname = "pinact";
-  version = "1.0.0";
+  version = "1.1.2";
   src = fetchFromGitHub {
     owner = "suzuki-shunsuke";
     repo = "pinact";
-    rev = "v${version}";
-    hash = "sha256-fOmQDfqG1aWzpL80Nc8JA6HWQR+z9mhqtwU4rC2g2Gg=";
+    tag = "v${version}";
+    hash = "sha256-QBWxs0YRTWItJ1aTG33Z6vK8/vaZBTuZAVPYqD6dIvE=";
   };
+  mainProgram = "pinact";
 in
 buildGoModule {
   inherit pname version src;
 
-  vendorHash = "sha256-AFlkzs5mL/x9CwfF2apLcQbiu60GD33oFH6lQDHAL1M=";
+  vendorHash = "sha256-Y44nJv0eWM0xO+lB56OBcEe/CCipPj8Ptg7WuJ2Vszo=";
+
+  env.CGO_ENABLED = 0;
 
   doCheck = true;
 
-  passthru = {
-    tests.version = testers.testVersion {
-      package = pinact;
-    };
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgram = "${placeholder "out"}/bin/${mainProgram}";
+  versionCheckProgramArg = [ "version" ];
 
+  passthru = {
     updateScript = nix-update-script { };
   };
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version} -X main.commit=${src.rev}"
+    "-X main.version=${version} -X main.commit=v${version}"
   ];
 
-  meta = with lib; {
+  subPackages = [
+    "cmd/pinact"
+  ];
+
+  meta = {
+    inherit mainProgram;
     description = "Pin GitHub Actions versions";
     homepage = "https://github.com/suzuki-shunsuke/pinact";
-    changelog = "https://github.com/suzuki-shunsuke/pinact/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = [ maintainers.kachick ];
-    mainProgram = "pinact";
+    changelog = "https://github.com/suzuki-shunsuke/pinact/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kachick ];
   };
 }

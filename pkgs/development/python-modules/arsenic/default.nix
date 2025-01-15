@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "HENNGE";
     repo = "arsenic";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-fsLo22PR9WdX2FazPgr8B8dFq6EM1LLTpRFGEm/ymCE=";
   };
 

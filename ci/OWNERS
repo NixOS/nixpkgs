@@ -14,12 +14,13 @@
 # Processing of this file is implemented in workflows/codeowners-v2.yml
 
 # CI
-/.github/workflows @NixOS/Security @Mic92 @zowoq @infinisil @azuwis
+/.github/*_TEMPLATE*                    @SigmaSquadron
+/.github/workflows                      @NixOS/Security @Mic92 @zowoq @infinisil @azuwis
 /.github/workflows/check-nix-format.yml @infinisil
-/.github/workflows/nixpkgs-vet.yml @infinisil @philiptaron
-/.github/workflows/codeowners-v2.yml @infinisil
-/ci @infinisil @philiptaron @NixOS/Security
-/ci/OWNERS @infinisil @philiptaron
+/.github/workflows/codeowners-v2.yml    @infinisil
+/.github/workflows/nixpkgs-vet.yml      @infinisil @philiptaron
+/ci                                     @infinisil @philiptaron @NixOS/Security
+/ci/OWNERS                              @infinisil @philiptaron
 
 # Development support
 /.editorconfig @Mic92 @zowoq
@@ -102,6 +103,7 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 /nixos/default.nix                                    @infinisil
 /nixos/lib/from-env.nix                               @infinisil
 /nixos/lib/eval-config.nix                            @infinisil
+/nixos/modules/misc/ids.nix                           @R-VdP
 /nixos/modules/system/activation/bootspec.nix         @grahamc @cole-h @raitobezarius
 /nixos/modules/system/activation/bootspec.cue         @grahamc @cole-h @raitobezarius
 
@@ -134,14 +136,16 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 /nixos/modules/installer/sd-card/
 
 # Amazon
-/nixos/modules/virtualisation/amazon-init.nix     @arianvp
-/nixos/modules/virtualisation/ec2-data.nix        @arianvp
-/nixos/modules/virtualisation/amazon-options.nix  @arianvp
-/nixos/modules/virtualisation/amazon-image.nix    @arianvp
-/nixos/maintainers/scripts/ec2/                   @arianvp
-/nixos/modules/services/misc/amazon-ssm-agent.nix @arianvp
-/nixos/tests/amazon-ssm-agent.nix                 @arianvp
-/nixos/modules/system/boot/grow-partition.nix     @arianvp
+/nixos/modules/virtualisation/amazon-init.nix                  @arianvp
+/nixos/modules/virtualisation/ec2-data.nix                     @arianvp
+/nixos/modules/virtualisation/amazon-options.nix               @arianvp
+/nixos/modules/virtualisation/amazon-image.nix                 @arianvp
+/nixos/maintainers/scripts/ec2/                                @arianvp
+/nixos/modules/services/misc/amazon-ssm-agent.nix              @arianvp
+/nixos/tests/amazon-ssm-agent.nix                              @arianvp
+/nixos/modules/system/boot/grow-partition.nix                  @arianvp
+/nixos/modules/services/monitoring/amazon-cloudwatch-agent.nix @philipmw
+/nixos/tests/amazon-cloudwatch-agent.nix                       @philipmw
 
 # nixos-rebuild-ng
 /pkgs/by-name/ni/nixos-rebuild-ng                 @thiagokokada
@@ -247,6 +251,9 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /nixos/modules/services/databases/postgresql.md @NixOS/postgres
 /nixos/modules/services/databases/postgresql.nix @NixOS/postgres
 /nixos/tests/postgresql @NixOS/postgres
+
+# MySQL/MariaDB and related stuff
+/nixos/modules/services/backup/mysql-backup.nix @6543
 
 # Hardened profile & related modules
 /nixos/modules/profiles/hardened.nix                       @joachifm
@@ -387,12 +394,6 @@ pkgs/by-name/fo/forgejo/                @adamcstephens @bendlas @emilylange
 /pkgs/build-support/ocaml           @ulrikstrid
 /pkgs/development/compilers/ocaml   @ulrikstrid
 /pkgs/development/ocaml-modules     @ulrikstrid
-
-# ZFS
-pkgs/os-specific/linux/zfs/2_1.nix        @raitobezarius
-pkgs/os-specific/linux/zfs/generic.nix    @raitobezarius
-nixos/modules/tasks/filesystems/zfs.nix   @raitobezarius
-nixos/tests/zfs.nix                       @raitobezarius
 
 # Zig
 /pkgs/development/compilers/zig @figsoda

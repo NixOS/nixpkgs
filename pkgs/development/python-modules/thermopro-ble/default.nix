@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bluetooth-devices";
     repo = "thermopro-ble";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-xaRbp9XLCDGJ0NE0TzJygn2OzqvSFszs97vGHawCkzU=";
   };
 

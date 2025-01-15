@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "geopython";
     repo = "OWSLib";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-q2O9FNBszNWfL1ekcohSd1RbdLFu8c+zxi+UFeQ7/mk=";
   };
 

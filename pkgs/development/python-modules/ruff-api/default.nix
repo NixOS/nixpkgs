@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "amyreese";
     repo = "ruff-api";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-1XULyxu3XujhAcFnvqI5zMiXOc0axx1LS4EevjhoGDc=";
   };
 

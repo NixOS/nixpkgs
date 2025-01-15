@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fwestenberg";
     repo = "stookwijzer";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-zAlHB4ZAgbUBDBQbnoSXwB+iOKeWKtkwBbA4AAyNv00=";
   };
 

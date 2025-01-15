@@ -66,7 +66,6 @@ stdenv.mkDerivation (
         lgpl3Plus
       ];
       maintainers = with maintainers; [
-        milahu
         nickcao
       ];
       platforms = platforms.unix;

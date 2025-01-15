@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "ko-build";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-MeFoy2WoPsJIgUhpzt/4sEP6J9lM4nsSAK2VZiTS7jo=";
   };
 

@@ -50,13 +50,19 @@ mkDerivation rec {
     substituteInPlace fmit.pro --replace '$$FMITVERSIONGITPRO' '${version}'
   '';
 
-  preConfigure = ''
-    qmakeFlags="$qmakeFlags \
-      CONFIG+=${lib.optionalString alsaSupport "acs_alsa"} \
-      CONFIG+=${lib.optionalString jackSupport "acs_jack"} \
-      CONFIG+=${lib.optionalString portaudioSupport "acs_portaudio"} \
-      PREFIXSHORTCUT=$out"
-  '';
+  qmakeFlags =
+    [
+      "PREFIXSHORTCUT=${placeholder "out"}"
+    ]
+    ++ lib.optionals alsaSupport [
+      "CONFIG+=acs_alsa"
+    ]
+    ++ lib.optionals jackSupport [
+      "CONFIG+=acs_jack"
+    ]
+    ++ lib.optionals portaudioSupport [
+      "CONFIG+=acs_portaudio"
+    ];
 
   meta = with lib; {
     description = "Free Musical Instrument Tuner";

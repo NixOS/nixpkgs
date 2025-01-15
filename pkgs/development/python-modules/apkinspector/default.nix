@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "erev0s";
     repo = "apkInspector";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-trEbm9EFZLoFBWKKOlbI305r+8GdSmU5zWPnNhb5qzQ=";
   };
 

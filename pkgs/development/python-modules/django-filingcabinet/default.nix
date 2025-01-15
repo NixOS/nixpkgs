@@ -28,7 +28,7 @@
   poppler_utils,
   pytest-playwright,
   playwright-driver,
-  pnpm,
+  pnpm_9,
   nodejs,
 }:
 
@@ -55,7 +55,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     nodejs
-    pnpm.configHook
+    pnpm_9.configHook
   ];
 
   dependencies = [
@@ -85,7 +85,7 @@ buildPythonPackage rec {
     #annotate = [ fcdocs-annotate ];
   };
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version src;
     hash = "sha256-32kOhB2+37DD4hKXKep08iDxhXpasKPfcv9fkwISxeU=";
   };
@@ -120,7 +120,7 @@ buildPythonPackage rec {
     export PLAYWRIGHT_BROWSERS_PATH="${playwright-driver.browsers}"
   '';
 
-  pythonImportCheck = [ "filingcabinet" ];
+  pythonImportsCheck = [ "filingcabinet" ];
 
   meta = {
     description = "Django app that manages documents with pages, annotations and collections";

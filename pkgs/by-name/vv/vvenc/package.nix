@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vvenc";
-  version = "1.12.1";
+  version = "1.13.0";
 
   outputs = [
     "out"
@@ -21,8 +21,10 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "fraunhoferhhi";
     repo = "vvenc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Et/JmF/2hh6A1EsOzvgzruMN47rd5cPgRke3uPvz298=";
+    hash = "sha256-9fWKunafTniBsY9hK09+xYwvB7IgGPhZmgqauPHgB/g=";
   };
+
+  patches = [ ./unset-darwin-cmake-flags.patch ];
 
   env.NIX_CFLAGS_COMPILE = toString (
     lib.optionals stdenv.cc.isGNU [
@@ -39,7 +41,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   passthru = {
-    updateScript = gitUpdater { rev-prefix = "v"; };
+    updateScript = gitUpdater {
+      rev-prefix = "v";
+      ignoredVersions = "rc";
+    };
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 

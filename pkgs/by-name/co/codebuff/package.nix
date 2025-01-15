@@ -25,7 +25,7 @@ buildNpmPackage rec {
 
   meta = {
     description = "Use natural language to edit your codebase and run commands from your terminal faster";
-    homepage = "https://codebuff.ai";
+    homepage = "https://www.codebuff.com/";
     downloadPage = "https://www.npmjs.com/package/codebuff";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.malo ];

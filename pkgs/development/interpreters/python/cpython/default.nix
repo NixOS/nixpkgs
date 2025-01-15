@@ -25,7 +25,6 @@
 
 # platform-specific dependencies
 , bash
-, apple-sdk_11
 , darwin
 , windows
 
@@ -178,9 +177,6 @@ let
     bluez
   ] ++ optionals enableFramework [
     darwin.apple_sdk.frameworks.Cocoa
-  ] ++ optionals stdenv.hostPlatform.isDarwin [
-    # Work around for ld64 crashes on x86_64-darwin. Remove once 11.0 becomes the default.
-    apple-sdk_11
   ] ++ optionals stdenv.hostPlatform.isMinGW [
     windows.dlfcn
     windows.mingw_w64_pthreads
@@ -298,6 +294,8 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
   ] ++ optionals (pythonOlder "3.12") [
     # https://github.com/python/cpython/issues/90656
     ./loongarch-support.patch
+  ] ++ optionals (pythonAtLeast "3.12") [
+    ./3.12/CVE-2024-12254.patch
   ] ++ optionals (pythonAtLeast "3.11" && pythonOlder "3.13") [
     # backport fix for https://github.com/python/cpython/issues/95855
     ./platform-triplet-detection.patch
@@ -436,6 +434,8 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
   '' + optionalString (stdenv.hostPlatform.isDarwin && x11Support && pythonAtLeast "3.11") ''
     export TCLTK_LIBS="-L${tcl}/lib -L${tk}/lib -l${tcl.libPrefix} -l${tk.libPrefix}"
     export TCLTK_CFLAGS="-I${tcl}/include -I${tk}/include"
+  '' + optionalString stdenv.hostPlatform.isWindows ''
+    export NIX_CFLAGS_COMPILE+=" -Wno-error=incompatible-pointer-types"
   '' + optionalString stdenv.hostPlatform.isMusl ''
     export NIX_CFLAGS_COMPILE+=" -DTHREAD_STACK_SIZE=0x100000"
   '' +
@@ -667,5 +667,7 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.linux ++ platforms.darwin ++ platforms.windows ++ platforms.freebsd;
     mainProgram = executable;
     maintainers = lib.teams.python.members;
+    # mingw patches only apply to Python 3.11 currently
+    broken = (lib.versions.minor version) != "11" && stdenv.hostPlatform.isWindows;
   };
 })

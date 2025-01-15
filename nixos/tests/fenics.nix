@@ -30,7 +30,7 @@ import ./make-test-python.nix (
   {
     name = "fenics";
     meta = {
-      maintainers = with pkgs.lib.maintainers; [ knedlsepp ];
+      maintainers = with pkgs.lib.maintainers; [ ];
     };
 
     nodes = {

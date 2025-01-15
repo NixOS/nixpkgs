@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "neurodata";
     repo = "hyppo";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-bYxqYSOOifQE3gbw8vNk/A13D5TPx7ERSgFvRHMXKGM=";
   };
 

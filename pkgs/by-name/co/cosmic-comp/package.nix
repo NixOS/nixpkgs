@@ -9,7 +9,7 @@
   libinput,
   libglvnd,
   libxkbcommon,
-  mesa,
+  libgbm,
   seatd,
   udev,
   xwayland,
@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage rec {
     libglvnd
     libinput
     libxkbcommon
-    mesa
+    libgbm
     pixman
     seatd
     udev

@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "YoSmart-Inc";
     repo = "yolink-api";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-VJqKORyAlTBIRsHaeUrLDuvVAU/EX/Zzh8u7xxmD2IE=";
   };
 

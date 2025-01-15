@@ -21,7 +21,6 @@
   falcon,
   fastapi,
   flask,
-  flask-sockets,
   gunicorn,
   moto,
   pyramid,
@@ -47,7 +46,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "slackapi";
     repo = "bolt-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-4zEg60f3wtLnzrZU4mZMJmF6hO0EiHDTx6iw4WDsx0U=";
   };
 
@@ -73,7 +72,6 @@ buildPythonPackage rec {
       falcon
       fastapi
       flask
-      flask-sockets
       gunicorn
       moto
       pyramid

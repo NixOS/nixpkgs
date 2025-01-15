@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "p0dalirius";
     repo = "ApacheTomcatScanner";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-mzpJq0er13wcekTac3j4cnRokHh6Q0seM8vwZsM2tN8=";
   };
 

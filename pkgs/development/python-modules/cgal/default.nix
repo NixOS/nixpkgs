@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "CGAL";
     repo = "cgal-swig-bindings";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-MnUsl4ozMamKcQ13TV6mtoG7VKq8BuiDSIVq1RPn2rs=";
   };
 

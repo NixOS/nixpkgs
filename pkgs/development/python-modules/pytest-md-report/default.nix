@@ -14,15 +14,15 @@
 
 buildPythonPackage rec {
   pname = "pytest-md-report";
-  version = "0.6.2";
+  version = "0.6.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "pytest_md_report";
     inherit version;
-    hash = "sha256-XpbGVevJtcPHt4v3xTgsH2gFbpaQRDAlJ5D4c33lzpk=";
+    hash = "sha256-fpHtDAQhsUk8ESbvmWvbUhiCqWogy9Wyzwo4lFSVqFI=";
   };
 
   build-system = [

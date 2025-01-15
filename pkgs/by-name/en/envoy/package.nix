@@ -4,6 +4,7 @@
   bazel-gazelle,
   buildBazelPackage,
   fetchFromGitHub,
+  applyPatches,
   stdenv,
   cacert,
   cargo,
@@ -29,32 +30,66 @@ let
     # However, the version string is more useful for end-users.
     # These are contained in a attrset of their own to make it obvious that
     # people should update both.
-    version = "1.32.0";
-    rev = "86dc7ef91ca15fb4957a74bd599397413fc26a24";
-    hash = "sha256-Wcbt62RfaNcTntmPjaAM0cP3LJangm4ht7Q0bzEpu5A=";
+    version = "1.32.3";
+    rev = "58bd599ebd5918d4d005de60954fcd2cb00abd95";
+    hash = "sha256-5HpxcsAPoyVOJ3Aem+ZjSLa8Zu6s76iCMiWJbp8RjHc=";
   };
 
   # these need to be updated for any changes to fetchAttrs
   depsHash =
     {
-      x86_64-linux = "sha256-LkDNPFT7UUCsGPG1dMnwzdIw0lzc5+3JYDoblF5oZVk=";
-      aarch64-linux = "sha256-DkibjmY1YND9Q2aQ41bhNdch0SKM5ghY2mjYSQfV30M=";
+      x86_64-linux = "sha256-YFXNatolLM9DdwkMnc9SWsa6Z6/aGzqLmo/zKE7OFy0=";
+      aarch64-linux = "sha256-AjG1OBjPjiSwWCmIJgHevSQHx8+rzRgmLsw3JwwD0hk=";
     }
     .${stdenv.system} or (throw "unsupported system ${stdenv.system}");
+
 in
 buildBazelPackage rec {
   pname = "envoy";
   inherit (srcVer) version;
   bazel = bazel_6;
-  src = fetchFromGitHub {
-    owner = "envoyproxy";
-    repo = "envoy";
-    inherit (srcVer) hash rev;
 
-    postFetch = ''
-      chmod -R +w $out
-      rm $out/.bazelversion
-      echo ${srcVer.rev} > $out/SOURCE_VERSION
+  src = applyPatches {
+    src = fetchFromGitHub {
+      owner = "envoyproxy";
+      repo = "envoy";
+      inherit (srcVer) hash rev;
+    };
+    patches = [
+      # use system Python, not bazel-fetched binary Python
+      ./0001-nixpkgs-use-system-Python.patch
+
+      # use system Go, not bazel-fetched binary Go
+      ./0002-nixpkgs-use-system-Go.patch
+
+      # use system C/C++ tools
+      ./0003-nixpkgs-use-system-C-C-toolchains.patch
+
+      # patch boringssl to work with GCC 14
+      # vendored patch from https://boringssl.googlesource.com/boringssl/+/c70190368c7040c37c1d655f0690bcde2b109a0d
+      ./0004-nixpkgs-patch-boringssl-for-gcc14.patch
+
+      # update rust rules to work with rustc v1.83
+      # cherry-pick of https://github.com/envoyproxy/envoy/commit/019f589da2cc8da7673edd077478a100b4d99436
+      # drop with v1.33.x
+      ./0005-deps-Bump-rules_rust-0.54.1-37056.patch
+
+      # patch gcc flags to work with GCC 14
+      # (silences erroneus -Werror=maybe-uninitialized and others)
+      # cherry-pick of https://github.com/envoyproxy/envoy/commit/448e4e14f4f188687580362a861ae4a0dbb5b1fb
+      # drop with v1.33.x
+      ./0006-gcc-warnings.patch
+
+      # Remove "-Werror" from protobuf build
+      # This is fixed in protobuf v28 and later:
+      # https://github.com/protocolbuffers/protobuf/commit/f5a1b178ad52c3e64da40caceaa4ca9e51045cb4
+      # drop with v1.33.x
+      ./0007-protobuf-remove-Werror.patch
+    ];
+    postPatch = ''
+      chmod -R +w .
+      rm ./.bazelversion
+      echo ${srcVer.rev} > ./SOURCE_VERSION
     '';
   };
 
@@ -79,17 +114,6 @@ buildBazelPackage rec {
     cat bazel/nix/rules_rust_extra.patch bazel/rules_rust.patch > bazel/nix/rules_rust.patch
     mv bazel/nix/rules_rust.patch bazel/rules_rust.patch
   '';
-
-  patches = [
-    # use system Python, not bazel-fetched binary Python
-    ./0001-nixpkgs-use-system-Python.patch
-
-    # use system Go, not bazel-fetched binary Go
-    ./0002-nixpkgs-use-system-Go.patch
-
-    # use system C/C++ tools
-    ./0003-nixpkgs-use-system-C-C-toolchains.patch
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -194,6 +218,8 @@ buildBazelPackage rec {
       "--noexperimental_strict_action_env"
       "--cxxopt=-Wno-error"
       "--linkopt=-Wl,-z,noexecstack"
+      "--config=gcc"
+      "--verbose_failures"
 
       # Force use of system Java.
       "--extra_toolchains=@local_jdk//:all"

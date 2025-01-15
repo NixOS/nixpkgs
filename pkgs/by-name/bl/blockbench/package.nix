@@ -17,7 +17,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "JannisX11";
     repo = "blockbench";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-rUMzn+3j+RL8DY8euS6a4MmdoIAVLXxXu9wvKNmK/TU=";
   };
 

@@ -19,7 +19,7 @@
   binutils,
   withQt ? false,
   qtbase ? null,
-  libqt5pas ? null,
+  libqtpas ? null,
   wrapQtAppsHook ? null,
 }:
 
@@ -27,7 +27,7 @@
 #  1. the build date is embedded in the binary through `$I %DATE%` - we should dump that
 
 let
-  version = "3.2-0";
+  version = "3.6-0";
 
   # as of 2.0.10 a suffix is being added. That may or may not disappear and then
   # come back, so just leave this here.
@@ -43,6 +43,7 @@ let
     )
   );
 
+  qtVersion = lib.versions.major qtbase.version;
 in
 stdenv.mkDerivation rec {
   pname = "lazarus-${LCL_PLATFORM}";
@@ -50,7 +51,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/lazarus/Lazarus%20Zip%20_%20GZip/Lazarus%20${majorMinorPatch version}/lazarus-${version}.tar.gz";
-    sha256 = "69f43f0a10b9e09deea5f35094c73b84464b82d3f40d8a2fcfcb5a5ab03c6edf";
+    hash = "sha256-5luQNn9jvxfLe/NfW+acnvcEyklOkdjGfQcuM3P6sIU=";
   };
 
   postPatch = ''
@@ -73,7 +74,7 @@ stdenv.mkDerivation rec {
       gdk-pixbuf
     ]
     ++ lib.optionals withQt [
-      libqt5pas
+      libqtpas
       qtbase
     ];
 
@@ -94,7 +95,7 @@ stdenv.mkDerivation rec {
     "bigide"
   ];
 
-  LCL_PLATFORM = if withQt then "qt5" else "gtk2";
+  LCL_PLATFORM = if withQt then "qt${qtVersion}" else "gtk2";
 
   NIX_LDFLAGS = lib.concatStringsSep " " (
     [
@@ -113,8 +114,8 @@ stdenv.mkDerivation rec {
       "-lpango-1.0"
     ]
     ++ lib.optionals withQt [
-      "-L${lib.getLib libqt5pas}/lib"
-      "-lQt5Pas"
+      "-L${lib.getLib libqtpas}/lib"
+      "-lQt${qtVersion}Pas"
     ]
   );
 

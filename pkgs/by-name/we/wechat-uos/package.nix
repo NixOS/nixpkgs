@@ -16,7 +16,7 @@
   xcbutilimage,
   xcbutilkeysyms,
   xcbutilrenderutil,
-  mesa,
+  libgbm,
   alsa-lib,
   wayland,
   atk,
@@ -122,7 +122,7 @@ let
     libxml2
     pango
     libdrm
-    mesa
+    libgbm
     vulkan-loader
     systemd
     wayland

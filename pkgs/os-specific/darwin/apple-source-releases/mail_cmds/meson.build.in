@@ -9,28 +9,10 @@ project('mail_cmds', 'c', version : '@version@')
 cc = meson.get_compiler('c')
 
 
-# Compatibility tests
-utimensat_test = '''
-#include <stdlib.h>
-#include <fcntl.h>
-#include <sys/stat.h>
-int main(int argc, char* argv[]) {
-    return utimensat(AT_FDCWD, NULL, NULL, 0);
-}
-'''
-
-has_utimensat = cc.compiles(utimensat_test, name : 'supports utimensat')
-utimensat_c_args = has_utimensat ? [ ] : [ '-include', 'time_compat.h', '-I' + meson.source_root() + '/compat' ]
-utimensat_sources = has_utimensat ? [ ] : [ 'compat/time_compat.c' ]
-
-compat_link_args = not has_utimensat ? [ '-Wl,-undefined,dynamic_lookup' ] : [ ]
-
 # Binaries
 executable(
     'mail',
-    c_args : utimensat_c_args,
     install : true,
-    link_args : compat_link_args,
     sources : [
         'mail/cmd1.c',
         'mail/cmd2.c',
@@ -55,7 +37,6 @@ executable(
         'mail/v7.local.c',
         'mail/vars.c',
         'mail/version.c',
-        utimensat_sources,
     ],
 )
 install_man('mail/mail.1')

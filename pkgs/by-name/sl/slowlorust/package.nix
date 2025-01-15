@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "MJVL";
     repo = "slowlorust";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-c4NWkQ/QvlUo1YoV2s7rWB6wQskAP5Qp1WVM23wvV3c=";
   };
 

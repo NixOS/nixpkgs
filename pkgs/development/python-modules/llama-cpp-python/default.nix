@@ -13,9 +13,6 @@
   pyproject-metadata,
   scikit-build-core,
 
-  # buildInputs
-  apple-sdk_11,
-
   # dependencies
   diskcache,
   jinja2,
@@ -70,18 +67,14 @@ buildPythonPackage rec {
     scikit-build-core
   ];
 
-  buildInputs =
-    lib.optionals cudaSupport (
-      with cudaPackages;
-      [
-        cuda_cudart # cuda_runtime.h
-        cuda_cccl # <thrust/*>
-        libcublas # cublas_v2.h
-      ]
-    )
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_11
-    ];
+  buildInputs = lib.optionals cudaSupport (
+    with cudaPackages;
+    [
+      cuda_cudart # cuda_runtime.h
+      cuda_cccl # <thrust/*>
+      libcublas # cublas_v2.h
+    ]
+  );
 
   dependencies = [
     diskcache

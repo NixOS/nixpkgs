@@ -28,13 +28,13 @@ let
 in
 buildPythonPackage rec {
   pname = "mlx";
-  version = "0.18.0";
+  version = "0.21.1";
 
   src = fetchFromGitHub {
     owner = "ml-explore";
     repo = "mlx";
     rev = "refs/tags/v${version}";
-    hash = "sha256-eFKjCrutqrmhZKzRrLq5nYl0ieqLvoXpbnTxA1NEhWo=";
+    hash = "sha256-wxv9bA9e8VyFv/FMh63sUTTNgkXHGQJNQhLuVynczZA=";
   };
 
   pyproject = true;
@@ -83,6 +83,9 @@ buildPythonPackage rec {
     changelog = "https://github.com/ml-explore/mlx/releases/tag/v${version}";
     license = licenses.mit;
     platforms = [ "aarch64-darwin" ];
-    maintainers = with maintainers; [ viraptor ];
+    maintainers = with maintainers; [
+      viraptor
+      Gabriella439
+    ];
   };
 }

@@ -26,7 +26,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "RogerCrocker";
     repo = "BadaBib";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-8lpkmQCVh94+qhFJijAIVyYeJRFz2u/OYR1C5E+gtOE=";
   };
 

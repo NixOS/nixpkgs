@@ -2,20 +2,24 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   fetchpatch,
-  pytest-xdist,
-  pytestCheckHook,
+
+  # build-system
   setuptools,
+
+  # dependencies
   absl-py,
-  cvxpy,
   jax,
-  jaxlib,
   matplotlib,
   numpy,
-  optax,
   scipy,
+
+  # tests
+  cvxpy,
+  optax,
+  pytest-xdist,
+  pytestCheckHook,
   scikit-learn,
 }:
 
@@ -24,12 +28,10 @@ buildPythonPackage rec {
   version = "0.8.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "google";
     repo = "jaxopt";
-    rev = "refs/tags/jaxopt-v${version}";
+    tag = "jaxopt-v${version}";
     hash = "sha256-T/BHSnuk3IRuLkBj3Hvb/tFIb7Au25jjQtvwL28OU1U=";
   };
 
@@ -48,17 +50,16 @@ buildPythonPackage rec {
   dependencies = [
     absl-py
     jax
-    jaxlib
     matplotlib
     numpy
     scipy
   ];
 
   nativeCheckInputs = [
-    pytest-xdist
-    pytestCheckHook
     cvxpy
     optax
+    pytest-xdist
+    pytestCheckHook
     scikit-learn
   ];
 
@@ -74,12 +75,19 @@ buildPythonPackage rec {
     [
       # https://github.com/google/jaxopt/issues/592
       "test_solve_sparse"
+
+      # AssertionError: Not equal to tolerance rtol=1e-06, atol=1e-06
+      # https://github.com/google/jaxopt/issues/618
+      "test_binary_logit_log_likelihood"
     ]
     ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
       # https://github.com/google/jaxopt/issues/577
       "test_binary_logit_log_likelihood"
       "test_solve_sparse"
       "test_logreg_with_intercept_manual_loop3"
+
+      # Flaky (AssertionError)
+      "test_inv_hessian_product_pytree3"
 
       # https://github.com/google/jaxopt/issues/593
       # Makes the test suite crash
@@ -94,6 +102,7 @@ buildPythonPackage rec {
       # AssertionError (flaky numerical tests)
       "test_logreg_with_intercept_manual_loop3"
       "test_binary_logit_log_likelihood"
+      "test_inv_hessian_product_pytree3"
     ];
 
   meta = {

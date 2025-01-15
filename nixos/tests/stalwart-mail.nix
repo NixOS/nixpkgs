@@ -123,7 +123,7 @@ import ./make-test-python.nix (
     meta = {
       maintainers = with lib.maintainers; [
         happysalada
-        pacien
+        euxane
         onny
       ];
     };

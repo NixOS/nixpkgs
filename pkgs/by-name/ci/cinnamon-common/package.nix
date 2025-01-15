@@ -24,7 +24,7 @@
   libstartup_notification,
   libXtst,
   libXdamage,
-  mesa,
+  libgbm,
   muffin,
   networkmanager,
   pkg-config,
@@ -76,13 +76,13 @@ in
 # TODO (after 25.05 branch-off): Rename to pkgs.cinnamon
 stdenv.mkDerivation rec {
   pname = "cinnamon-common";
-  version = "6.4.2";
+  version = "6.4.6";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cinnamon";
     rev = version;
-    hash = "sha256-r5cSm/a+xtHwwAHQmdgviDAN3nnMAnXGY/p+ER1/gbk=";
+    hash = "sha256-hvQINRvEqTDWV0ja1tHzkpJMexc0htL0IlCHuy8QCQk=";
   };
 
   patches = [
@@ -109,7 +109,7 @@ stdenv.mkDerivation rec {
     libstartup_notification
     libXtst
     libXdamage
-    mesa
+    libgbm
     muffin
     networkmanager
     polkit

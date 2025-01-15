@@ -42,6 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     bison
     cmake
     pkg-config
+    protobuf
   ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ rpcsvc-proto ];
 
   patches = [
@@ -81,6 +82,8 @@ stdenv.mkDerivation (finalAttrs: {
       developer_cmds
       DarwinTools
     ];
+
+  strictDeps = true;
 
   outputs = [
     "out"

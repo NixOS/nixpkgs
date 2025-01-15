@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kha-white";
     repo = "manga-ocr";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-0EwXDMnA9SCmSsMVXnMenSFSzs74lorFNNym9y/NNsI=";
   };
 
@@ -36,6 +36,11 @@ buildPythonPackage rec {
     transformers
     unidic-lite
   ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "numpy<2" "numpy"
+  '';
 
   meta = with lib; {
     description = "Optical character recognition for Japanese text, with the main focus being Japanese manga";

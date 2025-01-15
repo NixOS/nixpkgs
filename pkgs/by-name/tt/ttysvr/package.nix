@@ -15,15 +15,15 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "ttysvr";
-  version = "0.3.3";
+  version = "0.3.4";
 
   src = fetchFromGitHub {
     owner = "cxreiff";
     repo = "ttysvr";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-qUwnx+hwd3PRzz1TlQzPAppj6aTZZpTG2e5cBaA3zZI=";
+    tag = "v${version}";
+    hash = "sha256-W8IglZVvhFqn0TH1ZBGWERizCxCQ+C4SckYFLCzB3yc=";
   };
-  cargoHash = "sha256-kIE8+FUS3i8Ulkj35lO1iRmFx5x+r89THVuzNzAv6tE=";
+  cargoHash = "sha256-gHrsdlmA8QxahrWIy6+5knLydVcSbEfS7+02fF1sSsA=";
 
   nativeBuildInputs = [
     pkg-config

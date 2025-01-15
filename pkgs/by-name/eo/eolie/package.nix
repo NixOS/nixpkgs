@@ -29,7 +29,7 @@ python3.pkgs.buildPythonApplication rec {
 
   src = fetchgit {
     url = "https://gitlab.gnome.org/World/eolie";
-    rev = "refs/tags/${version}";
+    tag = version;
     fetchSubmodules = true;
     sha256 = "077jww5mqg6bbqbj0j1gss2j3dxlfr2xw8bc43k8vg52drqg6g8w";
   };

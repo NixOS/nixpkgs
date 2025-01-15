@@ -102,6 +102,9 @@ stdenv.mkDerivation rec {
 
     DEFAULT_JVM_OPTS=$(sed -n -E "s/^DEFAULT_JVM_OPTS='(.*)'$/\1/p" $out/bin/JabRef | sed -e "s|\$APP_HOME|$out|g" -e 's/"//g')
 
+    # Temp fix: openjfx doesn't build with webkit
+    unzip $out/lib/javafx-web-*-*.jar libjfxwebkit.so -d $out/lib/
+
     runHook postInstall
   '';
 

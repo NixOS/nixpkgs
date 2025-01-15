@@ -2,11 +2,10 @@
   lib,
   buildPythonPackage,
   click,
-  colorama,
-  configparser,
   distro,
   fetchFromGitHub,
   gevent,
+  importlib-metadata,
   jinja2,
   packaging,
   paramiko,
@@ -14,7 +13,6 @@
   python-dateutil,
   pythonOlder,
   pywinrm,
-  pyyaml,
   setuptools,
   typeguard,
   typing-extensions,
@@ -22,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "pyinfra";
-  version = "3.1.1";
+  version = "3.2";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -30,27 +28,27 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Fizzadar";
     repo = "pyinfra";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-NHQpYOXlqFU4BtiwiESGV8pM0O8kqCz2TpXOGz8T4zQ=";
+    tag = "v${version}";
+    hash = "sha256-l0RD4lOLjzM9Ydf7vJr+PXpUGsVdAZN/dTUFJ3fo078=";
   };
 
   build-system = [ setuptools ];
 
-  dependencies = [
-    click
-    colorama
-    configparser
-    distro
-    gevent
-    jinja2
-    packaging
-    paramiko
-    python-dateutil
-    pywinrm
-    pyyaml
-    setuptools
-    typeguard
-  ] ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ];
+  dependencies =
+    [
+      click
+      distro
+      gevent
+      jinja2
+      packaging
+      paramiko
+      python-dateutil
+      pywinrm
+      setuptools
+      typeguard
+    ]
+    ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ]
+    ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

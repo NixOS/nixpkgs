@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  fetchpatch2,
   pythonOlder,
 
   # build-system
@@ -32,6 +33,15 @@ buildPythonPackage rec {
     inherit version;
     hash = "sha256-mAhiodFsnhR6WWA2d/oqpf2CuH8iO2y4cGlbz86DAGU=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      # https://github.com/python/importlib_resources/issues/318
+      name = "python-3.13-compat.patch";
+      url = "https://github.com/python/importlib_resources/commit/8684c7a028b65381ec6c6724e2f9c9bea7df0aee.patch";
+      hash = "sha256-mb2V4rQPKyi5jMQ+yCf9fY3vHxB54BhvLzy2NNc0zNc=";
+    })
+  ];
 
   build-system = [
     setuptools

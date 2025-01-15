@@ -45,11 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
     ./4.x-nix_share_path.patch
   ];
 
-  # The 10.12 SDK used by x86_64-darwin requires defining `_POSIX_C_SOURCE` to use `strnlen`.
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (
-    stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64
-  ) "-D_POSIX_C_SOURCE=200809L";
-
   nativeBuildInputs = [
     meson
     ninja

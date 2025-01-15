@@ -65,7 +65,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "Qcodes";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-oNJVOz2FMMhUkYIajeWwRmHzLcXu5qTSQzjk0gciOnE=";
   };
 

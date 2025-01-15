@@ -66,7 +66,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     desktop-file-utils
-    mesa # needed for gbm
     meson
     ninja
     pkg-config
@@ -106,6 +105,7 @@ stdenv.mkDerivation rec {
     json-glib
     libXtst
     graphene
+    mesa # actually uses eglmesaext
   ];
 
   mesonFlags = [

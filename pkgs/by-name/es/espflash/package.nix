@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "esp-rs";
     repo = "espflash";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-X9VTwXk/6zAkQb5P9Wz8Pt4oIt2xXfff9dhGb8wauG4=";
   };
 

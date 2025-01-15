@@ -11,16 +11,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "swt";
-  version = "4.33";
-  fullVersion = "${finalAttrs.version}-202409030240";
+  version = "4.34";
+  fullVersion = "${finalAttrs.version}-202411201800";
 
   hardeningDisable = [ "format" ];
 
   passthru.srcMetadataByPlatform = {
     x86_64-linux.platform = "gtk-linux-x86_64";
-    x86_64-linux.hash = "sha256-0OUr+jpwTx5/eoA6Uo2E9/SBAtf+IMMiSVRhOfaWFhE=";
+    x86_64-linux.hash = "sha256-lKAB2aCI3dZdt3pE7uSvSfxc8vc3oMSTCx5R+71Aqdk=";
     x86_64-darwin.platform = "cocoa-macosx-x86_64";
-    x86_64-darwin.hash = "sha256-n948C/YPF55WPYvub3re/wARLP1Wk+XhJiIuI0YQH5c=";
+    x86_64-darwin.hash = "sha256-Uns3fMoetbZAIrL/N0eVd42/3uygXakDdxpaxf5SWDI=";
   };
   passthru.srcMetadata =
     finalAttrs.passthru.srcMetadataByPlatform.${stdenv.hostPlatform.system} or null;
@@ -63,8 +63,8 @@ stdenv.mkDerivation (finalAttrs: {
   AWT_LIB_PATH = "${jdk}/lib/openjdk/lib";
   # Used by the makefile which is responsible for the shared objects only
   OUTPUT_DIR = "${placeholder "out"}/lib";
-  # GTK4 is not supported yet. Waiting for:
-  # https://github.com/eclipse-platform/eclipse.platform.swt/pull/1482
+  # GTK4 is not supported yet. See:
+  # https://github.com/eclipse-platform/eclipse.platform.swt/issues/652
   makeFlags = "gtk3";
   preBuild = ''
     cd library

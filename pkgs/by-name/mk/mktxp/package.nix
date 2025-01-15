@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication {
   src = fetchFromGitHub {
     owner = "akpw";
     repo = "mktxp";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-LPCx5UJuL22aRbRYD+GkDAQ/0RCi+WJwvsF86ZQ01JY=";
   };
 

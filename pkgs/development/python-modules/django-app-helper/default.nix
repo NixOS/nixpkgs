@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nephila";
     repo = "django-app-helper";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-4nFg8B1uxGJVY1jcGr0e2Oi14lqXcFOi0HJ+ogE2ikg=";
   };
 

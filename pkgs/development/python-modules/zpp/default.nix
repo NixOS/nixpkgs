@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jbigot";
     repo = "zpp";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Jvh80TfOonZ57lb+4PulVOUKi9Y74nplIcrPzlUPw3M=";
   };
 

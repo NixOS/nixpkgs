@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "misialq";
     repo = "openerz-api";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-CwK61StspZJt0TALv76zfibUzlriwp9HRoYOtX9bU+c=";
   };
 

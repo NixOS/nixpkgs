@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tee-ar-ex";
     repo = "trx-python";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-gKPgP3GJ7QY0Piylk5L0HxnscRCREP1Hm5HZufL2h5g=";
   };
 

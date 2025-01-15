@@ -60,16 +60,16 @@ let
       let
         appDir = "$out/share/php/${finalAttrs.pname}";
 
-        stateDirectories = ''
+        stateDirectories = /* sh */ ''
           # Symlinking in our state directories
-          rm -rf $out/.env $out/cache ${appDir}/public/cache
+          rm -rf $out/{.env,cache} ${appDir}/{log,public/cache}
           ln -s ${cfg.dataDir}/.env ${appDir}/.env
           ln -s ${cfg.dataDir}/public/cache ${appDir}/public/cache
           ln -s ${cfg.logDir} ${appDir}/log
           ln -s ${cfg.runtimeDir}/cache ${appDir}/cache
         '';
 
-        exposeComposer = ''
+        exposeComposer = /* sh */ ''
           # Expose PHP Composer for scripts
           mkdir -p $out/bin
           echo "#!${lib.getExe pkgs.dash}" > $out/bin/movim-composer
@@ -85,10 +85,10 @@ let
                   # Disable all Admin panel options that were set in the
                   # `cfg.podConfig` to prevent confusing situtions where the
                   # values are rewritten on server reboot
-                  ''
-                    substituteInPlace ${appDir}/app/Widgets/AdminMain/adminmain.tpl \
-                      --replace-warn 'name="${k}"' 'name="${k}" readonly'
-                  '')
+                  /* sh */ ''
+                  substituteInPlace ${appDir}/app/Widgets/AdminMain/adminmain.tpl \
+                    --replace-warn 'name="${k}"' 'name="${k}" readonly'
+                '')
               [ ]
               cfg.podConfig));
 
@@ -101,7 +101,7 @@ let
                 [ "css" "ini" "js" "json" "manifest" "mjs" "svg" "webmanifest" ]);
           in
           lib.concatStringsSep "\n" [
-            (lib.optionalString brotli.enable ''
+            (lib.optionalString brotli.enable /* sh */ ''
               echo -n "Precompressing static files with Brotli …"
               find ${appDir}/public -type f ${findTextFileNames} -print0 \
                 | xargs -0 -n 1 -P $NIX_BUILD_CORES ${pkgs.writeShellScript "movim_precompress_broti" ''
@@ -110,10 +110,10 @@ let
                   ''}
               echo " done."
             '')
-            (lib.optionalString gzip.enable ''
+            (lib.optionalString gzip.enable /* sh */ ''
               echo -n "Precompressing static files with Gzip …"
               find ${appDir}/public -type f ${findTextFileNames} -print0 \
-                | xargs -0 -n 1 -P $NIX_BUILD_CORES ${pkgs.writeShellScript "movim_precompress_broti" ''
+                | xargs -0 -n 1 -P $NIX_BUILD_CORES ${pkgs.writeShellScript "movim_precompress_gzip" ''
                     file="$1"
                     ${lib.getExe gzip.package} -c -${builtins.toString gzip.compressionLevel} $file > $file.gz
                   ''}
@@ -440,6 +440,7 @@ in
           isSystemUser = true;
           group = cfg.group;
         };
+      } // lib.optionalAttrs (cfg.nginx != null) {
         "${config.services.nginx.user}".extraGroups = [ cfg.group ];
       };
       groups = {
@@ -483,99 +484,100 @@ in
         };
       };
 
-      nginx = mkIf (cfg.nginx != null) {
-        enable = true;
-        recommendedOptimisation = true;
-        recommendedGzipSettings = true;
-        recommendedBrotliSettings = true;
-        recommendedProxySettings = true;
-        # TODO: recommended cache options already in Nginx⁇
-        appendHttpConfig = /* nginx */ ''
-          fastcgi_cache_path /tmp/nginx_cache levels=1:2 keys_zone=nginx_cache:100m inactive=60m;
-          fastcgi_cache_key "$scheme$request_method$host$request_uri";
-        '';
-        virtualHosts."${cfg.domain}" = mkMerge [
-          cfg.nginx
-          {
-            root = lib.mkForce "${package}/share/php/movim/public";
-            locations = {
-              "/favicon.ico" = {
-                priority = 100;
-                extraConfig = /* nginx */ ''
-                  access_log off;
-                  log_not_found off;
-                '';
+      nginx = mkIf (cfg.nginx != null)
+        {
+          enable = true;
+          recommendedOptimisation = mkDefault true;
+          recommendedProxySettings = true;
+          # TODO: recommended cache options already in Nginx⁇
+          appendHttpConfig = /* nginx */ ''
+            fastcgi_cache_path /tmp/nginx_cache levels=1:2 keys_zone=nginx_cache:100m inactive=60m;
+            fastcgi_cache_key "$scheme$request_method$host$request_uri";
+          '';
+          virtualHosts."${cfg.domain}" = mkMerge [
+            cfg.nginx
+            {
+              root = lib.mkForce "${package}/share/php/movim/public";
+              locations = {
+                "/favicon.ico" = {
+                  priority = 100;
+                  extraConfig = /* nginx */ ''
+                    access_log off;
+                    log_not_found off;
+                  '';
+                };
+                "/robots.txt" = {
+                  priority = 100;
+                  extraConfig = /* nginx */ ''
+                    access_log off;
+                    log_not_found off;
+                  '';
+                };
+                "~ /\\.(?!well-known).*" = {
+                  priority = 210;
+                  extraConfig = /* nginx */ ''
+                    deny all;
+                  '';
+                };
+                # Ask nginx to cache every URL starting with "/picture"
+                "/picture" = {
+                  priority = 400;
+                  tryFiles = "$uri $uri/ /index.php$is_args$args";
+                  extraConfig = /* nginx */ ''
+                    set $no_cache 0; # Enable cache only there
+                  '';
+                };
+                "/" = {
+                  priority = 490;
+                  tryFiles = "$uri $uri/ /index.php$is_args$args";
+                  extraConfig = /* nginx */ ''
+                    # https://github.com/movim/movim/issues/314
+                    add_header Content-Security-Policy "default-src 'self'; img-src 'self' aesgcm: https:; media-src 'self' aesgcm: https:; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline';";
+                    set $no_cache 1;
+                  '';
+                };
+                "~ \\.php$" = {
+                  priority = 500;
+                  tryFiles = "$uri =404";
+                  extraConfig = /* nginx */ ''
+                    include ${config.services.nginx.package}/conf/fastcgi.conf;
+                    add_header X-Cache $upstream_cache_status;
+                    fastcgi_ignore_headers "Cache-Control" "Expires" "Set-Cookie";
+                    fastcgi_cache nginx_cache;
+                    fastcgi_cache_valid any 7d;
+                    fastcgi_cache_bypass $no_cache;
+                    fastcgi_no_cache $no_cache;
+                    fastcgi_split_path_info ^(.+\.php)(/.+)$;
+                    fastcgi_index index.php;
+                    fastcgi_pass unix:${fpm.socket};
+                  '';
+                };
+                "/ws/" = {
+                  priority = 900;
+                  proxyPass = "http://${cfg.settings.DAEMON_INTERFACE}:${builtins.toString cfg.port}/";
+                  proxyWebsockets = true;
+                  recommendedProxySettings = true;
+                  extraConfig = /* nginx */ ''
+                    proxy_set_header X-Forwarded-Proto $scheme;
+                    proxy_redirect off;
+                  '';
+                };
               };
-              "/robots.txt" = {
-                priority = 100;
-                extraConfig = /* nginx */ ''
-                  access_log off;
-                  log_not_found off;
-                '';
-              };
-              "~ /\\.(?!well-known).*" = {
-                priority = 210;
-                extraConfig = /* nginx */ ''
-                  deny all;
-                '';
-              };
-              # Ask nginx to cache every URL starting with "/picture"
-              "/picture" = {
-                priority = 400;
-                tryFiles = "$uri $uri/ /index.php$is_args$args";
-                extraConfig = /* nginx */ ''
-                  set $no_cache 0; # Enable cache only there
-                '';
-              };
-              "/" = {
-                priority = 490;
-                tryFiles = "$uri $uri/ /index.php$is_args$args";
-                extraConfig = /* nginx */ ''
-                  # https://github.com/movim/movim/issues/314
-                  add_header Content-Security-Policy "default-src 'self'; img-src 'self' aesgcm: https:; media-src 'self' aesgcm: https:; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline';";
-                  set $no_cache 1;
-                '';
-              };
-              "~ \\.php$" = {
-                priority = 500;
-                tryFiles = "$uri =404";
-                extraConfig = /* nginx */ ''
-                  include ${config.services.nginx.package}/conf/fastcgi.conf;
-                  add_header X-Cache $upstream_cache_status;
-                  fastcgi_ignore_headers "Cache-Control" "Expires" "Set-Cookie";
-                  fastcgi_cache nginx_cache;
-                  fastcgi_cache_valid any 7d;
-                  fastcgi_cache_bypass $no_cache;
-                  fastcgi_no_cache $no_cache;
-                  fastcgi_split_path_info ^(.+\.php)(/.+)$;
-                  fastcgi_index index.php;
-                  fastcgi_pass unix:${fpm.socket};
-                '';
-              };
-              "/ws/" = {
-                priority = 900;
-                proxyPass = "http://${cfg.settings.DAEMON_INTERFACE}:${builtins.toString cfg.port}/";
-                proxyWebsockets = true;
-                recommendedProxySettings = true;
-                extraConfig = /* nginx */ ''
-                  proxy_set_header X-Forwarded-Proto $scheme;
-                  proxy_redirect off;
-                '';
-              };
-            };
-            extraConfig = /* ngnix */ ''
-              index index.php;
-            '';
-          }
-        ];
-      };
+              extraConfig = /* ngnix */ ''
+                index index.php;
+              '';
+            }
+          ];
+        }
+      // lib.optionalAttrs (cfg.precompressStaticFiles.gzip.enable) { recommendedGzipSettings = mkDefault true; }
+      // lib.optionalAttrs (cfg.precompressStaticFiles.brotli.enable) { recommendedBrotliSettings = mkDefault true; };
 
       mysql = mkIf (cfg.database.createLocally && cfg.database.type == "mysql") {
         enable = mkDefault true;
         package = mkDefault pkgs.mariadb;
         ensureDatabases = [ cfg.database.name ];
         ensureUsers = [{
-          name = cfg.user;
+          name = cfg.database.user;
           ensureDBOwnership = true;
         }];
       };
@@ -584,7 +586,7 @@ in
         enable = mkDefault true;
         ensureDatabases = [ cfg.database.name ];
         ensureUsers = [{
-          name = cfg.user;
+          name = cfg.database.user;
           ensureDBOwnership = true;
         }];
         authentication = ''
@@ -636,7 +638,7 @@ in
           LoadCredential = "env-secrets:${cfg.secretFile}";
         };
 
-        script = ''
+        script = /* sh */ ''
           # Env vars
           rm -f ${cfg.dataDir}/.env
           cp --no-preserve=all ${configFile} ${cfg.dataDir}/.env

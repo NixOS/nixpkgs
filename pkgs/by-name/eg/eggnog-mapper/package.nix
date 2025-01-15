@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "eggnogdb";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-+luxXQmtGufYrA/9Ak3yKzbotOj2HM3vhIoOxE+Ty1U=";
   };
 

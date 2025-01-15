@@ -13,10 +13,7 @@
   xcodebuild,
 }:
 
-let
-  stdenv' = if stdenv.hostPlatform.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
-in
-stdenv'.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openimagedenoise";
   version = "2.2.2";
 

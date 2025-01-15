@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitLab,
+  fetchpatch,
   gitUpdater,
   testers,
   boost,
@@ -40,6 +41,15 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
     "doc"
     "bin"
+  ];
+
+  patches = [
+    # Remove when version > 2.0.2
+    (fetchpatch {
+      name = "0001-trust-store-Fix-boost-184-compat.patch";
+      url = "https://gitlab.com/ubports/development/core/trust-store/-/commit/569f6b35d8bcdb2ae5ff84549cd92cfc0899675b.patch";
+      hash = "sha256-3lrdVIzscXGiLKwftC5oECICVv3sBoS4UedfRHx7uOs=";
+    })
   ];
 
   postPatch =

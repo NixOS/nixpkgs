@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "treebeardtech";
     repo = "nbmake";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-OzjqpipFb5COhqc//Sg6OU65ShPrYe/KtxifToEXveg=";
   };
 
@@ -50,11 +50,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nbmake" ];
 
+  # tests are prone to race conditions under high parallelism
+  # https://github.com/treebeardtech/nbmake/issues/129
+  pytestFlagsArray = [ "--maxprocesses=4" ];
+
   nativeCheckInputs = [
     pytest-xdist
     pytestCheckHook
     typing-extensions
   ];
+
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
 
   __darwinAllowLocalNetworking = true;
 

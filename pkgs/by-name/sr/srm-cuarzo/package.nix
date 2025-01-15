@@ -8,7 +8,7 @@
 , libdrm
 , libGL
 , libinput
-, mesa
+, libgbm
 , seatd
 , udev
 }:
@@ -35,7 +35,7 @@ stdenv.mkDerivation (self: {
     libdrm
     libGL
     libinput
-    mesa
+    libgbm
     seatd
     udev
   ];

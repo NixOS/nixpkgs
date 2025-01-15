@@ -139,11 +139,11 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram $out/bin/mysqlsh --set PYTHONPATH "${lib.makeSearchPath python3.sitePackages pythonDeps}"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://dev.mysql.com/doc/mysql-shell/${lib.versions.majorMinor finalAttrs.version}/en/";
     description = "New command line scriptable shell for MySQL";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ aaronjheng ];
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ aaronjheng ];
     mainProgram = "mysqlsh";
   };
 })

@@ -32,8 +32,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "cython==" "cython>=" \
-      --replace "numpy>=2.0.0rc1" "numpy"
+      --replace "cython==" "cython>="
   '';
 
   nativeBuildInputs = [

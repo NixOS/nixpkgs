@@ -7,13 +7,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "stardust-xr-magnetar";
-  version = "0-unstable-2024-08-31";
+  version = "0-unstable-2024-12-29";
 
   src = fetchFromGitHub {
     owner = "stardustxr";
     repo = "magnetar";
-    rev = "48064b84b71d27ceea00b5d2f19dcbf21d75f554";
-    hash = "sha256-x1yHf5ceCws4C8NuoB/+kHwZK09vnn4IOFgduhjl4O8=";
+    rev = "d00c5ecf0bcaf2b4382ec3b4f3373ea5b761ee7b";
+    hash = "sha256-2I6BRjw5t68OMc93cis4/qnyYT9OBYIr1S+ZF8LmFCc=";
   };
 
   cargoLock = {

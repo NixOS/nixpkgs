@@ -24,7 +24,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "fdw";
     repo = "rofi-rbw";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-wUb89GkNB2lEfb42hMvcxpbjc1O+wx8AkFjq7aJwAko=";
   };
 

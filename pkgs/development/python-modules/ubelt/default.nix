@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Erotemic";
     repo = "ubelt";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ygoJqyTscfuZVDGVbrZobZFvlcuF4HavTU65tmhyU+w=";
   };
 

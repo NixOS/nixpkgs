@@ -18,7 +18,7 @@ python.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "WALinuxAgent";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-L8W/ijBHkNukM2G9HBRVx2wFXzgkR8gbFBljNVPs6xA=";
   };
   patches = [

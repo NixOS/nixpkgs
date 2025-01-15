@@ -14,6 +14,7 @@
 {
   name ? null,
   pname ? null,
+  version ? null,
   mainGemName ? null,
   gemdir ? null,
   gemfile ? null,
@@ -78,15 +79,15 @@ let
 
   gems = lib.flip lib.mapAttrs configuredGemset (name: attrs: buildGem name attrs);
 
-  name' =
-    if name != null then
-      name
+  version' =
+    if version != null then
+      version
+    else if pname != null then
+      gems.${pname}.suffix
     else
-      let
-        gem = gems.${pname};
-        suffix = gem.suffix;
-      in
-      "${pname}-${suffix}";
+      null;
+
+  name' = if name != null then name else "${pname}-${version'}";
 
   pname' = if pname != null then pname else name;
 
@@ -137,9 +138,15 @@ let
   envPaths = lib.attrValues gems ++ lib.optional (!hasBundler) bundler;
 
   basicEnvArgs = {
-    inherit nativeBuildInputs buildInputs ignoreCollisions;
+    inherit
+      nativeBuildInputs
+      buildInputs
+      ignoreCollisions
+      pname
+      ;
 
     name = name';
+    version = version';
 
     paths = envPaths;
     pathsToLink = [ "/lib" ];

@@ -39,15 +39,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  postPatch =
-    lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
-      substituteInPlace src/platfdep_mac.mm \
-        --replace "appearance.name == NSAppearanceNameDarkAqua" "NO"
-    ''
-    + lib.optionalString (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isx86_64) ''
-      substituteInPlace 3rd/CMakeLists.txt \
-        --replace "-msse4.2 -maes" ""
-    '';
+  postPatch = lib.optionalString (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isx86_64) ''
+    substituteInPlace 3rd/CMakeLists.txt \
+      --replace "-msse4.2 -maes" ""
+  '';
 
   nativeBuildInputs =
     [

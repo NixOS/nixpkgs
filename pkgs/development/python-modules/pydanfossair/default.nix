@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "JonasPed";
     repo = "pydanfoss-air";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ZTairxQbvijNiSomDoeZtmL/Hn3ce1Z5TEOf+0C8cYg=";
   };
 
