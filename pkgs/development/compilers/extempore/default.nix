@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchurl
-, writeText
-, cmake
-, pkg-config
-, pcre
-, libuv
-, portaudio
-, boost
-, zlib
-, python3
-, libffi
-, xorg
-, mesa
-, libGL
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchurl,
+  writeText,
+  cmake,
+  pkg-config,
+  pcre,
+  libuv,
+  portaudio,
+  boost,
+  zlib,
+  python3,
+  libffi,
+  xorg,
+  mesa, # Mesa for OpenGL support
+  libGL, # Added explicit libGL dependency
 }:
 let
   llvm-patch = writeText "llvm-3.8.0-extempore.patch" ''
@@ -80,8 +81,15 @@ let
     patches = [ llvm-patch ];
     patchFlags = [ "-p0" ];
 
-    nativeBuildInputs = [ cmake pkg-config python3 ];
-    buildInputs = [ zlib libffi ];
+    nativeBuildInputs = [
+      cmake
+      pkg-config
+      python3
+    ];
+    buildInputs = [
+      zlib
+      libffi
+    ];
 
     cmakeFlags = [
       "-DCMAKE_BUILD_TYPE=Release"
@@ -122,7 +130,8 @@ let
     enableParallelBuilding = true;
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "extempore";
   version = "0.8.9";
 
@@ -147,7 +156,7 @@ in stdenv.mkDerivation rec {
     boost
     zlib
     mesa
-    libGL
+    libGL # Added explicit libGL dependency
     xorg.libX11
     xorg.libXext
     xorg.libXrandr
@@ -172,12 +181,12 @@ in stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "A cyber-physical programming environment for live coding";
     homepage = "https://extemporelang.github.io/";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ qxrein ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd2;
+    maintainers = [ lib.maintainers.qxrein ];
+    platforms = lib.platforms.unix;
     mainProgram = "extempore";
   };
 }
