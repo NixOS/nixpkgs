@@ -25,13 +25,13 @@ let
 in
 buildNpmPackage rec {
   pname = "jitsi-meet-electron";
-  version = "2024.6.0";
+  version = "2025.1.0";
 
   src = fetchFromGitHub {
     owner = "jitsi";
     repo = "jitsi-meet-electron";
     rev = "v${version}";
-    hash = "sha256-jnt+aHkCnIj4GGFbAk6AlVhg0rvzFhGCELAaYMCZx88=";
+    hash = "sha256-o65UPPyGgmFe8+HANmnyVgPITk8gY7uvIzx7QZUluBU=";
   };
 
   nativeBuildInputs =
@@ -58,7 +58,7 @@ buildNpmPackage rec {
       OpenGL
     ];
 
-  npmDepsHash = "sha256-zmnxNJdalspZib1PGZN0YBIauJ+gaxs6Iir94cPRNtU=";
+  npmDepsHash = "sha256-16yWCI408tkkzvrx2fBPSNSUa9dRej9LrnNpqobwfl8=";
 
   makeCacheWritable = true;
 
