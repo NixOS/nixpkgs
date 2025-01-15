@@ -11882,7 +11882,6 @@ with pkgs;
   };
 
   tt-rss = callPackage ../servers/tt-rss { };
-  matomo = callPackage ../servers/web-apps/matomo { };
 
   unpackerr = callPackage ../servers/unpackerr {
     inherit (darwin.apple_sdk.frameworks) Cocoa WebKit;
