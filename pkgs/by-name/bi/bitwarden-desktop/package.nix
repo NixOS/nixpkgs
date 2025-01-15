@@ -161,6 +161,9 @@ buildNpmPackage rec {
     mkdir -p $out/bin
     cp -r apps/desktop/desktop_native/target/release/desktop_proxy $out/bin
 
+    mkdir -p $out/lib/mozilla/native-messaging-hosts
+    substituteAll ${./firefox-native-messaging-host.json} $out/lib/mozilla/native-messaging-hosts/com.8bit.bitwarden.json
+
     pushd apps/desktop/dist/linux-${lib.optionalString stdenv.hostPlatform.isAarch64 "arm64-"}unpacked
     mkdir -p $out/opt/Bitwarden
     cp -r locales resources{,.pak} $out/opt/Bitwarden
