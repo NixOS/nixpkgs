@@ -390,18 +390,6 @@
   },
   {
     "package": "openldap",
-    "headers": [
-      "lber.h",
-      "lber_types.h",
-      "ldap.h",
-      "ldap_cdefs.h",
-      "ldap_features.h",
-      "ldap_schema.h",
-      "ldap_utf8.h",
-      "ldif.h",
-      "openldap.h",
-      "slapi-plugin.h"
-    ],
     "libraries": [
       "liblber.*",
       "liblber_r.*",
