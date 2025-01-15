@@ -13,7 +13,7 @@ let
 
   askPasswordWrapper = pkgs.writeScript "ssh-askpass-wrapper" ''
     #! ${pkgs.runtimeShell} -e
-    eval export $(systemctl --user show-environment | ${pkgs.coreutils}/bin/grep -E '^(DISPLAY|WAYLAND_DISPLAY|XAUTHORITY)=')
+    eval export $(systemctl --user show-environment | ${lib.getExe pkgs.gnugrep} -E '^(DISPLAY|WAYLAND_DISPLAY|XAUTHORITY)=')
     exec ${cfg.askPassword} "$@"
   '';
 
