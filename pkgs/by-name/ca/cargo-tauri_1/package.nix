@@ -1,10 +1,8 @@
 {
   lib,
   stdenv,
-  rustPlatform,
   fetchFromGitHub,
   cargo-tauri,
-  cargo-tauri_1,
   gtk3,
   libsoup_2_4,
   openssl,
@@ -26,14 +24,12 @@ cargo-tauri.overrideAttrs (
     # https://discourse.nixos.org/t/difficulty-using-buildrustpackage-with-a-src-containing-multiple-cargo-workspaces/10202
     sourceRoot = "${newAttrs.src.name}/tooling/cli";
 
-    cargoDeps = rustPlatform.fetchCargoTarball {
-      inherit (newAttrs)
-        pname
-        version
-        src
-        sourceRoot
-        ;
-      hash = "sha256-OIXC4kwGIemIL8KaqK5SUDZZrOX3PX0w3h9bNiM/pCw=";
+    useFetchCargoVendor = false;
+    cargoHash = "sha256-OIXC4kwGIemIL8KaqK5SUDZZrOX3PX0w3h9bNiM/pCw=";
+
+    passthru = {
+      inherit (oldAttrs.passthru) hook;
+      cargoLock = null; # we could have just ommitted it, but this is more explicit
     };
 
     buildInputs =
@@ -43,20 +39,5 @@ cargo-tauri.overrideAttrs (
         libsoup_2_4
         webkitgtk_4_0
       ];
-
-    passthru = {
-      hook = cargo-tauri.hook.override { cargo-tauri = cargo-tauri_1; };
-    };
-
-    meta = {
-      inherit (oldAttrs.meta)
-        description
-        homepage
-        changelog
-        license
-        maintainers
-        mainProgram
-        ;
-    };
   }
 )
