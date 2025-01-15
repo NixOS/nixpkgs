@@ -1,13 +1,14 @@
 {
-  cereal_1_3_2,
-  cmake,
+  lib,
+  stdenv,
   fetchFromGitHub,
+  cmake,
   fetchFromGitLab,
   glfw,
   glm,
-  lib,
   spdlog,
-  stdenv,
+  cereal_1_3_2,
+  python3Packages,
 }:
 
 let
@@ -35,8 +36,8 @@ let
     eigen3 = fetchFromGitLab {
       owner = "libeigen";
       repo = "eigen";
-      rev = "d34b100c137ac931379ae5e1b888f16a9c8d6c72";
-      hash = "sha256-GYjENtobSWCJqRw2GJbxAJDZSdyBNqWkobn2Vm5H53Q=";
+      rev = "7f2377859377da6f22152015c28b12c04752af77";
+      hash = "sha256-SmyvY/WlU9jryD9ZpSw73dQEc9jI4ySQPRnplg/BC4w=";
     };
     googletest = fetchFromGitHub {
       owner = "google";
@@ -131,7 +132,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mujoco";
-  version = "3.2.6";
+  version = "3.2.7";
 
   # Bumping version? Make sure to look though the MuJoCo's commit
   # history for bumped dependency pins!
@@ -139,7 +140,7 @@ stdenv.mkDerivation rec {
     owner = "google-deepmind";
     repo = "mujoco";
     tag = version;
-    hash = "sha256-n1H9e+GMqHYsimypF7AiVzHC2dXkL+4FWDEHB5B2ZIE=";
+    hash = "sha256-TAhgu3h7tCflIMscVS+jYuUfMmIYcCcI3JFxUlj8g9E=";
   };
 
   patches = [ ./mujoco-system-deps-dont-fetch.patch ];
@@ -177,8 +178,13 @@ stdenv.mkDerivation rec {
     ln -s ${pin.marchingcubecpp} build/_deps/marchingcubecpp-src
   '';
 
-  passthru.pin = {
-    inherit (pin) lodepng eigen3 abseil-cpp;
+  passthru = {
+    pin = {
+      inherit (pin) lodepng eigen3 abseil-cpp;
+    };
+    tests = {
+      pythonMujoco = python3Packages.mujoco;
+    };
   };
 
   meta = {
