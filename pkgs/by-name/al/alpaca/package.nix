@@ -14,18 +14,19 @@
   xdg-utils,
   ollama,
   vte-gtk4,
+  libspelling,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "alpaca";
-  version = "3.2.0";
+  version = "3.5.0";
   pyproject = false; # Built with meson
 
   src = fetchFromGitHub {
     owner = "Jeffser";
     repo = "Alpaca";
     tag = version;
-    hash = "sha256-Mh+LYslVmb4l+ZCB1Si7hxugzHPz/mULUMBNeJI12r0=";
+    hash = "sha256-YheyeT9KiH9LphFfExie7RU7q/qVni5pFdpz32rM8RQ=";
   };
 
   nativeBuildInputs = [
@@ -42,6 +43,7 @@ python3Packages.buildPythonApplication rec {
     libadwaita
     gtksourceview5
     vte-gtk4
+    libspelling
   ];
 
   dependencies = with python3Packages; [
@@ -54,6 +56,7 @@ python3Packages.buildPythonApplication rec {
     pydbus
     odfpy
     pyicu
+    matplotlib
   ];
 
   dontWrapGApps = true;
