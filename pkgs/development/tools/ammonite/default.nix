@@ -6,7 +6,6 @@
   writeScript,
   common-updater-scripts,
   git,
-  nixfmt-classic,
   nix,
   coreutils,
   gnused,
@@ -51,18 +50,14 @@ let
               git
               gnused
               nix
-              nixfmt-classic
             ]
           }
           oldVersion="$(nix-instantiate --eval -E "with import ./. {}; lib.getVersion ${pname}" | tr -d '"')"
           latestTag="$(git -c 'versionsort.suffix=-' ls-remote --exit-code --refs --sort='version:refname' --tags ${repo} '*.*.*' | tail --lines=1 | cut --delimiter='/' --fields=3)"
           if [ "$oldVersion" != "$latestTag" ]; then
-            nixpkgs="$(git rev-parse --show-toplevel)"
-            default_nix="$nixpkgs/pkgs/development/tools/ammonite/default.nix"
             update-source-version ${pname}_2_12 "$latestTag" --version-key=version --print-changes
-            sed -i "s|$latestTag|$oldVersion|g" "$default_nix"
+            sed -i "s|$latestTag|$oldVersion|g" "$(git rev-parse --show-toplevel)/pkgs/development/tools/ammonite/default.nix"
             update-source-version ${pname}_2_13 "$latestTag" --version-key=version --print-changes
-            nixfmt "$default_nix"
           else
             echo "${pname} is already up-to-date"
           fi
