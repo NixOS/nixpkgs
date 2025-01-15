@@ -90,6 +90,7 @@ in
         enum
         package
         port
+        listOf
         ;
 
       assertStringPath =
@@ -285,6 +286,25 @@ in
           different theme types: for example, `account`,
           `login` etc. After adding a theme to this option you
           can select it by its name in Keycloak administration console.
+        '';
+      };
+
+      realmFiles = mkOption {
+        type = listOf path;
+        example = lib.literalExpression ''
+          [
+            ./some/realm.json
+            ./another/realm.json
+          ]
+        '';
+        default = [ ];
+        description = ''
+          Realm files that the server is going to import during startup.
+          If a realm already exists in the server, the import operation is
+          skipped. Importing the master realm is not supported. All files are
+          expected to be in `json` format. See the
+          [documentation](https://www.keycloak.org/server/importExport) for
+          further information.
         '';
       };
 
@@ -644,6 +664,24 @@ in
         '';
       };
 
+      systemd.tmpfiles.settings."10-keycloak" =
+        let
+          mkTarget =
+            file:
+            let
+              baseName = builtins.baseNameOf file;
+              name = if lib.hasSuffix ".json" baseName then baseName else "${baseName}.json";
+            in
+            "/run/keycloak/data/import/${name}";
+          settingsList = map (f: {
+            name = mkTarget f;
+            value = {
+              "L+".argument = "${f}";
+            };
+          }) cfg.realmFiles;
+        in
+        builtins.listToAttrs settingsList;
+
       systemd.services.keycloak =
         let
           databaseServices =
@@ -725,7 +763,7 @@ in
               cp $CREDENTIALS_DIRECTORY/ssl_{cert,key} /run/keycloak/ssl/
             ''
             + ''
-              kc.sh --verbose start --optimized
+              kc.sh --verbose start --optimized ${lib.optionalString (cfg.realmFiles != [ ]) "--import-realm"}
             '';
         };
 
