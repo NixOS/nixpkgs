@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   version = "2.16.1";
 
   src = fetchurl {
-    url = "ftp://bird.network.cz/pub/bird/${pname}-${version}.tar.gz";
+    url = "https://bird.network.cz/download/bird-${version}.tar.gz";
     hash = "sha256-9uWcvMrKYmaK6gIGhyS9QnuexEnH4PD8VoFQOYjHNbQ=";
   };
 
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     changelog = "https://gitlab.nic.cz/labs/bird/-/blob/v${version}/NEWS";
     description = "BIRD Internet Routing Daemon";
-    homepage = "http://bird.network.cz";
+    homepage = "https://bird.network.cz";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ herbetom ];
     platforms = platforms.linux;
