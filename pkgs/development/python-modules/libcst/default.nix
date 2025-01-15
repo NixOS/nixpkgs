@@ -3,13 +3,11 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  callPackage,
   cargo,
   hypothesmith,
   libcst,
   libiconv,
   pytestCheckHook,
-  python,
   pythonOlder,
   pyyaml,
   rustPlatform,
@@ -36,9 +34,7 @@ buildPythonPackage rec {
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    sourceRoot = "${src.name}/${cargoRoot}";
-    name = "${pname}-${version}";
+    inherit pname version src cargoRoot;
     hash = "sha256-TcWGW1RF2se89BtvQHO+4BwnRMZ8ygqO3du9Q/gZi/Q=";
   };
 

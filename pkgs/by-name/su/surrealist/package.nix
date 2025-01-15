@@ -68,10 +68,14 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit (finalAttrs) patches src;
-    sourceRoot = "${finalAttrs.src.name}/${finalAttrs.cargoRoot}";
-    hash = "sha256-HmdEcjgxPyRsQqhU0P/C3KVgwZsSvfHjyzj0OHKe5jY";
-    patchFlags = [ "-p2" ];
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      patches
+      cargoRoot
+      ;
+    hash = "sha256-Rnbj5LtWDtB2OMIBDd9jplutye5v0Jw10ta0LozNjFk=";
   };
 
   pnpmDeps = pnpm.fetchDeps {

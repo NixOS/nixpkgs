@@ -232,9 +232,12 @@ let
           };
           cargoRoot = "src/_bcrypt";
           cargoDeps = rustPlatform.fetchCargoTarball {
-            inherit src;
-            sourceRoot = "${pname}-${version}/${cargoRoot}";
-            name = "${pname}-${version}";
+            inherit
+              pname
+              version
+              src
+              cargoRoot
+              ;
             hash = "sha256-lDWX69YENZFMu7pyBmavUZaalGvFqbHSHfkwkzmDQaY=";
           };
         });

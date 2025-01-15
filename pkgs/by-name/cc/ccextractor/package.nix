@@ -49,11 +49,9 @@ stdenv.mkDerivation (finalAttrs: {
   cargoRoot = "src/rust";
 
   cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit (finalAttrs) src;
-    sourceRoot = "${finalAttrs.src.name}/${finalAttrs.cargoRoot}";
+    inherit (finalAttrs) pname version src cargoRoot;
     patches = [ ./use-rsmpeg-0.15.patch ];
-    patchFlags = [ "-p3" ];
-    hash = "sha256-jh8hHKAad+tCJGwuGdoJp/TMm/IsMrZmz8aag9lj0BA=";
+    hash = "sha256-pemKurmqzHK7WpxWkyJZJF0iL+9PASYDYo86vH8jDJw=";
   };
 
   nativeBuildInputs = [

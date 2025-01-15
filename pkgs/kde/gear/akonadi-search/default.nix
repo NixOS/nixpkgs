@@ -16,10 +16,8 @@ mkKdeDerivation rec {
   cargoRoot = "agent/rs/htmlparser";
 
   cargoDeps = rustPlatform.fetchCargoTarball {
-    # include version in the name so we invalidate the FOD
-    name = "${pname}-${version}";
+    inherit pname version cargoRoot;
     src = sources.${pname};
-    sourceRoot = "${pname}-${version}/${cargoRoot}";
     hash = cargoHash;
   };
 
