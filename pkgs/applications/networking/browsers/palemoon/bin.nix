@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "palemoon-bin";
-  version = "33.5.0";
+  version = "33.5.1";
 
   src = finalAttrs.passthru.sources."gtk${if withGTK3 then "3" else "2"}";
 
@@ -172,11 +172,11 @@ stdenv.mkDerivation (finalAttrs: {
       {
         gtk3 = fetchzip {
           urls = urlRegionVariants "gtk3";
-          hash = "sha256-TlmDsZKHolTS+y+1BymyY49+AvqUv8zmUXCGNHCRPL0=";
+          hash = "sha256-N3z03c4DsEG/L3T4BjOSx7XOGT988ZDshYhgl9TuOQM=";
         };
         gtk2 = fetchzip {
           urls = urlRegionVariants "gtk2";
-          hash = "sha256-f6vLHbpmvVfkjZr7x0DiCFoGGvfxHfFZ3KTagq2Mwp4=";
+          hash = "sha256-L+SgmjzilFFK8FcutINVac4MCAPvgJ3OqpwBaQqNlCI=";
         };
       };
 
