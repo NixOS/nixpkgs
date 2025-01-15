@@ -1,9 +1,15 @@
-{ lib, pkgs, stdenvNoCC }:
+{
+  lib,
+  pkgs,
+  stdenvNoCC,
+}:
 
 let
   tests =
     let
-      p = pkgs.python3Packages.xpybutil.overridePythonAttrs (_: { dontWrapPythonPrograms = true; });
+      p = pkgs.python3Packages.xpybutil.overridePythonAttrs (_: {
+        dontWrapPythonPrograms = true;
+      });
     in
     {
       overridePythonAttrs = {
@@ -24,31 +30,45 @@ let
       };
       overriding-using-only-attrset-no-final-attrs = {
         name = "overriding-using-only-attrset-no-final-attrs";
-        expr = ((stdenvNoCC.mkDerivation { pname = "hello-no-final-attrs"; }).overrideAttrs { pname = "hello-no-final-attrs-overridden"; }).pname == "hello-no-final-attrs-overridden";
+        expr =
+          ((stdenvNoCC.mkDerivation { pname = "hello-no-final-attrs"; }).overrideAttrs {
+            pname = "hello-no-final-attrs-overridden";
+          }).pname == "hello-no-final-attrs-overridden";
         expected = true;
       };
       buildGoModule-overrideAttrs = {
-        expr = lib.all (
-          attrPath:
-          let
-            attrPathPretty = lib.concatStringsSep "." attrPath;
-            valueNative = lib.getAttrFromPath attrPath pet_0_4_0;
-            valueOverridden = lib.getAttrFromPath attrPath pet_0_4_0-overridden;
-          in
-          lib.warnIfNot
-            (valueNative == valueOverridden)
-            "pet_0_4_0.${attrPathPretty} (${valueNative}) does not equal pet_0_4_0-overridden.${attrPathPretty} (${valueOverridden})"
-            true
-        ) [
-          [ "drvPath" ]
-          [ "name" ]
-          [ "pname" ]
-          [ "version" ]
-          [ "vendorHash" ]
-          [ "goModules" "drvPath" ]
-          [ "goModules" "name" ]
-          [ "goModules" "outputHash" ]
-        ];
+        expr =
+          lib.all
+            (
+              attrPath:
+              let
+                attrPathPretty = lib.concatStringsSep "." attrPath;
+                valueNative = lib.getAttrFromPath attrPath pet_0_4_0;
+                valueOverridden = lib.getAttrFromPath attrPath pet_0_4_0-overridden;
+              in
+              lib.warnIfNot (valueNative == valueOverridden)
+                "pet_0_4_0.${attrPathPretty} (${valueNative}) does not equal pet_0_4_0-overridden.${attrPathPretty} (${valueOverridden})"
+                true
+            )
+            [
+              [ "drvPath" ]
+              [ "name" ]
+              [ "pname" ]
+              [ "version" ]
+              [ "vendorHash" ]
+              [
+                "goModules"
+                "drvPath"
+              ]
+              [
+                "goModules"
+                "name"
+              ]
+              [
+                "goModules"
+                "outputHash"
+              ]
+            ];
         expected = true;
       };
       buildGoModule-goModules-overrideAttrs = {
@@ -61,28 +81,37 @@ let
       };
     };
 
-  addEntangled = origOverrideAttrs: f:
+  addEntangled =
+    origOverrideAttrs: f:
     origOverrideAttrs (
-      lib.composeExtensions f (self: super: {
-        passthru = super.passthru // {
-          entangled = super.passthru.entangled.overrideAttrs f;
-          overrideAttrs = addEntangled self.overrideAttrs;
-        };
-      })
+      lib.composeExtensions f (
+        self: super: {
+          passthru = super.passthru // {
+            entangled = super.passthru.entangled.overrideAttrs f;
+            overrideAttrs = addEntangled self.overrideAttrs;
+          };
+        }
+      )
     );
 
-  entangle = pkg1: pkg2: pkg1.overrideAttrs (self: super: {
-    passthru = super.passthru // {
-      entangled = pkg2;
-      overrideAttrs = addEntangled self.overrideAttrs;
-    };
-  });
+  entangle =
+    pkg1: pkg2:
+    pkg1.overrideAttrs (
+      self: super: {
+        passthru = super.passthru // {
+          entangled = pkg2;
+          overrideAttrs = addEntangled self.overrideAttrs;
+        };
+      }
+    );
 
   example = entangle pkgs.hello pkgs.figlet;
 
   overrides1 = example.overrideAttrs (_: super: { pname = "a-better-${super.pname}"; });
 
-  repeatedOverrides = overrides1.overrideAttrs (_: super: { pname = "${super.pname}-with-blackjack"; });
+  repeatedOverrides = overrides1.overrideAttrs (
+    _: super: { pname = "${super.pname}-with-blackjack"; }
+  );
 
   pet_0_3_4 = pkgs.buildGoModule rec {
     pname = "pet";
@@ -126,17 +155,19 @@ let
     };
   };
 
-  pet_0_4_0-overridden = pet_0_3_4.overrideAttrs (finalAttrs: previousAttrs: {
-  version = "0.4.0";
+  pet_0_4_0-overridden = pet_0_3_4.overrideAttrs (
+    finalAttrs: previousAttrs: {
+      version = "0.4.0";
 
-  src = pkgs.fetchFromGitHub {
-    inherit (previousAttrs.src) owner repo;
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-gVTpzmXekQxGMucDKskGi+e+34nJwwsXwvQTjRO6Gdg=";
-  };
+      src = pkgs.fetchFromGitHub {
+        inherit (previousAttrs.src) owner repo;
+        rev = "v${finalAttrs.version}";
+        hash = "sha256-gVTpzmXekQxGMucDKskGi+e+34nJwwsXwvQTjRO6Gdg=";
+      };
 
-  vendorHash = "sha256-dUvp7FEW09V0xMuhewPGw3TuAic/sD7xyXEYviZ2Ivs=";
-  });
+      vendorHash = "sha256-dUvp7FEW09V0xMuhewPGw3TuAic/sD7xyXEYviZ2Ivs=";
+    }
+  );
 
   pet-foo = pet_0_3_4.overrideAttrs (
     finalAttrs: previousAttrs: {
@@ -156,7 +187,16 @@ in
 stdenvNoCC.mkDerivation {
   name = "test-overriding";
   passthru = { inherit tests; };
-  buildCommand = ''
-    touch $out
-  '' + lib.concatStringsSep "\n" (lib.attrValues (lib.mapAttrs (name: t: "([[ ${lib.boolToString t.expr} == ${lib.boolToString t.expected} ]] && echo '${name} success') || (echo '${name} fail' && exit 1)") tests));
+  buildCommand =
+    ''
+      touch $out
+    ''
+    + lib.concatStringsSep "\n" (
+      lib.attrValues (
+        lib.mapAttrs (
+          name: t:
+          "([[ ${lib.boolToString t.expr} == ${lib.boolToString t.expected} ]] && echo '${name} success') || (echo '${name} fail' && exit 1)"
+        ) tests
+      )
+    );
 }
