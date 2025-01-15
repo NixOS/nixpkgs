@@ -117,7 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.cmakeBool "ENABLE_SYSTEM_YYJSON" true)
       (lib.cmakeBool "ENABLE_GLX" x11Support)
       (lib.cmakeBool "ENABLE_RPM" rpmSupport)
-      (lib.cmakeBool "ENABLE_VULKAN" x11Support)
+      (lib.cmakeBool "ENABLE_VULKAN" vulkanSupport)
       (lib.cmakeBool "ENABLE_WAYLAND" waylandSupport)
       (lib.cmakeBool "ENABLE_X11" x11Support)
       (lib.cmakeBool "ENABLE_XCB" x11Support)
