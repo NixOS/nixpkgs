@@ -131,6 +131,8 @@ self: super: with self; {
 
   ahocorasick-rs = callPackage ../development/python-modules/ahocorasick-rs { };
 
+  aider-chat = callPackage ../development/python-modules/aider-chat { };
+
   aigpy = callPackage ../development/python-modules/aigpy { };
 
   aio-geojson-client = callPackage ../development/python-modules/aio-geojson-client { };
@@ -573,8 +575,6 @@ self: super: with self; {
   amberelectric = callPackage ../development/python-modules/amberelectric { };
 
   amcrest = callPackage ../development/python-modules/amcrest { };
-
-  amiibo-py = callPackage ../development/python-modules/amiibo-py { };
 
   amply = callPackage ../development/python-modules/amply { };
 
@@ -4210,6 +4210,8 @@ self: super: with self; {
 
   eradicate = callPackage ../development/python-modules/eradicate { };
 
+  eris = callPackage ../development/python-modules/eris { };
+
   es-client = callPackage ../development/python-modules/es-client { };
 
   esig = callPackage ../development/python-modules/esig { };
@@ -4481,6 +4483,8 @@ self: super: with self; {
   fastentrypoints = callPackage ../development/python-modules/fastentrypoints { };
 
   faster-whisper = callPackage ../development/python-modules/faster-whisper { };
+
+  fastexcel = callPackage ../development/python-modules/fastexcel { };
 
   fastimport = callPackage ../development/python-modules/fastimport { };
 
@@ -6925,6 +6929,8 @@ self: super: with self; {
 
   kde-material-you-colors = callPackage ../development/python-modules/kde-material-you-colors { };
 
+  kdl-py = callPackage ../development/python-modules/kdl-py { };
+
   keba-kecontact = callPackage ../development/python-modules/keba-kecontact { };
 
   keep = callPackage ../development/python-modules/keep { };
@@ -9146,9 +9152,11 @@ self: super: with self; {
 
   netbox-documents = callPackage ../development/python-modules/netbox-documents { };
 
-  netbox-reorder-rack = callPackage ../development/python-modules/netbox-reorder-rack { };
-
   netbox-plugin-prometheus-sd = callPackage ../development/python-modules/netbox-plugin-prometheus-sd { };
+
+  netbox-qrcode = callPackage ../development/python-modules/netbox-qrcode { };
+
+  netbox-reorder-rack = callPackage ../development/python-modules/netbox-reorder-rack { };
 
   netcdf4 = callPackage ../development/python-modules/netcdf4 { };
 
@@ -14139,8 +14147,6 @@ self: super: with self; {
   riscv-config = callPackage ../development/python-modules/riscv-config { };
 
   riscv-isac = callPackage ../development/python-modules/riscv-isac { };
-
-  rising = callPackage ../development/python-modules/rising { };
 
   ritassist = callPackage ../development/python-modules/ritassist { };
 
