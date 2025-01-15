@@ -29,16 +29,19 @@ buildPythonPackage rec {
     hash = "sha256-IAsa/GjTydKZq9Nh9MSVRb2DujICVQT38hMPTjzQyBw=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     beautifulsoup4
     extruct
     isodate
     language-tags
     regex
-    requests
   ];
+
+  optional-dependencies = {
+    online = [ requests ];
+  };
 
   nativeCheckInputs = [
     pytestCheckHook
