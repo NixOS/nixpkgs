@@ -4333,10 +4333,6 @@ with pkgs;
     };
   });
 
-  netlify-cli = callPackage ../by-name/ne/netlify-cli/package.nix {
-    nodejs = nodejs_20;
-  };
-
   netpbm = callPackage ../tools/graphics/netpbm { };
 
   networkmanager = callPackage ../tools/networking/networkmanager { };
