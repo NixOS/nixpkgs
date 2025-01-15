@@ -10,14 +10,12 @@
   libxkbcommon,
   vulkan-loader,
   xorg,
-  nix-update-script,
   openh264,
   xorgSupport ? stdenvNoCC.hostPlatform.isLinux,
 }:
 let
   pname = "ruffle-bin";
   version = "nightly-2025-01-13";
-  passthru.updateScript = nix-update-script { extraArgs = [ "--version=unstable" ]; };
 
   openh264-2-4-1 = openh264.overrideAttrs (old: {
     src = fetchFromGitHub {
@@ -32,7 +30,6 @@ let
     inherit
       pname
       version
-      passthru
       meta
       ;
 
