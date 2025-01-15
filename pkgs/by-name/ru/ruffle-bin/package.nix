@@ -84,7 +84,32 @@ let
   });
 
   # TODO: Add Darwin support.
-  darwin = null;
+  darwin = stdenvNoCC.mkDerivation (finalAttrs: {
+    inherit
+      pname
+      version
+      meta
+      ;
+
+    src = fetchurl {
+      url = "${urlPrefix finalAttrs.version}-macos-universal.tar.gz";
+      hash = "sha256-q252R1IVhfa4YC/pwhxK/EEz7/3NOy2uwkMdtKIZE/Q=";
+    };
+
+    sourceRoot = ".";
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p "$out/Applications"
+      cp -R Ruffle.app "$out/Applications"
+
+      mkdir -p $out/bin
+      ln -s "$out/Applications/Ruffle.app/Contents/MacOS/ruffle" "$out/bin/ruffle"
+
+      runHook postInstall
+    '';
+  });
 
   meta = {
     description = "Nightly pre-built binary release of ruffle, the Adobe Flash Player emulator";
