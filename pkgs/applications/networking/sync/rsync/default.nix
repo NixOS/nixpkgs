@@ -82,7 +82,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     mainProgram = "rsync";
     maintainers = with lib.maintainers; [
-      ehmry
       kampfschlaefer
       ivan
     ];
