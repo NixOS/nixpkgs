@@ -6,20 +6,22 @@
   openconnect,
   openssl,
   perl,
+  pkg-config,
   vpnc-scripts,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "gpclient";
 
   inherit (gpauth) version src meta;
 
   buildAndTestSubdir = "apps/gpclient";
-  cargoHash = "sha256-lKfcWKOxpXEB28JajypOdyJNxLIAI8udMlaEo+6pecQ=";
+  cargoHash = "sha256-aanC0iwitvpKWCZSyaGVIkrWo/Hi1gjS19t3PfW+w4U=";
 
   nativeBuildInputs = [
     perl
     makeWrapper
+    pkg-config
   ];
   buildInputs = [
     gpauth
