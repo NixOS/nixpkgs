@@ -1,11 +1,13 @@
 {
   lib,
-  fetchFromGitHub,
+  asgiref,
   buildPythonPackage,
-  setuptools,
   django,
+  fetchFromGitHub,
   pytest-django,
   pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -13,16 +15,21 @@ buildPythonPackage rec {
   version = "4.6.0";
   pyproject = true;
 
+  disabled = pythonOlder "3.9";
+
   src = fetchFromGitHub {
     owner = "adamchainz";
-    repo = pname;
-    rev = version;
+    repo = "django-cors-headers";
+    tag = version;
     hash = "sha256-Dvsuj+U1YFC9jT5qkh2h1aL71JkRsAyXW4rxhLzEbOw=";
   };
 
   build-system = [ setuptools ];
 
-  dependencies = [ django ];
+  dependencies = [
+    asgiref
+    django
+  ];
 
   nativeCheckInputs = [
     pytest-django
@@ -34,6 +41,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Django app for handling server Cross-Origin Resource Sharing (CORS) headers";
     homepage = "https://github.com/OttoYiu/django-cors-headers";
+    changelog = "https://github.com/adamchainz/django-cors-headers/blob/${version}/CHANGELOG.rst";
     license = licenses.mit;
     maintainers = [ ];
   };
