@@ -21,6 +21,7 @@ buildDotnetModule rec {
   dotnet-sdk = dotnetCorePackages.sdk_9_0;
   dotnet-runtime = dotnetCorePackages.sdk_9_0;
   dotnetFlags = [ "-p:TargetFramework=net9.0" ];
+  dotnetRestoreFlags = [ "-p:Configuration=${buildType}" ];
   buildType = "Linux";
   projectFile = "UI.Avalonia/UI.Avalonia.csproj";
   nugetDeps = ./deps.json;
