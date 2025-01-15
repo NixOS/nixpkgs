@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   nix-update-script,
-  pnpm,
+  pnpm_9,
   nodejs,
   makeWrapper,
   electron,
@@ -25,14 +25,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-AndJqk1VAUdC4pOTRzyfhdxmzJMskGF6pUiqPs3fIy4=";
   };
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
     hash = "sha256-/7JIeQZt3QsKrjujSucRLiHfhfSllK7FeumNA4eHqSY=";
   };
 
   nativeBuildInputs = [
     nodejs
-    pnpm.configHook
+    pnpm_9.configHook
     makeWrapper
   ];
 

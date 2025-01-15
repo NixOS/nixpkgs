@@ -15,7 +15,7 @@
   openssl,
   pango,
   pkg-config,
-  pnpm,
+  pnpm_9,
   rustc,
   rustPlatform,
   stdenv,
@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-LtQS0kH+2P4odV7BJYiH6T51+iZHAM9W9mV96rNfNWs=";
   };
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
     hash = "sha256-Y14wBYiAsctMf4Ljt7G/twGEQP2nCSDQZVG8otImnIE=";
   };
@@ -85,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     gobject-introspection
     makeBinaryWrapper
     nodejs
-    pnpm.configHook
+    pnpm_9.configHook
     pkg-config
     rustc
     rustPlatform.cargoSetupHook
