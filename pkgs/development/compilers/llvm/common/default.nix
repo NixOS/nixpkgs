@@ -701,6 +701,12 @@ let
               # FIXME: do we need this after 15?
               (metadata.getVersionFile "lldb/procfs.patch")
             ]
+            ++ lib.optional (lib.versionOlder metadata.release_version "18") (fetchpatch {
+              name = "libcxx-19-char_traits.patch";
+              url = "https://github.com/llvm/llvm-project/commit/68744ffbdd7daac41da274eef9ac0d191e11c16d.patch";
+              stripLen = 1;
+              hash = "sha256-QCGhsL/mi7610ZNb5SqxjRGjwJeK2rwtsFVGeG3PUGc=";
+            })
             ++ lib.optional (lib.versionOlder metadata.release_version "17") resourceDirPatch
             ++ lib.optional (lib.versionOlder metadata.release_version "14") (
               metadata.getVersionFile "lldb/gnu-install-dirs.patch"
