@@ -13315,6 +13315,18 @@ final: prev:
     meta.homepage = "https://github.com/leafgarland/typescript-vim/";
   };
 
+	typr = buildVimPlugin {
+    pname = "typr";
+    version = "2025-01-15";
+		src = fetchFromGitHub {
+			owner = "nvzone";
+			repo = "typr";
+			rev = "main";
+			hash = "sha256-iVLxQeQqpqohCPZAE3SxReEo3KmWAo+xGAiJJnRBbUE=";
+		};
+    meta.homepage = "https://github.com/nvzone/typr";
+	};
+
   typst-conceal-vim = buildVimPlugin {
     pname = "typst-conceal.vim";
     version = "2023-10-13";
@@ -18885,6 +18897,18 @@ final: prev:
     };
     meta.homepage = "https://github.com/Mofiqul/vscode.nvim/";
   };
+
+	volt = buildVimPlugin {
+    pname = "volt";
+    version = "2025-01-15";
+		src = fetchFromGitHub {
+			owner = "nvzone";
+			repo = "volt";
+			rev = "main";
+			hash = "sha256-2SO847Un74kNFGxARaebB+WCCgexnaJdjUkQLZ6ROQ8=";
+		};
+    meta.homepage = "https://github.com/nvzone/volt";
+	};
 
   wal-vim = buildVimPlugin {
     pname = "wal.vim";
