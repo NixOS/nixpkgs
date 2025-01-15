@@ -14673,7 +14673,7 @@ with pkgs;
 
   ncdu_1 = callPackage ../tools/misc/ncdu/1.nix { };
 
-  notepad-next = libsForQt5.callPackage ../applications/editors/notepad-next { };
+  notepad-next = callPackage ../applications/editors/notepad-next { };
 
   notepadqq = libsForQt5.callPackage ../applications/editors/notepadqq { };
 
