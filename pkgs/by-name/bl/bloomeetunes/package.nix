@@ -51,6 +51,8 @@ flutter324.buildFlutterApplication rec {
     }"
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
     description = "Cross-platform music app designed to bring you ad-free tunes from various sources";
     homepage = "https://github.com/HemantKArya/BloomeeTunes";
