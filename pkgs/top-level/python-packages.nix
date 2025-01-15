@@ -9029,6 +9029,8 @@ self: super: with self; {
 
   netbox-documents = callPackage ../development/python-modules/netbox-documents { };
 
+  netbox-interface-synchronization = callPackage ../development/python-modules/netbox-interface-synchronization { };
+
   netbox-plugin-prometheus-sd = callPackage ../development/python-modules/netbox-plugin-prometheus-sd { };
 
   netbox-qrcode = callPackage ../development/python-modules/netbox-qrcode { };
