@@ -24,7 +24,7 @@ let
   inherit (python3Packages) buildPythonApplication pythonOlder;
 in
 buildPythonApplication rec {
-  version = "5.2.3";
+  version = "5.2.4";
   pname = "gramps";
   pyproject = true;
 
@@ -34,7 +34,7 @@ buildPythonApplication rec {
     owner = "gramps-project";
     repo = "gramps";
     tag = "v${version}";
-    hash = "sha256-DfKKB+rgMGQ8HTqhCp11UTYLj3Fdd0B0v4a922GJ8L8=";
+    hash = "sha256-Jue5V4pzfd1MaZwEhkGam+MhNjaisio7byMBPgGmiFg=";
   };
 
   patches = [
