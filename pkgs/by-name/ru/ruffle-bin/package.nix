@@ -11,7 +11,7 @@
   vulkan-loader,
   xorg,
   openh264,
-  xorgSupport ? stdenvNoCC.hostPlatform.isLinux,
+  withXorg ? stdenvNoCC.hostPlatform.isLinux,
 }:
 let
   pname = "ruffle-bin";
@@ -59,7 +59,7 @@ let
         vulkan-loader
         openh264-2-4-1
       ]
-      ++ lib.optionals xorgSupport [
+      ++ lib.optionals withXorg [
         xorg.libX11
         xorg.libXcursor
         xorg.libXi
