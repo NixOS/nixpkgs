@@ -15,17 +15,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cosmic-files";
-  version = "1.0.0-alpha.1";
+  version = "1.0.0-alpha.5.1";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-files";
     rev = "epoch-${version}";
-    hash = "sha256-UwQwZRzOyMvLRRmU2noxGrqblezkR8J2PNMVoyG0M0w=";
+    hash = "sha256-0kR8TSF7aRUYz0giogRvKOdcM2q2y58E+9eZW+5+qNo=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-me/U4LtnvYtf77qxF2Z1ncHRVOLp3inDVlwnCjwlj08=";
+  cargoHash = "sha256-OzplSqLrQ0ksUypgPnBKv1uXXOINg3GvScE4eBTVouc=";
 
   # COSMIC applications now uses vergen for the About page
   # Update the COMMIT_DATE to match when the commit was made
