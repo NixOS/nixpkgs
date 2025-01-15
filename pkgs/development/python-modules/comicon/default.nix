@@ -1,14 +1,15 @@
 {
-  lib,
   buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  pythonOlder,
   ebooklib,
+  fetchFromGitHub,
+  lib,
   lxml,
+  nix-update-script,
   pillow,
+  poetry-core,
   pypdf,
   python-slugify,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -24,15 +25,11 @@ buildPythonPackage rec {
     hash = "sha256-jZ/ZhSFg0ZPTYI10s8Cn1s9UZRFFnuLjS96lnUFVekQ=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
-  pythonRelaxDeps = [
-    "pillow"
-  ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     ebooklib
     lxml
     pillow
@@ -40,15 +37,21 @@ buildPythonPackage rec {
     python-slugify
   ];
 
+  pythonRelaxDeps = [
+    "pillow"
+  ];
+
   doCheck = false; # test artifacts are not public
 
   pythonImportsCheck = [ "comicon" ];
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     changelog = "https://github.com/potatoeggy/comicon/releases/tag/v${version}";
     description = "Lightweight comic converter library between CBZ, PDF, and EPUB";
     homepage = "https://github.com/potatoeggy/comicon";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ Scrumplex ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ Scrumplex ];
   };
 }
