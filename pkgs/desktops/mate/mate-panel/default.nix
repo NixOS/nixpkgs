@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
     gobject-introspection
     gettext
     itstool
+    libxml2 # xmllint
     pkg-config
     wrapGAppsHook3
   ];
@@ -46,7 +47,6 @@ stdenv.mkDerivation rec {
     libmateweather
     libwnck
     librsvg
-    libxml2
     dconf
     mate-desktop
     mate-menus
