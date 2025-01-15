@@ -4340,7 +4340,7 @@ with pkgs;
     };
   });
 
-  netlify-cli = callPackage ../development/web/netlify-cli {
+  netlify-cli = callPackage ../by-name/ne/netlify-cli/package.nix {
     nodejs = nodejs_20;
   };
 
