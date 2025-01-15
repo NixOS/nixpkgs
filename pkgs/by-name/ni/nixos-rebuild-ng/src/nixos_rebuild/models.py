@@ -52,7 +52,7 @@ class BuildAttr:
     attr: str | None
 
     def to_attr(self, *attrs: str) -> str:
-        return f"{self.attr + '.' if self.attr else ''}{".".join(attrs)}"
+        return f"{self.attr + '.' if self.attr else ''}{'.'.join(attrs)}"
 
     @classmethod
     def from_arg(cls, attr: str | None, file: str | None) -> Self:
@@ -68,7 +68,7 @@ class Flake:
     _re: ClassVar = re.compile(r"^(?P<path>[^\#]*)\#?(?P<attr>[^\#\"]*)$")
 
     def to_attr(self, *attrs: str) -> str:
-        return f"{self}.{".".join(attrs)}"
+        return f"{self}.{'.'.join(attrs)}"
 
     @override
     def __str__(self) -> str:
@@ -83,7 +83,7 @@ class Flake:
         m = cls._re.match(flake_str)
         assert m is not None, f"got no matches for {flake_str}"
         attr = m.group("attr")
-        nixos_attr = f"nixosConfigurations.{attr or hostname_fn() or "default"}"
+        nixos_attr = f"nixosConfigurations.{attr or hostname_fn() or 'default'}"
         path = m.group("path")
         if ":" in path:
             return cls(path, nixos_attr)
