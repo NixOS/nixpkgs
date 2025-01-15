@@ -96,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script { extraArgs = [ "--generate-lockfile" ]; };
   };
 
   meta = {
