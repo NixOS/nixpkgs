@@ -199,6 +199,13 @@ goBuild {
       make ${dist_cmd} -j $NIX_BUILD_CORES
     '';
 
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
+    # copy libggml_*.so and runners into lib
+    # https://github.com/ollama/ollama/blob/v0.4.4/llama/make/gpu.make#L90
+    mkdir -p $out/lib
+    cp -r dist/*/lib/* $out/lib/
+  '';
+
   postFixup =
     # the app doesn't appear functional at the moment, so hide it
     ''
