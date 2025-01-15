@@ -16,17 +16,17 @@ in
 
 stdenv.mkDerivation rec {
   pname = "sqlite${lib.optionalString interactive "-interactive"}";
-  version = "3.47.2";
+  version = "3.48.0";
 
   # nixpkgs-update: no auto update
   # NB! Make sure to update ./tools.nix src (in the same directory).
   src = fetchurl {
-    url = "https://sqlite.org/2024/sqlite-autoconf-${archiveVersion version}.tar.gz";
-    hash = "sha256-8bLuQSwo10cryVupljaNbwzc8ANir/2tsn7ShsF5VAs=";
+    url = "https://sqlite.org/2025/sqlite-autoconf-${archiveVersion version}.tar.gz";
+    hash = "sha256-rJkvf8o5id5+0f6ZwWNj+Eh5TIwyoVja/U65J6LgL9U=";
   };
   docsrc = fetchurl {
-    url = "https://sqlite.org/2024/sqlite-doc-${archiveVersion version}.zip";
-    hash = "sha256-bcyommdJAp+6gbwPQYjL1PeKy0jWo+rcbVSK+RF8P0E=";
+    url = "https://sqlite.org/2025/sqlite-doc-${archiveVersion version}.zip";
+    hash = "sha256-PcE3/NfGrLMmr2CmG5hE3RXTdzywXnqc4nbEH3E9dlo=";
   };
 
   outputs = [ "bin" "dev" "man" "doc" "out" ];
@@ -86,9 +86,6 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    # Do not contaminate dependent libtool-based projects with sqlite dependencies.
-    sed -i $out/lib/libsqlite3.la -e "s/dependency_libs=.*/dependency_libs='''/"
-
     mkdir -p $doc/share/doc
     unzip $docsrc
     mv sqlite-doc-${archiveVersion version} $doc/share/doc/sqlite
