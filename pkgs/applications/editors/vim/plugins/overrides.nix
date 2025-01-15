@@ -2853,6 +2853,8 @@ in
       "snacks.win"
       "snacks.words"
       "snacks.zen"
+      "snacks.picker.config.highlights"
+      "snacks.picker.actions"
       # Optional trouble integration
       "trouble.sources.profiler"
     ];
