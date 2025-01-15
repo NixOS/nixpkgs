@@ -9,6 +9,7 @@
   vala,
   libadwaita,
   libgee,
+  gettext,
   gnome-settings-daemon,
   granite7,
   gtk4,
@@ -31,6 +32,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    gettext # msgfmt
     meson
     ninja
     pkg-config

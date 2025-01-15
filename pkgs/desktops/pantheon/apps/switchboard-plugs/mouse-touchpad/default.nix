@@ -13,6 +13,7 @@
   granite7,
   gtk4,
   switchboard,
+  gettext,
   gnome-settings-daemon,
   glib,
   gala, # needed for gestures support
@@ -38,6 +39,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
+    gettext # msgfmt
     meson
     ninja
     pkg-config
