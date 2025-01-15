@@ -72,13 +72,4 @@ in
       ]
       ++ lib.teams.flyingcircus.members;
   };
-  matomo-beta = matomoTest pkgs.matomo-beta // {
-    name = "matomo-beta";
-    meta.maintainers = with maintainers; [
-      florianjacob
-      mmilata
-      twey
-      boozedog
-    ];
-  };
 }
