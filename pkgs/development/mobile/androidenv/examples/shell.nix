@@ -37,7 +37,10 @@ let
 
     platforms = [ "23" "24" "25" "26" "27" "28" "29" "30" "31" "32" "33" "34" "35" ];
     abis = [ "x86_64" ];
-    extras = ["extras;google;gcm"];
+    extras = [
+      "extras;google;gcm"
+      "extras;google;auto"
+    ];
   };
 
   # If you copy this example out of nixpkgs, something like this will work:
@@ -180,7 +183,9 @@ pkgs.mkShell rec {
         "system-images;android-32;google_apis_playstore;x86_64" \
         "system-images;android-33;google_apis_playstore;x86_64" \
         "system-images;android-34;google_apis;x86_64" \
-        "system-images;android-35;google_apis_playstore_ps16k;x86_64"
+        "system-images;android-35;google_apis;x86_64" \
+        "extras;google;gcm"
+        "extras;google;auto"
       )
 
       for package in "''${packages[@]}"; do
