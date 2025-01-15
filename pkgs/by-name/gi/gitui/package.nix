@@ -6,13 +6,14 @@
   libiconv,
   openssl,
   pkg-config,
+  cmake,
   xclip,
   darwin,
   nix-update-script,
 }:
 let
   pname = "gitui";
-  version = "0.26.3";
+  version = "0.27.0";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -21,12 +22,15 @@ rustPlatform.buildRustPackage {
     owner = "extrawurst";
     repo = "gitui";
     rev = "v${version}";
-    hash = "sha256-j3y+KjC+o9p2omf4bN8+XevwU7WqiaQ0sfPqHySD2ik=";
+    hash = "sha256-jKJ1XnF6S7clyFGN2o3bHnYpC4ckl/lNXscmf6GRLbI=";
   };
 
-  cargoHash = "sha256-vVEo0kSghOQsH3T6ZTAzN7gIUku0n7rDbKwNmOM9GZc=";
+  cargoHash = "sha256-T00TqxR2EWnDkZo3MUQhiG0oAUf1PgpkUMZLt7f4FH0=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+  ];
 
   buildInputs =
     [ openssl ]
@@ -57,9 +61,7 @@ rustPlatform.buildRustPackage {
     "--skip=keys::key_config::tests::test_symbolic_links"
   ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version=unstable" ];
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/extrawurst/gitui/blob/v${version}/CHANGELOG.md";
