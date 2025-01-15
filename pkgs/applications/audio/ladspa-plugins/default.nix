@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   autoreconfHook,
+  automake,
   fftw,
   ladspaH,
   libxml2,
@@ -21,8 +22,19 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-eOtIhNcuItREUShI8JRlBVKfMfovpdfIYu+m37v4KLE=";
   };
 
+  preBuild = ''
+    shopt -s globstar
+    for f in **/Makefile; do
+      substituteInPlace "$f" \
+        --replace-quiet 'ranlib' '${stdenv.cc.targetPrefix}ranlib'
+    done
+    shopt -u globstar
+  '';
+
   nativeBuildInputs = [
     autoreconfHook
+    perlPackages.perl
+    perlPackages.XMLParser
     pkg-config
     perlPackages.perl
     perlPackages.XMLParser
@@ -34,10 +46,8 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    patchShebangs .
-    substituteInPlace util/Makefile.am --replace-fail "ranlib" "$RANLIB"
-    substituteInPlace gsm/Makefile.am --replace-fail "ranlib" "$RANLIB"
-    substituteInPlace gverb/Makefile.am --replace-fail "ranlib" "$RANLIB"
+    patchShebangs --build . ./metadata/ makestub.pl
+    cp ${automake}/share/automake-*/mkinstalldirs .
   '';
 
   meta = with lib; {
