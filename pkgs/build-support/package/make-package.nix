@@ -85,6 +85,8 @@ let
             }
           );
 
+        internals = this;
+
         # TODO: Support legacy attrs like passthru?
         overrideAttrs =
           f:
