@@ -37,3 +37,4 @@ jobs:
     with:
       from: ${{ matrix.pairs.from }}
       into: ${{ matrix.pairs.into }}
+    secrets: inherit
