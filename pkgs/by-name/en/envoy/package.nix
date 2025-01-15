@@ -19,6 +19,10 @@
   python3,
   linuxHeaders,
   nixosTests,
+  runCommandLocal,
+  gnutar,
+  gnugrep,
+  envoy,
 
   # v8 (upstream default), wavm, wamr, wasmtime, disabled
   wasmRuntime ? "wamr",
@@ -242,6 +246,38 @@ buildBazelPackage rec {
     envoy = nixosTests.envoy;
     # tested as a core component of Pomerium
     pomerium = nixosTests.pomerium;
+
+    deps-store-free =
+      runCommandLocal "${envoy.name}-deps-store-free-test"
+        {
+          nativeBuildInputs = [
+            gnutar
+            gnugrep
+          ];
+        }
+        ''
+          touch $out
+          tar -xf ${envoy.deps}
+          grep -r /nix/store external && status=$? || status=$?
+          case $status in
+            1)
+              echo "No match found."
+              ;;
+            0)
+              echo
+              echo "Error: Found references to /nix/store in envoy.deps derivation"
+              echo "This is a reproducibility issue, as the hash of the fixed-output derivation"
+              echo "will change in case the store path of the input changes."
+              echo
+              echo "Replace the store path in fetcherAttrs.preInstall."
+              exit 1
+              ;;
+            *)
+              echo "An unexpected error occurred."
+              exit $status
+              ;;
+          esac
+        '';
   };
 
   meta = with lib; {
