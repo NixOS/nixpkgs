@@ -6,9 +6,11 @@
   fetchurl,
   fetchpatch,
   cmake,
+  expected-lite,
   qt6,
   fmt,
   shaderc,
+  variant-lite,
   vulkan-headers,
   wayland,
   cudaSupport ? config.cudaSupport,
@@ -18,11 +20,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gpt4all";
-  version = "3.4.2";
+  version = "3.6.1";
 
   src = fetchFromGitHub {
     fetchSubmodules = true;
-    hash = "sha256-QzU22y6tt3UhazVSPcFuKejH4AV+mw7JExH61NtAKoM=";
+    hash = "sha256-eJVwLHER3Ch9dnxubSUJFvE1MHt0ywvcYr5s2p2W7X8=";
     owner = "nomic-ai";
     repo = "gpt4all";
     rev = "v${finalAttrs.version}";
@@ -35,12 +37,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./embedding-local.patch
-    (fetchpatch {
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/004-fix-build-with-qt-6.8.0.diff?h=gpt4all-chat&id=d14b12cb63fae95e578aa839a570189a23833051";
-      sha256 = "3Zur9KFn45f4dgAzOF7p1q42IdLqXwioN4zMiBbWbVU=";
-      # remove the `gpt4all-chat` part of the paths as sourceRoot is gpt4all-chat
-      stripLen = 1;
-    })
   ];
 
   sourceRoot = "${finalAttrs.src.name}/gpt4all-chat";
@@ -57,6 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs =
     [
+      expected-lite
+      variant-lite
       fmt
       qt6.qtwayland
       qt6.qtquicktimeline
@@ -85,6 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
       "-DKOMPUTE_OPT_USE_BUILT_IN_FMT=OFF"
       "-DGGML_VULKAN=ON"
       "-DGGML_KOMPUTE=ON"
+      "-DJINJA2CPP_DEPS_MODE=external"
     ]
     ++ lib.optionals (!cudaSupport) [
       "-DLLMODEL_CUDA=OFF"
