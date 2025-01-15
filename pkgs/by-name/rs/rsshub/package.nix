@@ -3,7 +3,7 @@
   fetchFromGitHub,
   makeBinaryWrapper,
   nodejs,
-  pnpm,
+  pnpm_9,
   replaceVars,
   stdenv,
 }:
@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
     hash = "sha256-mAAo4SdJ8cj8aqnbm+azcnxq8lFBvOy3BlSEKz9MA0Q=";
   };
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeBinaryWrapper
     nodejs
-    pnpm.configHook
+    pnpm_9.configHook
   ];
 
   buildPhase = ''
