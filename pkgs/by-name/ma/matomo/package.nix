@@ -102,21 +102,22 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Real-time web analytics application";
     mainProgram = "matomo-console";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     homepage = "https://matomo.org/";
     changelog = "https://github.com/matomo-org/matomo/releases/tag/${finalAttrs.version}";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     maintainers =
-      with maintainers;
+      with lib.maintainers;
       [
         florianjacob
         sebbel
         twey
         boozedog
+        niklaskorz
       ]
-      ++ teams.flyingcircus.members;
+      ++ lib.teams.flyingcircus.members;
   };
 })
