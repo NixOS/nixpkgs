@@ -15,7 +15,8 @@
   sqlite,
   wxGTK32,
   gtk3,
-  darwin,
+  lua,
+  wxsqlite3,
 }:
 
 stdenv.mkDerivation rec {
@@ -39,9 +40,9 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  postPatch = lib.optionalString (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isx86_64) ''
-    substituteInPlace 3rd/CMakeLists.txt \
-      --replace "-msse4.2 -maes" ""
+  postPatch = ''
+    substituteInPlace src/dbwrapper.cpp src/model/Model_Report.cpp \
+      --replace-fail "sqlite3mc_amalgamation.h" "sqlite3.h"
   '';
 
   nativeBuildInputs =
@@ -59,18 +60,20 @@ stdenv.mkDerivation rec {
       lsb-release
     ];
 
-  buildInputs =
-    [
-      curl
-      sqlite
-      wxGTK32
-      gtk3
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.libobjc
-    ];
+  buildInputs = [
+    curl
+    sqlite
+    wxGTK32
+    gtk3
+    lua
+    wxsqlite3
+  ];
 
   strictDeps = true;
+
+  cmakeFlags = [
+    "-DWXSQLITE3_HAVE_CODEC=1"
+  ];
 
   env.NIX_CFLAGS_COMPILE = toString (
     lib.optionals stdenv.cc.isClang [
