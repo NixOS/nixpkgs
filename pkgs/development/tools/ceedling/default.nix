@@ -13,5 +13,6 @@ bundlerApp {
     homepage = "http://www.throwtheswitch.org/ceedling";
     license = licenses.mit;
     platforms = platforms.unix;
+    maintainers = [ maintainers.rlwrnc ];
   };
 }
