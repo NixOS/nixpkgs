@@ -136,6 +136,7 @@ class HTMLRenderer(Renderer):
     def dd_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         return "</dd>"
     def myst_role(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        # NixOS-specific roles are documented at <nixpkgs>/doc/README.md (with reverse reference)
         if token.meta['name'] == 'command':
             return f'<span class="command"><strong>{escape(token.content)}</strong></span>'
         if token.meta['name'] == 'file':
