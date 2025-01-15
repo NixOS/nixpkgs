@@ -94,7 +94,7 @@ jobs:
             echo
             echo "nixfmt ${unformattedFiles[*]@Q}"
             echo
-            echo "Make sure your branch is up to date with master, rebase if not."
+            echo "Make sure your branch is up to date with master; rebase if not."
             echo "If you're having trouble, please ping @NixOS/nix-formatting"
             exit 1
           fi
