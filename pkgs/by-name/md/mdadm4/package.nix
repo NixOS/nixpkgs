@@ -4,9 +4,13 @@
   util-linux,
   coreutils,
   fetchurl,
+  findutils,
+  gnugrep,
   groff,
+  makeWrapper,
   system-sendmail,
   udev,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
@@ -57,7 +61,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ udev ];
 
-  nativeBuildInputs = [ groff ];
+  nativeBuildInputs = [
+    groff
+    makeWrapper
+  ];
 
   postPatch = ''
     sed -e 's@/lib/udev@''${out}/lib/udev@' \
@@ -69,11 +76,33 @@ stdenv.mkDerivation rec {
         *.rules
   '';
 
+  postInstall = ''
+    install -D -m 755 misc/mdcheck $out/bin/mdcheck
+
+    wrapProgram $out/bin/mdcheck \
+      --prefix PATH : $out/bin:${
+        lib.makeBinPath [
+          coreutils
+          util-linux
+          findutils
+          gnugrep
+        ]
+      }
+
+    substituteInPlace $out/lib/systemd/system/mdcheck_{start,continue}.service \
+      --replace-fail "/usr/share/mdadm/mdcheck" "$out/bin/mdcheck"
+
+    substituteInPlace $out/lib/systemd/system/mdmonitor.service \
+      --replace-fail "ExecStartPre=-/usr/lib/mdadm/mdadm_env.sh" ""
+  '';
+
   # This is to avoid self-references, which causes the initrd to explode
   # in size and in turn prevents mdraid systems from booting.
   postFixup = ''
     grep -r $out $out/bin && false || true
   '';
+
+  passthru.tests.mdcheck = nixosTests.mdcheck;
 
   meta = with lib; {
     description = "Programs for managing RAID arrays under Linux";
