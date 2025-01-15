@@ -72,6 +72,7 @@
                 # https://github.com/NixOS/nixpkgs/pull/153594#issuecomment-1023287913
                 ({ config, pkgs, lib, ... }: {
                   config.nixpkgs.source = self.outPath;
+                  config.system.build.usingFlakes = true;
                 })
               ];
             } // builtins.removeAttrs args [ "modules" ]

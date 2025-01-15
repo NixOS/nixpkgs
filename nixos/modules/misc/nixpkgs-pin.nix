@@ -7,7 +7,7 @@
 }:
 let
   cfg = config.nixpkgs;
-  usingFlakes = lib ? nixosSystem;
+  usingFlakes = config.system.build.usingFlakes;
 in
 {
 
