@@ -3666,10 +3666,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
 
-  gpredict = callPackage ../applications/science/astronomy/gpredict {
-    hamlib = hamlib_4;
-  };
-
   gprof2dot = with python3Packages; toPythonApplication gprof2dot;
 
   grails = callPackage ../development/web/grails { jdk = null; };
