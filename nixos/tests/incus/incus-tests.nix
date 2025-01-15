@@ -293,6 +293,16 @@ import ../make-test-python.nix (
 
                     check_sysctl(f"container-{variant}2")
 
+            with subtest("supports per-instance lxcfs"):
+                machine.succeed(f"incus stop container-{variant}1")
+                machine.fail(f"pgrep -a lxcfs | grep 'incus/devices/container-{variant}1/lxcfs'")
+
+                machine.succeed("incus config set instances.lxcfs.per_instance=true")
+
+                machine.succeed(f"incus start container-{variant}1")
+                wait_for_instance(f"container-{variant}1")
+                machine.succeed(f"pgrep -a lxcfs | grep 'incus/devices/container-{variant}1/lxcfs'")
+
 
             with subtest("Instance remains running when softDaemonRestart is enabled and service is stopped"):
                 pid = machine.succeed(f"incus info container-{variant}1 | grep 'PID'").split(":")[1].strip()
