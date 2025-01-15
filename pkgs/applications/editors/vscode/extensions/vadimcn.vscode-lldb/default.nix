@@ -92,7 +92,7 @@ stdenv.mkDerivation {
     unzip
   ];
 
-  patches = [ ./cmake-build-extension-only.patch ];
+  patches = [ ./patches/cmake-build-extension-only.patch ];
 
   postPatch = ''
     # temporary patch for forgotten version updates
