@@ -15,6 +15,7 @@
   ollama,
   vte-gtk4,
   libspelling,
+  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -73,6 +74,8 @@ python3Packages.buildPythonApplication rec {
     # https://github.com/flatpak/flatpak/issues/3229
     "--set FLATPAK_DEST ${placeholder "out"}"
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Ollama client made with GTK4 and Adwaita";
