@@ -50,8 +50,8 @@ def test_parse_args() -> None:
     assert r1.install_grub is True
     assert r1.profile_name == "system"
     assert r1.action == "switch"
-    assert r1.option == ["foo", "bar"]
-    assert g1["common_flags"].option == ["foo", "bar"]
+    assert r1.option == [["foo", "bar"]]
+    assert g1["common_flags"].option == [["foo", "bar"]]
 
     r2, g2 = nr.parse_args(
         [
@@ -292,6 +292,10 @@ def test_execute_nix_switch_flake(mock_run: Any, tmp_path: Path) -> None:
             "--sudo",
             "--verbose",
             "--fast",
+            # https://github.com/NixOS/nixpkgs/issues/374050
+            "--option",
+            "narinfo-cache-negative-ttl",
+            "1200",
         ]
     )
 
@@ -307,6 +311,9 @@ def test_execute_nix_switch_flake(mock_run: Any, tmp_path: Path) -> None:
                     "--print-out-paths",
                     "/path/to/config#nixosConfigurations.hostname.config.system.build.toplevel",
                     "-v",
+                    "--option",
+                    "narinfo-cache-negative-ttl",
+                    "1200",
                     "--no-link",
                 ],
                 check=True,
