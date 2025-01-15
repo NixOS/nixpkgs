@@ -30,6 +30,7 @@
   curl,
   bison,
   flex,
+  fetchurl,
 }:
 
 let
@@ -45,9 +46,22 @@ let
         --replace-fail '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@
     '';
   });
+  avro-cpp_rods = avro-cpp_llvm.overrideAttrs (attrs: {
+    inherit stdenv;
+    version = "1.11.3";
+    src = attrs.src.overrideAttrs rec {
+      outputHash = "sha256-+6JCrvd+yBnQdWH8upN1FyGVbejQyujh8vMAtUszG64=";
+    };
+    patches = [ ];
+    preConfigure = ''
+      substituteInPlace test/SchemaTests.cc --replace "BOOST_CHECKPOINT" "BOOST_TEST_CHECKPOINT"
+      substituteInPlace test/buffertest.cc --replace "BOOST_MESSAGE" "BOOST_TEST_MESSAGE"
+    '';
+  });
 in
 let
-  avro-cpp = avro-cpp_llvm;
+  avro-cpp = avro-cpp_rods;
+  spdlog = spdlog_rods;
   nanodbc = nanodbc_llvm;
 
   common = import ./common.nix {
@@ -79,7 +93,7 @@ let
       fmt
       nlohmann_json
       curl
-      spdlog_rods
+      spdlog
       bison
       flex
       ;
