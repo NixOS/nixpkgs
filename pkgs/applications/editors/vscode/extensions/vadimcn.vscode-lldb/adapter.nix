@@ -45,7 +45,7 @@ rustPlatform.buildRustPackage {
       --set-default LLDB_DEBUGSERVER_PATH "${lldb.out}/bin/lldb-server"
   '';
 
-  patches = [ ./adapter-output-shared_object.patch ];
+  patches = [ ./patches/adapter-output-shared_object.patch ];
 
   # Tests are linked to liblldb but it is not available here.
   doCheck = false;
