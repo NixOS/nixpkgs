@@ -1,12 +1,5 @@
+{ lib, ... }:
 {
-  system ? builtins.currentSystem,
-  config ? { },
-  pkgs ? import ../.. { inherit system config; },
-}:
-
-with import ../lib/testing-python.nix { inherit system pkgs; };
-
-makeTest {
   name = "matomo";
 
   nodes.machine =
@@ -54,12 +47,12 @@ makeTest {
   '';
 
   meta.maintainers =
-    with pkgs.lib.maintainers;
+    with lib.maintainers;
     [
       florianjacob
       mmilata
       twey
       boozedog
     ]
-    ++ pkgs.lib.teams.flyingcircus.members;
+    ++ lib.teams.flyingcircus.members;
 }
