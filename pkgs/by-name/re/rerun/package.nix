@@ -3,14 +3,12 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
-
   # nativeBuildInputs
   binaryen,
   lld,
   pkg-config,
   protobuf,
   rustfmt,
-
   # buildInputs
   freetype,
   glib,
@@ -19,9 +17,7 @@
   openssl,
   vulkan-loader,
   wayland,
-
   versionCheckHook,
-
   # passthru
   nix-update-script,
   python3Packages,
@@ -49,7 +45,28 @@ rustPlatform.buildRustPackage rec {
   cargoBuildFlags = [ "--package rerun-cli" ];
   cargoTestFlags = [ "--package rerun-cli" ];
   buildNoDefaultFeatures = true;
-  buildFeatures = [ "native_viewer" ];
+  buildFeatures = [
+    "native_viewer"
+    "web_viewer"
+  ];
+
+  # When web_viewer is compiled, the wasm webviewer first needs to be built
+  # If this doesn't exist, the build will fail. More information: https://github.com/rerun-io/rerun/issues/6028
+  # The command is taken from https://github.com/rerun-io/rerun/blob/dd025f1384f9944d785d0fb75ca4ca1cd1792f17/pixi.toml#L198C72-L198C187
+  # Note that cargoBuildFeatures reference what buildFeatures is set to in stdenv.mkDerivation,
+  # so that user can easily create an overlay to set cargoBuildFeatures to what he needs
+  configurePhase = ''
+    runHook preConfigure
+
+    if [[ " $cargoBuildFeatures " == *" web_viewer "* ]]; then
+      echo "Building with web_viewer feature..."
+      cargo run -p re_dev_tools -- build-web-viewer --no-default-features --features analytics,grpc,map_view --release -g
+    else
+      echo "web_viewer feature not enabled, skipping web viewer build."
+    fi
+
+    runHook postConfigure
+  '';
 
   nativeBuildInputs = [
     (lib.getBin binaryen) # wasm-opt
