@@ -1634,6 +1634,7 @@ with pkgs;
 
   authelia = callPackage ../servers/authelia {
     buildGoModule = buildGo123Module;
+    pnpm = pnpm_9;
   };
 
   authentik-outposts = recurseIntoAttrs (callPackages ../by-name/au/authentik/outposts.nix { });
@@ -4761,7 +4762,7 @@ with pkgs;
 
   inherit (callPackage ../development/tools/pnpm { })
     pnpm_8 pnpm_9 pnpm_10;
-  pnpm = pnpm_9;
+  pnpm = pnpm_10;
 
   po4a = perlPackages.Po4a;
 
