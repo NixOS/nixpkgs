@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchurl,
+  fetchFromGitHub,
   wrapGAppsHook3,
   autoPatchelfHook,
   alsa-lib,
@@ -10,6 +11,7 @@
   vulkan-loader,
   xorg,
   nix-update-script,
+  openh264,
   xorgSupport ? stdenvNoCC.hostPlatform.isLinux,
 }:
 let
@@ -17,6 +19,15 @@ let
   version = "nightly-2025-01-13";
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=unstable" ]; };
 
+  openh264-2-4-1 = openh264.overrideAttrs (old: {
+    src = fetchFromGitHub {
+      owner = "cisco";
+      repo = "openh264";
+      rev = "v2.4.1";
+      hash = "sha256-ai7lcGcQQqpsLGSwHkSs7YAoEfGCIbxdClO6JpGA+MI=";
+    };
+    postPatch = "";
+  });
   x86_64-linux = stdenvNoCC.mkDerivation (finalAttrs: {
     inherit
       pname
@@ -46,6 +57,7 @@ let
         wayland
         libxkbcommon
         vulkan-loader
+        openh264-2-4-1
       ]
       ++ lib.optionals xorgSupport [
         xorg.libX11
