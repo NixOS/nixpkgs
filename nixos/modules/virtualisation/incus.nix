@@ -401,6 +401,7 @@ in
         "incus.socket"
       ];
       requires = [ "incus.socket" ];
+      wantedBy = config.systemd.services.incus.wantedBy;
 
       serviceConfig = {
         ExecStart = "${incus-startup} start";
