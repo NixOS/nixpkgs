@@ -7,6 +7,7 @@
 , which
 , Accelerate
 , CoreGraphics
+, impureUseNativeOptimizations
 , CoreML
 , CoreVideo
 , MetalKit
@@ -21,7 +22,7 @@ let
   # It's necessary to consistently use backendStdenv when building with CUDA support,
   # otherwise we get libstdc++ errors downstream.
   # cuda imposes an upper bound on the gcc version, e.g. the latest gcc compatible with cudaPackages_11 is gcc11
-  effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else stdenv;
+  effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else impureUseNativeOptimizations stdenv;
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "whisper-cpp";
@@ -61,6 +62,8 @@ effectiveStdenv.mkDerivation (finalAttrs: {
       cuda_cudart
       libcublas
     ]);
+
+  enableParallelBuilding = true;
 
   postPatch = let
     cudaOldStr = "-lcuda ";
