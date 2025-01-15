@@ -1,4 +1,4 @@
-{ stdenv, lib, akku, curl, git }:
+{ stdenv, lib, fetchFromGitHub, akku, curl, git }:
 let
   joinOverrides =
     overrides: pkg: old:
@@ -13,22 +13,29 @@ let
   runTests = pkg: old: { doCheck = true; };
   brokenOnAarch64 = _: lib.addMetaAttrs { broken = stdenv.hostPlatform.isAarch64; };
   brokenOnx86_64Darwin = lib.addMetaAttrs { broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64; };
+  brokenOnDarwin = lib.addMetaAttrs { broken = stdenv.hostPlatform.isDarwin; };
 in
 {
   chez-srfi = joinOverrides [
     (pkg: old: {
+      version = "0.0.0-unstable-2024-10-31";
       preCheck = ''
         SKIP='
         multi-dimensional-arrays.sps
         time.sps
         tables-test.ikarus.sps
         lazy.sps
+        pipeline-operators.sps
         '
       '';
+      src = fetchFromGitHub {
+        owner = "arcfide";
+        repo = "chez-srfi";
+        rev = "b424440b94037ace50fc8179f159b7e4c53e59e6";
+        hash = "sha256-Qg8XveLObiD6bZJ3FQNAgbZepnQHcB2GC+wzh58I5mA=";
+      };
+      unpackPhase = "";
     })
-
-    # nothing builds on ARM Macs because of this
-    brokenOnAarch64
   ];
 
   akku-r7rs = pkg: old: {
@@ -83,7 +90,7 @@ in
   # system-specific:
 
   # scheme-langserver doesn't work because of this
-  ufo-thread-pool = brokenOnx86_64Darwin;
+  ufo-thread-pool = brokenOnDarwin;
 
   # broken everywhere:
   chibi-math-linalg = broken;
