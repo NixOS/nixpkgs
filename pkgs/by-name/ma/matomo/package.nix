@@ -5,6 +5,7 @@
   makeWrapper,
   php,
   nixosTests,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -90,6 +91,12 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--url"
+        "https://github.com/matomo-org/matomo"
+      ];
+    };
     tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
       inherit (nixosTests) matomo;
     };
@@ -100,6 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "matomo-console";
     license = licenses.gpl3Plus;
     homepage = "https://matomo.org/";
+    changelog = "https://github.com/matomo-org/matomo/releases/tag/${finalAttrs.version}";
     platforms = platforms.all;
     maintainers =
       with maintainers;
