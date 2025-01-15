@@ -15,7 +15,10 @@ in
 {
   meta = {
     doc = ./garage.md;
-    maintainers = [ maintainers.mjm ];
+    maintainers = with lib.maintainers; [
+      mjm
+      cything
+    ];
   };
 
   options.services.garage = {
