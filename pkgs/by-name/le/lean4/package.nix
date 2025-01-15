@@ -13,18 +13,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lean4";
-  version = "4.12.0";
+  version = "4.15.0";
 
   src = fetchFromGitHub {
     owner = "leanprover";
     repo = "lean4";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-O2Egyh2D0TfQWzQKfHUeAh7qAjMfeLVwXwGUw5QqcvE=";
+    hash = "sha256-Xzuk41voBP93vsl3u/bBii9Y6DMfvi6UazKiLLABgHA=";
   };
 
   postPatch = ''
     substituteInPlace src/CMakeLists.txt \
-      --replace 'set(GIT_SHA1 "")' 'set(GIT_SHA1 "${finalAttrs.src.rev}")'
+      --replace-fail 'set(GIT_SHA1 "")' 'set(GIT_SHA1 "${finalAttrs.src.rev}")'
 
     # Remove tests that fails in sandbox.
     # It expects `sourceRoot` to be a git repository.
@@ -37,12 +37,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    cadical
   ];
 
   buildInputs = [
     gmp
     libuv
+    cadical
   ];
 
   nativeCheckInputs = [
