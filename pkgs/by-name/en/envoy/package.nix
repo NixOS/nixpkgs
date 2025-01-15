@@ -42,8 +42,8 @@ let
   # these need to be updated for any changes to fetchAttrs
   depsHash =
     {
-      x86_64-linux = "sha256-A4faXoO0WiXLrepk7DV88NavL/fytZa2UPepC+QkR3E=";
-      aarch64-linux = "sha256-vA/Wgf5bu/+Hlgc93h5lvhbPlsiSR10TuZ0qn5v0UaM=";
+      x86_64-linux = "sha256-4CQkHlXbDpRiqzeyserVf9PpLx3ME7TtZ2H88ggog6U=";
+      aarch64-linux = "sha256-FxkfBWiG0NIInl28w+l4YvaV2VFuCtjn5VBAKvJoxM8=";
     }
     .${stdenv.system} or (throw "unsupported system ${stdenv.system}");
 
@@ -135,7 +135,9 @@ buildBazelPackage rec {
         -e 's,${stdenv.shellPackage},__NIXSHELL__,' \
         $bazelOut/external/com_github_luajit_luajit/build.py \
         $bazelOut/external/local_config_sh/BUILD \
-        $bazelOut/external/*_pip3/BUILD.bazel
+        $bazelOut/external/*_pip3/BUILD.bazel \
+        $bazelOut/external/rules_rust/util/process_wrapper/private/process_wrapper.sh \
+        $bazelOut/external/rules_rust/crate_universe/src/metadata/cargo_tree_rustc_wrapper.sh
 
       rm -r $bazelOut/external/go_sdk
       rm -r $bazelOut/external/local_jdk
