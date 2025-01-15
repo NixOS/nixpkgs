@@ -10,13 +10,13 @@
 
 mkDerivation rec {
   pname = "notepad-next";
-  version = "0.9";
+  version = "0.10";
 
   src = fetchFromGitHub {
     owner = "dail8859";
     repo = "NotepadNext";
     rev = "v${version}";
-    hash = "sha256-3BCLPY104zxALd3wFH8e9PitjmFbPcOfKsLqXowXqnY=";
+    hash = "sha256-DpqFu7Nt7l1rmQoJ7aQnFEGPxo8NDrowHxmyLdKIX4A=";
     # External dependencies - https://github.com/dail8859/NotepadNext/issues/135
     fetchSubmodules = true;
   };
