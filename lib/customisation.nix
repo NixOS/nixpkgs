@@ -303,6 +303,10 @@ rec {
     if missingArgs == { } then
       if fargs ? mkPackage then
         if fargs != { mkPackage = false; } then
+          # If your file is e.g. an attrset with a package and something else,
+          # use `{ callPackage }: { foo = callPackage ({ mkPackage}: ...); ... }`
+          # Explaining that in the error message would be too verbose and confusing.
+          # TODO: link to docs
           throw ''
             callPackage: A package function that uses `mkPackage` must only have `{ mkPackage }:` as its arguments.
             Any other dependencies should be taken from the `mkPackage` callback.
