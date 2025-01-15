@@ -367,7 +367,7 @@ stdenv.mkDerivation rec {
     # see patch-npm-packages.proj
     typeset -f isScript patchShebangs > src/aspnetcore/patch-shebangs.sh
 
-    # fix nuget-to-nix failure on package sources which return 401
+    # fix nuget-to-json failure on package sources which return 401
     for source in dotnet{7,8,9}-internal{,-transport}; do
       ./.dotnet/dotnet nuget disable source --configfile src/aspnetcore/NuGet.config $source
     done
