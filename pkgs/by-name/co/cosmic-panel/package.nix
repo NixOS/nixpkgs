@@ -4,7 +4,6 @@
   fetchFromGitHub,
   just,
   pkg-config,
-  rust,
   rustPlatform,
   libglvnd,
   libxkbcommon,
