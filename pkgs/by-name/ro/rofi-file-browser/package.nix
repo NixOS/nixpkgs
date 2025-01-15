@@ -37,6 +37,11 @@ stdenv.mkDerivation rec {
 
   ROFI_PLUGINS_DIR = "$out/lib/rofi";
 
+  NIX_CFLAGS_COMPILE = [
+    "-Wno-deprecated-declarations"
+    "-Wno-incompatible-pointer-types"
+  ];
+
   dontUseCmakeBuildDir = true;
 
   meta = with lib; {
