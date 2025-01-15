@@ -11,7 +11,7 @@
   curl,
   goocanvas2,
   gpsd,
-  hamlib,
+  hamlib_4,
   wrapGAppsHook3,
 }:
 
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     gtk3
     goocanvas2
     gpsd
-    hamlib
+    hamlib_4
   ];
 
   meta = {
