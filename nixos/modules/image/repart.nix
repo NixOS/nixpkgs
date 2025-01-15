@@ -283,7 +283,7 @@ in
         addClosure = _name: partitionConfig: partitionConfig // (
           lib.optionalAttrs
             (partitionConfig.storePaths or [ ] != [ ])
-            { closure = "${makeClosure partitionConfig.storePaths}/store-paths"; }
+            { closure = "${makeClosure partitionConfig.storePaths}"; }
         );
       in
       {
