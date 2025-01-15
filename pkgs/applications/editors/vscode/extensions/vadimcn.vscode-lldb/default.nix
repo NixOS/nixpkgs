@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  runCommand,
   rustPlatform,
   makeWrapper,
   llvmPackages,
@@ -33,7 +32,7 @@ let
   };
 
   # need to build a custom version of lldb and llvm for enhanced rust support
-  lldb = (import ./lldb.nix { inherit fetchFromGitHub runCommand llvmPackages; });
+  lldb = (import ./lldb.nix { inherit fetchFromGitHub llvmPackages; });
 
   adapter = rustPlatform.buildRustPackage {
     pname = "${pname}-adapter";
