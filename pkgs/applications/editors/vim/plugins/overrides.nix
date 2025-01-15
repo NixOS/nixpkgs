@@ -3301,6 +3301,10 @@ in
     ];
   };
 
+  typr = super.typr.overrideAttrs {
+    dependencies = with self; [ volt ];
+  };
+
   unicode-vim =
     let
       unicode-data = fetchurl {
