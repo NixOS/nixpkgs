@@ -5,6 +5,7 @@
   cmake,
   extra-cmake-modules,
   fcitx5,
+  gettext,
   qtbase,
   qtwayland,
   wrapQtAppsHook,
@@ -39,6 +40,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
+    gettext
     wrapQtAppsHook
   ];
 
