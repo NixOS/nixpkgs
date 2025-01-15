@@ -369,44 +369,6 @@ let
       };
     }
   );
-
-  # TODO: use tmpfiles
-  enabledManifests = lib.filter (m: m.enable) (lib.attrValues cfg.manifests);
-  enabledHelmManifests = lib.filter (m: m.enable) (lib.attrValues cfg.autoDeployCharts);
-  enabledAutoDeployCharts = lib.concatMapAttrs (n: v: { ${n} = v.package; }) (
-    lib.filterAttrs (_: v: v.enable) cfg.autoDeployCharts
-  );
-  linkManifestEntry = m: "${pkgs.coreutils-full}/bin/ln -sfn ${m.source} ${manifestDir}/${m.target}";
-  linkImageEntry = image: "${pkgs.coreutils-full}/bin/ln -sfn ${image} ${imageDir}/${image.name}";
-  linkChartEntry =
-    let
-      mkChartTarget = name: if (lib.hasSuffix ".tgz" name) then name else name + ".tgz";
-    in
-    name: value:
-    "${pkgs.coreutils-full}/bin/ln -sfn ${value} ${chartDir}/${mkChartTarget (builtins.baseNameOf name)}";
-
-  activateK3sContent = pkgs.writeShellScript "activate-k3s-content" ''
-    ${lib.optionalString (
-      builtins.length (enabledManifests ++ enabledHelmManifests) > 0
-    ) "${pkgs.coreutils-full}/bin/mkdir -p ${manifestDir}"}
-    ${lib.optionalString (
-      cfg.charts != { } || enabledAutoDeployCharts != { }
-    ) "${pkgs.coreutils-full}/bin/mkdir -p ${chartDir}"}
-    ${lib.optionalString (
-      builtins.length cfg.images > 0
-    ) "${pkgs.coreutils-full}/bin/mkdir -p ${imageDir}"}
-
-    ${builtins.concatStringsSep "\n" (map linkManifestEntry enabledManifests)}
-    ${builtins.concatStringsSep "\n" (map linkManifestEntry enabledHelmManifests)}
-    ${builtins.concatStringsSep "\n" (lib.mapAttrsToList linkChartEntry cfg.charts)}
-    ${builtins.concatStringsSep "\n" (lib.mapAttrsToList linkChartEntry enabledAutoDeployCharts)}
-    ${builtins.concatStringsSep "\n" (map linkImageEntry cfg.images)}
-
-    ${lib.optionalString (cfg.containerdConfigTemplate != null) ''
-      mkdir -p $(dirname ${containerdConfigTemplateFile})
-      ${pkgs.coreutils-full}/bin/ln -sfn ${pkgs.writeText "config.toml.tmpl" cfg.containerdConfigTemplate} ${containerdConfigTemplateFile}
-    ''}
-  '';
 in
 {
   imports = [ (removeOption [ "docker" ] "k3s docker option is no longer supported.") ];
@@ -826,6 +788,50 @@ in
 
     environment.systemPackages = [ config.services.k3s.package ];
 
+    # Use systemd-tmpfiles to activate k3s content
+    systemd.tmpfiles.settings."10-k3s" =
+      let
+        # Merge manifest with manifests generated from auto deploying charts, keep only enabled manifests
+        enabledManifests = lib.filterAttrs (_: v: v.enable) (cfg.autoDeployCharts // cfg.manifests);
+        # Merge charts with charts contained in enabled auto deploying charts
+        helmCharts =
+          (lib.concatMapAttrs (n: v: { ${n} = v.package; }) (
+            lib.filterAttrs (_: v: v.enable) cfg.autoDeployCharts
+          ))
+          // cfg.charts;
+        # Make a systemd-tmpfiles rule for a manifest
+        mkManifestRule = manifest: {
+          name = "${manifestDir}/${manifest.target}";
+          value = {
+            "L+".argument = "${manifest.source}";
+          };
+        };
+        # Ensure that all chart targets have a .tgz suffix
+        mkChartTarget = name: if (lib.hasSuffix ".tgz" name) then name else name + ".tgz";
+        # Make a systemd-tmpfiles rule for a chart
+        mkChartRule = target: source: {
+          name = "${chartDir}/${mkChartTarget target}";
+          value = {
+            "L+".argument = "${source}";
+          };
+        };
+        # Make a systemd-tmpfiles rule for a container image
+        mkImageRule = image: {
+          name = "${imageDir}/${image.name}";
+          value = {
+            "L+".argument = "${image}";
+          };
+        };
+      in
+      (lib.mapAttrs' (_: v: mkManifestRule v) enabledManifests)
+      // (lib.mapAttrs' (n: v: mkChartRule n v) helmCharts)
+      // (builtins.listToAttrs (map mkImageRule cfg.images))
+      // (lib.optionalAttrs (cfg.containerdConfigTemplate != null) {
+        ${containerdConfigTemplateFile} = {
+          "L+".argument = "${pkgs.writeText "config.toml.tmpl" cfg.containerdConfigTemplate}";
+        };
+      });
+
     systemd.services.k3s =
       let
         kubeletParams =
@@ -873,7 +879,6 @@ in
           LimitCORE = "infinity";
           TasksMax = "infinity";
           EnvironmentFile = cfg.environmentFile;
-          ExecStartPre = activateK3sContent;
           ExecStart = lib.concatStringsSep " \\\n " (
             [ "${cfg.package}/bin/k3s ${cfg.role}" ]
             ++ (lib.optional cfg.clusterInit "--cluster-init")
