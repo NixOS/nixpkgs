@@ -57,19 +57,34 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i '/-ffloat-store/d' cmake/pcl_find_sse.cmake
   '';
 
-  nativeBuildInputs = [
-    pkg-config
-    cmake
-    wrapQtAppsHook
-  ] ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ];
+  nativeBuildInputs =
+    [
+      pkg-config
+      cmake
+      wrapQtAppsHook
+    ]
+    ++ lib.optionals cudaSupport (
+      with cudaPackages;
+      [
+        cuda_nvcc
+      ]
+    );
 
-  buildInputs = [
-    eigen
-    libusb1
-    libpcap
-    qtbase
-    libXt
-  ];
+  buildInputs =
+    [
+      eigen
+      libusb1
+      libpcap
+      qtbase
+      libXt
+    ]
+    ++ lib.optionals cudaSupport (
+      with cudaPackages;
+      [
+        cuda_cccl
+        cuda_cudart
+      ]
+    );
 
   propagatedBuildInputs = [
     boost
@@ -81,6 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
+    (lib.cmakeBool "BUILD_GPU" cudaSupport)
     (lib.cmakeBool "PCL_ENABLE_MARCHNATIVE" false)
     (lib.cmakeBool "WITH_CUDA" cudaSupport)
   ];
