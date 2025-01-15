@@ -33,8 +33,9 @@ let
       "-DBUILD_SUPERLU=OFF"
     ];
 
-    env = lib.optionalAttrs stdenv.cc.isClang {
-      NIX_CFLAGS_COMPILE = "-Wno-error=implicit-int";
+    env = {
+      # Required for gcc-14 and clang build
+      NIX_CFLAGS_COMPILE = "-Wno-error=implicit-int -Wno-error=incompatible-pointer-types";
     };
 
     buildInputs = [
@@ -99,6 +100,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   env = lib.optionalAttrs stdenv.cc.isClang {
     NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-function-pointer-types";
+  } // lib.optionalAttrs (stdenv.cc.isGNU) {
+    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
   };
 
   doCheck = true;
