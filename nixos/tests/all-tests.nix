@@ -1551,6 +1551,7 @@ in
   vdirsyncer = runTest ./vdirsyncer.nix;
   vector = import ./vector { inherit runTest; };
   velocity = runTest ./velocity.nix;
+  vencloud = runTest ./web-servers/vencloud.nix;
   vengi-tools = runTest ./vengi-tools.nix;
   victorialogs = runTest ./victorialogs.nix;
   victoriametrics = import ./victoriametrics { inherit runTest; };
