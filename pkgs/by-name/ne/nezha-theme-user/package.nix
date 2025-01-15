@@ -6,13 +6,13 @@
 
 buildNpmPackage rec {
   pname = "nezha-theme-user";
-  version = "1.12.1";
+  version = "1.12.5";
 
   src = fetchFromGitHub {
     owner = "hamster1963";
     repo = "nezha-dash-v1";
     tag = "v${version}";
-    hash = "sha256-vd242bYWT7AgpKDyYEb+Kc+8o1qtuTusmxqLnWGo5pE=";
+    hash = "sha256-7AGZrI5LfrCCvbBjXlWbQlZbzryrsB6E8No/BZ8CHPA=";
   };
 
   # TODO: Switch to the bun build function once available in nixpkgs
@@ -26,7 +26,7 @@ buildNpmPackage rec {
       --replace-fail '/commit/' '/tree/'
   '';
 
-  npmDepsHash = "sha256-jWCgeT3IvTZZTh/kKq+mRc0tAVoptl3rrlwcbUSs5uc=";
+  npmDepsHash = "sha256-noT4hSFRsmfxNLcwlL/TyiG42A1INjL/OhhU6+JfQBA=";
 
   npmPackFlags = [ "--ignore-scripts" ];
 
