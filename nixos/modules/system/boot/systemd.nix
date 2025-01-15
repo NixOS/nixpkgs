@@ -138,8 +138,10 @@ let
       "systemd-ask-password-wall.service"
 
       # Varlink APIs
+    ] ++ lib.optionals cfg.package.withBootloader [
       "systemd-bootctl@.service"
       "systemd-bootctl.socket"
+    ] ++ [
       "systemd-creds@.service"
       "systemd-creds.socket"
     ] ++ lib.optional cfg.package.withTpm2Tss [
