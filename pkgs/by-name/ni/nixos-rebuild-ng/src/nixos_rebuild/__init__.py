@@ -54,7 +54,7 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
     flake_common_flags.add_argument("--no-write-lock-file", action="store_true")
     flake_common_flags.add_argument("--no-registries", action="store_true")
     flake_common_flags.add_argument("--commit-lock-file", action="store_true")
-    flake_common_flags.add_argument("--update-input")
+    flake_common_flags.add_argument("--update-input", action="append")
     flake_common_flags.add_argument("--override-input", nargs=2, action="append")
 
     classic_build_flags = argparse.ArgumentParser(add_help=False)
