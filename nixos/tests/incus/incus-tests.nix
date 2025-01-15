@@ -190,7 +190,7 @@ import ../make-test-python.nix (
 
         def cleanup():
             # avoid conflict between preseed and cleanup operations
-            machine.wait_for_unit("incus-preseed.service")
+            machine.execute("systemctl kill incus-preseed.service")
 
             instances = json.loads(machine.succeed("incus list --format json --all-projects"))
             with subtest("Stopping all running instances"):
@@ -301,6 +301,13 @@ import ../make-test-python.nix (
                 machine.succeed(f"ps {pid}")
                 machine.succeed("systemctl start incus")
 
+                with subtest("Instances stop with incus-startup.service"):
+                    pid = machine.succeed(f"incus info container-{variant}1 | grep 'PID'").split(":")[1].strip()
+                    machine.succeed(f"ps {pid}")
+                    machine.succeed("systemctl stop incus-startup.service")
+                    machine.wait_until_fails(f"ps {pid}", timeout=120)
+                    machine.succeed("systemctl start incus-startup.service")
+
 
             cleanup()
           ''
@@ -358,6 +365,14 @@ import ../make-test-python.nix (
                 machine.succeed("systemctl stop incus")
                 machine.succeed(f"ps {pid}")
                 machine.succeed("systemctl start incus")
+
+
+                with subtest("Instances stop with incus-startup.service"):
+                    pid = machine.succeed(f"incus info vm-{variant}1 | grep 'PID'").split(":")[1].strip()
+                    machine.succeed(f"ps {pid}")
+                    machine.succeed("systemctl stop incus-startup.service")
+                    machine.wait_until_fails(f"ps {pid}", timeout=120)
+                    machine.succeed("systemctl start incus-startup.service")
 
 
             cleanup()
