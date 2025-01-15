@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
       well. Gpredict uses the SGP4/SDP4 algorithms, which are compatible with the
       NORAD Keplerian elements.
     '';
-    license = lib.licenses.gpl2Only;
+    license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     homepage = "http://gpredict.oz9aec.net/";
     maintainers = with lib.maintainers; [
