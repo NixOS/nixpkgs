@@ -98,7 +98,7 @@ writeScript "update-dotnet-vmr.sh" ''
       curl -fsSL "$releaseUrl" -o release.json
 
       if [[ -z $tag && "$tagName" == "${tag}" ]]; then
-          >&2 echo "release is already $release"
+          >&2 echo "release is already $tagName"
           exit
       fi
 
