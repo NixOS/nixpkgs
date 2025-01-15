@@ -23,13 +23,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
+    gettext # msgfmt
     pkg-config
     zstd
   ];
   buildInputs = [
     fcitx5
     anthy
-    gettext
   ];
 
   meta = with lib; {
