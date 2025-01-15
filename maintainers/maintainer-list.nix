@@ -11976,6 +11976,11 @@
     githubId = 464625;
     name = "Enric Morales";
   };
+  kilgarragh = {
+    github = "Kilgarragh";
+    githubId = 126100118;
+    name = "Kilgarragh";
+  };
   kilianar = {
     email = "mail@kilianar.de";
     github = "kilianar";
