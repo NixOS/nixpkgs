@@ -14,9 +14,7 @@ on:
     - cron:  '0 */6 * * *'
   workflow_dispatch:
 
-permissions:
-  contents: write  # for devmasx/merge-branch to merge branches
-  pull-requests: write  # for peter-evans/create-or-update-comment to create or update comment
+permissions: {}
 
 jobs:
   periodic-merge:
