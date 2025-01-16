@@ -510,8 +510,8 @@ rec {
       "sha256-z2cvFzYgx+9ud+ZbWi+Dr2HMJJcPaaSOghFw7CDzj8w=";
 
   mypy-boto3-entityresolution =
-    buildMypyBoto3Package "entityresolution" "1.35.93"
-      "sha256-EyjVSjrqmuOFigajarcB/+Ys12rfkaiG0weAVeBwXzk=";
+    buildMypyBoto3Package "entityresolution" "1.36.0"
+      "sha256-8AYX5ZmyC08SXL7Ahuj0do4hngw0Tc8aIKSQOBqLDhU=";
 
   mypy-boto3-es =
     buildMypyBoto3Package "es" "1.35.93"
