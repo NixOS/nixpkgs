@@ -8,11 +8,11 @@
 
 buildDunePackage (rec {
   pname = "junit";
-  version = "2.0.2";
+  version = "2.2.0";
 
   src = fetchurl {
     url = "https://github.com/Khady/ocaml-junit/releases/download/${version}/junit-${version}.tbz";
-    sha256 = "00bbx5j8vsy9fqbc04xa3lsalaxicirmbczr65bllfk1afv43agx";
+    sha256 = "sha256-0KsbCOe7VtOVUTno/9jPB0jxuVKvAHLJ+ejZFNUx2Qo=";
   };
 
   propagatedBuildInputs = [
