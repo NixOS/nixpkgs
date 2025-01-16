@@ -1,4 +1,4 @@
-{ stdenv, lib, makeDesktopItem, makeWrapper, makeBinaryWrapper, lndir, config
+{ stdenv, lib, makeDesktopItem, makeWrapper, lndir, config
 , buildPackages
 , jq, xdg-utils, writeText
 
