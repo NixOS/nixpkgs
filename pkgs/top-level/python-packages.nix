@@ -2219,6 +2219,8 @@ self: super: with self; {
 
   btsocket = callPackage ../development/python-modules/btsocket { };
 
+  bubblejail = callPackage ../development/python-modules/bubblejail { };
+
   bubop = callPackage ../development/python-modules/bubop { };
 
   bucketstore = callPackage ../development/python-modules/bucketstore { };

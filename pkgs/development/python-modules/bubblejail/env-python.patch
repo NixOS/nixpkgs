@@ -1,0 +1,11 @@
+diff --git a/templates/bubblejail_launch_base.py.jinja b/templates/bubblejail_launch_base.py.jinja
+index af91508..2dc9084 100644
+--- a/templates/bubblejail_launch_base.py.jinja
++++ b/templates/bubblejail_launch_base.py.jinja
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python3 -{{ PYTHON_SHEBANG_SHORT_OPTS }}
++#!/usr/bin/env python3
+ # SPDX-License-Identifier: GPL-3.0-or-later
+ # SPDX-FileCopyrightText: 2024 igo95862
+ from __future__ import annotations
+
