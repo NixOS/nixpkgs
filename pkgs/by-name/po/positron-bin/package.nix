@@ -1,21 +1,22 @@
 {
-  lib,
   _7zz,
   alsa-lib,
-  systemd,
   autoPatchelfHook,
   blas,
   dpkg,
   fetchurl,
   gtk3,
+  lib,
+  libgbm,
   libglvnd,
   libxkbcommon,
   makeShellWrapper,
-  libgbm,
   musl,
   nss,
+  openssl,
   patchelf,
   stdenv,
+  systemd,
   xorg,
 }:
 let
@@ -42,11 +43,12 @@ stdenv.mkDerivation {
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       alsa-lib
       gtk3
+      libgbm
       libglvnd
       libxkbcommon
-      libgbm
       musl
       nss
+      openssl
       stdenv.cc.cc
       xorg.libX11
       xorg.libXcomposite
