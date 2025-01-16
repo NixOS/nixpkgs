@@ -10,6 +10,9 @@ in {
     virtualisation.hypervGuest = {
       enable = mkEnableOption "Hyper-V Guest Support";
 
+      enhancedSession =
+        mkEnableOption (lib.mdDoc "Hyper-V Enhanced Session Support");
+
       videoMode = mkOption {
         type = types.str;
         default = "1152x864";
@@ -25,40 +28,69 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
-    boot = {
-      initrd.kernelModules = [
-        "hv_balloon" "hv_netvsc" "hv_storvsc" "hv_utils" "hv_vmbus"
-      ];
+  config = mkIf cfg.enable (mkMerge [
+    {
+      boot = {
+        initrd.kernelModules = [
+          "hv_balloon" "hv_netvsc" "hv_storvsc" "hv_utils" "hv_vmbus"
+        ];
 
-      initrd.availableKernelModules = [ "hyperv_keyboard" ];
+        initrd.availableKernelModules = [ "hyperv_keyboard" ];
 
-      kernelParams = [
-        "video=hyperv_fb:${cfg.videoMode}" "elevator=noop"
-      ];
-    };
-
-    environment.systemPackages = [ config.boot.kernelPackages.hyperv-daemons.bin ];
-
-    # enable hotadding cpu/memory
-    services.udev.packages = lib.singleton (pkgs.writeTextFile {
-      name = "hyperv-cpu-and-memory-hotadd-udev-rules";
-      destination = "/etc/udev/rules.d/99-hyperv-cpu-and-memory-hotadd.rules";
-      text = ''
-        # Memory hotadd
-        SUBSYSTEM=="memory", ACTION=="add", DEVPATH=="/devices/system/memory/memory[0-9]*", TEST=="state", ATTR{state}="online"
-
-        # CPU hotadd
-        SUBSYSTEM=="cpu", ACTION=="add", DEVPATH=="/devices/system/cpu/cpu[0-9]*", TEST=="online", ATTR{online}="1"
-      '';
-    });
-
-    systemd = {
-      packages = [ config.boot.kernelPackages.hyperv-daemons.lib ];
-
-      targets.hyperv-daemons = {
-        wantedBy = [ "multi-user.target" ];
+        kernelParams = [
+          "video=hyperv_fb:${cfg.videoMode}" "elevator=noop"
+        ];
+        blacklistedKernelModules = [ "hyperv_fb" ]; # workaround to use hyperv_drm
       };
-    };
-  };
+
+      environment.systemPackages = [ config.boot.kernelPackages.hyperv-daemons.bin ];
+
+      # enable hotadding cpu/memory
+      services.udev.packages = lib.singleton (pkgs.writeTextFile {
+        name = "hyperv-cpu-and-memory-hotadd-udev-rules";
+        destination = "/etc/udev/rules.d/99-hyperv-cpu-and-memory-hotadd.rules";
+        text = ''
+          # Memory hotadd
+          SUBSYSTEM=="memory", ACTION=="add", DEVPATH=="/devices/system/memory/memory[0-9]*", TEST=="state", ATTR{state}="online"
+
+          # CPU hotadd
+          SUBSYSTEM=="cpu", ACTION=="add", DEVPATH=="/devices/system/cpu/cpu[0-9]*", TEST=="online", ATTR{online}="1"
+        '';
+      });
+
+      systemd = {
+        packages = [ config.boot.kernelPackages.hyperv-daemons.lib ];
+
+        targets.hyperv-daemons = {
+          wantedBy = [ "multi-user.target" ];
+        };
+      };
+    }
+    (mkIf cfg.enable {
+      assertions = [{
+        assertion = config.hardware.pulseaudio.enable;
+        message = ''
+          Audio support for Hyper-V (xrdp) currently only supports pulseaudio
+        '';
+      }];
+      services.xrdp = {
+        enable = true;
+        openFirewall = true;
+        transportMode = "vsock";
+        address = "-1";
+        audio.enable = true;
+        extraConfDirCommands = ''
+          substituteInPlace $out/xrdp.ini \
+            --replace-fail security_layer=negotiate security_layer=rdp \
+            --replace-fail crypt_level=high crypt_level=none \
+            --replace-fail bitmap_compression=true bitmap_compression=false
+
+          substituteInPlace $out/sesman.ini \
+            --replace-fail FuseMountName=thinclient_drives FuseMountName=shared-drives
+        '';
+      };
+      boot.kernelModules = [ "hv_sock" ];
+
+    })
+  ]);
 }
