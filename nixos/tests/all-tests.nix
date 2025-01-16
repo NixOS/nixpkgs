@@ -955,6 +955,7 @@ in {
   snapper = handleTest ./snapper.nix {};
   snipe-it = runTest ./web-apps/snipe-it.nix;
   soapui = handleTest ./soapui.nix {};
+  soarca = handleTest ./soarca.nix {};
   soft-serve = handleTest ./soft-serve.nix {};
   sogo = handleTest ./sogo.nix {};
   soju = handleTest ./soju.nix {};
