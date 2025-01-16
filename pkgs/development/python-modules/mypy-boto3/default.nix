@@ -954,8 +954,8 @@ rec {
       "sha256-opBYGc17hHGBP+mP/Z+9oi0MISepksTmCas4XJXpD3A=";
 
   mypy-boto3-networkmanager =
-    buildMypyBoto3Package "networkmanager" "1.35.93"
-      "sha256-4xU3vZf8uQnJEhmuLe2bR1//bxFUprlhpPNz1FTT/XM=";
+    buildMypyBoto3Package "networkmanager" "1.36.0"
+      "sha256-0xuH1KqfMrVPDrwZ5mWkKs9iFFAXQ6m5qaibfPj7g9A=";
 
   mypy-boto3-nimble =
     buildMypyBoto3Package "nimble" "1.35.0"
