@@ -8898,6 +8898,8 @@ self: super: with self; {
 
   lxml-stubs = callPackage ../development/python-modules/lxml-stubs { };
 
+  lxns = callPackage ../development/python-modules/lxns { };
+
   lyricwikia = callPackage ../development/python-modules/lyricwikia { };
 
   lz4 = callPackage ../development/python-modules/lz4 { };
