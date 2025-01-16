@@ -40,6 +40,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-vG1HUkuNUZkhBumoJJy3AyFU6cZOo1YGmaOYcU6bPOM=";
   };
 
+  patches = [
+    # Discover all MPI languages components to avoid scalpack discovery failure
+    ./scalapack-mpi-alias.patch
+  ];
+
   nativeBuildInputs = [
     which
     perl
