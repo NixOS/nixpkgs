@@ -5,9 +5,17 @@
   ...
 }:
 
-with lib;
-
 let
+  inherit (lib)
+    mkEnableOption
+    mkPackageOption
+    mkOption
+    mkDefault
+    mkIf
+    types
+    literalExpression
+    ;
+
   cfg = config.services.mobilizon;
 
   user = "mobilizon";
@@ -20,7 +28,7 @@ let
   # Make a package containing launchers with the correct envirenment, instead of
   # setting it with systemd services, so that the user can also use them without
   # troubles
-  launchers = pkgs.stdenv.mkDerivation rec {
+  launchers = pkgs.stdenv.mkDerivation {
     pname = "${cfg.package.pname}-launchers";
     inherit (cfg.package) version;
 
