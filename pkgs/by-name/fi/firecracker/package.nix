@@ -2,59 +2,65 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  makeRustPlatform,
-  rustc,
-  cargo,
-  llvmPackages,
   cmake,
   gcc,
-
-  # gcc compile error at deps: aws-lc-sys, function 'memcpy' inlined from 'OPENSSL_memcpy'
-  # error: '__builtin_memcpy' specified bound exceeds maximum object size
-  # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=91397
-  useRustPlatform ? makeRustPlatform {
-    inherit rustc cargo;
-    inherit (llvmPackages) stdenv;
-  },
+  rust-bindgen,
+  rustPlatform,
 }:
 
-useRustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage rec {
   pname = "firecracker";
-  version = "1.9.1";
+  version = "1.10.1";
 
   src = fetchFromGitHub {
     owner = "firecracker-microvm";
     repo = "firecracker";
     rev = "v${version}";
-    hash = "sha256-NgT06Xfb6j+d5EcqFjQeaiY08uJJjmrddzdwSoqpKbQ=";
+    hash = "sha256-kLQPAHbj8Q425Z5zdwofyHz+sd3bf7zGmcMjKn9yTKc=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "micro_http-0.1.0" = "sha256-bso39jUUyhlNutUxHw8uHtKWQIHmoikfQ5O3RIePboo=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-TnEPNTeeX1KP+9HLD/oGF0sZGcXDHpc1Q1wCWw3L6mU=";
+
+  # For aws-lc-sys@0.22.0: use external bindgen.
+  AWS_LC_SYS_EXTERNAL_BINDGEN = "true";
+
+  # For aws-lc-sys@0.22.0: fix gcc error:
+  # In function 'memcpy',
+  #   inlined from 'OPENSSL_memcpy' at aws-lc/crypto/asn1/../internal.h
+  #   inlined from 'aws_lc_0_22_0_i2c_ASN1_BIT_STRING' at aws-lc/crypto/asn1/a_bitstr.c
+  # glibc/.../string_fortified.h: error: '__builtin_memcpy' specified bound exceeds maximum object size [-Werror=stringop-overflow=]
+  postPatch = ''
+    substituteInPlace $cargoDepsCopy/aws-lc-sys-*/aws-lc/crypto/asn1/a_bitstr.c \
+      --replace-warn '(len > INT_MAX - 1)' '(len < 0 || len > INT_MAX - 1)'
+  '';
 
   nativeBuildInputs = [
     cmake
     gcc
-    useRustPlatform.bindgenHook
+    rust-bindgen  # for aws-lc-sys@0.22.0
+    rustPlatform.bindgenHook
   ];
 
   cargoBuildFlags = [ "--workspace" ];
+  cargoTestFlags = [ "--package" "firecracker" "--package" "jailer" ];
 
   checkFlags = [
-    # requires /sys/devices/virtual/dmi
+    # basic tests to skip in sandbox
     "--skip=fingerprint::dump::tests::test_read_valid_sysfs_file"
-    # requires /dev/kvm
     "--skip=template::dump::tests::test_dump"
+    "--skip=tests::test_filter_apply"
     "--skip=tests::test_fingerprint_dump_command"
     "--skip=tests::test_template_dump_command"
     "--skip=tests::test_template_verify_command"
     "--skip=utils::tests::test_build_microvm"
-    # requires seccomp == 0
-    "--skip=tests::test_filter_apply"
+    # more tests to skip in sandbox
+    "--skip=env::tests::test_copy_cache_info"
+    "--skip=env::tests::test_dup2"
+    "--skip=env::tests::test_mknod_and_own_dev"
+    "--skip=env::tests::test_setup_jailed_folder"
+    "--skip=env::tests::test_userfaultfd_dev"
+    "--skip=resource_limits::tests::test_set_resource_limits"
   ];
 
   installPhase = ''
