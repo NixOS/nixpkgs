@@ -8197,6 +8197,10 @@ with pkgs;
     baseBinName = "pkgconf";
   };
 
+  u-config = callPackage ../build-support/pkg-config-wrapper {
+    pkg-config = u-config-unwrapped;
+  };
+
   pkg-config = callPackage ../build-support/pkg-config-wrapper {
     pkg-config = pkg-config-unwrapped;
   };
