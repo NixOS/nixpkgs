@@ -994,8 +994,8 @@ rec {
       "sha256-Taq1U8zH2IRvTPxWDaJO2n02lpmSm2JI47JJG+Lh6/c=";
 
   mypy-boto3-outposts =
-    buildMypyBoto3Package "outposts" "1.35.93"
-      "sha256-bFiFu2Ib6a+smhrjdgrIEFsUIH1hpgsWHVN0BhveoHo=";
+    buildMypyBoto3Package "outposts" "1.36.0"
+      "sha256-v3tU+ARbeC+8gi0OLgpbAX+0NhCMQgkoedeeod5PZWQ=";
 
   mypy-boto3-panorama =
     buildMypyBoto3Package "panorama" "1.35.93"
