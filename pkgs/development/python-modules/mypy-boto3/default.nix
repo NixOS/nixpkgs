@@ -1186,8 +1186,8 @@ rec {
       "sha256-ck/nxwOGvfn/7cwwW71Rg+EXU7hjB4E0kM5diBo8ZKE=";
 
   mypy-boto3-sagemaker-featurestore-runtime =
-    buildMypyBoto3Package "sagemaker-featurestore-runtime" "1.35.93"
-      "sha256-Wpx/JFjjNQe1FJvfzzsfU0A6CGUubVqTHwpYxOV3ZcU=";
+    buildMypyBoto3Package "sagemaker-featurestore-runtime" "1.36.0"
+      "sha256-uZNeHQY0YG6m6ag6SgXf5jxJ95JUpWJWXJrSiyXNb+o=";
 
   mypy-boto3-sagemaker-geospatial =
     buildMypyBoto3Package "sagemaker-geospatial" "1.35.93"
