@@ -66,7 +66,6 @@ let
 
       #### Dtk Application
       deepin-calculator = callPackage ./apps/deepin-calculator { };
-      deepin-camera = callPackage ./apps/deepin-camera { };
       deepin-compressor = callPackage ./apps/deepin-compressor { };
       deepin-draw = callPackage ./apps/deepin-draw { };
       deepin-editor = callPackage ./apps/deepin-editor { };
@@ -116,6 +115,7 @@ let
       deepin-voice-note = throw "'deepin.deepin-voice-note' has been removed as it depending on deepin-movie-reborn which was broken"; # added 2025-01-16
       deepin-screen-recorder = throw "'deepin.deepin-screen-recorder' has been removed as it was broken and unmaintained in nixpkgs, Please use 'flameshot' or 'simplescreenrecorder' instead"; # added 2025-01-16
       deepin-ocr-plugin-manager = throw "'deepin.deepin-ocr-plugin-manager' has been removed as it was outdated"; # added 2025-01-16
+      deepin-camera = throw "'deepin.deepin-camera' has been removed as it was unmaintained in nixpkgs, Please use 'snapshot' instead"; # added 2025-01-16
     };
 in
 lib.makeScope pkgs.newScope packages
