@@ -13,14 +13,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "cobang";
-  version = "0.14.1";
+  version = "0.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hongquan";
     repo = "CoBang";
     tag = "v${version}";
-    hash = "sha256-/8JtDoXFQGlM7tlwKd+WRIKpnKCD6OnMmbvElg7LbzU=";
+    hash = "sha256-ozHmGpRx+Ts6yrDXwm4OHXTArunQbJOlA/7zJvRNQio=";
   };
 
   postPatch = ''
