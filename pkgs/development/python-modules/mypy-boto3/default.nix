@@ -1190,8 +1190,8 @@ rec {
       "sha256-uZNeHQY0YG6m6ag6SgXf5jxJ95JUpWJWXJrSiyXNb+o=";
 
   mypy-boto3-sagemaker-geospatial =
-    buildMypyBoto3Package "sagemaker-geospatial" "1.35.93"
-      "sha256-+hUBSCDJBca1EvfsqvFUg4nvG1MUkEEwI2jB/WTIw9Q=";
+    buildMypyBoto3Package "sagemaker-geospatial" "1.36.0"
+      "sha256-4ISRJZSVLmyzzwNbpLimMyl40b44Za9gZVt/oFqrcUU=";
 
   mypy-boto3-sagemaker-metrics =
     buildMypyBoto3Package "sagemaker-metrics" "1.35.93"
