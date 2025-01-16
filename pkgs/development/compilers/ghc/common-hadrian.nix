@@ -182,6 +182,26 @@
            then ./docs-sphinx-7-ghc98.patch
            else ./docs-sphinx-7.patch )
         ]
+
+        ++ lib.optional (
+          # 2025-01-16: unix >= 2.8.6.0 is unaffected which is shipped by GHC 9.12.1 and 9.8.4
+          lib.versionOlder version "9.11"
+          && !(lib.versionAtLeast version "9.8.4" && lib.versionOlder version "9.9")
+        ) [
+          # Determine size of time related types using hsc2hs instead of assuming CLong.
+          # Prevents failures when e.g. stat(2)ing on 32bit systems with 64bit time_t etc.
+          # https://github.com/haskell/ghcup-hs/issues/1107
+          # https://gitlab.haskell.org/ghc/ghc/-/issues/25095
+          # Note that in normal situations this shouldn't be the case since nixpkgs
+          # doesn't set -D_FILE_OFFSET_BITS=64 and friends (yet).
+          (fetchpatch {
+            name = "unix-fix-ctimeval-size-32-bit.patch";
+            url = "https://github.com/haskell/unix/commit/8183e05b97ce870dd6582a3677cc82459ae566ec.patch";
+            sha256 = "17q5yyigqr5kxlwwzb95sx567ysfxlw6bp3j4ji20lz0947aw6gv";
+            stripLen = 1;
+            extraPrefix = "libraries/unix/";
+          })
+        ]
         ++ lib.optionals (lib.versionAtLeast version "9.6" && lib.versionOlder version "9.6.6") [
           (fetchpatch {
             name = "fix-fully_static.patch";

@@ -29,9 +29,15 @@ self: super: {
   Cabal_3_12_1_0 = doDistribute (super.Cabal_3_12_1_0.override {
     Cabal-syntax = self.Cabal-syntax_3_12_1_0;
   });
-  Cabal_3_14_1_1 = doDistribute (super.Cabal_3_14_1_1.override {
+  Cabal_3_14_1_1 = overrideCabal (drv: {
+    # Revert increased lower bound on unix since we have backported
+    # the required patch to all GHC bundled versions of unix.
+    postPatch = drv.postPatch or "" + ''
+      substituteInPlace Cabal.cabal --replace-fail "unix  >= 2.8.6.0" "unix >= 2.6.0.0"
+    '';
+  }) (doDistribute (super.Cabal_3_14_1_1.override {
     Cabal-syntax = self.Cabal-syntax_3_14_1_0;
-  });
+  }));
 
   # cabal-install needs most recent versions of Cabal and Cabal-syntax,
   # so we need to put some extra work for non-latest GHCs
