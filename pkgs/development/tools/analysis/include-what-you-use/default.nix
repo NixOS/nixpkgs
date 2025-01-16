@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   cmake,
   llvmPackages,
   python3,
@@ -9,12 +9,15 @@
 
 stdenv.mkDerivation rec {
   pname = "include-what-you-use";
-  # Also bump llvmPackages in all-packages.nix to the supported version!
-  version = "0.22";
+  # Make sure to bump `llvmPackages` in "all-packages.nix" to the supported version:
+  # https://github.com/include-what-you-use/include-what-you-use?tab=readme-ov-file#clang-compatibility
+  version = "0.23";
 
-  src = fetchurl {
-    url = "${meta.homepage}/downloads/${pname}-${version}.src.tar.gz";
-    hash = "sha256-hZB0tGHqS4MlpzQYwgfKM7XmVmsI5rWH65FkQWVppt0=";
+  src = fetchFromGitHub {
+    owner = "include-what-you-use";
+    repo = "include-what-you-use";
+    tag = version;
+    hash = "sha256-djL1nfyVvkB+qnms8t2kVEZfJVvYWzLA1lpmznJCPsU=";
   };
 
   postPatch = ''
