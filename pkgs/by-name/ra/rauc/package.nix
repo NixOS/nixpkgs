@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rauc";
-  version = "1.11.3";
+  version = "1.13";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-sFOvkr6WbiP99GNAttK9ZmRg+O/hoUQDCnW7vq9s/vo=";
+    sha256 = "sha256-Vq1dudB8OQveclAIVgiB8jbtp4o2Ga5v61Y6JUjOpbs=";
   };
 
   passthru = {
@@ -57,6 +57,7 @@ stdenv.mkDerivation rec {
     (lib.mesonOption "dbusinterfacesdir" "${placeholder "out"}/share/dbus-1/interfaces")
     (lib.mesonOption "dbuspolicydir" "${placeholder "out"}/share/dbus-1/system.d")
     (lib.mesonOption "dbussystemservicedir" "${placeholder "out"}/share/dbus-1/system-services")
+    (lib.mesonOption "systemdcatalogdir" "${placeholder "out"}/lib/systemd/catalog")
   ];
 
   meta = with lib; {
