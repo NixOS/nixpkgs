@@ -16740,6 +16740,8 @@ self: super: with self; {
 
   sixel = callPackage ../development/python-modules/sixel { };
 
+  sixelcrop = callPackage ../development/python-modules/sixelcrop { };
+
   sjcl = callPackage ../development/python-modules/sjcl { };
 
   skein = callPackage ../development/python-modules/skein { };
