@@ -1410,8 +1410,8 @@ rec {
       "sha256-5lMYZjiUIxoSX1RhixACXY8ch4AGXQsC5/WrPpHZzuQ=";
 
   mypy-boto3-workdocs =
-    buildMypyBoto3Package "workdocs" "1.35.93"
-      "sha256-AMnvm/ZUy6myNgq26H19HJwpJLhUAYG6Hs1g71u45SI=";
+    buildMypyBoto3Package "workdocs" "1.36.0"
+      "sha256-E7UI4bjrruLEt4GDm7xgd+RIBglBqdOYmy1OZheMQQI=";
 
   mypy-boto3-worklink =
     buildMypyBoto3Package "worklink" "1.35.0"
