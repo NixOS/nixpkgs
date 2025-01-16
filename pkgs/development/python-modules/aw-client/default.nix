@@ -11,28 +11,25 @@
   tabulate,
   typing-extensions,
   pytestCheckHook,
-  gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "aw-client";
-  version = "0.5.14";
-
-  format = "pyproject";
-
-  # pypi distribution doesn't include tests, so build from source instead
-  src = fetchFromGitHub {
-    owner = "ActivityWatch";
-    repo = "aw-client";
-    rev = "v${version}";
-    sha256 = "sha256-HTyhQz/RaNdCtJIV6YHEd6Yhu9VRJ8E9XdN7NcoO8ao=";
-  };
+  version = "0.5.15";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
-  nativeBuildInputs = [ poetry-core ];
+  src = fetchFromGitHub {
+    owner = "ActivityWatch";
+    repo = "aw-client";
+    tag = "v${version}";
+    hash = "sha256-AS29DIfEQ6/vh8idcMMQoGmiRM8MMf3eVQzvNPsXgpA=";
+  };
 
-  propagatedBuildInputs = [
+  build-system = [ poetry-core ];
+
+  dependencies = [
     aw-core
     requests
     persist-queue
@@ -54,13 +51,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aw_client" ];
 
-  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
-
   meta = with lib; {
     description = "Client library for ActivityWatch";
-    mainProgram = "aw-client";
     homepage = "https://github.com/ActivityWatch/aw-client";
-    maintainers = with maintainers; [ huantian ];
+    changelog = "https://github.com/ActivityWatch/aw-client/releases/tag/v${version}";
     license = licenses.mpl20;
+    maintainers = with maintainers; [ huantian ];
+    mainProgram = "aw-client";
   };
 }
