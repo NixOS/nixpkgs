@@ -74,7 +74,6 @@ let
       deepin-image-viewer = callPackage ./apps/deepin-image-viewer { };
       deepin-music = callPackage ./apps/deepin-music { };
       deepin-picker = callPackage ./apps/deepin-picker { };
-      deepin-screen-recorder = callPackage ./apps/deepin-screen-recorder { };
       deepin-shortcut-viewer = callPackage ./apps/deepin-shortcut-viewer { };
       deepin-system-monitor = callPackage ./apps/deepin-system-monitor { };
       deepin-terminal = callPackage ./apps/deepin-terminal { };
@@ -116,6 +115,7 @@ let
       deepin-movie-reborn = throw "'deepin.deepin-movie-reborn' has been removed as it was broken and unmaintained in nixpkgs, Please use 'vlc' instead"; # added 2025-01-16;
       deepin-album = throw "'deepin.deepin-album' has been removed as it was broken and unmaintained in nixpkgs, Please use 'kdePackages.gwenview' instead"; # added 2025-01-16
       deepin-voice-note = throw "'deepin.deepin-voice-note' has been removed as it depending on deepin-movie-reborn which was broken"; # added 2025-01-16
+      deepin-screen-recorder = throw "'deepin.deepin-screen-recorder' has been removed as it was broken and unmaintained in nixpkgs, Please use 'flameshot' or 'simplescreenrecorder' instead"; # added 2025-01-16
     };
 in
 lib.makeScope pkgs.newScope packages
