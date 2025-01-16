@@ -45,15 +45,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-
-
   meta = with lib; {
     description = "Cross-platform FFmpeg frontend (GUI) exposing some of its features.";
     homepage = "https://sites.google.com/site/dmsimpleapps";
     license = licenses.unfreeRedistributable;
-    maintainers = with maintainers; [
-      kilgarragh
-    ];
+    maintainers = with maintainers; [ kilgarragh ];
     platforms = [ "x86_64-linux" ];
   };
 }
