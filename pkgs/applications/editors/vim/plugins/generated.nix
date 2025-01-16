@@ -13173,12 +13173,12 @@ final: prev:
 
   trouble-nvim = buildVimPlugin {
     pname = "trouble.nvim";
-    version = "2024-11-27";
+    version = "2025-01-15";
     src = fetchFromGitHub {
       owner = "folke";
       repo = "trouble.nvim";
-      rev = "46cf952fc115f4c2b98d4e208ed1e2dce08c9bf6";
-      sha256 = "12ky8alz6zi2vlqspnacmkj99d4sam4hrzs92i3n4sz6jx2w8696";
+      rev = "50481f414bd3c1a40122c1d759d7e424d5fafe84";
+      sha256 = "14cvhnz4njzqydnbyf9iydsdhqvms4kajlvxgkr1gfkw6rw96r37";
     };
     meta.homepage = "https://github.com/folke/trouble.nvim/";
   };
