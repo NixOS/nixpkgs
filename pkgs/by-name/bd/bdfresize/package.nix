@@ -13,7 +13,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-RAz8BiCgI35GNSwUoHdMqj8wWXWbCiDe/vyU6EkIl6Y=";
   };
 
-  patches = [ ./remove-malloc-declaration.patch ];
+  patches = [
+    ./fix-configure.patch
+    ./remove-malloc-declaration.patch
+  ];
 
   meta = with lib; {
     description = "Tool to resize BDF fonts";
