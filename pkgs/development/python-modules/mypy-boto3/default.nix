@@ -714,8 +714,8 @@ rec {
       "sha256-mGlREIlUgg9uYhtcf7mqauCMfdmZk+YSNSd7xT2/dzU=";
 
   mypy-boto3-kafkaconnect =
-    buildMypyBoto3Package "kafkaconnect" "1.35.98"
-      "sha256-P2PMe4zzm4pUSa9GsuwNksl/4Ry/KuDJUOqO9f3phog=";
+    buildMypyBoto3Package "kafkaconnect" "1.36.0"
+      "sha256-YYRZ/0CoUoj/uDhtBhb9MBspBYPD2VMZ3Ma2TWZNTD8=";
 
   mypy-boto3-kendra =
     buildMypyBoto3Package "kendra" "1.35.93"
