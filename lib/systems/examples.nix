@@ -163,6 +163,10 @@ rec {
     libc = "newlib";
   };
 
+  alpha = {
+    config = "alpha-unknown-linux-gnu";
+  };
+
   avr = {
     config = "avr";
   };
@@ -188,6 +192,19 @@ rec {
   s390x = {
     config = "s390x-unknown-linux-gnu";
   };
+
+  sparc = {
+    config = "sparc-unknown-linux-gnu";
+  };
+
+  sparc64 = {
+    config = "sparc64-unknown-linux-gnu";
+  };
+
+  vax = {
+    config = "vax-unknown-linux-gnu";
+  };
+
 
   arm-embedded = {
     config = "arm-none-eabi";
@@ -215,6 +232,18 @@ rec {
     libc = "newlib";
   };
 
+  cris-embedded = {
+    config = "cris-none-elf";
+  };
+
+  ia64-embedded = {
+    config = "ia64-none-elf";
+  };
+
+  m68k-embedded = {
+    config = "m68k-none-elf";
+  };
+
   ppc-embedded = {
     config = "powerpc-none-eabi";
     libc = "newlib";
@@ -222,6 +251,11 @@ rec {
 
   ppcle-embedded = {
     config = "powerpcle-none-eabi";
+    libc = "newlib";
+  };
+
+  ppc64-embedded = {
+    config = "powerpc64-none-elf";
     libc = "newlib";
   };
 
