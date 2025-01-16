@@ -838,8 +838,8 @@ rec {
       "sha256-pBbyaMCoSCFSaTjHAhBNZzK3N7bXclswkpP4Y/+CfAY=";
 
   mypy-boto3-managedblockchain =
-    buildMypyBoto3Package "managedblockchain" "1.35.93"
-      "sha256-RprF634l7cHRrDiuFJYztUsXTw5MWFEAwgK1vHBy9Dw=";
+    buildMypyBoto3Package "managedblockchain" "1.36.0"
+      "sha256-uSzu/Vwyfly3T6iaFqdCTZLzM/ivgLArjl6L7f3t7MU=";
 
   mypy-boto3-managedblockchain-query =
     buildMypyBoto3Package "managedblockchain-query" "1.35.93"
