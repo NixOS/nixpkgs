@@ -22391,6 +22391,12 @@
     githubId = 1901799;
     name = "Nathan van Doorn";
   };
+  taoky = {
+    email = "me@taoky.moe";
+    github = "taoky";
+    githubId = 2109893;
+    name = "Keyu Tao";
+  };
   taranarmo = {
     email = "taranarmo@gmail.com";
     github = "taranarmo";
