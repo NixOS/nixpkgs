@@ -76,6 +76,7 @@ let
           src = grammar.src or (fetchGrammar grammar);
           location = grammar.location or null;
           generate = grammar.generate or false;
+          isBroken = grammar ? isBroken && grammar.isBroken;
         };
       grammars' = import ./grammars { inherit lib; } // extraGrammars;
       grammars =
