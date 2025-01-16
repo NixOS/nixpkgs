@@ -1,29 +1,40 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  pytest,
+  fetchFromGitHub,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "py2bit";
-  version = "0.3.0";
-  format = "setuptools";
+  version = "0.3.2";
+  pyproject = true;
 
-  checkInput = [ pytest ];
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1vw2nvw1yrl7ikkqsqs1pg239yr5nspvd969r1x9arms1k25a1a5";
+  src = fetchFromGitHub {
+    owner = "deeptools";
+    repo = "py2bit";
+    tag = version;
+    hash = "sha256-zuzepYX1iQM9BXWCyfvn39yOgqBQTC0tqU6nLGZd9TQ=";
   };
 
-  meta = with lib; {
+  build-system = [
+    setuptools
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pytestFlagsArray = [ "py2bitTest/test.py" ];
+
+  meta = {
     homepage = "https://github.com/deeptools/py2bit";
     description = "File access to 2bit files";
     longDescription = ''
       A python extension, written in C, for quick access to 2bit files. The extension uses lib2bit for file access.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ scalavision ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ scalavision ];
   };
 }
