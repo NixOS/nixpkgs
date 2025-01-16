@@ -2328,8 +2328,6 @@ with pkgs;
     inherit (darwin) libobjc libresolv;
   };
 
-  gping = callPackage ../tools/networking/gping { };
-
   greg = callPackage ../applications/audio/greg {
     pythonPackages = python3Packages;
   };
@@ -14672,8 +14670,6 @@ with pkgs;
   ncdu = callPackage ../tools/misc/ncdu { };
 
   ncdu_1 = callPackage ../tools/misc/ncdu/1.nix { };
-
-  notepad-next = libsForQt5.callPackage ../applications/editors/notepad-next { };
 
   notepadqq = libsForQt5.callPackage ../applications/editors/notepadqq { };
 
