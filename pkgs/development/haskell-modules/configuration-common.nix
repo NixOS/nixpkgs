@@ -2228,6 +2228,37 @@ self: super: {
   # Too strict bound on hspec (<2.11)
   utf8-light = doJailbreak super.utf8-light;
 
+  # Fails to build in pkgsStatic with:
+  #  Preprocessing test suite 'hashable-tests' for hashable-1.4.4.0..
+  #  Mmap.hsc: In function ‘_hsc2hs_test13’:
+  #  Mmap.hsc:54:20: error: storage size of ‘test_array’ isn’t constant
+  #  compilation failed
+  hashable = dontCheckIf pkgs.stdenv.hostPlatform.isStatic super.hashable;
+
+  # Fails to build in pkgsStatic with:
+  #  Building test suite 'unliftio-spec' for unliftio-0.2.25.0..
+  #  ghc: could not execute: hspec-discover
+  #
+  # Because of this in Spec.hs:
+  #  {-# OPTIONS_GHC -F -pgmF hspec-discover #-}
+  unliftio = dontCheckIf pkgs.stdenv.hostPlatform.isStatic super.unliftio;
+
+  # Fails to build in pkgsStatic with:
+  #  Building test suite 'spec' for infer-license-0.2.0..
+  #  ghc: could not execute: hspec-discover
+  #
+  # Because of this in Spec.hs:
+  #  {-# OPTIONS_GHC -fforce-recomp -F -pgmF hspec-discover #-}
+  infer-license = dontCheckIf pkgs.stdenv.hostPlatform.isStatic super.infer-license;
+
+  # Fails to build in pkgsStatic with:
+  #  Building test suite 'spec' for interpolate-0.2.1..
+  #  ghc: could not execute: hspec-discover
+  #
+  # Because of this in Spec.hs:
+  #  {-# OPTIONS_GHC -F -pgmF hspec-discover #-}
+  interpolate = dontCheckIf pkgs.stdenv.hostPlatform.isStatic super.interpolate;
+
   # BSON defaults to requiring network instead of network-bsd which is
   # required nowadays: https://github.com/mongodb-haskell/bson/issues/26
   bson = appendConfigureFlag "-f-_old_network" (super.bson.override {
