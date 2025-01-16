@@ -426,8 +426,8 @@ rec {
       "sha256-+eIiLbW/GBQkx0yfwUmxTAPGCUGxUCgTrkDWXJZNHfc=";
 
   mypy-boto3-drs =
-    buildMypyBoto3Package "drs" "1.35.93"
-      "sha256-DS2dkeWCnaC13YGVLE4CohHLEi4/b6Ljf9GLQb0pmoM=";
+    buildMypyBoto3Package "drs" "1.36.0"
+      "sha256-knGzFh7hI8OFxMIMtix8TRw4QsOymWg44sTX+3Iu8aA=";
 
   mypy-boto3-ds =
     buildMypyBoto3Package "ds" "1.35.93"
