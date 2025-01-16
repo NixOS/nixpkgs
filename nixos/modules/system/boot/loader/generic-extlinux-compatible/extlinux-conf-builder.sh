@@ -1,4 +1,4 @@
-#! @bash@/bin/sh -e
+#! @bash@/bin/bash -e
 
 shopt -s nullglob
 
@@ -58,7 +58,14 @@ declare -A filesCopied
 
 copyToKernelsDir() {
     local src=$(readlink -f "$1")
-    local dst="$target/nixos/$(cleanName $src)"
+    # Don't copy if on same filesystem, just point to the original.
+    if [[ -z "@copyKernels@" && $(stat -f -c %i $src) = $(stat -f -c %i $target/nixos) ]]; then
+        # Replace /nix/store with storePath
+        echo "${src/#\/nix\/store/@storePath@}"
+        return
+    fi
+    local reldst="nixos/$(cleanName $src)"
+    local dst="$target/$reldst"
     # Don't copy the file if $dst already exists.  This means that we
     # have to create $dst atomically to prevent partially copied
     # kernels or initrd if this script is ever interrupted.
@@ -68,7 +75,8 @@ copyToKernelsDir() {
         mv $dstTmp $dst
     fi
     filesCopied[$dst]=1
-    result=$dst
+    # Relative path from $target/extlinux/extlinux.conf
+    echo "../$reldst"
 }
 
 # Copy its kernel, initrd and dtbs to $target/nixos, and echo out an
@@ -81,11 +89,11 @@ addEntry() {
         return
     fi
 
-    copyToKernelsDir "$path/kernel"; kernel=$result
-    copyToKernelsDir "$path/initrd"; initrd=$result
+    kernel=$(copyToKernelsDir "$path/kernel")
+    initrd=$(copyToKernelsDir "$path/initrd")
     dtbDir=$(readlink -m "$path/dtbs")
     if [ -e "$dtbDir" ]; then
-        copyToKernelsDir "$dtbDir"; dtbs=$result
+        dtbs=$(copyToKernelsDir "$dtbDir")
     fi
 
     timestampEpoch=$(stat -L -c '%Z' $path)
@@ -101,8 +109,8 @@ addEntry() {
     else
         echo "  MENU LABEL NixOS - Configuration $tag ($timestamp - $nixosLabel)"
     fi
-    echo "  LINUX ../nixos/$(basename $kernel)"
-    echo "  INITRD ../nixos/$(basename $initrd)"
+    echo "  LINUX $kernel"
+    echo "  INITRD $initrd"
     echo "  APPEND init=$path/init $extraParams"
 
     if [ -n "$noDeviceTree" ]; then
@@ -112,9 +120,9 @@ addEntry() {
     if [ -d "$dtbDir" ]; then
         # if a dtbName was specified explicitly, use that, else use FDTDIR
         if [ -n "$dtbName" ]; then
-            echo "  FDT ../nixos/$(basename $dtbs)/${dtbName}"
+            echo "  FDT $dtbs/$dtbName"
         else
-            echo "  FDTDIR ../nixos/$(basename $dtbs)"
+            echo "  FDTDIR $dtbs"
         fi
     else
         if [ -n "$dtbName" ]; then
