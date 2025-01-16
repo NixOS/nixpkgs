@@ -1,26 +1,27 @@
 {
-  lib,
   _7zz,
   alsa-lib,
-  systemd,
   autoPatchelfHook,
   blas,
   dpkg,
   fetchurl,
   gtk3,
+  lib,
+  libgbm,
   libglvnd,
   libxkbcommon,
   makeShellWrapper,
-  libgbm,
   musl,
   nss,
+  openssl,
   patchelf,
   stdenv,
+  systemd,
   xorg,
 }:
 let
   pname = "positron-bin";
-  version = "2024.11.0-116";
+  version = "2025.01.0-159";
 in
 stdenv.mkDerivation {
   inherit version pname;
@@ -29,12 +30,12 @@ stdenv.mkDerivation {
     if stdenv.hostPlatform.isDarwin then
       fetchurl {
         url = "https://github.com/posit-dev/positron/releases/download/${version}/Positron-${version}.dmg";
-        hash = "sha256-5Ym42InDgFLGdZk0LYV1H0eC5WzmsYToG1KLdiGgTto=";
+        hash = "sha256-QF5u0TLNQY6ziCe0Rv6Z757d8usso8unqJD0NedeqzQ=";
       }
     else
       fetchurl {
         url = "https://github.com/posit-dev/positron/releases/download/${version}/Positron-${version}.deb";
-        hash = "sha256-pE25XVYFW8WwyQ7zmox2mmXy6ZCSaXk2gSnPimg7xtU=";
+        hash = "sha256-Yn07ZEk1fqM6pE23AT5PeprTK1MO6uvbmxnacztsY14=";
       };
 
   buildInputs =
@@ -42,11 +43,12 @@ stdenv.mkDerivation {
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       alsa-lib
       gtk3
+      libgbm
       libglvnd
       libxkbcommon
-      libgbm
       musl
       nss
+      openssl
       stdenv.cc.cc
       xorg.libX11
       xorg.libXcomposite
@@ -97,8 +99,8 @@ stdenv.mkDerivation {
         install -m 444 -D usr/share/applications/positron.desktop "$out/share/applications/positron.desktop"
         substituteInPlace "$out/share/applications/positron.desktop" \
           --replace-fail \
-          "Icon=com.visualstudio.code.oss" \
-          "Icon=$out/share/pixmaps/com.visualstudio.code.oss.png" \
+          "Icon=co.posit.positron" \
+          "Icon=$out/share/pixmaps/co.posit.positron.png" \
           --replace-fail \
           "Exec=/usr/share/positron/positron %F" \
           "Exec=$out/share/positron/.positron-wrapped %F" \
