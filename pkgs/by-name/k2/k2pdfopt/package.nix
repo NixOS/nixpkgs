@@ -26,8 +26,9 @@
   # Tesseract support is currently broken
   # See: https://github.com/NixOS/nixpkgs/issues/368349
   enableTesseract ? false,
-  leptonica,
   tesseract5,
+  enableLeptonica ? true,
+  leptonica,
   opencl-headers,
   fetchDebianPatch,
 }:
@@ -256,10 +257,8 @@ stdenv.mkDerivation rec {
     ++ lib.optional enableMuPDF mupdf_modded
     ++ lib.optional enableDJVU djvulibre
     ++ lib.optional enableGOCR gocr
-    ++ lib.optionals enableTesseract [
-      leptonica_modded
-      tesseract_modded
-    ];
+    ++ lib.optional enableTesseract tesseract_modded
+    ++ lib.optional (enableLeptonica || enableTesseract) leptonica_modded;
 
   dontUseCmakeBuildDir = true;
 
