@@ -1181,6 +1181,7 @@ in {
   xmonad = handleTest ./xmonad.nix {};
   xmonad-xdg-autostart = handleTest ./xmonad-xdg-autostart.nix {};
   xpadneo = handleTest ./xpadneo.nix {};
+  xpra = handleTest ./xpra.nix {};
   xrdp = handleTest ./xrdp.nix {};
   xrdp-with-audio-pulseaudio = handleTest ./xrdp-with-audio-pulseaudio.nix {};
   xscreensaver = handleTest ./xscreensaver.nix {};
