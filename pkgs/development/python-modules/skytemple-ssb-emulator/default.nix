@@ -21,21 +21,19 @@
 }:
 buildPythonPackage rec {
   pname = "skytemple-ssb-emulator";
-  version = "1.8.0";
+  version = "1.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
     repo = pname;
     rev = version;
-    hash = "sha256-9xD9Q/oYsi9tuxTOJ6ItLbWkqAjG78uzXYZXOiITDEA=";
+    hash = "sha256-WDTSW0Vg0oL9+2J5/nIx6sd/ZWqsiDu1trpzuXNw0Kg=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "skytemple_rust-1.8.1" = "sha256-KtMqgUOlyF02msQRouE4NpvCHqahY+aRiRV9P32ASqg=";
-    };
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-Fgc0gFzDrdcV73HU39cqyw74nln4EKHokz86V8k8TAI=";
   };
 
   buildInputs = [
@@ -58,6 +56,8 @@ buildPythonPackage rec {
     setuptools
     setuptools-rust
   ];
+
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration -Wno-error=int-conversion";
 
   propagatedBuildInputs = [ range-typed-integers ];
 
