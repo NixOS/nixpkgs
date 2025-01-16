@@ -1374,8 +1374,8 @@ rec {
       "sha256-UNXQ8UPxPBEChjLf54CWE9rDFMi/BiOXdbou/pOsHdg=";
 
   mypy-boto3-translate =
-    buildMypyBoto3Package "translate" "1.35.93"
-      "sha256-uXRM1S6zGbLNvCx342Nh4GPeZXVBRYpxDO0FFsRwYgc=";
+    buildMypyBoto3Package "translate" "1.36.0"
+      "sha256-eciWk3er9XomkPcP8vNGta2L2+vRwL4ytUVjmR1gDBQ=";
 
   mypy-boto3-verifiedpermissions =
     buildMypyBoto3Package "verifiedpermissions" "1.35.93"
