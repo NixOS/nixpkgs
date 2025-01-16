@@ -4,6 +4,12 @@
   flax,
   tomlq,
   rustPlatform,
+  python,
+  ninja,
+  pkg-config,
+  meson-python,
+  nanobind,
+  cmake,
   pytestCheckHook,
 }:
 
@@ -13,8 +19,10 @@ buildPythonPackage rec {
   pyproject = true;
 
   inherit (flax) src;
+  # src = /home/gaetan/flax;
 
-  sourceRoot = "${src.name}/flaxlib";
+  sourceRoot = "${src.name}/flaxlib_src";
+  # sourceRoot = "flax/flaxlib_src";
 
   postPatch = ''
     expected_version="$version"
@@ -26,22 +34,44 @@ buildPythonPackage rec {
       echo -e "\tPlease update the version attribute of the nix python3Packages.flaxlib package."
       exit 1
     fi
+
+    substituteInPlace meson.build \
+      --replace-fail ", static: true" ""
   '';
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit
-      pname
-      version
-      src
-      sourceRoot
-      ;
-    hash = "sha256-RPbMHnRdJaWKLU9Rkz39lmfibO20dnfZmLZqehHM3w4=";
-  };
+  # preConfigure = ''
+  #   # export CMAKE_PREFIX_PATH=${nanobind}/${python.sitePackages}/nanobind/cmake
+  #   # echo $CMAKE_PREFIX_PATH
+  #   nanobind_dir=$(mktemp -d)
+  #   echo ---------------
+  #   export CMAKE_PREFIX_PATH=$(${python.interpreter} -m nanobind --cmake_dir):$CMAKE_PREFIX_PATH
+  #   echo ---------------
+  #   echo $CMAKE_PREFIX_PATH
+  # '';
 
-  nativeBuildInputs = [
-    rustPlatform.maturinBuildHook
-    rustPlatform.cargoSetupHook
+  # mesonFlags = [ "--log-level=debug" ];
+
+  # cargoDeps = rustPlatform.fetchCargoTarball {
+  #   inherit
+  #     pname
+  #     version
+  #     src
+  #     sourceRoot
+  #     ;
+  #   hash = "sha256-RPbMHnRdJaWKLU9Rkz39lmfibO20dnfZmLZqehHM3w4=";
+  # };
+
+  build-system = [
+    meson-python
+    # nanobind
+    ninja
   ];
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+  ];
+  buildInputs = [ nanobind ];
+  dontUseCmakeConfigure = true;
 
   pythonImportsCheck = [ "flaxlib" ];
 
