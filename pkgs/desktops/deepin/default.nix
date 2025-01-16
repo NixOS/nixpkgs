@@ -69,7 +69,6 @@ let
       deepin-compressor = callPackage ./apps/deepin-compressor { };
       deepin-draw = callPackage ./apps/deepin-draw { };
       deepin-editor = callPackage ./apps/deepin-editor { };
-      deepin-image-viewer = callPackage ./apps/deepin-image-viewer { };
       deepin-music = callPackage ./apps/deepin-music { };
       deepin-picker = callPackage ./apps/deepin-picker { };
       deepin-shortcut-viewer = callPackage ./apps/deepin-shortcut-viewer { };
@@ -116,6 +115,7 @@ let
       deepin-screen-recorder = throw "'deepin.deepin-screen-recorder' has been removed as it was broken and unmaintained in nixpkgs, Please use 'flameshot' or 'simplescreenrecorder' instead"; # added 2025-01-16
       deepin-ocr-plugin-manager = throw "'deepin.deepin-ocr-plugin-manager' has been removed as it was outdated"; # added 2025-01-16
       deepin-camera = throw "'deepin.deepin-camera' has been removed as it was unmaintained in nixpkgs, Please use 'snapshot' instead"; # added 2025-01-16
+      deepin-image-viewer = throw "'deepin.deepin-image-viewer' has been removed as it was broken and unmaintained in nixpkgs, Please use 'kdePackages.gwenview' instead"; # added 2025-01-16
     };
 in
 lib.makeScope pkgs.newScope packages
