@@ -278,8 +278,8 @@ rec {
       "sha256-bTP0rI6YS93GywxmzlRoEOljyg6iUJDwj7Qy0alF10k=";
 
   mypy-boto3-codedeploy =
-    buildMypyBoto3Package "codedeploy" "1.35.93"
-      "sha256-ooWZ9Nl7Bfhg/bg+LVko325dhpQcyGk8a5faAFpOJOw=";
+    buildMypyBoto3Package "codedeploy" "1.36.0"
+      "sha256-bQb0DWUMjztac9xXmsa/Mf2CghRTtqAu1KAhJAS+VMs=";
 
   mypy-boto3-codeguru-reviewer =
     buildMypyBoto3Package "codeguru-reviewer" "1.35.93"
