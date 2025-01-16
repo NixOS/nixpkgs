@@ -1,4 +1,4 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{ buildGoModule, fetchFromGitHub, lib, gitUpdater }:
 
 buildGoModule rec {
   pname = "cloudflare-exporter";
@@ -12,6 +12,10 @@ buildGoModule rec {
   };
 
   vendorHash = "sha256-c1drgbzoA5AlbB0K+E8kuJnyShgUg7spPQKAAwxCr6M=";
+
+  passthru = {
+    updateScript = gitUpdater { };
+  };
 
   meta = with lib; {
     description = "Prometheus Cloudflare Exporter";
