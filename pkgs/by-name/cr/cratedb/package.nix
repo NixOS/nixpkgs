@@ -11,7 +11,7 @@
 let
   # Wants at least Java 22
   jdk = openjdk23;
-  version = "5.9.5";
+  version = "5.9.6";
 in
 maven.buildMavenPackage {
   pname = "cratedb";
@@ -21,7 +21,7 @@ maven.buildMavenPackage {
     owner = "crate";
     repo = "crate";
     tag = version;
-    hash = "sha256-T72Cy/jU8l68Res85bcZysRB81IqUF4eqgRxW7TJ+6Q=";
+    hash = "sha256-IBIOxcpd1MXMz+Z2utnjZfN74qX/ZrKVNrIjFaLKBEA=";
   };
 
   nativeBuildInputs = [
