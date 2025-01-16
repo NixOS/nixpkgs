@@ -23218,6 +23218,12 @@
     githubId = 1391883;
     name = "Tom Hall";
   };
+  three = {
+    email = "eric@ericroberts.dev";
+    github = "three";
+    githubId = 1761259;
+    name = "Eric Roberts";
+  };
   thtrf = {
     email = "thtrf@proton.me";
     github = "thtrf";
