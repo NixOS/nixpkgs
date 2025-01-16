@@ -18260,6 +18260,8 @@ self: super: with self; {
 
   timezonefinder = callPackage ../development/python-modules/timezonefinder { };
 
+  timg = callPackage ../development/python-modules/timg { };
+
   timing-asgi = callPackage ../development/python-modules/timing-asgi { };
 
   timm = callPackage ../development/python-modules/timm { };
