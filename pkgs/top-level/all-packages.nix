@@ -17371,6 +17371,11 @@ with pkgs;
   geogebra = callPackage ../applications/science/math/geogebra { };
   geogebra6 = callPackage ../applications/science/math/geogebra/geogebra6.nix { };
 
+  inherit (callPackage ../applications/science/math/matlab { })
+    fetchFromMPM
+    matlab
+    matlab-package-manager;
+
   maxima = callPackage ../applications/science/math/maxima {
     lisp-compiler = sbcl;
   };
