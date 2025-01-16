@@ -13,6 +13,7 @@
 , libpng
 , libtool
 , pango
+, tcl
 , bash
 , bison
 , xorg
@@ -47,6 +48,7 @@ stdenv.mkDerivation rec {
     python3
     bison
     flex
+    tcl.tclPackageHook
   ];
 
   buildInputs = [
@@ -66,6 +68,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-ltdl-lib=${libtool.lib}/lib"
     "--with-ltdl-include=${libtool}/include"
+    "--with-tclsh=${tcl}/bin/tclsh"
   ] ++ optional (xorg == null) "--without-x";
 
   enableParallelBuilding = true;
