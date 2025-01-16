@@ -2,6 +2,7 @@
 , buildGoModule
 , fetchFromGitHub
 , testers
+, stdenv
 , otel-desktop-viewer
 , stdenv
 , apple-sdk_12
@@ -19,11 +20,13 @@ buildGoModule rec {
   };
 
   # https://github.com/CtrlSpice/otel-desktop-viewer/issues/139
-  patches = [ ./version-0.1.4.patch ];
+  # https://github.com/NixOS/nixpkgs/issues/301925
+  patches = [ ./version-0.1.4.patch ]
+    ++ lib.optional (stdenv.system == "aarch64-darwin") ./go-m1cpu-0.1.6.patch;
 
   subPackages = [ "..." ];
 
-  vendorHash = "sha256-pH16DCYeW8mdnkkRi0zqioovZu9slVc3gAdhMYu2y98=";
+  vendorHash = "sha256-X6QwAFqREROADpTrDCr45OyeNXYtoBdPfyBfjVegc4w=";
 
   ldflags = [ "-s" "-w" ];
 
