@@ -3303,6 +3303,10 @@ in
     ];
   };
 
+  nvzone-typr = super.nvzone-typr.overrideAttrs {
+    dependencies = [ self.nvzone-volt ];
+  };
+
   unicode-vim =
     let
       unicode-data = fetchurl {
