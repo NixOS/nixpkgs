@@ -570,8 +570,8 @@ rec {
       "sha256-OvHk8XMzUC/UgOAHVgf0lZ+LK0r8oq/m7PWYgLLoj40=";
 
   mypy-boto3-globalaccelerator =
-    buildMypyBoto3Package "globalaccelerator" "1.35.93"
-      "sha256-Vyx6ki0OtFy7nnTm0DxEYvFaGfRkK0YYty/cCLU5TM4=";
+    buildMypyBoto3Package "globalaccelerator" "1.36.0"
+      "sha256-1Xjn3SfQQOXthfqH1dwHkldEIgSmUGEnn8N83H7ALXQ=";
 
   mypy-boto3-glue =
     buildMypyBoto3Package "glue" "1.35.93"
