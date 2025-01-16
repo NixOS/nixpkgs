@@ -11713,12 +11713,12 @@ final: prev:
 
   snacks-nvim = buildVimPlugin {
     pname = "snacks.nvim";
-    version = "2025-01-15";
+    version = "2025-01-16";
     src = fetchFromGitHub {
       owner = "folke";
       repo = "snacks.nvim";
-      rev = "e5dd9281ee9402858fb7b7f1ac74ddcef40ebacc";
-      sha256 = "147rbp4z58bvm6s2lk1yzis7rjrrppwgchxpiyf9klj2gh08mzwp";
+      rev = "4ac28ad1de74438daf10b07e5dea6463470d8d05";
+      sha256 = "15n86b1vrc54s8icm1p0sp5ay811w9z8ygwbkqd478a677q8vk0w";
     };
     meta.homepage = "https://github.com/folke/snacks.nvim/";
   };
