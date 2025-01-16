@@ -230,8 +230,8 @@ rec {
       "sha256-rMLHrokg8RZ74Jf2FRaF/lrumb4viQB17fk+BdKY6LA=";
 
   mypy-boto3-cloudfront =
-    buildMypyBoto3Package "cloudfront" "1.35.93"
-      "sha256-Xpsi7anZNxPdooBO2CtfYUxw9HrSKo1kwTHOy2ZS3Mw=";
+    buildMypyBoto3Package "cloudfront" "1.36.0"
+      "sha256-6HRqoRpUsrvPVrNvVlQodzjWpfk5Eq472jCzNVMULzM=";
 
   mypy-boto3-cloudhsm =
     buildMypyBoto3Package "cloudhsm" "1.35.93"
