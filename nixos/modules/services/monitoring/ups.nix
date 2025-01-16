@@ -525,6 +525,7 @@ in
       description = "Uninterruptible Power Supplies (Monitor)";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
+      path = [ pkgs.unixtools.wall ];
       serviceConfig = {
         Type = "forking";
         ExecStartPre = "${createUpsmonConf}";
