@@ -8,7 +8,7 @@
   srcOnly,
   removeReferencesTo,
   nodejs,
-  pnpm,
+  pnpm_9,
   python3,
   git,
   jq,
@@ -48,13 +48,13 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     customPython
     nodejs
-    pnpm.configHook
+    pnpm_9.configHook
     git
     jq
     zip
   ];
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
     hash = "sha256-BVVmv0VVvQ2YhL0zOKiM1oVKJKvqwMGNR47DkcCj874=";
   };

@@ -1,7 +1,7 @@
 {
   fetchFromGitHub,
   lib,
-  pnpm,
+  pnpm_9,
   stdenvNoCC,
   nodejs,
   nix-update-script,
@@ -18,14 +18,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-8SWN22pjHnXWM+RUEYNux0ZWhRUVMib3M7r2SlI33tQ=";
   };
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
     hash = "sha256-NGAgueJ+cuK/csjdf94KNklu+Xf91BHoWKVgEctX6eA=";
   };
 
   nativeBuildInputs = [
     nodejs
-    pnpm.configHook
+    pnpm_9.configHook
   ];
 
   buildPhase = ''

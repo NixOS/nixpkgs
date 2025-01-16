@@ -6,17 +6,17 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "wyoming-faster-whisper";
-  version = "2.2.0";
+  version = "2.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "wyoming-faster-whisper";
     rev = "refs/tags/v${version}";
-    hash = "sha256-G46ycjpRu4MD00FiBM1H0DrPpXaaPlZ8yeoyZ7WYD48=";
+    hash = "sha256-Ai28i+2/oWI2Y61x7U5an5MBHfuBaGy6qZZwZydS308=";
   };
 
-  nativeBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
     setuptools
   ];
 
@@ -25,7 +25,7 @@ python3Packages.buildPythonApplication rec {
     "wyoming"
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3Packages; [
     faster-whisper
     wyoming
   ];

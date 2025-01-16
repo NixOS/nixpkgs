@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   mpiCheckPhaseHook,
   mpi,
@@ -14,27 +13,18 @@ assert blas.isILP64 == lapack.isILP64;
 
 stdenv.mkDerivation rec {
   pname = "scalapack";
-  version = "2.2.1";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "Reference-ScaLAPACK";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-GNVGWrIWdfyTfbz7c31Vjt9eDlVzCd/aLHoWq2DMyX4=";
+    sha256 = "sha256-KDMW/D7ubGaD2L7eTwULJ04fAYDPAKl8xKPZGZMkeik=";
   };
 
   passthru = { inherit (blas) isILP64; };
 
   __structuredAttrs = true;
-
-  # upstream patch, remove with next release
-  patches = [
-    (fetchpatch {
-      name = "gcc-10";
-      url = "https://github.com/Reference-ScaLAPACK/scalapack/commit/a0f76fc0c1c16646875b454b7d6f8d9d17726b5a.patch";
-      sha256 = "0civn149ikghakic30bynqg1bal097hr7i12cm4kq3ssrhq073bp";
-    })
-  ];
 
   # Required to activate ILP64.
   # See https://github.com/Reference-ScaLAPACK/scalapack/pull/19
@@ -85,14 +75,6 @@ stdenv.mkDerivation rec {
   # Increase individual test timeout from 1500s to 10000s because hydra's builds
   # sometimes fail due to this
   checkFlags = [ "ARGS=--timeout 10000" ];
-
-  postFixup = ''
-    # _IMPORT_PREFIX, used to point to lib, points to dev output. Every package using the generated
-    # cmake file will thus look for the library in the dev output instead of out.
-    # Use the absolute path to $out instead to fix the issue.
-    substituteInPlace  $dev/lib/cmake/scalapack-${version}/scalapack-targets-release.cmake \
-      --replace "\''${_IMPORT_PREFIX}" "$out"
-  '';
 
   meta = with lib; {
     homepage = "http://www.netlib.org/scalapack/";
