@@ -11066,6 +11066,8 @@ self: super: with self; {
 
   primer3 = callPackage ../development/python-modules/primer3 { };
 
+  primme = callPackage ../development/python-modules/primme { };
+
   priority = callPackage ../development/python-modules/priority { };
 
   prisma = callPackage ../development/python-modules/prisma { };
