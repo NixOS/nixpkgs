@@ -1246,8 +1246,8 @@ rec {
       "sha256-u7GYGYWFF3nqrq1UPvFCxBWhbijzGDHiBlYBYz5kjS8=";
 
   mypy-boto3-servicediscovery =
-    buildMypyBoto3Package "servicediscovery" "1.35.93"
-      "sha256-nJ3uWIw+e0xgPrCe8beTbIWsHPrzAZdftSa1E1f3x0o=";
+    buildMypyBoto3Package "servicediscovery" "1.36.0"
+      "sha256-edpmbbgwyFcZFMag8WLm8K2ARaFc+h0MYCuI0FSOvS0=";
 
   mypy-boto3-ses =
     buildMypyBoto3Package "ses" "1.35.93"
