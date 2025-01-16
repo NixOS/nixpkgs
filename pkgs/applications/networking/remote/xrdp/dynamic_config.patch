@@ -370,3 +370,36 @@ index e67d9477..8bc718a0 100644
                      s_push_layer(s, iso_hdr, 4);
                      out_uint16_le(s, 103);
                      out_uint32_le(s, 16); /* key up */
+diff --git a/sesman/chansrv/chansrv.c b/sesman/chansrv/chansrv.c
+index ef3960ed..86a8b6da 100644
+--- a/sesman/chansrv/chansrv.c
++++ b/sesman/chansrv/chansrv.c
+@@ -1703,10 +1703,12 @@ main(int argc, char **argv)
+         return 1;
+     }
+
+-    /*
+-     * The user is unable at present to override the sysadmin-provided
+-     * sesman.ini location */
+-    config_path = XRDP_CFG_PATH "/sesman.ini";
++    if (argc < 2) {
++        g_writeln("usage: %s sesman.ini", argv[0]);
++        return 1;
++    }
++    config_path = argv[1];
++
+     if ((g_cfg = config_read(0, config_path)) == NULL)
+     {
+         main_cleanup();
+diff --git a/sesman/session.c b/sesman/session.c
+index d352f5e8..3dbcc47c 100644
+--- a/sesman/session.c
++++ b/sesman/session.c
+@@ -410,6 +410,7 @@ session_start_chansrv(char *username, int display)
+                    XRDP_SBIN_PATH);
+
+         list_add_item(chansrv_params, (intptr_t) g_strdup(exe_path));
++        list_add_item(chansrv_params, (intptr_t) g_strdup(g_cfg->sesman_ini));
+         list_add_item(chansrv_params, 0); /* mandatory */
+
+         env_set_user(username, 0, display,
