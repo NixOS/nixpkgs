@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   ROFI_PLUGINS_DIR = "$out/lib/rofi";
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-deprecated-declarations"
     "-Wno-incompatible-pointer-types"
   ];
