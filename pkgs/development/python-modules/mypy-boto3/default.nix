@@ -638,8 +638,8 @@ rec {
       "sha256-bxtAI1FJFqb2mQAbKxZJCl5w8DHtU3CNHwiqI7ewahw=";
 
   mypy-boto3-iot-data =
-    buildMypyBoto3Package "iot-data" "1.35.93"
-      "sha256-5kw/Vw97r9HjFtSnD/eE+qT93S3f2P2ctvAB1A6CMMc=";
+    buildMypyBoto3Package "iot-data" "1.36.0"
+      "sha256-uczlAx7Gs17O4p87DrZuPu/2X4xeTiLnX6vH46kF9nY=";
 
   mypy-boto3-iot-jobs-data =
     buildMypyBoto3Package "iot-jobs-data" "1.35.93"
