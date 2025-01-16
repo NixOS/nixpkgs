@@ -682,8 +682,8 @@ rec {
       "sha256-CZyyJNJDkz/rtwuQib7522Irs123wRAIFop37FfmGRw=";
 
   mypy-boto3-iotsitewise =
-    buildMypyBoto3Package "iotsitewise" "1.35.93"
-      "sha256-d1Lhj2/izhVGJiIP37NhMEvz/RMzWuw6NpFskWoN7FA=";
+    buildMypyBoto3Package "iotsitewise" "1.36.0"
+      "sha256-VLRYSXse89aCgRjMr2t8ndDLnS60Bl+i8WLBe9fSoM8=";
 
   mypy-boto3-iotthingsgraph =
     buildMypyBoto3Package "iotthingsgraph" "1.35.93"
