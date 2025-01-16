@@ -8,6 +8,8 @@ mkDerivation {
   path = "sys/arch/amd64/stand";
   extraPaths = [ "sys" ];
 
+  patches = [ ../sys/initpath.patch ];
+
   # gcc compat
   postPatch = ''
     find $BSDSRCDIR -name Makefile -print0 | xargs -0 sed -E -i -e 's/-nopie/-no-pie/g'
