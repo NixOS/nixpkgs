@@ -110,6 +110,7 @@
         # they seem to lead to `too many sections` errors when building base for
         # profiling.
         ++ lib.optionals (!stdenv.targetPlatform.isWindows) [ "split_sections" ]
+        ++ lib.optionals stdenv.targetPlatform.isWindows [ "no_split_sections" ]
       ;
     in
       baseFlavour + lib.concatMapStrings (t: "+${t}") transformers
@@ -198,6 +199,14 @@
             hash = "sha256-3+CyRBpebEZi8YpS22SsdGQHqi0drR7cCKPtKbR3zyE=";
           })
         ]
+        ++ lib.optionals (lib.versionAtLeast version "9.10" && lib.versionOlder version "9.12") [
+          # https://gitlab.haskell.org/ghc/ghc/-/issues/24945
+          (fetchpatch {
+            name = "rts-cleanup-inlining-logic";
+            url = "https://gitlab.haskell.org/ghc/ghc/-/commit/35a64220c9e47d64635ae732f33795c611eb1fc8.patch";
+            hash = "sha256-cS6z86iPAOkVqGGF/Q9XqSoxCKgKb8Sn5xi1KfIPRso=";
+          })
+        ]
         ++ lib.optionals (stdenv.targetPlatform.isDarwin && stdenv.targetPlatform.isAarch64) [
           # Prevent the paths module from emitting symbols that we don't use
           # when building with separate outputs.
@@ -208,6 +217,10 @@
           (if lib.versionOlder version "9.10"
            then ./Cabal-at-least-3.6-paths-fix-cycle-aarch64-darwin.patch
            else ./Cabal-3.12-paths-fix-cycle-aarch64-darwin.patch)
+        ]
+        ++ lib.optionals stdenv.targetPlatform.isWindows [
+          # https://gitlab.haskell.org/ghc/ghc/-/issues/23688
+          ./win32-no-hsc2hs.patch
         ]
         # Prevents passing --hyperlinked-source to haddock. Note that this can
         # be configured via a user defined flavour now. Unfortunately, it is
@@ -327,6 +340,8 @@ let
 
         ld = cc.bintools;
         "ld.gold" = cc.bintools;
+
+        windres = cc.bintools;
 
         otool = cc.bintools.bintools;
 
@@ -689,6 +704,10 @@ stdenv.mkDerivation ({
         then toolPath "clang" installCC
         else "${llvmPackages.clang}/bin/${llvmPackages.clang.targetPrefix}clang"
       }"
+  ''
+  + lib.optionalString (stdenv.hostPlatform != stdenv.targetPlatform && stdenv.targetPlatform.isWindows) ''
+    ghc-settings-edit "$settingsFile" \
+      "windres command" "${toolPath "windres" installCC}"
   ''
   + ''
 
