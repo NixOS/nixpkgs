@@ -76,20 +76,18 @@ rec {
     cascadelake    = [ "cannonlake"     ] ++ inferiors.cannonlake;
     cooperlake     = [ "cascadelake"    ] ++ inferiors.cascadelake;
     tigerlake      = [ "icelake-server" ] ++ inferiors.icelake-server;
+    alderlake      = [ "skylake"        ] ++ inferiors.skylake;
     sapphirerapids = [ "tigerlake"      ] ++ inferiors.tigerlake;
     emeraldrapids  = [ "sapphirerapids" ] ++ inferiors.sapphirerapids;
 
-    # CX16 does not exist on alderlake, while it does on nearly all other intel CPUs
-    alderlake      = [ ];
-
     # x86_64 AMD
     # TODO: fill this (need testing)
-    btver1         = [ ];
-    btver2         = [ ];
-    bdver1         = [ ];
-    bdver2         = [ ];
-    bdver3         = [ ];
-    bdver4         = [ ];
+    btver1         = [ "x86-64" ];
+    btver2         = [ "x86-64-v2" ] ++ inferiors.x86-64-v2;
+    bdver1         = [ "x86-64-v2" ] ++ inferiors.x86-64-v2;
+    bdver2         = [ "x86-64-v2" ] ++ inferiors.x86-64-v2;
+    bdver3         = [ "x86-64-v2" ] ++ inferiors.x86-64-v2;
+    bdver4         = [ "x86-64-v3" ] ++ inferiors.x86-64-v3;
     # Regarding `skylake` as inferior of `znver1`, there are reports of
     # successful usage by Gentoo users and Phoronix benchmarking of different
     # `-march` targets.
