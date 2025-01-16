@@ -22,7 +22,11 @@ in
   options.services.monado = {
     enable = mkEnableOption "Monado user service";
 
-    package = mkPackageOption pkgs "monado" { };
+    package =
+      mkPackageOption pkgs "monado" { }
+      // mkOption {
+        apply = pkg: pkg.override { ultraleapSupport = cfg.enableUltraleap; };
+      };
 
     defaultRuntime = mkOption {
       type = types.bool;
@@ -52,6 +56,8 @@ in
     highPriority =
       mkEnableOption "high priority capability for monado-service"
       // mkOption { default = true; };
+
+    enableUltraleap = mkEnableOption "Ultraleap hand tracking Monado driver and system service";
   };
 
   config = mkIf cfg.enable {
@@ -65,6 +71,10 @@ in
     };
 
     services.udev.packages = with pkgs; [ xr-hardware ];
+
+    services.ultraleap = mkIf cfg.enableUltraleap {
+      enable = mkDefault true;
+    };
 
     systemd.user = {
       services.monado = {

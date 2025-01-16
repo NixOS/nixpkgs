@@ -1,0 +1,42 @@
+diff --git a/usr/lib/ultraleap-hand-tracking-service/cmake/LeapCTargets-release.cmake b/usr/lib/ultraleap-hand-tracking-service/cmake/LeapCTargets-release.cmake
+index be4fe4e..f3f5bba 100644
+--- a/usr/lib/ultraleap-hand-tracking-service/cmake/LeapCTargets-release.cmake
++++ b/usr/lib/ultraleap-hand-tracking-service/cmake/LeapCTargets-release.cmake
+@@ -8,12 +8,12 @@ set(CMAKE_IMPORT_FILE_VERSION 1)
+ # Import target "LeapSDK::LeapC" for configuration "release"
+ set_property(TARGET LeapSDK::LeapC APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
+ set_target_properties(LeapSDK::LeapC PROPERTIES
+-  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib/ultraleap-hand-tracking-service/libLeapC.so.5"
++  IMPORTED_LOCATION_RELEASE "@out@/lib/libLeapC.so.5"
+   IMPORTED_SONAME_RELEASE "libLeapC.so.5"
+   )
+ 
+ list(APPEND _IMPORT_CHECK_TARGETS LeapSDK::LeapC )
+-list(APPEND _IMPORT_CHECK_FILES_FOR_LeapSDK::LeapC "${_IMPORT_PREFIX}/lib/ultraleap-hand-tracking-service/libLeapC.so.5" )
++list(APPEND _IMPORT_CHECK_FILES_FOR_LeapSDK::LeapC "@out@/lib/libLeapC.so.5" )
+ 
+ # Commands beyond this point should not need to know the version.
+ set(CMAKE_IMPORT_FILE_VERSION)
+diff --git a/usr/lib/ultraleap-hand-tracking-service/cmake/LeapCTargets.cmake b/usr/lib/ultraleap-hand-tracking-service/cmake/LeapCTargets.cmake
+index 7a30c2e..38e335c 100644
+--- a/usr/lib/ultraleap-hand-tracking-service/cmake/LeapCTargets.cmake
++++ b/usr/lib/ultraleap-hand-tracking-service/cmake/LeapCTargets.cmake
+@@ -54,7 +54,7 @@ endif()
+ add_library(LeapSDK::LeapC SHARED IMPORTED)
+ 
+ set_target_properties(LeapSDK::LeapC PROPERTIES
+-  INTERFACE_INCLUDE_DIRECTORIES "/usr/include"
++  INTERFACE_INCLUDE_DIRECTORIES "@dev@/include"
+   INTERFACE_LINK_LIBRARIES "atomic"
+ )
+ 
+diff --git a/usr/lib/x86_64-linux-gnu/cmake/LeapSDK/leapsdk-config.cmake b/usr/lib/x86_64-linux-gnu/cmake/LeapSDK/leapsdk-config.cmake
+index f74639b..c46805d 100644
+--- a/usr/lib/x86_64-linux-gnu/cmake/LeapSDK/leapsdk-config.cmake
++++ b/usr/lib/x86_64-linux-gnu/cmake/LeapSDK/leapsdk-config.cmake
+@@ -12,4 +12,4 @@ if(IS_DIRECTORY ${PACKAGE_PREFIX_DIR}/lib/x64 OR
+   set(_arch_folder x64)
+ endif()
+ 
+-include(/usr/lib/ultraleap-hand-tracking-service//${_arch_folder}/cmake/LeapCTargets.cmake)
++include(@dev@/lib/cmake/LeapCTargets.cmake)

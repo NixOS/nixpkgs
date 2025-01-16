@@ -54,6 +54,7 @@
   zlib,
   zstd,
   nixosTests,
+  ultraleap-hand-tracking-service,
   cudaPackages,
   enableCuda ? config.cudaSupport,
   # Set as 'false' to build monado without service support, i.e. allow VR
@@ -62,6 +63,7 @@
   # https://gitlab.freedesktop.org/monado/monado/-/blob/master/doc/targets.md#xrt_feature_service-disabled
   serviceSupport ? true,
   tracingSupport ? false,
+  ultraleapSupport ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -88,7 +90,6 @@ stdenv.mkDerivation (finalAttrs: {
   #  - DRIVER_DEPTHAI - Needs depthai-core https://github.com/luxonis/depthai-core (See https://github.com/NixOS/nixpkgs/issues/292618)
   #  - DRIVER_ILLIXR - needs ILLIXR headers https://github.com/ILLIXR/ILLIXR (See https://github.com/NixOS/nixpkgs/issues/292661)
   #  - DRIVER_ULV2 - Needs proprietary Leapmotion SDK https://api.leapmotion.com/documentation/v2/unity/devguide/Leap_SDK_Overview.html (See https://github.com/NixOS/nixpkgs/issues/292624)
-  #  - DRIVER_ULV5 - Needs proprietary Leapmotion SDK https://api.leapmotion.com/documentation/v2/unity/devguide/Leap_SDK_Overview.html (See https://github.com/NixOS/nixpkgs/issues/292624)
 
   buildInputs =
     [
@@ -136,6 +137,9 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals tracingSupport [
       tracy
+    ]
+    ++ lib.optionals ultraleapSupport [
+      ultraleap-hand-tracking-service
     ];
 
   patches = [
