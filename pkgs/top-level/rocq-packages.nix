@@ -13,6 +13,7 @@ let
         {inherit lib stdenv fetchzip fetchurl; };
       mkRocqDerivation = lib.makeOverridable (callPackage ../build-support/rocq {});
 
+      bignums = callPackage ../development/rocq-modules/bignums {};
       stdlib = callPackage ../development/rocq-modules/stdlib {};
 
       filterPackages = doesFilter: if doesFilter then filterRocqPackages self else self;
