@@ -1246,6 +1246,20 @@ rec {
     f:
     listToAttrs (map (n: nameValuePair n (f n)) names);
 
+  /* Generate an attribute set by mapping over a list of items
+     Taking two functions, one to apply for the name and one to
+     apply for the value of the attribute set.
+
+    Example:
+       genAttrs' [ {a = 2; b.c = "a" } {a = 1; b.c = "b"} ]
+          (i: i.b.c) (i: i.a)
+       => { a = 2; b = 1; }
+
+    Type:
+      genAttrs' :: [ a ] -> (a -> String) -> (a -> Any) -> AttrSet
+  */
+  genAttrs' = items: f: g:
+    listToAttrs (map (i: nameValuePair (f i) (g i)) items);
 
   /**
     Check whether the argument is a derivation. Any set with
