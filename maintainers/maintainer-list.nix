@@ -17521,6 +17521,12 @@
     githubId = 25278658;
     name = "Patrick Widmer";
   };
+  paukaifler = {
+    email = "pau@kaifler.me";
+    github = "PauKaifler";
+    githubId = 81905706;
+    name = "Pau Kaifler";
+  };
   paulsmith = {
     email = "paulsmith@pobox.com";
     github = "paulsmith";
