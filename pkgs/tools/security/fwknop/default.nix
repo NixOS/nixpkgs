@@ -33,6 +33,14 @@ stdenv.mkDerivation rec {
       url = "https://github.com/mrash/fwknop/commit/bee7958532338499e35c19e75937891c8113f7de.patch";
       hash = "sha256-lrro5dSDR0Zz9aO3bV5vFFADNJjoDR9z6P5lFYWyLW8=";
     })
+
+    # Pull patch pending upstream inclusion to fix snprintf buffer length when using gpg:
+    #   https://github.com/mrash/fwknop/pull/359
+    (fetchpatch {
+      name = "gpg-snprintf.patch";
+      url = "https://github.com/mrash/fwknop/commit/b246eeccc53d663640d763fe9f06baadf8c9883e.patch";
+      sha256 = "sha256-Oca0A4lEbYX5ZwrhAAvSkxbjpKkzFDjQRVGto9YoUyA=";
+    })
   ];
 
   nativeBuildInputs = [ autoreconfHook ];
