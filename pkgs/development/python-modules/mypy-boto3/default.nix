@@ -618,8 +618,8 @@ rec {
       "sha256-lRYLRpJ12+MtoUav4WiyPSrHrvQE0wmaS28JuAsc83g=";
 
   mypy-boto3-importexport =
-    buildMypyBoto3Package "importexport" "1.35.93"
-      "sha256-sS+E55GkpEaO/lixkQZulvX7OWjOY9p4L2ysKNvqXKg=";
+    buildMypyBoto3Package "importexport" "1.36.0"
+      "sha256-ZF20ZT+H4hlPoXll7Nmfcqn1FY7C5/3WcmzrIre8fvg=";
 
   mypy-boto3-inspector =
     buildMypyBoto3Package "inspector" "1.35.93"
