@@ -1577,6 +1577,18 @@
   "sec-option-types-composed": [
     "index.html#sec-option-types-composed"
   ],
+  "section-option-types-record": [
+    "index.html#section-option-types-record"
+  ],
+  "section-option-types-record-fields": [
+    "index.html#section-option-types-record-fields"
+  ],
+  "section-option-types-record-optional-fields": [
+    "index.html#section-option-types-record-optional-fields"
+  ],
+  "section-option-types-record-freeform": [
+    "index.html#section-option-types-record-freeform"
+  ],
   "section-option-types-submodule": [
     "index.html#section-option-types-submodule"
   ],
@@ -1645,6 +1657,9 @@
   ],
   "sec-freeform-modules": [
     "index.html#sec-freeform-modules"
+  ],
+  "ex-freeform-record": [
+    "index.html#ex-freeform-record"
   ],
   "ex-freeform-module": [
     "index.html#ex-freeform-module"

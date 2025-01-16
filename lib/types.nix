@@ -1124,7 +1124,8 @@ rec {
     # Augment the given type with an additional type check function.
     addCheck = elemType: check: elemType // { check = x: elemType.check x && check x; };
 
-  };
+  }
+  // import ./types/record.nix { inherit lib; };
 };
 
 in outer_types // outer_types.types

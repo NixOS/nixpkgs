@@ -1,5 +1,7 @@
 # Freeform modules {#sec-freeform-modules}
 
+<!-- TODO: Consider re-writing this doc to favor `types.record` over `types.submodule` -->
+
 Freeform modules allow you to define values for option paths that have
 not been declared explicitly. This can be used to add attribute-specific
 types to what would otherwise have to be `attrsOf` options in order to
@@ -11,6 +13,43 @@ associated option will be merged using the freeform type and combined
 into the resulting `config` set. Since this feature nullifies name
 checking for entire option trees, it is only recommended for use in
 submodules.
+
+<!-- TODO: Link to more details on the record and submodule types -->
+
+Freeform records can also be used to achieve the same thing, and may be
+preferred in many scenarios due to their improved performance when
+compared to submodules and also the ability to declare "optional" fields.
+
+Freeform records are used by simply passing `freeformType = types.anything`
+to a record type definition.
+
+::: {#ex-freeform-record .example}
+### Freeform record
+
+Most freeform submodules can also be represented as freeform records.
+
+The following example is equivalent to the first submodule example:
+
+```nix
+{ lib, config, ... }: {
+
+  options.settings = lib.mkOption {
+    type = lib.types.record {
+
+      freeformType = lib.types.str;
+
+      # We want this attribute to be checked for the correct type
+      fields = {
+        port = lib.mkField {
+          type = lib.types.port;
+          default = 8080;
+          # We could also set `optional = true` instead of setting a default:
+          # optional = true;
+        };
+    };
+  };
+}
+```
 
 ::: {#ex-freeform-module .example}
 ### Freeform submodule
