@@ -91,6 +91,7 @@ let
       evanjs
       arkivm
       nicolas-goudry
+      Rishik-Y
     ];
     mainProgram = "gitkraken";
   };
