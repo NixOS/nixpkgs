@@ -22,34 +22,17 @@
 
 stdenv.mkDerivation rec {
   pname = "rsync";
-  version = "3.3.0";
+  version = "3.4.1";
 
   src = fetchurl {
-    # signed with key 0048 C8B0 26D4 C96F 0E58  9C2F 6C85 9FB1 4B96 A8C5
+    # signed with key 9FEF 112D CE19 A0DC 7E88  2CB8 1BB2 4997 A853 5F6F
     url = "mirror://samba/rsync/src/rsync-${version}.tar.gz";
-    hash = "sha256-c5nppnCMMtZ4pypjIZ6W8jvgviM25Q/RNISY0HBB35A=";
+    hash = "sha256-KSS8s6Hti1UfwQH3QLnw/gogKxFQJ2R89phQ1l/YjFI=";
   };
 
   nativeBuildInputs = [
     updateAutotoolsGnuConfigScriptsHook
     perl
-  ];
-
-  patches = [
-    # https://github.com/WayneD/rsync/pull/558
-    ./configure.ac-fix-failing-IPv6-check.patch
-    ./CVE-2024-12084/0001-Some-checksum-buffer-fixes.patch
-    ./CVE-2024-12084/0002-Another-cast-when-multiplying-integers.patch
-    ./CVE-2024-12085/0001-prevent-information-leak-off-the-stack.patch
-    ./CVE-2024-12086/0001-refuse-fuzzy-options-when-fuzzy-not-selected.patch
-    ./CVE-2024-12086/0002-added-secure_relative_open.patch
-    ./CVE-2024-12086/0003-receiver-use-secure_relative_open-for-basis-file.patch
-    ./CVE-2024-12086/0004-disallow-.-elements-in-relpath-for-secure_relative_o.patch
-    ./CVE-2024-12087/0001-Refuse-a-duplicate-dirlist.patch
-    ./CVE-2024-12087/0002-range-check-dir_ndx-before-use.patch
-    ./CVE-2024-12088/0001-make-safe-links-stricter.patch
-    ./CVE-2024-12747/0001-fixed-symlink-race-condition-in-sender.patch
-    ./raise-protocol-version-to-32.patch
   ];
 
   buildInputs =
