@@ -7,6 +7,7 @@
   gnome-icon-theme,
   hicolor-icon-theme,
   nix-update-script,
+  folder-color ? "plasma", # Supported colors: black blue caramel citron firebrick gold green grey highland jade lavender lime olive orange pistachio plasma pumpkin purple red rust sapphire tomato violet white yellow
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -19,6 +20,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-MCof2CFQfh/ChFNlsxw9BmrFf1A804HzWoHJdNsrW74=";
   };
+
+  patches = [ ./folder-color.patch ];
 
   nativeBuildInputs = [ gtk3 ];
 
@@ -33,6 +36,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     mkdir -p $out/share/icons
     cp -r Gruvbox-Plus-Dark $out/share/icons/
+    patchShebangs scripts/folders-color-chooser
+    ./scripts/folders-color-chooser -c ${folder-color}
     gtk-update-icon-cache $out/share/icons/Gruvbox-Plus-Dark
 
     runHook postInstall
