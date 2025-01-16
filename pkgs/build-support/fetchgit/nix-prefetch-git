@@ -8,6 +8,7 @@ expHash=
 hashType=$NIX_HASH_ALGO
 deepClone=$NIX_PREFETCH_GIT_DEEP_CLONE
 leaveDotGit=$NIX_PREFETCH_GIT_LEAVE_DOT_GIT
+keepSourceDate=$NIX_PREFETCH_GIT_KEEP_SOURCE_DATE
 fetchSubmodules=
 fetchLFS=
 builder=
@@ -39,6 +40,12 @@ else
     leaveDotGit=true
 fi
 
+if test "$keepSourceDate" != 1; then
+    keepSourceDate=
+else
+    keepSourceDate=true
+fi
+
 usage(){
     echo  >&2 "syntax: nix-prefetch-git [options] [URL [REVISION [EXPECTED-HASH]]]
 
@@ -53,6 +60,7 @@ Options:
       --deepClone     Clone the entire repository.
       --no-deepClone  Make a shallow clone of just the required ref.
       --leave-dotGit  Keep the .git directories.
+      --keep-source-date Keep source date in nix-support/SOURCE_DATE_EPOCH
       --fetch-lfs     Fetch git Large File Storage (LFS) files.
       --fetch-submodules Fetch submodules.
       --builder       Clone as fetchgit does, but url, rev, and out option are mandatory.
@@ -84,6 +92,7 @@ for arg; do
             --leave-dotGit) leaveDotGit=true;;
             --fetch-lfs) fetchLFS=true;;
             --fetch-submodules) fetchSubmodules=true;;
+            --keep-source-date) keepSourceDate=true;;
             --builder) builder=true;;
             -h|--help) usage; exit;;
             *)
@@ -323,6 +332,12 @@ clone_user_rev() {
     humanReadableRev=$(git describe "$fullRev" 2> /dev/null || git describe --tags "$fullRev" 2> /dev/null || echo -- none --)
     commitDate=$(git show -1 --no-patch --pretty=%ci "$fullRev")
     commitDateStrict8601=$(git show -1 --no-patch --pretty=%cI "$fullRev")
+
+    if [ -n "$keepSourceDate" ]; then
+      mkdir nix-support || true
+      git show -1 --no-patch --pretty=%ct "$fullRev" > nix-support/SOURCE_DATE_EPOCH
+    fi
+
     popd >/dev/null
 
     # Allow doing additional processing before .git removal
@@ -401,7 +416,8 @@ print_results() {
   "fetchLFS": $([[ -n "$fetchLFS" ]] && echo true || echo false),
   "fetchSubmodules": $([[ -n "$fetchSubmodules" ]] && echo true || echo false),
   "deepClone": $([[ -n "$deepClone" ]] && echo true || echo false),
-  "leaveDotGit": $([[ -n "$leaveDotGit" ]] && echo true || echo false)
+  "leaveDotGit": $([[ -n "$leaveDotGit" ]] && echo true || echo false),
+  "keepSourceDate: $([[ -n "$keepSourceDate" ]] && echo true || echo false)
 }
 EOF
     fi

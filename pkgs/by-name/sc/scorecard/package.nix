@@ -15,7 +15,7 @@ buildGoModule rec {
     owner = "ossf";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-9DuADuEIoZNwkvdKyqus2zNfIK31Jc3+bPW3/z8fvlc=";
+    hash = "sha256-8o5tE/9Bx4y7x2Y+1JX1b6UyayXGbjnyf2S0TjXok/Q=";
     # populate values otherwise taken care of by goreleaser,
     # unfortunately these require us to use git. By doing
     # this in postFetch we can delete .git afterwards and
@@ -24,10 +24,9 @@ buildGoModule rec {
     postFetch = ''
       cd "$out"
       git rev-parse HEAD > $out/COMMIT
-      # 0000-00-00T00:00:00Z
-      date -u -d "@$(git log -1 --pretty=%ct)" "+%Y-%m-%dT%H:%M:%SZ" > $out/SOURCE_DATE_EPOCH
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
+    keepSourceDate = true;
   };
   vendorHash = "sha256-apOVAlGjaYSrW4qtUdDNgqwWxnVlBLhrefWEUvN4lzE=";
 
@@ -45,7 +44,7 @@ buildGoModule rec {
   # ldflags based on metadata from git and source
   preBuild = ''
     ldflags+=" -X sigs.k8s.io/release-utils/version.gitCommit=$(cat COMMIT)"
-    ldflags+=" -X sigs.k8s.io/release-utils/version.buildDate=$(cat SOURCE_DATE_EPOCH)"
+    ldflags+=" -X sigs.k8s.io/release-utils/version.buildDate=$(date -u -d "@$SOURCE_DATE_EPOCH" "+%Y-%m-%dT%H:%M:%SZ")"
   '';
 
   preCheck = ''
