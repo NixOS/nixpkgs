@@ -266,8 +266,8 @@ rec {
       "sha256-adJN1hy0NsAFWRgBuT7uOqlFWQtHasuHyC6TwQ/oE/8=";
 
   mypy-boto3-codebuild =
-    buildMypyBoto3Package "codebuild" "1.35.96"
-      "sha256-SOJAFGd5Yz4TJ49VfjixfchWC0s1xdogZ/2qd5SvDVQ=";
+    buildMypyBoto3Package "codebuild" "1.36.0"
+      "sha256-sft6FDJa7wUKP7jeSgtUvRHb4HP6UIcWeSgUY6j3qBk=";
 
   mypy-boto3-codecatalyst =
     buildMypyBoto3Package "codecatalyst" "1.35.93"
