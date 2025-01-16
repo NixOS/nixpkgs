@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "kneaddata";
-  version = "0.7.7-alpha";
+  version = "0.12.1";
   pyproject = true;
 
   dependencies = [ setuptools ];
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "biobakery";
     repo = "kneaddata";
     tag = version;
-    hash = "sha256-8pXabwMGNZETEXP0A31SInj37pvogyKpJAaAY7aTyns=";
+    hash = "sha256-biZ6lS0a81CBAAhTOb1Ol38/YagLqXA3AbMr2nBmSEw=";
   };
 
   nativeCheckInputs = [ unittestCheckHook ];
