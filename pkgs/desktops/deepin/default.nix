@@ -73,7 +73,6 @@ let
       deepin-draw = callPackage ./apps/deepin-draw { };
       deepin-editor = callPackage ./apps/deepin-editor { };
       deepin-image-viewer = callPackage ./apps/deepin-image-viewer { };
-      deepin-movie-reborn = callPackage ./apps/deepin-movie-reborn { };
       deepin-music = callPackage ./apps/deepin-music { };
       deepin-picker = callPackage ./apps/deepin-picker { };
       deepin-screen-recorder = callPackage ./apps/deepin-screen-recorder { };
@@ -116,6 +115,7 @@ let
       go-lib = throw "Then 'deepin.go-lib' package was removed, use 'go mod' to manage it"; # added 2024-05-31
       go-gir-generator = throw "Then 'deepin.go-gir-generator' package was removed, use 'go mod' to manage it"; # added 2024-05-31
       go-dbus-factory = throw "Then 'deepin.go-dbus-factory' package was removed, use 'go mod' to manage it"; # added 2024-05-31
+      deepin-movie-reborn = throw "'deepin.deepin-movie-reborn' has been removed as it was broken and unmaintained in nixpkgs"; # added 2025-01-16;
     };
 in
 lib.makeScope pkgs.newScope packages
