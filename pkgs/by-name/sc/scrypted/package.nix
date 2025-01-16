@@ -48,6 +48,6 @@ in
     homepage = "https://github.com/koush/scrypted";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
-    # maintainers = lib.maintainers [ ];
+    maintainers = with lib.maintainers; [ omares ];
   };
 }

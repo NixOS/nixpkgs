@@ -17224,6 +17224,13 @@
     githubId = 4728903;
     name = "Owen Lynch";
   };
+  omares = {
+    email = "nixpkgs@mres.me";
+    github = "omares";
+    githubId = 1375307;
+    name = "Ota Mares";
+    keys = [ { fingerprint = "gFRzYaOzwdT2ipiB7GoOotds1SPhu7YcfB1ozj6Z/Ng"; } ];
+  };
   omasanori = {
     github = "omasanori";
     githubId = 167209;
