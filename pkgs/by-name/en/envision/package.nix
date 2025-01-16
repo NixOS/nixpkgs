@@ -81,8 +81,20 @@ buildFHSEnv {
         ninja
         glslang
         gst_all_1.gstreamer
+        gdk-pixbuf
+        lerc
+        libsysprof-capture
+        libbsd
+        libdeflate
         libdrm
+        libGL
         libnotify
+        libpng
+        libselinux
+        libsepol
+        libtiff
+        libuuid
+        libwebp
         openssl
         openxr-loader
         vulkan-loader
