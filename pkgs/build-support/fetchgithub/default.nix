@@ -74,15 +74,16 @@ let
       # Use the archive URI for non-private repos, as the API endpoint has
       # relatively restrictive rate limits for unauthenticated users.
       url =
-        let
-          endpoint = "/repos/${owner}/${repo}/tarball/${revWithTag}";
-        in
-        if private
-        then
-          if githubBase == "github.com"
-          then "https://api.github.com${endpoint}"
-          else "https://${githubBase}/api/v3${endpoint}"
-        else "${baseUrl}/archive/${revWithTag}.tar.gz";
+        if private then
+          let
+            endpoint = "/repos/${owner}/${repo}/tarball/${revWithTag}";
+          in
+          if githubBase == "github.com" then
+            "https://api.github.com${endpoint}"
+          else
+            "https://${githubBase}/api/v3${endpoint}"
+        else
+          "${baseUrl}/archive/${revWithTag}.tar.gz";
       extension = "tar.gz";
 
       passthru = {
