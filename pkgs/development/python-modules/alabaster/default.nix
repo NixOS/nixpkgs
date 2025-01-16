@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  pythonOlder,
   fetchPypi,
   flit-core,
   pygments,
@@ -8,12 +9,14 @@
 
 buildPythonPackage rec {
   pname = "alabaster";
-  version = "0.7.16";
+  version = "1.0.0";
   pyproject = true;
+
+  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-dai5nCil2tUN1/jM3UR6Eh3bOJLanlPRylzKMQbVjWU=";
+    hash = "sha256-wA3KV7yib6YqbX0Kn8zmXz4Cbpv+M+nFOP0/uyFE/Z4=";
   };
 
   nativeBuildInputs = [ flit-core ];
