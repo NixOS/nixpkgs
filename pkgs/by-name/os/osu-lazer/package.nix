@@ -21,13 +21,13 @@
 
 buildDotnetModule rec {
   pname = "osu-lazer";
-  version = "2024.1009.1";
+  version = "2025.101.0";
 
   src = fetchFromGitHub {
     owner = "ppy";
     repo = "osu";
-    rev = version;
-    hash = "sha256-odWTLvx41miFgn4O/EDzwm2pfWKxj4B1ieSfNS0hrW8=";
+    tag = version;
+    hash = "sha256-8sckmwFFL7Vcf947EVxqIRPU/yYrEFVwz+zqwZZ34Mw=";
   };
 
   projectFile = "osu.Desktop/osu.Desktop.csproj";
@@ -74,7 +74,7 @@ buildDotnetModule rec {
       --set OSU_EXTERNAL_UPDATE_PROVIDER 1
 
     for i in 16 32 48 64 96 128 256 512 1024; do
-      install -D ./assets/lazer.png $out/share/icons/hicolor/''${i}x$i/apps/osu!.png
+      install -D ./assets/lazer.png $out/share/icons/hicolor/''${i}x$i/apps/osu.png
     done
 
     ln -sft $out/lib/${pname} ${SDL2}/lib/libSDL2${stdenvNoCC.hostPlatform.extensions.sharedLibrary}
@@ -88,7 +88,7 @@ buildDotnetModule rec {
       desktopName = "osu!";
       name = "osu";
       exec = "osu!";
-      icon = "osu!";
+      icon = "osu";
       comment = "Rhythm is just a *click* away (no score submission or multiplayer, see osu-lazer-bin)";
       type = "Application";
       categories = [ "Game" ];
