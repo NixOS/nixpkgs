@@ -390,8 +390,8 @@ rec {
       "sha256-UkuWWk99OTXMMhYMuAby9rbJjlhYBI0WwA9clnz4U9A=";
 
   mypy-boto3-detective =
-    buildMypyBoto3Package "detective" "1.35.93"
-      "sha256-TxBjqeQUbqqdH7BS0DZNkSlyIVWrj+W/9LRR0Aio3EM=";
+    buildMypyBoto3Package "detective" "1.36.0"
+      "sha256-qumyLsWuOFuwiBK1XN558ag8LlEA5jfHofy5dKK+Gbw=";
 
   mypy-boto3-devicefarm =
     buildMypyBoto3Package "devicefarm" "1.35.93"
