@@ -402,8 +402,8 @@ rec {
       "sha256-2B9WXAldrhCN91Bfpy14FU6nW4IFi8tbyc+ToppCzFU=";
 
   mypy-boto3-directconnect =
-    buildMypyBoto3Package "directconnect" "1.35.93"
-      "sha256-NpQ5uL3uYz5HKe4n6UkqTAF3drh56jllar1jZ3lpr/M=";
+    buildMypyBoto3Package "directconnect" "1.36.0"
+      "sha256-vsQqIfI1pCzglFLq6/3NU+V98viLpOXe7ga3t4RhSRE=";
 
   mypy-boto3-discovery =
     buildMypyBoto3Package "discovery" "1.35.93"
