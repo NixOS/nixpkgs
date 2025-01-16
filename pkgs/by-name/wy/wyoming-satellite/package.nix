@@ -4,7 +4,22 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+let
+  python = python3Packages.python.override {
+    self = python;
+    packageOverrides = self: super: {
+      wyoming = super.wyoming.overridePythonAttrs (oldAttrs: rec {
+        version = "1.5.4";
+        src = fetchFromGitHub {
+          inherit (oldAttrs.src) owner repo;
+          tag = version;
+          hash = "sha256-gx9IbFkwR5fiFFAZTiQKzBbVBJ/RYz29sztgbvAEeRQ=";
+        };
+      });
+    };
+  };
+in
+python.pkgs.buildPythonApplication rec {
   pname = "wyoming-satellite";
   version = "1.2.0";
   pyproject = true;
@@ -16,7 +31,7 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-KIWhWE9Qaxs72fJ1LRTkvk6QtpBJOFlmZv2od69O15g=";
   };
 
-  nativeBuildInputs = with python3Packages; [
+  build-system = with python.pkgs; [
     setuptools
   ];
 
@@ -25,7 +40,7 @@ python3Packages.buildPythonApplication rec {
     "zeroconf"
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python.pkgs; [
     pyring-buffer
     wyoming
     zeroconf
