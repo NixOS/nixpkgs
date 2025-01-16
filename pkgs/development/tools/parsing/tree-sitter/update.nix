@@ -228,7 +228,7 @@ let
       repo = "tree-sitter-commonlisp";
     };
     "tree-sitter-cuda" = {
-      orga = "thehamsta";
+      orga = "tree-sitter-grammars";
       repo = "tree-sitter-cuda";
     };
     "tree-sitter-glsl" = {
