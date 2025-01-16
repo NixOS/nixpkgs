@@ -1,0 +1,23 @@
+From 06c162dee37f6b1e5522f4ff45664cc6cfe5d0ce Mon Sep 17 00:00:00 2001
+From: GameDungeon <60719255+CountingBeeps@users.noreply.github.com>
+Date: Wed, 27 Nov 2024 22:35:39 -0600
+Subject: [PATCH] Control USE_HOME with Env Var
+
+---
+ mobsf/MobSF/settings.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/mobsf/MobSF/settings.py b/mobsf/MobSF/settings.py
+index e2df63800..9e111e65a 100644
+--- a/mobsf/MobSF/settings.py
++++ b/mobsf/MobSF/settings.py
+@@ -21,7 +21,7 @@
+ #       MOBSF CONFIGURATION
+ # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ BANNER, VERSION, MOBSF_VER = get_mobsf_version()
+-USE_HOME = True
++USE_HOME = os.getenv("MOBSF_USE_HOME", "1") == "1"
+ # True : All Uploads/Downloads will be stored in user's home directory
+ # False : All Uploads/Downloads will be stored under MobSF root directory
+ 
+
