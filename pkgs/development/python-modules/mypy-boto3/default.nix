@@ -834,8 +834,8 @@ rec {
       "sha256-qk6euuMYqJx9Nas49Ve+lFwmI0dOKVg04YZJspzdjqw=";
 
   mypy-boto3-macie2 =
-    buildMypyBoto3Package "macie2" "1.35.93"
-      "sha256-wUxm28vigkr09Uz1ZdUO3pMRZz1DQJiOlWglNotSjOI=";
+    buildMypyBoto3Package "macie2" "1.36.0"
+      "sha256-pBbyaMCoSCFSaTjHAhBNZzK3N7bXclswkpP4Y/+CfAY=";
 
   mypy-boto3-managedblockchain =
     buildMypyBoto3Package "managedblockchain" "1.35.93"
