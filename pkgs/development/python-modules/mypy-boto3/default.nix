@@ -410,8 +410,8 @@ rec {
       "sha256-eEgRtTa8uwRsrixtrGrnn2vRSrHC+a3FXVtrt1t3DmY=";
 
   mypy-boto3-dlm =
-    buildMypyBoto3Package "dlm" "1.35.93"
-      "sha256-BW3/1VKXUHWzqnTHC/CjI8L0hbSqknGyeMGH68emHOI=";
+    buildMypyBoto3Package "dlm" "1.36.0"
+      "sha256-si7pjgKzxg++SfVdOsIQP37rXG84IZM0ltcwc2+wn3I=";
 
   mypy-boto3-dms =
     buildMypyBoto3Package "dms" "1.35.93"
