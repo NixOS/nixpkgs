@@ -32,14 +32,16 @@ qtModule {
     ./use-versioned-import-path.patch
   ];
 
-  preConfigure = let
-    storePrefixLen = builtins.toString ((builtins.stringLength builtins.storeDir) + 1);
-  in ''
-    # "NIX:" is reserved for saved qmlc files in patch 0001, "QTDHASH:" takes the place
-    # of the old tag, which is otherwise the qt version, invalidating caches from other
-    # qtdeclarative store paths.
-    echo "QTDHASH:''${out:${storePrefixLen}:32}" > .tag
-  '';
+  preConfigure =
+    let
+      storePrefixLen = builtins.toString ((builtins.stringLength builtins.storeDir) + 1);
+    in
+    ''
+      # "NIX:" is reserved for saved qmlc files in patch 0001, "QTDHASH:" takes the place
+      # of the old tag, which is otherwise the qt version, invalidating caches from other
+      # qtdeclarative store paths.
+      echo "QTDHASH:''${out:${storePrefixLen}:32}" > .tag
+    '';
 
   cmakeFlags =
     [
@@ -52,5 +54,8 @@ qtModule {
       "-DQt6QmlTools_DIR=${pkgsBuildBuild.qt6.qtdeclarative}/lib/cmake/Qt6QmlTools"
     ];
 
-  meta.maintainers = with lib.maintainers; [ nickcao outfoxxed ];
+  meta.maintainers = with lib.maintainers; [
+    nickcao
+    outfoxxed
+  ];
 }
