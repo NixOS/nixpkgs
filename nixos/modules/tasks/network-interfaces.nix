@@ -348,6 +348,15 @@ let
           '';
         };
       };
+
+      neededForBoot = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether to depend on the presence of this device on boot.
+          Set this to <literal>false</literal> if this is a pluggable ethernet device (like an Ethernet USB dongle).
+        '';
+      };
     };
 
     config = {
