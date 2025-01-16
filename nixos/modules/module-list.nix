@@ -668,6 +668,7 @@
   ./services/home-automation/wyoming/satellite.nix
   ./services/home-automation/zigbee2mqtt.nix
   ./services/home-automation/zwave-js.nix
+  ./services/infrastructure/terraform-cloud-agent/default.nix
   ./services/logging/SystemdJournal2Gelf.nix
   ./services/logging/awstats.nix
   ./services/logging/filebeat.nix
