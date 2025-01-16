@@ -66,7 +66,7 @@ assert testing -> !stable
 
 let
   opencascade-occt = opencascade-occt_7_6;
-  inherit (lib) optional optionals optionalString;
+  inherit (lib) optional optionals optionalString optionalAttrs;
 in
 stdenv.mkDerivation rec {
   pname = "kicad-base";
