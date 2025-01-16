@@ -1058,8 +1058,8 @@ rec {
       "sha256-mf7j5YWyPMlSUgIpOgJpLf64zecRJZbhmFCCLoZUNjM=";
 
   mypy-boto3-privatenetworks =
-    buildMypyBoto3Package "privatenetworks" "1.35.93"
-      "sha256-hcRCSRqPleAs+AGSsXra0R2PGv5kgt0EJFK1XAAEzAg=";
+    buildMypyBoto3Package "privatenetworks" "1.36.0"
+      "sha256-A5phaD0eEsVPwj5U6VXP5UJreNJwVj5zkddst3FNeCo=";
 
   mypy-boto3-proton =
     buildMypyBoto3Package "proton" "1.35.93"
