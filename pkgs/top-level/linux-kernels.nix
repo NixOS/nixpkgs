@@ -583,11 +583,11 @@ in {
 
     zenpower = callPackage ../os-specific/linux/zenpower { };
 
-    zfs_2_1 = callPackage ../os-specific/linux/zfs/2_1.nix {
+    zfs_2_2 = callPackage ../os-specific/linux/zfs/2_2.nix {
       configFile = "kernel";
       inherit pkgs kernel;
     };
-    zfs_2_2 = callPackage ../os-specific/linux/zfs/2_2.nix {
+    zfs_2_3 = callPackage ../os-specific/linux/zfs/2_3.nix {
       configFile = "kernel";
       inherit pkgs kernel;
     };
@@ -618,6 +618,7 @@ in {
     tsme-test = callPackage ../os-specific/linux/tsme-test { };
 
   } // lib.optionalAttrs config.allowAliases {
+    zfs_2_1 = throw "zfs_2_1 has been removed"; # added 2024-12-25;
     ati_drivers_x11 = throw "ati drivers are no longer supported by any kernel >=4.1"; # added 2021-05-18;
     hid-nintendo = throw "hid-nintendo was added in mainline kernel version 5.16"; # Added 2023-07-30
     sch_cake = throw "sch_cake was added in mainline kernel version 4.19"; # Added 2023-06-14
