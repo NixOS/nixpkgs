@@ -7,20 +7,21 @@
   rustPlatform,
   fetchFromGitHub,
   lib,
+  nix-update-script,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "lanzaboote-tool";
-  version = "0.3.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "lanzaboote";
-    rev = "v${version}";
-    hash = "sha256-Fb5TeRTdvUlo/5Yi2d+FC8a6KoRLk2h1VE0/peMhWPs=";
+    tag = "v${version}";
+    hash = "sha256-eSZyrQ9uoPB9iPQ8Y5H7gAmAgAvCw3InStmU3oEjqsE=";
   };
 
-  sourceRoot = "${src.name}/rust/tool";
-  cargoHash = "sha256-g4WzqfH6DZVUuNb0jV3MFdm3h7zy2bQ6d3agrXesWgc=";
+  sourceRoot = "source/rust/tool";
+  cargoHash = "sha256-veUpirIxUhTanUWhZgK1grgqsjYDBpgAUp21nNiZjMs=";
 
   env.TEST_SYSTEMD = systemd;
   doCheck = lib.meta.availableOn stdenv.hostPlatform systemd;
@@ -30,6 +31,9 @@ rustPlatform.buildRustPackage rec {
   ];
 
   postInstall = ''
+    if [[ -f $out/bin/lzbt-systemd ]]; then
+      mv $out/bin/lzbt{-systemd,}
+    fi
     # Clean PATH to only contain what we need to do objcopy.
     # This is still an unwrapped lanzaboote tool lacking of the
     # UEFI stub location.
@@ -48,12 +52,14 @@ rustPlatform.buildRustPackage rec {
     sbsigntool
   ];
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
+    mainProgram = "lzbt";
     description = "Lanzaboote UEFI tooling for SecureBoot enablement on NixOS systems";
     homepage = "https://github.com/nix-community/lanzaboote";
-    license = licenses.gpl3Only;
-    mainProgram = "lzbt";
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       raitobezarius
       nikstur
     ];
