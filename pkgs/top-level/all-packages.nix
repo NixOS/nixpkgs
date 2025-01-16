@@ -280,6 +280,8 @@ with pkgs;
 
   cewl = callPackage ../tools/security/cewl { };
 
+  statcat = callPackage ../tools/misc/statcat { };
+
   chef-cli = callPackage ../tools/misc/chef-cli { };
 
   checkov = callPackage ../development/tools/analysis/checkov { };
