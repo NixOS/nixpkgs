@@ -424,34 +424,35 @@ in
         virtualHosts."${hostname}" = {
           enableACME = lib.mkDefault true;
           forceSSL = lib.mkDefault true;
-          extraConfig = ''
-            proxy_http_version 1.1;
-            proxy_set_header Upgrade $http_upgrade;
-            proxy_set_header Connection "upgrade";
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_set_header X-Forwarded-Proto $scheme;
-          '';
           locations."/" = {
             inherit proxyPass;
+            proxyWebsockets = true;
+            recommendedProxySettings = lib.mkDefault true;
+            extraConfig = ''
+              expires off;
+              add_header Cache-Control "public, max-age=0, s-maxage=0, must-revalidate" always;
+            '';
           };
-          locations."~ ^/(js|css|img)" = {
+          locations."~ ^/(assets|img)" = {
             root = "${cfg.package}/lib/mobilizon-${cfg.package.version}/priv/static";
             extraConfig = ''
-              etag off;
               access_log off;
-              add_header Cache-Control "public, max-age=31536000, immutable";
+              add_header Cache-Control "public, max-age=31536000, s-maxage=31536000, immutable";
             '';
           };
           locations."~ ^/(media|proxy)" = {
             inherit proxyPass;
+            recommendedProxySettings = lib.mkDefault true;
+            # Combination of HTTP/1.1 and disabled request buffering is
+            # needed to directly forward chunked responses
             extraConfig = ''
-              etag off;
+              proxy_http_version 1.1;
+              proxy_request_buffering off;
               access_log off;
-              add_header Cache-Control "public, max-age=31536000, immutable";
+              add_header Cache-Control "public, max-age=31536000, s-maxage=31536000, immutable";
             '';
           };
+
         };
       };
 
