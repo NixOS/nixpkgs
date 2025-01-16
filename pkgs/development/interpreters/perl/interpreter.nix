@@ -62,7 +62,9 @@ stdenv.mkDerivation (rec {
 
   disallowedReferences = [ stdenv.cc ];
 
-  patches = []
+  patches = lib.optionals (crossCompiling && stdenv.hostPlatform.isOpenBSD) [
+    ./openbsd-hints.patch
+  ]
     # Do not look in /usr etc. for dependencies.
     ++ lib.optional ((lib.versions.majorMinor version) == "5.38") ./no-sys-dirs-5.38.0.patch
     ++ lib.optional ((lib.versions.majorMinor version) == "5.40") ./no-sys-dirs-5.40.0.patch
@@ -130,6 +132,11 @@ stdenv.mkDerivation (rec {
     ++ lib.optional stdenv.hostPlatform.isSunOS "-Dcc=gcc"
     ++ lib.optional enableThreading "-Dusethreads"
     ++ lib.optional (!enableCrypt) "-A clear:d_crypt_r"
+    ++ lib.optionals (crossCompiling && stdenv.hostPlatform.isOpenBSD) [
+      # When building for OpenBSD perl fails unless we manually set osname
+      # but manually setting osname on FreeBSD causes it to fail.
+      "-Dosname=${stdenv.hostPlatform.parsed.kernel.name}"
+    ]
     ++ lib.optionals (stdenv.hostPlatform.isFreeBSD && crossCompiling && enableCrypt) [
       # https://github.com/Perl/perl5/issues/22295
       # configure cannot figure out that we have crypt automatically, but we really do

@@ -1,0 +1,11 @@
+diff --git a/cnf/hints/openbsd b/cnf/hints/openbsd
+new file mode 100644
+index 0000000..982cd66
+--- /dev/null
++++ b/cnf/hints/openbsd
+@@ -0,0 +1,5 @@
++# OpenBSD syscalls
++d_nanosleep='define'
++
++# libraries to test
++libswanted='m'
