@@ -31,7 +31,7 @@ let
 
   buildMachinesText = concatMapStrings (
     machine:
-    (concatStringsSep " " (
+    ((optionalString (machine.comment != null) "# ${machine.comment}\n") + concatStringsSep " " (
       [
         "${optionalString (machine.protocol != null) "${machine.protocol}://"}${
           optionalString (machine.sshUser != null) "${machine.sshUser}@"
@@ -199,6 +199,15 @@ in
                   The (base64-encoded) public host key of this builder. The field
                   is calculated via {command}`base64 -w0 /etc/ssh/ssh_host_type_key.pub`.
                   If null, SSH will use its regular known-hosts file when connecting.
+                '';
+              };
+              comment = mkOption {
+                type = types.nullOr types.str;
+                default = null;
+                example = "This is a powerful builder located in Belgium";
+                description = ''
+                  A comment to describe the builder. Could be useful for noting the full
+                  DNS name of a machine, and using an IP address as hostName.
                 '';
               };
             };
