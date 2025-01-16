@@ -46,8 +46,6 @@ let
     };
   });
 
-  getCoreExe = lib.getExe' coreutils;
-
   inherit (python3Packages) paramiko pycairo pyodbc;
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -63,14 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     (replaceVars ./hardcode-paths.patch {
       bash = lib.getExe bash;
       catchsegv = lib.getExe' glibc "catchsegv";
-      cp = getCoreExe "cp";
-      dd = getCoreExe "dd";
-      ls = getCoreExe "ls";
-      mkdir = getCoreExe "mkdir";
-      nohup = getCoreExe "nohup";
-      rm = getCoreExe "rm";
-      rmdir = getCoreExe "rmdir";
-      stat = getCoreExe "stat";
+      coreutils = lib.getBin coreutils;
       sudo = lib.getExe sudo;
     })
 

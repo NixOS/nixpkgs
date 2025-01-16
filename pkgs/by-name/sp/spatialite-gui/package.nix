@@ -23,9 +23,6 @@
   wxGTK,
   xz,
   zstd,
-  Carbon,
-  Cocoa,
-  IOKit,
 }:
 
 stdenv.mkDerivation rec {
@@ -41,33 +38,27 @@ stdenv.mkDerivation rec {
     pkg-config
   ] ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
 
-  buildInputs =
-    [
-      curl
-      freexl
-      geos
-      librasterlite2
-      librttopo
-      libspatialite
-      libwebp
-      libxlsxwriter
-      libxml2
-      lz4
-      minizip
-      openjpeg
-      postgresql
-      proj
-      sqlite
-      virtualpg
-      wxGTK
-      xz
-      zstd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Carbon
-      Cocoa
-      IOKit
-    ];
+  buildInputs = [
+    curl
+    freexl
+    geos
+    librasterlite2
+    librttopo
+    libspatialite
+    libwebp
+    libxlsxwriter
+    libxml2
+    lz4
+    minizip
+    openjpeg
+    postgresql
+    proj
+    sqlite
+    virtualpg
+    wxGTK
+    xz
+    zstd
+  ];
 
   enableParallelBuilding = true;
 
