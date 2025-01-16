@@ -16,7 +16,8 @@ in
 {
   imports = [
     (mkRemovedOptionModule [
-      "settings"
+      "services"
+      "tabby"
       "indexInterval"
     ] "These options are now managed within the tabby WebGUI")
   ];
