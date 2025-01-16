@@ -10,6 +10,23 @@
   pybind11,
   torch,
   which,
+
+  # optional dependencies (incomplete; for monai-label):
+  fire,
+  gdown,
+  ignite,
+  itk,
+  lmdb,
+  nibabel,
+  numpymaxflow,
+  mlflow,
+  openslide,
+  pillow,
+  psutil,
+  scikit-image,
+  tensorboard,
+  torchvision,
+  tqdm,
 }:
 
 buildPythonPackage rec {
@@ -44,6 +61,24 @@ buildPythonPackage rec {
     packaging
     torch
   ];
+
+  optional-dependencies = {
+    fire = [ fire ];
+    gdown = [ gdown ];
+    ignite = [ ignite ];
+    itk = [ itk ];
+    lmdb = [ lmdb ];
+    mlflow = [ mlflow ];
+    nibabel = [ nibabel ];
+    numpymaxflow = [ numpymaxflow ];
+    openslide = [ openslide ];
+    pillow = [ pillow ];
+    psutil = [ psutil ];
+    scikit-image = [ scikit-image ];
+    tensorboard = [ tensorboard ];
+    torchvision = [ torchvision ];
+    tqdm = [ tqdm ];
+  };
 
   env.BUILD_MONAI = 1;
 
