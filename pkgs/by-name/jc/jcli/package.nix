@@ -2,6 +2,7 @@
   lib,
   stdenv,
   buildGoModule,
+  buildPackages,
   fetchFromGitHub,
   installShellFiles,
 }:
@@ -30,21 +31,27 @@ buildGoModule rec {
   nativeBuildInputs = [ installShellFiles ];
 
   postInstall =
+    let
+      jcliBin =
+        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+          "$out"
+        else
+          lib.getBin buildPackages.jcli;
+    in
     ''
       mv $out/bin/{jenkins-cli,jcli}
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+
       installShellCompletion --cmd jcli \
-        --bash <($out/bin/jcli completion --type bash) \
-        --fish <($out/bin/jcli completion --type fish) \
-        --zsh <($out/bin/jcli completion --type zsh)
+        --bash <(${jcliBin}/bin/jcli completion --type bash) \
+        --fish <(${jcliBin}/bin/jcli completion --type fish) \
+        --zsh <(${jcliBin}/bin/jcli completion --type zsh)
     '';
 
   meta = {
     description = "Jenkins CLI allows you to manage your Jenkins in an easy way";
     mainProgram = "jcli";
     homepage = "https://github.com/jenkins-zh/jenkins-cli";
-    changelog = "https://github.com/jenkins-zh/jenkins-cli/releases/tag/${src.tag}";
+    changelog = "https://github.com/jenkins-zh/jenkins-cli/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sikmir ];
   };
