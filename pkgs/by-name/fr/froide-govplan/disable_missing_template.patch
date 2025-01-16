@@ -1,0 +1,28 @@
+diff --git a/froide_govplan/templates/froide_govplan/detail.html b/froide_govplan/templates/froide_govplan/detail.html
+index 25b780b..3620852 100644
+--- a/froide_govplan/templates/froide_govplan/detail.html
++++ b/froide_govplan/templates/froide_govplan/detail.html
+@@ -5,7 +5,6 @@
+ {% load cms_tags %}
+ {% load follow_tags %}
+ {% load govplan %}
+-{% load form_helper %}
+ {% load content_helper %}
+ {% load thumbnail %}
+ 
+@@ -41,7 +40,6 @@
+           </ul>
+ 
+           <div class="ms-auto mt-2 mt-md-0">
+-            {% show_follow "govplan" object %}
+           </div>
+         </div>
+ 
+@@ -177,7 +175,6 @@
+                     <div class="modal-body">
+                       <form method="post" action="{% url 'govplan:propose_planupdate' gov=object.government.slug plan=object.slug %}">
+                         {% csrf_token %}
+-                        {% render_form update_proposal_form %}
+                         <button type="submit" class="btn btn-primary">
+                           Neue Entwicklung melden
+                         </button>

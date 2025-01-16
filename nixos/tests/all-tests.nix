@@ -363,6 +363,7 @@ in {
   freetube = discoverTests (import ./freetube.nix);
   freshrss = handleTest ./freshrss {};
   frigate = handleTest ./frigate.nix {};
+  froide-govplan = handleTest ./web-apps/froide-govplan.nix {};
   frp = handleTest ./frp.nix {};
   frr = handleTest ./frr.nix {};
   fsck = handleTest ./fsck.nix {};
