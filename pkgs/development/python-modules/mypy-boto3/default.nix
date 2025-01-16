@@ -1378,8 +1378,8 @@ rec {
       "sha256-eciWk3er9XomkPcP8vNGta2L2+vRwL4ytUVjmR1gDBQ=";
 
   mypy-boto3-verifiedpermissions =
-    buildMypyBoto3Package "verifiedpermissions" "1.35.93"
-      "sha256-e9C5tky3SXyj9mPj6QGFCazGCwRJOCGd1qsT/5iGHqc=";
+    buildMypyBoto3Package "verifiedpermissions" "1.36.0"
+      "sha256-GehPDR8OrIy2MphBTVTYtVl8XUfBu3UnvbrZopoTL+4=";
 
   mypy-boto3-voice-id =
     buildMypyBoto3Package "voice-id" "1.35.93"
