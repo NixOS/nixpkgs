@@ -3370,6 +3370,12 @@
     github = "brianmcgillion";
     githubId = 1044263;
   };
+  britter = {
+    name = "Benedikt Ritter";
+    email = "beneritter@gmail.com";
+    github = "britter";
+    githubId = 1327662;
+  };
   brodes = {
     email = "me@brod.es";
     github = "brhoades";
@@ -21319,6 +21325,12 @@
     github = "skovati";
     githubId = 49844593;
     name = "skovati";
+  };
+  skowalak = {
+    github = "skowalak";
+    githubId = 26260032;
+    name = "Sebastian Kowalak";
+    matrix = "@scl:tchncs.de";
   };
   skyesoss = {
     name = "Skye Soss";
