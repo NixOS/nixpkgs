@@ -274,8 +274,8 @@ rec {
       "sha256-M1rNkJHIg7bld/Zl1mbQ+qn+AkHhbLWDAOCbcQQboI8=";
 
   mypy-boto3-codecommit =
-    buildMypyBoto3Package "codecommit" "1.35.93"
-      "sha256-ZQeOiEchZanKwr+KeLXwPLEKHojkJsTDEN7ttDEBKEw=";
+    buildMypyBoto3Package "codecommit" "1.36.0"
+      "sha256-bTP0rI6YS93GywxmzlRoEOljyg6iUJDwj7Qy0alF10k=";
 
   mypy-boto3-codedeploy =
     buildMypyBoto3Package "codedeploy" "1.35.93"
