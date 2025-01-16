@@ -7,6 +7,7 @@
   glibcLocales,
   withPostgresAdapter ? true,
   withBigQueryAdapter ? true,
+  withMySQLAdapter ? true,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "harlequin";
@@ -48,7 +49,8 @@ python3Packages.buildPythonApplication rec {
       tomlkit
     ]
     ++ lib.optionals withPostgresAdapter [ harlequin-postgres ]
-    ++ lib.optionals withBigQueryAdapter [ harlequin-bigquery ];
+    ++ lib.optionals withBigQueryAdapter [ harlequin-bigquery ]
+    ++ lib.optionals withMySQLAdapter [ harlequin-mysql ];
 
   pythonImportsCheck = [
     "harlequin"
