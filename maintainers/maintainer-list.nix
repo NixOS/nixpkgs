@@ -3370,6 +3370,13 @@
     github = "brianmcgillion";
     githubId = 1044263;
   };
+  briaoeuidhtns = {
+    name = "Brian Brunner";
+    email = "brian.brunner.bb+gh@gmail.com";
+    github = "briaoeuidhtns";
+    githubId = 7530156;
+    keys = [ { fingerprint = "5200 F1B2 26BF 2691 59DD  F891 AC13 5E2E F7C1 7861"; } ];
+  };
   brodes = {
     email = "me@brod.es";
     github = "brhoades";
