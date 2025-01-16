@@ -3,12 +3,12 @@
 
 let
   pname = "ex_doc";
-  version = "0.34.1";
+  version = "0.36.1";
   src = fetchFromGitHub {
     owner = "elixir-lang";
     repo = "${pname}";
     rev = "v${version}";
-    hash = "sha256-OXIRippEDYAKD222XzNJkkZdXbUkDUauv5amr4oAU7c=";
+    hash = "sha256-BAGRSgPLeBWUHczEen1cMrCKstjHBRD8Hqb9oaRnYLg=";
   };
 in
 mixRelease {
@@ -19,7 +19,7 @@ mixRelease {
   mixFodDeps = fetchMixDeps {
     pname = "mix-deps-${pname}";
     inherit src version elixir;
-    hash = "sha256-fYINsATbw3M3r+IVoYS14aVEsg9OBuH6mNUqzQJuDQo=";
+    hash = "sha256-kqy4EXP87CIw7J0qtWAk50SMfRYYlb9MsCoPaKb5hqw=";
   };
 
   configurePhase = ''
