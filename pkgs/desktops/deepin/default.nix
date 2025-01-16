@@ -21,7 +21,6 @@ let
       qt5platform-plugins = callPackage ./library/qt5platform-plugins { };
       qt5integration = callPackage ./library/qt5integration { };
       deepin-wayland-protocols = callPackage ./library/deepin-wayland-protocols { };
-      deepin-ocr-plugin-manager = callPackage ./library/deepin-ocr-plugin-manager { };
       dwayland = callPackage ./library/dwayland { };
       dde-qt-dbus-factory = callPackage ./library/dde-qt-dbus-factory { };
       disomaster = callPackage ./library/disomaster { };
@@ -116,6 +115,7 @@ let
       deepin-album = throw "'deepin.deepin-album' has been removed as it was broken and unmaintained in nixpkgs, Please use 'kdePackages.gwenview' instead"; # added 2025-01-16
       deepin-voice-note = throw "'deepin.deepin-voice-note' has been removed as it depending on deepin-movie-reborn which was broken"; # added 2025-01-16
       deepin-screen-recorder = throw "'deepin.deepin-screen-recorder' has been removed as it was broken and unmaintained in nixpkgs, Please use 'flameshot' or 'simplescreenrecorder' instead"; # added 2025-01-16
+      deepin-ocr-plugin-manager = throw "'deepin.deepin-ocr-plugin-manager' has been removed as it was outdated"; # added 2025-01-16
     };
 in
 lib.makeScope pkgs.newScope packages
