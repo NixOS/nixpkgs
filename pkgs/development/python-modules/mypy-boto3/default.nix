@@ -1214,8 +1214,8 @@ rec {
       "sha256-OFBu3vHrNfad5gNIl1BF8xygY956xCOmqd+7wYOUVfM=";
 
   mypy-boto3-sdb =
-    buildMypyBoto3Package "sdb" "1.35.93"
-      "sha256-quvoYvLCckS/EQmtobhl2Mq66fT/HMuXaSvt3Urpn+o=";
+    buildMypyBoto3Package "sdb" "1.36.0"
+      "sha256-T1aCzVPgwpi8xLUJREre+tCLHdFN4/wx+s/bZoWIwkY=";
 
   mypy-boto3-secretsmanager =
     buildMypyBoto3Package "secretsmanager" "1.35.93"
