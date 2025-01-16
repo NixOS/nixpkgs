@@ -5,6 +5,8 @@
   fetchFromGitHub,
 
   git,
+  gnugrep,
+  gnused,
   openssh,
   inotify-tools,
 }:
@@ -42,6 +44,8 @@ runCommand "gitwatch"
       --prefix PATH ';' ${
         lib.makeBinPath [
           git
+          gnugrep
+          gnused
           inotify-tools
           openssh
         ]
