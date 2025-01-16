@@ -209,7 +209,5 @@ buildPythonPackage rec {
     homepage = "https://beam.apache.org/";
     license = licenses.asl20;
     maintainers = with maintainers; [ ndl ];
-    # https://github.com/apache/beam/issues/27221
-    broken = lib.versionAtLeast pandas.version "2";
   };
 }
