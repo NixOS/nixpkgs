@@ -61,7 +61,19 @@ get_imds() {
   curl --silent --show-error --fail --header "X-aws-ec2-metadata-token: $IMDS_TOKEN" "$@" || true
 }
 
+try_decompress() {
+  local temp
+  ftype=$(file --brief "$1")
+  case $ftype in
+    gzip*)
+      echo "decompressing: $1"
+      temp=$(mktemp)
+      zcat "$1" > "$temp"
+      mv "$temp" "$1"
+  esac
+}
+
 get_imds -o "$metaDir/ami-manifest-path" http://169.254.169.254/1.0/meta-data/ami-manifest-path
-(umask 077 && get_imds -o "$metaDir/user-data" http://169.254.169.254/1.0/user-data)
+(umask 077 && get_imds -o "$metaDir/user-data" http://169.254.169.254/1.0/user-data && try_decompress "$metaDir/user-data")
 get_imds -o "$metaDir/hostname" http://169.254.169.254/1.0/meta-data/hostname
 get_imds -o "$metaDir/public-keys-0-openssh-key" http://169.254.169.254/1.0/meta-data/public-keys/0/openssh-key
