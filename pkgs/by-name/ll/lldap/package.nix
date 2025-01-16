@@ -12,6 +12,12 @@
 
 let
 
+  wasm-bindgen-95 = wasm-bindgen-cli.override {
+    version = "0.2.95";
+    hash = "sha256-prMIreQeAcbJ8/g3+pMp1Wp9H5u+xLqxRxL+34hICss=";
+    cargoHash = "sha256-6iMebkD7FQvixlmghGGIvpdGwFNLfnUcFke/Rg8nPK4=";
+  };
+
   commonDerivationAttrs = rec {
     pname = "lldap";
     version = "0.6.1";
@@ -38,7 +44,7 @@ let
     pname = commonDerivationAttrs.pname + "-frontend";
 
     nativeBuildInputs = [
-      wasm-pack wasm-bindgen-cli binaryen which rustc rustc.llvmPackages.lld
+      wasm-pack wasm-bindgen-95 binaryen which rustc rustc.llvmPackages.lld
     ];
 
     buildPhase = ''
