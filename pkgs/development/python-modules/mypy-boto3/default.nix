@@ -1230,8 +1230,8 @@ rec {
       "sha256-LNpu2+bCPpcmn8frAyI+QaUXDauc8DuBkbNn1cuFu6o=";
 
   mypy-boto3-serverlessrepo =
-    buildMypyBoto3Package "serverlessrepo" "1.35.93"
-      "sha256-x+9kE7sxdzO8VVAuGbNjZmxxb6Nt/SyqgNRRTvYYaWk=";
+    buildMypyBoto3Package "serverlessrepo" "1.36.0"
+      "sha256-sWmqOjkVcU/2kdU8MytG0fV75NCa9+k9ustlJ0AyRE4=";
 
   mypy-boto3-service-quotas =
     buildMypyBoto3Package "service-quotas" "1.35.93"
