@@ -21318,6 +21318,12 @@
     githubId = 49844593;
     name = "skovati";
   };
+  skowalak = {
+    github = "skowalak";
+    githubId = 26260032;
+    name = "Sebastian Kowalak";
+    matrix = "@scl:tchncs.de";
+  };
   skyesoss = {
     name = "Skye Soss";
     matrix = "@skyesoss:matrix.org";
