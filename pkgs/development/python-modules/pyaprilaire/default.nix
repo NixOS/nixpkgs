@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   meta = {
     changelog = "https://github.com/chamberlain2007/pyaprilaire/releases/tag/${version}";
-    description = "Python library for interacting with Aprilaire thermostats.";
+    description = "Python library for interacting with Aprilaire thermostats";
     homepage = "https://github.com/chamberlain2007/pyaprilaire";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pyrox0 ];
