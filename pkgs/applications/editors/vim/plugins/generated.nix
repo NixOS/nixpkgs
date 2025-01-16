@@ -10145,6 +10145,18 @@ final: prev:
     meta.homepage = "https://github.com/nvzone/minty/";
   };
 
+  nvzone-typr = buildVimPlugin {
+    pname = "nvzone-typr";
+    version = "2025-01-15";
+    src = fetchFromGitHub {
+      owner = "nvzone";
+      repo = "typr";
+      rev = "a60c7f237be94d4b39228a3bd2ced80fe9fe2781";
+      sha256 = "0hbd85s2d28832qqy0lnm7f2iqa5n5s16h7n10hsm9iawi0z2ll9";
+    };
+    meta.homepage = "https://github.com/nvzone/typr/";
+  };
+
   nvzone-volt = buildVimPlugin {
     pname = "nvzone-volt";
     version = "2024-12-31";
@@ -13313,18 +13325,6 @@ final: prev:
       sha256 = "042dnb5y8v3xb5nz564snicxkxalki1zm32y09imkskfkv588l52";
     };
     meta.homepage = "https://github.com/leafgarland/typescript-vim/";
-  };
-
-  nvzone-typr = buildVimPlugin {
-    pname = "typr";
-    version = "2025-01-15";
-    src = fetchFromGitHub {
-      owner = "nvzone";
-      repo = "typr";
-      rev = "a60c7f237be94d4b39228a3bd2ced80fe9fe2781";
-      sha256 = "0hbd85s2d28832qqy0lnm7f2iqa5n5s16h7n10hsm9iawi0z2ll9";
-    };
-    meta.homepage = "https://github.com/nvzone/typr/";
   };
 
   typst-conceal-vim = buildVimPlugin {
