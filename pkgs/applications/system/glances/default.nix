@@ -23,7 +23,7 @@
 
 buildPythonApplication rec {
   pname = "glances";
-  version = "4.2.1";
+  version = "4.3.0";
   pyproject = true;
 
   disabled = isPyPy;
@@ -32,7 +32,7 @@ buildPythonApplication rec {
     owner = "nicolargo";
     repo = "glances";
     tag = "v${version}";
-    hash = "sha256-8Jm6DE3B7OQkaNwX/KwXMNZHUyvPtln8mJYaD6yzJRM=";
+    hash = "sha256-4XwHOUK741E6jostbeXQ43Kw+Cdf211oVjSm5J3TWew=";
   };
 
   build-system = [ setuptools ];
