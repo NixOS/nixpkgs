@@ -1018,8 +1018,8 @@ rec {
       "sha256-cYPjCVdl4VCwjOfyNt01cQN5bbCotw+CIwl8OCQeDDo=";
 
   mypy-boto3-personalize-events =
-    buildMypyBoto3Package "personalize-events" "1.35.93"
-      "sha256-r/zotloeRFPWMc9wYwerTvjNpJwikIPVoRDOcLrrHpg=";
+    buildMypyBoto3Package "personalize-events" "1.36.0"
+      "sha256-4qYuEGWtRvOtn7+61nZFC7zCNHI9eIpcURUQW2eZ/SQ=";
 
   mypy-boto3-personalize-runtime =
     buildMypyBoto3Package "personalize-runtime" "1.35.93"
