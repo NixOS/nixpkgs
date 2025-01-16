@@ -99,6 +99,14 @@ in
         '';
       };
 
+      finalConfigFile = lib.mkOption {
+        type = lib.types.path;
+        readOnly = true;
+        description = ''
+          Path to the configuration file of dnsmasq.
+        '';
+      };
+
     };
 
   };
@@ -108,10 +116,14 @@ in
 
   config = lib.mkIf cfg.enable {
 
-    services.dnsmasq.settings = {
-      dhcp-leasefile = lib.mkDefault "${stateDir}/dnsmasq.leases";
-      conf-file = lib.mkDefault (lib.optional cfg.resolveLocalQueries "/etc/dnsmasq-conf.conf");
-      resolv-file = lib.mkDefault (lib.optional cfg.resolveLocalQueries "/etc/dnsmasq-resolv.conf");
+    services.dnsmasq = {
+      settings = {
+        dhcp-leasefile = lib.mkDefault "${stateDir}/dnsmasq.leases";
+        conf-file = lib.mkDefault (lib.optional cfg.resolveLocalQueries "/etc/dnsmasq-conf.conf");
+        resolv-file = lib.mkDefault (lib.optional cfg.resolveLocalQueries "/etc/dnsmasq-resolv.conf");
+      };
+
+      finalConfigFile = dnsmasqConf;
     };
 
     networking.nameservers =
