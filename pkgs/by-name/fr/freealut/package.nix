@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
   meta = {
-    homepage = "http://openal.org/";
+    homepage = "https://openal.org/";
     description = "Free implementation of OpenAL's ALUT standard";
     mainProgram = "freealut-config";
     license = lib.licenses.lgpl2;
