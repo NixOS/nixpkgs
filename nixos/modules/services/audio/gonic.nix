@@ -38,7 +38,11 @@ in
       description = "Gonic Media Server";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      serviceConfig = {
+      serviceConfig = let
+        jukeboxEnabled = if cfg.settings?jukebox-enabled
+        then lib.last cfg.settings.jukebox-enabled
+        else false;
+      in {
         ExecStart =
           let
             # these values are null by default but should not appear in the final config
@@ -65,9 +69,10 @@ in
         ++ lib.optional (cfg.settings.tls-cert != null) cfg.settings.tls-cert
         ++ lib.optional (cfg.settings.tls-key != null) cfg.settings.tls-key;
         CapabilityBoundingSet = "";
+        DeviceAllow = lib.optionalString jukeboxEnabled "char-alsa rw";
         RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
         RestrictNamespaces = true;
-        PrivateDevices = true;
+        PrivateDevices = !jukeboxEnabled;
         PrivateUsers = true;
         ProtectClock = true;
         ProtectControlGroups = true;
@@ -75,6 +80,7 @@ in
         ProtectKernelLogs = true;
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
+        SupplementaryGroups = lib.optionals jukeboxEnabled ["audio"];
         SystemCallArchitectures = "native";
         SystemCallFilter = [ "@system-service" "~@privileged" ];
         RestrictRealtime = true;
