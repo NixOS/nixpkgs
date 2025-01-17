@@ -1632,48 +1632,31 @@ self: super: {
   # Too strict upper bounds on text
   lsql-csv = doJailbreak super.lsql-csv;
 
-  reflex-dom = lib.pipe super.reflex-dom [
-      (appendPatch
-        (fetchpatch {
-          name = "bump-reflex-dom-bounds.patch";
-          url = "https://github.com/reflex-frp/reflex-dom/commit/70ff88942f9d2bcd364e301c70df8702f452df38.patch";
-          sha256 = "sha256-xzk1+6CnfhEBfXdL5RUFbLRSn7knMwydmV8v2F2W5gE=";
-          relative = "reflex-dom";
-        })
-      )
-      (overrideCabal (drv: {
-        editedCabalFile = null;
-        revision = null;
-      }))
-    ];
+  inherit (
+    let
+      useUpstream = pkg: version: lib.warnIf (lib.versionAtLeast super.${pkg}.version version) "${pkg} version override is no longer needed and should be removed" (
+        overrideSrc rec {
+          inherit version;
+          src = (pkgs.fetchFromGitHub {
+            owner = "reflex-frp";
+            repo = "reflex-dom";
+            rev = "reflex-dom-0.6.3.2";
+            hash = "sha256-CTyU/+7mzzMhqUAC8uJ8f+kZ5a8xquW104FpRowy5Eg=";
+          }) + "/" + pkg;
+        });
+    in {
+      reflex-dom = useUpstream "reflex-dom" "0.6.3.2" super.reflex-dom;
 
-  # Tests disabled and broken override needed because of missing lib chrome-test-utils: https://github.com/reflex-frp/reflex-dom/issues/392
-  # 2022-03-16: Pullrequest for ghc 9 compat https://github.com/reflex-frp/reflex-dom/pull/433
-  reflex-dom-core = lib.pipe super.reflex-dom-core [
-      doDistribute
-      unmarkBroken
-      dontCheck
-      (appendPatches [
-        (fetchpatch {
-          name = "fix-th-build-order.patch";
-          url = "https://github.com/reflex-frp/reflex-dom/commit/1814640a14c6c30b1b2299e74d08fb6fcaadfb94.patch";
-          sha256 = "sha256-QyX2MLd7Tk0M1s0DU0UV3szXs8ngz775i3+KI62Q3B8=";
-          relative = "reflex-dom-core";
-        })
-        (fetchpatch {
-          name = "bump-reflex-dom-core-bounds.patch";
-          url = "https://github.com/reflex-frp/reflex-dom/commit/51cdd96dde9d65fcde326a16a797397bf62102d9.patch";
-          sha256 = "sha256-Ct8gMbXqN+6vqTwFiqnKxddAfs+YFaBocF4G7PPMzFo=";
-          relative = "reflex-dom-core";
-        })
-        (fetchpatch {
-          name = "new-mtl-compat.patch";
-          url = "https://github.com/reflex-frp/reflex-dom/commit/df95bfc0b9baf70492f20daddfe6bb180f80c413.patch";
-          sha256 = "sha256-zkLZtcnfqpfiv6zDEmkZjWHr2b7lOnZ4zujm0/pkxQg=";
-          relative = "reflex-dom-core";
-        })
-      ])
-    ];
+      # Tests disabled and broken override needed because of missing lib chrome-test-utils: https://github.com/reflex-frp/reflex-dom/issues/392
+      reflex-dom-core = lib.pipe super.reflex-dom-core [
+        doDistribute
+        dontCheck
+        unmarkBroken
+        (useUpstream "reflex-dom-core" "0.8.1.1")
+      ];
+    })
+    reflex-dom
+    reflex-dom-core;
 
   # Tests disabled because they assume to run in the whole jsaddle repo and not the hackage tarball of jsaddle-warp.
   jsaddle-warp = dontCheck super.jsaddle-warp;
