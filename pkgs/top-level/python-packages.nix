@@ -9166,6 +9166,8 @@ self: super: with self; {
 
   netbox-documents = callPackage ../development/python-modules/netbox-documents { };
 
+  netbox-floorplan-plugin = callPackage ../development/python-modules/netbox-floorplan-plugin { };
+
   netbox-interface-synchronization = callPackage ../development/python-modules/netbox-interface-synchronization { };
 
   netbox-plugin-prometheus-sd = callPackage ../development/python-modules/netbox-plugin-prometheus-sd { };
