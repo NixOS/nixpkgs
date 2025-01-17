@@ -243,6 +243,11 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
+  # test_matplotlib_image_with_multiple_axes may take >60s
+  pytestFlagArray = [
+    "--timeout=1024"
+  ];
+
   disabledTestPaths = [
     # Require docker access
     "tests/release_tests/test_launch"
