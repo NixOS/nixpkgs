@@ -1,0 +1,54 @@
+From bf269dda3c81bb9eaa244b3015d426de38c85ccf Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Carles=20Pag=C3=A8s?= <page@ruiec.cat>
+Date: Fri, 3 Mar 2017 09:59:09 +0100
+Subject: [PATCH] Fix build with unbound 1.6.1
+
+From their changelog: Fix to rename ub_callback_t to ub_callback_type, because POSIX reserves _t typedefs
+---
+ postlicyd/dns.c       | 2 +-
+ postlicyd/dns.h       | 2 +-
+ postlicyd/spf-proto.c | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/postlicyd/dns.c b/postlicyd/dns.c
+index d8409c2..97f1c4d 100644
+--- a/postlicyd/dns.c
++++ b/postlicyd/dns.c
+@@ -123,7 +123,7 @@ static int dns_handler(client_t *event, void *config)
+ }
+ 
+ bool dns_resolve(const char *hostname, dns_rrtype_t type,
+-                 ub_callback_t callback, void *data)
++                 ub_callback_type callback, void *data)
+ {
+     if (_G.ctx == NULL) {
+         _G.ctx = ub_ctx_create();
+diff --git a/postlicyd/dns.h b/postlicyd/dns.h
+index d84de3b..905b924 100644
+--- a/postlicyd/dns.h
++++ b/postlicyd/dns.h
+@@ -89,7 +89,7 @@ typedef void (*dns_result_callback_f)(dns_result_t *result, void *data);
+  */
+ __attribute__((nonnull(1,3,4)))
+ bool dns_resolve(const char *hostname, dns_rrtype_t type,
+-                 ub_callback_t callback, void *data);
++                 ub_callback_type callback, void *data);
+ 
+ /** Fetch the DNS record of the given type.
+  */
+diff --git a/postlicyd/spf-proto.c b/postlicyd/spf-proto.c
+index 31cb0a5..79a2d83 100644
+--- a/postlicyd/spf-proto.c
++++ b/postlicyd/spf-proto.c
+@@ -279,7 +279,7 @@ static bool spf_validate_domain(const char* restrict domain)
+ }
+ 
+ static bool spf_query(spf_t *spf, const char* query, dns_rrtype_t rtype,
+-                      ub_callback_t cb)
++                      ub_callback_type cb)
+ {
+     buffer_reset(&_G.query_buffer);
+     buffer_addstr(&_G.query_buffer, query);
+-- 
+2.12.0
+
