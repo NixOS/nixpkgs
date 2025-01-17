@@ -8483,6 +8483,8 @@ self: super: with self; {
 
   multitasking = callPackage ../development/python-modules/multitasking { };
 
+  multivolumefile = callPackage ../development/python-modules/multivolumefile { };
+
   munch = callPackage ../development/python-modules/munch { };
 
   mung = callPackage ../development/python-modules/mung { };
