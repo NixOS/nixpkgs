@@ -25,7 +25,7 @@ neovim.override {
       # here your custom configuration goes!
     '';
     packages.myVimPackage = with pkgs.vimPlugins; {
-      # see examples below how to use custom packages
+      # See examples below on how to use custom packages.
       start = [ ];
       # If a Vim plugin has a dependency that is not explicitly listed in
       # opt that dependency will always be added to start to avoid confusion.
