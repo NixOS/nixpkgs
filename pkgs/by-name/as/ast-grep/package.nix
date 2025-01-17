@@ -56,6 +56,7 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/ast-grep/ast-grep/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [
+      xiaoxiangmoe
       montchr
       lord-valen
       cafkafk
