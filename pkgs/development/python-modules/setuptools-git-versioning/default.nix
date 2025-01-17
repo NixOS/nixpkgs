@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "setuptools-git-versioning";
-  version = "2.0.0";
+  version = "2.1.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "dolfinus";
     repo = "setuptools-git-versioning";
     tag = "v${version}";
-    hash = "sha256-xugK/JOVA53nCK8bB0gPkhIREmy0+/OthsydfYRCYno=";
+    hash = "sha256-Slf6tq83LajdTnr98SuCiFIdm/6auzftnARLAOBgyng=";
   };
 
   nativeBuildInputs = [
