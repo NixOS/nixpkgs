@@ -21,14 +21,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "coqui-tts";
-  version = "0.25.1";
+  version = "0.25.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "idiap";
     repo = "coqui-ai-TTS";
     tag = "v${version}";
-    hash = "sha256-5w1Y9wdoJ+EV/WBwK3nqyY60NEsMjQsfE4g+sJB7VwQ=";
+    hash = "sha256-CYoUJ8l4KG1q1rGtjLe0WD/f+D02xEXxgYxKeQA2HHI=";
   };
 
   postPatch =
@@ -46,6 +46,7 @@ python.pkgs.buildPythonApplication rec {
         "trainer"
         "spacy\\[ja\\]"
         "transformers"
+        "num2words"
       ];
     in
     ''
