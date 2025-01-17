@@ -1,0 +1,19 @@
+diff --git a/usr.sbin/makefs/walk.c b/usr.sbin/makefs/walk.c
+index 56e2d19c6f00..c3bf8faac2aa 100644
+--- a/usr.sbin/makefs/walk.c
++++ b/usr.sbin/makefs/walk.c
+@@ -540,12 +540,12 @@ apply_specentry(const char *dir, NODE *specnode, fsnode *dirnode)
+ 		dirnode->inode->st.st_flags = specnode->st_flags;
+ 	}
+ #endif
+-/*	if (specnode->flags & F_DEV) {
++	if (specnode->flags & F_DEV) {
+ 		ASEPRINT("rdev", "%#llx",
+ 		    (unsigned long long)dirnode->inode->st.st_rdev,
+ 		    (unsigned long long)specnode->st_rdev);
+ 		dirnode->inode->st.st_rdev = specnode->st_rdev;
+-	}*/
++	}
+ #undef ASEPRINT
+ 
+ 	dirnode->flags |= FSNODE_F_HASSPEC;
