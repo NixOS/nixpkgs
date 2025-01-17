@@ -7623,6 +7623,7 @@ self: super: with self; {
   };
 
   llm = callPackage ../development/python-modules/llm { };
+  llm-clip = callPackage ../development/python-modules/llm-clip { };
 
   llm-cmd = callPackage ../development/python-modules/llm-cmd { };
 
