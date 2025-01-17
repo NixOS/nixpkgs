@@ -4,7 +4,8 @@
   fetchFromGitLab,
   gitUpdater,
   testers,
-  boost,
+  # Pin Boost 1.86 due to use of boost::asio::io_service.
+  boost186,
   cmake,
   cmake-extras,
   dbus,
@@ -65,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    boost
+    boost186
     cmake-extras
     dbus
     dbus-cpp
