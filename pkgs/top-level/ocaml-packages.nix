@@ -225,6 +225,10 @@ let
 
     cohttp-async = callPackage ../development/ocaml-modules/cohttp/async.nix { };
 
+    cohttp-eio = callPackage ../development/ocaml-modules/cohttp/eio.nix { };
+
+    cohttp-http = callPackage ../development/ocaml-modules/cohttp/http.nix { };
+
     cohttp-lwt = callPackage ../development/ocaml-modules/cohttp/lwt.nix { };
 
     cohttp-lwt-jsoo = callPackage ../development/ocaml-modules/cohttp/lwt-jsoo.nix { };

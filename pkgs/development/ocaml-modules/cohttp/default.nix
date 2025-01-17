@@ -3,6 +3,8 @@
   fetchurl,
   buildDunePackage,
   ppx_sexp_conv,
+  cohttp-http,
+  logs,
   base64,
   jsonm,
   re,
@@ -10,18 +12,19 @@
   uri-sexp,
   fmt,
   alcotest,
+  ppx_expect,
   crowbar,
 }:
 
 buildDunePackage rec {
   pname = "cohttp";
-  version = "5.3.1";
+  version = "6.0.0";
 
   minimalOCamlVersion = "4.08";
 
   src = fetchurl {
     url = "https://github.com/mirage/ocaml-cohttp/releases/download/v${version}/cohttp-${version}.tbz";
-    hash = "sha256-9eJz08Lyn/R71+Ftsj4fPWzQGkC+ACCJhbxDTIjUV2s=";
+    hash = "sha256-VMw0rxKLNC9K5gimaWUNZmYf/dUDJQ5N6ToaXvHvIqk=";
   };
 
   postPatch = ''
@@ -38,6 +41,8 @@ buildDunePackage rec {
     re
     stringext
     uri-sexp
+    cohttp-http
+    logs
   ];
 
   doCheck = true;
@@ -45,6 +50,7 @@ buildDunePackage rec {
     fmt
     alcotest
     crowbar
+    ppx_expect
   ];
 
   meta = {
