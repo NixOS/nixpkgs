@@ -1199,6 +1199,21 @@ self: super: {
     '';
   }) super.cryptol;
 
+  # Z3 removed aliases for boolean types in 4.12
+  inherit (
+    let
+      fixZ3 = appendConfigureFlags [
+        "--hsc2hs-option=-DZ3_Bool=bool"
+        "--hsc2hs-option=-DZ3_TRUE=true"
+        "--hsc2hs-option=-DZ3_FALSE=false"
+      ];
+    in
+    {
+      z3 = fixZ3 super.z3;
+      hz3 = fixZ3 super.hz3;
+    }
+  ) z3 hz3;
+
   # Tests try to invoke external process and process == 1.4
   grakn = dontCheck (doJailbreak super.grakn);
 
