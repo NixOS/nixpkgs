@@ -870,6 +870,9 @@ self: super: builtins.intersectAttrs super {
     hinotify = if pkgs.stdenv.hostPlatform.isLinux then self.hinotify else self.fsnotify;
   });
 
+  # needs git to configure
+  git-repair = addBuildTool pkgs.git super.git-repair;
+
   # The test suite has undeclared dependencies on git.
   githash = dontCheck super.githash;
 

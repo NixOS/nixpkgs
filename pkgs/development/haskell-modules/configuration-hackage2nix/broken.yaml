@@ -2081,7 +2081,6 @@ broken-packages:
   - gitlab-haskell # failure in job https://hydra.nixos.org/build/233190692 at 2023-09-02
   - gitlib-cmdline # failure in job https://hydra.nixos.org/build/233230857 at 2023-09-02
   - gitlib-utils # failure in job https://hydra.nixos.org/build/233190826 at 2023-09-02
-  - git-repair # failure in job https://hydra.nixos.org/build/233222686 at 2023-09-02
   - gitter # failure in job https://hydra.nixos.org/build/233210040 at 2023-09-02
   - git-vogue # failure in job https://hydra.nixos.org/build/233249420 at 2023-09-02
   - gi-webkit2webextension # failure in job https://hydra.nixos.org/build/254424710 at 2024-03-31
