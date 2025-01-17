@@ -106,6 +106,12 @@ in
           [ "nixpkgs=flake:nixpkgs" ]
           ++ lib.optional config.nix.channel.enable "/nix/var/nix/profiles/per-user/root/channels"
         );
+        # Nix will not accept a NIX_PATH with `flake:foo` in it unless flakes
+        # are enabled in the resulting configuration, and this is kind of surprising behaviour.
+        nix.settings.experimental-features = lib.mkDefault [
+          "nix-command"
+          "flakes"
+        ];
       })
     ]
   );
