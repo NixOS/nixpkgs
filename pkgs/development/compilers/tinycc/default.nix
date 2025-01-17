@@ -90,12 +90,10 @@ stdenv.mkDerivation (finalAttrs: {
       configureFlagsArray+=("--elfinterp=$(< $NIX_CC/nix-support/dynamic-linker)")
     '';
 
-  env.NIX_CFLAGS_COMPILE = toString (
-    lib.optionals stdenv.cc.isClang [
-      "-Wno-error=implicit-int"
-      "-Wno-error=int-conversion"
-    ]
-  );
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=implicit-int"
+    "-Wno-error=int-conversion"
+  ];
 
   # Test segfault for static build
   doCheck = !stdenv.hostPlatform.isStatic;
