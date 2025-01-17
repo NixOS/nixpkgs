@@ -10,66 +10,16 @@
 let
   elpi = coq.ocamlPackages.elpi.override (
     lib.switch coq.coq-version [
-      {
-        case = "8.11";
-        out = {
-          version = "1.11.4";
-        };
-      }
-      {
-        case = "8.12";
-        out = {
-          version = "1.12.0";
-        };
-      }
-      {
-        case = "8.13";
-        out = {
-          version = "1.13.7";
-        };
-      }
-      {
-        case = "8.14";
-        out = {
-          version = "1.13.7";
-        };
-      }
-      {
-        case = "8.15";
-        out = {
-          version = "1.15.0";
-        };
-      }
-      {
-        case = "8.16";
-        out = {
-          version = "1.17.0";
-        };
-      }
-      {
-        case = "8.17";
-        out = {
-          version = "1.17.0";
-        };
-      }
-      {
-        case = "8.18";
-        out = {
-          version = "1.18.1";
-        };
-      }
-      {
-        case = "8.19";
-        out = {
-          version = "1.18.1";
-        };
-      }
-      {
-        case = "8.20";
-        out = {
-          version = "1.19.2";
-        };
-      }
+      { case = "8.11"; out = { version = "1.11.4"; }; }
+      { case = "8.12"; out = { version = "1.12.0"; }; }
+      { case = "8.13"; out = { version = "1.13.7"; }; }
+      { case = "8.14"; out = { version = "1.13.7"; }; }
+      { case = "8.15"; out = { version = "1.15.0"; }; }
+      { case = "8.16"; out = { version = "1.17.0"; }; }
+      { case = "8.17"; out = { version = "1.17.0"; }; }
+      { case = "8.18"; out = { version = "1.18.1"; }; }
+      { case = "8.19"; out = { version = "1.18.1"; }; }
+      { case = "8.20"; out = { version = "1.19.2"; }; }
     ] { }
   );
 in
@@ -79,46 +29,16 @@ in
   owner = "LPCIC";
   inherit version;
   defaultVersion = lib.switch coq.coq-version [
-    {
-      case = "8.20";
-      out = "2.2.0";
-    }
-    {
-      case = "8.19";
-      out = "2.0.1";
-    }
-    {
-      case = "8.18";
-      out = "2.0.0";
-    }
-    {
-      case = "8.17";
-      out = "1.18.0";
-    }
-    {
-      case = "8.16";
-      out = "1.15.6";
-    }
-    {
-      case = "8.15";
-      out = "1.14.0";
-    }
-    {
-      case = "8.14";
-      out = "1.11.2";
-    }
-    {
-      case = "8.13";
-      out = "1.11.1";
-    }
-    {
-      case = "8.12";
-      out = "1.8.3_8.12";
-    }
-    {
-      case = "8.11";
-      out = "1.6.3_8.11";
-    }
+    { case = "8.20"; out = "2.2.0"; }
+    { case = "8.19"; out = "2.0.1"; }
+    { case = "8.18"; out = "2.0.0"; }
+    { case = "8.17"; out = "1.18.0"; }
+    { case = "8.16"; out = "1.15.6"; }
+    { case = "8.15"; out = "1.14.0"; }
+    { case = "8.14"; out = "1.11.2"; }
+    { case = "8.13"; out = "1.11.1"; }
+    { case = "8.12"; out = "1.8.3_8.12"; }
+    { case = "8.11"; out = "1.6.3_8.11"; }
   ] null;
   release."2.2.0".sha256 = "sha256-rADEoqTXM7/TyYkUKsmCFfj6fjpWdnZEOK++5oLfC/I=";
   release."2.0.1".sha256 = "sha256-cuoPsEJ+JRLVc9Golt2rJj4P7lKltTrrmQijjoViooc=";
