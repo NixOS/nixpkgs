@@ -963,7 +963,11 @@ let
           })
         );
 
-        consult-gh-forge = buildWithGit super.consult-gh-forge;
+        # needs network during compilation
+        consult-gh-embark = ignoreCompilationError super.consult-gh-embark;
+
+        # needs network during compilation
+        consult-gh-forge = ignoreCompilationError (buildWithGit super.consult-gh-forge);
 
         counsel-gtags = ignoreCompilationError super.counsel-gtags; # elisp error
 
