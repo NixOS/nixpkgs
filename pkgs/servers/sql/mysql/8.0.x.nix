@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   bison,
   cmake,
   pkg-config,
@@ -47,12 +48,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./no-force-outline-atomics.patch # Do not force compilers to turn on -moutline-atomics switch
+    # Fix compilation with LLVM 19, adapted from https://github.com/mysql/mysql-server/commit/3a51d7fca76e02257f5c42b6a4fc0c5426bf0421
+    # in https://github.com/NixOS/nixpkgs/pull/374591#issuecomment-2615855076
+    ./libcpp-fixes.patch
+    (fetchpatch {
+      url = "https://github.com/mysql/mysql-server/commit/4a5c00d26f95faa986ffed7a15ee15e868e9dcf2.patch";
+      hash = "sha256-MEl1lQlDYtFjHk0+S02RQFnxMr+YeFxAyNjpDtVHyeE=";
+    })
   ];
 
   ## NOTE: MySQL upstream frequently twiddles the invocations of libtool. When updating, you might proactively grep for libtool references.
-  postPatch = ''
-    substituteInPlace cmake/libutils.cmake --replace /usr/bin/libtool libtool
-    substituteInPlace cmake/os/Darwin.cmake --replace /usr/bin/libtool libtool
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace cmake/libutils.cmake --replace-fail /usr/bin/libtool ${cctools}/bin/libtool
+    substituteInPlace cmake/os/Darwin.cmake --replace-fail /usr/bin/libtool ${cctools}/bin/libtool
+    substituteInPlace cmake/package_name.cmake --replace-fail "COMMAND sw_vers" "COMMAND ${DarwinTools}/bin/sw_vers"
   '';
 
   buildInputs =
@@ -77,10 +86,8 @@ stdenv.mkDerivation (finalAttrs: {
       libtirpc
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      cctools
       CoreServices
       developer_cmds
-      DarwinTools
     ];
 
   strictDeps = true;
