@@ -295,6 +295,9 @@ in
     (mkRemovedOptionModule [ "services" "tedicross" ] ''
       The corresponding package was broken and removed from nixpkgs.
     '')
+    (mkRemovedOptionModule [ "services" "rippled" ] ''
+      The corresponding package was broken, abandoned upstream and thus removed from nixpkgs.
+    '')
 
     # Do NOT add any option renames here, see top of the file
   ];
