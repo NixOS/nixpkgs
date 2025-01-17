@@ -16,7 +16,7 @@ buildPythonPackage rec {
   version = "2.5.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "weblyzard";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     lxml
     requests
   ];
