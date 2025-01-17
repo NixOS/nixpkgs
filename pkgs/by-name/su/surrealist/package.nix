@@ -17,7 +17,7 @@
   openssl,
   pango,
   pkg-config,
-  pnpm,
+  pnpm_9,
   rustc,
   rustPlatform,
   stdenv,
@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     patchFlags = [ "-p2" ];
   };
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
     hash = "sha256-JwOY6Z8UjbrodSQ3csnT+puftbQUDF3NIK7o6rSpl2o=";
   };
@@ -90,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     moreutils
     nodejs
     pkg-config
-    pnpm.configHook
+    pnpm_9.configHook
     rustc
     rustPlatform.cargoSetupHook
   ];

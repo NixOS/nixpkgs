@@ -2066,6 +2066,12 @@
     githubId = 869771;
     name = "Kirill Boltaev";
   };
+  aspauldingcode = {
+    email = "aspauldingcode@gmail.com";
+    github = "aspauldingcode";
+    githubId = 10196826;
+    name = "Alex Spaulding";
+  };
   asppsa = {
     email = "asppsa@gmail.com";
     github = "asppsa";
@@ -3363,6 +3369,12 @@
     email = "bmg.avoin@gmail.com";
     github = "brianmcgillion";
     githubId = 1044263;
+  };
+  britter = {
+    name = "Benedikt Ritter";
+    email = "beneritter@gmail.com";
+    github = "britter";
+    githubId = 1327662;
   };
   brodes = {
     email = "me@brod.es";
@@ -4955,6 +4967,12 @@
     githubId = 16063713;
     name = "Dov Alperin";
     keys = [ { fingerprint = "4EED 5096 B925 86FA 1101  6673 7F2C 07B9 1B52 BB61"; } ];
+  };
+  da-luce = {
+    email = "daltonluce42@gmail.com";
+    github = "da-luce";
+    githubId = 102048662;
+    name = "Dalton Luce";
   };
   damhiya = {
     name = "SoonWon Moon";
@@ -7421,6 +7439,12 @@
     githubId = 64613093;
     name = "Felix Albrigtsen";
     matrix = "@felixalb:feal.no";
+  };
+  felixdorn = {
+    name = "Félix";
+    matrix = "@d:xfe.li";
+    github = "felixdorn";
+    githubId = 55788595;
   };
   felixscheinost = {
     name = "Felix Scheinost";
@@ -17497,6 +17521,12 @@
     githubId = 25278658;
     name = "Patrick Widmer";
   };
+  paukaifler = {
+    email = "pau@kaifler.me";
+    github = "PauKaifler";
+    githubId = 81905706;
+    name = "Pau Kaifler";
+  };
   paulsmith = {
     email = "paulsmith@pobox.com";
     github = "paulsmith";
@@ -20876,6 +20906,12 @@
     githubId = 16765155;
     name = "Shardul Baral";
   };
+  sharpchen = {
+    github = "sharpchen";
+    githubId = 77432836;
+    name = "sharpchen";
+    email = "rui.chen.sharp@gmail.com";
+  };
   sharzy = {
     email = "me@sharzy.in";
     github = "SharzyL";
@@ -21287,6 +21323,12 @@
     github = "skovati";
     githubId = 49844593;
     name = "skovati";
+  };
+  skowalak = {
+    github = "skowalak";
+    githubId = 26260032;
+    name = "Sebastian Kowalak";
+    matrix = "@scl:tchncs.de";
   };
   skyesoss = {
     name = "Skye Soss";

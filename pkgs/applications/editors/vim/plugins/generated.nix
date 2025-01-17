@@ -11713,12 +11713,12 @@ final: prev:
 
   snacks-nvim = buildVimPlugin {
     pname = "snacks.nvim";
-    version = "2025-01-06";
+    version = "2025-01-15";
     src = fetchFromGitHub {
       owner = "folke";
       repo = "snacks.nvim";
-      rev = "14e89401da348f5d14509fca164fb7bcec83e597";
-      sha256 = "0z66fiy6mscwrwczgwngnhfcgi6mlr5kmv9k21nfwskrgmp8c71v";
+      rev = "e5dd9281ee9402858fb7b7f1ac74ddcef40ebacc";
+      sha256 = "147rbp4z58bvm6s2lk1yzis7rjrrppwgchxpiyf9klj2gh08mzwp";
     };
     meta.homepage = "https://github.com/folke/snacks.nvim/";
   };
@@ -13313,6 +13313,18 @@ final: prev:
       sha256 = "042dnb5y8v3xb5nz564snicxkxalki1zm32y09imkskfkv588l52";
     };
     meta.homepage = "https://github.com/leafgarland/typescript-vim/";
+  };
+
+  nvzone-typr = buildVimPlugin {
+    pname = "typr";
+    version = "2025-01-15";
+    src = fetchFromGitHub {
+      owner = "nvzone";
+      repo = "typr";
+      rev = "a60c7f237be94d4b39228a3bd2ced80fe9fe2781";
+      sha256 = "0hbd85s2d28832qqy0lnm7f2iqa5n5s16h7n10hsm9iawi0z2ll9";
+    };
+    meta.homepage = "https://github.com/nvzone/typr/";
   };
 
   typst-conceal-vim = buildVimPlugin {

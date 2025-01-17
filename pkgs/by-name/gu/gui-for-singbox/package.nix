@@ -1,7 +1,7 @@
 {
   stdenv,
   nodejs,
-  pnpm,
+  pnpm_9,
   fetchFromGitHub,
   buildGoModule,
   lib,
@@ -30,10 +30,10 @@ let
 
     nativeBuildInputs = [
       nodejs
-      pnpm.configHook
+      pnpm_9.configHook
     ];
 
-    pnpmDeps = pnpm.fetchDeps {
+    pnpmDeps = pnpm_9.fetchDeps {
       inherit (finalAttrs) pname version src;
       sourceRoot = "${finalAttrs.src.name}/frontend";
       hash = "sha256-dLI1YMzs9lLk9lJBkBgc6cpirM79khy0g5VaOVEzUAc=";

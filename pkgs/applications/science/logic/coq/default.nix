@@ -231,17 +231,29 @@ self = stdenv.mkDerivation {
     mainProgram = "coqide";
   };
 }; in
-if coqAtLeast "8.17" then self.overrideAttrs(_: let
-  core-stdlib-package = if coqAtLeast "8.21" then "rocq-core" else "coq-stdlib"; in {
+if coqAtLeast "8.21" then self.overrideAttrs(_: {
+  # coq-core is now a shim for rocq
   buildPhase = ''
     runHook preBuild
     make dunestrap
-    dune build -p coq-core${lib.optionalString (coqAtLeast "8.21") ",rocq-runtime"},${core-stdlib-package},coqide-server${lib.optionalString buildIde ",coqide"} -j $NIX_BUILD_CORES
+    dune build -p rocq-runtime,rocq-core,coq-core,coqide-server${lib.optionalString buildIde ",rocqide"} -j $NIX_BUILD_CORES
     runHook postBuild
   '';
   installPhase = ''
     runHook preInstall
-    dune install --prefix $out coq-core ${lib.optionalString (coqAtLeast "8.21") "rocq-runtime"} ${core-stdlib-package} coqide-server${lib.optionalString buildIde " coqide"}
+    dune install --prefix $out rocq-runtime rocq-core coq-core coqide-server${lib.optionalString buildIde " rocqide"}
+    runHook postInstall
+  '';
+}) else if coqAtLeast "8.17" then self.overrideAttrs(_: {
+  buildPhase = ''
+    runHook preBuild
+    make dunestrap
+    dune build -p coq-core,coq-stdlib,coqide-server${lib.optionalString buildIde ",coqide"} -j $NIX_BUILD_CORES
+    runHook postBuild
+  '';
+  installPhase = ''
+    runHook preInstall
+    dune install --prefix $out coq-core coq-stdlib coqide-server${lib.optionalString buildIde " coqide"}
     runHook postInstall
   '';
 }) else self

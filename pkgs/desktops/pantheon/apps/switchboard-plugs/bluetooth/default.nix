@@ -9,6 +9,7 @@
   vala,
   libadwaita,
   libgee,
+  gettext,
   granite7,
   gtk4,
   bluez,
@@ -28,6 +29,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    gettext # msgfmt
     meson
     ninja
     pkg-config
