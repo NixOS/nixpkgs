@@ -42,7 +42,7 @@ shows the status of tests for the `nixpkgs-unstable` channel.
 
 The tests are conducted by a cluster called [Hydra](https://nixos.org/hydra/),
 which also builds binary packages from the Nix expressions in Nixpkgs for
-`x86_64-linux`, `i686-linux` and `x86_64-darwin`.
+`x86_64-linux`, `i686-linux` and `aarch64-darwin`.
 The binaries are made available via a [binary cache](https://cache.nixos.org).
 
 The current Nix expressions of the channels are available in the
