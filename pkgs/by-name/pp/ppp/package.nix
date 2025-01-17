@@ -8,6 +8,7 @@
 , openssl
 , bash
 , nixosTests
+, systemd
 }:
 
 stdenv.mkDerivation rec {
@@ -25,6 +26,7 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
     "--sysconfdir=/etc"
     "--with-openssl=${openssl.dev}"
+    "--enable-systemd"
   ];
 
   nativeBuildInputs = [
@@ -37,6 +39,7 @@ stdenv.mkDerivation rec {
     libxcrypt
     openssl
     bash
+    systemd
   ];
 
   postPatch = ''
