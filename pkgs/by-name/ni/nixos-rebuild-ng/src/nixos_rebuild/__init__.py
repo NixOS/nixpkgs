@@ -27,6 +27,7 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
         default=0,
         help="Enable verbose logging (includes nix)",
     )
+    common_flags.add_argument("--quiet", action="count", default=0)
     common_flags.add_argument("--max-jobs", "-j")
     common_flags.add_argument("--cores")
     common_flags.add_argument("--log-format")
@@ -34,12 +35,11 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
     common_flags.add_argument("--keep-failed", "-K", action="store_true")
     common_flags.add_argument("--fallback", action="store_true")
     common_flags.add_argument("--repair", action="store_true")
-    common_flags.add_argument("--option", nargs=2)
+    common_flags.add_argument("--option", nargs=2, action="append")
 
     common_build_flags = argparse.ArgumentParser(add_help=False)
     common_build_flags.add_argument("--builders")
     common_build_flags.add_argument("--include", "-I", action="append")
-    common_build_flags.add_argument("--quiet", action="store_true")
     common_build_flags.add_argument("--print-build-logs", "-L", action="store_true")
     common_build_flags.add_argument("--show-trace", action="store_true")
 
@@ -54,8 +54,8 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
     flake_common_flags.add_argument("--no-write-lock-file", action="store_true")
     flake_common_flags.add_argument("--no-registries", action="store_true")
     flake_common_flags.add_argument("--commit-lock-file", action="store_true")
-    flake_common_flags.add_argument("--update-input")
-    flake_common_flags.add_argument("--override-input", nargs=2)
+    flake_common_flags.add_argument("--update-input", action="append")
+    flake_common_flags.add_argument("--override-input", nargs=2, action="append")
 
     classic_build_flags = argparse.ArgumentParser(add_help=False)
     classic_build_flags.add_argument("--no-build-output", "-Q", action="store_true")
