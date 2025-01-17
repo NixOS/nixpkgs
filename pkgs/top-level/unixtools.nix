@@ -88,6 +88,7 @@ let
               else pkgs.netbsd.getent;
       darwin = pkgs.netbsd.getent;
       freebsd = pkgs.freebsd.getent;
+      openbsd = pkgs.openbsd.getent;
     };
     getopt = {
       linux = pkgs.util-linux;
@@ -110,11 +111,13 @@ let
       linux = pkgs.nettools;
       darwin = pkgs.darwin.shell_cmds;
       freebsd = pkgs.freebsd.bin;
+      openbsd = pkgs.openbsd.hostname;
     };
     ifconfig = {
       linux = pkgs.nettools;
       darwin = pkgs.darwin.network_cmds;
       freebsd = pkgs.freebsd.ifconfig;
+      openbsd = pkgs.openbsd.ifconfig;
     };
     killall = {
       linux = pkgs.psmisc;
@@ -141,6 +144,7 @@ let
       linux = pkgs.util-linux;
       darwin = pkgs.darwin.diskdev_cmds;
       freebsd = freebsd.mount;
+      openbsd = pkgs.openbsd.mount;
       # technically just targeting the darwin version; binlore already
       # ids the util-linux copy as 'cannot'
       # no obvious exec in manpage args; I think binlore flags 'can'
@@ -163,6 +167,7 @@ let
       linux = pkgs.procps;
       darwin = pkgs.darwin.ps;
       freebsd = pkgs.freebsd.bin;
+      openbsd = pkgs.openbsd.ps;
       # technically just targeting procps ps (which ids as can)
       # but I don't see obvious exec in args; have yet to look
       # for underlying cause in source
@@ -178,6 +183,7 @@ let
       linux = pkgs.nettools;
       darwin = pkgs.darwin.network_cmds;
       freebsd = pkgs.freebsd.route;
+      openbsd = pkgs.openbsd.route;
     };
     script = {
       linux = pkgs.util-linux;
@@ -187,11 +193,13 @@ let
       linux = pkgs.procps;
       darwin = pkgs.darwin.system_cmds;
       freebsd = pkgs.freebsd.sysctl;
+      openbsd = pkgs.openbsd.sysctl;
     };
     top = {
       linux = pkgs.procps;
       darwin = pkgs.darwin.top;
       freebsd = pkgs.freebsd.top;
+      openbsd = pkgs.openbsd.top;
       # technically just targeting procps top; haven't needed this in
       # any scripts so far, but overriding it for consistency with ps
       # override above and in procps. (procps also overrides 'free',
@@ -218,6 +226,7 @@ let
       # Darwin/FreeBSD. Unfortunately no other implementations exist currently!
       darwin = pkgs.callPackage ../os-specific/linux/procps-ng {};
       freebsd = pkgs.callPackage ../os-specific/linux/procps-ng {};
+      openbsd = pkgs.callPackage ../os-specific/linux/procps-ng {};
     };
     write = {
       linux = pkgs.util-linux;
