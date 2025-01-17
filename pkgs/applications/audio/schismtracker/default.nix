@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Music tracker application, free reimplementation of Impulse Tracker";
-    homepage = "http://schismtracker.org/";
+    homepage = "https://schismtracker.org/";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ ftrvxmtrx ];
