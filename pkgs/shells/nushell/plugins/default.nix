@@ -4,6 +4,7 @@ lib.makeScope newScope (self: with self; {
   gstat = callPackage ./gstat.nix { inherit Security; };
   formats = callPackage ./formats.nix { inherit IOKit Foundation; };
   polars = callPackage ./polars.nix { inherit IOKit Foundation; };
+  port-scan = callPackage ./port-scan.nix { inherit IOKit CoreFoundation; nushell-plugin-port-scan = self.port-scan; };
   query = callPackage ./query.nix { inherit IOKit CoreFoundation; };
   net = callPackage ./net.nix { inherit IOKit CoreFoundation; };
   units = callPackage ./units.nix  { inherit IOKit Foundation; };
