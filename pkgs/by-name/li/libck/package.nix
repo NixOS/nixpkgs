@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
       asl20
       bsd2
     ];
-    homepage = "http://concurrencykit.org/";
+    homepage = "https://concurrencykit.org/";
     platforms = platforms.unix;
     maintainers = with maintainers; [
       chessai
