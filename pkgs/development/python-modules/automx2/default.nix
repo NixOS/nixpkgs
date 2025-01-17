@@ -7,12 +7,13 @@
   ldap3,
   pytestCheckHook,
   pythonOlder,
+  pythonPackages,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "automx2";
-  version = "2024.2";
+  version = "2025.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,7 +22,7 @@ buildPythonPackage rec {
     owner = "rseichter";
     repo = "automx2";
     tag = version;
-    hash = "sha256-7SbSKSjDHTppdqfPPKvuWbdoksHa6BMIOXOq0jDggTE=";
+    hash = "sha256-EG0S8Ie9U1nV96th7NdGsbAWXLVoqddHbGdHt/FUlqE=";
   };
 
   nativeBuildInputs = [ setuptools ];
