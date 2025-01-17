@@ -92,7 +92,9 @@ rec {
           };
           varDefs = concatStringsSep "\n" (map (x: "  --set ${x} \\")
             ([ "JAVA_HOME ${java}" ] ++ toolchain.varDefs));
-          jnaLibraryPath = lib.makeLibraryPath [ udev ];
+          jnaLibraryPath = if stdenv.hostPlatform.isLinux then lib.makeLibraryPath [ udev ] else "";
+          jnaFlag =
+            if stdenv.hostPlatform.isLinux then "--add-flags \"-Djna.library.path=${jnaLibraryPath}\"" else "";
         in ''
           mkdir -pv $out/lib/gradle/
           cp -rv lib/ $out/lib/gradle/
@@ -101,7 +103,7 @@ rec {
           test -f $gradle_launcher_jar
           makeWrapper ${java}/bin/java $out/bin/gradle \
             ${varDefs}
-            --add-flags "-Djna.library.path=${jnaLibraryPath}" \
+            ${jnaFlag} \
             --add-flags "-classpath $gradle_launcher_jar org.gradle.launcher.GradleMain${toolchain.property}"
         '';
 
@@ -132,7 +134,7 @@ rec {
         # Gradle will refuse to start without _both_ 5 and 6 versions of ncurses.
         echo ${ncurses5} >> $out/nix-support/manual-runtime-dependencies
         echo ${ncurses6} >> $out/nix-support/manual-runtime-dependencies
-        echo ${udev} >> $out/nix-support/manual-runtime-dependencies
+        ${lib.optionalString stdenv.hostPlatform.isLinux "echo ${udev} >> $out/nix-support/manual-runtime-dependencies"}
       '';
 
       passthru.tests = {
