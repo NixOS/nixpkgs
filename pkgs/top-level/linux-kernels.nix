@@ -357,6 +357,8 @@ in {
 
     dpdk-kmods = callPackage ../os-specific/linux/dpdk-kmods { };
 
+    ethercat = callPackage ../by-name/et/ethercat/kernel.nix {};
+
     exfat-nofuse = if lib.versionOlder kernel.version "5.8" then callPackage ../os-specific/linux/exfat { } else null;
 
     evdi = callPackage ../os-specific/linux/evdi { };
