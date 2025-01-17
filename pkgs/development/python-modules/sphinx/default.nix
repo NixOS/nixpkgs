@@ -28,7 +28,6 @@
   sphinxcontrib-serializinghtml,
   sphinxcontrib-websupport,
   tomli,
-  typing-extensions,
 
   # check phase
   defusedxml,
@@ -36,6 +35,7 @@
   html5lib,
   pytestCheckHook,
   pytest-xdist,
+  typing-extensions,
 
   # reverse dependencies to test
   breathe,
@@ -43,7 +43,7 @@
 
 buildPythonPackage rec {
   pname = "sphinx";
-  version = "7.4.7";
+  version = "8.1.3";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -59,7 +59,7 @@ buildPythonPackage rec {
       mv tests/roots/test-images/{testimäge,testimæge}.png
       sed -i 's/testimäge/testimæge/g' tests/{test_build*.py,roots/test-images/index.rst}
     '';
-    hash = "sha256-/5zH9IdLmTGnn5MY4FFSuZOIeF/x1L9Ga/wp57XrAQo=";
+    hash = "sha256-AObNQz2gKoPHfvC5aoefynXfQMe3bnQpEx6KrLNQBoQ=";
   };
 
   build-system = [ flit-core ];
@@ -127,6 +127,8 @@ buildPythonPackage rec {
       "test_cython"
       # Could not fetch remote image: http://localhost:7777/sphinx.png
       "test_copy_images"
+      # https://github.com/sphinx-doc/sphinx/issues/13223
+      "test_html_multi_line_copyright"
     ]
     ++ lib.optionals (pythonAtLeast "3.12") [
       # https://github.com/sphinx-doc/sphinx/issues/12430
