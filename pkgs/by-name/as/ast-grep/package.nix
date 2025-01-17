@@ -6,6 +6,7 @@
   installShellFiles,
   buildPackages,
   versionCheckHook,
+  nix-update-script,
   enableLegacySg ? false,
 }:
 
@@ -71,6 +72,8 @@ rustPlatform.buildRustPackage rec {
   ];
   versionCheckProgramArg = [ "--version" ];
   doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     mainProgram = "ast-grep";
