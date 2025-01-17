@@ -17,7 +17,7 @@ let
         false
       else if !lib.types.str.check x.type then
         false
-      else if x.type != "imap" && x.type != "smtp" then
+      else if x.type != "imap" && x.type != "smtp" && x.type != "pop" then
         false
       else if !lib.types.str.check x.name then
         false
