@@ -10217,6 +10217,8 @@ self: super: with self; {
 
   pymeshlab = toPythonModule (pkgs.libsForQt5.callPackage ../applications/graphics/pymeshlab { });
 
+  pyppmd = callPackage ../development/python-modules/pyppmd { };
+
   pyprecice = callPackage ../development/python-modules/pyprecice { };
 
   pyprobables = callPackage ../development/python-modules/pyprobables { };
