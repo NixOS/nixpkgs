@@ -162,6 +162,9 @@ self: super:
     ];
   }) super.ConfigFile;
 
+  # https://github.com/NixOS/nixpkgs/pull/367998#issuecomment-2598941240
+  libtorch-ffi-helper = unmarkBroken (doDistribute super.libtorch-ffi-helper);
+
   # Compatibility with core libs of GHC 9.6
   # Jailbreak to lift bound on time
   kqueue = doJailbreak (
