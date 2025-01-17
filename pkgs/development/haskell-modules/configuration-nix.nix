@@ -1437,6 +1437,8 @@ self: super: builtins.intersectAttrs super {
     __onlyPropagateKnownPkgConfigModules = true;
     }) super)
       gi-javascriptcore
+      gi-javascriptcore4
+      gi-javascriptcore6
       gi-webkit2webextension
       gi-gtk_4_0_12
       gi-gdk_4_0_10
