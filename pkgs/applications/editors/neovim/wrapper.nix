@@ -26,7 +26,7 @@ let
     , autoconfigure ? true
 
     # append to PATH runtime deps of plugins
-    , autowrapRuntimeDeps ? false
+    , autowrapRuntimeDeps ? true
 
     # should contain all args but the binary. Can be either a string or list
     , wrapperArgs ? []
