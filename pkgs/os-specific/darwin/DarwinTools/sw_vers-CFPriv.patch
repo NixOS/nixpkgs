@@ -1,0 +1,19 @@
+--- a/sw_vers.c	2021-04-19 13:06:50.131346864 +0900
++++ b/sw_vers.c	2021-04-19 13:07:32.481967474 +0900
+@@ -28,7 +28,15 @@
+  */
+ 
+ #include <CoreFoundation/CoreFoundation.h>
+-#include <CoreFoundation/CFPriv.h>
++
++// Avoid dependency on CoreFoundation/CFPriv, which no longer appears to be
++// part of the upstream sdk.
++
++CFDictionaryRef _CFCopyServerVersionDictionary(void);
++CFDictionaryRef _CFCopySystemVersionDictionary(void);
++extern CFStringRef _kCFSystemVersionProductNameKey;
++extern CFStringRef _kCFSystemVersionProductVersionKey;
++extern CFStringRef _kCFSystemVersionBuildVersionKey;
+ 
+ void usage(char *progname) {
+ 	fprintf(stderr, "Usage: %s [-productName|-productVersion|-buildVersion]\n", progname);

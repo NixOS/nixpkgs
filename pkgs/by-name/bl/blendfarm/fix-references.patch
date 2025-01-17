@@ -1,0 +1,14 @@
+diff --git a/LogicReinc.BlendFarm/LogicReinc.BlendFarm.csproj b/LogicReinc.BlendFarm/LogicReinc.BlendFarm.csproj
+index 97aa471..3eaa259 100644
+--- a/LogicReinc.BlendFarm/LogicReinc.BlendFarm.csproj
++++ b/LogicReinc.BlendFarm/LogicReinc.BlendFarm.csproj
+@@ -9,6 +9,9 @@
+     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+     <PackageIcon>icon.png</PackageIcon>
+   </PropertyGroup>
++  <PropertyGroup>
++    <ValidateExecutableReferencesMatchSelfContained>false</ValidateExecutableReferencesMatchSelfContained>
++</PropertyGroup>
+   <ItemGroup>
+     <AvaloniaXaml Remove="Content\**" />
+     <Compile Remove="Content\**" />
