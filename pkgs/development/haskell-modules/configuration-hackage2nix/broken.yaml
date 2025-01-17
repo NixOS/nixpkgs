@@ -3525,7 +3525,7 @@ broken-packages:
   - libsystemd-daemon # failure in job https://hydra.nixos.org/build/233207090 at 2023-09-02
   - libtagc # failure in job https://hydra.nixos.org/build/233223631 at 2023-09-02
   - libtelnet # failure in job https://hydra.nixos.org/build/233209594 at 2023-09-02
-  - libtorch-ffi # failure in job https://hydra.nixos.org/build/283204506 at 2024-12-31
+  - libtorch-ffi-helper # doesn't support ghc >= 9.8 before 2.0.0.1
   - libvirt-hs # failure in job https://hydra.nixos.org/build/253697570 at 2024-03-31
   - libxls # failure in job https://hydra.nixos.org/build/233257847 at 2023-09-02
   - libxlsxwriter-hs # failure in job https://hydra.nixos.org/build/233244798 at 2023-09-02
