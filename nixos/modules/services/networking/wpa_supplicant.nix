@@ -220,8 +220,6 @@ in
             Whether to allow configuring networks "imperatively" (e.g. via
             `wpa_supplicant_gui`) and declaratively via
             [](#opt-networking.wireless.networks).
-
-            Please note that this adds a custom patch to `wpa_supplicant`.
           '';
         };
 
