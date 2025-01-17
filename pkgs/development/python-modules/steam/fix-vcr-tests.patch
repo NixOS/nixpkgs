@@ -1,0 +1,25 @@
+diff --git a/tests/test_steamid.py b/tests/test_steamid.py
+index 269a2cf..f4fba3a 100644
+--- a/tests/test_steamid.py
++++ b/tests/test_steamid.py
+@@ -351,7 +351,7 @@ class steamid_functions(unittest.TestCase):
+                               mode='once',
+                               serializer='yaml',
+                               filter_query_parameters=['nocache'],
+-                              decode_compressed_response=False,
++                              decode_compressed_response=True,
+                               before_record_request=scrub_req,
+                               before_record_response=scrub_resp,
+                               ):
+diff --git a/tests/test_webapi.py b/tests/test_webapi.py
+index 82c70d0..c9d3ea6 100644
+--- a/tests/test_webapi.py
++++ b/tests/test_webapi.py
+@@ -27,6 +27,7 @@ test_vcr = vcr.VCR(
+     cassette_library_dir='vcr',
+     before_record_request=scrub_req,
+     before_record_response=scrub_resp,
++    decode_compressed_response=True,
+ )
+ 
+ class TCwebapi(unittest.TestCase):
