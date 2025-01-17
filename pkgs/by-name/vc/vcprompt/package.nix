@@ -1,40 +1,37 @@
 {
   lib,
   stdenv,
-  fetchhg,
-  autoconf,
+  fetchFromGitHub,
+  autoreconfHook,
   sqlite,
 }:
 
 stdenv.mkDerivation rec {
   pname = "vcprompt";
-  version = "1.2.1";
+  version = "1.3.0-unstable-2020-12-28";
 
-  src = fetchhg {
-    url = "http://hg.gerg.ca/vcprompt/";
-    rev = version;
-    sha256 = "03xqvp6bfl98bpacrw4n82qv9cw6a4fxci802s3vrygas989v1kj";
+  src = fetchFromGitHub {
+    owner = "powerman";
+    repo = "vcprompt";
+    rev = "850bf44cd61723f6b46121f678ff94047e42f802";
+    hash = "sha256-w2gpekNx3RA7uxNLg0Nkf9/aoxZj3DR4foKI+4q8SKk=";
   };
+
+  nativeBuildInputs = [
+    autoreconfHook
+  ];
 
   buildInputs = [
     sqlite
-    autoconf
   ];
-
-  preConfigure = ''
-    autoconf
-  '';
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
   ];
 
   meta = with lib; {
-    description = ''
-      A little C program that prints a short string with barebones information
-      about the current working directory for various version control systems
-    '';
-    homepage = "http://hg.gerg.ca/vcprompt";
+    description = "Program that prints barebones information about the current working directory for various version control systems";
+    homepage = "https://github.com/powerman/vcprompt";
     maintainers = [ ];
     platforms = with platforms; linux ++ darwin;
     license = licenses.gpl2Plus;
