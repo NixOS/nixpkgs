@@ -93,8 +93,20 @@ let
         vulkan-headers
         x264
         glslang
+        gdk-pixbuf
+        lerc
+        libsysprof-capture
+        libbsd
+        libdeflate
         libdrm
+        libGL
         libnotify
+        libpng
+        libselinux
+        libsepol
+        libtiff
+        libuuid
+        libwebp
         openssl
       ])
     );
