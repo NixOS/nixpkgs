@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchurl,
-  fetchpatch,
   pkg-config,
   gtk-doc,
   nixosTests,
@@ -53,9 +52,9 @@ let
     ]
   );
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ostree";
-  version = "2024.10";
+  version = "2025.2";
 
   outputs = [
     "out"
@@ -65,17 +64,9 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://github.com/ostreedev/ostree/releases/download/v${version}/libostree-${version}.tar.xz";
-    sha256 = "sha256-VOM4fe4f8WAxoGeayitg2pCrf0omwhGCIzPH8jAAq+4=";
+    url = "https://github.com/ostreedev/ostree/releases/download/v${finalAttrs.version}/libostree-${finalAttrs.version}.tar.xz";
+    hash = "sha256-8kSkCMkJmYp3jhJ/zCLBtQK00BPxXyaUj0fMcv/i7vQ=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "static-pkg-config.patch";
-      url = "https://github.com/ostreedev/ostree/pull/3382.patch";
-      hash = "sha256-VCQLq4OqmojtB7WFHNNV82asgXPGq5tKoJun66eUntY=";
-    })
-  ];
 
   nativeBuildInputs =
     [
@@ -183,4 +174,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [ copumpkin ];
   };
-}
+})
