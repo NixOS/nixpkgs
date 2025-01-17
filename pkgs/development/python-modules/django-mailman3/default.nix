@@ -65,5 +65,6 @@ buildPythonPackage rec {
     homepage = "https://gitlab.com/mailman/django-mailman3";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ qyliss ];
+    broken = lib.versionAtLeast django-allauth.version "65.0.0";
   };
 }
