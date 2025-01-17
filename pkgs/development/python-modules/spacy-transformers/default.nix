@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "spacy-transformers";
-  version = "1.3.5";
+  version = "1.3.6";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -25,8 +25,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "explosion";
     repo = "spacy-transformers";
-    tag = "v${version}";
-    hash = "sha256-+KCRbjY4P52SWawU1NoMoe+HOV7iujFkwqVe87fWVTE=";
+    tag = "release-v${version}";
+    hash = "sha256-VZEx7mDTqcJ7c0qqDYc3GZzesqi/MwJawAZDUGdXMB0=";
   };
 
   build-system = [
