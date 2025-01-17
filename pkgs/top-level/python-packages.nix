@@ -14360,6 +14360,8 @@ self: super: with self; {
 
   runs = callPackage ../development/python-modules/runs { };
 
+  runstats = callPackage ../development/python-modules/runstats { };
+
   ruuvitag-ble = callPackage ../development/python-modules/ruuvitag-ble { };
 
   ruyaml = callPackage ../development/python-modules/ruyaml { };

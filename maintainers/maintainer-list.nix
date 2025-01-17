@@ -17189,6 +17189,12 @@
     githubId = 7820716;
     name = "orthros";
   };
+  osbm = {
+    email = "osmanfbayram@gmail.com";
+    github = "osbm";
+    githubId = 74963545;
+    name = "Osman Bayram";
+  };
   osener = {
     email = "ozan@ozansener.com";
     github = "ozanmakes";
