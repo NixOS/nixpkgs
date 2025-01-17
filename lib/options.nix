@@ -452,18 +452,39 @@ rec {
         assert length defs > 1;
         throw "The option `${showOption loc}' is defined multiple times while it's expected to be unique.\n${message}\nDefinition values:${showDefs defs}\n${prioritySuggestion}";
 
-  /* "Merge" option definitions by checking that they all have the same value. */
-  mergeEqualOption = loc: defs:
+  # Merge two values only when they are equal under a given projection function.
+  # The additional argument `printProjectedValues` can be used to disable printing
+  # the values that were used in the comparison in case of an error message.
+  mergeEqualOptionBy =
+    { project
+    , printProjectedValues ? true
+    }:
+    loc: defs:
     if defs == [] then abort "This case should never happen."
     # Return early if we only have one element
     # This also makes it work for functions, because the foldl' below would try
     # to compare the first element with itself, which is false for functions
     else if length defs == 1 then (head defs).value
     else (foldl' (first: def:
-      if def.value != first.value then
-        throw "The option `${showOption loc}' has conflicting definition values:${showDefs [ first def ]}\n${prioritySuggestion}"
+      if (project def.value) != (project first.value) then
+        let
+          projectValue = def: def // {
+            value = {
+              originalValue = def.value;
+              comparedValue = project def.value;
+            };
+          };
+          showDefs' = defs:
+            if printProjectedValues
+            then showDefs (map projectValue defs)
+            else showDefs defs;
+        in
+        throw "The option `${showOption loc}' has conflicting definition values:${showDefs' [ first def ]}\n${prioritySuggestion}"
       else
         first) (head defs) (tail defs)).value;
+
+  /* "Merge" option definitions by checking that they all have the same value. */
+  mergeEqualOption = mergeEqualOptionBy { project = lib.id; printProjectedValues = false; };
 
   /* Extracts values of all "value" keys of the given list.
 
