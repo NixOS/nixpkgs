@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "lexilang";
-  version = "1.0.2";
+  version = "1.0.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "LibreTranslate";
     repo = "LexiLang";
     tag = "v${version}";
-    hash = "sha256-/uSoEz/5HJnFVkXZndIlM+K0OJLJaorFQ6+kWYELjrs=";
+    hash = "sha256-Yn6zthr6irkDsRx25NG9gOQc07xRpItwCc6+WqAhd/c=";
   };
 
   nativeBuildInputs = [ setuptools ];
