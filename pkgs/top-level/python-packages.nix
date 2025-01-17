@@ -6127,6 +6127,8 @@ self: super: with self; {
 
   hyppo = callPackage ../development/python-modules/hyppo { };
 
+  hyprpy = callPackage ../development/python-modules/hyprpy { };
+
   hyrule = callPackage ../development/python-modules/hyrule { };
 
   i2c-tools = callPackage ../development/python-modules/i2c-tools {
