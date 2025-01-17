@@ -235,13 +235,15 @@ pipe ((callFile ./common/builder.nix {}) ({
   # insert into default search paths.
   + optionalString hostPlatform.isDarwin ''
     substituteInPlace gcc/config/darwin-c.c${optionalString atLeast12 "c"} \
-      --replace 'if (stdinc)' 'if (0)'
+      --replace-fail 'if (stdinc)' 'if (0)'
 
-    substituteInPlace libgcc/config/t-slibgcc-darwin \
-      --replace "-install_name @shlib_slibdir@/\$(SHLIB_INSTALL_NAME)" "-install_name ''${!outputLib}/lib/\$(SHLIB_INSTALL_NAME)"
-
-    substituteInPlace libgfortran/configure \
-      --replace "-install_name \\\$rpath/\\\$soname" "-install_name ''${!outputLib}/lib/\\\$soname"
+    for c in $(find . -name '*.m4' | xargs grep -l "'@rpath/\\\\\$soname'" || true)
+    do
+      # see also pattern in preConfigure
+      substituteInPlace $c \
+        --replace-fail "'\\\$rpath/\\\$soname'" "''\'''${!outputLib}/lib/\\\$soname'" \
+        --replace-fail "'@rpath/\\\$soname'" "''\'''${!outputLib}/lib/\\\$soname'"
+    done
   ''
   + (
     optionalString (targetPlatform != hostPlatform || stdenv.cc.libc != null)
@@ -280,6 +282,18 @@ pipe ((callFile ./common/builder.nix {}) ({
 
   preConfigure = (callFile ./common/pre-configure.nix { }) + optionalString atLeast10 ''
     ln -sf ${libxcrypt}/include/crypt.h libsanitizer/sanitizer_common/crypt.h
+  ''
+  + optionalString hostPlatform.isDarwin ''
+    for c in $(find . -name configure | xargs grep -l "'@rpath/\\\\\$soname'" || true)
+    do
+      # see also pattern in postPatch
+      substituteInPlace $c \
+        --replace-fail "'\\\$rpath/\\\$soname'" "''\'''${!outputLib}/lib/\\\$soname'" \
+        --replace-fail "'@rpath/\\\$soname'" "''\'''${!outputLib}/lib/\\\$soname'"
+    done
+    substituteInPlace libgcc/config/t-darwin-rpath \
+      --replace-fail "@rpath" "''\'''${!outputLib}/lib'"
+
   '';
 
   dontDisableStatic = true;
