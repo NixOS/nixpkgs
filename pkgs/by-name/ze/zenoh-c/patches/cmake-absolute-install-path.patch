@@ -1,0 +1,94 @@
+diff --git a/install/CMakeLists.txt b/install/CMakeLists.txt
+index b770e3c..f48d16e 100644
+--- a/install/CMakeLists.txt
++++ b/install/CMakeLists.txt
+@@ -4,7 +4,7 @@ message(STATUS "zenoh-c install")
+ # Installation
+ # For debug configuration installs libraries with 'd' added to filename
+ #
+-status_print(CMAKE_INSTALL_PREFIX)
++status_print(CMAKE_INSTALL_FULL_PREFIX)
+ 
+ include(GNUInstallDirs)
+ include(CMakePackageConfigHelpers)
+@@ -15,15 +15,15 @@ function(install_zenohc_lib configurations property_postfix package_name)
+     get_filename_component(DYLIB ${dylib_path} NAME)
+     get_filename_component(IMPLIB "${implib_path}" NAME)
+     # On Windows .dll need to be installed in ${CMAKE_INSTALL_BINDIR}, 
+-    # while on Linux and macOS .so and .dylib need to be installed in ${CMAKE_INSTALL_LIBDIR}
++    # while on Linux and macOS .so and .dylib need to be installed in ${CMAKE_INSTALL_FULL_LIBDIR}
+     if(WIN32)
+-        set(ZENOHC_INSTALL_DYLIBDIR ${CMAKE_INSTALL_BINDIR})
++        set(ZENOHC_INSTALL_FULL_DYLIBDIR ${CMAKE_INSTALL_FULL_BINDIR})
+     else()
+-        set(ZENOHC_INSTALL_DYLIBDIR ${CMAKE_INSTALL_LIBDIR})
++        set(ZENOHC_INSTALL_FULL_DYLIBDIR ${CMAKE_INSTALL_FULL_LIBDIR})
+     endif()
+-    install(FILES ${dylib_path} DESTINATION ${ZENOHC_INSTALL_DYLIBDIR} CONFIGURATIONS ${configurations} COMPONENT lib)
++    install(FILES ${dylib_path} DESTINATION ${ZENOHC_INSTALL_FULL_DYLIBDIR} CONFIGURATIONS ${configurations} COMPONENT lib)
+     if(DEFINED implib_path)
+-        install(FILES ${implib_path} DESTINATION ${CMAKE_INSTALL_LIBDIR} CONFIGURATIONS ${configurations} COMPONENT lib)
++        install(FILES ${implib_path} DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR} CONFIGURATIONS ${configurations} COMPONENT lib)
+     endif()
+     if((APPLE OR UNIX))
+         get_filename_component(LIBNAME ${DYLIB} NAME_WE)
+diff --git a/install/PackageConfig.cmake.in b/install/PackageConfig.cmake.in
+index 1327236..3f13ae8 100644
+--- a/install/PackageConfig.cmake.in
++++ b/install/PackageConfig.cmake.in
+@@ -16,15 +16,6 @@
+ 
+ set(ZENOHC_BUILD_WITH_UNSTABLE_API @ZENOHC_BUILD_WITH_UNSTABLE_API@)
+ set(ZENOHC_BUILD_WITH_SHARED_MEMORY @ZENOHC_BUILD_WITH_SHARED_MEMORY@)
+-# Compute the installation prefix relative to this file.
+-get_filename_component(_IMPORT_PREFIX "${CMAKE_CURRENT_LIST_FILE}" PATH)
+-get_filename_component(_IMPORT_PREFIX "${_IMPORT_PREFIX}" PATH)
+-get_filename_component(_IMPORT_PREFIX "${_IMPORT_PREFIX}" PATH)
+-get_filename_component(_IMPORT_PREFIX "${_IMPORT_PREFIX}" PATH)
+-if(_IMPORT_PREFIX STREQUAL "/")
+-  set(_IMPORT_PREFIX "")
+-endif()
+-
+ 
+ if(NOT TARGET __zenohc_shared)
+     add_library(__zenohc_shared SHARED IMPORTED GLOBAL)
+@@ -32,11 +23,11 @@ if(NOT TARGET __zenohc_shared)
+     set_target_properties(__zenohc_shared PROPERTIES
+         IMPORTED_NO_SONAME TRUE
+         INTERFACE_COMPILE_DEFINITION ZENOHC_DYN_LIB
+-        IMPORTED_LOCATION "${_IMPORT_PREFIX}/@ZENOHC_INSTALL_DYLIBDIR@/@DYLIB@"
+-        INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/@CMAKE_INSTALL_INCLUDEDIR@"
++        IMPORTED_LOCATION "@ZENOHC_INSTALL_FULL_DYLIBDIR@/@DYLIB@"
++        INTERFACE_INCLUDE_DIRECTORIES "@CMAKE_INSTALL_FULL_INCLUDEDIR@"
+     )
+     if(NOT ("@IMPLIB@" STREQUAL ""))
+-        set_property(TARGET __zenohc_shared PROPERTY IMPORTED_IMPLIB "${_IMPORT_PREFIX}/@CMAKE_INSTALL_LIBDIR@/@IMPLIB@")
++        set_property(TARGET __zenohc_shared PROPERTY IMPORTED_IMPLIB "@CMAKE_INSTALL_FULL_LIBDIR@/@IMPLIB@")
+     endif()
+ endif()
+ if(NOT TARGET __zenohc_static)
+@@ -44,8 +35,8 @@ if(NOT TARGET __zenohc_static)
+     add_library(zenohc::static ALIAS __zenohc_static)
+     target_link_libraries(__zenohc_static INTERFACE @NATIVE_STATIC_LIBS@)
+     set_target_properties(__zenohc_static PROPERTIES
+-        IMPORTED_LOCATION "${_IMPORT_PREFIX}/@CMAKE_INSTALL_LIBDIR@/@STATICLIB@"
+-        INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/@CMAKE_INSTALL_INCLUDEDIR@"
++        IMPORTED_LOCATION "@CMAKE_INSTALL_FULL_LIBDIR@/@STATICLIB@"
++        INTERFACE_INCLUDE_DIRECTORIES "@CMAKE_INSTALL_FULL_INCLUDEDIR@"
+     )
+ endif()
+ 
+diff --git a/install/zenohc.pc.in b/install/zenohc.pc.in
+index c756cc7..1b7299f 100644
+--- a/install/zenohc.pc.in
++++ b/install/zenohc.pc.in
+@@ -4,5 +4,5 @@ Name: @PROJECT_NAME@
+ Description: @CMAKE_PROJECT_DESCRIPTION@
+ URL: @CMAKE_PROJECT_HOMEPAGE_URL@
+ Version: @PROJECT_VERSION@
+-Cflags: -I${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
+-Libs: -L${prefix}/@CMAKE_INSTALL_LIBDIR@ -l@LIBNAME@
+\ No newline at end of file
++Cflags: -I@CMAKE_INSTALL_FULL_INCLUDEDIR@
++Libs: -L@CMAKE_INSTALL_FULL_LIBDIR@ -l@LIBNAME@
+\ No newline at end of file
