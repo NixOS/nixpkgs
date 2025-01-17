@@ -1,0 +1,12 @@
+diff -Naur 4th-3.64.0-old/sources/Makefile 4th-3.64.0-new/sources/Makefile
+--- 4th-3.64.0-old/sources/Makefile	2022-03-15 12:37:45.925122854 -0300
++++ 4th-3.64.0-new/sources/Makefile	2022-03-15 12:38:50.987870211 -0300
+@@ -125,7 +125,7 @@
+ 
+ install: mostlyinstall
+ 	install -Dm644 ../documentation/4th.1 $(MANDIR)/man1/4th.1
+-	install -Dm644 ../documentation/4tHmanual.txt $(DOCDIR)/4th/
++	install -Dm644 ../documentation/4tHmanual.pdf $(DOCDIR)/4th/
+ 
+ uninstall:
+ 	-rm -f $(LIBRARIES)/lib4th.{a,so*}

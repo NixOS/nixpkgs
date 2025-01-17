@@ -1,0 +1,7 @@
+name="gmp"
+version="@VERSION@"
+description="bindings to GNU MP library"
+archive(byte)="gmp.cma"
+archive(native)="gmp.cmxa"
+requires=""
+
