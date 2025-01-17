@@ -15881,6 +15881,8 @@ self: super: with self; {
 
   test-tube = callPackage ../development/python-modules/test-tube { };
 
+  text2digits = callPackage ../development/python-modules/text2digits { };
+
   textdistance = callPackage ../development/python-modules/textdistance { };
 
   textacy = callPackage ../development/python-modules/textacy { };
