@@ -7,8 +7,8 @@
   Foundation,
   dbusSupport ? stdenv.hostPlatform.isLinux,
   dbus,
-  # rustls will be used for TLS if useOpenSSL=false
-  useOpenSSL ? stdenv.hostPlatform.isLinux,
+  # rustls will be used for TLS, enable this option to use OpenSSL instead
+  useOpenSSL ? false,
   openssl,
   notificationSupport ? stdenv.hostPlatform.isLinux,
 }:
