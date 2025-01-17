@@ -110,6 +110,7 @@ if (stat($bootPath)->dev != stat("/nix/store")->dev) {
 # Discover information about the location of the bootPath
 struct(Fs => {
     device => '$',
+    root => '$',
     type => '$',
     mount => '$',
 });
@@ -117,12 +118,12 @@ struct(Fs => {
 # Figure out what filesystem is used for the directory with init/initrd/kernel files
 sub GetFs {
     my ($dir) = @_;
-    my ($status, @pathInfo) = runCommand("@utillinux@/bin/findmnt", "-n", "-v", "-o", "SOURCE,FSTYPE,TARGET", "-T", @{[$dir]});
+    my ($status, @pathInfo) = runCommand("@utillinux@/bin/findmnt", "-n", "-u", "-v", "-o", "SOURCE,FSROOT,FSTYPE,TARGET", "-T", @{[$dir]});
     if ($status != 0 || @pathInfo != 1) {
         die "Failed to get file system (returned $status) for @{[$dir]}";
     }
     my @fields = split /\s+/, $pathInfo[0];
-    return Fs->new(device => $fields[0], type => $fields[1], mount => $fields[2]);
+    return Fs->new(device => $fields[0], root => $fields[1], type => $fields[2], mount => $fields[3]);
 }
 struct (Grub => {
     path => '$',
@@ -132,10 +133,7 @@ my $driveid = 1;
 sub GrubFs {
     my ($dir) = @_;
     my $fs = GetFs($dir);
-    my $path = substr($dir, length($fs->mount));
-    if (substr($path, 0, 1) ne "/") {
-        $path = "/$path";
-    }
+    my $path = File::Spec->catdir($fs->root, substr($dir, length($fs->mount)));
     my $search = "";
 
     # ZFS is completely separate logic as zpools are always identified by a label
@@ -176,30 +174,6 @@ sub GrubFs {
                 die "Couldn't find a $types{$fsIdentifier} for @{[$fs->device]}\n"
             }
             $search .= $matches[0];
-        }
-
-        # BTRFS is a special case in that we need to fix the referenced path based on subvolumes
-        if ($fs->type eq 'btrfs') {
-            my ($status, @id_info) = runCommand("@btrfsprogs@/bin/btrfs", "subvol", "show", @{[$fs->mount]});
-            if ($status != 0) {
-                die "Failed to retrieve subvolume info for @{[$fs->mount]}\n";
-            }
-            my @ids = join("\n", @id_info) =~ m/^(?!\/\n).*Subvolume ID:[ \t\n]*([0-9]+)/s;
-            if ($#ids > 0) {
-                die "Btrfs subvol name for @{[$fs->device]} listed multiple times in mount\n"
-            } elsif ($#ids == 0) {
-                my ($status, @path_info) = runCommand("@btrfsprogs@/bin/btrfs", "subvol", "list", @{[$fs->mount]});
-                if ($status != 0) {
-                    die "Failed to find @{[$fs->mount]} subvolume id from btrfs\n";
-                }
-                my @paths = join("", @path_info) =~ m/ID $ids[0] [^\n]* path ([^\n]*)/;
-                if ($#paths > 0) {
-                    die "Btrfs returned multiple paths for a single subvolume id, mountpoint @{[$fs->mount]}\n";
-                } elsif ($#paths != 0) {
-                    die "Btrfs did not return a path for the subvolume at @{[$fs->mount]}\n";
-                }
-                $path = "/$paths[0]$path";
-            }
         }
     }
     if (not $search eq "") {
