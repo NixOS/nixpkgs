@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  fetchurl,
+  fetchFromGitHub,
   pkg-config,
   autoreconfHook,
   glib,
@@ -14,13 +14,17 @@
   libobjc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libticalcs2";
-  version = "1.1.9";
-  src = fetchurl {
-    url = "mirror://sourceforge/tilp/${pname}-${version}.tar.bz2";
-    sha256 = "08c9wgrdnyqcs45mx1bjb8riqq81bzfkhgaijxzn96rhpj40fy3n";
+  version = "1.1.10";
+  src = fetchFromGitHub {
+    owner = "debrouxl";
+    repo = "tilibs";
+    rev = "aae5bcf4a6b7c653eaf1d80c752e74eff042b4b5";
+    hash = "sha256-W2SkOsqm3HJ3z6RHua5LQW6Mq1VQHGcouz0Cu/zENJE=";
   };
+
+  sourceRoot = finalAttrs.src.name + "/libticalcs/trunk";
 
   nativeBuildInputs = [
     autoreconfHook
@@ -54,4 +58,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = with platforms; linux ++ darwin;
   };
-}
+})
