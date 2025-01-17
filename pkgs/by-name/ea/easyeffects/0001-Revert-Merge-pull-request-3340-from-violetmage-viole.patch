@@ -1,0 +1,229 @@
+From a2f524ffe163e1a15dc8a4b6f21964092ec8e0a7 Mon Sep 17 00:00:00 2001
+From: Sofi <sofi+git@mailbox.org>
+Date: Sat, 28 Sep 2024 00:31:11 +0200
+Subject: [PATCH] Revert "Merge pull request #3340 from
+ violetmage/violetmage-spectrum-avsync"
+
+This reverts commit d40ff638e2f0db00579e1f30a9880b7d35f137fd, reversing
+changes made to ee0fe4a8da57ef84a39600ad02280ddc98d9de31.
+---
+ ...thub.wwmm.easyeffects.spectrum.gschema.xml |  5 --
+ data/ui/preferences_spectrum.ui               | 21 -----
+ include/spectrum.hpp                          |  5 --
+ src/preferences_spectrum.cpp                  |  7 +-
+ src/spectrum.cpp                              | 86 +++----------------
+ 5 files changed, 14 insertions(+), 110 deletions(-)
+
+diff --git a/data/schemas/com.github.wwmm.easyeffects.spectrum.gschema.xml b/data/schemas/com.github.wwmm.easyeffects.spectrum.gschema.xml
+index 340da382e..1260810f3 100644
+--- a/data/schemas/com.github.wwmm.easyeffects.spectrum.gschema.xml
++++ b/data/schemas/com.github.wwmm.easyeffects.spectrum.gschema.xml
+@@ -49,10 +49,5 @@
+             <range min="120" max="22000" />
+             <default>20000</default>
+         </key>
+-
+-        <key name="avsync-delay" type="i">
+-            <range min="0" max="1000" />
+-            <default>0</default>
+-        </key>
+     </schema>
+ </schemalist>
+\ No newline at end of file
+diff --git a/data/ui/preferences_spectrum.ui b/data/ui/preferences_spectrum.ui
+index 2eae7b8ab..97535d518 100644
+--- a/data/ui/preferences_spectrum.ui
++++ b/data/ui/preferences_spectrum.ui
+@@ -18,27 +18,6 @@
+                         </child>
+                     </object>
+                 </child>
+-
+-                <child>
+-                    <object class="AdwActionRow">
+-                        <property name="title" translatable="yes">Compensating Delay (ms)</property>
+-
+-                        <child>
+-                            <object class="GtkSpinButton" id="avsync_delay">
+-                                <property name="valign">center</property>
+-                                <property name="digits">0</property>
+-                                <property name="adjustment">
+-                                    <object class="GtkAdjustment">
+-                                        <property name="lower">0</property>
+-                                        <property name="upper">1000</property>
+-                                        <property name="step-increment">1</property>
+-                                        <property name="page-increment">10</property>
+-                                    </object>
+-                                </property>
+-                            </object>
+-                        </child>
+-                    </object>
+-                </child>
+             </object>
+         </child>
+ 
+diff --git a/include/spectrum.hpp b/include/spectrum.hpp
+index 546ceec59..af49dd9e5 100644
+--- a/include/spectrum.hpp
++++ b/include/spectrum.hpp
+@@ -65,11 +65,6 @@ class Spectrum : public PluginBase {
+ 
+   std::array<float, n_bands> real_input;
+   std::array<double, n_bands / 2U + 1U> output;
+-  
+-  std::vector<float> left_delayed_vector;
+-  std::vector<float> right_delayed_vector;
+-  std::span<float> left_delayed;
+-  std::span<float> right_delayed;
+ 
+   std::array<float, n_bands> latest_samples_mono;
+ 
+diff --git a/src/preferences_spectrum.cpp b/src/preferences_spectrum.cpp
+index 2902a8ee4..151960bef 100644
+--- a/src/preferences_spectrum.cpp
++++ b/src/preferences_spectrum.cpp
+@@ -49,7 +49,7 @@ struct _PreferencesSpectrum {
+ 
+   GtkDropDown* type;
+ 
+-  GtkSpinButton *n_points, *height, *line_width, *minimum_frequency, *maximum_frequency, *avsync_delay;
++  GtkSpinButton *n_points, *height, *line_width, *minimum_frequency, *maximum_frequency;
+ 
+   GSettings* settings;
+ 
+@@ -119,7 +119,6 @@ void preferences_spectrum_class_init(PreferencesSpectrumClass* klass) {
+   gtk_widget_class_bind_template_child(widget_class, PreferencesSpectrum, axis_color_button);
+   gtk_widget_class_bind_template_child(widget_class, PreferencesSpectrum, minimum_frequency);
+   gtk_widget_class_bind_template_child(widget_class, PreferencesSpectrum, maximum_frequency);
+-  gtk_widget_class_bind_template_child(widget_class, PreferencesSpectrum, avsync_delay);
+ 
+   gtk_widget_class_bind_template_callback(widget_class, on_spectrum_color_set);
+   gtk_widget_class_bind_template_callback(widget_class, on_spectrum_axis_color_set);
+@@ -193,9 +192,9 @@ void preferences_spectrum_init(PreferencesSpectrum* self) {
+   // spectrum section gsettings bindings
+ 
+   gsettings_bind_widgets<"show", "fill", "rounded-corners", "show-bar-border", "dynamic-y-scale", "n-points", "height",
+-                         "line-width", "minimum-frequency", "maximum-frequency", "avsync-delay">(
++                         "line-width", "minimum-frequency", "maximum-frequency">(
+       self->settings, self->show, self->fill, self->rounded_corners, self->show_bar_border, self->dynamic_y_scale,
+-      self->n_points, self->height, self->line_width, self->minimum_frequency, self->maximum_frequency, self->avsync_delay);
++      self->n_points, self->height, self->line_width, self->minimum_frequency, self->maximum_frequency);
+ 
+   ui::gsettings_bind_enum_to_combo_widget(self->settings, "type", self->type);
+ 
+diff --git a/src/spectrum.cpp b/src/spectrum.cpp
+index 28f7ff4da..1075a358f 100644
+--- a/src/spectrum.cpp
++++ b/src/spectrum.cpp
+@@ -55,30 +55,6 @@ Spectrum::Spectrum(const std::string& tag,
+ 
+   plan = fftwf_plan_dft_r2c_1d(static_cast<int>(n_bands), real_input.data(), complex_output, FFTW_ESTIMATE);
+ 
+-
+-
+-  lv2_wrapper = std::make_unique<lv2::Lv2Wrapper>("http://lsp-plug.in/plugins/lv2/comp_delay_x2_stereo");
+-
+-  package_installed = lv2_wrapper->found_plugin;
+-
+-  if (!package_installed) {
+-    util::debug(log_tag + "http://lsp-plug.in/plugins/lv2/comp_delay_x2_stereo is not installed, spectrum will not have A/V sync compensation");
+-  }
+-
+-  lv2_wrapper->set_control_port_value("mode_l", 2);
+-  lv2_wrapper->set_control_port_value("mode_r", 2);
+-
+-  lv2_wrapper->set_control_port_value("dry_l", 0.0F);
+-  lv2_wrapper->set_control_port_value("dry_r", 0.0F);
+-
+-  lv2_wrapper->set_control_port_value("wet_l", static_cast<float>(util::db_to_linear(0.0F)));
+-  lv2_wrapper->set_control_port_value("wet_r", static_cast<float>(util::db_to_linear(0.0F)));
+-
+-  lv2_wrapper->bind_key_int<"time_l", "avsync-delay">(settings);
+-  lv2_wrapper->bind_key_int<"time_r", "avsync-delay">(settings);
+-
+-
+-
+   g_signal_connect(settings, "changed::show", G_CALLBACK(+[](GSettings* settings, char* key, gpointer user_data) {
+                      auto* self = static_cast<Spectrum*>(user_data);
+ 
+@@ -106,19 +82,6 @@ Spectrum::~Spectrum() {
+ void Spectrum::setup() {
+   std::ranges::fill(real_input, 0.0F);
+   std::ranges::fill(latest_samples_mono, 0.0F);
+-
+-  left_delayed_vector.resize(n_samples, 0.0F);
+-  right_delayed_vector.resize(n_samples, 0.0F);
+-
+-  left_delayed = std::span<float>(left_delayed_vector);
+-  right_delayed = std::span<float>(right_delayed_vector);
+-
+-  lv2_wrapper->set_n_samples(n_samples);
+-
+-  if (lv2_wrapper->get_rate() != rate) {
+-    util::debug(log_tag + " creating instance of comp delay x2 stereo for spectrum A/V sync");
+-    lv2_wrapper->create_instance(rate);
+-  }
+ }
+ 
+ void Spectrum::process(std::span<float>& left_in,
+@@ -132,46 +95,19 @@ void Spectrum::process(std::span<float>& left_in,
+     return;
+   }
+ 
+-  // delay the visualization of the spectrum by the reported latency
+-  // of the output device, so that the spectrum is visually in sync
+-  // with the audio as experienced by the user. (A/V sync)
+-  if ( lv2_wrapper->found_plugin && lv2_wrapper->has_instance() ) {
+-    lv2_wrapper->connect_data_ports(left_in, right_in, left_delayed, right_delayed);
+-    lv2_wrapper->run();
++  if (n_samples < n_bands) {
++    // Drop the oldest quantum.
++    std::memmove(&latest_samples_mono[0], &latest_samples_mono[n_samples],
++        (n_bands - n_samples) * sizeof(float));
+ 
+-    // Downmix the latest n_bands samples from the delayed signal.
+-    if (n_samples < n_bands) {
+-      // Drop the oldest quantum.
+-      std::memmove(&latest_samples_mono[0], &latest_samples_mono[n_samples],
+-          (n_bands - n_samples) * sizeof(float));
+-
+-      // Copy the new quantum.
+-      for (size_t n = 0; n < n_samples; n++) {
+-        latest_samples_mono[n_bands - n_samples + n] = 0.5F * (left_delayed[n] + right_delayed[n]);
+-      }
+-    } else {
+-      // Copy the latest n_bands samples.
+-      for (size_t n = 0; n < n_bands; n++)
+-        latest_samples_mono[n] = 0.5F * (left_delayed[n_samples - n_bands + n] +
+-                                        right_delayed[n_samples - n_bands + n]);
+-    }
++    // Copy the new quantum.
++    for (size_t n = 0; n < n_samples; n++)
++      latest_samples_mono[n_bands - n_samples + n] = 0.5F * (left_in[n] + right_in[n]);
+   } else {
+-    // Downmix the latest n_bands samples from the non-delayed signal.
+-    if (n_samples < n_bands) {
+-      // Drop the oldest quantum.
+-      std::memmove(&latest_samples_mono[0], &latest_samples_mono[n_samples],
+-          (n_bands - n_samples) * sizeof(float));
+-
+-      // Copy the new quantum.
+-      for (size_t n = 0; n < n_samples; n++) {
+-        latest_samples_mono[n_bands - n_samples + n] = 0.5F * (left_in[n] + right_in[n]);
+-      }
+-    } else {
+-      // Copy the latest n_bands samples.
+-      for (size_t n = 0; n < n_bands; n++)
+-        latest_samples_mono[n] = 0.5F * (left_in[n_samples - n_bands + n] +
+-                                        right_in[n_samples - n_bands + n]);
+-    }
++    // Copy the latest n_bands samples.
++    for (size_t n = 0; n < n_bands; n++)
++      latest_samples_mono[n] = 0.5F * (left_in[n_samples - n_bands + n] +
++                                       right_in[n_samples - n_bands + n]);
+   }
+ 
+   /*
+-- 
+2.46.0
+
