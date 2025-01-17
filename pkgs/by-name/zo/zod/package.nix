@@ -130,7 +130,7 @@ symlinkJoin {
   ];
   meta = with lib; {
     description = "Multiplayer remake of ZED";
-    homepage = "http://zod.sourceforge.net/";
+    homepage = "https://zod.sourceforge.net/";
     maintainers = with maintainers; [ zeri ];
     license = licenses.gpl3Plus; # Says the website
     platforms = platforms.linux;

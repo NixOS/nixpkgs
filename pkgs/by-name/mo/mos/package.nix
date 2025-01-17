@@ -27,7 +27,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Smooths scrolling and set mouse scroll directions independently";
-    homepage = "http://mos.caldis.me/";
+    homepage = "https://mos.caldis.me/";
     changelog = "https://github.com/Caldis/Mos/releases/tag/${finalAttrs.version}";
     license = licenses.cc-by-nc-40;
     maintainers = [ ];
