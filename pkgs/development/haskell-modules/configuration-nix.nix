@@ -1442,6 +1442,8 @@ self: super: builtins.intersectAttrs super {
       gi-webkit2webextension
       gi-gtk_4_0_12
       gi-gdk_4_0_10
+      gi-gdk4
+      gi-gtk4
       gi-gsk
       gi-adwaita
       sdl2-ttf
