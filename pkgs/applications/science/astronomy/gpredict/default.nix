@@ -15,14 +15,14 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gpredict";
   version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "csete";
     repo = "gpredict";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-+hgjImfT3nWMBYwde7+KC/hzd84pwQbpoJvaJSNG4E8=";
   };
 
@@ -77,4 +77,4 @@ stdenv.mkDerivation rec {
       cmcdragonkai
     ];
   };
-}
+})
