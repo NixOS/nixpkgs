@@ -3,12 +3,12 @@
 
 stdenv.mkDerivation rec {
   pname = "morgen";
-  version = "3.5.9";
+  version = "3.6.3";
 
   src = fetchurl {
     name = "morgen-${version}.deb";
     url = "https://dl.todesktop.com/210203cqcj00tw1/versions/${version}/linux/deb";
-    hash = "sha256-ZKlj/QuQnrqQepsJY6KCROC2fXK/4Py5tmI/FVnRi9w=";
+    hash = "sha256-kq7g79uKzk9k0RQ2OqHPRJxiHCYceVlfCUQ300rVn5E=";
   };
 
   nativeBuildInputs = [
