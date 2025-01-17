@@ -7,7 +7,7 @@
   lib,
   nix-update,
   nodejs,
-  pnpm,
+  pnpm_9,
   stdenv,
   writeShellScript,
   buildWebExtension ? false,
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-sU2eJUUw7crvzMGGBQP6rbxISkL+S5nmT3QspyYXlRQ=";
   };
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname src;
 
     hash = "sha256-vVzERis1W3QZB/i6SQR9dQR56yDWadKWvFr+nLTQY9Y=";
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     git
     nodejs
-    pnpm.configHook
+    pnpm_9.configHook
   ];
 
   env = {
