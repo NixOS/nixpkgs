@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   pkg-config,
   gettext,
   gobject-introspection,
@@ -27,6 +28,17 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/goocanvas/${lib.versions.majorMinor version}/goocanvas-${version}.tar.xz";
     sha256 = "06j05g2lmwvklmv51xsb7gm7rszcarhm01sal41jfp0qzrbpa2k7";
   };
+
+  patches = [
+    # This broke due to the introduction of anubis
+    /*
+      (fetchpatch {
+        url = "https://gitlab.gnome.org/Archive/goocanvas/-/commit/d025d0eeae1c5266063bdc1476dbdff121bcfa57.patch";
+        hash = "sha256-9uqqC1uKZF9TDz5dfDTKSRCmjEiuvqkLnZ9w6U+q2TI=";
+      })
+    */
+    ./gcc14-fix.patch
+  ];
 
   nativeBuildInputs = [
     pkg-config
