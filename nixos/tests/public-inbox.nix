@@ -193,11 +193,11 @@ import ./make-test-python.nix (
       )
 
       # List inboxes through public-inbox-httpd
+      machine.wait_for_unit("public-inbox-httpd.socket")
       machine.wait_for_unit("nginx.service")
       machine.succeed("curl -L https://machine.${domain} | grep repo1@${domain}")
       # The repo2 inbox is hidden
       machine.fail("curl -L https://machine.${domain} | grep repo2@${domain}")
-      machine.wait_for_unit("public-inbox-httpd.service")
 
       # Send a mail and read it through public-inbox-httpd
       # Must work too when using a recipientDelimiter.
@@ -216,8 +216,7 @@ import ./make-test-python.nix (
       machine.succeed("curl -L 'https://machine.${domain}/inbox/repo1/repo1@root-1/T/#u' | grep 'This is a testing mail.'")
 
       # Read a mail through public-inbox-imapd
-      machine.wait_for_open_port(993)
-      machine.wait_for_unit("public-inbox-imapd.service")
+      machine.wait_for_unit("public-inbox-imapd.socket")
       machine.succeed("openssl s_client -ign_eof -crlf -connect machine.${domain}:993 <${pkgs.writeText "imap-commands" ''
         tag login anonymous@${domain} anonymous
         tag SELECT INBOX.comp.${orga}.repo1.0
@@ -226,8 +225,7 @@ import ./make-test-python.nix (
       ''} | grep '^Message-ID: <repo1@root-1>'")
 
       # TODO: Read a mail through public-inbox-nntpd
-      #machine.wait_for_open_port(563)
-      #machine.wait_for_unit("public-inbox-nntpd.service")
+      #machine.wait_for_unit("public-inbox-nntpd.socket")
 
       # Delete a mail.
       # Note that the use of an extension not listed in the addresses
