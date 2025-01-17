@@ -2807,7 +2807,6 @@ broken-packages:
   - hsc3-cairo # failure in job https://hydra.nixos.org/build/233215926 at 2023-09-02
   - hsc3-db # failure in job https://hydra.nixos.org/build/233191679 at 2023-09-02
   - hsc3-dot # failure in job https://hydra.nixos.org/build/233219452 at 2023-09-02
-  - hsc3 # failure in job https://hydra.nixos.org/build/283199022 at 2024-12-31
   - hsc3-lang # failure in job https://hydra.nixos.org/build/233198291 at 2023-09-02
   - hsc3-process # failure in job https://hydra.nixos.org/build/233196358 at 2023-09-02
   - hsc3-rec # failure in job https://hydra.nixos.org/build/233206364 at 2023-09-02
