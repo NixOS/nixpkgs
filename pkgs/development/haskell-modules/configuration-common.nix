@@ -1661,6 +1661,17 @@ self: super: {
   # Tests disabled because they assume to run in the whole jsaddle repo and not the hackage tarball of jsaddle-warp.
   jsaddle-warp = dontCheck super.jsaddle-warp;
 
+  # https://github.com/ghcjs/jsaddle/issues/151
+  jsaddle-webkit2gtk = overrideCabal (drv: {
+    postPatch = drv.postPatch or "" + ''
+      substituteInPlace jsaddle-webkit2gtk.cabal --replace-fail gi-gtk gi-gtk3
+      substituteInPlace jsaddle-webkit2gtk.cabal --replace-fail gi-javascriptcore gi-javascriptcore4
+    '';
+  }) (super.jsaddle-webkit2gtk.override {
+    gi-gtk = self.gi-gtk3;
+    gi-javascriptcore = self.gi-javascriptcore4;
+  });
+
   # 2020-06-24: Jailbreaking because of restrictive test dep bounds
   # Upstream issue: https://github.com/kowainik/trial/issues/62
   trial = doJailbreak super.trial;
