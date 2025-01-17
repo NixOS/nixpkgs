@@ -11,8 +11,8 @@ import ./make-test-python.nix ({ pkgs, ... }:
         cp key.pem cert.pem $out
       '';
 
-    accessKey = "BKIKJAA5BMMU2RHO6IBB";
-    secretKey = "V7f1CwQqAcwo80UEIJEjc5gVQUSSx5ohQ9GSrr12";
+    rootUser = "abc"; # intentionally as short as the minimum length we document
+    rootPassword = "12345678"; # intentionally as short as the minimum length we document
     minioPythonScript = pkgs.writeScript "minio-test.py" ''
       #! ${pkgs.python3.withPackages(ps: [ ps.minio ])}/bin/python
       import io
@@ -26,8 +26,8 @@ import ./make-test-python.nix ({ pkgs, ... }:
         tls = False
 
       minioClient = Minio('localhost:9000',
-                    access_key='${accessKey}',
-                    secret_key='${secretKey}',
+                    access_key='${rootUser}',
+                    secret_key='${rootPassword}',
                     secure=tls,
                     cert_check=False)
       sio = io.BytesIO()
@@ -37,14 +37,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
       sio.seek(0)
       minioClient.put_object('test-bucket', 'test.txt', sio, sio_len, content_type='text/plain')
     '';
-    rootCredentialsFile = "/etc/nixos/minio-root-credentials";
-    credsPartial = pkgs.writeText "minio-credentials-partial" ''
-      MINIO_ROOT_USER=${accessKey}
-    '';
-    credsFull = pkgs.writeText "minio-credentials-full" ''
-      MINIO_ROOT_USER=${accessKey}
-      MINIO_ROOT_PASSWORD=${secretKey}
-    '';
+    rootPasswordFile = "/etc/nixos/minio-root-password";
   in
   {
     name = "minio";
@@ -56,7 +49,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
       machine = { pkgs, ... }: {
         services.minio = {
           enable = true;
-          inherit rootCredentialsFile;
+          inherit rootUser rootPasswordFile;
         };
         environment.systemPackages = [ pkgs.minio-client ];
 
@@ -73,7 +66,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
       start_all()
       # simulate manually editing root credentials file
       machine.wait_for_unit("multi-user.target")
-      machine.copy_from_host("${credsFull}", "${rootCredentialsFile}")
+      machine.copy_from_host("${rootPassword}", "${rootPasswordFile}")
 
       # Test non-TLS server
       machine.wait_for_unit("minio.service")
@@ -81,7 +74,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
 
       # Create a test bucket on the server
       machine.succeed(
-          "mc config host add minio http://localhost:9000 ${accessKey} ${secretKey} --api s3v4"
+          "mc config host add minio http://localhost:9000 ${rootUser} ${rootPassword} --api s3v4"
       )
       machine.succeed("mc mb minio/test-bucket")
       machine.succeed("${minioPythonScript}")
@@ -100,7 +93,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
 
       # Create a test bucket on the server
       machine.succeed(
-          "mc config host add minio https://localhost:9000 ${accessKey} ${secretKey} --api s3v4"
+          "mc config host add minio https://localhost:9000 ${rootUser} ${rootPassword} --api s3v4"
       )
       machine.succeed("mc --insecure mb minio/test-bucket")
       machine.succeed("${minioPythonScript} tls")
