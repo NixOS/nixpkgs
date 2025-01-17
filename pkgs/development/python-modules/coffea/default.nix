@@ -97,6 +97,10 @@ buildPythonPackage rec {
     # Requires internet access
     # https://github.com/CoffeaTeam/coffea/issues/1094
     "test_lumimask"
+
+    # Flaky: FileNotFoundError: [Errno 2] No such file or directory: 'nminusone.npz'
+    # https://github.com/scikit-hep/coffea/issues/1246
+    "test_packed_selection_nminusone_dak"
   ];
 
   __darwinAllowLocalNetworking = true;
