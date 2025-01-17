@@ -1,10 +1,7 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.traefik;
-  jsonValue = with types;
+  jsonValue = with lib.types;
     let
       valueType = nullOr (oneOf [
         bool
@@ -40,7 +37,7 @@ let
       yj -jt -i \
         < ${
           pkgs.writeText "static_config.json" (builtins.toJSON
-            (recursiveUpdate cfg.staticConfigOptions {
+            (lib.recursiveUpdate cfg.staticConfigOptions {
               providers.file.filename = "${dynamicConfigFile}";
             }))
         } \
@@ -55,19 +52,19 @@ let
     else "/run/traefik/config.toml";
 in {
   options.services.traefik = {
-    enable = mkEnableOption "Traefik web server";
+    enable = lib.mkEnableOption "Traefik web server";
 
-    staticConfigFile = mkOption {
+    staticConfigFile = lib.mkOption {
       default = null;
-      example = literalExpression "/path/to/static_config.toml";
-      type = types.nullOr types.path;
+      example = lib.literalExpression "/path/to/static_config.toml";
+      type = lib.types.nullOr lib.types.path;
       description = ''
         Path to traefik's static configuration to use.
         (Using that option has precedence over `staticConfigOptions` and `dynamicConfigOptions`)
       '';
     };
 
-    staticConfigOptions = mkOption {
+    staticConfigOptions = lib.mkOption {
       description = ''
         Static configuration for Traefik.
       '';
@@ -81,17 +78,17 @@ in {
       };
     };
 
-    dynamicConfigFile = mkOption {
+    dynamicConfigFile = lib.mkOption {
       default = null;
-      example = literalExpression "/path/to/dynamic_config.toml";
-      type = types.nullOr types.path;
+      example = lib.literalExpression "/path/to/dynamic_config.toml";
+      type = lib.types.nullOr lib.types.path;
       description = ''
         Path to traefik's dynamic configuration to use.
         (Using that option has precedence over `dynamicConfigOptions`)
       '';
     };
 
-    dynamicConfigOptions = mkOption {
+    dynamicConfigOptions = lib.mkOption {
       description = ''
         Dynamic configuration for Traefik.
       '';
@@ -108,17 +105,17 @@ in {
       };
     };
 
-    dataDir = mkOption {
+    dataDir = lib.mkOption {
       default = "/var/lib/traefik";
-      type = types.path;
+      type = lib.types.path;
       description = ''
         Location for any persistent data traefik creates, ie. acme
       '';
     };
 
-    group = mkOption {
+    group = lib.mkOption {
       default = "traefik";
-      type = types.str;
+      type = lib.types.str;
       example = "docker";
       description = ''
         Set the group that traefik runs under.
@@ -126,11 +123,11 @@ in {
       '';
     };
 
-    package = mkPackageOption pkgs "traefik" { };
+    package = lib.mkPackageOption pkgs "traefik" { };
 
-    environmentFiles = mkOption {
+    environmentFiles = lib.mkOption {
       default = [];
-      type = types.listOf types.path;
+      type = lib.types.listOf lib.types.path;
       example = [ "/run/secrets/traefik.env" ];
       description = ''
         Files to load as environment file. Environment variables from this file
@@ -139,7 +136,7 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.tmpfiles.rules = [ "d '${cfg.dataDir}' 0700 traefik traefik - -" ];
 
     systemd.services.traefik = {

@@ -2,14 +2,11 @@
 # main server configuration, and for the virtual hosts.  (The latter
 # has additional options that affect the web server as a whole, like
 # the user/group to run under.)
-
 { config, lib, ... }:
-
-with lib;
 {
   options = {
-    serverName = mkOption {
-      type = types.nullOr types.str;
+    serverName = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       description = ''
         Name of this virtual host. Defaults to attribute name in virtualHosts.
@@ -17,8 +14,8 @@ with lib;
       example = "example.org";
     };
 
-    serverAliases = mkOption {
-      type = types.listOf types.str;
+    serverAliases = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [];
       example = [ "www.example.org" "example.org" ];
       description = ''
@@ -26,14 +23,14 @@ with lib;
       '';
     };
 
-    listen = mkOption {
-      type = with types; listOf (submodule {
+    listen = lib.mkOption {
+      type = with lib.types; listOf (submodule {
         options = {
-          addr = mkOption {
+          addr = lib.mkOption {
             type = str;
             description = "Listen address.";
           };
-          port = mkOption {
+          port = lib.mkOption {
             type = types.nullOr port;
             description = ''
               Port number to listen on.
@@ -41,17 +38,17 @@ with lib;
             '';
             default = null;
           };
-          ssl = mkOption {
+          ssl = lib.mkOption {
             type = bool;
             description = "Enable SSL.";
             default = false;
           };
-          proxyProtocol = mkOption {
+          proxyProtocol = lib.mkOption {
             type = bool;
             description = "Enable PROXY protocol.";
             default = false;
           };
-          extraParameters = mkOption {
+          extraParameters = lib.mkOption {
             type = listOf str;
             description = "Extra parameters of this listen directive.";
             default = [ ];
@@ -76,8 +73,8 @@ with lib;
       '';
     };
 
-    listenAddresses = mkOption {
-      type = with types; listOf str;
+    listenAddresses = lib.mkOption {
+      type = with lib.types; listOf str;
 
       description = ''
         Listen addresses for this virtual host.
@@ -90,8 +87,8 @@ with lib;
       example = [ "127.0.0.1" "[::1]" ];
     };
 
-    enableACME = mkOption {
-      type = types.bool;
+    enableACME = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether to ask Let's Encrypt to sign a certificate for this vhost.
@@ -99,8 +96,8 @@ with lib;
       '';
     };
 
-    useACMEHost = mkOption {
-      type = types.nullOr types.str;
+    useACMEHost = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       description = ''
         A host of an existing Let's Encrypt certificate to use.
@@ -111,8 +108,8 @@ with lib;
       '';
     };
 
-    acmeRoot = mkOption {
-      type = types.nullOr types.str;
+    acmeRoot = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = "/var/lib/acme/acme-challenge";
       description = ''
         Directory for the ACME challenge, which is **public**. Don't put certs or keys in here.
@@ -120,8 +117,8 @@ with lib;
       '';
     };
 
-    acmeFallbackHost = mkOption {
-      type = types.nullOr types.str;
+    acmeFallbackHost = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       description = ''
         Host which to proxy requests to if ACME challenge is not found. Useful
@@ -133,8 +130,8 @@ with lib;
       '';
     };
 
-    addSSL = mkOption {
-      type = types.bool;
+    addSSL = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether to enable HTTPS in addition to plain HTTP. This will set defaults for
@@ -143,8 +140,8 @@ with lib;
       '';
     };
 
-    onlySSL = mkOption {
-      type = types.bool;
+    onlySSL = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether to enable HTTPS and reject plain HTTP connections. This will set
@@ -152,14 +149,14 @@ with lib;
       '';
     };
 
-    enableSSL = mkOption {
-      type = types.bool;
+    enableSSL = lib.mkOption {
+      type = lib.types.bool;
       visible = false;
       default = false;
     };
 
-    forceSSL = mkOption {
-      type = types.bool;
+    forceSSL = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether to add a separate nginx server block that redirects (defaults
@@ -170,8 +167,8 @@ with lib;
       '';
     };
 
-    rejectSSL = mkOption {
-      type = types.bool;
+    rejectSSL = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether to listen for and reject all HTTPS connections to this vhost. Useful in
@@ -182,8 +179,8 @@ with lib;
       '';
     };
 
-    kTLS = mkOption {
-      type = types.bool;
+    kTLS = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether to enable kTLS support.
@@ -193,27 +190,27 @@ with lib;
       '';
     };
 
-    sslCertificate = mkOption {
-      type = types.path;
+    sslCertificate = lib.mkOption {
+      type = lib.types.path;
       example = "/var/host.cert";
       description = "Path to server SSL certificate.";
     };
 
-    sslCertificateKey = mkOption {
-      type = types.path;
+    sslCertificateKey = lib.mkOption {
+      type = lib.types.path;
       example = "/var/host.key";
       description = "Path to server SSL certificate key.";
     };
 
-    sslTrustedCertificate = mkOption {
-      type = types.nullOr types.path;
+    sslTrustedCertificate = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       default = null;
-      example = literalExpression ''"''${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt"'';
+      example = lib.literalExpression ''"''${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt"'';
       description = "Path to root SSL certificate for stapling and client certificates.";
     };
 
-    http2 = mkOption {
-      type = types.bool;
+    http2 = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = ''
         Whether to enable the HTTP/2 protocol.
@@ -226,8 +223,8 @@ with lib;
       '';
     };
 
-    http3 = mkOption {
-      type = types.bool;
+    http3 = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = ''
         Whether to enable the HTTP/3 protocol.
@@ -241,8 +238,8 @@ with lib;
       '';
     };
 
-    http3_hq = mkOption {
-      type = types.bool;
+    http3_hq = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether to enable the HTTP/0.9 protocol negotiation used in QUIC interoperability tests.
@@ -255,8 +252,8 @@ with lib;
       '';
     };
 
-    quic = mkOption {
-      type = types.bool;
+    quic = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether to enable the QUIC transport protocol.
@@ -268,8 +265,8 @@ with lib;
       '';
     };
 
-    reuseport = mkOption {
-      type = types.bool;
+    reuseport = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Create an individual listening socket .
@@ -277,8 +274,8 @@ with lib;
       '';
     };
 
-    root = mkOption {
-      type = types.nullOr types.path;
+    root = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       default = null;
       example = "/data/webserver/docs";
       description = ''
@@ -286,24 +283,24 @@ with lib;
       '';
     };
 
-    default = mkOption {
-      type = types.bool;
+    default = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Makes this vhost the default.
       '';
     };
 
-    extraConfig = mkOption {
-      type = types.lines;
+    extraConfig = lib.mkOption {
+      type = lib.types.lines;
       default = "";
       description = ''
         These lines go to the end of the vhost verbatim.
       '';
     };
 
-    globalRedirect = mkOption {
-      type = types.nullOr types.str;
+    globalRedirect = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       example = "newserver.example.org";
       description = ''
@@ -312,8 +309,8 @@ with lib;
       '';
     };
 
-    redirectCode = mkOption {
-      type = types.ints.between 300 399;
+    redirectCode = lib.mkOption {
+      type = lib.types.ints.between 300 399;
       default = 301;
       example = 308;
       description = ''
@@ -324,10 +321,10 @@ with lib;
       '';
     };
 
-    basicAuth = mkOption {
-      type = types.attrsOf types.str;
+    basicAuth = lib.mkOption {
+      type = lib.types.attrsOf lib.types.str;
       default = {};
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           user = "password";
         };
@@ -340,8 +337,8 @@ with lib;
       '';
     };
 
-    basicAuthFile = mkOption {
-      type = types.nullOr types.path;
+    basicAuthFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       default = null;
       description = ''
         Basic Auth password file for a vhost.
@@ -349,12 +346,12 @@ with lib;
       '';
     };
 
-    locations = mkOption {
-      type = types.attrsOf (types.submodule (import ./location-options.nix {
+    locations = lib.mkOption {
+      type = lib.types.attrsOf (lib.types.submodule (import ./location-options.nix {
         inherit lib config;
       }));
       default = {};
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           "/" = {
             proxyPass = "http://localhost:3000";
