@@ -835,6 +835,7 @@ if (scalar(keys(%units_to_stop)) > 0) {
         print STDERR "stopping the following units: ", join(", ", @units_to_stop_filtered), "\n";
     }
     # Use current version of systemctl binary before daemon is reexeced.
+    # The stop may be cancelled by a timer, see note [systemd-timers-cancelling-stop-commands].
     system("$cur_systemd/systemctl", "stop", "--", sort(keys(%units_to_stop)));
 }
 
@@ -962,16 +963,51 @@ if (scalar(keys(%units_to_restart)) > 0) {
     unlink($restart_list_file);
 }
 
-# Start all active targets, as well as changed units we stopped above.
-# The latter is necessary because some may not be dependencies of the
-# targets (i.e., they were manually started).  FIXME: detect units
+# Start all active _targets_, as well as changed _units_ we stopped above.
+# Both are included in `units_to_start`.
+# Starting the changed units explicitly is necessary because
+# some may not be dependencies of the
+# targets (i.e., they were manually started).
+#
+# Note [systemd-timers-cancelling-stop-commands]:
+# We need to start the changed units with `restart` instead of `start`.
+# This is because of systemd timers, which can make our life miserable:
+#     https://github.com/NixOS/nixpkgs/issues/49415
+# If during `systemctl stop` above, a timer restarts a unit (directly or
+# as a dependency), systemctl will cancel the stop and execute the restart.
+# The stop command in that case prints:
+#     Job for myjob.service canceled
+# If a timer-caused restart cancels a stop, the unit will have been
+# restarted with the unit definition from before the configuration switch,
+# so it will be outdated (e.g. run the wrong binary or config).
+# If we only `start`ed such a unit here, it would continue running outdated.
+# Thus, we must `restart` the units we stopped above.
+# But we need to do that only with the units we stopped above,
+# not all `units_to_start`: If we `restart`ed all `.target`s,
+# this would do too much, e.g. kill the network.
+# A minor drawback of this approach is that units that fail the `restart`
+# get a second chance with the subsequent `start`.
+# This may be confusing to users when reading logs or designing timeouts.
+# Unfortunately, we must do it this way, because otherwise a fundamental promise
+# of NixOS is broken (congruent configuration management:
+# "the system runs the declared services, not some old leftover ones").
+# A better solution would be if systemd provided a command where one
+# could, within a single systemd transaction, say which units should
+# be started and which ones restarted.
+# For what "transaction" means, see:
+#     https://github.com/systemd/systemd/issues/10626
+#
+# FIXME: detect units
 # that are symlinks to other units.  We shouldn't start both at the
 # same time because we'll get a "Failed to add path to set" error from
 # systemd.
 my @units_to_start_filtered = filter_units(\%units_to_start);
 if (scalar(@units_to_start_filtered)) {
-    print STDERR "starting the following units: ", join(", ", @units_to_start_filtered), "\n"
+    # See note [systemd-timers-cancelling-stop-commands].
+    print STDERR "starting (via restart, see #49415) the following units: ", join(", ", sort(@units_to_start_filtered)), "\n";
+    system("$new_systemd/bin/systemctl", "restart", "--", sort(@units_to_start_filtered)) == 0 or $res = 4;
 }
+print STDERR "ensuring the following units and targets are started: ", join(", ", sort(keys(%units_to_start))), "\n";
 system("$new_systemd/bin/systemctl", "start", "--", sort(keys(%units_to_start))) == 0 or $res = 4;
 unlink($start_list_file);
 
