@@ -4,6 +4,7 @@
   fetchFromGitHub,
   espeak-ng,
   tts,
+  nix-update-script,
   addBinToPathHook,
   writableTmpDirAsHomeHook,
 }:
@@ -100,9 +101,12 @@ python3.pkgs.buildPythonApplication rec {
 
   # tests get stuck when run in nixpkgs-review, tested in passthru
   doCheck = false;
-  passthru.tests.pytest = tts.overridePythonAttrs (_: {
-    doCheck = true;
-  });
+  passthru = {
+    tests.pytest = tts.overridePythonAttrs (_: {
+      doCheck = true;
+    });
+    updateScript = nix-update-script { };
+  };
 
   nativeCheckInputs =
     with python3.pkgs;
