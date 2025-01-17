@@ -206,6 +206,15 @@ For example, software using Wayland usually needs the `wayland` library at runti
 But it also executes the `wayland-scanner` program as part of the build to generate code, so `wayland` should also be added to `nativeBuildInputs`.
 :::
 
+::: {.note}
+When using native compilation, `stdenv` is lenient towards incorrect uses of `buildInputs` and `nativeBuildInputs`.
+That means a dependency needed at runtime often works, even if it is only present in `nativeBuildInputs`.
+Vice-versa, dependencies containing binaries that need to be executed during the build will work even if they are only listed in `buildInputs`.
+
+Add `strictDeps = true` as a parameter to `mkDerivation` or any of its language specific wrappers to disable this behavior.
+The specialized `build*` functions for dlang, go, nim, ocaml, python, and rust enable this option by default.
+:::
+
 Dependencies needed only to run tests are similarly classified between native (executed during build) and non-native (executed at runtime):
 - `nativeCheckInputs` for test tools needed on `$PATH` (such as `ctest`) and [setup hooks](#ssec-setup-hooks) (for example [`pytestCheckHook`](#python))
 - `checkInputs` for libraries linked into test executables (for example the `qcheck` OCaml package)
