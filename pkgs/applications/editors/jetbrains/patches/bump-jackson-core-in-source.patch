@@ -1,0 +1,11 @@
+--- a/build/deps/src/org/jetbrains/intellij/build/impl/BundledMavenDownloader.kt
++++ b/build/deps/src/org/jetbrains/intellij/build/impl/BundledMavenDownloader.kt
+@@ -35,7 +35,7 @@
+   "org.jdom:jdom2:2.0.6.1",*/
+ )
+ 
+-private val mavenTelemetryDependencies = listOf("com.fasterxml.jackson.core:jackson-core:2.16.0")
++private val mavenTelemetryDependencies = listOf("com.fasterxml.jackson.core:jackson-core:2.17.0")
+ 
+ object BundledMavenDownloader {
+   private val mutex = Mutex()
