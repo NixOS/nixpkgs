@@ -26,7 +26,6 @@ let
       disomaster = callPackage ./library/disomaster { };
       docparser = callPackage ./library/docparser { };
       gio-qt = callPackage ./library/gio-qt { };
-      image-editor = callPackage ./library/image-editor { };
       udisks2-qt5 = callPackage ./library/udisks2-qt5 { };
       util-dfm = callPackage ./library/util-dfm { };
       dtk6core = callPackage ./library/dtk6core { };
@@ -116,6 +115,7 @@ let
       deepin-ocr-plugin-manager = throw "'deepin.deepin-ocr-plugin-manager' has been removed as it was outdated"; # added 2025-01-16
       deepin-camera = throw "'deepin.deepin-camera' has been removed as it was unmaintained in nixpkgs, Please use 'snapshot' instead"; # added 2025-01-16
       deepin-image-viewer = throw "'deepin.deepin-image-viewer' has been removed as it was broken and unmaintained in nixpkgs, Please use 'kdePackages.gwenview' instead"; # added 2025-01-16
+      image-editor = throw "'deepin.image-editor' has been removed as it was unmaintained in nixpkgs"; # added 2025-01-16
     };
 in
 lib.makeScope pkgs.newScope packages
