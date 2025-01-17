@@ -54,14 +54,14 @@ neovim-qt.override {
 You can use the new unstable wrapper but the interface may change:
 - `autoconfigure`: certain plugins need a custom configuration to work with nix.
 For instance, `sqlite-lua` needs `g:sqlite_clib_path` to be set to work. Nixpkgs historically patched these in the plugins with several drawbacks: harder maintenance and making upstream work harder. Per convention, these mandatory bits of configuration are bookmarked in nixpkgs in `passthru.initLua`. Enabling `autoconfigure` automatically adds the snippets required for the plugins to work.
-- `autowrapRuntimeDeps`: append to PATH runtime dependencies of your plugins. For instance `rest.nvim` requires `curl` to work. Enabling `autowrapRuntimeDeps` adds it to the PATH visible by your neovim wrapper (but not your global PATH).
+- `autowrapRuntimeDeps`: Appends plugin's runtime dependencies to `PATH`. For instance, `rest.nvim` requires `curl` to work. Enabling `autowrapRuntimeDeps` adds it to the `PATH` visible by your Neovim wrapper (but not your global `PATH`).
   neovim wrapper.
-- `luaRcContent`: extra lua code to add to the generated `init.lua`
-- `neovimRcContent`: extra vimL code sourced by the generated init.lua
-- `wrapperArgs`: extra arguments forwarded to the `makeWrapper` call
-- `wrapRc`: nix not being able to write in your $HOME, nixpkgs loads the
-  generated neovim configuration via its  `-u` argument, i.e. : `-u /nix/store/...generatedInit.lua`. This has sideeffects like preventing neovim to read your config in `$XDG_CONFIG_HOME` (see bullet 7 of [`:help startup`](https://neovim.io/doc/user/starting.html#_initialization) in neovim). Disable it if you want to generate your own wrapper. You can still reuse while reusing the logic of the nixpkgs wrapper and access the generated config via `neovim.passthru.initRc`.
-- `plugins`: a list of plugins to add to the wrapper.
+- `luaRcContent`: Extra lua code to add to the generated `init.lua`.
+- `neovimRcContent`: Extra vimL code sourced by the generated `init.lua`.
+- `wrapperArgs`: Extra arguments forwarded to the `makeWrapper` call.
+- `wrapRc`: Nix, not being able to write in your `$HOME`, loads the
+  generated Neovim configuration via its  `-u` argument, i.e. : `-u /nix/store/...generatedInit.lua`. This has side effects like preventing Neovim from reading your config in `$XDG_CONFIG_HOME` (see bullet 7 of [`:help startup`](https://neovim.io/doc/user/starting.html#_initialization) in Neovim). Disable it if you want to generate your own wrapper. You can still reuse while reusing the logic of the nixpkgs wrapper and access the generated config via `neovim.passthru.initRc`.
+- `plugins`: A list of plugins to add to the wrapper.
 
 ```
 wrapNeovimUnstable {
@@ -89,7 +89,7 @@ wrapNeovimUnstable {
 }
 ```
 
-You can explore the configuration in the `nix repl` to discover these options and
+You can explore the configuration with`nix repl` to discover these options and
 override them. For instance:
 ```nix
 neovim.overrideAttrs(oldAttrs: {
