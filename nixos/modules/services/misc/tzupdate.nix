@@ -29,7 +29,11 @@ in {
       after = [ "network-online.target" ];
       script = ''
         set -uo pipefail
-        timedatectl set-timezone "$(${lib.getExe pkgs.tzupdate} --print-only)"
+        timezone="$(${lib.getExe pkgs.tzupdate} --print-only)"
+        if [[ ! -z "$timezone" ]]; then
+          echo setting timezone to "$timezone"
+          timedatectl set-timezone "$timezone"
+        fi
       '';
 
       serviceConfig = {
