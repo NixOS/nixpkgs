@@ -7,6 +7,7 @@
   stdenv,
   installShellFiles,
   versionCheckHook,
+  nixosTests,
 }:
 buildGoModule rec {
   pname = "alist";
@@ -87,6 +88,10 @@ buildGoModule rec {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
+
+  passthru.tests = {
+    inherit (nixosTests) alist;
+  };
 
   meta = {
     description = "File list/WebDAV program that supports multiple storages";
