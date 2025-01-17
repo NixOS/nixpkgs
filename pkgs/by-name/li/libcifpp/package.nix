@@ -3,10 +3,30 @@
 , boost
 , cmake
 , fetchFromGitHub
+, fetchurl
 , eigen
 , zlib
+, downloadCCDFile ? false
 }:
 
+let
+  ccd-file = stdenv.mkDerivation (finalAttrs: {
+    pname = "ccd-file";
+    version = "20250101";
+    src = fetchurl {
+      url = "ftp://snapshots.wwpdb.org/${finalAttrs.version}/pub/pdb/data/monomers/components.cif.gz";
+      hash = "sha256-2bJpHBYaZiKF13HXKWZen6YqA4tJeBy31zu+HrlC+Fw=";
+    };
+    unpackPhase = ''
+      runHook preUnpack
+
+      mkdir -p $out/share
+      gunzip -c $src > $out/share/components.cif
+
+      runHook postUnpack
+    '';
+  });
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libcifpp";
   version = "7.0.8";
@@ -23,9 +43,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    # disable network access
-    "-DCIFPP_DOWNLOAD_CCD=OFF"
+    # The CCD file is huge. (> 400 MB)
+    (lib.cmakeBool "CIFPP_DOWNLOAD_CCD" downloadCCDFile)
   ];
+
+  preConfigure = lib.optionalString downloadCCDFile ''
+    cp ${ccd-file}/share/components.cif rsrc/components.cif
+  '';
 
   buildInputs = [
     boost
