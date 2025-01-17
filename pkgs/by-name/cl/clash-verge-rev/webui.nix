@@ -2,7 +2,7 @@
   version,
   src,
   pname,
-  pnpm,
+  pnpm_9,
   nodejs,
   stdenv,
   meta,
@@ -10,14 +10,14 @@
 stdenv.mkDerivation {
   inherit version src meta;
   pname = "${pname}-webui";
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version src;
     hash = "sha256-ZKDhBdVyLIPf7CQaYUvj9dJd3lA3zsqroSjTyvOmunQ=";
   };
 
   nativeBuildInputs = [
     nodejs
-    pnpm.configHook
+    pnpm_9.configHook
   ];
 
   postPatch = ''

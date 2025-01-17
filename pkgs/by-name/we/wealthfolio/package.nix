@@ -7,7 +7,7 @@
   nodejs,
   openssl,
   pkg-config,
-  pnpm,
+  pnpm_9,
   rustPlatform,
   webkitgtk_4_0,
   wrapGAppsHook3,
@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-AH0bwzsnGaGE82Ds1pDeZkVY2GXEB7RqHYw+WAt69/4=";
   };
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) src pname version;
     hash = "sha256-OpQg/ZZ4M2vszMZeCJAKzqGduxexZfIVe3Jy/hG3Yu0=";
   };
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     cargo-tauri_1.hook
     nodejs
     pkg-config
-    pnpm.configHook
+    pnpm_9.configHook
     rustPlatform.cargoSetupHook
     wrapGAppsHook3
   ];
