@@ -910,6 +910,9 @@ self: super: {
   # https://github.com/input-output-hk/hedgehog-extras/issues/39
   hedgehog-extras = doJailbreak super.hedgehog-extras;
 
+  # Allow bytestring-0.12.1.0, https://github.com/lpeterse/haskell-socket/issues/71
+  socket = doJailbreak super.socket;
+
   # Known issue with nondeterministic test suite failure
   # https://github.com/nomeata/tasty-expected-failure/issues/21
   tasty-expected-failure = dontCheck super.tasty-expected-failure;
