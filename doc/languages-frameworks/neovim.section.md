@@ -55,7 +55,6 @@ You can use the new unstable wrapper but the interface may change:
 - `autoconfigure`: certain plugins need a custom configuration to work with nix.
 For instance, `sqlite-lua` needs `g:sqlite_clib_path` to be set to work. Nixpkgs historically patched these in the plugins with several drawbacks: harder maintenance and making upstream work harder. Per convention, these mandatory bits of configuration are bookmarked in nixpkgs in `passthru.initLua`. Enabling `autoconfigure` automatically adds the snippets required for the plugins to work.
 - `autowrapRuntimeDeps`: Appends plugin's runtime dependencies to `PATH`. For instance, `rest.nvim` requires `curl` to work. Enabling `autowrapRuntimeDeps` adds it to the `PATH` visible by your Neovim wrapper (but not your global `PATH`).
-  neovim wrapper.
 - `luaRcContent`: Extra lua code to add to the generated `init.lua`.
 - `neovimRcContent`: Extra vimL code sourced by the generated `init.lua`.
 - `wrapperArgs`: Extra arguments forwarded to the `makeWrapper` call.
