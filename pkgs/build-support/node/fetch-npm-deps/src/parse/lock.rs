@@ -1,4 +1,5 @@
-use anyhow::{anyhow, bail, Context};
+use crate::lockfile::{NpmDependency, NpmLockfile, NpmPackage};
+use anyhow::{anyhow, Context};
 use rayon::slice::ParallelSliceMut;
 use serde::{
     de::{self, Visitor},
@@ -11,26 +12,17 @@ use std::{
 };
 use url::Url;
 
-pub(super) fn packages(content: &str) -> anyhow::Result<Vec<Package>> {
-    let lockfile: Lockfile = serde_json::from_str(content)?;
+pub(super) fn extract_packages(content: &str) -> anyhow::Result<Vec<NpmPackage>> {
+    let lockfile: NpmLockfile = serde_json::from_str(content)?;
 
-    let mut packages = match lockfile.version {
-        1 => {
+    let mut packages = match lockfile {
+        NpmLockfile::V1(lock) => {
             let initial_url = get_initial_url()?;
 
-            to_new_packages(lockfile.dependencies.unwrap_or_default(), &initial_url)?
+            to_new_packages(lock.dependencies, &initial_url)?
         }
-        2 | 3 => lockfile
-            .packages
-            .unwrap_or_default()
-            .into_iter()
-            .filter(|(n, p)| !n.is_empty() && matches!(p.resolved, Some(UrlOrString::Url(_))))
-            .map(|(n, p)| Package { name: Some(n), ..p })
-            .collect(),
-        _ => bail!(
-            "We don't support lockfile version {}, please file an issue.",
-            lockfile.version
-        ),
+        NpmLockfile::V2(lock) => get_valid_external_dependencies(lock.packages),
+        NpmLockfile::V3(lock) => get_valid_external_dependencies(lock.packages),
     };
 
     packages.par_sort_by(|x, y| {
@@ -51,46 +43,14 @@ pub(super) fn packages(content: &str) -> anyhow::Result<Vec<Package>> {
     Ok(packages)
 }
 
-#[derive(Deserialize)]
-struct Lockfile {
-    #[serde(rename = "lockfileVersion")]
-    version: u8,
-    dependencies: Option<HashMap<String, OldPackage>>,
-    packages: Option<HashMap<String, Package>>,
-}
-
-#[derive(Deserialize)]
-struct OldPackage {
-    version: UrlOrString,
-    #[serde(default)]
-    bundled: bool,
-    resolved: Option<UrlOrString>,
-    integrity: Option<HashCollection>,
-    dependencies: Option<HashMap<String, OldPackage>>,
-}
-
-#[derive(Debug, Deserialize, PartialEq, Eq)]
-pub(super) struct Package {
-    #[serde(default)]
-    pub(super) name: Option<String>,
-    pub(super) resolved: Option<UrlOrString>,
-    pub(super) integrity: Option<HashCollection>,
-}
-
-#[derive(Debug, Deserialize, PartialEq, Eq, PartialOrd, Ord)]
-#[serde(untagged)]
-pub(super) enum UrlOrString {
-    Url(Url),
-    String(String),
-}
-
-impl fmt::Display for UrlOrString {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        match self {
-            UrlOrString::Url(url) => url.fmt(f),
-            UrlOrString::String(string) => string.fmt(f),
-        }
-    }
+fn get_valid_external_dependencies(packages: HashMap<String, NpmPackage>) -> Vec<NpmPackage> {
+    packages
+        .into_iter()
+        .filter(|(n, p)| {
+            !n.is_empty() && matches!(p.resolved.as_ref().map(|r| Url::parse(&r)), Some(Ok(_)))
+        })
+        .map(|(n, p)| NpmPackage { name: Some(n), ..p })
+        .collect()
 }
 
 #[derive(Debug, PartialEq, Eq)]
@@ -200,9 +160,9 @@ impl Ord for Hash {
 
 #[allow(clippy::case_sensitive_file_extension_comparisons)]
 fn to_new_packages(
-    old_packages: HashMap<String, OldPackage>,
+    old_packages: HashMap<String, NpmDependency>,
     initial_url: &Url,
-) -> anyhow::Result<Vec<Package>> {
+) -> anyhow::Result<Vec<NpmPackage>> {
     let mut new = Vec::new();
 
     for (name, mut package) in old_packages {
@@ -213,10 +173,10 @@ fn to_new_packages(
             continue;
         }
 
-        if let UrlOrString::Url(v) = &package.version {
+        if let Some(Ok(v)) = package.version.as_ref().map(|v| Url::parse(v)) {
             if v.scheme() == "npm" {
-                if let Some(UrlOrString::Url(ref url)) = &package.resolved {
-                    package.version = UrlOrString::Url(url.clone());
+                if let Some(Ok(url)) = &package.resolved.as_deref().map(Url::parse) {
+                    package.version = Some(url.to_string());
                 }
             } else {
                 for (scheme, host) in [
@@ -238,7 +198,7 @@ fn to_new_packages(
 
                             new_url.set_fragment(v.fragment());
 
-                            UrlOrString::Url(new_url)
+                            Some(new_url.to_string())
                         };
 
                         break;
@@ -247,18 +207,19 @@ fn to_new_packages(
             }
         }
 
-        new.push(Package {
+        new.push(NpmPackage {
             name: Some(name),
-            resolved: if matches!(package.version, UrlOrString::Url(_)) {
-                Some(package.version)
+            resolved: if let Some(Ok(_)) = package.version.as_ref().map(|v| Url::parse(&v)) {
+                package.version
             } else {
                 package.resolved
             },
             integrity: package.integrity,
+            ..Default::default()
         });
 
-        if let Some(dependencies) = package.dependencies {
-            new.append(&mut to_new_packages(dependencies, initial_url)?);
+        if !package.dependencies.is_empty() {
+            new.append(&mut to_new_packages(package.dependencies, initial_url)?);
         }
     }
 
@@ -271,15 +232,12 @@ fn get_initial_url() -> anyhow::Result<Url> {
 
 #[cfg(test)]
 mod tests {
-    use super::{
-        get_initial_url, packages, to_new_packages, Hash, HashCollection, OldPackage, Package,
-        UrlOrString,
-    };
+    use super::{get_initial_url, extract_packages, to_new_packages, Hash, HashCollection};
+    use crate::lockfile::{NpmDependency, NpmPackage};
     use std::{
         cmp::Ordering,
         collections::{HashMap, HashSet},
     };
-    use url::Url;
 
     #[test]
     fn git_shorthand_v1() -> anyhow::Result<()> {
@@ -287,17 +245,12 @@ mod tests {
             let mut o = HashMap::new();
             o.insert(
                 String::from("sqlite3"),
-                OldPackage {
-                    version: UrlOrString::Url(
-                        Url::parse(
-                            "github:mapbox/node-sqlite3#593c9d498be2510d286349134537e3bf89401c4a",
-                        )
-                        .unwrap(),
+                NpmDependency {
+                    version: Some(
+                        "github:mapbox/node-sqlite3#593c9d498be2510d286349134537e3bf89401c4a"
+                            .to_string(),
                     ),
-                    bundled: false,
-                    resolved: None,
-                    integrity: None,
-                    dependencies: None,
+                    ..Default::default()
                 },
             );
             o
@@ -308,10 +261,10 @@ mod tests {
         let new = to_new_packages(old, &initial_url)?;
 
         assert_eq!(new.len(), 1, "new packages map should contain 1 value");
-        assert_eq!(new[0], Package {
+        assert_eq!(new[0], NpmPackage {
             name: Some(String::from("sqlite3")),
-            resolved: Some(UrlOrString::Url(Url::parse("git+ssh://git@github.com/mapbox/node-sqlite3.git#593c9d498be2510d286349134537e3bf89401c4a").unwrap())),
-            integrity: None
+            resolved: Some("git+ssh://git@github.com/mapbox/node-sqlite3.git#593c9d498be2510d286349134537e3bf89401c4a".to_string()),
+            ..Default::default()
         });
 
         Ok(())
@@ -338,7 +291,7 @@ mod tests {
 
     #[test]
     fn parse_lockfile_correctly() {
-        let packages = packages(
+        let packages = extract_packages(
             r#"{
                 "name": "node-ddr",
                 "version": "1.0.0",
@@ -361,10 +314,7 @@ mod tests {
         assert_eq!(packages.len(), 1);
         assert_eq!(
             packages[0].resolved,
-            Some(UrlOrString::Url(
-                Url::parse("https://registry.npmjs.org/string-width/-/string-width-4.2.3.tgz")
-                    .unwrap()
-            ))
+            Some("https://registry.npmjs.org/string-width/-/string-width-4.2.3.tgz".to_string())
         );
     }
 }
