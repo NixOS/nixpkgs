@@ -8481,6 +8481,8 @@ self: super: with self; {
 
   mpldatacursor = callPackage ../development/python-modules/mpldatacursor { };
 
+  mplcursors = callPackage ../development/python-modules/mplcursors { };
+
   mplfinance = callPackage ../development/python-modules/mplfinance { };
 
   mplhep = callPackage ../development/python-modules/mplhep { };
