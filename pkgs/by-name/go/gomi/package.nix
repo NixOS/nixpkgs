@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "gomi";
-  version = "1.1.6";
+  version = "1.1.8";
 
   src = fetchFromGitHub {
     owner = "b4b4r07";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-YsR2KU5Np6xQHkjM8KAoDp/XZ/9DkwBlMbu2IX5OQlk=";
+    sha256 = "sha256-AIH5ADJPkZEbYLHPyMRPMeO78Y+JQDTzfvrtLTKjrsY=";
   };
 
-  vendorHash = "sha256-n31LUfdgbLQ/KmcFi8LdqmDHXgzbSCc+dnustGvc5SY=";
+  vendorHash = "sha256-/9VuRb0dtKJccJYM7Jasm+xyFxphtN77YQvQkDZ8FcE=";
 
   subPackages = [ "." ];
 
