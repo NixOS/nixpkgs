@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
   cfg = config.services.openvpn;
@@ -11,7 +8,7 @@ let
   makeOpenVPNJob = cfg: name:
     let
 
-      path = makeBinPath (getAttr "openvpn-${name}" config.systemd.services).path;
+      path = lib.makeBinPath (lib.getAttr "openvpn-${name}" config.systemd.services).path;
 
       upScript = ''
         export PATH=${path}
@@ -28,13 +25,13 @@ let
         done
 
         ${cfg.up}
-        ${optionalString cfg.updateResolvConf
+        ${lib.optionalString cfg.updateResolvConf
            "${pkgs.update-resolv-conf}/libexec/openvpn/update-resolv-conf"}
       '';
 
       downScript = ''
         export PATH=${path}
-        ${optionalString cfg.updateResolvConf
+        ${lib.optionalString cfg.updateResolvConf
            "${pkgs.update-resolv-conf}/libexec/openvpn/update-resolv-conf"}
         ${cfg.down}
       '';
@@ -42,13 +39,13 @@ let
       configFile = pkgs.writeText "openvpn-config-${name}"
         ''
           errors-to-stderr
-          ${optionalString (cfg.up != "" || cfg.down != "" || cfg.updateResolvConf) "script-security 2"}
+          ${lib.optionalString (cfg.up != "" || cfg.down != "" || cfg.updateResolvConf) "script-security 2"}
           ${cfg.config}
-          ${optionalString (cfg.up != "" || cfg.updateResolvConf)
+          ${lib.optionalString (cfg.up != "" || cfg.updateResolvConf)
               "up ${pkgs.writeShellScript "openvpn-${name}-up" upScript}"}
-          ${optionalString (cfg.down != "" || cfg.updateResolvConf)
+          ${lib.optionalString (cfg.down != "" || cfg.updateResolvConf)
               "down ${pkgs.writeShellScript "openvpn-${name}-down" downScript}"}
-          ${optionalString (cfg.authUserPass != null)
+          ${lib.optionalString (cfg.authUserPass != null)
               "auth-user-pass ${pkgs.writeText "openvpn-credentials-${name}" ''
                 ${cfg.authUserPass.username}
                 ${cfg.authUserPass.password}
@@ -59,7 +56,7 @@ let
     {
       description = "OpenVPN instance ‘${name}’";
 
-      wantedBy = optional cfg.autoStart "multi-user.target";
+      wantedBy = lib.optional cfg.autoStart "multi-user.target";
       after = [ "network.target" ];
 
       path = [ pkgs.iptables pkgs.iproute2 pkgs.nettools ];
@@ -69,7 +66,7 @@ let
       serviceConfig.Type = "notify";
     };
 
-  restartService = optionalAttrs cfg.restartAfterSleep {
+  restartService = lib.optionalAttrs cfg.restartAfterSleep {
     openvpn-restart = {
       wantedBy = [ "sleep.target" ];
       path = [ pkgs.procps ];
@@ -84,17 +81,17 @@ in
 
 {
   imports = [
-    (mkRemovedOptionModule [ "services" "openvpn" "enable" ] "")
+    (lib.mkRemovedOptionModule [ "services" "openvpn" "enable" ] "")
   ];
 
   ###### interface
 
   options = {
 
-    services.openvpn.servers = mkOption {
+    services.openvpn.servers = lib.mkOption {
       default = { };
 
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           server = {
             config = '''
@@ -134,11 +131,11 @@ in
         attribute name.
       '';
 
-      type = with types; attrsOf (submodule {
+      type = with lib.types; attrsOf (submodule {
 
         options = {
 
-          config = mkOption {
+          config = lib.mkOption {
             type = types.lines;
             description = ''
               Configuration of this OpenVPN instance.  See
@@ -150,7 +147,7 @@ in
             '';
           };
 
-          up = mkOption {
+          up = lib.mkOption {
             default = "";
             type = types.lines;
             description = ''
@@ -158,7 +155,7 @@ in
             '';
           };
 
-          down = mkOption {
+          down = lib.mkOption {
             default = "";
             type = types.lines;
             description = ''
@@ -166,13 +163,13 @@ in
             '';
           };
 
-          autoStart = mkOption {
+          autoStart = lib.mkOption {
             default = true;
             type = types.bool;
             description = "Whether this OpenVPN instance should be started automatically.";
           };
 
-          updateResolvConf = mkOption {
+          updateResolvConf = lib.mkOption {
             default = false;
             type = types.bool;
             description = ''
@@ -182,7 +179,7 @@ in
             '';
           };
 
-          authUserPass = mkOption {
+          authUserPass = lib.mkOption {
             default = null;
             description = ''
               This option can be used to store the username / password credentials
@@ -193,12 +190,12 @@ in
             type = types.nullOr (types.submodule {
 
               options = {
-                username = mkOption {
+                username = lib.mkOption {
                   description = "The username to store inside the credentials file.";
                   type = types.str;
                 };
 
-                password = mkOption {
+                password = lib.mkOption {
                   description = "The password to store inside the credentials file.";
                   type = types.str;
                 };
@@ -211,9 +208,9 @@ in
 
     };
 
-    services.openvpn.restartAfterSleep = mkOption {
+    services.openvpn.restartAfterSleep = lib.mkOption {
       default = true;
-      type = types.bool;
+      type = lib.types.bool;
       description = "Whether OpenVPN client should be restarted after sleep.";
     };
 
@@ -222,9 +219,9 @@ in
 
   ###### implementation
 
-  config = mkIf (cfg.servers != { }) {
+  config = lib.mkIf (cfg.servers != { }) {
 
-    systemd.services = (listToAttrs (mapAttrsToList (name: value: nameValuePair "openvpn-${name}" (makeOpenVPNJob value name)) cfg.servers))
+    systemd.services = (lib.listToAttrs (lib.mapAttrsToList (name: value: lib.nameValuePair "openvpn-${name}" (makeOpenVPNJob value name)) cfg.servers))
       // restartService;
 
     environment.systemPackages = [ openvpn ];

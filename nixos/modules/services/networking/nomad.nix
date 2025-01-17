@@ -4,7 +4,6 @@
   pkgs,
   ...
 }:
-with lib;
 let
   cfg = config.services.nomad;
   format = pkgs.formats.json { };
@@ -13,31 +12,31 @@ in
   ##### interface
   options = {
     services.nomad = {
-      enable = mkEnableOption "Nomad, a distributed, highly available, datacenter-aware scheduler";
+      enable = lib.mkEnableOption "Nomad, a distributed, highly available, datacenter-aware scheduler";
 
-      package = mkPackageOption pkgs "nomad" { };
+      package = lib.mkPackageOption pkgs "nomad" { };
 
-      extraPackages = mkOption {
-        type = types.listOf types.package;
+      extraPackages = lib.mkOption {
+        type = lib.types.listOf lib.types.package;
         default = [ ];
         description = ''
           Extra packages to add to {env}`PATH` for the Nomad agent process.
         '';
-        example = literalExpression ''
+        example = lib.literalExpression ''
           with pkgs; [ cni-plugins ]
         '';
       };
 
-      dropPrivileges = mkOption {
-        type = types.bool;
+      dropPrivileges = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Whether the nomad agent should be run as a non-root nomad user.
         '';
       };
 
-      enableDocker = mkOption {
-        type = types.bool;
+      enableDocker = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Enable Docker support. Needed for Nomad's docker driver.
@@ -47,33 +46,33 @@ in
         '';
       };
 
-      extraSettingsPaths = mkOption {
-        type = types.listOf types.path;
+      extraSettingsPaths = lib.mkOption {
+        type = lib.types.listOf lib.types.path;
         default = [ ];
         description = ''
           Additional settings paths used to configure nomad. These can be files or directories.
         '';
-        example = literalExpression ''
+        example = lib.literalExpression ''
           [ "/etc/nomad-mutable.json" "/run/keys/nomad-with-secrets.json" "/etc/nomad/config.d" ]
         '';
       };
 
-      extraSettingsPlugins = mkOption {
-        type = types.listOf (types.either types.package types.path);
+      extraSettingsPlugins = lib.mkOption {
+        type = lib.types.listOf (lib.types.either lib.types.package lib.types.path);
         default = [ ];
         description = ''
           Additional plugins dir used to configure nomad.
         '';
-        example = literalExpression ''
+        example = lib.literalExpression ''
           [ "<pluginDir>" pkgs.nomad-driver-nix pkgs.nomad-driver-podman  ]
         '';
       };
 
-      credentials = mkOption {
+      credentials = lib.mkOption {
         description = ''
           Credentials envs used to configure nomad secrets.
         '';
-        type = types.attrsOf types.str;
+        type = lib.types.attrsOf lib.types.str;
         default = { };
 
         example = {
@@ -81,7 +80,7 @@ in
         };
       };
 
-      settings = mkOption {
+      settings = lib.mkOption {
         type = format.type;
         default = { };
         description = ''
@@ -102,7 +101,7 @@ in
           the `DynamicUser` feature of systemd which directly
           manages and operates on `StateDirectory`.
         '';
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             # A minimal config example:
             server = {
@@ -119,10 +118,10 @@ in
   };
 
   ##### implementation
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     services.nomad.settings = {
       # Agrees with `StateDirectory = "nomad"` set below.
-      data_dir = mkDefault "/var/lib/nomad";
+      data_dir = lib.mkDefault "/var/lib/nomad";
     };
 
     environment = {
@@ -146,7 +145,7 @@ in
           iptables
         ]);
 
-      serviceConfig = mkMerge [
+      serviceConfig = lib.mkMerge [
         {
           DynamicUser = cfg.dropPrivileges;
           ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
@@ -158,8 +157,8 @@ in
               };
             in
             "${cfg.package}/bin/nomad agent -config=/etc/nomad.json -plugin-dir=${pluginsDir}/bin"
-            + concatMapStrings (path: " -config=${path}") cfg.extraSettingsPaths
-            + concatMapStrings (key: " -config=\${CREDENTIALS_DIRECTORY}/${key}") (
+            + lib.concatMapStrings (path: " -config=${path}") cfg.extraSettingsPaths
+            + lib.concatMapStrings (key: " -config=\${CREDENTIALS_DIRECTORY}/${key}") (
               lib.attrNames cfg.credentials
             );
           KillMode = "process";
@@ -172,10 +171,10 @@ in
           TasksMax = "infinity";
           LoadCredential = lib.mapAttrsToList (key: value: "${key}:${value}") cfg.credentials;
         }
-        (mkIf cfg.enableDocker {
+        (lib.mkIf cfg.enableDocker {
           SupplementaryGroups = "docker"; # space-separated string
         })
-        (mkIf (cfg.settings.data_dir == "/var/lib/nomad") {
+        (lib.mkIf (cfg.settings.data_dir == "/var/lib/nomad") {
           StateDirectory = "nomad";
         })
       ];
@@ -194,6 +193,6 @@ in
     ];
 
     # Docker support requires the Docker daemon to be running.
-    virtualisation.docker.enable = mkIf cfg.enableDocker true;
+    virtualisation.docker.enable = lib.mkIf cfg.enableDocker true;
   };
 }

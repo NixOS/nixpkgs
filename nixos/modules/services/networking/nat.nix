@@ -1,16 +1,12 @@
 # This module enables Network Address Translation (NAT).
 # XXX: todo: support multiple upstream links
 # see http://yesican.chsoft.biz/lartc/MultihomedLinuxNetworking.html
-
 {
   config,
   lib,
   pkgs,
   ...
 }:
-
-with lib;
-
 let
 
   cfg = config.networking.nat;
@@ -21,8 +17,8 @@ in
 
   options = {
 
-    networking.nat.enable = mkOption {
-      type = types.bool;
+    networking.nat.enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether to enable Network Address Translation (NAT). A
@@ -32,16 +28,16 @@ in
       '';
     };
 
-    networking.nat.enableIPv6 = mkOption {
-      type = types.bool;
+    networking.nat.enableIPv6 = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether to enable IPv6 NAT.
       '';
     };
 
-    networking.nat.internalInterfaces = mkOption {
-      type = types.listOf types.str;
+    networking.nat.internalInterfaces = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [ ];
       example = [ "eth0" ];
       description = ''
@@ -51,8 +47,8 @@ in
       '';
     };
 
-    networking.nat.internalIPs = mkOption {
-      type = types.listOf types.str;
+    networking.nat.internalIPs = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [ ];
       example = [ "192.168.1.0/24" ];
       description = ''
@@ -62,8 +58,8 @@ in
       '';
     };
 
-    networking.nat.internalIPv6s = mkOption {
-      type = types.listOf types.str;
+    networking.nat.internalIPv6s = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [ ];
       example = [ "fc00::/64" ];
       description = ''
@@ -73,8 +69,8 @@ in
       '';
     };
 
-    networking.nat.externalInterface = mkOption {
-      type = types.nullOr types.str;
+    networking.nat.externalInterface = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       example = "eth1";
       description = ''
@@ -82,8 +78,8 @@ in
       '';
     };
 
-    networking.nat.externalIP = mkOption {
-      type = types.nullOr types.str;
+    networking.nat.externalIP = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       example = "203.0.113.123";
       description = ''
@@ -95,8 +91,8 @@ in
       '';
     };
 
-    networking.nat.externalIPv6 = mkOption {
-      type = types.nullOr types.str;
+    networking.nat.externalIPv6 = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       example = "2001:dc0:2001:11::175";
       description = ''
@@ -108,34 +104,34 @@ in
       '';
     };
 
-    networking.nat.forwardPorts = mkOption {
+    networking.nat.forwardPorts = lib.mkOption {
       type =
-        with types;
+        with lib.types;
         listOf (submodule {
           options = {
-            sourcePort = mkOption {
+            sourcePort = lib.mkOption {
               type = types.either types.int (types.strMatching "[[:digit:]]+:[[:digit:]]+");
               example = 8080;
               description = "Source port of the external interface; to specify a port range, use a string with a colon (e.g. \"60000:61000\")";
             };
 
-            destination = mkOption {
+            destination = lib.mkOption {
               type = types.str;
               example = "10.0.0.1:80";
               description = "Forward connection to destination ip:port (or [ipv6]:port); to specify a port range, use ip:start-end";
             };
 
-            proto = mkOption {
+            proto = lib.mkOption {
               type = types.str;
               default = "tcp";
               example = "udp";
               description = "Protocol of forwarded connection";
             };
 
-            loopbackIPs = mkOption {
+            loopbackIPs = lib.mkOption {
               type = types.listOf types.str;
               default = [ ];
-              example = literalExpression ''[ "55.1.2.3" ]'';
+              example = lib.literalExpression ''[ "55.1.2.3" ]'';
               description = "Public IPs for NAT reflection; for connections to `loopbackip:sourcePort` from the host itself and from other hosts behind NAT";
             };
           };
@@ -160,8 +156,8 @@ in
       '';
     };
 
-    networking.nat.dmzHost = mkOption {
-      type = types.nullOr types.str;
+    networking.nat.dmzHost = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       example = "10.0.0.1";
       description = ''
@@ -172,7 +168,7 @@ in
 
   };
 
-  config = mkIf config.networking.nat.enable {
+  config = lib.mkIf config.networking.nat.enable {
 
     assertions = [
       {
@@ -198,18 +194,18 @@ in
       kernelModules = [ "nf_nat_ftp" ];
       kernel.sysctl =
         {
-          "net.ipv4.conf.all.forwarding" = mkOverride 99 true;
-          "net.ipv4.conf.default.forwarding" = mkOverride 99 true;
+          "net.ipv4.conf.all.forwarding" = lib.mkOverride 99 true;
+          "net.ipv4.conf.default.forwarding" = lib.mkOverride 99 true;
         }
-        // optionalAttrs cfg.enableIPv6 {
+        // lib.optionalAttrs cfg.enableIPv6 {
           # Do not prevent IPv6 autoconfiguration.
           # See <http://strugglers.net/~andy/blog/2011/09/04/linux-ipv6-router-advertisements-and-forwarding/>.
-          "net.ipv6.conf.all.accept_ra" = mkOverride 99 2;
-          "net.ipv6.conf.default.accept_ra" = mkOverride 99 2;
+          "net.ipv6.conf.all.accept_ra" = lib.mkOverride 99 2;
+          "net.ipv6.conf.default.accept_ra" = lib.mkOverride 99 2;
 
           # Forward IPv6 packets.
-          "net.ipv6.conf.all.forwarding" = mkOverride 99 true;
-          "net.ipv6.conf.default.forwarding" = mkOverride 99 true;
+          "net.ipv6.conf.all.forwarding" = lib.mkOverride 99 true;
+          "net.ipv6.conf.default.forwarding" = lib.mkOverride 99 true;
         };
     };
 
