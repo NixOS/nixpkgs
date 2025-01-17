@@ -8,6 +8,7 @@
   CoreServices,
   Security,
   SystemConfiguration,
+  zlib,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -31,6 +32,7 @@ rustPlatform.buildRustPackage rec {
       CoreServices
       Security
       SystemConfiguration
+      zlib
     ];
 
   # requires internet access
