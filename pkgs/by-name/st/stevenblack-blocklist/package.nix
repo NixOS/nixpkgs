@@ -29,6 +29,34 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     "social"
   ];
 
+  postPatch = ''
+    # Add IPv6 hosts
+    process_hosts_file() {
+      local input_file="$1"
+      local tmpfile=$(mktemp)
+
+      awk '
+        /^0\.0\.0\.0/ {
+          ipv6 = $0
+          gsub("0\\.0\\.0\\.0", "::", ipv6)
+          print $0
+          print ipv6
+          next
+        }
+        { print $0 }
+      ' "$input_file" > "$tmpfile"
+      mv "$tmpfile" "$input_file"
+    }
+
+    # Process the main hosts file
+    process_hosts_file "hosts"
+
+    # Process all alternates hosts files
+    for ext in alternates/*; do
+      process_hosts_file "$ext/hosts"
+    done
+  '';
+
   dontConfigure = true;
   dontBuild = true;
 
