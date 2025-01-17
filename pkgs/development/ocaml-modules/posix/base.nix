@@ -8,13 +8,13 @@
 
 buildDunePackage rec {
   pname = "posix-base";
-  version = "2.0.2";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-posix";
     rev = "v${version}";
-    hash = "sha256-xxNaPJZdcW+KnT7rYUuC7ZgmHtXTppZG2BOmpKweC/U=";
+    hash = "sha256-x34Tki2gBAy48HYNo4dw833u132nle3ilQN1DIbrAjw=";
   };
 
   duneVersion = "3";
