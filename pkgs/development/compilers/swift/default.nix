@@ -6,7 +6,6 @@
   llvmPackages,
   llvmPackages_15,
   overrideCC,
-  overrideLibcxx,
 }:
 
 let
@@ -36,15 +35,7 @@ let
     # Overrides that create a useful environment for swift packages, allowing
     # packaging with `swiftPackages.callPackage`.
     inherit (clang) bintools;
-    stdenv =
-      let
-        stdenv' = overrideCC pkgs.stdenv clang;
-      in
-      # Ensure that Swift’s internal clang uses the same libc++ and libc++abi as the
-      # default clang’s stdenv. Using the default libc++ avoids issues (such as crashes)
-      # that can happen when a Swift application dynamically links different versions
-      # of libc++ and libc++abi than libraries it links are using.
-      if stdenv'.cc.libcxx != null then overrideLibcxx stdenv' else stdenv';
+    stdenv = overrideCC pkgs.stdenv clang;
 
     swift-unwrapped = callPackage ./compiler {
       inherit (darwin) DarwinTools sigtool;
