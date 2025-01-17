@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = true; # Plugin code does not conform to plugin API changes. See https://github.com/feediron/ttrss_plugin-feediron/issues/206
     description = "Evolution of ttrss_plugin-af_feedmod";
     longDescription = ''
       This is a plugin for Tiny Tiny RSS (tt-rss).
