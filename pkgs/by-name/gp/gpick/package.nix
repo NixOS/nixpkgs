@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Advanced color picker written in C++ using GTK+ toolkit";
-    homepage = "http://www.gpick.org/";
+    homepage = "https://www.gpick.org/";
     license = licenses.bsd3;
     maintainers = [ maintainers.vanilla ];
     platforms = platforms.linux;
