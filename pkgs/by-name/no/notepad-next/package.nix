@@ -1,55 +1,49 @@
 {
-  mkDerivation,
   lib,
   fetchFromGitHub,
-  qmake,
-  qttools,
-  qtx11extras,
+  qt5,
   stdenv,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "notepad-next";
-  version = "0.9";
+  version = "0.10";
 
   src = fetchFromGitHub {
     owner = "dail8859";
     repo = "NotepadNext";
-    rev = "v${version}";
-    hash = "sha256-3BCLPY104zxALd3wFH8e9PitjmFbPcOfKsLqXowXqnY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-DpqFu7Nt7l1rmQoJ7aQnFEGPxo8NDrowHxmyLdKIX4A=";
     # External dependencies - https://github.com/dail8859/NotepadNext/issues/135
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
-    qmake
-    qttools
+    qt5.qmake
+    qt5.qttools
+    qt5.wrapQtAppsHook
   ];
-  buildInputs = [ qtx11extras ];
+  buildInputs = [ qt5.qtx11extras ];
 
   qmakeFlags = [
     "PREFIX=${placeholder "out"}"
     "src/NotepadNext.pro"
   ];
 
-  postPatch = ''
-    substituteInPlace src/i18n.pri \
-      --replace 'EXTRA_TRANSLATIONS = \' "" \
-      --replace '$$[QT_INSTALL_TRANSLATIONS]/qt_zh_CN.qm' ""
-  '';
-
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mv $out/bin $out/Applications
     rm -fr $out/share
+    mkdir -p $out/bin
+    ln -s $out/Applications/NotepadNext.app/Contents/MacOS/NotepadNext $out/bin/NotepadNext
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/dail8859/NotepadNext";
     description = "Cross-platform, reimplementation of Notepad++";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.sebtm ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ sebtm ];
     broken = stdenv.hostPlatform.isAarch64;
     mainProgram = "NotepadNext";
   };
-}
+})

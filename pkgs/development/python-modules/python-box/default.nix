@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "python-box";
-  version = "7.3.0";
+  version = "7.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "cdgriffith";
     repo = "Box";
     tag = version;
-    hash = "sha256-0vUPXZEyolI03N5RQ5GKTvSHUuFpimHZwQAYwGHJydU=";
+    hash = "sha256-id1gLT26jETRQ0fyVNTIhSZqM+fDmpaVbB56GxPhYr8=";
   };
 
   build-system = [

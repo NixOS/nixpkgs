@@ -1,13 +1,15 @@
 {
   lib,
   buildPythonPackage,
+  django,
   fetchFromGitHub,
-  setuptools,
-  wheel,
+  netaddr,
+  netbox,
   pillow,
   qrcode,
-  netbox,
+  setuptools,
 }:
+
 buildPythonPackage rec {
   pname = "netbox-qrcode";
   version = "0.0.15";
@@ -16,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "netbox-community";
     repo = "netbox-qrcode";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-gEBOjmX7dcLjiy0u6raAtAaqZUVYsPz3YhupjRRqVDE=";
   };
 
@@ -27,7 +29,11 @@ buildPythonPackage rec {
     pillow
   ];
 
-  nativeCheckInputs = [ netbox ];
+  nativeCheckInputs = [
+    django
+    netaddr
+    netbox
+  ];
 
   preFixup = ''
     export PYTHONPATH=${netbox}/opt/netbox/netbox:$PYTHONPATH

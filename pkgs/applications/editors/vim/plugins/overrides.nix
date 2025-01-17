@@ -2853,6 +2853,8 @@ in
       "snacks.win"
       "snacks.words"
       "snacks.zen"
+      "snacks.picker.config.highlights"
+      "snacks.picker.actions"
       # Optional trouble integration
       "trouble.sources.profiler"
     ];
@@ -3299,6 +3301,10 @@ in
       nvim-lspconfig
       plenary-nvim
     ];
+  };
+
+  nvzone-typr = super.nvzone-typr.overrideAttrs {
+    dependencies = [ self.nvzone-volt ];
   };
 
   unicode-vim =

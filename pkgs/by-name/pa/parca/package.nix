@@ -4,7 +4,7 @@
   fetchFromGitHub,
   lib,
   nodejs,
-  pnpm,
+  pnpm_9,
   stdenv,
 }:
 let
@@ -22,7 +22,7 @@ let
     pname = "parca-ui";
     src = "${parca-src}/ui";
 
-    pnpmDeps = pnpm.fetchDeps {
+    pnpmDeps = pnpm_9.fetchDeps {
       inherit (finalAttrs) pname src version;
       hash = "sha256-MVNO24Oksy/qRUmEUoWoviQEo6Eimb18ZnDj5Z1vJkY=";
     };
@@ -30,7 +30,7 @@ let
     nativeBuildInputs = [
       faketty
       nodejs
-      pnpm.configHook
+      pnpm_9.configHook
     ];
 
     # faketty is required to work around a bug in nx.
