@@ -12,19 +12,22 @@
   gettext,
 
   # dependencies
+  asgiref,
   django,
+
+  # optional-dependencies
+  fido2,
   python3-openid,
+  python3-saml,
   requests,
   requests-oauthlib,
   pyjwt,
-
-  # optional-dependencies
-  python3-saml,
   qrcode,
 
   # tests
   pillow,
   pytestCheckHook,
+  pytest-asyncio,
   pytest-django,
 
   # passthru tests
@@ -33,36 +36,48 @@
 
 buildPythonPackage rec {
   pname = "django-allauth";
-  version = "0.61.1";
+  version = "65.3.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pennersr";
     repo = "django-allauth";
     tag = version;
-    hash = "sha256-C9SYlL1yMnSb+Zpi2opvDw1stxAHuI9/XKHyvkM36Cg=";
+    hash = "sha256-IgadrtOQt3oY2U/+JWBs5v97aaWz5oinz5QUdGXBqO4=";
   };
 
   nativeBuildInputs = [
     gettext
+  ];
+
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    asgiref
     django
-    pyjwt
-    python3-openid
-    requests
-    requests-oauthlib
-  ] ++ pyjwt.optional-dependencies.crypto;
+  ];
 
-  preBuild = "${python.interpreter} -m django compilemessages";
+  preBuild = ''
+    ${python.interpreter} -m django compilemessages
+  '';
 
   optional-dependencies = {
+    mfa = [
+      fido2
+      qrcode
+    ];
+    openid = [ python3-openid ];
     saml = [ python3-saml ];
-    mfa = [ qrcode ];
+    socialaccount = [
+      requests
+      requests-oauthlib
+      pyjwt
+    ] ++ pyjwt.optional-dependencies.crypto;
+    steam = [ python3-openid ];
   };
 
   pythonImportsCheck = [ "allauth" ];
@@ -70,6 +85,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pillow
     pytestCheckHook
+    pytest-asyncio
     pytest-django
   ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
