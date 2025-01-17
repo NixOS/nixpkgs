@@ -3461,8 +3461,6 @@ dont-distribute-packages:
  - runtime-arbitrary
  - rv
  - s-expression
- - safe-coloured-text-layout-gen
- - safe-coloured-text-layout-gen_0_0_0_1
  - safe-coupling
  - safe-failure
  - safe-failure-cme
