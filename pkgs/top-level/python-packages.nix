@@ -9255,6 +9255,8 @@ self: super: with self; {
 
   netbox-plugin-prometheus-sd = callPackage ../development/python-modules/netbox-plugin-prometheus-sd { };
 
+  netbox-proxbox = callPackage ../development/python-modules/netbox-proxbox { };
+
   netbox-qrcode = callPackage ../development/python-modules/netbox-qrcode { };
 
   netbox-reorder-rack = callPackage ../development/python-modules/netbox-reorder-rack { };
