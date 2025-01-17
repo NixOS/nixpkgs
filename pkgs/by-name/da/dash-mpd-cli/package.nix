@@ -8,20 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "dash-mpd-cli";
-  version = "0.2.23";
+  version = "0.2.24";
 
   src = fetchFromGitHub {
     owner = "emarsden";
     repo = "dash-mpd-cli";
-    rev = "v${version}";
-    hash = "sha256-gRtt7iocGmnFpdTEMv/U4izeR/NtdYYXX3eFXW5LGYs=";
+    tag = "v${version}";
+    hash = "sha256-Q4zzKdp8GROL8vHi8XETErqufSqgZH/zf/mqEH2lIzE=";
   };
 
-  postPatch = ''
-    ln -s ${./Cargo.lock} Cargo.lock
-  '';
-
-  cargoLock.lockFile = ./Cargo.lock;
+  cargoHash = "sha256-R54Np08hYpDoidsHr3rmhpX/QZZkZHGcCSoKk6nw9R8=";
 
   nativeBuildInputs = [ protobuf ];
 
