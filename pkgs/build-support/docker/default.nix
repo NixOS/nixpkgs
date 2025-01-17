@@ -182,31 +182,40 @@ rec {
 
   # buildEnv creates symlinks to dirs, which is hard to edit inside the overlay VM
   mergeDrvs =
-    { derivations
-    , onlyDeps ? false
-    }:
-    runCommand "merge-drvs"
-      {
-        inherit derivations onlyDeps;
-      } ''
-      if [[ -n "$onlyDeps" ]]; then
-        echo $derivations > $out
-        exit 0
-      fi
+    let
+      warnMsg = "dockerTools.mergeDrvs is deprecated and will be removed after 24.05 due to lack of tests, "
+        + "documentation, being in the wrong place (its behaviour is not related to dockerTools), and "
+        + "having a misleading name. If you depend on this function, please visit "
+        + "https://github.com/NixOS/nixpkgs/issues/283952";
 
-      mkdir $out
-      for derivation in $derivations; do
-        echo "Merging $derivation..."
-        if [[ -d "$derivation" ]]; then
-          # If it's a directory, copy all of its contents into $out.
-          cp -drf --preserve=mode -f $derivation/* $out/
-        else
-          # Otherwise treat the derivation as a tarball and extract it
-          # into $out.
-          tar -C $out -xpf $drv || true
-        fi
-      done
-    '';
+      mergeDrvsFunc =
+        { derivations
+        , onlyDeps ? false
+        }:
+        runCommand "merge-drvs"
+          {
+            inherit derivations onlyDeps;
+          } ''
+          if [[ -n "$onlyDeps" ]]; then
+            echo $derivations > $out
+            exit 0
+          fi
+
+          mkdir $out
+          for derivation in $derivations; do
+            echo "Merging $derivation..."
+            if [[ -d "$derivation" ]]; then
+              # If it's a directory, copy all of its contents into $out.
+              cp -drf --preserve=mode -f $derivation/* $out/
+            else
+              # Otherwise treat the derivation as a tarball and extract it
+              # into $out.
+              tar -C $out -xpf $drv || true
+            fi
+          done
+        '';
+    in
+    lib.warn warnMsg mergeDrvsFunc;
 
   # Helper for setting up the base files for managing users and
   # groups, only if such files don't exist already. It is suitable for
