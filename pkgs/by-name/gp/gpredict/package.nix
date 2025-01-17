@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "csete";
     repo = "gpredict";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-+hgjImfT3nWMBYwde7+KC/hzd84pwQbpoJvaJSNG4E8=";
   };
 
