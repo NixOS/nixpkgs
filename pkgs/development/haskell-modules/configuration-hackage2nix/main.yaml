@@ -42,6 +42,8 @@ default-package-overrides:
   - diagrams-input < 0.1.4
   # 2024-12-31: last version that's compatible with GHC < 9.9
   - htree < 0.2.0.0
+  # 2025-01-17: need to match stackage version of hosc
+  - hsc3 < 0.21
 
 extra-packages:
   - Cabal == 3.2.*                      # Used for packages needing newer Cabal on ghc 8.6 and 8.8
