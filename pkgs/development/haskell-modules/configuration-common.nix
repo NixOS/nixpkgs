@@ -1973,14 +1973,13 @@ self: super: {
   # Missing test files in 1.8.1.0, fixed in 1.8.1.1
   sequence-formats = dontCheck super.sequence-formats;
 
-  # Windows.normalise changed in filepath >= 1.4.100.4 which fails the equivalency
-  # test suite. This is of no great consequence for us, though.
-  # Patch solving this has been submitted to upstream by me (@sternenseemann).
-  filepath-bytestring =
-    lib.warnIf
-      (lib.versionAtLeast super.filepath-bytestring.version "1.4.100.4")
-      "filepath-bytestring override may be obsolete"
-      dontCheck super.filepath-bytestring;
+  # filepath-bytestring indicates via bounds which version it has been tested
+  # to be equivalent to. We can be somewhat sure that it's fine to relax the
+  # bounds since we run the equivalency test suite.
+  # The only behavioral change for 1.5.2.0.0 is a fix that's included in 1.4.100.4
+  # of upstream filepath anyways:
+  # https://git.joeyh.name/index.cgi/haskell-filepath-bytestring.git/commit/?id=c447335c01f819910bb8434b215356cee8e6ecfc
+  filepath-bytestring = doJailbreak super.filepath-bytestring;
 
   # Break out of overspecified constraint on QuickCheck.
   haddock-library = doJailbreak super.haddock-library;
