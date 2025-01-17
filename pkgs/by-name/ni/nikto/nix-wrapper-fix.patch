@@ -1,0 +1,26 @@
+diff --git a/program/nikto.pl b/program/nikto.pl
+index 2cb07f9..323e666 100755
+--- a/program/nikto.pl
++++ b/program/nikto.pl
+@@ -243,7 +243,7 @@ sub config_init {
+     # Guess Nikto current directory
+     my $NIKTODIR = abs_path($0);
+     chomp($NIKTODIR);
+-    $NIKTODIR =~ s#[\\/]nikto.pl$##;
++    $NIKTODIR =~ s#[\\/]bin[\\/]\.nikto-wrapped$##;
+ 
+     # Guess user's home directory -- to support Windows
+     foreach my $var (split(/ /, "HOME USERPROFILE")) {
+@@ -251,10 +251,10 @@ sub config_init {
+     }
+ 
+     # Read the conf files in order (previous values are over-written with each, if multiple found)
+-    push(@CF, "$NIKTODIR/nikto.conf.default");
++    push(@CF,"$NIKTODIR/etc/nikto.conf.default");
+     push(@CF, "/etc/nikto.conf");
+     push(@CF, "$home/nikto.conf");
+-    push(@CF, "$NIKTODIR/nikto.conf");
++    push(@CF,"$NIKTODIR/etc/nikto.conf");
+     push(@CF, "nikto.conf");
+     push(@CF, "$VARIABLES{'configfile'}");
+ 

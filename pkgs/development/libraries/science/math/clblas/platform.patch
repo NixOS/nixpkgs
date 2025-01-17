@@ -1,0 +1,34 @@
+diff --git a/src/library/tools/ktest/config.cpp b/src/library/tools/ktest/config.cpp
+index 8b20128..faf9bde 100644
+--- a/src/library/tools/ktest/config.cpp
++++ b/src/library/tools/ktest/config.cpp
+@@ -24,8 +24,6 @@
+ 
+ using namespace clMath;
+ 
+-static const char DEFAULT_PLATFORM_NAME[] = "AMD Accelerated Parallel Processing";
+-
+ Config::Config() :
+     defaultConfig_(""),
+     cpp_("ktest.cpp"),
+@@ -35,7 +33,10 @@ Config::Config() :
+     hasFuncID_(false), hasSubdims_(false),
+     skipAccuracy_(false)
+ {
+-    setPlatform(DEFAULT_PLATFORM_NAME);
++    platform_ = NULL;
++    setPlatform("");
++
++    device_ = NULL;
+     setDevice("");
+ 
+     memset(&kargs_, 0, sizeof(kargs_));
+@@ -262,7 +263,7 @@ Config::setPlatform(const std::string& name)
+             continue;
+         }
+         if (name.empty()) {
+-            found = (strcmp(pname, DEFAULT_PLATFORM_NAME) == 0);
++	    found = true;
+         }
+         else {
+             found = (strcmp(pname, name.c_str()) == 0);

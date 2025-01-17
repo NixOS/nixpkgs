@@ -1,0 +1,16 @@
+--- app/electron/jsComponents/mainWindowEvents.js	2024-02-18 12:53:41.115773007 -0500
++++ app/electron/jsComponents/mainWindowEvents.js2	2024-02-18 23:22:20.003280203 -0500
+@@ -128,7 +128,12 @@
+ 
+ 	if (app.isPackaged) {
+ 		global.mainWindow.webContents.once("did-finish-load", function () {
+-			autoUpdater.checkForUpdates();
++			global.mainWindow.loadURL(
++				url.format({
++					...global.APPLICATION_URL_OBJECT,
++					slashes: true,
++				}),
++			);
+ 		});
+ 	} else {
+ 		global.mainWindow.webContents.openDevTools();
