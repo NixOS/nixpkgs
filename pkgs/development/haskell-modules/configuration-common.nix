@@ -1880,21 +1880,16 @@ self: super: {
   # https://github.com/adnelson/semver-range/issues/15
   semver-range = dontCheck super.semver-range;
 
-  reflex = lib.pipe super.reflex [
-    doJailbreak
-    # Until hackage release has https://github.com/reflex-frp/reflex/pull/517
-    (overrideCabal (drv: {
-      postPatch = drv.postPatch or "" + ''
-        substituteInPlace \
-          src/Data/AppendMap.hs \
-          src/Reflex/Class.hs \
-          src/Reflex/FunctorMaybe.hs \
-          src/Reflex/Spider/Internal.hs \
-          test/DebugCycles.hs \
-          --replace-fail Data.Witherable Witherable
-      '';
-    }))
-  ];
+  reflex = lib.warnIf (lib.versionAtLeast super.reflex.version "0.9.3.2") "reflex version override is no longer needed and should be removed"
+    (overrideSrc rec {
+      version = "0.9.3.2";
+      src = (pkgs.fetchFromGitHub {
+        owner = "reflex-frp";
+        repo = "reflex";
+        rev = "v0.9.3.2";
+        hash = "sha256-IJMoYoIN8OWOmyOMSvr1aFXofWsyEetCUY7hO141ThE=";
+      });
+    } super.reflex);
 
   # 2024-03-02: vty <5.39 - https://github.com/reflex-frp/reflex-ghci/pull/33
   reflex-ghci = assert super.reflex-ghci.version == "0.2.0.1"; doJailbreak super.reflex-ghci;
