@@ -10,20 +10,20 @@
 
 php.buildComposerProject (finalAttrs: {
   pname = "grocy";
-  version = "4.2.0";
+  version = "4.3.0";
 
   src = fetchFromGitHub {
     owner = "grocy";
     repo = "grocy";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-aX3DMy9Jv8rNp1/VIvUtNXYXGBrCgBMs5GsDf4XXSj0=";
+    hash = "sha256-9Lc3NUZ7Huiyt887kCHL6lshow3+Pqrq8h1NV+CFHGs=";
   };
 
-  vendorHash = "sha256-KaYvA0Rd4pd1s/L8QbVUgkE+SjH+jv4+6RvIaGOpews=";
+  vendorHash = "sha256-dehRfsAEjU2RBGUQ4r3OPu0EbnlJ2C38kIU+4E1Ny3U=";
 
   offlineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";
-    hash = "sha256-UvWY8+qSRvzJbm7z3CmLyeUHxemzNUB7dHYP95ZVtcI=";
+    hash = "sha256-l8uYMBMufbSHhxNxqqA0BqCLqUYubjIpgevaenzy5Ic=";
   };
 
   nativeBuildInputs = [
