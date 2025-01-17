@@ -1,0 +1,10 @@
+diff --git a/nu_correct_norm.in b/nu_correct_norm.in
+index 1dc84ac..1bc6235 100644
+--- a/nu_correct_norm.in
++++ b/nu_correct_norm.in
+@@ -1,4 +1,4 @@
+-#! @PERL@
++#! /usr/bin/perl
+  
+ #---------------------------------------------------------------------------
+ #@COPYRIGHT :
