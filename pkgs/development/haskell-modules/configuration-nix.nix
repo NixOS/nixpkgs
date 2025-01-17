@@ -1449,6 +1449,7 @@ self: super: builtins.intersectAttrs super {
       sdl2-ttf
       sdl2
       dear-imgui
+      libremidi
       ;
 
     webkit2gtk3-javascriptcore = lib.pipe super.webkit2gtk3-javascriptcore [

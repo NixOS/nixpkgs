@@ -3520,7 +3520,6 @@ broken-packages:
   - libphonenumber # failure in job https://hydra.nixos.org/build/233251839 at 2023-09-02
   - libpq # failure in job https://hydra.nixos.org/build/233192542 at 2023-09-02
   - librandomorg # failure in job https://hydra.nixos.org/build/233232749 at 2023-09-02
-  - libremidi # failure in job https://hydra.nixos.org/build/283561085 at 2024-12-31
   - libsecp256k1 # failure in job https://hydra.nixos.org/build/234441559 at 2023-09-13
   - libsodium # failure in job https://hydra.nixos.org/build/243816565 at 2024-01-01
   - libsystemd-daemon # failure in job https://hydra.nixos.org/build/233207090 at 2023-09-02
