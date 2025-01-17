@@ -70,6 +70,7 @@ let
 
   rocmLibs = [
     rocmPackages.clr
+    rocmPackages.hipblas-common
     rocmPackages.hipblas
     rocmPackages.rocblas
     rocmPackages.rocsolver
@@ -77,10 +78,9 @@ let
     rocmPackages.rocm-device-libs
     rocmPackages.rocm-smi
   ];
-  rocmClang = linkFarm "rocm-clang" { llvm = rocmPackages.llvm.clang; };
   rocmPath = buildEnv {
     name = "rocm-path";
-    paths = rocmLibs ++ [ rocmClang ];
+    paths = rocmLibs;
   };
 
   cudaLibs = [
@@ -145,6 +145,13 @@ goBuild {
       ROCM_PATH = rocmPath;
       CLBlast_DIR = "${clblast}/lib/cmake/CLBlast";
       HIP_PATH = rocmPath;
+      CFLAGS = "-Wno-c++17-extensions -I${rocmPath}/include";
+      CXXFLAGS = "-Wno-c++17-extensions -I${rocmPath}/include";
+    }
+    // lib.optionalAttrs (enableRocm && (rocmPackages.clr.localGpuTargets or false) != false) {
+      # If rocm CLR is set to build for an exact set of targets reuse that target list,
+      # otherwise let ollama use its builtin defaults
+      HIP_ARCHS = lib.concatStringsSep ";" rocmPackages.clr.localGpuTargets;
     }
     // lib.optionalAttrs enableCuda {
       CUDA_PATH = cudaPath;
@@ -172,10 +179,16 @@ goBuild {
     ++ lib.optionals stdenv.hostPlatform.isDarwin metalFrameworks;
 
   # replace inaccurate version number with actual release version
-  postPatch = ''
-    substituteInPlace version/version.go \
-      --replace-fail 0.0.0 '${version}'
-  '';
+  postPatch =
+    ''
+      substituteInPlace version/version.go \
+        --replace-fail 0.0.0 '${version}'
+    ''
+    + lib.optionalString enableRocm ''
+      substituteInPlace make/Makefile.rocm \
+        --replace-fail '-I./llama/' '-I./llama/ -I${rocmPath}/include' \
+        --replace-fail ' $(ROCBLAS_DIST_DEP_MANIFEST) ' ' '
+    '';
 
   overrideModAttrs = (
     finalAttrs: prevAttrs: {
