@@ -1595,6 +1595,8 @@ self: super: with self; {
 
   beartype = callPackage ../development/python-modules/beartype { };
 
+  beaupy = callPackage ../development/python-modules/beaupy { };
+
   beautiful-date = callPackage ../development/python-modules/beautiful-date { };
 
   beautifulsoup4 = callPackage ../development/python-modules/beautifulsoup4 { };
@@ -10825,6 +10827,8 @@ self: super: with self; {
 
   python-idzip = callPackage ../development/python-modules/python-idzip { };
 
+  python-yakh = callPackage ../development/python-modules/python-yakh { };
+
   pythonfinder = callPackage ../development/python-modules/pythonfinder { };
 
   pytomorrowio = callPackage ../development/python-modules/pytomorrowio { };
@@ -13770,6 +13774,8 @@ self: super: with self; {
   qudida = callPackage ../development/python-modules/qudida { };
 
   querystring-parser = callPackage ../development/python-modules/querystring-parser { };
+
+  questo = callPackage ../development/python-modules/questo { };
 
   questionary = callPackage ../development/python-modules/questionary { };
 
