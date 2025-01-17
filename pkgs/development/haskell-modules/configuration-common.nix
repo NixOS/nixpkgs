@@ -1705,6 +1705,12 @@ self: super: {
     sha256 = "sha256-xsQbr/QIrgWR0uwDPtV0NRTbVvP0tR9bY9NMe1JzqOw=";
   }) (doJailbreak super.monad-logger-extras);
 
+  # Support ansi-terminal 1.1: https://github.com/facebookincubator/retrie/pull/73
+  retrie = appendPatch (fetchpatch {
+    url = "https://github.com/facebookincubator/retrie/commit/b0df07178133b5b049e3e7764acba0e5e3fa57af.patch";
+    sha256 = "sha256-Ea/u6PctSxy4h8VySjOwD2xW3TbwY1qE49dG9Av1SbQ=";
+  }) super.retrie;
+
   # Fails with encoding problems, likely needs locale data.
   # Test can be executed by adding which to testToolDepends and
   # $PWD/dist/build/haskeline-examples-Test to $PATH.
@@ -2475,6 +2481,15 @@ self: super: {
     editedCabalFile = null;
   }) super.relude);
 
+  # Support hedgehog 1.5: https://github.com/kowainik/stan/pull/581
+  stan = appendPatch (fetchpatch {
+    url = "https://github.com/kowainik/stan/pull/581/commits/3429e419b26b56f86dbebbb657106a7da5182d20.patch";
+    sha256 = "sha256-CNWAuBryWMkd3yqDJ29OMZ+vXoiwprbyF2jNBD6qXIs=";
+  })  super.stan;
+
+  # 2025-01-07: unreleased upstream supports hedgehog 1.5 but drifted quite a bit from hackage revisions so hard to patch
+  hw-hspec-hedgehog = doJailbreak super.hw-hspec-hedgehog;
+
   # doJailbreak: too strict bounds on chell: https://github.com/fpco/haskell-filesystem/issues/24
   # dontCheck:   tests don't typecheck after ghc 8.4 (possibly introduced by api change of unix library)
   system-fileio = doJailbreak (dontCheck super.system-fileio);
@@ -2691,6 +2706,36 @@ self: super: {
         hash = "sha256-dcL2QShMMaiENhdGsLiVYTuorNb20NSBTHsGBM04ULw=";
       }))
     ];
+
+  # Support tasty-quickcheck 0.11: https://github.com/nikita-volkov/deferred-folds/pull/8
+  deferred-folds = appendPatch (fetchpatch {
+    url = "https://github.com/nikita-volkov/deferred-folds/commit/27bd67d49f52d6826ea69c3a85e5297408266ad0.patch";
+    sha256 = "sha256-4LUoAIX0e4VZrka6nIrlccBHDMTbd1hGQCtRoJDAl74=";
+  }) super.deferred-folds;
+
+  # Support tasty-quickcheck 0.11: https://github.com/Bodigrim/mod/pull/26
+  mod = appendPatch (fetchpatch {
+    url = "https://github.com/Bodigrim/mod/commit/30596fb9d85b69ec23ecb05ef9a7c91d67901cfd.patch";
+    sha256 = "sha256-9XuzIxEbepaw5bRoIOUka8fkiZBfturIybh/9nhGmWQ=";
+  }) super.mod;
+
+  # Support tasty-quickcheck 0.11: https://github.com/nikita-volkov/primitive-extras/pull/9
+  primitive-extras = appendPatch (fetchpatch {
+    url = "https://github.com/nikita-volkov/primitive-extras/commit/ffc1304793c210a2624532c4f5c45ce7dea5cfbe.patch";
+    sha256 = "sha256-AU+OeNjisquoXElZbydrgqElXc2Vwmb5qmG49fU+uj0=";
+  }) super.primitive-extras;
+
+  # Fixes build of test suite: not yet released
+  primitive-unlifted = appendPatch (fetchpatch {
+    url = "https://github.com/haskell-primitive/primitive-unlifted/commit/26922952ef20c4771d857f3e96c9e710cb3c2df9.patch";
+    sha256 = "sha256-Qk/o3bkwcgh/NROSFuWc2hN+VJG1W2E+UEncB+KRTuE=";
+  }) (overrideCabal { editedCabalFile = null; revision = null; } super.primitive-unlifted);
+
+  # Support tasty-quickcheck 0.11: https://github.com/nikita-volkov/stm-hamt/pull/9
+  stm-hamt = appendPatch (fetchpatch {
+    url = "https://github.com/nikita-volkov/stm-hamt/commit/4f094ab328606ce7ab8592604cc7fc72eebe6b01.patch";
+    sha256 = "sha256-y6/hK18YveyPhRtvrGvJ+Ho4fKoAeD7efXgkusyWfug=";
+  }) super.stm-hamt;
 
   # composite-aeson <0.8, composite-base <0.8
   compdoc = doJailbreak super.compdoc;
