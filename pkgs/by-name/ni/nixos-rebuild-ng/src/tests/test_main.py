@@ -40,8 +40,21 @@ def test_parse_args() -> None:
             "--flake",
             "/etc/nixos",
             "--option",
-            "foo",
-            "bar",
+            "foo1",
+            "bar1",
+            "--option",
+            "foo2",
+            "bar2",
+            "--override-input",
+            "override1",
+            "input1",
+            "--override-input",
+            "override2",
+            "input2",
+            "--update-input",
+            "input1",
+            "--update-input",
+            "input2",
         ]
     )
     assert nr.logger.level == logging.INFO
@@ -50,8 +63,27 @@ def test_parse_args() -> None:
     assert r1.install_grub is True
     assert r1.profile_name == "system"
     assert r1.action == "switch"
-    assert r1.option == ["foo", "bar"]
-    assert g1["common_flags"].option == ["foo", "bar"]
+    # round-trip test (ensure that we have the same flags as parsed)
+    assert nr.utils.dict_to_flags(vars(g1["common_flags"])) == [
+        "--option",
+        "foo1",
+        "bar1",
+        "--option",
+        "foo2",
+        "bar2",
+    ]
+    assert nr.utils.dict_to_flags(vars(g1["flake_common_flags"])) == [
+        "--update-input",
+        "input1",
+        "--update-input",
+        "input2",
+        "--override-input",
+        "override1",
+        "input1",
+        "--override-input",
+        "override2",
+        "input2",
+    ]
 
     r2, g2 = nr.parse_args(
         [
@@ -63,7 +95,13 @@ def test_parse_args() -> None:
             "foo",
             "--attr",
             "bar",
+            "-I",
+            "include1",
+            "-I",
+            "include2",
             "-vvv",
+            "--quiet",
+            "--quiet",
         ]
     )
     assert nr.logger.level == logging.DEBUG
@@ -72,7 +110,18 @@ def test_parse_args() -> None:
     assert r2.action == "dry-build"
     assert r2.file == "foo"
     assert r2.attr == "bar"
-    assert g2["common_flags"].v == 3
+    # round-trip test (ensure that we have the same flags as parsed)
+    assert nr.utils.dict_to_flags(vars(g2["common_flags"])) == [
+        "-vvv",
+        "--quiet",
+        "--quiet",
+    ]
+    assert nr.utils.dict_to_flags(vars(g2["common_build_flags"])) == [
+        "--include",
+        "include1",
+        "--include",
+        "include2",
+    ]
 
 
 @patch.dict(nr.process.os.environ, {}, clear=True)
@@ -292,6 +341,10 @@ def test_execute_nix_switch_flake(mock_run: Any, tmp_path: Path) -> None:
             "--sudo",
             "--verbose",
             "--fast",
+            # https://github.com/NixOS/nixpkgs/issues/374050
+            "--option",
+            "narinfo-cache-negative-ttl",
+            "1200",
         ]
     )
 
@@ -307,6 +360,9 @@ def test_execute_nix_switch_flake(mock_run: Any, tmp_path: Path) -> None:
                     "--print-out-paths",
                     "/path/to/config#nixosConfigurations.hostname.config.system.build.toplevel",
                     "-v",
+                    "--option",
+                    "narinfo-cache-negative-ttl",
+                    "1200",
                     "--no-link",
                 ],
                 check=True,
