@@ -11,6 +11,7 @@
   torch,
   tqdm,
   flaky,
+  llvmPackages,
   pandas,
   pytestCheckHook,
   safetensors,
@@ -19,15 +20,15 @@
 
 buildPythonPackage rec {
   pname = "skorch";
-  version = "1.0.0";
+  version = "1.1.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-JcplwaeYlGRAJXRNac1Ya/hgWoHE+NWjZhCU9eaSyRQ=";
+    hash = "sha256-AguMhI/MO4DNexe5azVEXOw7laTRBN0ecFW81qqh0rY=";
   };
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   propagatedBuildInputs = [
     numpy
@@ -52,6 +53,8 @@ buildPythonPackage rec {
       --replace "--cov-report=term-missing" ""  \
       --replace "--cov-config .coveragerc" ""
   '';
+
+  checkInputs = lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
   disabledTests =
     [
