@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Canvas widget for GTK based on the the Cairo 2D library";
     homepage = "https://gitlab.gnome.org/Archive/goocanvas";
-    license = lib.licenses.lgpl2; # https://gitlab.gnome.org/GNOME/goocanvas/-/issues/12
+    license = lib.licenses.lgpl2Plus; # The license contains the "or later" clause
     maintainers = with lib.maintainers; [
       bobby285271
       pandapip1
