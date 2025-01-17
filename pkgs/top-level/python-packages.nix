@@ -9035,6 +9035,8 @@ self: super: with self; {
 
   netbox-interface-synchronization = callPackage ../development/python-modules/netbox-interface-synchronization { };
 
+  netbox-napalm-plugin = callPackage ../development/python-modules/netbox-napalm-plugin { };
+
   netbox-plugin-prometheus-sd = callPackage ../development/python-modules/netbox-plugin-prometheus-sd { };
 
   netbox-qrcode = callPackage ../development/python-modules/netbox-qrcode { };
