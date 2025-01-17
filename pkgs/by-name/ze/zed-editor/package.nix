@@ -95,7 +95,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "zed-industries";
     repo = "zed";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-UEqlOiB7oNQcrLViPrk9ZCg4uUDYhRXjq0cHp/wclYk=";
   };
 

@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "hrkfdn";
     repo = "ncspot";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-h3Mp67AKuzzeO6l7jN6yrQAHpYSsaOp1Y+qJoamK82U=";
   };
 

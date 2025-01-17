@@ -35,7 +35,7 @@ ps.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "dynobo";
     repo = "normcap";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-iMlW8oEt4OSipJaQ2XzBZeBVqiZP/C1sM0f5LYjv7/A=";
   };
 

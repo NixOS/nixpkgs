@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Opus10";
     repo = "django-pgactivity";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-jOpm/vYy3Ubi+NfvARH19ozZMUgyGD/ZztqxKNvAoLQ=";
   };
 

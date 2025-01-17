@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "kiota-http-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-dtSTrsLVDNJ+s5B3wLvZ9qGerZ8fdYpEsqrBoPf7Lrk=";
   };
 

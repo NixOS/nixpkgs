@@ -32,7 +32,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "datastax";
     repo = "python-driver";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-pnNm5Pd5k4bt+s3GrUUDWRpSdqNSM89GiX8DZKYzW1E=";
   };
 

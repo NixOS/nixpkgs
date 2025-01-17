@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "kitabisa";
     repo = "mubeng";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-V+0XPuMM2Jg2LEpWzxRNLZ44YRoEnf/Fvbj51p9hwL4=";
   };
 

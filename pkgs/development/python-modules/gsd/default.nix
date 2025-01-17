@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "glotzerlab";
     repo = "gsd";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-4HJZZ5UUENHhKePfau6KT4E4qA9YCGpe/IMLyf5egsk=";
   };
 

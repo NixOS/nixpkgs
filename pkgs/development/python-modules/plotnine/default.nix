@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "has2k1";
     repo = "plotnine";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-K2Feqg3UiffZ4izYzrCW+iu7dH61sItOUVtwvzTMth0=";
   };
 

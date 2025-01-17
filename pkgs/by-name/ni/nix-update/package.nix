@@ -17,7 +17,7 @@ let
     src = fetchFromGitHub {
       owner = "Mic92";
       repo = "nix-update";
-      rev = "refs/tags/${self.version}";
+      tag = self.version;
       hash = "sha256-5KhS3RxeVDHKjsxT3hHtl0hHcwlSHl2fYFYLonobpLg=";
     };
 

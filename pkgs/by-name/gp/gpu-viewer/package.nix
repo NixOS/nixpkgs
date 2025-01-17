@@ -33,7 +33,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "arunsivaramanneo";
     repo = "gpu-viewer";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-vFU2VdafY1HmPGRa20PwT6n+Xf4bKBzKJ5jWpvwyMWg=";
   };
 

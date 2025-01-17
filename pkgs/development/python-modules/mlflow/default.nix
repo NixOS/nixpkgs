@@ -76,7 +76,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mlflow";
     repo = "mlflow";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-s3t6RAJh129d5XJKtMNxS0wgGO4mKbAfMCXDBXEKBxM=";
   };
 

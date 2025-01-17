@@ -16,7 +16,7 @@ mkYarnPackage rec {
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "mjolnir";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-yD7QGsS2Em8Z95po9pGRUDmHgHe4z0j0Jnvy3IG7xKY=";
   };
 

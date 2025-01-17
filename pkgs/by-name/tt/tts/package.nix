@@ -24,7 +24,7 @@ python.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "idiap";
     repo = "coqui-ai-TTS";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-5w1Y9wdoJ+EV/WBwK3nqyY60NEsMjQsfE4g+sJB7VwQ=";
   };
 

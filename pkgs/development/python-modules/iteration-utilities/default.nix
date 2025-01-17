@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "MSeifert04";
     repo = "iteration_utilities";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-BiBbmZHo5B/u//LItqEcKtGXOA6xK+T1zoitR9XIiSU=";
   };
 

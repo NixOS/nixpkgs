@@ -16,7 +16,7 @@ flutter.buildFlutterApplication rec {
   src = fetchFromGitHub {
     owner = "saber-notes";
     repo = "saber";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ExnqXpaGDlnuhBUTUjVpc5gEto2Uaqdq9P/AnVDuIBw=";
   };
 

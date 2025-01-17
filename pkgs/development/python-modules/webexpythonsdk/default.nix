@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "CiscoDevNet";
     repo = "WebexPythonSDK";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ENAUUicVO/Br7k+RFHCGzQ7BIG0CP7jTYM3tzs5EAZQ=";
   };
 

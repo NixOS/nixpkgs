@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "python-spanner";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-KwANiuzVyqsz+KKTqNPM1WftuoMtUXRI8xbIdAzZF+s=";
   };
 

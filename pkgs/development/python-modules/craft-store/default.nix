@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "craft-store";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-l8WnuaMJN4/nZRkWoU6omgbd4hKR2m7YC+YVcvAqzcA=";
   };
 

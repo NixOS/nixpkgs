@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Lektrico";
     repo = "lektricowifi";
-    rev = "refs/tags/v.${version}";
+    tag = "v.${version}";
     hash = "sha256-NwM1WpH6tS0iAVpG2gSFJpDPPn9nECHAzpOnWzeYPH4=";
   };
 

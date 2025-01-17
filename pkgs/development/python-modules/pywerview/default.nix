@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "the-useless-one";
     repo = "pywerview";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-G4kcKlb6bq9Vx52MVZ+DCN5k1QcvkoMXm9P959nA1fI=";
   };
 

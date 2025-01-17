@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = "ospd-openvas";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-bFZTwNITDG5OpoWD7F1Ad6BQFpY4Q5CGUGbYy7rTuc0=";
   };
 

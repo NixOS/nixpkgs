@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "proxmoxer";
     repo = "proxmoxer";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-bwNv9eBuatMAWZ/ZOoF4VUZFIYAxJDEEwGQaAwPWcHY=";
   };
 

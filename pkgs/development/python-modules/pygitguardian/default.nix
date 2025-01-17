@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "GitGuardian";
     repo = "py-gitguardian";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-+L0rF5wy4iL/6nPdLSXwYazxsobH2G3pCATrqYe9B6U=";
   };
 

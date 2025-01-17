@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "priv-kweihmann";
     repo = "oelint-adv";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-bDttjeHcIK90W7zPrKNAS4B1L9mibaRjQdnUAU2N8as=";
   };
 

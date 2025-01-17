@@ -31,7 +31,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-kasa";
     repo = "python-kasa";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-405FrKG1jZNrxTmz/K8vqwPhiOqrxURWVCpyFQRJeXc=";
   };
 

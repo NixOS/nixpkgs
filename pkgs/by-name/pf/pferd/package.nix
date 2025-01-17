@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Garmelon";
     repo = "PFERD";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-BUYu04Ie7GNJYUGSH30VbVUQirg1tAl1LY39mnEsLf8=";
   };
 

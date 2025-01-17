@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bimmerconnected";
     repo = "bimmer_connected";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-1Ef+8G30LdMtmOKOPoN3Xa7yhlHLBQvwoiPHJazu3c4=";
   };
 

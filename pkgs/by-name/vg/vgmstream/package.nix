@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "vgmstream";
     repo = "vgmstream";
-    rev = "refs/tags/r${version}";
+    tag = "r${version}";
     hash = "sha256-Wa0FAUHdJtG+u9y3ZOt8dxRIo78lekFPghiu67KJZ9s=";
   };
 

@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "frostming";
     repo = "pbs-installer";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-fftrY1r84o9Vj9Hw18WYItGRRjgKarF1tXmDV2tERXQ=";
   };
 

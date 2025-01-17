@@ -14,7 +14,7 @@ buildGoModule {
   src = fetchFromGitHub {
     owner = "yitsushi";
     repo = "totp-cli";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-WCPDrKGIRrYJFeozXtf8YPgHJ8m6DAsMBD8Xgjvclvc=";
   };
 

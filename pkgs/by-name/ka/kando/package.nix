@@ -29,7 +29,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "kando-menu";
     repo = "kando";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-JcPTplqrMgDsT0HDTh7liChUWvLqe9gwS51ANM3Wsds=";
   };
 

@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "uv";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-xy/fgy3+YvSdfq5ngPVbAmRpYyJH27Cft5QxBwFQumU=";
   };
 

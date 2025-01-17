@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "PostHog";
     repo = "posthog-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-1evqG/rdHBs0bAHM+bIHyT4tFE6tAE+aJyu5r0QqAMk=";
   };
 

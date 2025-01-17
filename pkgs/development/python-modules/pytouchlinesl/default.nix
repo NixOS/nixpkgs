@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jnsgruk";
     repo = "pytouchlinesl";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-BSffzy/MKmpPdvk55Ff76i+p4/cY0OHjS/NOc9tEGwo=";
   };
 
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   meta = {
     description = "A Python API client for Roth's TouchlineSL API";
     homepage = "https://github.com/jnsgruk/pytouchlinesl";
-    changelog = "https://github.com/jnsgruk/pytouchlinesl/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
+    changelog = "https://github.com/jnsgruk/pytouchlinesl/releases/tag/${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ jnsgruk ];
   };

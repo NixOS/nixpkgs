@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "stanford-rc";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-DK0mEqlPf9UGtUxqbzB0l1xX0P4htYm2NYvV7zilhx0=";
   };
 

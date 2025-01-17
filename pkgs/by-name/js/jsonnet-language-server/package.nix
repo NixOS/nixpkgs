@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "jsonnet-language-server";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-GR5EjVd1Tje9FLyP0pfNT6hMUGYkfPnsT8M72H713D4=";
   };
 

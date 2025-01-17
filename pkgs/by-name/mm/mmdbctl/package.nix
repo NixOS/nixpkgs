@@ -16,7 +16,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "ipinfo";
     repo = "mmdbctl";
-    rev = "refs/tags/mmdbctl-${version}";
+    tag = "mmdbctl-${version}";
     hash = "sha256-6hJ9V8fHs84Lq48l3mB9nZka4rLneyxD4HMhWQYZ0cI=";
   };
 

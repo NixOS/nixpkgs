@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "JakeMartin-ICL";
     repo = "monzopy";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-yO0mdqdoRdyl6BDT1vBuTh83zECck3atQtdtWhQCh9s=";
   };
 

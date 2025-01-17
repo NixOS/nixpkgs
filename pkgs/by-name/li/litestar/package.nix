@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "litestar-org";
     repo = "litestar";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-bWo+hhSij0H9XGxpqg1/h7O8U8jjTmlaIHfCU5I4RSI=";
   };
 

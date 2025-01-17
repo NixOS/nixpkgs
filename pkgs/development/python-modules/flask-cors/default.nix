@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "corydolphin";
     repo = "flask-cors";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-I1iCnUT0+ZThf+c9Vm9GgH5hYL/pcBReOjKJGRNsRrg=";
   };
 

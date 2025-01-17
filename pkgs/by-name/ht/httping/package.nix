@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "folkertvanheusden";
     repo = "HTTPing";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-JtsPtrj/ZineBokEytbkZdAfjVLTkiaNcGtKVJlKm38=";
   };
 

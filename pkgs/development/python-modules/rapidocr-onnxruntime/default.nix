@@ -24,7 +24,7 @@ let
   src = fetchFromGitHub {
     owner = "RapidAI";
     repo = "RapidOCR";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-+iY+/IdOgsn+LPZQ4Kdzxuh31csQ7dyh5Zf552ne3N0=";
   };
 

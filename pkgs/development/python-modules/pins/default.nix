@@ -36,7 +36,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rstudio";
     repo = "pins-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-TRwdd0vxqXZgongjooJG5rzTnopUsjfl2I8z3nBocdg=";
   };
 

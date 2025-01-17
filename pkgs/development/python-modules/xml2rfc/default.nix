@@ -32,7 +32,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ietf-tools";
     repo = "xml2rfc";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-cymClLsXPeuWsRMbFJHO55ASzEbau++XvYoBsquDv+Y=";
   };
 

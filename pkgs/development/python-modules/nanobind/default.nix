@@ -33,7 +33,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "wjakob";
     repo = "nanobind";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-AO/EHx2TlXidalhPb+xuUchaek4ki7fDExu2foBgUp0=";
     fetchSubmodules = true;
   };

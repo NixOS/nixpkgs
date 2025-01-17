@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "noahhusby";
     repo = "aiorussound";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-uMVmP4wXF6ln5A/iECf075B6gVnEzQxDTEPcyv5osyM=";
   };
 

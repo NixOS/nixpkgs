@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "kristoff-it";
     repo = "superhtml";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ubFFFHlYTYmivVI5hd/Mj+jFIBuPQ/IycNv3BLxkeuc=";
   };
 

@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ViViDboarder";
     repo = "py_nextbus";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-/pzlxYGXqWix11G7DsHgwkCrSQFT/N1boKcBJ1YpE0A=";
   };
 

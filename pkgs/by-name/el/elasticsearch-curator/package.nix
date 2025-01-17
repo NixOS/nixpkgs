@@ -15,7 +15,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "elastic";
     repo = "curator";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-nSBsLzem+eZBM0ebhW1Omh+pYYPYdly/VraM89iJe3E=";
   };
 

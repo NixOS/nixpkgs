@@ -34,7 +34,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langsmith-sdk";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-nR3fb3MHBxFvI4qrsTpElLWTDUESZ8J78GsVoCGTIyQ=";
   };
 

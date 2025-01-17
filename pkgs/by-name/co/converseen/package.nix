@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Faster3ck";
     repo = "Converseen";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ISXEEJHE7C1gqEmhIAPuu8ibrh0Cvh7EyRKsFeDuLDE=";
   };
 

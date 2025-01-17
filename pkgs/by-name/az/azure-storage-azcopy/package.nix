@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "azure-storage-azcopy";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-TF0vChuM3OF/YbCsP8Vg4x609Q1QgqwBNmKUdWCHHUc=";
   };
 

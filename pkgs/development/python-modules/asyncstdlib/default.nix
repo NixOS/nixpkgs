@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "maxfischer2781";
     repo = "asyncstdlib";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-RQoq+Okzan4/Q51mlL1EPyZuBSr3+xGWEPSAnZYJGyA=";
   };
 

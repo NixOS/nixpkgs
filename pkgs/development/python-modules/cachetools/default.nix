@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tkem";
     repo = "cachetools";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-WG9PiUMVGaEXXHKbtOFEGjLiSbNnpSI2fXCogpGj1PI=";
   };
 

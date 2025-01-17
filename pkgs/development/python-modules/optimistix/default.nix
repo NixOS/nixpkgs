@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "patrick-kidger";
     repo = "optimistix";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-s8MRPyPObTpgLRm4bxU8F4Su7FKH+MHqtQsxIHb/DN4=";
   };
 

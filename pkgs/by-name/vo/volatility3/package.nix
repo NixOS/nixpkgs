@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "volatilityfoundation";
     repo = "volatility3";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-elTUAvSe91TqpsTXg08SPKaVr6iM7FKcBaVNunv+HfU=";
   };
 

@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "eylles";
     repo = "pywal16";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-YKHOH1bEsZHTgYm8AYpfA6C8RtWxAqNQ+GHMcdaj/JU=";
   };
 

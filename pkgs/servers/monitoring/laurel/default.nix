@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "threathunters-io";
     repo = "laurel";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-vasu4ffSdiyeXGV8JUZYL3I/04UvZ/mOImdE45la9y8=";
   };
 

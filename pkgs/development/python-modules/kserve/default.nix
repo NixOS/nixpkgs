@@ -55,7 +55,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kserve";
     repo = "kserve";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-N/IgiTiyBNw7WQWxcUJlXU+Q9o3UUaduD9ZBKwu0uRE=";
   };
 

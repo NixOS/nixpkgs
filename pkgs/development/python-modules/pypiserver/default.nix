@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pypiserver";
     repo = "pypiserver";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-5GJthS3kWOyWvYW+mYnIcNKD3fgSVexABZ+DpVh7qkE=";
   };
 

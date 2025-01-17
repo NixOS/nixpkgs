@@ -18,7 +18,7 @@ let
     src = fetchFromGitHub {
       owner = "OmniSharp";
       repo = "omnisharp-roslyn";
-      rev = "refs/tags/v${version}";
+      tag = "v${version}";
       hash = "sha256-WQIBNqUqvVA0UhSoPdf179X+GYKp4LhPvYeEAet6TnY=";
     };
 

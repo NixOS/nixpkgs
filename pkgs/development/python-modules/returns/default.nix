@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dry-python";
     repo = "returns";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-4ZP/wvPgqQQec/BaXuL9r7BEc2G+LztMdFul0NeEJTc=";
   };
 

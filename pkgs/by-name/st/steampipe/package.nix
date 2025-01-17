@@ -18,7 +18,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "turbot";
     repo = "steampipe";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-BGV5x828WRaBTCddmKl6quMR/FGxXtJEezt8J3H6gPQ=";
   };
 

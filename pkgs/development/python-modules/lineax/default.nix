@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "patrick-kidger";
     repo = "lineax";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-HcFI55Ww/y7ZaUkawj7xWSb7VDTBec3u0ulWL8kTm2c=";
   };
 

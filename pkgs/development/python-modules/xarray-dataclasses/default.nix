@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "astropenguin";
     repo = "xarray-dataclasses";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-NZBWq1G63yef6h9TjRBfCqPzhaks0Cm7bUCJfIIpmcE=";
   };
 

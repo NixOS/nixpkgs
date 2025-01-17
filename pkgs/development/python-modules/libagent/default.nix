@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "romanz";
     repo = "trezor-agent";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-NmpFyLjLdR9r1tc06iDNH8Tc7isUelTg13mWPrQvxSc=";
   };
 

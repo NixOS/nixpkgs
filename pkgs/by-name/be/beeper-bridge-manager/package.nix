@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "beeper";
     repo = "bridge-manager";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Q8RgfkPw8KPkfORaPCwM18rNhzNm4UcH4hSdfYe4FZo=";
   };
 

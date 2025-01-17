@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication {
   src = fetchFromGitHub {
     owner = "Softcatala";
     repo = "whisper-ctranslate2";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-sIkZIzSGqPbjg9BMkcciGFr024Pd8ohXl/NdbsxhjH0=";
   };
 

@@ -14,7 +14,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "anametologin";
     repo = "krohnkite";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-PiGpYOKvBpwkPfDWHlOhq7dwyBYzfzfJVURiEC1a78g=";
   };
 

@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "libfuse";
     repo = "pyfuse3";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-J4xHiaV8GCtUQ9GJS8YRXpMsuzuwbtnzspvuIonHT24=";
   };
 

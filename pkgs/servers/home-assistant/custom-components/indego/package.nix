@@ -13,7 +13,7 @@ buildHomeAssistantComponent rec {
   src = fetchFromGitHub {
     owner = "sander1988";
     repo = "Indego";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-SiYjducy0NP5bF3STVzhBdnJraNjHywHfD7OmAnYmr0=";
   };
 
