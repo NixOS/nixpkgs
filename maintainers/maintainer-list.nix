@@ -11524,6 +11524,13 @@
     githubId = 1792886;
     name = "Julien Malka";
   };
+  juliuskreutz = {
+    email = "julius@kreutz.dev";
+    github = "juliuskreutz";
+    githubId = 47820349;
+    name = "Julius Kreutz";
+    keys = [ { fingerprint = "EBE7 5BC0 5820 6BC9 F440  895F F7D6 E464 4ACD 05A4"; } ];
+  };
   juliusrickert = {
     email = "nixpkgs@juliusrickert.de";
     github = "juliusrickert";
