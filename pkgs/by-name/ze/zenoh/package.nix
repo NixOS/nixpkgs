@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  nixosTests,
   testers,
   zenoh,
 }:
@@ -33,9 +34,12 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = false;
 
-  passthru.tests.version = testers.testVersion {
-    package = zenoh;
-    version = "v" + version;
+  passthru.tests = {
+    version = testers.testVersion {
+      package = zenoh;
+      version = "v" + version;
+    };
+    zenohd = nixosTests.zenohd;
   };
 
   meta = {
