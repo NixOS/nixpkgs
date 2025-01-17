@@ -18,14 +18,44 @@ my $extraPrefix = $ENV{"extraPrefix"};
 
 my @pathsToLink = split ' ', $ENV{"pathsToLink"};
 
-sub isInPathsToLink {
+# Normalize paths in pathsToLink. Normalized paths do not have duplicated
+# or trailing slashes and have a leading slash except for the root which is
+# an empty string. E.g.: "", "/foo", "/foo/bar".
+foreach my $pathToLink (@pathsToLink) {
+    my @parts = split(/\//, $pathToLink);
+    @parts = grep { $_ ne '' } @parts;
+    $pathToLink = join "", map { "/" . $_ } @parts;
+}
+
+# Determine if two paths are related, that is they are equal or one is below
+# the other. Both paths must be normalized as done above for pathsToLink
+# (note that $relName in findFiles is normalized due to its construction).
+# Examples: ("/a/b", "") -> 1, ("/a/b", "/a") -> 1, ("/a/b", "/a/b") -> 1,
+# ("/a/b", "/a/b/c") -> 1, ("/a/b", "/c") -> 0, ("/a/b", "/c/d/e") -> 0.
+sub pathsAreRelated {
+    my ($path1, $path2) = @_;
+    my $len1 = length($path1);
+    my $len2 = length($path2);
+    if ($len1 == $len2) {
+        return $path1 eq $path2;
+    } elsif ($len1 < $len2) {
+        return $path1 eq substr($path2, 0, $len1) && substr($path2, $len1, 1) eq "/";
+    } else {
+        return $path2 eq substr($path1, 0, $len2) && substr($path1, $len2, 1) eq "/";
+    }
+}
+
+# Determine if a path is related to any of the paths in pathsToLink - see
+# pathsAreRelated. This effectively determines whether findFiles should skip
+# processing of the path in order to include just the right paths (as far as
+# pathsToLink is concerned). This must return true for a path that is above
+# some pathToLink because it may be a directory that contains paths wich must
+# be included! For example, "/a" must not be skipped if pathsToLink contains
+# "/a/b/c".
+sub pathIsRelatedToPathsToLink {
     my $path = shift;
-    $path = "/" if $path eq "";
-    foreach my $elem (@pathsToLink) {
-        return 1 if
-            $elem eq "/" ||
-            (substr($path, 0, length($elem)) eq $elem
-             && (($path eq $elem) || (substr($path, length($elem), 1) eq "/")));
+    foreach my $pathToLink (@pathsToLink) {
+        return 1 if pathsAreRelated($path, $pathToLink);
     }
     return 0;
 }
@@ -126,6 +156,10 @@ sub findFiles {
             die "The store path $target is a file and can't be merged into an environment using pkgs.buildEnv!";
         }
     }
+
+    # Skip the path if it is not related to any pathToLink.
+    # See this function for the explanation.
+    return if !pathIsRelatedToPathsToLink($relName);
 
     # Urgh, hacky...
     return if
@@ -283,7 +317,6 @@ my $nrLinks = 0;
 foreach my $relName (sort keys %symlinks) {
     my ($target, $priority) = @{$symlinks{$relName}};
     my $abs = "$out" . "$extraPrefix" . "/$relName";
-    next unless isInPathsToLink $relName;
     if ($target eq "") {
         #print "creating directory $relName\n";
         mkpath $abs or die "cannot create directory `$abs': $!";
