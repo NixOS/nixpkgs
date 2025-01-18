@@ -4,9 +4,8 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
-  testers,
   nix-update-script,
-  go-task,
+  versionCheckHook,
 }:
 
 buildGoModule rec {
@@ -47,15 +46,14 @@ buildGoModule rec {
         --zsh <($out/bin/task --completion zsh)
     '';
 
-  passthru = {
-    tests = {
-      version = testers.testVersion {
-        package = go-task;
-      };
-    };
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgram = "${placeholder "out"}/bin/task";
+  versionCheckProgramArg = [ "--version" ];
 
-    updateScript = nix-update-script { };
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://taskfile.dev/";
