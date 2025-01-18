@@ -8,6 +8,7 @@
   openssl,
   stdenv,
   darwin,
+  versionCheckHook,
   nix-update-script,
 }:
 
@@ -47,6 +48,13 @@ rustPlatform.buildRustPackage rec {
   # See also:
   #   https://travis-ci.org/sagiegurari/cargo-make
   doCheck = false;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgram = "${placeholder "out"}/bin/makers";
+  versionCheckProgramArg = [ "--version" ];
 
   passthru.updateScript = nix-update-script { };
 
