@@ -3016,6 +3016,12 @@ self: super: {
       '' + (drv.postPatch or "");
     }) (doJailbreak (addExtraLibrary pkgs.pkg-config (addExtraLibrary pkgs.poppler super.pdftotext)));
 
+  proto3-wire = appendPatch (fetchpatch {
+    # https://github.com/awakesecurity/proto3-wire/pull/109
+    url = "https://github.com/awakesecurity/proto3-wire/commit/b32f3db6f8d36ea0708fb2f371f62d439ea45b42.patch";
+    hash = "sha256-EGFyk3XawU0+zk299WGwFKB2uW9eJrCDM6NgfIKWgRY=";
+  }) super.proto3-wire;
+
   # 2024-07-27: building test component requires non-trivial custom build steps
   # https://github.com/awakesecurity/proto3-suite/blob/bec9d40e2767143deed5b2d451197191f1d8c7d5/nix/overlays/haskell-packages.nix#L311
   proto3-suite = lib.pipe super.proto3-suite [
