@@ -30,7 +30,9 @@ buildPythonPackage rec {
     hash = "sha256-AguMhI/MO4DNexe5azVEXOw7laTRBN0ecFW81qqh0rY=";
   };
 
-  disabled = pythonOlder "3.9";
+  # AttributeError: 'NoneType' object has no attribute 'span' with Python 3.13
+  # https://github.com/skorch-dev/skorch/issues/1080
+  disabled = pythonOlder "3.9" || pythonAtLeast "3.13";
 
   build-system = [ setuptools ];
 
