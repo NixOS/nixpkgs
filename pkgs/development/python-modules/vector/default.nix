@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "vector";
-  version = "1.5.2";
+  version = "1.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "vector";
     tag = "v${version}";
-    hash = "sha256-lj6ZloBGZqHW0g7lCD7m9zvszJceB9TQ3r6B3Xuj5KE=";
+    hash = "sha256-W10j1oQdmJ7GE0dCsAPtIsEPy4L2CIvVEZZqm7aHxII=";
   };
 
   build-system = [
