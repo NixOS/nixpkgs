@@ -68,14 +68,10 @@ let
   openvdb_tbb_2021_8 = openvdb.override { tbb = tbb_2021_11; };
   wxGTK-override' = if wxGTK-override == null then wxGTK-prusa else wxGTK-override;
   opencascade-override' = if opencascade-override == null then opencascade-occt_7_6_1 else opencascade-override;
-
-  patches = [
-  ];
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "prusa-slicer";
   version = "2.9.0";
-  inherit patches;
 
   src = fetchFromGitHub {
     owner = "prusa3d";
@@ -83,6 +79,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-6BrmTNIiu6oI/CbKPKoFQIh1aHEVfJPIkxomQou0xKk=";
     rev = "version_${finalAttrs.version}";
   };
+
+  # https://github.com/prusa3d/PrusaSlicer/pull/14010
+  patches = [(fetchpatch {
+    url = "https://github.com/prusa3d/PrusaSlicer/commit/cdc3db58f9002778a0ca74517865527f50ade4c3.patch";
+    hash = "sha256-zgpGg1jtdnCBaWjR6oUcHo5sGuZx5oEzpux3dpRdMAM=";
+  })];
 
   # required for GCC 14
   # (not applicable to super-slicer fork)
