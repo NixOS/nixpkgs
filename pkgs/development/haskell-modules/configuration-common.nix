@@ -378,6 +378,25 @@ self: super: {
   # if it's a bug, at least doesn't seem to be nixpkgs-specific.
   nspace = dontCheck super.nspace;
 
+  # Unreleased commits relaxing bounds on various dependencies
+  gitit = appendPatches [
+    (fetchpatch {
+      name = "gitit-allow-hoauth2-2.14.patch";
+      url = "https://github.com/jgm/gitit/commit/58a226c48b37f076ccc1b94ad88a9ffc05f983cc.patch";
+      sha256 = "1fvfzbas18vsv9qvddp6g82hy9hdgz34n51w6dpkd7cm4sl07pjv";
+    })
+    (fetchpatch {
+      name = "gitit-allow-pandoc-3.6.patch";
+      url = "https://github.com/jgm/gitit/commit/c57c790fa0db81d383f22901a0db4ffe90f1bfcc.patch";
+      sha256 = "0nbzxyc9gkhkag1fhv3qmw5zgblhbz0axrlsismrcvdzr28amii8";
+    })
+    (fetchpatch {
+      name = "gitit-allow-zlib-0.7-network-3.2.patch";
+      url = "https://github.com/jgm/gitit/commit/efaee62bc32c558e618ad34458fa2ef85cb8eb1e.patch";
+      sha256 = "1ghky3afnib56w102mh09cz2alfyq743164mnjywwfl6a6yl6i5h";
+    })
+  ] super.gitit;
+
   # 2024-03-10: Maintainance stalled, fixes unmerged: https://github.com/haskell/ThreadScope/pull/130
   threadscope = overrideCabal (drv: {
     prePatch = drv.prePatch or "" + ''
