@@ -8,6 +8,7 @@
   openssl,
   stdenv,
   darwin,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -46,6 +47,8 @@ rustPlatform.buildRustPackage rec {
   # See also:
   #   https://travis-ci.org/sagiegurari/cargo-make
   doCheck = false;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Rust task runner and build tool";
