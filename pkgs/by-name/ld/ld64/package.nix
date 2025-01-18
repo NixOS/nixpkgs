@@ -146,7 +146,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  env.NIX_CFLAGS_COMPILE = "-DTARGET_OS_BRIDGE=0 -I${privateHeaders}/include";
+  env.NIX_CFLAGS_COMPILE = "-I${privateHeaders}/include";
 
   nativeBuildInputs = [
     meson
