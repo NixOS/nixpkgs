@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "jsonargparse";
-  version = "4.35.0";
+  version = "4.36.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     owner = "omni-us";
     repo = "jsonargparse";
     tag = "v${version}";
-    hash = "sha256-+gxwajChbdcsIa8Jp0iva3ik5vZeMRa38KuoQwIGNoU=";
+    hash = "sha256-wtYE6DQ6EgTFJjzx3IdavnV6TUIGmvPM3PR/+9oeJAk=";
   };
 
   build-system = [ setuptools ];
