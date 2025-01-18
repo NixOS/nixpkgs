@@ -39,14 +39,14 @@
 let
   self = buildPythonPackage rec {
     pname = "dask";
-    version = "2024.12.1";
+    version = "2025.1.0";
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = "dask";
       repo = "dask";
       tag = version;
-      hash = "sha256-QqvdldAHW2UYt1NXfk3Aa+oe97e+OpRbF8d6eKV3OJ4=";
+      hash = "sha256-KBqOyf471mNg3L9dYmR7IRSltEtC+VgC+6ptsoKgVmM=";
     };
 
     build-system = [ setuptools ];
@@ -141,8 +141,6 @@ let
         "test_to_bag"
       ]
       ++ [
-        # https://github.com/dask/dask/issues/10347#issuecomment-1589683941
-        "test_concat_categorical"
         # AttributeError: 'ArrowStringArray' object has no attribute 'tobytes'. Did you mean: 'nbytes'?
         "test_dot"
         "test_dot_nan"
