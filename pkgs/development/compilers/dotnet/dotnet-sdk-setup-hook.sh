@@ -85,6 +85,7 @@ configureNuget() {
     rootConfig=$(find . -maxdepth 1 -iname nuget.config -print -quit)
     if [[ -z $rootConfig ]]; then
         dotnet new nugetconfig
+        rootConfig=nuget.config
     fi
 
     (
@@ -99,6 +100,18 @@ configureNuget() {
             -i /configuration/packageSources/__new -t attr -n key -v _nix
             -i /configuration/packageSources/__new -t attr -n value -v "$nugetSource"
             -r /configuration/packageSources/__new -v add)
+
+        if [[ -n ${keepNugetConfig-} ]] && ! xmlstarlet select -t -i "/configuration/packageSources/clear" -nl "$rootConfig"; then
+            @xmlstarlet@/bin/xmlstarlet ed --inplace \
+                -s /configuration -t elem -n "packageSources" \
+                -d "/configuration/packageSources[position() != 1]" \
+                -s "/configuration/packageSources" -t elem -n __unused \
+                -i "/configuration/packageSources/*[1]" -t elem -n add \
+                -i "/configuration/packageSources/*[1]" -t attr -n key -v "nuget" \
+                -i "/configuration/packageSources/*[1]" -t attr -n value -v "https://api.nuget.org/v3/index.json" \
+                -d "/configuration/packageSources/__unused" \
+                "$rootConfig"
+        fi
 
         if [[ -z ${keepNugetConfig-} ]]; then
             xmlConfigArgs+=(-d '//configuration/*')
