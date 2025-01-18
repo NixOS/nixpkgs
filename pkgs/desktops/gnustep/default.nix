@@ -1,26 +1,25 @@
-{ newScope
-, llvmPackages
+{
+  lib,
+  llvmPackages,
+  newScope,
 }:
 
-let
-  callPackage = newScope self;
-
-  self = {
+lib.makeScope newScope (
+  self: with self; {
     stdenv = llvmPackages.stdenv;
 
-    wrapGNUstepAppsHook = callPackage ./wrapGNUstepAppsHook.nix {};
+    wrapGNUstepAppsHook = callPackage ./wrapGNUstepAppsHook.nix { };
 
-    make = callPackage ./make {};
+    make = callPackage ./make { };
 
-    libobjc = callPackage ./libobjc2 {};
-    base = callPackage ./base {};
-    back = callPackage ./back {};
-    gui = callPackage ./gui {};
+    libobjc = callPackage ./libobjc2 { };
+    base = callPackage ./base { };
+    back = callPackage ./back { };
+    gui = callPackage ./gui { };
 
-    gorm = callPackage ./gorm {};
-    projectcenter = callPackage ./projectcenter {};
-    system_preferences = callPackage ./systempreferences {};
-    gworkspace = callPackage ./gworkspace {};
-  };
-
-in self
+    gorm = callPackage ./gorm { };
+    projectcenter = callPackage ./projectcenter { };
+    system_preferences = callPackage ./systempreferences { };
+    gworkspace = callPackage ./gworkspace { };
+  }
+)
