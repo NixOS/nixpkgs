@@ -26,7 +26,7 @@ buildPythonPackage rec {
     hash = "sha256-irQ4QvpGIAYYKq0UqLuo7Nrnde905+GJFd4HkxsCDmQ=";
   };
 
-  build-setup = [ setuptools ];
+  build-system = [ setuptools ];
 
   dependencies = [
     aiohttp
