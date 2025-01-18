@@ -54,6 +54,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Sphinx extension that makes code examples clickable";
     homepage = "https://github.com/felix-hilden/sphinx-codeautolink";
+    changelog = "https://github.com/felix-hilden/sphinx-codeautolink/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ kaction ];
   };
