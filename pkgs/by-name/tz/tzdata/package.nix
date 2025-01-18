@@ -7,16 +7,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tzdata";
-  version = "2024b";
+  version = "2025a";
 
   srcs = [
     (fetchurl {
       url = "https://data.iana.org/time-zones/releases/tzdata${finalAttrs.version}.tar.gz";
-      hash = "sha256-cOdU2xJqjQ2z0W1rTLX37B4E1fJhJV5FWKZ/6S055VA=";
+      hash = "sha256-TV/Lxyx8RQ6/4LZZvQ8cAvv1L9f1F6nqE/5xwh618NA=";
     })
     (fetchurl {
       url = "https://data.iana.org/time-zones/releases/tzcode${finalAttrs.version}.tar.gz";
-      hash = "sha256-XkOPxEliSQavFqGP9Fc3OfDNqYYuXsKNO8sZy67Q9nI=";
+      hash = "sha256-EZZ51Z92SB614D09KkfXhw1ZLzmZVJrxidvTHy6/UGE=";
     })
   ];
 
