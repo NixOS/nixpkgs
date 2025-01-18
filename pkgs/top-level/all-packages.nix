@@ -1336,7 +1336,6 @@ with pkgs;
 
   dosbox = callPackage ../applications/emulators/dosbox {
     inherit (darwin.apple_sdk.frameworks ) OpenGL;
-    SDL = if stdenv.hostPlatform.isDarwin then SDL else SDL_compat;
   };
 
   dosbox-x = darwin.apple_sdk_11_0.callPackage ../applications/emulators/dosbox-x {
@@ -10531,7 +10530,7 @@ with pkgs;
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 
-  SDL = SDL1;
+  SDL = SDL_compat;
 
   SDL2 = callPackage ../development/libraries/SDL2 {
     inherit (darwin.apple_sdk.frameworks) AudioUnit Cocoa CoreAudio CoreServices ForceFeedback OpenGL;
@@ -16525,7 +16524,7 @@ with pkgs;
   openttd-grfcodec = callPackage ../games/openttd/grfcodec.nix { };
   openttd-nml = callPackage ../games/openttd/nml.nix { };
 
-  openxcom = callPackage ../games/openxcom { SDL = SDL_compat; };
+  openxcom = callPackage ../games/openxcom { };
 
   openxray = callPackage ../games/openxray {
     # Builds with Clang, but hits an assertion failure unless GCC is used
@@ -16577,7 +16576,7 @@ with pkgs;
     ncurses = ncurses5;
   };
 
-  rott = callPackage ../games/rott { SDL = SDL_compat; };
+  rott = callPackage ../games/rott { };
 
   rott-shareware = rott.override {
     buildShareware = true;
