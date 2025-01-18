@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "thebigmunch";
     repo = "tbm-utils";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-AEKawsAxDSDNkIaXEFFgdEBOY2PpASDrhlDrsnM5eyA=";
   };
 

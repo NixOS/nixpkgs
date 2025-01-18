@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = pname;
     repo = "radish";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-9Wt+W7PWUVijzAeZMvcOl/Na60OCCGJJqxh2UaAxAcM=";
   };
 

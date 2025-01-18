@@ -36,7 +36,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dfm";
     repo = "corner.py";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-MYos01YCSUwivymSE2hbjV7eKXfaMqG89koD2CWZjcQ=";
   };
 

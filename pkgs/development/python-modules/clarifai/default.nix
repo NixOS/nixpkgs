@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Clarifai";
     repo = "clarifai-python";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-/fHNRFtxyNa9VdEi5wQ+YA+9mFv3ZpRFJQnWkuxQd5I=";
   };
 

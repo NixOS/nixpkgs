@@ -24,7 +24,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Freed-Wu";
     repo = "autotools-language-server";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-V0EOV1ZmeC+4svc2fqV6AIiL37dkrxUJAnjywMZcENw=";
   };
   patches = [

@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "django-hijack";
     repo = "django-hijack";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-WQ6s5s4Gccog78++tZX2IZ1605OHGhYSb2aTuU7LyBc=";
   };
 

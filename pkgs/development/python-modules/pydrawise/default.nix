@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dknowles2";
     repo = "pydrawise";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-8S1Ce4MW/iD8xRloUtKbUhFIN0+nconnklqxBy7xMm0=";
   };
 

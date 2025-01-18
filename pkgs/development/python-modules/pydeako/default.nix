@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "DeakoLights";
     repo = "pydeako";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Z0H5VhWfjmvvCGTX//hds9dwk2wJSPXckNac1PkQZNA=";
   };
 

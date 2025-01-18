@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "MartinHjelmare";
     repo = "aiovlc";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-NnctcSgEHWEJUB0yDrSYMochh20CfT5jgtcALKmDjdo=";
   };
 

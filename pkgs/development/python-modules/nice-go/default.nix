@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "IceBotYT";
     repo = "nice-go";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-LPH6U0D/JSi8zASlirfkNgfWOh/ArPHoccniNjy2hJc=";
   };
 

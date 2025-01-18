@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bayesian-optimization";
     repo = "BayesianOptimization";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-XAO+UeHsOFAmUXqzMY/Iws1E738ZnU4Wz7E4YNIeGKY=";
   };
 

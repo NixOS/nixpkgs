@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "typeddjango";
     repo = "djangorestframework-stubs";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-m9KxC3dGe+uRB3YIykV/SCOHeItRYNKopF9fqCd10Vk=";
   };
 

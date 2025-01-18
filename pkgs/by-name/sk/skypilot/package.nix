@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "skypilot-org";
     repo = "skypilot";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ZrNI9s7U39SMHqIzOtyuth8Wrkn+T2KSsMfpqO1pxoI=";
   };
 

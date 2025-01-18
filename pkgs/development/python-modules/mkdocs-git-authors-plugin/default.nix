@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "timvink";
     repo = "mkdocs-git-authors-plugin";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-UomcEXWNt5aVE9JxP9wskkHkFYXKN/+jXwr1SXCmeyE=";
   };
 

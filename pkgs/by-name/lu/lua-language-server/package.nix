@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "luals";
     repo = "lua-language-server";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-V8iqMmf9uVwWvFqEYPlc7WhPnPmKMlJuhve81kf3yQg=";
     fetchSubmodules = true;
   };

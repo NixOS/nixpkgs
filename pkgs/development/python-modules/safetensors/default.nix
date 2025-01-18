@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "safetensors";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-gr4hBbecaGHaoNhRQQXWfLfNB0/wQPKftSiTnGgngog=";
   };
 

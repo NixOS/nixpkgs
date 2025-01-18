@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "abdullahselek";
     repo = "HerePy";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-XefoRAaWq5sPQsrqek6kibRjKU+ZImQmt32jutfptNw=";
   };
 

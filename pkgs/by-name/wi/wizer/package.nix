@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "bytecodealliance";
     repo = "wizer";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-bx8V/jaKDpJdWRwYm6GrjsdXQpDyTulRMKVnQZlqLNE=";
   };
 

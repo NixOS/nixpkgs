@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "reflex-dev";
     repo = "reflex-chakra";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-VMFCaJh7HA/bsOV1ONuPJCzhzpQrcppOnPIcIIpeaSs=";
   };
 

@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "devcontainers";
     repo = "cli";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-plIDK5nOvLKFlRVlPHgpjHPhIh0NAWHmbaKsnYCU/7k=";
   };
 

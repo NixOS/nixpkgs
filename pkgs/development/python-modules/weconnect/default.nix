@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tillsteinbach";
     repo = "WeConnect-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-vWnqitYGh68PM9IM2qKJG3g0JrVfIA+s9Ngh8jpNJKg=";
   };
 

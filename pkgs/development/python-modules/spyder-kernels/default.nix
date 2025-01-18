@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "spyder-ide";
     repo = "spyder-kernels";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-OWdm4ytF9evqMEOOASssMag6QuJq2MwqmIZ+4et5IoI=";
   };
 

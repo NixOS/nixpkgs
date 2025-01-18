@@ -12,7 +12,7 @@ let
   src = fetchFromGitHub {
     owner = "firebase";
     repo = "firebase-tools";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-FIflfCSTXm7J2WectS175vc0ccztWa4tE2E2kcbhwJg=";
   };
 in

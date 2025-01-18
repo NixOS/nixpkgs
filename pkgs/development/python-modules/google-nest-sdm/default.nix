@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "allenporter";
     repo = "python-google-nest-sdm";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-F/vpyg3EYgKCsq/0yL3uP+1azu8bbHOMsf85Yabl0KQ=";
   };
 

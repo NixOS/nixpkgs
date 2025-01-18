@@ -17,7 +17,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "DCsunset";
     repo = "pandoc-include";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-rhA+mPjwMoWwX0VIoSZ3aRmlgUy88eGyjSuM3BhyAAQ=";
   };
 

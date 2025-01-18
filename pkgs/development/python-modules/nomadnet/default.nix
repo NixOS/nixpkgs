@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "markqvist";
     repo = "NomadNet";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-4dHxwTHDe8aE/FFtf9jhOO1Wf3uU7KjBa/ngj8o5iMY=";
   };
 

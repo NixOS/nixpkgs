@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "acsone";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     sha256 = "sha256-I3jaiG0Xu8B34q30p7zTs+FeBXUQiPKTAJLSVxE9gYE=";
   };
 

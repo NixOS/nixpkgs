@@ -27,7 +27,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "mijorus";
     repo = "gearlever";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-OpNzJwEjLni/vG1RtRSH29wovMRwKzJn+Vep1vZDEFM=";
   };
 

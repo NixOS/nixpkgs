@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Erotemic";
     repo = "xdoctest";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-1c3wnQ30J2OfnBffzGfPPt9St8VpLGmFGbifzbw+cOc=";
   };
 

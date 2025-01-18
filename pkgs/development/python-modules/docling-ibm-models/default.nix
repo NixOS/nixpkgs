@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "DS4SD";
     repo = "docling-ibm-models";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-vSEW1+mFTjUvjjUOoX3aGgT/y8iwP3JGIZaPh9RbX5I=";
   };
 

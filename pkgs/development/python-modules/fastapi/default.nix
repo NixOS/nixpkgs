@@ -48,7 +48,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tiangolo";
     repo = "fastapi";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-JIaPgZVbz887liVwd3YtubJm+L4tFCM9Jcn9/smjiKo=";
   };
 

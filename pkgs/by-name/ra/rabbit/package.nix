@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "natarajan-chidambaram";
     repo = "RABBIT";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-diy94QhgLHLvkb1kKhGDxiHAyQ43BNJUXjHFYahEDpw=";
   };
 

@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     repo = "pyomo";
     owner = "pyomo";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-+r8HyIEFcWB6WHwKbos8IGRAmekRsPDJWbtQ5mVpHrE=";
   };
 

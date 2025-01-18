@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Napsty";
     repo = "check_esxi_hardware";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-u0LklUrzj92mzSzD61C/lxA37bx6nWlRzE1+1fcTL14=";
   };
 

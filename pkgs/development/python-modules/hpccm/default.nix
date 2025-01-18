@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "hpc-container-maker";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-uB2+1Nc+SgPzB5hJI1L6yD8gn0hGOkIZF6rejq4rYg8=";
   };
 

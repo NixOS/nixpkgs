@@ -37,7 +37,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "falconry";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-7719gOM8WQVjODwOSo7HpH3HMFFeCGQQYBKktBAevig=";
   };
 

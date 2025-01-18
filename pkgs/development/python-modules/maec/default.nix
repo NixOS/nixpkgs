@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "MAECProject";
     repo = "python-maec";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-I2Ov2AQiC9D8ivHqn7owcTsNS7Kw+CWVyijK3VO52Og=";
   };
 

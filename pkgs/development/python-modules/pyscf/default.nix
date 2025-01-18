@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyscf";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-lXOREy0BABcjpAkxIMy245SAX8HfJKj/QSHGob14GgI=";
   };
 

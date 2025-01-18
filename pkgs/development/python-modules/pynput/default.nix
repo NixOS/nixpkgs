@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "moses-palmer";
     repo = "pynput";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-gRq4LS9NvPL98N0Jk09Z0GfoHS09o3zM284BEWS+NW4=";
   };
 

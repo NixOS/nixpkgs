@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "astropy";
     repo = "astropy-iers-data";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-PGr8meqVs9l15+k5DHmcPcGK96ydN0nRUOBVfvCtRUg=";
   };
 

@@ -31,7 +31,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "omni-us";
     repo = "jsonargparse";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-dj2539vTmzsGNvHqjsCzqo2sqOh2ink8Ut4Mi0qCDzI=";
   };
 

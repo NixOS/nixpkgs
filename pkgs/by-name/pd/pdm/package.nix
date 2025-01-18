@@ -32,7 +32,7 @@ python.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "pdm-project";
     repo = "pdm";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-khAS/OpuvZTJGh9/lIGtKONajIonCwc/M9D9lSwzFvw=";
   };
 

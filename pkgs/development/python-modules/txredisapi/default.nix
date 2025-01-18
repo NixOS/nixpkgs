@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "IlyaSkriblovsky";
     repo = "txredisapi";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-6Z2vurTAw9YHxvEiixtdxBH0YHj+Y9aTdsSkafPMZus=";
   };
 

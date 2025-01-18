@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "MatthewFlamm";
     repo = "pynws";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-eAXIlX/K7Cpq+aiPHiRGqhtSHQDtbHONYP0AjRW8JjY=";
   };
 

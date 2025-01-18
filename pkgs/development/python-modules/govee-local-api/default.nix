@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Galorhallen";
     repo = "govee-local-api";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-qBT0Xub+eL7rfF+lQWlheBJSahEKWjREGJQD6sHjTPk=";
   };
 

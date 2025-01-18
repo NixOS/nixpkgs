@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "imLinguin";
     repo = "comet";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-TdIqdNn5HnIED7LMn4qAzKPHlA5t/Q1Dn+W+ulx5qOU=";
     fetchSubmodules = true;
   };

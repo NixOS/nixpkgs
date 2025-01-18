@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "model-bakers";
     repo = "model_bakery";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-71c5p6FypqbwUUoYu4dTamYnBlks1fiXTp7dUfc0ZQs=";
   };
 

@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "breathe-doc";
     repo = "breathe";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-LJXvtScyWRL8zfj877bJ4xuIbLV9IN3Sn9KPUTLMjMI=";
   };
 

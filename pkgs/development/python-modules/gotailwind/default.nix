@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-gotailwind";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-g4wYjMJXSm7cjb5Zck1O0A+ETfqMTmiI8In26mcGhNw=";
   };
 

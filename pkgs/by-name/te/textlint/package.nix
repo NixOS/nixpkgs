@@ -33,7 +33,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "textlint";
     repo = "textlint";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-M3ahoQxEBTGfQy2k3QqIefh0emgGF9q+AwWTReKWbhM=";
   };
 

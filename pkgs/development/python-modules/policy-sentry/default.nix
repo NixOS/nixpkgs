@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "salesforce";
     repo = "policy_sentry";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-OUe6NAz4w9/OXWQg4W+TmEI5qiSdEp+/tspQnIISTnc=";
   };
 

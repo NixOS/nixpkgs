@@ -15,7 +15,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "languitar";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-QmZX5I1D1iYUQ6Ll0tkbpjzqaOIBaGAltKHwUqLB6uk=";
   };
 

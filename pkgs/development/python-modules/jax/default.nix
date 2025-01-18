@@ -36,7 +36,7 @@ buildPythonPackage rec {
     owner = "google";
     repo = "jax";
     # google/jax contains tags for jax and jaxlib. Only use jax tags!
-    rev = "refs/tags/jax-v${version}";
+    tag = "jax-v${version}";
     hash = "sha256-qSHPwi3is6Ts7pz5s4KzQHBMbcjGp+vAOsejW3o36Ek=";
   };
 

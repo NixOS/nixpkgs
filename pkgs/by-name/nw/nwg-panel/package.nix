@@ -28,7 +28,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = "nwg-panel";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-/PMUkD2kr8aqmohStntlTOc5XgfR+A3LaeYsk04GvOM=";
   };
 

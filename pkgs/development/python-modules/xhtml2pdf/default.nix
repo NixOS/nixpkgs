@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "xhtml2pdf";
     repo = "xhtml2pdf";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-sva1Oqz4FsLz/www8IPVxol3D0hx5F5hQ0I/rSRP9sE=";
   };
 

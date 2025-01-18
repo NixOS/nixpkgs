@@ -43,7 +43,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "run-llama";
     repo = "llama_index";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-r4xedtxoYv6CcxtDrgwau9LY3kOBg3jXlQm1g59L7x4=";
   };
 

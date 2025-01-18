@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "belane";
     repo = "CloudHunter";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-7iT4vr0kcNXEyJJdBbJsllIcbZRGY3T5t/FjEONkuq0=";
   };
 

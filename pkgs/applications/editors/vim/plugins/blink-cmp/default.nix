@@ -10,7 +10,7 @@ let
   src = fetchFromGitHub {
     owner = "Saghen";
     repo = "blink.cmp";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-LWA3rPvqq+zeK+8zS1kM1BaQ+uaBmlHJy4o7IaT1zsg=";
   };
   libExt = if stdenv.hostPlatform.isDarwin then "dylib" else "so";

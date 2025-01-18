@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "yutto-dev";
     repo = "yutto";
-    rev = "refs/tags/biliass@${version}";
+    tag = "biliass@${version}";
     hash = "sha256-Pn6z4iDxNcLVoY4xk7v0zc8hmajWEaOYFDEw5HEYxl4=";
   };
 

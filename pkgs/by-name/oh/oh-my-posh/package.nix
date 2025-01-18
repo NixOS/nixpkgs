@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "jandedobbeleer";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-quncE2OfSQUnLOEKsqKGBeONCI67CNRB/egqyf7o+4U=";
   };
 

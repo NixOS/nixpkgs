@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "yurijmikhalevich";
     repo = "rclip";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-MdqO6X1dbIzmDuDSjrbmKbQfPIPcyhVIbodERYu9PZU=";
   };
 

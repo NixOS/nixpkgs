@@ -21,7 +21,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "detachhead";
     repo = "basedpyright";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-RwckZqEL5U60XSYul74p9Ezg+N8FrnLkRFpdxIa7/34=";
   };
 

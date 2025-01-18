@@ -15,7 +15,7 @@ beamPackages.mixRelease rec {
   src = fetchFromGitHub {
     owner = "lexical-lsp";
     repo = "lexical";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-YKp1IOBIt6StYpVZyTj3BMZM/+6Bp+galbFpuBKYeOM=";
   };
 

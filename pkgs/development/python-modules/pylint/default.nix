@@ -31,7 +31,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pylint-dev";
     repo = "pylint";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-cnMYHHtIRxIySfZV0jTn+OFji+72cOReyNNDiJ9pbAg=";
   };
 

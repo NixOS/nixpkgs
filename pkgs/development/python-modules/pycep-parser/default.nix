@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gruebel";
     repo = "pycep";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-qogUjj/GwMGwFEin+xJCSOCf5Ut8bgsFakyoMhkyKgU=";
   };
 

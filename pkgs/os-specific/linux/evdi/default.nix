@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "DisplayLink";
     repo = "evdi";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-57DP8kKsPEK1C5A6QfoZZDmm76pn4SaUKEKu9cicyKI=";
   };
 

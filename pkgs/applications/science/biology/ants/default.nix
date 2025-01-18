@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ANTsX";
     repo = "ANTs";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-DZzuHMC0XymFCnDn+H1pRFx9jUt+s03PaN88R4ZBRwY=";
   };
 

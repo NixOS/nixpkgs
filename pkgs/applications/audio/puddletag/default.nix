@@ -16,7 +16,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "puddletag";
     repo = "puddletag";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-oScT8YcQoDf2qZ+J7xKm22Sbfym3tkVUrWT5D2LU5e8=";
   };
 

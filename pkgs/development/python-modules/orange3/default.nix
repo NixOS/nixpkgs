@@ -60,7 +60,7 @@ let
     src = fetchFromGitHub {
       owner = "biolab";
       repo = "orange3";
-      rev = "refs/tags/${version}";
+      tag = version;
       hash = "sha256-3PybiHXH6oIYJb78/a7LnQA6cYUicDx4Mf65QhIhT4w=";
     };
 

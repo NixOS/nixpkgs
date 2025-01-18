@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "nitefood";
     repo = "asn";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-pXPc6cAPqvbECvP3v3Z1Og8jhIhh5zvXomZrxNX6KVI=";
   };
 

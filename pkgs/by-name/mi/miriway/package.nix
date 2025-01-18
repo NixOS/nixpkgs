@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Miriway";
     repo = "Miriway";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-jpXsvr2HnfMCJh851oS+IiQLSmL9C1bnaG6IPSq5xrA=";
   };
 

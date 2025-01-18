@@ -41,7 +41,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "slackapi";
     repo = "bolt-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-wDiRQ44ei59I8/2JXv2j9VQFthdyS7sSEZLS7trhdp0=";
   };
 

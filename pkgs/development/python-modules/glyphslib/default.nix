@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "glyphsLib";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-NanqjZZkxrhPaBsR+FrARvsO3vdT2MYnWFtkO0hpbQg=";
   };
 

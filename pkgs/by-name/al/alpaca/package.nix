@@ -24,7 +24,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Jeffser";
     repo = "Alpaca";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-gEQUVSNf8u92qIg0+5fsLIOPgIASdYdlTRDpzl61P+Q=";
   };
 

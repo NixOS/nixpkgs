@@ -24,7 +24,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "thenaterhood";
     repo = "${pname}";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-fpxKhgLpXbuUhALzF6n4v3FLcLaqbqLLxwQJE/wJrAY=";
   };
 

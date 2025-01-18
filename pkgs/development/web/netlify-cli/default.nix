@@ -15,7 +15,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "netlify";
     repo = "cli";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-34WvnbvLv2bB8CTlFKf351eQ5enYRhDqHoHRvJTBq4M=";
   };
 

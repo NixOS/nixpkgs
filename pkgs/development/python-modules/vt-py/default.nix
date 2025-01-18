@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "VirusTotal";
     repo = "vt-py";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-pMljLoJBSLq1UxXn+iOeiebWgVfdxW8uzdXPsZtANuw=";
   };
 

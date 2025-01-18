@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "SeleniumHQ";
     repo = "selenium";
     # check if there is a newer tag with or without -python suffix
-    rev = "refs/tags/selenium-${version}";
+    tag = "selenium-${version}";
     hash = "sha256-ykZdL2Rn+bU8do3e9zf9pJtInBNRGLcXi5pD1vm7OJY=";
   };
 

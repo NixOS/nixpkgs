@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "anchore";
     repo = "vunnel";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-KemiM+dCLSU3a6IIbI9VKtaIeY4SVcHsuE9QwZtzNxU=";
   };
 

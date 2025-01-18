@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hhursev";
     repo = "recipe-scrapers";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-2rwy7tfTKaUmPJv59WMVGAOUP+vGWquJbF/3BbS3kkA=";
   };
 

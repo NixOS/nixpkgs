@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "eternnoir";
     repo = "pyTelegramBotAPI";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-R/RbkiKkhcZd17hgDJnEpr3OCVMvn744YM+lmzSXKWs=";
   };
 

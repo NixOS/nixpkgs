@@ -88,7 +88,7 @@ gcc11Stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "DCGM";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-n/uWvgvxAGfr1X51XgtHfFGDOO5AMBSV5UWQQpsylpg=";
   };
 

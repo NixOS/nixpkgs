@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bw2";
     repo = "ConfigArgParse";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-m77MY0IZ1AJkd4/Y7ltApvdF9y17Lgn92WZPYTCU9tA=";
   };
 

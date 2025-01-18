@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lucidrains";
     repo = "rotary-embedding-torch";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-VHaCpoASy+pYmfx5X7hrH7hMnP0OTxD/5EPPZy7POaA=";
   };
 

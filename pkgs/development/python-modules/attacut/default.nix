@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "PyThaiNLP";
     repo = "attacut";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-x3JJC1Xd+tsOAHJEHGzIrhIrNGSvLSanAFc7+uXb2Kk=";
   };
 

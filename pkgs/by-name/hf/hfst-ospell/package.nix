@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "hfst";
     repo = "hfst-ospell";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-16H1nbAIe+G71+TnlLG0WnH9LktZwmc0d0O+oYduH1k=";
   };
 

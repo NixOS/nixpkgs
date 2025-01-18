@@ -16,7 +16,7 @@ buildPythonPackage rec {
     inherit pname version;
     owner = "conda";
     repo = "conda-libmamba-solver";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-lIpMzm3wjkugMDwqmVFXDKVJyX/SdzFG5jelZRys8PQ=";
   };
 

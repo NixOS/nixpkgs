@@ -21,7 +21,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "regen100";
     repo = "cmake-language-server";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-9fnyDJm8rUl+7g4FrdMykPpQOcww2M6IPWH/3qVeJX4=";
   };
 

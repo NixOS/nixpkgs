@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     repo = "wagtail-localize";
     owner = "wagtail";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-khGzJj7LBxz5WPU8l20CmQjC9p5umk6spSyMMHBBguc=";
   };
 

@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "jetstack";
     repo = "dependency-track-exporter";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-yvScGxgkyZzEdfeJCXk/tSk3cLW+jyw00XbJVrpU6MY=";
   };
 

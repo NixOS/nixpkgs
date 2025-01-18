@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Equicord";
     repo = "Equibop";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-mK/zoW8Km6xlppxJnVbuas4yE1rpAOd9QnjETlxxnsE=";
   };
 

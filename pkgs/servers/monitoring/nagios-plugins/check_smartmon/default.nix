@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "driehuis";
     repo = "Nagios_check_smartmon";
-    rev = "refs/tags/${version}";
+    tag = version;
     sha256 = "tiIeFiHdDgqoeznk9XdCE7owIMnnsQ0fmtj8foFoUD8=";
   };
 

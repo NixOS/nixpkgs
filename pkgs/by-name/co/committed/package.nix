@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "crate-ci";
     repo = "committed";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-HqZYxV2YjnK7Q3A7B6yVFXME0oc3DZ4RfMkDGa2IQxA=";
   };
   cargoHash = "sha256-AmAEGVWq6KxLtiHDGIFVcoP1Wck8z+P9mnDy0SSSJNM=";

@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jupyter-server";
     repo = "pycrdt";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-TKSBTpOvAr1/HBn3HnwNdEwM1hgbvPdice8bcVhVmH0=";
   };
 
@@ -64,7 +64,7 @@ buildPythonPackage rec {
   meta = {
     description = "CRDTs based on Yrs";
     homepage = "https://github.com/jupyter-server/pycrdt";
-    changelog = "https://github.com/jupyter-server/pycrdt/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
+    changelog = "https://github.com/jupyter-server/pycrdt/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = lib.teams.jupyter.members;
   };

@@ -12,7 +12,7 @@ mkTclDerivation rec {
   src = fetchFromGitHub {
     owner = "flightaware";
     repo = "tclcurl-fa";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-XQuP+SiqvGX3ckBShUxsGBADjV3QdvYpU4hW6LMbMMQ=";
   };
 

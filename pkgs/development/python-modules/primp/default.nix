@@ -31,7 +31,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "deedy5";
     repo = "primp";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-dexJdeNGpRsPLk8b/gNeQc1dsQLOiXNL5zgDEN9qHfQ=";
   };
 

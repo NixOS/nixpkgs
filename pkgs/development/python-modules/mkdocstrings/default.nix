@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mkdocstrings";
     repo = "mkdocstrings";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-xZKE8+bNHL+GSQS00MlShOl/3p7+mRV558Pel50ipOI=";
   };
 

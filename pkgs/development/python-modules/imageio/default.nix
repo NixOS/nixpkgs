@@ -37,7 +37,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "imageio";
     repo = "imageio";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-dQrAVPXtDdibaxxfqW29qY7j5LyegvmI0Y7/btXmsyY=";
   };
 

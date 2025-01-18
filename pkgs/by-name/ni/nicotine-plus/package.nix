@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "nicotine-plus";
     repo = "nicotine-plus";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-6tA3d+QX2ArDH4aeWZNKuIXe3Sk32JaFe8d0C8G9Akc=";
   };
 

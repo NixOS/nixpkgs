@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rstcheck";
     repo = "rstcheck";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-CB8UtYAJpPrUOGgHOIp9Ts0GaID6GdtKHWD/ihxRoNg=";
   };
 

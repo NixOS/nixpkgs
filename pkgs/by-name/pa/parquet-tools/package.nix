@@ -15,7 +15,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "ktrueda";
     repo = "parquet-tools";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-mV66R5ejfzH1IasmoyAWAH5vzrnLVVhOqKBMfWKIVY0=";
   };
 

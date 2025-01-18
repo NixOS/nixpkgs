@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sethmlarson";
     repo = "hstspreload";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Gm0jZbJwVdoU19gkTuzJ9Mop1qsPDboTg53Yiocb3Rc=";
   };
 

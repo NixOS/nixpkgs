@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "craigjmidwinter";
     repo = "total-connect-client";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-NGiI4gn59U7NiRYtB6UydxOu+lVtmbl8qF3nbAjiYwk=";
   };
 

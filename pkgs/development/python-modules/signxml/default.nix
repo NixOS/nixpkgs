@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "XML-Security";
     repo = "signxml";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ZpboU0N8dD03yHSboMpC+TJvp16StM45Qhn0Hv9+6fg=";
   };
 

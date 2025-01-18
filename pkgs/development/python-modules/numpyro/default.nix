@@ -36,7 +36,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyro-ppl";
     repo = "numpyro";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-g+ep221hhLbCjQasKpiEAXkygI5A3Hglqo1tV8lv5eg=";
   };
 

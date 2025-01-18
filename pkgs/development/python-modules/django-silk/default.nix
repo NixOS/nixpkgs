@@ -33,7 +33,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "django-silk";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-teDvQzNmzCOWdPOqlm2GRhhlilOjM+VAcfOXPw/Rq44=";
   };
 

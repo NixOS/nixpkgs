@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "wagga40";
     repo = "Zircolite";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-a7xwF0amsh2SycOjtZpk3dylcBGG9uYd7vmbnz/f9Ug=";
   };
 

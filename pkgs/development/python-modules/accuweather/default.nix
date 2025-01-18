@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bieniu";
     repo = "accuweather";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-hnKwK0I8C8Xh7yn4yk2DqowqgyZYDB22IEllm5MeIGo=";
   };
 

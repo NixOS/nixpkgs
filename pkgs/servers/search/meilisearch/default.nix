@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "meilisearch";
     repo = "meiliSearch";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-CVofke9tOGeDEhRHEt6EYwT52eeAYNqlEd9zPpmXQ2U=";
   };
 

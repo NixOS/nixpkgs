@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-iot-device-sdk-python-v2";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-2ZMNG+6yshEvjEpyN6uV62m11LZUrUHAzpRbm1foif0=";
   };
 

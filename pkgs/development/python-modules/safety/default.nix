@@ -35,7 +35,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyupio";
     repo = "safety";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-etA/S/i87w4ihsqQo5JJjt6hWC7Jt9/q8vhqyo+DTek=";
   };
 

@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "python-proton-core";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-2Drlai/PYzi1z1CtDYfNhol2wamb/HNrvUhj0XsiyHg=";
   };
 
