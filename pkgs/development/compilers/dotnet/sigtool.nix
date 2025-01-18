@@ -1,5 +1,5 @@
 {
-  cctools,
+  buildPackages,
   darwin,
   fetchFromGitHub,
   makeWrapper,
@@ -24,6 +24,6 @@ darwin.sigtool.overrideAttrs (old: {
     + ''
       wrapProgram $out/bin/codesign \
         --set-default CODESIGN_ALLOCATE \
-          "${cctools}/bin/${cctools.targetPrefix}codesign_allocate"
+          "${buildPackages.cctools}/bin/${buildPackages.cctools.targetPrefix}codesign_allocate"
     '';
 })

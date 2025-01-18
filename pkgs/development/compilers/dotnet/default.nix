@@ -28,6 +28,7 @@ makeScopeWithSplicing' {
         import version {
           inherit fetchNupkg;
           buildAspNetCore = attrs: buildDotnet (attrs // { type = "aspnetcore"; });
+          buildWindowsDesktop = attrs: buildDotnet (attrs // { type = "windowsdesktop"; });
           buildNetRuntime = attrs: buildDotnet (attrs // { type = "runtime"; });
           buildNetSdk = attrs: buildDotnet (attrs // { type = "sdk"; });
         };

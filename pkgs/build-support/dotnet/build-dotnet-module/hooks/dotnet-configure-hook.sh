@@ -3,9 +3,6 @@ dotnetConfigureHook() {
 
     runHook preConfigure
 
-    local -r dynamicLinker=@dynamicLinker@
-    local -r libPath=@libPath@
-
     if [[ -n $__structuredAttrs ]]; then
         local dotnetProjectFilesArray=( "${dotnetProjectFiles[@]}" )
         local dotnetTestProjectFilesArray=( "${dotnetTestProjectFiles[@]}" )
