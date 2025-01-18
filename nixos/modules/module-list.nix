@@ -858,6 +858,7 @@
   ./services/misc/radarr.nix
   ./services/misc/radicle.nix
   ./services/misc/readarr.nix
+  ./services/misc/realmd.nix
   ./services/misc/redlib.nix
   ./services/misc/redmine.nix
   ./services/misc/renovate.nix

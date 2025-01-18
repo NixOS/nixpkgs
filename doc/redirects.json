@@ -8,6 +8,9 @@
   "neovim-custom-configuration": [
     "index.html#neovim-custom-configuration"
   ],
+  "neovim-luarocks-based-plugins": [
+    "index.html#neovim-luarocks-based-plugins"
+  ],
   "nixpkgs-manual": [
     "index.html#nixpkgs-manual"
   ],
@@ -3799,7 +3802,8 @@
   "testing-neovim-plugins-neovim-require-check": [
     "index.html#testing-neovim-plugins-neovim-require-check"
   ],
-  "vim-plugin-required-snippet": [
+  "neovim-plugin-required-snippet": [
+    "index.html#neovim-plugin-required-snippet",
     "index.html#vim-plugin-required-snippet"
   ],
   "updating-plugins-in-nixpkgs": [
