@@ -55,7 +55,7 @@ let
     let
       build = name: grammar:
         buildGrammar {
-          language = grammar.language or name;
+          language = grammar.language or (lib.removePrefix "tree-sitter-" name);
           inherit version;
           src = grammar.src or (fetchGrammar grammar);
           location = grammar.location or null;
