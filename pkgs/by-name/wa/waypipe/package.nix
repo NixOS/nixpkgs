@@ -10,20 +10,15 @@
   lz4,
   zstd,
   ffmpeg,
-  libva,
   cargo,
   rustc,
-  git,
   vulkan-headers,
   vulkan-loader,
   shaderc,
-  vulkan-tools,
   llvmPackages,
   autoPatchelfHook,
-  wayland,
   wayland-scanner,
   rust-bindgen,
-  egl-wayland,
 }:
 llvmPackages.stdenv.mkDerivation rec {
   pname = "waypipe";
