@@ -893,6 +893,19 @@ let
         }
       );
 
+      clangLibcNoRt = wrapCCWith (
+        rec {
+          cc = tools.clang-unwrapped;
+          libcxx = null;
+          bintools = bintools';
+          extraPackages = [ ];
+          extraBuildCommands = mkExtraBuildCommands0 cc;
+        }
+        // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "15") {
+          nixSupport.cc-cflags = [ "-fno-exceptions" ];
+        }
+      );
+
       clangNoLibcNoRt = wrapCCWith (
         rec {
           cc = tools.clang-unwrapped;
@@ -1080,6 +1093,9 @@ let
           # Darwin needs to use a bootstrap stdenv to avoid an infinite recursion when cross-compiling.
           if stdenv.hostPlatform.isDarwin then
             overrideCC darwin.bootstrapStdenv buildLlvmTools.clangNoLibcNoRt
+          else if stdenv.targetPlatform.isAndroid then
+            # on android, compiler-rt requires libc in order to compile. For example, see lib/builtins/os_version_check.c.
+            overrideCC stdenv buildLlvmTools.clangLibcNoRt
           else
             overrideCC stdenv buildLlvmTools.clangNoLibcNoRt;
       };

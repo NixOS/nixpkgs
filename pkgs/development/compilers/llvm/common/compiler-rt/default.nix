@@ -40,8 +40,8 @@ let
   # use clean up the `cmakeFlags` rats nest below.
   haveLibcxx = stdenv.cc.libcxx != null;
   isDarwinStatic = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isStatic && lib.versionAtLeast release_version "16";
-  inherit (stdenv.hostPlatform) isMusl isAarch64 isWindows;
-  noSanitizers = !haveLibc || bareMetal || isMusl || isDarwinStatic || isWindows;
+  inherit (stdenv.hostPlatform) isMusl isAarch64 isWindows isAndroid;
+  noSanitizers = !haveLibc || bareMetal || isMusl || isDarwinStatic || isWindows || isAndroid;
 
   baseName = "compiler-rt";
   pname = baseName + lib.optionalString (haveLibc) "-libc";
@@ -191,7 +191,7 @@ stdenv.mkDerivation {
   # Hack around weird upsream RPATH bug
   postInstall = lib.optionalString (stdenv.hostPlatform.isDarwin) ''
     ln -s "$out/lib"/*/* "$out/lib"
-  '' + lib.optionalString (useLLVM && stdenv.hostPlatform.isLinux) ''
+  '' + lib.optionalString (useLLVM && stdenv.hostPlatform.isLinux && !isAndroid) ''
     ln -s $out/lib/*/clang_rt.crtbegin-*.o $out/lib/crtbegin.o
     ln -s $out/lib/*/clang_rt.crtend-*.o $out/lib/crtend.o
     # Note the history of crt{begin,end}S in previous versions of llvm in nixpkg:
