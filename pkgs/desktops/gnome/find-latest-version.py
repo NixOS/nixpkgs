@@ -48,6 +48,16 @@ class Stability(Enum):
             case Stability.UNSTABLE:
                 return True
 
+    def __repr__(self) -> str:
+        """
+        Useful for tests.
+        """
+        match self:
+            case Stability.STABLE:
+                return "Stability.STABLE"
+            case Stability.UNSTABLE:
+                return "Stability.UNSTABLE"
+
 
 VersionPolicy = Callable[[Version], bool]
 VersionClassifier = Callable[[Version], Stability]
@@ -61,7 +71,39 @@ def version_to_list(version: str) -> List[int]:
     return list(map(int, version.split(".")))
 
 
-def odd_unstable(version: Version, selected: Stability) -> bool:
+def odd_unstable(version: Version) -> Stability:
+    """
+    Traditional GNOME version policy
+
+    >>> odd_unstable(Version("32"))
+    Stability.STABLE
+    >>> odd_unstable(Version("3.2.1"))
+    Stability.STABLE
+    >>> odd_unstable(Version("3.2.1.alpha"))
+    Stability.UNSTABLE
+    >>> odd_unstable(Version("3.2.1beta"))
+    Stability.UNSTABLE
+    >>> odd_unstable(Version("4.2.89"))
+    Stability.STABLE
+    >>> odd_unstable(Version("4.2.90"))
+    Stability.STABLE
+    >>> odd_unstable(Version("4.88.2"))
+    Stability.STABLE
+    >>> odd_unstable(Version("4.90.2"))
+    Stability.UNSTABLE
+    >>> odd_unstable(Version("4.3.0"))
+    Stability.UNSTABLE
+    >>> odd_unstable(Version("4.3.89"))
+    Stability.UNSTABLE
+    >>> odd_unstable(Version("4.2.899"))
+    Stability.STABLE
+    >>> odd_unstable(Version("4.2.900"))
+    Stability.STABLE
+    >>> odd_unstable(Version("4.898.2"))
+    Stability.STABLE
+    >>> odd_unstable(Version("4.900.2"))
+    Stability.UNSTABLE
+    """
     try:
         version_parts = version_to_list(version.value)
     except:
@@ -81,6 +123,22 @@ def odd_unstable(version: Version, selected: Stability) -> bool:
 
 
 def tagged(version: Version) -> Stability:
+    """
+    Considers only versions with explicit `alpha`, `beta` or `rc` tags unstable.
+
+    >>> tagged(Version("32"))
+    Stability.STABLE
+    >>> tagged(Version("3.2.1"))
+    Stability.STABLE
+    >>> tagged(Version("4.3.0"))
+    Stability.STABLE
+    >>> tagged(Version("3.2.1.alpha"))
+    Stability.UNSTABLE
+    >>> tagged(Version("3.2.1beta"))
+    Stability.UNSTABLE
+    >>> tagged(Version("3.2.1rc.3"))
+    Stability.UNSTABLE
+    """
     prerelease = "alpha" in version.value or "beta" in version.value or "rc" in version.value
     if prerelease:
         return Stability.UNSTABLE
@@ -89,6 +147,18 @@ def tagged(version: Version) -> Stability:
 
 
 def no_policy(version: Version) -> Stability:
+    """
+    Considers any version stable.
+
+    >>> no_policy(Version("32"))
+    Stability.STABLE
+    >>> no_policy(Version("3.2.1"))
+    Stability.STABLE
+    >>> no_policy(Version("3.2.1.alpha"))
+    Stability.STABLE
+    >>> no_policy(Version("3.2.1beta"))
+    Stability.STABLE
+    """
     return Stability.STABLE
 
 
