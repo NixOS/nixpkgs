@@ -1,0 +1,19 @@
+Index: breeze-plymouth-5.7.3/cmake/FindPlymouth.cmake
+===================================================================
+--- breeze-plymouth-5.7.3.orig/cmake/FindPlymouth.cmake
++++ breeze-plymouth-5.7.3/cmake/FindPlymouth.cmake
+@@ -24,12 +24,8 @@
+ include(FindPkgConfig)
+ 
+ pkg_check_modules(Plymouth ply-boot-client ply-splash-core)
+-exec_program(${PKG_CONFIG_EXECUTABLE}
+-    ARGS ply-splash-core --variable=pluginsdir
+-    OUTPUT_VARIABLE Plymouth_PLUGINSDIR)
+-exec_program(${PKG_CONFIG_EXECUTABLE}
+-    ARGS ply-splash-core --variable=themesdir
+-    OUTPUT_VARIABLE Plymouth_THEMESDIR)
++set(Plymouth_PLUGINSDIR "@out@/lib/plymouth")
++set(Plymouth_THEMESDIR "@out@/share/plymouth/themes")
+ 
+ find_package_handle_standard_args(Plymouth
+     FOUND_VAR

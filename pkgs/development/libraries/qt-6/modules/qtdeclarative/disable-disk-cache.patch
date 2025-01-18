@@ -1,0 +1,17 @@
+--- a/src/qml/jsruntime/qv4engine.cpp
++++ b/src/qml/jsruntime/qv4engine.cpp
+@@ -2208,13 +2208,7 @@ ExecutionEngine::DiskCacheOptions ExecutionEngine::diskCacheOptions() const
+ {
+     if (forceDiskCache())
+         return DiskCache::Enabled;
+-    if (disableDiskCache() || debugger())
+-        return DiskCache::Disabled;
+-    static const DiskCacheOptions options = qmlGetConfigOption<
+-            DiskCacheOptions, transFormDiskCache>("QML_DISK_CACHE");
+-    return hasPreview.loadAcquire()
+-            ? (options & ~DiskCacheOptions(DiskCache::Aot)) // Disable AOT if preview enabled
+-            : options;
++    return DiskCache::Disabled;
+ }
+ 
+ void ExecutionEngine::callInContext(QV4::Function *function, QObject *self,

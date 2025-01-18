@@ -1,0 +1,42 @@
+From c8b35f4b871d00e3020f525425517548bed9f6ad Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Date: Sun, 9 Sep 2018 20:13:27 +0200
+Subject: [PATCH] serial/rfc2217: only subnegotiate on value change
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This was suggested and is a direct copy of Uwe Kleine König's patch
+from [1].
+
+[1]: https://github.com/pyserial/pyserial/issues/376#issuecomment-418885211
+Signed-off-by: Rouven Czerwinski <r.czerwinski@pengutronix.de>
+---
+ serial/rfc2217.py | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
+
+diff --git a/serial/rfc2217.py b/serial/rfc2217.py
+index d962c1e8..2148512d 100644
+--- a/serial/rfc2217.py
++++ b/serial/rfc2217.py
+@@ -330,11 +330,15 @@ def set(self, value):
+         the client needs to know if the change is performed he has to check the
+         state of this object.
+         """
+-        self.value = value
+-        self.state = REQUESTED
+-        self.connection.rfc2217_send_subnegotiation(self.option, self.value)
+-        if self.connection.logger:
+-            self.connection.logger.debug("SB Requesting {} -> {!r}".format(self.name, self.value))
++        if value != self.value:
++            self.value = value
++            self.state = REQUESTED
++            self.connection.rfc2217_send_subnegotiation(self.option, self.value)
++            if self.connection.logger:
++                self.connection.logger.debug("SB Requesting {} -> {!r}".format(self.name, self.value))
++        else:
++            if self.connection.logger:
++                self.connection.logger.debug("SB Requesting {} -> {!r} (skipped)".format(self.name, self.value))
+
+     def is_ready(self):
+         """\
