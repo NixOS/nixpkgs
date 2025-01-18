@@ -1,6 +1,6 @@
 {
   "name": "draupnir",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "A moderation tool for Matrix",
   "main": "lib/index.js",
   "repository": "https://github.com/the-draupnir-project/Draupnir.git",
@@ -70,8 +70,8 @@
     "jsdom": "^24.0.0",
     "matrix-appservice-bridge": "^10.3.1",
     "matrix-bot-sdk": "npm:@vector-im/matrix-bot-sdk@^0.7.1-element.6",
-    "matrix-protection-suite": "npm:@gnuxie/matrix-protection-suite@2.5.1",
-    "matrix-protection-suite-for-matrix-bot-sdk": "npm:@gnuxie/matrix-protection-suite-for-matrix-bot-sdk@2.5.1",
+    "matrix-protection-suite": "npm:@gnuxie/matrix-protection-suite@2.5.2",
+    "matrix-protection-suite-for-matrix-bot-sdk": "npm:@gnuxie/matrix-protection-suite-for-matrix-bot-sdk@2.5.2",
     "parse-duration": "^1.0.2",
     "pg": "^8.8.0",
     "shell-quote": "^1.7.3",
