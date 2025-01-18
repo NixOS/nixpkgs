@@ -1,4 +1,5 @@
 {
+  nix-update-script,
   lib,
   fetchFromGitHub,
   rustPlatform,
@@ -27,6 +28,8 @@ rustPlatform.buildRustPackage rec {
     gtk3
     gtk-layer-shell
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Simple app launcher for wayland written in rust";
