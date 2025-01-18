@@ -2226,6 +2226,8 @@ self: super: with self; {
 
   cftime = callPackage ../development/python-modules/cftime { };
 
+  cfv = callPackage ../development/python-modules/cfv { };
+
   cgal = callPackage ../development/python-modules/cgal {
     inherit (pkgs) cgal;
   };
