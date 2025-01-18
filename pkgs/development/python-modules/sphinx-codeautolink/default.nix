@@ -18,7 +18,7 @@
 buildPythonPackage rec {
   pname = "sphinx-codeautolink";
   version = "0.16.2";
-  format = "pyproject";
+  pyproject = true;
 
   outputs = [
     "out"
@@ -32,8 +32,9 @@ buildPythonPackage rec {
     hash = "sha256-pHo7uA7TXmNdSU8CFRO0heI5rYBw+JeQ2NijmirhhHk=";
   };
 
+  build-system = [ setuptools ];
+
   nativeBuildInputs = [
-    setuptools
     sphinxHook
     sphinx-rtd-theme
     matplotlib
@@ -42,7 +43,7 @@ buildPythonPackage rec {
 
   sphinxRoot = "docs/src";
 
-  propagatedBuildInputs = [
+  dependencies = [
     sphinx
     beautifulsoup4
   ];
