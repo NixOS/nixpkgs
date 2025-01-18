@@ -5,8 +5,8 @@ let
 in
 {
   mir = common {
-    version = "2.19.2";
-    hash = "sha256-E6+FjYJUIgejpat1Kyl0B1JL+mnQd4rXjSQAPTX31qc=";
+    version = "2.19.3";
+    hash = "sha256-WwT0cdLZJlVTTq8REuQrtYWdpRhqEDjYPHDy2oj8Edk=";
   };
 
   mir_2_15 = common {
