@@ -55,7 +55,7 @@ import ./make-test-python.nix (
           ];
 
           # To help with OCR
-          etc."xdg/foot/foot.ini".text = lib.generators.toINI { } {
+          etc."xdg/foot/foot.ini".source = (pkgs.formats.ini { }).generate "foot.ini" {
             main = {
               font = "inconsolata:size=16";
             };
@@ -65,7 +65,7 @@ import ./make-test-python.nix (
               regular2 = foreground;
             };
           };
-          etc."xdg/alacritty/alacritty.yml".text = lib.generators.toYAML { } {
+          etc."xdg/alacritty/alacritty.toml".source = (pkgs.formats.toml { }).generate "alacritty.toml" {
             font = rec {
               normal.family = "Inconsolata";
               bold.family = normal.family;
