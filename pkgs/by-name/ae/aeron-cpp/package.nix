@@ -19,6 +19,13 @@
 let
   version = aeron.version;
 
+  sbeAll_1_31_1 = fetchMavenArtifact {
+    groupId = "uk.co.real-logic";
+    version = "1.31.1";
+    artifactId = "sbe-all";
+    hash = "sha512-Ypsk8PbShFOxm49u1L+TTuApaW6ECTSee+hHEhmY/jNi5AymHXBWwDMBMkzC25aowiHLJS5EnzLk6hu9Lea93Q==";
+  };
+
   sbeAll_1_34_1 = fetchMavenArtifact {
     groupId = "uk.co.real-logic";
     version = "1.34.1";
