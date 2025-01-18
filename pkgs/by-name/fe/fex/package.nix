@@ -6,7 +6,6 @@
   cmake,
   ninja,
   pkg-config,
-  gitMinimal,
   qt5,
   python3,
   xxHash,
@@ -61,7 +60,6 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     cmake
     ninja
     pkg-config
-    gitMinimal
     qt5.wrapQtAppsHook
     llvmPackages.bintools
 
@@ -90,6 +88,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     "-DUSE_LINKER=lld"
     "-DENABLE_LTO=True"
     "-DENABLE_ASSERTIONS=False"
+    (lib.cmakeFeature "OVERRIDE_VERSION" finalAttrs.version)
     (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 
