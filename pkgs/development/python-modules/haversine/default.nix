@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mapado";
     repo = "haversine";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-MKOg2awpamupvuXstiH7VoIY4ax+hy2h2cFXDFKJ2mA=";
   };
 

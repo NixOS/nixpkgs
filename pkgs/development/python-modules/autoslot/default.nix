@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cjrh";
     repo = "autoslot";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-fG4rRwRubJt2aXChEsMybEKal6LscZI7GA2uwtK5Vtg=";
   };
 

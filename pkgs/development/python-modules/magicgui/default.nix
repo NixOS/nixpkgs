@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyapp-kit";
     repo = "magicgui";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-6ye29HtGQ8iwYE2kQ1wWIBC+bzFsMZmJR4eTXWwu7+U=";
   };
 

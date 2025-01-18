@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "johnfactotum";
     repo = "foliate";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-y4c/nlFk0hlr773/O2yvW7VzUx0NZWpcDtk8b9wlL2s=";
     fetchSubmodules = true;
   };

@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.btrfs";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-k5GckcnWsXM6WC129zLXjUxNVcNRmLPp72gSUJBtExo=";
   };
 

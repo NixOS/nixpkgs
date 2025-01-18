@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Mazars-Tech";
     repo = "AD_Miner";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-/TIG1UUfLct9MxCmahWk7F6KlypNan+zk/02zVpPV+w=";
   };
 

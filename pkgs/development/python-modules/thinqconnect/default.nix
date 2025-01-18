@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "thinq-connect";
     repo = "pythinqconnect";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-8TDpoV2FNWzcHwXaEDyt5mRCbmFdtfuIYJK7OqXAgvg=";
   };
 

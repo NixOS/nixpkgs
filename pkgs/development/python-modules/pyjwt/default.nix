@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jpadilla";
     repo = "pyjwt";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-z1sqaSeign0ZDFcg94cli0fIVBxcK14VUlgP+mSaxRA=";
   };
 

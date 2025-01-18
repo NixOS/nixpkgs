@@ -39,7 +39,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "crossbario";
     repo = "autobahn-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-aeTE4a37zr83KZ+v947XikzFrHAhkZ4mj4tXdkQnB84=";
   };
 

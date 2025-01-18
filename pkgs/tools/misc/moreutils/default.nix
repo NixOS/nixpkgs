@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "git://git.joeyh.name/moreutils";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-hVvRAIXlG8+pAD2v/Ma9Z6EUL/1xIRz7Gx1fOxoQyi0=";
   };
 

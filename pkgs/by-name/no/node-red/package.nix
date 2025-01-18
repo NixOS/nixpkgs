@@ -13,7 +13,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "node-red";
     repo = "node-red";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-s+3OrTj/VwjnK6Ml+4aSlLo/GcpC6BWmGmxAaj1SsMI=";
   };
 

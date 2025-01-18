@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "kliment";
     repo = "Printrun";
-    rev = "refs/tags/printrun-${version}";
+    tag = "printrun-${version}";
     hash = "sha256-INJNGAmghoPIiivQp6AV1XmhyIu8SjfKqL8PTpi/tkY=";
   };
 

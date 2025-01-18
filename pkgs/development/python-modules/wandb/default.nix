@@ -80,7 +80,7 @@ let
   src = fetchFromGitHub {
     owner = "wandb";
     repo = "wandb";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-nx50baneYSSIWPAIOkUk4cGCNpWAhv7IwFDQJ4vUMiw=";
   };
 

@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "polyswarm";
     repo = "polyswarm-api";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-3K0FdqsEjt5cTymgxmt0Ohud/+bsILe9bDclZXJqPV8=";
   };
 

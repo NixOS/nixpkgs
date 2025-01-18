@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "chemelli74";
     repo = "aiovodafone";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-BVuDnIp9K+f4jZPPfCABMD+fpPXDQE6/RWTZ8k7ftMI=";
   };
 

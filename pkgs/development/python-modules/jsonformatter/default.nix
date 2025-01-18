@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "MyColorfulDays";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-oK419J/MIxRT+1j/5Yklj1F+4d3wuMXR8IVqJAMKPNw=";
   };
 

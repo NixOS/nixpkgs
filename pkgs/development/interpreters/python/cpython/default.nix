@@ -298,7 +298,7 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
   ] ++ optionals (pythonOlder "3.12") [
     # https://github.com/python/cpython/issues/90656
     ./loongarch-support.patch
-  ] ++ optionals (pythonAtLeast "3.12") [
+  ] ++ optionals (pythonAtLeast "3.12" && pythonOlder "3.14") [
     ./3.12/CVE-2024-12254.patch
   ] ++ optionals (pythonAtLeast "3.11" && pythonOlder "3.13") [
     # backport fix for https://github.com/python/cpython/issues/95855
@@ -492,6 +492,13 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     # This allows build Python to import host Python's sysconfigdata
     mkdir -p "$out/${sitePackages}"
     ln -s "$out/lib/${libPrefix}/"_sysconfigdata*.py "$out/${sitePackages}/"
+    '' + optionalString (pythonAtLeast "3.14") ''
+    # Get rid of retained dependencies on -dev packages, and remove from _sysconfig_vars*.json introduced with Python3.14
+    for i in $out/lib/${libPrefix}/_sysconfig_vars*.json; do
+       sed -i $i -e "s|$TMPDIR|/no-such-path|g"
+    done
+    find $out/lib -name '_sysconfig_vars*.json*' -print -exec nuke-refs ${keep-references} '{}' +
+    ln -s "$out/lib/${libPrefix}/"_sysconfig_vars*.json "$out/${sitePackages}/"
     '' + optionalString stripConfig ''
     rm -R $out/bin/python*-config $out/lib/python*/config-*
     '' + optionalString stripIdlelib ''

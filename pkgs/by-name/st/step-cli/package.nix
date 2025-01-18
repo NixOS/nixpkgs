@@ -15,7 +15,7 @@ buildGoModule {
   src = fetchFromGitHub {
     owner = "smallstep";
     repo = "cli";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-G+/fc1qFXcNOxF+oyDmEZzzOUcODBvX+YfQ8Sx5JQK4=";
     # this file change depending on git branch status (via .gitattributes)
     # https://github.com/NixOS/nixpkgs/issues/84312

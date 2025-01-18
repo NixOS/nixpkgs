@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "getlogbook";
     repo = "logbook";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-bqfFSd7CPYII/3AJCMApqmAYrAWjecOb3JA17FPFMIc=";
   };
 

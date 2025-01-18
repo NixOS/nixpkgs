@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tiagocoutinho";
     repo = "async_modbus";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-OTt/rUa3KLVSFOIUyMNHnqHvPtISxTposNFAgoixRfk=";
   };
 

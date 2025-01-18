@@ -37,7 +37,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "seperman";
     repo = "deepdiff";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-e6eTPSGoJ8r/4vGi/iGVFW/BruBADtVMtnO001Qs0IQ=";
   };
 

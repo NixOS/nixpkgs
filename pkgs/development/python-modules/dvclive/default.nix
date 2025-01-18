@@ -41,7 +41,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "iterative";
     repo = "dvclive";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-WIVRpJD7B6OI7ZfdHT+DunRRiaxHhri5Ge/B1BQ1kJY=";
   };
 

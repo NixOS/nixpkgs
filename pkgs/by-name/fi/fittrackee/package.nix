@@ -34,7 +34,7 @@ python.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "SamR1";
     repo = "FitTrackee";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-K110H5Y8vQrRx2/O+2ezhpGp4G5sJUlzE+1cSYu7+4I=";
   };
 

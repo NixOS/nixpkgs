@@ -86,7 +86,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ggerganov";
     repo = "llama.cpp";
-    rev = "refs/tags/b${finalAttrs.version}";
+    tag = "b${finalAttrs.version}";
     hash = "sha256-rttgk8mF9s3R53+TN5+PdDtkTG5cohn/9wz9Z5gRpdM=";
     leaveDotGit = true;
     postFetch = ''

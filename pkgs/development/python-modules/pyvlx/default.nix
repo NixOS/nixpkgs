@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Julius2342";
     repo = "pyvlx";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-c0HlmqLvpIn2GXorOArBKJ0YzvWz1spmhWwm6Gow2iU=";
   };
 

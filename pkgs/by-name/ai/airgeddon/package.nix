@@ -120,7 +120,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "v1s1t0r1sh3r3";
     repo = "airgeddon";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-3Rx1tMRIpSk+IEJGOs+t+kDlvGHYOx1IOSi+663uzrw=";
   };
 

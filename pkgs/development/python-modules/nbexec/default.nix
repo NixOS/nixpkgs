@@ -25,7 +25,7 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "jsvine";
     repo = "nbexec";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Vv6EHX6WlnSmzQAYlO1mHnz5t078z3RQfVfte1+X2pw=";
   };
 

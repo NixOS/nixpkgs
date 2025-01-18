@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "khast3x";
     repo = "h8mail";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-gKRght/12apPD1u3mRY/yCPT0XAyXwaYgaqyJHrDLgw=";
   };
 

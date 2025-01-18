@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = "yamlfmt";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-l9PtVaAKjtP9apTrKCkC1KDR0IXqLqinpj1onzSrPnI=";
   };
 

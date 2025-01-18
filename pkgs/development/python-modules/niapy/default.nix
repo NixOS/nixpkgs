@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "NiaOrg";
     repo = "NiaPy";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-+5tXwubKdhkcv5NjO/DglK+WJfsJ3AzVx/Y/byDBmGo=";
   };
 

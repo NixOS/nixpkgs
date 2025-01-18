@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "humbertogontijo";
     repo = "python-roborock";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-sPG3AqVrv+BiB+copgaghWDT/Rb/WU0R+Y8Z2J6l+7E=";
   };
 

@@ -18,7 +18,7 @@ buildHomeAssistantComponent rec {
   src = fetchFromGitHub {
     inherit owner;
     repo = "hacs_waste_collection_schedule";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-2WUwUifRCIhz+QmhpY8VGx/USEImpPX0K511xDJWP1I=";
   };
 

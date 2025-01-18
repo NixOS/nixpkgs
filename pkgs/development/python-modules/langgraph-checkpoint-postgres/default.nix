@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
-    rev = "refs/tags/checkpointpostgres==${version}";
+    tag = "checkpointpostgres==${version}";
     hash = "sha256-E3gdHWUYelR/xI3Cv3T2uVwsyt+tOkw9MjX7I2RAuiQ=";
   };
 

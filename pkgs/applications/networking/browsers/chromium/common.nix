@@ -750,6 +750,10 @@ let
         # Use nixpkgs Rust compiler instead of the one shipped by Chromium.
         rust_sysroot_absolute = "${buildPackages.rustc}";
       }
+      // lib.optionalAttrs (chromiumVersionAtLeast "132" && stdenv.hostPlatform.isAarch64) {
+        # Hotfix for "ld.lld: error: undefined symbol: __arm_tpidr2_save" on aarch64-linux
+        libyuv_use_sme = false;
+      }
       // lib.optionalAttrs (chromiumVersionAtLeast "127") {
         rust_bindgen_root = "${buildPackages.rust-bindgen}";
       }

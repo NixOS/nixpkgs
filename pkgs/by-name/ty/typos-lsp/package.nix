@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "tekumara";
     repo = "typos-lsp";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-MnN7cMbvQef3UEQzsrH6i0O+f1nnfHJVI8O8NmBUpuo=";
   };
 

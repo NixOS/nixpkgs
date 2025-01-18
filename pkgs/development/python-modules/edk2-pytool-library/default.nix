@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tianocore";
     repo = "edk2-pytool-library";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-rauk8rY3i5fWUrE8lszyC9KBVjTZ7zhXO98cMhIiiz8=";
   };
 

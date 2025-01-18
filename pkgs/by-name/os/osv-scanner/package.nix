@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = "osv-scanner";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-s288EHtF/YRkPVwe7b1+q/1ky8tQdHvzb8GaOPpRqTw=";
   };
 

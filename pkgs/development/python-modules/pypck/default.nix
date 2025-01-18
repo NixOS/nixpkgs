@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "alengwenus";
     repo = "pypck";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-DWdQUnURL3WBi916vOTawtBqq+SHTu4iLViGczwAWQE=";
   };
 

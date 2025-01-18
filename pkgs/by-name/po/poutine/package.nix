@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "boostsecurityio";
     repo = "poutine";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-9vbK2tc57e/YNfhSVbCMxnzOmmahr9T3x5Tt7GQjVnc=";
   };
 

@@ -10,7 +10,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "amacneil";
     repo = "dbmate";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-stemIBwUYW1TsDUBrgQLq858kPBiaHaXaRIr65lnWQo=";
   };
 

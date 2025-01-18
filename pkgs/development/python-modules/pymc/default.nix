@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pymc-devs";
     repo = "pymc";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-rH6sh05rSrhakcfdc+BSR37kQYO/QEPuw8hHMZZGwdE=";
   };
 

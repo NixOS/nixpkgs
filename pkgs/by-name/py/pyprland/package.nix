@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "hyprland-community";
     repo = "pyprland";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-QONnIElYz8UjyLICSm2QGZME5jx+l2Zw4r7kwHW8YEM=";
   };
 

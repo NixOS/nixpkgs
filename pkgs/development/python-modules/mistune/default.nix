@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lepture";
     repo = "mistune";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-OoTiqJ7hsFP1Yx+7xW3rL+Yc/O2lCMdhBBbaZucyZXM=";
   };
 

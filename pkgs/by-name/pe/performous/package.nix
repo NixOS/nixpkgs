@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "performous";
     repo = "performous";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-f70IHA8LqIlkMRwJqSmszx3keStSx50nKcEWLGEjc3g=";
   };
 

@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-O5I5shW8nL2RAQptS2Bp/GI/4L6o0xXXmwYvRq0MM8o=";
   };
 

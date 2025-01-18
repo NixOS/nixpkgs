@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ikvk";
     repo = "imap_tools";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-2qSmnJnjwXNysUh0xeXshLZklCIOd92aM3gXtL8JhlI=";
   };
 

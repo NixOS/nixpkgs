@@ -45,7 +45,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "BerriAI";
     repo = "litellm";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-jC5BiD4JFfsiyNOSlY6rH6l3Dk6AKKXJ8+Q6MTGYTpM=";
   };
 

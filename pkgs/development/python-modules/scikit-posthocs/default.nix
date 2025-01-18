@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "maximtrp";
     repo = "scikit-posthocs";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ssaTd+A7lzd4tlKHGkgKixi3XjZLQBcPs6UOEzX/hrk=";
   };
 

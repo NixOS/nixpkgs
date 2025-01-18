@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "CravateRouge";
     repo = "bloodyAD";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-GpBhLFjae/RSB5qllYCaVsCCqVu9wxxqAGywShbW1/s=";
   };
 

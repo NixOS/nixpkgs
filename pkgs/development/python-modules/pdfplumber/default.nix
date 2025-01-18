@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jsvine";
     repo = "pdfplumber";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-62S5DMQwSgehl0BcjeRaTocko8xg72pQQ5YLoL3+QbU=";
   };
 

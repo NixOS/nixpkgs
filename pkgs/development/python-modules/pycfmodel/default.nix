@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Skyscanner";
     repo = "pycfmodel";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-iCjOSwW6rdG3H4e/B/um+QioP45nOr9OcPAwXxZs3mU=";
   };
 

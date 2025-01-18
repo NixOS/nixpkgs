@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pburgio";
     repo = "iottyCloud";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-EtAAUyVL7FTn0VoGmU5bU9XouMuEQUOx2t6j/wd1OEo=";
   };
 

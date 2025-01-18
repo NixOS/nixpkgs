@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "liudger";
     repo = "python-bsblan";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-mOVX65YRDUac0GoB9+tHIYtvNDGyxT0BSsj8I3OzuBI=";
   };
 

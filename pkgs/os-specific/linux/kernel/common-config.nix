@@ -519,6 +519,8 @@ let
         DRM_I915_GVT_KVMGT = module;
         # Enable Hyper-V Synthetic DRM Driver
         DRM_HYPERV = whenAtLeast "5.14" module;
+        # And disable the legacy framebuffer driver when we have the new one
+        FB_HYPERV = whenAtLeast "5.14" no;
       }
       // lib.optionalAttrs (stdenv.hostPlatform.system == "aarch64-linux") {
         # enable HDMI-CEC on RPi boards

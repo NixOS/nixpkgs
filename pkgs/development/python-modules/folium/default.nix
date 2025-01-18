@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-visualization";
     repo = "folium";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-TNj3javEETjWpI3xs1y/AuKHqFwnTBmWORZK2fafKqI=";
   };
 

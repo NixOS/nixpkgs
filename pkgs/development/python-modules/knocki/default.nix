@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "swan-solutions";
     repo = "knocki-homeassistant";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Eh/ykTbR2NMZ9Mjgcc53OU3+2EsX6FWV93DmwCDvsRg=";
   };
 

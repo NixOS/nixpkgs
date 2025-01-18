@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "mosajjal";
     repo = "dnsmonster";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-0WHTrqnc3vYQro+nSsQipAPVymR8L4uOwtd9GJHxhVM=";
   };
 

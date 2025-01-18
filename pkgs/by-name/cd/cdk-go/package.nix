@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "cdk-team";
     repo = "CDK";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-0cg2o98BcE4H6EW/yAkJOJtIJXEq2cFG6pNaRPtQofo=";
   };
 

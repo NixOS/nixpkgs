@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dbt-labs";
     repo = "dbt-semantic-interfaces";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-LHcNitkrDQNz2971iMn13eELUyuJbjUK/u+u83JRIBk=";
   };
 

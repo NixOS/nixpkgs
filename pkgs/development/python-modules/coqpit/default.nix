@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "idiap";
     repo = "coqui-ai-coqpit";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-3LZxoj2aFTpezakBymogkNPCaEBBaaUmyIa742cSMgU=";
   };
 

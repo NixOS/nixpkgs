@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zxdavb";
     repo = "incomfort-client";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-I6MAFvODkw2QadzXJacFl/TwA6exfBB1PSDslmT7Ysw=";
   };
 

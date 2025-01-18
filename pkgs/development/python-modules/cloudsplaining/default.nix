@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "salesforce";
     repo = "cloudsplaining";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-ZraWGOiJNqVSmxnllaTvpk9+rUQRFcxFIdp91gpAQW0=";
   };
 

@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Riverside-Healthcare";
     repo = "djlint";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-KdIK6SgOQiNc13Nzg6MI38BdkBdEClnMn1RcWvngP+A=";
   };
 

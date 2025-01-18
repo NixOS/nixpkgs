@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Clarifai";
     repo = "clarifai-python-grpc";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-XJqbZicRQCiykdXn2R8tOzWPbtrso9IwZYpcTcY7vio=";
   };
 

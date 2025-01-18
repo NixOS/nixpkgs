@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "dllogger";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Hpr4yeRl+Dyaz6lRyH/5P6UQT184JEHPqgVlf4qHvOg=";
   };
 

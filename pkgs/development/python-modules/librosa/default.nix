@@ -41,7 +41,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "librosa";
     repo = "librosa";
-    rev = "refs/tags/${version}";
+    tag = version;
     fetchSubmodules = true; # for test data
     hash = "sha256-0FbKVAFWmcFTW2dR27nif6hPZeIxFWYF1gTm4BEJZ/Q=";
   };

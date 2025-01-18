@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dbt-labs";
     repo = "dbt-postgres";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-E7Y2lY8aCiAZx5sLWwpOBLTrdOsCQAdWWJTvR2jGOaA=";
   };
 

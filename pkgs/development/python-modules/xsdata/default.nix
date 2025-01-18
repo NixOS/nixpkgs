@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tefra";
     repo = "xsdata";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-hyNC9VcWkGnOYm6BpXgH3RzmHTqBVmQoADvcEvgF6yg=";
   };
 

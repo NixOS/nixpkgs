@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "ltratt";
     repo = "pizauth";
-    rev = "refs/tags/pizauth-${version}";
+    tag = "pizauth-${version}";
     hash = "sha256-9NezG644oCLTWHTdUaUpJbuwkJu3at/IGNH3FSxl/DI=";
   };
 

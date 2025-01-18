@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "j3ssie";
     repo = "goverview";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-IgvpMuDwMK9IdPs1IRbPbpgr7xZuDX3boVT5d7Lb+3w=";
   };
 

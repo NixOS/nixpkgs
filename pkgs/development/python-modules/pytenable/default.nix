@@ -34,7 +34,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tenable";
     repo = "pyTenable";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-kau350L2WCyuxwsmnD85iWte6LIIqprSVe0yNn+BikE=";
   };
 

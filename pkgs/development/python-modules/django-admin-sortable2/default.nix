@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jrief";
     repo = "django-admin-sortable2";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-ZXaLe6H6il27DXMwclKR4iRGyus6zyYt3rNWRsLPHSU=";
   };
 

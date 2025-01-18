@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nolze";
     repo = "msoffcrypto-tool";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-nwCjgcZqD0hptHC0WqIodHC5m/JHYyUdfEngIoXzNqA=";
   };
 

@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "instaloader";
     repo = "instaloader";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-ysyHCdgednd+cddcXDmEIY1RO8RPHTDitj4NT1IpE8Y=";
   };
 

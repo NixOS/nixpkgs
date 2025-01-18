@@ -10,7 +10,7 @@ buildGo123Module rec {
   src = fetchFromGitHub {
     owner = "fiatjaf";
     repo = "nak";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-VUSBCvDW53Z+mdAx0bUQIgcsiEwxOnm/FnnMcSC0iks=";
   };
 

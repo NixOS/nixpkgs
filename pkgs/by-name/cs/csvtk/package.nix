@@ -16,7 +16,7 @@ buildGoModule {
   src = fetchFromGitHub {
     owner = "shenwei356";
     repo = "csvtk";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-RfW7SiRcsN0F/+2bixLMNsqJCOSD1BQwlm4Zm2kogXM=";
   };
 

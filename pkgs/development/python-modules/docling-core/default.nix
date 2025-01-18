@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "DS4SD";
     repo = "docling-core";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-N8rL+5bCVF4Qi5eqgkaB2r3LTYoqTVPeK4gQ6stiW/w=";
   };
 

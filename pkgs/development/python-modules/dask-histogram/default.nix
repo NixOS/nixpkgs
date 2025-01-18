@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dask-contrib";
     repo = "dask-histogram";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-k+hD5y9K6Jsm++H+IAWJ/Z3wlCN4fV8RIcyAnvOvem0=";
   };
 

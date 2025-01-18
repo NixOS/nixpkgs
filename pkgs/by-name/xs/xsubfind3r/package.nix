@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "hueristiq";
     repo = "xsubfind3r";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-tukynKPcIwDwpH0/SFyif6OGVZrmLVdXfhrFaaVd1d8=";
   };
 

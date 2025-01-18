@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "lovasoa";
     repo = "dezoomify-rs";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-uo0QTaAAbNYMidlWBauW+3hdd0snEWH+I5KQL6Vxgug=";
   };
 

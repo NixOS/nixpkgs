@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pysal";
     repo = "momepy";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-9GVX+OaBkLb3Q/RRHbGOlAJ3gu2K+V07ez6v9dWU6JU=";
   };
 

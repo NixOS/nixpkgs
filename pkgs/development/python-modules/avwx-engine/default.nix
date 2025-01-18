@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "avwx-rest";
     repo = "avwx-engine";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-gDhZlrxiIyj15nxMBFFzuCAHtkDfqYowDZc5g4pQ+i8=";
   };
 

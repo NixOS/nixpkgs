@@ -38,7 +38,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cielong";
     repo = "pyfx";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Q5ihWnoa7nf4EkrY4SgrwjaNvTva4RdW9GRbnbsPXPc=";
   };
 

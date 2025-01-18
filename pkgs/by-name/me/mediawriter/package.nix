@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "FedoraQt";
     repo = "MediaWriter";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-ClqBEITZU1gx04ouPk4hBuURSRIg1CSYfMBdfnvD51Q=";
   };
 

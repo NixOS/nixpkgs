@@ -36,7 +36,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aiogram";
     repo = "aiogram";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-SEq88e5MLNqssJhxPPwI2ZdpNdTCBomNpI0xmbmz3Pw=";
   };
 

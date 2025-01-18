@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = "notus-scanner";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-DcFIypfdrz8pM7qAMVpof6xKWYp/bSRUswngxa5EQFk=";
   };
 

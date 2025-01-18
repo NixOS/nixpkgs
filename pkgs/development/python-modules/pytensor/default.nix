@@ -35,7 +35,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pymc-devs";
     repo = "pytensor";
-    rev = "refs/tags/rel-${version}";
+    tag = "rel-${version}";
     hash = "sha256-tEIDuMAY+rMBqzHLnhbSqOoWzjIbZKCWWMx/uej2pOU=";
   };
 

@@ -16,7 +16,7 @@ maven.buildMavenPackage rec {
   src = fetchFromGitHub {
     owner = "SonarSource";
     repo = "sonar-scanner-cli";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-k1gZO3h6ZGwxJNQ5QwUH96aDPGpJuEn6HYUsYOpqo+g=";
   };
 
