@@ -6,7 +6,7 @@
   ninja,
   pkg-config,
   scdoc,
-  mesa,
+  libgbm,
   lz4,
   zstd,
   ffmpeg,
@@ -55,15 +55,22 @@ llvmPackages.stdenv.mkDerivation rec {
     rustc
     wayland-scanner
     rustPlatform.cargoSetupHook
+    autoPatchelfHook
     rust-bindgen
   ];
 
   buildInputs = [
-    mesa
+    libgbm
     lz4
     zstd
     ffmpeg
     vulkan-headers
+    vulkan-loader
+  ];
+
+  runtimeDependencies = [
+    libgbm
+    ffmpeg.lib
     vulkan-loader
   ];
 
