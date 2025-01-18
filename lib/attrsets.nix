@@ -4,10 +4,10 @@
 { lib }:
 
 let
-  inherit (builtins) head length;
+  inherit (builtins) head length isString;
   inherit (lib.trivial) oldestSupportedReleaseIsAtLeast mergeAttrs warn warnIf;
   inherit (lib.strings) concatStringsSep concatMapStringsSep escapeNixIdentifier sanitizeDerivationName;
-  inherit (lib.lists) filter foldr foldl' concatMap elemAt all partition groupBy take foldl;
+  inherit (lib.lists) filter foldr foldl' concatMap elemAt all partition groupBy take foldl optional;
 in
 
 rec {
@@ -478,6 +478,153 @@ rec {
       in foldl (acc: el: el.update acc) withNestedMods split.right;
 
   in updates: value: go 0 true value updates;
+
+  /**
+
+    The abstract version of `lib.attrsets.associateWithAttrPath` which can
+    return arbitrary data formats through use of custom packing and combining
+    functions.
+
+    # Inputs
+
+    `pack`
+
+    : A function which takes a name and a value as its arguments. It's expected
+      to pack the arguments into your desired representation of one terminating
+      string + attrpath pair.
+
+    `combine`
+
+    : A function which takes the recursive function and the remaining subtree as
+      arguments. It's expected to call the function with all names and values of
+      the remaining subtree. It then needs to combine the results of those calls
+      into your desired representation of multiple string + attrpath pairs.
+
+    `pathPrefix`
+
+    : The attrpath prefix of the current iteration. This will be prepended to
+      the resulting attrpath. Pass the empty list (`[ ]`) for no prefix.
+      Recursive calls pass this attrpath with the current attribute name
+      appended.
+
+    `current`
+
+    : The name of the current attribute that will be appended to the resulting
+      path in this iteration of the recursive call. Pass `null` to signify the
+      root directory; it will not be appended.
+
+    `remaining`
+
+    : The value of the current attribute. This can either be an attrset
+      containing the rest of the attrpath declaration or a string which
+      terminates the attrpath declaration.
+
+    # Examples
+    :::{.example}
+    ## `lib.attrsets.associateWithAttrPath'` usage example
+
+    ```nix
+    attrValues {c = 3; a = 1; b = 2;}
+    => [1 2 3]
+    ```
+
+    :::
+  */
+  associateWithAttrPath' =
+    pack: combine: pathPrefix: current: remaining:
+    let
+      currentPath = pathPrefix ++ optional (current != null) current; # Null denotes the root
+    in
+    if
+      isString remaining # Any string is a terminator
+    then
+      pack remaining currentPath
+    else
+      combine (associateWithAttrPath' pack combine currentPath) remaining;
+
+  /**
+    This function associates arbitrary strings with attribute paths in the form
+    of a list of name-value pairs consumable by `builtins.listToAttrs`.
+
+    To declare the attribute paths, you simply declare an attrset with
+    (optionally) nested attributes that describe the paths and set the final
+    attributes equal to the strings which you want to associate the paths with.
+
+    This also works with paths that require quoting; simply quote your
+    specification's attributes as usual.
+
+    Each string can be associated with multiple attribute paths, resulting in
+    multiple list elements with the same name.
+
+    In most cases, you'd typically use the singular variant of this function.
+
+    # Examples
+    :::{.example}
+    ## `lib.attrsets.associateWithAttrPathMultiple` usage example
+
+    ```Nix
+    lib.attrsets.associateWithAttrPathMultiple {
+      foo.bar = "somestring";
+      foo.baz = "otherstring";
+      any.path."can.be".expressed.here = "otherstring";
+    }
+    =>
+    [
+      {
+        name = "somestring";
+        value = [ "foo" "bar" ];
+      }
+      {
+        name = "otherstring";
+        value = [ "foo" "baz" ];
+      }
+      {
+        name = "otherstring";
+        value = [ "any" "path" "can.be" "expressed" "here" ];
+      }
+    ]
+    ```
+    :::
+  */
+  associateWithAttrPathMultiple = associateWithAttrPath' (name: path: [ (nameValuePair name path) ]) (
+    recursor: remaining: concatMap (next: recursor next remaining.${next}) (attrNames remaining)
+  );
+
+  /**
+    This function associates arbitrary strings with attribute paths in the form
+    of an attrset.
+
+    To declare the attribute paths, you simply declare an attrset with
+    (optionally nested) attributes that describe the paths and set the final
+    attributes equal to the strings which you want to associate the paths with.
+
+    This also works with paths that require quoting; simply quote your
+    specification's attributes as usual.
+
+    # Examples
+    :::{.example}
+    ## `lib.attrsets.associateWithAttrPath` usage example
+
+    ```Nix
+    lib.attrsets.associateWithAttrPath {
+      foo.bar = "from";
+      foo."bar.baz" = "to";
+    }
+    =>
+    {
+      from = [ "foo" "bar" ];
+      to = [ "foo" "bar.baz" ];
+    }
+    ```
+    :::
+
+    The same string MUST NOT be associated with multiple attribute paths. This
+    results in undefined behaviour. Use associateWithAttrPath' instead if you
+    need to handle multiple instances of the same string.
+  */
+  associateWithAttrPath = associateWithAttrPath' (name: path: { ${name} = path; }) (
+    recursor: remaining: concatMapAttrs recursor remaining
+  ) [ ] null;
 
   /**
     Return the specified attributes from a set.
