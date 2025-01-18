@@ -11,7 +11,7 @@
   pythonOlder,
   setuptools,
   toml,
-  wheel,
+  tomli,
 }:
 
 buildPythonPackage rec {
@@ -26,15 +26,14 @@ buildPythonPackage rec {
     hash = "sha256-Slf6tq83LajdTnr98SuCiFIdm/6auzftnARLAOBgyng=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
-    wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     packaging
     setuptools
-  ] ++ lib.optionals (pythonOlder "3.11") [ toml ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   pythonImportsCheck = [ "setuptools_git_versioning" ];
 
