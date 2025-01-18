@@ -2,7 +2,13 @@
 (buildAstalModule {
   name = "io";
   sourceRoot = "lib/astal/io";
-  meta.description = "Astal core library";
+  meta = {
+    description = "Astal core library";
+    longDescription = ''
+      Astal is a collection of building blocks for creating custom desktop shells
+    '';
+    mainProgram = "astal";
+  };
 }).overrideAttrs
   {
     # add an update script only in one place,
