@@ -9,22 +9,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libxls";
-  version = "1.6.2";
+  version = "1.6.3";
 
   src = fetchFromGitHub {
     owner = "libxls";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-vjmYByk+IDBon8xGR1+oNaEQTiJK+IVpDXsG1IyVNoY=";
+    hash = "sha256-KbITHQ9s2RUeo8zR53R9s4WUM6z8zzddz1k47So0Mlw=";
   };
-
-  patches = [
-    # Fix cross-compilation
-    (fetchpatch {
-      url = "https://github.com/libxls/libxls/commit/007e63c1f5e19bc73292f267c85d7dd14e9ecb38.patch";
-      sha256 = "sha256-PjPHuXth4Yaq9nVfk5MYJMRo5B0R6YA1KEqgwfjF3PM=";
-    })
-  ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -40,13 +32,5 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ abbradar ];
     mainProgram = "xls2csv";
     platforms = platforms.unix;
-    knownVulnerabilities = [
-      "CVE-2023-38851"
-      "CVE-2023-38852"
-      "CVE-2023-38853"
-      "CVE-2023-38854"
-      "CVE-2023-38855"
-      "CVE-2023-38856"
-    ];
   };
 }
