@@ -37,13 +37,24 @@ class Stability(Enum):
     STABLE = "stable"
     UNSTABLE = "unstable"
 
+    def allows(self, target: "Stability") -> bool:
+        """
+        Whether selected stability `self` allows version
+        with a specified `target` stability.
+        """
+        match self:
+            case Stability.STABLE:
+                return target == Stability.STABLE
+            case Stability.UNSTABLE:
+                return True
+
 
 VersionPolicy = Callable[[Version], bool]
-VersionPredicate = Callable[[Version, Stability], bool]
+VersionClassifier = Callable[[Version], Stability]
 
 
-class VersionPredicateHolder(NamedTuple):
-    function: VersionPredicate
+class VersionClassifierHolder(NamedTuple):
+    function: VersionClassifier
 
 
 def version_to_list(version: str) -> List[int]:
@@ -55,37 +66,38 @@ def odd_unstable(version: Version, selected: Stability) -> bool:
         version_parts = version_to_list(version.value)
     except:
         # Failing to parse as a list of numbers likely means the version contains a string tag like “beta”, therefore it is not a stable release.
-        return selected != Stability.STABLE
+        return Stability.UNSTABLE
 
     if len(version_parts) < 2:
-        return True
+        return Stability.STABLE
 
     even = version_parts[1] % 2 == 0
     prerelease = (version_parts[1] >= 90 and version_parts[1] < 100) or (version_parts[1] >= 900 and version_parts[1] < 1000)
     stable = even and not prerelease
-    if selected == Stability.STABLE:
-        return stable
+    if stable:
+        return Stability.STABLE
     else:
-        return True
+        return Stability.UNSTABLE
 
 
-def tagged(version: Version, selected: Stability) -> bool:
-    if selected == Stability.STABLE:
-        return not ("alpha" in version.value or "beta" in version.value or "rc" in version.value)
+def tagged(version: Version) -> Stability:
+    prerelease = "alpha" in version.value or "beta" in version.value or "rc" in version.value
+    if prerelease:
+        return Stability.UNSTABLE
     else:
-        return True
+        return Stability.STABLE
 
 
-def no_policy(version: Version, selected: Stability) -> bool:
-    return True
+def no_policy(version: Version) -> Stability:
+    return Stability.STABLE
 
 
 class VersionPolicyKind(Enum):
     # HACK: Using function as values directly would make Enum
     # think they are methods and skip them.
-    ODD_UNSTABLE = VersionPredicateHolder(odd_unstable)
-    TAGGED = VersionPredicateHolder(tagged)
-    NONE = VersionPredicateHolder(no_policy)
+    ODD_UNSTABLE = VersionClassifierHolder(odd_unstable)
+    TAGGED = VersionClassifierHolder(tagged)
+    NONE = VersionClassifierHolder(no_policy)
 
 
 def make_version_policy(
@@ -93,11 +105,11 @@ def make_version_policy(
     selected: Stability,
     upper_bound: Optional[Version],
 ) -> VersionPolicy:
-    version_predicate = version_policy_kind.value.function
+    version_classifier = version_policy_kind.value.function
     if not upper_bound:
-        return lambda version: version_predicate(version, selected)
+        return lambda version: selected.allows(version_classifier(version))
     else:
-        return lambda version: version_predicate(version, selected) and version < upper_bound
+        return lambda version: selected.allows(version_classifier(version)) and version < upper_bound
 
 
 def find_versions(package_name: str, version_policy: VersionPolicy) -> List[Version]:
