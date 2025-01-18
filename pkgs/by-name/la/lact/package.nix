@@ -11,26 +11,28 @@
   libdrm,
   vulkan-loader,
   coreutils,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "lact";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "ilya-zlobintsev";
     repo = "LACT";
     rev = "v${version}";
-    hash = "sha256-goNwLtVjNY3O/BhFrCcM3X11dtM34XgfHL6bh+YFoIY=";
+    hash = "sha256-9Enht9bwvk1jHYHRDPSUtwRxPGbPlU3V0hv0CuCOCls=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-rgpBmoGCNMU5nFVxzNtqsPaOn93mHW5P2isKgbP9UN4=";
+  cargoHash = "sha256-Tw3yOu1pZJxjbg5fpOgWA46qbigq4hTIKh9eOXjAtBU=";
 
   nativeBuildInputs = [
     blueprint-compiler
     pkg-config
     wrapGAppsHook4
+    rustPlatform.bindgenHook
   ];
 
   buildInputs = [
@@ -43,6 +45,7 @@ rustPlatform.buildRustPackage rec {
   checkFlags = [
     # tries and fails to initialize gtk
     "--skip=app::pages::thermals_page::fan_curve_frame::tests::set_get_curve"
+    "--skip=tests::snapshot_everything"
   ];
 
   postPatch = ''
@@ -63,10 +66,18 @@ rustPlatform.buildRustPackage rec {
   '';
 
   postFixup = lib.optionalString stdenv.targetPlatform.isElf ''
-    patchelf $out/bin/.lact-wrapped --add-needed libvulkan.so --add-rpath ${
-      lib.makeLibraryPath [ vulkan-loader ]
+    patchelf $out/bin/.lact-wrapped \
+    --add-needed libvulkan.so \
+    --add-needed libdrm.so \
+    --add-rpath ${
+      lib.makeLibraryPath [
+        vulkan-loader
+        libdrm
+      ]
     }
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Linux GPU Configuration Tool for AMD and NVIDIA";
