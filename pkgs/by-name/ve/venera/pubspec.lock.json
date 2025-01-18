@@ -377,6 +377,17 @@
       "source": "sdk",
       "version": "0.0.0"
     },
+    "flutter_7zip": {
+      "dependency": "direct main",
+      "description": {
+        "path": ".",
+        "ref": "b33344797f1d2469339e0e1b75f5f954f1da224c",
+        "resolved-ref": "b33344797f1d2469339e0e1b75f5f954f1da224c",
+        "url": "https://github.com/wgh136/flutter_7zip"
+      },
+      "source": "git",
+      "version": "0.0.1"
+    },
     "flutter_file_dialog": {
       "dependency": "direct main",
       "description": {
@@ -507,8 +518,8 @@
       "dependency": "direct main",
       "description": {
         "path": ".",
-        "ref": "1657f62fe7545ac43a339e0a5ee2b82bacd81e9f",
-        "resolved-ref": "1657f62fe7545ac43a339e0a5ee2b82bacd81e9f",
+        "ref": "9c99ac258a11f8e91761a5466a190efba3ca64af",
+        "resolved-ref": "9c99ac258a11f8e91761a5466a190efba3ca64af",
         "url": "https://github.com/wgh136/flutter_qjs"
       },
       "source": "git",
@@ -1080,15 +1091,15 @@
       "source": "hosted",
       "version": "5.0.2"
     },
-    "shimmer": {
+    "shimmer_animation": {
       "dependency": "direct main",
       "description": {
-        "name": "shimmer",
-        "sha256": "5f88c883a22e9f9f299e5ba0e4f7e6054857224976a5d9f839d4ebdc94a14ac9",
+        "name": "shimmer_animation",
+        "sha256": "9357080b7dd892aae837d569e1fbbcbe7f9a02ca994e558561d90e35e92f1101",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "3.0.0"
+      "version": "2.2.2"
     },
     "sky_engine": {
       "dependency": "transitive",
@@ -1176,6 +1187,16 @@
       "source": "hosted",
       "version": "1.3.0"
     },
+    "syntax_highlight": {
+      "dependency": "direct main",
+      "description": {
+        "name": "syntax_highlight",
+        "sha256": "ee33b6aa82cc722bb9b40152a792181dee222353b486c0255fde666a3e3a4997",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.4.0"
+    },
     "term_glyph": {
       "dependency": "transitive",
       "description": {
@@ -1195,6 +1216,16 @@
       },
       "source": "hosted",
       "version": "0.7.3"
+    },
+    "text_scroll": {
+      "dependency": "direct main",
+      "description": {
+        "name": "text_scroll",
+        "sha256": "7869d86a6fdd725dee56bdd150216a99f0372b82fbfcac319214dbd5f36e1908",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.2.0"
     },
     "typed_data": {
       "dependency": "transitive",
@@ -1401,11 +1432,11 @@
       "dependency": "direct main",
       "description": {
         "name": "zip_flutter",
-        "sha256": "955b53d58709fcd9feefbed3d41b5522bc5273e677603e9fc67017a81e568d24",
+        "sha256": "be21152c35fcb6d0ef4ce89fc3aed681f7adc0db5490ca3eb5893f23fd20e646",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "0.0.5"
+      "version": "0.0.6"
     }
   },
   "sdks": {
