@@ -2,6 +2,7 @@
   fetchFromGitHub,
   lib,
   llvmPackages,
+  stdenv,
   cmake,
   ninja,
   pkg-config,
@@ -10,6 +11,7 @@
   python3,
   xxHash,
   fmt,
+  nasm,
 }:
 
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
@@ -65,6 +67,8 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     ))
   ];
 
+  nativeCheckInputs = [ nasm ];
+
   buildInputs =
     [
       xxHash
@@ -86,7 +90,18 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   ];
 
   strictDeps = true;
-  doCheck = false; # broken on Apple silicon computers
+
+  # Unsupported on non-4K page size kernels (e.g. Apple Silicon)
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+
+  # List not exhaustive, e.g. because they depend on an x86 compiler or some
+  # other difficult-to-build test binaries.
+  checkTarget = lib.concatStringsSep " " [
+    "asm_tests"
+    "api_tests"
+    "fexcore_apitests"
+    "emitter_tests"
+  ];
 
   # Avoid wrapping anything other than FEXConfig, since the wrapped executables
   # don't seem to work when registered as binfmts.
