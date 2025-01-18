@@ -54,18 +54,23 @@ let
 
   cxxabiCMakeFlags = lib.optionals (lib.versionAtLeast release_version "18") [
     "-DLIBCXXABI_USE_LLVM_UNWINDER=OFF"
-  ] ++ lib.optionals (useLLVM && !stdenv.hostPlatform.isWasm) (if lib.versionAtLeast release_version "18" then [
+  ] ++ lib.optionals (useLLVM && stdenv.targetPlatform.hasStackUnwinding) (if lib.versionAtLeast release_version "18" then [
     "-DLIBCXXABI_ADDITIONAL_LIBRARIES=unwind"
-    "-DLIBCXXABI_USE_COMPILER_RT=ON"
   ] else [
-    "-DLIBCXXABI_USE_COMPILER_RT=ON"
     "-DLIBCXXABI_USE_LLVM_UNWINDER=ON"
-  ]) ++ lib.optionals stdenv.hostPlatform.isWasm [
+  ]) ++ lib.optionals (useLLVM && !stdenv.targetPlatform.isWasm) [
+    "-DLIBCXXABI_USE_COMPILER_RT=ON"
+  ] ++ lib.optionals (!stdenv.targetPlatform.hasThreads) [
     "-DLIBCXXABI_ENABLE_THREADS=OFF"
+  ] ++ lib.optionals (!stdenv.targetPlatform.hasExceptions) [
     "-DLIBCXXABI_ENABLE_EXCEPTIONS=OFF"
   ] ++ lib.optionals (!enableShared || stdenv.hostPlatform.isWindows) [
     # Required on Windows due to https://github.com/llvm/llvm-project/issues/55245
     "-DLIBCXXABI_ENABLE_SHARED=OFF"
+  ] ++ lib.optionals (!stdenv.targetPlatform.hasLocalization) [
+    "-DLIBCXX_ENABLE_LOCALIZATION=OFF"
+  ] ++ lib.optionals (!stdenv.targetPlatform.hasMonotonicClock) [
+    "-DLIBCXX_ENABLE_MONOTONIC_CLOCK=OFF"
   ];
 
   cxxCMakeFlags = [
@@ -90,9 +95,11 @@ let
     "-DLIBCXX_USE_COMPILER_RT=ON"
   ] ++ lib.optionals (useLLVM && !stdenv.hostPlatform.isFreeBSD && lib.versionAtLeast release_version "16") [
     "-DLIBCXX_ADDITIONAL_LIBRARIES=unwind"
-  ] ++ lib.optionals stdenv.hostPlatform.isWasm [
+  ] ++ lib.optionals (!stdenv.targetPlatform.hasThreads) [
     "-DLIBCXX_ENABLE_THREADS=OFF"
+  ] ++ lib.optionals (!stdenv.targetPlatform.hasFilesystem) [
     "-DLIBCXX_ENABLE_FILESYSTEM=OFF"
+  ] ++ lib.optionals (!stdenv.targetPlatform.hasExceptions) [
     "-DLIBCXX_ENABLE_EXCEPTIONS=OFF"
   ] ++ lib.optionals stdenv.hostPlatform.isWindows [
     # https://github.com/llvm/llvm-project/issues/55245
@@ -135,7 +142,11 @@ stdenv.mkDerivation (rec {
     ++ lib.optional (cxxabi != null) lndir;
 
   buildInputs = [ cxxabi ]
-    ++ lib.optionals (useLLVM && !stdenv.hostPlatform.isWasm && !stdenv.hostPlatform.isFreeBSD) [ libunwind ];
+    ++ lib.optionals (stdenv.targetPlatform.hasStackUnwinding && (
+        !stdenv.targetPlatform.hasSystemLibunwind
+        # TODO: Why is this needed on Darwin, but not on FreeBSD?
+        || stdenv.targetPlatform.isDarwin
+      ) && useLLVM) [ libunwind ];
 
   # libc++.so is a linker script which expands to multiple libraries,
   # libc++.so.1 and libc++abi.so or the external cxxabi. ld-wrapper doesn't

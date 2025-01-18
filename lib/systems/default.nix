@@ -193,6 +193,34 @@ let
          || isWasm                                                     # WASM
         ) && !isStatic;
 
+      # Whether the system provides its own libunwind implementation that we
+      # should use.
+      hasSystemLibunwind = final.isFreeBSD || final.isDarwin;
+
+      # Controls whether stack unwinding support is enabled.
+      hasStackUnwinding = !(final.isWasm || final.isNone);
+
+      # You often don't want exceptions in an embedded setting, disable them by default.
+      hasExceptions = !(final.isNone || final.isWasm);
+
+      # If there is no kernel (`isNone`) we assume no threads. WASM can
+      # supposedly support threads in certain cases, so this might change in
+      # the future.
+      hasThreads = !(final.isNone || final.isWasm);
+
+      # On bare metal platforms or on WASM there is no "obvious" filesystem to
+      # access, so disable support by default. (Use-cases like filesystem
+      # emulation with WASI or accessing an SD card over SPI need more
+      # configuration than just being able to work "by default".)
+      hasFilesystem = !(final.isNone || final.isWasm);
+
+      # Wanting localization in embedded settings is probably a rare edge-case,
+      # so disable it by default.
+      hasLocalization = !final.isNone;
+
+      # Without a kernel there is no cross-platform way for libc to obtain a clock.
+      hasMonotonicClock = !final.isNone;
+
       # The difference between `isStatic` and `hasSharedLibraries` is mainly the
       # addition of the `staticMarker` (see make-derivation.nix).  Some
       # platforms, like embedded machines without a libc (e.g. arm-none-eabi)
