@@ -53,10 +53,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "drms" ];
 
-  meta = {
+  meta = with lib; {
     description = "Access HMI, AIA and MDI data with Python";
     homepage = "https://github.com/sunpy/drms";
-    license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ bot-wxt1221 ];
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ bot-wxt1221 ];
   };
 }

@@ -99,16 +99,16 @@ stdenv.mkDerivation (finalAttrs: {
     install -D resources/icons/icon.svg $out/share/icons/hicolor/scalable/apps/jamesdsp.svg
   '';
 
-  meta = {
+  meta = with lib; {
     broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     description = "Audio effect processor for PipeWire clients";
     mainProgram = "jamesdsp";
     homepage = "https://github.com/Audio4Linux/JDSP4Linux";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [
       pasqui23
       rewine
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 })

@@ -71,17 +71,17 @@ stdenv.mkDerivation (finalAttrs: {
     inherit jdk;
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://infinitekind.com/moneydance";
     changelog = "https://infinitekind.com/stabledl/2024_5118/changelog.txt";
     description = "Easy to use and full-featured personal finance app that doesn't compromise your privacy";
-    sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
-    license = lib.licenses.unfree;
+    sourceProvenance = [ sourceTypes.binaryBytecode ];
+    license = licenses.unfree;
     # Darwin refers to Zulu Java, which breaks the evaluation of this derivation
     # for some reason
     #
     # https://github.com/NixOS/nixpkgs/pull/306372#issuecomment-2111688236
-    platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.lucasbergman ];
+    platforms = platforms.linux;
+    maintainers = [ maintainers.lucasbergman ];
   };
 })

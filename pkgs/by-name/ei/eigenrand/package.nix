@@ -38,11 +38,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [ "-DCMAKE_CTEST_ARGUMENTS=--exclude-regex;EigenRand-test" ];
 
-  meta = {
+  meta = with lib; {
     description = "Fastest Random Distribution Generator for Eigen";
     homepage = "https://github.com/bab2min/EigenRand";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ nim65s ];
-    platforms = lib.platforms.unix;
+    license = licenses.mit;
+    maintainers = with maintainers; [ nim65s ];
+    platforms = platforms.unix;
   };
 })

@@ -57,10 +57,10 @@ buildPythonPackage rec {
     print(f"{pynvml.nvmlInit()=}")
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Python bindings for the NVIDIA Management Library";
     homepage = "https://github.com/gpuopenanalytics/pynvml";
-    license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.bcdarwin ];
+    license = licenses.bsd3;
+    maintainers = [ maintainers.bcdarwin ];
   };
 }

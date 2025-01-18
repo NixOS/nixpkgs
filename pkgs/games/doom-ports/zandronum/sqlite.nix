@@ -20,10 +20,10 @@ stdenv.mkDerivation {
     cp sqlite3ext.h $out/
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "http://www.sqlite.org/";
     description = "Single C code file, named sqlite3.c, that contains all C code for the core SQLite library and the FTS3 and RTREE extensions";
-    platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.lassulus ];
+    platforms = platforms.unix;
+    maintainers = [ maintainers.lassulus ];
   };
 }

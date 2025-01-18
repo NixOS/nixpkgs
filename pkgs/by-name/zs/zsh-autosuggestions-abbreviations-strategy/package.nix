@@ -23,11 +23,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Have zsh-autosuggestions suggest your zsh-abbr abbreviations";
     homepage = "https://github.com/olets/zsh-autosuggestions-abbreviations-strategy";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ llakala ];
-    platforms = lib.platforms.all;
+    license = licenses.mit;
+    maintainers = with maintainers; [ llakala ];
+    platforms = platforms.all;
   };
 })

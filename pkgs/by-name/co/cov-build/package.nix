@@ -61,11 +61,11 @@ stdenv.mkDerivation rec {
 
   dontStrip = true;
 
-  meta = {
+  meta = with lib; {
     description = "Coverity Scan build tools";
     homepage = "https://scan.coverity.com";
-    license = lib.licenses.unfreeRedistributable;
-    platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.thoughtpolice ];
+    license = licenses.unfreeRedistributable;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.thoughtpolice ];
   };
 }

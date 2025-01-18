@@ -63,12 +63,12 @@ python3Packages.buildPythonApplication rec {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Convert your documents";
     homepage = "https://gitlab.gnome.org/World/morphosis";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ getchoo ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ getchoo ];
     mainProgram = "morphosis";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

@@ -72,12 +72,12 @@ buildNpmPackage rec {
     hardcodeZeroVersion = true;
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/IvarK/AntimatterDimensionsSourceCode";
     description = "Idle incremental game with multiple prestige layers.";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "antimatter-dimensions";
-    maintainers = with lib.maintainers; [ amozeo ];
+    maintainers = with maintainers; [ amozeo ];
     inherit (electron.meta) platforms;
   };
 }

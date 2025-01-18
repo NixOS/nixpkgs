@@ -24,12 +24,12 @@ buildNimPackage (finalAttrs: {
     pcre
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Terminal file manager for Linux";
     mainProgram = "nimmm";
     homepage = "https://github.com/joachimschmidt557/nimmm";
-    license = lib.licenses.gpl3;
-    platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.joachimschmidt557 ];
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.joachimschmidt557 ];
   };
 })

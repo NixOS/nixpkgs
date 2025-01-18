@@ -30,12 +30,12 @@ stdenv.mkDerivation {
     cp -vai RunningX "$out/bin"
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "http://www.fiction.net/blong/programs/mutt/";
     description = "Program for testing if X is running";
-    license = lib.licenses.free;
-    platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.romildo ];
+    license = licenses.free;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.romildo ];
     mainProgram = "RunningX";
   };
 }

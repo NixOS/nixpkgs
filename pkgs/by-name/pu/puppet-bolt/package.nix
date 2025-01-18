@@ -36,17 +36,17 @@
     updateScript = bundlerUpdateScript "puppet-bolt";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Execute commands remotely over SSH and WinRM";
     homepage = "https://github.com/puppetlabs/bolt";
     changelog = "https://github.com/puppetlabs/bolt/blob/main/CHANGELOG.md";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     mainProgram = "bolt";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       uvnikita
       anthonyroussel
     ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }).overrideAttrs
   (old: {

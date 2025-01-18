@@ -64,14 +64,14 @@ rustPlatform.buildRustPackage {
     install -Dm 644 flatpak/com.github.polymeilex.neothesia.png $out/share/icons/hicolor/256x256/apps/com.github.polymeilex.neothesia.png
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Flashy Synthesia Like Software For Linux, Windows and macOS";
     homepage = "https://github.com/PolyMeilex/Neothesia";
-    license = lib.licenses.gpl3;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3;
+    platforms = platforms.linux;
     mainProgram = "neothesia";
     maintainers = [
-      lib.maintainers.naxdy
+      maintainers.naxdy
     ];
   };
 }

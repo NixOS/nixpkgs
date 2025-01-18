@@ -9,12 +9,12 @@ makeGaugePlugin {
   repo = "getgauge/gauge-java";
   releasePrefix = "gauge-java-";
 
-  meta = {
+  meta = with lib; {
     description = "Gauge plugin that lets you write tests in Java";
     homepage = "https://github.com/getgauge/gauge-java/";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ marie ];
-    sourceProvenance = with lib.sourceTypes; [
+    license = licenses.asl20;
+    maintainers = with maintainers; [ marie ];
+    sourceProvenance = with sourceTypes; [
       # Native binary written in go
       binaryNativeCode
       # Jar files

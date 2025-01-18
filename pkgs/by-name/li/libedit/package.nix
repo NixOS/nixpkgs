@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
       xargs sed -i -e 's,-lncurses[a-z]*,-L${ncurses.out}/lib -lncursesw,g'
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "http://www.thrysoee.dk/editline/";
     changelog = "https://www.thrysoee.dk/editline/#changelog";
     description = "Port of the NetBSD Editline library (libedit)";
@@ -55,8 +55,8 @@ stdenv.mkDerivation (finalAttrs: {
       provides generic line editing, history, and tokenization functions,
       similar to those found in GNU Readline.
     '';
-    license = with lib.licenses; [ bsd3 ];
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = lib.platforms.all;
+    license = with licenses; [ bsd3 ];
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.all;
   };
 })

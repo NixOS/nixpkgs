@@ -47,14 +47,14 @@ rustPlatform.buildRustPackage rec {
 
   passthru.tests.version = testers.testVersion { package = nixtract; };
 
-  meta = {
+  meta = with lib; {
     description = "CLI tool to extract the graph of derivations from a Nix flake";
     homepage = "https://github.com/tweag/nixtract";
-    license = with lib.licenses; [
+    license = with licenses; [
       mit # or
       asl20
     ];
     mainProgram = "nixtract";
-    maintainers = with lib.maintainers; [ aleksana ];
+    maintainers = with maintainers; [ aleksana ];
   };
 }

@@ -46,10 +46,10 @@ stdenv.mkDerivation rec {
       rm $out/bin/wall $out/share/man/man1/wall.1
     '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.nongnu.org/sysvinit/";
     description = "Utilities related to booting and shutdown";
-    platforms = lib.platforms.linux;
-    license = lib.licenses.gpl2Plus;
+    platforms = platforms.linux;
+    license = licenses.gpl2Plus;
   };
 }

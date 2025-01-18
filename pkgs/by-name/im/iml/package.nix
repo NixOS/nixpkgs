@@ -25,11 +25,11 @@ stdenv.mkDerivation rec {
     "--with-gmp-lib=${gmp}/lib"
     "--with-cblas=-lblas"
   ];
-  meta = {
+  meta = with lib; {
     description = "Algorithms for computing exact solutions to dense systems of linear equations over the integers";
-    license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.raskin ];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.unix;
     homepage = "https://cs.uwaterloo.ca/~astorjoh/iml.html";
   };
 }

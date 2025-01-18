@@ -16,11 +16,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-qsncOsCxepySJI+rJnzbIGxSWlxMzqShtzcEoJD2UPw=";
 
-  meta = {
+  meta = with lib; {
     description = "A neofetch-like tool to show info about your Kubernetes Cluster.";
     homepage = "https://github.com/jkulzer/kubefetch";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ wrmilling ];
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ wrmilling ];
     mainProgram = "kubefetch";
   };
 }

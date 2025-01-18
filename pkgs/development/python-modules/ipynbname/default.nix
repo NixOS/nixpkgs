@@ -25,10 +25,10 @@ buildPythonPackage rec {
   # upstream has no tests
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Simply returns either notebook filename or the full path to the notebook";
     homepage = "https://github.com/msm1089/ipynbname";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

@@ -65,13 +65,13 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "LIBS=-lexpat" ];
 
-  meta = {
+  meta = with lib; {
     description = "Tool to detect RFID-Tags and show their meta information";
     homepage = "https://www.rfdump.org/";
     changelog = "https://salsa.debian.org/pkg-security-team/rfdump/-/blob/debian/master/ChangeLog";
-    license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ tochiaha ];
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ tochiaha ];
     mainProgram = "rfdump";
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 }

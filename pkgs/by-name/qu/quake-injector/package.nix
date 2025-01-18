@@ -63,15 +63,15 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Download, install and play quake singleplayer maps from the quaddicted.com archive";
     homepage = "https://github.com/hrehfeld/QuakeInjector";
     changelog = "https://github.com/hrehfeld/QuakeInjector/releases";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ theobori ];
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ theobori ];
     mainProgram = "quake-injector";
     platforms = jdk.meta.platforms;
-    sourceProvenance = with lib.sourceTypes; [
+    sourceProvenance = with sourceTypes; [
       fromSource
       binaryBytecode # mitm cache
     ];

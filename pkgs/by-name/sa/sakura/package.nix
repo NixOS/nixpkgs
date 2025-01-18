@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.test = nixosTests.terminal-emulators.sakura;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.pleyades.net/david/projects/sakura";
     description = "Terminal emulator based on GTK and VTE";
     longDescription = ''
@@ -66,12 +66,12 @@ stdenv.mkDerivation (finalAttrs: {
       terminals in one window and adds a contextual menu with some basic
       options. No more no less.
     '';
-    license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [
       astsmtl
       codyopel
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
     mainProgram = "sakura";
   };
 })

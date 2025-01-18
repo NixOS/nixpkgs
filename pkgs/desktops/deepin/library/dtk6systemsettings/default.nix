@@ -57,11 +57,11 @@ stdenv.mkDerivation rec {
     "doc"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Qt-based development library for system settings";
     homepage = "https://github.com/linuxdeepin/dtk6systemsettings";
-    license = lib.licenses.lgpl3Plus;
-    platforms = lib.platforms.linux;
-    maintainers = lib.teams.deepin.members;
+    license = licenses.lgpl3Plus;
+    platforms = platforms.linux;
+    maintainers = teams.deepin.members;
   };
 }

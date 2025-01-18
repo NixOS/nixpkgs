@@ -48,11 +48,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [ "--sysconfdir=/etc" ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://gitlab.com/wayfireplugins/windecor";
     description = "Window decoration plugin for wayfire";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ rewine ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ rewine ];
     inherit (wayfire.meta) platforms;
   };
 })

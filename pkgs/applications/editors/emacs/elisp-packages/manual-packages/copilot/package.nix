@@ -51,11 +51,11 @@ melpaBuild {
 
   propagatedUserEnvPkgs = [ nodejs ];
 
-  meta = {
+  meta = with lib; {
     description = "Unofficial copilot plugin for Emacs";
     homepage = "https://github.com/copilot-emacs/copilot.el";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ bbigras ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ bbigras ];
     platforms = [
       "aarch64-darwin"
       "aarch64-linux"

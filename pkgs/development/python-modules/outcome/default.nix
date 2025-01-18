@@ -23,13 +23,13 @@ buildPythonPackage rec {
   # Has a test dependency on trio, which depends on outcome.
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Capture the outcome of Python function calls";
     homepage = "https://github.com/python-trio/outcome";
-    license = with lib.licenses; [
+    license = with licenses; [
       mit
       asl20
     ];
-    maintainers = with lib.maintainers; [ catern ];
+    maintainers = with maintainers; [ catern ];
   };
 }

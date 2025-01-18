@@ -20,12 +20,12 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace "PREFIX=/usr/local" "PREFIX=$out"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "XML stream reformatter";
     mainProgram = "xmlindent";
     homepage = "https://xmlindent.sourceforge.net/";
-    license = lib.licenses.gpl3;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3;
+    platforms = platforms.linux;
     maintainers = [ ];
   };
 }

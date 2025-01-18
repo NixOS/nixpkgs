@@ -54,11 +54,11 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "datalad_gooey" ];
 
-  meta = {
+  meta = with lib; {
     description = "Graphical user interface (GUI) for DataLad";
     homepage = "https://github.com/datalad/datalad-gooey";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ gador ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ gador ];
     mainProgram = "datalad-gooey";
   };
 }

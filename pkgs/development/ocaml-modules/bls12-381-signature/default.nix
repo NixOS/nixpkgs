@@ -30,10 +30,10 @@ buildDunePackage rec {
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "Implementation of BLS signatures for the pairing-friendly curve BLS12-381";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     homepage = "https://gitlab.com/nomadic-labs/cryptography/ocaml-bls12-381-signature";
-    maintainers = [ lib.maintainers.ulrikstrid ];
+    maintainers = [ maintainers.ulrikstrid ];
   };
 }

@@ -83,12 +83,12 @@ stdenv.mkDerivation (finalAttrs: {
     rev-prefix = "V";
   };
 
-  meta = {
+  meta = with lib; {
     description = "SVG-based Qt5 theme engine plus a config tool and extra themes";
     homepage = "https://github.com/tsujan/Kvantum";
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
       romildo
       Scrumplex
     ];

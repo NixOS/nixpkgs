@@ -58,12 +58,12 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://projects.sirrix.com/trac/tpmmanager";
     description = "Tool for managing the TPM";
     mainProgram = "tpmmanager";
-    license = lib.licenses.gpl2;
+    license = licenses.gpl2;
     maintainers = [ ];
-    platforms = with lib.platforms; linux;
+    platforms = with platforms; linux;
   };
 }

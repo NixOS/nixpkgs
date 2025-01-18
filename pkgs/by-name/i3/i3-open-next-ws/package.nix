@@ -13,12 +13,12 @@ rustPlatform.buildRustPackage rec {
   };
   cargoHash = "sha256-9U0bYCbkvcZJOCd4jZog4bSJkP1ntmAFjWm7lJDdcuo=";
 
-  meta = {
+  meta = with lib; {
     description = "Workspace management utility for i3 and sway, that picks the first unused workspace automagically";
     homepage = "https://github.com/JohnDowson/i3-open-next-ws";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "i3-open-next-ws";
-    maintainers = with lib.maintainers; [ quantenzitrone ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ quantenzitrone ];
+    platforms = platforms.linux;
   };
 }

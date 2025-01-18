@@ -23,10 +23,10 @@ melpaBuild {
 
   passthru.updateScript = unstableGitUpdater { tagPrefix = "v"; };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/misohena/el-easydraw";
     description = "Embedded drawing tool for Emacs";
-    license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ brahyerr ];
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ brahyerr ];
   };
 }

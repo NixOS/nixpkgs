@@ -26,10 +26,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "prodict" ];
 
-  meta = {
+  meta = with lib; {
     description = "Access Python dictionary as a class with type hinting and autocompletion";
     homepage = "https://github.com/ramazanpolat/prodict";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ bcdarwin ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ bcdarwin ];
   };
 }

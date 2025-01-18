@@ -27,11 +27,11 @@ stdenvNoCC.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Webbased Amateur Radio Logging Software";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     homepage = "https://www.wavelog.org";
     platforms = php.meta.platforms;
-    maintainers = with lib.maintainers; [ ethancedwards8 ];
+    maintainers = with maintainers; [ ethancedwards8 ];
   };
 }

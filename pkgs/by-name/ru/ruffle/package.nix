@@ -106,19 +106,19 @@ rustPlatform.buildRustPackage {
   useFetchCargoVendor = true;
   cargoHash = "sha256-q+9yhUjYolPlBt6W1xJPoyE7DgqDffEhkQqJmSX4y3Y=";
 
-  meta = {
+  meta = with lib; {
     description = "Cross platform Adobe Flash Player emulator";
     homepage = "https://ruffle.rs/";
     license = [
-      lib.licenses.mit
-      lib.licenses.asl20
+      licenses.mit
+      licenses.asl20
     ];
     maintainers = [
-      lib.maintainers.govanify
-      lib.maintainers.jchw
-      lib.maintainers.normalcea
+      maintainers.govanify
+      maintainers.jchw
+      maintainers.normalcea
     ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    platforms = platforms.linux ++ platforms.darwin;
     mainProgram = "ruffle_desktop";
   };
 }

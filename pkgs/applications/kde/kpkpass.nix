@@ -9,9 +9,9 @@
 
 mkDerivation {
   pname = "kpkpass";
-  meta = {
-    license = with lib.licenses; [ lgpl21 ];
-    maintainers = [ lib.maintainers.bkchr ];
+  meta = with lib; {
+    license = with licenses; [ lgpl21 ];
+    maintainers = [ maintainers.bkchr ];
   };
   nativeBuildInputs = [
     extra-cmake-modules

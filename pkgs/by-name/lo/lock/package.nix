@@ -53,11 +53,11 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Process data with GnuPG";
     homepage = "https://konstantintutsch.com/Lock";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ getchoo ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ getchoo ];
     mainProgram = "com.konstantintutsch.Lock";
     inherit (gpgme.meta) platforms;
   };

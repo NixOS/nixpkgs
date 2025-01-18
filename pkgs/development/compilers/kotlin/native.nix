@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/run_konan --prefix PATH ":" ${lib.makeBinPath [ jre ]}
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://kotlinlang.org/";
     description = "Modern programming language that makes developers happier";
     longDescription = ''
@@ -65,9 +65,9 @@ stdenv.mkDerivation rec {
       backend for the Kotlin compiler and native implementation of the Kotlin
       standard library.
     '';
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ fabianhjr ];
-    platforms = [ "x86_64-linux" ] ++ lib.platforms.darwin;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fabianhjr ];
+    platforms = [ "x86_64-linux" ] ++ platforms.darwin;
   };
 }

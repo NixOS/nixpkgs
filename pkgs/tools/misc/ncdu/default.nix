@@ -41,12 +41,12 @@ stdenv.mkDerivation (finalAttrs: {
     package = finalAttrs.finalPackage;
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://dev.yorhel.nl/ncdu";
     description = "Disk usage analyzer with an ncurses interface";
     changelog = "https://dev.yorhel.nl/ncdu/changes2";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       pSub
       rodrgz
     ];

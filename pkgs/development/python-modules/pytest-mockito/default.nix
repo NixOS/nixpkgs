@@ -26,10 +26,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = {
+  meta = with lib; {
     description = "Base fixtures for mockito";
     homepage = "https://github.com/kaste/pytest-mockito";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

@@ -25,11 +25,11 @@ buildNpmPackage rec {
 
   dontNpmBuild = true;
 
-  meta = {
+  meta = with lib; {
     description = "Easily spoof your MAC address in OS X & Linux";
     homepage = "https://github.com/feross/spoof";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "spoof";
-    maintainers = with lib.maintainers; [ modderme123 ];
+    maintainers = with maintainers; [ modderme123 ];
   };
 }

@@ -43,12 +43,12 @@ stdenv.mkDerivation {
 
   passthru.updateScript = ./update.sh;
 
-  meta = {
+  meta = with lib; {
     description = "Binary distribution of PDFium";
     homepage = "https://github.com/bblanchon/pdfium-binaries";
-    license = with lib.licenses; [ asl20 ];
-    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
-    maintainers = with lib.maintainers; [ aucub ];
+    license = with licenses; [ asl20 ];
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    maintainers = with maintainers; [ aucub ];
     platforms = [
       "aarch64-linux"
       "aarch64-darwin"

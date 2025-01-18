@@ -45,12 +45,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Small programming toolbox";
     mainProgram = "libguytools";
     homepage = "https://libguytools.sourceforge.io";
-    maintainers = with lib.maintainers; [ d3vil0p3r ];
-    platforms = lib.platforms.linux;
-    license = lib.licenses.gpl2Plus;
+    maintainers = with maintainers; [ d3vil0p3r ];
+    platforms = platforms.linux;
+    license = licenses.gpl2Plus;
   };
 })

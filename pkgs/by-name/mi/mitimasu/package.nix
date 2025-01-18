@@ -25,11 +25,11 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Mitimasu webfont";
     homepage = "https://github.com/kemomimi-no-sato/mitimasu-webfont";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ istudyatuni ];
+    license = licenses.mit;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ istudyatuni ];
   };
 }

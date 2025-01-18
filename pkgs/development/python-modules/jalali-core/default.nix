@@ -26,10 +26,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jalali_core" ];
 
-  meta = {
+  meta = with lib; {
     description = "Module to convert Gregorian to Jalali and inverse dates";
     homepage = "https://pypi.org/project/jalali-core/";
-    license = lib.licenses.lgpl2Only;
-    maintainers = with lib.maintainers; [ fab ];
+    license = licenses.lgpl2Only;
+    maintainers = with maintainers; [ fab ];
   };
 }

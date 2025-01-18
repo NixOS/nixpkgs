@@ -45,12 +45,12 @@ stdenv.mkDerivation {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = {
+  meta = with lib; {
     description = "Simple program launcher using GTK4";
     homepage = "https://github.com/System64fumo/sysmenu";
-    license = lib.licenses.wtfpl;
+    license = licenses.wtfpl;
     mainProgram = "sysmenu";
-    maintainers = with lib.maintainers; [ matteopacini ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ matteopacini ];
+    platforms = platforms.linux;
   };
 }

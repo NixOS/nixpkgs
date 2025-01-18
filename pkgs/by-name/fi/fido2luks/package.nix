@@ -30,11 +30,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-BcwcgQzNH1p9pOVbelaGTN7bKqDgvxD4Red2JeavpJQ=";
 
-  meta = {
+  meta = with lib; {
     description = "Decrypt your LUKS partition using a FIDO2 compatible authenticator";
     homepage = "https://github.com/shimunn/fido2luks";
-    license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ mmahut ];
-    platforms = lib.platforms.linux;
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ mmahut ];
+    platforms = platforms.linux;
   };
 }

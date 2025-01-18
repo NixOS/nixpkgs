@@ -17,9 +17,9 @@ buildPythonPackage rec {
 
   buildInputs = [ six ];
 
-  meta = {
+  meta = with lib; {
     description = "Dict implementations with attribute access";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.MostAwesomeDude ];
+    license = licenses.mit;
+    maintainers = [ maintainers.MostAwesomeDude ];
   };
 }

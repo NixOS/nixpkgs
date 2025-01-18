@@ -30,7 +30,7 @@ buildPostgresqlExtension {
 
   makeFlags = [ "USE_PGXS=1" ];
 
-  meta = {
+  meta = with lib; {
     description = "Extension to support similarity queries on PostgreSQL";
     longDescription = ''
       pg_similarity is an extension to support similarity queries on PostgreSQL. The implementation
@@ -38,7 +38,7 @@ buildPostgresqlExtension {
       operators (= and <>) you can use ~~~ and ~!~ (any of these operators represents a similarity function).
     '';
     platforms = postgresql.meta.platforms;
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ danbst ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ danbst ];
   };
 }

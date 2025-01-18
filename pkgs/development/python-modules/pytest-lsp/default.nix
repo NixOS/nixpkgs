@@ -34,12 +34,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_lsp" ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/swyddfa/lsp-devtools";
     changelog = "https://github.com/swyddfa/lsp-devtools/blob/develop/lib/pytest-lsp/CHANGES.md";
     description = "Pytest plugin for writing end-to-end tests for language servers";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       clemjvdm
       fliegendewurst
     ];

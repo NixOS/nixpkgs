@@ -33,12 +33,12 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Font family created by Vercel in collaboration with Basement Studio";
     homepage = "https://vercel.com/font";
-    license = lib.licenses.ofl;
-    maintainers = with lib.maintainers; [ x0ba ];
-    platforms = lib.platforms.all;
-    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = licenses.ofl;
+    maintainers = with maintainers; [ x0ba ];
+    platforms = platforms.all;
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
   };
 }

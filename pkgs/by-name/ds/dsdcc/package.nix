@@ -38,12 +38,12 @@ stdenv.mkDerivation (finalAttrs: {
       --replace '=''${exec_prefix}//' '=/'
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Digital Speech Decoder (DSD) rewritten as a C++ library";
     homepage = "https://github.com/f4exb/dsdcc";
-    license = lib.licenses.gpl3;
+    license = licenses.gpl3;
     mainProgram = "dsdccx";
-    maintainers = with lib.maintainers; [ alexwinter ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ alexwinter ];
+    platforms = platforms.unix;
   };
 })

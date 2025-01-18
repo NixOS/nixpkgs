@@ -48,11 +48,11 @@ stdenv.mkDerivation {
     cp -r Documentation/* $out/share/doc/linux-doc/
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Linux kernel html documentation";
     homepage = "https://www.kernel.org/doc/htmldocs/";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
     inherit (linux_latest.meta) license;
-    maintainers = with lib.maintainers; [ sigmanificient ];
+    maintainers = with maintainers; [ sigmanificient ];
   };
 }

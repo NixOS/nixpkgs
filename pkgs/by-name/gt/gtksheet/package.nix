@@ -43,11 +43,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
 
-  meta = {
+  meta = with lib; {
     description = "Spreadsheet widget for GTK+";
     homepage = "https://fpaquet.github.io/gtksheet/";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ wegank ];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ wegank ];
+    platforms = platforms.unix;
   };
 })

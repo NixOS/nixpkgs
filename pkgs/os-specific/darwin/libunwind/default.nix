@@ -19,10 +19,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     EOF
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Compatibility package for libunwind on Darwin";
-    maintainers = lib.teams.darwin.members;
-    platforms = lib.platforms.darwin;
+    maintainers = teams.darwin.members;
+    platforms = platforms.darwin;
     pkgConfigModules = [ "libunwind" ];
   };
 })

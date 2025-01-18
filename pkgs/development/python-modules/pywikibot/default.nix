@@ -31,12 +31,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pywikibot" ];
 
-  meta = {
+  meta = with lib; {
     description = "Python MediaWiki bot framework";
     mainProgram = "pwb";
     homepage = "https://www.mediawiki.org/wiki/Manual:Pywikibot";
     changelog = "https://doc.wikimedia.org/pywikibot/master/changelog.html";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ tomodachi94 ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ tomodachi94 ];
   };
 }

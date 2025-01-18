@@ -55,18 +55,18 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = ./update.sh;
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.der-hammer.info/pages/terminal.html";
     changelog = "https://www.der-hammer.info/terminal/CHANGELOG.txt";
     description = "A terminal program for serial communication";
     # See https://www.der-hammer.info/terminal/LICENSE.txt
-    license = lib.licenses.unfree;
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = [
       "x86_64-linux"
       "i686-linux"
     ];
-    maintainers = with lib.maintainers; [ zebreus ];
+    maintainers = with maintainers; [ zebreus ];
     mainProgram = "hterm";
   };
 })

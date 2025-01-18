@@ -14,11 +14,11 @@ materia-theme.overrideAttrs (oldAttrs: rec {
     hash = "sha256-dHcwPTZFWO42wu1LbtGCMm2w/YHbjSUJnRKcaFllUbs=";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Transparent Material Design theme for GNOME/GTK based desktop environments";
     homepage = "https://github.com/ckissane/materia-theme-transparent";
-    license = lib.licenses.gpl2Only;
-    platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.corbinwunderlich ];
+    license = licenses.gpl2Only;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.corbinwunderlich ];
   };
 })

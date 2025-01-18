@@ -37,12 +37,12 @@ rustPlatform.buildRustPackage rec {
     "--skip=filehash::tests::get_filehash_unit_test"
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/ashuio/shavee";
     description = "Program to automatically decrypt and mount ZFS datasets using Yubikey HMAC as 2FA or any File on USB/SFTP/HTTPS";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ jasonodoom ];
-    platforms = lib.platforms.linux;
+    license = licenses.mit;
+    maintainers = with maintainers; [ jasonodoom ];
+    platforms = platforms.linux;
     mainProgram = "shavee";
   };
 }

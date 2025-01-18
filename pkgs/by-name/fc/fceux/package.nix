@@ -60,16 +60,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "http://www.fceux.com/";
     description = "Nintendo Entertainment System (NES) Emulator";
     changelog = "https://github.com/TASEmulators/blob/fceux/${finalAttrs.src.rev}/changelog.txt";
-    license = with lib.licenses; [ gpl2Plus ];
+    license = with licenses; [ gpl2Plus ];
     mainProgram = "fceux";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       AndersonTorres
       sbruder
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 })

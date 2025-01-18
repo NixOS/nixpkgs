@@ -33,12 +33,12 @@ stdenv.mkDerivation rec {
      --prefix PATH : ${lib.makeBinPath [ smartmontools ]}
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "http://www.snapraid.it/";
     description = "Backup program for disk arrays";
-    license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.makefu ];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl3;
+    maintainers = [ maintainers.makefu ];
+    platforms = platforms.unix;
     mainProgram = "snapraid";
   };
 }

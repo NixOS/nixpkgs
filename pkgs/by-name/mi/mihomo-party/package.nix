@@ -82,7 +82,7 @@ stdenv.mkDerivation {
       }"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Another Mihomo GUI";
     homepage = "https://github.com/mihomo-party-org/mihomo-party";
     mainProgram = "mihomo-party";
@@ -90,8 +90,8 @@ stdenv.mkDerivation {
       "aarch64-linux"
       "x86_64-linux"
     ];
-    license = lib.licenses.gpl3Plus;
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [ aucub ];
+    license = licenses.gpl3Plus;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    maintainers = with maintainers; [ aucub ];
   };
 }

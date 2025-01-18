@@ -96,12 +96,12 @@ buildDotnetModule rec {
 
   passthru.updateScript = ./update.sh;
 
-  meta = {
+  meta = with lib; {
     description = "GUI client for Windows and Linux, support Xray core and sing-box-core and others";
     homepage = "https://github.com/2dust/v2rayN";
     mainProgram = "v2rayN";
-    license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ aucub ];
+    license = with licenses; [ gpl3Plus ];
+    maintainers = with maintainers; [ aucub ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

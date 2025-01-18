@@ -17,10 +17,10 @@ buildNpmPackage rec {
 
   npmDepsHash = "sha256-nHGTi1aH9YY01dzBeNyUEUEswrdjZPWaoycDVZZmIAA=";
 
-  meta = {
+  meta = with lib; {
     description = "JavaScript and TypeScript code intelligence through the Language Server Protocol";
     homepage = "https://github.com/sourcegraph/javascript-typescript-langserver";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ dywedir ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ dywedir ];
   };
 }

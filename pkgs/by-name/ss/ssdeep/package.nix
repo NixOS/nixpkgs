@@ -23,12 +23,12 @@ stdenv.mkDerivation rec {
     patchelf --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE" "$out"/bin/*
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Program for calculating fuzzy hashes";
     mainProgram = "ssdeep";
     homepage = "http://www.ssdeep.sf.net";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.thoughtpolice ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.thoughtpolice ];
   };
 }

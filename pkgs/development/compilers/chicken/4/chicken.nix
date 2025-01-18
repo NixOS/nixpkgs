@@ -97,11 +97,11 @@ stdenv.mkDerivation {
 
   # TODO: Assert csi -R files -p '(pathname-file (repository-path))' == binaryVersion
 
-  meta = {
+  meta = with lib; {
     homepage = "http://www.call-cc.org/";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ corngood ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin; # Maybe other Unix
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ corngood ];
+    platforms = platforms.linux ++ platforms.darwin; # Maybe other Unix
     description = "Portable compiler for the Scheme programming language";
     longDescription = ''
       CHICKEN is a compiler for the Scheme programming language.

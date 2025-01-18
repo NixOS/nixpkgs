@@ -22,11 +22,11 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Blazingly fast command line interface for Urban Dictionary";
     homepage = "https://github.com/tfkhdyt/urban-cli";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ tfkhdyt ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ tfkhdyt ];
     mainProgram = "urban-cli";
   };
 }

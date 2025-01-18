@@ -31,10 +31,10 @@ mkTclDerivation rec {
   doInstallCheck = true;
   installCheckTarget = "test";
 
-  meta = {
+  meta = with lib; {
     description = "XML / DOM / XPath / XSLT / HTML / JSON implementation for Tcl";
     homepage = "http://www.tdom.org";
-    license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ fgaz ];
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ fgaz ];
   };
 }

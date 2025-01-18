@@ -69,11 +69,11 @@ stdenv.mkDerivation rec {
       ''
     );
 
-  meta = {
+  meta = with lib; {
     description = "Terminal feature database";
     homepage = "https://www.gnu.org/software/termutils/";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ wegank ];
-    platforms = lib.platforms.all;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ wegank ];
+    platforms = platforms.all;
   };
 }

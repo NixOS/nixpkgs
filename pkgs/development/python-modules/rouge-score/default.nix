@@ -61,10 +61,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rouge_score" ];
 
-  meta = {
+  meta = with lib; {
     description = "Python ROUGE Implementation";
     homepage = "https://github.com/google-research/google-research/tree/master/rouge";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ nviets ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ nviets ];
   };
 }

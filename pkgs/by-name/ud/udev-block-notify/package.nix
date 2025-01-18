@@ -43,12 +43,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/eworm-de/udev-block-notify";
     description = "Notify about udev block events";
     mainProgram = "udev-block-notify";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ danbulant ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ danbulant ];
+    platforms = platforms.linux;
   };
 })

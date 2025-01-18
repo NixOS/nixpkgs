@@ -43,16 +43,16 @@ stdenv.mkDerivation (finalAttrs: {
   #   Aborted (core dumped)
   hardeningDisable = [ "fortify" ];
 
-  meta = {
+  meta = with lib; {
     homepage = "http://lgames.sourceforge.net/LBreakout2/";
     description = "Breakout clone from the LGames series";
-    license = with lib.licenses; [ gpl2Plus ];
+    license = with licenses; [ gpl2Plus ];
     mainProgram = "lbreakout2";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       AndersonTorres
       ciil
     ];
-    platforms = lib.platforms.unix;
-    hydraPlatforms = lib.platforms.linux; # build hangs on both Darwin platforms, needs investigation
+    platforms = platforms.unix;
+    hydraPlatforms = platforms.linux; # build hangs on both Darwin platforms, needs investigation
   };
 })

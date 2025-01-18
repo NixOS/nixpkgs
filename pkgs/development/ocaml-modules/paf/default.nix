@@ -62,10 +62,10 @@ buildDunePackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = {
+  meta = with lib; {
     description = "HTTP/AF and MirageOS";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.sternenseemann ];
+    license = licenses.mit;
+    maintainers = [ maintainers.sternenseemann ];
     homepage = "https://github.com/dinosaure/paf-le-chien";
   };
 }

@@ -19,13 +19,13 @@ buildPerlPackage {
 
   doCheck = false; # TODO: almost all tests fail ... is this a real problem?
 
-  meta = {
+  meta = with lib; {
     description = "MNI MINC perllib (not used much anymore)";
     homepage = "https://github.com/BIC-MNI/mni-perllib";
-    license = with lib.licenses; [
+    license = with licenses; [
       artistic1
       gpl1Plus
     ];
-    maintainers = with lib.maintainers; [ bcdarwin ];
+    maintainers = with maintainers; [ bcdarwin ];
   };
 }

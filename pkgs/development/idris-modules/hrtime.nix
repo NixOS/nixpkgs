@@ -18,10 +18,10 @@ build-idris-package {
     sha256 = "0rmmpi1kp1h7ficmcxbxkny9lq9pjli2qhwy17vgbgx8fx60m8l0";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Idris library for high resolution time";
     homepage = "https://github.com/pierrebeaucamp/idris-hrtime";
-    license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.brainrape ];
+    license = licenses.asl20;
+    maintainers = [ maintainers.brainrape ];
   };
 }

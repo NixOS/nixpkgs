@@ -54,10 +54,10 @@ buildPythonPackage rec {
   # no tests in the pypi archive
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Package for statistical analysis of time-series data";
     homepage = "https://pypi.org/project/pyseries/";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ GaetanLepage ];
   };
 }

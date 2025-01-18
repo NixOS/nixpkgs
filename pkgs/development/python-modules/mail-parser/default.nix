@@ -49,11 +49,11 @@ buildPythonPackage rec {
     cat tests/mails/mail_malformed_3 | ${python.interpreter} -m mailparser -k -j
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Mail parser for python 2 and 3";
     mainProgram = "mailparser";
     homepage = "https://github.com/SpamScope/mail-parser";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ psyanticy ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ psyanticy ];
   };
 }

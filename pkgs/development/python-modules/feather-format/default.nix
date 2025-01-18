@@ -23,10 +23,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "feather" ];
   doCheck = false; # no tests
 
-  meta = {
+  meta = with lib; {
     description = "Simple wrapper library to the Apache Arrow-based Feather File Format";
     homepage = "https://github.com/wesm/feather";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ sigmanificient ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ sigmanificient ];
   };
 }

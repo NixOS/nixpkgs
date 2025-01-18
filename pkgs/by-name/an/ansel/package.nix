@@ -176,12 +176,12 @@ stdenv.mkDerivation {
     (lib.cmakeFeature "Xsltproc_BIN" (lib.getExe' libxslt "xsltproc"))
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Darktable fork minus the bloat plus some design vision";
     homepage = "https://ansel.photos/";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ];
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ ];
     mainProgram = "ansel";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

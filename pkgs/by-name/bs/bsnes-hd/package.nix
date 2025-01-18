@@ -95,15 +95,15 @@ stdenv.mkDerivation {
     updateScript = unstableGitUpdater { };
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/DerKoun/bsnes-hd";
     description = "Fork of bsnes that adds HD video features";
-    license = lib.licenses.gpl3Only;
+    license = licenses.gpl3Only;
     mainProgram = "bsnes";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       AndersonTorres
       stevebob
     ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }

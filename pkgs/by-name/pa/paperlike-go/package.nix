@@ -19,12 +19,12 @@ buildGoModule {
 
   subPackages = [ "cmd/paperlike-cli" ];
 
-  meta = {
+  meta = with lib; {
     description = "Linux Go library and CLI utility to control a Dasung Paperlike display via I2C DDC";
     homepage = "https://github.com/leoluk/paperlike-go";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     maintainers = [ ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
     mainProgram = "paperlike-cli";
   };
 }

@@ -24,10 +24,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  meta = {
+  meta = with lib; {
     description = ".NET viewstate decoder";
     homepage = "https://github.com/yuvadm/viewstate";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ kamadorueda ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ kamadorueda ];
   };
 }

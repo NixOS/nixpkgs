@@ -50,12 +50,12 @@ stdenv.mkDerivation rec {
   doCheck = true;
   checkTarget = "test";
 
-  meta = {
+  meta = with lib; {
     description = "Fast, parallel test case minimization tool";
     mainProgram = "halfempty";
     homepage = "https://github.com/googleprojectzero/halfempty/";
-    maintainers = with lib.maintainers; [ fpletz ];
-    license = with lib.licenses; [ asl20 ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ fpletz ];
+    license = with licenses; [ asl20 ];
+    platforms = platforms.unix;
   };
 }

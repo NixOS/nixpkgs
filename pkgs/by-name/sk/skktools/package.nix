@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     glib
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Collection of tools to edit SKK dictionaries";
     longDescription = ''
       This package provides a collection of tools to manipulate
@@ -48,8 +48,8 @@ stdenv.mkDerivation rec {
       input method.
     '';
     homepage = "https://github.com/skk-dev/skktools";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ yuriaisaka ];
-    platforms = with lib.platforms; linux ++ darwin;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ yuriaisaka ];
+    platforms = with platforms; linux ++ darwin;
   };
 }

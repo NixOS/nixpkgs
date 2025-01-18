@@ -89,16 +89,16 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Alternative client for the Bitwarden platform, created to provide the best user experience possible";
     homepage = "https://github.com/AChep/keyguard-app";
     mainProgram = "Keyguard";
-    license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ aucub ];
-    sourceProvenance = with lib.sourceTypes; [
+    license = licenses.unfree;
+    maintainers = with maintainers; [ aucub ];
+    sourceProvenance = with sourceTypes; [
       fromSource
       binaryBytecode
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 })

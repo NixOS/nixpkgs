@@ -29,10 +29,10 @@ buildPythonPackage {
     plasTeX
   ];
 
-  meta = {
+  meta = with lib; {
     description = "plasTeX plugin allowing to build dependency graphs";
     homepage = "https://github.com/PatrickMassot/plastexdepgraph";
-    maintainers = with lib.maintainers; [ niklashh ];
-    license = lib.licenses.asl20;
+    maintainers = with maintainers; [ niklashh ];
+    license = licenses.asl20;
   };
 }

@@ -91,10 +91,10 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Video editing tool that allows you to trim, flip, rotate, and crop clips";
     homepage = "https://gitlab.com/adhami3310/Footage";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ onny ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ onny ];
   };
 }

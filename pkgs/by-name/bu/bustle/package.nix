@@ -62,15 +62,15 @@ stdenv.mkDerivation (finalAttrs: {
     libadwaita
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Graphical D-Bus message analyser and profiler";
     homepage = "https://gitlab.gnome.org/World/bustle";
-    license = lib.licenses.lgpl21Plus;
-    maintainers = with lib.maintainers; [
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [
       jtojnar
       aleksana
     ];
     mainProgram = "bustle";
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 })

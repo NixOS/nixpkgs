@@ -43,10 +43,10 @@ buildPythonPackage rec {
 
   passthru.tests = jupyter-collaboration.tests;
 
-  meta = {
+  meta = with lib; {
     description = "Jupyter-server extension integrating collaborative shared models";
     homepage = "https://github.com/jupyterlab/jupyter-collaboration/tree/main/projects/jupyter-server-ydoc";
-    license = lib.licenses.bsd3;
-    maintainers = lib.teams.jupyter.members;
+    license = licenses.bsd3;
+    maintainers = teams.jupyter.members;
   };
 }

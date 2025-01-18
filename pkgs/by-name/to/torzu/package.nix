@@ -223,17 +223,17 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm444 $src/dist/72-yuzu-input.rules $out/lib/udev/rules.d/72-yuzu-input.rules
   ";
 
-  meta = {
+  meta = with lib; {
     description = "Fork of yuzu, an open-source Nintendo Switch emulator";
     homepage = "https://notabug.org/litucks/torzu";
     mainProgram = "yuzu";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
     badPlatforms = [
       # Several conversion errors, probably caused by the update to GCC 14
       "aarch64-linux"
     ];
-    maintainers = with lib.maintainers; [ liberodark ];
-    license = with lib.licenses; [
+    maintainers = with maintainers; [ liberodark ];
+    license = with licenses; [
       gpl3Plus
       # Icons
       asl20

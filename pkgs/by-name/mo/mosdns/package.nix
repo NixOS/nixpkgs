@@ -43,11 +43,11 @@ buildGoModule rec {
     };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Modular, pluggable DNS forwarder";
     homepage = "https://github.com/IrineSistiana/mosdns";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ moraxyc ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ moraxyc ];
     mainProgram = "mosdns";
   };
 }

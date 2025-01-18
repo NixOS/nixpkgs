@@ -28,11 +28,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libpng ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.kernel.org/pub/software/graphics/pngtoico/";
     description = "Small utility to convert a set of PNG images to Microsoft ICO format";
-    license = lib.licenses.gpl2Plus;
-    platforms = with lib.platforms; linux;
+    license = licenses.gpl2Plus;
+    platforms = with platforms; linux;
     mainProgram = "pngtoico";
   };
 }

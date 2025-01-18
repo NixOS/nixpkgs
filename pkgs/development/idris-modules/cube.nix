@@ -14,10 +14,10 @@ build-idris-package {
     sha256 = "11k45j0b4qabj6zhwjvynyj56nmssf7d4fnkv66bd2w1pxnshzxg";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Implementation of the Lambda Cube in Idris";
     homepage = "https://github.com/aatxe/cube.idr";
-    license = lib.licenses.agpl3Only;
-    maintainers = [ lib.maintainers.brainrape ];
+    license = licenses.agpl3Only;
+    maintainers = [ maintainers.brainrape ];
   };
 }

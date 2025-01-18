@@ -32,11 +32,11 @@ else
 
     createFindlibDestdir = true;
 
-    meta = {
+    meta = with lib; {
       description = "Bit vector library for OCaml";
-      license = lib.licenses.lgpl21;
+      license = licenses.lgpl21;
       homepage = "https://github.com/backtracking/bitv";
-      maintainers = [ lib.maintainers.vbgl ];
+      maintainers = [ maintainers.vbgl ];
       inherit (ocaml.meta) platforms;
     };
   }

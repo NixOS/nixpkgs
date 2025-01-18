@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = {
+  meta = with lib; {
     description = "GNU C Language Intro and Reference Manual";
     longDescription = ''
       This manual explains the C language for use with the GNU Compiler
@@ -64,8 +64,8 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://www.gnu.org/software/c-intro-and-ref/";
     changelog = "https://git.savannah.nongnu.org/cgit/c-intro-and-ref.git/plain/ChangeLog?id=${finalAttrs.src.rev}";
-    license = lib.licenses.fdl13Plus;
-    maintainers = with lib.maintainers; [ rc-zb ];
-    platforms = lib.platforms.all;
+    license = licenses.fdl13Plus;
+    maintainers = with maintainers; [ rc-zb ];
+    platforms = platforms.all;
   };
 })

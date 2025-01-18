@@ -96,11 +96,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pygerber" ];
 
-  meta = {
+  meta = with lib; {
     description = "Implementation of the Gerber X3/X2 format, based on Ucamco's The Gerber Layer Format Specification";
     homepage = "https://github.com/Argmaster/pygerber";
     changelog = "https://argmaster.github.io/pygerber/stable/Changelog.html";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ clemjvdm ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ clemjvdm ];
   };
 }

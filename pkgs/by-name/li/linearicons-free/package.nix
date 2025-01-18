@@ -21,14 +21,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Crisp Line Icons by Perxis";
     longDescription = ''
       See cheat sheet here: https://linearicons.com/free#cheat-sheet
     '';
     homepage = "https://linearicons.com/free";
-    license = lib.licenses.cc-by-sa-40;
-    maintainers = [ lib.maintainers.CardboardTurkey ];
-    platforms = lib.platforms.all;
+    license = licenses.cc-by-sa-40;
+    maintainers = [ maintainers.CardboardTurkey ];
+    platforms = platforms.all;
   };
 })

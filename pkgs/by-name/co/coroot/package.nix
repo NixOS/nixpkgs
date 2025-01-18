@@ -43,11 +43,11 @@ buildGoModule rec {
     npm --prefix="$npmRoot" run build-prod
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Open-source APM & Observability tool";
     homepage = "https://coroot.com";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ errnoh ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ errnoh ];
     mainProgram = "coroot";
   };
 }

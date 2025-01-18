@@ -25,10 +25,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "torchsummary" ];
 
-  meta = {
+  meta = with lib; {
     description = "Model summary in PyTorch similar to `model.summary()` in Keras";
     homepage = "https://github.com/sksq96/pytorch-summary";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ tomasajt ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ tomasajt ];
   };
 }

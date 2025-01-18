@@ -20,11 +20,11 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = {
+  meta = with lib; {
     description = "ncurses based snake game for the terminal";
     mainProgram = "nsnake";
     homepage = "https://github.com/alexdantas/nSnake";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ clerie ];
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ clerie ];
   };
 }

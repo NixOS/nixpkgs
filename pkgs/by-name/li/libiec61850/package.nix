@@ -23,11 +23,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
-  meta = {
+  meta = with lib; {
     description = "Open-source library for the IEC 61850 protocols";
     homepage = "https://libiec61850.com/";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ stv0g ];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ stv0g ];
+    platforms = platforms.unix;
   };
 })

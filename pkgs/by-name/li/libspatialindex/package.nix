@@ -40,11 +40,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "Extensible spatial index library in C++";
     homepage = "https://libspatialindex.org";
-    license = lib.licenses.mit;
-    maintainers = lib.teams.geospatial.members;
-    platforms = lib.platforms.unix;
+    license = licenses.mit;
+    maintainers = teams.geospatial.members;
+    platforms = platforms.unix;
   };
 })

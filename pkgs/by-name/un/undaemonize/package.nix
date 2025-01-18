@@ -17,12 +17,12 @@ stdenv.mkDerivation {
   installPhase = ''
     install -D undaemonize $out/bin/undaemonize
   '';
-  meta = {
+  meta = with lib; {
     description = "Tiny helper utility to force programs which insist on daemonizing themselves to run in the foreground";
     homepage = "https://github.com/nickstenning/undaemonize";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.canndrew ];
-    platforms = lib.platforms.linux;
+    license = licenses.mit;
+    maintainers = [ maintainers.canndrew ];
+    platforms = platforms.linux;
     mainProgram = "undaemonize";
   };
 }

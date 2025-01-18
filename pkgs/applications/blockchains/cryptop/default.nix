@@ -25,11 +25,11 @@ buildPythonApplication rec {
   # No tests in archive
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/huwwp/cryptop";
     description = "Command line Cryptocurrency Portfolio";
-    license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ bhipple ];
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ bhipple ];
     mainProgram = "cryptop";
   };
 }

@@ -22,11 +22,11 @@ rustPlatform.buildRustPackage rec {
     "--skip cli::converts_warnings_from_pipe"
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://gitlab.com/dlalic/gitlab-clippy";
     description = "Convert clippy warnings into GitLab Code Quality report";
     mainProgram = "gitlab-clippy";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ wucke13 ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ wucke13 ];
   };
 }

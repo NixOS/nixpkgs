@@ -24,7 +24,7 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "‘revival’ of Goudy Oldstyle and Italic";
     longDescription = ''
       A 'revival' of Goudy Oldstyle and Italic, with features including small
@@ -34,7 +34,7 @@ stdenvNoCC.mkDerivation {
       latin scripts.
     '';
     homepage = "https://www.theleagueofmoveabletype.com/sorts-mill-goudy";
-    license = lib.licenses.ofl;
-    maintainers = with lib.maintainers; [ minijackson ];
+    license = licenses.ofl;
+    maintainers = with maintainers; [ minijackson ];
   };
 }

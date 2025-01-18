@@ -20,10 +20,10 @@ buildDunePackage rec {
     dune-configurator
   ];
 
-  meta = {
+  meta = with lib; {
     description = "ZeroMQ bindings for OCaml";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ akavel ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ akavel ];
     homepage = "https://engineering.issuu.com/ocaml-zmq/";
   };
 }

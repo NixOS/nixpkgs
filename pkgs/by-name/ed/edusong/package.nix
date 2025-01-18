@@ -19,7 +19,7 @@ stdenvNoCC.mkDerivation rec {
     mv *.ttf $out/share/fonts/
   '';
 
-  meta = {
+  meta = with lib; {
     description = "The MOE Standard Song Font, a Chinese font by the Ministry of Education, ROC (Taiwan)";
     longDescription = ''
       The MOE Standard Song Font is a Chinese Song font provided by
@@ -27,7 +27,7 @@ stdenvNoCC.mkDerivation rec {
       Song or Ming is a category of CKJ typefaces in print.
     '';
     homepage = "https://language.moe.gov.tw/result.aspx?classify_sn=23&subclassify_sn=436&content_sn=48";
-    license = lib.licenses.cc-by-nd-30;
-    maintainers = with lib.maintainers; [ ShamrockLee ];
+    license = licenses.cc-by-nd-30;
+    maintainers = with maintainers; [ ShamrockLee ];
   };
 }

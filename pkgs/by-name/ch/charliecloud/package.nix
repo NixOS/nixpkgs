@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests.charliecloud = nixosTests.charliecloud;
 
-  meta = {
+  meta = with lib; {
     description = "User-defined software stacks (UDSS) for high-performance computing (HPC) centers";
     longDescription = ''
       Charliecloud uses Linux user namespaces to run containers with no
@@ -90,9 +90,9 @@ stdenv.mkDerivation rec {
       on offer.
     '';
     homepage = "https://hpc.github.io/charliecloud";
-    license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.bzizou ];
-    platforms = lib.platforms.linux;
+    license = licenses.asl20;
+    maintainers = [ maintainers.bzizou ];
+    platforms = platforms.linux;
   };
 
 }

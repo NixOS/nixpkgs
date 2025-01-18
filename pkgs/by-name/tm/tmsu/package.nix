@@ -30,15 +30,15 @@ buildGoModule {
     installShellCompletion --zsh misc/zsh/_tmsu
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.tmsu.org";
     description = "Tool for tagging your files using a virtual filesystem";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       luftmensch-luftmensch
       pSub
     ];
     mainProgram = "tmsu";
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.unix;
+    license = licenses.gpl3Plus;
+    platforms = platforms.unix;
   };
 }

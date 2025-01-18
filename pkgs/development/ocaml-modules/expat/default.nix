@@ -41,10 +41,10 @@ lib.throwIfNot (lib.versionAtLeast ocaml.version "4.02")
 
     createFindlibDestdir = true;
 
-    meta = {
+    meta = with lib; {
       description = "OCaml wrapper for the Expat XML parsing library";
-      license = lib.licenses.mit;
-      maintainers = [ lib.maintainers.vbgl ];
+      license = licenses.mit;
+      maintainers = [ maintainers.vbgl ];
       inherit (src.meta) homepage;
       inherit (ocaml.meta) platforms;
     };

@@ -53,10 +53,10 @@ stdenv.mkDerivation rec {
     cp _build/lib*.a _build/lib*.so* "$out/lib"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "GCC wrapper that makes it easy to embed secure computation protocols inside regular C programs";
-    license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.raskin ];
-    platforms = lib.platforms.linux;
+    license = licenses.bsd3;
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.linux;
   };
 }

@@ -20,10 +20,10 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "http://log4cplus.sourceforge.net/";
     description = "Port the log4j library from Java to C++";
-    license = lib.licenses.asl20;
-    platforms = lib.platforms.unix;
+    license = licenses.asl20;
+    platforms = platforms.unix;
   };
 }

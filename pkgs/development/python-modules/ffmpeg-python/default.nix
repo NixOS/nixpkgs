@@ -56,10 +56,10 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "ffmpeg" ];
 
-  meta = {
+  meta = with lib; {
     description = "Python bindings for FFmpeg - with complex filtering support";
     homepage = "https://github.com/kkroening/ffmpeg-python";
-    license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.emily ];
+    license = licenses.asl20;
+    maintainers = [ maintainers.emily ];
   };
 }

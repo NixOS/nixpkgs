@@ -31,12 +31,12 @@ buildDotnetModule (finalAttrs: {
     command = "seqcli version";
   };
 
-  meta = {
+  meta = with lib; {
     description = "The Seq command-line client. Administer, log, ingest, search, from any OS";
     homepage = "https://github.com/datalust/seqcli";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ hausken ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ hausken ];
     mainProgram = "seqcli";
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 })

@@ -25,10 +25,10 @@ buildDunePackage rec {
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "Decode and encode tar format files in pure OCaml";
     homepage = "https://github.com/mirage/ocaml-tar";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.ulrikstrid ];
+    license = licenses.mit;
+    maintainers = [ maintainers.ulrikstrid ];
   };
 }

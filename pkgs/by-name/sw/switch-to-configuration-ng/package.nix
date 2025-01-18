@@ -32,10 +32,10 @@ rustPlatform.buildRustPackage {
     cargo clippy -- -Dwarnings
   '';
 
-  meta = {
+  meta = with lib; {
     description = "NixOS switch-to-configuration program";
     mainProgram = "switch-to-configuration";
-    maintainers = with lib.maintainers; [ jmbaur ];
-    license = lib.licenses.mit;
+    maintainers = with maintainers; [ jmbaur ];
+    license = licenses.mit;
   };
 }

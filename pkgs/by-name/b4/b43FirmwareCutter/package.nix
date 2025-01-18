@@ -20,11 +20,11 @@ stdenv.mkDerivation rec {
     "CC=${stdenv.cc.targetPrefix}cc"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Firmware extractor for cards supported by the b43 kernel module";
     mainProgram = "b43-fwcutter";
     homepage = "http://wireless.kernel.org/en/users/Drivers/b43";
-    license = lib.licenses.bsd2;
-    platforms = lib.platforms.linux;
+    license = licenses.bsd2;
+    platforms = platforms.linux;
   };
 }

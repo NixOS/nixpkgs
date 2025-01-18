@@ -22,11 +22,11 @@ stdenv.mkDerivation rec {
     make -C . prefix="$out" install;
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Tool for converting single/multi part UIF image files to ISO";
     homepage = "http://aluigi.org/mytoolz.htm#uif2iso";
-    license = lib.licenses.gpl1Plus;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl1Plus;
+    platforms = platforms.linux;
     mainProgram = "uif2iso";
   };
 }

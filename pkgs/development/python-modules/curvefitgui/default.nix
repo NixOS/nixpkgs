@@ -38,10 +38,10 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "curvefitgui" ];
 
-  meta = {
+  meta = with lib; {
     description = "Graphical interface to the non-linear curvefit function scipy.optimise.curve_fit";
     homepage = "https://github.com/moosepy/curvefitgui";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ doronbehar ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ doronbehar ];
   };
 }

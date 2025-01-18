@@ -37,11 +37,11 @@ buildGoModule rec {
       installManPage cert-viewer.1
     '';
 
-  meta = {
+  meta = with lib; {
     description = "Admin tool to view and inspect multiple x509 Certificates";
     homepage = "https://github.com/mgit-at/cert-viewer";
-    license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.mkg20001 ];
+    license = licenses.asl20;
+    maintainers = [ maintainers.mkg20001 ];
     mainProgram = "cert-viewer";
   };
 }

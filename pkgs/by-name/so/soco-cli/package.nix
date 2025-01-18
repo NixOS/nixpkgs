@@ -33,11 +33,11 @@ python3.pkgs.buildPythonApplication rec {
     "soco_cli"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Command-line interface to control Sonos sound systems";
     homepage = "https://github.com/avantrec/soco-cli";
-    license = with lib.licenses; [ asl20 ];
+    license = with licenses; [ asl20 ];
     mainProgram = "sonos";
-    maintainers = with lib.maintainers; [ fab ];
+    maintainers = with maintainers; [ fab ];
   };
 }

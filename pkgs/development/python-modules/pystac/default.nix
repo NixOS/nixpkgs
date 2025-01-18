@@ -44,10 +44,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pystac" ];
 
-  meta = {
+  meta = with lib; {
     description = "Python library for working with any SpatioTemporal Asset Catalog (STAC)";
     homepage = "https://github.com/stac-utils/pystac";
-    license = lib.licenses.asl20;
-    maintainers = lib.teams.geospatial.members;
+    license = licenses.asl20;
+    maintainers = teams.geospatial.members;
   };
 }

@@ -136,18 +136,18 @@ stdenv.mkDerivation {
     done
   '') dlopenLibs;
 
-  meta = {
+  meta = with lib; {
     description = "Guest additions for VirtualBox";
     longDescription = ''
       Various add-ons which makes NixOS work better as guest OS inside VirtualBox.
       This add-on provides support for dynamic resizing of the virtual display, shared
       host/guest clipboard support.
     '';
-    sourceProvenance = with lib.sourceTypes; [ fromSource ];
-    license = lib.licenses.gpl2;
+    sourceProvenance = with sourceTypes; [ fromSource ];
+    license = licenses.gpl2;
     maintainers = [
-      lib.maintainers.sander
-      lib.maintainers.friedrichaltheide
+      maintainers.sander
+      maintainers.friedrichaltheide
     ];
     platforms = [
       "i686-linux"

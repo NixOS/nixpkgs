@@ -35,11 +35,11 @@ buildPythonPackage rec {
     six
   ];
 
-  meta = {
+  meta = with lib; {
     changelog = "https://github.com/rajatomar788/pywebcopy/blob/master/docs/changelog.md";
     description = "Python package for cloning complete webpages and websites to local storage";
     homepage = "https://github.com/rajatomar788/pywebcopy/";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ d3vil0p3r ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ d3vil0p3r ];
   };
 }

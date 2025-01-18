@@ -52,11 +52,11 @@ stdenv.mkDerivation rec {
     "CUPS_BACKENDS=$(out)/lib/cups/backend"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Foomatic printing filters";
     mainProgram = "foomatic-rip";
-    maintainers = [ lib.maintainers.raskin ];
-    platforms = lib.platforms.linux;
-    license = lib.licenses.gpl2Plus;
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.linux;
+    license = licenses.gpl2Plus;
   };
 }

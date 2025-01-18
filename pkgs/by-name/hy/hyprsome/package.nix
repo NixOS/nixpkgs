@@ -17,12 +17,12 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-Jqx77/PDWEJ+NPJN2R6n4w9nVPXQoHeuVfYKUB3i9Lg=";
 
-  meta = {
+  meta = with lib; {
     description = "Awesome-like workspaces for Hyprland";
     homepage = "https://github.com/sopa0/hyprsome";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ bhasherbel ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ bhasherbel ];
+    platforms = platforms.linux;
     mainProgram = "hyprsome";
   };
 }

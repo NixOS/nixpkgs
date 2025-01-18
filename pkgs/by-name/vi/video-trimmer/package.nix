@@ -74,17 +74,17 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://gitlab.gnome.org/YaLTeR/video-trimmer";
     description = "Trim videos quickly";
     maintainers =
-      with lib.maintainers;
+      with maintainers;
       [
         doronbehar
       ]
-      ++ lib.teams.gnome-circle.members;
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
+      ++ teams.gnome-circle.members;
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
     mainProgram = "video-trimmer";
   };
 })

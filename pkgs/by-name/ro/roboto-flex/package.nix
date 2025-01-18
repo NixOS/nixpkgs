@@ -22,11 +22,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/googlefonts/roboto-flex";
     description = "Google Roboto Flex family of fonts";
-    license = lib.licenses.ofl;
-    platforms = lib.platforms.all;
-    maintainers = [ lib.maintainers.romildo ];
+    license = licenses.ofl;
+    platforms = platforms.all;
+    maintainers = [ maintainers.romildo ];
   };
 }

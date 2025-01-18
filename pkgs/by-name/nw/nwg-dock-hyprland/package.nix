@@ -40,12 +40,12 @@ buildGoModule rec {
     install -Dm644 config/style.css $out/share/nwg-dock-hyprland/style.css
   '';
 
-  meta = {
+  meta = with lib; {
     description = "GTK3-based dock for Hyprland";
     mainProgram = "nwg-dock-hyprland";
     homepage = "https://github.com/nwg-piotr/nwg-dock-hyprland";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ aleksana ];
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ aleksana ];
   };
 }

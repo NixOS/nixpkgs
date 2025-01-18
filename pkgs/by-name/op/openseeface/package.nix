@@ -42,11 +42,11 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Robust realtime face and facial landmark tracking on CPU with Unity integration";
     homepage = "https://github.com/emilianavt/OpenSeeFace";
-    license = lib.licenses.bsd2;
+    license = licenses.bsd2;
     mainProgram = "facetracker";
-    maintainers = with lib.maintainers; [ tomasajt ];
+    maintainers = with maintainers; [ tomasajt ];
   };
 }

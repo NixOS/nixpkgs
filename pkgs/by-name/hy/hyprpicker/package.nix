@@ -67,11 +67,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Wlroots-compatible Wayland color picker that does not suck";
     homepage = "https://github.com/hyprwm/hyprpicker";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [
+    license = licenses.bsd3;
+    maintainers = with maintainers; [
       fufexan
       khaneliman
     ];

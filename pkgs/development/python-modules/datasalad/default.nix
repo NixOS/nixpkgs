@@ -36,11 +36,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "datasalad" ];
 
-  meta = {
+  meta = with lib; {
     description = "Pure-Python library with a collection of utilities for working with Git and git-annex";
     changelog = "https://github.com/datalad/datasalad/blob/main/CHANGELOG.md";
     homepage = "https://github.com/datalad/datasalad";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ gador ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ gador ];
   };
 }

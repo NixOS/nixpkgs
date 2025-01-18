@@ -83,11 +83,11 @@ python3.pkgs.buildPythonApplication {
     pytestCheckHook
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Inkscape extension for machine embroidery design";
     homepage = "https://inkstitch.org/";
-    license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [
+    license = with licenses; [ gpl3Plus ];
+    maintainers = with maintainers; [
       tropf
       pluiedev
     ];

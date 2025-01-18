@@ -57,12 +57,12 @@ stdenv.mkDerivation (finalAttrs: {
     "-DWITH_LIBSIXEL=On"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Terminal image and video viewer";
     homepage = "https://timg.sh/";
-    license = lib.licenses.gpl2Only;
+    license = licenses.gpl2Only;
     mainProgram = "timg";
-    maintainers = with lib.maintainers; [ hzeller ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ hzeller ];
+    platforms = platforms.unix;
   };
 })

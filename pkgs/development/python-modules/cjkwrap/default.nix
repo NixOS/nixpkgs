@@ -24,10 +24,10 @@ buildPythonPackage rec {
   # no tests
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Library for wrapping and filling CJK text";
     homepage = "https://f.gallai.re/cjkwrap";
-    license = lib.licenses.lgpl3Plus;
-    maintainers = [ lib.maintainers.kaction ];
+    license = licenses.lgpl3Plus;
+    maintainers = [ maintainers.kaction ];
   };
 }

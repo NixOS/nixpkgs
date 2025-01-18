@@ -14,12 +14,12 @@
 
 mkDerivation {
   pname = "kdenetwork-filesharing";
-  meta = {
+  meta = with lib; {
     license = [
-      lib.licenses.gpl2
-      lib.licenses.lgpl21
+      licenses.gpl2
+      licenses.lgpl21
     ];
-    maintainers = [ lib.maintainers.ttuegel ];
+    maintainers = [ maintainers.ttuegel ];
   };
   nativeBuildInputs = [
     extra-cmake-modules

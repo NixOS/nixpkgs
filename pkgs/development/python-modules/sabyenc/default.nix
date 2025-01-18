@@ -17,10 +17,10 @@ buildPythonPackage rec {
   # tests are not included in pypi distribution
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Python yEnc package optimized for use within SABnzbd";
     homepage = "https://github.com/sabnzbd/sabyenc/";
-    license = lib.licenses.lgpl3;
-    maintainers = [ lib.maintainers.georgewhewell ];
+    license = licenses.lgpl3;
+    maintainers = [ maintainers.georgewhewell ];
   };
 }

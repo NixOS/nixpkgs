@@ -40,15 +40,15 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     inherit (vapoursynth.meta) platforms;
     description = "Filter for VapourSynth";
     homepage = "https://github.com/sekrit-twc/znedi3";
-    license = with lib.licenses; [
+    license = with licenses; [
       gpl2Plus
       wtfpl
       lgpl21
     ];
-    maintainers = with lib.maintainers; [ snaki ];
+    maintainers = with maintainers; [ snaki ];
   };
 }

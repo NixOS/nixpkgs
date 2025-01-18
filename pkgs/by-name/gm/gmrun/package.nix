@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     gappsWrapperArgs+=(--set-default GDK_BACKEND x11)
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Gnome Completion-Run Utility";
     longDescription = ''
       A simple program which provides a "run program" window, featuring a bash-like TAB completion.
@@ -40,9 +40,9 @@ stdenv.mkDerivation (finalAttrs: {
       Running commands in a terminal with CTRL-Enter. URL handlers.
     '';
     homepage = "https://github.com/wdlkmpx/gmrun";
-    license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ aleksana ];
-    platforms = lib.platforms.linux;
+    license = licenses.isc;
+    maintainers = with maintainers; [ aleksana ];
+    platforms = platforms.linux;
     mainProgram = "gmrun";
   };
 })

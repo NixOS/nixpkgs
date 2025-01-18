@@ -38,12 +38,12 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = {
+  meta = with lib; {
     description = ''
       A command-line download/upload tool for popular file sharing websites
     '';
-    license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ aforemny ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ aforemny ];
+    platforms = platforms.linux;
   };
 }

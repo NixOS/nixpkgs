@@ -24,14 +24,14 @@ buildGoModule {
   # Tests rely on the 'vndr' binary being in the PATH already.
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Stupid golang vendoring tool, inspired by docker vendor script";
     mainProgram = "vndr";
     homepage = "https://github.com/LK4D4/vndr";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       vdemeester
       rvolosatovs
     ];
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
   };
 }

@@ -46,11 +46,11 @@ stdenv.mkDerivation {
     updateScript = unstableGitUpdater { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "GStreamer plugin for streaming videos from websites";
     homepage = "https://rafostar.github.io/gtuber/";
-    license = lib.licenses.lgpl21Plus;
-    maintainers = with lib.maintainers; [ chuangzhu ];
-    platforms = lib.platforms.unix;
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ chuangzhu ];
+    platforms = platforms.unix;
   };
 }

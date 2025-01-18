@@ -58,7 +58,7 @@ rustPlatform.buildRustPackage rec {
     done
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Radicle JSON HTTP API Daemon";
     longDescription = ''
       A Radicle HTTP daemon exposing a JSON HTTP API that allows someone to browse local
@@ -66,13 +66,13 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://radicle.xyz";
     # cargo.toml says MIT and asl20, LICENSE file says GPL3
-    license = with lib.licenses; [
+    license = with licenses; [
       gpl3Only
       mit
       asl20
     ];
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
       gador
       lorenzleutgeb
     ];

@@ -28,12 +28,12 @@ buildGoModule {
 
   checkFlags = [ "-skip=^TestSave$" ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/robfig/glock";
     description = "Command-line tool to lock Go dependencies to specific revisions";
     mainProgram = "glock";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       luftmensch-luftmensch
       rushmorem
     ];

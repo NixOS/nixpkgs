@@ -33,14 +33,14 @@ python3Packages.buildPythonPackage rec {
       --add-flags "$out/share/mybbscan/scan.py"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Scans plugins directory for possible vulnerable plugins";
     homepage = "https://github.com/0xB9/MyBBscan";
     # https://github.com/0xB9/MyBBscan/issues/12
-    license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ tochiaha ];
+    license = licenses.unfree;
+    maintainers = with maintainers; [ tochiaha ];
     mainProgram = "mybbscan";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    platforms = lib.platforms.all;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    platforms = platforms.all;
   };
 }

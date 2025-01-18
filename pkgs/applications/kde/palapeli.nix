@@ -21,11 +21,11 @@ mkDerivation {
     kio
     ktextwidgets
   ];
-  meta = {
+  meta = with lib; {
     homepage = "https://apps.kde.org/palapeli/";
     description = "Single-player jigsaw puzzle game";
     mainProgram = "palapeli";
-    license = with lib.licenses; [ gpl2 ];
-    maintainers = with lib.maintainers; [ harrisonthorne ];
+    license = with licenses; [ gpl2 ];
+    maintainers = with maintainers; [ harrisonthorne ];
   };
 }

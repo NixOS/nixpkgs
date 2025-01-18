@@ -46,11 +46,11 @@ stdenv.mkDerivation rec {
     ln -s xml $out/bin/xmlstarlet
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Command line tool for manipulating and querying XML data";
     homepage = "https://xmlstar.sourceforge.net/";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "xmlstarlet";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }

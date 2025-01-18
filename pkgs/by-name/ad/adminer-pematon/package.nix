@@ -60,16 +60,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Database management in a single PHP file (Pematon fork)";
     homepage = "https://github.com/pematon/adminer";
-    license = with lib.licenses; [
+    license = with licenses; [
       asl20
       gpl2Only
     ];
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       johnrtitor
     ];
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 })

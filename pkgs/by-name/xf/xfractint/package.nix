@@ -25,13 +25,13 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = {
+  meta = with lib; {
     description = "";
     # Code cannot be used in commercial programs
     # Looks like the definition hinges on the price, not license
-    license = lib.licenses.unfree;
-    maintainers = [ lib.maintainers.raskin ];
-    platforms = lib.platforms.linux;
+    license = licenses.unfree;
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.linux;
     homepage = "https://www.fractint.net/";
     mainProgram = "xfractint";
   };

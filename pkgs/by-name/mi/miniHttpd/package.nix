@@ -20,12 +20,12 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = toString [ "-std=c++14" ];
 
-  meta = {
+  meta = with lib; {
     homepage = "http://mini-httpd.nongnu.org/";
     description = "minimalistic high-performance web server";
     mainProgram = "httpd";
-    license = lib.licenses.gpl3;
-    platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.peti ];
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.peti ];
   };
 }

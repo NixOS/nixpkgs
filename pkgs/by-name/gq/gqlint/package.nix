@@ -19,11 +19,11 @@ buildNpmPackage rec {
 
   dontNpmBuild = true;
 
-  meta = {
+  meta = with lib; {
     description = "GraphQL linter";
     homepage = "https://github.com/happylinks/gqlint";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "gqlint";
-    maintainers = with lib.maintainers; [ hardselius ];
+    maintainers = with maintainers; [ hardselius ];
   };
 }

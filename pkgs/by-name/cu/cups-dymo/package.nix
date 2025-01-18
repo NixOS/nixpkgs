@@ -28,10 +28,10 @@ stdenv.mkDerivation rec {
     "cupsmodeldir=$(out)/share/cups/model"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "CUPS Linux drivers and SDK for DYMO printers";
     homepage = "https://www.dymo.com/";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ makefu ];
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ makefu ];
   };
 }

@@ -25,11 +25,11 @@ buildGoModule {
     "-X main.version=${version}"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "CLI tool for summarizing go test output. Pipe friendly. CI/CD friendly";
     mainProgram = "tparse";
     homepage = "https://github.com/mfridman/tparse";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ obreitwi ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ obreitwi ];
   };
 }

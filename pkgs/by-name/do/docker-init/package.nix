@@ -33,14 +33,14 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Creates Docker-related starter files for your project";
     homepage = "https://docs.docker.com/reference/cli/docker/init";
     downloadPage = "https://docs.docker.com/desktop/release-notes";
     mainProgram = "docker-init";
-    license = lib.licenses.unfree;
+    license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [ BastianAsmussen ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    maintainers = with maintainers; [ BastianAsmussen ];
   };
 })

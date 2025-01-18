@@ -17,11 +17,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-WDUw539G15rf2X1NWLRCHIxMqyuxthEy8Cbn5XgIFCk=";
 
-  meta = {
+  meta = with lib; {
     description = "Terminal based csv editor which is designed to be memory efficient but still useful";
     homepage = "https://github.com/nathangavin/csv-tui";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ottoblep ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ ottoblep ];
     mainProgram = "csv_tui";
   };
 }

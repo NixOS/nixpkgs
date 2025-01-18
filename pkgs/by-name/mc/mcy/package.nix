@@ -45,11 +45,11 @@ stdenv.mkDerivation {
     cp -r scripts/. $out/share/mcy/scripts/.
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Mutation-based coverage testing for hardware designs, with Yosys";
     homepage = "https://github.com/YosysHQ/mcy";
-    license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ thoughtpolice ];
-    platforms = lib.platforms.all;
+    license = licenses.isc;
+    maintainers = with maintainers; [ thoughtpolice ];
+    platforms = platforms.all;
   };
 }

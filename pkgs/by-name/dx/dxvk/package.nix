@@ -76,13 +76,13 @@ stdenvNoCC.mkDerivation (
 
     __structuredAttrs = true;
 
-    meta = {
+    meta = with lib; {
       description = "Setup script for DXVK";
       mainProgram = "setup_dxvk.sh";
       homepage = "https://github.com/doitsujin/dxvk";
       changelog = "https://github.com/doitsujin/dxvk/releases";
-      maintainers = [ lib.maintainers.reckenrode ];
-      license = lib.licenses.zlib;
+      maintainers = [ maintainers.reckenrode ];
+      license = licenses.zlib;
       platforms = [
         "x86_64-darwin"
         "i686-linux"

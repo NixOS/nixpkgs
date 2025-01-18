@@ -72,12 +72,12 @@ stdenv.mkDerivation (finalAttrs: {
     ];
   };
 
-  meta = {
+  meta = with lib; {
     description = "simple heads up display written in gtkmm 4";
     mainProgram = "syshud";
     homepage = "https://github.com/System64fumo/syshud";
-    license = lib.licenses.wtfpl;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ colinsane ];
+    license = licenses.wtfpl;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ colinsane ];
   };
 })

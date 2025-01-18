@@ -129,14 +129,14 @@ stdenv.mkDerivation rec {
 
   dontStrip = true;
 
-  meta = {
+  meta = with lib; {
     description = "Gerbil Scheme";
     homepage = "https://github.com/vyzo/gerbil";
-    license = lib.licenses.lgpl21Only; # dual, also asl20, like Gambit
+    license = licenses.lgpl21Only; # dual, also asl20, like Gambit
     # NB regarding platforms: regularly tested on Linux and on macOS.
     # Please report success and/or failure to fare.
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ fare ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ fare ];
   };
 
   outputsToInstall = [ "out" ];

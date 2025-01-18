@@ -15,10 +15,10 @@ build-idris-package {
     sha256 = "1z8pyrsm1kdsspcs3h96k38h44ss0mv39lcz7xvwg8ickys3kqxl";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Port of Haskell tf-random";
     homepage = "https://github.com/david-christiansen/idris-tf-random";
-    license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.mikesperber ];
+    license = licenses.bsd3;
+    maintainers = [ maintainers.mikesperber ];
   };
 }

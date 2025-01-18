@@ -39,13 +39,13 @@ buildPythonPackage rec {
     "zenoh"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Python API for zenoh";
     homepage = "https://github.com/eclipse-zenoh/zenoh-python";
-    license = with lib.licenses; [
+    license = with licenses; [
       asl20
       epl20
     ];
-    maintainers = with lib.maintainers; [ markuskowa ];
+    maintainers = with maintainers; [ markuskowa ];
   };
 }

@@ -26,10 +26,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "zephyr" ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/nassauwinter/zephyr-python-api";
     description = "Set of wrappers for Zephyr Scale (TM4J) REST API";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ rapiteanu ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ rapiteanu ];
   };
 }

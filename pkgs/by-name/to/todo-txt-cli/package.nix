@@ -24,11 +24,11 @@ stdenv.mkDerivation {
     install -vm 644 todo.cfg $out/etc/todo/config
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Simple plaintext todo list manager";
     homepage = "http://todotxt.com";
-    license = lib.licenses.gpl3;
+    license = licenses.gpl3;
     mainProgram = "todo.sh";
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 }

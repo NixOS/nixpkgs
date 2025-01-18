@@ -30,12 +30,12 @@ rustPlatform.buildRustPackage {
     ]
   );
 
-  meta = {
+  meta = with lib; {
     changelog = "https://github.com/ckampfe/russ/blob/master/CHANGELOG.md";
     description = "TUI RSS reader with vim-like controls and a local-first, offline-first focus";
     homepage = "https://github.com/ckampfe/russ";
-    license = with lib.licenses; [ agpl3Only ];
-    maintainers = with lib.maintainers; [ blusk ];
+    license = with licenses; [ agpl3Only ];
+    maintainers = with maintainers; [ blusk ];
     mainProgram = "russ";
   };
 }

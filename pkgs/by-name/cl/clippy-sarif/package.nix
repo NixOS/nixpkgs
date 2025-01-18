@@ -24,11 +24,11 @@ rustPlatform.buildRustPackage rec {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "A CLI tool to convert clippy diagnostics into SARIF";
     homepage = "https://psastras.github.io/sarif-rs";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ getchoo ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ getchoo ];
     mainProgram = "clippy-sarif";
     inherit (clippy.meta) platforms;
   };

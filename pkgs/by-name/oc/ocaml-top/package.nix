@@ -24,11 +24,11 @@ buildDunePackage rec {
     ocp-index
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.typerex.org/ocaml-top.html";
-    license = lib.licenses.gpl3;
+    license = licenses.gpl3;
     description = "Simple cross-platform OCaml code editor built for top-level evaluation";
     mainProgram = "ocaml-top";
-    maintainers = with lib.maintainers; [ vbgl ];
+    maintainers = with maintainers; [ vbgl ];
   };
 }

@@ -64,18 +64,18 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gitUpdater { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Simple convenience library for handling processes in C++11";
     homepage = "https://gitlab.com/ubports/development/core/lib-cpp/process-cpp";
-    license = with lib.licenses; [
+    license = with licenses; [
       gpl3Only
       lgpl3Only
     ];
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       onny
       OPNA2608
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
     pkgConfigModules = [ "process-cpp" ];
   };
 })

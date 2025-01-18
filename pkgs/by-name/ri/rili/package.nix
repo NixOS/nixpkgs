@@ -37,17 +37,17 @@ stdenv.mkDerivation rec {
     SDL_mixer
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://ri-li.sourceforge.net";
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     description = "Children's train game";
     longDescription = ''
            Ri-li is an arcade game licensed under the GPL (General Public License).
       You drive a toy wood engine in many levels and you must collect all the coaches
       to win.
     '';
-    maintainers = with lib.maintainers; [ jcumming ];
-    platforms = with lib.platforms; linux;
+    maintainers = with maintainers; [ jcumming ];
+    platforms = with platforms; linux;
     mainProgram = "Ri_li";
   };
 }

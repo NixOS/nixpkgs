@@ -38,11 +38,11 @@ stdenv.mkDerivation rec {
 
   inherit (topkg) buildPhase installPhase;
 
-  meta = {
+  meta = with lib; {
     description = "OCamlbuild plugin for C stubs";
     homepage = "https://github.com/pqwy/ocb-stubblr";
-    license = lib.licenses.isc;
+    license = licenses.isc;
     inherit (ocaml.meta) platforms;
-    maintainers = [ lib.maintainers.vbgl ];
+    maintainers = [ maintainers.vbgl ];
   };
 }

@@ -36,12 +36,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pixel_font_knife" ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/TakWolf/pixel-font-knife";
     description = "Set of pixel font utilities";
-    platforms = lib.platforms.all;
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    platforms = platforms.all;
+    license = licenses.mit;
+    maintainers = with maintainers; [
       TakWolf
       h7x4
     ];

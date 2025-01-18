@@ -52,12 +52,12 @@ let
       rm -f $out/bin/phylophlan_write_default_configs.sh
     '';
 
-    meta = {
+    meta = with lib; {
       homepage = "https://github.com/biobakery/phylophlan";
       description = "Precise phylogenetic analysis of microbial isolates and genomes from metagenomes";
       changelog = "https://github.com/biobakery/phylophlan/releases";
-      license = lib.licenses.mit;
-      maintainers = with lib.maintainers; [ theobori ];
+      license = licenses.mit;
+      maintainers = with maintainers; [ theobori ];
       mainProgram = "phylophlan";
     };
   };

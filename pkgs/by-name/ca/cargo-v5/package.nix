@@ -30,11 +30,11 @@ rustPlatform.buildRustPackage {
     openssl
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Cargo tool for working with VEX V5 Rust projects";
     mainProgram = "cargo-v5";
     homepage = "https://github.com/vexide/cargo-v5";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ max-niederman ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ max-niederman ];
   };
 }

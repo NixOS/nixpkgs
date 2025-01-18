@@ -53,18 +53,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.acpica.org/";
     description = "ACPICA Tools";
-    license = with lib.licenses; [
+    license = with licenses; [
       iasl
       gpl2Only
       bsd3
     ];
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       tadfisher
       felixsinger
     ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 })

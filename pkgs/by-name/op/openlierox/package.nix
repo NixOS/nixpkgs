@@ -68,12 +68,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Real-time game with Worms-like shooting";
     homepage = "http://openlierox.net";
-    license = lib.licenses.lgpl2Plus;
+    license = licenses.lgpl2Plus;
     mainProgram = "openlierox";
-    maintainers = with lib.maintainers; [ tomasajt ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ tomasajt ];
+    platforms = platforms.linux;
   };
 })

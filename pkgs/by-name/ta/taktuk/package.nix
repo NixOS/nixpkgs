@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     substituteInPlace ./taktuk --replace-fail "${lib.getExe buildPackages.perl}" "/usr/bin/env perl"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Efficient, large scale, parallel remote execution of commands";
     mainProgram = "taktuk";
     longDescription = ''
@@ -49,8 +49,8 @@ stdenv.mkDerivation rec {
       algorithm.'';
     homepage = "https://taktuk.gitlabpages.inria.fr/";
     changelog = "https://gitlab.inria.fr/taktuk/taktuk/-/blob/HEAD/ChangeLog";
-    license = lib.licenses.gpl2;
-    maintainers = [ lib.maintainers.bzizou ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2;
+    maintainers = [ maintainers.bzizou ];
+    platforms = platforms.linux;
   };
 }

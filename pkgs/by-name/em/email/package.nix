@@ -48,11 +48,11 @@ stdenv.mkDerivation {
     chmod -R +w ${srcRoot}/dlib;
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Command line SMTP client";
-    license = with lib.licenses; [ gpl2Plus ];
+    license = with licenses; [ gpl2Plus ];
     homepage = "https://deanproxy.com/code";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
     mainProgram = "email";
   };
 }

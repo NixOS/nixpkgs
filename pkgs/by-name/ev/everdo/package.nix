@@ -24,11 +24,11 @@ appimageTools.wrapType2 {
     cp -r ${appimageContents}/usr/share/icons $out/share
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Cross-platform GTD app with focus on privacy";
     homepage = "https://everdo.net/";
-    license = lib.licenses.unfree;
-    maintainers = [ lib.maintainers.luftmensch-luftmensch ];
+    license = licenses.unfree;
+    maintainers = [ maintainers.luftmensch-luftmensch ];
     mainProgram = "everdo";
     platforms = [ "x86_64-linux" ];
   };

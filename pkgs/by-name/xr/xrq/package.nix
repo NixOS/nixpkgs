@@ -27,11 +27,11 @@ stdenv.mkDerivation {
 
   buildInputs = [ libX11 ];
 
-  meta = {
+  meta = with lib; {
     description = "X utility for querying xrdb";
     homepage = "https://github.com/arianon/xrq";
-    license = lib.licenses.mit;
-    platforms = with lib.platforms; unix;
+    license = licenses.mit;
+    platforms = with platforms; unix;
     mainProgram = "xrq";
   };
 }

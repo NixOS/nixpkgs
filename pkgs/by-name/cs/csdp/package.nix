@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://projects.coin-or.org/Csdp";
-    license = lib.licenses.cpl10;
-    maintainers = [ lib.maintainers.roconnor ];
+    license = licenses.cpl10;
+    maintainers = [ maintainers.roconnor ];
     description = "C Library for Semidefinite Programming";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }

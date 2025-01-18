@@ -35,12 +35,12 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "zotify" ];
 
-  meta = {
+  meta = with lib; {
     description = "Fast and customizable music and podcast downloader";
     homepage = "https://github.com/zotify-dev/zotify";
     changelog = "https://github.com/zotify-dev/zotify/blob/main/CHANGELOG.md";
-    license = lib.licenses.zlib;
+    license = licenses.zlib;
     mainProgram = "zotify";
-    maintainers = with lib.maintainers; [ bwkam ];
+    maintainers = with maintainers; [ bwkam ];
   };
 }

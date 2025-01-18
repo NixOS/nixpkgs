@@ -34,12 +34,12 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
   versionCheckProgramArg = "-V";
 
-  meta = {
+  meta = with lib; {
     description = "Tool to extract files from a YAFFS2 file system image";
     homepage = "https://github.com/whataday/unyaffs";
-    license = lib.licenses.gpl2Only;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ KSJ2000 ];
+    license = licenses.gpl2Only;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ KSJ2000 ];
     mainProgram = "unyaffs";
   };
 })

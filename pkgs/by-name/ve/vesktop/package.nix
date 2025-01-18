@@ -172,12 +172,12 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Alternate client for Discord with Vencord built-in";
     homepage = "https://github.com/Vencord/Vesktop";
     changelog = "https://github.com/Vencord/Vesktop/releases/tag/${finalAttrs.src.rev}";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [
       getchoo
       Scrumplex
       vgskye

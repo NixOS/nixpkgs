@@ -29,14 +29,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "CJK programming font based on Iosevka and Source Han Sans";
     homepage = "https://github.com/be5invis/Sarasa-Gothic";
-    license = lib.licenses.ofl;
-    maintainers = with lib.maintainers; [
+    license = licenses.ofl;
+    maintainers = with maintainers; [
       ChengCat
       wegank
     ];
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 })

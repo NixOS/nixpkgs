@@ -90,13 +90,13 @@ stdenv.mkDerivation {
     updateScript = ./update.sh;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Azure static sites client";
     homepage = "https://github.com/Azure/static-web-apps-cli";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = lib.licenses.unfree;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
     mainProgram = "StaticSitesClient";
-    maintainers = with lib.maintainers; [ veehaitch ];
+    maintainers = with maintainers; [ veehaitch ];
     platforms = [ "x86_64-linux" ];
   };
 }

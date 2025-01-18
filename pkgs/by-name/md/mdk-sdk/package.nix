@@ -79,11 +79,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "multimedia development kit";
     homepage = "https://github.com/wang-bin/mdk-sdk";
-    license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ orivej ];
+    license = licenses.unfree;
+    maintainers = with maintainers; [ orivej ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

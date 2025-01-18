@@ -33,10 +33,10 @@ stdenv.mkDerivation rec {
     sha256 = "0lvv44s3bf96zvkysa4ansxj2ffgj3b5kgpliln538q4wd9ank15";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Library of the matchbox X window manager";
     homepage = "http://matchbox-project.org/";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.unix;
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
   };
 }

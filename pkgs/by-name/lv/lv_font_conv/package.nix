@@ -24,11 +24,11 @@ buildNpmPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Converts TTF/WOFF fonts to compact bitmap format";
     mainProgram = "lv_font_conv";
     homepage = " https://lvgl.io/tools/fontconverter";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ pyrox0 ];
   };
 }

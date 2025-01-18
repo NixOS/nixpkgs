@@ -17,11 +17,11 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = {
+  meta = with lib; {
     description = "Port of the Adapta theme for Plasma";
     homepage = "https://github.com/PapirusDevelopmentTeam/adapta-kde";
-    license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.tadfisher ];
-    platforms = lib.platforms.all;
+    license = licenses.gpl3;
+    maintainers = [ maintainers.tadfisher ];
+    platforms = platforms.all;
   };
 }

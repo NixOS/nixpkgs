@@ -33,11 +33,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     description = "Cross platform port of the macOS CoreFoundation";
     homepage = "https://github.com/gerickson/opencflite";
-    license = lib.licenses.apple-psl20;
-    maintainers = with lib.maintainers; [ wegank ];
+    license = licenses.apple-psl20;
+    maintainers = with maintainers; [ wegank ];
     platforms = [ "x86_64-linux" ];
   };
 }

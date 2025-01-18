@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Media container library to manipulate Ogg files";
     longDescription = ''
       Library to work with Ogg multimedia container format.
@@ -40,8 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
       plethora of codecs. Open format free for anyone to use.
     '';
     homepage = "https://xiph.org/ogg/";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ ehmry ];
-    platforms = lib.platforms.all;
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ ehmry ];
+    platforms = platforms.all;
   };
 })

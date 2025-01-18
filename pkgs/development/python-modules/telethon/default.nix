@@ -55,10 +55,10 @@ buildPythonPackage rec {
     "test_private_get_extension"
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/LonamiWebs/Telethon";
     description = "Full-featured Telegram client library for Python 3";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ nyanloutre ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ nyanloutre ];
   };
 }

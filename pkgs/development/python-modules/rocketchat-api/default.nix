@@ -35,10 +35,10 @@ buildPythonPackage rec {
   # requires running a Rocket.Chat server
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Python API wrapper for Rocket.Chat";
     homepage = "https://github.com/jadolg/rocketchat_API";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

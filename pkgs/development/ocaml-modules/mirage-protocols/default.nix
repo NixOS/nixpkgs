@@ -26,10 +26,10 @@ buildDunePackage rec {
     tcpip
   ];
 
-  meta = {
+  meta = with lib; {
     description = "MirageOS signatures for network protocols";
     homepage = "https://github.com/mirage/mirage-protocols";
-    license = lib.licenses.isc;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.isc;
+    maintainers = [ maintainers.vbgl ];
   };
 }

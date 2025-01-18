@@ -50,22 +50,22 @@ stdenv.mkDerivation (finalAttrs: {
       --add-flags $out/share/TETR.IO/app.asar
   '';
 
-  meta = {
+  meta = with lib; {
     changelog = "https://tetr.io/about/desktop/history/";
     description = "Desktop client for TETR.IO, an online stacker game";
     downloadPage = "https://tetr.io/about/desktop/";
     homepage = "https://tetr.io";
-    license = lib.licenses.unfree;
+    license = licenses.unfree;
     longDescription = ''
       TETR.IO is a free-to-win modern yet familiar online stacker.
       Play multiplayer games against friends and foes all over the world, or claim a spot on the leaderboards - the stacker future is yours!
     '';
     mainProgram = "tetrio";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       wackbyte
       huantian
     ];
     platforms = [ "x86_64-linux" ];
-    sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
+    sourceProvenance = [ sourceTypes.binaryBytecode ];
   };
 })

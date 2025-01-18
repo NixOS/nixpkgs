@@ -47,11 +47,11 @@ buildGoModule rec {
       --zsh <($out/bin/go-chromecast completion zsh)
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/vishen/go-chromecast";
     description = "CLI for Google Chromecast, Home devices and Cast Groups";
-    license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.zi3m5f ];
+    license = licenses.asl20;
+    maintainers = [ maintainers.zi3m5f ];
     mainProgram = "go-chromecast";
   };
 }

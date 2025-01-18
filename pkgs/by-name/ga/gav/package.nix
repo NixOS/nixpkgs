@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
     SDL_net
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Remake of AV Arcade Volleyball";
     mainProgram = "gav";
     homepage = "https://gav.sourceforge.net/";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
   };
 }

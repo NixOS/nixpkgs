@@ -22,11 +22,11 @@ stdenv.mkDerivation {
     install -m 0444 man/lsusb.8 $out/share/man/man8
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/jlhonora/lsusb";
     description = "lsusb command for Mac OS X";
-    platforms = lib.platforms.darwin;
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.varunpatro ];
+    platforms = platforms.darwin;
+    license = licenses.mit;
+    maintainers = [ maintainers.varunpatro ];
   };
 }

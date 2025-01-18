@@ -25,12 +25,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Visual tool to view, edit, and model Realm databases.";
     homepage = "https://www.mongodb.com/docs/atlas/device-sdks/studio/";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ matteopacini ];
-    platforms = lib.platforms.darwin;
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ matteopacini ];
+    platforms = platforms.darwin;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 })

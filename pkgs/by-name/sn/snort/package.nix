@@ -58,11 +58,11 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/snort --add-flags "--daq-dir ${daq}/lib/daq --dynamic-preprocessor-lib-dir $out/lib/snort_dynamicpreprocessor/ --dynamic-engine-lib-dir $out/lib/snort_dynamicengine"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Network intrusion prevention and detection system (IDS/IPS)";
     homepage = "https://www.snort.org";
-    maintainers = with lib.maintainers; [ aycanirican ];
-    license = lib.licenses.gpl2;
-    platforms = with lib.platforms; linux;
+    maintainers = with maintainers; [ aycanirican ];
+    license = licenses.gpl2;
+    platforms = with platforms; linux;
   };
 }

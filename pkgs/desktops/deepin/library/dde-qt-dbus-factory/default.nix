@@ -41,11 +41,11 @@ stdenv.mkDerivation rec {
       --replace-fail "/usr/include" "$out/include"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Repo of auto-generated D-Bus source code which DDE used";
     homepage = "https://github.com/linuxdeepin/dde-qt-dbus-factory";
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
-    maintainers = lib.teams.deepin.members;
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = teams.deepin.members;
   };
 }

@@ -21,10 +21,10 @@ vscode-utils.buildVscodeMarketplaceExtension {
     cd "$out/$installPrefix"
     jq '.contributes.configuration.properties."millet.server.path".default = "${millet}/bin/millet-ls"' package.json | sponge package.json
   '';
-  meta = {
+  meta = with lib; {
     description = "Standard ML support for VS Code";
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=azdavis.millet";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.smasher164 ];
+    license = licenses.mit;
+    maintainers = [ maintainers.smasher164 ];
   };
 }

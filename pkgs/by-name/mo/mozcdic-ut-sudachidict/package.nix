@@ -31,12 +31,12 @@ stdenvNoCC.mkDerivation {
     ];
   };
 
-  meta = {
+  meta = with lib; {
     description = "Mozc UT SudachiDict Dictionary is a dictionary converted from SudachiDict for Mozc.";
     homepage = "https://github.com/utuhiro78/mozcdic-ut-sudachidict";
-    license = with lib.licenses; [ asl20 ];
-    maintainers = with lib.maintainers; [ pineapplehunter ];
-    platforms = lib.platforms.all;
+    license = with licenses; [ asl20 ];
+    maintainers = with maintainers; [ pineapplehunter ];
+    platforms = platforms.all;
     # this does not need to be separately built
     # it only provides some zip files
     hydraPlatforms = [ ];

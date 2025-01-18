@@ -72,12 +72,12 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "LSP implementation for the fish shell language";
     homepage = "https://github.com/ndonfris/fish-lsp";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "fish-lsp";
-    maintainers = with lib.maintainers; [ petertriho ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ petertriho ];
+    platforms = platforms.unix;
   };
 }

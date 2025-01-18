@@ -16,10 +16,10 @@ buildPythonPackage rec {
     sha256 = "1d4k6z13mc1f88m6wbhfx8hillb7q78n33ws5bmyblsdkv1gx607";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Adds ring buffer functionality";
     homepage = "https://github.com/spatialaudio/python-pa-ringbuffer";
-    maintainers = with lib.maintainers; [ laikq ];
-    license = lib.licenses.mit;
+    maintainers = with maintainers; [ laikq ];
+    license = licenses.mit;
   };
 }

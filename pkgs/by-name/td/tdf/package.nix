@@ -38,15 +38,15 @@ rustPlatform.buildRustPackage {
   # requires nightly features (feature(portable_simd))
   RUSTC_BOOTSTRAP = true;
 
-  meta = {
+  meta = with lib; {
     description = "Tui-based PDF viewer";
     homepage = "https://github.com/itsjunetime/tdf";
-    license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [
+    license = licenses.mpl20;
+    maintainers = with maintainers; [
       luftmensch-luftmensch
       DieracDelta
     ];
     mainProgram = "tdf";
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

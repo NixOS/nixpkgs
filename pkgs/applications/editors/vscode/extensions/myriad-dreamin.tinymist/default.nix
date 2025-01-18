@@ -26,12 +26,12 @@ vscode-utils.buildVscodeMarketplaceExtension {
     jq '.contributes.configuration.properties."tinymist.serverPath".default = "${lib.getExe tinymist}"' package.json | sponge package.json
   '';
 
-  meta = {
+  meta = with lib; {
     changelog = "https://marketplace.visualstudio.com/items/myriad-dreamin.tinymist/changelog";
     description = "VSCode extension for providing an integration solution for Typst";
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=myriad-dreamin.tinymist";
     homepage = "https://github.com/myriad-dreamin/tinymist";
-    license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.drupol ];
+    license = licenses.asl20;
+    maintainers = [ maintainers.drupol ];
   };
 }

@@ -61,10 +61,10 @@ buildPythonPackage rec {
   # pyopencl._cl.LogicError: clGetPlatformIDs failed: PLATFORM_NOT_FOUND_KHR
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Code generator for array-based code on CPUs and GPUs";
     homepage = "https://github.com/inducer/loopy";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ tomasajt ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ tomasajt ];
   };
 }

@@ -41,12 +41,12 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = {
+  meta = with lib; {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Cross-platform clipboard utilities supporting both binary and text data";
     mainProgram = "pyclip";
     homepage = "https://github.com/spyoungtech/pyclip";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ ];
   };
 }

@@ -17,10 +17,10 @@ build-idris-package {
   # tests fail with permission error
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Strongly Typed Paths for Idris";
     homepage = "https://github.com/superfunc/tp";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.brainrape ];
+    license = licenses.mit;
+    maintainers = [ maintainers.brainrape ];
   };
 }

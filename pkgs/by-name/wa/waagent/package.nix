@@ -74,7 +74,7 @@ python.pkgs.buildPythonApplication rec {
     };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Microsoft Azure Linux Agent (waagent)";
     mainProgram = "waagent";
     longDescription = ''
@@ -82,8 +82,8 @@ python.pkgs.buildPythonApplication rec {
       manages Linux provisioning and VM interaction with the Azure
       Fabric Controller'';
     homepage = "https://github.com/Azure/WALinuxAgent";
-    maintainers = with lib.maintainers; [ codgician ];
-    license = with lib.licenses; [ asl20 ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ codgician ];
+    license = with licenses; [ asl20 ];
+    platforms = platforms.linux;
   };
 }

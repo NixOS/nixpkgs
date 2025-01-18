@@ -37,15 +37,15 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Environment, homespace, and setup client for Stardust XR";
     homepage = "https://stardustxr.org";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "atmosphere";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       pandapip1
       technobaboo
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

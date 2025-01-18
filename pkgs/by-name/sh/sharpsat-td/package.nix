@@ -77,14 +77,14 @@ stdenv.mkDerivation rec {
     runHook postInstallCheck
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Fast solver for the #SAT model counting problem";
     homepage = "https://github.com/Laakeri/sharpsat-td";
-    license = with lib.licenses; [
+    license = with licenses; [
       mit
       asl20
     ];
-    maintainers = with lib.maintainers; [ ris ];
+    maintainers = with maintainers; [ ris ];
     # uses clhash, which is non-portable
     platforms = [
       "x86_64-linux"

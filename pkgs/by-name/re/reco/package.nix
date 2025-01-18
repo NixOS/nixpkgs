@@ -46,12 +46,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [ (lib.mesonBool "use_submodule" false) ];
 
-  meta = {
+  meta = with lib; {
     description = "Audio recorder focused on being concise and simple to use";
     homepage = "https://github.com/ryonakano/reco";
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     mainProgram = "com.github.ryonakano.reco";
-    maintainers = with lib.maintainers; [ aleksana ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ aleksana ];
+    platforms = platforms.unix;
   };
 })

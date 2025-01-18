@@ -35,11 +35,11 @@ lib.throwIfNot (lib.versionAtLeast ocaml.version "4.07")
 
     inherit (topkg) buildPhase installPhase;
 
-    meta = {
-      license = lib.licenses.isc;
+    meta = with lib; {
+      license = licenses.isc;
       homepage = "https://erratique.ch/software/rresult";
       description = "Result value combinators for OCaml";
-      maintainers = [ lib.maintainers.vbgl ];
+      maintainers = [ maintainers.vbgl ];
       inherit (ocaml.meta) platforms;
     };
   }

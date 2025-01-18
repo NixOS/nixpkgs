@@ -42,16 +42,16 @@ python3.pkgs.buildPythonApplication rec {
 
   strictDeps = true;
 
-  meta = {
+  meta = with lib; {
     description = "Program for showing navigation satellite data";
     longDescription = ''
       Satellite is an adaptive GTK3 / libhandy application which displays global navigation satellite system (GNSS: GPS et al.) data obtained from ModemManager or gnss-share.
       It can also save your position to a GPX-file.
     '';
     homepage = "https://codeberg.org/tpikonen/satellite";
-    license = lib.licenses.gpl3Only;
+    license = licenses.gpl3Only;
     mainProgram = "satellite";
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ Luflosi ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ Luflosi ];
   };
 }

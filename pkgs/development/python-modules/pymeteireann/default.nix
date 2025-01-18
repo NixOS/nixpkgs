@@ -37,10 +37,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "meteireann" ];
 
-  meta = {
+  meta = with lib; {
     description = "Python module to communicate with the Met Éireann Public Weather Forecast API";
     homepage = "https://github.com/DylanGore/PyMetEireann/";
-    license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ fab ];
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
   };
 }

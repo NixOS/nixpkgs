@@ -47,11 +47,11 @@ buildDunePackage rec {
   ];
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "Pure OCaml implementation of Zlib";
     homepage = "https://github.com/mirage/decompress";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.mit;
+    maintainers = [ maintainers.vbgl ];
     mainProgram = "decompress.pipe";
   };
 }

@@ -41,12 +41,12 @@ rustPlatform.buildRustPackage rec {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Shell for Couchbase Server and Cloud";
     homepage = "https://couchbase.sh/";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ petrkozorezov ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ petrkozorezov ];
     mainProgram = "cbsh";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

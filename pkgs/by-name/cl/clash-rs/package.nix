@@ -46,12 +46,12 @@ rustPlatform.buildRustPackage rec {
     versionCheckHook
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Custom protocol, rule based network proxy software";
     homepage = "https://github.com/Watfaq/clash-rs";
     mainProgram = "clash";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ aucub ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    license = licenses.asl20;
+    maintainers = with maintainers; [ aucub ];
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

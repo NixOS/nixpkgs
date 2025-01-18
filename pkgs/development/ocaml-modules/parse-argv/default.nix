@@ -23,10 +23,10 @@ buildDunePackage rec {
   doCheck = lib.versionAtLeast ocaml.version "4.08";
   checkInputs = [ ounit ];
 
-  meta = {
+  meta = with lib; {
     description = "Process strings into sets of command-line arguments";
     homepage = "https://github.com/mirage/parse-argv";
-    license = lib.licenses.isc;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.isc;
+    maintainers = [ maintainers.vbgl ];
   };
 }

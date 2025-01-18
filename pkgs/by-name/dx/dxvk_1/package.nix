@@ -54,12 +54,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   __structuredAttrs = true;
 
-  meta = {
+  meta = with lib; {
     description = "Vulkan-based translation layer for Direct3D 9/10/11";
     homepage = "https://github.com/doitsujin/dxvk";
     changelog = "https://github.com/doitsujin/dxvk/releases";
-    maintainers = [ lib.maintainers.reckenrode ];
-    license = lib.licenses.zlib;
-    platforms = lib.platforms.windows;
+    maintainers = [ maintainers.reckenrode ];
+    license = licenses.zlib;
+    platforms = platforms.windows;
   };
 })

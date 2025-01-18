@@ -55,18 +55,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     changelog = "https://freedesktop.org/software/pulseaudio/pavucontrol/#news";
     description = "PulseAudio Volume Control";
     homepage = "http://freedesktop.org/software/pulseaudio/pavucontrol/";
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     longDescription = ''
       PulseAudio Volume Control (pavucontrol) provides a GTK
       graphical user interface to connect to a PulseAudio server and
       easily control the volume of all clients, sinks, etc.
     '';
     mainProgram = "pavucontrol";
-    maintainers = with lib.maintainers; [ abbradar ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ abbradar ];
+    platforms = platforms.linux;
   };
 })

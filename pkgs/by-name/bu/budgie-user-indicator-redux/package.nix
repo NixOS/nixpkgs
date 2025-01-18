@@ -48,12 +48,12 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Manage your user session from the Budgie panel";
     homepage = "https://github.com/EbonJaeger/budgie-user-indicator-redux";
     changelog = "https://github.com/EbonJaeger/budgie-user-indicator-redux/blob/${finalAttrs.src.rev}/CHANGELOG.md";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
-    maintainers = lib.teams.budgie.members;
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = teams.budgie.members;
   };
 })

@@ -21,12 +21,12 @@ python3Packages.buildPythonApplication rec {
   # tests require working internet connection
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "FFmpeg progress formatter to display a nice progress bar and an adaptative ETA timer";
     homepage = "https://github.com/althonos/ffpb";
     changelog = "https://github.com/althonos/ffpb/blob/master/CHANGELOG.md";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ CaptainJawZ ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ CaptainJawZ ];
     mainProgram = "ffpb";
   };
 }

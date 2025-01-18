@@ -95,11 +95,11 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Kernel module driver for some Broadcom's wireless cards";
     homepage = "http://www.broadcom.com/support/802.11/linux_sta.php";
-    license = lib.licenses.unfreeRedistributable;
+    license = licenses.unfreeRedistributable;
     maintainers = [ ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

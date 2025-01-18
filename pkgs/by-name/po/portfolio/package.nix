@@ -101,12 +101,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru.updateScript = gitUpdater { url = "https://github.com/buchen/portfolio.git"; };
 
-  meta = {
+  meta = with lib; {
     description = "Simple tool to calculate the overall performance of an investment portfolio";
     homepage = "https://www.portfolio-performance.info/";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = lib.licenses.epl10;
-    maintainers = with lib.maintainers; [
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.epl10;
+    maintainers = with maintainers; [
       kilianar
       oyren
       shawn8901

@@ -61,11 +61,11 @@ stdenv.mkDerivation (finalAttrs: {
     rm -fr $out/nix
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "http://radscan.com/nas.html";
     description = "Network transparent, client/server audio transport system";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     maintainers = [ ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 })

@@ -40,12 +40,12 @@ stdenvNoCC.mkDerivation {
     extraArgs = [ "--version=branch" ];
   };
 
-  meta = {
+  meta = with lib; {
     description = "CLI tool that provides useful tips and commands for Linux users";
     homepage = "https://github.com/cli-stuff/cli-tips";
-    license = lib.licenses.unlicense;
-    platforms = with lib.platforms; linux ++ darwin ++ windows;
-    maintainers = with lib.maintainers; [ perchun ];
+    license = licenses.unlicense;
+    platforms = with platforms; linux ++ darwin ++ windows;
+    maintainers = with maintainers; [ perchun ];
     mainProgram = "cli-tips";
   };
 }

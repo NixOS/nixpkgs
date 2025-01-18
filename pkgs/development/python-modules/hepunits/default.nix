@@ -24,10 +24,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = {
+  meta = with lib; {
     description = "Units and constants in the HEP system of units";
     homepage = "https://github.com/scikit-hep/hepunits";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ doronbehar ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ doronbehar ];
   };
 }

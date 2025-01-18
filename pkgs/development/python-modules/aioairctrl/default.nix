@@ -32,10 +32,10 @@ buildPythonPackage rec {
 
   doCheck = false; # no tests
 
-  meta = {
+  meta = with lib; {
     description = "Library for controlling Philips air purifiers (using encrypted CoAP)";
     homepage = "https://github.com/kongo09/aioairctrl";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ justinas ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ justinas ];
   };
 }

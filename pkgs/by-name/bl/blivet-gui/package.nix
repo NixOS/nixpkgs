@@ -62,12 +62,12 @@ python3.pkgs.buildPythonApplication rec {
 
   passthru.tests.version = testers.testVersion { package = blivet-gui; };
 
-  meta = {
+  meta = with lib; {
     description = "GUI tool for storage configuration using blivet library";
     homepage = "https://fedoraproject.org/wiki/Blivet";
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     mainProgram = "blivet-gui";
-    maintainers = with lib.maintainers; [ cybershadow ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ cybershadow ];
+    platforms = platforms.linux;
   };
 }

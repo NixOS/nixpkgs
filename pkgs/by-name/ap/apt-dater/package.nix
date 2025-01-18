@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/DE-IBH/apt-dater";
     description = "Terminal-based remote package update manager";
     longDescription = ''
@@ -73,8 +73,8 @@ stdenv.mkDerivation rec {
       number of remote hosts using SSH. It supports Debian-based managed hosts
       as well as rug (e.g. openSUSE) and yum (e.g. CentOS) based systems.
     '';
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     mainProgram = "apt-dater";
-    maintainers = with lib.maintainers; [ c0bw3b ];
+    maintainers = with maintainers; [ c0bw3b ];
   };
 }

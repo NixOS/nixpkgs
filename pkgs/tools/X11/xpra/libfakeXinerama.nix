@@ -39,11 +39,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "http://xpra.org/";
     description = "fakeXinerama for Xpra";
-    platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.nickcao ];
-    license = lib.licenses.mit;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.nickcao ];
+    license = licenses.mit;
   };
 }

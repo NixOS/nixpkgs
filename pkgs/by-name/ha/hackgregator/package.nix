@@ -50,16 +50,16 @@ rustPlatform.buildRustPackage {
     popd
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Comfortable GTK reader application for news.ycombinator.com";
     homepage = "https://gitlab.com/gunibert/hackgregator";
-    license = with lib.licenses; [
+    license = with licenses; [
       gpl3Plus
       # and
       cc0
     ];
     mainProgram = "hackgregator";
-    maintainers = with lib.maintainers; [ aleksana ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ aleksana ];
+    platforms = platforms.unix;
   };
 }

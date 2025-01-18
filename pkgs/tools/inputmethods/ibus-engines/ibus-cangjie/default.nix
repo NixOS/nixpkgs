@@ -64,13 +64,13 @@ stdenv.mkDerivation {
     wrapGApp $out/lib/ibus-cangjie/ibus-engine-cangjie
   '';
 
-  meta = {
+  meta = with lib; {
     isIbusEngine = true;
     description = "IBus engine for users of the Cangjie and Quick input methods";
     mainProgram = "ibus-setup-cangjie";
     homepage = "https://github.com/Cangjians/ibus-cangjie";
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ ];
   };
 }

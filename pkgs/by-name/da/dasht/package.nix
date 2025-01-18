@@ -59,11 +59,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Search API docs offline, in terminal or browser";
     homepage = "https://sunaku.github.io/dasht/man";
-    license = lib.licenses.isc;
-    platforms = lib.platforms.unix; # cannot test other
-    maintainers = with lib.maintainers; [ matthiasbeyer ];
+    license = licenses.isc;
+    platforms = platforms.unix; # cannot test other
+    maintainers = with maintainers; [ matthiasbeyer ];
   };
 }

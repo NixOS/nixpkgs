@@ -97,12 +97,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.ESBUILD_BINARY_PATH = lib.getExe esbuild';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://git.taler.net/wallet-core.git/";
     description = "CLI wallet for GNU Taler written in TypeScript and Anastasis Web UI";
-    license = lib.licenses.gpl3Plus;
-    maintainers = lib.teams.ngi.members;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Plus;
+    maintainers = teams.ngi.members;
+    platforms = platforms.linux;
     mainProgram = "taler-wallet-cli";
   };
 })

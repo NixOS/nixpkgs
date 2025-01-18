@@ -220,13 +220,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = ./update.sh;
 
-  meta = {
+  meta = with lib; {
     description = "Open-source XMPP application server written in Erlang";
     mainProgram = "ejabberdctl";
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     homepage = "https://www.ejabberd.im";
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
       sander
       abbradar
       chuangzhu

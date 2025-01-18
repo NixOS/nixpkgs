@@ -57,12 +57,12 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     description = "Frontend for arcade cabinets and media PCs";
     homepage = "http://attractmode.org";
-    license = lib.licenses.gpl3Plus;
-    maintainers = [ lib.maintainers.hrdinka ];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl3Plus;
+    maintainers = [ maintainers.hrdinka ];
+    platforms = platforms.unix;
     mainProgram = "attract";
   };
 }

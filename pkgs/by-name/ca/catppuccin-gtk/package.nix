@@ -105,12 +105,12 @@ lib.checkListOfEnum "${pname}: theme accent" validAccents accents lib.checkListO
 
     passthru.updateScript = nix-update-script { };
 
-    meta = {
+    meta = with lib; {
       description = "Soothing pastel theme for GTK";
       homepage = "https://github.com/catppuccin/gtk";
-      license = lib.licenses.gpl3Plus;
-      platforms = lib.platforms.all;
-      maintainers = with lib.maintainers; [
+      license = licenses.gpl3Plus;
+      platforms = platforms.all;
+      maintainers = with maintainers; [
         fufexan
         dixslyf
         isabelroses

@@ -29,10 +29,10 @@ stdenv.mkDerivation rec {
     boost
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Collection of miscellaneous plugins for the nix expression language";
     homepage = "https://github.com/shlevy/nix-plugins";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.all;
+    license = licenses.mit;
+    platforms = platforms.all;
   };
 }

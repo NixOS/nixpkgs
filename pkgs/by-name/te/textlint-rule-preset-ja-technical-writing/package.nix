@@ -61,12 +61,12 @@ stdenv.mkDerivation (finalAttrs: {
     testFile = ./test.md;
   };
 
-  meta = {
+  meta = with lib; {
     description = "技術文書向けのtextlintルールプリセット";
     homepage = "https://github.com/textlint-ja/textlint-rule-preset-ja-technical-writing";
     changelog = "https://github.com/textlint-ja/textlint-rule-preset-ja-technical-writing/blob/${finalAttrs.src.rev}/CHANGELOG.md";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ natsukium ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ natsukium ];
     platforms = textlint.meta.platforms;
   };
 })

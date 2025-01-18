@@ -37,12 +37,12 @@ stdenv.mkDerivation rec {
     cp picosat.h "$out"/include/picosat
   '';
 
-  meta = {
+  meta = with lib; {
     description = "SAT solver with proof and core support";
     homepage = "https://fmv.jku.at/picosat/";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
       roconnor
       thoughtpolice
     ];

@@ -53,12 +53,12 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "All in one project management solution";
     homepage = "https://clickup.com";
-    license = lib.licenses.unfree;
+    license = licenses.unfree;
     mainProgram = "clickup";
-    maintainers = with lib.maintainers; [ heisfer ];
+    maintainers = with maintainers; [ heisfer ];
     platforms = [ "x86_64-linux" ];
   };
 }

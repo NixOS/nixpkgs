@@ -37,10 +37,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "motor" ];
 
-  meta = {
+  meta = with lib; {
     description = "Non-blocking MongoDB driver for Tornado or asyncio";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     homepage = "https://github.com/mongodb/motor";
-    maintainers = with lib.maintainers; [ globin ];
+    maintainers = with maintainers; [ globin ];
   };
 }

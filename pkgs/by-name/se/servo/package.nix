@@ -143,12 +143,12 @@ rustPlatform.buildRustPackage {
       --prefix LD_LIBRARY_PATH : ${runtimePaths}
   '';
 
-  meta = {
+  meta = with lib; {
     description = "The embeddable, independent, memory-safe, modular, parallel web rendering engine";
     homepage = "https://servo.org";
-    license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ supinie ];
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ supinie ];
     mainProgram = "servo";
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

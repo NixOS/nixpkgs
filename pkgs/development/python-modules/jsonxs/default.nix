@@ -22,10 +22,10 @@ buildPythonPackage {
 
   build-system = [ setuptools ];
 
-  meta = {
+  meta = with lib; {
     description = "A python library that uses path expression strings to get and set values in JSON";
     homepage = "https://github.com/fboender/jsonxs";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.tie ];
+    license = licenses.mit;
+    maintainers = [ maintainers.tie ];
   };
 }

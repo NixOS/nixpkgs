@@ -78,12 +78,12 @@ buildGo123Module {
     };
   };
 
-  meta = {
+  meta = with lib; {
     mainProgram = "api";
     homepage = "https://homebox.software/";
     description = "Inventory and organization system built for the Home User";
-    maintainers = with lib.maintainers; [ patrickdag ];
-    license = lib.licenses.agpl3Only;
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ patrickdag ];
+    license = licenses.agpl3Only;
+    platforms = platforms.linux;
   };
 }

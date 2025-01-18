@@ -51,12 +51,12 @@ stdenv.mkDerivation rec {
     echo Nethack > "$out/share/games/lib/xsok/gametypes"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Generic Sokoban game for X11";
     mainProgram = "xsok";
-    license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.raskin ];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.unix;
     homepage = "https://tracker.debian.org/pkg/xsok";
   };
 }

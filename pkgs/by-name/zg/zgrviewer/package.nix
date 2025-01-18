@@ -27,14 +27,14 @@ stdenv.mkDerivation rec {
     echo "${jre}/bin/java -jar '$out/share/java/zvtm/zgrviewer-${version}.jar' \"\$@\"" >> "$out/bin/zgrviewer"
     chmod a+x "$out/bin/zgrviewer"
   '';
-  meta = {
+  meta = with lib; {
     # Quicker to unpack locally than load Hydra
     hydraPlatforms = [ ];
-    maintainers = with lib.maintainers; [ raskin ];
-    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
-    license = lib.licenses.lgpl21Plus;
+    maintainers = with maintainers; [ raskin ];
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = licenses.lgpl21Plus;
     description = "GraphViz graph viewer/navigator";
-    platforms = with lib.platforms; unix;
+    platforms = with platforms; unix;
     mainProgram = "zgrviewer";
   };
 }

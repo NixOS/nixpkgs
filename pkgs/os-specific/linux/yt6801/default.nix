@@ -45,12 +45,12 @@ stdenv.mkDerivation (finalAttrs: {
     "ko_full=${modDestDir}/yt6801.ko.xz"
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.motor-comm.com/product/ethernet-control-chip";
     description = "YT6801 Gigabit PCIe Ethernet controller chip";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ indexyz ];
-    platforms = lib.platforms.linux;
-    sourceProvenance = with lib.sourceTypes; [ fromSource ];
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ indexyz ];
+    platforms = platforms.linux;
+    sourceProvenance = with sourceTypes; [ fromSource ];
   };
 })

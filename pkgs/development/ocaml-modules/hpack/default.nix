@@ -25,11 +25,11 @@ buildDunePackage rec {
   # circular dependency
   doCheck = false;
 
-  meta = {
-    license = lib.licenses.bsd3;
+  meta = with lib; {
+    license = licenses.bsd3;
     description = "HPACK (Header Compression for HTTP/2) implementation in OCaml";
     homepage = "https://github.com/anmonteiro/ocaml-h2";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       sternenseemann
       anmonteiro
     ];

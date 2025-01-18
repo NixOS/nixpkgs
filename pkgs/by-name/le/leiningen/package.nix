@@ -65,13 +65,13 @@ stdenv.mkDerivation {
     runHook postFixup
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://leiningen.org/";
     description = "Project automation for Clojure";
-    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
-    license = lib.licenses.epl10;
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = licenses.epl10;
     platforms = jdk.meta.platforms;
-    maintainers = with lib.maintainers; [ momeemt ];
+    maintainers = with maintainers; [ momeemt ];
     mainProgram = "lein";
   };
 }

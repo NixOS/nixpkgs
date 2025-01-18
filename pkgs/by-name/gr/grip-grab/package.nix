@@ -21,12 +21,12 @@ rustPlatform.buildRustPackage {
 
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Fast, more lightweight ripgrep alternative for daily use cases";
     homepage = "https://github.com/alexpasmantier/grip-grab";
     changelog = "https://github.com/alexpasmantier/grip-grab/releases";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ luftmensch-luftmensch ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ luftmensch-luftmensch ];
     mainProgram = "gg";
   };
 }

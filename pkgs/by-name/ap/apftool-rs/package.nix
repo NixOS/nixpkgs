@@ -17,12 +17,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-6lYokd0jwpBWCQ+AbN6ptZYXGcy41GHPbnTELUjPbyA=";
 
-  meta = {
+  meta = with lib; {
     description = "About Tools for Rockchip image unpack tool";
     mainProgram = "apftool-rs";
     homepage = "https://github.com/suyulin/apftool-rs";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ colemickens ];
-    platforms = lib.platforms.linux;
+    license = licenses.asl20;
+    maintainers = with maintainers; [ colemickens ];
+    platforms = platforms.linux;
   };
 }

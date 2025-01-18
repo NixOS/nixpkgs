@@ -25,11 +25,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Per-directory shell environments sourced from .env file";
     homepage = "https://github.com/hyperupcall/autoenv";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ clebs ];
+    license = licenses.mit;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ clebs ];
   };
 })

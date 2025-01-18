@@ -25,10 +25,10 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "flask_sslify" ];
 
-  meta = {
+  meta = with lib; {
     description = "Flask extension that redirects all incoming requests to HTTPS";
     homepage = "https://github.com/kennethreitz42/flask-sslify";
-    license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ zhaofengli ];
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ zhaofengli ];
   };
 }

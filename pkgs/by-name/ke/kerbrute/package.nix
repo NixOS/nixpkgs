@@ -24,11 +24,11 @@ python3.pkgs.buildPythonApplication rec {
     $out/bin/kerbrute --version
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/TarlogicSecurity/kerbrute";
     description = "Kerberos bruteforce utility";
     mainProgram = "kerbrute";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ applePrincess ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ applePrincess ];
   };
 }

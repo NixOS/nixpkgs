@@ -24,10 +24,10 @@ buildOasisPackage rec {
     num
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/tcsprojects/tcslib";
     description = "Multi-purpose library for OCaml";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ mgttlinger ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ mgttlinger ];
   };
 }

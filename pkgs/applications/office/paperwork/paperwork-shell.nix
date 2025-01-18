@@ -62,11 +62,11 @@ buildPythonPackage rec {
     "$out/bin/paperwork-cli" chkdeps
   '';
 
-  meta = {
+  meta = with lib; {
     description = "CLI for Paperwork";
     homepage = "https://openpaper.work/";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
       aszlig
       symphorien
     ];

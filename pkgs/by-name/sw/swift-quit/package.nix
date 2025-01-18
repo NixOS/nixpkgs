@@ -25,12 +25,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Automatic quitting of macOS apps when closing their windows.";
     homepage = "https://swiftquit.com/";
-    license = lib.licenses.gpl3;
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [ Enzime ];
-    platforms = lib.platforms.darwin;
+    license = licenses.gpl3;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    maintainers = with maintainers; [ Enzime ];
+    platforms = platforms.darwin;
   };
 })

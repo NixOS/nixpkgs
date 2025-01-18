@@ -24,11 +24,11 @@ stdenv.mkDerivation {
 
   strictDeps = true;
 
-  meta = {
+  meta = with lib; {
     description = "C++ utility library primarily aimed at audio/musical applications";
     homepage = "http://drobilla.net/software/raul";
-    license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ t4ccer ];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ t4ccer ];
+    platforms = platforms.unix;
   };
 }

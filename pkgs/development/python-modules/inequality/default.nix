@@ -36,10 +36,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "inequality" ];
 
-  meta = {
+  meta = with lib; {
     description = "Spatial inequality analysis";
     homepage = "https://github.com/pysal/inequality";
-    license = lib.licenses.bsd3;
-    maintainers = lib.teams.geospatial.members;
+    license = licenses.bsd3;
+    maintainers = teams.geospatial.members;
   };
 }

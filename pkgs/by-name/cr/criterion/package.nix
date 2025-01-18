@@ -103,15 +103,15 @@ stdenv.mkDerivation rec {
       version = "v${version}";
     };
 
-  meta = {
+  meta = with lib; {
     description = "Cross-platform C and C++ unit testing framework for the 21th century";
     homepage = "https://github.com/Snaipe/Criterion";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       thesola10
       Yumasi
       sigmanificient
     ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }

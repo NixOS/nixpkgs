@@ -42,10 +42,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nutils_poly" ];
 
-  meta = {
+  meta = with lib; {
     description = "Low-level functions for evaluating and manipulating polynomials";
     homepage = "https://github.com/nutils/poly-py";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ tomasajt ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ tomasajt ];
   };
 }

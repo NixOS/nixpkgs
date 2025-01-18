@@ -26,11 +26,11 @@ buildGoModule rec {
 
   doCheck = false; # Requires network
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/bjesus/pipet";
     description = "Scraping and extracting data from online assets";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ bjesus ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ bjesus ];
     mainProgram = "pipet";
   };
 }

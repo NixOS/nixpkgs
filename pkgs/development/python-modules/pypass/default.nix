@@ -73,13 +73,13 @@ buildPythonPackage rec {
   # as the test environment is non-graphical.
   disabledTests = [ "test_show_clip" ];
 
-  meta = {
+  meta = with lib; {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Password manager pass in Python";
     mainProgram = "pypass";
     homepage = "https://github.com/aviau/python-pass";
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ jluttine ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ jluttine ];
   };
 }

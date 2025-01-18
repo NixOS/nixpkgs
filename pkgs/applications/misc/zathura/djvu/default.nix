@@ -41,15 +41,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.PKG_CONFIG_ZATHURA_PLUGINDIR = "lib/zathura";
 
-  meta = {
+  meta = with lib; {
     homepage = "https://pwmt.org/projects/zathura-djvu/";
     description = "Zathura DJVU plugin";
     longDescription = ''
       The zathura-djvu plugin adds DjVu support to zathura by using the
       djvulibre library.
     '';
-    license = lib.licenses.zlib;
-    platforms = lib.platforms.unix;
+    license = licenses.zlib;
+    platforms = platforms.unix;
     maintainers = [ ];
   };
 })

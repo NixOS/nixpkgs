@@ -49,16 +49,16 @@ python3Packages.buildPythonApplication rec {
     update-source-version "$UPDATE_NIX_ATTR_PATH" "$version"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Parse a PDF document";
     longDescription = ''
       This tool will parse a PDF document to identify the fundamental elements used in the analyzed file.
       It will not render a PDF document.
     '';
     homepage = "https://blog.didierstevens.com/programs/pdf-tools/";
-    license = lib.licenses.publicDomain;
-    maintainers = [ lib.maintainers.lightdiscord ];
-    platforms = lib.platforms.all;
+    license = licenses.publicDomain;
+    maintainers = [ maintainers.lightdiscord ];
+    platforms = platforms.all;
     mainProgram = "pdf-parser.py";
   };
 }

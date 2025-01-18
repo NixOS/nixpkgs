@@ -26,12 +26,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Aquarium/sea animation in ASCII art (with option of transparent background)";
     homepage = "https://github.com/nothub/asciiquarium";
-    license = lib.licenses.gpl2Only;
+    license = licenses.gpl2Only;
     mainProgram = "asciiquarium";
-    maintainers = with lib.maintainers; [ quantenzitrone ];
+    maintainers = with maintainers; [ quantenzitrone ];
     platforms = perl.meta.platforms;
   };
 })

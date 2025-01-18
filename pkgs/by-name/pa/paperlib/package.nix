@@ -26,17 +26,17 @@ let
     inherit pname version src;
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/Future-Scholars/paperlib?";
     description = "Open-source academic paper management tool";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ ByteSudoer ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ ByteSudoer ];
     platforms = [
       "x86_64-darwin"
       "x86_64-linux"
     ];
     mainProgram = "paperlib";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 in
 if stdenv.hostPlatform.isDarwin then

@@ -32,10 +32,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyls_memestra" ];
 
-  meta = {
+  meta = with lib; {
     description = "Memestra plugin for the Python Language Server";
     homepage = "https://github.com/QuantStack/pyls-memestra";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ GaetanLepage ];
   };
 }

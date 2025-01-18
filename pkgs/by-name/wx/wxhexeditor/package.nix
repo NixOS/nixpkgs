@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     "OPTFLAGS=-fopenmp"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Hex Editor / Disk Editor for Huge Files or Devices";
     longDescription = ''
       This is not an ordinary hex editor, but could work as low level disk editor too.
@@ -77,9 +77,9 @@ stdenv.mkDerivation rec {
       wxHexEditor could edit HDD/SDD disk devices or partitions in raw up to exabyte sizes.
     '';
     homepage = "http://www.wxhexeditor.org/";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ wegank ];
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ wegank ];
     mainProgram = "wxHexEditor";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }

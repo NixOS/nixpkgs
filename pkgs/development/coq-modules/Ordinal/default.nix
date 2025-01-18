@@ -26,10 +26,10 @@ mkCoqDerivation {
   installPhase = ''
     make -f Makefile.coq COQMF_COQLIB=$out/lib/coq/${coq.coq-version}/ install
   '';
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/snu-sf/Ordinal";
     description = "Ordinal Numbers in Coq";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ damhiya ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ damhiya ];
   };
 }

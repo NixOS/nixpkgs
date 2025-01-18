@@ -46,12 +46,12 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/rofi-systemd --prefix PATH : "${wrapperPath}"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Control your systemd units using rofi";
     homepage = "https://github.com/IvanMalison/rofi-systemd";
-    maintainers = with lib.maintainers; [ imalison ];
-    license = lib.licenses.gpl3;
-    platforms = with lib.platforms; linux;
+    maintainers = with maintainers; [ imalison ];
+    license = licenses.gpl3;
+    platforms = with platforms; linux;
     mainProgram = "rofi-systemd";
   };
 }

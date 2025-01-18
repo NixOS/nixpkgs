@@ -30,10 +30,10 @@ buildPythonPackage rec {
     "ljdata.jpg"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "JPEG and DICOM data used for testing pylibjpeg";
     homepage = "https://github.com/pydicom/pylibjpeg-data";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.bcdarwin ];
+    license = licenses.mit;
+    maintainers = [ maintainers.bcdarwin ];
   };
 }

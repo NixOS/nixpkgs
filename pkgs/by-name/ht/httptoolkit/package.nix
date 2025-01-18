@@ -92,12 +92,12 @@ buildNpmPackage rec {
     })
   ];
 
-  meta = {
+  meta = with lib; {
     description = "HTTP(S) debugging, development & testing tool";
     homepage = "https://httptoolkit.com/";
-    license = lib.licenses.agpl3Plus;
+    license = licenses.agpl3Plus;
     mainProgram = "httptoolkit";
-    maintainers = with lib.maintainers; [ tomasajt ];
+    maintainers = with maintainers; [ tomasajt ];
     platforms = electron.meta.platforms;
   };
 }

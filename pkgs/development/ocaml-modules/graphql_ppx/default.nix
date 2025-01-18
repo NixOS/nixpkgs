@@ -41,11 +41,11 @@ buildDunePackage rec {
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/reasonml-community/graphql_ppx";
     description = "GraphQL PPX rewriter for Bucklescript/ReasonML";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       Zimmi48
       jtcoolen
     ];

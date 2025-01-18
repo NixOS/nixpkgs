@@ -26,15 +26,15 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Linear logic programming language for modeling generative interactive systems";
     mainProgram = "ceptre";
     homepage = "https://github.com/chrisamaphone/interactive-lp";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       NotAShelf
       pSub
     ];
-    platforms = lib.platforms.unix;
-    license = lib.licenses.unfree;
+    platforms = platforms.unix;
+    license = licenses.unfree;
   };
 }

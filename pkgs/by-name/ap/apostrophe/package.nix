@@ -102,17 +102,17 @@ python3Packages.buildPythonApplication {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://gitlab.gnome.org/World/apostrophe";
     description = "Distraction free Markdown editor for GNU/Linux";
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
     maintainers =
-      with lib.maintainers;
+      with maintainers;
       [
         sternenseemann
       ]
-      ++ lib.teams.gnome-circle.members;
+      ++ teams.gnome-circle.members;
     mainProgram = "apostrophe";
   };
 }

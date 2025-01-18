@@ -14,10 +14,10 @@ mkLibretroCore {
     hash = "sha256-EHvKElPw8V5Z6LnMaQXBCdM4niLIlF3aBm8dRbeYXHs=";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Port of BlastEm to libretro";
     homepage = "https://github.com/libretro/blastem";
-    license = lib.licenses.gpl3Only;
-    platforms = lib.platforms.x86;
+    license = licenses.gpl3Only;
+    platforms = platforms.x86;
   };
 }

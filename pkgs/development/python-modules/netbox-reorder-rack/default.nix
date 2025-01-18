@@ -32,10 +32,10 @@ buildPythonPackage rec {
   dontUsePythonImportsCheck = python.pythonVersion != netbox.python.pythonVersion;
   pythonImportsCheck = [ "netbox_reorder_rack" ];
 
-  meta = {
+  meta = with lib; {
     description = "NetBox plugin to allow users to reorder devices within a rack using a drag and drop UI";
     homepage = "https://github.com/netbox-community/netbox-reorder-rack";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ minijackson ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ minijackson ];
   };
 }

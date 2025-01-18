@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Fast and flexible keyboard launcher";
     longDescription = ''
       Albert is a desktop agnostic launcher. Its goals are usability and beauty,
@@ -75,13 +75,13 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://albertlauncher.github.io";
     changelog = "https://github.com/albertlauncher/albert/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     # See: https://github.com/NixOS/nixpkgs/issues/279226
-    license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [
+    license = licenses.unfree;
+    maintainers = with maintainers; [
       ericsagnes
       synthetica
       eljamm
     ];
     mainProgram = "albert";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 })

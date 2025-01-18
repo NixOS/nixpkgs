@@ -21,11 +21,11 @@ build-idris-package {
     sha256 = "0a0fc0bsr356plgzsr5sr4qmqx4838998wjwmflz10qwsv1j3zsw";
   };
 
-  meta = {
+  meta = with lib; {
     description = "TOML parser for Idris";
     homepage = "https://github.com/emptyflash/tomladris";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       siddharthist
       brainrape
     ];

@@ -21,10 +21,10 @@ vscode-utils.buildVscodeMarketplaceExtension {
       $out/$installPrefix/server/bin/lua-language-server
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Lua language server provides various language features for Lua to make development easier and faster";
     homepage = "https://marketplace.visualstudio.com/items?itemName=sumneko.lua";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.lblasc ];
+    license = licenses.mit;
+    maintainers = [ maintainers.lblasc ];
   };
 }

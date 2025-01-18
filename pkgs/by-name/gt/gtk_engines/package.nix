@@ -22,9 +22,9 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [ gtk2 ];
 
-  meta = {
+  meta = with lib; {
     description = "Theme engines for GTK 2";
-    license = lib.licenses.lgpl21Plus;
-    platforms = lib.platforms.linux;
+    license = licenses.lgpl21Plus;
+    platforms = platforms.linux;
   };
 }

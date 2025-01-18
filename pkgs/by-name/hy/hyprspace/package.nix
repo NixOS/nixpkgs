@@ -46,15 +46,15 @@ buildGoModule rec {
     > pkgs/by-name/hy/hyprspace/config_generated.go
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Lightweight VPN Built on top of Libp2p for Truly Distributed Networks";
     homepage = "https://github.com/hyprspace/hyprspace";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
+    license = licenses.asl20;
+    maintainers = with maintainers; [
       gerg-l
       max
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
     mainProgram = "hyprspace";
   };
 }

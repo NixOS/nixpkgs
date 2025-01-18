@@ -34,11 +34,11 @@ buildGoModule rec {
     version = "v${version}";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Command-line tool to incrementally drill down JSON";
     mainProgram = "jid";
     homepage = "https://github.com/simeji/jid";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ stesie ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ stesie ];
   };
 }

@@ -84,12 +84,12 @@ buildGoModule rec {
       --set CGO_LDFLAGS "-L${lib.makeLibraryPath [ zlib ]}"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Build applications using Go + HTML + CSS + JS";
     homepage = "https://wails.io";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ ];
     mainProgram = "wails";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }

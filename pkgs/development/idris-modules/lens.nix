@@ -17,10 +17,10 @@ build-idris-package {
     sha256 = "1q6lmhrwd1qg18s253sim4hg2a2wk5439p3izy1f9ygi6pv4a6mk";
   };
 
-  meta = {
+  meta = with lib; {
     description = "van Laarhoven lenses for Idris";
     homepage = "https://github.com/HuwCampbell/idris-lens";
-    license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.brainrape ];
+    license = licenses.bsd3;
+    maintainers = [ maintainers.brainrape ];
   };
 }

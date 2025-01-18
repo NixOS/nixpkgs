@@ -37,15 +37,15 @@ stdenv.mkDerivation (finalAttrs: {
     libgee
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Pin portable apps to the launcher";
     homepage = "https://github.com/ryonakano/pinit";
-    license = with lib.licenses; [
+    license = with licenses; [
       gpl3Plus
       cc0
     ];
     mainProgram = "com.github.ryonakano.pinit";
-    maintainers = with lib.maintainers; [ aleksana ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ aleksana ];
+    platforms = platforms.linux;
   };
 })

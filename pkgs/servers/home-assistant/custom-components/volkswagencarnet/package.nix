@@ -29,10 +29,10 @@ buildHomeAssistantComponent rec {
   # https://github.com/robinostlund/homeassistant-volkswagencarnet/issues/651
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Volkswagen Connect component for Home Assistant";
     homepage = "https://github.com/robinostlund/homeassistant-volkswagencarnet";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

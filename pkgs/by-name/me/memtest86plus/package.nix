@@ -30,14 +30,14 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm0444 -t $out/ memtest.bin memtest.efi
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.memtest.org/";
     description = "Tool to detect memory errors";
-    license = lib.licenses.gpl2Only;
+    license = licenses.gpl2Only;
     platforms = [
       "x86_64-linux"
       "i686-linux"
     ];
-    maintainers = [ lib.maintainers.LunNova ];
+    maintainers = [ maintainers.LunNova ];
   };
 })

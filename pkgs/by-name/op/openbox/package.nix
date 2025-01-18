@@ -89,10 +89,10 @@ stdenv.mkDerivation rec {
     wrapPythonProgramsIn "$out/libexec" "$out $pythonPath"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "X window manager for non-desktop embedded systems";
     homepage = "http://openbox.org/";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
   };
 }

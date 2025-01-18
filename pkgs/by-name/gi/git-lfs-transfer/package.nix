@@ -16,11 +16,11 @@ buildGoModule {
 
   vendorHash = "sha256-1cGlhLdnU6yTqzcB3J1cq3gawncbtdgkb3LFh2ZmXbM=";
 
-  meta = {
+  meta = with lib; {
     description = "Server-side implementation of the Git LFS pure-SSH protocol";
     mainProgram = "git-lfs-transfer";
     homepage = "https://github.com/charmbracelet/git-lfs-transfer";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ chn ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ chn ];
   };
 }

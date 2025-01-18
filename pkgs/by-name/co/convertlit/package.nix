@@ -33,11 +33,11 @@ stdenv.mkDerivation rec {
     cp clit $out/bin
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "http://www.convertlit.com/";
     description = "Tool for converting Microsoft Reader ebooks to more open formats";
     mainProgram = "clit";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
   };
 }

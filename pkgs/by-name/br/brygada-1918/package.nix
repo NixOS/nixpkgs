@@ -28,11 +28,11 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Digital revival of the Brygada serif typeface";
     homepage = "https://brygada1918.eu/";
-    license = lib.licenses.ofl;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ oidro ];
+    license = licenses.ofl;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ oidro ];
   };
 }

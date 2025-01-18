@@ -18,14 +18,14 @@ stdenv.mkDerivation rec {
     "EXEC_PREFIX=$(out)"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Magnetic Tape control tools for Linux";
     longDescription = ''
       Fork of the standard "mt" tool with additional Linux-specific IOCTLs.
     '';
     homepage = "https://github.com/iustin/mt-st";
-    license = lib.licenses.gpl2Only;
-    maintainers = [ lib.maintainers.redvers ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Only;
+    maintainers = [ maintainers.redvers ];
+    platforms = platforms.linux;
   };
 }

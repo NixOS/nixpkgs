@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  meta = {
+  meta = with lib; {
     description = "Vim-like browser";
     mainProgram = "vimb";
     longDescription = ''
@@ -50,8 +50,8 @@ stdenv.mkDerivation rec {
       keyboard driven and does not detract you from your daily work.
     '';
     homepage = "https://fanglingsu.github.io/vimb/";
-    license = lib.licenses.gpl3;
+    license = licenses.gpl3;
     maintainers = [ ];
-    platforms = with lib.platforms; linux;
+    platforms = with platforms; linux;
   };
 }

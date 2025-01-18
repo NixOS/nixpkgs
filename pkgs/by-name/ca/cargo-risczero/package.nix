@@ -44,11 +44,11 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Cargo extension to help create, manage, and test RISC Zero projects";
     mainProgram = "cargo-risczero";
     homepage = "https://risczero.com";
-    license = with lib.licenses; [ asl20 ];
-    maintainers = with lib.maintainers; [ cameronfyfe ];
+    license = with licenses; [ asl20 ];
+    maintainers = with maintainers; [ cameronfyfe ];
   };
 }

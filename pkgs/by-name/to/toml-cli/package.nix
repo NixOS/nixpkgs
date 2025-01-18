@@ -29,11 +29,11 @@ rustPlatform.buildRustPackage rec {
     version = testers.testVersion { package = toml-cli; };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Simple CLI for editing and querying TOML files";
     homepage = "https://github.com/gnprice/toml-cli";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ phlip9 ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ phlip9 ];
     mainProgram = "toml";
   };
 }

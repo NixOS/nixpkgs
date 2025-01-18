@@ -23,11 +23,11 @@ python3Packages.buildPythonApplication rec {
     $out/bin/ffmpeg-normalize --help > /dev/null
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Normalize audio via ffmpeg";
     homepage = "https://github.com/slhck/ffmpeg-normalize";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       luftmensch-luftmensch
       prusnak
     ];

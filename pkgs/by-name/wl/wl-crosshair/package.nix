@@ -26,12 +26,12 @@ rustPlatform.buildRustPackage {
       --set-default WL_CROSSHAIR_IMAGE_PATH $out/share/cursors/inverse-v.png
   '';
 
-  meta = {
+  meta = with lib; {
     description = "A crosshair overlay for wlroots compositor";
     homepage = "https://github.com/lelgenio/wl-crosshair";
-    license = lib.licenses.unfree; # didn't found a license
+    license = licenses.unfree; # didn't found a license
     mainProgram = "wl-crosshair";
-    maintainers = with lib.maintainers; [ Guanran928 ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ Guanran928 ];
+    platforms = platforms.linux;
   };
 }

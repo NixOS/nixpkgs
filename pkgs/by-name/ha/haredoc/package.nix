@@ -42,11 +42,11 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://harelang.org/";
     description = "Hare's documentation tool";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ onemoresuza ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ onemoresuza ];
     mainProgram = "haredoc";
     inherit (hareHook.meta) platforms badPlatforms;
   };

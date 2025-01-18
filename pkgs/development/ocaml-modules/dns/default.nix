@@ -44,11 +44,11 @@ buildDunePackage rec {
   doCheck = true;
   checkInputs = [ alcotest ];
 
-  meta = {
+  meta = with lib; {
     description = "Domain Name System (DNS) library";
     homepage = "https://github.com/mirage/ocaml-dns";
-    license = lib.licenses.bsd2;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.bsd2;
+    maintainers = [ maintainers.vbgl ];
   };
 
 }

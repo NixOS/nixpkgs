@@ -48,12 +48,12 @@ stdenv.mkDerivation rec {
     ln -s $out/share/design/io.github.dubstar_04.design $out/bin
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/dubstar-04/Design";
     description = "2D CAD For GNOME";
-    maintainers = with lib.maintainers; [ linsui ];
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ linsui ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
     mainProgram = "io.github.dubstar_04.design";
   };
 }

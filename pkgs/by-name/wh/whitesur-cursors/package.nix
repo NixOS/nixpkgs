@@ -22,11 +22,11 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "X-cursor theme inspired by macOS and based on capitaine-cursors";
     homepage = "https://github.com/vinceliuice/WhiteSur-cursors";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ tomasajt ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ tomasajt ];
+    platforms = platforms.linux;
   };
 }

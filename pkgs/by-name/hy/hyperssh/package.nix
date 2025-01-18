@@ -30,12 +30,12 @@ buildNpmPackage {
     })
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Run SSH over hyperswarm";
     homepage = "https://github.com/mafintosh/hyperssh";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ davhau ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ davhau ];
     mainProgram = "hyperssh";
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 }

@@ -20,15 +20,15 @@ stdenv.mkDerivation rec {
     cmake
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Wayland protocol extensions for treeland";
     homepage = "https://github.com/linuxdeepin/treeland-protocols";
-    license = with lib.licenses; [
+    license = with licenses; [
       gpl3Only
       lgpl3Only
       asl20
     ];
-    platforms = lib.platforms.linux;
-    maintainers = lib.teams.deepin.members;
+    platforms = platforms.linux;
+    maintainers = teams.deepin.members;
   };
 }

@@ -52,11 +52,11 @@ buildDunePackage rec {
     alcotest-lwt
   ];
 
-  meta = {
+  meta = with lib; {
     description = "OCaml web framework";
     homepage = "https://github.com/rgrinberg/opium";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.pmahoney ];
+    license = licenses.mit;
+    maintainers = [ maintainers.pmahoney ];
     broken = true; # Not compatible with mirage-crypto ≥ 1.0
   };
 }

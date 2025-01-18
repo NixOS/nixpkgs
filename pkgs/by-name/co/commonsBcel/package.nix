@@ -19,12 +19,12 @@ stdenv.mkDerivation rec {
     cp bcel-${version}.jar $out/share/java/
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://commons.apache.org/proper/commons-bcel/";
     description = "Gives users a convenient way to analyze, create, and manipulate (binary) Java class files";
-    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
-    maintainers = with lib.maintainers; [ copumpkin ];
-    license = lib.licenses.asl20;
-    platforms = with lib.platforms; unix;
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    maintainers = with maintainers; [ copumpkin ];
+    license = licenses.asl20;
+    platforms = with platforms; unix;
   };
 }

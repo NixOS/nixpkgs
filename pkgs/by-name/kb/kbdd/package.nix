@@ -28,11 +28,11 @@ stdenv.mkDerivation {
     dbus-glib
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Simple daemon and library to make per window layout using XKB";
     homepage = "https://github.com/qnikst/kbdd";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
     maintainers = [ ];
     mainProgram = "kbdd";
   };

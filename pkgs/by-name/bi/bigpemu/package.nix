@@ -24,15 +24,15 @@ let
       tar -xvf $src -C $out/bin --strip-components=1
     '';
 
-    meta = {
+    meta = with lib; {
       description = "Atari Jaguar Emulator (BigPEmu) by Richard Whitehouse";
       homepage = "https://www.richwhitehouse.com/jaguar/index.php";
-      license = lib.licenses.unfree;
-      maintainers = with lib.maintainers; [
+      license = licenses.unfree;
+      maintainers = with maintainers; [
         tombert
         hughobrien
       ];
-      platforms = with lib.platforms; [ "x86_64-linux" ];
+      platforms = with platforms; [ "x86_64-linux" ];
     };
   };
 in

@@ -26,15 +26,15 @@ buildDotnetModule rec {
     "-property:ImportByWildcardBeforeSolution=false"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Dump certificates from PE files in different formats";
     mainProgram = "CertDump";
     homepage = "https://github.com/secana/CertDump";
     longDescription = ''
       Cross-Platform tool to dump the signing certificate from a Portable Executable (PE) file.
     '';
-    license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.baloo ];
+    license = licenses.asl20;
+    maintainers = [ maintainers.baloo ];
     broken = stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isDarwin;
   };
 }

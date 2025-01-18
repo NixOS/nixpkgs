@@ -33,13 +33,13 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "App That Opens Apps";
     homepage = "https://www.mothersruin.com/software/Apparency/";
-    license = lib.licenses.unfreeRedistributable;
+    license = licenses.unfreeRedistributable;
     maintainers = [ ];
     mainProgram = "appy";
-    platforms = lib.platforms.darwin;
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    platforms = platforms.darwin;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }

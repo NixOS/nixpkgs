@@ -18,11 +18,11 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  meta = {
+  meta = with lib; {
     description = "LHa is an archiver and compressor using the LZSS and Huffman encoding compression algorithms";
     homepage = "https://github.com/jca02266/lha";
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
       sander
       momeemt
     ];
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
     # However, old code is still covered by the original LHa license, which is
     # not a free software license (it has additional requirements on commercial
     # use).
-    license = lib.licenses.unfree;
+    license = licenses.unfree;
     mainProgram = "lha";
   };
 }

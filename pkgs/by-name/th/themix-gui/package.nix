@@ -60,7 +60,7 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Graphical application for designing themes and exporting them using plugins";
     longDescription = ''
       Graphical application for generating different color variations of
@@ -71,9 +71,9 @@ stdenv.mkDerivation {
       KDE, VIM and many more.
     '';
     homepage = "https://github.com/themix-project/themix-gui";
-    license = lib.licenses.gpl3Only;
+    license = licenses.gpl3Only;
     mainProgram = "themix-gui";
     maintainers = [ ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

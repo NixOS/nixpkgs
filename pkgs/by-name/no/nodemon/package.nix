@@ -22,11 +22,11 @@ buildNpmPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Simple monitor script for use during development of a Node.js app";
     mainProgram = "nodemon";
     homepage = "https://nodemon.io";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ pyrox0 ];
   };
 }

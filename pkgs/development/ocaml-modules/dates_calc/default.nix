@@ -28,10 +28,10 @@ buildDunePackage rec {
     qcheck
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Date calculation library";
-    license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.niols ];
+    license = licenses.asl20;
+    maintainers = [ maintainers.niols ];
     homepage = "https://github.com/catalalang/dates-calc";
   };
 }

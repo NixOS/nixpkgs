@@ -41,12 +41,12 @@ rustPlatform.buildRustPackage {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Interactive, cross-platform Git terminal application with clear git graphs arranged for your branching model";
     homepage = "https://github.com/mlange-42/git-igitt";
-    license = lib.licenses.mit;
-    sourceProvenance = [ lib.sourceTypes.fromSource ];
-    maintainers = [ lib.maintainers.pinage404 ];
+    license = licenses.mit;
+    sourceProvenance = [ sourceTypes.fromSource ];
+    maintainers = [ maintainers.pinage404 ];
     mainProgram = "git-igitt";
   };
 }

@@ -55,10 +55,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiohasupervisor" ];
 
-  meta = {
+  meta = with lib; {
     description = "Client for Home Assistant Supervisor";
     homepage = "https://github.com/home-assistant-libs/python-supervisor-client";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ fab ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
   };
 }

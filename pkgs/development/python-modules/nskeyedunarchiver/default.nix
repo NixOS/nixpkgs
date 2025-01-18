@@ -20,10 +20,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "NSKeyedUnArchiver" ];
 
-  meta = {
+  meta = with lib; {
     description = "Unserializes plist data into a usable Python dict";
     homepage = "https://github.com/avibrazil/NSKeyedUnArchiver";
-    license = lib.licenses.bsdOriginal;
-    maintainers = with lib.maintainers; [ PapayaJackal ];
+    license = licenses.bsdOriginal;
+    maintainers = with maintainers; [ PapayaJackal ];
   };
 }

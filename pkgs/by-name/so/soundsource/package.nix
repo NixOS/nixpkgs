@@ -26,16 +26,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     changelog = "https://rogueamoeba.com/support/releasenotes/?product=SoundSource";
     description = "Sound controller for macOS";
     homepage = "https://rogueamoeba.com/soundsource";
-    license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [
+    license = licenses.unfree;
+    maintainers = with maintainers; [
       emilytrau
       donteatoreo
     ];
-    platforms = lib.platforms.darwin;
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    platforms = platforms.darwin;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 })

@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   });
 
-  meta = {
+  meta = with lib; {
     description = "Open-source macOS application to analyze disk usage";
     longDescription = ''
       GrandPerspective is a small utility application for macOS that graphically shows the disk usage within a file
@@ -59,13 +59,13 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     mainProgram = "grandperspective";
     homepage = "https://grandperspectiv.sourceforge.net";
-    license = lib.licenses.gpl2Only;
-    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl2Only;
+    sourceProvenance = [ sourceTypes.binaryNativeCode ];
+    maintainers = with maintainers; [
       eliandoran
       DimitarNestorov
     ];
-    platforms = lib.platforms.darwin;
+    platforms = platforms.darwin;
   };
 
 })

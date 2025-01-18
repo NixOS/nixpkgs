@@ -51,12 +51,12 @@ let
       "SALib.util"
     ];
 
-    meta = {
+    meta = with lib; {
       changelog = "https://github.com/SALib/SALib/releases";
       description = "Python implementations of commonly used sensitivity analysis methods, useful in systems modeling to calculate the effects of model inputs or exogenous factors on outputs of interest";
       homepage = "https://github.com/SALib/SALib";
-      license = lib.licenses.mit;
-      maintainers = with lib.maintainers; [ theobori ];
+      license = licenses.mit;
+      maintainers = with maintainers; [ theobori ];
       mainProgram = "salib";
     };
   };

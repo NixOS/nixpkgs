@@ -41,15 +41,15 @@ stdenv.mkDerivation {
     chmod +x $bin
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Create file hierarchies from media tags";
     homepage = "https://www.emacswiki.org/emacs/Bongo";
     platforms = ruby.meta.platforms;
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       livnev
       dbrock
     ];
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     mainProgram = "tree-from-tags";
   };
 }

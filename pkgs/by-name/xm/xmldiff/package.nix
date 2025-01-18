@@ -22,7 +22,7 @@ python3.pkgs.buildPythonApplication {
     setuptools
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://xmldiff.readthedocs.io/en/stable/";
     description = "Library and command line utility for diffing xml";
     longDescription = ''
@@ -36,7 +36,7 @@ python3.pkgs.buildPythonApplication {
       would not be readable by a human. xmldiff provides tools to make human
       readable diffs in those situations.
     '';
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ anpryl ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ anpryl ];
   };
 }

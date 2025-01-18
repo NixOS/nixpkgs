@@ -93,12 +93,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Focaltech Fingerprint driver for focaltech 0x2808:0xa658";
     homepage = "https://github.com/ftfpteams/RTS5811-FT9366-fingerprint-linux-driver-with-VID-2808-and-PID-a658";
-    license = lib.licenses.unfree;
-    maintainers = [ lib.maintainers.imsick ];
+    license = licenses.unfree;
+    maintainers = [ maintainers.imsick ];
     platforms = [ "x86_64-linux" ];
-    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+    sourceProvenance = [ sourceTypes.binaryNativeCode ];
   };
 }

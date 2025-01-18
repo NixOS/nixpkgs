@@ -53,15 +53,15 @@ python3Packages.buildPythonApplication rec {
 
   strictDeps = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/Nokse22/inspector";
     description = "Gtk4 Libadwaita wrapper for various system info cli commands";
-    license = with lib.licenses; [
+    license = with licenses; [
       gpl3Plus
       cc0
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
     mainProgram = "inspector";
-    maintainers = with lib.maintainers; [ mksafavi ];
+    maintainers = with maintainers; [ mksafavi ];
   };
 }

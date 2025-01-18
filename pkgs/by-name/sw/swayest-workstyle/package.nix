@@ -22,12 +22,12 @@ rustPlatform.buildRustPackage {
   # No tests
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Map sway workspace names to icons defined depending on the windows inside of the workspace";
     homepage = "https://github.com/Lyr-7D1h/swayest_workstyle";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "sworkstyle";
-    maintainers = with lib.maintainers; [ ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ ];
+    platforms = platforms.linux;
   };
 }

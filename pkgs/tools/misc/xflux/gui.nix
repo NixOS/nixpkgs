@@ -57,11 +57,11 @@ buildPythonApplication rec {
     patchPythonScript $out/${python3Packages.python.sitePackages}/fluxgui/fluxapp.py
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Better lighting for Linux. Open source GUI for xflux";
     homepage = "https://justgetflux.com/linux.html";
-    license = lib.licenses.unfree; # marked as unfree since the source code contains a copy of the unfree xflux binary
-    maintainers = [ lib.maintainers.sheenobu ];
-    platforms = lib.platforms.linux;
+    license = licenses.unfree; # marked as unfree since the source code contains a copy of the unfree xflux binary
+    maintainers = [ maintainers.sheenobu ];
+    platforms = platforms.linux;
   };
 }

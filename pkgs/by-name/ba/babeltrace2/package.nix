@@ -90,12 +90,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     description = "Babeltrace /ˈbæbəltreɪs/ is an open-source trace manipulation toolkit";
     homepage = "https://babeltrace.org";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ wentasah ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ wentasah ];
     mainProgram = "babeltrace2";
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 }

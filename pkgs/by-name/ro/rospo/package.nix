@@ -36,11 +36,11 @@ buildGoModule rec {
       --zsh <($out/bin/rospo completion zsh)
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Simple, reliable, persistent ssh tunnels with embedded ssh server";
     homepage = "https://github.com/ferama/rospo";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ sikmir ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ sikmir ];
     mainProgram = "rospo";
   };
 }

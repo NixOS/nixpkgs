@@ -48,15 +48,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Simple alternative to both xinit and startx for starting a Xorg server";
     homepage = "https://github.com/earnestly/sx";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "sx";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       figsoda
       thiagokokada
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 })

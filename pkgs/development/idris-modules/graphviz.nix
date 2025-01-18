@@ -21,10 +21,10 @@ build-idris-package {
     sed -i "/^author /cauthor = Merlin Goettlinger" source/graphviz.ipkg
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Parser and library for graphviz dot files";
     homepage = "https://gitlab.com/mgttlinger/idris-graphviz";
-    license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.brainrape ];
+    license = licenses.gpl3;
+    maintainers = [ maintainers.brainrape ];
   };
 }

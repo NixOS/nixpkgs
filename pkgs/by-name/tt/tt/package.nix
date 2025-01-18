@@ -25,11 +25,11 @@ buildGoModule rec {
     installManPage tt.1.gz
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Typing test in the terminal written in Go";
     homepage = "https://github.com/lemnos/tt";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "tt";
-    maintainers = with lib.maintainers; [ vinetos ];
+    maintainers = with maintainers; [ vinetos ];
   };
 }

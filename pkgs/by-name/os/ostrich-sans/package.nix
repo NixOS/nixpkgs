@@ -23,14 +23,14 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Gorgeous modern sans-serif with a very long neck";
     longDescription = ''
       A gorgeous modern sans-serif with a very long neck. With a whole slew of
       styles & weights.
     '';
     homepage = "https://www.theleagueofmoveabletype.com/ostrich-sans";
-    license = lib.licenses.ofl;
-    maintainers = with lib.maintainers; [ minijackson ];
+    license = licenses.ofl;
+    maintainers = with maintainers; [ minijackson ];
   };
 }

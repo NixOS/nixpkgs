@@ -32,10 +32,10 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "misoc" ];
 
-  meta = {
+  meta = with lib; {
     description = "Original high performance and small footprint system-on-chip based on Migen";
     homepage = "https://github.com/m-labs/misoc";
-    license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ doronbehar ];
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ doronbehar ];
   };
 }

@@ -31,11 +31,11 @@ buildLua {
     (lib.makeBinPath [ yt-dlp ])
   ];
 
-  meta = {
+  meta = with lib; {
     description = "MPV script to overlay youtube chat on top of a video using yt-dlp";
     homepage = "https://github.com/BanchouBoo/mpv-youtube-chat";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     platforms = yt-dlp.meta.platforms;
-    maintainers = with lib.maintainers; [ fliegendewurst ];
+    maintainers = with maintainers; [ fliegendewurst ];
   };
 }

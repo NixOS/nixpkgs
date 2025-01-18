@@ -32,12 +32,12 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Arch distro that runs on top of another without root";
     homepage = "https://github.com/fsquillace/junest";
-    license = lib.licenses.gpl3Only;
+    license = licenses.gpl3Only;
     mainProgram = "junest";
-    maintainers = with lib.maintainers; [ jdev082 ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ jdev082 ];
+    platforms = platforms.linux;
   };
 }

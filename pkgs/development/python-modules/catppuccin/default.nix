@@ -38,13 +38,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "catppuccin" ];
 
-  meta = {
+  meta = with lib; {
     description = "Soothing pastel theme for Python";
     homepage = "https://github.com/catppuccin/python";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       fufexan
       tomasajt
     ];
-    license = lib.licenses.mit;
+    license = licenses.mit;
   };
 }

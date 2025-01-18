@@ -22,11 +22,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "Inversion of control container for C++11, C++14 and later";
     homepage = "https://github.com/gracicot/kangaru";
-    maintainers = with lib.maintainers; [ l33tname ];
-    platforms = lib.platforms.all;
-    license = lib.licenses.mit;
+    maintainers = with maintainers; [ l33tname ];
+    platforms = platforms.all;
+    license = licenses.mit;
   };
 })

@@ -33,12 +33,12 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" ];
 
-  meta = {
+  meta = with lib; {
     description = "NSS module for glibc, to provide NIS support for glibc";
     changelog = "https://github.com/thkukuk/libnss_nis/blob/master/NEWS";
     homepage = "https://github.com/thkukuk/libnss_nis";
-    license = lib.licenses.lgpl21Plus;
-    maintainers = with lib.maintainers; [ BarrOff ];
-    platforms = lib.platforms.linux;
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ BarrOff ];
+    platforms = platforms.linux;
   };
 }

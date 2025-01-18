@@ -41,14 +41,14 @@ stdenv.mkDerivation rec {
     autoreconfHook
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/cph6/zsync";
     description = "File distribution system using the rsync algorithm";
-    license = lib.licenses.artistic2;
-    maintainers = with lib.maintainers; [
+    license = licenses.artistic2;
+    maintainers = with maintainers; [
       viric
       ryand56
     ];
-    platforms = with lib.platforms; all;
+    platforms = with platforms; all;
   };
 }

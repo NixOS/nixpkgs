@@ -70,12 +70,12 @@ maven.buildMavenPackage rec {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Scanner CLI for SonarQube and SonarCloud";
     homepage = "https://github.com/SonarSource/sonar-scanner-cli";
-    license = lib.licenses.lgpl3Only;
+    license = licenses.lgpl3Only;
     mainProgram = "sonar-scanner";
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ peterromfeldhk ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ peterromfeldhk ];
   };
 }

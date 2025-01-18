@@ -22,14 +22,14 @@ rustPlatform.buildRustPackage rec {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Simple CLI tool that aims to be a helper for Advent of Code";
     homepage = "https://github.com/gobanos/cargo-aoc";
-    license = with lib.licenses; [
+    license = with licenses; [
       mit
       asl20
     ];
-    maintainers = with lib.maintainers; [ defelo ];
+    maintainers = with maintainers; [ defelo ];
     mainProgram = "cargo-aoc";
   };
 }

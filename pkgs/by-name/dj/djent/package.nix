@@ -36,16 +36,16 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "http://www.deadhat.com/";
     description = ''
       A reimplementation of the Fourmilab/John Walker random number test program
       ent with several improvements
     '';
     mainProgram = "djent";
-    license = lib.licenses.gpl2Only;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl2Only;
+    platforms = platforms.all;
+    maintainers = with maintainers; [
       orichter
       thillux
     ];

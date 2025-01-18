@@ -71,10 +71,10 @@ buildPythonPackage rec {
     "tests/unit/caching/test_blob.py"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "A function-based LLM protocol and wrapper";
     homepage = "https://github.com/microsoft/essex-toolkit/tree/main/python/fnllm";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fab ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
   };
 }

@@ -34,10 +34,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "humblewx" ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/thetimelineproj/humblewx";
     description = "Library that simplifies creating user interfaces with wxPython";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ davidak ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ davidak ];
   };
 }

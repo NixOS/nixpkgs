@@ -44,11 +44,11 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-pilot-prefix=${pilot-link}" ];
 
-  meta = {
+  meta = with lib; {
     description = "Desktop organizer software for the Palm Pilot";
     homepage = "https://www.jpilot.org/";
-    license = lib.licenses.gpl2;
+    license = licenses.gpl2;
     mainProgram = "jpilot";
-    maintainers = with lib.maintainers; [ PapayaJackal ];
+    maintainers = with maintainers; [ PapayaJackal ];
   };
 }

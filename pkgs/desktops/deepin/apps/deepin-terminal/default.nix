@@ -50,12 +50,12 @@ stdenv.mkDerivation rec {
 
   passthru.tests.test = nixosTests.terminal-emulators.deepin-terminal;
 
-  meta = {
+  meta = with lib; {
     description = "Terminal emulator with workspace, multiple windows, remote management, quake mode and other features";
     mainProgram = "deepin-terminal";
     homepage = "https://github.com/linuxdeepin/deepin-terminal";
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
-    maintainers = lib.teams.deepin.members;
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = teams.deepin.members;
   };
 }

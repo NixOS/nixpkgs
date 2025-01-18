@@ -38,13 +38,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Batch image converter and resizer";
     homepage = "https://converseen.fasterland.net/";
     changelog = "https://github.com/Faster3ck/Converseen/blob/${finalAttrs.src.rev}/CHANGELOG";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ];
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ ];
     mainProgram = "converseen";
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 })

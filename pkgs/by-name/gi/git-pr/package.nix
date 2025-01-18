@@ -21,11 +21,11 @@ buildGoModule rec {
     mv $out/bin/ssh $out/bin/git-ssh
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://pr.pico.sh";
     description = "Simple git collaboration tool";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ sigmanificient ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ sigmanificient ];
     mainProgram = "git-pr";
   };
 }

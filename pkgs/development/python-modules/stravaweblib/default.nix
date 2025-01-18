@@ -38,10 +38,10 @@ buildPythonPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Python library for extending the Strava v3 API using web scraping";
     homepage = "https://github.com/pR0Ps/stravaweblib";
-    license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ stv0g ];
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ stv0g ];
   };
 }

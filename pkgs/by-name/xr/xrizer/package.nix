@@ -47,11 +47,11 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "XR-ize your favorite OpenVR games";
     homepage = "https://github.com/Supreeeme/xrizer";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ Scrumplex ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ Scrumplex ];
     # TODO: support more systems
     # To do so, we need to map systems to the format openvr expects.
     # i.e. x86_64-linux -> linux64, aarch64-linux -> linuxarm64

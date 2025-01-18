@@ -37,10 +37,10 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "pytest_mypy" ];
 
-  meta = {
+  meta = with lib; {
     description = "Mypy static type checker plugin for Pytest";
     homepage = "https://github.com/dbader/pytest-mypy";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ sigmanificient ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ sigmanificient ];
   };
 }

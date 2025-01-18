@@ -47,12 +47,12 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) ttyd;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Share your terminal over the web";
     homepage = "https://github.com/tsl0922/ttyd";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.thoughtpolice ];
-    platforms = lib.platforms.all;
+    license = licenses.mit;
+    maintainers = [ maintainers.thoughtpolice ];
+    platforms = platforms.all;
     mainProgram = "ttyd";
   };
 }

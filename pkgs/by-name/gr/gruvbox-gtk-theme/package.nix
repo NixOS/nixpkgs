@@ -108,12 +108,12 @@ lib.checkListOfEnum "${pname}: colorVariants" colorVariantList colorVariants lib
       runHook postInstall
     '';
 
-    meta = {
+    meta = with lib; {
       description = "GTK theme based on the Gruvbox colour palette";
       homepage = "https://github.com/Fausto-Korpsvart/Gruvbox-GTK-Theme";
-      license = lib.licenses.gpl3Plus;
-      platforms = lib.platforms.unix;
-      maintainers = with lib.maintainers; [
+      license = licenses.gpl3Plus;
+      platforms = platforms.unix;
+      maintainers = with maintainers; [
         luftmensch-luftmensch
         math-42
         d3vil0p3r

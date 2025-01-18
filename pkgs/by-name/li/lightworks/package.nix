@@ -115,13 +115,13 @@ buildFHSEnv {
 
   runScript = "lightworks";
 
-  meta = {
+  meta = with lib; {
     description = "Professional Non-Linear Video Editor";
     homepage = "https://www.lwks.com/";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = lib.licenses.unfree;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
     mainProgram = "lightworks";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       antonxy
       vojta001
       kashw2

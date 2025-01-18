@@ -33,11 +33,11 @@ buildGoModule {
     rm -f $out/bin/genfileembed
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Way of storing, syncing, sharing, modelling and backing up content (née Camlistore)";
     homepage = "https://perkeep.org";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
+    license = licenses.asl20;
+    maintainers = with maintainers; [
       kalbasit
       gador
     ];

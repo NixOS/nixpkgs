@@ -49,10 +49,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "broadbean" ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://qcodes.github.io/broadbean";
     description = "Library for making pulses that can be leveraged with QCoDeS";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ evilmav ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ evilmav ];
   };
 }

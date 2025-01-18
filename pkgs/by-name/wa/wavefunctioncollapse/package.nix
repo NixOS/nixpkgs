@@ -29,10 +29,10 @@ stdenv.mkDerivation rec {
     chmod a+x "$out/bin/wavefunctioncollapse"
   '';
   buildInputs = [ mono ];
-  meta = {
+  meta = with lib; {
     description = "Generator of bitmaps that are locally similar to the input bitmap";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.raskin ];
-    platforms = lib.platforms.linux;
+    license = licenses.mit;
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.linux;
   };
 }

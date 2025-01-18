@@ -29,11 +29,11 @@ stdenvNoCC.mkDerivation {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = {
+  meta = with lib; {
     description = "Techno Plymouth theme with crazy animation";
     homepage = "https://github.com/PROxZIMA/proxzima-plymouth";
-    license = lib.licenses.gpl3Only;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ johnrtitor ];
+    license = licenses.gpl3Only;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ johnrtitor ];
   };
 }

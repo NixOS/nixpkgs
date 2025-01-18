@@ -51,14 +51,14 @@ buildPythonPackage rec {
     openpaperwork-core
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Reusable GTK components of Paperwork";
     homepage = "https://openpaper.work/";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
       aszlig
       symphorien
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

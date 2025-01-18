@@ -21,11 +21,11 @@ ocamlPackages.buildDunePackage rec {
   nativeBuildInputs = [ menhir ];
   buildInputs = with ocamlPackages; [ re ];
 
-  meta = {
+  meta = with lib; {
     description = "Simple tool which produces pretty-printed output from a Menhir parser file (.mly)";
     mainProgram = "obelisk";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.mit;
+    maintainers = [ maintainers.vbgl ];
     homepage = "https://github.com/Lelio-Brun/Obelisk";
   };
 }

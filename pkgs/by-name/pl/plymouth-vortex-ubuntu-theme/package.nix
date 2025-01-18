@@ -29,15 +29,15 @@ stdenvNoCC.mkDerivation {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = {
+  meta = with lib; {
     description = "Animated Plymouth boot theme with rotating Ubuntu logo";
     longDescription = ''
       Animated Plymouth theme with the Ubuntu logo and a futuristic and elegant look.
       Disk encryption password prompt is supported.
     '';
     homepage = "https://github.com/emanuele-scarsella/vortex-ubuntu-plymouth-theme";
-    license = lib.licenses.gpl2Only;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ johnrtitor ];
+    license = licenses.gpl2Only;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ johnrtitor ];
   };
 }

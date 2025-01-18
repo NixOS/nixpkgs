@@ -28,11 +28,11 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "GTK Theme based off of the Gruvbox Material colour palette";
     homepage = "https://github.com/TheGreatMcPain/gruvbox-material-gtk";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.amadaluzia ];
-    platforms = lib.platforms.unix;
+    license = licenses.mit;
+    maintainers = [ maintainers.amadaluzia ];
+    platforms = platforms.unix;
   };
 }

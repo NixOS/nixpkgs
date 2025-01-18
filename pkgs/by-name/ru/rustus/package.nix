@@ -63,12 +63,12 @@ rustPlatform.buildRustPackage {
   #   "--skip=util::tests::test_process_multi_addr"
   # ];
 
-  meta = {
+  meta = with lib; {
     description = "TUS protocol implementation in Rust";
     mainProgram = "rustus";
     homepage = "https://s3rius.github.io/rustus/";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ happysalada ];
-    platforms = lib.platforms.all;
+    license = licenses.asl20;
+    maintainers = with maintainers; [ happysalada ];
+    platforms = platforms.all;
   };
 }

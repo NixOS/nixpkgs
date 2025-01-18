@@ -66,9 +66,9 @@ perlPackages.buildPerlModule {
     })
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Puzzle with Bubbles";
-    license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ puckipedia ];
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ puckipedia ];
   };
 }

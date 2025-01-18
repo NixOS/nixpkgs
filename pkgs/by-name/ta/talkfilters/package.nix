@@ -19,11 +19,11 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "format" ];
 
-  meta = {
+  meta = with lib; {
     description = "Converts English text into text that mimics a stereotyped or humorous dialect";
     homepage = "https://www.hyperrealm.com/talkfilters/talkfilters.html";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ ikervagyok ];
-    platforms = with lib.platforms; unix;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ ikervagyok ];
+    platforms = with platforms; unix;
   };
 }

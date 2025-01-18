@@ -18,11 +18,11 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake ];
 
-  meta = {
+  meta = with lib; {
     description = "CMake utility toolbox";
     homepage = "https://github.com/jrl-umi3218/jrl-cmakemodules";
-    license = lib.licenses.lgpl3Plus;
-    maintainers = [ lib.maintainers.nim65s ];
-    platforms = lib.platforms.all;
+    license = licenses.lgpl3Plus;
+    maintainers = [ maintainers.nim65s ];
+    platforms = platforms.all;
   };
 }

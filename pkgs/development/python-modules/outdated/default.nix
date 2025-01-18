@@ -31,10 +31,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "outdated" ];
 
-  meta = {
+  meta = with lib; {
     description = "Mini-library which, given a package name and a version, checks if it's the latest version available on PyPI";
     homepage = "https://github.com/alexmojaki/outdated";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ gador ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ gador ];
   };
 }

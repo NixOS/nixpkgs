@@ -109,12 +109,12 @@ stdenv.mkDerivation {
     inherit cudaSupport cudaPackages pythonSupport;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Library for efficient similarity search and clustering of dense vectors by Facebook Research";
     mainProgram = "demo_ivfpq_indexing";
     homepage = "https://github.com/facebookresearch/faiss";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ SomeoneSerge ];
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ SomeoneSerge ];
   };
 }

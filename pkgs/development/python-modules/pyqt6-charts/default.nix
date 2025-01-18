@@ -69,11 +69,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "PyQt6.QtCharts" ];
 
-  meta = {
+  meta = with lib; {
     description = "Python bindings for Qt6 QtCharts";
     homepage = "https://riverbankcomputing.com/";
-    license = lib.licenses.gpl3Only;
+    license = licenses.gpl3Only;
     inherit (mesa.meta) platforms;
-    maintainers = with lib.maintainers; [ dandellion ];
+    maintainers = with maintainers; [ dandellion ];
   };
 }

@@ -101,11 +101,11 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/bin
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "http://www.t2-project.org/packages/bsd-games.html";
     description = "Ports of all the games from NetBSD-current that are free";
-    license = lib.licenses.free;
-    maintainers = with lib.maintainers; [ viric ];
-    platforms = with lib.platforms; linux;
+    license = licenses.free;
+    maintainers = with maintainers; [ viric ];
+    platforms = with platforms; linux;
   };
 })

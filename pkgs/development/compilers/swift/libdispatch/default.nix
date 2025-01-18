@@ -43,11 +43,11 @@ stdenv.mkDerivation {
     substituteAll ${./glue.cmake} $dev/lib/cmake/dispatch/dispatchConfig.cmake
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Grand Central Dispatch";
     homepage = "https://github.com/apple/swift-corelibs-libdispatch";
-    platforms = lib.platforms.linux;
-    license = lib.licenses.asl20;
-    maintainers = lib.teams.swift.members ++ (with lib.maintainers; [ cmm ]);
+    platforms = platforms.linux;
+    license = licenses.asl20;
+    maintainers = teams.swift.members ++ (with maintainers; [ cmm ]);
   };
 }

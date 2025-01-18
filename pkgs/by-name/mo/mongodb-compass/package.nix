@@ -134,15 +134,15 @@ stdenv.mkDerivation {
     wrapGAppsHook $out/bin/mongodb-compass
   '';
 
-  meta = {
+  meta = with lib; {
     description = "GUI for MongoDB";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       bryanasdev000
       friedow
     ];
     homepage = "https://github.com/mongodb-js/compass";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = lib.licenses.sspl;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.sspl;
     platforms = [ "x86_64-linux" ];
     mainProgram = "mongodb-compass";
   };

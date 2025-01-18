@@ -38,12 +38,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [ "--with-geoip" ];
 
-  meta = {
+  meta = with lib; {
     changelog = "https://dev.yorhel.nl/ncdc/changes";
     description = "Modern and lightweight direct connect client with a friendly ncurses interface";
     homepage = "https://dev.yorhel.nl/ncdc";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ehmry ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ ehmry ];
     mainProgram = "ncdc";
   };
 })

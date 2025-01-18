@@ -37,12 +37,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     description = "Osmocom Media Gateway (MGW). speaks RTP and E1 as well as MGCP";
     mainProgram = "osmo-mgw";
     homepage = "https://osmocom.org/projects/osmo-mgw";
-    license = lib.licenses.agpl3Plus;
-    maintainers = [ lib.maintainers.markuskowa ];
-    platforms = lib.platforms.linux;
+    license = licenses.agpl3Plus;
+    maintainers = [ maintainers.markuskowa ];
+    platforms = platforms.linux;
   };
 }

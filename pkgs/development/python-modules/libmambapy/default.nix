@@ -88,10 +88,10 @@ buildPythonPackage rec {
     "libmambapy.bindings"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Python library for the fast Cross-Platform Package Manager";
     homepage = "https://github.com/mamba-org/mamba";
-    license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.ericthemagician ];
+    license = licenses.bsd3;
+    maintainers = [ maintainers.ericthemagician ];
   };
 }

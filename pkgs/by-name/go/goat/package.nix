@@ -20,12 +20,12 @@ buildGoModule {
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
-  meta = {
+  meta = with lib; {
     description = "Go ASCII Tool. Render ASCII art as SVG diagrams";
     homepage = "https://github.com/blampe/goat";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ katexochen ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ katexochen ];
     mainProgram = "goat";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }

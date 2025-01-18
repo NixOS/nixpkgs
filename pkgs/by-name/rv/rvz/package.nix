@@ -37,11 +37,11 @@ buildGoModule rec {
     go test -v -short -coverprofile=cover.out ./...
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Golang library for reading RVZ disc images";
     homepage = "https://github.com/bodgit/rvz";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ dansbandit ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ dansbandit ];
     mainProgram = "rvz";
   };
 }

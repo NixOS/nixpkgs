@@ -67,12 +67,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/rombust/methane";
     description = "Clone of Taito's Bubble Bobble arcade game released for Amiga in 1993 by Apache Software";
     mainProgram = "methane";
-    license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ nixinator ];
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ nixinator ];
     platforms = [ "x86_64-linux" ];
   };
 })

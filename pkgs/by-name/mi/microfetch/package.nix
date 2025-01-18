@@ -20,15 +20,15 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Microscopic fetch script in Rust, for NixOS systems";
     homepage = "https://github.com/NotAShelf/microfetch";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [
       nydragon
       NotAShelf
     ];
     mainProgram = "microfetch";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

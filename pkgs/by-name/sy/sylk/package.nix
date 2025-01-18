@@ -17,16 +17,16 @@ appimageTools.wrapType2 rec {
     export LC_ALL=C.UTF-8
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Desktop client for SylkServer, a multiparty conferencing tool";
     homepage = "https://sylkserver.com/";
-    license = lib.licenses.agpl3Plus;
+    license = licenses.agpl3Plus;
     mainProgram = "Sylk";
-    maintainers = with lib.maintainers; [ zimbatm ];
+    maintainers = with maintainers; [ zimbatm ];
     platforms = [
       "i386-linux"
       "x86_64-linux"
     ];
-    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+    sourceProvenance = [ sourceTypes.binaryNativeCode ];
   };
 }

@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.test = nixosTests.terminal-emulators.ctx;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://ctx.graphics/";
     description = "Vector graphics terminal";
     longDescription = ''
@@ -76,8 +76,8 @@ stdenv.mkDerivation (finalAttrs: {
       terminal, with escape sequences that enable a 2D vector drawing API using
       a vector graphics protocol.
     '';
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.unix;
   };
 })

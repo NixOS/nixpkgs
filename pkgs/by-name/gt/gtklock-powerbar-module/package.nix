@@ -30,11 +30,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.testModule = gtklock.testModule finalAttrs.finalPackage;
 
-  meta = {
+  meta = with lib; {
     description = "Gtklock module adding power controls to the lockscreen";
     homepage = "https://github.com/jovanlanik/gtklock-powerbar-module";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ aleksana ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ aleksana ];
+    platforms = platforms.linux;
   };
 })

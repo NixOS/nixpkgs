@@ -34,10 +34,10 @@ buildPythonPackage rec {
   # upstream has no tests
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Obtains information from bandcamp.com";
     homepage = "https://github.com/RustyRin/bandcamp-api";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

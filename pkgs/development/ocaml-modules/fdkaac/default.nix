@@ -19,13 +19,13 @@ buildDunePackage rec {
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [ fdk_aac ];
 
-  meta = {
+  meta = with lib; {
     description = "OCaml binding for the fdk-aac library";
     inherit (src.meta) homepage;
-    license = lib.licenses.gpl2Only;
+    license = licenses.gpl2Only;
     maintainers = [
-      lib.maintainers.vbgl
-      lib.maintainers.dandellion
+      maintainers.vbgl
+      maintainers.dandellion
     ];
   };
 

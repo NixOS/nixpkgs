@@ -302,11 +302,11 @@ lib.checkListOfEnum "${pname}: variant" validVariants [ variant ] lib.checkListO
         runHook postInstall
       '';
 
-    meta = {
+    meta = with lib; {
       description = "Soothing pastel themes";
       homepage = "https://github.com/catppuccin/catppuccin";
-      license = lib.licenses.mit;
-      platforms = lib.platforms.all;
-      maintainers = [ lib.maintainers.khaneliman ];
+      license = licenses.mit;
+      platforms = platforms.all;
+      maintainers = [ maintainers.khaneliman ];
     };
   }

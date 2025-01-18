@@ -30,11 +30,11 @@ python3Packages.buildPythonApplication rec {
     cp -r youtube_dl_gui/data/* $out/share
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Cross platform front-end GUI of the popular youtube-dl written in wxPython";
     homepage = "https://oleksis.github.io/youtube-dl-gui";
-    license = lib.licenses.unlicense;
+    license = licenses.unlicense;
     mainProgram = "yt-dlg";
-    maintainers = with lib.maintainers; [ quantenzitrone ];
+    maintainers = with maintainers; [ quantenzitrone ];
   };
 }

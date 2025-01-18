@@ -76,11 +76,11 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Open Multi-View Stereo reconstruction library";
     homepage = "https://github.com/cdcseacave/openMVS";
-    license = lib.licenses.agpl3Only;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ bouk ];
+    license = licenses.agpl3Only;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ bouk ];
   };
 }

@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     cp -r ../include $out/
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Add a light/intuitive GUI to OpenGL applications";
     longDescription = ''
       A small and easy-to-use C/C++ library that allows to quickly add a light
@@ -42,8 +42,8 @@ stdenv.mkDerivation rec {
       to interactively tweak parameters on-screen
     '';
     homepage = "https://anttweakbar.sourceforge.net/";
-    license = lib.licenses.zlib;
-    maintainers = [ lib.maintainers.razvan ];
-    platforms = lib.platforms.linux;
+    license = licenses.zlib;
+    maintainers = [ maintainers.razvan ];
+    platforms = platforms.linux;
   };
 }

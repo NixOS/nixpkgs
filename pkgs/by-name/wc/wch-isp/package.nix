@@ -29,12 +29,12 @@ stdenv.mkDerivation rec {
     "install-rules"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Firmware programmer for WCH microcontrollers over USB";
     mainProgram = "wch-isp";
-    license = lib.licenses.gpl2Only;
+    license = licenses.gpl2Only;
     homepage = "https://git.sr.ht/~jmaselbas/wch-isp";
-    maintainers = with lib.maintainers; [ lesuisse ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ lesuisse ];
+    platforms = platforms.unix;
   };
 }

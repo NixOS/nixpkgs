@@ -18,11 +18,11 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = !stdenv.hostPlatform.isAarch64 && !stdenv.hostPlatform.isDarwin;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/shssoichiro/oxipng";
     description = "Multithreaded lossless PNG compression optimizer";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dywedir ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ dywedir ];
     mainProgram = "oxipng";
   };
 }

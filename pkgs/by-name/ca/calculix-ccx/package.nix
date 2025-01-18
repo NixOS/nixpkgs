@@ -50,12 +50,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "http://www.calculix.de";
     description = "Three-dimensional structural finite element program";
     mainProgram = "ccx";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ gebner ];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ gebner ];
+    platforms = platforms.unix;
   };
 }

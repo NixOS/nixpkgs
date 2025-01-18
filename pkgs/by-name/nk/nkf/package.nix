@@ -25,12 +25,12 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "prefix=$(out)" ];
 
-  meta = {
+  meta = with lib; {
     description = "Tool for converting encoding of Japanese text";
     mainProgram = "nkf";
     homepage = "https://nkf.osdn.jp/";
-    license = lib.licenses.zlib;
-    platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.auntie ];
+    license = licenses.zlib;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.auntie ];
   };
 }

@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://awk.dev";
     description = "One, true implementation of AWK";
     longDescription = ''
@@ -53,12 +53,12 @@ stdenv.mkDerivation (finalAttrs: {
       (Addison-Wesley, 2023, ISBN 0-13-826972-6).
     '';
     changelog = "https://github.com/onetrueawk/awk/blob/${finalAttrs.src.rev}/ChangeLog";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "nawk";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       AndersonTorres
       konimex
     ];
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 })

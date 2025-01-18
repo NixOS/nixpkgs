@@ -29,12 +29,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Simple fetch in C which is tiny and fast";
     homepage = "https://github.com/abrik1/tinyfetch";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "tinyfetch";
-    maintainers = with lib.maintainers; [ pagedMov ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ pagedMov ];
+    platforms = platforms.unix;
   };
 }

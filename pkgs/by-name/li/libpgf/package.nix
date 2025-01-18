@@ -25,10 +25,10 @@ stdenv.mkDerivation rec {
     dos2unix
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.libpgf.org/";
     description = "Progressive Graphics Format";
-    license = lib.licenses.lgpl21Plus;
-    platforms = lib.platforms.unix;
+    license = licenses.lgpl21Plus;
+    platforms = platforms.unix;
   };
 }

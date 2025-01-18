@@ -43,15 +43,15 @@ stdenv.mkDerivation rec {
     ++ lib.optional kcapi-encapp "--enable-kcapi-encapp"
     ++ lib.optional kcapi-dgstapp "--enable-kcapi-dgstapp";
 
-  meta = {
+  meta = with lib; {
     homepage = "http://www.chronox.de/libkcapi.html";
     description = "Linux Kernel Crypto API User Space Interface Library";
-    license = with lib.licenses; [
+    license = with licenses; [
       bsd3
       gpl2Only
     ];
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
       orichter
       thillux
     ];

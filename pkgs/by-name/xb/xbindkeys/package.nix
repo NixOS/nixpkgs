@@ -25,11 +25,11 @@ stdenv.mkDerivation rec {
     guile
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.nongnu.org/xbindkeys/xbindkeys.html";
     description = "Launch shell commands with your keyboard or your mouse under X Window";
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = with lib.platforms; linux;
+    platforms = with platforms; linux;
   };
 }

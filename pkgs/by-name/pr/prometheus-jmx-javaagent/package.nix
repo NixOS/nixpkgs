@@ -24,13 +24,13 @@ stdenv.mkDerivation (
       cp $src $out/lib/${jarName}
     '';
 
-    meta = {
+    meta = with lib; {
       homepage = "https://github.com/prometheus/jmx_exporter";
       description = "A process for exposing JMX Beans via HTTP for Prometheus consumption";
-      sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
-      license = lib.licenses.asl20;
-      maintainers = [ lib.maintainers.srhb ];
-      platforms = lib.platforms.unix;
+      sourceProvenance = [ sourceTypes.binaryBytecode ];
+      license = licenses.asl20;
+      maintainers = [ maintainers.srhb ];
+      platforms = platforms.unix;
     };
   }
 )

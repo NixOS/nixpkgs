@@ -38,10 +38,10 @@ buildPythonPackage rec {
     "uuid6"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "New time-based UUID formats which are suited for use as a database key";
     homepage = "https://github.com/oittaa/uuid6-python";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ aleksana ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ aleksana ];
   };
 }

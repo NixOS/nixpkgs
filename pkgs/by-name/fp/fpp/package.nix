@@ -30,11 +30,11 @@ stdenv.mkDerivation rec {
     installManPage debian/usr/share/man/man1/fpp.1
   '';
 
-  meta = {
+  meta = with lib; {
     description = "CLI program that accepts piped input and presents files for selection";
     homepage = "https://facebook.github.io/PathPicker/";
-    license = lib.licenses.bsd3;
-    platforms = lib.platforms.all;
+    license = licenses.bsd3;
+    platforms = platforms.all;
     mainProgram = "fpp";
   };
 }

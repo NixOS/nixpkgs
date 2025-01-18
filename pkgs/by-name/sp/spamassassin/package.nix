@@ -132,12 +132,12 @@ perlPackages.buildPerlPackage rec {
     done
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://spamassassin.apache.org/";
     description = "Open-Source Spam Filter";
-    license = lib.licenses.asl20;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [
+    license = licenses.asl20;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
       qknight
       qyliss
     ];

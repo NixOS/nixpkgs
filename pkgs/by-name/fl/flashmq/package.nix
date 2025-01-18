@@ -34,12 +34,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Fast light-weight MQTT broker/server";
     mainProgram = "flashmq";
     homepage = "https://www.flashmq.org/";
-    license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ sikmir ];
-    platforms = lib.platforms.linux;
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [ sikmir ];
+    platforms = platforms.linux;
   };
 })

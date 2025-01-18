@@ -24,10 +24,10 @@ stdenv.mkDerivation rec {
     libtool
     gmpxx
   ];
-  meta = {
+  meta = with lib; {
     description = "C++ library for arithmetic and algebraic computations";
-    license = lib.licenses.cecill-b;
-    maintainers = [ lib.maintainers.raskin ];
-    platforms = lib.platforms.linux;
+    license = licenses.cecill-b;
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.linux;
   };
 }

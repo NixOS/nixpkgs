@@ -50,10 +50,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "qstylizer" ];
 
-  meta = {
+  meta = with lib; {
     description = "Qt stylesheet generation utility for PyQt/PySide";
     homepage = "https://github.com/blambright/qstylizer";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ drewrisinger ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ drewrisinger ];
   };
 }

@@ -21,10 +21,10 @@ buildPythonPackage rec {
   nativeBuildInputs = [ setuptools-scm ];
   pythonImportsCheck = [ "ffmpeg" ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/jonghwanhyeon/python-ffmpeg";
     description = "Python binding for FFmpeg which provides sync and async APIs";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ youhaveme9 ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ youhaveme9 ];
   };
 }

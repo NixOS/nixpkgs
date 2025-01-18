@@ -31,10 +31,10 @@ buildPythonPackage rec {
     "wgnlpy.nlas"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Netlink connector to WireGuard";
     homepage = "https://github.com/ArgosyLabs/wgnlpy";
-    license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ marcel ];
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ marcel ];
   };
 }

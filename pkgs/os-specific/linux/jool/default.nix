@@ -33,11 +33,11 @@ stdenv.mkDerivation {
     inherit (nixosTests) jool;
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.jool.mx/";
     description = "Fairly compliant SIIT and Stateful NAT64 for Linux - kernel modules";
-    platforms = lib.platforms.linux;
-    license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ fpletz ];
+    platforms = platforms.linux;
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ fpletz ];
   };
 }

@@ -24,10 +24,10 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  meta = {
+  meta = with lib; {
     description = "Utility for enslaving networking interfaces under a bond";
     mainProgram = "ifenslave";
-    license = lib.licenses.gpl2Only;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Only;
+    platforms = platforms.linux;
   };
 }

@@ -20,12 +20,12 @@ stdenv.mkDerivation rec {
     "PREFIX:=$(out)"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Simple command-line utility for Linux, for extracting text from EPUB documents";
     homepage = "https://github.com/kevinboone/epub2txt2";
-    license = lib.licenses.gpl3Only;
-    platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.leonid ];
+    license = licenses.gpl3Only;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.leonid ];
     mainProgram = "epub2txt";
   };
 }

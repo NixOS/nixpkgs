@@ -21,10 +21,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pretalx_downstream" ];
 
-  meta = {
+  meta = with lib; {
     description = "Use pretalx passively by importing another event's schedule";
     homepage = "https://github.com/pretalx/pretalx-downstream";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ wegank ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ wegank ];
   };
 }

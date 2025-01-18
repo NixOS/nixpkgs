@@ -48,12 +48,12 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/lxqt/obconf-qt";
     description = "Qt port of obconf, the Openbox configuration tool";
     mainProgram = "obconf-qt";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.unix;
-    maintainers = lib.teams.lxqt.members;
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+    maintainers = teams.lxqt.members;
   };
 }

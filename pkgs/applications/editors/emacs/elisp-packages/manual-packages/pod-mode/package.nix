@@ -26,10 +26,10 @@ melpaBuild {
     install -Dm644 -t ''${!outputDoc}/share/doc/pod-mode/ ChangeLog README
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://metacpan.org/dist/pod-mode";
     description = "Major mode for editing .pod-files";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ qyliss ];
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ qyliss ];
   };
 }

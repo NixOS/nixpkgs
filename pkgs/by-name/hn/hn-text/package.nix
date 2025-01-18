@@ -25,11 +25,11 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Fast, easy-to-use and distraction-free Hacker News terminal client";
     homepage = "https://github.com/piqoni/hn-text";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "hn-text";
-    maintainers = with lib.maintainers; [ Guanran928 ];
+    maintainers = with maintainers; [ Guanran928 ];
   };
 }

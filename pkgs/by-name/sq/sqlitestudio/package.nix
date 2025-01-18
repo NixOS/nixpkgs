@@ -64,12 +64,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     description = "Free, open source, multi-platform SQLite database manager";
     homepage = "https://sqlitestudio.pl/";
-    license = lib.licenses.gpl3;
+    license = licenses.gpl3;
     mainProgram = "sqlitestudio";
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ asterismono ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ asterismono ];
   };
 }

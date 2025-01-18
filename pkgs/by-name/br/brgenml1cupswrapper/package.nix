@@ -132,11 +132,11 @@ stdenv.mkDerivation rec {
   dontPatchELF = true;
   dontStrip = true;
 
-  meta = {
+  meta = with lib; {
     description = "Brother BrGenML1 CUPS wrapper driver";
     homepage = "http://www.brother.com";
-    platforms = lib.platforms.linux;
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ jraygauthier ];
+    platforms = platforms.linux;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ jraygauthier ];
   };
 }

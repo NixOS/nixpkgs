@@ -45,11 +45,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Clash.Meta Dashboard, The Official One, XD";
     homepage = "https://github.com/MetaCubeX/metacubexd";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ Guanran928 ];
+    license = licenses.mit;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ Guanran928 ];
   };
 })

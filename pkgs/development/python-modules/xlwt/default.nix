@@ -28,14 +28,14 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "xlwt" ];
 
-  meta = {
+  meta = with lib; {
     description = "Library to create spreadsheet files compatible with MS";
     homepage = "https://github.com/python-excel/xlwt";
-    license = with lib.licenses; [
+    license = with licenses; [
       bsdOriginal
       bsd3
       lgpl21Plus
     ];
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = with maintainers; [ pyrox0 ];
   };
 }

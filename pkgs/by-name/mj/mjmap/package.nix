@@ -30,13 +30,13 @@ buildGoModule {
     tagPrefix = "v.";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Sendmail‐compatible JMAP client";
     homepage = "https://git.sr.ht/~rockorager/mjmap";
-    license = lib.licenses.mpl20;
-    sourceProvenance = [ lib.sourceTypes.fromSource ];
-    maintainers = [ lib.maintainers.emily ];
+    license = licenses.mpl20;
+    sourceProvenance = [ sourceTypes.fromSource ];
+    maintainers = [ maintainers.emily ];
     mainProgram = "mjmap";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }

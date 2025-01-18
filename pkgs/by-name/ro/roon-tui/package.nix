@@ -22,11 +22,11 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Roon Remote for the terminal";
     homepage = "https://github.com/TheAppgineer/roon-tui";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ MichaelCDormann ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ MichaelCDormann ];
     mainProgram = "roon-tui";
   };
 }

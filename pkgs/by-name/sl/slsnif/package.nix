@@ -13,11 +13,11 @@ stdenv.mkDerivation rec {
     sha256 = "0gn8c5hj8m3sywpwdgn6w5xl4rzsvg0z7d2w8dxi6p152j5b0pii";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Serial line sniffer";
     homepage = "http://slsnif.sourceforge.net/";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
     mainProgram = "slsnif";
   };
 }

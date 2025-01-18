@@ -24,12 +24,12 @@ stdenv.mkDerivation rec {
     getopt
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://xalan.apache.org/";
     description = "XSLT processor for transforming XML documents";
     mainProgram = "Xalan";
-    license = lib.licenses.asl20;
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    maintainers = [ lib.maintainers.jagajaga ];
+    license = licenses.asl20;
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = [ maintainers.jagajaga ];
   };
 }

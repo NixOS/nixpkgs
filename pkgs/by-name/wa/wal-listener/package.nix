@@ -20,10 +20,10 @@ buildGoModule rec {
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
-  meta = {
+  meta = with lib; {
     description = "PostgreSQL WAL listener";
     homepage = "https://github.com/ihippik/wal-listener";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ bbigras ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ bbigras ];
   };
 }

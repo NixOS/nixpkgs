@@ -109,12 +109,12 @@ flutter327.buildFlutterApplication rec {
 
   passthru.updateScript = ./update.sh;
 
-  meta = {
+  meta = with lib; {
     description = "Watch Animes online with danmaku support";
     homepage = "https://github.com/Predidit/Kazumi";
     mainProgram = "kazumi";
-    license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ aucub ];
-    platforms = lib.platforms.linux;
+    license = with licenses; [ gpl3Plus ];
+    maintainers = with maintainers; [ aucub ];
+    platforms = platforms.linux;
   };
 }

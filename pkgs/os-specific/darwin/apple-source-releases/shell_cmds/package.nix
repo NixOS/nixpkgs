@@ -62,11 +62,11 @@ mkAppleDerivation {
     HOST_PATH="$out/bin" patchShebangs --host "$out/bin" "$out/libexec"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Darwin shell commands and the Almquist shell";
     license = [
-      lib.licenses.bsd2
-      lib.licenses.bsd3
+      licenses.bsd2
+      licenses.bsd3
     ];
   };
 }

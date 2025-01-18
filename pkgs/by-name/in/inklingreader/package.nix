@@ -30,12 +30,12 @@ stdenv.mkDerivation rec {
     libusb1
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/roelj/inklingreader";
     description = "GNU/Linux-friendly version of the Wacom Inkling SketchManager";
-    license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ totoroot ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ totoroot ];
+    platforms = platforms.linux;
     mainProgram = "inklingreader";
   };
 }

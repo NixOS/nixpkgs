@@ -32,11 +32,11 @@ stdenv.mkDerivation {
     wrapProgram $out/bin/hexgui --prefix PATH : ${lib.makeBinPath [ jdk ]}
   '';
 
-  meta = {
+  meta = with lib; {
     description = "GUI for the board game Hex";
     mainProgram = "hexgui";
     homepage = "https://github.com/selinger/hexgui";
-    license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.ursi ];
+    license = licenses.gpl3;
+    maintainers = [ maintainers.ursi ];
   };
 }

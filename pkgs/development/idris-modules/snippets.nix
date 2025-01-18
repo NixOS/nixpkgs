@@ -18,10 +18,10 @@ build-idris-package {
     sha256 = "1vwyzck6yan3wifsyj02ji9l6x9rs2r02aybm90gl676s2x4mhjn";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Collection of Idris snippets";
     homepage = "https://github.com/palladin/idris-snippets";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.brainrape ];
+    license = licenses.mit;
+    maintainers = [ maintainers.brainrape ];
   };
 }

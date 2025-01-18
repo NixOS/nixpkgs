@@ -32,11 +32,11 @@ else
 
     createFindlibDestdir = true;
 
-    meta = {
+    meta = with lib; {
       homepage = "https://github.com/hannesm/xml";
       description = "XML Parser for discrete data";
       platforms = ocaml.meta.platforms or [ ];
-      license = lib.licenses.bsd3;
-      maintainers = with lib.maintainers; [ vbgl ];
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ vbgl ];
     };
   }

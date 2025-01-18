@@ -40,11 +40,11 @@ stdenv.mkDerivation (finalAttrs: {
     package = finalAttrs.finalPackage;
   };
 
-  meta = {
+  meta = with lib; {
     description = "C++ library for Limited Error Raster Compression";
     homepage = "https://github.com/esri/lerc";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ dotlambda ];
     pkgConfigModules = [ "Lerc" ];
   };
 })

@@ -246,15 +246,15 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (nixosTests) openvscode-server;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Run VS Code on a remote machine";
     longDescription = ''
       Run upstream VS Code on a remote machine with access through a modern web
       browser from any device, anywhere.
     '';
     homepage = "https://github.com/gitpod-io/openvscode-server";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       dguenther
       ghuntley
       emilytrau

@@ -155,11 +155,11 @@ stdenvNoCC.mkDerivation rec {
       >> $sddm/nix-support/propagated-user-env-packages
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Gtk and KDE themes using the Nord color pallete";
     homepage = "https://github.com/EliverLara/Nordic";
-    license = lib.licenses.gpl3Only;
-    platforms = lib.platforms.all;
-    maintainers = [ lib.maintainers.romildo ];
+    license = licenses.gpl3Only;
+    platforms = platforms.all;
+    maintainers = [ maintainers.romildo ];
   };
 }

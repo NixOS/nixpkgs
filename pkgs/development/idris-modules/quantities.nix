@@ -14,10 +14,10 @@ build-idris-package {
     sha256 = "0fv12kdi9089b4kkr6inhqvs2s8x62nv5vqj76wzk8hy0lrzylzj";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Type-safe physical computations and unit conversions in Idris";
     homepage = "https://github.com/timjb/quantities";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ imuli ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ imuli ];
   };
 }

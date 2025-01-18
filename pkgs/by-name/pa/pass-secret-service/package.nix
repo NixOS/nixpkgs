@@ -67,12 +67,12 @@ python3.pkgs.buildPythonApplication rec {
 
   passthru.tests.pass-secret-service = nixosTests.pass-secret-service;
 
-  meta = {
+  meta = with lib; {
     description = "Libsecret D-Bus API with pass as the backend";
     homepage = "https://github.com/mdellweg/pass_secret_service/";
-    license = lib.licenses.gpl3Only;
-    platforms = lib.platforms.all;
+    license = licenses.gpl3Only;
+    platforms = platforms.all;
     mainProgram = "pass_secret_service";
-    maintainers = with lib.maintainers; [ jluttine ];
+    maintainers = with maintainers; [ jluttine ];
   };
 }

@@ -27,10 +27,10 @@ buildPythonPackage rec {
   # upstream has no tests
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Async single threaded connector to Splunk HEC using an asyncio session";
     homepage = "https://github.com/Bre77/hass_splunk";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

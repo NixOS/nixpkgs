@@ -25,12 +25,12 @@ stdenv.mkDerivation {
 
   preInstall = "mkdir -p $out/{bin,share/man/man1}";
 
-  meta = {
+  meta = with lib; {
     description = "Nano like text editor built with pure C";
     homepage = "https://github.com/proh14/ptext";
-    license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ sigmanificient ];
-    platforms = lib.platforms.linux;
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ sigmanificient ];
+    platforms = platforms.linux;
     mainProgram = "ptext";
   };
 }

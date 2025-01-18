@@ -42,10 +42,10 @@ buildPythonPackage rec {
     pytest pytest_cram/ --ignore=pytest_cram/tests/test_examples.py
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Test command-line applications with pytest and cram";
     homepage = "https://github.com/tbekolay/pytest-cram";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ jluttine ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ jluttine ];
   };
 }

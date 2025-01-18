@@ -20,11 +20,11 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ perl ];
 
-  meta = {
+  meta = with lib; {
     description = "TUI and CLI to manage your Servarrs";
     homepage = "https://github.com/Dark-Alex-17/managarr";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.IncredibleLaser ];
+    license = licenses.mit;
+    maintainers = [ maintainers.IncredibleLaser ];
     mainProgram = "managarr";
   };
 }

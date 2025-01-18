@@ -27,11 +27,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  meta = {
+  meta = with lib; {
     description = "Userspace tool to configure linux bridges (deprecated in favour or iproute2)";
     mainProgram = "brctl";
     homepage = "https://wiki.linuxfoundation.org/networking/bridge";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
   };
 }

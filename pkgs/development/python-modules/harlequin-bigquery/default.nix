@@ -34,10 +34,10 @@ buildPythonPackage rec {
     "harlequin"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "A Harlequin adapter for Google BigQuery";
     homepage = "https://pypi.org/project/harlequin-bigquery/";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pcboy ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ pcboy ];
   };
 }

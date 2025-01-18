@@ -24,11 +24,11 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/kaBeech/serious-sans";
     description = "Legible monospace font for playful professionals";
-    license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ CobaltCause ];
-    platforms = lib.platforms.all;
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ CobaltCause ];
+    platforms = platforms.all;
   };
 }

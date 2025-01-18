@@ -34,12 +34,12 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Transfer files over multiple SSH (SFTP) connections";
     homepage = "https://github.com/upa/mscp";
     mainProgram = "mscp";
-    license = lib.licenses.gpl3Only;
-    maintainers = lib.teams.deshaw.members;
-    platforms = lib.platforms.unix;
+    license = licenses.gpl3Only;
+    maintainers = teams.deshaw.members;
+    platforms = platforms.unix;
   };
 })

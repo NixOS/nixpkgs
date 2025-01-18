@@ -17,11 +17,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-Il/jwaQ4nu93R1fC3r6haSSF5ATSrgkv4uZmAA/RZBI=";
 
-  meta = {
+  meta = with lib; {
     description = "Cross-platform, user-space WireGuard port-forwarder that requires no root-access or system network configurations";
     homepage = "https://github.com/aramperes/onetun";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ dit7ya ];
     mainProgram = "onetun";
   };
 }

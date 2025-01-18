@@ -29,10 +29,10 @@ buildNpmPackage rec {
 
   dontNpmBuild = true;
 
-  meta = {
+  meta = with lib; {
     description = "CLI tools for mathjax-node";
     homepage = "https://github.com/mathjax/mathjax-node-cli";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ colinsane ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ colinsane ];
   };
 }

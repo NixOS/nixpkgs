@@ -16,11 +16,11 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-sblSlmXkiJkVGbrMU6HgtvYnAd48SlUOgDwB6ASMFsQ=";
 
-  meta = {
+  meta = with lib; {
     description = "Generate random usernames quickly and in various formats";
     homepage = "https://majima.matte.fyi/";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.ufUNnxagpM ];
+    license = licenses.mit;
+    maintainers = [ maintainers.ufUNnxagpM ];
     mainProgram = "majima";
   };
 }

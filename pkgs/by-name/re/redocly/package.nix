@@ -46,12 +46,12 @@ buildNpmPackage rec {
     };
   };
 
-  meta = {
+  meta = with lib; {
     changelog = "https://redocly.com/docs/cli/changelog/";
     description = "Makes OpenAPI easy. Lint/validate to any standard, generate beautiful docs, and more";
     homepage = "https://github.com/Redocly/redocly-cli";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "redocly";
-    maintainers = with lib.maintainers; [ szlend ];
+    maintainers = with maintainers; [ szlend ];
   };
 }

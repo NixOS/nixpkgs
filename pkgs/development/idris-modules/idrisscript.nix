@@ -14,10 +14,10 @@ build-idris-package {
     sha256 = "074ignh2hqwq4ng5nk7dswga4lm7342w7h4bmx4n03ygrn7w89ff";
   };
 
-  meta = {
+  meta = with lib; {
     description = "FFI Bindings to interact with the unsafe world of JavaScript";
     homepage = "https://github.com/idris-hackers/IdrisScript";
-    license = lib.licenses.bsd2;
-    maintainers = [ lib.maintainers.brainrape ];
+    license = licenses.bsd2;
+    maintainers = [ maintainers.brainrape ];
   };
 }

@@ -22,13 +22,13 @@ stdenv.mkDerivation rec {
     install -Dt $out/bin rasm
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "http://rasm.wikidot.com/english-index:home";
     description = "Z80 assembler";
     mainProgram = "rasm";
     # use -n option to display all licenses
-    license = lib.licenses.mit; # expat version
-    maintainers = with lib.maintainers; [ sigmanificient ];
-    platforms = lib.platforms.all;
+    license = licenses.mit; # expat version
+    maintainers = with maintainers; [ sigmanificient ];
+    platforms = platforms.all;
   };
 }

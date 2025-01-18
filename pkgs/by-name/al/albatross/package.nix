@@ -22,10 +22,10 @@ stdenv.mkDerivation rec {
     cp -dr --no-preserve='ownership' {LICENSE.GPL,README,index.theme,gtk-2.0,gtk-3.0,metacity-1,xfwm4} $out/share/themes/Albatross/
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Desktop Suite for Xfce";
     homepage = "https://github.com/shimmerproject/Albatross";
-    license = lib.licenses.gpl2;
-    platforms = lib.platforms.unix;
+    license = licenses.gpl2;
+    platforms = platforms.unix;
   };
 }

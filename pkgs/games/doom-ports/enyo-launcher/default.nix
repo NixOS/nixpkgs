@@ -21,12 +21,12 @@ mkDerivation rec {
 
   buildInputs = [ qtbase ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://gitlab.com/sdcofer70/enyo-launcher";
     description = "Frontend for Doom engines";
     mainProgram = "enyo-launcher";
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.usrfriendly ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.usrfriendly ];
   };
 }

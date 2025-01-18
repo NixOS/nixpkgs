@@ -40,12 +40,12 @@ rustPlatform.buildRustPackage {
     install -Dm444 src/daemon/hayabusa.service -t $out/lib/systemd/system/
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Swift rust fetch program";
     homepage = "https://github.com/notarin/hayabusa";
-    license = lib.licenses.cc-by-nc-nd-40;
-    maintainers = with lib.maintainers; [ ];
+    license = licenses.cc-by-nc-nd-40;
+    maintainers = with maintainers; [ ];
     mainProgram = "hayabusa";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

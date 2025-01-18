@@ -43,11 +43,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/libsdl-org/SDL_net";
     description = "SDL multiplatform networking library";
-    license = lib.licenses.zlib;
-    maintainers = lib.teams.sdl.members ++ (with lib.maintainers; [ ]);
+    license = licenses.zlib;
+    maintainers = teams.sdl.members ++ (with maintainers; [ ]);
     inherit (SDL2.meta) platforms;
   };
 })

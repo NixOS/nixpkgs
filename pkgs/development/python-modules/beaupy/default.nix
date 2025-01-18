@@ -47,10 +47,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  meta = {
+  meta = with lib; {
     description = "A Python library of interactive CLI elements you have been looking for";
     homepage = "https://github.com/petereon/beaupy";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ doronbehar ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ doronbehar ];
   };
 }

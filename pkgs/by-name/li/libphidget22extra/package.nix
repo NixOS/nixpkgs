@@ -29,11 +29,11 @@ stdenv.mkDerivation {
 
   strictDeps = true;
 
-  meta = {
+  meta = with lib; {
     description = "Phidget Inc sensor boards and electronics extras library";
     homepage = "https://www.phidgets.com/docs/OS_-_Linux";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ mksafavi ];
-    platforms = lib.platforms.linux;
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ mksafavi ];
+    platforms = platforms.linux;
   };
 }

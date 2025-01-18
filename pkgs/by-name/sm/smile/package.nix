@@ -58,14 +58,14 @@ python3.pkgs.buildPythonApplication rec {
     )
   '';
 
-  meta = {
+  meta = with lib; {
     changelog = "https://smile.mijorus.it/changelog";
     description = "Emoji picker for linux, with custom tags support and localization";
     downloadPage = "https://github.com/mijorus/smile";
     homepage = "https://mijorus.it/projects/smile/";
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     mainProgram = "smile";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       koppor
       aleksana
     ];

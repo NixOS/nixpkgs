@@ -32,10 +32,10 @@ mkDerivation rec {
     qtbase
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Qt and QML MPRIS interface and adaptor";
     homepage = "https://github.com/sailfishos/qtmpris";
-    license = lib.licenses.lgpl21Plus;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

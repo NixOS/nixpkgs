@@ -202,18 +202,18 @@ python3Packages.buildPythonApplication {
             ${beets}/bin/beet -c $out/config.yaml > /dev/null
       '';
 
-  meta = {
+  meta = with lib; {
     description = "Music tagger and library organizer";
     homepage = "https://beets.io";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       aszlig
       doronbehar
       lovesegfault
       montchr
       pjones
     ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    platforms = platforms.linux ++ platforms.darwin;
     mainProgram = "beet";
   };
 }

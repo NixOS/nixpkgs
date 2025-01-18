@@ -53,13 +53,13 @@ stdenv.mkDerivation rec {
       --prefix PATH : ${lib.makeBinPath [ zenity ]}
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://gopeed.com";
     description = "Modern download manager that supports all platforms. Built with Golang and Flutter";
     mainProgram = "gopeed";
     platforms = [ "x86_64-linux" ];
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ aucub ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = with licenses; [ gpl3Plus ];
+    maintainers = with maintainers; [ aucub ];
   };
 }

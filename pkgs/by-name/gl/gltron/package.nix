@@ -57,12 +57,12 @@ stdenv.mkDerivation rec {
   strictDeps = true;
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "http://www.gltron.org/";
     description = "Game based on the movie Tron";
     mainProgram = "gltron";
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = with lib.platforms; linux;
+    platforms = with platforms; linux;
   };
 }

@@ -32,11 +32,11 @@ stdenv.mkDerivation {
 
   cmakeFlags = [ "-DCMAKE_INSTALL_LIBDIR=lib" ];
 
-  meta = {
+  meta = with lib; {
     description = "SDL Emulation and Adaptation Layer for Curses (ncursesw)";
     homepage = "https://git.skyjake.fi/skyjake/sealcurses";
-    license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ sikmir ];
-    platforms = lib.platforms.unix;
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ sikmir ];
+    platforms = platforms.unix;
   };
 }

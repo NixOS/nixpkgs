@@ -58,10 +58,10 @@ stdenv.mkDerivation rec {
     moveToOutput bin "$bin"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Provides functionality for gaming input devices";
     homepage = "https://sourceforge.net/projects/libgaminggear/";
-    platforms = lib.platforms.linux;
-    license = lib.licenses.gpl2Plus;
+    platforms = platforms.linux;
+    license = licenses.gpl2Plus;
   };
 }

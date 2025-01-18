@@ -26,11 +26,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://e2tools.github.io/";
     description = "Utilities to read/write/manipulate files in an ext2/ext3 filesystem";
-    license = lib.licenses.gpl2Only;
-    platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.leenaars ];
+    license = licenses.gpl2Only;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.leenaars ];
   };
 }

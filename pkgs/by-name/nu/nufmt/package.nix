@@ -24,11 +24,11 @@ rustPlatform.buildRustPackage {
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
-  meta = {
+  meta = with lib; {
     description = "Nushell formatter";
     homepage = "https://github.com/nushell/nufmt";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       iogamaster
       khaneliman
     ];

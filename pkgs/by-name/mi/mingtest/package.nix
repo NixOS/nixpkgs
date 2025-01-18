@@ -23,12 +23,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  meta = {
+  meta = with lib; {
     description = "Minimalistic C++ unit test framework";
     homepage = "https://github.com/craflin/mingtest";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ lutzberger ];
-    platforms = lib.platforms.linux;
+    license = licenses.mit;
+    maintainers = with maintainers; [ lutzberger ];
+    platforms = platforms.linux;
   };
 
 }

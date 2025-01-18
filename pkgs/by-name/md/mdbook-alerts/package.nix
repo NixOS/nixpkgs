@@ -17,12 +17,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-twAIr1GVkvo4ZC7iwgKY4L1CklGVvGqd/eQf8toncDE=";
 
-  meta = {
+  meta = with lib; {
     description = "Preprocessor for mdbook to support the inclusion of Markdown alerts";
     mainProgram = "mdbook-alerts";
     homepage = "https://github.com/lambdalisue/rs-mdbook-alerts";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       brianmcgillion
       matthiasbeyer
     ];

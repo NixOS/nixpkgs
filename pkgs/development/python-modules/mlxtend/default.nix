@@ -62,11 +62,11 @@ buildPythonPackage rec {
     "mlxtend/evaluate/tests/test_bootstrap_point632.py" # keras.api._v2
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Library of Python tools and extensions for data science";
     homepage = "https://github.com/rasbt/mlxtend";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ evax ];
-    platforms = lib.platforms.unix;
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ evax ];
+    platforms = platforms.unix;
   };
 }

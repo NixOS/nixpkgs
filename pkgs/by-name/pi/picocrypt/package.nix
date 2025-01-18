@@ -66,12 +66,12 @@ buildGoModule rec {
     })
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Very small, very simple, yet very secure encryption tool, written in Go";
     homepage = "https://github.com/Picocrypt/Picocrypt";
     changelog = "https://github.com/Picocrypt/Picocrypt/blob/main/Changelog.md";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ ryand56 ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ ryand56 ];
     mainProgram = "picocrypt-gui";
   };
 }

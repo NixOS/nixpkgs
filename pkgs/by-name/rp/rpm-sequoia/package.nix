@@ -69,10 +69,10 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "An OpenPGP backend for rpm using Sequoia PGP";
     homepage = "https://sequoia-pgp.org/";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ baloo ];
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ baloo ];
   };
 }

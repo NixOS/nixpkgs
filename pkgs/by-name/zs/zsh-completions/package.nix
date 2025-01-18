@@ -23,17 +23,17 @@ stdenv.mkDerivation rec {
     rm $out/share/zsh/site-functions/_tmuxp
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Additional completion definitions for zsh";
     homepage = "https://github.com/zsh-users/zsh-completions";
-    license = with lib.licenses; [
+    license = with licenses; [
       asl20
       bsd3
       isc
       mit
       mit-modern
     ];
-    platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.olejorgenb ];
+    platforms = platforms.unix;
+    maintainers = [ maintainers.olejorgenb ];
   };
 }

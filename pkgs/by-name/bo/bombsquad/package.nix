@@ -107,19 +107,19 @@ stdenv.mkDerivation (finalAttrs: {
     });
   };
 
-  meta = {
+  meta = with lib; {
     description = "Free, multiplayer, arcade-style game for up to eight players that combines elements of fighting games and first-person shooters (FPS)";
     homepage = "https://ballistica.net";
     changelog = "https://ballistica.net/downloads?display=changelog";
-    license = with lib.licenses; [
+    license = with licenses; [
       mit
       unfree
     ];
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       syedahkam
       coffeeispower
     ];
     mainProgram = "bombsquad";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 })

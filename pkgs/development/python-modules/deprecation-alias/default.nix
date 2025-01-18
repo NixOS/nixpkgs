@@ -28,10 +28,10 @@ buildPythonPackage rec {
       --replace-fail '"setuptools!=61.*,<=67.1.0,>=40.6.0"' '"setuptools"'
   '';
 
-  meta = {
+  meta = with lib; {
     description = "A wrapper around ‘deprecation’ providing support for deprecated aliases.";
     homepage = "https://github.com/domdfcoding/deprecation-alias";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ tyberius-prime ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ tyberius-prime ];
   };
 }

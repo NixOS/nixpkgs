@@ -44,11 +44,11 @@ else
       cp -L interpreter/wasm $out/bin
     '';
 
-    meta = {
+    meta = with lib; {
       description = "Executable and OCaml library to run, read and write Web Assembly (wasm) files and manipulate their AST";
       mainProgram = "wasm";
-      license = lib.licenses.asl20;
-      maintainers = [ lib.maintainers.vbgl ];
+      license = licenses.asl20;
+      maintainers = [ maintainers.vbgl ];
       homepage = "https://github.com/WebAssembly/spec/tree/master/interpreter";
       inherit (ocaml.meta) platforms;
     };

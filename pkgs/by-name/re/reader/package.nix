@@ -17,12 +17,12 @@ let
 
     vendorHash = "sha256-obYdifg3WrTyxgN/VtzgpL31ZOyPNtVT8UDQts0WodQ=";
 
-    meta = {
+    meta = with lib; {
       description = "Lightweight tool offering better readability of web pages on the CLI";
       homepage = "https://github.com/mrusme/reader";
       changelog = "https://github.com/mrusme/reader/releases";
-      license = lib.licenses.gpl3Plus;
-      maintainers = with lib.maintainers; [ theobori ];
+      license = licenses.gpl3Plus;
+      maintainers = with maintainers; [ theobori ];
       mainProgram = "reader";
     };
   };

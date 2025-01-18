@@ -93,11 +93,11 @@ stdenv.mkDerivation rec {
 
   passthru.tests = nixosTests.firejail;
 
-  meta = {
+  meta = with lib; {
     description = "Namespace-based sandboxing tool for Linux";
-    license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.raskin ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.linux;
     homepage = "https://firejail.wordpress.com/";
   };
 }

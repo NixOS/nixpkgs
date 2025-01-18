@@ -19,12 +19,12 @@ buildGoModule rec {
 
   subPackages = [ "cmd/sloth" ];
 
-  meta = {
+  meta = with lib; {
     description = "Easy and simple Prometheus SLO (service level objectives) generator";
     homepage = "https://sloth.dev/";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ nrhtr ];
-    platforms = lib.platforms.unix;
+    license = licenses.asl20;
+    maintainers = with maintainers; [ nrhtr ];
+    platforms = platforms.unix;
     mainProgram = "sloth";
   };
 }

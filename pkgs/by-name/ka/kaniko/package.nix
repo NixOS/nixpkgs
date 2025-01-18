@@ -44,12 +44,12 @@ buildGoModule rec {
     command = "${kaniko}/bin/executor version";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Tool to build container images from a Dockerfile, inside a container or Kubernetes cluster";
     homepage = "https://github.com/GoogleContainerTools/kaniko";
-    license = lib.licenses.asl20;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [
+    license = licenses.asl20;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
       jk
       qjoly
     ];

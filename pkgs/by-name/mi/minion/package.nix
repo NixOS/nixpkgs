@@ -64,13 +64,13 @@ stdenvNoCC.mkDerivation rec {
     })
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Addon manager for World of Warcraft and The Elder Scrolls Online";
     homepage = "https://minion.mmoui.com/";
-    license = lib.licenses.unfree;
-    platforms = lib.platforms.linux;
+    license = licenses.unfree;
+    platforms = platforms.linux;
     mainProgram = "minion";
-    maintainers = with lib.maintainers; [ patrickdag ];
-    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    maintainers = with maintainers; [ patrickdag ];
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
   };
 }

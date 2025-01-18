@@ -95,13 +95,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     (lib.getLib systemd)
   ];
 
-  meta = {
+  meta = with lib; {
     description = "GUI for managing Git and GitHub";
     homepage = "https://desktop.github.com/";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "github-desktop";
-    maintainers = with lib.maintainers; [ dan4ik605743 ];
-    platforms = lib.platforms.linux;
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    maintainers = with maintainers; [ dan4ik605743 ];
+    platforms = platforms.linux;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 })

@@ -28,12 +28,12 @@ stdenv.mkDerivation {
     package/export $out/
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/jdebp/redo";
     description = "System for building target files from source files";
-    license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ momeemt ];
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ momeemt ];
     mainProgram = "redo";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }

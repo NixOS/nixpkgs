@@ -100,12 +100,12 @@ stdenv.mkDerivation (finalAttrs: {
     tests.static = pkgsStatic.rc;
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/rakitzis/rc";
     description = "Plan 9 shell";
-    license = [ lib.licenses.zlib ];
+    license = [ licenses.zlib ];
     mainProgram = "rc";
-    maintainers = with lib.maintainers; [ ramkromberg ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ ramkromberg ];
+    platforms = platforms.unix;
   };
 })

@@ -28,15 +28,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru.updateScript = ./update/update.mjs;
 
-  meta = {
+  meta = with lib; {
     description = "App to write, plan, collaborate, and get organised";
     homepage = "https://www.notion.so/";
-    license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ xiaoxiangmoe ];
+    license = licenses.unfree;
+    maintainers = with maintainers; [ xiaoxiangmoe ];
     platforms = [
       "x86_64-darwin"
       "aarch64-darwin"
     ];
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 })

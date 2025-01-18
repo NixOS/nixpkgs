@@ -28,12 +28,12 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Aesthetic, modern fcitx5 theme featuring rounded rectangle design";
     homepage = "https://github.com/sanweiya/fcitx5-mellow-themes";
-    license = lib.licenses.bsd2;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [
+    license = licenses.bsd2;
+    platforms = platforms.all;
+    maintainers = with maintainers; [
       Guanran928
       zendo
     ];

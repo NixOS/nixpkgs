@@ -33,17 +33,17 @@ stdenv.mkDerivation {
     sha256 = "05d6l2a5m9jf32a8kahwg2p2ph4x9rjf1nsl83331q3gwn5bkmr0";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Standard ML compiler and interpreter";
     longDescription = ''
       Poly/ML is a full implementation of Standard ML.
     '';
     homepage = "https://www.polyml.org/";
-    license = lib.licenses.lgpl21;
-    platforms = with lib.platforms; linux;
+    license = licenses.lgpl21;
+    platforms = with platforms; linux;
     maintainers = [
       # Add your name here!
-      lib.maintainers.maggesi
+      maintainers.maggesi
     ];
   };
 }

@@ -118,12 +118,12 @@ stdenv.mkDerivation (finalAttrs: {
       )
     '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://gtoolkit.com";
     description = "GlamorousToolkit Development Environment";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.akgrant43 ];
+    license = licenses.mit;
+    maintainers = [ maintainers.akgrant43 ];
     platforms = [ "x86_64-linux" ];
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 })

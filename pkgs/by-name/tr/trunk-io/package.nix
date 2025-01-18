@@ -23,11 +23,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = ./update.sh;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://trunk.io/";
     description = "Developer experience toolkit used to check, test, merge, and monitor code";
-    license = lib.licenses.unfree;
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    maintainers = with lib.maintainers; [ aaronjheng ];
+    license = licenses.unfree;
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ aaronjheng ];
   };
 })

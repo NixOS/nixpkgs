@@ -24,10 +24,10 @@ buildDunePackage rec {
     stdlib-shims
   ];
 
-  meta = {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Fuzzy string searching, using Levenshtein automaton";
-    license = lib.licenses.bsd2;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.bsd2;
+    maintainers = [ maintainers.vbgl ];
   };
 }

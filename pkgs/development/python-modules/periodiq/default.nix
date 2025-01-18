@@ -51,11 +51,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "periodiq" ];
 
-  meta = {
+  meta = with lib; {
     description = "Simple Scheduler for Dramatiq Task Queue";
     mainProgram = "periodiq";
     homepage = "https://pypi.org/project/periodiq/";
-    license = lib.licenses.lgpl3Only;
-    maintainers = with lib.maintainers; [ traxys ];
+    license = licenses.lgpl3Only;
+    maintainers = with maintainers; [ traxys ];
   };
 }

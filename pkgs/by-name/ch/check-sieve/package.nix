@@ -52,13 +52,13 @@ stdenv.mkDerivation rec {
     extraArgs = [ "--version-regex=check-sieve-(.*)" ];
   };
 
-  meta = {
+  meta = with lib; {
     description = "Syntax checker for mail sieves";
     mainProgram = "check-sieve";
     homepage = "https://github.com/dburkart/check-sieve";
     changelog = "https://github.com/dburkart/check-sieve/blob/master/ChangeLog";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ eilvelia ];
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ eilvelia ];
   };
 }

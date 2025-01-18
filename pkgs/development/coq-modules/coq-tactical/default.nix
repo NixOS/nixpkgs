@@ -31,9 +31,9 @@ mkCoqDerivation {
     cp -pR src/* $COQLIB/user-contrib/Tactical
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Library of Coq proof automation";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ stepbrobd ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ stepbrobd ];
   };
 }

@@ -93,11 +93,11 @@ stdenv.mkDerivation rec {
     cp dist/debian/seamly2d.sharedmimeinfo $out/share/mime/packages/seamly2d.xml
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Open source patternmaking software";
     homepage = "https://seamly.net/";
-    license = lib.licenses.gpl3;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ WhittlesJr ];
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ WhittlesJr ];
   };
 }

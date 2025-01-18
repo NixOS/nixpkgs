@@ -28,12 +28,12 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [ libseccomp ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/kwohlfahrt/unstick";
     description = "Silently eats chmod commands forbidden by Nix";
     mainProgram = "unstick";
-    license = lib.licenses.gpl3;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ kwohlfahrt ];
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ kwohlfahrt ];
   };
 }

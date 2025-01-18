@@ -30,11 +30,11 @@ buildGoModule rec {
     cp -r injectedCode views $out/share/${pname}
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Remote debugger for iOS Safari";
     homepage = "https://git.gay/besties/ios-safari-remote-debug";
-    license = lib.licenses.agpl3Plus;
+    license = licenses.agpl3Plus;
     mainProgram = "ios-safari-remote-debug";
-    maintainers = with lib.maintainers; [ paveloom ];
+    maintainers = with maintainers; [ paveloom ];
   };
 }

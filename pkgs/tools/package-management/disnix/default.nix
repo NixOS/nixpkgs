@@ -43,13 +43,13 @@ stdenv.mkDerivation rec {
     dysnomia
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Nix-based distributed service deployment tool";
-    license = lib.licenses.lgpl21Plus;
-    maintainers = with lib.maintainers; [
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [
       sander
       tomberek
     ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }

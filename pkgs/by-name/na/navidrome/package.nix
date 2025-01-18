@@ -83,13 +83,13 @@ buildGo123Module rec {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Navidrome Music Server and Streamer compatible with Subsonic/Airsonic";
     mainProgram = "navidrome";
     homepage = "https://www.navidrome.org/";
-    license = lib.licenses.gpl3Only;
-    sourceProvenance = with lib.sourceTypes; [ fromSource ];
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl3Only;
+    sourceProvenance = with sourceTypes; [ fromSource ];
+    maintainers = with maintainers; [
       aciceri
       squalus
     ];

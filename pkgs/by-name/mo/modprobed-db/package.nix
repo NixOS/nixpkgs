@@ -47,12 +47,12 @@ stdenv.mkDerivation {
     installShellCompletion --zsh common/zsh-completion
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/graysky2/modprobed-db";
     description = "Useful utility for users wishing to build a minimal kernel via a make localmodconfig";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ NotAShelf ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ NotAShelf ];
     mainProgram = "modprobed-db";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

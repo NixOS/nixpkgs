@@ -50,12 +50,12 @@ flutter327.buildFlutterApplication rec {
     patchelf --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE" $out/app/saber/lib/lib*.so
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Cross-platform open-source app built for handwriting";
     homepage = "https://github.com/saber-notes/saber";
     mainProgram = "saber";
-    license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ aucub ];
+    license = with licenses; [ gpl3Plus ];
+    maintainers = with maintainers; [ aucub ];
     platforms = [
       "aarch64-linux"
       "x86_64-linux"

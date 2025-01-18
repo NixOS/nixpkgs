@@ -25,11 +25,11 @@ buildPythonPackage rec {
     tests.version = testers.testVersion { package = zpp; };
   };
 
-  meta = {
+  meta = with lib; {
     description = "The 'Z' pre-processor, the last preprocessor you'll ever need";
     homepage = "https://github.com/jbigot/zpp";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "zpp";
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    maintainers = with maintainers; [ GaetanLepage ];
   };
 }

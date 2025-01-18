@@ -25,10 +25,10 @@ buildDunePackage rec {
     ppx_deriving
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Simple event library";
     homepage = "https://github.com/gares/sel/";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.mit;
+    maintainers = [ maintainers.vbgl ];
   };
 }

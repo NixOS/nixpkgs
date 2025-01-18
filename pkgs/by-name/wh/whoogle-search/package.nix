@@ -67,11 +67,11 @@ python3Packages.buildPythonApplication rec {
     inherit (nixosTests) whoogle-search;
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/benbusby/whoogle-search";
     description = "A self-hosted, ad-free, privacy-respecting metasearch engine";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ malte-v ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ malte-v ];
     mainProgram = "whoogle-search";
   };
 }

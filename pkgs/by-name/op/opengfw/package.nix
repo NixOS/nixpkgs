@@ -19,7 +19,7 @@ buildGoModule {
     hash = "sha256-6PFfsPfLzzeaImcteX9u/k5pwe3cvSQwT90TCizA3gI=";
   };
 
-  meta = {
+  meta = with lib; {
     mainProgram = "OpenGFW";
     description = "Flexible, easy-to-use, open source implementation of GFW on Linux";
     longDescription = ''
@@ -30,8 +30,8 @@ buildGoModule {
       and start filtering like a pro - you too can play Big Brother.
     '';
     homepage = "https://gfw.dev/";
-    license = lib.licenses.mpl20;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ eum3l ];
+    license = licenses.mpl20;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ eum3l ];
   };
 }

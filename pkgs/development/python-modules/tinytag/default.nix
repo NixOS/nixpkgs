@@ -28,10 +28,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = {
+  meta = with lib; {
     description = "Read audio file metadata";
     homepage = "https://github.com/tinytag/tinytag";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ sigmanificient ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ sigmanificient ];
   };
 }

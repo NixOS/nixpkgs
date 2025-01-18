@@ -58,10 +58,10 @@ rustPlatform.buildRustPackage rec {
   # requires a complex setup with podman for the end-to-end tests
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "LibSQL with extended capabilities like HTTP protocol, replication, and more";
     homepage = "https://github.com/tursodatabase/libsql";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ dit7ya ];
   };
 }

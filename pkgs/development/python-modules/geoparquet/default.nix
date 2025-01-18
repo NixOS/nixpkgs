@@ -38,10 +38,10 @@ buildPythonPackage {
 
   doCheck = false; # no tests
 
-  meta = {
+  meta = with lib; {
     description = "API between Parquet files and GeoDataFrames for fast input/output of GIS data";
     homepage = "https://github.com/darcy-r/geoparquet-python";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ sigmanificient ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ sigmanificient ];
   };
 }

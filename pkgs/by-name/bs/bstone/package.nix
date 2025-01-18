@@ -32,16 +32,16 @@ stdenv.mkDerivation (finalAttrs: {
     mv $out/bstone* $out/bin
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Unofficial source port for the Blake Stone series";
     homepage = "https://github.com/bibendovsky/bstone";
     changelog = "https://github.com/bibendovsky/bstone/blob/${finalAttrs.src.rev}/CHANGELOG.md";
-    license = with lib.licenses; [
+    license = with licenses; [
       gpl2Plus # Original game source code
       mit # BStone
     ];
-    maintainers = with lib.maintainers; [ keenanweaver ];
+    maintainers = with maintainers; [ keenanweaver ];
     mainProgram = "bstone";
-    platforms = lib.platforms.linux; # TODO: macOS / Darwin support
+    platforms = platforms.linux; # TODO: macOS / Darwin support
   };
 })

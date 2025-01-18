@@ -43,10 +43,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "weheat" ];
 
-  meta = {
+  meta = with lib; {
     description = "Library to interact with the weheat API";
     homepage = "https://github.com/wefabricate/wh-python";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fab ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
   };
 }

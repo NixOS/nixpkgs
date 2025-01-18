@@ -12,11 +12,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-SD60BhCI4rNLNY5HVAtdSVqWzUaONhBQ+uYVsYCdxKE=";
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://opencore-amr.sourceforge.io/";
     description = "Library of OpenCORE Framework implementation of Adaptive Multi Rate Narrowband and Wideband (AMR-NB and AMR-WB) speech codec.
     Library of VisualOn implementation of Adaptive Multi Rate Wideband (AMR-WB)";
-    license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.kiloreux ];
+    license = licenses.asl20;
+    maintainers = [ maintainers.kiloreux ];
   };
 }

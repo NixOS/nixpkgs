@@ -22,10 +22,10 @@ buildDunePackage rec {
     ocaml_lwt
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Abstract devices for MirageOS";
     homepage = "https://github.com/mirage/mirage-device";
-    license = lib.licenses.isc;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.isc;
+    maintainers = [ maintainers.vbgl ];
   };
 }

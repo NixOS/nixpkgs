@@ -32,10 +32,10 @@ buildPythonPackage rec {
   # django.core.exceptions.ImproperlyConfigured: Requested setting DEBUG, but settings are not configured.
   # pythonImportsCheck = [ "crossdomainmedia" ];
 
-  meta = {
+  meta = with lib; {
     description = "Django application to retrieve user's IP address";
     homepage = "https://github.com/stefanw/django-crossdomainmedia";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.onny ];
+    license = licenses.mit;
+    maintainers = [ maintainers.onny ];
   };
 }

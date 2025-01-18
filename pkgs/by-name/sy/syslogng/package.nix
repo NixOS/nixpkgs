@@ -141,14 +141,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.syslog-ng.com";
     description = "Next-generation syslogd with advanced networking and filtering capabilities";
-    license = with lib.licenses; [
+    license = with licenses; [
       gpl2Plus
       lgpl21Plus
     ];
-    maintainers = with lib.maintainers; [ vifino ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ vifino ];
+    platforms = platforms.linux;
   };
 })

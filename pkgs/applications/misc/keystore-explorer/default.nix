@@ -45,12 +45,12 @@ stdenv.mkDerivation rec {
   dontBuild = true;
   dontConfigure = true;
 
-  meta = {
+  meta = with lib; {
     description = "Open source GUI replacement for the Java command-line utilities keytool and jarsigner";
     mainProgram = "keystore-explorer";
-    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
-    license = lib.licenses.gpl3Only;
-    maintainers = [ lib.maintainers.numinit ];
-    platforms = lib.platforms.unix;
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = licenses.gpl3Only;
+    maintainers = [ maintainers.numinit ];
+    platforms = platforms.unix;
   };
 }

@@ -46,11 +46,11 @@ buildLuarocksPackage {
     busted lua/spec/
   '';
 
-  meta = {
+  meta = with lib; {
     description = "A tiny, neat lua library that portably invokes native file open and save dialogs.";
     homepage = "https://github.com/Alloyed/nativefiledialog/tree/master/lua";
-    license = lib.licenses.zlib;
-    maintainers = [ lib.maintainers.scoder12 ];
+    license = licenses.zlib;
+    maintainers = [ maintainers.scoder12 ];
     broken = lua.luaversion != "5.1";
   };
 }

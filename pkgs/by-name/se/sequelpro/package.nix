@@ -21,10 +21,10 @@ stdenv.mkDerivation {
     chmod +x "$out/Applications/Sequel Pro.app/Contents/MacOS/Sequel Pro"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "MySQL database management for macOS";
     homepage = "http://www.sequelpro.com/";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.darwin;
+    license = licenses.mit;
+    platforms = platforms.darwin;
   };
 }

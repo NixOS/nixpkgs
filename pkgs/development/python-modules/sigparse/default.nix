@@ -32,10 +32,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = {
+  meta = with lib; {
     description = "Backports python 3.10 typing features into 3.7, 3.8, and 3.9";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     homepage = "https://github.com/Lunarmagpie/sigparse";
-    maintainers = with lib.maintainers; [ sigmanificient ];
+    maintainers = with maintainers; [ sigmanificient ];
   };
 }

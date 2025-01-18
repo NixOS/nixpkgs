@@ -80,11 +80,11 @@ stdenv.mkDerivation rec {
       --prefix XDG_CONFIG_DIRS : "$out/etc/xdg"
   '';
 
-  meta = {
-    maintainers = with lib.maintainers; [ dopplerian ];
+  meta = with lib; {
+    maintainers = with maintainers; [ dopplerian ];
     mainProgram = "bashrun2";
     homepage = "http://henning-liebenau.de/bashrun2/";
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     description = "Application launcher based on a modified bash session in a small terminal window";
   };
 }

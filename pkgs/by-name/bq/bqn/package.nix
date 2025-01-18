@@ -52,11 +52,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/mlochbaum/BQN/";
     description = "Original BQN implementation in Javascript";
-    license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    license = licenses.isc;
+    maintainers = with maintainers; [ AndersonTorres ];
     inherit (nodejs.meta) platforms;
   };
 })

@@ -50,15 +50,15 @@ rustPlatform.buildRustPackage rec {
     STARDUST_RES_PREFIXES = "${src}/res";
   };
 
-  meta = {
+  meta = with lib; {
     description = "A 360-degree app shell / DE for Stardust XR using Niri";
     homepage = "https://stardustxr.org/";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "kiara";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       pandapip1
       technobaboo
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

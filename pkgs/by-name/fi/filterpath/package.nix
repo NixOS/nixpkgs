@@ -28,12 +28,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postCheck
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/Sigmanificient/filterpath";
     description = "Retrieve a valid path from a messy piped line";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ sigmanificient ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ sigmanificient ];
     mainProgram = "filterpath";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 })

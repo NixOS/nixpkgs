@@ -89,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.cmakeFeature "BLAS_LIBRARY" "${lib.getLib blas}/lib/libblas.so")
     ]);
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.generic-mapping-tools.org";
     description = "Tools for manipulating geographic and cartesian data sets";
     longDescription = ''
@@ -101,8 +101,8 @@ stdenv.mkDerivation (finalAttrs: {
       transformations and includes supporting data such as coastlines, rivers,
       and political boundaries and optionally country polygons.
     '';
-    platforms = lib.platforms.unix;
-    license = lib.licenses.lgpl3Plus;
-    maintainers = with lib.maintainers; [ tviti ];
+    platforms = platforms.unix;
+    license = licenses.lgpl3Plus;
+    maintainers = with maintainers; [ tviti ];
   };
 })

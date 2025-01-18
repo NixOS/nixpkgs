@@ -60,7 +60,7 @@ py.pkgs.buildPythonApplication rec {
   # Disable checks because of interference with older Qt versions // xcb
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     homepage = "http://arminstraub.com/software/krop";
     description = "Graphical tool to crop the pages of PDF files";
     longDescription = ''
@@ -71,9 +71,9 @@ py.pkgs.buildPythonApplication rec {
       your eReader does not support convenient scrolling. Krop also has a command line
       interface.
     '';
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ leenaars ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ leenaars ];
+    platforms = platforms.linux;
     mainProgram = "krop";
   };
 }

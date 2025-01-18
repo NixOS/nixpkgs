@@ -158,13 +158,13 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  meta = {
+  meta = with lib; {
     description = "RedisInsight Redis client powered by Electron";
     homepage = "https://github.com/RedisInsight/RedisInsight";
-    license = lib.licenses.sspl;
-    maintainers = with lib.maintainers; [
+    license = licenses.sspl;
+    maintainers = with maintainers; [
       tomasajt
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 })

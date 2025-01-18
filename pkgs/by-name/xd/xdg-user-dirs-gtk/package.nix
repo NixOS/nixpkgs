@@ -54,12 +54,12 @@ stdenv.mkDerivation (finalAttrs: {
     packageName = "xdg-user-dirs-gtk";
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/xdg-user-dirs-gtk";
     description = "Companion to xdg-user-dirs that integrates it into the GNOME desktop and GTK applications";
-    license = lib.licenses.gpl2Only;
-    maintainers = lib.teams.gnome.members;
-    platforms = lib.platforms.unix;
+    license = licenses.gpl2Only;
+    maintainers = teams.gnome.members;
+    platforms = platforms.unix;
     mainProgram = "xdg-user-dirs-gtk-update";
   };
 })

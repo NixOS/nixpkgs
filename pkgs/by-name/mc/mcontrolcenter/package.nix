@@ -60,12 +60,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/dmitry-s93/MControlCenter";
     description = "Tool to change the settings of MSI laptops running Linux";
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.Tommimon ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.Tommimon ];
     mainProgram = "mcontrolcenter";
   };
 })

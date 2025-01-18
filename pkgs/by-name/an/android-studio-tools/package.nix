@@ -45,14 +45,14 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Android Studio CLI Tools";
     homepage = "https://developer.android.com/studio";
     downloadPage = "https://developer.android.com/studio";
     changelog = "https://developer.android.com/studio/releases";
-    license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ pandapip1 ];
-    platforms = lib.platforms.all;
-    sourceProvenance = with lib.sourceTypes; [ fromSource ]; # The 'binaries' are actually shell scripts
+    license = licenses.unfree;
+    maintainers = with maintainers; [ pandapip1 ];
+    platforms = platforms.all;
+    sourceProvenance = with sourceTypes; [ fromSource ]; # The 'binaries' are actually shell scripts
   };
 }

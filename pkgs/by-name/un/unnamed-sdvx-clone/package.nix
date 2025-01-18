@@ -98,11 +98,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "A game based on K-Shoot MANIA and Sound Voltex";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ sako ];
-    platforms = lib.platforms.linux;
+    license = licenses.mit;
+    maintainers = with maintainers; [ sako ];
+    platforms = platforms.linux;
     mainProgram = "usc-game-wrapped";
   };
 })

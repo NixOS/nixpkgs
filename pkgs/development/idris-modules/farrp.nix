@@ -17,10 +17,10 @@ build-idris-package {
     sha256 = "1zrf750d7x1cz7kkgcx4ipa87hkg10adwii4qqvz9vpjap7vh7h0";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Arrowized FRP library for Idris with static safety guarantees";
     homepage = "https://github.com/lambda-11235/FarRP";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.brainrape ];
+    license = licenses.mit;
+    maintainers = [ maintainers.brainrape ];
   };
 }

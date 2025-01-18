@@ -44,11 +44,11 @@ buildPythonPackage rec {
   # no tests on PyPI
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Socket.IO server";
     homepage = "https://github.com/bdraco/python-socketio-v4";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     longDescription = "This is a release of 4.6.1 under the “socketio_v4” namespace for old systems.";
-    maintainers = with lib.maintainers; [ dotlambda ];
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

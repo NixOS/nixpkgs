@@ -40,10 +40,10 @@ buildPythonPackage rec {
   # pypi tarball has no tests
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Collection of utilities for doing lightweight data wrangling";
     homepage = "https://github.com/microsoft/datashaper/tree/main/python/datashaper";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ natsukium ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ natsukium ];
   };
 }

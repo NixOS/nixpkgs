@@ -27,11 +27,11 @@ rustPlatform.buildRustPackage rec {
     sqlite
   ];
 
-  meta = {
+  meta = with lib; {
     description = "CLI for indexing and searching packages in Nix expressions";
     homepage = "https://github.com/replit/rippkgs";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ cdmistman ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ cdmistman ];
     mainProgram = "rippkgs";
   };
 }

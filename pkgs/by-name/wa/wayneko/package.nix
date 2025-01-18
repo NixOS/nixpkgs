@@ -36,12 +36,12 @@ stdenv.mkDerivation {
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  meta = {
+  meta = with lib; {
     description = "Neko on Wayland";
     homepage = "https://sr.ht/~leon_plickat/wayneko";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ fgaz ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ fgaz ];
     mainProgram = "wayneko";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

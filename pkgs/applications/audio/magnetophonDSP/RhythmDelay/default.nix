@@ -37,10 +37,10 @@ stdenv.mkDerivation rec {
     cp -r RhythmDelay.lv2/ $out/lib/lv2
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Tap a rhythm into your delay! For jack and lv2";
     homepage = "https://github.com/magnetophon/RhythmDelay";
-    license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.magnetophon ];
+    license = licenses.gpl3;
+    maintainers = [ maintainers.magnetophon ];
   };
 }

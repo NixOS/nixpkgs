@@ -37,10 +37,10 @@ buildPythonPackage rec {
     "bokeh_sampledata"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Sample datasets for Bokeh examples";
     homepage = "https://pypi.org/project/bokeh-sampledata";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ doronbehar ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ doronbehar ];
   };
 }

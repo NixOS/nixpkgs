@@ -44,11 +44,11 @@ stdenv.mkDerivation rec {
     protobufc
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Versatile deduplicating backup tool";
     mainProgram = "zbackup";
     homepage = "http://zbackup.org/";
-    platforms = lib.platforms.linux;
-    license = lib.licenses.gpl2Plus;
+    platforms = platforms.linux;
+    license = licenses.gpl2Plus;
   };
 }

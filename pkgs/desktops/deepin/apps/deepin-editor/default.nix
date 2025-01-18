@@ -50,11 +50,11 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DVERSION=${version}" ];
 
-  meta = {
+  meta = with lib; {
     description = "Desktop text editor that supports common text editing features";
     homepage = "https://github.com/linuxdeepin/deepin-editor";
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
-    maintainers = lib.teams.deepin.members;
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = teams.deepin.members;
   };
 }

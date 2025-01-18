@@ -13,17 +13,17 @@ stdenv.mkDerivation rec {
     sha256 = "e865de2c1f559fff0d3fc936e660c0efaf7afe662064f2fb97ccad1ec28d208a";
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://linux-diag.sourceforge.net/Sysfsutils.html";
     longDescription = ''
       These are a set of utilites built upon sysfs, a new virtual
       filesystem in Linux kernel versions 2.5+ that exposes a system's
       device tree.
     '';
-    license = with lib.licenses; [
+    license = with licenses; [
       gpl2Plus
       lgpl21
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

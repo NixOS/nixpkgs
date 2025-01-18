@@ -27,7 +27,7 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/andrew-paglinawan/QuicksandFamily";
     description = "Sans serif font designed using geometric shapes";
     longDescription = ''
@@ -37,8 +37,8 @@ stdenvNoCC.mkDerivation {
       sizes as well. Quicksand Family is available in three styles
       which are Light, Regular and Bold including true italics for each weight.
     '';
-    license = with lib.licenses; [ ofl ];
-    maintainers = with lib.maintainers; [ hubble ];
-    platforms = lib.platforms.all;
+    license = with licenses; [ ofl ];
+    maintainers = with maintainers; [ hubble ];
+    platforms = platforms.all;
   };
 }

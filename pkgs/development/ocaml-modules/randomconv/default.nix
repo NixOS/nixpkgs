@@ -15,11 +15,11 @@ buildDunePackage rec {
     hash = "sha256-sxce3wfjQaRGj5L/wh4qiGO4LtXDb3R3zJja8F1bY+o=";
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/hannesm/randomconv";
     description = "Convert from random bytes to random native numbers";
-    license = lib.licenses.isc;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.isc;
+    maintainers = [ maintainers.vbgl ];
   };
 
 }

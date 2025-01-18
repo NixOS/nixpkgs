@@ -46,12 +46,12 @@ stdenv.mkDerivation {
       --set ALSA_PLUGIN_DIR ${alsa-plugins}/lib/alsa-lib
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Speech synthesizer commandline utility that improves pico2wave, included with SVOX PicoTTS";
     homepage = "https://github.com/gmn/nanotts";
-    license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.strikerlulu ];
-    platforms = lib.platforms.linux;
+    license = licenses.asl20;
+    maintainers = [ maintainers.strikerlulu ];
+    platforms = platforms.linux;
     mainProgram = "nanotts";
   };
 }

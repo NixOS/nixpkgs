@@ -73,11 +73,11 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "C++ library for building Wayland compositors";
     homepage = "https://github.com/CuarzoSoftware/Louvre";
     mainProgram = "louvre-views";
-    maintainers = [ lib.maintainers.dblsaiko ];
-    platforms = lib.platforms.linux;
+    maintainers = [ maintainers.dblsaiko ];
+    platforms = platforms.linux;
   };
 })

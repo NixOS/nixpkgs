@@ -32,12 +32,12 @@ stdenv.mkDerivation rec {
     jansson
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/haiwen/libsearpc";
     description = "Simple and easy-to-use C language RPC framework based on GObject System";
     mainProgram = "searpc-codegen.py";
-    license = lib.licenses.lgpl3;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ greizgh ];
+    license = licenses.lgpl3;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ greizgh ];
   };
 }

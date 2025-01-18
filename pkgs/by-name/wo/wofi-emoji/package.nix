@@ -59,15 +59,15 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Simple emoji selector for Wayland using wofi and wl-clipboard";
     homepage = "https://github.com/Zeioth/wofi-emoji";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       johnrtitor
       ymarkus
     ];
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
     mainProgram = "wofi-emoji";
   };
 }

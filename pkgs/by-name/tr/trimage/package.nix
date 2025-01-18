@@ -61,11 +61,11 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Cross-platform tool for optimizing PNG and JPG files";
     homepage = "https://github.com/Kilian/Trimage";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "trimage";
-    maintainers = with lib.maintainers; [ tomasajt ];
+    maintainers = with maintainers; [ tomasajt ];
   };
 }

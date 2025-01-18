@@ -36,10 +36,10 @@ buildPythonPackage rec {
     "bidsschematools"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Python tools for working with the BIDS schema";
     homepage = "https://github.com/bids-standard/bids-specification/tree/master/tools/schemacode";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ wegank ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ wegank ];
   };
 }

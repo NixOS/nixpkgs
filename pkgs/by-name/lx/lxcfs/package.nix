@@ -74,13 +74,13 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "FUSE filesystem for LXC";
     mainProgram = "lxcfs";
     homepage = "https://linuxcontainers.org/lxcfs";
     changelog = "https://linuxcontainers.org/lxcfs/news/";
-    license = lib.licenses.asl20;
-    platforms = lib.platforms.linux;
-    maintainers = lib.teams.lxc.members;
+    license = licenses.asl20;
+    platforms = platforms.linux;
+    maintainers = teams.lxc.members;
   };
 }

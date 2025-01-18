@@ -25,12 +25,12 @@ buildPythonApplication rec {
   nativeCheckInputs = [ pytestCheckHook ];
   pytestFlagsArray = [ "test/test.py" ];
 
-  meta = {
+  meta = with lib; {
     description = "Importer and exporter for MBTiles";
     mainProgram = "mb-util";
     homepage = "https://github.com/mapbox/mbutil";
-    license = lib.licenses.bsd3;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ sikmir ];
+    license = licenses.bsd3;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ sikmir ];
   };
 }

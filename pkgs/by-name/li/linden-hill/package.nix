@@ -23,14 +23,14 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Digital version of Frederic Goudy’s Deepdene";
     longDescription = ''
       Linden Hill is a digital version of Frederic Goudy’s Deepdene. The
       package includes roman and italic.
     '';
     homepage = "https://www.theleagueofmoveabletype.com/linden-hill";
-    license = lib.licenses.ofl;
-    maintainers = with lib.maintainers; [ minijackson ];
+    license = licenses.ofl;
+    maintainers = with maintainers; [ minijackson ];
   };
 }

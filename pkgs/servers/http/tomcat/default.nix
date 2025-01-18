@@ -47,13 +47,13 @@ let
         };
       };
 
-      meta = {
+      meta = with lib; {
         homepage = "https://tomcat.apache.org/";
         description = "Implementation of the Java Servlet and JavaServer Pages technologies";
         platforms = jre.meta.platforms;
-        maintainers = with lib.maintainers; [ anthonyroussel ];
-        license = lib.licenses.asl20;
-        sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+        maintainers = with maintainers; [ anthonyroussel ];
+        license = licenses.asl20;
+        sourceProvenance = with sourceTypes; [ binaryBytecode ];
       };
     });
 

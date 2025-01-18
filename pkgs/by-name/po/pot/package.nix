@@ -101,12 +101,12 @@ stdenv.mkDerivation (finalAttrs: {
     chmod +w ..
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Cross-platform translation software";
     mainProgram = "pot";
     homepage = "https://pot-app.com";
-    platforms = lib.platforms.linux;
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ linsui ];
+    platforms = platforms.linux;
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ linsui ];
   };
 })

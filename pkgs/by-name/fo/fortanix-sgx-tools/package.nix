@@ -19,11 +19,11 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-F0lZG1neAPVvyOxUtDPv0t7o+ZC+aQRtpFeq55QwcmE=";
   };
   cargoHash = "sha256-jYfsmPwhvt+ccUr4Vwq5q1YzNlxA+Vnpxd4KpWZrYo8=";
-  meta = {
+  meta = with lib; {
     description = "Tools for building and running enclaves for the Fortanix SGX ABI";
     homepage = "https://github.com/fortanix/rust-sgx";
-    maintainers = [ lib.maintainers.ozwaldorf ];
+    maintainers = [ maintainers.ozwaldorf ];
     platforms = [ "x86_64-linux" ];
-    license = lib.licenses.mpl20;
+    license = licenses.mpl20;
   };
 }

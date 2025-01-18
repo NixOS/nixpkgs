@@ -38,10 +38,10 @@ stdenv.mkDerivation {
         }
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Openvpn learn-address script to manage a hosts-like file";
     homepage = "https://gist.github.com/offlinehacker/4058733/";
-    maintainers = [ lib.maintainers.offline ];
-    platforms = lib.platforms.unix;
+    maintainers = [ maintainers.offline ];
+    platforms = platforms.unix;
   };
 }

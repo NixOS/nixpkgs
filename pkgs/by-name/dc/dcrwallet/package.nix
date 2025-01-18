@@ -26,11 +26,11 @@ buildGoModule rec {
     "-skip=^TestUntrustedClientCert$"
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://decred.org";
     description = "Secure Decred wallet daemon written in Go (golang)";
-    license = with lib.licenses; [ isc ];
-    maintainers = with lib.maintainers; [ juaningan ];
+    license = with licenses; [ isc ];
+    maintainers = with maintainers; [ juaningan ];
     mainProgram = "dcrwallet";
   };
 }

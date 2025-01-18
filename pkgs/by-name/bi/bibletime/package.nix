@@ -63,12 +63,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "http://www.bibletime.info/";
     description = "Powerful cross platform Bible study tool";
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     mainProgram = "bibletime";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.linux;
   };
 })

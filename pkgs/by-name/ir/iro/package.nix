@@ -17,11 +17,11 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-ZP0YO+5juxFGc2rtvNBvknlTJBrtr8HiuN6/kKW1WNU=";
 
-  meta = {
+  meta = with lib; {
     description = "CLI tool to convet Hex color code or RGB to color code, RGB, HSL and color name";
     homepage = "https://github.com/kyoheiu/iro";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ airrnot ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ airrnot ];
     mainProgram = "iro";
   };
 }

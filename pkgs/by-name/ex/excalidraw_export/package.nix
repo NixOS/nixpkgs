@@ -29,11 +29,11 @@ buildNpmPackage rec {
   ];
   nativeBuildInputs = [ pkg-config ];
 
-  meta = {
+  meta = with lib; {
     description = "CLI to export Excalidraw drawings to SVG and PDF";
     homepage = "https://github.com/Timmmm/excalidraw_export";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ venikx ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ venikx ];
     mainProgram = "excalidraw_export";
     broken = stdenv.isDarwin;
   };

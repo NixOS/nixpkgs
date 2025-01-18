@@ -62,11 +62,11 @@ stdenv.mkDerivation rec {
     "-Dsystemd-unit-dir=./lib/systemd/system/"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Configuration library for gaming mice";
     homepage = "https://github.com/libratbag/libratbag";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ mvnetbiz ];
-    platforms = lib.platforms.linux;
+    license = licenses.mit;
+    maintainers = with maintainers; [ mvnetbiz ];
+    platforms = platforms.linux;
   };
 }

@@ -17,10 +17,10 @@ buildPythonPackage rec {
   # Some tests require physical probing and additional physical setup
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/vsergeev/python-periphery";
     description = "Linux Peripheral I/O (GPIO, LED, PWM, SPI, I2C, MMIO, Serial) with Python 2 & 3";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ bandresen ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ bandresen ];
   };
 }

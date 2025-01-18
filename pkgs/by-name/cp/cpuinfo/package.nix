@@ -39,13 +39,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
 
-  meta = {
+  meta = with lib; {
     description = "Tools and library to detect essential for performance optimization information about host CPU";
     homepage = "https://github.com/pytorch/cpuinfo";
-    license = lib.licenses.bsd2;
+    license = licenses.bsd2;
     mainProgram = "cpu-info";
-    maintainers = with lib.maintainers; [ pawelchcki ];
+    maintainers = with maintainers; [ pawelchcki ];
     pkgConfigModules = [ "libcpuinfo" ];
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 })

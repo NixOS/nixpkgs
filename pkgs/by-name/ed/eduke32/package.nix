@@ -182,14 +182,14 @@ stdenv.mkDerivation (finalAttrs: {
       runHook postInstall
     '';
 
-  meta = {
+  meta = with lib; {
     description = "Enhanched port of Duke Nukem 3D for various platforms";
     homepage = "http://eduke32.com";
-    license = with lib.licenses; [ gpl2Plus ];
-    maintainers = with lib.maintainers; [
+    license = with licenses; [ gpl2Plus ];
+    maintainers = with maintainers; [
       qubitnano
       sander
     ];
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 })

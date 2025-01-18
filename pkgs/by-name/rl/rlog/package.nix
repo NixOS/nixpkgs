@@ -13,10 +13,10 @@ stdenv.mkDerivation rec {
     sha256 = "0y9zg0pd7vmnskwac1qdyzl282z7kb01nmn57lsg2mjdxgnywf59";
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.arg0.net/rlog";
     description = "C++ logging library used in encfs";
-    platforms = lib.platforms.linux;
-    license = lib.licenses.lgpl3;
+    platforms = platforms.linux;
+    license = licenses.lgpl3;
   };
 }

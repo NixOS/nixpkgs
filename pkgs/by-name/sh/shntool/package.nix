@@ -23,11 +23,11 @@ stdenv.mkDerivation rec {
     patches=$(grep -v '#' ./debian/patches/series | while read patch; do echo "./debian/patches/$patch"; done | tr '\n' ' ')
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Multi-purpose WAVE data processing and reporting utility";
     homepage = "https://packages.qa.debian.org/s/shntool.html";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ jcumming ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ jcumming ];
   };
 }

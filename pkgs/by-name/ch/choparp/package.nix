@@ -34,12 +34,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/quinot/choparp";
     description = "Proxy ARP daemon";
-    maintainers = with lib.maintainers; [ bot-wxt1221 ];
-    platforms = lib.platforms.unix;
-    license = lib.licenses.bsd3;
+    maintainers = with maintainers; [ bot-wxt1221 ];
+    platforms = platforms.unix;
+    license = licenses.bsd3;
     mainProgram = "choparp";
   };
 })

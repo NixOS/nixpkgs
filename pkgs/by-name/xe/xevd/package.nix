@@ -91,14 +91,14 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/mpeg5/xevd";
     description = "eXtra-fast Essential Video Decoder, MPEG-5 EVC";
-    license = lib.licenses.bsd3;
+    license = licenses.bsd3;
     mainProgram = "xevd_app";
     pkgConfigModules = [ "xevd" ];
-    maintainers = with lib.maintainers; [ jopejoe1 ];
-    platforms = lib.platforms.all;
+    maintainers = with maintainers; [ jopejoe1 ];
+    platforms = platforms.all;
     broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
   };
 })

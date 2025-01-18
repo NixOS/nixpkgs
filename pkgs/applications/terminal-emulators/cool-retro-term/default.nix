@@ -49,7 +49,7 @@ mkDerivation rec {
 
   passthru.tests.test = nixosTests.terminal-emulators.cool-retro-term;
 
-  meta = {
+  meta = with lib; {
     description = "Terminal emulator which mimics the old cathode display";
     longDescription = ''
       cool-retro-term is a terminal emulator which tries to mimic the look and
@@ -57,8 +57,8 @@ mkDerivation rec {
       eye-candy, customizable, and reasonably lightweight.
     '';
     homepage = "https://github.com/Swordfish90/cool-retro-term";
-    license = lib.licenses.gpl3Plus;
-    platforms = with lib.platforms; linux ++ darwin;
+    license = licenses.gpl3Plus;
+    platforms = with platforms; linux ++ darwin;
     maintainers = [ ];
     mainProgram = "cool-retro-term";
   };

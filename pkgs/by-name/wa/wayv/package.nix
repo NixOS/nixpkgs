@@ -37,11 +37,11 @@ stdenv.mkDerivation rec {
     cp doc/*.jpg "$out"/share/doc/wayv
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Gesture control for X11";
-    license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.raskin ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.linux;
     homepage = "https://github.com/mikemb/wayV";
     mainProgram = "wayv";
   };

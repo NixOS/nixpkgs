@@ -45,13 +45,13 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     changelog = "https://calcoo.sourceforge.net/changelog.html";
     description = "RPN and algebraic scientific calculator";
     homepage = "https://calcoo.sourceforge.net/";
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     mainProgram = "calcoo";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ AndersonTorres ];
     inherit (jdk.meta) platforms;
   };
 })

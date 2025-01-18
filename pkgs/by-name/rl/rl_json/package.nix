@@ -30,16 +30,16 @@ stdenv.mkDerivation (finalAttrs: {
     "--datarootdir=${placeholder "out"}/share"
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/RubyLane/rl_json";
     description = "Tcl extension for fast json manipulation";
-    license = lib.licenses.tcltk;
+    license = licenses.tcltk;
     longDescription = ''
       Extends Tcl with a json value type and a command to manipulate json values
       directly. Similar in spirit to how the dict command manipulates dictionary
       values, and comparable in speed.
     '';
-    maintainers = with lib.maintainers; [ fgaz ];
+    maintainers = with maintainers; [ fgaz ];
     platforms = tcl.meta.platforms;
     # From version 0.15.1: 'endian.h' file not found
     broken = stdenv.hostPlatform.isDarwin;

@@ -61,12 +61,12 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.inference.org.uk/dasher/";
     description = "Information-efficient text-entry interface, driven by natural continuous pointing gestures";
-    license = lib.licenses.gpl2Only;
+    license = licenses.gpl2Only;
     maintainers = [ ];
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
     mainProgram = "dasher";
   };
 }

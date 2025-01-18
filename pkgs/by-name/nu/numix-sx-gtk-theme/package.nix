@@ -25,11 +25,11 @@ stdenv.mkDerivation {
     cp -dr --no-preserve='ownership' Numix-SX-{Dark,FullDark,Light} "$out/share/themes/"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Gray variation of Numix theme";
     homepage = "https://www.gnome-look.org/p/1117412/";
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.all;
-    maintainers = [ lib.maintainers.sauyon ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.all;
+    maintainers = [ maintainers.sauyon ];
   };
 }

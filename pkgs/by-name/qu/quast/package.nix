@@ -59,15 +59,15 @@ pythonPackages.buildPythonApplication rec {
   # Tests need to download data files, so manual run after packaging is needed
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Evaluates genome assemblies by computing various metrics";
     homepage = "https://github.com/ablab/quast";
-    sourceProvenance = with lib.sourceTypes; [
+    sourceProvenance = with sourceTypes; [
       fromSource
       binaryNativeCode # source bundles binary dependencies
     ];
-    license = lib.licenses.gpl2;
-    maintainers = [ lib.maintainers.bzizou ];
-    platforms = lib.platforms.all;
+    license = licenses.gpl2;
+    maintainers = [ maintainers.bzizou ];
+    platforms = platforms.all;
   };
 }

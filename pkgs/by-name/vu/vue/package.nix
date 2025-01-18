@@ -24,12 +24,12 @@ stdenv.mkDerivation rec {
     chmod a+x "$out/bin/vue"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Visual Understanding Environment - mind mapping software";
-    maintainers = with lib.maintainers; [ raskin ];
-    platforms = with lib.platforms; linux;
-    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
-    license = lib.licenses.ecl20;
+    maintainers = with maintainers; [ raskin ];
+    platforms = with platforms; linux;
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = licenses.ecl20;
     mainProgram = "vue";
   };
 }

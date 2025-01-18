@@ -65,13 +65,13 @@ rustPlatform.buildRustPackage {
       --zsh <($out/bin/earbuds --generate zsh)
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Free CLI tool to control your Galaxy Buds";
     homepage = "https://github.com/JojiiOfficial/LiveBudsCli";
     changelog = "https://github.com/JojiiOfficial/LiveBudsCli/releases";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ griffi-gh ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ griffi-gh ];
     mainProgram = "earbuds";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

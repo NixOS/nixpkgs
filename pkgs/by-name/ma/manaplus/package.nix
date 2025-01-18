@@ -68,12 +68,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     maintainers = [ ];
     description = "Free OpenSource 2D MMORPG client";
     homepage = "https://manaplus.org/";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.all;
-    badPlatforms = [ lib.systems.inspect.patterns.isDarwin ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.all;
+    badPlatforms = [ systems.inspect.patterns.isDarwin ];
   };
 })

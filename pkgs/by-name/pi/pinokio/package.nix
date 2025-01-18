@@ -24,17 +24,17 @@ let
 
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://pinokio.computer";
     description = "Browser to install, run, and programmatically control ANY application automatically";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ByteSudoer ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ ByteSudoer ];
     platforms = [
       "x86_64-darwin"
       "x86_64-linux"
     ];
     mainProgram = "pinokio";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 in
 

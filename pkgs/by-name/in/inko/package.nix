@@ -58,12 +58,12 @@ rustPlatform.buildRustPackage rec {
     simple = callPackage ./test.nix { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Language for building concurrent software with confidence";
     homepage = "https://inko-lang.org/";
-    license = lib.licenses.mpl20;
-    maintainers = [ lib.maintainers.feathecutie ];
-    platforms = lib.platforms.unix;
+    license = licenses.mpl20;
+    maintainers = [ maintainers.feathecutie ];
+    platforms = platforms.unix;
     mainProgram = "inko";
   };
 }

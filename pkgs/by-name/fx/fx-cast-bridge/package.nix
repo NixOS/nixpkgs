@@ -56,11 +56,11 @@ buildNpmPackage rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Implementation of the Chrome Sender API (Chromecast) within Firefox";
     homepage = "https://hensm.github.io/fx_cast/";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ bot-wxt1221 ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ bot-wxt1221 ];
     platforms = [
       "x86_64-linux"
       "aarch64-darwin"

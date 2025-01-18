@@ -44,13 +44,13 @@ stdenv.mkDerivation (finalAttrs: {
     rm $out/share/doc/mpc/contrib/mpc-completion.bash
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.musicpd.org/clients/mpc/";
     description = "Minimalist command line interface to MPD";
     changelog = "https://raw.githubusercontent.com/MusicPlayerDaemon/mpc/refs/heads/master/NEWS";
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     mainProgram = "mpc";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.unix;
   };
 })

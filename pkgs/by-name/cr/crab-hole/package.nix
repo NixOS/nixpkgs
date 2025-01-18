@@ -17,14 +17,14 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-6g5l4sQv8OsOLJZ/Vl3RLU8k/zx3Bj13STonsY2+lf0=";
 
-  meta = {
+  meta = with lib; {
     description = "Pi-Hole clone written in Rust using Hickory DNS";
     homepage = "https://github.com/LuckyTurtleDev/crab-hole";
-    license = lib.licenses.agpl3Plus;
+    license = licenses.agpl3Plus;
     mainProgram = "crab-hole";
     maintainers = [
-      lib.maintainers.NiklasVousten
+      maintainers.NiklasVousten
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

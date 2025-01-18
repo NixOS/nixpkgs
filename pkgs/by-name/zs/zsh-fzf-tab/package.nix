@@ -93,11 +93,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/Aloxaf/fzf-tab";
     description = "Replace zsh's default completion selection menu with fzf!";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ diredocks ];
-    platforms = lib.platforms.unix;
+    license = licenses.mit;
+    maintainers = with maintainers; [ diredocks ];
+    platforms = platforms.unix;
   };
 }

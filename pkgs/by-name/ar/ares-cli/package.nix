@@ -23,7 +23,7 @@ buildNpmPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://webostv.developer.lge.com/develop/tools/cli-introduction";
     description = "A collection of commands used for creating, packaging, installing, and launching web apps for LG webOS TV.";
     longDescription = ''
@@ -32,7 +32,7 @@ buildNpmPackage rec {
       a specific IDE.
     '';
     mainProgram = "ares";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ rucadi ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ rucadi ];
   };
 }

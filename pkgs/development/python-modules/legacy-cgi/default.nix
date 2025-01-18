@@ -27,10 +27,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = {
+  meta = with lib; {
     description = "Fork of the standard library cgi and cgitb modules, being deprecated in PEP-594";
     homepage = "https://github.com/jackrosenthal/legacy-cgi";
-    license = lib.licenses.psfl;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    license = licenses.psfl;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

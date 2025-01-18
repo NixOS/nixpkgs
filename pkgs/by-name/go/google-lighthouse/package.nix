@@ -50,11 +50,11 @@ stdenv.mkDerivation rec {
   '';
 
   doDist = false;
-  meta = {
+  meta = with lib; {
     description = "Automated auditing, performance metrics, and best practices for the web";
     homepage = "https://developer.chrome.com/docs/lighthouse/overview";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     mainProgram = "lighthouse";
-    maintainers = with lib.maintainers; [ theCapypara ];
+    maintainers = with maintainers; [ theCapypara ];
   };
 }

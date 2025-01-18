@@ -79,10 +79,10 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Admin interface for Akkoma";
     homepage = "https://akkoma.dev/AkkomaGang/akkoma-fe/";
-    license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ mvs ];
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [ mvs ];
   };
 })

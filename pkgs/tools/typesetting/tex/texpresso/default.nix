@@ -78,11 +78,11 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  meta = {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Live rendering and error reporting for LaTeX";
-    maintainers = with lib.maintainers; [ nickhu ];
-    license = lib.licenses.mit;
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ nickhu ];
+    license = licenses.mit;
+    platforms = platforms.unix;
   };
 }

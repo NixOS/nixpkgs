@@ -36,14 +36,14 @@ python3Packages.buildPythonApplication rec {
 
   buildInputs = [ zlib ];
 
-  meta = {
+  meta = with lib; {
     changelog = "https://sourcery.ai/changelog/";
     description = "AI-powered code review and pair programming tool for Python";
     downloadPage = "https://pypi.org/project/sourcery/";
     homepage = "https://sourcery.ai";
-    license = lib.licenses.unfree;
+    license = licenses.unfree;
     mainProgram = "sourcery";
-    maintainers = with lib.maintainers; [ tomasajt ];
+    maintainers = with maintainers; [ tomasajt ];
     platforms = [
       "x86_64-linux"
       "x86_64-darwin"

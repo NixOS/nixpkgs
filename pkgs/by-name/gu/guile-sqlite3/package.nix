@@ -41,11 +41,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://notabug.org/guile-sqlite3/guile-sqlite3";
     description = "Guile bindings for the SQLite3 database engine";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ];
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ ];
     inherit (guile.meta) platforms;
   };
 })

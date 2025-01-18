@@ -36,13 +36,13 @@ mkDerivation {
     poppler
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://invent.kde.org/maui/mauikit-documents";
     description = "MauiKit QtQuick plugins for text editing";
-    license = with lib.licenses; [
+    license = with licenses; [
       bsd2
       lgpl21Plus
     ];
-    maintainers = with lib.maintainers; [ dotlambda ];
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

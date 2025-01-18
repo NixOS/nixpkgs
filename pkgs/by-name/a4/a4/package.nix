@@ -24,12 +24,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   installFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  meta = {
+  meta = with lib; {
     description = "Dynamic terminal window manager";
     homepage = "https://www.a4term.com/";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ onemoresuza ];
-    platforms = lib.platforms.linux;
+    license = licenses.mit;
+    maintainers = with maintainers; [ onemoresuza ];
+    platforms = platforms.linux;
     mainProgram = "a4";
   };
 })

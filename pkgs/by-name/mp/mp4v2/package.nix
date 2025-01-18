@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     description = "Provides functions to read, create, and modify mp4 files";
     longDescription = ''
       MP4v2 library provides an API to work with mp4 files
@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
       This container format is derived from Apple's QuickTime format.
     '';
     homepage = "https://github.com/TechSmith/mp4v2";
-    maintainers = [ lib.maintainers.Anton-Latukha ];
-    platforms = lib.platforms.unix;
-    license = lib.licenses.mpl11;
+    maintainers = [ maintainers.Anton-Latukha ];
+    platforms = platforms.unix;
+    license = licenses.mpl11;
   };
 }

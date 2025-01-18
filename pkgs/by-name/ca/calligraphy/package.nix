@@ -46,16 +46,16 @@ python3Packages.buildPythonApplication rec {
 
   makeWrapperArgs = [ "\${gappsWrapperArgs[@]}" ];
 
-  meta = {
+  meta = with lib; {
     description = "GTK tool turning text into ASCII banners";
     homepage = "https://calligraphy.geopjr.dev";
-    license = with lib.licenses; [
+    license = with licenses; [
       gpl3Plus
       # and
       cc0
     ];
     mainProgram = "calligraphy";
-    maintainers = with lib.maintainers; [ aleksana ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ aleksana ];
+    platforms = platforms.linux;
   };
 }

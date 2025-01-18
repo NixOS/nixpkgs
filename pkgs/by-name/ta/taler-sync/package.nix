@@ -53,11 +53,11 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "/bin/bash" "${runtimeShell}"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Backup and synchronization service";
     homepage = "https://git.taler.net/sync.git";
-    license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ wegank ];
-    platforms = lib.platforms.linux;
+    license = licenses.agpl3Plus;
+    maintainers = with maintainers; [ wegank ];
+    platforms = platforms.linux;
   };
 })

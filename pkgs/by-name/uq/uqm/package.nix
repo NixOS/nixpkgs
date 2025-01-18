@@ -130,7 +130,7 @@ stdenv.mkDerivation rec {
     sed -i $out/bin/uqm -e "s%/usr/local/games/%$out%g"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Remake of Star Control II";
     mainProgram = "uqm";
     longDescription = ''
@@ -142,11 +142,11 @@ stdenv.mkDerivation rec {
           spin-offs, thereby making zillions more people happy!
     '';
     homepage = "https://sc2.sourceforge.net/";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [
       jcumming
       aszlig
     ];
-    platforms = with lib.platforms; linux;
+    platforms = with platforms; linux;
   };
 }

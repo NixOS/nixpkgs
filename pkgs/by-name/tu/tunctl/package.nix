@@ -19,11 +19,11 @@ stdenv.mkDerivation rec {
     cp tunctl $out/bin
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://tunctl.sourceforge.net/";
     description = "Utility to set up and maintain TUN/TAP network interfaces";
     mainProgram = "tunctl";
-    license = lib.licenses.gpl2Only;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Only;
+    platforms = platforms.linux;
   };
 }

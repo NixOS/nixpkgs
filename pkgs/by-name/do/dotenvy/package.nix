@@ -23,10 +23,10 @@ rustPlatform.buildRustPackage rec {
   # just run unittests and skip doc-tests
   cargoTestFlags = [ "--lib" ];
 
-  meta = {
+  meta = with lib; {
     description = "Loads environment variables from a .env file";
     homepage = "https://github.com/allan2/dotenvy";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ phlip9 ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ phlip9 ];
   };
 }

@@ -25,11 +25,11 @@ buildGoModule rec {
     "-X github.com/vmware/govmomi/govc/flags.BuildVersion=${version}"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "VSphere CLI built on top of govmomi";
     homepage = "https://github.com/vmware/govmomi/tree/master/govc";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ nicknovitski ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ nicknovitski ];
     mainProgram = "govc";
   };
 }

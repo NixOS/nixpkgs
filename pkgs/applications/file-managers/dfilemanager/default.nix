@@ -30,11 +30,11 @@ mkDerivation {
 
   cmakeFlags = [ "-DQT5BUILD=true" ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/probonopd/dfilemanager";
     description = "File manager written in Qt/C++";
     mainProgram = "dfm";
-    license = lib.licenses.gpl2;
-    platforms = lib.platforms.unix;
+    license = licenses.gpl2;
+    platforms = platforms.unix;
   };
 }

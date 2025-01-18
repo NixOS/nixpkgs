@@ -21,11 +21,11 @@ python3Packages.buildPythonApplication rec {
 
   LC_ALL = "en_US.UTF-8";
 
-  meta = {
+  meta = with lib; {
     description = "curl statistics made simple";
     mainProgram = "httpstat";
     homepage = "https://github.com/reorx/httpstat";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ nequissimus ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ nequissimus ];
   };
 }

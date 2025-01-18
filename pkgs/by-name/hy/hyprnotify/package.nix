@@ -23,12 +23,12 @@ buildGoModule rec {
 
   vendorHash = "sha256-2BuWJ57jELtfj7SGr+dLdC2KFc5sD2bC8MgjUHaIXUs=";
 
-  meta = {
+  meta = with lib; {
     description = "DBus Implementation of Freedesktop Notification spec for 'hyprctl notify'";
     homepage = "https://github.com/codelif/hyprnotify";
-    license = lib.licenses.asl20;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ bloeckchengrafik ];
+    license = licenses.asl20;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ bloeckchengrafik ];
     mainProgram = "hyprnotify";
   };
 }

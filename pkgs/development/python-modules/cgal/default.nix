@@ -78,11 +78,11 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = {
+  meta = with lib; {
     description = "CGAL bindings using SWIG";
     homepage = "https://github.com/CGAL/cgal-swig-bindings";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ pbsds ];
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ pbsds ];
     # error: no template named 'unary_function' in namespace 'boost::functional::detail'
     broken = stdenv.hostPlatform.isDarwin;
   };

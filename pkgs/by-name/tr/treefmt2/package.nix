@@ -27,13 +27,13 @@ buildGoModule rec {
     "-X github.com/numtide/treefmt/v2/build.Version=v${version}"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "one CLI to format the code tree";
     homepage = "https://github.com/numtide/treefmt";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     maintainers = [
-      lib.maintainers.brianmcgee
-      lib.maintainers.zimbatm
+      maintainers.brianmcgee
+      maintainers.zimbatm
     ];
     mainProgram = "treefmt";
   };

@@ -18,11 +18,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  meta = {
+  meta = with lib; {
     description = "Zscheile Lowlevel (utility) library";
     homepage = "https://github.com/fogti/libowlevelzs";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ sigmanificient ];
-    platforms = lib.platforms.all;
+    license = licenses.mit;
+    maintainers = with maintainers; [ sigmanificient ];
+    platforms = platforms.all;
   };
 }

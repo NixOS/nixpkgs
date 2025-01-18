@@ -71,12 +71,12 @@ buildDotnetModule rec {
     '';
   };
 
-  meta = {
+  meta = with lib; {
     badPlatforms = [ "aarch64-linux" ]; # not sure what the issue is
     description = "Multi-system emulator that supports NES, SNES, Game Boy (Color) and PC Engine games";
     homepage = "https://www.mesen.ca";
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     mainProgram = "Mesen";
-    maintainers = with lib.maintainers; [ tomasajt ];
+    maintainers = with maintainers; [ tomasajt ];
   };
 }

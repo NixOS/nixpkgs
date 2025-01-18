@@ -44,10 +44,10 @@ buildDunePackage rec {
   doCheck = true;
   checkInputs = [ qcheck-alcotest ];
 
-  meta = {
+  meta = with lib; {
     description = "Name pattern combinators";
     homepage = "https://github.com/RedPRL/yuujinchou";
-    license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.asl20;
+    maintainers = [ maintainers.vbgl ];
   };
 }

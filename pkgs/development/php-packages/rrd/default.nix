@@ -19,10 +19,10 @@ buildPecl {
     pkg-config
   ];
 
-  meta = {
+  meta = with lib; {
     description = "PHP bindings to RRD tool system";
-    license = lib.licenses.bsd0;
+    license = licenses.bsd0;
     homepage = "https://github.com/php/pecl-processing-rrd";
-    maintainers = lib.teams.wdz.members;
+    maintainers = teams.wdz.members;
   };
 }

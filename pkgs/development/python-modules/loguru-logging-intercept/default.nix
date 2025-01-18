@@ -21,10 +21,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "loguru_logging_intercept" ];
 
-  meta = {
+  meta = with lib; {
     description = "Code to integrate Loguru with Python's standard logging module";
     homepage = "https://github.com/MatthewScholefield/loguru-logging-intercept";
-    maintainers = with lib.maintainers; [ sigmanificient ];
-    license = lib.licenses.mit;
+    maintainers = with maintainers; [ sigmanificient ];
+    license = licenses.mit;
   };
 }

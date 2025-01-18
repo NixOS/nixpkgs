@@ -22,12 +22,12 @@ stdenv.mkDerivation rec {
     libiconv
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Simple .odt to .txt converter";
     mainProgram = "odt2txt";
     homepage = "https://github.com/dstosberg/odt2txt";
-    platforms = lib.platforms.all;
-    license = lib.licenses.gpl2Only;
+    platforms = platforms.all;
+    license = licenses.gpl2Only;
     maintainers = [ ];
   };
 }

@@ -15,10 +15,10 @@ buildDunePackage {
   };
   minimalOCamlVersion = "4.06";
   propagatedBuildInputs = [ systemdLibs ];
-  meta = {
-    platform = lib.platforms.linux;
+  meta = with lib; {
+    platform = platforms.linux;
     description = "OCaml module for native access to the systemd facilities";
-    license = lib.licenses.lgpl3Only;
-    maintainers = [ lib.maintainers.atagen ];
+    license = licenses.lgpl3Only;
+    maintainers = [ maintainers.atagen ];
   };
 }

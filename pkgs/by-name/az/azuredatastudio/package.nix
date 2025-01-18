@@ -209,12 +209,12 @@ stdenv.mkDerivation rec {
       --set LD_LIBRARY_PATH ${rpath}
   '';
 
-  meta = {
-    maintainers = with lib.maintainers; [ xavierzwirtz ];
+  meta = with lib; {
+    maintainers = with maintainers; [ xavierzwirtz ];
     description = "Data management tool that enables working with SQL Server, Azure SQL DB and SQL DW";
     homepage = "https://docs.microsoft.com/en-us/sql/azure-data-studio/download-azure-data-studio";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = lib.licenses.unfreeRedistributable;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfreeRedistributable;
     platforms = [ "x86_64-linux" ];
     mainProgram = "azuredatastudio";
   };

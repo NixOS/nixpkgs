@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
       "$out/bin/sympow" -sp 2p16 -curve "[1,2,3,4,5]" | grep '8.3705'
     '';
 
-  meta = {
+  meta = with lib; {
     description = "Compute special values of symmetric power elliptic curve L-functions";
     mainProgram = "sympow";
     license = {
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
       fullName = "Custom, BSD-like. See COPYING file.";
       free = true;
     };
-    maintainers = lib.teams.sage.members;
-    platforms = lib.platforms.unix;
+    maintainers = teams.sage.members;
+    platforms = platforms.unix;
   };
 }

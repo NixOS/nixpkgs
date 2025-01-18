@@ -41,11 +41,11 @@ stdenv.mkDerivation rec {
     substituteInPlace tcl/xdeview --replace "exec uuwish" "exec $out/bin/uuwish"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Nice and Friendly Decoder";
     homepage = "http://www.fpx.de/fp/Software/UUDeview/";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ woffs ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ woffs ];
+    platforms = platforms.linux;
   };
 }

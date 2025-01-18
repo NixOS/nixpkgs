@@ -37,12 +37,12 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Krunner Plugin which allows you to open your VSCode Project Manager projects";
     homepage = "https://github.com/alex1701c/krunner-vscodeprojects";
-    sourceProvenance = with lib.sourceTypes; [ fromSource ];
-    license = lib.licenses.lgpl3Only;
-    maintainers = with lib.maintainers; [ js6pak ];
+    sourceProvenance = with sourceTypes; [ fromSource ];
+    license = licenses.lgpl3Only;
+    maintainers = with maintainers; [ js6pak ];
     inherit (kdePackages.krunner.meta) platforms;
   };
 }

@@ -22,13 +22,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     changelog = "https://www.mowglii.com/itsycal/versionhistory.html";
     description = "Itsycal is a tiny menu bar calendar";
     homepage = "https://www.mowglii.com/itsycal/";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ donteatoreo ];
-    platforms = lib.platforms.darwin;
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ donteatoreo ];
+    platforms = platforms.darwin;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 })

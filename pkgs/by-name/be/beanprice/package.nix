@@ -33,15 +33,15 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "beancount" ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/beancount/beanprice";
     description = "Price quotes fetcher for Beancount";
     longDescription = ''
       A script to fetch market data prices from various sources on the internet
       and render them for plain text accounting price syntax (and Beancount).
     '';
-    license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ alapshin ];
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ alapshin ];
     mainProgram = "bean-price";
   };
 }

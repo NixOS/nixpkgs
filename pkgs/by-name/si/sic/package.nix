@@ -17,11 +17,11 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = {
+  meta = with lib; {
     description = "Simple IRC client";
     mainProgram = "sic";
     homepage = "https://tools.suckless.org/sic/";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.unix;
+    license = licenses.mit;
+    platforms = platforms.unix;
   };
 }

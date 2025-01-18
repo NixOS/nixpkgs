@@ -59,12 +59,12 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "View and edit your apps’ keys";
     homepage = "https://gitlab.gnome.org/sophie-h/key-rack";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ getchoo ];
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ getchoo ];
     mainProgram = "key-rack";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 })

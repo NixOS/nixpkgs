@@ -28,16 +28,16 @@ stdenv.mkDerivation (finalAttrs: {
     gui
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Graphical Object Relationship Modeller is an easy-to-use interface designer for GNUstep";
     homepage = "https://gnustep.github.io/";
-    license = lib.licenses.lgpl2Plus;
+    license = licenses.lgpl2Plus;
     mainProgram = "Gorm";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       ashalkhakov
       matthewbauer
       dblsaiko
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 })

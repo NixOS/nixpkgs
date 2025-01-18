@@ -22,10 +22,10 @@ stdenv.mkDerivation rec {
 
   CXXFLAGS = lib.optionalString stdenv.cc.isClang "-std=c++11";
 
-  meta = {
+  meta = with lib; {
     homepage = "https://parchive.sourceforge.net/";
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     description = "Library for using Parchives (parity archive volume sets)";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }

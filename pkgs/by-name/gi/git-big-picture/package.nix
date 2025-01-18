@@ -28,11 +28,11 @@ python3Packages.buildPythonApplication rec {
       }
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Tool for visualization of Git repositories";
     homepage = "https://github.com/git-big-picture/git-big-picture";
-    license = lib.licenses.gpl3Plus;
-    maintainers = [ lib.maintainers.nthorne ];
+    license = licenses.gpl3Plus;
+    maintainers = [ maintainers.nthorne ];
     mainProgram = "git-big-picture";
   };
 }

@@ -47,11 +47,11 @@ python3Packages.buildPythonApplication rec {
     PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION = "python";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Simple policy-based fee manager for lightning network daemon";
     homepage = "https://github.com/accumulator/charge-lnd";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [
       mmilata
       mariaa144
     ];

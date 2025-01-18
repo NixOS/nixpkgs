@@ -51,11 +51,11 @@ stdenv.mkDerivation rec {
   dontStrip = true;
   dontPatchELF = true;
 
-  meta = {
+  meta = with lib; {
     description = "Brother type1 scanners udev rules";
     homepage = "http://www.brother.com";
-    platforms = lib.platforms.linux;
-    license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ jraygauthier ];
+    platforms = platforms.linux;
+    license = licenses.unfree;
+    maintainers = with maintainers; [ jraygauthier ];
   };
 }

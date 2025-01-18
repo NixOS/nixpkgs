@@ -79,11 +79,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "troveclient" ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/openstack/python-troveclient";
     description = "Client library for OpenStack Trove API";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     mainProgram = "trove";
-    maintainers = lib.teams.openstack.members;
+    maintainers = teams.openstack.members;
   };
 }

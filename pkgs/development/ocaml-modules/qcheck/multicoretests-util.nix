@@ -22,10 +22,10 @@ buildDunePackage rec {
 
   minimalOCamlVersion = "4.12";
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/ocaml-multicore/multicoretests";
     description = "Utility functions for property-based testing of multicore programs";
-    license = lib.licenses.bsd2;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.bsd2;
+    maintainers = [ maintainers.vbgl ];
   };
 }

@@ -18,12 +18,12 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace "/usr/local" "$out"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Offline WPS bruteforce utility";
     homepage = "https://github.com/wiire-a/pixiewps";
-    license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.nico202 ];
-    platforms = lib.platforms.all;
+    license = licenses.gpl3;
+    maintainers = [ maintainers.nico202 ];
+    platforms = platforms.all;
     mainProgram = "pixiewps";
   };
 }

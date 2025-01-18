@@ -35,15 +35,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.basic = nixosTests.ydotool;
 
-  meta = {
+  meta = with lib; {
     description = "Generic Linux command-line automation tool";
     homepage = "https://github.com/ReimuNotMoe/ydotool";
-    license = lib.licenses.agpl3Plus;
+    license = licenses.agpl3Plus;
     mainProgram = "ydotool";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       willibutz
       kraem
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 })

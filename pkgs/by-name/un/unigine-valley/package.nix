@@ -131,11 +131,11 @@ stdenv.mkDerivation rec {
 
   stripDebugList = [ "${instPath}/bin" ];
 
-  meta = {
+  meta = with lib; {
     description = "Unigine Valley GPU benchmarking tool";
     homepage = "https://unigine.com/products/benchmarks/valley/";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = lib.licenses.unfree; # see also: $out/$instPath/documentation/License.pdf
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree; # see also: $out/$instPath/documentation/License.pdf
     maintainers = [ ];
     platforms = [
       "x86_64-linux"

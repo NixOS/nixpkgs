@@ -70,11 +70,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     description = "PMIx Reference Runtime Environment";
     homepage = "https://docs.prrte.org/";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ markuskowa ];
-    platforms = lib.platforms.unix;
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ markuskowa ];
+    platforms = platforms.unix;
   };
 }

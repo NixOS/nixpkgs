@@ -35,10 +35,10 @@ buildDunePackage rec {
   ];
   doCheck = !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
 
-  meta = {
+  meta = with lib; {
     description = "Js_of_ocaml Javascript stubs for the OCaml ctypes library";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ bezmuth ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ bezmuth ];
     homepage = "https://gitlab.com/nomadic-labs/ctypes_stubs_js";
   };
 }

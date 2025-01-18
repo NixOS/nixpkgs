@@ -96,14 +96,14 @@ buildPythonPackage rec {
   # <blivet.static_data.luks_data.LUKS_Data object at 0x7ffff4a34b90>
   dontUseSetuptoolsCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "Python module for system storage configuration";
     homepage = "https://github.com/storaged-project/blivet";
     license = [
-      lib.licenses.gpl2Plus
-      lib.licenses.lgpl2Plus
+      licenses.gpl2Plus
+      licenses.lgpl2Plus
     ];
-    maintainers = with lib.maintainers; [ cybershadow ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ cybershadow ];
+    platforms = platforms.linux;
   };
 }

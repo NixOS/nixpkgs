@@ -39,11 +39,11 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Safe and ergonomic alternative to rm";
     homepage = "https://github.com/MilesCranmer/rip2";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
       milescranmer
       matthiasbeyer
     ];

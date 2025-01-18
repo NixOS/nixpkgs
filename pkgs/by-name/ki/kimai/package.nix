@@ -55,16 +55,16 @@ php.buildComposerProject (finalAttrs: {
     kimai = nixosTests.kimai;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Web-based multi-user time-tracking application";
     homepage = "https://www.kimai.org/";
-    license = lib.licenses.agpl3Plus;
+    license = licenses.agpl3Plus;
     longDescription = "
       Kimai is a web-based multi-user time-tracking application. Works great for
       everyone: freelancers, companies, organizations - everyone can track their
       times, generate reports, create invoices and do so much more.
     ";
-    maintainers = with lib.maintainers; [ peat-psuwit ];
-    platforms = lib.platforms.all;
+    maintainers = with maintainers; [ peat-psuwit ];
+    platforms = platforms.all;
   };
 })

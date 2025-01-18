@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
     llvmPackages.openmp
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Extensible high performance math expression parser library written in C++";
     homepage = "https://beltoforion.de/en/muparser/";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ wegank ];
-    platforms = lib.platforms.unix;
+    license = licenses.mit;
+    maintainers = with maintainers; [ wegank ];
+    platforms = platforms.unix;
   };
 }

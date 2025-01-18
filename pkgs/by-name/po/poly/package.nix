@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   outputHashMode = "recursive";
   outputHash = "11d7ldryfxi0wzfrg1bhw23a668a44vdb8gggxryvahmp5ahmq2h";
 
-  meta = {
+  meta = with lib; {
     description = "Medium contrast serif font";
     longDescription = ''
       With short ascenders and a very high x-height, Poly is efficient in small
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
       and languages that use the Latin script and its variants.
     '';
     homepage = "http://www.fontsquirrel.com/fonts/poly";
-    license = lib.licenses.ofl;
-    maintainers = with lib.maintainers; [ relrod ];
+    license = licenses.ofl;
+    maintainers = with maintainers; [ relrod ];
   };
 }

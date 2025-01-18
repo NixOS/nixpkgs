@@ -36,11 +36,11 @@ stdenv.mkDerivation rec {
     makeFlags="prefix=$out ETCDIR=$out/etc"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Adhoc wireless mesh routing daemon";
-    license = lib.licenses.bsd3;
+    license = licenses.bsd3;
     homepage = "http://olsr.org/";
     maintainers = [ ];
-    platforms = with lib.platforms; linux;
+    platforms = with platforms; linux;
   };
 }

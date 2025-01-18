@@ -112,11 +112,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "datalad_next" ];
 
-  meta = {
+  meta = with lib; {
     description = "DataLad extension with a staging area for additional functionality, or for improved performance and user experience";
     changelog = "https://github.com/datalad/datalad-next/blob/main/CHANGELOG.md";
     homepage = "https://github.com/datalad/datalad-next";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ gador ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ gador ];
   };
 }

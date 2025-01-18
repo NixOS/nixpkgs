@@ -40,11 +40,11 @@ buildGo122Module rec {
     chmod +x $out/bin/cloudpan189-go
   '';
 
-  meta = {
+  meta = with lib; {
     mainProgram = "cloudpan189-go";
-    maintainers = with lib.maintainers; [ xddxdd ];
+    maintainers = with maintainers; [ xddxdd ];
     description = "CLI for China Telecom 189 Cloud Drive service, implemented in Go";
     homepage = "https://github.com/tickstep/cloudpan189-go";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
   };
 }

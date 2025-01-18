@@ -110,11 +110,11 @@ maven.buildMavenPackage rec {
       });
   };
 
-  meta = {
+  meta = with lib; {
     description = "Sonarlint language server";
     mainProgram = "sonarlint-ls";
     homepage = "https://github.com/SonarSource/sonarlint-language-server";
-    license = lib.licenses.lgpl3;
-    maintainers = with lib.maintainers; [ tricktron ];
+    license = licenses.lgpl3;
+    maintainers = with maintainers; [ tricktron ];
   };
 }

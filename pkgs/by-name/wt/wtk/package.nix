@@ -29,11 +29,11 @@ stdenv.mkDerivation rec {
     stdenv.cc.cc
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "http://java.sun.com/products/sjwtoolkit/download.html";
     description = "Sun Java Wireless Toolkit 2.5.2_01 for CLDC";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = lib.licenses.unfree;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
     platforms = [ "i686-linux" ];
   };
 }

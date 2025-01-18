@@ -30,16 +30,16 @@ stdenv.mkDerivation {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = {
+  meta = with lib; {
     description = "Compact interpreter for a minimal lisp/scheme dialect";
     homepage = "https://git.sr.ht/~ft/femtolisp";
-    license = with lib.licenses; [
+    license = with licenses; [
       mit
       bsd3
     ];
-    maintainers = with lib.maintainers; [ moody ];
+    maintainers = with maintainers; [ moody ];
     broken = stdenv.hostPlatform.isDarwin;
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
     mainProgram = "flisp";
   };
 }

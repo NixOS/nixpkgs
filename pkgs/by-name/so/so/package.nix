@@ -52,13 +52,13 @@ let
       };
     };
 
-    meta = {
+    meta = with lib; {
       homepage = "https://github.com/samtay/so";
       description = "TUI to StackExchange network";
       changelog = "https://github.com/samtay/so/blob/main/CHANGELOG.md";
       mainProgram = "so";
-      license = lib.licenses.mit;
-      maintainers = with lib.maintainers; [
+      license = licenses.mit;
+      maintainers = with maintainers; [
         unsolvedcypher
       ];
     };

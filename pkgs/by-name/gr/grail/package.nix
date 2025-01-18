@@ -34,10 +34,10 @@ stdenv.mkDerivation rec {
 
   configureFlags = lib.optional enableX11 "--with-x11";
 
-  meta = {
+  meta = with lib; {
     homepage = "https://launchpad.net/canonical-multitouch/grail";
     description = "Gesture Recognition And Instantiation Library";
-    license = lib.licenses.gpl2;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2;
+    platforms = platforms.linux;
   };
 }

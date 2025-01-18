@@ -36,10 +36,10 @@ buildPythonPackage rec {
   # upstream has no tests
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Python client library for A. O. Smith water heaters";
     homepage = "https://github.com/bdr99/py-aosmith";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

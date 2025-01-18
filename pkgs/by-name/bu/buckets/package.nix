@@ -49,11 +49,11 @@ appimageTools.wrapType2 {
     done
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Private family budgeting app";
     homepage = "https://www.budgetwithbuckets.com/";
-    license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ kmogged ];
+    license = licenses.unfree;
+    maintainers = with maintainers; [ kmogged ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

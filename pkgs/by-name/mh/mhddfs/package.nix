@@ -38,11 +38,11 @@ stdenv.mkDerivation rec {
     cp mhddfs $out/bin/
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://mhddfs.uvw.ru/";
     description = "Combines a several mount points into the single one";
-    license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.makefu ];
+    license = licenses.gpl3;
+    maintainers = [ maintainers.makefu ];
     mainProgram = "mhddfs";
   };
 }

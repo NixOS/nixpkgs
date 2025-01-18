@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   env.NIX_CFLAGS_COMPILE = "-DPOINTERHOLDER_TRANSITION=1";
   env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-liconv";
 
-  meta = {
+  meta = with lib; {
     homepage = "https://mj.ucw.cz/sw/paperjam/";
     description = "Program for transforming PDF files";
     longDescription = ''
@@ -42,9 +42,9 @@ stdenv.mkDerivation (finalAttrs: {
       pages, scale and rotate them, put multiple pages on a single sheet, draw
       cropmarks, and many other tricks.
     '';
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     mainProgram = "paperjam";
-    maintainers = with lib.maintainers; [ cbley ];
-    platforms = lib.platforms.all;
+    maintainers = with maintainers; [ cbley ];
+    platforms = platforms.all;
   };
 })

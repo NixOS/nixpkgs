@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
       "''${gappsWrapperArgs[@]}"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Real-time strategy game with programmable units";
     mainProgram = "liberation-circuit";
     longDescription = ''
@@ -59,8 +59,8 @@ stdenv.mkDerivation rec {
       editor and compiler to write your own unit AI in a simplified version of C.
     '';
     homepage = "https://linleyh.itch.io/liberation-circuit";
-    maintainers = with lib.maintainers; [ emilytrau ];
-    license = lib.licenses.gpl3Only;
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ emilytrau ];
+    license = licenses.gpl3Only;
+    platforms = platforms.linux;
   };
 }

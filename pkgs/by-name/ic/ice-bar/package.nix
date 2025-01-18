@@ -30,12 +30,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Powerful menu bar manager for macOS";
     homepage = "https://icemenubar.app/";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ donteatoreo ];
-    platforms = lib.platforms.darwin;
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ donteatoreo ];
+    platforms = platforms.darwin;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 })

@@ -50,7 +50,7 @@ python3Packages.buildPythonApplication rec {
     "mycli/packages/paramiko_stub/__init__.py"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Command-line interface for MySQL";
     mainProgram = "mycli";
     longDescription = ''
@@ -58,7 +58,7 @@ python3Packages.buildPythonApplication rec {
       syntax highlighting.
     '';
     homepage = "http://mycli.net";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ jojosch ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ jojosch ];
   };
 }

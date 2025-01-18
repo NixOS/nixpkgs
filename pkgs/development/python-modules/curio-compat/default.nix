@@ -29,10 +29,10 @@ buildPythonPackage rec {
     "test_ssl_outgoing"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Coroutine-based library for concurrent systems programming";
     homepage = "https://github.com/klen/curio";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

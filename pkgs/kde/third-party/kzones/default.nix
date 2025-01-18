@@ -35,11 +35,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "KDE KWin Script for snapping windows into zones";
     homepage = "https://github.com/gerritdevriese/kzones/";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ k900 ];
-    platforms = lib.platforms.all;
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ k900 ];
+    platforms = platforms.all;
   };
 })

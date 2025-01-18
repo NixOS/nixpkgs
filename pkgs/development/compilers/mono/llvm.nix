@@ -54,11 +54,11 @@ stdenv.mkDerivation {
     ]
     ++ lib.optional (!isDarwin) "-DBUILD_SHARED_LIBS=ON";
 
-  meta = {
+  meta = with lib; {
     description = "Collection of modular and reusable compiler and toolchain technologies - Mono build";
     homepage = "http://llvm.org/";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ thoughtpolice ];
-    platforms = lib.platforms.all;
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ thoughtpolice ];
+    platforms = platforms.all;
   };
 }

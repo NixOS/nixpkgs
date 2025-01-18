@@ -24,12 +24,12 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ openssl ];
   nativeBuildInputs = [ pkg-config ];
 
-  meta = {
+  meta = with lib; {
     description = "CLI Tool for Codeberg similar to gh and glab";
     homepage = "https://codeberg.org/VoiDD/fjo";
-    license = lib.licenses.agpl3Only;
+    license = licenses.agpl3Only;
     mainProgram = "berg";
-    maintainers = with lib.maintainers; [ ehmry ];
+    maintainers = with maintainers; [ ehmry ];
     broken = stdenv.hostPlatform.isDarwin;
   };
 }

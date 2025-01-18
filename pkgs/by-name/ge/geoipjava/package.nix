@@ -25,10 +25,10 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/java
     cp maxmindgeoip.jar $out/share/java
   '';
-  meta = {
+  meta = with lib; {
     description = "GeoIP Java API";
-    license = lib.licenses.lgpl21Plus;
-    maintainers = [ lib.maintainers.sander ];
-    platforms = lib.platforms.unix;
+    license = licenses.lgpl21Plus;
+    maintainers = [ maintainers.sander ];
+    platforms = platforms.unix;
   };
 }

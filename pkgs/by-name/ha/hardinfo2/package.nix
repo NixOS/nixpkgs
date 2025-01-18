@@ -80,16 +80,16 @@ stdenv.mkDerivation (finalAtrs: {
     (lib.cmakeFeature "CMAKE_INSTALL_SERVICEDIR" "${placeholder "out"}/lib")
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "http://www.hardinfo2.org";
     description = "System information and benchmarks for Linux systems";
-    license = with lib.licenses; [
+    license = with licenses; [
       gpl2Plus
       gpl3Plus
       lgpl2Plus
     ];
-    maintainers = with lib.maintainers; [ sigmanificient ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ sigmanificient ];
+    platforms = platforms.linux;
     mainProgram = "hardinfo2";
   };
 })

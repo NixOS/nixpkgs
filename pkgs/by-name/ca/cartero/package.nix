@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Make HTTP requests and test APIs";
     longDescription = ''
       Cartero is a graphical HTTP client that can be used
@@ -63,9 +63,9 @@ stdenv.mkDerivation (finalAttrs: {
       payloads to compatible requests.
     '';
     homepage = "https://cartero.danirod.es";
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     mainProgram = "cartero";
-    maintainers = with lib.maintainers; [ aleksana ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ aleksana ];
+    platforms = platforms.linux;
   };
 })

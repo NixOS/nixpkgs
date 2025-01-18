@@ -41,10 +41,10 @@ let
       bignums
     ];
 
-    meta = {
+    meta = with lib; {
       description = "Tool for Coq proofs about floating-point round-off error";
-      maintainers = with lib.maintainers; [ quinn-dougherty ];
-      license = lib.licenses.lgpl3Plus;
+      maintainers = with maintainers; [ quinn-dougherty ];
+      license = licenses.lgpl3Plus;
     };
   };
 in

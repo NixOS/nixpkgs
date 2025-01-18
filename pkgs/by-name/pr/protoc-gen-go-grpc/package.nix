@@ -23,11 +23,11 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Go language implementation of gRPC. HTTP/2 based RPC";
     homepage = "https://grpc.io/";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ aaronjheng ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ aaronjheng ];
     mainProgram = "protoc-gen-go-grpc";
   };
 }

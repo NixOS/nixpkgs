@@ -42,15 +42,15 @@ mkDerivation rec {
     "-DCMAKE_INSTALL_UDEVRULESDIR=${placeholder "out"}/lib/udev/rules.d"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Linux/X11 application for the Logitech Spotlight device (and similar devices)";
     homepage = "https://github.com/jahnf/Projecteur";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "projecteur";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       benneti
       drupol
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

@@ -25,11 +25,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-+pMgaHB69itbQ+BDM7/oaJg3HrT1UN+joJL7BO/2vxE=";
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/docopt/docopts";
     description = "Shell interpreter for docopt, the command-line interface description language";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.confus ];
-    platforms = lib.platforms.unix;
+    license = licenses.mit;
+    maintainers = [ maintainers.confus ];
+    platforms = platforms.unix;
   };
 }

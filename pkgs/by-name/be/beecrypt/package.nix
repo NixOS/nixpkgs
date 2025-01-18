@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
     "--enable-static"
   ];
 
-  meta = {
-    platforms = lib.platforms.linux;
-    license = lib.licenses.lgpl2;
+  meta = with lib; {
+    platforms = platforms.linux;
+    license = licenses.lgpl2;
   };
 }

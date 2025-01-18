@@ -16,10 +16,10 @@ stdenv.mkDerivation rec {
     sed -i -e 's@\$(DESTDIR)/usr@'$out'@' src/Makefile;
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://multitran.sourceforge.net/";
     description = "Multitran lib: library for reading Multitran's BTREE database format";
-    license = lib.licenses.gpl2Only;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Only;
+    platforms = platforms.linux;
   };
 }

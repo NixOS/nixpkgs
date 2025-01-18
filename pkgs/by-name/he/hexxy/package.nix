@@ -28,11 +28,11 @@ buildGoModule {
     ];
   };
 
-  meta = {
+  meta = with lib; {
     description = "A modern and beautiful alternative to xxd and hexdump";
     homepage = "https://github.com/sweetbbak/hexxy";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.NotAShelf ];
+    license = licenses.mit;
+    maintainers = [ maintainers.NotAShelf ];
     mainProgram = "hexxy";
   };
 }

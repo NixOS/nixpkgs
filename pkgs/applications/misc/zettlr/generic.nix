@@ -37,12 +37,12 @@ appimageTools.wrapType2 rec {
       --replace-fail 'Exec=AppRun' 'Exec=${pname}'
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Markdown editor for writing academic texts and taking notes";
     homepage = "https://www.zettlr.com";
     platforms = [ "x86_64-linux" ];
-    license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ tfmoraes ];
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ tfmoraes ];
     mainProgram = "zettlr";
   };
 }

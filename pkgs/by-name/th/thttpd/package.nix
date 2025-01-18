@@ -29,10 +29,10 @@ stdenv.mkDerivation rec {
     sed -i -e '/chgrp/d' extras/Makefile
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Tiny/turbo/throttling HTTP server";
     homepage = "http://www.acme.com/software/thttpd/";
-    license = lib.licenses.bsd2;
-    platforms = lib.platforms.linux;
+    license = licenses.bsd2;
+    platforms = platforms.linux;
   };
 }

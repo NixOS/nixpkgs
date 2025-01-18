@@ -50,12 +50,12 @@ stdenv.mkDerivation (finalAttrs: {
     popd
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://sr.ht/~emersion/basu";
     description = "Sd-bus library, extracted from systemd";
     mainProgram = "basuctl";
-    license = lib.licenses.lgpl21Only;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = lib.platforms.linux;
+    license = licenses.lgpl21Only;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.linux;
   };
 })

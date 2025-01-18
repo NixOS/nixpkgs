@@ -48,11 +48,11 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
-  meta = {
+  meta = with lib; {
     description = "JSON Schema to Rust type converter";
     mainProgram = "cargo-typify";
     homepage = "https://github.com/oxidecomputer/typify";
-    license = with lib.licenses; [ asl20 ];
-    maintainers = with lib.maintainers; [ david-r-cox ];
+    license = with licenses; [ asl20 ];
+    maintainers = with maintainers; [ david-r-cox ];
   };
 }

@@ -17,11 +17,11 @@ stdenv.mkDerivation rec {
     sha256 = "06daxwbysppvbh1mwprw8fgsp6mbd3kqj7a978w7ivn8hdgdi28m";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Simple HTTP benchmarking tool";
     homepage = "http://www.hping.org/wbox/";
-    license = lib.licenses.bsd3;
-    platforms = lib.platforms.unix;
+    license = licenses.bsd3;
+    platforms = platforms.unix;
     mainProgram = "wbox";
   };
 }

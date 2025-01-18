@@ -50,10 +50,10 @@ buildDunePackage rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/hackwaly/ocamlearlybird";
     description = "OCaml debug adapter";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.romildo ];
+    license = licenses.mit;
+    maintainers = [ maintainers.romildo ];
   };
 }

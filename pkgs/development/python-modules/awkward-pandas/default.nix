@@ -40,10 +40,10 @@ buildPythonPackage rec {
   # There are no tests in the Pypi archive
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Awkward Array Pandas Extension";
     homepage = "https://pypi.org/project/awkward-pandas/";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ GaetanLepage ];
   };
 }

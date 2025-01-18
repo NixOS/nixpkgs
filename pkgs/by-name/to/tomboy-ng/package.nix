@@ -71,12 +71,12 @@ stdenv.mkDerivation (finalAttrs: {
     LAZ_DIR = "${lazarus}/share/lazarus";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Note taking app that works and synchronises between Linux, Windows and macOS";
     homepage = "https://github.com/tomboy-notes/tomboy-ng";
-    license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ pluiedev ];
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ pluiedev ];
     mainProgram = "tomboy-ng";
-    platforms = lib.platforms.unix ++ lib.platforms.windows;
+    platforms = platforms.unix ++ platforms.windows;
   };
 })

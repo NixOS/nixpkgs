@@ -16,10 +16,10 @@ buildPecl {
     libyaml
   ];
 
-  meta = {
+  meta = with lib; {
     description = "YAML-1.1 parser and emitter";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     homepage = "https://github.com/php/pecl-file_formats-yaml";
-    maintainers = lib.teams.php.members;
+    maintainers = teams.php.members;
   };
 }

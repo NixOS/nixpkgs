@@ -12,11 +12,11 @@ appimageTools.wrapType2 rec {
     hash = "sha256-7Z/1PwmjwbvKsZXncWB60WbGnQVTlSsqcsLy8mN2CI0=";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Private DeFi wallet for Linux";
     homepage = "https://www.railway.xyz";
-    license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ mitchmindtree ];
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [ mitchmindtree ];
     platforms = [ "x86_64-linux" ];
   };
 }

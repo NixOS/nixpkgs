@@ -19,11 +19,11 @@ buildNpmPackage rec {
 
   dontNpmBuild = true;
 
-  meta = {
+  meta = with lib; {
     description = "YAML based HTTP script processing engine";
     homepage = "https://github.com/pmarkert/hyperpotamus";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "hyperpotamus";
-    maintainers = with lib.maintainers; [ onny ];
+    maintainers = with maintainers; [ onny ];
   };
 }

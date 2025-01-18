@@ -27,11 +27,11 @@ buildGoModule rec {
     "-extldflags -static"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Language for writing HTML user interfaces in Go";
     homepage = "https://github.com/a-h/templ";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "templ";
-    maintainers = with lib.maintainers; [ luleyleo ];
+    maintainers = with maintainers; [ luleyleo ];
   };
 }

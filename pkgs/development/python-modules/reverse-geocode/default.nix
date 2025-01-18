@@ -33,10 +33,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "reverse_geocode" ];
 
-  meta = {
+  meta = with lib; {
     description = "Reverse geocode the given latitude/longitude";
     homepage = "https://pypi.org/project/reverse-geocode/";
-    license = lib.licenses.lgpl2Only;
-    maintainers = with lib.maintainers; [ fab ];
+    license = licenses.lgpl2Only;
+    maintainers = with maintainers; [ fab ];
   };
 }

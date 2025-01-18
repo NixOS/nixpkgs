@@ -73,11 +73,11 @@ python3.pkgs.buildPythonApplication rec {
     "'not online'"
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://sherlockproject.xyz/";
     description = "Hunt down social media accounts by username across social networks";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "sherlock";
-    maintainers = with lib.maintainers; [ applePrincess ];
+    maintainers = with maintainers; [ applePrincess ];
   };
 }

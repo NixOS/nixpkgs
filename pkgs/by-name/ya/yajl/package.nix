@@ -27,16 +27,16 @@ stdenv.mkDerivation (finalAttrs: {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Yet Another JSON Library";
     longDescription = ''
       YAJL is a small event-driven (SAX-style) JSON parser written in ANSI
       C, and a small validating JSON generator.
     '';
     homepage = "http://lloyd.github.com/yajl/";
-    license = lib.licenses.isc;
+    license = licenses.isc;
     pkgConfigModules = [ "yajl" ];
-    platforms = with lib.platforms; linux ++ darwin;
-    maintainers = with lib.maintainers; [ maggesi ];
+    platforms = with platforms; linux ++ darwin;
+    maintainers = with maintainers; [ maggesi ];
   };
 })

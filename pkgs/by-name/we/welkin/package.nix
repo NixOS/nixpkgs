@@ -31,14 +31,14 @@ stdenv.mkDerivation rec {
     chmod a+x $out/bin/welkin
   '';
 
-  meta = {
+  meta = with lib; {
     description = "RDF visualizer";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       raskin
     ];
     hydraPlatforms = [ ];
-    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
-    license = lib.licenses.bsd3;
-    platforms = with lib.platforms; unix;
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = licenses.bsd3;
+    platforms = with platforms; unix;
   };
 }

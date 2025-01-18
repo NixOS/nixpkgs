@@ -24,12 +24,12 @@ buildNpmPackage rec {
     generates-valid-markdown = callPackage ./test-generates-valid-markdown { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Generate table of contents for Markdown files";
     homepage = "https://github.com/thlorenz/doctoc";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ tomodachi94 ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ tomodachi94 ];
     mainProgram = "doctoc";
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 }

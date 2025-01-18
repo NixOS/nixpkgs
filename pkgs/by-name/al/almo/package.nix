@@ -40,12 +40,12 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "ALMO is markdown parser and static site generator";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.all;
+    license = licenses.mit;
+    platforms = platforms.all;
     homepage = "https://github.com/abap34/almo";
-    maintainers = with lib.maintainers; [ momeemt ];
+    maintainers = with maintainers; [ momeemt ];
     mainProgram = "almo";
   };
 }

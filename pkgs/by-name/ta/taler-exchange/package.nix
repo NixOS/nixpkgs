@@ -101,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   checkTarget = "check";
 
-  meta = {
+  meta = with lib; {
     description = "Exchange component for the GNU Taler electronic payment system";
     longDescription = ''
       Taler is an electronic payment system providing the ability to pay
@@ -115,8 +115,8 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://taler.net/";
     changelog = "https://git.taler.net/exchange.git/tree/ChangeLog";
-    license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ astro ];
-    platforms = lib.platforms.linux;
+    license = licenses.agpl3Plus;
+    maintainers = with maintainers; [ astro ];
+    platforms = platforms.linux;
   };
 })

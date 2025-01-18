@@ -16,10 +16,10 @@ build-idris-package {
     sha256 = "07wps3pyp4ph0vj3640x561gkjkbcdq1if9h6sjjb30924sbdxfg";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Some Idris libraries including nodejs bindings and ISO8601 Date and Time";
     homepage = "https://github.com/ostera/idris-coda";
-    license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.brainrape ];
+    license = licenses.bsd3;
+    maintainers = [ maintainers.brainrape ];
   };
 }

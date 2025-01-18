@@ -45,15 +45,15 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  meta = {
+  meta = with lib; {
     description = "3D model viewer for the GNOME desktop powered by f3d";
     homepage = "https://github.com/Nokse22/Exhibit";
-    license = with lib.licenses; [
+    license = with licenses; [
       gpl3Plus
       cc0
     ];
     mainProgram = "exhibit";
-    maintainers = with lib.maintainers; [ aleksana ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ aleksana ];
+    platforms = platforms.linux;
   };
 }

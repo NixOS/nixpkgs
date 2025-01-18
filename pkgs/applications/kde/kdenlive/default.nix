@@ -115,10 +115,10 @@ mkDerivation {
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://apps.kde.org/kdenlive/";
     description = "Video editor";
-    license = with lib.licenses; [ gpl2Plus ];
-    maintainers = with lib.maintainers; [ turion ];
+    license = with licenses; [ gpl2Plus ];
+    maintainers = with maintainers; [ turion ];
   };
 }

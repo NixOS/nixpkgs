@@ -28,10 +28,10 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/CamDavidsonPilon/autograd-gamma";
     description = "Autograd compatible approximations to the gamma family of functions";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ swflint ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ swflint ];
   };
 }

@@ -28,12 +28,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "List remote branches if they're merged and/or available locally";
     homepage = "https://github.com/davidosomething/git-my";
-    license = lib.licenses.free;
+    license = licenses.free;
     maintainers = [ ];
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
     mainProgram = "git-my";
   };
 })

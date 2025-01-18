@@ -17,11 +17,11 @@ buildGoModule rec {
 
   vendorHash = null;
 
-  meta = {
+  meta = with lib; {
     description = "Access Windows named pipes from WSL";
     homepage = "https://github.com/jstarks/npiperelay";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.shlevy ];
-    platforms = lib.platforms.windows;
+    license = licenses.mit;
+    maintainers = [ maintainers.shlevy ];
+    platforms = platforms.windows;
   };
 }

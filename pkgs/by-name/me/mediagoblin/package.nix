@@ -147,10 +147,10 @@ python.pkgs.buildPythonApplication rec {
     inherit python;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Free software media publishing platform that anyone can run";
     homepage = "https://mediagoblin.org/";
-    license = lib.licenses.agpl3Plus;
-    maintainers = lib.teams.c3d2.members;
+    license = licenses.agpl3Plus;
+    maintainers = teams.c3d2.members;
   };
 }

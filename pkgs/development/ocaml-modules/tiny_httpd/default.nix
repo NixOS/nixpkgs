@@ -22,11 +22,11 @@ buildDunePackage rec {
   buildInputs = [ result ];
   propagatedBuildInputs = [ seq ];
 
-  meta = {
+  meta = with lib; {
     description = "Minimal HTTP server using good old threads";
     inherit (src.meta) homepage;
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.mit;
+    maintainers = [ maintainers.vbgl ];
     mainProgram = "http_of_dir";
   };
 }

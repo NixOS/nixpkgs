@@ -57,12 +57,12 @@ stdenv.mkDerivation {
     libconfuse
   ] ++ lib.optional (gccCross != null) gccCross;
 
-  meta = {
+  meta = with lib; {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Qi tools to access the Ben Nanonote USB_BOOT mode";
-    license = lib.licenses.gpl3;
+    license = licenses.gpl3;
     homepage = "http://www.linux-mtd.infradead.org/";
     maintainers = [ ];
-    platforms = lib.platforms.x86_64;
+    platforms = platforms.x86_64;
   };
 }

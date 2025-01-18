@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   ];
   NIX_LDFLAGS = "-lm -lpthread";
 
-  meta = {
+  meta = with lib; {
     description = ''An effects "rack" for the JACK low latency audio API'';
     longDescription = ''
       JACK Rack is an effects "rack" for the JACK low latency audio
@@ -37,8 +37,8 @@ stdenv.mkDerivation rec {
       computer into an effects box.
     '';
     homepage = "https://jack-rack.sourceforge.net/";
-    license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.astsmtl ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.astsmtl ];
+    platforms = platforms.linux;
   };
 }

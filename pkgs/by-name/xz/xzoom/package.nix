@@ -50,11 +50,11 @@ stdenv.mkDerivation rec {
     "install.man"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "X11 screen zoom tool";
-    license = lib.licenses.free;
-    maintainers = [ lib.maintainers.raskin ];
-    platforms = lib.platforms.linux;
+    license = licenses.free;
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.linux;
     mainProgram = "xzoom";
   };
 }

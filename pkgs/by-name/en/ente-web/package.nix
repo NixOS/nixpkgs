@@ -45,15 +45,15 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Web client for Ente Photos";
     homepage = "https://ente.io/";
     changelog = "https://github.com/ente-io/ente/releases";
-    license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [
       surfaceflinger
       pinpox
     ];
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 })

@@ -29,11 +29,11 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "ghstack" ];
 
-  meta = {
+  meta = with lib; {
     description = "Submit stacked diffs to GitHub on the command line";
     homepage = "https://github.com/ezyang/ghstack";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ munksgaard ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ munksgaard ];
     mainProgram = "ghstack";
   };
 }

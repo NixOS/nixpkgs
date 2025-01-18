@@ -87,11 +87,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstallCheck
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://fprint.freedesktop.org/";
     description = "Library designed to make it easy to add support for consumer fingerprint readers";
-    license = lib.licenses.lgpl21Only;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ abbradar ];
+    license = licenses.lgpl21Only;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ abbradar ];
   };
 })

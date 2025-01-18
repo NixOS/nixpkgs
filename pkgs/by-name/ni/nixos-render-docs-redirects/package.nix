@@ -13,10 +13,10 @@ python3.pkgs.buildPythonApplication {
     pytestCheckHook
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Redirects manipulation for nixos manuals";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ getpsyched ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ getpsyched ];
     mainProgram = "redirects";
   };
 }

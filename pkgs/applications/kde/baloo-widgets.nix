@@ -13,9 +13,9 @@
 
 mkDerivation {
   pname = "baloo-widgets";
-  meta = {
-    license = [ lib.licenses.lgpl21 ];
-    maintainers = [ lib.maintainers.ttuegel ];
+  meta = with lib; {
+    license = [ licenses.lgpl21 ];
+    maintainers = [ maintainers.ttuegel ];
   };
   nativeBuildInputs = [
     extra-cmake-modules

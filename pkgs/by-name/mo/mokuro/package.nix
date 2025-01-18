@@ -44,11 +44,11 @@ python3Packages.buildPythonApplication rec {
   # tests try to use the network
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Read Japanese manga inside browser with selectable text";
     homepage = "https://github.com/kha-white/mokuro";
-    license = lib.licenses.gpl3Only;
+    license = licenses.gpl3Only;
     mainProgram = "mokuro";
-    maintainers = with lib.maintainers; [ tomasajt ];
+    maintainers = with maintainers; [ tomasajt ];
   };
 }

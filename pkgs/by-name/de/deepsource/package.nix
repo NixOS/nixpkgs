@@ -52,11 +52,11 @@ buildGoModule rec {
     versionCheckHook
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Command line interface to DeepSource, the code health platform";
     mainProgram = "deepsource";
     homepage = "https://github.com/DeepSourceCorp/cli";
-    license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ nipeharefa ];
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ nipeharefa ];
   };
 }

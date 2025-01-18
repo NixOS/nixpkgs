@@ -25,12 +25,12 @@ stdenv.mkDerivation (finalAttrs: {
       fixDarwinDylibNames
     ];
 
-  meta = {
+  meta = with lib; {
     description = "Turn quickly bulky LAS files into compact LAZ files without information loss";
     homepage = "https://laszip.org";
     changelog = "https://github.com/LASzip/LASzip/releases/tag/${finalAttrs.src.rev}";
-    license = lib.licenses.lgpl2;
-    maintainers = [ lib.maintainers.michelk ];
-    platforms = lib.platforms.unix;
+    license = licenses.lgpl2;
+    maintainers = [ maintainers.michelk ];
+    platforms = platforms.unix;
   };
 })

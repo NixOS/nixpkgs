@@ -71,12 +71,12 @@ stdenv.mkDerivation {
     mkdir -p $out/bin;
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Translator English -- C/C++ declarations";
     homepage = "https://cdecl.org";
-    license = lib.licenses.publicDomain;
-    maintainers = with lib.maintainers; [ sigmanificient ];
-    platforms = lib.platforms.unix;
+    license = licenses.publicDomain;
+    maintainers = with maintainers; [ sigmanificient ];
+    platforms = platforms.unix;
     mainProgram = "cdecl";
   };
 }

@@ -40,16 +40,16 @@ stdenv.mkDerivation (finalAttrs: {
     pushd
   '';
 
-  meta = {
+  meta = with lib; {
     description = "C library for reading/writing various DNA sequence formats";
     homepage = "https://staden.sourceforge.net";
     downloadPage = "https://github.com/jkbonfield/io_lib/releases";
     changelog = "https://github.com/jkbonfield/io_lib/blob/${finalAttrs.src.rev}/CHANGES";
-    license = with lib.licenses; [
+    license = with licenses; [
       bsd3
       free
     ];
-    platforms = lib.platforms.all;
-    maintainers = [ lib.maintainers.kupac ];
+    platforms = platforms.all;
+    maintainers = [ maintainers.kupac ];
   };
 })

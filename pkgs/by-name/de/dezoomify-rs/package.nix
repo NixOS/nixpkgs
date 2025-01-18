@@ -24,11 +24,11 @@ rustPlatform.buildRustPackage rec {
     "--skip=custom_size_local_zoomify_tiles"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Zoomable image downloader for Google Arts & Culture, Zoomify, IIIF, and others";
     homepage = "https://github.com/lovasoa/dezoomify-rs/";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ fsagbuya ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ fsagbuya ];
     mainProgram = "dezoomify-rs";
   };
 }

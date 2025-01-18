@@ -44,12 +44,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/dokutan/mouse_m908";
     description = "Control various Redragon gaming mice from Linux, BSD and Haiku";
     mainProgram = "mouse_m908";
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     platforms = [ "x86_64-linux" ];
-    maintainers = with lib.maintainers; [ kylelovestoad ];
+    maintainers = with maintainers; [ kylelovestoad ];
   };
 })

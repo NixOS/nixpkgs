@@ -35,12 +35,12 @@ stdenv.mkDerivation (finalAttrs: {
     mpfr
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Simple GTK postfix calculator for GNOME";
     homepage = "https://gitlab.com/leesonwai/sums";
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     mainProgram = "sums";
-    maintainers = with lib.maintainers; [ aleksana ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ aleksana ];
+    platforms = platforms.unix;
   };
 })

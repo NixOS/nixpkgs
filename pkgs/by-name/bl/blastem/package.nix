@@ -65,12 +65,12 @@ stdenv.mkDerivation (finalAttrs: {
     version = "0.6.3-pre"; # remove line when moving to a stable version
   };
 
-  meta = {
+  meta = with lib; {
     description = "The fast and accurate Genesis emulator";
     homepage = "https://www.retrodev.com/blastem/";
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     mainProgram = "blastem";
-    maintainers = with lib.maintainers; [ tomasajt ];
+    maintainers = with maintainers; [ tomasajt ];
     platforms = [
       "i686-linux"
       "x86_64-linux"

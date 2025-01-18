@@ -87,15 +87,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.mate = nixosTests.mate-wayland;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://wayfire.org/";
     description = "3D Wayland compositor";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       wucke13
       rewine
     ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
     mainProgram = "wayfire";
   };
 })

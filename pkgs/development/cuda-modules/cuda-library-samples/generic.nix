@@ -28,16 +28,16 @@ let
         addDriverRunpath $exe
       done
     '';
-    meta = {
+    meta = with lib; {
       description = "examples of using libraries using CUDA";
       longDescription = ''
         CUDA Library Samples contains examples demonstrating the use of
         features in the math and image processing libraries cuBLAS, cuTENSOR,
         cuSPARSE, cuSOLVER, cuFFT, cuRAND, NPP and nvJPEG.
       '';
-      license = lib.licenses.bsd3;
+      license = licenses.bsd3;
       platforms = [ "x86_64-linux" ];
-      maintainers = with lib.maintainers; [ obsidian-systems-maintenance ] ++ lib.teams.cuda.members;
+      maintainers = with maintainers; [ obsidian-systems-maintenance ] ++ teams.cuda.members;
     };
   };
 in

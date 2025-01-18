@@ -32,11 +32,11 @@ buildPythonPackage rec {
     rustPlatform.maturinBuildHook
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Native accelerator for ua-parser";
     homepage = "https://github.com/ua-parser/uap-rust/tree/main/ua-parser-py";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ dotlambda ];
     mainProgram = "ua-parser-rs";
   };
 }

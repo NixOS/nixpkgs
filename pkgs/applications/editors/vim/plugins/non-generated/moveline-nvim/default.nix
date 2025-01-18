@@ -45,10 +45,10 @@ vimUtils.buildVimPlugin {
   # Plugin generates a non lua file output that needs to be manually required
   nvimRequireCheck = "moveline";
 
-  meta = {
+  meta = with lib; {
     description = "Neovim plugin for moving lines up and down";
     homepage = "https://github.com/willothy/moveline.nvim";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ redxtech ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ redxtech ];
   };
 }

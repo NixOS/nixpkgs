@@ -39,13 +39,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     description = "Set C++ wrappers around the LV2 C API";
     mainProgram = "ttl2c";
     homepage = "https://lvtk.org/";
-    license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ bot-wxt1221 ];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ bot-wxt1221 ];
+    platforms = platforms.unix;
     badPlatforms = [
       "x86_64-darwin"
       "aarch64-darwin"

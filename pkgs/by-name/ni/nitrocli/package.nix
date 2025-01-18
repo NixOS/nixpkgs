@@ -44,11 +44,11 @@ rustPlatform.buildRustPackage {
       rm $out/bin/shell-complete
     '';
 
-  meta = {
+  meta = with lib; {
     description = "Command line tool for interacting with Nitrokey devices";
     homepage = "https://github.com/d-e-s-o/nitrocli";
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     mainProgram = "nitrocli";
-    maintainers = with lib.maintainers; [ robinkrahl ];
+    maintainers = with maintainers; [ robinkrahl ];
   };
 }

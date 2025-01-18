@@ -23,12 +23,12 @@ tcl.mkTclDerivation rec {
     install -m 755 $src $out/bin/2048
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/dbohdan/2048.tcl";
     description = "Game of 2048 implemented in Tcl";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dbohdan ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ dbohdan ];
     mainProgram = "2048";
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 }

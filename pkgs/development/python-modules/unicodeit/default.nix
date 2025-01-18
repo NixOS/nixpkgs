@@ -48,14 +48,14 @@ buildPythonPackage rec {
         touch $out
       '';
 
-  meta = {
+  meta = with lib; {
     description = "Converts LaTeX tags to unicode";
     mainProgram = "unicodeit";
     homepage = "https://github.com/svenkreiss/unicodeit";
-    license = with lib.licenses; [
+    license = with licenses; [
       lppl13c
       mit
     ];
-    maintainers = with lib.maintainers; [ nicoo ];
+    maintainers = with maintainers; [ nicoo ];
   };
 }

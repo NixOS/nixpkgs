@@ -25,10 +25,10 @@ buildGoModule {
 
   vendorHash = "sha256-4I4gIRJ80x9lmPpbJraSo1OD9CzT6povZDUAr1ZZEa0=";
 
-  meta = {
+  meta = with lib; {
     description = "High performance sFlow/IPFIX/NetFlow Collector";
     homepage = "https://github.com/netsampler/goflow2";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ isabelroses ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ isabelroses ];
   };
 }

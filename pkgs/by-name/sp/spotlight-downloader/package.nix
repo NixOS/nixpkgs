@@ -45,12 +45,12 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Retrieve Windows Spotlight images from the Microsoft Spotlight API";
-    license = lib.licenses.cddl;
-    maintainers = with lib.maintainers; [ ulysseszhan ];
+    license = licenses.cddl;
+    maintainers = with maintainers; [ ulysseszhan ];
     homepage = "https://github.com/ORelio/Spotlight-Downloader";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
     mainProgram = "SpotlightDownloader";
   };
 }

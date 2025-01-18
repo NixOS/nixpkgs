@@ -48,11 +48,11 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r $src/include $out
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/jcelerier/libremidi";
     description = "Modern C++ MIDI real-time & file I/O library";
-    license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = lib.platforms.all;
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.all;
   };
 })

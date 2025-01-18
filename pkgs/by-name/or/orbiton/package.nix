@@ -48,11 +48,11 @@ buildGoModule rec {
       wrapProgram $out/bin/og --prefix PATH : $out/bin
     '';
 
-  meta = {
+  meta = with lib; {
     description = "Config-free text editor and IDE limited to VT100";
     homepage = "https://orbiton.zip";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ sikmir ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ sikmir ];
     mainProgram = "o";
   };
 }

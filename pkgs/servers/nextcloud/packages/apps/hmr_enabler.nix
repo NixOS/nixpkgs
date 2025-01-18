@@ -27,12 +27,12 @@ php.buildComposerProject (finalAttrs: {
     rm -r $out/share $out/composer.* $out/Makefile $out/psalm.xml $out/tests
   '';
 
-  meta = {
+  meta = with lib; {
     description = " Development Nextcloud app to enable apps to use hot module reloading";
     homepage = "https://github.com/nextcloud/hmr_enabler";
     changelog = "https://github.com/nextcloud/hmr_enabler/blob/master/CHANGELOG.md";
-    license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ onny ];
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [ onny ];
   };
 
 })

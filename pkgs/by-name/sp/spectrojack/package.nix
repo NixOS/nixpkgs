@@ -33,12 +33,12 @@ stdenv.mkDerivation rec {
     install -Dm644 -t $out/usr/share/spectrojack/colormaps colormaps/*
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Little spectrogram/audiogram/sonogram/whatever for JACK";
     homepage = "http://sed.free.fr/spectrojack";
-    license = lib.licenses.publicDomain;
-    maintainers = with lib.maintainers; [ sleexyz ];
-    platforms = with lib.platforms; linux;
+    license = licenses.publicDomain;
+    maintainers = with maintainers; [ sleexyz ];
+    platforms = with platforms; linux;
     mainProgram = "spectrojack";
   };
 }

@@ -22,11 +22,11 @@ buildPythonPackage rec {
     hatchling
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://docs.litestar.dev/latest/usage/htmx.html";
-    maintainers = with lib.maintainers; [ bot-wxt1221 ];
-    license = lib.licenses.asl20;
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ bot-wxt1221 ];
+    license = licenses.asl20;
+    platforms = platforms.unix;
     description = "HTMX Integration for Litesstar";
   };
 }

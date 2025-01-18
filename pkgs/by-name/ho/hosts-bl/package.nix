@@ -21,12 +21,12 @@ buildGoModule rec {
 
   vendorHash = null;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/ScriptTiger/Hosts-BL";
     description = "Simple tool to handle hosts file black lists";
     mainProgram = "Hosts-BL";
-    maintainers = [ lib.maintainers.puffnfresh ];
-    platforms = lib.platforms.unix;
-    license = lib.licenses.mit;
+    maintainers = [ maintainers.puffnfresh ];
+    platforms = platforms.unix;
+    license = licenses.mit;
   };
 }

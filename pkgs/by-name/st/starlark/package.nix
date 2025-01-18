@@ -26,11 +26,11 @@ buildGoModule {
     extraArgs = [ "--version=branch" ];
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/google/starlark-go";
     description = "Interpreter for Starlark, implemented in Go";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ aaronjheng ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ aaronjheng ];
     mainProgram = "starlark";
   };
 }

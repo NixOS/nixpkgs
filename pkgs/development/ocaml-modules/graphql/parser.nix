@@ -30,11 +30,11 @@ buildDunePackage rec {
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/andreas/ocaml-graphql-server";
     description = "Library for parsing GraphQL queries";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.mit;
+    maintainers = [ maintainers.vbgl ];
   };
 
 }

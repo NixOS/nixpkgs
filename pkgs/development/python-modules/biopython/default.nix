@@ -41,7 +41,7 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Python library for bioinformatics";
     longDescription = ''
       Biopython is a set of freely available tools for biological computation
@@ -51,7 +51,7 @@ buildPythonPackage rec {
       bioinformatics.
     '';
     homepage = "https://biopython.org/wiki/Documentation";
-    maintainers = with lib.maintainers; [ luispedro ];
-    license = lib.licenses.bsd3;
+    maintainers = with maintainers; [ luispedro ];
+    license = licenses.bsd3;
   };
 }

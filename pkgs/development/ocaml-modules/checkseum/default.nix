@@ -40,11 +40,11 @@ buildDunePackage rec {
 
   doCheck = lib.versionAtLeast ocaml.version "4.08";
 
-  meta = {
+  meta = with lib; {
     description = "ADLER-32 and CRC32C Cyclic Redundancy Check";
     homepage = "https://github.com/mirage/checkseum";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.mit;
+    maintainers = [ maintainers.vbgl ];
     mainProgram = "checkseum.checkseum";
   };
 }

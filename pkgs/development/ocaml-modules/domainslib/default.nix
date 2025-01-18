@@ -32,11 +32,11 @@ buildDunePackage rec {
     qcheck-stm
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/ocaml-multicore/domainslib";
     description = "Nested-parallel programming";
-    license = lib.licenses.isc;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.isc;
+    maintainers = [ maintainers.vbgl ];
     broken = true; # Not compatible with saturn > 0.4.0
   };
 }

@@ -32,13 +32,13 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Digitally sign PDF files from your commandline";
     homepage = "https://github.com/open-pdf-sign/open-pdf-sign";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ drupol ];
-    platforms = lib.platforms.unix;
-    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ drupol ];
+    platforms = platforms.unix;
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     mainProgram = "open-pdf-sign";
   };
 })

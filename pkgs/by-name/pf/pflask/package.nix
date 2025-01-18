@@ -50,12 +50,12 @@ stdenv.mkDerivation (finalAttrs: {
     cp build/pflask $out/bin
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Lightweight process containers for Linux";
     mainProgram = "pflask";
     homepage = "https://ghedo.github.io/pflask/";
-    license = lib.licenses.bsd2;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ bot-wxt1221 ];
+    license = licenses.bsd2;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ bot-wxt1221 ];
   };
 })

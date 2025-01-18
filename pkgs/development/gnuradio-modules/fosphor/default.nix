@@ -79,15 +79,15 @@ mkDerivation {
     (lib.cmakeBool "ENABLE_PNG" enablePNG)
   ];
 
-  meta = {
+  meta = with lib; {
     description = "GNU Radio block for RTSA-like spectrum visualization using OpenCL and OpenGL acceleration";
     longDescription = ''
       You'll need to install an OpenCL ICD for it to work.
       See https://nixos.org/manual/nixos/stable/#sec-gpu-accel-opencl
     '';
     homepage = "https://projects.osmocom.org/projects/sdr/wiki/Fosphor";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ chuangzhu ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ chuangzhu ];
+    platforms = platforms.linux;
   };
 }

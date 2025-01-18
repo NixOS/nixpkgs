@@ -41,10 +41,10 @@ buildPythonPackage rec {
         --zsh <($out/bin/git-dummy --show-completion zsh)
     '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/initialcommit-com/git-dummy";
     description = "Generate dummy Git repositories populated with the desired number of commits, branches, and structure";
-    license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ mathiassven ];
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ mathiassven ];
   };
 }

@@ -103,10 +103,10 @@ stdenv.mkDerivation {
     })
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Multiplayer tactical FPS on top of Quake 3 engine";
     homepage = "https://www.urbanterror.info";
-    license = lib.licenses.unfreeRedistributable;
+    license = licenses.unfreeRedistributable;
     longDescription = ''
       Urban Terror is a free multiplayer first person shooter developed by
       FrozenSand, that (thanks to the ioquake3-code) does not require
@@ -115,10 +115,10 @@ stdenv.mkDerivation {
       realism". This results in a very unique, enjoyable and addictive game.
     '';
     mainProgram = "urbanterror";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       astsmtl
       drupol
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

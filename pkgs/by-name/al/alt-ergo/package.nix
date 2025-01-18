@@ -72,10 +72,10 @@ ocamlPackages.buildDunePackage {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "High-performance theorem prover and SMT solver";
     homepage = "https://alt-ergo.ocamlpro.com/";
-    license = lib.licenses.ocamlpro_nc;
-    maintainers = [ lib.maintainers.thoughtpolice ];
+    license = licenses.ocamlpro_nc;
+    maintainers = [ maintainers.thoughtpolice ];
   };
 }

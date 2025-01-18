@@ -34,7 +34,7 @@ stdenv.mkDerivation {
   postFixup = ''
     patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) --set-rpath "$libPath" "$out/bin/xflux"
   '';
-  meta = {
+  meta = with lib; {
     description = "Adjusts your screen to emit warmer light at night";
     longDescription = ''
       xflux changes the color temperature of your screen to be much warmer
@@ -42,10 +42,10 @@ stdenv.mkDerivation {
       when the sun rises.
     '';
     homepage = "https://justgetflux.com/";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = lib.licenses.unfree;
-    platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.paholg ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.paholg ];
     mainProgram = "xflux";
   };
 }

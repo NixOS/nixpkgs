@@ -38,10 +38,10 @@ buildDunePackage rec {
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/gfngfn/otfed";
     description = "OpenType Font Format Encoder & Decoder";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.mit;
+    maintainers = [ maintainers.vbgl ];
   };
 }

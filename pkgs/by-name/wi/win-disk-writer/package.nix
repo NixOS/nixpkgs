@@ -25,12 +25,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Windows Bootable USB creator for macOS";
     homepage = "https://github.com/TechUnRestricted/WinDiskWriter";
-    license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ donteatoreo ];
-    platforms = lib.platforms.darwin;
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ donteatoreo ];
+    platforms = platforms.darwin;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 })

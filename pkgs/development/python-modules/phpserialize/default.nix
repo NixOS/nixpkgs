@@ -17,10 +17,10 @@ buildPythonPackage rec {
   # project does not have tests at the moment
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Port of the serialize and unserialize functions of PHP to Python";
     homepage = "https://github.com/mitsuhiko/phpserialize";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ jluttine ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ jluttine ];
   };
 }

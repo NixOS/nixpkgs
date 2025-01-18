@@ -84,12 +84,12 @@ let
           exec -a dbtoepub ${ruby}/bin/ruby ${self}/share/xml/${pname}/epub/bin/dbtoepub "$@"
         '';
 
-        meta = {
+        meta = with lib; {
           homepage = "https://github.com/docbook/wiki/wiki/DocBookXslStylesheets";
           description = "XSL stylesheets for transforming DocBook documents into HTML and various other formats";
-          license = lib.licenses.mit;
+          license = licenses.mit;
           maintainers = [ ];
-          platforms = lib.platforms.all;
+          platforms = platforms.all;
         };
       };
     in

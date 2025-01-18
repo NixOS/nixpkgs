@@ -68,11 +68,11 @@ stdenvNoCC.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = {
+  meta = with lib; {
     description = "MacOS big sur like theme for KDE Plasma desktop";
     homepage = "https://github.com/vinceliuice/WhiteSur-kde";
-    license = lib.licenses.gpl3Only;
-    platforms = lib.platforms.all;
-    maintainers = [ lib.maintainers.romildo ];
+    license = licenses.gpl3Only;
+    platforms = platforms.all;
+    maintainers = [ maintainers.romildo ];
   };
 }

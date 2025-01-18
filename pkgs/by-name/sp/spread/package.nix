@@ -55,12 +55,12 @@ buildGoModule {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     mainProgram = "spread";
-    license = lib.licenses.gpl3Only;
+    license = licenses.gpl3Only;
     description = "Convenient full-system test (task) distribution";
     homepage = "https://github.com/snapcore/spread";
-    maintainers = with lib.maintainers; [ jnsgruk ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ jnsgruk ];
+    platforms = platforms.unix;
   };
 }

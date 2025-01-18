@@ -43,11 +43,11 @@ mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Notification system for tiling window managers";
     homepage = "https://github.com/sboli/twmn";
-    platforms = with lib.platforms; linux;
-    maintainers = [ lib.maintainers.matejc ];
-    license = lib.licenses.lgpl3;
+    platforms = with platforms; linux;
+    maintainers = [ maintainers.matejc ];
+    license = licenses.lgpl3;
   };
 }

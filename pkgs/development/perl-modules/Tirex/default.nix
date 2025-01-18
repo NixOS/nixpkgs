@@ -56,10 +56,10 @@ buildPerlPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Tools for running a map tile server";
     homepage = "https://wiki.openstreetmap.org/wiki/Tirex";
-    maintainers = with lib.maintainers; [ jglukasik ];
-    license = with lib.licenses; [ gpl2Only ];
+    maintainers = with maintainers; [ jglukasik ];
+    license = with licenses; [ gpl2Only ];
   };
 }

@@ -9,7 +9,7 @@ bundlerApp {
   gemdir = ./.;
   exes = [ "pru" ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/grosser/pru";
     description = "Pipeable Ruby";
     longDescription = ''
@@ -17,8 +17,8 @@ bundlerApp {
       higher-level replacement of typical text processing tools (like sed, awk,
       grep etc.).
     '';
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ AndersonTorres ];
   };
 
   passthru.updateScript = bundlerUpdateScript "pru";

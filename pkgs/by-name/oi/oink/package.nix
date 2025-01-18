@@ -21,12 +21,12 @@ buildGoModule rec {
     mv $out/bin/src $out/bin/oink
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Dynamic DNS client for Porkbun";
     homepage = "https://github.com/rlado/oink";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "oink";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       jtbx
       pmw
     ];

@@ -27,10 +27,10 @@ python3Packages.buildPythonApplication {
     progressbar
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Delta debugger for SMT benchmarks in SMT-LIB v2";
     homepage = "https://ddsmt.readthedocs.io/";
-    license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ ];
+    license = with licenses; [ gpl3Plus ];
+    maintainers = with maintainers; [ ];
   };
 }

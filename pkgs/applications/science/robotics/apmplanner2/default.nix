@@ -56,14 +56,14 @@ mkDerivation rec {
       --replace /usr $out
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Ground station software for autonomous vehicles";
     longDescription = ''
       A GUI ground control station for autonomous vehicles using the MAVLink protocol.
       Includes support for the APM and PX4 based controllers.
     '';
     homepage = "https://ardupilot.org/planner2/";
-    license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ wucke13 ];
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ wucke13 ];
   };
 }

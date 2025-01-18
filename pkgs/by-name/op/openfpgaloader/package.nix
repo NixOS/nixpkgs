@@ -38,12 +38,12 @@ stdenv.mkDerivation (finalAttrs: {
       udev
     ];
 
-  meta = {
+  meta = with lib; {
     description = "Universal utility for programming FPGAs";
     mainProgram = "openFPGALoader";
     homepage = "https://github.com/trabucayre/openFPGALoader";
-    license = lib.licenses.agpl3Only;
+    license = licenses.agpl3Only;
     maintainers = [ ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 })

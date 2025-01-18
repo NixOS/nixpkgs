@@ -19,11 +19,11 @@ buildNpmPackage rec {
 
   dontNpmBuild = true;
 
-  meta = {
+  meta = with lib; {
     description = "JavaScript build tool, similar to Make or Rake";
     homepage = "https://github.com/jakejs/jake";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     mainProgram = "jake";
-    maintainers = with lib.maintainers; [ jasoncarr ];
+    maintainers = with maintainers; [ jasoncarr ];
   };
 }

@@ -136,9 +136,9 @@ stdenv.mkDerivation rec {
       --replace "udev-configure-printer" "$out/etc/udev/udev-configure-printer"
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/openprinting/system-config-printer";
-    platforms = lib.platforms.linux;
-    license = lib.licenses.gpl2Plus;
+    platforms = platforms.linux;
+    license = licenses.gpl2Plus;
   };
 }

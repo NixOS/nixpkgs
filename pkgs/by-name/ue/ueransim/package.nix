@@ -54,12 +54,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = {
+  meta = with lib; {
     description = "Open source 5G UE and RAN (gNodeB) implementation";
     homepage = "https://github.com/aligungr/UERANSIM";
     changelog = "https://github.com/aligungr/UERANSIM/releases";
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ theobori ];
-    license = lib.licenses.gpl3Only;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ theobori ];
+    license = licenses.gpl3Only;
   };
 })

@@ -22,11 +22,11 @@ python3Packages.buildPythonApplication rec {
     "epy_reader.reader"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "CLI Ebook Reader";
     homepage = "https://github.com/wustho/epy";
     mainProgram = "epy";
-    license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ perstark ];
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ perstark ];
   };
 }

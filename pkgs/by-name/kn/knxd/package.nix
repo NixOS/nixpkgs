@@ -60,11 +60,11 @@ stdenv.mkDerivation (finalAttrs: {
     "systemdsysusersdir=$(out)/lib/sysusers.d"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Advanced router/gateway for KNX";
     homepage = "https://github.com/knxd/knxd";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ sikmir ];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ sikmir ];
+    platforms = platforms.unix;
   };
 })

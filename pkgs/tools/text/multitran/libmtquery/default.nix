@@ -35,10 +35,10 @@ stdenv.mkDerivation rec {
     sed -i -e 's@/usr/share/multitran@${multitrandata}/share/multitran@' src/config.cc
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://multitran.sourceforge.net/";
     description = "Multitran lib: main engine to query translations";
-    license = lib.licenses.gpl2Only;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Only;
+    platforms = platforms.linux;
   };
 }

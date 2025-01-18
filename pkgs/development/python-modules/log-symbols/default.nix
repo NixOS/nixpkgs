@@ -25,10 +25,10 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "log_symbols" ];
 
-  meta = {
+  meta = with lib; {
     description = "Colored Symbols for Various Log Levels";
     homepage = "https://github.com/manrajgrover/py-log-symbols";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ urbas ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ urbas ];
   };
 }

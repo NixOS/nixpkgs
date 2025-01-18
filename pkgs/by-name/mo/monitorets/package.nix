@@ -47,15 +47,15 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Simple and quick view at the usage of your computer resources";
     homepage = "https://github.com/jorchube/monitorets";
-    license = with lib.licenses; [
+    license = with licenses; [
       gpl3Plus
       cc0
     ];
     mainProgram = "monitorets";
-    maintainers = with lib.maintainers; [ aleksana ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ aleksana ];
+    platforms = platforms.linux;
   };
 }

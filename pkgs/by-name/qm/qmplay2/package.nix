@@ -96,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit sources;
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/zaps166/QMPlay2/";
     description = "Qt-based Multimedia player";
     longDescription = ''
@@ -105,12 +105,12 @@ stdenv.mkDerivation (finalAttrs: {
       raw files, Rayman 2 music, and chiptunes. It also contains YouTube and
       MyFreeMP3 browser.
     '';
-    license = lib.licenses.lgpl3Plus;
+    license = licenses.lgpl3Plus;
     mainProgram = "qmplay2";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       AndersonTorres
       kashw2
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 })

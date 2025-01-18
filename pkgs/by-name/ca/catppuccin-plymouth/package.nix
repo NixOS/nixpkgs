@@ -43,12 +43,12 @@ lib.checkListOfEnum "${pname}: color variant" validVariants [ variant ]
 
     passthru.updateScript = unstableGitUpdater { };
 
-    meta = {
+    meta = with lib; {
       description = "Soothing pastel theme for Plymouth";
       homepage = "https://github.com/catppuccin/plymouth";
-      license = lib.licenses.mit;
-      platforms = lib.platforms.linux;
-      maintainers = with lib.maintainers; [
+      license = licenses.mit;
+      platforms = platforms.linux;
+      maintainers = with maintainers; [
         johnrtitor
         spectre256
       ];

@@ -83,11 +83,11 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/google-coral/libedgetpu";
     description = "Userspace level runtime driver for Coral devices";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ frenetic00 ];
-    platforms = lib.platforms.linux;
+    license = licenses.asl20;
+    maintainers = with maintainers; [ frenetic00 ];
+    platforms = platforms.linux;
   };
 }

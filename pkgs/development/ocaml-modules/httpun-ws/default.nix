@@ -32,10 +32,10 @@ buildDunePackage rec {
   doCheck = true;
   checkInputs = [ alcotest ];
 
-  meta = {
+  meta = with lib; {
     description = "Websocket implementation for httpun";
-    license = lib.licenses.bsd3;
+    license = licenses.bsd3;
     homepage = "https://github.com/anmonteiro/httpun-ws";
-    maintainers = [ lib.maintainers.vbgl ];
+    maintainers = [ maintainers.vbgl ];
   };
 }

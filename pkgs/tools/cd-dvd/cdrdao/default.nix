@@ -70,10 +70,10 @@ stdenv.mkDerivation (finalAttrs: {
   # Needed on gcc >= 6.
   env.NIX_CFLAGS_COMPILE = "-Wno-narrowing";
 
-  meta = {
+  meta = with lib; {
     description = "Tool for recording audio or data CD-Rs in disk-at-once (DAO) mode";
     homepage = "https://cdrdao.sourceforge.net/";
-    platforms = lib.platforms.unix;
-    license = lib.licenses.gpl2Plus;
+    platforms = platforms.unix;
+    license = licenses.gpl2Plus;
   };
 })

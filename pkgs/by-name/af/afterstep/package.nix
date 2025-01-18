@@ -89,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
   #   https://github.com/afterstep/afterstep/issues/8
   enableParallelBuilding = false;
 
-  meta = {
+  meta = with lib; {
     homepage = "http://www.afterstep.org/";
     description = "NEXTStep-inspired window manager";
     longDescription = ''
@@ -99,9 +99,9 @@ stdenv.mkDerivation (finalAttrs: {
       development is to provide for flexibility of desktop configuration,
       improving aestetics, and efficient use of system resources.
     '';
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ AndersonTorres ];
     mainProgram = "afterstep";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 })

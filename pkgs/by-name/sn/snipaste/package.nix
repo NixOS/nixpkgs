@@ -23,16 +23,16 @@ appimageTools.wrapType2 {
     substituteInPlace $out/share/applications/*.desktop --replace-warn 'Exec=Snipaste' 'Exec=${pname}'
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Screenshot tools";
     homepage = "https://www.snipaste.com/";
-    license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [
+    license = licenses.unfree;
+    maintainers = with maintainers; [
       luftmensch-luftmensch
       ltrump
     ];
     mainProgram = "snipaste";
     platforms = [ "x86_64-linux" ];
-    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+    sourceProvenance = [ sourceTypes.binaryNativeCode ];
   };
 }

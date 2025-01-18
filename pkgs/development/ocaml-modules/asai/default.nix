@@ -21,10 +21,10 @@ buildDunePackage rec {
     bwd
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Library for constructing and printing compiler diagnostics";
     homepage = "https://redprl.org/asai/asai/";
-    license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.asl20;
+    maintainers = [ maintainers.vbgl ];
   };
 }

@@ -14,15 +14,15 @@ bundlerEnv {
 
   passthru.updateScript = bundlerUpdateScript "cfn-nag";
 
-  meta = {
+  meta = with lib; {
     description = "Linting tool for CloudFormation templates";
     homepage = "https://github.com/stelligent/cfn_nag";
     mainProgram = "cfn_nag";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       momeemt
       mathstlouis
     ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }

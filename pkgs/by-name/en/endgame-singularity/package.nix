@@ -44,7 +44,7 @@ python3.pkgs.buildPythonApplication rec {
           # ↑ we cannot glob on [...]/music, it doesn't exist yet
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "http://www.emhsoft.com/singularity/";
     description = "Simulation game about strong AI";
     longDescription = ''
@@ -52,7 +52,7 @@ python3.pkgs.buildPythonApplication rec {
       entire world. Keep hidden, and you might have a chance
     '';
     # License details are in LICENSE.txt
-    license = with lib.licenses; [
+    license = with licenses; [
       gpl2Plus # most of the code, some translations
       mit # recursive_fix_pickle, polib
       cc-by-sa-30 # data and artwork, some translations
@@ -60,6 +60,6 @@ python3.pkgs.buildPythonApplication rec {
       cc0 # cick0.wav
     ];
     mainProgram = "singularity";
-    maintainers = with lib.maintainers; [ fgaz ];
+    maintainers = with maintainers; [ fgaz ];
   };
 }

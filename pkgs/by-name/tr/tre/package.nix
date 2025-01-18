@@ -20,11 +20,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Lightweight and robust POSIX compliant regexp matching library";
     homepage = "https://laurikari.net/tre/";
-    license = lib.licenses.bsd2;
+    license = licenses.bsd2;
     mainProgram = "agrep";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }

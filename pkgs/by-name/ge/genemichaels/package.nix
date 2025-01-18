@@ -24,11 +24,11 @@ rustPlatform.buildRustPackage rec {
   # example, between versions 0.5.8 and 0.5.12, there was a failing test in one
   # of the other workspace members that genemichaels depends on.
 
-  meta = {
+  meta = with lib; {
     description = "Even formats macros";
     homepage = "https://github.com/andrewbaxter/genemichaels";
-    license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ djacu ];
+    license = licenses.isc;
+    maintainers = with maintainers; [ djacu ];
     mainProgram = "genemichaels";
   };
 }

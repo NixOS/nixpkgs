@@ -26,11 +26,11 @@ buildGoModule rec {
 
   doInstallCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "Argo expression tester";
     homepage = "https://github.com/blacha/argo-expr";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ l0b0 ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ l0b0 ];
     mainProgram = "argo-expr";
   };
 }

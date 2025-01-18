@@ -82,10 +82,10 @@ buildPythonPackage rec {
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Tool and Python library to interact with Android Files";
     homepage = "https://github.com/androguard/androguard";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ pmiddend ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ pmiddend ];
   };
 }

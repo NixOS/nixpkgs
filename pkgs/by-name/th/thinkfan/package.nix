@@ -49,20 +49,20 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ yaml-cpp ] ++ lib.optional smartSupport libatasmart;
 
-  meta = {
+  meta = with lib; {
     description = "Simple, lightweight fan control program";
     longDescription = ''
       Thinkfan is a minimalist fan control program. Originally designed
       specifically for IBM/Lenovo Thinkpads, it now supports any kind of
       system via the sysfs hwmon interface (/sys/class/hwmon).
     '';
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     homepage = "https://github.com/vmatare/thinkfan";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       domenkozar
       rnhmjoj
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
     mainProgram = "thinkfan";
   };
 }

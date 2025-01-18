@@ -44,12 +44,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Pretty small HTTP server - a command-line tool to share files";
     mainProgram = "pshs";
     homepage = "https://github.com/mgorny/pshs";
-    sourceProvenance = [ lib.sourceTypes.fromSource ];
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.unix;
+    sourceProvenance = [ sourceTypes.fromSource ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
   };
 })

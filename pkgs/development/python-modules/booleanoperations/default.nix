@@ -41,10 +41,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Boolean operations on paths";
     homepage = "https://github.com/typemytype/booleanOperations";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.sternenseemann ];
+    license = licenses.mit;
+    maintainers = [ maintainers.sternenseemann ];
   };
 }

@@ -34,11 +34,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "Fast conic optimization in C";
     homepage = "https://github.com/kul-optec/superscs";
     changelog = "https://github.com/kul-optec/superscs/blob/${finalAttrs.src.rev}/CHANGELOG.md";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ nim65s ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ nim65s ];
   };
 })

@@ -46,13 +46,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Woof! is a continuation of the Boom/MBF bloodline of Doom source ports";
     homepage = "https://github.com/fabiangreffrath/woof";
     changelog = "https://github.com/fabiangreffrath/woof/blob/${finalAttrs.src.rev}/CHANGELOG.md";
-    license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ keenanweaver ];
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ keenanweaver ];
     mainProgram = "woof";
-    platforms = with lib.platforms; darwin ++ linux ++ windows;
+    platforms = with platforms; darwin ++ linux ++ windows;
   };
 })

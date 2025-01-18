@@ -42,11 +42,11 @@ buildGoModule rec {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/mautrix/meta";
     description = "Matrix <-> Facebook and Matrix <-> Instagram hybrid puppeting/relaybot bridge";
-    license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ eyjhb ];
+    license = licenses.agpl3Plus;
+    maintainers = with maintainers; [ eyjhb ];
     mainProgram = "mautrix-meta";
   };
 }

@@ -27,10 +27,10 @@ stdenv.mkDerivation {
     chmod +x $out/bin/get-libtokencap-so
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/AFLplusplus/AFLplusplus";
     description = "strcmp & memcmp token capture library";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ris ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ ris ];
   };
 }

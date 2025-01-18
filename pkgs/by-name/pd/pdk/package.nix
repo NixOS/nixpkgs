@@ -27,13 +27,13 @@ bundlerApp {
     updateScript = bundlerUpdateScript "pdk";
   };
 
-  meta = {
+  meta = with lib; {
     changelog = "https://github.com/puppetlabs/pdk/blob/main/CHANGELOG.md";
     description = "Puppet Development Kit";
     homepage = "https://github.com/puppetlabs/pdk";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     mainProgram = "pdk";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       netali
       anthonyroussel
     ];

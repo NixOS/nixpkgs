@@ -64,11 +64,11 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Colored Material cursors with cute animations";
     homepage = "https://github.com/Souravgoswami/oreo-cursors";
-    license = lib.licenses.gpl2Only;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ michaelBrunner ];
+    license = licenses.gpl2Only;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ michaelBrunner ];
   };
 }

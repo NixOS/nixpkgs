@@ -27,12 +27,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = unstableGitUpdater { tagPrefix = "v"; };
 
-  meta = {
+  meta = with lib; {
     description = "Linux System call fuzz tester";
     mainProgram = "trinity";
     homepage = "https://github.com/kernelslacker/trinity";
-    license = lib.licenses.gpl2Only;
-    maintainers = [ lib.maintainers.dezgeg ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Only;
+    maintainers = [ maintainers.dezgeg ];
+    platforms = platforms.linux;
   };
 })

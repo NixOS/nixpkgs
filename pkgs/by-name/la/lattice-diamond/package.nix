@@ -132,7 +132,7 @@ stdenv.mkDerivation {
     libusb-compat-0_1
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Vendor development tools for Lattice FPGA devices";
     longDescription = ''
       Lattice Diamond software is the leading-edge software design environment
@@ -140,8 +140,8 @@ stdenv.mkDerivation {
       next-generation replacement for ispLEVER.
     '';
     homepage = "https://www.latticesemi.com/latticediamond";
-    license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ q3k ];
+    license = licenses.unfree;
+    maintainers = with maintainers; [ q3k ];
     platforms = [ "x86_64-linux" ];
   };
 }

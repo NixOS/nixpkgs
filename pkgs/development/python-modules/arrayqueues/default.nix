@@ -19,10 +19,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ numpy ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/portugueslab/arrayqueues";
     description = "Multiprocessing queues for numpy arrays using shared memory";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ tbenst ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ tbenst ];
   };
 }

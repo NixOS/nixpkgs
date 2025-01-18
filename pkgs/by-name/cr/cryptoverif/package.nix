@@ -60,12 +60,12 @@ stdenv.mkDerivation (finalAttrs: {
     update-source-version "$UPDATE_NIX_ATTR_PATH" "$version"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Cryptographic protocol verifier in the computational model";
     mainProgram = "cryptoverif";
     homepage = "https://bblanche.gitlabpages.inria.fr/CryptoVerif/";
-    license = lib.licenses.cecill-b;
-    platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.thoughtpolice ];
+    license = licenses.cecill-b;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.thoughtpolice ];
   };
 })

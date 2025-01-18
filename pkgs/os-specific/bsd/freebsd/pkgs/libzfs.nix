@@ -78,8 +78,8 @@ mkDerivation {
     "debug"
   ];
 
-  meta = {
-    platforms = lib.platforms.freebsd;
-    license = with lib.licenses; [ cddl ];
+  meta = with lib; {
+    platforms = platforms.freebsd;
+    license = with licenses; [ cddl ];
   };
 }

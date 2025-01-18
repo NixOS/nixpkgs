@@ -78,11 +78,11 @@ stdenv.mkDerivation rec {
 
   passthru.tests.default = nixosTests.incus.ui;
 
-  meta = {
+  meta = with lib; {
     description = "Web user interface for Incus, based on LXD webui";
     homepage = "https://github.com/canonical/lxd-ui";
-    license = lib.licenses.gpl3;
-    maintainers = lib.teams.lxc.members;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3;
+    maintainers = teams.lxc.members;
+    platforms = platforms.linux;
   };
 }

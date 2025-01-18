@@ -23,7 +23,7 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Modern, coquettish script font";
     longDescription = ''
       This ain’t no Lucinda. League Script #1 is a modern, coquettish script
@@ -33,7 +33,7 @@ stdenvNoCC.mkDerivation {
       framework for future script designs.
     '';
     homepage = "https://www.theleagueofmoveabletype.com/league-script";
-    license = lib.licenses.ofl;
-    maintainers = with lib.maintainers; [ minijackson ];
+    license = licenses.ofl;
+    maintainers = with maintainers; [ minijackson ];
   };
 }

@@ -192,10 +192,10 @@ let
               cd ${pkgpath}
             '';
 
-            meta = {
+            meta = with lib; {
               homepage = "https://metacoq.github.io/";
-              license = lib.licenses.mit;
-              maintainers = with lib.maintainers; [ cohencyril ];
+              license = licenses.mit;
+              maintainers = with maintainers; [ cohencyril ];
             };
           }
           // lib.optionalAttrs (package != "single") {

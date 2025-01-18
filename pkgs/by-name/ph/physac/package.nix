@@ -37,11 +37,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "2D physics header-only library for raylib";
     homepage = "https://github.com/victorfisac/Physac";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ sigmanificient ];
-    platforms = lib.platforms.unix;
+    license = licenses.mit;
+    maintainers = with maintainers; [ sigmanificient ];
+    platforms = platforms.unix;
   };
 })

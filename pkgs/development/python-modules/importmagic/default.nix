@@ -27,10 +27,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "importmagic" ];
 
-  meta = {
+  meta = with lib; {
     description = "Python Import Magic - automagically add, remove and manage imports";
     homepage = "https://github.com/alecthomas/importmagic";
-    license = lib.licenses.bsd0;
-    maintainers = with lib.maintainers; [ onny ];
+    license = licenses.bsd0;
+    maintainers = with maintainers; [ onny ];
   };
 }

@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses ] ++ lib.optional stdenv.hostPlatform.isDarwin gettext;
 
-  meta = {
+  meta = with lib; {
     description = "Program for calculating and printing calendars";
     longDescription = ''
       Gcal is the GNU version of the trusty old cal(1). Gcal is a
@@ -38,9 +38,9 @@ stdenv.mkDerivation rec {
       also displays holiday lists for many countries around the globe.
     '';
     homepage = "https://www.gnu.org/software/gcal/";
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.romildo ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.romildo ];
     mainProgram = "gcal";
   };
 }

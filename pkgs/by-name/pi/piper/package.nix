@@ -61,12 +61,12 @@ python3.pkgs.buildPythonApplication rec {
     patchShebangs meson_install.sh data/generate-piper-gresource.xml.py
   '';
 
-  meta = {
+  meta = with lib; {
     description = "GTK frontend for ratbagd mouse config daemon";
     mainProgram = "piper";
     homepage = "https://github.com/libratbag/piper";
-    license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ mvnetbiz ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ mvnetbiz ];
+    platforms = platforms.linux;
   };
 }

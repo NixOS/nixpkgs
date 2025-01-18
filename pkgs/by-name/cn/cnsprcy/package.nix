@@ -22,12 +22,12 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ sqlite ];
 
-  meta = {
+  meta = with lib; {
     description = "End to end encrypted connections between trusted devices";
     homepage = "https://git.sr.ht/~xaos/cnsprcy";
-    license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ supinie ];
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ supinie ];
     mainProgram = "cnspr";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

@@ -37,10 +37,10 @@ lib.throwIfNot (lib.versionAtLeast ocaml.version "4.14")
 
     inherit (topkg) buildPhase installPhase;
 
-    meta = {
+    meta = with lib; {
       description = "ZIP archive and deflate codec for OCaml";
       homepage = "https://erratique.ch/software/zipc";
-      license = lib.licenses.isc;
-      maintainers = [ lib.maintainers.vbgl ];
+      license = licenses.isc;
+      maintainers = [ maintainers.vbgl ];
     };
   }

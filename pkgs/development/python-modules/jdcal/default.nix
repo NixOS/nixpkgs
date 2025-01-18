@@ -21,10 +21,10 @@ buildPythonPackage rec {
     py.test
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Module containing functions for converting between Julian dates and calendar dates";
     homepage = "https://github.com/phn/jdcal";
-    license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ lihop ];
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ lihop ];
   };
 }

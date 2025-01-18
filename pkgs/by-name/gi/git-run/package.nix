@@ -20,11 +20,11 @@ buildNpmPackage rec {
   makeCacheWritable = true;
   dontBuild = true;
 
-  meta = {
+  meta = with lib; {
     description = "Multiple git repository management tool";
     homepage = "https://mixu.net/gr/";
-    license = lib.licenses.bsd3;
+    license = licenses.bsd3;
     mainProgram = "gr";
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = with maintainers; [ pyrox0 ];
   };
 }

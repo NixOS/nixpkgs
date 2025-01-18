@@ -36,14 +36,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Computer Modern fonts including matching non-latin alphabets";
     homepage = "https://ctan.org/pkg/newcomputermodern";
     # "The GUST Font License (GFL), which is a free license, legally
     # equivalent to the LaTeX Project Public License (LPPL), version 1.3c or
     # later." - GUST website
-    license = lib.licenses.lppl13c;
-    maintainers = [ lib.maintainers.drupol ];
-    platforms = lib.platforms.all;
+    license = licenses.lppl13c;
+    maintainers = [ maintainers.drupol ];
+    platforms = platforms.all;
   };
 })

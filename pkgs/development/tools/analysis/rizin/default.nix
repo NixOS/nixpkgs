@@ -143,17 +143,17 @@ let
         };
     };
 
-    meta = {
+    meta = with lib; {
       description = "UNIX-like reverse engineering framework and command-line toolset";
       homepage = "https://rizin.re/";
-      license = lib.licenses.gpl3Plus;
+      license = licenses.gpl3Plus;
       mainProgram = "rizin";
-      maintainers = with lib.maintainers; [
+      maintainers = with maintainers; [
         raskin
         makefu
         mic92
       ];
-      platforms = with lib.platforms; unix;
+      platforms = with platforms; unix;
     };
   };
 in

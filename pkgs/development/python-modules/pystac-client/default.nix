@@ -53,10 +53,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pystac_client" ];
 
-  meta = {
+  meta = with lib; {
     description = "A Python client for working with STAC Catalogs and APIs";
     homepage = "https://github.com/stac-utils/pystac-client";
-    license = lib.licenses.asl20;
-    maintainers = lib.teams.geospatial.members;
+    license = licenses.asl20;
+    maintainers = teams.geospatial.members;
   };
 }

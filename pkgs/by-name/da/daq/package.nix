@@ -35,12 +35,12 @@ stdenv.mkDerivation rec {
     "--with-dnet-libraries=${libdnet}/lib"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Data AcQuisition library (DAQ), for packet I/O";
     mainProgram = "daq-modules-config";
     homepage = "https://www.snort.org";
-    maintainers = with lib.maintainers; [ aycanirican ];
-    license = lib.licenses.gpl2;
-    platforms = with lib.platforms; linux;
+    maintainers = with maintainers; [ aycanirican ];
+    license = licenses.gpl2;
+    platforms = with platforms; linux;
   };
 }

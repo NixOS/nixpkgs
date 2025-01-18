@@ -23,10 +23,10 @@ buildPythonPackage rec {
 
   doCheck = false; # no tests
 
-  meta = {
+  meta = with lib; {
     description = "Python dead batteries. See PEP 594";
     homepage = "https://github.com/youknowone/python-deadlib";
-    license = lib.licenses.psfl;
-    maintainers = with lib.maintainers; [ hexa ];
+    license = licenses.psfl;
+    maintainers = with maintainers; [ hexa ];
   };
 }

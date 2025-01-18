@@ -21,11 +21,11 @@ stdenv.mkDerivation {
     chmod +x $out/bin/emv
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "http://www.i0i0.de/toolchest/emv";
     description = "Editor Move: Rename files with your favourite text editor";
-    license = lib.licenses.publicDomain;
-    platforms = lib.platforms.unix;
+    license = licenses.publicDomain;
+    platforms = platforms.unix;
     mainProgram = "emv";
   };
 }

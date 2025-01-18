@@ -23,14 +23,14 @@ python3.pkgs.buildPythonApplication {
     "--prefix PATH : ${lib.makeBinPath [ scribus ]}"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Convert Scribus SLA files to PDF from the command line";
     homepage = "https://github.com/sla2pdf-team/sla2pdf";
-    license = with lib.licenses; [
+    license = with licenses; [
       cc-by-40
       mpl20
     ];
-    maintainers = with lib.maintainers; [ ob7 ];
+    maintainers = with maintainers; [ ob7 ];
     mainProgram = "sla2pdf";
   };
 }

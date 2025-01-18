@@ -31,13 +31,13 @@ stdenv.mkDerivation rec {
       --add-flags lombok.launch.Main
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Library that can write a lot of boilerplate for your Java project";
     mainProgram = "lombok";
-    platforms = lib.platforms.all;
-    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
-    license = lib.licenses.mit;
+    platforms = platforms.all;
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = licenses.mit;
     homepage = "https://projectlombok.org/";
-    maintainers = [ lib.maintainers.CrystalGamma ];
+    maintainers = [ maintainers.CrystalGamma ];
   };
 }

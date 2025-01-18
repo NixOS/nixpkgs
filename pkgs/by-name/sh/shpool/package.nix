@@ -45,12 +45,12 @@ rustPlatform.buildRustPackage rec {
     package = shpool;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Persistent session management like tmux, but more lightweight";
     homepage = "https://github.com/shell-pool/shpool";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     mainProgram = "shpool";
-    maintainers = with lib.maintainers; [ aleksana ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ aleksana ];
+    platforms = platforms.linux;
   };
 }

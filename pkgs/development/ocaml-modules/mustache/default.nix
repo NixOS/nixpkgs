@@ -26,10 +26,10 @@ buildDunePackage rec {
   doCheck = true;
   checkInputs = [ ounit ];
 
-  meta = {
+  meta = with lib; {
     description = "Mustache logic-less templates in OCaml";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.mit;
+    maintainers = [ maintainers.vbgl ];
     inherit (src.meta) homepage;
   };
 }

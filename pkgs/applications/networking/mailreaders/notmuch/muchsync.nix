@@ -28,12 +28,12 @@ stdenv.mkDerivation rec {
     zlib
   ];
   XAPIAN_CONFIG = "${xapian}/bin/xapian-config";
-  meta = {
+  meta = with lib; {
     description = "Synchronize maildirs and notmuch databases";
     mainProgram = "muchsync";
     homepage = "http://www.muchsync.org/";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
     maintainers = [ ];
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
   };
 }

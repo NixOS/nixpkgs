@@ -27,15 +27,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru.updateScript = ./update/update.mjs;
 
-  meta = {
+  meta = with lib; {
     description = "Unpacks archive files";
     homepage = "https://theunarchiver.com/";
-    license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ xiaoxiangmoe ];
+    license = licenses.unfree;
+    maintainers = with maintainers; [ xiaoxiangmoe ];
     platforms = [
       "aarch64-darwin"
       "x86_64-darwin"
     ];
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 })

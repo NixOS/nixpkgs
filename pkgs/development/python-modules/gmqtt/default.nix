@@ -32,10 +32,10 @@ buildPythonPackage rec {
   ];
   pythonImportsCheck = [ "gmqtt" ];
 
-  meta = {
+  meta = with lib; {
     description = "Python MQTT v5.0 async client";
     homepage = "https://github.com/wialon/gmqtt";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ doronbehar ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ doronbehar ];
   };
 }

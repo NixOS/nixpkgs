@@ -38,11 +38,11 @@ stdenv.mkDerivation rec {
 
   inherit (topkg) buildPhase installPhase;
 
-  meta = {
+  meta = with lib; {
     description = "Open and reload URIs in browsers from OCaml";
     homepage = "https://erratique.ch/software/webbrowser";
-    license = lib.licenses.isc;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.isc;
+    maintainers = [ maintainers.vbgl ];
     mainProgram = "browse";
     inherit (ocaml.meta) platforms;
   };

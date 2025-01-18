@@ -82,12 +82,12 @@ stdenv.mkDerivation (finalAttrs: {
       --suffix PATH : "$out/bin"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Screen recorder that has minimal impact on system performance by recording a window using the GPU only";
     homepage = "https://git.dec05eba.com/gpu-screen-recorder/about/";
-    license = lib.licenses.gpl3Only;
+    license = licenses.gpl3Only;
     mainProgram = "gpu-screen-recorder";
-    maintainers = [ lib.maintainers.babbaj ];
+    maintainers = [ maintainers.babbaj ];
     platforms = [ "x86_64-linux" ];
   };
 })

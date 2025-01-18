@@ -30,11 +30,11 @@ stdenv.mkDerivation rec {
         -i "$out/share/bash-completion/completions/gibo-completion.bash"
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/simonwhitaker/gibo";
-    license = lib.licenses.publicDomain;
+    license = licenses.publicDomain;
     description = "Shell script for easily accessing gitignore boilerplates";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
     mainProgram = "gibo";
   };
 }

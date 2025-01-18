@@ -33,15 +33,15 @@ python3Packages.buildPythonApplication rec {
     version = "boot.py ${lib.versions.majorMinor version}";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Amlogic USB Boot Protocol Library";
     homepage = "https://github.com/superna9999/pyamlboot";
-    license = with lib.licenses; [
+    license = with licenses; [
       asl20
       gpl2Only
       mit
     ];
-    maintainers = with lib.maintainers; [ genga898 ];
+    maintainers = with maintainers; [ genga898 ];
     mainProgram = "boot.py";
   };
 }

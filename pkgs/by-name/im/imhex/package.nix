@@ -130,14 +130,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Hex Editor for Reverse Engineers, Programmers and people who value their retinas when working at 3 AM";
     homepage = "https://github.com/WerWolv/ImHex";
-    license = with lib.licenses; [ gpl2Only ];
-    maintainers = with lib.maintainers; [
+    license = with licenses; [ gpl2Only ];
+    maintainers = with maintainers; [
       kashw2
       cafkafk
     ];
-    platforms = with lib.platforms; linux ++ darwin;
+    platforms = with platforms; linux ++ darwin;
   };
 })

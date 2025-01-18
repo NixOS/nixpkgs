@@ -17,10 +17,10 @@ buildDunePackage rec {
   doCheck = lib.versionAtLeast ocaml.version "4.08";
   checkInputs = [ alcotest ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/rgrinberg/ocaml-semver";
     description = "Semantic versioning module";
-    license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.ulrikstrid ];
+    license = licenses.bsd3;
+    maintainers = [ maintainers.ulrikstrid ];
   };
 }

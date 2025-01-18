@@ -34,10 +34,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Css language server extension for coc.nvim";
     homepage = "https://github.com/neoclide/coc-css";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ pyrox0 ];
   };
 })

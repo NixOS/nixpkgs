@@ -36,12 +36,12 @@ stdenv.mkDerivation (final: {
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "Low level terminal interface library";
     homepage = "https://github.com/termpaint/termpaint";
-    platforms = lib.platforms.unix;
-    license = lib.licenses.boost;
-    maintainers = with lib.maintainers; [
+    platforms = platforms.unix;
+    license = licenses.boost;
+    maintainers = with maintainers; [
       istoph
       textshell
     ];

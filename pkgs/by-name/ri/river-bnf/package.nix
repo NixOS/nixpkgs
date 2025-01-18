@@ -32,12 +32,12 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = {
+  meta = with lib; {
     description = "Switch back'n'forth between river tags";
     homepage = "https://git.sr.ht/~leon_plickat/river-bnf";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ adamcstephens ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ adamcstephens ];
     mainProgram = "river-bnf";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

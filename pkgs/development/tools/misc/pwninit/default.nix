@@ -38,12 +38,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-J2uQoqStBl+qItaXWi17H/IailZ7P4YzhLNs17BY92Q=";
 
-  meta = {
+  meta = with lib; {
     description = "Automate starting binary exploit challenges";
     mainProgram = "pwninit";
     homepage = "https://github.com/io12/pwninit";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.scoder12 ];
-    platforms = lib.platforms.all;
+    license = licenses.mit;
+    maintainers = [ maintainers.scoder12 ];
+    platforms = platforms.all;
   };
 }

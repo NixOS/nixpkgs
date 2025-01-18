@@ -61,11 +61,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     [ desktopItem ];
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
-  meta = {
+  meta = with lib; {
     description = "An xprop replacement for Hyprland";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ khaneliman ];
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ khaneliman ];
     mainProgram = "hyprprop";
   };
 })

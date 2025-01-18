@@ -64,11 +64,11 @@ stdenv.mkDerivation (finalAttrs: {
   # However, the python module works flawlessly.
   dontFixup = enablePython;
 
-  meta = {
+  meta = with lib; {
     description = "Computes sparse tensor expressions on CPUs and GPUs";
     mainProgram = "taco";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     homepage = "https://github.com/tensor-compiler/taco";
-    maintainers = [ lib.maintainers.sheepforce ];
+    maintainers = [ maintainers.sheepforce ];
   };
 })

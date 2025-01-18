@@ -30,11 +30,11 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/fnm completions --shell zsh)
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Fast and simple Node.js version manager";
     mainProgram = "fnm";
     homepage = "https://github.com/Schniz/fnm";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ kidonng ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ kidonng ];
   };
 }

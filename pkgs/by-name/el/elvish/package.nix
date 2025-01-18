@@ -40,7 +40,7 @@ buildGoModule {
     };
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://elv.sh/";
     description = "Friendly and expressive command shell";
     mainProgram = "elvish";
@@ -49,7 +49,7 @@ buildGoModule {
       language. It runs on Linux, BSDs, macOS and Windows. Despite its pre-1.0
       status, it is already suitable for most daily interactive use.
     '';
-    license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ ];
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ ];
   };
 }

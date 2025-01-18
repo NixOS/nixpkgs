@@ -22,10 +22,10 @@ buildDunePackage rec {
     domain_shims
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Low-level multicore utilities for OCaml";
-    license = lib.licenses.isc;
+    license = licenses.isc;
     homepage = "https://github.com/ocaml-multicore/multicore-magic";
-    maintainers = [ lib.maintainers.vbgl ];
+    maintainers = [ maintainers.vbgl ];
   };
 }

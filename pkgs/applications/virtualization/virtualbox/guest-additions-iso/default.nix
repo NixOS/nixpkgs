@@ -10,16 +10,16 @@ in
 fetchurl {
   url = "http://download.virtualbox.org/virtualbox/${version}/VBoxGuestAdditions_${version}.iso";
   sha256 = "80c91d35742f68217cf47b13e5b50d53f54c22c485bacce41ad7fdc321649e61";
-  meta = {
+  meta = with lib; {
     description = "Guest additions ISO for VirtualBox";
     longDescription = ''
       ISO containing various add-ons which improves guests inside VirtualBox.
     '';
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = lib.licenses.gpl2;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.gpl2;
     maintainers = [
-      lib.maintainers.sander
-      lib.maintainers.friedrichaltheide
+      maintainers.sander
+      maintainers.friedrichaltheide
     ];
     platforms = [
       "i686-linux"

@@ -25,14 +25,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/nxengine/nxengine-evo";
     description = "Assets for nxengine-evo";
-    license = with lib.licenses; [
+    license = with licenses; [
       unfreeRedistributable
     ];
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = lib.platforms.all;
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.all;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 })

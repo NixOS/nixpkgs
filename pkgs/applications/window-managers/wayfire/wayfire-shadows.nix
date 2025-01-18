@@ -44,11 +44,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/timgott/wayfire-shadows";
     description = "Wayfire plugin that adds window shadows";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ rewine ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ rewine ];
     inherit (wayfire.meta) platforms;
   };
 })

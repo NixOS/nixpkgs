@@ -65,12 +65,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     broken = stdenv.hostPlatform.isDarwin;
     description = "API and runtime that allows access to VR hardware from multiple vendors without requiring that applications have specific knowledge of the hardware they are targeting";
     homepage = "https://github.com/ValveSoftware/openvr";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ Scrumplex ];
-    platforms = lib.platforms.unix;
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ Scrumplex ];
+    platforms = platforms.unix;
   };
 })

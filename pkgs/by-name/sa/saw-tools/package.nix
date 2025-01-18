@@ -47,12 +47,12 @@ stdenv.mkDerivation (finalAttrs: {
     command = "saw --version";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Tools for software verification and analysis";
     homepage = "https://saw.galois.com";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = lib.licenses.bsd3;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.bsd3;
     platforms = [ "x86_64-linux" ];
-    maintainers = [ lib.maintainers.thoughtpolice ];
+    maintainers = [ maintainers.thoughtpolice ];
   };
 })

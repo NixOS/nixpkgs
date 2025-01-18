@@ -26,10 +26,10 @@ buildDunePackage rec {
   doCheck = true;
   checkInputs = [ alcotest ];
 
-  meta = {
+  meta = with lib; {
     description = "Traced atomics";
     homepage = "https://github.com/ocaml-multicore/dscheck";
-    license = lib.licenses.isc;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.isc;
+    maintainers = [ maintainers.vbgl ];
   };
 }

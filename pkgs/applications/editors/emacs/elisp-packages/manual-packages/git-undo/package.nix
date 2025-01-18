@@ -18,10 +18,10 @@ melpaBuild {
 
   passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/jwiegley/git-undo-el";
     description = "Revert region to most recent Git-historical version";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ leungbk ];
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ leungbk ];
   };
 }

@@ -291,15 +291,15 @@ buildPythonPackage {
     installPhase = "touch $out";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Dataframes powered by a multithreaded, vectorized query engine, written in Rust";
     homepage = "https://github.com/pola-rs/polars";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       happysalada
       SomeoneSerge
     ];
     mainProgram = "polars";
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 }

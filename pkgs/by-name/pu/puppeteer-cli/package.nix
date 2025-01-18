@@ -32,11 +32,11 @@ buildNpmPackage rec {
       --set PUPPETEER_EXECUTABLE_PATH ${chromium}/bin/chromium
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Command-line wrapper for generating PDF prints and PNG screenshots with Puppeteer";
     homepage = "https://github.com/JarvusInnovations/puppeteer-cli";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "puppeteer";
-    maintainers = with lib.maintainers; [ chessai ];
+    maintainers = with maintainers; [ chessai ];
   };
 }

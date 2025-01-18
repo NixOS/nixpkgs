@@ -34,12 +34,12 @@ stdenv.mkDerivation rec {
     wrapPythonPrograms
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://itstool.org/";
     description = "XML to PO and back again";
     mainProgram = "itstool";
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.all;
+    license = licenses.gpl3Plus;
+    platforms = platforms.all;
     maintainers = [ ];
   };
 }

@@ -40,11 +40,11 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "S3 benchmarking tool";
     homepage = "https://github.com/minio/warp";
-    license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ christoph-heiss ];
+    license = licenses.agpl3Plus;
+    maintainers = with maintainers; [ christoph-heiss ];
     mainProgram = "minio-warp";
   };
 }

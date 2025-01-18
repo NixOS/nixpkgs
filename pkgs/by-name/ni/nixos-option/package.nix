@@ -61,11 +61,11 @@ stdenvNoCC.mkDerivation {
     '';
   };
 
-  meta = {
+  meta = with lib; {
     description = "Evaluate NixOS configuration and return the properties of given option";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "nixos-option";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       FireyFly
       azuwis
       aleksana

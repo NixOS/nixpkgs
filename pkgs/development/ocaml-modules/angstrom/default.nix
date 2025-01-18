@@ -33,10 +33,10 @@ buildDunePackage rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/inhabitedtype/angstrom";
     description = "OCaml parser combinators built for speed and memory efficiency";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ sternenseemann ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ sternenseemann ];
   };
 }

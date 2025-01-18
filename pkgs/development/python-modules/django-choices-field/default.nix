@@ -37,10 +37,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "django_choices_field" ];
 
-  meta = {
+  meta = with lib; {
     description = "Django field that set/get django's new TextChoices/IntegerChoices enum";
     homepage = "https://github.com/bellini666/django-choices-field";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ minijackson ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ minijackson ];
   };
 }

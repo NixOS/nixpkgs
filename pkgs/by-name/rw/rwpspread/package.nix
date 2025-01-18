@@ -25,12 +25,12 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Multi-Monitor Wallpaper Utility";
     homepage = "https://github.com/0xk1f0/rwpspread";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ fsnkty ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ fsnkty ];
+    platforms = platforms.linux;
     mainProgram = "rwpspread";
   };
 }

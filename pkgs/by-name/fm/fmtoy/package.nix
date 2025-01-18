@@ -61,12 +61,12 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = unstableGitUpdater { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "FM synthesiser based on emulated Yamaha YM chips (OPL, OPM and OPN series)";
     homepage = "https://github.com/vampirefrog/fmtoy";
-    license = lib.licenses.gpl3Only;
+    license = licenses.gpl3Only;
     mainProgram = "fmtoy_jack";
-    maintainers = with lib.maintainers; [ OPNA2608 ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ OPNA2608 ];
+    platforms = platforms.linux;
   };
 })

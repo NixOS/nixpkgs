@@ -19,11 +19,11 @@ buildGoModule {
 
   vendorHash = null;
 
-  meta = {
+  meta = with lib; {
     description = "Simple bridge between Mattermost, IRC, XMPP, Gitter, Slack, Discord, Telegram, Rocket.Chat, Hipchat(via xmpp), Matrix and Steam";
     homepage = "https://github.com/42wim/matterbridge";
-    license = with lib.licenses; [ asl20 ];
-    maintainers = with lib.maintainers; [ ryantm ];
+    license = with licenses; [ asl20 ];
+    maintainers = with maintainers; [ ryantm ];
     mainProgram = "matterbridge";
   };
 }

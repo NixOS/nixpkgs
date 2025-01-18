@@ -20,11 +20,11 @@ buildDunePackage rec {
     easy-format
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Binary data format designed for speed, safety, ease of use and backward compatibility as protocols evolve";
     homepage = "https://github.com/ocaml-community/biniou";
-    license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.bsd3;
+    maintainers = [ maintainers.vbgl ];
     mainProgram = "bdump";
   };
 }

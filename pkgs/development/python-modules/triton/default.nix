@@ -274,12 +274,12 @@ buildPythonPackage {
         '';
   };
 
-  meta = {
+  meta = with lib; {
     description = "Language and compiler for writing highly efficient custom Deep-Learning primitives";
     homepage = "https://github.com/triton-lang/triton";
-    platforms = lib.platforms.linux;
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    platforms = platforms.linux;
+    license = licenses.mit;
+    maintainers = with maintainers; [
       SomeoneSerge
       Madouura
       derdennisop

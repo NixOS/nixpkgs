@@ -52,10 +52,10 @@ buildGoModule rec {
       runHook postBuild
     '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/mongodb/mongo-tools";
     description = "Tools for the MongoDB";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ bryanasdev000 ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ bryanasdev000 ];
   };
 }

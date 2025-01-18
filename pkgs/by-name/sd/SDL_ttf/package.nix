@@ -44,11 +44,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/libsdl-org/SDL_ttf";
     description = "SDL TrueType library";
-    license = lib.licenses.zlib;
-    maintainers = lib.teams.sdl.members ++ (with lib.maintainers; [ ]);
+    license = licenses.zlib;
+    maintainers = teams.sdl.members ++ (with maintainers; [ ]);
     inherit (SDL.meta) platforms;
   };
 })

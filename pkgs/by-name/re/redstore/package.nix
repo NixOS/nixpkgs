@@ -35,12 +35,12 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  meta = {
+  meta = with lib; {
     description = "HTTP interface to Redland RDF store";
     mainProgram = "redstore";
     homepage = "https://www.aelius.com/njh/redstore/";
-    maintainers = [ lib.maintainers.raskin ];
-    platforms = with lib.platforms; linux ++ freebsd ++ gnu;
-    license = lib.licenses.gpl3Plus;
+    maintainers = [ maintainers.raskin ];
+    platforms = with platforms; linux ++ freebsd ++ gnu;
+    license = licenses.gpl3Plus;
   };
 }

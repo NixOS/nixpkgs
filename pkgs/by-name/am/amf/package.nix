@@ -43,12 +43,12 @@ stdenv.mkDerivation (finalAttrs: {
     patchelf $out/lib/* --add-needed libamdenc64.so
   '';
 
-  meta = {
+  meta = with lib; {
     description = "AMD's closed source Advanced Media Framework (AMF) driver";
     homepage = "https://www.amd.com/en/support/download/drivers.html";
-    license = lib.licenses.unfree;
+    license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
-    maintainers = with lib.maintainers; [ jopejoe1 ];
+    sourceProvenance = [ sourceTypes.binaryNativeCode ];
+    maintainers = with maintainers; [ jopejoe1 ];
   };
 })

@@ -34,10 +34,10 @@ python3.pkgs.buildPythonApplication {
   # manually tested instead
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Command line utility to automatically retrieve BibTeX citations from MathSciNet, arXiv, PubMed and doi.org";
     homepage = "https://github.com/wirhabenzeit/pybibget";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ vasissualiyp ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ vasissualiyp ];
   };
 }

@@ -26,11 +26,11 @@ buildNpmPackage rec {
     popd
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Fixes prettier formatting for go templates";
     mainProgram = "prettier-plugin-go-template";
     homepage = "https://github.com/NiklasPor/prettier-plugin-go-template";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ jukremer ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ jukremer ];
   };
 }

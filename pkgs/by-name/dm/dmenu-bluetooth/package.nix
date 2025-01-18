@@ -39,12 +39,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Script that generates a dmenu menu that uses bluetoothctl to connect to bluetooth devices and display status info";
     mainProgram = "dmenu-bluetooth";
     homepage = "https://github.com/Layerex/dmenu-bluetooth";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ ludovicopiero ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ ludovicopiero ];
+    platforms = platforms.linux;
   };
 })

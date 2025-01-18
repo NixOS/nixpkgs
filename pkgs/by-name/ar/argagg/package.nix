@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/vietjtnguyen/argagg";
     description = "Argument Aggregator";
     longDescription = ''
@@ -34,9 +34,9 @@ stdenv.mkDerivation (finalAttrs: {
       types until you access them, so the result structures end up just being
       pointers into the original command line argument C-strings.
     '';
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = lib.platforms.all;
+    license = licenses.mit;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.all;
     badPlatforms = [ "aarch64-darwin" ];
   };
 })

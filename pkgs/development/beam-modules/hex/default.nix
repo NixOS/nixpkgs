@@ -53,11 +53,11 @@ let
         runHook postInstall
       '';
 
-      meta = {
+      meta = with lib; {
         description = "Package manager for the Erlang VM https://hex.pm";
-        license = lib.licenses.mit;
+        license = licenses.mit;
         homepage = "https://github.com/hexpm/hex";
-        maintainers = with lib.maintainers; [ ericbmerritt ];
+        maintainers = with maintainers; [ ericbmerritt ];
       };
 
       passthru = {

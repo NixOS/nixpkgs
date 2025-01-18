@@ -18,10 +18,10 @@ melpaBuild {
 
   passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/ibizaman/emacs-conflict";
     description = "Resolve conflicts happening when using file synchronization tools";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ibizaman ];
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ ibizaman ];
   };
 }

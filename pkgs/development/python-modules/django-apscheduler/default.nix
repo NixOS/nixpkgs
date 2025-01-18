@@ -45,10 +45,10 @@ buildPythonPackage rec {
     "django_apscheduler"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "APScheduler for Django";
     homepage = "https://github.com/jcass77/django-apscheduler";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ happysalada ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ happysalada ];
   };
 }

@@ -39,10 +39,10 @@ buildNpmPackage rec {
   '';
   passthru.scriptName = "webtorrent.js";
 
-  meta = {
+  meta = with lib; {
     description = "Adds a hook that allows mpv to stream torrents";
     homepage = "https://github.com/mrxdst/webtorrent-mpv-hook";
-    maintainers = [ lib.maintainers.chuangzhu ];
-    license = lib.licenses.isc;
+    maintainers = [ maintainers.chuangzhu ];
+    license = licenses.isc;
   };
 }

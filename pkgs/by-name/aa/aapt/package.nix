@@ -45,13 +45,13 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Build tool that compiles and packages Android app's resources";
     mainProgram = "aapt2";
     homepage = "https://developer.android.com/tools/aapt2";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ linsui ];
-    platforms = lib.platforms.unix;
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ linsui ];
+    platforms = platforms.unix;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }

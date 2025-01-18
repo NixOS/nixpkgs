@@ -22,11 +22,11 @@ buildDotnetModule rec {
   patchPhase = ''
     sed -i 's|<TargetFrameworks>.*</TargetFrameworks>|<TargetFramework>net8.0</TargetFramework>|' Build.props
   '';
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/microsoft/artifacts-credprovider";
     description = "Azure Artifacts Credential Provider";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ anpin ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ anpin ];
     mainProgram = "CredentialProvider.Microsoft";
     platforms = [ "x86_64-linux" ];
   };

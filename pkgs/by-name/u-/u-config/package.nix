@@ -33,11 +33,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Smaller, simpler, portable pkg-config clone";
     homepage = "https://github.com/skeeto/u-config";
-    license = lib.licenses.unlicense;
-    maintainers = with lib.maintainers; [ sigmanificient ];
-    platforms = lib.platforms.all;
+    license = licenses.unlicense;
+    maintainers = with maintainers; [ sigmanificient ];
+    platforms = platforms.all;
   };
 })

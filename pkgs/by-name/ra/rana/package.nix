@@ -17,11 +17,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-+3QbqAGQzGT4yuGPHmT2BJkcnNmwhLTpQERTl4Ri2bk=";
 
-  meta = {
+  meta = with lib; {
     description = "Nostr public key mining tool";
     homepage = "https://github.com/grunch/rana";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ jigglycrumb ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ jigglycrumb ];
     mainProgram = "rana";
   };
 }

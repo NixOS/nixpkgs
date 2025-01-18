@@ -133,12 +133,12 @@ stdenv.mkDerivation rec {
         --replace-fail "ggrep" "${gnugrep}/bin/grep"
     '';
 
-  meta = {
+  meta = with lib; {
     description = "Manage FIDO2.1 devices over USB or NFC, including Passkeys";
     homepage = "https://github.com/token2/fido2-manage";
-    platforms = lib.platforms.all;
-    license = lib.licenses.bsd2;
+    platforms = platforms.all;
+    license = licenses.bsd2;
     mainProgram = "fido2-manage";
-    maintainers = with lib.maintainers; [ Srylax ];
+    maintainers = with maintainers; [ Srylax ];
   };
 }

@@ -43,12 +43,12 @@ buildDotnetModule {
     ln -s ${gozip}/bin/gozip $out/bin/gozip
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/Azure/azure-functions-core-tools";
     description = "Command line tools for Azure Functions";
     mainProgram = "func";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       mdarocha
       detegr
     ];

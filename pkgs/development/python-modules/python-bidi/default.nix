@@ -38,11 +38,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/MeirKriheli/python-bidi";
     description = "Pure python implementation of the BiDi layout algorithm";
     mainProgram = "pybidi";
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ freezeboy ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ freezeboy ];
   };
 }

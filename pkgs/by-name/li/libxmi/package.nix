@@ -19,11 +19,11 @@ stdenv.mkDerivation rec {
   # For the x86_64 GNU/Linux arch to be recognized by 'configure'
   preConfigure = "cp ${libtool}/share/libtool/build-aux/config.sub .";
 
-  meta = {
+  meta = with lib; {
     description = "Library for rasterizing 2-D vector graphics";
     homepage = "https://www.gnu.org/software/libxmi/";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.unix;
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
     maintainers = [ ];
   };
 }

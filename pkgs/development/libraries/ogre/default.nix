@@ -114,15 +114,15 @@ let
           (lib.cmakeBool "OGRE_BUILD_LIBS_AS_FRAMEWORKS" false)
         ];
 
-      meta = {
+      meta = with lib; {
         description = "3D Object-Oriented Graphics Rendering Engine";
         homepage = "https://www.ogre3d.org/";
-        maintainers = with lib.maintainers; [
+        maintainers = with maintainers; [
           raskin
           wegank
         ];
-        platforms = lib.platforms.unix;
-        license = lib.licenses.mit;
+        platforms = platforms.unix;
+        license = licenses.mit;
       };
     };
 in

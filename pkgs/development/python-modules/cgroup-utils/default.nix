@@ -30,12 +30,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cgutils" ];
 
-  meta = {
+  meta = with lib; {
     description = "Utility tools for control groups of Linux";
     homepage = "https://github.com/peo3/cgroup-utils";
     mainProgram = "cgutil";
-    maintainers = with lib.maintainers; [ layus ];
-    platforms = lib.platforms.linux;
-    license = lib.licenses.gpl2Plus;
+    maintainers = with maintainers; [ layus ];
+    platforms = platforms.linux;
+    license = licenses.gpl2Plus;
   };
 }

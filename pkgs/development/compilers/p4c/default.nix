@@ -98,15 +98,15 @@ stdenv.mkDerivation (finalAttrs: {
     flex
   ];
 
-  meta = {
+  meta = with lib; {
     changelog = "https://github.com/p4lang/p4c/releases";
     description = "Reference compiler for the P4 programming language";
     homepage = "https://github.com/p4lang/p4c";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
+    license = licenses.asl20;
+    maintainers = with maintainers; [
       raitobezarius
       govanify
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 })

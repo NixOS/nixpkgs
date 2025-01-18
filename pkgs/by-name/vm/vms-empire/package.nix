@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "http://catb.org/~esr/vms-empire/";
     description = "Ancestor of all expand/explore/exploit/exterminate games";
     longDescription = ''
@@ -64,9 +64,9 @@ stdenv.mkDerivation (finalAttrs: {
       expand/explore/exploit/exterminate games, including Civilization and
       Master of Orion.
     '';
-    license = lib.licenses.gpl2Only;
+    license = licenses.gpl2Only;
     mainProgram = "vms-empire";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.unix;
   };
 })

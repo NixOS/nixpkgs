@@ -45,7 +45,7 @@ python3Packages.buildPythonApplication rec {
     wheel
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Run LLMs and AI on any Cloud";
     longDescription = ''
       SkyPilot is a framework for running LLMs, AI, and batch jobs on any
@@ -53,8 +53,8 @@ python3Packages.buildPythonApplication rec {
       managed execution.
     '';
     homepage = "https://github.com/skypilot-org/skypilot";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ seanrmurphy ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ seanrmurphy ];
     mainProgram = "sky";
   };
 }

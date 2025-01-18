@@ -103,12 +103,12 @@ python3Packages.buildPythonApplication rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Container-based approach to boot a full Android system on a regular GNU/Linux system";
     mainProgram = "waydroid";
     homepage = "https://github.com/waydroid/waydroid";
-    license = lib.licenses.gpl3Only;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ ];
+    license = licenses.gpl3Only;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ ];
   };
 }

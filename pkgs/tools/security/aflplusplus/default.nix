@@ -194,19 +194,19 @@ let
       qemu = aflplusplus-qemu;
     };
 
-    meta = {
+    meta = with lib; {
       description = ''
         Heavily enhanced version of AFL, incorporating many features
         and improvements from the community
       '';
       homepage = "https://aflplus.plus";
       changelog = "https://aflplus.plus/docs/changelog";
-      license = lib.licenses.asl20;
+      license = licenses.asl20;
       platforms = [
         "x86_64-linux"
         "i686-linux"
       ];
-      maintainers = with lib.maintainers; [
+      maintainers = with maintainers; [
         ris
         mindavi
       ];

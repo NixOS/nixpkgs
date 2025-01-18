@@ -17,12 +17,12 @@ stdenv.mkDerivation rec {
     installFlags=DESTDIR=$out
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://idle3-tools.sourceforge.net/";
     description = "Tool to get/set the infamous idle3 timer in WD HDDs";
-    license = lib.licenses.gpl3;
+    license = licenses.gpl3;
     maintainers = [ ];
-    platforms = with lib.platforms; linux;
+    platforms = with platforms; linux;
     mainProgram = "idle3ctl";
   };
 }

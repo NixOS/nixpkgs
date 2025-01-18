@@ -20,11 +20,11 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
-  meta = {
+  meta = with lib; {
     description = "Save screenshots of urls and webpages from terminal";
     homepage = "https://github.com/pwnwriter/haylxon";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ scientiac ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ scientiac ];
     mainProgram = "hxn";
   };
 }

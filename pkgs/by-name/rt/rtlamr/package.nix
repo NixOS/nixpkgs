@@ -17,15 +17,15 @@ buildGoModule rec {
 
   vendorHash = "sha256-uT6zfsWgIot0EMNqwtwJNFXN/WaAyOGfcYJjuyOXT4g=";
 
-  meta = {
+  meta = with lib; {
     description = "Rtl-sdr receiver for Itron ERT compatible smart meters";
     longDescription = ''
       An rtl-sdr receiver for Itron ERT compatible smart meters operating
       in the 900MHz ISM band
     '';
     homepage = "https://github.com/bemasher/rtlamr";
-    license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ jmendyk ];
-    platforms = lib.platforms.unix;
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [ jmendyk ];
+    platforms = platforms.unix;
   };
 }

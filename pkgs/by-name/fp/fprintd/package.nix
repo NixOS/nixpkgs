@@ -112,11 +112,11 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "'G_DEBUG=fatal-criticals'," ""
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://fprint.freedesktop.org/";
     description = "D-Bus daemon that offers libfprint functionality over the D-Bus interprocess communication bus";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ abbradar ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ abbradar ];
   };
 })

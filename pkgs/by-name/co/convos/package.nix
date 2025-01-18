@@ -117,11 +117,11 @@ perlPackages.buildPerlPackage rec {
 
   passthru.tests = nixosTests.convos;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://convos.chat";
     description = "Convos is the simplest way to use IRC in your browser";
     mainProgram = "convos";
-    license = lib.licenses.artistic2;
-    maintainers = with lib.maintainers; [ sgo ];
+    license = licenses.artistic2;
+    maintainers = with maintainers; [ sgo ];
   };
 }

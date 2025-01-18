@@ -31,11 +31,11 @@ buildNpmPackage rec {
     cp ${./package-lock.json} package-lock.json
   '';
 
-  meta = {
+  meta = with lib; {
     description = "CLI App for converting cursor svg file to png";
     homepage = "https://github.com/ful1e5/cbmp";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.mrtnvgr ];
+    license = licenses.mit;
+    maintainers = [ maintainers.mrtnvgr ];
     mainProgram = "cbmp";
   };
 }

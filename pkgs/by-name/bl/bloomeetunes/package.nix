@@ -50,12 +50,12 @@ flutter324.buildFlutterApplication rec {
 
   passthru.updateScript = ./update.sh;
 
-  meta = {
+  meta = with lib; {
     description = "Cross-platform music app designed to bring you ad-free tunes from various sources";
     homepage = "https://github.com/HemantKArya/BloomeeTunes";
     mainProgram = "bloomee";
-    license = with lib.licenses; [ gpl2Plus ];
-    maintainers = with lib.maintainers; [ aucub ];
-    platforms = lib.platforms.linux;
+    license = with licenses; [ gpl2Plus ];
+    maintainers = with maintainers; [ aucub ];
+    platforms = platforms.linux;
   };
 }

@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Cute cat(1) for the terminal";
     longDescription = ''
       see is a powerful file visualization tool for the terminal, offering
@@ -31,8 +31,8 @@ rustPlatform.buildRustPackage rec {
       various file types directly in your console.
     '';
     homepage = "https://github.com/guilhermeprokisch/see";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "see";
-    maintainers = with lib.maintainers; [ louis-thevenet ];
+    maintainers = with maintainers; [ louis-thevenet ];
   };
 }

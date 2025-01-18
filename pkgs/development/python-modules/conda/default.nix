@@ -73,10 +73,10 @@ buildPythonPackage rec {
   # menuinst is currently not packaged
   pythonRemoveDeps = lib.optionals (!stdenv.hostPlatform.isWindows) [ "menuinst" ];
 
-  meta = {
+  meta = with lib; {
     description = "OS-agnostic, system-level binary package manager";
     homepage = "https://github.com/conda/conda";
-    license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.ericthemagician ];
+    license = licenses.bsd3;
+    maintainers = [ maintainers.ericthemagician ];
   };
 }

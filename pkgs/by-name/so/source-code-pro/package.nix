@@ -22,11 +22,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Monospaced font family for user interface and coding environments";
-    maintainers = with lib.maintainers; [ relrod ];
-    platforms = with lib.platforms; all;
+    maintainers = with maintainers; [ relrod ];
+    platforms = with platforms; all;
     homepage = "https://adobe-fonts.github.io/source-code-pro/";
-    license = lib.licenses.ofl;
+    license = licenses.ofl;
   };
 }

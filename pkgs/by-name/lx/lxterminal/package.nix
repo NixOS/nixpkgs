@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests.test = nixosTests.terminal-emulators.lxterminal;
 
-  meta = {
+  meta = with lib; {
     description = "Standard terminal emulator of LXDE";
     longDescription = ''
       LXTerminal is the standard terminal emulator of LXDE. The terminal is a
@@ -74,9 +74,9 @@ stdenv.mkDerivation rec {
       unnecessary dependencies.
     '';
     homepage = "https://wiki.lxde.org/en/LXTerminal";
-    license = lib.licenses.gpl2;
-    maintainers = [ lib.maintainers.pbsds ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2;
+    maintainers = [ maintainers.pbsds ];
+    platforms = platforms.linux;
     mainProgram = "lxterminal";
   };
 }

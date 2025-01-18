@@ -37,11 +37,11 @@ stdenv.mkDerivation rec {
     rm -rf $out/lib
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Swiss army knife for puredata";
     homepage = "http://puredata.info/downloads/zexy";
-    license = lib.licenses.gpl2;
-    maintainers = [ lib.maintainers.magnetophon ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2;
+    maintainers = [ maintainers.magnetophon ];
+    platforms = platforms.linux;
   };
 }

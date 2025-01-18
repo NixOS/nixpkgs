@@ -102,12 +102,12 @@ stdenv.mkDerivation (finalAttrs: {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/v-novaltd/LCEVCdec";
     description = "MPEG-5 LCEVC Decoder";
-    license = lib.licenses.bsd3Clear;
+    license = licenses.bsd3Clear;
     pkgConfigModules = [ "lcevc_dec" ];
-    maintainers = with lib.maintainers; [ jopejoe1 ];
-    platforms = lib.platforms.all;
+    maintainers = with maintainers; [ jopejoe1 ];
+    platforms = platforms.all;
   };
 })

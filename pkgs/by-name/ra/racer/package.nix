@@ -38,11 +38,11 @@ stdenv.mkDerivation rec {
 
   patches = [ ./mkdir.patch ];
 
-  meta = {
+  meta = with lib; {
     description = "Car racing game";
     mainProgram = "racer";
     homepage = "http://hippo.nipax.cz/download.en.php";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
   };
 }

@@ -38,7 +38,7 @@ buildDunePackage rec {
   doCheck = lib.versionAtLeast ocaml.version "4.05";
   checkInputs = [ alcotest ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/abeaumont/ocaml-chacha";
     description = "ChaCha20, ChaCha12 and ChaCha8 encryption functions, in OCaml";
     longDescription = ''
@@ -46,8 +46,8 @@ buildDunePackage rec {
       ChaCha8 and ChaCha12 functions. The hot loop is implemented in C for efficiency
       reasons.
     '';
-    license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ fufexan ];
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ fufexan ];
     broken = true; # Not compatible with mirage-crypto ≥ 1.0
   };
 }

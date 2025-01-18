@@ -77,10 +77,10 @@ buildPythonPackage {
       "test_fb_def_and_forward_lowdim"
     ];
 
-  meta = {
+  meta = with lib; {
     description = "PyTorch-based audio source separation toolkit for researchers";
     homepage = "https://github.com/asteroid-team/asteroid-filterbanks";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ matthewcroughan ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ matthewcroughan ];
   };
 }

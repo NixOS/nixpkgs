@@ -17,10 +17,10 @@ buildFishPlugin {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = {
+  meta = with lib; {
     description = "Fish plugin that reminds you to use your aliases";
     homepage = "https://github.com/paysonwallach/fish-you-should-use";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ anomalocaris ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ anomalocaris ];
   };
 }

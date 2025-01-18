@@ -78,11 +78,11 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.withFeatureAs true "timidity-cfg" "${timidity}/share/timidity/timidity.cfg")
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/libsdl-org/SDL_mixer";
     description = "SDL multi-channel audio mixer library";
-    license = lib.licenses.zlib;
-    maintainers = lib.teams.sdl.members ++ (with lib.maintainers; [ ]);
-    platforms = lib.platforms.unix;
+    license = licenses.zlib;
+    maintainers = teams.sdl.members ++ (with maintainers; [ ]);
+    platforms = platforms.unix;
   };
 })

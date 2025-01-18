@@ -70,13 +70,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     '';
   });
 
-  meta = {
+  meta = with lib; {
     changelog = "https://www.rewind.ai/changelog";
     description = "Rewind is a personalized AI powered by everything you've seen, said, or heard";
     homepage = "https://www.rewind.ai/";
-    license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ donteatoreo ];
+    license = licenses.unfree;
+    maintainers = with maintainers; [ donteatoreo ];
     platforms = [ "aarch64-darwin" ];
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 })

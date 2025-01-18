@@ -32,12 +32,12 @@ stdenv.mkDerivation rec {
     ncurses
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Tracker music player for the terminal";
     homepage = "http://mikmod.shlomifish.org/";
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = with lib.platforms; linux;
+    platforms = with platforms; linux;
     mainProgram = "mikmod";
   };
 }

@@ -42,10 +42,10 @@ buildPythonPackage rec {
   # upstream has no tests
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Python conversion functions between ISO country codes, countries, and continents";
     homepage = "https://github.com/jefftune/pycountry-convert";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

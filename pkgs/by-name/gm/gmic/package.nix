@@ -133,14 +133,14 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://gmic.eu/";
     description = "Open and full-featured framework for image processing";
     mainProgram = "gmic";
-    license = lib.licenses.cecill21;
+    license = licenses.cecill21;
     maintainers = [
-      lib.maintainers.AndersonTorres
+      maintainers.AndersonTorres
     ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 })

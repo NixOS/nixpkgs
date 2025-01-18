@@ -30,10 +30,10 @@ buildGoModule rec {
   # Tests require a running docker daemon
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "PostgreSQL zero-downtime migrations made easy";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     homepage = "https://github.com/xataio/pgroll";
-    maintainers = with lib.maintainers; [ ilyakooo0 ];
+    maintainers = with maintainers; [ ilyakooo0 ];
   };
 }

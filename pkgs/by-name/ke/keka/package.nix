@@ -26,12 +26,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "macOS file archiver";
     homepage = "https://www.keka.io";
-    license = lib.licenses.unfree;
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [ emilytrau ];
-    platforms = lib.platforms.darwin;
+    license = licenses.unfree;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    maintainers = with maintainers; [ emilytrau ];
+    platforms = platforms.darwin;
   };
 })

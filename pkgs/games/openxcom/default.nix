@@ -45,12 +45,12 @@ stdenv.mkDerivation {
     zlib
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Open source clone of UFO: Enemy Unknown";
     mainProgram = "openxcom";
     homepage = "https://openxcom.org";
-    license = lib.licenses.gpl3;
+    license = licenses.gpl3;
     maintainers = [ ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

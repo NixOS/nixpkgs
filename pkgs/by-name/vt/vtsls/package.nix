@@ -82,12 +82,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "LSP wrapper for typescript extension of vscode.";
     homepage = "https://github.com/yioneko/vtsls";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ kuglimon ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ kuglimon ];
     mainProgram = "vtsls";
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 })

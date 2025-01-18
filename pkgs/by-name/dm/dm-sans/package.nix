@@ -23,10 +23,10 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Geometric sans-serif typeface";
     homepage = "https://github.com/googlefonts/dm-fonts";
-    license = lib.licenses.ofl;
-    maintainers = with lib.maintainers; [ gilice ];
+    license = licenses.ofl;
+    maintainers = with maintainers; [ gilice ];
   };
 }

@@ -31,12 +31,12 @@ let
       data = ./deps.json;
     };
 
-    meta = {
+    meta = with lib; {
       description = "Ghidra extension for delinking executables back to object files";
       homepage = "https://github.com/boricj/ghidra-delinker-extension";
-      license = lib.licenses.asl20;
-      maintainers = [ lib.maintainers.jchw ];
-      platforms = lib.platforms.unix;
+      license = licenses.asl20;
+      maintainers = [ maintainers.jchw ];
+      platforms = platforms.unix;
     };
   };
 in

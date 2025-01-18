@@ -40,15 +40,15 @@ buildGoModule rec {
       $out/share/museum
   '';
 
-  meta = {
+  meta = with lib; {
     description = "API server for ente.io";
     homepage = "https://github.com/ente-io/ente/tree/main/server";
-    license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [
       surfaceflinger
       pinpox
     ];
     mainProgram = "museum";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

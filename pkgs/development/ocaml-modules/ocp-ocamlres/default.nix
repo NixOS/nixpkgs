@@ -38,11 +38,11 @@ else
     installFlags = [ "BINDIR=$(out)/bin" ];
     preInstall = "mkdir -p $out/bin";
 
-    meta = {
+    meta = with lib; {
       description = "Simple tool and library to embed files and directories inside OCaml executables";
       homepage = "https://www.typerex.org/ocp-ocamlres.html";
-      license = lib.licenses.lgpl3Plus;
-      maintainers = [ lib.maintainers.vbgl ];
+      license = licenses.lgpl3Plus;
+      maintainers = [ maintainers.vbgl ];
       mainProgram = "ocp-ocamlres";
       inherit (ocaml.meta) platforms;
     };

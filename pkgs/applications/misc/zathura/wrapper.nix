@@ -55,7 +55,7 @@ symlinkJoin {
         --replace-fail "${zathura_core.out}" "$out"
     '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://pwmt.org/projects/zathura";
     description = "Highly customizable and functional PDF viewer";
     longDescription = ''
@@ -64,9 +64,9 @@ symlinkJoin {
       is an application that provides a minimalistic and space saving interface
       as well as an easy usage that mainly focuses on keyboard interaction.
     '';
-    license = lib.licenses.zlib;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [
+    license = licenses.zlib;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
       smironov
       globin
       TethysSvensson

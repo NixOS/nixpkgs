@@ -43,12 +43,12 @@ buildGoModule {
     rm -v windows_amd64_icon.syso
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Safe and secure chat client";
     mainProgram = "coyim";
     homepage = "https://coy.im/";
-    license = lib.licenses.gpl3;
+    license = licenses.gpl3;
     broken = stdenv.hostPlatform.isDarwin;
-    maintainers = with lib.maintainers; [ PapayaJackal ];
+    maintainers = with maintainers; [ PapayaJackal ];
   };
 }

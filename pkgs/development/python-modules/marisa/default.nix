@@ -25,13 +25,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "marisa" ];
 
-  meta = {
+  meta = with lib; {
     description = "Python bindings for marisa";
     homepage = "https://github.com/s-yata/marisa-trie";
-    license = with lib.licenses; [
+    license = with licenses; [
       bsd2
       lgpl21Plus
     ];
-    maintainers = with lib.maintainers; [ dotlambda ];
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

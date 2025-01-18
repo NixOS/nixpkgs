@@ -21,11 +21,11 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/noriokanisawa/HachiMaruPop";
     description = "Cute, Japanese font";
-    license = lib.licenses.ofl;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = lib.platforms.all;
+    license = licenses.ofl;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.all;
   };
 }

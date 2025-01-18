@@ -41,12 +41,12 @@ stdenv.mkDerivation rec {
 
   configureFlags = lib.optional (!jackSupport) "--disable-jack";
 
-  meta = {
+  meta = with lib; {
     description = "Not a Guitar-Only tuner";
     mainProgram = "lingot";
     homepage = "https://www.nongnu.org/lingot/";
-    license = lib.licenses.gpl2Plus;
-    platforms = with lib.platforms; linux;
+    license = licenses.gpl2Plus;
+    platforms = with platforms; linux;
     maintainers = [ ];
   };
 }

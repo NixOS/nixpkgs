@@ -28,11 +28,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sensoterra" ];
 
-  meta = {
+  meta = with lib; {
     description = "Query Sensoterra probes using the Customer API";
     homepage = "https://gitlab.com/sensoterra/public/python";
     changelog = "https://gitlab.com/sensoterra/public/python/-/blob/main/CHANGELOG.md";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fab ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
   };
 }

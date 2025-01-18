@@ -67,15 +67,15 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Mobile-friendly GTK calendar application";
     homepage = "https://gitlab.com/floers/karlender";
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     mainProgram = "karlender";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       chuangzhu
       bot-wxt1221
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

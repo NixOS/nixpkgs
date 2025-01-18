@@ -56,10 +56,10 @@ buildPythonPackage rec {
             print(f"Device {i} : {nvmlDeviceGetName(handle)}")
       '';
 
-  meta = {
+  meta = with lib; {
     description = "Python Bindings for the NVIDIA Management Library";
     homepage = "https://pypi.org/project/nvidia-ml-py";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ GaetanLepage ];
   };
 }

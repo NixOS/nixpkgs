@@ -43,10 +43,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     rev-prefix = "v";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Gradle tab completion for bash and zsh";
     homepage = "https://github.com/gradle/gradle-completion";
-    license = lib.licenses.mit;
-    maintainers = [ ] ++ lib.teams.java.members;
+    license = licenses.mit;
+    maintainers = [ ] ++ teams.java.members;
   };
 })

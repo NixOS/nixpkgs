@@ -30,11 +30,11 @@ buildGoModule rec {
       --prefix PATH : '${lib.makeBinPath [ arp-scan ]}'
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Lightweight network IP scanner with web GUI";
     homepage = "https://github.com/aceberg/WatchYourLAN";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "WatchYourLAN";
-    maintainers = [ lib.maintainers.iv-nn ];
+    maintainers = [ maintainers.iv-nn ];
   };
 }

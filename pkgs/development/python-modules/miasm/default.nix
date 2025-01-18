@@ -49,11 +49,11 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "miasm" ];
 
-  meta = {
+  meta = with lib; {
     description = "Reverse engineering framework in Python";
     homepage = "https://github.com/cea-sec/miasm";
     changelog = "https://github.com/cea-sec/miasm/blob/${commit}/CHANGELOG.md";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ msanft ];
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ msanft ];
   };
 }

@@ -28,10 +28,10 @@ buildDunePackage rec {
   ];
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "Key Derivation Functions: HKDF RFC 5869, PBKDF RFC 2898, SCRYPT RFC 7914";
     homepage = "https://github.com/robur-coop/kdf";
-    license = lib.licenses.bsd2;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.bsd2;
+    maintainers = [ maintainers.vbgl ];
   };
 }

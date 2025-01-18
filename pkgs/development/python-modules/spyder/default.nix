@@ -133,7 +133,7 @@ buildPythonPackage rec {
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Scientific python development environment";
     mainProgram = "spyder";
     longDescription = ''
@@ -144,8 +144,8 @@ buildPythonPackage rec {
     homepage = "https://www.spyder-ide.org/";
     downloadPage = "https://github.com/spyder-ide/spyder/releases";
     changelog = "https://github.com/spyder-ide/spyder/blob/master/CHANGELOG.md";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ gebner ];
-    platforms = lib.platforms.linux;
+    license = licenses.mit;
+    maintainers = with maintainers; [ gebner ];
+    platforms = platforms.linux;
   };
 }

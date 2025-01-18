@@ -58,12 +58,12 @@ stdenv.mkDerivation {
     z3
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Efficient compiler-based symbolic execution";
     homepage = "https://www.s3.eurecom.fr/tools/symbolic_execution/symcc.html";
-    license = lib.licenses.gpl3Plus;
-    maintainers = [ lib.maintainers.dump_stack ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Plus;
+    maintainers = [ maintainers.dump_stack ];
+    platforms = platforms.linux;
     mainProgram = "symcc";
   };
 }

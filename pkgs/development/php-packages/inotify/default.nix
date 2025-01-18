@@ -8,11 +8,11 @@ buildPecl {
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "Inotify bindings for PHP";
     homepage = "https://github.com/arnaud-lb/php-inotify";
-    license = lib.licenses.php301;
-    maintainers = lib.teams.php.members;
-    platforms = lib.platforms.linux;
+    license = licenses.php301;
+    maintainers = teams.php.members;
+    platforms = platforms.linux;
   };
 }

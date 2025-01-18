@@ -23,7 +23,7 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Junction is a a humanist sans-serif font";
     longDescription = ''
       Junction is a a humanist sans-serif, and the first open-source type
@@ -32,7 +32,7 @@ stdenvNoCC.mkDerivation {
       international support.
     '';
     homepage = "https://www.theleagueofmoveabletype.com/junction";
-    license = lib.licenses.ofl;
-    maintainers = with lib.maintainers; [ minijackson ];
+    license = licenses.ofl;
+    maintainers = with maintainers; [ minijackson ];
   };
 }

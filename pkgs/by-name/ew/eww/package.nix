@@ -58,7 +58,7 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
-  meta = {
+  meta = with lib; {
     description = "Widget system made in Rust to create widgets for any WM";
     longDescription = ''
       Eww (ElKowar's Wacky Widgets) is a widget system made in Rust which lets
@@ -68,8 +68,8 @@ rustPlatform.buildRustPackage rec {
       to customize and provides all the flexibility you need!
     '';
     homepage = "https://github.com/elkowar/eww";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       coffeeispower
       figsoda
       lom

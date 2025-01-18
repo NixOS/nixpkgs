@@ -82,11 +82,11 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Deepin tool kit core library";
     homepage = "https://github.com/linuxdeepin/dtk6core";
-    license = lib.licenses.lgpl3Plus;
-    platforms = lib.platforms.linux;
-    maintainers = lib.teams.deepin.members;
+    license = licenses.lgpl3Plus;
+    platforms = platforms.linux;
+    maintainers = teams.deepin.members;
   };
 })

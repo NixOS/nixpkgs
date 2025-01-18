@@ -52,17 +52,17 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       --inherit-argv0
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Desktop application for Proton Pass";
     homepage = "https://proton.me/pass";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
       luftmensch-luftmensch
       massimogengarelli
       sebtm
     ];
     platforms = [ "x86_64-linux" ];
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     mainProgram = "proton-pass";
   };
 })

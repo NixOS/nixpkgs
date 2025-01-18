@@ -110,12 +110,12 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Highly configurable and privacy-focused Discord client";
     homepage = "https://github.com/Milkshiift/GoofCord";
     downloadPage = "https://github.com/Milkshiift/GoofCord";
-    license = lib.licenses.osl3;
-    maintainers = with lib.maintainers; [ nyabinary ];
+    license = licenses.osl3;
+    maintainers = with maintainers; [ nyabinary ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

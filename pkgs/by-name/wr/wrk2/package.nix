@@ -43,12 +43,12 @@ stdenv.mkDerivation rec {
     mv ./wrk $out/bin/wrk2
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Constant throughput, correct latency recording variant of wrk";
     homepage = "https://github.com/giltene/wrk2";
-    license = lib.licenses.bsd3;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ thoughtpolice ];
+    license = licenses.bsd3;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ thoughtpolice ];
     # never built on aarch64-linux since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
     mainProgram = "wrk2";

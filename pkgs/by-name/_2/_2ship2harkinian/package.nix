@@ -197,13 +197,13 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/HarbourMasters/2ship2harkinian";
     description = "A PC port of Majora's Mask with modern controls, widescreen, high-resolution, and more";
     mainProgram = "2s2h";
     platforms = [ "x86_64-linux" ];
-    maintainers = with lib.maintainers; [ qubitnano ];
-    license = with lib.licenses; [
+    maintainers = with maintainers; [ qubitnano ];
+    license = with licenses; [
       # OTRExporter, OTRGui, ZAPDTR, libultraship
       mit
       # 2 Ship 2 Harkinian

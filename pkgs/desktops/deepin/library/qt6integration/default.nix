@@ -38,11 +38,11 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
-  meta = {
+  meta = with lib; {
     description = "Qt platform theme integration plugins for DDE";
     homepage = "https://github.com/linuxdeepin/qt6integration";
-    license = lib.licenses.lgpl3Plus;
-    platforms = lib.platforms.linux;
-    maintainers = lib.teams.deepin.members;
+    license = licenses.lgpl3Plus;
+    platforms = platforms.linux;
+    maintainers = teams.deepin.members;
   };
 }

@@ -76,11 +76,11 @@ mkAppleDerivation {
     ln -s "$ps/bin/ps" "$out/bin/ps"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Advanced commands package for Darwin";
     license = [
-      lib.licenses.apsl10
-      lib.licenses.apsl20
+      licenses.apsl10
+      licenses.apsl20
     ];
   };
 }

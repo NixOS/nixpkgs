@@ -28,14 +28,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "A comprehensive user.js template for configuration and hardening";
     homepage = "https://github.com/arkenfox/user.js";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       linsui
       Guanran928
     ];
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 })

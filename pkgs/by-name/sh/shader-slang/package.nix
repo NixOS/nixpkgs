@@ -147,12 +147,12 @@ stdenv.mkDerivation (finalAttrs: {
     ignoredVersions = "*-draft";
   };
 
-  meta = {
+  meta = with lib; {
     description = "A shading language that makes it easier to build and maintain large shader codebases in a modular and extensible fashion";
     homepage = "https://github.com/shader-slang/slang";
-    license = lib.licenses.asl20-llvm;
-    maintainers = with lib.maintainers; [ niklaskorz ];
+    license = licenses.asl20-llvm;
+    maintainers = with maintainers; [ niklaskorz ];
     mainProgram = "slangc";
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 })

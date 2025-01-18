@@ -33,15 +33,15 @@ stdenv.mkDerivation {
       --replace-fail '/bin/chmod' '${coreutils}/bin/chmod'
   '';
 
-  meta = {
+  meta = with lib; {
     description = "GNU/Linux application to control backlights";
     homepage = "https://gitlab.com/dpeukert/light";
-    license = lib.licenses.gpl3Only;
+    license = licenses.gpl3Only;
     mainProgram = "light";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       puffnfresh
       dtzWill
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

@@ -10,12 +10,12 @@ stdenv.mkDerivation rec {
   pname = "gmad";
   version = "unstable-2020-02-24";
 
-  meta = {
+  meta = with lib; {
     description = "Garry's Mod Addon Creator and Extractor";
     homepage = "https://github.com/Facepunch/gmad";
-    license = lib.licenses.unfree;
-    maintainers = [ lib.maintainers.abigailbuccaneer ];
-    platforms = lib.platforms.all;
+    license = licenses.unfree;
+    maintainers = [ maintainers.abigailbuccaneer ];
+    platforms = platforms.all;
   };
 
   src = fetchFromGitHub {

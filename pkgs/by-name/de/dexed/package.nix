@@ -110,12 +110,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
-  meta = {
+  meta = with lib; {
     description = "DX7 FM multi platform/multi format plugin";
     mainProgram = "Dexed";
     homepage = "https://asb2m10.github.io/dexed";
-    license = lib.licenses.gpl3Only;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ OPNA2608 ];
+    license = licenses.gpl3Only;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ OPNA2608 ];
   };
 })

@@ -23,11 +23,11 @@ buildGoModule rec {
 
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/mna/pigeon";
     description = "PEG parser generator for Go";
     mainProgram = "pigeon";
-    maintainers = with lib.maintainers; [ zimbatm ];
-    license = with lib.licenses; [ bsd3 ];
+    maintainers = with maintainers; [ zimbatm ];
+    license = with licenses; [ bsd3 ];
   };
 }

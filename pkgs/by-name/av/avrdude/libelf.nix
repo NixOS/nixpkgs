@@ -26,11 +26,11 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "ELF object file access library (vendored by avrdudes)";
     homepage = "https://github.com/avrdudes/libelf";
-    license = lib.licenses.lgpl2Plus;
-    platforms = lib.platforms.all;
-    maintainers = [ lib.maintainers.bjornfor ];
+    license = licenses.lgpl2Plus;
+    platforms = platforms.all;
+    maintainers = [ maintainers.bjornfor ];
   };
 }

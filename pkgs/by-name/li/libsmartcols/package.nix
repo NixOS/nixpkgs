@@ -40,11 +40,11 @@ stdenv.mkDerivation rec {
     "install-pkgconfigDATA"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "smart column output alignment library";
     homepage = "https://github.com/karelzak/util-linux/tree/master/libsmartcols";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    maintainers = with lib.maintainers; [ rb2k ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ rb2k ];
   };
 }

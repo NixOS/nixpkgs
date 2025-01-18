@@ -125,11 +125,11 @@ param.stdenv.mkDerivation rec {
     done
   '';
 
-  meta = {
+  meta = with lib; {
     description = "OCaml interface to Tcl/Tk, including OCaml library explorer OCamlBrowser";
     homepage = "http://labltk.forge.ocamlcore.org/";
-    license = lib.licenses.lgpl21;
+    license = licenses.lgpl21;
     inherit (ocaml.meta) platforms;
-    maintainers = [ lib.maintainers.vbgl ];
+    maintainers = [ maintainers.vbgl ];
   };
 }

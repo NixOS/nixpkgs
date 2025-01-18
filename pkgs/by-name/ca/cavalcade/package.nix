@@ -65,10 +65,10 @@ python3Packages.buildPythonApplication rec {
     })
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Python wrapper for C.A.V.A. utility with a GUI";
     homepage = "https://github.com/worron/cavalcade";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ sigmanificient ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ sigmanificient ];
   };
 }

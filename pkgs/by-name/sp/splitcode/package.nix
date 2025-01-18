@@ -37,12 +37,12 @@ stdenv.mkDerivation {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Tool for flexible, efficient parsing, interpreting, and editing of technical sequences in sequencing reads";
     homepage = "https://github.com/pachterlab/splitcode";
-    license = lib.licenses.bsd2;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ zimward ];
+    license = licenses.bsd2;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ zimward ];
     mainProgram = "splitcode";
     badPlatforms = [
       # Test hangs indefinitely. See https://github.com/pachterlab/splitcode/issues/31

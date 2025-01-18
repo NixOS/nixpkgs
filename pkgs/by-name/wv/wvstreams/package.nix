@@ -100,11 +100,11 @@ stdenv.mkDerivation {
     perl
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Network programming library in C++";
     homepage = "http://alumnit.ca/wiki/index.php?page=WvStreams";
-    license = lib.licenses.lgpl2;
-    maintainers = [ lib.maintainers.flokli ];
-    platforms = lib.platforms.linux;
+    license = licenses.lgpl2;
+    maintainers = [ maintainers.flokli ];
+    platforms = platforms.linux;
   };
 }

@@ -47,12 +47,12 @@ stdenv.mkDerivation rec {
     ++ lib.optional stdenv.hostPlatform.isLinux e2fsprogs
     ++ lib.optional stdenv.hostPlatform.isDarwin bzip2;
 
-  meta = {
+  meta = with lib; {
     description = "Online backups for the truly paranoid";
     homepage = "http://www.tarsnap.com/";
-    license = lib.licenses.unfree;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [
+    license = licenses.unfree;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
       thoughtpolice
       roconnor
     ];

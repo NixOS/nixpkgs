@@ -22,10 +22,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ qt5.qtbase ];
 
-  meta = {
-    maintainers = with lib.maintainers; [ xddxdd ];
+  meta = with lib; {
+    maintainers = with maintainers; [ xddxdd ];
     description = "HTTP server for Qt applications";
     homepage = "https://github.com/nitroshare/qhttpengine";
-    license = lib.licenses.mit;
+    license = licenses.mit;
   };
 }

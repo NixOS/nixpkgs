@@ -54,10 +54,10 @@ buildDunePackage rec {
     eio_main
   ];
 
-  meta = {
+  meta = with lib; {
     description = "HTTP library with HTTP/2 support written entirely in OCaml";
     homepage = "https://github.com/anmonteiro/piaf";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ anmonteiro ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ anmonteiro ];
   };
 }

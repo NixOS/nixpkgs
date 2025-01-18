@@ -33,14 +33,14 @@
 
 mkDerivation {
   pname = "dolphin";
-  meta = {
+  meta = with lib; {
     homepage = "https://apps.kde.org/dolphin/";
     description = "KDE file manager";
-    license = with lib.licenses; [
+    license = with licenses; [
       gpl2Plus
       fdl12Plus
     ];
-    maintainers = [ lib.maintainers.ttuegel ];
+    maintainers = [ maintainers.ttuegel ];
   };
   nativeBuildInputs = [
     extra-cmake-modules

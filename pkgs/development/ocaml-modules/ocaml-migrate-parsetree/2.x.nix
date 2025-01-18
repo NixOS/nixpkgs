@@ -20,10 +20,10 @@ lib.throwIf (lib.versionAtLeast ocaml.version "5.1")
       sha256 = "sha256-7EnEUtwzemIFVqtoK/AZi/UBglULUC2PsjClkSYKpqQ=";
     };
 
-    meta = {
+    meta = with lib; {
       description = "Convert OCaml parsetrees between different major versions";
-      license = lib.licenses.lgpl21;
-      maintainers = with lib.maintainers; [
+      license = licenses.lgpl21;
+      maintainers = with maintainers; [
         vbgl
         sternenseemann
       ];

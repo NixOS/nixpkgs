@@ -26,11 +26,11 @@ buildPythonPackage rec {
     pinecone-plugin-interface
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.pinecone.io/";
-    maintainers = with lib.maintainers; [ bot-wxt1221 ];
-    license = lib.licenses.asl20;
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ bot-wxt1221 ];
+    license = licenses.asl20;
+    platforms = platforms.unix;
     description = "Embeddings plugin for Pinecone SDK";
   };
 }

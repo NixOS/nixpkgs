@@ -31,11 +31,11 @@ stdenv.mkDerivation (finalAttrs: {
     nodejs
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Fetch and print the GraphQL schema from a GraphQL HTTP endpoint.";
     homepage = "https://github.com/prisma-labs/get-graphql-schema";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "get-graphql-schema";
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = with maintainers; [ pyrox0 ];
   };
 })

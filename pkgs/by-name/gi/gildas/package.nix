@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Radioastronomy data analysis software";
     longDescription = ''
       GILDAS is a collection of state-of-the-art software
@@ -110,12 +110,12 @@ stdenv.mkDerivation rec {
       few parts in C/C++ (mainly keyboard interaction,
       plotting, widgets).'';
     homepage = "http://www.iram.fr/IRAMFR/GILDAS/gildas.html";
-    license = lib.licenses.free;
+    license = licenses.free;
     maintainers = [
-      lib.maintainers.bzizou
-      lib.maintainers.smaret
+      maintainers.bzizou
+      maintainers.smaret
     ];
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 
 }

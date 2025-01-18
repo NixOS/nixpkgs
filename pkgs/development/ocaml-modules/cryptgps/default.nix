@@ -30,7 +30,7 @@ else
 
     createFindlibDestdir = true;
 
-    meta = {
+    meta = with lib; {
       homepage = "http://projects.camlcity.org/projects/cryptgps.html";
       description = "Cryptographic functions for OCaml";
       longDescription = ''
@@ -39,10 +39,10 @@ else
         i.e. this is not a binding to some C library, but the implementation
         itself.
       '';
-      license = lib.licenses.mit;
+      license = licenses.mit;
       inherit (ocaml.meta) platforms;
       maintainers = [
-        lib.maintainers.maggesi
+        maintainers.maggesi
       ];
     };
   }

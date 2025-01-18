@@ -20,16 +20,16 @@ stdenv.mkDerivation rec {
     mkdir -p $out/man/man1 $out/bin
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Send a wake-on-lan packet";
     longDescription = ''
       WakeLan sends a properly formatted UDP packet across the
       network which will cause a wake-on-lan enabled computer to
       power on.
     '';
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
     mainProgram = "wakelan";
   };
 }

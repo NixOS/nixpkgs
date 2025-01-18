@@ -31,12 +31,12 @@ stdenvNoCC.mkDerivation {
     ];
   };
 
-  meta = {
+  meta = with lib; {
     description = "Mozc UT NEologd Dictionary is a dictionary converted from mecab-ipadic-NEologd for Mozc.";
     homepage = "https://github.com/utuhiro78/mozcdic-ut-neologd";
-    license = with lib.licenses; [ asl20 ];
-    maintainers = with lib.maintainers; [ pineapplehunter ];
-    platforms = lib.platforms.all;
+    license = with licenses; [ asl20 ];
+    maintainers = with maintainers; [ pineapplehunter ];
+    platforms = platforms.all;
     # this does not need to be separately built
     # it only provides some zip files
     hydraPlatforms = [ ];

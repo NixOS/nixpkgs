@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://savannah.nongnu.org/projects/fastjar/";
     description = "Fast Java archiver written in C";
     longDescription = ''
@@ -46,9 +46,9 @@ stdenv.mkDerivation (finalAttrs: {
       written in C, it can create the same .jar file as Sun's tool in a fraction
       of the time.
     '';
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     mainProgram = "fastjar";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = lib.platforms.all;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.all;
   };
 })

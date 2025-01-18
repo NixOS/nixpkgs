@@ -22,10 +22,10 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "CNCF Sandbox Project for managing your Kubernetes clusters";
     homepage = "https://github.com/clusternet/clusternet";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ genga898 ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ genga898 ];
   };
 }

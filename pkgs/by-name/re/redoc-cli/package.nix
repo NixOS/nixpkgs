@@ -25,12 +25,12 @@ buildNpmPackage rec {
 
   dontNpmBuild = true;
 
-  meta = {
+  meta = with lib; {
     description = "OpenAPI/Swagger-generated API Reference Documentation";
     homepage = "https://github.com/Redocly/redoc/tree/redoc-cli/cli";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "redoc-cli";
-    maintainers = with lib.maintainers; [ veehaitch ];
+    maintainers = with maintainers; [ veehaitch ];
     # https://github.com/NixOS/nixpkgs/issues/272217
     broken = true;
   };

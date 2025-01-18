@@ -33,11 +33,11 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ libpcap ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/pellegre/libcrafter";
     description = "High level C++ network packet sniffing and crafting library";
-    license = lib.licenses.bsd3;
+    license = licenses.bsd3;
     maintainers = [ ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }

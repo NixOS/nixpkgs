@@ -93,10 +93,10 @@ derivation = mkCoqDerivation {
     make elpi/dune || true
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Coq plugin embedding ELPI";
-    maintainers = [ lib.maintainers.cohencyril ];
-    license = lib.licenses.lgpl21Plus;
+    maintainers = [ maintainers.cohencyril ];
+    license = licenses.lgpl21Plus;
   };
 };
 patched-derivation1 = derivation.overrideAttrs

@@ -29,14 +29,14 @@
 
 mkDerivation {
   pname = "gwenview";
-  meta = {
+  meta = with lib; {
     homepage = "https://apps.kde.org/gwenview/";
     description = "KDE image viewer";
-    license = with lib.licenses; [
+    license = with licenses; [
       gpl2Plus
       fdl12Plus
     ];
-    maintainers = [ lib.maintainers.ttuegel ];
+    maintainers = [ maintainers.ttuegel ];
     mainProgram = "gwenview";
   };
 

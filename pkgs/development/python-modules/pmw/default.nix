@@ -21,10 +21,10 @@ buildPythonPackage rec {
   # Disable tests due to their xserver requirement
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Toolkit for building high-level compound widgets in Python using the Tkinter module";
     homepage = "https://pmw.sourceforge.net/";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ mounium ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ mounium ];
   };
 }

@@ -23,9 +23,9 @@ stdenv.mkDerivation rec {
     cp -r gtk-2.0 gtk-3.0 metacity-1 openbox-3 xfwm4 $out/share/themes/orion
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/shimmerproject/Orion";
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
   };
 }

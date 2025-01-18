@@ -83,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
       )
     '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://luakit.github.io/";
     description = "Fast, small, webkit-based browser framework extensible in Lua";
     longDescription = ''
@@ -93,9 +93,9 @@ stdenv.mkDerivation (finalAttrs: {
       power users, developers and anyone who wants to have fine-grained control
       over their web browser’s behaviour and interface.
     '';
-    license = lib.licenses.gpl3Only;
+    license = licenses.gpl3Only;
     mainProgram = "luakit";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.unix;
   };
 })

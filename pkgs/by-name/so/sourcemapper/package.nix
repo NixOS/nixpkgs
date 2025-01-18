@@ -17,12 +17,12 @@ buildGoModule {
 
   vendorHash = null;
 
-  meta = {
+  meta = with lib; {
     description = "Extract JavaScript source trees from Sourcemap files";
     homepage = "https://github.com/denandz/sourcemapper";
-    license = lib.licenses.bsd3;
+    license = licenses.bsd3;
     mainProgram = "sourcemapper";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       emilytrau
       crem
     ];

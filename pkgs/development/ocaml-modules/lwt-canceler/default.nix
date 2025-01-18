@@ -23,10 +23,10 @@ buildDunePackage rec {
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://gitlab.com/nomadic-labs/lwt-canceler";
     description = "Cancellation synchronization object";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.ulrikstrid ];
+    license = licenses.mit;
+    maintainers = [ maintainers.ulrikstrid ];
   };
 }

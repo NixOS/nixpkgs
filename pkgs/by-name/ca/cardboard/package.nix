@@ -134,13 +134,13 @@ stdenv.mkDerivation {
     providedSessions = [ "cardboard" ];
   };
 
-  meta = {
+  meta = with lib; {
     broken = true; # Upstream is archived, fails to build on gcc-13.
     homepage = "https://gitlab.com/cardboardwm/cardboard";
     description = "Scrollable, tiling Wayland compositor inspired on PaperWM";
-    license = lib.licenses.gpl3Only;
+    license = licenses.gpl3Only;
     mainProgram = "cardboard";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ AndersonTorres ];
     inherit (wayland.meta) platforms;
   };
 }

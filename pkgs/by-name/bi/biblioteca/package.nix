@@ -98,11 +98,11 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://apps.gnome.org/Biblioteca/";
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ bot-wxt1221 ] ++ lib.teams.gnome-circle.members;
-    license = lib.licenses.gpl3Only;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ bot-wxt1221 ] ++ teams.gnome-circle.members;
+    license = licenses.gpl3Only;
     description = "Documentation viewer for GNOME";
     mainProgram = "biblioteca";
   };

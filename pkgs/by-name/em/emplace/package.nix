@@ -25,11 +25,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-0BYAJOHymBVAssNfU5nPYTSvPbLEDCKoRVovIm6evUQ=";
 
-  meta = {
+  meta = with lib; {
     description = "Mirror installed software on multiple machines";
     homepage = "https://github.com/tversteeg/emplace";
-    license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ Br1ght0ne ];
+    license = licenses.agpl3Plus;
+    maintainers = with maintainers; [ Br1ght0ne ];
     mainProgram = "emplace";
   };
 }

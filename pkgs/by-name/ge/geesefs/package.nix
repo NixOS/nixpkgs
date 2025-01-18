@@ -24,12 +24,12 @@ buildGoModule {
 
   subPackages = [ "." ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/yandex-cloud/geesefs";
     description = "Finally, a good FUSE FS implementation over S3";
-    license = [ lib.licenses.mit ];
-    maintainers = [ lib.maintainers.flokli ];
-    platforms = lib.platforms.unix;
+    license = [ licenses.mit ];
+    maintainers = [ maintainers.flokli ];
+    platforms = platforms.unix;
     mainProgram = "geesefs";
   };
 }

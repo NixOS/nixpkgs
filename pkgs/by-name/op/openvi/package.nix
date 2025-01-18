@@ -32,12 +32,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/johnsonjh/OpenVi";
     description = "Portable OpenBSD vi for UNIX systems";
-    license = lib.licenses.bsd3;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ aleksana ];
+    license = licenses.bsd3;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ aleksana ];
     mainProgram = "ovi";
   };
 }

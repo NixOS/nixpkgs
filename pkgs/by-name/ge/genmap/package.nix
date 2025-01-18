@@ -34,12 +34,12 @@ stdenv.mkDerivation rec {
     echo > benchmarks/CMakeLists.txt
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Ultra-fast computation of genome mappability";
     mainProgram = "genmap";
-    license = lib.licenses.bsd3;
+    license = licenses.bsd3;
     homepage = "https://github.com/cpockrandt/genmap";
-    maintainers = with lib.maintainers; [ jbedo ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ jbedo ];
+    platforms = platforms.unix;
   };
 }

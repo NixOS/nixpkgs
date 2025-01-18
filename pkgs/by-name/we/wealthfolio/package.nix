@@ -68,12 +68,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "A Beautiful Private and Secure Desktop Investment Tracking Application";
     homepage = "https://wealthfolio.app/";
-    license = lib.licenses.agpl3Only;
+    license = licenses.agpl3Only;
     mainProgram = "wealthfolio";
-    maintainers = with lib.maintainers; [ kilianar ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ kilianar ];
+    platforms = platforms.linux;
   };
 })

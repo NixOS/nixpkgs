@@ -36,12 +36,12 @@ rustPlatform.buildRustPackage rec {
     "PREFIX=${placeholder "out"}"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Synchronise calendars and contacts";
     homepage = "https://git.sr.ht/~whynothugo/pimsync";
-    license = lib.licenses.eupl12;
-    platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.qxrein ];
+    license = licenses.eupl12;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.qxrein ];
     mainProgram = "pimsync";
   };
 }

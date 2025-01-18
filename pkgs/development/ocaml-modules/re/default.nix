@@ -42,10 +42,10 @@ buildDunePackage rec {
   doCheck = lib.versionAtLeast ocaml.version "4.08";
   checkInputs = [ (if lib.versionAtLeast version "1.12" then ounit2 else ounit) ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/ocaml/ocaml-re";
     description = "Pure OCaml regular expressions, with support for Perl and POSIX-style strings";
-    license = lib.licenses.lgpl2;
-    maintainers = with lib.maintainers; [ vbgl ];
+    license = licenses.lgpl2;
+    maintainers = with maintainers; [ vbgl ];
   };
 }

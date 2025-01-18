@@ -74,12 +74,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://sourceforge.net/projects/btanks/";
     description = "Fast 2d tank arcade game with multiplayer and split-screen modes";
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     mainProgram = "btanks";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ AndersonTorres ];
     inherit (SDL.meta) platforms;
   };
 })

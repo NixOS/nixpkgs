@@ -30,10 +30,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pysqlitecipher" ];
 
-  meta = {
+  meta = with lib; {
     description = "Lightweight and easy to use sqlite wrapper with built-in encryption system";
     homepage = "https://github.com/harshnative/pysqlitecipher";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

@@ -155,15 +155,15 @@ stdenvNoCC.mkDerivation {
     })
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Network simulation tool from Cisco";
     homepage = "https://www.netacad.com/courses/packet-tracer";
-    license = lib.licenses.unfree;
+    license = licenses.unfree;
     mainProgram = "packettracer8";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       gepbird
     ];
     platforms = [ "x86_64-linux" ];
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }

@@ -56,10 +56,10 @@ stdenv.mkDerivation rec {
     mv $out/lib/ocaml $dev/lib/
   '';
 
-  meta = {
-    license = lib.licenses.lgpl21;
+  meta = with lib; {
+    license = licenses.lgpl21;
     homepage = "http://apron.cri.ensmp.fr/library/";
-    maintainers = [ lib.maintainers.vbgl ];
+    maintainers = [ maintainers.vbgl ];
     description = "Numerical abstract domain library";
     inherit (ocaml.meta) platforms;
   };

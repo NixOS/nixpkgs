@@ -32,12 +32,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "high-performance, open-source SQL database for applications in financial services, IoT, machine learning, DevOps and observability";
     homepage = "https://questdb.io/";
-    sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
-    license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.jacfal ];
-    platforms = lib.platforms.linux;
+    sourceProvenance = [ sourceTypes.binaryBytecode ];
+    license = licenses.asl20;
+    maintainers = [ maintainers.jacfal ];
+    platforms = platforms.linux;
   };
 })

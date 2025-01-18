@@ -23,11 +23,11 @@ mkTclDerivation rec {
 
   makeFlags = [ "LDFLAGS=-lcurl" ];
 
-  meta = {
+  meta = with lib; {
     description = "Curl support in Tcl";
     homepage = "https://github.com/flightaware/tclcurl-fa";
     changelog = "https://github.com/flightaware/tclcurl-fa/blob/master/ChangeLog.txt";
-    license = lib.licenses.tcltk;
-    maintainers = with lib.maintainers; [ fgaz ];
+    license = licenses.tcltk;
+    maintainers = with maintainers; [ fgaz ];
   };
 }

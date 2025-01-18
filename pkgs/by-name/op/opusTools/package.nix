@@ -28,11 +28,11 @@ stdenv.mkDerivation rec {
     libopusenc
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Tools to work with opus encoded audio streams";
     homepage = "https://www.opus-codec.org/";
-    license = lib.licenses.bsd2;
+    license = licenses.bsd2;
     maintainers = [ ];
-    platforms = with lib.platforms; unix;
+    platforms = with platforms; unix;
   };
 }

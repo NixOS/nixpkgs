@@ -42,12 +42,12 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gitUpdater { rev-prefix = "v"; };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Vertical Blanking Interval (VBI) utilities";
     homepage = "https://github.com/zapping-vbi/zvbi";
     changelog = "https://github.com/zapping-vbi/zvbi/blob/${finalAttrs.src.rev}/ChangeLog";
     pkgConfigModules = [ "zvbi-0.2" ];
-    license = with lib.licenses; [
+    license = with licenses; [
       bsd2
       bsd3
       gpl2
@@ -56,6 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
       lgpl2Plus
       mit
     ];
-    maintainers = with lib.maintainers; [ jopejoe1 ];
+    maintainers = with maintainers; [ jopejoe1 ];
   };
 })

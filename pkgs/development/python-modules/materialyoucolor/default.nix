@@ -50,10 +50,10 @@ buildPythonPackage rec {
     "materialyoucolor.quantize" # ext
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Material You color generation algorithms in python";
     homepage = "https://github.com/T-Dynamos/materialyoucolor-python";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ tomasajt ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ tomasajt ];
   };
 }

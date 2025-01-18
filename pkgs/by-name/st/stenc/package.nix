@@ -40,12 +40,12 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = {
+  meta = with lib; {
     description = "SCSI Tape Encryption Manager";
     mainProgram = "stenc";
     homepage = "https://github.com/scsitape/stenc";
-    license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ woffs ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ woffs ];
+    platforms = platforms.linux;
   };
 }

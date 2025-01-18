@@ -31,13 +31,13 @@ appimageTools.wrapType2 {
     cp -r ${appimageContents}/usr/share/icons $out/share
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.bitcomet.com";
     description = "Free BitTorrent download client";
     mainProgram = "bitcomet";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = lib.licenses.unfree;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with lib.maintainers; [ aucub ];
+    maintainers = with maintainers; [ aucub ];
   };
 }

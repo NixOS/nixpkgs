@@ -61,10 +61,10 @@ buildPythonPackage rec {
   # jaraco-path depends ob pyobjc
   doCheck = !stdenv.isDarwin;
 
-  meta = {
+  meta = with lib; {
     description = "Distutils as found in cpython";
     homepage = "https://github.com/pypa/distutils";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

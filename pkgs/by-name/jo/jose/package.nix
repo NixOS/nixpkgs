@@ -41,12 +41,12 @@ stdenv.mkDerivation rec {
   ];
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     description = "C-language implementation of Javascript Object Signing and Encryption";
     mainProgram = "jose";
     homepage = "https://github.com/latchset/jose";
     maintainers = [ ];
-    license = lib.licenses.asl20;
-    platforms = lib.platforms.all;
+    license = licenses.asl20;
+    platforms = platforms.all;
   };
 }

@@ -18,11 +18,11 @@ buildNpmPackage {
 
   npmDepsHash = "sha256-tnsgNtMdnrKYxcYy9+4tgp1BX+o8e5/HUDeSP5BOvUQ=";
 
-  meta = {
+  meta = with lib; {
     description = "JSON Fixer for Humans using (relaxed) JSON5";
     homepage = "https://github.com/rhysd/fixjson";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "fixjson";
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = with maintainers; [ pyrox0 ];
   };
 }

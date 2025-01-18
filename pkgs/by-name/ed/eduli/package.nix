@@ -21,7 +21,7 @@ stdenvNoCC.mkDerivation rec {
     done
   '';
 
-  meta = {
+  meta = with lib; {
     description = "The MOE Li Font, a clerical Chinese font by the Ministry of Education, ROC (Taiwan)";
     longDescription = ''
       The MOE Li Font is a li (clerical srcipt) font
@@ -31,7 +31,7 @@ stdenvNoCC.mkDerivation rec {
       The clerical script (lishu) is an archaic style of Chinese calligraphy.
     '';
     homepage = "http://language.moe.gov.tw/result.aspx?classify_sn=23&subclassify_sn=436&content_sn=49";
-    license = lib.licenses.cc-by-nd-30;
-    maintainers = with lib.maintainers; [ ShamrockLee ];
+    license = licenses.cc-by-nd-30;
+    maintainers = with maintainers; [ ShamrockLee ];
   };
 }

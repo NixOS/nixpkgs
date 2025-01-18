@@ -21,12 +21,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ qt5.qmake ];
 
-  meta = {
+  meta = with lib; {
     description = "Open-source, cross-platform and standalone subtitle player";
     homepage = "https://github.com/carsonip/Penguin-Subtitle-Player";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ eljamm ];
-    platforms = lib.platforms.all;
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ eljamm ];
+    platforms = platforms.all;
     mainProgram = "PenguinSubtitlePlayer";
   };
 })

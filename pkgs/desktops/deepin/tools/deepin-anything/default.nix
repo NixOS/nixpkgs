@@ -45,11 +45,11 @@ stdenv.mkDerivation rec {
     pcre
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Deepin Anything file search tool";
     homepage = "https://github.com/linuxdeepin/deepin-anything";
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
-    maintainers = lib.teams.deepin.members;
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = teams.deepin.members;
   };
 }

@@ -147,11 +147,11 @@ stdenv.mkDerivation (finalAttrs: {
       ) hashes;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Blackfire Profiler PHP module";
     homepage = "https://blackfire.io/";
-    license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ shyim ];
+    license = licenses.unfree;
+    maintainers = with maintainers; [ shyim ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
@@ -159,6 +159,6 @@ stdenv.mkDerivation (finalAttrs: {
       "x86_64-darwin"
       "aarch64-darwin"
     ];
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 })

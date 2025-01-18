@@ -35,10 +35,10 @@ buildPythonPackage rec {
     "toptica.lasersdk.dlcpro.v2_2_0"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "TOPTICA Python Laser SDK";
     homepage = "https://toptica.github.io/python-lasersdk/";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ doronbehar ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ doronbehar ];
   };
 }

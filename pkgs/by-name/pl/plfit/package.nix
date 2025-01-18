@@ -48,11 +48,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "Fitting power-law distributions to empirical data";
     homepage = "https://github.com/ntamas/plfit";
     changelog = "https://github.com/ntamas/plfit/blob/${finalAttrs.src.rev}/CHANGELOG.md";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ dotlambda ];
   };
 })

@@ -31,10 +31,10 @@ buildPythonPackage rec {
     "aws_sso_lib"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Library to make AWS SSO easier";
     homepage = "https://pypi.org/project/aws-sso-lib/";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ cterence ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ cterence ];
   };
 }

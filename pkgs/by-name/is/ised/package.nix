@@ -12,11 +12,11 @@ stdenv.mkDerivation rec {
     sha256 = "0fhha61whkkqranqdxg792g0f5kgp5m3m6z1iqcvjh2c34rczbmb";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Numeric sequence editor";
-    maintainers = with lib.maintainers; [ raskin ];
-    platforms = with lib.platforms; linux;
-    license = lib.licenses.gpl3Plus;
+    maintainers = with maintainers; [ raskin ];
+    platforms = with platforms; linux;
+    license = licenses.gpl3Plus;
     mainProgram = "ised";
   };
 }

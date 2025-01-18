@@ -18,15 +18,15 @@
 
     vendorHash = "sha256-qRcB0KmUJWRQaMlnK1JdUsZrikThD6nQnrqQZm9yROk=";
 
-    meta = {
+    meta = with lib; {
       description = "Static analyzer for PHP";
       homepage = "https://github.com/phan/phan";
-      license = lib.licenses.mit;
+      license = licenses.mit;
       longDescription = ''
         Phan is a static analyzer for PHP. Phan prefers to avoid false-positives
         and attempts to prove incorrectness rather than correctness.
       '';
       mainProgram = "phan";
-      maintainers = with lib.maintainers; [ apeschar ] ++ lib.teams.php.members;
+      maintainers = with maintainers; [ apeschar ] ++ teams.php.members;
     };
   })

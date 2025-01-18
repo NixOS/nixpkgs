@@ -270,18 +270,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = ./update.py;
 
-  meta = {
+  meta = with lib; {
     changelog = "https://learn.microsoft.com/en-us/deployedge/microsoft-edge-relnote-stable-channel";
     description = "Web browser from Microsoft";
     homepage = "https://www.microsoft.com/en-us/edge";
-    license = lib.licenses.unfree;
+    license = licenses.unfree;
     mainProgram = "microsoft-edge";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       zanculmarktum
       kuwii
       rhysmdnz
     ];
     platforms = [ "x86_64-linux" ];
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 })

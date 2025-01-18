@@ -17,10 +17,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-HjEYC7FUHpxNWy/nUVO65O3f/RdT9hYZc3TpcqP3SSM=";
 
-  meta = {
+  meta = with lib; {
     description = "Displays colors in various color spaces";
     homepage = "https://aloso.github.io/colo";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ llakala ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ llakala ];
   };
 }

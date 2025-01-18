@@ -68,12 +68,12 @@
         mv src/manager.xml src/net.reactivated.Fprint.Manager.xml
       '';
 
-    meta = {
+    meta = with lib; {
       homepage = "https://fprint.freedesktop.org/";
       description = "fprintd built with libfprint-tod to support Touch OEM Drivers";
-      license = lib.licenses.gpl2Plus;
-      platforms = lib.platforms.linux;
-      maintainers = with lib.maintainers; [ hmenke ];
+      license = licenses.gpl2Plus;
+      platforms = platforms.linux;
+      maintainers = with maintainers; [ hmenke ];
     };
   }
 )

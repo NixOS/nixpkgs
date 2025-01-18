@@ -15,10 +15,10 @@ buildDunePackage rec {
     hash = "sha256-+hfRXVviPHm6dB9ffLiO1xEt4WpEEM6oHHG5gIaImEc=";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Libraries and module types for portable clocks";
     homepage = "https://github.com/mirage/mirage-clock";
-    license = lib.licenses.isc;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.isc;
+    maintainers = [ maintainers.vbgl ];
   };
 }

@@ -29,15 +29,15 @@ let
       };
     };
 
-    meta = {
+    meta = with lib; {
       description = "Ruby kernel for Jupyter";
       homepage = "https://github.com/SciRuby/iruby";
-      license = lib.licenses.mit;
-      maintainers = with lib.maintainers; [
+      license = licenses.mit;
+      maintainers = with maintainers; [
         costrouc
         thomasjm
       ];
-      platforms = lib.platforms.unix;
+      platforms = platforms.unix;
     };
   };
 

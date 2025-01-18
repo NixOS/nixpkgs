@@ -26,15 +26,15 @@ stdenv.mkDerivation rec {
     cp wgetpaste $out/bin;
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Command-line interface to various pastebins";
     mainProgram = "wgetpaste";
     homepage = "https://github.com/zlin/wgetpaste";
-    license = lib.licenses.publicDomain;
-    maintainers = with lib.maintainers; [
+    license = licenses.publicDomain;
+    maintainers = with maintainers; [
       qknight
       domenkozar
     ];
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 }

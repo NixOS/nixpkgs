@@ -120,11 +120,11 @@ stdenv.mkDerivation rec {
         ./mk-list ${singleWordlist} > "$out/share/dict/words.txt"
       '';
 
-  meta = {
+  meta = with lib; {
     description = "Spell checker oriented word lists";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.raskin ];
-    platforms = lib.platforms.unix;
+    license = licenses.mit;
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.unix;
     homepage = "http://wordlist.aspell.net/";
   };
 }

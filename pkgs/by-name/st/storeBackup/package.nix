@@ -123,11 +123,11 @@ stdenv.mkDerivation rec {
     }
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Backup suite that stores files on other disks";
     homepage = "https://savannah.nongnu.org/projects/storebackup";
-    license = lib.licenses.gpl3Plus;
-    maintainers = [ lib.maintainers.marcweber ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Plus;
+    maintainers = [ maintainers.marcweber ];
+    platforms = platforms.linux;
   };
 }

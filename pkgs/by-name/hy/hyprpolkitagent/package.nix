@@ -36,15 +36,15 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtwayland
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Polkit authentication agent written in QT/QML";
     homepage = "https://github.com/hyprwm/hyprpolkitagent";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [
+    license = licenses.bsd3;
+    maintainers = with maintainers; [
       fufexan
       johnrtitor
     ];
     mainProgram = "hyprpolkitagent";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 })

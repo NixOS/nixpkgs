@@ -59,17 +59,17 @@ stdenv.mkDerivation rec {
       --replace gnu3d.dem $out/libexec/gnu3d.dem
   '';
 
-  meta = {
+  meta = with lib; {
     description = "IOzone Filesystem Benchmark";
     homepage = "http://www.iozone.org/";
-    license = lib.licenses.unfreeRedistributable;
+    license = licenses.unfreeRedistributable;
     platforms = [
       "i686-linux"
       "x86_64-linux"
       "x86_64-darwin"
       "aarch64-linux"
     ];
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       Baughn
       makefu
     ];

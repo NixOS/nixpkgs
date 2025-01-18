@@ -39,15 +39,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.PKG_CONFIG_ZATHURA_PLUGINDIR = "lib/zathura";
 
-  meta = {
+  meta = with lib; {
     homepage = "https://pwmt.org/projects/zathura-ps/";
     description = "Zathura PS plugin";
     longDescription = ''
       The zathura-ps plugin adds PS support to zathura by using the
       libspectre library.
     '';
-    license = lib.licenses.zlib;
-    platforms = lib.platforms.unix;
+    license = licenses.zlib;
+    platforms = platforms.unix;
     maintainers = [ ];
   };
 })

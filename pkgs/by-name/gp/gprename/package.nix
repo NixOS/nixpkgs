@@ -66,11 +66,11 @@ stdenv.mkDerivation (finalAttrs: {
       }
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Complete batch renamer for files and directories";
     homepage = "https://gprename.sourceforge.net/index.php";
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     mainProgram = "gprename";
-    maintainers = with lib.maintainers; [ quantenzitrone ];
+    maintainers = with maintainers; [ quantenzitrone ];
   };
 })

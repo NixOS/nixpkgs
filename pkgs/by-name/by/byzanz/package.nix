@@ -62,11 +62,11 @@ stdenv.mkDerivation {
       wrapGAppsHook3
     ]);
 
-  meta = {
+  meta = with lib; {
     description = "Tool to record a running X desktop to an animation suitable for presentation in a web browser";
     homepage = "https://github.com/GNOME/byzanz";
-    license = lib.licenses.gpl3;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ bot-wxt1221 ];
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ bot-wxt1221 ];
   };
 }

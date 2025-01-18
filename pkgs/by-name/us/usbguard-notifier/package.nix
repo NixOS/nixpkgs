@@ -54,11 +54,11 @@ stdenv.mkDerivation rec {
         'systemd_unit_dir="$out/lib/systemd/user"'
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Notifications for detecting usbguard policy and device presence changes";
     homepage = "https://github.com/Cropi/usbguard-notifier";
-    maintainers = with lib.maintainers; [ fpletz ];
-    platforms = lib.platforms.linux;
-    license = lib.licenses.gpl2Plus;
+    maintainers = with maintainers; [ fpletz ];
+    platforms = platforms.linux;
+    license = licenses.gpl2Plus;
   };
 }

@@ -48,10 +48,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "linode_api4" ];
 
-  meta = {
+  meta = with lib; {
     description = "Python library for the Linode API v4";
     homepage = "https://github.com/linode/python-linode-api";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ glenns ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ glenns ];
   };
 }

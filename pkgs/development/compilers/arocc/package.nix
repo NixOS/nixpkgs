@@ -20,14 +20,14 @@ stdenv.mkDerivation (finalAttrs: {
     stdenv = overrideCC stdenv finalAttrs.passthru.wrapped;
   };
 
-  meta = {
+  meta = with lib; {
     description = "C compiler written in Zig.";
     homepage = "http://aro.vexu.eu/";
-    license = with lib.licenses; [
+    license = with licenses; [
       mit
       unicode-30
     ];
-    maintainers = with lib.maintainers; [ RossComputerGuy ];
+    maintainers = with maintainers; [ RossComputerGuy ];
     mainProgram = "arocc";
   };
 })

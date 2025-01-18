@@ -16,15 +16,15 @@ stdenv.mkDerivation rec {
     cp src/ladspa.h $out/include/ladspa.h
   '';
 
-  meta = {
+  meta = with lib; {
     description = "LADSPA format audio plugins header file";
     longDescription = ''
       The ladspa.h API header file from the LADSPA SDK.
       For the full SDK, use the ladspa-sdk package.
     '';
     homepage = "http://www.ladspa.org/ladspa_sdk/overview.html";
-    license = lib.licenses.lgpl2;
-    maintainers = [ lib.maintainers.magnetophon ];
-    platforms = lib.platforms.all;
+    license = licenses.lgpl2;
+    maintainers = [ maintainers.magnetophon ];
+    platforms = platforms.all;
   };
 }

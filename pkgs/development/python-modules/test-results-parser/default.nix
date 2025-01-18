@@ -35,10 +35,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Codecov test results parser";
     homepage = "https://github.com/codecov/test-results-parser";
-    license = lib.licenses.fsl11Asl20;
-    maintainers = with lib.maintainers; [ veehaitch ];
+    license = licenses.fsl11Asl20;
+    maintainers = with maintainers; [ veehaitch ];
   };
 }

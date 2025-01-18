@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     description = "Library to deal with Japanese kana-to-kanji conversion method";
     mainProgram = "skk";
     longDescription = ''
@@ -78,8 +78,8 @@ stdenv.mkDerivation rec {
       user dictionary, skkserv, and CDB format dictionary.
     '';
     homepage = "https://github.com/ueno/libskk";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ yuriaisaka ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ yuriaisaka ];
+    platforms = platforms.linux;
   };
 }

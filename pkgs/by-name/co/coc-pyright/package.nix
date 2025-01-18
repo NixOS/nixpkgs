@@ -18,10 +18,10 @@ buildNpmPackage {
 
   npmDepsHash = "sha256-cTAt02RdQbKurP6H/JWwVp+VpoIysbFt9le9R69+DL4=";
 
-  meta = {
+  meta = with lib; {
     description = "Pyright extension for coc.nvim";
     homepage = "https://github.com/fannheyward/coc-pyright";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ pyrox0 ];
   };
 }

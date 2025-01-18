@@ -104,12 +104,12 @@ stdenv.mkDerivation rec {
   ];
   env.CXXFLAGS = "-include cstdint"; # needed at least with gcc13 on aarch64-linux
 
-  meta = {
+  meta = with lib; {
     description = "A raw converter based on RawTherapee";
     homepage = "https://bitbucket.org/agriggio/art/";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ paperdigits ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ paperdigits ];
     mainProgram = "art";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

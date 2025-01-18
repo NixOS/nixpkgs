@@ -104,12 +104,12 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = [ ./update.sh ] ++ builtins.attrNames depSrcs;
 
-  meta = {
+  meta = with lib; {
     description = "Complete 2D graphic library for drawing Text, Geometries, and Images (Aseprite's fork)";
     homepage = "https://skia.org/";
     downloadPage = "https://github.com/aseprite/skia";
-    license = lib.licenses.bsd3;
+    license = licenses.bsd3;
     inherit (aseprite.meta) maintainers;
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 })

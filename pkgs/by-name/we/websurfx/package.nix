@@ -45,7 +45,7 @@ rustPlatform.buildRustPackage {
     cp -r public $out/opt/websurfx/
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Open source alternative to searx";
     longDescription = ''
       An open source alternative to searx which provides a modern-looking,
@@ -53,8 +53,8 @@ rustPlatform.buildRustPackage {
     '';
     homepage = "https://github.com/neon-mmd/websurfx";
     changelog = "https://github.com/neon-mmd/websurfx/releases";
-    license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ theobori ];
+    license = licenses.agpl3Plus;
+    maintainers = with maintainers; [ theobori ];
     mainProgram = "websurfx";
   };
 }

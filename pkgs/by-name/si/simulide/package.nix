@@ -123,7 +123,7 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Simple real time electronic circuit simulator";
     longDescription = ''
       SimulIDE is a simple real time electronic circuit simulator, intended for hobbyist or students
@@ -131,9 +131,9 @@ stdenv.mkDerivation {
       It supports PIC, AVR, Arduino and other MCUs and MPUs.
     '';
     homepage = "https://simulide.com/";
-    license = lib.licenses.gpl3Only;
+    license = licenses.gpl3Only;
     mainProgram = "simulide";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       carloscraveiro
       tomasajt
     ];

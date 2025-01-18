@@ -17,10 +17,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ numpy ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/njsmith/colorspacious";
     description = "Powerful, accurate, and easy-to-use Python library for doing colorspace conversions";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ tbenst ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ tbenst ];
   };
 }

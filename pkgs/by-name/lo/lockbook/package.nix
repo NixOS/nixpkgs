@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion --fish --name lockbook.fish <($out/bin/lockbook completions fish)
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Private, polished note-taking platform";
     longDescription = ''
       Write notes, sketch ideas, and store files in one secure place.
@@ -42,9 +42,9 @@ rustPlatform.buildRustPackage rec {
       Lockbook is 100% open-source.
     '';
     homepage = "https://lockbook.net";
-    license = lib.licenses.unlicense;
-    platforms = lib.platforms.all;
+    license = licenses.unlicense;
+    platforms = platforms.all;
     changelog = "https://github.com/lockbook/lockbook/releases";
-    maintainers = [ lib.maintainers.parth ];
+    maintainers = [ maintainers.parth ];
   };
 }

@@ -41,11 +41,11 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript.command = [ ./update.sh ];
 
-  meta = {
+  meta = with lib; {
     description = "Blazing fast terminal file manager written in Rust, based on async I/O";
     homepage = "https://github.com/sxyazi/yazi";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       eljamm
       khaneliman
       linsui

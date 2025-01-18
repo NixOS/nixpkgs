@@ -65,12 +65,12 @@ buildGoModule rec {
       }
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Your little expandable text snippet helper daemon";
     homepage = "https://snippetexpander.org";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ ];
+    platforms = platforms.linux;
     mainProgram = "snippetexpanderd";
   };
 }

@@ -30,11 +30,11 @@ buildPythonPackage rec {
   # No tests in pypi source
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/aaren/notedown";
     description = "Convert IPython Notebooks to markdown (and back)";
     mainProgram = "notedown";
-    license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ vcanadi ];
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ vcanadi ];
   };
 }

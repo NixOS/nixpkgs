@@ -39,14 +39,14 @@ stdenv.mkDerivation (finalAttrs: {
                     -t $doc/share/doc/jwasm/
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/Baron-von-Riedesel/JWasm/";
     description = "MASM-compatible x86 assembler";
     changelog = "https://github.com/Baron-von-Riedesel/JWasm/releases/tag/${finalAttrs.src.rev}";
     mainProgram = "jwasm";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
   };
 })

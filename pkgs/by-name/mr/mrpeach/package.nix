@@ -61,11 +61,11 @@ stdenv.mkDerivation {
     rm -rf $out/lib
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Collection of Pd objectclasses for OSC-messages";
     homepage = "http://puredata.info/downloads/osc";
-    license = lib.licenses.gpl2;
-    maintainers = [ lib.maintainers.magnetophon ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2;
+    maintainers = [ maintainers.magnetophon ];
+    platforms = platforms.linux;
   };
 }

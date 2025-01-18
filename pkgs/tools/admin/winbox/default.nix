@@ -64,14 +64,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     })
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Graphical configuration utility for RouterOS-based devices";
     homepage = "https://mikrotik.com";
     downloadPage = "https://mikrotik.com/download";
     changelog = "https://wiki.mikrotik.com/wiki/Winbox_changelog";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = lib.licenses.unfree;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
     mainProgram = "winbox";
-    maintainers = with lib.maintainers; [ yrd ];
+    maintainers = with maintainers; [ yrd ];
   };
 })

@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Documentation and tools for Lattice iCE40 FPGAs";
     longDescription = ''
       Project IceStorm aims at reverse engineering and
@@ -71,11 +71,11 @@ stdenv.mkDerivation rec {
       creating bitstream files.
     '';
     homepage = "https://github.com/YosysHQ/icestorm/";
-    license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [
+    license = licenses.isc;
+    maintainers = with maintainers; [
       shell
       thoughtpolice
     ];
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 }

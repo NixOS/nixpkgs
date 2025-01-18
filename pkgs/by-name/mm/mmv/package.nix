@@ -51,11 +51,11 @@ stdenv.mkDerivation rec {
     ];
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/rrthomas/mmv";
     description = "Utility for wildcard renaming, copying, etc";
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ siraben ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ siraben ];
   };
 }

@@ -48,14 +48,14 @@ rustPlatform.buildRustPackage rec {
   # provide the list of solc versions to the `svm-rs-builds` dependency
   SVM_RELEASES_LIST_JSON = solc-versions.${stdenv.hostPlatform.system};
 
-  meta = {
+  meta = with lib; {
     description = "Solidity test generator based on the Branching Tree Technique";
     homepage = "https://github.com/alexfertel/bulloak";
-    license = with lib.licenses; [
+    license = with licenses; [
       mit
       asl20
     ];
     mainProgram = "bulloak";
-    maintainers = with lib.maintainers; [ beeb ];
+    maintainers = with maintainers; [ beeb ];
   };
 }

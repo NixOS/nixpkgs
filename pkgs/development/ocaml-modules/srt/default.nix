@@ -28,11 +28,11 @@ buildDunePackage rec {
     srt
   ];
 
-  meta = {
+  meta = with lib; {
     description = "OCaml bindings for the libsrt library";
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     inherit (src.meta) homepage;
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       vbgl
       dandellion
     ];

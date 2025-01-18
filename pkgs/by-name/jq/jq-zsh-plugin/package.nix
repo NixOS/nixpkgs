@@ -34,11 +34,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Interactively build jq expressions in Zsh";
     homepage = "https://github.com/reegnz/jq-zsh-plugin";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.vinnymeller ];
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.vinnymeller ];
   };
 }

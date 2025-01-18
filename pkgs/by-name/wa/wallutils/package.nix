@@ -66,12 +66,12 @@ buildGoModule rec {
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
-  meta = {
+  meta = with lib; {
     description = "Utilities for handling monitors, resolutions, and (timed) wallpapers";
     inherit (src.meta) homepage;
-    license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.AndersonTorres ];
+    license = licenses.bsd3;
+    maintainers = [ maintainers.AndersonTorres ];
     inherit (wayland.meta) platforms;
-    badPlatforms = lib.platforms.darwin;
+    badPlatforms = platforms.darwin;
   };
 }

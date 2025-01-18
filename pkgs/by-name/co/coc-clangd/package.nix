@@ -18,10 +18,10 @@ buildNpmPackage {
 
   npmDepsHash = "sha256-93MEug2eEL/Hum+RFmXx0JYO6jUygF8QRmL5nTTFyrs=";
 
-  meta = {
+  meta = with lib; {
     description = "clangd extension for coc.nvim";
     homepage = "https://github.com/clangd/coc-clangd";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ pyrox0 ];
   };
 }

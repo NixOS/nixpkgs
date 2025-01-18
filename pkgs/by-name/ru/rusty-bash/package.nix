@@ -23,11 +23,11 @@ rustPlatform.buildRustPackage rec {
 
   passthru.shellPath = "/bin/sush";
 
-  meta = {
+  meta = with lib; {
     description = "Bash written with Rust, a.k.a. sushi shell";
     homepage = "https://github.com/shellgei/rusty_bash";
-    license = lib.licenses.bsd3;
+    license = licenses.bsd3;
     mainProgram = "sush";
-    maintainers = with lib.maintainers; [ aleksana ];
+    maintainers = with maintainers; [ aleksana ];
   };
 }

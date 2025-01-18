@@ -40,12 +40,12 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram $out/bin/zef --prefix RAKUDOLIB , "inst#$out"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Raku / Perl6 Module Management";
     homepage = "https://github.com/ugexe/zef";
-    license = lib.licenses.artistic2;
+    license = licenses.artistic2;
     mainProgram = "zef";
-    maintainers = with lib.maintainers; [ sgo ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ sgo ];
+    platforms = platforms.unix;
   };
 })

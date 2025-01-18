@@ -67,20 +67,20 @@ let
       ;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Clash GUI based on tauri";
     homepage = "https://github.com/clash-verge-rev/clash-verge-rev";
     longDescription = ''
       Clash GUI based on tauri
       Setting NixOS option `programs.clash-verge.enable = true` is recommended.
     '';
-    license = lib.licenses.gpl3Only;
+    license = licenses.gpl3Only;
     mainProgram = "clash-verge";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       Guanran928
       bot-wxt1221
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 in
 stdenv.mkDerivation {

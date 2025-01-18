@@ -26,11 +26,11 @@ buildGoModule rec {
     command = "git-backup -version";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Backup all your GitHub & GitLab repositories";
     homepage = "https://github.com/ChappIO/git-backup";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     mainProgram = "git-backup";
-    maintainers = with lib.maintainers; [ aleksana ];
+    maintainers = with maintainers; [ aleksana ];
   };
 }

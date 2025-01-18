@@ -40,10 +40,10 @@ buildPythonPackage rec {
     sounddevice
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Reliable low-latency audio playback and recording with Python, using PortAudio via the sounddevice module";
     homepage = "https://python-rtmixer.readthedocs.io";
-    maintainers = with lib.maintainers; [ laikq ];
-    license = lib.licenses.mit;
+    maintainers = with maintainers; [ laikq ];
+    license = licenses.mit;
   };
 }

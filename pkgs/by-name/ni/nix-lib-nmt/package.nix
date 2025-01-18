@@ -26,10 +26,10 @@ stdenv.mkDerivation {
     cp -rv * "$out"
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://git.sr.ht/~rycee/nmt";
     description = "Basic test framework for projects using the Nixpkgs module system";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ rycee ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ rycee ];
   };
 }

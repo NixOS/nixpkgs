@@ -35,13 +35,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "Library for polynomial system solving through algebraic methods";
     mainProgram = "msolve";
     homepage = "https://msolve.lip6.fr";
     changelog = "https://github.com/algebraic-solving/msolve/releases/tag/${finalAttrs.src.rev}";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ wegank ];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ wegank ];
+    platforms = platforms.unix;
   };
 })

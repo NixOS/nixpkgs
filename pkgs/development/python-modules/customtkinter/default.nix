@@ -40,10 +40,10 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "customtkinter" ];
 
-  meta = {
+  meta = with lib; {
     description = "Modern and customizable python UI-library based on Tkinter";
     homepage = "https://github.com/TomSchimansky/CustomTkinter";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     longDescription = ''
       CustomTkinter is a python UI-library based on Tkinter, which provides
       new, modern and fully customizable widgets. They are created and
@@ -55,6 +55,6 @@ buildPythonPackage {
       a consistent and modern look across all desktop platforms
       (Windows, macOS, Linux).
     '';
-    maintainers = with lib.maintainers; [ donteatoreo ];
+    maintainers = with maintainers; [ donteatoreo ];
   };
 }

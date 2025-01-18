@@ -27,10 +27,10 @@ buildDunePackage rec {
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/c-cube/printbox/";
     description = "Allows to print nested boxes, lists, arrays, tables in several formats";
-    license = lib.licenses.isc;
-    maintainers = [ lib.maintainers.romildo ];
+    license = licenses.isc;
+    maintainers = [ maintainers.romildo ];
   };
 }

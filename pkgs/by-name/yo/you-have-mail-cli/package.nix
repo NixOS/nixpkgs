@@ -51,11 +51,11 @@ rustPlatform.buildRustPackage {
     };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Small application to notify you when you receive an email in your email account";
     homepage = "https://github.com/LeanderBB/you-have-mail-cli";
-    license = lib.licenses.agpl3Only;
+    license = licenses.agpl3Only;
     mainProgram = "you-have-mail-cli";
-    maintainers = with lib.maintainers; [ baksa ];
+    maintainers = with maintainers; [ baksa ];
   };
 }

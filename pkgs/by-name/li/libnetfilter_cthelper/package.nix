@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libmnl ];
 
-  meta = {
+  meta = with lib; {
     description = "Userspace library that provides the programming interface to the user-space connection tracking helper infrastructure";
     longDescription = ''
       libnetfilter_cthelper is the userspace library that provides the programming interface
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       is used by conntrack-tools.
     '';
     homepage = "https://www.netfilter.org/projects/libnetfilter_cthelper/";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
   };
 }

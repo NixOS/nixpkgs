@@ -123,12 +123,12 @@ perlPackages.buildPerlModule rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.ensembl.org/info/docs/tools/vep/index.html";
     description = "Annotate genetics variants based on genes, transcripts, and protein sequence, as well as regulatory regions";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     mainProgram = "vep";
-    maintainers = with lib.maintainers; [ apraga ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ apraga ];
+    platforms = platforms.unix;
   };
 }

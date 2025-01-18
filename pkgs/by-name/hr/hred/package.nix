@@ -30,11 +30,11 @@ buildNpmPackage rec {
     '';
   };
 
-  meta = {
+  meta = with lib; {
     description = "Command-line tool to extract data from HTML";
     mainProgram = "hred";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     homepage = "https://github.com/danburzo/hred";
-    maintainers = with lib.maintainers; [ tejing ];
+    maintainers = with maintainers; [ tejing ];
   };
 }

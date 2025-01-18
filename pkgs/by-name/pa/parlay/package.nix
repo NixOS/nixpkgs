@@ -20,14 +20,14 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Enriches SBOMs with data from third party services";
     homepage = "https://github.com/snyk/parlay";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
+    license = licenses.asl20;
+    maintainers = with maintainers; [
       kiike
     ];
     mainProgram = "parlay";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }

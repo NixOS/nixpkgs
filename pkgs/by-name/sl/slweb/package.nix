@@ -30,12 +30,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   doInstallCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "Static website generator which aims at being simplistic";
     homepage = "https://strahinja.srht.site/slweb/";
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ GaetanLepage ];
     mainProgram = "slweb";
   };
 })

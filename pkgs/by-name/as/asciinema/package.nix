@@ -25,12 +25,12 @@ python3Packages.buildPythonApplication rec {
 
   nativeCheckInputs = [ python3Packages.pytestCheckHook ];
 
-  meta = {
+  meta = with lib; {
     description = "Terminal session recorder and the best companion of asciinema.org";
     homepage = "https://asciinema.org/";
-    license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ ];
-    platforms = lib.platforms.all;
+    license = with licenses; [ gpl3Plus ];
+    maintainers = with maintainers; [ ];
+    platforms = platforms.all;
     mainProgram = "asciinema";
   };
 }

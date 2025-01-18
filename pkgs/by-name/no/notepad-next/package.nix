@@ -37,12 +37,12 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $out/Applications/NotepadNext.app/Contents/MacOS/NotepadNext $out/bin/NotepadNext
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/dail8859/NotepadNext";
     description = "Cross-platform, reimplementation of Notepad++";
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ sebtm ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ sebtm ];
     broken = stdenv.hostPlatform.isAarch64;
     mainProgram = "NotepadNext";
   };

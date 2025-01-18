@@ -57,12 +57,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Offline search engine for manual pages, Arch Wiki, Gentoo Wiki and other documentation";
     homepage = "https://github.com/filiparag/wikiman";
-    license = with lib.licenses; [ mit ];
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ pluiedev ];
+    license = with licenses; [ mit ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ pluiedev ];
     mainProgram = "wikiman";
   };
 })

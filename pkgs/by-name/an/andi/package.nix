@@ -41,12 +41,12 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs ./test
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Efficient Estimation of Evolutionary Distances";
     homepage = "https://github.com/evolbioinf/andi";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ natsukium ];
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ natsukium ];
     mainProgram = "andi";
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 })

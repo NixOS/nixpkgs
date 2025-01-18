@@ -35,11 +35,11 @@ mkTmuxPlugin {
     hash = "sha256-X7FunHrAexDgAlZfN+JOUJvXFZeyVj9yu6WRnxMEA8E=";
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/alexwforsythe/tmux-which-key";
     description = "Tmux plugin that allows users to select actions from a customizable popup menu";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ novaviper ];
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ novaviper ];
   };
 }

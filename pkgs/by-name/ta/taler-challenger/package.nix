@@ -71,11 +71,11 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "/bin/bash" "${runtimeShell}"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "OAuth 2.0-based authentication service that validates user can receive messages at a certain address";
     homepage = "https://git.taler.net/challenger.git";
-    license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ wegank ];
-    platforms = lib.platforms.linux;
+    license = licenses.agpl3Plus;
+    maintainers = with maintainers; [ wegank ];
+    platforms = platforms.linux;
   };
 })

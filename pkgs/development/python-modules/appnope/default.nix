@@ -19,11 +19,11 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook ];
 
-  meta = {
+  meta = with lib; {
     description = "Disable App Nap on macOS";
     homepage = "https://github.com/minrk/appnope";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ OPNA2608 ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ OPNA2608 ];
     # Not Darwin-specific because dummy fallback may be used cross-platform
   };
 }

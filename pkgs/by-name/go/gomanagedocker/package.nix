@@ -54,11 +54,11 @@ buildGoModule {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "TUI tool to manage your docker images, containers and volumes";
     homepage = "https://github.com/ajayd-san/gomanagedocker";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ genga898 ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ genga898 ];
     mainProgram = "gomanagedocker";
   };
 }

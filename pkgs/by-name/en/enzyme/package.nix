@@ -32,11 +32,11 @@ llvmPackages.stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://enzyme.mit.edu/";
     description = "High-performance automatic differentiation of LLVM and MLIR";
-    maintainers = with lib.maintainers; [ kiranshila ];
-    platforms = lib.platforms.all;
-    license = lib.licenses.asl20-llvm;
+    maintainers = with maintainers; [ kiranshila ];
+    platforms = platforms.all;
+    license = licenses.asl20-llvm;
   };
 }

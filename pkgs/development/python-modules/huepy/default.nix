@@ -23,11 +23,11 @@ buildPythonPackage rec {
   # no test
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Print awesomely in terminals";
     homepage = "https://pypi.org/project/huepy/";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ tochiaha ];
-    platforms = lib.platforms.all;
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ tochiaha ];
+    platforms = platforms.all;
   };
 }

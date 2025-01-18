@@ -52,15 +52,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "Real-time library for sampling rate conversion library";
     homepage = "https://github.com/minorninth/libresample";
-    license = lib.licenses.bsd2; # OR LGPL-2.1-or-later
-    sourceProvenance = [ lib.sourceTypes.fromSource ];
-    platforms = lib.platforms.all;
+    license = licenses.bsd2; # OR LGPL-2.1-or-later
+    sourceProvenance = [ sourceTypes.fromSource ];
+    platforms = platforms.all;
     maintainers = [
-      lib.maintainers.sander
-      lib.maintainers.emily
+      maintainers.sander
+      maintainers.emily
     ];
     mainProgram = "resample-sndfile";
   };

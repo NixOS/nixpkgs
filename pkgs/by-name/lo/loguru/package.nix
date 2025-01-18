@@ -39,11 +39,11 @@ stdenv.mkDerivation {
     cmake
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Lightweight C++ logging library";
     homepage = "https://github.com/emilk/loguru";
-    license = lib.licenses.unlicense;
-    maintainers = with lib.maintainers; [ drupol ];
-    platforms = lib.platforms.all;
+    license = licenses.unlicense;
+    maintainers = with maintainers; [ drupol ];
+    platforms = platforms.all;
   };
 }

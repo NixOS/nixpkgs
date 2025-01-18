@@ -65,13 +65,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Tool that helps undoing the last git command with grace";
     homepage = "https://github.com/Bhupesh-V/ugit";
     downloadPage = "https://github.com/Bhupesh-V/ugit/releases";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "ugit";
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ d-brasher ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ d-brasher ];
   };
 })

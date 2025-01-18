@@ -95,12 +95,12 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (nixosTests) guacamole-server;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Clientless remote desktop gateway";
     homepage = "https://guacamole.apache.org/";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     mainProgram = "guacd";
-    maintainers = [ lib.maintainers.drupol ];
+    maintainers = [ maintainers.drupol ];
     platforms = [
       "x86_64-linux"
       "i686-linux"

@@ -17,11 +17,11 @@ buildNpmPackage rec {
 
   npmDepsHash = "sha256-xX0su3q31R42m8jksF2IoSZCe9dFjUlrvaI5uMD/HGQ=";
 
-  meta = {
+  meta = with lib; {
     description = "Fully-automatic torrent cross-seeding with Torznab";
     homepage = "https://cross-seed.org";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     mainProgram = "cross-seed";
-    maintainers = with lib.maintainers; [ mkez ];
+    maintainers = with maintainers; [ mkez ];
   };
 }

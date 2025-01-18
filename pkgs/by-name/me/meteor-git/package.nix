@@ -17,11 +17,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-jKd/eJwp5SZvTrP3RN7xT7ibAB0PQondGR3RT+HQXIo=";
 
-  meta = {
+  meta = with lib; {
     description = "CLI tool for writing conventional commits";
     mainProgram = "meteor";
     homepage = "https://github.com/stefanlogue/meteor";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ nebunebu ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ nebunebu ];
   };
 }

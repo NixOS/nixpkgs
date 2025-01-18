@@ -39,7 +39,7 @@ python3Packages.buildPythonApplication rec {
     inherit (python3Packages) python;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Improved, cross-platform substitute for Make";
     longDescription = ''
       SCons is an Open Source software construction tool. Think of SCons as an
@@ -49,7 +49,7 @@ python3Packages.buildPythonApplication rec {
       to build software.
     '';
     homepage = "https://scons.org/";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }

@@ -109,12 +109,12 @@ let
       updateScript = nix-update-script { };
     };
 
-    meta = {
+    meta = with lib; {
       homepage = "https://github.com/nbQA-dev/nbQA";
       changelog = "https://nbqa.readthedocs.io/en/latest/history.html";
       description = "Run ruff, isort, pyupgrade, mypy, pylint, flake8, black, blacken-docs, and more on Jupyter Notebooks";
-      license = lib.licenses.mit;
-      maintainers = with lib.maintainers; [ l0b0 ];
+      license = licenses.mit;
+      maintainers = with maintainers; [ l0b0 ];
       mainProgram = "nbqa";
     };
   };

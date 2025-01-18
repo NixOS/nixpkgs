@@ -34,10 +34,10 @@ buildDunePackage {
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "Lua bindings for OCaml";
     homepage = "https://pdonadeo.github.io/ocaml-lua";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.kenran ];
+    license = licenses.mit;
+    maintainers = [ maintainers.kenran ];
   };
 }

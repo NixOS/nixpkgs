@@ -79,11 +79,11 @@ stdenv.mkDerivation (finalAttrs: {
     versionCheck = true;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Library for input gesture recognition";
     homepage = "https://launchpad.net/geis";
-    license = lib.licenses.gpl2;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2;
+    platforms = platforms.linux;
     pkgConfigModules = [ "libgeis" ];
   };
 })

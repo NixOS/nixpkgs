@@ -13,11 +13,11 @@ buildDotnetGlobalTool {
 
   nugetHash = "sha256-JHatCW+hl2792S+HYeEbbYbCIS+N4DmOctqXB/56/HU=";
 
-  meta = {
+  meta = with lib; {
     description = "A polyglot REPL built on .NET Interactive";
     homepage = "https://github.com/jonsequitur/dotnet-repl";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "dotnet-repl";
-    maintainers = with lib.maintainers; [ tomasajt ];
+    maintainers = with maintainers; [ tomasajt ];
   };
 }

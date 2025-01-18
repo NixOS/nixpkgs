@@ -19,10 +19,10 @@ buildDunePackage rec {
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/scemama/ocaml-getopt";
     description = "Parsing of command line arguments (similar to GNU GetOpt) for OCaml";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.ulrikstrid ];
+    license = licenses.mit;
+    maintainers = [ maintainers.ulrikstrid ];
   };
 }

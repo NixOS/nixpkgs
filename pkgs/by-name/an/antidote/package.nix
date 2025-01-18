@@ -28,11 +28,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Zsh plugin manager made from the ground up thinking about performance";
     homepage = "https://getantidote.github.io/";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.hitsmaxft ];
-    platforms = lib.platforms.all;
+    license = licenses.mit;
+    maintainers = [ maintainers.hitsmaxft ];
+    platforms = platforms.all;
   };
 })

@@ -138,12 +138,12 @@ crystal.buildCrystalPackage rec {
     updateScript = ./update.sh;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Open source alternative front-end to YouTube";
     mainProgram = "invidious";
     homepage = "https://invidious.io/";
-    license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [
+    license = licenses.agpl3Plus;
+    maintainers = with maintainers; [
       _999eagle
       GaetanLepage
       sbruder

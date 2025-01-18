@@ -93,10 +93,10 @@ buildPythonPackage {
       --replace-fail 'scour = "^0.37"' 'scour = ">=0.37"'
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Library for manipulating SVG documents which is the basis for Inkscape extensions";
     homepage = "https://gitlab.com/inkscape/extensions";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

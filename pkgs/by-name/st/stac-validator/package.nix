@@ -27,10 +27,10 @@ python3Packages.buildPythonPackage rec {
 
   pythonImportsCheck = [ "stac_validator" ];
 
-  meta = {
+  meta = with lib; {
     description = "Validator for the SpatioTemporal Asset Catalog (STAC) specification";
     homepage = "https://github.com/stac-utils/stac-validator";
-    license = lib.licenses.asl20;
-    maintainers = lib.teams.geospatial.members;
+    license = licenses.asl20;
+    maintainers = teams.geospatial.members;
   };
 }

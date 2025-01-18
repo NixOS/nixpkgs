@@ -35,12 +35,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Tool to sort a list of items based on pairwise comparisons";
     homepage = "https://github.com/hiAndrewQuinn/resorter";
-    license = with lib.licenses; [ cc0 ];
+    license = with licenses; [ cc0 ];
     mainProgram = "resorter";
-    maintainers = with lib.maintainers; [ ];
-    platforms = lib.platforms.all;
+    maintainers = with maintainers; [ ];
+    platforms = platforms.all;
   };
 })

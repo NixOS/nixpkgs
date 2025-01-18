@@ -32,11 +32,11 @@ python3Packages.buildPythonApplication rec {
 
   doCheck = false; # no tests
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/tartley/cbeams";
     description = "Command-line program to draw animated colored circles in the terminal";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [
+    license = licenses.bsd3;
+    maintainers = with maintainers; [
       oxzi
       sigmanificient
     ];

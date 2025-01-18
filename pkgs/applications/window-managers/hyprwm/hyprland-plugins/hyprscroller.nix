@@ -31,11 +31,11 @@ mkHyprlandPlugin hyprland {
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/dawsers/hyprscroller";
     description = "Hyprland layout plugin providing a scrolling layout like PaperWM";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ donovanglover ];
-    platforms = lib.platforms.linux;
+    license = licenses.mit;
+    maintainers = with maintainers; [ donovanglover ];
+    platforms = platforms.linux;
   };
 }

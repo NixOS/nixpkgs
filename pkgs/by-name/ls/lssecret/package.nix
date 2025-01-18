@@ -22,12 +22,12 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "DESTDIR=$(out)" ];
 
-  meta = {
+  meta = with lib; {
     description = "Tool to list passwords and other secrets stored using the org.freedesktop.secrets dbus api";
     homepage = "https://gitlab.com/GrantMoyer/lssecret";
-    license = lib.licenses.unlicense;
-    maintainers = with lib.maintainers; [ genericnerdyusername ];
-    platforms = lib.platforms.unix;
+    license = licenses.unlicense;
+    maintainers = with maintainers; [ genericnerdyusername ];
+    platforms = platforms.unix;
     mainProgram = "lssecret";
   };
 }

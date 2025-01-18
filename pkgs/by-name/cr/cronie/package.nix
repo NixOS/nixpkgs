@@ -25,17 +25,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/cronie-crond/cronie";
     description = "Cron replacement, based on vixie-cron";
     changelog = "https://github.com/cronie-crond/cronie/blob/master/ChangeLog";
-    license = with lib.licenses; [
+    license = with licenses; [
       gpl2Plus
       isc
       lgpl21Plus
     ];
     mainProgram = "crond";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = lib.platforms.all;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.all;
   };
 })

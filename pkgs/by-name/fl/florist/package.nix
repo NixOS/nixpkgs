@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
     gnat13Packages.gprbuild
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Posix Ada Bindings";
     homepage = "https://github.com/adacore/florist";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ lutzberger ];
-    platforms = lib.platforms.linux;
+    license = licenses.mit;
+    maintainers = with maintainers; [ lutzberger ];
+    platforms = platforms.linux;
   };
 }

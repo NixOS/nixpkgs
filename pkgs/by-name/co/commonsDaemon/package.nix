@@ -19,12 +19,12 @@ stdenv.mkDerivation rec {
     cp *.jar $out/share/java/
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://commons.apache.org/proper/commons-daemon";
     description = "Apache Commons Daemon software is a set of utilities and Java support classes for running Java applications as server processes";
-    maintainers = with lib.maintainers; [ rsynnest ];
-    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
-    license = lib.licenses.asl20;
-    platforms = with lib.platforms; unix;
+    maintainers = with maintainers; [ rsynnest ];
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = licenses.asl20;
+    platforms = with platforms; unix;
   };
 }

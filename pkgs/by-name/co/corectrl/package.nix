@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--prefix PATH : ${lib.makeBinPath finalAttrs.runtimeInputs}"
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://gitlab.com/corectrl/corectrl/";
     description = "Control your computer hardware via application profiles";
     longDescription = ''
@@ -83,8 +83,8 @@ stdenv.mkDerivation (finalAttrs: {
       to control with ease your computer hardware using application profiles. It
       aims to be flexible, comfortable and accessible to regular users.
     '';
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ Scrumplex ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ Scrumplex ];
   };
 })

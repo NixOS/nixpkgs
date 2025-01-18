@@ -36,11 +36,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = {
+  meta = with lib; {
     inherit (php.meta) platforms;
     description = "Kanban project management software";
     homepage = "https://kanboard.org";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ yzx9 ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ yzx9 ];
   };
 })

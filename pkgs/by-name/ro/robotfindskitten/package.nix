@@ -43,12 +43,12 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm644 nki/vanilla.nki -t $out/share/games/robotfindskitten/
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Yet another zen simulation; A simple find-the-kitten game";
     homepage = "http://robotfindskitten.org/";
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     mainProgram = "robotfindskitten";
-    maintainers = [ lib.maintainers.AndersonTorres ];
-    platforms = lib.platforms.unix;
+    maintainers = [ maintainers.AndersonTorres ];
+    platforms = platforms.unix;
   };
 })

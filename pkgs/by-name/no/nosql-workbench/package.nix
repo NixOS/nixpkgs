@@ -28,12 +28,12 @@ let
       }
       .${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
 
-  meta = {
+  meta = with lib; {
     description = "Visual tool that provides data modeling, data visualization, and query development features to help you design, create, query, and manage DynamoDB tables";
     homepage = "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/workbench.html";
     changelog = "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/WorkbenchDocumentHistory.html";
-    license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ DataHearth ];
+    license = licenses.unfree;
+    maintainers = with maintainers; [ DataHearth ];
     platforms = [
       "aarch64-darwin"
       "x86_64-darwin"

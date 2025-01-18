@@ -33,12 +33,12 @@ stdenv.mkDerivation (finalAttrs: {
     extraRegex = "(?!.*-win(32|64)).*";
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://lgames.sourceforge.io/LBreakoutHD/";
     description = "Widescreen Breakout clone";
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     mainProgram = "lbreakouthd";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ AndersonTorres ];
     inherit (SDL2.meta) platforms;
     broken = stdenv.hostPlatform.isDarwin;
   };

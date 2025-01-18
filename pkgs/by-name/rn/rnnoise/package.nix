@@ -86,12 +86,12 @@ stdenv.mkDerivation (finalAttrs: {
         "$modelJson" | sponge "$modelJson"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Recurrent neural network for audio noise reduction";
     homepage = "https://people.xiph.org/~jm/demo/rnnoise/";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ nh2 ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ nh2 ];
     mainProgram = "rnnoise_demo";
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 })

@@ -28,12 +28,12 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "PIC_ALWAYS" true)
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Minimal libdwarf mirror for faster cloning and configuration";
     homepage = "https://github.com/jeremy-rifkin/libdwarf-lite";
-    license = lib.licenses.lgpl21Only;
+    license = licenses.lgpl21Only;
     maintainers = [ ];
     mainProgram = "libdwarf-lite";
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 })

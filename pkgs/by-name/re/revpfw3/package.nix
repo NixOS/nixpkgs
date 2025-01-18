@@ -18,11 +18,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-D+9269WRCvpohyhrl6wkzalV7wPsJE38hSviTU2CNyg=";
 
-  meta = {
+  meta = with lib; {
     description = "Reverse proxy to bypass the need for port forwarding";
     homepage = "https://git.tudbut.de/tudbut/revpfw3";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ tudbut ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ tudbut ];
     mainProgram = "revpfw3";
   };
 }

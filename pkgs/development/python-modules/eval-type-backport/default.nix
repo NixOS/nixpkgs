@@ -24,10 +24,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = {
+  meta = with lib; {
     description = "Like `typing._eval_type`, but lets older Python versions use newer typing features";
     homepage = "https://github.com/alexmojaki/eval_type_backport";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ perchun ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ perchun ];
   };
 }

@@ -39,10 +39,10 @@ buildPythonPackage rec {
     "tree_sitter_make"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Makefile grammar for tree-sitter";
     homepage = "https://github.com/tree-sitter-grammars/tree-sitter-make";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ doronbehar ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ doronbehar ];
   };
 }

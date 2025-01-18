@@ -29,10 +29,10 @@ mkTclDerivation rec {
 
   doInstallCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "Tcl and Tk Interfaces to GraphicsMagick and ImageMagick";
     homepage = "http://www.graphicsmagick.org/TclMagick/doc/";
-    license = lib.licenses.tcltk;
-    maintainers = with lib.maintainers; [ fgaz ];
+    license = licenses.tcltk;
+    maintainers = with maintainers; [ fgaz ];
   };
 }

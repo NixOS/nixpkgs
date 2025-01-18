@@ -42,11 +42,11 @@ stdenv.mkDerivation rec {
     libxml2
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://gitlab.gnome.org/Archive/unique";
     description = "Library for writing single instance applications";
-    license = lib.licenses.lgpl21;
+    license = licenses.lgpl21;
     maintainers = [ ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

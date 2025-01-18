@@ -51,10 +51,10 @@ rustPlatform.buildRustPackage rec {
 
   env.FFMPEG_DIR = ffmpeg.dev;
 
-  meta = {
+  meta = with lib; {
     description = "Media metadata parser and formatter designed for human consumption, powered by FFmpeg";
-    maintainers = with lib.maintainers; [ clevor ];
-    license = lib.licenses.mit;
+    maintainers = with maintainers; [ clevor ];
+    license = licenses.mit;
     homepage = "https://github.com/zmwangx/metadata";
     mainProgram = "metadata";
   };

@@ -19,10 +19,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ markdown ];
 
-  meta = {
+  meta = with lib; {
     description = "Math extension for Python-Markdown";
     homepage = "https://github.com/mitya57/python-markdown-math";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ klntsky ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ klntsky ];
   };
 }

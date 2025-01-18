@@ -131,7 +131,7 @@ in
     export QT_PLUGIN_PATH="${qt.qtbase.bin}/${qt.qtbase.qtPluginPrefix}"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Software Defined Radio (SDR) software";
     mainProgram = "gnuradio-config-info";
     longDescription = ''
@@ -144,9 +144,9 @@ in
       real-world radio systems.
     '';
     homepage = "https://www.gnuradio.org";
-    license = lib.licenses.gpl3;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl3;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
       doronbehar
       bjornfor
       fpletz

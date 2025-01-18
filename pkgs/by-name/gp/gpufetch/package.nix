@@ -64,12 +64,12 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gitUpdater { rev-prefix = "v"; };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Simple yet fancy GPU architecture fetching tool";
     homepage = "https://github.com/Dr-Noob/gpufetch";
-    license = lib.licenses.gpl2Only;
+    license = licenses.gpl2Only;
     mainProgram = "gpufetch";
-    maintainers = with lib.maintainers; [ bot-wxt1221 ];
+    maintainers = with maintainers; [ bot-wxt1221 ];
     platforms = [ "x86_64-linux" ];
   };
 })

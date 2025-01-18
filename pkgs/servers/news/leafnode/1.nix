@@ -20,11 +20,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ pcre2 ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://leafnode.sourceforge.io/index.shtml";
     description = "Implementation of a store & forward NNTP proxy, stable release";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.ne9z ];
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.ne9z ];
   };
 })

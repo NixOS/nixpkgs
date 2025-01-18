@@ -27,12 +27,12 @@ buildGoModule {
     installShellCompletion --zsh autocomplete/zsh_autocomplete
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Authy/Google Authenticator like TOTP CLI tool written in Go";
     changelog = "https://github.com/yitsushi/totp-cli/releases/";
     homepage = "https://yitsushi.github.io/totp-cli/";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ luftmensch-luftmensch ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ luftmensch-luftmensch ];
     mainProgram = "totp-cli";
   };
 }

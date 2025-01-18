@@ -25,11 +25,11 @@ rustPlatform.buildRustPackage {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = {
+  meta = with lib; {
     description = "CLI tool to download specific GitHub directories or files";
     homepage = "https://github.com/alok8bb/cloneit";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ NotAShelf ];
-    platforms = lib.platforms.linux;
+    license = licenses.mit;
+    maintainers = with maintainers; [ NotAShelf ];
+    platforms = platforms.linux;
   };
 }

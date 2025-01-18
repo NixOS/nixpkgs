@@ -25,15 +25,15 @@ stdenv.mkDerivation rec {
   buildPhase = "./remake";
   installPhase = "./remake install";
 
-  meta = {
+  meta = with lib; {
     homepage = "http://gappa.gforge.inria.fr/";
     description = "Verifying and formally proving properties on numerical programs dealing with floating-point or fixed-point arithmetic";
     mainProgram = "gappa";
-    license = with lib.licenses; [
+    license = with licenses; [
       cecill20
       gpl2
     ];
-    maintainers = with lib.maintainers; [ vbgl ];
-    platforms = lib.platforms.all;
+    maintainers = with maintainers; [ vbgl ];
+    platforms = platforms.all;
   };
 }

@@ -24,11 +24,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "keyrings.passwordstore.backend" ];
 
-  meta = {
-    license = lib.licenses.mit;
+  meta = with lib; {
+    license = licenses.mit;
     description = "Keyring backend for password-store";
     homepage = "https://github.com/stv0g/keyrings.passwordstore";
-    maintainers = [ lib.maintainers.shlevy ];
+    maintainers = [ maintainers.shlevy ];
     broken = true; # https://github.com/stv0g/keyrings.passwordstore/issues/2
   };
 }

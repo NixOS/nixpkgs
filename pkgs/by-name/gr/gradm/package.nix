@@ -49,12 +49,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = "rmdir $out/dev";
 
-  meta = {
+  meta = with lib; {
     description = "grsecurity RBAC administration and policy analysis utility";
     homepage = "https://grsecurity.net";
-    license = lib.licenses.gpl2Only;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl2Only;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
       thoughtpolice
       joachifm
     ];

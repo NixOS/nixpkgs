@@ -55,10 +55,10 @@ buildPythonPackage rec {
     "bqplot.pyplot"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "2D plotting library for Jupyter based on Grammar of Graphics";
     homepage = "https://bqplot.github.io/bqplot";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ bcdarwin ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ bcdarwin ];
   };
 }

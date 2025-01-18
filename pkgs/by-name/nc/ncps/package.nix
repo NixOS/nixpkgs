@@ -35,12 +35,12 @@ let
       cp -r db $out/share/ncps/db
     '';
 
-    meta = {
+    meta = with lib; {
       description = "Nix binary cache proxy service";
       homepage = "https://github.com/kalbasit/ncps";
-      license = lib.licenses.mit;
+      license = licenses.mit;
       mainProgram = "ncps";
-      maintainers = [ lib.maintainers.kalbasit ];
+      maintainers = [ maintainers.kalbasit ];
     };
   };
 in

@@ -87,18 +87,18 @@ stdenv.mkDerivation (finalAttrs: {
     # `slimevr-server` is updated by the `slimevr` update script.
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://docs.slimevr.dev/";
     description = "App for facilitating full-body tracking in virtual reality";
-    license = with lib.licenses; [
+    license = with licenses; [
       mit
       asl20
     ];
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       gale-username
       imurx
     ];
-    platforms = with lib.platforms; darwin ++ linux;
+    platforms = with platforms; darwin ++ linux;
     mainProgram = "slimevr-server";
   };
 })

@@ -36,12 +36,12 @@ stdenv.mkDerivation {
     cp "res/50-xorg-fix-xwiimote.conf" "$out/etc/X11/xorg.conf.d/50-fix-xwiimote.conf"
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://xwiimote.github.io/xwiimote/";
     description = "Userspace utilities to control connected Nintendo Wii Remotes";
     mainProgram = "xwiishow";
-    platforms = lib.platforms.linux;
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    platforms = platforms.linux;
+    license = licenses.mit;
+    maintainers = with maintainers; [ pyrox0 ];
   };
 }

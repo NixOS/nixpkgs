@@ -31,11 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "overly" ];
 
-  meta = {
+  meta = with lib; {
     description = "Overly configurable http server for client testing";
     homepage = "https://github.com/theelous3/overly";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
     broken = stdenv.hostPlatform.isDarwin; # https://github.com/theelous3/overly/issues/2
   };
 }

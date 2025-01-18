@@ -21,11 +21,11 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/hyprwm/hyprland-protocols";
     description = "Wayland protocol extensions for Hyprland";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ fufexan ];
-    platforms = lib.platforms.linux;
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ fufexan ];
+    platforms = platforms.linux;
   };
 })

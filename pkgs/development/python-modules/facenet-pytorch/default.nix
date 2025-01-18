@@ -24,10 +24,10 @@ buildPythonPackage rec {
     torchvision
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Pretrained Pytorch face detection (MTCNN) and facial recognition (InceptionResnet) models";
     homepage = "https://github.com/timesler/facenet-pytorch";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.lucasew ];
+    license = licenses.mit;
+    maintainers = [ maintainers.lucasew ];
   };
 }

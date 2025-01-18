@@ -61,13 +61,13 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Brute force directories and files names on web/application servers";
     homepage = "https://wiki.owasp.org/index.php/Category:OWASP_DirBuster_Project";
-    license = lib.licenses.lgpl21Only;
+    license = licenses.lgpl21Only;
     mainProgram = "dirbuster";
-    maintainers = with lib.maintainers; [ emilytrau ];
-    platforms = lib.platforms.all;
-    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    maintainers = with maintainers; [ emilytrau ];
+    platforms = platforms.all;
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
   };
 })

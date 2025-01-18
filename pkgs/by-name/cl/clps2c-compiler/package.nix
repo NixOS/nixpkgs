@@ -65,11 +65,11 @@ buildDotnetModule rec {
 
   projectFile = "CLPS2C-Compiler/CLPS2C-Compiler/CLPS2C-Compiler.csproj";
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/NiV-L-A/CLPS2C-Compiler";
     description = "Compiler for CLPS2C, a domain-specific language built specifically for writing PS2 cheat codes";
     mainProgram = "CLPS2C-Compiler";
-    maintainers = [ lib.maintainers.gigahawk ];
-    license = lib.licenses.gpl3Only;
+    maintainers = [ maintainers.gigahawk ];
+    license = licenses.gpl3Only;
   };
 }

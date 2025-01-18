@@ -28,13 +28,13 @@ stdenv.mkDerivation rec {
       --set _JAVA_AWT_WM_NONREPARENTING 1
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/kspalaiologos/kamilalisp";
     description = "Functional, flexible, and concise Lisp";
     mainProgram = "kamilalisp";
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     inherit (jre.meta) platforms;
-    maintainers = with lib.maintainers; [ cafkafk ];
-    sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
+    maintainers = with maintainers; [ cafkafk ];
+    sourceProvenance = [ sourceTypes.binaryBytecode ];
   };
 }

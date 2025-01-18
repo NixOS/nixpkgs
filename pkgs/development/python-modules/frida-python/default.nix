@@ -24,11 +24,11 @@ buildPythonPackage rec {
     "frida._frida"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Dynamic instrumentation toolkit for developers, reverse-engineers, and security researchers (Python bindings)";
     homepage = "https://www.frida.re";
-    license = lib.licenses.wxWindows;
-    maintainers = with lib.maintainers; [ s1341 ];
+    license = licenses.wxWindows;
+    maintainers = with maintainers; [ s1341 ];
     platforms = [
       "x86_64-linux"
     ];

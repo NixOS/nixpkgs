@@ -89,12 +89,12 @@ lib.checkListOfEnum "Invalid accent, valid accents are ${toString validAccents}"
       runHook postInstall
     '';
 
-    meta = {
+    meta = with lib; {
       description = "Soothing pastel theme for Discord";
       homepage = "https://github.com/catppuccin/discord";
-      license = lib.licenses.mit;
-      maintainers = with lib.maintainers; [ NotAShelf ];
-      platforms = lib.platforms.all;
-      sourceProvenance = with lib.sourceTypes; [ fromSource ];
+      license = licenses.mit;
+      maintainers = with maintainers; [ NotAShelf ];
+      platforms = platforms.all;
+      sourceProvenance = with sourceTypes; [ fromSource ];
     };
   })

@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   # otherwise does not find SIGWINCH
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-D_DARWIN_C_SOURCE";
 
-  meta = {
+  meta = with lib; {
     homepage = "https://codemadness.org/sfeed-simple-feed-parser.html";
     description = "RSS and Atom parser (and some format programs)";
     longDescription = ''
@@ -40,8 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
       to import and export OPML and to fetch, filter, merge and order feed
       items.
     '';
-    license = lib.licenses.isc;
-    maintainers = [ lib.maintainers.matthiasbeyer ];
-    platforms = lib.platforms.all;
+    license = licenses.isc;
+    maintainers = [ maintainers.matthiasbeyer ];
+    platforms = platforms.all;
   };
 })

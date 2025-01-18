@@ -41,11 +41,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "fish, xonsh and zsh support for nix-shell";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     homepage = "https://github.com/haslersn/any-nix-shell";
-    maintainers = with lib.maintainers; [ haslersn ];
+    maintainers = with maintainers; [ haslersn ];
     mainProgram = "any-nix-shell";
   };
 }

@@ -55,13 +55,13 @@ buildPythonPackage rec {
   # not available in the build sandbox.
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Hardware hacking with the greatfet";
     homepage = "https://greatscottgadgets.com/greatfet";
-    license = lib.licenses.bsd3;
-    platforms = lib.platforms.all;
+    license = licenses.bsd3;
+    platforms = platforms.all;
     mainProgram = "gf";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       mog
       msanft
     ];

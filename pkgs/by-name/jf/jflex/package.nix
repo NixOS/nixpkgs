@@ -34,11 +34,11 @@ stdenv.mkDerivation rec {
     runHook postInstallCheck
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.jflex.de/";
     description = "Lexical analyzer generator for Java, written in Java";
     mainProgram = "jflex";
-    license = lib.licenses.bsd3;
-    platforms = lib.platforms.unix;
+    license = licenses.bsd3;
+    platforms = platforms.unix;
   };
 }

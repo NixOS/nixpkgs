@@ -83,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.byobu.org/";
     description = "Text-based window manager and terminal multiplexer";
     longDescription = ''
@@ -96,9 +96,9 @@ stdenv.mkDerivation (finalAttrs: {
       Tmux terminal multiplexer, and works on most Linux, BSD, and Mac
       distributions.
     '';
-    license = with lib.licenses; [ gpl3Plus ];
+    license = with licenses; [ gpl3Plus ];
     mainProgram = "byobu";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.unix;
   };
 })

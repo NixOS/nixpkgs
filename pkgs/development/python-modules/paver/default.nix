@@ -44,11 +44,11 @@ buildPythonPackage rec {
     "paver/tests/test_tasks.py"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Python-based build/distribution/deployment scripting tool";
     mainProgram = "paver";
     homepage = "https://github.com/paver/paver";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ lovek323 ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ lovek323 ];
   };
 }

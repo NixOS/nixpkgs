@@ -24,7 +24,7 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Roman serif with blackletter elements";
     longDescription = ''
       "Prociono" (pro-tsee-O-no) is an Esperanto word meaning either the star
@@ -32,7 +32,7 @@ stdenvNoCC.mkDerivation {
       with blackletter elements.
     '';
     homepage = "https://www.theleagueofmoveabletype.com/prociono";
-    license = lib.licenses.ofl;
-    maintainers = with lib.maintainers; [ minijackson ];
+    license = licenses.ofl;
+    maintainers = with maintainers; [ minijackson ];
   };
 }

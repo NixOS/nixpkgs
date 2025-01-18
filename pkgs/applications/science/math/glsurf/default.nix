@@ -68,11 +68,11 @@ stdenv.mkDerivation rec {
     wrapProgram "$out/bin/glsurf" --set CC "${cc}/bin/${cc.targetPrefix}cc"
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://raffalli.eu/~christophe/glsurf/";
     description = "Program to draw implicit surfaces and curves";
     mainProgram = "glsurf";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.all;
+    license = licenses.gpl2Plus;
+    platforms = platforms.all;
   };
 }

@@ -35,16 +35,16 @@ stdenv.mkDerivation rec {
     install -Dm755 bin/convbin $out/bin/convbin
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Converts files to other formats";
     longDescription = ''
       This program is used to convert files to other formats,
       specifically for the TI84+CE and related calculators.
     '';
     homepage = "https://github.com/mateoconlechuga/convbin";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ clevor ];
-    platforms = lib.platforms.all;
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ clevor ];
+    platforms = platforms.all;
     mainProgram = "convbin";
   };
 }

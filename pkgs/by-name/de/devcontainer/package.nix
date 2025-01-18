@@ -81,12 +81,12 @@ stdenv.mkDerivation (finalAttrs: {
       }
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Dev container CLI, run and manage your dev environments via a devcontainer.json";
     homepage = "https://containers.dev/";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ rucadi ];
-    platforms = lib.platforms.unix;
+    license = licenses.mit;
+    maintainers = with maintainers; [ rucadi ];
+    platforms = platforms.unix;
     mainProgram = "devcontainer";
   };
 })

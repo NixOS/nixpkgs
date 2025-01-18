@@ -23,11 +23,11 @@ stdenv.mkDerivation (finalAttrs: {
     libXfixes
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Buzz on new X11 clipboard events";
     homepage = "https://trong.loang.net/~cnx/clipbuzz";
-    license = lib.licenses.unlicense;
-    maintainers = [ lib.maintainers.McSinyx ];
+    license = licenses.unlicense;
+    maintainers = [ maintainers.McSinyx ];
     mainProgram = "clipbuzz";
   };
 })

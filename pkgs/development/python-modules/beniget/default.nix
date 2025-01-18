@@ -27,10 +27,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = {
+  meta = with lib; {
     description = "Extract semantic information about static Python code";
     homepage = "https://github.com/serge-sans-paille/beniget";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ ];
   };
 }

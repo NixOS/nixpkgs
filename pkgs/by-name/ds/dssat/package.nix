@@ -62,13 +62,13 @@ stdenv.mkDerivation (final: {
     makeWrapper $out/share/dssat/dscsm048 $out/bin/dscsm048
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/DSSAT/dssat-csm-os";
     description = "Cropping System Model";
     mainProgram = "dscsm048";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ pcboy ];
-    platforms = lib.platforms.unix;
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ pcboy ];
+    platforms = platforms.unix;
     broken = stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux;
   };
 })

@@ -31,12 +31,12 @@ stdenv.mkDerivation {
     updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Libusb based programming tool for 24Cxx serial EEPROMs using the WinChipHead CH341A IC";
     homepage = "https://github.com/command-tab/ch341eeprom";
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     mainProgram = "ch341eeprom";
-    maintainers = with lib.maintainers; [ xokdvium ];
-    platforms = with lib.platforms; darwin ++ linux;
+    maintainers = with maintainers; [ xokdvium ];
+    platforms = with platforms; darwin ++ linux;
   };
 }

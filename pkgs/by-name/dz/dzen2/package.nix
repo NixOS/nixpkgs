@@ -43,10 +43,10 @@ stdenv.mkDerivation rec {
     make clean install
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/robm/dzen";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     description = "X notification utility";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

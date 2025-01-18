@@ -58,10 +58,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "etcd3" ];
 
-  meta = {
+  meta = with lib; {
     description = "Python client for the etcd API v3";
     homepage = "https://github.com/kragniz/python-etcd3";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ moraxyc ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ moraxyc ];
   };
 }

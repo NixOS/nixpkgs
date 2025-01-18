@@ -79,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   checkTarget = "check";
 
-  meta = {
+  meta = with lib; {
     description = "Merchant component for the GNU Taler electronic payment system";
     longDescription = ''
       This is the GNU Taler merchant backend. It provides the logic that should run
@@ -91,8 +91,8 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://taler.net/";
     changelog = "https://git.taler.net/merchant.git/tree/ChangeLog";
-    license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ astro ];
-    platforms = lib.platforms.linux;
+    license = licenses.agpl3Plus;
+    maintainers = with maintainers; [ astro ];
+    platforms = platforms.linux;
   };
 })

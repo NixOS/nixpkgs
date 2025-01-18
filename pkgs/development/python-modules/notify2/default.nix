@@ -23,10 +23,10 @@ buildPythonPackage rec {
     dbus-python
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Pure Python interface to DBus notifications";
     homepage = "https://bitbucket.org/takluyver/pynotify2";
-    license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ mog ];
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ mog ];
   };
 }

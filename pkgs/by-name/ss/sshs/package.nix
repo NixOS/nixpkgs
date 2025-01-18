@@ -21,11 +21,11 @@ rustPlatform.buildRustPackage rec {
 
   passthru.tests.version = testers.testVersion { package = sshs; };
 
-  meta = {
+  meta = with lib; {
     description = "Terminal user interface for SSH";
     homepage = "https://github.com/quantumsheep/sshs";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ not-my-segfault ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ not-my-segfault ];
     mainProgram = "sshs";
   };
 }

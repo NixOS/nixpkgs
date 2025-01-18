@@ -21,12 +21,12 @@ stdenv.mkDerivation rec {
     ./40_dectalk_extended_chars.patch
   ]; # taken from the debian yasr package
 
-  meta = {
+  meta = with lib; {
     homepage = "https://yasr.sourceforge.net";
     description = "General-purpose console screen reader";
     longDescription = "Yasr is a general-purpose console screen reader for GNU/Linux and other Unix-like operating systems.";
-    platforms = lib.platforms.linux;
-    license = lib.licenses.gpl2;
+    platforms = platforms.linux;
+    license = licenses.gpl2;
     maintainers = [ ];
     mainProgram = "yasr";
   };

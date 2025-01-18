@@ -40,10 +40,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [ (lib.cmakeBool "TRLIB_BUILD_PYTHON3" pythonSupport) ];
 
-  meta = {
+  meta = with lib; {
     description = "Trust Region Subproblem Solver Library";
     homepage = "https://github.com/felixlen/trlib";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ nim65s ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ nim65s ];
   };
 })

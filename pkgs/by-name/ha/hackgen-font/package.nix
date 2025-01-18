@@ -21,11 +21,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Composite font of Hack and GenJyuu-Goghic";
     homepage = "https://github.com/yuru7/HackGen";
-    license = lib.licenses.ofl;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ natsukium ];
+    license = licenses.ofl;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ natsukium ];
   };
 })

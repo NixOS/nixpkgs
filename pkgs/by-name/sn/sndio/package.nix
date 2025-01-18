@@ -33,11 +33,11 @@ stdenv.mkDerivation (finalAttrs: {
     rev-prefix = "v";
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.sndio.org";
     description = "Small audio and MIDI framework part of the OpenBSD project";
-    license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ Madouura ];
-    platforms = lib.platforms.all;
+    license = licenses.isc;
+    maintainers = with maintainers; [ Madouura ];
+    platforms = platforms.all;
   };
 })

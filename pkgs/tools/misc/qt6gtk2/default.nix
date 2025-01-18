@@ -37,11 +37,11 @@ stdenv.mkDerivation {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = {
+  meta = with lib; {
     description = "GTK+2.0 integration plugins for Qt6";
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     homepage = "https://github.com/trialuser02/qt6gtk2";
-    maintainers = [ lib.maintainers.misterio77 ];
-    platforms = lib.platforms.linux;
+    maintainers = [ maintainers.misterio77 ];
+    platforms = platforms.linux;
   };
 }

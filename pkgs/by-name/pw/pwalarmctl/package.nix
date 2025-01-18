@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
 
   buildAndTestSubdir = "pwalarmctl";
 
-  meta = {
+  meta = with lib; {
     description = "Controller for pwalarmd";
     longDescription = ''
       pwalarmctl is a command-line controller for pwalarmd which allows
@@ -36,9 +36,9 @@ rustPlatform.buildRustPackage rec {
       of pwalarmd.
     '';
     mainProgram = "pwalarmctl";
-    license = lib.licenses.gpl2Only;
-    platforms = lib.platforms.all;
-    badPlatforms = lib.platforms.darwin;
-    maintainers = with lib.maintainers; [ amyipdev ];
+    license = licenses.gpl2Only;
+    platforms = platforms.all;
+    badPlatforms = platforms.darwin;
+    maintainers = with maintainers; [ amyipdev ];
   };
 }

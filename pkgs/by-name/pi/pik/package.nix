@@ -21,15 +21,15 @@ rustPlatform.buildRustPackage rec {
 
   passthru.tests.version = testers.testVersion { package = pik; };
 
-  meta = {
+  meta = with lib; {
     description = "Process Interactive Kill";
     longDescription = ''
       Process Interactive Kill is a command line tool that helps to find and kill process.
       It works like pkill command but search is interactive.
     '';
     homepage = "https://github.com/jacek-kurlit/pik";
-    license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ bew ];
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ bew ];
     mainProgram = "pik";
   };
 }

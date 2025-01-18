@@ -35,11 +35,11 @@ buildGoModule rec {
     ldflags+=" -X 'main.buildTime=$(cat BUILD_TIME)'"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "QR code generator (ASCII & PNG) for SEPA payments";
     mainProgram = "payme";
     homepage = "https://github.com/jovandeginste/payme";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ cimm ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ cimm ];
   };
 }

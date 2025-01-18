@@ -44,12 +44,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Text Editor Written In C Using ncurses";
     homepage = "https://github.com/CobbCoding1/Cano";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     mainProgram = "Cano";
-    maintainers = with lib.maintainers; [ sigmanificient ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ sigmanificient ];
+    platforms = platforms.linux;
   };
 })

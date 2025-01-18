@@ -13,10 +13,10 @@ melpaBuild {
     hash = "sha256-JCrmS3FSGDHSR+eAR0X/uO0nAgd3TUmFxwEVH5+KV+4=";
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.emacswiki.org/emacs/control-lock.el";
     description = "Like caps-lock, but for your control key";
-    license = lib.licenses.free;
-    platforms = lib.platforms.all;
+    license = licenses.free;
+    platforms = platforms.all;
   };
 }

@@ -58,12 +58,12 @@ flutter.buildFlutterApplication rec {
     --prefix LD_LIBRARY_PATH : "$out/app/${pname}/lib"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Cross-platform manga app made for e-hentai & exhentai by Flutter";
     homepage = "https://github.com/jiangtian616/JHenTai";
     mainProgram = "jhentai";
-    license = with lib.licenses; [ asl20 ];
-    maintainers = with lib.maintainers; [ aucub ];
-    platforms = lib.platforms.linux;
+    license = with licenses; [ asl20 ];
+    maintainers = with maintainers; [ aucub ];
+    platforms = platforms.linux;
   };
 }

@@ -115,7 +115,7 @@ rustPlatform.buildRustPackage rec {
     touch $out/bin/nonportable
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Hyperspeedcube is a 3D and 4D Rubik's cube simulator";
     longDescription = ''
       Hyperspeedcube is a modern, beginner-friendly 3D and 4D Rubik's cube
@@ -124,8 +124,8 @@ rustPlatform.buildRustPackage rec {
       records and runs on all major operating systems plus the web.
     '';
     homepage = "https://ajfarkas.dev/hyperspeedcube/";
-    license = lib.licenses.cc-by-nc-sa-40;
-    maintainers = [ lib.maintainers.omnipotententity ];
+    license = licenses.cc-by-nc-sa-40;
+    maintainers = [ maintainers.omnipotententity ];
     platforms = [ "x86_64-linux" ];
   };
 }

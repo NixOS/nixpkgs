@@ -26,10 +26,10 @@ buildPythonPackage rec {
   # no tests
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Core support module for scikits-odes";
     homepage = "https://github.com/bmcage/odes/blob/master/packages/scikits-odes-core";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ idontgetoutmuch ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ idontgetoutmuch ];
   };
 }

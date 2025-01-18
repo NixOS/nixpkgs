@@ -67,12 +67,12 @@ stdenv.mkDerivation (finalAttrs: {
     gtest
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Fast and powerful twin-panel file manager for the Linux desktop";
     homepage = "https://gcmd.github.io";
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     mainProgram = "gnome-commander";
-    maintainers = with lib.maintainers; [ aleksana ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ aleksana ];
+    platforms = platforms.linux;
   };
 })

@@ -46,11 +46,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     isIbusEngine = true;
     description = "The PinYin engine for IBus";
-    license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ azuwis ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ azuwis ];
+    platforms = platforms.linux;
   };
 }

@@ -30,11 +30,11 @@ stdenv.mkDerivation rec {
     "-DUDEV_RULES_DIR=${placeholder "out"}/etc/udev/rules.d"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Thunderbolt(TM) user-space components";
-    license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.ryantrinkle ];
+    license = licenses.bsd3;
+    maintainers = [ maintainers.ryantrinkle ];
     homepage = "https://01.org/thunderbolt-sw";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

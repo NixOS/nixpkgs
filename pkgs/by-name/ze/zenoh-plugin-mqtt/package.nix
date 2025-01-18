@@ -20,15 +20,15 @@ rustPlatform.buildRustPackage rec {
   # Some test time out
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "A Zenoh plug-in that allows to integrate and/or route MQTT pub/sub with Eclipse Zenoh";
     homepage = "https://github.com/eclipse-zenoh/zenoh-plugin-mqtt";
-    license = with lib.licenses; [
+    license = with licenses; [
       epl20
       asl20
     ];
-    maintainers = with lib.maintainers; [ markuskowa ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ markuskowa ];
+    platforms = platforms.linux;
     mainProgram = "zenoh-bridge-mqtt";
   };
 }

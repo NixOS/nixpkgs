@@ -43,11 +43,11 @@ buildPythonPackage rec {
     bump2version
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Version-bump your font sources";
     homepage = "https://github.com/simoncozens/bumpfontversion";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     mainProgram = "bumpfontversion";
-    maintainers = with lib.maintainers; [ jopejoe1 ];
+    maintainers = with maintainers; [ jopejoe1 ];
   };
 }

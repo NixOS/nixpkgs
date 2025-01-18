@@ -130,14 +130,14 @@ let
   pname = "libint";
   version = "2.9.0";
 
-  meta = {
+  meta = with lib; {
     description = "Library for the evaluation of molecular integrals of many-body operators over Gaussian functions";
     homepage = "https://github.com/evaleev/libint";
-    license = with lib.licenses; [
+    license = with licenses; [
       lgpl3Only
       gpl3Only
     ];
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       markuskowa
       sheepforce
     ];

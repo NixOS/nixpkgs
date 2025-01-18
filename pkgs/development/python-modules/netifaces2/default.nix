@@ -36,11 +36,11 @@ buildPythonPackage {
   nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "netifaces" ];
 
-  meta = {
+  meta = with lib; {
     description = "Portable network interface information";
     homepage = "https://github.com/SamuelYvon/netifaces-2";
-    license = with lib.licenses; [ mit ];
-    platforms = with lib.platforms; unix ++ windows;
-    maintainers = with lib.maintainers; [ pluiedev ];
+    license = with licenses; [ mit ];
+    platforms = with platforms; unix ++ windows;
+    maintainers = with maintainers; [ pluiedev ];
   };
 }

@@ -16,11 +16,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ sqlite ];
 
-  meta = {
+  meta = with lib; {
     homepage = "http://www.tildeslash.com/libzdb/";
     description = "Small, easy to use Open Source Database Connection Pool Library";
-    license = lib.licenses.gpl3;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3;
+    platforms = platforms.linux;
     maintainers = [ ];
   };
 }

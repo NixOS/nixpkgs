@@ -92,10 +92,10 @@ buildDunePackage rec {
   ];
   doCheck = !stdenv.hostPlatform.isAarch64;
 
-  meta = {
+  meta = with lib; {
     description = "Git format and protocol in pure OCaml";
-    license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [
+    license = licenses.isc;
+    maintainers = with maintainers; [
       sternenseemann
       vbgl
     ];

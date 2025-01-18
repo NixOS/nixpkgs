@@ -68,15 +68,15 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.cmakeFeature "LIBUNRAR_INCLUDE_DIR" "")
     ];
 
-  meta = {
+  meta = with lib; {
     description = "General purpose mod manager with support for the NexusMods API and LOOT";
     homepage = "https://github.com/limo-app/limo";
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     mainProgram = "limo";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       tomasajt
       MattSturgeon
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 })

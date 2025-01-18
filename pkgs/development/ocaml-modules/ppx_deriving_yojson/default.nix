@@ -50,10 +50,10 @@ buildDunePackage rec {
   doCheck = lib.versionAtLeast ocaml.version "4.08";
   inherit (param) checkInputs;
 
-  meta = {
+  meta = with lib; {
     description = "Yojson codec generator for OCaml >= 4.04";
     inherit (src.meta) homepage;
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.mit;
+    maintainers = [ maintainers.vbgl ];
   };
 }

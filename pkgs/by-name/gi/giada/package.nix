@@ -72,12 +72,12 @@ stdenv.mkDerivation (finalAttrs: {
       fontconfig
     ];
 
-  meta = {
+  meta = with lib; {
     description = "Free, minimal, hardcore audio tool for DJs, live performers and electronic musicians";
     mainProgram = "giada";
     homepage = "https://giadamusic.com/";
-    license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ kashw2 ];
-    platforms = lib.platforms.all;
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ kashw2 ];
+    platforms = platforms.all;
   };
 })

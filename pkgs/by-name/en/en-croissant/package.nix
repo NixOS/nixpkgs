@@ -66,12 +66,12 @@ rustPlatform.buildRustPackage rec {
     makeWrapper "$out"/Applications/en-croissant.app/Contents/MacOS/en-croissant $out/bin/en-croissant
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Ultimate Chess Toolkit";
     homepage = "https://github.com/franciscoBSalgueiro/en-croissant/";
-    license = lib.licenses.gpl3Only;
+    license = licenses.gpl3Only;
     mainProgram = "en-croissant";
-    maintainers = with lib.maintainers; [ tomasajt ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with maintainers; [ tomasajt ];
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

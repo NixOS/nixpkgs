@@ -52,11 +52,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     description = "Osmocom IuH library";
     homepage = "https://osmocom.org/projects/osmohnbgw/wiki";
-    license = lib.licenses.agpl3Plus;
+    license = licenses.agpl3Plus;
     maintainers = [ ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

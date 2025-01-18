@@ -34,11 +34,11 @@ stdenvNoCC.mkDerivation rec {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = {
+  meta = with lib; {
     description = "Light, clean theme for KDE Plasma desktop";
     homepage = "https://github.com/yeyushengfan258/Twilight-kde";
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ dretyuiop ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ dretyuiop ];
   };
 }

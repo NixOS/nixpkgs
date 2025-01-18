@@ -19,11 +19,11 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-F0WAtpAjBwL5YfzGtPgn7WTL6lgx3bjZFBQdDpjCr3I=";
 
-  meta = {
+  meta = with lib; {
     description = "Cowsay, but with a cute kitty :3";
     homepage = "https://github.com/uncenter/kittysay";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [
       isabelroses
       uncenter
     ];

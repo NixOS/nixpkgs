@@ -26,10 +26,10 @@ buildNpmPackage rec {
       --add-flags "$out/lib/node_modules/whiteboard/websocket_server/main.js"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Backend server for the Nextcloud Whiteboard app";
     homepage = "https://apps.nextcloud.com/apps/whiteboard";
-    license = lib.licenses.agpl3Plus;
-    maintainers = [ lib.maintainers.onny ];
+    license = licenses.agpl3Plus;
+    maintainers = [ maintainers.onny ];
   };
 }

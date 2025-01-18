@@ -49,10 +49,10 @@ buildPythonPackage rec {
   # AttributeError: type object 'InfoForCharger' has no attribute 'from_dict'
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Communication with Lektrico's chargers";
     homepage = "https://github.com/Lektrico/lektricowifi";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

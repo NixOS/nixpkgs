@@ -32,11 +32,11 @@ rustPlatform.buildRustPackage rec {
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/sus_compiler";
 
-  meta = {
+  meta = with lib; {
     description = "A new Hardware Design Language that keeps you in the driver's seat";
     homepage = "https://github.com/pc2/sus-compiler";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ pbsds ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ pbsds ];
     mainProgram = "sus_compiler";
   };
 }

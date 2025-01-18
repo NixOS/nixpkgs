@@ -60,11 +60,11 @@ stdenv.mkDerivation rec {
     test = nixosTests.nbd;
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://nbd.sourceforge.io/";
     description = "Map arbitrary files as block devices over the network";
-    license = lib.licenses.gpl2Only;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ nickcao ];
+    license = licenses.gpl2Only;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ nickcao ];
   };
 }

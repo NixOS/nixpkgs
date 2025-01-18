@@ -34,10 +34,10 @@ buildPythonPackage rec {
 
   disabledTestPaths = [ "tests/test_qeventloop.py" ];
 
-  meta = {
+  meta = with lib; {
     description = "Allows coroutines to be used in PyQt/PySide applications by providing an implementation of the PEP 3156 event-loop";
     homepage = "https://github.com/CabbageDevelopment/qasync";
-    license = [ lib.licenses.bsd2 ];
-    maintainers = [ lib.maintainers.lucasew ];
+    license = [ licenses.bsd2 ];
+    maintainers = [ maintainers.lucasew ];
   };
 }

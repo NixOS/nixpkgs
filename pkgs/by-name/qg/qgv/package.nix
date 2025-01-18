@@ -34,11 +34,11 @@ stdenv.mkDerivation (finalAttrs: {
     jrl-cmakemodules
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Interactive Qt graphViz display";
     homepage = "https://github.com/gepetto/qgv";
-    license = lib.licenses.lgpl3Only;
-    maintainers = [ lib.maintainers.nim65s ];
-    platforms = lib.platforms.unix;
+    license = licenses.lgpl3Only;
+    maintainers = [ maintainers.nim65s ];
+    platforms = platforms.unix;
   };
 })

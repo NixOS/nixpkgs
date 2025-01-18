@@ -44,11 +44,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       --suffix PATH : "${lib.makeBinPath finalAttrs.runtimeInputs}"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Take screnshots of your reMarkable tablet over SSH";
     homepage = "https://github.com/cloudsftp/reSnap";
-    license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ _404wolf ];
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ _404wolf ];
     mainProgram = "reSnap";
   };
 })

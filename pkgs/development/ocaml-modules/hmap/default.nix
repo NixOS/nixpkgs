@@ -41,10 +41,10 @@ stdenv.mkDerivation rec {
 
   checkPhase = "${topkg.run} test";
 
-  meta = {
+  meta = with lib; {
     description = "Heterogeneous value maps for OCaml";
     homepage = "https://erratique.ch/software/hmap";
-    license = lib.licenses.isc;
-    maintainers = [ lib.maintainers.pmahoney ];
+    license = licenses.isc;
+    maintainers = [ maintainers.pmahoney ];
   };
 }

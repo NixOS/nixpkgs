@@ -137,11 +137,11 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Insight Segmentation and Registration Toolkit";
     homepage = "https://www.itk.org";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ daspk04 ];
-    platforms = with lib.platforms; linux;
+    license = licenses.asl20;
+    maintainers = with maintainers; [ daspk04 ];
+    platforms = with platforms; linux;
   };
 })

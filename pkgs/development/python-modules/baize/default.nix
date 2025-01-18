@@ -43,11 +43,11 @@ buildPythonPackage rec {
     "test_request_response"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Powerful and exquisite WSGI/ASGI framework/toolkit";
     homepage = "https://github.com/abersheeran/baize";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
+    license = licenses.asl20;
+    maintainers = with maintainers; [
       dotlambda
       bot-wxt1221
     ];

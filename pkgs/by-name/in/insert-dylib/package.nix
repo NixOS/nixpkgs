@@ -32,12 +32,12 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Command line utility for inserting a dylib load command into a Mach-O binary";
     homepage = "https://github.com/tyilo/insert_dylib";
-    license = lib.licenses.unfree; # no license specified
+    license = licenses.unfree; # no license specified
     mainProgram = "insert_dylib";
-    maintainers = with lib.maintainers; [ wegank ];
-    platforms = lib.platforms.darwin;
+    maintainers = with maintainers; [ wegank ];
+    platforms = platforms.darwin;
   };
 }

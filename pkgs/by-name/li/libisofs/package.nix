@@ -44,15 +44,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://dev.lovelyhq.com/libburnia/web/wiki";
     description = "Library to create an ISO-9660 filesystem with extensions like RockRidge or Joliet";
     changelog = "https://dev.lovelyhq.com/libburnia/libisofs/src/tag/${finalAttrs.src.rev}/ChangeLog";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [
       abbradar
       AndersonTorres
     ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 })

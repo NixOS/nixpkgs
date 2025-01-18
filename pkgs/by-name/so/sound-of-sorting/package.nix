@@ -46,12 +46,12 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Audibilization and Visualization of Sorting Algorithms";
     homepage = "https://panthema.net/2013/sound-of-sorting/";
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     mainProgram = "sound-of-sorting";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ AndersonTorres ];
     inherit (SDL2.meta) platforms;
   };
 })

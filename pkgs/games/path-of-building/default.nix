@@ -120,11 +120,11 @@ stdenv.mkDerivation {
 
   passthru.data = data;
 
-  meta = {
+  meta = with lib; {
     description = "Offline build planner for Path of Exile";
     homepage = "https://pathofbuilding.community/";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.k900 ];
+    license = licenses.mit;
+    maintainers = [ maintainers.k900 ];
     mainProgram = "pobfrontend";
     broken = stdenv.hostPlatform.isDarwin; # doesn't find uic6 for some reason
   };

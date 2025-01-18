@@ -79,12 +79,12 @@ stdenv.mkDerivation rec {
     patchShebangs --build dat/outfits/bioship/generate.py utils/build/*.py utils/*.py
   '';
 
-  meta = {
+  meta = with lib; {
     description = "2D action/rpg space game";
     mainProgram = "naev";
     homepage = "http://www.naev.org";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ralismark ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ ralismark ];
+    platforms = platforms.linux;
   };
 }

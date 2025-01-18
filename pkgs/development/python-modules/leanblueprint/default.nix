@@ -45,10 +45,10 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "leanblueprint" ];
 
-  meta = {
+  meta = with lib; {
     description = "This plasTeX plugin allowing to write blueprints for Lean 4 projects";
     homepage = "https://github.com/PatrickMassot/leanblueprint";
-    maintainers = with lib.maintainers; [ niklashh ];
-    license = lib.licenses.asl20;
+    maintainers = with maintainers; [ niklashh ];
+    license = licenses.asl20;
   };
 }

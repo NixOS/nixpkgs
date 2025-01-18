@@ -54,11 +54,11 @@ stdenv.mkDerivation (finalAttrs: {
     glib
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://gitlab.gnome.org/World/gedit/libgedit-gfls";
     description = "Module dedicated to file loading and saving";
-    maintainers = with lib.maintainers; [ bobby285271 ];
-    license = lib.licenses.lgpl3Plus;
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ bobby285271 ];
+    license = licenses.lgpl3Plus;
+    platforms = platforms.linux;
   };
 })

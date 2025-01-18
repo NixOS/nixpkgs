@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     install -Dm644 "${stellaris-udev-rules}" "$out/etc/udev/rules.d/61.stellpad.rules"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Command-line firmware flashing tool for the Stellaris Launchpad";
     longDescription = ''
       Command-line firmware flashing tool using libusb-1.0 to communicate with
@@ -49,9 +49,9 @@ stdenv.mkDerivation rec {
       BSD systems.
     '';
     homepage = "https://github.com/utzig/lm4tools";
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     mainProgram = "lm4flash";
-    maintainers = with lib.maintainers; [ MostafaKhaled ];
-    platforms = lib.platforms.all;
+    maintainers = with maintainers; [ MostafaKhaled ];
+    platforms = platforms.all;
   };
 }

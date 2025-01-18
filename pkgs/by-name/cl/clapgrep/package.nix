@@ -62,12 +62,12 @@ rustPlatform.buildRustPackage {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Search through all your files";
     homepage = "https://github.com/luleyleo/clapgrep";
-    license = with lib.licenses; [ gpl3Only ];
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ pluiedev ];
+    license = with licenses; [ gpl3Only ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ pluiedev ];
     mainProgram = "clapgrep";
   };
 }

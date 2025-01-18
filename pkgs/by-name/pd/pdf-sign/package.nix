@@ -48,12 +48,12 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Tool to visually sign PDF files";
     homepage = "https://github.com/svenssonaxel/pdf-sign";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "pdf-sign";
-    maintainers = with lib.maintainers; [ tomasajt ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ tomasajt ];
+    platforms = platforms.unix;
   };
 }

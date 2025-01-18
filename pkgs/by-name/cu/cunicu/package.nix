@@ -67,12 +67,12 @@ buildGoModule rec {
       --fish <($out/bin/cunicu completion fish)
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Zeroconf peer-to-peer mesh VPN using Wireguard® and Interactive Connectivity Establishment (ICE)";
     homepage = "https://cunicu.li";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ stv0g ];
-    platforms = lib.platforms.linux;
+    license = licenses.asl20;
+    maintainers = with maintainers; [ stv0g ];
+    platforms = platforms.linux;
     mainProgram = "cunicu";
   };
 }

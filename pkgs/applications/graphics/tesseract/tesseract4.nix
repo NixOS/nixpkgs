@@ -55,12 +55,12 @@ stdenv.mkDerivation rec {
     opencl-headers
   ];
 
-  meta = {
+  meta = with lib; {
     description = "OCR engine";
     homepage = "https://github.com/tesseract-ocr/tesseract";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ erikarvstedt ];
-    platforms = with lib.platforms; linux ++ darwin;
+    license = licenses.asl20;
+    maintainers = with maintainers; [ erikarvstedt ];
+    platforms = with platforms; linux ++ darwin;
     mainProgram = "tesseract";
   };
 }

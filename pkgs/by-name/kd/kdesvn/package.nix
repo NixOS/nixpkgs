@@ -62,13 +62,13 @@ stdenv.mkDerivation {
     libsForQt5.kxmlgui
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://invent.kde.org/sdk/kdesvn";
-    platforms = lib.platforms.unix;
-    badPlatforms = lib.platforms.darwin;
-    maintainers = with lib.maintainers; [ bot-wxt1221 ];
+    platforms = platforms.unix;
+    badPlatforms = platforms.darwin;
+    maintainers = with maintainers; [ bot-wxt1221 ];
     mainProgram = "kdesvn";
     description = "Subversion client by KDE";
-    license = lib.licenses.agpl3Plus;
+    license = licenses.agpl3Plus;
   };
 }

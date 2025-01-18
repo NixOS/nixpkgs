@@ -61,15 +61,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = gitUpdater { url = "https://git.pwmt.org/pwmt/zathura-pdf-mupdf.git"; };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://pwmt.org/projects/zathura-pdf-mupdf/";
     description = "Zathura PDF plugin (mupdf)";
     longDescription = ''
       The zathura-pdf-mupdf plugin adds PDF support to zathura by
       using the mupdf rendering library.
     '';
-    license = lib.licenses.zlib;
-    platforms = lib.platforms.unix;
+    license = licenses.zlib;
+    platforms = platforms.unix;
     maintainers = [ ];
   };
 })

@@ -52,10 +52,10 @@ buildNpmPackage rec {
         touch $out
       '';
 
-  meta = {
+  meta = with lib; {
     description = "Draw SVG digital circuits schematics from yosys JSON netlists";
     homepage = "https://github.com/nturley/netlistsvg";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pbsds ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ pbsds ];
   };
 }

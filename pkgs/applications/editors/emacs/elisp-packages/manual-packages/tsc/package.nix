@@ -49,9 +49,9 @@ melpaBuild {
     updateScript = nix-update-script { attrPath = "emacsPackages.tsc.tsc-dyn"; };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Core APIs of the Emacs binding for tree-sitter";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pimeys ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ pimeys ];
   };
 }

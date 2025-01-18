@@ -69,12 +69,12 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = {
+  meta = with lib; {
     description = "Scalable Linear Programming Library";
     mainProgram = "scalp";
     homepage = "https://digidev.digi.e-technik.uni-kassel.de/scalp/";
-    license = lib.licenses.lgpl3Only;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ wegank ];
+    license = licenses.lgpl3Only;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ wegank ];
   };
 }

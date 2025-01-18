@@ -15,11 +15,11 @@ let
       hash = "sha256-AIFj7lz+QnqXGMBCfLucVwoBR3dcT0sLNPrQxA5qTuU=";
     };
 
-    meta = {
+    meta = with lib; {
       description = "Sparklines for Fish";
       homepage = "https://github.com/jorgebucaran/spark.fish";
-      license = lib.licenses.mit;
-      maintainers = with lib.maintainers; [ theobori ];
+      license = licenses.mit;
+      maintainers = with maintainers; [ theobori ];
     };
   };
 in

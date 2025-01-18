@@ -58,15 +58,15 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://lczero.org/";
     description = "Open source neural network based chess engine";
     longDescription = ''
       Lc0 is a UCI-compliant chess engine designed to play chess via neural network, specifically those of the LeelaChessZero project.
     '';
-    maintainers = with lib.maintainers; [ _9glenda ];
-    platforms = lib.platforms.unix;
-    license = lib.licenses.gpl3Plus;
+    maintainers = with maintainers; [ _9glenda ];
+    platforms = platforms.unix;
+    license = licenses.gpl3Plus;
     broken = stdenv.hostPlatform.isDarwin;
   };
 

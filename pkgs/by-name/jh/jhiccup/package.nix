@@ -30,12 +30,12 @@ stdenv.mkDerivation rec {
     mv jHiccup jHiccupLogProcessor $out/bin/
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Measure JVM application stalls and GC pauses";
     homepage = "https://www.azul.com/jhiccup/";
-    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
-    license = lib.licenses.cc0;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ thoughtpolice ];
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = licenses.cc0;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ thoughtpolice ];
   };
 }

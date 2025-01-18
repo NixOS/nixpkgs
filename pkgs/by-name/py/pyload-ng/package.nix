@@ -62,11 +62,11 @@ python3.pkgs.buildPythonApplication rec {
     inherit (nixosTests) pyload;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Free and open-source download manager with support for 1-click-hosting sites";
     homepage = "https://github.com/pyload/pyload";
-    license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ ruby0b ];
+    license = licenses.agpl3Plus;
+    maintainers = with maintainers; [ ruby0b ];
     mainProgram = "pyload";
   };
 }

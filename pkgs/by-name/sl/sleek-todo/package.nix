@@ -26,11 +26,11 @@ let
       }
       .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.system}");
 
-  meta = {
+  meta = with lib; {
     description = "Todo manager based on todo.txt syntax";
     homepage = "https://github.com/ransome1/sleek";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ByteSudoer ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ ByteSudoer ];
     mainProgram = "sleek-todo";
     platforms = [
       "x86_64-linux"

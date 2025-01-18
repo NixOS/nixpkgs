@@ -192,14 +192,14 @@ buildPythonPackage rec {
   # updater fails to pick the correct branch
   passthru.skipBulkUpdate = true;
 
-  meta = {
+  meta = with lib; {
     description = "Source-built JAX frontend: differentiate, compile, and transform Numpy code";
     longDescription = ''
       This is the JAX frontend package, it's meant to be used together with one of the jaxlib implementations,
       e.g. `python3Packages.jaxlib`, `python3Packages.jaxlib-bin`, or `python3Packages.jaxlibWithCuda`.
     '';
     homepage = "https://github.com/google/jax";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ samuela ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ samuela ];
   };
 }

@@ -26,10 +26,10 @@ build-idris-package {
     sha256 = "045ylaj66g5m4syzhqxlaxmivy8y7jznkcf1y7w4awa4y5znyqqd";
   };
 
-  meta = {
+  meta = with lib; {
     description = "GLFW bindings for Idris";
     homepage = "https://github.com/eckart/glfw-idris";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.brainrape ];
+    license = licenses.mit;
+    maintainers = [ maintainers.brainrape ];
   };
 }

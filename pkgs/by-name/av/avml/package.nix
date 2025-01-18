@@ -33,12 +33,12 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "A portable volatile memory acquisition tool for Linux";
     homepage = "https://github.com/microsoft/avml";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.lesuisse ];
-    platforms = lib.platforms.linux;
+    license = licenses.mit;
+    maintainers = [ maintainers.lesuisse ];
+    platforms = platforms.linux;
     mainProgram = "avml";
   };
 }

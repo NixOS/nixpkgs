@@ -38,7 +38,7 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/google/roboto";
     description = "Roboto family of fonts";
     longDescription = ''
@@ -46,8 +46,8 @@ stdenvNoCC.mkDerivation rec {
       Chrome OS, and the recommended font for Google’s visual language,
       Material Design.
     '';
-    license = lib.licenses.asl20;
-    platforms = lib.platforms.all;
-    maintainers = [ lib.maintainers.romildo ];
+    license = licenses.asl20;
+    platforms = platforms.all;
+    maintainers = [ maintainers.romildo ];
   };
 }

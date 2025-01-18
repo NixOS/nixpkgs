@@ -21,11 +21,11 @@ stdenv.mkDerivation rec {
     cp -va README.md WORKAROUNDS screenshot.jpg $out/share/doc/E17gtk/
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Enlightenment-like GTK theme with sharp corners";
     homepage = "https://github.com/tsujan/E17gtk";
-    license = lib.licenses.gpl3;
-    platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.romildo ];
+    license = licenses.gpl3;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.romildo ];
   };
 }

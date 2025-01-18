@@ -28,7 +28,7 @@ stdenv.mkDerivation {
     cp perseus $out/bin
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Persistent Homology Software";
     mainProgram = "perseus";
     longDescription = ''
@@ -39,8 +39,8 @@ stdenv.mkDerivation {
       matrices and so forth.
     '';
     homepage = "http://people.maths.ox.ac.uk/nanda/perseus/index.html";
-    license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ erikryb ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ erikryb ];
+    platforms = platforms.linux;
   };
 }

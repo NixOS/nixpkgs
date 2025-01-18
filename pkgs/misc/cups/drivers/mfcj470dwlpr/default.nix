@@ -66,13 +66,13 @@ stdenv.mkDerivation rec {
     }
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "http://www.brother.com/";
     description = "Brother MFC-J470DW LPR driver";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = lib.licenses.unfree;
-    platforms = lib.platforms.linux;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+    platforms = platforms.linux;
     downloadPage = "http://support.brother.com/g/b/downloadlist.aspx?c=us&lang=en&prod=mfcj470dw_us_eu_as&os=128";
-    maintainers = [ lib.maintainers.yochai ];
+    maintainers = [ maintainers.yochai ];
   };
 }

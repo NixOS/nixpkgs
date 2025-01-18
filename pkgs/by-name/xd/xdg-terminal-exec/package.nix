@@ -37,12 +37,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       --replace-fail '#!/bin/sh' '#!${lib.getExe dash}'
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Reference implementation of the proposed XDG Default Terminal Execution Specification";
     homepage = "https://github.com/Vladimir-csp/xdg-terminal-exec";
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     mainProgram = "xdg-terminal-exec";
-    maintainers = with lib.maintainers; [ quantenzitrone ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ quantenzitrone ];
+    platforms = platforms.unix;
   };
 })

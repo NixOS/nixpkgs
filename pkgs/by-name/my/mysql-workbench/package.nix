@@ -163,7 +163,7 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Visual MySQL database modeling, administration and querying tool";
     longDescription = ''
       MySQL Workbench is a modeling tool that allows you to design
@@ -172,9 +172,9 @@ stdenv.mkDerivation (finalAttrs: {
       and execute SQL queries.
     '';
     homepage = "http://wb.mysql.com/";
-    license = lib.licenses.gpl2Only;
+    license = licenses.gpl2Only;
     mainProgram = "mysql-workbench";
-    maintainers = with lib.maintainers; [ tomasajt ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ tomasajt ];
+    platforms = platforms.linux;
   };
 })

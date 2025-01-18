@@ -31,11 +31,11 @@ buildPythonPackage {
   # no tests
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = ''Pure Python pager (like "more" and "less")'';
     homepage = "https://github.com/prompt-toolkit/pypager";
-    license = lib.licenses.bsd3;
+    license = licenses.bsd3;
     mainProgram = "pypager";
-    maintainers = with lib.maintainers; [ taha-yassine ];
+    maintainers = with maintainers; [ taha-yassine ];
   };
 }

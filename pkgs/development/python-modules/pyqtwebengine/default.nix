@@ -97,11 +97,11 @@ buildPythonPackage (
       inherit (libsForQt5) wrapQtAppsHook;
     };
 
-    meta = {
+    meta = with lib; {
       description = "Python bindings for Qt5";
       homepage = "http://www.riverbankcomputing.co.uk";
-      license = lib.licenses.gpl3;
-      hydraPlatforms = lib.lists.intersectLists libsForQt5.qtwebengine.meta.platforms mesa.meta.platforms;
+      license = licenses.gpl3;
+      hydraPlatforms = lists.intersectLists libsForQt5.qtwebengine.meta.platforms mesa.meta.platforms;
     };
   }
   // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {

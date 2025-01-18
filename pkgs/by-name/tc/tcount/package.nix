@@ -22,11 +22,11 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
-  meta = {
+  meta = with lib; {
     description = "Count your code by tokens and patterns in the syntax tree. A tokei/scc/cloc alternative";
     homepage = "https://github.com/rrethy/tcount";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ phanirithvij ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ phanirithvij ];
     mainProgram = "tcount";
   };
 }

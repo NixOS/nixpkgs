@@ -55,11 +55,11 @@ stdenv.mkDerivation rec {
     inherit (src) updateScript;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Script to install DLLs needed to work around problems in Wine";
     mainProgram = "winetricks";
-    license = lib.licenses.lgpl21;
+    license = licenses.lgpl21;
     homepage = "https://github.com/Winetricks/winetricks";
-    platforms = with lib.platforms; linux ++ darwin;
+    platforms = with platforms; linux ++ darwin;
   };
 }

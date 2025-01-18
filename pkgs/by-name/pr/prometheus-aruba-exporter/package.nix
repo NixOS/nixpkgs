@@ -17,11 +17,11 @@ buildGoModule {
 
   vendorHash = "sha256-1XYwrajzKoWOPg4aKE5rJVjWZ9RWBKD/kANOZHtWJCk=";
 
-  meta = {
+  meta = with lib; {
     description = "Prometheus exporter for metrics from Aruba devices including ArubaSwitchOS, ArubaOS-CX, ArubaOS (Instant AP and controllers/gateways)";
     mainProgram = "aruba_exporter";
     homepage = "https://github.com/slashdoom/aruba_exporter";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ netali ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ netali ];
   };
 }

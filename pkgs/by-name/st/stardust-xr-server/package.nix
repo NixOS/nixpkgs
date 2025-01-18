@@ -57,16 +57,16 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Wayland compositor and display server for 3D applications";
     homepage = "https://stardustxr.org/";
     changelog = "https://github.com/StardustXR/server/releases";
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     mainProgram = "stardust-xr-server";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       pandapip1
       technobaboo
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

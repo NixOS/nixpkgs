@@ -41,11 +41,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Console Light is a lightweight, real-time activity monitoring interface";
     homepage = "https://angie.software/en/console/";
-    license = lib.licenses.asl20;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ izorkin ];
+    license = licenses.asl20;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ izorkin ];
   };
 }

@@ -36,11 +36,11 @@ buildGoModule {
     "-X github.com/ory/oathkeeper/internal/driver/config.Commit=${commit}"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Open-source identity and access proxy that authorizes HTTP requests based on sets of rules";
     homepage = "https://www.ory.sh/oathkeeper/";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ camcalaquian ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ camcalaquian ];
     mainProgram = "oathkeeper";
   };
 }

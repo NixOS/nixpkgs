@@ -65,11 +65,11 @@ let
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     passthru.buildRootOnly = mkWithAttrs buildRootOnlyAttrs;
 
-    meta = {
+    meta = with lib; {
       description = "Unicode and globalization support library with Apple customizations";
-      license = [ lib.licenses.icu ];
-      maintainers = lib.teams.darwin.members;
-      platforms = lib.platforms.darwin;
+      license = [ licenses.icu ];
+      maintainers = teams.darwin.members;
+      platforms = platforms.darwin;
       pkgConfigModules = [
         "icu-i18n"
         "icu-io"

@@ -29,12 +29,12 @@ stdenv.mkDerivation rec {
     cp fsnotifier $out/bin/fsnotifier
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/JetBrains/intellij-community/tree/master/native/fsNotifier/linux";
     description = "IntelliJ Platform companion program for watching and reporting file and directory structure modification";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     mainProgram = "fsnotifier";
-    maintainers = with lib.maintainers; [ shyim ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ shyim ];
+    platforms = platforms.linux;
   };
 }

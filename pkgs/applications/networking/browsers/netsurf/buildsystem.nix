@@ -17,11 +17,11 @@ stdenv.mkDerivation (finalAttrs: {
     "PREFIX=$(out)"
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.netsurf-browser.org/";
     description = "NetSurf browser shared build system";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = lib.platforms.unix;
+    license = licenses.mit;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.unix;
   };
 })

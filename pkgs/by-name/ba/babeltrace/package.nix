@@ -67,12 +67,12 @@ stdenv.mkDerivation (finalAttrs: {
     allowedVersions = "^1\\.";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Command-line tool and library to read and convert LTTng tracefiles";
     homepage = "https://www.efficios.com/babeltrace";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
       bjornfor
       wentasah
     ];

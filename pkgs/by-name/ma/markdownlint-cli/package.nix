@@ -19,11 +19,11 @@ buildNpmPackage rec {
 
   dontNpmBuild = true;
 
-  meta = {
+  meta = with lib; {
     description = "Command line interface for MarkdownLint";
     homepage = "https://github.com/igorshubovych/markdownlint-cli";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "markdownlint";
-    maintainers = with lib.maintainers; [ ambroisie ];
+    maintainers = with maintainers; [ ambroisie ];
   };
 }

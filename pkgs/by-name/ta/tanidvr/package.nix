@@ -13,11 +13,11 @@ stdenv.mkDerivation rec {
     sha256 = "0irwwf6mb72n3y4xcrl3s081nbnldvdlc6ypjqxa4p32c1d0g6ql";
   };
 
-  meta = {
+  meta = with lib; {
     description = "CLI tool for managing and capturing video from DVRs which use the DVR-IP protocol";
     homepage = "https://tanidvr.sourceforge.net/";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ pho ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ pho ];
+    platforms = platforms.linux;
   };
 }

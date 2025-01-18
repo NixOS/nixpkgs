@@ -25,12 +25,12 @@ buildGoModule rec {
   # requires network access
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Manage your GitHub Actions from Terminal with great UI";
     homepage = "https://github.com/termkit/gama";
     changelog = "https://github.com/termkit/gama/releases";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ phanirithvij ];
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ phanirithvij ];
     mainProgram = "gama";
   };
 }

@@ -35,11 +35,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "envs" ];
 
-  meta = {
+  meta = with lib; {
     description = "Easy access to environment variables from Python";
     mainProgram = "envs";
     homepage = "https://github.com/capless/envs";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ peterhoeg ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ peterhoeg ];
   };
 }

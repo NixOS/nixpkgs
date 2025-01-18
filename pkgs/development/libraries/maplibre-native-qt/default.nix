@@ -28,16 +28,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontWrapQtApps = true; # library only
 
-  meta = {
+  meta = with lib; {
     changelog = "https://github.com/maplibre/maplibre-native-qt/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "MapLibre Native Qt Bindings and Qt Location Plugin";
     homepage = "https://github.com/maplibre/maplibre-native-qt";
-    license = with lib.licenses; [
+    license = with licenses; [
       bsd2
       gpl3
       lgpl3
     ];
-    maintainers = with lib.maintainers; [ dotlambda ];
-    platforms = lib.platforms.all;
+    maintainers = with maintainers; [ dotlambda ];
+    platforms = platforms.all;
   };
 })

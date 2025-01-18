@@ -54,11 +54,11 @@ mkDerivation rec {
       rm $out/bin/projectM-unittest
     '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/projectM-visualizer/projectm";
     description = "Cross-platform Milkdrop-compatible music visualizer";
-    license = lib.licenses.lgpl21;
-    platforms = lib.platforms.unix;
+    license = licenses.lgpl21;
+    platforms = platforms.unix;
     maintainers = [ ];
     longDescription = ''
       The open-source project that reimplements the esteemed Winamp Milkdrop by Geiss in a more modern, cross-platform reusable library.

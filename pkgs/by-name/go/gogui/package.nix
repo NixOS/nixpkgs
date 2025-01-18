@@ -86,15 +86,15 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Graphical user interface to programs that play the board game Go and support the Go Text Protocol such as GNU Go";
     homepage = "https://github.com/Remi-Coulom/gogui";
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     mainProgram = "gogui";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       cleverca22
       omnipotententity
     ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 })

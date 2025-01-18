@@ -19,10 +19,10 @@ buildPythonPackage {
 
   nativeBuildInputs = [ setuptools ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/ms-jpq/std2";
     description = "Dependency to chadtree and coq_nvim plugins";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ GaetanLepage ];
   };
 }

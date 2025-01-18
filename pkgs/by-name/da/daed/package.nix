@@ -104,12 +104,12 @@ buildGoModule rec {
     })
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Modern dashboard with dae";
     homepage = "https://github.com/daeuniverse/daed";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ oluceps ];
-    platforms = lib.platforms.linux;
+    license = licenses.mit;
+    maintainers = with maintainers; [ oluceps ];
+    platforms = platforms.linux;
     mainProgram = "daed";
   };
 }

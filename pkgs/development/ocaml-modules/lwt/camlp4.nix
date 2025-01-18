@@ -25,10 +25,10 @@ buildDunePackage rec {
 
   preBuild = "rm META.lwt_camlp4";
 
-  meta = {
+  meta = with lib; {
     description = "Camlp4 syntax extension for Lwt (deprecated)";
-    license = lib.licenses.lgpl21;
+    license = licenses.lgpl21;
     inherit (src.meta) homepage;
-    maintainers = [ lib.maintainers.vbgl ];
+    maintainers = [ maintainers.vbgl ];
   };
 }

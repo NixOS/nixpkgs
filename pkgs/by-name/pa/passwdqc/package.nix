@@ -60,12 +60,12 @@ stdenv.mkDerivation (finalAttrs: {
     "SHARED_LIBDIR_REL=$(out)/lib"
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.openwall.com/passwdqc/";
     description = "Passphrase strength checking and enforcement";
-    license = with lib.licenses; [ bsd3 ];
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    license = with licenses; [ bsd3 ];
+    maintainers = with maintainers; [ AndersonTorres ];
     mainProgram = "passwdqc";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 })

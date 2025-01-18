@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Modular Vim/Neovim configuration";
     longDescription = ''
       SpaceVim is a modular configuration of Vim and Neovim. It's inspired by
@@ -74,9 +74,9 @@ stdenv.mkDerivation rec {
       by keeping them from having to think about what packages to install.
     '';
     homepage = "https://spacevim.org/";
-    license = lib.licenses.gpl3Plus;
-    maintainers = [ lib.maintainers.perchun ];
-    platforms = lib.platforms.all;
+    license = licenses.gpl3Plus;
+    maintainers = [ maintainers.perchun ];
+    platforms = platforms.all;
     mainProgram = "spacevim";
   };
 }

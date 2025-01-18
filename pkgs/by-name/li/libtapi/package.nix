@@ -170,15 +170,15 @@ stdenv.mkDerivation (finalAttrs: {
     rm $bin/share/man/man1/tapi-analyze.1 $bin/share/man/man1/tapi-api-verify.1
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Replaces the Mach-O Dynamic Library Stub files in Apple's SDKs to reduce the size";
     homepage = "https://github.com/apple-oss-distributions/tapi/";
-    license = lib.licenses.ncsa;
+    license = licenses.ncsa;
     mainProgram = "tapi";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       matthewbauer
       reckenrode
     ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 })

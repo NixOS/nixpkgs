@@ -32,12 +32,12 @@ appimageTools.wrapType2 {
       --replace 'Exec=AppRun' 'Exec=${pname}'
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Native web3 interface that lets you sign data, securely manage accounts and transparently interact with dapps via web3 protocols like Ethereum and IPFS";
     homepage = "https://frame.sh/";
     downloadPage = "https://github.com/floating/frame/releases";
-    license = lib.licenses.gpl3Only;
+    license = licenses.gpl3Only;
     platforms = [ "x86_64-linux" ];
-    maintainers = with lib.maintainers; [ nook ];
+    maintainers = with maintainers; [ nook ];
   };
 }

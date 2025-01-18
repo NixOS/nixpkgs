@@ -48,13 +48,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     updateScript = ./update.py;
   };
 
-  meta = {
+  meta = with lib; {
     description = "High-performance Minecraft Server";
     homepage = "https://papermc.io/";
-    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
-    license = lib.licenses.gpl3Only;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = licenses.gpl3Only;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
       aaronjanse
       neonfuz
       MayNiklas

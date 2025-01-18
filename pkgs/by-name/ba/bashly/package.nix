@@ -12,12 +12,12 @@ bundlerApp {
 
   passthru.updateScript = bundlerUpdateScript "bashly";
 
-  meta = {
+  meta = with lib; {
     description = "Bash command line framework and CLI generator";
     homepage = "https://github.com/DannyBen/bashly";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "bashly";
-    maintainers = with lib.maintainers; [ drupol ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ drupol ];
+    platforms = platforms.unix;
   };
 }

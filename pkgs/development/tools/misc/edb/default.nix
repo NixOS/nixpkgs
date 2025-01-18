@@ -63,12 +63,12 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Cross platform AArch32/x86/x86-64 debugger";
     mainProgram = "edb";
     homepage = "https://github.com/eteran/edb-debugger";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [
       lihop
       maxxk
     ];

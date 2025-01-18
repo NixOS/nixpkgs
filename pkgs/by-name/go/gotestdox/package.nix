@@ -25,11 +25,11 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Tool for formatting Go test results as readable documentation";
     homepage = "https://github.com/bitfield/gotestdox";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ eljamm ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ eljamm ];
     mainProgram = "gotestdox";
   };
 }

@@ -44,13 +44,13 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/yishilin14/asc-key-to-qr-code-gif";
     description = "Convert ASCII-armored PGP keys to animated QR code";
-    license = lib.licenses.unfree; # program does not have a license
+    license = licenses.unfree; # program does not have a license
     mainProgram = "asc-to-gif";
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
       asymmetric
       NotAShelf
     ];

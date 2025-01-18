@@ -21,11 +21,11 @@ buildGoModule rec {
 
   subPackages = [ "cmd/ecsk" ];
 
-  meta = {
+  meta = with lib; {
     description = "Interactively call Amazon ECS APIs, copy files between ECS and local, and view logs";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "ecsk";
     homepage = "https://github.com/yukiarrr/ecsk";
-    maintainers = with lib.maintainers; [ whtsht ];
+    maintainers = with maintainers; [ whtsht ];
   };
 }

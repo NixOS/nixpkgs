@@ -46,10 +46,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiosasl" ];
 
-  meta = {
+  meta = with lib; {
     description = "Asyncio SASL library";
     homepage = "https://github.com/horazont/aiosasl";
-    license = lib.licenses.lgpl3Plus;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    license = licenses.lgpl3Plus;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

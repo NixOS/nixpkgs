@@ -25,11 +25,11 @@ rustPlatform.buildRustPackage rec {
     tests.version = testers.testVersion { package = kak-tree-sitter-unwrapped; };
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://git.sr.ht/~hadronized/kak-tree-sitter";
     description = "Server that interfaces tree-sitter with kakoune";
     mainProgram = "kak-tree-sitter";
-    license = with lib.licenses; [ bsd3 ];
-    maintainers = with lib.maintainers; [ lelgenio ];
+    license = with licenses; [ bsd3 ];
+    maintainers = with maintainers; [ lelgenio ];
   };
 }

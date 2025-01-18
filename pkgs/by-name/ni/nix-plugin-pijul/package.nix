@@ -85,11 +85,11 @@ stdenv.mkDerivation (finalAttrs: {
       nix_2_24 = localRepoCheck nixVersions.nix_2_24;
     };
 
-  meta = {
+  meta = with lib; {
     description = "Plugin to add Pijul support to the Nix package manager";
     homepage = "https://nest.pijul.com/dblsaiko/nix-plugin-pijul";
-    license = lib.licenses.lgpl3Plus;
-    maintainers = [ lib.maintainers.dblsaiko ];
-    platforms = lib.platforms.unix;
+    license = licenses.lgpl3Plus;
+    maintainers = [ maintainers.dblsaiko ];
+    platforms = platforms.unix;
   };
 })

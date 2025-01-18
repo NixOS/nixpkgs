@@ -24,10 +24,10 @@ stdenv.mkDerivation rec {
 
   preInstall = ''mkdir -p "$out/bin" "$out/share/man/man8"'';
 
-  meta = {
+  meta = with lib; {
     description = "Serial port configuration utility";
-    platforms = lib.platforms.linux;
-    license = lib.licenses.gpl2Only;
+    platforms = platforms.linux;
+    license = licenses.gpl2Only;
     mainProgram = "setserial";
   };
 }

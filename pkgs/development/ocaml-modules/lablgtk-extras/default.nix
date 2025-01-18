@@ -40,11 +40,11 @@ else
 
     createFindlibDestdir = true;
 
-    meta = {
+    meta = with lib; {
       inherit (ocaml.meta) platforms;
-      maintainers = with lib.maintainers; [ vbgl ];
+      maintainers = with maintainers; [ vbgl ];
       homepage = "https://framagit.org/zoggy/lablgtk-extras/";
       description = "Collection of libraries and modules useful when developing OCaml/LablGtk2 applications";
-      license = lib.licenses.lgpl2Plus;
+      license = licenses.lgpl2Plus;
     };
   }

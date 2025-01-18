@@ -80,11 +80,11 @@ buildDartApplication rec {
     };
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/sass/dart-sass";
     description = "Reference implementation of Sass, written in Dart";
     mainProgram = "sass";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ lelgenio ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ lelgenio ];
   };
 }

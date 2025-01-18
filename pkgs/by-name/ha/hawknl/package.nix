@@ -29,10 +29,10 @@ stdenv.mkDerivation rec {
     mkdir -p $out/lib $out/include
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "http://hawksoft.com/hawknl/";
     description = "Free, open source, game oriented network API";
-    license = lib.licenses.lgpl2Plus;
-    platforms = lib.platforms.linux;
+    license = licenses.lgpl2Plus;
+    platforms = platforms.linux;
   };
 }

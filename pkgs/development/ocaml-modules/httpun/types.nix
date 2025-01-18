@@ -16,10 +16,10 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ faraday ];
 
-  meta = {
+  meta = with lib; {
     description = "Common HTTP/1.x types";
     homepage = "https://github.com/anmonteiro/httpun";
-    license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.bsd3;
+    maintainers = [ maintainers.vbgl ];
   };
 }

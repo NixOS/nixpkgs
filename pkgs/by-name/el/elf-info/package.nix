@@ -20,11 +20,11 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Inspect and dissect an ELF file with pretty formatting";
     homepage = "https://github.com/kevin-lesenechal/elf-info";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ viperML ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ viperML ];
     mainProgram = "elf";
   };
 }

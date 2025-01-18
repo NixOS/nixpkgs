@@ -33,14 +33,14 @@ stdenv.mkDerivation rec {
   ];
   installTargets = [ "install" ];
 
-  meta = {
+  meta = with lib; {
     description = "PIDFF driver with useful patches for initialization of FFB devices";
     homepage = "https://github.com/JacKeTUs/universal-pidff";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [
       computerdane
       racci
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

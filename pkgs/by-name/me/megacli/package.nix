@@ -47,10 +47,10 @@ stdenv.mkDerivation rec {
     eval fixupPhase
   '';
 
-  meta = {
+  meta = with lib; {
     description = "CLI program for LSI MegaRAID cards, which also works with some Dell PERC RAID cards";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = lib.licenses.unfree;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     mainProgram = "MegaCli64";
   };

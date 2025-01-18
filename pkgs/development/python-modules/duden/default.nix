@@ -37,7 +37,7 @@ let
 
     pythonImportsCheck = [ "duden" ];
 
-    meta = {
+    meta = with lib; {
       homepage = "https://github.com/radomirbosak/duden";
       changelog = "https://github.com/radomirbosak/duden/blob/${finalAttrs.src.rev}/CHANGELOG.md";
       description = "CLI for https://duden.de dictionary written in Python";
@@ -46,9 +46,9 @@ let
         various information about given german word. The provided data are
         parsed from german dictionary duden.de.
       '';
-      license = with lib.licenses; [ mit ];
+      license = with licenses; [ mit ];
       mainProgram = "duden";
-      maintainers = with lib.maintainers; [
+      maintainers = with maintainers; [
         linuxissuper
       ];
     };

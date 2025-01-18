@@ -17,10 +17,10 @@ build-idris-package {
     sha256 = "0l07mnarvrb4xdw0b2xqgyxq4rljw1axz5mc9w4gmhvcrzxnyfnr";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Idris library to interact with xhr";
     homepage = "https://github.com/pierrebeaucamp/idris-xhr";
-    license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.brainrape ];
+    license = licenses.asl20;
+    maintainers = [ maintainers.brainrape ];
   };
 }

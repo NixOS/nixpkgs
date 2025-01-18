@@ -105,13 +105,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Facebook's branch of Apache Thrift";
     mainProgram = "thrift1";
     homepage = "https://github.com/facebook/fbthrift";
-    license = lib.licenses.asl20;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [
+    license = licenses.asl20;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
       pierreis
       kylesferrazza
       emily

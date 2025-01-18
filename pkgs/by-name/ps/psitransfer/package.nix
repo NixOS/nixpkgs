@@ -49,11 +49,11 @@ buildNpmPackage {
 
   dontBuild = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/psi-4ward/psitransfer";
     description = "Simple open source self-hosted file sharing solution";
-    license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ hyshka ];
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ hyshka ];
     mainProgram = "psitransfer";
   };
 }

@@ -26,10 +26,10 @@ buildDunePackage rec {
   ];
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/mirage/ocaml-uri";
     description = "RFC3986 URI parsing library for OCaml";
-    license = lib.licenses.isc;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.isc;
+    maintainers = [ maintainers.vbgl ];
   };
 }

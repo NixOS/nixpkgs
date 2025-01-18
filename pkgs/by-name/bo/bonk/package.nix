@@ -17,11 +17,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-/qBuIG5ETUWMv2iOGpW3/awuhZb35qsBAflNJv3xTUs=";
 
-  meta = {
+  meta = with lib; {
     description = "Blazingly fast touch alternative written in Rust";
     homepage = "https://github.com/elliot40404/bonk";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "bonk";
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = with maintainers; [ dit7ya ];
   };
 }

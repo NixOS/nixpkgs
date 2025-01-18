@@ -59,12 +59,12 @@ flutter324.buildFlutterApplication rec {
 
   passthru.updateScript = ./update.sh;
 
-  meta = {
+  meta = with lib; {
     description = "Third-party BiliBili client developed with Flutter";
     homepage = "https://github.com/orz12/PiliPalaX";
     mainProgram = "pilipala";
-    license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ aucub ];
-    platforms = lib.platforms.linux;
+    license = with licenses; [ gpl3Plus ];
+    maintainers = with maintainers; [ aucub ];
+    platforms = platforms.linux;
   };
 }

@@ -25,11 +25,11 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/preserves-tool completions zsh)
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Command-line utilities for working with Preserves documents";
     homepage = "https://preserves.dev/doc/preserves-tool.html";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ehmry ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ ehmry ];
     mainProgram = "preserves-tool";
   };
 }

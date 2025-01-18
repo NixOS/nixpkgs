@@ -21,12 +21,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
-  meta = {
+  meta = with lib; {
     description = "Convert HTML to plain text";
     mainProgram = "html2text";
     homepage = "https://gitlab.com/grobian/html2text";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.eikek ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.eikek ];
   };
 }

@@ -37,11 +37,11 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-introspection" ]; # not needed anywhere AFAIK
 
-  meta = {
+  meta = with lib; {
     description = "Library for creating task lists and pagers";
     homepage = "https://gitlab.gnome.org/GNOME/libwnck";
-    license = lib.licenses.lgpl21;
-    maintainers = with lib.maintainers; [ johnazoidberg ];
+    license = licenses.lgpl21;
+    maintainers = with maintainers; [ johnazoidberg ];
     # ./xutils.h:31:10: fatal error: 'gdk/gdkx.h' file not found
     # #include <gdk/gdkx.h>
     broken = stdenv.hostPlatform.isDarwin;

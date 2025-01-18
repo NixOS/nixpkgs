@@ -51,10 +51,10 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = {
+  meta = with lib; {
     description = "File management application for Django";
     homepage = "https://github.com/django-cms/django-filer";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.onny ];
+    license = licenses.mit;
+    maintainers = [ maintainers.onny ];
   };
 }

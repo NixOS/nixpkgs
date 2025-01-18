@@ -24,11 +24,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dlinfo" ];
 
-  meta = {
+  meta = with lib; {
     description = "Python wrapper for libc's dlinfo and dyld_find on Mac";
     homepage = "https://github.com/cloudflightio/python-dlinfo";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
     broken = stdenv.hostPlatform.isDarwin;
   };
 }

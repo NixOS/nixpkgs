@@ -45,15 +45,15 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Firmware for the Nitrokey Start device";
     homepage = "https://github.com/Nitrokey/nitrokey-start-firmware";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
       amerino
       imadnyc
       kiike
     ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 })

@@ -65,11 +65,11 @@ stdenv.mkDerivation {
     wrapProgram "$out/bin/ingen" --set INGEN_UI_PATH "$out/share/ingen/ingen_gui.ui"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Modular audio processing system using JACK and LV2 or LADSPA plugins";
     homepage = "http://drobilla.net/software/ingen";
-    license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ t4ccer ];
-    platforms = lib.platforms.linux;
+    license = licenses.agpl3Plus;
+    maintainers = with maintainers; [ t4ccer ];
+    platforms = platforms.linux;
   };
 }

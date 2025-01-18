@@ -27,14 +27,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Client-only implementation of the SCEP (Cisco System's Simple Certificate Enrollment Protocol)";
     homepage = "https://github.com/certnanny/sscep";
-    maintainers = [ lib.maintainers.stv0g ];
+    maintainers = [ maintainers.stv0g ];
     license = [
-      lib.licenses.bsd2
-      lib.licenses.openssl
+      licenses.bsd2
+      licenses.openssl
     ];
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 })

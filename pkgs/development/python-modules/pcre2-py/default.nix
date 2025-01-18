@@ -80,11 +80,11 @@ buildPythonPackage rec {
     rm -rf *.t* *.py requirements Makefile LICENSE *.md
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Python bindings for the PCRE2 library created by Philip Hazel";
     homepage = "https://github.com/grtetrault/pcre2.py";
     changelog = "https://github.com/grtetrault/pcre2.py/releases/tag/v{version}";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ tochiaha ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ tochiaha ];
   };
 }

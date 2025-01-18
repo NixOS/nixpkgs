@@ -20,11 +20,11 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "FiLe InteRacT, the file interaction tool for your command line";
     homepage = "https://git.sr.ht/~hadronized/flirt";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [
+    license = licenses.bsd3;
+    maintainers = with maintainers; [
       adda
     ];
     mainProgram = "flirt";

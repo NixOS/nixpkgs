@@ -24,11 +24,11 @@ buildDunePackage rec {
     logs
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://irmin.org/";
     description = "PPX deriver for Irmin generics";
-    license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [
+    license = licenses.isc;
+    maintainers = with maintainers; [
       vbgl
       sternenseemann
     ];

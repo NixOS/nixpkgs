@@ -43,11 +43,11 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "JSON5 formatter";
     homepage = "https://github.com/google/json5format";
-    license = lib.licenses.bsd3;
+    license = licenses.bsd3;
     mainProgram = "formatjson5";
-    maintainers = with lib.maintainers; [ katexochen ];
+    maintainers = with maintainers; [ katexochen ];
   };
 }

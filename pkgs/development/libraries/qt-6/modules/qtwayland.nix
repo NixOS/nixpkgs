@@ -43,8 +43,8 @@ qtModule {
     cp ${wayland-scanner}/share/wayland/wayland.xml src/3rdparty/protocol/wayland/wayland.xml
   '';
 
-  meta = {
-    platforms = lib.platforms.unix;
-    badPlatforms = lib.platforms.darwin;
+  meta = with lib; {
+    platforms = platforms.unix;
+    badPlatforms = platforms.darwin;
   };
 }

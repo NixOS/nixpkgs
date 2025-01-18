@@ -62,7 +62,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "scs" ];
 
-  meta = {
+  meta = with lib; {
     description = "Python interface for SCS: Splitting Conic Solver";
     longDescription = ''
       Solves convex cone programs via operator splitting.
@@ -71,7 +71,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/cvxgrp/scs"; # upstream C package
     downloadPage = "https://github.com/bodono/scs-python";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ drewrisinger ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ drewrisinger ];
   };
 }

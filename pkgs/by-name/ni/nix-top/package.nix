@@ -51,12 +51,12 @@ stdenv.mkDerivation rec {
       runHook postInstall
     '';
 
-  meta = {
+  meta = with lib; {
     description = "Tracks what nix is building";
     homepage = "https://github.com/jerith666/nix-top";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.jerith666 ];
-    platforms = lib.platforms.unix;
+    license = licenses.mit;
+    maintainers = [ maintainers.jerith666 ];
+    platforms = platforms.unix;
     mainProgram = "nix-top";
   };
 }

@@ -58,11 +58,11 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://project-copacetic.github.io/copacetic/";
     description = "Tool for directly patching vulnerabilities in container images";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     mainProgram = "copa";
-    maintainers = with lib.maintainers; [ bmanuel ];
+    maintainers = with maintainers; [ bmanuel ];
   };
 }

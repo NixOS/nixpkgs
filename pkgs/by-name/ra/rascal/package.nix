@@ -26,13 +26,13 @@ stdenv.mkDerivation rec {
       --add-flags "-jar ${src}" \
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.rascal-mpl.org/";
     description = "Command-line REPL for the Rascal metaprogramming language";
     mainProgram = "rascal";
-    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
-    license = lib.licenses.epl10;
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = licenses.epl10;
     maintainers = [ ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }

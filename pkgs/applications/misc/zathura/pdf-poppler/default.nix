@@ -37,15 +37,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.PKG_CONFIG_ZATHURA_PLUGINDIR = "lib/zathura";
 
-  meta = {
+  meta = with lib; {
     homepage = "https://pwmt.org/projects/zathura-pdf-poppler/";
     description = "Zathura PDF plugin (poppler)";
     longDescription = ''
       The zathura-pdf-poppler plugin adds PDF support to zathura by
       using the poppler rendering library.
     '';
-    license = lib.licenses.zlib;
-    platforms = lib.platforms.unix;
+    license = licenses.zlib;
+    platforms = platforms.unix;
     maintainers = [ ];
   };
 })

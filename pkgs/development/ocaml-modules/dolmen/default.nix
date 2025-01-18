@@ -31,10 +31,10 @@ buildDunePackage rec {
 
   checkInputs = [ qcheck ];
 
-  meta = {
+  meta = with lib; {
     description = "OCaml library providing clean and flexible parsers for input languages";
-    license = lib.licenses.bsd2;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.bsd2;
+    maintainers = [ maintainers.vbgl ];
     homepage = "https://github.com/Gbury/dolmen";
   };
 }

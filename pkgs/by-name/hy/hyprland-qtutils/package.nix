@@ -39,11 +39,11 @@ gcc14Stdenv.mkDerivation (finalAttrs: {
     qtWrapperArgs+=(--prefix PATH : "${makeBinPath [ pciutils ]}")
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Hyprland QT/qml utility apps";
     homepage = "https://github.com/hyprwm/hyprland-qtutils";
-    license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.fufexan ];
-    platforms = lib.platforms.linux;
+    license = licenses.bsd3;
+    maintainers = [ maintainers.fufexan ];
+    platforms = platforms.linux;
   };
 })

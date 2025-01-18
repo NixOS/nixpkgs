@@ -46,15 +46,15 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "vapoursynth_dep.get_variable(pkgconfig: 'libdir')" "get_option('libdir')"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Wrapper library around FFmpeg that ensures sample and frame accurate access to audio and video";
     homepage = "https://github.com/vapoursynth/bestsource";
-    license = with lib.licenses; [
+    license = with licenses; [
       mit
       wtfpl
       gpl2Plus
     ];
-    maintainers = with lib.maintainers; [ snaki ];
-    platforms = lib.platforms.all;
+    maintainers = with maintainers; [ snaki ];
+    platforms = platforms.all;
   };
 })

@@ -32,13 +32,13 @@ perlPackages.buildPerlPackage {
     rm -r $out/${perlPackages.perl.libPrefix}/${perlPackages.perl.version}/auto
   '';
 
-  meta = {
+  meta = with lib; {
     description = "A colourful wrapper for terminal programs";
     homepage = "https://github.com/deftdawg/cope";
-    license = with lib.licenses; [
+    license = with licenses; [
       artistic1
       gpl1Plus
     ];
-    maintainers = with lib.maintainers; [ deftdawg ];
+    maintainers = with maintainers; [ deftdawg ];
   };
 }

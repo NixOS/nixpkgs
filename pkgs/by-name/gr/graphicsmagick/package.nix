@@ -98,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "http://www.graphicsmagick.org";
     description = "Swiss army knife of image processing";
     longDescription = ''
@@ -108,9 +108,9 @@ stdenv.mkDerivation (finalAttrs: {
       including important formats like DPX, GIF, JPEG, JPEG-2000, JXL, PNG, PDF,
       PNM, TIFF, and WebP.
     '';
-    license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ AndersonTorres ];
     mainProgram = "gm";
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 })

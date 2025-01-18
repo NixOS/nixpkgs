@@ -62,10 +62,10 @@ buildDunePackage (
     pname = "camomile";
     inherit version;
 
-    meta = {
+    meta = with lib; {
       homepage = "https://github.com/ocaml-community/Camomile";
-      maintainers = [ lib.maintainers.vbgl ];
-      license = lib.licenses.lgpl21;
+      maintainers = [ maintainers.vbgl ];
+      license = licenses.lgpl21;
       description = "Unicode library for OCaml";
     };
   }

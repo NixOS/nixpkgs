@@ -38,10 +38,10 @@ buildPythonPackage rec {
 
   doCheck = !isPy3k; # https://github.com/marinkaz/nimfa/issues/42
 
-  meta = {
+  meta = with lib; {
     description = "Nonnegative matrix factorization library";
     homepage = "http://nimfa.biolab.si";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ ashgillman ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ ashgillman ];
   };
 }

@@ -22,11 +22,11 @@ stdenv.mkDerivation rec {
     mv {,$out/bin/}mysql2psql
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Convert MySQL dump files to PostgreSQL-loadable files";
     homepage = "https://pgfoundry.org/projects/mysql2pgsql/";
-    license = lib.licenses.bsdOriginal;
+    license = licenses.bsdOriginal;
     mainProgram = "mysql2psql";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }

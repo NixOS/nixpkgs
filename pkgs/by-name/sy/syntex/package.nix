@@ -29,10 +29,10 @@ stdenv.mkDerivation rec {
     chmod a+x "$out/bin/syntex"
   '';
   buildInputs = [ mono ];
-  meta = {
+  meta = with lib; {
     description = "Texture synthesis from examples";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.raskin ];
-    platforms = lib.platforms.linux;
+    license = licenses.mit;
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.linux;
   };
 }

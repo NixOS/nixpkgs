@@ -75,18 +75,18 @@ stdenv.mkDerivation (finalAttrs: {
     ''
   ];
 
-  meta = {
+  meta = with lib; {
     changelog = "https://github.com/rgriebl/brickstore/blob/main/CHANGELOG.md";
     description = "BrickLink offline management tool";
     homepage = "https://www.brickstore.dev/";
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     longDescription = ''
       BrickStore is a BrickLink offline management tool.
       It is multi-platform (Windows, macOS and Linux as well as iOS and Android),
       multilingual (currently English, German, Spanish, Swedish and French), fast and stable.
     '';
-    maintainers = with lib.maintainers; [ legojames ];
+    maintainers = with maintainers; [ legojames ];
     mainProgram = "brickstore";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 })

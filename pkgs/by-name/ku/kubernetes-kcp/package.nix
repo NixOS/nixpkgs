@@ -58,12 +58,12 @@ buildGoModule rec {
     version = "v${version}";
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://kcp.io";
     description = "Kubernetes-like control planes for form-factors and use-cases beyond Kubernetes and container workloads";
     mainProgram = "kcp";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
+    license = licenses.asl20;
+    maintainers = with maintainers; [
       rytswd
     ];
   };

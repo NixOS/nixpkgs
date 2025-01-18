@@ -33,16 +33,16 @@ buildPythonPackage rec {
   # no tests in upstream
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/ultrafunkamsterdam/nodriver";
-    license = lib.licenses.agpl3Only;
+    license = licenses.agpl3Only;
     description = "Web automation framework which can bypass bot detection";
     longDescription = ''
       Successor of Undetected-Chromedriver. Providing a blazing fast framework for web
       automation, webscraping, bots and any other creative ideas which are normally
       hindered by annoying anti bot systems like Captcha / CloudFlare / Imperva / hCaptcha
     '';
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       liammurphy14
       toasteruwu
     ];

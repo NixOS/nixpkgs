@@ -46,14 +46,14 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Graph and mesh/hypergraph partitioning, graph clustering, and sparse matrix ordering";
     longDescription = ''
       Scotch is a software package for graph and mesh/hypergraph partitioning, graph clustering,
       and sparse matrix ordering.
     '';
     homepage = "http://www.labri.fr/perso/pelegrin/scotch";
-    license = lib.licenses.cecill-c;
-    maintainers = [ lib.maintainers.bzizou ];
+    license = licenses.cecill-c;
+    maintainers = [ maintainers.bzizou ];
   };
 })

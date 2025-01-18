@@ -34,13 +34,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "x_transformers" ];
 
-  meta = {
+  meta = with lib; {
     description = "Concise but fully-featured transformer";
     longDescription = ''
       A simple but complete full-attention transformer with a set of promising experimental features from various papers
     '';
     homepage = "https://github.com/lucidrains/x-transformers";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ByteSudoer ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ ByteSudoer ];
   };
 }

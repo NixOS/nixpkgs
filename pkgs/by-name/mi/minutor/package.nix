@@ -32,10 +32,10 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Easy to use mapping tool for Minecraft";
-    maintainers = [ lib.maintainers.sternenseemann ];
-    license = lib.licenses.bsd2;
+    maintainers = [ maintainers.sternenseemann ];
+    license = licenses.bsd2;
     homepage = "https://seancode.com/minutor/";
     inherit (qt5.qtbase.meta) platforms;
     mainProgram = "minutor";

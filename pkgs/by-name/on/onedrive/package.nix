@@ -80,16 +80,16 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/abraunegg/onedrive";
     description = "Complete tool to interact with OneDrive on Linux";
-    license = lib.licenses.gpl3Only;
+    license = licenses.gpl3Only;
     mainProgram = "onedrive";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       AndersonTorres
       peterhoeg
       bertof
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 })

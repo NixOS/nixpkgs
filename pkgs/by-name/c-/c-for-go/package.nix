@@ -20,12 +20,12 @@ buildGoModule rec {
   # Almost all tests fail on the release branch, but package still compiles and works fine.
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/xlab/c-for-go";
     changelog = "https://github.com/xlab/c-for-go/releases/";
     description = "Automatic C-Go Bindings Generator for the Go Programming Language";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.msanft ];
+    license = licenses.mit;
+    maintainers = [ maintainers.msanft ];
     mainProgram = "c-for-go";
   };
 }

@@ -15,11 +15,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-wfMiqWcEsL6/d6XFnEFm/lCbelU7BHC7JKdHREnynAU=";
 
-  meta = {
+  meta = with lib; {
     description = "gtk-rust-app cli for building flatpak apps with ease";
     homepage = "https://gitlab.com/floers/gtk-stuff/cargo-gra/";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ bot-wxt1221 ];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ bot-wxt1221 ];
+    platforms = platforms.unix;
   };
 }

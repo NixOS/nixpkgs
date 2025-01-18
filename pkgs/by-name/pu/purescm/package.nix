@@ -34,11 +34,11 @@ let
       version = testers.testVersion { inherit package; };
     };
 
-    meta = {
+    meta = with lib; {
       description = "Chez Scheme back-end for PureScript";
       homepage = "https://github.com/purescm/purescm";
-      license = lib.licenses.asl20;
-      maintainers = with lib.maintainers; [ toastal ];
+      license = licenses.asl20;
+      maintainers = with maintainers; [ toastal ];
       mainProgram = "purescm";
     };
   };

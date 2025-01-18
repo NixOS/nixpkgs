@@ -43,12 +43,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       runHook postInstall
     '';
 
-  meta = {
+  meta = with lib; {
     description = "Intuitive screenwriting app that streamlines the writing process";
     homepage = "https://starc.app/";
     mainProgram = "starc";
-    license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ pancaek ];
+    license = licenses.unfree;
+    maintainers = with maintainers; [ pancaek ];
     platforms = [ "x86_64-linux" ];
   };
 })

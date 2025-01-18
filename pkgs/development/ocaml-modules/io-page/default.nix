@@ -28,10 +28,10 @@ buildDunePackage rec {
   checkInputs = [ ounit ];
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/mirage/io-page";
-    license = lib.licenses.isc;
+    license = licenses.isc;
     description = "IO memory page library for Mirage backends";
-    maintainers = with lib.maintainers; [ vbgl ];
+    maintainers = with maintainers; [ vbgl ];
   };
 }

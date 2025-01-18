@@ -19,12 +19,12 @@ stdenv.mkDerivation (finalAttrs: {
     install -m 644 -Dt $out/share/mednafen-server standard.conf
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Netplay server for Mednafen";
     mainProgram = "mednafen-server";
     homepage = "https://mednafen.github.io/";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.unix;
   };
 })

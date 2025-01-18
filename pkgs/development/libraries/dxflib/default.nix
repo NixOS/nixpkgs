@@ -39,10 +39,10 @@ stdenv.mkDerivation rec {
   '';
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://qcad.org/en/90-dxflib";
-    maintainers = with lib.maintainers; [ raskin ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.unix;
     description = "DXF file format library";
   };
 }

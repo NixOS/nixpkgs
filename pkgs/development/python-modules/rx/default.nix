@@ -27,10 +27,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rx" ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/ReactiveX/RxPY";
     description = "Reactive Extensions for Python";
-    maintainers = with lib.maintainers; [ thanegill ];
-    license = lib.licenses.asl20;
+    maintainers = with maintainers; [ thanegill ];
+    license = licenses.asl20;
   };
 }

@@ -106,15 +106,15 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://moorstation.org/typoasis/designers/lab/index.htm";
     # description from archive here: http://web.archive.org/web/20030422173903fw_/http://www.hardcovermedia.com/lab/Pages/Fontpages/komikahands.html
     description = "First ever comic lettering super family";
     longDescription = ''
       50 fonts, covering everything the comic artist needs when it comes to lettering. 10 text faces, 10 display faces, 10 tiling faces, 10 hand variations, 9 poster faces, and 20 balloons in a font.
     '';
-    license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ pancaek ];
-    platforms = lib.platforms.all;
+    license = licenses.unfree;
+    maintainers = with maintainers; [ pancaek ];
+    platforms = platforms.all;
   };
 }

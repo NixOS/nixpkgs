@@ -24,10 +24,10 @@ buildPythonPackage rec {
   # After disabling and running the build, no tests are collected.
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Pretty and more helpful exceptions in Python, automatically";
     homepage = "https://github.com/qix-/better-exceptions";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.alex-nt ];
+    license = licenses.mit;
+    maintainers = [ maintainers.alex-nt ];
   };
 }

@@ -26,16 +26,16 @@ stdenv.mkDerivation rec {
   ];
   preConfigure = "./autogen.sh";
 
-  meta = {
+  meta = with lib; {
     description = "gadu, a du like utility for annexed files";
     longDescription = ''
       This is a set of utilities that are handy to use with git-annex repositories.
       Currently there is only one utility gadu, a du like utility for annexed files.
     '';
     homepage = "https://git-annex.mysteryvortex.com/git-annex-utils.html";
-    license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ woffs ];
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ woffs ];
     mainProgram = "gadu";
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 }

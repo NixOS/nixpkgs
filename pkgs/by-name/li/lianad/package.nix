@@ -28,16 +28,16 @@ rustPlatform.buildRustPackage rec {
   # bypass broken unit tests
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     mainProgram = "lianad";
     description = "Bitcoin wallet leveraging on-chain timelocks for safety and recovery";
     homepage = "https://wizardsardine.com/liana";
-    license = lib.licenses.bsd3;
+    license = licenses.bsd3;
     maintainers = [
-      lib.maintainers.dunxen
-      lib.maintainers.plebhash
+      maintainers.dunxen
+      maintainers.plebhash
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
     broken = stdenv.hostPlatform.isAarch64;
   };
 }

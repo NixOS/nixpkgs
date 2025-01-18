@@ -44,12 +44,12 @@ stdenv.mkDerivation rec {
     libnl
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Generates a status line for i3bar, dzen2, xmobar or lemonbar";
     homepage = "https://i3wm.org";
     maintainers = [ ];
-    license = lib.licenses.bsd3;
-    platforms = lib.platforms.all;
+    license = licenses.bsd3;
+    platforms = platforms.all;
     mainProgram = "i3status";
   };
 

@@ -26,11 +26,11 @@ buildNpmPackage {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Professional PHP tooling for any Language Server Protocol capable editor";
     homepage = "https://intelephense.com/";
-    license = lib.licenses.unfree;
+    license = licenses.unfree;
     mainProgram = "intelephense";
-    maintainers = with lib.maintainers; [ patka ];
+    maintainers = with maintainers; [ patka ];
   };
 }

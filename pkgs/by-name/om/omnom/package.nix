@@ -74,11 +74,11 @@ buildGoModule rec {
     cp config.yml_sample $out/share/examples/config.yml
   '';
 
-  meta = {
+  meta = with lib; {
     description = "A webpage bookmarking and snapshotting service";
     homepage = "https://github.com/asciimoo/omnom";
-    license = lib.licenses.agpl3Only;
-    maintainers = lib.teams.ngi.members;
+    license = licenses.agpl3Only;
+    maintainers = teams.ngi.members;
     mainProgram = "omnom";
   };
 }

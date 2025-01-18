@@ -83,12 +83,12 @@ python.pkgs.buildPythonApplication {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "ABC music notation editor";
     mainProgram = "easyabc";
     homepage = "https://easyabc.sourceforge.net/";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ mausch ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ mausch ];
   };
 }

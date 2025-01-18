@@ -34,11 +34,11 @@ stdenv.mkDerivation rec {
     echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/uobikiemukot/yaft";
     description = "Yet another framebuffer terminal";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.matthiasbeyer ];
-    platforms = with lib.platforms; linux;
+    license = licenses.mit;
+    maintainers = [ maintainers.matthiasbeyer ];
+    platforms = with platforms; linux;
   };
 }

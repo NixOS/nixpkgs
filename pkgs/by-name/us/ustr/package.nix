@@ -41,12 +41,12 @@ stdenv.mkDerivation (finalAttrs: {
     find $out/lib -name \*debug\* -delete
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "http://www.and.org/ustr/";
     description = "Micro String API for C language";
     mainProgram = "ustr-import";
-    license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ sigmanificient ];
-    platforms = lib.platforms.linux;
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ sigmanificient ];
+    platforms = platforms.linux;
   };
 })

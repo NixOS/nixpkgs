@@ -29,12 +29,12 @@ rustPlatform.buildRustPackage rec {
     installManPage doc/citron.1
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://git.sr.ht/~grtcdr/citron";
     description = "System data via on-demand notifications";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ vuimuich ];
-    platforms = lib.platforms.linux;
+    license = licenses.mit;
+    maintainers = with maintainers; [ vuimuich ];
+    platforms = platforms.linux;
     mainProgram = "citron";
   };
 }

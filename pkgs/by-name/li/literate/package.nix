@@ -30,11 +30,11 @@ buildDubPackage {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Literate programming tool for any language";
     homepage = "https://zyedidia.github.io/literate/";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "lit";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }

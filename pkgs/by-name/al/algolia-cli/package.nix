@@ -37,11 +37,11 @@ buildGoModule {
       --zsh <($out/bin/algolia completion zsh)
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Algolia’s official CLI devtool";
     mainProgram = "algolia";
     homepage = "https://algolia.com/doc/tools/cli/";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ momeemt ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ momeemt ];
   };
 }

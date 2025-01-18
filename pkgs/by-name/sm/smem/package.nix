@@ -23,11 +23,11 @@ stdenv.mkDerivation rec {
     install -Dm444 -t $out/share/man/man8/ smem.8
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.selenic.com/smem/";
     description = "Memory usage reporting tool that takes shared memory into account";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
     maintainers = [ ];
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
   };
 }

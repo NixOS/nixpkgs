@@ -71,11 +71,11 @@ python3Packages.buildPythonApplication rec {
     };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Run your own AI cluster at home with everyday devices";
     homepage = "https://github.com/exo-explore/exo";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ GaetanLepage ];
     mainProgram = "exo";
   };
 }

@@ -83,7 +83,7 @@ mkDerivationWith python3.pkgs.buildPythonApplication {
     inherit (libopenshot) libopenshot-audio;
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "http://openshot.org/";
     description = "Free, open-source video editor";
     longDescription = ''
@@ -93,9 +93,9 @@ mkDerivationWith python3.pkgs.buildPythonApplication {
       and effects, and then export your film to DVD, YouTube, Vimeo, Xbox 360,
       and many other common formats.
     '';
-    license = with lib.licenses; [ gpl3Plus ];
+    license = with licenses; [ gpl3Plus ];
     mainProgram = "openshot-qt";
-    maintainers = with lib.maintainers; [ ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ ];
+    platforms = platforms.unix;
   };
 }

@@ -44,12 +44,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       --prefix PATH : ${lib.makeBinPath finalAttrs.runtimeInputs}
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/synacktraa/ani-skip";
     description = "Automated solution to bypassing anime opening and ending sequences";
     mainProgram = "ani-skip";
-    license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.diniamo ];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl3;
+    maintainers = [ maintainers.diniamo ];
+    platforms = platforms.unix;
   };
 })

@@ -43,12 +43,12 @@ appimageTools.wrapType2 {
       xorg.libxkbfile
     ]);
 
-  meta = {
+  meta = with lib; {
     homepage = "https://wooting.io/wootility";
     description = "Customization and management software for Wooting keyboards";
-    platforms = lib.platforms.linux;
-    license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [
+    platforms = platforms.linux;
+    license = licenses.unfree;
+    maintainers = with maintainers; [
       davidtwco
       sodiboo
       returntoreality

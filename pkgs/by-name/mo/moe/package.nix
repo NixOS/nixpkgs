@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.gnu.org/software/moe/";
     description = "Small, 8-bit clean editor";
     longDescription = ''
@@ -43,9 +43,9 @@ stdenv.mkDerivation (finalAttrs: {
       completion, directory browser, duplicate removal from prompt histories,
       delimiter matching, text conversion from/to UTF-8, romanization, etc.
     '';
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.unix;
     mainProgram = "moe";
   };
 })

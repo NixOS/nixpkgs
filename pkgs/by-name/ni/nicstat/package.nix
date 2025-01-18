@@ -37,14 +37,14 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Network traffic statistics utility for Solaris and Linux";
     homepage = "https://github.com/scotte/nicstat";
     changelog = "https://github.com/scotte/nicstat/blob/${finalAttrs.src.rev}/ChangeLog.txt";
-    license = lib.licenses.artistic2;
-    maintainers = with lib.maintainers; [ juliusrickert ];
+    license = licenses.artistic2;
+    maintainers = with maintainers; [ juliusrickert ];
     mainProgram = "nicstat";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
   };
 })

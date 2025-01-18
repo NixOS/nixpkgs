@@ -25,13 +25,13 @@ stdenv.mkDerivation {
     cryptopp
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Generate chunked backups for Signal messages";
     homepage = "https://gitlab.com/gerum/signal-backup-deduplicator";
-    license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [ GaetanLepage ];
     mainProgram = "signal_backup_deduplicate";
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
     # ld: symbol(s) not found for architecture ...
     broken = stdenv.hostPlatform.isDarwin;
   };

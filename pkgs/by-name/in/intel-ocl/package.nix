@@ -76,12 +76,12 @@ stdenv.mkDerivation rec {
 
   dontStrip = true;
 
-  meta = {
+  meta = with lib; {
     description = "Official OpenCL runtime for Intel CPUs";
     homepage = "https://software.intel.com/en-us/articles/opencl-drivers";
-    license = lib.licenses.unfree;
+    license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = [ ];
-    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+    sourceProvenance = [ sourceTypes.binaryNativeCode ];
   };
 }

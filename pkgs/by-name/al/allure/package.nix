@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://docs.qameta.io/allure/";
     description = "Allure Report is a flexible, lightweight multi-language test reporting tool";
     longDescription = ''
@@ -42,8 +42,8 @@ stdenv.mkDerivation (finalAttrs: {
       in the development process to extract the maximum of information from
       the everyday testing process.
     '';
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     mainProgram = "allure";
-    maintainers = with lib.maintainers; [ happysalada ];
+    maintainers = with maintainers; [ happysalada ];
   };
 })

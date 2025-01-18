@@ -38,10 +38,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "qnapstats" ];
 
-  meta = {
+  meta = with lib; {
     description = "Python API for obtaining QNAP NAS system stats";
     homepage = "https://github.com/colinodell/python-qnapstats";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

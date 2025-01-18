@@ -31,15 +31,15 @@ stdenv.mkDerivation {
     cp sixpair $out/bin/sixpair
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Pair with SIXAXIS controllers over USB";
     longDescription = ''
       This command-line utility searches USB buses for SIXAXIS controllers and tells them to connect to a new Bluetooth master.
     '';
     homepage = "http://www.pabr.org/sixlinux/";
-    license = lib.licenses.gpl2Only;
-    maintainers = [ lib.maintainers.tomsmeets ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Only;
+    maintainers = [ maintainers.tomsmeets ];
+    platforms = platforms.linux;
     mainProgram = "sixpair";
   };
 }

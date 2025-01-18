@@ -27,10 +27,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "iOSbackup" ];
 
-  meta = {
+  meta = with lib; {
     description = "Reads and extracts files from password-encrypted iOS backups";
     homepage = "https://github.com/avibrazil/iOSbackup";
-    license = lib.licenses.lgpl2Only;
-    maintainers = with lib.maintainers; [ PapayaJackal ];
+    license = licenses.lgpl2Only;
+    maintainers = with maintainers; [ PapayaJackal ];
   };
 }

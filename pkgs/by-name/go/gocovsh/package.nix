@@ -29,14 +29,14 @@ buildGoModule rec {
   versionCheckProgramArg = [ "--version" ];
   doInstallCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "Go Coverage in your terminal: a tool for exploring Go Coverage reports from the command line";
     homepage = "https://github.com/orlangure/gocovsh";
     changelog = "https://github.com/orlangure/gocovsh/releases";
     # https://github.com/orlangure/gocovsh/blob/8880bc63283c13a1d630ce3817c7165a6c210d46/.goreleaser.yaml#L33
-    license = lib.licenses.gpl3Only;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ phanirithvij ];
+    license = licenses.gpl3Only;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ phanirithvij ];
     mainProgram = "gocovsh";
   };
 }

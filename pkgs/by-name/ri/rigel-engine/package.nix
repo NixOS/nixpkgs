@@ -33,12 +33,12 @@ stdenv.mkDerivation {
     "-Wno-dev"
   ] ++ lib.optional buildOpenGLES "-DUSE_GL_ES=ON";
 
-  meta = {
+  meta = with lib; {
     description = "Modern re-implementation of the classic DOS game Duke Nukem II";
     homepage = "https://github.com/lethal-guitar/RigelEngine";
-    license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ keenanweaver ];
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ keenanweaver ];
     mainProgram = "RigelEngine";
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 }

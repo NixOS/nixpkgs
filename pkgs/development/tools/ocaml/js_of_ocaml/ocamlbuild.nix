@@ -18,10 +18,10 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ ocamlbuild ];
 
-  meta = {
+  meta = with lib; {
     description = "Ocamlbuild plugin to compile to JavaScript";
     homepage = "https://github.com/ocsigen/js_of_ocaml-ocamlbuild";
-    license = lib.licenses.lgpl2Only;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.lgpl2Only;
+    maintainers = [ maintainers.vbgl ];
   };
 }

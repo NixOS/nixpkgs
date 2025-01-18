@@ -36,12 +36,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = {
+  meta = with lib; {
     description = "3DS shader assembler and disassembler";
     homepage = "https://github.com/neobrain/nihstro";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ getchoo ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ getchoo ];
     mainProgram = "nihstro-assemble";
-    platforms = lib.platforms.unix ++ lib.platforms.windows;
+    platforms = platforms.unix ++ platforms.windows;
   };
 })

@@ -17,11 +17,11 @@ buildDunePackage rec {
     sha256 = "0s7p9swjqjsqddylmgid6cv263ggq7pmb734z4k84yfcrgb6kg4g";
   };
 
-  meta = {
+  meta = with lib; {
     inherit (src.meta) homepage;
-    license = lib.licenses.mit;
+    license = licenses.mit;
     description = "Strict impure trie tree";
-    maintainers = [ lib.maintainers.vbgl ];
+    maintainers = [ maintainers.vbgl ];
   };
 
 }

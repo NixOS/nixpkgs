@@ -31,10 +31,10 @@ buildPythonPackage rec {
     python-lsp-server
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/paradoxxxzero/pyls-isort";
     description = "Isort plugin for python-lsp-server";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ cpcloud ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ cpcloud ];
   };
 }

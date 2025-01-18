@@ -21,10 +21,10 @@ python3Packages.buildPythonApplication {
 
   nativeCheckInputs = [ python3Packages.pytestCheckHook ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/matthew-brett/grin";
     description = "Grep program configured the way I like it";
-    platforms = lib.platforms.all;
-    maintainers = [ lib.maintainers.sjagoe ];
+    platforms = platforms.all;
+    maintainers = [ maintainers.sjagoe ];
   };
 }

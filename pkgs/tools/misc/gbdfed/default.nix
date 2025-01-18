@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  meta = {
+  meta = with lib; {
     description = "Bitmap Font Editor";
     longDescription = ''
       gbdfed lets you interactively create new bitmap font files or modify existing ones.
@@ -35,9 +35,9 @@ stdenv.mkDerivation rec {
       The editor works natively with BDF fonts.
     '';
     homepage = "http://sofia.nmsu.edu/~mleisher/Software/gbdfed/";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.linquize ];
-    platforms = lib.platforms.all;
+    license = licenses.mit;
+    maintainers = [ maintainers.linquize ];
+    platforms = platforms.all;
     mainProgram = "gbdfed";
   };
 }

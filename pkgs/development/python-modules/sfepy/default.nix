@@ -81,10 +81,10 @@ buildPythonPackage rec {
     ${python.interpreter} -c "import sfepy; sfepy.test()"
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://sfepy.org/";
     description = "Simple Finite Elements in Python";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ wd15 ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ wd15 ];
   };
 }

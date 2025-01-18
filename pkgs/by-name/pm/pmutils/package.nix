@@ -61,10 +61,10 @@ stdenv.mkDerivation rec {
     rm $out/lib/pm-utils/power.d/{journal-commit,readahead}
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://pm-utils.freedesktop.org/wiki/";
     description = "Small collection of scripts that handle suspend and resume on behalf of HAL";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
   };
 }

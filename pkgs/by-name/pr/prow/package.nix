@@ -64,7 +64,7 @@ buildGoModule rec {
 
   nativeCheckInputs = [ git ];
 
-  meta = {
+  meta = with lib; {
     description = "Kubernetes based CI/CD system developed to serve the Kubernetes community";
     longDescription = ''
       Prow is a Kubernetes based CI/CD system. Jobs can be triggered by various
@@ -74,8 +74,8 @@ buildGoModule rec {
       merging.
     '';
     homepage = "https://github.com/kubernetes-sigs/prow";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ kalbasit ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    license = licenses.asl20;
+    maintainers = with maintainers; [ kalbasit ];
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

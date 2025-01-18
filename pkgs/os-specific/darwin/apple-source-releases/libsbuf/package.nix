@@ -74,12 +74,12 @@ bootstrapStdenv.mkDerivation (finalAttrs: {
 
   __structuredAttrs = true;
 
-  meta = {
+  meta = with lib; {
     description = "Safely compose and manipulate strings in C";
     homepage = "https://www.freebsd.org";
     license = [
-      lib.licenses.bsd2
-      lib.licenses.bsd3
+      licenses.bsd2
+      licenses.bsd3
     ];
   };
 })

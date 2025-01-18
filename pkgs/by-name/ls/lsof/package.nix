@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
     cp lsof $out/bin
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/lsof-org/lsof";
     description = "Tool to list open files";
     mainProgram = "lsof";
@@ -88,8 +88,8 @@ stdenv.mkDerivation rec {
       socket (IPv6/IPv4/UNIX local), or partition (by opening a file
       from it).
     '';
-    license = lib.licenses.purdueBsd;
-    maintainers = with lib.maintainers; [ dezgeg ];
-    platforms = lib.platforms.unix;
+    license = licenses.purdueBsd;
+    maintainers = with maintainers; [ dezgeg ];
+    platforms = platforms.unix;
   };
 }

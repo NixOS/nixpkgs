@@ -113,13 +113,13 @@ stdenv.mkDerivation rec {
       "$out/bin/.kmymoney-wrapped"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Personal finance manager for KDE";
     mainProgram = "kmymoney";
     homepage = "https://kmymoney.org/";
-    platforms = lib.platforms.linux;
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [
+    platforms = platforms.linux;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [
       aidalgol
       das-g
     ];

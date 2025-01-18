@@ -38,11 +38,11 @@ buildGoModule rec {
     rm -f $out/bin/pcs_config.json
   '';
 
-  meta = {
+  meta = with lib; {
     mainProgram = "BaiduPCS-Go";
-    maintainers = with lib.maintainers; [ xddxdd ];
+    maintainers = with maintainers; [ xddxdd ];
     description = "Baidu Netdisk commandline client, mimicking Linux shell file handling commands";
     homepage = "https://github.com/qjfoidnh/BaiduPCS-Go";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
   };
 }

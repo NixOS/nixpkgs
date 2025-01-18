@@ -18,12 +18,12 @@ wsjtx.overrideAttrs (old: rec {
     mv $out/bin/wsjtx_app_version $out/bin/wsjtz_app_version
   '';
 
-  meta = {
+  meta = with lib; {
     description = "WSJT-X fork, primarily focused on automation and enhanced functionality";
     homepage = "https://sourceforge.net/projects/wsjt-z/";
-    license = lib.licenses.gpl3;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
       scd31
     ];
     mainProgram = "wsjtz";

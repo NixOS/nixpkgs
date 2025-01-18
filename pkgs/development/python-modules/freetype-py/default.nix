@@ -47,10 +47,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "freetype" ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/rougier/freetype-py";
     description = "FreeType (high-level Python API)";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ goertzenator ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ goertzenator ];
   };
 }

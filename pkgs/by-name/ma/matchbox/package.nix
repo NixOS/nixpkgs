@@ -31,10 +31,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = {
+  meta = with lib; {
     description = "X window manager for non-desktop embedded systems";
     homepage = "https://www.yoctoproject.org/software-item/matchbox/";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
   };
 }

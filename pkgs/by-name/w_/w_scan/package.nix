@@ -18,12 +18,12 @@ stdenv.mkDerivation rec {
   #     `service_t'; countries.o:/build/w_scan-20170107/si_types.h:117: first defined here
   env.NIX_CFLAGS_COMPILE = "-fcommon";
 
-  meta = {
+  meta = with lib; {
     description = "Small CLI utility to scan DVB and ATSC transmissions";
     homepage = "http://wirbel.htpc-forum.de/w_scan/index_en.html";
-    platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.nico202 ];
-    license = lib.licenses.gpl2;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.nico202 ];
+    license = licenses.gpl2;
     mainProgram = "w_scan";
   };
 }

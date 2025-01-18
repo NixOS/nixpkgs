@@ -22,11 +22,11 @@ stdenv.mkDerivation rec {
     ln -s dvdread $out/include/libdvdread
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "http://dvdnav.mplayerhq.hu/";
     description = "Library for reading DVDs";
-    license = lib.licenses.gpl2;
-    maintainers = [ lib.maintainers.wmertens ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2;
+    maintainers = [ maintainers.wmertens ];
+    platforms = platforms.linux;
   };
 }

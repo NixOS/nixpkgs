@@ -14,10 +14,10 @@ build-idris-package {
     sha256 = "1dxbqzg0qy7lkabmkj0qypywdjz5751g7h2ql8b2253dy3v0ndbs";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Composable and effectful production, transformation and consumption of streams of data";
     homepage = "https://github.com/QuentinDuval/IdrisPipes";
-    license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.brainrape ];
+    license = licenses.bsd3;
+    maintainers = [ maintainers.brainrape ];
   };
 }

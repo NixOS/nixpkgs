@@ -84,15 +84,15 @@ stdenv.mkDerivation {
     "-DCMAKE_INSTALL_RPATH=${lib.strings.makeLibraryPath [ vulkan-loader ]}"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Advanced test & measurement remote control and analysis suite";
     homepage = "https://www.ngscopeclient.org/";
-    license = lib.licenses.bsd3;
+    license = licenses.bsd3;
     mainProgram = "ngscopeclient";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       bgamari
       carlossless
     ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

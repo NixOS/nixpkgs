@@ -30,10 +30,10 @@ buildPythonPackage rec {
     sed -i "s|Src|$dev/src|" $dev/src/cxxextensions.c $dev/src/cxxsupport.cxx
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Set of classes to help create extensions of Python in the C++ language";
     homepage = "https://sourceforge.net/projects/cxx/";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ freezeboy ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ freezeboy ];
   };
 }

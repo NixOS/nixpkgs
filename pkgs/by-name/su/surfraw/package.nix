@@ -20,11 +20,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ perl ];
 
-  meta = {
+  meta = with lib; {
     description = "Provides a fast unix command line interface to a variety of popular WWW search engines and other artifacts of power";
     homepage = "https://gitlab.com/surfraw/Surfraw";
     maintainers = [ ];
-    platforms = lib.platforms.all;
-    license = lib.licenses.publicDomain;
+    platforms = platforms.all;
+    license = licenses.publicDomain;
   };
 }

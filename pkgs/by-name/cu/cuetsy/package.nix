@@ -17,11 +17,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-CDa7ZfbVQOIt24VZTy4j0Dn24nolmYa0h9zgrJ3QTeY=";
 
-  meta = {
+  meta = with lib; {
     description = "Experimental CUE->TypeScript exporter";
     homepage = "https://github.com/grafana/cuetsy";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ bryanhonof ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ bryanhonof ];
     mainProgram = "cuetsy";
   };
 }

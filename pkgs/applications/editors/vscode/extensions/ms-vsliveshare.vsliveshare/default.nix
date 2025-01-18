@@ -17,11 +17,11 @@ vscode-utils.buildVscodeMarketplaceExtension {
       --replace-fail '"xsel"' '"${xsel}/bin/xsel"'
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Real-time collaborative development for VS Code";
     homepage = "https://aka.ms/vsls-docs";
     changelog = "https://marketplace.visualstudio.com/items/MS-vsliveshare.vsliveshare/changelog";
-    license = lib.licenses.unfree;
-    maintainers = builtins.attrValues { inherit (lib.maintainers) jraygauthier V; };
+    license = licenses.unfree;
+    maintainers = builtins.attrValues { inherit (maintainers) jraygauthier V; };
   };
 }

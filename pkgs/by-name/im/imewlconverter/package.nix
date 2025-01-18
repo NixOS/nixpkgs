@@ -21,11 +21,11 @@ buildDotnetModule {
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
   dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
 
-  meta = {
+  meta = with lib; {
     mainProgram = "ImeWlConverterCmd";
     description = "FOSS program for converting IME dictionaries";
     homepage = "https://github.com/studyzy/imewlconverter";
-    maintainers = with lib.maintainers; [ xddxdd ];
-    license = lib.licenses.gpl3Only;
+    maintainers = with maintainers; [ xddxdd ];
+    license = licenses.gpl3Only;
   };
 }

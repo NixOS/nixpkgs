@@ -67,12 +67,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Convenient alternative to GOverlay for setting up MangoHud";
     homepage = "https://github.com/radiolamp/mangojuice";
-    license = with lib.licenses; [ gpl3Only ];
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [
+    license = with licenses; [ gpl3Only ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
       pluiedev
       getchoo
     ];

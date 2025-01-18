@@ -72,12 +72,12 @@ stdenv.mkDerivation rec {
     qtWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Awesome music player with brilliant and tweakful UI Deepin-UI based";
     mainProgram = "deepin-music";
     homepage = "https://github.com/linuxdeepin/deepin-music";
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
-    maintainers = lib.teams.deepin.members;
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = teams.deepin.members;
   };
 }

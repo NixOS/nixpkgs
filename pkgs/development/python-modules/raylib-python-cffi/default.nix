@@ -74,10 +74,10 @@ buildPythonPackage rec {
       CoreVideo
     ];
 
-  meta = {
+  meta = with lib; {
     description = "Python CFFI bindings for Raylib";
     homepage = "https://electronstudio.github.io/raylib-python-cffi";
-    license = lib.licenses.epl20;
-    maintainers = with lib.maintainers; [ sigmanificient ];
+    license = licenses.epl20;
+    maintainers = with maintainers; [ sigmanificient ];
   };
 }

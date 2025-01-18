@@ -25,11 +25,11 @@ rustPlatform.buildRustPackage {
       --replace 'Command::new("git")' 'Command::new("${git}/bin/git")'
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Simple Git prompt";
     homepage = "https://github.com/9ary/gitprompt-rs";
-    license = lib.licenses.bsd0;
-    maintainers = with lib.maintainers; [
+    license = licenses.bsd0;
+    maintainers = with maintainers; [
       isabelroses
       cafkafk
     ];

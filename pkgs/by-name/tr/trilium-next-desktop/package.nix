@@ -24,12 +24,12 @@ let
   darwinSource.url = "https://github.com/TriliumNext/Notes/releases/download/v${version}/TriliumNextNotes-v${version}-macos-x64.zip";
   darwinSource.sha256 = "0jv80k7dk6gpyfj36iin6y7fk7qan4bya72f14jcgfla95wvk6ls";
 
-  meta = {
+  meta = with lib; {
     description = "Hierarchical note taking application with focus on building large personal knowledge bases";
     homepage = "https://github.com/TriliumNext/Notes";
-    license = lib.licenses.agpl3Plus;
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [
+    license = licenses.agpl3Plus;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    maintainers = with maintainers; [
       eliandoran
       fliegendewurst
     ];

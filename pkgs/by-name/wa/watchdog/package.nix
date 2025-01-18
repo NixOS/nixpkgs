@@ -14,12 +14,12 @@ stdenv.mkDerivation (finalAttrs: {
     "CONFIG_FILENAME:=${placeholder "out"}/etc/watchdog.conf"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Software watchdog for Linux";
     homepage = "https://sourceforge.net/projects/watchdog/";
-    license = lib.licenses.gpl2;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ n8henrie ];
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ n8henrie ];
     mainProgram = "watchdog";
   };
 })

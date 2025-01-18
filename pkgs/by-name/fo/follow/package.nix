@@ -105,11 +105,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Next generation information browser";
     homepage = "https://github.com/RSSNext/Follow";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ iosmanthus ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ iosmanthus ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "follow";
   };

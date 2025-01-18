@@ -89,12 +89,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://gitlab.com/nbdkit/nbdkit";
     description = "NBD server with stable plugin ABI and permissive license";
-    license = with lib.licenses; bsd3;
-    maintainers = with lib.maintainers; [ lukts30 ];
-    platforms = lib.platforms.unix;
+    license = with licenses; bsd3;
+    maintainers = with maintainers; [ lukts30 ];
+    platforms = platforms.unix;
     mainProgram = "nbdkit";
   };
 })

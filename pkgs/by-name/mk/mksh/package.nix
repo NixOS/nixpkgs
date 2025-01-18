@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     shellPath = "/bin/mksh";
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "http://www.mirbsd.org/mksh.htm";
     changelog = "https://www.mirbsd.org/mksh.htm#clog";
     description = "MirBSD Korn Shell";
@@ -55,16 +55,16 @@ stdenv.mkDerivation (finalAttrs: {
       also to be readily available under other UNIX(R)-like operating
       systems.
     '';
-    license = with lib.licenses; [
+    license = with licenses; [
       miros
       isc
       unicode-dfs-2016
     ];
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       AndersonTorres
       joachifm
     ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 })
 # TODO [ AndersonTorres ]: lksh

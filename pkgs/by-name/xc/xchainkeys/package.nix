@@ -16,11 +16,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libX11 ];
 
-  meta = {
+  meta = with lib; {
     homepage = "http://henning-bekel.de/xchainkeys/";
     description = "Standalone X11 program to create chained key bindings";
-    license = lib.licenses.gpl3;
-    platforms = lib.platforms.unix;
+    license = licenses.gpl3;
+    platforms = platforms.unix;
     mainProgram = "xchainkeys";
   };
 }

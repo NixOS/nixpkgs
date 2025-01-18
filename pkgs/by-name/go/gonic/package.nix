@@ -66,11 +66,11 @@ buildGoModule rec {
   # tests require it
   __darwinAllowLocalNetworking = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/sentriz/gonic";
     description = "Music streaming server / subsonic server API implementation";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ autrimpo ];
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ autrimpo ];
     mainProgram = "gonic";
   };
 }

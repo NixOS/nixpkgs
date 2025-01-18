@@ -98,12 +98,12 @@ clangStdenv.mkDerivation (finalAttrs: {
     rm -rf "$out"/lib/cmake
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://gitlab.com/ananicy-cpp/ananicy-cpp";
     description = "Rewrite of ananicy in c++ for lower cpu and memory usage";
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
       artturin
       johnrtitor
       diniamo

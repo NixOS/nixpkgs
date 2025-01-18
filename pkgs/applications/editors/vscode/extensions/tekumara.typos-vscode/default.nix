@@ -53,12 +53,12 @@ vscode-utils.buildVscodeMarketplaceExtension {
     jq '.contributes.configuration.properties."typos.path".default = "${lib.getExe typos-lsp}"' package.json | sponge package.json
   '';
 
-  meta = {
+  meta = with lib; {
     changelog = "https://marketplace.visualstudio.com/items/tekumara.typos-vscode/changelog";
     description = "VSCode extension for providing a low false-positive source code spell checker";
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=tekumara.typos-vscode";
     homepage = "https://github.com/tekumara/typos-lsp";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.drupol ];
+    license = licenses.mit;
+    maintainers = [ maintainers.drupol ];
   };
 }

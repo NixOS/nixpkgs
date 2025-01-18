@@ -147,16 +147,16 @@ stdenv.mkDerivation {
     ocamlPackages.yaml
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Swiss-army knife for multimedia streaming";
     mainProgram = "liquidsoap";
     homepage = "https://www.liquidsoap.info/";
     changelog = "https://raw.githubusercontent.com/savonet/liquidsoap/main/CHANGES.md";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       dandellion
       ehmry
     ];
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     platforms = ocamlPackages.ocaml.meta.platforms or [ ];
   };
 }

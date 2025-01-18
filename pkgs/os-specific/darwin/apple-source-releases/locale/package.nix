@@ -52,12 +52,12 @@ stdenvNoCC.mkDerivation {
 
   installFlags = [ "DESTDIR=${placeholder "out"}" ];
 
-  meta = {
+  meta = with lib; {
     description = "Locale data for Darwin";
     license = [
-      lib.licenses.apsl10
-      lib.licenses.apsl20
+      licenses.apsl10
+      licenses.apsl20
     ];
-    maintainers = lib.teams.darwin.members;
+    maintainers = teams.darwin.members;
   };
 }

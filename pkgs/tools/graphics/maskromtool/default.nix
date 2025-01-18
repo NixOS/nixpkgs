@@ -30,15 +30,15 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
   ];
 
-  meta = {
+  meta = with lib; {
     description = "CAD tool for extracting bits from Mask ROM photographs";
     homepage = "https://github.com/travisgoodspeed/maskromtool";
     license = [
-      lib.licenses.beerware
-      lib.licenses.gpl1Plus
+      licenses.beerware
+      licenses.gpl1Plus
     ];
     maintainers = [
-      lib.maintainers.evanrichter
+      maintainers.evanrichter
     ];
   };
 }

@@ -68,12 +68,12 @@ stdenv.mkDerivation (finalAttrs: {
     testFile = ./test.md;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Textlint rule to check your English styles with write-good";
     homepage = "https://github.com/textlint-rule/textlint-rule-write-good";
     changelog = "https://github.com/textlint-rule/textlint-rule-write-good/releases/tag/${finalAttrs.src.rev}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ natsukium ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ natsukium ];
     platforms = textlint.meta.platforms;
   };
 })

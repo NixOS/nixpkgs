@@ -39,12 +39,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstallCheck
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/bb010g/betterdiscordctl";
     description = "Utility for managing BetterDiscord on Linux";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "betterdiscordctl";
     maintainers = [ ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 })

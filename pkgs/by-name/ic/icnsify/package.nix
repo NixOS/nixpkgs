@@ -19,11 +19,11 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-5wgioCOKvZ0J/t5v/Ic3unAA5h5Bt6MuCUzFJP7Dusw=";
 
-  meta = {
+  meta = with lib; {
     description = "Convert PNGs to .icns";
     homepage = "https://github.com/uncenter/icnsify";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ uncenter ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ uncenter ];
     mainProgram = "icnsify";
   };
 }

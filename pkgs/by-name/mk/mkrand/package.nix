@@ -15,12 +15,12 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "Digital Random Bit Generator";
     mainProgram = "mkrand";
     longDescription = "MKRAND is a utility for generating random information.";
     homepage = "https://github.com/mknight-tag/MKRAND/";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.all;
+    license = licenses.mit;
+    platforms = platforms.all;
   };
 }

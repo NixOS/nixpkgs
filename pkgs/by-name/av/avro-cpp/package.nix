@@ -41,12 +41,12 @@ stdenv.mkDerivation rec {
   versionCheckProgram = "${placeholder "out"}/bin/avrogencpp";
   versionCheckProgramArg = [ "--version" ];
 
-  meta = {
+  meta = with lib; {
     description = "C++ library which implements parts of the Avro Specification";
     mainProgram = "avrogencpp";
     homepage = "https://avro.apache.org/";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ rasendubi ];
-    platforms = lib.platforms.all;
+    license = licenses.asl20;
+    maintainers = with maintainers; [ rasendubi ];
+    platforms = platforms.all;
   };
 }

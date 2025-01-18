@@ -21,11 +21,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "LXGW WenKai font optimized for screen reading";
     homepage = "https://github.com/lxgw/LxgwWenKai-Screen";
-    license = lib.licenses.ofl;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ lebensterben ];
+    license = licenses.ofl;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ lebensterben ];
   };
 })

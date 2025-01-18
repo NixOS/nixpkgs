@@ -44,12 +44,12 @@ flutter324.buildFlutterApplication rec {
     install -Dm644 snap/gui/musicpod.png -t $out/share/pixmaps
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Music, radio, television and podcast player";
     homepage = "https://github.com/ubuntu-flutter-community/musicpod";
-    license = lib.licenses.gpl3Only;
+    license = licenses.gpl3Only;
     mainProgram = "musicpod";
-    maintainers = with lib.maintainers; [ aleksana ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ aleksana ];
+    platforms = platforms.linux;
   };
 }

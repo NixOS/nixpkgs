@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "prefix=$(out)" ];
 
-  meta = {
+  meta = with lib; {
     description = "Tool to generate CVS patch set information";
     longDescription = ''
       CVSps is a program for generating `patchset' information from a
@@ -65,8 +65,8 @@ stdenv.mkDerivation rec {
       same time (using a single "cvs commit" command).
     '';
     homepage = "http://www.cobite.com/cvsps/";
-    license = lib.licenses.gpl2;
-    platforms = lib.platforms.unix;
+    license = licenses.gpl2;
+    platforms = platforms.unix;
     mainProgram = "cvsps";
   };
 }

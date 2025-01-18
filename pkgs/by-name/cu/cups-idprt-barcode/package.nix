@@ -42,14 +42,14 @@ stdenvNoCC.mkDerivation {
       runHook postInstall
     '';
 
-  meta = {
+  meta = with lib; {
     description = "CUPS drivers for iDPRT barcode printers (iD2P, iD2X, iD4P, iD4S, iE2P, iE2X, iE4P, iE4S, iT4B, iT4E, iT4P, iT4S, iT4X, iX4E, iX4L, iX4P, iX4E, iX6P)";
     platforms = [
       "x86_64-linux"
       "x86-linux"
     ];
-    license = lib.licenses.unfree;
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [ pandapip1 ];
+    license = licenses.unfree;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    maintainers = with maintainers; [ pandapip1 ];
   };
 }

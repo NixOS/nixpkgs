@@ -35,12 +35,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.floodgap.com/retrotech/xa/";
     description = "Andre Fachat's open-source 6502 disassembler";
     mainProgram = "dxa";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = with lib.platforms; unix;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = with platforms; unix;
   };
 })

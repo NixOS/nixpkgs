@@ -32,11 +32,11 @@ stdenv.mkDerivation rec {
     mv lang images examples $out/share/$pname/
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.c-amie.co.uk/software/analog/";
-    license = lib.licenses.gpl2Only;
+    license = licenses.gpl2Only;
     description = "Powerful tool to generate web server statistics";
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
     mainProgram = "analog";
   };
 

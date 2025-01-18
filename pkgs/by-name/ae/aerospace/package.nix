@@ -46,13 +46,13 @@ stdenv.mkDerivation {
     rev-prefix = "v";
   };
 
-  meta = {
-    license = lib.licenses.mit;
+  meta = with lib; {
+    license = licenses.mit;
     mainProgram = "aerospace";
     homepage = "https://github.com/nikitabobko/AeroSpace";
     description = "i3-like tiling window manager for macOS";
-    platforms = lib.platforms.darwin;
-    maintainers = with lib.maintainers; [ alexandru0-dev ];
-    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+    platforms = platforms.darwin;
+    maintainers = with maintainers; [ alexandru0-dev ];
+    sourceProvenance = [ sourceTypes.binaryNativeCode ];
   };
 }

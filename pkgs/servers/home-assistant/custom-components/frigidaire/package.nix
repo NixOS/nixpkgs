@@ -22,10 +22,10 @@ buildHomeAssistantComponent rec {
   # frigidaire dependency
   ignoreVersionRequirement = [ "frigidaire" ];
 
-  meta = {
+  meta = with lib; {
     description = "Custom component for the Frigidaire integration";
     homepage = "https://github.com/bm1549/home-assistant-frigidaire";
-    maintainers = with lib.maintainers; [ nullcube ];
-    license = lib.licenses.mit;
+    maintainers = with maintainers; [ nullcube ];
+    license = licenses.mit;
   };
 }

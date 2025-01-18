@@ -52,12 +52,12 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail wayprompt $out/bin/wayprompt
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://git.sr.ht/~leon_plickat/wayprompt";
     description = "Multi-purpose (password-)prompt tool for Wayland";
-    license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ sg-qwt ];
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ sg-qwt ];
     mainProgram = "pinentry-wayprompt";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 })

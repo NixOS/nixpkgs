@@ -17,10 +17,10 @@ buildDunePackage rec {
     sha256 = "0yqvqw58hbx1a61wcpbnl9j30n495k23qmyy2xwczqs63mn2nkpn";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Shared [@@deriving] plugin registry";
-    license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.bsd3;
+    maintainers = [ maintainers.vbgl ];
     inherit (src.meta) homepage;
   };
 }

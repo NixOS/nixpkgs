@@ -95,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
     firmware = "${finalAttrs.finalPackage}/share/seabios/${biosfile}";
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.seabios.org";
     description = "Open source implementation of a 16bit x86 BIOS";
     longDescription = ''
@@ -103,9 +103,9 @@ stdenv.mkDerivation (finalAttrs: {
       It can run in an emulator or it can run natively on x86 hardware with the
       use of coreboot.
     '';
-    license = with lib.licenses; [ lgpl3Plus ];
-    maintainers = with lib.maintainers; [ sigmasquadron ];
-    platforms = lib.systems.inspect.patternLogicalAnd lib.systems.inspect.patterns.isUnix lib.systems.inspect.patterns.isx86;
-    badPlatforms = [ lib.systems.inspect.patterns.isDarwin ];
+    license = with licenses; [ lgpl3Plus ];
+    maintainers = with maintainers; [ sigmasquadron ];
+    platforms = systems.inspect.patternLogicalAnd systems.inspect.patterns.isUnix systems.inspect.patterns.isx86;
+    badPlatforms = [ systems.inspect.patterns.isDarwin ];
   };
 })

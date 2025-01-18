@@ -30,11 +30,11 @@ buildDunePackage rec {
     fuse
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://sourceforge.net/projects/ocamlfuse";
     description = "OCaml bindings for FUSE";
-    license = lib.licenses.gpl2;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ bennofs ];
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ bennofs ];
   };
 }

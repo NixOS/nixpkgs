@@ -85,11 +85,11 @@ stdenv.mkDerivation rec {
     patchelf --remove-needed "libX11.so.6" $out/bin/nxagent
   '';
 
-  meta = {
+  meta = with lib; {
     description = "NX X server based on Xnest";
     homepage = "https://github.com/ArcticaProject/nx-libs";
-    license = lib.licenses.gpl2Only;
+    license = licenses.gpl2Only;
     maintainers = [ ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Swiss knife of text processing";
     longDescription = ''
       A small tool for quick text transformations such as
@@ -65,17 +65,17 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://gitlab.com/liferooter/textpieces";
     mainProgram = "textpieces";
-    license = with lib.licenses; [
+    license = with licenses; [
       gpl3Plus
       # and
       cc0
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
     maintainers =
-      with lib.maintainers;
+      with maintainers;
       [
         zendo
       ]
-      ++ lib.teams.gnome-circle.members;
+      ++ teams.gnome-circle.members;
   };
 })

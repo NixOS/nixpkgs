@@ -23,12 +23,12 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "blinkstick" ];
 
-  meta = {
+  meta = with lib; {
     description = "Python package to control BlinkStick USB devices";
     mainProgram = "blinkstick";
     homepage = "https://github.com/arvydas/blinkstick-python";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [
+    license = licenses.bsd3;
+    maintainers = with maintainers; [
       np
       perstark
     ];

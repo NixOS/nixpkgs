@@ -65,11 +65,11 @@ mkDerivation {
     kquickimageedit
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Image gallery application";
     mainProgram = "pix";
     homepage = "https://invent.kde.org/maui/pix";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ onny ];
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ onny ];
   };
 }

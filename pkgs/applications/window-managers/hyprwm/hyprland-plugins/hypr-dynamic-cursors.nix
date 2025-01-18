@@ -30,11 +30,11 @@ mkHyprlandPlugin hyprland {
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
-  meta = {
+  meta = with lib; {
     description = "Plugin to make your Hyprland cursor more realistic";
     homepage = "https://github.com/VirtCode/hypr-dynamic-cursors";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ donovanglover ];
-    platforms = lib.platforms.linux;
+    license = licenses.mit;
+    maintainers = with maintainers; [ donovanglover ];
+    platforms = platforms.linux;
   };
 }

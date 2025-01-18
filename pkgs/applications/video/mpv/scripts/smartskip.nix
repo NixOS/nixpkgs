@@ -19,10 +19,10 @@ buildLua {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = {
+  meta = with lib; {
     description = "Automatically or manually skip opening, intro, outro, and preview";
     homepage = "https://github.com/Eisa01/mpv-scripts";
-    license = lib.licenses.bsd2;
-    maintainers = [ lib.maintainers.iynaix ];
+    license = licenses.bsd2;
+    maintainers = [ maintainers.iynaix ];
   };
 }

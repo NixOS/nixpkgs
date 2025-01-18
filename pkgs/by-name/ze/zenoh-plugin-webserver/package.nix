@@ -17,14 +17,14 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-W1vmrKP4aS6O/+8sCzPb5Rs9kAm8ePnowtYEhcS7yMo=";
 
-  meta = {
+  meta = with lib; {
     description = "Implements an HTTP server mapping URLs to zenoh paths";
     homepage = "https://github.com/eclipse-zenoh/zenoh-plugin-webserver";
-    license = with lib.licenses; [
+    license = with licenses; [
       epl20
       asl20
     ];
-    maintainers = with lib.maintainers; [ markuskowa ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ markuskowa ];
+    platforms = platforms.linux;
   };
 }

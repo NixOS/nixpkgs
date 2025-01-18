@@ -73,13 +73,13 @@ buildDunePackage {
   postInstall = ''
     wrapProgram "$out/bin/melc" --set MELANGELIB "$OCAMLFIND_DESTDIR/melange/melange:$OCAMLFIND_DESTDIR/melange/js/melange"
   '';
-  meta = {
+  meta = with lib; {
     description = "Toolchain to produce JS from Reason/OCaml";
     homepage = "https://melange.re/";
     mainProgram = "melc";
-    license = lib.licenses.lgpl3;
+    license = licenses.lgpl3;
     maintainers = [
-      lib.maintainers.vog
+      maintainers.vog
     ];
   };
 }

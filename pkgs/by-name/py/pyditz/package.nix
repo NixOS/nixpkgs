@@ -23,11 +23,11 @@ python3Packages.buildPythonApplication rec {
     cerberus
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://hg.sr.ht/~zondo/pyditz";
     description = "Drop-in replacement for the Ditz distributed issue tracker";
-    maintainers = with lib.maintainers; [ ilikeavocadoes ];
-    license = lib.licenses.lgpl2Plus;
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ ilikeavocadoes ];
+    license = licenses.lgpl2Plus;
+    platforms = platforms.linux;
   };
 }

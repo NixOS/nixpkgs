@@ -75,12 +75,12 @@ mkDerivation {
   # fatal error: properties/ImageProperties.peg.h: No such file or directory
   enableParallelBuilding = false;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/kmkolasinski/AwesomeBump";
     description = "Program to generate normal, height, specular or ambient occlusion textures from a single image";
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     maintainers = [ ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
     mainProgram = "AwesomeBump";
   };
 }

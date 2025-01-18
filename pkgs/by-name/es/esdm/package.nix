@@ -129,15 +129,15 @@ stdenv.mkDerivation rec {
   strictDeps = true;
   mesonBuildType = "release";
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.chronox.de/esdm.html";
     description = "Entropy Source and DRNG Manager in user space";
-    license = with lib.licenses; [
+    license = with licenses; [
       gpl2Only
       bsd3
     ];
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
       orichter
       thillux
     ];

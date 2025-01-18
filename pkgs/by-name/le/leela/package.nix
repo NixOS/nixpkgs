@@ -25,12 +25,12 @@ stdenv.mkDerivation {
     "MANDIR=$(out)/share/man"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "CLI frontend to the poppler-glib library of PDF tools";
     homepage = "https://github.com/TrilbyWhite/Leela";
-    license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.puffnfresh ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3;
+    maintainers = [ maintainers.puffnfresh ];
+    platforms = platforms.linux;
     mainProgram = "leela";
   };
 }

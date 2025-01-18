@@ -39,11 +39,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = {
+  meta = with lib; {
     description = "Variation for marwaita GTK theme based on linux mint color scheme";
     homepage = "https://www.pling.com/p/1674243";
-    license = lib.licenses.gpl3Only;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ romildo ];
+    license = licenses.gpl3Only;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ romildo ];
   };
 })

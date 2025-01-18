@@ -86,15 +86,15 @@ python3Packages.buildPythonApplication rec {
       --set GDK_PIXBUF_MODULE_FILE "${librsvg.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "QR code scanner desktop app for Linux";
     homepage = "https://github.com/hongquan/CoBang";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [
       aleksana
       dvaerum
     ];
     mainProgram = "cobang";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

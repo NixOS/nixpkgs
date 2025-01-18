@@ -201,11 +201,11 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = {
+  meta = with lib; {
     description = "C++ library for accessing LOOT's metadata and sorting functionality";
     homepage = "https://github.com/loot/libloot";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ tomasajt ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ tomasajt ];
+    platforms = platforms.linux;
   };
 })

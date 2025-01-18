@@ -31,10 +31,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "grep_ast" ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/paul-gauthier/grep-ast";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ greg ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ greg ];
     description = "Python implementation of the ast-grep tool";
     mainProgram = "grep-ast";
   };

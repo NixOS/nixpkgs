@@ -43,12 +43,12 @@ let
 
     pythonImportsCheck = [ "loompy" ];
 
-    meta = {
+    meta = with lib; {
       changelog = "https://github.com/linnarsson-lab/loompy/releases";
       description = "Python implementation of the Loom file format";
       homepage = "https://github.com/linnarsson-lab/loompy";
-      license = lib.licenses.bsd2;
-      maintainers = with lib.maintainers; [ theobori ];
+      license = licenses.bsd2;
+      maintainers = with maintainers; [ theobori ];
       mainProgram = "loompy";
     };
   };

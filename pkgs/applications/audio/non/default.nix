@@ -52,11 +52,11 @@ stdenv.mkDerivation {
 
   env.CXXFLAGS = "-std=c++14";
 
-  meta = {
+  meta = with lib; {
     description = "Lightweight and lightning fast modular Digital Audio Workstation";
     homepage = "http://non.tuxfamily.org";
-    license = lib.licenses.lgpl21;
-    platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.nico202 ];
+    license = licenses.lgpl21;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.nico202 ];
   };
 }

@@ -56,12 +56,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = ./update.sh;
 
-  meta = {
+  meta = with lib; {
     description = "JVM-based Common Lisp implementation";
     homepage = "https://common-lisp.net/project/armedbear/";
-    license = lib.licenses.gpl2Classpath;
+    license = licenses.gpl2Classpath;
     mainProgram = "abcl";
-    maintainers = lib.teams.lisp.members;
-    platforms = lib.platforms.darwin ++ lib.platforms.linux;
+    maintainers = teams.lisp.members;
+    platforms = platforms.darwin ++ platforms.linux;
   };
 })

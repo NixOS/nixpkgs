@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Decodes still images from movie files and serves them via HTTP";
     longDescription = ''
       harvid's intended use-case is to efficiently provide frame-accurate data
@@ -60,9 +60,9 @@ stdenv.mkDerivation (finalAttrs: {
       processor.
     '';
     homepage = "http://x42.github.io/harvid";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.mitchmindtree ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.mitchmindtree ];
     mainProgram = "harvid";
   };
 })

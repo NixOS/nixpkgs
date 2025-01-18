@@ -53,12 +53,12 @@ stdenv.mkDerivation {
     libportal-gtk4
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Simple and intuitive timer application (also named Planytimer)";
     homepage = "https://gitlab.com/idevecore/pomodoro";
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     mainProgram = "pomodoro";
-    maintainers = with lib.maintainers; [ aleksana ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ aleksana ];
+    platforms = platforms.unix;
   };
 }

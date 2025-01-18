@@ -25,11 +25,11 @@ buildPythonPackage rec {
     pytest
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Generate random names";
     mainProgram = "names";
     homepage = "https://github.com/treyhunner/names";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ kamadorueda ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ kamadorueda ];
   };
 }

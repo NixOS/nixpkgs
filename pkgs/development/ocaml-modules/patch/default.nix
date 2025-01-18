@@ -27,13 +27,13 @@ buildDunePackage rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = {
+  meta = with lib; {
     description = "Patch library purely in OCaml";
     longDescription = ''
       This is a library which parses unified diff and git diff output, and can apply a patch in memory.
     '';
     homepage = "https://github.com/hannesm/patch";
-    maintainers = with lib.maintainers; [ r17x ];
-    license = lib.licenses.isc;
+    maintainers = with maintainers; [ r17x ];
+    license = licenses.isc;
   };
 }

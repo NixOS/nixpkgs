@@ -13,10 +13,10 @@ melpaBuild rec {
     hash = "sha256-nEqdM/ZQoBDeGzPH/OisCv7ErXHyEBS+J20oIublIQM=";
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://gitweb.gentoo.org/proj/ebuild-mode.git/";
     description = "Major modes for Gentoo package files";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ ];
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ ];
   };
 }

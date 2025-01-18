@@ -36,11 +36,11 @@ rustPlatform.buildRustPackage {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = {
+  meta = with lib; {
     description = "Rust service that decrypts YouTube signatures and manages player information";
     homepage = "https://github.com/iv-org/inv_sig_helper";
-    license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [ GaetanLepage ];
     mainProgram = "inv_sig_helper_rust";
   };
 }

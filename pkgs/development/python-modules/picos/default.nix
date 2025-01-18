@@ -48,10 +48,10 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Python interface to conic optimization solvers";
     homepage = "https://gitlab.com/picos-api/picos";
-    license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ tobiasBora ];
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ tobiasBora ];
   };
 }

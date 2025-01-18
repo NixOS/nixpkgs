@@ -57,11 +57,11 @@ buildPythonPackage rec {
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;
 
-  meta = {
+  meta = with lib; {
     description = "Jupyter Notebook format";
     mainProgram = "jupyter-trust";
     homepage = "https://jupyter.org/";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ globin ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ globin ];
   };
 }

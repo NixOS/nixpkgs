@@ -118,18 +118,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.nixos = nixosTests.taskchampion-sync-server;
 
-  meta = {
+  meta = with lib; {
     changelog = "https://github.com/GothenburgBitFactory/taskwarrior/releases/tag/v${finalAttrs.src.rev}";
     description = "Highly flexible command-line tool to manage TODO lists";
     homepage = "https://taskwarrior.org";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       marcweber
       oxalica
       mlaradji
       doronbehar
     ];
     mainProgram = "task";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 })

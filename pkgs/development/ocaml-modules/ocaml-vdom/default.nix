@@ -31,10 +31,10 @@ buildDunePackage rec {
     ojs
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/LexiFi/ocaml-vdom";
     description = "Elm architecture and (V)DOM for OCaml";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ jayesh-bhoot ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ jayesh-bhoot ];
   };
 }

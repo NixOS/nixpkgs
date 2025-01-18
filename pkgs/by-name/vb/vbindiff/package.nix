@@ -16,11 +16,11 @@ stdenv.mkDerivation rec {
     sha256 = "1f1kj4jki08bnrwpzi663mjfkrx4wnfpzdfwd2qgijlkx5ysjkgh";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Terminal visual binary diff viewer";
     homepage = "https://www.cjmweb.net/vbindiff/";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.unix;
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
     mainProgram = "vbindiff";
   };
 }

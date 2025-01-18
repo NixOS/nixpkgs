@@ -40,10 +40,10 @@ buildDunePackage rec {
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "	https://nomadic-labs.gitlab.io/cryptography/ocaml-bls12-381/bls12-381/";
     description = "Implementation of BLS12-381 and some cryptographic primitives built on top of it";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.ulrikstrid ];
+    license = licenses.mit;
+    maintainers = [ maintainers.ulrikstrid ];
   };
 }

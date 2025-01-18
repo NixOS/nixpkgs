@@ -31,13 +31,13 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Little beautifier tool for xcodebuild";
     homepage = "https://github.com/cpisciotta/xcbeautify";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.darwin;
+    license = licenses.mit;
+    platforms = platforms.darwin;
     mainProgram = "xcbeautify";
-    maintainers = with lib.maintainers; [ siddarthkay ];
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    maintainers = with maintainers; [ siddarthkay ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }

@@ -97,10 +97,10 @@ stdenv.mkDerivation rec {
     wrapQtApp $out/bin/makehuman
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Software to create realistic humans";
     homepage = "http://www.makehumancommunity.org/";
-    license = with lib.licenses; [
+    license = with licenses; [
       agpl3Plus
       cc0
     ];
@@ -109,7 +109,7 @@ stdenv.mkDerivation rec {
       realistic-looking humans.
     '';
     mainProgram = "makehuman";
-    maintainers = with lib.maintainers; [ elisesouche ];
-    platforms = lib.platforms.all;
+    maintainers = with maintainers; [ elisesouche ];
+    platforms = platforms.all;
   };
 }

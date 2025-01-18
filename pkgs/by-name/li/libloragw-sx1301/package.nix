@@ -33,13 +33,13 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Driver/HAL to build a gateway using a concentrator board based on Semtech SX1301 multi-channel modem and SX1257/SX1255 RF transceivers";
     license = [
-      lib.licenses.bsd3
-      lib.licenses.mit
+      licenses.bsd3
+      licenses.mit
     ];
-    maintainers = [ lib.maintainers.stv0g ];
-    platforms = lib.platforms.linux;
+    maintainers = [ maintainers.stv0g ];
+    platforms = platforms.linux;
   };
 })

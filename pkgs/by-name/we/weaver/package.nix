@@ -28,11 +28,11 @@ rustPlatform.buildRustPackage rec {
     package = weaver;
   };
 
-  meta = {
+  meta = with lib; {
     description = "OpenTelemetry tool for dealing with semantic conventions and application telemetry schemas";
     homepage = "https://github.com/open-telemetry/weaver";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ aaronjheng ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ aaronjheng ];
     mainProgram = "weaver";
   };
 }

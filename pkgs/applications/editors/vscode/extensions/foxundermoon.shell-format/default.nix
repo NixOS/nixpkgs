@@ -24,10 +24,10 @@ vscode-utils.buildVscodeMarketplaceExtension {
     jq '.contributes.configuration.properties."shellformat.path".default = "${shfmt}/bin/shfmt"' package.json | sponge package.json
   '';
 
-  meta = {
+  meta = with lib; {
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=foxundermoon.shell-format";
     homepage = "https://github.com/foxundermoon/vs-shell-format";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.dbirks ];
+    license = licenses.mit;
+    maintainers = [ maintainers.dbirks ];
   };
 }

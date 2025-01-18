@@ -31,11 +31,11 @@ rustPlatform.buildRustPackage rec {
     "--skip=tests::test_execute_generate_on_frb_example_pure_dart"
   ];
 
-  meta = {
+  meta = with lib; {
     mainProgram = "flutter_rust_bridge_codegen";
     description = "Flutter/Dart <-> Rust binding generator, feature-rich, but seamless and simple";
     homepage = "https://fzyzcjy.github.io/flutter_rust_bridge";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.eymeric ];
+    license = licenses.mit;
+    maintainers = [ maintainers.eymeric ];
   };
 }

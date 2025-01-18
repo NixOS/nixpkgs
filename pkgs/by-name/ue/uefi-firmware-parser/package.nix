@@ -28,12 +28,12 @@ python3.pkgs.buildPythonApplication rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Tool for parsing, extracting, and recreating UEFI firmware volumes";
     homepage = "https://github.com/theopolis/uefi-firmware-parser";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ KSJ2000 ];
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ KSJ2000 ];
     mainProgram = "uefi-firmware-parser";
   };
 }

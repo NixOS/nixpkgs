@@ -23,7 +23,7 @@
 
       passthru.updateScript = nix-update-script { };
 
-      meta = {
+      meta = with lib; {
         description = "Chat client for Twitch chat";
         mainProgram = "chatterino";
         longDescription = ''
@@ -34,9 +34,9 @@
         '';
         homepage = "https://github.com/SevenTV/chatterino7";
         changelog = "https://github.com/SevenTV/chatterino7/blob/${finalAttrs.src.rev}/CHANGELOG.c7.md";
-        license = lib.licenses.mit;
-        platforms = lib.platforms.unix;
-        maintainers = with lib.maintainers; [ marie ];
+        license = licenses.mit;
+        platforms = platforms.unix;
+        maintainers = with maintainers; [ marie ];
       };
     }
   )

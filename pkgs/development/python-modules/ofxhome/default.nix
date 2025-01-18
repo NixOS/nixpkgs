@@ -28,10 +28,10 @@ buildPythonPackage rec {
     "testfile"
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/captin411/ofxhome";
     description = "ofxhome.com financial institution lookup REST client";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ pyrox0 ];
   };
 }

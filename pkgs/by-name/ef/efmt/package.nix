@@ -17,14 +17,14 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-hEJb1SOQ3daY2otroCds8zitoodSjRyRTyR7GwF8dgk=";
 
-  meta = {
+  meta = with lib; {
     description = "Erlang code formatter";
     homepage = "https://github.com/sile/efmt";
-    license = with lib.licenses; [
+    license = with licenses; [
       asl20
       mit
     ];
-    maintainers = with lib.maintainers; [ haruki7049 ];
+    maintainers = with maintainers; [ haruki7049 ];
     mainProgram = "efmt";
   };
 }

@@ -56,16 +56,16 @@ stdenv.mkDerivation (finalAttrs: {
     grep -v "Version=#VERSION#" $src/LINUX/die.desktop > $out/share/applications/die.desktop
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Program for determining types of files for Windows, Linux and MacOS.";
     mainProgram = "die";
     homepage = "https://github.com/horsicq/Detect-It-Easy";
     changelog = "https://github.com/horsicq/Detect-It-Easy/blob/master/changelog.txt";
-    maintainers = with lib.maintainers; [ ivyfanchiang ];
+    maintainers = with maintainers; [ ivyfanchiang ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
     ];
-    license = lib.licenses.mit;
+    license = licenses.mit;
   };
 })

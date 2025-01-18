@@ -33,11 +33,11 @@ rustPlatform.buildRustPackage {
     OPENSSL_NO_VENDOR = 1;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Theme manager for LeftWM";
     homepage = "https://github.com/leftwm/leftwm-theme";
-    license = lib.licenses.bsd3;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ denperidge ];
+    license = licenses.bsd3;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ denperidge ];
   };
 }

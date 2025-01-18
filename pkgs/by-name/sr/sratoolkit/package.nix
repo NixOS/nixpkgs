@@ -44,14 +44,14 @@ stdenv.mkDerivation (finalAttrs: {
     openjdk
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/ncbi/sra-tools";
     description = "Collection of tools and libraries for using data in the INSDC Sequence Read Archives";
-    license = lib.licenses.ncbiPd;
-    maintainers = with lib.maintainers; [
+    license = licenses.ncbiPd;
+    maintainers = with maintainers; [
       thyol
       t4ccer
     ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 })

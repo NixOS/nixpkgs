@@ -31,11 +31,11 @@ rustPlatform.buildRustPackage {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = {
+  meta = with lib; {
     description = "Simple terminal UI for search and replace, ala VS Code";
     homepage = "https://github.com/yassinebridi/serpl.git";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ NotAShelf ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ NotAShelf ];
     mainProgram = "serpl";
   };
 }

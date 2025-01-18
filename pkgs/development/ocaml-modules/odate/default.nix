@@ -20,11 +20,11 @@ buildDunePackage rec {
 
   nativeBuildInputs = [ menhir ];
 
-  meta = {
+  meta = with lib; {
     description = "Date and duration in OCaml";
     inherit (src.meta) homepage;
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.mit;
+    maintainers = [ maintainers.vbgl ];
   };
 
 }

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Vh6GNiDkjNhaD9U/3fG2LpMLN39L3jRUgG/FQeG1z40=";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Enables dynamic control of xterm properties";
     longDescription = ''
       Enables dynamic control of xterm properties.
@@ -22,9 +22,9 @@ stdenv.mkDerivation rec {
       To complete the feature set; xtermcontrol lets advanced users issue any xterm control sequence of their choosing.
     '';
     homepage = "http://thrysoee.dk/xtermcontrol";
-    license = lib.licenses.gpl2;
-    platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.derchris ];
+    license = licenses.gpl2;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.derchris ];
     mainProgram = "xtermcontrol";
   };
 }

@@ -24,12 +24,12 @@ stdenv.mkDerivation rec {
   '';
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ bison ];
-  meta = {
+  meta = with lib; {
     description = "High performance TCP and WebSocket load generator and sink";
-    license = lib.licenses.bsd2;
+    license = licenses.bsd2;
     inherit (src.meta) homepage;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ ethercrow ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ ethercrow ];
     mainProgram = "tcpkali";
   };
 }

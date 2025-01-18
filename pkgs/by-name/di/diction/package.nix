@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "08fi971b8qa4xycxbgb42i6b5ms3qx9zpp5hwpbxy2vypfs0wph9";
   };
 
-  meta = {
+  meta = with lib; {
     description = "GNU style and diction utilities";
     longDescription = ''
       Diction and style are two old standard Unix commands. Diction identifies
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       characteristics of a document, including sentence length and other
       readability measures.
     '';
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.unix;
+    license = licenses.gpl3Plus;
+    platforms = platforms.unix;
   };
 }

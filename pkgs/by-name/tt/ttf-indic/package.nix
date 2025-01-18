@@ -21,11 +21,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.indlinux.org/wiki/index.php/Downloads";
     description = "Indic Opentype Fonts collection";
-    license = lib.licenses.gpl2Only;
-    maintainers = [ lib.maintainers.akssri ];
-    platforms = lib.platforms.all;
+    license = licenses.gpl2Only;
+    maintainers = [ maintainers.akssri ];
+    platforms = platforms.all;
   };
 }

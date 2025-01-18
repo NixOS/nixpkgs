@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     chmod a+x "$out/bin/nix-binary-cache-start"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Set of scripts to serve the Nix store as a binary cache";
     longDescription = ''
       This package installs a CGI script that serves Nix store path in the
@@ -63,9 +63,9 @@ stdenv.mkDerivation rec {
       nix-binary-cache-start that can be run without any setup to launch
       a binary cache and get the example arguments for its usage.
     '';
-    maintainers = [ lib.maintainers.raskin ];
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.all;
+    maintainers = [ maintainers.raskin ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.all;
     hydraPlatforms = [ ];
   };
 }

@@ -166,12 +166,12 @@ rustPlatform.buildRustPackage rec {
 
   buildFeatures = [ "extended" ];
 
-  meta = {
+  meta = with lib; {
     description = "Generate low-bandwidth search index for your static website";
     homepage = "https://pagefind.app/";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pbsds ];
-    platforms = lib.platforms.unix;
+    license = licenses.mit;
+    maintainers = with maintainers; [ pbsds ];
+    platforms = platforms.unix;
     mainProgram = "pagefind";
   };
 }

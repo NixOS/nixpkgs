@@ -35,11 +35,11 @@ mkHyprlandPlugin hyprland {
   '';
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/pyt0xic/hyprfocus";
     description = "Focus animation plugin for Hyprland inspired by Flashfocus";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ donovanglover ];
-    platforms = lib.platforms.linux;
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ donovanglover ];
+    platforms = platforms.linux;
   };
 }

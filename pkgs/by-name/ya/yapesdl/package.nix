@@ -42,14 +42,14 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "http://yape.plus4.net/";
     description = "Multiplatform Commodore 64 and 264 family emulator";
     changelog = "https://github.com/calmopyrin/yapesdl/releases/tag/${finalAttrs.src.rev}";
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     mainProgram = "yapesdl";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
   };
 })

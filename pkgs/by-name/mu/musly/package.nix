@@ -54,7 +54,7 @@ stdenv.mkDerivation {
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.musly.org";
     description = "Fast and high-quality audio music similarity library written in C/C++";
     longDescription = ''
@@ -64,9 +64,9 @@ stdenv.mkDerivation {
       or try the command line application included in the package and start generating
       some automatic music playlists right away.
     '';
-    license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ ggpeti ];
-    platforms = lib.platforms.unix;
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ ggpeti ];
+    platforms = platforms.unix;
     mainProgram = "musly";
   };
 }

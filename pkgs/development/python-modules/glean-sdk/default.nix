@@ -57,11 +57,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "glean" ];
 
-  meta = {
+  meta = with lib; {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Telemetry client libraries and are a part of the Glean project";
     homepage = "https://mozilla.github.io/glean/book/index.html";
-    license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ melling ];
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ melling ];
   };
 }

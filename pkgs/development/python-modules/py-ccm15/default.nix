@@ -36,10 +36,10 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "ccm15" ];
 
-  meta = {
+  meta = with lib; {
     description = "Python Library to access a Midea CCM15 data converter";
     homepage = "https://github.com/ocalvo/py-ccm15";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ pyrox0 ];
   };
 }

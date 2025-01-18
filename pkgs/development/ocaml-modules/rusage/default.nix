@@ -15,10 +15,10 @@ buildDunePackage rec {
     hash = "sha256-OgYA2Fe1goqoaOS45Z6FBJNNYN/uq+KQoUwG8KSo6Fk=";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Bindings to the GETRUSAGE(2) syscall";
     homepage = "https://github.com/CraigFe/ocaml-rusage";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.mit;
+    maintainers = [ maintainers.vbgl ];
   };
 }

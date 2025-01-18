@@ -30,12 +30,12 @@ python3Packages.buildPythonApplication rec {
     fabio
   ];
 
-  meta = {
+  meta = with lib; {
     changelog = "https://github.com/silx-kit/silx/blob/main/CHANGELOG.rst";
     description = "Software to support data assessment, reduction and analysis at synchrotron radiation facilities";
     homepage = "https://github.com/silx-kit/silx";
-    license = [ lib.licenses.mit ];
-    maintainers = [ lib.maintainers.pmiddend ];
+    license = [ licenses.mit ];
+    maintainers = [ maintainers.pmiddend ];
     mainProgram = "silx";
   };
 

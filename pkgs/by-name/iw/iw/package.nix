@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://wireless.wiki.kernel.org/en/users/Documentation/iw";
     description = "Tool to use nl80211";
     longDescription = ''
@@ -37,9 +37,9 @@ stdenv.mkDerivation (finalAttrs: {
       The old tool iwconfig, which uses Wireless Extensions interface, is
       deprecated and it's strongly recommended to switch to iw and nl80211.
     '';
-    license = lib.licenses.isc;
+    license = licenses.isc;
     mainProgram = "iw";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.linux;
   };
 })

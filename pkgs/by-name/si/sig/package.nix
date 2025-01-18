@@ -17,11 +17,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-afsLf/WsCShjagYWDUA3ZgpgK1XjQiZzISZngzzYybg=";
 
-  meta = {
+  meta = with lib; {
     description = "Interactive grep (for streaming)";
     homepage = "https://github.com/ynqa/sig";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ qaidvoid ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ qaidvoid ];
     mainProgram = "sig";
   };
 }

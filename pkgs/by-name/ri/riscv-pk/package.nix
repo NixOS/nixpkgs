@@ -38,11 +38,11 @@ stdenv.mkDerivation {
     rmdir $out/.cleanup
   '';
 
-  meta = {
+  meta = with lib; {
     description = "RISC-V Proxy Kernel and Bootloader";
     homepage = "https://github.com/riscv/riscv-pk";
-    license = lib.licenses.bsd3;
-    platforms = lib.platforms.riscv;
-    maintainers = [ lib.maintainers.shlevy ];
+    license = licenses.bsd3;
+    platforms = platforms.riscv;
+    maintainers = [ maintainers.shlevy ];
   };
 }

@@ -40,12 +40,12 @@ stdenv.mkDerivation {
   # libintl detection does not work even if provided
   mesonAutoFeatures = "disabled";
 
-  meta = {
+  meta = with lib; {
     description = "Interactive Gtk canvas widget for graph-based interfaces";
     mainProgram = "ganv_bench";
     homepage = "http://drobilla.net";
-    license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ t4ccer ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ t4ccer ];
+    platforms = platforms.linux;
   };
 }

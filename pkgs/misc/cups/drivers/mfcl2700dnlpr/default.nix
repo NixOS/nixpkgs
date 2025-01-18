@@ -55,12 +55,12 @@ stdenv.mkDerivation rec {
     patchelf --set-interpreter "$interpreter" $dir/lpd/rawtobr3
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Brother MFC-L2700DN LPR driver";
     homepage = "http://www.brother.com/";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = lib.licenses.unfree;
-    maintainers = [ lib.maintainers.tv ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+    maintainers = [ maintainers.tv ];
     platforms = [ "i686-linux" ];
   };
 }

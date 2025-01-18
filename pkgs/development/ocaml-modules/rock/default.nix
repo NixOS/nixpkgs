@@ -28,11 +28,11 @@ buildDunePackage rec {
     sexplib0
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Minimalist framework to build extensible HTTP servers and clients";
     homepage = "https://github.com/rgrinberg/opium";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.mit;
+    maintainers = [ maintainers.vbgl ];
   };
 
 }

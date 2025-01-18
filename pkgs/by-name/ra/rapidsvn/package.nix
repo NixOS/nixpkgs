@@ -50,12 +50,12 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = "-std=c++14";
 
-  meta = {
+  meta = with lib; {
     description = "Multi-platform GUI front-end for the Subversion revision system";
     homepage = "http://rapidsvn.tigris.org/";
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     maintainers = [ ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
     mainProgram = "rapidsvn";
   };
 }

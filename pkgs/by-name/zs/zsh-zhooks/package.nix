@@ -22,15 +22,15 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "A tool for displaying the code for all Zsh hook functions";
     homepage = "https://github.com/agkozak/zhooks";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     longDescription = ''
       This Zsh plugin is a tool for displaying the code for all Zsh hook functions (such as precmd), as well as the contents of
       hook arrays (such as precmd_functions).
     '';
-    maintainers = [ lib.maintainers.fidgetingbits ];
-    platforms = lib.platforms.all;
+    maintainers = [ maintainers.fidgetingbits ];
+    platforms = platforms.all;
   };
 }

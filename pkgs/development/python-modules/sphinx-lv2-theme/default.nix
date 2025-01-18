@@ -24,10 +24,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sphinx_lv2_theme" ];
 
-  meta = {
+  meta = with lib; {
     description = "Sphinx theme in the style of the LV2 plugin";
     homepage = "https://gitlab.com/lv2/sphinx_lv2_theme";
-    license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ samueltardieu ];
+    license = licenses.isc;
+    maintainers = with maintainers; [ samueltardieu ];
   };
 }

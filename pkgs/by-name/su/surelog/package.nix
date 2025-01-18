@@ -68,15 +68,15 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postCheck
   '';
 
-  meta = {
+  meta = with lib; {
     description = "SystemVerilog 2017 Pre-processor, Parser, Elaborator, UHDM Compiler";
     homepage = "https://github.com/chipsalliance/Surelog";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     mainProgram = "surelog";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       matthuszagh
       hzeller
     ];
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 })

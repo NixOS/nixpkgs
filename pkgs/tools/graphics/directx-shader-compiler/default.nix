@@ -51,11 +51,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Compiler to compile HLSL programs into DXIL and SPIR-V";
     homepage = "https://github.com/microsoft/DirectXShaderCompiler";
-    platforms = with lib.platforms; linux ++ darwin;
-    license = lib.licenses.ncsa;
-    maintainers = with lib.maintainers; [ Flakebi ];
+    platforms = with platforms; linux ++ darwin;
+    license = licenses.ncsa;
+    maintainers = with maintainers; [ Flakebi ];
   };
 })

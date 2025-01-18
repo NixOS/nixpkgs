@@ -17,11 +17,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-x2oEPFx2KRhnKPX3QjGBM16nkYGclxR5mELGYvxjtMA=";
 
-  meta = {
+  meta = with lib; {
     description = "Alternative rust-based implementation of the proposed XDG Default Terminal Execution Specification";
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     mainProgram = "xdg-terminal-exec";
-    maintainers = with lib.maintainers; [ quantenzitrone ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ quantenzitrone ];
+    platforms = platforms.unix;
   };
 }

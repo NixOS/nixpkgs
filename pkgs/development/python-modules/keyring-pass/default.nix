@@ -66,10 +66,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "keyring_pass" ];
 
-  meta = {
+  meta = with lib; {
     description = "Password Store (pass) backend for python's keyring";
     homepage = "https://github.com/nazarewk/keyring_pass";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.nazarewk ];
+    license = licenses.mit;
+    maintainers = [ maintainers.nazarewk ];
   };
 }

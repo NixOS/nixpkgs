@@ -64,13 +64,13 @@ stdenv.mkDerivation (finalAttrs: {
     gst_all_1.gst-plugins-bad
   ];
 
-  meta = {
+  meta = with lib; {
     changelog = "https://gitlab.com/schmiddi-on-mobile/flare/-/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Unofficial Signal GTK client";
     mainProgram = "flare";
     homepage = "https://gitlab.com/schmiddi-on-mobile/flare";
-    license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ dotlambda ];
-    platforms = lib.platforms.linux;
+    license = licenses.agpl3Plus;
+    maintainers = with maintainers; [ dotlambda ];
+    platforms = platforms.linux;
   };
 })

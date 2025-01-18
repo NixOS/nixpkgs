@@ -14,10 +14,10 @@ build-idris-package {
     sha256 = "0n1kqpxysl3dji0zd8c47ir4144s0n3pb8i1mqp6ylma3r7rlg1l";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Comonads for Idris";
     homepage = "https://github.com/ctford/flying-spaghetti-monster";
-    license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.brainrape ];
+    license = licenses.bsd3;
+    maintainers = [ maintainers.brainrape ];
   };
 }

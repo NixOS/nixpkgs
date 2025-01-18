@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     tests.platomav = callPackage ./test-platomav.nix { amd-ucodegen = finalAttrs.finalPackage; };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Tool to generate AMD microcode files";
     longDescription = ''
       This tool can be used to generate AMD microcode containers as used by the
@@ -52,9 +52,9 @@ stdenv.mkDerivation (finalAttrs: {
       The generated output file can be installed in /lib/firmware/amd-ucode.
     '';
     homepage = "https://github.com/AndyLavr/amd-ucodegen";
-    license = lib.licenses.gpl2Only;
-    platforms = lib.platforms.unix;
+    license = licenses.gpl2Only;
+    platforms = platforms.unix;
     mainProgram = "amd-ucodegen";
-    maintainers = with lib.maintainers; [ d-brasher ];
+    maintainers = with maintainers; [ d-brasher ];
   };
 })

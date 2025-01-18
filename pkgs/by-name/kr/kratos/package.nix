@@ -45,11 +45,11 @@ buildGoModule {
     substituteInPlace Makefile --replace-fail '/usr/bin/env bash' '${stdenv.shell}'
   '';
 
-  meta = {
+  meta = with lib; {
     mainProgram = "kratos";
     description = "API-first Identity and User Management system that is built according to cloud architecture best practices";
     homepage = "https://www.ory.sh/kratos/";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ mrmebelman ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ mrmebelman ];
   };
 }

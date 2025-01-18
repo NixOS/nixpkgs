@@ -17,15 +17,15 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-5+lp5xlwJxFDqzVxptJPX7z0iLoMkgdwHxvRVIXHF7Y=";
 
-  meta = {
+  meta = with lib; {
     description = "Set the system timezone based on IP geolocation";
     homepage = "https://github.com/cdown/tzupdate";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       camillemndn
       doronbehar
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
     mainProgram = "tzupdate";
   };
 }

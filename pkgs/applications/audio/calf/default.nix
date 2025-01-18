@@ -51,12 +51,12 @@ stdenv.mkDerivation rec {
     lv2
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://calf-studio-gear.org";
     description = "Set of high quality open source audio plugins for musicians";
-    license = lib.licenses.lgpl2;
+    license = licenses.lgpl2;
     maintainers = [ ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
     mainProgram = "calfjackhost";
   };
 }

@@ -56,12 +56,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/milgra/sov";
     description = "Workspace overview app for sway";
-    license = lib.licenses.gpl3Only;
+    license = licenses.gpl3Only;
     mainProgram = "sov";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with maintainers; [ ];
     inherit (wayland.meta) platforms;
     # sys/timerfd.h header inexistent
     broken = stdenv.isDarwin;

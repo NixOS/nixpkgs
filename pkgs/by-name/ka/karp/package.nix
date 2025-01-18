@@ -51,12 +51,12 @@ stdenv.mkDerivation {
     qt6.qtwebengine
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://apps.kde.org/karp/";
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ bot-wxt1221 ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ bot-wxt1221 ];
     description = "KDE alternative to PDF arranger";
-    license = with lib.licenses; [
+    license = with licenses; [
       bsd3
       cc-by-sa-40
       cc0

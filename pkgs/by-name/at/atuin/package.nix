@@ -86,11 +86,11 @@ rustPlatform.buildRustPackage rec {
     "--skip=build_aliases"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Replacement for a shell history which records additional commands context with optional encrypted synchronization between machines";
     homepage = "https://github.com/atuinsh/atuin";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       SuperSandro2000
       sciencentistguy
       _0x4A6F

@@ -60,15 +60,15 @@ rustPlatform.buildRustPackage {
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
-  meta = {
+  meta = with lib; {
     description = "Wayland-native, highly customizable runner";
     homepage = "https://github.com/kirottu/anyrun";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [
       khaneliman
       NotAShelf
     ];
     mainProgram = "anyrun";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

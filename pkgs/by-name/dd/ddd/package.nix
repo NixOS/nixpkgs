@@ -57,13 +57,13 @@ stdenv.mkDerivation (finalAttrs: {
     install -D ddd.png $out/share/icons/hicolor/48x48/apps/ddd.png
   '';
 
-  meta = {
+  meta = with lib; {
     changelog = "https://www.gnu.org/software/ddd/news.html";
     description = "Graphical front-end for command-line debuggers";
     homepage = "https://www.gnu.org/software/ddd";
-    license = lib.licenses.gpl3Only;
+    license = licenses.gpl3Only;
     mainProgram = "ddd";
-    maintainers = with lib.maintainers; [ emilytrau ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ emilytrau ];
+    platforms = platforms.unix;
   };
 })

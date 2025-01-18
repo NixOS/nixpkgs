@@ -23,11 +23,11 @@ buildNpmPackage rec {
 
   dontNpmBuild = true;
 
-  meta = {
+  meta = with lib; {
     description = "Little language that compiles into JavaScript";
     homepage = "https://github.com/jashkenas/coffeescript";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "coffee";
-    maintainers = with lib.maintainers; [ cdmistman ];
+    maintainers = with maintainers; [ cdmistman ];
   };
 }

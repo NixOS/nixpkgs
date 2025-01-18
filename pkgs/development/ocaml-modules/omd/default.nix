@@ -19,11 +19,11 @@ buildDunePackage rec {
     substituteInPlace src/dune --replace "bytes)" ")"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Extensible Markdown library and tool in OCaml";
     homepage = "https://github.com/ocaml/omd";
-    license = lib.licenses.isc;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.isc;
+    maintainers = [ maintainers.vbgl ];
     mainProgram = "omd";
   };
 }

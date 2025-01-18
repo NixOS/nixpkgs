@@ -303,17 +303,17 @@ let
 
   passthru.updateScript = ./update.sh;
 
-  meta = {
+  meta = with lib; {
     changelog = "https://chromereleases.googleblog.com/";
     description = "Freeware web browser developed by Google";
     homepage = "https://www.google.com/chrome/browser/";
-    license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [
+    license = licenses.unfree;
+    maintainers = with maintainers; [
       jnsgruk
       johnrtitor
     ];
-    platforms = lib.platforms.darwin ++ [ "x86_64-linux" ];
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    platforms = platforms.darwin ++ [ "x86_64-linux" ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     mainProgram = "google-chrome-stable";
   };
 in

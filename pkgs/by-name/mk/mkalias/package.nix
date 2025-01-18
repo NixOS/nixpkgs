@@ -37,15 +37,15 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Quick'n'dirty tool to make APFS aliases";
     homepage = "https://github.com/vs49688/mkalias";
-    license = lib.licenses.gpl2Only;
+    license = licenses.gpl2Only;
     mainProgram = "mkalias";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       zane
       emilytrau
     ];
-    platforms = lib.platforms.darwin;
+    platforms = platforms.darwin;
   };
 })

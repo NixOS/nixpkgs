@@ -106,12 +106,12 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix PATH : ${lib.makeBinPath [ netpbm ]}
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Open Source Drawing Software for Children";
     homepage = "http://www.tuxpaint.org/";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ woffs ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ woffs ];
+    platforms = platforms.linux;
     mainProgram = "tuxpaint";
   };
 })

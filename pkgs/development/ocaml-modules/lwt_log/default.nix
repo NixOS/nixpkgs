@@ -20,10 +20,10 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ lwt ];
 
-  meta = {
+  meta = with lib; {
     description = "Lwt logging library (deprecated)";
     homepage = "https://github.com/aantron/lwt_log";
-    license = lib.licenses.lgpl21;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.lgpl21;
+    maintainers = [ maintainers.vbgl ];
   };
 }

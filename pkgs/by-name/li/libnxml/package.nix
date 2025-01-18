@@ -20,11 +20,11 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ curl ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/bakulf/libnxml";
     description = "C library for parsing, writing and creating XML 1.0 and 1.1 files or streams";
-    license = lib.licenses.lgpl2;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ sigmanificient ];
+    license = licenses.lgpl2;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ sigmanificient ];
   };
 })

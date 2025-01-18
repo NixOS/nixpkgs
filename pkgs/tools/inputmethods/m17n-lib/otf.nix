@@ -60,11 +60,11 @@ stdenv.mkDerivation rec {
       --replace "pkg-config" "${pkg-config}/bin/pkg-config"
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.nongnu.org/m17n/";
     description = "Multilingual text processing library (libotf)";
-    license = lib.licenses.lgpl21Plus;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ bendlas ];
+    license = licenses.lgpl21Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ bendlas ];
   };
 }

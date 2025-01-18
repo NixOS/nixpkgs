@@ -35,10 +35,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyflipper" ];
 
-  meta = {
+  meta = with lib; {
     description = "Flipper Zero Python CLI Wrapper";
     homepage = "https://github.com/wh00hw/pyFlipper";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ siraben ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ siraben ];
   };
 }

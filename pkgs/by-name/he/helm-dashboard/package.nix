@@ -26,7 +26,7 @@ buildGoModule rec {
     "-X main.version=v${version}"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Simplified way of working with Helm";
     mainProgram = "helm-dashboard";
     longDescription = ''
@@ -34,7 +34,7 @@ buildGoModule rec {
       see their revision history and corresponding k8s resources.
     '';
     homepage = "https://github.com/komodorio/helm-dashboard/";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ qjoly ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ qjoly ];
   };
 }

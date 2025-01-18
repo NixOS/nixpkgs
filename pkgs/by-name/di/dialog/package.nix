@@ -40,12 +40,12 @@ stdenv.mkDerivation (finalAttrs: {
     "install${lib.optionalString withLibrary "-full"}"
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://invisible-island.net/dialog/dialog.html";
     description = "Display dialog boxes from shell";
-    license = lib.licenses.lgpl21Plus;
+    license = licenses.lgpl21Plus;
     mainProgram = "dialog";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       AndersonTorres
       spacefrogg
     ];

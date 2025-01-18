@@ -63,12 +63,12 @@ flutter327.buildFlutterApplication {
     })
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Open source Jellyfin music player";
     homepage = "https://github.com/jmshrv/finamp";
-    license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ dseelp ];
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ dseelp ];
     mainProgram = "finamp";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

@@ -59,11 +59,11 @@ stdenv.mkDerivation rec {
     "lib"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "And-Inverter Graph (AIG) utilities";
     homepage = "https://fmv.jku.at/aiger/";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ thoughtpolice ];
-    platforms = lib.platforms.unix;
+    license = licenses.mit;
+    maintainers = with maintainers; [ thoughtpolice ];
+    platforms = platforms.unix;
   };
 }

@@ -28,11 +28,11 @@ buildGoModule rec {
     "-short"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Go testing in the browser. Integrates with `go test`. Write behavioral tests in Go";
     mainProgram = "goconvey";
     homepage = "https://github.com/smartystreets/goconvey";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ vdemeester ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ vdemeester ];
   };
 }

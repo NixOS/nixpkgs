@@ -27,10 +27,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [ unittestCheckHook ];
   pythonImportsCheck = [ "baycomp" ];
 
-  meta = {
+  meta = with lib; {
     description = "Library for Bayesian comparison of classifiers";
     homepage = "https://github.com/janezd/baycomp";
-    license = [ lib.licenses.mit ];
-    maintainers = [ lib.maintainers.lucasew ];
+    license = [ licenses.mit ];
+    maintainers = [ maintainers.lucasew ];
   };
 }

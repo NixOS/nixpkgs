@@ -67,11 +67,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     description = "SDL image library";
     homepage = "https://github.com/libsdl-org/SDL_image";
-    license = lib.licenses.zlib;
-    maintainers = lib.teams.sdl.members ++ (with lib.maintainers; [ ]);
-    platforms = lib.platforms.unix;
+    license = licenses.zlib;
+    maintainers = teams.sdl.members ++ (with maintainers; [ ]);
+    platforms = platforms.unix;
   };
 })

@@ -22,11 +22,11 @@ buildNpmPackage {
 
   dontNpmBuild = true;
 
-  meta = {
+  meta = with lib; {
     description = "Mighty CSS linter that helps you avoid errors and enforce conventions";
     mainProgram = "stylelint";
     homepage = "https://stylelint.io";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ momeemt ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ momeemt ];
   };
 }

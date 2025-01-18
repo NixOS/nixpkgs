@@ -34,12 +34,12 @@ rustPlatform.buildRustPackage rec {
 
   updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Concentrator HAL daemon for LoRa gateways";
     homepage = "https://www.chirpstack.io/";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.stv0g ];
-    platforms = lib.platforms.linux;
+    license = licenses.mit;
+    maintainers = [ maintainers.stv0g ];
+    platforms = platforms.linux;
     mainProgram = "chirpstack-concentratord";
   };
 }

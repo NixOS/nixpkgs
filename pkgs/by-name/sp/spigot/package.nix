@@ -43,12 +43,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.chiark.greenend.org.uk/~sgtatham/spigot/";
     description = "Command-line exact real calculator";
     mainProgram = "spigot";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = lib.platforms.unix;
+    license = licenses.mit;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.unix;
   };
 })

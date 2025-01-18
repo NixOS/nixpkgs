@@ -38,11 +38,11 @@ buildGoModule rec {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Remote repository management made easy";
     homepage = "https://github.com/x-motemen/ghq";
-    maintainers = with lib.maintainers; [ sigma ];
-    license = lib.licenses.mit;
+    maintainers = with maintainers; [ sigma ];
+    license = licenses.mit;
     mainProgram = "ghq";
   };
 }

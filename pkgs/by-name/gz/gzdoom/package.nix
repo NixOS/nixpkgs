@@ -108,7 +108,7 @@ stdenv.mkDerivation rec {
     done;
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/ZDoom/gzdoom";
     description = "Modder-friendly OpenGL and Vulkan source port based on the DOOM engine";
     mainProgram = "gzdoom";
@@ -116,9 +116,9 @@ stdenv.mkDerivation rec {
       GZDoom is a feature centric port for all DOOM engine games, based on
       ZDoom, adding an OpenGL renderer and powerful scripting capabilities.
     '';
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
       azahi
       lassulus
       Gliczy

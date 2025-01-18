@@ -66,10 +66,10 @@ buildPythonPackage {
     ln -s ${dic-src} $out/${python.sitePackages}/pyopenjtalk/${dic-dirname}
   '';
 
-  meta = {
+  meta = with lib; {
     description = "VOICEVOX's fork of the pyopenjtalk text-to-speech library";
     homepage = "https://github.com/VOICEVOX/pyopenjtalk";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ tomasajt ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ tomasajt ];
   };
 }

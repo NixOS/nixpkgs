@@ -49,14 +49,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Ligature-based symbol font and a mapping function for sketchybar";
     longDescription = ''
       A ligature-based symbol font and a mapping function for sketchybar, inspired by simple-bar's usage of community-contributed minimalistic app icons.
     '';
     homepage = "https://github.com/kvndrsslr/sketchybar-app-font";
-    license = lib.licenses.cc0;
-    maintainers = with lib.maintainers; [ khaneliman ];
-    platforms = lib.platforms.all;
+    license = licenses.cc0;
+    maintainers = with maintainers; [ khaneliman ];
+    platforms = platforms.all;
   };
 })

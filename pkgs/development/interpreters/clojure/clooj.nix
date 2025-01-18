@@ -26,12 +26,12 @@ stdenv.mkDerivation rec {
     makeWrapper ${jre}/bin/java $out/bin/clooj --add-flags "-jar $out/share/java/clooj.jar"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Lightweight IDE for Clojure";
     mainProgram = "clooj";
     homepage = "https://github.com/arthuredelstein/clooj";
-    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
-    license = lib.licenses.bsd3;
-    platforms = lib.platforms.all;
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = licenses.bsd3;
+    platforms = platforms.all;
   };
 }

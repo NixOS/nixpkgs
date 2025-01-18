@@ -47,12 +47,12 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "/usr/share/" "${placeholder "out"}/share/"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Simple kanban-style task organiser";
     homepage = "https://github.com/smolBlackCat/progress-tracker";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "progress";
-    maintainers = with lib.maintainers; [ Guanran928 ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ Guanran928 ];
+    platforms = platforms.linux;
   };
 })

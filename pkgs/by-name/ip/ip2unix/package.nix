@@ -69,12 +69,12 @@ stdenv.mkDerivation rec {
     fi
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/nixcloud/ip2unix";
     description = "Turn IP sockets into Unix domain sockets";
-    platforms = lib.platforms.linux;
-    license = lib.licenses.lgpl3;
-    maintainers = [ lib.maintainers.aszlig ];
+    platforms = platforms.linux;
+    license = licenses.lgpl3;
+    maintainers = [ maintainers.aszlig ];
     mainProgram = "ip2unix";
   };
 }

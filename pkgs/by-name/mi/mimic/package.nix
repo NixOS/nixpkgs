@@ -61,11 +61,11 @@ stdenv.mkDerivation rec {
       --run "export ALSA_PLUGIN_DIR=${alsa-plugins}/lib/alsa-lib"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Mycroft's TTS engine, based on CMU's Flite (Festival Lite)";
     homepage = "https://mimic.mycroft.ai/";
-    license = lib.licenses.free;
-    platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.fx-chun ];
+    license = licenses.free;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.fx-chun ];
   };
 }

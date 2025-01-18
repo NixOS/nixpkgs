@@ -41,10 +41,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "matrix_client" ];
 
-  meta = {
+  meta = with lib; {
     description = "Python Matrix Client-Server SDK";
     homepage = "https://github.com/matrix-org/matrix-python-sdk";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ olejorgenb ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ olejorgenb ];
   };
 }

@@ -17,10 +17,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ future ];
 
-  meta = {
+  meta = with lib; {
     description = "lz-string for python";
     homepage = "https://github.com/gkovacs/lz-string-python";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ obadz ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ obadz ];
   };
 }

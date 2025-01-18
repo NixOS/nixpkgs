@@ -26,11 +26,11 @@ buildNimPackage (finalAttrs: {
     install -D icons/hicolor/48x48/snekim.svg -t $out/share/icons/hicolor/48x48/apps
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://codeberg.org/annaaurora/snekim";
     description = "Simple implementation of the classic snake game";
     mainProgram = "snekim";
-    license = lib.licenses.lgpl3Only;
-    maintainers = [ lib.maintainers.annaaurora ];
+    license = licenses.lgpl3Only;
+    maintainers = [ maintainers.annaaurora ];
   };
 })

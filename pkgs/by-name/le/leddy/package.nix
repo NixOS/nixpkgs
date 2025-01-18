@@ -25,11 +25,11 @@ rustPlatform.buildRustPackage rec {
   ];
   doCheck = false; # no tests
 
-  meta = {
+  meta = with lib; {
     description = "LED controller for the Fnatic miniStreak and Fnatic Streak keyboards";
     homepage = "https://github.com/XanClic/leddy";
-    license = lib.licenses.gpl3Plus;
-    maintainers = [ lib.maintainers.jmir ];
+    license = licenses.gpl3Plus;
+    maintainers = [ maintainers.jmir ];
     mainProgram = "leddy";
   };
 }

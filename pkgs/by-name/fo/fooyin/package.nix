@@ -65,13 +65,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.LANG = "C.UTF-8";
 
-  meta = {
+  meta = with lib; {
     description = "Customisable music player";
     homepage = "https://www.fooyin.org/";
     downloadPage = "https://github.com/fooyin/fooyin";
     mainProgram = "fooyin";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ peterhoeg ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ peterhoeg ];
+    platforms = platforms.linux;
   };
 })

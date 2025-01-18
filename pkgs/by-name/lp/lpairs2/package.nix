@@ -31,13 +31,13 @@ stdenv.mkDerivation (finalAttrs: {
     extraRegex = "(?!.*-win(32|64)).*";
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "http://lgames.sourceforge.net/LPairs/";
     description = "Matching the pairs - a typical Memory Game";
-    license = with lib.licenses; [ gpl2Plus ];
+    license = with licenses; [ gpl2Plus ];
     mainProgram = "lpairs2";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
   };
 })

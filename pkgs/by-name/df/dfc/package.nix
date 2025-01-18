@@ -20,12 +20,12 @@ stdenv.mkDerivation rec {
     gettext
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://projects.gw-computing.net/projects/dfc";
     description = "Displays file system space usage using graphs and colors";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ qknight ];
-    platforms = lib.platforms.all;
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ qknight ];
+    platforms = platforms.all;
     mainProgram = "dfc";
   };
 }

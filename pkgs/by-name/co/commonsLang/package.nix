@@ -21,12 +21,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Provides additional methods to manipulate standard Java library classes";
     homepage = "https://commons.apache.org/proper/commons-lang";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ copumpkin ];
-    platforms = with lib.platforms; unix;
-    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ copumpkin ];
+    platforms = with platforms; unix;
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
   };
 })

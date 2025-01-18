@@ -26,11 +26,11 @@ rustPlatform.buildRustPackage rec {
   # Tests require rustup.
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Rust debugger for Linux x86-64";
     homepage = "https://github.com/godzie44/BugStalker";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ jacg ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ jacg ];
     mainProgram = "bs";
     platforms = [ "x86_64-linux" ];
   };

@@ -30,10 +30,10 @@ stdenv.mkDerivation rec {
     sha256 = "1gnl80i5zkyj2lpnb4g0q0r5npba1x6cnafl2jb3i3pzlfz1bndr";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Simple tool for transporting data over the network";
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     homepage = "https://mamuti.net/netrw/index.en.html";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }

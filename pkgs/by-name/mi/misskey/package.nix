@@ -115,12 +115,12 @@ stdenv.mkDerivation (finalAttrs: {
     tests.misskey = nixosTests.misskey;
   };
 
-  meta = {
+  meta = with lib; {
     description = "🌎 An interplanetary microblogging platform 🚀";
     homepage = "https://misskey-hub.net/";
-    license = lib.licenses.agpl3Only;
-    maintainers = [ lib.maintainers.feathecutie ];
-    platforms = lib.platforms.unix;
+    license = licenses.agpl3Only;
+    maintainers = [ maintainers.feathecutie ];
+    platforms = platforms.unix;
     mainProgram = "misskey";
   };
 })

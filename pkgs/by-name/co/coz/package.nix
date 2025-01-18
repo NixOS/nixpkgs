@@ -43,12 +43,12 @@ python3Packages.buildPythonApplication rec {
     chmod -x $out/include/coz.h
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/plasma-umass/coz";
     description = "Profiler based on casual profiling";
     mainProgram = "coz";
-    license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [
+    license = licenses.bsd2;
+    maintainers = with maintainers; [
       zimbatm
       aleksana
     ];

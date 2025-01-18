@@ -114,17 +114,17 @@ maven.buildMavenPackage rec {
     libayatana-appindicator
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Free client-side encryption for your cloud files";
     homepage = "https://cryptomator.org";
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     mainProgram = "cryptomator";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       bachp
       gepbird
     ];
     platforms = [ "x86_64-linux" ];
-    sourceProvenance = with lib.sourceTypes; [
+    sourceProvenance = with sourceTypes; [
       fromSource
       binaryBytecode # deps
     ];

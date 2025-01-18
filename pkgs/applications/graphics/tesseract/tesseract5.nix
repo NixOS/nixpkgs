@@ -52,12 +52,12 @@ stdenv.mkDerivation rec {
     ];
 
   passthru.updateScript = nix-update-script { };
-  meta = {
+  meta = with lib; {
     description = "OCR engine";
     homepage = "https://github.com/tesseract-ocr/tesseract";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ patrickdag ];
-    platforms = lib.platforms.unix;
+    license = licenses.asl20;
+    maintainers = with maintainers; [ patrickdag ];
+    platforms = platforms.unix;
     mainProgram = "tesseract";
   };
 }

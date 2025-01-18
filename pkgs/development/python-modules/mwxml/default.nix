@@ -41,11 +41,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mwxml" ];
 
-  meta = {
+  meta = with lib; {
     description = "Set of utilities for processing MediaWiki XML dump data";
     mainProgram = "mwxml";
     homepage = "https://github.com/mediawiki-utilities/python-mwxml";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ GaetanLepage ];
   };
 }

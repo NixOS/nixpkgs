@@ -40,12 +40,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [ "--disable-setgid" ];
 
-  meta = {
+  meta = with lib; {
     description = "Puzzle game similar to Bejeweled or Diamond Mine";
     mainProgram = "gweled";
     homepage = "https://gweled.org";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ aleksana ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ aleksana ];
   };
 })

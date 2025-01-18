@@ -31,11 +31,11 @@ buildNpmPackage rec {
     cp -R dist/* $out/
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Custom weather card with charts";
     homepage = "https://github.com/mlamberts78/weather-chart-card";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ hexa ];
-    platforms = lib.platforms.all;
+    license = licenses.mit;
+    maintainers = with maintainers; [ hexa ];
+    platforms = platforms.all;
   };
 }

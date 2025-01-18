@@ -31,12 +31,12 @@ rustPlatform.buildRustPackage rec {
     installManPage gobble.1
   '';
 
-  meta = {
+  meta = with lib; {
     description = "gobbles your terminal";
     homepage = "https://github.com/EmperorPenguin18/gobble";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ vuimuich ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ vuimuich ];
+    platforms = platforms.linux;
     mainProgram = "gobble";
   };
 }

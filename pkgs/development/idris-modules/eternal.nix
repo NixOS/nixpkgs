@@ -24,10 +24,10 @@ build-idris-package {
     sed -i 's/\/usr\/local\/idris\/readProcess.o/readProcess.o/g' source/Control/Eternal/System/Process.idr
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Infix pipe operators and some Nat, Float, String conversions";
     homepage = "https://github.com/Heather/Control.Eternal.Idris";
-    license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.brainrape ];
+    license = licenses.bsd3;
+    maintainers = [ maintainers.brainrape ];
   };
 }

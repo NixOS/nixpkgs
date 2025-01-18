@@ -20,10 +20,10 @@ buildPythonPackage rec {
   # No tests existing
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Python wrapper for dmenu";
     homepage = "https://dmenu.readthedocs.io";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.nico202 ];
+    license = licenses.mit;
+    maintainers = [ maintainers.nico202 ];
   };
 }

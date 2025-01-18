@@ -36,7 +36,7 @@ let
   pname = "plex-desktop";
   version = "1.101.0";
   rev = "75";
-  meta = {
+  meta = with lib; {
     homepage = "https://plex.tv/";
     description = "Streaming media player for Plex";
     longDescription = ''
@@ -45,8 +45,8 @@ let
       but uses a more powerful playback engine as well as
       some other advance features.
     '';
-    maintainers = with lib.maintainers; [ detroyejr ];
-    license = lib.licenses.unfree;
+    maintainers = with maintainers; [ detroyejr ];
+    license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     mainProgram = "plex-desktop";
   };

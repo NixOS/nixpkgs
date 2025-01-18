@@ -15,11 +15,11 @@ buildDunePackage rec {
     hash = "sha256-l0NvWPGBd1WR+b50WXEYfptuCUjda8MlZ/o5YngRNIg=";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Common interface for tracing/instrumentation libraries in OCaml";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     homepage = "https://c-cube.github.io/ocaml-trace/";
-    maintainers = [ lib.maintainers.vbgl ];
+    maintainers = [ maintainers.vbgl ];
   };
 
 }

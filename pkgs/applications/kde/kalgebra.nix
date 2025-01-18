@@ -41,10 +41,10 @@ mkDerivation {
     plasma-framework
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://apps.kde.org/kalgebra/";
     description = "2D and 3D Graph Calculator";
-    license = with lib.licenses; [ gpl2Plus ];
-    maintainers = with lib.maintainers; [ ninjafb ];
+    license = with licenses; [ gpl2Plus ];
+    maintainers = with maintainers; [ ninjafb ];
   };
 }

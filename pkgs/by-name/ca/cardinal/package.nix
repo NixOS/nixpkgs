@@ -89,16 +89,16 @@ stdenv.mkDerivation rec {
     rm -f $out/bin/CardinalNative
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Plugin wrapper around VCV Rack";
     homepage = "https://github.com/DISTRHO/cardinal";
-    license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl3;
+    maintainers = with maintainers; [
       magnetophon
       PowerUser64
     ];
     mainProgram = "Cardinal";
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
     # never built on aarch64-darwin, x86_64-darwin since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isDarwin;
   };

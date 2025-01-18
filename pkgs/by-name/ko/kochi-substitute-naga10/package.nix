@@ -24,7 +24,7 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Japanese font, non-free replacement for MS Gothic and MS Mincho";
     longDescription = ''
       Kochi Gothic and Kochi Mincho were developed as free replacements for the
@@ -34,7 +34,7 @@ stdenvNoCC.mkDerivation rec {
       Debian version.
     '';
     homepage = "https://osdn.net/projects/efont/";
-    license = lib.licenses.unfreeRedistributable;
-    maintainers = [ lib.maintainers.auntie ];
+    license = licenses.unfreeRedistributable;
+    maintainers = [ maintainers.auntie ];
   };
 }

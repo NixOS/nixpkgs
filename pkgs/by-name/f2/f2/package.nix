@@ -26,11 +26,11 @@ buildGoModule rec {
   # has no tests
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Command-line batch renaming tool";
     homepage = "https://github.com/ayoisaiah/f2";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ zendo ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ zendo ];
     mainProgram = "f2";
   };
 }

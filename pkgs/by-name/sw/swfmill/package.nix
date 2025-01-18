@@ -29,11 +29,11 @@ stdenv.mkDerivation rec {
   # fatal error: 'libxml/xpath.h' file not found
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-I${libxml2.dev}/include/libxml2";
 
-  meta = {
+  meta = with lib; {
     description = "Xml2swf and swf2xml processor with import functionalities";
     homepage = "http://swfmill.org";
-    license = lib.licenses.gpl2Only;
-    platforms = lib.platforms.unix;
+    license = licenses.gpl2Only;
+    platforms = platforms.unix;
     mainProgram = "swfmill";
   };
 }

@@ -28,12 +28,12 @@ vscode-utils.buildVscodeMarketplaceExtension {
     jq '.contributes.configuration.properties."typst-lsp.serverPath".default = "${lib.getExe typst-lsp}"' package.json | sponge package.json
   '';
 
-  meta = {
+  meta = with lib; {
     changelog = "https://marketplace.visualstudio.com/items/nvarner.typst-lsp/changelog";
     description = "VSCode extension for providing a language server for Typst";
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=nvarner.typst-lsp";
     homepage = "https://github.com/nvarner/typst-lsp";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.drupol ];
+    license = licenses.mit;
+    maintainers = [ maintainers.drupol ];
   };
 }

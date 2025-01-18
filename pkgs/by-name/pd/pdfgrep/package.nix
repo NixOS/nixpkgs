@@ -38,15 +38,15 @@ stdenv.mkDerivation rec {
     pcre2
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Commandline utility to search text in PDF files";
     homepage = "https://pdfgrep.org/";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [
       qknight
       fpletz
     ];
-    platforms = with lib.platforms; unix;
+    platforms = with platforms; unix;
     mainProgram = "pdfgrep";
   };
 }

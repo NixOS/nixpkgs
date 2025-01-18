@@ -59,11 +59,11 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libXtst
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Tray plugins that integrated into task bar";
     homepage = "https://github.com/linuxdeepin/dde-tray-loader";
-    license = with lib.licenses; [ gpl3Plus ];
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ rewine ];
+    license = with licenses; [ gpl3Plus ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ rewine ];
   };
 })

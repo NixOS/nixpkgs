@@ -25,15 +25,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://launchpad.net/smpq";
     description = "StormLib MPQ archiving utility";
-    license = lib.licenses.gpl3Only;
+    license = licenses.gpl3Only;
     mainProgram = "smpq";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       aanderse
       karolchmist
     ];
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 })

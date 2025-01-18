@@ -202,12 +202,12 @@ stdenv.mkDerivation (finalAttrs: {
     ignoredVersions = ".*-(beta|rc).*";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Vulkan Portability implementation built on top of Apple’s Metal API";
     homepage = "https://github.com/KhronosGroup/MoltenVK";
     changelog = "https://github.com/KhronosGroup/MoltenVK/releases";
-    maintainers = [ lib.maintainers.reckenrode ];
-    license = lib.licenses.asl20;
-    platforms = lib.platforms.darwin;
+    maintainers = [ maintainers.reckenrode ];
+    license = licenses.asl20;
+    platforms = platforms.darwin;
   };
 })

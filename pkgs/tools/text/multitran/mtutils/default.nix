@@ -39,12 +39,12 @@ stdenv.mkDerivation rec {
       src/converter.cc;
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://multitran.sourceforge.net/";
     description = "Multitran: simple command line utilities for dictionary maintenance";
     mainProgram = "mtquery";
-    license = lib.licenses.gpl2Only;
+    license = licenses.gpl2Only;
     maintainers = [ ];
-    platforms = with lib.platforms; linux;
+    platforms = with platforms; linux;
   };
 }

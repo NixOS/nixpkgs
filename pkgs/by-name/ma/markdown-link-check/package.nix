@@ -22,11 +22,11 @@ buildNpmPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Checks all of the hyperlinks in a markdown text to determine if they are alive or dead";
     mainProgram = "markdown-link-check";
     homepage = "https://github.com/tcort/markdown-link-check";
-    license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    license = licenses.isc;
+    maintainers = with maintainers; [ pyrox0 ];
   };
 }

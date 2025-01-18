@@ -25,7 +25,7 @@ stdenv.mkDerivation {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = {
+  meta = with lib; {
     description = "Multiple Repository management tool";
     longDescription = ''
       mr is a tool to manage all your version control repos. It can
@@ -36,8 +36,8 @@ stdenv.mkDerivation {
       other version control systems can easily be added.
     '';
     homepage = "http://myrepos.branchable.com/";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ antono ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ antono ];
   };
 }

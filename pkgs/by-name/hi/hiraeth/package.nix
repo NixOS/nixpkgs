@@ -16,10 +16,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-bp9xDB7tplHEBR1Z+Ouks2ZwcktAhaZ/zSSPcu7LWr8=";
 
-  meta = {
+  meta = with lib; {
     description = "Share files with an expiration date";
-    license = lib.licenses.agpl3Plus;
-    maintainers = [ lib.maintainers.lukaswrz ];
+    license = licenses.agpl3Plus;
+    maintainers = [ maintainers.lukaswrz ];
     mainProgram = "hiraeth";
   };
 }

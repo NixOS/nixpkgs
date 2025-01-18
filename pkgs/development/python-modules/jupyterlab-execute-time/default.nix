@@ -33,10 +33,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jupyterlab_execute_time" ];
 
-  meta = {
+  meta = with lib; {
     description = "JupyterLab extension for displaying cell timings";
     homepage = "https://github.com/deshaw/jupyterlab-execute-time";
-    license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.vglfr ];
+    license = licenses.bsd3;
+    maintainers = [ maintainers.vglfr ];
   };
 }

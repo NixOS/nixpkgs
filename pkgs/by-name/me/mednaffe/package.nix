@@ -41,12 +41,12 @@ stdenv.mkDerivation (finalAttrs: {
     )
   '';
 
-  meta = {
+  meta = with lib; {
     description = "GTK-based frontend for mednafen emulator";
     mainProgram = "mednaffe";
     homepage = "https://github.com/AmatCoder/mednaffe";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.unix;
   };
 })

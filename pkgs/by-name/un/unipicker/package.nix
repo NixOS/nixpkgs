@@ -36,12 +36,12 @@ stdenv.mkDerivation (finalAttrs: {
     "DESTDIR=${placeholder "out"}"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "CLI utility for searching unicode characters by description and optionally copying them to clipboard";
     homepage = "https://github.com/jeremija/unipicker";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ sigmanificient ];
-    platforms = lib.platforms.unix;
+    license = licenses.mit;
+    maintainers = with maintainers; [ sigmanificient ];
+    platforms = platforms.unix;
     mainProgram = "unipicker";
   };
 })

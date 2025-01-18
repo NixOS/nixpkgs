@@ -17,11 +17,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-vdq2nEFhvteQEqEZNbSegivvkU6cTxSmZLc6oaxLkwY=";
 
-  meta = {
+  meta = with lib; {
     description = "Find and replace text in source files";
     mainProgram = "ruplacer";
     homepage = "https://github.com/TankerHQ/ruplacer";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ Br1ght0ne ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ Br1ght0ne ];
   };
 }

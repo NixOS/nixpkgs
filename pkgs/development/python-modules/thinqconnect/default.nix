@@ -36,10 +36,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "thinqconnect" ];
 
-  meta = {
+  meta = with lib; {
     description = "Module to interacting with the LG ThinQ Connect Open API";
     homepage = "https://github.com/thinq-connect/pythinqconnect";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ fab ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
   };
 }

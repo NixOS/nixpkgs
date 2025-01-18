@@ -22,11 +22,11 @@ python3Packages.buildPythonApplication rec {
     pyyaml
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Formatter to make your CMake code the real treasure";
     homepage = "https://github.com/BlankSpruce/gersemi";
-    license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ xeals ];
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ xeals ];
     mainProgram = "gersemi";
   };
 }

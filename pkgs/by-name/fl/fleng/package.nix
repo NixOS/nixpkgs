@@ -15,12 +15,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "http://www.call-with-current-continuation.org/fleng/fleng.html";
     description = "Low level concurrent logic programming language descended from Prolog";
-    license = lib.licenses.publicDomain;
-    maintainers = with lib.maintainers; [ ];
-    platforms = lib.platforms.unix;
+    license = licenses.publicDomain;
+    maintainers = with maintainers; [ ];
+    platforms = platforms.unix;
   };
 })
 # TODO: bootstrap

@@ -22,11 +22,11 @@ buildGoModule rec {
     "./tools"
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/kubernetes/kube-state-metrics";
     description = "Add-on agent to generate and expose k8s cluster-level metrics";
-    license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.eskytthe ];
-    platforms = lib.platforms.unix;
+    license = licenses.asl20;
+    maintainers = [ maintainers.eskytthe ];
+    platforms = platforms.unix;
   };
 }

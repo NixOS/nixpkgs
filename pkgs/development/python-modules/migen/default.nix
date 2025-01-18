@@ -30,10 +30,10 @@ buildPythonPackage {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = {
+  meta = with lib; {
     description = " A Python toolbox for building complex digital hardware";
     homepage = "https://m-labs.hk/migen";
-    license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ l-as ];
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ l-as ];
   };
 }

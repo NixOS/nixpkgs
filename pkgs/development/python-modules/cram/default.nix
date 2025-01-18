@@ -29,12 +29,12 @@ buildPythonPackage rec {
     scripts/cram tests
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Simple testing framework for command line applications";
     mainProgram = "cram";
     homepage = "https://bitheap.org/cram/";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ jluttine ];
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ jluttine ];
     # Tests fail on i686: https://hydra.nixos.org/build/52896671/nixlog/4
     broken = stdenv.hostPlatform.isi686;
   };

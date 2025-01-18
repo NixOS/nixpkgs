@@ -28,12 +28,12 @@ buildGoModule rec {
       --replace-fail "Test_HttpFilter" "Skip_HttpFilter"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Black box fuzzer for web applications";
     homepage = "https://github.com/Brum3ns/firefly";
     # https://github.com/Brum3ns/firefly/issues/12
-    license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ fab ];
+    license = licenses.unfree;
+    maintainers = with maintainers; [ fab ];
     mainProgram = "firefly";
   };
 }

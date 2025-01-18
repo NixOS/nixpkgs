@@ -69,11 +69,11 @@ backendStdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Samples for CUDA Developers which demonstrates features in CUDA Toolkit";
     # CUDA itself is proprietary, but these sample apps are not.
-    license = lib.licenses.bsd3;
+    license = licenses.bsd3;
     platforms = [ "x86_64-linux" ];
-    maintainers = with lib.maintainers; [ obsidian-systems-maintenance ] ++ lib.teams.cuda.members;
+    maintainers = with maintainers; [ obsidian-systems-maintenance ] ++ teams.cuda.members;
   };
 })

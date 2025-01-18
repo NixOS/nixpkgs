@@ -32,13 +32,13 @@ stdenv.mkDerivation {
     install -vD wavegain "$out/bin/wavegain"
   '';
 
-  meta = {
+  meta = with lib; {
     broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     description = "ReplayGain for wave files";
     homepage = "https://github.com/MestreLion/wavegain";
-    license = lib.licenses.lgpl21;
-    platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.robbinch ];
+    license = licenses.lgpl21;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.robbinch ];
     mainProgram = "wavegain";
   };
 }

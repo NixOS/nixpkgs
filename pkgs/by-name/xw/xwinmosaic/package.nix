@@ -39,11 +39,11 @@ stdenv.mkDerivation rec {
     libXdamage
   ];
 
-  meta = {
+  meta = with lib; {
     description = "X window switcher drawing a colourful grid";
-    license = lib.licenses.bsd2;
-    maintainers = [ lib.maintainers.raskin ];
-    platforms = lib.platforms.linux;
+    license = licenses.bsd2;
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.linux;
     mainProgram = "xwinmosaic";
   };
 }

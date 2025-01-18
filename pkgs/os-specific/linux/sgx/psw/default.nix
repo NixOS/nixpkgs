@@ -261,15 +261,15 @@ stdenv.mkDerivation rec {
     service = nixosTests.aesmd;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Intel SGX Architectural Enclave Service Manager";
     homepage = "https://github.com/intel/linux-sgx";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       phlip9
       veehaitch
       citadelcore
     ];
     platforms = [ "x86_64-linux" ];
-    license = [ lib.licenses.bsd3 ];
+    license = [ licenses.bsd3 ];
   };
 }

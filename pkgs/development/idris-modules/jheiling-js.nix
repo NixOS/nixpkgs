@@ -22,10 +22,10 @@ build-idris-package {
     sha256 = "1mvpxwszh56cfrf509qiadn7gp2l4syanhvdq6v1br0y03g8wk9v";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Js library for Idris";
     homepage = "https://github.com/jheiling/idris-js";
-    license = lib.licenses.unlicense;
-    maintainers = [ lib.maintainers.brainrape ];
+    license = licenses.unlicense;
+    maintainers = [ maintainers.brainrape ];
   };
 }

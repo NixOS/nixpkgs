@@ -89,12 +89,12 @@ buildPythonPackage rec {
     "PyQt6.QtWebEngineWidgets"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Python bindings for Qt6 WebEngine";
     homepage = "https://riverbankcomputing.com/";
-    license = lib.licenses.gpl3Only;
+    license = licenses.gpl3Only;
     inherit (mesa.meta) platforms;
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       LunNova
       nrdxp
     ];

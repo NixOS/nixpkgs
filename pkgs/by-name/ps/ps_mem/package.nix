@@ -15,12 +15,12 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-jCfPtPSky/QFk9Xo/tq3W7609Pie1yLC4iS4dqjCa+E=";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Utility to accurately report the in core memory usage for a program";
     homepage = "https://github.com/pixelb/ps_mem";
-    license = lib.licenses.lgpl21;
-    maintainers = with lib.maintainers; [ sigmanificient ];
-    platforms = lib.platforms.linux;
+    license = licenses.lgpl21;
+    maintainers = with maintainers; [ sigmanificient ];
+    platforms = platforms.linux;
     mainProgram = "ps_mem";
   };
 }

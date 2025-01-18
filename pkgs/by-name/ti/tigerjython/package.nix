@@ -81,7 +81,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     install -Dm444 ${icon} $out/share/icons/hicolor/64x64/apps/tigerjython.png
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.tigerjython.ch";
     downloadPage = "https://tigerjython.ch/en/products/download";
     description = "Simple development environment for programming in Python";
@@ -91,9 +91,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       You will find a wide variety of tutorials and can get started right away
       in programming environments specially developed for you.
     '';
-    license = lib.licenses.unfreeRedistributable;
-    maintainers = with lib.maintainers; [ rcmlz ];
-    platforms = lib.platforms.all;
+    license = licenses.unfreeRedistributable;
+    maintainers = with maintainers; [ rcmlz ];
+    platforms = platforms.all;
     mainProgram = "tigerjython";
   };
 })

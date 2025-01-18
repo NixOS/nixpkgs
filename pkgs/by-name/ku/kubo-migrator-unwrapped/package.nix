@@ -22,12 +22,12 @@ buildGoModule rec {
 
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Run the appropriate migrations for migrating the filesystem repository of Kubo (migrations not included)";
     homepage = "https://github.com/ipfs/fs-repo-migrations";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
       Luflosi
       elitak
     ];

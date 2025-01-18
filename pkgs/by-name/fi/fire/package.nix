@@ -116,11 +116,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = unstableGitUpdater { tagPrefix = "v"; };
 
-  meta = {
+  meta = with lib; {
     description = "Multi-band distortion plugin by Wings";
     homepage = "https://github.com/jerryuhoo/Fire";
-    license = lib.licenses.agpl3Only; # Not clarified if Only or Plus
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ OPNA2608 ];
+    license = licenses.agpl3Only; # Not clarified if Only or Plus
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ OPNA2608 ];
   };
 })

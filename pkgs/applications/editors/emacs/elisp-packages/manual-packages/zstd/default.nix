@@ -28,10 +28,10 @@ melpaBuild {
 
   files = ''(:defaults "zstd-core${libExt}")'';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/syohex/emacs-zstd";
     description = "Zstd binding for Emacs Lisp";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ nagy ];
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ nagy ];
   };
 }

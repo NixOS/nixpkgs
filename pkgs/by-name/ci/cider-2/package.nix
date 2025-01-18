@@ -36,12 +36,12 @@ appimageTools.wrapType2 rec {
       cp -r ${contents}/usr/share/icons $out/share
     '';
 
-  meta = {
+  meta = with lib; {
     description = "Powerful music player that allows you listen to your favorite tracks with style";
     homepage = "https://cider.sh";
-    license = lib.licenses.unfree;
+    license = licenses.unfree;
     mainProgram = "cider-2";
-    maintainers = with lib.maintainers; [ itsvic-dev ];
+    maintainers = with maintainers; [ itsvic-dev ];
     platforms = [ "x86_64-linux" ];
   };
 }

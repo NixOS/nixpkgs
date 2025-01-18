@@ -52,11 +52,11 @@ stdenv.mkDerivation {
     "dev"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Multimedia library for rookies and prototyping";
     homepage = "https://liblapin.org?lan=en";
-    platforms = lib.platforms.unix;
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ sigmanificient ];
+    platforms = platforms.unix;
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ sigmanificient ];
   };
 }

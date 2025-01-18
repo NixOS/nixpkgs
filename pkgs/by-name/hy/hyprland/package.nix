@@ -211,17 +211,17 @@ customStdenv.mkDerivation (finalAttrs: {
     updateScript = ./update.sh;
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/hyprwm/Hyprland";
     description = "Dynamic tiling Wayland compositor that doesn't sacrifice on its looks";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [
+    license = licenses.bsd3;
+    maintainers = with maintainers; [
       fufexan
       johnrtitor
       khaneliman
       wozeparrot
     ];
     mainProgram = "Hyprland";
-    platforms = lib.platforms.linux ++ lib.platforms.freebsd;
+    platforms = platforms.linux ++ platforms.freebsd;
   };
 })

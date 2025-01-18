@@ -35,12 +35,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Small, single-file and POSIX-compatible substituion for systemd-sysusers";
     homepage = "https://github.com/eweOS/catnest";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "catnest";
-    maintainers = with lib.maintainers; [ aleksana ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ aleksana ];
+    platforms = platforms.unix;
   };
 })

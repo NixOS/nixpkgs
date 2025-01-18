@@ -36,11 +36,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = {
+  meta = with lib; {
     description = "Work with yarn/npm packages locally like a boss";
     mainProgram = "yalc";
     homepage = "https://github.com/wclr/yalc";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ pyrox0 ];
   };
 })

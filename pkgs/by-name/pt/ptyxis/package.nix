@@ -42,12 +42,12 @@ stdenv.mkDerivation (finalAttrs: {
     pcre2
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Terminal for GNOME with first-class support for containers";
     homepage = "https://gitlab.gnome.org/chergert/ptyxis";
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     mainProgram = "ptyxis";
-    maintainers = with lib.maintainers; [ aleksana ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ aleksana ];
+    platforms = platforms.linux;
   };
 })

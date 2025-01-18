@@ -62,11 +62,11 @@ stdenv.mkDerivation rec {
     cp ${src}/dist/99-qdmr.rules $out/etc/udev/rules.d/
   '';
 
-  meta = {
+  meta = with lib; {
     description = "GUI application and command line tool for programming DMR radios";
     homepage = "https://dm3mat.darc.de/qdmr/";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ _0x4A6F ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ _0x4A6F ];
+    platforms = platforms.linux;
   };
 }

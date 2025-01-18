@@ -42,12 +42,12 @@ stdenv.mkDerivation (finalAttrs: {
     gzip < manlifter.1 > $out/share/man/man1/manlifter.1.gz
   '';
 
-  meta = {
+  meta = with lib; {
     changelog = "https://gitlab.com/esr/doclifter/-/blob/2.21/NEWS";
     description = "Lift documents in nroff markups to XML-DocBook";
     homepage = "http://www.catb.org/esr/doclifter";
-    license = lib.licenses.bsd2;
+    license = licenses.bsd2;
     mainProgram = "doclifter";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 })

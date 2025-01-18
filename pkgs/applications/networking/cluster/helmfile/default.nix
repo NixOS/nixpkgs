@@ -46,7 +46,7 @@ buildGoModule rec {
         --zsh <($out/bin/helmfile completion zsh)
     '';
 
-  meta = {
+  meta = with lib; {
     description = "Declarative spec for deploying Helm charts";
     mainProgram = "helmfile";
     longDescription = ''
@@ -54,8 +54,8 @@ buildGoModule rec {
       and charts as Helm releases in one shot.
     '';
     homepage = "https://helmfile.readthedocs.io/";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       pneumaticat
       yurrriq
     ];

@@ -22,14 +22,14 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Official C implementation of BLAKE3";
     homepage = "https://github.com/BLAKE3-team/BLAKE3/tree/master/c";
-    license = with lib.licenses; [
+    license = with licenses; [
       asl20
       cc0
     ];
-    maintainers = with lib.maintainers; [ fgaz ];
-    platforms = lib.platforms.all;
+    maintainers = with maintainers; [ fgaz ];
+    platforms = platforms.all;
   };
 })

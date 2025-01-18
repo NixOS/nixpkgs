@@ -23,9 +23,9 @@ lib.throwIf (lib.versionAtLeast ocaml.version "5.2")
     # Otherwise ./configure script will run and create files conflicting with dune.
     dontConfigure = true;
 
-    meta = {
+    meta = with lib; {
       homepage = "https://github.com/thierry-martinez/stdcompat";
-      license = lib.licenses.bsd2;
-      maintainers = [ lib.maintainers.vbgl ];
+      license = licenses.bsd2;
+      maintainers = [ maintainers.vbgl ];
     };
   }

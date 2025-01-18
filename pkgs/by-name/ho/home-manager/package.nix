@@ -83,7 +83,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     url = "https://github.com/nix-community/home-manager/";
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://nix-community.github.io/home-manager/";
     description = "Nix-based user environment configurator";
     longDescription = ''
@@ -92,9 +92,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       found in Nixpkgs. It allows declarative configuration of user specific
       (non global) packages and dotfiles.
     '';
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "home-manager";
-    maintainers = with lib.maintainers; [ bryango ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ bryango ];
+    platforms = platforms.unix;
   };
 })

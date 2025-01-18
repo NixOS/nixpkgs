@@ -33,7 +33,7 @@ buildDunePackage rec {
   inherit doCheck;
   checkTarget = "test";
 
-  meta = {
+  meta = with lib; {
     homepage = "https://ocaml-batteries-team.github.io/batteries-included/hdoc2/";
     description = "OCaml Batteries Included";
     longDescription = ''
@@ -41,9 +41,9 @@ buildDunePackage rec {
       and comprehensive development platform for the OCaml programming
       language.
     '';
-    license = lib.licenses.lgpl21Plus;
+    license = licenses.lgpl21Plus;
     maintainers = [
-      lib.maintainers.maggesi
+      maintainers.maggesi
     ];
   };
 }

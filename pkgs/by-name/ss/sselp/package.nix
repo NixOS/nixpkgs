@@ -22,12 +22,12 @@ stdenv.mkDerivation rec {
     sed -i "s@/usr/X11R6/lib@${libX11}/lib@g" config.mk
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://tools.suckless.org/sselp";
     description = "Prints the X selection to stdout, useful in scripts";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.magnetophon ];
-    platforms = lib.platforms.linux;
+    license = licenses.mit;
+    maintainers = [ maintainers.magnetophon ];
+    platforms = platforms.linux;
     mainProgram = "sselp";
   };
 }

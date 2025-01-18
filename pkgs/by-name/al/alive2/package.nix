@@ -56,12 +56,12 @@ clangStdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Automatic verification of LLVM optimizations";
     homepage = "https://github.com/AliveToolkit/alive2";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ shogo ];
+    license = licenses.mit;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ shogo ];
     mainProgram = "alive";
   };
 })

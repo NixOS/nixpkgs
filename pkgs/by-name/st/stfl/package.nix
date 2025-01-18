@@ -60,11 +60,11 @@ stdenv.mkDerivation rec {
       ln -s $out/lib/libstfl.so.0.24 $out/lib/libstfl.so.0
     '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://web.archive.org/web/20211113222004/http://www.clifford.at/stfl/";
     description = "Library which implements a curses-based widget set for text terminals";
-    maintainers = with lib.maintainers; [ lovek323 ];
-    license = lib.licenses.lgpl3;
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ lovek323 ];
+    license = licenses.lgpl3;
+    platforms = platforms.unix;
   };
 }

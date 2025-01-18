@@ -21,13 +21,13 @@ stdenv.mkDerivation {
     "PREFIX="
   ];
 
-  meta = {
-    platforms = lib.platforms.all;
+  meta = with lib; {
+    platforms = platforms.all;
     broken = stdenv.hostPlatform.isDarwin;
     description = "A disk usage calculator for Linux";
     homepage = "https://codeberg.org/201984/dut";
-    license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ errnoh ];
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ errnoh ];
     mainProgram = "dut";
   };
 }

@@ -32,11 +32,11 @@ stdenv.mkDerivation rec {
       --prefix PATH : ${lib.makeBinPath [ ghostscript_headless ]}:$out/bin
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://ccal.chinesebay.com/ccal.htm";
     description = "Command line Chinese calendar viewer, similar to cal";
-    license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ sharzy ];
-    platforms = lib.platforms.all;
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ sharzy ];
+    platforms = platforms.all;
   };
 }

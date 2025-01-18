@@ -84,15 +84,15 @@ stdenv.mkDerivation (finalAttrs: {
       }" \
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Tiling tabbed window manager";
     homepage = "https://notionwm.net";
-    license = lib.licenses.lgpl21;
+    license = licenses.lgpl21;
     mainProgram = "notion";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       jfb
       raboof
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 })

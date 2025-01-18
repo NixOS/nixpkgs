@@ -50,15 +50,15 @@ stdenv.mkDerivation rec {
     install -Dm555 usbreset -t $out/bin
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "http://www.linux-usb.org/";
     description = "Tools for working with USB devices, such as lsusb";
-    maintainers = with lib.maintainers; [ cafkafk ];
-    license = with lib.licenses; [
+    maintainers = with maintainers; [ cafkafk ];
+    license = with licenses; [
       gpl2Only # manpages, usbreset
       gpl2Plus # most of the code
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
     mainProgram = "lsusb";
   };
 }

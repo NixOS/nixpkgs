@@ -27,11 +27,11 @@ rustPlatform.buildRustPackage rec {
     cp -r vhdl_libraries $out/lib/rust_hdl
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Fast VHDL language server";
     homepage = "https://github.com/VHDL-LS/rust_hdl";
-    license = lib.licenses.mpl20;
+    license = licenses.mpl20;
     mainProgram = "vhdl_ls";
-    maintainers = with lib.maintainers; [ doronbehar ];
+    maintainers = with maintainers; [ doronbehar ];
   };
 }

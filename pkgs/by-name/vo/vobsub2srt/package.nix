@@ -28,12 +28,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ libtiff ];
   propagatedBuildInputs = [ tesseract3 ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/ruediger/VobSub2SRT";
     description = "Converts VobSub subtitles into SRT subtitles";
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.ttuegel ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.ttuegel ];
     mainProgram = "vobsub2srt";
   };
 }

@@ -33,13 +33,13 @@ stdenv.mkDerivation rec {
 
   qmakeFlags = [ "CONFIG+=noupcasename" ];
 
-  meta = {
+  meta = with lib; {
     description = "Enables musicians to perform real-time jam sessions over the internet";
     longDescription = "You also need to enable JACK and should enable several real-time optimizations. See project website for details";
     homepage = "https://github.com/corrados/jamulus";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
     mainProgram = "jamulus";
-    maintainers = with lib.maintainers; [ seb314 ];
+    maintainers = with maintainers; [ seb314 ];
   };
 }

@@ -77,12 +77,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "OpenTelemetry C++ Client Library";
     homepage = "https://github.com/open-telemetry/opentelemetry-cpp";
-    license = [ lib.licenses.asl20 ];
-    maintainers = with lib.maintainers; [ jfroche ];
-    platforms = lib.platforms.linux;
+    license = [ licenses.asl20 ];
+    maintainers = with maintainers; [ jfroche ];
+    platforms = platforms.linux;
     # https://github.com/protocolbuffers/protobuf/issues/14492
     broken = !(stdenv.buildPlatform.canExecute stdenv.hostPlatform);
   };

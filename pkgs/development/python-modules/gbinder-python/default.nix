@@ -33,11 +33,11 @@ buildPythonPackage rec {
 
   setupPyGlobalFlags = [ "--cython" ];
 
-  meta = {
+  meta = with lib; {
     description = "Python bindings for libgbinder";
     homepage = "https://github.com/erfanoabdi/gbinder-python";
-    license = lib.licenses.gpl3;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ ];
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ ];
   };
 }

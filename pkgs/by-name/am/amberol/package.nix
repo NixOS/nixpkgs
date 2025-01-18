@@ -77,12 +77,12 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://gitlab.gnome.org/World/amberol";
     description = "Small and simple sound and music player";
-    maintainers = with lib.maintainers; [ linsui ] ++ lib.teams.gnome-circle.members;
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ linsui ] ++ teams.gnome-circle.members;
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
     mainProgram = "amberol";
   };
 }

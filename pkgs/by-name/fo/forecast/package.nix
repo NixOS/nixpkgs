@@ -94,12 +94,12 @@ rustPlatform.buildRustPackage rec {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Weather app written in rust and libcosmic";
     homepage = "https://github.com/cosmic-utils/forecast";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ GaetanLepage ];
+    platforms = platforms.linux;
     mainProgram = "cosmic-ext-forecast";
   };
 }

@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     rsync -av examples/ $out/share/abella/examples/
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Interactive theorem prover";
     mainProgram = "abella";
     longDescription = ''
@@ -51,11 +51,11 @@ stdenv.mkDerivation (finalAttrs: {
       objects with binding.
     '';
     homepage = "https://abella-prover.org";
-    license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl3;
+    maintainers = with maintainers; [
       bcdarwin
       ciil
     ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 })

@@ -50,12 +50,12 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = unstableGitUpdater { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "VGM file extraction tools";
     homepage = "https://github.com/vampirefrog/vgm2x";
-    license = lib.licenses.gpl3Only;
+    license = licenses.gpl3Only;
     mainProgram = "vgm2x";
-    maintainers = with lib.maintainers; [ OPNA2608 ];
-    platforms = lib.platforms.all;
+    maintainers = with maintainers; [ OPNA2608 ];
+    platforms = platforms.all;
   };
 })

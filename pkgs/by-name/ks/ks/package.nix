@@ -31,12 +31,12 @@ stdenv.mkDerivation (finalAttrs: {
       --zsh --name _ks ${./ks-completion.zsh}
   '';
 
-  meta = {
+  meta = with lib; {
     mainProgram = "ks";
     homepage = "https://github.com/loteoo/ks";
     description = "Command-line secrets manager powered by macOS keychains";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ivankovnatsky ];
-    platforms = lib.platforms.darwin;
+    license = licenses.mit;
+    maintainers = with maintainers; [ ivankovnatsky ];
+    platforms = platforms.darwin;
   };
 })

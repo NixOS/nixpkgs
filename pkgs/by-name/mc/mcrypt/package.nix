@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Replacement for old UNIX crypt(1)";
     longDescription = ''
       mcrypt, and the accompanying libmcrypt, are intended to be replacements
@@ -40,8 +40,8 @@ stdenv.mkDerivation rec {
       ever-wider range of algorithms and modes.
     '';
     homepage = "https://mcrypt.sourceforge.net";
-    license = lib.licenses.gpl3Only;
-    platforms = lib.platforms.all;
-    maintainers = [ lib.maintainers.qknight ];
+    license = licenses.gpl3Only;
+    platforms = platforms.all;
+    maintainers = [ maintainers.qknight ];
   };
 }

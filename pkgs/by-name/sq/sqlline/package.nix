@@ -45,11 +45,11 @@ maven.buildMavenPackage rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Shell for issuing SQL to relational databases via JDBC";
     homepage = "https://github.com/julianhyde/sqlline";
     mainProgram = "sqlline";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ taranarmo ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ taranarmo ];
   };
 }

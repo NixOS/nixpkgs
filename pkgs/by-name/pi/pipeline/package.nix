@@ -90,12 +90,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { attrPath = finalAttrs.pname; };
 
-  meta = {
+  meta = with lib; {
     description = "Watch YouTube and PeerTube videos in one place";
     homepage = "https://mobile.schmidhuberj.de/pipeline";
     mainProgram = "tubefeeder";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ chuangzhu ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ chuangzhu ];
+    platforms = platforms.linux;
   };
 })

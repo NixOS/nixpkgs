@@ -28,12 +28,12 @@ python3.pkgs.buildPythonApplication rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Command-line interface for accessing IETF documents and other information";
     mainProgram = "ietf";
     homepage = "https://github.com/paulehoffman/ietf-cli";
-    license = lib.licenses.wtfpl;
-    maintainers = with lib.maintainers; [ lilioid ];
-    platforms = lib.lists.intersectLists python3.meta.platforms rsync.meta.platforms;
+    license = licenses.wtfpl;
+    maintainers = with maintainers; [ lilioid ];
+    platforms = lists.intersectLists python3.meta.platforms rsync.meta.platforms;
   };
 }

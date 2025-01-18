@@ -25,12 +25,12 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Digital modem file transfer program";
     homepage = "https://sourceforge.net/projects/fldigi/";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ dysinger ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ dysinger ];
+    platforms = platforms.linux;
     mainProgram = "flwrap";
   };
 }

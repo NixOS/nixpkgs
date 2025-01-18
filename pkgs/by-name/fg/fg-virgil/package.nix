@@ -25,11 +25,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/excalidraw/virgil";
     description = "Font that powers Excalidraw";
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ drupol ];
-    license = lib.licenses.ofl;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ drupol ];
+    license = licenses.ofl;
   };
 })

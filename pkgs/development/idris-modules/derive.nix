@@ -21,10 +21,10 @@ build-idris-package {
     sha256 = "06za15m1kv9mijzll5712crry4iwx3b0fjv76gy9vv1p10gy2g4m";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Type class deriving with elaboration reflection";
     homepage = "https://github.com/davlum/derive-all-the-instances";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.brainrape ];
+    license = licenses.mit;
+    maintainers = [ maintainers.brainrape ];
   };
 }

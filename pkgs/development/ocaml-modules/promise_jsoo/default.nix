@@ -31,10 +31,10 @@ buildDunePackage rec {
     ojs
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/mnxn/promise_jsoo";
     description = "Js_of_ocaml bindings to JS Promises with supplemental functions";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ jayesh-bhoot ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ jayesh-bhoot ];
   };
 }

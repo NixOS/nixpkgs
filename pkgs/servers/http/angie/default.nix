@@ -42,11 +42,11 @@ callPackage ../nginx/generic.nix args rec {
     angie-http3 = nixosTests.nginx-http3.angieQuic;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Angie is an efficient, powerful, and scalable web server that was forked from nginx";
     homepage = "https://angie.software/en/";
-    license = lib.licenses.bsd2;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ izorkin ];
+    license = licenses.bsd2;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ izorkin ];
   };
 }

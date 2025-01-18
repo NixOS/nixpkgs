@@ -69,12 +69,12 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: rec {
     wrapQtApp $out/bin/FEXConfig
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Fast usermode x86 and x86-64 emulator for Arm64 Linux";
     homepage = "https://fex-emu.com/";
     platforms = [ "aarch64-linux" ];
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ andre4ik3 ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ andre4ik3 ];
     mainProgram = "FEXBash";
   };
 })

@@ -33,11 +33,11 @@ stdenv.mkDerivation (finalAttrs: {
     libnxml
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/bakulf/libmrss";
     description = "C library for parsing, writing and creating RSS/ATOM files or streams";
-    license = lib.licenses.lgpl2;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ sigmanificient ];
+    license = licenses.lgpl2;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ sigmanificient ];
   };
 })

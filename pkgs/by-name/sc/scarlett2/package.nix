@@ -52,11 +52,11 @@ stdenv.mkDerivation {
     ln -s ${firmwareSrc}/firmware $out/share/firmware
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Scarlett2 Firmware Management Utility for Scarlett 2nd, 3rd, and 4th Gen, Clarett USB, and Clarett+ interfaces";
     homepage = "https://github.com/geoffreybennett/scarlett2";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ squalus ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ squalus ];
     mainProgram = "scarlett2";
   };
 

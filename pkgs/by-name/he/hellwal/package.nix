@@ -19,15 +19,15 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/share/docs/hellwal
     cp -r templates themes $out/share/docs/hellwal
   '';
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/danihek/hellwal";
     description = "Fast, extensible color palette generator";
     longDescription = ''
       Pywal-like color palette generator, but faster and in C.
     '';
-    license = lib.licenses.mit;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ danihek ];
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ danihek ];
     mainProgram = "hellwal";
   };
 })

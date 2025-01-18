@@ -46,12 +46,12 @@ gcc14Stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/hyprwm/hyprlang";
     description = "Official implementation library for the hypr config language";
-    license = lib.licenses.lgpl3Only;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [
+    license = licenses.lgpl3Only;
+    platforms = platforms.all;
+    maintainers = with maintainers; [
       fufexan
       khaneliman
     ];

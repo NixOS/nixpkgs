@@ -40,16 +40,16 @@ stdenv.mkDerivation (finalAttrs: {
     gorm
   ];
 
-  meta = {
+  meta = with lib; {
     description = "GNUstep's integrated development environment";
     homepage = "https://gnustep.github.io/";
-    license = lib.licenses.lgpl2Plus;
+    license = licenses.lgpl2Plus;
     mainProgram = "ProjectCenter";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       ashalkhakov
       matthewbauer
       dblsaiko
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 })

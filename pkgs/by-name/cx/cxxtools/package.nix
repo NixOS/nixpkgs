@@ -45,11 +45,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "http://www.tntnet.org/cxxtools.html";
     description = "Comprehensive C++ class library for Unix and Linux";
-    platforms = lib.platforms.linux;
-    license = lib.licenses.lgpl21;
-    maintainers = [ lib.maintainers.juliendehos ];
+    platforms = platforms.linux;
+    license = licenses.lgpl21;
+    maintainers = [ maintainers.juliendehos ];
   };
 }

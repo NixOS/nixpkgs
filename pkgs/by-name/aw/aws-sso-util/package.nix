@@ -30,14 +30,14 @@ python3Packages.buildPythonApplication rec {
     requests
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Utilities to make AWS SSO easier";
     homepage = "https://pypi.org/project/aws-sso-util/";
     downloadPage = "https://pypi.org/project/aws-sso-util/#files";
     changelog = "https://github.com/benkehoe/aws-sso-util/releases";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ cterence ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ cterence ];
     mainProgram = "aws-sso-util";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

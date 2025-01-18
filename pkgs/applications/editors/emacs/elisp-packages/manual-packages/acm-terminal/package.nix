@@ -25,10 +25,10 @@ melpaBuild {
 
   passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/twlz0ne/acm-terminal";
     description = "Patch for LSP bridge acm on Terminal";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ kira-bruneau ];
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ kira-bruneau ];
   };
 }

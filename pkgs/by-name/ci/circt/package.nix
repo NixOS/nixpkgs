@@ -134,15 +134,15 @@ stdenv.mkDerivation rec {
     llvm = circt-llvm;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Circuit IR compilers and tools";
     homepage = "https://circt.org/";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
+    license = licenses.asl20;
+    maintainers = with maintainers; [
       sharzy
       pineapplehunter
       sequencer
     ];
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 }

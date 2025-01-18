@@ -83,17 +83,17 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     package = finalAttrs.finalPackage;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Helps you catch problems in your HTML/CSS/SVG";
     homepage = "https://validator.github.io/validator/";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       andersk
       ivan
     ];
     mainProgram = "vnu";
-    platforms = lib.platforms.all;
-    sourceProvenance = with lib.sourceTypes; [
+    platforms = platforms.all;
+    sourceProvenance = with sourceTypes; [
       binaryBytecode
       fromSource
     ];

@@ -73,11 +73,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "barbicanclient" ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://opendev.org/openstack/python-barbicanclient";
     description = "Client library for OpenStack Barbican API";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     mainProgram = "barbican";
-    maintainers = lib.teams.openstack.members;
+    maintainers = teams.openstack.members;
   };
 }

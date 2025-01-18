@@ -29,11 +29,11 @@ stdenv.mkDerivation rec {
   ];
   inherit (topkg) buildPhase installPhase;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://erratique.ch/software/brr";
     description = "Toolkit for programming browsers in OCaml";
-    license = lib.licenses.isc;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.isc;
+    maintainers = [ maintainers.vbgl ];
     inherit (ocaml.meta) platforms;
   };
 }

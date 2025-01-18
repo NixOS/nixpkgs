@@ -61,10 +61,10 @@ buildPythonPackage rec {
   preCheck = "pushd $out";
   postCheck = "popd";
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/zarr-developers/numcodecs";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     description = "Buffer compression and transformation codecs for use in data storage and communication applications";
-    maintainers = with lib.maintainers; [ doronbehar ];
+    maintainers = with maintainers; [ doronbehar ];
   };
 }

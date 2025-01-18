@@ -50,12 +50,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Small, convenient command-line ACPI client with a lot of features";
     mainProgram = "acpitool";
     homepage = "https://sourceforge.net/projects/acpitool/";
-    license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.guibert ];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.guibert ];
+    platforms = platforms.unix;
   };
 }

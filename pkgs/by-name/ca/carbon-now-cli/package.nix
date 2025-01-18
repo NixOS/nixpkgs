@@ -28,11 +28,11 @@ buildNpmPackage rec {
     PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD = 1;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Beautiful images of your code — from right inside your terminal";
     homepage = "https://github.com/mixn/carbon-now-cli";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "carbon-now";
-    maintainers = with lib.maintainers; [ rmcgibbo ];
+    maintainers = with maintainers; [ rmcgibbo ];
   };
 }

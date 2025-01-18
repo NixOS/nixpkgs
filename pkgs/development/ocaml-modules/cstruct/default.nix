@@ -27,10 +27,10 @@ buildDunePackage rec {
     crowbar
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Access C-like structures directly from OCaml";
-    license = lib.licenses.isc;
+    license = licenses.isc;
     homepage = "https://github.com/mirage/ocaml-cstruct";
-    maintainers = [ lib.maintainers.vbgl ];
+    maintainers = [ maintainers.vbgl ];
   };
 }

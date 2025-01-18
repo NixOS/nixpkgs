@@ -29,10 +29,10 @@ vscode-utils.buildVscodeMarketplaceExtension {
     < package.json \
     | sponge package.json
   '';
-  meta = {
+  meta = with lib; {
     description = "Uncompromising Nix Code Formatter";
     homepage = "https://github.com/kamadorueda/alejandra";
-    license = lib.licenses.unlicense;
-    maintainers = [ lib.maintainers.kamadorueda ];
+    license = licenses.unlicense;
+    maintainers = [ maintainers.kamadorueda ];
   };
 }

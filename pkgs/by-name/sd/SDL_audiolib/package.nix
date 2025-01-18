@@ -48,11 +48,11 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "USE_RESAMP_SRC" false)
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Audio decoding, resampling and mixing library for SDL";
     homepage = "https://github.com/realnc/SDL_audiolib";
-    license = lib.licenses.lgpl3Plus;
-    maintainers = lib.teams.sdl.members ++ (with lib.maintainers; [ ]);
+    license = licenses.lgpl3Plus;
+    maintainers = teams.sdl.members ++ (with maintainers; [ ]);
     inherit (SDL2.meta) platforms;
   };
 })

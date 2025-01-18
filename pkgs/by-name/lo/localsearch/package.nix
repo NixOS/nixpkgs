@@ -143,12 +143,12 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gnome.updateScript { packageName = "localsearch"; };
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/localsearch";
     description = "Desktop-neutral user information store, search tool and indexer";
-    maintainers = lib.teams.gnome.members;
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.unix;
+    maintainers = teams.gnome.members;
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
     mainProgram = "localsearch";
   };
 })

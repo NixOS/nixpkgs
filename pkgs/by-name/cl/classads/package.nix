@@ -29,10 +29,10 @@ stdenv.mkDerivation rec {
     stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64
   ) "-Dfinite=isfinite";
 
-  meta = {
+  meta = with lib; {
     homepage = "http://www.cs.wisc.edu/condor/classad/";
     description = "Classified Advertisements library provides a generic means for matching resources";
-    license = lib.licenses.asl20;
-    platforms = lib.platforms.unix;
+    license = licenses.asl20;
+    platforms = platforms.unix;
   };
 }

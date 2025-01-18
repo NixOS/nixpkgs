@@ -25,13 +25,13 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "General purpose text processing utility based on the concept of pattern matching";
     longDescription = "Reads an input file and copies it to an output file transforming the data as specified by the patterns defined by the user.";
     homepage = "https://gema.sourceforge.net/";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "gema";
-    maintainers = with lib.maintainers; [ quag ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ quag ];
+    platforms = platforms.unix;
   };
 })

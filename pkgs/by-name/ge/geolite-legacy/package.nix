@@ -30,11 +30,11 @@ stdenv.mkDerivation rec {
     cp ${extra}/usr/share/GeoIP/*.dat $out/share/GeoIP
   '';
 
-  meta = {
+  meta = with lib; {
     description = "GeoLite Legacy IP geolocation databases";
     homepage = "https://mailfud.org/geoip-legacy/";
-    license = lib.licenses.cc-by-sa-40;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ fpletz ];
+    license = licenses.cc-by-sa-40;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ fpletz ];
   };
 }

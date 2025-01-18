@@ -99,10 +99,10 @@ perlPackages.buildPerlPackage rec {
     installShellCompletion --name rex --bash ./share/rex-tab-completion.bash
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.rexify.org";
     description = "Friendly automation framework";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ qbit ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ qbit ];
   };
 }

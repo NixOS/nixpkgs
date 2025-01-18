@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     cp lsmsr/lsmsr $out/bin
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Identification utility for the x86 series of processors";
     longDescription = ''
       x86info will identify all Intel/AMD/Centaur/Cyrix/VIA CPUs. It leverages
@@ -53,8 +53,8 @@ stdenv.mkDerivation rec {
       "i686-linux"
       "x86_64-linux"
     ];
-    license = lib.licenses.gpl2Only;
+    license = licenses.gpl2Only;
     homepage = "https://github.com/kernelslacker/x86info";
-    maintainers = with lib.maintainers; [ jcumming ];
+    maintainers = with maintainers; [ jcumming ];
   };
 }

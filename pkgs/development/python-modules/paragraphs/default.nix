@@ -33,10 +33,10 @@ buildPythonPackage rec {
     "paragraphs"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Module to incorporate long strings";
     homepage = "https://github.com/ShayHill/paragraphs";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fab ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
   };
 }

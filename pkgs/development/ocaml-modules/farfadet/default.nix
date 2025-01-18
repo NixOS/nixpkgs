@@ -36,11 +36,11 @@ else
 
     inherit (topkg) buildPhase installPhase;
 
-    meta = {
+    meta = with lib; {
       description = "Printf-like for Faraday library";
       homepage = "https://github.com/oklm-wsh/Farfadet";
-      license = lib.licenses.mit;
-      maintainers = [ lib.maintainers.vbgl ];
+      license = licenses.mit;
+      maintainers = [ maintainers.vbgl ];
       inherit (ocaml.meta) platforms;
     };
   }

@@ -26,10 +26,10 @@ buildLua rec {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = {
+  meta = with lib; {
     description = "Lua script for mpv to send notifications with notify-send";
     homepage = "https://github.com/Parranoh/mpv-notify-send";
-    license = lib.licenses.wtfpl;
-    maintainers = with lib.maintainers; [ r3n3gad3p3arl ];
+    license = licenses.wtfpl;
+    maintainers = with maintainers; [ r3n3gad3p3arl ];
   };
 }

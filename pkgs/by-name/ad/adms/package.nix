@@ -35,11 +35,11 @@ stdenv.mkDerivation rec {
   ];
   configureFlags = [ "--enable-maintainer-mode" ];
 
-  meta = {
+  meta = with lib; {
     description = "automatic device model synthesizer";
     homepage = "https://github.com/Qucs/adms";
-    license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ disassembler ];
-    platforms = with lib.platforms; unix;
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ disassembler ];
+    platforms = with platforms; unix;
   };
 }

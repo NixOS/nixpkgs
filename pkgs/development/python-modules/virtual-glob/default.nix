@@ -40,10 +40,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = {
+  meta = with lib; {
     description = "Globbing of virtual file systems";
     homepage = "https://pypi.org/project/virtual_glob/";
-    maintainers = with lib.maintainers; [ PopeRigby ];
-    license = lib.licenses.mit;
+    maintainers = with maintainers; [ PopeRigby ];
+    license = licenses.mit;
   };
 }

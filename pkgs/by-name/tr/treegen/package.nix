@@ -37,13 +37,13 @@ buildGoModule rec {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     changelog = "https://github.com/bilbilak/treegen/blob/main/CHANGELOG.md";
     description = "ASCII Tree Directory and File Structure Generator";
     homepage = "https://github.com/bilbilak/treegen";
-    license = lib.licenses.gpl3Only;
+    license = licenses.gpl3Only;
     mainProgram = "treegen";
-    maintainers = with lib.maintainers; [ _4r7if3x ];
-    platforms = with lib.platforms; unix ++ windows;
+    maintainers = with maintainers; [ _4r7if3x ];
+    platforms = with platforms; unix ++ windows;
   };
 }

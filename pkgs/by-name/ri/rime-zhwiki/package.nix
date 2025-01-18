@@ -21,13 +21,13 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
-    maintainers = with lib.maintainers; [ xddxdd ];
+  meta = with lib; {
+    maintainers = with maintainers; [ xddxdd ];
     description = "RIME dictionary file for entries from zh.wikipedia.org";
     homepage = "https://github.com/felixonmars/fcitx5-pinyin-zhwiki";
     license = [
-      lib.licenses.fdl13Plus
-      lib.licenses.cc-by-sa-40
+      licenses.fdl13Plus
+      licenses.cc-by-sa-40
     ];
   };
 }

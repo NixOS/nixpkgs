@@ -38,11 +38,11 @@ buildPythonPackage rec {
     "test/"
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/elijahr/python-autopxd2";
     mainProgram = "autopxd";
-    maintainers = with lib.maintainers; [ bot-wxt1221 ];
-    license = lib.licenses.mit;
+    maintainers = with maintainers; [ bot-wxt1221 ];
+    license = licenses.mit;
     description = "Generates .pxd files automatically from .h files";
   };
 }

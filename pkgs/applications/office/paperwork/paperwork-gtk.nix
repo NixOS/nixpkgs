@@ -148,14 +148,14 @@ python3Packages.buildPythonApplication rec {
     update-source-version paperwork.sample_docs "$docs_version" --file=pkgs/applications/office/paperwork/src.nix --version-key=rev
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Personal document manager for scanned documents";
     homepage = "https://openpaper.work/";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
       aszlig
       symphorien
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

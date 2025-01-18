@@ -80,12 +80,12 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "http://www.povray.org/";
     description = "Persistence of Vision Raytracer";
-    license = lib.licenses.free;
-    platforms = lib.platforms.linux;
+    license = licenses.free;
+    platforms = platforms.linux;
     mainProgram = "povray";
-    maintainers = with lib.maintainers; [ fgaz ];
+    maintainers = with maintainers; [ fgaz ];
   };
 })

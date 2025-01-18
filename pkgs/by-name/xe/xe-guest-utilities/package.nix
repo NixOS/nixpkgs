@@ -41,11 +41,11 @@ buildGoModule rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "XenServer guest utilities";
     homepage = "https://github.com/xenserver/xe-guest-utilities";
-    license = lib.licenses.bsd2;
+    license = licenses.bsd2;
     maintainers = [ ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

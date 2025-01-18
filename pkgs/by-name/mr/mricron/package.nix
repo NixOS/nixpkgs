@@ -77,13 +77,13 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Application to display NIfTI medical imaging data";
     homepage = "https://people.cas.sc.edu/rorden/mricron/index.HTML";
-    license = lib.licenses.bsd1;
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ adriangl ];
+    license = licenses.bsd1;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ adriangl ];
     mainProgram = "mricron";
   };
 }

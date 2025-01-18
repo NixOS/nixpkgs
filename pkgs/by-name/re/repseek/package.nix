@@ -23,12 +23,12 @@ stdenv.mkDerivation rec {
       substituteInPlace Makefile --replace "MACHINE = MACOSX" "MACHINE = LINUX"
     '';
 
-  meta = {
+  meta = with lib; {
     description = "Tool to retrieve approximate repeats from large DNA sequences";
     mainProgram = "repseek";
     homepage = "https://bioinfo.mnhn.fr/abi/public/RepSeek";
-    maintainers = [ lib.maintainers.bzizou ];
-    license = lib.licenses.lgpl21;
+    maintainers = [ maintainers.bzizou ];
+    license = licenses.lgpl21;
   };
 
 }

@@ -71,12 +71,12 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.libsdl.org/";
     description = "Cross-platform multimedia library - build SDL 1.2 applications against 2.0";
-    license = lib.licenses.zlib;
+    license = licenses.zlib;
     mainProgram = "sdl-config";
-    maintainers = lib.teams.sdl.members ++ (with lib.maintainers; [ peterhoeg ]);
-    platforms = lib.platforms.all;
+    maintainers = teams.sdl.members ++ (with maintainers; [ peterhoeg ]);
+    platforms = platforms.all;
   };
 })

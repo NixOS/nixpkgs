@@ -123,13 +123,13 @@ stdenv.mkDerivation rec {
     gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : "${runtimeLibs}" )
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://getpolarized.io/";
     description = "Personal knowledge repository for PDF and web content supporting incremental reading and document annotation";
     mainProgram = "polar-desktop-app";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = lib.licenses.gpl3Only;
-    platforms = lib.platforms.linux;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.gpl3Only;
+    platforms = platforms.linux;
     maintainers = [ ];
   };
 

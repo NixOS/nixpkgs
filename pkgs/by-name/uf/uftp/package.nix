@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
     cp {uftp.1,uftpd.1,uftp_keymgt.1,uftpproxyd.1} $man/share/man/man1
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Encrypted UDP based FTP with multicast";
     homepage = "https://uftp-multicast.sourceforge.net/";
-    license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.fadenb ];
-    platforms = with lib.platforms; linux ++ darwin;
+    license = licenses.gpl3;
+    maintainers = [ maintainers.fadenb ];
+    platforms = with platforms; linux ++ darwin;
   };
 }

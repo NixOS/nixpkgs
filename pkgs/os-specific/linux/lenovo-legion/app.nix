@@ -50,12 +50,12 @@ python3.pkgs.buildPythonApplication rec {
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Utility to control Lenovo Legion laptop";
     homepage = "https://github.com/johnfanv2/LenovoLegionLinux";
-    license = lib.licenses.gpl2Only;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl2Only;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
       ulrikstrid
       realsnick
       chn

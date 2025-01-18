@@ -75,18 +75,18 @@ buildNpmPackage {
     '';
   };
 
-  meta = {
+  meta = with lib; {
     description = "CLI of the open-source IDE For exploring and testing APIs";
     homepage = "https://www.usebruno.com";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "bru";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       gepbird
       kashw2
       lucasew
       mattpolzin
       water-sucks
     ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

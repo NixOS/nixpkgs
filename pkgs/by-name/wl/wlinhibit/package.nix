@@ -34,11 +34,11 @@ stdenv.mkDerivation rec {
     wayland-scanner
   ];
 
-  meta = {
+  meta = with lib; {
     description = "simple, stupid idle inhibitor for wayland";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     homepage = "https://github.com/0x5a4/wlinhibit";
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ _0x5a4 ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ _0x5a4 ];
   };
 }

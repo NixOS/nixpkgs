@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
 
   dontStrip = true;
 
-  meta = {
+  meta = with lib; {
     description = "Chess GUI for analyzing with and playing against various engines";
     longDescription = ''
       A free Graphical User Interface (GUI) for chess. Arena assists you in
@@ -89,8 +89,8 @@ stdenv.mkDerivation rec {
       UCI protocol I, II. Furthermore, compatible to Chess960, DGT electronic
       chess board & DGT clocks and much more.
     '';
-    license = lib.licenses.unfree;
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     homepage = "http://www.playwitharena.de";
     platforms = [ "x86_64-linux" ];
   };

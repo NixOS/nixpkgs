@@ -20,13 +20,13 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-LkLSPFCfQxBb5DJZ67I7xPxzIYqTzKccyLW0S65/MLU=";
 
-  meta = {
+  meta = with lib; {
     description = "Prettified Linux syscall tracing tool (like strace)";
     homepage = "https://github.com/sectordistrict/intentrace";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     platforms = [ "x86_64-linux" ];
     mainProgram = "intentrace";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       cloudripper
       jk
     ];

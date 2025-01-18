@@ -62,15 +62,15 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Cross-platform Rust rewrite of the GNU coreutils";
     longDescription = ''
       uutils is an attempt at writing universal (as in cross-platform)
       CLI utils in Rust. This repo is to aggregate the GNU coreutils rewrites.
     '';
     homepage = "https://github.com/uutils/coreutils";
-    maintainers = with lib.maintainers; [ siraben ];
-    license = lib.licenses.mit;
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ siraben ];
+    license = licenses.mit;
+    platforms = platforms.unix;
   };
 }

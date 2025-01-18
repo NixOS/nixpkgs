@@ -55,11 +55,11 @@ lib.throwIf (lib.versionAtLeast ocaml.version "5.0")
       "all.opt"
     ];
 
-    meta = {
+    meta = with lib; {
       inherit (src.meta) homepage;
       description = "Lexer generator for Unicode and OCaml";
-      license = lib.licenses.mit;
+      license = licenses.mit;
       inherit (ocaml.meta) platforms;
-      maintainers = [ lib.maintainers.roconnor ];
+      maintainers = [ maintainers.roconnor ];
     };
   }

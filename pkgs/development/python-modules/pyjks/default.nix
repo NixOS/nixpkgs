@@ -28,10 +28,10 @@ buildPythonPackage rec {
   # Tests assume network connectivity
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Pure-Python Java Keystore (JKS) library";
     homepage = "https://github.com/kurtbrose/pyjks";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ kamadorueda ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ kamadorueda ];
   };
 }

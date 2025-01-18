@@ -39,10 +39,10 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "test" ];
 
-  meta = {
+  meta = with lib; {
     description = "Python data serialization library";
     homepage = "https://github.com/stargateaudio/pymarshal";
-    maintainers = with lib.maintainers; [ yuu ];
-    license = lib.licenses.bsd2;
+    maintainers = with maintainers; [ yuu ];
+    license = licenses.bsd2;
   };
 }

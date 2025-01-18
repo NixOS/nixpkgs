@@ -42,11 +42,11 @@ stdenv.mkDerivation rec {
   nativeCheckInputs = [ gtest ];
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "Various ZIM command line tools";
     homepage = "https://github.com/openzim/zim-tools";
-    maintainers = with lib.maintainers; [ robbinch ];
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.all;
+    maintainers = with maintainers; [ robbinch ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.all;
   };
 }

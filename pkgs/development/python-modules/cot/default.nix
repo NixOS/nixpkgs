@@ -81,7 +81,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "COT" ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/glennmatthews/cot";
     description = "Common OVF Tool";
     mainProgram = "cot";
@@ -90,7 +90,7 @@ buildPythonPackage rec {
       (.ovf, .ova) virtual appliances, with a focus on virtualized network
       appliances such as the Cisco CSR 1000V and Cisco IOS XRv platforms.
     '';
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ evanjs ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ evanjs ];
   };
 }

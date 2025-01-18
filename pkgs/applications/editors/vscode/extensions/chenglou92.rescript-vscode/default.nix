@@ -28,13 +28,13 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
     ln -s ${rescript-editor-analysis}/bin ${analysisDir}
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Official VSCode plugin for ReScript";
     homepage = "https://github.com/rescript-lang/rescript-vscode";
     maintainers = [
-      lib.maintainers.dlip
-      lib.maintainers.jayesh-bhoot
+      maintainers.dlip
+      maintainers.jayesh-bhoot
     ];
-    license = lib.licenses.mit;
+    license = licenses.mit;
   };
 }

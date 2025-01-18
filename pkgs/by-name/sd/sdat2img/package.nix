@@ -20,12 +20,12 @@ python3Packages.buildPythonApplication {
     install -D $src/sdat2img.py $out/bin/sdat2img
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Convert sparse Android data image (.dat) into filesystem ext4 image (.img)";
     homepage = "https://github.com/xpirt/sdat2img";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.xaverdh ];
-    platforms = lib.platforms.unix;
+    license = licenses.mit;
+    maintainers = [ maintainers.xaverdh ];
+    platforms = platforms.unix;
     mainProgram = "sdat2img";
   };
 }

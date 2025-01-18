@@ -36,10 +36,10 @@ buildPythonPackage rec {
     pytest-cov-stub
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Organize Django settings into multiple files and directories";
     homepage = "https://github.com/wemake-services/django-split-settings";
-    maintainers = with lib.maintainers; [ sikmir ];
-    license = lib.licenses.bsd3;
+    maintainers = with maintainers; [ sikmir ];
+    license = licenses.bsd3;
   };
 }

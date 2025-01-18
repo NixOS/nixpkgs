@@ -54,12 +54,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/tiehuis/2048-cli";
     description = "Game 2048 for your Linux terminal";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.AndersonTorres ];
-    platforms = lib.platforms.unix;
+    license = licenses.mit;
+    maintainers = [ maintainers.AndersonTorres ];
+    platforms = platforms.unix;
     mainProgram = "2048";
   };
 })

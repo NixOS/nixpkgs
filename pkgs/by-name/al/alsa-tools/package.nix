@@ -105,11 +105,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postFixup
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "http://www.alsa-project.org/";
     description = "ALSA Tools";
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 })

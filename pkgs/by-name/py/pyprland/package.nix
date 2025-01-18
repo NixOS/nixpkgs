@@ -63,15 +63,15 @@ python3Packages.buildPythonApplication rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     mainProgram = "pypr";
     description = "Hyperland plugin system";
     homepage = "https://github.com/hyprland-community/pyprland";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       iliayar
       johnrtitor
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

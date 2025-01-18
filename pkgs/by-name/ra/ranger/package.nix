@@ -70,12 +70,12 @@ python3Packages.buildPythonApplication rec {
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
-  meta = {
+  meta = with lib; {
     description = "File manager with minimalistic curses interface";
     homepage = "https://ranger.github.io/";
-    license = lib.licenses.gpl3Only;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl3Only;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
       toonn
       lucasew
     ];

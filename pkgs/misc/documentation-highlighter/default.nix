@@ -1,12 +1,12 @@
 { lib, runCommand }:
 runCommand "documentation-highlighter"
   {
-    meta = {
+    meta = with lib; {
       description = "Highlight.js sources for the Nix Ecosystem's documentation";
       homepage = "https://highlightjs.org";
-      license = lib.licenses.bsd3;
-      platforms = lib.platforms.all;
-      maintainers = [ lib.maintainers.grahamc ];
+      license = licenses.bsd3;
+      platforms = platforms.all;
+      maintainers = [ maintainers.grahamc ];
     };
     src = lib.sources.cleanSourceWith {
       src = ./.;

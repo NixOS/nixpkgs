@@ -21,10 +21,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pretalx_pages" ];
 
-  meta = {
+  meta = with lib; {
     description = "Static pages for pretalx, e.g. information, venue listings, a Code of Conduct, etc";
     homepage = "https://github.com/pretalx/pretalx-pages";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ wegank ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ wegank ];
   };
 }

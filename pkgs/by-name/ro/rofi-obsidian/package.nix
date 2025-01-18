@@ -16,11 +16,11 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-hAiBSAvnMRchH49bku2oPhoCK3+bcWiZW4YbcMuAiqU=";
 
-  meta = {
+  meta = with lib; {
     description = "Launch your Obsidian vaults from the comfort of rofi";
     homepage = "https://github.com/Nydragon/rofi-obsidian";
-    license = lib.licenses.unlicense;
-    maintainers = with lib.maintainers; [ nydragon ];
+    license = licenses.unlicense;
+    maintainers = with maintainers; [ nydragon ];
     mainProgram = "rofi-obsidian";
   };
 }

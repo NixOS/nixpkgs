@@ -41,13 +41,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "C++ Libraries for Computer Vision Research and Implementation";
     homepage = "https://vxl.sourceforge.net";
     # license appears contradictory; see https://github.com/vxl/vxl/issues/752
     # (and see https://github.com/InsightSoftwareConsortium/ITK/pull/1920/files for potential patch)
-    license = [ lib.licenses.unfree ];
+    license = [ licenses.unfree ];
     maintainers = [ ];
-    platforms = with lib.platforms; linux;
+    platforms = with platforms; linux;
   };
 })

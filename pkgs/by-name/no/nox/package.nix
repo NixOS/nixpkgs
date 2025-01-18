@@ -30,11 +30,11 @@ python3Packages.buildPythonApplication rec {
     setuptools
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/madjar/nox";
     description = "Tools to make nix nicer to use";
-    maintainers = [ lib.maintainers.madjar ];
-    license = lib.licenses.mit;
-    platforms = lib.platforms.all;
+    maintainers = [ maintainers.madjar ];
+    license = licenses.mit;
+    platforms = platforms.all;
   };
 }

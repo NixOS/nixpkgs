@@ -27,13 +27,13 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     changelog = "https://github.com/bitrise-io/bitrise/releases";
     description = "CLI for running your Workflows from Bitrise on your local machine";
     homepage = "https://bitrise.io/cli";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.unix;
+    license = licenses.mit;
+    platforms = platforms.unix;
     mainProgram = "bitrise";
-    maintainers = with lib.maintainers; [ ofalvai ];
+    maintainers = with maintainers; [ ofalvai ];
   };
 }

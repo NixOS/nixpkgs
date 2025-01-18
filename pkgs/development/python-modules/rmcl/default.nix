@@ -40,10 +40,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rmcl" ];
 
-  meta = {
+  meta = with lib; {
     description = "ReMarkable Cloud Library";
     homepage = "https://github.com/rschroll/rmcl";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

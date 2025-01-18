@@ -36,14 +36,14 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://rustwasm.github.io/docs/wasm-bindgen/";
-    license = with lib.licenses; [
+    license = with licenses; [
       asl20 # or
       mit
     ];
     description = "Facilitating high-level interactions between wasm modules and JavaScript";
-    maintainers = with lib.maintainers; [ rizary ];
+    maintainers = with maintainers; [ rizary ];
     mainProgram = "wasm-bindgen";
   };
 }

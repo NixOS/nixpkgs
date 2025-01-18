@@ -18,12 +18,12 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "Atomic primitives for high performance, concurrent software";
     homepage = "https://trac.mpich.org/projects/openpa";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ leenaars ];
-    platforms = lib.platforms.unix;
+    license = licenses.mit;
+    maintainers = with maintainers; [ leenaars ];
+    platforms = platforms.unix;
     longDescription = ''
       OPA (or sometimes OpenPA or Open Portable Atomics) is an
       open source library intended to provide a consistent C API for performing

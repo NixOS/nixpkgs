@@ -35,11 +35,11 @@ python3.pkgs.buildPythonApplication rec {
   # Project has no tests
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Microsoft Graph API (Entra, o365, and Intune) enumeration and exploitation toolkit";
     homepage = "https://github.com/mlcsec/Graphpython";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fab ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
     mainProgram = "graphpython";
   };
 }

@@ -53,11 +53,11 @@ stdenv.mkDerivation {
     "install.man"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "VNC recorder";
     homepage = "http://ronja.twibright.com/utils/vncrec/";
-    platforms = lib.platforms.linux;
-    license = lib.licenses.gpl2Plus;
+    platforms = platforms.linux;
+    license = licenses.gpl2Plus;
     mainProgram = "vncrec";
   };
 }

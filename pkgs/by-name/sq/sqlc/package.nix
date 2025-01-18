@@ -47,11 +47,11 @@ buildGoModule {
     version = "v${version}";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Generate type-safe code from SQL";
     homepage = "https://sqlc.dev/";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ aaronjheng ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ aaronjheng ];
     mainProgram = "sqlc";
   };
 }

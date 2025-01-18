@@ -41,12 +41,12 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/cytoscape
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "http://www.cytoscape.org";
     description = "General platform for complex network analysis and visualization";
     mainProgram = "cytoscape";
-    license = lib.licenses.lgpl21;
-    maintainers = [ lib.maintainers.mimame ];
-    platforms = lib.platforms.unix;
+    license = licenses.lgpl21;
+    maintainers = [ maintainers.mimame ];
+    platforms = platforms.unix;
   };
 }

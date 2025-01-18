@@ -130,15 +130,15 @@ stdenv.mkDerivation (finalAttrs: {
     xscreensaver = nixosTests.xscreensaver;
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.jwz.org/xscreensaver/";
     description = "Set of screensavers";
     downloadPage = "https://www.jwz.org/xscreensaver/download.html";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       raskin
       AndersonTorres
     ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 })

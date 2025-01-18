@@ -39,11 +39,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Scrollable tiling Kwin script";
     homepage = "https://github.com/peterfajdiga/karousel";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ k900 ];
-    platforms = lib.platforms.all;
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ k900 ];
+    platforms = platforms.all;
   };
 })

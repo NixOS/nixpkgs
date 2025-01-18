@@ -30,11 +30,11 @@ buildPythonApplication rec {
     runHook postCheck
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Record the CPU and memory activity of a process";
     homepage = "https://github.com/astrofrog/psrecord";
-    license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ johnazoidberg ];
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ johnazoidberg ];
     mainProgram = "psrecord";
   };
 }

@@ -31,12 +31,12 @@ buildGoModule rec {
 
   ldflags = [ "-s" ];
 
-  meta = {
+  meta = with lib; {
     description = "Tools for compiling many Go commands into one binary to save space";
     longDescription = "Builds are supported for vendor-based Go and module-based Go";
     homepage = "https://github.com/u-root/gobusybox";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ katexochen ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ katexochen ];
     mainProgram = "makebb";
   };
 }

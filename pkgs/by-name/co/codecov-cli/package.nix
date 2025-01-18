@@ -35,10 +35,10 @@ python3Packages.buildPythonApplication rec {
     tree-sitter
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Codecov Command Line Interface";
     homepage = "https://github.com/codecov/codecov-cli";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ veehaitch ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ veehaitch ];
   };
 }

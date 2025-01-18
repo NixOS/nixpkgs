@@ -124,10 +124,10 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Game engine for a 6DOF first-person shooter";
     homepage = "https://github.com/DescentDevelopers/Descent3";
-    license = with lib.licenses; [
+    license = with licenses; [
       # See LICENSE and header that’s at the top of many source files.
       gpl3Plus
       # See THIRD_PARTY.md.
@@ -135,18 +135,18 @@ stdenv.mkDerivation rec {
       mit
     ];
     mainProgram = "Descent3";
-    maintainers = [ lib.maintainers.jayman2000 ];
-    platforms = lib.platforms.all;
+    maintainers = [ maintainers.jayman2000 ];
+    platforms = platforms.all;
     badPlatforms = [
       # Descent 3 stores modules in HOG2 archives. It extracts those modules
       # and then tries to dlopen() them at runtime.
-      lib.systems.inspect.platformPatterns.isStatic
+      systems.inspect.platformPatterns.isStatic
       # When you build Descent 3 on Darwin, it produces a different directory
       # structure (no bin/ directory) [1]. I’m sure that this derivation could be
       # updated to account for that different directory structure, but I don’t
       # have any Darwin systems to test things on at the moment.
       #
       # [1]: <https://logs.ofborg.org/?key=nixos/nixpkgs.355710&attempt_id=747dd630-5068-4ba9-9c50-6f150634ef1a>
-    ] ++ lib.platforms.darwin;
+    ] ++ platforms.darwin;
   };
 }

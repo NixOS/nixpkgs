@@ -33,11 +33,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontWrapQtApps = true;
 
-  meta = {
+  meta = with lib; {
     description = "Color Monitor plugin for OBS Studio";
     homepage = "https://github.com/norihiro/obs-color-monitor";
-    license = lib.licenses.gpl2Only;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ hlad ];
+    license = licenses.gpl2Only;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ hlad ];
   };
 })

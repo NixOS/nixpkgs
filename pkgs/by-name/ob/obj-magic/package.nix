@@ -27,12 +27,12 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Command line tool for manipulating Wavefront OBJ 3D meshes";
     homepage = "https://github.com/tapio/obj-magic";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ lorenz ];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ lorenz ];
+    platforms = platforms.unix;
     mainProgram = "obj-magic";
   };
 }

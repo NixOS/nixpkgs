@@ -36,11 +36,11 @@ clangStdenv.mkDerivation (finalAttrs: {
     build-hello-world = (import ./test-build-and-run.nix) { inherit clangStdenv objfw writeTextDir; };
   };
 
-  meta = {
+  meta = with lib; {
     description = "A portable framework for the Objective-C language";
     homepage = "https://objfw.nil.im";
-    license = lib.licenses.lgpl3;
-    maintainers = [ lib.maintainers.steeleduncan ];
-    platforms = lib.platforms.linux;
+    license = licenses.lgpl3;
+    maintainers = [ maintainers.steeleduncan ];
+    platforms = platforms.linux;
   };
 })

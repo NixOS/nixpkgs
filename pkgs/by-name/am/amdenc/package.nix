@@ -34,12 +34,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "AMD Encode Core Library";
     homepage = "https://www.amd.com/en/support/download/drivers.html";
-    license = lib.licenses.unfree;
+    license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
-    maintainers = with lib.maintainers; [ jopejoe1 ];
+    sourceProvenance = [ sourceTypes.binaryNativeCode ];
+    maintainers = with maintainers; [ jopejoe1 ];
   };
 })

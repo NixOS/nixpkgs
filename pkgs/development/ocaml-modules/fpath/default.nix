@@ -36,11 +36,11 @@ else
 
     inherit (topkg) buildPhase installPhase;
 
-    meta = {
+    meta = with lib; {
       description = "OCaml module for handling file system paths with POSIX and Windows conventions";
       homepage = "https://erratique.ch/software/fpath";
-      license = lib.licenses.isc;
-      maintainers = [ lib.maintainers.vbgl ];
+      license = licenses.isc;
+      maintainers = [ maintainers.vbgl ];
       inherit (ocaml.meta) platforms;
     };
   }

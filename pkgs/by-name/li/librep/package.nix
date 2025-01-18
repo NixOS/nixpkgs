@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   setupHook = ./setup-hook.sh;
 
-  meta = {
+  meta = with lib; {
     homepage = "http://sawfish.tuxfamily.org/";
     description = "Fast, lightweight, and versatile Lisp environment";
     longDescription = ''
@@ -48,9 +48,9 @@ stdenv.mkDerivation (finalAttrs: {
       compiler, and a virtual machine. It can serve as an application extension
       language but is also suitable for standalone scripts.
     '';
-    license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.AndersonTorres ];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.AndersonTorres ];
+    platforms = platforms.unix;
   };
 })
 # TODO: investigate fetchFromGithub

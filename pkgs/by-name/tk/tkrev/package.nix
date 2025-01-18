@@ -31,10 +31,10 @@ stdenv.mkDerivation rec {
     ./doinstall.tcl $out
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://tkcvs.sourceforge.io";
     description = "TCL/TK GUI for cvs and subversion";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.unix;
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
   };
 }

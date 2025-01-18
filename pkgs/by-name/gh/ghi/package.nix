@@ -36,11 +36,11 @@ stdenv.mkDerivation (finalAttrs: {
     cp ghi $out/bin
   '';
 
-  meta = {
+  meta = with lib; {
     description = "GitHub Issues on the command line";
     mainProgram = "ghi";
     homepage = "https://github.com/drazisil/ghi";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ sigmanificient ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ sigmanificient ];
   };
 })

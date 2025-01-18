@@ -28,12 +28,12 @@ buildPythonPackage rec {
 
   pythonNamespaces = [ "zc" ];
 
-  meta = {
+  meta = with lib; {
     description = "Software build and configuration system";
     mainProgram = "buildout";
     downloadPage = "https://github.com/buildout/buildout";
     homepage = "https://www.buildout.org";
-    license = lib.licenses.zpl21;
-    maintainers = with lib.maintainers; [ gotcha ];
+    license = licenses.zpl21;
+    maintainers = with maintainers; [ gotcha ];
   };
 }

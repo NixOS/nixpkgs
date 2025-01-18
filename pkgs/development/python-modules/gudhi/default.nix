@@ -83,14 +83,14 @@ buildPythonPackage rec {
     "gudhi.clustering"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Library for Computational Topology and Topological Data Analysis (TDA)";
     homepage = "https://gudhi.inria.fr/python/latest/";
     downloadPage = "https://github.com/GUDHI/gudhi-devel";
-    license = with lib.licenses; [
+    license = with licenses; [
       mit
       gpl3
     ];
-    maintainers = with lib.maintainers; [ yl3dy ];
+    maintainers = with maintainers; [ yl3dy ];
   };
 }

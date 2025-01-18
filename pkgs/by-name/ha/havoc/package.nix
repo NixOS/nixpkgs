@@ -45,15 +45,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/ii8/havoc";
     description = "Minimal terminal emulator for Wayland";
-    license = with lib.licenses; [
+    license = with licenses; [
       mit
       publicDomain
     ];
     mainProgram = "havoc";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ AndersonTorres ];
     inherit (wayland.meta) platforms;
     broken = stdenv.hostPlatform.isDarwin; # fatal error: 'sys/epoll.h' file not found
   };

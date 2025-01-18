@@ -71,11 +71,11 @@ stdenv.mkDerivation rec {
     $out/bin/mma -G
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Creates MIDI tracks for a soloist to perform over from a user supplied file containing chords";
     homepage = "https://www.mellowood.ca/mma/index.html";
-    license = lib.licenses.gpl2;
-    maintainers = [ lib.maintainers.magnetophon ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2;
+    maintainers = [ maintainers.magnetophon ];
+    platforms = platforms.linux;
   };
 }

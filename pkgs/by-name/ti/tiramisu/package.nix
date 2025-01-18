@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = {
+  meta = with lib; {
     description = "Desktop notifications, the UNIX way";
     longDescription = ''
       tiramisu is a notification daemon based on dunst that outputs notifications
@@ -35,9 +35,9 @@ stdenv.mkDerivation (finalAttrs: {
       prefer.
     '';
     homepage = "https://github.com/Sweets/tiramisu";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
       wishfort36
       moni
     ];

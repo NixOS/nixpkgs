@@ -54,12 +54,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
-  meta = {
+  meta = with lib; {
     description = "Drag multiple files and folders on to Collection window, drop them anywhere!";
     mainProgram = "collector";
     homepage = "https://github.com/mijorus/collector";
-    license = lib.licenses.gpl3;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ CaptainJawZ ];
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ CaptainJawZ ];
   };
 })

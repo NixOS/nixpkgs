@@ -30,11 +30,11 @@ stdenv.mkDerivation (finalAttrs: {
     nodejs
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Simple extensive tar-like archive format with indexing";
     homepage = "https://github.com/electron/asar";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "asar";
-    maintainers = with lib.maintainers; [ xvapx ];
+    maintainers = with maintainers; [ xvapx ];
   };
 })

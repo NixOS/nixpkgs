@@ -32,12 +32,12 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p "$out"/{share/man,bin}
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Console implementation of 2048 game";
     mainProgram = "n2048";
-    license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ raskin ];
-    platforms = lib.platforms.linux;
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.linux;
     homepage = "http://www.dettus.net/n2048/";
   };
 })

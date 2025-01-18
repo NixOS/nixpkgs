@@ -38,10 +38,10 @@ stdenv.mkDerivation {
     sed -i /XIPH_PATH_OGG/d configure
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://xiph.org/tremor/";
     description = "Fixed-point version of the Ogg Vorbis decoder";
-    license = lib.licenses.bsd3;
-    platforms = lib.platforms.unix;
+    license = licenses.bsd3;
+    platforms = platforms.unix;
   };
 }

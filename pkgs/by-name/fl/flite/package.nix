@@ -67,11 +67,11 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Small, fast run-time speech synthesis engine";
     homepage = "http://www.festvox.org/flite/";
-    license = lib.licenses.bsdOriginal;
-    maintainers = with lib.maintainers; [ getchoo ];
+    license = licenses.bsdOriginal;
+    maintainers = with maintainers; [ getchoo ];
     mainProgram = "flite";
   };
 })

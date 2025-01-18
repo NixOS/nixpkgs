@@ -17,10 +17,10 @@ buildFishPlugin {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = {
+  meta = with lib; {
     description = "Fish plugin to quickly put 'sudo' in your command";
     homepage = "https://github.com/oh-my-fish/plugin-sudope";
-    license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ anomalocaris ];
+    license = licenses.isc;
+    maintainers = with maintainers; [ anomalocaris ];
   };
 }

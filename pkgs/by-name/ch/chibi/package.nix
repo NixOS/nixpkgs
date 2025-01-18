@@ -33,11 +33,11 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/ashinn/chibi-scheme";
     description = "Small Footprint Scheme for use as a C Extension Language";
-    platforms = lib.platforms.all;
-    license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.DerGuteMoritz ];
+    platforms = platforms.all;
+    license = licenses.bsd3;
+    maintainers = [ maintainers.DerGuteMoritz ];
   };
 }

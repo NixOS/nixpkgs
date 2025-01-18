@@ -23,11 +23,11 @@ rustPlatform.buildRustPackage rec {
     darwin.apple_sdk_11_0.frameworks.AppKit
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Utility to copy project tree contents to clipboard";
     homepage = "https://github.com/DeeKahy/CopyCat";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.deekahy ];
+    license = licenses.mit;
+    maintainers = [ maintainers.deekahy ];
     mainProgram = "ccat";
   };
 }

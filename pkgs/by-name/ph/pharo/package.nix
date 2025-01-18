@@ -83,19 +83,19 @@ stdenv.mkDerivation (finalAttrs: {
       wrapProgram "$out/bin/pharo" --argv0 $out/bin/pharo --prefix LD_LIBRARY_PATH ":" "${libPath}"
     '';
 
-  meta = {
+  meta = with lib; {
     description = "Clean and innovative Smalltalk-inspired environment";
     homepage = "https://pharo.org";
     changelog = "https://github.com/pharo-project/pharo/releases/";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     longDescription = ''
       Pharo's goal is to deliver a clean, innovative, free open-source
       Smalltalk-inspired environment. By providing a stable and small core
       system, excellent dev tools, and maintained releases, Pharo is an
       attractive platform to build and deploy mission critical applications.
     '';
-    maintainers = with lib.maintainers; [ ehmry ];
+    maintainers = with maintainers; [ ehmry ];
     mainProgram = "pharo";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 })

@@ -94,13 +94,13 @@ stdenv.mkDerivation (finalAttrs: {
     find $out/lib/app{,/mods}/doc/javadocs -name "*.html" -exec strip-nondeterminism --type javadoc {} +
   '';
 
-  meta = {
+  meta = with lib; {
     description = "A visual tool for browsing and editing HDF4 and HDF5 files";
-    license = lib.licenses.free; # BSD-like
+    license = licenses.free; # BSD-like
     homepage = "https://www.hdfgroup.org/downloads/hdfview";
     downloadPage = "https://github.com/HDFGroup/hdfview";
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ jiegec ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ jiegec ];
     mainProgram = "HDFView";
     # Startup issue is described here:
     # https://github.com/NixOS/nixpkgs/issues/340048 A possible solution is

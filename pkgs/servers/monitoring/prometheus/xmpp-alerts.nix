@@ -54,11 +54,11 @@ python3Packages.buildPythonApplication rec {
     '';
   };
 
-  meta = {
+  meta = with lib; {
     description = "XMPP Web hook for Prometheus";
     mainProgram = "prometheus-xmpp-alerts";
     homepage = "https://github.com/jelmer/prometheus-xmpp-alerts";
-    maintainers = with lib.maintainers; [ fpletz ];
-    license = with lib.licenses; [ asl20 ];
+    maintainers = with maintainers; [ fpletz ];
+    license = with licenses; [ asl20 ];
   };
 }

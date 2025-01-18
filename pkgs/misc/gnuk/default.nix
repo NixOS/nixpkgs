@@ -62,11 +62,11 @@ stdenv.mkDerivation (finalAttrs: {
     chmod +x $out/bin/{unlock,flash}
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.fsij.org/category/gnuk.html";
     description = "Implementation of USB cryptographic token for gpg";
-    license = lib.licenses.gpl3;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3;
+    platforms = platforms.linux;
     maintainers = [ ];
     broken = true; # Needs Picolib, which is not packaged in Nixpkgs.
   };

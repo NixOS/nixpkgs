@@ -67,12 +67,12 @@ stdenv.mkDerivation {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "A fork of Basalt improved for tracking XR devices with Monado";
     homepage = "https://gitlab.freedesktop.org/mateosss/basalt";
-    license = lib.licenses.bsd3;
+    license = licenses.bsd3;
     mainProgram = "basalt_vio";
-    maintainers = [ lib.maintainers.locochoco ];
-    platforms = lib.platforms.linux;
+    maintainers = [ maintainers.locochoco ];
+    platforms = platforms.linux;
   };
 }

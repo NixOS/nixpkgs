@@ -31,12 +31,12 @@ rustPlatform.buildRustPackage rec {
     "--skip=runs_regex_from_input_file_badline_j1"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Rust shell tool to run commands in parallel with a similar interface to GNU parallel";
     homepage = "https://github.com/aaronriekenberg/rust-parallel";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "rust-parallel";
-    maintainers = with lib.maintainers; [ sedlund ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ sedlund ];
+    platforms = platforms.linux;
   };
 }

@@ -47,12 +47,12 @@ mkYarnPackage rec {
 
   doDist = false;
 
-  meta = {
+  meta = with lib; {
     description = "dokieli is a clientside editor for decentralised article publishing, annotations and social interactions";
     homepage = "https://github.com/linkeddata/dokieli";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ shogo ];
+    license = licenses.mit;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ shogo ];
     mainProgram = "dokieli";
   };
 }

@@ -25,10 +25,10 @@ buildDunePackage rec {
     integers
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.liquidsoap.info/ocaml-posix/";
     description = "Base module for the posix bindings";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.mit;
+    maintainers = [ maintainers.vbgl ];
   };
 }

@@ -22,12 +22,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Cursor manager for macOS built using private, nonintrusive CoreGraphics APIs";
     homepage = "https://github.com/alexzielenski/Mousecape";
-    license = lib.licenses.free;
-    maintainers = with lib.maintainers; [ donteatoreo ];
-    platforms = lib.platforms.darwin;
-    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+    license = licenses.free;
+    maintainers = with maintainers; [ donteatoreo ];
+    platforms = platforms.darwin;
+    sourceProvenance = [ sourceTypes.binaryNativeCode ];
   };
 })

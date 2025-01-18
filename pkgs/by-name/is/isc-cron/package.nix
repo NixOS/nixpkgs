@@ -60,12 +60,12 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/{{,s}bin,share/man/man{1,5,8}}
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://ftp.isc.org/isc/cron/";
     description = "Daemon for running commands at specific times";
-    license = lib.licenses.bsd0;
+    license = licenses.bsd0;
     mainProgram = "cron";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.unix;
   };
 })

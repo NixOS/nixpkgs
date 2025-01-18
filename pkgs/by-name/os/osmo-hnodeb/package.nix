@@ -49,12 +49,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     description = "(upper layers of) HomeNodeB";
     mainProgram = "osmo-hnodeb";
     homepage = "https://osmocom.org/projects/osmo-hnodeb";
-    license = lib.licenses.agpl3Plus;
+    license = licenses.agpl3Plus;
     maintainers = [ ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

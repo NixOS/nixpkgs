@@ -126,15 +126,15 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Early in development PS4 emulator";
     homepage = "https://github.com/shadps4-emu/shadPS4";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [
       ryand56
       liberodark
     ];
     mainProgram = "shadps4";
-    platforms = lib.intersectLists lib.platforms.linux lib.platforms.x86_64;
+    platforms = intersectLists platforms.linux platforms.x86_64;
   };
 })

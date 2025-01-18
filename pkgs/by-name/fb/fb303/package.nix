@@ -62,12 +62,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Base Thrift service and a common set of functionality for querying stats, options, and other information from a service";
     homepage = "https://github.com/facebook/fb303";
-    license = lib.licenses.asl20;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [
+    license = licenses.asl20;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
       kylesferrazza
       emily
       techknowlogick

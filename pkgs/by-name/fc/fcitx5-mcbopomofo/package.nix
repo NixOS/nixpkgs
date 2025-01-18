@@ -44,11 +44,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "McBopomofo for fcitx5";
     homepage = "https://github.com/openvanilla/fcitx5-mcbopomofo";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ shiphan ];
-    platforms = lib.platforms.linux;
+    license = licenses.mit;
+    maintainers = with maintainers; [ shiphan ];
+    platforms = platforms.linux;
   };
 }

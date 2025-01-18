@@ -35,10 +35,10 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "effdet" ];
 
-  meta = {
+  meta = with lib; {
     description = "PyTorch implementation of EfficientDet";
     homepage = "https://pypi.org/project/effdet";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ happysalada ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ happysalada ];
   };
 }

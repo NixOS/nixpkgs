@@ -100,15 +100,15 @@ stdenv.mkDerivation {
     ./fix-darwin.patch # fix: libtool tag not found; MacFileSystemAccess not declared; server cannot init
   ];
 
-  meta = {
+  meta = with lib; {
     description = "MEGA Command Line Interactive and Scriptable Application";
     homepage = "https://mega.io/cmd";
-    license = with lib.licenses; [
+    license = with licenses; [
       bsd2
       gpl3Only
     ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    maintainers = with lib.maintainers; [
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [
       lunik1
       ulysseszhan
     ];

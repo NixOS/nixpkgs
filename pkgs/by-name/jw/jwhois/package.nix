@@ -35,10 +35,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-liconv";
 
-  meta = {
+  meta = with lib; {
     description = "Client for the WHOIS protocol allowing you to query the owner of a domain name";
     homepage = "https://www.gnu.org/software/jwhois/";
-    license = lib.licenses.gpl3Only;
-    platforms = lib.platforms.unix;
+    license = licenses.gpl3Only;
+    platforms = platforms.unix;
   };
 })

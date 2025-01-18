@@ -24,10 +24,10 @@ buildDunePackage rec {
   propagatedBuildInputs = [ bigstringaf ];
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "Serialization library built for speed and memory efficiency";
-    license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.bsd3;
+    maintainers = [ maintainers.vbgl ];
     inherit (src.meta) homepage;
   };
 }

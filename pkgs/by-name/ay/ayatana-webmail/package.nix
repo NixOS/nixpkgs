@@ -81,11 +81,11 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ libcanberra-gtk3 ]})
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Webmail notifications and actions for any desktop";
     homepage = "https://github.com/AyatanaIndicators/ayatana-webmail";
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ doronbehar ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ doronbehar ];
   };
 }

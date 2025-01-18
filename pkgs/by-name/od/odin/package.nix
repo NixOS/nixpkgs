@@ -83,17 +83,17 @@ stdenv.mkDerivation {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Fast, concise, readable, pragmatic and open sourced programming language";
     downloadPage = "https://github.com/odin-lang/Odin";
     homepage = "https://odin-lang.org/";
-    license = lib.licenses.bsd3;
+    license = licenses.bsd3;
     mainProgram = "odin";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       astavie
       znaniye
     ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
     broken = stdenv.hostPlatform.isMusl;
   };
 }

@@ -121,7 +121,7 @@ stdenv.mkDerivation {
     EOF
     chmod +x "$out/bin/oilrush"
   '';
-  meta = {
+  meta = with lib; {
     description = "Naval strategy game";
     longDescription = ''
       Oil Rush is a real-time naval strategy game based on group control. It
@@ -129,11 +129,11 @@ stdenv.mkDerivation {
       of Tower Defense.
     '';
     homepage = "http://oilrush-game.com/";
-    license = lib.licenses.unfree;
-    #maintainers = with lib.maintainers; [ astsmtl ];
-    platforms = lib.platforms.linux;
+    license = licenses.unfree;
+    #maintainers = with maintainers; [ astsmtl ];
+    platforms = platforms.linux;
     hydraPlatforms = [ ];
-    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+    sourceProvenance = [ sourceTypes.binaryNativeCode ];
   };
 
 }

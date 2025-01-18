@@ -30,10 +30,10 @@ buildDunePackage rec {
     ppx_sexp_conv
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Network connection establishment library";
-    license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [
+    license = licenses.isc;
+    maintainers = with maintainers; [
       alexfmpe
       vbgl
     ];

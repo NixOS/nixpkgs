@@ -55,12 +55,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Minimal dumb-terminal emulation program";
     homepage = "https://gitlab.com/wsakernel/picocom";
     changelog = "https://gitlab.com/wsakernel/picocom/-/releases";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.unix;
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
     mainProgram = "picocom";
   };
 })

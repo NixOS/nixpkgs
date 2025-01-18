@@ -30,11 +30,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Minimalistic GRUB theme insipired by primitivistical and vimix";
     homepage = "https://github.com/tomdewildt/minimal-grub-theme";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ azuwis ];
-    platforms = lib.platforms.linux;
+    license = licenses.mit;
+    maintainers = with maintainers; [ azuwis ];
+    platforms = platforms.linux;
   };
 })

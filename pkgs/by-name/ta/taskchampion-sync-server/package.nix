@@ -15,11 +15,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-Erhr5NduvQyUJSSurKqcZXJe4ExP68t8ysn7hZLAgP4=";
 
-  meta = {
+  meta = with lib; {
     description = "Sync server for Taskwarrior 3";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     homepage = "https://github.com/GothenburgBitFactory/taskchampion-sync-server";
-    maintainers = with lib.maintainers; [ mlaradji ];
+    maintainers = with maintainers; [ mlaradji ];
     mainProgram = "taskchampion-sync-server";
   };
 }

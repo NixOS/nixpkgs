@@ -94,12 +94,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Free software that gathers information on CPU, motherboard and more";
     mainProgram = "cpu-x";
     homepage = "https://thetumultuousunicornofdarkness.github.io/CPU-X";
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     platforms = [ "x86_64-linux" ];
-    maintainers = with lib.maintainers; [ viraptor ];
+    maintainers = with maintainers; [ viraptor ];
   };
 })

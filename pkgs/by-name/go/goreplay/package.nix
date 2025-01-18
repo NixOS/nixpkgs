@@ -36,11 +36,11 @@ buildGoModule rec {
 
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/buger/goreplay";
-    license = lib.licenses.lgpl3Only;
+    license = licenses.lgpl3Only;
     description = "Open-source tool for capturing and replaying live HTTP traffic";
-    maintainers = with lib.maintainers; [ lovek323 ];
+    maintainers = with maintainers; [ lovek323 ];
     mainProgram = "goreplay";
   };
 }

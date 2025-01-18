@@ -27,10 +27,10 @@ else
       result
     ];
 
-    meta = {
+    meta = with lib; {
       description = "Convert OCaml parsetrees between different major versions";
-      license = lib.licenses.lgpl21;
-      maintainers = [ lib.maintainers.vbgl ];
+      license = licenses.lgpl21;
+      maintainers = [ maintainers.vbgl ];
       inherit (src.meta) homepage;
     };
   }

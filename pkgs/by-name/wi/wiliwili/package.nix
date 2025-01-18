@@ -65,16 +65,16 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "CPR_FORCE_USE_SYSTEM_CURL" true)
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Third-party Bilibili client with a switch-like UI";
     homepage = "https://xfangfang.github.io/wiliwili";
     # https://github.com/xfangfang/wiliwili/discussions/355
-    license = lib.licenses.gpl3Only;
+    license = licenses.gpl3Only;
     mainProgram = "wiliwili";
-    maintainers = with lib.maintainers; [ aleksana ];
-    platforms = with lib.platforms; unix ++ windows;
+    maintainers = with maintainers; [ aleksana ];
+    platforms = with platforms; unix ++ windows;
     # Testing on darwin was blocked due to broken swift
     # buildInputs should still need some tweaking, but can't be sure
-    badPlatforms = lib.platforms.darwin;
+    badPlatforms = platforms.darwin;
   };
 })

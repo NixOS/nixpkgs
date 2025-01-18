@@ -25,12 +25,12 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Language server implementation for GLSL";
     mainProgram = "glslls";
     homepage = "https://github.com/svenstaro/glsl-language-server";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ declan ];
-    platforms = lib.platforms.linux;
+    license = licenses.mit;
+    maintainers = with maintainers; [ declan ];
+    platforms = platforms.linux;
   };
 })

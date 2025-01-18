@@ -35,10 +35,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "Simple Eigen-C++ wrapper for OSQP library";
     homepage = "https://github.com/robotology/osqp-eigen";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ nim65s ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ nim65s ];
   };
 })

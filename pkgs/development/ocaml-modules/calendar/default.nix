@@ -19,10 +19,10 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ re ];
 
-  meta = {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Library for handling dates and times";
-    license = lib.licenses.lgpl21Plus;
-    maintainers = [ lib.maintainers.gal_bolle ];
+    license = licenses.lgpl21Plus;
+    maintainers = [ maintainers.gal_bolle ];
   };
 }

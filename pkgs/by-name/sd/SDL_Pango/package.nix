@@ -46,11 +46,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://sdlpango.sourceforge.net/";
     description = "Connects the Pango rendering engine to SDL";
-    license = lib.licenses.lgpl21Plus;
-    maintainers = lib.teams.sdl.members ++ (with lib.maintainers; [ puckipedia ]);
+    license = licenses.lgpl21Plus;
+    maintainers = teams.sdl.members ++ (with maintainers; [ puckipedia ]);
     inherit (SDL.meta) platforms;
   };
 })

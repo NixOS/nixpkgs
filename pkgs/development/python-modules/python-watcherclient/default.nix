@@ -65,11 +65,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "watcherclient" ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/openstack/python-watcherclient";
     description = "Client library for OpenStack Watcher API";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     mainProgram = "watcher";
-    maintainers = lib.teams.openstack.members;
+    maintainers = teams.openstack.members;
   };
 }

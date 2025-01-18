@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   doCheck = false;
   cmakeFlags = [ "-DBUILD_TESTS=OFF" ];
 
-  meta = {
+  meta = with lib; {
     description = "Lightweight portable rapid development library for managing OpenGL display / interaction and abstracting video input";
     longDescription = ''
       Pangolin is a lightweight portable rapid development library for managing
@@ -68,8 +68,8 @@ stdenv.mkDerivation rec {
       graphical data.
     '';
     homepage = "https://github.com/stevenlovegrove/Pangolin";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     maintainers = [ ];
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 }

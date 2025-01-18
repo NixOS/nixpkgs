@@ -38,11 +38,11 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "dnsvalidator" ];
 
-  meta = {
+  meta = with lib; {
     description = "Tool to maintain a list of IPv4 DNS servers";
     homepage = "https://github.com/vortexau/dnsvalidator";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ fab ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ fab ];
     mainProgram = "dnsvalidator";
   };
 }

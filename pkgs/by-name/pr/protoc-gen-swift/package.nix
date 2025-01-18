@@ -46,11 +46,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Protobuf plugin for generating Swift code";
     homepage = "https://github.com/apple/swift-protobuf";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ matteopacini ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ matteopacini ];
     mainProgram = "protoc-gen-swift";
     inherit (swift.meta) platforms badPlatforms;
   };

@@ -61,11 +61,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Simple game server monitor and administrative tool";
     homepage = "https://github.com/lxndr/gswatcher";
-    license = with lib.licenses; [ agpl3Plus ];
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ pluiedev ];
+    license = with licenses; [ agpl3Plus ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ pluiedev ];
   };
 })

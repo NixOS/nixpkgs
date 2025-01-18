@@ -38,12 +38,12 @@ rustPlatform.buildRustPackage rec {
     versionCheckHook
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Boot and upgrade via container images";
     homepage = "https://containers.github.io/bootc";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "bootc";
-    maintainers = with lib.maintainers; [ thesola10 ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ thesola10 ];
+    platforms = platforms.linux;
   };
 }

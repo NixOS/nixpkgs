@@ -33,10 +33,10 @@ buildPythonPackage rec {
   # tests weren't adapted for the fork
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "A fork of SleekXMPP with TLS cert validation disabled, intended only to be used with the sucks project";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     homepage = "https://github.com/aszymanik/SleekXMPP";
-    maintainers = with lib.maintainers; [ dotlambda ];
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

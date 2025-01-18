@@ -21,11 +21,11 @@ let
       sha256 = "0bkzxggbqx7sql3sp46bqham6r457in0vrgh3ai3lw2jrw79pwmh";
     };
 
-    meta = {
+    meta = with lib; {
       description = "KeePass plugin to expose password entries securely (256bit AES/CBC) over HTTP";
       homepage = "https://github.com/pfn/keepasshttp";
-      platforms = with lib.platforms; linux;
-      license = lib.licenses.gpl3;
+      platforms = with platforms; linux;
+      license = licenses.gpl3;
     };
 
     pluginFilename = "KeePassHttp.plgx";

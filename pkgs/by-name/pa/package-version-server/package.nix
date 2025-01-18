@@ -30,11 +30,11 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = lib.versionAtLeast version "0.0.8";
 
-  meta = {
+  meta = with lib; {
     description = "Language server that handles hover information in package.json files";
     homepage = "https://github.com/zed-industries/package-version-server/";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ felixdorn ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ felixdorn ];
     mainProgram = "package-version-server";
   };
 }

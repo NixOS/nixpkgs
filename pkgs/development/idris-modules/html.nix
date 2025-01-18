@@ -27,10 +27,10 @@ build-idris-package {
     sed -i "s/hrTime/hrtime/g" source/html.ipkg
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Idris library to interact with HTML";
     homepage = "https://github.com/pierrebeaucamp/idris-html";
-    license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.brainrape ];
+    license = licenses.asl20;
+    maintainers = [ maintainers.brainrape ];
   };
 }

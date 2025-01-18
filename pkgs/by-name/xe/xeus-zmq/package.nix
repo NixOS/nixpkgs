@@ -36,11 +36,11 @@ clangStdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ nlohmann_json ];
 
-  meta = {
+  meta = with lib; {
     description = "ZeroMQ-based middleware for xeus";
     homepage = "https://github.com/jupyter-xeus/xeus-zmq";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ thomasjm ];
-    platforms = lib.platforms.all;
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ thomasjm ];
+    platforms = platforms.all;
   };
 }

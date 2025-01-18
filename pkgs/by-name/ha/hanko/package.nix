@@ -27,12 +27,12 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion assets/completions/hanko.fish
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Keeps your Git allowed signers file up to date";
     homepage = "https://github.com/SRv6d/hanko";
     changelog = "https://github.com/SRv6d/hanko/blob/main/CHANGELOG.md";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ srv6d ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ srv6d ];
     mainProgram = "hanko";
   };
 }

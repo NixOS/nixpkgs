@@ -34,12 +34,12 @@ stdenv.mkDerivation rec {
 
   createFindlibDestdir = true;
 
-  meta = {
+  meta = with lib; {
     platforms = ocaml.meta.platforms or [ ];
-    maintainers = with lib.maintainers; [ vbgl ];
+    maintainers = with maintainers; [ vbgl ];
     homepage = "http://gtk-extras.forge.ocamlcore.org/";
     description = "Collection of libraries and modules useful when developing OCaml/LablGtk2 applications";
-    license = lib.licenses.lgpl2Plus;
+    license = licenses.lgpl2Plus;
     branch = "1.4";
   };
 }

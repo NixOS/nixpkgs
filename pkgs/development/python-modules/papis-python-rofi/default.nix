@@ -17,10 +17,10 @@ buildPythonPackage rec {
   # No tests existing
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Python module to make simple GUIs with Rofi";
     homepage = "https://github.com/alejandrogallo/python-rofi";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.nico202 ];
+    license = licenses.mit;
+    maintainers = [ maintainers.nico202 ];
   };
 }

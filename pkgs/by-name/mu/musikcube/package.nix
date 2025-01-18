@@ -94,15 +94,15 @@ stdenv.mkDerivation (finalAttrs: {
     install_name_tool -add_rpath $out/share/musikcube $out/share/musikcube/musikcubed
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Terminal-based music player, library, and streaming audio server";
     homepage = "https://musikcube.com/";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       aanderse
       afh
     ];
     mainProgram = "musikcube";
-    license = lib.licenses.bsd3;
-    platforms = lib.platforms.all;
+    license = licenses.bsd3;
+    platforms = platforms.all;
   };
 })

@@ -34,11 +34,11 @@ stdenv.mkDerivation (finalAttrs: {
     bash generate-version-header.sh
   '';
 
-  meta = {
+  meta = with lib; {
     description = "C language binding for wxWidgets";
     homepage = "https://wiki.haskell.org/WxHaskell";
-    license = lib.licenses.wxWindows;
-    maintainers = with lib.maintainers; [ fgaz ];
+    license = licenses.wxWindows;
+    maintainers = with maintainers; [ fgaz ];
     platforms = wxGTK32.meta.platforms;
   };
 })

@@ -47,10 +47,10 @@ mkLibretroCore {
 
   preInstall = "cd bin";
 
-  meta = {
+  meta = with lib; {
     description = "Port of PCSX2 to libretro";
     homepage = "https://github.com/libretro/ps2";
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.x86;
+    license = licenses.gpl3Plus;
+    platforms = platforms.x86;
   };
 }

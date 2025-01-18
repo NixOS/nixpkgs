@@ -116,10 +116,10 @@ stdenv.mkDerivation {
     })
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Free fast-paced first-person shooter";
     homepage = "http://www.alientrap.org/games/nexuiz";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
   };
 }

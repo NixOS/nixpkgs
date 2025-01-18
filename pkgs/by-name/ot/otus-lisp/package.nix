@@ -20,15 +20,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = {
+  meta = with lib; {
     description = "Purely functional dialect of Lisp";
     homepage = "https://yuriy-chumak.github.io/ol/";
-    license = with lib.licenses; [
+    license = with licenses; [
       mit
       lgpl3Only
     ]; # dual licensed
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ nagy ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ nagy ];
     mainProgram = "ol";
   };
 })

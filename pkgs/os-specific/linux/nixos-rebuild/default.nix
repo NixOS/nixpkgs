@@ -77,11 +77,11 @@ substitute {
     execer cannot bin/nixos-rebuild
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Rebuild your NixOS configuration and switch to it, on local hosts and remote";
     homepage = "https://github.com/NixOS/nixpkgs/tree/master/pkgs/os-specific/linux/nixos-rebuild";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       Profpatsch
       thiagokokada
     ];

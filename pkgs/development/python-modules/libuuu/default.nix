@@ -50,11 +50,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Python wrapper for libuuu";
     homepage = "https://github.com/nxp-imx/mfgtools/tree/master/wrapper";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ GaetanLepage ];
     badPlatforms = [
       # The pypi archive does not contain the pre-built library for these platforms
       "aarch64-linux"

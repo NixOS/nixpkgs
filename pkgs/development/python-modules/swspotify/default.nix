@@ -43,10 +43,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "SwSpotify" ];
 
-  meta = {
+  meta = with lib; {
     description = "Library to get the currently playing song and artist from Spotify";
     homepage = "https://github.com/SwagLyrics/SwSpotify";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ siraben ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ siraben ];
   };
 }

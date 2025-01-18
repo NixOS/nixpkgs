@@ -167,7 +167,7 @@ stdenv.mkDerivation {
     HOST_PATH=$out/bin:$HOST_PATH patchShebangs --host $out/share/zsh/*/functions
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Z shell";
     longDescription = ''
       Zsh is a UNIX command interpreter (shell) usable as an interactive login
@@ -179,11 +179,11 @@ stdenv.mkDerivation {
     '';
     license = "MIT-like";
     homepage = "https://www.zsh.org/";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       pSub
       artturin
     ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
     mainProgram = "zsh";
   };
 

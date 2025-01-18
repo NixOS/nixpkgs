@@ -74,12 +74,12 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Commit message editor";
     homepage = "https://github.com/sonnyp/Commit";
-    license = lib.licenses.gpl3Only;
-    maintainers = lib.teams.gnome-circle.members;
+    license = licenses.gpl3Only;
+    maintainers = teams.gnome-circle.members;
     mainProgram = "re.sonny.Commit";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 })

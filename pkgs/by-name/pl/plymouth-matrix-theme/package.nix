@@ -33,7 +33,7 @@ stdenvNoCC.mkDerivation {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = {
+  meta = with lib; {
     description = "Plymouth boot theme inspired by Matrix";
     longDescription = ''
       A very simple boot animation that emulates
@@ -41,8 +41,8 @@ stdenvNoCC.mkDerivation {
       beginning of The Matrix (1999).
     '';
     homepage = "https://github.com/storax/plymouth-matrix-theme";
-    license = lib.licenses.gpl3;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ johnrtitor ];
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ johnrtitor ];
   };
 }

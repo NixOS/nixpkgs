@@ -39,11 +39,11 @@ stdenv.mkDerivation (finalAttrs: {
        FIND_PACKAGE(Qt5OpenGL REQUIRED)"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Qt bindings for OpenSceneGraph";
     homepage = "https://github.com/openscenegraph/osgQt";
     license = "OpenSceneGraph Public License - free LGPL-based license";
-    maintainers = [ lib.maintainers.nim65s ];
-    platforms = lib.platforms.unix;
+    maintainers = [ maintainers.nim65s ];
+    platforms = platforms.unix;
   };
 })

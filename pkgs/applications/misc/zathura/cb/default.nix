@@ -39,14 +39,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.PKG_CONFIG_ZATHURA_PLUGINDIR = "lib/zathura";
 
-  meta = {
+  meta = with lib; {
     homepage = "https://pwmt.org/projects/zathura-cb/";
     description = "Zathura CB plugin";
     longDescription = ''
       The zathura-cb plugin adds comic book support to zathura.
     '';
-    license = lib.licenses.zlib;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ jlesquembre ];
+    license = licenses.zlib;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ jlesquembre ];
   };
 })

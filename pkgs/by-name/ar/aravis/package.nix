@@ -82,15 +82,15 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "Library for video acquisition using GenICam cameras";
     longDescription = ''
       Implements the gigabit ethernet and USB3 protocols used by industrial cameras.
     '';
     # the documentation is the best working homepage that's not the Github repo
     homepage = "https://aravisproject.github.io/docs/aravis-0.8";
-    license = lib.licenses.lgpl2;
-    maintainers = with lib.maintainers; [ tpw_rules ];
-    platforms = lib.platforms.unix;
+    license = licenses.lgpl2;
+    maintainers = with maintainers; [ tpw_rules ];
+    platforms = platforms.unix;
   };
 }

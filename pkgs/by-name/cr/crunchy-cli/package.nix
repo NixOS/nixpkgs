@@ -45,11 +45,11 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Command-line downloader for Crunchyroll";
     homepage = "https://github.com/crunchy-labs/crunchy-cli";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ stepbrobd ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ stepbrobd ];
     mainProgram = "crunchy-cli";
   };
 }

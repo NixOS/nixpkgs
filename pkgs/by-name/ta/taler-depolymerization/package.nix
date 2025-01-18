@@ -44,10 +44,10 @@ rustPlatform.buildRustPackage {
     ]
   );
 
-  meta = {
+  meta = with lib; {
     description = "Wire gateway for Bitcoin/Ethereum";
     homepage = "https://git.taler.net/depolymerization.git/";
-    license = lib.licenses.agpl3Only;
-    maintainers = lib.teams.ngi.members;
+    license = licenses.agpl3Only;
+    maintainers = teams.ngi.members;
   };
 }

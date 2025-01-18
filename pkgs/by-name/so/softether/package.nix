@@ -41,11 +41,11 @@ stdenv.mkDerivation (finalAttrs: {
       Makefile
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Open-Source Free Cross-platform Multi-protocol VPN Program";
     homepage = "https://www.softether.org/";
-    license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.rick68 ];
+    license = licenses.asl20;
+    maintainers = [ maintainers.rick68 ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

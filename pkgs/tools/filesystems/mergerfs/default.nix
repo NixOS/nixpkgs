@@ -58,11 +58,11 @@ stdenv.mkDerivation rec {
     ln -srf $out/bin/mergerfs $out/bin/mount.mergerfs
   '';
 
-  meta = {
+  meta = with lib; {
     description = "FUSE based union filesystem";
     homepage = "https://github.com/trapexit/mergerfs";
-    license = lib.licenses.isc;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ makefu ];
+    license = licenses.isc;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ makefu ];
   };
 }

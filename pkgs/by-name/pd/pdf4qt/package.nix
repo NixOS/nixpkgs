@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     qtWrapperArgs+=(''${gappsWrapperArgs[@]})
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Open source PDF editor";
     longDescription = ''
       This software is consisting of PDF rendering library,
@@ -70,9 +70,9 @@ stdenv.mkDerivation (finalAttrs: {
       functionality based on PDF Reference 2.0.
     '';
     homepage = "https://jakubmelka.github.io";
-    license = lib.licenses.lgpl3Only;
+    license = licenses.lgpl3Only;
     mainProgram = "Pdf4QtViewerLite";
-    maintainers = with lib.maintainers; [ aleksana ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ aleksana ];
+    platforms = platforms.linux;
   };
 })

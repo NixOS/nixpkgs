@@ -43,10 +43,10 @@ buildPythonPackage rec {
     "fwup_utils"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Python FirmWare UPgrader";
     homepage = "https://github.com/greatscottgadgets/pyfwup";
-    license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.msanft ];
+    license = licenses.bsd3;
+    maintainers = [ maintainers.msanft ];
   };
 }

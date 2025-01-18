@@ -39,12 +39,12 @@ stdenv.mkDerivation rec {
     xorg.libXext
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/tias/xinput_calibrator";
     description = "Generic touchscreen calibration program for X.Org";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.flosse ];
-    platforms = lib.platforms.linux;
+    license = licenses.mit;
+    maintainers = [ maintainers.flosse ];
+    platforms = platforms.linux;
     mainProgram = "xinput_calibrator";
   };
 }

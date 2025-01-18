@@ -24,11 +24,11 @@ buildGoModule {
     "-w"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Manage local application configuration files using templates and data from etcd or consul";
     homepage = "https://github.com/kelseyhightower/confd";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.zimbatm ];
+    license = licenses.mit;
+    maintainers = [ maintainers.zimbatm ];
     mainProgram = "confd";
   };
 }

@@ -101,7 +101,7 @@ buildPythonPackage rec {
     kaleido = callPackage ./tests.nix { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Fast static image export for web-based visualization libraries with zero dependencies";
     homepage = "https://github.com/plotly/Kaleido";
     changelog = "https://github.com/plotly/Kaleido/releases";
@@ -111,8 +111,8 @@ buildPythonPackage rec {
       "aarch64-linux"
       "aarch64-darwin"
     ];
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ]; # Trust me, I'm not happy. But after literal hours of trying to reverse-engineer their build system and getting nowhere, I'll use the stupid binaries >:(
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pandapip1 ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ]; # Trust me, I'm not happy. But after literal hours of trying to reverse-engineer their build system and getting nowhere, I'll use the stupid binaries >:(
+    license = licenses.mit;
+    maintainers = with maintainers; [ pandapip1 ];
   };
 }

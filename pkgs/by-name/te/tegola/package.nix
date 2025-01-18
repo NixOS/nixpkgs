@@ -47,11 +47,11 @@ buildGoModule {
     go generate ./server
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.tegola.io/";
     description = "Mapbox Vector Tile server";
     mainProgram = "tegola";
-    maintainers = lib.teams.geospatial.members ++ (with lib.maintainers; [ ingenieroariel ]);
-    license = lib.licenses.mit;
+    maintainers = teams.geospatial.members ++ (with maintainers; [ ingenieroariel ]);
+    license = licenses.mit;
   };
 }

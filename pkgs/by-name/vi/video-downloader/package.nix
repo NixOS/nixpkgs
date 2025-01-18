@@ -61,12 +61,12 @@ python3Packages.buildPythonApplication rec {
     )
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/Unrud/video-downloader";
     changelog = "https://github.com/Unrud/video-downloader/releases";
     description = "GUI application based on yt-dlp";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ fliegendewurst ];
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ fliegendewurst ];
     mainProgram = "video-downloader";
   };
 }

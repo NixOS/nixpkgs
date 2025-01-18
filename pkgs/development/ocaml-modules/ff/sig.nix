@@ -23,10 +23,10 @@ buildDunePackage rec {
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Minimal finite field signatures";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.ulrikstrid ];
+    license = licenses.mit;
+    maintainers = [ maintainers.ulrikstrid ];
   };
 }

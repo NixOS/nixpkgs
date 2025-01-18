@@ -28,14 +28,14 @@ rustPlatform.buildRustPackage rec {
     darwin.apple_sdk.frameworks.Security
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Self-hosted solution to enable secure connectivity between devices across restricted networks like NAT or firewalls";
     homepage = "https://github.com/narrowlink/narrowlink";
-    license = with lib.licenses; [
+    license = with licenses; [
       agpl3Only
       mpl20
     ]; # the gateway component is AGPLv3, the rest is MPLv2
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = with maintainers; [ dit7ya ];
     mainProgram = "narrowlink";
   };
 }

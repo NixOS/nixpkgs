@@ -32,9 +32,9 @@ stdenvNoCC.mkDerivation rec {
     yarn2nix
   ];
 
-  meta = {
-    maintainers = with lib.maintainers; [ ];
+  meta = with lib; {
+    maintainers = with maintainers; [ ];
     description = "Utility to generate Nix expressions for Zammad's dependencies";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }

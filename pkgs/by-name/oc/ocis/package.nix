@@ -78,11 +78,11 @@ buildGoModule rec {
     updateScript = ./update.sh;
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/owncloud/web";
     description = "Next generation frontend for ownCloud Infinite Scale";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     mainProgram = "ocis";
-    maintainers = with lib.maintainers; [ xinyangli ];
+    maintainers = with maintainers; [ xinyangli ];
   };
 }

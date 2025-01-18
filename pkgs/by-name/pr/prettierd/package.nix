@@ -34,14 +34,14 @@ stdenv.mkDerivation (finalAttrs: {
     nodejs
   ];
 
-  meta = {
+  meta = with lib; {
     mainProgram = "prettierd";
     description = "Prettier, as a daemon, for improved formatting speed";
     homepage = "https://github.com/fsouza/prettierd";
-    license = lib.licenses.isc;
+    license = licenses.isc;
     changelog = "https://github.com/fsouza/prettierd/blob/${finalAttrs.src.rev}/CHANGELOG.md";
-    platforms = with lib.platforms; linux ++ darwin;
-    maintainers = with lib.maintainers; [
+    platforms = with platforms; linux ++ darwin;
+    maintainers = with maintainers; [
       NotAShelf
       n3oney
     ];

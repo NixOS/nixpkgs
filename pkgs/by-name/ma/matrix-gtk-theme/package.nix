@@ -113,11 +113,11 @@ lib.checkListOfEnum "${pname}: colorVariants" colorVariantList colorVariants lib
       runHook postInstall
     '';
 
-    meta = {
+    meta = with lib; {
       description = "GTK theme based on the Matrix colour palette";
       homepage = "https://github.com/D3vil0p3r/Matrix-GTK-Theme";
-      license = lib.licenses.gpl3Plus;
-      maintainers = with lib.maintainers; [ d3vil0p3r ];
-      platforms = lib.platforms.unix;
+      license = licenses.gpl3Plus;
+      maintainers = with maintainers; [ d3vil0p3r ];
+      platforms = platforms.unix;
     };
   }

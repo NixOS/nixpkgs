@@ -67,15 +67,15 @@ rustPlatform.buildRustPackage rec {
     command = "edgedb --version";
   };
 
-  meta = {
+  meta = with lib; {
     description = "EdgeDB cli";
     homepage = "https://www.edgedb.com/docs/cli/index";
-    license = with lib.licenses; [
+    license = with licenses; [
       asl20
       # or
       mit
     ];
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       ahirner
       kirillrdy
     ];

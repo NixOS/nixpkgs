@@ -23,12 +23,12 @@ buildNpmPackage rec {
 
   passthru.updateScript = ./update.sh;
 
-  meta = {
+  meta = with lib; {
     description = "Use natural language to edit your codebase and run commands from your terminal faster";
     homepage = "https://www.codebuff.com/";
     downloadPage = "https://www.npmjs.com/package/codebuff";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.malo ];
+    license = licenses.mit;
+    maintainers = [ maintainers.malo ];
     mainProgram = "codebuff";
   };
 }

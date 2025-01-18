@@ -61,12 +61,12 @@ python3Packages.buildPythonApplication rec {
     inherit mercurial;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Qt based graphical tool for working with Mercurial";
     homepage = "https://tortoisehg.bitbucket.io/";
-    license = lib.licenses.gpl2Only;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl2Only;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
       danbst
       gbtb
     ];

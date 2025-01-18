@@ -21,12 +21,12 @@ mkDerivation {
     libkdegames
     freecell-solver
   ];
-  meta = {
-    license = with lib.licenses; [
+  meta = with lib; {
+    license = with licenses; [
       gpl2Plus
       lgpl21Plus
       fdl12Plus
     ];
-    maintainers = with lib.maintainers; [ rnhmjoj ];
+    maintainers = with maintainers; [ rnhmjoj ];
   };
 }

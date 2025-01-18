@@ -10,13 +10,13 @@
 
 mkDerivation {
   pname = "libkipi";
-  meta = {
-    license = with lib.licenses; [
+  meta = with lib; {
+    license = with licenses; [
       gpl2
       lgpl21
       bsd3
     ];
-    maintainers = [ lib.maintainers.ttuegel ];
+    maintainers = [ maintainers.ttuegel ];
   };
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [

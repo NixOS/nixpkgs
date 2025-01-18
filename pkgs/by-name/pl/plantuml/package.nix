@@ -43,18 +43,18 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     command = "plantuml --version";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Draw UML diagrams using a simple and human readable text description";
     homepage = "https://plantuml.com/";
     # "plantuml -license" says GPLv3 or later
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     mainProgram = "plantuml";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       bjornfor
       Mogria
       anthonyroussel
     ];
-    platforms = lib.platforms.unix;
-    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    platforms = platforms.unix;
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
   };
 })

@@ -22,10 +22,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "para" ];
 
-  meta = {
+  meta = with lib; {
     description = "Set utilities that ake advantage of python's 'multiprocessing' module to distribute CPU-intensive tasks";
     homepage = "https://pypi.org/project/para";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ GaetanLepage ];
   };
 }

@@ -94,11 +94,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = {
+  meta = with lib; {
     description = "Policy kit agent for the Lomiri desktop";
     homepage = "https://gitlab.com/ubports/development/core/lomiri-polkit-agent";
-    license = lib.licenses.gpl3Only;
-    maintainers = lib.teams.lomiri.members;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Only;
+    maintainers = teams.lomiri.members;
+    platforms = platforms.linux;
   };
 })

@@ -73,12 +73,12 @@ rustPlatform.buildRustPackage rec {
       }
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Low level control GUI for the PipeWire multimedia server";
     homepage = "https://github.com/dimtpap/coppwr";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ ravenz46 ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ ravenz46 ];
     mainProgram = "coppwr";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

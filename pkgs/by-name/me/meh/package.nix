@@ -35,11 +35,11 @@ stdenv.mkDerivation {
     giflib
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Minimal image viewer using raw XLib";
     homepage = "https://www.johnhawthorn.com/meh/";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
+    license = licenses.mit;
+    platforms = platforms.linux;
     mainProgram = "meh";
   };
 }

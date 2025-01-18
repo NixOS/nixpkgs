@@ -51,10 +51,10 @@ buildPythonPackage rec {
     scipy
   ];
 
-  meta = {
+  meta = with lib; {
     description = "SVG Parsing for Elements, Paths, and other SVG Objects";
     homepage = "https://github.com/meerk40t/svgelements";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ GaetanLepage ];
   };
 }

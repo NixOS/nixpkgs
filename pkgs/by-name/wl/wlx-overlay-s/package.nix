@@ -92,12 +92,12 @@ rustPlatform.buildRustPackage rec {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Wayland/X11 desktop overlay for SteamVR and OpenXR, Vulkan edition";
     homepage = "https://github.com/galister/wlx-overlay-s";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ Scrumplex ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ Scrumplex ];
+    platforms = platforms.linux;
     broken = stdenv.hostPlatform.isAarch64;
     mainProgram = "wlx-overlay-s";
   };

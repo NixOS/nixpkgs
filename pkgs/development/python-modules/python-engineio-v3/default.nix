@@ -36,11 +36,11 @@ buildPythonPackage rec {
   # no tests on PyPI
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Engine.IO server";
     homepage = "https://github.com/bdraco/python-engineio-v3";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     longDescription = "This is a release of 3.14.2 under the “engineio_v3” namespace for old systems.";
-    maintainers = with lib.maintainers; [ dotlambda ];
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

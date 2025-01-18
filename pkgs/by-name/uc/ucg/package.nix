@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://gvansickle.github.io/ucg/";
     description = "Grep-like tool for searching large bodies of source code";
     longDescription = ''
@@ -48,10 +48,10 @@ stdenv.mkDerivation (finalAttrs: {
       command-line compatible with Ack, to some extent with ag, and where
       appropriate with grep. Search patterns are specified as PCRE regexes.
     '';
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     mainProgram = "ucg";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.unix;
     broken = stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isDarwin;
   };
 })

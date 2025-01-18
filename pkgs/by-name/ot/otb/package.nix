@@ -99,10 +99,10 @@ stdenv.mkDerivation (finalAttrs: {
       --set OTB_APPLICATION_PATH "$out/lib/otb/applications"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Open Source processing of remote sensing images";
     homepage = "https://www.orfeo-toolbox.org/";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ daspk04 ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ daspk04 ];
   };
 })

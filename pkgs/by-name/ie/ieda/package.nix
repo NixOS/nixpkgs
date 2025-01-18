@@ -107,12 +107,12 @@ stdenv.mkDerivation {
 
   enableParallelBuild = true;
 
-  meta = {
+  meta = with lib; {
     description = "Open-source EDA infracstructure and tools from Netlist to GDS for ASIC design";
     homepage = "https://gitee.com/oscc-project/iEDA";
-    license = lib.licenses.mulan-psl2;
-    maintainers = with lib.maintainers; [ xinyangli ];
+    license = licenses.mulan-psl2;
+    maintainers = with maintainers; [ xinyangli ];
     mainProgram = "iEDA";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

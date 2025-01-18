@@ -20,10 +20,10 @@ build-idris-package {
   # tests fail
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Propositional logic tools, inspired by the Coq standard library";
     homepage = "https://github.com/yurrriq/idris-logic";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.brainrape ];
+    license = licenses.mit;
+    maintainers = [ maintainers.brainrape ];
   };
 }

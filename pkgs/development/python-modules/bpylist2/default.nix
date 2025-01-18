@@ -30,10 +30,10 @@ buildPythonPackage {
       --replace-fail "--mypy" ""
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Parse and Generate binary plists and NSKeyedArchiver archives";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     homepage = "https://github.com/parabolala/bpylist2";
-    maintainers = with lib.maintainers; [ sigmanificient ];
+    maintainers = with maintainers; [ sigmanificient ];
   };
 }

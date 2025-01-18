@@ -11,10 +11,10 @@ vscode-utils.buildVscodeMarketplaceExtension {
     hash = "sha256-YUo0QbJILa9BzWub6Wi6cDD/Zsy/H8LZ8j+9H+5pVHY=";
   };
 
-  meta = {
+  meta = with lib; {
     description = "A Visual Studio Code extension pack that lets you open any folder in a container, on a remote machine, or in WSL and take advantage of VS Code's full feature set";
     homepage = "https://github.com/Microsoft/vscode-remote-release";
-    license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ drupol ];
+    license = licenses.unfree;
+    maintainers = with maintainers; [ drupol ];
   };
 }

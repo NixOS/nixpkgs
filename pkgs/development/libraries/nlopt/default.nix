@@ -41,11 +41,11 @@ stdenv.mkDerivation rec {
       'INTERFACE_INCLUDE_DIRECTORIES "''${_IMPORT_PREFIX}/' 'INTERFACE_INCLUDE_DIRECTORIES "'
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://nlopt.readthedocs.io/en/latest/";
     description = "Free open-source library for nonlinear optimization";
-    license = lib.licenses.lgpl21Plus;
-    hydraPlatforms = lib.platforms.linux;
+    license = licenses.lgpl21Plus;
+    hydraPlatforms = platforms.linux;
   };
 
 }

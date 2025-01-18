@@ -34,11 +34,11 @@ beamPackages.mixRelease rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "A protoc plugin to generate Elixir code";
     mainProgram = "protoc-gen-elixir";
     homepage = "https://github.com/elixir-protobuf/protobuf";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ mattpolzin ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ mattpolzin ];
   };
 }

@@ -67,17 +67,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [ "-Wno-dev" ] ++ lib.optionals buildDayZLauncher [ "-DBUILD_DAYZ_LAUNCHER=ON" ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/muttleyxd/arma3-unix-launcher/";
     description = "Clean, intuitive Arma 3 + DayZ SA Launcher";
-    license = with lib.licenses; [
+    license = with licenses; [
       # Launcher
       mit
       # Steamworks SDK
       unfree
     ];
-    maintainers = with lib.maintainers; [ DrymarchonShaun ];
+    maintainers = with maintainers; [ DrymarchonShaun ];
     mainProgram = "arma3-unix-launcher";
-    platforms = with lib.platforms; linux ++ darwin;
+    platforms = with platforms; linux ++ darwin;
   };
 })

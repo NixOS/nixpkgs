@@ -22,10 +22,10 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin $out/share/man/man1
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "http://point-at-infinity.org/seccure/";
     description = "Zero-configuration elliptic curve cryptography utility";
-    platforms = lib.platforms.unix;
-    license = lib.licenses.lgpl3;
+    platforms = platforms.unix;
+    license = licenses.lgpl3;
   };
 }

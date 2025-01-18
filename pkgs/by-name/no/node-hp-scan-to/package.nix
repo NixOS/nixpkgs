@@ -66,12 +66,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     changelog = "https://github.com/manuc66/node-hp-scan-to/releases/tag/${finalAttrs.src.rev}";
     description = "Allow to send scan from device to computer for some HP All-in-One Printers";
     homepage = "https://github.com/manuc66/node-hp-scan-to";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "node-hp-scan-to";
-    maintainers = with lib.maintainers; [ jonas-w ];
+    maintainers = with maintainers; [ jonas-w ];
   };
 })

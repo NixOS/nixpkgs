@@ -24,12 +24,12 @@ rustPlatform.buildRustPackage rec {
   ];
   cargoHash = "sha256-VgbNwqDVcORWJB5QjH39gZZtW1n2Me9FxVUhb4vIg1A=";
 
-  meta = {
+  meta = with lib; {
     description = "Simple command line client for CWE";
     homepage = "https://github.com/NotBalds/cwe-client-cli";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ tbwanderer ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ tbwanderer ];
     mainProgram = "cwe-client-cli";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

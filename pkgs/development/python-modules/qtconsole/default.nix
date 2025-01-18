@@ -50,13 +50,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "qtconsole" ];
 
-  meta = {
+  meta = with lib; {
     description = "Jupyter Qt console";
     mainProgram = "jupyter-qtconsole";
     homepage = "https://qtconsole.readthedocs.io/";
     changelog = "https://qtconsole.readthedocs.io/en/stable/changelog.html#changes-in-jupyter-qt-console";
-    license = lib.licenses.bsd3;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    license = licenses.bsd3;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ GaetanLepage ];
   };
 }

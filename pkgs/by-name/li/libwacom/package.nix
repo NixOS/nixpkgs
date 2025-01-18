@@ -69,12 +69,12 @@ stdenv.mkDerivation (finalAttrs: {
     tests = finalAttrs.finalPackage.overrideAttrs { doCheck = true; };
   };
 
-  meta = {
-    platforms = lib.platforms.linux;
+  meta = with lib; {
+    platforms = platforms.linux;
     homepage = "https://linuxwacom.github.io/";
     changelog = "https://github.com/linuxwacom/libwacom/blob/${finalAttrs.src.rev}/NEWS";
     description = "Libraries, configuration, and diagnostic tools for Wacom tablets running under Linux";
-    maintainers = lib.teams.freedesktop.members;
-    license = lib.licenses.hpnd;
+    maintainers = teams.freedesktop.members;
+    license = licenses.hpnd;
   };
 })

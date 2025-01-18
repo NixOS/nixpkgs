@@ -22,11 +22,11 @@ mkTclDerivation rec {
     cp -R *.tcl lang images "$out/lib/bwidget${version}"
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://sourceforge.net/projects/tcllib";
     description = "High-level widget set for Tcl/Tk";
-    maintainers = with lib.maintainers; [ agbrooks ];
-    license = lib.licenses.tcltk;
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ agbrooks ];
+    license = licenses.tcltk;
+    platforms = platforms.unix;
   };
 }

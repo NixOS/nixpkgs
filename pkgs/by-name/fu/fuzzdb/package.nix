@@ -23,11 +23,11 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Comprehensive collection of attack patterns and predictable resource names used for security testing and fuzzing application";
     homepage = "https://github.com/fuzzdb-project/fuzzdb";
-    license = with lib.licenses; [ bsd3 ];
-    maintainers = with lib.maintainers; [ d3vil0p3r ];
-    platforms = lib.platforms.all;
+    license = with licenses; [ bsd3 ];
+    maintainers = with maintainers; [ d3vil0p3r ];
+    platforms = platforms.all;
   };
 }

@@ -188,7 +188,7 @@ stdenv.mkDerivation (finalAttrs: {
     wrapper = callPackage ./wrapper.nix { };
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://arcan-fe.com/";
     description = "Combined Display Server, Multimedia Framework, Game Engine";
     longDescription = ''
@@ -197,12 +197,12 @@ stdenv.mkDerivation (finalAttrs: {
       e.g. game development, real-time streaming video, monitoring and
       surveillance, up to and including desktop compositors and window managers.
     '';
-    license = with lib.licenses; [
+    license = with licenses; [
       bsd3
       gpl2Plus
       lgpl2Plus
     ];
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.unix;
   };
 })

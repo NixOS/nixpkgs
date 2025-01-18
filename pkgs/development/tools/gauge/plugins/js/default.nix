@@ -33,11 +33,11 @@ buildNpmPackage rec {
     unzip deploy/gauge-js-${version}.zip -d $out/share/gauge-plugins/js/${version}
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Gauge plugin that lets you write tests in JavaScript";
     homepage = "https://github.com/getgauge/gauge-js/";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ marie ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ marie ];
     inherit (gauge-unwrapped.meta) platforms;
   };
 }

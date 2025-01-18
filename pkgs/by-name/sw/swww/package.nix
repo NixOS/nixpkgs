@@ -53,15 +53,15 @@ rustPlatform.buildRustPackage rec {
       --zsh completions/_swww
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Efficient animated wallpaper daemon for wayland, controlled at runtime";
     homepage = "https://github.com/LGFae/swww";
-    license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl3;
+    maintainers = with maintainers; [
       mateodd25
       donovanglover
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
     mainProgram = "swww";
   };
 }

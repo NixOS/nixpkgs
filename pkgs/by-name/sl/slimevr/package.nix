@@ -127,18 +127,18 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = ./update.sh;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://docs.slimevr.dev/";
     description = "App for facilitating full-body tracking in virtual reality";
-    license = with lib.licenses; [
+    license = with licenses; [
       mit
       asl20
     ];
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       gale-username
       imurx
     ];
-    platforms = with lib.platforms; darwin ++ linux;
+    platforms = with platforms; darwin ++ linux;
     broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "slimevr";
   };

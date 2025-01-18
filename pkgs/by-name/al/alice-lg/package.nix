@@ -86,12 +86,12 @@ buildGoModule rec {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/alice-lg/alice-lg";
     description = "Looking-glass for BGP sessions";
     changelog = "https://github.com/alice-lg/alice-lg/blob/main/CHANGELOG.md";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ stv0g ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ stv0g ];
     mainProgram = "alice-lg";
   };
 }

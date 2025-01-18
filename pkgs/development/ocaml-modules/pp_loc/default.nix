@@ -17,10 +17,10 @@ buildDunePackage rec {
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "Quote and highlight input fragments at a given source location";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.mit;
+    maintainers = [ maintainers.vbgl ];
     homepage = "https://armael.github.io/pp_loc/pp_loc/";
   };
 }

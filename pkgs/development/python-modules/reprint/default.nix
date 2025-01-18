@@ -37,11 +37,11 @@ buildPythonPackage rec {
     "reprint"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Module for binding variables and refreshing multi-line output in terminal";
     homepage = "https://github.com/Yinzo/reprint";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
+    license = licenses.asl20;
+    maintainers = with maintainers; [
       jasonodoom
       jleightcap
     ];

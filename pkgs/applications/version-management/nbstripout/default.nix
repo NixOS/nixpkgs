@@ -43,11 +43,11 @@ python3.pkgs.buildPythonApplication rec {
     git config --global init.defaultBranch main
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Strip output from Jupyter and IPython notebooks";
     homepage = "https://github.com/kynan/nbstripout";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ jluttine ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ jluttine ];
     mainProgram = "nbstripout";
   };
 }

@@ -89,13 +89,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/mpeg5/xeve";
     description = "eXtra-fast Essential Video Encoder, MPEG-5 EVC";
-    license = lib.licenses.bsd3;
+    license = licenses.bsd3;
     mainProgram = "xeve_app";
-    maintainers = with lib.maintainers; [ jopejoe1 ];
-    platforms = lib.platforms.all;
+    maintainers = with maintainers; [ jopejoe1 ];
+    platforms = platforms.all;
     broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
   };
 })

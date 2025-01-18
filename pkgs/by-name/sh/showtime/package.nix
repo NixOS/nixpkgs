@@ -68,11 +68,11 @@ python3Packages.buildPythonApplication rec {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Watch without distraction";
     homepage = "https://apps.gnome.org/Showtime";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ getchoo ];
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ getchoo ];
     mainProgram = "showtime";
   };
 }

@@ -111,17 +111,17 @@ buildNpmPackage rec {
 
   versionCheckProgramArg = [ "--version" ];
 
-  meta = {
+  meta = with lib; {
     description = "Unofficial Microsoft Teams client for Linux";
     mainProgram = "teams-for-linux";
     homepage = "https://github.com/IsmaelMartinez/teams-for-linux";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
       muscaln
       qjoly
       chvp
       khaneliman
     ];
-    platforms = with lib.platforms; darwin ++ linux;
+    platforms = with platforms; darwin ++ linux;
   };
 }

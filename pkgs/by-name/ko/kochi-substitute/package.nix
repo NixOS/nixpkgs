@@ -39,7 +39,7 @@ stdenv.mkDerivation {
   outputHashMode = "recursive";
   outputHash = "10hcrf51npc1w2jsz5aiw07dgw96vs4wmsz4ai9zyaswipvf8ddy";
 
-  meta = {
+  meta = with lib; {
     description = "Japanese font, a free replacement for MS Gothic and MS Mincho";
     longDescription = ''
       Kochi Gothic and Kochi Mincho were developed as free replacements for the
@@ -48,7 +48,7 @@ stdenv.mkDerivation {
       from the naga10 font.
     '';
     homepage = "https://osdn.net/projects/efont/";
-    license = lib.licenses.wadalab;
-    maintainers = [ lib.maintainers.auntie ];
+    license = licenses.wadalab;
+    maintainers = [ maintainers.auntie ];
   };
 }

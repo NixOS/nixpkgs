@@ -72,7 +72,7 @@ lib.throwIf (enableDragAndDrop && !hasDndSupport)
 
     pythonImportsCheck = [ "TUIFIManager" ];
 
-    meta = {
+    meta = with lib; {
       description = "Cross-platform terminal-based termux-oriented file manager";
       longDescription = ''
         A cross-platform terminal-based termux-oriented file manager (and component),
@@ -80,8 +80,8 @@ lib.throwIf (enableDragAndDrop && !hasDndSupport)
         attempt to get more attention to the Uni-Curses project.
       '';
       homepage = "https://github.com/GiorgosXou/TUIFIManager";
-      license = lib.licenses.gpl3Only;
-      maintainers = with lib.maintainers; [
+      license = licenses.gpl3Only;
+      maintainers = with maintainers; [
         michaelBelsanti
         sigmanificient
       ];

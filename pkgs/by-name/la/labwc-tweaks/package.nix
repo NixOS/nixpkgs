@@ -42,13 +42,13 @@ stdenv.mkDerivation {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/labwc/labwc-tweaks";
     description = "Configuration gui app for labwc";
     mainProgram = "labwc-tweaks";
-    license = lib.licenses.gpl2Only;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl2Only;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
       AndersonTorres
       romildo
     ];

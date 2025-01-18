@@ -68,11 +68,11 @@ rustPlatform.buildRustPackage rec {
     OPENSSL_NO_VENDOR = true;
   };
 
-  meta = {
+  meta = with lib; {
     description = "The Oxide Rust SDK and CLI";
     homepage = "https://github.com/oxidecomputer/oxide.rs";
-    license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [
+    license = licenses.mpl20;
+    maintainers = with maintainers; [
       djacu
       sarcasticadmin
     ];

@@ -109,13 +109,13 @@ stdenv.mkDerivation rec {
       --replace "/opt/Polar Bookshelf/polar-bookshelf" "$out/bin/polar-bookshelf"
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://getpolarized.io/";
     description = "Personal knowledge repository for PDF and web content supporting incremental reading and document annotation";
     mainProgram = "polar-bookshelf";
-    license = lib.licenses.gpl3Only;
-    maintainers = [ lib.maintainers.dansbandit ];
-    platforms = lib.platforms.linux;
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = licenses.gpl3Only;
+    maintainers = [ maintainers.dansbandit ];
+    platforms = platforms.linux;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }

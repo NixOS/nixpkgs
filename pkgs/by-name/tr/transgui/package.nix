@@ -104,11 +104,11 @@ stdenv.mkDerivation rec {
     tagPrefix = "v";
   };
 
-  meta = {
+  meta = with lib; {
     description = "A cross platform front-end for the Transmission BitTorrent client";
     homepage = "https://sourceforge.net/p/transgui";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ ramkromberg ];
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ ramkromberg ];
     mainProgram = "transgui";
     platforms = [
       "x86_64-linux"

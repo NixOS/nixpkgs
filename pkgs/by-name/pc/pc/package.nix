@@ -26,12 +26,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = {
+  meta = with lib; {
     description = "Programmer's calculator";
     homepage = "https://git.sr.ht/~ft/pc";
-    license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ moody ];
-    platforms = lib.platforms.unix;
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ moody ];
+    platforms = platforms.unix;
     mainProgram = "pc";
   };
 })

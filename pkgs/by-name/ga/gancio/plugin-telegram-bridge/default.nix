@@ -47,11 +47,11 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Telegram bridge for Gancio, republishes content to Telegram channels or groups";
     homepage = "https://framagit.org/bcn.convocala/gancio-plugin-telegram-bridge";
-    license = lib.licenses.agpl3Plus;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ jbgi ];
+    license = licenses.agpl3Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ jbgi ];
   };
 }

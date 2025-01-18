@@ -28,11 +28,11 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "mitm6" ];
 
-  meta = {
+  meta = with lib; {
     description = "DHCPv6 network spoofing application";
     homepage = "https://github.com/dirkjanm/mitm6";
-    license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ fab ];
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ fab ];
     mainProgram = "mitm6";
   };
 }

@@ -41,11 +41,11 @@ rustPlatform.buildRustPackage rec {
     pango
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Tool to help efficiently focus windows in Sway, inspired by i3-easyfocus";
     homepage = "https://github.com/edzdez/sway-easyfocus";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ ];
     mainProgram = "sway-easyfocus";
   };
 }

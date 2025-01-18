@@ -30,14 +30,14 @@ stdenv.mkDerivation rec {
       -e /depmod/d Makefile
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.open-mesh.org/projects/batman-adv/wiki/Wiki";
     description = "B.A.T.M.A.N. routing protocol in a linux kernel module for layer 2";
-    license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [
       fpletz
       philiptaron
     ];
-    platforms = with lib.platforms; linux;
+    platforms = with platforms; linux;
   };
 }

@@ -37,12 +37,12 @@ stdenv.mkDerivation {
       --replace gcc cc
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Simple NNTP proxy with SSL support";
     homepage = "https://github.com/nieluj/nntp-proxy";
-    license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.fadenb ];
-    platforms = lib.platforms.all;
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.fadenb ];
+    platforms = platforms.all;
     mainProgram = "nntp-proxy";
   };
 }

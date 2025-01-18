@@ -58,14 +58,14 @@ stdenv.mkDerivation rec {
   # We might be getting the wrong pkg-config file anyway:
   # https://github.com/TokTok/c-toxcore/issues/2334
 
-  meta = {
+  meta = with lib; {
     description = "P2P FOSS instant messaging application aimed to replace Skype";
     homepage = "https://tox.chat";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
       peterhoeg
       ehmry
     ];
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 }

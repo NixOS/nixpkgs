@@ -89,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit options;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Official Core War simulator";
     longDescription = ''
       Portable MARS is the official Core War simulator of the ICWS and the rec.games.corewar newsgroup. pMARS serves as
@@ -98,9 +98,9 @@ stdenv.mkDerivation (finalAttrs: {
       put a lot of time into this project.
     '';
     homepage = "http://www.koth.org/pmars/";
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     mainProgram = "pmars";
-    maintainers = with lib.maintainers; [ OPNA2608 ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ OPNA2608 ];
+    platforms = platforms.unix;
   };
 })

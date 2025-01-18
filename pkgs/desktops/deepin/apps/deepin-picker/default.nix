@@ -46,12 +46,12 @@ stdenv.mkDerivation rec {
     "DOCDIR=${placeholder "out"}/share/dman/deepin-picker"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Color picker application";
     mainProgram = "deepin-picker";
     homepage = "https://github.com/linuxdeepin/deepin-picker";
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
-    maintainers = lib.teams.deepin.members;
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = teams.deepin.members;
   };
 }

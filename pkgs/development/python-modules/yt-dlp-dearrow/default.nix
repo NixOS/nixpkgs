@@ -23,10 +23,10 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "yt_dlp_plugins" ];
 
-  meta = {
+  meta = with lib; {
     description = "Post-processor plugin to use DeArrow video titles in YT-DLP";
     homepage = "https://github.com/QuantumWarpCode/yt-dlp-dearrow";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ sigmanificient ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ sigmanificient ];
   };
 }

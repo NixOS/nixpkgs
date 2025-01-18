@@ -63,14 +63,14 @@ buildBazelPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Bazel/Build Analysis and Navigation Tool";
     homepage = "http://bant.build/";
-    license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [
       hzeller
       lromor
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

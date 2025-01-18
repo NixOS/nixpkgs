@@ -25,11 +25,11 @@ buildGoModule rec {
     "-X=carvel.dev/kbld/pkg/kbld/version.Version=${version}"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Seamlessly incorporates image building and image pushing into your development and deployment workflows";
     homepage = "https://carvel.dev/kbld/";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ benchand ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ benchand ];
     mainProgram = "kbld";
   };
 }

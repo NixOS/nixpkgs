@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     && autoconf
   '';
 
-  meta = {
+  meta = with lib; {
     description = "General-purpose software audio FSK modem";
     longDescription = ''
       Minimodem is a command-line program which decodes (or generates) audio
@@ -55,9 +55,9 @@ stdenv.mkDerivation rec {
       Caller-ID.
     '';
     homepage = "http://www.whence.com/minimodem/";
-    license = lib.licenses.gpl3Plus;
-    platforms = with lib.platforms; linux;
-    maintainers = with lib.maintainers; [ relrod ];
+    license = licenses.gpl3Plus;
+    platforms = with platforms; linux;
+    maintainers = with maintainers; [ relrod ];
     mainProgram = "minimodem";
   };
 }

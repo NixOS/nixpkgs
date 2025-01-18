@@ -23,11 +23,11 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = {
+  meta = with lib; {
     description = "Thin wrapper around chruby to make it work with the Fish shell";
     homepage = "https://github.com/JeanMertz/chruby-fish";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.all;
-    maintainers = [ lib.maintainers.cohei ];
+    license = licenses.mit;
+    platforms = platforms.all;
+    maintainers = [ maintainers.cohei ];
   };
 }

@@ -34,13 +34,13 @@ appimageTools.wrapType2 {
       --replace-fail "Exec=navicat" "Exec=navicat-premium"
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.navicat.com/products/navicat-premium";
     changelog = "https://www.navicat.com/products/navicat-premium-release-note";
     description = "Database development tool that allows you to simultaneously connect to many databases";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ aucub ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+    maintainers = with maintainers; [ aucub ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

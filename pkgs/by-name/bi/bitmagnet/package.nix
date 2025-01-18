@@ -28,14 +28,14 @@ buildGo122Module rec {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Self-hosted BitTorrent indexer, DHT crawler, and torrent search engine";
     longDescription = ''
       A self-hosted BitTorrent indexer, DHT crawler, content classifier and torrent search engine with web UI, GraphQL API and Servarr stack integration.
     '';
     homepage = "https://bitmagnet.io/";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ viraptor ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ viraptor ];
     mainProgram = "bitmagnet";
   };
 }

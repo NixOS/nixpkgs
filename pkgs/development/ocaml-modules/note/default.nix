@@ -30,11 +30,11 @@ lib.throwIfNot (lib.versionAtLeast ocaml.version "4.08")
 
     propagatedBuildInputs = [ brr ];
 
-    meta = {
+    meta = with lib; {
       homepage = "https://erratique.ch/software/note";
       description = "OCaml module for functional reactive programming";
-      license = lib.licenses.isc;
-      maintainers = [ lib.maintainers.vbgl ];
+      license = licenses.isc;
+      maintainers = [ maintainers.vbgl ];
       inherit (ocaml.meta) platforms;
     };
   }

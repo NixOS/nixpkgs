@@ -62,12 +62,12 @@ stdenv.mkDerivation {
     runHook postInstallCheck
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Program that counts lines of source code";
     homepage = "https://github.com/AlDanial/cloc";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ rycee ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ rycee ];
     mainProgram = "cloc";
   };
 }

@@ -18,11 +18,11 @@ stdenv.mkDerivation rec {
     cp lib/bsf.jar $out/share/java/
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Interface to scripting languages, including JSR-223";
     homepage = "https://commons.apache.org/proper/commons-bsf/";
-    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
-    license = lib.licenses.asl20;
-    platforms = lib.platforms.unix;
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = licenses.asl20;
+    platforms = platforms.unix;
   };
 }

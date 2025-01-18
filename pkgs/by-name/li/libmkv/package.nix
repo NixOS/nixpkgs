@@ -26,15 +26,15 @@ stdenv.mkDerivation rec {
 
   preConfigure = "sh bootstrap.sh";
 
-  meta = {
+  meta = with lib; {
     description = "Abandoned library. Alternative lightweight Matroska muxer written for HandBrake";
     longDescription = ''
       Library was meant to be an alternative to the official libmatroska library.
       It is written in plain C, and intended to be very portable.
     '';
     homepage = "https://github.com/saintdev/libmkv";
-    license = lib.licenses.gpl2;
-    maintainers = [ lib.maintainers.wmertens ];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl2;
+    maintainers = [ maintainers.wmertens ];
+    platforms = platforms.unix;
   };
 }

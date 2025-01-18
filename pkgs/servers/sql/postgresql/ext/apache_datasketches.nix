@@ -56,7 +56,7 @@ buildPostgresqlExtension (finalAttrs: {
     '';
   };
 
-  meta = {
+  meta = with lib; {
     description = "PostgreSQL extension providing approximate algorithms for distinct item counts, quantile estimation and frequent items detection";
     longDescription = ''
       apache_datasketches is an extension to support approximate algorithms on PostgreSQL. The implementation
@@ -65,7 +65,7 @@ buildPostgresqlExtension (finalAttrs: {
     '';
     homepage = "https://datasketches.apache.org/";
     platforms = postgresql.meta.platforms;
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ mmusnjak ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ mmusnjak ];
   };
 })

@@ -55,11 +55,11 @@ buildPythonPackage rec {
     "tests/test_flask.py"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Simplify the writing of REST APIs, and extend them with additional protocols";
     homepage = "https://pythonhosted.org/WSME/";
     changelog = "https://pythonhosted.org/WSME/changes.html";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ sigmanificient ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ sigmanificient ];
   };
 }

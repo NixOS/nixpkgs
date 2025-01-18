@@ -28,12 +28,12 @@ rustPlatform.buildRustPackage rec {
     export HOME=$TMPDIR
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Window switcher (and more) for sway";
     homepage = "https://git.sr.ht/~tsdh/swayr";
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     mainProgram = "swayr";
-    maintainers = with lib.maintainers; [ artturin ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ artturin ];
+    platforms = platforms.linux;
   };
 }

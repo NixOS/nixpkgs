@@ -48,12 +48,12 @@ stdenv.mkDerivation rec {
     install -Dm755 ${pname} $out/bin/${pname}
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Use rofi to perform various types of screenshots and screen captures";
     mainProgram = "rofi-screenshot";
     homepage = "https://github.com/ceuk/rofi-screenshot";
-    maintainers = with lib.maintainers; [ zopieux ];
-    platforms = lib.platforms.all;
-    license = lib.licenses.wtfpl;
+    maintainers = with maintainers; [ zopieux ];
+    platforms = platforms.all;
+    license = licenses.wtfpl;
   };
 }

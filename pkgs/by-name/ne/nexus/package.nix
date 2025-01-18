@@ -54,13 +54,13 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) nexus;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Repository manager for binary software components";
     homepage = "https://www.sonatype.com/products/sonatype-nexus-oss";
-    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
-    license = lib.licenses.epl10;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = licenses.epl10;
+    platforms = platforms.all;
+    maintainers = with maintainers; [
       aespinosa
       ironpinguin
       luftmensch-luftmensch

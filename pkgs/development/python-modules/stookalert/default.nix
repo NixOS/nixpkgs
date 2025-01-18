@@ -23,10 +23,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "stookalert" ];
 
-  meta = {
+  meta = with lib; {
     description = "Python package for the RIVM Stookalert";
     homepage = "https://github.com/fwestenberg/stookalert";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

@@ -58,10 +58,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "http://libvolk.org/";
     description = "Vector Optimized Library of Kernels (version 2.5.0 - for GR 3.8)";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ doronbehar ];
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ doronbehar ];
   };
 })

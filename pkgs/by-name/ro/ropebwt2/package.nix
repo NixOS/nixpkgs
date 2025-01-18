@@ -22,12 +22,12 @@ stdenv.mkDerivation {
 
     runHook postInstall
   '';
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/lh3/ropebwt2";
     description = "Incremental construction of FM-index for DNA sequences";
     mainProgram = "ropebwt2";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ apraga ];
-    platforms = lib.platforms.unix;
+    license = licenses.mit;
+    maintainers = with maintainers; [ apraga ];
+    platforms = platforms.unix;
   };
 }

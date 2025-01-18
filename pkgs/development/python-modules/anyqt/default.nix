@@ -40,10 +40,10 @@ buildPythonPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "PyQt/PySide compatibility layer";
     homepage = "https://github.com/ales-erjavec/anyqt";
-    license = [ lib.licenses.gpl3Only ];
-    maintainers = [ lib.maintainers.lucasew ];
+    license = [ licenses.gpl3Only ];
+    maintainers = [ maintainers.lucasew ];
   };
 }

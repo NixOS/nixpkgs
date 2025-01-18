@@ -28,12 +28,12 @@ stdenv.mkDerivation rec {
       --set _JAVA_OPTIONS '-Dawt.useSystemAAFontSettings=gasp';
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://workcraft.org/";
     description = "Framework for interpreted graph modeling, verification and synthesis";
     mainProgram = "workcraft";
-    platforms = lib.platforms.linux;
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ timor ];
+    platforms = platforms.linux;
+    license = licenses.mit;
+    maintainers = with maintainers; [ timor ];
   };
 }

@@ -32,11 +32,11 @@ stdenv.mkDerivation rec {
     "-DLIBSUPERDERPY_STATIC=ON" # recommended by upstream for coexistence with other superderpy games
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://gitlab.com/HolyPangolin/animatch/";
     description = "Cute match three game for the Librem 5 smartphone";
     mainProgram = "animatch";
-    license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ colinsane ];
+    license = with licenses; [ gpl3Plus ];
+    maintainers = with maintainers; [ colinsane ];
   };
 }

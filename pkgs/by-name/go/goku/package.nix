@@ -39,11 +39,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Karabiner configurator";
     homepage = "https://github.com/yqrashawn/GokuRakuJoudo";
-    license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.nikitavoloboev ];
-    platforms = lib.platforms.darwin;
+    license = licenses.gpl3;
+    maintainers = [ maintainers.nikitavoloboev ];
+    platforms = platforms.darwin;
   };
 })

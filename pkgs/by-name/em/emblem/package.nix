@@ -67,18 +67,18 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Generate project icons and avatars from a symbolic icon";
     mainProgram = "emblem";
     homepage = "https://gitlab.gnome.org/World/design/emblem";
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.unix;
+    license = licenses.gpl3Plus;
+    platforms = platforms.unix;
     maintainers =
-      with lib.maintainers;
+      with maintainers;
       [
         figsoda
         foo-dogsquared
       ]
-      ++ lib.teams.gnome-circle.members;
+      ++ teams.gnome-circle.members;
   };
 }

@@ -27,11 +27,11 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "http://www.newbreedsoftware.com/vectoroids/";
     description = "Clone of the classic arcade game Asteroids by Atari";
     mainProgram = "vectoroids";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
   };
 }

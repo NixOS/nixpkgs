@@ -28,14 +28,14 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://math.nist.gov/scimark2/index.html";
     description = "Scientific and numerical computing benchmark (ANSI C version)";
     downloadPage = "https://math.nist.gov/scimark2/download_c.html";
-    license = lib.licenses.publicDomain;
+    license = licenses.publicDomain;
     mainProgram = "scimark4";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = lib.platforms.all;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.all;
   };
 })
 # TODO [ AndersonTorres ]: Java version

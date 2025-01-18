@@ -26,12 +26,12 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Linux controller for the Nothing Ear (2)";
     homepage = "https://gitlab.com/bharadwaj-raju/ear2ctl";
-    maintainers = with lib.maintainers; [ jaredmontoya ];
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ jaredmontoya ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
     mainProgram = "ear2ctl";
   };
 }

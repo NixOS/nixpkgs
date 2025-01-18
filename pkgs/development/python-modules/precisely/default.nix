@@ -28,10 +28,10 @@ buildPythonPackage rec {
 
   passthru.updateScripts = gitUpdater { };
 
-  meta = {
+  meta = with lib; {
     description = "Matcher library for Python";
     homepage = "https://github.com/mwilliamson/python-precisely";
-    license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ drupol ];
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ drupol ];
   };
 }

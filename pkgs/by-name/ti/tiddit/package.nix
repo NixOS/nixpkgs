@@ -40,12 +40,12 @@ python3Packages.buildPythonApplication rec {
     }"
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/SciLifeLab/TIDDIT";
     description = "Identify chromosomal rearrangements using Mate Pair or Paired End sequencing data";
     mainProgram = "tiddit";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ apraga ];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ apraga ];
+    platforms = platforms.unix;
   };
 }

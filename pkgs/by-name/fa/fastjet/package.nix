@@ -23,12 +23,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     description = "Software package for jet finding in pp and e+e− collisions";
     mainProgram = "fastjet-config";
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     homepage = "http://fastjet.fr/";
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ veprbl ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ veprbl ];
   };
 }

@@ -35,10 +35,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Python package to interact with the Watergate Local API";
     homepage = "https://github.com/watergate-ai/watergate-local-api-python";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

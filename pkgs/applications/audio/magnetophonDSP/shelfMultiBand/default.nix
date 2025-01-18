@@ -40,10 +40,10 @@ stdenv.mkDerivation rec {
     cp -r shelfMultiBandMono.lv2/ $out/lib/lv2
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Multiband compressor made from shelving filters";
     homepage = "https://github.com/magnetophon/shelfMultiBand";
-    license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.magnetophon ];
+    license = licenses.gpl3;
+    maintainers = [ maintainers.magnetophon ];
   };
 }

@@ -76,11 +76,11 @@ stdenv.mkDerivation (finalAttrs: {
     gappsWrapperArgs+=(--set ISO_CODES_DIR "${isocodes}/share/xml/iso-codes")
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/ocrfeeder";
     description = "Complete Optical Character Recognition and Document Analysis and Recognition program";
-    maintainers = with lib.maintainers; [ doronbehar ];
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ doronbehar ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
   };
 })

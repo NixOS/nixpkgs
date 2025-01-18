@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage {
     fontconfig.lib
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Control wl-gammarelay-rs via applet";
     longDescription = ''
       wl-gammarelay-applet is a small desktop applet for controlling
@@ -47,8 +47,8 @@ rustPlatform.buildRustPackage {
     '';
     homepage = "https://github.com/lgbishop/wl-gammarelay-applet";
     mainProgram = "wl-gammarelay-applet";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ lgbishop ];
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ lgbishop ];
   };
 }

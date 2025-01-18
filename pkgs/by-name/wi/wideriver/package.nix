@@ -29,12 +29,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = {
+  meta = with lib; {
     description = "Tiling window manager for the river wayland compositor, inspired by dwm and xmonad";
     homepage = "https://github.com/alex-courtis/wideriver";
-    license = lib.licenses.gpl3Only;
+    license = licenses.gpl3Only;
     mainProgram = "wideriver";
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ clebs ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ clebs ];
   };
 })

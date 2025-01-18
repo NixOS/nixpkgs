@@ -21,12 +21,12 @@ stdenv.mkDerivation rec {
     "PREFIX=${placeholder "out"}"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Diff-capable 'du' browser";
     homepage = "https://gt5.sourceforge.net/";
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = with lib.platforms; all;
+    platforms = with platforms; all;
     mainProgram = "gt5";
   };
 }

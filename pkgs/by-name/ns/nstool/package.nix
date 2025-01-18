@@ -25,12 +25,12 @@ stdenv.mkDerivation (finalAttrs: {
     cp -v bin/nstool $out/bin
   '';
 
-  meta = {
+  meta = with lib; {
     description = "General purpose reading/extraction tool for Nintendo Switch file formats";
     homepage = "https://github.com/jakcron/nstool";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "nstool";
-    maintainers = with lib.maintainers; [ diadatp ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ diadatp ];
+    platforms = platforms.unix;
   };
 })

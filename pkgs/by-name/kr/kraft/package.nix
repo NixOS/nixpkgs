@@ -51,11 +51,11 @@ buildGoModule rec {
     };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Build and use highly customized and ultra-lightweight unikernel VMs";
     homepage = "https://github.com/unikraft/kraftkit";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [
+    license = licenses.bsd3;
+    maintainers = with maintainers; [
       dit7ya
       cloudripper
     ];

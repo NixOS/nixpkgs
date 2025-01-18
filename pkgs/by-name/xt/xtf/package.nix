@@ -67,12 +67,12 @@ stdenv.mkDerivation {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = {
+  meta = with lib; {
     description = "Xen Test Framework and Suite for creating microkernel-based tests";
     homepage = "https://xenbits.xenproject.org/docs/xtf/index.html";
-    license = lib.licenses.bsd2;
-    maintainers = lib.teams.xen.members;
+    license = licenses.bsd2;
+    maintainers = teams.xen.members;
     mainProgram = "xtf-runner";
-    platforms = lib.lists.intersectLists lib.platforms.linux lib.platforms.x86_64;
+    platforms = lists.intersectLists platforms.linux platforms.x86_64;
   };
 }

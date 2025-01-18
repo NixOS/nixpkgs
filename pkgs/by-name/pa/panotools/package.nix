@@ -36,11 +36,11 @@ stdenv.mkDerivation (finalAttrs: {
       darwin.apple_sdk.frameworks.Carbon
     ];
 
-  meta = {
+  meta = with lib; {
     description = "Free software suite for authoring and displaying virtual reality panoramas";
     homepage = "https://panotools.sourceforge.net/";
-    license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.wegank ];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.wegank ];
+    platforms = platforms.unix;
   };
 })

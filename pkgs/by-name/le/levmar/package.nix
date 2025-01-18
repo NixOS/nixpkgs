@@ -25,10 +25,10 @@ stdenv.mkDerivation rec {
     cp liblevmar.a $out/lib
   '';
 
-  meta = {
+  meta = with lib; {
     description = "ANSI C implementations of Levenberg-Marquardt, usable also from C++";
     homepage = "https://www.ics.forth.gr/~lourakis/levmar/";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.all;
+    license = licenses.gpl2Plus;
+    platforms = platforms.all;
   };
 }

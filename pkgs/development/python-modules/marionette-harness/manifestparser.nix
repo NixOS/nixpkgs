@@ -18,10 +18,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ ];
 
-  meta = {
+  meta = with lib; {
     description = "Mozilla test manifest handling";
     homepage = "https://wiki.mozilla.org/Auto-tools/Projects/Mozbase";
-    license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ raskin ];
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ raskin ];
   };
 }

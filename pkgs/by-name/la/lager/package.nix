@@ -33,10 +33,10 @@ stdenv.mkDerivation (finalAttrs: {
   preConfigure = ''
     rm BUILD
   '';
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/arximboldi/lager";
     description = "C++ library for value-oriented design using the unidirectional data-flow architecture — Redux for C++";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ nek0 ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ nek0 ];
   };
 })

@@ -23,11 +23,11 @@ buildGoModule rec {
     "-X github.com/mrusme/canard/main.VERSION=${version}"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Command line TUI client for the journalist RSS aggregator";
     homepage = "https://github.com/mrusme/canard";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ moraxyc ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ moraxyc ];
     mainProgram = "canard";
   };
 }

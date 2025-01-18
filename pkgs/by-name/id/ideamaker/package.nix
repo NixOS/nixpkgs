@@ -208,13 +208,13 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   });
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.raise3d.com/ideamaker/";
     changelog = "https://www.raise3d.com/download/ideamaker-release-notes/";
     description = "Raise3D's 3D slicer software";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = lib.licenses.unfree;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with lib.maintainers; [ cjshearer ];
+    maintainers = with maintainers; [ cjshearer ];
   };
 })

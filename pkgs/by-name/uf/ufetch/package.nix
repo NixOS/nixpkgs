@@ -34,12 +34,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Tiny system info for Unix-like operating systems";
     homepage = "https://gitlab.com/jschx/ufetch";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
+    license = licenses.mit;
+    platforms = platforms.linux;
     mainProgram = "ufetch";
-    maintainers = with lib.maintainers; [ mrtnvgr ];
+    maintainers = with maintainers; [ mrtnvgr ];
   };
 })

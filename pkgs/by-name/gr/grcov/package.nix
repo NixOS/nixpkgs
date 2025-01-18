@@ -38,11 +38,11 @@ rustPlatform.buildRustPackage rec {
     in
     builtins.concatStringsSep " " (builtins.map skipFlag skipList);
 
-  meta = {
+  meta = with lib; {
     description = "Rust tool to collect and aggregate code coverage data for multiple source files";
     mainProgram = "grcov";
     homepage = "https://github.com/mozilla/grcov";
-    license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ DieracDelta ];
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ DieracDelta ];
   };
 }

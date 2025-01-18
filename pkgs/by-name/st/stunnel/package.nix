@@ -61,12 +61,12 @@ stdenv.mkDerivation (finalAttrs: {
     stunnel = nixosTests.stunnel;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Universal tls/ssl wrapper";
     homepage = "https://www.stunnel.org/";
-    license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.thoughtpolice ];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.thoughtpolice ];
+    platforms = platforms.unix;
     mainProgram = "stunnel";
   };
 })

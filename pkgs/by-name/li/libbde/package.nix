@@ -32,14 +32,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Library to access the BitLocker Drive Encryption (BDE) format";
     homepage = "https://github.com/libyal/libbde/";
-    license = lib.licenses.lgpl3;
-    maintainers = with lib.maintainers; [
+    license = licenses.lgpl3;
+    maintainers = with maintainers; [
       eliasp
       bot-wxt1221
     ];
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 })

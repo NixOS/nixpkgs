@@ -44,11 +44,11 @@ buildPythonPackage rec {
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
-  meta = {
+  meta = with lib; {
     description = "Python based FAT12/FAT16/FAT32 implementation with VFAT support";
     homepage = "https://github.com/nathanhi/pyfatfs";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ vlaci ];
+    license = licenses.mit;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ vlaci ];
   };
 }

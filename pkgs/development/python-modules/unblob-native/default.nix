@@ -36,11 +36,11 @@ buildPythonPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Performance sensitive parts of Unblob";
     homepage = "https://unblob.org";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ vlaci ];
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ vlaci ];
   };
 }

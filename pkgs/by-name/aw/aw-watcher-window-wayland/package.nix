@@ -32,12 +32,12 @@ rustPlatform.buildRustPackage rec {
     wayland
   ];
 
-  meta = {
+  meta = with lib; {
     description = "WIP window and afk watcher for some Wayland compositors";
     homepage = "https://github.com/ActivityWatch/aw-watcher-window-wayland";
-    license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ esau79p ];
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ esau79p ];
     mainProgram = "aw-watcher-window-wayland";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

@@ -58,11 +58,11 @@ buildVscodeMarketplaceExtension {
 
   passthru.updateScript = ./update.sh;
 
-  meta = {
+  meta = with lib; {
     description = "Official C# support for Visual Studio Code";
     homepage = "https://github.com/dotnet/vscode-csharp";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ggg ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ ggg ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

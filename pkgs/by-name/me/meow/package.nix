@@ -21,11 +21,11 @@ rustPlatform.buildRustPackage rec {
     mv $out/bin/meow-cli $out/bin/meow
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Print ASCII cats to your terminal";
     homepage = "https://github.com/PixelSergey/meow";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "meow";
-    maintainers = with lib.maintainers; [ pixelsergey ];
+    maintainers = with maintainers; [ pixelsergey ];
   };
 }

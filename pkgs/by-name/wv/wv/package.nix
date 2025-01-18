@@ -59,10 +59,10 @@ stdenv.mkDerivation (finalAttrs: {
     mv CHANGELOG ChangeLog~ && mv ChangeLog~ ChangeLog
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/AbiWord/wv";
     description = "Converter from Microsoft Word formats to human-editable ones";
-    platforms = lib.platforms.unix;
-    license = lib.licenses.gpl2Plus;
+    platforms = platforms.unix;
+    license = licenses.gpl2Plus;
   };
 })

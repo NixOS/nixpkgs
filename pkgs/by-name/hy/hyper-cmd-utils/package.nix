@@ -30,12 +30,12 @@ buildNpmPackage {
     })
   ];
 
-  meta = {
+  meta = with lib; {
     description = "HyperCmd Utils";
     homepage = "https://github.com/holepunchto/hyper-cmd-utils";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ davhau ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ davhau ];
     mainProgram = "hyper-cmd-utils";
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 }

@@ -235,12 +235,12 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
-  meta = {
+  meta = with lib; {
     description = "Wavebox Productivity Browser";
     homepage = "https://wavebox.io";
-    license = lib.licenses.unfree;
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [ flexiondotorg ];
+    license = licenses.unfree;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    maintainers = with maintainers; [ flexiondotorg ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "wavebox";
   };

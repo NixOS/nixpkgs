@@ -24,11 +24,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "f90nml" ];
 
-  meta = {
+  meta = with lib; {
     description = "Python module for working with Fortran Namelists";
     mainProgram = "f90nml";
     homepage = "https://f90nml.readthedocs.io";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ loicreynier ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ loicreynier ];
   };
 }

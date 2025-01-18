@@ -33,11 +33,11 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = {
+  meta = with lib; {
     description = "CPU monitoring and tuning software designed for 64-bit processors";
     homepage = "https://github.com/cyring/CoreFreq";
-    license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ mrene ];
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ mrene ];
     mainProgram = "corefreq-cli";
     platforms = [
       "x86_64-linux"

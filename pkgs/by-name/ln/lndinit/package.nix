@@ -18,11 +18,11 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  meta = {
+  meta = with lib; {
     description = "Wallet initializer utility for lnd";
     homepage = "https://github.com/lightninglabs/lndinit";
     mainProgram = "lndinit";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ aldoborrero ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ aldoborrero ];
   };
 }

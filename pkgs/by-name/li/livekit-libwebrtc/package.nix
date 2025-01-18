@@ -291,14 +291,14 @@ stdenv.mkDerivation {
     ${lib.getExe gclient2nix} --main-source-path src https://github.com/webrtc-sdk/webrtc.git m114_release
   '';
 
-  meta = {
+  meta = with lib; {
     description = "WebRTC library used by livekit";
     homepage = "https://github.com/livekit/rust-sdks/";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [
+    license = licenses.bsd3;
+    maintainers = with maintainers; [
       WeetHet
       niklaskorz
     ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

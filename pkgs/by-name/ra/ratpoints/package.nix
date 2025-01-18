@@ -34,12 +34,12 @@ stdenv.mkDerivation rec {
 
   preInstall = ''mkdir -p "$out"/{bin,share,lib,include}'';
 
-  meta = {
+  meta = with lib; {
     description = "Program to find rational points on hyperelliptic curves";
     mainProgram = "ratpoints";
-    license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.raskin ];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.unix;
     homepage = "http://www.mathe2.uni-bayreuth.de/stoll/programs/";
   };
 }

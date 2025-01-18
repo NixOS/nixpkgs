@@ -51,11 +51,11 @@ buildGoModule rec {
     };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Data constraint language which aims to simplify tasks involving defining and using data";
     homepage = "https://cuelang.org/";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ aaronjheng ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ aaronjheng ];
     mainProgram = "cue";
   };
 }

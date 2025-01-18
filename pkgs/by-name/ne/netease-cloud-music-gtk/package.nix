@@ -65,15 +65,15 @@ stdenv.mkDerivation (finalAttrs: {
       gst-plugins-ugly
     ]);
 
-  meta = {
+  meta = with lib; {
     description = "Rust + GTK based netease cloud music player";
     homepage = "https://github.com/gmg137/netease-cloud-music-gtk";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
       diffumist
       aleksana
     ];
     mainProgram = "netease-cloud-music-gtk4";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 })

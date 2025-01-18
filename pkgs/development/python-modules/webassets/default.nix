@@ -63,11 +63,11 @@ buildPythonPackage rec {
     "TestBabel"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Media asset management for Python, with glue code for various web frameworks";
     mainProgram = "webassets";
     homepage = "https://github.com/miracle2k/webassets/";
-    license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ abbradar ];
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ abbradar ];
   };
 }

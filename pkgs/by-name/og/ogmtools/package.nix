@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = toString [ "-std=c++14" ];
 
-  meta = {
+  meta = with lib; {
     description = "Tools for modifying and inspecting OGG media streams";
     longDescription = ''
       These tools allow information about (ogminfo) or extraction from
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       tool for extracting chapter information from DVD.
     '';
     homepage = "https://www.bunkus.org/videotools/ogmtools/";
-    license = lib.licenses.gpl2;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2;
+    platforms = platforms.linux;
   };
 }

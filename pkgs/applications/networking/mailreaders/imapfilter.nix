@@ -28,12 +28,12 @@ stdenv.mkDerivation (finalAttrs: {
     lua
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/lefcha/imapfilter";
     description = "Mail filtering utility";
     mainProgram = "imapfilter";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ doronbehar ];
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ doronbehar ];
   };
 })

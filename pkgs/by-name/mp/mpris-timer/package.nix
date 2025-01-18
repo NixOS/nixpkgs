@@ -63,16 +63,16 @@ buildGoModule rec {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Timer app with seamless GNOME integration";
     homepage = "https://github.com/efogdev/mpris-timer";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       stunkymonkey
       getchoo
     ];
     mainProgram = "mpris-timer";
     # Always uses ALSA
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

@@ -64,10 +64,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "osc_placement" ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://opendev.org/openstack/osc-placement";
     description = "OpenStackClient plugin for the Placement service";
-    license = lib.licenses.asl20;
-    maintainers = lib.teams.openstack.members;
+    license = licenses.asl20;
+    maintainers = teams.openstack.members;
   };
 }

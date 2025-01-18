@@ -17,10 +17,10 @@ build-idris-package {
     sha256 = "0209fhv8x3sw6ijrwc8a85pch97z821ygaz78va3l274xam4l659";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Recursion scheme library for Idris";
     homepage = "https://github.com/sellout/Iaia";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.brainrape ];
+    license = licenses.mit;
+    maintainers = [ maintainers.brainrape ];
   };
 }

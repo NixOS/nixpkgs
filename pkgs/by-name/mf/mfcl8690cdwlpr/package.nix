@@ -58,11 +58,11 @@ stdenv.mkDerivation rec {
     patchelf --set-interpreter "$interpreter" $dir/lpd/brmfcl8690cdwfilter
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Brother MFC-L8690CDW LPR printer driver";
     homepage = "http://www.brother.com/";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = lib.licenses.unfree;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
     maintainers = [ ];
     platforms = [
       "x86_64-linux"

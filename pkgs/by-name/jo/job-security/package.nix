@@ -18,15 +18,15 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-YwlI+Z3Zry3i3amz3DufvKzSS1Hrp2kPG76aH5tMJ2g=";
 
-  meta = {
+  meta = with lib; {
     description = "Job control from anywhere";
     homepage = "https://github.com/yshui/job-security";
-    license = with lib.licenses; [
+    license = with licenses; [
       asl20
       mit
       mpl20
     ];
-    maintainers = with lib.maintainers; [ fgaz ];
+    maintainers = with maintainers; [ fgaz ];
     mainProgram = "jobs";
     broken = stdenv.hostPlatform.isDarwin;
   };

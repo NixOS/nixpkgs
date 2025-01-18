@@ -80,12 +80,12 @@ stdenv.mkDerivation rec {
   # install documentation
   postInstall = "make install-doxygen-docs";
 
-  meta = {
+  meta = with lib; {
     description = "Open-source code for solving general MINLP (Mixed Integer NonLinear Programming) problems";
     mainProgram = "bonmin";
     homepage = "https://github.com/coin-or/Bonmin";
-    license = lib.licenses.epl10;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ aanderse ];
+    license = licenses.epl10;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ aanderse ];
   };
 }

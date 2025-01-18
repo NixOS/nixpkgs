@@ -35,11 +35,11 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Wayland clipboard utility";
     homepage = "https://sr.ht/~noocsharp/wayclip/";
-    license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ getchoo ];
+    license = licenses.isc;
+    maintainers = with maintainers; [ getchoo ];
     mainProgram = "waycopy";
     inherit (wayland.meta) platforms;
   };

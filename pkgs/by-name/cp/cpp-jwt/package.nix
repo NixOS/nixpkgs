@@ -39,10 +39,10 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  meta = {
+  meta = with lib; {
     description = "JSON Web Token library for C++";
     homepage = "https://github.com/arun11299/cpp-jwt";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fpletz ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ fpletz ];
   };
 }

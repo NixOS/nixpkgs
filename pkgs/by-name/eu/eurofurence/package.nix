@@ -52,10 +52,10 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://web.archive.org/web/20200131023120/http://eurofurence.net/eurofurence.html";
     description = "Family of geometric rounded sans serif fonts";
-    maintainers = with lib.maintainers; [ ehmry ];
-    license = lib.licenses.free;
+    maintainers = with maintainers; [ ehmry ];
+    license = licenses.free;
   };
 }

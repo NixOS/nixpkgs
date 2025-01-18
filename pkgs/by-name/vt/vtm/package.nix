@@ -20,12 +20,12 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Terminal multiplexer with window manager and session sharing";
     homepage = "https://vtm.netxs.online/";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "vtm";
-    maintainers = with lib.maintainers; [ ];
-    platforms = lib.platforms.all;
+    maintainers = with maintainers; [ ];
+    platforms = platforms.all;
   };
 })

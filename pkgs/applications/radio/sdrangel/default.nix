@@ -123,17 +123,17 @@ stdenv.mkDerivation (finalAttrs: {
     "-DENABLE_QT6=ON"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Software defined radio (SDR) software";
     homepage = "https://github.com/f4exb/sdrangel";
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     longDescription = ''
       SDRangel is an Open Source Qt6 / OpenGL 3.0+ SDR and signal analyzer frontend to various hardware.
     '';
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       alkeryn
       Tungsten842
     ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 })

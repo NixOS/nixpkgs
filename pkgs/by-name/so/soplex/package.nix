@@ -22,12 +22,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://scipopt.org";
     description = "Sequential object-oriented simPlex";
-    license = with lib.licenses; [ asl20 ];
+    license = with licenses; [ asl20 ];
     mainProgram = "soplex";
-    maintainers = with lib.maintainers; [ david-r-cox ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ david-r-cox ];
+    platforms = platforms.unix;
   };
 })

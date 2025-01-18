@@ -115,10 +115,10 @@ else
         stdlib-shims
       ];
 
-    meta = {
+    meta = with lib; {
       description = "Comprehensive ppx tool set";
-      license = lib.licenses.mit;
-      maintainers = [ lib.maintainers.vbgl ];
+      license = licenses.mit;
+      maintainers = [ maintainers.vbgl ];
       homepage = "https://github.com/ocaml-ppx/ppxlib";
     };
   }

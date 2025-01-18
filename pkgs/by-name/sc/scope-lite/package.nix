@@ -19,11 +19,11 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake ];
 
-  meta = {
+  meta = with lib; {
     description = "Migration path to C++ library extensions scope_exit, scope_fail, scope_success, unique_resource";
-    license = lib.licenses.boost;
-    maintainers = [ lib.maintainers.shlevy ];
+    license = licenses.boost;
+    maintainers = [ maintainers.shlevy ];
     homepage = "https://github.com/martinmoene/scope-lite";
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 }

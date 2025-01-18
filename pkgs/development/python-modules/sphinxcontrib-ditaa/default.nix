@@ -32,10 +32,10 @@ buildPythonPackage rec {
 
   pythonNamespaces = [ "sphinxcontrib" ];
 
-  meta = {
+  meta = with lib; {
     description = "Sphinx ditaa extension";
     homepage = "https://pypi.org/project/sphinxcontrib-ditaa";
-    maintainers = with lib.maintainers; [ rconybea ];
-    license = lib.licenses.bsd2;
+    maintainers = with maintainers; [ rconybea ];
+    license = licenses.bsd2;
   };
 }

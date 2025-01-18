@@ -39,13 +39,13 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "SX1302 Hardware Abstraction Layer and Tools (packet forwarder...)";
     license = [
-      lib.licenses.bsd3
-      lib.licenses.mit
+      licenses.bsd3
+      licenses.mit
     ];
-    maintainers = [ lib.maintainers.stv0g ];
-    platforms = lib.platforms.linux;
+    maintainers = [ maintainers.stv0g ];
+    platforms = platforms.linux;
   };
 })

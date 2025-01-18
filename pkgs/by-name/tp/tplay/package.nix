@@ -50,12 +50,12 @@ rustPlatform.buildRustPackage rec {
       --prefix PATH : "${lib.makeBinPath [ ffmpeg ]}"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Terminal Media Player";
     homepage = "https://github.com/maxcurzi/tplay";
-    platforms = lib.platforms.linux;
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    platforms = platforms.linux;
+    license = licenses.mit;
+    maintainers = with maintainers; [
       demine
       colemickens
     ];

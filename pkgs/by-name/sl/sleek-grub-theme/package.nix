@@ -35,11 +35,11 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Grub bootloader themes, contains light/dark/orange/bigSur styles";
     homepage = "https://github.com/sandesh236/sleek--themes";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ luochen1990 ];
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ luochen1990 ];
   };
 }

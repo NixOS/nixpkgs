@@ -42,15 +42,15 @@ stdenv.mkDerivation {
     update-source-version heroku "$version" "$hash" "$url"
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://devcenter.heroku.com/articles/heroku-cli";
     description = "Everything you need to get started using Heroku";
     mainProgram = "heroku";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       aflatter
       mirdhyn
     ];
-    license = lib.licenses.mit;
-    platforms = with lib.platforms; unix;
+    license = licenses.mit;
+    platforms = with platforms; unix;
   };
 }

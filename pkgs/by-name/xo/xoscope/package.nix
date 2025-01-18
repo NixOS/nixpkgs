@@ -34,12 +34,12 @@ stdenv.mkDerivation rec {
     alsa-lib
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Oscilloscope through the sound card";
     mainProgram = "xoscope";
     homepage = "https://xoscope.sourceforge.net";
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = with lib.platforms; linux;
+    platforms = with platforms; linux;
   };
 }

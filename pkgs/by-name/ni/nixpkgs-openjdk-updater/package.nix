@@ -76,11 +76,11 @@ python3Packages.buildPythonApplication {
       };
     };
 
-  meta = {
+  meta = with lib; {
     description = "Updater for Nixpkgs OpenJDK packages";
-    license = lib.licenses.mit;
-    sourceProvenance = [ lib.sourceTypes.fromSource ];
-    maintainers = [ lib.maintainers.emily ];
+    license = licenses.mit;
+    sourceProvenance = [ sourceTypes.fromSource ];
+    maintainers = [ maintainers.emily ];
     mainProgram = "nixpkgs-openjdk-updater";
   };
 }

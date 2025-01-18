@@ -85,11 +85,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = {
+  meta = with lib; {
     description = "Alpine Linux build tools";
     homepage = "https://gitlab.alpinelinux.org/alpine/abuild";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ onny ];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ onny ];
+    platforms = platforms.unix;
   };
 })

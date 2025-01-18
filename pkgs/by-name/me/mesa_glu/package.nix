@@ -52,12 +52,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = {
+  meta = with lib; {
     description = "OpenGL utility library";
     homepage = "https://cgit.freedesktop.org/mesa/glu/";
-    license = lib.licenses.sgi-b-20;
+    license = licenses.sgi-b-20;
     pkgConfigModules = [ "glu" ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
     broken = stdenv.hostPlatform.isAndroid;
   };
 })

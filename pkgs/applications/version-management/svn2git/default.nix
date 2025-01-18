@@ -39,11 +39,11 @@ stdenv.mkDerivation rec {
       --prefix PATH : ${git}/bin
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/nirvdrum/svn2git";
     description = "Tool for importing Subversion repositories into git";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.unix;
+    license = licenses.mit;
+    platforms = platforms.unix;
     mainProgram = "svn2git";
   };
 }

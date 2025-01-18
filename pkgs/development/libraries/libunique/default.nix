@@ -42,10 +42,10 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://gitlab.gnome.org/Archive/unique";
     description = "Library for writing single instance applications";
-    license = lib.licenses.lgpl21;
-    platforms = with lib.platforms; linux ++ darwin;
+    license = licenses.lgpl21;
+    platforms = with platforms; linux ++ darwin;
   };
 }

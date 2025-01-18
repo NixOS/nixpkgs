@@ -48,13 +48,13 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Hierarchical note taking application with focus on building large personal knowledge bases";
     homepage = "https://github.com/TriliumNext/Notes";
-    license = lib.licenses.agpl3Plus;
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = licenses.agpl3Plus;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = [ "x86_64-linux" ];
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       eliandoran
       fliegendewurst
     ];

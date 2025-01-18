@@ -58,10 +58,10 @@ stdenv.mkDerivation rec {
     chmod +x "$out/bin/slack"
   '';
 
-  meta = {
-    license = lib.licenses.mit;
+  meta = with lib; {
+    license = licenses.mit;
     maintainers = [ ];
     mainProgram = "slack";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }

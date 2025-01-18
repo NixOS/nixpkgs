@@ -129,16 +129,16 @@ python3Packages.buildPythonApplication rec {
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "Python fitting assistant, cross-platform fitting tool for EVE Online";
     homepage = "https://github.com/pyfa-org/Pyfa";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
       toasteruwu
       cholli
       paschoal
     ];
     mainProgram = "pyfa";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

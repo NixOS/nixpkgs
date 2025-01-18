@@ -69,12 +69,12 @@ python3Packages.buildPythonApplication rec {
       done
     '';
 
-  meta = {
+  meta = with lib; {
     description = "Graphical interface for version control intended to run on gnome and nautilus";
     homepage = "https://gitlab.gnome.org/philippun1/turtle";
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     mainProgram = "turtle_cli";
-    maintainers = with lib.maintainers; [ aleksana ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ aleksana ];
+    platforms = platforms.unix;
   };
 }

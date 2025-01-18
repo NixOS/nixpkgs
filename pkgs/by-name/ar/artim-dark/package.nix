@@ -29,11 +29,11 @@ stdenvNoCC.mkDerivation rec {
     cp -R GTK $out/share/themes/Aritim-Dark
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Dark theme deeply inspired by the Ayu Dark color palette";
     homepage = "https://github.com/Mrcuve0/Aritim-Dark";
-    license = with lib.licenses; [ gpl3Only ];
-    platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.pasqui23 ];
+    license = with licenses; [ gpl3Only ];
+    platforms = platforms.unix;
+    maintainers = [ maintainers.pasqui23 ];
   };
 }

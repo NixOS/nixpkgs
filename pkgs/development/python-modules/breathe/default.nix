@@ -53,11 +53,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "breathe" ];
 
-  meta = {
+  meta = with lib; {
     description = "Sphinx Doxygen renderer";
     mainProgram = "breathe-apidoc";
     homepage = "https://github.com/breathe-doc/breathe";
-    license = lib.licenses.bsd3;
-    maintainers = lib.teams.sphinx.members;
+    license = licenses.bsd3;
+    maintainers = teams.sphinx.members;
   };
 }

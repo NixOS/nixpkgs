@@ -37,11 +37,11 @@ buildNimPackage' (finalAttrs: rec {
     runHook postCheck
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Opinionated code formatter for Nim";
     homepage = "https://github.com/arnetheduck/nph";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ sigmanificient ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ sigmanificient ];
     mainProgram = "nph";
   };
 })

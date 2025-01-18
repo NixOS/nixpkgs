@@ -22,11 +22,11 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/bufbuild/bufisk";
     description = "User-friendly launcher for Buf";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ aaronjheng ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ aaronjheng ];
     mainProgram = "bufisk";
   };
 }

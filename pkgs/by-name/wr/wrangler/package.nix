@@ -87,14 +87,14 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Command-line interface for all things Cloudflare Workers";
     homepage = "https://github.com/cloudflare/workers-sdk#readme";
-    license = with lib.licenses; [
+    license = with licenses; [
       mit
       apsl20
     ];
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       seanrmurphy
       dezren39
       ryand56

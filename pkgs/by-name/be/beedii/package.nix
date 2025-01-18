@@ -25,12 +25,12 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Free Hand Drawn Emoji Font";
     homepage = "https://github.com/webkul/beedii";
-    license = lib.licenses.cc0;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [
+    license = licenses.cc0;
+    platforms = platforms.all;
+    maintainers = with maintainers; [
       kachick
     ];
   };

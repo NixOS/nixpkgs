@@ -34,10 +34,10 @@ stdenv.mkDerivation rec {
     export ac_cv_func_lstat64=no
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.nongnu.org/renameutils/";
     description = "Set of programs to make renaming of files faster";
-    platforms = lib.platforms.unix;
-    license = lib.licenses.gpl2Plus;
+    platforms = platforms.unix;
+    license = licenses.gpl2Plus;
   };
 }

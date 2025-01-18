@@ -36,10 +36,10 @@ buildPythonPackage {
     "test__renames"
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/dsoprea/PyInotify";
     description = "Monitor filesystems events on Linux platforms with inotify";
-    license = lib.licenses.gpl2;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2;
+    platforms = platforms.linux;
   };
 }

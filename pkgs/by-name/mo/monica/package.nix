@@ -26,14 +26,14 @@ stdenv.mkDerivation rec {
 
   passthru.tests.monica = nixosTests.monica;
 
-  meta = {
+  meta = with lib; {
     description = "Personal CRM";
     homepage = "https://www.monicahq.com/";
     longDescription = ''
       Remember everything about your friends, family and business
       relationships.
     '';
-    license = lib.licenses.agpl3Plus;
-    platforms = lib.platforms.all;
+    license = licenses.agpl3Plus;
+    platforms = platforms.all;
   };
 }

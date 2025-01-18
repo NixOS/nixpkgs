@@ -26,11 +26,11 @@ buildGoModule rec {
       --zsh <($out/bin/optinix completion zsh)
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Tool for searching options in Nix";
     homepage = "https://gitlab.com/hmajid2301/optinix";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ hmajid2301 ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ hmajid2301 ];
     mainProgram = "optinix";
   };
 }

@@ -32,13 +32,13 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/ftrvxmtrx/9pfs";
     description = "FUSE-based client of the 9P network filesystem protocol";
     mainProgram = "9pfs";
     maintainers = [ ];
-    platforms = lib.platforms.unix;
-    license = with lib.licenses; [
+    platforms = platforms.unix;
+    license = with licenses; [
       lpl-102
       bsd2
     ];

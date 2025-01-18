@@ -64,13 +64,13 @@ rustPlatform.buildRustPackage {
     patchelf --set-rpath ${libraryPath}:$(patchelf --print-rpath $out/bin/wldash) $out/bin/wldash
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Wayland launcher/dashboard";
     homepage = "https://github.com/kennylevinsen/wldash";
-    license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ bbenno ];
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ bbenno ];
     mainProgram = "wldash";
-    platforms = lib.platforms.linux;
-    sourceProvenance = with lib.sourceTypes; [ fromSource ];
+    platforms = platforms.linux;
+    sourceProvenance = with sourceTypes; [ fromSource ];
   };
 }

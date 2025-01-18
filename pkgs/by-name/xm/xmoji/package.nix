@@ -47,11 +47,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [ "prefix=${placeholder "out"}" ];
 
-  meta = {
+  meta = with lib; {
     description = "Plain X11 emoji keyboard";
     homepage = "https://github.com/Zirias/xmoji";
-    license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ sigmanificient ];
-    platforms = lib.platforms.linux;
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ sigmanificient ];
+    platforms = platforms.linux;
   };
 })

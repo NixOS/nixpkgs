@@ -37,11 +37,11 @@ lib.checkListOfEnum "${pname}: variant"
       runHook postInstall
     '';
 
-    meta = {
+    meta = with lib; {
       description = "Gruvbox themes for kvantum";
       homepage = "https://github.com/sachnr/gruvbox-kvantum-themes";
-      license = lib.licenses.gpl3;
-      platforms = lib.platforms.linux;
-      maintainers = with lib.maintainers; [ istudyatuni ];
+      license = licenses.gpl3;
+      platforms = platforms.linux;
+      maintainers = with maintainers; [ istudyatuni ];
     };
   }

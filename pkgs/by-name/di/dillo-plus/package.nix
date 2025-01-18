@@ -44,13 +44,13 @@ stdenv.mkDerivation (finalAttrs: {
     "INSTALL=install"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Lightweight web browser based on Dillo but with many improvements, such as: support for http, https, gemini, gopher, epub, reader mode and more";
     homepage = "https://github.com/crossbowerbt/dillo-plus";
     changelog = "https://github.com/crossbowerbt/dillo-plus/blob/main/ChangeLog";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ fgaz ];
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ fgaz ];
     mainProgram = "dillo";
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 })

@@ -22,10 +22,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "stop_words" ];
 
-  meta = {
+  meta = with lib; {
     description = "Get list of common stop words in various languages in Python";
     homepage = "https://github.com/Alir3z4/python-stop-words";
-    license = [ lib.licenses.bsd3 ];
-    maintainers = with lib.maintainers; [ lavafroth ];
+    license = [ licenses.bsd3 ];
+    maintainers = with maintainers; [ lavafroth ];
   };
 }

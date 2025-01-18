@@ -20,11 +20,11 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DCLINGO_BUILD_WITH_PYTHON=OFF" ];
 
-  meta = {
+  meta = with lib; {
     description = "ASP system to ground and solve logic programs";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.raskin ];
-    platforms = lib.platforms.unix;
+    license = licenses.mit;
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.unix;
     homepage = "https://potassco.org/";
     downloadPage = "https://github.com/potassco/clingo/releases/";
   };

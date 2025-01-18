@@ -49,10 +49,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pydy" ];
 
-  meta = {
+  meta = with lib; {
     description = "Python tool kit for multi-body dynamics";
     homepage = "http://pydy.org";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ sigmanificient ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ sigmanificient ];
   };
 }

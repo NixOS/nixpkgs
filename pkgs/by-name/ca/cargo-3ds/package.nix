@@ -23,13 +23,13 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Cargo command to work with Nintendo 3DS project binaries";
     homepage = "https://github.com/rust3ds/cargo-3ds";
-    license = with lib.licenses; [
+    license = with licenses; [
       mit
       asl20
     ];
-    maintainers = with lib.maintainers; [ l1npengtul ];
+    maintainers = with maintainers; [ l1npengtul ];
   };
 }

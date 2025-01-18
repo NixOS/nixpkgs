@@ -27,10 +27,10 @@ build-idris-package {
     sha256 = "0rbx0yqa0fb7h7qfsvqvirc5q85z51rcwbivn6351jgn3a0inmhf";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Recursion schemes for Idris";
     homepage = "https://github.com/vmchale/recursion_schemes";
-    license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.brainrape ];
+    license = licenses.bsd3;
+    maintainers = [ maintainers.brainrape ];
   };
 }

@@ -51,15 +51,15 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "prefix=$(out)" ];
 
-  meta = {
+  meta = with lib; {
     description = "Graphical frontend for firmware management";
     homepage = "https://github.com/pop-os/firmware-manager";
-    license = with lib.licenses; [
+    license = with licenses; [
       gpl3Plus
       cc0
     ];
     mainProgram = "com.system76.FirmwareManager";
-    maintainers = [ lib.maintainers.shlevy ];
-    platforms = lib.platforms.linux;
+    maintainers = [ maintainers.shlevy ];
+    platforms = platforms.linux;
   };
 }

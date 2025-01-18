@@ -37,11 +37,11 @@ stdenvNoCC.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "WhatsApp Emoji for GNU/Linux";
     homepage = "https://github.com/dmlls/whatsapp-emoji-linux";
-    maintainers = [ lib.maintainers.lucasew ];
-    sourceProvenance = [ lib.sourceTypes.fromSource ];
-    license = lib.licenses.unfree;
+    maintainers = [ maintainers.lucasew ];
+    sourceProvenance = [ sourceTypes.fromSource ];
+    license = licenses.unfree;
   };
 }

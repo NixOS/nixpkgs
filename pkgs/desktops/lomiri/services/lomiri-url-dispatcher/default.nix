@@ -166,7 +166,7 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gitUpdater { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Lomiri operating environment service for requesting URLs to be opened";
     longDescription = ''
       Allows applications to request a URL to be opened and handled by another
@@ -174,12 +174,12 @@ stdenv.mkDerivation (finalAttrs: {
       starting them inside its own Application Confinement.
     '';
     homepage = "https://gitlab.com/ubports/development/core/lomiri-url-dispatcher";
-    license = with lib.licenses; [
+    license = with licenses; [
       lgpl3Only
       gpl3Only
     ];
-    maintainers = lib.teams.lomiri.members;
-    platforms = lib.platforms.linux;
+    maintainers = teams.lomiri.members;
+    platforms = platforms.linux;
     pkgConfigModules = [
       "lomiri-url-dispatcher"
     ];

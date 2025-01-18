@@ -20,10 +20,10 @@ buildDunePackage rec {
   propagatedBuildInputs = [ cstruct ];
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "Mininal OCaml library providing hexadecimal converters";
     homepage = "https://github.com/mirage/ocaml-hex";
-    license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ vbgl ];
+    license = licenses.isc;
+    maintainers = with maintainers; [ vbgl ];
   };
 }

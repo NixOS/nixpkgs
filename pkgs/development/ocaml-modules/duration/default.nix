@@ -20,11 +20,11 @@ buildDunePackage rec {
   doCheck = lib.versionAtLeast ocaml.version "4.08";
   checkInputs = [ alcotest ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/hannesm/duration";
     description = "Conversions to various time units";
-    license = lib.licenses.isc;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.isc;
+    maintainers = [ maintainers.vbgl ];
   };
 
 }

@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
       }"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Reduces browser profile sizes by cleaning their sqlite databases";
     longDescription = ''
       Use profile-cleaner to reduce the size of browser profiles by organizing
@@ -44,9 +44,9 @@ stdenv.mkDerivation rec {
       some email clients and newsreaders too.
     '';
     homepage = "https://github.com/graysky2/profile-cleaner";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.all;
-    maintainers = [ lib.maintainers.devhell ];
+    license = licenses.mit;
+    platforms = platforms.all;
+    maintainers = [ maintainers.devhell ];
     mainProgram = "profile-cleaner";
   };
 }

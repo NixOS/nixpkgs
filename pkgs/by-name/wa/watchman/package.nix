@@ -102,15 +102,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Watches files and takes action when they change";
     homepage = "https://facebook.github.io/watchman";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       kylesferrazza
       emily
       techknowlogick
     ];
-    platforms = lib.platforms.unix;
-    license = lib.licenses.mit;
+    platforms = platforms.unix;
+    license = licenses.mit;
   };
 })

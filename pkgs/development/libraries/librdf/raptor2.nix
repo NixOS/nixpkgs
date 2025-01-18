@@ -54,15 +54,15 @@ stdenv.mkDerivation rec {
     libxslt
   ];
 
-  meta = {
+  meta = with lib; {
     description = "RDF Parser Toolkit";
     mainProgram = "rapper";
     homepage = "https://librdf.org/raptor";
-    license = with lib.licenses; [
+    license = with licenses; [
       lgpl21
       asl20
     ];
-    maintainers = with lib.maintainers; [ marcweber ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ marcweber ];
+    platforms = platforms.unix;
   };
 }

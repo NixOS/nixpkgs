@@ -34,12 +34,12 @@ stdenv.mkDerivation {
     wrapProgram $out/bin/syspower --prefix LD_LIBRARY_PATH : $out/lib
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Simple power menu/shutdown screen for Hyprland";
     homepage = "https://gihub.com/System64fumo/syspower";
-    license = lib.licenses.wtfpl;
-    maintainers = with lib.maintainers; [ justdeeevin ];
+    license = licenses.wtfpl;
+    maintainers = with maintainers; [ justdeeevin ];
     mainProgram = "syspower";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

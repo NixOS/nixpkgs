@@ -26,10 +26,10 @@ buildPythonPackage rec {
   # Requires graphical environment to use pyautogui
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Python module that masks password input";
     homepage = "https://github.com/asweigart/pwinput";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ bwkam ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ bwkam ];
   };
 }

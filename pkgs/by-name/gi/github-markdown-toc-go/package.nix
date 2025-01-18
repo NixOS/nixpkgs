@@ -16,11 +16,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-K5yb7bnW6eS5UESK9wgNEUwGjB63eJk6+B0jFFiFero=";
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/ekalinin/github-markdown-toc.go";
     description = "Easy TOC creation for GitHub README.md (in go)";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dannixon ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ dannixon ];
     mainProgram = "gh-md-toc";
   };
 }

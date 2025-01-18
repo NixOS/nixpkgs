@@ -160,17 +160,17 @@ stdenv.mkDerivation {
     chmod +x $out/opt/simulator/resources/firmware/qemu_linux/qemu-system-arm
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Zepp OS Simulator";
     homepage = "https://developer.zepp.com/os/home";
-    license = lib.licenses.unfree;
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     # TODO Darwin
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
     ];
-    maintainers = with lib.maintainers; [ griffi-gh ];
+    maintainers = with maintainers; [ griffi-gh ];
     mainProgram = "simulator";
   };
 }

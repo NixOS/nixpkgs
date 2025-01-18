@@ -13,12 +13,12 @@ stdenv.mkDerivation rec {
     sha256 = "0nr0hrwr4kbi611qazmrify7a27nzxb5n7d97f5i9cw3avxlw38s";
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "http://silcnet.org/";
     description = "Secure Internet Live Conferencing server";
     mainProgram = "silcd";
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = with lib.platforms; linux;
+    platforms = with platforms; linux;
   };
 }

@@ -72,11 +72,11 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DVERSION=${version}" ];
 
-  meta = {
+  meta = with lib; {
     description = "System-wide desktop search for DDE";
     homepage = "https://github.com/linuxdeepin/dde-grand-search";
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
-    maintainers = lib.teams.deepin.members;
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = teams.deepin.members;
   };
 }

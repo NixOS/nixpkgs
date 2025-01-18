@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
   versionCheckProgramArg = "--version";
 
-  meta = {
+  meta = with lib; {
     description = "Customizable automatic UML diagram generator for C++ based on Clang";
     longDescription = ''
       clang-uml is an automatic C++ to UML class, sequence, package and include diagram generator, driven by YAML configuration files.
@@ -86,10 +86,10 @@ stdenv.mkDerivation (finalAttrs: {
       The configuration file or files for clang-uml define the types and contents of each generated diagram.
       The diagrams can be generated in PlantUML, MermaidJS and JSON formats.
     '';
-    maintainers = with lib.maintainers; [ eymeric ];
+    maintainers = with maintainers; [ eymeric ];
     homepage = "https://clang-uml.github.io/";
-    license = lib.licenses.asl20;
-    platforms = lib.platforms.all;
+    license = licenses.asl20;
+    platforms = platforms.all;
     mainProgram = "clang-uml";
   };
 })

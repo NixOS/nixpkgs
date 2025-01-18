@@ -26,11 +26,11 @@ buildGoModule rec {
     "-X github.com/mjl-/mox/moxvar.Version=${version}"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Modern full-featured open source secure mail server for low-maintenance self-hosted email";
     mainProgram = "mox";
     homepage = "https://github.com/mjl-/mox";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ dit7ya ];
   };
 }

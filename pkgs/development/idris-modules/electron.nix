@@ -23,10 +23,10 @@ build-idris-package {
     sha256 = "1rpa7yjvfpzl06h0qbk54jd2n52nmgpf7nq5aamcinqh7h5gbiwn";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Electron bindings for Idris";
     homepage = "https://github.com/jheiling/idris-electron";
-    license = lib.licenses.unlicense;
-    maintainers = [ lib.maintainers.brainrape ];
+    license = licenses.unlicense;
+    maintainers = [ maintainers.brainrape ];
   };
 }

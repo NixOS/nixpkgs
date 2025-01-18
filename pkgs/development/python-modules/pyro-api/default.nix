@@ -19,10 +19,10 @@ buildPythonPackage rec {
   # tests require pyro-ppl which depends on this package
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Generic API for dispatch to Pyro backends";
     homepage = "http://pyro.ai";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ georgewhewell ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ georgewhewell ];
   };
 }

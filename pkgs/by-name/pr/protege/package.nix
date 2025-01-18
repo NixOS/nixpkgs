@@ -71,7 +71,7 @@ maven.buildMavenPackage rec {
     })
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://protege.stanford.edu/";
     downloadPage = "https://protege.stanford.edu/software.php#desktop-protege";
     description = "A free and open-source OWL 2 ontology editor";
@@ -80,14 +80,14 @@ maven.buildMavenPackage rec {
       support for the OWL 2 Web Ontology Language, and direct in-memory
       connections to description logic reasoners.
     '';
-    maintainers = with lib.maintainers; [ nessdoor ];
-    license = with lib.licenses; [ bsd2 ];
+    maintainers = with maintainers; [ nessdoor ];
+    license = with licenses; [ bsd2 ];
     # TODO Protege is able to run on Darwin as well, but I (@nessdoor) had no
     #      way of testing it nor any experience in packaging Darwin apps, so I
     #      will leave the task to someone who has the right tools and knowledge.
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
     mainProgram = "protege";
-    sourceProvenance = with lib.sourceTypes; [
+    sourceProvenance = with sourceTypes; [
       fromSource
       binaryBytecode
     ];

@@ -23,11 +23,11 @@ rustPlatform.buildRustPackage rec {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "A CLI tool to convert clang-tidy diagnostics into SARIF";
     homepage = "https://psastras.github.io/sarif-rs";
-    maintainers = with lib.maintainers; [ getchoo ];
+    maintainers = with maintainers; [ getchoo ];
     mainProgram = "clang-tidy-sarif";
-    license = lib.licenses.mit;
+    license = licenses.mit;
   };
 }

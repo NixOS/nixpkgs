@@ -107,7 +107,7 @@ stdenv.mkDerivation rec {
         -e 's~^CONFDIR=.*~CONFDIR=/etc~'
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "http://www.shorewall.net/";
     description = "IP gateway/firewall configuration tool for GNU/Linux";
     longDescription = ''
@@ -121,7 +121,7 @@ stdenv.mkDerivation rec {
       not use Netfilter's ipchains compatibility mode and can thus take
       advantage of Netfilter's connection state tracking capabilities.
     '';
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
   };
 }

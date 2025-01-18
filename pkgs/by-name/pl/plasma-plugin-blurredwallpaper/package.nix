@@ -26,14 +26,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Plasma 6 wallpaper plugin to blur the wallpaper of active window";
     homepage = "https://github.com/bouteillerAlan/blurredwallpaper";
-    license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl3;
+    maintainers = with maintainers; [
       dr460nf1r3
       johnrtitor
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 })

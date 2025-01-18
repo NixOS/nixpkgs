@@ -13,15 +13,15 @@
 
 mkDerivation {
   pname = "kmplot";
-  meta = {
+  meta = with lib; {
     homepage = "https://apps.kde.org/kmplot/";
     description = "Mathematical function plotter";
     mainProgram = "kmplot";
-    license = with lib.licenses; [
+    license = with licenses; [
       gpl2Plus
       fdl12Plus
     ];
-    maintainers = [ lib.maintainers.orivej ];
+    maintainers = [ maintainers.orivej ];
   };
   nativeBuildInputs = [
     extra-cmake-modules

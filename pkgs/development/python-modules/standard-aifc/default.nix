@@ -37,10 +37,10 @@ buildPythonPackage rec {
     "aifc"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Standard library aifc redistribution";
     homepage = "https://github.com/youknowone/python-deadlib/tree/main/aifc";
-    license = lib.licenses.psfl;
-    maintainers = with lib.maintainers; [ hexa ];
+    license = licenses.psfl;
+    maintainers = with maintainers; [ hexa ];
   };
 }

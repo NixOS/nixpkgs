@@ -18,11 +18,11 @@ python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [ python3Packages.setuptools ];
   propagatedBuildInputs = [ python3Packages.python-dateutil ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/Olivia5k/doge";
     description = "Wow very terminal doge";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       Gonzih
       quantenzitrone
     ];

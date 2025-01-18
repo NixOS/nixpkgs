@@ -152,16 +152,16 @@ stdenv.mkDerivation {
     done
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Standard ML of New Jersey, a compiler";
     homepage = "http://smlnj.org";
-    license = lib.licenses.bsd3;
+    license = licenses.bsd3;
     platforms = [
       "x86_64-linux"
       "i686-linux"
       "x86_64-darwin"
     ];
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       skyesoss
       thoughtpolice
     ];

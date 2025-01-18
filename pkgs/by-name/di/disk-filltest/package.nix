@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     install -D -m0644 -t $doc/share/doc/disk-filltest README
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://panthema.net/2013/disk-filltest";
     description = "Simple program to detect bad disks by filling them with random data";
     longDescription = ''
@@ -40,9 +40,9 @@ stdenv.mkDerivation (finalAttrs: {
       disk is full, read the files again and verify the sequence written. It
       also can measure read/write speed while filling the disk.
     '';
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     mainProgram = "disk-filltest";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = lib.platforms.all;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.all;
   };
 })

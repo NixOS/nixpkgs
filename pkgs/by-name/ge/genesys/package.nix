@@ -34,11 +34,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Simple family tree generator that scales";
     homepage = "https://github.com/mrlem/genesys";
-    license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ rogarb ];
-    platforms = lib.platforms.all;
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ rogarb ];
+    platforms = platforms.all;
   };
 })

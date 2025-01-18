@@ -85,13 +85,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "GUI for the version control system Jujutsu";
     homepage = "https://github.com/gulbanana/gg";
     changelog = "https://github.com/gulbanana/gg/blob/${finalAttrs.src.rev}/CHANGELOG.md";
-    license = with lib.licenses; [ asl20 ];
+    license = with licenses; [ asl20 ];
     inherit (cargo-tauri.hook.meta) platforms;
-    maintainers = with lib.maintainers; [ pluiedev ];
+    maintainers = with maintainers; [ pluiedev ];
     mainProgram = "gg";
   };
 })

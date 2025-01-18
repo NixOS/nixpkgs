@@ -60,12 +60,12 @@ stdenv.mkDerivation (finalAttrs: {
     package = finalAttrs.finalPackage;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Simple and lightweight translator that allows to translate and speak text using Google, Yandex and Bing";
     homepage = "https://invent.kde.org/office/crow-translate";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ sikmir ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ sikmir ];
+    platforms = platforms.linux;
     mainProgram = "crow";
   };
 })

@@ -26,10 +26,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "zope.cachedescriptors" ];
 
-  meta = {
+  meta = with lib; {
     description = "Method and property caching decorators";
     homepage = "https://github.com/zopefoundation/zope.cachedescriptors";
-    license = lib.licenses.zpl21;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    license = licenses.zpl21;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

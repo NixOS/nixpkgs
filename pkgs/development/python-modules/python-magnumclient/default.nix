@@ -87,11 +87,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "magnumclient" ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/openstack/python-magnumclient";
     description = "Client library for OpenStack Magnum API";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     mainProgram = "magnum";
-    maintainers = lib.teams.openstack.members;
+    maintainers = teams.openstack.members;
   };
 }

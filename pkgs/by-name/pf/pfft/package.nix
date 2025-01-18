@@ -53,11 +53,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "Parallel fast Fourier transforms";
     homepage = "https://www-user.tu-chemnitz.de/~potts/workgroup/pippig/software.php.en#pfft";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ hmenke ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ hmenke ];
+    platforms = platforms.linux;
   };
 })

@@ -28,10 +28,10 @@ stdenv.mkDerivation rec {
       "ac_cv_func_setpgrp_void=yes"
     ];
 
-  meta = {
+  meta = with lib; {
     description = "Lightweight C library that eases the writing of UNIX daemons";
     homepage = "http://0pointer.de/lennart/projects/libdaemon/";
-    license = lib.licenses.lgpl2Plus;
-    platforms = lib.platforms.unix;
+    license = licenses.lgpl2Plus;
+    platforms = platforms.unix;
   };
 }

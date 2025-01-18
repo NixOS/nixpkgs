@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     chmod +x ./autogen.sh && ./autogen.sh
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/radareorg/acr/";
     description = "Pure shell autoconf replacement";
     longDescription = ''
@@ -27,8 +27,8 @@ stdenv.mkDerivation (finalAttrs: {
       'configure' script (runtime flags). But using shell-script instead of
       m4. This means that ACR is faster, smaller and easy to use.
     '';
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = lib.platforms.all;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.all;
   };
 })

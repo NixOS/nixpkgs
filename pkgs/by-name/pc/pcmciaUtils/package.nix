@@ -58,14 +58,14 @@ stdenv.mkDerivation rec {
     done;
   '') firmware;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.kernel.org/pub/linux/utils/kernel/pcmcia/";
     longDescription = "
       PCMCIAutils contains the initialization tools necessary to allow
       the PCMCIA subsystem to behave (almost) as every other
       hotpluggable bus system.
     ";
-    license = lib.licenses.gpl2Only;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Only;
+    platforms = platforms.linux;
   };
 }

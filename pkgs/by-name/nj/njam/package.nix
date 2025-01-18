@@ -32,11 +32,11 @@ stdenv.mkDerivation rec {
 
   patches = [ ./logfile.patch ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://trackballs.sourceforge.net/";
     description = "Cross-platform pacman-like game";
     mainProgram = "njam";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
   };
 }

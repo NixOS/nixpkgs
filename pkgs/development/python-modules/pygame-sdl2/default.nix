@@ -56,13 +56,13 @@ buildPythonPackage {
 
   doCheck = isPy27; # python3 tests are non-functional
 
-  meta = {
+  meta = with lib; {
     description = "Reimplementation of parts of pygame API using SDL2";
     homepage = "https://github.com/renpy/pygame_sdl2";
-    license = with lib.licenses; [
+    license = with licenses; [
       lgpl2
       zlib
     ];
-    maintainers = with lib.maintainers; [ raskin ];
+    maintainers = with maintainers; [ raskin ];
   };
 }

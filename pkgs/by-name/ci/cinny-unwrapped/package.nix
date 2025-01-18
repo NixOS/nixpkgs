@@ -49,12 +49,12 @@ buildNpmPackage rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Yet another Matrix client for the web";
     homepage = "https://cinny.in/";
-    maintainers = with lib.maintainers; [ abbe ];
-    license = lib.licenses.agpl3Only;
-    platforms = lib.platforms.all;
+    maintainers = with maintainers; [ abbe ];
+    license = licenses.agpl3Only;
+    platforms = platforms.all;
     inherit (olm.meta) knownVulnerabilities;
   };
 }

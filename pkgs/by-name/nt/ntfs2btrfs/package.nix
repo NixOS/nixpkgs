@@ -38,12 +38,12 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "CLI tool which does in-place conversion of Microsoft's NTFS filesystem to the open-source filesystem Btrfs";
     homepage = "https://github.com/maharmstone/ntfs2btrfs";
-    license = with lib.licenses; [ gpl2Only ];
-    maintainers = with lib.maintainers; [ j1nxie ];
+    license = with licenses; [ gpl2Only ];
+    maintainers = with maintainers; [ j1nxie ];
     mainProgram = "ntfs2btrfs";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

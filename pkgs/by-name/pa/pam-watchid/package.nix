@@ -29,11 +29,11 @@ swiftPackages.stdenv.mkDerivation {
     cp $binPath/libpam-watchid.dylib $out/lib/pam_watchid.so
   '';
 
-  meta = {
+  meta = with lib; {
     description = "PAM plugin module that allows the Apple Watch to be used for authentication";
     homepage = "https://github.com/Logicer16/pam-watchid";
-    license = lib.licenses.unlicense;
-    maintainers = [ lib.maintainers.samasaur ];
-    platforms = lib.platforms.darwin;
+    license = licenses.unlicense;
+    maintainers = [ maintainers.samasaur ];
+    platforms = platforms.darwin;
   };
 }

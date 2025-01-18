@@ -54,14 +54,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "A library to obtain, parse and analyze data (EEG, EMG, ECG) from biosensors";
     homepage = "https://brainflow.org/";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       pandapip1
       ziguana
     ];
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 })

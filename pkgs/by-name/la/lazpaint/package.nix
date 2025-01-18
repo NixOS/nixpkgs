@@ -77,13 +77,13 @@ stdenv.mkDerivation rec {
     qtWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ python3 ]})
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Image editor like PaintBrush or Paint.Net";
     homepage = "https://lazpaint.github.io";
     downloadPage = "https://github.com/bgrabitmap/lazpaint/";
-    license = lib.licenses.gpl3Only;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ aleksana ];
+    license = licenses.gpl3Only;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ aleksana ];
     mainProgram = "lazpaint";
   };
 }

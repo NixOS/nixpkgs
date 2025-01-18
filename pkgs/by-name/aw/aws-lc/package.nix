@@ -79,15 +79,15 @@ awsStdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = {
+  meta = with lib; {
     description = "General-purpose cryptographic library maintained by the AWS Cryptography team for AWS and their customers";
     homepage = "https://github.com/aws/aws-lc";
     license = [
-      lib.licenses.asl20 # or
-      lib.licenses.isc
+      licenses.asl20 # or
+      licenses.isc
     ];
-    maintainers = [ lib.maintainers.theoparis ];
-    platforms = lib.platforms.unix;
+    maintainers = [ maintainers.theoparis ];
+    platforms = platforms.unix;
     mainProgram = "bssl";
   };
 })

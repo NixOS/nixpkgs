@@ -57,15 +57,15 @@ stdenv.mkDerivation rec {
     patchelf --set-interpreter "$interpreter" $dir/lpd/rawtobr3
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Brother MFC-L2720DW lpr driver";
     homepage = "http://www.brother.com/";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = lib.licenses.unfree;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
     platforms = [
       "x86_64-linux"
       "i686-linux"
     ];
-    maintainers = [ lib.maintainers.xeji ];
+    maintainers = [ maintainers.xeji ];
   };
 }

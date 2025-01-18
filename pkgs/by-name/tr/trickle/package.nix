@@ -38,11 +38,11 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  meta = {
+  meta = with lib; {
     description = "Lightweight userspace bandwidth shaper";
-    license = lib.licenses.bsd3;
+    license = licenses.bsd3;
     homepage = "https://monkey.org/~marius/pages/?page=trickle";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
     mainProgram = "trickle";
   };
 }

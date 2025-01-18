@@ -99,12 +99,12 @@ mkYarnPackage rec {
     updateScript = ./update.sh;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Bridge between Matrix and Discord";
     homepage = "https://github.com/Half-Shot/matrix-appservice-discord";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ euxane ];
-    platforms = lib.platforms.linux;
+    license = licenses.asl20;
+    maintainers = with maintainers; [ euxane ];
+    platforms = platforms.linux;
     mainProgram = "matrix-appservice-discord";
   };
 }

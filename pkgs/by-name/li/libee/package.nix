@@ -17,11 +17,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libestr ];
 
-  meta = {
+  meta = with lib; {
     description = "Event Expression Library inspired by CEE";
     homepage = "http://www.libee.org/";
-    license = lib.licenses.lgpl21Plus;
+    license = licenses.lgpl21Plus;
     mainProgram = "libee-convert";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }

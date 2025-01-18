@@ -23,12 +23,12 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "NetworkManager secret agent that responds with the content of preconfigured files";
     mainProgram = "nm-file-secret-agent";
     homepage = "https://github.com/lilioid/nm-file-secret-agent/";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ lilioid ];
-    platforms = lib.lists.intersectLists dbus.meta.platforms networkmanager.meta.platforms;
+    license = licenses.mit;
+    maintainers = with maintainers; [ lilioid ];
+    platforms = lists.intersectLists dbus.meta.platforms networkmanager.meta.platforms;
   };
 }

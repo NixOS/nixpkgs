@@ -64,15 +64,15 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Poker roguelike";
     longDescription = ''
       Balatro is a hypnotically satisfying deckbuilder where you play illegal poker hands,
       discover game-changing jokers, and trigger adrenaline-pumping, outrageous combos.
     '';
-    license = lib.licenses.unfree;
+    license = licenses.unfree;
     homepage = "https://store.steampowered.com/app/2379780/Balatro/";
-    maintainers = [ lib.maintainers.antipatico ];
+    maintainers = [ maintainers.antipatico ];
     platforms = love.meta.platforms;
     mainProgram = "balatro";
   };

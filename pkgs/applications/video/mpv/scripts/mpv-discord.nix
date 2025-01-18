@@ -34,11 +34,11 @@ buildLua {
       --replace-fail 'binary_path = ""' 'binary_path = "${core}/bin/mpv-discord"'
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Cross-platform Discord Rich Presence integration for mpv with no external dependencies";
     homepage = "https://github.com/tnychn/mpv-discord";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ bddvlpr ];
+    license = licenses.mit;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ bddvlpr ];
   };
 }

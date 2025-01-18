@@ -17,10 +17,10 @@ buildFishPlugin rec {
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
-  meta = {
+  meta = with lib; {
     description = "Fish plugin to quickly go back to a parent directory up in your current working directory tree";
     homepage = "https://github.com/0rax/fish-bd";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ anomalocaris ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ anomalocaris ];
   };
 }

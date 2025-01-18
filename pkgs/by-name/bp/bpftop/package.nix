@@ -35,11 +35,11 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } {
     "zerocallusedregs"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Dynamic real-time view of running eBPF programs";
     homepage = "https://github.com/Netflix/bpftop";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
+    license = licenses.asl20;
+    maintainers = with maintainers; [
       _0x4A6F
       luftmensch-luftmensch
       mfrw

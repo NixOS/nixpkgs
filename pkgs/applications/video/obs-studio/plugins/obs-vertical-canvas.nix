@@ -39,11 +39,11 @@ stdenv.mkDerivation rec {
     rm -rf $out/obs-plugins
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Plugin for OBS Studio to add vertical canvas";
     homepage = "https://github.com/Aitum/obs-vertical-canvas";
-    maintainers = with lib.maintainers; [ flexiondotorg ];
-    license = lib.licenses.gpl2Plus;
+    maintainers = with maintainers; [ flexiondotorg ];
+    license = licenses.gpl2Plus;
     platforms = [
       "x86_64-linux"
       "i686-linux"

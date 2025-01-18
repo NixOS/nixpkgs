@@ -34,12 +34,12 @@ buildDotnetModule rec {
     ./0001-display-the-message-of-caught-exceptions.patch
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/trueromanus/TorrentStream";
     description = "Simple web server for streaming torrent files in video players";
-    license = lib.licenses.bsd2;
-    platforms = lib.platforms.all;
+    license = licenses.bsd2;
+    platforms = platforms.all;
     mainProgram = "TorrentStream";
-    maintainers = with lib.maintainers; [ _3JlOy-PYCCKUi ];
+    maintainers = with maintainers; [ _3JlOy-PYCCKUi ];
   };
 }

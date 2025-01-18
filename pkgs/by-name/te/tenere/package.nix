@@ -16,11 +16,11 @@ rustPlatform.buildRustPackage rec {
 
   requiredSystemFeatures = [ "big-parallel" ]; # for fat LTO from upstream
 
-  meta = {
+  meta = with lib; {
     description = "Terminal interface for large language models (LLMs)";
     homepage = "https://github.com/pythops/tenere";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ ob7 ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ ob7 ];
     mainProgram = "tenere";
   };
 }

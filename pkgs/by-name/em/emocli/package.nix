@@ -18,11 +18,11 @@ buildNimPackage (finalAttrs: {
     "--maxLoopIterationsVM:1000000000"
   ];
   env.EMOCLI_DATAFILE = "${unicode-emoji}/share/unicode/emoji/emoji-test.txt";
-  meta = {
+  meta = with lib; {
     homepage = "https://gitlab.com/AsbjornOlling/emocli";
     description = "Emoji picker for your command line";
-    license = lib.licenses.eupl12;
-    maintainers = with lib.maintainers; [ asbjornolling ];
+    license = licenses.eupl12;
+    maintainers = with maintainers; [ asbjornolling ];
     mainProgram = "emocli";
   };
 })

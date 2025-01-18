@@ -35,11 +35,11 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "fissix" ];
 
-  meta = {
+  meta = with lib; {
     description = "Backport of latest lib2to3, with enhancements";
     homepage = "https://github.com/amyreese/fissix";
-    sourceProvenance = [ lib.sourceTypes.fromSource ];
-    license = lib.licenses.psfl;
-    maintainers = [ lib.maintainers.emily ];
+    sourceProvenance = [ sourceTypes.fromSource ];
+    license = licenses.psfl;
+    maintainers = [ maintainers.emily ];
   };
 }

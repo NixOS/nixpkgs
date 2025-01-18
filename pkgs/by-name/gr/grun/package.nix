@@ -31,12 +31,12 @@ stdenv.mkDerivation {
     "PREFIX=${placeholder "out"}"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Application launcher written in C and using GTK for the interface";
     mainProgram = "grun";
     homepage = "https://github.com/lrgc/grun";
-    platforms = lib.platforms.linux;
-    license = with lib.licenses; [ gpl2Only ];
-    maintainers = with lib.maintainers; [ _3JlOy-PYCCKUi ];
+    platforms = platforms.linux;
+    license = with licenses; [ gpl2Only ];
+    maintainers = with maintainers; [ _3JlOy-PYCCKUi ];
   };
 }

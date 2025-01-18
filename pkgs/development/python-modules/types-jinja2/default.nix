@@ -25,11 +25,11 @@ buildPythonPackage rec {
     types-markupsafe
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Typing stubs for Jinja2";
     homepage = "https://pypi.org/project/types-Jinja2/";
     changelog = "https://github.com/typeshed-internal/stub_uploader/blob/main/data/changelogs/MarkupSafe.md";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ nim65s ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ nim65s ];
   };
 }

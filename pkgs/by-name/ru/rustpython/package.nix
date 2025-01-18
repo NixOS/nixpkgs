@@ -36,11 +36,11 @@ rustPlatform.buildRustPackage rec {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Python 3 interpreter in written Rust";
     homepage = "https://rustpython.github.io";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ prusnak ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ prusnak ];
     mainProgram = "rustpython";
   };
 }

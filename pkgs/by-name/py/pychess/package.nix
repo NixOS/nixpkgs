@@ -63,12 +63,12 @@ python3Packages.buildPythonApplication rec {
   # No tests available.
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Advanced GTK chess client written in Python";
     homepage = "https://pychess.github.io/";
     mainProgram = "pychess";
-    license = lib.licenses.gpl3Only;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ lgbishop ];
+    license = licenses.gpl3Only;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ lgbishop ];
   };
 }

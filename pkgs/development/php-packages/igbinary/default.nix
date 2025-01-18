@@ -12,10 +12,10 @@ buildPecl {
     "dev"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Binary serialization for PHP";
     homepage = "https://github.com/igbinary/igbinary/";
-    license = lib.licenses.bsd3;
-    maintainers = lib.teams.php.members;
+    license = licenses.bsd3;
+    maintainers = teams.php.members;
   };
 }

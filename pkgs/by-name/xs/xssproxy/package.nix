@@ -32,12 +32,12 @@ stdenv.mkDerivation rec {
     "man1dir=$(out)/share/man/man1"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Forward freedesktop.org Idle Inhibition Service calls to Xss";
     mainProgram = "xssproxy";
     homepage = "https://github.com/vincentbernat/xssproxy";
-    license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ benley ];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ benley ];
+    platforms = platforms.unix;
   };
 }

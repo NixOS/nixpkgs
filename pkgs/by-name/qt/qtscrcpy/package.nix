@@ -115,19 +115,19 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Android real-time display control software";
     homepage = "https://github.com/barry-ran/QtScrcpy";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
+    license = licenses.asl20;
+    maintainers = with maintainers; [
       daru-san
       aleksana
     ];
     mainProgram = "QtScrcpy";
-    platforms = with lib.platforms; linux ++ darwin ++ windows;
+    platforms = with platforms; linux ++ darwin ++ windows;
     # needs some special handling on darwin as it generates .app bundle directly
-    badPlatforms = lib.platforms.darwin;
-    sourceProvenance = with lib.sourceTypes; [
+    badPlatforms = platforms.darwin;
+    sourceProvenance = with sourceTypes; [
       fromSource
       # Still includes sndcpy.apk vendored in the same repo
       # which will run on controlled Android device

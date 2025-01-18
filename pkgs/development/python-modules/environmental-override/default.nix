@@ -19,10 +19,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "environmental_override" ];
 
-  meta = {
+  meta = with lib; {
     description = "Easily configure apps using simple environmental overrides";
     homepage = "https://github.com/coddingtonbear/environmental-override";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ nathanruiz ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ nathanruiz ];
   };
 }

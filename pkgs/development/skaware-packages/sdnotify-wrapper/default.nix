@@ -19,13 +19,13 @@ runCommandCC "sdnotify-wrapper"
       "out"
     ];
 
-    meta = {
+    meta = with lib; {
       homepage = "https://skarnet.org/software/misc/sdnotify-wrapper.c";
       description = "Use systemd sd_notify without having to link against libsystemd";
       mainProgram = "sdnotify-wrapper";
-      platforms = lib.platforms.linux;
-      license = lib.licenses.isc;
-      maintainers = with lib.maintainers; [ Profpatsch ];
+      platforms = platforms.linux;
+      license = licenses.isc;
+      maintainers = with maintainers; [ Profpatsch ];
     };
 
   }

@@ -30,12 +30,12 @@ stdenv.mkDerivation (finalAttrs: {
     export ASDF_OUTPUT_TRANSLATIONS=$(pwd):$(pwd)
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Tiling, keyboard driven window manager";
     homepage = "https://stumpwm.github.io/";
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     mainProgram = "stumpwm";
-    maintainers = lib.teams.lisp.members;
-    platforms = lib.platforms.unix;
+    maintainers = teams.lisp.members;
+    platforms = platforms.unix;
   };
 })

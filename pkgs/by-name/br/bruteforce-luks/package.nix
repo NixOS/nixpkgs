@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/glv2/bruteforce-luks";
     description = "Cracks passwords of LUKS encrypted volumes";
     mainProgram = "bruteforce-luks";
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
       knowing anything about it would take way too much time (unless the
       password is really short and/or weak). It can also use a dictionary.
     '';
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
   };
 }

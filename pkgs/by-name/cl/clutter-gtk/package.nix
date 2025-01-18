@@ -55,11 +55,11 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Clutter-GTK";
     homepage = "http://www.clutter-project.org/";
-    license = lib.licenses.lgpl2Plus;
+    license = licenses.lgpl2Plus;
     maintainers = [ ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }

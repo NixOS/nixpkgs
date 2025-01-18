@@ -35,10 +35,10 @@ stdenv.mkDerivation rec {
     chmod a+x "$out/bin/convchainfast"
   '';
   buildInputs = [ mono ];
-  meta = {
+  meta = with lib; {
     description = "Bitmap generation from a single example with convolutions and MCMC";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.raskin ];
-    platforms = lib.platforms.linux;
+    license = licenses.mit;
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.linux;
   };
 }

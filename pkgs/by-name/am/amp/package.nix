@@ -51,11 +51,11 @@ rustPlatform.buildRustPackage rec {
   # Tests need to write to the theme directory in HOME.
   preCheck = "export HOME=`mktemp -d`";
 
-  meta = {
+  meta = with lib; {
     description = "Modern text editor inspired by Vim";
     homepage = "https://amp.rs";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [
       sb0
       aleksana
     ];

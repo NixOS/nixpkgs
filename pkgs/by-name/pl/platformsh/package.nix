@@ -59,12 +59,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Unified tool for managing your Platform.sh services from the command line";
     homepage = "https://github.com/platformsh/cli";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "platform";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       shyim
       spk
     ];
@@ -74,6 +74,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       "x86_64-darwin"
       "aarch64-darwin"
     ];
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 })

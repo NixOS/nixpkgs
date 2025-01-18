@@ -30,11 +30,11 @@ buildNpmPackage rec {
     inherit (nixosTests) db-rest;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Clean REST API wrapping around the Deutsche Bahn API";
     homepage = "https://v6.db.transport.rest/";
-    license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ marie ];
+    license = licenses.isc;
+    maintainers = with maintainers; [ marie ];
     mainProgram = "db-rest";
   };
 }

@@ -16,11 +16,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-ZxAqR3D5VUtbntktrpnywPG3m9rq1utO4fdum0Qe6TU=";
 
-  meta = {
+  meta = with lib; {
     description = "Beautiful terminal dashboard for hledger";
     homepage = "https://github.com/siddhantac/puffin";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "puffin";
-    maintainers = with lib.maintainers; [ renesat ];
+    maintainers = with maintainers; [ renesat ];
   };
 }

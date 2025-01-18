@@ -37,12 +37,12 @@ stdenv.mkDerivation rec {
     openssl
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Redis and Memcached traffic generation and benchmarking tool";
     homepage = "https://github.com/redislabs/memtier_benchmark";
-    license = lib.licenses.gpl2Only;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ thoughtpolice ];
+    license = licenses.gpl2Only;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ thoughtpolice ];
     mainProgram = "memtier_benchmark";
   };
 }

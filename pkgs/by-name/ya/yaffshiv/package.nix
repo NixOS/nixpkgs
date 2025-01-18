@@ -22,11 +22,11 @@ stdenv.mkDerivation {
     install -D -m755 src/yaffshiv $out/bin/yaffshiv
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Simple YAFFS file system parser and extractor";
     homepage = "https://github.com/devttys0/yaffshiv";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ sgo ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ sgo ];
     mainProgram = "yaffshiv";
   };
 }

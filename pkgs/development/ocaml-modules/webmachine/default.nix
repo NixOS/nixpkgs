@@ -32,11 +32,11 @@ buildDunePackage rec {
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/inhabitedtype/ocaml-webmachine";
-    license = lib.licenses.bsd3;
+    license = licenses.bsd3;
     description = "REST toolkit for OCaml";
-    maintainers = [ lib.maintainers.vbgl ];
+    maintainers = [ maintainers.vbgl ];
   };
 
 }

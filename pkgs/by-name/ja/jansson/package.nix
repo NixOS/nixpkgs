@@ -40,13 +40,13 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "C library for encoding, decoding and manipulating JSON data";
     homepage = "https://github.com/akheron/jansson";
     changelog = "https://github.com/akheron/jansson/raw/${finalAttrs.src.rev}/CHANGES";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ getchoo ];
-    platforms = lib.platforms.all;
+    license = licenses.mit;
+    maintainers = with maintainers; [ getchoo ];
+    platforms = platforms.all;
     pkgConfigModules = [ "jansson" ];
   };
 })

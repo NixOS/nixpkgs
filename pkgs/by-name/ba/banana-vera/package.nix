@@ -31,12 +31,12 @@ stdenv.mkDerivation (finalAttrs: {
     "-DPANDOC=OFF"
   ];
 
-  meta = {
+  meta = with lib; {
     mainProgram = "vera++";
     description = "Fork of vera using python3.10";
     homepage = "https://github.com/Epitech/banana-vera";
-    license = lib.licenses.boost;
-    maintainers = with lib.maintainers; [ sigmanificient ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    license = licenses.boost;
+    maintainers = with maintainers; [ sigmanificient ];
+    platforms = platforms.linux ++ platforms.darwin;
   };
 })

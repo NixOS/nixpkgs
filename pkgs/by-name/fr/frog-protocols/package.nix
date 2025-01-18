@@ -29,15 +29,15 @@ stdenv.mkDerivation (finalAttrs: {
     tests.pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Wayland protocols but much more iterative";
     homepage = "https://github.com/misyltoad/frog-protocols";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       getchoo
       Scrumplex
     ];
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
     pkgConfigModules = [ "frog-protocols" ];
   };
 })

@@ -22,10 +22,10 @@ buildPythonPackage rec {
   # Tests are not present in Pypi archive
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Get the unique machine ID of any host (without admin privileges)";
     homepage = "https://github.com/keygen-sh/py-machineid";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ GaetanLepage ];
   };
 }

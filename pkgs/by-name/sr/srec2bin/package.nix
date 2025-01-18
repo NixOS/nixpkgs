@@ -17,12 +17,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [ ./package.patch ]; # upstream builds for windows
 
-  meta = {
+  meta = with lib; {
     description = "Tool for converting Motorola S-Record file into a binary image";
     homepage = "https://github.com/srec2bin/srec";
-    license = lib.licenses.gpl3Only;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ KSJ2000 ];
+    license = licenses.gpl3Only;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ KSJ2000 ];
     mainProgram = "srec2bin";
   };
 })

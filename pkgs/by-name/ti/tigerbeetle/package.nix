@@ -45,19 +45,19 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     updateScript = ./update.sh;
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://tigerbeetle.com/";
     description = "Financial accounting database designed to be distributed and fast";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
+    license = licenses.asl20;
+    maintainers = with maintainers; [
       danielsidhion
       nwjsmith
     ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-    ] ++ lib.platforms.darwin;
-    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+    ] ++ platforms.darwin;
+    sourceProvenance = [ sourceTypes.binaryNativeCode ];
     mainProgram = "tigerbeetle";
   };
 })

@@ -20,12 +20,12 @@ stdenv.mkDerivation {
 
   makeFlags = [ "PREFIX=$(out)/bin" ];
 
-  meta = {
+  meta = with lib; {
     description = "Minimalist re-implementation of the Fusée Gelée exploit";
     mainProgram = "fusee-nano";
     homepage = "https://github.com/DavidBuchanan314/fusee-nano";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.leo60228 ];
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.leo60228 ];
   };
 }

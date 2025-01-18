@@ -27,14 +27,14 @@ stdenv.mkDerivation {
 
   makeFlags = lib.optional stdenv.hostPlatform.isDarwin [ "CC=cc" ];
 
-  meta = {
+  meta = with lib; {
     description = "Cozy fireplace in your terminal";
     homepage = "https://github.com/Wyatt915/fireplace";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       multivac61
     ];
     mainProgram = "fireplace";
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 }

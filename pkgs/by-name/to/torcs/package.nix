@@ -85,12 +85,12 @@ stdenv.mkDerivation rec {
 
   installTargets = "install datainstall";
 
-  meta = {
+  meta = with lib; {
     description = "Car racing game";
     homepage = "https://torcs.sourceforge.net/";
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
     hydraPlatforms = [ ];
   };
 }

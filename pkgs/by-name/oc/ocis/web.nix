@@ -39,10 +39,10 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-3Erva6srdkX1YQ727trx34Ufx524nz19MUyaDQToz6M=";
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/owncloud/ocis";
     description = "ownCloud Infinite Scale Stack";
-    maintainers = with lib.maintainers; [ xinyangli ];
-    license = lib.licenses.agpl3Only;
+    maintainers = with maintainers; [ xinyangli ];
+    license = licenses.agpl3Only;
   };
 }

@@ -37,12 +37,12 @@ stdenv.mkDerivation rec {
     wrapProgram "$out/sbin/resolvconf" --set PATH "${coreutils}/bin"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Program to manage /etc/resolv.conf";
     mainProgram = "resolvconf";
     homepage = "https://roy.marples.name/projects/openresolv";
-    license = lib.licenses.bsd2;
+    license = licenses.bsd2;
     maintainers = [ ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }

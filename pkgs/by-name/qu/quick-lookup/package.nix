@@ -46,12 +46,12 @@ stdenv.mkDerivation (finalAttrs: {
     glib-networking
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Simple GTK dictionary application powered by Wiktionary";
     homepage = "https://github.com/johnfactotum/quick-lookup";
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     mainProgram = "quick-lookup";
-    maintainers = with lib.maintainers; [ aleksana ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ aleksana ];
+    platforms = platforms.linux;
   };
 })

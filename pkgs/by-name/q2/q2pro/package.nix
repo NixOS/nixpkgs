@@ -131,12 +131,12 @@ stdenv.mkDerivation (finalAttrs: rec {
 
   passthru.updateScript = ./update.sh;
 
-  meta = {
+  meta = with lib; {
     description = "Enhanced Quake 2 client and server focused on multiplayer";
     homepage = "https://github.com/skullernet/q2pro";
-    license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ carlossless ];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ carlossless ];
+    platforms = platforms.unix;
     mainProgram = "q2pro";
   };
 })

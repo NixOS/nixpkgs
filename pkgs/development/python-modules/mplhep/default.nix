@@ -59,10 +59,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mplhep" ];
 
-  meta = {
+  meta = with lib; {
     description = "Extended histogram plots on top of matplotlib and HEP compatible styling similar to current collaboration requirements (ROOT)";
     homepage = "https://github.com/scikit-hep/mplhep";
-    license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ veprbl ];
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ veprbl ];
   };
 }

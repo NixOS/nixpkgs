@@ -26,10 +26,10 @@ buildDunePackage rec {
     menhir
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Dice roller";
     homepage = "https://github.com/raphael-proust/odds";
-    license = lib.licenses.isc;
-    maintainers = [ lib.maintainers.Denommus ];
+    license = licenses.isc;
+    maintainers = [ maintainers.Denommus ];
   };
 }

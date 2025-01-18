@@ -77,16 +77,16 @@ python3Packages.buildPythonApplication rec {
 
   makeWrapperArgs = [ "\${gappsWrapperArgs[@]}" ];
 
-  meta = {
+  meta = with lib; {
     description = "Upscale and enhance images";
     homepage = "https://tesk.page/upscaler";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [
       grimmauld
       getchoo
       aleksana
     ];
     mainProgram = "upscaler";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

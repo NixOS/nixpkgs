@@ -94,10 +94,10 @@ stdenv.mkDerivation {
     ];
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://sourceforge.net/projects/c64-debugger";
     description = "Commodore 64, Atari XL/XE and NES code and memory debugger that works in real time";
-    license = with lib.licenses; [
+    license = with licenses; [
       gpl3Only # c64-debugger
       mit # MTEngine
       # emulators included in c64-debugger
@@ -105,7 +105,7 @@ stdenv.mkDerivation {
       gpl2 # nestopiaue
     ];
     mainProgram = "c64debugger";
-    maintainers = [ lib.maintainers.detegr ];
-    platforms = lib.platforms.linux;
+    maintainers = [ maintainers.detegr ];
+    platforms = platforms.linux;
   };
 }

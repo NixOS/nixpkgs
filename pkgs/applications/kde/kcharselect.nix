@@ -15,10 +15,10 @@
 
 mkDerivation {
   pname = "kcharselect";
-  meta = {
+  meta = with lib; {
     homepage = "https://apps.kde.org/kcharselect/";
-    license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.schmittlauch ];
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.schmittlauch ];
     description = "Tool to select special characters from all installed fonts and copy them into the clipboard";
     mainProgram = "kcharselect";
   };

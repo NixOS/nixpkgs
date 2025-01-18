@@ -46,12 +46,12 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "nose2pytest.assert_tools" ];
 
-  meta = {
+  meta = with lib; {
     description = "Scripts to convert Python Nose tests to PyTest";
     homepage = "https://github.com/pytest-dev/nose2pytest";
-    sourceProvenance = [ lib.sourceTypes.fromSource ];
-    license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.emily ];
+    sourceProvenance = [ sourceTypes.fromSource ];
+    license = licenses.bsd3;
+    maintainers = [ maintainers.emily ];
     mainProgram = "nose2pytest";
   };
 }

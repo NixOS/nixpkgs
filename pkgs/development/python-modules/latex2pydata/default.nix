@@ -24,11 +24,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/gpoore/latex2pydata";
     description = "Send data from LaTeX to Python using Python literal format";
-    license = lib.licenses.bsd3;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ romildo ];
+    license = licenses.bsd3;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ romildo ];
   };
 }

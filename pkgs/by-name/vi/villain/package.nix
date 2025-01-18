@@ -39,12 +39,12 @@ python3Packages.buildPythonApplication rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "High level stage 0/1 C2 framework that can handle multiple TCP socket & HoaxShell-based reverse shells";
     homepage = "https://github.com/t3l3machus/Villain";
-    license = lib.licenses.cc-by-nc-nd-40;
+    license = licenses.cc-by-nc-nd-40;
     mainProgram = "villain";
-    maintainers = with lib.maintainers; [ d3vil0p3r ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ d3vil0p3r ];
+    platforms = platforms.unix;
   };
 }

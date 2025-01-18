@@ -41,12 +41,12 @@ stdenv.mkDerivation (finalAttrs: {
     yarn --offline run rollup -c
   '';
 
-  meta = {
+  meta = with lib; {
     changelog = "https://github.com/postlight/parser/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     homepage = "https://reader.postlight.com";
     description = "Extracts the bits that humans care about from any URL you give it";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ viraptor ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ viraptor ];
     mainProgram = "postlight-parser";
   };
 })

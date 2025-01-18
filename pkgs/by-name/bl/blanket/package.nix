@@ -67,17 +67,17 @@ python3Packages.buildPythonApplication rec {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Listen to different sounds";
     homepage = "https://github.com/rafaelmardojai/blanket";
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     mainProgram = "blanket";
     maintainers =
-      with lib.maintainers;
+      with maintainers;
       [
         onny
       ]
-      ++ lib.teams.gnome-circle.members;
-    platforms = lib.platforms.linux;
+      ++ teams.gnome-circle.members;
+    platforms = platforms.linux;
   };
 }

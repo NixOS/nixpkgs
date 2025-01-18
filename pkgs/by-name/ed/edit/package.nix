@@ -44,12 +44,12 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Relaxing mix of Vi and ACME";
     homepage = "https://c9x.me/edit";
-    license = lib.licenses.publicDomain;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = lib.platforms.unix;
+    license = licenses.publicDomain;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.unix;
     mainProgram = "edit";
   };
 }

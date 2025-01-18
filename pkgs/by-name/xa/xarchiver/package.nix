@@ -58,13 +58,13 @@ stdenv.mkDerivation rec {
     }
   '';
 
-  meta = {
+  meta = with lib; {
     broken = stdenv.hostPlatform.isDarwin;
     description = "GTK frontend to 7z,zip,rar,tar,bzip2, gzip,arj, lha, rpm and deb (open and extract only)";
     homepage = "https://github.com/ib/xarchiver";
-    maintainers = [ lib.maintainers.domenkozar ];
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.all;
+    maintainers = [ maintainers.domenkozar ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.all;
     mainProgram = "xarchiver";
   };
 }

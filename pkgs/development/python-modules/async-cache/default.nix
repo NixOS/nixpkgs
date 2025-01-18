@@ -24,10 +24,10 @@ buildPythonPackage {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = {
+  meta = with lib; {
     description = "Caching solution for asyncio";
     homepage = "https://github.com/iamsinghrajat/async-cache";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.lukegb ];
+    license = licenses.mit;
+    maintainers = [ maintainers.lukegb ];
   };
 }

@@ -41,11 +41,11 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CMAKE_INSTALL_INCLUDEDIR" "include")
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Simple, convinient and thread safe logger for Qt-based C++ apps";
     homepage = "https://github.com/linuxdeepin/dtk6log";
-    license = lib.licenses.lgpl21Plus;
-    platforms = lib.platforms.linux;
-    maintainers = lib.teams.deepin.members;
+    license = licenses.lgpl21Plus;
+    platforms = platforms.linux;
+    maintainers = teams.deepin.members;
   };
 })

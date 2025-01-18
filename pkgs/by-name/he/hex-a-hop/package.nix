@@ -42,17 +42,17 @@ stdenv.mkDerivation rec {
     install -Dm644 ${desktop} $out/share/applications/${pname}.desktop
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Puzzle game based on hexagonal tiles";
     mainProgram = "hex-a-hop";
     homepage = "http://hexahop.sourceforge.net";
-    license = with lib.licenses; [
+    license = with licenses; [
       gpl2Plus # Main code
       cc-by-30 # Assets
       lgpl2Plus # i18n
       lgpl3Plus # source files from Lips of Suna
     ];
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ rampoina ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ rampoina ];
   };
 }

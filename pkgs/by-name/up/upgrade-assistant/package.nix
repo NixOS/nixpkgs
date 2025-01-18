@@ -5,12 +5,12 @@ buildDotnetGlobalTool {
 
   nugetHash = "sha256-N0xEmPQ88jfirGPLJykeAJQYGwELFzKwUWdFxIgiwhY=";
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/dotnet/upgrade-assistant";
     description = "Tool to assist developers in upgrading .NET Framework applications to .NET 6 and beyond";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ khaneliman ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ khaneliman ];
     mainProgram = "ugprade-assistant";
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 }

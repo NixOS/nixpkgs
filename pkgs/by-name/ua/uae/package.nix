@@ -38,12 +38,12 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = "-fcommon";
   LDFLAGS = [ "-lm" ];
 
-  meta = {
+  meta = with lib; {
     description = "Ultimate/Unix/Unusable Amiga Emulator";
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     homepage = "https://web.archive.org/web/20130901222855/http://www.amigaemulator.org/";
-    maintainers = [ lib.maintainers.sander ];
-    platforms = lib.platforms.linux;
+    maintainers = [ maintainers.sander ];
+    platforms = platforms.linux;
     mainProgram = "uae";
   };
 }

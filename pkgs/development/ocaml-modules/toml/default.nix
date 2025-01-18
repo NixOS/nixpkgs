@@ -22,10 +22,10 @@ buildDunePackage rec {
   nativeBuildInputs = [ menhir ];
   propagatedBuildInputs = [ iso8601 ];
 
-  meta = {
+  meta = with lib; {
     description = "Implementation in OCaml of the Toml minimal langage";
     homepage = "http://ocaml-toml.github.io/To.ml";
-    license = lib.licenses.lgpl3;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.lgpl3;
+    maintainers = [ maintainers.vbgl ];
   };
 }

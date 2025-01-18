@@ -20,13 +20,13 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = {
+  meta = with lib; {
     description = "Portable file system cache diagnostics and control";
     longDescription = "vmtouch is a tool for learning about and controlling the file system cache of unix and unix-like systems.";
     homepage = "https://hoytech.com/vmtouch/";
-    license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.garrison ];
-    platforms = lib.platforms.all;
+    license = licenses.bsd3;
+    maintainers = [ maintainers.garrison ];
+    platforms = platforms.all;
     mainProgram = "vmtouch";
   };
 }

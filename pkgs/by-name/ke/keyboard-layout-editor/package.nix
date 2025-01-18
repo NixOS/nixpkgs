@@ -69,11 +69,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Keyboard layout editor for XKB";
     homepage = "https://github.com/vgresak/keyboard-layout-editor";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fliegendewurst ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ fliegendewurst ];
     mainProgram = "keyboard-layout-editor";
     platforms = [
       "x86_64-linux"

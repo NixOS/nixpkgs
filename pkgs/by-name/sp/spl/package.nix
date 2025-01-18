@@ -18,11 +18,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-AWkyh3MRtnK+IzXu+h6jurNVMLDQVlBs2RsS2jn9lrA=";
 
-  meta = {
+  meta = with lib; {
     description = "Simple, concise, concatenative scripting language";
     homepage = "https://git.tudbut.de/tudbut/spl";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ tudbut ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ tudbut ];
     mainProgram = "spl";
   };
 }

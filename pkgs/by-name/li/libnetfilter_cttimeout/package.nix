@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libmnl ];
 
-  meta = {
+  meta = with lib; {
     description = "Userspace library that provides the programming interface to the connection tracking timeout infrastructure";
     longDescription = ''
       libnetfilter_cttimeout is the userspace library that provides the programming
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       be attached to traffic flows. This library is used by conntrack-tools.
     '';
     homepage = "https://netfilter.org/projects/libnetfilter_cttimeout/";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
   };
 }

@@ -118,15 +118,15 @@ stdenv.mkDerivation {
     env = customREnv;
   };
 
-  meta = {
+  meta = with lib; {
     changelog = "https://jasp-stats.org/release-notes";
     description = "Complete statistical package for both Bayesian and Frequentist statistical methods";
     homepage = "https://github.com/jasp-stats/jasp-desktop";
-    license = lib.licenses.agpl3Plus;
+    license = licenses.agpl3Plus;
     mainProgram = "JASP";
-    maintainers = with lib.maintainers; [ tomasajt ];
+    maintainers = with maintainers; [ tomasajt ];
     # JASP's cmake build steps are really different on Darwin
     # Perhaps the Darwin-specific things could be changed to be the same as Linux
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

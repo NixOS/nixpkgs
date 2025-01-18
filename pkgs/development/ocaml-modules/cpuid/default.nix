@@ -17,10 +17,10 @@ buildDunePackage rec {
     sha256 = "08ng4mva6qblb5ipkrxbr0my7ndkc4qwcbswkqgbgir864s74m93";
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/pqwy/cpuid";
     description = "Detect CPU features from OCaml";
-    license = lib.licenses.isc;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.isc;
+    maintainers = [ maintainers.vbgl ];
   };
 }

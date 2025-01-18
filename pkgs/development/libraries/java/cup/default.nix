@@ -46,12 +46,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "LALR parser generator for Java";
     homepage = "http://www2.cs.tum.edu/projects/cup/";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "javacup";
-    maintainers = [ lib.maintainers.romildo ];
-    platforms = lib.platforms.all;
+    maintainers = [ maintainers.romildo ];
+    platforms = platforms.all;
   };
 })

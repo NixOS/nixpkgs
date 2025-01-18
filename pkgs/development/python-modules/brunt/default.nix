@@ -37,10 +37,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "brunt" ];
 
-  meta = {
+  meta = with lib; {
     description = "Unofficial Python SDK for Brunt";
     homepage = "https://github.com/eavanvalkenburg/brunt-api";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

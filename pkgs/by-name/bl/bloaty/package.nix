@@ -80,12 +80,12 @@ stdenv.mkDerivation {
     install -Dm755 {.,$out/bin}/bloaty
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Size profiler for binaries";
     mainProgram = "bloaty";
     homepage = "https://github.com/google/bloaty";
-    license = lib.licenses.asl20;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ momeemt ];
+    license = licenses.asl20;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ momeemt ];
   };
 }

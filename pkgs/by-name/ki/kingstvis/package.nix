@@ -50,12 +50,12 @@ buildFHSEnv {
 
   runScript = "${src}/KingstVIS";
 
-  meta = {
+  meta = with lib; {
     description = "Kingst Virtual Instruments Studio, software for logic analyzers";
     homepage = "http://www.qdkingst.com/";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = lib.licenses.unfree;
-    maintainers = [ lib.maintainers.luisdaranda ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+    maintainers = [ maintainers.luisdaranda ];
     platforms = [ "x86_64-linux" ];
   };
 }

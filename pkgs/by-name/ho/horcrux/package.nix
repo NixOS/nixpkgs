@@ -17,11 +17,11 @@ buildGoModule rec {
 
   vendorHash = null;
 
-  meta = {
+  meta = with lib; {
     description = "Split your file into encrypted fragments so that you don't need to remember a passcode";
     homepage = "https://github.com/jesseduffield/horcrux";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "horcrux";
-    maintainers = with lib.maintainers; [ mh ];
+    maintainers = with maintainers; [ mh ];
   };
 }

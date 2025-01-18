@@ -67,15 +67,15 @@ stdenv.mkDerivation rec {
     ln -sf $out/Applications/GTKWave.app/Contents/MacOS/GTKWave $out/bin/gtkwave
   '';
 
-  meta = {
+  meta = with lib; {
     description = "VCD/Waveform viewer for Unix and Win32";
     homepage = "https://gtkwave.sourceforge.net";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [
       thoughtpolice
       jiegec
       jleightcap
     ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

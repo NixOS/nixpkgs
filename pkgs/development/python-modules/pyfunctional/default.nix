@@ -36,10 +36,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "functional" ];
 
-  meta = {
+  meta = with lib; {
     description = "Python library for creating data pipelines with chain functional programming";
     homepage = "https://github.com/EntilZha/PyFunctional";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ sigmanificient ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ sigmanificient ];
   };
 }

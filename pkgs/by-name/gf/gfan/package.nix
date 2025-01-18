@@ -55,11 +55,11 @@ stdenv.mkDerivation rec {
     cddlib
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Software package for computing Gröbner fans and tropical varieties";
-    license = lib.licenses.gpl2;
-    maintainers = [ lib.maintainers.raskin ];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl2;
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.unix;
     homepage = "http://home.math.au.dk/jensen/software/gfan/gfan.html";
   };
 }

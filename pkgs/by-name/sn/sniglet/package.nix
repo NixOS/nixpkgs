@@ -24,14 +24,14 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Fun rounded display face that’s great for headlines";
     longDescription = ''
       A rounded display face that’s great for headlines. It comes with a full
       character set, so you can type in Icelandic or even French!
     '';
     homepage = "https://www.theleagueofmoveabletype.com/sniglet";
-    license = lib.licenses.ofl;
-    maintainers = with lib.maintainers; [ minijackson ];
+    license = licenses.ofl;
+    maintainers = with maintainers; [ minijackson ];
   };
 }

@@ -214,7 +214,7 @@ stdenv.mkDerivation (
         );
       };
 
-    meta = {
+    meta = with lib; {
       homepage = "https://www.lua.org";
       description = "Powerful, fast, lightweight, embeddable scripting language";
       longDescription = ''
@@ -226,8 +226,8 @@ stdenv.mkDerivation (
         for configuration, scripting, and rapid prototyping.
       '';
       mainProgram = "lua";
-      license = lib.licenses.mit;
-      platforms = lib.platforms.unix;
+      license = licenses.mit;
+      platforms = platforms.unix;
     };
   }
 )

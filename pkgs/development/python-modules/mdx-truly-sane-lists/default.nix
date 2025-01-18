@@ -29,13 +29,13 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "mdx_truly_sane_lists/tests.py" ];
 
-  meta = {
+  meta = with lib; {
     description = "Extension for Python-Markdown that makes lists truly sane";
     longDescription = ''
       Features custom indents for nested lists and fix for messy linebreaks and
       paragraphs between lists.
     '';
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ kaction ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ kaction ];
   };
 }

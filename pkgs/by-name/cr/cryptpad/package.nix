@@ -153,11 +153,11 @@ buildNpmPackage {
 
   passthru.tests.cryptpad = nixosTests.cryptpad;
 
-  meta = {
+  meta = with lib; {
     description = "Collaborative office suite, end-to-end encrypted and open-source.";
     homepage = "https://cryptpad.org/";
-    license = lib.licenses.agpl3Plus;
+    license = licenses.agpl3Plus;
     mainProgram = "cryptpad";
-    maintainers = with lib.maintainers; [ martinetd ];
+    maintainers = with maintainers; [ martinetd ];
   };
 }

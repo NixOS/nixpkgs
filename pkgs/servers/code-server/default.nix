@@ -326,7 +326,7 @@ stdenv.mkDerivation (finalAttrs: {
     longName = "Visual Studio Code Server";
   };
 
-  meta = {
+  meta = with lib; {
     changelog = "https://github.com/coder/code-server/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Run VS Code on a remote server";
     longDescription = ''
@@ -334,8 +334,8 @@ stdenv.mkDerivation (finalAttrs: {
       browser.
     '';
     homepage = "https://github.com/coder/code-server";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       offline
       henkery
       code-asher

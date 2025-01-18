@@ -44,11 +44,11 @@ stdenv.mkDerivation {
     libxml2
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Library for interfacing with amazon s3";
     homepage = "https://github.com/bji/libs3";
-    license = lib.licenses.lgpl3Plus;
+    license = licenses.lgpl3Plus;
     mainProgram = "s3";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

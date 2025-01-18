@@ -16,10 +16,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-hoU+GSJHBZtb29jJbeuaFQSn496b1xLzXJtBCbKEcYE=";
 
-  meta = {
+  meta = with lib; {
     description = "Helpful Cloudflare utility program";
     homepage = "https://github.com/Cyb3r-Jak3/cloudflare-utils";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ yelite ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ yelite ];
   };
 }

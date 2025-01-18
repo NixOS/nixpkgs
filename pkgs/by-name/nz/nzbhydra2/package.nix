@@ -42,12 +42,12 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) nzbhydra2;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Usenet meta search";
     homepage = "https://github.com/theotherp/nzbhydra2";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ matteopacini ];
-    platforms = lib.platforms.linux;
+    license = licenses.asl20;
+    maintainers = with maintainers; [ matteopacini ];
+    platforms = platforms.linux;
     mainProgram = "nzbhydra2";
   };
 }

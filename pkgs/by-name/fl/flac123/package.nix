@@ -28,13 +28,13 @@ stdenv.mkDerivation (finalAttrs: {
     popt
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/flac123/flac123";
     changelog = "https://github.com/flac123/flac123/blob/${finalAttrs.src.rev}/NEWS";
     description = "Command-line program for playing FLAC audio files";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ kiike ];
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ kiike ];
     mainProgram = "flac123";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 })

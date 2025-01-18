@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage rec {
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = [ "--version" ];
 
-  meta = {
+  meta = with lib; {
     description = "Tool to prepare a Proxmox installation ISO for automated installations";
     longDescription = ''
       This tool can be used to prepare a Proxmox installation ISO for automated installations.
@@ -51,9 +51,9 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://pve.proxmox.com/wiki/Automated_Installation";
     changelog = "https://git.proxmox.com/?p=pve-installer.git;a=blob;f=debian/changelog";
-    license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ christoph-heiss ];
-    platforms = lib.platforms.linux;
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [ christoph-heiss ];
+    platforms = platforms.linux;
     mainProgram = "proxmox-auto-install-assistant";
   };
 }

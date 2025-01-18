@@ -45,12 +45,12 @@ stdenv.mkDerivation {
 
   passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
-  meta = {
+  meta = with lib; {
     inherit (odin.meta) platforms;
     description = "Language server for the Odin programming language";
     homepage = "https://github.com/DanielGavin/ols";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       astavie
       znaniye
     ];

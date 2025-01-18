@@ -26,14 +26,14 @@ stdenv.mkDerivation rec {
     kdePackages.libplasma
   ];
 
-  meta = {
+  meta = with lib; {
     description = "KDE Plasma plasmoid for supergfxctl";
     longDescription = ''
       KDE Plasma plasmoid for supergfxctl
       Built as a C++/QML Plasmoid
     '';
-    license = lib.licenses.mpl20;
+    license = licenses.mpl20;
     homepage = "https://gitlab.com/Jhyub/supergfxctl-plasmoid";
-    maintainers = with lib.maintainers; [ johnylpm ];
+    maintainers = with maintainers; [ johnylpm ];
   };
 }

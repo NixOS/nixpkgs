@@ -39,10 +39,10 @@ buildPythonPackage rec {
     "test_doctest"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Python client for the whois.cymru.com service";
     homepage = "https://github.com/JustinAzoff/python-cymruwhois";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fab ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
   };
 }

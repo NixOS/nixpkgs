@@ -40,10 +40,10 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = {
+  meta = with lib; {
     description = "I2P bindings for Twisted";
     homepage = "https://github.com/tahoe-lafs/txi2p";
-    license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    license = licenses.isc;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

@@ -27,10 +27,10 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "contextlib2" ];
 
-  meta = {
+  meta = with lib; {
     description = "Backports and enhancements for the contextlib module";
     homepage = "https://contextlib2.readthedocs.org/";
-    license = lib.licenses.psfl;
-    maintainers = with lib.maintainers; [ sigmanificient ];
+    license = licenses.psfl;
+    maintainers = with maintainers; [ sigmanificient ];
   };
 }

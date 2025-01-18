@@ -45,11 +45,11 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  meta = {
+  meta = with lib; {
     description = "DDE network library framework";
     homepage = "https://github.com/linuxdeepin/dde-network-core";
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
-    maintainers = lib.teams.deepin.members;
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = teams.deepin.members;
   };
 }

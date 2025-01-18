@@ -24,12 +24,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     description = "Hard drive and file system benchmark suite";
     homepage = "http://www.coker.com.au/bonnie++/";
-    license = lib.licenses.gpl2Only;
+    license = licenses.gpl2Only;
     mainProgram = "bonnie++";
-    maintainers = with lib.maintainers; [ wegank ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with maintainers; [ wegank ];
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

@@ -116,13 +116,13 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gitUpdater { rev-prefix = "v"; };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Free open-source planetarium";
     mainProgram = "stellarium";
     homepage = "https://stellarium.org/";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ kilianar ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ kilianar ];
     broken = stdenv.hostPlatform.isDarwin;
   };
 })

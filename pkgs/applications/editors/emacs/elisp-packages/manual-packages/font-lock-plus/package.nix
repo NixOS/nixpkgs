@@ -19,10 +19,10 @@ melpaBuild {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/emacsmirror/font-lock-plus";
     description = "Enhancements to standard library font-lock.el";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ AndersonTorres ];
   };
 }

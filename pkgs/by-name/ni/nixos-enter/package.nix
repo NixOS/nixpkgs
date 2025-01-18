@@ -24,11 +24,11 @@ substituteAll {
     installManPage ${./nixos-enter.8}
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Run a command in a NixOS chroot environment";
     homepage = "https://github.com/NixOS/nixpkgs/tree/master/pkgs/by-name/ni/nixos-install";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
+    license = licenses.mit;
+    platforms = platforms.linux;
     mainProgram = "nixos-enter";
   };
 }

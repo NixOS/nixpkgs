@@ -14,10 +14,10 @@ build-idris-package {
     sha256 = "148dnyd664vnxi04zjsyjbs1y51dq0zz98005q9c042k4jcfpfjh";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Primitive flat arrays containing Idris values";
     homepage = "https://github.com/idris-hackers/idris-array";
-    license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.brainrape ];
+    license = licenses.bsd3;
+    maintainers = [ maintainers.brainrape ];
   };
 }

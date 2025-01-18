@@ -63,11 +63,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   pythonImportsCheck = [ "ndcurves" ];
 
-  meta = {
+  meta = with lib; {
     description = "Library for creating smooth cubic splines";
     homepage = "https://github.com/loco-3d/ndcurves";
-    license = lib.licenses.bsd2;
-    maintainers = [ lib.maintainers.nim65s ];
-    platforms = lib.platforms.unix;
+    license = licenses.bsd2;
+    maintainers = [ maintainers.nim65s ];
+    platforms = platforms.unix;
   };
 })

@@ -28,11 +28,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libX11 ];
 
-  meta = {
+  meta = with lib; {
     description = "Tool to scribble over X windows";
-    license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.raskin ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.linux;
     homepage = "https://github.com/blais/xannotate";
     mainProgram = "xannotate";
   };

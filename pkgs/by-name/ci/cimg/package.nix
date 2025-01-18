@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit gmic gmic-qt;
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "http://cimg.eu/";
     description = "Small, open source, C++ toolkit for image processing";
     longDescription = ''
@@ -48,8 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
       C++. Due to its generic conception, it can cover a wide range of image
       processing applications.
     '';
-    license = lib.licenses.cecill-c;
+    license = licenses.cecill-c;
     maintainers = [ ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 })

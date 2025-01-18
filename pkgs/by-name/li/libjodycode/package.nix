@@ -32,12 +32,12 @@ stdenv.mkDerivation (finalAttrs: {
     inherit jdupes;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Shared code used by several utilities written by Jody Bruchon";
     homepage = "https://codeberg.org/jbruchon/libjodycode";
     changelog = "https://codeberg.org/jbruchon/libjodycode/src/branch/master/CHANGES.txt";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ pbsds ];
+    license = licenses.mit;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ pbsds ];
   };
 })

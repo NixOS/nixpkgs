@@ -61,14 +61,14 @@ stdenv.mkDerivation (finalAttrs: {
         --set JAVA_HOME ${jre}
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Mind-mapping software";
     homepage = "https://freemind.sourceforge.net/wiki/index.php/Main_Page";
     mainProgram = "freemind";
-    maintainers = with lib.maintainers; [ tomasajt ];
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
-    sourceProvenance = with lib.sourceTypes; [
+    maintainers = with maintainers; [ tomasajt ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    sourceProvenance = with sourceTypes; [
       fromSource
       binaryBytecode # source bundles dependencies as jars
     ];

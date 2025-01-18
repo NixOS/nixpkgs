@@ -23,11 +23,11 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "A TUI for Jujutsu VCS";
     homepage = "https://github.com/idursun/jjui";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       adda
     ];
     mainProgram = "jjui";

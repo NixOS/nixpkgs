@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "fortify" ];
 
-  meta = {
-    platforms = lib.platforms.unix;
-    license = lib.licenses.gpl3;
+  meta = with lib; {
+    platforms = platforms.unix;
+    license = licenses.gpl3;
   };
 }

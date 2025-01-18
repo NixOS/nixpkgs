@@ -20,13 +20,13 @@ mkAppleDerivation {
 
   buildInputs = [ libutil ];
 
-  meta = {
+  meta = with lib; {
     description = "BSD patch commands for Darwin";
     license = [
-      lib.licenses.apple-psl10
-      lib.licenses.bsd2 # -freebsd
-      lib.licenses.bsd3
-      lib.licenses.bsdOriginal
+      licenses.apple-psl10
+      licenses.bsd2 # -freebsd
+      licenses.bsd3
+      licenses.bsdOriginal
     ];
   };
 }

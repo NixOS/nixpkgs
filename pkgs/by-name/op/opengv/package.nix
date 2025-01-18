@@ -24,10 +24,10 @@ stdenv.mkDerivation (finalAttrs: {
     eigen
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Collection of computer vision methods for solving geometric vision problems";
     homepage = "https://github.com/laurentkneip/opengv";
-    license = lib.licenses.bsd2;
+    license = licenses.bsd2;
     longDescription = ''
       OpenGV is a collection of computer vision methods for solving
       geometric vision problems. It contains absolute-pose, relative-pose,
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
       to the above pages also shows links to precompiled Matlab mex-libraries.
       Please consult the documentation for more information.
     '';
-    maintainers = [ lib.maintainers.locochoco ];
-    platforms = lib.platforms.all;
+    maintainers = [ maintainers.locochoco ];
+    platforms = platforms.all;
   };
 })

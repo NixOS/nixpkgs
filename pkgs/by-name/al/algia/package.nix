@@ -18,11 +18,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-8zAGkz17U7j0WWh8ayLowVhNZQvbIlA2YgXMgVIHuFg=";
 
-  meta = {
+  meta = with lib; {
     description = "CLI application for nostr";
     homepage = "https://github.com/mattn/algia";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ haruki7049 ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ haruki7049 ];
     mainProgram = "algia";
   };
 }

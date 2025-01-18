@@ -32,15 +32,15 @@ stdenvNoCC.mkDerivation {
     ];
   };
 
-  meta = {
+  meta = with lib; {
     description = "A jawiki dump list of page titles in main namespace";
     homepage = "https://dumps.wikimedia.org/backup-index.html";
-    license = with lib.licenses; [
+    license = with licenses; [
       fdl13Only
       cc-by-sa-30
     ];
-    maintainers = with lib.maintainers; [ pineapplehunter ];
-    platforms = lib.platforms.all;
+    maintainers = with maintainers; [ pineapplehunter ];
+    platforms = platforms.all;
     # this does not need to be separately built
     # it only provides a dump gz file
     hydraPlatforms = [ ];

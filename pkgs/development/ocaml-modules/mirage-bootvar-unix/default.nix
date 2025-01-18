@@ -22,10 +22,10 @@ buildDunePackage rec {
     parse-argv
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Unix implementation of MirageOS Bootvar interface";
     homepage = "https://github.com/mirage/mirage-bootvar-unix";
-    license = lib.licenses.isc;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.isc;
+    maintainers = [ maintainers.vbgl ];
   };
 }

@@ -24,10 +24,10 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "scrapy_deltafetch" ];
 
-  meta = {
+  meta = with lib; {
     description = "Scrapy spider middleware to ignore requests to pages containing items seen in previous crawls";
     homepage = "https://github.com/scrapy-plugins/scrapy-deltafetch";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ evanjs ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ evanjs ];
   };
 }

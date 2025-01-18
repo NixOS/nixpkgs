@@ -19,12 +19,12 @@ buildGoModule rec {
   # Tests seem to be using Swisscom's live servers.
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Bitbucket Enterprise CLI";
     homepage = "https://github.com/swisscom/bitbucket-cli";
     mainProgram = "bitbucket-cli";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ attila ];
-    platforms = with lib.platforms; linux ++ darwin;
+    license = licenses.mit;
+    maintainers = with maintainers; [ attila ];
+    platforms = with platforms; linux ++ darwin;
   };
 }

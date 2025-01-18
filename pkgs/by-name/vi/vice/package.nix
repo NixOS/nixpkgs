@@ -79,11 +79,11 @@ stdenv.mkDerivation rec {
     cp src/arch/gtk3/data/unix/vice-org-*.desktop $out/share/applications
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Emulators for a variety of 8-bit Commodore computers";
     homepage = "https://vice-emu.sourceforge.io/";
-    license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.sander ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.sander ];
+    platforms = platforms.linux;
   };
 }

@@ -59,11 +59,11 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/BIC-MNI/conglomerate";
     description = "More command-line utilities for working with MINC files";
-    maintainers = with lib.maintainers; [ bcdarwin ];
-    platforms = lib.platforms.unix;
-    license = lib.licenses.hpndUc;
+    maintainers = with maintainers; [ bcdarwin ];
+    platforms = platforms.unix;
+    license = licenses.hpndUc;
   };
 }

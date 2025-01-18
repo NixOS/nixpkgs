@@ -64,17 +64,17 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "Icon=veracrypt" "Icon=veracrypt.xpm"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Free Open-Source filesystem on-the-fly encryption";
     homepage = "https://www.veracrypt.fr/";
-    license = with lib.licenses; [
+    license = with licenses; [
       asl20 # and
       unfree # TrueCrypt License version 3.0
     ];
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       dsferruzza
       ryand56
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 })

@@ -21,10 +21,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "serverfiles" ];
   nativeCheckInputs = [ unittestCheckHook ];
 
-  meta = {
+  meta = with lib; {
     description = "Utility that accesses files on a HTTP server and stores them locally for reuse";
     homepage = "https://github.com/biolab/serverfiles";
-    license = [ lib.licenses.gpl3Plus ];
-    maintainers = [ lib.maintainers.lucasew ];
+    license = [ licenses.gpl3Plus ];
+    maintainers = [ maintainers.lucasew ];
   };
 }

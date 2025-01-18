@@ -27,10 +27,10 @@ stdenv.mkDerivation rec {
 
   createFindlibDestdir = true;
 
-  meta = {
+  meta = with lib; {
     description = "Easy process control in OCaml";
-    license = lib.licenses.isc;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.isc;
+    maintainers = [ maintainers.vbgl ];
     inherit (src.meta) homepage;
     inherit (ocaml.meta) platforms;
   };

@@ -54,12 +54,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "Aiming to be the best integrated clipboard manager for the Unity desktop";
     homepage = "https://launchpad.net/diodon";
     mainProgram = "diodon";
-    license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.sfrijters ];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.sfrijters ];
+    platforms = platforms.unix;
   };
 })

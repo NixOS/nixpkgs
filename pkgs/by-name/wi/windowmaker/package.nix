@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     dockapps = callPackage ./dockapps { };
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "http://windowmaker.org/";
     description = "NeXTSTEP-like window manager";
     longDescription = ''
@@ -80,9 +80,9 @@ stdenv.mkDerivation (finalAttrs: {
       programmers from around the world.
     '';
     changelog = "https://www.windowmaker.org/news/";
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     mainProgram = "wmaker";
-    maintainers = [ lib.maintainers.AndersonTorres ];
-    platforms = lib.platforms.linux;
+    maintainers = [ maintainers.AndersonTorres ];
+    platforms = platforms.linux;
   };
 })

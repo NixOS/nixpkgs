@@ -24,11 +24,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ django ];
 
-  meta = {
+  meta = with lib; {
     description = "Convert data to their natural (human-readable) format";
     homepage = "https://github.com/tehmaze/natural";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       sailord
       vinetos
     ];

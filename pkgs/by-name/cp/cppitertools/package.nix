@@ -86,14 +86,14 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Implementation of Python itertools and builtin iteration functions for C++17";
     longDescription = ''
       Range-based for loop add-ons inspired by the Python builtins and itertools library
       for C++17, using lazy evaluation wherever possible.
     '';
     homepage = "https://github.com/ryanhaining/cppitertools";
-    maintainers = with lib.maintainers; [ qyriad ];
-    license = with lib.licenses; bsd2;
+    maintainers = with maintainers; [ qyriad ];
+    license = with licenses; bsd2;
   };
 })

@@ -16,11 +16,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-/cepTVJoBM1LYZkFpH9UCvE74cSszHDaeThsZksQ1P8=";
 
-  meta = {
+  meta = with lib; {
     description = "Tool for getting data from TOML files on the command line";
     homepage = "https://github.com/cryptaliagy/tomlq";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ kinzoku ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ kinzoku ];
     mainProgram = "tq";
   };
 }

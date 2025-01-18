@@ -30,11 +30,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "cxxheaderparser" ];
 
-  meta = {
+  meta = with lib; {
     description = "Modern pure python C++ header parser";
     homepage = "https://github.com/robotpy/cxxheaderparser";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ nim65s ];
-    platforms = lib.platforms.unix;
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ nim65s ];
+    platforms = platforms.unix;
   };
 }

@@ -38,11 +38,11 @@ buildGoModule rec {
       --zsh <($out/bin/$pname completion zsh)
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/deggja/netfetch";
     description = "Kubernetes tool for scanning clusters for network policies and identifying unprotected workloads";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "netfetch";
-    maintainers = with lib.maintainers; [ banh-canh ];
+    maintainers = with maintainers; [ banh-canh ];
   };
 }

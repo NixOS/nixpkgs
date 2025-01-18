@@ -19,11 +19,11 @@ mkTclDerivation rec {
 
   buildFlags = [ "all" ] ++ lib.optional withCritcl "critcl";
 
-  meta = {
+  meta = with lib; {
     homepage = "https://core.tcl-lang.org/tcllib/";
     description = "Tcl-only library of standard routines for Tcl";
-    license = lib.licenses.tcltk;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ fgaz ];
+    license = licenses.tcltk;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ fgaz ];
   };
 }

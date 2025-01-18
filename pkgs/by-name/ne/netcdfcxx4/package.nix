@@ -44,12 +44,12 @@ stdenv.mkDerivation rec {
     export HDF5_PLUGIN_PATH=${netcdf}/lib/hdf5-plugins
   '';
 
-  meta = {
+  meta = with lib; {
     description = "C++ API to manipulate netcdf files";
     mainProgram = "ncxx4-config";
     homepage = "https://www.unidata.ucar.edu/software/netcdf/";
-    license = lib.licenses.free;
-    platforms = lib.platforms.unix;
+    license = licenses.free;
+    platforms = platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
   };
 }

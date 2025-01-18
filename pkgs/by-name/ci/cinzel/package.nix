@@ -38,11 +38,11 @@ stdenvNoCC.mkDerivation {
     extraArgs = [ "--version=branch" ];
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/NDISCOVER/Cinzel";
     description = "Typeface inspired in First Century Roman Inscriptions";
-    license = lib.licenses.ofl;
-    platforms = lib.platforms.all;
-    maintainers = [ lib.maintainers.marijanp ];
+    license = licenses.ofl;
+    platforms = platforms.all;
+    maintainers = [ maintainers.marijanp ];
   };
 }

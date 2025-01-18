@@ -25,13 +25,13 @@ appimageTools.wrapType2 {
     echo 'KERNEL=="hidraw*", SUBSYSTEM=="hidraw", MODE="0666", TAG+="uaccess", TAG+="udev-acl"' > $out/etc/udev/rules.d/92-viia.rules
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Open-source GUI and QMK fork for configuring your keyboard in real time";
     homepage = "https://get.vial.today";
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     mainProgram = "Vial";
-    maintainers = with lib.maintainers; [ kranzes ];
+    maintainers = with maintainers; [ kranzes ];
     platforms = [ "x86_64-linux" ];
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }

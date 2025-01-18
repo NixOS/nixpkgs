@@ -39,12 +39,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Spacer with mouse gestures for the KDE Plasma Panel";
     homepage = "https://github.com/luisbocanegra/plasma-panel-spacer-extended";
     changelog = "https://github.com/luisbocanegra/plasma-panel-spacer-extended/blob/main/CHANGELOG.md";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ HeitorAugustoLN ];
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ HeitorAugustoLN ];
     inherit (kdePackages.kwindowsystem.meta) platforms;
   };
 })

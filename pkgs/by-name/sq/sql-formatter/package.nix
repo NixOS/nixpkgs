@@ -34,11 +34,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Whitespace formatter for different query languages";
     homepage = "https://sql-formatter-org.github.io/sql-formatter";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "sql-formatter";
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = with maintainers; [ pyrox0 ];
   };
 }

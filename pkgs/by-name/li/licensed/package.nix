@@ -10,11 +10,11 @@ bundlerApp {
 
   passthru.updateScript = bundlerUpdateScript "licensed";
 
-  meta = {
+  meta = with lib; {
     description = "Ruby gem to cache and verify the licenses of dependencies";
     homepage = "https://github.com/github/licensed";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.jcaesar ];
-    platforms = lib.platforms.linux;
+    license = licenses.mit;
+    maintainers = [ maintainers.jcaesar ];
+    platforms = platforms.linux;
   };
 }

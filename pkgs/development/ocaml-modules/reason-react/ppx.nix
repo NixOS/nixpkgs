@@ -20,12 +20,12 @@ buildDunePackage {
     ppxlib
   ];
   doCheck = false; # Needs to run in reason-react, see default.nix
-  meta = {
+  meta = with lib; {
     description = "React.js JSX PPX";
     homepage = "https://github.com/reasonml/reason-react";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     maintainers = [
-      lib.maintainers.vog
+      maintainers.vog
     ];
   };
 }

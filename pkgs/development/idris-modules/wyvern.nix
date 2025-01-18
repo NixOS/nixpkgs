@@ -25,10 +25,10 @@ build-idris-package {
     sed -i "s/Wyvern.Core/Wyvern.Main/g" source/src/Wyvern.idr
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Little web server written in Idris";
     homepage = "https://github.com/ericqweinstein/wyvern";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.brainrape ];
+    license = licenses.mit;
+    maintainers = [ maintainers.brainrape ];
   };
 }

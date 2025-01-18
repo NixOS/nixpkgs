@@ -34,11 +34,11 @@ rustPlatform.buildRustPackage {
 
   env.PROTOC = lib.getExe buildPackages.protobuf;
 
-  meta = {
+  meta = with lib; {
     description = "Standalone official anki sync server";
     homepage = "https://apps.ankiweb.net";
-    license = with lib.licenses; [ agpl3Plus ];
-    maintainers = with lib.maintainers; [ martinetd ];
+    license = with licenses; [ agpl3Plus ];
+    maintainers = with maintainers; [ martinetd ];
     mainProgram = "anki-sync-server";
   };
 }

@@ -27,11 +27,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Culmus Hebrew fonts";
     longDescription = "The Culmus project aims at providing the Hebrew-speaking GNU/Linux and Unix community with a basic collection of Hebrew fonts for X Windows.";
-    platforms = lib.platforms.all;
-    license = lib.licenses.gpl2;
+    platforms = platforms.all;
+    license = licenses.gpl2;
     homepage = "http://culmus.sourceforge.net/";
     downloadPage = "http://culmus.sourceforge.net/download.html";
   };

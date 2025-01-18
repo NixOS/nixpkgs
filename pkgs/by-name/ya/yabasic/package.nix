@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     ncurses
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "http://2484.de/yabasic/";
     description = "Yet another BASIC";
     mainProgram = "yabasic";
@@ -39,8 +39,8 @@ stdenv.mkDerivation (finalAttrs: {
       and free.
     '';
     changelog = "https://2484.de/yabasic/whatsnew.html";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = lib.platforms.all;
+    license = licenses.mit;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.all;
   };
 })

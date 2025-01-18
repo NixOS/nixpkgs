@@ -50,10 +50,10 @@ python311Packages.buildPythonApplication rec {
     "test_when_successfully_configured"
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/nvbn/thefuck";
     description = "Magnificent app which corrects your previous console command";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ marcusramberg ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ marcusramberg ];
   };
 }

@@ -23,10 +23,10 @@ build-idris-package {
     sha256 = "0cn4fwnf3sg6269pbfbhnmsvyaya4d8479n2hy039idxzzkxw0yb";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Idris library to interact with the browser console";
     homepage = "https://github.com/pierrebeaucamp/idris-console";
-    license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.brainrape ];
+    license = licenses.asl20;
+    maintainers = [ maintainers.brainrape ];
   };
 }

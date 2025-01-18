@@ -58,11 +58,11 @@ rustPlatform.buildRustPackage rec {
       --set-default OPENGL_DRIVER ${mesa.driverLink}
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Run programs from your system in a microVM";
     homepage = "https://github.com/slp/krun";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ RossComputerGuy ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ RossComputerGuy ];
     platforms = libkrun.meta.platforms;
     mainProgram = "krun";
   };

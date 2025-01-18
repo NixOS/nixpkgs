@@ -129,12 +129,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Implementation of the QUIC transport protocol";
     homepage = "https://github.com/facebook/mvfst";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
       ris
       emily
       techknowlogick

@@ -28,11 +28,11 @@ stdenv.mkDerivation {
     pcre
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Only backup program that doesn't make backups";
     homepage = "https://github.com/miekg/rdup";
-    license = lib.licenses.gpl3;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ sternenseemann ];
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ sternenseemann ];
   };
 }

@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
     cp autocutsel $out/bin/
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.nongnu.org/autocutsel/";
     description = "Tracks changes in the server's cutbuffer and CLIPBOARD selection";
-    license = lib.licenses.gpl2Plus;
-    platforms = with lib.platforms; all;
+    license = licenses.gpl2Plus;
+    platforms = with platforms; all;
     mainProgram = "autocutsel";
   };
 }

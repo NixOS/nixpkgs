@@ -25,14 +25,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Fcitx 5 pinyin dictionary from zh.moegirl.org.cn";
     homepage = "https://github.com/outloudvi/mw2fcitx";
-    license = with lib.licenses; [
+    license = with licenses; [
       unlicense
       cc-by-nc-sa-30
     ];
-    maintainers = with lib.maintainers; [ Guanran928 ];
-    platforms = lib.platforms.all;
+    maintainers = with maintainers; [ Guanran928 ];
+    platforms = platforms.all;
   };
 })

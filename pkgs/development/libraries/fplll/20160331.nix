@@ -30,10 +30,10 @@ stdenv.mkDerivation rec {
     gmp
     mpfr
   ];
-  meta = {
+  meta = with lib; {
     description = "Lattice algorithms using floating-point arithmetic";
-    license = lib.licenses.lgpl21Plus;
-    maintainers = [ lib.maintainers.raskin ];
-    platforms = lib.platforms.linux;
+    license = licenses.lgpl21Plus;
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.linux;
   };
 }

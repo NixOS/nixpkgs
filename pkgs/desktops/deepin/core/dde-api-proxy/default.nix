@@ -40,11 +40,11 @@ stdenv.mkDerivation rec {
     libsForQt5.qtbase
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Proxy service for dde";
     homepage = "https://github.com/linuxdeepin/dde-api-proxy";
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
-    maintainers = lib.teams.deepin.members;
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = teams.deepin.members;
   };
 }

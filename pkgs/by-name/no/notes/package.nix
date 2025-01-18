@@ -43,12 +43,12 @@ stdenv'.mkDerivation (finalAttrs: {
     mv $out/bin/Notes.app $out/Applications
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Fast and beautiful note-taking app";
     homepage = "https://github.com/nuttyartist/notes";
     mainProgram = "notes";
-    license = lib.licenses.mpl20;
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    maintainers = with lib.maintainers; [ zendo ];
+    license = licenses.mpl20;
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ zendo ];
   };
 })

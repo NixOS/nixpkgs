@@ -72,12 +72,12 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Provides the necessary functionality for other ProtonVPN components to interact with NetworkManager";
     homepage = "https://github.com/ProtonVPN/python-proton-vpn-network-manager";
-    license = lib.licenses.gpl3Only;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl3Only;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
       sebtm
       rapiteanu
     ];

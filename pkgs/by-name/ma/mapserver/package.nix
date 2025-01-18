@@ -82,12 +82,12 @@ stdenv.mkDerivation rec {
     (lib.cmakeBool "CMAKE_SKIP_BUILD_RPATH" true)
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Platform for publishing spatial data and interactive mapping applications to the web";
     homepage = "https://mapserver.org/";
     changelog = "https://mapserver.org/development/changelog/";
-    license = lib.licenses.mit;
-    maintainers = lib.teams.geospatial.members;
-    platforms = lib.platforms.unix;
+    license = licenses.mit;
+    maintainers = teams.geospatial.members;
+    platforms = platforms.unix;
   };
 }

@@ -24,10 +24,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sansio_multipart" ];
 
-  meta = {
+  meta = with lib; {
     description = "Parser for multipart/form-data";
     homepage = "https://github.com/theelous3/sansio-multipart-parser";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

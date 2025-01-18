@@ -54,12 +54,12 @@ stdenv.mkDerivation rec {
   doInstallCheck = true;
   installCheckTarget = "check-recursive";
 
-  meta = {
+  meta = with lib; {
     description = "Wrapper to safely torify applications";
     mainProgram = "torsocks";
     homepage = "https://gitlab.torproject.org/tpo/core/torsocks";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ thoughtpolice ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ thoughtpolice ];
   };
 }

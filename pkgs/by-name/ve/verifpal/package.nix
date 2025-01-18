@@ -28,11 +28,11 @@ buildGoModule rec {
     go generate verifpal.com/cmd/verifpal
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://verifpal.com/";
     description = "Cryptographic protocol analysis for students and engineers";
     mainProgram = "verifpal";
-    maintainers = with lib.maintainers; [ zimbatm ];
-    license = with lib.licenses; [ gpl3 ];
+    maintainers = with maintainers; [ zimbatm ];
+    license = with licenses; [ gpl3 ];
   };
 }

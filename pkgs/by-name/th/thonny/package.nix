@@ -70,7 +70,7 @@ buildPythonApplication rec {
   # Tests need a DISPLAY
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Python IDE for beginners";
     longDescription = ''
       Thonny is a Python IDE for beginners. It supports different ways
@@ -79,9 +79,9 @@ buildPythonApplication rec {
       for explaining the concepts of references and heap.
     '';
     homepage = "https://www.thonny.org/";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ leenaars ];
-    platforms = lib.platforms.unix;
+    license = licenses.mit;
+    maintainers = with maintainers; [ leenaars ];
+    platforms = platforms.unix;
     mainProgram = "thonny";
   };
 }

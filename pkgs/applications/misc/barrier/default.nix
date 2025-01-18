@@ -61,7 +61,7 @@ mkDerivation rec {
     ''--prefix PATH : ${lib.makeBinPath [ openssl ]}''
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Open-source KVM software";
     longDescription = ''
       Barrier is KVM software forked from Symless's synergy 1.9 codebase.
@@ -70,9 +70,9 @@ mkDerivation rec {
     '';
     homepage = "https://github.com/debauchee/barrier";
     downloadPage = "https://github.com/debauchee/barrier/releases";
-    license = lib.licenses.gpl2;
-    maintainers = [ lib.maintainers.phryneas ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2;
+    maintainers = [ maintainers.phryneas ];
+    platforms = platforms.linux;
     mainProgram = "barrier";
   };
 }

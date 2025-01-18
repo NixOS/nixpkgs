@@ -35,11 +35,11 @@ buildPythonPackage rec {
     export PATH=$out/bin:$PATH
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Automatically sorting python statements within a module";
     homepage = "https://github.com/bwhmather/ssort";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ tochiaha ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ tochiaha ];
     mainProgram = "ssort";
   };
 }

@@ -7,9 +7,9 @@
 
 mkDerivation {
   pname = "kdegraphics-mobipocket";
-  meta = {
-    license = [ lib.licenses.gpl2Plus ];
-    maintainers = [ lib.maintainers.ttuegel ];
+  meta = with lib; {
+    license = [ licenses.gpl2Plus ];
+    maintainers = [ maintainers.ttuegel ];
   };
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ kio ];

@@ -17,11 +17,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-0eWrkOcaow+W2Daaw2rzugfS+jqhN6RE2iCdpui9aQg=";
 
-  meta = {
+  meta = with lib; {
     description = "Go tool to modify struct field tags";
     mainProgram = "gomodifytags";
     homepage = "https://github.com/fatih/gomodifytags";
-    maintainers = with lib.maintainers; [ vdemeester ];
-    license = lib.licenses.bsd3;
+    maintainers = with maintainers; [ vdemeester ];
+    license = licenses.bsd3;
   };
 }

@@ -22,10 +22,10 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isMusl "-largp";
 
-  meta = {
+  meta = with lib; {
     description = "Programming interface for the 1394 Trade Association AV/C (Audio/Video Control) Digital Interface Command Set";
     homepage = "https://sourceforge.net/projects/libavc1394/";
-    license = lib.licenses.lgpl21Plus;
-    platforms = lib.platforms.linux;
+    license = licenses.lgpl21Plus;
+    platforms = platforms.linux;
   };
 }

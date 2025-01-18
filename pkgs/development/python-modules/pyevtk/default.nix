@@ -34,10 +34,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyevtk" ];
 
-  meta = {
+  meta = with lib; {
     description = "Exports data to binary VTK files for visualization/analysis";
     homepage = "https://github.com/pyscience-projects/pyevtk";
-    license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ sigmanificient ];
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ sigmanificient ];
   };
 }

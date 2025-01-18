@@ -37,10 +37,10 @@ buildPythonPackage rec {
     "roma"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Lightweight library to deal with 3D rotations in PyTorch";
     homepage = "https://github.com/naver/roma";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ nim65s ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ nim65s ];
   };
 }

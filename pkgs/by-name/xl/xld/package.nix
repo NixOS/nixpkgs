@@ -51,13 +51,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     '';
   });
 
-  meta = {
+  meta = with lib; {
     description = "Lossless audio decoder";
     homepage = "https://tmkk.undo.jp/xld/index_e.html";
-    license = lib.licenses.osl3;
-    maintainers = with lib.maintainers; [ iivusly ];
-    platforms = lib.platforms.darwin;
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = licenses.osl3;
+    maintainers = with maintainers; [ iivusly ];
+    platforms = platforms.darwin;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     mainProgram = "xld";
   };
 })

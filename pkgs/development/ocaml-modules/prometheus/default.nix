@@ -30,9 +30,9 @@ buildDunePackage rec {
     alcotest
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Client library for Prometheus monitoring";
-    license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.ulrikstrid ];
+    license = licenses.asl20;
+    maintainers = [ maintainers.ulrikstrid ];
   };
 }

@@ -24,12 +24,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Tool which displays memory information";
     homepage = "https://codeberg.org/jahway603/ramfetch";
-    platforms = lib.platforms.linux;
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.markbeep ];
+    platforms = platforms.linux;
+    license = licenses.mit;
+    maintainers = [ maintainers.markbeep ];
     mainProgram = "ramfetch";
   };
 }

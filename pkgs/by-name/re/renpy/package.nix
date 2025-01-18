@@ -126,14 +126,14 @@ stdenv.mkDerivation {
 
   env.NIX_CFLAGS_COMPILE = with python311.pkgs; "-I${pygame-sdl2}/include/${python.libPrefix}";
 
-  meta = {
+  meta = with lib; {
     description = "Visual Novel Engine";
     mainProgram = "renpy";
     homepage = "https://renpy.org/";
     changelog = "https://renpy.org/doc/html/changelog.html";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ shadowrz ];
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ shadowrz ];
   };
 
   passthru = {

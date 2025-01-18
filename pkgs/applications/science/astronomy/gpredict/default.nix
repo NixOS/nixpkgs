@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     hamlib
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Real time satellite tracking and orbit prediction";
     mainProgram = "gpredict";
     longDescription = ''
@@ -69,10 +69,10 @@ stdenv.mkDerivation rec {
       well. Gpredict uses the SGP4/SDP4 algorithms, which are compatible with the
       NORAD Keplerian elements.
     '';
-    license = lib.licenses.gpl2Only;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Only;
+    platforms = platforms.linux;
     homepage = "http://gpredict.oz9aec.net/";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       markuskowa
       cmcdragonkai
     ];

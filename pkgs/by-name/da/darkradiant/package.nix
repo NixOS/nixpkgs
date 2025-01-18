@@ -80,13 +80,13 @@ stdenv.mkDerivation (finalAttrs: {
     installManPage ../man/darkradiant.1
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Open-source level editor for Doom 3 and The Dark Mod";
     homepage = "https://github.com/codereader/DarkRadiant";
     changelog = "https://github.com/codereader/DarkRadiant/releases";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ theobori ];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ theobori ];
+    platforms = platforms.unix;
     mainProgram = "darkradiant";
     broken = stdenv.hostPlatform.isDarwin;
   };

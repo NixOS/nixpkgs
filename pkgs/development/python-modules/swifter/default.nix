@@ -43,10 +43,10 @@ buildPythonPackage rec {
   # https://github.com/jmcarpenter2/swifter/issues/221
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Package which efficiently applies any function to a pandas dataframe or series in the fastest available manner";
     homepage = "https://github.com/jmcarpenter2/swifter";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ natsukium ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ natsukium ];
   };
 }

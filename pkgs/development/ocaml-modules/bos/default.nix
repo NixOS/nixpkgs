@@ -41,11 +41,11 @@ stdenv.mkDerivation rec {
 
   inherit (topkg) buildPhase installPhase;
 
-  meta = {
+  meta = with lib; {
     description = "Basic OS interaction for OCaml";
     homepage = "https://erratique.ch/software/bos";
-    license = lib.licenses.isc;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.isc;
+    maintainers = [ maintainers.vbgl ];
     inherit (ocaml.meta) platforms;
   };
 }

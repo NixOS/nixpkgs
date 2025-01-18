@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
     chmod 755 $out/bin/nb
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Small weblog engine written in Bash for the command line";
     homepage = "https://nanoblogger.sourceforge.net/";
-    license = lib.licenses.gpl2;
+    license = licenses.gpl2;
     mainProgram = "nb";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }

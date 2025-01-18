@@ -38,13 +38,13 @@ python3Packages.buildPythonApplication rec {
     pytestCheckHook
   ];
 
-  meta = {
+  meta = with lib; {
     changelog = "https://github.com/Josef-Friedrich/check_systemd/releases";
     description = "Nagios / Icinga monitoring plugin to check systemd for failed units";
     homepage = "https://github.com/Josef-Friedrich/check_systemd";
-    license = lib.licenses.lgpl2Only;
+    license = licenses.lgpl2Only;
     mainProgram = "check_systemd";
-    maintainers = with lib.maintainers; [ symphorien ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ symphorien ];
+    platforms = platforms.linux;
   };
 }

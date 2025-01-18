@@ -172,15 +172,15 @@ stdenv.mkDerivation rec {
     "x11"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Modular SIP User-Agent with audio and video support";
     homepage = "https://github.com/baresip/baresip";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       raskin
       ehmry
     ];
     mainProgram = "baresip";
-    license = lib.licenses.bsd3;
-    platforms = lib.platforms.unix;
+    license = licenses.bsd3;
+    platforms = platforms.unix;
   };
 }

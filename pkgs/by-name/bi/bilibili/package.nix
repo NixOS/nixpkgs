@@ -49,14 +49,14 @@ stdenv.mkDerivation {
 
   passthru.updateScript = ./update.sh;
 
-  meta = {
+  meta = with lib; {
     description = "Electron-based bilibili desktop client";
     homepage = "https://github.com/msojocs/bilibili-linux";
-    license = with lib.licenses; [
+    license = with licenses; [
       unfree
       mit
     ];
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       jedsek
       kashw2
       bot-wxt1221
@@ -65,7 +65,7 @@ stdenv.mkDerivation {
       "x86_64-linux"
       "aarch64-linux"
     ];
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     mainProgram = "bilibili";
   };
 }

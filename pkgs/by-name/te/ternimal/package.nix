@@ -34,12 +34,12 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Simulate a lifeform in the terminal";
     homepage = "https://github.com/p-e-w/ternimal";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ anomalocaris ];
-    platforms = with lib.platforms; linux ++ darwin;
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ anomalocaris ];
+    platforms = with platforms; linux ++ darwin;
     mainProgram = "ternimal";
   };
 }

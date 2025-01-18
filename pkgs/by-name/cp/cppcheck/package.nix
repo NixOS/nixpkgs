@@ -109,18 +109,18 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gitUpdater { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Static analysis tool for C/C++ code";
     longDescription = ''
       Check C/C++ code for memory leaks, mismatching allocation-deallocation,
       buffer overruns and more.
     '';
     homepage = "http://cppcheck.sourceforge.net";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
       joachifm
       paveloom
     ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 })

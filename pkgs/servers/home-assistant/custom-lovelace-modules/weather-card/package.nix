@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Weather Card with animated icons for Home Assistant Lovelace";
     homepage = "https://github.com/bramkragten/weather-card";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ matthiasbeyer ];
-    platforms = lib.platforms.all;
+    license = licenses.asl20;
+    maintainers = with maintainers; [ matthiasbeyer ];
+    platforms = platforms.all;
   };
 }

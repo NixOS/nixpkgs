@@ -17,11 +17,11 @@ build-idris-package {
     sha256 = "05x66abhpbdm6yr0afbwfk6w04ysdk78gylj5alhgwhy4jqakv29";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Parser combinators for Idris";
     homepage = "https://github.com/ziman/lightyear";
-    license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [
+    license = licenses.bsd2;
+    maintainers = with maintainers; [
       siddharthist
       brainrape
     ];

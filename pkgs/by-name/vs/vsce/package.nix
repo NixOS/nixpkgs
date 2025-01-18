@@ -49,11 +49,11 @@ buildNpmPackage rec {
     };
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/microsoft/vscode-vsce";
     description = "Visual Studio Code Extension Manager";
-    maintainers = with lib.maintainers; [ aaronjheng ];
-    license = lib.licenses.mit;
+    maintainers = with maintainers; [ aaronjheng ];
+    license = licenses.mit;
     mainProgram = "vsce";
   };
 }

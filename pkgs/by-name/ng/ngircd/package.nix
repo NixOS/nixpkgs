@@ -33,11 +33,11 @@ stdenv.mkDerivation rec {
     libiconv
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Next Generation IRC Daemon";
     mainProgram = "ngircd";
     homepage = "https://ngircd.barton.de";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.all;
+    license = licenses.gpl2Plus;
+    platforms = platforms.all;
   };
 }

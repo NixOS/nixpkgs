@@ -38,7 +38,7 @@ buildGoModule rec {
       --zsh <($out/bin/qrcp completion zsh)
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://qrcp.sh/";
     description = "Transfer files over wifi by scanning a QR code from your terminal";
     longDescription = ''
@@ -47,8 +47,8 @@ buildGoModule rec {
       handler serves the content and exits the program when the transfer is
       complete.
     '';
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fgaz ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ fgaz ];
     mainProgram = "qrcp";
   };
 }

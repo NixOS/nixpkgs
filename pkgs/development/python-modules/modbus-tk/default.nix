@@ -29,10 +29,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "modbus_tk" ];
 
-  meta = {
+  meta = with lib; {
     description = "Module for simple Modbus interactions";
     homepage = "https://github.com/ljean/modbus-tk";
-    license = lib.licenses.lgpl21Plus;
-    maintainers = with lib.maintainers; [ fab ];
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ fab ];
   };
 }

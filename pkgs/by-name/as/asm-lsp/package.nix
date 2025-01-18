@@ -31,15 +31,15 @@ rustPlatform.buildRustPackage {
     export HOME=$(mktemp -d)
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Language server for NASM/GAS/GO Assembly";
     homepage = "https://github.com/bergercookie/asm-lsp";
-    license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [
+    license = licenses.bsd2;
+    maintainers = with maintainers; [
       NotAShelf
       CaiqueFigueiredo
     ];
     mainProgram = "asm-lsp";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }

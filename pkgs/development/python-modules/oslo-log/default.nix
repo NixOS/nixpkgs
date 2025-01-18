@@ -66,11 +66,11 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = {
+  meta = with lib; {
     description = "oslo.log library";
     mainProgram = "convert-json";
     homepage = "https://github.com/openstack/oslo.log";
-    license = lib.licenses.asl20;
-    maintainers = lib.teams.openstack.members;
+    license = licenses.asl20;
+    maintainers = teams.openstack.members;
   };
 }

@@ -20,11 +20,11 @@ buildNpmPackage rec {
 
   npmDepsHash = "sha256-oC9eOpoMZLZbyx9XnC4m5zzqORQWP62uRDNVZjyVnBs=";
 
-  meta = {
+  meta = with lib; {
     description = "Unconventional code formatting tool for JavaScript";
     mainProgram = "shittier";
     homepage = "https://github.com/rohitdhas/shittier";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ totoroot ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ totoroot ];
   };
 }

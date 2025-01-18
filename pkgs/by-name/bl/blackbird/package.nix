@@ -21,14 +21,14 @@ stdenv.mkDerivation rec {
 
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
-  meta = {
+  meta = with lib; {
     description = "Dark Desktop Suite for Gtk, Xfce and Metacity";
     homepage = "https://github.com/shimmerproject/Blackbird";
-    license = with lib.licenses; [
+    license = with licenses; [
       gpl2Plus
       cc-by-nc-sa-30
     ];
-    platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.romildo ];
+    platforms = platforms.linux;
+    maintainers = [ maintainers.romildo ];
   };
 }

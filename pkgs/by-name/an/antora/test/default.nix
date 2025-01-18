@@ -57,10 +57,10 @@ stdenvNoCC.mkDerivation {
     gitMinimal
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Reproducible Antora test framework";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.naho ];
-    platforms = lib.platforms.all;
+    license = licenses.mit;
+    maintainers = [ maintainers.naho ];
+    platforms = platforms.all;
   };
 }

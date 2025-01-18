@@ -33,11 +33,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/ziglang/shell-completions";
     description = "Shell completions for the Zig compiler";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ aaronjheng ];
-    platforms = lib.platforms.all;
+    license = licenses.mit;
+    maintainers = with maintainers; [ aaronjheng ];
+    platforms = platforms.all;
   };
 })

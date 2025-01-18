@@ -39,10 +39,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = "wrapProgram $out/bin/amttool --prefix PERL5LIB : $PERL5LIB";
 
-  meta = {
+  meta = with lib; {
     description = "Intel AMT® SoL client + tools";
     homepage = "https://www.kraxel.org/cgit/amtterm/";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
   };
 })

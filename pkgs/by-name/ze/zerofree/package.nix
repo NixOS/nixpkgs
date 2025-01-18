@@ -33,12 +33,12 @@ stdenv.mkDerivation rec {
     installManPage ${manpage}
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://frippery.org/uml/";
     description = "Zero free blocks from ext2, ext3 and ext4 file-systems";
-    platforms = lib.platforms.linux;
-    license = lib.licenses.gpl2Only;
-    maintainers = [ lib.maintainers.theuni ];
+    platforms = platforms.linux;
+    license = licenses.gpl2Only;
+    maintainers = [ maintainers.theuni ];
     mainProgram = "zerofree";
   };
 }

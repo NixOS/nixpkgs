@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "us" ];
 
-  meta = {
+  meta = with lib; {
     description = "Package for easily working with US and state metadata";
     mainProgram = "states";
     longDescription = ''
@@ -44,7 +44,7 @@ buildPythonPackage rec {
       census, congressional districts, counties, and census tracts.
     '';
     homepage = "https://github.com/unitedstates/python-us/";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ bot-wxt1221 ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ bot-wxt1221 ];
   };
 }

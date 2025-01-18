@@ -29,11 +29,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "KDE Plasma Applet for use as a desktop/workspace pager";
     homepage = "https://github.com/dhruv8sh/kara";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ HeitorAugustoLN ];
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ HeitorAugustoLN ];
     inherit (kdePackages.kwindowsystem.meta) platforms;
   };
 })

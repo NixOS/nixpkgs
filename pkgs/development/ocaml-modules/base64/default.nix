@@ -31,10 +31,10 @@ buildDunePackage rec {
     rresult
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/mirage/ocaml-base64";
     description = "Base64 encoding and decoding in OCaml";
-    license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ vbgl ];
+    license = licenses.isc;
+    maintainers = with maintainers; [ vbgl ];
   };
 }

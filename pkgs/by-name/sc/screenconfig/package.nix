@@ -29,12 +29,12 @@ python3.pkgs.buildPythonApplication rec {
     feh
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Automatic configuration of connected screens/monitors";
     homepage = "https://github.com/jceb/screenconfig";
-    platforms = lib.platforms.linux;
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ jceb ];
+    platforms = platforms.linux;
+    license = licenses.mit;
+    maintainers = with maintainers; [ jceb ];
     mainProgram = "screenconfig";
   };
 }

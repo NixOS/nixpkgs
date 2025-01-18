@@ -36,11 +36,11 @@ stdenv.mkDerivation (finalAttrs: {
       wrapProgram $out/bin/alda-player --prefix PATH : $out/bin:${binPath}
     '';
 
-  meta = {
+  meta = with lib; {
     description = "Music programming language for musicians";
     homepage = "https://alda.io";
-    license = lib.licenses.epl10;
-    maintainers = [ lib.maintainers.ericdallo ];
+    license = licenses.epl10;
+    maintainers = [ maintainers.ericdallo ];
     platforms = jre.meta.platforms;
   };
 })

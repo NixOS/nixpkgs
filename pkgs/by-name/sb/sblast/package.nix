@@ -47,14 +47,14 @@ let
       };
     };
 
-    meta = {
+    meta = with lib; {
       description = "Blast your Linux audio to DLNA receivers";
       homepage = "https://github.com/ugjka/sblast";
       # license is "MIT+NoAI": <https://github.com/ugjka/sblast/blob/main/LICENSE>
-      license = lib.licenses.unfree;
+      license = licenses.unfree;
       mainProgram = "sblast";
-      maintainers = with lib.maintainers; [ colinsane ];
-      platforms = lib.platforms.linux;
+      maintainers = with maintainers; [ colinsane ];
+      platforms = platforms.linux;
     };
   };
 in

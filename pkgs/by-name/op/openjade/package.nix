@@ -27,11 +27,11 @@ stdenv.mkDerivation rec {
     "--enable-splibdir=${opensp}/lib"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Implementation of DSSSL, an ISO standard for formatting SGML (and XML) documents";
     mainProgram = "openjade";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     homepage = "https://openjade.sourceforge.net/";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

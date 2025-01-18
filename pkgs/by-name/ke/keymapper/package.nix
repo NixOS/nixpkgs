@@ -41,16 +41,16 @@ stdenv.mkDerivation (finalAttrs: {
     libayatana-appindicator
   ];
 
-  meta = {
+  meta = with lib; {
     changelog = "https://github.com/houmain/keymapper/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Cross-platform context-aware key remapper";
     homepage = "https://github.com/houmain/keymapper";
-    license = lib.licenses.gpl3Only;
+    license = licenses.gpl3Only;
     mainProgram = "keymapper";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       dit7ya
       spitulax
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 })

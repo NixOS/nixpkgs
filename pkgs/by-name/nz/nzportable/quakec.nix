@@ -54,11 +54,11 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "QuakeC repository for Nazi Zombies: Portable";
     homepage = "https://github.com/nzp-team/quakec";
-    license = lib.licenses.gpl2Plus;
-    platforms = with lib.platforms; linux ++ darwin;
-    maintainers = with lib.maintainers; [ pluiedev ];
+    license = licenses.gpl2Plus;
+    platforms = with platforms; linux ++ darwin;
+    maintainers = with maintainers; [ pluiedev ];
   };
 }

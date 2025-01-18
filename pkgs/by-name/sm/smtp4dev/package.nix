@@ -44,15 +44,15 @@ buildDotnetModule {
     mv $out/bin/Rnwood.Smtp4dev $out/bin/smtp4dev
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Fake smtp email server for development and testing";
     homepage = "https://github.com/rnwood/smtp4dev";
-    license = lib.licenses.bsd3;
+    license = licenses.bsd3;
     mainProgram = "smtp4dev";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       rucadi
       jchw
     ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }

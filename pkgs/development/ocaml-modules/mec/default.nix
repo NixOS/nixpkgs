@@ -42,10 +42,10 @@ buildDunePackage rec {
     bisect_ppx
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Mec - Mini Elliptic Curve library";
     homepage = "https://gitlab.com/nomadic-labs/cryptography/ocaml-ec";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.ulrikstrid ];
+    license = licenses.mit;
+    maintainers = [ maintainers.ulrikstrid ];
   };
 }

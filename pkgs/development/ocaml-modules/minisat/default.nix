@@ -17,10 +17,10 @@ buildDunePackage rec {
     hash = "sha256-dH0Ndlyo/DTZ6Ao1S478aBuxoZFSkRBi5HblkTWCPas=";
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://c-cube.github.io/ocaml-minisat/";
     description = "Simple bindings to Minisat-C";
-    license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ mgttlinger ];
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ mgttlinger ];
   };
 }

@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
       --prefix PATH ":" "${python3Packages.rethinkdb}/bin"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Open-source distributed database built with love";
     mainProgram = "rethinkdb";
     longDescription = ''
@@ -79,9 +79,9 @@ stdenv.mkDerivation rec {
       joins and group by, and is easy to setup and learn.
     '';
     homepage = "https://rethinkdb.com";
-    license = lib.licenses.asl20;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [
+    license = licenses.asl20;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
       thoughtpolice
       bluescreen303
     ];

@@ -34,10 +34,10 @@ buildPythonPackage rec {
     "openstep_parser"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Python module to manipulate XCode projects ";
     homepage = "https://github.com/kronenthaler/mod-pbxproj";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ilaumjd ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ ilaumjd ];
   };
 }

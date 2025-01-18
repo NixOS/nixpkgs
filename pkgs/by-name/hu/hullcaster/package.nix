@@ -22,10 +22,10 @@ rustPlatform.buildRustPackage rec {
     "--skip gpodder::tests::gpodder"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Terminal-based podcast manager built in Rust";
     homepage = "https://github.com/gilcu3/hullcaster";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ kiara ];
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ kiara ];
   };
 }

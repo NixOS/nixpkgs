@@ -37,12 +37,12 @@ mkDerivation rec {
     qgpgme
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Program to write hybrid ISO files onto USB disks";
     homepage = "https://invent.kde.org/utilities/isoimagewriter";
-    platforms = lib.platforms.linux;
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ k900 ];
+    platforms = platforms.linux;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ k900 ];
     mainProgram = "isoimagewriter";
   };
 }

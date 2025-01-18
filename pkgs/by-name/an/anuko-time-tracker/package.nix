@@ -33,11 +33,11 @@ stdenvNoCC.mkDerivation rec {
     inherit (nixosTests) anuko-time-tracker;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Simple, easy to use, open source time tracking system";
-    license = lib.licenses.sspl;
+    license = licenses.sspl;
     homepage = "https://github.com/anuko/timetracker/";
     platforms = php.meta.platforms;
-    maintainers = with lib.maintainers; [ michaelshmitty ];
+    maintainers = with maintainers; [ michaelshmitty ];
   };
 }

@@ -73,12 +73,12 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Vala based UI for beets";
     homepage = "https://github.com/DannyGB/SuperGee";
-    license = lib.licenses.gpl3Only;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Only;
+    platforms = platforms.linux;
     mainProgram = "SuperG";
-    maintainers = with lib.maintainers; [ bot-wxt1221 ];
+    maintainers = with maintainers; [ bot-wxt1221 ];
   };
 })

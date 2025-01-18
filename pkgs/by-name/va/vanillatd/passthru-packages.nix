@@ -13,11 +13,11 @@ builtins.mapAttrs
       inherit name buildPhase;
       phases = [ "buildPhase" ];
       nativeBuildInputs = [ unar ];
-      meta = {
-        sourceProvenance = with lib.sourceTypes; [
+      meta = with lib; {
+        sourceProvenance = with sourceTypes; [
           binaryBytecode
         ];
-        license = with lib.licenses; [
+        license = with licenses; [
           unfree
         ];
       };

@@ -21,11 +21,11 @@ buildNpmPackage rec {
 
   dontBuild = true;
 
-  meta = {
+  meta = with lib; {
     description = "Tool to help with the migration of a Matrix Synapse installation to the Matrix Authentication Service";
     homepage = "https://github.com/element-hq/matrix-authentication-service/tree/main/tools/syn2mas";
-    license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ teutat3s ];
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [ teutat3s ];
     mainProgram = "syn2mas";
   };
 }

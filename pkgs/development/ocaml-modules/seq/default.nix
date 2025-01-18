@@ -12,9 +12,9 @@ stdenv.mkDerivation (
     version = "0.1";
     pname = "ocaml${ocaml.version}-seq";
 
-    meta = {
-      license = lib.licenses.lgpl21;
-      maintainers = [ lib.maintainers.vbgl ];
+    meta = with lib; {
+      license = licenses.lgpl21;
+      maintainers = [ maintainers.vbgl ];
       homepage = "https://github.com/c-cube/seq";
       inherit (ocaml.meta) platforms;
     };

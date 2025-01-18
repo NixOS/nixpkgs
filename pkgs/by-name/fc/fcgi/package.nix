@@ -20,12 +20,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = "ln -s . $out/include/fastcgi";
 
-  meta = {
+  meta = with lib; {
     description = "Language independent, scalable, open extension to CGI";
     homepage = "https://fastcgi-archives.github.io/"; # Formerly http://www.fastcgi.com/
     license = "FastCGI, see LICENSE.TERMS";
     mainProgram = "cgi-fcgi";
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ jtbx ];
+    platforms = platforms.all;
+    maintainers = with maintainers; [ jtbx ];
   };
 })

@@ -21,10 +21,10 @@ build-idris-package {
     sha256 = "0m2yjr20dxkfmn3nzc68l6vh0rdaw6b637yijwl4c83b5xiac1mi";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Idris Hash Array Mapped Trie";
     homepage = "https://github.com/bamboo/idris-hamt";
-    license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.brainrape ];
+    license = licenses.bsd3;
+    maintainers = [ maintainers.brainrape ];
   };
 }

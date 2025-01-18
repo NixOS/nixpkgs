@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
     ninja
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Threading support library for Windows 7 and above";
     homepage = "https://github.com/lhmouse/mcfgthread/wiki";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ wegank ];
-    platforms = lib.platforms.windows;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ wegank ];
+    platforms = platforms.windows;
   };
 }

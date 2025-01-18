@@ -126,15 +126,15 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
 
   disallowedReferences = [ env.SKIA_SOURCE_DIR ];
 
-  meta = {
+  meta = with lib; {
     description = "Programmable cross-platform sequencer for the Game Boy Advance sound chip";
     homepage = "https://github.com/jturcotte/chiptrack";
-    license = with lib.licenses; [
+    license = with licenses; [
       mit # main
       gpl3Only # GPL dependencies
     ];
     mainProgram = "chiptrack";
-    maintainers = with lib.maintainers; [ OPNA2608 ];
+    maintainers = with maintainers; [ OPNA2608 ];
     # Various issues with wrong max macOS version & misparsed target conditional checks, can't figure out the magic combination for this
     broken = clangStdenv.hostPlatform.isDarwin;
   };

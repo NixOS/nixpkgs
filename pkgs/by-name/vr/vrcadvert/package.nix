@@ -40,12 +40,12 @@ buildDotnetModule rec {
 
   passthru.updateScript = ./update.sh;
 
-  meta = {
+  meta = with lib; {
     description = "Advertise your OSC app through OSCQuery";
     homepage = "https://github.com/galister/VrcAdvert";
-    license = lib.licenses.unlicense;
-    maintainers = with lib.maintainers; [ Scrumplex ];
+    license = licenses.unlicense;
+    maintainers = with maintainers; [ Scrumplex ];
     mainProgram = "VrcAdvert";
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 }

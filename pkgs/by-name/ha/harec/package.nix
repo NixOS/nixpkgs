@@ -70,18 +70,18 @@ stdenv.mkDerivation (finalAttrs: {
     inherit qbe;
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://harelang.org/";
     description = "Bootstrapping Hare compiler written in C for POSIX systems";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ onemoresuza ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ onemoresuza ];
     mainProgram = "harec";
     # The upstream developers do not like proprietary operating systems; see
     # https://harelang.org/platforms/
     # UPDATE: https://github.com/hshq/harelang provides a MacOS port
     platforms =
-      with lib.platforms;
-      lib.intersectLists (freebsd ++ openbsd ++ linux) (aarch64 ++ x86_64 ++ riscv64);
-    badPlatforms = lib.platforms.darwin;
+      with platforms;
+      intersectLists (freebsd ++ openbsd ++ linux) (aarch64 ++ x86_64 ++ riscv64);
+    badPlatforms = platforms.darwin;
   };
 })

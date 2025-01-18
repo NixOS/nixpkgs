@@ -37,11 +37,11 @@ mkHyprlandPlugin hyprland {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Hyprland plugin for touch gestures";
     homepage = "https://github.com/horriblename/hyprgrass";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ donovanglover ];
-    platforms = lib.platforms.linux;
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ donovanglover ];
+    platforms = platforms.linux;
   };
 }

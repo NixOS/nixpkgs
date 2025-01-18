@@ -45,11 +45,11 @@ buildGoModule {
     installShellCompletion $completions_dir/*
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Cross-platform CLI to interact with an OpenFGA server";
     homepage = "https://github.com/openfga/cli";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     mainProgram = "fga";
-    maintainers = with lib.maintainers; [ jlesquembre ];
+    maintainers = with maintainers; [ jlesquembre ];
   };
 }

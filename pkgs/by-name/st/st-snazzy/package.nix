@@ -37,11 +37,11 @@ stdenv.mkDerivation {
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
   env.TERMINFO = "${placeholder "out"}/share/terminfo";
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/siduck/st";
     description = "snazzy terminal (suckless + beautiful)";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pouya ];
-    platforms = lib.platforms.linux;
+    license = licenses.mit;
+    maintainers = with maintainers; [ pouya ];
+    platforms = platforms.linux;
   };
 }

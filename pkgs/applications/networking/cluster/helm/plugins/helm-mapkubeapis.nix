@@ -29,10 +29,10 @@ buildGoModule rec {
     install -m644 -Dt $out/helm-mapkubeapis plugin.yaml
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Helm plugin which maps deprecated or removed Kubernetes APIs in a release to supported APIs";
     homepage = "https://github.com/helm/helm-mapkubeapis";
-    license = with lib.licenses; [ asl20 ];
-    maintainers = with lib.maintainers; [ aos ];
+    license = with licenses; [ asl20 ];
+    maintainers = with maintainers; [ aos ];
   };
 }

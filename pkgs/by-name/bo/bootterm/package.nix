@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Simple, reliable and powerful terminal to ease connection to serial ports";
     longDescription = ''
       BootTerm is a simple, reliable and powerful terminal designed to
@@ -33,9 +33,9 @@ stdenv.mkDerivation (finalAttrs: {
       and typically USB-based ones.
     '';
     homepage = "https://github.com/wtarreau/bootterm";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "bt";
-    maintainers = with lib.maintainers; [ deadbaed ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ deadbaed ];
+    platforms = platforms.unix;
   };
 })

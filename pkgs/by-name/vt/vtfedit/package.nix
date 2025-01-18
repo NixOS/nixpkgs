@@ -69,12 +69,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = {
+  meta = with lib; {
     description = "VTF file viewer/editor";
     homepage = "https://nemstools.github.io/pages/VTFLib.html";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = lib.licenses.lgpl21Plus;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.lgpl21Plus;
     inherit (wine.meta) platforms;
-    maintainers = with lib.maintainers; [ paveloom ];
+    maintainers = with maintainers; [ paveloom ];
   };
 }

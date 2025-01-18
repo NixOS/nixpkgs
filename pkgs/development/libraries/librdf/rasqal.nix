@@ -35,14 +35,14 @@ stdenv.mkDerivation rec {
   doCheck = false; # fails with "No testsuite plan file sparql-query-plan.ttl could be created in build/..."
   doInstallCheck = false; # fails with "rasqal-config does not support (--help|--version)"
 
-  meta = {
+  meta = with lib; {
     description = "Library that handles Resource Description Framework (RDF)";
     homepage = "https://librdf.org/rasqal";
-    license = with lib.licenses; [
+    license = with licenses; [
       lgpl21
       asl20
     ];
-    maintainers = with lib.maintainers; [ marcweber ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ marcweber ];
+    platforms = platforms.unix;
   };
 }

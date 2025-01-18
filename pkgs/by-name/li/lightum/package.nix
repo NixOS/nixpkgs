@@ -43,12 +43,12 @@ stdenv.mkDerivation {
       mandir=$out/share/man INSTALL="install -c" INSTALLDATA="install -c -m 644"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "MacBook automatic light sensor daemon";
     mainProgram = "lightum";
     homepage = "https://github.com/poliva/lightum";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ puffnfresh ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ puffnfresh ];
+    platforms = platforms.linux;
   };
 }

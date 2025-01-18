@@ -40,12 +40,12 @@ maven.buildMavenPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://schemaspy.org";
     description = "Document your database simply and easily";
     mainProgram = "schemaspy";
-    license = lib.licenses.lgpl3Plus;
-    maintainers = with lib.maintainers; [
+    license = licenses.lgpl3Plus;
+    maintainers = with maintainers; [
       jraygauthier
       anthonyroussel
     ];

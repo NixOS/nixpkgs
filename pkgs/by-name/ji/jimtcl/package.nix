@@ -73,12 +73,12 @@ stdenv.mkDerivation (finalAttrs: {
   # test posix-1.6 needs the "hostname" command
   nativeCheckInputs = [ inetutils ];
 
-  meta = {
+  meta = with lib; {
     description = "Open source small-footprint implementation of the Tcl programming language";
     homepage = "http://jim.tcl.tk/";
-    license = lib.licenses.bsd2;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [
+    license = licenses.bsd2;
+    platforms = platforms.all;
+    maintainers = with maintainers; [
       dbohdan
       fgaz
     ];

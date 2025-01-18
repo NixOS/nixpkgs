@@ -17,12 +17,12 @@ buildGoModule rec {
 
   vendorHash = "sha256-XYrv/cjma2ZYHs2x6hSXxifuS10Xa/zUx4s5O/OMLf4=";
 
-  meta = {
+  meta = with lib; {
     description = "Mobile Device Management server for Apple Devices, focused on giving you all the power through an API";
     homepage = "https://github.com/micromdm/micromdm";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "micromdm";
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ neverbehave ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ neverbehave ];
   };
 }

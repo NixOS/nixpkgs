@@ -48,11 +48,11 @@ stdenv.mkDerivation {
 
   strictDeps = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/atx/wlay";
     description = "Graphical output management for Wayland";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ AndersonTorres ];
     inherit (wayland.meta) platforms;
     mainProgram = "wlay";
   };

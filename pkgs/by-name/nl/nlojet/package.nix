@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
     stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64
   ) "-Dfinite=isfinite";
 
-  meta = {
+  meta = with lib; {
     homepage = "http://www.desy.de/~znagy/Site/NLOJet++.html";
-    license = lib.licenses.gpl2;
+    license = licenses.gpl2;
     description = "Implementation of calculation of the hadron jet cross sections";
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ veprbl ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ veprbl ];
   };
 }

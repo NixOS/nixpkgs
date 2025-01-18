@@ -22,7 +22,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Tré Seals’ first open-source font, a typeface based on the Chicago Freedom Movement";
     longDescription = ''
       The open-source release of The Neue Black is in partnership with designer
@@ -31,7 +31,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       alternates.
     '';
     homepage = "https://www.theleagueofmoveabletype.com/the-neue-black";
-    license = lib.licenses.ofl;
-    maintainers = with lib.maintainers; [ minijackson ];
+    license = licenses.ofl;
+    maintainers = with maintainers; [ minijackson ];
   };
 })

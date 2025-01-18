@@ -44,11 +44,11 @@ buildNpmPackage {
     runHook postCheck
   '';
 
-  meta = {
+  meta = with lib; {
     description = "CLI tool for saving a faithful copy of a complete web page in a single HTML file";
     homepage = "https://github.com/gildas-lormeau/single-file-cli";
-    license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ n8henrie ];
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [ n8henrie ];
     mainProgram = "single-file";
   };
 }

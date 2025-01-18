@@ -59,7 +59,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       );
     };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://maven.apache.org/";
     description = "Build automation tool (used primarily for Java projects)";
     longDescription = ''
@@ -68,9 +68,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       manage a project's build, reporting and documentation from a central piece
       of information.
     '';
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     mainProgram = "mvn";
-    maintainers = with lib.maintainers; [ tricktron ] ++ lib.teams.java.members;
+    maintainers = with maintainers; [ tricktron ] ++ teams.java.members;
     inherit (jdk_headless.meta) platforms;
   };
 })

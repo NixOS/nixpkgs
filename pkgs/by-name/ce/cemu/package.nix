@@ -165,12 +165,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Software to emulate Wii U games and applications on PC";
     homepage = "https://cemu.info";
-    license = lib.licenses.mpl20;
+    license = licenses.mpl20;
     mainProgram = "cemu";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       zhaofengli
       baduhai
       AndersonTorres

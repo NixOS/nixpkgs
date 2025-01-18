@@ -46,11 +46,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Build context-aware reasoning applications";
     homepage = "https://github.com/langchain-ai/langchain";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       natsukium
       sarahec
     ];

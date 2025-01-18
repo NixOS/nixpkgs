@@ -53,12 +53,12 @@ stdenv.mkDerivation {
       --set LD_PRELOAD "${lib.getLib alsa-lib}/lib/libasound.so.2"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Open source re-implementation of Gothic 2: Night of the Raven";
     homepage = "https://github.com/Try/OpenGothic";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ azahi ];
-    platforms = lib.platforms.linux;
+    license = licenses.mit;
+    maintainers = with maintainers; [ azahi ];
+    platforms = platforms.linux;
     mainProgram = "Gothic2Notr";
   };
 }

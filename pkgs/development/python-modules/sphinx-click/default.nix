@@ -50,10 +50,10 @@ buildPythonPackage rec {
     hash = "sha256-9dZkMh3AxmIv8Bnx4chOWM4M7P3etRDgBM9gwqOrRls=";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Sphinx extension that automatically documents click applications";
     homepage = "https://github.com/click-contrib/sphinx-click";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ antonmosich ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ antonmosich ];
   };
 }

@@ -67,10 +67,10 @@ lib.throwIfNot (lib.versionAtLeast ocaml.version "4.07")
 
     preInstall = "mkdir -p $OCAMLFIND_DESTDIR/stublibs";
 
-    meta = {
+    meta = with lib; {
       description = "OCaml bindings for MariaDB";
-      license = lib.licenses.mit;
-      maintainers = with lib.maintainers; [ bcc32 ];
+      license = licenses.mit;
+      maintainers = with maintainers; [ bcc32 ];
       homepage = "https://github.com/andrenth/ocaml-mariadb";
       inherit (ocaml.meta) platforms;
     };

@@ -37,10 +37,10 @@ stdenv.mkDerivation {
     "OCAML_HAVE_OCAMLOPT=yes"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Fontconfig bindings for OCaml";
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     platforms = ocaml.meta.platforms;
-    maintainers = with lib.maintainers; [ vbgl ];
+    maintainers = with maintainers; [ vbgl ];
   };
 }

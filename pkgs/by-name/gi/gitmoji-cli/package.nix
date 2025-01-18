@@ -73,11 +73,11 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Gitmoji client for using emojis on commit messages";
     homepage = "https://github.com/carloscuesta/gitmoji-cli";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "gitmoji";
-    maintainers = with lib.maintainers; [ nequissimus ];
+    maintainers = with maintainers; [ nequissimus ];
   };
 })

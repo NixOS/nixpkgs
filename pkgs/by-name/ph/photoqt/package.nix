@@ -70,12 +70,12 @@ stdenv.mkDerivation rec {
     makeWrapper $out/{Applications/photoqt.app/Contents/MacOS,bin}/photoqt
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Simple, yet powerful and good looking image viewer";
     homepage = "https://photoqt.org/";
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     mainProgram = "photoqt";
-    maintainers = with lib.maintainers; [ wegank ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ wegank ];
+    platforms = platforms.unix;
   };
 }

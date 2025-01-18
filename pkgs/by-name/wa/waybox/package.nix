@@ -59,12 +59,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.providedSessions = [ "waybox" ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/wizbright/waybox";
     description = "Openbox clone on Wayland";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "waybox";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ AndersonTorres ];
     inherit (wayland.meta) platforms;
   };
 })

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "fortify" ];
 
-  meta = {
+  meta = with lib; {
     description = "Tool for validating and repairing MPEG audio streams";
     longDescription = ''
       MP3val is a small, high-speed, free software tool for checking MPEG audio
@@ -34,9 +34,9 @@ stdenv.mkDerivation rec {
       common types of tags (ID3v1, ID3v2, APEv2).
     '';
     homepage = "https://mp3val.sourceforge.net/index.shtml";
-    license = lib.licenses.gpl2;
-    platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.devhell ];
+    license = licenses.gpl2;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.devhell ];
     mainProgram = "mp3val";
   };
 }

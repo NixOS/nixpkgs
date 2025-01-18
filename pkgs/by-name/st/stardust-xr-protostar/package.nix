@@ -49,14 +49,14 @@ rustPlatform.buildRustPackage rec {
     extraArgs = [ "--version=branch" ];
   };
 
-  meta = {
+  meta = with lib; {
     description = "Prototype application launchers for Stardust XR";
     homepage = "https://stardustxr.org";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       pandapip1
       technobaboo
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

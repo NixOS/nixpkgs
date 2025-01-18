@@ -68,11 +68,11 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "http://azukifont.com/font/azuki.html";
     description = "Azuki Font";
-    license = lib.licenses.unfree;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ nyadiia ];
+    license = licenses.unfree;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ nyadiia ];
   };
 }

@@ -46,12 +46,12 @@ stdenv.mkDerivation {
       runHook postInstall
     '';
 
-  meta = {
+  meta = with lib; {
     description = "Bash-tool to store your private data inside a git repository";
     homepage = "https://sobolevn.me/git-secret/";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.lo1tuma ];
-    platforms = lib.platforms.all;
+    license = licenses.mit;
+    maintainers = [ maintainers.lo1tuma ];
+    platforms = platforms.all;
     mainProgram = "git-secret";
   };
 }

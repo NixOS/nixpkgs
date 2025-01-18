@@ -55,11 +55,11 @@ buildPythonPackage {
     "objexplore.utils"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Terminal UI to interactively inspect and explore Python objects";
     homepage = "https://github.com/kylepollina/objexplore";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       pbsds
       sigmanificient
     ];

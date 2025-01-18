@@ -134,15 +134,15 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
       --run 'if [[ -z $I_WANT_A_BROKEN_WAYLAND_UI ]]; then export QT_QPA_PLATFORM=xcb; fi'
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/stenzek/duckstation";
     description = "Fast PlayStation 1 emulator for x86-64/AArch32/AArch64";
-    license = lib.licenses.gpl3Only;
+    license = licenses.gpl3Only;
     mainProgram = "duckstation-qt";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       guibou
       AndersonTorres
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 })

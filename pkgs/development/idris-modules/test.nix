@@ -19,10 +19,10 @@ build-idris-package {
 
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Testing Utilities for Idris programs";
     homepage = "https://github.com/jfdm/idris-testing";
-    license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.brainrape ];
+    license = licenses.bsd3;
+    maintainers = [ maintainers.brainrape ];
   };
 }

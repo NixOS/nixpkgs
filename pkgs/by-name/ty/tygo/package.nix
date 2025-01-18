@@ -25,11 +25,11 @@ buildGoModule rec {
     "-extldflags -static"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Generate Typescript types from Golang source code";
     homepage = "https://github.com/gzuidhof/tygo";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ alexymantha ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ alexymantha ];
     mainProgram = "tygo";
   };
 }

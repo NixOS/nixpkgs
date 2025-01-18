@@ -51,12 +51,12 @@ stdenv.mkDerivation (
 
     env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-Wno-error=format-truncation";
 
-    meta = {
+    meta = with lib; {
       description = "Fork of Chez Scheme for Racket";
       homepage = "https://github.com/racket/ChezScheme";
-      license = lib.licenses.asl20;
-      maintainers = with lib.maintainers; [ l-as ];
-      platforms = lib.platforms.unix;
+      license = licenses.asl20;
+      maintainers = with maintainers; [ l-as ];
+      platforms = platforms.unix;
     };
   }
 )

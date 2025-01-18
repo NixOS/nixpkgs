@@ -13,11 +13,11 @@ stdenv.mkDerivation rec {
     sha256 = "1fsy6dlzxrx177qc877qhajm9l4g28mvh06h2l15rxy4bapzknjz";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Portable library for controlling audio CDs";
     mainProgram = "libcdaudio-config";
     homepage = "https://libcdaudio.sourceforge.net";
-    platforms = lib.platforms.linux;
-    license = lib.licenses.lgpl2;
+    platforms = platforms.linux;
+    license = licenses.lgpl2;
   };
 }

@@ -101,12 +101,12 @@ crystal.buildCrystalPackage {
   # I don't know how to fix it for xvfb and openbox.
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "AutoHotkey for X11";
     homepage = "https://phil294.github.io/AHK_X11";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ ulysseszhan ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ ulysseszhan ];
+    platforms = platforms.linux;
     mainProgram = "ahk_x11";
   };
 }

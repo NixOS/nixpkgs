@@ -34,11 +34,11 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  meta = {
+  meta = with lib; {
     description = "Modern smart contract platform for Cardano";
     homepage = "https://aiken-lang.org";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ t4ccer ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ t4ccer ];
     mainProgram = "aiken";
   };
 }

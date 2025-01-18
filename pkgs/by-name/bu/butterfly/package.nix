@@ -39,16 +39,16 @@ flutter327.buildFlutterApplication rec {
 
   passthru.updateScript = ./update.sh;
 
-  meta = {
+  meta = with lib; {
     description = "Powerful, minimalistic, cross-platform, opensource note-taking app";
     homepage = "https://github.com/LinwoodDev/Butterfly";
     mainProgram = "butterfly";
-    license = with lib.licenses; [
+    license = with licenses; [
       agpl3Plus
       cc-by-sa-40
       asl20
     ];
-    maintainers = with lib.maintainers; [ aucub ];
+    maintainers = with maintainers; [ aucub ];
     platforms = [
       "aarch64-linux"
       "x86_64-linux"

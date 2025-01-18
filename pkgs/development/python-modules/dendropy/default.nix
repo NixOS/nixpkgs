@@ -42,11 +42,11 @@ buildPythonPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Python library for phylogenetic computing";
     homepage = "https://jeetsukumaran.github.io/DendroPy/";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [
+    license = licenses.bsd3;
+    maintainers = with maintainers; [
       unode
       pandapip1
     ];

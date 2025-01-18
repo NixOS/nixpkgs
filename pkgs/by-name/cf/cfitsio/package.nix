@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     sed -e '/^install:/s/libcfitsio.a //' -e 's@/bin/@@g' -i Makefile.in
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://heasarc.gsfc.nasa.gov/fitsio/";
     description = "Library for reading and writing FITS data files";
     longDescription = ''
@@ -53,11 +53,11 @@ stdenv.mkDerivation (finalAttrs: {
       FITS files.
     '';
     changelog = "https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/docs/changes.txt";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       xbreak
       hjones2199
     ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 })

@@ -47,12 +47,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/usnistgov/SP800-90B_EntropyAssessment";
     description = "Implementation of min-entropy assessment methods included in Special Publication 800-90B";
-    platforms = lib.platforms.linux;
-    license = lib.licenses.nistSoftware;
-    maintainers = with lib.maintainers; [
+    platforms = platforms.linux;
+    license = licenses.nistSoftware;
+    maintainers = with maintainers; [
       orichter
       thillux
     ];

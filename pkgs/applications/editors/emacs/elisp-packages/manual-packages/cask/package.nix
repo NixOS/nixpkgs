@@ -63,7 +63,7 @@ melpaBuild (finalAttrs: {
     rev-prefix = "v";
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/cask/cask";
     description = "Project management for Emacs";
     longDescription = ''
@@ -71,8 +71,8 @@ melpaBuild (finalAttrs: {
       package development cycle; development, dependencies, testing, building,
       packaging and more.
     '';
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     mainProgram = "cask";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ AndersonTorres ];
   };
 })

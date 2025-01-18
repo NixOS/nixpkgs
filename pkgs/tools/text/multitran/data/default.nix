@@ -22,10 +22,10 @@ stdenv.mkDerivation {
     sed -i -e 's@\$(DESTDIR)/usr@'$out'@' Makefile
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://multitran.sourceforge.net/";
     description = "Multitran data english-russian";
-    license = lib.licenses.gpl2Only;
-    platforms = lib.platforms.unix;
+    license = licenses.gpl2Only;
+    platforms = platforms.unix;
   };
 }

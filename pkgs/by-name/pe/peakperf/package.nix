@@ -63,12 +63,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   versionCheckProgram = "${placeholder "out"}/bin/peakperf";
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/Dr-Noob/peakperf";
     description = "Achieve peak performance on x86 CPUs and NVIDIA GPUs";
     mainProgram = "peakperf";
-    maintainers = with lib.maintainers; [ bot-wxt1221 ];
+    maintainers = with maintainers; [ bot-wxt1221 ];
     platforms = [ "x86_64-linux" ];
-    license = lib.licenses.gpl2Only;
+    license = licenses.gpl2Only;
   };
 })

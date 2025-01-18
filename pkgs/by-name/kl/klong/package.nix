@@ -47,13 +47,13 @@ stdenv.mkDerivation rec {
     installManPage $docs/*.1
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Simple Array programming language";
     homepage = "https://t3x.org/klong";
     mainProgram = "kg";
-    maintainers = [ lib.maintainers.casaca ];
-    platforms = lib.platforms.all;
-    license = with lib.licenses; [
+    maintainers = [ maintainers.casaca ];
+    platforms = platforms.all;
+    license = with licenses; [
       publicDomain
       cc0
     ];

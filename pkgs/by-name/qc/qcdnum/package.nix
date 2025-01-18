@@ -26,12 +26,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     description = "Very fast QCD evolution program written in FORTRAN77";
     mainProgram = "qcdnum-config";
-    license = lib.licenses.gpl3;
+    license = licenses.gpl3;
     homepage = "https://www.nikhef.nl/~h24/qcdnum/index.html";
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ veprbl ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ veprbl ];
   };
 }

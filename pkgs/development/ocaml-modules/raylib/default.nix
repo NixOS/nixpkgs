@@ -31,10 +31,10 @@ buildDunePackage rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = {
+  meta = with lib; {
     description = "OCaml bindings for Raylib (5.0.0)";
     homepage = "https://tjammer.github.io/raylib-ocaml";
-    maintainers = with lib.maintainers; [ r17x ];
-    license = lib.licenses.mit;
+    maintainers = with maintainers; [ r17x ];
+    license = licenses.mit;
   };
 }

@@ -24,15 +24,15 @@ stdenv.mkDerivation (finalAttrs: {
     "--bindir=${placeholder "out"}/bin"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "C port of Stefan Hirschmann's NoteBook FanControl";
     longDescription = ''
       nbfc-linux provides fan control service for notebooks
     '';
     homepage = "https://github.com/nbfc-linux/nbfc-linux";
-    license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.Celibistrial ];
+    license = licenses.gpl3;
+    maintainers = [ maintainers.Celibistrial ];
     mainProgram = "nbfc";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 })

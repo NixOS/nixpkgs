@@ -42,11 +42,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ziafont" ];
 
-  meta = {
+  meta = with lib; {
     description = "Convert TTF/OTF font glyphs to SVG paths";
     homepage = "https://ziafont.readthedocs.io/en/latest/";
     changelog = "https://github.com/cdelker/ziafont/blob/main/CHANGES.md";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.sfrijters ];
+    license = licenses.mit;
+    maintainers = [ maintainers.sfrijters ];
   };
 }

@@ -59,12 +59,12 @@ buildDunePackage rec {
     menhir
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/ocaml-mlx/ocamlformat-mlx";
     description = "OCaml .mlx Code Formatter";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       Denommus
     ];
-    license = lib.licenses.mit;
+    license = licenses.mit;
   };
 }

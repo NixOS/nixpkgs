@@ -25,10 +25,10 @@ build-idris-package {
     sha256 = "1w2w2l4drvkf8mdzh3lwn6l5lnkbxlx9p22s7spw82n5s4wib6c9";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Parsers for various configuration files written in Idris";
     homepage = "https://github.com/benclifford/idris-config";
-    license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.brainrape ];
+    license = licenses.bsd3;
+    maintainers = [ maintainers.brainrape ];
   };
 }

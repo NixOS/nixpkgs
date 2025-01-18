@@ -31,13 +31,13 @@ vscode-utils.buildVscodeMarketplaceExtension {
     < package.json \
     | sponge package.json
   '';
-  meta = {
+  meta = with lib; {
     changelog = "https://marketplace.visualstudio.com/items/jackmacwindows.craftos-pc/changelog";
     description = "Visual Studio Code extension for opening a CraftOS-PC window";
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=jackmacwindows.craftos-pc";
     homepage = "https://www.craftos-pc.cc/docs/extension";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ tomodachi94 ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ tomodachi94 ];
     platforms = craftos-pc.meta.platforms;
   };
 }

@@ -28,11 +28,11 @@ buildDunePackage rec {
     logs
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Connecting to a remote host via IP version 4 or 6";
     homepage = "https://github.com/roburio/happy-eyeballs";
-    license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [
+    license = licenses.isc;
+    maintainers = with maintainers; [
       vbgl
       ulrikstrid
     ];

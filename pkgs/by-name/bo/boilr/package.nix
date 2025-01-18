@@ -61,15 +61,15 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
 
   dontPatchELF = true;
 
-  meta = {
+  meta = with lib; {
     description = "Automatically adds (almost) all your games to your Steam library (including image art)";
     homepage = "https://github.com/PhilipK/BoilR";
-    license = with lib.licenses; [
+    license = with licenses; [
       asl20
       mit
     ];
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ foolnotion ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ foolnotion ];
     mainProgram = "boilr";
   };
 }

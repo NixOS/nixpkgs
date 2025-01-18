@@ -45,10 +45,10 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Python package to simplify receiving, parsing, and sending email";
     homepage = "https://seanthegeek.github.io/mailsuite/";
-    maintainers = with lib.maintainers; [ talyz ];
-    license = lib.licenses.asl20;
+    maintainers = with maintainers; [ talyz ];
+    license = licenses.asl20;
   };
 }

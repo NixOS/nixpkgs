@@ -36,17 +36,17 @@ bundlerApp {
     updateScript = bundlerUpdateScript "r10k";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Puppet environment and module deployment";
     homepage = "https://github.com/puppetlabs/r10k";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
+    license = licenses.asl20;
+    maintainers = with maintainers; [
       zimbatm
       manveru
       nicknovitski
       anthonyroussel
     ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
     mainProgram = "r10k";
   };
 }

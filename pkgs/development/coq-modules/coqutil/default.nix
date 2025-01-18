@@ -30,9 +30,9 @@ mkCoqDerivation {
 
   nativeBuildInputs = [ findutils ];
 
-  meta = {
+  meta = with lib; {
     description = "Coq library for tactics, basic definitions, sets, maps";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ stepbrobd ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ stepbrobd ];
   };
 }

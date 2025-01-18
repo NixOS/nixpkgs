@@ -27,17 +27,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://inai.de/projects/hxtools/";
     description = "Collection of small tools over the years by j.eng";
     # Taken from https://codeberg.org/jengelh/hxtools/src/branch/master/LICENSES.txt
-    license = with lib.licenses; [
+    license = with licenses; [
       mit
       bsd2Patent
       lgpl21Plus
       gpl2Plus
     ];
-    maintainers = with lib.maintainers; [ meator ];
-    platforms = lib.platforms.all;
+    maintainers = with maintainers; [ meator ];
+    platforms = platforms.all;
   };
 })

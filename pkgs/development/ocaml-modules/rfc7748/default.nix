@@ -33,7 +33,7 @@ buildDunePackage rec {
   doCheck = lib.versionAtLeast ocaml.version "4.08";
   checkInputs = [ ounit ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/burgerdev/ocaml-rfc7748";
     description = "Elliptic Curve Diffie-Hellman on Edwards Curves (X25519, X448)";
     longDescription = ''
@@ -42,7 +42,7 @@ buildDunePackage rec {
       publications, the public API is kept as simple as possible to make it easy
       to use and hard to misuse.
     '';
-    license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ fufexan ];
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ fufexan ];
   };
 }

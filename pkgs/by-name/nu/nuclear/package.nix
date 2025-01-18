@@ -28,11 +28,11 @@ appimageTools.wrapType2 {
     cp -r ${appimageContents}/usr/share/icons $out/share
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Streaming music player that finds free music for you";
     homepage = "https://nuclear.js.org/";
-    license = lib.licenses.agpl3Plus;
-    maintainers = [ lib.maintainers.NotAShelf ];
+    license = licenses.agpl3Plus;
+    maintainers = [ maintainers.NotAShelf ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "nuclear";
   };

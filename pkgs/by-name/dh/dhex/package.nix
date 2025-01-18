@@ -28,12 +28,12 @@ stdenv.mkDerivation rec {
     cp dhex_searchlog.5 $out/share/man/man5
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Themeable hex editor with diff mode";
     homepage = "http://www.dettus.net/dhex/";
-    license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ qknight ];
-    platforms = with lib.platforms; linux;
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ qknight ];
+    platforms = with platforms; linux;
     mainProgram = "dhex";
   };
 }

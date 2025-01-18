@@ -57,15 +57,15 @@ stdenv.mkDerivation rec {
     tests.version = testers.testVersion { package = pvs-studio; };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Static analyzer for C and C++";
     homepage = "https://pvs-studio.com/en/pvs-studio";
-    license = lib.licenses.unfreeRedistributable;
+    license = licenses.unfreeRedistributable;
     platforms = [
       "x86_64-darwin"
       "x86_64-linux"
     ];
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [ paveloom ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    maintainers = with maintainers; [ paveloom ];
   };
 }

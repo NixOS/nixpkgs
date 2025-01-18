@@ -21,10 +21,10 @@ stdenv.mkDerivation rec {
     substituteInPlace utils.mk --replace-fail "/usr/local" "$out"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Load the NVIDIA kernel module and create NVIDIA character device files ";
     homepage = "https://github.com/NVIDIA/nvidia-modprobe";
-    license = lib.licenses.gpl2;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2;
+    platforms = platforms.linux;
   };
 }

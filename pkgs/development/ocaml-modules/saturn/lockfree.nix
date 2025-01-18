@@ -22,10 +22,10 @@ buildDunePackage rec {
     multicore-magic
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Lock-free data structures for multicore OCaml";
     homepage = "https://github.com/ocaml-multicore/lockfree";
-    license = lib.licenses.isc;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.isc;
+    maintainers = [ maintainers.vbgl ];
   };
 }

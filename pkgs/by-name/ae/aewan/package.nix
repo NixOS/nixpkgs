@@ -35,10 +35,10 @@ stdenv.mkDerivation rec {
     ncurses
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Ascii-art Editor Without A Name";
     homepage = "https://aewan.sourceforge.net/";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.unix;
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
   };
 }

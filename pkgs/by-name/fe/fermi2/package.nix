@@ -23,12 +23,12 @@ stdenv.mkDerivation {
 
     runHook postInstall
   '';
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/lh3/fermi2";
     description = "Successor of fermi, a whole genome de novo assembler based on the FMD-index for large genomes";
     mainProgram = "fermi2";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ apraga ];
-    platforms = lib.intersectLists lib.platforms.x86_64 lib.platforms.unix;
+    license = licenses.mit;
+    maintainers = with maintainers; [ apraga ];
+    platforms = intersectLists platforms.x86_64 platforms.unix;
   };
 }

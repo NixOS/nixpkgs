@@ -48,11 +48,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = unstableGitUpdater { tagPrefix = "v"; };
 
-  meta = {
+  meta = with lib; {
     description = "Library for functions shared across zakalwe projects";
     homepage = "https://gitlab.com/hors/libzakalwe";
-    license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ OPNA2608 ];
-    platforms = lib.platforms.unix;
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ OPNA2608 ];
+    platforms = platforms.unix;
   };
 })

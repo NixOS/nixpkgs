@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
     libSM
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://logarithmic.net/pfh/synaesthesia";
     description = "Program for representing sounds visually";
-    license = lib.licenses.gpl2Only;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Only;
+    platforms = platforms.linux;
     maintainers = [ ];
     mainProgram = "synaesthesia";
   };

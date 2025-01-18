@@ -21,10 +21,10 @@ stdenv.mkDerivation {
     cp *.h $out/include
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://math.nist.gov/tnt/";
     description = "Template Numerical Toolkit: C++ headers for array and matrices";
-    license = lib.licenses.publicDomain;
-    platforms = lib.platforms.unix;
+    license = licenses.publicDomain;
+    platforms = platforms.unix;
   };
 }

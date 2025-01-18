@@ -68,12 +68,12 @@ rustPlatform.buildRustPackage rec {
     install -Dm644 $src/data/assets/icon.svg $out/share/icons/hicolor/scalable/apps/tangara-companion.svg
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Companion app for Cool Tech Zone Tangara";
     mainProgram = "tangara-companion";
     homepage = "https://github.com/haileys/tangara-companion";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ benpye ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ benpye ];
+    platforms = platforms.linux;
   };
 }

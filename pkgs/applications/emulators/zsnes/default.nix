@@ -84,10 +84,10 @@ stdenv.mkDerivation {
     ln -s ${desktopItem}/share/applications/* $out/share/applications/
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Super Nintendo Entertainment System Emulator";
-    license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.sander ];
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.sander ];
     homepage = "https://www.zsnes.com";
     platforms = [
       "i686-linux"

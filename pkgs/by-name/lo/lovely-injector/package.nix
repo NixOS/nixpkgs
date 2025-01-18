@@ -23,17 +23,17 @@ rustPlatform.buildRustPackage rec {
   # lovely-injector depends on nightly rust features
   env.RUSTC_BOOTSTRAP = 1;
 
-  meta = {
+  meta = with lib; {
     description = "Runtime lua injector for games built with LÖVE";
     longDescription = ''
       Lovely is a lua injector which embeds code into a LÖVE 2d game at runtime.
       Unlike executable patchers, mods can be installed, updated, and removed over and over again without requiring a partial or total game reinstallation.
       This is accomplished through in-process lua API detouring and an easy to use (and distribute) patch system.
     '';
-    license = lib.licenses.mit;
+    license = licenses.mit;
     homepage = "https://github.com/ethangreen-dev/lovely-injector";
     downloadPage = "https://github.com/ethangreen-dev/lovely-injector/releases";
-    maintainers = [ lib.maintainers.antipatico ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = [ maintainers.antipatico ];
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

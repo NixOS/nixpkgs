@@ -41,15 +41,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontConfigure = true;
 
-  meta = {
+  meta = with lib; {
     description = "Serialize a directory to a tree diagram, and vice versa";
     longDescription = ''
       Treecat is an amalgamation of `tree(1)` and `cat(1)`, with the added
       bonus that it can reconstruct its output back into the original filetree.
     '';
     homepage = "https://sr.ht/~autumnull/treecat/";
-    license = lib.licenses.wtfpl;
-    maintainers = with lib.maintainers; [ onemoresuza ];
+    license = licenses.wtfpl;
+    maintainers = with maintainers; [ onemoresuza ];
     mainProgram = "treecat";
     inherit (hareHook.meta) platforms badPlatforms;
   };

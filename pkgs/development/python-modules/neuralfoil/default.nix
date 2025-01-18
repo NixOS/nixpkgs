@@ -30,10 +30,10 @@ buildPythonPackage {
 
   nativeBuildInputs = [ pytestCheckHook ];
 
-  meta = {
+  meta = with lib; {
     description = "Airfoil aerodynamics analysis tool using physics-informed machine learning, in pure Python/NumPy";
     homepage = "https://github.com/peterdsharpe/NeuralFoil";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ sigmanificient ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ sigmanificient ];
   };
 }

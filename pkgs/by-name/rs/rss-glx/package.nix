@@ -42,13 +42,13 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = "-I${imagemagick6.dev}/include/ImageMagick";
 
-  meta = {
+  meta = with lib; {
     description = "Really Slick Screensavers Port to GLX";
     longDescription = ''
       This package currently contains all of the screensavers from the
       original collection, plus a few others.
     '';
-    license = lib.licenses.gpl2Only;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Only;
+    platforms = platforms.linux;
   };
 }

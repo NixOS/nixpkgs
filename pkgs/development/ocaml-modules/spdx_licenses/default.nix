@@ -15,10 +15,10 @@ buildDunePackage rec {
     hash = "sha256-9ViB7PRDz70w3RJczapgn2tJx9wTWgAbdzos6r3J2r4=";
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/kit-ty-kate/spdx_licenses";
     description = "A library providing a strict SPDX License Expression parser";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.mit;
+    maintainers = [ maintainers.vbgl ];
   };
 }

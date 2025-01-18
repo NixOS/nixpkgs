@@ -21,12 +21,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "x86(-64) macro assembler to binary, MZ, PE, COFF, and ELF";
     homepage = "https://flatassembler.net/download.php";
-    license = lib.licenses.bsd2;
+    license = licenses.bsd2;
     mainProgram = "fasm";
-    maintainers = with lib.maintainers; [ orivej ];
+    maintainers = with maintainers; [ orivej ];
     platforms = [
       "i686-linux"
       "x86_64-linux"

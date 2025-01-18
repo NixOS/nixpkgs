@@ -27,12 +27,12 @@ stdenv.mkDerivation (finalAttrs: {
     "MANPREFIX=${placeholder "out"}"
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/SFTtech/xautocfg";
     description = "Automatic keyboard repeat rate configuration for new keyboards";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ jceb ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ jceb ];
     mainProgram = "xautocfg";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 })

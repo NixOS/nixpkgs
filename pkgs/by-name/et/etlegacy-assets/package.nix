@@ -42,16 +42,16 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "ET: Legacy assets only";
     homepage = "https://etlegacy.com";
-    license = with lib.licenses; [ cc-by-nc-sa-30 ];
+    license = with licenses; [ cc-by-nc-sa-30 ];
     longDescription = ''
       ET: Legacy, an open source project fully compatible client and server
       for the popular online FPS game Wolfenstein: Enemy Territory - whose
       gameplay is still considered unmatched by many, despite its great age.
     '';
-    maintainers = with lib.maintainers; [ drupol ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ drupol ];
+    platforms = platforms.linux;
   };
 }

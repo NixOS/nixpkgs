@@ -30,10 +30,10 @@ python3Packages.buildPythonApplication rec {
     python3Packages.pytestCheckHook
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Transform any LP from lparchive into an epub document";
     homepage = "https://github.com/Arwalk/lparchive2epub";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ nsnelson ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ nsnelson ];
   };
 }

@@ -38,12 +38,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     changelog = "https://github.com/nvie/git-toolbelt/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "A suite of useful Git commands that aid with scripting or every day command line usage";
     homepage = "https://github.com/nvie/git-toolbelt";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ tomasajt ];
-    platforms = lib.platforms.all;
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ tomasajt ];
+    platforms = platforms.all;
   };
 })

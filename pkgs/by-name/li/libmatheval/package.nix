@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = "-I${lib.getDev guile}/include/guile/${guile.effectiveVersion}";
   env.NIX_LDFLAGS = "-L${guile}/lib -lguile-${guile.effectiveVersion}";
 
-  meta = {
+  meta = with lib; {
     description = "Library to parse and evaluate symbolic expressions input as text";
     longDescription = ''
       GNU libmatheval is a library (callable from C and Fortran) to parse and evaluate symbolic
@@ -53,8 +53,8 @@ stdenv.mkDerivation rec {
       symbolic derivatives and output expressions to strings.
     '';
     homepage = "https://www.gnu.org/software/libmatheval/";
-    license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.bzizou ];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl3;
+    maintainers = [ maintainers.bzizou ];
+    platforms = platforms.unix;
   };
 }

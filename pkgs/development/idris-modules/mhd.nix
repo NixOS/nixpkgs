@@ -25,10 +25,10 @@ build-idris-package {
     sha256 = "0wvp1qi3bn4hk52vsid6acfwvwbs58sggylbpjvkxzycsbhz4nx4";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Binding of the GNU libmicrohttpd library to the Idris C backend";
     homepage = "https://github.com/colin-adams/idris-libmicrohttpd";
-    license = lib.licenses.lgpl21;
-    maintainers = [ lib.maintainers.brainrape ];
+    license = licenses.lgpl21;
+    maintainers = [ maintainers.brainrape ];
   };
 }

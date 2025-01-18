@@ -247,12 +247,12 @@ buildPythonPackage rec {
     "tensorflow.python.framework"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Computation using data flow graphs for scalable machine learning";
     homepage = "http://tensorflow.org";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [
       jyp
       abbradar
     ];

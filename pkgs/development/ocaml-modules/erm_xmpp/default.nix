@@ -59,11 +59,11 @@ stdenv.mkDerivation rec {
 
   createFindlibDestdir = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/hannesm/xmpp";
     description = "OCaml based XMPP implementation (fork)";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ sternenseemann ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ sternenseemann ];
     inherit (ocaml.meta) platforms;
   };
 }

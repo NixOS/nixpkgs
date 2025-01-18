@@ -38,10 +38,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "logi_circle" ];
 
-  meta = {
+  meta = with lib; {
     description = "Python library to communicate with Logi Circle cameras";
     homepage = "https://github.com/evanjd/python-logi-circle";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

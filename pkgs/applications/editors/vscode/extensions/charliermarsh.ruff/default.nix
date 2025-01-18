@@ -33,12 +33,12 @@ vscode-utils.buildVscodeMarketplaceExtension {
     }
     // sources.${stdenvNoCC.system} or (throw "Unsupported system ${stdenvNoCC.system}");
 
-  meta = {
-    license = lib.licenses.mit;
+  meta = with lib; {
+    license = licenses.mit;
     changelog = "https://marketplace.visualstudio.com/items/charliermarsh.ruff/changelog";
     description = "Visual Studio Code extension with support for the Ruff linter";
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=charliermarsh.ruff";
     homepage = "https://github.com/astral-sh/ruff-vscode";
-    maintainers = [ lib.maintainers.azd325 ];
+    maintainers = [ maintainers.azd325 ];
   };
 }

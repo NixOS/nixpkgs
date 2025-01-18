@@ -30,13 +30,13 @@ stdenv.mkDerivation rec {
 
   # make check fails, see https://github.com/rocky/remake/issues/117
 
-  meta = {
+  meta = with lib; {
     homepage = "https://bashdb.sourceforge.net/remake/";
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     description = "GNU Make with comprehensible tracing and a debugger";
     mainProgram = "remake";
-    platforms = with lib.platforms; linux ++ darwin;
-    maintainers = with lib.maintainers; [
+    platforms = with platforms; linux ++ darwin;
+    maintainers = with maintainers; [
       bjornfor
       shamilton
     ];

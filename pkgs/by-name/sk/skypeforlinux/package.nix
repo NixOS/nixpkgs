@@ -181,13 +181,13 @@ stdenv.mkDerivation {
     fi
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Linux client for Skype";
     homepage = "https://www.skype.com";
     changelog = "https://support.microsoft.com/en-us/skype/what-s-new-in-skype-for-windows-mac-linux-and-web-d32f674c-abb3-40a5-a0b7-ee269ca60831";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = lib.licenses.unfree;
-    maintainers = [ lib.maintainers.mjoerg ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+    maintainers = [ maintainers.mjoerg ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "skypeforlinux";
   };

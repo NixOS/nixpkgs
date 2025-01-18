@@ -56,13 +56,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = {
+  meta = with lib; {
     description = "A fan-made multiplayer Super Mario Bros. style deathmatch game";
     homepage = "https://github.com/mmatyas/supermariowar";
     changelog = "https://github.com/mmatyas/supermariowar/blob/${finalAttrs.src.rev}/CHANGELOG";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ theobori ];
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ theobori ];
     mainProgram = "smw";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 })

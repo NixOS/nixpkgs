@@ -55,14 +55,14 @@ rustPlatform.buildRustPackage {
 
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Self contained toolkit for creating, editing, and previewing TPSE files";
     homepage = "https://gitlab.com/UniQMG/tpsecore";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       huantian
       wackbyte
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

@@ -48,15 +48,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     '';
   });
 
-  meta = {
+  meta = with lib; {
     description = "Arc from The Browser Company";
     homepage = "https://arc.net/";
-    license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ donteatoreo ];
+    license = licenses.unfree;
+    maintainers = with maintainers; [ donteatoreo ];
     platforms = [
       "aarch64-darwin"
       "x86_64-darwin"
     ];
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 })

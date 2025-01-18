@@ -68,11 +68,11 @@ stdenv.mkDerivation (finalAttrs: {
       ln -s $out/bin/com.github.robertsanseries.ciano $out/bin/ciano
     '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/robertsanseries/ciano";
     description = "Multimedia file converter focused on simplicity";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.linux;
   };
 })

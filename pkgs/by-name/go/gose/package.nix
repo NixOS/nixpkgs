@@ -68,11 +68,11 @@ buildGoModule {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Modern and scalable file-uploader focusing on scalability and simplicity";
     homepage = "https://github.com/stv0g/gose";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ stv0g ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ stv0g ];
     mainProgram = "gose";
   };
 }

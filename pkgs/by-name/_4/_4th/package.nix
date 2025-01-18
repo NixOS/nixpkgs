@@ -45,13 +45,13 @@ stdenv.mkDerivation (finalAttrs: {
     "MANDIR=${placeholder "man"}/share/man"
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://thebeez.home.xs4all.nl/4tH/index.html";
     description = "Portable Forth compiler";
-    license = lib.licenses.lgpl3Plus;
+    license = licenses.lgpl3Plus;
     mainProgram = "4th";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.unix;
   };
 })
 # TODO: set Makefile according to platform

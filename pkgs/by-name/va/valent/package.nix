@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonBool "plugin_bluez" true)
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Implementation of the KDE Connect protocol, built on GNOME platform libraries";
     mainProgram = "valent";
     longDescription = ''
@@ -89,12 +89,12 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://valent.andyholmes.ca";
     changelog = "https://github.com/andyholmes/valent/blob/${finalAttrs.src.rev}/CHANGELOG.md";
-    license = with lib.licenses; [
+    license = with licenses; [
       gpl3Plus
       cc0
       cc-by-sa-30
     ];
-    maintainers = with lib.maintainers; [ aleksana ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ aleksana ];
+    platforms = platforms.linux;
   };
 })

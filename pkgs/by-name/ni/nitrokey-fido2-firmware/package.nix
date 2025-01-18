@@ -67,18 +67,18 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Firmware for the Nitrokey FIDO2 device";
     homepage = "https://github.com/Nitrokey/nitrokey-fido2-firmware";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       amerino
       kiike
       imadnyc
     ];
-    license = with lib.licenses; [
+    license = with licenses; [
       asl20
       mit
     ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }

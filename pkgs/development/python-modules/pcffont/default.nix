@@ -32,12 +32,12 @@ buildPythonPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/TakWolf/pcffont";
     description = "A library for manipulating Portable Compiled Format (PCF) Fonts";
-    platforms = lib.platforms.all;
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    platforms = platforms.all;
+    license = licenses.mit;
+    maintainers = with maintainers; [
       TakWolf
       h7x4
     ];

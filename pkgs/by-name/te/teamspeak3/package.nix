@@ -122,17 +122,17 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "TeamSpeak voice communication tool";
     homepage = "https://teamspeak.com/";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = {
       # See distribution-permit.txt for a confirmation that nixpkgs is allowed to distribute TeamSpeak.
       fullName = "Teamspeak client license";
       url = "https://www.teamspeak.com/en/privacy-and-terms/";
       free = false;
     };
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       lhvwb
       lukegb
       atemu

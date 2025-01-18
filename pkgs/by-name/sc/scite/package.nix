@@ -45,12 +45,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.scintilla.org/SciTE.html";
     description = "SCIntilla based Text Editor";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
       rszibele
       aleksana
     ];

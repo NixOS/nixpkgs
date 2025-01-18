@@ -61,15 +61,15 @@ stdenv.mkDerivation {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "DSP tonewheel organ emulator";
     homepage = "https://setbfree.org";
-    license = lib.licenses.gpl2;
+    license = licenses.gpl2;
     platforms = [
       "x86_64-linux"
       "i686-linux"
     ]; # fails on ARM and Darwin
     broken = stdenv.hostPlatform.isAarch64;
-    maintainers = [ lib.maintainers.l1npengtul ];
+    maintainers = [ maintainers.l1npengtul ];
   };
 }

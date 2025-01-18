@@ -24,7 +24,7 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Outstanding grotesque sans serif typeface family";
     longDescription = ''
       Karla is an outstanding grotesque sans serif typeface
@@ -33,8 +33,8 @@ stdenvNoCC.mkDerivation {
       released through Google Webfonts in 2012.
     '';
     homepage = "https://github.com/googlefonts/karla";
-    license = lib.licenses.ofl;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ mimvoid ];
+    license = licenses.ofl;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ mimvoid ];
   };
 }

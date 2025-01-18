@@ -19,11 +19,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "http://www.namesys.com/";
     description = "Support library for Reiser4";
-    license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ mglolenstine ];
-    platforms = with lib.platforms; linux;
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ mglolenstine ];
+    platforms = with platforms; linux;
   };
 }

@@ -35,10 +35,10 @@ buildPythonPackage rec {
     starlette
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Convert WSGI app to ASGI app or ASGI app to WSGI app";
     homepage = "https://github.com/abersheeran/a2wsgi";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ SuperSandro2000 ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

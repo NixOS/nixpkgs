@@ -23,11 +23,11 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "turbocase" ];
 
-  meta = {
+  meta = with lib; {
     description = "Generate an OpenSCAD case template from a KiCAD PCB";
     homepage = "https://turbocase.org";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ MayNiklas ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ MayNiklas ];
     mainProgram = "turbocase";
   };
 }

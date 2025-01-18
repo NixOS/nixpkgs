@@ -14,10 +14,10 @@ build-idris-package {
     sha256 = "0wzbbp5n113mva99mqr119zwp5pgj4l6wq9033z4f0kbm2nhmcfr";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Composable algorithmic transformation";
     homepage = "https://github.com/QuentinDuval/IdrisReducers";
-    license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.brainrape ];
+    license = licenses.bsd3;
+    maintainers = [ maintainers.brainrape ];
   };
 }

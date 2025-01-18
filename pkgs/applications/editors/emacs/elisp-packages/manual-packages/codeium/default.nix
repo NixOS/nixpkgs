@@ -27,13 +27,13 @@ melpaBuild {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = {
+  meta = with lib; {
     description = "Free, ultrafast Copilot alternative for Emacs";
     homepage = "https://github.com/Exafunction/codeium.el";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.running-grass ];
+    license = licenses.mit;
+    maintainers = [ maintainers.running-grass ];
     inherit (codeium.meta) platforms;
-    sourceProvenance = [ lib.sourceTypes.fromSource ];
+    sourceProvenance = [ sourceTypes.fromSource ];
   };
 
 }

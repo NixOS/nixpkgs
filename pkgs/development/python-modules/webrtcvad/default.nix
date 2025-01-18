@@ -17,10 +17,10 @@ buildPythonPackage rec {
   # required WAV files for testing are not included in the tarball
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Interface to the Google WebRTC Voice Activity Detector (VAD)";
     homepage = "https://github.com/wiseman/py-webrtcvad";
-    license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ prusnak ];
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ prusnak ];
   };
 }

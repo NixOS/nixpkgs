@@ -22,15 +22,15 @@ rustPlatform.buildRustPackage {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "TUI Markdown Task Manager";
     longDescription = ''
       vault-tasks is a TUI Markdown task manager.
       It will parse any Markdown file or vault and display the tasks it contains.
     '';
     homepage = "https://github.com/louis-thevenet/vault-tasks";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "vault-tasks";
-    maintainers = with lib.maintainers; [ louis-thevenet ];
+    maintainers = with maintainers; [ louis-thevenet ];
   };
 }

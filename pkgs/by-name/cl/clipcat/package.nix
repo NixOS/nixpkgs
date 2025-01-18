@@ -47,12 +47,12 @@ rustPlatform.buildRustPackage rec {
     done
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Clipboard Manager written in Rust Programming Language";
     homepage = "https://github.com/xrelkd/clipcat";
-    license = lib.licenses.gpl3Only;
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl3Only;
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [
       xrelkd
       bot-wxt1221
     ];

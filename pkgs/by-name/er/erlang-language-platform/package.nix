@@ -40,10 +40,10 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "An IDE-first library for the semantic analysis of Erlang code, including LSP server, linting and refactoring tools.";
     homepage = "https://github.com/WhatsApp/erlang-language-platform/";
-    license = with lib.licenses; [
+    license = with licenses; [
       mit
       asl20
     ];
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
       "aarch64-darwin"
       "x86_64-darwin"
     ];
-    maintainers = with lib.maintainers; [ offsetcyan ];
-    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+    maintainers = with maintainers; [ offsetcyan ];
+    sourceProvenance = [ sourceTypes.binaryNativeCode ];
   };
 }

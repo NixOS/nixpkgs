@@ -18,12 +18,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libjack2 ];
 
-  meta = {
+  meta = with lib; {
     description = "Console jack loudness meter";
     homepage = "https://www.aelius.com/njh/jackmeter/";
-    license = lib.licenses.gpl2;
-    maintainers = [ lib.maintainers.marcweber ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2;
+    maintainers = [ maintainers.marcweber ];
+    platforms = platforms.linux;
     mainProgram = "jack_meter";
   };
 }

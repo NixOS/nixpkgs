@@ -37,11 +37,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "A simple and easy-to-use immediate-mode gui library";
     homepage = "https://github.com/raysan5/raygui";
-    license = lib.licenses.zlib;
-    maintainers = with lib.maintainers; [ sigmanificient ];
-    platforms = lib.platforms.unix;
+    license = licenses.zlib;
+    maintainers = with maintainers; [ sigmanificient ];
+    platforms = platforms.unix;
   };
 })

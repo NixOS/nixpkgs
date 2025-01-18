@@ -32,17 +32,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Simple hotkey daemon for macOS";
     homepage = "https://github.com/koekeishiya/skhd";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "skhd";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       cmacrae
       lnl7
       periklis
       khaneliman
     ];
-    platforms = lib.platforms.darwin;
+    platforms = platforms.darwin;
   };
 })

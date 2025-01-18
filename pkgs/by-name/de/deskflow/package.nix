@@ -106,16 +106,16 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/deskflow/deskflow";
     description = "Share one mouse and keyboard between multiple computers on Windows, macOS and Linux";
     mainProgram = "deskflow";
-    maintainers = with lib.maintainers; [ aucub ];
+    maintainers = with maintainers; [ aucub ];
     license = with lib; [
       licenses.gpl2Plus
       licenses.openssl
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
     knownVulnerabilities = [
       "CVE-2021-42072"
       "CVE-2021-42073"

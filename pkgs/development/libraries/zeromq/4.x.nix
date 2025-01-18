@@ -85,12 +85,12 @@ stdenv.mkDerivation (finalAttrs: {
     ffmpeg = ffmpeg.override { withZmq = true; };
   };
 
-  meta = {
+  meta = with lib; {
     branch = "4";
     homepage = "http://www.zeromq.org";
     description = "Intelligent Transport Layer";
-    license = lib.licenses.mpl20;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ fpletz ];
+    license = licenses.mpl20;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ fpletz ];
   };
 })

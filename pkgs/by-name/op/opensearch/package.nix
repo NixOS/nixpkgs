@@ -57,13 +57,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru.tests = nixosTests.opensearch;
 
-  meta = {
+  meta = with lib; {
     description = "Open Source, Distributed, RESTful Search Engine";
     homepage = "https://github.com/opensearch-project/OpenSearch";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ shyim ];
-    platforms = lib.platforms.unix;
-    sourceProvenance = with lib.sourceTypes; [
+    license = licenses.asl20;
+    maintainers = with maintainers; [ shyim ];
+    platforms = platforms.unix;
+    sourceProvenance = with sourceTypes; [
       binaryBytecode
       binaryNativeCode
     ];

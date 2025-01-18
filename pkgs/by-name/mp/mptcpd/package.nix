@@ -67,13 +67,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "Daemon for Linux that performs Multipath TCP path management related operations in the user space";
     homepage = "https://github.com/multipath-tcp/mptcpd";
     changelog = "https://github.com/multipath-tcp/mptcpd/blob/${finalAttrs.src.rev}/NEWS";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ nim65s ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ nim65s ];
     mainProgram = "mptcpize";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 })

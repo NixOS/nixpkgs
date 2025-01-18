@@ -35,11 +35,11 @@ let
 
       installFlags = [ "PREFIX=$(out)/lib/erlang/lib" ];
 
-      meta = {
+      meta = with lib; {
         description = "WebDriver implementation in Erlang";
-        license = lib.licenses.mit;
+        license = licenses.mit;
         homepage = "https://github.com/Quviq/webdrv";
-        maintainers = with lib.maintainers; [ ericbmerritt ];
+        maintainers = with maintainers; [ ericbmerritt ];
       };
 
       passthru = {

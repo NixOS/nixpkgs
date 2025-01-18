@@ -95,15 +95,15 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gitUpdater { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Lomiri API Library for integrating with the Lomiri shell";
     homepage = "https://gitlab.com/ubports/development/core/lomiri-api";
-    license = with lib.licenses; [
+    license = with licenses; [
       lgpl3Only
       gpl3Only
     ];
-    maintainers = lib.teams.lomiri.members;
-    platforms = lib.platforms.linux;
+    maintainers = teams.lomiri.members;
+    platforms = platforms.linux;
     pkgConfigModules = [
       "liblomiri-api"
       "lomiri-shell-api"

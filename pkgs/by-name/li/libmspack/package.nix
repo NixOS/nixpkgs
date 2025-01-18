@@ -13,10 +13,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-cN0fsvCuzDZ5G3Gh4YQOYhcweeraoIEZLRwyOg7uohs=";
   };
 
-  meta = {
+  meta = with lib; {
     description = "De/compression library for various Microsoft formats";
     homepage = "https://www.cabextract.org.uk/libmspack";
-    license = lib.licenses.lgpl2Only;
-    platforms = lib.platforms.unix;
+    license = licenses.lgpl2Only;
+    platforms = platforms.unix;
   };
 }

@@ -34,11 +34,11 @@ stdenv.mkDerivation rec {
     cp -p djvu2pdf.1.gz $out/man/man1
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Convert DjVu files to PDF files";
     homepage = "https://0x2a.at/site/projects/djvu2pdf/";
-    license = lib.licenses.gpl1Only;
-    platforms = lib.platforms.all;
+    license = licenses.gpl1Only;
+    platforms = platforms.all;
     mainProgram = "djvu2pdf";
   };
 }

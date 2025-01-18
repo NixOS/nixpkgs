@@ -30,11 +30,11 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Standalone header-based fortify-source implementation";
     homepage = "https://git.2f30.org/fortify-headers";
-    license = lib.licenses.bsd0;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ ris ];
+    license = licenses.bsd0;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ ris ];
   };
 }

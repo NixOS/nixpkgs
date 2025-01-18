@@ -72,15 +72,15 @@ stdenv.mkDerivation (finalAttrs: {
     chmod 0644 $out/lib/systemd/user/mako.service
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Lightweight Wayland notification daemon";
     homepage = "https://wayland.emersion.fr/mako/";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       dywedir
       synthetica
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
     mainProgram = "mako";
   };
 })

@@ -54,16 +54,16 @@ bundlerApp {
     updateScript = bundlerUpdateScript "facter";
   };
 
-  meta = {
+  meta = with lib; {
     changelog = "https://www.puppet.com/docs/puppet/latest/release_notes_facter.html";
     description = "System inventory tool";
     homepage = "https://github.com/puppetlabs/facter";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     mainProgram = "facter";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       womfoo
       anthonyroussel
     ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }

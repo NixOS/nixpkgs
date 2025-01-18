@@ -51,12 +51,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "Parallel nonequispaced fast Fourier transforms";
     homepage = "https://www-user.tu-chemnitz.de/~potts/workgroup/pippig/software.php.en#pnfft";
     changelog = "https://github.com/mpip/pnfft/blob/master/ChangeLog";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ hmenke ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ hmenke ];
+    platforms = platforms.linux;
   };
 })

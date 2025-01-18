@@ -160,11 +160,11 @@ stdenv.mkDerivation (finalAttrs: {
     branch = "develop";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Simple and elegant markdown editor, available for Linux, macOS and Windows";
     homepage = "https://www.marktext.cc";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       nh2
       eduarrrd
       bot-wxt1221
@@ -173,7 +173,7 @@ stdenv.mkDerivation (finalAttrs: {
       "x86_64-darwin"
       "aarch64-darwin"
     ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
     mainProgram = "marktext";
   };
 })

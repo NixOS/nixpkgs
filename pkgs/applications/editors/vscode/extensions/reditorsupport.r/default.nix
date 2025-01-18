@@ -31,12 +31,12 @@ vscode-utils.buildVscodeMarketplaceExtension {
     jq '.contributes.configuration.properties."r.rterm.mac".default = "${lib.getExe python311Packages.radian}"' package.json | sponge package.json
     jq '.contributes.configuration.properties."r.rterm.linux".default = "${lib.getExe python311Packages.radian}"' package.json | sponge package.json
   '';
-  meta = {
+  meta = with lib; {
     changelog = "https://marketplace.visualstudio.com/items/REditorSupport.r/changelog";
     description = "Visual Studio Code extension for the R programming language";
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=REditorSupport.r";
     homepage = "https://github.com/REditorSupport/vscode-R";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.pandapip1 ];
+    license = licenses.mit;
+    maintainers = [ maintainers.pandapip1 ];
   };
 }

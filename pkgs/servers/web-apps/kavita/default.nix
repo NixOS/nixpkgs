@@ -80,13 +80,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     updateScript = ./update.sh;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Fast, feature rich, cross platform reading server";
     homepage = "https://kavitareader.com";
     changelog = "https://github.com/kareadita/kavita/releases/tag/${finalAttrs.src.rev}";
-    license = lib.licenses.gpl3Only;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl3Only;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
       misterio77
       nevivurn
     ];

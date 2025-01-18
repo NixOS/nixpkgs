@@ -37,10 +37,10 @@ buildPythonPackage rec {
     "world_bank_data"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "World Bank Data API in Python";
     homepage = "https://github.com/mwouts/world_bank_data";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ itepastra ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ itepastra ];
   };
 }

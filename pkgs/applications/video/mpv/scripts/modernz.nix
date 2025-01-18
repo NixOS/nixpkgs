@@ -31,10 +31,10 @@ buildLua (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Sleek and modern OSC for mpv designed to enhance functionality by adding more features, all while preserving the core standards of mpv's OSC";
     homepage = "https://github.com/Samillion/ModernZ";
-    license = lib.licenses.lgpl21Plus;
-    maintainers = with lib.maintainers; [ Guanran928 ];
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ Guanran928 ];
   };
 })

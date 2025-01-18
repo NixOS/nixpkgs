@@ -27,10 +27,10 @@ buildPythonPackage rec {
   # This packages has no tests.
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Simple utility to separate the implementation of your Python package and its public API surface";
     homepage = "https://github.com/fchollet/namex";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ GaetanLepage ];
   };
 }

@@ -39,12 +39,12 @@ stdenv.mkDerivation rec {
     wafHook
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Modular patch bay for Jack and ALSA systems";
     homepage = "https://drobilla.net/software/patchage.html";
-    license = lib.licenses.lgpl3;
-    platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.nico202 ];
+    license = licenses.lgpl3;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.nico202 ];
     mainProgram = "patchage";
   };
 }

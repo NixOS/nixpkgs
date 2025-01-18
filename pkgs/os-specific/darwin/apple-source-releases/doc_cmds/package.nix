@@ -23,11 +23,11 @@ mkAppleDerivation {
     HOST_PATH='${lib.getBin shell_cmds}/bin' patchShebangs --host "$out/libexec"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "makewhatis commands for Darwin";
     license = [
-      lib.licenses.bsd2
-      lib.licenses.bsd3
+      licenses.bsd2
+      licenses.bsd3
     ];
   };
 }

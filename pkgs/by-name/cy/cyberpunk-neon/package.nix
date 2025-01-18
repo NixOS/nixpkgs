@@ -51,11 +51,11 @@ stdenvNoCC.mkDerivation {
     updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/Roboron3042/Cyberpunk-Neon";
     description = "Neon themes for many programs";
-    license = lib.licenses.cc-by-sa-40;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = lib.platforms.all;
+    license = licenses.cc-by-sa-40;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.all;
   };
 }

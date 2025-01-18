@@ -26,11 +26,11 @@ stdenv.mkDerivation rec {
     mkdir -p $out/include
     cp ../src/easylogging++.cc $out/include
   '';
-  meta = {
+  meta = with lib; {
     description = "C++ logging library";
     homepage = "https://github.com/amrayn/easyloggingpp";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ acowley ];
-    platforms = lib.platforms.all;
+    license = licenses.mit;
+    maintainers = with maintainers; [ acowley ];
+    platforms = platforms.all;
   };
 }

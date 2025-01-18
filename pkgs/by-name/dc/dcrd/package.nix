@@ -37,10 +37,10 @@ buildGoModule rec {
     export DCRD_APPDATA="$TMPDIR"
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://decred.org";
     description = "Decred daemon in Go (golang)";
-    license = with lib.licenses; [ isc ];
-    maintainers = with lib.maintainers; [ juaningan ];
+    license = with licenses; [ isc ];
+    maintainers = with maintainers; [ juaningan ];
   };
 }

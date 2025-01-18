@@ -22,10 +22,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/y-256/libdivsufsort";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     description = "Library to construct the suffix array and the BW transformed string";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }

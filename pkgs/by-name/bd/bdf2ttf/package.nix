@@ -25,12 +25,12 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Convert BDF font file to TTF (embed bitmap as is, not convert to vector)";
     homepage = "https://github.com/koron/bdf2ttf";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ners ];
-    platforms = lib.platforms.all;
+    license = licenses.mit;
+    maintainers = with maintainers; [ ners ];
+    platforms = platforms.all;
     broken = stdenv.hostPlatform.isDarwin;
   };
 }

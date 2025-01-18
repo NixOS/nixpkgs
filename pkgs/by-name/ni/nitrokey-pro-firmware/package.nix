@@ -47,15 +47,15 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Firmware for the Nitrokey Pro device";
     homepage = "https://github.com/Nitrokey/nitrokey-pro-firmware";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
       imadnyc
       kiike
       amerino
     ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }

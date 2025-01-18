@@ -36,10 +36,10 @@ stdenv.mkDerivation rec {
     ./autogen.sh
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Library for semi-portable access to hardware-provided atomic memory update operations";
-    license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.raskin ];
-    platforms = with lib.platforms; unix ++ windows;
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.raskin ];
+    platforms = with platforms; unix ++ windows;
   };
 }

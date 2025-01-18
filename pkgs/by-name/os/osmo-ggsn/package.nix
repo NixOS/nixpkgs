@@ -33,12 +33,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     description = "Osmocom Gateway GPRS Support Node (GGSN), successor of OpenGGSN";
     homepage = "https://osmocom.org/projects/openggsn";
-    license = lib.licenses.gpl2Only;
-    maintainers = [ lib.maintainers.markuskowa ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Only;
+    maintainers = [ maintainers.markuskowa ];
+    platforms = platforms.linux;
     mainProgram = "osmo-ggsn";
   };
 }

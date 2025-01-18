@@ -48,13 +48,13 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Draw diagrams or anything using only ASCII";
     homepage = "https://github.com/Nokse22/ascii-draw";
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     mainProgram = "ascii-draw";
-    maintainers = with lib.maintainers; [ aleksana ];
+    maintainers = with maintainers; [ aleksana ];
     # gnulib bindtextdomain is missing on various other unix platforms
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

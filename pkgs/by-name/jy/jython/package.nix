@@ -26,12 +26,12 @@ stdenv.mkDerivation rec {
     makeWrapper ${jre}/bin/java $out/bin/jython --add-flags "-jar $out/jython.jar"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Python interpreter written in Java";
     mainProgram = "jython";
     homepage = "https://jython.org/";
-    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
-    license = lib.licenses.psfl;
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = licenses.psfl;
     platforms = jre.meta.platforms;
   };
 }

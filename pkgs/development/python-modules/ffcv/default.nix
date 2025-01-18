@@ -100,11 +100,11 @@ buildPythonPackage rec {
     "test_traversal_random_distributed_with_indices"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "FFCV: Fast Forward Computer Vision";
     homepage = "https://ffcv.io";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
+    license = licenses.asl20;
+    maintainers = with maintainers; [
       samuela
       djacu
     ];

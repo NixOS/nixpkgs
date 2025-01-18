@@ -38,12 +38,12 @@ stdenv.mkDerivation {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/wins1ey/LibreSplit";
     description = "Speedrun timer with auto splitting and load removal for Linux";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ fgaz ];
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ fgaz ];
     mainProgram = "libresplit";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

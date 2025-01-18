@@ -162,12 +162,12 @@ buildPythonPackage rec {
     "TestStandardProfile.test_main"
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_sidereal_lat_independent" ];
 
-  meta = {
+  meta = with lib; {
     description = "Astronomy/Astrophysics library for Python";
     homepage = "https://www.astropy.org";
-    license = lib.licenses.bsd3;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [
+    license = licenses.bsd3;
+    platforms = platforms.all;
+    maintainers = with maintainers; [
       kentjames
       doronbehar
     ];

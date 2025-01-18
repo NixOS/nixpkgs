@@ -52,17 +52,17 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Fan-made modernization of the classic visual novel Katawa Shoujo";
     homepage = "https://www.fhs.sh/projects";
-    license = with lib.licenses; [
+    license = with licenses; [
       # code
       mpl20
       # assets from the original game
       cc-by-nc-nd-30
     ];
     mainProgram = "katawa-shoujo-re-engineered";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       quantenzitrone
       rapiteanu
     ];

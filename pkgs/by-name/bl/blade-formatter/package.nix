@@ -67,11 +67,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Laravel Blade template formatter";
     homepage = "https://github.com/shufo/blade-formatter";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ lelgenio ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ lelgenio ];
     mainProgram = "blade-formatter";
     inherit (nodejs.meta) platforms;
   };

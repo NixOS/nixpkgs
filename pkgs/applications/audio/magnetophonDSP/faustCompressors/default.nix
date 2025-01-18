@@ -49,10 +49,10 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Collection of bread and butter compressors";
     homepage = "https://github.com/magnetophon/faustCompressors";
-    license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.magnetophon ];
+    license = licenses.gpl3;
+    maintainers = [ maintainers.magnetophon ];
   };
 }

@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
         ;
     };
 
-  meta = {
+  meta = with lib; {
     description = "Interpreter for piet programs. Also includes npietedit and npiet-foogol";
     longDescription = ''
       npiet is an interpreter for the piet programming language.
@@ -60,9 +60,9 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://www.bertnase.de/npiet/";
     changelog = "https://www.bertnase.de/npiet/ChangeLog";
-    license = lib.licenses.gpl2Only;
-    platforms = lib.platforms.unix;
+    license = licenses.gpl2Only;
+    platforms = platforms.unix;
     mainProgram = "npiet";
-    maintainers = with lib.maintainers; [ Luflosi ];
+    maintainers = with maintainers; [ Luflosi ];
   };
 })

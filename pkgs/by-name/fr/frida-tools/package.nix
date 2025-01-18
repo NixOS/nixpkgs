@@ -21,10 +21,10 @@ python3Packages.buildPythonApplication rec {
     websockets
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Dynamic instrumentation toolkit for developers, reverse-engineers, and security researchers (client tools)";
     homepage = "https://www.frida.re/";
-    maintainers = with lib.maintainers; [ s1341 ];
-    license = lib.licenses.wxWindows;
+    maintainers = with maintainers; [ s1341 ];
+    license = licenses.wxWindows;
   };
 }

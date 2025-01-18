@@ -28,11 +28,11 @@ stdenv.mkDerivation rec {
     rm -rf $out/lib/
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Library of non-tilde externals for puredata, by Miller Puckette";
     homepage = "http://puredata.info/downloads/maxlib";
-    license = lib.licenses.gpl2;
-    maintainers = [ lib.maintainers.magnetophon ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2;
+    maintainers = [ maintainers.magnetophon ];
+    platforms = platforms.linux;
   };
 }

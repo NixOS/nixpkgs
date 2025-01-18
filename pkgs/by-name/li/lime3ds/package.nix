@@ -170,12 +170,12 @@ stdenv.mkDerivation (finalAttrs: {
       (cmakeBool "ENABLE_QT_TRANSLATION" enableQtTranslations)
     ];
 
-  meta = {
+  meta = with lib; {
     description = "A Nintendo 3DS emulator based on Citra";
     homepage = "https://github.com/Lime3DS/Lime3ds-archive";
-    license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ arthsmn ];
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ arthsmn ];
     mainProgram = "lime3ds";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 })

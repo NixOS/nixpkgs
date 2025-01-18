@@ -82,11 +82,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "zunclient" ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/openstack/python-zunclient";
     description = "Client library for OpenStack Zun API";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     mainProgram = "zun";
-    maintainers = lib.teams.openstack.members;
+    maintainers = teams.openstack.members;
   };
 }

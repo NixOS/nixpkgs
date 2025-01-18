@@ -49,12 +49,12 @@ rustPlatform.buildRustPackage {
     export POLKIT_AGENT_HELPER_PATH="$(strings ${polkit.out}/lib/libpolkit-agent-1.so | grep "polkit-agent-helper-1")"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Polkit authentication agent written in GTK designed to be used with any desktop environment";
     homepage = "https://github.com/ImVaskel/soteria";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     mainProgram = "soteria";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       NotAShelf
     ];
     inherit (polkit.meta) platforms;

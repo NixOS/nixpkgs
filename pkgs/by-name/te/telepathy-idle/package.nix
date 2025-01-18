@@ -39,10 +39,10 @@ stdenv.mkDerivation rec {
       --prefix GIO_EXTRA_MODULES : "${lib.getLib dconf}/lib/gio/modules"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "IRC connection manager for the Telepathy framework";
     homepage = "https://telepathy.freedesktop.org/components/telepathy-idle/";
-    license = lib.licenses.lgpl21Plus;
-    platforms = lib.platforms.unix;
+    license = licenses.lgpl21Plus;
+    platforms = platforms.unix;
   };
 }

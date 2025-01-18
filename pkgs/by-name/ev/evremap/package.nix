@@ -26,11 +26,11 @@ rustPlatform.buildRustPackage {
     extraArgs = [ "--version=branch" ];
   };
 
-  meta = {
+  meta = with lib; {
     description = "Keyboard input remapper for Linux/Wayland systems";
     homepage = "https://github.com/wez/evremap";
-    maintainers = with lib.maintainers; [ pluiedev ];
-    license = with lib.licenses; [ mit ];
+    maintainers = with maintainers; [ pluiedev ];
+    license = with licenses; [ mit ];
     mainProgram = "evremap";
   };
 }

@@ -82,20 +82,20 @@ stdenv.mkDerivation {
     imagemagick
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Integrated development environment for Java, C, C++ and PHP";
     homepage = "https://netbeans.apache.org/";
-    license = lib.licenses.asl20;
-    sourceProvenance = with lib.sourceTypes; [
+    license = licenses.asl20;
+    sourceProvenance = with sourceTypes; [
       binaryBytecode
       binaryNativeCode
     ];
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       sander
       rszibele
       kashw2
     ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
     mainProgram = "netbeans";
   };
 }

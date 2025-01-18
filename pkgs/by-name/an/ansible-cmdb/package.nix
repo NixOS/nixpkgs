@@ -49,11 +49,11 @@ buildPythonApplication {
     version = "v${version}";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Generate host overview from ansible fact gathering output";
     homepage = "https://github.com/fboender/ansible-cmdb";
-    license = lib.licenses.gpl3Only;
-    maintainers = [ lib.maintainers.tie ];
+    license = licenses.gpl3Only;
+    maintainers = [ maintainers.tie ];
     mainProgram = "ansible-cmdb";
   };
 }

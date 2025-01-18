@@ -33,11 +33,11 @@ buildNpmPackage {
     example = callPackage ./test/example.nix { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "View your xunit results using JavaScript";
     homepage = "https://lukejpreston.github.io/xunit-viewer";
-    license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ pluiedev ];
-    platforms = lib.platforms.all;
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ pluiedev ];
+    platforms = platforms.all;
   };
 }

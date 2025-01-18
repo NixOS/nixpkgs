@@ -37,11 +37,11 @@ stdenv.mkDerivation rec {
     fftwFloat
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Audio spectral analysis plugin for OBS";
     homepage = "https://github.com/phandasm/waveform";
-    maintainers = with lib.maintainers; [ matthewcroughan ];
-    license = lib.licenses.gpl3;
+    maintainers = with maintainers; [ matthewcroughan ];
+    license = licenses.gpl3;
     platforms = [ "x86_64-linux" ];
   };
 }

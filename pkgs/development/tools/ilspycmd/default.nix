@@ -39,21 +39,21 @@ buildDotnetModule (finalAttrs: rec {
   # see: https://github.com/tunnelvisionlabs/ReferenceAssemblyAnnotator/issues/94
   linkNugetPackages = true;
 
-  meta = {
+  meta = with lib; {
     description = "Tool for decompiling .NET assemblies and generating portable PDBs";
     mainProgram = "ilspycmd";
     homepage = "https://github.com/icsharpcode/ILSpy";
     changelog = "https://github.com/icsharpcode/ILSpy/releases/tag/${finalAttrs.src.rev}";
-    license = with lib.licenses; [
+    license = with licenses; [
       mit
       # third party dependencies
       mspl
       asl20
     ];
-    sourceProvenance = with lib.sourceTypes; [
+    sourceProvenance = with sourceTypes; [
       fromSource
       binaryBytecode
     ];
-    maintainers = with lib.maintainers; [ emilytrau ];
+    maintainers = with maintainers; [ emilytrau ];
   };
 })

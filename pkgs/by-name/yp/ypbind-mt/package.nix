@@ -33,13 +33,13 @@ stdenv.mkDerivation rec {
     systemdLibs
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Multithreaded daemon maintaining the NIS binding informations.";
     homepage = "https://github.com/thkukuk/ypbind-mt";
     changelog = "https://github.com/thkukuk/ypbind-mt/blob/master/NEWS";
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     mainProgram = "ypbind";
-    maintainers = with lib.maintainers; [ BarrOff ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ BarrOff ];
+    platforms = platforms.linux;
   };
 }

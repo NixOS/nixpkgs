@@ -39,12 +39,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     }
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Write documentation in pandoc markdown. Generate documentation in vimdoc";
     homepage = "https://github.com/kdheepak/panvimdoc";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ mrcjkb ];
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ mrcjkb ];
     mainProgram = "panvimdoc";
   };
 })

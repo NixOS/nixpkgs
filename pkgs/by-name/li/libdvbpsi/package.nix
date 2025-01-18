@@ -13,11 +13,11 @@ stdenv.mkDerivation rec {
     sha256 = "04h1l3vrkrdsrvkgzcr51adk10g6hxcxvgjphyyxz718ry5rkd82";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Simple library designed for decoding and generation of MPEG TS and DVB PSI tables according to standards ISO/IEC 13818 and ITU-T H.222.0";
     homepage = "http://www.videolan.org/developers/libdvbpsi.html";
-    platforms = lib.platforms.unix;
-    license = lib.licenses.lgpl21;
+    platforms = platforms.unix;
+    license = licenses.lgpl21;
   };
 
 }

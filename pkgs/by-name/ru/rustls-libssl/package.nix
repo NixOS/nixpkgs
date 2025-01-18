@@ -77,13 +77,13 @@ rustPlatform.buildRustPackage {
 
   passthru.tests = nixosTests.rustls-libssl;
 
-  meta = {
+  meta = with lib; {
     description = "Partial reimplementation of the OpenSSL 3 libssl ABI using rustls";
     homepage = "https://github.com/rustls/rustls-openssl-compat";
     changelog = "https://github.com/rustls/rustls-openssl-compat/releases";
-    license = lib.licenses.asl20;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [
+    license = licenses.asl20;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
       stephank
       cpu
     ];

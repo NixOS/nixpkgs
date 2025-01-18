@@ -18,11 +18,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ perl ];
   configureScript = "${bash}/bin/bash configure";
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.nongnu.org/atool";
     description = "Archive command line helper";
-    platforms = lib.platforms.unix;
-    license = lib.licenses.gpl3;
+    platforms = platforms.unix;
+    license = licenses.gpl3;
     mainProgram = "atool";
   };
 }

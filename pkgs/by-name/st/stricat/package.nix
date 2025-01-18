@@ -20,12 +20,12 @@ stdenv.mkDerivation rec {
     mv stricat $out/bin
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Multi-use cryptographic tool based on the STRIBOB algorithm";
     homepage = "https://www.stribob.com/stricat/";
-    license = lib.licenses.bsd3;
-    platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.thoughtpolice ];
+    license = licenses.bsd3;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.thoughtpolice ];
     mainProgram = "stricat";
   };
 }

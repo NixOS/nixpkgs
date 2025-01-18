@@ -23,10 +23,10 @@ python3.pkgs.buildPythonApplication rec {
   # There are no tests in the source
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Python scripts capable of extracting and analyzing the contents of UBI and UBIFS images";
     homepage = "https://github.com/onekey-sec/ubi_reader";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ vlaci ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ vlaci ];
   };
 }

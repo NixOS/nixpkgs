@@ -31,11 +31,11 @@ stdenv.mkDerivation (finalAttrs: {
     install -m444 sse2neon.h $out/lib/
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Mono library that provides a GDI+-compatible API on non-Windows operating systems";
     homepage = "https://www.mono-project.com/docs/gui/libgdiplus/";
-    platforms = lib.platforms.unix;
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.gador ];
+    platforms = platforms.unix;
+    license = licenses.mit;
+    maintainers = [ maintainers.gador ];
   };
 })

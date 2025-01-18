@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
-    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
-    platforms = lib.platforms.unix;
+  meta = with lib; {
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    platforms = platforms.unix;
   };
 }

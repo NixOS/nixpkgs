@@ -28,12 +28,12 @@ stdenv.mkDerivation rec {
     chmod a+x "$out/bin"/*
     cd "$out/lib/java"; for i in *.jar; do mv "$i" "''${i#*-}"; done
   '';
-  meta = {
+  meta = with lib; {
     description = "1D and 2D code reading library";
-    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
-    license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.raskin ];
-    platforms = lib.platforms.linux;
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = licenses.asl20;
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.linux;
     homepage = "https://github.com/zxing/zxing";
   };
 }

@@ -32,11 +32,11 @@ buildGoModule rec {
     "cmd/newrelic-infra-service"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "New Relic Infrastructure Agent";
     homepage = "https://github.com/newrelic/infrastructure-agent.git";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ davsanchez ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ davsanchez ];
     mainProgram = "newrelic-infra";
   };
 }

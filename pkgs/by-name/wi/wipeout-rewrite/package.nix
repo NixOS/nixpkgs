@@ -64,12 +64,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = {
+  meta = with lib; {
     mainProgram = "wipegame";
     description = "Re-implementation of the 1995 PSX game wipEout";
     homepage = "https://github.com/phoboslab/wipeout-rewrite";
-    license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ OPNA2608 ];
-    platforms = lib.platforms.all;
+    license = licenses.unfree;
+    maintainers = with maintainers; [ OPNA2608 ];
+    platforms = platforms.all;
   };
 })

@@ -21,11 +21,11 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/Hylian/atkinson-monolegible";
     description = "Mono variant of the Atkinson Hyperlegible typeface";
-    license = lib.licenses.ofl;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ Gliczy ];
+    license = licenses.ofl;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ Gliczy ];
   };
 }

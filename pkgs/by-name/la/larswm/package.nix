@@ -37,10 +37,10 @@ stdenv.mkDerivation rec {
     "install.man"
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "http://www.fnurt.net/larswm";
     description = "9wm-like tiling window manager";
-    license = lib.licenses.free;
-    platforms = lib.platforms.linux;
+    license = licenses.free;
+    platforms = platforms.linux;
   };
 }

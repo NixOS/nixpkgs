@@ -38,10 +38,10 @@ buildPythonPackage rec {
   # almost the entirety of the test suite makes network calls
   pytestFlagsArray = [ "test/test-filters.py" ];
 
-  meta = {
+  meta = with lib; {
     description = "Python interface to Library Genesis";
     homepage = "https://habanero.readthedocs.io/";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ nico202 ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ nico202 ];
   };
 }

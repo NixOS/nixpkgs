@@ -32,14 +32,14 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_SOPHUS_EXAMPLES" false)
   ];
 
-  meta = {
+  meta = with lib; {
     description = "C++ implementation of Lie Groups using Eigen";
     homepage = "https://github.com/strasdat/Sophus";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       locochoco
       acowley
     ];
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 })

@@ -93,15 +93,15 @@ rustPlatform.buildRustPackage rec {
       darwin.apple_sdk.frameworks.WebKit
     ];
 
-  meta = {
+  meta = with lib; {
     description = "Yet another matrix client for desktop";
     homepage = "https://github.com/cinnyapp/cinny-desktop";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       qyriad
       ryand56
     ];
-    license = lib.licenses.agpl3Only;
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    license = licenses.agpl3Only;
+    platforms = platforms.linux ++ platforms.darwin;
     mainProgram = "cinny";
   };
 }

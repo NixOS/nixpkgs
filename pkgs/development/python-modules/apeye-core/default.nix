@@ -29,10 +29,10 @@ buildPythonPackage rec {
     idna
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Core (offline) functionality for the apeye library.";
     homepage = "https://github.com/domdfcoding/apyey-core";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ tyberius-prime ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ tyberius-prime ];
   };
 }

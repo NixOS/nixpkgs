@@ -28,10 +28,10 @@ buildPythonPackage rec {
     requests
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Free proxy scraper written in python";
     homepage = "https://github.com/jundymek/free-proxy";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ tochiaha ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ tochiaha ];
   };
 }

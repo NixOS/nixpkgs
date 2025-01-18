@@ -42,12 +42,12 @@ buildPythonPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/TakWolf/pixel-font-builder";
     description = "Library that helps create pixel style fonts";
-    platforms = lib.platforms.all;
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    platforms = platforms.all;
+    license = licenses.mit;
+    maintainers = with maintainers; [
       TakWolf
       h7x4
     ];

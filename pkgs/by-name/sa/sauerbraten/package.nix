@@ -76,10 +76,10 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Free multiplayer & singleplayer first person shooter, the successor of the Cube FPS";
     homepage = "http://sauerbraten.org";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       raskin
       ajs124
     ];
@@ -89,6 +89,6 @@ stdenv.mkDerivation rec {
       # not setting platforms because it is 0.5+ GiB of game data
       [ ];
     license = "freeware"; # as an aggregate - data files have different licenses code is under zlib license
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

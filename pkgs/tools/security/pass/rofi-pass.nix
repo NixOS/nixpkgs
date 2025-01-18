@@ -92,12 +92,12 @@ stdenv.mkDerivation {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = {
+  meta = with lib; {
     description = "Script to make rofi work with password-store";
     mainProgram = "rofi-pass";
     homepage = "https://github.com/carnager/rofi-pass";
-    license = lib.licenses.gpl3;
-    platforms = with lib.platforms; linux;
+    license = licenses.gpl3;
+    platforms = with platforms; linux;
     maintainers = [ ];
   };
 }

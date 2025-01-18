@@ -43,12 +43,12 @@ stdenv.mkDerivation (finalAttrs: {
     rmdir $out/share || true
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/gmt4/mpvc";
     description = "Mpc-like control interface for mpv";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "mpvc";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.linux;
   };
 })

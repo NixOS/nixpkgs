@@ -33,8 +33,8 @@ stdenv.mkDerivation rec {
     rmdir $out/usr
   '';
 
-  meta = {
-    maintainers = [ lib.maintainers.matthewbauer ];
-    platforms = lib.platforms.darwin;
+  meta = with lib; {
+    maintainers = [ maintainers.matthewbauer ];
+    platforms = platforms.darwin;
   };
 }

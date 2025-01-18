@@ -30,10 +30,10 @@ mkTclDerivation rec {
 
   installCheckTarget = "test";
 
-  meta = {
+  meta = with lib; {
     description = "UDP socket support for Tcl";
     homepage = "https://core.tcl-lang.org/tcludp";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fgaz ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ fgaz ];
   };
 }

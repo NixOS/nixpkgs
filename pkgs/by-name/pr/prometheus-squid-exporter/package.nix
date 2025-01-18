@@ -17,10 +17,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-0BNhjNveUDd0+X0do4Md58zJjXe3+KN27MPEviNuF3g=";
 
-  meta = {
+  meta = with lib; {
     description = "Squid Prometheus exporter";
     homepage = "https://github.com/boynux/squid-exporter";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ srhb ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ srhb ];
   };
 }

@@ -53,11 +53,11 @@ python3Packages.buildPythonApplication {
 
   doCheck = false; # no tests
 
-  meta = {
+  meta = with lib; {
     description = "Rasdaemon exporter for Prometheus";
     homepage = "https://github.com/sanecz/prometheus-rasdaemon-exporter";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ hexa ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ hexa ];
     mainProgram = "prometheus-rasdaemon-exporter";
   };
 }

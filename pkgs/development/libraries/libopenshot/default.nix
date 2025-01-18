@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit libopenshot-audio;
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "http://openshot.org/";
     description = "Free, open-source video editor library";
     longDescription = ''
@@ -84,8 +84,8 @@ stdenv.mkDerivation (finalAttrs: {
       delivering high quality video editing, animation, and playback solutions
       to the world. API currently supports C++, Python, and Ruby.
     '';
-    license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ ];
-    platforms = lib.platforms.unix;
+    license = with licenses; [ gpl3Plus ];
+    maintainers = with maintainers; [ ];
+    platforms = platforms.unix;
   };
 })

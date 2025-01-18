@@ -30,14 +30,14 @@ buildGoModule rec {
     hardcodeZeroVersion = true;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Go AT protocol CLI tool";
     homepage = "https://github.com/bluesky-social/indigo/blob/main/cmd/goat/README.md";
-    license = with lib.licenses; [
+    license = with licenses; [
       mit
       asl20
     ];
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = with maintainers; [ pyrox0 ];
     mainProgram = "goat";
   };
 }

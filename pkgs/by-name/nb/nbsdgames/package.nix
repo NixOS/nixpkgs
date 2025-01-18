@@ -39,12 +39,12 @@ stdenv.mkDerivation (finalAttrs: {
     installManPage man/*
   '';
 
-  meta = {
+  meta = with lib; {
     description = "A package of 18 text-based modern games";
     homepage = "https://github.com/abakh/nbsdgames";
-    license = lib.licenses.cc0;
-    maintainers = with lib.maintainers; [ sarcasticadmin ];
+    license = licenses.cc0;
+    maintainers = with maintainers; [ sarcasticadmin ];
     mainProgram = "nbsdgames";
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 })

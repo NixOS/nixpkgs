@@ -28,11 +28,11 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "expecttest" ];
 
-  meta = {
-    maintainers = [ lib.maintainers.SomeoneSerge ];
-    license = lib.licenses.mit;
+  meta = with lib; {
+    maintainers = [ maintainers.SomeoneSerge ];
+    license = licenses.mit;
     description = ''EZ Yang "golden" tests (testing against a reference implementation)'';
     homepage = "https://github.com/pytorch/expecttest";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }

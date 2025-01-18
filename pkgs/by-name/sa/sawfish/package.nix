@@ -73,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "http://sawfish.tuxfamily.org/";
     description = "Extensible, Lisp-based window manager";
     longDescription = ''
@@ -83,8 +83,8 @@ stdenv.mkDerivation (finalAttrs: {
       possible. All high-level WM functions are implemented in Lisp for future
       extensibility or redefinition.
     '';
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.unix;
   };
 })

@@ -31,11 +31,11 @@ buildGoModule rec {
     package = mmark;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Powerful markdown processor in Go geared towards the IETF";
     homepage = "https://github.com/mmarkdown/mmark";
-    license = with lib.licenses; bsd2;
-    maintainers = with lib.maintainers; [ yrashk ];
+    license = with licenses; bsd2;
+    maintainers = with maintainers; [ yrashk ];
     mainProgram = "mmark";
   };
 }

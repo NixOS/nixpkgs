@@ -73,12 +73,12 @@ stdenv.mkDerivation rec {
       runHook postInstall
     '';
 
-  meta = {
+  meta = with lib; {
     description = "Generation of diagrams from text in a similar manner as markdown";
     homepage = "https://github.com/mermaid-js/mermaid-cli";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "mmdc";
-    maintainers = with lib.maintainers; [ ysndr ];
-    platforms = lib.platforms.all;
+    maintainers = with maintainers; [ ysndr ];
+    platforms = platforms.all;
   };
 }

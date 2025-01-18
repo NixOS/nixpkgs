@@ -43,11 +43,11 @@ stdenv.mkDerivation rec {
     "install.man"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "X11 brigthness and gamma software control";
     homepage = "http://shallowsky.com/software";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
+    license = licenses.mit;
+    platforms = platforms.linux;
     mainProgram = "xbrightness";
   };
 }

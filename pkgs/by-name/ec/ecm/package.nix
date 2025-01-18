@@ -36,12 +36,12 @@ stdenv.mkDerivation {
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "Elliptic Curve Method for Integer Factorization";
     mainProgram = "ecm";
-    license = lib.licenses.gpl3Only;
+    license = licenses.gpl3Only;
     homepage = "https://gitlab.inria.fr/zimmerma/ecm";
-    maintainers = [ lib.maintainers.roconnor ];
-    platforms = with lib.platforms; linux ++ darwin;
+    maintainers = [ maintainers.roconnor ];
+    platforms = with platforms; linux ++ darwin;
   };
 }

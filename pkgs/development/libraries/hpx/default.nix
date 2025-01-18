@@ -36,11 +36,11 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  meta = {
+  meta = with lib; {
     description = "C++ standard library for concurrency and parallelism";
     homepage = "https://github.com/STEllAR-GROUP/hpx";
-    license = lib.licenses.boost;
-    platforms = [ "x86_64-linux" ]; # lib.platforms.linux;
-    maintainers = with lib.maintainers; [ bobakker ];
+    license = licenses.boost;
+    platforms = [ "x86_64-linux" ]; # platforms.linux;
+    maintainers = with maintainers; [ bobakker ];
   };
 }

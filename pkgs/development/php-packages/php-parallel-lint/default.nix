@@ -18,11 +18,11 @@ php.buildComposerProject (finalAttrs: {
   composerLock = ./composer.lock;
   vendorHash = "sha256-NZLGeX1i+E621UGYeWn5tKufDbCLv4iD1VXJcnhfleY=";
 
-  meta = {
+  meta = with lib; {
     description = "Tool to check syntax of PHP files faster than serial check with fancier output";
     homepage = "https://github.com/php-parallel-lint/PHP-Parallel-Lint";
-    license = lib.licenses.bsd2;
+    license = licenses.bsd2;
     mainProgram = "parallel-lint";
-    maintainers = lib.teams.php.members;
+    maintainers = teams.php.members;
   };
 })

@@ -68,16 +68,16 @@ stdenv.mkDerivation (finalAttrs: {
     freepats
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Side-scroller action game that pits you against ruthless alien killers";
     homepage = "http://abuse.zoy.org/";
-    license = lib.licenses.unfree;
+    license = licenses.unfree;
     # Most of abuse is free (public domain, GPL2+, WTFPL), however the creator
     # of its sfx and music only gave Debian permission to redistribute the
     # files. Our friends from Debian thought about it some more:
     # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=648272
-    maintainers = with lib.maintainers; [ iblech ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ iblech ];
+    platforms = platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
   };
 })

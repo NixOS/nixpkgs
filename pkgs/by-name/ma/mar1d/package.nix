@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  meta = {
+  meta = with lib; {
     description = "First person Super Mario Bros";
     mainProgram = "MAR1D";
     longDescription = ''
@@ -61,8 +61,8 @@ stdenv.mkDerivation (finalAttrs: {
       You must view the world as mario does, as a one dimensional line.
     '';
     homepage = "https://mar1d.com";
-    license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ taeer ];
-    platforms = lib.platforms.unix;
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [ taeer ];
+    platforms = platforms.unix;
   };
 })

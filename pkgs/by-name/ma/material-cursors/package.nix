@@ -33,11 +33,11 @@ stdenvNoCC.mkDerivation {
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = {
+  meta = with lib; {
     description = "Material cursors for Linux";
     homepage = "https://github.com/varlesh/material-cursors";
-    license = lib.licenses.gpl3Only;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ RGBCube ];
+    license = licenses.gpl3Only;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ RGBCube ];
   };
 }

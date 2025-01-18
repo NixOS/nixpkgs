@@ -12,9 +12,9 @@ buildDunePackage {
     ringo
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Caches (bounded-size stores) for in-memory values and for resources";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.ulrikstrid ];
+    license = licenses.mit;
+    maintainers = [ maintainers.ulrikstrid ];
   };
 }

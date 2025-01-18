@@ -53,10 +53,10 @@ stdenv.mkDerivation rec {
     brotli
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Lossless JPEG repacking library";
     homepage = "https://github.com/google/brunsli";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

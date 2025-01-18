@@ -30,10 +30,10 @@ buildDunePackage rec {
   doCheck = true;
   checkInputs = [ alcotest ];
 
-  meta = {
+  meta = with lib; {
     description = "MirageOS signatures for key/value devices";
     homepage = "https://github.com/mirage/mirage-kv";
-    license = lib.licenses.isc;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.isc;
+    maintainers = [ maintainers.vbgl ];
   };
 }

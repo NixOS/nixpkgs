@@ -26,11 +26,11 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  meta = {
+  meta = with lib; {
     description = "GNU Go - A computer go player";
     mainProgram = "gnugo";
     homepage = "https://www.gnu.org/software/gnugo/";
-    license = lib.licenses.gpl3;
-    platforms = lib.platforms.unix;
+    license = licenses.gpl3;
+    platforms = platforms.unix;
   };
 }

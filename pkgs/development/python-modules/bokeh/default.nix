@@ -129,11 +129,11 @@ buildPythonPackage rec {
     cp -rv ''${src_test}/tests/* ./tests/
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Statistical and novel interactive HTML plots for Python";
     mainProgram = "bokeh";
     homepage = "https://github.com/bokeh/bokeh";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ orivej ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ orivej ];
   };
 }

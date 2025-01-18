@@ -60,15 +60,15 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Wrapper for wlroots based on Qt";
     homepage = "https://github.com/vioken/waylib";
-    license = with lib.licenses; [
+    license = with licenses; [
       gpl3Only
       lgpl3Only
       asl20
     ];
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ rewine ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ rewine ];
   };
 })

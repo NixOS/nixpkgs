@@ -98,7 +98,7 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://soundconverter.org/";
     description = "Leading audio file converter for the GNOME Desktop";
     mainProgram = "soundconverter";
@@ -107,9 +107,9 @@ python3Packages.buildPythonApplication rec {
       and writes WAV, FLAC, MP3, AAC and Ogg Vorbis files.
       Uses Python and GTK+ GUI toolkit, and runs on X Window System.
     '';
-    license = lib.licenses.gpl3Only;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl3Only;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
       jakubgs
       aleksana
     ];

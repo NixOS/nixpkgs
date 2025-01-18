@@ -47,12 +47,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     '';
   });
 
-  meta = {
+  meta = with lib; {
     description = "Music services manager";
     homepage = "https://www.last.fm/";
-    license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ iivusly ];
-    platforms = lib.platforms.darwin;
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+    maintainers = with maintainers; [ iivusly ];
+    platforms = platforms.darwin;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 })

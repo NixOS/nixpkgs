@@ -62,12 +62,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests = testers.testVersion { package = finalAttrs.finalPackage; };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/CastXML/CastXML";
     description = "C-family Abstract Syntax Tree XML Output";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     mainProgram = "castxml";
     maintainers = [ ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 })

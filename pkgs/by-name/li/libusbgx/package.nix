@@ -20,13 +20,13 @@ stdenv.mkDerivation {
     pkg-config
   ];
   buildInputs = [ libconfig ];
-  meta = {
+  meta = with lib; {
     description = "C library encapsulating the kernel USB gadget-configfs userspace API functionality";
-    license = with lib.licenses; [
+    license = with licenses; [
       lgpl21Plus # library
       gpl2Plus # examples
     ];
     maintainers = [ ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

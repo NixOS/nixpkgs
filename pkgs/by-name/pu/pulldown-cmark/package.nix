@@ -15,11 +15,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-siYwv14AzoQnub+Xcb3UCdEnCIOYremqNve5xyMhixc=";
 
-  meta = {
+  meta = with lib; {
     description = "Pull parser for CommonMark written in Rust";
     homepage = "https://github.com/raphlinus/pulldown-cmark";
-    license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ CobaltCause ];
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ CobaltCause ];
     mainProgram = "pulldown-cmark";
   };
 }

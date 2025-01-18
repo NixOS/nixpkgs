@@ -48,11 +48,11 @@ stdenv.mkDerivation rec {
     fmt
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Open source re-implementation of Chris Sawyer's Locomotion";
     homepage = "https://github.com/OpenLoco/OpenLoco";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ icewind1991 ];
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ icewind1991 ];
   };
 }

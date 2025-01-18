@@ -47,11 +47,11 @@ python3Packages.buildPythonApplication rec {
 
   nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
 
-  meta = {
+  meta = with lib; {
     description = "CLI for Google Calendar";
     mainProgram = "gcalcli";
     homepage = "https://github.com/insanum/gcalcli";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ nocoolnametom ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ nocoolnametom ];
   };
 }

@@ -35,10 +35,10 @@ mkDerivation {
     qtxmlpatterns
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Plugins for KDE-based image applications";
-    license = lib.licenses.gpl2;
+    license = licenses.gpl2;
     homepage = "https://github.com/KDE/kipi-plugins";
-    maintainers = with lib.maintainers; [ ttuegel ];
+    maintainers = with maintainers; [ ttuegel ];
   };
 }

@@ -38,10 +38,10 @@ buildPecl rec {
     ./configure --enable-snuffleupagus
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Security module for php7 and php8 - Killing bugclasses and virtual-patching the rest!";
     homepage = "https://github.com/jvoisin/snuffleupagus";
-    license = lib.licenses.lgpl3Only;
-    maintainers = lib.teams.php.members ++ [ lib.maintainers.zupo ];
+    license = licenses.lgpl3Only;
+    maintainers = teams.php.members ++ [ maintainers.zupo ];
   };
 }

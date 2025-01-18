@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Cross-platform C++ library providing a simple API to read and write INI-style configuration files";
     longDescription = ''
       A cross-platform library that provides a simple API to read and write
@@ -43,11 +43,11 @@ stdenv.mkDerivation (finalAttrs: {
       using the MIT licence.
     '';
     homepage = "https://github.com/brofield/simpleini";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       HeitorAugustoLN
       AndersonTorres
     ];
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 })

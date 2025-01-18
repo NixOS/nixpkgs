@@ -64,11 +64,11 @@ python3Packages.buildPythonApplication rec {
       --prefix PATH : "${ripgrep}/bin"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Local-first semantic code search engine";
     homepage = "https://kantord.github.io/SeaGOAT/";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ lavafroth ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ lavafroth ];
     mainProgram = "seagoat";
   };
 }

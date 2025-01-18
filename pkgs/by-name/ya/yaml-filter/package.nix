@@ -25,12 +25,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libyaml ];
 
-  meta = {
+  meta = with lib; {
     description = "YAML document filtering for libyaml";
     homepage = "https://github.com/OpenSCAP/yaml-filter";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ tochiaha ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ tochiaha ];
     mainProgram = "yamlp";
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 }

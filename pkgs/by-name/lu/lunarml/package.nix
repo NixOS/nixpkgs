@@ -48,12 +48,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Standard ML compiler that produces Lua/JavaScript";
     mainProgram = "lunarml";
     homepage = "https://github.com/minoki/LunarML";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       toastal
       ratsclub
     ];

@@ -59,11 +59,11 @@ stdenv.mkDerivation {
     branch = "openxr";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Reimplementation of OpenVR, translating calls to OpenXR";
     homepage = "https://gitlab.com/znixian/OpenOVR";
-    license = with lib.licenses; [ gpl3Only ];
-    maintainers = with lib.maintainers; [ Scrumplex ];
+    license = with licenses; [ gpl3Only ];
+    maintainers = with maintainers; [ Scrumplex ];
     # This can realistically only work on systems that support OpenXR Loader
     inherit (openxr-loader.meta) platforms;
   };

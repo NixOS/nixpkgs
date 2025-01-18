@@ -34,11 +34,11 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Gateway Bridge abstracts Packet Forwarder protocols into Protobuf or JSON over MQTT";
     homepage = "https://www.chirpstack.io/";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.stv0g ];
+    license = licenses.mit;
+    maintainers = [ maintainers.stv0g ];
     mainProgram = "chirpstack-gateway-bridge";
   };
 }

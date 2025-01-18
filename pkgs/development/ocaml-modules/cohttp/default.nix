@@ -47,10 +47,10 @@ buildDunePackage rec {
     crowbar
   ];
 
-  meta = {
+  meta = with lib; {
     description = "HTTP(S) library for Lwt, Async and Mirage";
-    license = lib.licenses.isc;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.isc;
+    maintainers = [ maintainers.vbgl ];
     homepage = "https://github.com/mirage/ocaml-cohttp";
   };
 }

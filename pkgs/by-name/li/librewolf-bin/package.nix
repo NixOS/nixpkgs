@@ -23,13 +23,13 @@ appimageTools.wrapType2 {
     install -Dm444 ${appimageContents}/librewolf.png -t $out/share/pixmaps
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Fork of Firefox, focused on privacy, security and freedom (upstream AppImage release)";
     homepage = "https://librewolf.net";
-    license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ dwrege ];
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ dwrege ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "librewolf";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }

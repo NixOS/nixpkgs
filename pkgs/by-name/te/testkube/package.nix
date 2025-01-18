@@ -25,11 +25,11 @@ buildGoModule rec {
 
   subPackages = [ "cmd/kubectl-testkube" ];
 
-  meta = {
+  meta = with lib; {
     description = "Kubernetes-native framework for test definition and execution";
     homepage = "https://github.com/kubeshop/testkube/";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "kubectl-testkube";
-    maintainers = with lib.maintainers; [ mathstlouis ];
+    maintainers = with maintainers; [ mathstlouis ];
   };
 }

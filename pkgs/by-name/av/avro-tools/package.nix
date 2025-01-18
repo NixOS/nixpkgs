@@ -32,12 +32,12 @@ stdenv.mkDerivation {
     --add-flags "-jar $out/libexec/avro-tools/${pname}.jar"
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://avro.apache.org/";
     description = "Avro command-line tools and utilities";
     mainProgram = "avro-tools";
-    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ momeemt ];
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ momeemt ];
   };
 }

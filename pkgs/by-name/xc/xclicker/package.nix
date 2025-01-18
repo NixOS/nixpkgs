@@ -43,16 +43,16 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     changelog = "https://github.com/robiot/xclicker/releases/tag/${finalAttrs.src.rev}";
     description = "Fast gui autoclicker for x11 linux desktops";
     homepage = "https://xclicker.xyz/";
-    license = lib.licenses.gpl3Only;
+    license = licenses.gpl3Only;
     mainProgram = "xclicker";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       gepbird
       tomasajt
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 })

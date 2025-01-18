@@ -34,11 +34,11 @@ buildGoModule rec {
       --prefix PATH : ${lib.makeBinPath [ tetex ]}
   '';
 
-  meta = {
+  meta = with lib; {
     description = "PDF report generator from a Grafana dashboard";
     mainProgram = "grafana-reporter";
     homepage = "https://github.com/IzakMarais/reporter";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.disassembler ];
+    license = licenses.mit;
+    maintainers = [ maintainers.disassembler ];
   };
 }

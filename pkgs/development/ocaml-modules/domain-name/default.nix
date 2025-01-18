@@ -22,10 +22,10 @@ buildDunePackage rec {
 
   doCheck = lib.versionAtLeast ocaml.version "4.08";
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/hannesm/domain-name";
     description = "RFC 1035 Internet domain names";
-    license = lib.licenses.isc;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.isc;
+    maintainers = [ maintainers.vbgl ];
   };
 }

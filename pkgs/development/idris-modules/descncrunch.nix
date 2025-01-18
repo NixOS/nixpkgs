@@ -17,11 +17,11 @@ build-idris-package {
     sha256 = "09fh334aga1z1hbw79507rdv7qsh0mqzb89lvpznn7vzi9zkl8fx";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Descriptions, levitation, and reflecting the elaborator";
     homepage = "https://github.com/ahmadsalim/desc-n-crunch";
-    license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.brainrape ];
+    license = licenses.gpl3;
+    maintainers = [ maintainers.brainrape ];
     broken = true;
   };
 }

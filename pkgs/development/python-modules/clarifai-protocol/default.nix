@@ -70,11 +70,11 @@ buildPythonPackage rec {
   # no tests
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Clarifai Python Runner Protocol";
     homepage = "https://pypi.org/project/clarifai-protocol";
-    license = lib.licenses.asl20;
-    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
-    maintainers = with lib.maintainers; [ natsukium ];
+    license = licenses.asl20;
+    sourceProvenance = [ sourceTypes.binaryNativeCode ];
+    maintainers = with maintainers; [ natsukium ];
   };
 }

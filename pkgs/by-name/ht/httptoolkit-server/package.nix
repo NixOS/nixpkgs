@@ -162,12 +162,12 @@ buildNpmPackage' {
     inherit nodeDatachannel;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Backend for HTTP Toolkit";
     homepage = "https://httptoolkit.com/";
-    license = lib.licenses.agpl3Plus;
+    license = licenses.agpl3Plus;
     mainProgram = "httptoolkit-server";
-    maintainers = with lib.maintainers; [ tomasajt ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ tomasajt ];
+    platforms = platforms.unix;
   };
 }

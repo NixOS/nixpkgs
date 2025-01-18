@@ -32,13 +32,13 @@ stdenvNoCC.mkDerivation {
     ];
   };
 
-  meta = {
+  meta = with lib; {
     description = "Zip files containing japanese zip codes";
     longDescription = "Zip files with japanese zip codes for japanese IME dictionaries";
     homepage = "https://github.com/musjj/jp-zip-codes";
-    license = lib.licenses.publicDomain;
-    maintainers = with lib.maintainers; [ pineapplehunter ];
-    platforms = lib.platforms.all;
+    license = licenses.publicDomain;
+    maintainers = with maintainers; [ pineapplehunter ];
+    platforms = platforms.all;
     # this does not need to be separately built
     # it only provides some zip files
     hydraPlatforms = [ ];

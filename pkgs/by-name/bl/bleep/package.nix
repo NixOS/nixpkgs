@@ -65,10 +65,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     command = "bleep --help | sed -n '/Bleeping/s/[^0-9.]//gp'";
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://bleep.build/";
-    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
-    license = lib.licenses.mit;
+    sourceProvenance = [ sourceTypes.binaryNativeCode ];
+    license = licenses.mit;
     description = "Bleeping fast scala build tool";
     mainProgram = "bleep";
     platforms = [
@@ -76,6 +76,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       "x86_64-darwin"
       "aarch64-darwin"
     ];
-    maintainers = with lib.maintainers; [ kristianan ];
+    maintainers = with maintainers; [ kristianan ];
   };
 })

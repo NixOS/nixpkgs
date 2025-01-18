@@ -58,10 +58,10 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "Crossplatform access to image scanners (paper eaters only)";
     homepage = "https://openpaper.work/en/projects/";
-    license = lib.licenses.lgpl3Plus;
-    maintainers = [ lib.maintainers.symphorien ];
+    license = licenses.lgpl3Plus;
+    maintainers = [ maintainers.symphorien ];
   };
 }

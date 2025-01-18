@@ -23,12 +23,12 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     changelog = "https://github.com/PowerShellMafia/PowerSploit/releases/";
     description = "PowerShell Post-Exploitation Framework";
-    license = with lib.licenses; [ bsd3 ];
-    maintainers = with lib.maintainers; [ shard7 ];
-    platforms = lib.platforms.all;
-    sourceProvenance = with lib.sourceTypes; [ fromSource ];
+    license = with licenses; [ bsd3 ];
+    maintainers = with maintainers; [ shard7 ];
+    platforms = platforms.all;
+    sourceProvenance = with sourceTypes; [ fromSource ];
   };
 }

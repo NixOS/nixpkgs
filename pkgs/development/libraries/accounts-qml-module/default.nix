@@ -96,11 +96,11 @@ stdenv.mkDerivation (finalAttrs: {
     tagPrefix = "VERSION_";
   };
 
-  meta = {
+  meta = with lib; {
     description = "QML bindings for libaccounts-qt + libsignon-qt";
     homepage = "https://gitlab.com/accounts-sso/accounts-qml-module";
-    license = lib.licenses.lgpl21Only;
-    maintainers = with lib.maintainers; [ OPNA2608 ];
-    platforms = lib.platforms.linux;
+    license = licenses.lgpl21Only;
+    maintainers = with maintainers; [ OPNA2608 ];
+    platforms = platforms.linux;
   };
 })

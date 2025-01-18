@@ -27,10 +27,10 @@ buildDunePackage rec {
   minimalOCamlVersion = "4.08";
   duneVersion = "3";
 
-  meta = {
+  meta = with lib; {
     description = "Fast implementation of queue in OCaml";
     homepage = "https://github.com/mirage/ke";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.mit;
+    maintainers = [ maintainers.vbgl ];
   };
 }

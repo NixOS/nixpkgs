@@ -33,11 +33,11 @@ stdenv.mkDerivation rec {
     export RELEASE_VERSION=${version}
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Client library to multiplex connections from and to iOS devices";
     homepage = "https://github.com/libimobiledevice/libusbmuxd";
-    license = lib.licenses.lgpl21Plus;
-    platforms = lib.platforms.unix;
+    license = licenses.lgpl21Plus;
+    platforms = platforms.unix;
     maintainers = [ ];
   };
 }

@@ -72,12 +72,12 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  meta = {
+  meta = with lib; {
     description = "GNOME utility for setting different wallpapers on individual monitors";
     homepage = "https://hydrapaper.gabmus.org";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ lachrymal ];
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ lachrymal ];
     mainProgram = "hydrapaper";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

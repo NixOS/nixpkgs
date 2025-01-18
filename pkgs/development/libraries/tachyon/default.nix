@@ -89,12 +89,12 @@ stdenv.mkDerivation rec {
     cp Changes Copyright README "$out/share/doc/tachyon"
     cp -r scenes "$out/share/tachyon/scenes"
   '';
-  meta = {
+  meta = with lib; {
     description = "Parallel / Multiprocessor Ray Tracing System";
     mainProgram = "tachyon";
-    license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.raskin ];
-    platforms = with lib.platforms; linux ++ cygwin ++ darwin;
+    license = licenses.bsd3;
+    maintainers = [ maintainers.raskin ];
+    platforms = with platforms; linux ++ cygwin ++ darwin;
     homepage = "http://jedi.ks.uiuc.edu/~johns/tachyon/";
   };
 }

@@ -31,16 +31,16 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
-  meta = {
+  meta = with lib; {
     homepage = "http://www.deadhat.com/";
     description = ''
       A C program to generate random data using several random models,
       with parameterized non uniformities and flexible output formats
     '';
-    license = lib.licenses.gpl2Only;
+    license = licenses.gpl2Only;
     # djenrandom uses x86 specific instructions, therefore we can only compile for the x86 architechture
-    platforms = lib.platforms.x86;
-    maintainers = with lib.maintainers; [
+    platforms = platforms.x86;
+    maintainers = with maintainers; [
       orichter
       thillux
     ];

@@ -147,15 +147,15 @@ stdenv.mkDerivation {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Plugin wrapper around Pure Data to allow patching in a wide selection of DAWs";
     mainProgram = "plugdata";
     homepage = "https://plugdata.org/";
-    license = lib.licenses.gpl3;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3;
+    platforms = platforms.linux;
     maintainers = [
-      lib.maintainers.PowerUser64
-      lib.maintainers.l1npengtul
+      maintainers.PowerUser64
+      maintainers.l1npengtul
     ];
   };
 }

@@ -28,10 +28,10 @@ ocamlPackages.buildDunePackage rec {
     gsl
   ];
 
-  meta = {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Curses-based RPN calculator";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ obadz ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ obadz ];
   };
 }

@@ -26,10 +26,10 @@ buildNimSbom (finalAttrs: {
     popd
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Utilities for working with Preserves documents and schemas";
-    license = lib.licenses.unlicense;
+    license = licenses.unlicense;
     homepage = "https://git.syndicate-lang.org/ehmry/preserves-nim";
-    maintainers = with lib.maintainers; [ ehmry ];
+    maintainers = with maintainers; [ ehmry ];
   };
 }) ./sbom.json

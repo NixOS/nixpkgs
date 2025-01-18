@@ -186,12 +186,12 @@ stdenv.mkDerivation rec {
 
   passthru.tests.tigervnc = nixosTests.tigervnc;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://tigervnc.org/";
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     description = "Fork of tightVNC, made in cooperation with VirtualGL";
     maintainers = [ ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
     # Prevent a store collision.
     priority = 4;
   };

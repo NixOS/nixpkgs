@@ -57,12 +57,12 @@ rustPlatform.buildRustPackage {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Yet another nix cli helper";
     homepage = "https://github.com/viperML/nh";
-    license = lib.licenses.eupl12;
+    license = licenses.eupl12;
     mainProgram = "nh";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       drupol
       viperML
     ];

@@ -64,12 +64,12 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = "-DluaL_reg=luaL_Reg"; # needed since luajit-2.1.0-beta3
 
-  meta = {
+  meta = with lib; {
     homepage = "https://love2d.org";
     description = "Lua-based 2D game engine/scripting language";
     mainProgram = "love";
-    license = lib.licenses.zlib;
-    platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.raskin ];
+    license = licenses.zlib;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.raskin ];
   };
 }

@@ -26,13 +26,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "kneaddata" ];
 
-  meta = {
+  meta = with lib; {
     description = "Quality control tool for metagenomic and metatranscriptomic sequencing data";
     homepage = "https://github.com/biobakery/kneaddata";
     changelog = "https://github.com/biobakery/kneaddata/releases";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ pandapip1 ];
+    license = licenses.mit;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ pandapip1 ];
     mainProgram = "kneaddata";
   };
 }

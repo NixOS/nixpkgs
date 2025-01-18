@@ -67,16 +67,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "C++ Library Manager for Windows, Linux, and macOS";
     mainProgram = "vcpkg";
     homepage = "https://vcpkg.io/";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       guekka
       gracicot
       h7x4
     ];
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 })

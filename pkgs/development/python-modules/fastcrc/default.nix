@@ -50,10 +50,10 @@ buildPythonPackage {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Hyper-fast Python module for computing CRC(8, 16, 32, 64) checksum";
     homepage = "https://fastcrc.readthedocs.io/en/latest/";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pluiedev ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ pluiedev ];
   };
 }

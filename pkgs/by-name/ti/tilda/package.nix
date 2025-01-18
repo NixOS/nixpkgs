@@ -53,12 +53,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.test = nixosTests.terminal-emulators.tilda;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/lanoxx/tilda/";
     description = "Gtk based drop down terminal for Linux and Unix";
     mainProgram = "tilda";
-    license = lib.licenses.gpl3Plus;
-    maintainers = [ lib.maintainers.AndersonTorres ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Plus;
+    maintainers = [ maintainers.AndersonTorres ];
+    platforms = platforms.linux;
   };
 })

@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     make install
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Mechanically check TLA+ proofs";
     longDescription = ''
       TLA+ is a general-purpose formal specification language that is
@@ -60,9 +60,9 @@ stdenv.mkDerivation rec {
       consistent abstraction over the various “backend” verifiers.
     '';
     homepage = "https://tla.msr-inria.inria.fr/tlaps/content/Home.html";
-    license = lib.licenses.bsd2;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ florentc ];
+    license = licenses.bsd2;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ florentc ];
   };
 
 }

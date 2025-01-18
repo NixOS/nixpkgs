@@ -44,11 +44,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Minimal X11 Color Picker and Magnifier";
     homepage = "https://codeberg.org/NRK/sxcs";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ sigmanificient ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ sigmanificient ];
+    platforms = platforms.linux;
   };
 })

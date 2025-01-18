@@ -36,10 +36,10 @@ buildPythonPackage {
     "test_subdomain"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Adds silk icons to your Flask application or module, or extension";
-    license = lib.licenses.bsd3;
-    maintainers = lib.teams.sage.members;
+    license = licenses.bsd3;
+    maintainers = teams.sage.members;
     homepage = "https://github.com/sublee/flask-silk";
   };
 }

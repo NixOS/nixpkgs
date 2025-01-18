@@ -22,10 +22,10 @@ build-idris-package {
     sha256 = "16ahzf2jzh7wzi4jjq94s5z9nzkgnj2962dy13s1crim53csjgw5";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Semantic highlighter for Idris code";
     homepage = "https://github.com/david-christiansen/idris-code-highlighter";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.brainrape ];
+    license = licenses.mit;
+    maintainers = [ maintainers.brainrape ];
   };
 }

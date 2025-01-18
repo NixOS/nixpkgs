@@ -47,16 +47,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [ "-DQT_MAJOR_VERSION=${lib.versions.major qtbase.version}" ];
 
-  meta = {
+  meta = with lib; {
     description = "Utility to allow streaming Wayland windows to X applications";
     homepage = "https://invent.kde.org/system/xwaylandvideobridge";
-    license = with lib.licenses; [
+    license = with licenses; [
       bsd3
       cc0
       gpl2Plus
     ];
-    maintainers = with lib.maintainers; [ stepbrobd ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ stepbrobd ];
+    platforms = platforms.linux;
     mainProgram = "xwaylandvideobridge";
   };
 })

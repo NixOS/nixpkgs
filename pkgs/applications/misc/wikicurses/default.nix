@@ -34,13 +34,13 @@ pythonPackages.buildPythonApplication rec {
 
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Simple curses interface for MediaWiki sites such as Wikipedia";
     mainProgram = "wikicurses";
     homepage = "https://github.com/ids1024/wikicurses/";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ pSub ];
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ pSub ];
   };
 
 }

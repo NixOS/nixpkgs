@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   CFLAGS = lib.optionalString debug " -DDEBUG=2";
 
-  meta = {
+  meta = with lib; {
     homepage = "https://eflite.sourceforge.net";
     description = "Speech server for screen readers";
     longDescription = ''
@@ -55,9 +55,9 @@ stdenv.mkDerivation (finalAttrs: {
       a free text-to-speech engine developed at the CMU Speech
       Center as an off-shoot of Festival.
     '';
-    license = lib.licenses.gpl2;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ bot-wxt1221 ];
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ bot-wxt1221 ];
     mainProgram = "eflite";
   };
 })

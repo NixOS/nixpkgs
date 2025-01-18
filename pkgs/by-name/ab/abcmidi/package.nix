@@ -15,12 +15,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-8kzgojLwVVFjpWiQ1/0S3GCVU8oEpoFItjtRDByauDg=";
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://abc.sourceforge.net/abcMIDI/";
     downloadPage = "https://ifdo.ca/~seymour/runabc/top.html";
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     description = "Utilities for converting between abc and MIDI";
-    platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.dotlambda ];
+    platforms = platforms.unix;
+    maintainers = [ maintainers.dotlambda ];
   };
 })

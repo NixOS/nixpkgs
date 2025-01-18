@@ -48,13 +48,13 @@ stdenv.mkDerivation (finalAttrs: {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/fraunhoferhhi/vvenc";
     description = "Fraunhofer Versatile Video Encoder";
-    license = lib.licenses.bsd3Clear;
+    license = licenses.bsd3Clear;
     mainProgram = "vvencapp";
     pkgConfigModules = [ "libvvenc" ];
-    maintainers = with lib.maintainers; [ jopejoe1 ];
-    platforms = lib.platforms.all;
+    maintainers = with maintainers; [ jopejoe1 ];
+    platforms = platforms.all;
   };
 })

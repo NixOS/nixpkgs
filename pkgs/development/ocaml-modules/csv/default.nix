@@ -19,10 +19,10 @@ buildDunePackage rec {
 
   duneVersion = "3";
 
-  meta = {
+  meta = with lib; {
     description = "Pure OCaml library to read and write CSV files";
-    license = lib.licenses.lgpl21;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.lgpl21;
+    maintainers = [ maintainers.vbgl ];
     homepage = "https://github.com/Chris00/ocaml-csv";
   };
 }

@@ -28,10 +28,10 @@ buildDunePackage {
   ];
   inherit doCheck;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/rgrinberg/stringext";
     description = "Extra string functions for OCaml";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ vbgl ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ vbgl ];
   };
 }

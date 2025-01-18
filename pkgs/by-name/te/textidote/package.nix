@@ -112,12 +112,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://sylvainhalle.github.io/textidote/";
     downloadPage = "https://github.com/sylvainhalle/textidote/releases";
     description = "Correction tool for LaTeX documents";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ magneticflux- ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ magneticflux- ];
     mainProgram = "textidote";
     inherit (jdk.meta) platforms;
   };

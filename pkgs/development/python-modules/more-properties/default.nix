@@ -36,10 +36,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "more_properties" ];
 
-  meta = {
+  meta = with lib; {
     description = "Collection of property variants";
     homepage = "https://github.com/madman-bob/python-more-properties";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

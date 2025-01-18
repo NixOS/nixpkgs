@@ -32,11 +32,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "django_fsm" ];
 
-  meta = {
+  meta = with lib; {
     description = "Django friendly finite state machine support";
     homepage = "https://github.com/viewflow/django-fsm";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     knownVulnerabilities = [ "Package is marked as discontinued upstream." ];
-    maintainers = [ lib.maintainers.onny ];
+    maintainers = [ maintainers.onny ];
   };
 }

@@ -186,16 +186,16 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram $out/bin/uwsgi --set PHP_INI_SCAN_DIR ${php-embed}/lib
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Fast, self-healing and developer/sysadmin-friendly application container server coded in pure C";
     homepage = "https://uwsgi-docs.readthedocs.org/en/latest/";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [
       abbradar
       schneefux
       globin
     ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
     mainProgram = "uwsgi";
   };
 })

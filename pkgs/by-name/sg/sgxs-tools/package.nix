@@ -19,11 +19,11 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-24lUhi4IPv+asM51/BfufkOUYVellXoXsbWXWN/zoBw=";
   };
   cargoHash = "sha256-vtuOCLo7qBOfqMynykqf9folmlETx3or35+CuTurh3s=";
-  meta = {
+  meta = with lib; {
     description = "Utilities for working with the SGX stream format";
     homepage = "https://github.com/fortanix/rust-sgx";
-    maintainers = [ lib.maintainers.ozwaldorf ];
+    maintainers = [ maintainers.ozwaldorf ];
     platforms = [ "x86_64-linux" ];
-    license = lib.licenses.mpl20;
+    license = licenses.mpl20;
   };
 }

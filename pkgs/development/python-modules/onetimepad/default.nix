@@ -20,11 +20,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "onetimepad" ];
 
-  meta = {
+  meta = with lib; {
     description = "Hacky implementation of one-time pad";
     mainProgram = "onetimepad";
     homepage = "https://jailuthra.in/onetimepad";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

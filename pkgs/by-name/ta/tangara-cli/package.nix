@@ -31,12 +31,12 @@ rustPlatform.buildRustPackage rec {
 
   buildAndTestSubdir = "crates/tangara-cli";
 
-  meta = {
+  meta = with lib; {
     description = "Command-line tool for managing the Cool Tech Zone Tangara";
     mainProgram = "tangara";
     homepage = "https://github.com/haileys/tangara-companion";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ stevestreza ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ stevestreza ];
+    platforms = platforms.linux;
   };
 }

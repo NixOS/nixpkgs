@@ -28,10 +28,10 @@ buildDunePackage rec {
     timedesc-tzlocal
   ];
 
-  meta = {
+  meta = with lib; {
     description = "OCaml date time handling library";
     homepage = "https://github.com/daypack-dev/timere";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.mit;
+    maintainers = [ maintainers.vbgl ];
   };
 }

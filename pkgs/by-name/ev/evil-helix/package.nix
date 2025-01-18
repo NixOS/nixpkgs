@@ -39,11 +39,11 @@ rustPlatform.buildRustPackage rec {
     cp contrib/helix.png $out/share/icons/hicolor/256x256/apps
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Post-modern modal text editor, with vim keybindings";
     homepage = "https://github.com/usagi-flow/evil-helix";
-    license = lib.licenses.mpl20;
+    license = licenses.mpl20;
     mainProgram = "hx";
-    maintainers = with lib.maintainers; [ thiagokokada ];
+    maintainers = with maintainers; [ thiagokokada ];
   };
 }

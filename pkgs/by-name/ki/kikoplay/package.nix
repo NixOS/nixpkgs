@@ -85,12 +85,12 @@ stdenv.mkDerivation rec {
       --set XDG_SESSION_TYPE x11
   '';
 
-  meta = {
+  meta = with lib; {
     mainProgram = "KikoPlay";
-    maintainers = with lib.maintainers; [ xddxdd ];
+    maintainers = with maintainers; [ xddxdd ];
     description = "More than a Full-Featured Danmu Player";
     homepage = "https://kikoplay.fun";
-    license = lib.licenses.gpl3Only;
+    license = licenses.gpl3Only;
     # See https://github.com/NixOS/nixpkgs/pull/354929
     broken = stdenv.isDarwin;
   };

@@ -33,12 +33,12 @@ stdenv.mkDerivation rec {
     install -m644 -b -D exfat.ko $out/lib/modules/${kernel.modDirVersion}/kernel/fs/exfat/exfat.ko
   '';
 
-  meta = {
+  meta = with lib; {
     description = "exfat kernel module";
     inherit (src.meta) homepage;
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ makefu ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ makefu ];
+    platforms = platforms.linux;
     broken = true;
   };
 }

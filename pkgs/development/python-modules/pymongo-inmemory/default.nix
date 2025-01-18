@@ -53,10 +53,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pymongo_inmemory" ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/kaizendorks/pymongo_inmemory";
     description = "Mongo mocking library with an ephemeral MongoDB running in memory";
-    maintainers = with lib.maintainers; [ pbsds ];
-    license = lib.licenses.mit;
+    maintainers = with maintainers; [ pbsds ];
+    license = licenses.mit;
   };
 }

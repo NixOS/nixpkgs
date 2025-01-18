@@ -22,11 +22,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "usbmonitor" ];
 
-  meta = {
+  meta = with lib; {
     description = "Cross-platform library for USB device monitoring";
     homepage = "https://github.com/Eric-Canas/USBMonitor";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ sifmelcara ];
-    platforms = lib.platforms.linux;
+    license = licenses.mit;
+    maintainers = with maintainers; [ sifmelcara ];
+    platforms = platforms.linux;
   };
 }

@@ -54,12 +54,12 @@ stdenv.mkDerivation rec {
     "-DCMAKE_SKIP_BUILD_RPATH=ON"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Improved fork of Waifu2X C++ using OpenCL and OpenCV";
     homepage = "https://github.com/DeadSix27/waifu2x-converter-cpp";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.xzfc ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    license = licenses.mit;
+    maintainers = [ maintainers.xzfc ];
+    platforms = platforms.linux ++ platforms.darwin;
     mainProgram = "waifu2x-converter-cpp";
   };
 }

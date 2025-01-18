@@ -11,11 +11,11 @@ stdenv.mkDerivation rec {
   };
   pname = "libosip2";
 
-  meta = {
-    license = lib.licenses.lgpl21Plus;
+  meta = with lib; {
+    license = licenses.lgpl21Plus;
     homepage = "https://www.gnu.org/software/osip/";
     description = "GNU oSIP library, an implementation of the Session Initiation Protocol (SIP)";
-    maintainers = with lib.maintainers; [ raskin ];
-    platforms = lib.platforms.all;
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.all;
   };
 }

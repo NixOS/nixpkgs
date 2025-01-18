@@ -23,10 +23,10 @@ build-idris-package {
     sha256 = "1abrwi5ikymff4g7a0g5wskycvhpnn895z1z1bz9r71ks554ypl8";
   };
 
-  meta = {
+  meta = with lib; {
     description = "HTTP library for idris";
     homepage = "https://github.com/uwap/idris-http";
-    license = lib.licenses.bsd2;
-    maintainers = [ lib.maintainers.brainrape ];
+    license = licenses.bsd2;
+    maintainers = [ maintainers.brainrape ];
   };
 }

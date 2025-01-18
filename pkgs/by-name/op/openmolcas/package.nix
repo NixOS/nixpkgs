@@ -167,11 +167,11 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/pymolcas --set MOLCAS $out
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Advanced quantum chemistry software package";
     homepage = "https://gitlab.com/Molcas/OpenMolcas";
-    maintainers = [ lib.maintainers.markuskowa ];
-    license = with lib.licenses; [
+    maintainers = [ maintainers.markuskowa ];
+    license = with licenses; [
       lgpl21Only
       bsd3
     ];

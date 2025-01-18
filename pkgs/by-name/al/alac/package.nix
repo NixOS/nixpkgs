@@ -31,12 +31,12 @@ stdenv.mkDerivation (finalAttrs: {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Apple Lossless Codec and Utility with Autotools";
     homepage = "https://github.com/mikebrady/alac";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     pkgConfigModules = [ "alac" ];
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ jopejoe1 ];
+    platforms = platforms.all;
+    maintainers = with maintainers; [ jopejoe1 ];
   };
 })

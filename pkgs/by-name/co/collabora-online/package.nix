@@ -95,11 +95,11 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = ./update.sh;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Collaborative online office suite based on LibreOffice technology";
-    license = lib.licenses.mpl20;
-    maintainers = [ lib.maintainers.xzfc ];
+    license = licenses.mpl20;
+    maintainers = [ maintainers.xzfc ];
     homepage = "https://www.collaboraonline.com";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 })

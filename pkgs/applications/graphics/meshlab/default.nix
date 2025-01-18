@@ -97,12 +97,12 @@ mkDerivation rec {
     "--set QT_QPA_PLATFORM xcb"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "System for processing and editing 3D triangular meshes";
     mainProgram = "meshlab";
     homepage = "https://www.meshlab.net/";
-    license = lib.licenses.gpl3Only;
+    license = licenses.gpl3Only;
     maintainers = [ ];
-    platforms = with lib.platforms; linux;
+    platforms = with platforms; linux;
   };
 }

@@ -25,12 +25,12 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Nix-channel-compatible package search";
     homepage = "https://github.com/diamondburned/nix-search";
-    license = lib.licenses.gpl3Only;
+    license = licenses.gpl3Only;
     mainProgram = "nix-search";
-    maintainers = with lib.maintainers; [ azuwis ];
-    platforms = lib.platforms.all;
+    maintainers = with maintainers; [ azuwis ];
+    platforms = platforms.all;
   };
 }

@@ -40,12 +40,12 @@ stdenv.mkDerivation (finalAttrs: {
     perl
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://epicsol.org";
     description = "IRC client that offers a great ircII interface";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ bot-wxt1221 ];
-    platforms = lib.platforms.unix;
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ bot-wxt1221 ];
+    platforms = platforms.unix;
     mainProgram = "epic5";
   };
 })

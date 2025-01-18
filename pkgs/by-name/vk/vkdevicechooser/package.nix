@@ -46,11 +46,11 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Vulkan layer to force a specific device to be used";
     homepage = "https://github.com/aejsmith/vkdevicechooser";
-    platforms = lib.platforms.unix;
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.sigmike ];
+    platforms = platforms.unix;
+    license = licenses.mit;
+    maintainers = [ maintainers.sigmike ];
   };
 }

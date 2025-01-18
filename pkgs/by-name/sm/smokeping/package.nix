@@ -52,11 +52,11 @@ stdenv.mkDerivation rec {
 
   passthru.tests.smokeping = nixosTests.smokeping;
 
-  meta = {
+  meta = with lib; {
     description = "Network latency collector";
     homepage = "https://oss.oetiker.ch/smokeping";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.all;
+    license = licenses.gpl2Plus;
+    platforms = platforms.all;
     maintainers = [ ];
   };
 }

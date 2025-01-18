@@ -32,12 +32,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Detect CPU ISA features with single-file";
     homepage = "https://github.com/nihui/ruapu";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ aleksana ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ aleksana ];
     mainProgram = "ruapu";
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 })

@@ -21,12 +21,12 @@ rustPlatform.buildRustPackage rec {
     install scripts/* -Dt $out/bin
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Tool to control Kakoune editor from the command line";
     homepage = "https://github.com/vbauerster/kamp";
-    license = lib.licenses.unlicense;
-    maintainers = with lib.maintainers; [ erikeah ];
+    license = licenses.unlicense;
+    maintainers = with maintainers; [ erikeah ];
     mainProgram = "kamp";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

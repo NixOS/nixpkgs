@@ -33,10 +33,10 @@ buildPythonPackage rec {
 
   passthru.updateScripts = gitUpdater { };
 
-  meta = {
+  meta = with lib; {
     description = "Create and clean up temporary directories";
     homepage = "https://github.com/mwilliamson/python-tempman";
-    license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ drupol ];
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ drupol ];
   };
 }

@@ -38,13 +38,13 @@ buildGoModule rec {
     command = "${lib.getExe container-structure-test} version";
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/GoogleContainerTools/container-structure-test";
     description = "Framework to validate the structure of a container image";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ rubenhoenle ];
-    platforms = lib.platforms.darwin ++ lib.platforms.linux;
+    license = licenses.asl20;
+    maintainers = with maintainers; [ rubenhoenle ];
+    platforms = platforms.darwin ++ platforms.linux;
     mainProgram = "container-structure-test";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }

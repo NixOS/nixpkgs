@@ -17,10 +17,10 @@ build-idris-package {
     sha256 = "0jbrwdpzg5hgmkfk2kj5y8lgaynl79h48qdvkl1glypfh392w35f";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Purely functional data structures in Idris";
     homepage = "https://github.com/timjb/idris-pfds";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.brainrape ];
+    license = licenses.mit;
+    maintainers = [ maintainers.brainrape ];
   };
 }

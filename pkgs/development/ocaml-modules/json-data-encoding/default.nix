@@ -22,10 +22,10 @@ buildDunePackage rec {
     uri
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://gitlab.com/nomadic-labs/json-data-encoding";
     description = "Type-safe encoding to and decoding from JSON";
-    license = lib.licenses.lgpl3;
-    maintainers = [ lib.maintainers.ulrikstrid ];
+    license = licenses.lgpl3;
+    maintainers = [ maintainers.ulrikstrid ];
   };
 }

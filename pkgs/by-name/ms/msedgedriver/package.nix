@@ -67,12 +67,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         runHook postInstall
       '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://developer.microsoft.com/en-us/microsoft-edge/tools/webdriver";
     description = "WebDriver implementation that controls an Edge browser running on the local machine";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ cholli ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+    maintainers = with maintainers; [ cholli ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

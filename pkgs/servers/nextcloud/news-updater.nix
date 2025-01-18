@@ -18,11 +18,11 @@ python3Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = [ php ];
 
-  meta = {
+  meta = with lib; {
     description = "Fast parallel feed updater for the Nextcloud news app";
     mainProgram = "nextcloud-news-updater";
     homepage = "https://github.com/nextcloud/news-updater";
-    license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ schneefux ];
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ schneefux ];
   };
 }

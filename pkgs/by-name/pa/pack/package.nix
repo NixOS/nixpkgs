@@ -33,11 +33,11 @@ buildGoModule rec {
     tests.version = testers.testVersion { package = pack; };
   };
 
-  meta = {
+  meta = with lib; {
     description = "CLI for building apps using Cloud Native Buildpacks";
     homepage = "https://github.com/buildpacks/pack/";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     mainProgram = "pack";
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = with maintainers; [ drupol ];
   };
 }

@@ -80,7 +80,7 @@ python3Packages.buildPythonApplication rec {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = {
+  meta = with lib; {
     mainProgram = "i3pystatus";
     homepage = "https://github.com/enkore/i3pystatus";
     description = "Complete replacement for i3status";
@@ -88,9 +88,9 @@ python3Packages.buildPythonApplication rec {
       i3pystatus is a growing collection of python scripts for status output compatible
       to i3status / i3bar of the i3 window manager.
     '';
-    license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
       igsha
       lucasew
     ];

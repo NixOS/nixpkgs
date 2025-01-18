@@ -52,12 +52,12 @@ mkDerivation rec {
     sed "s|@out@|$out|g" -i $out/share/applications/qpaeq.desktop
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Equalizer interface for pulseaudio's equalizer sinks";
     mainProgram = "qpaeq";
     homepage = "http://www.pulseaudio.org/";
-    license = lib.licenses.lgpl2Plus;
-    maintainers = with lib.maintainers; [ lovek323 ];
-    platforms = lib.platforms.unix;
+    license = licenses.lgpl2Plus;
+    maintainers = with maintainers; [ lovek323 ];
+    platforms = platforms.unix;
   };
 }

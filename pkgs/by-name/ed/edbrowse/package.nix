@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     )
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://edbrowse.org/";
     description = "Command Line Editor Browser";
     longDescription = ''
@@ -90,13 +90,13 @@ stdenv.mkDerivation (finalAttrs: {
       send email, with no human intervention whatsoever. edbrowse can also tap
       into databases through odbc. It was primarily written by Karl Dahlke.
     '';
-    license = with lib.licenses; [ gpl1Plus ];
+    license = with licenses; [ gpl1Plus ];
     mainProgram = "edbrowse";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       schmitthenner
       equirosa
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 })
 # TODO: send the patch to upstream developers

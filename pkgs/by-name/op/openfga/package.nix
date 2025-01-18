@@ -48,11 +48,11 @@ buildGoModule {
     installShellCompletion $completions_dir/*
   '';
 
-  meta = {
+  meta = with lib; {
     description = "High performance and flexible authorization/permission engine built for developers and inspired by Google Zanzibar";
     homepage = "https://openfga.dev/";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     mainProgram = "openfga";
-    maintainers = with lib.maintainers; [ jlesquembre ];
+    maintainers = with maintainers; [ jlesquembre ];
   };
 }

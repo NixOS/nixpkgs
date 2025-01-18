@@ -45,11 +45,11 @@ stdenv.mkDerivation (finalAttrs: {
       --replace '="''${prefix}//' '="/'
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Opinionated C11 library for low-level functionality";
     homepage = "https://git.skyjake.fi/skyjake/the_Foundation";
-    license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ sikmir ];
-    platforms = lib.platforms.unix;
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ sikmir ];
+    platforms = platforms.unix;
   };
 })

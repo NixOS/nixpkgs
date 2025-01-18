@@ -22,13 +22,13 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/man/man1
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.fourmilab.ch/webtools/qprint/";
-    license = lib.licenses.publicDomain;
+    license = licenses.publicDomain;
     description = "Encode and decode Quoted-Printable files";
     mainProgram = "qprint";
-    maintainers = [ lib.maintainers.tv ];
-    platforms = lib.platforms.all;
+    maintainers = [ maintainers.tv ];
+    platforms = platforms.all;
   };
 
 }

@@ -20,11 +20,11 @@ stdenv.mkDerivation {
     cp $src $out/include/miniball.hpp
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Smallest Enclosing Balls of Points";
     homepage = "https://www.inf.ethz.ch/personal/gaertner/miniball.html";
-    license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.erikryb ];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl3;
+    maintainers = [ maintainers.erikryb ];
+    platforms = platforms.unix;
   };
 }

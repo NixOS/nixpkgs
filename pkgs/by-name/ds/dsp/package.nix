@@ -53,12 +53,12 @@ stdenv.mkDerivation (finalAttrs: {
     libpulseaudio
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/bmc0/dsp";
     description = "Audio processing program with an interactive mode";
-    license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ aaronjheng ];
-    platforms = lib.platforms.linux;
+    license = licenses.isc;
+    maintainers = with maintainers; [ aaronjheng ];
+    platforms = platforms.linux;
     mainProgram = "dsp";
   };
 })

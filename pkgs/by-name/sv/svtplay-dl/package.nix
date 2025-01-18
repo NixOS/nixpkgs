@@ -76,11 +76,11 @@ buildPythonApplication {
     $out/bin/svtplay-dl --help > /dev/null
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/spaam/svtplay-dl";
     description = "Command-line tool to download videos from svtplay.se and other sites";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.unix;
+    license = licenses.mit;
+    platforms = platforms.unix;
     mainProgram = "svtplay-dl";
   };
 }

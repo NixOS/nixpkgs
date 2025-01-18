@@ -42,12 +42,12 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/lxqt/pavucontrol-qt";
     description = "Pulseaudio mixer in Qt (port of pavucontrol)";
     mainProgram = "pavucontrol-qt";
-    license = lib.licenses.gpl2Plus;
-    platforms = with lib.platforms; linux;
-    maintainers = lib.teams.lxqt.members;
+    license = licenses.gpl2Plus;
+    platforms = with platforms; linux;
+    maintainers = teams.lxqt.members;
   };
 }

@@ -39,10 +39,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "normality" ];
 
-  meta = {
+  meta = with lib; {
     description = "Micro-library to normalize text strings";
     homepage = "https://github.com/pudo/normality";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ sigmanificient ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ sigmanificient ];
   };
 }

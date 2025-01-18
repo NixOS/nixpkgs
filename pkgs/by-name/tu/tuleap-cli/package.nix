@@ -34,11 +34,11 @@ buildGoModule rec {
       --zsh <($out/bin/tuleap-cli -s tuleap.example.com completion zsh)
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Command-line interface for the Tuleap API";
     homepage = "https://gitlab.com/csgroup-oss/tuleap-cli";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ lesuisse ];
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ lesuisse ];
     mainProgram = "tuleap-cli";
   };
 }

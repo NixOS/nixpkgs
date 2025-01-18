@@ -103,13 +103,13 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gitUpdater { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Media scanner service & access library";
     homepage = "https://gitlab.com/ubports/development/core/mediascanner2";
-    license = lib.licenses.gpl3Only;
-    maintainers = lib.teams.lomiri.members;
+    license = licenses.gpl3Only;
+    maintainers = teams.lomiri.members;
     mainProgram = "mediascanner-service-2.0";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
     pkgConfigModules = [ "mediascanner-2.0" ];
   };
 })

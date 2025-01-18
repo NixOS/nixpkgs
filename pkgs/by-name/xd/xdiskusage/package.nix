@@ -16,12 +16,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ fltk ];
 
-  meta = {
+  meta = with lib; {
     description = "Program to show you what is using up all your disk space";
     homepage = "https://xdiskusage.sourceforge.net/";
-    license = with lib.licenses; [ gpl2Plus ];
-    maintainers = with lib.maintainers; [ fuzzdk ];
-    platforms = with lib.platforms; linux;
+    license = with licenses; [ gpl2Plus ];
+    maintainers = with maintainers; [ fuzzdk ];
+    platforms = with platforms; linux;
     mainProgram = "xdiskusage";
   };
 })

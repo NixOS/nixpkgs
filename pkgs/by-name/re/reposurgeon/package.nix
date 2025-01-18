@@ -33,11 +33,11 @@ buildGoModule rec {
     make install prefix=$out HTMLFILES=
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Tool for editing version-control repository history";
-    license = lib.licenses.bsd3;
+    license = licenses.bsd3;
     homepage = "http://www.catb.org/esr/reposurgeon/";
-    maintainers = with lib.maintainers; [ dfoxfranke ];
-    platforms = lib.platforms.all;
+    maintainers = with maintainers; [ dfoxfranke ];
+    platforms = platforms.all;
   };
 }

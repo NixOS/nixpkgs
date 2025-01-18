@@ -68,15 +68,15 @@ rustPlatform.buildRustPackage rec {
     }
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Linux GPU Configuration Tool for AMD and NVIDIA";
     homepage = "https://github.com/ilya-zlobintsev/LACT";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       figsoda
       atemu
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
     mainProgram = "lact";
   };
 }

@@ -35,11 +35,11 @@ buildGoModule rec {
     };
   };
 
-  meta = {
+  meta = with lib; {
     description = "CLI for streamlined RESTful API testing and management";
     homepage = "https://github.com/jackMort/Restman";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ kashw2 ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ kashw2 ];
     mainProgram = "restman";
   };
 }

@@ -66,12 +66,12 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Straight-forward and modern application to create bootable drives";
     homepage = "https://gitlab.com/adhami3310/Impression";
-    license = lib.licenses.gpl3Only;
+    license = licenses.gpl3Only;
     mainProgram = "impression";
-    maintainers = with lib.maintainers; [ dotlambda ] ++ lib.teams.gnome-circle.members;
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ dotlambda ] ++ teams.gnome-circle.members;
+    platforms = platforms.linux;
   };
 })

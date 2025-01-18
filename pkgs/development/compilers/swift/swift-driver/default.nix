@@ -82,11 +82,11 @@ stdenv.mkDerivation {
     done
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Swift compiler driver";
     homepage = "https://github.com/apple/swift-driver";
-    platforms = with lib.platforms; linux ++ darwin;
-    license = lib.licenses.asl20;
-    maintainers = lib.teams.swift.members;
+    platforms = with platforms; linux ++ darwin;
+    license = licenses.asl20;
+    maintainers = teams.swift.members;
   };
 }

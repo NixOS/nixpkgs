@@ -40,12 +40,12 @@ stdenv.mkDerivation {
 
   passthru.updateScript = unstableGitUpdater { tagPrefix = "v"; };
 
-  meta = {
+  meta = with lib; {
     description = "KVM virtual machine introspection library";
     homepage = "https://github.com/bitdefender/libkvmi";
-    license = lib.licenses.lgpl3Only;
+    license = licenses.lgpl3Only;
     platforms = [ "x86_64-linux" ];
-    maintainers = with lib.maintainers; [ sigmasquadron ];
+    maintainers = with maintainers; [ sigmasquadron ];
     mainProgram = "hookguest-libkvmi";
     outputsToInstall = [ "lib" ];
   };

@@ -43,12 +43,12 @@ stdenv.mkDerivation {
     cp -r helmholtz~/ $out/
   '';
 
-  meta = {
+  meta = with lib; {
     broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     description = "Time domain pitch tracker for Pure Data";
     homepage = "http://www.katjaas.nl/helmholtz/helmholtz.html";
-    license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.magnetophon ];
-    platforms = lib.platforms.linux;
+    license = licenses.bsd3;
+    maintainers = [ maintainers.magnetophon ];
+    platforms = platforms.linux;
   };
 }

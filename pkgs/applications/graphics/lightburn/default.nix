@@ -71,12 +71,12 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
-  meta = {
+  meta = with lib; {
     description = "Layout, editing, and control software for your laser cutter";
     homepage = "https://lightburnsoftware.com";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ q3k ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+    maintainers = with maintainers; [ q3k ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "lightburn";
   };

@@ -238,10 +238,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "datalad" ];
 
-  meta = {
+  meta = with lib; {
     description = "Keep code, data, containers under control with git and git-annex";
     homepage = "https://www.datalad.org";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ renesat ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ renesat ];
   };
 }

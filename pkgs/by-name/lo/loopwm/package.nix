@@ -33,12 +33,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     updateScript = ./update.sh;
   };
 
-  meta = {
+  meta = with lib; {
     description = "macOS Window management made elegant";
     homepage = "https://github.com/MrKai77/Loop";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ matteopacini ];
-    platforms = lib.platforms.darwin;
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ matteopacini ];
+    platforms = platforms.darwin;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 })

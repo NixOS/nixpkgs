@@ -48,11 +48,11 @@ python3Packages.buildPythonPackage rec {
     '';
   };
 
-  meta = {
+  meta = with lib; {
     description = "Declarative configurations using YAML for drawing cloud system architectures";
     homepage = "https://github.com/dmytrostriletskyi/diagrams-as-code";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ sigmanificient ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ sigmanificient ];
     mainProgram = "diagrams-as-code";
   };
 }

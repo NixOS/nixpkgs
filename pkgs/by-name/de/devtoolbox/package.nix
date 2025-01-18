@@ -95,7 +95,7 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Development tools at your fingertips";
     longDescription = ''
       If you're tired of endlessly looking online for the right
@@ -114,7 +114,7 @@ python3Packages.buildPythonApplication rec {
       - Much more...
     '';
     homepage = "https://github.com/aleiepure/devtoolbox";
-    license = with lib.licenses; [
+    license = with licenses; [
       gpl3Plus
       cc0
       lgpl3Only
@@ -122,10 +122,10 @@ python3Packages.buildPythonApplication rec {
       unlicense
     ];
     mainProgram = "devtoolbox";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       aleksana
       aucub
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

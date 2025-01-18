@@ -26,10 +26,10 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/tgalal/python-axolotl-curve25519";
     description = "Curve25519 with ed25519 signatures";
-    maintainers = with lib.maintainers; [ abbradar ];
-    license = lib.licenses.gpl3;
+    maintainers = with maintainers; [ abbradar ];
+    license = licenses.gpl3;
   };
 }

@@ -46,10 +46,10 @@ buildPythonPackage rec {
     inherit mpi;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Python bindings for the Message Passing Interface standard";
     homepage = "https://github.com/mpi4py/mpi4py";
-    license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ doronbehar ];
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ doronbehar ];
   };
 }

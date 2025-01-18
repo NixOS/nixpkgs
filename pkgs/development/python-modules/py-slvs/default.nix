@@ -38,11 +38,11 @@ buildPythonPackage rec {
     "py_slvs"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Python binding of SOLVESPACE geometry constraint solver";
     homepage = "https://github.com/realthunder/slvs_py";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [
       traverseda
     ];
   };

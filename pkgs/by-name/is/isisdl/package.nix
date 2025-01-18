@@ -43,16 +43,16 @@ python3Packages.buildPythonApplication rec {
   # disable tests since they require valid login credentials
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/Emily3403/isisdl";
     description = "Downloader for ISIS of TU-Berlin";
     longDescription = ''
       A downloading utility for ISIS of TU-Berlin.
       Download all your files and videos from ISIS.
     '';
-    license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ bchmnn ];
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ bchmnn ];
     mainProgram = "isisdl";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

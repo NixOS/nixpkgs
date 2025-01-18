@@ -17,10 +17,10 @@ build-idris-package {
     sha256 = "097l2pj8p33d0n3ryb8y2vp0n5isnc8bkdnad3y6raa9z1xjn3d6";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Idris library to interact with WebGL";
     homepage = "https://github.com/pierrebeaucamp/idris-webgl";
-    license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.brainrape ];
+    license = licenses.asl20;
+    maintainers = [ maintainers.brainrape ];
   };
 }

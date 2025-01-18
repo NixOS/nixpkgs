@@ -75,12 +75,12 @@ stdenv.mkDerivation (self: {
     })
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Offline frontend for Cloudlog";
     homepage = "https://github.com/myzinsky/cloudLogOffline";
-    license = [ lib.licenses.lgpl3 ];
+    license = [ licenses.lgpl3 ];
     mainProgram = "CloudLogOffline";
-    maintainers = [ lib.maintainers.dblsaiko ];
-    platforms = lib.platforms.unix;
+    maintainers = [ maintainers.dblsaiko ];
+    platforms = platforms.unix;
   };
 })

@@ -101,12 +101,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Cross-platform automation tool";
     homepage = "https://github.com/Jmgr/actiona";
-    license = lib.licenses.gpl3Only;
+    license = licenses.gpl3Only;
     mainProgram = "actiona";
-    maintainers = with lib.maintainers; [ tomasajt ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ tomasajt ];
+    platforms = platforms.linux;
   };
 })

@@ -32,10 +32,10 @@ buildPythonPackage rec {
   # has no tests
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "This is the Microsoft Azure Reservations Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ maxwilson ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ maxwilson ];
   };
 }

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Media Changer Tools";
     longDescription = ''
       The mtx command controls single or multi-drive SCSI media changers such as
@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
       specification.
     '';
     homepage = "https://sourceforge.net/projects/mtx/";
-    license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.redvers ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.redvers ];
+    platforms = platforms.linux;
   };
 }

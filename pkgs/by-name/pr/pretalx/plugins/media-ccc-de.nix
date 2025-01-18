@@ -21,10 +21,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pretalx_media_ccc_de" ];
 
-  meta = {
+  meta = with lib; {
     description = "Pull recordings from media.ccc.de and embed them in talk pages";
     homepage = "https://github.com/pretalx/pretalx-media-ccc-de";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ wegank ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ wegank ];
   };
 }

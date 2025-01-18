@@ -29,11 +29,11 @@ buildGoModule rec {
     cp config-sample.json $out/share/qcard/
   '';
 
-  meta = {
+  meta = with lib; {
     description = "CLI addressbook application for CardDAV servers written in Go";
     homepage = "https://git.sr.ht/~psic4t/qcard";
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     mainProgram = "qcard";
-    maintainers = with lib.maintainers; [ antonmosich ];
+    maintainers = with maintainers; [ antonmosich ];
   };
 }

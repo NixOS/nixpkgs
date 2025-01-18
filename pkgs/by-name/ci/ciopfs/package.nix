@@ -29,10 +29,10 @@ stdenv.mkDerivation rec {
     "PREFIX="
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.brain-dump.org/projects/ciopfs/";
     description = "Case-insensitive filesystem layered on top of any other filesystem";
-    license = lib.licenses.gpl2Only;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Only;
+    platforms = platforms.linux;
   };
 }

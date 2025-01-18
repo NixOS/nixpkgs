@@ -46,10 +46,10 @@ rustPlatform.buildRustPackage {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = {
+  meta = with lib; {
     description = "Generate Bazel BUILD files from Cargo dependencies";
     homepage = "https://github.com/google/cargo-raze";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ elasticdog ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ elasticdog ];
   };
 }

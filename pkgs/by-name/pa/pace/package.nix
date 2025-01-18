@@ -30,11 +30,11 @@ rustPlatform.buildRustPackage {
       --zsh <($out/bin/pace setup completions zsh)
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Command-line program for mindful time tracking";
     homepage = "https://github.com/pace-rs/pace";
-    license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ isabelroses ];
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [ isabelroses ];
     mainProgram = "pace";
   };
 }

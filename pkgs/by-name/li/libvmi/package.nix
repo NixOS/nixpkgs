@@ -79,7 +79,7 @@ stdenv.mkDerivation {
     inherit libVersion;
   };
 
-  meta = {
+  meta = with lib; {
     description = "C library for virtual machine introspection";
     longDescription = ''
       LibVMI is a C library with Python bindings that makes it easy to monitor the low-level
@@ -87,11 +87,11 @@ stdenv.mkDerivation {
       and accessing the vCPU registers.
     '';
     homepage = "https://libvmi.com/";
-    license = with lib.licenses; [
+    license = with licenses; [
       gpl3Only
       lgpl3Only
     ];
     platforms = [ "x86_64-linux" ];
-    maintainers = with lib.maintainers; [ sigmasquadron ];
+    maintainers = with maintainers; [ sigmasquadron ];
   };
 }

@@ -43,13 +43,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     '';
   });
 
-  meta = {
+  meta = with lib; {
     changelog = "https://bjango.com/mac/istatmenus/versionhistory/";
     description = "iStat Menus is set of nine separate and highly configurable menu items that let you know exactly what's going on inside your Mac";
     homepage = "https://bjango.com/mac/istatmenus/";
-    license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ donteatoreo ];
-    platforms = lib.platforms.darwin;
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+    maintainers = with maintainers; [ donteatoreo ];
+    platforms = platforms.darwin;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 })

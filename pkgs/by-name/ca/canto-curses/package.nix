@@ -25,7 +25,7 @@ python3Packages.buildPythonApplication rec {
   ];
   propagatedBuildInputs = [ canto-daemon ];
 
-  meta = {
+  meta = with lib; {
     description = "Ncurses-based console Atom/RSS feed reader";
     mainProgram = "canto-curses";
     longDescription = ''
@@ -37,8 +37,8 @@ python3Packages.buildPythonApplication rec {
       and extensibility using the excellent Python programming language.
     '';
     homepage = "https://codezen.org/canto-ng/";
-    license = lib.licenses.gpl2;
-    platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.devhell ];
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.devhell ];
   };
 }

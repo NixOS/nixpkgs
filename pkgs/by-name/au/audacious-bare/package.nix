@@ -44,18 +44,18 @@ stdenv.mkDerivation rec {
     ln -s ${audacious-plugins}/share/audacious/Skins $out/share/audacious/
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Lightweight and versatile audio player";
     homepage = "https://audacious-media-player.org";
     downloadPage = "https://github.com/audacious-media-player/audacious";
     mainProgram = "audacious";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       ramkromberg
       ttuegel
       thiagokokada
     ];
-    platforms = lib.platforms.linux;
-    license = with lib.licenses; [
+    platforms = platforms.linux;
+    license = with licenses; [
       bsd2
       bsd3 # https://github.com/audacious-media-player/audacious/blob/master/COPYING
       gpl2

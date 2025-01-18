@@ -33,10 +33,10 @@ buildPythonPackage {
     unidecode
   ];
 
-  meta = {
+  meta = with lib; {
     description = "plasTeX is a Python package to convert LaTeX markup to DOM";
     homepage = "https://plastex.github.io/plastex/";
-    maintainers = with lib.maintainers; [ niklashh ];
-    license = lib.licenses.asl20;
+    maintainers = with maintainers; [ niklashh ];
+    license = licenses.asl20;
   };
 }

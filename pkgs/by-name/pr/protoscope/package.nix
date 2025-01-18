@@ -22,11 +22,11 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Simple, human-editable language for representing and emitting the Protobuf wire format";
     mainProgram = "protoscope";
     homepage = "https://github.com/protocolbuffers/protoscope";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ aaronjheng ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ aaronjheng ];
   };
 }

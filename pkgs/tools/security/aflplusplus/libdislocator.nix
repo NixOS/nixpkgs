@@ -27,14 +27,14 @@ stdenv.mkDerivation {
     chmod +x $out/bin/get-libdislocator-so
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/vanhauser-thc/AFLplusplus";
     description = ''
       Drop-in replacement for the libc allocator which improves
       the odds of bumping into heap-related security bugs in
       several ways
     '';
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ris ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ ris ];
   };
 }

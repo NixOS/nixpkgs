@@ -34,11 +34,11 @@ stdenv.mkDerivation rec {
   nativeCheckInputs = [ python3 ];
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.jbig2dec.com/";
     description = "Decoder implementation of the JBIG2 image compression format";
     mainProgram = "jbig2dec";
-    license = lib.licenses.agpl3Only;
-    platforms = lib.platforms.unix;
+    license = licenses.agpl3Only;
+    platforms = platforms.unix;
   };
 }

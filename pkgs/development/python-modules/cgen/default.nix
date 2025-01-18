@@ -27,10 +27,10 @@ buildPythonPackage rec {
     pytest
   '';
 
-  meta = {
+  meta = with lib; {
     description = "C/C++ source generation from an AST";
     homepage = "https://github.com/inducer/cgen";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ sigmanificient ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ sigmanificient ];
   };
 }

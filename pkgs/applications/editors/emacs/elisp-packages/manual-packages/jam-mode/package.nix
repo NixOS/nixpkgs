@@ -27,9 +27,9 @@ melpaBuild rec {
     mv tmp.el jam-mode.el
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Emacs major mode for editing Jam files";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ qyliss ];
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ qyliss ];
   };
 }

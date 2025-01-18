@@ -17,10 +17,10 @@ buildLua (finalAttrs: {
     hash = "sha256-eAY+ZUuOxPJiNCuL7lqMBU4iURCMz12LQdfaYj4WFQc=";
   };
 
-  meta = {
+  meta = with lib; {
     description = "OSC UI replacement for MPV with icons from the bomi video player";
     homepage = "https://github.com/Zren/mpv-osc-tethys";
-    license = lib.licenses.unfree; # no license specified
-    maintainers = with lib.maintainers; [ luftmensch-luftmensch ];
+    license = licenses.unfree; # no license specified
+    maintainers = with maintainers; [ luftmensch-luftmensch ];
   };
 })

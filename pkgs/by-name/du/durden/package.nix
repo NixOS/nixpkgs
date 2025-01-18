@@ -28,7 +28,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://durden.arcan-fe.com/";
     description = "Reference Desktop Environment for Arcan";
     longDescription = ''
@@ -37,8 +37,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       features in Arcan, and as a very competent entry to the advanced-user side
       of the desktop environment spectrum.
     '';
-    license = with lib.licenses; [ bsd3 ];
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = lib.platforms.all;
+    license = with licenses; [ bsd3 ];
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.all;
   };
 })

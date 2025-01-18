@@ -23,11 +23,11 @@ python3Packages.buildPythonApplication rec {
 
   nativeCheckInputs = with python3Packages; [ pytest ];
 
-  meta = {
+  meta = with lib; {
     description = "Convert C++ header files to PlantUML";
     homepage = "https://github.com/thibaultmarin/hpp2plantuml";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "hpp2plantuml";
-    maintainers = with lib.maintainers; [ eymeric ];
+    maintainers = with maintainers; [ eymeric ];
   };
 }

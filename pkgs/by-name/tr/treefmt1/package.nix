@@ -16,11 +16,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-bpNIGuh74nwEmHPeXtPmsML9vJOb00xkdjK0Nd7esAc=";
 
-  meta = {
+  meta = with lib; {
     description = "one CLI to format the code tree";
     homepage = "https://github.com/numtide/treefmt";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.zimbatm ];
+    license = licenses.mit;
+    maintainers = [ maintainers.zimbatm ];
     mainProgram = "treefmt";
   };
 }

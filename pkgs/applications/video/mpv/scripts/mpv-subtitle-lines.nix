@@ -18,10 +18,10 @@ buildLua {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = {
+  meta = with lib; {
     description = "List and search subtitle lines of the selected subtitle track";
     homepage = "https://github.com/christoph-heinrich/mpv-subtitle-lines";
-    license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ purrpurrn ];
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ purrpurrn ];
   };
 }

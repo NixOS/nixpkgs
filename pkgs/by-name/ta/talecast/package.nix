@@ -33,12 +33,12 @@ rustPlatform.buildRustPackage rec {
     tests.version = testers.testVersion { package = talecast; };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Simple CLI podcatcher";
     homepage = "https://github.com/TBS1996/TaleCast";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "talecast";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       confusedalex
       getchoo
     ];

@@ -39,11 +39,11 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Provides a simplified, portable interface to several low-level networking routines";
     homepage = "https://github.com/dugsong/libdnet";
-    license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.marcweber ];
-    platforms = lib.platforms.linux;
+    license = licenses.bsd3;
+    maintainers = [ maintainers.marcweber ];
+    platforms = platforms.linux;
   };
 })

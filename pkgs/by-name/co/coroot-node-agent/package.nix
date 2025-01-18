@@ -22,11 +22,11 @@ buildGoModule rec {
 
   CGO_CFLAGS = "-I ${systemdLibs}/include";
 
-  meta = {
+  meta = with lib; {
     description = "Prometheus exporter based on eBPF";
     homepage = "https://github.com/coroot/coroot-node-agent";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ errnoh ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ errnoh ];
     mainProgram = "coroot-node-agent";
   };
 }

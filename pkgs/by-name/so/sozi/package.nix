@@ -32,13 +32,13 @@ appimageTools.wrapType2 {
       --replace 'Exec=AppRun' 'Exec=sozi'
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Zooming presentation editor and player";
     homepage = "https://sozi.baierouge.fr/";
-    license = lib.licenses.mpl20;
+    license = licenses.mpl20;
     mainProgram = "sozi";
-    maintainers = with lib.maintainers; [ srghma ];
+    maintainers = with maintainers; [ srghma ];
     platforms = [ "x86_64-linux" ];
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }

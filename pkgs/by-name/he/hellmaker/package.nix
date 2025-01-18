@@ -29,12 +29,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Generate FUD backdoors";
     homepage = "https://github.com/0xNinjaCyclone/hellMaker";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ tochiaha ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ tochiaha ];
     mainProgram = "hellmaker";
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 }

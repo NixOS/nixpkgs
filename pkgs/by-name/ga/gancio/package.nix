@@ -73,13 +73,13 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Shared agenda for local communities, running on nodejs";
     homepage = "https://gancio.org/";
     changelog = "https://framagit.org/les/gancio/-/raw/master/CHANGELOG.md";
-    license = lib.licenses.agpl3Plus;
-    platforms = lib.platforms.linux;
+    license = licenses.agpl3Plus;
+    platforms = platforms.linux;
     mainProgram = "gancio";
-    maintainers = with lib.maintainers; [ jbgi ];
+    maintainers = with maintainers; [ jbgi ];
   };
 })

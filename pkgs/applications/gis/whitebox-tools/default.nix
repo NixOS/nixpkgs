@@ -42,10 +42,10 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://jblindsay.github.io/ghrg/WhiteboxTools/index.html";
     description = "Advanced geospatial data analysis platform";
-    license = lib.licenses.mit;
-    maintainers = lib.teams.geospatial.members ++ (with lib.maintainers; [ mpickering ]);
+    license = licenses.mit;
+    maintainers = teams.geospatial.members ++ (with maintainers; [ mpickering ]);
   };
 }

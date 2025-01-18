@@ -115,13 +115,13 @@ let
       updateScript = gitUpdater { };
     };
 
-    meta = {
+    meta = with lib; {
       homepage = "https://xon.sh/";
       description = "Python-ish, BASHwards-compatible shell";
       changelog = "https://github.com/xonsh/xonsh/raw/main/CHANGELOG.rst";
-      license = with lib.licenses; [ bsd3 ];
+      license = with licenses; [ bsd3 ];
       mainProgram = "xonsh";
-      maintainers = with lib.maintainers; [ samlukeyes123 ];
+      maintainers = with maintainers; [ samlukeyes123 ];
     };
   };
 in

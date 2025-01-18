@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
     cp ./LICENSE $out/
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Configurable formatter (or 'pretty-printer') for XML documents";
     mainProgram = "xmlformat";
     homepage = "http://www.kitebird.com/software/xmlformat/";
-    license = lib.licenses.bsd3;
-    platforms = lib.platforms.all;
+    license = licenses.bsd3;
+    platforms = platforms.all;
   };
 }

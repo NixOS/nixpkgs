@@ -20,14 +20,14 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Companion tool to https://github.com/ryantm/agenix";
     homepage = "https://github.com/cole-h/agenix-cli";
-    license = with lib.licenses; [
+    license = with licenses; [
       asl20
       mit
     ];
-    maintainers = with lib.maintainers; [ misuzu ];
+    maintainers = with maintainers; [ misuzu ];
     mainProgram = "agenix";
   };
 }

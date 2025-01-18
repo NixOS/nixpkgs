@@ -34,15 +34,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Turn any device into a secondary screen for your computer";
     homepage = "https://deskreen.com";
-    license = lib.licenses.agpl3Only;
+    license = licenses.agpl3Only;
     mainProgram = "deskreen";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       leo248
       drupol
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 })

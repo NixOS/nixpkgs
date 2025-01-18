@@ -76,12 +76,12 @@ buildPythonPackage rec {
     "test_ensure_configuration_file_is_deleted"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Acts as a facade to the other Proton VPN components, exposing a uniform API to the available Proton VPN services";
     homepage = "https://github.com/ProtonVPN/python-proton-vpn-api-core";
-    license = lib.licenses.gpl3Only;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl3Only;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
       sebtm
       rapiteanu
     ];

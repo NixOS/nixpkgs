@@ -86,10 +86,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://styluslabs.com/";
     description = "Cross-platform (Windows, Mac, Linux, iOS, Android) application for handwritten notes";
-    license = with lib.licenses; [
+    license = with licenses; [
       # miniz, pugixml, stb, ugui, ulib, usvg
       mit
       # nanovgXC
@@ -97,11 +97,11 @@ stdenv.mkDerivation (finalAttrs: {
       # styluslabs-write itself
       agpl3Only
     ];
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       lukts30
       atemu
     ];
-    platforms = with lib.platforms; linux ++ darwin ++ windows;
+    platforms = with platforms; linux ++ darwin ++ windows;
     broken = !stdenv.hostPlatform.isLinux;
     mainProgram = "Write";
   };

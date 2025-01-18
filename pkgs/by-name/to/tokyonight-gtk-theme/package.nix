@@ -114,15 +114,15 @@ lib.checkListOfEnum "${pname}: colorVariants" colorVariantList colorVariants lib
       runHook postInstall
     '';
 
-    meta = {
+    meta = with lib; {
       description = "GTK theme based on the Tokyo Night colour palette";
       homepage = "https://github.com/Fausto-Korpsvart/Tokyonight-GTK-Theme";
-      license = lib.licenses.gpl3Plus;
-      maintainers = with lib.maintainers; [
+      license = licenses.gpl3Plus;
+      maintainers = with maintainers; [
         garaiza-93
         Madouura
         d3vil0p3r
       ];
-      platforms = lib.platforms.unix;
+      platforms = platforms.unix;
     };
   }

@@ -58,10 +58,10 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.vbgl ];
-    platforms = lib.platforms.all;
+  meta = with lib; {
+    license = licenses.mit;
+    maintainers = [ maintainers.vbgl ];
+    platforms = platforms.all;
     homepage = "https://easycrypt.info/";
     description = "Computer-Aided Cryptographic Proofs";
     mainProgram = "easycrypt";

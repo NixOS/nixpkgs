@@ -27,12 +27,12 @@ swiftPackages.stdenv.mkDerivation (final: {
 
   makeFlags = [ "prefix=$(out)" ];
 
-  meta = {
+  meta = with lib; {
     description = "Run a script whenever dark mode changes in macOS";
     homepage = "https://github.com/bouk/dark-mode-notify";
-    platforms = lib.platforms.darwin;
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ YorikSar ];
+    platforms = platforms.darwin;
+    license = licenses.mit;
+    maintainers = with maintainers; [ YorikSar ];
     mainProgram = "dark-mode-notify";
   };
 })

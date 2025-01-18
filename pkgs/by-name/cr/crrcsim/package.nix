@@ -34,14 +34,14 @@ stdenv.mkDerivation rec {
     ./gcc6.patch
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Model-airplane flight simulator";
     mainProgram = "crrcsim";
-    maintainers = with lib.maintainers; [ raskin ];
+    maintainers = with maintainers; [ raskin ];
     platforms = [
       "i686-linux"
       "x86_64-linux"
     ];
-    license = lib.licenses.gpl2Only;
+    license = licenses.gpl2Only;
   };
 }

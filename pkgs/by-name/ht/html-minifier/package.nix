@@ -21,11 +21,11 @@ buildNpmPackage rec {
 
   dontNpmBuild = true;
 
-  meta = {
+  meta = with lib; {
     description = "Highly configurable, well-tested, JavaScript-based HTML minifier";
     homepage = "https://github.com/kangax/html-minifier";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "html-minifier";
-    maintainers = with lib.maintainers; [ chris-martin ];
+    maintainers = with maintainers; [ chris-martin ];
   };
 }

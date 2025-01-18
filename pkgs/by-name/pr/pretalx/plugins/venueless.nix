@@ -31,10 +31,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pretalx_venueless" ];
 
-  meta = {
+  meta = with lib; {
     description = "Static venueless for pretalx, e.g. information, venue listings, a Code of Conduct, etc";
     homepage = "https://github.com/pretalx/pretalx-venueless";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ wegank ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ wegank ];
   };
 }

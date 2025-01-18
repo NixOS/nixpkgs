@@ -30,10 +30,10 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (nixosTests) iodine;
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "http://code.kryo.se/iodine/";
     description = "Tool to tunnel IPv4 data through a DNS server";
-    license = lib.licenses.isc;
-    platforms = lib.platforms.unix;
+    license = licenses.isc;
+    platforms = platforms.unix;
   };
 })

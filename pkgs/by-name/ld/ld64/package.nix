@@ -207,12 +207,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = gitUpdater { rev-prefix = "ld64-"; };
 
-  meta = {
+  meta = with lib; {
     description = "The classic linker for Darwin";
     homepage = "https://opensource.apple.com/releases/";
-    license = lib.licenses.apple-psl20;
+    license = licenses.apple-psl20;
     mainProgram = "ld";
-    maintainers = lib.teams.darwin.members;
-    platforms = lib.platforms.darwin; # Porting to other platforms is incomplete. Support only Darwin for now.
+    maintainers = teams.darwin.members;
+    platforms = platforms.darwin; # Porting to other platforms is incomplete. Support only Darwin for now.
   };
 })

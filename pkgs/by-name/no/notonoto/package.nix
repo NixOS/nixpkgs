@@ -22,11 +22,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Programming font that combines Noto Sans Mono and Noto Sans JP";
     homepage = "https://github.com/yuru7/NOTONOTO";
-    license = lib.licenses.ofl;
-    maintainers = with lib.maintainers; [ genga898 ];
+    license = licenses.ofl;
+    maintainers = with maintainers; [ genga898 ];
     mainProgram = "notonoto";
   };
 

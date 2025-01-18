@@ -17,11 +17,11 @@
 
 mkDerivation {
   pname = "kcachegrind";
-  meta = {
+  meta = with lib; {
     homepage = "https://apps.kde.org/kcachegrind/";
     description = "Profiler frontend";
-    license = with lib.licenses; [ gpl2 ];
-    maintainers = with lib.maintainers; [ orivej ];
+    license = with licenses; [ gpl2 ];
+    maintainers = with maintainers; [ orivej ];
   };
   nativeBuildInputs = [
     extra-cmake-modules

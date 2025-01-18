@@ -41,12 +41,12 @@ stdenv.mkDerivation rec {
     "SUFFIX=''"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "'perceptual' or 'psychoacoustic' audio spectrum analyser for JACK and ALSA";
     homepage = "http://kokkinizita.linuxaudio.org/linuxaudio/index.html";
-    license = lib.licenses.gpl2;
-    maintainers = [ lib.maintainers.magnetophon ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2;
+    maintainers = [ maintainers.magnetophon ];
+    platforms = platforms.linux;
     mainProgram = "japa";
   };
 }

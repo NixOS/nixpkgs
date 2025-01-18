@@ -201,11 +201,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "CasADi is a symbolic framework for numeric optimization implementing automatic differentiation in forward and reverse modes on sparse matrix-valued computational graphs. It supports self-contained C-code generation and interfaces state-of-the-art codes such as SUNDIALS, IPOPT etc. It can be used from C++, Python or Matlab/Octave";
     homepage = "https://github.com/casadi/casadi";
-    license = lib.licenses.lgpl3Only;
-    maintainers = with lib.maintainers; [ nim65s ];
-    platforms = lib.platforms.all;
+    license = licenses.lgpl3Only;
+    maintainers = with maintainers; [ nim65s ];
+    platforms = platforms.all;
   };
 })

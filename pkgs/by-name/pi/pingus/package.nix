@@ -45,11 +45,11 @@ stdenv.mkDerivation rec {
     sed -e '1i #include <cstdint>' -i src/util/pathname.hpp
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Puzzle game with mechanics similar to Lemmings";
     mainProgram = "pingus";
-    platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.raskin ];
-    license = lib.licenses.gpl3;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.raskin ];
+    license = licenses.gpl3;
   };
 }

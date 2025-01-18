@@ -50,12 +50,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Fighting the copy-paste element of your rebase workflow";
     homepage = "https://github.com/keis/git-fixup";
-    license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ michaeladler ];
-    platforms = lib.platforms.all;
+    license = licenses.isc;
+    maintainers = with maintainers; [ michaeladler ];
+    platforms = platforms.all;
     mainProgram = "git-fixup";
   };
 })

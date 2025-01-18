@@ -27,11 +27,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Fix for OS X's scroll wheel problem";
     homepage = "https://github.com/emreyolcu/discrete-scroll";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ bb2020 ];
-    platforms = lib.platforms.darwin;
+    license = licenses.mit;
+    maintainers = with maintainers; [ bb2020 ];
+    platforms = platforms.darwin;
   };
 })

@@ -54,13 +54,13 @@ stdenv.mkDerivation (finalAttrs: {
     # TODO: Debug why testVersion reports a non-zero status code in the nix sandbox
   };
 
-  meta = {
+  meta = with lib; {
     description = "Hex Editor for Qt";
     homepage = "https://github.com/Simsys/qhexedit2";
     changelog = "https://github.com/Simsys/qhexedit2/releases";
     mainProgram = "qhexedit";
-    license = lib.licenses.lgpl21Only;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ pandapip1 ];
+    license = licenses.lgpl21Only;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ pandapip1 ];
   };
 })

@@ -70,11 +70,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "http://www.libsdl.org/projects/SDL_image/";
     description = "SDL image library";
-    license = lib.licenses.zlib;
-    maintainers = lib.teams.sdl.members ++ (with lib.maintainers; [ ]);
+    license = licenses.zlib;
+    maintainers = teams.sdl.members ++ (with maintainers; [ ]);
     inherit (SDL.meta) platforms;
   };
 })

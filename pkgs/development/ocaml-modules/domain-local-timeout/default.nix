@@ -36,10 +36,10 @@ buildDunePackage rec {
     mdx
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/ocaml-multicore/domain-local-timeout";
     description = "Scheduler independent timeout mechanism";
-    license = lib.licenses.isc;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.isc;
+    maintainers = [ maintainers.vbgl ];
   };
 }

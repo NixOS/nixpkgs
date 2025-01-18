@@ -48,13 +48,13 @@ appimageTools.wrapType2 {
         fi
       '';
 
-  meta = {
+  meta = with lib; {
     description = "The only platform that allows you to automatically clean up your old posts from services like Twitter, Reddit, Facebook, Discord, and more, all in one place.";
     homepage = "https://redact.dev/";
-    license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ reputable2772 ];
+    license = licenses.unfree;
+    maintainers = with maintainers; [ reputable2772 ];
     mainProgram = "redact";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = [ "x86_64-linux" ];
   };
 }

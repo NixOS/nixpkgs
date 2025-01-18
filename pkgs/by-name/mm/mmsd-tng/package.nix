@@ -45,12 +45,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "Multimedia Messaging Service Daemon - The Next Generation";
     homepage = "https://gitlab.com/kop316/mmsd";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ julm ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ julm ];
+    platforms = platforms.linux;
     mainProgram = "mmsdtng";
   };
 })

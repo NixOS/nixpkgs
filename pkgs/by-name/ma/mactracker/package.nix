@@ -63,13 +63,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   versionCheckProgramArg = [ "${placeholder "out"}/Applications/Mactracker.app/Contents/Info.plist" ];
   doInstallCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "Mactracker provides detailed information on every Apple Macintosh, iPod, iPhone, iPad, and Apple Watch ever made";
     homepage = "https://mactracker.ca";
     changelog = "https://mactracker.ca/releasenotes-mac.html";
-    license = lib.licenses.unfree;
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [ DimitarNestorov ];
+    license = licenses.unfree;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    maintainers = with maintainers; [ DimitarNestorov ];
     platforms = [
       "aarch64-darwin"
       "x86_64-darwin"

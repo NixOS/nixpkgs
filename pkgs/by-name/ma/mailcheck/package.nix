@@ -15,13 +15,13 @@ stdenv.mkDerivation rec {
     sha256 = "0p0azaxsnjvjbg41ycicc1i0kzw6jiynq8k49cfkdhlckxfdm9kc";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Simple command line tool to check for new messages";
     mainProgram = "mailcheck";
     homepage = "https://mailcheck.sourceforge.net/";
-    license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ kovirobi ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ kovirobi ];
+    platforms = platforms.linux;
     longDescription = ''
       A simple command line tool to check for new mail in local mbox and
       maildir and remote POP3 and IMAP mailboxes.

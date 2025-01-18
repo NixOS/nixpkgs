@@ -31,12 +31,12 @@ stdenv.mkDerivation rec {
   #     multiple definition of `pVirtualDirList'; libupnp/upnp/.libs/libupnp.a(libupnp_la-upnpapi.o):libupnp/upnp/src/inc/upnpapi.h:163: first defined here
   env.NIX_CFLAGS_COMPILE = "-fcommon";
 
-  meta = {
+  meta = with lib; {
     homepage = "https://djmount.sourceforge.net/";
     description = "UPnP AV client, mounts as a Linux filesystem the media content of compatible UPnP AV devices";
     mainProgram = "djmount";
-    platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.jagajaga ];
-    license = lib.licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.jagajaga ];
+    license = licenses.gpl2Plus;
   };
 }

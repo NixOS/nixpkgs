@@ -30,11 +30,11 @@ rustPlatform.buildRustPackage rec {
       ]
     );
 
-  meta = {
+  meta = with lib; {
     description = "Web-app pentesting suite written in rust";
     homepage = "https://github.com/pwnwriter/kanha";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pwnwriter ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ pwnwriter ];
     mainProgram = "kanha";
   };
 }

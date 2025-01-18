@@ -39,12 +39,12 @@ stdenv.mkDerivation rec {
     makeWrapper $out/lib/eternity/eternity $out/bin/eternity
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://doomworld.com/eternity";
     description = "New school Doom port by James Haley";
     mainProgram = "eternity";
-    license = lib.licenses.gpl3;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3;
+    platforms = platforms.linux;
     maintainers = [ ];
   };
 }

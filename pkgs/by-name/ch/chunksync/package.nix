@@ -32,11 +32,11 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/man/man1
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Space-efficient incremental backups of large files or block devices";
     mainProgram = "chunksync";
     homepage = "http://chunksync.florz.de/";
-    license = lib.licenses.gpl2Plus;
-    platforms = with lib.platforms; linux;
+    license = licenses.gpl2Plus;
+    platforms = with platforms; linux;
   };
 }

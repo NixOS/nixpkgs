@@ -20,10 +20,10 @@ buildPythonPackage rec {
     aiocoap
     pycryptodome
   ];
-  meta = {
+  meta = with lib; {
     description = "Python implementation of the Encoding for Robust Immutable Storage (ERIS)";
     homepage = "https://eris.codeberg.page/python-eris/";
-    license = [ lib.licenses.agpl3Plus ];
-    maintainers = with lib.maintainers; [ ehmry ];
+    license = [ licenses.agpl3Plus ];
+    maintainers = with maintainers; [ ehmry ];
   };
 }

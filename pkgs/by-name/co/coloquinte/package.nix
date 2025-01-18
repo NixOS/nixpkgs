@@ -29,11 +29,11 @@ stdenv.mkDerivation (finalAttrs: {
     boost
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Placement library for electronic circuits";
     homepage = "https://github.com/Coloquinte/PlaceRoute";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.coloquinte ];
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.coloquinte ];
   };
 })

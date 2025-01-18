@@ -65,10 +65,10 @@ stdenv.mkDerivation (finalAttrs: {
     yq-go
   ];
   doDist = false;
-  meta = {
+  meta = with lib; {
     description = "dashy";
     homepage = "https://dashy.to";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.therealgramdalf ];
+    license = licenses.mit;
+    maintainers = [ maintainers.therealgramdalf ];
   };
 })

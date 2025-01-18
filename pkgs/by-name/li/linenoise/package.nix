@@ -43,14 +43,14 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/antirez/linenoise";
     description = "Minimal, zero-config, BSD licensed, readline replacement";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       fstamour
       remexre
     ];
-    platforms = lib.platforms.unix;
-    license = lib.licenses.bsd2;
+    platforms = platforms.unix;
+    license = licenses.bsd2;
   };
 }

@@ -57,15 +57,15 @@ stdenv.mkDerivation rec {
   # Be sure to keep the statically linked libraries
   dontDisableStatic = true;
 
-  meta = {
+  meta = with lib; {
     description = "Advanced purely-functional web programming language";
     mainProgram = "urweb";
     homepage = "http://www.impredicative.com/ur/";
-    license = lib.licenses.bsd3;
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    license = licenses.bsd3;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = [
-      lib.maintainers.thoughtpolice
-      lib.maintainers.sheganinans
+      maintainers.thoughtpolice
+      maintainers.sheganinans
     ];
   };
 }

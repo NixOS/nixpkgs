@@ -41,12 +41,12 @@ buildGoModule rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Decentralized, privacy-preserving, multi-party messaging protocol";
     homepage = "https://cwtch.im/";
     changelog = "https://docs.cwtch.im/changelog";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.gmacon ];
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.gmacon ];
   };
 }

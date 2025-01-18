@@ -32,11 +32,11 @@ stdenv.mkDerivation rec {
       --replace cat ${coreutils}/bin/cat
   '';
 
-  meta = {
-    maintainers = [ lib.maintainers.orbekk ];
-    platforms = lib.platforms.linux;
+  meta = with lib; {
+    maintainers = [ maintainers.orbekk ];
+    platforms = platforms.linux;
     description = "Tool to set battery charging thresholds on Lenovo Thinkpad";
     mainProgram = "tpacpi-bat";
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
   };
 }

@@ -75,10 +75,10 @@ buildPythonApplication {
 
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Visually simulate Git operations in your own repos with a single terminal command";
     homepage = "https://initialcommit.com/tools/git-sim";
-    license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ mathiassven ];
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ mathiassven ];
   };
 }

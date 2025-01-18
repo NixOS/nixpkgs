@@ -49,12 +49,12 @@ stdenv.mkDerivation rec {
 
   LIBLEPT_HEADERSDIR = "${leptonica}/include";
 
-  meta = {
+  meta = with lib; {
     description = "OCR engine";
     homepage = "https://github.com/tesseract-ocr/tesseract";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ erikarvstedt ];
-    platforms = with lib.platforms; linux ++ darwin;
+    license = licenses.asl20;
+    maintainers = with maintainers; [ erikarvstedt ];
+    platforms = with platforms; linux ++ darwin;
     mainProgram = "tesseract";
   };
 }

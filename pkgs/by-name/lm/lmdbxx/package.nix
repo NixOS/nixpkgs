@@ -19,10 +19,10 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ lmdb ];
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/hoytech/lmdbxx#readme";
     description = "C++11 wrapper for the LMDB embedded B+ tree database library";
-    license = lib.licenses.unlicense;
-    maintainers = with lib.maintainers; [ fgaz ];
+    license = licenses.unlicense;
+    maintainers = with maintainers; [ fgaz ];
   };
 })

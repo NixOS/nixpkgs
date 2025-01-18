@@ -23,10 +23,10 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Public domain font based on Frederic Goudy’s Kennerley Oldstyle";
     homepage = "https://www.theleagueofmoveabletype.com/goudy-bookletter-1911";
-    license = lib.licenses.ofl;
-    maintainers = with lib.maintainers; [ minijackson ];
+    license = licenses.ofl;
+    maintainers = with maintainers; [ minijackson ];
   };
 }

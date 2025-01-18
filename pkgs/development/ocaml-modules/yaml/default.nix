@@ -42,11 +42,11 @@ buildDunePackage rec {
     ezjsonm
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Parse and generate YAML 1.1 files";
     homepage = "https://github.com/avsm/ocaml-yaml";
-    license = lib.licenses.isc;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.isc;
+    maintainers = [ maintainers.vbgl ];
   };
 
 }

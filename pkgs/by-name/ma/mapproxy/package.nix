@@ -42,10 +42,10 @@ buildPythonApplication rec {
   #    https://github.com/NixOS/nixpkgs/pull/56480
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Open source proxy for geospatial data";
     homepage = "https://mapproxy.org/";
-    license = lib.licenses.asl20;
-    maintainers = lib.teams.geospatial.members ++ (with lib.maintainers; [ rakesh4g ]);
+    license = licenses.asl20;
+    maintainers = teams.geospatial.members ++ (with maintainers; [ rakesh4g ]);
   };
 }

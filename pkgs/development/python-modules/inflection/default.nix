@@ -21,10 +21,10 @@ buildPythonPackage rec {
   # Suppress overly verbose output if tests run successfully
   checkPhase = "pytest >/dev/null || pytest";
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/jpvanhal/inflection";
     description = "Port of Ruby on Rails inflector to Python";
-    maintainers = with lib.maintainers; [ ilya-kolpakov ];
-    license = lib.licenses.mit;
+    maintainers = with maintainers; [ ilya-kolpakov ];
+    license = licenses.mit;
   };
 }

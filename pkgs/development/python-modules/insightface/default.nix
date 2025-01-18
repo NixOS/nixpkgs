@@ -82,11 +82,11 @@ buildPythonPackage rec {
 
   doCheck = false; # Upstream has no tests
 
-  meta = {
+  meta = with lib; {
     description = "State-of-the-art 2D and 3D Face Analysis Project";
     mainProgram = "insightface-cli";
     homepage = "https://github.com/deepinsight/insightface";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ oddlama ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ oddlama ];
   };
 }

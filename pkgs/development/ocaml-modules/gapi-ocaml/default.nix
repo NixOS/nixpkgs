@@ -35,10 +35,10 @@ buildDunePackage rec {
   doCheck = true;
   checkInputs = [ ounit2 ];
 
-  meta = {
+  meta = with lib; {
     description = "OCaml client for google services";
     homepage = "https://github.com/astrada/gapi-ocaml";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ bennofs ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ bennofs ];
   };
 }

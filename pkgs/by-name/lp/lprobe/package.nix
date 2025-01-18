@@ -22,12 +22,12 @@ buildGoModule rec {
     libpcap
   ];
 
-  meta = {
+  meta = with lib; {
     description = "A command-line tool to perform Local Health Check Probes inside Container Images (ECS, Docker)";
     homepage = "https://github.com/fivexl/lprobe";
-    license = lib.licenses.asl20;
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    maintainers = with lib.maintainers; [ cageyv ];
+    license = licenses.asl20;
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ cageyv ];
     mainProgram = "lprobe";
   };
 }

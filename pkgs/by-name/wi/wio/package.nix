@@ -69,16 +69,16 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = unstableGitUpdater { };
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/Rubo3/wio";
     description = "Wayland compositor similar to Plan 9's rio";
     longDescription = ''
       Wio is a Wayland compositor for Linux and FreeBSD which has a similar look
       and feel to plan9's rio.
     '';
-    license = with lib.licenses; [ bsd3 ];
+    license = with licenses; [ bsd3 ];
     mainProgram = "wio";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ AndersonTorres ];
     inherit (wayland.meta) platforms;
   };
 })

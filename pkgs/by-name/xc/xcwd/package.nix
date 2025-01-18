@@ -24,14 +24,14 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/bin
   '';
 
-  meta = {
+  meta = with lib; {
     description = ''
       A simple tool which prints the current working directory of the currently focused window
     '';
     homepage = "https://github.com/schischi/xcwd";
-    license = lib.licenses.bsd3;
+    license = licenses.bsd3;
     mainProgram = "xcwd";
-    maintainers = [ lib.maintainers.grburst ];
-    platforms = lib.platforms.linux;
+    maintainers = [ maintainers.grburst ];
+    platforms = platforms.linux;
   };
 })

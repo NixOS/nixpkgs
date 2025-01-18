@@ -27,11 +27,11 @@ buildGoModule rec {
     xorg.libXi
   ] ++ lib.optional stdenv.hostPlatform.isDarwin apple-sdk_14;
 
-  meta = {
+  meta = with lib; {
     description = "Encrypted Screen Sharing";
     homepage = "https://1fps.video";
-    license = lib.licenses.fsl11Asl20;
-    maintainers = with lib.maintainers; [ renesat ];
+    license = licenses.fsl11Asl20;
+    maintainers = with maintainers; [ renesat ];
     mainProgram = "1fps";
   };
 }

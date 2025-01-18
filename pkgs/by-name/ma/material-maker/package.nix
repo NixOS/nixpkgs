@@ -85,12 +85,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Procedural materials authoring tool";
     mainProgram = "material-maker";
     homepage = "https://www.materialmaker.org";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     platforms = [ "x86_64-linux" ];
-    maintainers = with lib.maintainers; [ lelgenio ];
+    maintainers = with maintainers; [ lelgenio ];
   };
 })

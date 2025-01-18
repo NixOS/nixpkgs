@@ -24,7 +24,7 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Reworking of the classic gothic typeface style";
     longDescription = ''
       Oswald is a reworking of the classic gothic typeface style
@@ -33,8 +33,8 @@ stdenvNoCC.mkDerivation {
       better fit the pixel grid of standard digital screens.
     '';
     homepage = "https://github.com/googlefonts/OswaldFont";
-    license = lib.licenses.ofl;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ mimvoid ];
+    license = licenses.ofl;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ mimvoid ];
   };
 }

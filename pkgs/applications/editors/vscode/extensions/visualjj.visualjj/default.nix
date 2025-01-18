@@ -33,11 +33,11 @@ vscode-utils.buildVscodeMarketplaceExtension {
     }
     // sources.${stdenvNoCC.system} or (throw "Unsupported system ${stdenvNoCC.system}");
 
-  meta = {
+  meta = with lib; {
     description = "Jujutsu version control integration, for simpler Git workflow";
     downloadPage = "https://www.visualjj.com";
     homepage = "https://www.visualjj.com";
-    license = lib.licenses.unfree;
-    maintainers = [ lib.maintainers.drupol ];
+    license = licenses.unfree;
+    maintainers = [ maintainers.drupol ];
   };
 }

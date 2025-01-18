@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs tools/build
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/argtable/argtable3";
     description = "Single-file, ANSI C command-line parsing library";
     longDescription = ''
@@ -38,9 +38,9 @@ stdenv.mkDerivation (finalAttrs: {
       handling logic and textual descriptions of the command line syntax, which
       are essential but tedious to implement for a robust CLI program.
     '';
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ artuuge ];
-    platforms = lib.platforms.all;
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ artuuge ];
+    platforms = platforms.all;
   };
 })
 # TODO: a NixOS test suite

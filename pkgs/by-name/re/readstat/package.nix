@@ -42,11 +42,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/WizardMac/ReadStat";
     description = "Command-line tool (+ C library) for converting SAS, Stata, and SPSS files";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ swflint ];
-    platforms = lib.platforms.all;
+    license = licenses.mit;
+    maintainers = with maintainers; [ swflint ];
+    platforms = platforms.all;
   };
 }

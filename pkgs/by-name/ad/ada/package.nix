@@ -24,14 +24,14 @@ stdenv.mkDerivation rec {
     (lib.cmakeBool "ADA_TESTING" false)
   ];
 
-  meta = {
+  meta = with lib; {
     description = "WHATWG-compliant and fast URL parser written in modern C";
     homepage = "https://github.com/ada-url/ada";
-    license = with lib.licenses; [
+    license = with licenses; [
       asl20
       mit
     ];
-    maintainers = with lib.maintainers; [ nickcao ];
-    platforms = lib.platforms.all;
+    maintainers = with maintainers; [ nickcao ];
+    platforms = platforms.all;
   };
 }

@@ -55,10 +55,10 @@ stdenvNoCC.mkDerivation rec {
     tests = callPackage ./tests.nix { };
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/psb1558/Junicode-font";
     description = "Unicode font for medievalists";
-    maintainers = with lib.maintainers; [ ivan-timokhin ];
-    license = lib.licenses.ofl;
+    maintainers = with maintainers; [ ivan-timokhin ];
+    license = licenses.ofl;
   };
 }

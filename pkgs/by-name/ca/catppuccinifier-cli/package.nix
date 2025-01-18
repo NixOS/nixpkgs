@@ -24,15 +24,15 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Apply catppuccin flavors to your wallpapers";
     homepage = "https://github.com/lighttigerXIV/catppuccinifier";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "catppuccinifier-cli";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       aleksana
       isabelroses
     ];
-    platforms = with lib.platforms; linux ++ windows;
+    platforms = with platforms; linux ++ windows;
   };
 }

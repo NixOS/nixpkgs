@@ -41,11 +41,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Kernel module for the AmneziaWG";
     homepage = "https://amnezia.org";
-    license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ averyanalex ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ averyanalex ];
+    platforms = platforms.linux;
   };
 })

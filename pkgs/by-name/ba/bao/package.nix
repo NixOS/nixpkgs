@@ -21,11 +21,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-mmhTG3WXVjIKtaz2xP9aYI9GQNTbx4l3c6UgKSMgQJU=";
 
-  meta = {
+  meta = with lib; {
     description = "Implementation of BLAKE3 verified streaming";
     homepage = "https://github.com/oconnor663/bao";
-    maintainers = with lib.maintainers; [ amarshall ];
-    license = with lib.licenses; [
+    maintainers = with maintainers; [ amarshall ];
+    license = with licenses; [
       cc0
       asl20
     ];

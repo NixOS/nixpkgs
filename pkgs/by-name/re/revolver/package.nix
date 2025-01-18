@@ -82,13 +82,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Progress spinner for ZSH scripts";
     homepage = "https://github.com/molovo/revolver";
     downloadPage = "https://github.com/molovo/revolver/releases";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "revolver";
     inherit (zsh.meta) platforms;
-    maintainers = with lib.maintainers; [ d-brasher ];
+    maintainers = with maintainers; [ d-brasher ];
   };
 })

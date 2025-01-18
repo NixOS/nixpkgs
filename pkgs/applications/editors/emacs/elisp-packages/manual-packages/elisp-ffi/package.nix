@@ -31,7 +31,7 @@ melpaBuild {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/skeeto/elisp-ffi";
     description = "Emacs Lisp Foreign Function Interface";
     longDescription = ''
@@ -40,7 +40,7 @@ melpaBuild {
       driving a subprocess to do the heavy lifting, passing result
       values on to Emacs.
     '';
-    license = lib.licenses.unlicense;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    license = licenses.unlicense;
+    maintainers = with maintainers; [ AndersonTorres ];
   };
 }

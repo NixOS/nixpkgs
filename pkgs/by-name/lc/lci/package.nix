@@ -12,11 +12,11 @@ stdenv.mkDerivation rec {
     sha256 = "204f1ca5e2f56247d71ab320246811c220ed511bf08c9cb7f305cf180a93948e";
   };
   buildInputs = [ readline ];
-  meta = {
+  meta = with lib; {
     description = "Lambda calculus interpreter";
     mainProgram = "lci";
-    maintainers = with lib.maintainers; [ raskin ];
-    platforms = with lib.platforms; linux;
-    license = lib.licenses.gpl3;
+    maintainers = with maintainers; [ raskin ];
+    platforms = with platforms; linux;
+    license = licenses.gpl3;
   };
 }

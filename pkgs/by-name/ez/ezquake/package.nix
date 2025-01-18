@@ -60,12 +60,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://ezquake.com/";
     description = "Modern QuakeWorld client focused on competitive online play";
     mainProgram = "ezquake";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ edwtjo ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ edwtjo ];
   };
 }

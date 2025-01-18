@@ -23,14 +23,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Fcitx 5 pinyin dictionary from zh.wikipedia.org";
     homepage = "https://github.com/felixonmars/fcitx5-pinyin-zhwiki";
-    license = with lib.licenses; [
+    license = with licenses; [
       unlicense
       cc-by-sa-40
     ];
-    maintainers = with lib.maintainers; [ Guanran928 ];
-    platforms = lib.platforms.all;
+    maintainers = with maintainers; [ Guanran928 ];
+    platforms = platforms.all;
   };
 })

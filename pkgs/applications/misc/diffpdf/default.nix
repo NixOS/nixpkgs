@@ -63,12 +63,12 @@ mkDerivation rec {
     EOF
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "http://www.qtrac.eu/diffpdf.html";
     description = "Tool for diffing pdf files visually or textually";
     mainProgram = "diffpdf";
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = with lib.platforms; linux;
+    platforms = with platforms; linux;
   };
 }

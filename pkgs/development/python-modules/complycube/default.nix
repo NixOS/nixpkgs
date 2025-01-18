@@ -27,10 +27,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "complycube" ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://complycube.com";
     description = "Official Python client for the ComplyCube API";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ derdennisop ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ derdennisop ];
   };
 }

@@ -95,12 +95,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/libguestfs/virt-v2v";
     description = "Convert guests from foreign hypervisors to run on KVM";
-    license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ lukts30 ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ lukts30 ];
+    platforms = platforms.linux;
     mainProgram = "virt-v2v";
   };
 })

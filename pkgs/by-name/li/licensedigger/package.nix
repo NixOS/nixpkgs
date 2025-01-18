@@ -27,13 +27,13 @@ stdenv.mkDerivation {
 
   dontWrapQtApps = true;
 
-  meta = {
+  meta = with lib; {
     description = "Tools to convert existing license headers to SPDX compliant headers";
     homepage = "https://invent.kde.org/sdk/licensedigger";
-    license = with lib.licenses; [
+    license = with licenses; [
       gpl2Only
       gpl3Only
     ];
-    maintainers = with lib.maintainers; [ onny ];
+    maintainers = with maintainers; [ onny ];
   };
 }

@@ -26,12 +26,12 @@ buildPostgresqlExtension (finalAttrs: {
     };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Semantic version data type for PostgreSQL";
     homepage = "https://github.com/theory/pg-semver";
     changelog = "https://github.com/theory/pg-semver/blob/main/Changes";
-    maintainers = with lib.maintainers; [ grgi ];
+    maintainers = with maintainers; [ grgi ];
     inherit (postgresql.meta) platforms;
-    license = lib.licenses.postgresql;
+    license = licenses.postgresql;
   };
 })

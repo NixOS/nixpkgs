@@ -43,11 +43,11 @@ stdenv.mkDerivation rec {
     "-DVMIME_SENDMAIL_PATH=${sendmailPath}"
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.vmime.org/";
     description = "Free mail library for C++";
-    license = lib.licenses.gpl3;
+    license = licenses.gpl3;
     maintainers = [ ];
-    platforms = with lib.platforms; linux;
+    platforms = with platforms; linux;
   };
 }

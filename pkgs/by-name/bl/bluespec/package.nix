@@ -138,15 +138,15 @@ stdenv.mkDerivation rec {
     mv inst/doc/*.pdf $doc/share/doc/bsc
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Toolchain for the Bluespec Hardware Definition Language";
     homepage = "https://github.com/B-Lang-org/bsc";
-    license = lib.licenses.bsd3;
+    license = licenses.bsd3;
     platforms = [ "x86_64-linux" ];
     mainProgram = "bsc";
     # darwin fails at https://github.com/B-Lang-org/bsc/pull/35#issuecomment-583731562
     # aarch64 fails, as GHC fails with "ghc: could not execute: opt"
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       jcumming
       thoughtpolice
     ];

@@ -34,12 +34,12 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "C library implementing the Cangjie input method";
     homepage = "https://gitlab.freedesktop.org/cangjie/libcangjie";
-    license = lib.licenses.lgpl3Plus;
-    maintainers = [ lib.maintainers.linquize ];
-    platforms = lib.platforms.all;
+    license = licenses.lgpl3Plus;
+    maintainers = [ maintainers.linquize ];
+    platforms = platforms.all;
     mainProgram = "libcangjie-cli";
   };
 }

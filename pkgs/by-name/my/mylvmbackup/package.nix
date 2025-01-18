@@ -44,12 +44,12 @@ stdenv.mkDerivation rec {
       }"
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.lenzg.net/mylvmbackup/";
     description = "Tool for quickly creating full physical backups of a MySQL server's data files";
     mainProgram = "mylvmbackup";
-    license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ ryantm ];
-    platforms = with lib.platforms; linux;
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ ryantm ];
+    platforms = with platforms; linux;
   };
 }

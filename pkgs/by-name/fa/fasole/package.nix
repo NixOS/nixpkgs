@@ -17,11 +17,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-V5jqsNy4Pu1AKikIZqEXERdggwBe3gXKMJVmgivVT6A=";
 
-  meta = {
+  meta = with lib; {
     description = "Minimalist's todo-list";
     homepage = "https://github.com/ProggerX/fasole";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ proggerx ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ proggerx ];
     mainProgram = "fasole";
   };
 }

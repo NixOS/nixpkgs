@@ -17,10 +17,10 @@ buildPecl rec {
 
   sourceRoot = "${src.name}/extension";
 
-  meta = {
+  meta = with lib; {
     description = "PHP extension to get insight about memory usage";
     homepage = "https://github.com/BitOne/php-meminfo";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ drupol ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ drupol ];
   };
 }

@@ -32,11 +32,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://hamcrest.org/JavaHamcrest/";
     description = "Java library containing matchers that can be combined to create flexible expressions of intent";
     platforms = jdk.meta.platforms;
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ tomodachi94 ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ tomodachi94 ];
   };
 })

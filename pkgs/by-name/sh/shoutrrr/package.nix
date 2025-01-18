@@ -19,12 +19,12 @@ buildGoModule {
 
   vendorHash = "sha256-+LDA3Q6OSxHwKYoO5gtNUryB9EbLe2jJtUbLXnA2Lug=";
 
-  meta = {
+  meta = with lib; {
     description = "Notification library for gophers and their furry friends";
     homepage = "https://github.com/containrrr/shoutrrr";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ JManch ];
-    platforms = lib.platforms.unix;
+    license = licenses.mit;
+    maintainers = with maintainers; [ JManch ];
+    platforms = platforms.unix;
     mainProgram = "shoutrrr";
   };
 }

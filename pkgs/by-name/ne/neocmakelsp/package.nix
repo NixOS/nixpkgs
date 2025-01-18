@@ -28,12 +28,12 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion --zsh completions/zsh/_neocmakelsp
   '';
 
-  meta = {
+  meta = with lib; {
     description = "CMake lsp based on tower-lsp and treesitter";
     homepage = "https://github.com/Decodetalkers/neocmakelsp";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
       rewine
       multivac61
     ];

@@ -12,10 +12,10 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-IDUUrYJutAPasdLi3dA04NFTS75NvgITuwWT9mvrpOI=";
   };
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/mina86/pygtrie";
     description = "Trie data structure implementation";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ kmein ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ kmein ];
   };
 }

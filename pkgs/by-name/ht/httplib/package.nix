@@ -23,14 +23,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/yhirose/cpp-httplib";
     description = "C++ header-only HTTP/HTTPS server and client library";
     changelog = "https://github.com/yhirose/cpp-httplib/releases/tag/${finalAttrs.src.rev}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       AndersonTorres
     ];
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 })

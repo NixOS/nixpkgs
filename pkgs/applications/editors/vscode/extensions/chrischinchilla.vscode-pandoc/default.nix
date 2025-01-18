@@ -20,11 +20,11 @@ vscode-utils.buildVscodeMarketplaceExtension {
   postInstall = ''
     jq '.contributes.configuration.properties."pandoc.executable".default = "${lib.getExe pandoc}"' $out/$installPrefix/package.json | sponge $out/$installPrefix/package.json
   '';
-  meta = {
+  meta = with lib; {
     description = "Converts Markdown files to pdf, docx, or html files using pandoc";
     homepage = "https://github.com/ChrisChinchilla/vscode-pandoc#readme";
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=yzane.markdown-pdf";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pandapip1 ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ pandapip1 ];
   };
 }

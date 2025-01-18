@@ -171,13 +171,13 @@ let
         };
     };
 
-    meta = {
+    meta = with lib; {
       description = "Multi-protocol instant messaging client";
       mainProgram = "pidgin";
       homepage = "https://pidgin.im/";
-      license = lib.licenses.gpl2Plus;
-      platforms = lib.platforms.unix;
-      maintainers = [ lib.maintainers.lucasew ];
+      license = licenses.gpl2Plus;
+      platforms = platforms.unix;
+      maintainers = [ maintainers.lucasew ];
     };
   };
 

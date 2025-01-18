@@ -17,11 +17,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-+9uoB/1g4qucdM8RJRs+fSc5hpcgaCK0GrUOFgHWeKo=";
 
-  meta = {
+  meta = with lib; {
     description = "Useful clipboard manager TUI for Unix";
     homepage = "https://github.com/savedra1/clipse";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "clipse";
-    maintainers = [ lib.maintainers.savedra1 ];
+    maintainers = [ maintainers.savedra1 ];
   };
 }

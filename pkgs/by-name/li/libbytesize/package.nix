@@ -64,12 +64,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   pythonImportsCheck = [ "bytesize" ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/storaged-project/libbytesize";
     description = "Tiny library providing a C 'class' for working with arbitrary big sizes in bytes";
-    license = lib.licenses.lgpl2Plus;
+    license = licenses.lgpl2Plus;
     mainProgram = "bscalc";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.linux;
   };
 })

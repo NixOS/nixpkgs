@@ -65,11 +65,11 @@ buildGoModule rec {
     tests.simple-vmess-proxy-test = nixosTests.v2ray;
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.v2fly.org/en_US/";
     description = "Platform for building proxies to bypass network restrictions";
     mainProgram = "v2ray";
-    license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ servalcatty ];
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ servalcatty ];
   };
 }

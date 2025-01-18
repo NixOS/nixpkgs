@@ -30,11 +30,11 @@ buildNpmPackage {
 
   npmBuildScript = "package";
 
-  meta = {
+  meta = with lib; {
     description = "Language Server for MATLAB® code";
     homepage = "https://github.com/mathworks/MATLAB-language-server";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ doronbehar ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ doronbehar ];
     mainProgram = "matlab-language-server";
   };
 }

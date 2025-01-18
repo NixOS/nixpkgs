@@ -25,12 +25,12 @@ buildGoModule {
     })
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Reproducing images with geometric primitives";
     homepage = "https://github.com/fogleman/primitive";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ stunkymonkey ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ stunkymonkey ];
     mainProgram = "primitive";
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 }

@@ -10,11 +10,11 @@ let
       make src/IdrisPaths.idr
     '';
 
-    meta = {
+    meta = with lib; {
       description = "Idris2 Compiler API Library";
       homepage = "https://github.com/idris-lang/Idris2";
-      license = lib.licenses.bsd3;
-      maintainers = with lib.maintainers; [ mattpolzin ];
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ mattpolzin ];
       inherit (idris2.meta) platforms;
     };
   };

@@ -21,11 +21,11 @@ buildGoModule rec {
     go mod tidy
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Free (gratis and libre) command line compiler for Twine/Twee story formats, written in Go";
     homepage = "https://www.motoslave.net/tweego";
-    license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ chrispwill ];
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ chrispwill ];
     mainProgram = "tweego";
   };
 }

@@ -42,12 +42,12 @@ rustPlatform.buildRustPackage rec {
     install -Dm444 -t $out/etc/wired wired.ron wired_multilayout.ron
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Lightweight notification daemon written in Rust";
     homepage = "https://github.com/Toqozz/wired-notify";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fccapria ];
-    badPlatforms = lib.platforms.darwin;
+    license = licenses.mit;
+    maintainers = with maintainers; [ fccapria ];
+    badPlatforms = platforms.darwin;
     mainProgram = "wired";
   };
 }

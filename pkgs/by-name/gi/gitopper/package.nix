@@ -43,12 +43,12 @@ buildGoModule {
       --suffix PATH : ${lib.makeBinPath [ git ]}
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Gitops for non-Kubernetes folks";
     homepage = "https://github.com/miekg/gitopper/";
-    license = lib.licenses.asl20;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ luftmensch-luftmensch ];
+    license = licenses.asl20;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ luftmensch-luftmensch ];
     mainProgram = "gitopper";
   };
 }

@@ -41,12 +41,12 @@ stdenv.mkDerivation (finalAttrs: {
     sed -e 's|installdir=$(repexecdir)|installdir=$(libdir)/rep|g' -i Makefile.in
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "http://sawfish.tuxfamily.org";
     description = "GTK bindings for librep";
-    license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.AndersonTorres ];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.AndersonTorres ];
+    platforms = platforms.unix;
   };
 })
 # TODO: investigate fetchFromGithub

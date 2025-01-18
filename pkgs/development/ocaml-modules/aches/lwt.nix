@@ -15,9 +15,9 @@ buildDunePackage {
     lwt
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Caches (bounded-size stores) for Lwt promises";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.ulrikstrid ];
+    license = licenses.mit;
+    maintainers = [ maintainers.ulrikstrid ];
   };
 }

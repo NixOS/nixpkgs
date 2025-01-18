@@ -34,11 +34,11 @@ buildPythonPackage rec {
 
   doCheck = false; # no unittests, and would require KDE desktop environment
 
-  meta = {
+  meta = with lib; {
     homepage = "https://store.kde.org/p/2136963";
     description = "Automatic color scheme generator from your wallpaper for KDE Plasma powered by Material You";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ sigmanificient ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ sigmanificient ];
     mainProgram = "kde-material-you-colors";
   };
 }

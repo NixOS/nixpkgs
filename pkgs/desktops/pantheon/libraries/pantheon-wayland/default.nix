@@ -49,11 +49,11 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Wayland integration library to the Pantheon Desktop";
     homepage = "https://github.com/elementary/pantheon-wayland";
-    license = lib.licenses.lgpl3Plus;
-    maintainers = lib.teams.pantheon.members;
-    platforms = lib.platforms.linux;
+    license = licenses.lgpl3Plus;
+    maintainers = teams.pantheon.members;
+    platforms = platforms.linux;
   };
 })

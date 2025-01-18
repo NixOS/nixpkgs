@@ -88,12 +88,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Powerful and incredibly fast R6RS Scheme compiler";
     homepage = "https://cisco.github.io/ChezScheme/";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ thoughtpolice ];
-    platforms = lib.platforms.unix;
+    license = licenses.asl20;
+    maintainers = with maintainers; [ thoughtpolice ];
+    platforms = platforms.unix;
     mainProgram = "scheme";
   };
 })

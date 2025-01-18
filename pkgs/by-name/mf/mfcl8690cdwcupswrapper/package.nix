@@ -54,11 +54,11 @@ stdenv.mkDerivation rec {
     ln $dir/cupswrapper/brother_mfcl8690cdw_printer_en.ppd $out/share/cups/model
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Brother MFC-L8690CDW CUPS wrapper driver";
     homepage = "http://www.brother.com/";
-    license = lib.licenses.unfree;
-    platforms = lib.platforms.linux;
+    license = licenses.unfree;
+    platforms = platforms.linux;
     maintainers = [ ];
   };
 }

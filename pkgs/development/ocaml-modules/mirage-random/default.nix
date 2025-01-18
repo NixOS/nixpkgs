@@ -18,10 +18,10 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ cstruct ];
 
-  meta = {
+  meta = with lib; {
     description = "Random signatures for MirageOS";
     homepage = "https://github.com/mirage/mirage-random";
-    license = lib.licenses.isc;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.isc;
+    maintainers = [ maintainers.vbgl ];
   };
 }

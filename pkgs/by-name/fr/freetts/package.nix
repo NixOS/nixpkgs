@@ -47,16 +47,16 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Text to speech system based on Festival written in Java";
     longDescription = ''
       Text to speech system based on Festival written in Java.
       Can be used in combination with KDE accessibility.
     '';
     homepage = "http://freetts.sourceforge.net";
-    license = lib.licenses.bsdOriginal;
-    maintainers = with lib.maintainers; [ sander ];
-    sourceProvenance = with lib.sourceTypes; [
+    license = licenses.bsdOriginal;
+    maintainers = with maintainers; [ sander ];
+    sourceProvenance = with sourceTypes; [
       fromSource
       binaryBytecode # jsapi.jar is bundled in a self-extracting shell-script
     ];

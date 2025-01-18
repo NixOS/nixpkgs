@@ -99,12 +99,12 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Relatively simple music player";
     homepage = "https://codeberg.org/edestcroix/Recordbox";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ getchoo ];
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ getchoo ];
     mainProgram = "recordbox";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 })

@@ -35,10 +35,10 @@ stdenv.mkDerivation rec {
     echo letter > $out/etc/papersize
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Library for handling paper characteristics";
     homepage = "http://packages.debian.org/unstable/source/libpaper";
-    license = lib.licenses.gpl2;
-    platforms = lib.platforms.unix;
+    license = licenses.gpl2;
+    platforms = platforms.unix;
   };
 }

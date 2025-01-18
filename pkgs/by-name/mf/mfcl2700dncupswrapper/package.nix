@@ -54,11 +54,11 @@ stdenv.mkDerivation rec {
     ln $dir/cupswrapper/brother-MFCL2700DN-cups-en.ppd $out/share/cups/model
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Brother MFC-L2700DN CUPS wrapper driver";
     homepage = "http://www.brother.com/";
-    license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.tv ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.tv ];
+    platforms = platforms.linux;
   };
 }

@@ -38,12 +38,12 @@ stdenvNoCC.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/MintArchit/gh-contribs";
     description = "GitHub Contribution Graph CLI";
-    maintainers = [ lib.maintainers.vinnymeller ];
-    license = lib.licenses.unlicense;
+    maintainers = [ maintainers.vinnymeller ];
+    license = licenses.unlicense;
     mainProgram = "gh-contribs";
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 }

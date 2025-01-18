@@ -30,11 +30,11 @@ mkHyprlandPlugin hyprland {
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/KZDKM/Hyprspace";
     description = "Workspace overview plugin for Hyprland";
-    license = lib.licenses.gpl2Only;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ donovanglover ];
+    license = licenses.gpl2Only;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ donovanglover ];
   };
 }

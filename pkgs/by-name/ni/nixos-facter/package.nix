@@ -62,12 +62,12 @@ buildGoModule rec {
     "-X github.com/numtide/nixos-facter/pkg/build.System=${stdenv.hostPlatform.system}"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Declarative hardware configuration for NixOS";
     homepage = "https://github.com/numtide/nixos-facter";
-    license = lib.licenses.gpl3Plus;
-    maintainers = [ lib.maintainers.brianmcgee ];
+    license = licenses.gpl3Plus;
+    maintainers = [ maintainers.brianmcgee ];
     mainProgram = "nixos-facter";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

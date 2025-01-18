@@ -33,12 +33,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Control external displays using DDC/CI on Apple Silicon Macs";
     homepage = "https://github.com/waydabber/m1ddc";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "m1ddc";
-    maintainers = [ lib.maintainers.joanmassachs ];
+    maintainers = [ maintainers.joanmassachs ];
     platforms = [ "aarch64-darwin" ];
   };
 })

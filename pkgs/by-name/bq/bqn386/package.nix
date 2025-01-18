@@ -29,11 +29,11 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "APL and BQN font extending on APL386";
     homepage = "https://dzaima.github.io/BQN386/";
-    license = lib.licenses.unlicense;
-    maintainers = with lib.maintainers; [ skykanin ];
-    platforms = lib.platforms.all;
+    license = licenses.unlicense;
+    maintainers = with maintainers; [ skykanin ];
+    platforms = platforms.all;
   };
 }

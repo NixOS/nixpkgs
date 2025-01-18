@@ -64,11 +64,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "ADS-B decoder swiss knife";
     homepage = "https://github.com/wiedehopf/readsb";
-    license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ wucke13 ];
-    platforms = lib.platforms.linux; # uses epoll, hence its linux only
+    license = with licenses; [ gpl3Plus ];
+    maintainers = with maintainers; [ wucke13 ];
+    platforms = platforms.linux; # uses epoll, hence its linux only
   };
 })

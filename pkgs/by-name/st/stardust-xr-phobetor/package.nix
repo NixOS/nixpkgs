@@ -30,15 +30,15 @@ rustPlatform.buildRustPackage rec {
     extraArgs = [ "--version=branch" ];
   };
 
-  meta = {
+  meta = with lib; {
     description = "Handheld panel shell for Stardust XR";
     homepage = "https://stardustxr.org";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "phobetor";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       pandapip1
       technobaboo
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

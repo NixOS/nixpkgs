@@ -73,13 +73,13 @@ stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc ]}"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Minimal, functional, and customizable user-focused FOSS web browser based on Chromium";
     homepage = "https://getcatalyst.eu.org";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "catalyst";
-    maintainers = with lib.maintainers; [ jdev082 ];
+    maintainers = with maintainers; [ jdev082 ];
     platforms = [ "x86_64-linux" ];
-    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+    sourceProvenance = [ sourceTypes.binaryNativeCode ];
   };
 }

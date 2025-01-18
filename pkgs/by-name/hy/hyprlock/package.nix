@@ -66,15 +66,15 @@ gcc14Stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Hyprland's GPU-accelerated screen locking utility";
     homepage = "https://github.com/hyprwm/hyprlock";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [
+    license = licenses.bsd3;
+    maintainers = with maintainers; [
       iynaix
       johnrtitor
     ];
     mainProgram = "hyprlock";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 })

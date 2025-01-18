@@ -28,11 +28,11 @@ buildDunePackage {
     cppo
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Merlin support for MLX OCaml dialect";
     homepage = "https://github.com/ocaml-mlx/mlx";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.Denommus ];
+    license = licenses.mit;
+    maintainers = [ maintainers.Denommus ];
     mainProgram = "ocamlmerlin-mlx";
   };
 }

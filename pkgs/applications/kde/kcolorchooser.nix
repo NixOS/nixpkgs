@@ -9,12 +9,12 @@
 
 mkDerivation {
   pname = "kcolorchooser";
-  meta = {
+  meta = with lib; {
     homepage = "https://apps.kde.org/kcolorchooser/";
     description = "Color chooser";
     mainProgram = "kcolorchooser";
-    license = with lib.licenses; [ mit ];
-    maintainers = [ lib.maintainers.ttuegel ];
+    license = with licenses; [ mit ];
+    maintainers = [ maintainers.ttuegel ];
   };
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [

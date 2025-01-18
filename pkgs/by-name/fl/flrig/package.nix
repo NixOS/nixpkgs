@@ -29,12 +29,12 @@ stdenv.mkDerivation rec {
 
   env.FLTK_CONFIG = lib.getExe' (lib.getDev fltk13) "fltk-config";
 
-  meta = {
+  meta = with lib; {
     description = "Digital modem rig control program";
     homepage = "https://sourceforge.net/projects/fldigi/";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ dysinger ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ dysinger ];
+    platforms = platforms.linux;
     mainProgram = "flrig";
   };
 }

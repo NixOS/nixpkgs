@@ -40,11 +40,11 @@ python3Packages.buildPythonApplication rec {
     "test_current"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Comic strip downloader and archiver";
     mainProgram = "dosage";
     homepage = "https://dosage.rocks/";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ toonn ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ toonn ];
   };
 }

@@ -75,18 +75,18 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Fast and secure file transfer";
     homepage = "https://apps.gnome.org/Warp/";
-    license = lib.licenses.gpl3Only;
+    license = licenses.gpl3Only;
     maintainers =
-      with lib.maintainers;
+      with maintainers;
       [
         dotlambda
         foo-dogsquared
       ]
-      ++ lib.teams.gnome-circle.members;
-    platforms = lib.platforms.all;
+      ++ teams.gnome-circle.members;
+    platforms = platforms.all;
     mainProgram = "warp";
     broken = stdenv.hostPlatform.isDarwin;
   };

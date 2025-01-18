@@ -13,9 +13,9 @@ stdenv.mkDerivation rec {
     sha256 = "1a0jdyga1zfi4wgkg3905y6inghy3s4xfs5m4x7pal08m0llkmab";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Musepack SV7 decoder library";
-    platforms = lib.platforms.unix;
-    license = lib.licenses.bsd3;
+    platforms = platforms.unix;
+    license = licenses.bsd3;
   };
 }

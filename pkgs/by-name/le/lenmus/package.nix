@@ -91,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper $out/{Applications/lenmus.app/Contents/MacOS,bin}/lenmus
   '';
 
-  meta = {
+  meta = with lib; {
     description = "LenMus Phonascus is a program for learning music";
     longDescription = ''
       LenMus Phonascus is a free open source program (GPL v3) for learning music.
@@ -99,9 +99,9 @@ stdenv.mkDerivation (finalAttrs: {
       The different activities can be customized to meet your needs
     '';
     homepage = "http://www.lenmus.org/";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ramkromberg ];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ ramkromberg ];
+    platforms = platforms.unix;
     mainProgram = "lenmus";
   };
 })

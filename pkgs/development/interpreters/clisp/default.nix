@@ -161,12 +161,12 @@ stdenv.mkDerivation {
     if stdenv.hostPlatform.is64bit then "8" else "4"
   }";
 
-  meta = {
+  meta = with lib; {
     description = "ANSI Common Lisp Implementation";
     homepage = "http://clisp.org";
     mainProgram = "clisp";
-    maintainers = lib.teams.lisp.members;
-    license = lib.licenses.gpl2Plus;
-    platforms = with lib.platforms; linux ++ darwin;
+    maintainers = teams.lisp.members;
+    license = licenses.gpl2Plus;
+    platforms = with platforms; linux ++ darwin;
   };
 }

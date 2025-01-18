@@ -58,12 +58,12 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Pick and format colors";
     homepage = "https://github.com/FineFindus/eyedropper";
     mainProgram = "eyedropper";
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ zendo ] ++ lib.teams.gnome-circle.members;
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ zendo ] ++ teams.gnome-circle.members;
   };
 }

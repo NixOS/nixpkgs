@@ -25,12 +25,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/emmanuel-marty/lzsa";
     description = "Byte-aligned, efficient lossless packer that is optimized for fast decompression on 8-bit micros";
     mainProgram = "lzsa";
-    license = with lib.licenses; [ cc0 ];
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = lib.platforms.unix;
+    license = with licenses; [ cc0 ];
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.unix;
   };
 })

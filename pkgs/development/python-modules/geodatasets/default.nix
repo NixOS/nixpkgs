@@ -45,10 +45,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "geodatasets" ];
 
-  meta = {
+  meta = with lib; {
     description = "Spatial data examples";
     homepage = "https://geodatasets.readthedocs.io/";
-    license = lib.licenses.bsd3;
-    maintainers = lib.teams.geospatial.members;
+    license = licenses.bsd3;
+    maintainers = teams.geospatial.members;
   };
 }

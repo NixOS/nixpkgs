@@ -12,12 +12,12 @@ bundlerApp {
 
   passthru.updateScript = bundlerUpdateScript "completely";
 
-  meta = {
+  meta = with lib; {
     description = "Generate bash completion scripts using a simple configuration file";
     homepage = "https://github.com/DannyBen/completely";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ zendo ];
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ zendo ];
     mainProgram = "completely";
   };
 }

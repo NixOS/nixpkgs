@@ -27,12 +27,12 @@ stdenv.mkDerivation (finalAttrs: {
       fixDarwinDylibNames
     ];
 
-  meta = {
+  meta = with lib; {
     description = "Client library for MPD (music player daemon)";
     homepage = "https://www.musicpd.org/libs/libmpdclient/";
     changelog = "https://raw.githubusercontent.com/MusicPlayerDaemon/libmpdclient/${finalAttrs.src.rev}/NEWS";
-    license = with lib.licenses; [ bsd2 ];
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = lib.platforms.unix;
+    license = with licenses; [ bsd2 ];
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.unix;
   };
 })

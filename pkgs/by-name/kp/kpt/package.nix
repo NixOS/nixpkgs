@@ -25,11 +25,11 @@ buildGoModule rec {
     "-X github.com/kptdev/kpt/run.version=${version}"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Automate Kubernetes Configuration Editing";
     mainProgram = "kpt";
     homepage = "https://github.com/kptdev/kpt";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ mikefaille ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ mikefaille ];
   };
 }

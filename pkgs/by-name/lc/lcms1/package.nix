@@ -28,10 +28,10 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # fails with "Error in Linear interpolation (2p): Must be i=8000, But is n=8001"
 
-  meta = {
+  meta = with lib; {
     description = "Color management engine";
     homepage = "http://www.littlecms.com/";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.unix;
+    license = licenses.mit;
+    platforms = platforms.unix;
   };
 }

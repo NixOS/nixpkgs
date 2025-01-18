@@ -45,11 +45,11 @@ python3.pkgs.buildPythonApplication rec {
 
   passthru.tests.version = testers.testVersion { package = khard; };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/scheibler/khard";
     description = "Console carddav client";
-    license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ matthiasbeyer ];
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ matthiasbeyer ];
     mainProgram = "khard";
   };
 }

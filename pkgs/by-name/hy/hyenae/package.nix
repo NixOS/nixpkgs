@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
     libpcap
   ];
 
-  meta = {
+  meta = with lib; {
     description = "";
     homepage = "https://sourceforge.net/projects/hyenae/";
-    license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.marcweber ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3;
+    maintainers = [ maintainers.marcweber ];
+    platforms = platforms.linux;
   };
 }

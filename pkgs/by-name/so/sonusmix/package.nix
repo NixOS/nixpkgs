@@ -44,11 +44,11 @@ rustPlatform.buildRustPackage rec {
     dbus
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Next-gen Pipewire audio routing tool";
     homepage = "https://codeberg.org/sonusmix/sonusmix";
-    license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ aucub ];
-    platforms = lib.platforms.linux;
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ aucub ];
+    platforms = platforms.linux;
   };
 }

@@ -35,10 +35,10 @@ buildPythonPackage {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = {
+  meta = with lib; {
     description = "Easy to use PyPI client";
     homepage = "https://yarg.readthedocs.io";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ psyanticy ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ psyanticy ];
   };
 }

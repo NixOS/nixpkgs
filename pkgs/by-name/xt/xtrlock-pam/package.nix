@@ -32,11 +32,11 @@ stdenv.mkDerivation {
     python configure --prefix=$out
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/aanatoly/xtrlock-pam";
     description = "PAM based X11 screen locker";
     license = "unknown";
-    maintainers = with lib.maintainers; [ ondt ];
-    platforms = with lib.platforms; linux;
+    maintainers = with maintainers; [ ondt ];
+    platforms = with platforms; linux;
   };
 }

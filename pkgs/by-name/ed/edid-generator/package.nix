@@ -74,15 +74,15 @@ stdenv.mkDerivation {
     install -Dm 444 *.bin -t "$out/lib/firmware/edid"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Hackerswork to generate an EDID blob from given Xorg Modelines";
     homepage = "https://github.com/akatrevorjay/edid-generator";
-    license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl3;
+    maintainers = with maintainers; [
       flokli
       nazarewk
     ];
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
     broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/edid-generator.x86_64-darwin
   };
 }

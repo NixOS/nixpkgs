@@ -32,12 +32,12 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Experimental Go local docs server/generator and code reader implemented with some fresh ideas";
     homepage = "https://github.com/go101/golds";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ phanirithvij ];
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ phanirithvij ];
     mainProgram = "golds";
   };
 }

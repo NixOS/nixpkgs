@@ -85,11 +85,11 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
   pythonImportsCheck = [ "proxsuite" ];
 
-  meta = {
+  meta = with lib; {
     description = "The Advanced Proximal Optimization Toolbox";
     homepage = "https://github.com/Simple-Robotics/proxsuite";
-    license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ nim65s ];
-    platforms = lib.platforms.unix;
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ nim65s ];
+    platforms = platforms.unix;
   };
 })

@@ -167,15 +167,15 @@ stdenv.mkDerivation (finalAttrs: {
     tests.basic-service = nixosTests.monado;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Open source XR runtime";
     homepage = "https://monado.freedesktop.org/";
-    license = lib.licenses.boost;
-    maintainers = with lib.maintainers; [
+    license = licenses.boost;
+    maintainers = with maintainers; [
       Scrumplex
       prusnak
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
     mainProgram = "monado-cli";
   };
 })

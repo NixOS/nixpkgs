@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     substituteInPlace ./kanif --replace '$taktuk_command = "taktuk";' '$taktuk_command = "${taktuk}/bin/taktuk";'
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Cluster management and administration swiss army knife";
     longDescription = ''
       Kanif is a tool for high performance computing clusters management and
@@ -32,9 +32,9 @@ stdenv.mkDerivation rec {
       remote files or directories locally ('kaget' command). It relies on TakTuk
       for efficiency and scalability.'';
     homepage = "http://taktuk.gforge.inria.fr/kanif";
-    license = lib.licenses.gpl2;
-    maintainers = [ lib.maintainers.bzizou ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2;
+    maintainers = [ maintainers.bzizou ];
+    platforms = platforms.linux;
   };
 
 }

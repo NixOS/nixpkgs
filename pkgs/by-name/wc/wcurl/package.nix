@@ -70,12 +70,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://curl.se/wcurl";
     description = "Simple wrapper around curl to easily download files";
     mainProgram = "wcurl";
-    license = lib.licenses.curl;
-    maintainers = with lib.maintainers; [ deejayem ];
-    platforms = lib.platforms.all;
+    license = licenses.curl;
+    maintainers = with maintainers; [ deejayem ];
+    platforms = platforms.all;
   };
 })

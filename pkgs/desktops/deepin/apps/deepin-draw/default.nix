@@ -45,12 +45,12 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  meta = {
+  meta = with lib; {
     description = "Lightweight drawing tool for users to freely draw and simply edit images";
     mainProgram = "deepin-draw";
     homepage = "https://github.com/linuxdeepin/deepin-draw";
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
-    maintainers = lib.teams.deepin.members;
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = teams.deepin.members;
   };
 }

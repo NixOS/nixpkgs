@@ -39,11 +39,11 @@ else
       opaline -prefix $out -libdir $OCAMLFIND_DESTDIR
     '';
 
-    meta = {
+    meta = with lib; {
       description = "Embeddable Lua 2.5 interpreter implemented in OCaml";
       inherit (src.meta) homepage;
       inherit (ocaml.meta) platforms;
-      license = lib.licenses.bsd2;
-      maintainers = [ lib.maintainers.vbgl ];
+      license = licenses.bsd2;
+      maintainers = [ maintainers.vbgl ];
     };
   }

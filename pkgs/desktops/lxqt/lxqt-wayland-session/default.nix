@@ -60,10 +60,10 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/lxqt/lxqt-wayland-session";
     description = "Files needed for the LXQt Wayland Session";
-    license = with lib.licenses; [
+    license = with licenses; [
       bsd3
       cc-by-sa-40
       gpl2Only
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
       lgpl21Only
       mit
     ];
-    platforms = lib.platforms.linux;
-    maintainers = lib.teams.lxqt.members;
+    platforms = platforms.linux;
+    maintainers = teams.lxqt.members;
   };
 }

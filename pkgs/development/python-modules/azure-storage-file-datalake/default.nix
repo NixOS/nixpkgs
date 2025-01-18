@@ -41,10 +41,10 @@ buildPythonPackage rec {
   # require devtools_testutils which is a internal package for azure-sdk
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Microsoft Azure File DataLake Storage Client Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/storage/azure-storage-file-datalake";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }

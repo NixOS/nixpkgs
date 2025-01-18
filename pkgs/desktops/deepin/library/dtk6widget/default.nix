@@ -79,11 +79,11 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Deepin graphical user interface library";
     homepage = "https://github.com/linuxdeepin/dtk6widget";
-    license = lib.licenses.lgpl3Plus;
-    platforms = lib.platforms.linux;
-    maintainers = lib.teams.deepin.members;
+    license = licenses.lgpl3Plus;
+    platforms = platforms.linux;
+    maintainers = teams.deepin.members;
   };
 })

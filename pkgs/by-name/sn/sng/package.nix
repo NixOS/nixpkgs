@@ -33,15 +33,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://sng.sourceforge.net/";
     description = "Minilanguage designed to represent the entire contents of a PNG file in an editable form";
-    license = lib.licenses.zlib;
+    license = licenses.zlib;
     mainProgram = "sng";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       dezgeg
       AndersonTorres
     ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 })

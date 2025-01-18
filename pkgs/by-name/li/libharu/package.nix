@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
     libpng
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Cross platform, open source library for generating PDF files";
     homepage = "http://libharu.org/";
-    license = lib.licenses.zlib;
-    maintainers = [ lib.maintainers.marcweber ];
-    platforms = lib.platforms.unix;
+    license = licenses.zlib;
+    maintainers = [ maintainers.marcweber ];
+    platforms = platforms.unix;
   };
 }

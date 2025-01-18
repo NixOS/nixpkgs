@@ -39,11 +39,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = {
+  meta = with lib; {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Pandas support for pint";
-    license = lib.licenses.bsd3;
+    license = licenses.bsd3;
     homepage = "https://github.com/hgrecco/pint-pandas";
-    maintainers = with lib.maintainers; [ doronbehar ];
+    maintainers = with maintainers; [ doronbehar ];
   };
 }

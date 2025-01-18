@@ -22,10 +22,10 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
   ];
 
-  meta = {
+  meta = with lib; {
     description = "SubNetCalc is an IPv4/IPv6 subnet address calculator";
     homepage = "https://www.uni-due.de/~be0001/subnetcalc/";
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     longDescription = ''
       SubNetCalc is an IPv4/IPv6 subnet address calculator. For given IPv4 or
       IPv6 address and netmask or prefix length, it calculates network address,
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
       type, scope, interface ID, etc.).
     '';
     mainProgram = "subnetcalc";
-    maintainers = with lib.maintainers; [ atila ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ atila ];
+    platforms = platforms.unix;
   };
 })

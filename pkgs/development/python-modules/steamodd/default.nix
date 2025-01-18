@@ -31,10 +31,10 @@ buildPythonPackage rec {
     "steam.vdf"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "High level Steam API implementation with low level reusable core";
     homepage = "https://github.com/Lagg/steamodd";
-    license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    license = licenses.isc;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

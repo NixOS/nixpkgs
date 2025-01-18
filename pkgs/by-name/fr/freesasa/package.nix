@@ -48,13 +48,13 @@ stdenv.mkDerivation (finalAttrs: {
     version = testers.testVersion { package = finalAttrs.finalPackage; };
   };
 
-  meta = {
+  meta = with lib; {
     description = "C-library for calculating Solvent Accessible Surface Areas";
     homepage = "https://github.com/mittinatten/freesasa";
     changelog = "https://github.com/mittinatten/freesasa/blob/${finalAttrs.src.rev}/CHANGELOG.md";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ natsukium ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ natsukium ];
     mainProgram = "freesasa";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 })

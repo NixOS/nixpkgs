@@ -17,14 +17,14 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-eVADcCXf6hl9o9pApp3inU7kZAKA3k5mM3+vy7cq5u8=";
 
-  meta = {
+  meta = with lib; {
     description = "Command-line tool for managing Architectural Decision Records";
     homepage = "https://github.com/joshrotenberg/adrs";
-    license = with lib.licenses; [
+    license = with licenses; [
       mit
       asl20
     ];
-    maintainers = with lib.maintainers; [ dannixon ];
+    maintainers = with maintainers; [ dannixon ];
     mainProgram = "adrs";
   };
 }

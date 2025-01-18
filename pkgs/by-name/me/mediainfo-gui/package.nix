@@ -43,16 +43,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     description = "Supplies technical and tag information about a video or audio file (GUI version)";
     longDescription = ''
       MediaInfo is a convenient unified display of the most relevant technical
       and tag data for video and audio files.
     '';
     homepage = "https://mediaarea.net";
-    license = lib.licenses.bsd2;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ devhell ];
+    license = licenses.bsd2;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ devhell ];
     mainProgram = "mediainfo-gui";
   };
 })

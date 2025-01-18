@@ -20,11 +20,11 @@ python3Packages.buildPythonApplication rec {
     voluptuous
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Produces browsable summary of CBMC model checker output";
     homepage = "https://github.com/model-checking/cbmc-viewer";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ jacg ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ jacg ];
     mainProgram = "cbmc-viewer";
   };
 }

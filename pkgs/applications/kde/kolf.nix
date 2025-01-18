@@ -19,11 +19,11 @@ mkDerivation {
     kio
     ktextwidgets
   ];
-  meta = {
+  meta = with lib; {
     homepage = "https://apps.kde.org/kolf/";
     description = "Miniature golf";
     mainProgram = "kolf";
-    license = with lib.licenses; [ gpl2 ];
-    maintainers = with lib.maintainers; [ peterhoeg ];
+    license = with licenses; [ gpl2 ];
+    maintainers = with maintainers; [ peterhoeg ];
   };
 }

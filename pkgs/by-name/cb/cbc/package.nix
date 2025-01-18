@@ -35,11 +35,11 @@ stdenv.mkDerivation rec {
 
   # FIXME: move share/coin/Data to a separate output?
 
-  meta = {
+  meta = with lib; {
     homepage = "https://projects.coin-or.org/Cbc";
-    license = lib.licenses.epl10;
+    license = licenses.epl10;
     maintainers = [ ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    platforms = platforms.linux ++ platforms.darwin;
     description = "Mixed integer programming solver";
   };
 }

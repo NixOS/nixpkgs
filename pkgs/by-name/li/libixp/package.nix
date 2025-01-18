@@ -29,12 +29,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ unzip ];
   buildInputs = [ txt2tags ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/0intro/libixp";
     description = "Portable, simple C-language 9P client and server library";
     mainProgram = "ixpc";
-    maintainers = with lib.maintainers; [ kovirobi ];
-    license = lib.licenses.mit;
-    platforms = with lib.platforms; unix;
+    maintainers = with maintainers; [ kovirobi ];
+    license = licenses.mit;
+    platforms = with platforms; unix;
   };
 }

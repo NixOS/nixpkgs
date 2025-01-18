@@ -23,10 +23,10 @@ buildDunePackage rec {
     mirage-flow
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Implementations of Mirage console devices";
     homepage = "https://github.com/mirage/mirage-console";
-    license = lib.licenses.isc;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.isc;
+    maintainers = [ maintainers.vbgl ];
   };
 }

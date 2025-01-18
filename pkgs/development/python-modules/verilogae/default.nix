@@ -65,15 +65,15 @@ buildPythonPackage rec {
 
   hardeningDisable = [ "pic" ];
 
-  meta = {
+  meta = with lib; {
     description = "Verilog-A tool useful for compact model parameter extraction";
     homepage = "https://man.sr.ht/~dspom/openvaf_doc/verilogae/";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [
       jasonodoom
       jleightcap
     ];
-    platforms = lib.platforms.linux;
-    sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
+    platforms = platforms.linux;
+    sourceProvenance = [ sourceTypes.binaryBytecode ];
   };
 }

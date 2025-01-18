@@ -54,13 +54,13 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gitUpdater { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Official authentication app for German ID card and residence permit";
     downloadPage = "https://github.com/Governikus/AusweisApp2/releases";
     homepage = "https://www.ausweisapp.bund.de/open-source-software";
-    license = lib.licenses.eupl12;
+    license = licenses.eupl12;
     mainProgram = "AusweisApp";
-    maintainers = with lib.maintainers; [ b4dm4n ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ b4dm4n ];
+    platforms = platforms.linux;
   };
 })

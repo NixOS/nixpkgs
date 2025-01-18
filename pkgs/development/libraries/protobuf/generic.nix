@@ -108,17 +108,17 @@ stdenv.mkDerivation (finalAttrs: {
     inherit abseil-cpp;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Google's data interchange format";
     longDescription = ''
       Protocol Buffers are a way of encoding structured data in an efficient
       yet extensible format. Google uses Protocol Buffers for almost all of
       its internal RPC protocols and file formats.
     '';
-    license = lib.licenses.bsd3;
-    platforms = lib.platforms.all;
+    license = licenses.bsd3;
+    platforms = platforms.all;
     homepage = "https://protobuf.dev/";
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    maintainers = with maintainers; [ GaetanLepage ];
     mainProgram = "protoc";
   };
 })

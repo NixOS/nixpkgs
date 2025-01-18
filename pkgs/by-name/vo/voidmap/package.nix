@@ -22,12 +22,12 @@ rustPlatform.buildRustPackage rec {
     "--skip=screen::qc_input_events_dont_crash_void"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Terminal-based personal organizer";
     homepage = "https://github.com/void-rs/void";
-    license = lib.licenses.gpl3Only;
+    license = licenses.gpl3Only;
     mainProgram = "void";
-    maintainers = with lib.maintainers; [ poptart ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ poptart ];
+    platforms = platforms.linux;
   };
 }

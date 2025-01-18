@@ -28,10 +28,10 @@ buildDunePackage rec {
   doCheck = true;
   checkInputs = [ alcotest ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/oklm-wsh/Callipyge";
     description = "Curve25519 in OCaml";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fufexan ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ fufexan ];
   };
 }

@@ -40,11 +40,11 @@ buildPythonApplication rec {
     pytest
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Git remote prefix to simplify pushing to and pulling from CodeCommit";
-    maintainers = [ lib.maintainers.zaninime ];
+    maintainers = [ maintainers.zaninime ];
     homepage = "https://github.com/awslabs/git-remote-codecommit";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     mainProgram = "git-remote-codecommit";
   };
 }

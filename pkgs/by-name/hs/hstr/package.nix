@@ -32,12 +32,12 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--prefix=$(out)" ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/dvorka/hstr";
     description = "Shell history suggest box - easily view, navigate, search and use your command history";
-    license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.matthiasbeyer ];
-    platforms = with lib.platforms; linux ++ darwin;
+    license = licenses.asl20;
+    maintainers = [ maintainers.matthiasbeyer ];
+    platforms = with platforms; linux ++ darwin;
   };
 
 }

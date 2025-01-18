@@ -28,12 +28,12 @@ python3Packages.buildPythonApplication {
     colorama
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Client component of timewarrior synchronization application";
     mainProgram = "timew-sync-client";
     homepage = "https://github.com/timewarrior-synchronize/timew-sync-client";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       evris99
       errnoh
     ];

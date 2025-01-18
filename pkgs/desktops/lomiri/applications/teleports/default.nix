@@ -116,10 +116,10 @@ stdenv.mkDerivation (finalAttrs: {
     tests.vm = nixosTests.teleports;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Ubuntu Touch Telegram client";
     homepage = "https://gitlab.com/ubports/development/apps/teleports";
-    license = with lib.licenses; [
+    license = with licenses; [
       mit # main
       asl20 # benlau/asyncfuture in qtdlib
       bsd3 # FastScroll.js from Meego? maybe?
@@ -127,7 +127,7 @@ stdenv.mkDerivation (finalAttrs: {
       lgpl3Only # components
     ];
     mainProgram = "teleports";
-    maintainers = lib.teams.lomiri.members;
-    platforms = lib.platforms.linux;
+    maintainers = teams.lomiri.members;
+    platforms = platforms.linux;
   };
 })

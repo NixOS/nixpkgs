@@ -113,11 +113,11 @@ maven.buildMavenPackage rec {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Intelligent Component Analysis platform that allows organizations to identify and reduce risk in the software supply chain";
     homepage = "https://github.com/DependencyTrack/dependency-track";
-    license = lib.licenses.asl20;
-    maintainers = lib.teams.cyberus.members;
+    license = licenses.asl20;
+    maintainers = teams.cyberus.members;
     mainProgram = "dependency-track";
     inherit (jre_headless.meta) platforms;
   };

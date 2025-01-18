@@ -19,11 +19,11 @@ buildNpmPackage rec {
 
   dontNpmBuild = true;
 
-  meta = {
+  meta = with lib; {
     description = "System monitoring dashboard for the terminal";
     homepage = "https://github.com/aksakalli/gtop";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ tfc ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ tfc ];
     mainProgram = "gtop";
   };
 }

@@ -200,15 +200,15 @@ buildFHSEnv {
 
   runScript = "${bolt.name}";
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/Adamcake/Bolt";
     description = "An alternative launcher for RuneScape.";
     longDescription = ''
       Bolt Launcher supports HDOS/RuneLite by default with an optional feature flag for RS3 (enableRS3).
     '';
-    license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ nezia ];
-    platforms = lib.platforms.linux;
+    license = licenses.agpl3Plus;
+    maintainers = with maintainers; [ nezia ];
+    platforms = platforms.linux;
     mainProgram = "${bolt.name}";
   };
 }

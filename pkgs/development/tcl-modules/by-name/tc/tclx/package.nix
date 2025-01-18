@@ -24,11 +24,11 @@ mkTclDerivation rec {
       ln -s $prefix/lib/tclx${majorMinorVersion} $prefix/lib/tclx${majorMinorVersion}/tclx${majorMinorVersion}
     '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/flightaware/tclx";
     description = "Tcl extensions";
-    license = lib.licenses.tcltk;
-    maintainers = with lib.maintainers; [
+    license = licenses.tcltk;
+    maintainers = with maintainers; [
       kovirobi
       fgaz
     ];

@@ -22,14 +22,14 @@ stdenv.mkDerivation rec {
   # because a file named BUILD exists already.
   cmakeBuildDir = "build_dir";
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/google/nsync";
     description = "C library that exports various synchronization primitives";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
+    license = licenses.asl20;
+    maintainers = with maintainers; [
       puffnfresh
       Luflosi
     ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }

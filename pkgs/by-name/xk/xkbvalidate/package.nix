@@ -7,11 +7,11 @@
 runCommandCC "xkbvalidate"
   {
     buildInputs = [ libxkbcommon ];
-    meta = {
+    meta = with lib; {
       description = "NixOS tool to validate X keyboard configuration";
-      license = lib.licenses.mit;
-      platforms = lib.platforms.unix;
-      maintainers = [ lib.maintainers.aszlig ];
+      license = licenses.mit;
+      platforms = platforms.unix;
+      maintainers = [ maintainers.aszlig ];
       mainProgram = "xkbvalidate";
     };
   }

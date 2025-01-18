@@ -55,12 +55,12 @@ python3Packages.buildPythonApplication rec {
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
-  meta = {
+  meta = with lib; {
     description = "Piston api tool";
     homepage = "https://github.com/Shivansh-007/piston-cli";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ ethancedwards8 ];
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ ethancedwards8 ];
     mainProgram = "piston";
   };
 }

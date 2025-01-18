@@ -117,11 +117,11 @@ vscode-utils.buildVscodeMarketplaceExtension {
       wrapProgram $out/share/vscode/extensions/ms-vscode.cpptools/debugAdapters/bin/OpenDebugAD7 --prefix PATH : ${lib.makeBinPath [ gdb ]}
     '';
 
-  meta = {
+  meta = with lib; {
     description = "C/C++ extension adds language support for C/C++ to Visual Studio Code, including features such as IntelliSense and debugging";
     homepage = "https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools";
-    license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [
+    license = licenses.unfree;
+    maintainers = with maintainers; [
       jraygauthier
       stargate01
     ];
@@ -129,6 +129,6 @@ vscode-utils.buildVscodeMarketplaceExtension {
       "x86_64-linux"
       "aarch64-linux"
     ];
-    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+    sourceProvenance = [ sourceTypes.binaryNativeCode ];
   };
 }

@@ -26,10 +26,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pysvg" ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/alorence/pysvg-py3";
     description = "Creating SVG with Python";
-    license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ davidak ];
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ davidak ];
   };
 }

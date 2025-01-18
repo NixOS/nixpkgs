@@ -33,12 +33,12 @@ stdenv.mkDerivation (finalAttrs: {
     "PREFIX=${placeholder "out"}"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "High performance block-sorting data compression library";
     homepage = "http://libbsc.com/";
-    maintainers = with lib.maintainers; [ sigmanificient ];
-    license = lib.licenses.asl20;
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ sigmanificient ];
+    license = licenses.asl20;
+    platforms = platforms.unix;
     mainProgram = "bsc";
   };
 })

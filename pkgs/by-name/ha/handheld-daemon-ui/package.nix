@@ -30,13 +30,13 @@ appimageTools.wrapType2 {
     cp ${extractedFiles}/hhd-ui.png $iconDir
   '';
 
-  meta = {
+  meta = with lib; {
     description = "UI for the Handheld Daemon";
     homepage = "https://github.com/hhd-dev/hhd-ui";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ toast ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ toast ];
     mainProgram = "hhd-ui";
     platforms = [ "x86_64-linux" ];
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }

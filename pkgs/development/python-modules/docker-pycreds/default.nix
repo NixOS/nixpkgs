@@ -35,10 +35,10 @@ buildPythonPackage rec {
   # require docker-credential-helpers binaries
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Python bindings for the docker credentials store API";
     homepage = "https://github.com/shin-/dockerpy-creds";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ GaetanLepage ];
   };
 }

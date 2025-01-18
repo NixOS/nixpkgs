@@ -19,10 +19,10 @@ rustPlatform.buildRustPackage rec {
 
   buildNoDefaultFeatures = stdenv.targetPlatform.isWasi;
 
-  meta = {
+  meta = with lib; {
     description = "Command line application that converts alphanumeric characters to various styles defined in Unicode";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.jcaesar ];
+    license = licenses.mit;
+    maintainers = [ maintainers.jcaesar ];
     homepage = "https://github.com/ikanago/omekasy";
     mainProgram = "omekasy";
   };

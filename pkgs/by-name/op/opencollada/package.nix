@@ -56,11 +56,11 @@ stdenv.mkDerivation rec {
         --replace math.h cmath
     '';
 
-  meta = {
+  meta = with lib; {
     description = "Library for handling the COLLADA file format";
     homepage = "https://github.com/KhronosGroup/OpenCOLLADA/";
     maintainers = [ ];
-    platforms = lib.platforms.unix;
-    license = lib.licenses.mit;
+    platforms = platforms.unix;
+    license = licenses.mit;
   };
 }

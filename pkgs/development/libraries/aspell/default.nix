@@ -87,11 +87,11 @@ stdenv.mkDerivation rec {
         '';
   };
 
-  meta = {
+  meta = with lib; {
     description = "Spell checker for many languages";
     homepage = "http://aspell.net/";
-    license = lib.licenses.lgpl2Plus;
+    license = licenses.lgpl2Plus;
     maintainers = [ ];
-    platforms = with lib.platforms; all;
+    platforms = with platforms; all;
   };
 }

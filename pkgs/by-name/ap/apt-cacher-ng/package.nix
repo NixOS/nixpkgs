@@ -43,12 +43,12 @@ stdenv.mkDerivation (finalAttrs: {
     c-ares
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Caching proxy specialized for Linux distribution files";
     mainProgram = "apt-cacher-ng";
     homepage = "https://www.unix-ag.uni-kl.de/~bloch/acng/";
-    license = lib.licenses.bsdOriginal;
-    platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.makefu ];
+    license = licenses.bsdOriginal;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.makefu ];
   };
 })

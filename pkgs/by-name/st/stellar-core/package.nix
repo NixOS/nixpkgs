@@ -78,10 +78,10 @@ stdenv.mkDerivation (finalAttrs: {
     ./autogen.sh
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Implements the Stellar Consensus Protocol, a federated consensus protocol";
     homepage = "https://www.stellar.org/";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     longDescription = ''
       Stellar-core is the backbone of the Stellar network. It maintains a
       local copy of the ledger, communicating and staying in sync with other
@@ -89,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
       store historical records of the ledger and participate in consensus.
     '';
     maintainers = [ ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
     mainProgram = "stellar-core";
   };
 })

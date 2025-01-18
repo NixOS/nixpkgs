@@ -25,10 +25,10 @@ buildDunePackage rec {
 
   doCheck = false; # circular dependencies
 
-  meta = {
+  meta = with lib; {
     description = "Polynomials over finite field";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     homepage = "https://gitlab.com/nomadic-labs/ocaml-polynomial";
-    maintainers = [ lib.maintainers.ulrikstrid ];
+    maintainers = [ maintainers.ulrikstrid ];
   };
 }

@@ -40,11 +40,11 @@ buildPythonPackage rec {
     } (builtins.readFile "${src}/examples/cube.py");
   };
 
-  meta = {
+  meta = with lib; {
     description = "OpenGL frame for Python/Tkinter via ctypes and pyopengl";
     homepage = "https://github.com/jonwright/pyopengltk";
-    maintainers = with lib.maintainers; [ sigmanificient ];
-    license = lib.licenses.mit;
+    maintainers = with maintainers; [ sigmanificient ];
+    license = licenses.mit;
     # not supported yet, see: https://github.com/jonwright/pyopengltk/issues/12
     broken = stdenv.hostPlatform.isDarwin;
   };

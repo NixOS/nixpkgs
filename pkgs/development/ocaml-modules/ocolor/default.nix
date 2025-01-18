@@ -22,10 +22,10 @@ buildDunePackage rec {
     cppo
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Print with style in your terminal using Format’s semantic tags";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ toastal ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ toastal ];
     homepage = "https://github.com/marc-chevalier/ocolor";
   };
 }

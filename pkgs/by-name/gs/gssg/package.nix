@@ -27,11 +27,11 @@ buildGoModule {
     updateScript = unstableGitUpdater { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Gemini static site generator";
     homepage = "https://git.sr.ht/~gsthnz/gssg";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ genga898 ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ genga898 ];
     mainProgram = "gssg";
   };
 }

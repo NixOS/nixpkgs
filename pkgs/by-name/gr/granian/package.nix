@@ -38,12 +38,12 @@ python3Packages.buildPythonApplication rec {
     python3Packages.click
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Rust HTTP server for Python ASGI/WSGI/RSGI applications";
     homepage = "https://github.com/emmett-framework/granian";
-    license = lib.licenses.bsd3;
+    license = licenses.bsd3;
     mainProgram = "granian";
-    maintainers = with lib.maintainers; [ lucastso10 ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ lucastso10 ];
+    platforms = platforms.unix;
   };
 }

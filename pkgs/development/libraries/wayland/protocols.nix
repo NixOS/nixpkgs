@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [ "-Dtests=${lib.boolToString finalAttrs.doCheck}" ];
 
-  meta = {
+  meta = with lib; {
     description = "Wayland protocol extensions";
     longDescription = ''
       wayland-protocols contains Wayland protocols that add functionality not
@@ -57,9 +57,9 @@ stdenv.mkDerivation (finalAttrs: {
       wayland-protocols.
     '';
     homepage = "https://gitlab.freedesktop.org/wayland/wayland-protocols";
-    license = lib.licenses.mit; # Expat version
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ primeos ];
+    license = licenses.mit; # Expat version
+    platforms = platforms.all;
+    maintainers = with maintainers; [ primeos ];
     pkgConfigModules = [ "wayland-protocols" ];
   };
 

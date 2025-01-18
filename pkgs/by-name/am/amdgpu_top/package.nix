@@ -54,13 +54,13 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Tool to display AMDGPU usage";
     homepage = "https://github.com/Umio-Yasuno/amdgpu_top";
     changelog = "https://github.com/Umio-Yasuno/amdgpu_top/releases";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ geri1701 ];
-    platforms = lib.platforms.linux;
+    license = licenses.mit;
+    maintainers = with maintainers; [ geri1701 ];
+    platforms = platforms.linux;
     mainProgram = "amdgpu_top";
   };
 }

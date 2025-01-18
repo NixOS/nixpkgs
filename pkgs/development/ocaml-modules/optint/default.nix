@@ -13,10 +13,10 @@ buildDunePackage rec {
     sha256 = "sha256-KVz/LBNLA4WxO6gdUAXZ+EG6QNSlAq7RDJl/I57xFHs=";
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/mirage/optint";
     description = "Abstract type of integer between x64 and x86 architecture";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.mit;
+    maintainers = [ maintainers.vbgl ];
   };
 }

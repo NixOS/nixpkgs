@@ -49,13 +49,13 @@ stdenv.mkDerivation (finalAttrs: {
     installShellCompletion --fish completions/wt.fish
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/mateusauler/git-worktree-switcher";
     description = "Switch between git worktrees with speed.";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.all;
+    license = licenses.mit;
+    platforms = platforms.all;
     mainProgram = "wt";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       jiriks74
       mateusauler
     ];

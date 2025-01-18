@@ -114,15 +114,15 @@ stdenv.mkDerivation {
     passthru.updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     changelog = "https://actualbudget.org/docs/releases";
     description = "Super fast privacy-focused app for managing your finances";
     homepage = "https://actualbudget.org/";
     mainProgram = "actual-server";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     maintainers = [
-      lib.maintainers.oddlama
-      lib.maintainers.patrickdag
+      maintainers.oddlama
+      maintainers.patrickdag
     ];
   };
 }

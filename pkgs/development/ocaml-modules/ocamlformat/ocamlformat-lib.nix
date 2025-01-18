@@ -24,13 +24,13 @@ buildDunePackage {
 
   propagatedBuildInputs = library_deps;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/ocaml-ppx/ocamlformat";
     description = "Auto-formatter for OCaml code (library)";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       Zimmi48
       Julow
     ];
-    license = lib.licenses.mit;
+    license = licenses.mit;
   };
 }

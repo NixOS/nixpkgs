@@ -52,12 +52,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [ (lib.cmakeBool "APPLICATION_UPDATER" false) ];
 
-  meta = {
+  meta = with lib; {
     description = "ES-DE (EmulationStation Desktop Edition) is a frontend for browsing and launching games from your multi-platform collection";
     homepage = "https://es-de.org";
-    maintainers = with lib.maintainers; [ ivarmedi ];
-    license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ ivarmedi ];
+    license = licenses.mit;
+    platforms = platforms.linux;
     mainProgram = "es-de";
   };
 })

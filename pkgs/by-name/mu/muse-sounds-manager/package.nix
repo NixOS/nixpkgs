@@ -66,13 +66,13 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Manage Muse Sounds (Muse Hub) libraries for MuseScore";
     homepage = "https://musescore.org/";
-    license = lib.licenses.unfree;
+    license = licenses.unfree;
     mainProgram = "muse-sounds-manager";
-    maintainers = with lib.maintainers; [ orivej ];
+    maintainers = with maintainers; [ orivej ];
     platforms = [ "x86_64-linux" ];
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }

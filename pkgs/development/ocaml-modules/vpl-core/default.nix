@@ -22,11 +22,11 @@ buildDunePackage rec {
     zarith
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Verified Polyhedra Library";
     homepage = "https://amarechal.gitlab.io/home/projects/vpl/";
-    license = lib.licenses.lgpl3Only;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.lgpl3Only;
+    maintainers = [ maintainers.vbgl ];
   };
 
 }

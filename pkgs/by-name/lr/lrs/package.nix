@@ -21,11 +21,11 @@ stdenv.mkDerivation {
     "CC:=$(CC)"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Implementation of the reverse search algorithm for vertex enumeration/convex hull problems";
-    license = lib.licenses.gpl2;
-    maintainers = [ lib.maintainers.raskin ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2;
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.linux;
     homepage = "http://cgm.cs.mcgill.ca/~avis/C/lrs.html";
   };
 }

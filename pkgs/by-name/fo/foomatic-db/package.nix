@@ -92,13 +92,13 @@ stdenv.mkDerivation (finalAttrs: {
       | xargs -0r -n 64 -P "$NIX_BUILD_CORES" gzip -9n
   '';
 
-  meta = {
+  meta = with lib; {
     changelog = "https://github.com/OpenPrinting/foomatic-db/blob/${finalAttrs.src.rev}/ChangeLog";
     description = "OpenPrinting printer support database (free content)";
     downloadPage = "https://www.openprinting.org/download/foomatic/";
     homepage = "https://openprinting.github.io/projects/02-foomatic/";
-    license = lib.licenses.free; # mostly GPL and MIT, see README in source dir
-    maintainers = [ lib.maintainers.yarny ];
+    license = licenses.free; # mostly GPL and MIT, see README in source dir
+    maintainers = [ maintainers.yarny ];
     # list printer manufacturers here so people
     # searching for ppd files can find this package
     longDescription = ''

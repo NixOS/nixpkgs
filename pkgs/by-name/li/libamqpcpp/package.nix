@@ -26,11 +26,11 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "Library for communicating with a RabbitMQ server";
     homepage = "https://github.com/CopernicaMarketingSoftware/AMQP-CPP";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ mjp ];
-    platforms = lib.platforms.all;
+    license = licenses.asl20;
+    maintainers = with maintainers; [ mjp ];
+    platforms = platforms.all;
   };
 })

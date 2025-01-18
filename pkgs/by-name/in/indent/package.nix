@@ -56,12 +56,12 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   passthru.tests.static = pkgsStatic.indent;
-  meta = {
+  meta = with lib; {
     homepage = "https://www.gnu.org/software/indent/";
     description = "Source code reformatter";
     mainProgram = "indent";
-    license = lib.licenses.gpl3Plus;
-    maintainers = [ lib.maintainers.mmahut ];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl3Plus;
+    maintainers = [ maintainers.mmahut ];
+    platforms = platforms.unix;
   };
 }

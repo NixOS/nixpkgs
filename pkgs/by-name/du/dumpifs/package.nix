@@ -46,11 +46,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = {
+  meta = with lib; {
     description = "Tool for those who are interested in hacking MIB2 firmware";
     homepage = "https://github.com/askac/dumpifs";
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ KSJ2000 ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ KSJ2000 ];
     mainProgram = "dumpifs";
   };
 })

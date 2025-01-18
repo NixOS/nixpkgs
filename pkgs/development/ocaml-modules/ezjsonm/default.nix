@@ -24,10 +24,10 @@ buildDunePackage rec {
     sexplib0
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Easy interface on top of the Jsonm library";
     homepage = "https://github.com/mirage/ezjsonm";
-    license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ vbgl ];
+    license = licenses.isc;
+    maintainers = with maintainers; [ vbgl ];
   };
 }

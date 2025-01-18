@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.gnu.org/software/ed/";
     description = "GNU implementation of the standard Unix editor";
     longDescription = ''
@@ -52,9 +52,9 @@ stdenv.mkDerivation (finalAttrs: {
       widely available. For most purposes, however, it is superseded by
       full-screen editors such as GNU Emacs or GNU Moe.
     '';
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     mainProgram = "ed";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.unix;
   };
 })

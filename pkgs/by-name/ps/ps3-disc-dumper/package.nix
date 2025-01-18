@@ -39,12 +39,12 @@ buildDotnetModule rec {
 
   passthru.updateScript = ./update.sh;
 
-  meta = {
+  meta = with lib; {
     description = "Handy utility to make decrypted PS3 disc dumps";
     homepage = "https://github.com/13xforever/ps3-disc-dumper";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "ps3-disc-dumper";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       evanjs
       gepbird
     ];

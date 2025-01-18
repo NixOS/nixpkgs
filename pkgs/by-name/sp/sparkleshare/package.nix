@@ -91,11 +91,11 @@ stdenv.mkDerivation rec {
         }
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Share and collaborate by syncing with any Git repository instantly. Linux, macOS, and Windows";
     homepage = "https://sparkleshare.org";
-    license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ kevincox ];
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ kevincox ];
     mainProgram = "sparkleshare";
   };
 }

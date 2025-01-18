@@ -27,12 +27,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Put the output from any script or program into your macOS Menu Bar (the BitBar reboot)";
     homepage = "https://xbarapp.com/";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    platforms = lib.platforms.darwin;
-    maintainers = with lib.maintainers; [ r17x ];
-    license = lib.licenses.mit;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    platforms = platforms.darwin;
+    maintainers = with maintainers; [ r17x ];
+    license = licenses.mit;
   };
 })

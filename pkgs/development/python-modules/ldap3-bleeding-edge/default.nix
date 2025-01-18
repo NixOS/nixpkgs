@@ -34,10 +34,10 @@ buildPythonPackage rec {
   # Tests require network access
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Strictly RFC 4510 conforming LDAP V3 client library (bleeding edge)";
     homepage = "https://pypi.org/project/ldap3-bleeding-edge/";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ fab ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ fab ];
   };
 }

@@ -49,10 +49,10 @@ buildPythonPackage {
   # No tests
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Easily benchmark machine learning models in PyTorch";
     homepage = "https://github.com/paperswithcode/torchbench";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ drupol ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ drupol ];
   };
 }

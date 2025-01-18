@@ -35,13 +35,13 @@ stdenv.mkDerivation rec {
       -e 's@-Wl,--retain-symbols-file@@'
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Yet another telephony engine";
     homepage = "https://yate.ro/";
     # Yate's license is GPL with an exception for linking with
     # OpenH323 and PWlib (licensed under MPL).
-    license = lib.licenses.gpl2Only;
-    maintainers = [ lib.maintainers.marcweber ];
+    license = licenses.gpl2Only;
+    maintainers = [ maintainers.marcweber ];
     platforms = [
       "i686-linux"
       "x86_64-linux"

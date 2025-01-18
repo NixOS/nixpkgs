@@ -31,11 +31,11 @@ rustPlatform.buildRustPackage rec {
     "production"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Federated micro-blogging platform";
     homepage = "https://codeberg.org/silverpill/mitra";
-    license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ haruki7049 ];
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [ haruki7049 ];
     mainProgram = "mitra";
   };
 }

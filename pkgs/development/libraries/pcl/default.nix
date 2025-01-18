@@ -75,11 +75,11 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals cudaSupport [ "-DWITH_CUDA=true" ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://pointclouds.org/";
     description = "Open project for 2D/3D image and point cloud processing";
-    license = lib.licenses.bsd3;
+    license = licenses.bsd3;
     maintainers = [ ];
-    platforms = with lib.platforms; linux ++ darwin;
+    platforms = with platforms; linux ++ darwin;
   };
 }

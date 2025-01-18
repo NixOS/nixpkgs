@@ -48,12 +48,12 @@ python3.pkgs.buildPythonApplication {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Next-generation Debian package upload tool";
     homepage = "https://dput.readthedocs.io/en/latest/";
-    license = with lib.licenses; [ gpl2Plus ];
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ pluiedev ];
+    license = with licenses; [ gpl2Plus ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ pluiedev ];
     mainProgram = "dput";
   };
 }

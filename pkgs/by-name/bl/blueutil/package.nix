@@ -33,13 +33,13 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     changelog = "https://github.com/toy/blueutil/blob/main/CHANGELOG.md";
     description = "CLI for bluetooth on OSX";
     homepage = "https://github.com/toy/blueutil";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "blueutil";
-    maintainers = with lib.maintainers; [ azuwis ];
-    platforms = lib.platforms.darwin;
+    maintainers = with maintainers; [ azuwis ];
+    platforms = platforms.darwin;
   };
 })

@@ -23,10 +23,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ryd_client" ];
 
-  meta = {
+  meta = with lib; {
     description = "Python client library for the Return YouTube Dislike API";
     homepage = "https://github.com/bbilly1/ryd-client";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.ericthemagician ];
+    license = licenses.mit;
+    maintainers = [ maintainers.ericthemagician ];
   };
 }

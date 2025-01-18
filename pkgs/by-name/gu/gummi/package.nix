@@ -44,12 +44,12 @@ stdenv.mkDerivation rec {
     install -Dpm644 COPYING $out/share/licenses/$name/COPYING
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://gummi.app";
     description = "Simple LaTex editor for GTK users";
     mainProgram = "gummi";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ flokli ];
-    platforms = with lib.platforms; linux;
+    license = licenses.mit;
+    maintainers = with maintainers; [ flokli ];
+    platforms = with platforms; linux;
   };
 }

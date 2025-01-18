@@ -164,11 +164,11 @@ python.pkgs.buildPythonApplication rec {
     export PLAYWRIGHT_BROWSERS_PATH="${playwright-driver.browsers}"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Freedom of Information Portal";
     homepage = "https://github.com/okfde/froide";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.onny ];
+    license = licenses.mit;
+    maintainers = [ maintainers.onny ];
     mainProgram = "froide";
   };
 }

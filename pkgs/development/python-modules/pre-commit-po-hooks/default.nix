@@ -23,10 +23,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pre_commit_po_hooks" ];
 
-  meta = {
+  meta = with lib; {
     description = "Hooks for pre-commit useful working with PO files";
     homepage = "https://github.com/mondeja/pre-commit-po-hooks";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ yajo ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ yajo ];
   };
 }

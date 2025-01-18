@@ -28,9 +28,9 @@ buildDunePackage rec {
   # for some reason this never exits
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Opinionated clean-exit and signal-handling library for Lwt programs";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.ulrikstrid ];
+    license = licenses.mit;
+    maintainers = [ maintainers.ulrikstrid ];
   };
 }

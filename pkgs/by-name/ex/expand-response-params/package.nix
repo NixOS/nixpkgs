@@ -26,7 +26,7 @@ stdenv.mkDerivation {
     mv expand-response-params${stdenv.hostPlatform.extensions.executable} $prefix/bin/
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Internal tool used by the nixpkgs wrapper scripts for processing response files";
     longDescription = ''
       expand-response-params is a tool that allows for obtaining a full list of all
@@ -36,8 +36,8 @@ stdenv.mkDerivation {
       conjunction with the nixpkgs wrapper scripts, it should be considered as
       unstable and subject to change.
     '';
-    license = lib.licenses.mit;
-    platforms = lib.platforms.all;
+    license = licenses.mit;
+    platforms = platforms.all;
     mainProgram = "expand-response-params${stdenv.hostPlatform.extensions.executable}";
   };
 }

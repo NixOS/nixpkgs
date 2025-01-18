@@ -49,11 +49,11 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Implementation of the Stateless OpenPGP Command Line Interface using Sequoia";
     homepage = "https://docs.sequoia-pgp.org/sqop/";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ doronbehar ];
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ doronbehar ];
     mainProgram = "sqop";
   };
 }

@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = false; # no tests
 
-  meta = {
+  meta = with lib; {
     description = "Package manager for typst";
     longDescription = ''
       UTPM is a package manager for local and remote packages. Create quickly
@@ -38,8 +38,8 @@ rustPlatform.buildRustPackage rec {
       to Typst!
     '';
     homepage = "https://github.com/Thumuss/utpm";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "utpm";
-    maintainers = with lib.maintainers; [ louis-thevenet ];
+    maintainers = with maintainers; [ louis-thevenet ];
   };
 }

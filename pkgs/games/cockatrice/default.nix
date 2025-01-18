@@ -35,11 +35,11 @@ mkDerivation rec {
     wrapQtAppsHook
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/Cockatrice/Cockatrice";
     description = "Cross-platform virtual tabletop for multiplayer card games";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ evanjs ];
-    platforms = with lib.platforms; linux;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ evanjs ];
+    platforms = with platforms; linux;
   };
 }

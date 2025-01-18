@@ -46,12 +46,12 @@ stdenv.mkDerivation {
     cp $binPath/swift-format $out/bin/
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Formatting technology for Swift source code";
     homepage = "https://github.com/apple/swift-format";
-    platforms = with lib.platforms; linux ++ darwin;
-    license = lib.licenses.asl20;
-    maintainers = lib.teams.swift.members;
+    platforms = with platforms; linux ++ darwin;
+    license = licenses.asl20;
+    maintainers = teams.swift.members;
     mainProgram = "swift-format";
   };
 }

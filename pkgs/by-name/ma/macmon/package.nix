@@ -17,11 +17,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-mE6PGWjaCFpqVoE1zISOqwt6o5SakjJM4sPRtU90lPA=";
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/vladkens/macmon";
     description = "Sudoless performance monitoring for Apple Silicon processors";
     platforms = [ "aarch64-darwin" ];
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ schrobingus ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ schrobingus ];
   };
 }

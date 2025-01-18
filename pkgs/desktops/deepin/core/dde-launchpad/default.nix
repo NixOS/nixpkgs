@@ -45,12 +45,12 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DSYSTEMD_USER_UNIT_DIR=${placeholder "out"}/lib/systemd/user" ];
 
-  meta = {
+  meta = with lib; {
     description = "'launcher' or 'start menu' component for DDE";
     mainProgram = "dde-launchpad";
     homepage = "https://github.com/linuxdeepin/dde-launchpad";
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
-    maintainers = lib.teams.deepin.members;
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = teams.deepin.members;
   };
 }

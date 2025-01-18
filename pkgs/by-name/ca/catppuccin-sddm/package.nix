@@ -70,11 +70,11 @@ stdenvNoCC.mkDerivation rec {
     echo ${kdePackages.qtsvg} >> $out/nix-support/propagated-user-env-packages
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Soothing pastel theme for SDDM";
     homepage = "https://github.com/catppuccin/sddm";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ elysasrc ];
-    platforms = lib.platforms.linux;
+    license = licenses.mit;
+    maintainers = with maintainers; [ elysasrc ];
+    platforms = platforms.linux;
   };
 }

@@ -35,12 +35,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Spectre & Meltdown vulnerability/mitigation checker for Linux";
     mainProgram = "spectre-meltdown-checker";
     homepage = "https://github.com/speed47/spectre-meltdown-checker";
-    license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.dotlambda ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3;
+    maintainers = [ maintainers.dotlambda ];
+    platforms = platforms.linux;
   };
 })

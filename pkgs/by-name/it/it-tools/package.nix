@@ -43,10 +43,10 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Self-hostable website containing handy tools for developers, with great UX";
     homepage = "https://it-tools.tech/";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ akotro ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ akotro ];
   };
 }

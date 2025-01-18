@@ -17,11 +17,11 @@ buildDunePackage rec {
     hash = "sha256-JXnrfce/V7Bdu8uH98ZJCLjIHZoONiQ02ltFx6Fbvhg=";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Core qcheck library";
     homepage = "https://c-cube.github.io/qcheck/";
-    license = lib.licenses.bsd2;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.bsd2;
+    maintainers = [ maintainers.vbgl ];
   };
 
 }

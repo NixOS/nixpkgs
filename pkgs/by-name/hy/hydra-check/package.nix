@@ -37,11 +37,11 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/hydra-check --shell-completion zsh)
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Check hydra for the build status of a package";
     homepage = "https://github.com/nix-community/hydra-check";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       makefu
       artturin
       bryango

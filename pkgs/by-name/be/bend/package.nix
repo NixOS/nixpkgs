@@ -29,12 +29,12 @@ rustPlatform.buildRustPackage rec {
       --prefix PATH : ${lib.makeBinPath [ hvm ]}
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Bend is a massively parallel, high-level programming language";
     homepage = "https://higherorderco.com/";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     mainProgram = "bend";
-    maintainers = with lib.maintainers; [ k3yss ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ k3yss ];
+    platforms = platforms.unix;
   };
 }

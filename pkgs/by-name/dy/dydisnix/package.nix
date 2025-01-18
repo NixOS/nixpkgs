@@ -48,13 +48,13 @@ stdenv.mkDerivation rec {
     ./bootstrap
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Toolset enabling self-adaptive redeployment on top of Disnix";
     longDescription = ''
       Dynamic Disnix is a (very experimental!) prototype extension framework for Disnix supporting dynamic (re)deployment of service-oriented systems.
     '';
-    license = lib.licenses.lgpl21Plus;
-    maintainers = [ lib.maintainers.tomberek ];
-    platforms = lib.platforms.unix;
+    license = licenses.lgpl21Plus;
+    maintainers = [ maintainers.tomberek ];
+    platforms = platforms.unix;
   };
 }

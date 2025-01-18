@@ -37,13 +37,13 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "LoRa 2.4Ghz Gateway - Linux host Hardware Abstraction Layer, and tools (Packet Forwarder...)";
     license = [
-      lib.licenses.bsd3
-      lib.licenses.mit
+      licenses.bsd3
+      licenses.mit
     ];
-    maintainers = [ lib.maintainers.stv0g ];
-    platforms = lib.platforms.linux;
+    maintainers = [ maintainers.stv0g ];
+    platforms = platforms.linux;
   };
 })

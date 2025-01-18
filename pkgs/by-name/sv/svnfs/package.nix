@@ -48,12 +48,12 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = "-I ${subversion.dev}/include/subversion-1 -fcommon";
   NIX_LDFLAGS = "-lsvn_client-1 -lsvn_subr-1";
 
-  meta = {
+  meta = with lib; {
     description = "FUSE filesystem for accessing Subversion repositories";
     homepage = "https://www.jmadden.eu/index.php/svnfs/";
-    license = lib.licenses.gpl2Only;
-    maintainers = [ lib.maintainers.marcweber ];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl2Only;
+    maintainers = [ maintainers.marcweber ];
+    platforms = platforms.unix;
     mainProgram = "svnfs";
   };
 }

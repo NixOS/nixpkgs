@@ -85,7 +85,7 @@ maven.buildMavenPackage rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "VATSIM map and data explorer";
     longDescription = ''
       VATprism is a VATSIM Map and VATSIM Data Explorer, VATSIM being the
@@ -95,8 +95,8 @@ maven.buildMavenPackage rec {
     '';
     homepage = "https://vatprism.org/";
     mainProgram = "vatprism";
-    license = lib.licenses.agpl3Plus;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ thepuzzlemaker ];
+    license = licenses.agpl3Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ thepuzzlemaker ];
   };
 }

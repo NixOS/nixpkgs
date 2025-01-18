@@ -17,12 +17,12 @@ buildGoModule rec {
 
   vendorHash = "sha256-SX686l6fsr3Gm+gyzNUZUSGXwAnxaTvUo/J57N10fmU=";
 
-  meta = {
+  meta = with lib; {
     description = "BitTorrent client and library in Go";
     homepage = "https://github.com/cenkalti/rain";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "rain";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       justinrubek
       matthewdargan
     ];

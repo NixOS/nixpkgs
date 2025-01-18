@@ -38,11 +38,11 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Configuration management and drift detection tool for Kong";
     homepage = "https://github.com/Kong/deck";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     mainProgram = "deck";
-    maintainers = with lib.maintainers; [ liyangau ];
+    maintainers = with maintainers; [ liyangau ];
   };
 }

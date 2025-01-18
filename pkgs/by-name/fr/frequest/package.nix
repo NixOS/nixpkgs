@@ -64,12 +64,12 @@ stdenv.mkDerivation (finalAttrs: {
     install -D LinuxAppImageDeployment/frequest_icon.png $out/share/icons/hicolor/128x128/apps/frequest_icon.png
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Fast, lightweight and opensource desktop application to make HTTP(s) requests";
     homepage = "https://fabiobento512.github.io/FRequest";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ eliandoran ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ eliandoran ];
+    platforms = platforms.linux;
     mainProgram = "frequest";
   };
 })

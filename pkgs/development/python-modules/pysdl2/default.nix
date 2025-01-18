@@ -53,10 +53,10 @@ buildPythonPackage rec {
     ))
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Wrapper around the SDL2 library and as such similar to the discontinued PySDL project";
     homepage = "https://github.com/marcusva/py-sdl2";
-    license = lib.licenses.publicDomain;
-    maintainers = with lib.maintainers; [ pmiddend ];
+    license = licenses.publicDomain;
+    maintainers = with maintainers; [ pmiddend ];
   };
 }

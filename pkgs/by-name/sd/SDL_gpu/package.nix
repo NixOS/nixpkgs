@@ -49,11 +49,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  meta = {
+  meta = with lib; {
     description = "Library for high-performance, modern 2D graphics with SDL written in C";
     homepage = "https://grimfang4.github.io/sdl-gpu";
-    license = lib.licenses.mit;
-    maintainers = lib.teams.sdl.members ++ (with lib.maintainers; [ ]);
+    license = licenses.mit;
+    maintainers = teams.sdl.members ++ (with maintainers; [ ]);
     inherit (SDL2.meta) platforms;
   };
 })

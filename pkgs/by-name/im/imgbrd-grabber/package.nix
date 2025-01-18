@@ -90,12 +90,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/src";
 
-  meta = {
+  meta = with lib; {
     description = "Very customizable imageboard/booru downloader with powerful filenaming features";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     homepage = "https://bionus.github.io/imgbrd-grabber/";
     mainProgram = "Grabber";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       evanjs
       luftmensch-luftmensch
     ];

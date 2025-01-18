@@ -35,11 +35,11 @@ else
     strictDeps = true;
 
     createFindlibDestdir = true;
-    meta = {
+    meta = with lib; {
       description = "OCaml bindings to libcurl";
-      license = lib.licenses.mit;
+      license = licenses.mit;
       homepage = "http://ygrek.org.ua/p/ocurl/";
-      maintainers = with lib.maintainers; [
+      maintainers = with maintainers; [
         dandellion
         bennofs
       ];

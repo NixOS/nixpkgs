@@ -18,11 +18,11 @@ stdenv.mkDerivation rec {
     sha256 = "0fv5vldmwd6qrdv2wkk946dk9rn9nrv3c84ldvvqqn1spxfzgirm";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Send copies of (UDP) datagrams to multiple receivers";
     homepage = "https://github.com/sleinen/samplicator/";
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     mainProgram = "samplicate";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }

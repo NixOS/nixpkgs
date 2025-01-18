@@ -39,11 +39,11 @@ stdenv.mkDerivation (finalAttrs: {
     libuev
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Functions useful in mobile related, glib based projects";
     homepage = "https://gitlab.gnome.org/World/Phosh/gmobile";
-    license = lib.licenses.lgpl21Plus;
-    maintainers = with lib.maintainers; [ donovanglover ];
-    platforms = lib.platforms.linux;
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ donovanglover ];
+    platforms = platforms.linux;
   };
 })

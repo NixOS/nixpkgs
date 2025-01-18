@@ -29,11 +29,11 @@ stdenv.mkDerivation rec {
 
   checkTarget = "partcheck"; # "check" needs root
 
-  meta = {
+  meta = with lib; {
     description = "Library for asynchronous I/O in Linux";
     homepage = "https://lse.sourceforge.net/io/aio.html";
-    platforms = lib.platforms.linux;
-    license = lib.licenses.lgpl21;
+    platforms = platforms.linux;
+    license = licenses.lgpl21;
     maintainers = [ ];
   };
 }

@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     "man"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Simple GTK painting program";
     longDescription = ''
       mtPaint is a simple GTK painting program designed for
@@ -56,9 +56,9 @@ stdenv.mkDerivation rec {
       GNU/Linux, Windows and older PC hardware.
     '';
     homepage = "https://mtpaint.sourceforge.net/";
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.vklquevs ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.vklquevs ];
     mainProgram = "mtpaint";
   };
 }

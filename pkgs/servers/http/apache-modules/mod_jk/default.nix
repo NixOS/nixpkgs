@@ -41,12 +41,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Provides web server plugins to connect web servers with Tomcat";
     homepage = "https://tomcat.apache.org/download-connectors.cgi";
     changelog = "https://tomcat.apache.org/connectors-doc/miscellaneous/changelog.html";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ anthonyroussel ];
-    platforms = lib.platforms.unix;
+    license = licenses.asl20;
+    maintainers = with maintainers; [ anthonyroussel ];
+    platforms = platforms.unix;
   };
 }

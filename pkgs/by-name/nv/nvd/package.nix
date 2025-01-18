@@ -32,12 +32,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Nix/NixOS package version diff tool";
     homepage = "https://khumba.net/projects/nvd";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     mainProgram = "nvd";
-    maintainers = with lib.maintainers; [ khumba ];
-    platforms = lib.platforms.all;
+    maintainers = with maintainers; [ khumba ];
+    platforms = platforms.all;
   };
 })

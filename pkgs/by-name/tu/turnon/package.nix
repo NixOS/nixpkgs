@@ -41,12 +41,12 @@ rustPlatform.buildRustPackage rec {
     blueprint-compiler format resources/**/*.blp
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Turn on devices in your local network";
     homepage = "https://github.com/swsnr/turnon";
-    license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ mksafavi ];
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ mksafavi ];
     mainProgram = "turnon";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

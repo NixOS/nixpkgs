@@ -16,11 +16,11 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "1ybq6jb5clh9hw0sp3idp4hjv2gkm9yiaph48gcc208affflc8m9";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Dynamically enable sections of config files";
     mainProgram = "qualia";
     homepage = "https://github.com/darkfeline/mir.qualia";
-    license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.srhb ];
+    license = licenses.asl20;
+    maintainers = [ maintainers.srhb ];
   };
 }

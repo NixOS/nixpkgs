@@ -67,15 +67,15 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.hostPlatform.isLinux [ gtk3 ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.AppKit ];
 
-  meta = {
+  meta = with lib; {
     description = "Standalone ImPlot Demos";
     homepage = "https://github.com/epezent/implot_demos";
     broken =
       stdenv.hostPlatform.isAarch64 # Target "mandel" relies on AVX2
       || stdenv.hostPlatform.isDarwin;
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ SomeoneSerge ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ SomeoneSerge ];
     mainProgram = "implot-demos";
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 }

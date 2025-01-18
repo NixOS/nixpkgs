@@ -20,12 +20,12 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ ncurses ];
 
-  meta = {
+  meta = with lib; {
     description = "View and edit files in hexadecimal or in ASCII";
     homepage = "http://rigaux.org/hexedit.html";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ sigmanificient ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ sigmanificient ];
     mainProgram = "hexedit";
   };
 })

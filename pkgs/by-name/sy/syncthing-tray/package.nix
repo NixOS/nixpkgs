@@ -31,11 +31,11 @@ buildGoModule rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libappindicator-gtk3 ];
 
-  meta = {
+  meta = with lib; {
     description = "Simple application tray for syncthing";
     homepage = "https://github.com/alex2108/syncthing-tray";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       luftmensch-luftmensch
       nickhu
     ];

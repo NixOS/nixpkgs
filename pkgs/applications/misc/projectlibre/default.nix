@@ -65,12 +65,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Project-Management Software similar to MS-Project";
     homepage = "https://www.projectlibre.com/";
-    license = lib.licenses.cpal10;
+    license = licenses.cpal10;
     mainProgram = "projectlibre";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       Mogria
       tomasajt
     ];

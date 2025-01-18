@@ -19,16 +19,16 @@ stdenv.mkDerivation rec {
     install -D -m ugo=rx connect $out/bin/connect
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Make network connection via SOCKS and https proxy";
     longDescription = ''
       This proxy traversal tool is intended to assist OpenSSH (via ProxyCommand
       in ~/.ssh/config) and GIT (via $GIT_PROXY_COMMAND) utilize SOCKS and https proxies.
     '';
     homepage = "https://bitbucket.org/gotoh/connect/wiki/Home";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.gnu ++ lib.platforms.linux ++ lib.platforms.darwin;
-    maintainers = with lib.maintainers; [ jcumming ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.gnu ++ platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ jcumming ];
     mainProgram = "connect";
   };
 }

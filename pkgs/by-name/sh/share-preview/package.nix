@@ -62,12 +62,12 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Preview and debug websites metadata tags for social media share";
     homepage = "https://apps.gnome.org/SharePreview";
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     mainProgram = "share-preview";
-    maintainers = lib.teams.gnome-circle.members;
-    platforms = lib.platforms.unix;
+    maintainers = teams.gnome-circle.members;
+    platforms = platforms.unix;
   };
 })

@@ -83,12 +83,12 @@ buildGoModule rec {
     inherit anvilExtras;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Graphical, multi-pane tiling editor inspired by Acme";
     homepage = "https://anvil-editor.net";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "anvil";
-    maintainers = with lib.maintainers; [ aleksana ];
-    platforms = with lib.platforms; unix ++ windows;
+    maintainers = with maintainers; [ aleksana ];
+    platforms = with platforms; unix ++ windows;
   };
 }

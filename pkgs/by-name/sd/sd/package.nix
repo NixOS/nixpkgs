@@ -27,12 +27,12 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion --zsh gen/completions/_sd
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Intuitive find & replace CLI (sed alternative)";
     mainProgram = "sd";
     homepage = "https://github.com/chmln/sd";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       amar1729
       Br1ght0ne
     ];

@@ -32,11 +32,11 @@ perlPackages.buildPerlPackage rec {
     mv "pflogsumm.1" "$out/share/man/man1"
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "http://jimsun.linxnet.com/postfix_contrib.html";
-    maintainers = with lib.maintainers; [ schneefux ];
+    maintainers = with maintainers; [ schneefux ];
     description = "Postfix activity overview";
     mainProgram = "pflogsumm";
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
   };
 }

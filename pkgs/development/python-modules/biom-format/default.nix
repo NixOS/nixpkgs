@@ -52,10 +52,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "biom" ];
 
-  meta = {
+  meta = with lib; {
     homepage = "http://biom-format.org/";
     description = "Biological Observation Matrix (BIOM) format";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ tomasajt ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ tomasajt ];
   };
 }

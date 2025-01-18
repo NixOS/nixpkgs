@@ -64,12 +64,12 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) initrd-network-ssh;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Minimalistic libc subset for initramfs usage";
     mainProgram = "klcc";
     homepage = "https://kernel.org/pub/linux/libs/klibc/";
-    maintainers = with lib.maintainers; [ fpletz ];
-    license = lib.licenses.bsd3;
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ fpletz ];
+    license = licenses.bsd3;
+    platforms = platforms.linux;
   };
 }

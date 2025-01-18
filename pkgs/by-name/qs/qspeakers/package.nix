@@ -26,11 +26,11 @@ stdenv.mkDerivation (finalAttrs: {
     libsForQt5.qttools
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Loudspeaker enclosure designer";
     homepage = "https://github.com/be1/qspeakers";
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     mainProgram = "qspeakers";
-    maintainers = with lib.maintainers; [ tomasajt ];
+    maintainers = with maintainers; [ tomasajt ];
   };
 })

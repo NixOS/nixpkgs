@@ -67,13 +67,13 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "An IDE for programming in MIPS assembly language intended for educational-level use";
     mainProgram = "Mars";
     homepage = "https://courses.missouristate.edu/KenVollmar/MARS/";
-    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ emilytrau ];
-    platforms = lib.platforms.all;
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ emilytrau ];
+    platforms = platforms.all;
   };
 })

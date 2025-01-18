@@ -48,12 +48,12 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/hyprwm/hyprsunset";
     description = "Application to enable a blue-light filter on Hyprland";
-    license = lib.licenses.bsd3;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [
+    license = licenses.bsd3;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
       fufexan
       johnrtitor
     ];

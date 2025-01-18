@@ -24,10 +24,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "notify_events" ];
 
-  meta = {
+  meta = with lib; {
     description = "Python client for Notify.Events";
     homepage = "https://github.com/notify-events/python";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

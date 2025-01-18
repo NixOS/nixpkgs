@@ -17,14 +17,14 @@ buildLua {
   };
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = {
+  meta = with lib; {
     description = "Automatically skips chapters based on title";
     longDescription = ''
       MPV script that skips chapters based on their title, categorized using regexes.
       The set of skipped categories can be configured globally, or by an auto-profile.
     '';
     homepage = "https://github.com/po5/chapterskip";
-    license = lib.licenses.unfree; # https://github.com/po5/chapterskip/issues/10
-    maintainers = with lib.maintainers; [ nicoo ];
+    license = licenses.unfree; # https://github.com/po5/chapterskip/issues/10
+    maintainers = with maintainers; [ nicoo ];
   };
 }

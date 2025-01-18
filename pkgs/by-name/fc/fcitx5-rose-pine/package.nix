@@ -24,11 +24,11 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Fcitx5 themes based on Rosé Pine";
     homepage = "https://github.com/rose-pine/fcitx5";
-    maintainers = with lib.maintainers; [ rosehobgoblin ];
-    platforms = lib.platforms.all;
-    license = lib.licenses.unfree;
+    maintainers = with maintainers; [ rosehobgoblin ];
+    platforms = platforms.all;
+    license = licenses.unfree;
   };
 }

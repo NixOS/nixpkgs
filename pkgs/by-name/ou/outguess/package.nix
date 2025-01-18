@@ -22,12 +22,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [ "--with-generic-jconfig" ];
 
-  meta = {
+  meta = with lib; {
     description = "Universal steganographic tool that allows the insertion of hidden information into the redundant bits of data sources";
     homepage = "https://github.com/resurrecting-open-source-projects/outguess";
-    license = lib.licenses.bsdOriginal;
-    maintainers = with lib.maintainers; [ HeitorAugustoLN ];
+    license = licenses.bsdOriginal;
+    maintainers = with maintainers; [ HeitorAugustoLN ];
     mainProgram = "outguess";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 })

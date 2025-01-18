@@ -46,12 +46,12 @@ stdenvNoCC.mkDerivation {
         "$out/share/shell-color-scripts/colorscripts"
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://gitlab.com/dwt1/shell-color-scripts";
     description = "Collection of shell color scripts collected by dt (Derek Taylor)";
-    license = with lib.licenses; [ mit ];
+    license = with licenses; [ mit ];
     maintainers = [ ];
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
     mainProgram = "colorscript";
   };
 }

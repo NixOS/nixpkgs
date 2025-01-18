@@ -20,11 +20,11 @@ buildGoModule {
 
   vendorHash = "sha256-F74TVp6+UdV31YVYYHWtdIzpbbiYM2I8csGobesFN2g=";
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/gennaro-tedesco/archimede";
     description = "Unobtrusive directory information fetcher";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     mainProgram = "archimede";
-    maintainers = [ lib.maintainers.anugrahn1 ];
+    maintainers = [ maintainers.anugrahn1 ];
   };
 }

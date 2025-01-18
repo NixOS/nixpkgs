@@ -69,11 +69,11 @@ python312Packages.buildPythonPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Open source pan-CJK pixel font";
     homepage = "https://ark-pixel-font.takwolf.com/";
-    license = lib.licenses.ofl;
-    maintainers = with lib.maintainers; [ h7x4 ];
-    platforms = lib.platforms.all;
+    license = licenses.ofl;
+    maintainers = with maintainers; [ h7x4 ];
+    platforms = platforms.all;
   };
 }

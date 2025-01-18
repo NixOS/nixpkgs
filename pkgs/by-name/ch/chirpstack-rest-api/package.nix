@@ -24,11 +24,11 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "gRPC API to REST proxy for Chirpstack";
     homepage = "https://www.chirpstack.io/";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.stv0g ];
+    license = licenses.mit;
+    maintainers = [ maintainers.stv0g ];
     mainProgram = "chirpstack-rest-api";
   };
 }

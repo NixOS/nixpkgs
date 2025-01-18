@@ -64,11 +64,11 @@ buildPythonPackage rec {
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
-  meta = {
+  meta = with lib; {
     description = "Core library for ActivityWatch";
     mainProgram = "aw-cli";
     homepage = "https://github.com/ActivityWatch/aw-core";
-    maintainers = with lib.maintainers; [ huantian ];
-    license = lib.licenses.mpl20;
+    maintainers = with maintainers; [ huantian ];
+    license = licenses.mpl20;
   };
 }

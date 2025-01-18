@@ -76,11 +76,11 @@ stdenv.mkDerivation (finalAttrs: {
       ${stdenv.cc.targetPrefix}install_name_tool -id "$dylib" "$dylib"
     '';
 
-  meta = {
+  meta = with lib; {
     description = "Small QR code decoding library";
-    license = lib.licenses.isc;
-    maintainers = [ lib.maintainers.raskin ];
-    platforms = lib.platforms.linux ++ [
+    license = licenses.isc;
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.linux ++ [
       "x86_64-darwin"
       "aarch64-darwin"
     ];

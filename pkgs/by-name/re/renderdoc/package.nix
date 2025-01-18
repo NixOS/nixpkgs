@@ -126,7 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://renderdoc.org/";
     description = "Single-frame graphics debugger";
     longDescription = ''
@@ -135,9 +135,9 @@ stdenv.mkDerivation (finalAttrs: {
       of any application using Vulkan, D3D11, OpenGL or D3D12 across
       Windows 7 - 10, Linux or Android.
     '';
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "renderdoccmd";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = lib.intersectLists lib.platforms.linux (lib.platforms.x86_64 ++ lib.platforms.i686);
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = intersectLists platforms.linux (platforms.x86_64 ++ platforms.i686);
   };
 })

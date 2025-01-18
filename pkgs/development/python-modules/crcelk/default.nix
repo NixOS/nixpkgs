@@ -27,10 +27,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "crcelk" ];
 
-  meta = {
+  meta = with lib; {
     description = "Implementation of the CRC algorithm";
     homepage = "https://github.com/zeroSteiner/crcelk";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fab ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
   };
 }

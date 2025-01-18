@@ -97,12 +97,12 @@ python3Packages.buildPythonApplication rec {
       --zsh <($out/bin/snow --show-completion zsh)
   '';
 
-  meta = {
+  meta = with lib; {
     changelog = "https://github.com/snowflakedb/snowflake-cli/blob/main/RELEASE-NOTES.md";
     homepage = "https://docs.snowflake.com/en/developer-guide/snowflake-cli-v2/index";
     description = "Command-line tool explicitly designed for developer-centric workloads in addition to SQL operations";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ vtimofeenko ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ vtimofeenko ];
     mainProgram = "snow";
   };
 }

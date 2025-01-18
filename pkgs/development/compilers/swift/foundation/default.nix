@@ -74,12 +74,12 @@ stdenv.mkDerivation {
     substituteAll ${./glue.cmake} $dev/lib/cmake/Foundation/FoundationConfig.cmake
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Core utilities, internationalization, and OS independence for Swift";
     mainProgram = "plutil";
     homepage = "https://github.com/apple/swift-corelibs-foundation";
-    platforms = lib.platforms.linux;
-    license = lib.licenses.asl20;
-    maintainers = lib.teams.swift.members;
+    platforms = platforms.linux;
+    license = licenses.asl20;
+    maintainers = teams.swift.members;
   };
 }

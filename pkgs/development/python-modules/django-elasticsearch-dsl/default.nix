@@ -36,10 +36,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "django_elasticsearch_dsl" ];
 
-  meta = {
+  meta = with lib; {
     description = "Wrapper around elasticsearch-dsl-py for Django models";
     homepage = "https://github.com/sabricot/django-elasticsearch-dsl";
-    license = lib.licenses.bsd2;
-    maintainers = [ lib.maintainers.onny ];
+    license = licenses.bsd2;
+    maintainers = [ maintainers.onny ];
   };
 }

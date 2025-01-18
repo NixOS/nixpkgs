@@ -41,12 +41,12 @@ stdenv.mkDerivation rec {
     libadwaita
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Calculate display info like DPI and aspect ratio";
     homepage = "https://github.com/cassidyjames/dippi";
     mainProgram = "com.github.cassidyjames.dippi";
-    license = lib.licenses.gpl3;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ zendo ];
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ zendo ];
   };
 }

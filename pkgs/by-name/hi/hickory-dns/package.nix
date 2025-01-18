@@ -34,12 +34,12 @@ rustPlatform.buildRustPackage rec {
     ];
   };
 
-  meta = {
+  meta = with lib; {
     description = "Rust based DNS client, server, and resolver";
     homepage = "https://hickory-dns.org/";
-    maintainers = with lib.maintainers; [ colinsane ];
-    platforms = lib.platforms.linux;
-    license = with lib.licenses; [
+    maintainers = with maintainers; [ colinsane ];
+    platforms = platforms.linux;
+    license = with licenses; [
       asl20
       mit
     ];

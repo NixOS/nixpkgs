@@ -89,11 +89,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Virtual development framework for complex embedded systems";
     homepage = "https://renode.io";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ otavio ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ otavio ];
     platforms = [ "x86_64-linux" ];
   };
 })

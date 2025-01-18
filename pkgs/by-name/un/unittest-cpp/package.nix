@@ -33,11 +33,11 @@ stdenv.mkDerivation rec {
 
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/unittest-cpp/unittest-cpp";
     description = "Lightweight unit testing framework for C++";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     maintainers = [ ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }

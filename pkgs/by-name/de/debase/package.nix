@@ -75,14 +75,14 @@ stdenv.mkDerivation rec {
     }"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "TUI for drag-and-drop manipulation of git commits";
     homepage = "https://toaster.llc/debase";
     # The author has not yet specified a license.
     # See https://github.com/toasterllc/debase/pull/4
-    license = lib.licenses.publicDomain;
+    license = licenses.publicDomain;
     mainProgram = "debase";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       jeremyschlatter
       aleksana
     ];

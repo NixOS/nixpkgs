@@ -30,10 +30,10 @@ stdenv.mkDerivation rec {
 
   patches = [ ./0.9.1-discover-luajit.patch ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/Oberon00/luabind";
     description = "Library that helps you create bindings between C++ and Lua";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.unix;
+    license = licenses.mit;
+    platforms = platforms.unix;
   };
 }

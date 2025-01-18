@@ -15,11 +15,11 @@ buildDunePackage rec {
 
   duneVersion = "3";
 
-  meta = {
+  meta = with lib; {
     homepage = "https://binsec.github.io";
     downloadPage = "https://github.com/binsec/unisim_archisec";
     description = "UNISIM-VP DBA decoder";
-    license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.david-hamelin ];
+    license = licenses.bsd3;
+    maintainers = [ maintainers.david-hamelin ];
   };
 }

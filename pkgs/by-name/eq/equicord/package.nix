@@ -54,13 +54,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "The other cutest Discord client mod";
     homepage = "https://github.com/Equicord/Equicord";
-    license = lib.licenses.gpl3Only;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Only;
+    platforms = platforms.linux;
     maintainers = [
-      lib.maintainers.NotAShelf
+      maintainers.NotAShelf
     ];
   };
 })

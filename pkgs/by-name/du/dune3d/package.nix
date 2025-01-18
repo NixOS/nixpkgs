@@ -62,15 +62,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.CASROOT = opencascade-occt;
 
-  meta = {
+  meta = with lib; {
     description = "3D CAD application";
     homepage = "https://dune3d.org";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
       _0x4A6F
       jue89
     ];
     mainProgram = "dune3d";
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 })

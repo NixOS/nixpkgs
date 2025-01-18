@@ -52,14 +52,14 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Confluent event streaming platform based on Apache Kafka";
     homepage = "https://www.confluent.io/";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
+    license = licenses.asl20;
+    maintainers = with maintainers; [
       zoedsoupe
       autophagy
     ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 })

@@ -41,11 +41,11 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "INSTALL_UDEV_RULES" stdenv.hostPlatform.isLinux)
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Turns your Realtek RTL2832 based DVB dongle into a FM radio stereo receiver";
     homepage = "https://github.com/AlbrechtL/rtl_fm_streamer";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ doronbehar ];
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ doronbehar ];
     broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };
 })

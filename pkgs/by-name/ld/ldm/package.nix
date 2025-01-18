@@ -42,10 +42,10 @@ stdenv.mkDerivation rec {
     cp -v ldm $out/bin
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Lightweight device mounter, with libudev as only dependency";
     mainProgram = "ldm";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
+    license = licenses.mit;
+    platforms = platforms.linux;
   };
 }

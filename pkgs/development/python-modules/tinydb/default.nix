@@ -35,11 +35,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tinydb" ];
 
-  meta = {
+  meta = with lib; {
     description = "Lightweight document oriented database written in Python";
     homepage = "https://tinydb.readthedocs.org/";
     changelog = "https://tinydb.readthedocs.io/en/latest/changelog.html";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ marcus7070 ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ marcus7070 ];
   };
 }

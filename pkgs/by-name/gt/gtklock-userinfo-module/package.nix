@@ -36,11 +36,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.testModule = gtklock.testModule finalAttrs.finalPackage;
 
-  meta = {
+  meta = with lib; {
     description = "Gtklock module adding user info to the lockscreen";
     homepage = "https://github.com/jovanlanik/gtklock-userinfo-module";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ aleksana ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ aleksana ];
+    platforms = platforms.linux;
   };
 })

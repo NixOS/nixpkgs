@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
 
   inherit (topkg) buildPhase installPhase;
 
-  meta = {
+  meta = with lib; {
     description = "OCaml non-blocking streaming codec to decode and encode the JSON data format";
     homepage = "https://erratique.ch/software/jsonm";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ vbgl ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ vbgl ];
     mainProgram = "jsontrip";
     inherit (ocaml.meta) platforms;
   };

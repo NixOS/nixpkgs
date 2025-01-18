@@ -17,12 +17,12 @@ stdenv.mkDerivation {
     install *.ttf -Dt $out/share/fonts/wine
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Microsoft replacement fonts by the Wine project";
     homepage = "https://wiki.winehq.org/Create_Fonts";
-    license = with lib.licenses; [ lgpl21Plus ];
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [
+    license = with licenses; [ lgpl21Plus ];
+    platforms = platforms.all;
+    maintainers = with maintainers; [
       avnik
       raskin
       bendlas

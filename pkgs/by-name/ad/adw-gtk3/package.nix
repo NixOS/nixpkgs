@@ -34,11 +34,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Theme from libadwaita ported to GTK-3";
     homepage = "https://github.com/lassekongo83/adw-gtk3";
-    license = lib.licenses.lgpl21Only;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ ciferkey ];
+    license = licenses.lgpl21Only;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ ciferkey ];
   };
 })

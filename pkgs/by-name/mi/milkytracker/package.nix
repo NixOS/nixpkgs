@@ -57,14 +57,14 @@ stdenv.mkDerivation (finalAttrs: {
     rev-prefix = "v";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Music tracker application, similar to Fasttracker II";
     homepage = "https://milkytracker.org/";
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.unix;
+    license = licenses.gpl3Plus;
+    platforms = platforms.unix;
     # ibtool -> real Xcode -> I can't get that, and Ofborg can't test that
     broken = stdenv.hostPlatform.isDarwin;
-    maintainers = with lib.maintainers; [ OPNA2608 ];
+    maintainers = with maintainers; [ OPNA2608 ];
     mainProgram = "milkytracker";
   };
 })

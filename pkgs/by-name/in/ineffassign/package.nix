@@ -26,12 +26,12 @@ buildGoModule rec {
 
   allowGoReference = true;
 
-  meta = {
+  meta = with lib; {
     description = "Detect ineffectual assignments in Go code";
     mainProgram = "ineffassign";
     homepage = "https://github.com/gordonklaus/ineffassign";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       kalbasit
       bot-wxt1221
     ];

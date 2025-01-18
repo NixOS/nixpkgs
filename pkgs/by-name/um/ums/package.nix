@@ -52,11 +52,11 @@ stdenv.mkDerivation rec {
       --set JAVA_HOME "${jre8}"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Universal Media Server: a DLNA-compliant UPnP Media Server";
-    license = lib.licenses.gpl2Only;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl2Only;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
       thall
       snicket2100
     ];

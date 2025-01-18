@@ -101,11 +101,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://pwmt.org/projects/zathura";
     description = "Core component for zathura PDF viewer";
-    license = lib.licenses.zlib;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ globin ];
+    license = licenses.zlib;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ globin ];
   };
 })

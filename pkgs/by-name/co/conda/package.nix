@@ -126,7 +126,7 @@ buildFHSEnv {
 
   runScript = "bash -l";
 
-  meta = {
+  meta = with lib; {
     description = "Package manager for Python";
     mainProgram = "conda-shell";
     homepage = "https://conda.io";
@@ -134,7 +134,7 @@ buildFHSEnv {
       "aarch64-linux"
       "x86_64-linux"
     ];
-    license = with lib.licenses; [ bsd3 ];
-    maintainers = with lib.maintainers; [ jluttine ];
+    license = with licenses; [ bsd3 ];
+    maintainers = with maintainers; [ jluttine ];
   };
 }

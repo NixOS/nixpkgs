@@ -110,11 +110,11 @@ rustPlatform.buildRustPackage {
     inherit (dotnetBuild) fetch-deps;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Experimental GUI application to manage VRChat Unity Projects";
     homepage = "https://github.com/vrc-get/vrc-get";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ Scrumplex ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ Scrumplex ];
     # aarch64-linux: Error failed to build app: Target aarch64-unknown-linux-gnu does not exist. Please run `rustup target list` to see the available targets.
     broken = stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isAarch64;
     mainProgram = "alcom";

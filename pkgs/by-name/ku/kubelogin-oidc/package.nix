@@ -35,12 +35,12 @@ buildGoModule rec {
     mv $out/bin/kubelogin $out/bin/kubectl-oidc_login
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Kubernetes credential plugin implementing OpenID Connect (OIDC) authentication";
     mainProgram = "kubectl-oidc_login";
     inherit (src.meta) homepage;
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
+    license = licenses.asl20;
+    maintainers = with maintainers; [
       benley
       nevivurn
     ];

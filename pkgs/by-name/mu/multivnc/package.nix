@@ -94,11 +94,11 @@ stdenv.mkDerivation {
     wrapGAppsHook3
   ];
 
-  meta = {
+  meta = with lib; {
     mainProgram = "multivnc";
     description = "Cross-platform Multicast-enabled VNC viewer based on LibVNCClient";
     homepage = "https://github.com/bk138/multivnc";
-    maintainers = with lib.maintainers; [ rhelmot ];
-    license = lib.licenses.gpl3Plus;
+    maintainers = with maintainers; [ rhelmot ];
+    license = licenses.gpl3Plus;
   };
 }

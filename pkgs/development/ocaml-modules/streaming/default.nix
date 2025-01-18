@@ -18,10 +18,10 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ stdlib-shims ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://odis-labs.github.io/streaming";
-    license = lib.licenses.isc;
+    license = licenses.isc;
     description = "Fast, safe and composable streaming abstractions";
-    maintainers = [ lib.maintainers.vbgl ];
+    maintainers = [ maintainers.vbgl ];
   };
 }

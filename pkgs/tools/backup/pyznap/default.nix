@@ -21,11 +21,11 @@ buildPythonApplication rec {
   # tests aren't included in the PyPI packages
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/yboetz/pyznap";
     description = "ZFS snapshot tool written in python";
     mainProgram = "pyznap";
-    license = with lib.licenses; [ gpl3 ];
-    maintainers = with lib.maintainers; [ rbrewer ];
+    license = with licenses; [ gpl3 ];
+    maintainers = with maintainers; [ rbrewer ];
   };
 }

@@ -25,12 +25,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libgcrypt ];
 
-  meta = {
+  meta = with lib; {
     description = "C library for Bitcoin's base58 encoding";
     homepage = "https://github.com/bitcoin/libbase58";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ nagy ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ nagy ];
     mainProgram = "base58";
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 }

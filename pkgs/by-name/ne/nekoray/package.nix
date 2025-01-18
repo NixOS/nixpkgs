@@ -151,12 +151,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Qt based cross-platform GUI proxy configuration manager";
     homepage = "https://github.com/MatsuriDayo/nekoray";
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     mainProgram = "nekoray";
-    maintainers = with lib.maintainers; [ tomasajt ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ tomasajt ];
+    platforms = platforms.linux;
   };
 })

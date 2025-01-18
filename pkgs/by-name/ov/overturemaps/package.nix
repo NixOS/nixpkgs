@@ -22,11 +22,11 @@ python3Packages.buildPythonPackage rec {
     shapely
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Official command-line tool of the Overture Maps Foundation";
     homepage = "https://overturemaps.org/";
     mainProgram = "overturemaps";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ crimeminister ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ crimeminister ];
   };
 }

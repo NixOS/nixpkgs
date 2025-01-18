@@ -50,13 +50,13 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Native WebGPU implementation based on wgpu-core";
     homepage = "https://github.com/gfx-rs/wgpu-native";
-    license = with lib.licenses; [
+    license = with licenses; [
       mit
       asl20
     ];
-    maintainers = with lib.maintainers; [ niklaskorz ];
+    maintainers = with maintainers; [ niklaskorz ];
   };
 }

@@ -67,12 +67,12 @@ flutter327.buildFlutterApplication rec {
 
   passthru.updateScript = ./update.sh;
 
-  meta = {
+  meta = with lib; {
     description = "Comic reader that support reading local and network comics";
     homepage = "https://github.com/venera-app/venera";
     mainProgram = "venera";
-    license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ aucub ];
-    platforms = lib.platforms.linux;
+    license = with licenses; [ gpl3Plus ];
+    maintainers = with maintainers; [ aucub ];
+    platforms = platforms.linux;
   };
 }

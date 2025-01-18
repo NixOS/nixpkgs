@@ -42,10 +42,10 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "torchcrepe" ];
 
-  meta = {
+  meta = with lib; {
     description = "Pytorch implementation of the CREPE pitch tracker";
     homepage = "https://github.com/maxrmorrison/torchcrepe";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ derdennisop ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ derdennisop ];
   };
 }

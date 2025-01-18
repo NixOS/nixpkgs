@@ -18,12 +18,12 @@ let
       stripRoot = false;
     };
 
-    meta = {
+    meta = with lib; {
       description = "OtpKeyProv is a key provider based on one-time passwords";
       homepage = "https://keepass.info/plugins.html#otpkeyprov";
-      platforms = with lib.platforms; linux;
-      license = lib.licenses.gpl2;
-      maintainers = [ lib.maintainers.Enteee ];
+      platforms = with platforms; linux;
+      license = licenses.gpl2;
+      maintainers = [ maintainers.Enteee ];
     };
 
     pluginFilename = "OtpKeyProv.plgx";

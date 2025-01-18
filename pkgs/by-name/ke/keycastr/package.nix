@@ -26,12 +26,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru.updateScript = ./update.sh;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/keycastr/keycastr";
     description = "Open-source keystroke visualizer";
-    license = lib.licenses.bsd3;
-    platforms = lib.platforms.darwin;
-    maintainers = with lib.maintainers; [ matteopacini ];
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = licenses.bsd3;
+    platforms = platforms.darwin;
+    maintainers = with maintainers; [ matteopacini ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 })

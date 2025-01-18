@@ -35,11 +35,11 @@ python3Packages.buildPythonApplication rec {
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "Tool for generating Clang's JSON Compilation Database files";
     mainProgram = "compiledb";
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     homepage = "https://github.com/nickdiego/compiledb";
-    maintainers = with lib.maintainers; [ sigmanificient ];
+    maintainers = with maintainers; [ sigmanificient ];
   };
 }

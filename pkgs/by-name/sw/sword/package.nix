@@ -103,7 +103,7 @@ stdenv.mkDerivation (
       );
     };
 
-    meta = {
+    meta = with lib; {
       description = "Software framework that allows research manipulation of Biblical texts";
       homepage = "https://www.crosswire.org/sword/";
       longDescription = ''
@@ -115,11 +115,11 @@ stdenv.mkDerivation (
         translators of the Bible, and have a growing collection of many hundred
         texts in around 100 languages.
       '';
-      license = lib.licenses.gpl2;
-      maintainers = with lib.maintainers; [
+      license = licenses.gpl2;
+      maintainers = with maintainers; [
         greg
       ];
-      platforms = lib.platforms.all;
+      platforms = platforms.all;
     };
   }
 )

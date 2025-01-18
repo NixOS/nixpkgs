@@ -67,10 +67,10 @@ stdenv.mkDerivation rec {
       --share-path=$out/share
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Common Lisp implementation based on LLVM with C++ integration";
-    license = lib.licenses.lgpl21Plus;
-    maintainers = lib.teams.lisp.members;
+    license = licenses.lgpl21Plus;
+    maintainers = teams.lisp.members;
     platforms = [
       "x86_64-linux"
       "x86_64-darwin"

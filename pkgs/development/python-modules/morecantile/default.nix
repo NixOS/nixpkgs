@@ -50,11 +50,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "morecantile" ];
 
-  meta = {
+  meta = with lib; {
     description = "Construct and use map tile grids in different projection";
     homepage = "https://developmentseed.org/morecantile/";
-    license = lib.licenses.mit;
-    maintainers = lib.teams.geospatial.members;
+    license = licenses.mit;
+    maintainers = teams.geospatial.members;
     mainProgram = "morecantile";
   };
 }

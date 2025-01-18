@@ -29,12 +29,12 @@ stdenv.mkDerivation (finalAttrs: {
     open62541
   ];
 
-  meta = {
+  meta = with lib; {
     description = "C++ wrapper of the open62541 OPC UA library";
     homepage = "https://open62541pp.github.io/open62541pp";
     changelog = "https://github.com/open62541pp/open62541pp/releases/tag/${finalAttrs.src.rev}";
-    license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ sikmir ];
-    platforms = lib.platforms.unix;
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ sikmir ];
+    platforms = platforms.unix;
   };
 })

@@ -57,11 +57,11 @@ stdenv.mkDerivation (finalAttrs: {
     wrapPythonProgramsIn "$out/lib" "$out $propagatedBuildInputs"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Pass password manager search provider for gnome-shell";
     homepage = "https://github.com/jle64/gnome-pass-search-provider";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ lelgenio ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ lelgenio ];
+    platforms = platforms.linux;
   };
 })

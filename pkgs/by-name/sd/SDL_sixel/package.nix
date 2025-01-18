@@ -27,12 +27,12 @@ stdenv.mkDerivation {
 
   strictDeps = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/saitoha/SDL1.2-SIXEL";
     description = "SDL 1.2 patched with libsixel support";
-    license = lib.licenses.lgpl21;
+    license = licenses.lgpl21;
     mainProgram = "sdl-config";
-    maintainers = lib.teams.sdl.members ++ (with lib.maintainers; [ ]);
-    platforms = lib.platforms.linux;
+    maintainers = teams.sdl.members ++ (with maintainers; [ ]);
+    platforms = platforms.linux;
   };
 }

@@ -18,11 +18,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/arangodb/linenoise-ng";
     description = "Small, portable GNU readline replacement for Linux, Windows and MacOS which is capable of handling UTF-8 characters";
     maintainers = [ ];
-    platforms = lib.platforms.all;
-    license = lib.licenses.bsd3;
+    platforms = platforms.all;
+    license = licenses.bsd3;
   };
 }

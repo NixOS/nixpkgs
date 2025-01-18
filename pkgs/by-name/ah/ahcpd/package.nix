@@ -18,11 +18,11 @@ stdenv.mkDerivation rec {
     sed -i -e s,etc,$out/etc, Makefile
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "http://www.pps.univ-paris-diderot.fr/~jch/software/ahcp/";
     description = "Autoconfiguration protocol for IPv6 and dual-stack IPv6/IPv4 networks";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
+    license = licenses.mit;
+    platforms = platforms.linux;
     mainProgram = "ahcpd";
   };
 }

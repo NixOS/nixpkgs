@@ -40,11 +40,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  meta = {
+  meta = with lib; {
     description = "Real-time charting library for Vala and GTK4 based on Cairo";
     homepage = "https://github.com/lcallarec/live-chart";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ aleksana ];
-    platforms = lib.platforms.unix;
+    license = licenses.mit;
+    maintainers = with maintainers; [ aleksana ];
+    platforms = platforms.unix;
   };
 })

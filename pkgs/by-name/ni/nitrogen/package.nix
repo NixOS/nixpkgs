@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     patchShebangs data/icon-theme-installer
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Wallpaper browser and setter for X11";
     longDescription = ''
       nitrogen is a lightweight utility that can set the root background on X11.
@@ -36,9 +36,9 @@ stdenv.mkDerivation rec {
       and settings are stored in a human-readable config file.
     '';
     homepage = "https://github.com/l3ib/nitrogen";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.auntie ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.auntie ];
     mainProgram = "nitrogen";
   };
 }

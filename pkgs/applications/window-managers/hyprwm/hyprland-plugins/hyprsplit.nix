@@ -25,12 +25,12 @@ mkHyprlandPlugin hyprland rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/shezdy/hyprsplit";
     description = "Hyprland plugin for awesome / dwm like workspaces";
-    license = lib.licenses.bsd3;
+    license = licenses.bsd3;
     inherit (hyprland.meta) platforms;
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       aacebedo
     ];
   };

@@ -72,11 +72,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aodhclient" ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://opendev.org/openstack/python-aodhclient";
     description = "Client library for OpenStack Aodh API";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     mainProgram = "aodh";
-    maintainers = lib.teams.openstack.members;
+    maintainers = teams.openstack.members;
   };
 }

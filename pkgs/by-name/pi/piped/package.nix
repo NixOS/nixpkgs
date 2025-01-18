@@ -33,11 +33,11 @@ buildNpmPackage rec {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/TeamPiped/Piped";
     description = "Efficient and privacy-friendly YouTube frontend";
-    maintainers = [ lib.maintainers.lucasew ];
-    license = [ lib.licenses.agpl3Plus ];
+    maintainers = [ maintainers.lucasew ];
+    license = [ licenses.agpl3Plus ];
   };
 
 }

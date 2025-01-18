@@ -39,11 +39,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "WebM file parser";
     homepage = "https://www.webmproject.org/code/";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ niklaskorz ];
-    platforms = lib.platforms.all;
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ niklaskorz ];
+    platforms = platforms.all;
   };
 })

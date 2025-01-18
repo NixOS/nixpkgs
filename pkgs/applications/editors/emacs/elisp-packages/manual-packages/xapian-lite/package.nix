@@ -35,11 +35,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://git.sr.ht/~casouri/xapian-lite";
     description = "Minimal Emacs dynamic module for Xapian";
-    maintainers = [ lib.maintainers.kotatsuyaki ];
-    license = lib.licenses.gpl3Plus;
+    maintainers = [ maintainers.kotatsuyaki ];
+    license = licenses.gpl3Plus;
     inherit (emacs.meta) platforms;
   };
 })

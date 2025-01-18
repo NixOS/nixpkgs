@@ -28,10 +28,10 @@ buildDunePackage rec {
   ];
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "Password based key derivation functions (PBKDF) from PKCS#5";
-    maintainers = [ lib.maintainers.sternenseemann ];
-    license = lib.licenses.bsd2;
+    maintainers = [ maintainers.sternenseemann ];
+    license = licenses.bsd2;
     homepage = "https://github.com/abeaumont/ocaml-pbkdf";
   };
 }

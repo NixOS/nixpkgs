@@ -52,15 +52,15 @@ stdenv.mkDerivation (finalAttrs: {
     "-Denable_wdisplays=false"
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/WayfireWM/wcm";
     description = "Wayfire Config Manager";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       wucke13
       rewine
     ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
     mainProgram = "wcm";
   };
 })

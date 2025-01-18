@@ -66,11 +66,11 @@ stdenv.mkDerivation rec {
     echo "m4_define([GIT_VERSION], [${version}])" > version.m4;
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Tools for managing the Linux Non-Volatile Memory Device sub-system";
     homepage = "https://github.com/pmem/ndctl";
-    license = lib.licenses.lgpl21;
-    maintainers = with lib.maintainers; [ thoughtpolice ];
-    platforms = lib.platforms.linux;
+    license = licenses.lgpl21;
+    maintainers = with maintainers; [ thoughtpolice ];
+    platforms = platforms.linux;
   };
 }

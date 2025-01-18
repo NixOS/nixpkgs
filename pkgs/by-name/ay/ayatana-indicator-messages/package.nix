@@ -151,16 +151,16 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gitUpdater { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Ayatana Indicator Messages Applet";
     longDescription = ''
       The -messages Ayatana System Indicator is the messages menu indicator for Unity7, MATE and Lomiri (optionally for
       others, e.g. XFCE, LXDE).
     '';
     homepage = "https://github.com/AyatanaIndicators/ayatana-indicator-messages";
-    license = lib.licenses.gpl3Only;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ OPNA2608 ];
+    license = licenses.gpl3Only;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ OPNA2608 ];
     pkgConfigModules = [ "messaging-menu" ];
   };
 })

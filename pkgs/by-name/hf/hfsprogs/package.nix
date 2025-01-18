@@ -32,9 +32,9 @@ stdenv.mkDerivation rec {
     install -Dm 444 "fsck_hfs/fsck_hfs.8" "$out/share/man/man8/fsck.hfsplus.8"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "HFS/HFS+ user space utils";
-    license = lib.licenses.apple-psl20;
-    platforms = lib.platforms.linux;
+    license = licenses.apple-psl20;
+    platforms = platforms.linux;
   };
 }

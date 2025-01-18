@@ -49,11 +49,11 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) version;
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/X16Community/x16-rom";
     description = "ROM file for CommanderX16 8-bit computer";
-    license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ AndersonTorres ];
     inherit (cc65.meta) platforms;
     broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
   };

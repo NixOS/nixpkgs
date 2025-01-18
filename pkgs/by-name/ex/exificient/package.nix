@@ -34,11 +34,11 @@ maven.buildMavenPackage rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Java implementation of the W3C Efficient Extensible Interchange (EXI) format specification";
     homepage = "http://exificient.github.io/";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ samw ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ samw ];
     mainProgram = "exificient";
   };
 }

@@ -43,11 +43,11 @@ stdenv.mkDerivation (finalAttrs: {
   # requires downloading test sample of a specific zimlib version
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Partial GObject/C bindings for libzim";
     homepage = "https://github.com/birros/libzim-glib";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ aleksana ];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ aleksana ];
+    platforms = platforms.unix;
   };
 })

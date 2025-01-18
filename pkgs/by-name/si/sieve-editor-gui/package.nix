@@ -59,12 +59,12 @@ buildNpmPackage rec {
       --add-flags $out/electron/resources/main_esm.js
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Activate, edit, delete and add Sieve scripts with a convenient interface";
     homepage = "https://github.com/thsmi/sieve";
-    license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ Silver-Golden ];
-    platforms = lib.platforms.linux;
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [ Silver-Golden ];
+    platforms = platforms.linux;
     mainProgram = "sieve-editor-gui";
   };
 }

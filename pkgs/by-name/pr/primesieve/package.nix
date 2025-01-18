@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gitUpdater { rev-prefix = "v"; };
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://primesieve.org/";
     description = "Fast C/C++ prime number generator";
     longDescription = ''
@@ -48,9 +48,9 @@ stdenv.mkDerivation (finalAttrs: {
       required. primesieve can generate primes and prime k-tuplets up to 264.
     '';
     changelog = "https://github.com/kimwalisch/primesieve/blob/${finalAttrs.src.rev}/ChangeLog";
-    license = lib.licenses.bsd2;
+    license = licenses.bsd2;
     mainProgram = "primesieve";
-    maintainers = lib.teams.sage.members;
-    platforms = lib.platforms.unix;
+    maintainers = teams.sage.members;
+    platforms = platforms.unix;
   };
 })

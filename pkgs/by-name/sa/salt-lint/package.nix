@@ -33,11 +33,11 @@ python3Packages.buildPythonApplication rec {
 
   versionCheckProgramArg = [ "--version" ];
 
-  meta = {
+  meta = with lib; {
     description = "Command-line utility that checks for best practices in SaltStack";
     homepage = "https://salt-lint.readthedocs.io/en/latest/";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "salt-lint";
-    maintainers = with lib.maintainers; [ genga898 ];
+    maintainers = with maintainers; [ genga898 ];
   };
 }

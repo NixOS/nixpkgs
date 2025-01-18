@@ -110,12 +110,12 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
-  meta = {
+  meta = with lib; {
     homepage = "http://www.info-zip.org";
     description = "Extraction utility for archives compressed in .zip format";
-    license = lib.licenses.info-zip;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ RossComputerGuy ];
+    license = licenses.info-zip;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ RossComputerGuy ];
     mainProgram = "unzip";
   };
 }

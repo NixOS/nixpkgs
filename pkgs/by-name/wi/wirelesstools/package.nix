@@ -21,10 +21,10 @@ stdenv.mkDerivation rec {
     "LDCONFIG=:"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Wireless tools for Linux";
     homepage = "https://hewlettpackard.github.io/wireless-tools/Tools.html";
-    platforms = lib.platforms.linux;
-    license = lib.licenses.gpl2Only;
+    platforms = platforms.linux;
+    license = licenses.gpl2Only;
   };
 }

@@ -41,12 +41,12 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gitUpdater { rev-prefix = "v"; };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Collection of tools for manipulating bencoded data";
     homepage = "https://gitlab.com/heikkiorsila/bencodetools";
-    license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ OPNA2608 ];
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ OPNA2608 ];
     mainProgram = "bencat";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 })

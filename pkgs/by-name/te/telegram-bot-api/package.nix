@@ -36,16 +36,16 @@ stdenv.mkDerivation {
   doInstallCheck = true;
   versionCheckProgramArg = [ "--version" ];
 
-  meta = {
+  meta = with lib; {
     description = "Telegram Bot API server";
     homepage = "https://github.com/tdlib/telegram-bot-api";
-    license = lib.licenses.boost;
-    maintainers = with lib.maintainers; [
+    license = licenses.boost;
+    maintainers = with maintainers; [
       Anillc
       Forden
       nartsiss
     ];
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
     mainProgram = "telegram-bot-api";
   };
 }

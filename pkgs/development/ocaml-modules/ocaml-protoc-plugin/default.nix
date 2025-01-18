@@ -39,16 +39,16 @@ buildDunePackage rec {
   doCheck = true;
   nativeCheckInputs = [ protobuf ];
 
-  meta = {
+  meta = with lib; {
     description = "Maps google protobuf compiler to Ocaml types";
     homepage = "https://github.com/issuu/ocaml-protoc-plugin";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     longDescription = ''
       The goal of Ocaml protoc plugin is to create an
       up to date plugin for the google protobuf compiler
       (protoc) to generate Ocaml types and serialization
       and de-serialization function from a .proto file.
     '';
-    maintainers = [ lib.maintainers.GirardR1006 ];
+    maintainers = [ maintainers.GirardR1006 ];
   };
 }

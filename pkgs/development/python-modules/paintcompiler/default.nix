@@ -31,11 +31,11 @@ buildPythonPackage rec {
     "paintdecompiler"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Paint compiler for COLRv1 fonts";
     homepage = "https://github.com/simoncozens/paintcompiler";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     mainProgram = "paintcompiler";
-    maintainers = with lib.maintainers; [ jopejoe1 ];
+    maintainers = with maintainers; [ jopejoe1 ];
   };
 }

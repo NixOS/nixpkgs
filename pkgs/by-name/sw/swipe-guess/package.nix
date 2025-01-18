@@ -29,12 +29,12 @@ stdenv.mkDerivation rec {
     install -Dm555 swipeGuess -t $out/bin
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Completion plugin for touchscreen-keyboards on mobile devices";
     homepage = "https://git.sr.ht/~earboxer/swipeGuess/";
-    license = lib.licenses.agpl3Only;
+    license = licenses.agpl3Only;
     mainProgram = "swipeGuess";
-    maintainers = with lib.maintainers; [ ];
-    platforms = lib.platforms.all;
+    maintainers = with maintainers; [ ];
+    platforms = platforms.all;
   };
 }

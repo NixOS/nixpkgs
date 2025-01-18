@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     rm -R $out/var
   '';
 
-  meta = {
+  meta = with lib; {
     broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     description = "LV2 EQ plugins and more, with 64 bit processing";
     longDescription = ''
@@ -67,8 +67,8 @@ stdenv.mkDerivation rec {
       Nice GUI with powerful metering for every plugin.
     '';
     homepage = "https://eq10q.sourceforge.net/";
-    license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.magnetophon ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3;
+    maintainers = [ maintainers.magnetophon ];
+    platforms = platforms.linux;
   };
 }

@@ -24,7 +24,7 @@ let
       updateScript = unstableGitUpdater { };
     };
 
-    meta = {
+    meta = with lib; {
       homepage = "http://michaelcmartin.github.io/Ophis/";
       description = "Cross-assembler for the 6502 series of microprocessors";
       longDescription = ''
@@ -34,9 +34,9 @@ let
         has successfully been used to create programs for the Nintendo
         Entertainment System, the Atari 2600, and the Commodore 64.
       '';
-      license = lib.licenses.mit;
+      license = licenses.mit;
       mainProgram = "ophis";
-      maintainers = with lib.maintainers; [ ];
+      maintainers = with maintainers; [ ];
     };
   };
 in

@@ -30,11 +30,11 @@ stdenv.mkDerivation (finalAttrs: {
     "-DBUILD_SHARED_LIBS=ON"
   ] ++ lib.optionals (!stdenv.hostPlatform.isx86_64) [ "-DTARGET=GENERIC" ];
 
-  meta = {
+  meta = with lib; {
     description = "High-performance interior-point-method QP and QCQP solvers";
     homepage = "https://github.com/giaf/hpipm";
     changelog = "https://github.com/giaf/hpipm/blob/${finalAttrs.src.rev}/Changelog.txt";
-    license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ nim65s ];
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ nim65s ];
   };
 })

@@ -20,9 +20,9 @@
 
 mkDerivation {
   pname = "print-manager";
-  meta = {
-    license = [ lib.licenses.gpl2 ];
-    maintainers = [ lib.maintainers.ttuegel ];
+  meta = with lib; {
+    license = [ licenses.gpl2 ];
+    maintainers = [ maintainers.ttuegel ];
   };
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [

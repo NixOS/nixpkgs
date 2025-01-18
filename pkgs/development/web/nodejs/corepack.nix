@@ -19,12 +19,12 @@ stdenv.mkDerivation {
     # corepack enable --install-directory $out/bin npm
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Wrappers for npm, pnpm and Yarn via Node.js Corepack";
     homepage = "https://nodejs.org/api/corepack.html";
     changelog = "https://github.com/nodejs/node/releases/tag/v${nodejs.version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ wmertens ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    license = licenses.mit;
+    maintainers = with maintainers; [ wmertens ];
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

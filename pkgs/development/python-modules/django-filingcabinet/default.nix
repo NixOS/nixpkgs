@@ -122,10 +122,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "filingcabinet" ];
 
-  meta = {
+  meta = with lib; {
     description = "Django app that manages documents with pages, annotations and collections";
     homepage = "https://github.com/okfde/django-filingcabinet";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.onny ];
+    license = licenses.mit;
+    maintainers = [ maintainers.onny ];
   };
 }

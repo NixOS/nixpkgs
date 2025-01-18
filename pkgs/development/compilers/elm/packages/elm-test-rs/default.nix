@@ -37,12 +37,12 @@ rustPlatform.buildRustPackage rec {
   # Tests perform networking and therefore can't work in sandbox
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Fast and portable executable to run your Elm tests";
     mainProgram = "elm-test-rs";
     homepage = "https://github.com/mpizenberg/elm-test-rs";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [
+    license = licenses.bsd3;
+    maintainers = with maintainers; [
       jpagex
       zupo
     ];

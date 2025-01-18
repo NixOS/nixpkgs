@@ -19,11 +19,11 @@ buildNpmPackage rec {
 
   dontNpmBuild = true;
 
-  meta = {
+  meta = with lib; {
     description = "Build native mobile applications using HTML, CSS and JavaScript";
     homepage = "https://github.com/apache/cordova-cli";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     mainProgram = "cordova";
-    maintainers = with lib.maintainers; [ flosse ];
+    maintainers = with maintainers; [ flosse ];
   };
 }

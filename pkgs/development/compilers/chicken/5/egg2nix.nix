@@ -25,12 +25,12 @@ eggDerivation {
     matchable
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Generate nix-expression from CHICKEN scheme eggs";
     mainProgram = "egg2nix";
     homepage = "https://github.com/the-kenny/egg2nix";
-    license = lib.licenses.bsd3;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ corngood ];
+    license = licenses.bsd3;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ corngood ];
   };
 }

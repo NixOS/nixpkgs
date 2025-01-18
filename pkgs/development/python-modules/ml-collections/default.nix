@@ -45,10 +45,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ml_collections" ];
 
-  meta = {
+  meta = with lib; {
     description = "ML Collections is a library of Python collections designed for ML usecases";
     homepage = "https://github.com/google/ml_collections";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ samuela ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ samuela ];
   };
 }

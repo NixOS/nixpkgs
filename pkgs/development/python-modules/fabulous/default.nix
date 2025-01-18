@@ -39,10 +39,10 @@ buildPythonPackage rec {
     done
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Make the output of terminal applications look fabulous";
     homepage = "https://jart.github.io/fabulous";
-    license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.symphorien ];
+    license = licenses.asl20;
+    maintainers = [ maintainers.symphorien ];
   };
 }

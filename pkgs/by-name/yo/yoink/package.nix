@@ -20,10 +20,10 @@ buildGoModule {
 
   vendorHash = "sha256-cnfh2D/k4JP9BNlI+6FVLBFyk5XMIYG/DotUdAZaY0Q=";
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/MrMarble/yoink";
     description = "Automatically download freeleech torrents";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ hogcycle ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ hogcycle ];
   };
 }

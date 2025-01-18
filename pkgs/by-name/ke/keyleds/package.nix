@@ -55,11 +55,11 @@ stdenv.mkDerivation rec {
 
   cmakeBuildType = "MinSizeRel";
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/keyleds/keyleds";
     description = "Advanced RGB animation service for Logitech keyboards";
-    license = lib.licenses.gpl3;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ GaetanLepage ];
   };
 }

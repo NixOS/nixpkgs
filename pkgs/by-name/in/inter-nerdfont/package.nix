@@ -34,11 +34,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://gitlab.com/mid_os/inter-nerdfont";
     description = "NerdFont patch of the Inter font";
-    license = lib.licenses.ofl;
-    platforms = lib.platforms.all;
-    maintainers = [ lib.maintainers.midirhee12 ];
+    license = licenses.ofl;
+    platforms = platforms.all;
+    maintainers = [ maintainers.midirhee12 ];
   };
 })

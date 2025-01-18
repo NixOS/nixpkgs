@@ -150,14 +150,14 @@ stdenv.mkDerivation (finalAttrs: {
       finalAttrs.finalPackage;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Xcode-compatible build tool";
     homepage = "https://github.com/facebook/xcbuild";
-    license = with lib.licenses; [
+    license = with licenses; [
       bsd2
       bsd3
     ];
-    maintainers = lib.teams.darwin.members;
-    platforms = lib.platforms.unix;
+    maintainers = teams.darwin.members;
+    platforms = platforms.unix;
   };
 })

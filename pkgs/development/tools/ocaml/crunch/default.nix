@@ -33,12 +33,12 @@ buildDunePackage rec {
     dune install --prefix=$bin --libdir=$lib/lib/ocaml/${ocaml.version}/site-lib/
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/mirage/ocaml-crunch";
     description = "Convert a filesystem into a static OCaml module";
     mainProgram = "ocaml-crunch";
-    license = lib.licenses.isc;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.isc;
+    maintainers = [ maintainers.vbgl ];
   };
 
 }

@@ -41,10 +41,10 @@ buildPythonPackage rec {
     "test_unique_logger_instances"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Telemetry for Jupyter Applications and extensions";
     homepage = "https://jupyter-telemetry.readthedocs.io/";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ chiroptical ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ chiroptical ];
   };
 }

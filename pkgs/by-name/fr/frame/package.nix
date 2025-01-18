@@ -29,11 +29,11 @@ stdenv.mkDerivation rec {
 
   configureFlags = lib.optional enableX11 "--with-x11";
 
-  meta = {
+  meta = with lib; {
     homepage = "https://launchpad.net/frame";
     description = "Handles the buildup and synchronization of a set of simultaneous touches";
     mainProgram = "frame-test-x11";
-    license = lib.licenses.gpl3;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3;
+    platforms = platforms.linux;
   };
 }

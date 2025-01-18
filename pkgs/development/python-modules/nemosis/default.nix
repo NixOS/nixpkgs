@@ -40,10 +40,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "nemosis" ];
   doCheck = false; # require network and patching
 
-  meta = {
+  meta = with lib; {
     description = "Downloader of historical data published by the Australian Energy Market Operator";
     homepage = "https://github.com/UNSW-CEEM/NEMOSIS";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ sigmanificient ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ sigmanificient ];
   };
 }

@@ -38,12 +38,12 @@ rustPlatform.buildRustPackage rec {
     version = "0.3.0";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Client for the Hydra CI";
     mainProgram = "hydra-cli";
     homepage = "https://github.com/nlewo/hydra-cli";
-    license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [
       lewo
       aleksana
     ];

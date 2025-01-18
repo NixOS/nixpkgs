@@ -42,7 +42,7 @@ buildGoModule rec {
     "-skip=^TestClientLoad$" # index out of range
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Web based real-time log viewer";
     longDescription = ''
       Web based real-time log viewer.
@@ -50,8 +50,8 @@ buildGoModule rec {
       Parse any format with TypeScript
     '';
     homepage = "https://github.com/logdyhq/logdy-core";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
+    license = licenses.asl20;
+    maintainers = with maintainers; [
       sigmanificient
       ByteSudoer
     ];

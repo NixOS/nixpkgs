@@ -62,10 +62,10 @@ buildPythonPackage rec {
   # Tests are not included in Pypi archive
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Lightweight library for PyTorch training tools and utilities";
     homepage = "https://github.com/pytorch/tnt";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ nim65s ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ nim65s ];
   };
 }

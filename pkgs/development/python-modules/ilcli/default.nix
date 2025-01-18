@@ -25,10 +25,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ilcli" ];
 
-  meta = {
+  meta = with lib; {
     description = "I like command-line interfaces";
     homepage = "https://github.com/cloudant/ilcli";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ tochiaha ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ tochiaha ];
   };
 }

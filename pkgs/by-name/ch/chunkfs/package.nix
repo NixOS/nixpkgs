@@ -30,10 +30,10 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/man/man1
   '';
 
-  meta = {
+  meta = with lib; {
     description = "FUSE filesystems for viewing chunksync-style directory trees as a block device and vice versa";
     homepage = "http://chunkfs.florz.de/";
-    license = lib.licenses.gpl2Plus;
-    platforms = with lib.platforms; linux;
+    license = licenses.gpl2Plus;
+    platforms = with platforms; linux;
   };
 }

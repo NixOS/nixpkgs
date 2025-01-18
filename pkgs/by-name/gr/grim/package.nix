@@ -45,12 +45,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://sr.ht/~emersion/grim";
     description = "Grab images from a Wayland compositor";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "grim";
-    maintainers = with lib.maintainers; [ khaneliman ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ khaneliman ];
+    platforms = platforms.linux;
   };
 })

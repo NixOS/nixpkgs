@@ -24,10 +24,10 @@ buildNpmPackage {
 
   env.NODE_OPTIONS = "--openssl-legacy-provider";
 
-  meta = {
+  meta = with lib; {
     description = "Terminal client for Cabal, the p2p chat platform";
     homepage = "https://cabal.chat";
-    license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ kototama ];
+    license = licenses.agpl3Plus;
+    maintainers = with maintainers; [ kototama ];
   };
 }

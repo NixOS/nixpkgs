@@ -46,11 +46,11 @@ stdenv.mkDerivation {
 
   mesonFlags = [ (lib.mesonBool "opencl" openclSupport) ];
 
-  meta = {
+  meta = with lib; {
     description = "Filter for VapourSynth";
     homepage = "https://github.com/HomeOfVapourSynthEvolution/VapourSynth-EEDI3";
-    license = with lib.licenses; [ gpl2Plus ];
-    maintainers = with lib.maintainers; [ snaki ];
-    platforms = lib.platforms.x86_64;
+    license = with licenses; [ gpl2Plus ];
+    maintainers = with maintainers; [ snaki ];
+    platforms = platforms.x86_64;
   };
 }

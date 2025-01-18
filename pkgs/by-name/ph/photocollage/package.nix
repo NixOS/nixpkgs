@@ -49,12 +49,12 @@ python3Packages.buildPythonApplication rec {
     cp -r ./data/icons $out/share/icons
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Graphical tool to make photo collage posters";
     homepage = "https://github.com/adrienverge/PhotoCollage";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ eliandoran ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ eliandoran ];
+    platforms = platforms.linux;
     mainProgram = "photocollage";
   };
 }

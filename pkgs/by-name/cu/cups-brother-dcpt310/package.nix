@@ -131,17 +131,17 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       --replace \"\$"@"\" \"\$"@\" | LD_PRELOAD= ${gnused}/bin/sed -E '/^(function list :|resource file :).*/{s#/opt#$out/opt#}'"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Brother DCP-T310 printer driver";
-    license = with lib.licenses; [
+    license = with licenses; [
       unfree
       gpl2Plus
     ];
-    sourceProvenance = with lib.sourceTypes; [
+    sourceProvenance = with sourceTypes; [
       binaryNativeCode
       fromSource
     ];
-    maintainers = with lib.maintainers; [ inexcode ];
+    maintainers = with maintainers; [ inexcode ];
     platforms = [
       "x86_64-linux"
       "i686-linux"

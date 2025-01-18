@@ -74,16 +74,16 @@ stdenv.mkDerivation rec {
     install -Dm644 doc/rtorrent.rc-example -t $out/share/doc/rtorrent/rtorrent.rc
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://rakshasa.github.io/rtorrent/";
     description = "Ncurses client for libtorrent, ideal for use with screen, tmux, or dtach";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [
       ebzzry
       codyopel
       thiagokokada
     ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
     mainProgram = "rtorrent";
   };
 }

@@ -111,15 +111,15 @@ buildDunePackage rec {
 
   dontPatchShebangs = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "http://ocsigen.org/ocsigenserver/";
     description = "Full featured Web server";
     longDescription = ''
       A full featured Web server. It implements most features of the HTTP protocol, and has a very powerful extension mechanism that make very easy to plug your own OCaml modules for generating pages.
     '';
-    license = lib.licenses.lgpl21Only;
+    license = licenses.lgpl21Only;
     inherit (ocaml.meta) platforms;
-    maintainers = [ lib.maintainers.gal_bolle ];
+    maintainers = [ maintainers.gal_bolle ];
   };
 
 }

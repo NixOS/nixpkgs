@@ -24,14 +24,14 @@ stdenv.mkDerivation rec {
     sed -e '/curl\/types/d' -i src/*.c src/*.h
   '';
 
-  meta = {
+  meta = with lib; {
     description = "RDF Parser Toolkit";
     homepage = "https://librdf.org/raptor";
-    license = with lib.licenses; [
+    license = with licenses; [
       lgpl21
       asl20
     ];
-    maintainers = [ lib.maintainers.marcweber ];
-    platforms = lib.platforms.linux;
+    maintainers = [ maintainers.marcweber ];
+    platforms = platforms.linux;
   };
 }

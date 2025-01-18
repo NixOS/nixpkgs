@@ -17,10 +17,10 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ containers ];
 
-  meta = {
+  meta = with lib; {
     description = "Easy to use and user-friendly topological sort";
     inherit (src.meta) homepage;
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.mit;
+    maintainers = [ maintainers.vbgl ];
   };
 }

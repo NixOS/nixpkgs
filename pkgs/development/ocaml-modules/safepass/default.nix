@@ -17,11 +17,11 @@ buildDunePackage rec {
     sha256 = "1cwslwdb1774lfmhcclj9kymvidbcpjx1vp16jnjirqdqgl4zs5q";
   };
 
-  meta = {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "OCaml library offering facilities for the safe storage of user passwords";
-    license = lib.licenses.lgpl21;
-    maintainers = with lib.maintainers; [ vbgl ];
+    license = licenses.lgpl21;
+    maintainers = with maintainers; [ vbgl ];
   };
 
 }

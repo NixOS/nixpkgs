@@ -59,12 +59,12 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Lightweight Thunderstore client";
     homepage = "https://github.com/Kesomannen/gale";
-    license = lib.licenses.gpl3Only;
+    license = licenses.gpl3Only;
     mainProgram = "gale";
-    maintainers = with lib.maintainers; [ tomasajt ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ tomasajt ];
+    platforms = platforms.linux;
   };
 })

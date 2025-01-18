@@ -41,11 +41,11 @@ buildDunePackage {
     sedlex
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Compiler from OCaml bytecode to Javascript";
     homepage = "https://ocsigen.org/js_of_ocaml/";
-    license = lib.licenses.gpl2;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.gpl2;
+    maintainers = [ maintainers.vbgl ];
     mainProgram = "js_of_ocaml";
   };
 }

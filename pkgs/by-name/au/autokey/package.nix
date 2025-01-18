@@ -60,11 +60,11 @@ python3Packages.buildPythonApplication rec {
     rm $out/bin/autokey-qt $out/share/applications/autokey-qt.desktop
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/autokey/autokey";
     description = "Desktop automation utility for Linux and X11";
-    license = with lib.licenses; [ gpl3 ];
-    maintainers = with lib.maintainers; [ pneumaticat ];
-    platforms = lib.platforms.linux;
+    license = with licenses; [ gpl3 ];
+    maintainers = with maintainers; [ pneumaticat ];
+    platforms = platforms.linux;
   };
 }

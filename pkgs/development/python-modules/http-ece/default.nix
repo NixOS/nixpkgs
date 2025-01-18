@@ -31,10 +31,10 @@ buildPythonPackage rec {
     pytest-cov-stub
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Encipher HTTP Messages";
     homepage = "https://github.com/web-push-libs/encrypted-content-encoding";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ peterhoeg ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ peterhoeg ];
   };
 }

@@ -96,11 +96,11 @@ maven.buildMavenPackage {
 
   passthru.tests = nixosTests.commafeed;
 
-  meta = {
+  meta = with lib; {
     description = "Google Reader inspired self-hosted RSS reader";
     homepage = "https://github.com/Athou/commafeed";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     mainProgram = "commafeed";
-    maintainers = [ lib.maintainers.raroh73 ];
+    maintainers = [ maintainers.raroh73 ];
   };
 }

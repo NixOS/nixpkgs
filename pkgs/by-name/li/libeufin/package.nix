@@ -111,13 +111,13 @@ stdenv.mkDerivation (finalAttrs: {
   # TODO: tests are currently failing
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://git.taler.net/libeufin.git/";
     description = "Integration and sandbox testing for FinTech APIs and data formats";
-    license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ atemu ];
+    license = licenses.agpl3Plus;
+    maintainers = with maintainers; [ atemu ];
     mainProgram = "libeufin-bank";
-    sourceProvenance = with lib.sourceTypes; [
+    sourceProvenance = with sourceTypes; [
       fromSource
       binaryBytecode # mitm cache
     ];

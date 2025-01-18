@@ -81,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     wrapPythonProgramsIn "$out/bin" "$out $pythonPath"
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://fc-solve.shlomifish.org/";
     description = "FreeCell automatic solver";
     longDescription = ''
@@ -89,9 +89,9 @@ stdenv.mkDerivation (finalAttrs: {
       and similar variants of Card Solitaire such as Eight Off, Forecell, and
       Seahaven Towers, as well as Simple Simon boards.
     '';
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "fc-solve";
-    maintainers = [ lib.maintainers.AndersonTorres ];
-    platforms = lib.platforms.unix;
+    maintainers = [ maintainers.AndersonTorres ];
+    platforms = platforms.unix;
   };
 })

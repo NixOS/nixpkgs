@@ -52,13 +52,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru.updateScript = ./update.sh;
 
-  meta = {
+  meta = with lib; {
     description = "High Detail Old School Runescape Client";
     homepage = "https://hdos.dev";
     changelog = "https://hdos.dev/changelog";
-    sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
-    license = lib.licenses.unfree;
+    sourceProvenance = [ sourceTypes.binaryBytecode ];
+    license = licenses.unfree;
     platforms = openjdk11.meta.platforms;
-    maintainers = [ lib.maintainers.misterio77 ];
+    maintainers = [ maintainers.misterio77 ];
   };
 })

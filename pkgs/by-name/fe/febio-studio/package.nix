@@ -74,12 +74,12 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional ffmpegSupport ffmpeg
     ++ lib.optional dicomSupport dcmtk;
 
-  meta = {
+  meta = with lib; {
     description = "FEBio Suite Solver";
     mainProgram = "FEBioStudio";
-    license = with lib.licenses; [ mit ];
+    license = with licenses; [ mit ];
     homepage = "https://febio.org/";
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ Scriptkiddi ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ Scriptkiddi ];
   };
 })

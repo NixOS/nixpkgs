@@ -15,11 +15,11 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
-  meta = {
+  meta = with lib; {
     description = "Tool for AVR microcontrollers which can interface to many hardware in-system programmers";
     mainProgram = "uisp";
-    license = lib.licenses.gpl2;
+    license = licenses.gpl2;
     homepage = "https://savannah.nongnu.org/projects/uisp";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

@@ -35,10 +35,10 @@ buildPythonPackage {
     "cmsis_svd.parser"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "CMSIS SVD parser";
     homepage = "https://github.com/cmsis-svd/cmsis-svd";
-    maintainers = [ lib.maintainers.dump_stack ];
-    license = lib.licenses.asl20;
+    maintainers = [ maintainers.dump_stack ];
+    license = licenses.asl20;
   };
 }

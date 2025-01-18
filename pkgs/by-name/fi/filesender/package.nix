@@ -34,10 +34,10 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (nixosTests) filesender;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Web application for sending large files to other users";
     homepage = "https://filesender.org/";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ nhnn ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ nhnn ];
   };
 })

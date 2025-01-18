@@ -46,13 +46,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "poppler" ];
 
-  meta = {
+  meta = with lib; {
     description = "Python binding to poppler-cpp";
     homepage = "https://github.com/cbrunet/python-poppler";
     changelog = "https://cbrunet.net/python-poppler/changelog.html";
     # Contradictory license definition
     # https://github.com/cbrunet/python-poppler/issues/90
-    license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.onny ];
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.onny ];
   };
 }

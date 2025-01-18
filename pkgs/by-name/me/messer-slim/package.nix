@@ -29,11 +29,11 @@ stdenv.mkDerivation rec {
     "-DCMAKE_RANLIB=${gcc-unwrapped}/bin/gcc-ranlib"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Evolutionary simulation framework";
     homepage = "https://messerlab.org/slim/";
-    license = with lib.licenses; [ gpl3 ];
-    maintainers = with lib.maintainers; [ bzizou ];
-    platforms = lib.platforms.all;
+    license = with licenses; [ gpl3 ];
+    maintainers = with maintainers; [ bzizou ];
+    platforms = platforms.all;
   };
 }

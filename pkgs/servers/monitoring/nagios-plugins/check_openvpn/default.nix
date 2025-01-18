@@ -18,10 +18,10 @@ python3Packages.buildPythonApplication rec {
   # no tests
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Nagios/icinga/sensu check plugin for OpenVPN";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "check_openvpn";
-    maintainers = with lib.maintainers; [ peterhoeg ];
+    maintainers = with maintainers; [ peterhoeg ];
   };
 }

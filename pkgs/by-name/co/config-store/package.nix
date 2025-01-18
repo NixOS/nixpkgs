@@ -16,15 +16,15 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-tEhk6vDan5uaP1vvKanB+juKsGJndrJPP67kudds24s=";
 
-  meta = {
+  meta = with lib; {
     description = "Simple key-value store designed to be used from shell scripts written in Rust";
     homepage = "https://github.com/DOD-101/config-store";
     mainProgram = "config-store";
-    license = with lib.licenses; [
+    license = with licenses; [
       mit
       asl20
     ];
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ dod-101 ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ dod-101 ];
   };
 }

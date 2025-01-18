@@ -60,15 +60,15 @@ stdenv.mkDerivation rec {
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "High speed arctic racing game based on Tux Racer";
     longDescription = ''
       ExtremeTuxRacer - Tux lies on his belly and accelerates down ice slopes.
     '';
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     homepage = "https://sourceforge.net/projects/extremetuxracer/";
     maintainers = [ ];
     mainProgram = "etr";
-    platforms = with lib.platforms; linux;
+    platforms = with platforms; linux;
   };
 }

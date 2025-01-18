@@ -23,13 +23,13 @@ stdenv.mkDerivation rec {
     find . -type f -executable -exec install -Dt $out/bin {} \;
     runHook postInstall;
   '';
-  meta = {
+  meta = with lib; {
     description = "Virtual machine for Collapse OS (Forth operating system)";
     changelog = "http://collapseos.org/files/CHANGES.txt";
     downloadPage = "http://collapseos.org/files/";
     homepage = "http://collapseos.org/";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ ehmry ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ ehmry ];
     mainProgram = "cos-serial";
   };
 }

@@ -37,12 +37,12 @@ stdenv.mkDerivation rec {
     ln -s $man/share/man/man1/iperf3.1 $man/share/man/man1/iperf.1
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://software.es.net/iperf/";
     description = "Tool to measure IP bandwidth using UDP or TCP";
-    platforms = lib.platforms.unix;
-    license = lib.licenses.bsd3;
+    platforms = platforms.unix;
+    license = licenses.bsd3;
     mainProgram = "iperf3";
-    maintainers = with lib.maintainers; [ fpletz ];
+    maintainers = with maintainers; [ fpletz ];
   };
 }

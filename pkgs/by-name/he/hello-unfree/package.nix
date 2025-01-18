@@ -19,10 +19,10 @@ stdenv.mkDerivation {
     chmod +x $out/bin/hello-unfree
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Example package with unfree license (for testing)";
-    license = lib.licenses.unfree;
-    maintainers = [ lib.maintainers.oxij ];
+    license = licenses.unfree;
+    maintainers = [ maintainers.oxij ];
     mainProgram = "hello-unfree";
   };
 }

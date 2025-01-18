@@ -36,11 +36,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  meta = {
+  meta = with lib; {
     description = "GTK4 library that includes customized widgets";
     homepage = "https://github.com/ryonakano/ryokucha";
-    license = lib.licenses.lgpl3Plus;
-    maintainers = with lib.maintainers; [ aleksana ];
-    platforms = lib.platforms.unix;
+    license = licenses.lgpl3Plus;
+    maintainers = with maintainers; [ aleksana ];
+    platforms = platforms.unix;
   };
 })

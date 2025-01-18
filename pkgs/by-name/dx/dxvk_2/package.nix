@@ -94,14 +94,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   __structuredAttrs = true;
 
-  meta = {
+  meta = with lib; {
     description = "Vulkan-based translation layer for Direct3D 8/9/10/11";
     homepage = "https://github.com/doitsujin/dxvk";
     changelog = "https://github.com/doitsujin/dxvk/releases";
-    maintainers = [ lib.maintainers.reckenrode ];
-    license = lib.licenses.zlib;
-    badPlatforms = lib.platforms.darwin;
-    platforms = lib.platforms.windows ++ lib.platforms.unix;
+    maintainers = [ maintainers.reckenrode ];
+    license = licenses.zlib;
+    badPlatforms = platforms.darwin;
+    platforms = platforms.windows ++ platforms.unix;
     pkgConfigModules = [
       "dxvk-d3d10core"
       "dxvk-d3d11"

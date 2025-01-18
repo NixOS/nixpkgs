@@ -22,12 +22,12 @@ stdenv.mkDerivation {
     install -vD subdl $out/bin/subdl
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/alexanderwink/subdl";
     description = "Command-line tool to download subtitles from opensubtitles.org";
-    platforms = lib.platforms.all;
-    license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.exfalso ];
+    platforms = platforms.all;
+    license = licenses.gpl3;
+    maintainers = [ maintainers.exfalso ];
     mainProgram = "subdl";
   };
 }

@@ -84,11 +84,11 @@ mkDerivation rec {
     ln -s ${libpng}/lib/libpng.so $out/lib/hpmyroom/libpng15.so.15
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Client for HPE's MyRoom web conferencing solution";
-    maintainers = with lib.maintainers; [ johnazoidberg ];
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = lib.licenses.unfree;
+    maintainers = with maintainers; [ johnazoidberg ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
     homepage = "https://myroom.hpe.com";
     # TODO: A Darwin binary is available upstream
     platforms = [ "x86_64-linux" ];

@@ -24,13 +24,13 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = " A bold, painted face for the rocker within";
     longDescription = ''
       Knewave is bold, painted face. Get it? Git it.
     '';
     homepage = "https://www.theleagueofmoveabletype.com/knewave";
-    license = lib.licenses.ofl;
-    maintainers = with lib.maintainers; [ minijackson ];
+    license = licenses.ofl;
+    maintainers = with maintainers; [ minijackson ];
   };
 }

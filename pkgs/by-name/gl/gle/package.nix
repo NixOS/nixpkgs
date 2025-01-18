@@ -39,10 +39,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-yvCu0EOwxOMN6upeHX+C2sIz1YVjjB/320g+Mf24S6g=";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Tubing and extrusion library";
-    license = lib.licenses.gpl2;
-    maintainers = [ lib.maintainers.raskin ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2;
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.linux;
   };
 }

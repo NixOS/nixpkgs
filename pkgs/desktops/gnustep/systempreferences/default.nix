@@ -28,16 +28,16 @@ stdenv.mkDerivation (finalAttrs: {
     gui
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Settings manager for the GNUstep environment and its applications";
     homepage = "https://gnustep.github.io/";
-    license = lib.licenses.lgpl2Plus;
+    license = licenses.lgpl2Plus;
     mainProgram = "SystemPreferences";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       ashalkhakov
       matthewbauer
       dblsaiko
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 })

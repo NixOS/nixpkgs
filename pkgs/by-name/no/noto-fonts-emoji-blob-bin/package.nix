@@ -21,15 +21,15 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Noto Emoji with extended Blob support";
     homepage = "https://github.com/C1710/blobmoji";
-    license = with lib.licenses; [
+    license = with licenses; [
       ofl
       asl20
     ];
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [
+    platforms = platforms.all;
+    maintainers = with maintainers; [
       rileyinman
       jk
     ];

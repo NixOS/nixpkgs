@@ -32,11 +32,11 @@ rustPlatform.buildRustPackage {
       ]
     );
 
-  meta = {
+  meta = with lib; {
     description = "Static webring generator in Rust";
     homepage = "https://github.com/k3rs3d/ringfairy";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ uncenter ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ uncenter ];
     mainProgram = "ringfairy";
   };
 }

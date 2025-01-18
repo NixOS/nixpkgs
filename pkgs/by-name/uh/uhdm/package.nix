@@ -40,14 +40,14 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
   checkPhase = "make test";
 
-  meta = {
+  meta = with lib; {
     description = "Universal Hardware Data Model";
     homepage = "https://github.com/chipsalliance/UHDM";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
+    license = licenses.asl20;
+    maintainers = with maintainers; [
       matthuszagh
       hzeller
     ];
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 })

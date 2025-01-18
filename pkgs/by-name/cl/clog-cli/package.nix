@@ -17,12 +17,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-yjBgccrkG2D8ZW3Uju4XUhz9Kar50jkJZ75MWhn9j3U=";
 
-  meta = {
+  meta = with lib; {
     description = "Generate changelogs from local git metadata";
     homepage = "https://github.com/clog-tool/clog-cli";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.nthorne ];
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.nthorne ];
     mainProgram = "clog";
     # error: could not compile `rustc-serialize`
     broken = true; # Added 2024-03-16

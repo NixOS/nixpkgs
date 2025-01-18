@@ -112,12 +112,12 @@ rustPlatform.buildRustPackage rec {
       --prefix PATH : ${lib.makeBinPath [ ffmpeg ]}
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/Dusk-Labs/dim";
     description = "Self-hosted media manager";
-    license = lib.licenses.agpl3Only;
+    license = licenses.agpl3Only;
     mainProgram = "dim";
-    maintainers = [ lib.maintainers.misterio77 ];
-    platforms = lib.platforms.unix;
+    maintainers = [ maintainers.misterio77 ];
+    platforms = platforms.unix;
   };
 }

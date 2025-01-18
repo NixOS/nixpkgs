@@ -48,11 +48,11 @@ stdenv.mkDerivation rec {
   GIT_PREFIX = placeholder "out";
   dontInstall = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://git-scm.com/";
     description = "Distributed version control system - with Gitaly patches";
-    license = lib.licenses.gpl2Only;
-    platforms = lib.platforms.all;
-    maintainers = lib.teams.gitlab.members;
+    license = licenses.gpl2Only;
+    platforms = platforms.all;
+    maintainers = teams.gitlab.members;
   };
 }

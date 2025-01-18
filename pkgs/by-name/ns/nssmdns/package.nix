@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "MDNS Name Service Switch (NSS) plug-in";
     longDescription = ''
       `nss-mdns' is a plugin for the GNU Name Service Switch (NSS)
@@ -45,9 +45,9 @@ stdenv.mkDerivation rec {
       domain `.local'.
     '';
     homepage = "https://github.com/avahi/nss-mdns/";
-    license = lib.licenses.lgpl2Plus;
+    license = licenses.lgpl2Plus;
     # Supports both the GNU and FreeBSD NSS.
-    platforms = lib.platforms.gnu ++ lib.platforms.linux ++ lib.platforms.freebsd;
+    platforms = platforms.gnu ++ platforms.linux ++ platforms.freebsd;
     maintainers = [ ];
   };
 }

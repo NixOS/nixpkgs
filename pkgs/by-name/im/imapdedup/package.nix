@@ -21,11 +21,11 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "imapdedup" ];
 
-  meta = {
+  meta = with lib; {
     description = "Duplicate email message remover";
     homepage = "https://github.com/quentinsf/IMAPdedup";
-    maintainers = with lib.maintainers; [ sigmanificient ];
-    license = with lib.licenses; [ gpl2Only ];
+    maintainers = with maintainers; [ sigmanificient ];
+    license = with licenses; [ gpl2Only ];
     mainProgram = "imapdedup";
   };
 }

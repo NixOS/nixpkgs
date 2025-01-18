@@ -114,12 +114,12 @@ flutter324.buildFlutterApplication rec {
     --prefix LD_LIBRARY_PATH : "$out/app/simple-live-app/lib"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Simply Watch Live";
     homepage = "https://github.com/xiaoyaocz/dart_simple_live";
     mainProgram = "simple_live_app";
-    license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ aucub ];
-    platforms = lib.platforms.linux;
+    license = with licenses; [ gpl3Plus ];
+    maintainers = with maintainers; [ aucub ];
+    platforms = platforms.linux;
   };
 }

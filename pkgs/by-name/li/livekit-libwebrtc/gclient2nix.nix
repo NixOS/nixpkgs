@@ -49,11 +49,11 @@ buildPythonPackage {
       --set PATH ${lib.makeBinPath nativeDeps}
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Generate Nix expressions for projects based on the Google build tools";
     homepage = "https://github.com/WeetHet/gclient2nix";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       WeetHet
     ];
     mainProgram = "gclient2nix";

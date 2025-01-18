@@ -52,10 +52,10 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s ${minizip-ng.src} lib/minizip-ng
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Tool to convert proprietary, sequenced videogame music to industry-standard formats";
     homepage = "https://github.com/vgmtrans/vgmtrans";
-    license = with lib.licenses; [
+    license = with licenses; [
       zlib
       libpng
       bsd3 # oki_adpcm_state
@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
       "x86_64-windows"
       "aarch64-windows"
     ];
-    maintainers = with lib.maintainers; [ pluiedev ];
+    maintainers = with maintainers; [ pluiedev ];
     mainProgram = "vgmtrans";
   };
 })

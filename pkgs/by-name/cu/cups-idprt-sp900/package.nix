@@ -51,14 +51,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       runHook postInstall
     '';
 
-  meta = {
+  meta = with lib; {
     description = "CUPS driver for the iDPRT SP900";
     platforms = [
       "x86_64-linux"
       "x86-linux"
     ];
-    license = lib.licenses.unfree;
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [ pandapip1 ];
+    license = licenses.unfree;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    maintainers = with maintainers; [ pandapip1 ];
   };
 })

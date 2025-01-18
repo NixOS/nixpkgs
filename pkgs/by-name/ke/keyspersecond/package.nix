@@ -86,15 +86,15 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  meta = {
+  meta = with lib; {
     changelog = "https://github.com/RoanH/KeysPerSecond/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Keys-per-second meter and counter for rhythm games";
     homepage = "https://github.com/RoanH/KeysPerSecond";
-    license = lib.licenses.gpl3Only;
+    license = licenses.gpl3Only;
     mainProgram = "KeysPerSecond";
-    maintainers = with lib.maintainers; [ tomasajt ];
+    maintainers = with maintainers; [ tomasajt ];
     platforms = jre.meta.platforms;
-    sourceProvenance = with lib.sourceTypes; [
+    sourceProvenance = with sourceTypes; [
       fromSource
       binaryBytecode # deps
       binaryNativeCode # jnativehook shared library

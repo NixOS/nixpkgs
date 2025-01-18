@@ -24,10 +24,10 @@ buildDunePackage rec {
   checkInputs = [ alcotest ];
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "Bigstring intrinsics and fast blits based on memcpy/memmove";
-    license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.bsd3;
+    maintainers = [ maintainers.vbgl ];
     inherit (src.meta) homepage;
   };
 }

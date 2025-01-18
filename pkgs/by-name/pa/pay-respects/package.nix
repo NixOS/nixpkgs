@@ -27,11 +27,11 @@ rustPlatform.buildRustPackage rec {
     openssl
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Terminal command correction, alternative to `thefuck`, written in Rust";
     homepage = "https://codeberg.org/iff/pay-respects";
-    license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [
+    license = licenses.agpl3Plus;
+    maintainers = with maintainers; [
       sigmasquadron
       bloxx12
     ];

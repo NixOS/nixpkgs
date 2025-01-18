@@ -22,12 +22,12 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/bin
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/mdolidon/endlines";
     description = "Easy conversion between new-line conventions";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ zedseven ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ zedseven ];
     mainProgram = "endlines";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 })

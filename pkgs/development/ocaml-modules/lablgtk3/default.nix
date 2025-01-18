@@ -30,10 +30,10 @@ buildDunePackage rec {
     cairo2
   ];
 
-  meta = {
+  meta = with lib; {
     description = "OCaml interface to GTK 3";
     homepage = "http://lablgtk.forge.ocamlcore.org/";
-    license = lib.licenses.lgpl21;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.lgpl21;
+    maintainers = [ maintainers.vbgl ];
   };
 }

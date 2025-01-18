@@ -30,10 +30,10 @@ buildDunePackage rec {
   doCheck = true;
   checkInputs = [ alcotest ];
 
-  meta = {
+  meta = with lib; {
     description = "Url safe slug generator for OCaml";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.niols ];
+    license = licenses.mit;
+    maintainers = [ maintainers.niols ];
     homepage = "https://github.com/thangngoc89/ocaml-slug";
   };
 }

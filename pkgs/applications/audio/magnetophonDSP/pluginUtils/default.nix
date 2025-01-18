@@ -44,10 +44,10 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Some simple utility lv2 plugins";
     homepage = "https://github.com/magnetophon/pluginUtils";
-    license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.magnetophon ];
+    license = licenses.gpl3;
+    maintainers = [ maintainers.magnetophon ];
   };
 }

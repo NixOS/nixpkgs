@@ -21,10 +21,10 @@ buildPecl {
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "High performance, open source, general RPC framework that puts mobile and HTTP/2 first";
     homepage = "https://github.com/grpc/grpc/tree/master/src/php/ext/grpc";
-    license = lib.licenses.asl20;
-    maintainers = lib.teams.php.members;
+    license = licenses.asl20;
+    maintainers = teams.php.members;
   };
 }

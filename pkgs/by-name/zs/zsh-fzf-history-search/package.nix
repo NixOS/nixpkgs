@@ -27,11 +27,11 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Simple zsh plugin that replaces Ctrl+R with an fzf-driven select which includes date/times";
     homepage = "https://github.com/joshskidmore/zsh-fzf-history-search";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.unix;
+    license = licenses.mit;
+    platforms = platforms.unix;
     maintainers = [ ];
   };
 }

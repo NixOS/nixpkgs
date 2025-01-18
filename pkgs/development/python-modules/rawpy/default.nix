@@ -78,13 +78,13 @@ buildPythonPackage rec {
     "testThumbExtractBitmap"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "RAW image processing for Python, a wrapper for libraw";
     homepage = "https://github.com/letmaik/rawpy";
-    license = with lib.licenses; [
+    license = with licenses; [
       lgpl21Only
       mit
     ];
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    maintainers = with maintainers; [ GaetanLepage ];
   };
 }

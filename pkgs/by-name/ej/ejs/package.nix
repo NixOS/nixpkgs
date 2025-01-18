@@ -27,11 +27,11 @@ buildNpmPackage {
     runHook postBuild
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Embedded JavaScript templates";
     homepage = "http://ejs.co";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     mainProgram = "ejs";
-    maintainers = with lib.maintainers; [ momeemt ];
+    maintainers = with maintainers; [ momeemt ];
   };
 }

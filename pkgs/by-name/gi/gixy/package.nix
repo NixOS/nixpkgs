@@ -63,7 +63,7 @@ python.pkgs.buildPythonApplication rec {
     inherit (nginx.passthru) tests;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Nginx configuration static analyzer";
     mainProgram = "gixy";
     longDescription = ''
@@ -71,9 +71,9 @@ python.pkgs.buildPythonApplication rec {
       The main goal of Gixy is to prevent security misconfiguration and automate flaw detection.
     '';
     homepage = "https://github.com/yandex/gixy";
-    sourceProvenance = [ lib.sourceTypes.fromSource ];
-    license = lib.licenses.mpl20;
-    maintainers = [ lib.maintainers.willibutz ];
-    platforms = lib.platforms.unix;
+    sourceProvenance = [ sourceTypes.fromSource ];
+    license = licenses.mpl20;
+    maintainers = [ maintainers.willibutz ];
+    platforms = platforms.unix;
   };
 }

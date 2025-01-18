@@ -35,15 +35,15 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://codeberg.org/heiko/rsop";
     description = "Stateless OpenPGP (SOP) based on rpgp";
-    license = with lib.licenses; [
+    license = with licenses; [
       mit
       apsl20
       cc0
     ];
-    maintainers = with lib.maintainers; [ nikstur ];
+    maintainers = with maintainers; [ nikstur ];
     mainProgram = "rsop";
   };
 }

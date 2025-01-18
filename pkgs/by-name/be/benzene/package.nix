@@ -44,11 +44,11 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Software for playing and solving the game of Hex";
     homepage = "https://github.com/cgao3/benzene-vanilla-cmake";
-    license = lib.licenses.lgpl3;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ eilvelia ];
+    license = licenses.lgpl3;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ eilvelia ];
   };
 }

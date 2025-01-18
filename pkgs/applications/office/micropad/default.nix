@@ -82,11 +82,11 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  meta = {
+  meta = with lib; {
     description = "A powerful note-taking app that helps you organise + take notes without restrictions";
     homepage = "https://getmicropad.com/";
-    license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ rhysmdnz ];
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ rhysmdnz ];
     inherit (electron.meta) platforms;
     mainProgram = "micropad";
   };

@@ -17,10 +17,10 @@ buildDunePackage rec {
     hash = "sha256-uLnVbptCvmBeNbOjGjyAWAKgzkKLDTYVFY6SNH2zf0A=";
   };
 
-  meta = {
+  meta = with lib; {
     description = "OCaml library to work with swhids";
     homepage = "https://github.com/ocamlpro/swhid_core";
-    license = lib.licenses.isc;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.isc;
+    maintainers = [ maintainers.vbgl ];
   };
 }

@@ -21,7 +21,7 @@ buildDotnetModule rec {
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
-  meta = {
+  meta = with lib; {
     description = "Functional reactive programming language for programming Arduino";
     longDescription = ''
       The purpose of Juniper is to provide a functional reactive programming
@@ -32,8 +32,8 @@ buildDotnetModule rec {
       executable.
     '';
     homepage = "https://www.juniper-lang.org/";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ AlexSKaye ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ AlexSKaye ];
     mainProgram = "Juniper";
     inherit (dotnet-sdk.meta) platforms;
   };

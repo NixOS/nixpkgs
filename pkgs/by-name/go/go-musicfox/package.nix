@@ -46,12 +46,12 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Terminal netease cloud music client written in Go";
     homepage = "https://github.com/anhoder/go-musicfox";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "musicfox";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       zendo
       Ruixi-rebirth
       aleksana

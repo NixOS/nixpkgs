@@ -18,10 +18,10 @@ buildDunePackage rec {
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/ygrek/ocaml-extlib";
     description = "Enhancements to the OCaml Standard Library modules";
-    license = lib.licenses.lgpl21Only;
-    maintainers = [ lib.maintainers.sternenseemann ];
+    license = licenses.lgpl21Only;
+    maintainers = [ maintainers.sternenseemann ];
   };
 }

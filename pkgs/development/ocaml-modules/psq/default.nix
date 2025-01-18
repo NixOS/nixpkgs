@@ -24,10 +24,10 @@ buildDunePackage rec {
   doCheck = lib.versionAtLeast ocaml.version "4.08";
   checkInputs = [ qcheck-alcotest ];
 
-  meta = {
+  meta = with lib; {
     description = "Functional Priority Search Queues for OCaml";
     homepage = "https://github.com/pqwy/psq";
-    maintainers = [ lib.maintainers.vbgl ];
-    license = lib.licenses.isc;
+    maintainers = [ maintainers.vbgl ];
+    license = licenses.isc;
   };
 }

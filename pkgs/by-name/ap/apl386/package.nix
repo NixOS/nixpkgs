@@ -23,11 +23,11 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://abrudz.github.io/APL386/";
     description = "APL385 Unicode font evolved";
-    license = lib.licenses.unlicense;
-    maintainers = with lib.maintainers; [ sigmanificient ];
-    platforms = lib.platforms.all;
+    license = licenses.unlicense;
+    maintainers = with maintainers; [ sigmanificient ];
+    platforms = platforms.all;
   };
 }

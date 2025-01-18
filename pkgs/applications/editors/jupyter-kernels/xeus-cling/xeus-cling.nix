@@ -82,12 +82,12 @@ clangStdenv.mkDerivation rec {
 
   dontStrip = debug;
 
-  meta = {
+  meta = with lib; {
     description = "Jupyter kernel for the C++ programming language";
     mainProgram = "xcpp";
     homepage = "https://github.com/jupyter-xeus/xeus-cling";
-    maintainers = with lib.maintainers; [ thomasjm ];
-    platforms = lib.platforms.unix;
-    license = lib.licenses.mit;
+    maintainers = with maintainers; [ thomasjm ];
+    platforms = platforms.unix;
+    license = licenses.mit;
   };
 }

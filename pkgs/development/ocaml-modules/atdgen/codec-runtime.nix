@@ -13,10 +13,10 @@ buildDunePackage rec {
     hash = "sha256-ukJ5vtVNE9zz9nA6SzF0TbgV3yLAUC2ZZdbGdM4IOTM=";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Runtime for atdgen generated bucklescript converters";
     homepage = "https://github.com/ahrefs/atd";
-    maintainers = [ lib.maintainers.vbgl ];
-    license = lib.licenses.mit;
+    maintainers = [ maintainers.vbgl ];
+    license = licenses.mit;
   };
 }

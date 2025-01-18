@@ -23,11 +23,11 @@ stdenv.mkDerivation rec {
     "dev"
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "http://leenissen.dk/fann/wp/";
     description = "Fast Artificial Neural Network Library";
-    maintainers = with lib.maintainers; [ fpletz ];
-    license = lib.licenses.lgpl21;
-    platforms = lib.platforms.all;
+    maintainers = with maintainers; [ fpletz ];
+    license = licenses.lgpl21;
+    platforms = platforms.all;
   };
 }

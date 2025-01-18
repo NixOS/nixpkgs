@@ -28,15 +28,15 @@ rustPlatform.buildRustPackage {
 
   doCheck = false; # no tests
 
-  meta = {
+  meta = with lib; {
     description = "Simple oscilloscope/vectorscope/spectroscope for your terminal";
     homepage = "https://github.com/alemidev/scope-tui";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       iynaix
       aleksana
     ];
     mainProgram = "scope-tui";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

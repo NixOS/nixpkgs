@@ -100,17 +100,17 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper "$out/lib/lunacy/Lunacy" "$out/bin/lunacy"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Free design software that keeps your flow with AI tools and built-in graphics";
     homepage = "https://icons8.com/lunacy";
     changelog = "https://lunacy.docs.icons8.com/release-notes/";
-    license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [
+    license = licenses.unfree;
+    maintainers = with maintainers; [
       eliandoran
       luftmensch-luftmensch
     ];
-    platforms = lib.platforms.linux;
-    sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
+    platforms = platforms.linux;
+    sourceProvenance = [ sourceTypes.binaryBytecode ];
     mainProgram = "lunacy";
   };
 })

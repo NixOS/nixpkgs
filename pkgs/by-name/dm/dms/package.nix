@@ -17,12 +17,12 @@ buildGoModule rec {
 
   vendorHash = "sha256-f6Jl78ZPLD7Oq4Bq8MBQpHEKnBvpyTWZ9qHa1fGOlgA=";
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/anacrolix/dms";
     description = "UPnP DLNA Digital Media Server with basic video transcoding";
-    license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.claes ];
-    platforms = lib.platforms.linux;
+    license = licenses.bsd3;
+    maintainers = [ maintainers.claes ];
+    platforms = platforms.linux;
     mainProgram = "dms";
   };
 }

@@ -21,10 +21,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Arcticons Sans";
     homepage = "https://github.com/arcticons-team/arcticons-font";
-    license = lib.licenses.ofl;
-    maintainers = with lib.maintainers; [ asininemonkey ];
+    license = licenses.ofl;
+    maintainers = with maintainers; [ asininemonkey ];
   };
 })

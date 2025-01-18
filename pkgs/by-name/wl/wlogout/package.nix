@@ -76,13 +76,13 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gitUpdater { };
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/ArtsyMacaw/wlogout";
     description = "Wayland based logout menu";
     changelog = "https://github.com/ArtsyMacaw/wlogout/releases/tag/${finalAttrs.src.rev}";
-    license = with lib.licenses; [ mit ];
+    license = with licenses; [ mit ];
     mainProgram = "wlogout";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ AndersonTorres ];
     inherit (wayland.meta) platforms;
   };
 })

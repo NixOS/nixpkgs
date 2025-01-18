@@ -93,12 +93,12 @@ stdenv.mkDerivation {
 
   dontUnpack = true;
 
-  meta = {
+  meta = with lib; {
     description = "Unigine Heaven GPU benchmarking tool";
     homepage = "https://benchmark.unigine.com/heaven";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = lib.licenses.unfree;
-    maintainers = [ lib.maintainers.BarinovMaxim ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+    maintainers = [ maintainers.BarinovMaxim ];
     platforms = [
       "x86_64-linux"
       "i686-linux"

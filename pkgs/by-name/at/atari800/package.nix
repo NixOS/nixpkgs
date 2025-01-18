@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.withFeatureAs true "video" "sdl")
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://atari800.github.io/";
     description = "Atari 8-bit emulator";
     longDescription = ''
@@ -54,8 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
       WinCE, Sega Dreamcast, Android and other systems supported by the SDL
       library.
     '';
-    license = with lib.licenses; [ gpl2Plus ];
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = lib.platforms.linux;
+    license = with licenses; [ gpl2Plus ];
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.linux;
   };
 })

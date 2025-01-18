@@ -28,11 +28,11 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "\$\$[QT_INSTALL_PLUGINS]" "$out/$qtPluginPrefix"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Qt plugin for generating highly recognizable identicons";
     homepage = "https://github.com/Nheko-Reborn/qt-jdenticon";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ unclechu ];
+    license = licenses.mit;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ unclechu ];
   };
 })

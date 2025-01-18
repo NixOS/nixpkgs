@@ -31,11 +31,11 @@ python3Packages.buildPythonApplication rec {
     "tests/integration_test.py"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Automatically activate Python virtualenvs (and other environments)";
     homepage = "https://github.com/Yelp/aactivator";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "aactivator";
-    maintainers = with lib.maintainers; [ keller00 ];
+    maintainers = with maintainers; [ keller00 ];
   };
 }

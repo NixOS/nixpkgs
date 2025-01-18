@@ -27,11 +27,11 @@ buildGoModule {
     extraArgs = [ "--version=branch" ];
   };
 
-  meta = {
+  meta = with lib; {
     description = "Formatter for text proto files";
     homepage = "https://github.com/protocolbuffers/txtpbfmt";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ aaronjheng ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ aaronjheng ];
     mainProgram = "txtpbfmt";
   };
 }

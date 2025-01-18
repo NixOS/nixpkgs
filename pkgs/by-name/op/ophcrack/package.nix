@@ -53,12 +53,12 @@ stdenv.mkDerivation rec {
     cp -R src/ophcrack $out/bin
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Free Windows password cracker based on rainbow tables";
     homepage = "https://ophcrack.sourceforge.io";
-    license = with lib.licenses; [ gpl2Plus ];
-    maintainers = with lib.maintainers; [ tochiaha ];
+    license = with licenses; [ gpl2Plus ];
+    maintainers = with maintainers; [ tochiaha ];
     mainProgram = "ophcrack";
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 }

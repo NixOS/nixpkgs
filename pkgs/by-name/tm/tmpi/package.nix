@@ -49,12 +49,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Run a parallel command inside a split tmux window";
     mainProgram = "tmpi";
     homepage = "https://github.com/Azrael3000/tmpi";
-    license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ vasissualiyp ];
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ vasissualiyp ];
     platforms = reptyr.meta.platforms;
   };
 }

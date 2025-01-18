@@ -74,10 +74,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "designateclient" ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://opendev.org/openstack/python-designateclient";
     description = "Client library for OpenStack Designate API";
-    license = lib.licenses.asl20;
-    maintainers = lib.teams.openstack.members;
+    license = licenses.asl20;
+    maintainers = teams.openstack.members;
   };
 }

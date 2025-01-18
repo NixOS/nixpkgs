@@ -18,15 +18,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  meta = {
+  meta = with lib; {
     description = "Fast and exact implementation of the C++ from_chars functions for number types";
     homepage = "https://github.com/fastfloat/fast_float";
-    license = with lib.licenses; [
+    license = with licenses; [
       asl20
       boost
       mit
     ];
-    maintainers = with lib.maintainers; [ wegank ];
-    platforms = lib.platforms.all;
+    maintainers = with maintainers; [ wegank ];
+    platforms = platforms.all;
   };
 })

@@ -25,11 +25,11 @@ buildGoModule {
     "-X main.Version=${version}"
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/coloradocolby/gh-eco";
     description = "gh extension to explore the ecosystem";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ helium ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ helium ];
     mainProgram = "gh-eco";
   };
 }

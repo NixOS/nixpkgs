@@ -36,10 +36,10 @@ buildPythonPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://pypi.org/project/pkgutil_resolve_name/";
     description = "Backport of Python 3.9’s pkgutil.resolve_name";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ yajo ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ yajo ];
   };
 }

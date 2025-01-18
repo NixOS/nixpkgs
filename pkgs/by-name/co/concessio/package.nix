@@ -55,12 +55,12 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Understand File Permissions";
     homepage = "https://github.com/ronniedroid/concessio";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ getchoo ];
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ getchoo ];
     mainProgram = "io.github.ronniedroid.concessio";
-    platforms = lib.intersectLists lib.platforms.linux gjs.meta.platforms;
+    platforms = intersectLists platforms.linux gjs.meta.platforms;
   };
 })

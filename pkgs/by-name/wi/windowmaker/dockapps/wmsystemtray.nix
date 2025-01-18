@@ -31,11 +31,11 @@ stdenv.mkDerivation (finalAttrs: {
     libXpm
   ];
 
-  meta = {
+  meta = with lib; {
     description = "System tray for Windowmaker";
     homepage = "http://wmsystemtray.sourceforge.net";
-    license = lib.licenses.gpl2Only;
+    license = licenses.gpl2Only;
     maintainers = [ ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 })

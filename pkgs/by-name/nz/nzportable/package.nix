@@ -73,12 +73,12 @@ writeShellApplication {
     };
   };
 
-  meta = {
+  meta = with lib; {
     inherit (fteqw.meta) platforms;
     description = "Call of Duty: Zombies demake, powered by various Quake sourceports (PC version)";
     homepage = "https://docs.nzp.gay";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ pluiedev ];
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ pluiedev ];
     mainProgram = "nzportable";
   };
 }

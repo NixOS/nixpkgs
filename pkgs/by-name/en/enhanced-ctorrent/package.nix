@@ -26,7 +26,7 @@ stdenv.mkDerivation {
     })
   ];
 
-  meta = {
+  meta = with lib; {
     broken = stdenv.hostPlatform.isDarwin;
     description = "BitTorrent client written in C++";
     mainProgram = "ctorrent";
@@ -35,8 +35,8 @@ stdenv.mkDerivation {
       performance enhancements.
     '';
     homepage = "http://www.rahul.net/dholmes/ctorrent/";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.devhell ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.devhell ];
   };
 }

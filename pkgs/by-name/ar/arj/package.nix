@@ -54,15 +54,15 @@ gccStdenv.mkDerivation (finalAttrs: {
     cd ..
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Open-source implementation of the world-famous ARJ archiver";
     longDescription = ''
       This version of ARJ has been created with an intent to preserve maximum
       compatibility and retain the feature set of the original ARJ archiver as
       provided by ARJ Software, Inc.
     '';
-    license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.sander ];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.sander ];
+    platforms = platforms.unix;
   };
 })

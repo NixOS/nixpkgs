@@ -25,11 +25,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Devanagari + Latin family for Google Fonts";
     homepage = "https://github.com/itfoundry/Poppins/";
-    license = lib.licenses.ofl;
-    maintainers = with lib.maintainers; [ nyawox ];
-    platforms = lib.platforms.all;
+    license = licenses.ofl;
+    maintainers = with maintainers; [ nyawox ];
+    platforms = platforms.all;
   };
 }

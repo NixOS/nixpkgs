@@ -29,12 +29,12 @@ buildPythonPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/TakWolf/bdffont";
     description = "A library for manipulating Glyph Bitmap Distribution Format (BDF) Fonts";
-    platforms = lib.platforms.all;
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    platforms = platforms.all;
+    license = licenses.mit;
+    maintainers = with maintainers; [
       TakWolf
       h7x4
     ];

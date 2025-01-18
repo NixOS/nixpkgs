@@ -24,10 +24,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pycompliance" ];
 
-  meta = {
+  meta = with lib; {
     description = "Simply library to represent compliance benchmarks as tree structures";
     homepage = "https://github.com/rhmdnd/pycompliance";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ tochiaha ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ tochiaha ];
   };
 }

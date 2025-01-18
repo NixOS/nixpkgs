@@ -57,12 +57,12 @@ python3Packages.buildPythonApplication rec {
 
   passthru.tests.version = testers.testVersion { package = offpunk; };
 
-  meta = {
+  meta = with lib; {
     description = "Command-line and offline-first smolnet browser/feed reader";
     homepage = src.meta.homepage;
-    license = lib.licenses.agpl3Plus;
+    license = licenses.agpl3Plus;
     mainProgram = "offpunk";
-    maintainers = with lib.maintainers; [ DamienCassou ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ DamienCassou ];
+    platforms = platforms.linux;
   };
 }

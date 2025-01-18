@@ -49,12 +49,12 @@ stdenv.mkDerivation rec {
 
   extraOutputsToInstall = [ "man" ];
 
-  meta = {
+  meta = with lib; {
     description = "C99 program that accesses passive DNS database systems";
     homepage = "https://github.com/dnsdb/dnsdbq";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ x123 ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ x123 ];
     mainProgram = "dnsdbq";
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 }

@@ -30,10 +30,10 @@ stdenv.mkDerivation rec {
     "HAVE_MII=1"
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "http://net-tools.sourceforge.net/";
     description = "Set of tools for controlling the network subsystem in Linux";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
   };
 }

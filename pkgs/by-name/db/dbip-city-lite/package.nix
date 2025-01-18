@@ -25,11 +25,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru.mmdb = "${finalAttrs.finalPackage}/share/dbip/dbip-city-lite.mmdb";
 
-  meta = {
+  meta = with lib; {
     description = "Free IP to City Lite database by DB-IP";
     homepage = "https://db-ip.com/db/download/ip-to-city-lite";
-    license = lib.licenses.cc-by-40;
-    maintainers = with lib.maintainers; [ Guanran928 ];
-    platforms = lib.platforms.all;
+    license = licenses.cc-by-40;
+    maintainers = with maintainers; [ Guanran928 ];
+    platforms = platforms.all;
   };
 })

@@ -94,16 +94,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-mmacosx-version-min=10.14";
 
-  meta = {
+  meta = with lib; {
     homepage = "https://ares-emu.net";
     description = "Open-source multi-system emulator with a focus on accuracy and preservation";
-    license = lib.licenses.isc;
+    license = licenses.isc;
     mainProgram = "ares";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       Madouura
       AndersonTorres
     ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
   };
 })

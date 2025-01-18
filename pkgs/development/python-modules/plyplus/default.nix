@@ -19,10 +19,10 @@ buildPythonPackage rec {
 
   doCheck = !isPy3k;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/erezsh/plyplus";
     description = "General-purpose parser built on top of PLY";
-    maintainers = with lib.maintainers; [ twey ];
-    license = lib.licenses.mit;
+    maintainers = with maintainers; [ twey ];
+    license = licenses.mit;
   };
 }

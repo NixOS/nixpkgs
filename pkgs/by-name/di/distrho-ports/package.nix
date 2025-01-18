@@ -59,7 +59,7 @@ stdenv.mkDerivation {
     done
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "http://distrho.sourceforge.net/ports";
     description = "Linux audio plugins and LV2 ports";
     longDescription = ''
@@ -99,7 +99,7 @@ stdenv.mkDerivation {
       - vitalium
       - wolpertinger
     '';
-    license = with lib.licenses; [
+    license = with licenses; [
       gpl2Only
       gpl3Only
       gpl2Plus
@@ -108,6 +108,6 @@ stdenv.mkDerivation {
       mit
     ];
     maintainers = [ ];
-    platforms = lib.systems.inspect.patternLogicalAnd lib.systems.inspect.patterns.isLinux lib.systems.inspect.patterns.isx86;
+    platforms = systems.inspect.patternLogicalAnd systems.inspect.patterns.isLinux systems.inspect.patterns.isx86;
   };
 }

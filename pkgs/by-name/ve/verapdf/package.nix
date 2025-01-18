@@ -63,18 +63,18 @@ maven.buildMavenPackage rec {
     })
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Command line and GUI industry supported PDF/A and PDF/UA Validation";
     homepage = "https://github.com/veraPDF/veraPDF-apps";
     license = [
-      lib.licenses.gpl3Plus
+      licenses.gpl3Plus
       # or
-      lib.licenses.mpl20
+      licenses.mpl20
     ];
     mainProgram = "verapdf-gui";
     maintainers = [
-      lib.maintainers.mohe2015
-      lib.maintainers.kilianar
+      maintainers.mohe2015
+      maintainers.kilianar
     ];
   };
 }

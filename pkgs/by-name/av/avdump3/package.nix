@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   dontPatchELF = true;
 
-  meta = {
+  meta = with lib; {
     mainProgram = "avdump3";
     description = "Tool for extracting audio/video metadata from media files and uploading it to AniDB";
     longDescription = ''
@@ -43,16 +43,16 @@ stdenv.mkDerivation rec {
       metadata for new files.
     '';
     homepage = "https://wiki.anidb.net/Avdump3";
-    sourceProvenance = with lib.sourceTypes; [
+    sourceProvenance = with sourceTypes; [
       binaryNativeCode
       binaryBytecode
     ];
     # partial source code available under MIT license at https://github.com/DvdKhl/AVDump3
-    license = with lib.licenses; [
+    license = with licenses; [
       mit
       unfree
     ];
-    maintainers = with lib.maintainers; [ kini ];
+    maintainers = with maintainers; [ kini ];
     # NOTE: aarch64-linux may also work but hasn't been tested; co-maintainers welcome.
     platforms = [ "x86_64-linux" ];
   };

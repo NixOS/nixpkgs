@@ -69,12 +69,12 @@ buildNpmPackage {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Linux Desktop client for Nvidia's GeForce NOW game streaming service";
     homepage = "https://github.com/hmlendea/gfn-electron";
-    license = with lib.licenses; [ gpl3Only ];
-    platforms = lib.intersectLists lib.platforms.linux electron.meta.platforms;
-    maintainers = with lib.maintainers; [ pluiedev ];
+    license = with licenses; [ gpl3Only ];
+    platforms = intersectLists platforms.linux electron.meta.platforms;
+    maintainers = with maintainers; [ pluiedev ];
     mainProgram = "geforcenow-electron";
   };
 }

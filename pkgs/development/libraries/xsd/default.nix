@@ -34,12 +34,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ xercesc ];
 
-  meta = {
+  meta = with lib; {
     homepage = "http://www.codesynthesis.com/products/xsd";
     description = "Open-source, cross-platform W3C XML Schema to C++ data binding compiler";
     mainProgram = "xsd";
-    license = lib.licenses.gpl2;
-    platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.jagajaga ];
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.jagajaga ];
   };
 }

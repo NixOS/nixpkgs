@@ -35,11 +35,11 @@ stdenv.mkDerivation rec {
     cp -R data/* $out/share/teetertorture
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "http://www.newbreedsoftware.com/teetertorture/";
     description = "Simple shooting game with your cannon is sitting atop a teeter totter";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
     mainProgram = "teetertorture";
   };
 }

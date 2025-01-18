@@ -66,15 +66,15 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Color emoji font";
     homepage = "https://github.com/googlefonts/noto-emoji";
-    license = with lib.licenses; [
+    license = with licenses; [
       ofl
       asl20
     ];
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [
+    platforms = platforms.all;
+    maintainers = with maintainers; [
       mathnerd314
       sternenseemann
     ];

@@ -22,13 +22,13 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-k8FgdNVjFYO/lflVzRQUwHvdy4+eCNTnTYImdfy1GaQ=";
 
-  meta = {
+  meta = with lib; {
     description = "Convenient helper for passing sockets into another process";
     mainProgram = "systemfd";
     homepage = "https://github.com/mitsuhiko/systemfd";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     maintainers = [ ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 
 }

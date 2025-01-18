@@ -54,11 +54,11 @@ stdenv.mkDerivation (finalAttrs: {
     "-DBUILD_TESTING=ON"
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/kidanger/vpv";
     description = "Image viewer for image processing experts";
-    maintainers = [ lib.maintainers.kidanger ];
-    license = lib.licenses.gpl3;
+    maintainers = [ maintainers.kidanger ];
+    license = licenses.gpl3;
     broken = stdenv.hostPlatform.isDarwin; # the CMake expects the SDL2::SDL2main target for darwin
     mainProgram = "vpv";
   };

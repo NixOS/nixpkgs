@@ -31,11 +31,11 @@ buildPythonPackage {
 
   pytestFlagsArray = [ "tests.py" ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/areski/python-nvd3";
     description = "Python Wrapper for NVD3 - It's time for beautiful charts";
     mainProgram = "nvd3";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.ivan-tkatchev ];
+    license = licenses.mit;
+    maintainers = [ maintainers.ivan-tkatchev ];
   };
 }

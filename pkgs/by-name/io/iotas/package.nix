@@ -69,12 +69,12 @@ python3.pkgs.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Simple note taking with mobile-first design and Nextcloud sync";
     homepage = "https://gitlab.gnome.org/World/iotas";
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
     mainProgram = "iotas";
-    maintainers = with lib.maintainers; [ zendo ];
+    maintainers = with maintainers; [ zendo ];
   };
 }

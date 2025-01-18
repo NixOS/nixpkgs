@@ -30,12 +30,12 @@ stdenv.mkDerivation {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = {
+  meta = with lib; {
     description = "Fast (80+ Gbit/s) pixelflut client with full IPv6 and animation support";
     homepage = "https://github.com/TobleMiner/sturmflut";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ zebreus ];
-    platforms = lib.platforms.linux;
+    license = licenses.mit;
+    maintainers = with maintainers; [ zebreus ];
+    platforms = platforms.linux;
     mainProgram = "sturmflut";
   };
 }

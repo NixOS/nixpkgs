@@ -19,11 +19,11 @@ melpaBuild {
 
   passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/sunrise-commander/sunrise-commander/";
     description = "Orthodox (two-pane) file manager for Emacs";
-    license = lib.licenses.gpl3Plus;
-    maintainers = [ lib.maintainers.AndersonTorres ];
-    platforms = lib.platforms.all;
+    license = licenses.gpl3Plus;
+    maintainers = [ maintainers.AndersonTorres ];
+    platforms = platforms.all;
   };
 }

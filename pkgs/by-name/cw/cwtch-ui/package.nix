@@ -48,13 +48,13 @@ flutter.buildFlutterApplication rec {
       --replace-fail PREFIX "$out"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Messaging app built on the cwtch decentralized, privacy-preserving, multi-party messaging protocol";
     homepage = "https://cwtch.im/";
     changelog = "https://docs.cwtch.im/changelog";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "cwtch";
     platforms = [ "x86_64-linux" ];
-    maintainers = [ lib.maintainers.gmacon ];
+    maintainers = [ maintainers.gmacon ];
   };
 }

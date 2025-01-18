@@ -17,13 +17,13 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-oppQG3YqiTe0feuvIrKkSCYLBRgNIGOOQ31/pCSJaPY=";
 
-  meta = {
+  meta = with lib; {
     description = "Template generation tool to create no_std applications targeting Espressif's chips";
     homepage = "https://github.com/esp-rs/esp-generate";
-    license = with lib.licenses; [
+    license = with licenses; [
       mit # or
       asl20
     ];
-    maintainers = [ lib.maintainers.eymeric ];
+    maintainers = [ maintainers.eymeric ];
   };
 }

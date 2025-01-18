@@ -69,11 +69,11 @@ buildGoModule {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Selfhosted TCP/HTTP tunnel, ngrok alternative, written in Go";
     homepage = "https://github.com/pgrok/pgrok";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ marie ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ marie ];
     mainProgram = "pgrok";
   };
 }

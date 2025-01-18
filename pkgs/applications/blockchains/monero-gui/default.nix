@@ -146,12 +146,12 @@ stdenv.mkDerivation rec {
     done;
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Private, secure, untraceable currency";
     homepage = "https://getmonero.org/";
-    license = lib.licenses.bsd3;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ rnhmjoj ];
+    license = licenses.bsd3;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ rnhmjoj ];
     mainProgram = "monero-wallet-gui";
   };
 }

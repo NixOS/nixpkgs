@@ -42,12 +42,12 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DVERSION=${version}" ];
 
-  meta = {
+  meta = with lib; {
     description = "Easy to use calculator for ordinary users";
     mainProgram = "deepin-calculator";
     homepage = "https://github.com/linuxdeepin/deepin-calculator";
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
-    maintainers = lib.teams.deepin.members;
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = teams.deepin.members;
   };
 }

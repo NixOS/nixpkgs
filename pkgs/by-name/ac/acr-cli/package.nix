@@ -35,11 +35,11 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Command Line Tool for interacting with Azure Container Registry Images";
     homepage = "https://github.com/Azure/acr-cli";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ hausken ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ hausken ];
     mainProgram = "acr-cli";
   };
 }

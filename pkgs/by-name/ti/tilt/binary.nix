@@ -26,11 +26,11 @@ buildGoModule rec {
     cp -r ${tilt-assets}/* pkg/assets/build/
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Local development tool to manage your developer instance when your team deploys to Kubernetes in production";
     mainProgram = "tilt";
     homepage = "https://tilt.dev/";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ anton-dessiatov ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ anton-dessiatov ];
   };
 }

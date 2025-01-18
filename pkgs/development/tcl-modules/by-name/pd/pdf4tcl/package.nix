@@ -20,10 +20,10 @@ mkTclDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Tcl package for generating PDF files";
     homepage = "https://pdf4tcl.sourceforge.net/";
-    license = lib.licenses.tcltk;
-    maintainers = with lib.maintainers; [ fgaz ];
+    license = licenses.tcltk;
+    maintainers = with maintainers; [ fgaz ];
   };
 }

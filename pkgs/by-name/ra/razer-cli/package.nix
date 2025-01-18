@@ -32,12 +32,12 @@ python3.pkgs.buildPythonApplication rec {
     xrdb
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/LoLei/razer-cli";
     description = "Command line interface for controlling Razer devices on Linux";
     mainProgram = "razer-cli";
-    license = lib.licenses.gpl3Only;
-    maintainers = [ lib.maintainers.kaylorben ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Only;
+    maintainers = [ maintainers.kaylorben ];
+    platforms = platforms.linux;
   };
 }

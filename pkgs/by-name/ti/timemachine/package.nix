@@ -35,12 +35,12 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = "-lm";
 
-  meta = {
+  meta = with lib; {
     description = "JACK audio recorder";
     homepage = "http://plugin.org.uk/timemachine/";
-    license = lib.licenses.lgpl2;
-    platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.nico202 ];
+    license = licenses.lgpl2;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.nico202 ];
     mainProgram = "timemachine";
   };
 }

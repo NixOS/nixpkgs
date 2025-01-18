@@ -62,10 +62,10 @@ buildPythonPackage {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = {
+  meta = with lib; {
     description = "Python module for building Noto fonts";
     homepage = "https://github.com/notofonts/notobuilder";
-    license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ jopejoe1 ];
+    license = licenses.unfree;
+    maintainers = with maintainers; [ jopejoe1 ];
   };
 }

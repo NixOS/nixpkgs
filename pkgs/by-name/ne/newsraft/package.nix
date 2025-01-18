@@ -38,15 +38,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Feed reader for terminal";
     homepage = "https://codeberg.org/grisha/newsraft";
-    license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [
+    license = licenses.isc;
+    maintainers = with maintainers; [
       arthsmn
       luftmensch-luftmensch
     ];
     mainProgram = "newsraft";
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 })

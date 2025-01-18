@@ -61,10 +61,10 @@ buildPythonPackage rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = {
+  meta = with lib; {
     description = "Implementation of the base OWBaseWidget class and utilities for use in Orange Canvas workflows";
     homepage = "https://github.com/biolab/orange-widget-base";
-    license = [ lib.licenses.gpl3Plus ];
-    maintainers = [ lib.maintainers.lucasew ];
+    license = [ licenses.gpl3Plus ];
+    maintainers = [ maintainers.lucasew ];
   };
 }

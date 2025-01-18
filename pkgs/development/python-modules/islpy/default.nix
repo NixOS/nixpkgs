@@ -63,10 +63,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "islpy" ];
 
-  meta = {
+  meta = with lib; {
     description = "Python wrapper around isl, an integer set library";
     homepage = "https://github.com/inducer/islpy";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ tomasajt ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ tomasajt ];
   };
 }

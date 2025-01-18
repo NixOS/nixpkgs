@@ -33,12 +33,12 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Neon stencil typeface";
     homepage = "https://noirblancrouge.com/fonts/beon-display";
     changelog = "https://github.com/noirblancrouge/Beon#changelog";
-    license = lib.licenses.ofl;
-    maintainers = with lib.maintainers; [ raboof ];
-    platforms = lib.platforms.all;
+    license = licenses.ofl;
+    maintainers = with maintainers; [ raboof ];
+    platforms = platforms.all;
   };
 }

@@ -19,12 +19,12 @@ stdenv.mkDerivation rec {
     cp README COPYING* $out/share/udptunnel
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://code.google.com/archive/p/udptunnel/";
     description = "Tunnels TCP over UDP packets";
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     maintainers = [ ];
-    platforms = with lib.platforms; linux;
+    platforms = with platforms; linux;
     mainProgram = "udptunnel";
   };
 }

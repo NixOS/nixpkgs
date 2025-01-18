@@ -37,10 +37,10 @@ stdenv.mkDerivation rec {
     cp -r LazyLimiter.lv2/ $out/lib/lv2
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Fast yet clean lookahead limiter for jack and lv2";
     homepage = "https://magnetophon.github.io/LazyLimiter/";
-    license = lib.licenses.gpl2;
-    maintainers = [ lib.maintainers.magnetophon ];
+    license = licenses.gpl2;
+    maintainers = [ maintainers.magnetophon ];
   };
 }

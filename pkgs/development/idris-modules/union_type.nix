@@ -14,10 +14,10 @@ build-idris-package {
     sha256 = "1ky0h03kja2y1fjg18j46akw03wi5ng80pghh2j3ib6hxlg1rbs7";
   };
 
-  meta = {
+  meta = with lib; {
     description = "UnionType in Idris";
     homepage = "https://github.com/berewt/UnionType";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.brainrape ];
+    license = licenses.mit;
+    maintainers = [ maintainers.brainrape ];
   };
 }

@@ -55,11 +55,11 @@ stdenv.mkDerivation (finalAttrs: {
     cairo
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/lv2/pugl";
-    maintainers = with lib.maintainers; [ bot-wxt1221 ];
-    platforms = lib.platforms.unix;
-    license = lib.licenses.isc;
+    maintainers = with maintainers; [ bot-wxt1221 ];
+    platforms = platforms.unix;
+    license = licenses.isc;
     description = "Minimal portable API for embeddable GUIs";
   };
 })

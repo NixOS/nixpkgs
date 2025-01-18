@@ -24,11 +24,11 @@ rustPlatform.buildRustPackage {
   env.RUSTC_BOOTSTRAP = true;
   env.RUSTFLAGS = "--cfg tokio_unstable";
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/lazytiger/trojan-rs";
     description = "Trojan server and proxy programs written in Rust";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "trojan";
-    maintainers = with lib.maintainers; [ oluceps ];
+    maintainers = with maintainers; [ oluceps ];
   };
 }

@@ -31,11 +31,11 @@ rustPlatform.buildRustPackage rec {
     "--skip=download::tests::download_file::test_renames_starter"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "CLI for Rustfinity challenges solving";
     homepage = "https://github.com/dcodesdev/rustfinity.com/tree/main/crates/cli";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ nartsiss ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ nartsiss ];
     mainProgram = "rustfinity";
   };
 }

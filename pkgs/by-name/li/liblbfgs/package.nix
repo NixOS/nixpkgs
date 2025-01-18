@@ -13,11 +13,11 @@ stdenv.mkDerivation rec {
     sha256 = "1kv8d289rbz38wrpswx5dkhr2yh4fg4h6sszkp3fawxm09sann21";
   };
 
-  meta = {
+  meta = with lib; {
     broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     description = "Library of Limited-memory Broyden-Fletcher-Goldfarb-Shanno (L-BFGS)";
     homepage = "http://www.chokkan.org/software/liblbfgs/";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.unix;
+    license = licenses.mit;
+    platforms = platforms.unix;
   };
 }

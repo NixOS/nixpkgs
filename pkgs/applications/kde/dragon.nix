@@ -29,15 +29,15 @@
 
 mkDerivation {
   pname = "dragon";
-  meta = {
+  meta = with lib; {
     homepage = "https://apps.kde.org/dragonplayer/";
-    license = with lib.licenses; [
+    license = with licenses; [
       gpl2Plus
       fdl12Plus
     ];
     description = "Simple media player for KDE";
     mainProgram = "dragon";
-    maintainers = [ lib.maintainers.jonathanreeve ];
+    maintainers = [ maintainers.jonathanreeve ];
   };
   nativeBuildInputs = [
     extra-cmake-modules

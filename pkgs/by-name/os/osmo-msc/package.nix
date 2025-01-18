@@ -47,12 +47,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     description = "Osmocom implementation of 3GPP Mobile Swtiching Centre (MSC)";
     mainProgram = "osmo-msc";
     homepage = "https://osmocom.org/projects/osmomsc/wiki";
-    license = lib.licenses.agpl3Only;
-    maintainers = [ lib.maintainers.markuskowa ];
-    platforms = lib.platforms.linux;
+    license = licenses.agpl3Only;
+    maintainers = [ maintainers.markuskowa ];
+    platforms = platforms.linux;
   };
 }

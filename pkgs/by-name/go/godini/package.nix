@@ -37,13 +37,13 @@ buildGoModule rec {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     changelog = "https://github.com/bilbilak/godini/blob/main/CHANGELOG.md";
     description = "INI Configuration Management Tool";
     homepage = "https://github.com/bilbilak/godini";
-    license = lib.licenses.gpl3Only;
+    license = licenses.gpl3Only;
     mainProgram = "godini";
-    maintainers = with lib.maintainers; [ _4r7if3x ];
-    platforms = with lib.platforms; unix ++ windows;
+    maintainers = with maintainers; [ _4r7if3x ];
+    platforms = with platforms; unix ++ windows;
   };
 }

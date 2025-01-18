@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
   # The tests depend on network access.
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Download media content from a DASH-MPEG or DASH-WebM MPD manifest";
     longDescription = ''
       A commandline application for downloading media content from a DASH MPD
@@ -38,8 +38,8 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://emarsden.github.io/dash-mpd-cli/";
     downloadPage = "https://github.com/emarsden/dash-mpd-cli/releases";
     changelog = "https://github.com/emarsden/dash-mpd-cli/blob/main/CHANGELOG.md";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ al3xtjames ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ al3xtjames ];
     mainProgram = "dash-mpd-cli";
   };
 }

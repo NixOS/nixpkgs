@@ -20,11 +20,11 @@ mkTclDerivation rec {
     "--with-ssl-dir=${openssl.dev}"
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://core.tcl-lang.org/tcltls/index";
     description = "OpenSSL / RSA-bsafe Tcl extension";
-    maintainers = [ lib.maintainers.agbrooks ];
-    license = lib.licenses.tcltk;
-    platforms = lib.platforms.unix;
+    maintainers = [ maintainers.agbrooks ];
+    license = licenses.tcltk;
+    platforms = platforms.unix;
   };
 }

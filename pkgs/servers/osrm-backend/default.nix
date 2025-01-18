@@ -55,12 +55,12 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) osrm-backend;
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/Project-OSRM/osrm-backend/wiki";
     description = "Open Source Routing Machine computes shortest paths in a graph. It was designed to run well with map data from the Openstreetmap Project";
     changelog = "https://github.com/Project-OSRM/osrm-backend/blob/master/CHANGELOG.md";
-    license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ erictapen ];
-    platforms = lib.platforms.unix;
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ erictapen ];
+    platforms = platforms.unix;
   };
 }

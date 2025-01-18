@@ -50,12 +50,12 @@ rustPlatform.buildRustPackage {
     }
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Explore the Rust programming language and learn more about it while doing exercises";
     homepage = "https://rustlings.cool/";
     changelog = "https://github.com/rust-lang/rustlings/releases";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ luftmensch-luftmensch ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ luftmensch-luftmensch ];
     mainProgram = "rustlings";
   };
 }

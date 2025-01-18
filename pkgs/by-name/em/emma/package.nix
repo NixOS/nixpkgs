@@ -21,11 +21,11 @@ stdenv.mkDerivation rec {
     cp lib/*.jar $out/lib/jars/
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://emma.sourceforge.net/";
     description = "Code coverage tool for Java";
-    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
-    platforms = lib.platforms.unix;
-    license = lib.licenses.cpl10;
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    platforms = platforms.unix;
+    license = licenses.cpl10;
   };
 }

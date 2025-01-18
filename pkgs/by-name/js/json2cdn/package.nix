@@ -47,15 +47,15 @@ stdenv.mkDerivation (finalAttrs: {
     tests.formats-cdn = tests.pkgs-lib.formats.passthru.entries.pass-cdnAtoms;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Converts a JSON file to dzikoysk's CDN format";
     homepage = "https://github.com/uku3lig/json2cdn";
-    sourceProvenance = with lib.sourceTypes; [
+    sourceProvenance = with sourceTypes; [
       fromSource
       binaryBytecode
     ];
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ uku3lig ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ uku3lig ];
     inherit (jre_headless.meta) platforms;
     mainProgram = "json2cdn";
   };

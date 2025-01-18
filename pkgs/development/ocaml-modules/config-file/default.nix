@@ -30,11 +30,11 @@ lib.throwIf (lib.versionAtLeast ocaml.version "5.0")
 
     createFindlibDestdir = true;
 
-    meta = {
+    meta = with lib; {
       homepage = "http://config-file.forge.ocamlcore.org/";
       platforms = ocaml.meta.platforms or [ ];
       description = "OCaml library used to manage the configuration file(s) of an application";
-      license = lib.licenses.lgpl2Plus;
-      maintainers = with lib.maintainers; [ vbgl ];
+      license = licenses.lgpl2Plus;
+      maintainers = with maintainers; [ vbgl ];
     };
   }

@@ -39,12 +39,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = {
+  meta = with lib; {
     description = "Tool which allows converting Apple compressed dmg archives to standard (hfsplus) image disk files";
     homepage = "https://github.com/Lekensteyn/dmg2img";
-    license = lib.licenses.gpl2Only;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ KSJ2000 ];
+    license = licenses.gpl2Only;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ KSJ2000 ];
     mainProgram = "dmg2img";
   };
 })

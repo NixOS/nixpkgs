@@ -67,12 +67,12 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) web-archive-darkreader;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Web archives reader offering the ability to browse offline millions of articles";
     homepage = "https://github.com/birros/web-archives";
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     mainProgram = "web-archives";
-    maintainers = with lib.maintainers; [ aleksana ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ aleksana ];
+    platforms = platforms.unix;
   };
 })

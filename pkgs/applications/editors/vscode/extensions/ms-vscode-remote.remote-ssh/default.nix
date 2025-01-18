@@ -97,9 +97,9 @@ buildVscodeMarketplaceExtension {
     inherit (nixosTests) vscode-remote-ssh;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Use any remote machine with a SSH server as your development environment";
-    license = lib.licenses.unfree;
-    maintainers = [ lib.maintainers.tbenst ];
+    license = licenses.unfree;
+    maintainers = [ maintainers.tbenst ];
   };
 }

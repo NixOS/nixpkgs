@@ -74,14 +74,14 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Wallet for Nano cryptocurrency";
     homepage = "https://nano.org/en/wallet/";
-    license = lib.licenses.bsd2;
+    license = licenses.bsd2;
     # Fails on Darwin. See:
     # https://github.com/NixOS/nixpkgs/pull/39295#issuecomment-386800962
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ jluttine ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ jluttine ];
   };
 
 }

@@ -16,12 +16,12 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = [ aigpy ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/yaronzz/Tidal-Media-Downloader";
     description = "Application that lets you download videos and tracks from Tidal";
-    license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.misterio77 ];
-    platforms = lib.platforms.all;
+    license = licenses.asl20;
+    maintainers = [ maintainers.misterio77 ];
+    platforms = platforms.all;
     mainProgram = "tidal-dl";
   };
 }

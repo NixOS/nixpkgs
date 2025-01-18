@@ -132,13 +132,13 @@ buildFHSEnv {
     substituteInPlace "$out/share/applications/todesk.desktop" \
       --replace-fail '/opt/todesk/bin' "${todesk-unwrapped}/lib"
   '';
-  meta = {
+  meta = with lib; {
     description = "Remote Desktop Application";
     homepage = "https://www.todesk.com/linux.html";
-    license = lib.licenses.unfree;
+    license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [ bot-wxt1221 ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    maintainers = with maintainers; [ bot-wxt1221 ];
     mainProgram = "todesk";
   };
 }

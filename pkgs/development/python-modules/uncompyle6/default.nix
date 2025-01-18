@@ -39,10 +39,10 @@ buildPythonPackage rec {
   # as the project only targets bytecode of versions <= 3.8
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "A bytecode decompiler for Python versions 3.8 and below";
     homepage = "https://github.com/rocky/python-uncompyle6";
-    license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ melvyn2 ];
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ melvyn2 ];
   };
 }

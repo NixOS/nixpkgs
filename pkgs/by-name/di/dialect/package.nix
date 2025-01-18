@@ -75,12 +75,12 @@ python3.pkgs.buildPythonApplication rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/dialect-app/dialect";
     description = "Translation app for GNOME";
-    maintainers = lib.teams.gnome-circle.members;
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
+    maintainers = teams.gnome-circle.members;
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
     mainProgram = "dialect";
   };
 }

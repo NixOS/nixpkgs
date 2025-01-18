@@ -17,12 +17,12 @@ buildGoModule {
 
   vendorHash = "sha256-3AAPySLAoMimXUOiy8Ctl+ghG5q+3dWRNGXHpl9nfG0=";
 
-  meta = {
+  meta = with lib; {
     description = "Pluggable Transport based on HTTP Upgrade(HTTPT)";
     homepage = "https://community.torproject.org/relay/setup/webtunnel/";
-    maintainers = [ lib.maintainers.gbtb ];
-    license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
+    maintainers = [ maintainers.gbtb ];
+    license = licenses.mit;
+    platforms = platforms.linux;
   };
 
 }

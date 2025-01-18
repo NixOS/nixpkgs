@@ -57,12 +57,12 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
-  meta = {
+  meta = with lib; {
     description = "Show keyboard, gamepad and mouse input on stream";
     homepage = "https://github.com/univrsal/input-overlay";
-    maintainers = with lib.maintainers; [ glittershark ];
-    license = lib.licenses.gpl2;
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ glittershark ];
+    license = licenses.gpl2;
+    platforms = platforms.linux;
     # never built on aarch64-linux since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
   };

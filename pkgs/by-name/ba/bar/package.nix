@@ -13,12 +13,12 @@ stdenv.mkDerivation rec {
     sha256 = "00v5cb6vzizyyhflgr62d3k8dqc0rg6wdgfyyk11c0s0r32mw3zs";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Console progress bar";
     homepage = "https://clpbar.sourceforge.net/";
-    license = lib.licenses.gpl2Only;
-    maintainers = [ lib.maintainers.rdnetto ];
-    platforms = lib.platforms.all;
+    license = licenses.gpl2Only;
+    maintainers = [ maintainers.rdnetto ];
+    platforms = platforms.all;
     mainProgram = "bar";
   };
 }

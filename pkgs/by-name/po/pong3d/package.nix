@@ -20,10 +20,10 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "http://www.newbreedsoftware.com/3dpong/";
     description = "One or two player 3d sports game based on Pong from Atari";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
   };
 }

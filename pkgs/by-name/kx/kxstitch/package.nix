@@ -41,12 +41,12 @@ stdenv.mkDerivation {
     done
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://invent.kde.org/graphics/kxstitch";
     description = "Cross stitch pattern and chart creation";
-    maintainers = with lib.maintainers; [ eliandoran ];
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ eliandoran ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
     mainProgram = "kxstitch";
   };
 }

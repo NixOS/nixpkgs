@@ -37,11 +37,11 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  meta = {
+  meta = with lib; {
     description = "Passive network reconnaissance and fingerprinting tool";
     homepage = "https://lcamtuf.coredump.cx/p0f3/";
-    license = lib.licenses.lgpl21;
-    platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.thoughtpolice ];
+    license = licenses.lgpl21;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.thoughtpolice ];
   };
 }

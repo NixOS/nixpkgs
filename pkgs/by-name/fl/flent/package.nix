@@ -44,12 +44,12 @@ python3Packages.buildPythonApplication rec {
   '';
 
   passthru.updateScript = nix-update-script { };
-  meta = {
+  meta = with lib; {
     description = "FLExible Network Tester";
     homepage = "https://flent.org";
-    license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ mmlb ];
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ mmlb ];
     mainProgram = "flent";
-    badPlatforms = lib.platforms.darwin;
+    badPlatforms = platforms.darwin;
   };
 }

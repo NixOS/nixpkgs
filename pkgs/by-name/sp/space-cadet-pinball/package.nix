@@ -68,19 +68,19 @@ stdenv.mkDerivation rec {
       ${assets}/Sounds/*.WAV -t ${assetsDest}
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Reverse engineering of 3D Pinball for Windows – Space Cadet, a game bundled with Windows";
     homepage = "https://github.com/k4zmu2a/SpaceCadetPinball";
     # The assets are unfree while the code is labeled as MIT
-    license = with lib.licenses; [
+    license = with licenses; [
       unfree
       mit
     ];
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       hqurve
       nadiaholmquist
     ];
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
     mainProgram = "SpaceCadetPinball";
   };
 }

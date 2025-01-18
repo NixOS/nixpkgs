@@ -51,10 +51,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rmrl" ];
 
-  meta = {
+  meta = with lib; {
     description = "Render reMarkable documents to PDF";
     homepage = "https://github.com/benneti/rmrl";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

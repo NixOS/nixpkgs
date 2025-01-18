@@ -15,12 +15,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  meta = {
+  meta = with lib; {
     description = "Library for operations on boolean expression binary trees";
     homepage = "http://perso.b2b2c.ca/~sarrazip/dev/boolstuff.html";
     license = "GPL";
-    maintainers = [ lib.maintainers.marcweber ];
+    maintainers = [ maintainers.marcweber ];
     mainProgram = "booldnf";
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 }

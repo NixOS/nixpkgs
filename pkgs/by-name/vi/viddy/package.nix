@@ -25,12 +25,12 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript.command = [ ./update.sh ];
 
-  meta = {
+  meta = with lib; {
     description = "Modern watch command, time machine and pager etc.";
     changelog = "https://github.com/sachaos/viddy/releases";
     homepage = "https://github.com/sachaos/viddy";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       j-hui
       phanirithvij
     ];

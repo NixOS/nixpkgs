@@ -41,15 +41,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = {
+  meta = with lib; {
     description = "Library to manage the activation process of Apple iOS devices";
     homepage = "https://libimobiledevice.org";
-    license = with lib.licenses; [
+    license = with licenses; [
       lgpl21
       gpl3
     ];
     mainProgram = "ideviceactivation";
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ clebs ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ clebs ];
   };
 })

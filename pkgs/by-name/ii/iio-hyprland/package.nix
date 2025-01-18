@@ -31,12 +31,12 @@ stdenv.mkDerivation {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = {
+  meta = with lib; {
     description = "Listens to iio-sensor-proxy and automatically changes Hyprland output orientation";
     homepage = "https://github.com/JeanSchoeller/iio-hyprland/tree/master";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ yusuf-duran ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ yusuf-duran ];
+    platforms = platforms.linux;
     mainProgram = "iio-hyprland";
   };
 }

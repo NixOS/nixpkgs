@@ -124,11 +124,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     testFile = ./test.md;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Textlint rule to check common misspellings";
     homepage = "https://github.com/io-monad/textlint-rule-common-misspellings";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ natsukium ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ natsukium ];
     mainProgram = "textlint-rule-common-misspellings";
     platforms = textlint.meta.platforms;
   };

@@ -68,12 +68,12 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/bin/lockdep --replace "./liblockdep.so" "$out/lib/liblockdep.so.$fullver"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Userspace locking validation tool built on the Linux kernel";
     mainProgram = "lockdep";
     homepage = "https://kernel.org/";
-    license = lib.licenses.gpl2Only;
-    platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.thoughtpolice ];
+    license = licenses.gpl2Only;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.thoughtpolice ];
   };
 }

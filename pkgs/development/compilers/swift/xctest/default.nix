@@ -50,11 +50,11 @@ stdenv.mkDerivation {
     mv $out/lib/swift/darwin $out/lib/swift/${swift.swiftOs}
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Framework for writing unit tests in Swift";
     homepage = "https://github.com/apple/swift-corelibs-xctest";
-    platforms = lib.platforms.all;
-    license = lib.licenses.asl20;
-    maintainers = lib.teams.swift.members;
+    platforms = platforms.all;
+    license = licenses.asl20;
+    maintainers = teams.swift.members;
   };
 }

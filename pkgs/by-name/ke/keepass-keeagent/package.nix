@@ -18,11 +18,11 @@ let
       stripRoot = false;
     };
 
-    meta = {
+    meta = with lib; {
       description = "KeePass plugin to allow other programs to access SSH keys stored in a KeePass database for authentication";
       homepage = "http://lechnology.com/software/keeagent";
-      platforms = with lib.platforms; linux;
-      license = lib.licenses.gpl2;
+      platforms = with platforms; linux;
+      license = licenses.gpl2;
       maintainers = [ ];
     };
 

@@ -73,13 +73,13 @@ stdenv.mkDerivation {
     makeWrapper
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://spideroak.com";
     description = "Secure online backup and sychronization";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ amorsillo ];
-    platforms = lib.platforms.linux;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+    maintainers = with maintainers; [ amorsillo ];
+    platforms = platforms.linux;
     mainProgram = "spideroak";
   };
 }

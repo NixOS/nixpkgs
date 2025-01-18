@@ -66,12 +66,12 @@ stdenv.mkDerivation rec {
     makeWrapper $out/{Applications/merkaartor.app/Contents/MacOS,bin}/merkaartor
   '';
 
-  meta = {
+  meta = with lib; {
     description = "OpenStreetMap editor";
     homepage = "http://merkaartor.be/";
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     mainProgram = "merkaartor";
-    maintainers = with lib.maintainers; [ sikmir ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ sikmir ];
+    platforms = platforms.unix;
   };
 }

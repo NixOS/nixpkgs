@@ -42,12 +42,12 @@ stdenv.mkDerivation rec {
     ncurses
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "http://silcnet.org/";
     description = "Secure Internet Live Conferencing server";
     mainProgram = "silc";
-    license = lib.licenses.gpl2;
+    license = licenses.gpl2;
     maintainers = [ ];
-    platforms = with lib.platforms; linux;
+    platforms = with platforms; linux;
   };
 }

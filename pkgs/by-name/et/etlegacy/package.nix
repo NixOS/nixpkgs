@@ -27,10 +27,10 @@ symlinkJoin {
     makeWrapper $out/bin/etlded.* $out/bin/etlded
   '';
 
-  meta = {
+  meta = with lib; {
     description = "ET: Legacy is an open source project based on the code of Wolfenstein: Enemy Territory which was released in 2010 under the terms of the GPLv3 license";
     homepage = "https://etlegacy.com";
-    license = with lib.licenses; [
+    license = with licenses; [
       gpl3Plus
       cc-by-nc-sa-30
     ];
@@ -40,10 +40,10 @@ symlinkJoin {
       gameplay is still considered unmatched by many, despite its great age.
     '';
     mainProgram = "etl";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       ashleyghooper
       drupol
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

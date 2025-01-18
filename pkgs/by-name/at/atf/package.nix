@@ -77,12 +77,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   __structuredAttrs = true;
 
-  meta = {
+  meta = with lib; {
     description = "Libraries to write tests in C, C++, and shell";
     homepage = "https://github.com/freebsd/atf/";
-    license = lib.licenses.bsd3;
+    license = licenses.bsd3;
     mainProgram = "atf-sh";
-    maintainers = with lib.maintainers; [ reckenrode ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ reckenrode ];
+    platforms = platforms.unix;
   };
 })

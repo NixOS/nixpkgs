@@ -53,14 +53,14 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "USE_SYSTEM_ARGS" true)
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Rewrite of the advanced file download/sync tool zsync";
     homepage = "https://github.com/AppImageCommunity/zsync2";
-    license = lib.licenses.artistic2;
+    license = licenses.artistic2;
     mainProgram = "zsync2";
-    maintainers = with lib.maintainers; [ aleksana ];
+    maintainers = with maintainers; [ aleksana ];
     # macro only supports linux as of now
     # src/zsclient.cpp#L460
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 })

@@ -42,7 +42,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/html5lib/html5lib-python";
     downloadPage = "https://github.com/html5lib/html5lib-python/releases";
     description = "HTML parser based on WHAT-WG HTML5 specification";
@@ -51,8 +51,8 @@ buildPythonPackage rec {
       conform to the WHATWG HTML specification, as is implemented by all
       major web browsers.
     '';
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       domenkozar
       prikhi
     ];

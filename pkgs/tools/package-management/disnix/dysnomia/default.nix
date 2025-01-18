@@ -100,10 +100,10 @@ stdenv.mkDerivation rec {
     ++ lib.optional enableS6RCService s6-rc
     ++ lib.optional enableXinetdService xinetd;
 
-  meta = {
+  meta = with lib; {
     description = "Automated deployment of mutable components and services for Disnix";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.sander ];
-    platforms = lib.platforms.unix;
+    license = licenses.mit;
+    maintainers = [ maintainers.sander ];
+    platforms = platforms.unix;
   };
 }

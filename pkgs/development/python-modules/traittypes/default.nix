@@ -43,10 +43,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "traittypes" ];
 
-  meta = {
+  meta = with lib; {
     description = "Trait types for NumPy, SciPy, XArray, and Pandas";
     homepage = "https://github.com/jupyter-widgets/traittypes";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ bcdarwin ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ bcdarwin ];
   };
 }

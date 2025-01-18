@@ -27,11 +27,11 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Parser for the KDL language";
     homepage = "https://github.com/tabatkins/kdlpy";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ ];
     mainProgram = "kdlreformat";
   };
 }

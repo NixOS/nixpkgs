@@ -28,11 +28,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "qrcode_terminal" ];
 
-  meta = {
+  meta = with lib; {
     description = "Display QRCode in Terminal";
     homepage = "https://github.com/alishtory/qrcode-terminal";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ moraxyc ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ moraxyc ];
     mainProgram = "qrcode-terminal-py";
   };
 }

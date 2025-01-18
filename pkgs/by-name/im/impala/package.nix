@@ -16,11 +16,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-3mRWXUWyMgeaGOFvZXUeZmlD607zCz8a2d3O+MzhhNo=";
 
-  meta = {
+  meta = with lib; {
     description = "TUI for managing wifi";
     homepage = "https://github.com/pythops/impala";
-    platforms = lib.platforms.linux;
-    license = lib.licenses.gpl3Only;
-    maintainers = [ lib.maintainers.nydragon ];
+    platforms = platforms.linux;
+    license = licenses.gpl3Only;
+    maintainers = [ maintainers.nydragon ];
   };
 }

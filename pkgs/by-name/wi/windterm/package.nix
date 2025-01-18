@@ -92,13 +92,13 @@ stdenv.mkDerivation rec {
       ''${qtWrapperArgs[@]}
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Professional cross-platform SSH/Sftp/Shell/Telnet/Serial terminal";
     homepage = "https://github.com/kingToolbox/WindTerm";
     mainProgram = "windterm";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ aucub ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+    maintainers = with maintainers; [ aucub ];
     platforms = [ "x86_64-linux" ];
   };
 }

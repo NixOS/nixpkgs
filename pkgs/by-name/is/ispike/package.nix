@@ -22,11 +22,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ boost ];
 
-  meta = {
+  meta = with lib; {
     description = "Spiking neural interface between iCub and a spiking neural simulator";
     homepage = "https://sourceforge.net/projects/ispike/";
-    license = lib.licenses.lgpl3;
-    platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.nico202 ];
+    license = licenses.lgpl3;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.nico202 ];
   };
 }

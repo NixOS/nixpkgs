@@ -20,10 +20,10 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ result ];
 
-  meta = {
+  meta = with lib; {
     description = "OCaml bindings to linenoise";
-    license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.bsd3;
+    maintainers = [ maintainers.vbgl ];
     inherit (src.meta) homepage;
   };
 }

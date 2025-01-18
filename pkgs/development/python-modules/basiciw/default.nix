@@ -23,10 +23,10 @@ buildPythonPackage rec {
   buildInputs = [ gcc ];
   propagatedBuildInputs = [ wirelesstools ];
 
-  meta = {
+  meta = with lib; {
     description = "Get info about wireless interfaces using libiw";
     homepage = "https://github.com/enkore/basiciw";
-    platforms = lib.platforms.linux;
-    license = lib.licenses.gpl2;
+    platforms = platforms.linux;
+    license = licenses.gpl2;
   };
 }

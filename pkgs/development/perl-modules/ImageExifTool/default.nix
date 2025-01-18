@@ -37,7 +37,7 @@ buildPerlPackage rec {
     updateScript = gitUpdater { url = "https://github.com/exiftool/exiftool.git"; };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Tool to read, write and edit EXIF meta information";
     longDescription = ''
       ExifTool is a platform-independent Perl library plus a command-line
@@ -52,11 +52,11 @@ buildPerlPackage rec {
     '';
     homepage = "https://exiftool.org/";
     changelog = "https://exiftool.org/history.html";
-    license = with lib.licenses; [
+    license = with licenses; [
       gpl1Plus # or
       artistic2
     ];
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       kiloreux
       anthonyroussel
     ];

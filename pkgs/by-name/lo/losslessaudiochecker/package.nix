@@ -24,13 +24,13 @@ stdenv.mkDerivation {
     install LAC -D -t $out/bin
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Utility to check whether audio is truly lossless or not";
     homepage = "https://losslessaudiochecker.com";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = lib.licenses.unfree;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with lib.maintainers; [ p-h ];
+    maintainers = with maintainers; [ p-h ];
     mainProgram = "LAC";
   };
 }

@@ -26,10 +26,10 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "RPKI-to-Router server used at Cloudflare";
     homepage = "https://github.com/cloudflare/gortr/";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ stv0g ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ stv0g ];
   };
 }

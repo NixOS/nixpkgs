@@ -92,12 +92,12 @@ stdenv.mkDerivation rec {
     libnsl.dev
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Kernel-based automounter";
     mainProgram = "automount";
     homepage = "https://www.kernel.org/pub/linux/daemons/autofs/";
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     executables = [ "automount" ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

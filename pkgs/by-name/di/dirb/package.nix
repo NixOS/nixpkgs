@@ -44,11 +44,11 @@ stdenv.mkDerivation rec {
     ln -s $out/share/dirb/wordlists/ $out/share/wordlists/dirb
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Web content scanner";
     homepage = "https://dirb.sourceforge.net/";
-    maintainers = with lib.maintainers; [ bennofs ];
-    license = with lib.licenses; [ gpl2Only ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ bennofs ];
+    license = with licenses; [ gpl2Only ];
+    platforms = platforms.unix;
   };
 }

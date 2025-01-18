@@ -41,13 +41,13 @@ stdenv.mkDerivation rec {
 
   runtimeDependencies = [ alglib ];
 
-  meta = {
+  meta = with lib; {
     description = "Rainbow table generator used for password cracking";
     homepage = "http://project-rainbowcrack.com";
-    maintainers = with lib.maintainers; [ tochiaha ];
-    license = lib.licenses.unfree;
+    maintainers = with maintainers; [ tochiaha ];
+    license = licenses.unfree;
     mainProgram = "rcrack";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = [ "x86_64-linux64" ];
   };
 }

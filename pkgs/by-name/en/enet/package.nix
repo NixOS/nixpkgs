@@ -13,11 +13,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-KooMU2DWi7T80R8uTEfGmXbo0shbEJ3X1gsRgaT4XTY=";
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "http://enet.bespin.org/";
     description = "Simple and robust network communication layer on top of UDP";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     maintainers = [ ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }

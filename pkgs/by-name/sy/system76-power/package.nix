@@ -37,17 +37,17 @@ rustPlatform.buildRustPackage rec {
     install -D -m 0644 data/com.system76.PowerDaemon.xml $out/share/dbus-1/interfaces/com.system76.PowerDaemon.xml
   '';
 
-  meta = {
+  meta = with lib; {
     description = "System76 Power Management";
     mainProgram = "system76-power";
     homepage = "https://github.com/pop-os/system76-power";
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     platforms = [
       "i686-linux"
       "x86_64-linux"
       "aarch64-linux"
     ];
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       smonson
       ahoneybun
     ];

@@ -26,11 +26,11 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [ cryptsetup ];
 
-  meta = {
+  meta = with lib; {
     description = "Simple library for storing metadata in the LUKSv1 header";
     mainProgram = "luksmeta";
     homepage = "https://github.com/latchset/luksmeta/";
-    maintainers = with lib.maintainers; [ fpletz ];
-    license = lib.licenses.lgpl21Plus;
+    maintainers = with maintainers; [ fpletz ];
+    license = licenses.lgpl21Plus;
   };
 }

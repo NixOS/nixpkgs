@@ -49,10 +49,10 @@ buildPythonPackage rec {
   # requires networking
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Poetry plugin for checking security vulnerabilities in dependencies";
     homepage = "https://github.com/opeco17/poetry-audit-plugin";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

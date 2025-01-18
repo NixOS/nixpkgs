@@ -58,15 +58,15 @@ stdenv.mkDerivation (finalAttrs: {
     glib-networking
   ];
 
-  meta = {
+  meta = with lib; {
     description = "App for Gnome Mobile to Track running and other workouts";
     homepage = "https://codeberg.org/baarkerlounger/jogger";
-    license = with lib.licenses; [
+    license = with licenses; [
       gpl3Plus
       cc0
     ];
     mainProgram = "jogger";
-    maintainers = with lib.maintainers; [ aleksana ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ aleksana ];
+    platforms = platforms.linux;
   };
 })

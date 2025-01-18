@@ -37,11 +37,11 @@ stdenv.mkDerivation rec {
 
   passthru.tests.spiped = nixosTests.spiped;
 
-  meta = {
+  meta = with lib; {
     description = "Utility for secure encrypted channels between sockets";
     homepage = "https://www.tarsnap.com/spiped.html";
-    license = lib.licenses.bsd2;
-    platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.thoughtpolice ];
+    license = licenses.bsd2;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.thoughtpolice ];
   };
 }

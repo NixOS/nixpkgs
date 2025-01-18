@@ -81,12 +81,12 @@ buildGoModule {
     withPlugins = callPackage ./plugins.nix { inherit caddy; };
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://caddyserver.com";
     description = "Fast and extensible multi-platform HTTP/1-2-3 web server with automatic HTTPS";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     mainProgram = "caddy";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       Br1ght0ne
       stepbrobd
       techknowlogick

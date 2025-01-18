@@ -57,14 +57,14 @@ rustPlatform.buildRustPackage {
       runHook postInstall
     '';
 
-  meta = {
+  meta = with lib; {
     description = "RetroArch Shaders for All";
     homepage = "https://github.com/SnowflakePowered/librashader";
-    license = with lib.licenses; [
+    license = with licenses; [
       mpl20
       gpl3Only
     ];
-    maintainers = with lib.maintainers; [ nadiaholmquist ];
-    platforms = lib.platforms.all;
+    maintainers = with maintainers; [ nadiaholmquist ];
+    platforms = platforms.all;
   };
 }

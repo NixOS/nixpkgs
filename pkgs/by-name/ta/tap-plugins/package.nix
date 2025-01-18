@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace Makefile --replace /usr/local "$out"
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://tomscii.sig7.se/tap-plugins/";
     description = "Tom's Audio Processing plugins";
     longDescription = ''
@@ -35,8 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
       Limiter, TAP Sigmoid Booster, TAP Stereo Echo, TAP Tremolo, TAP
       TubeWarmth, TAP Vibrato.
     '';
-    license = lib.licenses.gpl3Plus;
-    maintainers = [ lib.maintainers.AndersonTorres ];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl3Plus;
+    maintainers = [ maintainers.AndersonTorres ];
+    platforms = platforms.unix;
   };
 })

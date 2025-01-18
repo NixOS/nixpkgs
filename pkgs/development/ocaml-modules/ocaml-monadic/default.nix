@@ -20,10 +20,10 @@ buildDunePackage rec {
 
   buildInputs = [ ppxlib ];
 
-  meta = {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "PPX extension to provide an OCaml-friendly monadic syntax";
-    license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.bsd3;
+    maintainers = [ maintainers.vbgl ];
   };
 }

@@ -96,12 +96,12 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Tool for Linux filesystem snapshot management";
     homepage = "http://snapper.io";
-    license = lib.licenses.gpl2Only;
+    license = licenses.gpl2Only;
     mainProgram = "snapper";
-    maintainers = with lib.maintainers; [ markuskowa ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ markuskowa ];
+    platforms = platforms.linux;
   };
 }

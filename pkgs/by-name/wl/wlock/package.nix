@@ -44,11 +44,11 @@ stdenv.mkDerivation rec {
     wayland-scanner
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Sessionlocker for Wayland compositors that support the ext-session-lock-v1 protocol";
-    license = lib.licenses.gpl3;
+    license = licenses.gpl3;
     homepage = "https://codeberg.org/sewn/wlock";
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ fliegendewurst ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ fliegendewurst ];
   };
 }

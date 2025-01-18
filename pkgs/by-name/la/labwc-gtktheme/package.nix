@@ -44,12 +44,12 @@ python3Packages.buildPythonApplication rec {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/labwc/labwc-gtktheme";
     description = "Create a labwc theme based on current Gtk theme";
     mainProgram = "labwc-gtktheme";
-    license = lib.licenses.gpl2Only;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ romildo ];
+    license = licenses.gpl2Only;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ romildo ];
   };
 }

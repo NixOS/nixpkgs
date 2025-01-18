@@ -32,13 +32,13 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Mac app that shows all open files, directories, sockets, pipes and devices";
     homepage = "https://sveinbjorn.org/sloth";
-    license = lib.licenses.bsd3;
+    license = licenses.bsd3;
     mainProgram = "Sloth";
-    maintainers = with lib.maintainers; [ emilytrau ];
-    platforms = lib.platforms.darwin;
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    maintainers = with maintainers; [ emilytrau ];
+    platforms = platforms.darwin;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 })

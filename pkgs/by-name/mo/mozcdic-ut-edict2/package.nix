@@ -31,15 +31,15 @@ stdenvNoCC.mkDerivation {
     ];
   };
 
-  meta = {
+  meta = with lib; {
     description = "Mozc UT EDICT2 Dictionary is a dictionary converted from EDICT2 for Mozc.";
     homepage = "https://github.com/utuhiro78/mozcdic-ut-sudachidict";
-    license = with lib.licenses; [
+    license = with licenses; [
       asl20
       cc-by-sa-40
     ];
-    maintainers = with lib.maintainers; [ pineapplehunter ];
-    platforms = lib.platforms.all;
+    maintainers = with maintainers; [ pineapplehunter ];
+    platforms = platforms.all;
     # this does not need to be separately built
     # it only provides some zip files
     hydraPlatforms = [ ];

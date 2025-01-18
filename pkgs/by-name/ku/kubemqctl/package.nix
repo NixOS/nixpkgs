@@ -30,11 +30,11 @@ buildGoModule rec {
 
   doCheck = false; # TODO tests are failing
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/kubemq-io/kubemqctl";
     description = "Kubemqctl is a command line interface (CLI) for Kubemq Kubernetes Message Broker";
     mainProgram = "kubemqctl";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ brianmcgee ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ brianmcgee ];
   };
 }

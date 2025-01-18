@@ -30,16 +30,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://dev.lovelyhq.com/libburnia/web/wiki";
     description = "Library by which preformatted data get onto optical media: CD, DVD, BD (Blu-Ray)";
     changelog = "https://dev.lovelyhq.com/libburnia/libburn/src/tag/${finalAttrs.src.rev}/ChangeLog";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [
       abbradar
       AndersonTorres
     ];
     mainProgram = "cdrskin";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 })

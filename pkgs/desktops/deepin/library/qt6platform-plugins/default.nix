@@ -45,11 +45,11 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
-  meta = {
+  meta = with lib; {
     description = "Qt platform plugins for DDE";
     homepage = "https://github.com/linuxdeepin/qt6platform-plugins";
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
-    maintainers = lib.teams.deepin.members;
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = teams.deepin.members;
   };
 }

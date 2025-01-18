@@ -18,10 +18,10 @@ melpaBuild {
 
   passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/devonsparks/wat-mode";
     description = "Emacs major mode for WebAssembly's text format";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ nagy ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ nagy ];
   };
 }

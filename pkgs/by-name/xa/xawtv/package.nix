@@ -59,11 +59,11 @@ stdenv.mkDerivation rec {
     "resdir=${placeholder "out"}/share/X11"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "TV application for Linux with apps and tools such as a teletext browser";
-    license = lib.licenses.gpl2;
+    license = licenses.gpl2;
     homepage = "https://www.kraxel.org/blog/linux/xawtv/";
-    maintainers = with lib.maintainers; [ domenkozar ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ domenkozar ];
+    platforms = platforms.linux;
   };
 }

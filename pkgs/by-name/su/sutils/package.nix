@@ -22,11 +22,11 @@ stdenv.mkDerivation rec {
 
   prePatch = ''sed -i "s@/usr/local@$out@" Makefile'';
 
-  meta = {
+  meta = with lib; {
     description = "Small command-line utilities";
     homepage = "https://github.com/baskerville/sutils";
-    maintainers = [ lib.maintainers.meisternu ];
-    license = lib.licenses.unlicense;
-    platforms = lib.platforms.linux;
+    maintainers = [ maintainers.meisternu ];
+    license = licenses.unlicense;
+    platforms = platforms.linux;
   };
 }

@@ -31,11 +31,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-lTzEgy9mevkmefvTZT9hEBHN5I+kXVqTev5+sy/JoaE=";
 
-  meta = {
+  meta = with lib; {
     description = "Command-line tool to extract partitions from Android OTA files";
     homepage = "https://github.com/crazystylus/otadump";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.axka ];
+    license = licenses.mit;
+    maintainers = [ maintainers.axka ];
     mainProgram = "otadump";
   };
 }

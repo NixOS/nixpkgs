@@ -28,11 +28,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sphinxcontrib.jinjadomain" ];
 
-  meta = {
+  meta = with lib; {
     description = "Sphinx domain for describing jinja templates";
     homepage = "https://github.com/offlinehacker/sphinxcontrib.jinjadomain";
-    license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ tochiaha ];
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ tochiaha ];
     mainProgram = "sphinxcontrib-jinjadomain";
   };
 }

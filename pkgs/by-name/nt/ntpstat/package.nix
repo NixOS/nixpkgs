@@ -21,12 +21,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   makeFlags = [ "prefix=${placeholder "out"}" ];
 
-  meta = {
+  meta = with lib; {
     description = "Print the ntpd or chronyd synchronisation status";
     homepage = "https://github.com/mlichvar/ntpstat";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "nptstat";
-    maintainers = with lib.maintainers; [ hzeller ];
-    platforms = lib.platforms.all;
+    maintainers = with maintainers; [ hzeller ];
+    platforms = platforms.all;
   };
 })

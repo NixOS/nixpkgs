@@ -40,12 +40,12 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Send and receive files via bluetooth";
     homepage = "https://github.com/elementary/bluetooth-daemon";
-    license = lib.licenses.gpl3Plus;
-    maintainers = lib.teams.pantheon.members;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Plus;
+    maintainers = teams.pantheon.members;
+    platforms = platforms.linux;
     mainProgram = "io.elementary.bluetooth";
   };
 })

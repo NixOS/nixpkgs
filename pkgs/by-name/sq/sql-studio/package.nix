@@ -35,13 +35,13 @@ rustPlatform.buildRustPackage {
     cp -pr --reflink=auto -- ${ui} ui/dist
   '';
 
-  meta = {
+  meta = with lib; {
     description = "SQL Database Explorer [SQLite, libSQL, PostgreSQL, MySQL/MariaDB, DuckDB, ClickHouse]";
     homepage = "https://github.com/frectonz/sql-studio";
     mainProgram = "sql-studio";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.frectonz ];
-    platforms = lib.platforms.all;
+    license = licenses.mit;
+    maintainers = [ maintainers.frectonz ];
+    platforms = platforms.all;
     broken = stdenv.hostPlatform.isDarwin;
   };
 }

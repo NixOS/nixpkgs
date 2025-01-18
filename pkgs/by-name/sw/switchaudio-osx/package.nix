@@ -36,12 +36,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Command-line utility to manage audio input/output devices on macOS";
     homepage = "https://github.com/deweller/switchaudio-osx";
     mainProgram = "SwitchAudioSource";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ taranarmo ];
-    platforms = lib.platforms.darwin;
+    license = licenses.mit;
+    maintainers = with maintainers; [ taranarmo ];
+    platforms = platforms.darwin;
   };
 }

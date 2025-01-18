@@ -37,12 +37,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     description = "This implements an interface between the MNCC (Mobile Network Call Control) interface of OsmoMSC (and also previously OsmoNITB) and SIP";
     mainProgram = "osmo-sip-connector";
     homepage = "https://osmocom.org/projects/osmo-sip-conector";
-    license = lib.licenses.agpl3Plus;
-    maintainers = [ lib.maintainers.markuskowa ];
-    platforms = lib.platforms.linux;
+    license = licenses.agpl3Plus;
+    maintainers = [ maintainers.markuskowa ];
+    platforms = platforms.linux;
   };
 }

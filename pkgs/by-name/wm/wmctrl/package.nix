@@ -30,12 +30,12 @@ stdenv.mkDerivation rec {
 
   patches = [ ./64-bit-data.patch ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://sites.google.com/site/tstyblo/wmctrl";
     description = "CLI tool to interact with EWMH/NetWM compatible X Window Managers";
-    license = lib.licenses.gpl2Plus;
-    platforms = with lib.platforms; all;
-    maintainers = [ lib.maintainers.Anton-Latukha ];
+    license = licenses.gpl2Plus;
+    platforms = with platforms; all;
+    maintainers = [ maintainers.Anton-Latukha ];
     mainProgram = "wmctrl";
   };
 

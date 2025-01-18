@@ -34,10 +34,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "packaging_legacy" ];
 
-  meta = {
+  meta = with lib; {
     description = "Module to support for legacy Python Packaging functionality";
     homepage = "https://github.com/di/packaging_legacy";
-    license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ fab ];
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ fab ];
   };
 }

@@ -24,11 +24,11 @@ buildDunePackage rec {
     react
   ];
 
-  meta = {
+  meta = with lib; {
     inherit (src.meta) homepage;
-    license = lib.licenses.mit;
+    license = licenses.mit;
     description = "Modal Editing Witch, VI interpreter";
-    maintainers = [ lib.maintainers.vbgl ];
+    maintainers = [ maintainers.vbgl ];
   };
 
 }

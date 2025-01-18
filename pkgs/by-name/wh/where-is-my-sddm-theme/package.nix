@@ -72,11 +72,11 @@ lib.checkListOfEnum "where-is-my-sddm-theme: variant" validVariants variants
         ''
       );
 
-    meta = {
+    meta = with lib; {
       description = "Most minimalistic SDDM theme among all themes";
       homepage = "https://github.com/stepanzubkov/where-is-my-sddm-theme";
-      license = lib.licenses.mit;
-      platforms = lib.platforms.linux;
-      maintainers = with lib.maintainers; [ name-snrl ];
+      license = licenses.mit;
+      platforms = platforms.linux;
+      maintainers = with maintainers; [ name-snrl ];
     };
   })

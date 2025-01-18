@@ -17,11 +17,11 @@ ocamlPackages.buildDunePackage rec {
     hash = "sha256-NIl1YUTws8Ff4nrqdhU7oS/TN0lxVQgrtyEZtpS1ojM=";
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/besport/ocsigen-i18n";
     description = "I18n made easy for web sites written with eliom";
-    license = lib.licenses.lgpl21;
-    maintainers = [ lib.maintainers.gal_bolle ];
+    license = licenses.lgpl21;
+    maintainers = [ maintainers.gal_bolle ];
   };
 
 }

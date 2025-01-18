@@ -176,11 +176,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "SteamOS session compositing window manager";
     homepage = "https://github.com/ValveSoftware/gamescope";
-    license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [
+    license = licenses.bsd2;
+    maintainers = with maintainers; [
       nrdxp
       pedrohlc
       Scrumplex
@@ -188,7 +188,7 @@ stdenv.mkDerivation (finalAttrs: {
       k900
       Gliczy
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
     mainProgram = "gamescope";
   };
 })

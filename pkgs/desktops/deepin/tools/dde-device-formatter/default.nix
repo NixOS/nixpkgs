@@ -48,12 +48,12 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DVERSION=${version}" ];
 
-  meta = {
+  meta = with lib; {
     description = "Simple graphical interface for creating file system in a block device";
     mainProgram = "dde-device-formatter";
     homepage = "https://github.com/linuxdeepin/dde-device-formatter";
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
-    maintainers = lib.teams.deepin.members;
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = teams.deepin.members;
   };
 }

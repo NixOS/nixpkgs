@@ -69,10 +69,10 @@ mkCoqDerivation {
   buildFlags = [ "tactics" ];
   installTargets = [ "install-tactics" ];
 
-  meta = {
+  meta = with lib; {
     description = "Reconstruction tactics for the hammer for Coq";
     homepage = "https://github.com/lukaszcz/coqhammer";
-    license = lib.licenses.lgpl21;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.lgpl21;
+    maintainers = [ maintainers.vbgl ];
   };
 }

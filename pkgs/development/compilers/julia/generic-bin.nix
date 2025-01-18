@@ -130,12 +130,12 @@ stdenv.mkDerivation {
     runHook postInstallCheck
   '';
 
-  meta = {
+  meta = with lib; {
     description = "High-level, high-performance, dynamic language for technical computing";
     homepage = "https://julialang.org";
     # Bundled and linked with various GPL code, although Julia itself is MIT.
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [
       raskin
       nickcao
       wegank

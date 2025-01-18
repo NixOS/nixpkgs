@@ -120,11 +120,11 @@ stdenv.mkDerivation rec {
     cp -r "${src}/tools/syntax/vim" $out/share/vim-plugins/icinga2
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Open source monitoring system";
     homepage = "https://www.icinga.com";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
-    maintainers = lib.teams.helsinki-systems.members;
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = teams.helsinki-systems.members;
   };
 }

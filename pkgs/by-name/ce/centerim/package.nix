@@ -37,10 +37,10 @@ stdenv.mkDerivation rec {
     "--with-openssl=${openssl.dev}"
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.centerim.org/";
     description = "Fork of CenterICQ, a curses instant messaging program";
-    license = lib.licenses.gpl2Plus;
-    platforms = with lib.platforms; linux;
+    license = licenses.gpl2Plus;
+    platforms = with platforms; linux;
   };
 }

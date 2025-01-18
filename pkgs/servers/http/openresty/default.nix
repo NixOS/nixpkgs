@@ -56,12 +56,12 @@ callPackage ../nginx/generic.nix args rec {
     inherit (nixosTests) openresty-lua;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Fast web application server built on Nginx";
     homepage = "https://openresty.org";
-    license = lib.licenses.bsd2;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [
+    license = licenses.bsd2;
+    platforms = platforms.all;
+    maintainers = with maintainers; [
       thoughtpolice
       lblasc
     ];

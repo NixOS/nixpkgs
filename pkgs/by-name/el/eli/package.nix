@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
     $out/bin/eli "!ls"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Translator Construction Made Easy";
     longDescription = ''
       Eli is a programming environment that supports all phases of translator
@@ -91,8 +91,8 @@ stdenv.mkDerivation rec {
       arbitrary special cases. Output is the C subset of C++.
     '';
     homepage = "https://eli-project.sourceforge.net/";
-    license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ timokau ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ timokau ];
+    platforms = platforms.linux;
   };
 }

@@ -59,11 +59,11 @@ buildPythonPackage rec {
         print(angles)
       '';
 
-  meta = {
+  meta = with lib; {
     description = "FAIR's library of reusable components for deep learning with 3D data";
     homepage = "https://github.com/facebookresearch/pytorch3d";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [
+    license = licenses.bsd3;
+    maintainers = with maintainers; [
       pbsds
       SomeoneSerge
     ];

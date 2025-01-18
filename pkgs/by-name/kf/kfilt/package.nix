@@ -26,11 +26,11 @@ buildGoModule rec {
     "-X github.com/ryane/kfilt/cmd.GitCommit=${src.rev}"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Command-line tool that filters Kubernetes resources";
     mainProgram = "kfilt";
     homepage = "https://github.com/ryane/kfilt";
-    license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.ryane ];
+    license = licenses.asl20;
+    maintainers = [ maintainers.ryane ];
   };
 }

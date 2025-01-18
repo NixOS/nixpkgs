@@ -56,12 +56,12 @@ rustPlatform.buildRustPackage rec {
     installManPage $src/doc/mixxc.1
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Minimalistic and customizable volume mixer";
     homepage = "https://github.com/Elvyria/mixxc";
-    license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ daru-san ];
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ daru-san ];
     mainProgram = "mixxc";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

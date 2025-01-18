@@ -40,11 +40,11 @@ stdenv.mkDerivation {
     zlib
   ];
 
-  meta = {
+  meta = with lib; {
     description = "API for roguelike games";
     homepage = "http://roguecentral.org/doryen/libtcod/";
-    license = lib.licenses.bsd3;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    license = licenses.bsd3;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ AndersonTorres ];
   };
 }

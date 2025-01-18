@@ -24,10 +24,10 @@ stdenv.mkDerivation {
     autoconf
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Allows to start X with NumLock turned on";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.all;
+    license = licenses.mit;
+    platforms = platforms.all;
     mainProgram = "numlockx";
   };
 }

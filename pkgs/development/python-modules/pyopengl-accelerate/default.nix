@@ -36,10 +36,10 @@ buildPythonPackage rec {
     "-Wno-error=incompatible-pointer-types"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "This set of C (Cython) extensions provides acceleration of common operations for slow points in PyOpenGL 3.x";
     homepage = "https://pyopengl.sourceforge.net/";
-    maintainers = with lib.maintainers; [ laikq ];
-    license = lib.licenses.bsd3;
+    maintainers = with maintainers; [ laikq ];
+    license = licenses.bsd3;
   };
 }

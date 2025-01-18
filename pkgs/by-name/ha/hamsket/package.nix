@@ -38,12 +38,12 @@ appimageTools.wrapType2 {
     install -Dm644 ${desktopItem}/share/applications/* $out/share/applications
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Free and open source messaging and emailing app that combines common web applications into one";
     homepage = "https://github.com/TheGoddessInari/hamsket";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ nova-madeline ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ nova-madeline ];
     platforms = [ "x86_64-linux" ];
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }

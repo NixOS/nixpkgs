@@ -64,12 +64,12 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch=master" ]; };
 
-  meta = {
+  meta = with lib; {
     description = "Fetcher for EDID binaries from Linux Hardware Project's EDID repository";
     homepage = "https://github.com/linuxhw/EDID";
-    license = lib.licenses.cc-by-40;
-    maintainers = with lib.maintainers; [ nazarewk ];
-    platforms = lib.platforms.all;
+    license = licenses.cc-by-40;
+    maintainers = with maintainers; [ nazarewk ];
+    platforms = platforms.all;
     mainProgram = "linuxhw-edid-fetch";
   };
 }

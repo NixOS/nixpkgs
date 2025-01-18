@@ -15,10 +15,10 @@ symlinkJoin rec {
     fira-sans
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Fira font family including Fira Sans and Fira Mono";
     homepage = "https://bboxtype.com/fira/";
-    license = lib.licenses.ofl;
-    platforms = lib.platforms.all;
+    license = licenses.ofl;
+    platforms = platforms.all;
   };
 }

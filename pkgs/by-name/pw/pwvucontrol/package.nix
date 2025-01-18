@@ -74,16 +74,16 @@ stdenv.mkDerivation (finalAttrs: {
     wireplumber_0_4
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Pipewire Volume Control";
     homepage = "https://github.com/saivert/pwvucontrol";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
       figsoda
       Guanran928
       johnrtitor
     ];
     mainProgram = "pwvucontrol";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 })

@@ -61,12 +61,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/keshavbhatt/whatsie";
     description = "Feature rich WhatsApp Client for Desktop Linux";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "whatsie";
-    maintainers = with lib.maintainers; [ ajgon ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ ajgon ];
+    platforms = platforms.linux;
   };
 })

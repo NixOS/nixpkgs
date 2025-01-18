@@ -28,11 +28,11 @@ buildGoModule rec {
   # requires network access
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Command line tool for simple creation and cloning of virtual machines based on libvirt";
     homepage = "https://github.com/LINBIT/virter";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ dit7ya ];
     mainProgram = "virter";
   };
 }

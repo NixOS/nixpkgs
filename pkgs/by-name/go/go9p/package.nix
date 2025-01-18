@@ -17,12 +17,12 @@ buildGoModule rec {
 
   vendorHash = "sha256-HupMxf8CXPhsnsQEnO1KsIJjY3l2jRJopQ2nVYhoYEE=";
 
-  meta = {
+  meta = with lib; {
     description = "Implementation of the 9p2000 protocol in Go";
     homepage = "https://github.com/knusbaum/go9p";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "mount9p";
-    maintainers = with lib.maintainers; [ aleksana ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ aleksana ];
+    platforms = platforms.unix;
   };
 }

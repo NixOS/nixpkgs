@@ -24,11 +24,11 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
-  meta = {
+  meta = with lib; {
     description = "Official tool to extract and generate documentation for Go projects like pkg.go.dev";
     homepage = "https://github.com/golang/pkgsite";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ phanirithvij ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ phanirithvij ];
     mainProgram = "pkgsite";
   };
 }

@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
       install -m644 ${pdfdoc} ${placeholder "doc"}/share/doc/algol68g/learning-algol-68-genie.pdf
     '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://jmvdveer.home.xs4all.nl/en.algol-68-genie.html";
     description = "Algol 68 Genie compiler-interpreter";
     longDescription = ''
@@ -66,9 +66,9 @@ stdenv.mkDerivation (finalAttrs: {
       regular expressions and sounds. It can be linked to GNU plotutils, the GNU
       scientific library and PostgreSQL.
     '';
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     mainProgram = "a68g";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.unix;
   };
 })

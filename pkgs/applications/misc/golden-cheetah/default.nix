@@ -103,11 +103,11 @@ mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Performance software for cyclists, runners and triathletes. Built from source and without API tokens";
     mainProgram = "GoldenCheetah";
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ adamcstephens ];
-    license = lib.licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ adamcstephens ];
+    license = licenses.gpl2Plus;
   };
 }

@@ -22,11 +22,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ protobufc ];
   nativeBuildInputs = [ autoreconfHook ];
 
-  meta = {
+  meta = with lib; {
     description = "Library to deal with gadu-gadu protocol (most popular polish IM protocol)";
     homepage = "https://libgadu.net/index.en.html";
-    platforms = lib.platforms.linux;
-    license = lib.licenses.lgpl21;
+    platforms = platforms.linux;
+    license = licenses.lgpl21;
   };
 
 }

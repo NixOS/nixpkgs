@@ -18,11 +18,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  meta = {
+  meta = with lib; {
     description = "C++ python bytecode disassembler and decompiler";
     homepage = "https://github.com/zrax/pycdc";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ msm ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ msm ];
     mainProgram = "pycdc";
   };
 }

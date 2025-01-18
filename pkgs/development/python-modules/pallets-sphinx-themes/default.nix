@@ -32,10 +32,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pallets_sphinx_themes" ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/pallets/pallets-sphinx-themes";
     description = "Sphinx theme for Pallets projects";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ kaction ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ kaction ];
   };
 }

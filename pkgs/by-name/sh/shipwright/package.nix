@@ -187,16 +187,16 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/HarbourMasters/Shipwright";
     description = "A PC port of Ocarina of Time with modern controls, widescreen, high-resolution, and more";
     mainProgram = "soh";
-    platforms = [ "x86_64-linux" ] ++ lib.platforms.darwin;
-    maintainers = with lib.maintainers; [
+    platforms = [ "x86_64-linux" ] ++ platforms.darwin;
+    maintainers = with maintainers; [
       j0lol
       matteopacini
     ];
-    license = with lib.licenses; [
+    license = with licenses; [
       # OTRExporter, OTRGui, ZAPDTR, libultraship
       mit
       # Ship of Harkinian itself

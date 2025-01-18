@@ -23,16 +23,16 @@ stdenv.mkDerivation rec {
     libressl
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Mirror notes to IMAP";
     longDescription = ''
       notemap(1) mirrors text files to an IMAP mailbox in a format compatible with the iOS
       Notes app. It's intended to make notes managed in git(1) easily accessible
       from the phone.
     '';
-    license = lib.licenses.gpl3Plus;
-    maintainers = [ lib.maintainers.sternenseemann ];
+    license = licenses.gpl3Plus;
+    maintainers = [ maintainers.sternenseemann ];
     homepage = "https://git.causal.agency/notemap/about/";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }

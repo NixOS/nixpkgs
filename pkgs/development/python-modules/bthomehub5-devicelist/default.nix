@@ -31,10 +31,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bthomehub5_devicelist" ];
 
-  meta = {
+  meta = with lib; {
     description = "Returns a list of devices currently connected to a BT Home Hub 5";
     homepage = "https://github.com/ahobsonsayers/bthomehub5-devicelist";
-    license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ pyrox0 ];
   };
 }

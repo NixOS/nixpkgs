@@ -57,13 +57,13 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     description = "Standalone contribution to AGILe for steering Pythia 8";
     mainProgram = "run-pythia";
-    license = lib.licenses.gpl2;
+    license = licenses.gpl2;
     homepage = "https://agile.hepforge.org/trac/wiki/Sacrifice";
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ veprbl ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ veprbl ];
     # never built on aarch64-darwin since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
   };

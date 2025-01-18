@@ -55,12 +55,12 @@ stdenv.mkDerivation rec {
       --prefix PATH : "${wrapperPath}"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Script to make wofi work with password-store";
     homepage = "https://github.com/schmidtandreas/wofi-pass";
-    maintainers = with lib.maintainers; [ akechishiro ];
-    license = lib.licenses.gpl2Plus;
-    platforms = with lib.platforms; linux;
+    maintainers = with maintainers; [ akechishiro ];
+    license = licenses.gpl2Plus;
+    platforms = with platforms; linux;
     mainProgram = "wofi-pass";
   };
 }

@@ -44,12 +44,12 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Fully color managed PDF generation library";
     homepage = "https://github.com/jpakkane/capypdf";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ jtojnar ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ jtojnar ];
     mainProgram = "capypdf";
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 })

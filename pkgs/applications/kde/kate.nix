@@ -32,15 +32,15 @@
 
 mkDerivation {
   pname = "kate";
-  meta = {
+  meta = with lib; {
     homepage = "https://apps.kde.org/kate/";
     description = "Advanced text editor";
-    license = with lib.licenses; [
+    license = with licenses; [
       gpl3
       lgpl3
       lgpl2
     ];
-    maintainers = [ lib.maintainers.ttuegel ];
+    maintainers = [ maintainers.ttuegel ];
   };
 
   # InitialPreference values are too high and end up making kate &

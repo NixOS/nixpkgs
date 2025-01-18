@@ -132,12 +132,12 @@ stdenv.mkDerivation {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "High-performance, zero-overhead, extensible Python compiler using LLVM";
     homepage = "https://docs.exaloop.io/codon";
     maintainers = [ ];
-    license = lib.licenses.bsl11;
-    platforms = lib.platforms.all;
+    license = licenses.bsl11;
+    platforms = platforms.all;
     broken = true; # `codon-llvm` build fails on darwin and linux
   };
 }

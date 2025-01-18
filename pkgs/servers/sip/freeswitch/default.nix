@@ -186,12 +186,12 @@ stdenv.mkDerivation rec {
 
   passthru.tests.freeswitch = nixosTests.freeswitch;
 
-  meta = {
+  meta = with lib; {
     description = "Cross-Platform Scalable FREE Multi-Protocol Soft Switch";
     homepage = "https://freeswitch.org/";
-    license = lib.licenses.mpl11;
-    maintainers = with lib.maintainers; [ mikaelfangel ];
-    platforms = with lib.platforms; unix;
+    license = licenses.mpl11;
+    maintainers = with maintainers; [ mikaelfangel ];
+    platforms = with platforms; unix;
     broken = stdenv.hostPlatform.isDarwin;
   };
 }

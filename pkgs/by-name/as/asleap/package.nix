@@ -33,11 +33,11 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/zackw/asleap";
     description = "Recovers weak LEAP and PPTP passwords";
-    license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ pyrox0 ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ pyrox0 ];
+    platforms = platforms.linux;
   };
 }

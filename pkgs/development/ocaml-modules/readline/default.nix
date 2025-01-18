@@ -28,10 +28,10 @@ buildDunePackage {
 
   propagatedBuildInputs = [ readline ];
 
-  meta = {
+  meta = with lib; {
     description = "OCaml bindings for GNU Readline";
     homepage = "https://vtourneu.gitlabpages.inria.fr/readline-ocaml/readline/index.html";
-    license = lib.licenses.cecill20;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.cecill20;
+    maintainers = [ maintainers.vbgl ];
   };
 }

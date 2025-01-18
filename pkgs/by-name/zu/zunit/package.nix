@@ -83,14 +83,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Powerful testing framework for ZSH projects";
     homepage = "https://zunit.xyz/";
     downloadPage = "https://github.com/zunit-zsh/zunit/releases";
     changelog = "https://github.com/zunit-zsh/zunit/releases/tag/${finalAttrs.src.rev}";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "zunit";
     inherit (zsh.meta) platforms;
-    maintainers = with lib.maintainers; [ d-brasher ];
+    maintainers = with maintainers; [ d-brasher ];
   };
 })

@@ -44,11 +44,11 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Vulkan Wayland HDR WSI Layer (Xaver Hugl's fork for KWin 6)";
     homepage = "https://github.com/Zamundaaa/VK_hdr_layer";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ d4rk ];
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ d4rk ];
   };
 }

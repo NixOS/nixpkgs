@@ -31,11 +31,11 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Forwarder which can be installed on the gateway to forward LoRa data over MQTT";
     homepage = "https://www.chirpstack.io/";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.stv0g ];
+    license = licenses.mit;
+    maintainers = [ maintainers.stv0g ];
     mainProgram = "chirpstack-mqtt-forwarder";
   };
 }

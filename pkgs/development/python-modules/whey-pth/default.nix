@@ -28,10 +28,10 @@ buildPythonPackage rec {
       --replace-fail '"setuptools!=61.*,<=67.1.0,>=40.6.0"' '"setuptools"'
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Extension to whey to support .pth files.";
     homepage = "https://pypi.org/project/whey-pth";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ tyberius-prime ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ tyberius-prime ];
   };
 }

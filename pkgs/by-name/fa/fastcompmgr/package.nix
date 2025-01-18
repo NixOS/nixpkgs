@@ -35,11 +35,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Fast compositor for X11";
     homepage = "https://github.com/tycho-kirchner/fastcompmgr";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ camerondugan ];
-    platforms = lib.platforms.linux;
+    license = licenses.mit;
+    maintainers = with maintainers; [ camerondugan ];
+    platforms = platforms.linux;
   };
 })

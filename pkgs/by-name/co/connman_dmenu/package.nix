@@ -34,12 +34,12 @@ stdenv.mkDerivation {
     cp connman_dmenu $out/bin/
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Dmenu wrapper for connmann";
     mainProgram = "connman_dmenu";
     homepage = "https://github.com/march-linux/connman_dmenu";
-    license = lib.licenses.free;
-    maintainers = [ lib.maintainers.magnetophon ];
-    platforms = lib.platforms.all;
+    license = licenses.free;
+    maintainers = [ maintainers.magnetophon ];
+    platforms = platforms.all;
   };
 }

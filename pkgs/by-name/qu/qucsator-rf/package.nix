@@ -43,12 +43,12 @@ stdenv.mkDerivation rec {
     (lib.cmakeBool "WITH_ADMS" withAdms)
   ];
 
-  meta = {
+  meta = with lib; {
     description = "RF circuit simulation kernel for Qucs-S";
     homepage = "https://github.com/ra3xdh/qucsator_rf";
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     mainProgram = "qucsator_rf";
-    maintainers = with lib.maintainers; [ thomaslepoix ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ thomaslepoix ];
+    platforms = platforms.unix;
   };
 }

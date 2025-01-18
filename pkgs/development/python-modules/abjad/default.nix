@@ -50,7 +50,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "abjad" ];
 
-  meta = {
+  meta = with lib; {
     description = "GNU LilyPond wrapper for Python";
     longDescription = ''
       Abjad helps composers build up complex pieces of music notation in
@@ -61,9 +61,9 @@ buildPythonPackage rec {
       Abjad wraps the LilyPond music notation package, you can use Abjad to
       control the typographic detail of symbols on the page.
     '';
-    license = lib.licenses.mit;
+    license = licenses.mit;
     homepage = "https://abjad.github.io/";
     changelog = "https://abjad.github.io/appendices/changes.html";
-    maintainers = [ lib.maintainers.davisrichard437 ];
+    maintainers = [ maintainers.davisrichard437 ];
   };
 }

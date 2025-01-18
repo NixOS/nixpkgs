@@ -55,7 +55,7 @@ python3Packages.buildPythonApplication rec {
       --prefix PATH : ${lib.makeBinPath [ pciutils ]}
   '';
 
-  meta = {
+  meta = with lib; {
     description = "neofetch with pride flags <3";
     longDescription = ''
       HyFetch is a command-line system information tool fork of neofetch.
@@ -67,9 +67,9 @@ python3Packages.buildPythonApplication rec {
       icon set you are using, etc.
     '';
     homepage = "https://github.com/hykilpikonna/HyFetch";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "hyfetch";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       yisuidenghua
       isabelroses
       nullcube

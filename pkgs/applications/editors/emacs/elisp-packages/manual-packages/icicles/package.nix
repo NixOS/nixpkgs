@@ -18,10 +18,10 @@ melpaBuild {
 
   passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://emacswiki.org/emacs/Icicles";
     description = "Emacs library that enhances minibuffer completion";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ AndersonTorres ];
   };
 }

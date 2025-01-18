@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
     "prefix=${placeholder "out"}"
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/cktan/tomlcpp";
     description = "No fanfare TOML C++ Library";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = with lib.platforms; unix;
+    license = licenses.mit;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = with platforms; unix;
   };
 }

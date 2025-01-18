@@ -81,15 +81,15 @@ python3.pkgs.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  meta = {
+  meta = with lib; {
     description = "RSS/Atom feed reader for GNOME";
     mainProgram = "gfeeds";
     homepage = "https://gitlab.gnome.org/World/gfeeds";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
       pbogdan
       aleksana
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

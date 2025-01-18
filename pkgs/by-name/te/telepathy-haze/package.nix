@@ -33,10 +33,10 @@ stdenv.mkDerivation rec {
     python3
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Telepathy connection manager based on libpurple";
     homepage = "https://telepathy.freedesktop.org/components/telepathy-haze/";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.unix;
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
   };
 }

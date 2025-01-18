@@ -34,11 +34,11 @@ stdenv.mkDerivation {
     "PPPDIR=${placeholder "out"}/etc/ppp/peers"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "A dialer that automatically recognises the modem";
     homepage = "https://gitea.osmocom.org/retronetworking/wvdial";
-    license = lib.licenses.lgpl2;
-    maintainers = with lib.maintainers; [ flokli ];
-    platforms = lib.platforms.linux;
+    license = licenses.lgpl2;
+    maintainers = with maintainers; [ flokli ];
+    platforms = platforms.linux;
   };
 }

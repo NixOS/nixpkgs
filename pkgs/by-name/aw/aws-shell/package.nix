@@ -44,12 +44,12 @@ python3Packages.buildPythonApplication rec {
     export HOME=$(mktemp -d)
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/awslabs/aws-shell";
     description = "Integrated shell for working with the AWS CLI";
-    platforms = lib.platforms.unix;
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ bot-wxt1221 ];
+    platforms = platforms.unix;
+    license = licenses.asl20;
+    maintainers = with maintainers; [ bot-wxt1221 ];
     mainProgram = "aws-shell";
   };
 }

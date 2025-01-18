@@ -72,15 +72,15 @@ python3Packages.buildPythonApplication {
     '';
   };
 
-  meta = {
+  meta = with lib; {
     description = "Free, open-source tool for programming your amateur radio";
     homepage = "https://chirp.danplanet.com/";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
       emantor
       wrmilling
       nickcao
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

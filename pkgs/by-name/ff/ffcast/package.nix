@@ -49,12 +49,12 @@ stdenv.mkDerivation rec {
       wrapProgram $out/bin/ffcast --prefix PATH : ${binPath}
     '';
 
-  meta = {
+  meta = with lib; {
     description = "Run commands on rectangular screen regions";
     homepage = "https://github.com/ropery/FFcast";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ sikmir ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ sikmir ];
+    platforms = platforms.linux;
     mainProgram = "ffcast";
   };
 }

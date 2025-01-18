@@ -25,7 +25,7 @@ buildGoModule {
     "-w"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "High-Performance, Low-Memory, Lightweight, Extensible Minecraft Reverse Proxy";
     longDescription = ''
       Gate is an extensible, high performant & paralleled Minecraft proxy server
@@ -33,8 +33,8 @@ buildGoModule {
       and ready for the cloud!
     '';
     homepage = "https://github.com/minekube/gate";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ XBagon ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ XBagon ];
     mainProgram = "gate";
   };
 }

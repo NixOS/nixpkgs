@@ -36,11 +36,11 @@ stdenv.mkDerivation (finalAttrs: {
     qt6Packages.qtdeclarative
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Qt and QML MPRIS interface and adaptor";
     homepage = "https://github.com/deepin-community/qt6mpris";
-    license = lib.licenses.lgpl21Plus;
-    platforms = lib.platforms.linux;
-    maintainers = lib.teams.deepin.members;
+    license = licenses.lgpl21Plus;
+    platforms = platforms.linux;
+    maintainers = teams.deepin.members;
   };
 })

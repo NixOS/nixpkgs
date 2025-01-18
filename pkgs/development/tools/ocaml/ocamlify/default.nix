@@ -41,12 +41,12 @@ lib.throwIf (lib.versionAtLeast ocaml.version "5.0")
 
     dontStrip = true;
 
-    meta = {
+    meta = with lib; {
       homepage = "https://forge.ocamlcore.org/projects/ocamlmod/ocamlmod";
       description = "Generate OCaml modules from source files";
       platforms = ocaml.meta.platforms or [ ];
-      license = lib.licenses.lgpl21;
-      maintainers = with lib.maintainers; [
+      license = licenses.lgpl21;
+      maintainers = with maintainers; [
         maggesi
       ];
     };

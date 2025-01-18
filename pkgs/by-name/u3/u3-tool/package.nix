@@ -25,12 +25,12 @@ stdenv.mkDerivation (finalAttrs: {
     autoreconfHook
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Tool for controlling the special features of a 'U3 smart drive' USB Flash disk";
     homepage = "https://sourceforge.net/projects/u3-tool/";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ makefu ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ makefu ];
     mainProgram = "u3-tool";
   };
 })

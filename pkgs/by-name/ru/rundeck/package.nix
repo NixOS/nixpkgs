@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Job scheduler and runbook automation";
     longDescription = ''
       Rundeck is an open source automation service with a web console,
@@ -70,9 +70,9 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://www.rundeck.com/";
     changelog = "https://docs.rundeck.com/docs/history/";
-    sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
-    license = lib.licenses.asl20;
-    platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.liberodark ];
+    sourceProvenance = [ sourceTypes.binaryBytecode ];
+    license = licenses.asl20;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.liberodark ];
   };
 })

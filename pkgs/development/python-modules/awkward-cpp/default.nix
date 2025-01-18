@@ -33,10 +33,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "awkward_cpp" ];
 
-  meta = {
+  meta = with lib; {
     description = "CPU kernels and compiled extensions for Awkward Array";
     homepage = "https://github.com/scikit-hep/awkward";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ veprbl ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ veprbl ];
   };
 }

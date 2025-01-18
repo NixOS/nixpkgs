@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
     command = "KeY --help";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Java formal verification tool";
     homepage = "https://www.key-project.org"; # also https://formal.iti.kit.edu/key/
     changelog = "https://keyproject.github.io/key-docs/changelog/";
@@ -89,8 +89,8 @@ stdenv.mkDerivation rec {
       At the core of the system is a novel theorem prover for the first-order
       Dynamic Logic for Java with a user-friendly graphical interface.
     '';
-    license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [
       fgaz
       fliegendewurst
     ];

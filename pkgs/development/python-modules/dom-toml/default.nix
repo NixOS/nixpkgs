@@ -27,10 +27,10 @@ buildPythonPackage rec {
     tomli
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Dom's tools for Tom's Obvious, Minimal Language.";
     homepage = "https://github.com/domdfcoding/dom_toml";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ tyberius-prime ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ tyberius-prime ];
   };
 }

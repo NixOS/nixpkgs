@@ -22,13 +22,13 @@ stdenv.mkDerivation rec {
   pname = "phonon";
   version = "4.11.1";
 
-  meta = {
+  meta = with lib; {
     homepage = "https://community.kde.org/Phonon";
     description = "Multimedia API for Qt";
     mainProgram = "phononsettings";
-    license = lib.licenses.lgpl2;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ ttuegel ];
+    license = licenses.lgpl2;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ ttuegel ];
   };
 
   src = fetchurl {

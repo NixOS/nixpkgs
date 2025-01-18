@@ -131,7 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper $out/Applications/Aegisub.app/Contents/MacOS/aegisub $out/bin/aegisub
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/TypesettingTools/Aegisub";
     description = "Advanced subtitle editor";
     longDescription = ''
@@ -142,11 +142,11 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     # The Aegisub sources are itself BSD/ISC, but they are linked against GPL'd
     # softwares - so the resulting program will be GPL
-    license = with lib.licenses; [
+    license = with licenses; [
       bsd3
     ];
     mainProgram = "aegisub";
-    maintainers = with lib.maintainers; [ wegank ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ wegank ];
+    platforms = platforms.unix;
   };
 })

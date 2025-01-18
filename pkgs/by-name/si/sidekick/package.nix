@@ -44,11 +44,11 @@ buildGoModule rec {
   ];
   versionCheckProgramArg = "--version";
 
-  meta = {
+  meta = with lib; {
     description = "Command-line tool designed to simplify the process of deploying and managing applications on a VPS";
     mainProgram = "sidekick";
     homepage = "https://github.com/MightyMoud/sidekick";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ nipeharefa ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ nipeharefa ];
   };
 }

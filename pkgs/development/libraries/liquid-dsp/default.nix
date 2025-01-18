@@ -29,10 +29,10 @@ stdenv.mkDerivation rec {
       fixDarwinDylibNames
     ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://liquidsdr.org/";
     description = "Digital signal processing library for software-defined radios";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.unix;
+    license = licenses.mit;
+    platforms = platforms.unix;
   };
 }

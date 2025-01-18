@@ -58,10 +58,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "explorerscript" ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/SkyTemple/explorerscript";
     description = "Programming language + compiler/decompiler for creating scripts for Pokémon Mystery Dungeon Explorers of Sky";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ marius851000 ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ marius851000 ];
   };
 }

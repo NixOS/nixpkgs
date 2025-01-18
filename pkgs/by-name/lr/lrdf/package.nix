@@ -36,11 +36,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     description = "Lightweight RDF library with special support for LADSPA plugins";
     homepage = "https://sourceforge.net/projects/lrdf/";
-    license = lib.licenses.gpl2;
-    maintainers = [ lib.maintainers.marcweber ];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl2;
+    maintainers = [ maintainers.marcweber ];
+    platforms = platforms.unix;
   };
 }

@@ -46,12 +46,12 @@ rustPlatform.buildRustPackage rec {
     rm $out/bin/packetry-cli
   '';
 
-  meta = {
+  meta = with lib; {
     description = "USB 2.0 protocol analysis application for use with Cynthion";
     homepage = "https://github.com/greatscottgadgets/packetry";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ carlossless ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ carlossless ];
     mainProgram = "packetry";
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

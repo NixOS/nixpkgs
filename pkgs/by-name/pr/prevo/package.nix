@@ -22,16 +22,16 @@ symlinkJoin rec {
 
   '';
 
-  meta = {
+  meta = with lib; {
     description = "offline version of the Esperanto dictionary Reta Vortaro";
     longDescription = ''
       PReVo is the "portable" ReVo, i.e., the offline version
       of the Esperanto dictionary Reta Vortaro.
     '';
     homepage = "https://github.com/bpeel/prevodb";
-    license = lib.licenses.gpl2Only;
+    license = licenses.gpl2Only;
     mainProgram = "prevo";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       das-g
       ehmry
     ];

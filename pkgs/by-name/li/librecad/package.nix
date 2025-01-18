@@ -77,12 +77,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "2D CAD package based on Qt";
     homepage = "https://librecad.org";
-    license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ sikmir ];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ sikmir ];
+    platforms = platforms.unix;
     mainProgram = "librecad";
   };
 })

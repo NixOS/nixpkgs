@@ -62,12 +62,12 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Checks whether the contrast between two colors meet the WCAG requirements";
     homepage = "https://gitlab.gnome.org/World/design/contrast";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ getchoo ];
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ getchoo ];
     mainProgram = "contrast";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

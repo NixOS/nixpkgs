@@ -34,11 +34,11 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/bashdb --prefix PYTHONPATH ":" "$(toPythonPath ${python3Packages.pygments})"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Bash script debugger";
     mainProgram = "bashdb";
     homepage = "https://bashdb.sourceforge.net/";
-    license = lib.licenses.gpl2;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2;
+    platforms = platforms.linux;
   };
 }

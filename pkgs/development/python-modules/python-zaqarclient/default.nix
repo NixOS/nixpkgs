@@ -73,10 +73,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "zaqarclient" ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/openstack/python-zaqarclient";
     description = "Client library for OpenStack Zaqar API";
-    license = lib.licenses.asl20;
-    maintainers = lib.teams.openstack.members;
+    license = licenses.asl20;
+    maintainers = teams.openstack.members;
   };
 }

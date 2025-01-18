@@ -129,14 +129,14 @@ stdenv.mkDerivation rec {
     addEnvHooks "$targetOffset" addFramaCPath
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Extensible and collaborative platform dedicated to source-code analysis of C software";
     homepage = "http://frama-c.com/";
-    license = lib.licenses.lgpl21;
-    maintainers = with lib.maintainers; [
+    license = licenses.lgpl21;
+    maintainers = with maintainers; [
       thoughtpolice
       amiddelk
     ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }

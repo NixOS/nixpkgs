@@ -188,15 +188,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = lib.flatten (map (e: map (f: fstat e.enable f) e.names) options);
 
-  meta = {
+  meta = with lib; {
     description = "Graphical client for MPD";
     mainProgram = "cantata";
     homepage = "https://github.com/cdrummond/cantata";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ peterhoeg ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ peterhoeg ];
     # Technically, Cantata should run on Darwin/Windows so if someone wants to
     # bother figuring that one out, be my guest.
-    platforms = lib.platforms.unix;
-    badPlatforms = lib.platforms.darwin;
+    platforms = platforms.unix;
+    badPlatforms = platforms.darwin;
   };
 })

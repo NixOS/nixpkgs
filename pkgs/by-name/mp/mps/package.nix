@@ -28,11 +28,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ sqlite ];
 
-  meta = {
+  meta = with lib; {
     description = "Flexible memory management and garbage collection library";
     homepage = "https://www.ravenbrook.com/project/mps";
-    license = lib.licenses.sleepycat;
-    platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.thoughtpolice ];
+    license = licenses.sleepycat;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.thoughtpolice ];
   };
 }

@@ -36,10 +36,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytomorrowio" ];
 
-  meta = {
+  meta = with lib; {
     description = "Async Python package to access the Tomorrow.io API";
     homepage = "https://github.com/raman325/pytomorrowio";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

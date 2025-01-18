@@ -38,11 +38,11 @@ stdenv.mkDerivation rec {
     sh -e install
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.dechifro.org/dcraw/";
     description = "Decoder for many camera raw picture formats";
-    license = lib.licenses.free;
-    platforms = lib.platforms.unix; # Once had cygwin problems
+    license = licenses.free;
+    platforms = platforms.unix; # Once had cygwin problems
     maintainers = [ ];
     knownVulnerabilities = [
       "CVE-2018-19655"

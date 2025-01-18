@@ -56,10 +56,10 @@ stdenv.mkDerivation {
     ++ lib.optionals enableLibpng [ "--enable-libpng" ]
     ++ lib.optionals enableLibusb [ "--enable-libusb" ];
 
-  meta = {
+  meta = with lib; {
     description = "Suite of tools for connecting to PalmOS handheld devices";
     homepage = "https://github.com/desrod/pilot-link";
-    license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ PapayaJackal ];
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ PapayaJackal ];
   };
 }

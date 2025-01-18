@@ -67,12 +67,12 @@ buildGoModule rec {
     version = "v${flyctl.version}";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Command line tools for fly.io services";
     downloadPage = "https://github.com/superfly/flyctl";
     homepage = "https://fly.io/";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
+    license = licenses.asl20;
+    maintainers = with maintainers; [
       adtya
       jsierles
       techknowlogick

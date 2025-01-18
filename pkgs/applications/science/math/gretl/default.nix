@@ -54,15 +54,15 @@ stdenv.mkDerivation (finalAttrs: {
   #  make[1]: *** [Makefile:73: install_datafiles] Error 1
   enableParallelInstalling = false;
 
-  meta = {
+  meta = with lib; {
     description = "Software package for econometric analysis";
     homepage = "https://gretl.sourceforge.net";
-    license = lib.licenses.gpl3;
+    license = licenses.gpl3;
     longDescription = ''
       gretl is a cross-platform software package for econometric analysis,
       written in the C programming language.
     '';
-    maintainers = with lib.maintainers; [ dmrauh ];
-    platforms = lib.platforms.all;
+    maintainers = with maintainers; [ dmrauh ];
+    platforms = platforms.all;
   };
 })

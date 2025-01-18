@@ -30,11 +30,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "KDE Plasma6 widget with window controls";
     homepage = "https://github.com/antroids/application-title-bar";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ HeitorAugustoLN ];
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ HeitorAugustoLN ];
     inherit (kdePackages.kwindowsystem.meta) platforms;
   };
 })

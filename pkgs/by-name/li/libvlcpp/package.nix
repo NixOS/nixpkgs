@@ -30,11 +30,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "Header-only C++ bindings for the libvlc crossplatform multimedia API";
     homepage = "https://code.videolan.org/videolan/libvlcpp";
-    maintainers = with lib.maintainers; [ l33tname ];
-    platforms = lib.platforms.all;
-    license = lib.licenses.lgpl21Only;
+    maintainers = with maintainers; [ l33tname ];
+    platforms = platforms.all;
+    license = licenses.lgpl21Only;
   };
 })

@@ -15,10 +15,10 @@ buildDunePackage rec {
     sha256 = "sha256-kHuFBqu0mjFv53sOtmFZcX2reo5ToaOpItP7P53bfGQ=";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Stream and Genlex libraries for use with Camlp4 and Camlp5";
-    license = lib.licenses.lgpl21Only;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.lgpl21Only;
+    maintainers = [ maintainers.vbgl ];
   };
 
 }

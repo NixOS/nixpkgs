@@ -17,11 +17,11 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Uiua font";
     homepage = "https://uiua.org/";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ skykanin ];
-    platforms = lib.platforms.all;
+    license = licenses.mit;
+    maintainers = with maintainers; [ skykanin ];
+    platforms = platforms.all;
   };
 }

@@ -46,10 +46,10 @@ stdenv.mkDerivation rec {
     sed -i "s@../PureData/OscSendVoc.pd@$out/bin/PureData/OscSendVoc.pd@g" launchers/pitchTracker
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Turn your voice into a synthesizer";
     homepage = "https://github.com/magnetophon/VoiceOfFaust";
-    license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.magnetophon ];
+    license = licenses.gpl3;
+    maintainers = [ maintainers.magnetophon ];
   };
 }

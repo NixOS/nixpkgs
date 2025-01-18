@@ -26,10 +26,10 @@ buildDunePackage rec {
     qcheck
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://c-cube.github.io/oseq/";
     description = "Purely functional iterators compatible with standard `seq`";
-    license = lib.licenses.bsd2;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.bsd2;
+    maintainers = [ maintainers.vbgl ];
   };
 }

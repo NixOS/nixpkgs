@@ -148,7 +148,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://bochs.sourceforge.io/";
     description = "Open-source IA-32 (x86) PC emulator";
     longDescription = ''
@@ -156,9 +156,9 @@ stdenv.mkDerivation (finalAttrs: {
       in C++, that runs on most popular platforms. It includes emulation of the
       Intel x86 CPU, common I/O devices, and a custom BIOS.
     '';
-    license = lib.licenses.lgpl2Plus;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = lib.platforms.unix;
+    license = licenses.lgpl2Plus;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.unix;
   };
 })
 # TODO: a better way to organize the options

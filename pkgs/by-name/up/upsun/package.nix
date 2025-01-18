@@ -59,18 +59,18 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Unified tool for managing your Upsun services from the command line";
     homepage = "https://github.com/platformsh/cli";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "upsun";
-    maintainers = with lib.maintainers; [ spk ];
+    maintainers = with maintainers; [ spk ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
       "x86_64-darwin"
       "aarch64-darwin"
     ];
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 })

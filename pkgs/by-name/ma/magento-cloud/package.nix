@@ -40,14 +40,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://experienceleague.adobe.com/en/docs/commerce-cloud-service/user-guide/dev-tools/cloud-cli/cloud-cli-overview";
     description = "Adobe Commerce Cloud CLI";
     longDescription = ''
       Adobe Commerce Cloud CLI enables developers and system administrators the ability to manage Cloud projects and environments, perform routines and run automation tasks locally.
     '';
     mainProgram = "magento-cloud";
-    maintainers = with lib.maintainers; [ piotrkwiecinski ];
-    license = lib.licenses.unfree;
+    maintainers = with maintainers; [ piotrkwiecinski ];
+    license = licenses.unfree;
   };
 })

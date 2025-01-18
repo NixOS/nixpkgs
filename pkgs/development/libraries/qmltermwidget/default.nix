@@ -58,11 +58,11 @@ stdenv.mkDerivation {
 
   dontWrapQtApps = true;
 
-  meta = {
+  meta = with lib; {
     description = "QML port of qtermwidget";
     homepage = "https://github.com/Swordfish90/qmltermwidget";
-    license = lib.licenses.gpl2Plus;
-    platforms = with lib.platforms; linux ++ darwin;
-    maintainers = with lib.maintainers; [ OPNA2608 ];
+    license = licenses.gpl2Plus;
+    platforms = with platforms; linux ++ darwin;
+    maintainers = with maintainers; [ OPNA2608 ];
   };
 }

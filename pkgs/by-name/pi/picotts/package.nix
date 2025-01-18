@@ -28,12 +28,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   sourceRoot = "${finalAttrs.src.name}/pico";
   preConfigure = "./autogen.sh";
-  meta = {
+  meta = with lib; {
     description = "Text to speech voice sinthesizer from SVox";
     homepage = "https://github.com/naggety/picotts";
-    license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.canndrew ];
-    platforms = lib.platforms.linux;
+    license = licenses.asl20;
+    maintainers = [ maintainers.canndrew ];
+    platforms = platforms.linux;
     mainProgram = "pico2wave";
   };
 })

@@ -93,10 +93,10 @@ buildPythonPackage rec {
     "test_find_close"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "PyTorch library and evaluation platform for end-to-end compression research";
     homepage = "https://github.com/InterDigitalInc/CompressAI";
-    license = lib.licenses.bsd3Clear;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    license = licenses.bsd3Clear;
+    maintainers = with maintainers; [ GaetanLepage ];
   };
 }

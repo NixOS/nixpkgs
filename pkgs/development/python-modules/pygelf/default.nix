@@ -41,10 +41,10 @@ buildPythonPackage rec {
     "tests/test_common_fields.py"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Python logging handlers with GELF (Graylog Extended Log Format) support";
     homepage = "https://github.com/keeprocking/pygelf";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ drupol ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ drupol ];
   };
 }

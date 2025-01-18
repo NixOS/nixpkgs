@@ -61,12 +61,12 @@ stdenv.mkDerivation {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = {
+  meta = with lib; {
     description = "Fast, feature-complete bar for dwl";
     homepage = "https://github.com/kolunmi/dwlb";
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     mainProgram = "dwlb";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       bot-wxt1221
       lonyelon
     ];

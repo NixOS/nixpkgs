@@ -23,11 +23,11 @@ stdenv.mkDerivation (finalAttrs: {
     libtirpc
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Secure replacement for inetd";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
     homepage = "https://github.com/openSUSE/xinetd";
-    license = lib.licenses.xinetd;
-    maintainers = with lib.maintainers; [ fgaz ];
+    license = licenses.xinetd;
+    maintainers = with maintainers; [ fgaz ];
   };
 })

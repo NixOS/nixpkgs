@@ -34,11 +34,11 @@ stdenv.mkDerivation rec {
     cp ${./meson.build} meson.build
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/cesanta/frozen";
     description = "Minimal JSON parser for C, targeted for embedded systems";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ thillux ];
-    platforms = lib.platforms.unix;
+    license = licenses.asl20;
+    maintainers = with maintainers; [ thillux ];
+    platforms = platforms.unix;
   };
 }

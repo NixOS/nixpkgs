@@ -59,11 +59,11 @@ buildGoModule rec {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Agent of Nezha Monitoring";
     homepage = "https://github.com/nezhahq/agent";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ moraxyc ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ moraxyc ];
     mainProgram = "nezha-agent";
   };
 }

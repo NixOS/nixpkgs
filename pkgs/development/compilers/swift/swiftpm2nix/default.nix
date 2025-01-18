@@ -29,10 +29,10 @@ stdenv.mkDerivation {
 
   passthru = callPackage ./support.nix { };
 
-  meta = {
+  meta = with lib; {
     description = "Generate a Nix expression to fetch swiftpm dependencies";
     mainProgram = "swiftpm2nix";
-    maintainers = lib.teams.swift.members;
-    platforms = lib.platforms.all;
+    maintainers = teams.swift.members;
+    platforms = platforms.all;
   };
 }

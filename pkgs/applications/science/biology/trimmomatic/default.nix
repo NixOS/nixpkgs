@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     changelog = "https://github.com/usadellab/Trimmomatic/blob/main/versionHistory.txt";
     description = "Flexible read trimming tool for Illumina NGS data";
     longDescription = ''
@@ -64,12 +64,12 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "http://www.usadellab.org/cms/?page=trimmomatic";
     downloadPage = "https://github.com/usadellab/Trimmomatic/releases";
-    license = lib.licenses.gpl3Only;
+    license = licenses.gpl3Only;
     sourceProvenance = [
-      lib.sourceTypes.fromSource
-      lib.sourceTypes.binaryBytecode # source bundles dependencies as jars
+      sourceTypes.fromSource
+      sourceTypes.binaryBytecode # source bundles dependencies as jars
     ];
     mainProgram = "trimmomatic";
-    maintainers = [ lib.maintainers.kupac ];
+    maintainers = [ maintainers.kupac ];
   };
 })

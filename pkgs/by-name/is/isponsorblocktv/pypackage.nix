@@ -59,12 +59,12 @@ buildPythonApplication rec {
     "rich"
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/dmunozv04/iSponsorBlockTV";
     description = "SponsorBlock client for all YouTube TV clients";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ lukegb ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ lukegb ];
     mainProgram = "iSponsorBlockTV";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

@@ -51,11 +51,11 @@ stdenv.mkDerivation rec {
     isolate = nixosTests.isolate;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Sandbox for securely executing untrusted programs";
     mainProgram = "isolate";
     homepage = "https://github.com/ioi/isolate";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ virchau13 ];
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ virchau13 ];
   };
 }

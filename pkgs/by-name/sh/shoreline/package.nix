@@ -38,12 +38,12 @@ stdenv.mkDerivation {
 
   passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
-  meta = {
+  meta = with lib; {
     description = "Very fast (200+ Gbit/s) pixelflut server written in C with full IPv6 support";
     homepage = "https://github.com/TobleMiner/shoreline";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ zebreus ];
-    platforms = lib.platforms.linux;
+    license = licenses.mit;
+    maintainers = with maintainers; [ zebreus ];
+    platforms = platforms.linux;
     mainProgram = "shoreline";
   };
 }

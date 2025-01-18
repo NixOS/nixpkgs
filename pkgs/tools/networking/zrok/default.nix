@@ -51,17 +51,17 @@ stdenv.mkDerivation (finalAttrs: {
       runHook postInstall
     '';
 
-  meta = {
+  meta = with lib; {
     description = "Geo-scale, next-generation sharing platform built on top of OpenZiti";
     homepage = "https://zrok.io";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     mainProgram = "zrok";
-    maintainers = [ lib.maintainers.bandresen ];
+    maintainers = [ maintainers.bandresen ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
       "armv7l-linux"
     ];
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 })

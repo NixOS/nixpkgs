@@ -49,10 +49,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "color_operations" ];
 
-  meta = {
+  meta = with lib; {
     description = "Apply basic color-oriented image operations. Fork of rio-color";
     homepage = "https://github.com/vincentsarago/color-operations";
-    license = lib.licenses.mit;
-    maintainers = lib.teams.geospatial.members;
+    license = licenses.mit;
+    maintainers = teams.geospatial.members;
   };
 }

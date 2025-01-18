@@ -38,11 +38,11 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Highly configurable power menu using the wofi launcher power-menu";
     homepage = "https://github.com/szaffarano/wofi-power-menu";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ defelo ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ defelo ];
     mainProgram = "wofi-power-menu";
   };
 }

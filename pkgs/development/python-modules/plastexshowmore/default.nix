@@ -26,10 +26,10 @@ buildPythonPackage {
 
   dependencies = [ plasTeX ];
 
-  meta = {
+  meta = with lib; {
     description = "PlasTeX plugin for adding navigation buttons";
     homepage = "https://github.com/PatrickMassot/plastexshowmore";
-    maintainers = with lib.maintainers; [ niklashh ];
-    license = lib.licenses.asl20;
+    maintainers = with maintainers; [ niklashh ];
+    license = licenses.asl20;
   };
 }

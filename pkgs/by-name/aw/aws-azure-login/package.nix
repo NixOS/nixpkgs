@@ -72,12 +72,12 @@ stdenv.mkDerivation (finalAttrs: {
     package = finalAttrs.finalPackage;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Use Azure AD SSO to log into the AWS via CLI";
     homepage = "https://github.com/aws-azure-login/aws-azure-login";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "aws-azure-login";
-    maintainers = with lib.maintainers; [ l0b0 ];
-    platforms = lib.platforms.all;
+    maintainers = with maintainers; [ l0b0 ];
+    platforms = platforms.all;
   };
 })

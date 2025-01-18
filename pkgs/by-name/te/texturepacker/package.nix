@@ -35,13 +35,13 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r usr/share $out
   '';
 
-  meta = {
+  meta = with lib; {
     changelog = "https://www.codeandweb.com/texturepacker/download";
     description = "Sprite sheet creator and game graphics optimizer";
     homepage = "https://www.codeandweb.com/texturepacker";
-    license = lib.licenses.unfree;
+    license = licenses.unfree;
     mainProgram = "TexturePacker";
-    maintainers = with lib.maintainers; [ tomasajt ];
+    maintainers = with maintainers; [ tomasajt ];
     platforms = [ "x86_64-linux" ];
   };
 })

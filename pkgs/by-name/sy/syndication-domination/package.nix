@@ -46,12 +46,12 @@ stdenv.mkDerivation {
     (lib.mesonBool "PYTHON_BINDINGS" enablePython)
   ];
 
-  meta = {
+  meta = with lib; {
     description = "RSS/Atom parser written in C++ with Python binding";
     homepage = "https://gitlab.com/gabmus/syndication-domination";
-    license = lib.licenses.agpl3Only;
+    license = licenses.agpl3Only;
     mainProgram = "SyndicationDomination";
-    maintainers = with lib.maintainers; [ aleksana ];
-    platforms = lib.platforms.all;
+    maintainers = with maintainers; [ aleksana ];
+    platforms = platforms.all;
   };
 }

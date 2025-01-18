@@ -38,11 +38,11 @@ stdenv.mkDerivation (finalAttrs: {
     export GOCACHE=$TMPDIR/go-cache
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Vietnamese input method engine support for Fcitx";
     homepage = "https://github.com/fcitx/fcitx5-bamboo";
-    license = lib.licenses.lgpl21Plus;
-    maintainers = with lib.maintainers; [ ];
-    platforms = lib.platforms.linux;
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ ];
+    platforms = platforms.linux;
   };
 })

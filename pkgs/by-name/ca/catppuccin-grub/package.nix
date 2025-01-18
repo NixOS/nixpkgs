@@ -27,14 +27,14 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Soothing pastel theme for GRUB";
     homepage = "https://github.com/catppuccin/grub";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       isabelroses
       mimvoid
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

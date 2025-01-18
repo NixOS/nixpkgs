@@ -16,10 +16,10 @@ build-idris-package {
     sha256 = "0aila1qdpmhrp556dzaxk7yn7vgkwcnbp9jhw8f8pl51xs3s2kvf";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Virtual DOM in pure Idris";
     homepage = "https://github.com/brandondyck/idris-vdom";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.brainrape ];
+    license = licenses.mit;
+    maintainers = [ maintainers.brainrape ];
   };
 }

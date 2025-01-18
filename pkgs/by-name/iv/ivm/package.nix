@@ -52,12 +52,12 @@ rustPlatform.buildRustPackage rec {
       }
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Cross-platform Inko version manager";
     homepage = "https://github.com/inko-lang/ivm";
-    license = lib.licenses.mpl20;
-    maintainers = [ lib.maintainers.feathecutie ];
-    platforms = lib.platforms.unix;
+    license = licenses.mpl20;
+    maintainers = [ maintainers.feathecutie ];
+    platforms = platforms.unix;
     mainProgram = "ivm";
   };
 }

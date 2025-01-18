@@ -119,18 +119,18 @@ stdenv.mkDerivation {
       -folder "$out/share/fritzing"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Open source prototyping tool for Arduino-based projects";
     homepage = "https://fritzing.org";
-    license = with lib.licenses; [
+    license = with licenses; [
       gpl3
       cc-by-sa-30
     ];
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       robberer
       muscaln
     ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
     mainProgram = "Fritzing";
   };
 }

@@ -40,14 +40,14 @@ stdenv.mkDerivation (finalAttrs: {
     ./autogen.sh
   '';
 
-  meta = {
+  meta = with lib; {
     changelog = "https://github.com/swig/swig/blob/${finalAttrs.src.rev}/CHANGES.current";
     description = "Interface compiler that connects C/C++ code to higher-level languages";
     homepage = "https://swig.org/";
     # Different types of licenses available: https://www.swig.org/Release/LICENSE .
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ orivej ];
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ orivej ];
     mainProgram = "swig";
-    platforms = with lib.platforms; linux ++ darwin;
+    platforms = with platforms; linux ++ darwin;
   };
 })

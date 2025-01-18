@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_buck2_specific_version"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Buck2 launcher";
     longDescription = ''
       Buckle is a launcher for [Buck2](https://buck2.build). It manages
@@ -32,8 +32,8 @@ rustPlatform.buildRustPackage rec {
       enforcing the prelude is upgraded in sync.
     '';
     homepage = "https://github.com/benbrittain/buckle";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ cbarrete ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ cbarrete ];
     mainProgram = "buckle";
   };
 }

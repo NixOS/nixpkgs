@@ -36,12 +36,12 @@ stdenv.mkDerivation rec {
     cp msieve $out/bin/
   '';
 
-  meta = {
+  meta = with lib; {
     description = "C library implementing a suite of algorithms to factor large integers";
     mainProgram = "msieve";
-    license = lib.licenses.publicDomain;
+    license = licenses.publicDomain;
     homepage = "http://msieve.sourceforge.net/";
-    maintainers = [ lib.maintainers.roconnor ];
-    platforms = [ "x86_64-linux" ] ++ lib.platforms.darwin;
+    maintainers = [ maintainers.roconnor ];
+    platforms = [ "x86_64-linux" ] ++ platforms.darwin;
   };
 }

@@ -55,11 +55,11 @@ buildGoModule rec {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "CloudWatch Agent enables you to collect and export host-level metrics and logs on instances running Linux or Windows server";
     homepage = "https://github.com/aws/amazon-cloudwatch-agent";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "amazon-cloudwatch-agent";
-    maintainers = with lib.maintainers; [ pmw ];
+    maintainers = with maintainers; [ pmw ];
   };
 }

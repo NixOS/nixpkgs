@@ -27,13 +27,13 @@ vscode-utils.buildVscodeMarketplaceExtension {
     zlib
   ];
 
-  meta = {
+  meta = with lib; {
     changelog = "https://sourcery.ai/changelog/";
     description = "VSCode extension for Sourcery, an AI-powered code review and pair programming tool for Python";
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=sourcery.sourcery";
     homepage = "https://github.com/sourcery-ai/sourcery-vscode";
-    license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ tomasajt ];
+    license = licenses.unfree;
+    maintainers = with maintainers; [ tomasajt ];
     platforms = [
       "x86_64-linux"
       "x86_64-darwin"

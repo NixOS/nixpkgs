@@ -94,15 +94,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "UI for building, configuring and running Monado, the open source OpenXR runtime";
     homepage = "https://gitlab.com/gabmus/envision";
-    license = lib.licenses.agpl3Only;
+    license = licenses.agpl3Only;
     mainProgram = "envision";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       pandapip1
       Scrumplex
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 })

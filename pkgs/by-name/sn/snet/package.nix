@@ -20,11 +20,11 @@ buildGoModule {
   # flaky test, random failures
   checkFlags = [ "-skip=TestBloomfilter" ];
 
-  meta = {
+  meta = with lib; {
     description = "Transparent proxy works on linux desktop, MacOS, router";
     homepage = "https://github.com/monsterxx03/snet";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ azuwis ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ azuwis ];
     mainProgram = "snet";
   };
 }

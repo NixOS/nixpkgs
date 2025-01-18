@@ -34,12 +34,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/khvzak/bluez-tools";
     description = "Set of tools to manage bluetooth devices for linux";
-    license = with lib.licenses; [ gpl2Plus ];
+    license = with licenses; [ gpl2Plus ];
     mainProgram = "bt-agent";
-    maintainers = with lib.maintainers; [ ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ ];
+    platforms = platforms.linux;
   };
 })

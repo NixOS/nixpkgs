@@ -28,12 +28,12 @@ gcc10Stdenv.mkDerivation rec {
     cmake
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Command-line tool to convert COLLADA (.dae) files to glTF";
     homepage = "https://github.com/KhronosGroup/COLLADA2GLTF";
-    license = lib.licenses.bsd3;
+    license = licenses.bsd3;
     mainProgram = "COLLADA2GLTF";
-    maintainers = with lib.maintainers; [ shaddydc ];
-    platforms = with lib.platforms; unix ++ windows;
+    maintainers = with maintainers; [ shaddydc ];
+    platforms = with platforms; unix ++ windows;
   };
 }

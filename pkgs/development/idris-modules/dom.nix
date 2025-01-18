@@ -23,10 +23,10 @@ build-idris-package {
     sha256 = "16z9mykw2d9rjikn07kd6igb53jgaqi8zby4nc4n0gmplmhwdx4x";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Idris library to interact with the DOM";
     homepage = "https://github.com/pierrebeaucamp/idris-dom";
-    license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.brainrape ];
+    license = licenses.asl20;
+    maintainers = [ maintainers.brainrape ];
   };
 }

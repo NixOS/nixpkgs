@@ -21,11 +21,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libXmu ];
 
-  meta = {
+  meta = with lib; {
     description = "Tool to access the X clipboard from a console application";
     homepage = "https://github.com/astrand/xclip";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.all;
+    license = licenses.gpl2Plus;
+    platforms = platforms.all;
     mainProgram = "xclip";
   };
 }

@@ -25,17 +25,17 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Clientless remote desktop gateway";
     homepage = "https://guacamole.apache.org/";
-    license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.drupol ];
+    license = licenses.asl20;
+    maintainers = [ maintainers.drupol ];
     platforms = [
       "x86_64-linux"
       "i686-linux"
     ];
     sourceProvenance = [
-      lib.sourceTypes.binaryBytecode
+      sourceTypes.binaryBytecode
     ];
   };
 })

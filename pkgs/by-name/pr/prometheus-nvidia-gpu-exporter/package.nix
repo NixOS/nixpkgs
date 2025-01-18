@@ -27,11 +27,11 @@ buildGoModule rec {
     "-X=github.com/prometheus/common/version.BuildDate=1970-01-01T00:00:00Z"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Nvidia GPU exporter for prometheus using nvidia-smi binary";
     homepage = "https://github.com/utkuozdemir/nvidia_gpu_exporter";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ck3d ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ ck3d ];
     mainProgram = "nvidia_gpu_exporter";
   };
 }

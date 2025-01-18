@@ -50,11 +50,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = false; # test programs/data exist but no actual test harness
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/BIC-MNI/EZminc";
     description = "Collection of Perl and shell scripts for processing MINC files";
-    maintainers = with lib.maintainers; [ bcdarwin ];
-    platforms = lib.platforms.linux; # can't detect opengl on Darwin
-    license = lib.licenses.free;
+    maintainers = with maintainers; [ bcdarwin ];
+    platforms = platforms.linux; # can't detect opengl on Darwin
+    license = licenses.free;
   };
 })

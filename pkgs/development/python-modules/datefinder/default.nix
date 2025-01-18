@@ -30,10 +30,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "datefinder" ];
 
-  meta = {
+  meta = with lib; {
     description = "Extract datetime objects from strings";
     homepage = "https://github.com/akoumjian/datefinder";
-    license = lib.licenses.mit;
-    maintainers = lib.teams.deshaw.members;
+    license = licenses.mit;
+    maintainers = teams.deshaw.members;
   };
 }

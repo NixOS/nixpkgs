@@ -37,10 +37,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "axes" ];
 
-  meta = {
+  meta = with lib; {
     description = "Keep track of failed login attempts in Django-powered sites";
     homepage = "https://github.com/jazzband/django-axes";
-    maintainers = with lib.maintainers; [ sikmir ];
-    license = lib.licenses.mit;
+    maintainers = with maintainers; [ sikmir ];
+    license = licenses.mit;
   };
 }

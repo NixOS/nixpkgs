@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "/usr/share/" "$out/share/"
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://tytel.org/helm";
     description = "Free, cross-platform, polyphonic synthesizer";
     longDescription = ''
@@ -86,12 +86,12 @@ stdenv.mkDerivation (finalAttrs: {
         Simple arpeggiator
         Effects: Formant filter, stutter, delay
     '';
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
       magnetophon
       bot-wxt1221
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
     mainProgram = "helm";
   };
 })

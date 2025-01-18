@@ -28,12 +28,12 @@ stdenv.mkDerivation rec {
     "DESTDIR=$(out)"
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/dbohdan/s2png/";
     description = "Store any data in PNG images";
-    license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.dbohdan ];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.dbohdan ];
+    platforms = platforms.unix;
     mainProgram = "s2png";
   };
 }

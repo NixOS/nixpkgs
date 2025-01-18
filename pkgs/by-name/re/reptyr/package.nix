@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     "PYTHON_CMD=${python.interpreter}"
   ];
 
-  meta = {
+  meta = with lib; {
     platforms = [
       "i686-linux"
       "x86_64-linux"
@@ -46,8 +46,8 @@ stdenv.mkDerivation rec {
       "aarch64-linux"
       "riscv64-linux"
     ];
-    maintainers = with lib.maintainers; [ raskin ];
-    license = lib.licenses.mit;
+    maintainers = with maintainers; [ raskin ];
+    license = licenses.mit;
     description = "Reparent a running program to a new terminal";
     mainProgram = "reptyr";
     homepage = "https://github.com/nelhage/reptyr";

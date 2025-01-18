@@ -14,10 +14,10 @@ buildFishPlugin {
     hash = "sha256-oPPCtFN2DPuM//c48SXb4TrFRjJtccg0YPXcAo0Lxq0=";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Bash style history substitution for Oh My Fish";
     homepage = "https://github.com/oh-my-fish/plugin-bang-bang";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ theobori ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ theobori ];
   };
 }

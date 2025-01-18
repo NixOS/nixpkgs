@@ -51,14 +51,14 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Backend part of Paperwork (Python API, no UI)";
     homepage = "https://openpaper.work/";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
       aszlig
       symphorien
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

@@ -46,12 +46,12 @@ stdenv.mkDerivation (finalAttrs: {
     rev-prefix = "hheretic-";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Linux port of Raven Game's Heretic";
     homepage = "https://hhexen.sourceforge.net/hhexen.html";
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     mainProgram = "hheretic-gl";
-    maintainers = with lib.maintainers; [ moody ];
+    maintainers = with maintainers; [ moody ];
     inherit (SDL.meta) platforms;
     broken = stdenv.hostPlatform.isDarwin;
   };

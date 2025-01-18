@@ -36,11 +36,11 @@ buildGoModule rec {
     version = "v${version}";
   };
 
-  meta = {
+  meta = with lib; {
     description = "A high-performance and strong-extensibility Golang RPC framework";
     homepage = "https://github.com/cloudwego/kitex";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ aaronjheng ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ aaronjheng ];
     mainProgram = "kitex";
   };
 }

@@ -37,14 +37,14 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Wayland autoclicker";
     longDescription = "Script for auto clicking at incredibly high speeds - user must be a part of `input` group to run.";
     homepage = "https://github.com/phonetic112/wl-clicker";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.Flameopathic ];
+    license = licenses.mit;
+    maintainers = [ maintainers.Flameopathic ];
     mainProgram = "wl-clicker";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
     broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
   };
 })

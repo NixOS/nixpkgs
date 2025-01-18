@@ -42,12 +42,12 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r niallib $out/lib/
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Array language from Nial Systems";
     homepage = "https://bitbucket.com/museoa/qnial";
-    license = lib.licenses.artistic1;
+    license = licenses.artistic1;
     mainProgram = "nial";
-    maintainers = [ lib.maintainers.AndersonTorres ];
-    platforms = lib.platforms.linux;
+    maintainers = [ maintainers.AndersonTorres ];
+    platforms = platforms.linux;
   };
 })

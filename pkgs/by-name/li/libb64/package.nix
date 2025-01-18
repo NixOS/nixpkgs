@@ -59,11 +59,11 @@ stdenv.mkDerivation rec {
     cp src/libb64.a src/cencode.o src/cdecode.o $out/lib/
   '';
 
-  meta = {
+  meta = with lib; {
     description = "ANSI C routines for fast base64 encoding/decoding";
     homepage = "https://github.com/libb64/libb64";
-    license = lib.licenses.publicDomain;
+    license = licenses.publicDomain;
     mainProgram = "base64";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }

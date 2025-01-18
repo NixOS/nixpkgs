@@ -55,12 +55,12 @@ stdenv.mkDerivation rec {
     cp -r ../tests $out/share/packetdrill-tests
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Quick, precise tests for entire TCP/UDP/IPv4/IPv6 network stacks";
     homepage = "https://github.com/google/packetdrill";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
       dmjio
       cleverca22
     ];

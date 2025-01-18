@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
       "$out/bin/atari++"
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "http://www.xl-project.com/";
     description = "Enhanced, cycle-accurated Atari emulator";
     mainProgram = "atari++";
@@ -46,8 +46,8 @@ stdenv.mkDerivation (finalAttrs: {
       and the Atari 5200 game console. The emulator is auto-configurable and
       will compile on a variety of systems (Linux, Solaris, Irix).
     '';
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-    license = with lib.licenses; [ gpl2Plus ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ AndersonTorres ];
+    license = with licenses; [ gpl2Plus ];
+    platforms = platforms.unix;
   };
 })

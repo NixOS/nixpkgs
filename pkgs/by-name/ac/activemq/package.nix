@@ -29,13 +29,13 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://activemq.apache.org/";
     description = "Messaging and Integration Patterns server written in Java";
-    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
-    license = lib.licenses.asl20;
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = licenses.asl20;
     mainProgram = "activemq";
-    maintainers = [ lib.maintainers.anthonyroussel ];
-    platforms = lib.platforms.unix;
+    maintainers = [ maintainers.anthonyroussel ];
+    platforms = platforms.unix;
   };
 }

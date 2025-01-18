@@ -58,14 +58,14 @@ stdenv.mkDerivation rec {
   # The file "/nix/store/path/whatever.exe" is an not a valid CIL image
   dontStrip = true;
 
-  meta = {
+  meta = with lib; {
     description = "Functional CLI language";
     homepage = "https://fsharp.org/";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
+    license = licenses.asl20;
+    maintainers = with maintainers; [
       thoughtpolice
       raskin
     ];
-    platforms = with lib.platforms; unix;
+    platforms = with platforms; unix;
   };
 }

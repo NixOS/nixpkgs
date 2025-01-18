@@ -20,12 +20,12 @@ buildGoModule {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = {
+  meta = with lib; {
     description = "Packaging helper for Nextcloud apps";
     mainProgram = "nc4nix";
     homepage = "https://github.com/helsinki-systems/nc4nix";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ onny ];
-    platforms = lib.platforms.linux;
+    license = licenses.mit;
+    maintainers = with maintainers; [ onny ];
+    platforms = platforms.linux;
   };
 }

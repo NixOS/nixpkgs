@@ -91,11 +91,11 @@ stdenv.mkDerivation {
     touch $out
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://code.dogmap.org/fdtools/";
     description = "Set of utilities for working with file descriptors";
-    license = lib.licenses.gpl2Only;
-    platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.Profpatsch ];
+    license = licenses.gpl2Only;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.Profpatsch ];
   };
 }

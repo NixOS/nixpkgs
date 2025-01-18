@@ -25,11 +25,11 @@ python3Packages.buildPythonApplication rec {
 
   build-system = [ python3Packages.poetry-core ];
 
-  meta = {
+  meta = with lib; {
     description = "Keep a record of the time you dedicate to your projects";
     homepage = "https://github.com/lcfd/trak";
-    license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ buurro ];
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [ buurro ];
     mainProgram = "trak";
   };
 }

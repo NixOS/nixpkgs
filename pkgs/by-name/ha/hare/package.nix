@@ -169,11 +169,11 @@ stdenv.mkDerivation (finalAttrs: {
     inherit harec qbe;
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://harelang.org/";
     description = "Systems programming language designed to be simple, stable, and robust";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ onemoresuza ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ onemoresuza ];
     mainProgram = "hare";
     inherit (harec.meta) platforms badPlatforms;
   };

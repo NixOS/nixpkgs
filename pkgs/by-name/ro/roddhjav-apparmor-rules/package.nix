@@ -28,7 +28,7 @@ stdenvNoCC.mkDerivation {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/roddhjav/apparmor.d";
     description = "Over 1500 AppArmor profiles aiming to confine most linux processes";
     longDescription = ''
@@ -38,9 +38,9 @@ stdenvNoCC.mkDerivation {
       If your DE is not listed in https://github.com/roddhjav/apparmor.d
       Do not use this, else it may break your system.
     '';
-    license = lib.licenses.gpl2;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
       johnrtitor
     ];
   };

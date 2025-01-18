@@ -60,10 +60,10 @@ stdenv.mkDerivation rec {
            LIBCLANG_LIBDIR="${llvmPackages.clang.cc}/lib"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "C/C++ client-server indexer based on clang";
     homepage = "https://github.com/andersbakken/rtags";
-    license = lib.licenses.gpl3;
-    platforms = with lib.platforms; x86_64 ++ aarch64;
+    license = licenses.gpl3;
+    platforms = with platforms; x86_64 ++ aarch64;
   };
 }

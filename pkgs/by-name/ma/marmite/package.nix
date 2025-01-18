@@ -33,11 +33,11 @@ rustPlatform.buildRustPackage rec {
     RUSTONIG_SYSTEM_LIBONIG = true;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Static Site Generator for Blogs";
     homepage = "https://github.com/rochacbruno/marmite";
-    license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ matthewcroughan ];
+    license = licenses.agpl3Plus;
+    maintainers = with maintainers; [ matthewcroughan ];
     mainProgram = "marmite";
   };
 }

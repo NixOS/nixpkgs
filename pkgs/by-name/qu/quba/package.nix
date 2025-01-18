@@ -25,13 +25,13 @@ appimageTools.wrapType1 {
     cp -r ${appimageContents}/usr/share/icons $out/share
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Viewer for electronic invoices";
     homepage = "https://github.com/ZUGFeRD/quba-viewer";
     downloadPage = "https://github.com/ZUGFeRD/quba-viewer/releases";
-    license = lib.licenses.asl20;
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [ onny ];
+    license = licenses.asl20;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    maintainers = with maintainers; [ onny ];
     platforms = [ "x86_64-linux" ];
   };
 }

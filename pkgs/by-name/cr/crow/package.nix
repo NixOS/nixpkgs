@@ -31,11 +31,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "A Fast and Easy to use microframework for the web";
     homepage = "https://crowcpp.org/";
-    maintainers = with lib.maintainers; [ l33tname ];
-    platforms = lib.platforms.all;
-    license = lib.licenses.bsd3;
+    maintainers = with maintainers; [ l33tname ];
+    platforms = platforms.all;
+    license = licenses.bsd3;
   };
 })

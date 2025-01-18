@@ -27,13 +27,13 @@ buildGoModule rec {
       --fish <($out/bin/opensearch-cli completion fish)
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Full-featured command line interface (CLI) for OpenSearch";
     homepage = "https://github.com/opensearch-project/opensearch-cli";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     mainProgram = "opensearch-cli";
-    maintainers = with lib.maintainers; [ shyim ];
-    platforms = lib.platforms.unix;
-    sourceProvenance = with lib.sourceTypes; [ fromSource ];
+    maintainers = with maintainers; [ shyim ];
+    platforms = platforms.unix;
+    sourceProvenance = with sourceTypes; [ fromSource ];
   };
 }

@@ -49,12 +49,12 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-warn '/usr/bin/cryptor' 'cryptor'
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Simple gocryptfs GUI";
     homepage = "https://github.com/moson-mo/cryptor";
-    license = lib.licenses.bsd3;
+    license = licenses.bsd3;
     mainProgram = "cryptor";
-    maintainers = with lib.maintainers; [ fgaz ];
-    platforms = lib.platforms.all;
+    maintainers = with maintainers; [ fgaz ];
+    platforms = platforms.all;
   };
 })

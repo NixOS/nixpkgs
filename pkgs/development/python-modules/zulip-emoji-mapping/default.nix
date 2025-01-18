@@ -25,11 +25,11 @@ buildPythonPackage rec {
     "zulip_emoji_mapping"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Get emojis by Zulip names";
     homepage = "https://github.com/GearKite/zulip-emoji-mapping";
     changelog = "https://github.com/GearKite/zulip-emoji-mapping/releases";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ robertrichter ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ robertrichter ];
   };
 }

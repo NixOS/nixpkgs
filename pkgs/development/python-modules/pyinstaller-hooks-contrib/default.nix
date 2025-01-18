@@ -24,7 +24,7 @@ buildPythonPackage rec {
   # and building tests creates a very big closure.
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Community maintained hooks for PyInstaller";
     longDescription = ''
       A "hook" file extends PyInstaller to adapt it to the special needs and methods used by a Python package.
@@ -36,10 +36,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/pyinstaller/pyinstaller-hooks-contrib";
     # See https://github.com/pyinstaller/pyinstaller-hooks-contrib/issues/761
     changelog = "https://github.com/pyinstaller/pyinstaller-hooks-contrib/blob/master/CHANGELOG.rst";
-    license = with lib.licenses; [
+    license = with licenses; [
       gpl2Plus
       asl20
     ];
-    maintainers = with lib.maintainers; [ h7x4 ];
+    maintainers = with maintainers; [ h7x4 ];
   };
 }

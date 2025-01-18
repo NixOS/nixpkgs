@@ -65,12 +65,12 @@ stdenv.mkDerivation (finalAttrs: {
     install -D -m0644 -t $doc/share/doc AUTHORS BUGS ChangeLog README USAGE
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://gtklp.sirtobi.com";
     description = "GTK-based graphical frontend for CUPS";
-    license = with lib.licenses; [ gpl2Only ];
+    license = with licenses; [ gpl2Only ];
     mainProgram = "gtklp";
-    maintainers = with lib.maintainers; [ ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ ];
+    platforms = platforms.unix;
   };
 })

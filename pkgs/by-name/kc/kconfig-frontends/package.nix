@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=format-security";
 
-  meta = {
+  meta = with lib; {
     description = "Out of Linux tree packaging of the kconfig infrastructure";
     longDescription = ''
       Configuration language and system for the Linux kernel and other
@@ -65,8 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
       dependencies.
     '';
     homepage = "https://bitbucket.org/nuttx/tools/";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ ];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ ];
+    platforms = platforms.unix;
   };
 })

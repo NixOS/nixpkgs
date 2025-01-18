@@ -17,11 +17,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-rELkSYwqfMFX++w6e7/7suzPaB91GhbqFsLaYCeeIm4=";
 
-  meta = {
+  meta = with lib; {
     description = "Tool to scan your codebase for high entropy lines, which are often secrets";
     homepage = "https://github.com/EwenQuim/entropy";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ starsep ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ starsep ];
     mainProgram = "entropy";
   };
 }

@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     utf8cpp
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Chinese text-to-speech software";
     homepage = "http://www.eguidedog.net/ekho.php";
     longDescription = ''
@@ -58,9 +58,9 @@ stdenv.mkDerivation (finalAttrs: {
       (a dialect in Taiwan), Tibetan, Ngangien (an ancient Chinese before
       Yuan Dynasty) and Korean (in trial).
     '';
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    maintainers = with lib.maintainers; [ aaronjheng ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ aaronjheng ];
     mainProgram = "ekho";
   };
 })

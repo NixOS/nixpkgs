@@ -32,10 +32,10 @@ buildPythonPackage rec {
     "keke"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Easy profiling in chrome trace format";
     homepage = "https://pypi.org/project/keke/";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ matthewcroughan ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ matthewcroughan ];
   };
 }

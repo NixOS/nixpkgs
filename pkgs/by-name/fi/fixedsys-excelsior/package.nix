@@ -23,11 +23,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "http://www.fixedsysexcelsior.com/";
     description = "Pan-unicode version of Fixedsys, a classic DOS font";
-    platforms = lib.platforms.all;
-    license = lib.licenses.publicDomain;
-    maintainers = [ lib.maintainers.picnoir ];
+    platforms = platforms.all;
+    license = licenses.publicDomain;
+    maintainers = [ maintainers.picnoir ];
   };
 }

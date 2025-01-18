@@ -16,10 +16,10 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ ezjsonm ];
 
-  meta = {
+  meta = with lib; {
     description = "Encoding combinators a la Data_encoding for Ezjsonm";
     homepage = "https://github.com/lthms/ezjsonmi-encoding";
-    license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ fgaz ];
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ fgaz ];
   };
 }

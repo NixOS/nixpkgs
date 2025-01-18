@@ -33,12 +33,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Run HTTP requests from a terminal, e.g. for HTTP request testing";
     homepage = "https://www.jetbrains.com/help/idea/http-client-cli.html";
-    license = lib.licenses.unfree;
+    license = licenses.unfree;
     mainProgram = "ijhttp";
-    platforms = lib.platforms.all;
-    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    platforms = platforms.all;
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
   };
 })

@@ -16,14 +16,14 @@ rustPlatform.buildRustPackage {
 
   passthru.updateScript = ./make-initrd-ng/update.sh;
 
-  meta = {
+  meta = with lib; {
     description = "Tool for copying binaries and their dependencies";
     mainProgram = "make-initrd-ng";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       das_j
       elvishjerricco
       k900
     ];
-    license = lib.licenses.mit;
+    license = licenses.mit;
   };
 }

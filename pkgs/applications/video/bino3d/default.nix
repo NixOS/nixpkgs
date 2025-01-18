@@ -37,13 +37,13 @@ stdenv.mkDerivation (finalAttrs: {
     # The optional QVR dependency is not currently packaged.
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Video player with a focus on 3D and Virtual Reality";
     homepage = "https://bino3d.org/";
-    sourceProvenance = [ lib.sourceTypes.fromSource ];
-    license = lib.licenses.gpl3Plus;
-    maintainers = [ lib.maintainers.orivej ];
-    platforms = lib.platforms.unix;
+    sourceProvenance = [ sourceTypes.fromSource ];
+    license = licenses.gpl3Plus;
+    maintainers = [ maintainers.orivej ];
+    platforms = platforms.unix;
     mainProgram = "bino";
   };
 })

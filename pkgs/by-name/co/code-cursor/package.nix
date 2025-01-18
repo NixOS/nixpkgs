@@ -96,14 +96,14 @@ stdenvNoCC.mkDerivation {
     '';
   };
 
-  meta = {
+  meta = with lib; {
     description = "AI-powered code editor built on vscode";
     homepage = "https://cursor.com";
     changelog = "https://cursor.com/changelog";
-    license = lib.licenses.unfree;
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [ sarahec ];
-    platforms = lib.platforms.linux;
+    license = licenses.unfree;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    maintainers = with maintainers; [ sarahec ];
+    platforms = platforms.linux;
     mainProgram = "cursor";
   };
 }

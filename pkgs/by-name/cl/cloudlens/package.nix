@@ -35,11 +35,11 @@ buildGoModule rec {
   #Some tests require internet access
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "K9s like CLI for AWS and GCP";
     homepage = "https://github.com/one2nc/cloudlens";
-    license = lib.licenses.apsl20;
-    maintainers = with lib.maintainers; [ ByteSudoer ];
+    license = licenses.apsl20;
+    maintainers = with maintainers; [ ByteSudoer ];
     mainProgram = "cloudlens";
   };
 }

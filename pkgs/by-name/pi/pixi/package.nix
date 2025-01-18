@@ -64,12 +64,12 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Package management made easy";
     homepage = "https://pixi.sh/";
     changelog = "https://pixi.sh/latest/CHANGELOG";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [
+    license = licenses.bsd3;
+    maintainers = with maintainers; [
       aaronjheng
       edmundmiller
       xiaoxiangmoe

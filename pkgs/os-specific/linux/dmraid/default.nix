@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   #   tools/dmraid.c:12:10: fatal error: dmraid/dmraid.h: No such file
   enableParallelBuilding = false;
 
-  meta = {
+  meta = with lib; {
     description = "Old-style RAID configuration utility";
     longDescription = ''
       Old RAID configuration utility (still under development, though).
@@ -60,8 +60,8 @@ stdenv.mkDerivation rec {
       its volumes. May be needed for rescuing an older system or nuking
       the metadata when reformatting.
     '';
-    maintainers = [ lib.maintainers.raskin ];
-    platforms = lib.platforms.linux;
-    license = lib.licenses.gpl2Plus;
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.linux;
+    license = licenses.gpl2Plus;
   };
 }

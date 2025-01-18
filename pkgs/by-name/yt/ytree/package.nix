@@ -35,13 +35,13 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/bin $out/share/man/man1
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.han.de/~werner/ytree.html";
     description = "Curses-based file manager similar to DOS Xtree(TM)";
-    license = with lib.licenses; [ gpl2Plus ];
+    license = with licenses; [ gpl2Plus ];
     mainProgram = "ytree";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.unix;
   };
 })
 # TODO: X11 support

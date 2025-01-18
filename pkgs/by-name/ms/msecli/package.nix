@@ -56,13 +56,13 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Micron Storage Executive CLI";
     homepage = "https://www.micron.com/sales-support/downloads/software-drivers/storage-executive-software";
-    license = lib.licenses.unfree;
+    license = licenses.unfree;
     mainProgram = "msecli";
-    maintainers = with lib.maintainers; [ diadatp ];
+    maintainers = with maintainers; [ diadatp ];
     platforms = [ "x86_64-linux" ];
-    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+    sourceProvenance = [ sourceTypes.binaryNativeCode ];
   };
 }

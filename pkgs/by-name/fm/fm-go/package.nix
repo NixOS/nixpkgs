@@ -18,13 +18,13 @@ let
 
     vendorHash = "sha256-/tUL08Vo3W7PMPAnJA9RPdMl0AwZj8BzclYs2257nqM=";
 
-    meta = {
+    meta = with lib; {
       homepage = "https://github.com/mistakenelf/fm";
       description = "Terminal based file manager";
       changelog = "https://github.com/mistakenelf/fm/releases/tag/${finalAttrs.src.rev}";
-      license = with lib.licenses; [ mit ];
+      license = with licenses; [ mit ];
       mainProgram = "fm";
-      maintainers = with lib.maintainers; [ ];
+      maintainers = with maintainers; [ ];
     };
   };
 in

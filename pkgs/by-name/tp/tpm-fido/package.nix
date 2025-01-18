@@ -27,11 +27,11 @@ buildGoModule {
     "-w"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "WebAuthn/U2F token protected by a TPM";
     homepage = "https://github.com/psanford/tpm-fido";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ genga898 ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ genga898 ];
     mainProgram = "tpm-fido";
   };
 }

@@ -17,10 +17,10 @@ stdenv.mkDerivation rec {
   # `-Wimplicit-function-declaration` is otherwise on and errors by default
   env.CFLAGS = "-std=c89";
 
-  meta = {
+  meta = with lib; {
     homepage = "http://www.oberhumer.com/opensource/ucl/";
     description = "Portable lossless data compression library";
-    license = lib.licenses.gpl2;
-    platforms = lib.platforms.unix;
+    license = licenses.gpl2;
+    platforms = platforms.unix;
   };
 }

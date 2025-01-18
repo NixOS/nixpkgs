@@ -58,18 +58,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://codeberg.org/dnkl/fnott";
     changelog = "https://codeberg.org/dnkl/fnott/src/tag/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Keyboard driven and lightweight Wayland notification daemon for wlroots-based compositors";
-    license = with lib.licenses; [
+    license = with licenses; [
       mit
       zlib
     ];
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       jmbaur
     ];
     mainProgram = "fnott";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 })

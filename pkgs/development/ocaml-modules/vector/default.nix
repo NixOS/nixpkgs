@@ -17,11 +17,11 @@ buildDunePackage rec {
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "Resizable arrays for OCaml";
-    license = lib.licenses.lgpl2Only;
+    license = licenses.lgpl2Only;
     homepage = "https://github.com/backtracking/vector";
-    maintainers = [ lib.maintainers.vbgl ];
+    maintainers = [ maintainers.vbgl ];
   };
 
 }

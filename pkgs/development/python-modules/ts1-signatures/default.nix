@@ -35,10 +35,10 @@ buildPythonPackage {
     "test_nghttpd_log_parsing" # Attempts to load things from logs/ which it cannot find for some reason.
   ];
 
-  meta = {
+  meta = with lib; {
     description = "TLS and HTTP signature and fingerprint library";
     homepage = "https://github.com/yifeikong/th1";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ggg ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ ggg ];
   };
 }

@@ -84,11 +84,11 @@ stdenv.mkDerivation (finalAttrs: {
     "--suffix DDE_SHELL_PACKAGE_PATH : /run/current-system/sw/share/dde-shell"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "A plugin system that integrates plugins developed on DDE";
     homepage = "https://github.com/linuxdeepin/dde-shell";
-    license = with lib.licenses; [ gpl3Plus ];
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ rewine ];
+    license = with licenses; [ gpl3Plus ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ rewine ];
   };
 })

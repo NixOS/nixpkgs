@@ -79,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://mepo.milesalan.com";
     description = "Fast, simple, and hackable OSM map viewer";
     longDescription = ''
@@ -94,12 +94,12 @@ stdenv.mkDerivation (finalAttrs: {
       provide things like custom bounding-box search scripts, bookmarks, and
       more.
     '';
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
       sikmir
       McSinyx
       laalsaas
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 })

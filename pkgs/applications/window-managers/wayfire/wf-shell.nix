@@ -44,14 +44,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [ "--sysconfdir /etc" ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/WayfireWM/wf-shell";
     description = "GTK3-based panel for Wayfire";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       wucke13
       rewine
     ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 })

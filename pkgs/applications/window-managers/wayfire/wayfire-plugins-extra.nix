@@ -56,11 +56,11 @@ stdenv.mkDerivation (finalAttrs: {
     PKG_CONFIG_WAYFIRE_METADATADIR = "${placeholder "out"}/share/wayfire/metadata";
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/WayfireWM/wayfire-plugins-extra";
     description = "Additional plugins for Wayfire";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ rewine ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ rewine ];
     inherit (wayfire.meta) platforms;
   };
 })

@@ -29,12 +29,12 @@ php.buildComposerProject (finalAttrs: {
   vendorHash = "sha256-5ypBA9Qb8jHzAtvNBHkJfsLIf3Pfw1LvYmHP/hED2ig=";
   composerStrictValidation = false;
 
-  meta = {
+  meta = with lib; {
     description = "Web-based, open-source groupware";
     longDescription = "AgoraKit is web-based, open-source groupware for citizens' initiatives. By creating collaborative groups, people can discuss topics, organize events, store files and keep everyone updated as needed. AgoraKit is a forum, calendar, file manager and email notifier.";
     homepage = "https://github.com/agorakit/agorakit";
-    license = lib.licenses.agpl3Only;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ shogo ];
+    license = licenses.agpl3Only;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ shogo ];
   };
 })

@@ -30,11 +30,11 @@ python3Packages.buildPythonApplication rec {
     tests.version = testers.testVersion { package = latexminted; };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Python executable for LaTeX minted package";
     homepage = "https://pypi.org/project/latexminted";
-    license = lib.licenses.lppl13c;
+    license = licenses.lppl13c;
     mainProgram = "latexminted";
-    maintainers = with lib.maintainers; [ romildo ];
+    maintainers = with maintainers; [ romildo ];
   };
 }

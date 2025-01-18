@@ -89,13 +89,13 @@ python3Packages.buildPythonApplication rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Tweak various aspects of GNOME";
     homepage = "https://gitlab.gnome.org/TheEvilSkeleton/Refine";
     mainProgram = "refine";
-    platforms = lib.platforms.linux;
-    license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [
+    platforms = platforms.linux;
+    license = with licenses; [ gpl3Plus ];
+    maintainers = with maintainers; [
       getchoo
       aucub
     ];

@@ -35,11 +35,11 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion completions/dust.{bash,fish} --zsh completions/_dust
   '';
 
-  meta = {
+  meta = with lib; {
     description = "du + rust = dust. Like du but more intuitive";
     homepage = "https://github.com/bootandy/dust";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ aaronjheng ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ aaronjheng ];
     mainProgram = "dust";
   };
 }

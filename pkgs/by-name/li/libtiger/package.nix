@@ -37,11 +37,11 @@ stdenv.mkDerivation rec {
     cairo
   ] ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.ApplicationServices;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://code.google.com/archive/p/libtiger/";
     description = "Rendering library for Kate streams using Pango and Cairo";
-    platforms = lib.platforms.unix;
-    license = lib.licenses.lgpl21Plus;
-    maintainers = with lib.maintainers; [ matthewbauer ];
+    platforms = platforms.unix;
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ matthewbauer ];
   };
 }

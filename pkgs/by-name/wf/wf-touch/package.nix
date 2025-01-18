@@ -49,11 +49,11 @@ stdenv.mkDerivation {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = {
+  meta = with lib; {
     description = "Touchscreen gesture library";
     homepage = "https://github.com/WayfireWM/wf-touch";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ donovanglover ];
-    platforms = lib.platforms.unix;
+    license = licenses.mit;
+    maintainers = with maintainers; [ donovanglover ];
+    platforms = platforms.unix;
   };
 }

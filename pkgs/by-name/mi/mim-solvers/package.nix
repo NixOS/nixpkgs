@@ -58,11 +58,11 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
   pythonImportsCheck = [ "mim_solvers" ];
 
-  meta = {
+  meta = with lib; {
     description = "Numerical solvers used in the Machines in Motion Laboratory";
     homepage = "https://github.com/machines-in-motion/mim_solvers";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ nim65s ];
-    platforms = lib.platforms.all;
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ nim65s ];
+    platforms = platforms.all;
   };
 })

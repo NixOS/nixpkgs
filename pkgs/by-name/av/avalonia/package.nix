@@ -185,12 +185,12 @@ stdenvNoCC.mkDerivation (
         inherit npmDepsFile;
       };
 
-      meta = {
+      meta = with lib; {
         homepage = "https://avaloniaui.net/";
-        license = [ lib.licenses.mit ];
-        maintainers = with lib.maintainers; [ corngood ];
+        license = [ licenses.mit ];
+        maintainers = with maintainers; [ corngood ];
         description = "A cross-platform UI framework for dotnet";
-        sourceProvenance = with lib.sourceTypes; [
+        sourceProvenance = with sourceTypes; [
           fromSource
           binaryNativeCode # npm dependencies contain binaries
         ];

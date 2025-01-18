@@ -50,11 +50,11 @@ stdenv.mkDerivation rec {
     cp avy/src/{avy,avybmc} $out/bin/
   '';
 
-  meta = {
+  meta = with lib; {
     description = "AIGER model checking for Property Directed Reachability";
     homepage = "https://arieg.bitbucket.io/avy/";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ thoughtpolice ];
-    platforms = lib.platforms.linux;
+    license = licenses.mit;
+    maintainers = with maintainers; [ thoughtpolice ];
+    platforms = platforms.linux;
   };
 }

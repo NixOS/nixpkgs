@@ -57,11 +57,11 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Command line tool focused on NVMe testing in QEMU";
     homepage = "https://github.com/SamsungDS/vmctl";
-    license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ panky ];
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ panky ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

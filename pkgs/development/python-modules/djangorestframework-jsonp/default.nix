@@ -47,10 +47,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rest_framework_jsonp" ];
 
-  meta = {
+  meta = with lib; {
     description = "JSONP support for Django REST Framework";
     homepage = "https://jpadilla.github.io/django-rest-framework-jsonp/";
-    license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.onny ];
+    license = licenses.bsd3;
+    maintainers = [ maintainers.onny ];
   };
 }

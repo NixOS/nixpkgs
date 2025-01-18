@@ -31,10 +31,10 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "drf_orjson_renderer" ];
 
-  meta = {
+  meta = with lib; {
     description = "JSON renderer and parser for Django Rest Framework using the orjson library";
     homepage = "https://github.com/brianjbuck/drf_orjson_renderer";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ jvanbruegge ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ jvanbruegge ];
   };
 }

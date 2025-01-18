@@ -18,11 +18,11 @@ buildPythonPackage rec {
 
   build-system = [ setuptools-scm ];
 
-  meta = {
+  meta = with lib; {
     description = "Simple CLI tool for finding git repositories";
     homepage = "https://github.com/acroz/git-find-repos";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "git-find-repos";
-    maintainers = [ lib.maintainers.yajo ];
+    maintainers = [ maintainers.yajo ];
   };
 }

@@ -38,10 +38,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "skyboxremote" ];
 
-  meta = {
+  meta = with lib; {
     description = "Module for controlling a sky box";
     homepage = "https://pypi.org/project/skyboxremote/";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fab ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
   };
 }

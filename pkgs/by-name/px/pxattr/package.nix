@@ -21,12 +21,12 @@ stdenv.mkDerivation rec {
     cp pxattr $out/bin
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.lesbonscomptes.com/pxattr/index.html";
     description = "Provides a single interface to extended file attributes";
     maintainers = [ ];
-    license = [ lib.licenses.mit ];
-    platforms = lib.platforms.unix;
+    license = [ licenses.mit ];
+    platforms = platforms.unix;
     mainProgram = "pxattr";
   };
 }

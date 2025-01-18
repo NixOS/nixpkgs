@@ -32,11 +32,11 @@ rustPlatform.buildRustPackage rec {
     install -Dm644 glrnvim.svg $out/share/icons/hicolor/scalable/apps/glrnvim.svg
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Really fast & stable neovim GUI which could be accelerated by GPU";
     homepage = "https://github.com/beeender/glrnvim";
     mainProgram = "glrnvim";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ aacebedo ];
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ aacebedo ];
   };
 }

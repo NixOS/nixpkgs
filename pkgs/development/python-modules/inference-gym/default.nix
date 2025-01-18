@@ -22,10 +22,10 @@ buildPythonPackage rec {
   # The package does not ship any test.
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Place to exercise inference methods to help make them faster, leaner and more robust";
     homepage = "https://github.com/tensorflow/probability/tree/main/spinoffs/inference_gym";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ GaetanLepage ];
   };
 }

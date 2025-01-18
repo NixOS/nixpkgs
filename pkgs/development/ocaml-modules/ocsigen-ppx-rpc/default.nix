@@ -20,11 +20,11 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ ppxlib ];
 
-  meta = {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Syntax for RPCs for Eliom and Ocsigen Start";
-    license = lib.licenses.lgpl21Only;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.lgpl21Only;
+    maintainers = [ maintainers.vbgl ];
   };
 
 }

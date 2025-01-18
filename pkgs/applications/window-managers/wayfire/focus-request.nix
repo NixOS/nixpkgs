@@ -49,11 +49,11 @@ stdenv.mkDerivation (finalAttrs: {
     PKG_CONFIG_WAYFIRE_METADATADIR = "${placeholder "out"}/share/wayfire/metadata";
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://gitlab.com/wayfireplugins/focus-request";
     description = "Wayfire plugin provides a mechanism to grant focus to views that make a focus self-request";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ rewine ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ rewine ];
     inherit (wayfire.meta) platforms;
   };
 })

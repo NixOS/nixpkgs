@@ -49,11 +49,11 @@ stdenv.mkDerivation (finalAttrs: {
   # not setting it cause fte to not find xfte
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  meta = {
+  meta = with lib; {
     description = "Free text editor for developers";
     homepage = "https://fte.sourceforge.net/";
-    license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ sigmanificient ];
-    platforms = lib.platforms.all;
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ sigmanificient ];
+    platforms = platforms.all;
   };
 })

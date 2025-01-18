@@ -110,7 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Functional tests use loopback networking.
   __darwinAllowLocalNetworking = true;
 
-  meta = {
+  meta = with lib; {
     description = "Tool that generates a compilation database for clang tooling";
     mainProgram = "bear";
     longDescription = ''
@@ -119,8 +119,8 @@ stdenv.mkDerivation (finalAttrs: {
       and run `bear make`.  It's not perfect, but it gets a long way.
     '';
     homepage = "https://github.com/rizsotto/Bear";
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ DieracDelta ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ DieracDelta ];
   };
 })

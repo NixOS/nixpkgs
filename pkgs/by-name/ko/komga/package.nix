@@ -28,16 +28,16 @@ stdenvNoCC.mkDerivation rec {
     komga = nixosTests.komga;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Free and open source comics/mangas server";
     homepage = "https://komga.org/";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     platforms = jdk23_headless.meta.platforms;
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       tebriel
       govanify
     ];
     mainProgram = "komga";
-    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
   };
 }

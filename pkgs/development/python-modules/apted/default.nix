@@ -22,10 +22,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "apted" ];
   nativeCheckInputs = [ unittestCheckHook ];
 
-  meta = {
+  meta = with lib; {
     description = "APTED algorithm for the Tree Edit Distance";
     homepage = "https://github.com/JoaoFelipe/apted";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.McSinyx ];
+    license = licenses.mit;
+    maintainers = [ maintainers.McSinyx ];
   };
 }

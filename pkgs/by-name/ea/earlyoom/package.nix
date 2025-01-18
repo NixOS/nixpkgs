@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (nixosTests) earlyoom;
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/rfjakob/earlyoom";
     description = "Early OOM Daemon for Linux";
     longDescription = ''
@@ -59,11 +59,11 @@ stdenv.mkDerivation (finalAttrs: {
       oom_score). The percentage value is configurable via command line
       arguments.
     '';
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "earlyoom";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       oxalica
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 })

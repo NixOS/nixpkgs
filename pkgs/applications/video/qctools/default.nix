@@ -46,11 +46,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Audiovisual analytics and filtering of video files";
     homepage = "https://mediaarea.net/QCTools";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ orivej ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ orivej ];
+    platforms = platforms.linux;
   };
 }

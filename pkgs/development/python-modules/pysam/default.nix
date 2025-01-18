@@ -75,12 +75,12 @@ buildPythonPackage {
     "pysam.libcvcf"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Python module for reading, manipulating and writing genome data sets";
     downloadPage = "https://github.com/pysam-developers/pysam";
     homepage = "https://pysam.readthedocs.io";
-    maintainers = with lib.maintainers; [ unode ];
-    license = lib.licenses.mit;
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ unode ];
+    license = licenses.mit;
+    platforms = platforms.unix;
   };
 }

@@ -49,12 +49,12 @@ stdenv.mkDerivation rec {
     wrapProgram "$out/bin/sml" --set "SMLNJ_HOME" "$out"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Compiler for the Standard ML '97 programming language";
     homepage = "http://www.smlnj.org";
-    license = lib.licenses.free;
-    platforms = lib.platforms.darwin;
-    maintainers = [ lib.maintainers.jwiegley ];
+    license = licenses.free;
+    platforms = platforms.darwin;
+    maintainers = [ maintainers.jwiegley ];
     mainProgram = "sml";
   };
 }

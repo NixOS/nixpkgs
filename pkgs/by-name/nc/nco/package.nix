@@ -52,12 +52,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     description = "NetCDF Operator toolkit";
     homepage = "https://nco.sourceforge.net/";
-    license = lib.licenses.bsd3;
+    license = licenses.bsd3;
     longDescription = "The NCO (netCDF Operator) toolkit manipulates and analyzes data stored in netCDF-accessible formats, including DAP, HDF4, and HDF5";
-    maintainers = with lib.maintainers; [ bzizou ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ bzizou ];
+    platforms = platforms.unix;
   };
 })

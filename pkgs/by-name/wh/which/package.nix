@@ -23,11 +23,11 @@ stdenv.mkDerivation rec {
     lib.optional stdenv.hostPlatform.is32bit "-D_FILE_OFFSET_BITS=64"
   );
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.gnu.org/software/which/";
     description = "Shows the full path of (shell) commands";
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     mainProgram = "which";
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 }

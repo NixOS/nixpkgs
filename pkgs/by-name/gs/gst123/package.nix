@@ -43,13 +43,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     broken = stdenv.hostPlatform.isDarwin;
     description = "GStreamer based command line media player";
     homepage = "https://space.twc.de/~stefan/gst123.php";
-    license = lib.licenses.lgpl2Plus;
+    license = licenses.lgpl2Plus;
     mainProgram = "gst123";
-    maintainers = with lib.maintainers; [ swesterfeld ];
+    maintainers = with maintainers; [ swesterfeld ];
     inherit (ncurses.meta) platforms;
   };
 })

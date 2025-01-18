@@ -32,11 +32,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "citeproc" ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/citeproc-py/citeproc-py";
     description = "Citation Style Language (CSL) parser for Python";
     mainProgram = "csl_unsorted";
-    license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ bcdarwin ];
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ bcdarwin ];
   };
 }

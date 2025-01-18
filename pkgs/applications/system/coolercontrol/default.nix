@@ -14,12 +14,12 @@ let
     hash = "sha256-lRw5IcSrLM6aUajt2Ny1IUuGYcAjY1oUDZENyz0wVJI=";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Monitor and control your cooling devices";
     homepage = "https://gitlab.com/coolercontrol/coolercontrol";
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     platforms = [ "x86_64-linux" ];
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       codifryed
       OPNA2608
     ];

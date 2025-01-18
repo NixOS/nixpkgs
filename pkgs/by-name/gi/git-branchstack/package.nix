@@ -19,11 +19,11 @@ let
       git-revise
     ];
 
-    meta = {
+    meta = with lib; {
       homepage = "https://github.com/krobelus/git-branchstack";
       description = "Efficiently manage Git branches without leaving your local branch";
-      license = lib.licenses.mit;
-      maintainers = with lib.maintainers; [ AndersonTorres ];
+      license = licenses.mit;
+      maintainers = with maintainers; [ AndersonTorres ];
     };
   };
 in

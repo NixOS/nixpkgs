@@ -45,11 +45,11 @@ buildGoModule rec {
     inherit (nixosTests) eintopf;
   };
 
-  meta = {
+  meta = with lib; {
     description = "A calendar for Stuttgart, showing events, groups and places";
     homepage = "https://codeberg.org/Klasse-Methode/eintopf";
-    license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ onny ];
-    platforms = lib.platforms.unix;
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [ onny ];
+    platforms = platforms.unix;
   };
 }

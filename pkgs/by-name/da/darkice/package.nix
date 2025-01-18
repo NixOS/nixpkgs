@@ -46,10 +46,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "http://darkice.org/";
     description = "Live audio streamer";
-    license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ ikervagyok ];
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ ikervagyok ];
   };
 }

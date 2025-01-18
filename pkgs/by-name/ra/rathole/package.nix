@@ -36,12 +36,12 @@ rustPlatform.buildRustPackage {
     inherit (nixosTests) rathole;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Reverse proxy for NAT traversal";
     homepage = "https://github.com/rapiz1/rathole";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     mainProgram = "rathole";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       dit7ya
       xokdvium
     ];

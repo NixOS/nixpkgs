@@ -21,11 +21,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ openssl ];
 
-  meta = {
-    maintainers = with lib.maintainers; [ willibutz ];
+  meta = with lib; {
+    maintainers = with maintainers; [ willibutz ];
     description = "Tool for converting Xen images to raw and back";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.unix;
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
     mainProgram = "xva-img";
   };
 }

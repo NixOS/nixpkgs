@@ -21,10 +21,10 @@ melpaBuild {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = {
+  meta = with lib; {
     homepage = "http://emacswiki.org/emacs/RectangleMark";
     description = "Mark a rectangle of text with highlighting";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ AndersonTorres ];
   };
 }

@@ -24,11 +24,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = lib.optionals (!finalAttrs.doCheck) [ "-DBUILD_TESTS:BOOL=OFF" ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://hyperrealm.github.io/libconfig/";
     description = "C/C++ library for processing configuration files";
-    license = lib.licenses.lgpl3;
-    maintainers = with lib.maintainers; [ stv0g ];
-    platforms = lib.platforms.all;
+    license = licenses.lgpl3;
+    maintainers = with maintainers; [ stv0g ];
+    platforms = platforms.all;
   };
 })

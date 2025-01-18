@@ -25,11 +25,11 @@ stdenv.mkDerivation (finalAttrs: {
     "prefix=$(out)"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Device that allows access to Linux kernel cryptographic drivers";
     homepage = "http://cryptodev-linux.org/";
-    maintainers = with lib.maintainers; [ moni ];
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ moni ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
   };
 })

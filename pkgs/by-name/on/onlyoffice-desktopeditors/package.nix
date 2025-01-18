@@ -181,15 +181,15 @@ buildFHSEnv {
 
   passthru.updateScript = ./update.sh;
 
-  meta = {
+  meta = with lib; {
     description = "Office suite that combines text, spreadsheet and presentation editors allowing to create, view and edit local documents";
     homepage = "https://www.onlyoffice.com/";
     downloadPage = "https://github.com/ONLYOFFICE/DesktopEditors/releases";
     changelog = "https://github.com/ONLYOFFICE/DesktopEditors/blob/master/CHANGELOG.md";
     platforms = [ "x86_64-linux" ];
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.agpl3Plus;
+    maintainers = with maintainers; [
       nh2
       gtrunsec
     ];

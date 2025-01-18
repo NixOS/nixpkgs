@@ -46,11 +46,11 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.eclipse.org/aspectj/";
     description = "Seamless aspect-oriented extension to the Java programming language";
-    license = lib.licenses.epl10;
-    platforms = lib.platforms.unix;
-    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = licenses.epl10;
+    platforms = platforms.unix;
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
   };
 }

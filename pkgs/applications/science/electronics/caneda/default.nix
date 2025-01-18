@@ -28,12 +28,12 @@ mkDerivation rec {
     qwt6_1
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Open source EDA software focused on easy of use and portability";
     mainProgram = "caneda";
     homepage = "http://caneda.org";
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = with lib.platforms; linux;
+    platforms = with platforms; linux;
   };
 }

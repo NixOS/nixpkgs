@@ -19,12 +19,12 @@ stdenv.mkDerivation {
     inherit sha256;
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "http://saf.bio.caltech.edu/nettee.html";
     description = ''Network "tee" program'';
-    license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ Profpatsch ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ Profpatsch ];
+    platforms = platforms.linux;
     mainProgram = "nettee";
   };
 

@@ -13,12 +13,12 @@
 
 mkDerivation {
   pname = "kgeography";
-  meta = {
+  meta = with lib; {
     homepage = "https://apps.kde.org/kgeography/";
     description = "Geography trainer";
     mainProgram = "kgeography";
-    license = with lib.licenses; [ gpl2 ];
-    maintainers = [ lib.maintainers.globin ];
+    license = with licenses; [ gpl2 ];
+    maintainers = [ maintainers.globin ];
   };
   nativeBuildInputs = [
     cmake

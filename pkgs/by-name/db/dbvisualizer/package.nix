@@ -63,12 +63,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "The universal database tool";
     homepage = "https://www.dbvis.com/";
-    maintainers = with lib.maintainers; [ boldikoller ];
-    license = lib.licenses.unfree;
+    maintainers = with maintainers; [ boldikoller ];
+    license = licenses.unfree;
     mainProgram = "dbvis";
-    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
   };
 })

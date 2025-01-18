@@ -41,12 +41,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://commons.apache.org/proper/commons-daemon";
     description = "Part of the Apache Commons Daemon software, a set of utilities and Java support classes for running Java applications as server processes";
-    maintainers = with lib.maintainers; [ rsynnest ];
-    license = lib.licenses.asl20;
-    platforms = with lib.platforms; unix;
+    maintainers = with maintainers; [ rsynnest ];
+    license = licenses.asl20;
+    platforms = with platforms; unix;
     mainProgram = "jsvc";
   };
 }

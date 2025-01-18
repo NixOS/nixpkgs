@@ -42,7 +42,7 @@ stdenv.mkDerivation {
       --replace "Exec=hase" "Exec=$out/bin/hase"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Open-source artillery shooter";
     mainProgram = "hase";
     longDescription = ''
@@ -52,8 +52,8 @@ stdenv.mkDerivation {
       the GP2X, Open Pandora or GCW Zero.
     '';
     homepage = "http://ziz.gp2x.de/hase/";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ colinsane ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ colinsane ];
+    platforms = platforms.linux;
   };
 }

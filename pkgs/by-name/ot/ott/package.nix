@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
       rm -r $out/share/emacs
     '';
 
-  meta = {
+  meta = with lib; {
     description = "Tool for the working semanticist";
     mainProgram = "ott";
     longDescription = ''
@@ -57,8 +57,8 @@ stdenv.mkDerivation rec {
       target-system terms.
     '';
     homepage = "http://www.cl.cam.ac.uk/~pes20/ott";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ jwiegley ];
-    platforms = lib.platforms.unix;
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ jwiegley ];
+    platforms = platforms.unix;
   };
 }

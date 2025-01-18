@@ -207,13 +207,13 @@ stdenv.mkDerivation (rec {
       ];
   };
 
-  meta = {
+  meta = with lib; {
     description = "Git client from the makers of Sublime Text";
     homepage = "https://www.sublimemerge.com";
     mainProgram = "sublime_merge";
-    maintainers = with lib.maintainers; [ zookatron ];
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = lib.licenses.unfree;
+    maintainers = with maintainers; [ zookatron ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
     platforms = [
       "aarch64-linux"
       "x86_64-linux"

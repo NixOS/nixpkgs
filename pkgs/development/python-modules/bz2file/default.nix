@@ -17,9 +17,9 @@ buildPythonPackage rec {
   doCheck = false;
   # The test module (test_bz2file) is not available
 
-  meta = {
+  meta = with lib; {
     description = "Bz2file is a Python library for reading and writing bzip2-compressed files";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ jyp ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ jyp ];
   };
 }

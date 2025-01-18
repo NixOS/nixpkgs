@@ -20,11 +20,11 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Typing stubs for MarkupSafe";
     homepage = "https://pypi.org/project/types-markupsafe";
     changelog = "https://github.com/typeshed-internal/stub_uploader/blob/main/data/changelogs/MarkupSafe.md";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ nim65s ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ nim65s ];
   };
 }

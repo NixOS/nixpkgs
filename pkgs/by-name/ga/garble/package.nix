@@ -64,14 +64,14 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Obfuscate Go code by wrapping the Go toolchain";
     homepage = "https://github.com/burrowers/garble/";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       davhau
       bot-wxt1221
     ];
-    license = lib.licenses.bsd3;
+    license = licenses.bsd3;
     mainProgram = "garble";
   };
 }

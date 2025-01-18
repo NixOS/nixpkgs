@@ -26,12 +26,12 @@ stdenv.mkDerivation (finalAttrs: {
     tests = testers.testVersion { package = finalAttrs.finalPackage; };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Lightweight STUN/TURN server";
     homepage = "https://github.com/paullouisageneau/violet";
-    license = lib.licenses.gpl2Only;
+    license = licenses.gpl2Only;
     mainProgram = "violet";
-    maintainers = with lib.maintainers; [ oluceps ];
-    platforms = lib.platforms.all;
+    maintainers = with maintainers; [ oluceps ];
+    platforms = platforms.all;
   };
 })

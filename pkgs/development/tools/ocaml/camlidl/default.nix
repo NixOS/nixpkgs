@@ -53,11 +53,11 @@ lib.throwIfNot (lib.versionAtLeast ocaml.version "4.03")
       export NIX_LDFLAGS+=" -L $1/lib/ocaml/${ocaml.version}/site-lib/camlidl"
     '';
 
-    meta = {
+    meta = with lib; {
       description = "Stub code generator and COM binding for Objective Caml";
       mainProgram = "camlidl";
       homepage = "https://xavierleroy.org/camlidl/";
-      license = lib.licenses.lgpl21;
-      maintainers = [ lib.maintainers.roconnor ];
+      license = licenses.lgpl21;
+      maintainers = [ maintainers.roconnor ];
     };
   }

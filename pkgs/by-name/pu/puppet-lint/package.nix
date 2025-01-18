@@ -19,12 +19,12 @@ bundlerApp {
     updateScript = bundlerUpdateScript "puppet-lint";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Checks Puppet code against the recommended Puppet language style guide";
     homepage = "https://github.com/puppetlabs/puppet-lint";
     changelog = "https://github.com/puppetlabs/puppet-lint/blob/main/CHANGELOG.md";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "puppet-lint";
-    maintainers = with lib.maintainers; [ anthonyroussel ];
+    maintainers = with maintainers; [ anthonyroussel ];
   };
 }

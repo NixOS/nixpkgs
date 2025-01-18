@@ -31,10 +31,10 @@ rustPlatform.buildRustPackage {
       SystemConfiguration
     ];
 
-  meta = {
+  meta = with lib; {
     description = "Cross-platform TUI database management tool written in Rust";
     homepage = "https://github.com/tako8ki/gobang";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ figsoda ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ figsoda ];
   };
 }

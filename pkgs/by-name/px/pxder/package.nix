@@ -56,12 +56,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Download illusts from pixiv.net";
     homepage = "https://github.com/Tsuk1ko/pxder";
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     mainProgram = "pxder";
-    maintainers = with lib.maintainers; [ vanilla ];
-    platforms = lib.platforms.all;
+    maintainers = with maintainers; [ vanilla ];
+    platforms = platforms.all;
   };
 }

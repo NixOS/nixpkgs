@@ -60,11 +60,11 @@ python3Packages.buildPythonApplication rec {
     };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Simple Python tool to transfer data from SQLite 3 to MySQL";
     homepage = "https://github.com/techouse/sqlite3-to-mysql";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ gador ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ gador ];
     mainProgram = "sqlite3mysql";
   };
 }

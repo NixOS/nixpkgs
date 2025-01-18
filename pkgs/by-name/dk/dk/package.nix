@@ -39,11 +39,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://bitbucket.org/natemaia/dk";
     description = "List based tiling window manager in the vein of dwm, bspwm, and xmonad";
-    license = lib.licenses.x11;
-    maintainers = with lib.maintainers; [ _3JlOy-PYCCKUi ];
-    platforms = lib.platforms.linux;
+    license = licenses.x11;
+    maintainers = with maintainers; [ _3JlOy-PYCCKUi ];
+    platforms = platforms.linux;
   };
 })

@@ -31,11 +31,11 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.enableFeature withGui "gui")
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Open-source collection of tools for doing computation in game theory";
     homepage = "http://www.gambit-project.org";
-    license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ t4ccer ];
-    platforms = with lib.platforms; unix ++ windows;
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ t4ccer ];
+    platforms = with platforms; unix ++ windows;
   };
 })

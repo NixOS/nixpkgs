@@ -42,10 +42,10 @@ stdenv.mkDerivation rec {
       sed -i "2 i export PATH=${perl}/bin:\$PATH" $out/bin/jumpappify-desktop-entry
     '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/mkropat/jumpapp";
     description = "Run-or-raise application switcher for any X11 desktop";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.matklad ];
+    license = licenses.mit;
+    maintainers = [ maintainers.matklad ];
   };
 }

@@ -181,7 +181,7 @@ buildPythonPackage rec {
       mv $out/docs $doc
     '';
 
-  meta = {
+  meta = with lib; {
     description = "Universal Scene Description";
     longDescription = ''
       Universal Scene Description (USD) is an efficient, scalable system
@@ -189,8 +189,8 @@ buildPythonPackage rec {
       for interchange between graphics applications.
     '';
     homepage = "https://openusd.org/";
-    license = lib.licenses.tost;
-    maintainers = with lib.maintainers; [
+    license = licenses.tost;
+    maintainers = with maintainers; [
       shaddydc
       gador
     ];

@@ -23,13 +23,13 @@ stdenv.mkDerivation {
     libpng12
   ];
 
-  meta = {
+  meta = with lib; {
     description = "CGI module for Linux, Solaris, MacOS X and AIX to read Windows Help Files";
     mainProgram = "winhelpcgi.cgi";
     homepage = "http://www.herdsoft.com/linux/produkte/winhelpcgi.html";
-    license = lib.licenses.gpl2Only;
-    maintainers = [ lib.maintainers.shlevy ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Only;
+    maintainers = [ maintainers.shlevy ];
+    platforms = platforms.linux;
     broken = stdenv.hostPlatform.isAarch64;
   };
 }

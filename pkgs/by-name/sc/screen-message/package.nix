@@ -27,12 +27,12 @@ stdenv.mkDerivation rec {
   # screen-message installs its binary in $(prefix)/games per default
   makeFlags = [ "execgamesdir=$(out)/bin" ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.joachim-breitner.de/en/projects#screen-message";
     description = "Displays a short text fullscreen in an X11 window";
-    license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.fpletz ];
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.fpletz ];
     mainProgram = "sm";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }

@@ -61,12 +61,12 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "PORTABLE_MODE" false)
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Cycle-accurate Nintendo Game Boy Advance emulator";
     homepage = "https://github.com/nba-emu/NanoBoyAdvance";
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     mainProgram = "NanoBoyAdvance";
-    maintainers = with lib.maintainers; [ tomasajt ];
-    platforms = lib.platforms.all;
+    maintainers = with maintainers; [ tomasajt ];
+    platforms = platforms.all;
   };
 })

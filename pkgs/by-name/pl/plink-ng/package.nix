@@ -48,12 +48,12 @@ stdenv.mkDerivation rec {
     cp plink $out/bin
   '';
 
-  meta = {
+  meta = with lib; {
     broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     description = "Comprehensive update to the PLINK association analysis toolset";
     mainProgram = "plink";
     homepage = "https://www.cog-genomics.org/plink2";
-    license = lib.licenses.gpl3;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3;
+    platforms = platforms.linux;
   };
 }

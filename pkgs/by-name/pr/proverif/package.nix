@@ -29,12 +29,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Cryptographic protocol verifier in the formal model";
     homepage = "https://bblanche.gitlabpages.inria.fr/proverif/";
-    license = lib.licenses.gpl2;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl2;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
       thoughtpolice
       vbgl
     ];

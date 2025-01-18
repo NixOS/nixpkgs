@@ -80,13 +80,13 @@ buildNpmPackage {
       --add-flags "'$out/lib/node_modules/scanservjs-api/src/server.js'"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "SANE scanner nodejs web ui";
     longDescription = "scanservjs is a simple web-based UI for SANE which allows you to share a scanner on a network without the need for drivers or complicated installation.";
     homepage = "https://github.com/sbs20/scanservjs";
-    license = lib.licenses.gpl2Only;
+    license = licenses.gpl2Only;
     mainProgram = "scanservjs";
-    maintainers = with lib.maintainers; [ chayleaf ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ chayleaf ];
+    platforms = platforms.linux;
   };
 }

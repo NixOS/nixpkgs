@@ -25,10 +25,10 @@ buildPythonPackage rec {
   # release tarball.
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "MaxMind GeoIP Legacy Database - Python API";
     homepage = "https://www.maxmind.com/";
-    maintainers = with lib.maintainers; [ jluttine ];
-    license = lib.licenses.lgpl21Plus;
+    maintainers = with maintainers; [ jluttine ];
+    license = licenses.lgpl21Plus;
   };
 }

@@ -94,7 +94,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "http://research.microsoft.com/en-us/um/people/lamport/tla/toolbox.html";
     description = "IDE for the TLA+ tools";
     mainProgram = "tla-toolbox";
@@ -104,8 +104,8 @@ stdenv.mkDerivation rec {
       versions of your modules, run the TLC model checker, and run TLAPS, the TLA+ proof system.
     '';
     # http://lamport.azurewebsites.net/tla/license.html
-    license = with lib.licenses; [ mit ];
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = with licenses; [ mit ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = [ "x86_64-linux" ];
     maintainers = [ ];
   };

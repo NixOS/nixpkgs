@@ -33,11 +33,11 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "pyflyby" ];
 
-  meta = {
+  meta = with lib; {
     description = "Set of productivity tools for Python";
     homepage = "https://github.com/deshaw/pyflyby";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ jfvillablanca ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ jfvillablanca ];
     mainProgram = "py";
   };
 }

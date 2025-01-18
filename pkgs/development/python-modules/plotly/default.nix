@@ -118,12 +118,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "plotly" ];
 
-  meta = {
+  meta = with lib; {
     description = "Python plotting library for collaborative, interactive, publication-quality graphs";
     homepage = "https://plot.ly/python/";
     downloadPage = "https://github.com/plotly/plotly.py";
     changelog = "https://github.com/plotly/plotly.py/blob/master/CHANGELOG.md";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pandapip1 ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ pandapip1 ];
   };
 }

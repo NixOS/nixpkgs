@@ -34,11 +34,11 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Game asset repository for Nazi Zombies: Portable";
     homepage = "https://github.com/nzp-team/assets";
-    license = with lib.licenses; [ cc-by-sa-40 ];
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ pluiedev ];
+    license = with licenses; [ cc-by-sa-40 ];
+    platforms = platforms.all;
+    maintainers = with maintainers; [ pluiedev ];
   };
 }

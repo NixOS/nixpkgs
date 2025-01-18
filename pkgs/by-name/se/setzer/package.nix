@@ -71,11 +71,11 @@ python3Packages.buildPythonApplication rec {
     runHook postCheck
   '';
 
-  meta = {
+  meta = with lib; {
     description = "LaTeX editor written in Python with Gtk";
     mainProgram = "setzer";
     homepage = "https://www.cvfosammmm.org/setzer/";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

@@ -32,10 +32,10 @@ stdenv.mkDerivation rec {
     sed -i -e 's|exec wish|exec ${tk}/bin/wish|' $out/bin/gocr.tcl
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://jocr.sourceforge.net/";
     description = "GPL Optical Character Recognition";
-    license = lib.licenses.gpl2;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2;
+    platforms = platforms.linux;
   };
 }

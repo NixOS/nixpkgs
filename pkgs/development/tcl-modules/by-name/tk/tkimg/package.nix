@@ -37,11 +37,11 @@ tcl.mkTclDerivation rec {
       ]
     );
 
-  meta = {
+  meta = with lib; {
     homepage = "https://sourceforge.net/projects/tkimg/";
     description = "Img package adds several image formats to Tcl/Tk";
-    maintainers = with lib.maintainers; [ matthewcroughan ];
-    license = lib.licenses.bsd3;
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ matthewcroughan ];
+    license = licenses.bsd3;
+    platforms = platforms.unix;
   };
 }

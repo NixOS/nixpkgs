@@ -98,12 +98,12 @@ stdenv.mkDerivation rec {
 
   dontPatchELF = true;
 
-  meta = {
+  meta = with lib; {
     description = "Brother BrGenML1 LPR driver";
     homepage = "http://www.brother.com";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    platforms = lib.platforms.linux;
-    license = lib.licenses.unfreeRedistributable;
-    maintainers = with lib.maintainers; [ jraygauthier ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    platforms = platforms.linux;
+    license = licenses.unfreeRedistributable;
+    maintainers = with maintainers; [ jraygauthier ];
   };
 }

@@ -35,10 +35,10 @@ buildPythonPackage rec {
 
   passthru.tests = jupyter-collaboration.tests;
 
-  meta = {
+  meta = with lib; {
     description = "JupyterLab/Jupyter Notebook 7+ extension providing user interface integration for real time collaboration";
     homepage = "https://github.com/jupyterlab/jupyter-collaboration/tree/main/projects/jupyter-collaboration-ui";
-    license = lib.licenses.bsd3;
-    maintainers = lib.teams.jupyter.members;
+    license = licenses.bsd3;
+    maintainers = teams.jupyter.members;
   };
 }

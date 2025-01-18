@@ -33,10 +33,10 @@ buildPythonPackage rec {
     pandoc
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Pandoc filter for adding LaTeX environment on specific div";
     homepage = "https://github.com/chdemko/pandoc-latex-environment";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ sigmanificient ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ sigmanificient ];
   };
 }

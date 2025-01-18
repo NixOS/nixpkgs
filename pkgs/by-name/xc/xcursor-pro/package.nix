@@ -41,12 +41,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru.updateScript = ./update.sh;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/ful1e5/XCursor-pro";
     description = "Modern XCursors";
-    license = lib.licenses.gpl3;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl3;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
       lactose
       midirhee12
     ];

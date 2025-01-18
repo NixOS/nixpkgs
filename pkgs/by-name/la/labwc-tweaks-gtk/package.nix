@@ -44,12 +44,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/labwc/labwc-tweaks-gtk";
     description = "Configuration gui app for labwc; gtk fork";
     mainProgram = "labwc-tweaks-gtk";
-    license = lib.licenses.gpl2Only;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ romildo ];
+    license = licenses.gpl2Only;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ romildo ];
   };
 })

@@ -30,15 +30,15 @@
 
 mkDerivation {
   pname = "konsole";
-  meta = {
+  meta = with lib; {
     homepage = "https://apps.kde.org/konsole/";
     description = "KDE terminal emulator";
-    license = with lib.licenses; [
+    license = with licenses; [
       gpl2Plus
       lgpl21Plus
       fdl12Plus
     ];
-    maintainers = with lib.maintainers; [ ttuegel ];
+    maintainers = with maintainers; [ ttuegel ];
     mainProgram = "konsole";
   };
   nativeBuildInputs = [

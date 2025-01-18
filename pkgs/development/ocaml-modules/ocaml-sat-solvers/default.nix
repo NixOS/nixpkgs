@@ -20,10 +20,10 @@ buildOasisPackage rec {
 
   propagatedBuildInputs = [ minisat ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/tcsprojects/ocaml-sat-solvers";
     description = "SAT Solvers For OCaml";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ mgttlinger ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ mgttlinger ];
   };
 }

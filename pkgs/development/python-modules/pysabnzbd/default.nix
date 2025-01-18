@@ -24,10 +24,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pysabnzbd" ];
 
-  meta = {
+  meta = with lib; {
     description = "Python wrapper for SABnzbd API";
     homepage = "https://github.com/jeradM/pysabnzbd";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

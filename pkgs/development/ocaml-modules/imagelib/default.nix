@@ -27,11 +27,11 @@ buildDunePackage rec {
   doCheck = true;
   checkInputs = [ alcotest ];
 
-  meta = {
+  meta = with lib; {
     description = "Image formats such as PNG and PPM in OCaml";
     homepage = "https://github.com/rlepigre/ocaml-imagelib";
-    license = lib.licenses.lgpl3;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.lgpl3;
+    maintainers = [ maintainers.vbgl ];
     mainProgram = "imagetool";
   };
 }

@@ -80,10 +80,10 @@ buildPythonPackage rec {
     "test_softmax_classification_batch_zero_baseline"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Model interpretability and understanding for PyTorch";
     homepage = "https://github.com/pytorch/captum";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ drupol ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ drupol ];
   };
 }

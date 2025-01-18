@@ -133,12 +133,12 @@ buildDotnetModule rec {
     };
   };
 
-  meta = {
+  meta = with lib; {
     description = "AirVPN's OpenVPN and WireGuard wrapper";
     homepage = "https://eddie.website";
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     mainProgram = "eddie-ui";
-    maintainers = with lib.maintainers; [ paveloom ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ paveloom ];
+    platforms = platforms.linux;
   };
 }

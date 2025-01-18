@@ -64,12 +64,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "http://elvis.the-little-red-haired-girl.org/";
     description = "Vi clone for Unix and other operating systems";
-    license = lib.licenses.free;
+    license = licenses.free;
     mainProgram = "elvis";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.unix;
   };
 })

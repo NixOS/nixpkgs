@@ -29,11 +29,11 @@ python3Packages.buildPythonApplication rec {
     cli-ui
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Bump software releases";
     homepage = "https://github.com/your-tools/tbump";
-    license = lib.licenses.bsd3;
+    license = licenses.bsd3;
     mainProgram = "tbump";
-    maintainers = with lib.maintainers; [ slashformotion ];
+    maintainers = with maintainers; [ slashformotion ];
   };
 }

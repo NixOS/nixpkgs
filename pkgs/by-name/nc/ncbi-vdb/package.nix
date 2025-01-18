@@ -30,11 +30,11 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/ncbi/ncbi-vdb";
     description = "Libraries for the INSDC Sequence Read Archives";
-    license = lib.licenses.ncbiPd;
-    maintainers = with lib.maintainers; [ t4ccer ];
-    platforms = lib.platforms.unix;
+    license = licenses.ncbiPd;
+    maintainers = with maintainers; [ t4ccer ];
+    platforms = platforms.unix;
   };
 })

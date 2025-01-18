@@ -17,11 +17,11 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-U3mgbG9h2cDqr0aqxbI2CJUOweIoDXDxmsWg0zxolSo=";
 
-  meta = {
+  meta = with lib; {
     description = "Little satellite utility for LeftWM";
     homepage = "https://github.com/leftwm/leftwm-config";
-    maintainers = with lib.maintainers; [ denperidge ];
-    license = lib.licenses.bsd3;
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ denperidge ];
+    license = licenses.bsd3;
+    platforms = platforms.linux;
   };
 }

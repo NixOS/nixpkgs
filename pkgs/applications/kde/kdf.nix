@@ -13,9 +13,9 @@
 
 mkDerivation {
   pname = "kdf";
-  meta = {
-    license = with lib.licenses; [ gpl2 ];
-    maintainers = [ lib.maintainers.peterhoeg ];
+  meta = with lib; {
+    license = with licenses; [ gpl2 ];
+    maintainers = [ maintainers.peterhoeg ];
   };
   nativeBuildInputs = [
     extra-cmake-modules

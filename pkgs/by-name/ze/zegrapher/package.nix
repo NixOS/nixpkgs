@@ -31,16 +31,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://zegrapher.com/en/";
     description = "Open source math plotter";
     longDescription = ''
       An open source, free and easy to use math plotter. It can plot functions,
       sequences, parametric equations and data on the plane.
     '';
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     mainProgram = "ZeGrapher";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.unix;
   };
 })

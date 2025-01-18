@@ -31,12 +31,12 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/bin
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Tool to exploit the hash length extension attack in various hashing algorithms";
     homepage = "https://github.com/bwall/HashPump";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ t4ccer ];
-    platforms = lib.platforms.linux;
+    license = licenses.mit;
+    maintainers = with maintainers; [ t4ccer ];
+    platforms = platforms.linux;
     mainProgram = "hashpump";
   };
 })

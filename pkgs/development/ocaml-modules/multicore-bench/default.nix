@@ -24,10 +24,10 @@ buildDunePackage rec {
     yojson
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Framework for writing multicore benchmark executables to run on current-bench";
     homepage = "https://github.com/ocaml-multicore/multicore-bench";
-    license = lib.licenses.isc;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.isc;
+    maintainers = [ maintainers.vbgl ];
   };
 }

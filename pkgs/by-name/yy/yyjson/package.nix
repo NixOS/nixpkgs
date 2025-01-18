@@ -20,12 +20,12 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Fastest JSON library in C";
     homepage = "https://github.com/ibireme/yyjson";
     changelog = "https://github.com/ibireme/yyjson/blob/${finalAttrs.src.rev}/CHANGELOG.md";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ sigmanificient ];
-    platforms = lib.platforms.all;
+    license = licenses.mit;
+    maintainers = with maintainers; [ sigmanificient ];
+    platforms = platforms.all;
   };
 })

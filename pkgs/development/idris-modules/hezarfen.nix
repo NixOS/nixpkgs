@@ -14,10 +14,10 @@ build-idris-package {
     sha256 = "0z4150gavpx64m3l0xbjjz9dcir7zij9hvd69k98zvhw7i27b1xp";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Theorem prover for intuitionistic propositional logic in Idris, with metaprogramming features";
     homepage = "https://github.com/joom/hezarfen";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.brainrape ];
+    license = licenses.mit;
+    maintainers = [ maintainers.brainrape ];
   };
 }

@@ -69,13 +69,13 @@ stdenv.mkDerivation {
     })
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Apply catppuccin flavors to your wallpapers";
     homepage = "https://github.com/lighttigerXIV/catppuccinifier";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ isabelroses ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ isabelroses ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "catppuccinifier-gui";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }

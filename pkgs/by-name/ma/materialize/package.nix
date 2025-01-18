@@ -177,12 +177,12 @@ rustPlatform.buildRustPackage rec {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://materialize.com";
     description = "Streaming SQL materialized view engine for real-time applications";
-    license = lib.licenses.bsl11;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ petrosagg ];
+    license = licenses.bsl11;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ petrosagg ];
     mainProgram = "environmentd";
   };
 }

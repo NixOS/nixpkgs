@@ -23,10 +23,10 @@ buildDunePackage rec {
   doCheck = lib.versionAtLeast ocaml.version "4.08";
   checkInputs = [ qcheck-alcotest ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/pqwy/lru";
     description = "Scalable LRU caches for OCaml";
-    maintainers = [ lib.maintainers.vbgl ];
-    license = lib.licenses.isc;
+    maintainers = [ maintainers.vbgl ];
+    license = licenses.isc;
   };
 }

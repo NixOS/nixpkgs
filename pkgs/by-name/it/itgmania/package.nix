@@ -83,12 +83,12 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.itgmania.com/";
     description = "Fork of StepMania 5.1, improved for the post-ITG community";
-    platforms = lib.platforms.linux;
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ftsimas ];
+    platforms = platforms.linux;
+    license = licenses.mit;
+    maintainers = with maintainers; [ ftsimas ];
     mainProgram = "itgmania";
   };
 })

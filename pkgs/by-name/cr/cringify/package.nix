@@ -32,11 +32,11 @@ rustPlatform.buildRustPackage rec {
 
   passthru.tests.version = testers.testVersion { package = cringify; };
 
-  meta = {
+  meta = with lib; {
     description = "Annoy your friends with the cringified text";
     homepage = "https://github.com/sansyrox/cringify";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "cringify";
-    maintainers = with lib.maintainers; [ tomasajt ];
+    maintainers = with maintainers; [ tomasajt ];
   };
 }

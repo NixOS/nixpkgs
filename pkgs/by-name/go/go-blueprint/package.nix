@@ -38,11 +38,11 @@ buildGoModule rec {
       --zsh <($out/bin/go-blueprint completion zsh)
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Initialize Go projects using popular frameworks";
     homepage = "https://github.com/Melkeydev/go-blueprint";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ tobifroe ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ tobifroe ];
     mainProgram = "go-blueprint";
   };
 }

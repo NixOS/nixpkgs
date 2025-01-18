@@ -28,11 +28,11 @@ let
 
       dontStrip = true;
 
-      meta = {
+      meta = with lib; {
         description = "Erlang PostgreSQL Driver";
-        license = lib.licenses.mit;
+        license = licenses.mit;
         homepage = "https://github.com/semiocast/pgsql";
-        maintainers = with lib.maintainers; [ ericbmerritt ];
+        maintainers = with maintainers; [ ericbmerritt ];
       };
 
       passthru = {

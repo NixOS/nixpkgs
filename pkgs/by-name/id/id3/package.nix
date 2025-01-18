@@ -20,12 +20,12 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "prefix=$(out)" ];
 
-  meta = {
+  meta = with lib; {
     description = "Portable command-line mass tagger";
     homepage = "https://squell.github.io/id3/";
-    license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ jecaro ];
-    platforms = lib.platforms.unix;
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ jecaro ];
+    platforms = platforms.unix;
     mainProgram = "id3";
   };
 }

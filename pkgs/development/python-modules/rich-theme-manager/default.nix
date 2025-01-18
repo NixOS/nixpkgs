@@ -25,10 +25,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "rich_theme_manager" ];
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = {
+  meta = with lib; {
     description = "Define custom styles and themes for use with rich";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     homepage = "https://github.com/RhetTbull/rich_theme_manager";
-    maintainers = with lib.maintainers; [ sigmanificient ];
+    maintainers = with maintainers; [ sigmanificient ];
   };
 }

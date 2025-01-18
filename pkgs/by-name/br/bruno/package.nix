@@ -169,12 +169,12 @@ buildNpmPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Open-source IDE For exploring and testing APIs";
     homepage = "https://www.usebruno.com";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "bruno";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       gepbird
       kashw2
       lucasew
@@ -182,6 +182,6 @@ buildNpmPackage rec {
       redyf
       water-sucks
     ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

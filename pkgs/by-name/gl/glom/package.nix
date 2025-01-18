@@ -148,18 +148,18 @@ stdenv.mkDerivation (finalAttrs: {
     )
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Easy-to-use database designer and user interface";
-    license = with lib.licenses; [
+    license = with licenses; [
       lgpl2
       gpl2
     ];
     homepage = "https://gitlab.gnome.org/Archive/glom";
     maintainers =
-      lib.teams.gnome.members
-      ++ (with lib.maintainers; [
+      teams.gnome.members
+      ++ (with maintainers; [
         bot-wxt1221
       ]);
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 })

@@ -118,12 +118,12 @@ python3.pkgs.buildPythonApplication rec {
     inherit runtimeDeps;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Extract files from any kind of container formats";
     homepage = "https://unblob.org";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.unix;
+    license = licenses.mit;
+    platforms = platforms.unix;
     mainProgram = "unblob";
-    maintainers = with lib.maintainers; [ vlaci ];
+    maintainers = with maintainers; [ vlaci ];
   };
 }

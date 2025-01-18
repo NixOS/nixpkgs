@@ -57,11 +57,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Library for the fast Cross-Platform Package Manager";
     homepage = "https://github.com/mamba-org/mamba";
-    license = lib.licenses.bsd3;
-    platforms = lib.platforms.all;
-    maintainers = [ lib.maintainers.ericthemagician ];
+    license = licenses.bsd3;
+    platforms = platforms.all;
+    maintainers = [ maintainers.ericthemagician ];
   };
 })

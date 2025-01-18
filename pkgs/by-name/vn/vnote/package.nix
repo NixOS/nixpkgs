@@ -32,13 +32,13 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtwayland
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://vnotex.github.io/vnote";
     description = "Pleasant note-taking platform";
     mainProgram = "vnote";
     changelog = "https://github.com/vnotex/vnote/releases/tag/${finalAttrs.src.rev}";
-    license = lib.licenses.lgpl3Plus;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = lib.platforms.linux;
+    license = licenses.lgpl3Plus;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.linux;
   };
 })

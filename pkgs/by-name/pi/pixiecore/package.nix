@@ -22,11 +22,11 @@ buildGoModule rec {
 
   subPackages = [ "cmd/pixiecore" ];
 
-  meta = {
+  meta = with lib; {
     description = "Tool to manage network booting of machines";
     homepage = "https://github.com/danderson/netboot/tree/master/pixiecore";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ bbigras ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ bbigras ];
     mainProgram = "pixiecore";
   };
 }

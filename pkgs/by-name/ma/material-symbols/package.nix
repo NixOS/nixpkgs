@@ -31,15 +31,15 @@ stdenvNoCC.mkDerivation {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = {
+  meta = with lib; {
     description = "Material Symbols icons by Google";
     homepage = "https://fonts.google.com/icons";
     downloadPage = "https://github.com/google/material-design-icons";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
+    license = licenses.asl20;
+    maintainers = with maintainers; [
       fufexan
       luftmensch-luftmensch
     ];
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 }

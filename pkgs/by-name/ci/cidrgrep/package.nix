@@ -21,10 +21,10 @@ buildGoModule {
     mv $out/bin/cmd $out/bin/cidrgrep
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Like grep but for IPv4 CIDRs";
     mainProgram = "cidrgrep";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ das_j ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ das_j ];
   };
 }

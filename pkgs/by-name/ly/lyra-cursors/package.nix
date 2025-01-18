@@ -72,11 +72,11 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "A cursor theme inspired by macOS and based on capitaine-cursors";
     homepage = "https://github.com/yeyushengfan258/Lyra-Cursors";
-    license = lib.licenses.gpl3Only;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ lordmzte ];
+    license = licenses.gpl3Only;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ lordmzte ];
   };
 }

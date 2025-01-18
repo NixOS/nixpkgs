@@ -6,7 +6,7 @@ buildDotnetGlobalTool {
 
   nugetHash = "sha256-/Ru/H2WXX/SCqF2s0M1DJkaw+6Nikm+ccrveqiOXggA=";
 
-  meta = {
+  meta = with lib; {
     description = "The Entity Framework Core tools help with design-time development tasks.";
     longDescription = ''
       The Entity Framework Core tools help with design-time development tasks.
@@ -15,8 +15,8 @@ buildDotnetGlobalTool {
     downloadPage = "https://www.nuget.org/packages/dotnet-ef";
     homepage = "https://learn.microsoft.com/en-us/ef/core/cli/dotnet";
     changelog = "https://learn.microsoft.com/en-us/ef/core/what-is-new/";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ lostmsu ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ lostmsu ];
     mainProgram = "dotnet-ef";
   };
 }

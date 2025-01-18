@@ -62,11 +62,11 @@ stdenv.mkDerivation rec {
     cp -r ../{Help,Patterns,Scripts,Rules} "$out/share/golly"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Cellular automata simulation program";
-    license = lib.licenses.gpl2;
-    maintainers = [ lib.maintainers.raskin ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2;
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.linux;
     downloadPage = "https://sourceforge.net/projects/golly/files/golly";
   };
 }

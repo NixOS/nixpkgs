@@ -15,10 +15,10 @@ buildFishPlugin rec {
     hash = "sha256-2niYj0NLfmVIQguuGTA7RrPIcorJEPkxhH6Dhcy+6Bk=";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Text Expansions for Fish";
     homepage = "https://github.com/nickeb96/puffer-fish";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ quantenzitrone ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ quantenzitrone ];
   };
 }

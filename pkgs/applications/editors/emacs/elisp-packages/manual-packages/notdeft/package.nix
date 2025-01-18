@@ -63,11 +63,11 @@ melpaBuild {
     updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://tero.hasu.is/notdeft/";
     description = "Fork of Deft that uses Xapian as a search engine";
-    maintainers = [ lib.maintainers.nessdoor ];
-    license = lib.licenses.bsd3;
-    platforms = lib.platforms.linux;
+    maintainers = [ maintainers.nessdoor ];
+    license = licenses.bsd3;
+    platforms = platforms.linux;
   };
 }

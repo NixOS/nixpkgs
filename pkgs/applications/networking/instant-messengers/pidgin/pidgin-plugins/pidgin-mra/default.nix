@@ -30,10 +30,10 @@ stdenv.mkDerivation rec {
     "DATADIR=${placeholder "out"}/share"
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/dreadatour/pidgin-mra";
     description = "Mail.ru Agent plugin for Pidgin / libpurple";
-    license = lib.licenses.gpl2;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2;
+    platforms = platforms.linux;
   };
 }

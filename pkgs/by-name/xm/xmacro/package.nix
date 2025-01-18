@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
     libXi
   ];
 
-  meta = {
-    platforms = lib.platforms.linux;
-    license = lib.licenses.gpl2Plus;
+  meta = with lib; {
+    platforms = platforms.linux;
+    license = licenses.gpl2Plus;
   };
 }

@@ -26,12 +26,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.ijg.org/";
     description = "Library that implements the JPEG image file format";
-    maintainers = with lib.maintainers; [ sigmanificient ];
-    license = lib.licenses.free;
+    maintainers = with maintainers; [ sigmanificient ];
+    license = licenses.free;
     pkgConfigModules = [ "libjpeg" ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 })

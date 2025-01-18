@@ -78,19 +78,19 @@ stdenv.mkDerivation rec {
     tests.smoke-test = nixosTests.whisparr;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Adult movie collection manager for Usenet and BitTorrent users";
     homepage = "https://wiki.servarr.com/en/whisparr";
     changelog = "https://whisparr.servarr.com/v1/update/nightly/changes";
-    license = lib.licenses.gpl3Only;
+    license = licenses.gpl3Only;
     platforms = [
       "aarch64-darwin"
       "aarch64-linux"
       "x86_64-darwin"
       "x86_64-linux"
     ];
-    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+    sourceProvenance = [ sourceTypes.binaryNativeCode ];
     mainProgram = "Whisparr";
-    maintainers = [ lib.maintainers.paveloom ];
+    maintainers = [ maintainers.paveloom ];
   };
 }

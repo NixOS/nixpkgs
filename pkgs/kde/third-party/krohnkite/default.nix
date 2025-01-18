@@ -46,11 +46,11 @@ buildNpmPackage rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Dynamic Tiling Extension for KWin 6";
     homepage = "https://github.com/anametologin/krohnkite";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ben9986 ];
-    platforms = lib.platforms.all;
+    license = licenses.mit;
+    maintainers = with maintainers; [ ben9986 ];
+    platforms = platforms.all;
   };
 }

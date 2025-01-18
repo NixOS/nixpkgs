@@ -24,7 +24,7 @@ gccStdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "C++ utility library from Code Synthesis";
     longDescription = ''
       libcutl is a C++ utility library.
@@ -33,8 +33,8 @@ gccStdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://codesynthesis.com/projects/libcutl/";
     changelog = "https://git.codesynthesis.com/cgit/libcutl/libcutl/log/";
-    platforms = lib.platforms.all;
-    maintainers = [ lib.maintainers.xzfc ];
-    license = lib.licenses.mit;
+    platforms = platforms.all;
+    maintainers = [ maintainers.xzfc ];
+    license = licenses.mit;
   };
 })

@@ -57,10 +57,10 @@ stdenv.mkDerivation rec {
   nativeCheckInputs = [ xxd ];
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "Utilities for creating and checking FAT and VFAT file systems";
     homepage = "https://github.com/dosfstools/dosfstools";
-    platforms = lib.platforms.unix;
-    license = lib.licenses.gpl3;
+    platforms = platforms.unix;
+    license = licenses.gpl3;
   };
 }

@@ -21,10 +21,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "conda_package_handling" ];
 
-  meta = {
+  meta = with lib; {
     description = "Create and extract conda packages of various formats";
     homepage = "https://github.com/conda/conda-package-handling";
-    license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.ericthemagician ];
+    license = licenses.bsd3;
+    maintainers = [ maintainers.ericthemagician ];
   };
 }

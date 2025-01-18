@@ -36,11 +36,11 @@ stdenv.mkDerivation (finalAttrs: {
     stdenv.hostPlatform.isAarch64 && !stdenv.hostPlatform.isDarwin
   ) "-flax-vector-conversions";
 
-  meta = {
+  meta = with lib; {
     description = "Intel Open Path Guiding Library";
     homepage = "https://github.com/OpenPathGuidingLibrary/openpgl";
-    platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.amarshall ];
-    license = lib.licenses.asl20;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.amarshall ];
+    license = licenses.asl20;
   };
 })

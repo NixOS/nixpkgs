@@ -27,10 +27,10 @@ buildPythonPackage rec {
     "pretix_mollie"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Mollie payments for pretix";
     homepage = "https://github.com/pretix/pretix-mollie";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ hexa ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ hexa ];
   };
 }

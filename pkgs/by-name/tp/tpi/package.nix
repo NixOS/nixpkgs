@@ -16,11 +16,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-5TfLAMPl3I9gkd3SSjPlBeBJzANK9u5XjY0ReHVSTJw=";
 
-  meta = {
+  meta = with lib; {
     description = "CLI tool to control your Turing Pi 2 board";
     homepage = "https://github.com/turing-machines/tpi";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ WoutSwinkels ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ WoutSwinkels ];
     mainProgram = "tpi";
   };
 }

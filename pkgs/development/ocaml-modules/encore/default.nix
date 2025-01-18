@@ -29,10 +29,10 @@ buildDunePackage rec {
   checkInputs = [ alcotest ];
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/mirage/encore";
     description = "Library to generate encoder/decoder which ensure isomorphism";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.mit;
+    maintainers = [ maintainers.vbgl ];
   };
 }

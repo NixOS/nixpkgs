@@ -52,11 +52,11 @@ stdenv.mkDerivation (finalAttrs: {
   # Fontconfig error: No writable cache directories
   preBuild = "export XDG_CACHE_HOME=$(mktemp -d)";
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/gepetto/gepetto-viewer-corba";
     description = "CORBA client/server for gepetto-viewer.";
-    license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.nim65s ];
-    platforms = lib.platforms.unix;
+    license = licenses.bsd3;
+    maintainers = [ maintainers.nim65s ];
+    platforms = platforms.unix;
   };
 })

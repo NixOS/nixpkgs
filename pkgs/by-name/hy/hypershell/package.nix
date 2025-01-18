@@ -34,12 +34,12 @@ buildNpmPackage rec {
     $out/bin/hypershell --help
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Spawn shells anywhere. Fully peer-to-peer, authenticated, and end to end encrypted";
     homepage = "https://github.com/holepunchto/hypershell";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ davhau ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ davhau ];
     mainProgram = "hypershell";
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 }

@@ -68,12 +68,12 @@ stdenv.mkDerivation rec {
       --prefix PATH : ${apps}
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/bit-team/backintime";
     description = "Simple backup tool for Linux";
-    license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ stephen-huan ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ stephen-huan ];
+    platforms = platforms.linux;
     mainProgram = "backintime";
     longDescription = ''
       Back In Time is a simple backup tool (on top of rsync) for Linux

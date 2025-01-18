@@ -25,11 +25,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru.mmdb = "${finalAttrs.finalPackage}/share/dbip/dbip-country-lite.mmdb";
 
-  meta = {
+  meta = with lib; {
     description = "Free IP to Country Lite database by DB-IP";
     homepage = "https://db-ip.com/db/download/ip-to-country-lite";
-    license = lib.licenses.cc-by-40;
-    maintainers = with lib.maintainers; [ nickcao ];
-    platforms = lib.platforms.all;
+    license = licenses.cc-by-40;
+    maintainers = with maintainers; [ nickcao ];
+    platforms = platforms.all;
   };
 })

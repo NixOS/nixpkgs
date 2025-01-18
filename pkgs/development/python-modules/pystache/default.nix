@@ -36,10 +36,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pystache" ];
 
-  meta = {
+  meta = with lib; {
     description = "Framework-agnostic, logic-free templating system inspired by ctemplate and et";
     homepage = "https://github.com/defunkt/pystache";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.nickcao ];
+    license = licenses.mit;
+    maintainers = [ maintainers.nickcao ];
   };
 }

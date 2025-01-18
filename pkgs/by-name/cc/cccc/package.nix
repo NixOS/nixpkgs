@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     "LD=c++"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "C and C++ Code Counter";
     mainProgram = "cccc";
     longDescription = ''
@@ -35,8 +35,8 @@ stdenv.mkDerivation rec {
       complexity and metrics proposed by Chidamber&Kemerer and Henry&Kafura.
     '';
     homepage = "https://cccc.sourceforge.net/";
-    license = lib.licenses.gpl2;
-    platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.linquize ];
+    license = licenses.gpl2;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.linquize ];
   };
 }

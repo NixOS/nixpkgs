@@ -47,11 +47,11 @@ stdenv.mkDerivation rec {
         --modify-nix default.nix
     ''
   ];
-  meta = {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Better make, inspired by djb's redo";
-    license = lib.licenses.lgpl2Plus;
-    maintainers = [ lib.maintainers.timbertson ];
-    platforms = lib.platforms.all;
+    license = licenses.lgpl2Plus;
+    maintainers = [ maintainers.timbertson ];
+    platforms = platforms.all;
   };
 }

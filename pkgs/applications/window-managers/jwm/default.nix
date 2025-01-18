@@ -74,12 +74,12 @@ stdenv.mkDerivation rec {
     rev-prefix = "v";
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "http://joewing.net/projects/jwm/";
     description = "Joe's Window Manager is a light-weight X11 window manager";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.romildo ];
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.romildo ];
     mainProgram = "jwm";
   };
 }

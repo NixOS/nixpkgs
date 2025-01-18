@@ -69,11 +69,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "myfitnesspal" ];
 
-  meta = {
+  meta = with lib; {
     description = "Python module to access meal tracking data stored in MyFitnessPal";
     mainProgram = "myfitnesspal";
     homepage = "https://github.com/coddingtonbear/python-myfitnesspal";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ bhipple ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ bhipple ];
   };
 }

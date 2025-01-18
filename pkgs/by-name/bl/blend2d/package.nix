@@ -29,11 +29,11 @@ stdenv.mkDerivation {
 
   cmakeFlags = [ (lib.cmakeFeature "ASMJIT_DIR" (toString asmjit.src)) ];
 
-  meta = {
+  meta = with lib; {
     description = "2D Vector Graphics Engine Powered by a JIT Compiler";
     homepage = "https://blend2d.com";
-    license = lib.licenses.zlib;
-    maintainers = with lib.maintainers; [ aleksana ];
-    platforms = lib.platforms.all;
+    license = licenses.zlib;
+    maintainers = with maintainers; [ aleksana ];
+    platforms = platforms.all;
   };
 }

@@ -36,12 +36,12 @@ gccStdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/bin
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Bywater BASIC Interpreter";
     mainProgram = "bwbasic";
-    license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ irenes ];
-    platforms = lib.platforms.all;
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ irenes ];
+    platforms = platforms.all;
     homepage = "https://sourceforge.net/projects/bwbasic/";
   };
 })

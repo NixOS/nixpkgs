@@ -42,12 +42,12 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/vis --set TERM rxvt-256color
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/dpayne/cli-visualizer";
     description = "CLI based audio visualizer";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.matthiasbeyer ];
-    platforms = with lib.platforms; linux;
+    license = licenses.mit;
+    maintainers = [ maintainers.matthiasbeyer ];
+    platforms = with platforms; linux;
     mainProgram = "vis";
   };
 }

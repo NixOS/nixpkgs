@@ -13,12 +13,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-JTZZ3IZWk2PwZfXogeE1oMlZS5h/NKGbEEx0FKLSxHk=";
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.ivarch.com/programs/pv.shtml";
     description = "Tool for monitoring the progress of data through a pipeline";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ matthiasbeyer ];
-    platforms = lib.platforms.all;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ matthiasbeyer ];
+    platforms = platforms.all;
     mainProgram = "pv";
   };
 })

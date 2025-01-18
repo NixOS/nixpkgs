@@ -33,12 +33,12 @@ buildDunePackage rec {
     tiny_httpd
   ];
 
-  meta = {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "FUSE-based file system backed by Google Drive, written in OCaml";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ obadz ];
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ obadz ];
     mainProgram = "google-drive-ocamlfuse";
   };
 }

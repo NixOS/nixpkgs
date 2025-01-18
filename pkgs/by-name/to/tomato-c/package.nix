@@ -66,12 +66,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/gabrielzschmitz/Tomato.C";
     description = " A pomodoro timer written in pure C";
-    license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    license = with licenses; [ gpl3Plus ];
+    maintainers = with maintainers; [ AndersonTorres ];
     mainProgram = "tomato";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 })

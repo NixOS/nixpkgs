@@ -27,11 +27,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Simple image format optimised for pixel art";
     homepage = "https://github.com/Falconerd/pie";
-    maintainers = with lib.maintainers; [ sigmanificient ];
-    license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ sigmanificient ];
+    license = licenses.mit;
+    platforms = platforms.linux;
   };
 })

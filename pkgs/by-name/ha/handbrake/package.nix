@@ -353,7 +353,7 @@ let
       };
     };
 
-    meta = {
+    meta = with lib; {
       homepage = "https://handbrake.fr/";
       description = "Tool for converting video files and ripping DVDs";
       longDescription = ''
@@ -364,13 +364,13 @@ let
         CLI - `HandbrakeCLI`
         GTK GUI - `ghb`
       '';
-      license = lib.licenses.gpl2Only;
-      maintainers = with lib.maintainers; [
+      license = licenses.gpl2Only;
+      maintainers = with maintainers; [
         Anton-Latukha
         wmertens
       ];
       mainProgram = "HandBrakeCLI";
-      platforms = with lib.platforms; unix;
+      platforms = with platforms; unix;
       broken = stdenv.hostPlatform.isDarwin; # https://github.com/NixOS/nixpkgs/pull/297984#issuecomment-2016503434
     };
   };

@@ -25,10 +25,10 @@ buildLua {
     (lib.makeBinPath [ mpv-unwrapped ])
   ];
 
-  meta = {
+  meta = with lib; {
     description = "High-performance on-the-fly thumbnailer for mpv";
     homepage = "https://github.com/po5/thumbfast";
-    license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ apfelkuchen6 ];
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ apfelkuchen6 ];
   };
 }

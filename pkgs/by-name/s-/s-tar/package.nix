@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     rm -r $out/etc $out/include $out/sbin
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Very fast tar like tape archiver with improved functionality";
     longDescription = ''
       Star archives and extracts multiple files to and from a single file called a tarfile.
@@ -35,8 +35,8 @@ stdenv.mkDerivation rec {
       Note that unpacking tar archives may be a security risk because star may overwrite existing files.
     '';
     homepage = "https://cdrtools.sourceforge.net/private/star.html";
-    license = lib.licenses.cddl;
-    maintainers = [ lib.maintainers.wucke13 ];
+    license = licenses.cddl;
+    maintainers = [ maintainers.wucke13 ];
     platforms = [ "x86_64-linux" ];
   };
 }

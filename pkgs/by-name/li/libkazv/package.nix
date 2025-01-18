@@ -55,11 +55,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   checkInputs = [ catch2_3 ];
 
-  meta = {
+  meta = with lib; {
     description = "Matrix client sdk built upon lager and the value-oriented design it enables";
     homepage = "https://lily-is.land/kazv/libkazv";
-    license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ fgaz ];
-    platforms = lib.platforms.all;
+    license = licenses.agpl3Plus;
+    maintainers = with maintainers; [ fgaz ];
+    platforms = platforms.all;
   };
 })

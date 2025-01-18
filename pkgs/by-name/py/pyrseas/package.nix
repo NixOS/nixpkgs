@@ -47,10 +47,10 @@ python3Packages.buildPythonApplication rec {
   # The tests are impure (they try to access a PostgreSQL server)
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Declarative language to describe PostgreSQL databases";
     homepage = "https://perseas.github.io/";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ pmeunier ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ pmeunier ];
   };
 }

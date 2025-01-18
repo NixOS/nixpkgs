@@ -28,12 +28,12 @@ stdenv.mkDerivation rec {
     mkdir -p $out/lib
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://djvu.sourceforge.net/djview4.html";
     description = "Black-and-white djvu page encoder and decoder that use interpage information";
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
     mainProgram = "minidjvu";
     knownVulnerabilities = [
       "minidjvu is vulnerable to a number of out-of-bound read vulnerabilities, potentially causing denials of service (CVE-2017-12441, CVE-2017-12442, CVE-2017-12443, CVE-2017-12444, CVE-2017-12445)"

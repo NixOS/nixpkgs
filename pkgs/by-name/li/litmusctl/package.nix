@@ -34,12 +34,12 @@ buildGoModule rec {
       --zsh <($out/bin/litmusctl completion zsh)
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Command-Line tool to manage Litmuschaos's agent plane";
     homepage = "https://github.com/litmuschaos/litmusctl";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     mainProgram = "litmusctl";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       vinetos
       sailord
     ];

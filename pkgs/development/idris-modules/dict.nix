@@ -21,10 +21,10 @@ build-idris-package {
     sed -i 's/\"//g' source/dict.ipkg
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Dict k v in Idris";
     homepage = "https://github.com/be5invis/idris-dict";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.brainrape ];
+    license = licenses.mit;
+    maintainers = [ maintainers.brainrape ];
   };
 }

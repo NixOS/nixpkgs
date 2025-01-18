@@ -39,11 +39,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://smc.org.in/fonts/manjari";
     description = "Manjari Malayalam Typeface";
-    license = lib.licenses.ofl;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ adtya ];
+    license = licenses.ofl;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ adtya ];
   };
 }

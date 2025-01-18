@@ -120,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
       -e "/gtk-update-icon-cache/d"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Tethered camera control and capture";
     longDescription = ''
       Entangle uses GTK and libgphoto2 to provide a graphical interface
@@ -130,9 +130,9 @@ stdenv.mkDerivation (finalAttrs: {
       This app can also serve as a camera app for mobile devices.
     '';
     homepage = "https://gitlab.com/entangle/entangle";
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ ShamrockLee ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ ShamrockLee ];
     mainProgram = "entangle";
   };
 })

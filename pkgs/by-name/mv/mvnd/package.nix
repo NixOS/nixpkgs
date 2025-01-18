@@ -98,12 +98,12 @@ maven.buildMavenPackage rec {
       };
     });
 
-  meta = {
+  meta = with lib; {
     description = "The Apache Maven Daemon";
     homepage = "https://maven.apache.org/";
-    license = lib.licenses.asl20;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ nathanregner ];
+    license = licenses.asl20;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ nathanregner ];
     mainProgram = "mvnd";
   };
 }

@@ -51,15 +51,15 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s ${fsuae}/share/fs-uae $out/share/fs-uae
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://fs-uae.net";
     description = "Graphical front-end for the FS-UAE emulator";
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     mainProgram = "fs-uae-launcher";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       sander
       AndersonTorres
     ];
-    platforms = with lib.systems.inspect; patternLogicalAnd patterns.isx86 patterns.isLinux;
+    platforms = with systems.inspect; patternLogicalAnd patterns.isx86 patterns.isLinux;
   };
 })

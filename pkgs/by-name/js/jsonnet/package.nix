@@ -55,14 +55,14 @@ stdenv.mkDerivation rec {
     cp -r ./html $out/share/doc/jsonnet
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Purely-functional configuration language that helps you define JSON data";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       benley
       copumpkin
     ];
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     homepage = "https://github.com/google/jsonnet";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }

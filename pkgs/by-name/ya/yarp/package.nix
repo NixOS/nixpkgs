@@ -28,11 +28,11 @@ stdenv.mkDerivation rec {
 
   postInstall = "mv ./$out/lib/*.so $out/lib/";
 
-  meta = {
+  meta = with lib; {
     description = "Yet Another Robot Platform";
     homepage = "http://yarp.it";
-    license = lib.licenses.lgpl21;
-    platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.nico202 ];
+    license = licenses.lgpl21;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.nico202 ];
   };
 }

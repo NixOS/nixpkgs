@@ -61,10 +61,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Library to generate text, XML, JSON, and HTML";
-    license = lib.licenses.bsd2;
-    maintainers = [ lib.maintainers.reckenrode ];
-    platforms = lib.platforms.unix;
+    license = licenses.bsd2;
+    maintainers = [ maintainers.reckenrode ];
+    platforms = platforms.unix;
   };
 })

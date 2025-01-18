@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = {
+  meta = with lib; {
     description = "Prints or set the window manager name property of the root window";
     homepage = "https://tools.suckless.org/wmname";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.unix;
+    license = licenses.mit;
+    platforms = platforms.unix;
     mainProgram = "wmname";
   };
 }

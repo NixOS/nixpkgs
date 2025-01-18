@@ -15,11 +15,11 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://libcello.org/";
     description = "Higher level programming in C";
-    license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.MostAwesomeDude ];
-    platforms = lib.platforms.unix;
+    license = licenses.bsd3;
+    maintainers = [ maintainers.MostAwesomeDude ];
+    platforms = platforms.unix;
   };
 }

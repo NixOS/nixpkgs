@@ -40,12 +40,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postCheck
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Command line tool for generating a changelog from git tags and commit history";
     homepage = "https://github.com/cookpete/auto-changelog";
     changelog = "https://github.com/cookpete/auto-changelog/blob/master/CHANGELOG.md";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "auto-changelog";
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = with maintainers; [ pyrox0 ];
   };
 })

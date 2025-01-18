@@ -100,11 +100,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  meta = {
+  meta = with lib; {
     description = "SDL multi-channel audio mixer library";
     homepage = "http://www.libsdl.org/projects/SDL_mixer/";
-    maintainers = lib.teams.sdl.members ++ (with lib.maintainers; [ ]);
-    license = lib.licenses.zlib;
+    maintainers = teams.sdl.members ++ (with maintainers; [ ]);
+    license = licenses.zlib;
     inherit (SDL.meta) platforms;
   };
 })

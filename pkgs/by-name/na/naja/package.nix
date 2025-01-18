@@ -84,12 +84,12 @@ stdenv.mkDerivation {
     moveToOutput lib/libnaja_bne.so $lib
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Structural Netlist API (and more) for EDA post synthesis flow development";
     homepage = "https://github.com/najaeda/naja";
-    license = lib.licenses.asl20;
-    maintainers = lib.teams.ngi.members;
+    license = licenses.asl20;
+    maintainers = teams.ngi.members;
     mainProgram = "naja_edit";
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 }

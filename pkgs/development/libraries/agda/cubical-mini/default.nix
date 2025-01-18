@@ -33,11 +33,11 @@ mkDerivation rec {
     runHook postBuild
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/cmcmA20/cubical-mini";
     description = "A nonstandard library for Cubical Agda";
-    license = lib.licenses.agpl3Only;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ thelissimus ];
+    license = licenses.agpl3Only;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ thelissimus ];
   };
 }

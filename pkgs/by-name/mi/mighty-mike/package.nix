@@ -47,7 +47,7 @@ stdenv.mkDerivation {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = {
+  meta = with lib; {
     description = "Port of Mighty Mike, a 1995 Macintosh game by Pangea Software, for modern operating systems";
     longDescription = ''
       This is Pangea Software's Mighty Mike updated to run on modern systems.
@@ -55,9 +55,9 @@ stdenv.mkDerivation {
       It was initially published in 1995 under the name Power Pete.
     '';
     homepage = "https://jorio.itch.io/mightymike";
-    license = lib.licenses.cc-by-nc-sa-40;
+    license = licenses.cc-by-nc-sa-40;
     mainProgram = "MightyMike";
-    maintainers = with lib.maintainers; [ nateeag ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ nateeag ];
+    platforms = platforms.linux;
   };
 }

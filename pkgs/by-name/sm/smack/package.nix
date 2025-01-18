@@ -26,11 +26,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "XMPP (Jabber) client library for instant messaging and presence";
     homepage = "http://www.igniterealtime.org/projects/smack/";
-    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
-    platforms = lib.platforms.unix;
-    license = lib.licenses.asl20;
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    platforms = platforms.unix;
+    license = licenses.asl20;
   };
 }

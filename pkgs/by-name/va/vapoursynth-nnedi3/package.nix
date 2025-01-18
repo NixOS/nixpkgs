@@ -44,11 +44,11 @@ stdenv.mkDerivation (finalAttrs: {
     rm -f $out/lib/vapoursynth/*.la
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Filter for VapourSynth";
     homepage = "https://github.com/dubhater/vapoursynth-nnedi3";
-    license = with lib.licenses; [ gpl2Plus ];
-    maintainers = with lib.maintainers; [ snaki ];
-    platforms = with lib.platforms; x86_64 ++ aarch64;
+    license = with licenses; [ gpl2Plus ];
+    maintainers = with maintainers; [ snaki ];
+    platforms = with platforms; x86_64 ++ aarch64;
   };
 })

@@ -115,16 +115,16 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "fortify" ];
 
-  meta = {
+  meta = with lib; {
     description = "ET: Legacy is an open source project based on the code of Wolfenstein: Enemy Territory which was released in 2010 under the terms of the GPLv3 license";
     homepage = "https://etlegacy.com";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = with licenses; [ gpl3Plus ];
     longDescription = ''
       ET: Legacy, an open source project fully compatible client and server
       for the popular online FPS game Wolfenstein: Enemy Territory - whose
       gameplay is still considered unmatched by many, despite its great age.
     '';
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       ashleyghooper
       drupol
     ];

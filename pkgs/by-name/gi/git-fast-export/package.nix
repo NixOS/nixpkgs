@@ -78,11 +78,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Import mercurial into git";
     homepage = "https://repo.or.cz/w/fast-export.git";
-    license = lib.licenses.gpl2;
-    maintainers = [ lib.maintainers.koral ];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl2;
+    maintainers = [ maintainers.koral ];
+    platforms = platforms.unix;
   };
 })

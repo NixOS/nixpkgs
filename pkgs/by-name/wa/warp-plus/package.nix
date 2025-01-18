@@ -42,11 +42,11 @@ buildGoModule rec {
     tests.version = testers.testVersion { package = warp-plus; };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Warp + Psiphon, an anti censorship utility for Iran";
     homepage = "https://github.com/bepass-org/warp-plus";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ paveloom ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ paveloom ];
     mainProgram = "warp-plus";
   };
 }

@@ -49,12 +49,12 @@ appimageTools.wrapAppImage {
     ln -s ${udevRules} $out/lib/udev/rules.d/99-tprogrammer.rules
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Configure FLEXOPTIX Universal Transceivers in seconds";
     homepage = "https://www.flexoptix.net";
     changelog = "https://www.flexoptix.net/en/flexoptix-app/?os=linux#flexapp__modal__changelog";
-    license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ das_j ];
+    license = licenses.unfree;
+    maintainers = with maintainers; [ das_j ];
     platforms = [ "x86_64-linux" ];
   };
 }

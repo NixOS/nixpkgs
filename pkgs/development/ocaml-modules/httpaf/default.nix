@@ -29,10 +29,10 @@ buildDunePackage rec {
   ];
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "High-performance, memory-efficient, and scalable web server for OCaml";
-    license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.bsd3;
+    maintainers = [ maintainers.vbgl ];
     inherit (src.meta) homepage;
   };
 }

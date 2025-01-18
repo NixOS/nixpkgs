@@ -71,12 +71,12 @@ buildNpmPackage rec {
     install -Dm444 assets/images/icon.png $out/share/pixmaps/ytdownloader.png
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Modern GUI video and audio downloader";
     homepage = "https://github.com/aandrew-me/ytDownloader";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ chewblacka ];
-    platforms = lib.platforms.all;
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ chewblacka ];
+    platforms = platforms.all;
     mainProgram = "ytdownloader";
   };
 }

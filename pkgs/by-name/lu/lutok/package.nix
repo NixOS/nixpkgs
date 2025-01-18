@@ -76,12 +76,12 @@ lib.fix (
 
     __structuredAttrs = true;
 
-    meta = {
+    meta = with lib; {
       description = "Lightweight C++ API for Lua";
       homepage = "https://github.com/freebsd/lutok/";
-      license = lib.licenses.bsd3;
-      maintainers = with lib.maintainers; [ reckenrode ];
-      platforms = lib.platforms.unix;
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ reckenrode ];
+      platforms = platforms.unix;
     };
   })
 )

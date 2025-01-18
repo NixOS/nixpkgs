@@ -47,11 +47,11 @@ buildGoModule {
       --replace-fail '-files=/bin/bash' '-files=${bash}/bin/bash'
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Create small Go-based root file systems -- with support for CPIOs and (TBD) Docker images";
     homepage = "https://github.com/u-root/mkuimage";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ katexochen ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ katexochen ];
     mainProgram = "mkuimage";
   };
 }

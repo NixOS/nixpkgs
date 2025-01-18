@@ -23,12 +23,12 @@ flutter.buildFlutterApplication {
     install -Dm0644 ./packaging/linux/page.kramo.Sly.desktop $out/share/applications/page.kramo.Sly.desktop
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Friendly image editor";
     homepage = "https://github.com/kra-mo/sly";
     mainProgram = "sly";
-    license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ aucub ];
-    platforms = lib.platforms.linux;
+    license = with licenses; [ gpl3Plus ];
+    maintainers = with maintainers; [ aucub ];
+    platforms = platforms.linux;
   };
 }

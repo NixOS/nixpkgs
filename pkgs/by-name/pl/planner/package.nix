@@ -58,12 +58,12 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share/gsettings-schemas/planner-${version}"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Project management tool for the GNOME desktop";
     mainProgram = "planner";
     homepage = "https://gitlab.gnome.org/World/planner";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ amiloradovsky ];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ amiloradovsky ];
+    platforms = platforms.unix;
   };
 }

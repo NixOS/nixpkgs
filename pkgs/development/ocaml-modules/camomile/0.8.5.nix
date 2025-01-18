@@ -34,13 +34,13 @@ stdenv.mkDerivation {
 
   createFindlibDestdir = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/yoriyuki/Camomile/tree/master/Camomile";
     description = "Comprehensive Unicode library for OCaml";
-    license = lib.licenses.lgpl21;
+    license = licenses.lgpl21;
     inherit (ocaml.meta) platforms;
     maintainers = [
-      lib.maintainers.maggesi
+      maintainers.maggesi
     ];
   };
 }

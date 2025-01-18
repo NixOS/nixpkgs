@@ -73,18 +73,18 @@ rustPlatform.buildRustPackage rec {
         $out/share/applications/Modrinth\ App.desktop
     '';
 
-  meta = {
+  meta = with lib; {
     description = "Modrinth's game launcher";
     longDescription = ''
       A unique, open source launcher that allows you to play your favorite mods,
       and keep them up to date, all in one neat little package
     '';
     homepage = "https://modrinth.com";
-    license = with lib.licenses; [
+    license = with licenses; [
       gpl3Plus
       unfreeRedistributable
     ];
-    maintainers = with lib.maintainers; [ getchoo ];
+    maintainers = with maintainers; [ getchoo ];
     mainProgram = "ModrinthApp";
     platforms = with lib; platforms.linux ++ platforms.darwin;
     # This builds on architectures like aarch64, but the launcher itself does not support them yet.

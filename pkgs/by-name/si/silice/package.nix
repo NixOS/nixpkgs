@@ -110,15 +110,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = {
+  meta = with lib; {
     description = "Open source language that simplifies prototyping and writing algorithms on FPGA architectures";
     homepage = "https://github.com/sylefeb/Silice";
-    license = lib.licenses.bsd2;
+    license = licenses.bsd2;
     mainProgram = "silice";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       astro
       pbsds
     ];
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 })

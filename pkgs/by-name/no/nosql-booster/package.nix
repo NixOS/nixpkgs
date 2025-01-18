@@ -11,12 +11,12 @@ let
     url = "https://s3.nosqlbooster.com/download/releasesv8/nosqlbooster4mongo-${version}.AppImage";
     sha256 = "sha256-ZJdCHOodJel7Apb//s96vrf1Ruml/NLUMQ9eFFR9tfU=";
   };
-  meta = {
+  meta = with lib; {
     homepage = "https://nosqlbooster.com/";
     description = "GUI tool for MongoDB Server";
     changelog = "https://nosqlbooster.com/blog/announcing-nosqlbooster-81/#version-819";
-    maintainers = with lib.maintainers; [ guillaumematheron ];
-    license = lib.licenses.unfree;
+    maintainers = with maintainers; [ guillaumematheron ];
+    license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     mainProgram = "nosql-booster";
   };

@@ -45,11 +45,11 @@ stdenvNoCC.mkDerivation {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = {
+  meta = with lib; {
     description = "Soothing pastel theme for SDDM based on corners theme";
     homepage = "https://github.com/khaneliman/sddm-catppuccin-corners";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ khaneliman ];
-    platforms = lib.platforms.linux;
+    license = licenses.mit;
+    maintainers = with maintainers; [ khaneliman ];
+    platforms = platforms.linux;
   };
 }

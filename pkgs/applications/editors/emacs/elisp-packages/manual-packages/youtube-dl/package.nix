@@ -18,10 +18,10 @@ melpaBuild {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = {
+  meta = with lib; {
     description = "Emacs youtube-dl download manager";
     homepage = "https://github.com/skeeto/youtube-dl-emacs";
-    license = lib.licenses.unlicense;
-    maintainers = with lib.maintainers; [ leungbk ];
+    license = licenses.unlicense;
+    maintainers = with maintainers; [ leungbk ];
   };
 }

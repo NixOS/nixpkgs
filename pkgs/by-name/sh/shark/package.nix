@@ -38,10 +38,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  meta = {
+  meta = with lib; {
     description = "Fast, modular, general open-source C++ machine learning library";
     homepage = "https://shark-ml.github.io/Shark/";
-    license = lib.licenses.lgpl3Only;
-    maintainers = with lib.maintainers; [ daspk04 ];
+    license = licenses.lgpl3Only;
+    maintainers = with maintainers; [ daspk04 ];
   };
 })

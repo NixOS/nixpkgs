@@ -71,16 +71,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [ "-Duse_system_lua=true" ];
 
-  meta = {
+  meta = with lib; {
     changelog = "https://github.com/pragtical/pragtical/blob/${finalAttrs.src.rev}/changelog.md";
     description = "Practical and pragmatic code editor";
     homepage = "https://pragtical.dev";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "pragtical";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       suhr
       tomasajt
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 })

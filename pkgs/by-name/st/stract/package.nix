@@ -27,10 +27,10 @@ rustPlatform.buildRustPackage rec {
     curl
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Open source web search engine hosted at stract.com targeted towards tinkerers and developers.";
     homepage = "https://github.com/StractOrg/stract";
-    license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ ailsa-sun ];
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [ ailsa-sun ];
   };
 }

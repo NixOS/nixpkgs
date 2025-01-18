@@ -86,11 +86,11 @@ stdenv.mkDerivation {
     rm -rf "$darcs_repos" "$git_repos" "$test_home"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Converts a Darcs repository into a Git repository";
     homepage = "http://www.sanityinc.com/articles/converting-darcs-repositories-to-git";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.unix;
+    license = licenses.mit;
+    platforms = platforms.unix;
     mainProgram = "darcs-to-git";
   };
 }

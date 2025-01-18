@@ -156,14 +156,14 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gitUpdater { rev-prefix = "cctools-"; };
   };
 
-  meta = {
+  meta = with lib; {
     description = "The classic linker for Darwin";
     homepage = "https://opensource.apple.com/releases/";
-    license = with lib.licenses; [
+    license = with licenses; [
       apple-psl20
       gpl2 # GNU as
     ];
-    maintainers = lib.teams.darwin.members;
-    platforms = lib.platforms.darwin;
+    maintainers = teams.darwin.members;
+    platforms = platforms.darwin;
   };
 })

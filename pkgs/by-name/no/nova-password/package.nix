@@ -17,12 +17,12 @@ buildGoModule rec {
 
   vendorHash = "sha256-tRBWniPM/IPR/JKi7R46tnx9rgyCb5hOkOR1oy7iVcc=";
 
-  meta = {
+  meta = with lib; {
     description = "Decrypt the admin password generated for the VM in OpenStack";
     homepage = "https://github.com/sapcc/nova-password";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     mainProgram = "nova-password";
-    maintainers = with lib.maintainers; [ vinetos ];
-    platforms = lib.platforms.all;
+    maintainers = with maintainers; [ vinetos ];
+    platforms = platforms.all;
   };
 }

@@ -43,12 +43,12 @@ stdenv.mkDerivation (final: {
     "MANDIR=${placeholder "man"}/share/man"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Tool for analysis of TCP dump files";
     homepage = "http://www.tcptrace.org/";
-    license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.gmacon ];
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.gmacon ];
     mainProgram = "tcptrace";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 })

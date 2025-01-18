@@ -21,11 +21,11 @@ lib.throwIf (lib.versionAtLeast ocaml.version "5.0")
 
     buildInputs = [ dune-configurator ];
 
-    meta = {
+    meta = with lib; {
       description = "encoding variable-length quantities, in particular base64";
-      license = lib.licenses.mit;
+      license = licenses.mit;
       homepage = "https://github.com/flowtype/ocaml-vlq";
-      maintainers = [ lib.maintainers.nomeata ];
+      maintainers = [ maintainers.nomeata ];
     };
 
   }

@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
       --replace "Exec=input-leap" "Exec=$out/bin/input-leap"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Open-source KVM software";
     longDescription = ''
       Input Leap is software that mimics the functionality of a KVM switch, which historically
@@ -101,13 +101,13 @@ stdenv.mkDerivation rec {
       to switch focus to a different system.
     '';
     homepage = "https://github.com/input-leap/input-leap";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [
       kovirobi
       phryneas
       twey
       shymega
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

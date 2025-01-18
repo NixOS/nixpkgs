@@ -15,11 +15,11 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=implicit-function-declaration -Wno-error=int-conversion";
 
-  meta = {
-    license = lib.licenses.gpl2Plus;
+  meta = with lib; {
+    license = licenses.gpl2Plus;
     description = "Validating XML parser written in C";
     homepage = "https://www.cogsci.ed.ac.uk/~richard/rxp.html";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
     mainProgram = "rxp";
   };
 }

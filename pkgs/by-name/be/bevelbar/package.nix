@@ -33,14 +33,14 @@ stdenv.mkDerivation (finalAttrs: {
     rev-prefix = "v";
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.uninformativ.de/git/bevelbar/file/README.html";
     description = "X11 status bar with beveled borders";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       AndersonTorres
       neeasade
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 })

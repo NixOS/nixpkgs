@@ -22,14 +22,14 @@ stdenv.mkDerivation (finalAttrs: {
     libtool
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Library to provide basic file input/output abstraction";
     homepage = "https://github.com/libyal/libbfio";
-    license = with lib.licenses; [
+    license = with licenses; [
       gpl3Plus
       lgpl3Plus
     ];
-    maintainers = with lib.maintainers; [ d3vil0p3r ];
-    platforms = with lib.platforms; unix ++ windows;
+    maintainers = with maintainers; [ d3vil0p3r ];
+    platforms = with platforms; unix ++ windows;
   };
 })

@@ -25,15 +25,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/taocpp/pegtl";
     description = "Parsing Expression Grammar Template Library";
     longDescription = ''
       Zero-dependency C++ header-only parser combinator library
       for creating parsers according to a Parsing Expression Grammar (PEG).
     '';
-    license = lib.licenses.boost;
+    license = licenses.boost;
     maintainers = [ ];
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 })

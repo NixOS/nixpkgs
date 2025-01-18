@@ -74,11 +74,11 @@ stdenv.mkDerivation {
     "prefix="
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Collection of postfix-related tools";
-    license = with lib.licenses; [ bsd3 ];
+    license = with licenses; [ bsd3 ];
     homepage = "https://github.com/Fruneau/pfixtools";
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ jerith666 ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ jerith666 ];
   };
 }

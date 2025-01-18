@@ -15,12 +15,12 @@ makeGaugePlugin {
 
   buildInputs = [ (lib.getLib stdenv.cc.cc) ];
 
-  meta = {
+  meta = with lib; {
     description = "Gauge plugin that lets you write tests in C#";
     homepage = "https://github.com/getgauge/gauge-dotnet/";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ marie ];
-    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ marie ];
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     inherit (gauge-unwrapped.meta) platforms;
   };
 }

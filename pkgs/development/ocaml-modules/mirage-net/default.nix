@@ -28,10 +28,10 @@ buildDunePackage rec {
     mirage-device
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Network signatures for MirageOS";
     homepage = "https://github.com/mirage/mirage-net";
-    license = lib.licenses.isc;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.isc;
+    maintainers = [ maintainers.vbgl ];
   };
 }

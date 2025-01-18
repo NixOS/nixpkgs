@@ -21,12 +21,12 @@ stdenv.mkDerivation rec {
     cp -v "$src/enchive-mode.el" "$out/share/emacs/site-lisp/"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Encrypted personal archives";
     mainProgram = "enchive";
     homepage = "https://github.com/skeeto/enchive";
-    license = lib.licenses.unlicense;
-    platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.nico202 ];
+    license = licenses.unlicense;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.nico202 ];
   };
 }

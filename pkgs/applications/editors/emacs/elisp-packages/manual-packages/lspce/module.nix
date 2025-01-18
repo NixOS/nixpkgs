@@ -30,10 +30,10 @@ rustPlatform.buildRustPackage {
     mv --verbose $out/lib/liblspce_module${libExt} $out/lib/lspce-module${libExt}
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/zbelial/lspce";
     description = "LSP Client for Emacs implemented as a module using Rust";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ AndersonTorres ];
   };
 }

@@ -34,11 +34,11 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Userspace Go implementation of AmneziaWG";
     homepage = "https://github.com/amnezia-vpn/amneziawg-go";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ averyanalex ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ averyanalex ];
     mainProgram = "amneziawg-go";
   };
 }

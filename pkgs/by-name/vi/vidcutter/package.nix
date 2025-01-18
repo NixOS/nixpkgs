@@ -51,7 +51,7 @@ python3Packages.buildPythonApplication {
     }"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Modern yet simple multi-platform video cutter and joiner";
     longDescription = ''
       A modern, simple to use, constantly evolving and hella fast MEDIA CUTTER + JOINER
@@ -60,8 +60,8 @@ python3Packages.buildPythonApplication {
     '';
     homepage = "https://vidcutter.ozmartians.com/";
     changelog = "https://github.com/ozmartian/vidcutter/blob/master/CHANGELOG";
-    license = lib.licenses.gpl3Plus;
-    maintainers = [ lib.maintainers.zi3m5f ];
+    license = licenses.gpl3Plus;
+    maintainers = [ maintainers.zi3m5f ];
     mainProgram = "vidcutter";
   };
 }

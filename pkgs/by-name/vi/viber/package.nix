@@ -148,13 +148,13 @@ stdenv.mkDerivation {
   dontStrip = true;
   dontPatchELF = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.viber.com";
     description = "Instant messaging and Voice over IP (VoIP) app";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = lib.licenses.unfree;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with lib.maintainers; [ jagajaga ];
+    maintainers = with maintainers; [ jagajaga ];
   };
 
 }

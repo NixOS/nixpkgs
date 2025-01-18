@@ -21,11 +21,11 @@ stdenv.mkDerivation ({
 
   installPhase = "cd src; make install; cd -; cp -vr $PWD $out";
 
-  meta = {
+  meta = with lib; {
     description = "Test Environment Toolkit is used in test applications like The Open Group's UNIX Certification program and the Free Standards Group's LSB Certification program";
     homepage = "http://tetworks.opengroup.org/Products/tet.htm";
-    license = lib.licenses.artistic1;
-    platforms = lib.platforms.unix;
+    license = licenses.artistic1;
+    platforms = platforms.unix;
     maintainers = [ ];
   };
 })

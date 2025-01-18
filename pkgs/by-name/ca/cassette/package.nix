@@ -60,12 +60,12 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  meta = {
+  meta = with lib; {
     description = "GTK4/Adwaita application that allows you to use Yandex Music service on Linux operating systems";
     homepage = "https://github.com/Rirusha/Cassette";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ averyanalex ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ averyanalex ];
+    platforms = platforms.linux;
     mainProgram = "cassette";
   };
 }

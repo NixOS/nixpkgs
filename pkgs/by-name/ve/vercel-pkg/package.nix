@@ -66,12 +66,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Package your Node.js project into an executable";
     homepage = "https://github.com/vercel/pkg";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "pkg";
-    maintainers = with lib.maintainers; [ cmcdragonkai ];
-    platforms = lib.platforms.all;
+    maintainers = with maintainers; [ cmcdragonkai ];
+    platforms = platforms.all;
   };
 }

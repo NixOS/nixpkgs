@@ -37,14 +37,14 @@ rustPlatform.buildRustPackage rec {
     ZSTD_SYS_USE_PKG_CONFIG = true;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Backend and Storages for zenoh using RocksDB";
     homepage = "https://github.com/eclipse-zenoh/zenoh-backend-rocksdb";
-    license = with lib.licenses; [
+    license = with licenses; [
       epl20
       asl20
     ];
-    maintainers = with lib.maintainers; [ markuskowa ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ markuskowa ];
+    platforms = platforms.linux;
   };
 }

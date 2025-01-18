@@ -55,11 +55,11 @@ stdenv.mkDerivation {
 
   dontConfigure = true; # skip configure
 
-  meta = {
+  meta = with lib; {
     description = "Linux DVB API applications and utilities";
     homepage = "https://linuxtv.org/";
-    maintainers = with lib.maintainers; [ volfyd ];
-    platforms = lib.platforms.linux;
-    license = lib.licenses.gpl2Plus;
+    maintainers = with maintainers; [ volfyd ];
+    platforms = platforms.linux;
+    license = licenses.gpl2Plus;
   };
 }

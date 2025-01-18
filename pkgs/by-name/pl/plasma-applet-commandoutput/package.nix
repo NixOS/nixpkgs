@@ -27,12 +27,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     changelog = "https://github.com/Zren/plasma-applet-commandoutput/blob/${finalAttrs.src.rev}/Changelog.md";
     description = "Run a command periodically and render its output";
     homepage = "https://github.com/Zren/plasma-applet-commandoutput";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [
       matthiasbeyer
       oliver-ni
     ];

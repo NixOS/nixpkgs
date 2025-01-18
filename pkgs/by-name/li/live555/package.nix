@@ -102,12 +102,12 @@ stdenv.mkDerivation (finalAttrs: {
     inherit vlc;
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "http://www.live555.com/liveMedia/";
     description = "Set of C++ libraries for multimedia streaming, using open standard protocols (RTP/RTCP, RTSP, SIP)";
     changelog = "http://www.live555.com/liveMedia/public/changelog.txt";
-    license = with lib.licenses; [ lgpl21Plus ];
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = lib.platforms.unix;
+    license = with licenses; [ lgpl21Plus ];
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.unix;
   };
 })

@@ -40,10 +40,10 @@ stdenv.mkDerivation rec {
     cp -r CharacterCompressorMono.lv2/ $out/lib/lv2
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Compressor with character. For jack and lv2";
     homepage = "https://github.com/magnetophon/CharacterCompressor";
-    license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.magnetophon ];
+    license = licenses.gpl3;
+    maintainers = [ maintainers.magnetophon ];
   };
 }

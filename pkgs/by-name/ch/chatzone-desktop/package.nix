@@ -61,14 +61,14 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Ozon corporate messenger";
     mainProgram = "chatzone-desktop";
     homepage = "https://apps.o3team.ru/";
     downloadPage = "https://apps.o3team.ru/";
-    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
-    license = lib.licenses.unfreeRedistributable;
-    maintainers = [ lib.maintainers.progrm_jarvis ];
+    sourceProvenance = [ sourceTypes.binaryNativeCode ];
+    license = licenses.unfreeRedistributable;
+    maintainers = [ maintainers.progrm_jarvis ];
     platforms = [ "x86_64-linux" ];
   };
 }

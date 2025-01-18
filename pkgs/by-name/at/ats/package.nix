@@ -18,13 +18,13 @@ stdenv.mkDerivation rec {
   patches = [ ./install-atsdoc-hats-files.patch ];
   buildInputs = [ gmp ];
 
-  meta = {
+  meta = with lib; {
     description = "Functional programming language with dependent types";
     homepage = "http://www.ats-lang.org";
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     # TODO: it looks like ATS requires gcc specifically. Someone with more knowledge
     # will need to experiment.
-    platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.thoughtpolice ];
+    platforms = platforms.linux;
+    maintainers = [ maintainers.thoughtpolice ];
   };
 }

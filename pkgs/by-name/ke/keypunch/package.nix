@@ -58,15 +58,15 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Practice your typing skills";
     homepage = "https://github.com/bragefuglseth/keypunch";
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     mainProgram = "keypunch";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       tomasajt
       getchoo
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 })

@@ -44,13 +44,13 @@ python3Packages.buildPythonApplication rec {
   postFixup = ''
     gzip -9nv "${placeholder "out"}/share/cups/model/rastertosag-gdi"/*.ppd
   '';
-  meta = {
+  meta = with lib; {
     description = "CUPS driver for Ricoh Aficio SP 1000S and SP 1100S printers";
     mainProgram = "rastertosag-gdi";
     downloadPage = "https://www.openprinting.org/download/printing/rastertosag-gdi/";
     homepage = "https://www.openprinting.org/driver/rastertosag-gdi/";
-    license = lib.licenses.free; # just "GPL", according to README
-    maintainers = [ lib.maintainers.yarny ];
+    license = licenses.free; # just "GPL", according to README
+    maintainers = [ maintainers.yarny ];
     longDescription = ''
       This package brings CUPS raster filter
       for Ricoh Aficio SP 1000S and SP 1100S.

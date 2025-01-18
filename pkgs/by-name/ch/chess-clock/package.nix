@@ -51,11 +51,11 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Time games of over-the-board chess";
     homepage = "https://gitlab.gnome.org/World/chess-clock";
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     mainProgram = "chess-clock";
-    maintainers = lib.teams.gnome-circle.members;
+    maintainers = teams.gnome-circle.members;
   };
 }

@@ -54,11 +54,11 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm644 icons/64x64x32.png $out/share/icons/hicolor/64x64/apps/zsnes.png
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/xyproto/zsnes";
     description = "Maintained fork of zsnes";
-    license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.AndersonTorres ];
-    platforms = lib.intersectLists lib.platforms.linux lib.platforms.x86;
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.AndersonTorres ];
+    platforms = intersectLists platforms.linux platforms.x86;
   };
 })

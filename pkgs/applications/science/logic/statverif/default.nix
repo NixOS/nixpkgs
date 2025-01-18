@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
     cp ./proveriftotex $out/bin/statveriftotex
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Verification of stateful processes (via Proverif)";
     homepage = "https://markryan.eu/research/statverif/";
-    license = lib.licenses.gpl2;
-    platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.thoughtpolice ];
+    license = licenses.gpl2;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.thoughtpolice ];
   };
 }

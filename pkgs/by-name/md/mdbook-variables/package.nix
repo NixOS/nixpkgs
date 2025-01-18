@@ -22,11 +22,11 @@ rustPlatform.buildRustPackage rec {
   ];
   doInstallCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "mdBook preprocessor to replace values with env variables";
     mainProgram = "mdbook-variables";
     homepage = "https://gitlab.com/tglman/mdbook-variables";
-    license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ kraftnix ];
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ kraftnix ];
   };
 }

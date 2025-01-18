@@ -39,10 +39,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = {
+  meta = with lib; {
     description = "Library collecting some useful snippets";
     homepage = "https://gitlab.com/hcs/hcs_utils";
-    license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ lovek323 ];
+    license = licenses.isc;
+    maintainers = with maintainers; [ lovek323 ];
   };
 }

@@ -45,12 +45,12 @@ stdenv.mkDerivation rec {
       --replace-fail "sudo " ""
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://qqwing.com";
     description = "Sudoku generating and solving software";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ nickcao ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ nickcao ];
     mainProgram = "qqwing";
   };
 }

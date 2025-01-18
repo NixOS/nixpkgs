@@ -8,13 +8,13 @@
 
 mkDerivation {
   pname = "kqtquickcharts";
-  meta = {
-    license = with lib.licenses; [
+  meta = with lib; {
+    license = with licenses; [
       gpl2Plus
       lgpl21Plus
       fdl12Plus
     ];
-    maintainers = [ lib.maintainers.ttuegel ];
+    maintainers = [ maintainers.ttuegel ];
   };
   nativeBuildInputs = [ extra-cmake-modules ];
   propagatedBuildInputs = [

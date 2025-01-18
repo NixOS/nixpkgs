@@ -19,10 +19,10 @@ rustPlatform.buildRustPackage rec {
   sourceRoot = "${src.name}/clients/terminal";
   cargoHash = "sha256-VVG7AbwbbgCANMcFYNAIF76MQr7Fkmq5HXPxL3MnEhI=";
 
-  meta = {
+  meta = with lib; {
     description = "FCast Client Terminal, a terminal open-source media streaming client";
     homepage = "https://fcast.org/";
-    license = lib.licenses.gpl3;
+    license = licenses.gpl3;
     longDescription = ''
       FCast is a protocol designed for wireless streaming of audio and video
       content between devices. Unlike alternative protocols like Chromecast and
@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage rec {
       receiver devices or integrate the FCast protocol into their own apps.
     '';
     mainProgram = "fcast";
-    maintainers = with lib.maintainers; [ drupol ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ drupol ];
+    platforms = platforms.linux;
   };
 }

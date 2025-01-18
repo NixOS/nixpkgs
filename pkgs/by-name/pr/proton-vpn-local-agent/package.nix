@@ -26,11 +26,11 @@ rustPlatform.buildRustPackage rec {
     cp ./target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/libpython_proton_vpn_local_agent.so $out/${python3.sitePackages}/proton/vpn/local_agent.so
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Proton VPN local agent written in Rust with Python bindings";
     homepage = "https://github.com/ProtonVPN/python-proton-vpn-local-agent";
-    license = lib.licenses.gpl3Only;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ sebtm ];
+    license = licenses.gpl3Only;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ sebtm ];
   };
 }

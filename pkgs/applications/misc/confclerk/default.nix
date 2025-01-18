@@ -23,12 +23,12 @@ mkDerivation rec {
     mv $out/confclerk $out/bin/
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Offline conference schedule viewer";
     mainProgram = "confclerk";
     homepage = "http://www.toastfreeware.priv.at/confclerk";
-    license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ ehmry ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ ehmry ];
+    platforms = platforms.linux;
   };
 }

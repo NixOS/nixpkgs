@@ -33,11 +33,11 @@ rustPlatform.buildRustPackage rec {
     wrapProgram $out/bin/ego --prefix PATH : ${lib.makeBinPath [ xorg.xhost ]}
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Run Linux desktop applications under a different local user";
     homepage = "https://github.com/intgr/ego";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ dit7ya ];
     mainProgram = "ego";
   };
 }

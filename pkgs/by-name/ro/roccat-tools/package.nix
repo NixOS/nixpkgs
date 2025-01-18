@@ -68,10 +68,10 @@ stdenv.mkDerivation rec {
     "-fcommon"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Tools to configure ROCCAT devices";
     homepage = "https://roccat.sourceforge.net/";
-    platforms = lib.platforms.linux;
-    license = lib.licenses.gpl2Plus;
+    platforms = platforms.linux;
+    license = licenses.gpl2Plus;
   };
 }

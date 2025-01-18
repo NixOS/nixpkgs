@@ -70,12 +70,12 @@ let
         }
     '';
 
-    meta = {
+    meta = with lib; {
       description = "An Idris2 Package Manager with Curated Package Collections";
       mainProgram = "pack";
       homepage = "https://github.com/stefan-hoeck/idris2-pack";
-      license = lib.licenses.bsd3;
-      maintainers = with lib.maintainers; [ mattpolzin ];
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ mattpolzin ];
       inherit (idris2Packages.idris2.meta) platforms;
     };
   };

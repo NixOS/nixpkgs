@@ -19,10 +19,10 @@ buildDunePackage rec {
     sha256 = "sha256:0hdh56rbg8vfjd61q09cbmh8l5wmry5ykivg7gsm0v5ckkb3531r";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Implementations of the union-find data structure";
-    license = lib.licenses.lgpl2Only;
+    license = licenses.lgpl2Only;
     inherit (src.meta) homepage;
-    maintainers = [ lib.maintainers.vbgl ];
+    maintainers = [ maintainers.vbgl ];
   };
 }

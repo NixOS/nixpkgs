@@ -95,11 +95,11 @@ stdenv.mkDerivation rec {
     wrapProgram "$out/bin/monotone-viz" --prefix PATH : "${graphviz_2_0}/bin/"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Monotone ancestry visualiser";
     mainProgram = "monotone-viz";
-    license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.raskin ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.linux;
   };
 }

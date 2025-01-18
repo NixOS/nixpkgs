@@ -31,12 +31,12 @@ stdenvNoCC.mkDerivation {
     hardcodeZeroVersion = true;
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/CachyOS/ananicy-rules";
     description = "CachyOS' ananicy-rules meant to be used with ananicy-cpp";
-    license = lib.licenses.gpl3Only;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl3Only;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
       artturin
       johnrtitor
     ];

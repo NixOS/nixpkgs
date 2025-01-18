@@ -81,13 +81,13 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail '/usr/share/eusoft-eudic/AppRun' 'eudic'
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Authoritative English Dictionary Software Essential Tools for English Learners";
     homepage = "https://www.eudic.net/v4/en/app/eudic";
     platforms = [ "x86_64-linux" ];
-    license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ onedragon ];
+    license = licenses.unfree;
+    maintainers = with maintainers; [ onedragon ];
     mainProgram = "eudic";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 })

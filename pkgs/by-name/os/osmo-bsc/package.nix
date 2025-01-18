@@ -41,12 +41,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     description = "GSM Base Station Controller";
     homepage = "https://projects.osmocom.org/projects/osmobsc";
-    license = lib.licenses.agpl3Plus;
-    maintainers = [ lib.maintainers.markuskowa ];
-    platforms = lib.platforms.linux;
+    license = licenses.agpl3Plus;
+    maintainers = [ maintainers.markuskowa ];
+    platforms = platforms.linux;
     mainProgram = "osmo-bsc";
   };
 }

@@ -29,11 +29,11 @@ python3Packages.buildPythonApplication {
       --replace-fail "toml-sort" "$out/bin/toml-sort"
   '';
 
-  meta = {
+  meta = with lib; {
     mainProgram = "toml-sort";
     homepage = "https://github.com/pappasam/toml-sort";
     description = "Command line utility to sort and format your toml files";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ isabelroses ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ isabelroses ];
   };
 }

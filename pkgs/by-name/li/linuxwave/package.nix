@@ -35,12 +35,12 @@ stdenv.mkDerivation (finalAttrs: {
     installManPage man/linuxwave.1
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/orhun/linuxwave";
     description = "Generate music from the entropy of Linux";
     changelog = "https://github.com/orhun/linuxwave/blob/${finalAttrs.src.rev}/CHANGELOG.md";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ figsoda ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ figsoda ];
     inherit (zig.meta) platforms;
     mainProgram = "linuxwave";
   };

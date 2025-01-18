@@ -95,17 +95,17 @@ stdenv.mkDerivation (finalAttrs: {
     ];
   };
 
-  meta = {
+  meta = with lib; {
     description = "Text and hex editor";
     homepage = "https://www.sweetscape.com/010editor/";
-    license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ eljamm ];
+    license = licenses.unfree;
+    maintainers = with maintainers; [ eljamm ];
     platforms = [
       "aarch64-darwin"
       "x86_64-darwin"
       "x86_64-linux"
     ];
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     mainProgram = "010editor";
   };
 })

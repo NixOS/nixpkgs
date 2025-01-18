@@ -92,7 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
   # XXX: Actually tests require an X server.
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "X11 event recording and replay tool";
     longDescription = ''
       Xnee is a suite of programs that can record, replay and distribute
@@ -102,8 +102,8 @@ stdenv.mkDerivation (finalAttrs: {
       "macros", retype a file.
     '';
     homepage = "https://www.gnu.org/software/xnee/";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ wegank ];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ wegank ];
+    platforms = platforms.unix;
   };
 })

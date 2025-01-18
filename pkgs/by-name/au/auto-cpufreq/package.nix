@@ -97,12 +97,12 @@ python3Packages.buildPythonPackage rec {
     inherit (nixosTests) auto-cpufreq;
   };
 
-  meta = {
+  meta = with lib; {
     mainProgram = "auto-cpufreq";
     homepage = "https://github.com/AdnanHodzic/auto-cpufreq";
     description = "Automatic CPU speed & power optimizer for Linux";
-    license = lib.licenses.lgpl3Plus;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ sarcasticadmin ];
+    license = licenses.lgpl3Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ sarcasticadmin ];
   };
 }

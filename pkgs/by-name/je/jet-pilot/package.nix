@@ -15,13 +15,13 @@ appimageTools.wrapType2 rec {
 
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
 
-  meta = {
+  meta = with lib; {
     description = "Open-source Kubernetes desktop client that focuses on less clutter, speed and good looks";
     homepage = "https://jet-pilot.app/";
     changelog = "https://github.com/unxsist/jet-pilot/releases";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     platforms = [ "x86_64-linux" ];
-    maintainers = with lib.maintainers; [ kashw2 ];
+    maintainers = with maintainers; [ kashw2 ];
     mainProgram = "jet-pilot";
   };
 }

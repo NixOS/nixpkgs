@@ -34,10 +34,10 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "digiham" ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/jketterl/pydigiham";
     description = "bindings for the csdr library";
-    license = lib.licenses.gpl3Only;
-    maintainers = lib.teams.c3d2.members;
+    license = licenses.gpl3Only;
+    maintainers = teams.c3d2.members;
   };
 }

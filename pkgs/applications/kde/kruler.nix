@@ -11,12 +11,12 @@
 
 mkDerivation {
   pname = "kruler";
-  meta = {
+  meta = with lib; {
     homepage = "https://apps.kde.org/kruler/";
     description = "Screen ruler";
     mainProgram = "kruler";
-    license = with lib.licenses; [ gpl2 ];
-    maintainers = [ lib.maintainers.vandenoever ];
+    license = with licenses; [ gpl2 ];
+    maintainers = [ maintainers.vandenoever ];
   };
   nativeBuildInputs = [
     extra-cmake-modules

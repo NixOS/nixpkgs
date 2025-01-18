@@ -78,15 +78,15 @@ stdenv.mkDerivation rec {
     inherit zathura;
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://pwmt.org/projects/girara";
     description = "User interface library";
     longDescription = ''
       girara is a library that implements a GTK based VIM-like user interface
       that focuses on simplicity and minimalism.
     '';
-    license = lib.licenses.zlib;
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    license = licenses.zlib;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = [ ];
   };
 }

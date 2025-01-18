@@ -14,10 +14,10 @@ build-idris-package {
     sha256 = "1skkb7jz2lv0xg4n5m0vd9xddg3x01459dwx1jxnpc7ifask4cda";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Idris mapping library";
     homepage = "https://github.com/zaoqi/Mapping.idr";
-    license = lib.licenses.agpl3Plus;
-    maintainers = [ lib.maintainers.brainrape ];
+    license = licenses.agpl3Plus;
+    maintainers = [ maintainers.brainrape ];
   };
 }

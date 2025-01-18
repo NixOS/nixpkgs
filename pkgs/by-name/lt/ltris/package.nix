@@ -29,12 +29,12 @@ stdenv.mkDerivation (finalAttrs: {
     extraRegex = "(?!.*-win(32|64)).*";
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://lgames.sourceforge.io/LTris/";
     description = "Tetris clone from the LGames series";
-    license = with lib.licenses; [ gpl2Plus ];
+    license = with licenses; [ gpl2Plus ];
     mainProgram = "ltris";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ AndersonTorres ];
     inherit (SDL.meta) platforms;
     broken = stdenv.hostPlatform.isDarwin;
   };

@@ -21,11 +21,11 @@ stdenv.mkDerivation rec {
     mkdir -p $out/man/man{1,8} $out/sbin $out/bin
   ";
 
-  meta = {
+  meta = with lib; {
     description = "Netkit TFTP client and server";
     homepage = "ftp://ftp.uk.linux.org/pub/linux/Networking/netkit/";
-    license = lib.licenses.bsdOriginal;
+    license = licenses.bsdOriginal;
     maintainers = [ ];
-    platforms = with lib.platforms; linux;
+    platforms = with platforms; linux;
   };
 }

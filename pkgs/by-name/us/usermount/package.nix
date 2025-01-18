@@ -35,11 +35,11 @@ stdenv.mkDerivation {
     mv usermount $out/bin/
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/tom5760/usermount";
     description = "Simple tool to automatically mount removable drives using UDisks2 and D-Bus";
     mainProgram = "usermount";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
+    license = licenses.mit;
+    platforms = platforms.linux;
   };
 }

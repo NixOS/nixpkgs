@@ -61,15 +61,15 @@ maven.buildMavenPackage rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = {
+  meta = with lib; {
     description = "Open source Old School RuneScape client";
     homepage = "https://runelite.net/";
-    sourceProvenance = with lib.sourceTypes; [
+    sourceProvenance = with sourceTypes; [
       binaryBytecode
       binaryNativeCode
     ];
-    license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [
+    license = licenses.bsd2;
+    maintainers = with maintainers; [
       kmeakin
       moody
     ];

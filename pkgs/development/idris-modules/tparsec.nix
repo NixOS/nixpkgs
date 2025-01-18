@@ -19,10 +19,10 @@ build-idris-package {
     sha256 = "0pyhkafhx2pwim91ada6qrgacvahl9bpv5m486y8fph4qzf4z6mx";
   };
 
-  meta = {
+  meta = with lib; {
     description = "TParsec - Total Parser Combinators in Idris";
     homepage = "https://github.com/gallais/idris-tparsec";
-    license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.brainrape ];
+    license = licenses.gpl3;
+    maintainers = [ maintainers.brainrape ];
   };
 }

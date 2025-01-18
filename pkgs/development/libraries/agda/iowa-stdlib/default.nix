@@ -23,14 +23,14 @@ mkDerivation (rec {
     make
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/cedille/ial";
     description = "Agda standard library developed at Iowa";
-    license = lib.licenses.free;
-    platforms = lib.platforms.unix;
+    license = licenses.free;
+    platforms = platforms.unix;
     # broken since Agda 2.6.1
     broken = true;
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       alexarice
       turion
     ];

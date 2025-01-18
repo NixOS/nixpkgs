@@ -230,10 +230,10 @@ stdenv.mkDerivation (finalAttrs: {
     interpreter = "${finalAttrs.finalPackage}/bin/octave";
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.gnu.org/software/octave/";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
       raskin
       doronbehar
     ];

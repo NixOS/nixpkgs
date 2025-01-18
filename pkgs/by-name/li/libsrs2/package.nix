@@ -13,14 +13,14 @@ stdenv.mkDerivation rec {
     sha256 = "9d1191b705d7587a5886736899001d04168392bbb6ed6345a057ade50943a492";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Next generation SRS library from the original designer of SRS";
     mainProgram = "srs";
-    license = with lib.licenses; [
+    license = with licenses; [
       gpl2
       bsd3
     ];
     homepage = "https://www.libsrs2.org/";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

@@ -21,10 +21,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "devgoldyutils" ];
 
-  meta = {
+  meta = with lib; {
     description = "Collection of utility functions for Python used by mov-cli";
     homepage = "https://github.com/THEGOLDENPRO/devgoldyutils";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ youhaveme9 ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ youhaveme9 ];
   };
 }

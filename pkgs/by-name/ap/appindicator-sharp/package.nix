@@ -34,10 +34,10 @@ stdenv.mkDerivation rec {
   ac_cv_path_MDOC = "no";
   installFlags = [ "GAPIXMLDIR=/tmp/gapixml" ];
 
-  meta = {
+  meta = with lib; {
     description = "Bindings for appindicator using gobject-introspection";
     homepage = "https://github.com/stsundermann/appindicator-sharp";
-    license = lib.licenses.lgpl3Only;
-    maintainers = with lib.maintainers; [ kevincox ];
+    license = licenses.lgpl3Only;
+    maintainers = with maintainers; [ kevincox ];
   };
 }

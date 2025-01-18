@@ -49,10 +49,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_mpi" ];
 
-  meta = {
+  meta = with lib; {
     description = "Pytest plugin for working with MPI";
     homepage = "https://github.com/aragilar/pytest-mpi";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ doronbehar ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ doronbehar ];
   };
 }

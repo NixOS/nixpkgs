@@ -25,10 +25,10 @@ buildPythonPackage rec {
   # https://github.com/aboSamoor/pycld2/pull/62
   env.NIX_CFLAGS_COMPILE = "-Wno-narrowing";
 
-  meta = {
+  meta = with lib; {
     description = "Python bindings around Google Chromium's embedded compact language detection library (CLD2)";
     homepage = "https://github.com/LibreTranslate/pycld2";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ misuzu ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ misuzu ];
   };
 }

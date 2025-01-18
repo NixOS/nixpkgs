@@ -22,10 +22,10 @@ build-idris-package {
     sha256 = "1px550spigl8k1m1r64mjrw7qjvipa43xy95kz1pb5ibmy84d6r3";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Idris Binary Integer Arithmetic, porting PArith, NArith, and ZArith from Coq";
     homepage = "https://github.com/sbp/idris-bi";
-    license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.brainrape ];
+    license = licenses.bsd3;
+    maintainers = [ maintainers.brainrape ];
   };
 }

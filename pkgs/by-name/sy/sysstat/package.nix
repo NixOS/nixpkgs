@@ -40,12 +40,12 @@ stdenv.mkDerivation rec {
 
   patches = [ ./install.patch ];
 
-  meta = {
+  meta = with lib; {
     mainProgram = "iostat";
     homepage = "http://sebastien.godard.pagesperso-orange.fr/";
     description = "Collection of performance monitoring tools for Linux (such as sar, iostat and pidstat)";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.hensoko ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.hensoko ];
   };
 }

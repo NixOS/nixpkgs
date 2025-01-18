@@ -59,10 +59,10 @@ stdenv.mkDerivation rec {
 
   cargoVendorDir = "./vendor";
 
-  meta = {
+  meta = with lib; {
     homepage = "https://gitlab.com/tezos/tezos-rust-libs";
     description = "Tezos: all rust dependencies and their dependencies";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.ulrikstrid ];
+    license = licenses.mit;
+    maintainers = [ maintainers.ulrikstrid ];
   };
 }

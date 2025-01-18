@@ -49,12 +49,12 @@ stdenv.mkDerivation (self: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Ordered resolution based theorem prover for Coalition Logic";
     homepage = "https://cgi.csc.liv.ac.uk/~ullrich/CLProver++/";
-    maintainers = with lib.maintainers; [ mgttlinger ];
-    platforms = with lib.platforms; linux ++ windows;
-    license = lib.licenses.gpl3;
+    maintainers = with maintainers; [ mgttlinger ];
+    platforms = with platforms; linux ++ windows;
+    license = licenses.gpl3;
     mainProgram = if stdenv.targetPlatform.isWindows then "CLProver++.exe" else "CLProver++";
   };
 })

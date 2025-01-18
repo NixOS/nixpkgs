@@ -36,11 +36,11 @@ stdenv.mkDerivation rec {
       --replace 'chmod u+s' 'chmod +x'
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Library and tools to manage Linux cgroups";
     homepage = "https://github.com/libcgroup/libcgroup";
-    license = lib.licenses.lgpl2;
-    platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.thoughtpolice ];
+    license = licenses.lgpl2;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.thoughtpolice ];
   };
 }

@@ -157,18 +157,18 @@ buildDotnetModule (finalAttrs: {
     (finalAttrs.passthru.fetch-deps)
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://famistudio.org/";
     description = "NES Music Editor";
     longDescription = ''
       FamiStudio is very simple music editor for the Nintendo Entertainment System
       or Famicom. It is targeted at both chiptune artists and NES homebrewers.
     '';
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       OPNA2608
     ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
     mainProgram = "FamiStudio";
   };
 })

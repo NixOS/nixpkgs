@@ -26,12 +26,12 @@ php81.buildComposerProject (finalAttrs: {
     ];
   };
 
-  meta = {
+  meta = with lib; {
     changelog = "https://magerun.net/category/magerun/";
     description = "Swiss army knife for Magento1/OpenMage developers";
     homepage = "https://magerun.net/";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "n98-magerun";
-    maintainers = lib.teams.php.members;
+    maintainers = teams.php.members;
   };
 })

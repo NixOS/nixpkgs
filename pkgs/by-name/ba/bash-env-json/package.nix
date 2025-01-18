@@ -38,12 +38,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Export Bash environment as JSON for import into modern shells like Elvish and Nushell";
     homepage = "https://github.com/tesujimath/bash-env-json";
     mainProgram = "bash-env-json";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ jaredmontoya ];
-    platforms = lib.platforms.all;
+    license = licenses.mit;
+    maintainers = with maintainers; [ jaredmontoya ];
+    platforms = platforms.all;
   };
 })

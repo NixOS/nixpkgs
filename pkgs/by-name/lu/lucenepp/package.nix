@@ -69,13 +69,13 @@ stdenv.mkDerivation rec {
     cp $src/src/contrib/include/*h $out/include/lucene++/
   '';
 
-  meta = {
+  meta = with lib; {
     description = "C++ port of the popular Java Lucene search engine";
     homepage = "https://github.com/luceneplusplus/LucenePlusPlus";
-    license = with lib.licenses; [
+    license = with licenses; [
       asl20
       lgpl3Plus
     ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }

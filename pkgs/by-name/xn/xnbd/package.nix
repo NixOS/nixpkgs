@@ -38,11 +38,11 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile.am --replace "lib doc ." "lib ."
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://bitbucket.org/hirofuchi/xnbd";
     description = "Yet another NBD (Network Block Device) server program";
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

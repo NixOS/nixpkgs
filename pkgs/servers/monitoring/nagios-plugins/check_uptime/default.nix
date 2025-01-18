@@ -24,11 +24,11 @@ stdenv.mkDerivation {
     ln -sr $out/libexec $out/bin
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Uptime check plugin for Sensu/Nagios/others";
     homepage = "https://github.com/madrisan/nagios-plugins-uptime";
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     mainProgram = "check_uptime";
-    maintainers = with lib.maintainers; [ peterhoeg ];
+    maintainers = with maintainers; [ peterhoeg ];
   };
 }

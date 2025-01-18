@@ -19,11 +19,11 @@ buildGoModule rec {
 
   doCheck = false; # uses network
 
-  meta = {
+  meta = with lib; {
     description = "Convert websites into ebooks and markdown";
     mainProgram = "papeer";
     homepage = "https://papeer.tech/";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ehmry ];
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ ehmry ];
   };
 }

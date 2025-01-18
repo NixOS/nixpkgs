@@ -29,12 +29,12 @@ stdenv.mkDerivation (finalAttrs: {
     libserialport
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Cross-platform M8 tracker headless client";
     homepage = "https://github.com/laamaa/m8c";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ mrtnvgr ];
+    license = licenses.mit;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ mrtnvgr ];
     mainProgram = "m8c";
   };
 })

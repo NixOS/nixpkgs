@@ -41,7 +41,7 @@ python3Packages.buildPythonApplication rec {
   checkPhase = "py.test";
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "FUSE filesystem that fully integrates with git";
     longDescription = ''
       A git remote repository's branch can be mounted locally,
@@ -49,9 +49,9 @@ python3Packages.buildPythonApplication rec {
       automatically committed to the remote.
     '';
     homepage = "https://github.com/PressLabs/gitfs";
-    license = lib.licenses.asl20;
-    platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.robbinch ];
+    license = licenses.asl20;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.robbinch ];
     mainProgram = "gitfs";
   };
 }

@@ -102,11 +102,11 @@ stdenv.mkDerivation (finalAttrs: {
     kamailio-bin = callPackage ./test-kamailio-bin { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Fast and flexible SIP server, proxy, SBC, and load balancer";
     homepage = "https://www.kamailio.org/";
-    license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ mawis ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ mawis ];
+    platforms = platforms.linux;
   };
 })

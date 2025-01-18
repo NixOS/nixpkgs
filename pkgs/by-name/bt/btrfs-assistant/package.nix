@@ -74,12 +74,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "GUI management tool to make managing a Btrfs filesystem easier";
     homepage = "https://gitlab.com/btrfs-assistant/btrfs-assistant";
-    license = lib.licenses.gpl3Only;
+    license = licenses.gpl3Only;
     mainProgram = "btrfs-assistant-bin";
-    maintainers = with lib.maintainers; [ khaneliman ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ khaneliman ];
+    platforms = platforms.linux;
   };
 })

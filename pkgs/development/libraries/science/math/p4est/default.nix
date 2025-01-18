@@ -56,7 +56,7 @@ stdenv.mkDerivation {
     doCheck
     ;
 
-  meta = {
+  meta = with lib; {
     branch = "prev3-develop";
     description = "Parallel AMR on Forests of Octrees";
     longDescription = ''
@@ -66,7 +66,7 @@ stdenv.mkDerivation {
     '';
     homepage = "https://www.p4est.org/";
     downloadPage = "https://github.com/cburstedde/p4est.git";
-    license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.cburstedde ];
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.cburstedde ];
   };
 }

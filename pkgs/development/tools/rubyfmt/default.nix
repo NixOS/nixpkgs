@@ -76,11 +76,11 @@ rustPlatform.buildRustPackage rec {
     mv $out/bin/rubyfmt{-main,}
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Ruby autoformatter";
     homepage = "https://github.com/fables-tales/rubyfmt";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ bobvanderlinden ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ bobvanderlinden ];
     broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "rubyfmt";
   };

@@ -121,15 +121,15 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Simple, yet powerful Minecraft custom launcher with a strong focus on the user experience";
     homepage = "https://gdlauncher.com/";
-    license = lib.licenses.bsl11;
-    maintainers = with lib.maintainers; [
+    license = licenses.bsl11;
+    maintainers = with maintainers; [
       huantian
       TsubakiDev
     ];
-    platforms = lib.platforms.linux;
-    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+    platforms = platforms.linux;
+    sourceProvenance = [ sourceTypes.binaryNativeCode ];
   };
 })

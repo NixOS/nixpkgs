@@ -48,9 +48,9 @@ makeSetupHook {
       .${kernelName} or (throw "${kernelName} is not supported by cargo-tauri.hook");
   };
 
-  meta = {
+  meta = with lib; {
     inherit (cargo-tauri.meta) maintainers broken;
     # Platforms that Tauri supports bundles for
-    platforms = lib.platforms.darwin ++ lib.platforms.linux;
+    platforms = platforms.darwin ++ platforms.linux;
   };
 } ./hook.sh

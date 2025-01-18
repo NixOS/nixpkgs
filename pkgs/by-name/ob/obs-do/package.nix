@@ -28,14 +28,14 @@ rustPlatform.buildRustPackage rec {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "CLI for common OBS operations while streaming using WebSocket";
     homepage = "https://github.com/jonhoo/obs-do";
-    license = with lib.licenses; [
+    license = with licenses; [
       asl20
       mit
     ];
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    maintainers = with maintainers; [ GaetanLepage ];
     mainProgram = "obs-do";
   };
 }

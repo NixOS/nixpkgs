@@ -29,11 +29,11 @@ stdenv.mkDerivation rec {
     cp ../*.md "$out/share/doc/gfxtablet/"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Uinput driver for Android GfxTablet tablet-as-input-device app";
     mainProgram = "networktablet";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.raskin ];
-    platforms = lib.platforms.linux;
+    license = licenses.mit;
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.linux;
   };
 }

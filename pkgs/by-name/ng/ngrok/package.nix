@@ -64,15 +64,15 @@ stdenv.mkDerivation (finalAttrs: {
   # Stripping causes SEGFAULT on darwin
   dontStrip = stdenv.hostPlatform.isDarwin;
 
-  meta = {
+  meta = with lib; {
     description = "Allows you to expose a web server running on your local machine to the internet";
     homepage = "https://ngrok.com/";
     downloadPage = "https://ngrok.com/download";
     changelog = "https://ngrok.com/docs/agent/changelog/";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = lib.licenses.unfree;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
       bobvanderlinden
       brodes
     ];

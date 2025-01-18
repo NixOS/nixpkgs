@@ -26,11 +26,11 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Capability analysis CLI for Go packages that informs users of which privileged operations a given package can access";
     homepage = "https://github.com/google/capslock";
-    license = lib.licenses.bsd3;
+    license = licenses.bsd3;
     mainProgram = "capslock";
-    maintainers = with lib.maintainers; [ katexochen ];
+    maintainers = with maintainers; [ katexochen ];
   };
 }

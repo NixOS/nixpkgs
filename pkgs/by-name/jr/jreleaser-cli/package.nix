@@ -25,12 +25,12 @@ stdenv.mkDerivation rec {
       --add-flags "-jar $out/share/java/${pname}.jar"
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://jreleaser.org/";
     description = "Release projects quickly and easily";
-    sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
-    license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.i-al-istannen ];
+    sourceProvenance = [ sourceTypes.binaryBytecode ];
+    license = licenses.asl20;
+    maintainers = [ maintainers.i-al-istannen ];
     mainProgram = "jreleaser-cli";
   };
 }

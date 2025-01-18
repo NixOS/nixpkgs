@@ -73,12 +73,12 @@ rustPlatform.buildRustPackage rec {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Simple password manager written in Rust";
     mainProgram = "ripasso-cursive";
     homepage = "https://github.com/cortex/ripasso";
-    license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ sgo ];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ sgo ];
+    platforms = platforms.unix;
   };
 }

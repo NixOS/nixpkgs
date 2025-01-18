@@ -17,7 +17,7 @@ buildLua rec {
   };
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = {
+  meta = with lib; {
     description = "Manual & automatic reloading of videos";
     longDescription = ''
       This script adds reloading of videos, automatically on timers (when stuck
@@ -25,7 +25,7 @@ buildLua rec {
       is not loading further due to a network or remote issue.
     '';
     homepage = "https://github.com/4e6/mpv-reload";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ nicoo ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ nicoo ];
   };
 }

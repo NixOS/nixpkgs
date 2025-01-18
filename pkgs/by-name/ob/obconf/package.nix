@@ -46,13 +46,13 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace configure.ac --replace-fail 2.0.4 ${finalAttrs.version}
   '';
 
-  meta = {
+  meta = with lib; {
     description = "GUI configuration tool for openbox";
     homepage = "http://openbox.org/wiki/ObConf";
     changelog = "http://openbox.org/wiki/ObConf:Changelog";
-    license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.sfrijters ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.sfrijters ];
+    platforms = platforms.linux;
     mainProgram = "obconf";
   };
 })

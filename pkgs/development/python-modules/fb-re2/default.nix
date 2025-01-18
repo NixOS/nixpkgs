@@ -31,10 +31,10 @@ buildPythonPackage rec {
   # no tests in PyPI tarball
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Python wrapper for Google's RE2";
     homepage = "https://github.com/facebook/pyre2";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ ivan ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ ivan ];
   };
 }

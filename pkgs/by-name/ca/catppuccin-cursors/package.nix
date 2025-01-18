@@ -100,11 +100,11 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Catppuccin cursor theme based on Volantes";
     homepage = "https://github.com/catppuccin/cursors";
-    license = lib.licenses.gpl2;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ dixslyf ];
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ dixslyf ];
   };
 }

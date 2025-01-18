@@ -26,11 +26,11 @@ stdenv.mkDerivation (finalAttrs: {
     tagPrefix = "libz-";
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://sortix.org/libz/";
     description = "Clean fork of zlib";
-    license = [ lib.licenses.zlib ];
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = lib.platforms.unix;
+    license = [ licenses.zlib ];
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.unix;
   };
 })

@@ -25,12 +25,12 @@ buildGoModule {
 
   doCheck = false; # fails, silently
 
-  meta = {
+  meta = with lib; {
     description = "Tool for rewriting Go import paths";
     homepage = "https://github.com/rogpeppe/govers";
-    license = lib.licenses.bsd3;
+    license = licenses.bsd3;
     mainProgram = "govers";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       luftmensch-luftmensch
       urandom
     ];

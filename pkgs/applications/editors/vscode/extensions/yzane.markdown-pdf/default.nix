@@ -20,12 +20,12 @@ vscode-utils.buildVscodeMarketplaceExtension {
   postInstall = ''
     jq '.contributes.configuration.properties."markdown-pdf.executablePath".default = "${lib.getExe ungoogled-chromium}"' $out/$installPrefix/package.json | sponge $out/$installPrefix/package.json
   '';
-  meta = {
+  meta = with lib; {
     description = "Converts Markdown files to pdf, html, png or jpeg files";
     homepage = "https://github.com/yzane/vscode-markdown-pdf#readme";
     changelog = "https://github.com/yzane/vscode-markdown-pdf/blob/master/CHANGELOG.md";
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=yzane.markdown-pdf";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pandapip1 ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ pandapip1 ];
   };
 }

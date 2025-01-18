@@ -44,10 +44,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "Nonequispaced fast Fourier transform";
     homepage = "https://www-user.tu-chemnitz.de/~potts/nfft/";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ hmenke ];
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ hmenke ];
   };
 })

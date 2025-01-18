@@ -44,11 +44,11 @@ multiStdenv.mkDerivation (finalAttrs: {
     updateScript = unstableGitUpdater { };
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/CyberShadow/hax11";
     description = "Hackbrary to Hook and Augment X11 protocol calls";
-    license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ cybershadow ];
-    platforms = lib.platforms.linux;
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ cybershadow ];
+    platforms = platforms.linux;
   };
 })

@@ -16,10 +16,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ intltool ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://lxde.org/";
-    license = lib.licenses.gpl2;
+    license = licenses.gpl2;
     description = "Freedesktop.org desktop menus for LXDE";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

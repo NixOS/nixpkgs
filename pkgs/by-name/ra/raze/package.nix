@@ -84,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm644 ../soundfont/raze.sf2 $out/share/raze/soundfonts/raze.sf2
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Build engine port backed by GZDoom tech";
     longDescription = ''
       Raze is a fork of Build engine games backed by GZDoom tech and combines
@@ -92,8 +92,8 @@ stdenv.mkDerivation (finalAttrs: {
       in a single package. It is also capable of playing Nam and WW2 GI.
     '';
     homepage = "https://github.com/ZDoom/Raze";
-    license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ qubitnano ];
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ qubitnano ];
     mainProgram = "raze";
     platforms = [ "x86_64-linux" ];
   };

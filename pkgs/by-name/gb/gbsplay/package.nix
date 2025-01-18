@@ -33,11 +33,11 @@ stdenv.mkDerivation (finalAttrs: {
     installShellCompletion --bash --name gbsplay contrib/gbsplay.bashcompletion
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Gameboy sound player";
-    license = lib.licenses.gpl1Plus;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ sigmanificient ];
+    license = licenses.gpl1Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ sigmanificient ];
     mainProgram = "gbsplay";
   };
 })

@@ -17,10 +17,10 @@ build-idris-package {
     sha256 = "0j34a7vawrkc7nkwwnv6lsjjdcr00d85csjw06nnbh8rj4vj5ps0";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Some useful functions for Idris";
     homepage = "https://github.com/jheiling/idris-extras";
-    license = lib.licenses.unlicense;
-    maintainers = [ lib.maintainers.brainrape ];
+    license = licenses.unlicense;
+    maintainers = [ maintainers.brainrape ];
   };
 }

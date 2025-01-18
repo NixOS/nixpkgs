@@ -16,10 +16,10 @@ build-idris-package {
     sha256 = "1am7kfc51p2zlml954v8cl9xvx0g0f1caq7ni3z36xvsd7fh47yh";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Port of Scala/Haskell Refined library to Idris";
     homepage = "https://github.com/janschultecom/idris-refined";
-    license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.brainrape ];
+    license = licenses.asl20;
+    maintainers = [ maintainers.brainrape ];
   };
 }

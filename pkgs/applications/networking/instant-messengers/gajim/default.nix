@@ -132,16 +132,16 @@ python3.pkgs.buildPythonApplication rec {
   # necessary for wrapGAppsHook3
   strictDeps = false;
 
-  meta = {
+  meta = with lib; {
     homepage = "http://gajim.org/";
     description = "Jabber client written in PyGTK";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
       raskin
       abbradar
     ];
     downloadPage = "http://gajim.org/download/";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
     mainProgram = "gajim";
   };
 }

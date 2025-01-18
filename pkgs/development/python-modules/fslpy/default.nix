@@ -88,11 +88,11 @@ buildPythonPackage rec {
     "fsl.wrappers"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "FSL Python library";
     homepage = "https://git.fmrib.ox.ac.uk/fsl/fslpy";
     changelog = "https://git.fmrib.ox.ac.uk/fsl/fslpy/-/blob/main/CHANGELOG.rst";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ bcdarwin ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ bcdarwin ];
   };
 }

@@ -41,13 +41,13 @@ buildDunePackage rec {
   # Checks depend on caqti-driver-sqlite3 (circural dependency)
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Unified interface to relational database libraries";
-    license = with lib.licenses; [
+    license = with licenses; [
       lgpl3Plus
       ocamlLgplLinkingException
     ];
-    maintainers = with lib.maintainers; [ bcc32 ];
+    maintainers = with maintainers; [ bcc32 ];
     homepage = "https://github.com/paurkedal/ocaml-caqti";
   };
 }

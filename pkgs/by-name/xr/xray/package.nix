@@ -57,11 +57,11 @@ buildGoModule rec {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Platform for building proxies to bypass network restrictions. A replacement for v2ray-core, with XTLS support and fully compatible configuration";
     mainProgram = "xray";
     homepage = "https://github.com/XTLS/Xray-core";
-    license = with lib.licenses; [ mpl20 ];
-    maintainers = with lib.maintainers; [ iopq ];
+    license = with licenses; [ mpl20 ];
+    maintainers = with maintainers; [ iopq ];
   };
 }

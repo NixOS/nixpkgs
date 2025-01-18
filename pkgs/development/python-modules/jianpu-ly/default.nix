@@ -26,10 +26,10 @@ buildPythonPackage rec {
   # no tests in shipped with upstream
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://ssb22.user.srcf.net/mwrhome/jianpu-ly.html";
     description = "Assists with printing jianpu";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ifurther ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ ifurther ];
   };
 }

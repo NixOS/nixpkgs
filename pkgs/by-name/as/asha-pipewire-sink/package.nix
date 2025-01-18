@@ -35,12 +35,12 @@ stdenv.mkDerivation rec {
     install -Dm755 asha_connection_test snoop_analyze asha_stream_test asha_pipewire_sink -t $out/bin
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Sample ASHA implementation for Linux designed to work with pipewire and bluez";
     homepage = "https://github.com/thewierdnut/asha_pipewire_sink";
-    license = lib.licenses.unlicense;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ onny ];
+    license = licenses.unlicense;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ onny ];
     mainProgram = "asha_pipewire_sink";
   };
 }

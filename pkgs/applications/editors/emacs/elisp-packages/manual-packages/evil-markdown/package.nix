@@ -25,10 +25,10 @@ melpaBuild {
 
   passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/Somelauw/evil-markdown";
     description = "Integrates Emacs evil and markdown";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ leungbk ];
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ leungbk ];
   };
 }

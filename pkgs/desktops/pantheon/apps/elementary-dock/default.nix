@@ -55,12 +55,12 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Elegant, simple, clean dock";
     homepage = "https://github.com/elementary/dock";
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
-    maintainers = lib.teams.pantheon.members;
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = teams.pantheon.members;
     mainProgram = "io.elementary.dock";
   };
 })

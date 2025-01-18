@@ -65,10 +65,10 @@ buildPythonPackage rec {
     "test_bad_pinning_url_changed"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Core logic used by the other Proton components";
     homepage = "https://github.com/ProtonVPN/python-proton-core";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ sebtm ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ sebtm ];
   };
 }

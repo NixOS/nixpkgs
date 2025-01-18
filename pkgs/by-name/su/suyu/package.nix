@@ -220,13 +220,13 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm444 $src/dist/72-suyu-input.rules $out/lib/udev/rules.d/72-suyu-input.rules
   ";
 
-  meta = {
+  meta = with lib; {
     description = "Experimental Nintendo Switch emulator written in C++";
     homepage = "https://suyu.dev";
     mainProgram = "suyu";
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ liberodark ];
-    license = with lib.licenses; [
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ liberodark ];
+    license = with licenses; [
       gpl3Plus
       # Icons
       asl20

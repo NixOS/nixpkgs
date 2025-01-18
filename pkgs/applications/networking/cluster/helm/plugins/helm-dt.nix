@@ -39,10 +39,10 @@ buildGoModule rec {
     install -m644 -Dt $out/helm-dt plugin.yaml
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Helm Distribution plugin is is a set of utilities and Helm Plugin for making offline work with Helm Charts easier";
     homepage = "https://github.com/vmware-labs/distribution-tooling-for-helm";
-    maintainers = with lib.maintainers; [ ascii17 ];
-    license = lib.licenses.mit;
+    maintainers = with maintainers; [ ascii17 ];
+    license = licenses.mit;
   };
 }

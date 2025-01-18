@@ -24,14 +24,14 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Convert CUE to ISO suitable to POPStarter";
     homepage = "https://github.com/makefu/cue2pops-linux";
     # Upstream license is unclear.
     # <https://github.com/ErikAndren/cue2pops-mac/issues/2#issuecomment-673983298>
-    license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = lib.platforms.all;
+    license = licenses.unfree;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.all;
     mainProgram = "cue2pops";
   };
 }

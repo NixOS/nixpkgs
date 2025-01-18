@@ -90,15 +90,15 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "SymbiYosys, a front-end for Yosys-based formal verification flows";
     homepage = "https://symbiyosys.readthedocs.io/";
-    license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [
+    license = licenses.isc;
+    maintainers = with maintainers; [
       thoughtpolice
       rcoeurjoly
     ];
     mainProgram = "sby";
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 }

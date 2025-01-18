@@ -21,11 +21,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "(mainly) Chinese Unicode font";
     homepage = "http://wenq.org";
-    license = lib.licenses.gpl2; # with font embedding exceptions
-    maintainers = [ lib.maintainers.pkmx ];
-    platforms = lib.platforms.all;
+    license = licenses.gpl2; # with font embedding exceptions
+    maintainers = [ maintainers.pkmx ];
+    platforms = platforms.all;
   };
 }

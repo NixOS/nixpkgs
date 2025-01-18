@@ -132,10 +132,10 @@ stdenv.mkDerivation rec {
     runHook postInstallCheck
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/dzaima/CBQN/";
     description = "BQN implementation in C";
-    license = with lib.licenses; [
+    license = with licenses; [
       # https://github.com/dzaima/CBQN?tab=readme-ov-file#licensing
       asl20
       boost
@@ -145,13 +145,13 @@ stdenv.mkDerivation rec {
       mpl20
     ];
     mainProgram = "cbqn";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       AndersonTorres
       detegr
       shnarazk
       sternenseemann
       synthetica
     ];
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 }

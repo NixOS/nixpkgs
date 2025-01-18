@@ -26,11 +26,11 @@ buildNpmPackage rec {
     --replace-fail 'dirname, "../data/email.html"' 'process.cwd(), "email.html"'
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Quickly generate a disposable email straight from terminal";
     mainProgram = "mailsy";
     homepage = "https://fig.io/manual/mailsy";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers._404wolf ];
+    license = licenses.mit;
+    maintainers = [ maintainers._404wolf ];
   };
 }

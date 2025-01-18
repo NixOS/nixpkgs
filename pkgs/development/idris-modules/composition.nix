@@ -17,10 +17,10 @@ build-idris-package {
     sha256 = "05424xzxx6f3ig0ravib15nr34nqvaq8spcj6b1512raqrvkkay8";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Composition extras for Idris";
     homepage = "https://github.com/vmchale/composition";
-    license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.brainrape ];
+    license = licenses.bsd3;
+    maintainers = [ maintainers.brainrape ];
   };
 }

@@ -58,11 +58,11 @@ stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_BUILD_WITH_INSTALL_NAME_DIR=ON"
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/podofo/podofo";
     description = "Library to work with the PDF file format";
-    platforms = lib.platforms.all;
-    license = with lib.licenses; [
+    platforms = platforms.all;
+    license = with licenses; [
       gpl2Plus
       lgpl2Plus
     ];

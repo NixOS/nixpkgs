@@ -58,10 +58,10 @@ stdenv.mkDerivation rec {
       CXXFLAGS = "-std=c++98";
     };
 
-  meta = {
+  meta = with lib; {
     description = "Client for many p2p networks, with multiple frontends";
     homepage = "https://github.com/ygrek/mldonkey";
-    license = lib.licenses.gpl2Only;
-    platforms = lib.platforms.unix;
+    license = licenses.gpl2Only;
+    platforms = platforms.unix;
   };
 }

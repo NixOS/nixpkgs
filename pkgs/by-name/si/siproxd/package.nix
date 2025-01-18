@@ -22,12 +22,12 @@ stdenv.mkDerivation rec {
     sqlite
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "http://siproxd.sourceforge.net/";
     description = "Masquerading SIP Proxy Server";
     mainProgram = "siproxd";
     maintainers = [ ];
-    platforms = with lib.platforms; linux;
-    license = lib.licenses.gpl2Plus;
+    platforms = with platforms; linux;
+    license = licenses.gpl2Plus;
   };
 }

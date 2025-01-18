@@ -46,11 +46,11 @@ stdenv.mkDerivation (finalAttrs: {
     rev-prefix = "hhexen-";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Linux port of Raven Game's Hexen";
     homepage = "https://hhexen.sourceforge.net/hhexen.html";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [
       moody
       djanatyn
     ];

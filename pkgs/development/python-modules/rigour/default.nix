@@ -58,10 +58,10 @@ buildPythonPackage rec {
     "rigour.addresses"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Data cleaning and validation functions for names, languages, identifiers, etc";
     homepage = "https://opensanctions.github.io/rigour";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ bcdarwin ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ bcdarwin ];
   };
 }

@@ -20,10 +20,10 @@ stdenv.mkDerivation {
 
   configureFlags = lib.optionals stdenv.hostPlatform.isDarwin [ "--build=x86_64-apple-darwin" ];
 
-  meta = {
+  meta = with lib; {
     description = "Forth implementation of the GNU project (outdated version used to bootstrap)";
     homepage = "https://www.gnu.org/software/gforth/";
-    license = lib.licenses.gpl3;
-    platforms = lib.platforms.all;
+    license = licenses.gpl3;
+    platforms = platforms.all;
   };
 }

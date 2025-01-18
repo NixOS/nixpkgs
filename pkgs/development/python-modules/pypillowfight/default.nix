@@ -31,10 +31,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = {
+  meta = with lib; {
     description = "Library containing various image processing algorithms";
     inherit (src.meta) homepage;
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ pyrox0 ];
   };
 }

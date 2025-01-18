@@ -38,11 +38,11 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "rabbit" ];
 
-  meta = {
+  meta = with lib; {
     description = "Tool for identifying bot accounts based on their recent GitHub event history";
     homepage = "https://github.com/natarajan-chidambaram/RABBIT";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     mainProgram = "rabbit";
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = with maintainers; [ drupol ];
   };
 }

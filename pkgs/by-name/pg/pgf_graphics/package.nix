@@ -34,10 +34,10 @@ stdenv.mkDerivation rec {
     libpgf
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.libpgf.org/";
     description = "Progressive Graphics Format command line program";
-    license = lib.licenses.lgpl21Plus;
-    platforms = lib.platforms.linux;
+    license = licenses.lgpl21Plus;
+    platforms = platforms.linux;
   };
 }

@@ -27,11 +27,11 @@ buildDunePackage rec {
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "Bindings for Linux’s filesystem monitoring interface, inotify";
-    license = lib.licenses.lgpl21;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.lgpl21;
+    maintainers = [ maintainers.vbgl ];
     inherit (src.meta) homepage;
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

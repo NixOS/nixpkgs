@@ -18,11 +18,11 @@ buildDunePackage rec {
 
   checkInputs = [ alcotest ];
 
-  meta = {
+  meta = with lib; {
     description = "Exponential backoff mechanism for OCaml";
     homepage = "https://github.com/ocaml-multicore/backoff";
-    license = lib.licenses.isc;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.isc;
+    maintainers = [ maintainers.vbgl ];
   };
 
   minimalOCamlVersion = "4.12";

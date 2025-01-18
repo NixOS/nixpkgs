@@ -36,10 +36,10 @@ buildPythonPackage rec {
   # tested in `gradio`
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Python library for easily interacting with trained machine learning models";
     homepage = "https://pypi.org/project/gradio-pdf/";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ pbsds ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ pbsds ];
   };
 }

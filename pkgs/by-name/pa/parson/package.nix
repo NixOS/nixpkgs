@@ -22,11 +22,11 @@ stdenv.mkDerivation {
     ninja
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Lightweight JSON library written in C";
     homepage = "https://github.com/kgabis/parson";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ sigmanificient ];
+    license = licenses.mit;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ sigmanificient ];
   };
 }

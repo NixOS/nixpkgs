@@ -53,11 +53,11 @@ buildGoModule rec {
   # removing the table decorations from the command output.
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  meta = {
+  meta = with lib; {
     description = "Tool for creating NATS account and user access configurations";
     homepage = "https://github.com/nats-io/nsc";
-    license = with lib.licenses; [ asl20 ];
-    maintainers = with lib.maintainers; [ cbrewster ];
+    license = with licenses; [ asl20 ];
+    maintainers = with maintainers; [ cbrewster ];
     mainProgram = "nsc";
   };
 }

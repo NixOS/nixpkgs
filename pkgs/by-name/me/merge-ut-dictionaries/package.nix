@@ -77,12 +77,12 @@ stdenvNoCC.mkDerivation {
     ];
   };
 
-  meta = {
+  meta = with lib; {
     description = "Mozc UT dictionaries are additional dictionaries for Mozc.";
     homepage = "https://github.com/utuhiro78/merge-ut-dictionaries";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ pineapplehunter ];
-    platforms = lib.platforms.all;
+    license = licenses.asl20;
+    maintainers = with maintainers; [ pineapplehunter ];
+    platforms = platforms.all;
     # this does not need to be separately built
     # it only provides a dictionary
     hydraPlatforms = [ ];

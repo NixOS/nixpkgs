@@ -79,11 +79,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Simple and unix-idiomatic build automator";
     homepage = "https://sr.ht/~autumnull/haredo/";
-    license = lib.licenses.wtfpl;
-    maintainers = with lib.maintainers; [ onemoresuza ];
+    license = licenses.wtfpl;
+    maintainers = with maintainers; [ onemoresuza ];
     mainProgram = "haredo";
     inherit (hareHook.meta) platforms badPlatforms;
   };

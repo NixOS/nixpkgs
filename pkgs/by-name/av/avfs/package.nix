@@ -27,10 +27,10 @@ stdenv.mkDerivation rec {
     "--enable-fuse"
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://avf.sourceforge.net/";
     description = "Virtual filesystem that allows browsing of compressed files";
-    platforms = lib.platforms.unix;
-    license = lib.licenses.gpl2Only;
+    platforms = platforms.unix;
+    license = licenses.gpl2Only;
   };
 }

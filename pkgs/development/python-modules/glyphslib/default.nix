@@ -51,10 +51,10 @@ buildPythonPackage rec {
     "tests/builder/interpolation_test.py" # this test tries to use a font that previous test should made
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Bridge from Glyphs source files (.glyphs) to UFOs and Designspace files via defcon and designspaceLib";
     homepage = "https://github.com/googlefonts/glyphsLib";
-    license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.BarinovMaxim ];
+    license = licenses.asl20;
+    maintainers = [ maintainers.BarinovMaxim ];
   };
 }

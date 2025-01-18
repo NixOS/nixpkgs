@@ -21,11 +21,11 @@ buildPythonPackage rec {
 
   dependencies = [ types-psycopg2 ];
 
-  meta = {
+  meta = with lib; {
     description = "Type stubs for Django";
     homepage = "https://github.com/sbdchd/django-types";
     changelog = "https://github.com/sbdchd/django-types/blob/main/CHANGELOG.md";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ nickcao ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ nickcao ];
   };
 }

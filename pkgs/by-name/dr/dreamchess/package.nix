@@ -61,12 +61,12 @@ stdenv.mkDerivation (finalAttrs: {
     stat "''${!outputBin}/bin/${finalAttrs.meta.mainProgram}"
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/dreamchess/dreamchess";
     description = "OpenGL Chess Game";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ spk ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ spk ];
+    platforms = platforms.linux;
     mainProgram = "dreamchess";
   };
 })

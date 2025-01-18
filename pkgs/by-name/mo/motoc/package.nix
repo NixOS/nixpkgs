@@ -31,12 +31,12 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "MOnado Tracking Origin Calibration program";
     homepage = "https://github.com/galister/motoc";
     changelog = "https://github.com/galister/motoc/releases";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ pandapip1 ];
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ pandapip1 ];
     mainProgram = "motoc";
   };
 }

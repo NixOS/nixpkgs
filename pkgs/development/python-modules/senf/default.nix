@@ -35,11 +35,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "senf" ];
 
-  meta = {
+  meta = with lib; {
     description = "Consistent filename handling for all Python versions and platforms";
     homepage = "https://senf.readthedocs.io/en/latest/";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ cab404 ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ cab404 ];
   };
 
 }

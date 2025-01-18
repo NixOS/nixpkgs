@@ -51,11 +51,11 @@ rustPlatform.buildRustPackage {
     tagPrefix = "v";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Hassle-free Discord music bot";
     homepage = "https://github.com/aquelemiguel/parrot";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ gerg-l ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ gerg-l ];
     mainProgram = "parrot";
   };
 }

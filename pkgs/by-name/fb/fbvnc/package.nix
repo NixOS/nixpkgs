@@ -34,11 +34,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Framebuffer VNC client";
-    license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.raskin ];
-    platforms = lib.platforms.linux;
+    license = licenses.bsd3;
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.linux;
     homepage = "https://github.com/zohead/fbvnc/";
     mainProgram = "fbvnc";
   };

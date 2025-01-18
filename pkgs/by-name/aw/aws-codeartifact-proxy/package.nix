@@ -18,11 +18,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-3MO+mRCstXw0FfySiyMSs1vaao7kUYIyJB2gAp1IE48=";
 
-  meta = {
+  meta = with lib; {
     description = "AWS CodeArtifact proxy to allow unauthenticated read access";
     homepage = "https://github.com/sktan/aws-codeartifact-proxy";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ lafrenierejm ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ lafrenierejm ];
     mainProgram = "aws-codeartifact-proxy";
   };
 }

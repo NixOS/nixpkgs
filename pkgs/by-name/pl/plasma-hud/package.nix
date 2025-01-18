@@ -46,12 +46,12 @@ python3Packages.buildPythonApplication rec {
     runHook postInstall
   '';
 
-  meta = {
-    license = lib.licenses.gpl2Only;
+  meta = with lib; {
+    license = licenses.gpl2Only;
     homepage = "https://github.com/Zren/plasma-hud";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
     description = "Run menubar commands, much like the Unity 7 Heads-Up Display (HUD)";
-    maintainers = with lib.maintainers; [ pasqui23 ];
+    maintainers = with maintainers; [ pasqui23 ];
     mainProgram = "plasma-hud";
   };
 }

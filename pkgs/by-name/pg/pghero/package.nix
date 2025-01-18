@@ -70,12 +70,12 @@ stdenv.mkDerivation (
       };
     };
 
-    meta = {
+    meta = with lib; {
       homepage = "https://github.com/ankane/pghero";
       description = "Performance dashboard for Postgres";
       mainProgram = "pghero";
-      license = lib.licenses.mit;
-      maintainers = [ lib.maintainers.tie ];
+      license = licenses.mit;
+      maintainers = [ maintainers.tie ];
     };
   }
 )

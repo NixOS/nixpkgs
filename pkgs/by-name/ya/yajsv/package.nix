@@ -31,11 +31,11 @@ buildGoModule {
     $out/bin/yajsv -v > /dev/null
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Yet Another JSON Schema Validator";
     homepage = "https://github.com/neilpa/yajsv";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ rycee ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ rycee ];
     mainProgram = "yajsv";
   };
 }

@@ -27,10 +27,10 @@ stdenvNoCC.mkDerivation {
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
-  meta = {
+  meta = with lib; {
     description = "RIME essay grammar plugin";
     homepage = "https://github.com/lotem/librime-octagram";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ azuwis ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ azuwis ];
   };
 }

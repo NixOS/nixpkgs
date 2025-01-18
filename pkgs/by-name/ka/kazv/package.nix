@@ -59,12 +59,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  meta = {
+  meta = with lib; {
     description = "Convergent matrix client and instant messaging app";
     homepage = "https://kazv.chat/";
-    license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ fgaz ];
+    license = licenses.agpl3Plus;
+    maintainers = with maintainers; [ fgaz ];
     mainProgram = "kazv";
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 })

@@ -22,10 +22,10 @@ buildDunePackage rec {
   propagatedBuildInputs = [ zarith_stubs_js ];
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "Javascript stubs for the integers library in js_of_ocaml";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ bezmuth ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ bezmuth ];
     inherit (src.meta) homepage;
   };
 }

@@ -47,10 +47,10 @@ stdenv.mkDerivation rec {
     IOKit
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://irrlicht.sourceforge.net/";
-    license = lib.licenses.zlib;
+    license = licenses.zlib;
     description = "Open source high performance realtime 3D engine written in C++";
-    platforms = lib.platforms.darwin;
+    platforms = platforms.darwin;
   };
 }

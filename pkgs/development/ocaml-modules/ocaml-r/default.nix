@@ -46,11 +46,11 @@ buildDunePackage rec {
   doCheck = true;
   checkInputs = [ alcotest ];
 
-  meta = {
+  meta = with lib; {
     description = "OCaml bindings for the R interpreter";
     inherit (src.meta) homepage;
-    license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.bcdarwin ];
+    license = licenses.gpl3;
+    maintainers = [ maintainers.bcdarwin ];
   };
 
 }

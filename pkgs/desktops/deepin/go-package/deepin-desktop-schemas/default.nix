@@ -47,11 +47,11 @@ buildGoModule rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "GSettings deepin desktop-wide schemas";
     homepage = "https://github.com/linuxdeepin/deepin-desktop-schemas";
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
-    maintainers = lib.teams.deepin.members;
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = teams.deepin.members;
   };
 }

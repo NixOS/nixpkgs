@@ -27,10 +27,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mpegdash" ];
 
-  meta = {
+  meta = with lib; {
     description = "MPEG-DASH MPD(Media Presentation Description) Parser";
     homepage = "https://github.com/sangwonl/python-mpegdash";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ drawbu ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ drawbu ];
   };
 }

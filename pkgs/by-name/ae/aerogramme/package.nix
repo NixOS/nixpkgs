@@ -35,12 +35,12 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];
 
-  meta = {
+  meta = with lib; {
     description = "Encrypted e-mail storage over Garage";
     homepage = "https://aerogramme.deuxfleurs.fr/";
-    license = lib.licenses.eupl12;
-    maintainers = with lib.maintainers; [ supinie ];
+    license = licenses.eupl12;
+    maintainers = with maintainers; [ supinie ];
     mainProgram = "aerogramme";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

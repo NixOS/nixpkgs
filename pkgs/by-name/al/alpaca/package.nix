@@ -71,7 +71,7 @@ python3Packages.buildPythonApplication rec {
     "--set FLATPAK_DEST ${placeholder "out"}"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Ollama client made with GTK4 and Adwaita";
     longDescription = ''
       To run Alpaca with GPU acceleration enabled, simply override it:
@@ -83,12 +83,12 @@ python3Packages.buildPythonApplication rec {
       Or using `pkgs.ollama-rocm` for AMD GPUs.
     '';
     homepage = "https://jeffser.com/alpaca";
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     mainProgram = "alpaca";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       aleksana
       Gliczy
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

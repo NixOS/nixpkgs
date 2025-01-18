@@ -39,12 +39,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "FujiFILM Linux Printer Driver";
     homepage = "https://support-fb.fujifilm.com";
-    license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ jaduff ];
-    platforms = lib.platforms.linux;
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+    maintainers = with maintainers; [ jaduff ];
+    platforms = platforms.linux;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 })

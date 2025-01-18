@@ -86,12 +86,12 @@ stdenv.mkDerivation rec {
     makeWrapper $out/{Applications/mmex.app/Contents/MacOS,bin}/mmex
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Easy-to-use personal finance software";
     homepage = "https://www.moneymanagerex.org/";
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = with lib.platforms; unix;
+    platforms = with platforms; unix;
     mainProgram = "mmex";
   };
 }

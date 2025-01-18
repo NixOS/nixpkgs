@@ -58,12 +58,12 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "MIT Photonic-Bands: computation of photonic band structures in periodic media";
     homepage = "https://mpb.readthedocs.io/en/latest/";
-    license = lib.licenses.gpl2Only;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl2Only;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
       sheepforce
     ];
   };

@@ -122,12 +122,12 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Client for the Mozilla VPN service";
     mainProgram = "mozillavpn";
     homepage = "https://vpn.mozilla.org/";
-    license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ andersk ];
-    platforms = lib.platforms.linux;
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ andersk ];
+    platforms = platforms.linux;
   };
 })

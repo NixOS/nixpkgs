@@ -27,12 +27,12 @@ stdenv.mkDerivation rec {
     cp sec.man $out/share/man/man1/sec.1
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://simple-evcorr.github.io";
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     description = "Simple Event Correlator";
-    maintainers = [ lib.maintainers.tv ];
-    platforms = lib.platforms.all;
+    maintainers = [ maintainers.tv ];
+    platforms = platforms.all;
     mainProgram = "sec";
   };
 }

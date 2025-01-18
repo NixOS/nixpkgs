@@ -41,12 +41,12 @@ stdenv.mkDerivation rec {
     gtksourceview5
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Beautiful markdown note-taking app for GNOME (forked from Paper)";
     homepage = "https://github.com/toolstack/Folio";
-    license = lib.licenses.gpl3Only;
+    license = licenses.gpl3Only;
     mainProgram = "com.toolstack.Folio";
-    maintainers = with lib.maintainers; [ aleksana ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ aleksana ];
+    platforms = platforms.unix;
   };
 }

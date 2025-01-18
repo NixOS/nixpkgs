@@ -37,12 +37,12 @@ python3Packages.buildPythonApplication rec {
     inherit (nixosTests) etesync-dav;
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.etesync.com";
     description = "Secure, end-to-end encrypted, and privacy respecting sync for contacts, calendars and tasks";
     mainProgram = "etesync-dav";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [
       thyol
       valodim
     ];

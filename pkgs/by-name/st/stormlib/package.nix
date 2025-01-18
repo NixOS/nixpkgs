@@ -53,15 +53,15 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "FRAMEWORK DESTINATION /Library/Frameworks" "FRAMEWORK DESTINATION Library/Frameworks"
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/ladislav-zezula/StormLib";
     description = "Open-source project that can work with Blizzard MPQ archives";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       aanderse
       karolchmist
     ];
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
     broken = stdenv.hostPlatform.isDarwin; # installation directory mismatch
   };
 })

@@ -86,12 +86,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://justine.lol/cosmopolitan/";
     description = "Your build-once run-anywhere c library";
-    license = lib.licenses.isc;
-    maintainers = lib.teams.cosmopolitan.members;
-    platforms = lib.platforms.x86_64;
-    badPlatforms = lib.platforms.darwin;
+    license = licenses.isc;
+    maintainers = teams.cosmopolitan.members;
+    platforms = platforms.x86_64;
+    badPlatforms = platforms.darwin;
   };
 })

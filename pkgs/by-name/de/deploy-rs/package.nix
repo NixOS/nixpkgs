@@ -24,11 +24,11 @@ rustPlatform.buildRustPackage {
     darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Multi-profile Nix-flake deploy tool";
     homepage = "https://github.com/serokell/deploy-rs";
-    license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ teutat3s ];
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ teutat3s ];
     mainProgram = "deploy";
   };
 }

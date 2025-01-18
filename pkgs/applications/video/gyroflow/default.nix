@@ -142,14 +142,14 @@ rustPlatform.buildRustPackage rec {
     }))
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Advanced gyro-based video stabilization tool";
     homepage = "https://gyroflow.xyz";
-    license = with lib.licenses; [
+    license = with licenses; [
       gpl3Plus
       cc0
     ];
-    maintainers = with lib.maintainers; [ orivej ];
+    maintainers = with maintainers; [ orivej ];
     platforms = [ "x86_64-linux" ];
   };
 }

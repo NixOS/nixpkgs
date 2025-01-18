@@ -49,10 +49,10 @@ stdenv.mkDerivation rec {
       "ac_cv_func_realloc_0_nonnull=yes"
     ];
 
-  meta = {
+  meta = with lib; {
     description = "Abstraction library for audio visualisations";
     homepage = "https://sourceforge.net/projects/libvisual/";
-    license = lib.licenses.lgpl21Plus;
-    platforms = lib.platforms.linux;
+    license = licenses.lgpl21Plus;
+    platforms = platforms.linux;
   };
 }

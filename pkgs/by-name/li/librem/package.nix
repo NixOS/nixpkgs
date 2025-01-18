@@ -35,10 +35,10 @@ stdenv.mkDerivation rec {
     ++ lib.optional (stdenv.cc.cc != null) "SYSROOT_ALT=${lib.getDev stdenv.cc.cc}"
     ++ lib.optional (stdenv.cc.libc != null) "SYSROOT=${lib.getDev stdenv.cc.libc}";
   enableParallelBuilding = true;
-  meta = {
+  meta = with lib; {
     description = "Library for real-time audio and video processing";
     homepage = "https://github.com/baresip/rem";
-    maintainers = with lib.maintainers; [ raskin ];
-    license = lib.licenses.bsd3;
+    maintainers = with maintainers; [ raskin ];
+    license = licenses.bsd3;
   };
 }

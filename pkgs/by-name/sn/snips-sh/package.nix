@@ -22,12 +22,12 @@ buildGoModule rec {
 
   buildInputs = [ sqlite ] ++ (lib.optional withTensorflow libtensorflow);
 
-  meta = {
+  meta = with lib; {
     description = "passwordless, anonymous SSH-powered pastebin with a human-friendly TUI and web UI";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
+    license = licenses.mit;
+    platforms = platforms.linux;
     homepage = "https://snips.sh";
-    maintainers = with lib.maintainers; [ jeremiahs ];
+    maintainers = with maintainers; [ jeremiahs ];
     mainProgram = "snips.sh";
   };
 }

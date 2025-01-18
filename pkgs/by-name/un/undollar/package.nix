@@ -26,12 +26,12 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "eats the dollar sign in the command you just pasted into your terminal";
     mainProgram = "$";
     homepage = "https://github.com/xtyrrell/undollar";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ pyrox0 ];
     inherit (nodejs.meta) platforms;
   };
 }

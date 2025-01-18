@@ -28,13 +28,13 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix PATH : "${lib.makeBinPath [ git ]}"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Recall what you did on the last working day";
     homepage = "https://github.com/kamranahmedse/git-standup";
     changelog = "https://github.com/kamranahmedse/git-standup/releases/tag/${finalAttrs.src.rev}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ sigmanificient ];
-    platforms = lib.platforms.all;
+    license = licenses.mit;
+    maintainers = with maintainers; [ sigmanificient ];
+    platforms = platforms.all;
     mainProgram = "git-standup";
   };
 })

@@ -17,10 +17,10 @@ buildPythonPackage rec {
   # No tests available
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/reingart/pyfpdf";
     description = "Simple PDF generation for Python";
-    license = lib.licenses.lgpl3;
-    maintainers = with lib.maintainers; [ oxzi ];
+    license = licenses.lgpl3;
+    maintainers = with maintainers; [ oxzi ];
   };
 }

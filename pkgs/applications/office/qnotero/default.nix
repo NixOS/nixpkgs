@@ -50,13 +50,13 @@ python3Packages.buildPythonPackage rec {
   # no tests executed
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Quick access to Zotero references";
     mainProgram = "qnotero";
     homepage = "https://www.cogsci.nl/software/qnotero";
-    license = lib.licenses.gpl2;
-    platforms = lib.platforms.unix;
+    license = licenses.gpl2;
+    platforms = platforms.unix;
     broken = stdenv.hostPlatform.isDarwin; # Build fails even after adding cx-freeze to `buildInputs`
-    maintainers = [ lib.maintainers.nico202 ];
+    maintainers = [ maintainers.nico202 ];
   };
 }

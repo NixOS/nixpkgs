@@ -60,12 +60,12 @@ stdenv.mkDerivation {
   # compiler itself. (Only its 'lib' output.)
   disallowedRequisites = [ swift.swift ];
 
-  meta = {
+  meta = with lib; {
     description = "Documentation compiler for Swift";
     mainProgram = "docc";
     homepage = "https://github.com/apple/swift-docc";
-    platforms = with lib.platforms; linux ++ darwin;
-    license = lib.licenses.asl20;
-    maintainers = lib.teams.swift.members;
+    platforms = with platforms; linux ++ darwin;
+    license = licenses.asl20;
+    maintainers = teams.swift.members;
   };
 }

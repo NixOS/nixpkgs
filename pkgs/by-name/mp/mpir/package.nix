@@ -45,11 +45,11 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--enable-cxx" ] ++ lib.optionals stdenv.hostPlatform.isLinux [ "--enable-fat" ];
 
-  meta = {
+  meta = with lib; {
     description = "Highly optimised library for bignum arithmetic forked from GMP";
-    license = lib.licenses.lgpl3Plus;
-    maintainers = [ lib.maintainers.raskin ];
-    platforms = lib.platforms.unix;
+    license = licenses.lgpl3Plus;
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.unix;
     downloadPage = "https://mpir.org/downloads.html";
     homepage = "https://mpir.org/";
   };

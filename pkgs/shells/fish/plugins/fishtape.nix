@@ -27,10 +27,10 @@ buildFishPlugin rec {
     mv fishtape.fish functions/
   '';
 
-  meta = {
+  meta = with lib; {
     description = "TAP-based test runner for Fish";
     homepage = "https://github.com/jorgebucaran/fishtape";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ euxane ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ euxane ];
   };
 }

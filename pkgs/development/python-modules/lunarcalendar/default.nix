@@ -32,11 +32,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "lunarcalendar" ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/wolfhong/LunarCalendar";
     description = "Lunar-Solar Converter, containing a number of lunar and solar festivals in China";
     mainProgram = "lunar-find";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ tomasajt ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ tomasajt ];
   };
 }

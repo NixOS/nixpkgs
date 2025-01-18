@@ -51,16 +51,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/nix-community/disko";
     description = "Declarative disk partitioning and formatting using nix";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "disko";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       mic92
       lassulus
       iFreilicht
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 })

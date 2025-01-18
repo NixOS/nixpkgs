@@ -31,11 +31,11 @@ buildGoModule rec {
 
   doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64);
 
-  meta = {
+  meta = with lib; {
     description = "Federated nanoblogging service with a Gemini frontend";
     homepage = "https://github.com/dimkr/tootik";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ sikmir ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ sikmir ];
     mainProgram = "tootik";
   };
 }

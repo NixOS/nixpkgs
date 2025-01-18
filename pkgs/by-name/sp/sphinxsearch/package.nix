@@ -43,12 +43,12 @@ stdenv.mkDerivation rec {
 
   CXXFLAGS = "-std=c++98";
 
-  meta = {
+  meta = with lib; {
     description = "Open source full text search server";
     homepage = "http://sphinxsearch.com";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl2Plus;
+    platforms = platforms.all;
+    maintainers = with maintainers; [
       ederoyd46
       valodim
     ];

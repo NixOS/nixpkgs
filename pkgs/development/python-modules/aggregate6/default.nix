@@ -38,11 +38,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aggregate6" ];
 
-  meta = {
+  meta = with lib; {
     description = "IPv4 and IPv6 prefix aggregation tool";
     mainProgram = "aggregate6";
     homepage = "https://github.com/job/aggregate6";
-    license = with lib.licenses; [ bsd2 ];
-    maintainers = lib.teams.wdz.members ++ (with lib.maintainers; [ marcel ]);
+    license = with licenses; [ bsd2 ];
+    maintainers = teams.wdz.members ++ (with maintainers; [ marcel ]);
   };
 }

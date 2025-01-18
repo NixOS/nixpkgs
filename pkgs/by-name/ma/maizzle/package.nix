@@ -19,11 +19,11 @@ buildNpmPackage rec {
 
   dontNpmBuild = true;
 
-  meta = {
+  meta = with lib; {
     description = "CLI tool for the Maizzle Email Framework";
     homepage = "https://github.com/maizzle/cli";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "maizzle";
-    maintainers = with lib.maintainers; [ happysalada ];
+    maintainers = with maintainers; [ happysalada ];
   };
 }

@@ -35,10 +35,10 @@ buildNpmPackage' rec {
   dontNpmBuild = true;
   dontNpmPrune = true;
 
-  meta = {
+  meta = with lib; {
     description = "Find and fix problems in your JavaScript code";
     homepage = "https://eslint.org";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.onny ];
+    license = licenses.mit;
+    maintainers = [ maintainers.onny ];
   };
 }

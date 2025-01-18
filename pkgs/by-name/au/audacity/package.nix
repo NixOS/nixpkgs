@@ -192,12 +192,12 @@ stdenv.mkDerivation (finalAttrs: {
       makeWrapper $out/Applications/Audacity.app/Contents/MacOS/Audacity $out/bin/audacity
     '';
 
-  meta = {
+  meta = with lib; {
     description = "Sound editor with graphical UI";
     mainProgram = "audacity";
     homepage = "https://www.audacityteam.org";
     changelog = "https://github.com/audacity/audacity/releases";
-    license = with lib.licenses; [
+    license = with licenses; [
       gpl2Plus
       # Must be GPL3 when building with "technologies that require it,
       # such as the VST3 audio plugin interface".
@@ -206,10 +206,10 @@ stdenv.mkDerivation (finalAttrs: {
       # Documentation.
       cc-by-30
     ];
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       veprbl
       wegank
     ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 })

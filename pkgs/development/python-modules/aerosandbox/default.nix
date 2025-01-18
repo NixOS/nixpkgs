@@ -43,10 +43,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aerosandbox" ];
 
-  meta = {
+  meta = with lib; {
     description = "Aircraft design optimization made fast through modern automatic differentiation";
     homepage = "https://peterdsharpe.github.io/AeroSandbox";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ sigmanificient ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ sigmanificient ];
   };
 }

@@ -23,12 +23,12 @@ mkHyprlandPlugin hyprland rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/outfoxxed/hy3";
     description = "Hyprland plugin for an i3 / sway like manual tiling layout";
-    license = lib.licenses.gpl3;
+    license = licenses.gpl3;
     inherit (hyprland.meta) platforms;
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       aacebedo
       johnrtitor
     ];

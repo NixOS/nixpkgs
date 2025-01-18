@@ -85,15 +85,15 @@ stdenv.mkDerivation rec {
   # $(nix-build -A sgx-azure-dcap-client.tests.suite)/bin/tests
   passthru.tests.suite = callPackage ./test-suite.nix { };
 
-  meta = {
+  meta = with lib; {
     description = "Interfaces between SGX SDKs and the Azure Attestation SGX Certification Cache";
     homepage = "https://github.com/microsoft/azure-dcap-client";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       phlip9
       trundle
       veehaitch
     ];
     platforms = [ "x86_64-linux" ];
-    license = [ lib.licenses.mit ];
+    license = [ licenses.mit ];
   };
 }

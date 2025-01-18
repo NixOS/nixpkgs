@@ -69,12 +69,12 @@ buildGoModule {
     simple = callPackage ./tests.nix { inherit version; };
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://nuvolaris.io/";
     description = "A CLI tool for running tasks using the Nuvolaris serverless engine";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     mainProgram = "nuv";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       msciabarra
       d4rkstar
     ];

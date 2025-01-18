@@ -28,11 +28,11 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "UDP packet-forwarder for the ChirpStack Concentratord";
     homepage = "https://www.chirpstack.io/";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.stv0g ];
+    license = licenses.mit;
+    maintainers = [ maintainers.stv0g ];
     mainProgram = "chirpstack-udp-forwarder";
   };
 }

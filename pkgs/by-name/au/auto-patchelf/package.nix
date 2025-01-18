@@ -33,11 +33,11 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Automatically patch ELF binaries using patchelf";
     mainProgram = "auto-patchelf";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ Scrumplex ];
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ Scrumplex ];
   };
 }

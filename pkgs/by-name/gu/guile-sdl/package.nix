@@ -53,13 +53,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  meta = {
+  meta = with lib; {
     # clang-16: error: unsupported option '--visibility=hidden'; did you mean '-fvisibility=hidden'
     broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://www.gnu.org/software/guile-sdl/";
     description = "Guile bindings for SDL";
-    license = lib.licenses.gpl3Plus;
-    maintainers = lib.teams.sdl.members ++ (with lib.maintainers; [ ]);
+    license = licenses.gpl3Plus;
+    maintainers = teams.sdl.members ++ (with maintainers; [ ]);
     inherit (guile.meta) platforms;
   };
 })

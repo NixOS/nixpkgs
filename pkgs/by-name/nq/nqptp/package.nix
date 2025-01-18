@@ -38,15 +38,15 @@ stdenv.mkDerivation rec {
     cp nqptp.service $out/lib/systemd/system
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/mikebrady/nqptp";
     description = "Daemon and companion application to Shairport Sync that monitors timing data from any PTP clocks";
-    license = lib.licenses.gpl2Only;
+    license = licenses.gpl2Only;
     mainProgram = "nqptp";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       jordanisaacs
       adamcstephens
     ];
-    platforms = lib.platforms.linux ++ lib.platforms.freebsd;
+    platforms = platforms.linux ++ platforms.freebsd;
   };
 }

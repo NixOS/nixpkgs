@@ -21,10 +21,10 @@ build-idris-package {
     sha256 = "13whhccb7yjq10hnngdc8bc9z9vvyir1wjkclpz006cr4cd266ca";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Js libraries for idris";
     homepage = "https://github.com/rbarreiro/idrisjs";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.brainrape ];
+    license = licenses.mit;
+    maintainers = [ maintainers.brainrape ];
   };
 }

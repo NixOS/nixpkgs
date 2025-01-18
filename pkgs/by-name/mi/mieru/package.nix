@@ -23,11 +23,11 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Socks5 / HTTP / HTTPS proxy to bypass censorship";
     homepage = "https://github.com/enfein/mieru";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ oluceps ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ oluceps ];
     mainProgram = "mieru";
   };
 }

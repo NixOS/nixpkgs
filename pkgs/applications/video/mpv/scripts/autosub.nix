@@ -25,10 +25,10 @@ buildLua {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = {
+  meta = with lib; {
     description = "Fully automatic subtitle downloading for the MPV media player";
     homepage = "https://github.com/davidde/mpv-autosub";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.octvs ];
+    license = licenses.mit;
+    maintainers = [ maintainers.octvs ];
   };
 }

@@ -24,12 +24,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libevent ];
 
-  meta = {
+  meta = with lib; {
     description = "Transparent redirector of any TCP connection to proxy";
     homepage = "https://darkk.net.ru/redsocks/";
-    license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.ekleog ];
-    platforms = lib.platforms.linux;
+    license = licenses.asl20;
+    maintainers = [ maintainers.ekleog ];
+    platforms = platforms.linux;
     mainProgram = "redsocks";
   };
 }

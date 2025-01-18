@@ -180,15 +180,15 @@ rustPlatform.buildRustPackage rec {
     ZSTD_SYS_USE_PKG_CONFIG = true;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Virtual / remote desktop infrastructure for everyone! Open source TeamViewer / Citrix alternative";
     homepage = "https://rustdesk.com";
-    license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [
       ocfox
       leixb
     ];
     mainProgram = "rustdesk";
-    badPlatforms = lib.platforms.darwin;
+    badPlatforms = platforms.darwin;
   };
 }

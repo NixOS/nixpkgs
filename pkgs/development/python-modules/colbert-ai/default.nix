@@ -58,11 +58,11 @@ buildPythonPackage rec {
   # There is no tests
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Fast and accurate retrieval model, enabling scalable BERT-based search over large text collections in tens of milliseconds";
     homepage = "https://github.com/stanford-futuredata/ColBERT";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       bachp
     ];
   };

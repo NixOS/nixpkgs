@@ -48,10 +48,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "momepy" ];
 
-  meta = {
+  meta = with lib; {
     description = "Urban Morphology Measuring Toolkit";
     homepage = "https://github.com/pysal/momepy";
-    license = lib.licenses.bsd3;
-    maintainers = lib.teams.geospatial.members;
+    license = licenses.bsd3;
+    maintainers = teams.geospatial.members;
   };
 }

@@ -31,12 +31,12 @@ buildNpmPackage {
   dontNpmBuild = true;
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
-  meta = {
+  meta = with lib; {
     description = "Application to perform the SAML single sing-on and easily retrieve the SVPNCOOKIE needed by openfortivpn";
     homepage = "https://github.com/gm-vm/openfortivpn-webview";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ lriesebos ];
-    platforms = with lib.platforms; linux ++ darwin;
+    license = licenses.mit;
+    maintainers = with maintainers; [ lriesebos ];
+    platforms = with platforms; linux ++ darwin;
     mainProgram = "openfortivpn-webview";
   };
 }

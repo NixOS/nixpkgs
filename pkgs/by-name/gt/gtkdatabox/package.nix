@@ -25,11 +25,11 @@ stdenv.mkDerivation rec {
     cairo
   ];
 
-  meta = {
+  meta = with lib; {
     description = "GTK widget for displaying large amounts of numerical data";
     homepage = "https://gtkdatabox.sourceforge.io/";
-    license = lib.licenses.lgpl2Only;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ yl3dy ];
+    license = licenses.lgpl2Only;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ yl3dy ];
   };
 }

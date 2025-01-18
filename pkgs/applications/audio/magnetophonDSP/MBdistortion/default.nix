@@ -45,10 +45,10 @@ stdenv.mkDerivation rec {
     cp -r MBdistortion.lv2/ $out/lib/lv2
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Mid-side multiband distortion for jack and lv2";
     homepage = "https://github.com/magnetophon/MBdistortion";
-    license = lib.licenses.gpl2;
-    maintainers = [ lib.maintainers.magnetophon ];
+    license = licenses.gpl2;
+    maintainers = [ maintainers.magnetophon ];
   };
 }

@@ -37,12 +37,12 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Lightweight cross-platform clipboard library";
     homepage = "https://jtanx.github.io/libclipboard";
     changelog = "https://github.com/jtanx/libclipboard/releases/tag/${finalAttrs.src.rev}";
-    platforms = lib.platforms.unix;
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.sigmanificient ];
+    platforms = platforms.unix;
+    license = licenses.mit;
+    maintainers = [ maintainers.sigmanificient ];
   };
 })

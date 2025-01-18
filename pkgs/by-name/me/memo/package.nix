@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
       mv completion/zsh/_memo    $out/share/zsh/site-functions/_memo
     '';
 
-  meta = {
+  meta = with lib; {
     description = "Simple tool written in bash to memorize stuff";
     longDescription = ''
       A simple tool written in bash to memorize stuff.
@@ -53,9 +53,9 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://palovandalo.com/memo/";
     downloadPage = "https://github.com/mrVanDalo/memo/releases";
-    license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.mrVanDalo ];
-    platforms = lib.platforms.all;
+    license = licenses.gpl3;
+    maintainers = [ maintainers.mrVanDalo ];
+    platforms = platforms.all;
     mainProgram = "memo";
   };
 }

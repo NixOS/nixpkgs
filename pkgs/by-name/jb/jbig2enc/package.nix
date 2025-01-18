@@ -58,10 +58,10 @@ stdenv.mkDerivation rec {
     make clean
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Encoder for the JBIG2 image compression format";
-    license = lib.licenses.asl20;
-    platforms = lib.platforms.all;
+    license = licenses.asl20;
+    platforms = platforms.all;
     homepage = "https://github.com/agl/jbig2enc";
     mainProgram = "jbig2";
   };

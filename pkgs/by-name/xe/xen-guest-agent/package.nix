@@ -38,12 +38,12 @@ rustPlatform.buildRustPackage rec {
     # Add the Xen libraries in the runpath so the guest agent can find libxenstore.
     "patchelf $out/bin/xen-guest-agent --add-rpath ${xen}/lib";
 
-  meta = {
+  meta = with lib; {
     description = "Xen agent running in Linux/BSDs (POSIX) VMs";
     homepage = "https://gitlab.com/xen-project/xen-guest-agent";
-    license = lib.licenses.agpl3Only;
-    platforms = lib.platforms.unix;
-    maintainers = lib.teams.xen.members;
+    license = licenses.agpl3Only;
+    platforms = platforms.unix;
+    maintainers = teams.xen.members;
     mainProgram = "xen-guest-agent";
   };
 }

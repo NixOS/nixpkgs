@@ -87,11 +87,11 @@ stdenv.mkDerivation rec {
   # we don't have any binaries
   dontWrapQtApps = true;
 
-  meta = {
+  meta = with lib; {
     description = "Flatpak portal library";
     homepage = "https://github.com/flatpak/libportal";
-    license = lib.licenses.lgpl3Plus;
-    maintainers = with lib.maintainers; [ jtojnar ];
-    platforms = lib.platforms.unix;
+    license = licenses.lgpl3Plus;
+    maintainers = with maintainers; [ jtojnar ];
+    platforms = platforms.unix;
   };
 }

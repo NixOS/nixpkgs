@@ -33,15 +33,15 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "Advanced disassembly library";
     homepage = "http://www.capstone-engine.org";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [
+    license = licenses.bsd3;
+    maintainers = with maintainers; [
       thoughtpolice
       ris
     ];
     mainProgram = "cstool";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }

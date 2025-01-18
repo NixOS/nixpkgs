@@ -4,10 +4,10 @@ bundlerApp {
   gemdir = ./.;
   exes = [ "sublime_syntax_convertor" ];
 
-  meta = {
+  meta = with lib; {
     description = "Converts tmLanguage to sublime-syntax";
     homepage = "https://github.com/aziz/SublimeSyntaxConvertor/";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ laalsaas ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ laalsaas ];
   };
 }

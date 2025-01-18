@@ -22,11 +22,11 @@ buildGoModule rec {
   env.CGO_ENABLED = "0";
   ldflags = [ "-X=carvel.dev/imgpkg/pkg/imgpkg/cmd.Version=${version}" ];
 
-  meta = {
+  meta = with lib; {
     description = "Store application configuration files in Docker/OCI registries";
     homepage = "https://carvel.dev/imgpkg";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ benchand ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ benchand ];
     mainProgram = "imgpkg";
   };
 }

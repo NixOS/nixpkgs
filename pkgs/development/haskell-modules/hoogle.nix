@@ -131,10 +131,10 @@ buildPackages.stdenv.mkDerivation {
     isHaskellLibrary = false; # for the filter in ./with-packages-wrapper.nix
   };
 
-  meta = {
+  meta = with lib; {
     description = "Local Hoogle database";
     platforms = ghc.meta.platforms;
-    hydraPlatforms = with lib.platforms; none;
-    maintainers = with lib.maintainers; [ ttuegel ];
+    hydraPlatforms = with platforms; none;
+    maintainers = with maintainers; [ ttuegel ];
   };
 }

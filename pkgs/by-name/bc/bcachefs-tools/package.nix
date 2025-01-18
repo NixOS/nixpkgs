@@ -124,15 +124,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     description = "Tool for managing bcachefs filesystems";
     homepage = "https://bcachefs.org/";
-    license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [
       davidak
       Madouura
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
     mainProgram = "bcachefs";
   };
 })

@@ -57,12 +57,12 @@ stdenv.mkDerivation (finalAttrs: {
   # two tests fail on darwin
   doCheck = stdenv.hostPlatform.isLinux;
 
-  meta = {
+  meta = with lib; {
     description = "SMT solver for fixed-size bit-vectors, floating-point arithmetic, arrays, and uninterpreted functions";
     mainProgram = "bitwuzla";
     homepage = "https://bitwuzla.github.io";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ symphorien ];
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ symphorien ];
   };
 })

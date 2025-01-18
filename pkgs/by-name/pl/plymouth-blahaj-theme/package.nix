@@ -38,11 +38,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Plymouth theme featuring IKEA's 1m soft toy shark";
     homepage = "https://github.com/190n/plymouth-blahaj";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ miampf ];
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ miampf ];
   };
 }

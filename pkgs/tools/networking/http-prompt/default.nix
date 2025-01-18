@@ -72,12 +72,12 @@ python.pkgs.buildPythonApplication rec {
 
   versionCheckProgramArg = [ "--version" ];
 
-  meta = {
+  meta = with lib; {
     description = "Interactive command-line HTTP client featuring autocomplete and syntax highlighting";
     mainProgram = "http-prompt";
     homepage = "https://github.com/eliangcs/http-prompt";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ matthiasbeyer ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    license = licenses.mit;
+    maintainers = with maintainers; [ matthiasbeyer ];
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

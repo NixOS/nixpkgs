@@ -46,11 +46,11 @@ buildGoModule rec {
     installShellCompletion --cmd exo --bash bash_completion --zsh zsh_completion
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Command-line tool for everything at Exoscale: compute, storage, dns";
     homepage = "https://github.com/exoscale/cli";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ viraptor ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ viraptor ];
     mainProgram = "exo";
   };
 }

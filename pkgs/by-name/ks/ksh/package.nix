@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  meta = {
+  meta = with lib; {
     description = "KornShell Command And Programming Language";
     longDescription = ''
       The KornShell language was designed and developed by David G. Korn at
@@ -48,9 +48,9 @@ stdenv.mkDerivation (finalAttrs: {
       many different computers and workstations on which it is implemented.
     '';
     homepage = "https://github.com/att/ast";
-    license = lib.licenses.cpl10;
-    maintainers = with lib.maintainers; [ sigmanificient ];
-    platforms = lib.platforms.all;
+    license = licenses.cpl10;
+    maintainers = with maintainers; [ sigmanificient ];
+    platforms = platforms.all;
   };
 
   passthru = {

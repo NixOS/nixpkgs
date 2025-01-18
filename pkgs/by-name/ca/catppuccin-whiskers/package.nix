@@ -19,11 +19,11 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-5FvW+ioeDi0kofDswyQpUC21wbEZM8TAeUEUemnNfnA=";
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/catppuccin/whiskers";
     description = "A templating tool to simplify the creation of Catppuccin ports";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ Name ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ Name ];
     mainProgram = "whiskers";
   };
 }

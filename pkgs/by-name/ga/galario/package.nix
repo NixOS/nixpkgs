@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     install_name_tool -change libgalario_single.dylib $out/lib/libgalario_single.dylib $out/lib/python*/site-packages/galario/single/libcommon.so
   '';
 
-  meta = {
+  meta = with lib; {
     description = "GPU Accelerated Library for Analysing Radio Interferometer Observations";
     longDescription = ''
       Galario is a library that exploits the computing power of modern
@@ -97,8 +97,8 @@ stdenv.mkDerivation (finalAttrs: {
       comparison to the observations.
     '';
     homepage = "https://mtazzari.github.io/galario/";
-    license = lib.licenses.lgpl3;
-    maintainers = [ lib.maintainers.smaret ];
-    platforms = lib.platforms.all;
+    license = licenses.lgpl3;
+    maintainers = [ maintainers.smaret ];
+    platforms = platforms.all;
   };
 })

@@ -19,12 +19,12 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Tool for analyzing Clang's -ftime-trace files";
     homepage = "https://github.com/aras-p/ClangBuildAnalyzer";
     maintainers = [ ];
-    license = lib.licenses.unlicense;
-    platforms = lib.platforms.unix;
+    license = licenses.unlicense;
+    platforms = platforms.unix;
     mainProgram = "ClangBuildAnalyzer";
   };
 })

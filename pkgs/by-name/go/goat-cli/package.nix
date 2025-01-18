@@ -32,11 +32,11 @@ buildGoModule rec {
   # Checks currently fail because of an issue with github.com/studio-b12/goat/mocks
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Integration testing tool for HTTP APIs using a simple script language";
     homepage = "https://studio-b12.github.io/goat/";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ kashw2 ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ kashw2 ];
     mainProgram = "goat";
   };
 

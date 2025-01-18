@@ -50,12 +50,12 @@ buildPythonPackage rec {
     "vulkan"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Ultimate Python binding for Vulkan API";
     homepage = "https://github.com/realitix/vulkan";
-    license = lib.licenses.asl20;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [
+    license = licenses.asl20;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
       grimmauld
       getchoo
     ];

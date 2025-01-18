@@ -23,11 +23,11 @@ stdenv.mkDerivation (finalAttrs: {
     zig.hook
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Minisign reimplemented in Zig";
     homepage = "https://github.com/jedisct1/zig-minisign";
-    license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ figsoda ];
+    license = licenses.isc;
+    maintainers = with maintainers; [ figsoda ];
     mainProgram = "minizign";
     inherit (zig.meta) platforms;
   };

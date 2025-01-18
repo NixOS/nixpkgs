@@ -45,15 +45,15 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/SecurityInnovation/PGPy";
     description = "Pretty Good Privacy for Python";
     longDescription = ''
       PGPy is a Python library for implementing Pretty Good Privacy into Python
       programs, conforming to the OpenPGP specification per RFC 4880.
     '';
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [
+    license = licenses.bsd3;
+    maintainers = with maintainers; [
       eadwu
       dotlambda
     ];

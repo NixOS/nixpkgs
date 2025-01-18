@@ -48,12 +48,12 @@ python3Packages.buildPythonApplication rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Installer for the fantastic GNOME for Firefox theme";
     homepage = "https://github.com/largestgithubuseronearth/addwater";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ thtrf ];
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ thtrf ];
     mainProgram = "addwater";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

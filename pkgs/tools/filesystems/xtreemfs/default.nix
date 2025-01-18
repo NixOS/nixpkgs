@@ -113,13 +113,13 @@ stdenv.mkDerivation {
     rm -r $out/sbin
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Distributed filesystem";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       raskin
       matejc
     ];
-    platforms = lib.platforms.linux;
-    license = lib.licenses.bsd3;
+    platforms = platforms.linux;
+    license = licenses.bsd3;
   };
 }

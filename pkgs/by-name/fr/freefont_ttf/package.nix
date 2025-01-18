@@ -22,7 +22,7 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "GNU Free UCS Outline Fonts";
     longDescription = ''
       The GNU Freefont project aims to provide a set of free outline
@@ -30,8 +30,8 @@ stdenvNoCC.mkDerivation rec {
       10646/Unicode UCS (Universal Character Set).
     '';
     homepage = "https://www.gnu.org/software/freefont/";
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.all;
+    license = licenses.gpl3Plus;
+    platforms = platforms.all;
     maintainers = [ ];
   };
 }

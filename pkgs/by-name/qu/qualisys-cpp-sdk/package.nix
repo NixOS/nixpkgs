@@ -32,11 +32,11 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake ];
 
-  meta = {
+  meta = with lib; {
     description = "C++ sdk for talking to Qualisys Track Manager software";
     homepage = "https://github.com/qualisys/qualisys_cpp_sdk";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ nim65s ];
-    platforms = lib.platforms.unix;
+    license = licenses.mit;
+    maintainers = with maintainers; [ nim65s ];
+    platforms = platforms.unix;
   };
 }

@@ -78,11 +78,11 @@ vimUtils.buildVimPlugin {
     "avante.providers.copilot"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Neovim plugin designed to emulate the behaviour of the Cursor AI IDE";
     homepage = "https://github.com/yetone/avante.nvim";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
+    license = licenses.asl20;
+    maintainers = with maintainers; [
       ttrei
       aarnphm
     ];

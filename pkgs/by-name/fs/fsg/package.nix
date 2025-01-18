@@ -62,10 +62,10 @@ stdenv.mkDerivation rec {
     chmod a+x $out/bin/fsg
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Cellular automata engine tuned towards the likes of Falling Sand";
     mainProgram = "fsg";
-    maintainers = [ lib.maintainers.raskin ];
-    platforms = lib.platforms.linux;
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.linux;
   };
 }

@@ -28,12 +28,12 @@ buildNpmPackage rec {
     })
   ];
 
-  meta = {
+  meta = with lib; {
     description = "A 1-1 end-to-end encrypted internet pipe powered by Hyperswarm ";
     homepage = "https://github.com/holepunchto/hyperbeam";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ davhau ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ davhau ];
     mainProgram = "hyperbeam";
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 }

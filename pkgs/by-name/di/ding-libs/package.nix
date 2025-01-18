@@ -19,14 +19,14 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "'D is not GLib' utility libraries";
     homepage = "https://pagure.io/SSSD/ding-libs";
-    platforms = with lib.platforms; linux;
+    platforms = with platforms; linux;
     maintainers = [ ];
     license = [
-      lib.licenses.gpl3
-      lib.licenses.lgpl3
+      licenses.gpl3
+      licenses.lgpl3
     ];
   };
 }

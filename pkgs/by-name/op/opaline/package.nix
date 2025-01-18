@@ -27,11 +27,11 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = {
+  meta = with lib; {
     description = "OPAm Light INstaller Engine";
     mainProgram = "opaline";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.mit;
+    maintainers = [ maintainers.vbgl ];
     inherit (src.meta) homepage;
     inherit (ocamlPackages.ocaml.meta) platforms;
   };

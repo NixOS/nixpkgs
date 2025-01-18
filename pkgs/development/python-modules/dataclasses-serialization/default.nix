@@ -58,10 +58,10 @@ buildPythonPackage rec {
     "dataclasses_serialization.serializer_base"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Serialize/deserialize Python dataclasses to various other data formats";
     homepage = "https://github.com/madman-bob/python-dataclasses-serialization";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

@@ -41,11 +41,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontWrapQtApps = true;
 
-  meta = {
+  meta = with lib; {
     description = "Song information plugin for obs-studio";
     homepage = "https://github.com/univrsal/tuna";
-    license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ shortcord ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ shortcord ];
+    platforms = platforms.linux;
   };
 })

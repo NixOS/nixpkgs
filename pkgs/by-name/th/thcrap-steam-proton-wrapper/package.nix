@@ -42,11 +42,11 @@ stdenv.mkDerivation {
       }
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Wrapper script for launching the official Touhou games on Steam with patches through Proton on GNU/Linux";
     homepage = "https://github.com/tactikauan/thcrap-steam-proton-wrapper";
-    license = lib.licenses.unlicense;
-    maintainers = with lib.maintainers; [ ashuramaruzxc ];
+    license = licenses.unlicense;
+    maintainers = with maintainers; [ ashuramaruzxc ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

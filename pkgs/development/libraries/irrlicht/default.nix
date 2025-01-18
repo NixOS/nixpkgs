@@ -52,10 +52,10 @@ stdenv.mkDerivation rec {
     libXxf86vm
   ] ++ lib.optional stdenv.hostPlatform.isAarch64 zlib;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://irrlicht.sourceforge.io/";
-    license = lib.licenses.zlib;
+    license = licenses.zlib;
     description = "Open source high performance realtime 3D engine written in C++";
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

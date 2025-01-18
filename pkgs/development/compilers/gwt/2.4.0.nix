@@ -22,10 +22,10 @@ stdenv.mkDerivation rec {
     mv gwt-2.4.0 $out/bin
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.gwtproject.org/";
     description = "Development toolkit for building and optimizing complex browser-based applications";
-    license = lib.licenses.asl20;
-    platforms = lib.platforms.unix;
+    license = licenses.asl20;
+    platforms = platforms.unix;
   };
 }

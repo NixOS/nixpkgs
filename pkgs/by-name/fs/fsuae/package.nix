@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     strip-nondeterminism --type zip $out/share/fs-uae/fs-uae.dat
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://fs-uae.net";
     description = "Accurate, customizable Amiga Emulator";
     longDescription = ''
@@ -67,9 +67,9 @@ stdenv.mkDerivation (finalAttrs: {
       models, but you can tweak the hardware configuration and create customized
       Amigas.
     '';
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     mainProgram = "fs-uae";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = with lib.systems.inspect; patternLogicalAnd patterns.isx86 patterns.isLinux;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = with systems.inspect; patternLogicalAnd patterns.isx86 patterns.isLinux;
   };
 })

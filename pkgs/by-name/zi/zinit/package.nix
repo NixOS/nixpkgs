@@ -57,11 +57,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/zdharma-continuum/zinit";
     description = "Flexible zsh plugin manager";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       pasqui23
       sei40kr
       moraxyc

@@ -26,10 +26,10 @@ stdenv.mkDerivation rec {
     getopt
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Provides complementary NixOS infrastructure deployment to Disnix";
-    license = lib.licenses.lgpl21Plus;
-    maintainers = [ lib.maintainers.sander ];
-    platforms = lib.platforms.linux;
+    license = licenses.lgpl21Plus;
+    maintainers = [ maintainers.sander ];
+    platforms = platforms.linux;
   };
 }

@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/sm64pc/sm64ex";
     description = "Super Mario 64 port based off of decompilation";
     longDescription = ''
@@ -79,8 +79,8 @@ stdenv.mkDerivation (finalAttrs: {
       If you would like to use patches sm64ex distributes as makeflags, add them to the "compileFlags" attribute.
     '';
     mainProgram = "sm64ex";
-    license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ qubitnano ];
-    platforms = lib.platforms.unix;
+    license = licenses.unfree;
+    maintainers = with maintainers; [ qubitnano ];
+    platforms = platforms.unix;
   };
 })

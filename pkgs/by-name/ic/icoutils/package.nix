@@ -49,10 +49,10 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/genresscript --prefix PERL5LIB : $PERL5LIB
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.nongnu.org/icoutils/";
     description = "Set of programs to deal with Microsoft Windows(R) icon and cursor files";
-    license = lib.licenses.gpl3Plus;
-    platforms = with lib.platforms; linux ++ darwin;
+    license = licenses.gpl3Plus;
+    platforms = with platforms; linux ++ darwin;
   };
 }

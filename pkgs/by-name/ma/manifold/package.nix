@@ -41,14 +41,14 @@ stdenv.mkDerivation (finalAttrs: {
     test/manifold_test
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Geometry library for topological robustness";
     homepage = "https://github.com/elalish/manifold";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
+    license = licenses.asl20;
+    maintainers = with maintainers; [
       hzeller
       pca006132
     ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 })

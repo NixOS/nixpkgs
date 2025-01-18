@@ -37,14 +37,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "han" ];
 
-  meta = {
+  meta = with lib; {
     description = "Decode smart power meter data stream of Cosem HDLC frames used by MBUS";
     longDescription = ''
       The package has special support of formats for Aidon, Kaifa and Kamstrup
       meters used in Norway and Sweden (AMS HAN).
     '';
     homepage = "https://github.com/toreamun/amshan";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ bjornfor ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ bjornfor ];
   };
 }

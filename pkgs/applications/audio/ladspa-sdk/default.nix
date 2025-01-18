@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   # it's probably still useful to run the part that creates the file.
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "SDK for the LADSPA audio plugin standard";
     longDescription = ''
       The LADSPA SDK, including the ladspa.h API header file,
@@ -43,8 +43,8 @@ stdenv.mkDerivation rec {
       three example programs (applyplugin, analyseplugin and listplugins).
     '';
     homepage = "http://www.ladspa.org/ladspa_sdk/overview.html";
-    license = lib.licenses.lgpl2;
-    maintainers = [ lib.maintainers.magnetophon ];
-    platforms = lib.platforms.linux;
+    license = licenses.lgpl2;
+    maintainers = [ maintainers.magnetophon ];
+    platforms = platforms.linux;
   };
 }

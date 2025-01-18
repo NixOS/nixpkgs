@@ -53,11 +53,11 @@ stdenv.mkDerivation rec {
       runHook postInstall
     '';
 
-  meta = {
+  meta = with lib; {
     homepage = "http://odamex.net/";
     description = "Client/server port for playing old-school Doom online";
-    license = lib.licenses.gpl2Only;
-    platforms = lib.platforms.unix;
+    license = licenses.gpl2Only;
+    platforms = platforms.unix;
     maintainers = [ ];
   };
 }

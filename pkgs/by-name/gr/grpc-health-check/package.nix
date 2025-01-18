@@ -23,11 +23,11 @@ rustPlatform.buildRustPackage {
   # tests fail
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Minimal, high performance, memory-friendly, safe implementation of the gRPC health checking protocol";
     homepage = "https://github.com/paypizza/grpc-health-check";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ flokli ];
-    platforms = lib.platforms.unix;
+    license = licenses.asl20;
+    maintainers = with maintainers; [ flokli ];
+    platforms = platforms.unix;
   };
 }

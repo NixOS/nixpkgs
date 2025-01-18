@@ -19,11 +19,11 @@ melpaBuild {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.emacswiki.org/emacs/IsearchPlus";
     description = "Extensions to isearch";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [
       leungbk
       AndersonTorres
     ];

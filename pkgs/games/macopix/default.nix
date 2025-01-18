@@ -36,11 +36,11 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = "-lX11";
 
-  meta = {
+  meta = with lib; {
     description = "Mascot Constructive Pilot for X";
     mainProgram = "macopix";
     homepage = "http://rosegray.sakura.ne.jp/macopix/index-e.html";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
   };
 }

@@ -28,12 +28,12 @@ stdenv.mkDerivation rec {
     bzip2
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/RIPE-NCC/bgpdump";
     description = "Analyze dump files produced by Zebra/Quagga or MRT";
-    license = lib.licenses.hpnd;
-    maintainers = with lib.maintainers; [ lewo ];
-    platforms = with lib.platforms; linux;
+    license = licenses.hpnd;
+    maintainers = with maintainers; [ lewo ];
+    platforms = with platforms; linux;
     mainProgram = "bgpdump";
   };
 }

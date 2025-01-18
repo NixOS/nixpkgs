@@ -21,10 +21,10 @@ buildHomeAssistantComponent rec {
 
   ignoreVersionRequirement = [ "icalendar" ];
 
-  meta = {
+  meta = with lib; {
     description = "Export calendar events in the iCalendar format";
     homepage = "https://github.com/JosephAbbey/ha_calendar_export";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ hexa ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ hexa ];
   };
 }

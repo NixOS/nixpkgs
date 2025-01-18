@@ -41,11 +41,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tskit" ];
 
-  meta = {
+  meta = with lib; {
     description = "Tree sequence toolkit";
     mainProgram = "tskit";
     homepage = "https://github.com/tskit-dev/tskit";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ alxsimon ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ alxsimon ];
   };
 }

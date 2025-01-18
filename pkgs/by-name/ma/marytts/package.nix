@@ -55,14 +55,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     nixos = nixosTests.marytts;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Open-source, multilingual text-to-speech synthesis system written in pure Java";
     homepage = "https://marytts.github.io/";
-    license = lib.licenses.lgpl3Only;
+    license = licenses.lgpl3Only;
     inherit (jdk.meta) platforms;
-    maintainers = with lib.maintainers; [ pluiedev ];
+    maintainers = with maintainers; [ pluiedev ];
     mainProgram = "marytts-server";
-    sourceProvenance = with lib.sourceTypes; [
+    sourceProvenance = with sourceTypes; [
       fromSource
       binaryBytecode # Gradle dependencies
     ];

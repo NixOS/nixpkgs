@@ -26,11 +26,11 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Thrift Language Server";
     homepage = "https://github.com/joyme123/thrift-ls";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
+    license = licenses.asl20;
+    maintainers = with maintainers; [
       callumio
       hughmandalidis
     ];

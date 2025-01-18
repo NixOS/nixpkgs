@@ -38,12 +38,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  meta = {
+  meta = with lib; {
     description = "Sequence analysis library used by Eddy/Rivas lab code";
     homepage = "https://github.com/EddyRivasLab/easel";
-    license = lib.licenses.bsd2;
+    license = licenses.bsd2;
     mainProgram = "easel";
-    maintainers = with lib.maintainers; [ natsukium ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ natsukium ];
+    platforms = platforms.unix;
   };
 })

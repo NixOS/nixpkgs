@@ -20,10 +20,10 @@ buildDunePackage rec {
 
   nativeBuildInputs = [ menhir ];
 
-  meta = {
+  meta = with lib; {
     description = "Simple parser and type-checker for polomorphic extension of the SMT-LIB 2 language";
-    license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.asl20;
+    maintainers = [ maintainers.vbgl ];
     inherit (src.meta) homepage;
   };
 

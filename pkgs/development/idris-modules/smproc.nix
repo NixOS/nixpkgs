@@ -17,10 +17,10 @@ build-idris-package {
     sha256 = "02gqa2a32dwrvgz6pwsg8bniszbzwxlkzm53fq81sz3l9ja8ax1n";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Well-typed symmetric-monoidal category of concurrent processes";
     homepage = "https://github.com/jameshaydon/smproc";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.brainrape ];
+    license = licenses.mit;
+    maintainers = [ maintainers.brainrape ];
   };
 }

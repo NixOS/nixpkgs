@@ -114,13 +114,13 @@ buildGoModule rec {
   # See also https://github.com/NixOS/nix/pull/1646
   __darwinAllowLocalNetworking = true;
 
-  meta = {
+  meta = with lib; {
     description = "Open source framework for processing, monitoring, and alerting on time series data";
     homepage = "https://influxdata.com/time-series-platform/kapacitor/";
     downloadPage = "https://github.com/influxdata/kapacitor/releases";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     changelog = "https://github.com/influxdata/kapacitor/blob/master/CHANGELOG.md";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       offline
       totoroot
     ];

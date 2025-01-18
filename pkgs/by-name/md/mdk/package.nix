@@ -24,10 +24,10 @@ stdenv.mkDerivation rec {
     cp -v ./misc/*.el $out/share/emacs/site-lisp
   '';
 
-  meta = {
+  meta = with lib; {
     description = "GNU MIX Development Kit (MDK)";
     homepage = "https://www.gnu.org/software/mdk/";
-    license = lib.licenses.gpl3;
-    platforms = lib.platforms.all;
+    license = licenses.gpl3;
+    platforms = platforms.all;
   };
 }

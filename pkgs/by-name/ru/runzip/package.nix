@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
     sha256 = "0l5zbb5hswxczigvyal877j0aiq3fc01j3gv88bvy7ikyvw3lc07";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Tool to convert filename encoding inside a ZIP archive";
-    license = lib.licenses.bsd2;
-    maintainers = [ lib.maintainers.raskin ];
-    platforms = lib.platforms.unix;
+    license = licenses.bsd2;
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.unix;
     mainProgram = "runzip";
   };
 }

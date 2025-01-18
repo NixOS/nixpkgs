@@ -28,10 +28,10 @@ buildHomeAssistantComponent rec {
     "getmac"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Philips AirPurifier custom component for Home Assistant";
     homepage = "https://github.com/kongo09/philips-airpurifier-coap";
-    license = lib.licenses.unfree; # See https://github.com/kongo09/philips-airpurifier-coap/issues/209
-    maintainers = with lib.maintainers; [ justinas ];
+    license = licenses.unfree; # See https://github.com/kongo09/philips-airpurifier-coap/issues/209
+    maintainers = with maintainers; [ justinas ];
   };
 }

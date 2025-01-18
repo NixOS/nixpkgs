@@ -14,11 +14,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-9emY0yhAKVzuk1Tlzi0kW8oR9jRqLdg8wbTcJMBrxMw=";
 
-  meta = {
+  meta = with lib; {
     description = "Command line tool for converting between timezones";
     homepage = "https://github.com/mitsuhiko/when";
     mainProgram = "when";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ loicreynier ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ loicreynier ];
   };
 }

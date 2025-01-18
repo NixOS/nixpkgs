@@ -82,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  meta = {
+  meta = with lib; {
     description = "Free and open-source Touhou Project clone and fangame";
     mainProgram = "taisei";
     longDescription = ''
@@ -91,14 +91,14 @@ stdenv.mkDerivation (finalAttrs: {
       folklore.
     '';
     homepage = "https://taisei-project.org/";
-    license = with lib.licenses; [
+    license = with licenses; [
       mit
       cc-by-40
     ];
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       lambda-11235
       Gliczy
     ];
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 })

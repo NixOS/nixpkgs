@@ -25,12 +25,12 @@ buildGoModule rec {
     "-X github.com/mistweaverco/kulala-fmt/cmd/kulalafmt.VERSION=${version}"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Opinionated .http and .rest files linter and formatter";
     homepage = "https://github.com/mistweaverco/kulala-fmt";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ CnTeng ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ CnTeng ];
     mainProgram = "kulala-fmt";
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 }

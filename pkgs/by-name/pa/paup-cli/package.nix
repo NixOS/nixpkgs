@@ -40,12 +40,12 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "A software package for inferring evolutionary trees";
     homepage = "http://phylosolutions.com/paup-test/";
-    license = lib.licenses.unfree;
-    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
-    maintainers = with lib.maintainers; [ pandapip1 ];
+    license = licenses.unfree;
+    sourceProvenance = [ sourceTypes.binaryNativeCode ];
+    maintainers = with maintainers; [ pandapip1 ];
     mainProgram = "paup";
     platforms = [ "x86_64-linux" ];
   };

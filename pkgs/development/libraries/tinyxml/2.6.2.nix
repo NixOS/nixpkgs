@@ -90,10 +90,10 @@ stdenv.mkDerivation {
       install_name_tool -id $out/lib/libtinyxml.dylib $out/lib/libtinyxml.dylib
     '';
 
-  meta = {
+  meta = with lib; {
     description = "Simple, small, C++ XML parser that can be easily integrating into other programs";
     homepage = "http://www.grinninglizard.com/tinyxml/index.html";
-    license = lib.licenses.zlib;
-    platforms = lib.platforms.unix;
+    license = licenses.zlib;
+    platforms = platforms.unix;
   };
 }

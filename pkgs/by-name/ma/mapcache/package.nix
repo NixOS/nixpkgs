@@ -70,12 +70,12 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-std=c99";
 
-  meta = {
+  meta = with lib; {
     description = "Server that implements tile caching to speed up access to WMS layers";
     homepage = "https://mapserver.org/mapcache/";
     changelog = "https://www.mapserver.org/development/changelog/mapcache/";
-    license = lib.licenses.mit;
-    maintainers = lib.teams.geospatial.members;
-    platforms = lib.platforms.unix;
+    license = licenses.mit;
+    maintainers = teams.geospatial.members;
+    platforms = platforms.unix;
   };
 }

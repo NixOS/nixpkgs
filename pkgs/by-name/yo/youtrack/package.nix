@@ -41,11 +41,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru.updateScript = ./update.sh;
 
-  meta = {
+  meta = with lib; {
     description = "Issue tracking and project management tool for developers";
-    maintainers = lib.teams.serokell.members ++ [ lib.maintainers.leona ];
-    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    maintainers = teams.serokell.members ++ [ maintainers.leona ];
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     # https://www.jetbrains.com/youtrack/buy/license.html
-    license = lib.licenses.unfree;
+    license = licenses.unfree;
   };
 })

@@ -44,11 +44,11 @@ buildPythonPackage rec {
   ];
   pythonImportsCheck = [ "optree" ];
 
-  meta = {
+  meta = with lib; {
     description = "Optimized PyTree Utilities";
     homepage = "https://github.com/metaopt/optree";
     changelog = "https://github.com/metaopt/optree/releases";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ pandapip1 ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ pandapip1 ];
   };
 }

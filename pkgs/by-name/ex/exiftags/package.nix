@@ -21,12 +21,12 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin $out/man/man1
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "http://johnst.org/sw/exiftags/";
     description = "Displays EXIF data from JPEG files";
-    license = lib.licenses.free;
+    license = licenses.free;
     maintainers = [ ];
-    platforms = with lib.platforms; unix;
+    platforms = with platforms; unix;
     knownVulnerabilities = [
       "CVE-2023-50671"
       "CVE-2024-42851"

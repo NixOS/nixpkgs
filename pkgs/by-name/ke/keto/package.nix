@@ -36,10 +36,10 @@ buildGoModule {
     "-X github.com/ory/keto/internal/driver/config.Commit=${commit}"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "ORY Keto, the open source access control server";
     homepage = "https://www.ory.sh/keto/";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ mrmebelman ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ mrmebelman ];
   };
 }

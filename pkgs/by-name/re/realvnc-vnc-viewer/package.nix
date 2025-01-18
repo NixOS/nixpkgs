@@ -7,20 +7,20 @@ let
   pname = "realvnc-vnc-viewer";
   version = "7.12.1";
 
-  meta = {
+  meta = with lib; {
     description = "VNC remote desktop client software by RealVNC";
     homepage = "https://www.realvnc.com/en/connect/download/viewer/";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = {
       fullName = "VNC Connect End User License Agreement";
       url = "https://static.realvnc.com/media/documents/LICENSE-4.0a_en.pdf";
       free = false;
     };
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       emilytrau
       onedragon
     ];
-    platforms = [ "x86_64-linux" ] ++ lib.platforms.darwin;
+    platforms = [ "x86_64-linux" ] ++ platforms.darwin;
     mainProgram = "vncviewer";
   };
 in

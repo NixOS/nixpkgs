@@ -68,10 +68,10 @@ buildGoModule {
     done
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Tool for building and running mobile apps written in Go";
     homepage = "https://pkg.go.dev/golang.org/x/mobile/cmd/gomobile";
-    license = with lib.licenses; [ bsd3 ];
-    maintainers = with lib.maintainers; [ jakubgs ];
+    license = with licenses; [ bsd3 ];
+    maintainers = with maintainers; [ jakubgs ];
   };
 }

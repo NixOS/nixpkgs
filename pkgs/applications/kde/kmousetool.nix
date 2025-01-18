@@ -29,14 +29,14 @@ mkDerivation {
     libXtst
     libXt
   ];
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/KDE/kmousetool";
     description = "Program that clicks the mouse for you";
     mainProgram = "kmousetool";
-    license = with lib.licenses; [
+    license = with licenses; [
       gpl2Plus
       fdl12Plus
     ];
-    maintainers = [ lib.maintainers.jayesh-bhoot ];
+    maintainers = [ maintainers.jayesh-bhoot ];
   };
 }

@@ -20,12 +20,12 @@ buildGoModule {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = {
+  meta = with lib; {
     description = "CLI for searching packages on search.nixos.org";
     homepage = "https://github.com/peterldowns/nix-search-cli";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ donovanglover ];
-    platforms = lib.platforms.all;
+    license = licenses.mit;
+    maintainers = with maintainers; [ donovanglover ];
+    platforms = platforms.all;
     mainProgram = "nix-search";
   };
 }

@@ -17,10 +17,10 @@ build-idris-package {
     sha256 = "16bs7rxbsq7m7jm96zkqiq8hj68l907m8xgmjrcxzl158qvzhw1w";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Experimental HTTP framework for Idris";
     homepage = "https://github.com/A1kmm/http4idris";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.brainrape ];
+    license = licenses.mit;
+    maintainers = [ maintainers.brainrape ];
   };
 }

@@ -79,13 +79,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   versionCheckProgramArg = [ "${placeholder "out"}/Applications/Enpass.app/Contents/Info.plist" ];
   doInstallCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "Choose your own safest place to store passwords";
     homepage = "https://www.enpass.io";
     changelog = "https://www.enpass.io/release-notes/macos-website-ver/";
-    license = [ lib.licenses.unfree ];
-    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
-    maintainers = with lib.maintainers; [ DimitarNestorov ];
-    platforms = lib.platforms.darwin;
+    license = [ licenses.unfree ];
+    sourceProvenance = [ sourceTypes.binaryNativeCode ];
+    maintainers = with maintainers; [ DimitarNestorov ];
+    platforms = platforms.darwin;
   };
 })

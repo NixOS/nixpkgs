@@ -16,12 +16,12 @@
 
 mkDerivation {
   pname = "filelight";
-  meta = {
+  meta = with lib; {
     description = "Disk usage statistics";
     mainProgram = "filelight";
     homepage = "https://apps.kde.org/filelight/";
-    license = with lib.licenses; [ gpl2 ];
-    maintainers = with lib.maintainers; [ vcunat ];
+    license = with licenses; [ gpl2 ];
+    maintainers = with maintainers; [ vcunat ];
   };
   nativeBuildInputs = [
     extra-cmake-modules

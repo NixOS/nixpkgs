@@ -23,11 +23,11 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Perl wrapper for Valgrind with ANSI escape code colored output";
     homepage = "http://renatocf.github.io/colorgrind/";
-    license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ pluiedev ];
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ pluiedev ];
     mainProgram = "colorgrind";
   };
 }

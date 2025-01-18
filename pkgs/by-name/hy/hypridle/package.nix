@@ -44,11 +44,11 @@ gcc14Stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Hyprland's idle daemon";
     homepage = "https://github.com/hyprwm/hypridle";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [
+    license = licenses.bsd3;
+    maintainers = with maintainers; [
       iogamaster
       johnrtitor
       khaneliman

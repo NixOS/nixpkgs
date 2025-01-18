@@ -38,11 +38,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-uarTWteOoAjzEHSnbZo+fEPELerpuL7UNA5pdGP5CMY=";
 
-  meta = {
+  meta = with lib; {
     mainProgram = "plandex-server";
     description = "AI driven development in your terminal. Designed for large, real-world tasks. The server part";
     homepage = "https://plandex.ai/";
-    license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ viraptor ];
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [ viraptor ];
   };
 }

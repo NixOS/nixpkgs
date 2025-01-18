@@ -105,21 +105,21 @@ clangStdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ENABLE_QT_ERROR_UI" withQtErrorWindow)
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Unofficial Minecraft Bedrock Edition launcher with CLI";
     homepage = "https://minecraft-linux.github.io";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
       aleksana
       morxemplum
     ];
     mainProgram = "mcpelauncher-client";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
     # Minecraft Bedrock Edition is raising minimal OpenGL version to OpenGL ES 3.1
     # which is currently not supported on macOS.
     # https://github.com/minecraft-linux/mcpelauncher-manifest/issues/1042
     # https://help.minecraft.net/hc/en-us/articles/30298767427597-Upcoming-OS-Sunset-Announcements-in-Minecraft
     # The program is also not tested on darwin. Any help from darwin users are welcomed.
-    badPlatforms = lib.platforms.darwin;
+    badPlatforms = platforms.darwin;
   };
 })
