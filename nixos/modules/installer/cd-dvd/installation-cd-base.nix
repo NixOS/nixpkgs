@@ -46,5 +46,15 @@
 
   programs.git.enable = lib.mkDefault true;
 
+  specialisation.latest_kernel.configuration = {
+    boot.kernelPackages = pkgs.linuxPackages_latest;
+    isoImage.configurationName = "Latest Kernel (${pkgs.linuxPackages_latest.kernel.version})";
+    boot.supportedFilesystems.zfs = false;
+    environment.etc."nixos-generate-config.conf".text = ''
+      [Defaults]
+      Kernel=latest
+    '';
+  };
+
   system.stateVersion = lib.mkDefault lib.trivial.release;
 }

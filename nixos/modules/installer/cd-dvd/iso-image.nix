@@ -36,7 +36,68 @@ let
   /**
    * Builds the default options.
    */
-  buildMenuGrub2 = buildMenuAdditionalParamsGrub2 "";
+  buildMenuGrub2 = cfg: let
+    name = "${cfg.isoImage.prependToMenuLabel}${cfg.system.nixos.distroName} ${cfg.system.nixos.label}${cfg.isoImage.appendToMenuLabel}";
+    whenNonNull = x: y: if x == null then y else x;
+  in ''
+    ${buildMenuAdditionalParamsGrub2 name cfg ""}
+    ${lib.concatStringsSep "\n" (lib.mapAttrsToList (specName: { configuration, ... }: ''
+      submenu "${name} - ${whenNonNull configuration.isoImage.configurationName specName}" --class installer --class submenu {
+        ${grubMenuCfg}
+        ${buildMenuGrub2 configuration}
+      }
+    '') cfg.specialisation)}
+    submenu "HiDPI, Quirks and Accessibility" --class hidpi --class submenu {
+      ${grubMenuCfg}
+      submenu "Suggests resolution @720p" --class hidpi-720p {
+        ${grubMenuCfg}
+        ${buildMenuAdditionalParamsGrub2 name cfg "video=1280x720@60"}
+      }
+      submenu "Suggests resolution @1080p" --class hidpi-1080p {
+        ${grubMenuCfg}
+        ${buildMenuAdditionalParamsGrub2 name cfg "video=1920x1080@60"}
+      }
+
+      # If we boot into a graphical environment where X is autoran
+      # and always crashes, it makes the media unusable. Allow the user
+      # to disable this.
+      submenu "Disable display-manager" --class quirk-disable-displaymanager {
+        ${grubMenuCfg}
+        ${buildMenuAdditionalParamsGrub2 name cfg "systemd.mask=display-manager.service"}
+      }
+
+      # Some laptop and convertibles have the panel installed in an
+      # inconvenient way, rotated away from the keyboard.
+      # Those entries makes it easier to use the installer.
+      submenu "" {return}
+      submenu "Rotate framebuffer Clockwise" --class rotate-90cw {
+        ${grubMenuCfg}
+        ${buildMenuAdditionalParamsGrub2 name cfg "fbcon=rotate:1"}
+      }
+      submenu "Rotate framebuffer Upside-Down" --class rotate-180 {
+        ${grubMenuCfg}
+        ${buildMenuAdditionalParamsGrub2 name cfg "fbcon=rotate:2"}
+      }
+      submenu "Rotate framebuffer Counter-Clockwise" --class rotate-90ccw {
+        ${grubMenuCfg}
+        ${buildMenuAdditionalParamsGrub2 name cfg "fbcon=rotate:3"}
+      }
+
+      # As a proof of concept, mainly. (Not sure it has accessibility merits.)
+      submenu "" {return}
+      submenu "Use black on white" --class accessibility-blakconwhite {
+        ${grubMenuCfg}
+        ${buildMenuAdditionalParamsGrub2 name cfg "vt.default_red=0xFF,0xBC,0x4F,0xB4,0x56,0xBC,0x4F,0x00,0xA1,0xCF,0x84,0xCA,0x8D,0xB4,0x84,0x68 vt.default_grn=0xFF,0x55,0xBA,0xBA,0x4D,0x4D,0xB3,0x00,0xA0,0x8F,0xB3,0xCA,0x88,0x93,0xA4,0x68 vt.default_blu=0xFF,0x58,0x5F,0x58,0xC5,0xBD,0xC5,0x00,0xA8,0xBB,0xAB,0x97,0xBD,0xC7,0xC5,0x68"}
+      }
+
+      # Serial access is a must!
+      submenu "" {return}
+      submenu "Serial console=ttyS0,115200n8" --class serial {
+        ${grubMenuCfg}
+        ${buildMenuAdditionalParamsGrub2 name cfg "console=ttyS0,115200n8"}
+      }
+    }
+  '';
 
   targetArch =
     if config.boot.loader.grub.forcei686 then
@@ -48,13 +109,13 @@ let
    * Given params to add to `params`, build a set of default options.
    * Use this one when creating a variant (e.g. hidpi)
    */
-  buildMenuAdditionalParamsGrub2 = additional:
+  buildMenuAdditionalParamsGrub2 = name: cfg: additional:
   let
     finalCfg = {
-      name = "${config.isoImage.prependToMenuLabel}${config.system.nixos.distroName} ${config.system.nixos.label}${config.isoImage.appendToMenuLabel}";
-      params = "init=${config.system.build.toplevel}/init ${additional} ${toString config.boot.kernelParams}";
-      image = "/boot/${config.system.boot.loader.kernelFile}";
-      initrd = "/boot/initrd";
+      inherit name;
+      params = "init=${cfg.system.build.toplevel}/init ${additional} ${toString cfg.boot.kernelParams}";
+      image = "/boot/${cfg.boot.kernelPackages.kernel + "/" + cfg.system.boot.loader.kernelFile}";
+      initrd = "/boot/${cfg.system.build.initialRamdisk + "/" + cfg.system.boot.loader.initrdFile}";
     };
 
   in
@@ -106,40 +167,48 @@ let
     ${config.isoImage.syslinuxTheme}
 
     DEFAULT boot
+  '';
 
+  mkIsolinuxCfg = cfg: ''
     LABEL boot
-    MENU LABEL ${config.isoImage.prependToMenuLabel}${config.system.nixos.distroName} ${config.system.nixos.label}${config.isoImage.appendToMenuLabel}
-    LINUX /boot/${config.system.boot.loader.kernelFile}
-    APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}
-    INITRD /boot/${config.system.boot.loader.initrdFile}
+    MENU LABEL ${cfg.isoImage.prependToMenuLabel}${cfg.system.nixos.distroName} ${cfg.system.nixos.label}${cfg.isoImage.appendToMenuLabel}
+    LINUX /boot/${cfg.boot.kernelPackages.kernel + "/" + cfg.system.boot.loader.kernelFile}
+    APPEND init=${cfg.system.build.toplevel}/init ${toString cfg.boot.kernelParams}
+    INITRD /boot/${cfg.system.build.initialRamdisk + "/" + cfg.system.boot.loader.initrdFile}
 
     # A variant to boot with 'nomodeset'
     LABEL boot-nomodeset
-    MENU LABEL ${config.isoImage.prependToMenuLabel}${config.system.nixos.distroName} ${config.system.nixos.label}${config.isoImage.appendToMenuLabel} (nomodeset)
-    LINUX /boot/${config.system.boot.loader.kernelFile}
-    APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams} nomodeset
-    INITRD /boot/${config.system.boot.loader.initrdFile}
+    MENU LABEL ${cfg.isoImage.prependToMenuLabel}${cfg.system.nixos.distroName} ${cfg.system.nixos.label}${cfg.isoImage.appendToMenuLabel} (nomodeset)
+    LINUX /boot/${cfg.boot.kernelPackages.kernel + "/" + cfg.system.boot.loader.kernelFile}
+    APPEND init=${cfg.system.build.toplevel}/init ${toString cfg.boot.kernelParams} nomodeset
+    INITRD /boot/${cfg.system.build.initialRamdisk + "/" + cfg.system.boot.loader.initrdFile}
 
     # A variant to boot with 'copytoram'
     LABEL boot-copytoram
-    MENU LABEL ${config.isoImage.prependToMenuLabel}${config.system.nixos.distroName} ${config.system.nixos.label}${config.isoImage.appendToMenuLabel} (copytoram)
-    LINUX /boot/${config.system.boot.loader.kernelFile}
-    APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams} copytoram
-    INITRD /boot/${config.system.boot.loader.initrdFile}
+    MENU LABEL ${cfg.isoImage.prependToMenuLabel}${cfg.system.nixos.distroName} ${cfg.system.nixos.label}${cfg.isoImage.appendToMenuLabel} (copytoram)
+    LINUX /boot/${cfg.boot.kernelPackages.kernel + "/" + cfg.system.boot.loader.kernelFile}
+    APPEND init=${cfg.system.build.toplevel}/init ${toString cfg.boot.kernelParams} copytoram
+    INITRD /boot/${cfg.system.build.initialRamdisk + "/" + cfg.system.boot.loader.initrdFile}
 
     # A variant to boot with verbose logging to the console
     LABEL boot-debug
-    MENU LABEL ${config.isoImage.prependToMenuLabel}${config.system.nixos.distroName} ${config.system.nixos.label}${config.isoImage.appendToMenuLabel} (debug)
-    LINUX /boot/${config.system.boot.loader.kernelFile}
-    APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams} loglevel=7
-    INITRD /boot/${config.system.boot.loader.initrdFile}
+    MENU LABEL ${cfg.isoImage.prependToMenuLabel}${cfg.system.nixos.distroName} ${cfg.system.nixos.label}${cfg.isoImage.appendToMenuLabel} (debug)
+    LINUX /boot/${cfg.boot.kernelPackages.kernel + "/" + cfg.system.boot.loader.kernelFile}
+    APPEND init=${cfg.system.build.toplevel}/init ${toString cfg.boot.kernelParams} loglevel=7
+    INITRD /boot/${cfg.system.build.initialRamdisk + "/" + cfg.system.boot.loader.initrdFile}
 
     # A variant to boot with a serial console enabled
     LABEL boot-serial
-    MENU LABEL ${config.isoImage.prependToMenuLabel}${config.system.nixos.distroName} ${config.system.nixos.label}${config.isoImage.appendToMenuLabel} (serial console=ttyS0,115200n8)
-    LINUX /boot/${config.system.boot.loader.kernelFile}
-    APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams} console=ttyS0,115200n8
-    INITRD /boot/${config.system.boot.loader.initrdFile}
+    MENU LABEL ${cfg.isoImage.prependToMenuLabel}${cfg.system.nixos.distroName} ${cfg.system.nixos.label}${cfg.isoImage.appendToMenuLabel} (serial console=ttyS0,115200n8)
+    LINUX /boot/${cfg.boot.kernelPackages.kernel + "/" + cfg.system.boot.loader.kernelFile}
+    APPEND init=${cfg.system.build.toplevel}/init ${toString cfg.boot.kernelParams} console=ttyS0,115200n8
+    INITRD /boot/${cfg.system.build.initialRamdisk + "/" + cfg.system.boot.loader.initrdFile}
+
+    ${lib.concatStringsSep "\n\n" (lib.mapAttrsToList (name: specCfg: ''
+      MENU BEGIN ${name}
+      ${mkIsolinuxCfg specCfg.configuration}
+      MENU END
+    '') cfg.specialisation)}
   '';
 
   isolinuxMemtest86Entry = ''
@@ -150,7 +219,7 @@ let
   '';
 
   isolinuxCfg = lib.concatStringsSep "\n"
-    ([ baseIsolinuxCfg ] ++ lib.optional config.boot.loader.grub.memtest86.enable isolinuxMemtest86Entry);
+    ([ baseIsolinuxCfg (mkIsolinuxCfg config) ] ++ lib.optional config.boot.loader.grub.memtest86.enable isolinuxMemtest86Entry);
 
   refindBinary = if targetArch == "x64" || targetArch == "aa64" then "refind_${targetArch}.efi" else null;
 
@@ -168,6 +237,8 @@ let
   grubPkgs = if config.boot.loader.grub.forcei686 then pkgs.pkgsi686Linux else pkgs;
 
   grubMenuCfg = ''
+    set textmode=${lib.boolToString (config.isoImage.forceTextMode)}
+
     #
     # Menu configuration
     #
@@ -224,6 +295,20 @@ let
         set menu_color_normal=cyan/blue
         set menu_color_highlight=white/blue
       fi
+    ''}
+
+    hiddenentry 'Text mode' --hotkey 't' {
+      loadfont (\$root)/EFI/BOOT/unicode.pf2
+      set textmode=true
+      terminal_output console
+    }
+
+    ${lib.optionalString (config.isoImage.grubTheme != null) ''
+    hiddenentry 'GUI mode' --hotkey 'g' {
+      $(find ${config.isoImage.grubTheme} -iname '*.pf2' -printf "loadfont (\$root)/EFI/BOOT/grub-theme/%P\n")
+      set textmode=false
+      terminal_output gfxterm
+    }
     ''}
   '';
 
@@ -317,7 +402,6 @@ let
 
     cat <<EOF > $out/EFI/BOOT/grub.cfg
 
-    set textmode=${lib.boolToString (config.isoImage.forceTextMode)}
     set timeout=${toString grubEfiTimeout}
 
     clear
@@ -330,20 +414,6 @@ let
 
     ${grubMenuCfg}
 
-    hiddenentry 'Text mode' --hotkey 't' {
-      loadfont (\$root)/EFI/BOOT/unicode.pf2
-      set textmode=true
-      terminal_output console
-    }
-
-    ${lib.optionalString (config.isoImage.grubTheme != null) ''
-    hiddenentry 'GUI mode' --hotkey 'g' {
-      $(find ${config.isoImage.grubTheme} -iname '*.pf2' -printf "loadfont (\$root)/EFI/BOOT/grub-theme/%P\n")
-      set textmode=false
-      terminal_output gfxterm
-    }
-    ''}
-
     # If the parameter iso_path is set, append the findiso parameter to the kernel
     # line. We need this to allow the nixos iso to be booted from grub directly.
     if [ \''${iso_path} ] ; then
@@ -354,57 +424,7 @@ let
     # Menu entries
     #
 
-    ${buildMenuGrub2}
-    submenu "HiDPI, Quirks and Accessibility" --class hidpi --class submenu {
-      ${grubMenuCfg}
-      submenu "Suggests resolution @720p" --class hidpi-720p {
-        ${grubMenuCfg}
-        ${buildMenuAdditionalParamsGrub2 "video=1280x720@60"}
-      }
-      submenu "Suggests resolution @1080p" --class hidpi-1080p {
-        ${grubMenuCfg}
-        ${buildMenuAdditionalParamsGrub2 "video=1920x1080@60"}
-      }
-
-      # If we boot into a graphical environment where X is autoran
-      # and always crashes, it makes the media unusable. Allow the user
-      # to disable this.
-      submenu "Disable display-manager" --class quirk-disable-displaymanager {
-        ${grubMenuCfg}
-        ${buildMenuAdditionalParamsGrub2 "systemd.mask=display-manager.service"}
-      }
-
-      # Some laptop and convertibles have the panel installed in an
-      # inconvenient way, rotated away from the keyboard.
-      # Those entries makes it easier to use the installer.
-      submenu "" {return}
-      submenu "Rotate framebuffer Clockwise" --class rotate-90cw {
-        ${grubMenuCfg}
-        ${buildMenuAdditionalParamsGrub2 "fbcon=rotate:1"}
-      }
-      submenu "Rotate framebuffer Upside-Down" --class rotate-180 {
-        ${grubMenuCfg}
-        ${buildMenuAdditionalParamsGrub2 "fbcon=rotate:2"}
-      }
-      submenu "Rotate framebuffer Counter-Clockwise" --class rotate-90ccw {
-        ${grubMenuCfg}
-        ${buildMenuAdditionalParamsGrub2 "fbcon=rotate:3"}
-      }
-
-      # As a proof of concept, mainly. (Not sure it has accessibility merits.)
-      submenu "" {return}
-      submenu "Use black on white" --class accessibility-blakconwhite {
-        ${grubMenuCfg}
-        ${buildMenuAdditionalParamsGrub2 "vt.default_red=0xFF,0xBC,0x4F,0xB4,0x56,0xBC,0x4F,0x00,0xA1,0xCF,0x84,0xCA,0x8D,0xB4,0x84,0x68 vt.default_grn=0xFF,0x55,0xBA,0xBA,0x4D,0x4D,0xB3,0x00,0xA0,0x8F,0xB3,0xCA,0x88,0x93,0xA4,0x68 vt.default_blu=0xFF,0x58,0x5F,0x58,0xC5,0xBD,0xC5,0x00,0xA8,0xBB,0xAB,0x97,0xBD,0xC7,0xC5,0x68"}
-      }
-
-      # Serial access is a must!
-      submenu "" {return}
-      submenu "Serial console=ttyS0,115200n8" --class serial {
-        ${grubMenuCfg}
-        ${buildMenuAdditionalParamsGrub2 "console=ttyS0,115200n8"}
-      }
-    }
+    ${buildMenuGrub2 config}
 
     ${lib.optionalString (refindBinary != null) ''
     # GRUB apparently cannot do "chainloader" operations on "CD".
@@ -695,6 +715,16 @@ in
       '';
     };
 
+    isoImage.configurationName = lib.mkOption {
+      default = null;
+      type = lib.types.nullOr lib.types.str;
+      example = "Latest Kernel";
+      description = ''
+        For specialisations, this name is included in the title of the
+        submenu that contains its boot entries.
+      '';
+    };
+
     isoImage.forceTextMode = lib.mkOption {
       default = false;
       type = lib.types.bool;
@@ -818,17 +848,24 @@ in
     # Individual files to be included on the CD, outside of the Nix
     # store on the CD.
     isoImage.contents =
-      [
-        { source = config.boot.kernelPackages.kernel + "/" + config.system.boot.loader.kernelFile;
-          target = "/boot/" + config.system.boot.loader.kernelFile;
-        }
-        { source = config.system.build.initialRamdisk + "/" + config.system.boot.loader.initrdFile;
-          target = "/boot/" + config.system.boot.loader.initrdFile;
-        }
+      let
+        cfgFiles = cfg: [
+          {
+            source = cfg.boot.kernelPackages.kernel + "/" + cfg.system.boot.loader.kernelFile;
+            target = "/boot/" + cfg.boot.kernelPackages.kernel + "/" + cfg.system.boot.loader.kernelFile;
+          }
+          {
+            source = cfg.system.build.initialRamdisk + "/" + cfg.system.boot.loader.initrdFile;
+            target = "/boot/" + cfg.system.build.initialRamdisk + "/" + cfg.system.boot.loader.initrdFile;
+          }
+        ] ++ lib.concatLists (lib.mapAttrsToList (_: { configuration, ... }: cfgFiles configuration) cfg.specialisation);
+      in [
         { source = pkgs.writeText "version" config.system.nixos.label;
           target = "/version.txt";
         }
-      ] ++ lib.optionals (config.isoImage.makeBiosBootable) [
+      ]
+      ++ lib.unique (cfgFiles config)
+      ++ lib.optionals (config.isoImage.makeBiosBootable) [
         { source = config.isoImage.splashImage;
           target = "/isolinux/background.png";
         }
