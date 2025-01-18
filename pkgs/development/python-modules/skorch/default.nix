@@ -7,12 +7,14 @@
   numpy,
   scikit-learn,
   scipy,
+  setuptools,
   tabulate,
   torch,
   tqdm,
   flaky,
   llvmPackages,
   pandas,
+  pytest-cov-stub,
   pytestCheckHook,
   safetensors,
   pythonAtLeast,
@@ -21,7 +23,7 @@
 buildPythonPackage rec {
   pname = "skorch";
   version = "1.1.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -30,29 +32,24 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.9";
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     numpy
     scikit-learn
     scipy
     tabulate
-    torch
+    torch # implicit dependency
     tqdm
   ];
 
   nativeCheckInputs = [
     flaky
     pandas
+    pytest-cov-stub
     pytestCheckHook
     safetensors
   ];
-
-  # patch out pytest-cov dep/invocation
-  postPatch = ''
-    substituteInPlace setup.cfg  \
-      --replace "--cov=skorch" ""  \
-      --replace "--cov-report=term-missing" ""  \
-      --replace "--cov-config .coveragerc" ""
-  '';
 
   checkInputs = lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
@@ -65,11 +62,6 @@ buildPythonPackage rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # there is a problem with the compiler selection
-      "test_fit_and_predict_with_compile"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.11") [
-      # Python 3.11+ not yet supported for torch.compile
-      # https://github.com/pytorch/pytorch/blob/v2.0.1/torch/_dynamo/eval_frame.py#L376-L377
       "test_fit_and_predict_with_compile"
     ];
 
@@ -86,11 +78,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "skorch" ];
 
-  meta = with lib; {
+  meta = {
     description = "Scikit-learn compatible neural net library using Pytorch";
     homepage = "https://skorch.readthedocs.io";
     changelog = "https://github.com/skorch-dev/skorch/blob/master/CHANGES.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }
