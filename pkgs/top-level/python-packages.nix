@@ -2813,6 +2813,10 @@ self: super: with self; {
 
   cu2qu = callPackage ../development/python-modules/cu2qu { };
 
+  curated-tokenizers = callPackage ../development/python-modules/curated-tokenizers { };
+
+  curated-transformers = callPackage ../development/python-modules/curated-transformers { };
+
   customtkinter = callPackage ../development/python-modules/customtkinter { };
 
   cucumber-tag-expressions = callPackage ../development/python-modules/cucumber-tag-expressions { };
@@ -15165,6 +15169,8 @@ self: super: with self; {
   };
 
   spacy-alignments = callPackage ../development/python-modules/spacy-alignments { };
+
+  spacy-curated-transformers = callPackage ../development/python-modules/spacy-curated-transformers { };
 
   spacy-legacy = callPackage ../development/python-modules/spacy/legacy.nix { };
 
