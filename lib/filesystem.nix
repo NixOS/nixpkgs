@@ -415,7 +415,7 @@ in
       # See:
       #  [lib.makeScope](https://nixos.org/manual/nixpkgs/unstable/#function-library-lib.customisation.makeScope) and
       #  [lib.recurseIntoAttrs](https://nixos.org/manual/nixpkgs/unstable/#function-library-lib.customisation.makeScope)
-      recurseIntoAttrs (makeScope args.newScope (self:
+      recurseIntoAttrs (makeScope newScope (self:
         # generate the attrset representing the directory, using the new scope's `callPackage` and `newScope`
         processDir (args // {
           inherit (self) callPackage newScope;
