@@ -1064,6 +1064,38 @@ rec {
     replaceStrings (builtins.attrNames toEscape) (lib.mapAttrsToList (_: c: "%${fixedWidthString 2 "0" (lib.toHexString c)}") toEscape);
 
   /**
+    Return a glob string that matches exactly the input string with minimal modification.
+
+    It utilize the `[<char>]` glob syntax which exactly matches `<char>`,
+    and supports both Unix-like globbing and Bash Extended Globbing.
+
+    # Inputs
+
+    `string`
+    : Input string, which the output glob exactly matches.
+
+    # Type
+
+    ```
+    escapeGlob :: string -> string
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.escapeGlob` usage example
+    ```nix-repl
+    lib.escapeGlob "Can you *hear* me?.txt"
+    => "Can you [*]hear[*] me[?].txt"
+    lib.escapeGlob "@(hi|hello)"
+    => "[@](hi|hello)"
+    lib.escapeGlob "alice@example.com"
+    => "alice@example.com"
+    ```
+    :::
+  */
+  escapeGlob = replaceStrings [ "*" "?" "[" "]" "+(" "@(" "!(" ] [ "[*]" "[?]" "[[]" "[]]" "[+](" "[@](" "[!](" ];
+
+  /**
     Quote `string` to be used safely within the Bourne shell if it has any
     special characters.
 
