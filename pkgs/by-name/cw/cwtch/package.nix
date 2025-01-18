@@ -5,15 +5,15 @@
 }:
 buildGoModule rec {
   pname = "libcwtch";
-  version = "0.1.3";
+  version = "0.1.5";
   # This Gitea instance has archive downloads disabled, so: fetchgit
   src = fetchgit {
     url = "https://git.openprivacy.ca/cwtch.im/autobindings.git";
     rev = "v${version}";
-    hash = "sha256-Gp6JnyjKChB7w0fUHkreu81QRXQ3YdMb2ReD/VCkVOE=";
+    hash = "sha256-SeMpL/ncDh4DgYYeikHiwRIF/RKsrOhRzPAePXglvqM=";
   };
 
-  vendorHash = "sha256-UgG/yjupUFrfjPZ4E+OM1VsWi9MuMuHxcZ4yvz+q/Y0=";
+  vendorHash = "sha256-ZgysF9ZYbuUdaxUiNAJ44JAeFKjBpOQ1DMXhO2RV7zc=";
   overrideModAttrs = (
     old: {
       preBuild = ''
@@ -30,14 +30,15 @@ buildGoModule rec {
 
   buildPhase = ''
     runHook preBuild
-    make linux
+    make libCwtch.so
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
     install -D build/linux/libCwtch.h -t $out/include
-    install -D build/linux/libCwtch.*.so $out/lib/libCwtch.so
+    # * will match either "amd64" or "arm64" depending on the platform.
+    install -D build/linux/*/libCwtch.so $out/lib/libCwtch.so
     runHook postInstall
   '';
 
