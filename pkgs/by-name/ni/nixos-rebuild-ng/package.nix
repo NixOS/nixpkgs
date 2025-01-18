@@ -107,6 +107,7 @@ python3Packages.buildPythonApplication rec {
           nixos-rebuild-specialisations-ng
           nixos-rebuild-target-host-ng
           ;
+        inherit (nixosTests.installer-ng) simple;
         repl = callPackage ./tests/repl.nix { };
         # NOTE: this is a passthru test rather than a build-time test because we
         # want to keep the build closures small
