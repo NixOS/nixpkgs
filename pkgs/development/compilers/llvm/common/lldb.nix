@@ -3,6 +3,7 @@
 , llvm_meta
 , release_version
 , cmake
+, debugserver
 , zlib
 , ncurses
 , swig
