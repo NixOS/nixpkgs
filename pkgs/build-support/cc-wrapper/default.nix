@@ -625,7 +625,7 @@ stdenvNoCC.mkDerivation {
     '' + ''
       echo "$ccLDFlags" >> $out/nix-support/cc-ldflags
       echo "$ccCFlags" >> $out/nix-support/cc-cflags
-    '' + optionalString (targetPlatform.isDarwin && (libcxx != null) && (cc.isClang or false)) ''
+    '' + optionalString ((libcxx != null) && (cc.isClang or false)) ''
       echo " -L${libcxx_solib}" >> $out/nix-support/cc-ldflags
     ''
 
