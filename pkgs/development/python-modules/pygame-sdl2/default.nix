@@ -1,8 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchurl,
-  isPy27,
+  fetchFromGitHub,
   renpy,
   cython_0,
   SDL2,
@@ -13,31 +12,18 @@
   libpng,
   setuptools,
 }:
-let
-  pname = "pygame-sdl2";
-  version = "2.1.0";
-  renpy_version = renpy.base_version;
-in
 
-buildPythonPackage {
-  inherit pname version;
-  name = "${pname}-${version}-${renpy_version}";
+buildPythonPackage rec {
+  pname = "pygame-sdl2";
+  version = "8.3.1.24090601";
   pyproject = true;
 
-  src = fetchurl {
-    url = "https://www.renpy.org/dl/${renpy_version}/pygame_sdl2-${version}+renpy${renpy_version}.tar.gz";
-    hash = "sha256-bcTrdXWLTCnZQ/fP5crKIPoqJiyz+o6s0PzRChV7TQE=";
+  src = fetchFromGitHub {
+    owner = "renpy";
+    repo = "pygame_sdl2";
+    tag = "renpy-${version}";
+    hash = "sha256-0itOmDScM+4HmWTpjkln56pv+yXDPB1KIDbE6ub2Tls=";
   };
-
-  # force rebuild of headers needed for install
-  prePatch = ''
-    rm -rf gen gen3
-  '';
-
-  # Remove build tag which produces invaild version
-  postPatch = ''
-    sed -i '2d' setup.cfg
-  '';
 
   nativeBuildInputs = [
     SDL2.dev
@@ -54,7 +40,12 @@ buildPythonPackage {
     libpng
   ];
 
-  doCheck = isPy27; # python3 tests are non-functional
+  doCheck = true;
+
+  preBuild = ''
+    sed -i "s/2.1.0/${version}/" setup.py
+    sed -i "s/2, 1, 0/$(echo ${version} | sed 's/\./,\ /g')/g" src/pygame_sdl2/version.py
+  '';
 
   meta = {
     description = "Reimplementation of parts of pygame API using SDL2";
