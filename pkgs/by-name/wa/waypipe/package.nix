@@ -6,24 +6,19 @@
   ninja,
   pkg-config,
   scdoc,
-  mesa,
+  libgbm,
   lz4,
   zstd,
   ffmpeg,
-  libva,
   cargo,
   rustc,
-  git,
   vulkan-headers,
   vulkan-loader,
   shaderc,
-  vulkan-tools,
   llvmPackages,
   autoPatchelfHook,
-  wayland,
   wayland-scanner,
   rust-bindgen,
-  egl-wayland,
 }:
 llvmPackages.stdenv.mkDerivation rec {
   pname = "waypipe";
@@ -55,15 +50,22 @@ llvmPackages.stdenv.mkDerivation rec {
     rustc
     wayland-scanner
     rustPlatform.cargoSetupHook
+    autoPatchelfHook
     rust-bindgen
   ];
 
   buildInputs = [
-    mesa
+    libgbm
     lz4
     zstd
     ffmpeg
     vulkan-headers
+    vulkan-loader
+  ];
+
+  runtimeDependencies = [
+    libgbm
+    ffmpeg.lib
     vulkan-loader
   ];
 

@@ -5,6 +5,7 @@
   fetchFromGitHub,
   hatchling,
   pytestCheckHook,
+  pythonAtLeast,
   typing-extensions,
 }:
 
@@ -28,6 +29,11 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "beartype" ];
+
+  # this test is not run upstream, and broke in 3.13 (_nparams removed)
+  disabledTests = lib.optionals (pythonAtLeast "3.13") [
+    "test_door_is_subhint"
+  ];
 
   meta = {
     description = "Fast runtime type checking for Python";
