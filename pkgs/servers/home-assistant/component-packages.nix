@@ -3868,7 +3868,8 @@
       ];
     "onkyo" =
       ps: with ps; [
-      ]; # missing inputs: pyeiscp
+        pyeiscp
+      ];
     "onvif" =
       ps: with ps; [
         ha-ffmpeg
@@ -6908,6 +6909,7 @@
     "oncue"
     "ondilo_ico"
     "onewire"
+    "onkyo"
     "onvif"
     "open_meteo"
     "openai_conversation"
