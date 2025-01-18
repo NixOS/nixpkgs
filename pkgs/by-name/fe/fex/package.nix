@@ -2,6 +2,7 @@
   fetchFromGitHub,
   lib,
   llvmPackages,
+  stdenv,
   cmake,
   ninja,
   pkg-config,
@@ -10,6 +11,7 @@
   python3,
   xxHash,
   fmt,
+  nasm,
 }:
 
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
@@ -69,7 +71,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
         libclang
       ]
     ))
-  ];
+  ] ++ lib.optionals finalAttrs.doCheck [ nasm ];
 
   buildInputs =
     [
@@ -92,7 +94,42 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   ];
 
   strictDeps = true;
-  doCheck = false; # broken on Apple silicon computers
+
+  # Unsupported on non-4K page size kernels (e.g. Apple Silicon)
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+
+  checkTarget = lib.concatStringsSep " " [
+    "asm_tests"
+    "api_tests"
+    "fexcore_apitests"
+    "emitter_tests"
+
+    # Needs x86 libc headers
+    # "struct_verifier"
+
+    # Needs x86 compiler
+    # "fex_linux_tests_all"
+
+    # Needs thunks to be enabled
+    # "thunkgen_tests"
+
+    # Needs prebuilt binaries
+    # "gcc_target_tests_64"
+    # "gcc_target_tests_32"
+    # "posix_tests"
+    # "gvisor_tests"
+  ];
+
+  preCheck = ''
+    # These tests are broken on Oryon:
+    # https://github.com/FEX-Emu/FEX/issues/4280
+    echo '
+    Test_3DNow/86.asm
+    Test_3DNow/87.asm
+    Test_3DNow/96.asm
+    Test_3DNow/97.asm
+    ' >> ../unittests/ASM/Disabled_Tests
+  '';
 
   # Avoid wrapping anything other than FEXConfig, since the wrapped executables
   # don't seem to work when registered as binfmts.
