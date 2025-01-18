@@ -13509,6 +13509,8 @@ with pkgs;
 
   bluejeans-gui = callPackage ../applications/networking/instant-messengers/bluejeans { };
 
+  electron-wrapper = callPackage ../applications/networking/instant-messengers/electron-wrapper/electron-wrapper.nix {};
+
   bottles = callPackage ../applications/misc/bottles/fhsenv.nix { };
 
   bottles-unwrapped = callPackage ../applications/misc/bottles { };
@@ -15381,6 +15383,8 @@ with pkgs;
   plover = recurseIntoAttrs (libsForQt5.callPackage ../applications/misc/plover { });
 
   pokefinder = qt6Packages.callPackage ../tools/games/pokefinder { };
+
+  WarThunder = callPackage ../games/WarThunder { };
 
   pomodoro = callPackage ../applications/misc/pomodoro {
     inherit (darwin.apple_sdk.frameworks) Foundation;
