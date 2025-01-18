@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "livelossplot";
-  version = "0.5.5";
+  version = "0.5.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "stared";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-YU8vX4SubI6txmC/i5fOjcvWfuDFm8+SPmie8Eb1qRs=";
+    sha256 = "sha256-qC1FBFJyf2IlDIffJ5Xs89WcN/GFA/8maODhc1u2xhA=";
   };
 
   propagatedBuildInputs = [
