@@ -9,17 +9,19 @@
   SDL2,
   libXext,
   Cocoa,
+  utf8proc,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "schismtracker";
-  version = "20240809";
+  version = "20241226";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-J4al7XU+vvehDnp2fRrVesWyUN4i63g5btUkjarpXbk=";
+    owner = "schismtracker";
+    repo = "schismtracker";
+    tag = version;
+    hash = "sha256-CZc5rIAgEydb8JhtkRSqEB9PI7TC58oJZg939GIEiMs=";
   };
 
   # If we let it try to get the version from git, it will fail and fall back
@@ -30,9 +32,21 @@ stdenv.mkDerivation rec {
       --replace-fail 'git log' 'echo ${version} #'
   '';
 
-  configureFlags = [
-    "--enable-dependency-tracking"
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin "--disable-sdltest";
+  configureFlags =
+    [
+      (lib.enableFeature true "dependency-tracking")
+      (lib.withFeature true "sdl2")
+      (lib.enableFeature true "sdl2-linking")
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      (lib.enableFeature true "alsa")
+      (lib.enableFeature true "alsa-linking")
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      (lib.enableFeature false "sdltest")
+    ];
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     autoreconfHook
@@ -41,7 +55,10 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs =
-    [ SDL2 ]
+    [
+      SDL2
+      utf8proc
+    ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       alsa-lib
       libXext
@@ -56,12 +73,14 @@ stdenv.mkDerivation rec {
       --replace '-lSDL2main' '-lSDL2'
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Music tracker application, free reimplementation of Impulse Tracker";
     homepage = "https://schismtracker.org/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ ftrvxmtrx ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ ftrvxmtrx ];
     mainProgram = "schismtracker";
   };
 }
