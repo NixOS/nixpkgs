@@ -6,6 +6,8 @@
 , dbus
 , fontconfig
 , portaudio
+, copyDesktopItems
+, makeDesktopItem
 }:
 
 buildDotnetModule rec {
@@ -18,6 +20,21 @@ buildDotnetModule rec {
     rev = "build/${version}";
     hash = "sha256-HE0KxPKU7tYZbYiCL8sm6I/NZiX0MJktt+5d6qB1A2E=";
   };
+
+  nativeBuildInputs = [ copyDesktopItems ];
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "openutau";
+      desktopName = "OpenUtau";
+      startupWMClass = "openutau";
+      icon = "openutau";
+      genericName = "Utau";
+      comment = "Open source UTAU successor";
+      exec = "OpenUtau";
+      categories = [ "Music" ];
+    })
+  ];
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
@@ -58,9 +75,16 @@ buildDotnetModule rec {
          else if (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) then "linux-arm64"
          else if stdenv.hostPlatform.isDarwin then "osx"
          else null;
-  in lib.optionalString (runtime != null) ''
-    cp runtimes/${runtime}/native/libworldline${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/OpenUtau/
-  '';
+    shouldInstallResampler = lib.optionalString (runtime != null) ''
+      cp runtimes/${runtime}/native/libworldline${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/OpenUtau/
+    '';
+    shouldInstallDesktopItem = lib.optionalString stdenv.hostPlatform.isLinux ''
+      install -Dm655 -t $out/share/icons/hicolor/scalable/apps Logo/openutau.svg
+    '';
+    in ''
+      ${shouldInstallResampler}
+      ${shouldInstallDesktopItem}
+    '';
 
   passthru.updateScript = ./update.sh;
 
