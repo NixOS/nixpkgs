@@ -1,14 +1,11 @@
-{ stdenv, lib, makeDesktopItem, makeWrapper, makeBinaryWrapper, lndir, config
+{ stdenv, lib, makeDesktopItem, makeWrapper, lndir, config
 , buildPackages
 , jq, xdg-utils, writeText
 
 ## various stuff that can be plugged in
 , ffmpeg, xorg, alsa-lib, libpulseaudio, libcanberra-gtk3, libglvnd, libnotify, opensc
 , adwaita-icon-theme
-, browserpass, gnome-browser-connector, uget-integrator, plasma5Packages, bukubrow, pipewire
-, tridactyl-native
-, fx-cast-bridge
-, keepassxc
+, pipewire
 , udev
 , libkrb5
 , libva
@@ -36,7 +33,6 @@ let
     , icon ? applicationName
     , wmClass ? applicationName
     , nativeMessagingHosts ? []
-    , extraNativeMessagingHosts ? []
     , pkcs11Modules ? []
     , useGlvnd ? true
     , cfg ? config.${applicationName} or {}
@@ -65,27 +61,7 @@ let
       # PCSC-Lite daemon (services.pcscd) also must be enabled for firefox to access smartcards
       smartcardSupport = cfg.smartcardSupport or false;
 
-      deprecatedNativeMessagingHost = option: pkg:
-        if (cfg.${option} or false)
-          then
-            lib.warn "The cfg.${option} argument for `firefox.override` is deprecated, please add `pkgs.${pkg.pname}` to `nativeMessagingHosts` instead"
-            [pkg]
-          else [];
-
-      allNativeMessagingHosts = builtins.map lib.getBin (
-        nativeMessagingHosts
-          ++ deprecatedNativeMessagingHost "enableBrowserpass" browserpass
-          ++ deprecatedNativeMessagingHost "enableBukubrow" bukubrow
-          ++ deprecatedNativeMessagingHost "enableTridactylNative" tridactyl-native
-          ++ deprecatedNativeMessagingHost "enableGnomeExtensions" gnome-browser-connector
-          ++ deprecatedNativeMessagingHost "enableUgetIntegrator" uget-integrator
-          ++ deprecatedNativeMessagingHost "enablePlasmaBrowserIntegration" plasma5Packages.plasma-browser-integration
-          ++ deprecatedNativeMessagingHost "enableFXCastBridge" fx-cast-bridge
-          ++ deprecatedNativeMessagingHost "enableKeePassXC" keepassxc
-          ++ (if extraNativeMessagingHosts != []
-                then lib.warn "The extraNativeMessagingHosts argument for the Firefox wrapper is deprecated, please use `nativeMessagingHosts`" extraNativeMessagingHosts
-                else [])
-       );
+      allNativeMessagingHosts = builtins.map lib.getBin nativeMessagingHosts;
 
        libs = lib.optionals stdenv.hostPlatform.isLinux (
             [ udev libva libgbm libnotify xorg.libXScrnSaver cups pciutils vulkan-loader ]
