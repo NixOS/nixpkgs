@@ -122,6 +122,47 @@ def odd_unstable(version: Version) -> Stability:
         return Stability.UNSTABLE
 
 
+def ninety_micro_unstable(version: Version) -> Stability:
+    """
+    <https://gitlab.gnome.org/GNOME/gcr/-/tree/4.3.90.3#versions>:
+    > To denote unstable versions, the micro version number will correspond to 90 or
+    > higher, e.g. 4.$MINOR.90.
+
+    >>> ninety_micro_unstable(Version("3.2.1"))
+    Stability.STABLE
+    >>> ninety_micro_unstable(Version("3.2.1.alpha"))
+    Stability.UNSTABLE
+    >>> ninety_micro_unstable(Version("3.2.1beta"))
+    Stability.UNSTABLE
+    >>> ninety_micro_unstable(Version("4.2.89"))
+    Stability.STABLE
+    >>> ninety_micro_unstable(Version("4.3.89"))
+    Stability.STABLE
+    >>> ninety_micro_unstable(Version("4.2.90"))
+    Stability.UNSTABLE
+    >>> ninety_micro_unstable(Version("4.2.89.3"))
+    Stability.STABLE
+    >>> ninety_micro_unstable(Version("4.2.90.3"))
+    Stability.UNSTABLE
+    >>> ninety_micro_unstable(Version("4.90.1"))
+    Stability.STABLE
+    """
+    try:
+        version_parts = version_to_list(version.value)
+    except:
+        # Failing to parse as a list of numbers likely means the version contains a string tag like “beta”, therefore it is not a stable release.
+        return Stability.UNSTABLE
+
+    if len(version_parts) < 3:
+        return Stability.STABLE
+
+    prerelease = version_parts[2] >= 90
+    if prerelease:
+        return Stability.UNSTABLE
+    else:
+        return Stability.STABLE
+
+
 def tagged(version: Version) -> Stability:
     """
     Considers only versions with explicit `alpha`, `beta` or `rc` tags unstable.
@@ -166,6 +207,7 @@ class VersionPolicyKind(Enum):
     # HACK: Using function as values directly would make Enum
     # think they are methods and skip them.
     ODD_UNSTABLE = VersionClassifierHolder(odd_unstable)
+    NINETY_MICRO_UNSTABLE = VersionClassifierHolder(ninety_micro_unstable)
     TAGGED = VersionClassifierHolder(tagged)
     NONE = VersionClassifierHolder(no_policy)
 
