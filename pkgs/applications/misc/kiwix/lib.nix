@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libkiwix";
-  version = "13.1.0";
+  version = "14.0.0";
 
   src = fetchFromGitHub {
     owner = "kiwix";
     repo = "libkiwix";
     rev = finalAttrs.version;
-    hash = "sha256-DKOwzfGyad/3diOaV1K8hXqT8YGfqCP6QDKDkxWu/1U=";
+    hash = "sha256-QP23ZS0FJsMVtnWOofywaAPIU0GJ2L+hLP/x0LXMKiU=";
   };
 
   nativeBuildInputs = [
