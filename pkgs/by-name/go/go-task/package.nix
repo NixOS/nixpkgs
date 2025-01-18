@@ -21,8 +21,6 @@ buildGoModule rec {
 
   vendorHash = "sha256-DR9G+I6PYk8jrR0CZiPqtuULTMekATNSLjyHACOmlbk=";
 
-  doCheck = false;
-
   nativeBuildInputs = [ installShellFiles ];
 
   subPackages = [ "cmd/task" ];
