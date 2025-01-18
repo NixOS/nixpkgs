@@ -1,4 +1,12 @@
 # shellcheck shell=bash
+
+# Guard against double inclusion.
+if (("${noBrokenSymlinksHookInstalled:-0}" > 0)); then
+  nixInfoLog "skipping because the hook has been propagated more than once"
+  return 0
+fi
+declare -ig noBrokenSymlinksHookInstalled=1
+
 # symlinks are often created in postFixup
 # don't use fixupOutputHooks, it is before postFixup
 postFixupHooks+=(noBrokenSymlinksInAllOutputs)
