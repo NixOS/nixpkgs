@@ -3,8 +3,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  makeWrapper,
-  nodejs,
   chromium,
 }:
 let
@@ -28,36 +26,13 @@ buildNpmPackage {
 
   npmDepsHash = "sha256-lrj3lSCfqUfUFvtnJ/ELNUFE9kNTC4apnGrYxYmkUtE=";
 
-  nativeBuildInputs = [
-    makeWrapper
-    nodejs
-  ];
-
   env = {
     PUPPETEER_SKIP_DOWNLOAD = true;
   };
 
   npmBuildScript = "prepare";
 
-  installPhase =
-    ''
-      runHook preInstall
-
-      npm --omit=dev --include=peer --ignore-scripts install
-
-      mkdir -p "$out/lib/node_modules/@mermaid-js/mermaid-cli"
-      cp -r . "$out/lib/node_modules/@mermaid-js/mermaid-cli"
-
-      makeWrapper "${nodejs}/bin/node" "$out/bin/mmdc" \
-    ''
-    + lib.optionalString (lib.meta.availableOn stdenv.hostPlatform chromium) ''
-      --set PUPPETEER_EXECUTABLE_PATH '${lib.getExe chromium}' \
-    ''
-    + ''
-        --add-flags "$out/lib/node_modules/@mermaid-js/mermaid-cli/src/cli.js"
-
-      runHook postInstall
-    '';
+  makeWrapperArgs = lib.lists.optional (lib.meta.availableOn stdenv.hostPlatform chromium) "--set PUPPETEER_EXECUTABLE_PATH '${lib.getExe chromium}'";
 
   meta = {
     description = "Generation of diagrams from text in a similar manner as markdown";
