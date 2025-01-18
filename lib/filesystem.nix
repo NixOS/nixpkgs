@@ -307,11 +307,11 @@ in
     # Type
 
     ```
-    packagesFromDirectoryRecursive :: (args :: {
+    packagesFromDirectoryRecursive :: {
       callPackage :: Path -> {} -> a,
       newScope? :: AttrSet -> scope,
       directory :: Path,
-    }) -> AttrSet
+    } -> AttrSet
     ```
 
     # Inputs
