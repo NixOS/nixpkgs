@@ -167,6 +167,13 @@ lib.mapAttrs mkLicense ({
     fullName = "Boost Software License 1.0";
   };
 
+  brotherEula = {
+    fullName = "Brother License Agreement";
+    url = "https://support.brother.com/g/s/agreement/English_eula/agree.html";
+    free = false;
+    redistributable = true;
+  };
+
   beerware = {
     spdxId = "Beerware";
     fullName = "Beerware License";
