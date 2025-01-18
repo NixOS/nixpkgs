@@ -10,7 +10,6 @@ let
   cfg = config.services.wyoming.faster-whisper;
 
   inherit (lib)
-    escapeShellArgs
     mkOption
     mkEnableOption
     mkPackageOption
@@ -240,7 +239,6 @@ in
                 description = ''
                   Extra arguments to pass to the server commandline.
                 '';
-                apply = escapeShellArgs;
               };
             };
           }
