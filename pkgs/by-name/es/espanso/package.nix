@@ -4,6 +4,7 @@
   fetchFromGitHub,
   rustPlatform,
   pkg-config,
+  bash,
   extra-cmake-modules,
   dbus,
   libX11,
@@ -71,6 +72,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs =
     [
+      bash
       wxGTK32
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -114,7 +116,10 @@ rustPlatform.buildRustPackage rec {
         wrapProgram $out/bin/espanso \
           --prefix PATH : ${
             lib.makeBinPath (
-              lib.optionals stdenv.hostPlatform.isLinux [
+              [
+                bash
+              ]
+              ++ lib.optionals stdenv.hostPlatform.isLinux [
                 libnotify
                 setxkbmap
               ]
