@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "matcha-rss-digest";
-  version = "0.7.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "piqoni";
     repo = "matcha";
     rev = "v${version}";
-    hash = "sha256-eexDPewRbAxrMVE7m4WHxeBgRl8xKVdtIpCbYPfp24w=";
+    hash = "sha256-Zs6Och5CsqN2mpnCLgV1VkH4+CV1fklfP20A22rE5y0=";
   };
 
   vendorHash = "sha256-CURFy92K4aNF9xC8ik6RDadRAvlw8p3Xc+gWE2un6cc=";
