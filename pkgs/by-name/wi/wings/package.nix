@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "http://www.wings3d.com/";
+    homepage = "https://www.wings3d.com/";
     description = "Subdivision modeler inspired by Nendo and Mirai from Izware";
     license = lib.licenses.tcltk;
     maintainers = [ ];

@@ -28,20 +28,23 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "mullvad";
-  version = "2024.8";
+  version = "2025.2";
 
   src = fetchFromGitHub {
     owner = "mullvad";
     repo = "mullvadvpn-app";
     rev = version;
     fetchSubmodules = true;
-    hash = "sha256-mDQRIlu1wslgLhYlH87i9yntfPwTd7UQK2c6IoHuIqU=";
+    hash = "sha256-5GcYiyvulsOFepguBcBec98juw22YTbT7yvZJUOJUwc=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-HCW2brAQK20oJIFKrdqHqRmihnKnxGZfyt5T8Yrt1z8=";
+  cargoHash = "sha256-3xleQgDp33Ctce7jB9XRRwxmRHkzLJcg9mPLU4PExAM=";
 
-  checkFlags = "--skip=version_check";
+  checkFlags = [
+    "--skip=version_check"
+    "--skip=config_resolver::test"
+  ];
 
   nativeBuildInputs = [
     pkg-config

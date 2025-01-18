@@ -581,6 +581,18 @@ final: prev:
     meta.homepage = "https://github.com/derekelkins/agda-vim/";
   };
 
+  agitator-nvim = buildVimPlugin {
+    pname = "agitator.nvim";
+    version = "2024-12-02";
+    src = fetchFromGitHub {
+      owner = "emmanueltouzery";
+      repo = "agitator.nvim";
+      rev = "dc2843869b8bb9e5096edf53583b1dee1e62aa6b";
+      sha256 = "12d75hjc1vxwbd7imdn8s1d3gqkqk8xg1sdpxx262kk2c90grxpn";
+    };
+    meta.homepage = "https://github.com/emmanueltouzery/agitator.nvim/";
+  };
+
   ai-vim = buildVimPlugin {
     pname = "ai.vim";
     version = "2023-10-03";
@@ -2835,6 +2847,18 @@ final: prev:
       sha256 = "0ag8ryq7figzvf0693077ifwj38jwig09521v04h9jyivickiq6w";
     };
     meta.homepage = "https://github.com/ms-jpq/coq.artifacts/";
+  };
+
+  coq-lsp-nvim = buildVimPlugin {
+    pname = "coq-lsp.nvim";
+    version = "2024-10-28";
+    src = fetchFromGitHub {
+      owner = "tomtomjhj";
+      repo = "coq-lsp.nvim";
+      rev = "6135ed25fc2a1b4b1b6451ed206dc38b493ff1a2";
+      sha256 = "1vlz2kgc82rhycxp4qcz2bwssnzbv16wvr3gsigbl8b7rxjv5ivr";
+    };
+    meta.homepage = "https://github.com/tomtomjhj/coq-lsp.nvim/";
   };
 
   coq-thirdparty = buildVimPlugin {
@@ -7455,6 +7479,18 @@ final: prev:
     meta.homepage = "https://github.com/benlubas/molten-nvim/";
   };
 
+  monaspace-nvim = buildVimPlugin {
+    pname = "monaspace.nvim";
+    version = "2025-01-14";
+    src = fetchFromGitHub {
+      owner = "jackplus-xyz";
+      repo = "monaspace.nvim";
+      rev = "8f6e5e64393b530fd1d8e0ea96c51ffbb4046186";
+      sha256 = "08c5kj2wmlykamww1bilgws45mmx8yqb4y0f58cazf3wl1rjbldr";
+    };
+    meta.homepage = "https://github.com/jackplus-xyz/monaspace.nvim/";
+  };
+
   monokai-pro-nvim = buildVimPlugin {
     pname = "monokai-pro.nvim";
     version = "2024-12-16";
@@ -10145,6 +10181,18 @@ final: prev:
     meta.homepage = "https://github.com/nvzone/minty/";
   };
 
+  nvzone-typr = buildVimPlugin {
+    pname = "nvzone-typr";
+    version = "2025-01-15";
+    src = fetchFromGitHub {
+      owner = "nvzone";
+      repo = "typr";
+      rev = "a60c7f237be94d4b39228a3bd2ced80fe9fe2781";
+      sha256 = "0hbd85s2d28832qqy0lnm7f2iqa5n5s16h7n10hsm9iawi0z2ll9";
+    };
+    meta.homepage = "https://github.com/nvzone/typr/";
+  };
+
   nvzone-volt = buildVimPlugin {
     pname = "nvzone-volt";
     version = "2024-12-31";
@@ -11713,12 +11761,12 @@ final: prev:
 
   snacks-nvim = buildVimPlugin {
     pname = "snacks.nvim";
-    version = "2025-01-15";
+    version = "2025-01-16";
     src = fetchFromGitHub {
       owner = "folke";
       repo = "snacks.nvim";
-      rev = "e5dd9281ee9402858fb7b7f1ac74ddcef40ebacc";
-      sha256 = "147rbp4z58bvm6s2lk1yzis7rjrrppwgchxpiyf9klj2gh08mzwp";
+      rev = "4ac28ad1de74438daf10b07e5dea6463470d8d05";
+      sha256 = "15n86b1vrc54s8icm1p0sp5ay811w9z8ygwbkqd478a677q8vk0w";
     };
     meta.homepage = "https://github.com/folke/snacks.nvim/";
   };
@@ -13039,12 +13087,12 @@ final: prev:
 
   todo-comments-nvim = buildVimPlugin {
     pname = "todo-comments.nvim";
-    version = "2024-09-16";
+    version = "2025-01-14";
     src = fetchFromGitHub {
       owner = "folke";
       repo = "todo-comments.nvim";
-      rev = "ae0a2afb47cf7395dc400e5dc4e05274bf4fb9e0";
-      sha256 = "0v6vn3f9svj756ds8cp0skpw65xixlx1f3aj0fh374wdpb5i4zhh";
+      rev = "304a8d204ee787d2544d8bc23cd38d2f929e7cc5";
+      sha256 = "0hrmiaxjp11200nds3y33brj8gpbn5ykd78jfy1jiash3d44xpva";
     };
     meta.homepage = "https://github.com/folke/todo-comments.nvim/";
   };
@@ -13173,12 +13221,12 @@ final: prev:
 
   trouble-nvim = buildVimPlugin {
     pname = "trouble.nvim";
-    version = "2024-11-27";
+    version = "2025-01-15";
     src = fetchFromGitHub {
       owner = "folke";
       repo = "trouble.nvim";
-      rev = "46cf952fc115f4c2b98d4e208ed1e2dce08c9bf6";
-      sha256 = "12ky8alz6zi2vlqspnacmkj99d4sam4hrzs92i3n4sz6jx2w8696";
+      rev = "50481f414bd3c1a40122c1d759d7e424d5fafe84";
+      sha256 = "14cvhnz4njzqydnbyf9iydsdhqvms4kajlvxgkr1gfkw6rw96r37";
     };
     meta.homepage = "https://github.com/folke/trouble.nvim/";
   };
@@ -13313,18 +13361,6 @@ final: prev:
       sha256 = "042dnb5y8v3xb5nz564snicxkxalki1zm32y09imkskfkv588l52";
     };
     meta.homepage = "https://github.com/leafgarland/typescript-vim/";
-  };
-
-  nvzone-typr = buildVimPlugin {
-    pname = "typr";
-    version = "2025-01-15";
-    src = fetchFromGitHub {
-      owner = "nvzone";
-      repo = "typr";
-      rev = "a60c7f237be94d4b39228a3bd2ced80fe9fe2781";
-      sha256 = "0hbd85s2d28832qqy0lnm7f2iqa5n5s16h7n10hsm9iawi0z2ll9";
-    };
-    meta.homepage = "https://github.com/nvzone/typr/";
   };
 
   typst-conceal-vim = buildVimPlugin {

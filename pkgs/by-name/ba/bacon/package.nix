@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitHub,
   versionCheckHook,
@@ -9,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "bacon";
-  version = "3.7.0";
+  version = "3.8.0";
 
   src = fetchFromGitHub {
     owner = "Canop";
     repo = "bacon";
     tag = "v${version}";
-    hash = "sha256-pw+EfmpDvMCKSHOeHiv06x13/tRuf053Zcj8z0eWnPs=";
+    hash = "sha256-IWjG1esLwiEnESmnDE5kpuMu+LFaNrIomgrZoktkA2Q=";
   };
 
-  cargoHash = "sha256-W1bDZSUBjPmb/7bOnE+E5byA0clJZ+qGJ4XYASAjfeU=";
+  cargoHash = "sha256-IQ8vTr5Z17ylcOCQ+iqKP6+tawZXd+pMiYoSH5h7Zjg=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = [ "--version" ];

@@ -668,6 +668,7 @@
   ./services/home-automation/wyoming/satellite.nix
   ./services/home-automation/zigbee2mqtt.nix
   ./services/home-automation/zwave-js.nix
+  ./services/home-automation/zwave-js-ui.nix
   ./services/logging/SystemdJournal2Gelf.nix
   ./services/logging/awstats.nix
   ./services/logging/filebeat.nix
@@ -747,6 +748,7 @@
   ./services/misc/anki-sync-server.nix
   ./services/misc/apache-kafka.nix
   ./services/misc/atuin.nix
+  ./services/misc/autobrr.nix
   ./services/misc/autofs.nix
   ./services/misc/autorandr.nix
   ./services/misc/autosuspend.nix
@@ -856,6 +858,7 @@
   ./services/misc/radarr.nix
   ./services/misc/radicle.nix
   ./services/misc/readarr.nix
+  ./services/misc/realmd.nix
   ./services/misc/redlib.nix
   ./services/misc/redmine.nix
   ./services/misc/renovate.nix
