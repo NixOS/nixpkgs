@@ -8499,6 +8499,8 @@ self: super: with self; {
 
   mpl-scatter-density = callPackage ../development/python-modules/mpl-scatter-density { };
 
+  mpl-typst = callPackage ../development/python-modules/mpl-typst { };
+
   mpmath = callPackage ../development/python-modules/mpmath { };
 
   mpris-server = callPackage ../development/python-modules/mpris-server { };
