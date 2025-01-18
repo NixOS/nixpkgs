@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  gcc13Stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -33,6 +34,9 @@
   cudaPackages ? { },
 
 }:
+let
+  stdenvTarget = if cudaSupport then gcc13Stdenv else stdenv;
+in
 buildPythonPackage rec {
   pname = "llama-cpp-python";
   version = "0.3.6";
@@ -76,6 +80,8 @@ buildPythonPackage rec {
     ]
   );
 
+  stdenv = stdenvTarget;
+
   dependencies = [
     diskcache
     jinja2
@@ -99,7 +105,11 @@ buildPythonPackage rec {
 
   passthru = {
     updateScript = gitUpdater { rev-prefix = "v"; };
-    tests.llama-cpp-python = llama-cpp-python.override { cudaSupport = true; };
+    tests = lib.optionalAttrs stdenvTarget.hostPlatform.isLinux {
+      withCuda = llama-cpp-python.override {
+        cudaSupport = true;
+      };
+    };
   };
 
   meta = {
@@ -109,12 +119,6 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kirillrdy ];
     badPlatforms = [
-      # Segfaults during tests:
-      # tests/test_llama.py .Fatal Python error: Segmentation fault
-      # Current thread 0x00000001f3decf40 (most recent call first):
-      #   File "/private/tmp/nix-build-python3.12-llama-cpp-python-0.3.2.drv-0/source/llama_cpp/_internals.py", line 51 in __init__
-      lib.systems.inspect.patterns.isDarwin
-
       # cc1: error: unknown value ‘native+nodotprod+noi8mm+nosve’ for ‘-mcpu’
       "aarch64-linux"
     ];
