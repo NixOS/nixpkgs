@@ -5,7 +5,7 @@
   fetchpatch,
   gitUpdater,
   testers,
-  boost,
+  boost186,
   cmake,
   dbus,
   doxygen,
@@ -81,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    boost
+    boost186 # uses boost/asio/io_service.hpp
     lomiri.cmake-extras
     dbus
     libxml2
