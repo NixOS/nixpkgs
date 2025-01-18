@@ -1,4 +1,4 @@
-{ testers, fetchgit, ... }: {
+{ testers, fetchgit, fetchurl, ... }: {
   simple = testers.invalidateFetcherByDrvHash fetchgit {
     name = "simple-nix-source";
     url = "https://github.com/NixOS/nix";
@@ -78,5 +78,47 @@
     url = "https://git.scottworley.com/pub/git/pinch";
     rev = "v3.0.14";
     sha256 = "sha256-bd0Lx75Gd1pcBJtwz5WGki7XoYSpqhinCT3a77wpY2c=";
+  };
+
+  ssh-commit-verification = testers.invalidateFetcherByDrvHash fetchgit {
+    name = "ssh-commit-verification-source";
+    url = "https://codeberg.org/flandweber/git-verify";
+    rev = "a43858e8f106b313aed68b6455a45340db7dd758";
+    sha256 = "sha256-tryIB8KlETlbHyTfW+IpsAgu2BQCcoeuHJpvzyFFsMg=";
+    verifyCommit = true;
+    publicKeys = [{
+        type = "ssh-ed25519";
+        key = "AAAAC3NzaC1lZDI1NTE5AAAAIBiNDWMPZNRItkm1U1CQkJUUrrmM+l7CdE6wyUHzr4Nr";
+      }];
+  };
+
+  gpg-commit-verification = testers.invalidateFetcherByDrvHash fetchgit {
+    name = "gpg-commit-verification-source";
+    url = "https://gitlab.torproject.org/tpo/core/tor";
+    rev = "8888e4ca6b44bb7476139be4644e739035441b35";
+    sha256 = "sha256-mC18zGHAh/u9zcYMoYjgrQfsOtjp0UwfP4JXGZWzJHs=";
+    verifyCommit = true;
+    publicKeys = [{
+        type="gpg";
+        key= fetchurl {
+          url = "https://web.archive.org/web/20241109193517/https://keys.openpgp.org/vks/v1/by-fingerprint/5EF3A41171BB77E6110ED2D01F3D03348DB1A3E2";
+          sha256 = "sha256-xvBWfaS1py7vyDIIYGtATqBOnWafd3B6OB2Blhfm4MU=";
+        };
+      }];
+  };
+
+  gpg-tag-verification = testers.invalidateFetcherByDrvHash fetchgit {
+    name = "gpg-tag-verification-source";
+    url = "https://gitlab.torproject.org/tpo/core/tor";
+    tag = "tor-0.4.8.12";
+    sha256 = "sha256-039kMxxf5B8FjOKoPjXie07+aQ3H8OauqAq62sU6LFo=";
+    verifyTag = true;
+    publicKeys = [{
+        type="gpg";
+        key= fetchurl {
+          url = "https://web.archive.org/web/20241109193821/https://keys.openpgp.org/vks/v1/by-fingerprint/B74417EDDF22AC9F9E90F49142E86A2A11F48D36";
+          sha256 = "sha256-M4mvelY1nLeGuhgZIpF4oAe80kbJl2+wcDI6zp9YwXo=";
+        };
+      }];
   };
 }
