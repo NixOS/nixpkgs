@@ -20,7 +20,7 @@
 
 stdenv.mkDerivation rec {
   pname = "glib-networking";
-  version = "2.80.0";
+  version = "2.80.1";
 
   outputs = [
     "out"
@@ -28,8 +28,8 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-2PTxqrITF5rjNRYXtZ2rXea8yeeFAh7uF4mY69S7Os8=";
+    url = "mirror://gnome/sources/glib-networking/${lib.versions.majorMinor version}/glib-networking-${version}.tar.xz";
+    hash = "sha256-uA4odBV81VBx8bZxD6C5EdWsXeEGqe4qTJx77mF4L44=";
   };
 
   patches = [
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "glib-networking";
       versionPolicy = "odd-unstable";
     };
 
