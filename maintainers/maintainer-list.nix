@@ -2582,6 +2582,12 @@
     name = "Wanderson Ferreira";
     keys = [ { fingerprint = "A3E1 C409 B705 50B3 BF41  492B 5684 0A61 4DBE 37AE"; } ];
   };
+  bashsu = {
+    name = "Joeal Subash";
+    email = "joeal.subash@cern.ch";
+    github = "joealsubash";
+    githubId = 98759349;
+  };
   bastaynav = {
     name = "Ivan Bastrakov";
     email = "bastaynav@proton.me";

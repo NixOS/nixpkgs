@@ -1,0 +1,25 @@
+From 8e2cd0c597ecc199438d3144aa119f6fcdd8990d Mon Sep 17 00:00:00 2001
+From: Joeal Subash <joeal.subash@cern.ch>
+Date: Wed, 10 Jul 2024 15:58:26 +0100
+Subject: [PATCH] /bin/bash = not_good
+
+---
+ config/Makefile.macros | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/config/Makefile.macros b/config/Makefile.macros
+index b1bdeb2a..2d653bd1 100644
+--- a/config/Makefile.macros
++++ b/config/Makefile.macros
+@@ -5,7 +5,7 @@ CACTUS_ROOT ?= /opt/cactus
+ CACTUS_RPM_ROOT ?= $(BUILD_HOME)
+ 
+ 
+-SHELL := /bin/bash
++#SHELL := /bin/bash
+ PYTHON ?= python
+ CACTUS_PLATFORM=$(shell if [ -f /etc/system-release ]; then cat /etc/system-release; fi)
+ CACTUS_OS=unknown.os
+-- 
+GitLab
+
