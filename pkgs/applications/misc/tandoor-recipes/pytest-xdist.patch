@@ -1,0 +1,12 @@
+diff --git a/pytest.ini b/pytest.ini
+index a3d26ec4..8bdf12fb 100644
+--- a/pytest.ini
++++ b/pytest.ini
+@@ -3,5 +3,5 @@ DJANGO_SETTINGS_MODULE = recipes.test_settings
+ testpaths = cookbook/tests
+ python_files = tests.py test_*.py *_tests.py
+ # uncomment to run coverage reports
+-addopts = -n auto --cov=. --cov-report=html:docs/reports/coverage --cov-report=xml:docs/reports/coverage/coverage.xml --junitxml=docs/reports/tests/pytest.xml --html=docs/reports/tests/tests.html
++addopts = -n @NIX_BUILD_CORES@ --cov=. --cov-report=html:docs/reports/coverage --cov-report=xml:docs/reports/coverage/coverage.xml --junitxml=docs/reports/tests/pytest.xml --html=docs/reports/tests/tests.html
+ # addopts = -n auto --junitxml=docs/reports/tests/pytest.xml --html=docs/reports/tests/tests.html
+\ No newline at end of file
