@@ -44,36 +44,27 @@ llvmPackages.stdenv.mkDerivation rec {
   strictDeps = true;
   LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
   depsBuildBuild = [ pkg-config ];
+
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
     scdoc
     cargo
-    git
-    vulkan-headers
-    vulkan-loader
-    shaderc
+    shaderc # for glslc
     rustc
     wayland-scanner
     rustPlatform.cargoSetupHook
-    autoPatchelfHook
     rust-bindgen
   ];
+
   buildInputs = [
-    # Optional dependencies:
     mesa
     lz4
     zstd
     ffmpeg
-    libva
     vulkan-headers
-  ];
-  runtimeDependencies = [
-    vulkan-tools
     vulkan-loader
-    wayland
-    egl-wayland
   ];
 
   meta = with lib; {

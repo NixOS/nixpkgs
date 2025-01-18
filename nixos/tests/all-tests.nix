@@ -144,6 +144,7 @@ in {
   auth-mysql = handleTest ./auth-mysql.nix {};
   authelia = handleTest ./authelia.nix {};
   auto-cpufreq = handleTest ./auto-cpufreq.nix {};
+  autobrr = handleTest ./autobrr.nix {};
   avahi = handleTest ./avahi.nix {};
   avahi-with-resolved = handleTest ./avahi.nix { networkd = true; };
   ayatana-indicators = runTest ./ayatana-indicators.nix;
@@ -1203,4 +1204,5 @@ in {
   zrepl = handleTest ./zrepl.nix {};
   zsh-history = handleTest ./zsh-history.nix {};
   zwave-js = handleTest ./zwave-js.nix {};
+  zwave-js-ui = handleTest ./zwave-js-ui.nix {};
 }
