@@ -454,32 +454,11 @@ in
             lib.filesystem.packagesFromDirectoryRecursive: Unsupported file type ${type} at path ${toString path}
           ''
         ) (builtins.readDir directory);
-
-      defaultRecurse = processDir: args:
-        if args ? newScope then
-          # Create a new scope and mark it `recurseForDerivations`.
-          # This lets the packages refer to each other.
-          # See:
-          #  [lib.makeScope](https://nixos.org/manual/nixpkgs/unstable/#function-library-lib.customisation.makeScope) and
-          #  [lib.recurseIntoAttrs](https://nixos.org/manual/nixpkgs/unstable/#function-library-lib.customisation.makeScope)
-          recurseIntoAttrs (makeScope args.newScope (self:
-            # generate the attrset representing the directory, using the new scope's `callPackage` and `newScope`
-            processDir (args // {
-              inherit (self) callPackage newScope;
-            })
-          ))
-        else
-          processDir args
-      ;
     in
     {
       callPackage,
       newScope ? throw "lib.packagesFromDirectoryRecursive: newScope wasn't passed in args",
       directory,
-      # recurseIntoDirectory can modify the function used when processing directory entries
-      #  and recurseArgs can (optionally) hold data for its use ; see function documentation
-      recurseArgs ? throw "lib.packagesFromDirectoryRecursive: recurseArgs wasn't passed in args",
-      recurseIntoDirectory ? defaultRecurse,
     }@args:
     let
       defaultPath = append directory "package.nix";
@@ -487,6 +466,19 @@ in
     if pathExists defaultPath then
       # if `${directory}/package.nix` exists, call it directly
       callPackage defaultPath {}
+    else if args ? newScope then
+      # Create a new scope and mark it `recurseForDerivations`.
+      # This lets the packages refer to each other.
+      # See:
+      #  [lib.makeScope](https://nixos.org/manual/nixpkgs/unstable/#function-library-lib.customisation.makeScope) and
+      #  [lib.recurseIntoAttrs](https://nixos.org/manual/nixpkgs/unstable/#function-library-lib.customisation.makeScope)
+      recurseIntoAttrs (makeScope args.newScope (self:
+        # generate the attrset representing the directory, using the new scope's `callPackage` and `newScope`
+        processDir (args // {
+          inherit (self) callPackage newScope;
+        })
+      ))
     else
-      recurseIntoDirectory processDir args;
+      processDir args
+  ;
 }
