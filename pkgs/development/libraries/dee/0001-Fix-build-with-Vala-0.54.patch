@@ -1,0 +1,29 @@
+From 7bc49f8edd9a49d675ee5b163ab61b405e2d0258 Mon Sep 17 00:00:00 2001
+From: Jan Tojnar <jtojnar@gmail.com>
+Date: Thu, 7 Oct 2021 21:42:26 +0200
+Subject: [PATCH] Fix build with Vala 0.54
+
+Vala codegen now emits constructor methods so we need to skip @new
+so that we can use a custom one from our VAPI overrides.
+
+https://gitlab.gnome.org/GNOME/vala/-/commit/472765b90cd98c1a628975d20005c46352d665f8
+---
+ vapi/Dee-1.0.metadata | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/vapi/Dee-1.0.metadata b/vapi/Dee-1.0.metadata
+index 7e80de0..793ffd8 100644
+--- a/vapi/Dee-1.0.metadata
++++ b/vapi/Dee-1.0.metadata
+@@ -1,6 +1,8 @@
+ GListResultSet skip
+ GListResultSetClass skip
+ 
++Filter
++	.new skip
+ FilterModel
+ 	.filter unowned
+ Model
+-- 
+2.33.0
+

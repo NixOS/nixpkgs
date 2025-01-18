@@ -1,0 +1,30 @@
+diff --git a/examples/extract_features_mip.py b/examples/extract_features_mip.py
+index cdc109f..90e79fa 100644
+--- a/examples/extract_features_mip.py
++++ b/examples/extract_features_mip.py
+@@ -9,9 +9,7 @@ import mip
+ lp_path = ""
+ 
+ #  using test data, replace with your instance
+-lp_path = mip.__file__.replace("mip/__init__.py", "test/data/1443_0-9.lp").replace(
+-    "mip\\__init__.py", "test\\data\\1443_0-9.lp"
+-)
++lp_path = "test/data/1443_0-9.lp"
+ 
+ m = Model()
+ if m.solver_name.upper() in ["GRB", "GUROBI"]:
+diff --git a/examples/gen_cuts_mip.py b/examples/gen_cuts_mip.py
+index f71edae..2799734 100644
+--- a/examples/gen_cuts_mip.py
++++ b/examples/gen_cuts_mip.py
+@@ -11,9 +11,7 @@ import mip
+ lp_path = ""
+ 
+ #  using test data
+-lp_path = mip.__file__.replace("mip/__init__.py", "test/data/1443_0-9.lp").replace(
+-    "mip\\__init__.py", "test\\data\\1443_0-9.lp"
+-)
++lp_path = "test/data/1443_0-9.lp"
+ 
+ m = Model()
+ if m.solver_name.upper() in ["GRB", "GUROBI"]:
