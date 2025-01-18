@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "matrix-synapse-mjolnir-antispam";
-  version = "1.8.3";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "mjolnir";
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-yD7QGsS2Em8Z95po9pGRUDmHgHe4z0j0Jnvy3IG7xKY=";
+    tag = "v${version}";
+    sha256 = "sha256-LK2CgMLDJHfr1+ejHYeJNw2ekCnUA8GHufZ6vbifzGQ=";
   };
 
   sourceRoot = "${src.name}/synapse_antispam";
