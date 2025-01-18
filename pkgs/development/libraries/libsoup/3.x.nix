@@ -24,7 +24,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libsoup";
-  version = "3.6.3";
+  version = "3.6.4";
 
   outputs = [
     "out"
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-oNhKsHvRaLMX0xmw3EDIswG0VD+6LsQvpzORSyCBr70=";
+    hash = "sha256-m1THb1J2sFvryvK2wqFBoYj8e7HQYk7aJZ2sE6ZmXIo=";
   };
 
   depsBuildBuild = [
