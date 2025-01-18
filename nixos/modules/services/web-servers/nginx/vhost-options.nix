@@ -170,6 +170,15 @@ with lib;
       '';
     };
 
+    forceSSLExtraConfig = mkOption {
+      type = types.lines;
+      default = "";
+      description = ''
+        These lines go to the end of the vhost that redirects all plain HTTP
+        traffic to HTTPS verbatim.
+      '';
+    };
+
     rejectSSL = mkOption {
       type = types.bool;
       default = false;
