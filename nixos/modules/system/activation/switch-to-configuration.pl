@@ -123,6 +123,8 @@ if (($ENV{"NIXOS_NO_SYNC"} // "") ne "1") {
 }
 
 if ($action eq "boot") {
+    # /run/next-system/activate is called when systemctl soft-reboot is called
+    system("@coreutils@/bin/ln", "-sfn", "$toplevel", "/run/next-system") == 0 or exit 1;
     exit(0);
 }
 
