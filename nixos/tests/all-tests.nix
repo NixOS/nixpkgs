@@ -1291,6 +1291,7 @@ in
   systemd-confinement = handleTest ./systemd-confinement { };
   systemd-coredump = runTest ./systemd-coredump.nix;
   systemd-cryptenroll = runTest ./systemd-cryptenroll.nix;
+  systemd-credentials-cmdline = runTest ./systemd-credentials-cmdline.nix;
   systemd-credentials-tpm2 = runTest ./systemd-credentials-tpm2.nix;
   systemd-escaping = runTest ./systemd-escaping.nix;
   systemd-initrd-bridge = runTest ./systemd-initrd-bridge.nix;

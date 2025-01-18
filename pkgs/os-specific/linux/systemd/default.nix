@@ -938,6 +938,7 @@ stdenv.mkDerivation (finalAttrs: {
             systemd-confinement
             systemd-coredump
             systemd-cryptenroll
+            systemd-credentials-cmdline
             systemd-credentials-tpm2
             systemd-escaping
             systemd-initrd-btrfs-raid
