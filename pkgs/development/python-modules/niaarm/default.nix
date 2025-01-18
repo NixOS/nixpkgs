@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "niaarm";
-  version = "0.3.12";
+  version = "0.3.13";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "firefly-cpp";
     repo = "NiaARM";
     tag = version;
-    hash = "sha256-rYFfLtPJgIdSjRIzDIQeHwoQm9NrI6nM3/BF7wAMr1Y=";
+    hash = "sha256-nDgGX5KbthOBXX5jg99fGT28ZuBx0Hxb+aHak3Uvjoc=";
   };
 
   pythonRelaxDeps = [
