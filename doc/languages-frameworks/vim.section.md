@@ -58,25 +58,6 @@ vim-full.customize {
 }
 ```
 
-`myVimPackage` is an arbitrary name for the generated package. You can choose any name you like.
-For Neovim the syntax is:
-
-```nix
-neovim.override {
-  configure = {
-    customRC = ''
-      # here your custom configuration goes!
-    '';
-    packages.myVimPackage = with pkgs.vimPlugins; {
-      # see examples below how to use custom packages
-      start = [ ];
-      # If a Vim plugin has a dependency that is not explicitly listed in
-      # opt that dependency will always be added to start to avoid confusion.
-      opt = [ ];
-    };
-  };
-}
-```
 
 The resulting package can be added to `packageOverrides` in `~/.nixpkgs/config.nix` to make it installable:
 
@@ -177,15 +158,6 @@ Sometimes plugins require an override that must be changed when the plugin is up
 To add a new plugin, run `nix-shell -p vimPluginsUpdater --run 'vim-plugins-updater add "[owner]/[name]"'`. **NOTE**: This script automatically commits to your git repository. Be sure to check out a fresh branch before running.
 
 Finally, there are some plugins that are also packaged in nodePackages because they have Javascript-related build steps, such as running webpack. Those plugins are not listed in `vim-plugin-names` or managed by `vimPluginsUpdater` at all, and are included separately in `overrides.nix`. Currently, all these plugins are related to the `coc.nvim` ecosystem of the Language Server Protocol integration with Vim/Neovim.
-
-
-### Plugin optional configuration {#vim-plugin-required-snippet}
-
-Some plugins require specific configuration to work. We choose not to
-patch those plugins but expose the necessary configuration under
-`PLUGIN.passthru.initLua` for neovim plugins. For instance, the `unicode-vim` plugin
-needs the path towards a unicode database so we expose the following snippet `vim.g.Unicode_data_directory="${self.unicode-vim}/autoload/unicode"` under `vimPlugins.unicode-vim.passthru.initLua`.
-
 
 ## Updating plugins in nixpkgs {#updating-plugins-in-nixpkgs}
 
