@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "capstone";
-  version = "5.0.3";
+  version = "5.0.5";
 
   src = fetchFromGitHub {
     owner = "capstone-engine";
     repo = "capstone";
     rev = version;
-    hash = "sha256-LZ10czBn5oaKMHQ8xguC6VZa7wvEgPRu6oWt/22QaDs=";
+    hash = "sha256-VGqqrixg7LaqRWTAEBzpC+gUTchncz3Oa2pSq8GLskI=";
   };
 
   cmakeFlags =
