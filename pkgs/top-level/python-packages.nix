@@ -7629,6 +7629,7 @@ self: super: with self; {
   };
 
   llm = callPackage ../development/python-modules/llm { };
+  llm-claude-3 = callPackage ../development/python-modules/llm-claude-3 { };
 
   llm-cmd = callPackage ../development/python-modules/llm-cmd { };
 
