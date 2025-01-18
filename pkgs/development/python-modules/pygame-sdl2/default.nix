@@ -1,15 +1,15 @@
 {
-  lib,
   buildPythonPackage,
-  fetchFromGitHub,
-  renpy,
   cython_0,
-  SDL2,
-  SDL2_image,
-  SDL2_ttf,
-  SDL2_mixer,
+  fetchFromGitHub,
+  lib,
   libjpeg,
   libpng,
+  nix-update-script,
+  SDL2,
+  SDL2_image,
+  SDL2_mixer,
+  SDL2_ttf,
   setuptools,
 }:
 
@@ -25,35 +25,40 @@ buildPythonPackage rec {
     hash = "sha256-0itOmDScM+4HmWTpjkln56pv+yXDPB1KIDbE6ub2Tls=";
   };
 
-  nativeBuildInputs = [
-    SDL2.dev
+  build-system = [
     cython_0
+    SDL2
     setuptools
   ];
 
-  buildInputs = [
-    SDL2
-    SDL2_image
-    SDL2_ttf
-    SDL2_mixer
+  dependencies = [
     libjpeg
     libpng
+    SDL2
+    SDL2_image
+    SDL2_mixer
+    SDL2_ttf
   ];
 
   doCheck = true;
 
   preBuild = ''
-    sed -i "s/2.1.0/${version}/" setup.py
-    sed -i "s/2, 1, 0/$(echo ${version} | sed 's/\./,\ /g')/g" src/pygame_sdl2/version.py
+    substituteInPlace setup.py --replace-fail "2.1.0" "${version}"
+    substituteInPlace src/pygame_sdl2/version.py --replace-fail "2, 1, 0" "${
+      builtins.replaceStrings [ "." ] [ ", " ] version
+    }"
   '';
 
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version-regex=renpy-(.*)" ]; };
+
   meta = {
-    description = "Reimplementation of parts of pygame API using SDL2";
+    description = "Reimplementation of the Pygame API using SDL2 and related libraries";
     homepage = "https://github.com/renpy/pygame_sdl2";
     license = with lib.licenses; [
       lgpl2
       zlib
     ];
+    platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ raskin ];
   };
 }
