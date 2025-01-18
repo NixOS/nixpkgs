@@ -16,7 +16,7 @@ buildPythonPackage rec {
   version = "1.3.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "marshmallow_sqlalchemy";
