@@ -1,4 +1,5 @@
 {
+  aiohttp,
   appdirs,
   appnope,
   black,
@@ -69,14 +70,14 @@
 
 stdenv.mkDerivation rec {
   pname = "home-assistant-chip-wheels";
-  version = "2024.9.0";
+  version = "2024.11.0";
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "chip-wheels";
     rev = version;
     fetchSubmodules = false;
     leaveDotGit = true;
-    hash = "sha256-T0G6mxb/5wFOxPLL92Ay34oP+9Xvk9w0YV9VSzWJuzw=";
+    hash = "sha256-5sAznU/GdiVTtA46oQKqUpxAaIRr5NeCNlI2IzDLb1c=";
     postFetch = ''
       cd $out
       # Download connectedhomeip.
@@ -170,6 +171,7 @@ stdenv.mkDerivation rec {
   env.PIP_FIND_LINKS =
     let
       dependencies = [
+        aiohttp
         appdirs
         appnope
         black
