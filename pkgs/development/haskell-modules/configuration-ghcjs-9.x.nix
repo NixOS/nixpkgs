@@ -25,6 +25,7 @@ with haskellLib;
 
   # https://gitlab.haskell.org/ghc/ghc/-/issues/25083#note_578275
   patch = haskellLib.disableParallelBuilding super.patch;
+  reflex-dom-core = haskellLib.disableParallelBuilding super.reflex-dom-core;
 
   reflex-dom = super.reflex-dom.override (drv: {
     jsaddle-webkit2gtk = null;
