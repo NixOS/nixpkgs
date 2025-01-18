@@ -8,6 +8,8 @@
   qt5,
   python3,
   nix-update-script,
+  xxHash,
+  fmt,
 }:
 
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
@@ -18,8 +20,32 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     owner = "FEX-Emu";
     repo = "FEX";
     tag = "FEX-${finalAttrs.version}";
-    hash = "sha256-tqUJBHYSRlEUaLI4WItzotIHGMUNbdjA7o9NjBYZmHw=";
-    fetchSubmodules = true;
+
+    hash = "sha256-oXducy4uvf/3Ox6AadPWNl9450D9TiPIr53P91/qEvw=";
+
+    leaveDotGit = true;
+    postFetch = ''
+      cd $out
+      git reset
+
+      # Only fetch required submodules
+      git submodule update --init --depth 1 \
+        External/Vulkan-Headers \
+        External/drm-headers \
+        External/jemalloc \
+        External/jemalloc_glibc \
+        External/robin-map \
+        External/vixl \
+        Source/Common/cpp-optparse \
+        External/Catch2
+
+      find . -name .git -print0 | xargs -0 rm -rf
+
+      # Remove some more unnecessary directories
+      rm -r \
+        External/vixl/src/aarch32 \
+        External/vixl/test
+    '';
   };
 
   nativeBuildInputs = [
@@ -37,12 +63,17 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     ))
   ];
 
-  buildInputs = with qt5; [
-    qtbase
-    qtdeclarative
-    qtquickcontrols
-    qtquickcontrols2
-  ];
+  buildInputs =
+    [
+      xxHash
+      fmt
+    ]
+    ++ (with qt5; [
+      qtbase
+      qtdeclarative
+      qtquickcontrols
+      qtquickcontrols2
+    ]);
 
   cmakeFlags = [
     (lib.cmakeFeature "CMAKE_BUILD_TYPE" "Release")
