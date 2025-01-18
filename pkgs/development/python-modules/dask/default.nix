@@ -31,6 +31,7 @@
   dask-expr,
   hypothesis,
   pytest-asyncio,
+  pytest-mock,
   pytest-rerunfailures,
   pytest-xdist,
   pytestCheckHook,
@@ -39,14 +40,14 @@
 let
   self = buildPythonPackage rec {
     pname = "dask";
-    version = "2024.12.1";
+    version = "2025.1.0";
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = "dask";
       repo = "dask";
       tag = version;
-      hash = "sha256-QqvdldAHW2UYt1NXfk3Aa+oe97e+OpRbF8d6eKV3OJ4=";
+      hash = "sha256-KBqOyf471mNg3L9dYmR7IRSltEtC+VgC+6ptsoKgVmM=";
     };
 
     build-system = [ setuptools ];
@@ -88,12 +89,12 @@ let
     nativeCheckInputs =
       [
         dask-expr
-        pytestCheckHook
-        pytest-rerunfailures
-        pytest-xdist
-        # from panda[test]
         hypothesis
         pytest-asyncio
+        pytest-mock
+        pytest-rerunfailures
+        pytest-xdist
+        pytestCheckHook
       ]
       ++ self.optional-dependencies.array
       ++ self.optional-dependencies.dataframe
@@ -127,33 +128,10 @@ let
       "-m 'not network'"
     ];
 
-    disabledTests =
-      lib.optionals stdenv.hostPlatform.isDarwin [
-        # Test requires features of python3Packages.psutil that are
-        # blocked in sandboxed-builds
-        "test_auto_blocksize_csv"
-        # AttributeError: 'str' object has no attribute 'decode'
-        "test_read_dir_nometa"
-      ]
-      ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-        # concurrent.futures.process.BrokenProcessPool: A process in the process pool terminated abpruptly...
-        "test_foldby_tree_reduction"
-        "test_to_bag"
-      ]
-      ++ [
-        # https://github.com/dask/dask/issues/10347#issuecomment-1589683941
-        "test_concat_categorical"
-        # AttributeError: 'ArrowStringArray' object has no attribute 'tobytes'. Did you mean: 'nbytes'?
-        "test_dot"
-        "test_dot_nan"
-        "test_merge_column_with_nulls"
-        # FileNotFoundError: [Errno 2] No such file or directory: '/build/tmp301jryv_/createme/0.part'
-        "test_to_csv_nodir"
-        "test_to_json_results"
-        # FutureWarning: Those tests should be working fine when pandas will have been upgraded to 2.1.1
-        "test_apply"
-        "test_apply_infer_columns"
-      ];
+    disabledTests = [
+      # UserWarning: Insufficient elements for `head`. 10 elements requested, only 5 elements available. Try passing larger `npartitions` to `head`.
+      "test_set_index_head_nlargest_string"
+    ];
 
     __darwinAllowLocalNetworking = true;
 
