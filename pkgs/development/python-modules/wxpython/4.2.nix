@@ -109,7 +109,7 @@ buildPythonPackage rec {
 
     export DOXYGEN=${doxygen}/bin/doxygen
     export PATH="${wxGTK}/bin:$PATH"
-    export SDL_CONFIG="${SDL.dev}/bin/sdl-config"
+    export SDL_CONFIG="${SDL}/bin/sdl-config"
     export WAF=$PWD/bin/waf
 
     ${python.pythonOnBuildForHost.interpreter} build.py -v --use_syswx dox etg sip --nodoc build_py

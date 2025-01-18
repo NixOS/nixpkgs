@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.enableFeature enableSdltest "sdltest")
   ];
 
-  env.SDL_CONFIG = lib.getExe' SDL.dev "sdl-config";
+  env.SDL_CONFIG = lib.getExe' SDL "sdl-config";
 
   strictDeps = true;
 
