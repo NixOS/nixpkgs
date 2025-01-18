@@ -109,10 +109,8 @@ import ./make-test-python.nix (
         machine.wait_for_file("/tmp/test-wayland-exit-ok")
         machine.copy_from_vm("/tmp/test-wayland.out")
         machine.screenshot("foot_wayland_info")
-        # Only succeeds when a mouse is moved inside an interactive session?
-        # machine.send_chars("exit\n")
-        # machine.wait_until_fails("pgrep foot")
-        machine.succeed("pkill foot")
+        machine.send_chars("exit\n")
+        machine.wait_until_fails("pgrep foot")
 
         # Test XWayland
         machine.send_key("ctrl-alt-a")
@@ -121,10 +119,8 @@ import ./make-test-python.nix (
         machine.wait_for_file("/tmp/test-x11-exit-ok")
         machine.copy_from_vm("/tmp/test-x11.out")
         machine.screenshot("alacritty_glinfo")
-        # Only succeeds when a mouse is moved inside an interactive session?
-        # machine.send_chars("exit\n")
-        # machine.wait_until_fails("pgrep alacritty")
-        machine.succeed("pkill alacritty")
+        machine.send_chars("exit\n")
+        machine.wait_until_fails("pgrep alacritty")
       '';
   }
 )
