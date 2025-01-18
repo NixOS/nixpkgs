@@ -9,7 +9,7 @@
 }:
 buildPythonPackage rec {
   pname = "gotenberg-client";
-  version = "0.8.2";
+  version = "0.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "stumpylog";
     repo = "gotenberg-client";
     tag = version;
-    hash = "sha256-EMukzSY8nfm1L1metGhiEc9VqnI/vaLz7ITgbZi0fBw=";
+    hash = "sha256-4tIkwfqFKERVQMB9nGwGfdMtxCWm3q4hrSWnEqA0qd8=";
   };
 
   nativeBuildInputs = [ hatchling ];
