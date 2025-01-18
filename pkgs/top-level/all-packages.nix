@@ -4839,8 +4839,6 @@ with pkgs;
   mpi = openmpi; # this attribute should used to build MPI applications
   openmodelica = recurseIntoAttrs (callPackage ../applications/science/misc/openmodelica {});
 
-  prowlarr = callPackage ../servers/prowlarr { };
-
   qarte = libsForQt5.callPackage ../applications/video/qarte { };
 
   qdrant = darwin.apple_sdk_11_0.callPackage ../servers/search/qdrant {
