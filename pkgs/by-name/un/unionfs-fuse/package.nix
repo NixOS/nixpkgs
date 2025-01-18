@@ -1,4 +1,5 @@
 {
+  nix-update-script,
   lib,
   stdenv,
   fetchFromGitHub,
@@ -49,6 +50,8 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/sbin/mount.unionfs-fuse --replace mount.fuse ${fuse3}/sbin/mount.fuse3
     substituteInPlace $out/sbin/mount.unionfs-fuse --replace unionfs $out/bin/unionfs
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     broken = stdenv.hostPlatform.isDarwin;
