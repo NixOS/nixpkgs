@@ -18577,7 +18577,7 @@ with pkgs;
   };
 
   weasis = callPackage ../by-name/we/weasis/package.nix {
-    jre = jdk21;
+    jre = jdk23;
   };
 
   sieveshell = with python3.pkgs; toPythonApplication managesieve;
