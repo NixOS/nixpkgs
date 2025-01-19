@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "sqlobject";
-  version = "3.11.0";
+  version = "3.12.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "SQLObject";
     inherit version;
-    hash = "sha256-QrGyrM6e1cxCtF4GxoivXU/Gj2H8VnG7EFcgimLfdng=";
+    hash = "sha256-8vb2nRvMSXvqMSN758cjaND4PuUZ8zSuJv7K2R4iGRQ=";
   };
 
   propagatedBuildInputs = [
