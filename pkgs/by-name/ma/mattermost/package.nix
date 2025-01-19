@@ -41,6 +41,18 @@ buildGoModule rec {
         def desuffix(version): version | gsub("^(?<prefix>[^\\+]+)\\+.*$"; "\(.prefix)");
         .packages |= map_values(if has("version") then .version = desuffix(.version) else . end)
       ' < package-lock.json > package-lock.fixed.json
+
+      # Run the lockfile overlay, if present.
+      ${lib.optionalString (versionInfo.lockfileOverlay or null != null) ''
+        ${lib.getExe jq} ${lib.escapeShellArg ''
+          # Unlock a dependency and let npm-lockfile-fix relock it.
+          def unlock(root; dependency; path):
+            root | .packages[path] |= del(.resolved, .integrity)
+                 | .packages[path].version = root.packages.channels.dependencies[dependency];
+          ${versionInfo.lockfileOverlay}
+        ''} < package-lock.fixed.json > package-lock.overlaid.json
+        mv package-lock.overlaid.json package-lock.fixed.json
+      ''}
       ${lib.getExe npm-lockfile-fix} package-lock.fixed.json
 
       rm -f package-lock.json
