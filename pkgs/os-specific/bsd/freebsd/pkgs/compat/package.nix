@@ -11,6 +11,7 @@
   freebsd-lib,
   expat,
   zlib,
+  extraSrc ? [ ],
 }:
 
 let
@@ -115,7 +116,8 @@ mkDerivation {
 
       # idk bro
       "sys/sys/kbio.h"
-    ];
+    ]
+    ++ extraSrc;
 
   preBuild =
     ''
