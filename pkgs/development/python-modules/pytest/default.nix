@@ -106,12 +106,7 @@ buildPythonPackage rec {
     description = "Framework for writing tests";
     homepage = "https://docs.pytest.org";
     changelog = "https://github.com/pytest-dev/pytest/releases/tag/${version}";
-    maintainers = with maintainers; [
-      domenkozar
-      lovek323
-      madjar
-      lsix
-    ];
+    maintainers = teams.python.members;
     license = licenses.mit;
   };
 }
