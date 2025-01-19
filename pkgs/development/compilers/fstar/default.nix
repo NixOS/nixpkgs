@@ -100,6 +100,7 @@ ocamlPackages.buildDunePackage rec {
     maintainers = with maintainers; [
       gebner
       pnmadelaine
+      numinit
     ];
     mainProgram = "fstar.exe";
     platforms = with platforms; darwin ++ linux;
