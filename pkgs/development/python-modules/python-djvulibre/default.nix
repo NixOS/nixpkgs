@@ -1,49 +1,47 @@
 {
   lib,
-  buildPythonPackage,
+  python3Packages,
   fetchFromGitHub,
-  cython,
   djvulibre,
   ghostscript_headless,
-  packaging,
   pkg-config,
-  setuptools,
   unittestCheckHook,
-  wheel,
 }:
 
-buildPythonPackage rec {
+python3Packages.buildPythonPackage rec {
   pname = "python-djvulibre";
-  version = "0.9.0";
+  version = "0.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "FriedrichFroebel";
     repo = "python-djvulibre";
     rev = version;
-    hash = "sha256-OrOZFvzDEBwBmIc+i3LjNTh6K2vhe6NWtSJrFTSkrgA=";
+    hash = "sha256-5jOJyVPGJvR4YgxgJgyN47/OzsK3ASJXfn1Gt9y8rbs=";
   };
 
-  nativeBuildInputs = [
-    cython
-    packaging
+  build-system = [
+    python3Packages.cython
+    djvulibre
+    ghostscript_headless
     pkg-config
-    setuptools
-    wheel
+    python3Packages.setuptools
   ];
 
-  buildInputs = [
+  dependencies = with python3Packages; [
     djvulibre
     ghostscript_headless
   ];
 
   preCheck = ''
     rm -rf djvu
+    rm -rf tests/examples
   '';
 
   nativeCheckInputs = [ unittestCheckHook ];
 
   unittestFlagsArray = [
+    "-s"
     "tests"
     "-v"
   ];
