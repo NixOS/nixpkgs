@@ -16,7 +16,7 @@
     # the version regex here as well.
     #
     # Ensure you also check ../mattermostLatest/package.nix.
-    regex = "^v(9\.11\.[0-9]+)$";
+    regex = "^v(9\\.11\\.[0-9]+)$";
     version = "9.11.7";
     srcHash = "sha256-KeGpYy3jr7/B2mtBk9em2MXJBJR2+Wajmvtz/yT4SG8=";
     vendorHash = "sha256-alLPBfnA1o6bUUgPRqvYW/98UKR9wltmFTzKIGtVEm4=";
