@@ -13,7 +13,7 @@
 , libjpegSupport ? true, libjpeg
 , djvulibreSupport ? true, djvulibre
 , lcms2Support ? true, lcms2
-, openexrSupport ? !stdenv.hostPlatform.isMinGW, openexr
+, openexrSupport ? !stdenv.hostPlatform.isMinGW, openexr_3
 , libjxlSupport ? true, libjxl
 , libpngSupport ? true, libpng
 , liblqr1Support ? true, liblqr1
@@ -97,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional libheifSupport libheif
     ++ lib.optional djvulibreSupport djvulibre
     ++ lib.optional libjxlSupport libjxl
-    ++ lib.optional openexrSupport openexr
+    ++ lib.optional openexrSupport openexr_3
     ++ lib.optionals librsvgSupport [
       librsvg
       pango
