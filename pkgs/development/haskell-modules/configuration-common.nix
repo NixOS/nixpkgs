@@ -3069,4 +3069,5 @@ self: super: {
     "--extra-include-dirs=${lib.getDev pkgs.opencascade-occt}/include/opencascade"
   ] super.opencascade-hs;
 
+  ihp-hsx = doJailbreak super.ihp-hsx;
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
