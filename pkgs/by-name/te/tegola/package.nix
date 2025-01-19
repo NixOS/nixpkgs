@@ -5,13 +5,13 @@
   fetchFromGitHub,
 }:
 let
-  version = "0.21.0";
+  version = "0.21.2";
 
   src = fetchFromGitHub {
     owner = "go-spatial";
     repo = "tegola";
     tag = "v${version}";
-    hash = "sha256-EXCh+5t2+7j/huIKUWOqG7u+Lo4eziyvPkDGpw3xaO8=";
+    hash = "sha256-aJCxxeewOm7DOHmehnsDKoQPwPnUMsjVit41ccY6tLg=";
   };
 
   frontend = buildNpmPackage {
@@ -20,7 +20,7 @@ let
 
     src = "${src}/ui";
 
-    npmDepsHash = "sha256-rhUdWt1X5/F0uvT8gI1T9ei6Y+HK1tKj2fuTKlMAwJk=";
+    npmDepsHash = "sha256-DHJ+l3ceLieGG97kH1ri+7yZAv7R2lVYRdBhjXCy/iM=";
 
     installPhase = ''
       cp -r dist $out
