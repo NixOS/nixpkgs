@@ -1534,4 +1534,7 @@ self: super: builtins.intersectAttrs super {
     torch = pkgs.libtorch-bin;
     torch_cpu = pkgs.libtorch-bin;
   }));
+
+  # Upper bounds of text and bytestring too strict: https://github.com/zsedem/haskell-cpython/pull/24
+  cpython = doJailbreak super.cpython;
 }
