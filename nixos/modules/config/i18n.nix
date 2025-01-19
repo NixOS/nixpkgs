@@ -95,9 +95,15 @@
         LOCALE_ARCHIVE = "/run/current-system/sw/lib/locale/locale-archive";
       } // config.i18n.extraLocaleSettings;
 
-    systemd.globalEnvironment = lib.mkIf (config.i18n.supportedLocales != []) {
-      LOCALE_ARCHIVE = "${config.i18n.glibcLocales}/lib/locale/locale-archive";
+    systemd = {
+      globalEnvironment = lib.mkIf (config.i18n.supportedLocales != []) {
+        LOCALE_ARCHIVE = "${config.i18n.glibcLocales}/lib/locale/locale-archive";
+      };
+      tmpfiles.rules = [
+        "L /usr/lib/locale/locale-archive - - - - /run/current-system/sw/lib/locale/locale-archive"
+      ];
     };
+
 
     # ‘/etc/locale.conf’ is used by systemd.
     environment.etc."locale.conf".source = pkgs.writeText "locale.conf"

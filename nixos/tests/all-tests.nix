@@ -460,6 +460,7 @@ in {
   hound = handleTest ./hound.nix {};
   hub = handleTest ./git/hub.nix {};
   hydra = handleTest ./hydra {};
+  i18n = handleTest ./i18n.nix {};
   i3wm = handleTest ./i3wm.nix {};
   icingaweb2 = handleTest ./icingaweb2.nix {};
   ifm = handleTest ./ifm.nix {};
