@@ -4,25 +4,22 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
-  testers,
   nix-update-script,
-  go-task,
+  versionCheckHook,
 }:
 
 buildGoModule rec {
   pname = "go-task";
-  version = "3.40.1";
+  version = "3.41.0";
 
   src = fetchFromGitHub {
     owner = "go-task";
     repo = "task";
     tag = "v${version}";
-    hash = "sha256-jQKPTKEzTfzqPlNlKFMduaAhvDsogRv3vCGtZ4KP/O4=";
+    hash = "sha256-yJ9XTCS0BK+pcQvcbGR2ixwPODJKdfQnHgB1QoTFhzA=";
   };
 
-  vendorHash = "sha256-bw9NaJOMMKcKth0hRqNq8mqib/5zLpjComo0oj22A/U=";
-
-  doCheck = false;
+  vendorHash = "sha256-DR9G+I6PYk8jrR0CZiPqtuULTMekATNSLjyHACOmlbk=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -47,15 +44,14 @@ buildGoModule rec {
         --zsh <($out/bin/task --completion zsh)
     '';
 
-  passthru = {
-    tests = {
-      version = testers.testVersion {
-        package = go-task;
-      };
-    };
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgram = "${placeholder "out"}/bin/task";
+  versionCheckProgramArg = [ "--version" ];
 
-    updateScript = nix-update-script { };
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://taskfile.dev/";

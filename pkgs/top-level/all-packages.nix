@@ -4826,8 +4826,6 @@ with pkgs;
   mpi = openmpi; # this attribute should used to build MPI applications
   openmodelica = recurseIntoAttrs (callPackage ../applications/science/misc/openmodelica {});
 
-  prowlarr = callPackage ../servers/prowlarr { };
-
   qarte = libsForQt5.callPackage ../applications/video/qarte { };
 
   qdrant = darwin.apple_sdk_11_0.callPackage ../servers/search/qdrant {
@@ -9577,11 +9575,6 @@ with pkgs;
     doCheck = false;
   };
 
-  libfreefare = callPackage ../development/libraries/libfreefare {
-    inherit (darwin.apple_sdk.frameworks) IOKit Security;
-    inherit (darwin) libobjc;
-  };
-
   libftdi = callPackage ../development/libraries/libftdi {
     inherit (darwin) libobjc;
     inherit (darwin.apple_sdk.frameworks) IOKit Security;
@@ -13717,10 +13710,6 @@ with pkgs;
   gphoto2 = callPackage ../applications/misc/gphoto2 { };
 
   gphoto2fs = callPackage ../applications/misc/gphoto2/gphotofs.nix { };
-
-  gramps = callPackage ../applications/misc/gramps {
-        pythonPackages = python3Packages;
-  };
 
   graphicsmagick_q16 = graphicsmagick.override { quantumdepth = 16; };
   graphicsmagick-imagemagick-compat = graphicsmagick.imagemagick-compat;

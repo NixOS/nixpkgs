@@ -45,23 +45,6 @@ let
     packageOverrides = final: prev: {
       django = prev.django_5;
 
-      # TODO: drop after https://github.com/NixOS/nixpkgs/pull/306556 or similar got merged
-      django-allauth = prev.django-allauth.overridePythonAttrs (
-        { src, nativeCheckInputs, ... }:
-        let
-          version = "65.0.2";
-        in
-        {
-          inherit version;
-          src = src.override {
-            tag = version;
-            hash = "sha256-GvYdExkNuySrg8ERnWOJxucFe5HVdPAcHfRNeqiVS7M=";
-          };
-
-          nativeCheckInputs = nativeCheckInputs ++ [ prev.fido2 ];
-        }
-      );
-
       django-extensions = prev.django-extensions.overridePythonAttrs (_: {
         # fails with: TypeError: 'class Meta' got invalid attribute(s): index_together
         # probably because of django_5 but it is the latest version available and used like that in paperless-ngx
@@ -232,6 +215,7 @@ python.pkgs.buildPythonApplication rec {
       whoosh
       zxing-cpp
     ]
+    ++ django-allauth.optional-dependencies.socialaccount
     ++ redis.optional-dependencies.hiredis
     ++ uvicorn.optional-dependencies.standard;
 
