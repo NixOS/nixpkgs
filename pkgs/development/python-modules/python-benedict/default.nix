@@ -25,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "python-benedict";
-  version = "0.34.0";
+  version = "0.34.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     owner = "fabiocaccamo";
     repo = "python-benedict";
     tag = version;
-    hash = "sha256-HQ9VVgRfF5qA36yOyKT63gXuKNLLjouqYKz5EuqGA2E=";
+    hash = "sha256-ffmyTVeQKzV/sssxFuIckmBW6wmjnTWkHbVQ1v7fmGg=";
   };
 
   pythonRelaxDeps = [ "boto3" ];

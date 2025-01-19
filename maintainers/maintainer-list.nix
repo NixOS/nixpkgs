@@ -17079,6 +17079,12 @@
     github = "jackyliu16";
     githubId = 50787361;
   };
+  one-d-wide = {
+    name = "Remy D. Farley";
+    email = "one-d-wide@protonmail.com";
+    github = "one-d-wide";
+    githubId = 116499566;
+  };
   onemoresuza = {
     name = "Coutinho de Souza";
     email = "dev@onemoresuza.com";
@@ -17250,6 +17256,14 @@
     github = "otwieracz";
     githubId = 108072;
     name = "Slawomir Gonet";
+  };
+  outfoxxed = {
+    name = "outfoxxed";
+    email = "nixpkgs@outfoxxed.me";
+    matrix = "@outfoxxed:outfoxxed.me";
+    github = "outfoxxed";
+    githubId = 83010835;
+    keys = [ { fingerprint = "0181 FF89 4F34 7FCC EB06  5710 4C88 A185 FB89 301E"; } ];
   };
   ovlach = {
     email = "ondrej@vlach.xyz";

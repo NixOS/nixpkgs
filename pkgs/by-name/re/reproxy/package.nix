@@ -32,6 +32,8 @@ buildGoModule rec {
     mv $out/bin/{app,reproxy}
   '';
 
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
     description = "Simple edge server / reverse proxy";
     homepage = "https://reproxy.io/";

@@ -6,21 +6,22 @@
   installShellFiles,
   buildPackages,
   versionCheckHook,
+  nix-update-script,
   enableLegacySg ? false,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ast-grep";
-  version = "0.33.0";
+  version = "0.33.1";
 
   src = fetchFromGitHub {
     owner = "ast-grep";
     repo = "ast-grep";
-    rev = version;
-    hash = "sha256-oqG76KzyN5TnE27yxrHeEYjLwrnDMvwbOzOnN6TWvxc=";
+    tag = version;
+    hash = "sha256-p7SJhkCoo4jBDyr+Z2+qxjUwWXWpVMuXd2/DDOM7Z/Q=";
   };
 
-  cargoHash = "sha256-O3FKn90QVDk1TXJtjmaiDuXr+pwIjsAmadi+aypXeLA=";
+  cargoHash = "sha256-aCBEL+Jx4Kk7PWsxIgpdRdI7AnUAUEtRU4+JMxQ4Swk=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -72,13 +73,15 @@ rustPlatform.buildRustPackage rec {
   versionCheckProgramArg = [ "--version" ];
   doInstallCheck = true;
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     mainProgram = "ast-grep";
     description = "Fast and polyglot tool for code searching, linting, rewriting at large scale";
     homepage = "https://ast-grep.github.io/";
     changelog = "https://github.com/ast-grep/ast-grep/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       xiaoxiangmoe
       montchr
       lord-valen

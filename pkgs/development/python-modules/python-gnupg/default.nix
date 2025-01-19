@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "python-gnupg";
-  version = "0.5.3";
+  version = "0.5.4";
 
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-KQ2N25zWPfls/pKEubJl8Z/W4UXlWC3Fj9cnHwJtCkc=";
+    hash = "sha256-8v21+ylhXHfCdD4cs9kxQ1Om6HsQw30jjZGuHG/q4IY=";
   };
 
   postPatch = ''

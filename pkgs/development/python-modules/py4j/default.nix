@@ -7,12 +7,12 @@
 buildPythonPackage rec {
   pname = "py4j";
 
-  version = "0.10.9.8";
+  version = "0.10.9.9";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-evqA2+QFmFEYEZ7EfdXaldsqfW42f79d7lvZSYMtC3U=";
+    hash = "sha256-9pTK0Z76W9He5PPlJw60BmE8l0OUA15b/E7Bq6hwuHk=";
   };
 
   # No tests in archive
