@@ -13,36 +13,45 @@
   py-cpuinfo,
 
   # dependencies
+  deprecated,
   numpy,
 
-  # tests
+  # optional dependencies
+  crc32c,
   msgpack,
+
+  # tests
   pytestCheckHook,
   importlib-metadata,
 }:
 
 buildPythonPackage rec {
   pname = "numcodecs";
-  version = "0.13.1";
+  version = "0.14.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-o883iB3wiY86nA1Ed9+IEz/oUYW//le6MbzC+iB3Cbw=";
+    hash = "sha256-AKNkkk/S1gC8zm4s7Za0fEDrX52Ev0sCB6ogjZzmzRw=";
   };
 
   build-system = [
     setuptools
     setuptools-scm
     cython
+    numpy
     py-cpuinfo
   ];
 
-  dependencies = [ numpy ];
+  dependencies = [
+    numpy
+    deprecated
+  ];
 
   optional-dependencies = {
+    crc32c = [ crc32c ];
     msgpack = [ msgpack ];
     # zfpy = [ zfpy ];
   };
@@ -53,18 +62,18 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    msgpack
     importlib-metadata
-  ];
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   # https://github.com/NixOS/nixpkgs/issues/255262
   preCheck = "pushd $out";
   postCheck = "popd";
 
   meta = {
-    homepage = "https://github.com/zarr-developers/numcodecs";
-    license = lib.licenses.mit;
     description = "Buffer compression and transformation codecs for use in data storage and communication applications";
+    homepage = "https://github.com/zarr-developers/numcodecs";
+    changelog = "https://github.com/zarr-developers/numcodecs/releases/tag/v${version}";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ doronbehar ];
   };
 }
