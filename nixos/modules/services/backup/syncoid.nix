@@ -87,7 +87,7 @@ in
     package = lib.mkPackageOption pkgs "sanoid" {};
 
     interval = lib.mkOption {
-      type = lib.types.str;
+      type = with lib.types; either str (listOf str);
       default = "hourly";
       example = "*-*-* *:15:00";
       description = ''
