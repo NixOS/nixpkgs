@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "xarray";
-  version = "2024.10.0";
+  version = "2025.01.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "pydata";
     repo = "xarray";
     tag = "v${version}";
-    hash = "sha256-s5MvHp2OkomD3xNYzj9oKlVLMgHZDQRBJM6vgOAv1jQ=";
+    hash = "sha256-BUpMNdYu72/R36r6XXHQqwIWL/ip+O+yE4WxcQQ3ZLY=";
   };
   patches = [
     # Fixes https://github.com/pydata/xarray/issues/9873
@@ -52,7 +52,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "xarray" ];
 
   meta = {
-    changelog = "https://github.com/pydata/xarray/blob/${src.rev}/doc/whats-new.rst";
+    changelog = "https://github.com/pydata/xarray/blob/${src.tag}/doc/whats-new.rst";
     description = "N-D labeled arrays and datasets in Python";
     homepage = "https://github.com/pydata/xarray";
     license = lib.licenses.asl20;
