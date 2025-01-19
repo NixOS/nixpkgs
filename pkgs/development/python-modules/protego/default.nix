@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "protego";
-  version = "0.3.1";
+  version = "0.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "Protego";
-    hash = "sha256-6UQw0NJcu/I5vISdhsXlRPveUx/Mz6BZlTx9o0ShcSw=";
+    hash = "sha256-k6XmYrYTmaDh8gijJPLG6pWyPuOebL8sliRtpKZWwvY=";
   };
 
   nativeBuildInputs = [ setuptools ];
