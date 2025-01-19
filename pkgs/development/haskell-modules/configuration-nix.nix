@@ -1537,4 +1537,6 @@ self: super: builtins.intersectAttrs super {
     torch = pkgs.libtorch-bin;
     torch_cpu = pkgs.libtorch-bin;
   }));
+
+  cpython = doJailbreak super.cpython;
 }
