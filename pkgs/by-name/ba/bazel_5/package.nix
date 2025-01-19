@@ -195,7 +195,7 @@ stdenv.mkDerivation rec {
     # On Darwin, the last argument to gcc is coming up as an empty string. i.e: ''
     # This is breaking the build of any C target. This patch removes the last
     # argument if it's found to be an empty string.
-    ../trim-last-argument-to-gcc-if-empty.patch
+    ./trim-last-argument-to-gcc-if-empty.patch
 
     # On Darwin, using clang 6 to build fails because of a linker error (see #105573),
     # but using clang 7 fails because libarclite_macosx.a cannot be found when linking
@@ -215,7 +215,7 @@ stdenv.mkDerivation rec {
     # So we are replacing this bazel paths by defaultShellPath,
     # improving hermeticity and making it work in nixos.
     (substituteAll {
-      src = ../strict_action_env.patch;
+      src = ./strict_action_env.patch;
       strictActionEnvPatch = defaultShellPath;
     })
 
@@ -227,14 +227,14 @@ stdenv.mkDerivation rec {
     # bazel reads its system bazelrc in /etc
     # override this path to a builtin one
     (substituteAll {
-      src = ../bazel_rc.patch;
+      src = ./bazel_rc.patch;
       bazelSystemBazelRCPath = bazelRC;
     })
 
     # disable suspend detection during a build inside Nix as this is
     # not available inside the darwin sandbox
     ./bazel_darwin_sandbox.patch
-  ] ++ lib.optional enableNixHacks ../nix-hacks.patch;
+  ] ++ lib.optional enableNixHacks ./nix-hacks.patch;
 
   # Additional tests that check bazel’s functionality. Execute
   #
@@ -328,7 +328,7 @@ stdenv.mkDerivation rec {
     in
     (lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
       # `extracted` doesn’t work on darwin
-      shebang = callPackage ../shebang-test.nix {
+      shebang = callPackage ./shebang-test.nix {
         inherit
           runLocal
           extracted
@@ -339,11 +339,11 @@ stdenv.mkDerivation rec {
       };
     })
     // {
-      bashTools = callPackage ../bash-tools-test.nix {
+      bashTools = callPackage ./bash-tools-test.nix {
         inherit runLocal bazelTest distDir;
         bazel = bazel_self;
       };
-      cpp = callPackage ../cpp-test.nix {
+      cpp = callPackage ./cpp-test.nix {
         inherit
           runLocal
           bazelTest
@@ -352,7 +352,7 @@ stdenv.mkDerivation rec {
           ;
         bazel = bazel_self;
       };
-      java = callPackage ../java-test.nix {
+      java = callPackage ./java-test.nix {
         inherit
           runLocal
           bazelTest
@@ -361,21 +361,21 @@ stdenv.mkDerivation rec {
           ;
         bazel = bazel_self;
       };
-      protobuf = callPackage ../protobuf-test.nix {
+      protobuf = callPackage ./protobuf-test.nix {
         inherit runLocal bazelTest distDir;
         bazel = bazel_self;
       };
-      pythonBinPath = callPackage ../python-bin-path-test.nix {
+      pythonBinPath = callPackage ./python-bin-path-test.nix {
         inherit runLocal bazelTest distDir;
         bazel = bazel_self;
       };
 
-      bashToolsWithNixHacks = callPackage ../bash-tools-test.nix {
+      bashToolsWithNixHacks = callPackage ./bash-tools-test.nix {
         inherit runLocal bazelTest distDir;
         bazel = bazelWithNixHacks;
       };
 
-      cppWithNixHacks = callPackage ../cpp-test.nix {
+      cppWithNixHacks = callPackage ./cpp-test.nix {
         inherit
           runLocal
           bazelTest
@@ -384,7 +384,7 @@ stdenv.mkDerivation rec {
           ;
         bazel = bazelWithNixHacks;
       };
-      javaWithNixHacks = callPackage ../java-test.nix {
+      javaWithNixHacks = callPackage ./java-test.nix {
         inherit
           runLocal
           bazelTest
@@ -393,11 +393,11 @@ stdenv.mkDerivation rec {
           ;
         bazel = bazelWithNixHacks;
       };
-      protobufWithNixHacks = callPackage ../protobuf-test.nix {
+      protobufWithNixHacks = callPackage ./protobuf-test.nix {
         inherit runLocal bazelTest distDir;
         bazel = bazelWithNixHacks;
       };
-      pythonBinPathWithNixHacks = callPackage ../python-bin-path-test.nix {
+      pythonBinPathWithNixHacks = callPackage ./python-bin-path-test.nix {
         inherit runLocal bazelTest distDir;
         bazel = bazelWithNixHacks;
       };

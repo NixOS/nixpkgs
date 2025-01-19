@@ -227,7 +227,7 @@ stdenv.mkDerivation rec {
     # On Darwin, the last argument to gcc is coming up as an empty string. i.e: ''
     # This is breaking the build of any C target. This patch removes the last
     # argument if it's found to be an empty string.
-    ../trim-last-argument-to-gcc-if-empty.patch
+    ./trim-last-argument-to-gcc-if-empty.patch
 
     # `java_proto_library` ignores `strict_proto_deps`
     # https://github.com/bazelbuild/bazel/pull/16146
@@ -251,7 +251,7 @@ stdenv.mkDerivation rec {
     # So we are replacing this bazel paths by defaultShellPath,
     # improving hermeticity and making it work in nixos.
     (substituteAll {
-      src = ../strict_action_env.patch;
+      src = ./strict_action_env.patch;
       strictActionEnvPatch = defaultShellPath;
     })
 
@@ -263,7 +263,7 @@ stdenv.mkDerivation rec {
     # bazel reads its system bazelrc in /etc
     # override this path to a builtin one
     (substituteAll {
-      src = ../bazel_rc.patch;
+      src = ./bazel_rc.patch;
       bazelSystemBazelRCPath = bazelRC;
     })
   ] ++ lib.optional enableNixHacks ./nix-hacks.patch;
@@ -349,20 +349,20 @@ stdenv.mkDerivation rec {
 
     in (lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
       # `extracted` doesn’t work on darwin
-      shebang = callPackage ../shebang-test.nix { inherit runLocal extracted bazelTest distDir; bazel = bazel_self;};
+      shebang = callPackage ./shebang-test.nix { inherit runLocal extracted bazelTest distDir; bazel = bazel_self;};
     }) // {
-      bashTools = callPackage ../bash-tools-test.nix { inherit runLocal bazelTest distDir; bazel = bazel_self;};
-      cpp = callPackage ../cpp-test.nix { inherit runLocal bazelTest bazel-examples distDir; bazel = bazel_self;};
-      java = callPackage ../java-test.nix { inherit runLocal bazelTest bazel-examples distDir; bazel = bazel_self;};
-      protobuf = callPackage ../protobuf-test.nix { inherit runLocal bazelTest distDir; bazel = bazel_self; };
-      pythonBinPath = callPackage ../python-bin-path-test.nix { inherit runLocal bazelTest distDir; bazel = bazel_self;};
+      bashTools = callPackage ./bash-tools-test.nix { inherit runLocal bazelTest distDir; bazel = bazel_self;};
+      cpp = callPackage ./cpp-test.nix { inherit runLocal bazelTest bazel-examples distDir; bazel = bazel_self;};
+      java = callPackage ./java-test.nix { inherit runLocal bazelTest bazel-examples distDir; bazel = bazel_self;};
+      protobuf = callPackage ./protobuf-test.nix { inherit runLocal bazelTest distDir; bazel = bazel_self; };
+      pythonBinPath = callPackage ./python-bin-path-test.nix { inherit runLocal bazelTest distDir; bazel = bazel_self;};
 
-      bashToolsWithNixHacks = callPackage ../bash-tools-test.nix { inherit runLocal bazelTest distDir; bazel = bazelWithNixHacks; };
+      bashToolsWithNixHacks = callPackage ./bash-tools-test.nix { inherit runLocal bazelTest distDir; bazel = bazelWithNixHacks; };
 
-      cppWithNixHacks = callPackage ../cpp-test.nix { inherit runLocal bazelTest bazel-examples distDir; bazel = bazelWithNixHacks; };
-      javaWithNixHacks = callPackage ../java-test.nix { inherit runLocal bazelTest bazel-examples distDir; bazel = bazelWithNixHacks; };
-      protobufWithNixHacks = callPackage ../protobuf-test.nix { inherit runLocal bazelTest distDir; bazel = bazelWithNixHacks; };
-      pythonBinPathWithNixHacks = callPackage ../python-bin-path-test.nix { inherit runLocal bazelTest distDir; bazel = bazelWithNixHacks; };
+      cppWithNixHacks = callPackage ./cpp-test.nix { inherit runLocal bazelTest bazel-examples distDir; bazel = bazelWithNixHacks; };
+      javaWithNixHacks = callPackage ./java-test.nix { inherit runLocal bazelTest bazel-examples distDir; bazel = bazelWithNixHacks; };
+      protobufWithNixHacks = callPackage ./protobuf-test.nix { inherit runLocal bazelTest distDir; bazel = bazelWithNixHacks; };
+      pythonBinPathWithNixHacks = callPackage ./python-bin-path-test.nix { inherit runLocal bazelTest distDir; bazel = bazelWithNixHacks; };
     };
 
   src_for_updater = stdenv.mkDerivation rec {
