@@ -15,16 +15,16 @@
 
 buildPythonPackage rec {
   pname = "policy-sentry";
-  version = "0.13.2";
+  version = "0.14.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "salesforce";
     repo = "policy_sentry";
     tag = version;
-    hash = "sha256-J6dLKmfZJSU9k64PzOAOTgYvRf9NCpWtYuFEUxrfT5M=";
+    hash = "sha256-zfqQLABn//qktrFSCm42WClRYAe3yWZoxnWjI9n1jWQ=";
   };
 
   build-system = [ setuptools ];
