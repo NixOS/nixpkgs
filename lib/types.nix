@@ -887,7 +887,9 @@ rec {
       getSubOptions = prefix: elemType.getSubOptions (prefix ++ [ "<function body>" ]);
       getSubModules = elemType.getSubModules;
       substSubModules = m: functionTo (elemType.substSubModules m);
-      functor = (defaultFunctor "functionTo") // { wrapped = elemType; };
+      functor = (elemTypeFunctor "functionTo" { inherit elemType; }) // {
+        type = payload: types.functionTo payload.elemType;
+      };
       nestedTypes.elemType = elemType;
     };
 
