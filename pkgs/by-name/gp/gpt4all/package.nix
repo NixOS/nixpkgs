@@ -5,6 +5,7 @@
   fetchFromGitHub,
   fetchurl,
   fetchpatch,
+  nix-update-script,
   cmake,
   qt6,
   fmt,
@@ -100,6 +101,8 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace $out/share/applications/io.gpt4all.gpt4all.desktop \
       --replace-fail 'Exec=chat' 'Exec=${finalAttrs.meta.mainProgram}'
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/nomic-ai/gpt4all/releases/tag/v${finalAttrs.version}";
