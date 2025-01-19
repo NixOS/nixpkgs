@@ -1,5 +1,5 @@
 diff --git a/pyproject.toml b/pyproject.toml
-index 93b3f40..e34ff5d 100644
+index 0b59809..8811148 100644
 --- a/pyproject.toml
 +++ b/pyproject.toml
 @@ -1,7 +1,7 @@
@@ -11,21 +11,20 @@ index 93b3f40..e34ff5d 100644
  build-backend = "hatchling.build"
  
  
-@@ -27,7 +27,8 @@ classifiers = [
+@@ -26,7 +26,8 @@ classifiers = [
    "Typing :: Typed",
  ]
- dependencies = ["importlib_metadata;python_version<'3.8'"]
+ dependencies = []
 -dynamic = ["version", "readme"]
 +dynamic = ["readme"]
 +version = "@version@"
  
  [project.optional-dependencies]
  tests-mypy = [
-@@ -76,54 +77,9 @@ GitHub = "https://github.com/python-attrs/attrs"
- Funding = "https://github.com/sponsors/hynek"
+@@ -72,53 +73,9 @@ Funding = "https://github.com/sponsors/hynek"
  Tidelift = "https://tidelift.com/subscription/pkg/pypi-attrs?utm_source=pypi-attrs&utm_medium=pypi"
  
--
+ 
 -[tool.hatch.version]
 -source = "vcs"
 -raw-options = { local_scheme = "no-local-version" }
