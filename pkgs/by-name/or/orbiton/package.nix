@@ -50,7 +50,7 @@ buildGoModule rec {
 
   meta = {
     description = "Config-free text editor and IDE limited to VT100";
-    homepage = "https://orbiton.zip";
+    homepage = "https://roboticoverlords.org/orbiton/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ sikmir ];
     mainProgram = "o";
