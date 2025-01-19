@@ -23,6 +23,12 @@ buildPythonPackage rec {
     hash = "sha256-SMGzQG3AMABBIZZkie68VRjOpw/U4/FjebSRMoUBpkQ=";
   };
 
+  patches = [
+    # fix for Numpy 2.x
+    # https://github.com/santosjorge/cufflinks/pull/288
+    ./numpy2.patch
+  ];
+
   # replace duplicated pandas method
   # https://github.com/santosjorge/cufflinks/pull/249#issuecomment-1759619149
   postPatch = ''
