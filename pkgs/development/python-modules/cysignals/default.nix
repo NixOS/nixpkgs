@@ -15,12 +15,12 @@ assert pariSupport -> pari != null;
 
 buildPythonPackage rec {
   pname = "cysignals";
-  version = "1.11.4";
+  version = "1.12.2";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Dx4yHlWgf5AchqNqHkSX9v+d/nAGgdATCjjDbk6yOMM=";
+    hash = "sha256-QH2xePsYqREYynQu3mIACyvuYrYX60nSb82tfpuidxo=";
   };
 
   # explicit check:
