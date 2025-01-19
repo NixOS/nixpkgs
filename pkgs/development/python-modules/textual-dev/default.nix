@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "textual-dev";
-  version = "1.5.1";
+  version = "1.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "Textualize";
     repo = "textual-dev";
     tag = "v${version}";
-    hash = "sha256-QnMKVt1WxnwGnZFNb7Gbus7xewGvyG5xJ0hIKKK5hug=";
+    hash = "sha256-f/tceRELDLONzOVVpbbqa5eiXJ1QzYw3A47R/9EqEU4=";
   };
 
   build-system = [ poetry-core ];
@@ -43,7 +43,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Development tools for Textual";
     homepage = "https://github.com/Textualize/textual-dev";
-    changelog = "https://github.com/Textualize/textual-dev/releases/tag/v${version}";
+    changelog = "https://github.com/Textualize/textual-dev/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ yannip ];
     mainProgram = "textual";
