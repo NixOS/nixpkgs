@@ -10,6 +10,7 @@
   pcre2,
   libiconv,
   darwin,
+  php,
 }:
 
 buildPecl rec {
@@ -65,5 +66,6 @@ buildPecl rec {
       bsd3
     ];
     maintainers = lib.teams.php.members;
+    broken = lib.versionAtLeast php.version "8.4";
   };
 }
