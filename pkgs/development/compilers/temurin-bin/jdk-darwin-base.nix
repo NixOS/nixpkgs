@@ -67,6 +67,7 @@ let
     passthru = {
       jre = result;
       home = result;
+      bundle = result;
     };
 
     meta = with lib; {
