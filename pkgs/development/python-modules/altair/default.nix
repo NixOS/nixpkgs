@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "altair";
-  version = "5.4.1";
+  version = "5.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "altair-viz";
     repo = "altair";
     tag = "v${version}";
-    hash = "sha256-7C51ACaBuNtOSXqLpuCI5bnLyE9U64vNXlD4/msPq2k=";
+    hash = "sha256-lrKC4FYRQEax5E0lQNhO9FLk5UOJ0TnYzqZjndlRpGI=";
   };
 
   build-system = [ hatchling ];
