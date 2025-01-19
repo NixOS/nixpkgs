@@ -13,11 +13,11 @@
 
 let
   pname = "clr-loader";
-  version = "0.2.6";
+  version = "0.2.7.post0";
   src = fetchPypi {
     pname = "clr_loader";
     inherit version;
-    hash = "sha256-AZNIrmtqg8ekBtFFN8J3zs96OlOyY+w0LIHe1YRaZ+4=";
+    hash = "sha256-t6iz+PuxvLu2OC2IfiHRdC1PELXqIJ5K2VVo/pfhx8Y=";
   };
   patches = [ ./dotnet-8-upgrade.patch ];
 
