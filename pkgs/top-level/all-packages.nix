@@ -7869,6 +7869,11 @@ with pkgs;
     inherit (llvmPackages) llvm libclang;
   };
 
+  daggerfall-unity-unfree = daggerfall-unity.override {
+    pname = "daggerfall-unity-unfree";
+    includeUnfree = true;
+  };
+
   dbt = with python3Packages; toPythonApplication dbt-core;
 
   devbox = callPackage ../development/tools/devbox { buildGoModule = buildGo123Module; };
@@ -18318,7 +18323,7 @@ with pkgs;
   };
 
   weasis = callPackage ../by-name/we/weasis/package.nix {
-    jre = jdk21;
+    jre = jdk23;
   };
 
   sieveshell = with python3.pkgs; toPythonApplication managesieve;

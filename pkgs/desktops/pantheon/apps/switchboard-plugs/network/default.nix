@@ -6,7 +6,7 @@
   meson,
   ninja,
   pkg-config,
-  substituteAll,
+  replaceVars,
   vala,
   libadwaita,
   libgee,
@@ -31,8 +31,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       inherit networkmanagerapplet;
     })
   ];
