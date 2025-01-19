@@ -31,6 +31,8 @@
   typing-extensions,
 
   # check phase
+  cython,
+  setuptools,
   defusedxml,
   filelock,
   html5lib,
@@ -58,6 +60,12 @@ buildPythonPackage rec {
     '';
     hash = "sha256-/5zH9IdLmTGnn5MY4FFSuZOIeF/x1L9Ga/wp57XrAQo=";
   };
+
+  prePatch = ''
+    # Import setuptools before distutils to use setuptools' distutils.
+    # This avoids a dependency loop on Python >=3.12, where distutils was removed from the stdlib.
+    sed -i '/import pyximport/i\    import setuptools' tests/test_extensions/test_ext_autodoc.py
+  '';
 
   build-system = [ flit-core ];
 
@@ -87,6 +95,8 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
+    cython
+    setuptools
     defusedxml
     filelock
     html5lib
@@ -120,8 +130,6 @@ buildPythonPackage rec {
       "test_document_toc_only"
       # Assertion error
       "test_gettext_literalblock_additional"
-      # requires cython_0, but fails miserably on 3.11
-      "test_cython"
       # Could not fetch remote image: http://localhost:7777/sphinx.png
       "test_copy_images"
     ]
