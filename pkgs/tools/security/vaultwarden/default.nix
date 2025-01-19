@@ -13,7 +13,7 @@
   SystemConfiguration,
   dbBackend ? "sqlite",
   libmysqlclient,
-  postgresql,
+  libpq,
 }:
 
 let
@@ -47,7 +47,7 @@ rustPlatform.buildRustPackage rec {
       SystemConfiguration
     ]
     ++ lib.optional (dbBackend == "mysql") libmysqlclient
-    ++ lib.optional (dbBackend == "postgresql") postgresql;
+    ++ lib.optional (dbBackend == "postgresql") libpq;
 
   buildFeatures = dbBackend;
 

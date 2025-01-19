@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   validatePkgConfig,
-  postgresql,
+  libpq,
   sqlite,
   darwin,
 }:
@@ -19,11 +19,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     validatePkgConfig
-    postgresql # for pg_config
+    libpq # for pg_config
   ];
 
   buildInputs = [
-    postgresql
+    libpq
     sqlite
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Kerberos ];
 

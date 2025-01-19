@@ -3,9 +3,9 @@
   stdenv,
   darwin,
   fetchFromGitHub,
+  libpq,
   openssl,
   pkg-config,
-  postgresql,
   rustPlatform,
   zstd,
 }:
@@ -29,8 +29,8 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs =
     [
+      libpq
       openssl
-      postgresql
       zstd
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [

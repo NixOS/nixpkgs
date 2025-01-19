@@ -17,7 +17,7 @@
   libmysqlclient,
   zlib,
   enablePgSQL ? false,
-  postgresql,
+  libpq,
   enableSqlite ? false,
   sqlite,
   enableAuthDovecot ? false,
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
       libmysqlclient
       zlib
     ]
-    ++ lib.optional enablePgSQL postgresql
+    ++ lib.optional enablePgSQL libpq
     ++ lib.optionals enableSqlite [
       sqlite
       sqlite.dev
@@ -117,8 +117,8 @@ stdenv.mkDerivation rec {
       ''}
       ${lib.optionalString enablePgSQL ''
         s:^# \(LOOKUP_PGSQL=yes\)$:\1:
-        s:^\(LOOKUP_LIBS\)=\(.*\):\1=\2 -lpq -L${postgresql.lib}/lib:
-        s:^# \(LOOKUP_LIBS\)=.*:\1=-lpq -L${postgresql.lib}/lib:
+        s:^\(LOOKUP_LIBS\)=\(.*\):\1=\2 -lpq -L${libpq}/lib:
+        s:^# \(LOOKUP_LIBS\)=.*:\1=-lpq -L${libpq}/lib:
       ''}
       ${lib.optionalString enableSqlite ''
         s:^# \(LOOKUP_SQLITE=yes\)$:\1:

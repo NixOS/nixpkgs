@@ -5,7 +5,7 @@
   libxml2,
   libxslt,
   openssl,
-  postgresql,
+  libpq,
   sqlite,
 }:
 
@@ -22,7 +22,7 @@ buildNimPackage (finalAttrs: {
   };
 
   buildInputs = [
-    postgresql.out
+    libpq
     sqlite
     libxml2
     libxslt
