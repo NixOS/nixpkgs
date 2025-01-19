@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "mypy-boto3-builder";
-  version = "8.5.0";
+  version = "8.8.0";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -32,8 +32,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "youtype";
     repo = "mypy_boto3_builder";
-    rev = "refs/tags/${version}";
-    hash = "sha256-ipi31Kbh7GdKQl7PzvR4tSWzjjHogrpHPPgzn8V/RTc=";
+    tag = version;
+    hash = "sha256-aDQ+zznHS0EyanmasT1wOtw0jgo6SYGlR6132XXmqTc=";
   };
 
   build-system = [ poetry-core ];
@@ -70,7 +70,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Type annotations builder for boto3";
     homepage = "https://github.com/youtype/mypy_boto3_builder";
-    changelog = "https://github.com/youtype/mypy_boto3_builder/releases/tag/${version}";
+    changelog = "https://github.com/youtype/mypy_boto3_builder/releases/tag/${src.tag}";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ fab ];
     mainProgram = "mypy_boto3_builder";
