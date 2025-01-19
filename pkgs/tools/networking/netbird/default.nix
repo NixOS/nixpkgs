@@ -49,14 +49,15 @@ buildGoModule rec {
   nativeBuildInputs = [ installShellFiles ] ++ lib.optional ui pkg-config;
 
   buildInputs =
-    lib.optionals (stdenv.hostPlatform.isLinux && ui) [
+    with stdenv.hostPlatform;
+    lib.optionals (isLinux && ui) [
       gtk3
       libayatana-appindicator
       libX11
       libXcursor
       libXxf86vm
     ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && ui) [
+    ++ lib.optionals (isDarwin && ui) [
       Cocoa
       IOKit
       Kernel
