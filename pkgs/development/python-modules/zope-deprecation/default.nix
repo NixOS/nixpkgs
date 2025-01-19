@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "zope-deprecation";
-  version = "5.0";
+  version = "5.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "zope.deprecation";
     inherit version;
-    hash = "sha256-t8MtM5IDayFFxAsxA+cyLbaGYqsJtyZ6/hUyqdk/ZA8=";
+    hash = "sha256-Rr7UYR+1PtxzGq3rZLKDCLy4SPTMFQxgyUjQePcQhyE=";
   };
 
   build-system = [ setuptools ];
