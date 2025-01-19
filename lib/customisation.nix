@@ -493,8 +493,11 @@ rec {
       outputs = drv.outputs or [ "out" ];
 
       commonAttrs = {
-        inherit (drv) name system meta;
+        inherit (drv) name meta;
         inherit outputs;
+      }
+      // optionalAttrs (drv ? system) {
+        inherit (drv) system;
       }
       // optionalAttrs (drv._hydraAggregate or false) {
         _hydraAggregate = true;
