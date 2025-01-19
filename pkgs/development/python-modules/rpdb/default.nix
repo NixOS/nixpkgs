@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "rpdb";
-  version = "0.1.6";
+  version = "0.2.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5d1a1cee34378ab075879dc30fa6328d448a9f680a66c4e84cac7382ad92f15f";
+    sha256 = "sha256-g0bw3UmKHDB2ivPTUozf6AhtjAV8n8y1Qwta7DKuFqs=";
   };
 
   meta = with lib; {
