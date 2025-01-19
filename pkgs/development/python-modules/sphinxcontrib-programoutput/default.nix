@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-programoutput";
-  version = "0.17";
+  version = "0.18";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MA7puMrug1XSXMdLTRx+/RLmCNKtFl4xQdMeb7wVK38=";
+    hash = "sha256-CeaLZBHZN6gLYIX0/eqkLg3FVVSAOFk4Rl9BBYnS7tg=";
   };
 
   buildInputs = [ sphinx ];
