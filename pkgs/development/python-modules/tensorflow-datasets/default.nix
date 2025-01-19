@@ -49,14 +49,14 @@
 
 buildPythonPackage rec {
   pname = "tensorflow-datasets";
-  version = "4.9.6";
+  version = "4.9.7";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "tensorflow";
     repo = "datasets";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-2zR1b/Zkj3hcwiVK7wdxix3taNgFFOxqy7fSge6dAIk=";
+    tag = "v${version}";
+    hash = "sha256-pnut5z3rEYIOOhsQT6uVjPdy+SqftKptSQMwxbMXoKA=";
   };
 
   patches = [
