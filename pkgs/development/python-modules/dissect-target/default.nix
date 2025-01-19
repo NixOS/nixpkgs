@@ -44,7 +44,7 @@
 
 buildPythonPackage rec {
   pname = "dissect-target";
-  version = "3.20";
+  version = "3.20.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -53,7 +53,7 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.target";
     tag = version;
-    hash = "sha256-/7pXOyhhFAKZJYgeW8QLriSicR1mB8pwK8EHkTz0Gko=";
+    hash = "sha256-kB1RhLnmsK77V5uI/GesRQX//awWKVAtWUGgtj38URM=";
   };
 
   postPatch = ''
@@ -163,7 +163,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Dissect module that provides a programming API and command line tools";
     homepage = "https://github.com/fox-it/dissect.target";
-    changelog = "https://github.com/fox-it/dissect.target/releases/tag/${version}";
+    changelog = "https://github.com/fox-it/dissect.target/releases/tag/${src.tag}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fab ];
   };
