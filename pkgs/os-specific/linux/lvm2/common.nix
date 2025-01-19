@@ -24,6 +24,7 @@
   enableMultipath ? false,
   multipath-tools,
   nixosTests,
+  recurseIntoAttrs,
 }:
 
 # configure: error: --enable-dmeventd requires --enable-cmdlib to be used as well
@@ -181,7 +182,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests = {
     installer = nixosTests.installer.lvm;
-    lvm2 = nixosTests.lvm2;
+    lvm2 = recurseIntoAttrs nixosTests.lvm2;
   };
 
   meta = with lib; {
