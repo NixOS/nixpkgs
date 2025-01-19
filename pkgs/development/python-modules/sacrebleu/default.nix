@@ -16,7 +16,7 @@
 }:
 let
   pname = "sacrebleu";
-  version = "2.4.2";
+  version = "2.5.0";
 in
 buildPythonPackage {
   inherit pname version;
@@ -26,7 +26,7 @@ buildPythonPackage {
     owner = "mjpost";
     repo = pname;
     tag = "v${version}";
-    hash = "sha256-evSBHvDFOJlE2f9uM+NNCQeABY5lCc3Rs9dq11n7v5c=";
+    hash = "sha256-ErssNc8X376E26maGJo/P19CA7FDxZ4/h6mgRB+YNZc=";
   };
 
   # postPatch = ''
