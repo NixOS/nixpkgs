@@ -15,16 +15,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sway-easyfocus";
-  version = "unstable-2023-11-05";
+  version = "unstable-2025-01-14";
 
   src = fetchFromGitHub {
     owner = "edzdez";
     repo = "sway-easyfocus";
-    rev = "4c70f6728dbfc859e60505f0a7fd82f5a90ed42c";
-    hash = "sha256-WvYXhf13ZCoa+JAF4bYgi5mI22i9pZLtbIhF1odqaTU=";
+    rev = "4c1df53f630ac8791479eabfc9656b57de5e32e6";
+    hash = "sha256-c3vDtettZuwopI/3ShIPIAokzYqPL9Q9hDXS6xmxm8c=";
   };
 
-  cargoHash = "sha256-9cN0ervcU8JojwG7J250fprbCD2rB9kh9TbRU+wCE/Y=";
+  cargoHash = "sha256-+7CRl3KPFJ6PMMb2kmby08SiF0KlUcHc8qZtoxrc0Po=";
 
   nativeBuildInputs = [
     pkg-config
