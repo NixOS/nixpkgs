@@ -26,7 +26,7 @@
   # Runtime dependencies
   arrow-cpp,
   babeltrace,
-  boost,
+  boost186,
   bzip2,
   cryptsetup,
   cunit,
@@ -289,7 +289,7 @@ let
       };
   };
 
-  boost' = boost.override {
+  boost' = boost186.override {
     enablePython = true;
     inherit python;
   };
