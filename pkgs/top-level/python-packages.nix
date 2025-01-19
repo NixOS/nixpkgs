@@ -2652,6 +2652,8 @@ self: super: with self; {
 
   coordinates = callPackage ../development/python-modules/coordinates { };
 
+  copykitten = callPackage ../development/python-modules/copykitten { };
+
   coreapi = callPackage ../development/python-modules/coreapi { };
 
   coredis = callPackage ../development/python-modules/coredis { };
@@ -9979,6 +9981,8 @@ self: super: with self; {
 
   pandas-datareader = callPackage ../development/python-modules/pandas-datareader { };
 
+  pandera = callPackage ../development/python-modules/pandera { };
+
   pandoc-attributes = callPackage ../development/python-modules/pandoc-attributes { };
 
   pandoc-latex-environment = callPackage ../development/python-modules/pandoc-latex-environment { };
@@ -14415,6 +14419,8 @@ self: super: with self; {
   sacremoses = callPackage ../development/python-modules/sacremoses { };
 
   safe-pysha3 = callPackage ../development/python-modules/safe-pysha3 { };
+
+  safehttpx = callPackage ../development/python-modules/safehttpx { };
 
   safeio = callPackage ../development/python-modules/safeio { };
 
