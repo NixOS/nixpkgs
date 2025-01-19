@@ -1,8 +1,8 @@
 {
   lib,
-  stdenv,
+  callPackage,
+  symlinkJoin,
   buildPythonPackage,
-  debugger,
   fetchPypi,
   capstone,
   colored-traceback,
@@ -26,11 +26,48 @@
   unix-ar,
   zstandard,
   installShellFiles,
+  pwndbg,
+  gdb,
+  runCommandNoCC,
 }:
 
 let
-  debuggerName = lib.strings.getName debugger;
+  binutilsArchs = [
+    "aarch64"
+    "alpha"
+    "arm"
+    "avr"
+    "cris"
+    "hppa"
+    "ia64"
+    "m68k"
+    "mips"
+    "mips64"
+    "msp430"
+    "powerpc"
+    "powerpc64"
+    "s390"
+    "sparc"
+    "vax"
+    "xscale"
+    "i386"
+    "x86_64"
+  ];
+  binutilsPackages = lib.attrsets.genAttrs binutilsArchs (
+    targetArch: callPackage ./binutils.nix { inherit targetArch; }
+  );
+  binutilsAll = symlinkJoin {
+    name = "binutils-cross-all";
+    paths = builtins.attrValues binutilsPackages;
+  };
+  wrap-debugger =
+    pkg: path:
+    runCommandNoCC (lib.strings.getName pkg + "-wrapped") { } ''
+      mkdir -p $out/bin
+      ln -s ${pkg}/bin/${path} $out/bin/pwntools-gdb
+    '';
 in
+
 buildPythonPackage rec {
   pname = "pwntools";
   version = "4.14.0";
@@ -43,8 +80,10 @@ buildPythonPackage rec {
 
   postPatch = ''
     # Upstream hardcoded the check for the command `gdb-multiarch`;
-    # Forcefully use the provided debugger, as `gdb` (hence `pwndbg`) is built with multiarch in `nixpkgs`.
-    sed -i 's/gdb-multiarch/${debuggerName}/' pwnlib/gdb.py
+    # However `gdb` and `pwndbg` is already built with multiarch support.
+    # Here we change name it looks for to `pwntools-gdb` and which matches
+    # the name set by the `wrap-debugger` function.
+    sed -i 's/gdb-multiarch/pwntools-gdb/' pwnlib/gdb.py
   '';
 
   nativeBuildInputs = [ installShellFiles ];
@@ -82,12 +121,16 @@ buildPythonPackage rec {
     installShellCompletion --bash extra/bash_completion.d/shellcraft
   '';
 
-  postFixup = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-    mkdir -p "$out/bin"
-    makeWrapper "${debugger}/bin/${debuggerName}" "$out/bin/pwntools-gdb"
-  '';
-
   pythonImportsCheck = [ "pwn" ];
+
+  passthru.binutils = binutilsPackages // {
+    "all" = binutilsAll;
+  };
+  passthru.debugger = {
+    inherit wrap-debugger;
+    gdb = wrap-debugger gdb "gdb";
+    pwndbg = wrap-debugger pwndbg "pwndbg";
+  };
 
   meta = with lib; {
     description = "CTF framework and exploit development library";
