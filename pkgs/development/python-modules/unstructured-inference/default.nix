@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "unstructured-inference";
-  version = "0.8.1";
+  version = "0.8.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Unstructured-IO";
     repo = "unstructured-inference";
     tag = version;
-    hash = "sha256-U4mB3A0a1el7lmzsqTzjDBxp6lA4RpsceUt0OVGYVG4=";
+    hash = "sha256-XdGY9VI0qI6P2XhhdLRfwVT8vH97sqzUIvuSvz5Db/g=";
   };
 
   propagatedBuildInputs =
@@ -90,7 +90,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "hosted model inference code for layout parsing models";
     homepage = "https://github.com/Unstructured-IO/unstructured-inference";
-    changelog = "https://github.com/Unstructured-IO/unstructured-inference/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/Unstructured-IO/unstructured-inference/blob/${src.tag}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ happysalada ];
     platforms = [
