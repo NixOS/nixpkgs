@@ -31,14 +31,14 @@
 
 buildPythonPackage rec {
   pname = "great-tables";
-  version = "0.12.0";
+  version = "0.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "posit-dev";
     repo = "great-tables";
     tag = "v${version}";
-    hash = "sha256-+n8s8cmsQizEUuRGzFrOxhWL0C9OQO506msiHD58jGQ=";
+    hash = "sha256-68Fx1BNDl5/nATR7CnKgd46qWCW5Rbur8YRACzN5iUU=";
   };
 
   build-system = [
@@ -82,7 +82,7 @@ buildPythonPackage rec {
   meta = {
     description = "Library for rendering and formatting dataframes";
     homepage = "https://github.com/posit-dev/great-tables";
-    changelog = "https://github.com/posit-dev/great-tables/releases/tag/v${version}";
+    changelog = "https://github.com/posit-dev/great-tables/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
