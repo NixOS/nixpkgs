@@ -1,6 +1,6 @@
 { config, options, pkgs, lib, ... }:
 let
-  version = "1.10.1";
+  version = "1.12.0";
   cfg = config.services.kubernetes.addons.dns;
   ports = {
     dns = 10053;
@@ -56,9 +56,9 @@ in {
       type = lib.types.attrs;
       default = {
         imageName = "coredns/coredns";
-        imageDigest = "sha256:a0ead06651cf580044aeb0a0feba63591858fb2e43ade8c9dea45a6a89ae7e5e";
+        imageDigest = "sha256:40384aa1f5ea6bfdc77997d243aec73da05f27aed0c5e9d65bfa98933c519d97";
         finalImageTag = version;
-        sha256 = "0wg696920smmal7552a2zdhfncndn5kfammfa8bk8l7dz9bhk0y1";
+        sha256 = "a305ecad3294b55ffa7cf95645cd589842e53b3a5d912107c108852c4bd1f8ed";
       };
     };
 
@@ -278,6 +278,7 @@ in {
                   securityContext = {
                     allowPrivilegeEscalation = false;
                     capabilities = {
+                      add = [ "NET_BIND_SERVICE" ];
                       drop = [ "all" ];
                     };
                     readOnlyRootFilesystem = true;
