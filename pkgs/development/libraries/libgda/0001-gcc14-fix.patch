@@ -1,0 +1,37 @@
+From d9cc38bf8ea3b4ba194c44fb9aa35bd022acdf4a Mon Sep 17 00:00:00 2001
+From: wxt <3264117476@qq.com>
+Date: Sun, 19 Jan 2025 21:28:52 +0800
+Subject: [PATCH] gcc14 fix
+
+---
+ m4/mysql.m4      | 1 +
+ m4/postgresql.m4 | 1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/m4/mysql.m4 b/m4/mysql.m4
+index 535a081a9..c17418004 100644
+--- a/m4/mysql.m4
++++ b/m4/mysql.m4
+@@ -177,6 +177,7 @@ int main() {
+ 
+             AC_LINK_IFELSE([AC_LANG_SOURCE([
+ #include <mysql.h>
++#include <stdio.h>
+ int main() {
+     printf("%p", mysql_real_connect);
+     return 0;
+diff --git a/m4/postgresql.m4 b/m4/postgresql.m4
+index 252d9053d..a7e308d1a 100644
+--- a/m4/postgresql.m4
++++ b/m4/postgresql.m4
+@@ -133,6 +133,7 @@ m4_define([_POSTGRES_CHECK_INTERNAL],
+ 	                LIBS="$LIBS -L$d/$pg_loclibdir -lpq"
+    	                AC_LINK_IFELSE([AC_LANG_SOURCE([
+ #include <libpq-fe.h>
++#include <stdio.h>
+ int main() {
+     printf("%p", PQconnectdb);
+     return 0;
+-- 
+2.47.0
+
