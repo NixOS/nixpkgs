@@ -10,6 +10,7 @@ let
     nullOr
     functionTo
     coercedTo
+    either
     ;
 in
 {
@@ -56,6 +57,12 @@ in
         options.coercedTo = mkOption {
           type = coercedTo (listOf types.str) lib.id (listOf types.str);
         };
+        options.either = mkOption {
+          type = either (listOf types.str) (listOf types.str);
+        };
+        options.mergedEither = mkOption {
+          type = either (listOf types.str) (listOf types.str);
+        };
       }
     )
     # Module B
@@ -76,6 +83,9 @@ in
         };
         options.mergedFunctionTo = mkOption {
           type = functionTo (listOf types.str);
+        };
+        options.mergedEither = mkOption {
+          type = either (listOf types.str) (listOf types.str);
         };
       }
     )
