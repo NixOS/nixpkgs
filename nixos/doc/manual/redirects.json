@@ -1,4 +1,13 @@
 {
+  "module-services-reposilite": [
+    "index.html#module-services-reposilite"
+  ],
+  "module-services-reposilite-generating-a-token": [
+    "index.html#module-services-reposilite-generating-a-token"
+  ],
+  "module-services-reposilite-quickstart": [
+    "index.html#module-services-reposilite-quickstart"
+  ],
   "book-nixos-manual": [
     "index.html#book-nixos-manual"
   ],
