@@ -102,6 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       pandapip1
       Scrumplex
+      txkyel
     ];
     platforms = lib.platforms.linux;
   };
