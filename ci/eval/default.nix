@@ -72,6 +72,7 @@ let
       chunkSize,
       checkMeta ? true,
       includeBroken ? true,
+      includeSubpackages ? evalSystem != "aarch64-darwin" && evalSystem != "x86_64-darwin",
       # Whether to just evaluate a single chunk for quick testing
       quickTest ? false,
     }:
@@ -100,6 +101,7 @@ let
           --arg systems "[ \"$system\" ]" \
           --arg checkMeta ${lib.boolToString checkMeta} \
           --arg includeBroken ${lib.boolToString includeBroken} \
+          --arg includeSubpackages ${lib.boolToString includeSubpackages} \
           -I ${nixpkgs} \
           -I ${attrpathFile} \
           > "$outputDir/result/$myChunk"

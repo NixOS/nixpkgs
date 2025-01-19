@@ -491,6 +491,7 @@ let
       broken = isMarkedBroken attrs;
       unsupported = hasUnsupportedPlatform attrs;
       insecure = isMarkedInsecure attrs;
+      hydraPlatforms = if config.allowHydra then attrs.hydraPlatforms or [] else [];
 
       available = validity.valid != "no"
       && (if config.checkMetaRecursively or false

@@ -73,6 +73,7 @@ let
     id
     isDerivation
     optionals
+    subtractLists
     ;
 
   inherit (release-lib.lib.attrsets) unionOfDisjoint;
@@ -324,6 +325,8 @@ let
   jobs = let
     packagePlatforms = release-lib.recursiveMapPackages
       (if attrNamesOnly then id else release-lib.getPlatforms);
+    packagePlatformsExclude = systems: release-lib.recursiveMapPackages
+      (if attrNamesOnly then id else (drv: subtractLists (release-lib.getPlatforms drv) systems));
     packageJobs = packagePlatforms pkgs // {
       haskell.compiler = packagePlatforms pkgs.haskell.compiler;
       haskellPackages = packagePlatforms pkgs.haskellPackages;
@@ -344,7 +347,7 @@ let
       idrisPackages = packagePlatforms pkgs.idrisPackages;
       agdaPackages = packagePlatforms pkgs.agdaPackages;
 
-      pkgsLLVM.stdenv = [ "x86_64-linux" "aarch64-linux" ];
+      pkgsLLVM = packagePlatformsExclude [ "aarch64-darwin" "x86_64-darwin" ] pkgs.pkgsLLVM;
       pkgsArocc.stdenv = [ "x86_64-linux" "aarch64-linux" ];
       pkgsZig.stdenv = [ "x86_64-linux" "aarch64-linux" ];
       pkgsMusl.stdenv = [ "x86_64-linux" "aarch64-linux" ];

@@ -175,6 +175,10 @@ let
     lib.optionalAttrs allowCustomOverrides
       ((config.packageOverrides or (super: {})) super);
 
+  nixpkgsFunSub = attrs: nixpkgsFun (attrs // {
+    allowHydra = config.allowHydraSubpackages;
+  });
+
   # Convenience attributes for instantitating package sets. Each of
   # these will instantiate a new version of allPackages. Currently the
   # following package sets are provided:
@@ -192,7 +196,7 @@ let
                               nixpkgsFun { inherit crossSystem; })
                               lib.systems.examples;
 
-    pkgsLLVM = nixpkgsFun {
+    pkgsLLVM = if stdenv.hostPlatform.isDarwin then self else nixpkgsFunSub {
       overlays = [
         (self': super': {
           pkgsLLVM = super';
@@ -207,7 +211,7 @@ let
       };
     };
 
-    pkgsArocc = nixpkgsFun {
+    pkgsArocc = nixpkgsFunSub {
       overlays = [
         (self': super': {
           pkgsArocc = super';
@@ -222,7 +226,7 @@ let
       };
     };
 
-    pkgsZig = nixpkgsFun {
+    pkgsZig = nixpkgsFunSub {
       overlays = [
         (self': super': {
           pkgsZig = super';
@@ -240,7 +244,7 @@ let
     # All packages built with the Musl libc. This will override the
     # default GNU libc on Linux systems. Non-Linux systems are not
     # supported. 32-bit is also not supported.
-    pkgsMusl = if stdenv.hostPlatform.isLinux && stdenv.buildPlatform.is64bit then nixpkgsFun {
+    pkgsMusl = if stdenv.hostPlatform.isLinux && stdenv.buildPlatform.is64bit then nixpkgsFunSub {
       overlays = [ (self': super': {
         pkgsMusl = super';
       })] ++ overlays;
@@ -252,7 +256,7 @@ let
 
     # All packages built for i686 Linux.
     # Used by wine, firefox with debugging version of Flash, ...
-    pkgsi686Linux = if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86 then nixpkgsFun {
+    pkgsi686Linux = if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86 then nixpkgsFunSub {
       overlays = [ (self': super': {
         pkgsi686Linux = super';
       })] ++ overlays;
@@ -265,7 +269,7 @@ let
     } else throw "i686 Linux package set can only be used with the x86 family.";
 
     # x86_64-darwin packages for aarch64-darwin users to use with Rosetta for incompatible packages
-    pkgsx86_64Darwin = if stdenv.hostPlatform.isDarwin then nixpkgsFun {
+    pkgsx86_64Darwin = if stdenv.hostPlatform.isDarwin then nixpkgsFunSub {
       overlays = [ (self': super': {
         pkgsx86_64Darwin = super';
       })] ++ overlays;
@@ -282,7 +286,7 @@ let
     pkgsLinux =
       if stdenv.hostPlatform.isLinux
       then self
-      else nixpkgsFun {
+      else nixpkgsFunSub {
         localSystem = lib.systems.elaborate "${stdenv.hostPlatform.parsed.cpu.name}-linux";
       };
 
@@ -292,7 +296,7 @@ let
     appendOverlays = extraOverlays:
       if extraOverlays == []
       then self
-      else nixpkgsFun { overlays = args.overlays ++ extraOverlays; };
+      else nixpkgsFunSub { overlays = args.overlays ++ extraOverlays; };
 
     # NOTE: each call to extend causes a full nixpkgs rebuild, adding ~130MB
     #       of allocations. DO NOT USE THIS IN NIXPKGS.
@@ -305,7 +309,7 @@ let
 
     # Fully static packages.
     # Currently uses Musl on Linux (couldn’t get static glibc to work).
-    pkgsStatic = nixpkgsFun ({
+    pkgsStatic = nixpkgsFunSub ({
       overlays = [ (self': super': {
         pkgsStatic = super';
       })] ++ overlays;
@@ -321,7 +325,7 @@ let
       };
     });
 
-    pkgsExtraHardening = nixpkgsFun {
+    pkgsExtraHardening = nixpkgsFunSub {
       overlays = [
         (self': super': {
           pkgsExtraHardening = super';

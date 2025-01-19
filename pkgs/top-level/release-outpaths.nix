@@ -7,6 +7,7 @@
 {
   checkMeta,
   includeBroken ? true, # set this to false to exclude meta.broken packages from the output
+  includeSubpackages ? true, # set this to false to exclude "pkgs*"
   path ? ./../..,
 
   # used by pkgs/top-level/release-attrnames-superset.nix
@@ -28,6 +29,7 @@ let
             allowAliases = false;
             allowBroken = includeBroken;
             allowUnfree = false;
+            allowHydraSubpackages = includeSubpackages;
             allowInsecurePredicate = x: true;
             checkMeta = checkMeta;
 
@@ -86,7 +88,7 @@ let
     "stdenvBootstrapTools"
     "moduleSystem"
     "lib-tests" # these just confuse the output
-  ];
+  ] ++ lib.optional (!includeSubpackages) "pkgsLLVM";
 
 in
 tweak (builtins.removeAttrs hydraJobs blacklist)

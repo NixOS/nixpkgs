@@ -92,6 +92,24 @@ let
       '';
     };
 
+    allowHydra = mkOption {
+      type = types.bool;
+      default = true;
+      defaultText = literalExpression ''true'';
+      description = ''
+        Whether to enable Hydra building of all packages.
+      '';
+    };
+
+    allowHydraSubpackages = mkOption {
+      type = types.bool;
+      default = false;
+      defaultText = literalExpression ''false'';
+      description = ''
+        Whether to enable Hydra building of all sub-nixpkgs instances.
+      '';
+    };
+
     allowUnfree = mkOption {
       type = types.bool;
       default = false;
