@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "ulid-transform";
-  version = "1.0.2";
+  version = "1.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "bdraco";
     repo = "ulid-transform";
     tag = "v${version}";
-    hash = "sha256-99hq329jUpok+rP8WzxN1yTOp15Zfy7tIGRpQMecrc0=";
+    hash = "sha256-+P5sd3FSk9SYmeHkatB88EE+/1vktyiJJeaecbBkBhI=";
   };
 
   build-system = [
@@ -44,7 +44,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library to create and transform ULIDs";
     homepage = "https://github.com/bdraco/ulid-transform";
-    changelog = "https://github.com/bdraco/ulid-transform/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/bdraco/ulid-transform/blob/${src.tag}/CHANGELOG.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
