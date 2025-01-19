@@ -51,14 +51,14 @@ let
   cutlass = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "cutlass";
-    tag = "v${version}";
+    rev = "refs/tags/v3.5.0";
     sha256 = "sha256-D/s7eYsa5l/mfx73tE4mnFcTQdYqGmXa9d9TCryw4e4=";
   };
 in
 
 buildPythonPackage rec {
   pname = "vllm";
-  version = "0.6.6.post1";
+  version = "0.6.2";
   pyproject = true;
 
   stdenv = if cudaSupport then cudaPackages.backendStdenv else args.stdenv;
@@ -67,7 +67,7 @@ buildPythonPackage rec {
     owner = "vllm-project";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-bMlIofYHTgdTmD5mGpJMt0p+23uchqnhIO/oSRN0TdI=";
+    hash = "sha256-zUkqAPPhDRdN9rDQ2biCl1B+trV0xIHXub++v9zsQGo=";
   };
 
   patches = [
@@ -169,7 +169,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "High-throughput and memory-efficient inference and serving engine for LLMs";
-    changelog = "https://github.com/vllm-project/vllm/releases/tag/${src.tag}";
+    changelog = "https://github.com/vllm-project/vllm/releases/tag/v${version}";
     homepage = "https://github.com/vllm-project/vllm";
     license = licenses.asl20;
     maintainers = with maintainers; [
