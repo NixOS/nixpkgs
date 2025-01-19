@@ -110,7 +110,7 @@ stdenvNoCC.mkDerivation (
       shell =
         let
           devmode' = devmode.override {
-            buildArgs = "./.";
+            buildArgs = toString ../.;
             open = "/share/doc/nixpkgs/manual.html";
           };
           nixos-render-docs-redirects' = writeShellScriptBin "redirects" "${lib.getExe nixos-render-docs-redirects} --file ${toString ../redirects.json} $@";
