@@ -13,7 +13,7 @@ buildPythonPackage rec {
   version = "2025.1.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "pvizeli";
