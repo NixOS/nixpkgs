@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
+    flex
     libtool
     xbitmaps
     libXext
@@ -55,9 +56,17 @@ stdenv.mkDerivation rec {
     libXau
   ];
 
-  postPatch = lib.optionalString (!demoSupport) ''
-    sed 's/\<demos\>//' -i Makefile.{am,in}
-  '';
+  strictDeps = true;
+
+  postPatch =
+    ''
+      # fails when cross-compiling - useless for Nix anyhow
+      substituteInPlace ./configure --replace-fail \
+        'as_fn_error $? "cannot check for file existence' '#'
+    ''
+    + lib.optionalString (!demoSupport) ''
+      sed 's/\<demos\>//' -i Makefile.{am,in}
+    '';
 
   patches = [
     ./Remove-unsupported-weak-refs-on-darwin.patch
@@ -90,6 +99,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  # provide correct configure answers for cross builds
+  configureFlags = [
+    "ac_cv_func_setpgrp_void=yes"
+  ];
+
   env = lib.optionalAttrs stdenv.cc.isClang {
     NIX_CFLAGS_COMPILE = toString [
       "-Wno-error=implicit-function-declaration"
@@ -105,6 +119,9 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     license = with licenses; [ lgpl21Plus ];
     maintainers = with maintainers; [ qyliss ];
-    broken = demoSupport && stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.version "16";
+    # TODO: fix compilation of makestrs for build platform when cross-compiling.
+    broken =
+      (demoSupport && stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.version "16")
+      || (!stdenv.buildPlatform.canExecute stdenv.hostPlatform);
   };
 }
