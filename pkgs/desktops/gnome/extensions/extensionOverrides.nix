@@ -17,7 +17,7 @@
 , nvme-cli
 , procps
 , smartmontools
-, substituteAll
+, replaceVars
 , touchegg
 , util-linux
 , vte
@@ -72,8 +72,7 @@ super: lib.trivial.pipe super [
   (patchExtension "eepresetselector@ulville.github.io" (old: {
     patches = [
       # Needed to find the currently set preset
-      (substituteAll {
-        src = ./extensionOverridesPatches/eepresetselector_at_ulville.github.io.patch;
+      (replaceVars ./extensionOverridesPatches/eepresetselector_at_ulville.github.io.patch {
         easyeffects_gsettings_path = "${glib.getSchemaPath easyeffects}";
       })
     ];
@@ -81,8 +80,7 @@ super: lib.trivial.pipe super [
 
   (patchExtension "freon@UshakovVasilii_Github.yahoo.com" (old: {
     patches = [
-      (substituteAll {
-        src = ./extensionOverridesPatches/freon_at_UshakovVasilii_Github.yahoo.com.patch;
+      (replaceVars ./extensionOverridesPatches/freon_at_UshakovVasilii_Github.yahoo.com.patch {
         inherit hddtemp liquidctl lm_sensors procps smartmontools;
         netcat = netcat-gnu;
         nvmecli = nvme-cli;
@@ -103,11 +101,10 @@ super: lib.trivial.pipe super [
   (patchExtension "gtk4-ding@smedius.gitlab.com" (old: {
     nativeBuildInputs = [ wrapGAppsHook3 ];
     patches = [
-      (substituteAll {
+      (replaceVars ./extensionOverridesPatches/gtk4-ding_at_smedius.gitlab.com.patch {
         inherit gjs;
         util_linux = util-linux;
         xdg_utils = xdg-utils;
-        src = ./extensionOverridesPatches/gtk4-ding_at_smedius.gitlab.com.patch;
         nautilus_gsettings_path = "${glib.getSchemaPath nautilus}";
       })
     ];
@@ -129,8 +126,7 @@ super: lib.trivial.pipe super [
 
   (patchExtension "system-monitor@gnome-shell-extensions.gcampax.github.com" (old: {
     patches = [
-      (substituteAll {
-        src = ./extensionOverridesPatches/system-monitor_at_gnome-shell-extensions.gcampax.github.com.patch;
+      (replaceVars ./extensionOverridesPatches/system-monitor_at_gnome-shell-extensions.gcampax.github.com.patch {
         gtop_path = "${libgtop}/lib/girepository-1.0";
       })
     ];
@@ -138,8 +134,7 @@ super: lib.trivial.pipe super [
 
   (patchExtension "system-monitor-next@paradoxxx.zero.gmail.com" (old: {
     patches = [
-      (substituteAll {
-        src = ./extensionOverridesPatches/system-monitor-next_at_paradoxxx.zero.gmail.com.patch;
+      (replaceVars ./extensionOverridesPatches/system-monitor-next_at_paradoxxx.zero.gmail.com.patch {
         gtop_path = "${libgtop}/lib/girepository-1.0";
       })
     ];
@@ -148,8 +143,7 @@ super: lib.trivial.pipe super [
 
   (patchExtension "Vitals@CoreCoding.com" (old: {
     patches = [
-      (substituteAll {
-        src = ./extensionOverridesPatches/vitals_at_corecoding.com.patch;
+      (replaceVars ./extensionOverridesPatches/vitals_at_corecoding.com.patch {
         gtop_path = "${libgtop}/lib/girepository-1.0";
       })
     ];
