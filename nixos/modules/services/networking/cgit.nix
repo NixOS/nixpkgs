@@ -4,24 +4,121 @@
   pkgs,
   ...
 }:
+
+with lib;
+
 let
-  cfgs = config.services.cgit;
+  cfg = config.services.cgit;
 
   settingType =
-    with lib.types;
+    with types;
     oneOf [
       bool
       int
       str
     ];
+
   repeatedSettingType =
-    with lib.types;
+    with types;
     oneOf [
       settingType
       (listOf settingType)
     ];
 
-  genAttrs' = names: f: lib.listToAttrs (map f names);
+  vhostOptions = {
+    options = {
+      package = mkPackageOption pkgs "cgit" {
+        extraDescription = "The cgit package cannot be overwritten per location because cgit expects its static files to be available at `/cgit.css` and so forth.";
+      };
+
+      locations = mkOption {
+        description = "Declarative configuration of cgit locations";
+        type = with types; attrsOf (submodule locationOptions);
+        default = { };
+        example = literalExpression ''
+          {
+            "/git/" = {
+              scanPath = "/var/lib/git";
+            };
+          }
+        '';
+      };
+    };
+  };
+
+  locationOptions = {
+    options = {
+      repos = mkOption {
+        description = "cgit repository settings, see cgitrc(5)";
+        type = with types; attrsOf (attrsOf settingType);
+        default = { };
+        example = {
+          blah = {
+            path = "/var/lib/git/example";
+            desc = "An example repository";
+          };
+        };
+      };
+
+      scanPath = mkOption {
+        description = "A path which will be scanned for repositories.";
+        type = types.nullOr types.path;
+        default = null;
+        example = "/var/lib/git";
+      };
+
+      user = mkOption {
+        description = ''
+          User to run the cgit service, or rather its fcgiwrap instance, as.
+
+          fcgiwrap instances are reused if they share the same user and group.
+        '';
+        type = types.str;
+        default = "cgit";
+      };
+
+      group = mkOption {
+        description = ''
+          Group to run the cgit service, or rather its fcgiwrap instance, as.
+
+          fcgiwrap instances are reused if they share the same user and group.
+        '';
+        type = types.str;
+        default = "cgit";
+      };
+
+      settings = mkOption {
+        description = "cgit configuration, see cgitrc(5)";
+        type = types.attrsOf settingType;
+        default = { };
+        example = literalExpression ''
+          {
+            enable-follow-links = true;
+            source-filter = "''${pkgs.cgit}/lib/cgit/filters/syntax-highlighting.py";
+          }
+        '';
+      };
+
+      extraConfig = mkOption {
+        description = "These lines go to the end of cgitrc verbatim.";
+        type = types.lines;
+        default = "";
+      };
+
+      locationConfig = mkOption {
+        description = "Additional declarative location config for nginx";
+        type = types.submodule (import ../web-servers/nginx/location-options.nix { inherit lib config; });
+        default = { };
+        example = literalExpression ''
+          {
+            basicAuth = {
+              user = "password";
+            };
+          }
+        '';
+      };
+    };
+  };
 
   regexEscape =
     let
@@ -53,25 +150,34 @@ let
         "" # \f / 0x0C
       ];
     in
-    lib.replaceStrings special (map (c: "\\${c}") special);
+    replaceStrings special (map (c: "\\${c}") special);
 
-  stripLocation = cfg: lib.removeSuffix "/" cfg.nginx.location;
+  stripLocation = removeSuffix "/";
 
-  regexLocation = cfg: regexEscape (stripLocation cfg);
+  regexLocation = loc: regexEscape (stripLocation loc);
 
-  mkFastcgiPass = name: cfg: ''
-    ${
-      if cfg.nginx.location == "/" then
-        ''
-          fastcgi_param PATH_INFO $uri;
-        ''
-      else
-        ''
-          fastcgi_split_path_info ^(${regexLocation cfg})(/.+)$;
-          fastcgi_param PATH_INFO $fastcgi_path_info;
-        ''
-    }fastcgi_pass unix:${config.services.fcgiwrap.instances."cgit-${name}".socket.address};
-  '';
+  mkFastcgiPass =
+    { loc, locCfg }:
+    let
+      inherit
+        (config.services.fcgiwrap.instances.${fcgiwrapInstanceName { inherit (locCfg) user group; }})
+        socket
+        ;
+    in
+    assert socket.type == "unix";
+    ''
+      ${
+        if loc == "/" then
+          ''
+            fastcgi_param PATH_INFO $uri;
+          ''
+        else
+          ''
+            fastcgi_split_path_info ^(${regexLocation loc})(/.+)$;
+            fastcgi_param PATH_INFO $fastcgi_path_info;
+          ''
+      }fastcgi_pass unix:${socket.address};
+    '';
 
   cgitrcLine =
     name: value:
@@ -84,205 +190,187 @@ let
         toString value
     }";
 
-  # list value as multiple lines (for "readme" for example)
-  cgitrcEntry =
-    name: value: if lib.isList value then map (cgitrcLine name) value else [ (cgitrcLine name value) ];
-
   mkCgitrc =
-    cfg:
+    loc: locCfg:
     pkgs.writeText "cgitrc" ''
       # global settings
-      ${lib.concatStringsSep "\n" (
-        lib.flatten (
-          lib.mapAttrsToList cgitrcEntry ({ virtual-root = cfg.nginx.location; } // cfg.settings)
-        )
-      )}
-      ${lib.optionalString (cfg.scanPath != null) (cgitrcLine "scan-path" cfg.scanPath)}
+      ${concatStringsSep "\n" (mapAttrsToList cgitrcLine ({ virtual-root = loc; } // locCfg.settings))}
+      ${optionalString (locCfg.scanPath != null) (cgitrcLine "scan-path" locCfg.scanPath)}
 
       # repository settings
-      ${lib.concatStrings (
-        lib.mapAttrsToList (url: settings: ''
+      ${concatStrings (
+        mapAttrsToList (url: settings: ''
           ${cgitrcLine "repo.url" url}
-          ${lib.concatStringsSep "\n" (lib.mapAttrsToList (name: cgitrcLine "repo.${name}") settings)}
-        '') cfg.repos
+          ${concatStringsSep "\n" (mapAttrsToList (name: cgitrcLine "repo.${name}") settings)}
+        '') locCfg.repos
       )}
 
       # extra config
-      ${cfg.extraConfig}
+      ${locCfg.extraConfig}
     '';
 
-  fcgiwrapUnitName = name: "fcgiwrap-cgit-${name}";
-  fcgiwrapRuntimeDir = name: "/run/${fcgiwrapUnitName name}";
+  fcgiwrapInstanceName = { user, group }: "cgit-${user}:${group}";
+  fcgiwrapUnitName = { user, group }: "fcgiwrap-${fcgiwrapInstanceName { inherit user group; }}";
+
   gitProjectRoot =
-    name: cfg: if cfg.scanPath != null then cfg.scanPath else "${fcgiwrapRuntimeDir name}/repos";
+    locCfg:
+    if locCfg.scanPath != null then
+      locCfg.scanPath
+    else
+      pkgs.runCommandLocal "cgit-repos" { } ''
+        mkdir -p "$out"
+        ${concatStrings (
+          mapAttrsToList (name: value: ''
+            ln -s ${escapeShellArg value.path} "$out"/${escapeShellArg name}
+          '') locCfg.repos
+        )}
+      '';
 
 in
 {
   options = {
-    services.cgit = lib.mkOption {
-      description = "Configure cgit instances.";
-      default = { };
-      type = lib.types.attrsOf (
-        lib.types.submodule (
-          { config, ... }:
+    services.cgit = {
+      enable = mkEnableOption "cgit";
+
+      virtualHosts = mkOption {
+        description = "Declarative configuration of cgit virtual hosts";
+        type = with types; attrsOf (submodule vhostOptions);
+        default = { };
+        example = literalExpression ''
           {
-            options = {
-              enable = lib.mkEnableOption "cgit";
-
-              package = lib.mkPackageOption pkgs "cgit" { };
-
-              nginx.virtualHost = lib.mkOption {
-                description = "VirtualHost to serve cgit on, defaults to the attribute name.";
-                type = lib.types.str;
-                default = config._module.args.name;
-                example = "git.example.com";
-              };
-
-              nginx.location = lib.mkOption {
-                description = "Location to serve cgit under.";
-                type = lib.types.str;
-                default = "/";
-                example = "/git/";
-              };
-
-              repos = lib.mkOption {
-                description = "cgit repository settings, see cgitrc(5)";
-                type = with lib.types; attrsOf (attrsOf settingType);
-                default = { };
-                example = {
-                  blah = {
-                    path = "/var/lib/git/example";
-                    desc = "An example repository";
-                  };
-                };
-              };
-
-              scanPath = lib.mkOption {
-                description = "A path which will be scanned for repositories.";
-                type = lib.types.nullOr lib.types.path;
-                default = null;
-                example = "/var/lib/git";
-              };
-
-              settings = lib.mkOption {
-                description = "cgit configuration, see cgitrc(5)";
-                type = lib.types.attrsOf repeatedSettingType;
-                default = { };
-                example = lib.literalExpression ''
-                  {
-                    enable-follow-links = true;
-                    source-filter = "''${pkgs.cgit}/lib/cgit/filters/syntax-highlighting.py";
-                  }
-                '';
-              };
-
-              extraConfig = lib.mkOption {
-                description = "These lines go to the end of cgitrc verbatim.";
-                type = lib.types.lines;
-                default = "";
-              };
-
-              user = lib.mkOption {
-                description = "User to run the cgit service as.";
-                type = lib.types.str;
-                default = "cgit";
-              };
-
-              group = lib.mkOption {
-                description = "Group to run the cgit service as.";
-                type = lib.types.str;
-                default = "cgit";
+            "localhost" = {
+              locations."/git" = {
+                scanPath = "/var/lib/git";
               };
             };
           }
-        )
-      );
+        '';
+      };
     };
   };
 
-  config = lib.mkIf (lib.any (cfg: cfg.enable) (lib.attrValues cfgs)) {
-    assertions = lib.mapAttrsToList (vhost: cfg: {
-      assertion = !cfg.enable || (cfg.scanPath == null) != (cfg.repos == { });
-      message = "Exactly one of services.cgit.${vhost}.scanPath or services.cgit.${vhost}.repos must be set.";
-    }) cfgs;
-
-    users = lib.mkMerge (
-      lib.flip lib.mapAttrsToList cfgs (
-        _: cfg: {
-          users.${cfg.user} = {
-            isSystemUser = true;
-            inherit (cfg) group;
-          };
-          groups.${cfg.group} = { };
-        }
-      )
-    );
-
-    services.fcgiwrap.instances = lib.flip lib.mapAttrs' cfgs (
-      name: cfg:
-      lib.nameValuePair "cgit-${name}" {
-        process = { inherit (cfg) user group; };
-        socket = { inherit (config.services.nginx) user group; };
-      }
-    );
-
-    systemd.services = lib.flip lib.mapAttrs' cfgs (
-      name: cfg:
-      lib.nameValuePair (fcgiwrapUnitName name) (
-        lib.mkIf (cfg.repos != { }) {
-          serviceConfig.RuntimeDirectory = fcgiwrapUnitName name;
-          preStart = ''
-            GIT_PROJECT_ROOT=${lib.escapeShellArg (gitProjectRoot name cfg)}
-            mkdir -p "$GIT_PROJECT_ROOT"
-            cd "$GIT_PROJECT_ROOT"
-            ${lib.concatLines (
-              lib.flip lib.mapAttrsToList cfg.repos (
-                name: repo: ''
-                  ln -s ${lib.escapeShellArg repo.path} ${lib.escapeShellArg name}
-                ''
-              )
-            )}
+  config = mkIf cfg.enable {
+    assertions = concatLists (
+      mapAttrsToList (
+        vhost: vhostCfg:
+        mapAttrsToList (loc: locCfg: {
+          assertion = (locCfg.scanPath == null) != (locCfg.repos == { });
+          message = ''
+            Exactly one of services.cgit.virtualHosts.${vhost}.locations.${loc}.scanPath
+            or services.cgit.virtualHosts.${vhost}.locations.${loc}.repos must be set.
           '';
-        }
+        }) vhostCfg.locations
+      ) cfg.virtualHosts
+    );
+
+    users = mkMerge (
+      concatMap (
+        vhostCfg:
+        flip mapAttrsToList vhostCfg.locations (
+          _: locCfg: {
+            users.${locCfg.user} = {
+              isSystemUser = true;
+              inherit (locCfg) group;
+            };
+            groups.${locCfg.group} = { };
+          }
+        )
+      ) (attrValues cfg.virtualHosts)
+    );
+
+    services.fcgiwrap.instances = mkMerge (
+      flip mapAttrsToList cfg.virtualHosts (
+        _: vhostCfg:
+        flip mapAttrs' vhostCfg.locations (
+          loc: locCfg:
+          nameValuePair (fcgiwrapInstanceName { inherit (locCfg) user group; }) {
+            process = { inherit (locCfg) user group; };
+            socket = { inherit (config.services.nginx) user group; };
+          }
+        )
       )
     );
 
-    services.nginx.enable = true;
+    systemd.services =
+      let
+        safeDirectoriesByUnit = zipAttrsWith (_: concatLists) (
+          concatMap (
+            vhostCfg:
+            map (locCfg: {
+              ${fcgiwrapUnitName { inherit (locCfg) user group; }} =
+                # safe.directory supports trailing /*, use it for scanPath
+                # https://git-scm.com/docs/git-config/2.36.0#Documentation/git-config.txt-safedirectory
+                optional (locCfg.scanPath != null) "${locCfg.scanPath}/*"
+                ++ map (name: "${gitProjectRoot locCfg}/${name}") (attrNames locCfg.repos);
+            }) (attrValues vhostCfg.locations)
+          ) (attrValues cfg.virtualHosts)
+        );
+      in
+      mapAttrs (_: safeDirectories: {
+        # see https://git-scm.com/docs/git-config/2.36.0#Documentation/git-config.txt-GITCONFIGCOUNT
+        environment = (
+          {
+            GIT_CONFIG_COUNT = toString (length safeDirectories);
+          }
+          // mergeAttrsList (
+            imap0 (i: directory: {
+              "GIT_CONFIG_KEY_${toString i}" = "safe.directory";
+              "GIT_CONFIG_VALUE_${toString i}" = directory;
+            }) safeDirectories
+          )
+        );
+        serviceConfig.ExecStartPre = [
+          "${getExe pkgs.git} config get --all --show-names safe.directory"
+        ];
+      }) safeDirectoriesByUnit;
 
-    services.nginx.virtualHosts = lib.mkMerge (
-      lib.mapAttrsToList (name: cfg: {
-        ${cfg.nginx.virtualHost} = {
-          locations =
-            (genAttrs' [ "cgit.css" "cgit.png" "favicon.ico" "robots.txt" ] (
-              fileName:
-              lib.nameValuePair "= ${stripLocation cfg}/${fileName}" {
-                extraConfig = ''
-                  alias ${cfg.package}/cgit/${fileName};
+    services.nginx = {
+      enable = true;
+      virtualHosts = mapAttrs (_: vhostCfg: {
+        locations = mkMerge (
+          optionals (vhostCfg.locations != { }) (
+            map
+              (name: {
+                "= /${name}".extraConfig = ''
+                  alias ${vhostCfg.package}/cgit/${name};
+                  auth_basic off;
                 '';
-              }
-            ))
-            // {
-              "~ ${regexLocation cfg}/.+/(info/refs|git-upload-pack)" = {
+              })
+              [
+                "cgit.css"
+                "cgit.png"
+                "favicon.ico"
+                "robots.txt"
+              ]
+          )
+          ++ (mapAttrsToList (loc: locCfg: {
+            "~ ${regexLocation loc}/.+/(info/refs|git-upload-pack)" = mkMerge [
+              locCfg.locationConfig
+              {
                 fastcgiParams = rec {
                   SCRIPT_FILENAME = "${pkgs.git}/libexec/git-core/git-http-backend";
                   GIT_HTTP_EXPORT_ALL = "1";
-                  GIT_PROJECT_ROOT = gitProjectRoot name cfg;
+                  GIT_PROJECT_ROOT = gitProjectRoot locCfg;
                   HOME = GIT_PROJECT_ROOT;
                 };
-                extraConfig = mkFastcgiPass name cfg;
-              };
-              "${stripLocation cfg}/" = {
+                extraConfig = mkFastcgiPass { inherit loc locCfg; };
+              }
+            ];
+            "${stripLocation loc}/" = mkMerge [
+              locCfg.locationConfig
+              {
                 fastcgiParams = {
-                  SCRIPT_FILENAME = "${cfg.package}/cgit/cgit.cgi";
+                  SCRIPT_FILENAME = "${vhostCfg.package}/cgit/cgit.cgi";
                   QUERY_STRING = "$args";
                   HTTP_HOST = "$server_name";
-                  CGIT_CONFIG = mkCgitrc cfg;
+                  CGIT_CONFIG = mkCgitrc loc locCfg;
                 };
-                extraConfig = mkFastcgiPass name cfg;
-              };
-            };
-        };
-      }) cfgs
-    );
+                extraConfig = mkFastcgiPass { inherit loc locCfg; };
+              }
+            ];
+          }) vhostCfg.locations)
+        );
+      }) cfg.virtualHosts;
+    };
   };
 }
