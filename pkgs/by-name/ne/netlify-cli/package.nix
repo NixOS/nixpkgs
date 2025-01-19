@@ -32,7 +32,7 @@ mkPackage (
           owner = "netlify";
           repo = "cli";
           tag = "v${this.version}";
-          hash = "sha256-fK+Z6bqnaqSYXgO0lUbGALZeCiAnvMd6LkMSH7JB7J8=";
+          hash = "sha256-LGnFVg7c+CMgjxkVdy/rdoo6uU5HaOwGKRDHRe5Hz3Y=";
         };
       };
 
