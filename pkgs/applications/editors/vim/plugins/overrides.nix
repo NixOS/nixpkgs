@@ -11,7 +11,6 @@
   fetchurl,
   neovimUtils,
   replaceVars,
-  substituteAll,
   # Language dependencies
   fetchYarnDeps,
   mkYarnModules,
@@ -58,6 +57,7 @@
   tmux,
   tup,
   typescript,
+  typescript-language-server,
   vim,
   which,
   xdg-utils,
@@ -188,8 +188,7 @@ in
 
   aw-watcher-vim = super.aw-watcher-vim.overrideAttrs {
     patches = [
-      (substituteAll {
-        src = ./patches/aw-watcher-vim/program_paths.patch;
+      (replaceVars ./patches/aw-watcher-vim/program_paths.patch {
         curl = lib.getExe curl;
       })
     ];
@@ -1103,8 +1102,7 @@ in
     super.fruzzy.overrideAttrs (old: {
       buildInputs = [ nim1 ];
       patches = [
-        (substituteAll {
-          src = ./patches/fruzzy/get_version.patch;
+        (replaceVars ./patches/fruzzy/get_version.patch {
           inherit (old) version;
         })
       ];
@@ -1243,8 +1241,7 @@ in
 
   gx-nvim = super.gx-nvim.overrideAttrs {
     patches = lib.optionals stdenv.hostPlatform.isLinux [
-      (substituteAll {
-        src = ./patches/gx-nvim/fix-paths.patch;
+      (replaceVars ./patches/gx-nvim/fix-paths.patch {
         inherit xdg-utils;
       })
     ];
@@ -1530,10 +1527,7 @@ in
     # https://github.com/NixOS/nixpkgs/pull/105810#issuecomment-740007985
     # https://github.com/camspiers/lens.vim/pull/40/files
     patches = [
-      (substituteAll {
-        src = ./patches/lens-vim/remove_duplicate_g_lens_animate.patch;
-        inherit languagetool;
-      })
+      ./patches/lens-vim/remove_duplicate_g_lens_animate.patch
     ];
   };
 
@@ -1662,8 +1656,7 @@ in
     in
     super.markdown-preview-nvim.overrideAttrs {
       patches = [
-        (substituteAll {
-          src = ./markdown-preview-nvim/fix-node-paths.patch;
+        (replaceVars ./markdown-preview-nvim/fix-node-paths.patch {
           node = "${nodejs}/bin/node";
         })
       ];
@@ -2573,8 +2566,7 @@ in
       "openscad.utilities"
     ];
     patches = [
-      (substituteAll {
-        src = ./patches/openscad.nvim/program_paths.patch;
+      (replaceVars ./patches/openscad.nvim/program_paths.patch {
         htop = lib.getExe htop;
         openscad = lib.getExe openscad;
         zathura = lib.getExe zathura;
@@ -2683,8 +2675,7 @@ in
 
   Preview-nvim = super.Preview-nvim.overrideAttrs {
     patches = [
-      (substituteAll {
-        src = ./patches/preview-nvim/hardcode-mdt-binary-path.patch;
+      (replaceVars ./patches/preview-nvim/hardcode-mdt-binary-path.patch {
         mdt = lib.getExe md-tui;
       })
     ];
@@ -3308,6 +3299,9 @@ in
       nvim-lspconfig
       plenary-nvim
     ];
+    runtimeDeps = [
+      typescript-language-server
+    ];
   };
 
   nvzone-typr = super.nvzone-typr.overrideAttrs {
@@ -3534,8 +3528,7 @@ in
     #   let g:grammarous#show_first_error = 1
     # see https://github.com/rhysd/vim-grammarous/issues/39
     patches = [
-      (substituteAll {
-        src = ./patches/vim-grammarous/set_default_languagetool.patch;
+      (replaceVars ./patches/vim-grammarous/set_default_languagetool.patch {
         inherit languagetool;
       })
     ];

@@ -2,7 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , nix-update-script
-, substituteAll
+, replaceVars
 , meson
 , ninja
 , pkg-config
@@ -38,8 +38,7 @@ stdenv.mkDerivation rec {
     # https://github.com/elementary/switchboard-plug-keyboard/issues/324
     ./hide-install-unlisted-engines-button.patch
 
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       inherit onboard libgnomekbd;
     })
   ];
