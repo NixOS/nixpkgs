@@ -2,6 +2,7 @@ name: Eval
 
 on:
   pull_request_target:
+    types: [opened, ready_for_review, synchronize, reopened]
   push:
     # Keep this synced with ci/request-reviews/dev-branches.txt
     branches:
@@ -334,3 +335,5 @@ jobs:
           REPOSITORY: ${{ github.repository }}
           NUMBER: ${{ github.event.number }}
           AUTHOR: ${{ github.event.pull_request.user.login }}
+          # Don't request reviewers on draft PRs
+          DRY_MODE: ${{ github.event.pull_request.draft && '1' || '' }}
