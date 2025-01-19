@@ -75,6 +75,7 @@ let
   # Note that individual attributes can be overriden if needed.
   elemTypeFunctor = name: { elemType, ... }@payload: {
     inherit name payload;
+    wrappedDeprecationMessage = makeWrappedDeprecationMessage payload;
     type    = outer_types.types.${name};
     binOp   = a: b:
       let
@@ -85,10 +86,10 @@ let
           null
         else
           { elemType = merged; };
-    wrappedDeprecationMessage = { loc }: lib.warn ''
-      The deprecated `${lib.optionalString (loc != null) "type."}functor.wrapped` attribute ${lib.optionalString (loc != null) "of the option `${showOption loc}` "}is accessed, use `${lib.optionalString (loc != null) "type."}nestedTypes.elemType` instead.
-    '' payload.elemType;
   };
+  makeWrappedDeprecationMessage = payload: { loc }: lib.warn ''
+    The deprecated `${lib.optionalString (loc != null) "type."}functor.wrapped` attribute ${lib.optionalString (loc != null) "of the option `${showOption loc}` "}is accessed, use `${lib.optionalString (loc != null) "type."}nestedTypes.elemType` instead.
+  '' payload.elemType;
 
 
   outer_types =
@@ -1163,7 +1164,9 @@ rec {
         getSubModules = finalType.getSubModules;
         substSubModules = m: coercedTo coercedType coerceFunc (finalType.substSubModules m);
         typeMerge = t: null;
-        functor = (defaultFunctor name) // { wrapped = finalType; };
+        functor = (defaultFunctor name) // {
+          wrappedDeprecationMessage = makeWrappedDeprecationMessage { elemType = finalType; };
+        };
         nestedTypes.coercedType = coercedType;
         nestedTypes.finalType = finalType;
       };

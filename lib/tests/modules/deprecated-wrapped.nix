@@ -9,6 +9,7 @@ let
     unique
     nullOr
     functionTo
+    coercedTo
     ;
 in
 {
@@ -43,12 +44,17 @@ in
         options.mergedNullOr = mkOption {
           type = nullOr (listOf types.str);
         };
-        # nullOr
+        # functionTo
         options.functionTo = mkOption {
           type = functionTo (listOf types.str);
         };
         options.mergedFunctionTo = mkOption {
           type = functionTo (listOf types.str);
+        };
+        # coercedTo
+        # Note: coercedTo is a non-mergeable option-type
+        options.coercedTo = mkOption {
+          type = coercedTo (listOf types.str) lib.id (listOf types.str);
         };
       }
     )
