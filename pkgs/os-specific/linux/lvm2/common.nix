@@ -67,6 +67,7 @@ stdenv.mkDerivation rec {
       "--with-default-run-dir=/run/lvm"
       "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
       "--with-systemd-run=/run/current-system/systemd/bin/systemd-run"
+      "--with-default-profile-subdir=profile.d"
     ]
     ++ lib.optionals (!enableCmdlib && !onlyLib) [
       "--bindir=${placeholder "bin"}/bin"
