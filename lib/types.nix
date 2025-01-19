@@ -1122,7 +1122,9 @@ rec {
         getSubModules = finalType.getSubModules;
         substSubModules = m: coercedTo coercedType coerceFunc (finalType.substSubModules m);
         typeMerge = t: null;
-        functor = (defaultFunctor name) // { wrapped = finalType; };
+        functor = elemTypeFunctor name { elemType = finalType; } // {
+          type = payload: types.coercedTo coercedType coerceFunc payload.finalType;
+        };
         nestedTypes.coercedType = coercedType;
         nestedTypes.finalType = finalType;
       };
