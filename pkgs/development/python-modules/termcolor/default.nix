@@ -9,15 +9,15 @@
 
 buildPythonPackage rec {
   pname = "termcolor";
-  version = "2.4.0";
-  format = "pyproject";
+  version = "2.5.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-qrnlYEfIrEHteY+jbYkqN6yms+kVnz4MJLxkqbOse3o=";
+    hash = "sha256-mY2NJ9ptSEQujh8BYRkHa2kNliUHUx30iQ/NLbLvim8=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-vcs
     hatchling
   ];
@@ -25,6 +25,11 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "termcolor" ];
 
   nativeCheckInputs = [ pytestCheckHook ];
+
+  preCheck = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail ".ini_options" ""
+  '';
 
   meta = with lib; {
     description = "ANSI color formatting for output in terminal";
