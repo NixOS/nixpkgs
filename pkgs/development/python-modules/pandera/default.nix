@@ -32,14 +32,14 @@
 
 buildPythonPackage rec {
   pname = "pandera";
-  version = "0.20.4";
+  version = "0.22.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "unionai-oss";
     repo = "pandera";
     tag = "v${version}";
-    hash = "sha256-VetLfZlBWok7Mr1jxlHHjDH/D5xEsPFWQtX/hrvobgQ=";
+    hash = "sha256-QOks3L/ZebkoWXWbHMn/tV9SmYSbR+gZ8wpqWoydkPM=";
   };
 
   build-system = [ setuptools ];
@@ -125,7 +125,7 @@ buildPythonPackage rec {
   meta = {
     description = "Light-weight, flexible, and expressive statistical data testing library";
     homepage = "https://pandera.readthedocs.io";
-    changelog = "https://github.com/unionai-oss/pandera/releases/tag/v${version}";
+    changelog = "https://github.com/unionai-oss/pandera/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
