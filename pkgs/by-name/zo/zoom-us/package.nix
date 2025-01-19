@@ -47,12 +47,12 @@ let
   throwSystem = throw "Unsupported system: ${system}";
 
   # Zoom versions are released at different times for each platform
-  # and often with different versions.  We write them on three lines
+  # and often with different versions. We write them on three lines
   # like this (rather than using {}) so that the updater script can
   # find where to edit them.
   versions.aarch64-darwin = "6.3.1.45300";
   versions.x86_64-darwin = "6.3.1.45300";
-  versions.x86_64-linux = "6.3.1.5673";
+  versions.x86_64-linux = "6.2.11.5069";
 
   srcs = {
     aarch64-darwin = fetchurl {
@@ -66,7 +66,7 @@ let
     };
     x86_64-linux = fetchurl {
       url = "https://zoom.us/client/${versions.x86_64-linux}/zoom_x86_64.pkg.tar.xz";
-      hash = "sha256-0gREcRnGkiFj6kIra0laR5PUqrb0Jvoj6gDfpAVLRtg=";
+      hash = "sha256-k8T/lmfgAFxW1nwEyh61lagrlHP5geT2tA7e5j61+qw=";
     };
   };
 

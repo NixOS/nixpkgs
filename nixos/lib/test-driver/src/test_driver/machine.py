@@ -702,8 +702,7 @@ class Machine:
 
     def get_tty_text(self, tty: str) -> str:
         status, output = self.execute(
-            f"fold -w$(stty -F /dev/tty{tty} size | "
-            f"awk '{{print $2}}') /dev/vcs{tty}"
+            f"fold -w$(stty -F /dev/tty{tty} size | awk '{{print $2}}') /dev/vcs{tty}"
         )
         return output
 

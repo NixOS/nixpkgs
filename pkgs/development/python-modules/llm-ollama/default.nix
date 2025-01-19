@@ -52,7 +52,7 @@ buildPythonPackage rec {
     "test_registered_models_when_ollama_is_down"
   ];
 
-  pythonImportCheck = [
+  pythonImportsCheck = [
     "llm_ollama"
   ];
 

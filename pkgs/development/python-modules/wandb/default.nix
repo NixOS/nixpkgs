@@ -105,9 +105,6 @@ let
 
     meta = {
       mainProgram = "gpu_stats";
-      # ld: library not found for -lIOReport
-      # TODO: succeeds on https://github.com/NixOS/nixpkgs/pull/348827, so try again once it lands on master
-      broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
     };
   };
 
@@ -302,7 +299,7 @@ buildPythonPackage rec {
       "test_disabled_context_manager"
       "test_mode_disabled"
     ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # AssertionError: assert not copy2_mock.called
       "test_copy_or_overwrite_changed_no_copy"
 

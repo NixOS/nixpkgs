@@ -48,13 +48,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-system-settings-unwrapped";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-system-settings";
     rev = finalAttrs.version;
-    hash = "sha256-dWaXPr9Z5jz5SbwLSd3jVqjK0E5BdcKVeF15p8j47uM=";
+    hash = "sha256-8X5a2zJ0y8bSSnbqDvRoYm/2VPAWcfZZuiH+5p8eXi4=";
   };
 
   outputs = [

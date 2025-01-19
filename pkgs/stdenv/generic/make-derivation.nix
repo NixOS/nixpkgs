@@ -400,7 +400,7 @@ else let
         );
     }) // {
       builder = attrs.realBuilder or stdenv.shell;
-      args = attrs.args or ["-e" (attrs.builder or ./default-builder.sh)];
+      args = attrs.args or ["-e" ./source-stdenv.sh (attrs.builder or ./default-builder.sh)];
       inherit stdenv;
 
       # The `system` attribute of a derivation has special meaning to Nix.

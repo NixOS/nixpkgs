@@ -14,7 +14,7 @@
 
   libsForQt5,
 
-  withUnrar ? true,
+  withUnrar ? false,
   unrar, # has an unfree license
 }:
 
@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "General purpose mod manager with support for the NexusMods API and LOOT";
     homepage = "https://github.com/limo-app/limo";
     license = lib.licenses.gpl3Plus;
-    mainProgram = "Limo";
+    mainProgram = "limo";
     maintainers = with lib.maintainers; [
       tomasajt
       MattSturgeon

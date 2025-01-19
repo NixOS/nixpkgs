@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "casbin";
-  version = "1.37.0";
+  version = "1.38.0";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "casbin";
     repo = "pycasbin";
     tag = "v${version}";
-    hash = "sha256-gFh8+fcunDG4kT+cJpmuVGsgWQzntbbm6AQmvS/iCo0=";
+    hash = "sha256-HrPf56J9tKQRzdXIGYTrbyvGOAXGUovm3VaHndBw+gY=";
   };
 
   build-system = [ setuptools ];

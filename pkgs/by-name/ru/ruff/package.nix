@@ -17,17 +17,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ruff";
-  version = "0.8.6";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "ruff";
     tag = version;
-    hash = "sha256-9YvHmNiKdf5hKqy9tToFSQZM2DNLoIiChcfjQay8wbU=";
+    hash = "sha256-DKDSjiN7Ve/1mHWXoYOIdJ67MRoJYDR59VuVmfwYJHs=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-aTzTCDCMhG4cKD9wFNHv6A3VBUifnKgI8a6kelc3bAM=";
+  cargoHash = "sha256-eIiR7pvSOZdB1lTPLtdriO9lkufFY/gX5d2ku53g2vE=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -52,36 +52,14 @@ rustPlatform.buildRustPackage rec {
   # tests do not appear to respect linker options on doctests
   # Upstream issue: https://github.com/rust-lang/cargo/issues/14189
   # This causes errors like "error: linker `cc` not found" on static builds
-  postInstallCheck = lib.optionalString (!stdenv.hostPlatform.isStatic) ''
-    cargoCheckHook
-  '';
+  doCheck = !stdenv.hostPlatform.isStatic;
 
-  # Failing on darwin for an unclear reason.
+  # Failing on darwin for an unclear reason, but probably due to sandbox.
   # According to the maintainers, those tests are from an experimental crate that isn't actually
   # used by ruff currently and can thus be safely skipped.
-  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
-    "--skip=added_package"
-    "--skip=add_search_path"
-    "--skip=changed_file"
-    "--skip=changed_versions_file"
-    "--skip=deleted_file"
-    "--skip=directory_deleted"
-    "--skip=directory_moved_to_trash"
-    "--skip=directory_moved_to_workspace"
-    "--skip=directory_renamed"
-    "--skip=hard_links_in_workspace"
-    "--skip=hard_links_to_target_outside_workspace"
-    "--skip=move_file_to_trash"
-    "--skip=move_file_to_workspace"
-    "--skip=nested_packages_delete_root"
-    "--skip=new_file"
-    "--skip=new_ignored_file"
-    "--skip=removed_package"
-    "--skip=rename_file"
-    "--skip=search_path"
-    "--skip=unix::changed_metadata"
-    "--skip=unix::symlinked_module_search_path"
-    "--skip=unix::symlink_inside_workspace"
+  cargoTestFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    "--workspace"
+    "--exclude=red_knot"
   ];
 
   nativeInstallCheckInputs = [

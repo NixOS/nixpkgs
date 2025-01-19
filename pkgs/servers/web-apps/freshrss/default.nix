@@ -41,7 +41,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   passthru.tests = {
-    inherit (nixosTests) freshrss-sqlite freshrss-pgsql freshrss-http-auth freshrss-none-auth freshrss-extensions;
+    inherit (nixosTests) freshrss;
   };
 
   meta = with lib; {

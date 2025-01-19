@@ -6,6 +6,7 @@
   runCommand,
   emptyFile,
   emptyDirectory,
+  stdenvNoCC,
   ...
 }:
 let
@@ -20,6 +21,15 @@ let
     versionSuffix = "test";
     label = "test";
   };
+
+  overrideStructuredAttrs =
+    enable: drv:
+    drv.overrideAttrs (old: {
+      failed = old.failed.overrideAttrs (oldFailed: {
+        name = oldFailed.name + "${lib.optionalString (!enable) "-no"}-structuredAttrs";
+        __structuredAttrs = enable;
+      });
+    });
 
 in
 lib.recurseIntoAttrs {
@@ -92,7 +102,7 @@ lib.recurseIntoAttrs {
     }
   );
 
-  testBuildFailure = lib.recurseIntoAttrs {
+  testBuildFailure = lib.recurseIntoAttrs rec {
     happy =
       runCommand "testBuildFailure-happy"
         {
@@ -121,6 +131,8 @@ lib.recurseIntoAttrs {
 
           touch $out
         '';
+
+    happyStructuredAttrs = overrideStructuredAttrs true happy;
 
     helloDoesNotFail =
       runCommand "testBuildFailure-helloDoesNotFail"
@@ -167,6 +179,45 @@ lib.recurseIntoAttrs {
           echo 'All good.'
           touch $out
         '';
+
+    multiOutputStructuredAttrs = overrideStructuredAttrs true multiOutput;
+
+    sideEffects =
+      runCommand "testBuildFailure-sideEffects"
+        {
+          failed = testers.testBuildFailure (
+            stdenvNoCC.mkDerivation {
+              name = "fail-with-side-effects";
+              src = emptyDirectory;
+
+              postHook = ''
+                echo touching side-effect...
+                # Assert that the side-effect doesn't exist yet...
+                # We're checking that this hook isn't run by expect-failure.sh
+                if [[ -e side-effect ]]; then
+                  echo "side-effect already exists"
+                  exit 1
+                fi
+                touch side-effect
+              '';
+
+              buildPhase = ''
+                echo i am failing
+                exit 1
+              '';
+            }
+          );
+        }
+        ''
+          grep -F 'touching side-effect...' $failed/testBuildFailure.log >/dev/null
+          grep -F 'i am failing' $failed/testBuildFailure.log >/dev/null
+          [[ 1 = $(cat $failed/testBuildFailure.exit) ]]
+          [[ ! -e side-effect ]]
+
+          touch $out
+        '';
+
+    sideEffectStructuredAttrs = overrideStructuredAttrs true sideEffects;
   };
 
   testEqualContents = lib.recurseIntoAttrs {

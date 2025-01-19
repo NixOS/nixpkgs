@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchurl,
-  substituteAll,
+  replaceVars,
   autoreconfHook,
   pkg-config,
   intltool,
@@ -74,8 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # to remove compiler from the runtime closure, reference was retained via
     # gimp --version --verbose output
-    (substituteAll {
-      src = ./remove-cc-reference.patch;
+    (replaceVars ./remove-cc-reference.patch {
       cc_version = stdenv.cc.cc.name;
     })
 

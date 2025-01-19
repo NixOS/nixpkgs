@@ -452,7 +452,9 @@ let
 
     either = callPackage ../development/ocaml-modules/either { };
 
-    elina = callPackage ../development/ocaml-modules/elina { };
+    elina = callPackage ../development/ocaml-modules/elina {
+      stdenv = pkgs.gcc13Stdenv;
+    };
 
     eliom = callPackage ../development/ocaml-modules/eliom { };
 
@@ -1819,6 +1821,8 @@ let
 
     syslog-message = callPackage ../development/ocaml-modules/syslog-message { };
 
+    systemd = callPackage ../development/ocaml-modules/systemd { };
+
     ### T ###
 
     taglib = callPackage ../development/ocaml-modules/taglib {
@@ -2061,21 +2065,37 @@ in let inherit (pkgs) callPackage; in rec
 {
   inherit mkOcamlPackages;
 
-  ocamlPackages_4_00_1 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.00.1.nix { });
+  ocamlPackages_4_00_1 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.00.1.nix {
+    stdenv = pkgs.gcc13Stdenv;
+  });
 
-  ocamlPackages_4_01_0 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.01.0.nix { });
+  ocamlPackages_4_01_0 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.01.0.nix {
+    stdenv = pkgs.gcc13Stdenv;
+  });
 
-  ocamlPackages_4_02 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.02.nix { });
+  ocamlPackages_4_02 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.02.nix {
+    stdenv = pkgs.gcc13Stdenv;
+  });
 
-  ocamlPackages_4_03 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.03.nix { });
+  ocamlPackages_4_03 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.03.nix {
+    stdenv = pkgs.gcc13Stdenv;
+  });
 
-  ocamlPackages_4_04 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.04.nix { });
+  ocamlPackages_4_04 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.04.nix {
+    stdenv = pkgs.gcc13Stdenv;
+  });
 
-  ocamlPackages_4_05 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.05.nix { });
+  ocamlPackages_4_05 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.05.nix {
+    stdenv = pkgs.gcc13Stdenv;
+  });
 
-  ocamlPackages_4_06 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.06.nix { });
+  ocamlPackages_4_06 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.06.nix {
+    stdenv = pkgs.gcc13Stdenv;
+  });
 
-  ocamlPackages_4_07 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.07.nix { });
+  ocamlPackages_4_07 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.07.nix {
+    stdenv = pkgs.gcc13Stdenv;
+  });
 
   ocamlPackages_4_08 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.08.nix { });
 
@@ -2097,7 +2117,9 @@ in let inherit (pkgs) callPackage; in rec
 
   ocamlPackages_5_2 = mkOcamlPackages (callPackage ../development/compilers/ocaml/5.2.nix { });
 
-  ocamlPackages_latest = ocamlPackages_5_2;
+  ocamlPackages_5_3 = mkOcamlPackages (callPackage ../development/compilers/ocaml/5.3.nix { });
+
+  ocamlPackages_latest = ocamlPackages_5_3;
 
   ocamlPackages = ocamlPackages_5_2;
 

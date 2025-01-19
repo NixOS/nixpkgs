@@ -31,6 +31,13 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  # clang > 17 dropped support for `-export-dynamic` but `-rdynamic` does the
+  # same thing
+  postPatch = ''
+    substituteInPlace platform.m4 \
+      --replace-fail -export-dynamic -rdynamic
+  '';
+
   nativeBuildInputs = [
     autoreconfHook
     gnustep.base

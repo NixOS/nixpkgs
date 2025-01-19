@@ -9,7 +9,7 @@
   libtool,
   pkg-config,
   ronn,
-  substituteAll,
+  replaceVars,
   buildPackages,
   mbrolaSupport ? true,
   mbrola,
@@ -45,8 +45,7 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals mbrolaSupport [
       # Hardcode correct mbrola paths.
-      (substituteAll {
-        src = ./mbrola.patch;
+      (replaceVars ./mbrola.patch {
         inherit mbrola;
       })
     ];

@@ -87,7 +87,6 @@
   # dependencies for torch.utils.tensorboard
   pillow,
   six,
-  future,
   tensorboard,
   protobuf,
 
@@ -298,6 +297,9 @@ buildPythonPackage rec {
           "# Upstream: set(CUDAToolkit_ROOT"
       substituteInPlace third_party/gloo/cmake/Cuda.cmake \
         --replace-warn "find_package(CUDAToolkit 7.0" "find_package(CUDAToolkit"
+
+      # annotations (3.7), print_function (3.0), with_statement (2.6) are all supported
+      sed -i -e "/from __future__ import/d" **.py
     ''
     + lib.optionalString rocmSupport ''
       # https://github.com/facebookincubator/gloo/pull/297
@@ -529,7 +531,6 @@ buildPythonPackage rec {
       # the following are required for tensorboard support
       pillow
       six
-      future
       tensorboard
       protobuf
 

@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    glib # glib-compile-resources
+    gtk4 # gtk-update-icon-cache
     meson
     ninja
     pkg-config

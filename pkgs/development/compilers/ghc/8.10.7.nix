@@ -557,16 +557,15 @@ stdenv.mkDerivation (
 
     checkTarget = "test";
 
-    hardeningDisable =
-      [ "format" ]
-      # In nixpkgs, musl based builds currently enable `pie` hardening by default
-      # (see `defaultHardeningFlags` in `make-derivation.nix`).
-      # But GHC cannot currently produce outputs that are ready for `-pie` linking.
-      # Thus, disable `pie` hardening, otherwise `recompile with -fPIE` errors appear.
-      # See:
-      # * https://github.com/NixOS/nixpkgs/issues/129247
-      # * https://gitlab.haskell.org/ghc/ghc/-/issues/19580
-      ++ lib.optional stdenv.targetPlatform.isMusl "pie";
+    # GHC cannot currently produce outputs that are ready for `-pie` linking.
+    # Thus, disable `pie` hardening, otherwise `recompile with -fPIE` errors appear.
+    # See:
+    # * https://github.com/NixOS/nixpkgs/issues/129247
+    # * https://gitlab.haskell.org/ghc/ghc/-/issues/19580
+    hardeningDisable = [
+      "format"
+      "pie"
+    ];
 
     # big-parallel allows us to build with more than 2 cores on
     # Hydra which already warrants a significant speedup

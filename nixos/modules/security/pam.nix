@@ -1191,7 +1191,7 @@ in
 
       control = lib.mkOption {
         default = "sufficient";
-        type = lib.types.enum [ "required" "requisite" "sufficient" "lib.optional" ];
+        type = lib.types.enum [ "required" "requisite" "sufficient" "optional" ];
         description = ''
           This option sets pam "control".
           If you want to have multi factor authentication, use "required".
@@ -1219,7 +1219,10 @@ in
           be changed using {option}`security.pam.u2f.authFile` option.
 
           File format is:
-          `username:first_keyHandle,first_public_key: second_keyHandle,second_public_key`
+          ```
+          <username1>:<KeyHandle1>,<UserKey1>,<CoseType1>,<Options1>:<KeyHandle2>,<UserKey2>,<CoseType2>,<Options2>:...
+          <username2>:<KeyHandle1>,<UserKey1>,<CoseType1>,<Options1>:<KeyHandle2>,<UserKey2>,<CoseType2>,<Options2>:...
+          ```
           This file can be generated using {command}`pamu2fcfg` command.
 
           More information can be found [here](https://developers.yubico.com/pam-u2f/).

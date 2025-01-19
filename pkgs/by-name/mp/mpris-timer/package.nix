@@ -14,16 +14,16 @@
 
 buildGoModule rec {
   pname = "mpris-timer";
-  version = "1.6.2";
+  version = "2.0.5";
 
   src = fetchFromGitHub {
     owner = "efogdev";
     repo = "mpris-timer";
     tag = version;
-    hash = "sha256-QOnyu2FphqQW6aFa3rdJwLvQw+DXTS2JSzixshixLEg=";
+    hash = "sha256-LNaf+nTQHpHOvUXdNzKexXGa0petWp+26UeLqfmjpZw=";
   };
 
-  vendorHash = "sha256-APcQgNEn7ULIjBk7f4q6MMSX9k58+F7vzgUDiIZ3Jxc=";
+  vendorHash = "sha256-vCzQiQsljNyI7nBYvq+C/dv0T186Lsj7rOq5xHMs3c0=";
 
   strictDeps = true;
 

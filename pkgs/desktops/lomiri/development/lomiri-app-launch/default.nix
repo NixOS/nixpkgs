@@ -58,6 +58,13 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-11pEhFi39Cvqb9Hg47kT8+5hq+bz6WmySqaIdwt1MVk=";
     })
 
+    # Remove when version > 0.1.9
+    (fetchpatch {
+      name = "0002-lomiri-app-launch-Fix-parallel-access-to-_iconFinders.patch";
+      url = "https://gitlab.com/ubports/development/core/lomiri-app-launch/-/commit/74da7db2d59e91d95129dcaa5f6d8960fbc32eca.patch";
+      hash = "sha256-3r12eS9uLJIoBqSiKE2xnkfrJ7uPhyvYxXsxXs0cykg=";
+    })
+
     # Use /run/current-system/sw/bin fallback for desktop file Exec= lookups, propagate to launched applications
     ./2001-Inject-current-system-PATH.patch
   ];

@@ -42,14 +42,14 @@
 
 buildPythonPackage rec {
   pname = "coffea";
-  version = "2024.11.0";
+  version = "2025.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CoffeaTeam";
     repo = "coffea";
     tag = "v${version}";
-    hash = "sha256-QE+la7CB2xrbbIOUL/HtKRHUOGu19IyfDvjL6oucn7g=";
+    hash = "sha256-l/HjTX3zm1jquAhuvNNI+oaC7TbaICNnmfqXxBNlaic=";
   };
 
   build-system = [
@@ -97,6 +97,10 @@ buildPythonPackage rec {
     # Requires internet access
     # https://github.com/CoffeaTeam/coffea/issues/1094
     "test_lumimask"
+
+    # Flaky: FileNotFoundError: [Errno 2] No such file or directory: 'nminusone.npz'
+    # https://github.com/scikit-hep/coffea/issues/1246
+    "test_packed_selection_nminusone_dak"
   ];
 
   __darwinAllowLocalNetworking = true;

@@ -94,8 +94,9 @@ let
     inherit (self.lists) singleton forEach map foldr fold foldl foldl' imap0 imap1
       filter ifilter0 concatMap flatten remove findSingle findFirst any all count
       optional optionals toList range replicate partition zipListsWith zipLists
-      reverseList listDfs toposort sort sortOn naturalSort compareLists take
-      drop sublist last init crossLists unique allUnique intersectLists
+      reverseList listDfs toposort sort sortOn naturalSort compareLists
+      take drop dropEnd sublist last init
+      crossLists unique allUnique intersectLists
       subtractLists mutuallyExclusive groupBy groupBy' concatLists genList
       length head tail elem elemAt isList;
     inherit (self.strings) concatStrings concatMapStrings concatImapStrings

@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "teslemetry-stream";
-  version = "0.4.2";
+  version = "0.6.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Teslemetry";
     repo = "python-teslemetry-stream";
     rev = "v${version}";
-    hash = "sha256-Ny68yiM0LS2U7zy6K2R35ZLm+Jo4s+HIFJjuqgL49E0=";
+    hash = "sha256-hKGYZYRfI4FikTPsf7Wy0gOA+dCiMdlpWtEb/Gn1y7s=";
   };
 
   build-system = [ setuptools ];

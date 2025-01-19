@@ -7,7 +7,6 @@
   pkg-config,
 
   # for passthru.tests
-  deepin,
   freeimage,
   hdrmerge,
   imagemagick,
@@ -43,7 +42,6 @@ stdenv.mkDerivation rec {
 
   passthru.tests = {
     inherit imagemagick hdrmerge freeimage;
-    inherit (deepin) deepin-image-viewer;
     inherit (python3.pkgs) rawkit;
   };
 

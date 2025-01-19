@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2025.1.1";
+  version = "2025.1.2";
   components = {
     "3_day_blinds" =
       ps: with ps; [
@@ -941,7 +941,8 @@
       ];
     "cookidoo" =
       ps: with ps; [
-      ]; # missing inputs: cookidoo-api
+        cookidoo-api
+      ];
     "coolmaster" =
       ps: with ps; [
         pycoolmasternet-async
@@ -1355,7 +1356,8 @@
       ];
     "eheimdigital" =
       ps: with ps; [
-      ]; # missing inputs: eheimdigital
+        eheimdigital
+      ];
     "eight_sleep" =
       ps: with ps; [
       ];
@@ -3917,7 +3919,8 @@
       ];
     "ohme" =
       ps: with ps; [
-      ]; # missing inputs: ohme
+        ohme
+      ];
     "ollama" =
       ps: with ps; [
         ha-ffmpeg
@@ -3955,7 +3958,8 @@
       ];
     "onkyo" =
       ps: with ps; [
-      ]; # missing inputs: pyeiscp
+        pyeiscp
+      ];
     "onvif" =
       ps: with ps; [
         ha-ffmpeg
@@ -6128,7 +6132,8 @@
       ];
     "watergate" =
       ps: with ps; [
-      ]; # missing inputs: watergate-local-api
+        watergate-local-api
+      ];
     "watson_iot" =
       ps: with ps; [
       ]; # missing inputs: ibmiotf
@@ -6229,7 +6234,8 @@
       ]; # missing inputs: pywmspro
     "wolflink" =
       ps: with ps; [
-      ]; # missing inputs: wolf-comm
+        wolf-comm
+      ];
     "workday" =
       ps: with ps; [
         holidays
@@ -6618,6 +6624,7 @@
     "configurator"
     "control4"
     "conversation"
+    "cookidoo"
     "coolmaster"
     "counter"
     "cover"
@@ -6673,6 +6680,7 @@
     "ecowitt"
     "edl21"
     "efergy"
+    "eheimdigital"
     "eight_sleep"
     "electrasmart"
     "elevenlabs"
@@ -7029,12 +7037,14 @@
     "nx584"
     "obihai"
     "octoprint"
+    "ohme"
     "ollama"
     "omnilogic"
     "onboarding"
     "oncue"
     "ondilo_ico"
     "onewire"
+    "onkyo"
     "onvif"
     "open_meteo"
     "openai_conversation"
@@ -7346,6 +7356,7 @@
     "wallbox"
     "waqi"
     "water_heater"
+    "watergate"
     "watttime"
     "waze_travel_time"
     "weather"
@@ -7365,6 +7376,7 @@
     "withings"
     "wiz"
     "wled"
+    "wolflink"
     "workday"
     "worldclock"
     "ws66i"

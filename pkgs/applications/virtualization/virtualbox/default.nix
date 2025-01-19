@@ -38,7 +38,7 @@
   libvpx,
   nettools,
   dbus,
-  substituteAll,
+  replaceVars,
   gsoap,
   zlib,
   xz,
@@ -235,10 +235,11 @@ stdenv.mkDerivation (finalAttrs: {
     # these issues by patching the code to set QT_PLUGIN_PATH to the necessary paths,
     # after the code that unsets it. Note that qtsvg is included so that SVG icons from
     # the user's icon theme can be loaded.
-    ++ optional (!headless && enableHardening) (substituteAll {
-      src = ./qt-env-vars.patch;
-      qtPluginPath = "${qtbase}/bin/${qtbase.qtPluginPrefix}:${qtsvg}/bin/${qtbase.qtPluginPrefix}:${qtwayland}/bin/${qtbase.qtPluginPrefix}";
-    })
+    ++ optional (!headless && enableHardening) (
+      replaceVars ./qt-env-vars.patch {
+        qtPluginPath = "${qtbase}/bin/${qtbase.qtPluginPrefix}:${qtsvg}/bin/${qtbase.qtPluginPrefix}:${qtwayland}/bin/${qtbase.qtPluginPrefix}";
+      }
+    )
     # While the KVM patch should not break any other behavior if --with-kvm is not specified,
     # we don't take any chances and only apply it if people actually want to use KVM support.
     ++ optional enableKvm (

@@ -86,9 +86,7 @@ in
       [ "sound" "enableOSSEmulation" ]
       [ "hardware" "alsa" "enableOSSEmulation" ]
     )
-    (lib.mkRenamedOptionModule
-      [ "sound" "extraConfig" ]
-      [ "hardware" "alsa" "config" ])
+    (lib.mkRenamedOptionModule [ "sound" "extraConfig" ] [ "hardware" "alsa" "config" ])
   ];
 
   options.hardware.alsa = {
@@ -191,7 +189,7 @@ in
           };
         })
       );
-      default = {};
+      default = { };
       example = lib.literalExpression ''
         {
           firefox = { device = "front"; maxVolume = -25.0; };
@@ -286,153 +284,175 @@ in
 
   };
 
-  config = lib.mkIf cfg.enable {
-
-    # Disable sound servers enabled by default and,
-    # if the user enabled one manually, cause a conflict.
-    services.pipewire.enable = false;
-    hardware.pulseaudio.enable = false;
-
-    hardware.alsa.config =
-      let
-        conf = [
-          ''
-            pcm.!default fromenv
-
-            # Read the capture and playback device from
-            # the ALSA_AUDIO_IN, ALSA_AUDIO_OUT variables
-            pcm.fromenv {
-              type asym
-              playback.pcm {
-                type plug
-                slave.pcm {
-                  @func getenv
-                  vars [ ALSA_AUDIO_OUT ]
-                  default pcm.sysdefault
-                }
-              }
-              capture.pcm {
-                type plug
-                slave.pcm {
-                  @func getenv
-                  vars [ ALSA_AUDIO_IN ]
-                  default pcm.sysdefault
-                }
-              }
-            }
-          ''
-          (lib.optional cfg.enableRecorder ''
-            pcm.!default "splitter:fromenv,recorder"
-
-            # Send audio to two stereo devices
-            pcm.splitter {
-              @args [ A B ]
-              @args.A.type string
-              @args.B.type string
-              type asym
-              playback.pcm {
-                type plug
-                route_policy "duplicate"
-                slave.pcm {
-                  type multi
-                  slaves.a.pcm $A
-                  slaves.b.pcm $B
-                  slaves.a.channels 2
-                  slaves.b.channels 2
-                  bindings [
-                   { slave a channel 0 }
-                   { slave a channel 1 }
-                   { slave b channel 0 }
-                   { slave b channel 1 }
-                  ]
-                }
-              }
-              capture.pcm $A
-            }
-
-            # Device which records and plays back audio
-            pcm.recorder {
-              type asym
-              capture.pcm {
-                type dsnoop
-                ipc_key 9165218
-                ipc_perm 0666
-                slave.pcm "hw:loopback,1,0"
-                slave.period_size 1024
-                slave.buffer_size 8192
-              }
-              playback.pcm {
-                type dmix
-                ipc_key 6181923
-                ipc_perm 0666
-                slave.pcm "hw:loopback,0,0"
-                slave.period_size 1024
-                slave.buffer_size 8192
-              }
-            }
-          '')
-          (lib.mapAttrsToList mkControl cfg.controls)
-          (lib.mapAttrsToList (n: v: "pcm.${n} ${quote v}") cfg.deviceAliases)
-        ];
-      in
-      lib.mkBefore (lib.concatStringsSep "\n" (lib.flatten conf));
-
-    hardware.alsa.cardAliases = lib.mkIf cfg.enableRecorder {
-      loopback.driver = "snd_aloop";
-      loopback.id = 2;
-    };
-
-    # Set default PCM devices
-    environment.sessionVariables = defaultDeviceVars;
-    systemd.globalEnvironment = defaultDeviceVars;
-
-    environment.etc."asound.conf".text = cfg.config;
-
-    boot.kernelModules =
-      [ ]
-      ++ lib.optionals cfg.enableOSSEmulation [ "snd_pcm_oss" "snd_mixer_oss" ]
-      ++ lib.optionals cfg.enableRecorder [ "snd_aloop" ];
-
-    # Assign names to the sound cards
-    boot.extraModprobeConfig = lib.concatStringsSep "\n" cardsConfig;
-
-    # Provide alsamixer, aplay, arecord, etc.
-    environment.systemPackages = [ pkgs.alsa-utils ];
-
-    # Install udev rules for restoring card settings on boot
-    services.udev.extraRules = ''
-      ACTION=="add", SUBSYSTEM=="sound", KERNEL=="controlC*", KERNELS!="card*", GOTO="alsa_restore_go"
-      GOTO="alsa_restore_end"
-
-      LABEL="alsa_restore_go"
-      TEST!="/etc/alsa/state-daemon.conf", RUN+="${alsactl} restore -gU $attr{device/number}"
-      TEST=="/etc/alsa/state-daemon.conf", RUN+="${alsactl} nrestore -gU $attr{device/number}"
-      LABEL="alsa_restore_end"
+  options.hardware.alsa.enablePersistence = lib.mkOption {
+    type = lib.types.bool;
+    defaultText = lib.literalExpression "config.hardware.alsa.enable";
+    default = config.hardware.alsa.enable;
+    description = ''
+      Whether to enable ALSA sound card state saving on shutdown.
+      This is generally not necessary if you're using an external sound server.
     '';
-
-    # Service to store/restore the sound card settings
-    systemd.services.alsa-store = {
-      description = "Store Sound Card State";
-      wantedBy = [ "multi-user.target" ];
-      restartIfChanged = false;
-      unitConfig = {
-        RequiresMountsFor = "/var/lib/alsa";
-        ConditionVirtualization = "!systemd-nspawn";
-      };
-      serviceConfig = {
-        Type = "oneshot";
-        RemainAfterExit = true;
-        StateDirectory = "alsa";
-        # Note: the service should never be restated, otherwise any
-        # setting changed between the last `store` and now will be lost.
-        # To prevent NixOS from starting it in case it has failed we
-        # expand the exit codes considered successful
-        SuccessExitStatus = [ 0 99 ];
-        ExecStart = "${alsactl} restore -gU";
-        ExecStop = "${alsactl} store -gU";
-      };
-    };
   };
+
+  config = lib.mkMerge [
+
+    (lib.mkIf cfg.enable {
+      # Disable sound servers enabled by default and,
+      # if the user enabled one manually, cause a conflict.
+      services.pipewire.enable = false;
+      services.pulseaudio.enable = false;
+
+      hardware.alsa.config =
+        let
+          conf = [
+            ''
+              pcm.!default fromenv
+
+              # Read the capture and playback device from
+              # the ALSA_AUDIO_IN, ALSA_AUDIO_OUT variables
+              pcm.fromenv {
+                type asym
+                playback.pcm {
+                  type plug
+                  slave.pcm {
+                    @func getenv
+                    vars [ ALSA_AUDIO_OUT ]
+                    default pcm.sysdefault
+                  }
+                }
+                capture.pcm {
+                  type plug
+                  slave.pcm {
+                    @func getenv
+                    vars [ ALSA_AUDIO_IN ]
+                    default pcm.sysdefault
+                  }
+                }
+              }
+            ''
+            (lib.optional cfg.enableRecorder ''
+              pcm.!default "splitter:fromenv,recorder"
+
+              # Send audio to two stereo devices
+              pcm.splitter {
+                @args [ A B ]
+                @args.A.type string
+                @args.B.type string
+                type asym
+                playback.pcm {
+                  type plug
+                  route_policy "duplicate"
+                  slave.pcm {
+                    type multi
+                    slaves.a.pcm $A
+                    slaves.b.pcm $B
+                    slaves.a.channels 2
+                    slaves.b.channels 2
+                    bindings [
+                     { slave a channel 0 }
+                     { slave a channel 1 }
+                     { slave b channel 0 }
+                     { slave b channel 1 }
+                    ]
+                  }
+                }
+                capture.pcm $A
+              }
+
+              # Device which records and plays back audio
+              pcm.recorder {
+                type asym
+                capture.pcm {
+                  type dsnoop
+                  ipc_key 9165218
+                  ipc_perm 0666
+                  slave.pcm "hw:loopback,1,0"
+                  slave.period_size 1024
+                  slave.buffer_size 8192
+                }
+                playback.pcm {
+                  type dmix
+                  ipc_key 6181923
+                  ipc_perm 0666
+                  slave.pcm "hw:loopback,0,0"
+                  slave.period_size 1024
+                  slave.buffer_size 8192
+                }
+              }
+            '')
+            (lib.mapAttrsToList mkControl cfg.controls)
+            (lib.mapAttrsToList (n: v: "pcm.${n} ${quote v}") cfg.deviceAliases)
+          ];
+        in
+        lib.mkBefore (lib.concatStringsSep "\n" (lib.flatten conf));
+
+      hardware.alsa.cardAliases = lib.mkIf cfg.enableRecorder {
+        loopback.driver = "snd_aloop";
+        loopback.id = 2;
+      };
+
+      # Set default PCM devices
+      environment.sessionVariables = defaultDeviceVars;
+      systemd.globalEnvironment = defaultDeviceVars;
+
+      environment.etc."asound.conf".text = cfg.config;
+
+      boot.kernelModules =
+        [ ]
+        ++ lib.optionals cfg.enableOSSEmulation [
+          "snd_pcm_oss"
+          "snd_mixer_oss"
+        ]
+        ++ lib.optionals cfg.enableRecorder [ "snd_aloop" ];
+
+      # Assign names to the sound cards
+      boot.extraModprobeConfig = lib.concatStringsSep "\n" cardsConfig;
+
+      # Provide alsamixer, aplay, arecord, etc.
+      environment.systemPackages = [ pkgs.alsa-utils ];
+    })
+
+    (lib.mkIf config.hardware.alsa.enablePersistence {
+
+      # Install udev rules for restoring card settings on boot
+      services.udev.extraRules = ''
+        ACTION=="add", SUBSYSTEM=="sound", KERNEL=="controlC*", KERNELS!="card*", GOTO="alsa_restore_go"
+        GOTO="alsa_restore_end"
+
+        LABEL="alsa_restore_go"
+        TEST!="/etc/alsa/state-daemon.conf", RUN+="${alsactl} restore -gU $attr{device/number}"
+        TEST=="/etc/alsa/state-daemon.conf", RUN+="${alsactl} nrestore -gU $attr{device/number}"
+        LABEL="alsa_restore_end"
+      '';
+
+      # Service to store/restore the sound card settings
+      systemd.services.alsa-store = {
+        description = "Store Sound Card State";
+        wantedBy = [ "multi-user.target" ];
+        restartIfChanged = false;
+        unitConfig = {
+          RequiresMountsFor = "/var/lib/alsa";
+          ConditionVirtualization = "!systemd-nspawn";
+        };
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+          StateDirectory = "alsa";
+          # Note: the service should never be restated, otherwise any
+          # setting changed between the last `store` and now will be lost.
+          # To prevent NixOS from starting it in case it has failed we
+          # expand the exit codes considered successful
+          SuccessExitStatus = [
+            0
+            99
+          ];
+          ExecStart = "${alsactl} restore -gU";
+          ExecStop = "${alsactl} store -gU";
+        };
+      };
+    })
+
+  ];
 
   meta.maintainers = with lib.maintainers; [ rnhmjoj ];
 

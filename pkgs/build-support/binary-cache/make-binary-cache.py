@@ -23,7 +23,7 @@ for item in closures:
   with open(xzFile, "w") as f:
     subprocess.run("nix-store --dump %s | xz -c" % item["path"], stdout=f, shell=True)
 
-  fileHash = subprocess.run(["nix-hash", "--base32", "--type", "sha256", item["path"]], capture_output=True).stdout.decode().strip()
+  fileHash = subprocess.run(["nix-hash", "--base32", "--type", "sha256", "--flat", xzFile], capture_output=True).stdout.decode().strip()
   fileSize = os.path.getsize(xzFile)
 
   # Rename the .nar.xz file to its own hash to match "nix copy" behavior

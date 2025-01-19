@@ -294,7 +294,7 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
   ] ++ optionals (pythonOlder "3.12") [
     # https://github.com/python/cpython/issues/90656
     ./loongarch-support.patch
-  ] ++ optionals (pythonAtLeast "3.12") [
+  ] ++ optionals (pythonAtLeast "3.12" && pythonOlder "3.14") [
     ./3.12/CVE-2024-12254.patch
   ] ++ optionals (pythonAtLeast "3.11" && pythonOlder "3.13") [
     # backport fix for https://github.com/python/cpython/issues/95855
@@ -434,6 +434,8 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
   '' + optionalString (stdenv.hostPlatform.isDarwin && x11Support && pythonAtLeast "3.11") ''
     export TCLTK_LIBS="-L${tcl}/lib -L${tk}/lib -l${tcl.libPrefix} -l${tk.libPrefix}"
     export TCLTK_CFLAGS="-I${tcl}/include -I${tk}/include"
+  '' + optionalString stdenv.hostPlatform.isWindows ''
+    export NIX_CFLAGS_COMPILE+=" -Wno-error=incompatible-pointer-types"
   '' + optionalString stdenv.hostPlatform.isMusl ''
     export NIX_CFLAGS_COMPILE+=" -DTHREAD_STACK_SIZE=0x100000"
   '' +
@@ -504,6 +506,13 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     # This allows build Python to import host Python's sysconfigdata
     mkdir -p "$out/${sitePackages}"
     ln -s "$out/lib/${libPrefix}/"_sysconfigdata*.py "$out/${sitePackages}/"
+    '' + optionalString (pythonAtLeast "3.14") ''
+    # Get rid of retained dependencies on -dev packages, and remove from _sysconfig_vars*.json introduced with Python3.14
+    for i in $out/lib/${libPrefix}/_sysconfig_vars*.json; do
+       sed -i $i -e "s|$TMPDIR|/no-such-path|g"
+    done
+    find $out/lib -name '_sysconfig_vars*.json*' -print -exec nuke-refs ${keep-references} '{}' +
+    ln -s "$out/lib/${libPrefix}/"_sysconfig_vars*.json "$out/${sitePackages}/"
     '' + optionalString stripConfig ''
     rm -R $out/bin/python*-config $out/lib/python*/config-*
     '' + optionalString stripIdlelib ''
@@ -665,5 +674,7 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.linux ++ platforms.darwin ++ platforms.windows ++ platforms.freebsd;
     mainProgram = executable;
     maintainers = lib.teams.python.members;
+    # mingw patches only apply to Python 3.11 currently
+    broken = (lib.versions.minor version) != "11" && stdenv.hostPlatform.isWindows;
   };
 })

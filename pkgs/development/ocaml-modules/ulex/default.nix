@@ -23,39 +23,43 @@ let
       };
 in
 
-stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-${pname}-${version}";
-  inherit (param) version;
+lib.throwIf (lib.versionAtLeast ocaml.version "5.0")
+  "ulex is not available for OCaml ${ocaml.version}"
 
-  src = fetchFromGitHub {
-    owner = "whitequark";
-    repo = pname;
-    rev = "v${version}";
-    inherit (param) sha256;
-  };
+  stdenv.mkDerivation
+  rec {
+    name = "ocaml${ocaml.version}-${pname}-${version}";
+    inherit (param) version;
 
-  createFindlibDestdir = true;
+    src = fetchFromGitHub {
+      owner = "whitequark";
+      repo = pname;
+      rev = "v${version}";
+      inherit (param) sha256;
+    };
 
-  nativeBuildInputs = [
-    ocaml
-    findlib
-    ocamlbuild
-    camlp4
-  ];
-  propagatedBuildInputs = [ camlp4 ];
+    createFindlibDestdir = true;
 
-  strictDeps = true;
+    nativeBuildInputs = [
+      ocaml
+      findlib
+      ocamlbuild
+      camlp4
+    ];
+    propagatedBuildInputs = [ camlp4 ];
 
-  buildFlags = [
-    "all"
-    "all.opt"
-  ];
+    strictDeps = true;
 
-  meta = {
-    inherit (src.meta) homepage;
-    description = "Lexer generator for Unicode and OCaml";
-    license = lib.licenses.mit;
-    inherit (ocaml.meta) platforms;
-    maintainers = [ lib.maintainers.roconnor ];
-  };
-}
+    buildFlags = [
+      "all"
+      "all.opt"
+    ];
+
+    meta = {
+      inherit (src.meta) homepage;
+      description = "Lexer generator for Unicode and OCaml";
+      license = lib.licenses.mit;
+      inherit (ocaml.meta) platforms;
+      maintainers = [ lib.maintainers.roconnor ];
+    };
+  }

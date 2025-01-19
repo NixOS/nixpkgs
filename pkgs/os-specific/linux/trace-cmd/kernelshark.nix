@@ -17,6 +17,7 @@
   freefont_ttf,
   wrapQtAppsHook,
   qtwayland,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,6 +28,13 @@ stdenv.mkDerivation (finalAttrs: {
     url = "https://git.kernel.org/pub/scm/utils/trace-cmd/kernel-shark.git/snapshot/kernelshark-v${finalAttrs.version}.tar.gz";
     hash = "sha256-KV8ahV2koX7OL1C42H5If14e7m54jv0DlZ1dNsVRUWE=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://git.kernel.org/pub/scm/utils/trace-cmd/kernel-shark.git/patch/?id=9e33324644fff49b7aa15d34f836e72af8b32c78";
+      hash = "sha256-2XtEQ4WscLlUiEQYG2HiHuysMzVzlG05PVreLRVM8Lc=";
+    })
+  ];
 
   outputs = [ "out" ];
 

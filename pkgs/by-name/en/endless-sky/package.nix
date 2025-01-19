@@ -41,13 +41,16 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  nativeBuildInputs = [
+    scons
+  ];
+
   buildInputs = [
     SDL2
     libpng
     libjpeg
     glew
     openal
-    scons
     libmad
     libuuid
   ];

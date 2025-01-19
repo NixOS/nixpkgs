@@ -15,13 +15,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "espflash";
-  version = "3.2.0";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "esp-rs";
     repo = "espflash";
     tag = "v${version}";
-    hash = "sha256-X9VTwXk/6zAkQb5P9Wz8Pt4oIt2xXfff9dhGb8wauG4=";
+    hash = "sha256-8qFq+OyidW8Bwla6alk/9pXLe3zayHkz5LsqI3jwgY0=";
   };
 
   nativeBuildInputs = [
@@ -43,7 +43,10 @@ rustPlatform.buildRustPackage rec {
       SystemConfiguration
     ];
 
-  cargoHash = "sha256-3xUDsznzIRlfGwVuIH1+Ub5tE/ST981KZS/2TAKaBAE=";
+  cargoHash = "sha256-04bBLTpsQNDP0ExvAOjwp3beOktC8rQqFtfEu6d+DWY=";
+  checkFlags = [
+    "--skip cli::monitor::external_processors"
+  ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd espflash \

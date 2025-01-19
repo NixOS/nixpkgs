@@ -515,6 +515,18 @@ let
       # we need to reintroduce `outputSpecified` to get the expected behavior e.g. of lib.get*
       llvm = tools.libllvm;
 
+      tblgen = callPackage ./tblgen.nix {
+        patches = builtins.filter
+          # Crude method to drop polly patches if present, they're not needed for tblgen.
+          (p: (!lib.hasInfix "-polly" p)) tools.libllvm.patches;
+        clangPatches = [
+          # Would take tools.libclang.patches, but this introduces a cycle due
+          # to replacements depending on the llvm outpath (e.g. the LLVMgold patch).
+          # So take the only patch known to be necessary.
+          (metadata.getVersionFile "clang/gnu-install-dirs.patch")
+        ];
+      };
+
       libclang = callPackage ./clang {
         patches =
           [
