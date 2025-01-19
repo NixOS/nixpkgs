@@ -15,7 +15,7 @@
   libxcb,
   openssl,
   libopus,
-  boost,
+  boost186,
   pkg-config,
   libdrm,
   wayland,
@@ -118,7 +118,7 @@ stdenv'.mkDerivation rec {
       xorg.libXi
       openssl
       libopus
-      boost
+      boost186 # does not build with 1.87 -- remove when upgrading to next stable release
       libdrm
       wayland
       libffi
