@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "jpype1";
-  version = "1.5.0";
+  version = "1.5.1";
   format = "setuptools";
   disabled = isPy27;
 
   src = fetchPypi {
     pname = "JPype1";
     inherit version;
-    hash = "sha256-QlpuGWav3VhItgwmiLyut+QLpQSmhvERRYlmjgYx6Hg=";
+    hash = "sha256-y7jqlSvwoMYBHyGjGpe67SQcSq0OJJnbOG7f1c8q3s4=";
   };
 
   propagatedBuildInputs = [ packaging ] ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
