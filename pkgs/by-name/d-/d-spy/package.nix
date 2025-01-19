@@ -51,15 +51,15 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "D-Bus exploration tool";
     mainProgram = "d-spy";
     homepage = "https://gitlab.gnome.org/GNOME/d-spy";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl3Plus # library
       gpl3Plus # app
     ];
-    maintainers = teams.gnome.members;
-    platforms = platforms.linux;
+    maintainers = lib.teams.gnome.members;
+    platforms = lib.platforms.linux;
   };
 }

@@ -34,10 +34,10 @@ stdenv.mkDerivation rec {
 
   createFindlibDestdir = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mjambon/dum";
     description = "Inspect the runtime representation of arbitrary OCaml values";
-    license = licenses.lgpl21Plus;
-    maintainers = [ maintainers.alexfmpe ];
+    license = lib.licenses.lgpl21Plus;
+    maintainers = [ lib.maintainers.alexfmpe ];
   };
 }

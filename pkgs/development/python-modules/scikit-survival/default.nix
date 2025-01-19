@@ -82,10 +82,10 @@ buildPythonPackage rec {
       # 27079905.88052468 to far from 27079905.880496684
       "test_coxnet";
 
-  meta = with lib; {
+  meta = {
     description = "Survival analysis built on top of scikit-learn";
     homepage = "https://github.com/sebp/scikit-survival";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ GuillaumeDesforges ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ GuillaumeDesforges ];
   };
 }

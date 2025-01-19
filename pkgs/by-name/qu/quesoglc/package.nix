@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     libX11
   ];
   # FIXME: Configure fails to use system glew.
-  meta = with lib; {
+  meta = {
     description = "Free implementation of the OpenGL Character Renderer";
     longDescription = ''
       QuesoGLC is a free (as in free speech) implementation of the OpenGL
@@ -36,8 +36,8 @@ stdenv.mkDerivation rec {
       platform that supports both FreeType and the OpenGL API.
     '';
     homepage = "https://quesoglc.sourceforge.net/";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ astsmtl ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ astsmtl ];
+    platforms = lib.platforms.linux;
   };
 }

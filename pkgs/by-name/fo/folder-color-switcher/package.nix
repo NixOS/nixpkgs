@@ -46,11 +46,11 @@ stdenvNoCC.mkDerivation rec {
   # TypeError: Couldn't find foreign struct converter for 'cairo.Surface'
   passthru.nemoPythonExtensionDeps = [ python3.pkgs.pycairo ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/linuxmint/folder-color-switcher";
     description = "Change folder colors for Nemo and Caja";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    maintainers = teams.cinnamon.members;
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = lib.teams.cinnamon.members;
   };
 }

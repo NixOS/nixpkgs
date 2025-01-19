@@ -222,11 +222,11 @@ stdenv.mkDerivation rec {
       cd ..
     '';
 
-  meta = with lib; {
+  meta = {
     description = "PC-9801 series emulator";
     homepage = "https://github.com/AZO234/NP2kai";
-    license = licenses.mit;
-    maintainers = with maintainers; [ OPNA2608 ];
-    platforms = platforms.x86;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ OPNA2608 ];
+    platforms = lib.platforms.x86;
   };
 }

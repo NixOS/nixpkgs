@@ -25,10 +25,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "setuptools extension for building non-Python Dynamic Shared Objects";
     homepage = "https://github.com/mdavidsaver/setuptools_dso";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ marius851000 ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ marius851000 ];
   };
 }

@@ -35,11 +35,11 @@ stdenv.mkDerivation rec {
 
   buildFlags = [ "CFLAGS=-fgnu89-inline" ];
 
-  meta = with lib; {
+  meta = {
     description = "Ncurses based hex editor with a vim-like interface";
     homepage = "https://bviplus.sourceforge.net";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
     mainProgram = "bviplus";
   };

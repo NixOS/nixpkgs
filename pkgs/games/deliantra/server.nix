@@ -80,14 +80,14 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/deliantra-server --prefix PERL5LIB : $PERL5LIB
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Server for the Deliantra free MMORPG";
     homepage = "http://www.deliantra.net/";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Plus
       agpl3Plus
     ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ ToxicFrog ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ ToxicFrog ];
   };
 }

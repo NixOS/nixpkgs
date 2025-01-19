@@ -34,12 +34,12 @@ mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  meta = with lib; {
+  meta = {
     description = "polyphonic additive synthesizer";
     mainProgram = "padthv1_jack";
     homepage = "http://padthv1.sourceforge.net/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.magnetophon ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.magnetophon ];
   };
 }

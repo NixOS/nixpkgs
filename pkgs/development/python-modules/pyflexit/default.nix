@@ -24,10 +24,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyflexit" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for Flexit A/C units";
     homepage = "https://github.com/Sabesto/pyflexit";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

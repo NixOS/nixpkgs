@@ -35,7 +35,7 @@ buildDunePackage rec {
       || lib.versionAtLeast ocaml.version "4.10"
     );
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Chris00/ocaml-cairo";
     description = "Binding to Cairo, a 2D Vector Graphics Library";
     longDescription = ''
@@ -44,8 +44,8 @@ buildDunePackage rec {
       the X Window System, Quartz, Win32, image buffers, PostScript, PDF,
       and SVG file output.
     '';
-    license = licenses.lgpl3;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl3;
+    maintainers = with lib.maintainers; [
       jirkamarsik
       vbgl
     ];

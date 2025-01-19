@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "NIX_DESTDIR=$(out)" ]; # see postPatch
   configureFlags = lib.optional (!enableTools) "--disable-tools";
 
-  meta = with lib; {
+  meta = {
     description = "Exult is a project to recreate Ultima VII for modern operating systems";
     longDescription = ''
       Ultima VII, an RPG from the early 1990's, still has a huge following. But,
@@ -72,8 +72,8 @@ stdenv.mkDerivation rec {
       possible.
     '';
     homepage = "http://exult.info";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ azahi ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ azahi ];
     mainProgram = "exult";
   };
 }

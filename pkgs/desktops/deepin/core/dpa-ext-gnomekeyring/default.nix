@@ -41,11 +41,11 @@ stdenv.mkDerivation rec {
     libsecret
   ];
 
-  meta = with lib; {
+  meta = {
     description = "GNOME keyring extension for dde-polkit-agent";
     homepage = "https://github.com/linuxdeepin/dpa-ext-gnomekeyring";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.deepin.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = lib.teams.deepin.members;
   };
 }

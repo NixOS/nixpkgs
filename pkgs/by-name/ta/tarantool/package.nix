@@ -46,11 +46,11 @@ stdenv.mkDerivation rec {
     "-DTARANTOOL_VERSION=${version}.builtByNix" # expects the commit hash as well
   ];
 
-  meta = with lib; {
+  meta = {
     description = "In-memory computing platform consisting of a database and an application server";
     homepage = "https://www.tarantool.io/";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     mainProgram = "tarantool";
-    maintainers = with maintainers; [ dit7ya ];
+    maintainers = with lib.maintainers; [ dit7ya ];
   };
 }

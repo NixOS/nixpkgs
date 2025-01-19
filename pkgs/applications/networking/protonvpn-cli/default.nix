@@ -31,12 +31,12 @@ buildPythonApplication rec {
   # Project has a dummy test
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Linux command-line client for ProtonVPN";
     homepage = "https://github.com/protonvpn/linux-cli";
     maintainers = [ ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
     mainProgram = "protonvpn-cli";
   };
 }

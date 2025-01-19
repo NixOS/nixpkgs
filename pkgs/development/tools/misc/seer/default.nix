@@ -38,12 +38,12 @@ stdenv.mkDerivation rec {
     kdePackages.wrapQtAppsHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Qt gui frontend for GDB";
     mainProgram = "seergdb";
     homepage = "https://github.com/epasveer/seer";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ foolnotion ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ foolnotion ];
   };
 }

@@ -75,12 +75,12 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Censor private information";
     homepage = "https://gitlab.gnome.org/World/obfuscate";
-    license = licenses.gpl3Plus;
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.all;
     mainProgram = "obfuscate";
-    maintainers = with maintainers; [ fgaz ] ++ lib.teams.gnome-circle.members;
+    maintainers = with lib.maintainers; [ fgaz ] ++ lib.teams.gnome-circle.members;
   };
 })

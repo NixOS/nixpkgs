@@ -22,10 +22,10 @@ python.pkgs.buildPythonApplication rec {
     distro
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://alisw.github.io/alibuild/";
     description = "Build tool for ALICE experiment software";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ ktf ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ ktf ];
   };
 }

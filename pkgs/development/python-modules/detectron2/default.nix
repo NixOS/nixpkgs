@@ -172,10 +172,10 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "detectron2" ];
 
-  meta = with lib; {
+  meta = {
     description = "Facebooks's next-generation platform for object detection, segmentation and other visual recognition tasks";
     homepage = "https://github.com/facebookresearch/detectron2";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

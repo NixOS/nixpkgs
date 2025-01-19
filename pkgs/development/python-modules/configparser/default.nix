@@ -31,10 +31,10 @@ buildPythonPackage rec {
     export LC_ALL=${if stdenv.hostPlatform.isDarwin then "en_US" else "C"}.UTF-8
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Updated configparser from Python 3.7 for Python 2.6+";
     homepage = "https://github.com/jaraco/configparser";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

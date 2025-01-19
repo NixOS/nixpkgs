@@ -95,12 +95,12 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Program to run certain classic graphical point-and-click adventure games (such as Monkey Island)";
     mainProgram = "scummvm";
     homepage = "https://www.scummvm.org/";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.peterhoeg ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.peterhoeg ];
+    platforms = lib.platforms.unix;
   };
 }

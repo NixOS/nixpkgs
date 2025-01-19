@@ -164,12 +164,12 @@ python3Packages.buildPythonApplication rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     mainProgram = "rcu";
     description = "All-in-one offline/local management software for reMarkable e-paper tablets";
     homepage = "http://www.davisr.me/projects/rcu/";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ OPNA2608 ];
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ OPNA2608 ];
     hydraPlatforms = [ ]; # requireFile used as src
   };
 }

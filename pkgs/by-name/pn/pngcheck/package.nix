@@ -36,12 +36,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pmt.sourceforge.net/pngcrush";
     description = "Verifies the integrity of PNG, JNG and MNG files";
-    license = licenses.free;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ starcraft66 ];
+    license = lib.licenses.free;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ starcraft66 ];
     mainProgram = "pngcheck";
   };
 }

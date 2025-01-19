@@ -76,11 +76,11 @@ stdenv.mkDerivation (finalAttrs: {
     mv $out/include $dev/include
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Dynamic library providing Virtualization-based process isolation capabilities";
     homepage = "https://github.com/containers/libkrun";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       nickcao
       RossComputerGuy
     ];

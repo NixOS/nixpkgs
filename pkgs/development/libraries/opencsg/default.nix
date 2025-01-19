@@ -63,12 +63,12 @@ stdenv.mkDerivation rec {
       $app
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Constructive Solid Geometry library";
     mainProgram = "opencsgexample";
     homepage = "http://www.opencsg.org/";
-    platforms = platforms.unix;
-    maintainers = [ maintainers.raskin ];
-    license = licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.raskin ];
+    license = lib.licenses.gpl2Plus;
   };
 }

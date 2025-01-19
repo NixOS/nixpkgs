@@ -51,9 +51,9 @@ stdenv.mkDerivation rec {
     networkManagerPlugin = "VPN/nm-strongswan-service.name";
   };
 
-  meta = with lib; {
+  meta = {
     description = "NetworkManager's strongswan plugin";
     inherit (networkmanager.meta) platforms;
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
   };
 }

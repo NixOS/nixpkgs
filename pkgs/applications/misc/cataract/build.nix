@@ -48,11 +48,11 @@ stdenv.mkDerivation {
     cp src/cgg{,-dirgen} $out/bin/
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://cgg.bzatek.net/";
     description = "Simple static web photo gallery, designed to be clean and easily usable";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.matthiasbeyer ];
-    platforms = with platforms; linux ++ darwin;
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.matthiasbeyer ];
+    platforms = with lib.platforms; linux ++ darwin;
   };
 }

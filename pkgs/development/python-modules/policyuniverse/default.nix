@@ -22,10 +22,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "policyuniverse" ];
 
-  meta = with lib; {
+  meta = {
     description = "Parse and Process AWS IAM Policies, Statements, ARNs and wildcards";
     homepage = "https://github.com/Netflix-Skunkworks/policyuniverse";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

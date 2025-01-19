@@ -15,13 +15,13 @@ stdenv.mkDerivation rec {
 
   patches = [ ./header-order.patch ];
 
-  meta = with lib; {
+  meta = {
     description = "SMTP filter that allows to check for viruses using the ClamAV
                    anti-virus software";
     homepage = "http://thewalter.net/stef/software/clamsmtp/";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.ekleog ];
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.ekleog ];
     mainProgram = "clamsmtpd";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

@@ -69,7 +69,7 @@ python3Packages.buildPythonApplication rec {
 
   checkPhase = "xvfb-run pytest ../tests/";
 
-  meta = with lib; {
+  meta = {
     description = " A personal tasks and TODO-list items organizer";
     mainProgram = "gtg";
     longDescription = ''
@@ -78,8 +78,8 @@ python3Packages.buildPythonApplication rec {
     '';
     homepage = "https://github.com/getting-things-gnome/gtg";
     downloadPage = "https://github.com/getting-things-gnome/gtg/releases";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ oyren ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ oyren ];
+    platforms = lib.platforms.linux;
   };
 }

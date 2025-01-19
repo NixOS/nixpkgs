@@ -30,12 +30,12 @@ stdenv.mkDerivation rec {
     makeFlagsArray+=(CFLAGS="-Wno-pointer-to-int-cast -Wno-newline-eof")
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Reliable, high-performance, thread safe, flexible, clear-model, pure C logging library";
     homepage = "https://hardysimpson.github.io/zlog/";
-    license = licenses.lgpl21;
-    maintainers = [ maintainers.matthiasbeyer ];
+    license = lib.licenses.lgpl21;
+    maintainers = [ lib.maintainers.matthiasbeyer ];
     mainProgram = "zlog-chk-conf";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

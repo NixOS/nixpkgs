@@ -34,11 +34,11 @@ buildGoModule rec {
     command = "curlie version";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Frontend to curl that adds the ease of use of httpie, without compromising on features and performance";
     homepage = "https://curlie.io/";
-    maintainers = with maintainers; [ ma27 ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ ma27 ];
+    license = lib.licenses.mit;
     mainProgram = "curlie";
   };
 }

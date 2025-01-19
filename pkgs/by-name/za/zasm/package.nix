@@ -45,13 +45,13 @@ stdenv.mkDerivation rec {
     install -Dm755 -t $out/bin zasm
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Z80 / 8080 / Z180 assembler (for unix-style OS)";
     mainProgram = "zasm";
     homepage = "https://k1.spdns.de/Develop/Projects/zasm/Distributions/";
-    license = licenses.bsd2;
-    maintainers = [ maintainers.turbomack ];
-    platforms = platforms.unix;
-    badPlatforms = platforms.aarch64;
+    license = lib.licenses.bsd2;
+    maintainers = [ lib.maintainers.turbomack ];
+    platforms = lib.platforms.unix;
+    badPlatforms = lib.platforms.aarch64;
   };
 }

@@ -45,11 +45,11 @@ stdenv.mkDerivation rec {
     rm -rf $out/share
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Userspace library for the Linux Restartable Sequence API";
     homepage = "https://github.com/compudj/librseq";
-    license = licenses.lgpl21Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ thoughtpolice ];
+    license = lib.licenses.lgpl21Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ thoughtpolice ];
   };
 }

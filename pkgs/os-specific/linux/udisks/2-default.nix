@@ -147,14 +147,14 @@ stdenv.mkDerivation rec {
     tests.vm = nixosTests.udisks2;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Daemon, tools and libraries to access and manipulate disks, storage devices and technologies";
     homepage = "https://www.freedesktop.org/wiki/Software/udisks/";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl2Plus
       gpl2Plus
     ]; # lgpl2Plus for the library, gpl2Plus for the tools & daemon
-    maintainers = teams.freedesktop.members ++ (with maintainers; [ johnazoidberg ]);
-    platforms = platforms.linux;
+    maintainers = lib.teams.freedesktop.members ++ (with lib.maintainers; [ johnazoidberg ]);
+    platforms = lib.platforms.linux;
   };
 }

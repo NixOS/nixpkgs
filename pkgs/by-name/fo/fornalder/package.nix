@@ -26,11 +26,11 @@ rustPlatform.buildRustPackage rec {
       --suffix PATH : ${lib.makeBinPath [ gnuplot ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Visualize long-term trends in collections of Git repositories";
     homepage = "https://github.com/hpjansson/fornalder";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       astro
       figsoda
     ];

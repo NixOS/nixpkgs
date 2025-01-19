@@ -74,11 +74,11 @@ stdenv.mkDerivation {
 
   dontStrip = true;
 
-  meta = with lib; {
+  meta = {
     description = "OCaml interface to GTK";
     homepage = "http://lablgtk.forge.ocamlcore.org/";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [
       maggesi
       roconnor
       vbgl

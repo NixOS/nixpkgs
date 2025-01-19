@@ -26,16 +26,16 @@ stdenv.mkDerivation rec {
     find lib -type f -exec install -D {} $out/{} \;
   '';
 
-  meta = with lib; {
+  meta = {
     description = "BlueField boot images";
     homepage = "https://github.com/Mellanox/bootimages";
     # It is unclear if the bootimages themselves are Open Source software. They
     # never explicitly say they are. They contain Open Source software licensed
     # under bsd2, bsd2Patent, bsd3. However, it is probably safer to assume
     # they are unfree. See https://github.com/Mellanox/bootimages/issues/3
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     platforms = [ "aarch64-linux" ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       nikstur
       thillux
     ];

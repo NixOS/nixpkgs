@@ -44,11 +44,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "File format and library for the storage of quantum chemical wave functions";
     homepage = "https://trex-coe.github.io/trexio/";
     downloadPage = "https://github.com/TREX-CoE/trexio";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.sheepforce ];
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.sheepforce ];
   };
 }

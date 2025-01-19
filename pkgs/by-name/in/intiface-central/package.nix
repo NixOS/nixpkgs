@@ -70,12 +70,12 @@ flutterPackages.stable.buildFlutterApplication rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     mainProgram = "intiface_central";
     description = "Intiface Central (Buttplug Frontend) Application for Desktop";
     homepage = "https://intiface.com/";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ _999eagle ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ _999eagle ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -8,11 +8,11 @@ bundlerApp {
   gemdir = ./.;
   exes = [ "xcversion" ];
 
-  meta = with lib; {
+  meta = {
     description = "Install and update your Xcodes automatically";
     homepage = "https://github.com/xcpretty/xcode-install";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ q3k ];
-    license = with licenses; [ mit ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ q3k ];
+    license = with lib.licenses; [ mit ];
   };
 }

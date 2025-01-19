@@ -21,11 +21,11 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
 
-  meta = with lib; {
+  meta = {
     description = "Colourise your checksum output";
     mainProgram = "coloursum";
     homepage = "https://github.com/ticky/coloursum";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fgaz ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fgaz ];
   };
 }

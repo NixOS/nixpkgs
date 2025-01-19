@@ -23,10 +23,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "python_picnic_api" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for the Picnic API";
     homepage = "https://github.com/MikeBrink/python-picnic-api";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

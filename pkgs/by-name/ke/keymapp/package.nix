@@ -61,14 +61,14 @@ stdenv.mkDerivation rec {
 
   desktopItems = [ desktopItem ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.zsa.io/flash/";
     description = "Application for ZSA keyboards";
     maintainers = with lib.maintainers; [
       jankaifer
       shawn8901
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     license = lib.licenses.unfree;
   };
 }

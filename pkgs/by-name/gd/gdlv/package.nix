@@ -29,11 +29,11 @@ buildGoModule rec {
     Metal
   ];
 
-  meta = with lib; {
+  meta = {
     description = "GUI frontend for Delve";
     mainProgram = "gdlv";
     homepage = "https://github.com/aarzilli/gdlv";
-    maintainers = with maintainers; [ mmlb ];
-    license = licenses.gpl3;
+    maintainers = with lib.maintainers; [ mmlb ];
+    license = lib.licenses.gpl3;
   };
 }

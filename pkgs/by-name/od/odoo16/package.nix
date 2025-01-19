@@ -94,10 +94,10 @@ python.pkgs.buildPythonApplication rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Open Source ERP and CRM";
     homepage = "https://www.odoo.com/";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ mkg20001 ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ mkg20001 ];
   };
 }

@@ -49,11 +49,11 @@ stdenv.mkDerivation rec {
     sed -i '/USER_JAVA_OPTS=$RTG_JAVA_OPTS/a mkdir -p $HOME/.config/rtg-tools'  installer/rtg
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/RealTimeGenomics/rtg-tools";
     description = "Useful utilities for dealing with VCF files and sequence data, especially vcfeval";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ apraga ];
+    maintainers = with lib.maintainers; [ apraga ];
   };
 }

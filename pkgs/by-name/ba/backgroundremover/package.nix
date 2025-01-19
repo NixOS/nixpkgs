@@ -95,13 +95,13 @@ let
 
     doCheck = false; # no tests
 
-    meta = with lib; {
+    meta = {
       mainProgram = "backgroundremover";
       description = "Command line tool to remove background from image and video, made by nadermx to power";
       homepage = "https://BackgroundRemoverAI.com";
       downloadPage = "https://github.com/nadermx/backgroundremover/releases";
-      license = licenses.mit;
-      maintainers = [ maintainers.lucasew ];
+      license = lib.licenses.mit;
+      maintainers = [ lib.maintainers.lucasew ];
     };
   };
 in

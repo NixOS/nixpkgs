@@ -30,11 +30,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Collection of tools written for use in bootstrapping";
     homepage = "https://savannah.nongnu.org/projects/mescc-tools";
-    license = licenses.gpl3Only;
-    maintainers = teams.minimal-bootstrap.members;
+    license = lib.licenses.gpl3Only;
+    maintainers = lib.teams.minimal-bootstrap.members;
     inherit (m2libc.meta) platforms;
   };
 })

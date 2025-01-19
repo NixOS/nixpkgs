@@ -82,12 +82,12 @@ mkDerivation rec {
     qtWrapperArgs+=(--prefix PYTHONPATH : "$program_PYTHONPATH")
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform application for configuring any YubiKey over all USB interfaces";
     homepage = "https://developers.yubico.com/yubikey-manager-qt/";
-    license = licenses.bsd2;
-    maintainers = [ maintainers.cbley ];
+    license = lib.licenses.bsd2;
+    maintainers = [ lib.maintainers.cbley ];
     mainProgram = "ykman-gui";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

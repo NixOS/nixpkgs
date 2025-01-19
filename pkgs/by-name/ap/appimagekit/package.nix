@@ -160,16 +160,16 @@ stdenv.mkDerivation rec {
     squashfuse = appimagekit_squashfuse;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool to package desktop applications as AppImages";
     longDescription = ''
       AppImageKit is an implementation of the AppImage format that
       provides tools such as appimagetool and appimaged for handling
       AppImages.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ taeer ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ taeer ];
     homepage = src.meta.homepage;
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

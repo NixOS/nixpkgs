@@ -32,11 +32,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for parsing semi-structured text into python tables";
     mainProgram = "textfsm";
     homepage = "https://github.com/google/textfsm";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

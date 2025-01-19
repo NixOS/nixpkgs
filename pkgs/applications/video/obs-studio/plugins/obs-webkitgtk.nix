@@ -42,11 +42,11 @@ stdenv.mkDerivation rec {
       --replace 'g_file_read_link("/proc/self/exe", NULL)' "g_strdup(\"$out/lib/obs-plugins\")"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Yet another OBS Studio browser source";
     homepage = "https://github.com/fzwoch/obs-webkitgtk";
-    maintainers = with maintainers; [ j-hui ];
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ j-hui ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
   };
 }

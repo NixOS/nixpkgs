@@ -45,12 +45,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "DB Browser for SQLite";
     mainProgram = "sqlitebrowser";
     homepage = "https://sqlitebrowser.org/";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ peterhoeg ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ peterhoeg ];
+    platforms = lib.platforms.unix;
   };
 })

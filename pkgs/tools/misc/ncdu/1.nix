@@ -16,12 +16,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses ];
 
-  meta = with lib; {
+  meta = {
     description = "Disk usage analyzer with an ncurses interface";
     homepage = "https://dev.yorhel.nl/ncdu";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ pSub ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ pSub ];
     mainProgram = "ncdu";
   };
 }

@@ -16,11 +16,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-R1Xahr9R4G8Tr2cGRJ2oydVaLohPz2VM6tnbtE8Hysk=";
 
-  meta = with lib; {
+  meta = {
     description = "Generate human readable random names";
     homepage = "https://github.com/allenap/rust-petname";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "petname";
   };
 }

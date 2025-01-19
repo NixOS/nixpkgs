@@ -145,13 +145,13 @@ stdenv.mkDerivation (finalAttrs: {
     cp ../deploy/data/linux/AmneziaVPN.service $out/lib/systemd/system/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Amnezia VPN Client";
     downloadPage = "https://amnezia.org/en/downloads";
     homepage = "https://amnezia.org/en";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     mainProgram = "AmneziaVPN";
-    maintainers = with maintainers; [ sund3RRR ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ sund3RRR ];
+    platforms = lib.platforms.unix;
   };
 })

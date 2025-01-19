@@ -28,11 +28,11 @@ stdenv.mkDerivation rec {
     "-Wno-error=sign-compare"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/tinyalsa/tinyalsa";
     description = "Tiny library to interface with ALSA in the Linux kernel";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
-    platforms = with platforms; linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ];
+    platforms = with lib.platforms; linux;
   };
 }

@@ -79,16 +79,16 @@ else
 
       dontStrip = true;
 
-      meta = with lib; {
+      meta = {
         description = "Preprocessor-pretty-printer for OCaml";
         longDescription = ''
           Camlp5 is a preprocessor and pretty-printer for OCaml programs.
           It also provides parsing and printing tools.
         '';
         homepage = "https://camlp5.github.io/";
-        license = licenses.bsd3;
+        license = lib.licenses.bsd3;
         platforms = ocaml.meta.platforms or [ ];
-        maintainers = with maintainers; [
+        maintainers = with lib.maintainers; [
           maggesi
           vbgl
         ];

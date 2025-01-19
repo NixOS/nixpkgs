@@ -21,11 +21,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-0bkyopkssqH0vfaWkFC3dV2o7Q3EuDEOM8JvRB9ekLU=";
 
-  meta = with lib; {
+  meta = {
     description = "Find Wireguard VPN keypairs with a specific readable string";
     homepage = "https://github.com/warner/wireguard-vanity-address";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bcc32 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bcc32 ];
     mainProgram = "wireguard-vanity-address";
   };
 }

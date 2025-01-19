@@ -40,11 +40,11 @@ mkDerivation rec {
     qtquickcontrols2
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Weather application for Plasma Mobile";
     mainProgram = "kweather";
     homepage = "https://invent.kde.org/plasma-mobile/kweather";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Plus
       cc-by-40
     ];

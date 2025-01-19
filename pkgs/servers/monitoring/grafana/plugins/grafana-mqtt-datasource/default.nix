@@ -9,10 +9,10 @@ grafanaPlugin rec {
     x86_64-darwin = "sha256-PZmUkghYawU5aKA536u3/LCzsvkIFVJIzl1FVWcrKTI=";
     aarch64-darwin = "sha256-9FP7UbNI4q4nqRTzlNKcEPnJ9mdqzOL4E0nuEAdFNJw=";
   };
-  meta = with lib; {
+  meta = {
     description = "The MQTT data source plugin allows you to visualize streaming MQTT data from within Grafana.";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ nagisa ];
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ nagisa ];
+    platforms = lib.platforms.unix;
   };
 }

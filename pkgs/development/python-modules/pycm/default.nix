@@ -49,10 +49,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pycm" ];
 
-  meta = with lib; {
+  meta = {
     description = "Multiclass confusion matrix library";
     homepage = "https://pycm.io";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

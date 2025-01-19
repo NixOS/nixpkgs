@@ -12,10 +12,10 @@ mkDiscoursePlugin {
     rev = "7721b1646dead4719c02868ef7965f1b27c74eb3";
     sha256 = "sha256-k2m88wsUmxAXC2LLvElwHVlMp6UzGSLDzEB+HJmKm5g=";
   };
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/discourse/discourse-docs";
-    maintainers = with maintainers; [ dpausp ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ dpausp ];
+    license = lib.licenses.mit;
     description = "Find and filter knowledge base topics";
   };
 }

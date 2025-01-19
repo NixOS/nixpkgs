@@ -102,11 +102,11 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/linuxmint/cinnamon-session";
     description = "Cinnamon session manager";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
-    maintainers = teams.cinnamon.members;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = lib.teams.cinnamon.members;
   };
 }

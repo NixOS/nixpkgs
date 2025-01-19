@@ -37,11 +37,11 @@ stdenv.mkDerivation rec {
     ))
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Graph algorithms in the language of linear algebra";
     homepage = "https://people.engr.tamu.edu/davis/GraphBLAS.html";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ wegank ];
-    platforms = with platforms; unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ wegank ];
+    platforms = with lib.platforms; unix;
   };
 }

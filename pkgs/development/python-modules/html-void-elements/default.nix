@@ -24,10 +24,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "HtmlVoidElements" ];
 
-  meta = with lib; {
+  meta = {
     description = "List of HTML void tag names";
     homepage = "https://github.com/Riverside-Healthcare/html-void-elements";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ traxys ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ traxys ];
   };
 }

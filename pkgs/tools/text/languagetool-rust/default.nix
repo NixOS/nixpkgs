@@ -79,11 +79,11 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/ltrs completions zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "LanguageTool API in Rust";
     homepage = "https://github.com/jeertmans/languagetool-rust";
-    license = licenses.mit;
-    maintainers = with maintainers; [ name-snrl ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ name-snrl ];
     mainProgram = "ltrs";
   };
 }

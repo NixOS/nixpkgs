@@ -36,11 +36,11 @@ let
 
     passthru.tests.version = testers.testVersion { inherit package; };
 
-    meta = with lib; {
+    meta = {
       description = "Interface to send PartiQL statements to Amazon Quantum Ledger Database (QLDB)";
       homepage = "https://github.com/awslabs/amazon-qldb-shell";
-      license = licenses.asl20;
-      maintainers = [ maintainers.terlar ];
+      license = lib.licenses.asl20;
+      maintainers = [ lib.maintainers.terlar ];
       mainProgram = "qldb";
       # See https://hydra.nixos.org/build/255146098/log.
       broken = true; # Added 2024-04-06

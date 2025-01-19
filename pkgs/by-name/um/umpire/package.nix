@@ -44,11 +44,11 @@ stdenv.mkDerivation rec {
     (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaPackages.flags.cmakeCudaArchitecturesString)
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Application-focused API for memory management on NUMA & GPU architectures";
     homepage = "https://github.com/LLNL/Umpire";
-    maintainers = with maintainers; [ sheepforce ];
-    license = with licenses; [ mit ];
+    maintainers = with lib.maintainers; [ sheepforce ];
+    license = with lib.licenses; [ mit ];
     platforms = [ "x86_64-linux" ];
   };
 }

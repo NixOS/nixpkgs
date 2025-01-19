@@ -59,10 +59,10 @@ stdenv.mkDerivation rec {
     "-DENABLE_SDL='true'"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Merge of the original Visual Boy Advance forks";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [
       lassulus
       netali
     ];

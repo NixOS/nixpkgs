@@ -23,12 +23,12 @@ stdenv.mkDerivation rec {
     cp ./dumptorrent $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Dump .torrent file information";
     homepage = "https://sourceforge.net/projects/dumptorrent/";
-    license = licenses.gpl2Only;
-    maintainers = [ maintainers.zohl ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Only;
+    maintainers = [ lib.maintainers.zohl ];
+    platforms = lib.platforms.all;
     mainProgram = "dumptorrent";
   };
 }

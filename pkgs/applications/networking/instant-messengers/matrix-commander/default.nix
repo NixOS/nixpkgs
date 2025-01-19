@@ -54,12 +54,12 @@ buildPythonApplication rec {
     emoji
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple but convenient CLI-based Matrix client app for sending and receiving";
     mainProgram = "matrix-commander";
     homepage = "https://github.com/8go/matrix-commander";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.seb314 ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.seb314 ];
   };
 }

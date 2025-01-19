@@ -25,11 +25,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-EluP4N3UBQeEKVdHTs4O0THXji+nAyE52nGKsxA3AA4=";
 
-  meta = with lib; {
+  meta = {
     description = "Advent of code command line tool";
     homepage = "https://github.com/scarvalhojr/aoc-cli/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jordanisaacs ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jordanisaacs ];
     mainProgram = "aoc";
   };
 }

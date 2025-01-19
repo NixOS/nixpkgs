@@ -27,12 +27,12 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
 
-  meta = with lib; {
+  meta = {
     description = "Package manager for JavaScript projects";
     mainProgram = "cotton";
     homepage = "https://github.com/danielhuang/cotton";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       dit7ya
       figsoda
     ];

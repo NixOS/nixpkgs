@@ -23,9 +23,9 @@ stdenv.mkDerivation rec {
     ./remove-unused-variables.patch
     ./replace-deprecated-gtk.patch
   ];
-  meta = with lib; {
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+  meta = {
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

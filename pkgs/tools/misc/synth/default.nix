@@ -33,10 +33,10 @@ rustPlatform.buildRustPackage rec {
   # requires unstable rust features
   RUSTC_BOOTSTRAP = 1;
 
-  meta = with lib; {
+  meta = {
     description = "Tool for generating realistic data using a declarative data model";
     homepage = "https://github.com/getsynth/synth";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ figsoda ];
   };
 }

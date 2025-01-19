@@ -30,12 +30,12 @@ buildPythonApplication rec {
     package = mu-repo;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool to help in dealing with multiple git repositories";
     homepage = "http://fabioz.github.io/mu-repo/";
-    license = licenses.gpl3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ sikmir ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ sikmir ];
     mainProgram = "mu";
   };
 }

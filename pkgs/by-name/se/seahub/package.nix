@@ -74,15 +74,15 @@ python3.pkgs.buildPythonApplication rec {
     inherit seafile-server;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Web end of seafile server";
     homepage = "https://github.com/haiwen/seahub";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       greizgh
       schmittlauch
       melvyn2
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

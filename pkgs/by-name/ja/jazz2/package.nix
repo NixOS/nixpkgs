@@ -44,12 +44,12 @@ stdenv.mkDerivation (finalAttrs: {
     package = finalAttrs.finalPackage;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Open-source Jazz Jackrabbit 2 reimplementation";
     homepage = "https://github.com/deathkiller/jazz2-native";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     mainProgram = "jazz2";
-    maintainers = with maintainers; [ surfaceflinger ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ surfaceflinger ];
+    platforms = lib.platforms.linux;
   };
 })

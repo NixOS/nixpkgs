@@ -79,10 +79,10 @@ stdenv.mkDerivation rec {
     popd
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://bash-my-aws.org";
     description = "CLI commands for AWS";
-    license = licenses.mit;
-    maintainers = with maintainers; [ tomberek ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ tomberek ];
   };
 }

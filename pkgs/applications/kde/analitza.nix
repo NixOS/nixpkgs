@@ -26,14 +26,14 @@ mkDerivation {
     qtsvg
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Front end to powerful mathematics and statistics packages";
     homepage = "https://cantor.kde.org/";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Only
       lgpl2Only
       fdl12Only
     ];
-    maintainers = with maintainers; [ hqurve ];
+    maintainers = with lib.maintainers; [ hqurve ];
   };
 }

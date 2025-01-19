@@ -56,16 +56,16 @@ stdenv.mkDerivation rec {
 
   qmakeFlags = [ "jacktrip.pro" ];
 
-  meta = with lib; {
+  meta = {
     description = "Multi-machine audio network performance over the Internet";
     mainProgram = "jacktrip";
     homepage = "https://jacktrip.github.io/jacktrip/";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3
       lgpl3
       mit
     ];
-    maintainers = [ maintainers.iwanb ];
-    platforms = platforms.linux;
+    maintainers = [ lib.maintainers.iwanb ];
+    platforms = lib.platforms.linux;
   };
 }

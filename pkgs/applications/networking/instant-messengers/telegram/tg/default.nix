@@ -39,11 +39,11 @@ buildPythonApplication rec {
 
   doCheck = false; # No tests
 
-  meta = with lib; {
+  meta = {
     description = "Terminal client for telegram";
     mainProgram = "tg";
     homepage = "https://github.com/paul-nameless/tg";
-    license = licenses.unlicense;
-    maintainers = with maintainers; [ sikmir ];
+    license = lib.licenses.unlicense;
+    maintainers = with lib.maintainers; [ sikmir ];
   };
 }

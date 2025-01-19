@@ -38,11 +38,11 @@ let
   # add symlink() to libc+tcc so we can use it in ln-boot
   libc_tcc_SOURCES = sources.libc_tcc_SOURCES ++ [ "lib/linux/symlink.c" ];
 
-  meta = with lib; {
+  meta = {
     description = "Scheme interpreter and C compiler for bootstrapping";
     homepage = "https://www.gnu.org/software/mes";
-    license = licenses.gpl3Plus;
-    maintainers = teams.minimal-bootstrap.members;
+    license = lib.licenses.gpl3Plus;
+    maintainers = lib.teams.minimal-bootstrap.members;
     platforms = [ "i686-linux" ];
   };
 

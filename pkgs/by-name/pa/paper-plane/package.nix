@@ -122,7 +122,7 @@ stdenv.mkDerivation {
     stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.version "16"
   ) "-Wno-error=incompatible-function-pointer-types";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/paper-plane-developers/paper-plane";
     description = "Chat over Telegram on a modern and elegant client";
     longDescription = ''
@@ -130,9 +130,9 @@ stdenv.mkDerivation {
       for its user interface and strives to meet the design principles
       of the GNOME desktop.
     '';
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ aleksana ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ aleksana ];
     mainProgram = "paper-plane";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

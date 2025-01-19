@@ -114,12 +114,12 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gnome.updateScript { packageName = "gnome-maps"; };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://apps.gnome.org/Maps/";
     description = "Map application for GNOME 3";
     mainProgram = "gnome-maps";
-    maintainers = teams.gnome.members;
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    maintainers = lib.teams.gnome.members;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
   };
 })

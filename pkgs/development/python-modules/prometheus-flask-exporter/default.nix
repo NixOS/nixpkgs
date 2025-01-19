@@ -27,10 +27,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
   pytestFlagsArray = [ "tests/" ];
 
-  meta = with lib; {
+  meta = {
     description = "Prometheus exporter for Flask applications";
     homepage = "https://github.com/rycus86/prometheus_flask_exporter";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lbpdt ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lbpdt ];
   };
 }

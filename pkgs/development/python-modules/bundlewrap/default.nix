@@ -52,11 +52,11 @@ buildPythonPackage rec {
     "tests/unit"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://bundlewrap.org/";
     description = "Easy, Concise and Decentralized Config management with Python";
     mainProgram = "bw";
-    license = [ licenses.gpl3 ];
-    maintainers = with maintainers; [ wamserma ];
+    license = [ lib.licenses.gpl3 ];
+    maintainers = with lib.maintainers; [ wamserma ];
   };
 }

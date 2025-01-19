@@ -43,11 +43,11 @@ crystal.buildCrystalPackage rec {
   # the binary doesn't take any arguments, so this will hang
   doInstallCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Code analysis server for the Crystal programming language";
     homepage = "https://github.com/crystal-lang-tools/scry";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       peterhoeg
       Br1ght0ne
     ];

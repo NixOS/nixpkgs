@@ -20,10 +20,10 @@ buildDunePackage rec {
     stdlib-shims
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/backtracking/ocamlgraph";
     description = "Graph library for OCaml";
-    license = licenses.gpl2Oss;
+    license = lib.licenses.gpl2Oss;
     maintainers = [ ];
   };
 }

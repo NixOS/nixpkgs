@@ -87,12 +87,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "A discord client reimplementation, written in C++";
     mainProgram = "abaddon";
     homepage = "https://github.com/uowuo/abaddon";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ genericnerdyusername ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ genericnerdyusername ];
     platforms = lib.platforms.linux;
   };
 }

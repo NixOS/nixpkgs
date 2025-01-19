@@ -16,10 +16,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-d0tN6NZiAd+RkRy941fIaVEw/moz6tkpL0rN8TZew3g=";
 
-  meta = with lib; {
+  meta = {
     description = "Cargo tool for monitoring ESP32/ESP8266 execution";
     homepage = "https://github.com/esp-rs/espmonitor";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ xanderio ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ xanderio ];
   };
 }

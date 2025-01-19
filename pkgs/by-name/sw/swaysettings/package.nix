@@ -69,15 +69,15 @@ stdenv.mkDerivation rec {
     patchShebangs build-aux/meson/postinstall.py
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GUI for configuring your sway desktop";
     longDescription = ''
       Sway settings enables easy configuration of a sway desktop environment
       such as selection of application or icon themes.
     '';
     homepage = "https://github.com/ErikReider/SwaySettings";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.aacebedo ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.aacebedo ];
   };
 }

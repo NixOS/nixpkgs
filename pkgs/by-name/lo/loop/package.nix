@@ -17,11 +17,11 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-sceS/2qxiV16VP8E3M39MYnGiCbq0rrnehsV/SuHZl4=";
 
-  meta = with lib; {
+  meta = {
     description = "UNIX's missing `loop` command";
     homepage = "https://github.com/Miserlou/Loop";
-    maintainers = with maintainers; [ koral ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ koral ];
+    license = lib.licenses.mit;
     mainProgram = "loop";
   };
 }

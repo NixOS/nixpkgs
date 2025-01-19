@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
     (cd submodule/zstd && patch -Np1 < ${./fix-pkg-config.patch})
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/zraorg/ZRA";
     description = "Library for ZStandard random access";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     maintainers = [ ];
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
 }

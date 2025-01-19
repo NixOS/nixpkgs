@@ -107,16 +107,16 @@ let
 
       doCheck = true;
 
-      meta = with lib; {
+      meta = {
         description = "Cryptographic algorithms library";
         homepage = "https://botan.randombit.net";
         mainProgram = "botan";
-        maintainers = with maintainers; [
+        maintainers = with lib.maintainers; [
           raskin
           thillux
         ];
-        platforms = platforms.unix;
-        license = licenses.bsd2;
+        platforms = lib.platforms.unix;
+        license = lib.licenses.bsd2;
       };
     });
 in

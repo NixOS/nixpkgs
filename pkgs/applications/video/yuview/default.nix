@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://ient.github.io/YUView";
     description = "YUV Viewer and Analysis Tool";
     longDescription = ''
@@ -42,9 +42,9 @@ stdenv.mkDerivation rec {
       sequences, and many more. Further information can be found in the YUV help
       in the application itself or in our wiki.
     '';
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ leixb ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ leixb ];
+    platforms = lib.platforms.unix;
     mainProgram = "YUView";
   };
 }

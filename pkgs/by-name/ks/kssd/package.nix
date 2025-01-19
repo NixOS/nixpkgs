@@ -47,12 +47,12 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "K-mer substring space decomposition";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://github.com/yhg926/public_kssd";
-    maintainers = with maintainers; [ unode ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ unode ];
+    platforms = lib.platforms.linux;
     mainProgram = "kssd";
   };
 })

@@ -34,15 +34,15 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DUSE_QT6=TRUE" ];
 
-  meta = with lib; {
+  meta = {
     description = "Qt based Minesweeper game";
     mainProgram = "libremines";
     longDescription = ''
       A Free/Libre and Open Source Software Qt based Minesweeper game available for GNU/Linux, FreeBSD and Windows systems.
     '';
     homepage = "https://bollos00.github.io/LibreMines";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ aleksana ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ aleksana ];
+    platforms = lib.platforms.unix;
   };
 }

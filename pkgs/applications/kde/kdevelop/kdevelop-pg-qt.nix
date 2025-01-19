@@ -27,9 +27,9 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
-  meta = with lib; {
-    maintainers = [ maintainers.ambrop72 ];
-    platforms = platforms.linux;
+  meta = {
+    maintainers = [ lib.maintainers.ambrop72 ];
+    platforms = lib.platforms.linux;
     description = "Parser-generator from KDevplatform";
     mainProgram = "kdev-pg-qt";
     longDescription = ''

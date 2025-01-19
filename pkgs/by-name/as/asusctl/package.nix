@@ -89,12 +89,12 @@ rustPlatform.buildRustPackage rec {
     make prefix=$out install-data
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Control daemon, CLI tools, and a collection of crates for interacting with ASUS ROG laptops";
     homepage = "https://gitlab.com/asus-linux/asusctl";
-    license = licenses.mpl20;
+    license = lib.licenses.mpl20;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       k900
       aacebedo
     ];

@@ -34,11 +34,11 @@ stdenv.mkDerivation (rec {
     substituteInPlace Makefile --replace /share/share/ /share/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Quick image viewer";
     homepage = "http://spiegl.de/qiv/";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
     mainProgram = "qiv";
   };
 })

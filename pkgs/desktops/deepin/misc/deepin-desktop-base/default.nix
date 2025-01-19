@@ -37,14 +37,14 @@ stdenvNoCC.mkDerivation rec {
     EOF
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Base assets and definitions for Deepin Desktop Environment";
     homepage = "https://github.com/linuxdeepin/deepin-desktop-base";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3Plus
       cc-by-40
     ];
-    platforms = platforms.linux;
-    maintainers = teams.deepin.members;
+    platforms = lib.platforms.linux;
+    maintainers = lib.teams.deepin.members;
   };
 }

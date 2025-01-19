@@ -32,11 +32,11 @@ buildPythonApplication {
   doCheck = false;
   pythonImportsCheck = [ "steamcontroller" ];
 
-  meta = with lib; {
+  meta = {
     description = "Standalone Steam controller driver";
     homepage = "https://github.com/ynsta/steamcontroller";
-    license = licenses.mit;
-    maintainers = with maintainers; [ rnhmjoj ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ rnhmjoj ];
+    platforms = lib.platforms.linux;
   };
 }

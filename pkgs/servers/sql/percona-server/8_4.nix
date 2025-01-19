@@ -215,15 +215,15 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.percona.com/software/mysql-database/percona-server";
     description = ''
       A free, fully compatible, enhanced, open source drop-in replacement for
       MySQL® that provides superior performance, scalability and instrumentation.
       Long-term support release.
     '';
-    license = licenses.gpl2Only;
-    maintainers = teams.flyingcircus.members;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Only;
+    maintainers = lib.teams.flyingcircus.members;
+    platforms = lib.platforms.unix;
   };
 })

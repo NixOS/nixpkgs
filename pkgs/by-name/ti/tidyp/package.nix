@@ -17,12 +17,12 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  meta = with lib; {
+  meta = {
     description = "Program that can validate your HTML, as well as modify it to be more clean and standard";
     mainProgram = "tidyp";
     homepage = "http://tidyp.com/";
-    platforms = platforms.all;
-    maintainers = with maintainers; [ pSub ];
-    license = licenses.bsd3;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ pSub ];
+    license = lib.licenses.bsd3;
   };
 }

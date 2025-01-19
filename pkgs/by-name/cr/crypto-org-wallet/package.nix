@@ -27,11 +27,11 @@ appimageTools.wrapType2 rec {
       --replace 'Exec=AppRun --no-sandbox %U' 'Exec=${pname} %U'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Crypto.org Chain desktop wallet (Beta)";
     homepage = "https://github.com/crypto-com/chain-desktop-wallet";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ th0rgal ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ th0rgal ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "chain-desktop-wallet";
   };

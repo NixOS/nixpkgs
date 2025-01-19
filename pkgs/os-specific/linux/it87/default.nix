@@ -32,14 +32,14 @@ stdenv.mkDerivation rec {
     "MODDESTDIR=$(out)/lib/modules/${kernel.modDirVersion}/kernel/drivers/hwmon"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Patched module for IT87xx superio chip sensors support";
     homepage = "https://github.com/hannesha/it87";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     platforms = [
       "x86_64-linux"
       "i686-linux"
     ];
-    maintainers = teams.lumiguide.members;
+    maintainers = lib.teams.lumiguide.members;
   };
 }

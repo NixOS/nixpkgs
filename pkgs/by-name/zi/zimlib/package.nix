@@ -65,11 +65,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Library for reading and writing ZIM files";
     homepage = "https://www.openzim.org/wiki/Zimlib";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ greg ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ greg ];
+    platforms = lib.platforms.unix;
   };
 }

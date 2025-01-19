@@ -25,12 +25,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Libre file transfer client for Mac and Windows";
     homepage = "https://cyberduck.io";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ emilytrau ];
-    platforms = platforms.darwin;
+    maintainers = with lib.maintainers; [ emilytrau ];
+    platforms = lib.platforms.darwin;
   };
 })

@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional mpiSupport mpi;
   cmakeFlags = lib.optional mpiSupport "-DENABLE_MPI=1";
 
-  meta = with lib; {
+  meta = {
     description = "General Environment for the Treatment of Discrete Problems";
     mainProgram = "getdp";
     longDescription = ''
@@ -45,8 +45,8 @@ stdenv.mkDerivation rec {
       symbolic mathematical expressions of these problems.
     '';
     homepage = "http://getdp.info/";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

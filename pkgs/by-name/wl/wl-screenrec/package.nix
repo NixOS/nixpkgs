@@ -34,12 +34,12 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = false; # tests use host compositor, etc
 
-  meta = with lib; {
+  meta = {
     description = "High performance wlroots screen recording, featuring hardware encoding";
     homepage = "https://github.com/russelltg/wl-screenrec";
-    license = licenses.asl20;
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux;
     mainProgram = "wl-screenrec";
-    maintainers = with maintainers; [ colemickens ];
+    maintainers = with lib.maintainers; [ colemickens ];
   };
 }

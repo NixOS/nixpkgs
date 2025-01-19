@@ -142,12 +142,12 @@ stdenv.mkDerivation rec {
 
   disallowedReferences = lib.concatMap getCudaPackages cudaPackageSets;
 
-  meta = with lib; {
+  meta = {
     description = "Data Center GPU Manager (DCGM) is a daemon that allows users to monitor NVIDIA data-center GPUs";
     homepage = "https://developer.nvidia.com/dcgm";
-    license = licenses.asl20;
-    maintainers = teams.deshaw.members;
+    license = lib.licenses.asl20;
+    maintainers = lib.teams.deshaw.members;
     mainProgram = "dcgmi";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

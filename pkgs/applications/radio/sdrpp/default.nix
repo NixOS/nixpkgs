@@ -174,12 +174,12 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = lib.optional stdenv.cc.isClang "format";
 
-  meta = with lib; {
+  meta = {
     description = "Cross-Platform SDR Software";
     homepage = "https://github.com/AlexandreRouma/SDRPlusPlus";
-    license = licenses.gpl3Only;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ sikmir ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ sikmir ];
     mainProgram = "sdrpp";
   };
 }

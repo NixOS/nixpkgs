@@ -36,16 +36,16 @@ mkDerivation rec {
       --replace /usr/share/polkit-1/actions/org.kde.kpmcore.externalcommand.policy $out/share/polkit-1/actions/org.kde.kpmcore.externalcommand.policy
   '';
 
-  meta = with lib; {
+  meta = {
     description = "KDE Partition Manager core library";
     homepage = "https://invent.kde.org/system/kpmcore";
-    license = with licenses; [
+    license = with lib.licenses; [
       cc-by-40
       cc0
       gpl3Plus
       mit
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       peterhoeg
       oxalica
     ];

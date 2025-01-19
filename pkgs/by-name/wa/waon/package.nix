@@ -36,11 +36,11 @@ stdenv.mkDerivation rec {
     install -Dt $out/bin waon pv gwaon
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Wave-to-Notes transcriber";
     homepage = "https://kichiki.github.io/WaoN/";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.puckipedia ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.puckipedia ];
+    platforms = lib.platforms.all;
   };
 }

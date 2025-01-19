@@ -48,11 +48,11 @@ rustPlatform.buildRustPackage rec {
   # Tests require the internet and don't work when running in nix
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "wasmCloud Shell (wash) CLI tool";
     homepage = "https://wasmcloud.com/";
     mainProgram = "wash";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bloveless ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bloveless ];
   };
 }

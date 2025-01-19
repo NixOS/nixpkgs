@@ -61,15 +61,15 @@ stdenv.mkDerivation rec {
     "-DVW_EIGEN_SYS_DEP=ON"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Machine learning system focused on online reinforcement learning";
     homepage = "https://github.com/VowpalWabbit/vowpal_wabbit/";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     longDescription = ''
       Machine learning system which pushes the frontier of machine learning with techniques such as online,
       hashing, allreduce, reductions, learning2search, active, and interactive and reinforcement learning
     '';
-    maintainers = with maintainers; [ jackgerrits ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ jackgerrits ];
+    platforms = lib.platforms.unix;
   };
 }

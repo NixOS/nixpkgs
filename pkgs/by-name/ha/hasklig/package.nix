@@ -22,11 +22,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/i-tu/Hasklig";
     description = "Font with ligatures for Haskell code based off Source Code Pro";
-    license = licenses.ofl;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ davidrusu ];
+    license = lib.licenses.ofl;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ davidrusu ];
   };
 }

@@ -30,12 +30,12 @@ stdenv.mkDerivation rec {
     dtk6core
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Application manager for DDE";
     mainProgram = "dde-application-manager";
     homepage = "https://github.com/linuxdeepin/dde-application-manager";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.deepin.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = lib.teams.deepin.members;
   };
 }

@@ -38,12 +38,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/museoa/unzoo/";
     description = "Manipulate archives of files in Zoo compressed form";
-    license = licenses.publicDomain;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.all;
+    license = lib.licenses.publicDomain;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.all;
     mainProgram = "unzoo";
   };
 }

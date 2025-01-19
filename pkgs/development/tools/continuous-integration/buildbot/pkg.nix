@@ -23,10 +23,10 @@ buildPythonPackage {
 
   disabled = !isPy3k;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://buildbot.net/";
     description = "Buildbot Packaging Helper";
-    maintainers = teams.buildbot.members;
-    license = licenses.gpl2;
+    maintainers = lib.teams.buildbot.members;
+    license = lib.licenses.gpl2;
   };
 }

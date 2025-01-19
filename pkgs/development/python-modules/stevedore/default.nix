@@ -40,10 +40,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "stevedore" ];
 
-  meta = with lib; {
+  meta = {
     description = "Manage dynamic plugins for Python applications";
     homepage = "https://docs.openstack.org/stevedore/";
-    license = licenses.asl20;
-    maintainers = teams.openstack.members ++ (with maintainers; [ fab ]);
+    license = lib.licenses.asl20;
+    maintainers = lib.teams.openstack.members ++ (with lib.maintainers; [ fab ]);
   };
 }

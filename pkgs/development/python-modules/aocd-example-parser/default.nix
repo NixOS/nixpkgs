@@ -27,10 +27,10 @@ buildPythonPackage rec {
   #   "aocd_example_parser"
   # ];
 
-  meta = with lib; {
+  meta = {
     description = "Default implementation of an example parser plugin for advent-of-code-data";
     homepage = "https://github.com/wimglenn/aocd-example-parser";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -37,11 +37,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Library for arbitrary-precision interval arithmetic";
     homepage = "https://arblib.org/";
-    license = licenses.lgpl21Plus;
-    maintainers = teams.sage.members;
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = lib.teams.sage.members;
+    platforms = lib.platforms.unix;
   };
 }

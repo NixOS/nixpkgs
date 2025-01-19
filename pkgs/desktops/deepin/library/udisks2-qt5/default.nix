@@ -28,11 +28,11 @@ stdenv.mkDerivation rec {
 
   qmakeFlags = [ "VERSION=${version}" ];
 
-  meta = with lib; {
+  meta = {
     description = "UDisks2 D-Bus interfaces binding for Qt5";
     homepage = "https://github.com/linuxdeepin/udisks2-qt5";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.deepin.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = lib.teams.deepin.members;
   };
 }

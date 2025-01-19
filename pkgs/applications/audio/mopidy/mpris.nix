@@ -22,10 +22,10 @@ python3Packages.buildPythonApplication rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.mopidy.com/";
     description = "Mopidy extension for controlling Mopidy through D-Bus using the MPRIS specification";
-    license = licenses.asl20;
-    maintainers = [ maintainers.nickhu ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.nickhu ];
   };
 }

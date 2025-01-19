@@ -71,13 +71,13 @@ stdenv.mkDerivation (finalAttrs: {
     tests.smoke-test = nixosTests.flaresolverr;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Proxy server to bypass Cloudflare protection";
     homepage = "https://github.com/FlareSolverr/FlareSolverr";
     changelog = "https://github.com/FlareSolverr/FlareSolverr/blob/${finalAttrs.src.rev}/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "flaresolverr";
-    maintainers = with maintainers; [ paveloom ];
+    maintainers = with lib.maintainers; [ paveloom ];
     inherit (undetected-chromedriver.meta) platforms;
     # See https://github.com/NixOS/nixpkgs/issues/332776
     broken = true;

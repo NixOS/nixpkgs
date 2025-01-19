@@ -30,10 +30,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flatten_dict" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for flattening and unflattening dict-like objects";
     homepage = "https://github.com/ianlini/flatten-dict";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

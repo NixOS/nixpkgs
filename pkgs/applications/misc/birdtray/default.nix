@@ -35,12 +35,12 @@ mkDerivation rec {
   # https://github.com/gyunaev/birdtray/issues/113#issuecomment-621742315
   qtWrapperArgs = [ "--set QT_QPA_PLATFORM xcb" ];
 
-  meta = with lib; {
+  meta = {
     description = "Mail system tray notification icon for Thunderbird";
     mainProgram = "birdtray";
     homepage = "https://github.com/gyunaev/birdtray";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ Flakebi ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ Flakebi ];
+    platforms = lib.platforms.linux;
   };
 }

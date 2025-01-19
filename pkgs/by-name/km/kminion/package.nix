@@ -21,11 +21,11 @@ buildGoModule rec {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "KMinion is a feature-rich Prometheus exporter for Apache Kafka written in Go";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ cafkafk ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ cafkafk ];
     mainProgram = "kminion";
   };
 }

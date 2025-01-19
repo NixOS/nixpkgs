@@ -97,15 +97,15 @@ python3.pkgs.buildPythonApplication rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/jpu/cambalache";
     description = "RAD tool for GTK 4 and 3 with data model first philosophy";
     mainProgram = "cambalache";
-    maintainers = teams.gnome.members;
-    license = with licenses; [
+    maintainers = lib.teams.gnome.members;
+    license = with lib.licenses; [
       lgpl21Only # Cambalache
       gpl2Only # tools
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

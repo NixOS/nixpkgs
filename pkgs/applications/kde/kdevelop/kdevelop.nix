@@ -125,9 +125,9 @@ mkDerivation rec {
     sed -E -i "$kdev_fixup_sed" "$out/bin/.kdevelop!-wrapped"
   '';
 
-  meta = with lib; {
-    maintainers = [ maintainers.ambrop72 ];
-    platforms = platforms.linux;
+  meta = {
+    maintainers = [ lib.maintainers.ambrop72 ];
+    platforms = lib.platforms.linux;
     description = "KDE official IDE";
     longDescription = ''
       A free, opensource IDE (Integrated Development Environment)
@@ -137,7 +137,7 @@ mkDerivation rec {
       libraries and is under development since 1998.
     '';
     homepage = "https://www.kdevelop.org";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Plus
       lgpl2Plus
     ];

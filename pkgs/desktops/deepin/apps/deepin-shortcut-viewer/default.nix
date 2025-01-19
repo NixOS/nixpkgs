@@ -39,12 +39,12 @@ stdenv.mkDerivation rec {
     "PREFIX=${placeholder "out"}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Deepin Shortcut Viewer";
     mainProgram = "deepin-shortcut-viewer";
     homepage = "https://github.com/linuxdeepin/deepin-shortcut-viewer";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.deepin.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = lib.teams.deepin.members;
   };
 }

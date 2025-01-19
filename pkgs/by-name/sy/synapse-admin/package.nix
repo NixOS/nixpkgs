@@ -54,12 +54,12 @@ mkYarnPackage rec {
   dontFixup = true;
   dontInstall = true;
 
-  meta = with lib; {
+  meta = {
     description = "Admin UI for Synapse Homeservers";
     homepage = "https://github.com/Awesome-Technologies/synapse-admin";
-    license = licenses.asl20;
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       mkg20001
       ma27
     ];

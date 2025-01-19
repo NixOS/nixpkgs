@@ -49,11 +49,11 @@ stdenv.mkDerivation rec {
 
   buildFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ]; # fix build on darwin
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/matrix-org/purple-matrix";
     description = "Matrix support for Pidgin / libpurple";
-    license = licenses.gpl2;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ symphorien ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ symphorien ];
   };
 }

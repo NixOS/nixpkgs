@@ -94,11 +94,11 @@ buildNpmPackage rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Open source tool that helps you monitor, analyze and optimize your website speed and performance";
     homepage = "https://sitespeed.io";
-    license = licenses.mit;
-    maintainers = with maintainers; [ misterio77 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ misterio77 ];
     platforms = lib.unique (geckodriver.meta.platforms ++ chromedriver.meta.platforms);
     mainProgram = "sitespeed-io";
   };

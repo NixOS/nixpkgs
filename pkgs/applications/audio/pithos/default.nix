@@ -66,12 +66,12 @@ pythonPackages.buildPythonApplication rec {
       pylast
     ]);
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Pandora Internet Radio player for GNOME";
     mainProgram = "pithos";
     homepage = "https://pithos.github.io/";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ obadz ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ obadz ];
   };
 }

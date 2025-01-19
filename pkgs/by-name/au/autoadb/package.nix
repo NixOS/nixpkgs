@@ -17,11 +17,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-xxmBgJqtWq1FLWTaC8SjaBoSXkPcIZYrSOc+hCEN778=";
 
-  meta = with lib; {
+  meta = {
     description = "Execute a command whenever a device is adb-connected";
     homepage = "https://github.com/rom1v/autoadb";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ shawn8901 ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ shawn8901 ];
     mainProgram = "autoadb";
   };
 }

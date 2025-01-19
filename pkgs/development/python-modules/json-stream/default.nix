@@ -38,10 +38,10 @@ buildPythonPackage rec {
 
   disabledTests = [ "test_writer" ];
 
-  meta = with lib; {
+  meta = {
     description = "Streaming JSON parser";
     homepage = "https://github.com/daggaz/json-stream";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

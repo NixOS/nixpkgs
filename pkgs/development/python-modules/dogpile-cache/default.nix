@@ -37,10 +37,10 @@ buildPythonPackage rec {
     mako
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Caching front-end based on the Dogpile lock";
     homepage = "https://github.com/sqlalchemy/dogpile.cache";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

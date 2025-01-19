@@ -54,10 +54,10 @@ buildPythonPackage rec {
     xvfb-run ${python.interpreter} -m unittest
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool-box for efficient build and debug for Scientific Computing and Computer Vision";
     homepage = "https://github.com/DIYer22/boxx";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lucasew ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lucasew ];
   };
 }

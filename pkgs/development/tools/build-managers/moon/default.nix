@@ -37,11 +37,11 @@ rustPlatform.buildRustPackage rec {
   # Some tests fail, because test using internet connection and install NodeJS by example
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Task runner and repo management tool for the web ecosystem, written in Rust";
     mainProgram = "moon";
     homepage = "https://github.com/moonrepo/moon";
-    license = licenses.mit;
-    maintainers = with maintainers; [ flemzord ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ flemzord ];
   };
 }

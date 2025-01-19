@@ -86,10 +86,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "keystoneauth1" ];
 
-  meta = with lib; {
+  meta = {
     description = "Authentication Library for OpenStack Identity";
     homepage = "https://github.com/openstack/keystoneauth";
-    license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    license = lib.licenses.asl20;
+    maintainers = lib.teams.openstack.members;
   };
 }

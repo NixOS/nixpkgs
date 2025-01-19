@@ -118,12 +118,12 @@ stdenv.mkDerivation rec {
     inherit fmod sqlite;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://zandronum.com/";
     description = "Multiplayer oriented port, based off Skulltag, for Doom and Doom II by id Software";
     mainProgram = "zandronum-server";
-    maintainers = with maintainers; [ lassulus ];
-    license = licenses.sleepycat;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ lassulus ];
+    license = lib.licenses.sleepycat;
+    platforms = lib.platforms.linux;
   };
 }

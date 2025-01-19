@@ -29,10 +29,10 @@ buildPythonPackage rec {
   # Package seems to work fine.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/zopefoundation/zope.schema";
     description = "zope.interface extension for defining data schemas";
-    license = licenses.zpl20;
+    license = lib.licenses.zpl20;
     maintainers = [ ];
   };
 }

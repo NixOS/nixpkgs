@@ -34,11 +34,11 @@ stdenv.mkDerivation rec {
     "-DCPPTOML_BUILD_EXAMPLES=OFF"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "C++ TOML configuration library";
     homepage = "https://github.com/skystrife/cpptoml";
-    license = licenses.mit;
-    maintainers = with maintainers; [ photex ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ photex ];
+    platforms = lib.platforms.all;
   };
 }

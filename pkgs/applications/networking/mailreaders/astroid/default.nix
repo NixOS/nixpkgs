@@ -86,15 +86,15 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://astroidmail.github.io/";
     description = "GTK frontend to the notmuch mail system";
     mainProgram = "astroid";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       bdimcheff
       SuprDewd
     ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
   };
 }

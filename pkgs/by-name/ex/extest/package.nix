@@ -17,11 +17,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-JZPiTzr9KaaqiXKhsGOYmYMtjNzPQzKhqyfSlbeqME8=";
 
-  meta = with lib; {
+  meta = {
     description = "X11 XTEST reimplementation primarily for Steam Controller on Wayland";
     homepage = "https://github.com/Supreeeme/extest";
-    platforms = platforms.linux;
-    license = licenses.mit;
-    maintainers = [ maintainers.puffnfresh ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.puffnfresh ];
   };
 }

@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
     substituteInPlace CMakeLists.txt --replace -std=c89 -std=c99
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/DaveGamble/cJSON";
     description = "Ultralightweight JSON parser in ANSI C";
-    license = licenses.mit;
-    maintainers = [ maintainers.matthiasbeyer ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.matthiasbeyer ];
+    platforms = lib.platforms.unix;
   };
 }

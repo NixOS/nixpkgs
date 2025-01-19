@@ -16,15 +16,15 @@ bundlerEnv rec {
 
   passthru.updateScript = bundlerUpdateScript "elm-github-install";
 
-  meta = with lib; {
+  meta = {
     description = "Install Elm packages from git repositories";
     homepage = "https://github.com/gdotdesign/elm-github-install";
-    license = licenses.unfree;
-    maintainers = with maintainers; [
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
       roberth
       nicknovitski
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     mainProgram = "elm-install";
   };
 }

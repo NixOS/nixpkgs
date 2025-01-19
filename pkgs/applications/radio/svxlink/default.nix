@@ -87,15 +87,15 @@ stdenv.mkDerivation rec {
     wrapQtApp $out/bin/qtel
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Advanced repeater controller and EchoLink software";
     longDescription = ''
       Advanced repeater controller and EchoLink software for Linux including a
       GUI, Qtel - The Qt EchoLink client
     '';
     homepage = "http://www.svxlink.org/";
-    license = with licenses; [ gpl2 ];
-    maintainers = with maintainers; [ zaninime ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [ gpl2 ];
+    maintainers = with lib.maintainers; [ zaninime ];
+    platforms = lib.platforms.linux;
   };
 }

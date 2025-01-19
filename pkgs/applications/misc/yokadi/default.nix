@@ -27,10 +27,10 @@ buildPythonApplication rec {
   # Yokadi doesn't have any tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Command line oriented, sqlite powered, todo-list";
     homepage = "https://yokadi.github.io/index.html";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.nkpvk ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.nkpvk ];
   };
 }

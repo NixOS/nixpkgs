@@ -28,11 +28,11 @@ rustPlatform.buildRustPackage rec {
   # disable tests that require gpu
   checkNoDefaultFeatures = true;
 
-  meta = with lib; {
+  meta = {
     description = "Change the start of your git commit hashes to whatever you want";
     homepage = "https://github.com/not-an-aardvark/lucky-commit";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "lucky_commit";
   };
 }

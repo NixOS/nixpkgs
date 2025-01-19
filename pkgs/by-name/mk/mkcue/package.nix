@@ -18,11 +18,11 @@ stdenv.mkDerivation rec {
   preInstall = "mkdir -pv $out/bin";
   postInstall = "chmod -v +w $out/bin/mkcue";
 
-  meta = with lib; {
+  meta = {
     description = "Generates CUE sheets from a CD TOC";
-    license = licenses.lgpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ pSub ];
+    license = lib.licenses.lgpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ pSub ];
     mainProgram = "mkcue";
   };
 }

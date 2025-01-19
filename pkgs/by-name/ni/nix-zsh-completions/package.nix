@@ -22,12 +22,12 @@ stdenv.mkDerivation rec {
     cp *.zsh $out/share/zsh/plugins/nix
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/nix-community/nix-zsh-completions";
     description = "ZSH completions for Nix, NixOS, and NixOps";
-    license = licenses.bsd3;
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       olejorgenb
       hedning
       ma27

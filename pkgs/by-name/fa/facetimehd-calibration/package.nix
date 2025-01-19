@@ -81,11 +81,11 @@ stdenvNoCC.mkDerivation {
       ''
     ) calibrationFiles;
 
-  meta = with lib; {
+  meta = {
     description = "facetimehd calibration";
     homepage = "https://support.apple.com/kb/DL1837";
-    license = licenses.unfree;
-    maintainers = with maintainers; [
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
       alexshpilkin
       womfoo
       grahamc

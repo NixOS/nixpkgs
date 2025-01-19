@@ -104,12 +104,12 @@ stdenv.mkDerivation rec {
     "--set FG_ROOT ${data}/share/FlightGear"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Flight simulator";
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.linux;
     hydraPlatforms = [ ]; # disabled from hydra because it's so big
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     mainProgram = "fgfs";
   };
 }

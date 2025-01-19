@@ -17,11 +17,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-x61lOwMOOLD3RTdy3Ji+c7zcA1PCn09u75MyrPX/NbE=";
 
-  meta = with lib; {
+  meta = {
     description = "Rapid note management for the terminal";
     homepage = "https://github.com/araekiel/jot";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dit7ya ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dit7ya ];
     mainProgram = "jt";
   };
 }

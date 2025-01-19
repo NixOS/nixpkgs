@@ -43,12 +43,12 @@ stdenv.mkDerivation rec {
     NIX_CFLAGS_COMPILE+=" -I${Carbon}/Library/Frameworks/Carbon.framework/Headers"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Sample Rate Converter for audio";
     homepage = "https://libsndfile.github.io/libsamplerate/";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ lovek323 ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ lovek323 ];
+    platforms = lib.platforms.all;
     # Linker is unhappy with the `.def` file.
     broken = stdenv.hostPlatform.isMinGW;
   };

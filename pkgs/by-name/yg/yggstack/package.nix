@@ -26,11 +26,11 @@ buildGoModule rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Yggdrasil as SOCKS proxy / port forwarder";
     homepage = "https://yggdrasil-network.github.io/";
-    license = licenses.lgpl3;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl3;
+    maintainers = with lib.maintainers; [
       ehmry
       peigongdsd
     ];

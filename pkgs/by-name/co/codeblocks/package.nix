@@ -160,9 +160,9 @@ stdenv.mkDerivation rec {
     ln -s $out/lib/codeblocks/plugins $out/share/codeblocks/plugins
   '';
 
-  meta = with lib; {
-    maintainers = [ maintainers.linquize ];
-    platforms = platforms.all;
+  meta = {
+    maintainers = [ lib.maintainers.linquize ];
+    platforms = lib.platforms.all;
     description = "Open source, cross platform, free C, C++ and Fortran IDE";
     longDescription = ''
       Code::Blocks is a free C, C++ and Fortran IDE built to meet the most demanding needs of its users.
@@ -170,6 +170,6 @@ stdenv.mkDerivation rec {
       Finally, an IDE with all the features you need, having a consistent look, feel and operation across platforms.
     '';
     homepage = "http://www.codeblocks.org";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
   };
 }

@@ -40,13 +40,13 @@ stdenv.mkDerivation rec {
     cp intermezzo.bin $out/bin/intermezzo.bin
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/nh-server/fusee-interfacee-tk";
     description = "Tool to send .bin files to a Nintendo Switch in RCM mode";
     mainProgram = "fusee-interfacee-tk";
     longDescription = "A mod of falquinhos Fusée Launcher for use with Nintendo Homebrew Switch Guide. It also adds the ability to mount SD while in RCM.
     Must be run as sudo.";
-    maintainers = with maintainers; [ kristian-brucaj ];
-    license = licenses.gpl2;
+    maintainers = with lib.maintainers; [ kristian-brucaj ];
+    license = lib.licenses.gpl2;
   };
 }

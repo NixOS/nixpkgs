@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Our Own Terminal Emulation Library";
     mainProgram = "rote-config";
     longDescription = ''
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
       screen when you need to.
     '';
     homepage = "https://rote.sourceforge.net/";
-    license = licenses.lgpl21;
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21;
+    platforms = lib.platforms.linux;
   };
 }

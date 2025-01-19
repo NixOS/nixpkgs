@@ -19,12 +19,12 @@ stdenv.mkDerivation rec {
     sed -i 's@/usr/bin/install@install@g ; s/gcc/cc/g' Makefile
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Terminal mixer - multiplexer for the i/o of terminal applications";
     homepage = "http://vicerveza.homeunix.net/~viric/soft/tm";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     mainProgram = "tm";
   };
 }

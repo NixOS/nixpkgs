@@ -38,10 +38,10 @@ buildPythonPackage {
     parameterized
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Translates Django models using a registration approach";
     homepage = "https://github.com/deschler/django-modeltranslation";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ augustebaum ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ augustebaum ];
   };
 }

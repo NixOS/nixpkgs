@@ -80,12 +80,12 @@ stdenv.mkDerivation {
     install -Dm444 $src/stepmania.desktop -t $out/share/applications
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.stepmania.com/";
     description = "Free dance and rhythm game for Windows, Mac, and Linux";
-    platforms = platforms.linux;
-    license = licenses.mit; # expat version
-    maintainers = with maintainers; [ h7x4 ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.mit; # expat version
+    maintainers = with lib.maintainers; [ h7x4 ];
     mainProgram = "stepmania";
   };
 }

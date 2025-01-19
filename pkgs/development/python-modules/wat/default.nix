@@ -29,10 +29,10 @@ buildPythonPackage rec {
   ];
   pythonImportsCheck = [ "wat" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://igrek51.github.io/wat/";
     description = "Deep inspection of python objects";
-    license = licenses.mit;
-    maintainers = with maintainers; [ parras ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ parras ];
   };
 }

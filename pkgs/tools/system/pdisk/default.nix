@@ -82,14 +82,14 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Low-level Apple partition table editor for Linux, OSS Apple version";
     homepage = "https://github.com/apple-oss-distributions/pdisk";
-    license = with licenses; [
+    license = with lib.licenses; [
       hpnd # original license statements seems to match this (in files that are shared with mac-fdisk)
       apple-psl10 # new files
     ];
-    maintainers = with maintainers; [ OPNA2608 ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ OPNA2608 ];
+    platforms = lib.platforms.unix;
   };
 }

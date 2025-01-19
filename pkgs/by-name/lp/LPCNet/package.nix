@@ -46,11 +46,11 @@ stdenv.mkDerivation (finalAttrs: {
     export LD_LIBRARY_PATH="$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}/build/source/build/src"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Experimental Neural Net speech coding for FreeDV";
     homepage = "https://github.com/drowe67/LPCNet";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ doronbehar ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ doronbehar ];
+    platforms = lib.platforms.all;
   };
 })

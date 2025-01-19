@@ -76,11 +76,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "listssrht" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://git.sr.ht/~sircmpwn/lists.sr.ht";
     description = "Mailing list service for the sr.ht network";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [
       eadwu
       christoph-heiss
     ];

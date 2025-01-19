@@ -58,12 +58,12 @@ stdenv.mkDerivation rec {
     install -m0755 -D vampire_z3_rel* $out/bin/vampire
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://vprover.github.io/";
     description = "Vampire Theorem Prover";
     mainProgram = "vampire";
-    platforms = platforms.unix;
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ gebner ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ gebner ];
   };
 }

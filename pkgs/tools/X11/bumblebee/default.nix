@@ -175,11 +175,11 @@ stdenv.mkDerivation rec {
       --prefix PATH : "${virtualgl}/bin"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Daemon for managing Optimus videocards (power-on/off, spawns xservers)";
     homepage = "https://github.com/Bumblebee-Project/Bumblebee";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ abbradar ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ abbradar ];
+    platforms = lib.platforms.linux;
   };
 }

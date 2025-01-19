@@ -50,12 +50,12 @@ mkDerivation rec {
     rev-prefix = "v_";
   };
 
-  meta = with lib; {
+  meta = {
     description = "GPS track manager for Qt using KDE Marble maps";
     homepage = "https://www.zombietrackergps.net/ztgps/";
     changelog = "https://www.zombietrackergps.net/ztgps/history.html";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ sohalt ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ sohalt ];
+    platforms = lib.platforms.linux;
   };
 }

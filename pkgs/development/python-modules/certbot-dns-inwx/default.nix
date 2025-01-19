@@ -26,13 +26,13 @@ buildPythonPackage rec {
 
   pytestImportsCheck = [ "certbot_dns_inwx" ];
 
-  meta = with lib; {
+  meta = {
     description = "INWX DNS Authenticator plugin for Certbot";
     homepage = "https://github.com/oGGy990/certbot-dns-inwx";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with maintainers; [ onny ];
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

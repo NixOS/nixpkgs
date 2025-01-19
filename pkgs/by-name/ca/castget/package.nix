@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple, command-line based RSS enclosure downloader";
     mainProgram = "castget";
     longDescription = ''
@@ -49,8 +49,8 @@ stdenv.mkDerivation (finalAttrs: {
       primarily intended for automatic, unattended downloading of podcasts.
     '';
     homepage = "https://castget.johndal.com/";
-    maintainers = with maintainers; [ doronbehar ];
-    license = licenses.gpl2;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ doronbehar ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
   };
 })

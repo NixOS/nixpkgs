@@ -34,11 +34,11 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple HTTP server for quickly sharing files";
     homepage = "https://xyne.archlinux.ca/projects/quickserve/";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ lassulus ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ lassulus ];
     mainProgram = "quickserve";
   };
 }

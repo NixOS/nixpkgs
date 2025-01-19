@@ -43,10 +43,10 @@ stdenv.mkDerivation rec {
     "PCDIR=$(dev)/lib/pkgconfig"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tools and library to manipulate EFI variables";
     homepage = "https://github.com/rhboot/efivar";
-    platforms = platforms.linux;
-    license = licenses.lgpl21Only;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.lgpl21Only;
   };
 }

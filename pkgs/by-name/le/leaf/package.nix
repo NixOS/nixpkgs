@@ -24,11 +24,11 @@ rustPlatform.buildRustPackage rec {
     darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple system fetch written in rust";
     homepage = "https://github.com/IogaMaster/leaf";
-    license = licenses.mit;
-    maintainers = with maintainers; [ iogamaster ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ iogamaster ];
     mainProgram = "leaf";
   };
 }

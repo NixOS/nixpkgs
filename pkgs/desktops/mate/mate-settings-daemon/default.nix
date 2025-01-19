@@ -57,16 +57,16 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = mateUpdateScript { inherit pname; };
 
-  meta = with lib; {
+  meta = {
     description = "MATE settings daemon";
     homepage = "https://github.com/mate-desktop/mate-settings-daemon";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Plus
       gpl3Plus
       lgpl2Plus
       mit
     ];
-    platforms = platforms.unix;
-    maintainers = teams.mate.members;
+    platforms = lib.platforms.unix;
+    maintainers = lib.teams.mate.members;
   };
 }

@@ -74,10 +74,10 @@ else
       cp mezzo $out/bin/
     '';
 
-    meta = with lib; {
+    meta = {
       homepage = "http://protz.github.io/mezzo/";
       description = "Programming language in the ML tradition, which places strong emphasis on the control of aliasing and access to mutable memory";
-      license = licenses.gpl2;
+      license = lib.licenses.gpl2;
       platforms = ocaml.meta.platforms or [ ];
     };
   }

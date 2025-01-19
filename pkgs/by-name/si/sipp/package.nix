@@ -44,11 +44,11 @@ stdenv.mkDerivation rec {
     openssl
   ] ++ lib.optional (stdenv.hostPlatform.isLinux) lksctp-tools;
 
-  meta = with lib; {
+  meta = {
     homepage = "http://sipp.sf.net";
     description = "SIPp testing tool";
     mainProgram = "sipp";
-    license = licenses.gpl3;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.unix;
   };
 }

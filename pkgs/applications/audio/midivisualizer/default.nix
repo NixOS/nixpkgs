@@ -76,12 +76,12 @@ stdenv.mkDerivation (finalAttrs: {
           --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS"
       '';
 
-  meta = with lib; {
+  meta = {
     description = "Small MIDI visualizer tool, using OpenGL";
     mainProgram = "MIDIVisualizer";
     homepage = "https://github.com/kosua20/MIDIVisualizer";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.ericdallo ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.ericdallo ];
   };
 })

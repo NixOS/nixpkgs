@@ -117,18 +117,18 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://libjpeg-turbo.org/";
     description = "Faster (using SIMD) libjpeg implementation";
-    license = licenses.ijg; # and some parts under other BSD-style licenses
+    license = lib.licenses.ijg; # and some parts under other BSD-style licenses
     pkgConfigModules = [
       "libjpeg"
       "libturbojpeg"
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       vcunat
       kamadorueda
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 })

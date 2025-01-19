@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
     patchShebangs $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://virt-manager.org";
     description = "Desktop user interface for managing virtual machines";
     longDescription = ''
@@ -93,10 +93,10 @@ stdenv.mkDerivation rec {
       virtual machines through libvirt. It primarily targets KVM VMs, but also
       manages Xen and LXC (linux containers).
     '';
-    license = licenses.gpl2;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.unix;
     mainProgram = "virt-manager";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       fpletz
       globin
     ];

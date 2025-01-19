@@ -45,11 +45,11 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion finalfrontier.{bash,fish,zsh}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Utility for training word and subword embeddings";
     mainProgram = "finalfrontier";
     homepage = "https://github.com/finalfusion/finalfrontier/";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

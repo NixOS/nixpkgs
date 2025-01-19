@@ -20,12 +20,12 @@ stdenv.mkDerivation rec {
 
   prePatch = ''sed -i "s@/usr/local@$out@" Makefile'';
 
-  meta = with lib; {
+  meta = {
     description = "Compute text widths";
     homepage = "https://github.com/baskerville/txtw";
-    maintainers = with maintainers; [ lihop ];
-    license = licenses.unlicense;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ lihop ];
+    license = lib.licenses.unlicense;
+    platforms = lib.platforms.linux;
     mainProgram = "txtw";
   };
 }

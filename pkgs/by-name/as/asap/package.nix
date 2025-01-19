@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     "install-lib"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://asap.sourceforge.net/";
     mainProgram = "asap-sdl";
     description = "Another Slight Atari Player";
@@ -50,8 +50,8 @@ stdenv.mkDerivation rec {
       music (*.sap, *.cmc, *.mpt, *.rmt, *.tmc, ...) on modern computers and
       mobile devices.
     '';
-    maintainers = with maintainers; [ OPNA2608 ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ OPNA2608 ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
   };
 }

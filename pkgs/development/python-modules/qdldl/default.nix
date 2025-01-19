@@ -37,11 +37,11 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "qdldl" ];
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Free LDL factorization routine";
     homepage = "https://github.com/oxfordcontrol/qdldl";
     downloadPage = "https://github.com/oxfordcontrol/qdldl-python";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ drewrisinger ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ drewrisinger ];
   };
 }

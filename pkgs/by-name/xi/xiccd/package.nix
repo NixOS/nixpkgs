@@ -32,12 +32,12 @@ stdenv.mkDerivation rec {
     colord
   ];
 
-  meta = with lib; {
+  meta = {
     description = "X color profile daemon";
     homepage = "https://github.com/agalakhov/xiccd";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ abbradar ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ abbradar ];
+    platforms = lib.platforms.linux;
     mainProgram = "xiccd";
   };
 }

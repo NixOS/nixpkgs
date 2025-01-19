@@ -53,12 +53,12 @@ stdenv.mkDerivation rec {
     updateScript = gnome.updateScript { packageName = "five-or-more"; };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/five-or-more";
     description = "Remove colored balls from the board by forming lines";
     mainProgram = "five-or-more";
-    maintainers = teams.gnome.members;
-    license = licenses.gpl2;
-    platforms = platforms.unix;
+    maintainers = lib.teams.gnome.members;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.unix;
   };
 }

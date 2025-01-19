@@ -55,13 +55,13 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DWITH_QT6=ON" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://hluk.github.io/CopyQ";
     description = "Clipboard Manager with Advanced Features";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ artturin ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ artturin ];
     # NOTE: CopyQ supports windows and osx, but I cannot test these.
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "copyq";
   };
 }

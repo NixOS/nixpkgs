@@ -21,12 +21,12 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Generate QRCode to connect apps to lnd Resources";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/LN-Zap/lndconnect";
-    maintainers = [ maintainers.d-xo ];
-    platforms = platforms.linux;
+    maintainers = [ lib.maintainers.d-xo ];
+    platforms = lib.platforms.linux;
     mainProgram = "lndconnect";
   };
 }

@@ -17,11 +17,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-dYiifLUOq6RKAVSXuoGlok9Jp8jHmbXN/EjQeQpoqWw=";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/txthinking/brook";
     description = "Cross-platform Proxy/VPN software";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ xrelkd ];
+    license = with lib.licenses; [ gpl3Only ];
+    maintainers = with lib.maintainers; [ xrelkd ];
     mainProgram = "brook";
   };
 }

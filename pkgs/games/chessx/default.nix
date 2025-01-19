@@ -63,12 +63,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://chessx.sourceforge.io/";
     description = "Browse and analyse chess games";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ luispedro ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ luispedro ];
+    platforms = lib.platforms.linux;
     mainProgram = "chessx";
   };
 })

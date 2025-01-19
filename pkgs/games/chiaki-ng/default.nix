@@ -112,16 +112,16 @@ stdenv.mkDerivation rec {
     wrapPythonPrograms
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://streetpea.github.io/chiaki-ng/";
     description = "Next-Generation of Chiaki (the open-source remote play client for PlayStation)";
     # Includes OpenSSL linking exception that we currently have no way
     # to represent.
     #
     # See also: <https://github.com/spdx/license-list-XML/issues/939>
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ devusb ];
-    platforms = platforms.linux;
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ devusb ];
+    platforms = lib.platforms.linux;
     mainProgram = "chiaki";
   };
 }

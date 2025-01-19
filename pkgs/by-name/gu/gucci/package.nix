@@ -38,11 +38,11 @@ buildGoModule rec {
     "-skip=^TestIntegration"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple CLI templating tool written in golang";
     mainProgram = "gucci";
     homepage = "https://github.com/noqcks/gucci";
-    license = licenses.mit;
-    maintainers = with maintainers; [ braydenjw ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ braydenjw ];
   };
 }

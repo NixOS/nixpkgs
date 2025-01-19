@@ -23,10 +23,10 @@ buildPythonPackage rec {
   # This package does not have tests.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Typing stubs for tqdm";
     homepage = "https://pypi.org/project/types-tqdm/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ GaetanLepage ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }

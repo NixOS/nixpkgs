@@ -32,11 +32,11 @@ stdenv.mkDerivation rec {
     mv release/gcc_linux_*/* $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command line tool to clean and optimize Matroska (.mkv / .mka / .mks / .mk3d) and WebM (.webm / .weba) files that have already been muxed";
     homepage = "https://www.matroska.org";
-    license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ cawilliamson ];
+    license = lib.licenses.bsdOriginal;
+    maintainers = with lib.maintainers; [ cawilliamson ];
     platforms = [
       "i686-linux"
       "x86_64-linux"

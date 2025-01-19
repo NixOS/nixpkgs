@@ -17,12 +17,12 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/dmsc/emu2/";
     description = "Simple text-mode x86 + DOS emulator";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ AndersonTorres ];
-    license = licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    license = lib.licenses.gpl2Plus;
     mainProgram = "emu2";
   };
 }

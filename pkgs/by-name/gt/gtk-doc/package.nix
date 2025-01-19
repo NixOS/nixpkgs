@@ -92,10 +92,10 @@ python3.pkgs.buildPythonApplication rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tools to extract documentation embedded in GTK and GNOME source code";
     homepage = "https://gitlab.gnome.org/GNOME/gtk-doc";
-    license = licenses.gpl2Plus;
-    maintainers = teams.gnome.members ++ (with maintainers; [ pSub ]);
+    license = lib.licenses.gpl2Plus;
+    maintainers = lib.teams.gnome.members ++ (with lib.maintainers; [ pSub ]);
   };
 }

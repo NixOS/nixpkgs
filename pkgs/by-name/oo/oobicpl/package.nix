@@ -36,11 +36,11 @@ stdenv.mkDerivation rec {
     "-DOOBICPL_BUILD_SHARED_LIBS=TRUE"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/BIC-MNI/oobicpl";
     description = "Brain Imaging Centre object-oriented programming library (and tools)";
-    maintainers = with maintainers; [ bcdarwin ];
-    platforms = platforms.unix;
-    license = licenses.free;
+    maintainers = with lib.maintainers; [ bcdarwin ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.free;
   };
 }

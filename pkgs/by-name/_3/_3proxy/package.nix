@@ -42,11 +42,11 @@ stdenv.mkDerivation rec {
     smoke-test = nixosTests._3proxy;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tiny free proxy server";
     homepage = "https://github.com/3proxy/3proxy";
-    license = licenses.bsd2;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ misuzu ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ misuzu ];
   };
 }

@@ -52,11 +52,11 @@ buildPythonPackage rec {
         '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Computer vision utils for Blender";
     homepage = "https://github.com/DIYer22/bpycv";
-    license = licenses.mit;
-    maintainers = [ maintainers.lucasew ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.lucasew ];
     broken = stdenv.hostPlatform.isAarch64;
     inherit (blender.meta) platforms;
   };

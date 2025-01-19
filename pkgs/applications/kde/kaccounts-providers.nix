@@ -18,12 +18,12 @@
 
 mkDerivation {
   pname = "kaccounts-providers";
-  meta = with lib; {
+  meta = {
     homepage = "https://community.kde.org/KTp/Setting_up_KAccounts";
     description = "Online account providers";
-    maintainers = with maintainers; [ kennyballou ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ kennyballou ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
   nativeBuildInputs = [
     extra-cmake-modules

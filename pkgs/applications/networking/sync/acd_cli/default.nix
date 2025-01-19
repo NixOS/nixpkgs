@@ -49,10 +49,10 @@ buildPythonApplication rec {
     lnOverBin acd_cli.py acdcli
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command line interface and FUSE filesystem for Amazon Cloud Drive";
     homepage = "https://github.com/yadayada/acd_cli";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ edwtjo ];
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ edwtjo ];
   };
 }

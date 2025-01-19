@@ -75,10 +75,10 @@ stdenv.mkDerivation rec {
     wrapPythonPrograms
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/NASA-SW-VnV/ikos";
     description = "Static analyzer for C/C++ based on the theory of Abstract Interpretation";
-    license = licenses.nasa13;
-    maintainers = with maintainers; [ atnnn ];
+    license = lib.licenses.nasa13;
+    maintainers = with lib.maintainers; [ atnnn ];
   };
 }

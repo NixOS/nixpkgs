@@ -55,11 +55,11 @@ stdenv.mkDerivation rec {
     "--enable-ansi"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "GNU Common Lisp compiler working via GCC";
     mainProgram = "gcl";
     maintainers = lib.teams.lisp.members;
-    license = licenses.gpl2;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
   };
 }

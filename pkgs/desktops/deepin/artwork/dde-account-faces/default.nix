@@ -17,14 +17,14 @@ stdenvNoCC.mkDerivation rec {
 
   makeFlags = [ "PREFIX=${placeholder "out"}/var" ];
 
-  meta = with lib; {
+  meta = {
     description = "Account faces of deepin desktop environment";
     homepage = "https://github.com/linuxdeepin/dde-account-faces";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3Plus
       cc0
     ];
-    platforms = platforms.linux;
-    maintainers = teams.deepin.members;
+    platforms = lib.platforms.linux;
+    maintainers = lib.teams.deepin.members;
   };
 }

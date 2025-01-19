@@ -38,10 +38,10 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Interactive spell-checking program for Unix";
     homepage = "https://www.cs.hmc.edu/~geoff/ispell.html";
-    license = licenses.free;
-    platforms = platforms.unix;
+    license = lib.licenses.free;
+    platforms = lib.platforms.unix;
   };
 }

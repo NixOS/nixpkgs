@@ -100,13 +100,13 @@ stdenv.mkDerivation rec {
     ln -svT $out/libexec/clightd $out/bin/clightd
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Linux bus interface that changes screen brightness/temperature";
     mainProgram = "clightd";
     homepage = "https://github.com/FedeDP/Clightd";
-    platforms = platforms.linux;
-    license = licenses.gpl3;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [
       eadwu
     ];
   };

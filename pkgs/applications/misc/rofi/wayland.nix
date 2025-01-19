@@ -30,12 +30,12 @@ rofi-unwrapped.overrideAttrs (oldAttrs: rec {
     wayland-protocols
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Window switcher, run dialog and dmenu replacement for Wayland";
     homepage = "https://github.com/lbonn/rofi";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "rofi";
-    maintainers = with maintainers; [ bew ];
-    platforms = with platforms; linux;
+    maintainers = with lib.maintainers; [ bew ];
+    platforms = with lib.platforms; linux;
   };
 })

@@ -85,12 +85,12 @@ buildGoModule rec {
     patchShebangs $out/libexec/aerc/filters
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Email client for your terminal";
     homepage = "https://aerc-mail.org/";
     maintainers = [ ];
     mainProgram = "aerc";
-    license = licenses.mit;
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
 }

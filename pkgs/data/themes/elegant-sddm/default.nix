@@ -59,10 +59,10 @@ stdenvNoCC.mkDerivation {
     echo ${qtgraphicaleffects} >> $out/nix-support/propagated-user-env-packages
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Sleek and stylish SDDM theme crafted in QML";
     homepage = "https://github.com/surajmandalcell/Elegant-sddm";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ GaetanLepage ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }

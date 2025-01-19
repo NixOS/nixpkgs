@@ -88,12 +88,12 @@ stdenv.mkDerivation rec {
     wrapPythonProgramsIn $out/lib "$out $pythonPath"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Bluetooth configuration tool";
     homepage = "https://github.com/linuxmint/blueberry";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       bobby285271
       romildo
     ];

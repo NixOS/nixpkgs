@@ -50,10 +50,10 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Daemon for exposing legacy ALSA sequencer applications in JACK MIDI system";
     homepage = "https://a2jmidid.ladish.org/";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     maintainers = [ ];
     platforms = [
       "i686-linux"

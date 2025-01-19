@@ -19,11 +19,11 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
 
-  meta = with lib; {
+  meta = {
     description = "Submit pull requests for individual, amendable, rebaseable commits to GitHub";
     mainProgram = "spr";
     homepage = "https://github.com/getcord/spr";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sven-of-cord ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sven-of-cord ];
   };
 }

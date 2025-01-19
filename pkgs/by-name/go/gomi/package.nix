@@ -19,11 +19,11 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  meta = with lib; {
+  meta = {
     description = "Replacement for UNIX rm command";
     homepage = "https://github.com/b4b4r07/gomi";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ozkutuk ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ozkutuk ];
     mainProgram = "gomi";
   };
 }

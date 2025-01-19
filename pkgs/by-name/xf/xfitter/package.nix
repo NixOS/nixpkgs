@@ -73,11 +73,11 @@ stdenv.mkDerivation rec {
     ln -sv "$out/lib/xfitter/"* "$out/lib/"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "XFitter project is an open source QCD fit framework ready to extract PDFs and assess the impact of new data";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     homepage = "https://www.xfitter.org/xFitter";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ veprbl ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

@@ -31,13 +31,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytm" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pythonic framework for threat modeling";
     homepage = "https://owasp.org/www-project-pytm/";
-    license = with licenses; [
+    license = with lib.licenses; [
       capec
       mit
     ];
-    maintainers = with maintainers; [ wamserma ];
+    maintainers = with lib.maintainers; [ wamserma ];
   };
 }

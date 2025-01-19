@@ -46,10 +46,10 @@ rustPlatform.buildRustPackage {
   # too many tests fail for now
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Orchestrate end-to-end encryption, cryptographic identities, mutual authentication, and authorization policies between distributed applications – at massive scale";
     homepage = "https://github.com/build-trust/ockam";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

@@ -64,12 +64,12 @@ rustPlatform.buildRustPackage rec {
     substituteInPlace src/greeter.rs --replace-fail '/usr/bin/env' '${lib.getExe' coreutils "env"}'
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pop-os/cosmic-greeter";
     description = "Greeter for the COSMIC Desktop Environment";
     mainProgram = "cosmic-greeter";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ nyabinary ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ nyabinary ];
+    platforms = lib.platforms.linux;
   };
 }

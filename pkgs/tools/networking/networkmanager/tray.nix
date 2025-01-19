@@ -39,12 +39,12 @@ mkDerivation rec {
     modemmanager-qt
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple Network Manager frontend written in Qt";
     mainProgram = "nm-tray";
     homepage = "https://github.com/palinek/nm-tray";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ dtzWill ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ dtzWill ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -56,11 +56,11 @@ stdenv.mkDerivation rec {
     rmdir "$out/usr"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://hardinfo.org/";
     description = "Display information about your hardware and operating system";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ bjornfor ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ bjornfor ];
     platforms = [
       "x86_64-linux"
       "i686-linux"

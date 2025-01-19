@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
     speexdsp
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Various plugins for ALSA";
     homepage = "http://alsa-project.org/";
-    license = licenses.lgpl21;
-    maintainers = [ maintainers.marcweber ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21;
+    maintainers = [ lib.maintainers.marcweber ];
+    platforms = lib.platforms.linux;
   };
 }

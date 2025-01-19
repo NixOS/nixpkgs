@@ -98,11 +98,11 @@ buildPythonApplication rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Simple modeling tool written in Python";
     maintainers = [ ] ++ lib.teams.gnome-circle.members;
     homepage = "https://github.com/gaphor/gaphor";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
   };
 }

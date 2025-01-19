@@ -20,12 +20,12 @@ stdenv.mkDerivation rec {
     cp -r binaries/data $out/share/0ad/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Free, open-source game of ancient warfare -- data files";
     homepage = "https://play0ad.com/";
-    license = licenses.cc-by-sa-30;
-    maintainers = with maintainers; [ chvp ];
-    platforms = platforms.linux;
+    license = lib.licenses.cc-by-sa-30;
+    maintainers = with lib.maintainers; [ chvp ];
+    platforms = lib.platforms.linux;
     hydraPlatforms = [ ];
   };
 }

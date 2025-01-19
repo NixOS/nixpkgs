@@ -39,12 +39,12 @@ mkDerivation rec {
         cp -a calaos_installer $out/bin
       '';
 
-  meta = with lib; {
+  meta = {
     description = "Calaos Installer, a tool to create calaos configuration";
     mainProgram = "calaos_installer";
     homepage = "https://www.calaos.fr/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ tiramiseb ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ tiramiseb ];
   };
 }

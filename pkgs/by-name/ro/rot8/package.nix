@@ -17,12 +17,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-KDg6Ggnm6Cl/1fXqNcc7/jRFJ6KTLVGveJ6Fs3NLlHE=";
 
-  meta = with lib; {
+  meta = {
     description = "screen rotation daemon for X11 and wlroots";
     homepage = "https://github.com/efernau/rot8";
-    license = licenses.mit;
-    maintainers = [ maintainers.smona ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.smona ];
     mainProgram = "rot8";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

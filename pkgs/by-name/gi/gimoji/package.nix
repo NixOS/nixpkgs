@@ -23,11 +23,11 @@ rustPlatform.buildRustPackage rec {
     darwin.apple_sdk.frameworks.AppKit
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Easily add emojis to your git commit messages";
     homepage = "https://github.com/zeenix/gimoji";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "gimoji";
-    maintainers = with maintainers; [ a-kenji ];
+    maintainers = with lib.maintainers; [ a-kenji ];
   };
 }

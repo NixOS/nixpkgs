@@ -20,7 +20,7 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Stealth coffee-break roguelike game";
     mainProgram = "harmonist";
     longDescription = ''
@@ -32,7 +32,7 @@ buildGoModule rec {
       adaptability for character progression.
     '';
     homepage = "https://harmonist.tuxfamily.org/";
-    license = licenses.isc;
+    license = lib.licenses.isc;
     maintainers = [ ];
   };
 }

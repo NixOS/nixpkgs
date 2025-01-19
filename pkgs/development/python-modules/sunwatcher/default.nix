@@ -25,10 +25,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sunwatcher" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for the SolarLog HTTP API";
     homepage = "https://bitbucket.org/Lavode/sunwatcher/src/master/";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -37,12 +37,12 @@ mkDerivation rec {
     libcsys
   ];
 
-  meta = with lib; {
+  meta = {
     description = "File information tool from the C Suite";
     mainProgram = "coreinfo";
     homepage = "https://gitlab.com/cubocore/coreapps/coreinfo";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dan4ik605743 ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ dan4ik605743 ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -61,10 +61,10 @@ python310Packages.buildPythonApplication rec {
   # https://github.com/rndusr/stig/issues/214#issuecomment-1995651219
   dontUsePytestCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "TUI and CLI for the BitTorrent client Transmission";
     homepage = "https://github.com/rndusr/stig";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
   };
 }

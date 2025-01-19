@@ -50,11 +50,11 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Small library intended for internal use by GNOME Games, but it may be used by others";
     homepage = "https://gitlab.gnome.org/GNOME/libgnome-games-support";
-    license = licenses.lgpl3;
-    maintainers = teams.gnome.members;
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl3;
+    maintainers = lib.teams.gnome.members;
+    platforms = lib.platforms.unix;
   };
 }

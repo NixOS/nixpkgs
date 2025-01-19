@@ -28,10 +28,10 @@ stdenv.mkDerivation rec {
     mv README.txt MANUAL.TXT $out/share/dlx/doc/
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.davidviner.com/dlx.html?name=DLX+Simulator";
     description = "DLX simulator written in C";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
   };
 }

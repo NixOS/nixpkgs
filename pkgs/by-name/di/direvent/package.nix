@@ -13,12 +13,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-HbvGGSqrZ+NFclFIYD1XDGooKDgMlkIVdir5FSTXlbo=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Directory event monitoring daemon";
     mainProgram = "direvent";
     homepage = "https://www.gnu.org.ua/software/direvent/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ puffnfresh ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ puffnfresh ];
   };
 }

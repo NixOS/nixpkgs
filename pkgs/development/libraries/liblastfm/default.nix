@@ -48,11 +48,11 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/lastfm/liblastfm";
     description = "Official LastFM library";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
   };
 }

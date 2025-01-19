@@ -17,15 +17,15 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-bPbwUqw2IFwZTi7qFm1BQgGYBAb6OG8QSU8xTdx/1zM=";
 
-  meta = with lib; {
+  meta = {
     description = "Automatically DRY up your Rust dependencies";
     homepage = "https://github.com/mainmatter/cargo-autoinherit";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # OR
       mit
     ];
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ matthiasbeyer ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ matthiasbeyer ];
     mainProgram = "cargo-autoinherit";
   };
 }

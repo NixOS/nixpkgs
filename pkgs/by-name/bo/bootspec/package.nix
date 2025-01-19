@@ -28,11 +28,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-eGSKVHjPnHK7WyGkO5LIjocNGHawahYQR3H5Lgk1C9s=";
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of RFC-0125's datatype and synthesis tooling";
     homepage = "https://github.com/DeterminateSystems/bootspec";
-    license = licenses.mit;
-    maintainers = teams.determinatesystems.members;
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = lib.teams.determinatesystems.members;
+    platforms = lib.platforms.unix;
   };
 }

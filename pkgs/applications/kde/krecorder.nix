@@ -34,11 +34,11 @@ mkDerivation rec {
     qtquickcontrols2
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Audio recorder for Plasma Mobile";
     mainProgram = "krecorder";
     homepage = "https://invent.kde.org/plasma-mobile/krecorder";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
   };
 }

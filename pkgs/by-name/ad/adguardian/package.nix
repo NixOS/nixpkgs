@@ -23,11 +23,11 @@ rustPlatform.buildRustPackage rec {
     darwin.apple_sdk.frameworks.Security
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Terminal-based, real-time traffic monitoring and statistics for your AdGuard Home instance";
     mainProgram = "adguardian";
     homepage = "https://github.com/Lissy93/AdGuardian-Term";
-    license = licenses.mit;
-    maintainers = with maintainers; [ GaetanLepage ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }

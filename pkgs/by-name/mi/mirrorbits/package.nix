@@ -42,7 +42,7 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "geographical download redirector for distributing files efficiently across a set of mirrors";
     homepage = "https://github.com/etix/mirrorbits";
     longDescription = ''
@@ -53,8 +53,8 @@ buildGoModule rec {
       the distribution of large-scale Open-Source projects with a lot
       of traffic.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ fpletz ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fpletz ];
     mainProgram = "mirrorbits";
   };
 }

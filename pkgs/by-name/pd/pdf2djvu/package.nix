@@ -60,11 +60,11 @@ stdenv.mkDerivation rec {
   # https://github.com/jwilk/pdf2djvu/commit/373e065faf2f0d868a3700788d20a96e9528bb12
   CXXFLAGS = "-std=c++17";
 
-  meta = with lib; {
+  meta = {
     description = "Creates djvu files from PDF files";
     homepage = "https://jwilk.net/software/pdf2djvu";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ pSub ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ pSub ];
     mainProgram = "pdf2djvu";
   };
 }

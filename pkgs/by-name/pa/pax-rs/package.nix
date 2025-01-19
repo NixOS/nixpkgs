@@ -10,15 +10,15 @@ rustPlatform.buildRustPackage rec {
   pname = "pax-rs";
   version = "0.4.0";
 
-  meta = with lib; {
+  meta = {
     description = "Fastest JavaScript bundler in the galaxy";
     longDescription = ''
       The fastest JavaScript bundler in the galaxy. Fully supports ECMAScript module syntax (import/export) in addition to CommonJS require(<string>).
     '';
     homepage = "https://github.com/nathan/pax";
-    license = licenses.mit;
-    maintainers = [ maintainers.klntsky ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.klntsky ];
+    platforms = lib.platforms.linux;
     mainProgram = "px";
   };
 

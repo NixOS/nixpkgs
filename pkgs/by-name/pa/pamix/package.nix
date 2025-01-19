@@ -47,12 +47,12 @@ stdenv.mkDerivation rec {
     ncurses
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Pulseaudio terminal mixer";
     homepage = "https://github.com/patroclos/PAmix";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ ericsagnes ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ ericsagnes ];
     mainProgram = "pamix";
   };
 }

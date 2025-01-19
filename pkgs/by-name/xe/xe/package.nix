@@ -17,11 +17,11 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple xargs and apply replacement";
     homepage = "https://github.com/chneukirchen/xe";
-    license = licenses.publicDomain;
-    platforms = platforms.all;
+    license = lib.licenses.publicDomain;
+    platforms = lib.platforms.all;
     maintainers = [ ];
     mainProgram = "xe";
   };

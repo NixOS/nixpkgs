@@ -85,11 +85,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mistralclient" ];
 
-  meta = with lib; {
+  meta = {
     description = "OpenStack Mistral Command-line Client";
     homepage = "https://opendev.org/openstack/python-mistralclient/";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "mistral";
-    maintainers = teams.openstack.members;
+    maintainers = lib.teams.openstack.members;
   };
 }

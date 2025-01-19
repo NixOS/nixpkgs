@@ -29,12 +29,12 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin $out/share/man/man1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Utility which removes LaTeX commands from input";
     mainProgram = "untex";
     homepage = "https://www.ctan.org/pkg/untex";
-    license = licenses.gpl1Only;
-    maintainers = with maintainers; [ joachifm ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl1Only;
+    maintainers = with lib.maintainers; [ joachifm ];
+    platforms = lib.platforms.all;
   };
 }

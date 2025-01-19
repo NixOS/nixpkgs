@@ -31,12 +31,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ systemd ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Hummer12007/brightnessctl";
     description = "This program allows you read and control device brightness";
-    license = licenses.mit;
-    maintainers = with maintainers; [ megheaiulian ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ megheaiulian ];
+    platforms = lib.platforms.linux;
     mainProgram = "brightnessctl";
   };
 

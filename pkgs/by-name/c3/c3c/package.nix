@@ -51,14 +51,14 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Compiler for the C3 language";
     homepage = "https://github.com/c3lang/c3c";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [
       anas
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     mainProgram = "c3c";
   };
 })

@@ -30,10 +30,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "guardian" ];
 
-  meta = with lib; {
+  meta = {
     description = "Per object permissions for Django";
     homepage = "https://github.com/django-guardian/django-guardian";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       bsd2
     ];

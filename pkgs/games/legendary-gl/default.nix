@@ -31,11 +31,11 @@ buildPythonApplication rec {
 
   pythonImportsCheck = [ "legendary" ];
 
-  meta = with lib; {
+  meta = {
     description = "Free and open-source Epic Games Launcher alternative";
     homepage = "https://github.com/derrod/legendary";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ equirosa ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ equirosa ];
     mainProgram = "legendary";
   };
 

@@ -28,10 +28,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "publicsuffix" ];
 
-  meta = with lib; {
+  meta = {
     description = "Allows to get the public suffix of a domain name";
     homepage = "https://pypi.python.org/pypi/publicsuffix/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

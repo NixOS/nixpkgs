@@ -39,11 +39,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "uplc" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python implementation of untyped plutus language core";
     homepage = "https://github.com/OpShin/uplc";
-    license = licenses.mit;
-    maintainers = with maintainers; [ t4ccer ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ t4ccer ];
     mainProgram = "opshin";
   };
 }

@@ -17,11 +17,11 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "DESTDIR=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/kaniini/libucontext";
     description = "ucontext implementation featuring glibc-compatible ABI";
-    license = licenses.isc;
-    platforms = platforms.linux;
+    license = lib.licenses.isc;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

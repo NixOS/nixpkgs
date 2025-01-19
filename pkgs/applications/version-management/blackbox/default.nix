@@ -55,10 +55,10 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Safely store secrets in a VCS repo";
-    maintainers = with maintainers; [ ericsagnes ];
-    license = licenses.mit;
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ ericsagnes ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
   };
 }

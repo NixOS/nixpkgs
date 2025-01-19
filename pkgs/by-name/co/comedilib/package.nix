@@ -52,11 +52,11 @@ stdenv.mkDerivation (finalAttrs: {
     "doc"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Linux Control and Measurement Device Interface Library";
     homepage = "https://github.com/Linux-Comedi/comedilib";
-    license = licenses.lgpl21;
-    maintainers = [ maintainers.doronbehar ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21;
+    maintainers = [ lib.maintainers.doronbehar ];
+    platforms = lib.platforms.linux;
   };
 })

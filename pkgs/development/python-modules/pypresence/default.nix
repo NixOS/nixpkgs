@@ -17,10 +17,10 @@ buildPythonPackage rec {
   doCheck = false; # tests require internet connection
   pythonImportsCheck = [ "pypresence" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://qwertyquerty.github.io/pypresence/html/index.html";
     description = "Discord RPC client written in Python";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

@@ -44,7 +44,7 @@ python311Packages.buildPythonApplication rec {
     "\${qtWrapperArgs[@]}"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://frescobaldi.org/";
     description = "LilyPond sheet music text editor";
     longDescription = ''
@@ -59,9 +59,9 @@ python311Packages.buildPythonApplication rec {
       MusicXML import, Modern user iterface with configurable colors,
       fonts and keyboard shortcuts
     '';
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ sepi ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ sepi ];
+    platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/frescobaldi.x86_64-darwin
     mainProgram = "frescobaldi";
   };

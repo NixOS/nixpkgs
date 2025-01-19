@@ -24,12 +24,12 @@ flutter.buildFlutterApplication rec {
     hash = "sha256-4a0OojgNvOpvM4+8uSslxxKb6uwKDfDkvHo29rMXynQ=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Firmware Updater for Linux";
     mainProgram = "firmware-updater";
     homepage = "https://github.com/canonical/firmware-updater";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ mkg20001 ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ mkg20001 ];
+    platforms = lib.platforms.linux;
   };
 }

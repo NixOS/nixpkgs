@@ -17,11 +17,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-daMPk1TKrUXXqCb4WVkrUIJsBL7uzXLJnxWNbHQ/Im4=";
 
-  meta = with lib; {
+  meta = {
     description = "CLI DNS lookup tool";
     mainProgram = "zdns";
     homepage = "https://github.com/zmap/zdns";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -101,12 +101,12 @@ stdenv.mkDerivation rec {
     url = "https://git.kernel.org/pub/scm/network/wireless/iwd.git";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://git.kernel.org/pub/scm/network/wireless/iwd.git";
     description = "Wireless daemon for Linux";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       dtzWill
       fpletz
     ];

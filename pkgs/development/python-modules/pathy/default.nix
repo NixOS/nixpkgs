@@ -47,11 +47,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pathy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Path interface for local and cloud bucket storage";
     mainProgram = "pathy";
     homepage = "https://github.com/justindujardin/pathy";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ melling ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ melling ];
   };
 }

@@ -70,12 +70,12 @@ buildGoModule rec {
     version = "v${version}";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/kubernetes/helm";
     description = "Package manager for kubernetes";
     mainProgram = "helm";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       rlupton20
       edude03
       saschagrunert

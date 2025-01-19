@@ -22,10 +22,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "iammeter" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to work with the IamMeter API";
     homepage = "https://pypi.org/project/iammeter/";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -42,10 +42,10 @@ buildPythonPackage rec {
     inherit localstack;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight Python client for LocalStack";
     homepage = "https://github.com/localstack/localstack-python-client";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

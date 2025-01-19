@@ -62,12 +62,12 @@ rustPlatform.buildRustPackage rec {
 
   RUSTFLAGS = "--cfg tokio_unstable";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pop-os/cosmic-launcher";
     description = "Launcher for the COSMIC Desktop Environment";
     mainProgram = "cosmic-launcher";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ nyabinary ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ nyabinary ];
+    platforms = lib.platforms.linux;
   };
 }

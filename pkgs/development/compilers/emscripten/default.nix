@@ -151,16 +151,16 @@ stdenv.mkDerivation rec {
     bintools = emscripten;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/emscripten-core/emscripten";
     description = "LLVM-to-JavaScript Compiler";
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       qknight
       matthewbauer
       raitobezarius
       willcohen
     ];
-    license = licenses.ncsa;
+    license = lib.licenses.ncsa;
   };
 }

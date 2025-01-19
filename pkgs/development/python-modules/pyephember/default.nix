@@ -29,10 +29,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyephember" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client to the EPH Control Systems Ember API";
     homepage = "https://github.com/ttroy50/pyephember";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

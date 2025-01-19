@@ -13,9 +13,9 @@
 
 mkDerivation {
   pname = "libksane";
-  meta = with lib; {
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ polendri ];
+  meta = {
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ polendri ];
   };
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [

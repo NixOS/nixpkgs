@@ -51,11 +51,11 @@ llvmPackages.stdenv.mkDerivation {
   # undefined reference to `typeinfo for clang::ASTConsumer'
   env.CXXFLAGS = "-fno-rtti";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/rpav/c2ffi";
     description = "LLVM based tool for extracting definitions from C, C++, and Objective C header files for use with foreign function call interfaces";
     mainProgram = "c2ffi";
-    license = licenses.lgpl21Only;
+    license = lib.licenses.lgpl21Only;
     maintainers = [ ];
   };
 }

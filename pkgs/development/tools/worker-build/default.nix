@@ -31,14 +31,14 @@ rustPlatform.buildRustPackage rec {
   # missing some module upstream to run the tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "This is a tool to be used as a custom build command for a Cloudflare Workers `workers-rs` project";
     mainProgram = "worker-build";
     homepage = "https://github.com/cloudflare/workers-rs";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [ happysalada ];
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

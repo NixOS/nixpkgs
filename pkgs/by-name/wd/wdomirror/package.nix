@@ -54,12 +54,12 @@ stdenv.mkDerivation {
       --replace "werror=true" "werror=false"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Mirrors an output of a wlroots compositor to a window";
     homepage = "https://github.com/progandy/wdomirror";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ jpas ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ jpas ];
     mainProgram = "wdomirror";
   };
 }

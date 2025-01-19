@@ -227,13 +227,13 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/k2pdfopt --set-default TESSDATA_PREFIX ${tesseract5}/share/tessdata
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Optimizes PDF/DJVU files for mobile e-readers (e.g. the Kindle) and smartphones";
     homepage = "http://www.willus.com/k2pdfopt";
     changelog = "https://www.willus.com/k2pdfopt/k2pdfopt_version.txt";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       bosu
       danielfullmer
     ];

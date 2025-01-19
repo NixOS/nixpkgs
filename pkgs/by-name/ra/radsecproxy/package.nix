@@ -30,11 +30,11 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://radsecproxy.github.io/";
     description = "Generic RADIUS proxy that supports both UDP and TLS (RadSec) RADIUS transports";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ sargon ];
-    platforms = with platforms; linux;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ sargon ];
+    platforms = with lib.platforms; linux;
   };
 }

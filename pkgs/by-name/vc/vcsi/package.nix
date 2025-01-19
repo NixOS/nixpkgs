@@ -33,11 +33,11 @@ python3Packages.buildPythonApplication rec {
 
   makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ ffmpeg ]}" ];
 
-  meta = with lib; {
+  meta = {
     description = "Create video contact sheets";
     homepage = "https://github.com/amietn/vcsi";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       dandellion
       zopieux
     ];

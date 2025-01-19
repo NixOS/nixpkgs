@@ -33,12 +33,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Examine the contents of Internet Explorer's cache files for forensic purposes";
     mainProgram = "pasco";
     homepage = "https://sourceforge.net/projects/fast/files/Pasco/";
-    maintainers = with maintainers; [ d3vil0p3r ];
-    platforms = platforms.unix;
-    license = with licenses; [ bsd3 ];
+    maintainers = with lib.maintainers; [ d3vil0p3r ];
+    platforms = lib.platforms.unix;
+    license = with lib.licenses; [ bsd3 ];
   };
 })

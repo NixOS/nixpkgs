@@ -16,11 +16,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-jbPFxwrXWwxPamMnbBxFvGBrt38YG7N5fTweAYULEYQ=";
 
-  meta = with lib; {
+  meta = {
     description = "Elasticsearch stats exporter for Prometheus";
     mainProgram = "elasticsearch_exporter";
     homepage = "https://github.com/prometheus-community/elasticsearch_exporter";
-    license = licenses.asl20;
-    maintainers = teams.deshaw.members;
+    license = lib.licenses.asl20;
+    maintainers = lib.teams.deshaw.members;
   };
 }

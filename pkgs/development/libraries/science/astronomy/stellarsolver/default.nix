@@ -34,11 +34,11 @@ mkDerivation rec {
     "-DBUILD_TESTER=${if withTester then "on" else "off"}"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/rlancaste/stellarsolver";
     description = "Astrometric plate solving library";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ hjones2199 ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ hjones2199 ];
+    platforms = lib.platforms.unix;
   };
 }

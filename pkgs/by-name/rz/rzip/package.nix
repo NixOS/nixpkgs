@@ -26,12 +26,12 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=implicit-int";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://rzip.samba.org/";
     description = "Compression program";
     maintainers = [ ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
     mainProgram = "rzip";
   };
 }

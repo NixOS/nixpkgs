@@ -64,11 +64,11 @@ python3Packages.buildPythonApplication rec {
     command = "HOME=$(mktemp -d) zabbix-cli --version";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Command-line interface for Zabbix";
     homepage = "https://github.com/unioslo/zabbix-cli";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "zabbix-cli";
-    maintainers = [ maintainers.anthonyroussel ];
+    maintainers = [ lib.maintainers.anthonyroussel ];
   };
 }

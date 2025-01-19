@@ -60,11 +60,11 @@ stdenv.mkDerivation rec {
       --set DLEYNA_CONNECTOR_PATH "$DLEYNA_CONNECTOR_PATH"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Library to discover, browse and manipulate Digital Media Servers";
     homepage = "https://github.com/phako/dleyna-server";
-    maintainers = with maintainers; [ jtojnar ];
-    platforms = platforms.unix;
-    license = licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [ jtojnar ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.lgpl21Only;
   };
 }

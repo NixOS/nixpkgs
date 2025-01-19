@@ -25,10 +25,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "wavinsentio" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to interact with the Wavin Sentio underfloor heating system";
     homepage = "https://github.com/djerik/wavinsentio";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

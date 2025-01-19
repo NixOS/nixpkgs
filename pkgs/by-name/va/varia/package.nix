@@ -58,12 +58,12 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple download manager based on aria2 and libadwaita";
     homepage = "https://giantpinkrobots.github.io/varia";
-    license = licenses.mpl20;
+    license = lib.licenses.mpl20;
     mainProgram = "varia";
-    maintainers = with maintainers; [ aleksana ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ aleksana ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -45,9 +45,9 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Rewrite of unclutter using the X11 Xfixes extension";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "unclutter";

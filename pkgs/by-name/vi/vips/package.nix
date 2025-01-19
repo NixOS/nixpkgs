@@ -150,12 +150,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/libvips/libvips/blob/${finalAttrs.src.rev}/ChangeLog";
     homepage = "https://www.libvips.org/";
     description = "Image processing system for large images";
-    license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl2Plus;
+    maintainers = with lib.maintainers; [
       kovirobi
       anthonyroussel
     ];
@@ -163,7 +163,7 @@ stdenv.mkDerivation (finalAttrs: {
       "vips"
       "vips-cpp"
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "vips";
   };
 })

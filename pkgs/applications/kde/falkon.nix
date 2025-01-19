@@ -52,12 +52,12 @@ mkDerivation rec {
     wrapQtAppsHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "QtWebEngine based cross-platform web browser";
     mainProgram = "falkon";
     homepage = "https://www.falkon.org";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ peterhoeg ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ peterhoeg ];
+    platforms = lib.platforms.unix;
   };
 }

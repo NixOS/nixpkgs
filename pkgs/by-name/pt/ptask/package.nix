@@ -39,12 +39,12 @@ stdenv.mkDerivation rec {
       --prefix PATH : "${taskwarrior2}/bin"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://wpitchoune.net/ptask/";
     description = "GTK-based GUI for taskwarrior";
     mainProgram = "ptask";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.spacefrogg ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.spacefrogg ];
+    platforms = lib.platforms.linux;
   };
 }

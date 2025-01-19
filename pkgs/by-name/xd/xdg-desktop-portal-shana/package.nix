@@ -34,12 +34,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-/iJAYG0OjTaRrDtNjypvmSUad8PS0lRfykSxp0fJZ98=";
 
-  meta = with lib; {
+  meta = {
     description = "Filechooser portal backend for any desktop environment";
     homepage = "https://github.com/Decodetalkers/xdg-desktop-portal-shana";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.samuelefacenda ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.samuelefacenda ];
   };
 
 }

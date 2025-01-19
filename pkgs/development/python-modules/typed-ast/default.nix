@@ -40,10 +40,10 @@ buildPythonPackage rec {
     "typed_ast.conversions"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python AST modules with type comment support";
     homepage = "https://github.com/python/typed_ast";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

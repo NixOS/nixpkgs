@@ -38,10 +38,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fe25519" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python field operations for Curve25519's prime";
     homepage = "https://github.com/BjoernMHaase/fe25519";
-    license = with licenses; [ cc0 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ cc0 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

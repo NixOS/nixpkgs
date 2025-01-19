@@ -78,11 +78,11 @@ mkDerivation rec {
     "-DDIALER_BUILD_SHELL_OVERLAY=OFF"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Dialer for Plasma Mobile";
     mainProgram = "plasmaphonedialer";
     homepage = "https://invent.kde.org/plasma-mobile/plasma-dialer";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
   };
 }

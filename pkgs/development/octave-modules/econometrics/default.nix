@@ -18,10 +18,10 @@ buildOctavePackage rec {
     optim
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://octave.sourceforge.io/econometrics/index.html";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ KarlJoad ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Econometrics functions including MLE and GMM based techniques";
   };
 }

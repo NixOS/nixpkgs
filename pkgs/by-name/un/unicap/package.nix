@@ -41,11 +41,11 @@ stdenv.mkDerivation rec {
     sed -e 's@/etc/udev@'"$out"'/&@' -i data/Makefile.*
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Universal video capture API";
     homepage = "https://www.unicap-imaging.org/";
-    maintainers = [ maintainers.raskin ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    maintainers = [ lib.maintainers.raskin ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

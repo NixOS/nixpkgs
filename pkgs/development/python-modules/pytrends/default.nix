@@ -50,10 +50,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytrends" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pseudo API for Google Trends";
     homepage = "https://github.com/GeneralMills/pytrends";
-    license = [ licenses.asl20 ];
-    maintainers = [ maintainers.mmahut ];
+    license = [ lib.licenses.asl20 ];
+    maintainers = [ lib.maintainers.mmahut ];
   };
 }

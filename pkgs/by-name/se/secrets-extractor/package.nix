@@ -20,11 +20,11 @@ buildGoModule rec {
 
   buildInputs = [ libpcap ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to check packets for secrets";
     homepage = "https://github.com/Xenios91/Secrets-Extractor";
     # https://github.com/Xenios91/Secrets-Extractor/issues/1
-    license = licenses.unfree;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

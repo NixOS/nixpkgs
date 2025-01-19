@@ -26,11 +26,11 @@ buildPythonPackage rec {
 
   doCheck = false; # custom test modifies sys.path
 
-  meta = with lib; {
+  meta = {
     description = "Flexible test runner with layer support";
     mainProgram = "zope-testrunner";
     homepage = "https://pypi.python.org/pypi/zope.testrunner";
-    license = licenses.zpl20;
+    license = lib.licenses.zpl20;
     maintainers = [ ];
   };
 }

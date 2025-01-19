@@ -13,10 +13,10 @@ buildOctavePackage rec {
     sha256 = "sha256-/M6n3YTBEE7TurtHoo8F4AEqicKE85qwlAkEUJFSlM4=";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://octave.sourceforge.io/struct/index.html";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ KarlJoad ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Additional structure manipulation functions";
   };
 }

@@ -71,11 +71,11 @@ python.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "textual_paint" ];
 
-  meta = with lib; {
+  meta = {
     description = "TUI image editor inspired by MS Paint";
     homepage = "https://github.com/1j01/textual-paint";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "textual-paint";
   };
 }

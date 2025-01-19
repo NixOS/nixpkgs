@@ -18,11 +18,11 @@ buildPythonApplication rec {
     pandocfilters
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/timofurrer/pandoc-plantuml-filter";
     description = "Pandoc filter which converts PlantUML code blocks to PlantUML images";
-    license = licenses.mit;
-    maintainers = with maintainers; [ cmcdragonkai ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ cmcdragonkai ];
     mainProgram = "pandoc-plantuml";
   };
 }

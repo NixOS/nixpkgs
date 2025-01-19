@@ -78,11 +78,11 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/grilo";
     description = "Framework that provides access to various sources of multimedia content, using a pluggable system";
-    maintainers = teams.gnome.members;
-    license = licenses.lgpl2Plus;
-    platforms = platforms.unix;
+    maintainers = lib.teams.gnome.members;
+    license = lib.licenses.lgpl2Plus;
+    platforms = lib.platforms.unix;
   };
 }

@@ -31,10 +31,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "python_bring_api" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to access the Bring! shopping lists API";
     homepage = "https://github.com/eliasball/python-bring-api";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

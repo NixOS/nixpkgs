@@ -37,9 +37,9 @@ stdenv.mkDerivation {
     Xplugin
     Foundation
   ];
-  meta = with lib; {
-    license = licenses.apple-psl20;
-    platforms = platforms.darwin;
-    maintainers = with maintainers; [ matthewbauer ];
+  meta = {
+    license = lib.licenses.apple-psl20;
+    platforms = lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ matthewbauer ];
   };
 }

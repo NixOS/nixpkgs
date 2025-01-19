@@ -54,12 +54,12 @@ buildPythonPackage rec {
      UM/Application.py
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Python framework for building Desktop applications";
     homepage = "https://github.com/Ultimaker/Uranium";
-    license = licenses.lgpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       abbradar
       gebner
     ];

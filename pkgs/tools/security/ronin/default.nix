@@ -29,10 +29,10 @@ bundlerEnv {
 
   passthru.updateScript = bundlerUpdateScript "ronin";
 
-  meta = with lib; {
+  meta = {
     description = "Free and Open Source Ruby toolkit for security research and development";
     homepage = "https://ronin-rb.dev";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ Ch1keen ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ Ch1keen ];
   };
 }

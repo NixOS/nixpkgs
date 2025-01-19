@@ -20,10 +20,10 @@ buildDunePackage rec {
     zlib
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/didier-wenzek/ocaml-kafka";
     description = "OCaml bindings for Kafka";
-    license = licenses.mit;
-    maintainers = [ maintainers.vbgl ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.vbgl ];
   };
 }

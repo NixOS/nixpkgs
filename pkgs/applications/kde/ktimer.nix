@@ -9,13 +9,13 @@
 
 mkDerivation {
   pname = "ktimer";
-  meta = with lib; {
+  meta = {
     homepage = "https://kde.org/applications/en/utilities/org.kde.ktimer";
     description = "Little tool to execute programs after some time";
     mainProgram = "ktimer";
-    maintainers = with maintainers; [ freezeboy ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ freezeboy ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
   nativeBuildInputs = [
     extra-cmake-modules

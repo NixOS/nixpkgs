@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "C++ interface to the GTK graphical user interface library";
     longDescription = ''
       gtkmm is the official C++ interface for the popular GUI library
@@ -90,8 +90,8 @@ stdenv.mkDerivation rec {
       tutorial.
     '';
     homepage = "https://gtkmm.org/";
-    license = licenses.lgpl2Plus;
-    maintainers = teams.gnome.members ++ (with maintainers; [ raskin ]);
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl2Plus;
+    maintainers = lib.teams.gnome.members ++ (with lib.maintainers; [ raskin ]);
+    platforms = lib.platforms.unix;
   };
 }

@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "paypalrestsdk" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python APIs to create, process and manage payment";
     homepage = "https://github.com/paypal/PayPal-Python-SDK";
     changelog = "https://github.com/paypal/PayPal-Python-SDK/blob/master/CHANGELOG.md";

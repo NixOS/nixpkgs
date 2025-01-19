@@ -20,14 +20,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ zlib ];
 
-  meta = with lib; {
+  meta = {
     description = "Compact and readable SAT solver";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       gebner
       raskin
     ];
-    platforms = platforms.unix;
-    license = licenses.mit;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.mit;
     homepage = "http://minisat.se/";
   };
 }

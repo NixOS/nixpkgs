@@ -24,11 +24,11 @@ buildPythonApplication rec {
 
   dontUseSetuptoolsCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://s3tools.org/s3cmd";
     description = "Command line tool for managing Amazon S3 and CloudFront services";
     mainProgram = "s3cmd";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
   };
 }

@@ -24,11 +24,11 @@ buildGoModule rec {
     "-X github.com/xjasonlyu/tun2socks/v2/internal/version.GitCommit=v${version}"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/xjasonlyu/tun2socks";
     description = "tun2socks - powered by gVisor TCP/IP stack";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ nickcao ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ nickcao ];
     mainProgram = "tun2socks";
   };
 }

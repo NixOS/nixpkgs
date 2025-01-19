@@ -31,10 +31,10 @@ buildGoModule rec {
     ln -s $out/bin/juicefs $out/bin/mount.juicefs
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Distributed POSIX file system built on top of Redis and S3";
     homepage = "https://www.juicefs.com/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dit7ya ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dit7ya ];
   };
 }

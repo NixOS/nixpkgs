@@ -41,11 +41,11 @@ stdenv.mkDerivation rec {
     mkdir -p $out/{bin,man/man1}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "View pictures on a linux framebuffer device";
     homepage = "http://s-tech.elsat.net.pl/fbv/";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ peterhoeg ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ peterhoeg ];
     mainProgram = "fbv";
   };
 }

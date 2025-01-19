@@ -69,11 +69,11 @@ stdenv.mkDerivation (finalAttrs: {
     inherit enableTls;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://hiawatha.leisink.net/";
     description = "Advanced and secure webserver";
-    license = licenses.gpl2Only;
-    platforms = platforms.unix; # "Hiawatha runs perfectly on Linux, BSD and MacOS X"
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.unix; # "Hiawatha runs perfectly on Linux, BSD and MacOS X"
     mainProgram = "hiawatha";
     maintainers = [ ];
   };

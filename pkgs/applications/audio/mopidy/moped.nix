@@ -22,10 +22,10 @@ pythonPackages.buildPythonApplication rec {
   # no tests implemented
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/martijnboland/moped";
     description = "Web client for Mopidy";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     hydraPlatforms = [ ];
   };

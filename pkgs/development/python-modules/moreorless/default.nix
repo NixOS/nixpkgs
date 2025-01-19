@@ -40,10 +40,10 @@ buildPythonPackage rec {
     "moreorless/tests/patch.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Wrapper to make difflib.unified_diff more fun to use";
     homepage = "https://github.com/thatch/moreorless/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

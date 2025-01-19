@@ -44,14 +44,14 @@ stdenv.mkDerivation rec {
     rmdir $out/usr
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/intel/opa-psm2";
     description = "PSM2 library supports a number of fabric media and stacks";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Only
       bsd3
     ];
     platforms = [ "x86_64-linux" ];
-    maintainers = [ maintainers.bzizou ];
+    maintainers = [ lib.maintainers.bzizou ];
   };
 }

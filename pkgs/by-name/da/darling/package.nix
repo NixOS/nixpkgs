@@ -255,12 +255,12 @@ stdenv.mkDerivation {
 
   passthru.tests.nixos = nixosTests.darling;
 
-  meta = with lib; {
+  meta = {
     description = "Open-source Darwin/macOS emulation layer for Linux";
     homepage = "https://www.darlinghq.org";
     changelog = "https://github.com/darlinghq/darling/releases";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ zhaofengli ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ zhaofengli ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "darling";
   };

@@ -30,12 +30,12 @@ buildPythonApplication rec {
 
   pythonImportsCheck = [ "cambrinary" ];
 
-  meta = with lib; {
+  meta = {
     description = "Cambridge dictionary in a terminal";
     mainProgram = "cambrinary";
     homepage = "https://github.com/xueyuanl/cambrinary";
-    license = licenses.gpl3Only;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ azahi ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ azahi ];
   };
 }

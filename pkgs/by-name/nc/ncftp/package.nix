@@ -53,12 +53,12 @@ stdenv.mkDerivation (finalAttrs: {
     "--mandir=$(out)/share/man/"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Command line FTP (File Transfer Protocol) client";
     homepage = "https://www.ncftp.com/ncftp/";
-    maintainers = with maintainers; [ bjornfor ];
-    platforms = platforms.unix;
-    license = licenses.clArtistic;
+    maintainers = with lib.maintainers; [ bjornfor ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.clArtistic;
     mainProgram = "ncftp";
   };
 })

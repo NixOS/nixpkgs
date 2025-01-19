@@ -17,11 +17,11 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-5u5240PL5cKhnHsT7sRdccrbZBAbRN+fa+FhJP1gX/4==";
 
-  meta = with lib; {
+  meta = {
     description = "A simple CLI browser for the peertube federated video platform";
     homepage = "https://gitlab.com/peertube-viewer/peertube-viewer-rs";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ haruki7049 ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ haruki7049 ];
     mainProgram = "peertube-viewer-rs";
   };
 }

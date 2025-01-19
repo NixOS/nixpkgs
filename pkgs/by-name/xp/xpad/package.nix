@@ -33,12 +33,12 @@ stdenv.mkDerivation rec {
     gtksourceview
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Sticky note application for jotting down things to remember";
     mainProgram = "xpad";
     homepage = "https://launchpad.net/xpad";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ michalrus ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ michalrus ];
   };
 }

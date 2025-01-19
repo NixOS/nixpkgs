@@ -17,11 +17,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-m11A5fcJzWoDZglrr2Es1V5ZJNepEkGeIRVhexJ7jws=";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/evansmurithi/cloak";
     description = "Command-line OTP authenticator application";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mvs ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mvs ];
     mainProgram = "cloak";
   };
 }

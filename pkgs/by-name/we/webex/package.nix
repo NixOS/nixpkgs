@@ -172,11 +172,11 @@ stdenv.mkDerivation rec {
     update-source-version ${pname} "$version" "$hash" "$url" --file=./pkgs/applications/networking/instant-messengers/webex/default.nix
   '';
 
-  meta = with lib; {
+  meta = {
     description = "All-in-one app to call, meet, message, and get work done";
     homepage = "https://webex.com/";
     downloadPage = "https://www.webex.com/downloads.html";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ uvnikita ];
     platforms = [ "x86_64-linux" ];
   };

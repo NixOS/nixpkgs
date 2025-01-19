@@ -67,10 +67,10 @@ stdenv.mkDerivation rec {
   # module, which works correctly in all cases.
   PYTHON_CONFIG = "/invalid";
 
-  meta = with lib; {
+  meta = {
     description = "Event system based on the talloc memory management library";
     homepage = "https://tevent.samba.org/";
-    license = licenses.lgpl3Plus;
-    platforms = platforms.all;
+    license = lib.licenses.lgpl3Plus;
+    platforms = lib.platforms.all;
   };
 }

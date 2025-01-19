@@ -77,10 +77,10 @@ buildPythonPackage {
     "test_other"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Adds Dramatiq support to your Flask application";
     homepage = "https://gitlab.com/bersace/flask-dramatiq";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ traxys ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ traxys ];
   };
 }

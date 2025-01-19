@@ -25,10 +25,10 @@ stdenv.mkDerivation {
 
   preferLocalBuild = true;
 
-  meta = with lib; {
+  meta = {
     description = "Quake 3 Arena demo content";
-    license = licenses.unfreeRedistributable;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ abbradar ];
+    license = lib.licenses.unfreeRedistributable;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ abbradar ];
   };
 }

@@ -38,11 +38,11 @@ stdenv.mkDerivation rec {
   doCheck = true;
   preCheck = ''export LD_LIBRARY_PATH=$PWD'';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://xeus.readthedocs.io";
     description = "C++ implementation of the Jupyter Kernel protocol";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ serge_sans_paille ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ serge_sans_paille ];
+    platforms = lib.platforms.all;
   };
 }

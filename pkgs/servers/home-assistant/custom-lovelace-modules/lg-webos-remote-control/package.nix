@@ -28,11 +28,11 @@ buildNpmPackage rec {
 
   passthru.entrypoint = "lg-remote-control.js";
 
-  meta = with lib; {
+  meta = {
     description = "Remote Control for LG TV WebOS";
     homepage = "https://github.com/madmicio/LG-WebOS-Remote-Control";
-    license = licenses.mit;
-    maintainers = with maintainers; [ k900 ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ k900 ];
+    platforms = lib.platforms.all;
   };
 }

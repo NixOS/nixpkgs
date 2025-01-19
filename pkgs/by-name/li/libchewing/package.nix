@@ -21,14 +21,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with lib; {
+  meta = {
     description = "Intelligent Chinese phonetic input method";
     homepage = "https://chewing.im/";
-    license = licenses.lgpl21Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [
       ericsagnes
       ShamrockLee
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 })

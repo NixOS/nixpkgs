@@ -17,11 +17,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-muxtr80EjnRoHG/TCEQwrBwlnARsfqWoYlR0HavMe6U=";
 
-  meta = with lib; {
+  meta = {
     description = "Bulk, parallel insert of CSV records into PostgreSQL";
     mainProgram = "timescaledb-parallel-copy";
     homepage = "https://github.com/timescale/timescaledb-parallel-copy";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ thoughtpolice ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ thoughtpolice ];
   };
 }

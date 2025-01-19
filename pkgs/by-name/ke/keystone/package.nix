@@ -35,12 +35,12 @@ stdenv.mkDerivation rec {
       fixDarwinDylibNames
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight multi-platform, multi-architecture assembler framework";
     homepage = "https://www.keystone-engine.org";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ ];
     mainProgram = "kstool";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

@@ -54,15 +54,15 @@ rustPlatform.buildRustPackage rec {
         "-Wl,--pop-state"
       ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pop-os/cosmic-panel";
     description = "Panel for the COSMIC Desktop Environment";
     mainProgram = "cosmic-panel";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       qyliss
       nyabinary
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

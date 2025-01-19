@@ -86,12 +86,12 @@ stdenv.mkDerivation rec {
     cd nixbld
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.siril.org/";
     description = "Astrophotographic image processing tool";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     changelog = "https://gitlab.com/free-astro/siril/-/blob/HEAD/ChangeLog";
-    maintainers = with maintainers; [ hjones2199 ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ hjones2199 ];
+    platforms = lib.platforms.linux;
   };
 }

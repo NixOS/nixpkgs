@@ -20,11 +20,11 @@ buildGo122Module {
   # dockerize.sh, which we don't care about.
   subPackages = [ "." ];
 
-  meta = with lib; {
+  meta = {
     description = "Advanced Honeypot framework";
     mainProgram = "honeytrap";
     homepage = "https://github.com/honeytrap/honeytrap";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

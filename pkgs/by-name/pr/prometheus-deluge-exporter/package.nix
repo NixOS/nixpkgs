@@ -25,11 +25,11 @@ python3.pkgs.buildPythonApplication rec {
     "deluge_exporter"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Prometheus exporter for Deluge";
     homepage = "https://github.com/ibizaman/deluge_exporter";
-    license = licenses.isc;
-    maintainers = with maintainers; [ ibizaman ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ ibizaman ];
     mainProgram = "deluge-exporter";
   };
 }

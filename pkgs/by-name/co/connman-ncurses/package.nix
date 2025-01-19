@@ -50,12 +50,12 @@ stdenv.mkDerivation {
     cp -va connman_ncurses "$out/bin/"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple ncurses UI for connman";
     mainProgram = "connman_ncurses";
     homepage = "https://github.com/eurogiciel-oss/connman-json-client";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.romildo ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.romildo ];
   };
 }

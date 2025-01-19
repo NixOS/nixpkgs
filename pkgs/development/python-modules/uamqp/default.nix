@@ -85,10 +85,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "uamqp" ];
 
-  meta = with lib; {
+  meta = {
     description = "AMQP 1.0 client library for Python";
     homepage = "https://github.com/Azure/azure-uamqp-python";
-    license = licenses.mit;
-    maintainers = with maintainers; [ maxwilson ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ maxwilson ];
   };
 }

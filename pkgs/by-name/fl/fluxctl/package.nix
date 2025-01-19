@@ -37,12 +37,12 @@ buildGoModule rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "CLI client for Flux, the GitOps Kubernetes operator";
     mainProgram = "fluxctl";
     homepage = "https://github.com/fluxcd/flux";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       Gonzih
       Br1ght0ne
     ];

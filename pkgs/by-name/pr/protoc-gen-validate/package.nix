@@ -19,10 +19,10 @@ buildGoModule rec {
 
   excludedPackages = [ "tests" ];
 
-  meta = with lib; {
+  meta = {
     description = "Protobuf plugin for generating polyglot message validators";
     homepage = "https://github.com/envoyproxy/protoc-gen-validate";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ matthewpi ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ matthewpi ];
   };
 }

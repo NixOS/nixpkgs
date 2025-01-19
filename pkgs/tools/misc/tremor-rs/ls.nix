@@ -19,10 +19,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-/RKwmslhMm30QxviVV7HthDHSmTmaGZn1hdt6bNF3d4=";
 
-  meta = with lib; {
+  meta = {
     description = "Tremor Language Server (Trill)";
     homepage = "https://www.tremor.rs/docs/next/getting-started/tooling";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

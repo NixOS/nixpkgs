@@ -20,14 +20,14 @@ stdenv.mkDerivation rec {
     ${deliantra-server}/bin/cfutil --install-maps .
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Map data for the Deliantra free MMORPG";
     homepage = "http://www.deliantra.net/";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Plus
       agpl3Plus
     ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ ToxicFrog ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ ToxicFrog ];
   };
 }

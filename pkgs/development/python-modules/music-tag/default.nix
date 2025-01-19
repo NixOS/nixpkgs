@@ -27,10 +27,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "music_tag" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple interface to edit audio file metadata";
     homepage = "https://github.com/KristoforMaynard/music-tag";
-    license = licenses.mit;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

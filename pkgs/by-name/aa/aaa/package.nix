@@ -16,11 +16,11 @@ rustPlatform.buildRustPackage rec {
   };
   cargoHash = "sha256-ugB0r9qiGRurc30GrJH4MKM6fWZ99+f1Gy7/1lSmrwU=";
 
-  meta = with lib; {
+  meta = {
     description = "Terminal viewer for 3a format";
     homepage = "https://github.com/DomesticMoth/aaa";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ asciimoth ];
+    license = with lib.licenses; [ gpl3Only ];
+    maintainers = with lib.maintainers; [ asciimoth ];
     mainProgram = "aaa";
   };
 }

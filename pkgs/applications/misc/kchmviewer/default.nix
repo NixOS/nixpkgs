@@ -55,12 +55,12 @@ stdenv.mkDerivation rec {
     install -Dm644 packages/kchmviewer.desktop -t $out/share/applications
   '';
 
-  meta = with lib; {
+  meta = {
     description = "CHM (Winhelp) files viewer";
     mainProgram = "kchmviewer";
     homepage = "http://www.ulduzsoft.com/linux/kchmviewer/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ sikmir ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ sikmir ];
+    platforms = lib.platforms.linux;
   };
 }

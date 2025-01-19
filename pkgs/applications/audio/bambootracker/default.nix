@@ -84,12 +84,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tracker for YM2608 (OPNA) which was used in NEC PC-8801/9801 series computers";
     mainProgram = "BambooTracker";
     homepage = "https://bambootracker.github.io/BambooTracker/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ OPNA2608 ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ OPNA2608 ];
   };
 })

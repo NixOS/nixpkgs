@@ -110,10 +110,10 @@ stdenv.mkDerivation rec {
         --subst-var-by TBB_LIB_NAME "tbb"
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Intel Thread Building Blocks C++ Library";
     homepage = "http://threadingbuildingblocks.org/";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     longDescription = ''
       Intel Threading Building Blocks offers a rich and complete approach to
       expressing parallelism in a C++ program. It is a library that helps you
@@ -122,8 +122,8 @@ stdenv.mkDerivation rec {
       represents a higher-level, task-based parallelism that abstracts platform
       details and threading mechanisms for scalability and performance.
     '';
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       thoughtpolice
       tmarkus
     ];

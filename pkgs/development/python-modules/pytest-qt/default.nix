@@ -31,10 +31,10 @@ buildPythonPackage rec {
   # Tests require X server
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "pytest support for PyQt and PySide applications";
     homepage = "https://github.com/pytest-dev/pytest-qt";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

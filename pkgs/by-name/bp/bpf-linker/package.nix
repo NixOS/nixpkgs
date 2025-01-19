@@ -40,15 +40,15 @@ rustPlatform.buildRustPackage rec {
   # rust-src and `-Z build-std=core` are required to properly run the tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Simple BPF static linker";
     mainProgram = "bpf-linker";
     homepage = "https://github.com/aya-rs/bpf-linker";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with maintainers; [ nickcao ];
+    maintainers = with lib.maintainers; [ nickcao ];
     # llvm-sys crate locates llvm by calling llvm-config
     # which is not available when cross compiling
     broken = stdenv.buildPlatform != stdenv.hostPlatform;

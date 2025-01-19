@@ -69,13 +69,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-  meta = with lib; {
+  meta = {
     description = "Small little utility to run a couple of executables under a new DBus session for testing";
     mainProgram = "dbus-test-runner";
     homepage = "https://launchpad.net/dbus-test-runner";
-    license = licenses.gpl3Only;
-    platforms = platforms.unix;
-    maintainers = teams.lomiri.members;
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.unix;
+    maintainers = lib.teams.lomiri.members;
     pkgConfigModules = [
       "dbustest-1"
     ];

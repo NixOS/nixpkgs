@@ -27,10 +27,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hpack" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pure-Python HPACK header compression";
     homepage = "https://github.com/python-hyper/hpack";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

@@ -27,15 +27,15 @@ stdenv.mkDerivation rec {
     sqlite
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Kerberos ];
 
-  meta = with lib; {
+  meta = {
     description = "Loadable dynamic extension to both SQLite and SpatiaLite";
     homepage = "https://www.gaia-gis.it/fossil/virtualpg";
-    license = with licenses; [
+    license = with lib.licenses; [
       mpl11
       gpl2Plus
       lgpl21Plus
     ];
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ sikmir ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ sikmir ];
   };
 }

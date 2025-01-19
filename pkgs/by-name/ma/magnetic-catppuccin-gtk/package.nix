@@ -101,11 +101,11 @@ lib.checkListOfEnum "${pname} Valid theme accent(s)" validAccents accent lib.che
       runHook postInstall
     '';
 
-    meta = with lib; {
+    meta = {
       description = "GTK Theme with Catppuccin colour scheme";
       homepage = "https://github.com/Fausto-Korpsvart/Catppuccin-GTK-Theme";
-      license = licenses.gpl3Only;
-      maintainers = with maintainers; [ icy-thought ];
-      platforms = platforms.all;
+      license = lib.licenses.gpl3Only;
+      maintainers = with lib.maintainers; [ icy-thought ];
+      platforms = lib.platforms.all;
     };
   }

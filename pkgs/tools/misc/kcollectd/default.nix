@@ -51,10 +51,10 @@ mkDerivation rec {
     breeze-icons
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Graphical frontend to collectd";
     homepage = "https://www.antonioerusso.com/projects/kcollectd/";
-    maintainers = [ maintainers.symphorien ];
+    maintainers = [ lib.maintainers.symphorien ];
     license = [ lib.licenses.gpl3Plus ];
     platforms = lib.platforms.linux;
     mainProgram = "kcollectd";

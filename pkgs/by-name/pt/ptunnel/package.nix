@@ -42,12 +42,12 @@ stdenv.mkDerivation (finalAttrs: {
     libpcap
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool for reliably tunneling TCP connections over ICMP echo request and reply packets";
     homepage = "https://www.cs.uit.no/~daniels/PingTunnel";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     mainProgram = "ptunnel";
-    maintainers = with maintainers; [ d3vil0p3r ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ d3vil0p3r ];
+    platforms = lib.platforms.unix;
   };
 })

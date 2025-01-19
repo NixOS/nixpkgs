@@ -50,11 +50,11 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace "docs" ""  # docs target wants to download from network
   '';
 
-  meta = with lib; {
+  meta = {
     description = "XSL Formatter";
     homepage = "http://xmlroff.org/";
-    platforms = platforms.unix;
-    license = licenses.bsd3;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.bsd3;
     mainProgram = "xmlroff";
   };
 }

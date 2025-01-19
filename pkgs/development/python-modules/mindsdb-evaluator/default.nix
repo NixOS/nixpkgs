@@ -37,10 +37,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mindsdb_evaluator" ];
 
-  meta = with lib; {
+  meta = {
     description = "Model evaluation for Machine Learning pipelines";
     homepage = "https://pypi.org/project/mindsdb-evaluator/";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ mbalatsko ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ mbalatsko ];
   };
 }

@@ -19,15 +19,15 @@ mkDerivation {
     kparts
     kwindowsystem
   ];
-  meta = with lib; {
+  meta = {
     homepage = "http://www.kde.org";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Plus
       lgpl21Plus
       fdl12Plus
       bsd3
     ];
-    maintainers = with maintainers; [ peterhoeg ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ peterhoeg ];
+    platforms = lib.platforms.linux;
   };
 }

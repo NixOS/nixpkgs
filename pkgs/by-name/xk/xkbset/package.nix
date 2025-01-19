@@ -33,12 +33,12 @@ stdenv.mkDerivation rec {
     rm -f $out/bin/xkbset-gui
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://faculty.missouri.edu/~stephen/software/#xkbset";
     description = "Program to help manage many of XKB features of X window";
-    maintainers = with maintainers; [ drets ];
-    platforms = platforms.linux;
-    license = licenses.bsd3;
+    maintainers = with lib.maintainers; [ drets ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.bsd3;
     mainProgram = "xkbset";
   };
 }

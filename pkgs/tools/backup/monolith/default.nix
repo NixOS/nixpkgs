@@ -39,13 +39,13 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Bundle any web page into a single HTML file";
     mainProgram = "monolith";
     homepage = "https://github.com/Y2Z/monolith";
-    license = licenses.cc0;
+    license = lib.licenses.cc0;
     platforms = lib.platforms.unix;
     broken = stdenv.isDarwin;
-    maintainers = with maintainers; [ Br1ght0ne ];
+    maintainers = with lib.maintainers; [ Br1ght0ne ];
   };
 }

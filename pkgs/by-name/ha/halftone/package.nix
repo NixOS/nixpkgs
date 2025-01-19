@@ -53,12 +53,12 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/tfuxu/halftone";
     description = "Simple app for giving images that pixel-art style";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "halftone";
-    maintainers = with maintainers; [ foo-dogsquared ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ foo-dogsquared ];
+    platforms = lib.platforms.linux;
   };
 }

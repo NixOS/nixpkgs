@@ -72,10 +72,10 @@ buildPythonPackage rec {
     "tests/test_py2.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of the Modbus protocol";
     homepage = "https://tiagocoutinho.github.io/sockio/";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ gpl3Plus ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -17,11 +17,11 @@ buildPostgresqlExtension rec {
     sha256 = "8hJNjQ9MaBk3J9a73l+yQMwMW/F2N8vr5PO2o+5GvYs=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "pg_relusage extension for PostgreSQL: discover and log the relations used in your statements";
     homepage = "https://github.com/adept/pg_relusage";
-    maintainers = with maintainers; [ thenonameguy ];
+    maintainers = with lib.maintainers; [ thenonameguy ];
     platforms = postgresql.meta.platforms;
-    license = licenses.postgresql;
+    license = lib.licenses.postgresql;
   };
 }

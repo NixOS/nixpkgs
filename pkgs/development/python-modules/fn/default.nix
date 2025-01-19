@@ -28,12 +28,12 @@ buildPythonPackage rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = ''
       Functional programming in Python: implementation of missing
       features to enjoy FP
     '';
     homepage = "https://github.com/kachayev/fn.py";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
 }

@@ -30,11 +30,11 @@ buildGoModule rec {
     installManPage duf.1
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/muesli/duf/";
     description = "Disk Usage/Free Utility";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       figsoda
       penguwin
       sigmasquadron

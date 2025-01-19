@@ -31,11 +31,11 @@ rustPlatform.buildRustPackage rec {
       darwin.apple_sdk.frameworks.Security
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Current stars history tells only half the story";
     homepage = "https://github.com/Canop/starry";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "starry";
   };
 }

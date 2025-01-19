@@ -51,10 +51,10 @@ buildPythonPackage rec {
     # h20
   ];
 
-  meta = with lib; {
+  meta = {
     description = "ONNXMLTools enables conversion of models to ONNX";
     homepage = "https://github.com/onnx/onnxmltools";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

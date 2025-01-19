@@ -29,10 +29,10 @@ buildGoModule rec {
     install -Dm755 bin/* bin/functional/cmd/* -t $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Distributed reliable key-value store for the most critical data of a distributed system";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://etcd.io/";
-    maintainers = with maintainers; [ offline ];
+    maintainers = with lib.maintainers; [ offline ];
   };
 }

@@ -36,9 +36,9 @@ stdenv.mkDerivation rec {
     libopcodes_2_38
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool that aims at generating automatically execution trace from HPC programs";
-    license = licenses.cecill-b;
+    license = lib.licenses.cecill-b;
     maintainers = [ ];
   };
 }

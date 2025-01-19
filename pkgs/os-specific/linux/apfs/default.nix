@@ -31,7 +31,7 @@ stdenv.mkDerivation {
 
   passthru.tests.apfs = nixosTests.apfs;
 
-  meta = with lib; {
+  meta = {
     description = "APFS module for linux";
     longDescription = ''
       The Apple File System (APFS) is the copy-on-write filesystem currently
@@ -43,8 +43,8 @@ stdenv.mkDerivation {
       Encryption is still not in the works though.
     '';
     homepage = "https://github.com/linux-apfs/linux-apfs-rw";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ Luflosi ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ Luflosi ];
   };
 }

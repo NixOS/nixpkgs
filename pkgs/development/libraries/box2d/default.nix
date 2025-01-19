@@ -71,11 +71,11 @@ stdenv.mkDerivation (finalAttrs: {
   # tests are broken on 2.4.2 and 2.3.x doesn't have tests: https://github.com/erincatto/box2d/issues/677
   doCheck = lib.versionAtLeast finalAttrs.version "2.4.2";
 
-  meta = with lib; {
+  meta = {
     description = "2D physics engine";
     homepage = "https://box2d.org/";
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.unix;
-    license = licenses.zlib;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.zlib;
   };
 })

@@ -55,15 +55,15 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Classic cannon combat game";
     mainProgram = "ballerburg";
     longDescription = ''
       Two castles, separated by a mountain, try to defeat each other with their cannonballs,
       either by killing the opponent's king or by weakening the opponent enough so that the king capitulates.'';
     homepage = "https://baller.tuxfamily.org/";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.j0hax ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.j0hax ];
+    platforms = lib.platforms.all;
   };
 }

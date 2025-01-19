@@ -18,10 +18,10 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ cmdliner ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mirage/functoria";
-    license = licenses.isc;
+    license = lib.licenses.isc;
     description = "Runtime support library for functoria-generated code";
-    maintainers = [ maintainers.sternenseemann ];
+    maintainers = [ lib.maintainers.sternenseemann ];
   };
 }

@@ -23,12 +23,12 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple client implementing zwlr-output-power-management-v1";
     homepage = "https://git.sr.ht/~leon_plickat/wlopm";
     mainProgram = "wlopm";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ arjan-s ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ arjan-s ];
+    platforms = lib.platforms.linux;
   };
 }

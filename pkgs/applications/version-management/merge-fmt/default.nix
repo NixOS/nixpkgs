@@ -28,15 +28,15 @@ buildDunePackage rec {
   # core v0.17 compatibility, obtained by `git diff -r 3e37827~2..3e37827`
   patches = [ ./merge-fmt.patch ];
 
-  meta = with lib; {
+  meta = {
     description = "Git mergetool leveraging code formatters";
     homepage = "https://github.com/hhugo/merge-fmt";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     longDescription = ''
       `merge-fmt` is a small wrapper on top git commands to help resolve
       conflicts by leveraging code formatters.
     '';
-    maintainers = [ maintainers.alizter ];
+    maintainers = [ lib.maintainers.alizter ];
     mainProgram = "merge-fmt";
   };
 }

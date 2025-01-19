@@ -39,11 +39,11 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Optimized HTTP/1 and HTTP/2 server";
     homepage = "https://h2o.examp1e.net";
-    license = licenses.mit;
-    maintainers = with maintainers; [ thoughtpolice ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ thoughtpolice ];
+    platforms = lib.platforms.linux;
   };
 }

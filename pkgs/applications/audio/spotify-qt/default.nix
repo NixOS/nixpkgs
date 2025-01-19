@@ -47,12 +47,12 @@ stdenv.mkDerivation (finalAttrs: {
     ln $out/Applications/spotify-qt.app/Contents/MacOS/spotify-qt $out/bin/spotify-qt
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight unofficial Spotify client using Qt";
     mainProgram = "spotify-qt";
     homepage = "https://github.com/kraxarn/spotify-qt";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ iivusly ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ iivusly ];
+    platforms = lib.platforms.unix;
   };
 })

@@ -49,11 +49,11 @@ stdenv.mkDerivation rec {
     gappsWrapperArgs+=(--prefix PATH : "${lib.makeBinPath [ xapp ]}")
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Backend implementation for xdg-desktop-portal for Cinnamon, MATE, Xfce";
     homepage = "https://github.com/linuxmint/xdg-desktop-portal-xapp";
-    maintainers = teams.cinnamon.members;
-    platforms = platforms.linux;
-    license = licenses.lgpl21Plus;
+    maintainers = lib.teams.cinnamon.members;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.lgpl21Plus;
   };
 }

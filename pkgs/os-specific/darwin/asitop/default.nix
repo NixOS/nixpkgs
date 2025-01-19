@@ -24,11 +24,11 @@ python3.pkgs.buildPythonApplication rec {
     psutil
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/tlkh/asitop";
     description = "Perf monitoring CLI tool for Apple Silicon";
-    platforms = platforms.darwin;
-    license = licenses.mit;
-    maintainers = with maintainers; [ juliusrickert ];
+    platforms = lib.platforms.darwin;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ juliusrickert ];
   };
 }

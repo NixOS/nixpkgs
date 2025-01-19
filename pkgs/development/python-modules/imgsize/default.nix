@@ -16,10 +16,10 @@ buildPythonPackage rec {
     sha256 = "0k24qj4i996fz7lpjrs36il6lp51rh13b0j2wip87cy5v9109m2d";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Pure Python image size library";
     homepage = "https://github.com/ojii/imgsize";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ twey ];
+    license = with lib.licenses; [ bsd3 ];
+    maintainers = with lib.maintainers; [ twey ];
   };
 }

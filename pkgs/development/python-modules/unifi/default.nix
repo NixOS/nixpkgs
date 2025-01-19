@@ -20,10 +20,10 @@ buildPythonPackage rec {
   # upstream has no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "API towards the Ubiquity Networks UniFi controller";
     homepage = "https://pypi.python.org/pypi/unifi/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ peterhoeg ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ peterhoeg ];
   };
 }

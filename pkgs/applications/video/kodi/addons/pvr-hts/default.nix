@@ -16,11 +16,11 @@ buildKodiBinaryAddon rec {
     sha256 = "sha256-BG5mGD674gvjUSdydu4g3F/4GH53gkJoKMDuvaFNi6k=";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/kodi-pvr/pvr.hts";
     description = "Kodi's Tvheadend HTSP client addon";
-    platforms = platforms.all;
-    license = licenses.gpl2Only;
-    maintainers = teams.kodi.members;
+    platforms = lib.platforms.all;
+    license = lib.licenses.gpl2Only;
+    maintainers = lib.teams.kodi.members;
   };
 }

@@ -18,10 +18,10 @@ buildPythonPackage rec {
 
   pyproject = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/karlicoss/orgparse";
     description = "orgparse - Emacs org-mode parser in Python";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ twitchy0 ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ twitchy0 ];
   };
 }

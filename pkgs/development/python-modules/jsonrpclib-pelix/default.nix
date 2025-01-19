@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   doCheck = false; # test_suite="tests" in setup.py but no tests in pypi.
 
-  meta = with lib; {
+  meta = {
     description = "JSON RPC client library - Pelix compatible fork";
     homepage = "https://pypi.python.org/pypi/jsonrpclib-pelix/";
     license = lib.licenses.asl20;

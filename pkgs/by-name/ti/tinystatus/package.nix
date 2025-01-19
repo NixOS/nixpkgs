@@ -61,12 +61,12 @@ stdenvNoCC.mkDerivation rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Static HTML status page generator written in pure shell";
     mainProgram = "tinystatus";
     homepage = "https://github.com/bderenzo/tinystatus";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ matthewcroughan ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ matthewcroughan ];
   };
 }

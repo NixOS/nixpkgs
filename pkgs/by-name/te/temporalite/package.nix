@@ -27,11 +27,11 @@ buildGoModule rec {
       --replace "TestMTLSConfig" "SkipMTLSConfig"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Experimental distribution of Temporal that runs as a single process";
     mainProgram = "temporalite";
     homepage = "https://github.com/temporalio/temporalite";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lucperkins ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lucperkins ];
   };
 }

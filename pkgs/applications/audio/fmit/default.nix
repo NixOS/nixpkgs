@@ -64,15 +64,15 @@ mkDerivation rec {
       "CONFIG+=acs_portaudio"
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Free Musical Instrument Tuner";
     longDescription = ''
       FMIT is a graphical utility for tuning musical instruments, with error
       and volume history, and advanced features.
     '';
     homepage = "http://gillesdegottex.github.io/fmit/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ orivej ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ orivej ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -49,12 +49,12 @@ stdenv.mkDerivation rec {
     "-DSOAPYSDR=ON"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "DAB/DAB+ radio application";
     homepage = "https://github.com/KejPi/AbracaDABra";
-    platforms = platforms.linux;
-    license = licenses.mit;
-    maintainers = [ maintainers.markuskowa ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.markuskowa ];
     mainProgram = "AbracaDABra";
   };
 }

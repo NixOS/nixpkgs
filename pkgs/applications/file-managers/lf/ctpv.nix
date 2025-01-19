@@ -57,11 +57,11 @@ stdenv.mkDerivation rec {
       }";
   '';
 
-  meta = with lib; {
+  meta = {
     description = "File previewer for a terminal";
     homepage = "https://github.com/NikitaIvanovV/ctpv";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.wesleyjrz ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.wesleyjrz ];
   };
 }

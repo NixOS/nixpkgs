@@ -21,9 +21,9 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ zope-testing ];
 
-  meta = with lib; {
+  meta = {
     description = "Supports the efficient creation of “hookable” objects";
     homepage = "https://github.com/zopefoundation/zope.hookable";
-    license = licenses.zpl21;
+    license = lib.licenses.zpl21;
   };
 }

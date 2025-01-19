@@ -59,12 +59,12 @@ stdenv.mkDerivation {
     "--with-standard-modules=all"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Cron like daemon for mpd";
     homepage = "http://alip.github.io/mpdcron/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       lovek323
       manveru
     ];

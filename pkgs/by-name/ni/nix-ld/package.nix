@@ -46,11 +46,11 @@ rustPlatform.buildRustPackage rec {
 
   passthru.tests = nixosTests.nix-ld;
 
-  meta = with lib; {
+  meta = {
     description = "Run unpatched dynamic binaries on NixOS";
     homepage = "https://github.com/Mic92/nix-ld";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mic92 ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mic92 ];
+    platforms = lib.platforms.linux;
   };
 }

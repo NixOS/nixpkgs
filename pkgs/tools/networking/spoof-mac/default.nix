@@ -23,11 +23,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "spoofmac" ];
 
-  meta = with lib; {
+  meta = {
     description = "Change your MAC address for debugging purposes";
     homepage = "https://github.com/feross/SpoofMAC";
-    license = licenses.mit;
-    maintainers = with maintainers; [ siraben ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ siraben ];
+    platforms = lib.platforms.unix;
   };
 }

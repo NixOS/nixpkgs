@@ -80,10 +80,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ase" ];
 
-  meta = with lib; {
+  meta = {
     description = "Atomic Simulation Environment";
     homepage = "https://wiki.fysik.dtu.dk/ase/";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
   };
 }

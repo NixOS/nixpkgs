@@ -20,10 +20,10 @@ python3Packages.buildPythonApplication rec {
   doCheck = false;
   pythonImportsCheck = [ "mopidy_mpd" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mopidy/mopidy-mpd";
     description = "Mopidy extension for controlling playback from MPD clients";
-    license = licenses.asl20;
-    maintainers = [ maintainers.tomahna ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.tomahna ];
   };
 }

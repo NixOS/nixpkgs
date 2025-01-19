@@ -17,11 +17,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-pAlAWG9Dfqhhvl7uVvzr4nx481seIwwzBg+5SSsje84=";
 
-  meta = with lib; {
+  meta = {
     description = "Find out what the past year looks like in commandline";
     homepage = "https://github.com/YiNNx/cmd-wrapped";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Cryolitia ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ Cryolitia ];
     mainProgram = "cmd-wrapped";
   };
 }

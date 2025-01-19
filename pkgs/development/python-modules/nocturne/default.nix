@@ -54,10 +54,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nocturne" ];
 
-  meta = with lib; {
+  meta = {
     description = "Data-driven, fast driving simulator for multi-agent coordination under partial observability";
     homepage = "https://github.com/facebookresearch/nocturne";
-    license = licenses.mit;
-    maintainers = with maintainers; [ samuela ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ samuela ];
   };
 }

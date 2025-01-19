@@ -42,12 +42,12 @@ buildPythonApplication rec {
     six
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Browse Reddit from your Terminal (fork of rtv)";
     mainProgram = "tuir";
     homepage = "https://gitlab.com/Chocimier/tuir";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       Br1ght0ne
       matthiasbeyer
       brokenpip3

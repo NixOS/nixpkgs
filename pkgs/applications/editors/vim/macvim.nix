@@ -209,12 +209,12 @@ stdenv.mkDerivation (finalAttrs: {
     (deny file-read* file-write* process-exec mach-lookup (subpath "/usr/local") (with no-log))
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Vim - the text editor - for macOS";
     homepage = "https://macvim.org/";
-    license = licenses.vim;
+    license = lib.licenses.vim;
     maintainers = [ ];
-    platforms = platforms.darwin;
+    platforms = lib.platforms.darwin;
     hydraPlatforms = [ ]; # hydra can't build this as long as we rely on Xcode and sandboxProfile
   };
 })

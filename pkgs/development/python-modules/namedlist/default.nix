@@ -42,10 +42,10 @@ buildPythonPackage rec {
     "test_ABC"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Similar to namedtuple, but instances are mutable";
     homepage = "https://gitlab.com/ericvsmith/namedlist";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ivan ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ ivan ];
   };
 }

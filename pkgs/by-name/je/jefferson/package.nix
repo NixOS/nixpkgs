@@ -33,11 +33,11 @@ python3.pkgs.buildPythonApplication rec {
   # upstream has no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "JFFS2 filesystem extraction tool";
     homepage = "https://github.com/onekey-sec/jefferson";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       tnias
       vlaci
     ];

@@ -64,16 +64,16 @@ stdenv.mkDerivation {
       Cocoa
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Unofficial open source recreation of the classic Grand Theft Auto III game executable";
     homepage = "https://github.com/rwengine/openrw";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     longDescription = ''
       OpenRW is an open source re-implementation of Rockstar Games' Grand Theft
       Auto III, a classic 3D action game first published in 2001.
     '';
-    maintainers = with maintainers; [ kragniz ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ kragniz ];
+    platforms = lib.platforms.all;
     mainProgram = "rwgame";
   };
 }

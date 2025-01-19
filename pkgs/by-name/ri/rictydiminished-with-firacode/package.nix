@@ -44,11 +44,11 @@ stdenv.mkDerivation rec {
     ]))
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/hakatashi/RictyDiminished-with-FiraCode";
     description = "Best Japanese programming font meets the awesome ligatures of Firacode";
-    license = licenses.ofl;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ mt-caret ];
+    license = lib.licenses.ofl;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ mt-caret ];
   };
 }

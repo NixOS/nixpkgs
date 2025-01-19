@@ -31,14 +31,14 @@ rustPlatform.buildRustPackage rec {
     ffmpeg
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Merge video & audio files via CLI";
     homepage = "https://github.com/TGotwig/vidmerger";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       commons-clause
     ];
-    maintainers = with maintainers; [ ByteSudoer ];
+    maintainers = with lib.maintainers; [ ByteSudoer ];
     mainProgram = "vidmerger";
   };
 }

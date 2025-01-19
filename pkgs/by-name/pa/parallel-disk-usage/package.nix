@@ -16,11 +16,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-T/TjiqBZJINgiuTLWD+JBCUDEQBs2b/hvZn9E2uxkYc=";
 
-  meta = with lib; {
+  meta = {
     description = "Highly parallelized, blazing fast directory tree analyzer";
     homepage = "https://github.com/KSXGitHub/parallel-disk-usage";
-    license = licenses.asl20;
-    maintainers = [ maintainers.peret ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.peret ];
     mainProgram = "pdu";
   };
 }

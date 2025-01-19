@@ -17,11 +17,11 @@ import ./versions.nix (
       hash = sha256;
     };
 
-    meta = with lib; {
+    meta = {
       description = "CLI for sending individual events to honeycomb.io";
       homepage = "https://honeycomb.io/";
-      license = licenses.asl20;
-      maintainers = [ maintainers.iand675 ];
+      license = lib.licenses.asl20;
+      maintainers = [ lib.maintainers.iand675 ];
     };
   }
 )

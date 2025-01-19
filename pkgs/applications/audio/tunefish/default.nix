@@ -60,11 +60,11 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://tunefish-synth.com/";
     description = "Virtual analog synthesizer LV2 plugin";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ orivej ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ orivej ];
     platforms = [ "x86_64-linux" ];
   };
 }

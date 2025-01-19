@@ -60,13 +60,13 @@ stdenv.mkDerivation {
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Exploit Development and Reverse Engineering with GDB Made Easy";
     mainProgram = "pwndbg";
     homepage = "https://github.com/pwndbg/pwndbg";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       mic92
       patryk4815
       msanft

@@ -9,7 +9,7 @@
 
 mkDerivation {
   pname = "picmi";
-  meta = with lib; {
+  meta = {
     homepage = "https://apps.kde.org/picmi/";
     description = "Nonogram game";
     mainProgram = "picmi";
@@ -17,9 +17,9 @@ mkDerivation {
       The goal is to reveal the hidden pattern in the board by coloring or
       leaving blank the cells in a grid according to numbers given at the side of the grid.
     '';
-    maintainers = with maintainers; [ freezeboy ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ freezeboy ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 
   nativeBuildInputs = [

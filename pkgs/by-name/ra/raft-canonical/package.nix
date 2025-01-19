@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     inherit lxd-lts;
   };
 
-  meta = with lib; {
+  meta = {
     description = ''
       Fully asynchronous C implementation of the Raft consensus protocol
     '';
@@ -68,8 +68,8 @@ stdenv.mkDerivation rec {
       snapshots).
     '';
     homepage = "https://github.com/canonical/raft";
-    license = licenses.asl20;
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

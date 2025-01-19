@@ -22,11 +22,11 @@ rustPlatform.buildRustPackage rec {
     sed "/Copyright (c) 2021/s/2021/$(date +%Y)/" -i tests/integration.rs
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Write licenses to stdout";
     homepage = "https://github.com/raftario/licensor";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ Br1ght0ne ];
     mainProgram = "licensor";
   };
 }

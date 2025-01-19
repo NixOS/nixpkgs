@@ -40,11 +40,11 @@ python3.pkgs.buildPythonApplication rec {
     inherit (nixosTests) iscsi-root;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Command shell for managing the Linux LIO kernel target";
     homepage = "https://github.com/open-iscsi/targetcli-fb";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

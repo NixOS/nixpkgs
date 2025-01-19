@@ -31,9 +31,9 @@ stdenv.mkDerivation rec {
 
   dontStrip = true;
 
-  meta = with lib; {
+  meta = {
     description = "D-Bus for .NET: GLib integration module";
-    platforms = platforms.linux;
-    license = licenses.mit;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.mit;
   };
 }

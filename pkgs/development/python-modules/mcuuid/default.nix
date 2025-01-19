@@ -24,10 +24,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mcuuid" ];
 
-  meta = with lib; {
+  meta = {
     description = "Getting Minecraft player information from Mojang API";
     homepage = "https://github.com/clerie/mcuuid";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ clerie ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ clerie ];
   };
 }

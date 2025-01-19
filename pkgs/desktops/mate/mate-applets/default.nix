@@ -70,15 +70,15 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = mateUpdateScript { inherit pname; };
 
-  meta = with lib; {
+  meta = {
     description = "Applets for use with the MATE panel";
     mainProgram = "mate-cpufreq-selector";
     homepage = "https://mate-desktop.org";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Plus
       lgpl2Plus
     ];
-    platforms = platforms.linux;
-    maintainers = teams.mate.members;
+    platforms = lib.platforms.linux;
+    maintainers = lib.teams.mate.members;
   };
 }

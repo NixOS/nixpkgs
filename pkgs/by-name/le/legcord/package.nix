@@ -81,12 +81,12 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight, alternative desktop client for Discord";
     homepage = "https://legcord.app";
     downloadPage = "https://github.com/Legcord/Legcord";
-    license = licenses.osl3;
-    maintainers = with maintainers; [
+    license = lib.licenses.osl3;
+    maintainers = with lib.maintainers; [
       wrmilling
       water-sucks
     ];

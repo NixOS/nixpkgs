@@ -22,11 +22,11 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Command-line tool for identifying similar or duplicated CSS code";
     homepage = "https://github.com/ruilisi/css-checker";
-    license = licenses.mit;
-    maintainers = with maintainers; [ arikgrahl ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ arikgrahl ];
     mainProgram = "css-checker";
   };
 }

@@ -45,11 +45,11 @@ stdenv.mkDerivation rec {
     "HOSTCC=${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Telescope is a w3m-like browser for Gemini";
     homepage = "https://www.telescope-browser.org/";
-    license = licenses.isc;
-    maintainers = with maintainers; [ heph2 ];
-    platforms = platforms.unix;
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ heph2 ];
+    platforms = lib.platforms.unix;
   };
 }

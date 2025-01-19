@@ -92,11 +92,11 @@ stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc ]}"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://springrts.com/";
     description = "Powerful real-time strategy (RTS) game engine";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       qknight
       domenkozar
       sorki

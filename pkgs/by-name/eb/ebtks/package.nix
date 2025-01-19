@@ -33,11 +33,11 @@ stdenv.mkDerivation {
 
   cmakeFlags = [ "-DLIBMINC_DIR=${libminc}/lib/cmake" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/BIC-MNI/EBTKS";
     description = "Library for working with MINC files";
-    maintainers = with maintainers; [ bcdarwin ];
-    platforms = platforms.unix;
-    license = licenses.free;
+    maintainers = with lib.maintainers; [ bcdarwin ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.free;
   };
 }

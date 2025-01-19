@@ -49,11 +49,11 @@ python3.pkgs.buildPythonApplication rec {
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
-  meta = with lib; {
+  meta = {
     description = "ABlog for blogging with Sphinx";
     mainProgram = "ablog";
     homepage = "https://ablog.readthedocs.io/en/latest/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ rgrinberg ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ rgrinberg ];
   };
 }

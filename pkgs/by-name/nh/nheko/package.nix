@@ -83,17 +83,17 @@ stdenv.mkDerivation rec {
     qtWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Desktop client for the Matrix protocol";
     homepage = "https://github.com/Nheko-Reborn/nheko";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "nheko";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       ekleog
       fpletz
       rnhmjoj
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     # Should be fixable if a higher clang version is used, see:
     # https://github.com/NixOS/nixpkgs/pull/85922#issuecomment-619287177
     broken = stdenv.hostPlatform.isDarwin;

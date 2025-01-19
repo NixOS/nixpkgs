@@ -10,11 +10,11 @@
 
 mkDerivation {
   pname = "zanshin";
-  meta = with lib; {
+  meta = {
     description = "Powerful yet simple application to manage your day to day actions, getting your mind like water";
     homepage = "https://zanshin.kde.org/";
-    maintainers = with maintainers; [ zraexy ];
-    license = licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ zraexy ];
+    license = lib.licenses.gpl2Plus;
   };
 
   nativeBuildInputs = [ extra-cmake-modules ];

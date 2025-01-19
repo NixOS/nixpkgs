@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
     "-DCLANG_ROOT=${llvmPackages_12.clang-unwrapped}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "OpenCL device simulator and debugger";
     homepage = "https://github.com/jrprice/oclgrind";
-    license = licenses.bsd3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ athas ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ athas ];
   };
 }

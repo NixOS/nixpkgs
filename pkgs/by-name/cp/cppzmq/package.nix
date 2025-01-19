@@ -26,11 +26,11 @@ stdenv.mkDerivation rec {
     "-DCPPZMQ_BUILD_TESTS=OFF"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/zeromq/cppzmq";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     description = "C++ binding for 0MQ";
-    maintainers = with maintainers; [ abbradar ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ abbradar ];
+    platforms = lib.platforms.unix;
   };
 }

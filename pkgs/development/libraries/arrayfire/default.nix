@@ -233,15 +233,15 @@ stdenv.mkDerivation rec {
     python3
   ];
 
-  meta = with lib; {
+  meta = {
     description = "General-purpose library for parallel and massively-parallel computations";
     longDescription = ''
       A general-purpose library that simplifies the process of developing software that targets parallel and massively-parallel architectures including CPUs, GPUs, and other hardware acceleration devices.";
     '';
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     homepage = "https://arrayfire.com/";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       chessai
       twesterhout
     ];

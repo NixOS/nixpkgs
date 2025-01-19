@@ -33,10 +33,10 @@ buildPythonPackage rec {
     ${python.interpreter} test/test_tokenize.py
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Chinese Words Segementation Utilities";
     homepage = "https://github.com/fxsjy/jieba";
-    license = licenses.mit;
-    maintainers = teams.tts.members;
+    license = lib.licenses.mit;
+    maintainers = lib.teams.tts.members;
   };
 }

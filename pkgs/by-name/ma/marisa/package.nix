@@ -20,11 +20,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/s-yata/marisa-trie";
     description = "Static and space-efficient trie data structure library";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ sifmelcara ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ sifmelcara ];
+    platforms = lib.platforms.all;
   };
 }

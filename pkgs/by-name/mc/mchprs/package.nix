@@ -45,11 +45,11 @@ rustPlatform.buildRustPackage rec {
       darwin.apple_sdk.frameworks.SystemConfiguration
     ];
 
-  meta = with lib; {
+  meta = {
     mainProgram = "mchprs";
     description = "Multithreaded Minecraft server built for redstone";
     homepage = "https://github.com/MCHPR/MCHPRS";
-    license = licenses.mit;
-    maintainers = with maintainers; [ gdd ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ gdd ];
   };
 }

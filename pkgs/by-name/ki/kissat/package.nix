@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "'keep it simple and clean bare metal SAT solver' written in C";
     mainProgram = "kissat";
     longDescription = ''
@@ -57,9 +57,9 @@ stdenv.mkDerivation rec {
       It is a port of CaDiCaL back to C with improved data structures,
       better scheduling of inprocessing and optimized algorithms and implementation.
     '';
-    maintainers = with maintainers; [ shnarazk ];
-    platforms = platforms.unix;
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ shnarazk ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.mit;
     homepage = "https://fmv.jku.at/kissat";
   };
 }

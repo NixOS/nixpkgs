@@ -82,11 +82,11 @@ buildPythonPackage rec {
       patchelf --replace-needed libunbound.so.8 $out/${python.sitePackages}/libunbound.so.8 $out/${python.sitePackages}/_unbound.so
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Python library for Unbound, the validating, recursive, and caching DNS resolver";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     homepage = "https://www.unbound.net";
-    maintainers = with maintainers; [ leenaars ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ leenaars ];
+    platforms = lib.platforms.unix;
   };
 }

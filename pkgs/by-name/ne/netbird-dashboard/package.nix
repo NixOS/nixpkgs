@@ -26,10 +26,10 @@ buildNpmPackage rec {
     CYPRESS_INSTALL_BINARY = 0;
   };
 
-  meta = with lib; {
+  meta = {
     description = "NetBird Management Service Web UI Panel";
     homepage = "https://github.com/netbirdio/dashboard";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ vrifox ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ vrifox ];
   };
 }

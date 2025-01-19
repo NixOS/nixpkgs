@@ -41,12 +41,12 @@ stdenv.mkDerivation rec {
     "-include cstdint"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Fast and effective C++ file optimizer";
     homepage = "https://github.com/fhanau/Efficient-Compression-Tool";
-    license = licenses.asl20;
-    maintainers = [ maintainers.lunik1 ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.lunik1 ];
+    platforms = lib.platforms.linux;
     mainProgram = "ect";
   };
 }

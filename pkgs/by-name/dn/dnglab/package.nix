@@ -24,11 +24,11 @@ rustPlatform.buildRustPackage rec {
     rm $out/bin/benchmark $out/bin/identify
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Camera RAW to DNG file format converter";
     homepage = "https://github.com/dnglab/dnglab";
-    license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ dit7ya ];
+    license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [ dit7ya ];
     mainProgram = "dnglab";
   };
 }

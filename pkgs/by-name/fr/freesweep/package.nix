@@ -36,12 +36,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Console minesweeper-style game written in C for Unix-like systems";
     mainProgram = "freesweep";
     homepage = "https://github.com/rwestlund/freesweep";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ ];
+    platforms = lib.platforms.unix;
   };
 }

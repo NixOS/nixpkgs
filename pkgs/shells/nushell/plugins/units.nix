@@ -30,12 +30,12 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "A nushell plugin for easily converting between common units.";
     mainProgram = "nu_plugin_units";
     homepage = "https://github.com/JosephTLyons/nu_plugin_units";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mgttlinger ];
-    platforms = with platforms; all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mgttlinger ];
+    platforms = with lib.platforms; all;
   };
 }

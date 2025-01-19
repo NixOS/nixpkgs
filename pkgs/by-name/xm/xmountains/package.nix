@@ -27,11 +27,11 @@ stdenv.mkDerivation rec {
 
   installPhase = "install -Dm755 xmountains -t $out/bin";
 
-  meta = with lib; {
+  meta = {
     description = "X11 based fractal landscape generator";
     homepage = "https://spbooth.github.io/xmountains";
-    license = licenses.hpndSellVariant;
-    maintainers = with maintainers; [ djanatyn ];
+    license = lib.licenses.hpndSellVariant;
+    maintainers = with lib.maintainers; [ djanatyn ];
     mainProgram = "xmountains";
   };
 }

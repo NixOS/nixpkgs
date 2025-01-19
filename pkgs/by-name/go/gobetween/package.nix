@@ -34,11 +34,11 @@ buildGoModule rec {
     cp -r config $out/share
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Modern & minimalistic load balancer for the Сloud era";
     homepage = "https://gobetween.io";
-    license = licenses.mit;
-    maintainers = with maintainers; [ tomberek ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ tomberek ];
     broken = true; # vendor isn't reproducible with go > 1.17: nix-build -A $name.goModules --check
   };
 }

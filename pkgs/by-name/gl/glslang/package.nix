@@ -63,11 +63,11 @@ stdenv.mkDerivation rec {
     ln -s $bin/bin/glslang $bin/bin/glslangValidator
   '';
 
-  meta = with lib; {
+  meta = {
     inherit (src.meta) homepage;
     description = "Khronos reference front-end for GLSL and ESSL";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.ralith ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.ralith ];
   };
 }

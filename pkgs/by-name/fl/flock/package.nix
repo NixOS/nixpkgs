@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform version of flock(1)";
-    maintainers = with maintainers; [ matthewbauer ];
+    maintainers = with lib.maintainers; [ matthewbauer ];
     mainProgram = "flock";
-    platforms = platforms.all;
-    license = licenses.isc;
+    platforms = lib.platforms.all;
+    license = lib.licenses.isc;
   };
 }

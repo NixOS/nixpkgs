@@ -19,11 +19,11 @@ python3Packages.buildPythonApplication rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://git.goral.net.pl/i3a.git/log/";
     description = "Set of scripts used for automation of i3 and sway window manager layouts";
     homepage = "https://git.goral.net.pl/i3a.git/about";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ moni ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ moni ];
   };
 }

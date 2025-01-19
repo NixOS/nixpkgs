@@ -34,12 +34,12 @@ buildGoModule {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Daemon for keeping the system timezone up-to-date based on the current location";
     homepage = "https://github.com/Stebalien/localtime";
-    maintainers = with maintainers; [ lovesegfault ];
-    platforms = platforms.linux;
-    license = licenses.gpl3;
+    maintainers = with lib.maintainers; [ lovesegfault ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl3;
     mainProgram = "localtimed";
   };
 }

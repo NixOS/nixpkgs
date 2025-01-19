@@ -53,11 +53,11 @@ python3.pkgs.buildPythonApplication rec {
     "test_K8sCveHunter"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to search issues in Kubernetes clusters";
     homepage = "https://github.com/aquasecurity/kube-hunter";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "kube-hunter";
   };
 }

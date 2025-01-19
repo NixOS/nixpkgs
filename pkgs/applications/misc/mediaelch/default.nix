@@ -68,12 +68,12 @@ stdenv.mkDerivation rec {
     "--prefix LD_LIBRARY_PATH : ${libmediainfo}/lib"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://mediaelch.de/mediaelch/";
     description = "Media Manager for Kodi";
     mainProgram = "MediaElch";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ stunkymonkey ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ stunkymonkey ];
+    platforms = lib.platforms.linux;
   };
 }

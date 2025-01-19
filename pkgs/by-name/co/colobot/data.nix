@@ -45,11 +45,11 @@ stdenv.mkDerivation rec {
     cd localSrc
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://colobot.info/";
     description = "Game data for colobot";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ freezeboy ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ freezeboy ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -30,10 +30,10 @@ buildPythonPackage rec {
   # upstream has no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Minimalistic Python client for the NextBus public API";
     homepage = "https://github.com/ViViDboarder/py_nextbus";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

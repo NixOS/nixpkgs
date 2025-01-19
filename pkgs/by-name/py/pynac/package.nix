@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python is Not a CAS -- modified version of Ginac";
     longDescription = ''
       Pynac -- "Python is Not a CAS" is a modified version of Ginac that
@@ -61,8 +61,8 @@ stdenv.mkDerivation (finalAttrs: {
       of the full GiNaC, and it is *only* meant to be used as a Python library.
     '';
     homepage = "http://pynac.org";
-    license = licenses.gpl2Plus;
-    maintainers = teams.sage.members;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = lib.teams.sage.members;
+    platforms = lib.platforms.unix;
   };
 })

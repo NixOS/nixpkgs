@@ -65,12 +65,12 @@ stdenv.mkDerivation rec {
     popd
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Germline and small variant caller";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     homepage = "https://github.com/Illumina/strelka";
-    maintainers = with maintainers; [ jbedo ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ jbedo ];
+    platforms = lib.platforms.linux;
   };
 
 }

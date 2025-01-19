@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
     libpaper
   ];
 
-  meta = with lib; {
+  meta = {
     description = "An easy rich text processor";
     longDescription = ''
       Ted is a text processor running under X Windows on Unix/Linux systems.
@@ -110,9 +110,9 @@ stdenv.mkDerivation rec {
       Acrobat PDF converter.
     '';
     homepage = "https://nllgg.nl/Ted/";
-    license = licenses.gpl2Only;
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin;
-    maintainers = with maintainers; [ obadz ];
+    maintainers = with lib.maintainers; [ obadz ];
   };
 }

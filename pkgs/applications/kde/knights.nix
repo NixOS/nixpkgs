@@ -12,13 +12,13 @@
 
 mkDerivation {
   pname = "knights";
-  meta = with lib; {
+  meta = {
     homepage = "https://kde.org/applications/en/games/org.kde.knights";
     description = "Chess game";
     mainProgram = "knights";
-    maintainers = with maintainers; [ freezeboy ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ freezeboy ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
   nativeBuildInputs = [
     extra-cmake-modules

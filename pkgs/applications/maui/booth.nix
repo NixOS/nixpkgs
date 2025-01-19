@@ -48,11 +48,11 @@ mkDerivation {
     )
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Camera application";
     mainProgram = "booth";
     homepage = "https://invent.kde.org/maui/booth";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ ];
   };
 }

@@ -22,12 +22,12 @@ stdenv.mkDerivation rec {
     find . -maxdepth 1 -executable -type f -exec install -Dt $out/bin '{}' \;
     runHook postInstall
   '';
-  meta = with lib; {
+  meta = {
     description = "Medley Interlisp virtual machine";
     homepage = "https://interlisp.org/";
     changelog = "https://github.com/Interlisp/maiko/releases";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ehmry ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ehmry ];
     inherit (xorg.libX11.meta) platforms;
   };
 }

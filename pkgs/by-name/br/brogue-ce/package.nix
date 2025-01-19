@@ -59,15 +59,15 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Community-lead fork of the minimalist roguelike game Brogue";
     mainProgram = "brogue-ce";
     homepage = "https://github.com/tmewett/BrogueCE";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [
       AndersonTorres
       fgaz
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 })

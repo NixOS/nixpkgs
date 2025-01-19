@@ -37,11 +37,11 @@ buildPythonPackage rec {
     xorgproto
   ];
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Extension to emulate keypresses and to get the layout information from the X server";
     homepage = "https://launchpad.net/virtkey";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ abbradar ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ abbradar ];
   };
 }

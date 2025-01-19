@@ -24,10 +24,10 @@ buildPythonPackage rec {
   # Requires network access
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "CORS support for aiohttp";
     homepage = "https://github.com/aio-libs/aiohttp-cors";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ primeos ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ primeos ];
   };
 }

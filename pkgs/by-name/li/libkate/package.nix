@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     libpng
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for encoding and decoding Kate streams";
     longDescription = ''
       This is libkate, the reference implementation of a codec for the Kate
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
       in an Ogg container. It can carry Unicode text, images, and animate
       them.'';
     homepage = "https://code.google.com/archive/p/libkate/";
-    platforms = platforms.unix;
-    license = licenses.bsd3;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.bsd3;
   };
 }

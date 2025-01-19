@@ -83,12 +83,12 @@ stdenv.mkDerivation rec {
     sed -i 's/sub_test_svcore_/#sub_test_svcore_/' sonic-lineup.pro
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Comparative visualisation of related audio recordings";
     mainProgram = "sonic-lineup";
     homepage = "https://www.sonicvisualiser.org/sonic-lineup/";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.vandenoever ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.vandenoever ];
+    platforms = lib.platforms.linux;
   };
 }

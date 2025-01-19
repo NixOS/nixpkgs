@@ -29,12 +29,12 @@ stdenv.mkDerivation rec {
     libsndfile
   ];
 
-  meta = with lib; {
+  meta = {
     description = "NOAA APT satellite imagery decoding library";
     mainProgram = "aptdec";
     homepage = "https://github.com/Xerbo/aptdec";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ alexwinter ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ alexwinter ];
+    platforms = lib.platforms.unix;
   };
 }

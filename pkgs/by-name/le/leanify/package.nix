@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight lossless file minifier/optimizer";
     longDescription = ''
       Leanify is a lightweight lossless file minifier/optimizer.
@@ -51,9 +51,9 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/JayXon/Leanify";
     changelog = "https://github.com/JayXon/Leanify/blob/master/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = [ maintainers.mynacol ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.mynacol ];
+    platforms = lib.platforms.all;
     mainProgram = "leanify";
   };
 }

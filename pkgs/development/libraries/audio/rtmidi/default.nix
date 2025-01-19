@@ -61,11 +61,11 @@ stdenv.mkDerivation rec {
     "-DRTMIDI_API_CORE=${if coremidiSupport then "ON" else "OFF"}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Set of C++ classes that provide a cross platform API for realtime MIDI input/output";
     homepage = "https://www.music.mcgill.ca/~gary/rtmidi/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ magnetophon ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ magnetophon ];
+    platforms = lib.platforms.unix;
   };
 }

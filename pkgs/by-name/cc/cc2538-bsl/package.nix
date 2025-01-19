@@ -38,11 +38,11 @@ python3Packages.buildPythonApplication rec {
     mv $out/bin/cc2538-bsl.py $out/bin/cc2538-bsl
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/JelmerT/cc2538-bsl";
     description = "Flash TI SimpleLink chips (CC2538, CC13xx, CC26xx) over serial";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ lorenz ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ lorenz ];
     mainProgram = "cc2538-bsl";
   };
 }

@@ -95,11 +95,11 @@ stdenv.mkDerivation rec {
 
   passthru = lib.attrsets.optionalAttrs enableMpi { inherit mpi; };
 
-  meta = with lib; {
+  meta = {
     description = "Real-space time dependent density-functional theory code";
     homepage = "https://octopus-code.org";
-    maintainers = with maintainers; [ markuskowa ];
-    license = with licenses; [
+    maintainers = with lib.maintainers; [ markuskowa ];
+    license = with lib.licenses; [
       gpl2Only
       asl20
       lgpl3Plus

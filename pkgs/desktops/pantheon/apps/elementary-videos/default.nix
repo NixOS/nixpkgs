@@ -55,12 +55,12 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Video player and library app designed for elementary OS";
     homepage = "https://github.com/elementary/videos";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = lib.teams.pantheon.members;
     mainProgram = "io.elementary.videos";
   };
 }

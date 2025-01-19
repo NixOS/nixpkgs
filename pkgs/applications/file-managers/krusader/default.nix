@@ -44,11 +44,11 @@ mkDerivation rec {
     kwindowsystem
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.krusader.org";
     description = "Norton/Total Commander clone for KDE";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ sander ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ sander ];
     mainProgram = "krusader";
   };
 }

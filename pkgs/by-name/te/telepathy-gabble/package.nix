@@ -54,11 +54,11 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Jabber/XMPP connection manager for the Telepathy framework";
     mainProgram = "telepathy-gabble-xmpp-console";
     homepage = "https://telepathy.freedesktop.org/components/telepathy-gabble/";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.unix;
   };
 }

@@ -40,13 +40,13 @@ buildPythonPackage rec {
 
   disabledTestPaths = lib.optionals (pythonAtLeast "3.11") [ "tests/test_nested_configs.py" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple but maybe too simple config management through python data classes";
     longDescription = ''
       Simple, light-weight and no dependency config handling through python data classes with to/from JSON serialization/deserialization.
     '';
     homepage = "https://github.com/idiap/coqui-ai-coqpit";
-    license = licenses.mit;
-    maintainers = teams.tts.members;
+    license = lib.licenses.mit;
+    maintainers = lib.teams.tts.members;
   };
 }

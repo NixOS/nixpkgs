@@ -50,11 +50,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = mateUpdateScript { inherit pname; };
 
-  meta = with lib; {
+  meta = {
     description = "Media tools for MATE";
     homepage = "https://mate-desktop.org";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = teams.mate.members ++ (with maintainers; [ chpatrick ]);
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = lib.teams.mate.members ++ (with lib.maintainers; [ chpatrick ]);
   };
 }

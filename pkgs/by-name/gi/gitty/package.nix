@@ -23,11 +23,11 @@ buildGoModule rec {
     "-X=main.Version=${version}"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/muesli/gitty/";
     description = "Contextual information about your git projects, right on the command-line";
-    license = licenses.mit;
-    maintainers = with maintainers; [ izorkin ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ izorkin ];
     mainProgram = "gitty";
   };
 }

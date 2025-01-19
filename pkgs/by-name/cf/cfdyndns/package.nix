@@ -23,15 +23,15 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];
 
-  meta = with lib; {
+  meta = {
     description = "CloudFlare Dynamic DNS Client";
     mainProgram = "cfdyndns";
     homepage = "https://github.com/nrdxp/cfdyndns";
     license = lib.licenses.mit;
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       colemickens
       nrdxp
     ];
-    platforms = with platforms; linux;
+    platforms = with lib.platforms; linux;
   };
 }

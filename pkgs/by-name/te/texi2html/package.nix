@@ -34,12 +34,12 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Perl script which converts Texinfo source files to HTML output";
     mainProgram = "texi2html";
     homepage = "https://www.nongnu.org/texi2html/";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.marcweber ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.marcweber ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -30,11 +30,11 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Nushell plugin to list system network interfaces";
     homepage = "https://github.com/fennewald/nu_plugin_net";
-    license = licenses.mit;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ happysalada ];
     mainProgram = "nu_plugin_net";
   };
 }

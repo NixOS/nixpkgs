@@ -25,12 +25,12 @@ stdenv.mkDerivation rec {
     cp brandy $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://brandy.matrixnetwork.co.uk/";
     description = "Matrix Brandy BASIC VI for Linux, Windows, MacOSX";
     mainProgram = "brandy";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ fiq ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ fiq ];
   };
 }

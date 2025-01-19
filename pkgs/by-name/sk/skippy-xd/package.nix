@@ -38,11 +38,11 @@ stdenv.mkDerivation rec {
   preInstall = ''
     sed -e "s@/etc/xdg@$out&@" -i Makefile
   '';
-  meta = with lib; {
+  meta = {
     description = "Expose-style compositing-based standalone window switcher";
     homepage = "https://github.com/felixfung/skippy-xd";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.linux;
   };
 }

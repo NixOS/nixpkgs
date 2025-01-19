@@ -44,11 +44,11 @@ stdenv.mkDerivation rec {
     wrapPythonPrograms
   '';
 
-  meta = with lib; {
+  meta = {
     description = "MPI based benchmark for network diagnostics";
     homepage = "https://github.com/cea-hpc/hp2p";
-    platforms = platforms.unix;
-    license = licenses.cecill-c;
-    maintainers = [ maintainers.bzizou ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.cecill-c;
+    maintainers = [ lib.maintainers.bzizou ];
   };
 }

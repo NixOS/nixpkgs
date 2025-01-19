@@ -20,11 +20,11 @@ rustPlatform.buildRustPackage {
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
-  meta = with lib; {
+  meta = {
     description = "Recursive blake3 digest (hash) of a file-system path";
     homepage = "https://github.com/rustshop/rblake3sum";
-    license = [ licenses.mit ];
-    maintainers = with maintainers; [ dpc ];
+    license = [ lib.licenses.mit ];
+    maintainers = with lib.maintainers; [ dpc ];
     mainProgram = "rblake3sum";
   };
 }

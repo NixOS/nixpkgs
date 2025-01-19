@@ -43,12 +43,12 @@ stdenv.mkDerivation {
     cp -r samples $out/share/dirt/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Unimpressive thingie for playing bits of samples with some level of accuracy";
     homepage = "https://github.com/tidalcycles/Dirt";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ anderspapitto ];
-    platforms = with platforms; linux;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ anderspapitto ];
+    platforms = with lib.platforms; linux;
     mainProgram = "dirt";
   };
 }

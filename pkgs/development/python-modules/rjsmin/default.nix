@@ -23,10 +23,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rjsmin" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to minify Javascript";
     homepage = "http://opensource.perlig.de/rjsmin/";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

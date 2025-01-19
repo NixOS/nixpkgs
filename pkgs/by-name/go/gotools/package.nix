@@ -33,14 +33,14 @@ buildGoModule rec {
       --subst-var-by bin $out
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Additional tools for Go development";
     longDescription = ''
       This package contains tools like: godoc, goimports, callgraph, digraph, stringer or toolstash.
     '';
     homepage = "https://go.googlesource.com/tools";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       SuperSandro2000
       techknowlogick
     ];

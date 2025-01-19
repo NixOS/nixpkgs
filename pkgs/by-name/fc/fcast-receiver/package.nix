@@ -51,15 +51,15 @@ buildNpmPackage rec {
       --add-flags $out/lib/node_modules/fcast-receiver/dist/bundle.js
   '';
 
-  meta = with lib; {
+  meta = {
     description = "FCast Receiver, an open-source media streaming receiver";
     longDescription = ''
       FCast Receiver is a receiver for an open-source media streaming protocol, FCast, an alternative to Chromecast and AirPlay.
     '';
     homepage = "https://fcast.org/";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ ymstnt ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ ymstnt ];
     mainProgram = "fcast-receiver";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

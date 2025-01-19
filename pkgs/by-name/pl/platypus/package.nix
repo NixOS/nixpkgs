@@ -43,11 +43,11 @@ stdenv.mkDerivation {
     makeWrapper ${python}/bin/python $out/bin/platypus --add-flags "$out/libexec/platypus/bin/Platypus.py"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Platypus variant caller";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     homepage = "https://github.com/andyrimmer/Platypus";
-    maintainers = with maintainers; [ jbedo ];
-    platforms = platforms.x86_64;
+    maintainers = with lib.maintainers; [ jbedo ];
+    platforms = lib.platforms.x86_64;
   };
 }

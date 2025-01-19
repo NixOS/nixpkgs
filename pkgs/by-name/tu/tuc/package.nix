@@ -16,11 +16,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-NbqmXptLmqLd6QizRB1bIM53Rdj010Hy3JqSuLQ4H24=";
 
-  meta = with lib; {
+  meta = {
     description = "When cut doesn't cut it";
     mainProgram = "tuc";
     homepage = "https://github.com/riquito/tuc";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ dit7ya ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ dit7ya ];
   };
 }

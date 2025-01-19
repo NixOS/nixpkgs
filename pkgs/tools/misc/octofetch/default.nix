@@ -27,10 +27,10 @@ rustPlatform.buildRustPackage rec {
     lib.optionals stdenv.hostPlatform.isLinux [ openssl ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/azur1s/octofetch";
     description = "Github user information on terminal";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "octofetch";
   };

@@ -36,12 +36,12 @@ stdenv.mkDerivation rec {
     ./configure --prefix $out
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://icculus.org/tennix/";
     description = "Classic Championship Tour 2011";
     mainProgram = "tennix";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ pSub ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ pSub ];
   };
 }

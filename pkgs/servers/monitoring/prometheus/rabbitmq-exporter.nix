@@ -27,11 +27,11 @@ buildGoModule rec {
     "-skip=TestWholeApp|TestExporter"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Prometheus exporter for RabbitMQ";
     mainProgram = "rabbitmq_exporter";
     homepage = "https://github.com/kbudde/rabbitmq_exporter";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

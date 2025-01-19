@@ -29,12 +29,12 @@ stdenv.mkDerivation {
     export PREFIX=$out
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Small desktop application launcher with reasonable memory footprint";
     homepage = "https://gitlab.com/fehlstart/fehlstart";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.mounium ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.mounium ];
+    platforms = lib.platforms.all;
     mainProgram = "fehlstart";
   };
 }

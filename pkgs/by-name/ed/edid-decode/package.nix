@@ -30,12 +30,12 @@ stdenv.mkDerivation {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "EDID decoder and conformance tester";
     homepage = "https://git.linuxtv.org/edid-decode.git";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ Madouura ];
-    platforms = platforms.all;
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ Madouura ];
+    platforms = lib.platforms.all;
     mainProgram = "edid-decode";
   };
 }

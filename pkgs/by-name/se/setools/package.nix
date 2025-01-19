@@ -45,10 +45,10 @@ python3.pkgs.buildPythonApplication rec {
     export SEPOL="${lib.getLib libsepol}/lib/libsepol.a"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "SELinux Policy Analysis Tools";
     homepage = "https://github.com/SELinuxProject/setools";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
   };
 }

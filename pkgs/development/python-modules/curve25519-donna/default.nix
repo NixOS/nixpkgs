@@ -14,10 +14,10 @@ buildPythonPackage rec {
     sha256 = "1w0vkjyh4ki9n98lr2hg09f1lr1g3pz48kshrlic01ba6pasj60q";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for the portable curve25519-donna implementation";
     homepage = "http://code.google.com/p/curve25519-donna/";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

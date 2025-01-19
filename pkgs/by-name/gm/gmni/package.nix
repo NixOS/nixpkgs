@@ -28,14 +28,14 @@ stdenv.mkDerivation rec {
   # passed one more byte than available.
   hardeningDisable = [ "fortify3" ];
 
-  meta = with lib; {
+  meta = {
     description = "Gemini client";
     homepage = "https://git.sr.ht/~sircmpwn/gmni";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       bsima
       jb55
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

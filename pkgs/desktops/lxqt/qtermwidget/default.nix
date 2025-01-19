@@ -40,12 +40,12 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://github.com/lxqt/qtermwidget";
     description = "Terminal emulator widget for Qt, used by QTerminal";
-    license = licenses.gpl2Plus;
-    platforms = with platforms; unix;
-    maintainers = teams.lxqt.members;
+    license = lib.licenses.gpl2Plus;
+    platforms = with lib.platforms; unix;
+    maintainers = lib.teams.lxqt.members;
   };
 }

@@ -55,12 +55,12 @@ stdenv.mkDerivation rec {
     ln -s $out/usr/bin/wl-color-picker $out/bin/wl-color-picker
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Wayland color picker that also works on wlroots";
     homepage = "https://github.com/jgmdev/wl-color-picker";
-    license = licenses.mit;
-    maintainers = with maintainers; [ onny ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ onny ];
+    platforms = lib.platforms.linux;
     mainProgram = "wl-color-picker";
   };
 }

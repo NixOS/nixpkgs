@@ -56,12 +56,12 @@ stdenv.mkDerivation rec {
       --replace '-lSDL2main' '-lSDL2'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Music tracker application, free reimplementation of Impulse Tracker";
     homepage = "https://schismtracker.org/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ ftrvxmtrx ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ ftrvxmtrx ];
     mainProgram = "schismtracker";
   };
 }

@@ -53,12 +53,12 @@ stdenv.mkDerivation rec {
   doCheck = true;
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://git.madhouse-project.org/algernon/riemann-c-client";
     description = "C client library for the Riemann monitoring system";
     mainProgram = "riemann-client";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ pradeepchhetri ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ pradeepchhetri ];
+    platforms = lib.platforms.linux;
   };
 }

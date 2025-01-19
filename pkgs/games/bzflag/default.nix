@@ -39,11 +39,11 @@ stdenv.mkDerivation rec {
       CoreServices
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Multiplayer 3D Tank game";
     homepage = "https://bzflag.org/";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
 }

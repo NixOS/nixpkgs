@@ -36,12 +36,12 @@ rustPlatform.buildRustPackage rec {
     wrapProgram $out/bin/termplay --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Play an image/video in your terminal";
     homepage = "https://jd91mzm2.github.io/termplay/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "termplay";
   };
 }

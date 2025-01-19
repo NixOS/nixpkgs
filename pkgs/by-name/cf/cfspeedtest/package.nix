@@ -18,12 +18,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-gckl2WHpuu7Gcubx/VEpHNW7jT76r9QHaAociQh+Zrc=";
 
-  meta = with lib; {
+  meta = {
     description = "Unofficial CLI for speed.cloudflare.com";
     homepage = "https://github.com/code-inflation/cfspeedtest";
-    license = with licenses; [ mit ];
+    license = with lib.licenses; [ mit ];
     broken = stdenv.hostPlatform.isDarwin;
-    maintainers = with maintainers; [ colemickens ];
+    maintainers = with lib.maintainers; [ colemickens ];
     mainProgram = "cfspeedtest";
   };
 }

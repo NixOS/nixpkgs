@@ -11,11 +11,11 @@ bundlerApp {
 
   passthru.updateScript = bundlerUpdateScript "krane";
 
-  meta = with lib; {
+  meta = {
     description = "Command-line tool that helps you ship changes to a Kubernetes namespace and understand the result";
     homepage = "https://github.com/Shopify/krane";
     changelog = "https://github.com/Shopify/krane/blob/main/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kira-bruneau ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kira-bruneau ];
   };
 }

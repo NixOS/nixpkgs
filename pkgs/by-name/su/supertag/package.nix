@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage rec {
   # The test are requiring extended permissions.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Tag-based filesystem";
     longDescription = ''
       Supertag is a tag-based filesystem, written in Rust, for Linux and MacOS.
@@ -48,11 +48,11 @@ rustPlatform.buildRustPackage rec {
       as objects that can be filtered by folders.
     '';
     homepage = "https://github.com/amoffat/supertag";
-    license = licenses.agpl3Plus;
+    license = lib.licenses.agpl3Plus;
     platforms = [
       "i686-linux"
       "x86_64-linux"
     ];
-    maintainers = with maintainers; [ oxzi ];
+    maintainers = with lib.maintainers; [ oxzi ];
   };
 }

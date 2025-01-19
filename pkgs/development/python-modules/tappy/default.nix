@@ -36,12 +36,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tap" ];
 
-  meta = with lib; {
+  meta = {
     description = "Set of tools for working with the Test Anything Protocol (TAP) in Python";
     homepage = "https://github.com/python-tap/tappy";
     changelog = "https://tappy.readthedocs.io/en/latest/releases.html";
     mainProgram = "tappy";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ sfrijters ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ sfrijters ];
   };
 }

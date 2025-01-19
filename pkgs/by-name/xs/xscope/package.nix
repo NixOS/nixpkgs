@@ -18,12 +18,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libXt ];
 
-  meta = with lib; {
+  meta = {
     description = "program to monitor X11/Client conversations";
     homepage = "https://cgit.freedesktop.org/xorg/app/xscope/";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ crertel ];
-    platforms = with platforms; unix;
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ crertel ];
+    platforms = with lib.platforms; unix;
     mainProgram = "xscope";
   };
 }

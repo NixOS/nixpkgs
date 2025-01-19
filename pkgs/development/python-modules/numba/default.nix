@@ -166,10 +166,10 @@ buildPythonPackage rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Compiling Python code using LLVM";
     homepage = "https://numba.pydata.org/";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     mainProgram = "numba";
   };
 }

@@ -33,12 +33,12 @@ rustPlatform.buildRustPackage rec {
 
   env.POLKIT_AGENT_HELPER_1 = "/run/wrappers/bin/polkit-agent-helper-1";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pop-os/cosmic-osd";
     description = "OSD for the COSMIC Desktop Environment";
     mainProgram = "cosmic-osd";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ nyabinary ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ nyabinary ];
+    platforms = lib.platforms.linux;
   };
 }

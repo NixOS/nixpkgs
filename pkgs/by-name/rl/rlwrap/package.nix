@@ -32,12 +32,12 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-error=implicit-function-declaration";
 
-  meta = with lib; {
+  meta = {
     description = "Readline wrapper for console programs";
     homepage = "https://github.com/hanslub42/rlwrap";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ jlesquembre ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ jlesquembre ];
     mainProgram = "rlwrap";
   };
 }

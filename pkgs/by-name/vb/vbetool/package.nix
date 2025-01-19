@@ -28,12 +28,12 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "LDFLAGS=-lpci" ];
 
-  meta = with lib; {
+  meta = {
     description = "Video BIOS execution tool";
     homepage = "https://www.codon.org.uk/~mjg59/vbetool/";
-    maintainers = [ maintainers.raskin ];
-    platforms = platforms.linux;
-    license = licenses.gpl2Only;
+    maintainers = [ lib.maintainers.raskin ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Only;
     mainProgram = "vbetool";
   };
 }

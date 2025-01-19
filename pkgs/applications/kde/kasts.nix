@@ -63,12 +63,12 @@ mkDerivation rec {
   '';
   dontWrapGApps = true;
 
-  meta = with lib; {
+  meta = {
     description = "Mobile podcast application";
     mainProgram = "kasts";
     homepage = "https://apps.kde.org/kasts/";
     # https://invent.kde.org/plasma-mobile/kasts/-/tree/master/LICENSES
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd2
       cc-by-sa-40
       cc0

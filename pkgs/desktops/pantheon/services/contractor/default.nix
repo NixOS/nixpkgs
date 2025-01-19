@@ -48,12 +48,12 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Desktop-wide extension service used by elementary OS";
     homepage = "https://github.com/elementary/contractor";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = lib.teams.pantheon.members;
     mainProgram = "contractor";
   };
 }

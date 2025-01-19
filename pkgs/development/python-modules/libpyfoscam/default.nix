@@ -22,10 +22,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "libpyfoscam" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Library for Foscam IP Cameras";
     homepage = "https://github.com/krmarien/python-foscam";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

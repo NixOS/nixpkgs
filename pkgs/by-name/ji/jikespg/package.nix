@@ -23,12 +23,12 @@ stdenv.mkDerivation rec {
     install -Dm755 -t $out/bin jikespg
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://jikes.sourceforge.net/";
     description = "Jikes Parser Generator";
     mainProgram = "jikespg";
-    platforms = platforms.all;
-    license = licenses.ipl10;
-    maintainers = with maintainers; [ pSub ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.ipl10;
+    maintainers = with lib.maintainers; [ pSub ];
   };
 }

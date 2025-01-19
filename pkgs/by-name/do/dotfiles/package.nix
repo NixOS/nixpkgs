@@ -19,10 +19,10 @@ python3Packages.buildPythonApplication rec {
   nativeCheckInputs = with python3Packages; [ pytest ];
   propagatedBuildInputs = with python3Packages; [ click ];
 
-  meta = with lib; {
+  meta = {
     description = "Easily manage your dotfiles";
     mainProgram = "dotfiles";
     homepage = "https://github.com/jbernard/dotfiles";
-    license = licenses.isc;
+    license = lib.licenses.isc;
   };
 }

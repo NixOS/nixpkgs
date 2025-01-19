@@ -68,11 +68,11 @@ rustPlatform.buildRustPackage {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Server based on Deno runtime, capable of running JavaScript, TypeScript, and WASM services";
     mainProgram = "edge-runtime";
     homepage = "https://github.com/supabase/edge-runtime";
-    license = licenses.mit;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

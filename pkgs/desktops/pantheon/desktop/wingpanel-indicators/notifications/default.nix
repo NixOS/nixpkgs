@@ -46,11 +46,11 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Notifications Indicator for Wingpanel";
     homepage = "https://github.com/elementary/wingpanel-indicator-notifications";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    maintainers = lib.teams.pantheon.members;
   };
 }

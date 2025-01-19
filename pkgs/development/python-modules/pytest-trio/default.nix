@@ -43,10 +43,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_trio" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pytest plugin for trio";
     homepage = "https://github.com/python-trio/pytest-trio";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

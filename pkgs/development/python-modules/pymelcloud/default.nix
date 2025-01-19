@@ -35,10 +35,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pymelcloud" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for interacting with MELCloud";
     homepage = "https://github.com/vilppuvuorinen/pymelcloud";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

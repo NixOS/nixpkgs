@@ -53,11 +53,11 @@ python3Packages.buildPythonApplication rec {
   # This application has no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/deepjyoti30/ytmdl";
     description = "YouTube Music Downloader";
-    license = licenses.mit;
-    maintainers = with maintainers; [ j0hax ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ j0hax ];
     mainProgram = "ytmdl";
   };
 }

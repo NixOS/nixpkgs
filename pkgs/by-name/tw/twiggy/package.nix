@@ -15,14 +15,14 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-94pfhVZ0CNMn+lCl5O+wOyE+D6fVXbH4NAPx92nMNbM=";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://rustwasm.github.io/twiggy/";
     description = "Code size profiler for Wasm";
     mainProgram = "twiggy";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with maintainers; [ lucperkins ];
+    maintainers = with lib.maintainers; [ lucperkins ];
   };
 }

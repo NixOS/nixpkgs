@@ -24,11 +24,11 @@ rustPlatform.buildRustPackage rec {
   # swayws does not have any tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Sway workspace tool which allows easy moving of workspaces to and from outputs";
     mainProgram = "swayws";
     homepage = "https://gitlab.com/w0lff/swayws";
-    license = licenses.mit;
-    maintainers = [ maintainers.atila ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.atila ];
   };
 }

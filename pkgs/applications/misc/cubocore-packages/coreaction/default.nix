@@ -33,12 +33,12 @@ mkDerivation rec {
     libcsys
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Side bar for showing widgets from the C Suite";
     mainProgram = "coreaction";
     homepage = "https://gitlab.com/cubocore/coreapps/coreaction";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dan4ik605743 ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ dan4ik605743 ];
+    platforms = lib.platforms.linux;
   };
 }

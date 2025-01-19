@@ -27,11 +27,11 @@ buildPostgresqlExtension rec {
     json_c
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://repmgr.org/";
     description = "Replication manager for PostgreSQL cluster";
-    license = licenses.postgresql;
+    license = lib.licenses.postgresql;
     platforms = postgresql.meta.platforms;
-    maintainers = with maintainers; [ zimbatm ];
+    maintainers = with lib.maintainers; [ zimbatm ];
   };
 }

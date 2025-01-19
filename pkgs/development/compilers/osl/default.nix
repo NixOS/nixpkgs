@@ -81,11 +81,11 @@ stdenv.mkDerivation rec {
       --replace '=''${exec_prefix}//' '=/'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Advanced shading language for production GI renderers";
     homepage = "https://opensource.imageworks.com/osl.html";
-    maintainers = with maintainers; [ hodapp ];
-    license = licenses.bsd3;
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ hodapp ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
   };
 }

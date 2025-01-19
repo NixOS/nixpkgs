@@ -45,10 +45,10 @@ buildPythonPackage rec {
       "pyannotate_tools/fixes/tests/test_annotate*.py"
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Auto-generate PEP-484 annotations";
     homepage = "https://github.com/dropbox/pyannotate";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "pyannotate";
   };

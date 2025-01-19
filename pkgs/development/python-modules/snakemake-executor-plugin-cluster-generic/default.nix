@@ -28,10 +28,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "snakemake_executor_plugin_cluster_generic" ];
 
-  meta = with lib; {
+  meta = {
     description = "Generic cluster executor for Snakemake";
     homepage = "https://github.com/snakemake/snakemake-executor-plugin-cluster-generic";
-    license = licenses.mit;
-    maintainers = with maintainers; [ veprbl ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

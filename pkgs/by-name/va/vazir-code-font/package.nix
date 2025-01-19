@@ -23,11 +23,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/rastikerdar/vazir-code-font";
     description = "Persian (farsi) Monospaced Font for coding";
-    license = licenses.publicDomain;
-    platforms = platforms.all;
-    maintainers = [ maintainers.dearrude ];
+    license = lib.licenses.publicDomain;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.dearrude ];
   };
 }

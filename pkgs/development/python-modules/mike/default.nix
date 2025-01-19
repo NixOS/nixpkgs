@@ -50,11 +50,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mike" ];
 
-  meta = with lib; {
+  meta = {
     description = "Manage multiple versions of your MkDocs-powered documentation";
     mainProgram = "mike";
     homepage = "https://github.com/jimporter/mike";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

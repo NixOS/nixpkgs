@@ -21,10 +21,10 @@ buildPecl {
       --replace 'SEARCH_PATH="/usr/local /usr"' 'SEARCH_PATH=${rdkafka}'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Kafka client based on librdkafka";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/arnaud-lb/php-rdkafka";
-    maintainers = teams.php.members;
+    maintainers = lib.teams.php.members;
   };
 }

@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     install -Dm755 iotools -t $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Set of simple command line tools which allow access to
       hardware device registers";
     longDescription = ''
@@ -35,8 +35,8 @@ stdenv.mkDerivation rec {
       operations.
     '';
     homepage = "https://github.com/adurbin/iotools";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ felixsinger ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ felixsinger ];
     platforms = [
       "x86_64-linux"
       "i686-linux"

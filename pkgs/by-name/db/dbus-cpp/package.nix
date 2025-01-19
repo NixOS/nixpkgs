@@ -116,13 +116,13 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Dbus-binding leveraging C++-11";
     homepage = "https://gitlab.com/ubports/development/core/lib-cpp/dbus-cpp";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ OPNA2608 ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ OPNA2608 ];
     mainProgram = "dbus-cppc";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     pkgConfigModules = [
       "dbus-cpp"
     ];

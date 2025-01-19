@@ -15,11 +15,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-nmnpHz9sCRlxOngcSrW+oktYIKM/A295/a03fUf3ofw=";
 
-  meta = with lib; {
+  meta = {
     description = "Simple digital waveform viewer with vi-like key bindings";
     mainProgram = "dwfv";
     homepage = "https://github.com/psurply/dwfv";
-    license = licenses.mit;
-    maintainers = with maintainers; [ newam ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ newam ];
   };
 }

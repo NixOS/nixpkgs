@@ -55,13 +55,13 @@ stdenv.mkDerivation rec {
     inherit gtk3;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight WebKitGTK web browser";
     mainProgram = "midori";
     homepage = "https://www.midori-browser.org/";
-    license = with licenses; [ lgpl21Plus ];
-    platforms = with platforms; linux;
-    maintainers = with maintainers; [
+    license = with lib.licenses; [ lgpl21Plus ];
+    platforms = with lib.platforms; linux;
+    maintainers = with lib.maintainers; [
       raskin
       ramkromberg
     ];

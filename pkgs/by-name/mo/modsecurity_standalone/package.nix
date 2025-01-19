@@ -72,11 +72,11 @@ stdenv.mkDerivation rec {
     cp -R * $nginx
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open source, cross-platform web application firewall (WAF)";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://github.com/owasp-modsecurity/ModSecurity";
-    maintainers = with maintainers; [ offline ];
+    maintainers = with lib.maintainers; [ offline ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

@@ -131,12 +131,12 @@ stdenv.mkDerivation rec {
     updateScript = gnome.updateScript { packageName = "gnome-boxes"; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Simple GNOME 3 application to access remote or virtual systems";
     mainProgram = "gnome-boxes";
     homepage = "https://apps.gnome.org/Boxes/";
-    license = licenses.lgpl2Plus;
-    platforms = platforms.linux;
-    maintainers = teams.gnome.members;
+    license = lib.licenses.lgpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = lib.teams.gnome.members;
   };
 }

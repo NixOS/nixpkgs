@@ -15,11 +15,11 @@ rustPlatform.buildRustPackage {
   };
   cargoHash = "sha256-HAeEd7HY+hbTUOkIt6aTfvPYLRPtdAcUGvkuBUMjohA=";
 
-  meta = with lib; {
+  meta = {
     description = "like cargo, but backwards";
     mainProgram = "ograc";
     homepage = "https://crates.io/crates/ograc";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ sciencentistguy ];
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ sciencentistguy ];
   };
 }

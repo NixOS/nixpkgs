@@ -34,10 +34,10 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     rm BUILD
   '';
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/arximboldi/zug";
     description = "library for functional interactive c++ programs";
-    maintainers = with maintainers; [ nek0 ];
-    license = licenses.boost;
+    maintainers = with lib.maintainers; [ nek0 ];
+    license = lib.licenses.boost;
   };
 }

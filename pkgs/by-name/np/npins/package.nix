@@ -43,12 +43,12 @@ rustPlatform.buildRustPackage rec {
     wrapProgram $out/bin/npins --prefix PATH : "${runtimePath}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple and convenient dependency pinning for Nix";
     mainProgram = "npins";
     homepage = "https://github.com/andir/npins";
-    license = licenses.eupl12;
-    maintainers = with maintainers; [ piegames ];
+    license = lib.licenses.eupl12;
+    maintainers = with lib.maintainers; [ piegames ];
   };
 
   passthru.mkSource = callPackage ./source.nix { };

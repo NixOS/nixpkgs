@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     export GOCACHE=$TMPDIR/go-cache
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Android SDK platform tools";
     longDescription = ''
       Android SDK Platform-Tools is a component for the Android SDK. It
@@ -74,11 +74,11 @@ stdenv.mkDerivation rec {
     # https://developer.android.com/studio/command-line#tools-platform
     # https://developer.android.com/studio/releases/platform-tools
     homepage = "https://github.com/nmeum/android-tools";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       unicode-dfs-2015
     ];
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ primeos ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ primeos ];
   };
 }

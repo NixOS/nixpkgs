@@ -16,12 +16,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-aG0J9hnkGvz42gOczU3uF3GsmKZWgrLtx8lXOkDwt0c=";
 
-  meta = with lib; {
+  meta = {
     description = "Command line utility to render templates from json|toml|yaml and ENV, using the tera templating engine";
     homepage = "https://github.com/chevdor/tera-cli";
-    license = licenses.mit;
-    maintainers = with maintainers; [ _365tuwe ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ _365tuwe ];
     mainProgram = "tera";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

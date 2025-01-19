@@ -51,11 +51,11 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "SAT/PseudoBoolean/MaxSat/ASP solver using glucose";
-    maintainers = with maintainers; [ gebner ];
-    platforms = platforms.unix;
-    license = licenses.asl20;
+    maintainers = with lib.maintainers; [ gebner ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.asl20;
     homepage = "https://alviano.net/software/maxino/";
   };
 }

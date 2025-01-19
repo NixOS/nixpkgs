@@ -61,12 +61,12 @@ stdenv.mkDerivation rec {
 
   qmakeFlags = [ "DEFINES+=VERSION=${version}" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple memo software with texts and voice recordings";
     mainProgram = "deepin-reader";
     homepage = "https://github.com/linuxdeepin/deepin-reader";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.deepin.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = lib.teams.deepin.members;
   };
 }

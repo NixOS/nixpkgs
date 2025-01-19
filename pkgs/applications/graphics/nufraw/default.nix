@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
       })
     ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://nufraw.sourceforge.io/";
     description = "Utility to read and manipulate raw images from digital cameras";
     longDescription = ''
@@ -90,8 +90,8 @@ stdenv.mkDerivation rec {
       Nufraw offers the same features (gimp plugin, batch, ecc) and the same quality of
       ufraw in a brand new improved user interface.
     '';
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ asbachb ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ asbachb ];
+    platforms = lib.platforms.linux;
   };
 }

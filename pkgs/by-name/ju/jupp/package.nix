@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     "--enable-termidx"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.mirbsd.org/jupp.htm";
     downloadPage = "https://www.mirbsd.org/MirOS/dist/jupp/";
     description = "Portable fork of Joe's editor";
@@ -46,8 +46,8 @@ stdenv.mkDerivation rec {
       and has a lot of bugs fixed. It is based upon an older version of joe
       because these behave better overall.
     '';
-    license = licenses.gpl1Only;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = with platforms; unix;
+    license = lib.licenses.gpl1Only;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = with lib.platforms; unix;
   };
 }

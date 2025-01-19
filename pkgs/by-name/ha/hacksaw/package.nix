@@ -29,12 +29,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-CDDJmWnAcXJ4wPfSPvu2DfthaFwZGZk1XXMNTA1g0+c=";
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight selection tool for usage in screenshot scripts etc";
     homepage = "https://github.com/neXromancers/hacksaw";
-    license = with licenses; [ mpl20 ];
-    maintainers = with maintainers; [ TethysSvensson ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [ mpl20 ];
+    maintainers = with lib.maintainers; [ TethysSvensson ];
+    platforms = lib.platforms.linux;
     mainProgram = "hacksaw";
   };
 }

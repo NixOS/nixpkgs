@@ -19,10 +19,10 @@ buildPythonPackage rec {
   # This package has no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Offline text-to-speech synthesis library";
     homepage = "https://github.com/nateshmbhat/pyttsx3";
-    license = licenses.mpl20;
-    maintainers = [ maintainers.ethindp ];
+    license = lib.licenses.mpl20;
+    maintainers = [ lib.maintainers.ethindp ];
   };
 }

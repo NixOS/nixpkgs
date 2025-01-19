@@ -79,12 +79,12 @@ stdenv.mkDerivation rec {
     make test
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Modern experience for GDB with advanced debugging features for exploit developers & reverse engineers";
     mainProgram = "gef";
     homepage = "https://github.com/hugsy/gef";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ freax13 ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ freax13 ];
   };
 }

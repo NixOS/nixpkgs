@@ -90,11 +90,11 @@ stdenv.mkDerivation rec {
     ignoredVersions = "^master.*";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/linuxmint/warpinator";
     description = "Share files across the LAN";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.cinnamon.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = lib.teams.cinnamon.members;
   };
 }

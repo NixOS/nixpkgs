@@ -17,11 +17,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-aHK9KBzRbU2IYr7vOdlz0Aw4iYGjD6VedbWPE/V7AVc=";
 
-  meta = with lib; {
+  meta = {
     description = "Annotate output with relative durations between lines";
     mainProgram = "rtss";
     homepage = "https://github.com/Freaky/rtss";
-    license = licenses.mit;
-    maintainers = with maintainers; [ djanatyn ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ djanatyn ];
   };
 }

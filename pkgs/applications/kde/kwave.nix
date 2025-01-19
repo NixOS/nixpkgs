@@ -26,13 +26,13 @@
 mkDerivation {
   pname = "kwave";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://kde.org/applications/en/multimedia/org.kde.kwave";
     description = "Simple media player";
     mainProgram = "kwave";
-    maintainers = with maintainers; [ freezeboy ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ freezeboy ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
   nativeBuildInputs = [
     extra-cmake-modules

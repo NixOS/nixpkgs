@@ -36,15 +36,15 @@ rustPlatform.buildRustPackage rec {
     cp -R crates/capi/include $out
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Rust symbol demangling";
     homepage = "https://github.com/alexcrichton/rustc-demangle";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];
     # upstream supports other platforms, but maintainer can only test on linux
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ _1000teslas ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ _1000teslas ];
   };
 }

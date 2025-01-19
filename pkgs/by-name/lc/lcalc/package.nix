@@ -33,12 +33,12 @@ stdenv.mkDerivation rec {
     "--with-pari"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.com/sagemath/lcalc";
     description = "Program for calculating with L-functions";
     mainProgram = "lcalc";
-    license = with licenses; [ gpl2 ];
-    maintainers = teams.sage.members;
-    platforms = platforms.all;
+    license = with lib.licenses; [ gpl2 ];
+    maintainers = lib.teams.sage.members;
+    platforms = lib.platforms.all;
   };
 }

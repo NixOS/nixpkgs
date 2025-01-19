@@ -31,12 +31,12 @@ stdenv.mkDerivation rec {
     qt5.wrapQtAppsHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Linux editor for the Akai LPD8";
     homepage = "https://github.com/charlesfleche/lpd8editor";
-    license = licenses.mit;
-    maintainers = with maintainers; [ pinpox ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ pinpox ];
     mainProgram = "lpd8editor";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

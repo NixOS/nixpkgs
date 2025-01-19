@@ -28,9 +28,9 @@ stdenv.mkDerivation rec {
   #  link: `parseopt.lo' is not a valid libtool object
   enableParallelBuilding = false;
 
-  meta = with lib; {
+  meta = {
     description = "Mini PXE server";
-    maintainers = [ maintainers.raskin ];
+    maintainers = [ lib.maintainers.raskin ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

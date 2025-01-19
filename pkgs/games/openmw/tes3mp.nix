@@ -129,11 +129,11 @@ let
       mv $out/bin/tes3mp-* $out/libexec
     '';
 
-    meta = with lib; {
+    meta = {
       description = "Multiplayer for TES3:Morrowind based on OpenMW";
       homepage = "https://tes3mp.com/";
-      license = licenses.gpl3Only;
-      maintainers = with maintainers; [ peterhoeg ];
+      license = lib.licenses.gpl3Only;
+      maintainers = with lib.maintainers; [ peterhoeg ];
       platforms = [
         "x86_64-linux"
         "i686-linux"

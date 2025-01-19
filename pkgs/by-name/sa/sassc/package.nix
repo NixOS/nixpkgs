@@ -27,15 +27,15 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Front-end for libsass";
     homepage = "https://github.com/sass/sassc/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "sassc";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       codyopel
       pjones
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

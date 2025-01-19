@@ -31,12 +31,12 @@ stdenv.mkDerivation rec {
     cp mkspiffs $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool to build and unpack SPIFFS images";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/igrr/mkspiffs";
-    maintainers = with maintainers; [ haslersn ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ haslersn ];
+    platforms = lib.platforms.linux;
     mainProgram = "mkspiffs";
   };
 }

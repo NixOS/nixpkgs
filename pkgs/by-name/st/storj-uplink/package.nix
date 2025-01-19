@@ -24,11 +24,11 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Command-line tool for Storj";
     homepage = "https://storj.io";
-    license = licenses.agpl3Only;
+    license = lib.licenses.agpl3Only;
     mainProgram = "uplink";
-    maintainers = with maintainers; [ felipeqq2 ];
+    maintainers = with lib.maintainers; [ felipeqq2 ];
   };
 }

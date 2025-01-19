@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   pname = "libxmp";
   version = "4.6.1";
 
-  meta = with lib; {
+  meta = {
     description = "Extended module player library";
     homepage = "https://xmp.sourceforge.net/";
     longDescription = ''
@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
       over 90 mainstream and obscure module formats including Protracker (MOD),
       Scream Tracker 3 (S3M), Fast Tracker II (XM), and Impulse Tracker (IT).
     '';
-    license = licenses.lgpl21Plus;
-    platforms = platforms.all;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.all;
   };
 
   src = fetchurl {

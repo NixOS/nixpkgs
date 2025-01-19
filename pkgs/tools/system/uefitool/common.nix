@@ -46,12 +46,12 @@ mkDerivation rec {
     cp ${lib.concatStringsSep " " installFiles} "$out"/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "UEFI firmware image viewer and editor";
     homepage = "https://github.com/LongSoft/uefitool";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     maintainers = [ ];
     # uefitool supposedly works on other platforms, but their build script only works on linux in nixpkgs
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

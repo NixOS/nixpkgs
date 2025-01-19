@@ -78,12 +78,12 @@ mkDerivation rec {
     libcsys
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Additional features,plugins etc for CuboCore Application Suite";
     mainProgram = "shareIT";
     homepage = "https://gitlab.com/cubocore/coreapps/coretoppings";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dan4ik605743 ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ dan4ik605743 ];
+    platforms = lib.platforms.linux;
   };
 }

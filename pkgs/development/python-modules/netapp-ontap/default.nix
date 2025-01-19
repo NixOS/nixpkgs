@@ -42,11 +42,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "netapp_ontap" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for working with ONTAP's REST APIs simply in Python";
     homepage = "https://devnet.netapp.com/restapi.php";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
     mainProgram = "ontap-cli";
   };
 }

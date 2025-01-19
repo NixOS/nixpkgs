@@ -64,12 +64,12 @@ mkDerivation rec {
   '';
   dontWrapGApps = true;
 
-  meta = with lib; {
+  meta = {
     description = "Client for YouTube Music";
     mainProgram = "audiotube";
     homepage = "https://invent.kde.org/plasma-mobile/audiotube";
     # https://invent.kde.org/plasma-mobile/audiotube/-/tree/c503d0607a3386112beaa9cf990ab85fe33ef115/LICENSES
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd2
       cc0
       gpl2Only

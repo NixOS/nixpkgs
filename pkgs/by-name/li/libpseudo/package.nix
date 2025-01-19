@@ -30,10 +30,10 @@ stdenv.mkDerivation rec {
     ncurses
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://libpseudo.sourceforge.net/";
     description = "Simple, thread-safe messaging between threads";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

@@ -42,10 +42,10 @@ buildPythonPackage rec {
   doCheck = false;
   #ZOOKEEPER_PATH = "${pkgs.zookeeper}";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://kazoo.readthedocs.org";
     description = "Higher Level Zookeeper Client";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

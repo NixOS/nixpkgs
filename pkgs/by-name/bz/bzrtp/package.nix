@@ -35,11 +35,11 @@ stdenv.mkDerivation rec {
     "-Wno-error=unused-parameter"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Opensource implementation of ZRTP keys exchange protocol. Part of the Linphone project";
     homepage = "https://gitlab.linphone.org/BC/public/bzrtp";
-    license = licenses.gpl3Plus;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ jluttine ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ jluttine ];
   };
 }

@@ -32,12 +32,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       --prefix PATH : ${lib.makeBinPath [ (imagemagick.override { ghostscriptSupport = true; }) ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Shows thumbnails in terminal using sixel graphics";
     homepage = "https://github.com/hackerb9/lsix";
-    license = licenses.gpl3Only;
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       justinlime
       kidonng
     ];

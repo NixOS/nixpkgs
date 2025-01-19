@@ -33,11 +33,11 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple compiled programming language";
     mainProgram = "paco";
     homepage = "https://github.com/pacolang/paco";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hugolgst ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hugolgst ];
   };
 }

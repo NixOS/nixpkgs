@@ -107,11 +107,11 @@ rustPlatform.buildRustPackage rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform disk usage analysis tool";
     homepage = "https://www.squirreldisk.com/";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ peret ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ peret ];
     mainProgram = "squirreldisk";
   };
 }

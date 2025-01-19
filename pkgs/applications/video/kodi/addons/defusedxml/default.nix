@@ -23,10 +23,10 @@ buildKodiAddon rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/tiran/defusedxml";
     description = "defusing XML bombs and other exploits";
-    license = licenses.psfl;
-    maintainers = teams.kodi.members;
+    license = lib.licenses.psfl;
+    maintainers = lib.teams.kodi.members;
   };
 }

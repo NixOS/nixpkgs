@@ -29,11 +29,11 @@ stdenv.mkDerivation rec {
 
   qmakeFlags = [ "VERSION=${version}" ];
 
-  meta = with lib; {
+  meta = {
     description = "Libisoburn wrapper class for Qt";
     homepage = "https://github.com/linuxdeepin/disomaster";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.deepin.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = lib.teams.deepin.members;
   };
 }

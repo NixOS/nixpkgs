@@ -26,11 +26,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Anonymous and neutral programming typeface focused on creating a better reading experience";
     homepage = "https://commitmono.com/";
-    license = licenses.ofl;
-    maintainers = [ maintainers.yoavlavi ];
-    platforms = platforms.all;
+    license = lib.licenses.ofl;
+    maintainers = [ lib.maintainers.yoavlavi ];
+    platforms = lib.platforms.all;
   };
 }

@@ -17,9 +17,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ colorama ];
 
-  meta = with lib; {
+  meta = {
     description = "TextUI colors for Python";
     homepage = "https://github.com/kennethreitz/crayons";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

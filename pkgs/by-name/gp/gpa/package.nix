@@ -30,11 +30,11 @@ stdenv.mkDerivation rec {
     libassuan
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Graphical user interface for the GnuPG";
     homepage = "https://www.gnupg.org/related_software/gpa/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
     mainProgram = "gpa";
   };
 }

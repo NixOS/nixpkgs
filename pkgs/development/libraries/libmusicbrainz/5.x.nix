@@ -45,14 +45,14 @@ stdenv.mkDerivation rec {
 
   dontUseCmakeBuildDir = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "http://musicbrainz.org/doc/libmusicbrainz";
     description = "MusicBrainz Client Library (5.x version)";
     longDescription = ''
       The libmusicbrainz (also known as mb_client or MusicBrainz Client
       Library) is a development library geared towards developers who wish to
       add MusicBrainz lookup capabilities to their applications.'';
-    platforms = platforms.all;
-    license = licenses.lgpl21;
+    platforms = lib.platforms.all;
+    license = lib.licenses.lgpl21;
   };
 }

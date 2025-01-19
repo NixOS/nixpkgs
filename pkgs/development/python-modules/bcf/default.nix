@@ -46,12 +46,12 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "bcf" ];
   doCheck = false; # Project provides no tests
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/hardwario/bch-firmware-tool";
     description = "HARDWARIO Firmware Tool";
     mainProgram = "bcf";
-    platforms = platforms.linux;
-    license = licenses.mit;
-    maintainers = with maintainers; [ cynerd ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ cynerd ];
   };
 }

@@ -38,10 +38,10 @@ buildPythonPackage rec {
     scikit-learn
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Machine learning descriptors for atomistic systems";
     homepage = "https://github.com/SINGROUP/dscribe";
-    license = licenses.asl20;
-    maintainers = [ maintainers.sheepforce ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.sheepforce ];
   };
 }

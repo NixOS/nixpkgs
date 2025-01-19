@@ -59,16 +59,16 @@ stdenv.mkDerivation rec {
       }"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "KeePass Command Line Interface";
     mainProgram = "kpcli";
     longDescription = ''
       KeePass Command Line Interface (CLI) / interactive shell.
       Use this program to access and manage your KeePass 1.x or 2.x databases from a Unix-like command line.
     '';
-    license = licenses.artistic1;
+    license = lib.licenses.artistic1;
     homepage = "http://kpcli.sourceforge.net";
-    platforms = platforms.all;
-    maintainers = [ maintainers.j-keck ];
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.j-keck ];
   };
 }

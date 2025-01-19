@@ -25,11 +25,11 @@ python3Packages.buildPythonPackage rec {
     gnome-online-accounts
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Mailnag GNOME Online Accounts plugin";
     homepage = "https://github.com/pulb/mailnag-goa-plugin";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ doronbehar ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 }

@@ -65,11 +65,11 @@ stdenv.mkDerivation rec {
       "$out"/bin/mwcap-info
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.magewell.com/";
     description = "Linux driver for the Magewell Pro Capture family";
-    license = licenses.unfreeRedistributable;
-    maintainers = with maintainers; [ flexiondotorg ];
-    platforms = platforms.linux;
+    license = lib.licenses.unfreeRedistributable;
+    maintainers = with lib.maintainers; [ flexiondotorg ];
+    platforms = lib.platforms.linux;
   };
 }

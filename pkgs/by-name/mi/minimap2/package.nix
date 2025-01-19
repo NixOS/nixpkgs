@@ -30,12 +30,12 @@ stdenv.mkDerivation rec {
     cp minimap2.1 $out/share/man/man1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Versatile pairwise aligner for genomic and spliced nucleotide sequences";
     mainProgram = "minimap2";
     homepage = "https://lh3.github.io/minimap2";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = [ maintainers.arcadio ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.arcadio ];
   };
 }

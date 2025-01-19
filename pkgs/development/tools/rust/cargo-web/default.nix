@@ -42,14 +42,14 @@ rustPlatform.buildRustPackage rec {
     Security
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Cargo subcommand for the client-side Web";
     mainProgram = "cargo-web";
     homepage = "https://github.com/koute/cargo-web";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [ clevor ];
+    maintainers = with lib.maintainers; [ clevor ];
   };
 }

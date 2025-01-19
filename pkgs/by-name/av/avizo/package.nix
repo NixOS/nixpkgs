@@ -54,11 +54,11 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/lightctl --suffix PATH : $out/bin:${lib.makeBinPath ([ brightnessctl ])}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Neat notification daemon for Wayland";
     homepage = "https://github.com/misterdanb/avizo";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.berbiche ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.berbiche ];
   };
 }

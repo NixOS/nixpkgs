@@ -35,10 +35,10 @@ stdenv.mkDerivation rec {
     openssl
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Slrn (S-Lang read news) newsreader";
     homepage = "https://slrn.sourceforge.net/index.html";
-    license = licenses.gpl2;
-    platforms = with platforms; linux;
+    license = lib.licenses.gpl2;
+    platforms = with lib.platforms; linux;
   };
 }

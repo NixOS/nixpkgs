@@ -34,12 +34,12 @@ python3Packages.buildPythonApplication rec {
   # no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Tool for monitoring webpages for updates";
     mainProgram = "urlwatch";
     homepage = "https://thp.io/2008/urlwatch/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       kmein
       tv
     ];

@@ -17,11 +17,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-hBV+mqN4rnHGKAVRtlk2VFml/T9YQxzGTvGK2jcCwNw=";
 
-  meta = with lib; {
+  meta = {
     description = "Simple, user-friendly alternative to sort | uniq";
     homepage = "https://github.com/lostutils/uq";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       doronbehar
       matthiasbeyer
     ];

@@ -35,10 +35,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "adt" ];
 
-  meta = with lib; {
+  meta = {
     description = "Algebraic data types for Python";
     homepage = "https://github.com/jspahrsummers/adt";
-    license = licenses.mit;
-    maintainers = with maintainers; [ uri-canva ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ uri-canva ];
   };
 }

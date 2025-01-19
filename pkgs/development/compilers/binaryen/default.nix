@@ -75,15 +75,15 @@ stdenv.mkDerivation rec {
   ];
   doCheck = stdenv.isLinux;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/WebAssembly/binaryen";
     description = "Compiler infrastructure and toolchain library for WebAssembly, in C++";
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       asppsa
       willcohen
     ];
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
   passthru.tests = {
     inherit emscripten;

@@ -42,11 +42,11 @@ stdenv.mkDerivation rec {
     "-Dqca_CERTSTORE=/etc/ssl/certs/ca-certificates.crt"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Qt Cryptographic Architecture";
     homepage = "https://invent.kde.org/libraries/qca";
-    maintainers = with maintainers; [ ttuegel ];
-    license = licenses.lgpl21Plus;
-    platforms = with platforms; unix;
+    maintainers = with lib.maintainers; [ ttuegel ];
+    license = lib.licenses.lgpl21Plus;
+    platforms = with lib.platforms; unix;
   };
 }

@@ -51,10 +51,10 @@ buildPythonPackage rec {
     "h2.config"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "HTTP/2 State-Machine based protocol implementation";
     homepage = "https://github.com/python-hyper/h2";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

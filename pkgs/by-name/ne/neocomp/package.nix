@@ -75,14 +75,14 @@ stdenv.mkDerivation rec {
       "#define MAX_PATH_LENGTH 128"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/DelusionalLogic/NeoComp";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       twey
       moni
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     description = "Fork of Compton, a compositor for X11";
     longDescription = ''
       NeoComp is a (hopefully) fast and (hopefully) simple compositor

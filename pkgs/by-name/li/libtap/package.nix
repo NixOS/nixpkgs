@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     perl
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to implement a test protocol";
     longDescription = ''
       libtap is a library to implement the Test Anything Protocol for
@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
       branch by Shlomi Fish.
     '';
     homepage = "https://www.shlomifish.org/open-source/projects/libtap/";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.AndersonTorres ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.AndersonTorres ];
+    platforms = lib.platforms.unix;
   };
 }

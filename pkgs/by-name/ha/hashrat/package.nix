@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Command-line hash-generation utility";
     mainProgram = "hashrat";
     longDescription = ''
@@ -37,8 +37,8 @@ stdenv.mkDerivation rec {
       Includes recursive file hashing and other features.
     '';
     homepage = "http://www.cjpaget.co.uk/Code/Hashrat";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ zendo ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ zendo ];
   };
 }

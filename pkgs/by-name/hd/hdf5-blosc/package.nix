@@ -45,10 +45,10 @@ stdenv.mkDerivation rec {
     substituteAll ${./blosc_filter.pc.in} $out/lib/pkgconfig/blosc_filter.pc
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Filter for HDF5 that uses the Blosc compressor";
     homepage = "https://github.com/Blosc/hdf5-blosc";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bhipple ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bhipple ];
   };
 }

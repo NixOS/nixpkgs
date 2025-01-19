@@ -34,10 +34,10 @@ buildPythonPackage rec {
   pytestFlagsArray = [ "tests/" ];
   pythonImportsCheck = [ "natasha" ];
 
-  meta = with lib; {
+  meta = {
     description = "NLP framework for Russian language";
     homepage = "https://github.com/natasha/natasha";
-    license = licenses.mit;
-    maintainers = with maintainers; [ npatsakula ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ npatsakula ];
   };
 }

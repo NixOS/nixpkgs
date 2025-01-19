@@ -168,16 +168,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests = nixosTests.musescore;
 
-  meta = with lib; {
+  meta = {
     description = "Music notation and composition software";
     homepage = "https://musescore.org/";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       vandenoever
       doronbehar
       orivej
     ];
     mainProgram = "mscore";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 })

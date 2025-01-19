@@ -47,11 +47,11 @@ stdenv.mkDerivation rec {
       --replace '#define PACKAGE ""' '#define PACKAGE "stardust"'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Space flight simulator";
     mainProgram = "stardust";
-    maintainers = [ maintainers.raskin ];
-    platforms = platforms.linux;
-    license = licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.raskin ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
   };
 }

@@ -17,11 +17,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-xRCxpmIocvkg1ErYVqBLHb/jXV2eWeWHg4IO/QsnnF0=";
 
-  meta = with lib; {
+  meta = {
     description = "Generate a color palette from an image using k-means clustering in the Oklab color space";
     homepage = "https://github.com/Ivordir/Okolors";
-    license = licenses.mit;
-    maintainers = with maintainers; [ laurent-f1z1 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ laurent-f1z1 ];
     mainProgram = "okolors";
   };
 }

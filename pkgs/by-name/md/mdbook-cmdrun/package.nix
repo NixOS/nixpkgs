@@ -28,12 +28,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-gT3DyQRJWn1HuR6fXeqk8aUPb+jmC+V1McdDN2JGXuI=";
 
-  meta = with lib; {
+  meta = {
     description = "mdbook preprocessor to run arbitrary commands";
     mainProgram = "mdbook-cmdrun";
     homepage = "https://github.com/FauconFan/mdbook-cmdrun";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       pinpox
       matthiasbeyer
     ];

@@ -22,10 +22,10 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "openbabel" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://openbabel.org/wiki/Main_Page";
     description = "Python bindings for openbabel";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ danielbarter ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ danielbarter ];
   };
 }

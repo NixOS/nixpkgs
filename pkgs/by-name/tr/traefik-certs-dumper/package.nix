@@ -18,11 +18,11 @@ buildGoModule rec {
   vendorHash = "sha256-CmqeIQk7lAENMDNWAG7XylnXRXvgyRN5GMt0ilwJX0U=";
   excludedPackages = "integrationtest";
 
-  meta = with lib; {
+  meta = {
     description = "dump ACME data from traefik to certificates";
     homepage = "https://github.com/ldez/traefik-certs-dumper";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ nickcao ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ nickcao ];
     mainProgram = "traefik-certs-dumper";
   };
 }

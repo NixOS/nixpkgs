@@ -44,10 +44,10 @@ buildPythonPackage rec {
     inherit poppler-qt5 qgis qgis-ltr;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Creates C++ bindings for Python modules";
     homepage = "https://riverbankcomputing.com/";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ nrdxp ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ nrdxp ];
   };
 }

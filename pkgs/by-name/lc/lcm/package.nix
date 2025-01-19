@@ -33,11 +33,11 @@ stdenv.mkDerivation rec {
     glib
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight Communications and Marshalling (LCM)";
     homepage = "https://github.com/lcm-proj/lcm";
-    license = licenses.lgpl21;
-    maintainers = with maintainers; [ kjeremy ];
+    license = lib.licenses.lgpl21;
+    maintainers = with lib.maintainers; [ kjeremy ];
     platforms = lib.platforms.unix;
   };
 }

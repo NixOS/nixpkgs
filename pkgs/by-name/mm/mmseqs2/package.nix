@@ -85,12 +85,12 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Ultra fast and sensitive sequence search and clustering suite";
     mainProgram = "mmseqs";
     homepage = "https://mmseqs.com/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ natsukium ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ natsukium ];
+    platforms = lib.platforms.unix;
   };
 })

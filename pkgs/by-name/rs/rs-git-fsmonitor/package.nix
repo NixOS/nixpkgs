@@ -25,10 +25,10 @@ rustPlatform.buildRustPackage rec {
     wrapProgram $out/bin/rs-git-fsmonitor --prefix PATH ":" "${lib.makeBinPath [ watchman ]}" ;
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fast git core.fsmonitor hook written in Rust";
     homepage = "https://github.com/jgavris/rs-git-fsmonitor";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "rs-git-fsmonitor";
   };

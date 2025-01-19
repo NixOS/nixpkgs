@@ -23,11 +23,11 @@ rustPlatform.buildRustPackage rec {
     "--skip=infer_override"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Run your rust code without setting up cargo";
     mainProgram = "cargo-play";
     homepage = "https://github.com/fanzeyi/cargo-play";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ figsoda ];
   };
 }

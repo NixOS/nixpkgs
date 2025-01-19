@@ -34,13 +34,13 @@ buildPostgresqlExtension (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "PostgreSQL implementation of JSON Web Tokens";
     longDescription = ''
       sign() and verify() functions to create and verify JSON Web Tokens.
     '';
-    license = licenses.mit;
+    license = lib.licenses.mit;
     platforms = postgresql.meta.platforms;
-    maintainers = with maintainers; [ spinus ];
+    maintainers = with lib.maintainers; [ spinus ];
   };
 })

@@ -34,9 +34,9 @@ buildPythonPackage rec {
     unittestCheckHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Pyunit extension for managing expensive test resources";
     homepage = "https://launchpad.net/testresources";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
   };
 }

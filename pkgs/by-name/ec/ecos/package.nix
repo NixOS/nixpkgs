@@ -31,12 +31,12 @@ stdenv.mkDerivation rec {
     cp -r include $out/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight conic solver for second-order cone programming";
     homepage = "https://www.embotech.com/ECOS";
     downloadPage = "https://github.com/embotech/ecos/releases";
-    license = licenses.gpl3;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ bhipple ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ bhipple ];
   };
 }

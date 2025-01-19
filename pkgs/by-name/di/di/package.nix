@@ -15,11 +15,11 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Disk information utility; displays everything 'df' does and more";
     homepage = "https://diskinfo-di.sourceforge.io/";
-    license = licenses.zlib;
-    maintainers = with maintainers; [ manveru ];
-    platforms = platforms.all;
+    license = lib.licenses.zlib;
+    maintainers = with lib.maintainers; [ manveru ];
+    platforms = lib.platforms.all;
   };
 }

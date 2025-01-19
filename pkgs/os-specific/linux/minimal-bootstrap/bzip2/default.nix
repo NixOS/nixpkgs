@@ -34,12 +34,12 @@ bash.runCommand "${pname}-${version}"
         mkdir $out
       '';
 
-    meta = with lib; {
+    meta = {
       description = "High-quality data compression program";
       homepage = "https://www.sourceware.org/bzip2";
-      license = licenses.bsdOriginal;
-      maintainers = teams.minimal-bootstrap.members;
-      platforms = platforms.unix;
+      license = lib.licenses.bsdOriginal;
+      maintainers = lib.teams.minimal-bootstrap.members;
+      platforms = lib.platforms.unix;
     };
   }
   ''

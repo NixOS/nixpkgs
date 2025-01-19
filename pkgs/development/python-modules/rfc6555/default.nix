@@ -29,10 +29,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rfc6555" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python implementation of the Happy Eyeballs Algorithm";
     homepage = "https://github.com/sethmlarson/rfc6555";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

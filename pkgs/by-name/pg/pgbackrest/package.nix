@@ -49,12 +49,12 @@ stdenv.mkDerivation rec {
     zstd
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Reliable PostgreSQL backup & restore";
     homepage = "https://pgbackrest.org/";
     changelog = "https://github.com/pgbackrest/pgbackrest/releases";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "pgbackrest";
-    maintainers = with maintainers; [ zaninime ];
+    maintainers = with lib.maintainers; [ zaninime ];
   };
 }

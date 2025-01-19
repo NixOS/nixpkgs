@@ -61,10 +61,10 @@ buildPythonPackage rec {
     "skrl.utils.model_instantiators"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Reinforcement learning library using PyTorch focusing on readability and simplicity";
     homepage = "https://skrl.readthedocs.io";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

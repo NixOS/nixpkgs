@@ -23,12 +23,12 @@ stdenv.mkDerivation rec {
     installManPage wsl-open.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open files with xdg-open from Windows Subsystem for Linux (WSL) in Windows applications";
     homepage = "https://gitlab.com/4U6U57/wsl-open";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
     mainProgram = "wsl-open";
   };
 }

@@ -33,10 +33,10 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "test_principal.py" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://packages.python.org/Flask-Principal/";
     description = "Identity management for flask";
-    license = licenses.mit;
-    maintainers = with maintainers; [ abbradar ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ abbradar ];
   };
 }

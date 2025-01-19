@@ -177,11 +177,11 @@ buildFHSEnv {
       # https://github.com/electron/electron/issues/13972
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Easiest way to get started with Electron";
     homepage = "https://www.electronjs.org/fiddle";
-    license = licenses.mit;
-    maintainers = with maintainers; [ andersk ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ andersk ];
     platforms = electron.meta.platforms;
   };
 }

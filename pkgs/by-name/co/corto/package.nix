@@ -18,10 +18,10 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with lib; {
+  meta = {
     description = "Mesh compression library, designed for rendering and speed";
     homepage = "https://github.com/cnr-isti-vclab/corto";
-    license = licenses.mit;
-    maintainers = with maintainers; [ nim65s ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ nim65s ];
   };
 }

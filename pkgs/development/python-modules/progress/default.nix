@@ -19,10 +19,10 @@ buildPythonPackage rec {
     ${python.interpreter} test_progress.py
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/verigak/progress/";
     description = "Easy to use progress bars";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

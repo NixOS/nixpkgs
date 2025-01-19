@@ -24,10 +24,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mkdocs_git_authors_plugin" ];
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight MkDocs plugin to display git authors of a markdown page";
     homepage = "https://github.com/timvink/mkdocs-git-authors-plugin";
-    license = licenses.mit;
-    maintainers = with maintainers; [ totoroot ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ totoroot ];
   };
 }

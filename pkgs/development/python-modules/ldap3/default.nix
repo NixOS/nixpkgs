@@ -37,10 +37,10 @@ buildPythonPackage rec {
 
   doCheck = false; # requires network
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pypi.python.org/pypi/ldap3";
     description = "Strictly RFC 4510 conforming LDAP V3 pure Python client library";
-    license = licenses.lgpl3;
+    license = lib.licenses.lgpl3;
     maintainers = [ ];
   };
 }

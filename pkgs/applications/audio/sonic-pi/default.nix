@@ -245,16 +245,16 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://sonic-pi.net/";
     description = "Free live coding synth for everyone originally designed to support computing and music lessons within schools";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       Phlogistique
       kamilchm
       c0deaddict
       sohalt
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

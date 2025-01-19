@@ -34,12 +34,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-eTAEf2nRrJ7i2Dw5BBZlLLu8mK2G/wUk40ivtfxk1pI=";
 
-  meta = with lib; {
+  meta = {
     description = "Quickfix allows you to commit changes in your git repository to a new branch without leaving the current branch";
     homepage = "https://github.com/siedentop/git-quickfix";
-    license = licenses.gpl3;
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       cafkafk
       matthiasbeyer
     ];

@@ -38,10 +38,10 @@ buildPythonPackage rec {
   # all the tests talk to the internet
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Get and save images from jump web viewer";
     homepage = "https://github.com/eggplants/getjump";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "jget";
   };

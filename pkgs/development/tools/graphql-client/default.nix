@@ -27,14 +27,14 @@ rustPlatform.buildRustPackage rec {
     openssl
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
-  meta = with lib; {
+  meta = {
     description = "GraphQL tool for Rust projects";
     mainProgram = "graphql-client";
     homepage = "https://github.com/graphql-rust/graphql-client";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [ bbigras ];
+    maintainers = with lib.maintainers; [ bbigras ];
   };
 }

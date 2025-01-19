@@ -15,10 +15,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pymorphy2_dicts_ru" ];
 
-  meta = with lib; {
+  meta = {
     description = "Russian dictionaries for pymorphy2";
     homepage = "https://github.com/kmike/pymorphy2-dicts/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

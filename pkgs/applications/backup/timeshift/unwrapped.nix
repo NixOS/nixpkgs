@@ -61,16 +61,16 @@ stdenv.mkDerivation rec {
     NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
   };
 
-  meta = with lib; {
+  meta = {
     description = "System restore tool for Linux";
     longDescription = ''
       TimeShift creates filesystem snapshots using rsync+hardlinks or BTRFS snapshots.
       Snapshots can be restored using TimeShift installed on the system or from Live CD or USB.
     '';
     homepage = "https://github.com/linuxmint/timeshift";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       ShamrockLee
       bobby285271
     ];

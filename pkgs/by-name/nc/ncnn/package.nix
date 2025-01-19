@@ -48,11 +48,11 @@ stdenv.mkDerivation rec {
     protobuf
   ];
 
-  meta = with lib; {
+  meta = {
     description = "ncnn is a high-performance neural network inference framework optimized for the mobile platform";
     homepage = "https://github.com/Tencent/ncnn";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ tilcreator ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ tilcreator ];
+    platforms = lib.platforms.all;
   };
 }

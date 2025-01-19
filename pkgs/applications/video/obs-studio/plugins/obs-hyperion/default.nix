@@ -47,11 +47,11 @@ stdenv.mkDerivation rec {
     rm -rf external/flatbuffers
   '';
 
-  meta = with lib; {
+  meta = {
     description = "OBS Studio plugin to connect to a Hyperion.ng server";
     homepage = "https://github.com/hyperion-project/hyperion-obs-plugin";
-    license = licenses.mit;
-    maintainers = with maintainers; [ algram ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ algram ];
     platforms = [ "x86_64-linux" ];
   };
 }

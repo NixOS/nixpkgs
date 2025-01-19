@@ -13,10 +13,10 @@ buildOctavePackage rec {
     sha256 = "sha256-/oXJ7NnbbdsVfhNOYU/tkkYwKhYs5zKMEjybmbf0Cok=";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://octave.sourceforge.io/doctest/index.html";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ KarlJoad ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Find and run example code within documentation";
     longDescription = ''
       Find and run example code within documentation. Formatted blocks

@@ -31,10 +31,10 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Parser & analyser for Lojban";
     homepage = "https://github.com/lojban/jbofihe";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ chkno ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ chkno ];
   };
 }

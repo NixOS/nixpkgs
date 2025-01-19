@@ -51,15 +51,15 @@ stdenv.mkDerivation rec {
     "-Dmac_ghash_pclmulqdq=disabled"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Fast and Secure Tunneling Daemon";
     homepage = "https://projects.universe-factory.net/projects/fastd/wiki";
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd2
       bsd3
     ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ fpletz ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ fpletz ];
     mainProgram = "fastd";
   };
 }

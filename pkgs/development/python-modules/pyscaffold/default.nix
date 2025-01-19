@@ -95,11 +95,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyscaffold" ];
 
-  meta = with lib; {
+  meta = {
     description = "Template tool for putting up the scaffold of a Python project";
     mainProgram = "putup";
     homepage = "https://pypi.org/project/PyScaffold/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ matthewcroughan ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ matthewcroughan ];
   };
 }

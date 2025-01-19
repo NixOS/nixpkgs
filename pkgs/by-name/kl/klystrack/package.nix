@@ -57,12 +57,12 @@ stdenv.mkDerivation rec {
       --replace "klystrack %f" "$out/bin/klystrack %f"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Chiptune tracker";
     homepage = "https://kometbomb.github.io/klystrack";
-    license = licenses.mit;
-    maintainers = with maintainers; [ suhr ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ suhr ];
+    platforms = lib.platforms.linux;
     mainProgram = "klystrack";
   };
 }

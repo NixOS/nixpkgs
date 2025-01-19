@@ -44,11 +44,11 @@ buildPythonPackage rec {
   # installCheckPhase tries to run build_ext again and there are no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Chip support package for Cypress EZ-USB FX2 series microcontrollers";
     mainProgram = "fx2tool";
     homepage = "https://github.com/whitequark/libfx2";
-    license = licenses.bsd0;
+    license = lib.licenses.bsd0;
     maintainers = [ ];
   };
 }

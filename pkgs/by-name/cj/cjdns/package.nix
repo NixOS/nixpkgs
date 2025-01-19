@@ -69,12 +69,12 @@ rustPlatform.buildRustPackage rec {
 
   passthru.tests.basic = nixosTests.cjdns;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/cjdelisle/cjdns";
     description = "Encrypted networking for regular people";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ehmry ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ ehmry ];
+    platforms = lib.platforms.linux;
     broken = stdenv.hostPlatform.isAarch64;
   };
 }

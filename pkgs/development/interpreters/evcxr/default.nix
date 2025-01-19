@@ -65,11 +65,11 @@ rustPlatform.buildRustPackage rec {
       rm $out/bin/testing_runtime
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Evaluation context for Rust";
     homepage = "https://github.com/google/evcxr";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       protoben
       ma27
     ];

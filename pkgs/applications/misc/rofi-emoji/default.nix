@@ -80,15 +80,15 @@ import ./versions.nix (
       ]
       ++ lib.optionals x11Support [ xclip ];
 
-    meta = with lib; {
+    meta = {
       description = "Emoji selector plugin for Rofi (built against ${rofi-unwrapped.pname})";
       homepage = "https://github.com/Mange/rofi-emoji";
-      license = licenses.mit;
-      maintainers = with maintainers; [
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [
         cole-h
         Mange
       ];
-      platforms = platforms.linux;
+      platforms = lib.platforms.linux;
     };
   }
 )

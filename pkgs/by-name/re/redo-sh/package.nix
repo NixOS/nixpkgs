@@ -27,11 +27,11 @@ stdenv.mkDerivation {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Redo implementation in Bourne Shell";
     homepage = "http://news.dieweltistgarnichtso.net/bin/redo-sh.html";
-    license = licenses.agpl3Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ sternenseemann ];
+    license = lib.licenses.agpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ sternenseemann ];
   };
 }

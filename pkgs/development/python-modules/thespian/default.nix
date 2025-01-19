@@ -21,10 +21,10 @@ buildPythonPackage rec {
   # CI configuration and do not need to be duplicated here.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Python Actor concurrency library";
     homepage = "http://thespianpy.com/";
-    license = licenses.mit;
-    maintainers = [ maintainers.kquick ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.kquick ];
   };
 }

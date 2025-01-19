@@ -40,10 +40,10 @@ buildPythonPackage rec {
     "pygti.gti"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Access public transport information in Hamburg, Germany";
     homepage = "https://github.com/vigonotion/pygti";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

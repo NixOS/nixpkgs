@@ -61,11 +61,11 @@ stdenv.mkDerivation rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "DroidCam OBS";
     homepage = "https://github.com/dev47apps/droidcam-obs-plugin";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ulrikstrid ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ ulrikstrid ];
+    platforms = lib.platforms.linux;
   };
 }

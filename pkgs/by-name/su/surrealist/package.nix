@@ -127,12 +127,12 @@ stdenv.mkDerivation (finalAttrs: {
       --set WEBKIT_DISABLE_COMPOSITING_MODE 1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Surrealist is the ultimate way to visually manage your SurrealDB database";
     homepage = "https://surrealdb.com/surrealist";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "surrealist";
-    maintainers = with maintainers; [ frankp ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ frankp ];
+    platforms = lib.platforms.linux;
   };
 })

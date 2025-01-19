@@ -42,10 +42,10 @@ buildGoModule {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "community managed domain list";
     homepage = "https://github.com/SagerNet/sing-geosite";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ linsui ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ linsui ];
   };
 }

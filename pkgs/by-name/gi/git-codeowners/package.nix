@@ -16,11 +16,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-TayvqcVNCFHF5UpR1pPVRe076Pa8LS4duhnZLzYxkQM=";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/softprops/git-codeowners";
     description = "Git extension to work with CODEOWNERS files";
-    license = licenses.mit;
-    maintainers = with maintainers; [ zimbatm ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ zimbatm ];
     mainProgram = "git-codeowners";
   };
 }

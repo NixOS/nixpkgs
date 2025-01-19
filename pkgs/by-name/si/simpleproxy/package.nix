@@ -16,11 +16,11 @@ stdenv.mkDerivation rec {
     sha256 = "1my9g4vp19dikx3fsbii4ichid1bs9b9in46bkg05gbljhj340f6";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/vzaliva/simpleproxy";
     description = "Simple TCP proxy";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.montag451 ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.montag451 ];
     mainProgram = "simpleproxy";
   };
 }

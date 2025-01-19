@@ -96,11 +96,11 @@ rustPlatform.buildRustPackage {
     mv $out/bin/app $out/bin/xplorer
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Customizable, modern file manager";
     homepage = "https://xplorer.space";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dit7ya ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dit7ya ];
     mainProgram = "xplorer";
   };
 }

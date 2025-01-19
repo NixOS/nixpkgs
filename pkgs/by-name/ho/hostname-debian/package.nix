@@ -21,15 +21,15 @@ stdenv.mkDerivation rec {
     "MANDIR=$(out)/share/man"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Utility to set/show the host name or domain name";
     longDescription = ''
       This package provides commands which can be used to display the system's
       DNS name, and to display or set its hostname or NIS domain name.
     '';
     homepage = "https://tracker.debian.org/pkg/hostname";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ posch ];
-    platforms = platforms.gnu;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ posch ];
+    platforms = lib.platforms.gnu;
   };
 }

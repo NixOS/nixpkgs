@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
     libxkbcommon
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Minimal wallpaper daemon for Wayland";
     longDescription = ''
       It allows the user to choose a different image for each output (aka for each monitor)
@@ -39,9 +39,9 @@ rustPlatform.buildRustPackage rec {
       displayed will be changed with another random one.
     '';
     homepage = "https://github.com/danyspin97/wpaperd";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       DPDmancul
       fsnkty
     ];

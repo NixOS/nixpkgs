@@ -78,12 +78,12 @@ stdenv.mkDerivation rec {
     ln -s ${countryGrid} ./data/country_osm_grid.sql.gz
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Search engine for OpenStreetMap data";
     homepage = "https://nominatim.org/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.mausch ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.mausch ];
     mainProgram = "nominatim";
   };
 }

@@ -23,11 +23,11 @@ buildPythonApplication rec {
     feedparser
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/manolomartinez/greg";
     description = "Command-line podcast aggregator";
     mainProgram = "greg";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ edwtjo ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ edwtjo ];
   };
 }

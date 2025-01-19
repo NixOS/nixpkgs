@@ -48,12 +48,12 @@ buildPythonApplication rec {
   ];
   nativeBuildInputs = [ installShellFiles ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://tailordev.github.io/Watson/";
     description = "Wonderful CLI to track your time!";
     mainProgram = "watson";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       mguentner
       nathyong
       oxzi

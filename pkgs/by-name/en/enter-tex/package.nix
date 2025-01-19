@@ -70,15 +70,15 @@ stdenv.mkDerivation (finalAttrs: {
     packageName = "enter-tex";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/swilmet/enter-tex";
     description = "LaTeX editor for the GNOME desktop";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       manveru
       bobby285271
     ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
     mainProgram = "enter-tex";
   };
 })

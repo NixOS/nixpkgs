@@ -57,10 +57,10 @@ rustPlatform.buildRustPackage rec {
     "libsignal-ffi"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "C ABI library which exposes Signal protocol logic";
     homepage = "https://github.com/signalapp/libsignal";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ niklaskorz ];
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ niklaskorz ];
   };
 }

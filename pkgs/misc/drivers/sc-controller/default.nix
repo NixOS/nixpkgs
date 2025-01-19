@@ -80,13 +80,13 @@ buildPythonApplication rec {
     )
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/C0rn3j/sc-controller";
     # donations: https://www.patreon.com/kozec
     description = "User-mode driver and GUI for Steam Controller and other controllers";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       orivej
       rnhmjoj
     ];

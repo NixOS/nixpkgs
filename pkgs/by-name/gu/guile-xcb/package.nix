@@ -37,11 +37,11 @@ stdenv.mkDerivation rec {
     "GUILE_AUTO_COMPILE=0"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mwitmer/guile-xcb";
     description = "XCB bindings for Guile";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ vyp ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ vyp ];
     platforms = guile.meta.platforms;
   };
 }

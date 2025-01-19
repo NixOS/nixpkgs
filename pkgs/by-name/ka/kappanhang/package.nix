@@ -22,12 +22,12 @@ buildGoModule rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ pulseaudio ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/nonoo/kappanhang";
     description = "Remote control for Icom radio transceivers";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ mvs ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ mvs ];
     mainProgram = "kappanhang";
   };
 }

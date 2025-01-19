@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Multiplayer FPS game designed for competitive gaming";
     longDescription = ''
       Set in a futuristic cartoon-like world where rocketlauncher-wielding
@@ -37,8 +37,8 @@ stdenv.mkDerivation rec {
       and macOS.
     '';
     homepage = "http://www.warsow.net";
-    license = licenses.unfreeRedistributable;
-    maintainers = with maintainers; [
+    license = lib.licenses.unfreeRedistributable;
+    maintainers = with lib.maintainers; [
       astsmtl
       abbradar
     ];

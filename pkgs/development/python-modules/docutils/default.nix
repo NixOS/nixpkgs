@@ -49,16 +49,16 @@ let
       done
     '';
 
-    meta = with lib; {
+    meta = {
       description = "Python Documentation Utilities";
       homepage = "http://docutils.sourceforge.net/";
-      license = with licenses; [
+      license = with lib.licenses; [
         publicDomain
         bsd2
         psfl
         gpl3Plus
       ];
-      maintainers = with maintainers; [ ];
+      maintainers = with lib.maintainers; [ ];
     };
   };
 in

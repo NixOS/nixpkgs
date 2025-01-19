@@ -60,12 +60,12 @@ stdenv.mkDerivation {
       ''}
     '';
 
-  meta = with lib; {
-    maintainers = [ maintainers.kmein ];
+  meta = {
+    maintainers = [ lib.maintainers.kmein ];
     homepage = "https://astrolog.org/astrolog.htm";
     description = "Freeware astrology program";
     mainProgram = "astrolog";
-    platforms = platforms.linux;
-    license = licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
   };
 }

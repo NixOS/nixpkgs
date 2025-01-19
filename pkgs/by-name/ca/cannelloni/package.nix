@@ -27,12 +27,12 @@ stdenv.mkDerivation (finalAttrs: {
     "-DSCTP_SUPPORT=${lib.boolToString sctpSupport}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "SocketCAN over Ethernet tunnel";
     mainProgram = "cannelloni";
     homepage = "https://github.com/mguentner/cannelloni";
-    platforms = platforms.linux;
-    license = licenses.gpl2Only;
-    maintainers = [ maintainers.samw ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = [ lib.maintainers.samw ];
   };
 })

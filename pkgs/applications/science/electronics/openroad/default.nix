@@ -131,14 +131,14 @@ mkDerivation rec {
     $out/bin/sta -version
   '';
 
-  meta = with lib; {
+  meta = {
     description = "OpenROAD's unified application implementing an RTL-to-GDS flow";
     homepage = "https://theopenroadproject.org";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       trepetti
       hzeller
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

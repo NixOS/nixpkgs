@@ -42,11 +42,11 @@ stdenv.mkDerivation rec {
       ]
     );
 
-  meta = with lib; {
+  meta = {
     description = "XQuery and XPath 2 library and command line utility written in C++, implemented on top of the Xerces-C library";
     mainProgram = "xqilla";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ obadz ];
-    platforms = platforms.all;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ obadz ];
+    platforms = lib.platforms.all;
   };
 }

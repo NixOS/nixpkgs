@@ -29,11 +29,11 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  meta = with lib; {
+  meta = {
     description = "Language model data package for libkkc";
     homepage = "https://github.com/ueno/libkkc";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ vanzef ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ vanzef ];
+    platforms = lib.platforms.linux;
   };
 }

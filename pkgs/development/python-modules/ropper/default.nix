@@ -34,11 +34,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ropper" ];
 
-  meta = with lib; {
+  meta = {
     description = "Show information about files in different file formats";
     mainProgram = "ropper";
     homepage = "https://scoding.de/ropper/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ bennofs ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ bennofs ];
   };
 }

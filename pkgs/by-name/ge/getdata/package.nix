@@ -18,11 +18,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ libtool ];
 
-  meta = with lib; {
+  meta = {
     description = "Reference implementation of the Dirfile Standards";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.all;
-    maintainers = [ maintainers.vbgl ];
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.vbgl ];
     homepage = "https://getdata.sourceforge.net/";
   };
 }

@@ -47,11 +47,11 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "GObject wrapper for the SkyDrive and Hotmail REST APIs";
     homepage = "https://gitlab.gnome.org/Archive/libzapojit";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

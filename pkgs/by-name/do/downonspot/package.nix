@@ -36,12 +36,12 @@ rustPlatform.buildRustPackage rec {
     lame
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Spotify downloader written in rust";
     homepage = "https://github.com/oSumAtrIX/DownOnSpot";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ onny ];
     mainProgram = "down_on_spot";
   };
 }

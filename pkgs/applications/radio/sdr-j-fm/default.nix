@@ -65,13 +65,13 @@ stdenv.mkDerivation (finalAttrs: {
     mv $out/linux-bin $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "SDR based FM radio receiver software";
     homepage = "https://github.com/JvanKatwijk/sdr-j-fm";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ doronbehar ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ doronbehar ];
     # Upstream doesn't find libusb1 on Darwin. Upstream probably doesn't
     # support it officially.
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })

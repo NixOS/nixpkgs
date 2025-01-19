@@ -24,11 +24,11 @@ buildPythonApplication rec {
     six
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Linter for prose";
     mainProgram = "proselint";
     homepage = "http://proselint.com";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

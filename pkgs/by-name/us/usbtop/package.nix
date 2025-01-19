@@ -24,12 +24,12 @@ stdenv.mkDerivation rec {
     boost
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/aguinet/usbtop";
     description = "Top utility that shows an estimated instantaneous bandwidth on USB buses and devices";
     mainProgram = "usbtop";
     maintainers = [ ];
-    license = licenses.bsd3;
-    platforms = platforms.linux;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
   };
 }

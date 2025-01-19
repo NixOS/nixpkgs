@@ -17,8 +17,8 @@ mkKdeDerivation rec {
 
   extraBuildInputs = [ libgit2 ];
 
-  meta = with lib; {
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.pwoelfel ];
+  meta = {
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.pwoelfel ];
   };
 }

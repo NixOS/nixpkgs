@@ -48,10 +48,10 @@ buildPythonPackage rec {
     responses
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Comprehensive Python module for handling Monero";
     homepage = "https://github.com/monero-ecosystem/monero-python";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ prusnak ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ prusnak ];
   };
 }

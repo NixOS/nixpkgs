@@ -31,10 +31,10 @@ buildLua (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Modern OSC UI replacement for MPV that retains the functionality of the default OSC";
     homepage = "https://github.com/cyl0/ModernX";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ Guanran928 ];
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ Guanran928 ];
   };
 })

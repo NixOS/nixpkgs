@@ -26,10 +26,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "ttach" ];
 
-  meta = with lib; {
+  meta = {
     description = "Image Test Time Augmentation with PyTorch";
     homepage = "https://github.com/qubvel/ttach";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ cfhammill ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ cfhammill ];
   };
 }

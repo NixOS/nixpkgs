@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   # the usb_modeswitch.d directory
   nativeBuildInputs = [ tcl ];
 
-  meta = with lib; {
+  meta = {
     description = "Device database and the rules file for 'multi-mode' USB devices";
     inherit (usb-modeswitch.meta) license maintainers platforms;
   };

@@ -38,10 +38,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "simplesqlite" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to simplify SQLite database operations";
     homepage = "https://github.com/thombashi/simplesqlite";
-    license = licenses.mit;
-    maintainers = with maintainers; [ henrirosten ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ henrirosten ];
   };
 }

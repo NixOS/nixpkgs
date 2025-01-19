@@ -128,13 +128,13 @@ ocamlPackages.buildDunePackage rec {
 
   doCheck = false; # Tests fail, but could not determine the reason
 
-  meta = with lib; {
+  meta = {
     homepage = "https://ligolang.org/";
     downloadPage = "https://ligolang.org/docs/intro/installation";
     description = "Friendly Smart Contract Language for Tezos";
     mainProgram = "ligo";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     platforms = ocamlPackages.ocaml.meta.platforms;
-    maintainers = with maintainers; [ ulrikstrid ];
+    maintainers = with lib.maintainers; [ ulrikstrid ];
   };
 }

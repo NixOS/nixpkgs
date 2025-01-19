@@ -23,10 +23,10 @@ pythonPackages.buildPythonApplication rec {
 
   nativeCheckInputs = with pythonPackages; [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.mopidy.com/";
     description = "Mopidy extension for playing music from a Subsonic-compatible Music Server";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ wenngle ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ wenngle ];
   };
 }

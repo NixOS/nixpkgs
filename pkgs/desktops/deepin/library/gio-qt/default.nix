@@ -52,11 +52,11 @@ stdenv.mkDerivation rec {
     export QT_PLUGIN_PATH=${libsForQt5.qtbase.bin}/${libsForQt5.qtbase.qtPluginPrefix}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Gio wrapper for Qt applications";
     homepage = "https://github.com/linuxdeepin/gio-qt";
-    license = licenses.lgpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.deepin.members;
+    license = lib.licenses.lgpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = lib.teams.deepin.members;
   };
 }

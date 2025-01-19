@@ -72,11 +72,11 @@ stdenv.mkDerivation rec {
 
   configureFlags = lib.optional withGtk3 "--enable-gtk3";
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight X11 desktop panel for LXDE";
     homepage = "https://lxde.org/";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.ryneeverett ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.ryneeverett ];
+    platforms = lib.platforms.linux;
   };
 }

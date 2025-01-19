@@ -51,11 +51,11 @@ buildPostgresqlExtension (finalAttrs: {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "PostgreSQL vector database extension for building AI applications";
     homepage = "https://lantern.dev/";
     changelog = "https://github.com/lanterndata/lantern/blob/${finalAttrs.src.rev}/CHANGELOG.md";
-    license = licenses.agpl3Only;
+    license = lib.licenses.agpl3Only;
     maintainers = [ ];
     platforms = postgresql.meta.platforms;
   };

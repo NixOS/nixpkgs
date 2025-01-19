@@ -45,11 +45,11 @@ stdenv.mkDerivation {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Icons based on Breeze and Super Flat Remix";
     homepage = "https://gitlab.manjaro.org/artwork/themes/maia";
-    license = licenses.lgpl3;
-    maintainers = with maintainers; [ mounium ];
-    platforms = platforms.all;
+    license = lib.licenses.lgpl3;
+    maintainers = with lib.maintainers; [ mounium ];
+    platforms = lib.platforms.all;
   };
 }

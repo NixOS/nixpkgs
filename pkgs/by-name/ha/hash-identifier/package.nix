@@ -21,12 +21,12 @@ python3Packages.buildPythonApplication rec {
     install -Dm0775 hash-id.py $out/bin/hash-identifier
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Identify the different types of hashes used to encrypt data and especially passwords";
     homepage = "https://github.com/blackploit/hash-identifier";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ ethancedwards8 ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ ethancedwards8 ];
     mainProgram = "hash-identifier";
   };
 }

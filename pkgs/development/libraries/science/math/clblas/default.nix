@@ -72,15 +72,15 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/clMathLibraries/clBLAS";
     description = "Software library containing BLAS functions written in OpenCL";
     longDescription = ''
       This package contains a library of BLAS functions on top of OpenCL.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [ artuuge ];
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ artuuge ];
+    platforms = lib.platforms.unix;
   };
 
 }

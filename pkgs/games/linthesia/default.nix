@@ -52,12 +52,12 @@ stdenv.mkDerivation rec {
     gtk3.out # icon cache
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Game of playing music using a MIDI keyboard following a MIDI file";
     mainProgram = "linthesia";
     inherit (src.meta) homepage;
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

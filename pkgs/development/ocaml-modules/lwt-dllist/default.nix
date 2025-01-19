@@ -24,10 +24,10 @@ buildDunePackage rec {
   ];
   doCheck = lib.versionAtLeast ocaml.version "4.03";
 
-  meta = with lib; {
+  meta = {
     description = "Mutable doubly-linked list with Lwt iterators";
     homepage = "https://github.com/mirage/lwt-dllist";
-    license = licenses.mit;
-    maintainers = [ maintainers.sternenseemann ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.sternenseemann ];
   };
 }

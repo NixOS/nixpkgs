@@ -21,14 +21,14 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
 
-  meta = with lib; {
+  meta = {
     description = "Fast CSV toolkit written in Rust";
     mainProgram = "xsv";
     homepage = "https://github.com/BurntSushi/xsv";
-    license = with licenses; [
+    license = with lib.licenses; [
       unlicense # or
       mit
     ];
-    maintainers = [ maintainers.jgertm ];
+    maintainers = [ lib.maintainers.jgertm ];
   };
 }

@@ -19,11 +19,11 @@ stdenv.mkDerivation rec {
     cat debian/base-files.links | grep common-licenses | sed -e "s|usr|$out|g" -e "s|^|ln -s |g" | bash -x
   '';
 
-  meta = with lib; {
+  meta = {
     description = "common-licenses extracted from debian base-files package";
     homepage = "https://tracker.debian.org/pkg/base-files";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.mkg20001 ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.mkg20001 ];
   };
 }

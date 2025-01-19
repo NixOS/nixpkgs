@@ -40,12 +40,12 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to investigate an ext3 file system for deleted content and possibly recover it";
     mainProgram = "ext3grep";
     homepage = "https://code.google.com/archive/p/ext3grep/";
-    maintainers = with maintainers; [ d3vil0p3r ];
-    platforms = platforms.linux;
-    license = licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ d3vil0p3r ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
   };
 })

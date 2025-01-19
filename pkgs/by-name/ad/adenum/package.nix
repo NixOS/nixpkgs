@@ -42,11 +42,11 @@ python3.pkgs.buildPythonApplication {
   # Project has no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Tool to find misconfiguration through LDAP";
     mainProgram = "adenum";
     homepage = "https://github.com/SecuProject/ADenum";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ gpl3Only ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -27,11 +27,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/bbonev/yascreen";
     description = "Yet Another Screen Library (curses replacement for daemons and embedded apps)";
-    license = licenses.lgpl3;
-    maintainers = [ maintainers.arezvov ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl3;
+    maintainers = [ lib.maintainers.arezvov ];
+    platforms = lib.platforms.linux;
   };
 }

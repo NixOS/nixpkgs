@@ -23,11 +23,11 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = [ slurp ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/tmccombs/swaytools";
     description = "Collection of simple tools for sway (and i3)";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ atila ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ atila ];
+    platforms = lib.platforms.linux;
   };
 }

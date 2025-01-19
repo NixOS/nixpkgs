@@ -54,12 +54,12 @@ mkDerivation rec {
     qmake
   ];
 
-  meta = with lib; {
+  meta = {
     description = "All in one MLV processing app that is pretty great";
     homepage = "https://mlv.app";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "mlvapp";
   };
 }

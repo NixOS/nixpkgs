@@ -70,12 +70,12 @@ python3.pkgs.buildPythonApplication rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/MightyCreak/diffuse";
     description = "Graphical tool for merging and comparing text files";
     mainProgram = "diffuse";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ k3a ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ k3a ];
+    platforms = lib.platforms.unix;
   };
 }

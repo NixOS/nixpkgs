@@ -28,10 +28,10 @@ buildPythonPackage rec {
 
   doCheck = false; # no tests in sdist
 
-  meta = with lib; {
+  meta = {
     description = "QwikSwitch USB Modem API binding for Python";
     homepage = "https://github.com/kellerza/pyqwikswitch";
-    license = licenses.mit;
-    maintainers = teams.home-assistant.members;
+    license = lib.licenses.mit;
+    maintainers = lib.teams.home-assistant.members;
   };
 }

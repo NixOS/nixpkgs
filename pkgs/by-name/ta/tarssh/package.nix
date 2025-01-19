@@ -17,12 +17,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-w1MNsMSGONsAAjyvAHjio2K88j1sqyP1Aqmw3EMya+c=";
 
-  meta = with lib; {
+  meta = {
     description = "Simple SSH tarpit inspired by endlessh";
     homepage = "https://github.com/Freaky/tarssh";
-    license = [ licenses.mit ];
-    maintainers = with maintainers; [ sohalt ];
-    platforms = platforms.unix;
+    license = [ lib.licenses.mit ];
+    maintainers = with lib.maintainers; [ sohalt ];
+    platforms = lib.platforms.unix;
     mainProgram = "tarssh";
   };
 }

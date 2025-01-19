@@ -39,10 +39,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pynndescent" ];
 
-  meta = with lib; {
+  meta = {
     description = "Nearest Neighbor Descent";
     homepage = "https://github.com/lmcinnes/pynndescent";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ mic92 ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ mic92 ];
   };
 }

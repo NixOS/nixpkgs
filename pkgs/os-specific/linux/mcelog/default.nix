@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
       --replace /usr/sbin $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Log x86 machine checks: memory, IO, and CPU hardware errors";
     mainProgram = "mcelog";
     longDescription = ''
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
       errors are logged to /var/log/mcelog or syslog or the journal.
     '';
     homepage = "http://mcelog.org/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

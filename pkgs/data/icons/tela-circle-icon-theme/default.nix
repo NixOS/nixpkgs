@@ -84,11 +84,11 @@ lib.checkListOfEnum "${pname}: color variants"
 
     passthru.updateScript = gitUpdater { };
 
-    meta = with lib; {
+    meta = {
       description = "Flat and colorful personality icon theme";
       homepage = "https://github.com/vinceliuice/Tela-circle-icon-theme";
-      license = licenses.gpl3Only;
-      platforms = platforms.linux; # darwin use case-insensitive filesystems that cause hash mismatches
-      maintainers = with maintainers; [ romildo ];
+      license = lib.licenses.gpl3Only;
+      platforms = lib.platforms.linux; # darwin use case-insensitive filesystems that cause hash mismatches
+      maintainers = with lib.maintainers; [ romildo ];
     };
   }

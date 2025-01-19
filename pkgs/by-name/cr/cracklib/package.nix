@@ -60,11 +60,11 @@ stdenv.mkDerivation rec {
   doInstallCheck = true;
   installCheckTarget = "test";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/cracklib/cracklib";
     description = "Library for checking the strength of passwords";
-    license = licenses.lgpl21; # Different license for the wordlist: http://www.openwall.com/wordlists
-    maintainers = with maintainers; [ lovek323 ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21; # Different license for the wordlist: http://www.openwall.com/wordlists
+    maintainers = with lib.maintainers; [ lovek323 ];
+    platforms = lib.platforms.unix;
   };
 }

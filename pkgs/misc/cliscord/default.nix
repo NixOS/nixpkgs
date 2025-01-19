@@ -25,11 +25,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-Z8ras6W4BnAWjHe6rPd1X1d3US5gq7CxnBAkW//OTsg=";
 
-  meta = with lib; {
+  meta = {
     description = "Simple command-line tool to send text and files to discord";
     homepage = "https://github.com/somebody1234/cliscord";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lom ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lom ];
     mainProgram = "cliscord";
   };
 }

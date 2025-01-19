@@ -30,11 +30,11 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''sed -i "s@PREFIX = /usr/local@PREFIX = $out@g" config.mk'';
 
-  meta = with lib; {
+  meta = {
     description = "Extremely fast and small background setter for X";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ pSub ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ pSub ];
     mainProgram = "bgs";
   };
 }

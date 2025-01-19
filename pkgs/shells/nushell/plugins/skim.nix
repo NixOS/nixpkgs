@@ -44,12 +44,12 @@ rustPlatform.buildRustPackage rec {
       '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "A nushell plugin that adds integrates the skim fuzzy finder";
     mainProgram = "nu_plugin_skim";
     homepage = "https://github.com/idanarye/nu_plugin_skim";
-    license = licenses.mit;
-    maintainers = with maintainers; [ aftix ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ aftix ];
+    platforms = lib.platforms.all;
   };
 }

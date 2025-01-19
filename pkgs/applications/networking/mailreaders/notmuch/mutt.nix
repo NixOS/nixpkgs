@@ -46,12 +46,12 @@ stdenv.mkDerivation rec {
       --prefix PERL5LIB : $PERL5LIB
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Mutt support for notmuch";
     mainProgram = "notmuch-mutt";
     homepage = "https://notmuchmail.org/";
-    license = with licenses; gpl3;
-    maintainers = with maintainers; [ peterhoeg ];
-    platforms = platforms.unix;
+    license = with lib.licenses; gpl3;
+    maintainers = with lib.maintainers; [ peterhoeg ];
+    platforms = lib.platforms.unix;
   };
 }

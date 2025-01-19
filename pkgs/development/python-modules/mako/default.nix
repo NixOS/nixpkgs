@@ -63,13 +63,13 @@ buildPythonPackage rec {
     # https://github.com/sqlalchemy/mako/issues/408
     ++ lib.optional (stdenv.targetPlatform.useLLVM or false) "test_future_import";
 
-  meta = with lib; {
+  meta = {
     description = "Super-fast templating language";
     mainProgram = "mako-render";
     homepage = "https://www.makotemplates.org/";
     changelog = "https://docs.makotemplates.org/en/latest/changelog.html";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ domenkozar ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ domenkozar ];
   };
 }

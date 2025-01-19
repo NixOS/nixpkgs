@@ -17,10 +17,10 @@ buildPythonPackage rec {
 
   buildInputs = [ pytest ];
 
-  meta = with lib; {
+  meta = {
     description = "Collection of persistent (disk-based) queues for Python";
     homepage = "https://github.com/scrapy/queuelib";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

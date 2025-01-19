@@ -21,15 +21,15 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-+cYbejdZOmvaX8jdf1llAvaTefPVtIOl1fqGm5tHMRk=";
 
-  meta = with lib; {
+  meta = {
     description = "See what Rust is doing behind the curtains";
     mainProgram = "cargo-inspect";
     homepage = "https://github.com/mre/cargo-inspect";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       asl20
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       minijackson
       matthiasbeyer
     ];

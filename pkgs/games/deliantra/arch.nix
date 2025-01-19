@@ -20,14 +20,14 @@ stdenv.mkDerivation rec {
     ${deliantra-server}/bin/cfutil --install-arch .
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Archetype data for the Deliantra free MMORPG";
     homepage = "http://www.deliantra.net/";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Plus
       agpl3Plus
     ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ ToxicFrog ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ ToxicFrog ];
   };
 }

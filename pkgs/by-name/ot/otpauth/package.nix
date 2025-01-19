@@ -17,11 +17,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-lATdsuqSM2EaclhvNN9BmJ6NC2nghDfggRrwvRjF7us=";
 
-  meta = with lib; {
+  meta = {
     description = "Google Authenticator migration decoder";
     mainProgram = "otpauth";
     homepage = "https://github.com/dim13/otpauth";
-    license = licenses.isc;
-    maintainers = with maintainers; [ ereslibre ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ ereslibre ];
   };
 }

@@ -72,11 +72,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "oslo_concurrency" ];
 
-  meta = with lib; {
+  meta = {
     description = "Oslo Concurrency library";
     mainProgram = "lockutils-wrapper";
     homepage = "https://github.com/openstack/oslo.concurrency";
-    license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    license = lib.licenses.asl20;
+    maintainers = lib.teams.openstack.members;
   };
 }

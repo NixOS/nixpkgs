@@ -21,10 +21,10 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "pyfnip" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client to get fido account data";
     homepage = "https://github.com/juhaniemi/pyfnip";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

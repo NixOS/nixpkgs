@@ -20,11 +20,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-4LLm8EIGR9YJyVlSLRsQmBJc0QZaxBQafE4VLsDyAfI=";
 
-  meta = with lib; {
+  meta = {
     description = "Terminal-based personal organizer";
     homepage = "https://github.com/spacejam/void";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ spacekookie ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ spacekookie ];
     mainProgram = "void";
   };
 }

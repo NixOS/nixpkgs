@@ -46,10 +46,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aspell" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for aspell (C extension and Python version)";
     homepage = "https://github.com/WojciechMula/aspell-python";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

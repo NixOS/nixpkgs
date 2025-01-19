@@ -46,10 +46,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aioftp" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python FTP client/server for asyncio";
     homepage = "https://aioftp.readthedocs.io/";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

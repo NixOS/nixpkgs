@@ -37,11 +37,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [ hellwolf ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ hellwolf ];
     homepage = "https://www.insynchq.com";
     description = "This package contains the Python extension and icons for integrating Insync with Nautilus";
   };

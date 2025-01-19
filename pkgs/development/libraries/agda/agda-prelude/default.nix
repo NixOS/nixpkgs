@@ -22,12 +22,12 @@ mkDerivation rec {
     cd ..
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/UlfNorell/agda-prelude";
     description = "Programming library for Agda";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       mudri
       alexarice
       turion

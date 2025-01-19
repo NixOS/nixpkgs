@@ -71,15 +71,15 @@ stdenv.mkDerivation rec {
     "-DCMAKE_OpenGL_GL_PREFERENCE=GLVND"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://elmerfem.org";
     description = "Finite element software for multiphysical problems";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       wulfsta
       broke
     ];
-    license = licenses.lgpl21;
+    license = lib.licenses.lgpl21;
   };
 
 }

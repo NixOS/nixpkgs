@@ -32,12 +32,12 @@ stdenv.mkDerivation (finalAttrs: {
   preConfigure = "cd src/SkypeExport/_gccbuild/linux";
   installPhase = "install -Dt $out/bin SkypeExport";
 
-  meta = with lib; {
+  meta = {
     description = "Export Skype history to HTML";
     mainProgram = "SkypeExport";
     homepage = "https://github.com/Temptin/SkypeExport";
-    license = licenses.gpl2;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
 })

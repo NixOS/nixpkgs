@@ -17,11 +17,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-tgs0l+sYdAxMHwVTew++keNpDyrHmevpmOBVIiuL+34=";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/volatilityfoundation/dwarf2json";
     description = "Convert ELF/DWARF symbol and type information into vol3's intermediate JSON";
-    license = licenses.vol-sl;
-    maintainers = with maintainers; [ arkivm ];
+    license = lib.licenses.vol-sl;
+    maintainers = with lib.maintainers; [ arkivm ];
     mainProgram = "dwarf2json";
   };
 }

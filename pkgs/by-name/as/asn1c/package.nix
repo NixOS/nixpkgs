@@ -32,11 +32,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "http://lionet.info/asn1c/compiler.html";
     description = "Open Source ASN.1 Compiler";
-    license = licenses.bsd2;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.numinit ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.numinit ];
   };
 }

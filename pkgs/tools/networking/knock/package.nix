@@ -30,11 +30,11 @@ buildGoModule rec {
     installManPage man/man1/knock.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple CLI network reachability tester";
     homepage = "https://codeberg.org/nat-418/knock";
-    license = licenses.bsd0;
+    license = lib.licenses.bsd0;
     changelog = "https://codeberg.org/nat-418/knock/raw/branch/trunk/CHANGELOG.md";
-    maintainers = with maintainers; [ nat-418 ];
+    maintainers = with lib.maintainers; [ nat-418 ];
   };
 }

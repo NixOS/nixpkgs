@@ -46,12 +46,12 @@ stdenv.mkDerivation rec {
     "stackprotector"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "One-time password login package";
     mainProgram = "otpw-gen";
     homepage = "http://www.cl.cam.ac.uk/~mgk25/otpw.html";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

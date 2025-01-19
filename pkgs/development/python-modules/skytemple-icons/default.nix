@@ -19,10 +19,10 @@ buildPythonPackage rec {
   doCheck = false; # there are no tests
   pythonImportsCheck = [ "skytemple_icons" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/SkyTemple/skytemple-icons";
     description = "Icons for SkyTemple";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
   };
 }

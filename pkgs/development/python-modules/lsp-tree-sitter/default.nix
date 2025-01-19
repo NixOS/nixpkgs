@@ -40,10 +40,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "lsp_tree_sitter" ];
 
-  meta = with lib; {
+  meta = {
     description = "A library to create language servers";
     homepage = "https://github.com/neomutt/lsp-tree-sitter";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ doronbehar ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 }

@@ -59,11 +59,11 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ImaginerApp/Imaginer";
     description = "Imaginer with AI";
     mainProgram = "imaginer";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ _0xMRTT ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ _0xMRTT ];
   };
 }

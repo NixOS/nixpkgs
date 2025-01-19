@@ -87,7 +87,7 @@ gnuradioMinimal.pkgs.mkDerivation rec {
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Software defined radio (SDR) receiver";
     mainProgram = "gqrx";
     longDescription = ''
@@ -99,9 +99,9 @@ gnuradioMinimal.pkgs.mkDerivation rec {
     homepage = "https://gqrx.dk/";
     # Some of the code comes from the Cutesdr project, with a BSD license, but
     # it's currently unknown which version of the BSD license that is.
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux; # should work on Darwin / macOS too
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux; # should work on Darwin / macOS too
+    maintainers = with lib.maintainers; [
       bjornfor
       fpletz
     ];

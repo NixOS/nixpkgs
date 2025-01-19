@@ -51,11 +51,11 @@ buildGoModule rec {
     updateScript = ./update.sh;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://usememos.com";
     description = "Lightweight, self-hosted memo hub";
-    maintainers = with maintainers; [ indexyz ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ indexyz ];
+    license = lib.licenses.mit;
     mainProgram = "memos";
   };
 }

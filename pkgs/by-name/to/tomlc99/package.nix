@@ -21,11 +21,11 @@ stdenv.mkDerivation rec {
     "prefix=${placeholder "out"}"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/cktan/tomlc99";
     description = "TOML v1.0.0-compliant library written in C99";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
-    platforms = with platforms; unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ];
+    platforms = with lib.platforms; unix;
   };
 }

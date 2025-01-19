@@ -32,10 +32,10 @@ rustPlatform.buildRustPackage rec {
     rustfmt
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Modern, performance focused unix commands";
     homepage = "https://github.com/SUPERCILEX/fuc";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dit7ya ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dit7ya ];
   };
 }

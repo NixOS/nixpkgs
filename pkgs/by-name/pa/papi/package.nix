@@ -22,12 +22,12 @@ stdenv.mkDerivation rec {
   doCheck = true;
   checkTarget = "test";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://icl.utk.edu/papi/";
     description = "Library providing access to various hardware performance counters";
-    license = licenses.bsdOriginal;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsdOriginal;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       costrouc
       zhaofengli
     ];

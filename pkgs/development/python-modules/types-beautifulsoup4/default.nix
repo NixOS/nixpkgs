@@ -25,10 +25,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bs4-stubs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Typing stubs for beautifulsoup4";
     homepage = "https://pypi.org/project/types-beautifulsoup4/";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

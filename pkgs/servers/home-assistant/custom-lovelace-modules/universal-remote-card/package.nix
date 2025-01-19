@@ -30,11 +30,11 @@ buildNpmPackage rec {
 
   passthru.entrypoint = "universal-remote-card.min.js";
 
-  meta = with lib; {
+  meta = {
     description = "Completely customizable universal remote card for Home Assistant. Supports multiple platforms out of the box";
     homepage = "https://github.com/Nerwyn/android-tv-card";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ k900 ];
-    platforms = platforms.all;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ k900 ];
+    platforms = lib.platforms.all;
   };
 }

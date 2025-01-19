@@ -25,12 +25,12 @@ appimageTools.wrapType2 rec {
     substituteInPlace $out/share/applications/${pname}.desktop  --replace 'Exec=AppRun' 'Exec=${pname}'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Visual IDE for React";
     homepage = "https://www.codux.com";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       dit7ya
       kashw2
     ];

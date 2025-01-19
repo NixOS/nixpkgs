@@ -60,12 +60,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pulumi" ];
 
-  meta = with lib; {
+  meta = {
     description = "Modern Infrastructure as Code. Any cloud, any language";
     homepage = "https://github.com/pulumi/pulumi";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ teto ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ teto ];
     # https://github.com/pulumi/pulumi/issues/16828
-    broken = versionAtLeast protobuf.version "5";
+    broken = lib.versionAtLeast protobuf.version "5";
   };
 }

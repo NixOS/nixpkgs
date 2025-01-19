@@ -49,11 +49,11 @@ rustPlatform.buildRustPackage rec {
     install -Dm 755 "${COMPLETION_OUT}/powerline-rs.fish" "$out/share/fish/vendor_completions.d/powerline-rs"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "powerline-shell rewritten in Rust, inspired by powerline-go";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "powerline-rs";
   };
 }

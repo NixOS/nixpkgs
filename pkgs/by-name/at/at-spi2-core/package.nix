@@ -107,11 +107,11 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : ${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Assistive Technology Service Provider Interface protocol definitions and daemon for D-Bus";
     homepage = "https://gitlab.gnome.org/GNOME/at-spi2-core";
-    license = licenses.lgpl21Plus;
-    maintainers = teams.gnome.members ++ (with maintainers; [ raskin ]);
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = lib.teams.gnome.members ++ (with lib.maintainers; [ raskin ]);
+    platforms = lib.platforms.unix;
   };
 }

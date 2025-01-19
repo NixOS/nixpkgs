@@ -39,10 +39,10 @@ buildDunePackage {
     functoria-runtime
   ];
 
-  meta = with lib; {
+  meta = {
     description = "DSL to organize functor applications";
     homepage = "https://github.com/mirage/functoria";
-    license = licenses.isc;
-    maintainers = [ maintainers.vbgl ];
+    license = lib.licenses.isc;
+    maintainers = [ lib.maintainers.vbgl ];
   };
 }

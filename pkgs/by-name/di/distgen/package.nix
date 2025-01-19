@@ -27,11 +27,11 @@ python3.pkgs.buildPythonApplication rec {
 
   checkPhase = "make test-unit PYTHON=${python3.executable}";
 
-  meta = with lib; {
+  meta = {
     description = "Templating system/generator for distributions";
     mainProgram = "dg";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     homepage = "https://distgen.readthedocs.io/";
-    maintainers = with maintainers; [ bachp ];
+    maintainers = with lib.maintainers; [ bachp ];
   };
 }

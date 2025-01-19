@@ -31,9 +31,9 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "NumPy-based text/binary PLY file reader/writer for Python";
     homepage = "https://github.com/dranjan/python-plyfile";
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with lib.maintainers; [ abbradar ];
   };
 }

@@ -17,11 +17,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-IRXyM000ZDiLPHX20lXlx00tkCzBe5PqvdgXAvm0EAw=";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/irccloud/irccat";
     description = "Send events to IRC channels from scripts and other applications";
     mainProgram = "irccat";
-    maintainers = with maintainers; [ qyliss ];
-    license = licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ qyliss ];
+    license = lib.licenses.gpl3Only;
   };
 }

@@ -41,11 +41,11 @@ stdenv.mkDerivation rec {
     "-DUDEV_RULES_GROUP=${udevGroup}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Open source wireless development platform suitable for Bluetooth experimentation";
     homepage = "https://github.com/greatscottgadgets/ubertooth";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ oxzi ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ oxzi ];
+    platforms = lib.platforms.linux;
   };
 }

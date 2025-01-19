@@ -38,10 +38,10 @@ mkDerivation rec {
     qtquickcontrols2
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Calendar for Plasma Mobile";
     homepage = "https://invent.kde.org/plasma-mobile/calindori";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
   };
 }

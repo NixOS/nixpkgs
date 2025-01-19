@@ -19,10 +19,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-nKb0J9ym3ZYC80KemwQwT5vVtQUngYD4/091hAIYAiU=";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/dsprenkels/sss-cli";
     description = "Command line program for secret-sharing strings";
-    license = licenses.mit;
-    maintainers = with maintainers; [ laalsaas ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ laalsaas ];
   };
 }

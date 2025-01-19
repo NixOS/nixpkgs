@@ -46,10 +46,10 @@ buildDunePackage rec {
   # uunf is broken on aarch64
   doCheck = !stdenv.hostPlatform.isAarch64;
 
-  meta = with lib; {
+  meta = {
     description = "Property fuzzing for OCaml";
     homepage = "https://github.com/stedolan/crowbar";
-    license = licenses.mit;
-    maintainers = [ maintainers.sternenseemann ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.sternenseemann ];
   };
 }

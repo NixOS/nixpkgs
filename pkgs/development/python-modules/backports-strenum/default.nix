@@ -28,10 +28,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "backports.strenum" ];
 
-  meta = with lib; {
+  meta = {
     description = "Base class for creating enumerated constants that are also subclasses of str";
     homepage = "https://github.com/clbarnes/backports.strenum";
-    license = with licenses; [ psfl ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ psfl ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

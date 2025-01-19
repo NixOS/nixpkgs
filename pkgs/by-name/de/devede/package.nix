@@ -66,10 +66,10 @@ buildPythonApplication rec {
       --replace "/usr/local/share" "$out/share"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "DVD Creator for Linux";
     homepage = "https://www.rastersoft.com/programas/devede.html";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.bdimcheff ];
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.bdimcheff ];
   };
 }

@@ -38,12 +38,12 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "DICT version of English Wiktionary";
     homepage = "https://en.wiktionary.org/";
-    maintainers = with maintainers; [ qyliss ];
-    platforms = platforms.all;
-    license = with licenses; [
+    maintainers = with lib.maintainers; [ qyliss ];
+    platforms = lib.platforms.all;
+    license = with lib.licenses; [
       cc-by-sa-30
       fdl11Plus
     ];

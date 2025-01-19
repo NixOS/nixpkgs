@@ -35,11 +35,11 @@ stdenv.mkDerivation {
     substituteInPlace Makefile --replace-fail "PWD modules_install" "PWD INSTALL_MOD_PATH=$out modules_install"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Based on AMD_ENERGY driver, but with some jiffies added so non-root users can read it safely.";
     homepage = "https://github.com/BoukeHaarsma23/zenergy";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ wizardlink ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ wizardlink ];
+    platforms = lib.platforms.linux;
   };
 }

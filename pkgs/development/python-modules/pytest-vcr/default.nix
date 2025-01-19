@@ -27,10 +27,10 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "pytest_vcr" ];
 
-  meta = with lib; {
+  meta = {
     description = "Integration VCR.py into pytest";
     homepage = "https://github.com/ktosiek/pytest-vcr";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

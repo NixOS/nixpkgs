@@ -34,10 +34,10 @@ buildPythonPackage rec {
       's|lib = .*\\\n[^\n]*|lib = "${lib.getLib fluidsynth}/lib/libfluidsynth${stdenv.hostPlatform.extensions.sharedLibrary}"|'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for FluidSynth, a MIDI synthesizer that uses SoundFont instruments";
     homepage = "https://github.com/nwhitehead/pyfluidsynth";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ figsoda ];
   };
 }

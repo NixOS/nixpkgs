@@ -51,11 +51,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "django" ];
 
-  meta = with lib; {
+  meta = {
     description = "High-level Python Web framework";
     homepage = "https://www.djangoproject.com/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ georgewhewell ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ georgewhewell ];
     knownVulnerabilities = [
       "Support for Django 3.2 ended on 2024-04-01, see https://www.djangoproject.com/download/#supported-versions."
     ];

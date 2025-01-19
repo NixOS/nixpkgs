@@ -43,7 +43,7 @@ python3Packages.buildPythonApplication rec {
     snapper
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Graphical interface for snapper";
     mainProgram = "snapper-gui";
     longDescription = ''
@@ -53,8 +53,8 @@ python3Packages.buildPythonApplication rec {
       and revert changes. Currently works with btrfs, ext4 and thin-provisioned LVM volumes.
     '';
     homepage = "https://github.com/ricardomv/snapper-gui";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ ahuzik ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ ahuzik ];
   };
 }

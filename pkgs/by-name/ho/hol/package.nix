@@ -76,7 +76,7 @@ stdenv.mkDerivation {
     # ln -s $out/src/hol4.${version}/bin $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     description = "Interactive theorem prover based on Higher-Order Logic";
     longDescription = ''
@@ -92,8 +92,8 @@ stdenv.mkDerivation {
       checking.
     '';
     homepage = "http://hol.sourceforge.net/";
-    license = licenses.bsd3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ mudri ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ mudri ];
   };
 }

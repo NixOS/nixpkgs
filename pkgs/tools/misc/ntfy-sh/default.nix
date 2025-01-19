@@ -70,11 +70,11 @@ buildGoModule rec {
     tests.ntfy-sh = nixosTests.ntfy-sh;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Send push notifications to your phone or desktop via PUT/POST";
     homepage = "https://ntfy.sh";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       arjan-s
       fpletz
     ];

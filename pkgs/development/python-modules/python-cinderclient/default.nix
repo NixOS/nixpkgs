@@ -82,11 +82,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cinderclient" ];
 
-  meta = with lib; {
+  meta = {
     description = "OpenStack Block Storage API Client Library";
     mainProgram = "cinder";
     homepage = "https://github.com/openstack/python-cinderclient";
-    license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    license = lib.licenses.asl20;
+    maintainers = lib.teams.openstack.members;
   };
 }

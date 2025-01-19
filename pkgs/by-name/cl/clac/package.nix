@@ -22,12 +22,12 @@ stdenv.mkDerivation rec {
     cp README* LICENSE "$out/share/doc/clac"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Interactive stack-based calculator";
     homepage = "https://github.com/soveran/clac";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.unix;
     mainProgram = "clac";
   };
 }

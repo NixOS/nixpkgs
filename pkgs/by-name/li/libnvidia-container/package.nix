@@ -157,13 +157,13 @@ stdenv.mkDerivation rec {
     '';
   disallowedReferences = [ go ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/NVIDIA/libnvidia-container";
     description = "NVIDIA container runtime library";
-    license = licenses.asl20;
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux;
     mainProgram = "nvidia-container-cli";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       cpcloud
       msanft
     ];

@@ -41,11 +41,11 @@ rustPlatform.buildRustPackage rec {
     make PREFIX=$out install-resources
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Gtk ui for neovim";
     homepage = "https://github.com/Lyude/neovim-gtk";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ aleksana ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ aleksana ];
     mainProgram = "nvim-gtk";
   };
 }

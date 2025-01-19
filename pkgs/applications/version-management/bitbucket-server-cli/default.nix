@@ -16,15 +16,15 @@ bundlerEnv rec {
 
   passthru.updateScript = bundlerUpdateScript "bitbucket-server-cli";
 
-  meta = with lib; {
+  meta = {
     description = "Command line interface to interact with BitBucket Server (formerly Atlassian Stash)";
     homepage = "https://bitbucket.org/atlassian/bitbucket-server-cli";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       jgertm
       nicknovitski
     ];
     mainProgram = "stash";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

@@ -53,12 +53,12 @@ stdenv.mkDerivation rec {
 
   nativeCheckInputs = [ perl ];
 
-  meta = with lib; {
+  meta = {
     description = "Report faked system time to programs without having to change the system-wide time";
     homepage = "https://github.com/wolfcw/libfaketime/";
-    license = licenses.gpl2;
-    platforms = platforms.all;
-    maintainers = [ maintainers.bjornfor ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.bjornfor ];
     mainProgram = "faketime";
   };
 }

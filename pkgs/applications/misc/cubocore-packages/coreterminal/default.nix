@@ -35,12 +35,12 @@ mkDerivation rec {
     libcsys
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Terminal emulator from the C Suite";
     mainProgram = "coreterminal";
     homepage = "https://gitlab.com/cubocore/coreapps/coreterminal";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dan4ik605743 ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ dan4ik605743 ];
+    platforms = lib.platforms.linux;
   };
 }

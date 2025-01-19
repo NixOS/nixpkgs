@@ -59,12 +59,12 @@ stdenv.mkDerivation (finalAttrs: {
     ignoredVersions = "(alpha|beta|rc).*";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/World/gnome-firmware";
     description = "Tool for installing firmware on devices";
     mainProgram = "gnome-firmware";
-    license = licenses.gpl2Plus;
-    maintainers = teams.gnome.members;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = lib.teams.gnome.members;
+    platforms = lib.platforms.linux;
   };
 })

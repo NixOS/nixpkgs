@@ -27,10 +27,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "spinel" ];
 
-  meta = with lib; {
+  meta = {
     description = "Interface to the OpenThread Network Co-Processor (NCP)";
     homepage = "https://github.com/openthread/pyspinel";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ gebner ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ gebner ];
   };
 }

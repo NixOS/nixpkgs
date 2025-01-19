@@ -42,10 +42,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "curl_cffi" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python binding for curl-impersonate via cffi";
     homepage = "https://curl-cffi.readthedocs.io";
-    license = licenses.mit;
-    maintainers = with maintainers; [ chuangzhu ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ chuangzhu ];
   };
 }

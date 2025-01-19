@@ -45,11 +45,11 @@ pypkgs.buildPythonApplication rec {
   # no tests from pypi
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Automatic TV episode file renamer, uses data from thetvdb.com via tvdb_api";
     homepage = "https://github.com/dbr/tvnamer";
-    license = licenses.unlicense;
-    maintainers = with maintainers; [ peterhoeg ];
+    license = lib.licenses.unlicense;
+    maintainers = with lib.maintainers; [ peterhoeg ];
     mainProgram = "tvnamer";
   };
 }

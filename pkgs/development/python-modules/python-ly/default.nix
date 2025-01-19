@@ -18,9 +18,9 @@ buildPythonPackage rec {
   # seem to be broken ATM: https://github.com/wbsoft/python-ly/issues/70
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Tool and library for manipulating LilyPond files";
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
     maintainers = [ ];
   };
 }

@@ -37,12 +37,12 @@ python3Packages.buildPythonApplication rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Python clone of Foreman, a tool for managing Procfile-based applications";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/nickstenning/honcho";
-    maintainers = with maintainers; [ benley ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ benley ];
+    platforms = lib.platforms.unix;
     mainProgram = "honcho";
   };
 }

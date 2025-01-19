@@ -47,11 +47,11 @@ stdenv.mkDerivation {
     $out/bin/${baseName} --version | grep -q "${version}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Opinionated code formatter for Scala";
     homepage = "http://scalameta.org/scalafmt";
-    license = licenses.asl20;
-    maintainers = [ maintainers.markus1189 ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.markus1189 ];
     mainProgram = "scalafmt";
   };
 }

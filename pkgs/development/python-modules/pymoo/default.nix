@@ -98,10 +98,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pymoo" ];
 
-  meta = with lib; {
+  meta = {
     description = "Multi-objective Optimization in Python";
     homepage = "https://pymoo.org/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ veprbl ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

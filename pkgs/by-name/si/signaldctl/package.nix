@@ -32,11 +32,11 @@ buildGoModule rec {
     rev-prefix = "v";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Golang library for communicating with signald";
     mainProgram = "signaldctl";
     homepage = "https://signald.org/signaldctl/";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ colinsane ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ colinsane ];
   };
 }

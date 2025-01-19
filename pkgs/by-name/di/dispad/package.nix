@@ -24,12 +24,12 @@ stdenv.mkDerivation rec {
     libconfuse
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Small daemon for disabling trackpads while typing";
     homepage = "https://github.com/BlueDragonX/dispad";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ zimbatm ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ zimbatm ];
+    platforms = lib.platforms.linux;
     mainProgram = "dispad";
   };
 }

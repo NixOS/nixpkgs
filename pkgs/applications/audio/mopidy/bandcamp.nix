@@ -18,10 +18,10 @@ python3Packages.buildPythonApplication rec {
     pykka
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Mopidy extension for playing music from bandcamp";
     homepage = "https://github.com/impliedchaos/mopidy-bandcamp";
-    license = licenses.mit;
-    maintainers = with maintainers; [ desttinghim ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ desttinghim ];
   };
 }

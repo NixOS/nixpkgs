@@ -18,10 +18,10 @@ buildPythonPackage rec {
   # There are no tests.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Simple bencode decoder/encoder library in pure Python";
     homepage = "https://github.com/utdemir/bencoder";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ somasis ];
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ somasis ];
   };
 }

@@ -26,11 +26,11 @@ rustPlatform.buildRustPackage rec {
     wrapProgram "$out/bin/sub-batch" --prefix PATH : "${lib.makeBinPath [ alass ]}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Match and rename subtitle files to video files and perform other batch operations on subtitle files";
     homepage = "https://github.com/kl/sub-batch";
-    license = licenses.mit;
-    maintainers = with maintainers; [ erictapen ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ erictapen ];
     broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "sub-batch";
   };

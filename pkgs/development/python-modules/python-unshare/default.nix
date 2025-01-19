@@ -18,11 +18,11 @@ buildPythonPackage {
     sha256 = "1h9biinhy5m7r2cj4abhvsg2hb6xjny3n2dxnj1336zpa082ys3h";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for the Linux unshare() syscall";
     homepage = "https://github.com/thetincho/python-unshare";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ abbradar ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ abbradar ];
   };
 }

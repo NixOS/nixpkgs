@@ -64,15 +64,15 @@ stdenv.mkDerivation (finalAttrs: {
     package = finalAttrs.finalPackage;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Markup language for GTK user interface files";
     mainProgram = "blueprint-compiler";
     homepage = "https://gitlab.gnome.org/jwestman/blueprint-compiler";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [
       benediktbroich
       ranfdev
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 })

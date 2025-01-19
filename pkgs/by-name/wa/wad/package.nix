@@ -29,7 +29,7 @@ python3.pkgs.buildPythonApplication rec {
     "wad"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool for detecting technologies used by web applications";
     mainProgram = "wad";
     longDescription = ''
@@ -40,10 +40,10 @@ python3.pkgs.buildPythonApplication rec {
     '';
     homepage = "https://github.com/CERN-CERT/WAD";
     # wad is GPLv3+, wappalyzer source is MIT
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3Plus
       mit
     ];
-    maintainers = with maintainers; [ fab ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

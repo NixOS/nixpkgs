@@ -26,12 +26,12 @@ rustPlatform.buildRustPackage rec {
     DiskArbitration
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Alternative to *fetch, uwuifies all stats";
     homepage = "https://github.com/netthier/owofetch-rs";
-    license = licenses.gpl3Only;
-    platforms = platforms.x86_64;
-    maintainers = with maintainers; [ nullishamy ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.x86_64;
+    maintainers = with lib.maintainers; [ nullishamy ];
     mainProgram = "owofetch";
   };
 }

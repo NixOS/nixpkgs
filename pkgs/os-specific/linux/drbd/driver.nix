@@ -46,12 +46,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.drbd-driver = nixosTests.drbd-driver;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/LINBIT/drbd";
     description = "LINBIT DRBD kernel module";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ birkb ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ birkb ];
     longDescription = ''
       DRBD is a software-based, shared-nothing, replicated storage solution
       mirroring the content of block devices (hard disks, partitions, logical volumes, and so on) between hosts.

@@ -15,11 +15,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-qoCOYk7hyjMx07l48IkxE6zsG58NkF72E3OvoZHz5d0=";
 
-  meta = with lib; {
+  meta = {
     description = "Display an interactive ASCII globe in your terminal";
     homepage = "https://github.com/adamsky/globe";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ devhell ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ devhell ];
     mainProgram = "globe";
   };
 }

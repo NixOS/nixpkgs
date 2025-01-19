@@ -48,12 +48,12 @@ stdenv.mkDerivation rec {
 
   dontInstall = true; # already installed during buildPhase
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isAarch64;
     description = "Intel X86 Encoder Decoder (Intel XED)";
     homepage = "https://intelxed.github.io/";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ arturcygan ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ arturcygan ];
   };
 }

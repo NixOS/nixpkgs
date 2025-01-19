@@ -69,12 +69,12 @@ stdenv.mkDerivation {
       dblatex
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Gnome Diagram drawing software";
     mainProgram = "dia";
     homepage = "http://live.gnome.org/Dia";
-    maintainers = with maintainers; [ raskin ];
-    license = licenses.gpl2;
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ raskin ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.unix;
   };
 }

@@ -42,10 +42,10 @@ mkDerivation rec {
     plasma-framework
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Plasma 5 applet in order to show window buttons in your panels";
     homepage = "https://github.com/psifidotos/applet-window-buttons";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

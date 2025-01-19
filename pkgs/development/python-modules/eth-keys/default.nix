@@ -67,10 +67,10 @@ buildPythonPackage rec {
     coincurve = [ coincurve ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Common API for Ethereum key operations";
     homepage = "https://github.com/ethereum/eth-keys";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

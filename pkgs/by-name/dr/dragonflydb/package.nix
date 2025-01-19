@@ -107,11 +107,11 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Modern replacement for Redis and Memcached";
     homepage = "https://dragonflydb.io/";
-    license = licenses.bsl11;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ yureien ];
+    license = lib.licenses.bsl11;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ yureien ];
   };
 }

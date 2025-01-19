@@ -25,11 +25,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ glib ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/clearlinux/psstop";
     description = "Show processes' memory usage by looking into pss"; # upstream summary
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ dtzWill ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ dtzWill ];
     mainProgram = "psstop";
   };
 }

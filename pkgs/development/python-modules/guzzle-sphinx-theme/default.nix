@@ -25,10 +25,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "guzzle_sphinx_theme" ];
 
-  meta = with lib; {
+  meta = {
     description = "Sphinx theme used by Guzzle: http://guzzlephp.org";
     homepage = "https://github.com/guzzle/guzzle_sphinx_theme/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ flokli ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ flokli ];
   };
 }

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.gnu.org/software/dap";
     description = "Small statistics and graphics package based on C";
     longDescription = ''
@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
       ANOVA, categorical data analysis, logistic regression, and nonparametric
       analyses).
     '';
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.unix;
   };
 }

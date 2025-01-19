@@ -45,11 +45,11 @@ stdenv.mkDerivation (finalAttrs: {
     rev-prefix = "VERSION_";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Qt library for accessing the online accounts database";
     mainProgram = "accountstest";
     homepage = "https://gitlab.com/accounts-sso/libaccounts-qt";
-    license = licenses.lgpl21;
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21;
+    platforms = lib.platforms.linux;
   };
 })

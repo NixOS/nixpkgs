@@ -30,10 +30,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://linux.techass.com/projects/xdb/";
     description = "C++ class library formerly known as XDB";
-    platforms = platforms.linux;
-    license = licenses.lgpl2;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.lgpl2;
   };
 }

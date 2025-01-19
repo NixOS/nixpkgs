@@ -28,11 +28,11 @@ buildPythonPackage rec {
   doCheck = false; # Package has no tests
   pythonImportsCheck = [ "langid" ];
 
-  meta = with lib; {
+  meta = {
     description = "Langid.py is a standalone Language Identification (LangID) tool";
     mainProgram = "langid";
     homepage = "https://pypi.org/project/langid/";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ mbalatsko ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ mbalatsko ];
   };
 }

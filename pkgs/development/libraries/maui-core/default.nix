@@ -33,13 +33,13 @@ mkDerivation rec {
     pulseaudio
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Core libraries to manage the desktop to be shared between Maui Settings and Cask";
     homepage = "https://github.com/Nitrux/maui-core";
     # Missing license information https://github.com/Nitrux/maui-core/issues/1
-    license = licenses.unfree;
-    maintainers = with maintainers; [ onny ];
-    platforms = platforms.linux;
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ onny ];
+    platforms = lib.platforms.linux;
   };
 
 }

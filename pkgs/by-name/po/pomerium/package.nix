@@ -127,12 +127,12 @@ buildGo123Module rec {
     updateScript = ./updater.sh;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pomerium.io";
     description = "Authenticating reverse proxy";
     mainProgram = "pomerium";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       lukegb
       devusb
     ];

@@ -24,10 +24,10 @@ buildPythonPackage rec {
   doCheck = false; # all checks are static analyses
   pythonImportsCheck = [ "loca" ];
 
-  meta = with lib; {
+  meta = {
     description = "Local locations";
     homepage = "https://pypi.org/project/loca";
-    license = licenses.lgpl3Plus;
-    maintainers = [ maintainers.McSinyx ];
+    license = lib.licenses.lgpl3Plus;
+    maintainers = [ lib.maintainers.McSinyx ];
   };
 }

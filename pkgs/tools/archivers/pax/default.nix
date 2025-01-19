@@ -32,11 +32,11 @@ stdenv.mkDerivation rec {
     install -Dm444 mans/pax{,cpio,tar}.1 -t $out/share/man/man1/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "POSIX standard archive tool from MirBSD";
     homepage = "https://www.mirbsd.org/pax.htm";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ gebner ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ gebner ];
+    platforms = lib.platforms.unix;
   };
 }

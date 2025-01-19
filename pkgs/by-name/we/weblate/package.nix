@@ -164,14 +164,14 @@ python.pkgs.buildPythonApplication rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Web based translation tool with tight version control integration";
     homepage = "https://weblate.org/";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3Plus
       mit
     ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ erictapen ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ erictapen ];
   };
 }

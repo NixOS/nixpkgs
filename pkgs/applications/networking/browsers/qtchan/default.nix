@@ -26,12 +26,12 @@ mkDerivation rec {
     cp qtchan $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "4chan browser in qt5";
     mainProgram = "qtchan";
     homepage = "https://github.com/siavash119/qtchan";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Madouura ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ Madouura ];
+    platforms = lib.platforms.unix;
   };
 }

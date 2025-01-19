@@ -61,12 +61,12 @@ stdenv.mkDerivation (finalAttrs: {
     cat <($out/bin/uuu -udev) > $out/lib/udev/rules.d/70-uuu.rules
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Freescale/NXP I.MX Chip image deploy tools";
     homepage = "https://github.com/nxp-imx/mfgtools";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ otavio ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ otavio ];
     mainProgram = "uuu";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 })

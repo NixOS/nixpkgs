@@ -42,13 +42,13 @@ mkDerivation {
     ])
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform, aesthetic, distraction-free Markdown editor";
     mainProgram = "ghostwriter";
     homepage = "https://ghostwriter.kde.org/";
     changelog = "https://invent.kde.org/office/ghostwriter/-/blob/master/CHANGELOG.md";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       dotlambda
       erictapen
     ];

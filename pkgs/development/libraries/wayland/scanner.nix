@@ -40,10 +40,10 @@ stdenv.mkDerivation {
     libxml2
   ];
 
-  meta = with lib; {
+  meta = {
     inherit (wayland.meta) homepage license maintainers;
     mainProgram = "wayland-scanner";
     description = "C code generator for Wayland protocol XML files";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

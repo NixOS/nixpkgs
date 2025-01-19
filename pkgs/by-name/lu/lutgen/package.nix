@@ -28,15 +28,15 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/lutgen --bpaf-complete-style-zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Blazingly fast interpolated LUT generator and applicator for arbitrary and popular color palettes";
     homepage = "https://github.com/ozwaldorf/lutgen-rs";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       ozwaldorf
       zzzsy
       donovanglover
     ];
     mainProgram = "lutgen";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

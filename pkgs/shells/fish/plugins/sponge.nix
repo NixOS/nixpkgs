@@ -15,10 +15,10 @@ buildFishPlugin rec {
     sha256 = "sha256-MdcZUDRtNJdiyo2l9o5ma7nAX84xEJbGFhAVhK+Zm1w=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "keeps your fish shell history clean from typos, incorrectly used commands and everything you don't want to store due to privacy reasons";
     homepage = "https://github.com/meaningful-ooo/sponge";
-    license = licenses.mit;
-    maintainers = with maintainers; [ quantenzitrone ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ quantenzitrone ];
   };
 }

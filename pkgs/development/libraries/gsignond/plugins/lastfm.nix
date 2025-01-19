@@ -41,11 +41,11 @@ stdenv.mkDerivation {
 
   PKG_CONFIG_GSIGNOND_GPLUGINSDIR = "${placeholder "out"}/lib/gsignond/gplugins";
 
-  meta = with lib; {
+  meta = {
     description = "Plugin for the Accounts-SSO gSignOn daemon that handles Last.FM credentials";
     homepage = "https://gitlab.com/accounts-sso/gsignond-plugin-lastfm";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

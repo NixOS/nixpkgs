@@ -235,16 +235,16 @@ stdenv.mkDerivation (finalAttrs: rec {
     spidermonkey = finalAttrs.finalPackage;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Mozilla's JavaScript engine written in C/C++";
     homepage = "https://spidermonkey.dev/";
-    license = licenses.mpl20; # TODO: MPL/GPL/LGPL tri-license for 78.
-    maintainers = with maintainers; [
+    license = lib.licenses.mpl20; # TODO: MPL/GPL/LGPL tri-license for 78.
+    maintainers = with lib.maintainers; [
       abbradar
       lostnet
       catap
     ];
-    broken = stdenv.hostPlatform.isDarwin && versionAtLeast version "115"; # Requires SDK 13.3 (see #242666).
-    platforms = platforms.unix;
+    broken = stdenv.hostPlatform.isDarwin && lib.versionAtLeast version "115"; # Requires SDK 13.3 (see #242666).
+    platforms = lib.platforms.unix;
   };
 })

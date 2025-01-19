@@ -24,11 +24,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "googletrans" ];
 
-  meta = with lib; {
+  meta = {
     description = "Googletrans is python library to interact with Google Translate API";
     mainProgram = "translate";
     homepage = "https://py-googletrans.readthedocs.io";
-    license = licenses.mit;
-    maintainers = with maintainers; [ unode ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ unode ];
   };
 }

@@ -28,11 +28,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zlib ];
 
-  meta = with lib; {
+  meta = {
     description = "Tools to create, check, and extract content of CramFs images";
     homepage = "https://packages.debian.org/jessie/cramfsprogs";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ pamplemousse ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ pamplemousse ];
+    platforms = lib.platforms.linux;
   };
 }

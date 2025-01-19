@@ -55,11 +55,11 @@ stdenv.mkDerivation {
 
   PKG_CONFIG_GSIGNOND_GPLUGINSDIR = "${placeholder "out"}/lib/gsignond/gplugins";
 
-  meta = with lib; {
+  meta = {
     description = "Plugin for the Accounts-SSO gSignOn daemon that handles the OAuth 1.0 and 2.0 authentication protocols";
     homepage = "https://gitlab.com/accounts-sso/gsignond-plugin-oa";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

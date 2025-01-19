@@ -59,13 +59,13 @@ stdenv.mkDerivation rec {
     install_name_tool -change libnewt.so.${version} $out/lib/libnewt.so.${version} $out/bin/whiptail
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Library for color text mode, widget based user interfaces";
     mainProgram = "whiptail";
     homepage = "https://pagure.io/newt";
     changelog = "https://pagure.io/newt/blob/master/f/CHANGES";
-    license = licenses.lgpl2;
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl2;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
 }

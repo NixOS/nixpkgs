@@ -27,11 +27,11 @@ python3Packages.buildPythonApplication rec {
     install -Dm0444 -t $out/lib/udev/rules.d/ contrib/udev/99-usbsdmux.rules
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Control software for the LXA USB-SD-Mux";
     homepage = "https://github.com/linux-automation/usbsdmux";
-    license = licenses.lgpl21;
-    maintainers = with maintainers; [ emantor ];
-    platforms = with platforms; linux;
+    license = lib.licenses.lgpl21;
+    maintainers = with lib.maintainers; [ emantor ];
+    platforms = with lib.platforms; linux;
   };
 }

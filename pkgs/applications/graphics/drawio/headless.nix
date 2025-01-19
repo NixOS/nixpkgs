@@ -30,14 +30,14 @@ writeTextFile {
     XDG_CONFIG_HOME="$tmpdir" ${xvfb-run}/bin/xvfb-run --auto-display ${drawio}/bin/drawio $@
   '';
 
-  meta = with lib; {
+  meta = {
     description = "xvfb wrapper around drawio";
     longDescription = ''
       A wrapper around drawio for running in headless environments.
       Runs drawio under xvfb-run, with configuration going to a temporary
       directory.
     '';
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       qyliss
       tfc
     ];

@@ -21,7 +21,7 @@ makeImpureTest {
     rocm-smi | grep -A1 GPU
   '';
 
-  meta = with lib; {
-    maintainers = teams.rocm.members;
+  meta = {
+    maintainers = lib.teams.rocm.members;
   };
 }

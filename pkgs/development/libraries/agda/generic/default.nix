@@ -25,14 +25,14 @@ mkDerivation rec {
     find src -name '*.agda' | sed -e 's/src\///;s/\//./g;s/\.agda$//;s/^/import /' >> Everything.agda
   '';
 
-  meta = with lib; {
+  meta = {
     # Remove if a version compatible with agda 2.6.2 is made
     broken = true;
     description = "A library for doing generic programming in Agda";
     homepage = src.meta.homepage;
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       alexarice
       turion
     ];

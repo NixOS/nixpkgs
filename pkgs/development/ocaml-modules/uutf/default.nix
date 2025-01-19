@@ -42,11 +42,11 @@ lib.throwIfNot (lib.versionAtLeast ocaml.version "4.03")
 
     inherit (topkg) buildPhase installPhase;
 
-    meta = with lib; {
+    meta = {
       description = "Non-blocking streaming Unicode codec for OCaml";
       homepage = "https://erratique.ch/software/uutf";
-      license = licenses.bsd3;
-      maintainers = [ maintainers.vbgl ];
+      license = lib.licenses.bsd3;
+      maintainers = [ lib.maintainers.vbgl ];
       mainProgram = "utftrip";
       inherit (ocaml.meta) platforms;
     };

@@ -21,12 +21,12 @@ python3.pkgs.buildPythonApplication rec {
     python3.pkgs.docopt
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Extract only relevant history from git repo";
     homepage = "https://github.com/rainlabs-eu/git-relevant-history";
-    license = licenses.asl20;
-    platforms = platforms.all;
-    maintainers = [ maintainers.bendlas ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.bendlas ];
     mainProgram = "git-relevant-history";
   };
 }

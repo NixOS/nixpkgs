@@ -44,12 +44,12 @@ buildGoModule rec {
       --zsh <($out/bin/hubble completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Network, Service & Security Observability for Kubernetes using eBPF";
     mainProgram = "hubble";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://github.com/cilium/hubble/";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       humancalico
       bryanasdev000
     ];

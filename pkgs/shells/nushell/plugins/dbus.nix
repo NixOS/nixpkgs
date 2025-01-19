@@ -41,12 +41,12 @@ rustPlatform.buildRustPackage rec {
       '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Nushell plugin for communicating with D-Bus";
     mainProgram = "nu_plugin_dbus";
     homepage = "https://github.com/devyn/nu_plugin_dbus";
-    license = licenses.mit;
-    maintainers = with maintainers; [ aftix ];
-    platforms = with platforms; linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ aftix ];
+    platforms = with lib.platforms; linux;
   };
 }

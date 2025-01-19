@@ -39,10 +39,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "debian_inspector" ];
 
-  meta = with lib; {
+  meta = {
     description = "Utilities to parse Debian package, copyright and control files";
     homepage = "https://github.com/nexB/debian-inspector";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       bsd3
       mit

@@ -42,11 +42,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/raspberrypi/pico-sdk";
     description = "SDK provides the headers, libraries and build system necessary to write programs for the RP2040-based devices";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ muscaln ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ muscaln ];
+    platforms = lib.platforms.unix;
   };
 })

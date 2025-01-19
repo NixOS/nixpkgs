@@ -57,13 +57,13 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Copy a Postgres database to a target Postgres server (pg_dump | pg_restore on steroids";
     homepage = "https://github.com/dimitri/pgcopydb";
     changelog = "https://github.com/dimitri/pgcopydb/blob/${finalAttrs.src.rev}/CHANGELOG.md";
-    license = licenses.postgresql;
+    license = lib.licenses.postgresql;
     maintainers = [ ];
     mainProgram = "pgcopydb";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 })

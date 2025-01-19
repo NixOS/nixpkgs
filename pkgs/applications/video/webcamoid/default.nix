@@ -56,13 +56,13 @@ mkDerivation rec {
     cmake
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Webcam Capture Software";
     longDescription = "Webcamoid is a full featured and multiplatform webcam suite.";
     homepage = "https://github.com/webcamoid/webcamoid/";
-    license = [ licenses.gpl3Plus ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ robaca ];
+    license = [ lib.licenses.gpl3Plus ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ robaca ];
     mainProgram = "webcamoid";
   };
 }

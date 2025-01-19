@@ -16,15 +16,15 @@ symlinkJoin rec {
     "${deliantra-server}/share/deliantra-server"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Combined game data (maps + archetypes) for the Deliantra free MMORPG";
     homepage = "http://www.deliantra.net/";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Plus
       agpl3Plus
     ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ ToxicFrog ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ ToxicFrog ];
     hydraPlatforms = [ ];
   };
 }

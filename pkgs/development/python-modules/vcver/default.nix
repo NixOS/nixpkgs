@@ -24,10 +24,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "vcver" ];
 
-  meta = with lib; {
+  meta = {
     description = "Reference Implementation of vcver";
     homepage = "https://github.com/toumorokoshi/vcver-python";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

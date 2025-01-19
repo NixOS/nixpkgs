@@ -25,12 +25,12 @@ stdenv.mkDerivation rec {
     cp ./SimpleNES $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/amhndu/SimpleNES";
     description = "NES emulator written in C++";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "SimpleNES";
   };
 }

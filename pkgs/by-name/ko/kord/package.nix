@@ -49,10 +49,10 @@ rustPlatform.buildRustPackage rec {
     lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.AudioUnit ];
 
-  meta = with lib; {
+  meta = {
     description = "Music theory binary and library for Rust";
     homepage = "https://github.com/twitchax/kord";
-    maintainers = with maintainers; [ kidsan ];
-    license = with licenses; [ mit ];
+    maintainers = with lib.maintainers; [ kidsan ];
+    license = with lib.licenses; [ mit ];
   };
 }

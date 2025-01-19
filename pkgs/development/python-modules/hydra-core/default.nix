@@ -81,10 +81,10 @@ buildPythonPackage rec {
     "hydra.version"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Framework for configuring complex applications";
     homepage = "https://hydra.cc";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

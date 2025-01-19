@@ -132,9 +132,9 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
-    license = licenses.gpl2Plus;
-    maintainers = teams.gnome.members;
-    platforms = platforms.linux;
+  meta = {
+    license = lib.licenses.gpl2Plus;
+    maintainers = lib.teams.gnome.members;
+    platforms = lib.platforms.linux;
   };
 })

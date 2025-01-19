@@ -79,7 +79,7 @@ buildFHSEnv {
     cp -r ${decent-sampler}/share $out/share
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Audio sample player";
     longDescription = ''
       Decent Sampler is an audio sample player.
@@ -90,9 +90,9 @@ buildFHSEnv {
     homepage = "https://www.decentsamples.com/product/decent-sampler-plugin/";
     # It claims to be free but we currently cannot find any license
     # that it is released under.
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       adam248
       chewblacka
     ];

@@ -28,10 +28,10 @@ buildDunePackage rec {
 
   hardeningDisable = lib.optional stdenv.hostPlatform.isDarwin "strictoverflow";
 
-  meta = with lib; {
+  meta = {
     inherit (src.meta) homepage;
     description = "Core pinning library";
-    maintainers = [ maintainers.bcdarwin ];
-    license = licenses.lgpl2;
+    maintainers = [ lib.maintainers.bcdarwin ];
+    license = lib.licenses.lgpl2;
   };
 }

@@ -29,10 +29,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "parts" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for common list functions related to partitioning lists";
     homepage = "https://github.com/lapets/parts";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -52,13 +52,13 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fast-paced one button platformer";
     mainProgram = "sienna";
     homepage = "https://tangramgames.dk/games/sienna";
-    maintainers = with maintainers; [ leenaars ];
-    platforms = platforms.linux;
-    license = licenses.free;
+    maintainers = with lib.maintainers; [ leenaars ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.free;
   };
 
 }

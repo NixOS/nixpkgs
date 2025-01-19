@@ -63,13 +63,13 @@ mkDerivation rec {
     cp $out/share/applications/org.kde.latte-dock.desktop $out/etc/xdg/autostart
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Dock-style app launcher based on Plasma frameworks";
     mainProgram = "latte-dock";
     homepage = "https://invent.kde.org/plasma/latte-dock";
-    license = licenses.gpl2;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.ysndr ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.ysndr ];
   };
 
 }

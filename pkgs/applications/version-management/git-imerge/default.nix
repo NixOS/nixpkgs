@@ -20,10 +20,10 @@ buildPythonApplication rec {
     installShellCompletion --bash completions/git-imerge
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mhagger/git-imerge";
     description = "Perform a merge between two branches incrementally";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     mainProgram = "git-imerge";
   };

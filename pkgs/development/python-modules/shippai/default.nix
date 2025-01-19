@@ -15,10 +15,10 @@ buildPythonPackage rec {
     sha256 = "0r6iwvmay8ygn2m15pyjrk9am4mfpk7rkf0lcbcb15pnabixlyzj";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Use Rust failures as Python exceptions";
     homepage = "https://github.com/untitaker/shippai";
-    license = licenses.mit;
-    maintainers = with maintainers; [ gebner ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ gebner ];
   };
 }

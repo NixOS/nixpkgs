@@ -30,10 +30,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "asmog" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for Ampio Smog Sensors";
     homepage = "https://github.com/kstaniek/python-ampio-smog-api";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

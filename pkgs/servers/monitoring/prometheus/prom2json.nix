@@ -17,11 +17,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-pCy4oECZnvoODezUD1+lOT46yWUr78zvnHgEB2BJN3c=";
 
-  meta = with lib; {
+  meta = {
     description = "Tool to scrape a Prometheus client and dump the result as JSON";
     mainProgram = "prom2json";
     homepage = "https://github.com/prometheus/prom2json";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ benley ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ benley ];
   };
 }

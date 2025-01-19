@@ -50,7 +50,7 @@ buildGoModule rec {
     wrapProgram $out/bin/3mux --prefix PATH : $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Terminal multiplexer inspired by i3";
     mainProgram = "3mux";
     longDescription = ''
@@ -58,11 +58,11 @@ buildGoModule rec {
       mouse-controlled scrollback, and i3-like keybindings
     '';
     homepage = "https://github.com/aaronjanse/3mux";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       aaronjanse
       Br1ght0ne
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

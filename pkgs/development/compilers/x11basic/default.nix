@@ -50,12 +50,12 @@ stdenv.mkDerivation rec {
     cp -r ../examples $out/share/.
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://x11-basic.sourceforge.net/";
     description = "Basic interpreter and compiler with graphics capabilities";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ edwtjo ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ edwtjo ];
+    platforms = lib.platforms.unix;
   };
 
 }

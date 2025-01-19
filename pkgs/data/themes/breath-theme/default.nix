@@ -38,11 +38,11 @@ stdenv.mkDerivation {
     "-DBUILD_SDDM_THEME=ON"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Manjaro KDE default theme";
     homepage = "https://gitlab.manjaro.org/artwork/themes/breath";
-    license = licenses.cc-by-sa-40;
-    maintainers = with maintainers; [ huantian ];
-    platforms = platforms.linux;
+    license = lib.licenses.cc-by-sa-40;
+    maintainers = with lib.maintainers; [ huantian ];
+    platforms = lib.platforms.linux;
   };
 }

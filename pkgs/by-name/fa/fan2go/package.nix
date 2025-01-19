@@ -30,12 +30,12 @@ buildGo123Module rec {
     rm internal/fans/cmd_test.go
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple daemon providing dynamic fan speed control based on temperature sensors";
     mainProgram = "fan2go";
     homepage = "https://github.com/markusressel/fan2go";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ mtoohey ];
-    platforms = platforms.linux;
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ mtoohey ];
+    platforms = lib.platforms.linux;
   };
 }

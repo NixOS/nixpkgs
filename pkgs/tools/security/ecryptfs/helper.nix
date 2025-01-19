@@ -26,11 +26,11 @@ stdenv.mkDerivation {
     makeWrapper "${python2.interpreter}" "$out/bin/ecryptfs-helper" --add-flags "$out/libexec/ecryptfs-helper.py"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Helper script to create/mount/unemount encrypted directories using eCryptfs without needing root permissions";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ obadz ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ obadz ];
+    platforms = lib.platforms.linux;
     hydraPlatforms = [ ];
   };
 }

@@ -31,12 +31,12 @@ rustPlatform.buildRustPackage {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ udev ];
 
-  meta = with lib; {
+  meta = {
     description = "Swiss army knife for Framework laptops";
     homepage = "https://github.com/FrameworkComputer/framework-system";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       nickcao
       leona
       kloenk

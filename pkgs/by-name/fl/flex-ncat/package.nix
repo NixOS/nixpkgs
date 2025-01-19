@@ -17,11 +17,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-RqQMCP9rmdTG5AXLXkIQz0vE7qF+3RZ1BDdVRYoHHQs=";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/kc2g-flex-tools/nCAT";
     description = "FlexRadio remote control (CAT) via hamlib/rigctl protocol";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mvs ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mvs ];
     mainProgram = "nCAT";
   };
 }

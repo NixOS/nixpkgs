@@ -62,12 +62,12 @@ stdenv.mkDerivation rec {
     updateScript = gnome.updateScript { packageName = pname; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Dock/panel library for GTK 4";
     mainProgram = "libpanel-example";
     homepage = "https://gitlab.gnome.org/GNOME/libpanel";
-    license = licenses.lgpl3Plus;
-    maintainers = teams.gnome.members;
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl3Plus;
+    maintainers = lib.teams.gnome.members;
+    platforms = lib.platforms.unix;
   };
 }

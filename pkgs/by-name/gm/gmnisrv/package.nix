@@ -38,15 +38,15 @@ stdenv.mkDerivation rec {
     mailcap
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple Gemini protocol server";
     mainProgram = "gmnisrv";
     homepage = "https://git.sr.ht/~sircmpwn/gmnisrv";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       bsima
       jb55
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

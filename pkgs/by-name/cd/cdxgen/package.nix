@@ -63,12 +63,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Creates CycloneDX Software Bill-of-Materials (SBOM) for your projects from source and container images";
     mainProgram = "cdxgen";
     homepage = "https://github.com/CycloneDX/cdxgen";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       dit7ya
       quincepie
     ];

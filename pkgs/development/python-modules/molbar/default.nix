@@ -62,10 +62,10 @@ buildPythonPackage rec {
 
   doCheck = false; # Doesn't find the fortran libs before installation
 
-  meta = with lib; {
+  meta = {
     description = "Unique molecular identifiers for molecular barcoding";
     homepage = "https://git.rwth-aachen.de/bannwarthlab/molbar";
-    license = licenses.mit;
-    maintainers = [ maintainers.sheepforce ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.sheepforce ];
   };
 }

@@ -24,10 +24,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rubymarshal" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/d9pouces/RubyMarshal/";
     description = "Read and write Ruby-marshalled data";
-    license = licenses.wtfpl;
-    maintainers = [ maintainers.ryantm ];
+    license = lib.licenses.wtfpl;
+    maintainers = [ lib.maintainers.ryantm ];
   };
 }

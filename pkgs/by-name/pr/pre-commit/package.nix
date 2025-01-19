@@ -180,11 +180,11 @@ buildPythonApplication rec {
     inherit git pre-commit;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Framework for managing and maintaining multi-language pre-commit hooks";
     homepage = "https://pre-commit.com/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ borisbabic ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ borisbabic ];
     mainProgram = "pre-commit";
   };
 }

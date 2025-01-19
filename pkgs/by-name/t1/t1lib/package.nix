@@ -62,13 +62,13 @@ stdenv.mkDerivation rec {
     chmod +x $out/lib/*.so.*
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.t1lib.org/";
     description = "Type 1 font rasterizer library for UNIX/X11";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2
       lgpl2
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

@@ -96,11 +96,11 @@ stdenv.mkDerivation rec {
   # Fix gtk3 module target dir. Proper upstream solution should be using define_variable.
   env.PKG_CONFIG_GTK__3_0_LIBDIR = "${placeholder "out"}/lib";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/linuxmint/xapp";
     description = "Cross-desktop libraries and common resources";
-    license = licenses.lgpl3;
-    platforms = platforms.linux;
-    maintainers = teams.cinnamon.members;
+    license = lib.licenses.lgpl3;
+    platforms = lib.platforms.linux;
+    maintainers = lib.teams.cinnamon.members;
   };
 }

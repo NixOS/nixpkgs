@@ -21,11 +21,11 @@ buildGoModule rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Collection of tools and libraries for working with Go code, including linters and static analysis";
     homepage = "https://staticcheck.io";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       rvolosatovs
       kalbasit
       smasher164

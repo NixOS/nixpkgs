@@ -36,12 +36,12 @@ stdenv.mkDerivation rec {
     install -Dm755 ./AntSimulator $out/bin/antsimulator
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/johnBuffer/AntSimulator";
     description = "Simple Ants simulator";
     mainProgram = "antsimulator";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

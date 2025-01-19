@@ -68,12 +68,12 @@ buildPythonPackage rec {
     "ezdxf.addons"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python package to read and write DXF drawings (interface to the DXF file format)";
     mainProgram = "ezdxf";
     homepage = "https://github.com/mozman/ezdxf/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hodapp ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hodapp ];
+    platforms = lib.platforms.unix;
   };
 }

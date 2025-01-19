@@ -26,11 +26,11 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=reserved-user-defined-literal";
 
-  meta = with lib; {
+  meta = {
     homepage = "http://compression.ca/pbzip2/";
     description = "Parallel implementation of bzip2 for multi-core machines";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

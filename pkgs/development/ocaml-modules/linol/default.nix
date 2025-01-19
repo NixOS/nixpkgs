@@ -28,10 +28,10 @@ buildDunePackage rec {
     trace
   ];
 
-  meta = with lib; {
+  meta = {
     description = "LSP server library";
-    license = licenses.mit;
-    maintainers = [ maintainers.ulrikstrid ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.ulrikstrid ];
     homepage = "https://github.com/c-cube/linol";
   };
 }

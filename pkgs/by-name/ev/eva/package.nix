@@ -15,11 +15,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-gnym2sedyzQzubOtj64Yoh+sKT+sa60w/Z72hby7Pms=";
 
-  meta = with lib; {
+  meta = {
     description = "Calculator REPL, similar to bc";
     homepage = "https://github.com/NerdyPepper/eva";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       nrdxp
       ma27
       figsoda

@@ -21,15 +21,15 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ darwin.Security ];
 
-  meta = with lib; {
+  meta = {
     description = "Generate documentation for Nix functions";
     mainProgram = "nixdoc";
     homepage = "https://github.com/nix-community/nixdoc";
-    license = [ licenses.gpl3 ];
-    maintainers = with maintainers; [
+    license = [ lib.licenses.gpl3 ];
+    maintainers = with lib.maintainers; [
       infinisil
       hsjobeki
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

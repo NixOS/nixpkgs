@@ -44,11 +44,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = [ wrapQtAppsHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Remote GUI for transmission-daemon";
     mainProgram = "tremotesf";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     homepage = "https://github.com/equeim/tremotesf2";
-    maintainers = with maintainers; [ sochotnicky ];
+    maintainers = with lib.maintainers; [ sochotnicky ];
   };
 })

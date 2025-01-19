@@ -32,11 +32,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Scala implementation of the Lightning Network";
     homepage = "https://github.com/ACINQ/eclair";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ prusnak ];
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ prusnak ];
+    platforms = lib.platforms.unix;
   };
 }

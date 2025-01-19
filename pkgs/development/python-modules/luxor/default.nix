@@ -29,10 +29,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "luxor" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to control FX Luminaire controllers";
     homepage = "https://github.com/pbozeman/luxor";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -31,10 +31,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mdformat_footnote" ];
 
-  meta = with lib; {
+  meta = {
     description = "Footnote format addition for mdformat";
     homepage = "https://github.com/executablebooks/mdformat-footnote";
-    license = licenses.mit;
-    maintainers = with maintainers; [ aldoborrero ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ aldoborrero ];
   };
 }

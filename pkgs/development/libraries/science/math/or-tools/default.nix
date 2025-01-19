@@ -144,14 +144,14 @@ stdenv.mkDerivation rec {
     "python"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/google/or-tools";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     description = ''
       Google's software suite for combinatorial optimization.
     '';
     mainProgram = "fzn-ortools";
-    maintainers = with maintainers; [ andersk ];
-    platforms = with platforms; linux ++ darwin;
+    maintainers = with lib.maintainers; [ andersk ];
+    platforms = with lib.platforms; linux ++ darwin;
   };
 }

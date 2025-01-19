@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ sfml ];
   cmakeFlags = [ "-DCMAKE_MODULE_PATH=${sfml}/share/SFML/cmake/Modules/" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.sfml-dev.org/";
     description = "Simple and fast multimedia library";
     longDescription = ''
@@ -27,8 +27,8 @@ stdenv.mkDerivation rec {
       It provides access to windowing, graphics, audio and network.
       It is written in C++, and has bindings for various languages such as C, .Net, Ruby, Python.
     '';
-    license = licenses.zlib;
-    maintainers = [ maintainers.jpdoyle ];
-    platforms = platforms.linux;
+    license = lib.licenses.zlib;
+    maintainers = [ lib.maintainers.jpdoyle ];
+    platforms = lib.platforms.linux;
   };
 }

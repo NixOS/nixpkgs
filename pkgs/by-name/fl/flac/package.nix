@@ -50,13 +50,13 @@ stdenv.mkDerivation rec {
     "doc"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://xiph.org/flac/";
     description = "Library and tools for encoding and decoding the FLAC lossless audio file format";
     changelog = "https://xiph.org/flac/changelog.html";
     mainProgram = "flac";
-    platforms = platforms.all;
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ruuda ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ ruuda ];
   };
 }

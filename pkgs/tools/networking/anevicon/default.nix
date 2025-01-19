@@ -38,11 +38,11 @@ rustPlatform.buildRustPackage rec {
   # Tries to send large UDP packets that Darwin rejects.
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  meta = with lib; {
+  meta = {
     description = "UDP-based load generator";
     homepage = "https://github.com/rozgo/anevicon";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "anevicon";
   };
 }

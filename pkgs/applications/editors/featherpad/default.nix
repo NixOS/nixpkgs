@@ -34,11 +34,11 @@ mkDerivation rec {
     qtx11extras
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight Qt5 Plain-Text Editor for Linux";
     homepage = "https://github.com/tsujan/FeatherPad";
-    platforms = platforms.linux;
-    maintainers = [ maintainers.flosse ];
-    license = licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.flosse ];
+    license = lib.licenses.gpl3Plus;
   };
 }

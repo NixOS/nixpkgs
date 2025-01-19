@@ -35,12 +35,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/leo-arch/clifm";
     description = "CliFM is a CLI-based, shell-like, and non-curses terminal file manager written in C: simple, fast, extensible, and lightweight as hell";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ nadir-ishiguro ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ nadir-ishiguro ];
+    platforms = lib.platforms.unix;
     mainProgram = "clifm";
   };
 }

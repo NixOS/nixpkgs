@@ -42,11 +42,11 @@ stdenv.mkDerivation rec {
     ./c-xpmpipethrough.patch
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Open source clone of the Motif widget set";
     homepage = "https://lesstif.sourceforge.net";
-    platforms = platforms.unix;
-    license = with licenses; [
+    platforms = lib.platforms.unix;
+    license = with lib.licenses; [
       gpl2
       lgpl2
     ];

@@ -43,12 +43,12 @@ stdenv.mkDerivation rec {
       --replace "Exec=" "Exec=$out/bin/"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://lifeograph.sourceforge.net/wiki/Main_Page";
     description = "Lifeograph is an off-line and private journal and note taking application";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     maintainers = [ ];
     mainProgram = "lifeograph";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

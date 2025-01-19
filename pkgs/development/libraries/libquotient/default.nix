@@ -58,11 +58,11 @@ stdenv.mkDerivation rec {
     rm $out/share/ndk-modules/Android.mk
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Qt5/Qt6 library to write cross-platform clients for Matrix";
     homepage = "https://quotient-im.github.io/libQuotient/";
-    license = licenses.lgpl21;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl21;
+    maintainers = with lib.maintainers; [
       colemickens
       matthiasbeyer
     ];

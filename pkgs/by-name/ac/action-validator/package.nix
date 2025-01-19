@@ -18,11 +18,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-mBY+J6JcIhV++tO6Dhw5JvYLSwoYZR3lB3l0KTjkcQM=";
 
-  meta = with lib; {
+  meta = {
     description = "Tool to validate GitHub Action and Workflow YAML files";
     homepage = "https://github.com/mpalmer/action-validator";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "action-validator";
-    maintainers = with maintainers; [ thiagokokada ];
+    maintainers = with lib.maintainers; [ thiagokokada ];
   };
 }

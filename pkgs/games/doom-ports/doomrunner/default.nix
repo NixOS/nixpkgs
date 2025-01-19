@@ -54,13 +54,13 @@ stdenv.mkDerivation (finalAttrs: {
     exec = "DoomRunner";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Graphical launcher of ZDoom and derivatives";
     mainProgram = "DoomRunner";
     homepage = "https://github.com/Youda008/DoomRunner/";
     changelog = "https://github.com/Youda008/DoomRunner/blob/${finalAttrs.src.rev}/changelog.txt";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ keenanweaver ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ keenanweaver ];
   };
 })

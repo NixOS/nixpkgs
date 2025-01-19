@@ -17,11 +17,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-74woBoLXuxE4v3iMvc+QWz5n5F5/peaFBgZu+3ULXRM=";
 
-  meta = with lib; {
+  meta = {
     description = "Tmuxinator for the i3 window manager";
     homepage = "https://github.com/pitkley/i3nator";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ mpoquet ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ mpoquet ];
     mainProgram = "i3nator";
   };
 }

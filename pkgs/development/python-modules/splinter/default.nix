@@ -83,11 +83,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "splinter" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://splinter.readthedocs.io/en/latest/news.html";
     description = "Browser abstraction for web acceptance testing";
     homepage = "https://github.com/cobrateam/splinter";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

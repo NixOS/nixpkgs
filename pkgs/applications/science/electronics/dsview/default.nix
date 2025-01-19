@@ -49,13 +49,13 @@ stdenv.mkDerivation rec {
     python3
   ] ++ lib.optional stdenv.hostPlatform.isLinux qtwayland;
 
-  meta = with lib; {
+  meta = {
     description = "GUI program for supporting various instruments from DreamSourceLab, including logic analyzer, oscilloscope, etc";
     mainProgram = "DSView";
     homepage = "https://www.dreamsourcelab.com/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       bachp
       carlossless
     ];

@@ -59,11 +59,11 @@ buildPythonApplication rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool that converts RSS/Atom newsfeeds to email";
     homepage = "https://pypi.python.org/pypi/rss2email";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ ekleog ];
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ ekleog ];
     mainProgram = "r2e";
   };
   passthru.tests = {

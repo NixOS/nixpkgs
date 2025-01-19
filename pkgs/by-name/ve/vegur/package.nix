@@ -26,11 +26,11 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://dotcolon.net/font/vegur/";
     description = "Humanist sans serif font";
-    platforms = platforms.all;
-    maintainers = with maintainers; [ minijackson ];
-    license = licenses.cc0;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ minijackson ];
+    license = lib.licenses.cc0;
   };
 }

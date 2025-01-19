@@ -75,11 +75,11 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "GNOME Office Spreadsheet";
     license = lib.licenses.gpl2Plus;
     homepage = "http://projects.gnome.org/gnumeric/";
-    platforms = platforms.unix;
-    maintainers = [ maintainers.vcunat ];
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.vcunat ];
   };
 }

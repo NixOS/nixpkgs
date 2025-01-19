@@ -57,11 +57,11 @@ stdenv.mkDerivation rec {
     ln -s ${libkkc-data}/lib/libkkc/models $out/share/libkkc/models
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Japanese Kana Kanji conversion input method library";
     homepage = "https://github.com/ueno/libkkc";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ vanzef ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ vanzef ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -71,12 +71,12 @@ rustPlatform.buildRustPackage rec {
       --suffix XDG_DATA_DIRS : "$out/share:${cosmic-icons}/share"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pop-os/cosmic-settings";
     description = "Settings for the COSMIC Desktop Environment";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ nyabinary ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ nyabinary ];
+    platforms = lib.platforms.linux;
     mainProgram = "cosmic-settings";
   };
 }

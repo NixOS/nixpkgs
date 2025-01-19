@@ -56,13 +56,13 @@ buildGoModule rec {
     execution = callPackage ./tests.nix { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool for securing CI/CD workflows with version pinning";
     mainProgram = "ratchet";
     downloadPage = "https://github.com/sethvargo/ratchet";
     homepage = "https://github.com/sethvargo/ratchet";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       cameronraysmith
       ryanccn
     ];

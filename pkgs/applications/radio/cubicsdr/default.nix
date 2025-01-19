@@ -62,12 +62,12 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DUSE_HAMLIB=ON" ] ++ lib.optional enableDigitalLab "-DENABLE_DIGITAL_LAB=ON";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://cubicsdr.com";
     description = "Software Defined Radio application";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ lasandell ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ lasandell ];
+    platforms = lib.platforms.unix;
     mainProgram = "CubicSDR";
   };
 }

@@ -17,11 +17,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-BLEVPKO2YwcKuM/rUeMuyE38phOrbq0e8cjqh1qmJjM=";
 
-  meta = with lib; {
+  meta = {
     description = "Print a list of paths as a tree of paths";
     homepage = "https://github.com/jez/as-tree";
-    license = with licenses; [ blueOak100 ];
-    maintainers = with maintainers; [ jshholland ];
+    license = with lib.licenses; [ blueOak100 ];
+    maintainers = with lib.maintainers; [ jshholland ];
     mainProgram = "as-tree";
   };
 }

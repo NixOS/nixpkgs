@@ -29,9 +29,9 @@ buildPythonPackage rec {
     h5py
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Reference implementations of popular deep learning models";
     homepage = "https://github.com/keras-team/keras-applications";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

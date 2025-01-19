@@ -28,12 +28,12 @@ stdenv.mkDerivation rec {
     install -Dm0755 act $out/bin/act
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Toolkit to automatically generate software components: abstract API, implementation stubs and language bindings";
     mainProgram = "act";
     homepage = "https://github.com/Autodesk/AutomaticComponentToolkit";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ gebner ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ gebner ];
+    platforms = lib.platforms.all;
   };
 }

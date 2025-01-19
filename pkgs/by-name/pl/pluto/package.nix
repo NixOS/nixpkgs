@@ -23,12 +23,12 @@ buildGoModule rec {
     "-X main.version=v${version}"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/FairwindsOps/pluto";
     description = "Find deprecated Kubernetes apiVersions";
     mainProgram = "pluto";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       peterromfeldhk
       kashw2
     ];

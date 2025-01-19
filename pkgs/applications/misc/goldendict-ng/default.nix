@@ -85,15 +85,15 @@ stdenv.mkDerivation (finalAttrs: {
     "-DUSE_SYSTEM_TOML=ON"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://xiaoyifang.github.io/goldendict-ng/";
     description = "Advanced multi-dictionary lookup program";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "goldendict";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       slbtty
       michojel
     ];
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
   };
 })

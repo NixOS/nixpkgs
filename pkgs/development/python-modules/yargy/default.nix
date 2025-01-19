@@ -21,10 +21,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
   pytestFlagsArray = [ "tests" ];
 
-  meta = with lib; {
+  meta = {
     description = "Rule-based facts extraction for Russian language";
     homepage = "https://github.com/natasha/yargu";
-    license = licenses.mit;
-    maintainers = with maintainers; [ npatsakula ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ npatsakula ];
   };
 }

@@ -42,12 +42,12 @@ stdenv.mkDerivation (finalAttrs: {
       --replace 'Exec=com.github.ryonakano.konbucase' 'Exec=${placeholder "out"}/bin/konbucase'
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ryonakano/konbucase";
     description = "Case converting app suitable for coding or typing";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ galaxy ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ galaxy ];
+    platforms = lib.platforms.linux;
     mainProgram = "konbucase";
   };
 })

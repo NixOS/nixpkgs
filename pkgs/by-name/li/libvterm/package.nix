@@ -37,10 +37,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ ncurses ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://libvterm.sourceforge.net/";
     description = "Terminal emulator library to mimic both vt100 and rxvt";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

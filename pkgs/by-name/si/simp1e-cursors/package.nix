@@ -39,11 +39,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Aesthetic cursor theme for Linux desktops";
     homepage = "https://gitlab.com/cursors/simp1e";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ natto1784 ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ natto1784 ];
   };
 }

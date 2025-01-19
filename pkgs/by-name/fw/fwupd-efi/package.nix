@@ -49,10 +49,10 @@ stdenv.mkDerivation rec {
     "-Defi_sbat_distro_url=https://search.nixos.org/packages?channel=unstable&show=fwupd-efi&from=0&size=50&sort=relevance&query=fwupd-efi"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://fwupd.org/";
     maintainers = [ ];
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
   };
 }

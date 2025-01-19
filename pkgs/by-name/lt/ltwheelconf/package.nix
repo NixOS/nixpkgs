@@ -25,12 +25,12 @@ stdenv.mkDerivation {
     cp ltwheelconf $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/thk/LTWheelConf";
     description = "Logitech wheels configuration tool";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.ebzzry ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.ebzzry ];
+    platforms = lib.platforms.linux;
     mainProgram = "ltwheelconf";
   };
 }

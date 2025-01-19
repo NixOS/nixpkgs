@@ -55,12 +55,12 @@ stdenv.mkDerivation {
     cp keynavrc $out/share/keynav/doc
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Generate X11 mouse clicks from keyboard";
     homepage = "https://www.semicomplete.com/projects/keynav/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ pSub ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ pSub ];
+    platforms = lib.platforms.linux;
     mainProgram = "keynav";
   };
 }

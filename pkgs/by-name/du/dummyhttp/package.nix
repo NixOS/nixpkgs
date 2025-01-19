@@ -23,11 +23,11 @@ rustPlatform.buildRustPackage rec {
     darwin.apple_sdk.frameworks.Security
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Super simple HTTP server that replies a fixed body with a fixed response code";
     homepage = "https://github.com/svenstaro/dummyhttp";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ GuillaumeDesforges ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ GuillaumeDesforges ];
     mainProgram = "dummyhttp";
   };
 }

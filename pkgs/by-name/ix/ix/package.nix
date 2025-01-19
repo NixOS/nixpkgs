@@ -33,11 +33,11 @@ resholve.mkDerivation {
     inputs = [ curl ];
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "http://ix.io";
     description = "Command line pastebin";
-    maintainers = with maintainers; [ peterhoeg ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ peterhoeg ];
+    platforms = lib.platforms.all;
     mainProgram = "ix";
   };
 }

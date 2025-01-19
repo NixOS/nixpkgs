@@ -65,12 +65,12 @@ stdenvNoCC.mkDerivation rec {
     "SYSCONFDIR=${placeholder "out"}/etc"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Fast, highly customizable system info script";
     homepage = "https://github.com/dylanaraps/neofetch";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ konimex ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ konimex ];
     mainProgram = "neofetch";
   };
 }

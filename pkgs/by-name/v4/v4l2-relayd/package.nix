@@ -38,12 +38,12 @@ stdenv.mkDerivation rec {
 
   preConfigure = "./autogen.sh --prefix=$out";
 
-  meta = with lib; {
+  meta = {
     description = "Streaming relay for v4l2loopback using GStreamer";
     mainProgram = "v4l2-relayd";
     homepage = "https://git.launchpad.net/v4l2-relayd";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ betaboon ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ betaboon ];
     platforms = [ "x86_64-linux" ];
   };
 }

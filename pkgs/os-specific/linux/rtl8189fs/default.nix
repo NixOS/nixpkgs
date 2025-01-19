@@ -17,11 +17,11 @@ rtl8189es.overrideAttrs (drv: rec {
     sha256 = "sha256-pziaUM6XfF4Tt9yfWUnLUiTw+sw6uZrr1HcaXdRQ31E=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Driver for Realtek rtl8189fs";
     homepage = "https://github.com/jwrdegoede/rtl8189ES_linux/tree/rtl8189fs";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ puffnfresh ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ puffnfresh ];
   };
 })

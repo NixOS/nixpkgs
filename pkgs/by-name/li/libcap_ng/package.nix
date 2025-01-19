@@ -23,10 +23,10 @@ stdenv.mkDerivation rec {
     "--without-python"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for working with POSIX capabilities";
     homepage = "https://people.redhat.com/sgrubb/libcap-ng/";
-    platforms = platforms.linux;
-    license = licenses.lgpl21;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.lgpl21;
   };
 }

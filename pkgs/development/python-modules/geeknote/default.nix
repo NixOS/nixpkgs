@@ -39,10 +39,10 @@ buildPythonPackage {
     evernote
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Work with Evernote from command line";
     homepage = "http://www.geeknote.me";
-    license = licenses.gpl1Only;
-    maintainers = with maintainers; [ hbunke ];
+    license = lib.licenses.gpl1Only;
+    maintainers = with lib.maintainers; [ hbunke ];
   };
 }

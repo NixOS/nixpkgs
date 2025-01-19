@@ -20,11 +20,11 @@ buildPostgresqlExtension rec {
 
   makeFlags = [ "USE_PGXS=1" ];
 
-  meta = with lib; {
+  meta = {
     description = "Text similarity measurement and index searching based on bigrams";
     homepage = "https://pgbigm.osdn.jp/";
     maintainers = [ ];
     platforms = postgresql.meta.platforms;
-    license = licenses.postgresql;
+    license = lib.licenses.postgresql;
   };
 }

@@ -53,11 +53,11 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "C++ interface to the GLib library";
     homepage = "https://gtkmm.org/";
-    license = licenses.lgpl2Plus;
-    maintainers = teams.gnome.members ++ (with maintainers; [ raskin ]);
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl2Plus;
+    maintainers = lib.teams.gnome.members ++ (with lib.maintainers; [ raskin ]);
+    platforms = lib.platforms.unix;
   };
 }

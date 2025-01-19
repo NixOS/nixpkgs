@@ -124,11 +124,11 @@ stdenv.mkDerivation rec {
     install_name_tool -add_rpath ${tbb}/lib $out/lib/libtiledb.dylib
   '';
 
-  meta = with lib; {
+  meta = {
     description = "TileDB allows you to manage the massive dense and sparse multi-dimensional array data";
     homepage = "https://github.com/TileDB-Inc/TileDB";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ rakesh4g ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ rakesh4g ];
   };
 }

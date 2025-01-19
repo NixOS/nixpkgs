@@ -57,12 +57,12 @@ stdenv.mkDerivation rec {
       darwin.apple_sdk.frameworks.Foundation
     ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/World/design/icon-library";
     description = "Symbolic icons for your apps";
     mainProgram = "icon-library";
-    maintainers = with maintainers; [ qyliss ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ qyliss ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
   };
 }

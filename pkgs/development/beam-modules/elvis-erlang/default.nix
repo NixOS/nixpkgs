@@ -46,11 +46,11 @@ rebar3Relx rec {
       echo "${repo} is already up-to-date"
     fi
   '';
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/inaka/elvis";
     description = "Erlang Style Reviewer";
-    platforms = platforms.unix;
-    license = licenses.asl20;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dlesl ];
     mainProgram = "elvis";
   };

@@ -61,12 +61,12 @@ stdenv.mkDerivation rec {
     updateScript = gitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Personal task manager for GNOME";
     mainProgram = "endeavour";
     homepage = "https://gitlab.gnome.org/World/Endeavour";
-    license = licenses.gpl3Plus;
-    maintainers = teams.gnome.members;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = lib.teams.gnome.members;
+    platforms = lib.platforms.linux;
   };
 }

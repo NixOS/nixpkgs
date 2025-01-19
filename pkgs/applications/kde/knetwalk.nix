@@ -10,13 +10,13 @@
 
 mkDerivation {
   pname = "knetwalk";
-  meta = with lib; {
+  meta = {
     homepage = "https://kde.org/applications/en/games/org.kde.knetwalk";
     description = "Single player logic game";
     mainProgram = "knetwalk";
-    maintainers = with maintainers; [ freezeboy ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ freezeboy ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
   nativeBuildInputs = [
     extra-cmake-modules

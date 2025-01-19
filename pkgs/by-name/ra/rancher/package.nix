@@ -34,11 +34,11 @@ buildGoModule rec {
     $out/bin/rancher | grep ${version} > /dev/null
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Rancher Command Line Interface (CLI) is a unified tool for interacting with your Rancher Server";
     mainProgram = "rancher";
     homepage = "https://github.com/rancher/cli";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bryanasdev000 ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bryanasdev000 ];
   };
 }

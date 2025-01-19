@@ -26,10 +26,10 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "python/tests" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/google/brotli";
     description = "Generic-purpose lossless compression algorithm";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

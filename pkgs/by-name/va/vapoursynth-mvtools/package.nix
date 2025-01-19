@@ -32,10 +32,10 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--libdir=$(out)/lib/vapoursynth" ];
 
-  meta = with lib; {
+  meta = {
     description = "Set of filters for motion estimation and compensation";
     homepage = "https://github.com/dubhater/vapoursynth-mvtools";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ rnhmjoj ];
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ rnhmjoj ];
   };
 }

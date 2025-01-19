@@ -19,10 +19,10 @@ rustPlatform.buildRustPackage rec {
 
   patches = [ ./fix.patch ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/fcsonline/tmux-thumbs";
     description = "Lightning fast version of tmux-fingers written in Rust, copy/pasting tmux like vimium/vimperator";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ghostbuster91 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ghostbuster91 ];
   };
 }

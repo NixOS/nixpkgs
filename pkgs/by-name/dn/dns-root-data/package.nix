@@ -33,12 +33,12 @@ stdenv.mkDerivation {
     cp ${rootDs} $out/root.ds
   '';
 
-  meta = with lib; {
+  meta = {
     description = "DNS root data including root zone and DNSSEC key";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       fpletz
       vcunat
     ];
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
   };
 }

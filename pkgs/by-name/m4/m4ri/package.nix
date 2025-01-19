@@ -54,11 +54,11 @@ stdenv.mkDerivation rec {
     autoreconfHook
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://malb.bitbucket.io/m4ri/";
     description = "Library to do fast arithmetic with dense matrices over F_2";
-    license = licenses.gpl2Plus;
-    maintainers = teams.sage.members;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = lib.teams.sage.members;
+    platforms = lib.platforms.unix;
   };
 }

@@ -13,10 +13,10 @@ buildOctavePackage rec {
     sha256 = "sha256-dRXqIRqMuO9dnTurhaNunfVHXosFqRmgeODVJ0YHcTM=";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://octave.sourceforge.io/image/index.html";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ KarlJoad ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Functions for processing images";
     longDescription = ''
       The Octave-forge Image package provides functions for processing

@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Collection of libraries and applications implementing large parts of the DICOM standard";
     longDescription = ''
       DCMTK is a collection of libraries and applications implementing large parts of the DICOM standard.
@@ -43,8 +43,8 @@ stdenv.mkDerivation rec {
       It comes in complete source code and is made available as "open source" software.
     '';
     homepage = "https://dicom.offis.de/dcmtk";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ iimog ];
-    platforms = with platforms; linux ++ darwin;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ iimog ];
+    platforms = with lib.platforms; linux ++ darwin;
   };
 }

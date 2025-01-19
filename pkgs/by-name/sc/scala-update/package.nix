@@ -47,10 +47,10 @@ buildGraalvmNativeImage {
     $out/bin/${baseName} --version | grep -q "${version}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Update your Scala dependencies interactively";
     homepage = "https://github.com/kitlangton/scala-update";
-    license = licenses.asl20;
-    maintainers = [ maintainers.rtimush ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.rtimush ];
   };
 }

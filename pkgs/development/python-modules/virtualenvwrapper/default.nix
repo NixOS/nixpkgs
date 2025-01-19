@@ -76,9 +76,9 @@ buildPythonPackage rec {
         done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Enhancements to virtualenv";
     homepage = "https://pypi.python.org/pypi/virtualenvwrapper";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

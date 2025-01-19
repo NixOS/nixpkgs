@@ -32,10 +32,10 @@ buildPythonPackage rec {
     ${python.interpreter} test/test_zcs.py
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Configuration system which takes advantage of both argparse and yacs";
     homepage = "https://github.com/DIYer22/zcs";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lucasew ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lucasew ];
   };
 }

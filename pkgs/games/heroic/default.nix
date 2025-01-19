@@ -106,12 +106,12 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Native GOG, Epic, and Amazon Games Launcher for Linux, Windows and Mac";
     homepage = "https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher";
     changelog = "https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher/releases";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ aidalgol ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ aidalgol ];
     # Heroic may work on nix-darwin, but it needs a dedicated maintainer for the platform.
     # It may also work on other Linux targets, but all the game stores only
     # support x86 Linux, so it would require extra hacking to run games via QEMU

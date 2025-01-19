@@ -17,12 +17,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-SZWmJGiCc/FevxMWJpa8xKVz/rbll52oNbFtqPpz74g=";
 
-  meta = with lib; {
+  meta = {
     description = "Clean and optimize SVG files from unnecessary data";
     homepage = "https://github.com/RazrFalcon/SVGCleaner";
     changelog = "https://github.com/RazrFalcon/svgcleaner/releases";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ yuu ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ yuu ];
     mainProgram = "svgcleaner";
   };
 }

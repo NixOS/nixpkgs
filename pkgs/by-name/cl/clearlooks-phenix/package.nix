@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   preferLocalBuild = true;
 
-  meta = with lib; {
+  meta = {
     description = "GTK3 port of the Clearlooks theme";
     longDescription = ''
       The Clearlooks-Phénix project aims at creating a GTK3 port of Clearlooks,
@@ -30,8 +30,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/jpfleury/clearlooks-phenix";
     downloadPage = "https://github.com/jpfleury/clearlooks-phenix/releases";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.prikhi ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.prikhi ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Linux development manual pages";
     homepage = "https://www.kernel.org/doc/man-pages/";
-    license = licenses.gpl2Plus;
-    platforms = with platforms; unix;
+    license = lib.licenses.gpl2Plus;
+    platforms = with lib.platforms; unix;
     priority = 30; # if a package comes with its own man page, prefer it
   };
 }

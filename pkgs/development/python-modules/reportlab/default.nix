@@ -59,10 +59,10 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open Source Python library for generating PDFs and graphics";
     homepage = "https://www.reportlab.com/";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

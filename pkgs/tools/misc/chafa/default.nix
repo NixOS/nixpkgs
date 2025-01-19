@@ -59,12 +59,12 @@ stdenv.mkDerivation rec {
   # https://github.com/NixOS/nixpkgs/pull/240893#issuecomment-1635347507
   NIX_LDFLAGS = [ "-lwebp" ];
 
-  meta = with lib; {
+  meta = {
     description = "Terminal graphics for the 21st century";
     homepage = "https://hpjansson.org/chafa/";
-    license = licenses.lgpl3Plus;
-    platforms = platforms.all;
-    maintainers = [ maintainers.mog ];
+    license = lib.licenses.lgpl3Plus;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.mog ];
     mainProgram = "chafa";
   };
 }

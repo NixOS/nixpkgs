@@ -53,14 +53,14 @@ stdenv.mkDerivation rec {
     "-Dsystemd_systemunitdir=${placeholder "out"}/etc/systemd/system"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/heftig/rtkit";
     description = "Daemon that hands out real-time priority to processes";
     mainProgram = "rtkitctl";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3
       bsd0
     ]; # lib is bsd license
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

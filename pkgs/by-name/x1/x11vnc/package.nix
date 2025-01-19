@@ -73,12 +73,12 @@ stdenv.mkDerivation rec {
     sed -i -e '/^\tXdummy.c\ \\$/,$d' -e 's/\tx11vnc_loop\ \\/\tx11vnc_loop/' misc/Makefile.am
   '';
 
-  meta = with lib; {
+  meta = {
     description = "VNC server connected to a real X11 screen";
     homepage = "https://github.com/LibVNC/x11vnc/";
-    platforms = platforms.linux;
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ OPNA2608 ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ OPNA2608 ];
     mainProgram = "x11vnc";
   };
 }

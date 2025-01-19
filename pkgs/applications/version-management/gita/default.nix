@@ -33,11 +33,11 @@ buildPythonApplication rec {
     installShellCompletion --zsh --name gita ${src}/.gita-completion.zsh
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command-line tool to manage multiple git repos";
     homepage = "https://github.com/nosarthur/gita";
-    license = licenses.mit;
-    maintainers = with maintainers; [ seqizz ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ seqizz ];
     mainProgram = "gita";
   };
 }

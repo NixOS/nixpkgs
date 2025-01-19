@@ -28,11 +28,11 @@ stdenv.mkDerivation rec {
     cp alan.readme ChangeLog $out/share/alan2
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.alanif.se/";
     description = "Alan interactive fiction language (legacy version)";
-    license = licenses.artistic2;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ neilmayhew ];
+    license = lib.licenses.artistic2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ neilmayhew ];
   };
 }

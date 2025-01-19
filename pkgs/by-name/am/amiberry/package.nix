@@ -98,12 +98,12 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/BlitterStudio/amiberry";
     description = "Optimized Amiga emulator for Linux/macOS";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ michaelshmitty ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ michaelshmitty ];
     mainProgram = "amiberry";
   };
 })

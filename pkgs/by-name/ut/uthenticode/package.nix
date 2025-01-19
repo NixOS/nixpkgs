@@ -34,11 +34,11 @@ stdenv.mkDerivation rec {
   doCheck = true;
   checkPhase = "test/uthenticode_test";
 
-  meta = with lib; {
+  meta = {
     description = "Small cross-platform library for verifying Authenticode digital signatures";
     homepage = "https://github.com/trailofbits/uthenticode";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ arturcygan ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ arturcygan ];
   };
 }

@@ -26,9 +26,9 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "yapsy" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://yapsy.sourceforge.net/";
     description = "Yet another plugin system";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
   };
 }

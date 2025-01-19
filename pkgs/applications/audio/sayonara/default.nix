@@ -81,11 +81,11 @@ mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Sayonara music player";
     homepage = "https://sayonara-player.com/";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ deepfire ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ deepfire ];
+    platforms = lib.platforms.unix;
   };
 }

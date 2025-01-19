@@ -82,12 +82,12 @@ gcc10Stdenv.mkDerivation rec {
       "-DHAVE_SSE42=${if gcc10Stdenv.hostPlatform.sse4_2Support then "ON" else "OFF"}"
     ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.arangodb.com";
     description = "Native multi-model database with flexible data models for documents, graphs, and key-values";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       flosse
       jsoo1
     ];

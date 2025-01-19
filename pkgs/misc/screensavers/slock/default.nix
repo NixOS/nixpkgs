@@ -46,18 +46,18 @@ stdenv.mkDerivation (finalAttrs: {
     url = "git://git.suckless.org/slock";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://tools.suckless.org/slock";
     description = "Simple X display locker";
     mainProgram = "slock";
     longDescription = ''
       Simple X display locker. This is the simplest X screen locker.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       astsmtl
       qusic
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })

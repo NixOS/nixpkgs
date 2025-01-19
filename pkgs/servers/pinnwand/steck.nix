@@ -41,11 +41,11 @@ python3Packages.buildPythonApplication rec {
 
   passthru.tests = nixosTests.pinnwand;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/supakeen/steck";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     description = "Client for pinnwand pastebin";
     mainProgram = "steck";
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

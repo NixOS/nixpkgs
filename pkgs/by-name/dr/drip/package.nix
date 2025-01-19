@@ -36,11 +36,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Launcher for the Java Virtual Machine intended to be a drop-in replacement for the java command, only faster";
-    license = licenses.epl10;
+    license = lib.licenses.epl10;
     homepage = "https://github.com/ninjudd/drip";
-    platforms = platforms.linux;
-    maintainers = [ maintainers.rybern ];
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.rybern ];
   };
 }

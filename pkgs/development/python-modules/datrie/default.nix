@@ -40,10 +40,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "datrie" ];
 
-  meta = with lib; {
+  meta = {
     description = "Super-fast, efficiently stored Trie for Python";
     homepage = "https://github.com/kmike/datrie";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ lewo ];
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ lewo ];
   };
 }

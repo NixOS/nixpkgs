@@ -58,11 +58,11 @@ stdenv.mkDerivation {
     (cmakeBool "USE_SYSTEM_BOX2D" true)
   ];
 
-  meta = with lib; {
+  meta = {
     description = "QML plugin for Box2D engine";
     homepage = "https://github.com/qml-box2d/qml-box2d";
-    maintainers = with maintainers; [ guibou ];
-    platforms = platforms.linux;
-    license = licenses.zlib;
+    maintainers = with lib.maintainers; [ guibou ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.zlib;
   };
 }

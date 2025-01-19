@@ -31,17 +31,17 @@ rustPlatform.buildRustPackage rec {
   # enable all output formats
   buildFeatures = [ "all" ];
 
-  meta = with lib; {
+  meta = {
     description = "Program that allows you to count your code, quickly";
     longDescription = ''
       Tokei is a program that displays statistics about your code. Tokei will show number of files, total lines within those files and code, comments, and blanks grouped by language.
     '';
     homepage = "https://github.com/XAMPPRocky/tokei";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [ gebner ];
+    maintainers = with lib.maintainers; [ gebner ];
     mainProgram = "tokei";
   };
 }

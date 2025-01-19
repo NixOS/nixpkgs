@@ -47,11 +47,11 @@ buildPythonApplication rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Tool to submit code to Gerrit";
     homepage = "https://opendev.org/opendev/git-review";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ kira-bruneau ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ kira-bruneau ];
     mainProgram = "git-review";
   };
 }

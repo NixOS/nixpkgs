@@ -32,10 +32,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gym" ];
 
-  meta = with lib; {
+  meta = {
     description = "Toolkit for developing and comparing your reinforcement learning agents";
     homepage = "https://www.gymlibrary.dev/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hyphon81 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hyphon81 ];
   };
 }

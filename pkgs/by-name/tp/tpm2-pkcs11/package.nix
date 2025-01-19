@@ -113,11 +113,11 @@ stdenv.mkDerivation rec {
       --prefix PATH : ${lib.makeBinPath [ tpm2-tools ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "PKCS#11 interface for TPM2 hardware";
     homepage = "https://github.com/tpm2-software/tpm2-pkcs11";
-    license = licenses.bsd2;
-    platforms = platforms.linux;
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
     mainProgram = "tpm2_ptool";
   };

@@ -94,12 +94,12 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "CLI tool for creating, inspecting and modifying BitTorrent metafiles";
     homepage = "https://github.com/fbdtemme/torrenttools";
-    license = licenses.mit;
-    maintainers = with maintainers; [ azahi ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ azahi ];
+    platforms = lib.platforms.unix;
     mainProgram = "torrenttools";
   };
 }

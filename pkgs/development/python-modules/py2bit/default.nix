@@ -17,13 +17,13 @@ buildPythonPackage rec {
     sha256 = "1vw2nvw1yrl7ikkqsqs1pg239yr5nspvd969r1x9arms1k25a1a5";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/deeptools/py2bit";
     description = "File access to 2bit files";
     longDescription = ''
       A python extension, written in C, for quick access to 2bit files. The extension uses lib2bit for file access.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ scalavision ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ scalavision ];
   };
 }

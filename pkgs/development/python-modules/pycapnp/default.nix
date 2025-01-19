@@ -34,10 +34,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "capnp" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://capnproto.github.io/pycapnp/";
     maintainers = [ ];
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     # No support for capnproto 1.0 yet
     # https://github.com/capnproto/pycapnp/issues/323
     broken = lib.versionAtLeast capnproto.version "1.0";

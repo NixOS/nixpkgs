@@ -33,11 +33,11 @@ stdenv.mkDerivation rec {
       CoreAudio
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Extended module player";
     homepage = "https://xmp.sourceforge.net/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
     mainProgram = "xmp";
   };
 }

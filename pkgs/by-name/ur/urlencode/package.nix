@@ -16,11 +16,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-UPw+/wVOEM+kciOr70P+gdMCxtCKQ/SXsNAWA44v4v8=";
 
-  meta = with lib; {
+  meta = {
     description = "CLI utility for URL-encoding or -decoding strings";
     homepage = "https://github.com/dead10ck/urlencode";
-    license = licenses.mit;
-    maintainers = with maintainers; [ l0b0 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ l0b0 ];
     mainProgram = "urlencode";
   };
 }

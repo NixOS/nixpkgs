@@ -28,12 +28,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/wasm3/wasm3";
     description = "Fastest WebAssembly interpreter, and the most universal runtime";
-    platforms = platforms.all;
-    maintainers = with maintainers; [ malbarbo ];
-    license = licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ malbarbo ];
+    license = lib.licenses.mit;
     knownVulnerabilities = [
       # wasm3 expects all wasm code to be pre-validated, any users
       # should be aware that running unvalidated wasm will potentially

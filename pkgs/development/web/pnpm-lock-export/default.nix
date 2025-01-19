@@ -26,11 +26,11 @@ buildNpmPackage rec {
     updateScript = ./update.sh;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Utility for converting pnpm-lock.yaml to other lockfile formats";
     mainProgram = "pnpm-lock-export";
     homepage = "https://github.com/cvent/pnpm-lock-export";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ambroisie ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ambroisie ];
   };
 }

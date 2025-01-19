@@ -49,18 +49,18 @@ stdenv.mkDerivation rec {
       --suffix PATH ":" ${lib.makeBinPath [ ffmpeg ]}
   '';
 
-  meta = with lib; {
+  meta = {
     mainProgram = "stremio";
     description = "Modern media center that gives you the freedom to watch everything you want";
     homepage = "https://www.stremio.com/";
     # (Server-side) web UI is closed source now, apparently they work on open-sourcing it.
     # server.js appears to be MIT-licensed, but I can't find how they actually build it.
     # https://www.reddit.com/r/StremioAddons/comments/n2ob04/a_summary_of_how_stremio_works_internally_and/
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3
       mit
     ];
-    maintainers = with maintainers; [ abbradar ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ abbradar ];
+    platforms = lib.platforms.linux;
   };
 }

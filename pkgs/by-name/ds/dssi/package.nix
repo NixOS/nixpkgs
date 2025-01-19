@@ -50,13 +50,13 @@ stdenv.mkDerivation rec {
     libICE
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Plugin SDK for virtual instruments";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       raskin
     ];
-    platforms = platforms.linux;
-    license = licenses.lgpl21;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.lgpl21;
     downloadPage = "https://sourceforge.net/projects/dssi/files/dssi/";
   };
 }

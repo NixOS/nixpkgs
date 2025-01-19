@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
     export SWORD_HOME=${sword};
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GTK Bible study tool";
     longDescription = ''
       Xiphos (formerly known as GnomeSword) is a Bible study tool
@@ -106,8 +106,8 @@ stdenv.mkDerivation rec {
       modules from The SWORD Project and elsewhere.
     '';
     homepage = "https://www.xiphos.org/";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.AndersonTorres ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.AndersonTorres ];
+    platforms = lib.platforms.linux;
   };
 }

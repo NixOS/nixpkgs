@@ -42,10 +42,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ruuvitag_ble" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for Ruuvitag BLE devices";
     homepage = "https://github.com/Bluetooth-Devices/ruuvitag-ble";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

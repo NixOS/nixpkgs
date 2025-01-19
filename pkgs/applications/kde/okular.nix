@@ -96,17 +96,17 @@ mkDerivation {
 
   cmakeFlags = lib.optional (!withSpeech) "-DFORCE_NOT_REQUIRED_DEPENDENCIES=Qt5TextToSpeech";
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.kde.org";
     description = "KDE document viewer";
     mainProgram = "okular";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Plus
       lgpl21Plus
       fdl12Plus
       bsd3
     ];
-    maintainers = with maintainers; [ ttuegel ];
+    maintainers = with lib.maintainers; [ ttuegel ];
     platforms = lib.platforms.linux;
   };
 }

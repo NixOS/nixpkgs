@@ -28,11 +28,11 @@ python3.pkgs.buildPythonApplication rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool to get the password policy from a windows machine";
     homepage = "https://github.com/Wh1t3Fox/polenum";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ exploitoverload ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ exploitoverload ];
     mainProgram = "polenum";
   };
 }

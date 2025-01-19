@@ -26,11 +26,11 @@ python3.pkgs.buildPythonApplication {
     pyaml
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Monitoring tool based on radon";
     homepage = "https://github.com/rubik/xenon";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jfvillablanca ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jfvillablanca ];
     mainProgram = "xenon";
   };
 }

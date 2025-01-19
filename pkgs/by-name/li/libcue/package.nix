@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "CUE Sheet Parser Library";
     longDescription = ''
       libcue is intended to parse a so called cue sheet from a char string or
@@ -34,8 +34,8 @@ stdenv.mkDerivation rec {
       available.
     '';
     homepage = "https://github.com/lipnitsk/libcue";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ astsmtl ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ astsmtl ];
+    platforms = lib.platforms.unix;
   };
 }

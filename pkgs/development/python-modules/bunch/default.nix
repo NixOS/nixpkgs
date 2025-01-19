@@ -30,10 +30,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bunch" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python dictionary that provides attribute-style access";
     homepage = "https://github.com/dsc/bunch";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

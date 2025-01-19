@@ -34,9 +34,9 @@ buildPythonPackage rec {
 
   buildInputs = [ liblo ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://das.nasophon.de/pyliblo/";
     description = "Python wrapper for the liblo OSC library";
-    license = licenses.lgpl21Only;
+    license = lib.licenses.lgpl21Only;
   };
 }

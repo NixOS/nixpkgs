@@ -32,10 +32,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "wsnsimpy" ] ++ lib.optional enableVisualization "wsnsimpy.wsnsimpy_tk";
 
-  meta = with lib; {
+  meta = {
     description = "SimPy-based WSN Simulator";
     homepage = "https://pypi.org/project/wsnsimpy/";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ dmrauh ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ dmrauh ];
   };
 }

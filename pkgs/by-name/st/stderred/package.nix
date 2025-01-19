@@ -22,11 +22,11 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "${src.name}/src";
 
-  meta = with lib; {
+  meta = {
     description = "stderr in red";
     homepage = "https://github.com/sickill/stderred";
-    license = licenses.mit;
-    maintainers = with maintainers; [ vojta001 ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ vojta001 ];
+    platforms = lib.platforms.unix;
   };
 }

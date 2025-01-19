@@ -13,11 +13,11 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-x+RVVgQvJwV5j7DLYS7AnXb4OMJ4v+l0awUuonQIgzY=";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ms-jpq/gay";
     description = "Colour your text / terminal to be more gay";
-    license = licenses.mit;
-    maintainers = with maintainers; [ CodeLongAndProsper90 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ CodeLongAndProsper90 ];
     mainProgram = "gay";
   };
 }

@@ -33,12 +33,12 @@ buildPythonApplication rec {
 
   pythonImportsCheck = [ "mpremote" ];
 
-  meta = with lib; {
+  meta = {
     description = "Integrated set of utilities to remotely interact with and automate a MicroPython device over a serial connection";
     homepage = "https://github.com/micropython/micropython/blob/master/tools/mpremote/README.md";
-    platforms = platforms.unix;
-    license = licenses.mit;
-    maintainers = with maintainers; [ _999eagle ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ _999eagle ];
     mainProgram = "mpremote";
   };
 }

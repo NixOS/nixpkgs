@@ -15,11 +15,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-ShJ7dbd3oNo3qZJ5+ut+NfLF9j8kPPZy9yC2zl/s56k=";
 
-  meta = with lib; {
+  meta = {
     description = "Trusty terminal typing tester";
     homepage = "https://github.com/Samyak2/toipe";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       loicreynier
       samyak
     ];

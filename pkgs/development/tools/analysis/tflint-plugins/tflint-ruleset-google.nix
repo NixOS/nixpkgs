@@ -29,11 +29,11 @@ buildGoModule rec {
     mv $out/bin/${pname} $out/github.com/terraform-linters/${pname}/${version}/
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/terraform-linters/tflint-ruleset-google";
     description = "TFLint ruleset plugin for Terraform Google Provider";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ john-rodewald ];
-    license = with licenses; [ mpl20 ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ john-rodewald ];
+    license = with lib.licenses; [ mpl20 ];
   };
 }

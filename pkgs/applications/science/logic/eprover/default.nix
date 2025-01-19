@@ -29,14 +29,14 @@ stdenv.mkDerivation rec {
       "--enable-ho"
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Automated theorem prover for full first-order logic with equality";
     homepage = "http://www.eprover.org/";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [
       raskin
       gebner
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     touch AUTHORS NEWS README
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Openwsman command-line client";
     longDescription = ''
       Openwsman provides a command-line tool, wsman, to perform basic

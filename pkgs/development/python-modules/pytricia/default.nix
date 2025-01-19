@@ -16,10 +16,10 @@ buildPythonPackage rec {
     sha256 = "0qp5774xkm700g35k5c76pck8pdzqlyzbaqgrz76a1yh67s2ri8h";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Library for fast IP address lookup in Python";
     homepage = "https://github.com/jsommers/pytricia";
-    license = with licenses; [ lgpl3Plus ];
-    maintainers = with maintainers; [ mkg ];
+    license = with lib.licenses; [ lgpl3Plus ];
+    maintainers = with lib.maintainers; [ mkg ];
   };
 }

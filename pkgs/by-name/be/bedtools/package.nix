@@ -36,11 +36,11 @@ stdenv.mkDerivation rec {
   buildPhase = "make prefix=$out SHELL=${stdenv.shell} CXX=${cxx} CC=${cc} -j $NIX_BUILD_CORES";
   installPhase = "make prefix=$out SHELL=${stdenv.shell} CXX=${cxx} CC=${cc} install";
 
-  meta = with lib; {
+  meta = {
     description = "Powerful toolset for genome arithmetic";
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
     homepage = "https://bedtools.readthedocs.io/en/latest/";
-    maintainers = with maintainers; [ jbedo ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ jbedo ];
+    platforms = lib.platforms.unix;
   };
 }

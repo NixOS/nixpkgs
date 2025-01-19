@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
     "-DOBS_SRC_DIR=${obs-studio.src}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple OBS Studio filter to adjust RGB levels";
     homepage = "https://github.com/wimpysworld/obs-rgb-levels-filter";
-    maintainers = with maintainers; [ flexiondotorg ];
-    license = licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ flexiondotorg ];
+    license = lib.licenses.gpl2Plus;
     platforms = [
       "x86_64-linux"
       "i686-linux"

@@ -44,11 +44,11 @@ stdenv.mkDerivation rec {
     boost
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Database access library for C++. Belledonne Communications' fork for Linphone";
     homepage = "https://gitlab.linphone.org/BC/public/external/soci";
-    license = licenses.boost;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ thibaultlemaire ];
+    license = lib.licenses.boost;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ thibaultlemaire ];
   };
 }

@@ -38,12 +38,12 @@ mkDerivation rec {
     qtquickcontrols2
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Public transport trip planner";
     mainProgram = "ktrip";
     homepage = "https://apps.kde.org/ktrip/";
     # GPL-2.0-or-later
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
   };
 }

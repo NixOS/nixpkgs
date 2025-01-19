@@ -25,12 +25,12 @@ mkDerivation rec {
     runHook postBuild
   '';
 
-  meta = with lib; {
+  meta = {
     description = "A cubical type theory library for use with the Agda compiler";
     homepage = src.meta.homepage;
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       alexarice
       ryanorendorff
       ncfavier

@@ -44,11 +44,11 @@ buildPythonPackage rec {
     "tests/test_podae.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Easy Reduced Basis method";
     homepage = "https://mathlab.github.io/EZyRB/";
     downloadPage = "https://github.com/mathLab/EZyRB/releases";
-    license = licenses.mit;
-    maintainers = with maintainers; [ yl3dy ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ yl3dy ];
   };
 }

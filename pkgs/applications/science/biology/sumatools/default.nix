@@ -7,11 +7,11 @@
 
 let
   stdenv = gccStdenv;
-  meta = with lib; {
+  meta = {
     description = "Fast and exact comparison and clustering of sequences";
     homepage = "https://metabarcoding.org/sumatra";
-    maintainers = [ maintainers.bzizou ];
-    platforms = platforms.unix;
+    maintainers = [ lib.maintainers.bzizou ];
+    platforms = lib.platforms.unix;
   };
 
 in

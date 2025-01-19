@@ -27,10 +27,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sgmllib" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pypi.org/project/sgmllib3k/";
     description = "Python 3 port of sgmllib";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ lovesegfault ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ lovesegfault ];
   };
 }

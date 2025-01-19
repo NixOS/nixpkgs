@@ -53,15 +53,15 @@ mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Graphical file and directories comparator and merge tool";
     mainProgram = "xxdiff";
     homepage = "http://furius.ca/xxdiff/";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [
       pSub
       raskin
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

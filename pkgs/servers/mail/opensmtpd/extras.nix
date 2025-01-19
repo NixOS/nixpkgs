@@ -101,12 +101,12 @@ stdenv.mkDerivation rec {
     lib.optionalString enableRedis "-I${hiredis}/include/hiredis -lhiredis"
     + lib.optionalString enableMysql " -L${libmysqlclient}/lib/mysql";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.opensmtpd.org/";
     description = "Extra plugins for the OpenSMTPD mail server";
-    license = licenses.isc;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.isc;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       gebner
       ekleog
     ];

@@ -61,11 +61,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Link Identity Editor";
     homepage = "https://cydia.saurik.com/info/ldid/";
-    maintainers = with maintainers; [ wegank ];
-    platforms = platforms.unix;
-    license = licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ wegank ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.agpl3Only;
   };
 }

@@ -63,11 +63,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = mateUpdateScript { inherit pname; };
 
-  meta = with lib; {
+  meta = {
     description = "MATE default window manager";
     homepage = "https://github.com/mate-desktop/marco";
-    license = [ licenses.gpl2Plus ];
-    platforms = platforms.unix;
-    maintainers = teams.mate.members;
+    license = [ lib.licenses.gpl2Plus ];
+    platforms = lib.platforms.unix;
+    maintainers = lib.teams.mate.members;
   };
 }
