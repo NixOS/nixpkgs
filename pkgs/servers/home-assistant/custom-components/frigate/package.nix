@@ -3,21 +3,25 @@
   fetchFromGitHub,
   buildHomeAssistantComponent,
   pytz,
+  hass-web-proxy-lib,
 }:
 
 buildHomeAssistantComponent rec {
   owner = "blakeblackshear";
   domain = "frigate";
-  version = "5.4.0";
+  version = "5.6.0";
 
   src = fetchFromGitHub {
     owner = "blakeblackshear";
     repo = "frigate-hass-integration";
-    rev = "v${version}";
-    hash = "sha256-V2Y+xUAA/Lu7u82WUlUI5CFi9SGWe6ocVQtlXeVg2ZA=";
+    tag = "v${version}";
+    hash = "sha256-rwPJdTN7UrFM7GaKfX2veYxmr2XodvaprNcjjVO/ciI=";
   };
 
-  dependencies = [ pytz ];
+  dependencies = [
+    pytz
+    hass-web-proxy-lib
+  ];
 
   dontBuild = true;
 
