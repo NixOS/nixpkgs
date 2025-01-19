@@ -400,13 +400,12 @@ let
           {
             inherit disabled;
           }
-          // attrs.passthru or { }
           // {
             updateScript =
               let
                 filename = head (splitString ":" self.meta.position);
               in
-              attrs.passthru.updateScript or [
+              [
                 update-python-libraries
                 filename
               ];
@@ -419,7 +418,8 @@ let
           }
           // optionalAttrs (build-system != [ ]) {
             inherit build-system;
-          };
+          }
+          // attrs.passthru or { };
 
         meta = {
           # default to python's platforms
