@@ -58,14 +58,14 @@
 let
   self = buildPythonPackage rec {
     pname = "orange3";
-    version = "3.37.0";
+    version = "3.38.1";
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = "biolab";
       repo = "orange3";
       tag = version;
-      hash = "sha256-3PybiHXH6oIYJb78/a7LnQA6cYUicDx4Mf65QhIhT4w=";
+      hash = "sha256-bzF2rK8/cKAoe9Wzj+rQJatgBQTP3KVtT6xU+IzKYIY=";
     };
 
     build-system = [
@@ -220,7 +220,7 @@ let
     meta = {
       description = "Data mining and visualization toolbox for novice and expert alike";
       homepage = "https://orangedatamining.com/";
-      changelog = "https://github.com/biolab/orange3/blob/${version}/CHANGELOG.md";
+      changelog = "https://github.com/biolab/orange3/blob/${src.tag}/CHANGELOG.md";
       license = [ lib.licenses.gpl3Plus ];
       maintainers = [ lib.maintainers.lucasew ];
       mainProgram = "orange-canvas";
