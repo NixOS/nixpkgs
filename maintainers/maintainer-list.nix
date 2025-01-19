@@ -17257,6 +17257,12 @@
     githubId = 108072;
     name = "Slawomir Gonet";
   };
+  oughie = {
+    name = "Oughie";
+    email = "oughery@gmail.com";
+    github = "Oughie";
+    githubId = 123173954;
+  };
   outfoxxed = {
     name = "outfoxxed";
     email = "nixpkgs@outfoxxed.me";
@@ -17264,12 +17270,6 @@
     github = "outfoxxed";
     githubId = 83010835;
     keys = [ { fingerprint = "0181 FF89 4F34 7FCC EB06  5710 4C88 A185 FB89 301E"; } ];
-  };
-  oughie = {
-    name = "Oughie";
-    email = "oughery@gmail.com";
-    github = "Oughie";
-    githubId = 123173954;
   };
   ovlach = {
     email = "ondrej@vlach.xyz";
