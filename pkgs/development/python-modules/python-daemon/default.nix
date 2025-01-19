@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "python-daemon";
-  version = "3.0.1";
+  version = "3.1.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bFdFI3L36v9Ak0ocA60YJr9eeTVY6H/vSRMeZGS02uU=";
+    hash = "sha256-97BDNa3Ec96Hf1EX4m1fEUL0yffNdlQI8Id3V75a+/Q=";
   };
 
   postPatch = ''
