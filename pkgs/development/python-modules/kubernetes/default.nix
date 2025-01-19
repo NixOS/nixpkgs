@@ -4,6 +4,7 @@
   adal,
   buildPythonPackage,
   certifi,
+  durationpy,
   fetchFromGitHub,
   google-auth,
   mock,
@@ -21,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "kubernetes";
-  version = "30.1.0";
+  version = "31.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -30,7 +31,7 @@ buildPythonPackage rec {
     owner = "kubernetes-client";
     repo = "python";
     tag = "v${version}";
-    hash = "sha256-zOooibXkk0iA6IYJViz+SIMgHwG0fr4WR3ZjhgIeUjE=";
+    hash = "sha256-Qjf5ovXOlzN1vMOZag+v8AtMfC/0+4JGz7LlBfBBI4Q=";
   };
 
   build-system = [
@@ -39,6 +40,7 @@ buildPythonPackage rec {
 
   dependencies = [
     certifi
+    durationpy
     google-auth
     python-dateutil
     pyyaml
@@ -68,7 +70,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Kubernetes Python client";
     homepage = "https://github.com/kubernetes-client/python";
-    changelog = "https://github.com/kubernetes-client/python/releases/tag/v${version}";
+    changelog = "https://github.com/kubernetes-client/python/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ lsix ];
   };
