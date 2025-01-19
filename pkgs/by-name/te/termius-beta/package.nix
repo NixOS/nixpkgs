@@ -104,11 +104,7 @@ stdenv.mkDerivation rec {
     downloadPage = "https://termius.com/linux/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [
-      Br1ght0ne
-      th0rgal
-      Rishik-Y
-    ];
+    maintainers = with maintainers; [ Rishik-Y ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "termius-beta";
   };
