@@ -10,7 +10,7 @@ mattermost.override {
     # See https://docs.mattermost.com/about/mattermost-server-releases.html
     # and make sure the version regex is up to date here.
     # Ensure you also check ../mattermost/package.nix for ESR releases.
-    regex = "^v(10\.3\.[0-9]+)$";
+    regex = "^v(10\.4\.[0-9]+)$";
     version = "10.3.1";
     srcHash = "sha256-nghwf9FgdqEDLkm8dKqhvY1SvALSZ8dasTDwMwbL5AI=";
     vendorHash = "sha256-G2IhU8/XSITjJKNu1Iwwoabm+hG9r3kLPtZnlzuKBD8=";
