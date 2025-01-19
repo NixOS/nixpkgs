@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "binary";
-  version = "1.0.0";
+  version = "1.0.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bsAQ5Y9zMevIvJY42+bGbWNd5g1YGLByO+9N6tDsKKY=";
+    hash = "sha256-VcatT2tIji67wKheXlCp9RoChOmYcMkKr0vnfvM7d9E=";
   };
 
   nativeBuildInputs = [ setuptools ];
