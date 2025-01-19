@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "tensordict";
-  version = "0.5.0";
+  version = "0.6.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     owner = "pytorch";
     repo = "tensordict";
     tag = "v${version}";
-    hash = "sha256-jnRlN9gefR77pioIXf0qM1CP6EtpeQkBvVIecGkb/pw=";
+    hash = "sha256-dsbpk0O5Gs5WUfi3ENqHdpy4rWoBjm1i44+ycp0jDJ0=";
   };
 
   build-system = [
@@ -97,7 +97,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Pytorch dedicated tensor container";
-    changelog = "https://github.com/pytorch/tensordict/releases/tag/v${version}";
+    changelog = "https://github.com/pytorch/tensordict/releases/tag/${src.tag}";
     homepage = "https://github.com/pytorch/tensordict";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
