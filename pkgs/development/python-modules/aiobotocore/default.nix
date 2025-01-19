@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "aiobotocore";
-  version = "2.15.1";
+  version = "2.18.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "aio-libs";
     repo = "aiobotocore";
     tag = version;
-    hash = "sha256-kPSkvvXBBwnWrdf0jmDNiTG6T1qpm5pNcPDHpnMFdmc=";
+    hash = "sha256-4S0CZtk5k+xke2WVwYrNyvP2up32xrOcdKNP72kO6zQ=";
   };
 
   # Relax version constraints: aiobotocore works with newer botocore versions
@@ -101,7 +101,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python client for amazon services";
     homepage = "https://github.com/aio-libs/aiobotocore";
-    changelog = "https://github.com/aio-libs/aiobotocore/releases/tag/${version}";
+    changelog = "https://github.com/aio-libs/aiobotocore/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ teh ];
   };
