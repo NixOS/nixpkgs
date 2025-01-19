@@ -4045,7 +4045,6 @@ in
       "papis-nvim"
       "rest-nvim"
       "rocks-config-nvim"
-      "rocks-nvim"
       "rtp-nvim"
       "telescope-manix"
       "telescope-nvim"
@@ -4058,3 +4057,20 @@ in
   in
   lib.genAttrs luarocksPackageNames toVimPackage
 )
+// {
+
+  rocks-nvim =
+    (neovimUtils.buildNeovimPlugin {
+      luaAttr = luaPackages.rocks-nvim;
+    }).overrideAttrs
+      (oa: {
+        passthru = oa.passthru // {
+          initLua = ''
+            vim.g.rocks_nvim = {
+              luarocks_binary = "${neovim-unwrapped.lua.pkgs.luarocks_bootstrap}/bin/luarocks"
+              }
+          '';
+        };
+
+      });
+}
