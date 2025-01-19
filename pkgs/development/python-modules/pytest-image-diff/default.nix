@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-image-diff";
-  version = "0.0.11";
+  version = "0.0.14";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Apkawa";
     repo = "pytest-image-diff";
-    rev = "v${version}";
-    hash = "sha256-7GBwxm0YQNN/Gq1yyBIxCEYbM7hmOFa9kUsfbBKQtBQ=";
+    tag = "v${version}";
+    hash = "sha256-BQwEbZBgjnx5becu5dcDx0yiw3Y2qptwyqywFq6lqas=";
   };
 
   propagatedBuildInputs = [
