@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "entry-points-txt";
-  version = "0.2.0";
+  version = "0.2.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jwodder";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-klFSt3Od7xYgenpMP4DBFoZeQanGrmtJxDm5qeZ1Psc=";
+    tag = "v${version}";
+    hash = "sha256-hIUXxBJ0XSB4FrNZJdofJ1gTTncILNq9Xh+iAV1CD0s=";
   };
 
   nativeBuildInputs = [ setuptools ];
