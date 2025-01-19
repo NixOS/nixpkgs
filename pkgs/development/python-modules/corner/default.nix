@@ -28,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "corner";
-  version = "2.2.2";
+  version = "2.2.3";
   pyproject = true;
 
   disable = pythonOlder "3.9";
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     owner = "dfm";
     repo = "corner.py";
     tag = "v${version}";
-    hash = "sha256-MYos01YCSUwivymSE2hbjV7eKXfaMqG89koD2CWZjcQ=";
+    hash = "sha256-gK2yylteI3VLVJ0p7NB7bR7cirCo2BvFKnYIH3kfyh4=";
   };
 
   build-system = [
@@ -104,7 +104,7 @@ buildPythonPackage rec {
   meta = {
     description = "Make some beautiful corner plots";
     homepage = "https://github.com/dfm/corner.py";
-    changelog = "https://github.com/dfm/corner.py/releases/tag/v${version}";
+    changelog = "https://github.com/dfm/corner.py/releases/tag/${src.tag}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
