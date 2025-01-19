@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libassuan";
-  version = "2.5.7";
+  version = "3.0.1";
 
   src = fetchurl {
-    url = "mirror://gnupg/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-AQMIH/wng4ouUEeRU8oQXoc9PWXYqVkygunJTH5q+3Y=";
+    url = "mirror://gnupg/libassuan/libassuan-${version}.tar.bz2";
+    hash = "sha256-yPD0LmED3qSxpqSDy1VmVOlzAsdGUwj1g2N3j5XxlLE=";
   };
 
   outputs = [
@@ -31,10 +31,15 @@ stdenv.mkDerivation rec {
     gettext
   ];
 
-  configureFlags = [
-    # Required for cross-compilation.
-    "--with-libgpg-error-prefix=${libgpg-error.dev}"
-  ];
+  configureFlags =
+    [
+      # Required for cross-compilation.
+      "--with-libgpg-error-prefix=${libgpg-error.dev}"
+    ]
+    ++ lib.optionals stdenv.cc.isClang [
+      # https://lists.gnupg.org/pipermail/gnupg-devel/2024-July/035614.html
+      "CFLAGS=-std=gnu89"
+    ];
 
   doCheck = true;
 
