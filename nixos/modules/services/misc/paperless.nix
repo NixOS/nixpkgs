@@ -331,6 +331,8 @@ in
         ExecStart = "${cfg.package}/bin/celery --app paperless beat --loglevel INFO";
         Restart = "on-failure";
         LoadCredential = lib.optionalString (cfg.passwordFile != null) "PAPERLESS_ADMIN_PASSWORD:${cfg.passwordFile}";
+        # Needs to talk to redis server for scheduling
+        PrivateNetwork = false;
       };
       environment = env;
 
