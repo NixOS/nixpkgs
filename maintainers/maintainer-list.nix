@@ -3215,6 +3215,7 @@
     name = "boralg";
     github = "boralg";
     githubId = 144260188;
+    matrix = "@boralg:matrix.org";
   };
   borisbabic = {
     email = "boris.ivan.babic@gmail.com";
