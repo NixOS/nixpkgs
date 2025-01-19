@@ -15544,6 +15544,8 @@ self: super: with self; {
 
   sshtunnel = callPackage ../development/python-modules/sshtunnel { };
 
+  ssh-python = callPackage ../development/python-modules/ssh-python { };
+
   sslib = callPackage ../development/python-modules/sslib { };
 
   ssg = callPackage ../development/python-modules/ssg { };
