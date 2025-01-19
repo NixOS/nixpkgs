@@ -8,11 +8,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "alt-tab-macos";
-  version = "7.18.1";
+  version = "7.19.1";
 
   src = fetchurl {
     url = "https://github.com/lwouis/alt-tab-macos/releases/download/v${finalAttrs.version}/AltTab-${finalAttrs.version}.zip";
-    hash = "sha256-PMnA0G/CuofKR7mlWkcbQ+JVdGf91yQf7q8znFCIujY=";
+    hash = "sha256-eT/HZDBDtOh9uQEffLhlBXfWuPSM/bnpgp5OFnSuCBk=";
   };
 
   sourceRoot = ".";

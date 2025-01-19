@@ -898,6 +898,18 @@ mapAliases {
   neocities-cli = neocities; # Added 2024-07-31
   netbox_3_3 = throw "netbox 3.3 series has been removed as it was EOL"; # Added 2023-09-02
   netbox_3_5 = throw "netbox 3.5 series has been removed as it was EOL"; # Added 2024-01-22
+  nextcloud28 = throw ''
+    Nextcloud v28 has been removed from `nixpkgs` as the support for is dropped
+    by upstream in 2025-01. Please upgrade to at least Nextcloud v29 by declaring
+
+        services.nextcloud.package = pkgs.nextcloud29;
+
+    in your NixOS config.
+
+    WARNING: if you were on Nextcloud 27 you have to upgrade to Nextcloud 28
+    first on 24.11 because Nextcloud doesn't support upgrades across multiple major versions!
+  ''; # Added 2025-01-19
+  nextcloud28Packages = throw "Nextcloud 28 is EOL!"; # Added 2025-01-19
   nextcloud27 = throw ''
     Nextcloud v27 has been removed from `nixpkgs` as the support for is dropped
     by upstream in 2024-06. Please upgrade to at least Nextcloud v28 by declaring
@@ -1494,6 +1506,7 @@ mapAliases {
 
   ### Z ###
 
+  zeromq4 = zeromq; # Added 2024-11-03
   zfsStable = zfs; # Added 2024-02-26
   zfsUnstable = zfs_unstable; # Added 2024-02-26
   zfs_2_1 = throw "zfs 2.1 has been removed as it is EOL. Please upgrade to a newer version"; # Added 2024-12-25

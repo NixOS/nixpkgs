@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "pycaption";
-  version = "2.2.15";
+  version = "2.2.16";
 
   disabled = pythonOlder "3.8";
 
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "pbs";
     repo = "pycaption";
     tag = version;
-    hash = "sha256-07Llsp2Cvvo9WueeTBJnAos3uynhYL0gT5U21EI9dHY=";
+    hash = "sha256-w617mOxvL1alj7jauH4TVsYO0wxMHIFjevdhb4+542s=";
   };
 
   build-system = [ setuptools ];

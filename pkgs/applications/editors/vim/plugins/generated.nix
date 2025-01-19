@@ -10771,6 +10771,18 @@ final: prev:
     meta.homepage = "https://github.com/olivercederborg/poimandres.nvim/";
   };
 
+  pomo-nvim = buildVimPlugin {
+    pname = "pomo.nvim";
+    version = "2024-07-30";
+    src = fetchFromGitHub {
+      owner = "epwalsh";
+      repo = "pomo.nvim";
+      rev = "aa8decc421d89be0f10b1fc6a602cdd269f350ff";
+      sha256 = "1drld6dmibkg4b35n181v98gwfi8yhshx1gfkg82k72a5apr77dl";
+    };
+    meta.homepage = "https://github.com/epwalsh/pomo.nvim/";
+  };
+
   pony-vim-syntax = buildVimPlugin {
     pname = "pony-vim-syntax";
     version = "2017-09-26";

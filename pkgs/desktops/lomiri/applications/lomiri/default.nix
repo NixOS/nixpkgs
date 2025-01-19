@@ -6,7 +6,7 @@
   fetchpatch2,
   gitUpdater,
   linkFarm,
-  substituteAll,
+  replaceVars,
   nixosTests,
   ayatana-indicator-datetime,
   bash,
@@ -117,8 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
     })
 
     ./9901-lomiri-Disable-Wizard.patch
-    (substituteAll {
-      src = ./9902-Layout-fallback-file.patch;
+    (replaceVars ./9902-Layout-fallback-file.patch {
       nixosLayoutFile = "/etc/" + finalAttrs.finalPackage.passthru.etcLayoutsFile;
     })
   ];

@@ -2,8 +2,11 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
+  attrs,
+  django,
+  netaddr,
   netbox,
+  setuptools,
 }:
 buildPythonPackage rec {
   pname = "netbox-interface-synchronization";
@@ -18,6 +21,12 @@ buildPythonPackage rec {
   };
 
   build-system = [ setuptools ];
+
+  dependencies = [
+    attrs
+    django
+    netaddr
+  ];
 
   # netbox is required for the pythonImportsCheck; plugin does not provide unit tests
   nativeCheckInputs = [ netbox ];

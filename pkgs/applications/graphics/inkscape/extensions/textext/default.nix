@@ -2,7 +2,7 @@
   lib,
   writeScript,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   inkscape,
   pdflatex,
   lualatex,
@@ -33,8 +33,7 @@ python3.pkgs.buildPythonApplication rec {
   patches = [
     # Make sure we can point directly to pdflatex in the extension,
     # instead of relying on the PATH (which might not have it)
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       inherit pdflatex lualatex;
     })
 

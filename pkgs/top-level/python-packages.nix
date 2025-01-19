@@ -2652,6 +2652,8 @@ self: super: with self; {
 
   coordinates = callPackage ../development/python-modules/coordinates { };
 
+  copykitten = callPackage ../development/python-modules/copykitten { };
+
   coreapi = callPackage ../development/python-modules/coreapi { };
 
   coredis = callPackage ../development/python-modules/coredis { };
@@ -4507,6 +4509,8 @@ self: super: with self; {
     inherit (self) python;
   });
 
+  fastmri = callPackage ../development/python-modules/fastmri { };
+
   fastnumbers = callPackage ../development/python-modules/fastnumbers { };
 
   fastparquet = callPackage ../development/python-modules/fastparquet { };
@@ -4865,7 +4869,7 @@ self: super: with self; {
     (pythonOlder "3.10")
     (toPythonModule (pkgs.fontforge.override {
       withPython = true;
-      inherit python;
+      python3 = python;
     }));
 
   fontmath = callPackage ../development/python-modules/fontmath { };
@@ -7731,6 +7735,8 @@ self: super: with self; {
 
   lrcalc-python = callPackage ../development/python-modules/lrcalc-python { };
 
+  lrclibapi = callPackage ../development/python-modules/lrclibapi { };
+
   lru-dict = callPackage ../development/python-modules/lru-dict { };
 
   lsassy = callPackage ../development/python-modules/lsassy { };
@@ -8498,6 +8504,8 @@ self: super: with self; {
   mplleaflet = callPackage ../development/python-modules/mplleaflet { };
 
   mpl-scatter-density = callPackage ../development/python-modules/mpl-scatter-density { };
+
+  mpl-typst = callPackage ../development/python-modules/mpl-typst { };
 
   mpmath = callPackage ../development/python-modules/mpmath { };
 
@@ -9978,6 +9986,8 @@ self: super: with self; {
   };
 
   pandas-datareader = callPackage ../development/python-modules/pandas-datareader { };
+
+  pandera = callPackage ../development/python-modules/pandera { };
 
   pandoc-attributes = callPackage ../development/python-modules/pandoc-attributes { };
 
@@ -14415,6 +14425,8 @@ self: super: with self; {
   sacremoses = callPackage ../development/python-modules/sacremoses { };
 
   safe-pysha3 = callPackage ../development/python-modules/safe-pysha3 { };
+
+  safehttpx = callPackage ../development/python-modules/safehttpx { };
 
   safeio = callPackage ../development/python-modules/safeio { };
 

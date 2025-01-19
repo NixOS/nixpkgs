@@ -57,6 +57,7 @@ buildGoModule rec {
     changelog = "https://code.forgejo.org/forgejo/runner/src/tag/${src.rev}/RELEASE-NOTES.md";
     license = licenses.mit;
     maintainers = with maintainers; [
+      adamcstephens
       kranzes
       emilylange
       christoph-heiss
