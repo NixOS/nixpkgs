@@ -21,7 +21,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "bcc";
-  version = "0.32.0";
+  version = "0.33.0";
 
   disabled = !stdenv.hostPlatform.isLinux;
 
@@ -29,7 +29,7 @@ python3Packages.buildPythonApplication rec {
     owner = "iovisor";
     repo = "bcc";
     tag = "v${version}";
-    hash = "sha256-urEHDDBBIdopQiT/QI5WtTbIO45pBk6bTNpfs8q/2hA=";
+    hash = "sha256-6dT3seLuEVQNKWiYGLK1ajXzW7pb62S/GQ0Lp4JdGjc=";
   };
   format = "other";
 
