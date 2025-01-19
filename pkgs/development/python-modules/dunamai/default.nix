@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "dunamai";
-  version = "1.22.0";
+  version = "1.23.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "mtkennerly";
     repo = "dunamai";
     tag = "v${version}";
-    hash = "sha256-oOchPGBRHf3PT1Ynci56CF/eW4TkRVPV9inVNX2QQrk=";
+    hash = "sha256-JuW/VL8kfzz5mSXRHtrg/hHykgcewaQYfDuO2PALbWc=";
   };
 
   nativeBuildInputs = [ poetry-core ];
@@ -53,7 +53,7 @@ buildPythonPackage rec {
     description = "Dynamic version generation";
     mainProgram = "dunamai";
     homepage = "https://github.com/mtkennerly/dunamai";
-    changelog = "https://github.com/mtkennerly/dunamai/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/mtkennerly/dunamai/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ jmgilman ];
   };
