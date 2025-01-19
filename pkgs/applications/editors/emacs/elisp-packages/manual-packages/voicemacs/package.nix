@@ -55,6 +55,6 @@ melpaBuild {
     homepage = "https://github.com/jcaw/voicemacs/";
     description = "Set of utilities for controlling Emacs by voice";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
   };
 }
