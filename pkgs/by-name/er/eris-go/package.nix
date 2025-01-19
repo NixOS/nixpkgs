@@ -1,22 +1,36 @@
-{ lib, stdenv, buildGoModule, fetchFromGitea, nixosTests }:
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitea,
+  nixosTests,
+  installShellFiles,
+}:
 
 buildGoModule rec {
   pname = "eris-go";
-  version = "20240920";
-  outputs = [ "out" "man" ];
+  version = "20241028";
+  outputs = [
+    "out"
+    "man"
+  ];
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "eris";
     repo = "eris-go";
     rev = version;
-    hash = "sha256-ZC4MBt1ucbZOn3sgs2xEiLLSDq7mz5Nj/in/TzydAbk=";
+    hash = "sha256-v4pN+fVwYoir3GLneWhg/azsg7ifvcKAksoqDkkQGwk=";
   };
 
-  vendorHash = "sha256-TnB4BSO2Yb9AtcHgdEgNrFHAQJ7u4IzmhLdcSjbZ7SA=";
+  vendorHash = "sha256-0BI4U9p4R7umyXtHAQBLa5t5+ni4dDndLNXgTIAMsqw=";
+
+  nativeBuildInputs = [ installShellFiles ];
 
   postInstall = ''
     install -D *.1.gz -t $man/share/man/man1
+    installShellCompletion --cmd eris-go \
+      --fish completions/eris-go.fish
   '';
 
   env.skipNetworkTests = true;

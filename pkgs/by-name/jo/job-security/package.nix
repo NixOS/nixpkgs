@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,7 +21,11 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Job control from anywhere";
     homepage = "https://github.com/yshui/job-security";
-    license = with lib.licenses; [ asl20 mit mpl20 ];
+    license = with lib.licenses; [
+      asl20
+      mit
+      mpl20
+    ];
     maintainers = with lib.maintainers; [ fgaz ];
     mainProgram = "jobs";
     broken = stdenv.hostPlatform.isDarwin;

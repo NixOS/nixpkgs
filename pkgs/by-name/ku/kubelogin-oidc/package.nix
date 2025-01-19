@@ -1,18 +1,18 @@
 {
   lib,
-  buildGo123Module,
+  buildGoModule,
   fetchFromGitHub,
 }:
 
-buildGo123Module rec {
+buildGoModule rec {
   pname = "kubelogin";
-  version = "1.30.1";
+  version = "1.31.1";
 
   src = fetchFromGitHub {
     owner = "int128";
     repo = "kubelogin";
     rev = "v${version}";
-    hash = "sha256-aoLPT3lX+q426QlxAPsjeQyTZMnmqMGh85jJPU7lQVU=";
+    hash = "sha256-LfMxfXM3L4r0S8eDQVgFO1jTf/BcYpxxQSMl4zRh/yA=";
   };
 
   subPackages = [ "." ];
@@ -22,7 +22,7 @@ buildGo123Module rec {
     "-X main.version=v${version}"
   ];
 
-  vendorHash = "sha256-gr+SsC7MiLj/MZ8kca5Hcfge+7Pm4y963TfwyKHEhBY=";
+  vendorHash = "sha256-o+74+PnwhMe2oMfFLMD95R4m3gMjQS2d4pAvCEjh05U=";
 
   # test all packages
   preCheck = ''

@@ -1,36 +1,24 @@
-{ lib
-, fetchFromGitHub
-, pkg-config
-, pkgs
-, overrideSDK
-, darwin
-, testers
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  testers,
+  nix-update-script,
 }:
-let
-  stdenv = overrideSDK pkgs.stdenv "11.0";
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "JankyBorders";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "FelixKratz";
     repo = "JankyBorders";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-DX1d228UCOI+JU+RxenhiGyn3AiqpsGe0aCtr091szs=";
+    hash = "sha256-PUyq3m244QyY7e8+/YeAMOxMcAz3gsyM1Mg/kgjGVgU=";
   };
 
   nativeBuildInputs = [
     pkg-config
-  ];
-
-  buildInputs = with darwin.apple_sdk.frameworks; [
-    AppKit
-    ApplicationServices
-    CoreFoundation
-    CoreGraphics
-    SkyLight
   ];
 
   installPhase = ''

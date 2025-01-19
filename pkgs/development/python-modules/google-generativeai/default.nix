@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "google-generativeai";
-  version = "0.8.2";
+  version = "0.8.3";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -24,14 +24,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = "generative-ai-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-7l7Tg4sCdRtYnDwrQBA4rUIz4gO2YGf+3qn7OQRMCDc=";
+    tag = "v${version}";
+    hash = "sha256-XHYO2bH95Naoha2ZLpkP0YCq60qqiQPz+YzU6O4pInQ=";
   };
 
   pythonRelaxDeps = [ "google-ai-generativelanguage" ];
 
   build-system = [ setuptools ];
-
 
   dependencies = [
     google-ai-generativelanguage

@@ -1,7 +1,16 @@
-{ lib, stdenv, fetchFromGitHub
-, fetchpatch
-, cmake, pkg-config, wrapQtAppsHook, boost, libGL
-, qtbase, python3 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  pkg-config,
+  wrapQtAppsHook,
+  boost,
+  libGL,
+  qtbase,
+  python3,
+}:
 
 stdenv.mkDerivation rec {
 
@@ -27,23 +36,33 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  cmakeFlags = let
-    options = {
-      PYTHON_EXECUTABLE = "${python3.interpreter}";
-      NANO_SHARED_BOOST = "ON";
-      BOOST_ROOT = boost;
-      RAIBLOCKS_GUI = "ON";
-      RAIBLOCKS_TEST = "ON";
-      Qt5_DIR = "${qtbase.dev}/lib/cmake/Qt5";
-      Qt5Core_DIR = "${qtbase.dev}/lib/cmake/Qt5Core";
-      Qt5Gui_INCLUDE_DIRS = "${qtbase.dev}/include/QtGui";
-      Qt5Widgets_INCLUDE_DIRS = "${qtbase.dev}/include/QtWidgets";
-    };
-    optionToFlag = name: value: "-D${name}=${value}";
-  in lib.mapAttrsToList optionToFlag options;
+  cmakeFlags =
+    let
+      options = {
+        PYTHON_EXECUTABLE = "${python3.interpreter}";
+        NANO_SHARED_BOOST = "ON";
+        BOOST_ROOT = boost;
+        RAIBLOCKS_GUI = "ON";
+        RAIBLOCKS_TEST = "ON";
+        Qt5_DIR = "${qtbase.dev}/lib/cmake/Qt5";
+        Qt5Core_DIR = "${qtbase.dev}/lib/cmake/Qt5Core";
+        Qt5Gui_INCLUDE_DIRS = "${qtbase.dev}/include/QtGui";
+        Qt5Widgets_INCLUDE_DIRS = "${qtbase.dev}/include/QtWidgets";
+      };
+      optionToFlag = name: value: "-D${name}=${value}";
+    in
+    lib.mapAttrsToList optionToFlag options;
 
-  nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
-  buildInputs = [ boost libGL qtbase ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    wrapQtAppsHook
+  ];
+  buildInputs = [
+    boost
+    libGL
+    qtbase
+  ];
 
   strictDeps = true;
 

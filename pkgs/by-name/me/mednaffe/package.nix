@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     gappsWrapperArgs+=(
       --prefix PATH ':' "${mednafen}/bin"
     )
-   '';
+  '';
 
   meta = {
     description = "GTK-based frontend for mednafen emulator";

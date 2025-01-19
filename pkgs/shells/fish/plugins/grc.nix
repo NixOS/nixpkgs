@@ -1,8 +1,12 @@
-{ lib, buildFishPlugin, fetchFromGitHub }:
+{
+  lib,
+  buildFishPlugin,
+  fetchFromGitHub,
+}:
 
 buildFishPlugin {
   pname = "grc";
-  version = "unstable-2022-05-24";
+  version = "0-unstable-2022-05-24";
 
   src = fetchFromGitHub {
     owner = "oh-my-fish";

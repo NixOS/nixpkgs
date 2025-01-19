@@ -19,17 +19,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "IceBotYT";
     repo = "linear-garage-door";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-ibOCqy7krIVC7N75SwEyUII3Tknb60nwA+zGbjOENv4=";
   };
 
-  postPatch = ''
-    sed -i pyproject.toml \
-      -e "/--cov/d" \
-      -e "/--no-cov/d"
-  '';
-
   build-system = [ poetry-core ];
+
+  pythonRelaxDeps = [ "tenacity" ];
 
   dependencies = [
     aiohttp

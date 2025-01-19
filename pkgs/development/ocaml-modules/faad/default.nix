@@ -1,4 +1,11 @@
-{ lib, buildDunePackage, fetchFromGitHub, dune-configurator, faad2, pkg-config }:
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  dune-configurator,
+  faad2,
+  pkg-config,
+}:
 
 buildDunePackage rec {
   pname = "faad";

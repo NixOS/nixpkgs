@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "CybOXProject";
     repo = "python-cybox";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Gn/gH7pvvOqLIGExgCNa5KswPazIZUZXdQe3LRAUVjw=";
   };
 

@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, help2man
-, installShellFiles
-, libiconv
-, Security
-, CoreServices
-, nix-update-script
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  help2man,
+  installShellFiles,
+  libiconv,
+  Security,
+  CoreServices,
+  nix-update-script,
 }:
 
 let
@@ -15,26 +16,20 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "texlab";
-  version = "5.20.0";
+  version = "5.21.0";
 
   src = fetchFromGitHub {
     owner = "latex-lsp";
     repo = "texlab";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-hKQdc9p69L0t2MwCR4Fy20Nl+2qQk5JJoCaB4O43DNY=";
+    tag = "v${version}";
+    hash = "sha256-Lx7vENYuBXaMvGDOZxAPqivGZVaCXYrihaTnBn9eTm4=";
   };
 
-  cargoHash = "sha256-A/stdJ1baV0hdDXTdLd9gi8+JO7qPgQbNiYjHkp1GPQ=";
-
-  # https://github.com/latex-lsp/texlab/pull/1237
-  preBuild = ''
-    rm .cargo/config.toml
-  '';
+  cargoHash = "sha256-6JDG9Ac43AW6HV2baZH08uxdb84hjrGXgdzZiFr2Ybk=";
 
   outputs = [ "out" ] ++ lib.optional (!isCross) "man";
 
-  nativeBuildInputs = [ installShellFiles ]
-    ++ lib.optional (!isCross) help2man;
+  nativeBuildInputs = [ installShellFiles ] ++ lib.optional (!isCross) help2man;
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
@@ -46,7 +41,7 @@ rustPlatform.buildRustPackage rec {
   # generate the man page
   postInstall = lib.optionalString (!isCross) ''
     # TexLab builds man page separately in CI:
-    # https://github.com/latex-lsp/texlab/blob/v5.20.0/.github/workflows/publish.yml#L110-L114
+    # https://github.com/latex-lsp/texlab/blob/v5.21.0/.github/workflows/publish.yml#L110-L114
     help2man --no-info "$out/bin/texlab" > texlab.1
     installManPage texlab.1
   '';
@@ -58,7 +53,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/latex-lsp/texlab";
     changelog = "https://github.com/latex-lsp/texlab/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ doronbehar kira-bruneau ];
+    maintainers = with maintainers; [
+      doronbehar
+      kira-bruneau
+    ];
     platforms = platforms.all;
     mainProgram = "texlab";
   };

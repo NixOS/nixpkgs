@@ -1,24 +1,26 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.prometheus.alertmanagerWebhookLogger;
 in
 {
   options.services.prometheus.alertmanagerWebhookLogger = {
-    enable = mkEnableOption "Alertmanager Webhook Logger";
+    enable = lib.mkEnableOption "Alertmanager Webhook Logger";
 
-    package = mkPackageOption pkgs "alertmanager-webhook-logger" { };
+    package = lib.mkPackageOption pkgs "alertmanager-webhook-logger" { };
 
-    extraFlags = mkOption {
-      type = types.listOf types.str;
-      default = [];
+    extraFlags = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [ ];
       description = "Extra command line options to pass to alertmanager-webhook-logger.";
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.alertmanager-webhook-logger = {
       description = "Alertmanager Webhook Logger";
 
@@ -29,7 +31,7 @@ in
       serviceConfig = {
         ExecStart = ''
           ${cfg.package}/bin/alertmanager-webhook-logger \
-          ${escapeShellArgs cfg.extraFlags}
+          ${lib.escapeShellArgs cfg.extraFlags}
         '';
 
         CapabilityBoundingSet = [ "" ];
@@ -58,9 +60,12 @@ in
         ProtectKernelLogs = true;
         ProtectControlGroups = true;
 
-        Restart  = "on-failure";
+        Restart = "on-failure";
 
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+        ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
@@ -77,5 +82,5 @@ in
     };
   };
 
-  meta.maintainers = [ maintainers.jpds ];
+  meta.maintainers = [ lib.maintainers.jpds ];
 }

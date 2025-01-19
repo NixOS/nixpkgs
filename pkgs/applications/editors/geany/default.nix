@@ -1,21 +1,28 @@
-{ lib, stdenv
-, fetchurl
-, gtk3
-, which
-, pkg-config
-, intltool
-, file
-, libintl
-, hicolor-icon-theme
-, python3
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gtk3,
+  which,
+  pkg-config,
+  intltool,
+  file,
+  libintl,
+  hicolor-icon-theme,
+  python3,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "geany";
   version = "2.0";
 
-  outputs = [ "out" "dev" "doc" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+    "man"
+  ];
 
   src = fetchurl {
     url = "https://download.geany.org/geany-${finalAttrs.version}.tar.bz2";

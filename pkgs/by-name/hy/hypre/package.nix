@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "hypre-space";
     repo = "hypre";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-h16+nZ6+GfddfBJDF6sphuZ9Sff++PxW2R58XgJsnsI=";
   };
 

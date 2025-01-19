@@ -1,25 +1,26 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, gtk3
-, libxml2
-, xkeyboard_config
-, wrapGAppsHook3
-, unstableGitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  gtk3,
+  libxml2,
+  xkeyboard_config,
+  wrapGAppsHook3,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "labwc-tweaks-gtk";
-  version = "0-unstable-2024-09-30";
+  version = "0-unstable-2025-01-11";
 
   src = fetchFromGitHub {
     owner = "labwc";
     repo = "labwc-tweaks-gtk";
-    rev = "19ae222b6bab778d0f8a900d39c25ab020e33631";
-    hash = "sha256-coA8gU2AKeHs6OENxBWholk5sEL/oketxNFLd8M1kTM=";
+    rev = "d954bc6bce2e86893c0470de36beae0542eceaad";
+    hash = "sha256-c+6AolglEF/+voa5mDwm3JLIA4btFOBI8e2/ZxCApGg=";
   };
 
   nativeBuildInputs = [
@@ -49,6 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "labwc-tweaks-gtk";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ AndersonTorres romildo ];
+    maintainers = with lib.maintainers; [ romildo ];
   };
 })

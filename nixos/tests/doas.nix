@@ -1,38 +1,95 @@
 # Some tests to ensure doas is working properly.
 import ./make-test-python.nix (
-  { lib, ... }: {
+  { lib, ... }:
+  {
     name = "doas";
     meta.maintainers = with lib.maintainers; [ cole-h ];
 
     nodes.machine =
       { ... }:
-        {
-          users.groups = { foobar = {}; barfoo = {}; baz = { gid = 1337; }; };
-          users.users = {
-            test0 = { isNormalUser = true; extraGroups = [ "wheel" ]; };
-            test1 = { isNormalUser = true; };
-            test2 = { isNormalUser = true; extraGroups = [ "foobar" ]; };
-            test3 = { isNormalUser = true; extraGroups = [ "barfoo" ]; };
-            test4 = { isNormalUser = true; extraGroups = [ "baz" ]; };
-            test5 = { isNormalUser = true; };
-            test6 = { isNormalUser = true; };
-            test7 = { isNormalUser = true; };
-          };
-
-          security.doas = {
-            enable = true;
-            wheelNeedsPassword = false;
-
-            extraRules = [
-              { users = [ "test1" ]; groups = [ "foobar" ]; }
-              { users = [ "test2" ]; noPass = true; setEnv = [ "CORRECT" "HORSE=BATTERY" ]; }
-              { groups = [ "barfoo" 1337 ]; noPass = true; }
-              { users = [ "test5" ]; noPass = true; keepEnv = true; runAs = "test1"; }
-              { users = [ "test6" ]; noPass = true; keepEnv = true; setEnv = [ "-STAPLE" ]; }
-              { users = [ "test7" ]; noPass = true; setEnv = [ "-SSH_AUTH_SOCK" ]; }
-            ];
+      {
+        users.groups = {
+          foobar = { };
+          barfoo = { };
+          baz = {
+            gid = 1337;
           };
         };
+        users.users = {
+          test0 = {
+            isNormalUser = true;
+            extraGroups = [ "wheel" ];
+          };
+          test1 = {
+            isNormalUser = true;
+          };
+          test2 = {
+            isNormalUser = true;
+            extraGroups = [ "foobar" ];
+          };
+          test3 = {
+            isNormalUser = true;
+            extraGroups = [ "barfoo" ];
+          };
+          test4 = {
+            isNormalUser = true;
+            extraGroups = [ "baz" ];
+          };
+          test5 = {
+            isNormalUser = true;
+          };
+          test6 = {
+            isNormalUser = true;
+          };
+          test7 = {
+            isNormalUser = true;
+          };
+        };
+
+        security.doas = {
+          enable = true;
+          wheelNeedsPassword = false;
+
+          extraRules = [
+            {
+              users = [ "test1" ];
+              groups = [ "foobar" ];
+            }
+            {
+              users = [ "test2" ];
+              noPass = true;
+              setEnv = [
+                "CORRECT"
+                "HORSE=BATTERY"
+              ];
+            }
+            {
+              groups = [
+                "barfoo"
+                1337
+              ];
+              noPass = true;
+            }
+            {
+              users = [ "test5" ];
+              noPass = true;
+              keepEnv = true;
+              runAs = "test1";
+            }
+            {
+              users = [ "test6" ];
+              noPass = true;
+              keepEnv = true;
+              setEnv = [ "-STAPLE" ];
+            }
+            {
+              users = [ "test7" ];
+              noPass = true;
+              setEnv = [ "-SSH_AUTH_SOCK" ];
+            }
+          ];
+        };
+      };
 
     testScript = ''
       with subtest("users in wheel group should have passwordless doas"):

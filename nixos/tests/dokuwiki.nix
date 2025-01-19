@@ -78,6 +78,11 @@ let
       };
     };
 
+    services.caddy.virtualHosts = {
+      "site1.local".hostName = "http://site1.local";
+      "site2.local".hostName = "http://site2.local";
+    };
+
     networking.firewall.allowedTCPPorts = [ 80 ];
     networking.hosts."127.0.0.1" = [ "site1.local" "site2.local" ];
   };

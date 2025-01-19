@@ -1,14 +1,15 @@
-{ lib
-, buildPerlPackage
-, fetchFromGitHub
-, fetchpatch
-, GD
-, IPCShareLite
-, JSON
-, LWP
-, mapnik
-, boost
-, nix-update-script
+{
+  lib,
+  buildPerlPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  GD,
+  IPCShareLite,
+  JSON,
+  LWP,
+  mapnik,
+  boost,
+  nix-update-script,
 }:
 
 buildPerlPackage rec {
@@ -18,7 +19,7 @@ buildPerlPackage rec {
   src = fetchFromGitHub {
     owner = "openstreetmap";
     repo = "tirex";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-p2P19tifA/AvJatTzboyhtt7W1SwKJQzqpU4oDalfhU=";
   };
 

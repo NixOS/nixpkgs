@@ -1,10 +1,11 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, kdeclarative
-, plasma-framework
-, plasma-workspace
-, gitUpdater
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  kdeclarative,
+  plasma-framework,
+  plasma-workspace,
+  gitUpdater,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -18,7 +19,10 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-AYH9fW20/p+mq6lxR1lcCV1BQ/kgcsjHncpMvYWXnWA=";
   };
 
-  outputs = [ "out" "sddm" ];
+  outputs = [
+    "out"
+    "sddm"
+  ];
 
   postPatch = ''
     patchShebangs install.sh

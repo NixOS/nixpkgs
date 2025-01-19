@@ -1,7 +1,13 @@
 {
-  stdenv, lib, fetchurl,
-  cmake, perl, pkg-config, python3,
-  rinutils, PathTiny,
+  stdenv,
+  lib,
+  fetchurl,
+  cmake,
+  perl,
+  pkg-config,
+  python3,
+  rinutils,
+  PathTiny,
 }:
 
 stdenv.mkDerivation rec {
@@ -13,9 +19,17 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-0y8yU291cykliPQbsNha5C1WE3bCGNxKtrrf5JBKN6c=";
   };
 
-  nativeBuildInputs = [ cmake perl pkg-config python3 ];
+  nativeBuildInputs = [
+    cmake
+    perl
+    pkg-config
+    python3
+  ];
 
-  buildInputs = [ rinutils PathTiny ];
+  buildInputs = [
+    rinutils
+    PathTiny
+  ];
 
   prePatch = ''
     patchShebangs ./scripts

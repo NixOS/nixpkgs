@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aequitas";
     repo = "python-rflink";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-n6VLa0xX1qewMS7Kv+kiitezWRbRvDJRNuOmA7IV6u0=";
   };
 

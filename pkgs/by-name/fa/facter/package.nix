@@ -60,7 +60,10 @@ bundlerApp {
     homepage = "https://github.com/puppetlabs/facter";
     license = lib.licenses.asl20;
     mainProgram = "facter";
-    maintainers = with lib.maintainers; [ womfoo anthonyroussel ];
+    maintainers = with lib.maintainers; [
+      womfoo
+      anthonyroussel
+    ];
     platforms = lib.platforms.unix;
   };
 }

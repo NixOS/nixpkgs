@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Noltari";
     repo = "python-ubus-rpc";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-M4hbnGrAjBjohwgMf6qw5NQnpyKCZ0/4HVklHhizTKc=";
   };
 

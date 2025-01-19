@@ -17,8 +17,11 @@ SRC_FILE=$(mktemp)
 
 log "file to write is $SRC_FILE"
 
-PRELUDE="let version = \"$NEW_VER\"; in
-{ fetchurl }: {
+PRELUDE="let
+  version = \"$NEW_VER\";
+in
+{ fetchurl }:
+{
   versionUsed = version;"
 echo "$PRELUDE" > "$SRC_FILE"
 log "wrote prelude"

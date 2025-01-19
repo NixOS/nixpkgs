@@ -15,24 +15,23 @@
   gtksourceview5,
   wrapGAppsHook4,
   desktop-file-utils,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "textpieces";
-  version = "4.1.0";
+  version = "4.1.1-1";
 
   src = fetchFromGitLab {
     owner = "liferooter";
     repo = "textpieces";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-0bc2Q3k08ZItRH7teQCv7uQyj4Rig6LtZmO5Vu48vxo=";
+    hash = "sha256-+CmlJrND61w1qXSUgIsacBoJcmmf9eLI2GSvDJbXv44=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "textpieces-core-1.1.2" = "sha256-fAATzugZ4kpUqHx8H4yuNH9Weeubkp8eAHAe94rMBmA=";
-    };
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) src;
+    hash = "sha256-fpnXMzQFne/TnRgjWy47nVlcwXFZJG4S+VD+D6bz5iQ=";
   };
 
   nativeBuildInputs = [
@@ -54,6 +53,10 @@ stdenv.mkDerivation (finalAttrs: {
     gtksourceview5
   ];
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = {
     description = "Swiss knife of text processing";
     longDescription = ''
@@ -68,9 +71,11 @@ stdenv.mkDerivation (finalAttrs: {
       cc0
     ];
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [
-      zendo
-      aleksana
-    ];
+    maintainers =
+      with lib.maintainers;
+      [
+        zendo
+      ]
+      ++ lib.teams.gnome-circle.members;
   };
 })

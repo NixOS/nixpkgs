@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libgedit-gtksourceview";
-  version = "299.3.0";
+  version = "299.4.0";
 
   outputs = [ "out" "dev" "devdoc" ];
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "gedit";
     repo = "libgedit-gtksourceview";
     rev = finalAttrs.version;
-    hash = "sha256-C2Bq01PlALJMr7kHsSr9VaSNcktc250yGevRYQ7Ipck=";
+    hash = "sha256-befm5UIXh2aCpKN2NH0aJhCYLf9j/ug0kVDAD5xNt4k=";
   };
 
   patches = [

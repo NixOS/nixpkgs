@@ -12,16 +12,16 @@
 
 buildPythonPackage rec {
   pname = "quadprog";
-  version = "0.1.12";
+  version = "0.1.13";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "quadprog";
     repo = "quadprog";
     rev = "v${version}";
-    hash = "sha256-3S846PaNfZ4j3r6Vi2o6+Jk+2kC/P7tMSQQiB/Kx8nI=";
+    hash = "sha256-8gPuqDY3ajw/+B6kJdtpq+HL+Oq2Nsy/O7m+IWzxP38=";
   };
 
   nativeBuildInputs = [

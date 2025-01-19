@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchurl
-, blas
-, cmake
-, eigen
-, gflags
-, glog
-, suitesparse
-, metis
-, runTests ? false
-, enableStatic ? stdenv.hostPlatform.isStatic
-, withBlas ? true
+{
+  lib,
+  stdenv,
+  fetchurl,
+  blas,
+  cmake,
+  eigen,
+  gflags,
+  glog,
+  suitesparse,
+  metis,
+  runTests ? false,
+  enableStatic ? stdenv.hostPlatform.isStatic,
+  withBlas ? true,
 }:
 
 # gflags is required to run tests
@@ -25,12 +26,23 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-99dO7N4K7XW/xR7EjJHQH+Fqa/FrzhmHpwcyhnAeL8Y=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = lib.optional runTests gflags;
-  propagatedBuildInputs = [ eigen glog ]
-  ++ lib.optionals withBlas [ blas suitesparse metis ];
+  propagatedBuildInputs =
+    [
+      eigen
+      glog
+    ]
+    ++ lib.optionals withBlas [
+      blas
+      suitesparse
+      metis
+    ];
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=${if enableStatic then "OFF" else "ON"}"

@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, cmake
-, copyDesktopItems
-, makeDesktopItem
-, makeWrapper
-, expat
-, fontconfig
-, freetype
-, libGL
-, udev
-, libxkbcommon
-, wayland
-, vulkan-loader
-, xorg
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  copyDesktopItems,
+  makeDesktopItem,
+  makeWrapper,
+  expat,
+  fontconfig,
+  freetype,
+  libGL,
+  udev,
+  libxkbcommon,
+  wayland,
+  vulkan-loader,
+  xorg,
 }:
 
 let
@@ -38,22 +39,17 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "liana";
-  version = "6.0"; # keep in sync with lianad
+  version = "8.0"; # keep in sync with lianad
 
   src = fetchFromGitHub {
     owner = "wizardsardine";
     repo = "liana";
     rev = "v${version}";
-    hash = "sha256-LLDgo4GoRTVYt72IT0II7O5wiMDrvJhe0f2yjzxQgsE=";
+    hash = "sha256-2aIaRZNIRgFdA+NVnzOkEE3kYA15CoNBrsNGBhIz0nU=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "liana-6.0.0" = "sha256-04jER209Q9xj9HJ6cLXuK3a2b6fIjAYI+X0+J8noP6A=";
-      "iced_futures-0.12.3" = "sha256-ztWEde3bJpT8lmk+pNhj/v2cpw/z3TNvzCSvEXwinKQ=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-pjvJ+UNM/2g2BDLptjEs6XVukScBB5miDx55zwHJ/C4=";
 
   nativeBuildInputs = [
     pkg-config

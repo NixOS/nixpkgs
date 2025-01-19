@@ -1,19 +1,20 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, fluxbox
-, hicolor-icon-theme
-, libarchive
-, numlockx
-, qmake
-, qtbase
-, qtmultimedia
-, qtsvg
-, qttools
-, qtx11extras
-, xorg
-, xscreensaver
-, wrapGAppsHook3
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  fluxbox,
+  hicolor-icon-theme,
+  libarchive,
+  numlockx,
+  qmake,
+  qtbase,
+  qtmultimedia,
+  qtsvg,
+  qttools,
+  qtx11extras,
+  xorg,
+  xscreensaver,
+  wrapGAppsHook3,
 }:
 
 mkDerivation rec {

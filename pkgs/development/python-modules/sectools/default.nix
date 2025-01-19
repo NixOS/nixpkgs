@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "p0dalirius";
     repo = "sectools";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-k3k1/DFmv0resnsNht/C+2Xh6qbSQmk83eN/3vtDU00=";
   };
 

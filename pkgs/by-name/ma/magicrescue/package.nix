@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, gdbm # ndbm.h for dupemap binary
-, perl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  gdbm, # ndbm.h for dupemap binary
+  perl,
 }:
 
 stdenv.mkDerivation {

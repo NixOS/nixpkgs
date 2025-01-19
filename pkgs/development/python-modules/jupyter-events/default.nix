@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
   pythonOlder,
 
   # build
@@ -12,6 +13,8 @@
   python-json-logger,
   pyyaml,
   referencing,
+  rfc3339-validator,
+  rfc3986-validator,
   traitlets,
 
   # optionals
@@ -26,25 +29,34 @@
 
 buildPythonPackage rec {
   pname = "jupyter-events";
-  version = "0.10.0";
+  version = "0.11.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "jupyter";
     repo = "jupyter_events";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-8aps8aNgXw+XbDgtCvWw+Ij1Cm1N0G+wcL35ySkofOk=";
+    tag = "v${version}";
+    hash = "sha256-e+BxJc/i5lpljvv6Uwqwrog+nLJ4NOBSqd47Q7DELOE=";
   };
 
-  nativeBuildInputs = [ hatchling ];
+  patches = [
+    # https://github.com/jupyter/jupyter_events/pull/110
+    (fetchpatch2 {
+      name = "python-json-logger-compatibility.patch";
+      url = "https://github.com/jupyter/jupyter_events/commit/6704ea630522f44542d83608f750da0068e41443.patch";
+      hash = "sha256-PfmOlbXRFdQxhM3SngjjUNsiueuUfCO7xlyLDGSnzj4=";
+    })
+  ];
 
-  propagatedBuildInputs = [
+  build-system = [ hatchling ];
+
+  dependencies = [
     jsonschema
     python-json-logger
     pyyaml
     referencing
+    rfc3339-validator
+    rfc3986-validator
     traitlets
   ] ++ jsonschema.optional-dependencies.format-nongpl;
 
@@ -67,12 +79,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jupyter_events" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/jupyter/jupyter_events/releases/tag/v${version}";
     description = "Configurable event system for Jupyter applications and extensions";
     mainProgram = "jupyter-events";
     homepage = "https://github.com/jupyter/jupyter_events";
-    license = licenses.bsd3;
-    maintainers = [ ];
+    license = lib.licenses.bsd3;
+    maintainers = lib.teams.jupyter.members;
   };
 }

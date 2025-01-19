@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jd-boyd";
     repo = "python-lzo";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-iXAvOCzHPvNERMkE5y4QTHi4ZieW1wrYWYScs7zyb2c=";
   };
 

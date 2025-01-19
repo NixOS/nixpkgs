@@ -1,21 +1,22 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, buildGoModule
-, nodejs
-, pnpm_9
-, esbuild
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  buildGoModule,
+  nodejs,
+  pnpm_9,
+  esbuild,
 }:
 
 buildGoModule rec {
   pname = "syncyomi";
-  version = "1.1.1";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "SyncYomi";
     repo = "SyncYomi";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-90MA62Zm9ouaf+CnYsbOm/njrUui21vW/VrwKYfsCZs=";
+    tag = "v${version}";
+    hash = "sha256-PPE6UXHo2ZlN0A0VkUH+8pkdfm6WEvpofusk6c3RBHk=";
   };
 
   vendorHash = "sha256-/rpT6SatIZ+GVzmVg6b8Zy32pGybprObotyvEgvdL2w=";
@@ -26,8 +27,13 @@ buildGoModule rec {
     sourceRoot = "${finalAttrs.src.name}/web";
 
     pnpmDeps = pnpm_9.fetchDeps {
-      inherit (finalAttrs) pname version src sourceRoot;
-      hash = "sha256-25Bg8sTeH/w25KdfwgZNoqBXz2d5c1QD5vGb33xpTCA=";
+      inherit (finalAttrs)
+        pname
+        version
+        src
+        sourceRoot
+        ;
+      hash = "sha256-edcZIqshnvM3jJpZWIR/UncI0VCMLq26h/n3VvV/384=";
     };
 
     nativeBuildInputs = [
@@ -35,18 +41,25 @@ buildGoModule rec {
       pnpm_9.configHook
     ];
 
-    env.ESBUILD_BINARY_PATH = lib.getExe (esbuild.override {
-      buildGoModule = args: buildGoModule (args // rec {
-        version = "0.17.19";
-        src = fetchFromGitHub {
-          owner = "evanw";
-          repo = "esbuild";
-          rev = "v${version}";
-          hash = "sha256-PLC7OJLSOiDq4OjvrdfCawZPfbfuZix4Waopzrj8qsU=";
-        };
-        vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
-      });
-    });
+    env.ESBUILD_BINARY_PATH = lib.getExe (
+      esbuild.override {
+        buildGoModule =
+          args:
+          buildGoModule (
+            args
+            // rec {
+              version = "0.17.19";
+              src = fetchFromGitHub {
+                owner = "evanw";
+                repo = "esbuild";
+                rev = "v${version}";
+                hash = "sha256-PLC7OJLSOiDq4OjvrdfCawZPfbfuZix4Waopzrj8qsU=";
+              };
+              vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
+            }
+          );
+      }
+    );
 
     buildPhase = ''
       runHook preBuild
@@ -66,7 +79,8 @@ buildGoModule rec {
   '';
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X main.version=v${version}"
   ];
 

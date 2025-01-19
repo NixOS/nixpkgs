@@ -9,15 +9,15 @@
 
 buildGoModule rec {
   pname = "kubernetes-helm";
-  version = "3.16.1";
+  version = "3.16.4";
 
   src = fetchFromGitHub {
     owner = "helm";
     repo = "helm";
     rev = "v${version}";
-    sha256 = "sha256-OTG4xPgK1WT/HUWjQZ1a7X126+PUo02yFnEAnd6MTU8=";
+    sha256 = "sha256-1dgBPDl5AtbqSKzfbAnCAzdBL+d6ZeO81LJFosmO7Bg=";
   };
-  vendorHash = "sha256-rNp2aah6lAMZd07HXF2w0h7wfPc+TuRHl/jQpgqY5Sk=";
+  vendorHash = "sha256-pkQ4J4JmEByu7bkUa/rg2bipY9s6t6uvPNiNyTyYkD8=";
 
   subPackages = [ "cmd/helm" ];
   ldflags = [

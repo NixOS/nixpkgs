@@ -1,25 +1,26 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, protobuf
-, stdenv
-, pkg-config
-, openssl
-, rust-jemalloc-sys
-, nix-update-script
-, Security
-, SystemConfiguration
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  protobuf,
+  stdenv,
+  pkg-config,
+  openssl,
+  rust-jemalloc-sys,
+  nix-update-script,
+  Security,
+  SystemConfiguration,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "qdrant";
-  version = "1.11.5";
+  version = "1.12.1";
 
   src = fetchFromGitHub {
     owner = "qdrant";
     repo = "qdrant";
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-yE7/xnAf0U9BpEEmtgXSH+EerUB20KeFePavuGW08f0=";
+    tag = "v${version}";
+    sha256 = "sha256-q99roKqeC8lra29gyJertJLnVNFvKRFZ2agREvHZx6k=";
   };
 
   cargoLock = {
@@ -30,21 +31,25 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  buildInputs = [
-    openssl
-    rust-jemalloc-sys
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Security
-    SystemConfiguration
-  ];
+  buildInputs =
+    [
+      openssl
+      rust-jemalloc-sys
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Security
+      SystemConfiguration
+    ];
 
-  nativeBuildInputs = [ protobuf rustPlatform.bindgenHook pkg-config ];
+  nativeBuildInputs = [
+    protobuf
+    rustPlatform.bindgenHook
+    pkg-config
+  ];
 
   env = {
     # Needed to get openssl-sys to use pkg-config.
     OPENSSL_NO_VENDOR = 1;
-  } // lib.optionalAttrs stdenv.cc.isClang {
-    NIX_CFLAGS_COMPILE = "-faligned-allocation";
   };
 
   passthru = {

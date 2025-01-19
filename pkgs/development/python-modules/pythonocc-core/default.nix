@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "tpaviot";
     repo = "pythonocc-core";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-45pqPQ07KYlpFwJSAYVHbzuqDQTbAvPpxReal52DCzU=";
   };
 

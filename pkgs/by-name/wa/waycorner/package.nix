@@ -5,6 +5,7 @@
   pkg-config,
   fetchFromGitHub,
   wayland,
+  gitUpdater,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "waycorner";
@@ -13,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "AndreasBackx";
     repo = "waycorner";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-b8juIhJ3kh+NJc8RUVVoatqjWISSW0ir/vk2Dz/428Y=";
   };
 
@@ -29,6 +30,8 @@ rustPlatform.buildRustPackage rec {
     wrapProgram $out/bin/waycorner \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ wayland ]}
   '';
+
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     description = "Hot corners for Wayland";

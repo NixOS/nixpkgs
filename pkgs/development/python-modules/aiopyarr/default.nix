@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tkdrob";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-CzNB6ymvDTktiOGdcdCvWLVQ3mKmbdMpc/vezSXCpG4=";
   };
 

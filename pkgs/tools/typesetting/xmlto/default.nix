@@ -4,7 +4,7 @@
   coreutils,
   docbook_xml_dtd_45,
   docbook_xsl,
-  docbook-xsl-ns,
+  docbook-xsl-nons,
   fetchgit,
   findutils,
   flex,
@@ -44,22 +44,18 @@ stdenv.mkDerivation (finalAttrs: {
 
     for f in format/docbook/* xmlto.in; do
       substituteInPlace $f \
-        --replace-fail "http://docbook.sourceforge.net/release/xsl/current" "${docbook-xsl-ns}/xml/xsl/docbook"
+        --replace-fail "http://docbook.sourceforge.net/release/xsl/current" "${docbook-xsl-nons}/xml/xsl/docbook"
     done
   '';
+
+  strictDeps = true;
 
   # `libxml2' provides `xmllint', needed at build-time and run-time.
   # `libxslt' provides `xsltproc', used by `xmlto' at run-time.
   nativeBuildInputs = [
     autoreconfHook
     makeWrapper
-    flex
     getopt
-  ];
-
-  buildInputs = [
-    docbook_xml_dtd_45
-    docbook_xsl
     libxml2
     libxslt
   ];

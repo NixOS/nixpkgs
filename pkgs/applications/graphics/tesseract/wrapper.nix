@@ -18,7 +18,9 @@ let
 
     nativeBuildInputs = [ makeWrapper ];
 
-    buildCommand = ''
+    phases = [ "buildPhase" "fixupPhase" ];
+
+    buildPhase = ''
       makeWrapper {$tesseractBase,$out}/bin/tesseract --set-default TESSDATA_PREFIX $out/share/tessdata
 
       # Recursively link include, share

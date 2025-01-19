@@ -17,7 +17,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-ySgWEGHlEJpfB/BZuRs1bELBspEaiaX/UnJai2V/hx0=";
 
-  CGO_ENABLED = "0";
+  env.CGO_ENABLED = "0";
 
   passthru = {
     updateScript = nix-update-script { };

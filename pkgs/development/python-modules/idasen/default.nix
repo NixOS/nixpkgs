@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "newAM";
     repo = "idasen";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-TQ+DBFpG+IeZ4/dN+YKMw3AM4Dl1rpqA1kRcb3Tb3jA=";
   };
 

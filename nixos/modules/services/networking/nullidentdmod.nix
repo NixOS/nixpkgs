@@ -1,7 +1,15 @@
-{ config, lib, pkgs, ... }: with lib; let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib;
+let
   cfg = config.services.nullidentdmod;
 
-in {
+in
+{
   options.services.nullidentdmod = with types; {
     enable = mkEnableOption "the nullidentdmod identd daemon";
 
@@ -25,7 +33,9 @@ in {
       description = "NullidentdMod service";
       serviceConfig = {
         DynamicUser = true;
-        ExecStart = "${pkgs.nullidentdmod}/bin/nullidentdmod${optionalString (cfg.userid != null) " ${cfg.userid}"}";
+        ExecStart = "${pkgs.nullidentdmod}/bin/nullidentdmod${
+          optionalString (cfg.userid != null) " ${cfg.userid}"
+        }";
         StandardInput = "socket";
         StandardOutput = "socket";
       };

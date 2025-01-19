@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, makeWrapper
-, pkg-config
-, SDL2
-, dbus
-, libdecor
-, libnotify
-, dejavu_fonts
-, zenity
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  makeWrapper,
+  pkg-config,
+  SDL2,
+  dbus,
+  libdecor,
+  libnotify,
+  dejavu_fonts,
+  zenity,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -32,13 +33,15 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [
-    SDL2
-    dbus
-    libnotify
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libdecor
-  ];
+  buildInputs =
+    [
+      SDL2
+      dbus
+      libnotify
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libdecor
+    ];
 
   patches = [
     # Fix build on clang https://github.com/Etaash-mathamsetty/trigger-control/pull/23

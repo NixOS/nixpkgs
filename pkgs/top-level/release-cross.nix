@@ -13,11 +13,14 @@
 */
 
 { # The platforms *from* which we cross compile.
-  supportedSystems ? [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" ]
+  supportedSystems ? [ "x86_64-linux" "aarch64-linux" "aarch64-darwin" ]
 , # Strip most of attributes when evaluating to spare memory usage
   scrubJobs ? true
 , # Attributes passed to nixpkgs. Don't build packages marked as unfree.
-  nixpkgsArgs ? { config = { allowUnfree = false; inHydra = true; }; }
+  nixpkgsArgs ? {
+    config = { allowUnfree = false; inHydra = true; };
+    __allowFileset = false;
+  }
 }:
 
 let

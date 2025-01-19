@@ -1,21 +1,22 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, substituteAll
-, addDriverRunpath
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  replaceVars,
+  addDriverRunpath,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libvpl";
-  version = "2.13.0";
+  version = "2.14.0";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "libvpl";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-H+pRdpk1B/QgsXaTxhQfm3JW5Plgz4esrUV1kKfjY1s=";
+    hash = "sha256-51kl9w1xqldQXGWbk6bveS2jMZWQOz/gYP/hPXDk/7M=";
   };
 
   nativeBuildInputs = [
@@ -28,8 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    (substituteAll {
-      src = ./opengl-driver-lib.patch;
+    (replaceVars ./opengl-driver-lib.patch {
       inherit (addDriverRunpath) driverLink;
     })
   ];

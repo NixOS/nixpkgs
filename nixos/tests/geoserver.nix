@@ -8,9 +8,12 @@ let
   # - wps-jdbc needs a running (Postrgres) db server.
   blacklist = [ "wps-jdbc" ];
 
-  blacklistedToNull = n: v: if ! builtins.elem n blacklist then v else null;
-  getNonBlackistedExtensionsAsList = ps: builtins.filter (x: x != null) (lib.attrsets.mapAttrsToList blacklistedToNull ps);
-  geoserverWithAllExtensions = pkgs.geoserver.withExtensions (ps: getNonBlackistedExtensionsAsList ps);
+  blacklistedToNull = n: v: if !builtins.elem n blacklist then v else null;
+  getNonBlackistedExtensionsAsList =
+    ps: builtins.filter (x: x != null) (lib.attrsets.mapAttrsToList blacklistedToNull ps);
+  geoserverWithAllExtensions = pkgs.geoserver.withExtensions (
+    ps: getNonBlackistedExtensionsAsList ps
+  );
 in
 {
 
@@ -20,15 +23,17 @@ in
   };
 
   nodes = {
-    machine = { pkgs, ... }: {
-      virtualisation.diskSize = 2 * 1024;
+    machine =
+      { pkgs, ... }:
+      {
+        virtualisation.diskSize = 2 * 1024;
 
-      environment.systemPackages = [
-        geoserver
-        geoserverWithImporterExtension
-        geoserverWithAllExtensions
-      ];
-    };
+        environment.systemPackages = [
+          geoserver
+          geoserverWithImporterExtension
+          geoserverWithAllExtensions
+        ];
+      };
   };
 
   testScript = ''

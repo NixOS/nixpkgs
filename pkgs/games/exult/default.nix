@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, SDL2
-, autoconf
-, autoconf-archive
-, autoreconfHook
-, automake
-, libogg
-, libtool
-, libvorbis
-, pkg-config
-, zlib
-, enableTools ? false
-# Darwin-specific
-, AudioUnit
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  SDL2,
+  autoconf,
+  autoconf-archive,
+  autoreconfHook,
+  automake,
+  libogg,
+  libtool,
+  libvorbis,
+  pkg-config,
+  zlib,
+  enableTools ? false,
+  # Darwin-specific
+  AudioUnit,
 }:
 
 stdenv.mkDerivation rec {
@@ -42,14 +43,16 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [
-    SDL2
-    libogg
-    libvorbis
-    zlib
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    AudioUnit
-  ];
+  buildInputs =
+    [
+      SDL2
+      libogg
+      libvorbis
+      zlib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      AudioUnit
+    ];
 
   enableParallelBuilding = true;
 

@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, cmake, pkg-config, extra-cmake-modules, qtbase }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  pkg-config,
+  extra-cmake-modules,
+  qtbase,
+}:
 
 stdenv.mkDerivation rec {
   pname = "kdevelop-pg-qt";
@@ -9,7 +17,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-PVZgTEefjwSuMqUj7pHzB4xxcRfQ3rOelz4iSUy7ZfE=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config extra-cmake-modules ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    extra-cmake-modules
+  ];
 
   buildInputs = [ qtbase ];
 

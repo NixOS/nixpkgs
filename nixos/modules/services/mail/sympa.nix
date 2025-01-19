@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.sympa;
   dataDir = "/var/lib/sympa";
@@ -26,39 +31,48 @@ let
   };
 
   # wwsympa has its own service config
-  sympaServiceConfig = srv: {
-    Type = "simple";
-    Restart = "always";
-    ExecStart = "${pkg}/bin/${srv}.pl --foreground";
-    PIDFile = "/run/sympa/${srv}.pid";
-    User = user;
-    Group = group;
+  sympaServiceConfig =
+    srv:
+    {
+      Type = "simple";
+      Restart = "always";
+      ExecStart = "${pkg}/bin/${srv}.pl --foreground";
+      PIDFile = "/run/sympa/${srv}.pid";
+      User = user;
+      Group = group;
 
-    # avoid duplicating log messageges in journal
-    StandardError = "null";
-  } // commonServiceConfig;
+      # avoid duplicating log messageges in journal
+      StandardError = "null";
+    }
+    // commonServiceConfig;
 
-  configVal = value:
-    if lib.isBool value then
-      if value then "on" else "off"
-    else toString value;
-  configGenerator = c: lib.concatStrings (lib.flip lib.mapAttrsToList c (key: val: "${key}\t${configVal val}\n"));
+  configVal = value: if lib.isBool value then if value then "on" else "off" else toString value;
+  configGenerator =
+    c: lib.concatStrings (lib.flip lib.mapAttrsToList c (key: val: "${key}\t${configVal val}\n"));
 
   mainConfig = pkgs.writeText "sympa.conf" (configGenerator cfg.settings);
   robotConfig = fqdn: domain: pkgs.writeText "${fqdn}-robot.conf" (configGenerator domain.settings);
 
-  transport = pkgs.writeText "transport.sympa" (lib.concatStringsSep "\n" (lib.flip map fqdns (domain: ''
-    ${domain}                        error:User unknown in recipient table
-    sympa@${domain}                  sympa:sympa@${domain}
-    listmaster@${domain}             sympa:listmaster@${domain}
-    bounce@${domain}                 sympabounce:sympa@${domain}
-    abuse-feedback-report@${domain}  sympabounce:sympa@${domain}
-  '')));
+  transport = pkgs.writeText "transport.sympa" (
+    lib.concatStringsSep "\n" (
+      lib.flip map fqdns (domain: ''
+        ${domain}                        error:User unknown in recipient table
+        sympa@${domain}                  sympa:sympa@${domain}
+        listmaster@${domain}             sympa:listmaster@${domain}
+        bounce@${domain}                 sympabounce:sympa@${domain}
+        abuse-feedback-report@${domain}  sympabounce:sympa@${domain}
+      '')
+    )
+  );
 
-  virtual = pkgs.writeText "virtual.sympa" (lib.concatStringsSep "\n" (lib.flip map fqdns (domain: ''
-    sympa-request@${domain}  postmaster@localhost
-    sympa-owner@${domain}    postmaster@localhost
-  '')));
+  virtual = pkgs.writeText "virtual.sympa" (
+    lib.concatStringsSep "\n" (
+      lib.flip map fqdns (domain: ''
+        sympa-request@${domain}  postmaster@localhost
+        sympa-owner@${domain}    postmaster@localhost
+      '')
+    )
+  );
 
   listAliases = pkgs.writeText "list_aliases.tt2" ''
     #--- [% list.name %]@[% list.domain %]: list transport map created at [% date %]
@@ -110,41 +124,50 @@ in
     };
 
     domains = lib.mkOption {
-      type = attrsOf (submodule ({ name, config, ... }: {
-        options = {
-          webHost = lib.mkOption {
-            type = nullOr str;
-            default = null;
-            example = "archive.example.org";
-            description = ''
-              Domain part of the web interface URL (no web interface for this domain if `null`).
-              DNS record of type A (or AAAA or CNAME) has to exist with this value.
-            '';
-          };
-          webLocation = lib.mkOption {
-            type = str;
-            default = "/";
-            example = "/sympa";
-            description = "URL path part of the web interface.";
-          };
-          settings = lib.mkOption {
-            type = attrsOf (oneOf [ str int bool ]);
-            default = {};
-            example = {
-              default_max_list_members = 3;
+      type = attrsOf (
+        submodule (
+          { name, config, ... }:
+          {
+            options = {
+              webHost = lib.mkOption {
+                type = nullOr str;
+                default = null;
+                example = "archive.example.org";
+                description = ''
+                  Domain part of the web interface URL (no web interface for this domain if `null`).
+                  DNS record of type A (or AAAA or CNAME) has to exist with this value.
+                '';
+              };
+              webLocation = lib.mkOption {
+                type = str;
+                default = "/";
+                example = "/sympa";
+                description = "URL path part of the web interface.";
+              };
+              settings = lib.mkOption {
+                type = attrsOf (oneOf [
+                  str
+                  int
+                  bool
+                ]);
+                default = { };
+                example = {
+                  default_max_list_members = 3;
+                };
+                description = ''
+                  The {file}`robot.conf` configuration file as key value set.
+                  See <https://sympa-community.github.io/gpldoc/man/sympa.conf.5.html>
+                  for list of configuration parameters.
+                '';
+              };
             };
-            description = ''
-              The {file}`robot.conf` configuration file as key value set.
-              See <https://sympa-community.github.io/gpldoc/man/sympa.conf.5.html>
-              for list of configuration parameters.
-            '';
-          };
-        };
 
-        config.settings = lib.mkIf (cfg.web.enable && config.webHost != null) {
-          wwsympa_url = lib.mkDefault "https://${config.webHost}${lib.removeSuffix "/" config.webLocation}";
-        };
-      }));
+            config.settings = lib.mkIf (cfg.web.enable && config.webHost != null) {
+              wwsympa_url = lib.mkDefault "https://${config.webHost}${lib.removeSuffix "/" config.webLocation}";
+            };
+          }
+        )
+      );
 
       description = ''
         Email domains handled by this instance. There have
@@ -166,7 +189,11 @@ in
 
     database = {
       type = lib.mkOption {
-        type = enum [ "SQLite" "PostgreSQL" "MySQL" ];
+        type = enum [
+          "SQLite"
+          "PostgreSQL"
+          "MySQL"
+        ];
         default = "SQLite";
         example = "MySQL";
         description = "Database engine to use.";
@@ -234,7 +261,10 @@ in
       };
 
       server = lib.mkOption {
-        type = enum [ "nginx" "none" ];
+        type = enum [
+          "nginx"
+          "none"
+        ];
         default = "nginx";
         description = ''
           The webserver used for the Sympa web interface. Set it to `none` if you want to configure it yourself.
@@ -261,7 +291,10 @@ in
 
     mta = {
       type = lib.mkOption {
-        type = enum [ "postfix" "none" ];
+        type = enum [
+          "postfix"
+          "none"
+        ];
         default = "postfix";
         description = ''
           Mail transfer agent (MTA) integration. Use `none` if you want to configure it yourself.
@@ -274,8 +307,12 @@ in
     };
 
     settings = lib.mkOption {
-      type = attrsOf (oneOf [ str int bool ]);
-      default = {};
+      type = attrsOf (oneOf [
+        str
+        int
+        bool
+      ]);
+      default = { };
       example = lib.literalExpression ''
         {
           default_home = "lists";
@@ -290,27 +327,34 @@ in
     };
 
     settingsFile = lib.mkOption {
-      type = attrsOf (submodule ({ name, config, ... }: {
-        options = {
-          enable = lib.mkOption {
-            type = bool;
-            default = true;
-            description = "Whether this file should be generated. This option allows specific files to be disabled.";
-          };
-          text = lib.mkOption {
-            default = null;
-            type = nullOr lines;
-            description = "Text of the file.";
-          };
-          source = lib.mkOption {
-            type = path;
-            description = "Path of the source file.";
-          };
-        };
+      type = attrsOf (
+        submodule (
+          { name, config, ... }:
+          {
+            options = {
+              enable = lib.mkOption {
+                type = bool;
+                default = true;
+                description = "Whether this file should be generated. This option allows specific files to be disabled.";
+              };
+              text = lib.mkOption {
+                default = null;
+                type = nullOr lines;
+                description = "Text of the file.";
+              };
+              source = lib.mkOption {
+                type = path;
+                description = "Path of the source file.";
+              };
+            };
 
-        config.source = lib.mkIf (config.text != null) (lib.mkDefault (pkgs.writeText "sympa-${baseNameOf name}" config.text));
-      }));
-      default = {};
+            config.source = lib.mkIf (config.text != null) (
+              lib.mkDefault (pkgs.writeText "sympa-${baseNameOf name}" config.text)
+            );
+          }
+        )
+      );
+      default = { };
       example = lib.literalExpression ''
         {
           "list_data/lists.example.org/help" = {
@@ -326,52 +370,57 @@ in
 
   config = lib.mkIf cfg.enable {
 
-    services.sympa.settings = (lib.mapAttrs (_: v: lib.mkDefault v) {
-      domain     = if cfg.mainDomain != null then cfg.mainDomain else lib.head fqdns;
-      listmaster = lib.concatStringsSep "," cfg.listMasters;
-      lang       = cfg.lang;
+    services.sympa.settings = (
+      lib.mapAttrs (_: v: lib.mkDefault v) {
+        domain = if cfg.mainDomain != null then cfg.mainDomain else lib.head fqdns;
+        listmaster = lib.concatStringsSep "," cfg.listMasters;
+        lang = cfg.lang;
 
-      home        = "${dataDir}/list_data";
-      arc_path    = "${dataDir}/arc";
-      bounce_path = "${dataDir}/bounce";
+        home = "${dataDir}/list_data";
+        arc_path = "${dataDir}/arc";
+        bounce_path = "${dataDir}/bounce";
 
-      sendmail = "${pkgs.system-sendmail}/bin/sendmail";
+        sendmail = "${pkgs.system-sendmail}/bin/sendmail";
 
-      db_type = cfg.database.type;
-      db_name = cfg.database.name;
-      db_user = cfg.database.name;
-    }
-    // (lib.optionalAttrs (cfg.database.host != null) {
-      db_host = cfg.database.host;
-    })
-    // (lib.optionalAttrs mysqlLocal {
-      db_host = "localhost"; # use unix domain socket
-    })
-    // (lib.optionalAttrs pgsqlLocal {
-      db_host = "/run/postgresql"; # use unix domain socket
-    })
-    // (lib.optionalAttrs (cfg.database.port != null) {
-      db_port = cfg.database.port;
-    })
-    // (lib.optionalAttrs (cfg.mta.type == "postfix") {
-      sendmail_aliases = "${dataDir}/sympa_transport";
-      aliases_program  = "${pkgs.postfix}/bin/postmap";
-      aliases_db_type  = "hash";
-    })
-    // (lib.optionalAttrs cfg.web.enable {
-      static_content_path = "${dataDir}/static_content";
-      css_path            = "${dataDir}/static_content/css";
-      pictures_path       = "${dataDir}/static_content/pictures";
-      mhonarc             = "${pkgs.perlPackages.MHonArc}/bin/mhonarc";
-    }));
+        db_type = cfg.database.type;
+        db_name = cfg.database.name;
+        db_user = cfg.database.name;
+      }
+      // (lib.optionalAttrs (cfg.database.host != null) {
+        db_host = cfg.database.host;
+      })
+      // (lib.optionalAttrs mysqlLocal {
+        db_host = "localhost"; # use unix domain socket
+      })
+      // (lib.optionalAttrs pgsqlLocal {
+        db_host = "/run/postgresql"; # use unix domain socket
+      })
+      // (lib.optionalAttrs (cfg.database.port != null) {
+        db_port = cfg.database.port;
+      })
+      // (lib.optionalAttrs (cfg.mta.type == "postfix") {
+        sendmail_aliases = "${dataDir}/sympa_transport";
+        aliases_program = "${pkgs.postfix}/bin/postmap";
+        aliases_db_type = "hash";
+      })
+      // (lib.optionalAttrs cfg.web.enable {
+        static_content_path = "${dataDir}/static_content";
+        css_path = "${dataDir}/static_content/css";
+        pictures_path = "${dataDir}/static_content/pictures";
+        mhonarc = "${pkgs.perlPackages.MHonArc}/bin/mhonarc";
+      })
+    );
 
-    services.sympa.settingsFile = {
-      "virtual.sympa"        = lib.mkDefault { source = virtual; };
-      "transport.sympa"      = lib.mkDefault { source = transport; };
-      "etc/list_aliases.tt2" = lib.mkDefault { source = listAliases; };
-    }
-    // (lib.flip lib.mapAttrs' cfg.domains (fqdn: domain:
-          lib.nameValuePair "etc/${fqdn}/robot.conf" (lib.mkDefault { source = robotConfig fqdn domain; })));
+    services.sympa.settingsFile =
+      {
+        "virtual.sympa" = lib.mkDefault { source = virtual; };
+        "transport.sympa" = lib.mkDefault { source = transport; };
+        "etc/list_aliases.tt2" = lib.mkDefault { source = listAliases; };
+      }
+      // (lib.flip lib.mapAttrs' cfg.domains (
+        fqdn: domain:
+        lib.nameValuePair "etc/${fqdn}/robot.conf" (lib.mkDefault { source = robotConfig fqdn domain; })
+      ));
 
     environment = {
       systemPackages = [ pkg ];
@@ -385,47 +434,55 @@ in
       isSystemUser = true;
     };
 
-    users.groups.${group} = {};
+    users.groups.${group} = { };
 
     assertions = [
-      { assertion = cfg.database.createLocally -> cfg.database.user == user && cfg.database.name == cfg.database.user;
+      {
+        assertion =
+          cfg.database.createLocally -> cfg.database.user == user && cfg.database.name == cfg.database.user;
         message = "services.sympa.database.user must be set to ${user} if services.sympa.database.createLocally is set to true";
       }
-      { assertion = cfg.database.createLocally -> cfg.database.passwordFile == null;
+      {
+        assertion = cfg.database.createLocally -> cfg.database.passwordFile == null;
         message = "a password cannot be specified if services.sympa.database.createLocally is set to true";
       }
     ];
 
-    systemd.tmpfiles.rules = [
-      "d  ${dataDir}                   0711 ${user} ${group} - -"
-      "d  ${dataDir}/etc               0700 ${user} ${group} - -"
-      "d  ${dataDir}/spool             0700 ${user} ${group} - -"
-      "d  ${dataDir}/list_data         0700 ${user} ${group} - -"
-      "d  ${dataDir}/arc               0700 ${user} ${group} - -"
-      "d  ${dataDir}/bounce            0700 ${user} ${group} - -"
-      "f  ${dataDir}/sympa_transport   0600 ${user} ${group} - -"
+    systemd.tmpfiles.rules =
+      [
+        "d  ${dataDir}                   0711 ${user} ${group} - -"
+        "d  ${dataDir}/etc               0700 ${user} ${group} - -"
+        "d  ${dataDir}/spool             0700 ${user} ${group} - -"
+        "d  ${dataDir}/list_data         0700 ${user} ${group} - -"
+        "d  ${dataDir}/arc               0700 ${user} ${group} - -"
+        "d  ${dataDir}/bounce            0700 ${user} ${group} - -"
+        "f  ${dataDir}/sympa_transport   0600 ${user} ${group} - -"
 
-      # force-copy static_content so it's up to date with package
-      # set permissions for wwsympa which needs write access (...)
-      "R  ${dataDir}/static_content    -    -       -        - -"
-      "C  ${dataDir}/static_content    0711 ${user} ${group} - ${pkg}/var/lib/sympa/static_content"
-      "e  ${dataDir}/static_content/*  0711 ${user} ${group} - -"
+        # force-copy static_content so it's up to date with package
+        # set permissions for wwsympa which needs write access (...)
+        "R  ${dataDir}/static_content    -    -       -        - -"
+        "C  ${dataDir}/static_content    0711 ${user} ${group} - ${pkg}/var/lib/sympa/static_content"
+        "e  ${dataDir}/static_content/*  0711 ${user} ${group} - -"
 
-      "d  /run/sympa                   0755 ${user} ${group} - -"
-    ]
-    ++ (lib.flip lib.concatMap fqdns (fqdn: [
-      "d  ${dataDir}/etc/${fqdn}       0700 ${user} ${group} - -"
-      "d  ${dataDir}/list_data/${fqdn} 0700 ${user} ${group} - -"
-    ]))
-    #++ (lib.flip lib.mapAttrsToList enabledFiles (k: v:
-    #  "L+ ${dataDir}/${k}              -    -       -        - ${v.source}"
-    #))
-    ++ (lib.concatLists (lib.flip lib.mapAttrsToList enabledFiles (k: v: [
-      # sympa doesn't handle symlinks well (e.g. fails to create locks)
-      # force-copy instead
-      "R ${dataDir}/${k}              -    -       -        - -"
-      "C ${dataDir}/${k}              0700 ${user}  ${group} - ${v.source}"
-    ])));
+        "d  /run/sympa                   0755 ${user} ${group} - -"
+      ]
+      ++ (lib.flip lib.concatMap fqdns (fqdn: [
+        "d  ${dataDir}/etc/${fqdn}       0700 ${user} ${group} - -"
+        "d  ${dataDir}/list_data/${fqdn} 0700 ${user} ${group} - -"
+      ]))
+      #++ (lib.flip lib.mapAttrsToList enabledFiles (k: v:
+      #  "L+ ${dataDir}/${k}              -    -       -        - ${v.source}"
+      #))
+      ++ (lib.concatLists (
+        lib.flip lib.mapAttrsToList enabledFiles (
+          k: v: [
+            # sympa doesn't handle symlinks well (e.g. fails to create locks)
+            # force-copy instead
+            "R ${dataDir}/${k}              -    -       -        - -"
+            "C ${dataDir}/${k}              0700 ${user}  ${group} - ${v.source}"
+          ]
+        )
+      ));
 
     systemd.services.sympa = {
       description = "Sympa mailing list manager";
@@ -482,37 +539,50 @@ in
         Type = "forking";
         PIDFile = "/run/sympa/wwsympa.pid";
         Restart = "always";
-        ExecStart = ''${pkgs.spawn_fcgi}/bin/spawn-fcgi \
-          -u ${user} \
-          -g ${group} \
-          -U nginx \
-          -M 0600 \
-          -F ${toString cfg.web.fcgiProcs} \
-          -P /run/sympa/wwsympa.pid \
-          -s /run/sympa/wwsympa.socket \
-          -- ${pkg}/lib/sympa/cgi/wwsympa.fcgi
+        ExecStart = ''
+          ${pkgs.spawn_fcgi}/bin/spawn-fcgi \
+                    -u ${user} \
+                    -g ${group} \
+                    -U nginx \
+                    -M 0600 \
+                    -F ${toString cfg.web.fcgiProcs} \
+                    -P /run/sympa/wwsympa.pid \
+                    -s /run/sympa/wwsympa.socket \
+                    -- ${pkg}/lib/sympa/cgi/wwsympa.fcgi
         '';
 
       } // commonServiceConfig;
     };
 
     services.nginx.enable = lib.mkIf usingNginx true;
-    services.nginx.virtualHosts = lib.mkIf usingNginx (let
-      vHosts = lib.unique (lib.remove null (lib.mapAttrsToList (_k: v: v.webHost) cfg.domains));
-      hostLocations = host: map (v: v.webLocation) (lib.filter (v: v.webHost == host) (lib.attrValues cfg.domains));
-      httpsOpts = lib.optionalAttrs cfg.web.https { forceSSL = lib.mkDefault true; enableACME = lib.mkDefault true; };
-    in
-    lib.genAttrs vHosts (host: {
-      locations = lib.genAttrs (hostLocations host) (loc: {
-        extraConfig = ''
-          include ${config.services.nginx.package}/conf/fastcgi_params;
+    services.nginx.virtualHosts = lib.mkIf usingNginx (
+      let
+        vHosts = lib.unique (lib.remove null (lib.mapAttrsToList (_k: v: v.webHost) cfg.domains));
+        hostLocations =
+          host: map (v: v.webLocation) (lib.filter (v: v.webHost == host) (lib.attrValues cfg.domains));
+        httpsOpts = lib.optionalAttrs cfg.web.https {
+          forceSSL = lib.mkDefault true;
+          enableACME = lib.mkDefault true;
+        };
+      in
+      lib.genAttrs vHosts (
+        host:
+        {
+          locations =
+            lib.genAttrs (hostLocations host) (loc: {
+              extraConfig = ''
+                include ${config.services.nginx.package}/conf/fastcgi_params;
 
-          fastcgi_pass unix:/run/sympa/wwsympa.socket;
-        '';
-      }) // {
-        "/static-sympa/".alias = "${dataDir}/static_content/";
-      };
-    } // httpsOpts));
+                fastcgi_pass unix:/run/sympa/wwsympa.socket;
+              '';
+            })
+            // {
+              "/static-sympa/".alias = "${dataDir}/static_content/";
+            };
+        }
+        // httpsOpts
+      )
+    );
 
     services.postfix = lib.mkIf (cfg.mta.type == "postfix") {
       enable = true;
@@ -563,8 +633,11 @@ in
       package = lib.mkDefault pkgs.mariadb;
       ensureDatabases = [ cfg.database.name ];
       ensureUsers = [
-        { name = cfg.database.user;
-          ensurePermissions = { "${cfg.database.name}.*" = "ALL PRIVILEGES"; };
+        {
+          name = cfg.database.user;
+          ensurePermissions = {
+            "${cfg.database.name}.*" = "ALL PRIVILEGES";
+          };
         }
       ];
     };
@@ -573,7 +646,8 @@ in
       enable = true;
       ensureDatabases = [ cfg.database.name ];
       ensureUsers = [
-        { name = cfg.database.user;
+        {
+          name = cfg.database.user;
           ensureDBOwnership = true;
         }
       ];
@@ -581,5 +655,8 @@ in
 
   };
 
-  meta.maintainers = with lib.maintainers; [ mmilata sorki ];
+  meta.maintainers = with lib.maintainers; [
+    mmilata
+    sorki
+  ];
 }

@@ -1,4 +1,8 @@
-{ lib, buildKodiAddon, fetchFromGitHub }:
+{
+  lib,
+  buildKodiAddon,
+  fetchFromGitHub,
+}:
 
 buildKodiAddon rec {
   pname = "xbmcswift2";

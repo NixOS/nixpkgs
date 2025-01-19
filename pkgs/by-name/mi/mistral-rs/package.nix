@@ -17,6 +17,8 @@
   # env
   fetchurl,
 
+  versionCheckHook,
+
   testers,
   mistral-rs,
   nix-update-script,
@@ -81,22 +83,17 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "mistral-rs";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "EricLBuehler";
     repo = "mistral.rs";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ljGr8V6WkpXPV90SiHJ0t7wzBPx0J0FOB52YdLLIeoM=";
+    tag = "v${version}";
+    hash = "sha256-aflzpJZ48AFBqNTssZl2KxkspQb662nGkEU6COIluxk=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "bindgen_cuda-0.1.6" = "sha256-OWGcQxT+x5HyIFskNVWpPr6Qfkh6Mv/g4PVSm5oA27g=";
-      "candle-core-0.6.1" = "sha256-AtKjMTtbMBI2DbZXoWimhqcHmsz2DnRXJorqA0QYNHw=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-USp8siEXVjtkPoCHfQjDYPtgLfNHcy02LSUNdwDbxgs=";
 
   nativeBuildInputs = [
     pkg-config
@@ -178,6 +175,13 @@ rustPlatform.buildRustPackage rec {
     "--skip=sampler::tests::test_gumbel_speculative"
     "--skip=util::tests::test_parse_image_url"
   ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgram = "${placeholder "out"}/bin/mistralrs-server";
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
 
   passthru = {
     tests = {

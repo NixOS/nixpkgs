@@ -44,10 +44,9 @@ let
     };
   };
 
-  webroot = pkgs.runCommandLocal
-    "${cfg.package.name or "nextcloud"}-with-apps"
-    { }
-    ''
+  webroot = pkgs.runCommand "${cfg.package.name or "nextcloud"}-with-apps" {
+    preferLocalBuild = true;
+  } ''
       mkdir $out
       ln -sfv "${cfg.package}"/* "$out"
       ${concatStrings
@@ -300,7 +299,7 @@ in {
     package = mkOption {
       type = types.package;
       description = "Which package to use for the Nextcloud instance.";
-      relatedPackages = [ "nextcloud28" "nextcloud29" "nextcloud30" ];
+      relatedPackages = [ "nextcloud29" "nextcloud30" ];
     };
     phpPackage = mkPackageOption pkgs "php" {
       example = "php82";
@@ -375,14 +374,18 @@ in {
       type = with types; attrsOf (oneOf [ str int bool ]);
       default = {
         "pm" = "dynamic";
-        "pm.max_children" = "32";
-        "pm.start_servers" = "2";
-        "pm.min_spare_servers" = "2";
-        "pm.max_spare_servers" = "4";
+        "pm.max_children" = "120";
+        "pm.start_servers" = "12";
+        "pm.min_spare_servers" = "6";
+        "pm.max_spare_servers" = "18";
         "pm.max_requests" = "500";
       };
       description = ''
-        Options for nextcloud's PHP pool. See the documentation on `php-fpm.conf` for details on configuration directives.
+        Options for nextcloud's PHP pool. See the documentation on `php-fpm.conf` for details on
+        configuration directives. The above are recommended for a server with 4GiB of RAM.
+
+        It's advisable to read the [section about PHPFPM tuning in the upstream manual](https://docs.nextcloud.com/server/30/admin_manual/installation/server_tuning.html#tune-php-fpm)
+        and consider customizing the values.
       '';
     };
 
@@ -417,7 +420,6 @@ in {
     config = {
       dbtype = mkOption {
         type = types.enum [ "sqlite" "pgsql" "mysql" ];
-        default = "sqlite";
         description = "Database type.";
       };
       dbname = mkOption {
@@ -768,15 +770,17 @@ in {
       description = ''
         Extra options which should be appended to Nextcloud's config.php file.
       '';
-      example = literalExpression '' {
-        redis = {
-          host = "/run/redis/redis.sock";
-          port = 0;
-          dbindex = 0;
-          password = "secret";
-          timeout = 1.5;
-        };
-      } '';
+      example = literalExpression ''
+        {
+          redis = {
+            host = "/run/redis/redis.sock";
+            port = 0;
+            dbindex = 0;
+            password = "secret";
+            timeout = 1.5;
+          };
+        }
+      '';
     };
 
     secretFile = mkOption {

@@ -9,9 +9,9 @@
   setuptools-scm,
 
   # dependencies
-  appdirs,
   flexcache,
   flexparser,
+  platformdirs,
   typing-extensions,
 
   # tests
@@ -25,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "pint";
-  version = "0.24.1";
+  version = "0.24.4";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -33,8 +33,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hgrecco";
     repo = "pint";
-    rev = "refs/tags/${version}";
-    hash = "sha256-PQAQvjMi7pFgNhUbw20vc306aTyEbCQNHGef/pxxpXo=";
+    tag = version;
+    hash = "sha256-Pr+BRLj6BjEDwKJ24qxmfiJswpgQJDumAx3rT6tQHSY=";
   };
 
   build-system = [
@@ -43,9 +43,9 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    appdirs
     flexcache
     flexparser
+    platformdirs
     typing-extensions
 
     # Both uncertainties and numpy are not necessarily needed for every

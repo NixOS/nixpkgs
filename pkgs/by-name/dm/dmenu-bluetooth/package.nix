@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, bluez
-, dmenu
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  bluez,
+  dmenu,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -26,7 +27,12 @@ stdenv.mkDerivation (finalAttrs: {
     install -D --target-directory=$out/bin/ ./dmenu-bluetooth
 
     wrapProgram $out/bin/dmenu-bluetooth \
-      --prefix PATH ":" ${lib.makeBinPath [ dmenu bluez ] }
+      --prefix PATH ":" ${
+        lib.makeBinPath [
+          dmenu
+          bluez
+        ]
+      }
 
     runHook postInstall
   '';

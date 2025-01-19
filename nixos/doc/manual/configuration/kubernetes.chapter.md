@@ -52,7 +52,7 @@ and [](#opt-services.kubernetes.easyCerts)
 to true. This sets up flannel as CNI and activates automatic PKI bootstrapping.
 
 ::: {.note}
-As of NixOS 19.03, it is mandatory to configure:
+It is mandatory to configure:
 [](#opt-services.kubernetes.masterAddress).
 The masterAddress must be resolveable and routeable by all cluster nodes.
 In single node clusters, this can be set to `localhost`.

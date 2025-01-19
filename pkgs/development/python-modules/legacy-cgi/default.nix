@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jackrosenthal";
     repo = "legacy-cgi";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-hhWZoRswkuwvgkcKthNhMkPPhhoRH4TjdNp+orluQTQ=";
   };
 

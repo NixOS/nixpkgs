@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "autinerd";
     repo = "webmin-xmlrpc";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-qCS5YV3o7ozO7fDaJucQvU0dEyTbxTivtTDKQVY4pkM=";
   };
 

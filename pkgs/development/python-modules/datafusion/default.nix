@@ -8,6 +8,7 @@
   libiconv,
   numpy,
   protobuf,
+  protoc,
   pyarrow,
   Security,
   SystemConfiguration,
@@ -42,7 +43,7 @@ buildPythonPackage rec {
     name = "datafusion-source";
     owner = "apache";
     repo = "arrow-datafusion-python";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-5WOSlx4XW9zO6oTY16lWQElShLv0ubflVPfSSEGrFgg=";
   };
 
@@ -55,6 +56,7 @@ buildPythonPackage rec {
   nativeBuildInputs = with rustPlatform; [
     cargoSetupHook
     maturinBuildHook
+    protoc
   ];
 
   buildInputs =

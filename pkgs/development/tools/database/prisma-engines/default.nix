@@ -1,11 +1,11 @@
-{ fetchFromGitHub
-, lib
-, Security
-, openssl
-, pkg-config
-, protobuf
-, rustPlatform
-, stdenv
+{
+  fetchFromGitHub,
+  lib,
+  openssl,
+  pkg-config,
+  protobuf,
+  rustPlatform,
+  stdenv,
 }:
 
 # Updating this package will force an update for prisma. The
@@ -13,43 +13,27 @@
 # function correctly.
 rustPlatform.buildRustPackage rec {
   pname = "prisma-engines";
-  version = "5.21.1";
+  version = "6.0.1";
 
   src = fetchFromGitHub {
     owner = "prisma";
     repo = "prisma-engines";
     rev = version;
-    hash = "sha256-zVGnAFvxBRh7YGXET8YjDI+qXay6StgG618mRfpc4kw=";
+    hash = "sha256-wrhOUUF3N0JvDxcqypL7q+B7SwAfLq9M0Zqs86jnB/M=";
   };
+
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-l5b7TcVgnTdUsUncvfJYBcmh0xhF3fMfoCx0cyjpJ8Y=";
 
   # Use system openssl.
   OPENSSL_NO_VENDOR = 1;
-
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "barrel-0.6.6-alpha.0" = "sha256-USh0lQ1z+3Spgc69bRFySUzhuY79qprLlEExTmYWFN8=";
-      "cuid-1.3.2" = "sha256-qBu1k/dJiA6rWBwk4nOOqouIneD9h2TTBT8tvs0TDfA=";
-      "graphql-parser-0.3.0" = "sha256-0ZAsj2mW6fCLhwTETucjbu4rPNzfbNiHu2wVTBlTNe4=";
-      "mysql_async-0.31.3" = "sha256-2wOupQ/LFV9pUifqBLwTvA0tySv+XWbxHiqs7iTzvvg=";
-      "postgres-native-tls-0.5.0" = "sha256-4CftieImsG2mBqpoJFfyq0R2yd2EyQX4oddAwyXMDZc=";
-      "mongodb-3.0.0" = "sha256-1WQgY0zSZhFjt1nrLYTUBrpqBxpCCgKRSeGJLtkE6pw=";
-    };
-  };
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     openssl
     protobuf
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
-
-  # FIXME: fix this upstream and remove this patch with the next version update.
-  postPatch = ''
-    file=libs/user-facing-errors/src/schema_engine.rs
-    echo "#![allow(dead_code)]" | cat - $file > $file.new
-    mv $file.new $file
-  '';
+  ];
 
   preBuild = ''
     export OPENSSL_DIR=${lib.getDev openssl}
@@ -65,10 +49,14 @@ rustPlatform.buildRustPackage rec {
   '';
 
   cargoBuildFlags = [
-    "-p" "query-engine"
-    "-p" "query-engine-node-api"
-    "-p" "schema-engine-cli"
-    "-p" "prisma-fmt"
+    "-p"
+    "query-engine"
+    "-p"
+    "query-engine-node-api"
+    "-p"
+    "schema-engine-cli"
+    "-p"
+    "prisma-fmt"
   ];
 
   postInstall = ''
@@ -84,7 +72,11 @@ rustPlatform.buildRustPackage rec {
     license = licenses.asl20;
     platforms = platforms.unix;
     mainProgram = "prisma";
-    maintainers = with maintainers; [ pimeys tomhoule aqrln ];
+    maintainers = with maintainers; [
+      pimeys
+      tomhoule
+      aqrln
+    ];
   };
 }
 

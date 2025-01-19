@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "thatch";
     repo = "moreorless";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-N11iqsxMGgzwW2QYeOoHQaR/aDEuoUnnd/2Mc5culN0=";
   };
 

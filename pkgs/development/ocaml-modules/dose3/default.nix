@@ -1,7 +1,16 @@
-{ lib, buildDunePackage, fetchFromGitLab
-, ocamlgraph, parmap, re, stdlib-shims
-, base64, extlib, cudf
-, ocaml, ounit
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitLab,
+  ocamlgraph,
+  parmap,
+  re,
+  stdlib-shims,
+  base64,
+  extlib,
+  cudf,
+  ocaml,
+  ounit,
 }:
 
 buildDunePackage rec {
@@ -33,7 +42,8 @@ buildDunePackage rec {
   checkInputs = [
     ounit
   ];
-  doCheck = lib.versionAtLeast ocaml.version "4.08";
+  # Check are not compatible with re ≥ 1.12
+  doCheck = lib.versionAtLeast ocaml.version "4.08" && !lib.versionAtLeast ocaml.version "4.12";
 
   meta = with lib; {
     description = "Dose library (part of Mancoosi tools)";

@@ -1,26 +1,28 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, gitUpdater
-, testers
-, boost
-, cmake
-, cmake-extras
-, dbus
-, dbus-cpp
-, doxygen
-, gettext
-, glog
-, graphviz
-, gtest
-, libapparmor
-, newt
-, pkg-config
-, process-cpp
-, properties-cpp
-, qtbase
-, qtdeclarative
-, validatePkgConfig
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  fetchpatch,
+  gitUpdater,
+  testers,
+  boost,
+  cmake,
+  cmake-extras,
+  dbus,
+  dbus-cpp,
+  doxygen,
+  gettext,
+  glog,
+  graphviz,
+  gtest,
+  libapparmor,
+  newt,
+  pkg-config,
+  process-cpp,
+  properties-cpp,
+  qtbase,
+  qtdeclarative,
+  validatePkgConfig,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -41,18 +43,29 @@ stdenv.mkDerivation (finalAttrs: {
     "bin"
   ];
 
-  postPatch = ''
-    # pkg-config patching hook expects prefix variable
-    substituteInPlace data/trust-store.pc.in \
-      --replace-fail 'libdir=''${exec_prefix}' 'libdir=''${prefix}' \
-      --replace-fail 'includedir=''${exec_prefix}' 'includedir=''${prefix}'
+  patches = [
+    # Remove when version > 2.0.2
+    (fetchpatch {
+      name = "0001-trust-store-Fix-boost-184-compat.patch";
+      url = "https://gitlab.com/ubports/development/core/trust-store/-/commit/569f6b35d8bcdb2ae5ff84549cd92cfc0899675b.patch";
+      hash = "sha256-3lrdVIzscXGiLKwftC5oECICVv3sBoS4UedfRHx7uOs=";
+    })
+  ];
 
-    substituteInPlace src/core/trust/terminal_agent.h \
-      --replace-fail '/bin/whiptail' '${lib.getExe' newt "whiptail"}'
-  '' + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
-    substituteInPlace CMakeLists.txt \
-      --replace-fail 'add_subdirectory(tests)' ""
-  '';
+  postPatch =
+    ''
+      # pkg-config patching hook expects prefix variable
+      substituteInPlace data/trust-store.pc.in \
+        --replace-fail 'libdir=''${exec_prefix}' 'libdir=''${prefix}' \
+        --replace-fail 'includedir=''${exec_prefix}' 'includedir=''${prefix}'
+
+      substituteInPlace src/core/trust/terminal_agent.h \
+        --replace-fail '/bin/whiptail' '${lib.getExe' newt "whiptail"}'
+    ''
+    + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
+      substituteInPlace CMakeLists.txt \
+        --replace-fail 'add_subdirectory(tests)' ""
+    '';
 
   strictDeps = true;
 

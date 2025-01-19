@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
 }:
 
 buildGoModule rec {
@@ -20,7 +21,11 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  ldflags = [ "-s" "-w" "-X github.com/claudiodangelis/qrcp/version.version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/claudiodangelis/qrcp/version.version=${version}"
+  ];
 
   nativeBuildInputs = [
     installShellFiles

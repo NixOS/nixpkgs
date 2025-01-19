@@ -1,4 +1,9 @@
-{ lib, pkgs, formats, runCommand }:
+{
+  lib,
+  pkgs,
+  formats,
+  runCommand,
+}:
 let
   inherit (lib)
     last
@@ -29,8 +34,15 @@ in
     data :: T: the data that will be converted.
     ```
   */
-  makeDataWriter = lib.warn "pkgs.writers.makeDataWriter is deprecated. Use pkgs.writeTextFile." ({ input ? lib.id, output ? "cp $inputPath $out" }: nameOrPath: data:
-    assert (types.path.check nameOrPath) || (builtins.match "([0-9A-Za-z._])[0-9A-Za-z._-]*" nameOrPath != null);
+  makeDataWriter = lib.warn "pkgs.writers.makeDataWriter is deprecated. Use pkgs.writeTextFile." (
+    {
+      input ? lib.id,
+      output ? "cp $inputPath $out",
+    }:
+    nameOrPath: data:
+    assert
+      (types.path.check nameOrPath)
+      || (builtins.match "([0-9A-Za-z._])[0-9A-Za-z._-]*" nameOrPath != null);
     let
       name = last (builtins.split "/" nameOrPath);
     in
@@ -38,15 +50,17 @@ in
       {
         input = input data;
         passAsFile = [ "input" ];
-      } ''
-      ${output}
+      }
+      ''
+        ${output}
 
-      ${optionalString (types.path.check nameOrPath) ''
-        mv $out tmp
-        mkdir -p $out/$(dirname "${nameOrPath}")
-        mv tmp $out/${nameOrPath}
-      ''}
-    '');
+        ${optionalString (types.path.check nameOrPath) ''
+          mv $out tmp
+          mkdir -p $out/$(dirname "${nameOrPath}")
+          mv tmp $out/${nameOrPath}
+        ''}
+      ''
+  );
 
   inherit (pkgs) writeText;
 
@@ -59,7 +73,7 @@ in
     writeJSON "data.json" { hello = "world"; }
     ```
   */
-  writeJSON = (pkgs.formats.json {}).generate;
+  writeJSON = (pkgs.formats.json { }).generate;
 
   /**
     Writes the content to a TOML file.
@@ -70,7 +84,7 @@ in
     writeTOML "data.toml" { hello = "world"; }
     ```
   */
-  writeTOML = (pkgs.formats.toml {}).generate;
+  writeTOML = (pkgs.formats.toml { }).generate;
 
   /**
     Writes the content to a YAML file.
@@ -81,5 +95,5 @@ in
     writeYAML "data.yaml" { hello = "world"; }
     ```
   */
-  writeYAML = (pkgs.formats.yaml {}).generate;
+  writeYAML = (pkgs.formats.yaml { }).generate;
 }

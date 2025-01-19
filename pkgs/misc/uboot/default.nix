@@ -17,6 +17,7 @@
 , swig
 , which
 , python3
+, perl
 , armTrustedFirmwareAllwinner
 , armTrustedFirmwareAllwinnerH6
 , armTrustedFirmwareAllwinnerH616
@@ -88,6 +89,7 @@ let
       ]))
       swig
       which # for scripts/dtc-version.sh
+      perl # for oid build (secureboot)
     ] ++ lib.optionals (!crossTools) toolsDeps;
     depsBuildBuild = [ buildPackages.stdenv.cc ];
     buildInputs = lib.optionals crossTools toolsDeps;
@@ -601,6 +603,13 @@ in {
         --replace rk3328-sdram-lpddr3-1600.dtsi rk3328-sdram-lpddr3-666.dtsi
     '';
     defconfig = "rock64-rk3328_defconfig";
+    extraMeta.platforms = [ "aarch64-linux" ];
+    BL31="${armTrustedFirmwareRK3328}/bl31.elf";
+    filesToInstall = [ "u-boot.itb" "idbloader.img" "u-boot-rockchip.bin" ];
+  };
+
+  ubootRockPiE = buildUBoot {
+    defconfig = "rock-pi-e-rk3328_defconfig";
     extraMeta.platforms = [ "aarch64-linux" ];
     BL31="${armTrustedFirmwareRK3328}/bl31.elf";
     filesToInstall = [ "u-boot.itb" "idbloader.img" "u-boot-rockchip.bin" ];

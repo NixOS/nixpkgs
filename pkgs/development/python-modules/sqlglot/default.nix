@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     repo = "sqlglot";
     owner = "tobymao";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-RE9Hbb3g6j4j5X2ksjcBZ610RcV7Zd3YaKaBIUyD2vU=";
   };
 

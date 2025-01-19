@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "certbot";
     repo = "certbot";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Qee7lUjgliG5fmUWWPm3MzpGJHUF/DXZ08UA6kkWjjk=";
   };
 
@@ -43,11 +43,11 @@ buildPythonPackage rec {
     })
   ];
 
-  postPatch = "cd ${pname}";  # using sourceRoot would interfere with patches
+  postPatch = "cd ${pname}"; # using sourceRoot would interfere with patches
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     configargparse
     acme
     configobj
@@ -71,7 +71,11 @@ buildPythonPackage rec {
     pytest-xdist
   ];
 
-  pytestFlagsArray = [ "-o cache_dir=$(mktemp -d)" ];
+  pytestFlagsArray = [
+    "-p no:cacheprovider"
+    "-W"
+    "ignore::DeprecationWarning"
+  ];
 
   makeWrapperArgs = [ "--prefix PATH : ${dialog}/bin" ];
 

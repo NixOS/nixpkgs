@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchurl
-, ncurses
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ncurses,
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +14,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-8hbSsyeehzd4T3fUhDyebyI/oTHOHr3a8ArYAquivNk=";
   };
 
-  outputs = [ "out" "doc" ];
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   buildInputs = [
     ncurses

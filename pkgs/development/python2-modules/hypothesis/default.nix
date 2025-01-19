@@ -1,7 +1,18 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, isPy3k, attrs, coverage, enum34, pexpect
-, doCheck ? true, pytest, pytest-xdist, flaky, mock
-, sortedcontainers
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPy3k,
+  attrs,
+  coverage,
+  enum34,
+  pexpect,
+  doCheck ? true,
+  pytest,
+  pytest-xdist,
+  flaky,
+  mock,
+  sortedcontainers,
 }:
 buildPythonPackage rec {
   # https://hypothesis.readthedocs.org/en/latest/packaging.html
@@ -29,7 +40,13 @@ buildPythonPackage rec {
     sortedcontainers
   ] ++ lib.optional (!isPy3k) enum34;
 
-  nativeCheckInputs = [ pytest pytest-xdist flaky mock pexpect ];
+  nativeCheckInputs = [
+    pytest
+    pytest-xdist
+    flaky
+    mock
+    pexpect
+  ];
   inherit doCheck;
 
   checkPhase = ''

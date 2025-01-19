@@ -1,4 +1,10 @@
-{ lib, buildKodiBinaryAddon, fetchFromGitHub, libretro, fuse }:
+{
+  lib,
+  buildKodiBinaryAddon,
+  fetchFromGitHub,
+  libretro,
+  fuse,
+}:
 
 buildKodiBinaryAddon rec {
   pname = "libretro-fuse";

@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "duosecurity";
     repo = "duo_client_python";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-7cifxNSBHbX7QZ52Sy1hm5xzZYcLZOkloT6q9P7TO6A=";
   };
 

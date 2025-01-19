@@ -8,15 +8,15 @@ with python3Packages;
 
 buildPythonPackage rec {
   pname = "manga-ocr";
-  version = "0.1.12";
+  version = "0.1.13";
   disabled = pythonOlder "3.7";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "kha-white";
     repo = "manga-ocr";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-uSWnrHS59fNcF7ve3imMwwNJ+/dmplBAavbDoBkEgGc=";
+    tag = "v${version}";
+    hash = "sha256-0EwXDMnA9SCmSsMVXnMenSFSzs74lorFNNym9y/NNsI=";
   };
 
   build-system = [
@@ -36,6 +36,11 @@ buildPythonPackage rec {
     transformers
     unidic-lite
   ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "numpy<2" "numpy"
+  '';
 
   meta = with lib; {
     description = "Optical character recognition for Japanese text, with the main focus being Japanese manga";

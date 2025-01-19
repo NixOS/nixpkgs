@@ -1,13 +1,19 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   types = lib.types;
   cfg = config.services.shorewall;
-in {
+in
+{
   options = {
     services.shorewall = {
       enable = lib.mkOption {
-        type        = types.bool;
-        default     = false;
+        type = types.bool;
+        default = false;
         description = ''
           Whether to enable Shorewall IPv4 Firewall.
 
@@ -19,14 +25,14 @@ in {
         '';
       };
       package = lib.mkOption {
-        type        = types.package;
-        default     = pkgs.shorewall;
+        type = types.package;
+        default = pkgs.shorewall;
         defaultText = lib.literalExpression "pkgs.shorewall";
         description = "The shorewall package to use.";
       };
       configs = lib.mkOption {
-        type        = types.attrsOf types.lines;
-        default     = {};
+        type = types.attrsOf types.lines;
+        default = { };
         description = ''
           This option defines the Shorewall configs.
           The attribute name defines the name of the config,
@@ -40,19 +46,19 @@ in {
   config = lib.mkIf cfg.enable {
     systemd.services.firewall.enable = false;
     systemd.services.shorewall = {
-      description     = "Shorewall IPv4 Firewall";
-      after           = [ "ipset.target" ];
-      before          = [ "network-pre.target" ];
-      wants           = [ "network-pre.target" ];
-      wantedBy        = [ "multi-user.target" ];
+      description = "Shorewall IPv4 Firewall";
+      after = [ "ipset.target" ];
+      before = [ "network-pre.target" ];
+      wants = [ "network-pre.target" ];
+      wantedBy = [ "multi-user.target" ];
       reloadIfChanged = true;
       restartTriggers = lib.attrValues cfg.configs;
       serviceConfig = {
-        Type            = "oneshot";
+        Type = "oneshot";
         RemainAfterExit = "yes";
-        ExecStart       = "${cfg.package}/bin/shorewall start";
-        ExecReload      = "${cfg.package}/bin/shorewall reload";
-        ExecStop        = "${cfg.package}/bin/shorewall stop";
+        ExecStart = "${cfg.package}/bin/shorewall start";
+        ExecReload = "${cfg.package}/bin/shorewall reload";
+        ExecStop = "${cfg.package}/bin/shorewall stop";
       };
       preStart = ''
         install -D -d -m 750 /var/lib/shorewall
@@ -62,7 +68,9 @@ in {
       '';
     };
     environment = {
-      etc = lib.mapAttrs' (name: conf: lib.nameValuePair "shorewall/${name}" {source=conf;}) cfg.configs;
+      etc = lib.mapAttrs' (
+        name: conf: lib.nameValuePair "shorewall/${name}" { source = conf; }
+      ) cfg.configs;
       systemPackages = [ cfg.package ];
     };
   };

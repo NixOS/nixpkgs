@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   pytestCheckHook,
   pythonOlder,
   substituteAll,
@@ -19,15 +18,15 @@
 
 buildPythonPackage rec {
   pname = "pyproj";
-  version = "3.6.1";
+  version = "3.7.0";
   format = "setuptools";
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pyproj4";
     repo = "pyproj";
-    rev = "refs/tags/${version}";
-    hash = "sha256-ynAhu89VpvtQJRkIeVyffQHhd+OvWSiZzaI/7nd6fXA=";
+    tag = version;
+    hash = "sha256-uCoWmJ0xtbJ/DHts5+9KR6d6p8vmZqDrI4RFjXQn2fM=";
   };
 
   # force pyproj to use ${proj}
@@ -36,12 +35,6 @@ buildPythonPackage rec {
       src = ./001.proj.patch;
       proj = proj;
       projdev = proj.dev;
-    })
-
-    # fix test failure caused by update of EPSG DB
-    (fetchpatch {
-      url = "https://github.com/pyproj4/pyproj/commit/3f7c7e5bcec33d9b2f37ceb03c484ea318dff3ce.patch";
-      hash = "sha256-0J8AlInuhFDAYIBJAJ00XbqIanJY/D8xPVwlOapmLDE=";
     })
   ];
 

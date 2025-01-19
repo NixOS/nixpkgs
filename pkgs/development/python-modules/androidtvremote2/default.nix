@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tronikos";
     repo = "androidtvremote2";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-4iVM7BCqOFHrW2BvPakXxp3MfZa+WlB7g/ix239NldE=";
   };
 

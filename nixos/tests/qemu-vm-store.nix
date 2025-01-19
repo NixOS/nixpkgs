@@ -1,4 +1,5 @@
-{ lib, ... }: {
+{ lib, ... }:
+{
 
   name = "qemu-vm-store";
 

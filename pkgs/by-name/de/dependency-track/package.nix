@@ -2,6 +2,7 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
+  nodejs_20,
   jre_headless,
   protobuf,
   cyclonedx-cli,
@@ -11,20 +12,23 @@
   nixosTests,
 }:
 let
-  version = "4.12.0";
+  version = "4.12.2";
 
   frontend = buildNpmPackage {
     pname = "dependency-track-frontend";
     inherit version;
 
+    # TODO: pinned due to build error on node 22
+    nodejs = nodejs_20;
+
     src = fetchFromGitHub {
       owner = "DependencyTrack";
       repo = "frontend";
       rev = version;
-      hash = "sha256-7omFxT3WBQp6xftgU6ttGgwIGbLXLetQz2ySvsgsQic=";
+      hash = "sha256-M7UtyhIuEi6ebkjO8OM0VVi8LQ+VqeVIzBgQwIzSAzg=";
     };
 
-    npmDepsHash = "sha256-LZg3n1+L6tvfC0gBKf8YZd/UMDz04v1V9qrJZrAr4W4=";
+    npmDepsHash = "sha256-ZU5D3ZXLaZ1m2YP6uZmpzahP2JQPL9tdOHOyN9fp/XA=";
     forceGitDeps = true;
     makeCacheWritable = true;
 
@@ -41,7 +45,7 @@ maven.buildMavenPackage rec {
     owner = "DependencyTrack";
     repo = "dependency-track";
     rev = version;
-    hash = "sha256-FJ4VNDpmVBXU1/URb/Rnu0LXAbxKw6Zd7MPbN4bs9eY=";
+    hash = "sha256-wn4HnOFhV02oq66LwBIOVzU+ehXemCuzOWcDASG/47c=";
   };
 
   patches = [
@@ -56,7 +60,7 @@ maven.buildMavenPackage rec {
   '';
 
   mvnJdk = jre_headless;
-  mvnHash = "sha256-YrlGVJ0Hp9VHfMD0+hT/9q8tskft6RvszmU4tRAXSAY=";
+  mvnHash = "sha256-x1/b8LoXyGxCQiu7QB60XSpiufTk/y4492mOraFnRKY=";
   manualMvnArtifacts = [ "com.coderplus.maven.plugins:copy-rename-maven-plugin:1.0.1" ];
   buildOffline = true;
 

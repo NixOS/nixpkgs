@@ -3,7 +3,7 @@
 , vala, cmake, ninja, wrapGAppsHook4, pkg-config, gettext
 , gobject-introspection, glib, gdk-pixbuf, gtk4, glib-networking
 , libadwaita
-, libnotify, libsoup, libgee
+, libnotify, libsoup_2_4, libgee
 , libsignal-protocol-c
 , libgcrypt
 , sqlite
@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     libnotify
     gpgme
     libgcrypt
-    libsoup
+    libsoup_2_4
     pcre2
     icu
     libsignal-protocol-c
@@ -90,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DXGETTEXT_EXECUTABLE=${lib.getBin buildPackages.gettext}/bin/xgettext"
     "-DMSGFMT_EXECUTABLE=${lib.getBin buildPackages.gettext}/bin/msgfmt"
     "-DGLIB_COMPILE_RESOURCES_EXECUTABLE=${lib.getDev buildPackages.glib}/bin/glib-compile-resources"
-    "-DSOUP_VERSION=${lib.versions.major libsoup.version}"
+    "-DSOUP_VERSION=${lib.versions.major libsoup_2_4.version}"
   ];
 
   # Undefined symbols for architecture arm64: "_gpg_strerror"

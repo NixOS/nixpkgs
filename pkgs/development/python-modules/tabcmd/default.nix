@@ -46,7 +46,6 @@ buildPythonPackage rec {
     "urllib3"
   ];
 
-
   build-system = [ setuptools ];
 
   dependencies = [

@@ -1,27 +1,45 @@
-{ lib, fetchFromGitHub, elk7Version, buildGoModule, libpcap, nixosTests, systemd, config }:
+{
+  lib,
+  fetchFromGitHub,
+  elk7Version,
+  buildGoModule,
+  libpcap,
+  nixosTests,
+  systemd,
+  config,
+}:
 
-let beat = package: extraArgs: buildGoModule (lib.attrsets.recursiveUpdate (rec {
-  pname = package;
-  version = elk7Version;
+let
+  beat =
+    package: extraArgs:
+    buildGoModule (
+      lib.attrsets.recursiveUpdate (rec {
+        pname = package;
+        version = elk7Version;
 
-  src = fetchFromGitHub {
-    owner = "elastic";
-    repo = "beats";
-    rev = "v${version}";
-    hash = "sha256-0qwWHRIDLlnaPOCRmiiFGg+/jdanWuQtggM2QSaMR1o=";
-  };
+        src = fetchFromGitHub {
+          owner = "elastic";
+          repo = "beats";
+          rev = "v${version}";
+          hash = "sha256-0qwWHRIDLlnaPOCRmiiFGg+/jdanWuQtggM2QSaMR1o=";
+        };
 
-  vendorHash = "sha256-rwCCpptppkpvwQWUtqTjBUumP8GSpPHBTCaj0nYVQv8=";
+        vendorHash = "sha256-rwCCpptppkpvwQWUtqTjBUumP8GSpPHBTCaj0nYVQv8=";
 
-  subPackages = [ package ];
+        subPackages = [ package ];
 
-  meta = with lib; {
-    homepage = "https://www.elastic.co/products/beats";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fadenb basvandijk dfithian ];
-    platforms = platforms.linux;
-  };
-}) extraArgs);
+        meta = with lib; {
+          homepage = "https://www.elastic.co/products/beats";
+          license = licenses.asl20;
+          maintainers = with maintainers; [
+            fadenb
+            basvandijk
+            dfithian
+          ];
+          platforms = platforms.linux;
+        };
+      }) extraArgs
+    );
 in
 rec {
   auditbeat7 = beat "auditbeat" { meta.description = "Lightweight shipper for audit data"; };
@@ -36,13 +54,12 @@ rec {
   heartbeat7 = beat "heartbeat" { meta.description = "Lightweight shipper for uptime monitoring"; };
   metricbeat7 = beat "metricbeat" {
     meta.description = "Lightweight shipper for metrics";
-    passthru.tests =
-      lib.optionalAttrs config.allowUnfree (
-        assert metricbeat7.drvPath == nixosTests.elk.unfree.ELK-7.elkPackages.metricbeat.drvPath;
-        {
-          elk = nixosTests.elk.unfree.ELK-7;
-        }
-      );
+    passthru.tests = lib.optionalAttrs config.allowUnfree (
+      assert metricbeat7.drvPath == nixosTests.elk.unfree.ELK-7.elkPackages.metricbeat.drvPath;
+      {
+        elk = nixosTests.elk.unfree.ELK-7;
+      }
+    );
   };
   packetbeat7 = beat "packetbeat" {
     buildInputs = [ libpcap ];

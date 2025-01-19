@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, gcc
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  gcc,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +18,10 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ gcc cmake ];
+  nativeBuildInputs = [
+    gcc
+    cmake
+  ];
 
   dontConfigure = true;
 

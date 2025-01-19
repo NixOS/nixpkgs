@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "google-research";
     repo = "torchsde";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-D0p2tL/VvkouXrXfRhMuCq8wMtzeoBTppWEG5vM1qCo=";
   };
 

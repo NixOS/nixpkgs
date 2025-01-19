@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Cadair";
     repo = "openenergymonitor_thermostat";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-vrMw3/X8MtejO1WyUA1DOlfVCPTCPgcK5p3+OlTWcM4=";
   };
 

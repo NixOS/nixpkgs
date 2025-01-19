@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   defaultUserGroup = "usbmux";
@@ -43,7 +48,10 @@ in
       default = pkgs.usbmuxd;
       defaultText = lib.literalExpression "pkgs.usbmuxd";
       description = "Which package to use for the usbmuxd daemon.";
-      relatedPackages = [ "usbmuxd" "usbmuxd2" ];
+      relatedPackages = [
+        "usbmuxd"
+        "usbmuxd2"
+      ];
     };
 
   };

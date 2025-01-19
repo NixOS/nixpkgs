@@ -37,7 +37,7 @@ buildDotnetModule rec {
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   runtimeDeps = [
     libX11
@@ -98,15 +98,10 @@ buildDotnetModule rec {
     install -D ./mime/Ryujinx.xml $out/share/mime/packages/Ryujinx.xml
     install -D ../misc/Logo.svg $out/share/icons/hicolor/scalable/apps/Ryujinx.svg
 
-    substituteInPlace $out/share/applications/Ryujinx.desktop \
-      --replace "Ryujinx.sh %f" "$out/bin/Ryujinx.sh %f"
-
     ln -s $out/bin/Ryujinx $out/bin/ryujinx
 
     popd
   '';
-
-  passthru.updateScript = ./updater.sh;
 
   meta = with lib; {
     homepage = "https://ryujinx.org/";

@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jannikmi";
     repo = "timezonefinder";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-8fDKgM6LVe7aJgD4UfTpg0EjKGuudzYsmqniocozmAE=";
   };
 

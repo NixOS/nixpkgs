@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  docopt,
   fetchFromGitHub,
   pytestCheckHook,
   requests,
@@ -17,23 +16,22 @@
 
 buildPythonPackage rec {
   pname = "internetarchive";
-  version = "4.1.0";
+  version = "5.1.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "jjjake";
     repo = "internetarchive";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-CqfwAKhrq4VEBU258x19JT8+ay2vOYIzVoFWjAzh3wY=";
+    tag = "v${version}";
+    hash = "sha256-HwE8oEd5ss8HkpuQuUwdfzENYHn2z/QmzvhRIBvo1qA=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     tqdm
-    docopt
     requests
     jsonpatch
     schema

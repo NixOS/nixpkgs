@@ -1,28 +1,36 @@
-{ lib
-, fetchurl
-, makeWrapper
-, stdenv
-, undmg
-, variant ?
-  if (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)
-  then "arm64"
-  else if (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64)
-  then "intel64"
-  else "universal" # not reachable by normal means
+{
+  lib,
+  fetchurl,
+  makeWrapper,
+  stdenv,
+  undmg,
+  variant ?
+    if (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) then
+      "arm64"
+    else if (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) then
+      "intel64"
+    else
+      "universal", # not reachable by normal means
 }:
 
-assert builtins.elem variant [ "arm64" "intel64" "universal" ];
+assert builtins.elem variant [
+  "arm64"
+  "intel64"
+  "universal"
+];
 stdenv.mkDerivation (finalAttrs: {
   pname = "vlc-bin-${variant}";
   version = "3.0.21";
 
   src = fetchurl {
     url = "http://get.videolan.org/vlc/${finalAttrs.version}/macosx/vlc-${finalAttrs.version}-${variant}.dmg";
-    hash = {
-      "arm64" = "sha256-Fd1lv2SJ2p7Gpn9VhcdMQKWJk6z/QagpWKkW3XQXgEQ=";
-      "intel64" = "sha256-1DH9BRw9x68CvTE8bQXZDPYEtw7T7Fu6b9TEnvPmONk=";
-      "universal" = "sha256-UDgOVvgdYw41MUJqJlq/iz3ubAgiu3yeMLUyx9aaZcA=";
-    }.${variant};
+    hash =
+      {
+        "arm64" = "sha256-Fd1lv2SJ2p7Gpn9VhcdMQKWJk6z/QagpWKkW3XQXgEQ=";
+        "intel64" = "sha256-1DH9BRw9x68CvTE8bQXZDPYEtw7T7Fu6b9TEnvPmONk=";
+        "universal" = "sha256-UDgOVvgdYw41MUJqJlq/iz3ubAgiu3yeMLUyx9aaZcA=";
+      }
+      .${variant};
   };
 
   sourceRoot = ".";
@@ -49,13 +57,13 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl21Plus;
     mainProgram = "vlc";
     maintainers = with lib.maintainers; [ pcasaretto ];
-    platforms = lib.systems.inspect.patternLogicalAnd
-      (lib.systems.inspect.patterns.isDarwin)
-      (({
+    platforms = lib.systems.inspect.patternLogicalAnd (lib.systems.inspect.patterns.isDarwin) (
+      ({
         "arm64" = lib.systems.inspect.patterns.isAarch64;
         "intel64" = lib.systems.inspect.patterns.isx86_64;
         "universal" = lib.systems.inspect.patterns.isDarwin;
-      }).${variant});
+      }).${variant}
+    );
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 })

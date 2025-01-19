@@ -1,4 +1,11 @@
-{ hello, checkpointBuildTools, runCommand, texinfo, stdenv, rsync }:
+{
+  hello,
+  checkpointBuildTools,
+  runCommand,
+  texinfo,
+  stdenv,
+  rsync,
+}:
 let
   baseHelloArtifacts = checkpointBuildTools.prepareCheckpointBuild hello;
   patchedHello = hello.overrideAttrs (old: {
@@ -20,9 +27,11 @@ let
     '';
   });
 
-  baseHelloRemoveFileArtifacts = checkpointBuildTools.prepareCheckpointBuild (hello.overrideAttrs (old: {
-    patches = [ ./hello-additionalFile.patch ];
-  }));
+  baseHelloRemoveFileArtifacts = checkpointBuildTools.prepareCheckpointBuild (
+    hello.overrideAttrs (old: {
+      patches = [ ./hello-additionalFile.patch ];
+    })
+  );
 
   preparedHelloRemoveFileSrc = runCommand "patch-hello-src" { } ''
     mkdir -p $out
@@ -54,4 +63,3 @@ stdenv.mkDerivation {
     [ "$(${checkpointBuiltHelloWithRemovedFile}/bin/hello)" = "Hello, incremental world!" ]
   '';
 }
-

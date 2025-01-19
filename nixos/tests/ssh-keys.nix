@@ -1,5 +1,5 @@
-pkgs:
-{ snakeOilPrivateKey = pkgs.writeText "privkey.snakeoil" ''
+pkgs: {
+  snakeOilPrivateKey = pkgs.writeText "privkey.snakeoil" ''
     -----BEGIN EC PRIVATE KEY-----
     MHcCAQEEIHQf/khLvYrQ8IOika5yqtWvI0oquHlpRLTZiJy5dRJmoAoGCCqGSM49
     AwEHoUQDQgAEKF0DYGbBwbj06tA3fd/+yP44cvmwmHBWXZCKbS+RQlAKvLXMWkpN

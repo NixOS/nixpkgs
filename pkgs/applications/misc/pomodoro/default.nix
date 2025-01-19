@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, Foundation }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  Foundation,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "pomodoro";

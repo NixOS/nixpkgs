@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hthiery";
     repo = "python-fritzhome";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-L+9CjSXJrPmlLif1SYfJr6C76IufUzj9FHSGQO78Vsw=";
   };
 

@@ -1,21 +1,35 @@
-{ lib
-, stdenv
-, fetchurl
-, autoconf
-, bison
-, boost
-, flex
-, gputils
-, texinfo
-, zlib
-, withGputils ? false
-, excludePorts ? []
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoconf,
+  bison,
+  boost,
+  flex,
+  gputils,
+  texinfo,
+  zlib,
+  withGputils ? false,
+  excludePorts ? [ ],
 }:
 
-assert lib.subtractLists [
-  "ds390" "ds400" "gbz80" "hc08" "mcs51" "pic14" "pic16" "r2k" "r3ka" "s08"
-  "stm8" "tlcs90" "z80" "z180"
-] excludePorts == [];
+assert
+  lib.subtractLists [
+    "ds390"
+    "ds400"
+    "gbz80"
+    "hc08"
+    "mcs51"
+    "pic14"
+    "pic16"
+    "r2k"
+    "r3ka"
+    "s08"
+    "stm8"
+    "tlcs90"
+    "z80"
+    "z180"
+  ] excludePorts == [ ];
 stdenv.mkDerivation (finalAttrs: {
   pname = "sdcc";
   version = "4.4.0";
@@ -25,7 +39,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-rowSFl6xdoDf9EsyjYh5mWMGtyQe+jqDsuOy0veQanU=";
   };
 
-  outputs = [ "out" "doc" "man" ];
+  outputs = [
+    "out"
+    "doc"
+    "man"
+  ];
 
   enableParallelBuilding = true;
 
@@ -35,18 +53,25 @@ stdenv.mkDerivation (finalAttrs: {
     flex
   ];
 
-  buildInputs = [
-    boost
-    texinfo
-    zlib
-  ] ++ lib.optionals withGputils [
-    gputils
-  ];
+  buildInputs =
+    [
+      boost
+      texinfo
+      zlib
+    ]
+    ++ lib.optionals withGputils [
+      gputils
+    ];
 
-  configureFlags = let
-    excludedPorts = excludePorts
-                    ++ (lib.optionals (!withGputils) [ "pic14" "pic16" ]);
-  in
+  configureFlags =
+    let
+      excludedPorts =
+        excludePorts
+        ++ (lib.optionals (!withGputils) [
+          "pic14"
+          "pic16"
+        ]);
+    in
     map (f: "--disable-${f}-port") excludedPorts;
 
   preConfigure = ''
@@ -66,11 +91,12 @@ stdenv.mkDerivation (finalAttrs: {
       2000/3000, Rabbit 3000A). Work is in progress on supporting the Microchip
       PIC16 and PIC18 targets. It can be retargeted for other microprocessors.
     '';
-    license = if withGputils
-              then lib.licenses.unfreeRedistributable
-              else lib.licenses.gpl2Plus;
+    license = if withGputils then lib.licenses.unfreeRedistributable else lib.licenses.gpl2Plus;
     mainProgram = "sdcc";
-    maintainers = with lib.maintainers; [ bjornfor yorickvp ];
+    maintainers = with lib.maintainers; [
+      bjornfor
+      yorickvp
+    ];
     platforms = lib.platforms.all;
   };
 })

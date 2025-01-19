@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bachya";
     repo = "simplisafe-python";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-ewbR2FI0t2F8HF0ZL5omsclB9OPAjHygGLPtSkVlvgM=";
   };
 

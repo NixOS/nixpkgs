@@ -1,15 +1,20 @@
-{ build-idris-package
-, fetchFromGitHub
-, contrib
-, lightyear
-, bytes
-, lib
+{
+  build-idris-package,
+  fetchFromGitHub,
+  contrib,
+  lightyear,
+  bytes,
+  lib,
 }:
-build-idris-package  {
+build-idris-package {
   pname = "http";
   version = "2018-02-25";
 
-  idrisDeps = [ contrib lightyear bytes ];
+  idrisDeps = [
+    contrib
+    lightyear
+    bytes
+  ];
 
   src = fetchFromGitHub {
     owner = "uwap";

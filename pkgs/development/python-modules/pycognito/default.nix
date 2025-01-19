@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pvizeli";
     repo = "pycognito";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-U23fFLru4j6GnWMcYtsCW9BVJkVcCoefPH6oMijYGew=";
   };
 

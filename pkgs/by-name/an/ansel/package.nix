@@ -1,89 +1,90 @@
-{ libsepol
-, libavif
-, bash
-, curl
-, librsvg
-, libselinux
-, util-linux
-, libwebp
-, libheif
-, lib
-, stdenv
-, fetchFromGitHub
-, libxslt
-, libxml2
-, cmake
-, exiftool
-, openexr_3
-, glib
-, python3Packages
-, perlPackages
-, lensfun
-, intltool
-, pkg-config
-, desktop-file-utils
-, libffi
-, gtk3
-, libjpeg
-, pugixml
-, pcre
-, pcre2
-, lcms
-, sqlite
-, json-glib
-, jasper
-, libsecret
-, gmic
-, icu
-, colord
-, colord-gtk
-, libaom
-, libdatrie
-, libsysprof-capture
-, libde265
-, isocodes
-, libpsl
-, libepoxy
-, libsoup
-, exiv2
-, libXtst
-, libthai
-, x265
-, libXdmcp
-, openjpeg
-, libgpg-error
-, libxkbcommon
-, osm-gps-map
-, wrapGAppsHook3
-, rav1e
-, dav1d
-, libgcrypt
-, graphicsmagick
-, unstableGitUpdater
+{
+  libsepol,
+  libavif,
+  bash,
+  curl,
+  librsvg,
+  libselinux,
+  util-linux,
+  libwebp,
+  libheif,
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libxslt,
+  libxml2,
+  cmake,
+  exiftool,
+  openexr_3,
+  glib,
+  python3Packages,
+  perlPackages,
+  lensfun,
+  intltool,
+  pkg-config,
+  desktop-file-utils,
+  libffi,
+  gtk3,
+  libjpeg,
+  pugixml,
+  pcre,
+  pcre2,
+  lcms,
+  sqlite,
+  json-glib,
+  jasper,
+  libsecret,
+  gmic,
+  icu,
+  colord,
+  colord-gtk,
+  libaom,
+  libdatrie,
+  libsysprof-capture,
+  libde265,
+  isocodes,
+  libpsl,
+  libepoxy,
+  libsoup_2_4,
+  exiv2,
+  libXtst,
+  libthai,
+  x265,
+  libXdmcp,
+  openjpeg,
+  libgpg-error,
+  libxkbcommon,
+  osm-gps-map,
+  wrapGAppsHook3,
+  rav1e,
+  dav1d,
+  libgcrypt,
+  graphicsmagick,
+  unstableGitUpdater,
 }:
 
 let
-    # requires libavif 0.x, see https://github.com/aurelienpierreeng/ansel/blob/e2c4a0a60cd80f741dd3d3c6ab72be9ac11234fb/src/CMakeLists.txt#L356
-    libavif_0_11 = libavif.overrideAttrs rec {
-      version = "0.11.1";
+  # requires libavif 0.x, see https://github.com/aurelienpierreeng/ansel/blob/e2c4a0a60cd80f741dd3d3c6ab72be9ac11234fb/src/CMakeLists.txt#L356
+  libavif_0_11 = libavif.overrideAttrs rec {
+    version = "0.11.1";
 
-      src = fetchFromGitHub {
-        owner = "AOMediaCodec";
-        repo = "libavif";
-        rev = "v${version}";
-        hash = "sha256-mUi0DU99XV3FzUZ8/9uJZU+W3fc6Bk6+y6Z78IRZ9Qs=";
-      };
+    src = fetchFromGitHub {
+      owner = "AOMediaCodec";
+      repo = "libavif";
+      rev = "v${version}";
+      hash = "sha256-mUi0DU99XV3FzUZ8/9uJZU+W3fc6Bk6+y6Z78IRZ9Qs=";
     };
+  };
 in
 stdenv.mkDerivation {
   pname = "ansel";
-  version = "0-unstable-2024-08-13";
+  version = "0-unstable-2025-01-12";
 
   src = fetchFromGitHub {
     owner = "aurelienpierreeng";
     repo = "ansel";
-    rev = "85f2b8b15fe2081634c6f2c3f96b5d430e045bf0";
-    hash = "sha256-w2DziVBoCy1NpH4AoIFmKdjqufopqUeYjAwqkOhxHBc=";
+    rev = "c15d92ab7236e61454aaf8e8591777adfa3a73f7";
+    hash = "sha256-FVb4xoHIs+DJG6Lw6Qf755Tjt0Sg9i+Hp979/GgD3IQ=";
     fetchSubmodules = true;
   };
 
@@ -138,7 +139,7 @@ stdenv.mkDerivation {
     libsecret
     libselinux
     libsepol
-    libsoup
+    libsoup_2_4
     libsysprof-capture
     libthai
     libwebp

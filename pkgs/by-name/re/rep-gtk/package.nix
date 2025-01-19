@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchurl
-, autoreconfHook
-, gtk2-x11
-, librep
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  gtk2-x11,
+  librep,
+  pkg-config,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -28,6 +29,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   strictDeps = true;
+
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals stdenv.cc.isClang [
+      "-Wno-error=implicit-function-declaration"
+      "-Wno-error=int-conversion"
+    ]
+  );
 
   patchPhase = ''
     sed -e 's|installdir=$(repexecdir)|installdir=$(libdir)/rep|g' -i Makefile.in

@@ -1,32 +1,33 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, libxml2
-, libpeas
-, glib
-, gtk3
-, gtksourceview4
-, gspell
-, xapp
-, pkg-config
-, python3
-, meson
-, ninja
-, versionCheckHook
-, wrapGAppsHook3
-, intltool
-, itstool
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  libxml2,
+  libpeas,
+  glib,
+  gtk3,
+  gtksourceview4,
+  gspell,
+  xapp,
+  pkg-config,
+  python3,
+  meson,
+  ninja,
+  versionCheckHook,
+  wrapGAppsHook3,
+  intltool,
+  itstool,
 }:
 
 stdenv.mkDerivation rec {
   pname = "xed-editor";
-  version = "3.6.6";
+  version = "3.8.2";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "xed";
     rev = version;
-    hash = "sha256-Lpdv8mX3GDzXH1FGGdmgK9b8P3EY7ETuEhGfSwc6IIE=";
+    hash = "sha256-LSAOo6lPm6CQdTNxfAIthul9I9VnWpbEo1vOnKN7SNU=";
   };
 
   patches = [
@@ -64,7 +65,10 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/linuxmint/xed";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ tu-maurice bobby285271 ];
+    maintainers = with maintainers; [
+      tu-maurice
+      bobby285271
+    ];
     mainProgram = "xed";
   };
 }

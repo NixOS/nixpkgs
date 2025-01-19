@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, alsa-lib
-, perl
-, pkg-config
-, SDL2
-, libXext
-, Cocoa
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  alsa-lib,
+  perl,
+  pkg-config,
+  SDL2,
+  libXext,
+  Cocoa,
 }:
 
 stdenv.mkDerivation rec {
@@ -29,13 +30,22 @@ stdenv.mkDerivation rec {
       --replace-fail 'git log' 'echo ${version} #'
   '';
 
-  configureFlags = [ "--enable-dependency-tracking" ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin "--disable-sdltest";
+  configureFlags = [
+    "--enable-dependency-tracking"
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin "--disable-sdltest";
 
-  nativeBuildInputs = [ autoreconfHook perl pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    perl
+    pkg-config
+  ];
 
-  buildInputs = [ SDL2 ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib libXext ]
+  buildInputs =
+    [ SDL2 ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      alsa-lib
+      libXext
+    ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ];
 
   enableParallelBuilding = true;
@@ -48,7 +58,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Music tracker application, free reimplementation of Impulse Tracker";
-    homepage = "http://schismtracker.org/";
+    homepage = "https://schismtracker.org/";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ ftrvxmtrx ];

@@ -6,12 +6,12 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "departure-mono";
-  version = "1.350";
+  version = "1.422";
 
   src = fetchzip {
     url = "https://github.com/rektdeckard/departure-mono/releases/download/v${finalAttrs.version}/DepartureMono-${finalAttrs.version}.zip";
     stripRoot = false;
-    hash = "sha256-MMmS1yjhy50fgMK5h0526YKRfQJuOcEAHqxn9rhUwCc=";
+    hash = "sha256-9CcXd7PLxkzQt0oT/asZO9mowtXtjPBfuKphfGgM/y8=";
   };
 
   installPhase = ''

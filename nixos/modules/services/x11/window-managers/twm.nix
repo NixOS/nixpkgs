@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -16,19 +21,17 @@ in
     services.xserver.windowManager.twm.enable = mkEnableOption "twm";
   };
 
-
   ###### implementation
 
   config = mkIf cfg.enable {
 
-    services.xserver.windowManager.session = singleton
-      { name = "twm";
-        start =
-          ''
-            ${pkgs.xorg.twm}/bin/twm &
-            waitPID=$!
-          '';
-      };
+    services.xserver.windowManager.session = singleton {
+      name = "twm";
+      start = ''
+        ${pkgs.xorg.twm}/bin/twm &
+        waitPID=$!
+      '';
+    };
 
     environment.systemPackages = [ pkgs.xorg.twm ];
 

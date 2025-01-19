@@ -14,7 +14,7 @@
 }:
 buildPythonPackage rec {
   pname = "mkdocs-awesome-pages-plugin";
-  version = "2.9.3";
+  version = "2.10.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -22,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lukasgeiter";
     repo = "mkdocs-awesome-pages-plugin";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-jDPoMAJ20n9bQu11CRNvKLQthRUh3+jR6t+fM3+vGzY=";
+    tag = "v${version}";
+    hash = "sha256-p/oG2SvGZrRbIS2yhW3M1+t+OO0przeNsFUtqObNDUA=";
   };
 
   propagatedBuildInputs = [
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     natsort
   ];
 
-  nativeBuildInputs = [poetry-core];
+  nativeBuildInputs = [ poetry-core ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -46,6 +46,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/lukasgeiter/mkdocs-awesome-pages-plugin";
     changelog = "https://github.com/lukasgeiter/mkdocs-awesome-pages-plugin/blob/v${version}/CHANGELOG";
     license = licenses.mit;
-    maintainers = with maintainers; [phaer];
+    maintainers = with maintainers; [ phaer ];
   };
 }

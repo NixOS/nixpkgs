@@ -1,25 +1,30 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }: {
-  name = "sabnzbd";
-  meta = with pkgs.lib; {
-    maintainers = with maintainers; [ jojosch ];
-  };
-
-  nodes.machine = { pkgs, ... }: {
-    services.sabnzbd = {
-      enable = true;
+import ./make-test-python.nix (
+  { pkgs, lib, ... }:
+  {
+    name = "sabnzbd";
+    meta = with pkgs.lib; {
+      maintainers = with maintainers; [ jojosch ];
     };
 
-    # unrar is unfree
-    nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [ "unrar" ];
-  };
+    nodes.machine =
+      { pkgs, ... }:
+      {
+        services.sabnzbd = {
+          enable = true;
+        };
 
-  testScript = ''
-    machine.wait_for_unit("sabnzbd.service")
-    machine.wait_until_succeeds(
-        "curl --fail -L http://localhost:8080/"
-    )
-    _, out = machine.execute("grep SABCTools /var/lib/sabnzbd/logs/sabnzbd.log")
-    machine.log(out)
-    machine.fail("grep 'SABCTools disabled: no correct version found!' /var/lib/sabnzbd/logs/sabnzbd.log")
-  '';
-})
+        # unrar is unfree
+        nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [ "unrar" ];
+      };
+
+    testScript = ''
+      machine.wait_for_unit("sabnzbd.service")
+      machine.wait_until_succeeds(
+          "curl --fail -L http://localhost:8080/"
+      )
+      _, out = machine.execute("grep SABCTools /var/lib/sabnzbd/logs/sabnzbd.log")
+      machine.log(out)
+      machine.fail("grep 'SABCTools disabled: no correct version found!' /var/lib/sabnzbd/logs/sabnzbd.log")
+    '';
+  }
+)

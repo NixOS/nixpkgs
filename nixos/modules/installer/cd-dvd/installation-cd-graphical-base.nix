@@ -49,10 +49,6 @@
     vim
     nano
 
-    # Include some version control tools.
-    git
-    rsync
-
     # Firefox for reading the manual.
     firefox
 

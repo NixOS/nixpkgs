@@ -1,66 +1,79 @@
 {
   lib,
   fetchPypi,
-  fetchpatch,
   buildPythonPackage,
   pythonOlder,
 
   # build time
-  astropy-extension-helpers,
   cython,
-  jinja2,
-  oldest-supported-numpy,
+  extension-helpers,
+  setuptools,
   setuptools-scm,
-  wheel,
-  # testing
-  pytestCheckHook,
-  stdenv,
-  pytest-xdist,
-  pytest-astropy,
 
-  # runtime
+  # dependencies
   astropy-iers-data,
   numpy,
   packaging,
   pyerfa,
   pyyaml,
+
+  # optional-depedencies
+  scipy,
+  matplotlib,
+  ipython,
+  ipywidgets,
+  ipykernel,
+  pandas,
+  certifi,
+  dask,
+  h5py,
+  pyarrow,
+  beautifulsoup4,
+  html5lib,
+  sortedcontainers,
+  pytz,
+  jplephem,
+  mpmath,
+  asdf,
+  asdf-astropy,
+  bottleneck,
+  fsspec,
+  s3fs,
+
+  # testing
+  pytestCheckHook,
+  stdenv,
+  pytest-xdist,
+  pytest-astropy-header,
+  pytest-astropy,
+  threadpoolctl,
+
 }:
 
 buildPythonPackage rec {
   pname = "astropy";
-  version = "6.1.1";
+  version = "7.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8"; # according to setup.cfg
+  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-5cb0XZEcMKy41VbH+O2ZSuxxsQjmHu5QZ/AK8eTjYTg=";
+    hash = "sha256-6S18n+6G6z34cU5d1Bu/nxY9ND4aGD2Vv2vQnkMTyUA=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "drop-usage-known-bad-actor-cdn.patch";
-      url = "https://github.com/astropy/astropy/commit/d329cb38e49584ad0ff5244fd2fff74cfa1f92f1.patch";
-      hash = "sha256-+DbDwYeyR+mMDLRB4jiyol/5WO0LwqSCCEwjgflxoTk=";
-    })
-  ];
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = "-Wno-error=unused-command-line-argument";
+  };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "numpy>=2.0.0"  "numpy"
-  '';
-
-  nativeBuildInputs = [
-    astropy-extension-helpers
+  build-system = [
     cython
-    jinja2
-    oldest-supported-numpy
+    extension-helpers
+    setuptools
     setuptools-scm
-    wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     astropy-iers-data
     numpy
     packaging
@@ -68,11 +81,56 @@ buildPythonPackage rec {
     pyyaml
   ];
 
+  optional-dependencies = lib.fix (self: {
+    recommended = [
+      scipy
+      matplotlib
+    ];
+    ipython = [
+      ipython
+    ];
+    jupyter = [
+      ipywidgets
+      ipykernel
+      # ipydatagrid
+      pandas
+    ] ++ self.ipython;
+    all =
+      [
+        certifi
+        dask
+        h5py
+        pyarrow
+        beautifulsoup4
+        html5lib
+        sortedcontainers
+        pytz
+        jplephem
+        mpmath
+        asdf
+        asdf-astropy
+        bottleneck
+        fsspec
+        s3fs
+      ]
+      ++ self.recommended
+      ++ self.ipython
+      ++ self.jupyter
+      ++ dask.optional-dependencies.array
+      ++ fsspec.optional-dependencies.http;
+  });
+
   nativeCheckInputs = [
     pytestCheckHook
     pytest-xdist
+    pytest-astropy-header
     pytest-astropy
-  ];
+    threadpoolctl
+  ] ++ optional-dependencies.recommended;
+
+  pythonImportsCheck = [ "astropy" ];
+
+  __darwinAllowLocalNetworking = true;
 
   # Not running it inside the build directory. See:
   # https://github.com/astropy/astropy/issues/15316#issuecomment-1722190547
@@ -81,15 +139,15 @@ buildPythonPackage rec {
     export HOME="$(mktemp -d)"
     export OMP_NUM_THREADS=$(( $NIX_BUILD_CORES / 4 ))
   '';
-  pythonImportsCheck = [ "astropy" ];
+
   disabledTests = [
+    # tests for all availability of all optional deps
+    "test_basic_testing_completeness"
+    "test_all_included"
+
     # May fail due to parallelism, see:
     # https://github.com/astropy/astropy/issues/15441
     "TestUnifiedOutputRegistry"
-
-    # fail due to pytest>=8
-    # https://github.com/astropy/astropy/issues/15960#issuecomment-1913654471
-    "test_distortion_header"
 
     # flaky
     "test_timedelta_conversion"
@@ -99,6 +157,9 @@ buildPythonPackage rec {
     "test_datetime_to_timedelta"
 
     "test_datetime_difference_agrees_with_timedelta_no_hypothesis"
+
+    # SAMPProxyError 1: 'Timeout expired!'
+    "TestStandardProfile.test_main"
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_sidereal_lat_independent" ];
 
   meta = {

@@ -1,30 +1,41 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, kdeclarative
-, plasma-framework
-, plasma-workspace
-, unstableGitUpdater
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  unstableGitUpdater,
 }:
+
+# NOTE:
+#
+# In order to use the qogir sddm theme, the packages
+# kdePackages.plasma-desktop and kdePackages.qtsvg should be added to
+# the option services.displayManager.sddm.extraPackages of the sddm
+# module:
+#
+# environment.systemPackages = with pkgs; [
+#   qogir-kde
+# ];
+#
+# services.displayManager.sddm = {
+#     enable = true;
+#     package = pkgs.kdePackages.sddm;
+#     theme = "Qogir";
+#     extraPackages = with pkgs; [
+#       kdePackages.plasma-desktop
+#       kdePackages.qtsvg
+#     ];
+# };
 
 stdenvNoCC.mkDerivation rec {
   pname = "qogir-kde";
-  version = "0-unstable-2024-09-21";
+  version = "0-unstable-2024-12-21";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
-    rev = "9f665cc10ded4fe0a3100c9151a5bd12d1ac50ca";
-    hash = "sha256-3WdDzOKO962RykLS8P4paxEiA1keGhuah/GhAKdsuhA=";
+    rev = "31e7bbf94e905ef40d262d2bc6063156df252470";
+    hash = "sha256-zgXwYmpD31vs2Gyg21m0MdOkwqzSn6V21Kva+nvNeVI=";
   };
-
-  # Propagate sddm theme dependencies to user env otherwise sddm does
-  # not find them. Putting them in buildInputs is not enough.
-  propagatedUserEnvPkgs = [
-    kdeclarative.bin
-    plasma-framework
-    plasma-workspace
-  ];
 
   postPatch = ''
     patchShebangs install.sh
@@ -52,11 +63,11 @@ stdenvNoCC.mkDerivation rec {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Flat Design theme for KDE Plasma desktop";
     homepage = "https://github.com/vinceliuice/Qogir-kde";
-    license = licenses.gpl3Only;
-    platforms = platforms.all;
-    maintainers = [ maintainers.romildo ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.romildo ];
   };
 }

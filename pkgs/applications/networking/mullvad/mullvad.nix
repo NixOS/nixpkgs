@@ -10,30 +10,41 @@
 , libnftnl
 , libmnl
 , libwg
+, darwin
 , enableOpenvpn ? true
 , openvpn-mullvad
 , shadowsocks-rust
 , installShellFiles
+, writeShellScriptBin
 }:
+let
+  # NOTE(cole-h): This is necessary because wireguard-go-rs executes go in its build.rs (whose goal
+  # is to  produce $OUT_DIR/libwg.a), and a mixed Rust-Go build is non-trivial (read: I didn't want
+  # to attempt it). So, we just fake the "go" binary and do what it would have done: put libwg.a
+  # under $OUT_DIR so that it can be linked against.
+  fakeGoCopyLibwg = writeShellScriptBin "go" ''
+    [ ! -e "$OUT_DIR"/libwg.a ] && cp ${libwg}/lib/libwg.a "$OUT_DIR"/libwg.a
+  '';
+in
 rustPlatform.buildRustPackage rec {
   pname = "mullvad";
-  version = "2024.4";
+  version = "2025.2";
 
   src = fetchFromGitHub {
     owner = "mullvad";
     repo = "mullvadvpn-app";
     rev = version;
-    hash = "sha256-d7poR1NnvqaPutXLFizpQnyipl+38N1Qe2zVXeV7v1Q=";
+    fetchSubmodules = true;
+    hash = "sha256-5GcYiyvulsOFepguBcBec98juw22YTbT7yvZJUOJUwc=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "udp-over-tcp-0.3.0" = "sha256-5PeaM7/zhux1UdlaKpnQ2yIdmFy1n2weV/ux9lSRha4=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-3xleQgDp33Ctce7jB9XRRwxmRHkzLJcg9mPLU4PExAM=";
 
-  checkFlags = "--skip=version_check";
+  checkFlags = [
+    "--skip=version_check"
+    "--skip=config_resolver::test"
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -41,20 +52,18 @@ rustPlatform.buildRustPackage rec {
     makeWrapper
     git
     installShellFiles
+    fakeGoCopyLibwg
   ];
 
-  buildInputs = [
-    dbus.dev
-    libnftnl
-    libmnl
-  ];
-
-  # talpid-core wants libwg.a in build/lib/{triple}
-  preBuild = ''
-    dest=build/lib/${stdenv.hostPlatform.config}
-    mkdir -p $dest
-    ln -s ${libwg}/lib/libwg.a $dest
-  '';
+  buildInputs =
+    lib.optionals stdenv.hostPlatform.isLinux [
+      dbus.dev
+      libnftnl
+      libmnl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.libpcap
+    ];
 
   postInstall = ''
     compdir=$(mktemp -d)

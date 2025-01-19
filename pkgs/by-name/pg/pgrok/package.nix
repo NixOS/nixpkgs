@@ -1,9 +1,10 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, nix-update-script
-, nodejs
-, pnpm
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nix-update-script,
+  nodejs,
+  pnpm_9,
 }:
 
 let
@@ -20,16 +21,19 @@ in
 buildGoModule {
   inherit pname version src;
 
-  outputs = [ "out" "server" ];
+  outputs = [
+    "out"
+    "server"
+  ];
 
   nativeBuildInputs = [
     nodejs
-    pnpm.configHook
+    pnpm_9.configHook
   ];
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version src;
-    hash = "sha256-1PUcISW1pC9+5HZyI9SIDRyhos5f/6aW1wa2z0OKams=";
+    hash = "sha256-xObDEkNGMXcUqX9thAJoE45yzd7f15k2odDWv9X3RRE=";
   };
 
   vendorHash = "sha256-X5FjzliIJdfJnNaUXBjv1uq5tyjMVjBbnLCBH/P0LFM=";

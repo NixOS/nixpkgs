@@ -2,7 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  trunk-ng,
+  trunk,
   tailwindcss,
   fetchNpmDeps,
   nix-update-script,
@@ -16,13 +16,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "webadmin";
-  version = "0.1.17";
+  version = "0.1.20";
 
   src = fetchFromGitHub {
     owner = "stalwartlabs";
     repo = "webadmin";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-kMfdCb2dwoVd9G1uZw2wcfaAAPt6obFfWQbbXG/MDB4=";
+    tag = "v${version}";
+    hash = "sha256-0/XiYFQDqcpRS9DXPyKQwoifnEd2YxFiyDbV12zd2RU=";
   };
 
   npmDeps = fetchNpmDeps {
@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-na1HEueX8w7kuDp8LEtJ0nD1Yv39cyk6sEMpS1zix2s=";
   };
 
-  cargoHash = "sha256-0Urr0MsmenFqg25lZAzg7LgJ/NkZHINoOWtPad7G6GE=";
+  cargoHash = "sha256-uyLGrCZvKiePHFG0C++ELwT/1FTH8c4baAUxV2ueHZ8=";
 
   postPatch = ''
     # Using local tailwindcss for compilation
@@ -44,15 +44,20 @@ rustPlatform.buildRustPackage rec {
     nodejs
     npmHooks.npmConfigHook
     tailwindcss
-    trunk-ng
-    wasm-bindgen-cli
+    trunk
+    # needs to match with wasm-bindgen version in upstreams Cargo.lock
+    (wasm-bindgen-cli.override {
+      version = "0.2.93";
+      hash = "sha256-DDdu5mM3gneraM85pAepBXWn3TMofarVR4NbjMdz3r0=";
+      cargoHash = "sha256-birrg+XABBHHKJxfTKAMSlmTVYLmnmqMDfRnmG6g/YQ=";
+    })
     zip
   ];
 
   NODE_PATH = "$npmDeps";
 
   buildPhase = ''
-    trunk-ng build --offline --verbose --release
+    trunk build --offline --frozen --release
   '';
 
   installPhase = ''
@@ -65,11 +70,11 @@ rustPlatform.buildRustPackage rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Secure & modern all-in-one mail server Stalwart (webadmin module)";
     homepage = "https://github.com/stalwartlabs/webadmin";
-    changelog = "https://github.com/stalwartlabs/mail-server/blob/${version}/CHANGELOG";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ onny ];
+    changelog = "https://github.com/stalwartlabs/webadmin/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

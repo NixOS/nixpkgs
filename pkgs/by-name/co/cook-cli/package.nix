@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, buildNpmPackage
-, rustPlatform
-, pkg-config
-, openssl
-, darwin
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildNpmPackage,
+  rustPlatform,
+  pkg-config,
+  openssl,
+  darwin,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "cook-cli";
@@ -20,7 +21,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-6lnURuE1cgNAniHl5ozXo1W3cLYYje7er+ZhvZDKdVg=";
 
-  nativeBuildInputs = [ pkg-config openssl ];
+  nativeBuildInputs = [
+    pkg-config
+    openssl
+  ];
 
   buildInputs = [
     openssl

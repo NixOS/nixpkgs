@@ -4,15 +4,16 @@
   datalad,
   datasalad,
   fetchFromGitHub,
-  git,
   git-annex,
+  git,
   humanize,
   lib,
   more-itertools,
+  openssh,
   psutil,
   pytestCheckHook,
+  pythonAtLeast,
   setuptools,
-  openssh,
   unzip,
   versioneer,
   webdavclient3,
@@ -26,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "datalad";
     repo = "datalad-next";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-fqP6nG2ncDRg48kvlsmPjNBOzfQp9+7wTcGvsYVrRzA=";
   };
 
@@ -64,45 +65,51 @@ buildPythonPackage rec {
     unzip
   ];
 
-  disabledTests = [
-    # remotes available after datalad-next install (through `console_scripts`), but not yet in $PATH during test
-    "test_uncurl_addurl_unredirected"
-    "test_uncurl"
-    "test_uncurl_ria_access"
-    "test_uncurl_store"
-    "test_uncurl_remove"
-    "test_uncurl_testremote"
-    "test_replace_add_archive_content"
-    "test_annex_remote"
-    "test_export_remote"
-    "test_annex_remote_autorepush"
-    "test_export_remote_autorepush"
-    "test_typeweb_annex"
-    "test_typeweb_annex_uncompressed"
-    "test_typeweb_export"
-    "test_submodule_url"
-    "test_uncurl_progress_reporting_to_annex"
-    "test_archivist_retrieval"
-    "test_archivist_retrieval_legacy"
+  disabledTests =
+    [
+      # remotes available after datalad-next install (through `console_scripts`), but not yet in $PATH during test
+      "test_uncurl_addurl_unredirected"
+      "test_uncurl"
+      "test_uncurl_ria_access"
+      "test_uncurl_store"
+      "test_uncurl_remove"
+      "test_uncurl_testremote"
+      "test_replace_add_archive_content"
+      "test_annex_remote"
+      "test_export_remote"
+      "test_annex_remote_autorepush"
+      "test_export_remote_autorepush"
+      "test_typeweb_annex"
+      "test_typeweb_annex_uncompressed"
+      "test_typeweb_export"
+      "test_submodule_url"
+      "test_uncurl_progress_reporting_to_annex"
+      "test_archivist_retrieval"
+      "test_archivist_retrieval_legacy"
 
-    # hardcoded /bin path
-    "test_auto_if_wanted_data_transfer_path_restriction"
+      # hardcoded /bin path
+      "test_auto_if_wanted_data_transfer_path_restriction"
 
-    # requires internet access
-    "test_push_wanted"
-    "test_auto_data_transfer"
-    "test_http_url_operations"
-    "test_transparent_decompression"
-    "test_compressed_file_stay_compressed"
-    "test_ls_file_collection_tarfile"
-    "test_iter_tar"
-  ];
+      # requires internet access
+      "test_push_wanted"
+      "test_auto_data_transfer"
+      "test_http_url_operations"
+      "test_transparent_decompression"
+      "test_compressed_file_stay_compressed"
+      "test_ls_file_collection_tarfile"
+      "test_iter_tar"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.13") [
+      # RuntimeError
+      "test_tree_with_broken_symlinks"
+    ];
 
   disabledTestPaths = [
     # requires internet access
     "datalad_next/commands/tests/test_download.py"
     "datalad_next/archive_operations/tests/test_tarfile.py"
   ];
+
   pythonImportsCheck = [ "datalad_next" ];
 
   meta = {

@@ -1,4 +1,10 @@
-{ config, lib, options, pkgs, ... }:
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.epgstation;
@@ -48,23 +54,54 @@ let
   logConfig = yaml.generate "logConfig.yml" {
     appenders.stdout.type = "stdout";
     categories = {
-      default = { appenders = [ "stdout" ]; level = "info"; };
-      system = { appenders = [ "stdout" ]; level = "info"; };
-      access = { appenders = [ "stdout" ]; level = "info"; };
-      stream = { appenders = [ "stdout" ]; level = "info"; };
+      default = {
+        appenders = [ "stdout" ];
+        level = "info";
+      };
+      system = {
+        appenders = [ "stdout" ];
+        level = "info";
+      };
+      access = {
+        appenders = [ "stdout" ];
+        level = "info";
+      };
+      stream = {
+        appenders = [ "stdout" ];
+        level = "info";
+      };
     };
   };
 
   # Deprecate top level options that are redundant.
-  deprecateTopLevelOption = config:
+  deprecateTopLevelOption =
+    config:
     lib.mkRenamedOptionModule
-      ([ "services" "epgstation" ] ++ config)
-      ([ "services" "epgstation" "settings" ] ++ config);
+      (
+        [
+          "services"
+          "epgstation"
+        ]
+        ++ config
+      )
+      (
+        [
+          "services"
+          "epgstation"
+          "settings"
+        ]
+        ++ config
+      );
 
-  removeOption = config: instruction:
-    lib.mkRemovedOptionModule
-      ([ "services" "epgstation" ] ++ config)
-      instruction;
+  removeOption =
+    config: instruction:
+    lib.mkRemovedOptionModule (
+      [
+        "services"
+        "epgstation"
+      ]
+      ++ config
+    ) instruction;
 in
 {
   meta.maintainers = with lib.maintainers; [ midchildan ];
@@ -73,8 +110,7 @@ in
     (deprecateTopLevelOption [ "port" ])
     (deprecateTopLevelOption [ "socketioPort" ])
     (deprecateTopLevelOption [ "clientSocketioPort" ])
-    (removeOption [ "basicAuth" ]
-      "Use a TLS-terminated reverse proxy with authentication instead.")
+    (removeOption [ "basicAuth" ] "Use a TLS-terminated reverse proxy with authentication instead.")
   ];
 
   options.services.epgstation = {
@@ -187,15 +223,17 @@ in
           '';
         };
 
-        options.mirakurunPath = with mirakurun; lib.mkOption {
-          type = lib.types.str;
-          default = "http+unix://${lib.replaceStrings ["/"] ["%2F"] sock}";
-          defaultText = lib.literalExpression ''
-            "http+unix://''${lib.replaceStrings ["/"] ["%2F"] config.${option}}"
-          '';
-          example = "http://localhost:40772";
-          description = "URL to connect to Mirakurun.";
-        };
+        options.mirakurunPath =
+          with mirakurun;
+          lib.mkOption {
+            type = lib.types.str;
+            default = "http+unix://${lib.replaceStrings [ "/" ] [ "%2F" ] sock}";
+            defaultText = lib.literalExpression ''
+              "http+unix://''${lib.replaceStrings ["/"] ["%2F"] config.${option}}"
+            '';
+            example = "http://localhost:40772";
+            description = "URL to connect to Mirakurun.";
+          };
 
         options.encodeProcessNum = lib.mkOption {
           type = lib.types.ints.positive;
@@ -257,7 +295,10 @@ in
     };
 
     networking.firewall = lib.mkIf cfg.openFirewall {
-      allowedTCPPorts = with cfg.settings; [ port socketioPort ];
+      allowedTCPPorts = with cfg.settings; [
+        port
+        socketioPort
+      ];
     };
 
     users.users.epgstation = {
@@ -309,14 +350,17 @@ in
         (lib.mkIf cfg.usePreconfiguredStreaming streamingConfig)
       ];
 
-    systemd.tmpfiles.settings."10-epgstation" =
-      lib.listToAttrs
-        (map (dir: lib.nameValuePair dir {
-          d = {
-            user = username;
-            group = groupname;
-          };
-        })
+    systemd.tmpfiles.settings."10-epgstation" = lib.listToAttrs (
+      map
+        (
+          dir:
+          lib.nameValuePair dir {
+            d = {
+              user = username;
+              group = groupname;
+            };
+          }
+        )
         [
           "/var/lib/epgstation/key"
           "/var/lib/epgstation/streamfiles"
@@ -327,13 +371,15 @@ in
           "/var/lib/epgstation/db/migrations/mysql"
           "/var/lib/epgstation/db/migrations/postgres"
           "/var/lib/epgstation/db/migrations/sqlite"
-        ]);
+        ]
+    );
 
     systemd.services.epgstation = {
       inherit description;
 
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ]
+      after =
+        [ "network.target" ]
         ++ lib.optional config.services.mirakurun.enable "mirakurun.service"
         ++ lib.optional config.services.mysql.enable "mysql.service";
 

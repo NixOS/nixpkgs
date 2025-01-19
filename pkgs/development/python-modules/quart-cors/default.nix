@@ -5,7 +5,7 @@
   pythonOlder,
 
   # build-system
-  poetry-core,
+  pdm-backend,
 
   # propagates
   quart,
@@ -19,17 +19,17 @@
 
 buildPythonPackage rec {
   pname = "quart-cors";
-  version = "0.7.0";
+  version = "0.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pgjones";
     repo = "quart-cors";
-    rev = "refs/tags/${version}";
-    hash = "sha256-qUzs0CTZHf3fGADBXPkd3CjZ6dnz1t3cTxflMErvz/k=";
+    tag = version;
+    hash = "sha256-f+l+j0bjzi5FTwJzdXNyCgh3uT4zldpg22ZOgW1Wub4=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ pdm-backend ];
 
   dependencies = [ quart ] ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ];
 

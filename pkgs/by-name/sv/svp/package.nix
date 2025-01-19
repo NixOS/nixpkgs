@@ -53,7 +53,7 @@ let
     libusb1
     mpvForSVP
     ocl-icd
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
     vapoursynth
     xdg-utils
     xorg.libX11
@@ -99,7 +99,8 @@ let
   };
 
   fhs = buildFHSEnv {
-    name = "SVPManager";
+    pname = "SVPManager";
+    inherit (svp-dist) version;
     targetPkgs = pkgs: libraries;
     runScript = "${svp-dist}/opt/SVPManager";
     unshareUser = false;

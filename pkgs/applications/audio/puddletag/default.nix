@@ -1,10 +1,11 @@
-{ lib
-, fetchFromGitHub
-, fetchurl
-, python3
-, qtbase
-, qtwayland
-, wrapQtAppsHook
+{
+  lib,
+  fetchFromGitHub,
+  fetchurl,
+  python3,
+  qtbase,
+  qtwayland,
+  wrapQtAppsHook,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -15,7 +16,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "puddletag";
     repo = "puddletag";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-oScT8YcQoDf2qZ+J7xKm22Sbfym3tkVUrWT5D2LU5e8=";
   };
 
@@ -77,7 +78,10 @@ python3.pkgs.buildPythonApplication rec {
     mainProgram = "puddletag";
     homepage = "https://docs.puddletag.net";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ peterhoeg dschrempf ];
+    maintainers = with maintainers; [
+      peterhoeg
+      dschrempf
+    ];
     platforms = platforms.linux;
   };
 }

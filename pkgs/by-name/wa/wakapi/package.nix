@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 let
-  version = "2.12.1";
+  version = "2.12.3";
 in
 buildGoModule {
   pname = "wakapi";
@@ -13,11 +13,11 @@ buildGoModule {
   src = fetchFromGitHub {
     owner = "muety";
     repo = "wakapi";
-    rev = "refs/tags/${version}";
-    hash = "sha256-+JxTszBa6rURm0vPy8Oke5/hX9EmDphWEp2eglS+SFU=";
+    tag = version;
+    hash = "sha256-kgzxeU5hM9fSidyJEmdTr26/w5OaBk1VdjSztmOgMYs=";
   };
 
-  vendorHash = "sha256-Q56Ud0MtkstB/dhn+QyAHTzIqHsmKvHEK+5PAt5lIMM=";
+  vendorHash = "sha256-q5o88fwc1S14ZwGyDS9aFtJMfPZ4pmMjffmeXODhajg=";
 
   # Not a go module required by the project, contains development utilities
   excludedPackages = [ "scripts" ];

@@ -1,4 +1,10 @@
-{ lib, buildDunePackage, ringo, aches, lwt }:
+{
+  lib,
+  buildDunePackage,
+  ringo,
+  aches,
+  lwt,
+}:
 
 buildDunePackage {
   pname = "aches-lwt";

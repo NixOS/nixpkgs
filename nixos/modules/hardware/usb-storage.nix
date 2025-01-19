@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   options.hardware.usbStorage.manageShutdown = lib.mkOption {
@@ -17,5 +22,10 @@
     '';
   };
 
-  imports = [(lib.mkRenamedOptionModule [ "hardware" "usbStorage" "manageStartStop" ] [ "hardware" "usbStorage" "manageShutdown" ])];
+  imports = [
+    (lib.mkRenamedOptionModule
+      [ "hardware" "usbStorage" "manageStartStop" ]
+      [ "hardware" "usbStorage" "manageShutdown" ]
+    )
+  ];
 }

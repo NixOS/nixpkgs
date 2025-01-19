@@ -1,11 +1,12 @@
-{ lib
-, fetchFromGitHub
-, perl
-, libiconv
-, openssl
-, rustPlatform
-, stdenv
-, darwin
+{
+  lib,
+  fetchFromGitHub,
+  perl,
+  libiconv,
+  openssl,
+  rustPlatform,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -23,8 +24,18 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ perl ];
 
-  buildInputs = [ libiconv openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [ Security SystemConfiguration ]);
+  buildInputs =
+    [
+      libiconv
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
+      with darwin.apple_sdk.frameworks;
+      [
+        Security
+        SystemConfiguration
+      ]
+    );
 
   doCheck = false;
 

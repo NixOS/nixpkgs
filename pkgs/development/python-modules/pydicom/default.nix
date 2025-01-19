@@ -3,54 +3,59 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonOlder,
   flit-core,
   numpy,
-  pillow,
   pytestCheckHook,
-  pythonOlder,
-  setuptools,
+
+  # optional/test dependencies
+  gdcm,
+  pillow,
+  pylibjpeg,
+  pylibjpeg-libjpeg,
 }:
-
 let
-  pname = "pydicom";
-  version = "2.4.4";
-
-  src = fetchFromGitHub {
-    owner = "pydicom";
-    repo = "pydicom";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-iJE1horEmdL7bKPn+NlZLgmtCbLZCZWQ8NjDBQPzXk8=";
-  };
-
   # Pydicom needs pydicom-data to run some tests. If these files aren't downloaded
   # before the package creation, it'll try to download during the checkPhase.
   test_data = fetchFromGitHub {
     owner = "pydicom";
     repo = "pydicom-data";
-    rev = "cbb9b2148bccf0f550e3758c07aca3d0e328e768";
-    hash = "sha256-nF/j7pfcEpWHjjsqqTtIkW8hCEbuQ3J4IxpRk0qc1CQ=";
+    rev = "8da482f208401d63cd63f3f4efc41b6856ef36c7";
+    hash = "sha256-ji7SppKdiszaXs8yCSIPkJj4Ld++XWNw9FuxLoFLfFo=";
   };
 in
-buildPythonPackage {
-  inherit pname version src;
+buildPythonPackage rec {
+  pname = "pydicom";
+  version = "3.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
 
-  patches = [
-    # backport of https://github.com/pydicom/pydicom/commit/2513a20cc41743a42bdb86f4cbb4873899b7823c
-    ./pillow-10.1.0-compat.patch
-  ];
+  src = fetchFromGitHub {
+    owner = "pydicom";
+    repo = "pydicom";
+    tag = "v${version}";
+    hash = "sha256-SvRevQehRaSp+vCtJRQVEJiC5noIJS+bGG1/q4p7/XU=";
+  };
 
-  nativeBuildInputs = [ flit-core ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
-    pillow
-    setuptools
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  optional-dependencies = {
+    pixeldata = [
+      pillow
+      #pyjpegls # not in nixpkgs
+      #pylibjpeg.optional-dependencies.openjpeg # infinite recursion
+      #pylibjpeg.optional-dependencies.rle # not in nixpkgs
+      pylibjpeg-libjpeg
+      gdcm
+    ];
+  };
+
+  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.pixeldata;
 
   # Setting $HOME to prevent pytest to try to create a folder inside
   # /homeless-shelter which is read-only.
@@ -65,6 +70,14 @@ buildPythonPackage {
     [
       # tries to remove a dicom inside $HOME/.pydicom/data/ and download it again
       "test_fetch_data_files"
+
+      # test_reference_expl{,_binary}[parametric_map_float.dcm] tries to download that file for some reason even though it's present in test-data
+      "test_reference_expl"
+      "test_reference_expl_binary"
+
+      # slight error in regex matching
+      "test_no_decoders_raises"
+      "test_deepcopy_bufferedreader_raises"
     ]
     ++ lib.optionals stdenv.hostPlatform.isAarch64 [
       # https://github.com/pydicom/pydicom/issues/1386

@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p nix-update nixfmt-classic curl jq
+#!nix-shell -i bash -p nix-update curl jq
 
 set -eu -o pipefail
 
@@ -371,7 +371,7 @@ for package in "${packages[@]}"; do
 
   url="https://pypi.io/packages/source/t/${package}/${package//-/_}-${version}.tar.gz"
   hash=$(nix-prefetch-url --type sha256 $url)
-  sri_hash="$(nix hash to-sri --type sha256 $hash)"
+  sri_hash="$(nix hash convert --hash-algo sha256 --to sri $hash)"
   package_short="${package#types-aiobotocore-}"
 
   awk -i inplace -v pkg="$package" -v pkg_short="$package_short" -v ver="$version" -v hash="$sri_hash" '
@@ -392,5 +392,3 @@ for package in "${packages[@]}"; do
   }' ${source_file}
 
 done
-
-nixfmt ${source_file}

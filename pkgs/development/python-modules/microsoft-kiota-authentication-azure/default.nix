@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "kiota-authentication-azure-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-JoR7qjAPNqtcV35AGwbyjhIro6AnFUZXXLHLOj7InY8=";
   };
 

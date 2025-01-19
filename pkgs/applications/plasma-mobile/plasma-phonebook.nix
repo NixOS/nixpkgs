@@ -1,16 +1,17 @@
-{ lib
-, mkDerivation
+{
+  lib,
+  mkDerivation,
 
-, cmake
-, extra-cmake-modules
+  cmake,
+  extra-cmake-modules,
 
-, kcontacts
-, kcoreaddons
-, kirigami2
-, kirigami-addons
-, kpeople
-, kpeoplevcard
-, qtquickcontrols2
+  kcontacts,
+  kcoreaddons,
+  kirigami2,
+  kirigami-addons,
+  kpeople,
+  kpeoplevcard,
+  qtquickcontrols2,
 }:
 
 mkDerivation rec {

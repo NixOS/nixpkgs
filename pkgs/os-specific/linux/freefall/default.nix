@@ -1,4 +1,8 @@
-{ lib, stdenv, kernel }:
+{
+  lib,
+  stdenv,
+  kernel,
+}:
 
 stdenv.mkDerivation {
   inherit (kernel) version src;

@@ -1,15 +1,27 @@
-{ stdenv, fetchFromGitHub, nix-update-source, lib, python3
-, which, runtimeShell, pylint }:
+{
+  stdenv,
+  fetchFromGitHub,
+  nix-update-source,
+  lib,
+  python3,
+  which,
+  runtimeShell,
+  pylint,
+}:
 stdenv.mkDerivation rec {
-  version = "0.9.1";
+  version = "0.9.2";
   src = fetchFromGitHub {
+    hash = "sha256-bV5HauM0xmRI/9Pxp1cYLPLA8PbFvPER2y4mAMmgchs=";
     owner = "timbertson";
     repo = "gup";
     rev = "version-${version}";
-    sha256 = "1wfw46b647rkalwds6547ylzy353b3xlklhcl2xjgj2gihvi30mx";
   };
   pname = "gup";
-  nativeBuildInputs = [ python3 which pylint ];
+  nativeBuildInputs = [
+    python3
+    which
+    pylint
+  ];
   buildInputs = [ python3 ];
   strictDeps = true;
   buildPhase = "make python";
@@ -31,6 +43,7 @@ stdenv.mkDerivation rec {
         --set repo gup \
         --set type fetchFromGitHub \
         --set rev 'version-{version}' \
+        --nix-literal rev 'version-''${version}'\
         --modify-nix default.nix
     ''
   ];

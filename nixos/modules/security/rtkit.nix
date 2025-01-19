@@ -1,11 +1,15 @@
 # A module for ‘rtkit’, a DBus system service that hands out realtime
 # scheduling priority to processes that ask for it.
 
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 
 with lib;
 
-{
+let
+  cfg = config.security.rtkit;
+  package = pkgs.rtkit;
+
+in {
 
   options = {
 
@@ -15,24 +19,43 @@ with lib;
       description = ''
         Whether to enable the RealtimeKit system service, which hands
         out realtime scheduling priority to user processes on
-        demand. For example, the PulseAudio server uses this to
+        demand. For example, PulseAudio and PipeWire use this to
         acquire realtime priority.
       '';
+    };
+
+    security.rtkit.args = mkOption {
+      type = types.listOf types.str;
+      default = [];
+      description = ''
+        Command-line options for `rtkit-daemon`.
+      '';
+      example = [
+        "--our-realtime-priority=29"
+        "--max-realtime-priority=28"
+      ];
     };
 
   };
 
 
-  config = mkIf config.security.rtkit.enable {
+  config = mkIf cfg.enable {
 
     security.polkit.enable = true;
 
     # To make polkit pickup rtkit policies
-    environment.systemPackages = [ pkgs.rtkit ];
+    environment.systemPackages = [ package ];
 
-    systemd.packages = [ pkgs.rtkit ];
+    services.dbus.packages = [ package ];
 
-    services.dbus.packages = [ pkgs.rtkit ];
+    systemd.packages = [ package ];
+
+    systemd.services.rtkit-daemon = {
+      serviceConfig.ExecStart = [
+        ""  # Resets command from upstream unit.
+        "${package}/libexec/rtkit-daemon ${utils.escapeSystemdExecArgs cfg.args}"
+      ];
+    };
 
     users.users.rtkit =
       {

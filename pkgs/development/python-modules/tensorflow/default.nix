@@ -294,7 +294,7 @@ let
     src = fetchFromGitHub {
       owner = "tensorflow";
       repo = "tensorflow";
-      rev = "refs/tags/v${version}";
+      tag = "v${version}";
       hash = "sha256-Rq5pAVmxlWBVnph20fkAwbfy+iuBNlfFy14poDPd5h0=";
     };
 
@@ -448,9 +448,6 @@ let
         # bazel 3.3 should work just as well as bazel 3.1
         rm -f .bazelversion
         patchShebangs .
-      ''
-      + lib.optionalString (stdenv.hostPlatform.system == "x86_64-darwin") ''
-        cat ${./com_google_absl_fix_macos.patch} >> third_party/absl/com_google_absl_fix_mac_and_nvcc_build.patch
       ''
       + lib.optionalString (!withTensorboard) ''
         # Tensorboard pulls in a bunch of dependencies, some of which may
@@ -610,6 +607,7 @@ let
   };
 in
 buildPythonPackage {
+  __structuredAttrs = true;
   inherit version pname;
   disabled = pythonAtLeast "3.12";
 
@@ -639,7 +637,10 @@ buildPythonPackage {
     rm $out/bin/tensorboard
   '';
 
-  setupPyGlobalFlags = [ "--project_name ${pname}" ];
+  setupPyGlobalFlags = [
+    "--project_name"
+    pname
+  ];
 
   # tensorflow/tools/pip_package/setup.py
   propagatedBuildInputs = [

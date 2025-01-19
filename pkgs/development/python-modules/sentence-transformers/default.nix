@@ -23,19 +23,19 @@
   accelerate,
   datasets,
   pytestCheckHook,
-  pytest-cov,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
   pname = "sentence-transformers";
-  version = "3.2.0";
+  version = "3.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "UKPLab";
     repo = "sentence-transformers";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-T9y+usEOqz53Wv5gObD5o3gAlABHM3apoq/ySD5ynVg=";
+    tag = "v${version}";
+    hash = "sha256-D8LHzEVHRuayod084B05cL3OvZiO1ByDZLxROGxTD0I=";
   };
 
   build-system = [ setuptools ];
@@ -57,7 +57,7 @@ buildPythonPackage rec {
     accelerate
     datasets
     pytestCheckHook
-    pytest-cov
+    pytest-cov-stub
   ];
 
   pythonImportsCheck = [ "sentence_transformers" ];
@@ -65,11 +65,16 @@ buildPythonPackage rec {
   disabledTests = [
     # Tests require network access
     "test_cmnrl_same_grad"
+    "test_forward"
+    "test_initialization_with_embedding_dim"
+    "test_initialization_with_embedding_weights"
     "test_LabelAccuracyEvaluator"
     "test_model_card_reuse"
     "test_paraphrase_mining"
     "test_ParaphraseMiningEvaluator"
+    "test_save_and_load"
     "test_simple_encode"
+    "test_tokenize"
     "test_trainer"
     "test_trainer_invalid_column_names"
     "test_trainer_multi_dataset_errors"
@@ -95,10 +100,8 @@ buildPythonPackage rec {
   meta = {
     description = "Multilingual Sentence & Image Embeddings with BERT";
     homepage = "https://github.com/UKPLab/sentence-transformers";
-    changelog = "https://github.com/UKPLab/sentence-transformers/releases/tag/${version}";
+    changelog = "https://github.com/UKPLab/sentence-transformers/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dit7ya ];
-    # Segmentation fault at import
-    broken = stdenv.hostPlatform.system == "x86_64-darwin";
   };
 }

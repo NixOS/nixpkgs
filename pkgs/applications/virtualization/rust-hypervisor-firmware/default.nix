@@ -1,11 +1,12 @@
-{ lib
-, fetchFromGitHub
-, hostPlatform
-, lld
+{
+  lib,
+  fetchFromGitHub,
+  stdenv,
+  lld,
 }:
 
 let
-  arch = hostPlatform.qemuArch;
+  arch = stdenv.hostPlatform.qemuArch;
 
   target = ./. + "/${arch}-unknown-none.json";
 
@@ -15,7 +16,7 @@ assert lib.assertMsg (builtins.pathExists target) "Target spec not found";
 
 let
   cross = import ../../../.. {
-    system = hostPlatform.system;
+    system = stdenv.hostPlatform.system;
     crossSystem = lib.systems.examples."${arch}-embedded" // {
       rust.rustcTarget = "${arch}-unknown-none";
       rust.platform = lib.importJSON target;

@@ -9,6 +9,7 @@
   util-linux,
   pciutils,
   stdenv,
+  systemdMinimal,
 }:
 let
   # We are waiting on some changes to be merged upstream: https://github.com/openSUSE/hwinfo/pulls
@@ -16,25 +17,25 @@ let
     src = fetchFromGitHub {
       owner = "numtide";
       repo = "hwinfo";
-      rev = "a559f34934098d54096ed2078e750a8245ae4044";
-      hash = "sha256-3abkWPr98qXXQ17r1Z43gh2M5hl/DHjW2hfeWl+GSAs=";
+      rev = "c2259845d10694c099fb306a8cfc5a403e71c708";
+      hash = "sha256-RGIoJkYiNMRHwUclzdRMELxCgBU9Pfvaghvt3op0zM0=";
     };
   };
 in
 buildGoModule rec {
   pname = "nixos-facter";
-  version = "0.1.1";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "numtide";
     repo = "nixos-facter";
     rev = "v${version}";
-    hash = "sha256-vlPmvCrgX64dcf//BPtQszBt7dkq35JpgQg+/LW0AqM=";
+    hash = "sha256-HJt6FEQbzwlVMow47p1DtqXdmCxLYA6g3D1EgGnKcUo=";
   };
 
-  vendorHash = "sha256-5leiTNp3FJmgFd0SKhu18hxYZ2G9SuQPhZJjki2SDVs=";
+  vendorHash = "sha256-WCItbRbGgclXGtJyHCkDgaPe3Mobe4mT/4c16AEdF5o=";
 
-  CGO_ENABLED = 1;
+  env.CGO_ENABLED = 1;
 
   buildInputs = [
     libusb1
@@ -50,6 +51,7 @@ buildGoModule rec {
     libusb1
     util-linux
     pciutils
+    systemdMinimal
   ];
 
   ldflags = [

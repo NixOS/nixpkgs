@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, qmake, qtwebkit, hunspell }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qmake,
+  qtwebkit,
+  hunspell,
+}:
 
 stdenv.mkDerivation {
   pname = "qtwebkit-plugins";
@@ -13,7 +20,10 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ qmake ];
 
-  buildInputs = [ qtwebkit hunspell ];
+  buildInputs = [
+    qtwebkit
+    hunspell
+  ];
 
   dontWrapQtApps = true;
 

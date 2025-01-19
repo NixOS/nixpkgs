@@ -2,14 +2,15 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
+  nixosTests,
   alsa-lib,
-  boost184,
+  boost,
   cmake,
   cryptopp,
   glslang,
   ffmpeg,
   fmt,
+  half,
   jack2,
   libdecor,
   libpulseaudio,
@@ -22,8 +23,9 @@
   qt6,
   rapidjson,
   renderdoc,
+  robin-map,
   sndio,
-  toml11,
+  stb,
   vulkan-headers,
   vulkan-loader,
   vulkan-memory-allocator,
@@ -33,37 +35,31 @@
   unstableGitUpdater,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "shadps4";
-  version = "0.3.0-unstable-2024-10-14";
+  version = "0.5.0-unstable-2025-01-02";
 
   src = fetchFromGitHub {
     owner = "shadps4-emu";
     repo = "shadPS4";
-    rev = "09725bd921088b73746605e672abf6ff40171880";
-    hash = "sha256-NtIiqmiZ1iCciMjT1cL7ONWxNHRO/0bci/thLrcORjo=";
+    rev = "596f4cdf0e66a97c9d2d4272091d8c0167a5b8e1";
+    hash = "sha256-apwAl8TCzSKchqYGHV0UsMSGErF4GgiwhlwmOPWpeLs=";
     fetchSubmodules = true;
   };
 
   patches = [
-    # https://github.com/shadps4-emu/shadPS4/issues/758
-    ./bloodborne.patch
     # Fix controls without a numpad
     ./laptop-controls.patch
-
-    # Disable auto-updating, as
-    # downloading an AppImage and trying to run it just won't work.
-    # https://github.com/shadps4-emu/shadPS4/issues/1368
-    ./0001-Disable-update-checking.patch
   ];
 
   buildInputs = [
     alsa-lib
-    boost184
+    boost
     cryptopp
     glslang
     ffmpeg
     fmt
+    half
     jack2
     libdecor
     libpulseaudio
@@ -81,8 +77,9 @@ stdenv.mkDerivation {
     qt6.qtwayland
     rapidjson
     renderdoc
+    robin-map
     sndio
-    toml11
+    stb
     vulkan-headers
     vulkan-loader
     vulkan-memory-allocator
@@ -98,6 +95,7 @@ stdenv.mkDerivation {
 
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_QT_GUI" true)
+    (lib.cmakeBool "ENABLE_UPDATER" false)
   ];
 
   # Still in development, help with debugging
@@ -108,33 +106,35 @@ stdenv.mkDerivation {
     runHook preInstall
 
     install -D -t $out/bin shadps4
-    install -Dm644 -t $out/share/icons/hicolor/512x512/apps $src/.github/shadps4.png
-    install -Dm644 -t $out/share/applications $src/.github/shadps4.desktop
+    install -Dm644 $src/.github/shadps4.png $out/share/icons/hicolor/512x512/apps/net.shadps4.shadPS4.png
+    install -Dm644 -t $out/share/applications $src/dist/net.shadps4.shadPS4.desktop
+    install -Dm644 -t $out/share/metainfo $src/dist/net.shadps4.shadPS4.metainfo.xml
 
     runHook postInstall
   '';
 
-  fixupPhase = ''
-    patchelf --add-rpath ${
-      lib.makeLibraryPath [
-        vulkan-loader
-        xorg.libXi
-      ]
-    } \
-      $out/bin/shadps4
-  '';
+  runtimeDependencies = [
+    vulkan-loader
+    xorg.libXi
+  ];
 
-  passthru.updateScript = unstableGitUpdater {
-    tagFormat = "v.*";
-    tagPrefix = "v.";
+  passthru = {
+    tests.openorbis-example = nixosTests.shadps4;
+    updateScript = unstableGitUpdater {
+      tagFormat = "v.*";
+      tagPrefix = "v.";
+    };
   };
 
   meta = {
     description = "Early in development PS4 emulator";
     homepage = "https://github.com/shadps4-emu/shadPS4";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ ryand56 ];
+    maintainers = with lib.maintainers; [
+      ryand56
+      liberodark
+    ];
     mainProgram = "shadps4";
     platforms = lib.intersectLists lib.platforms.linux lib.platforms.x86_64;
   };
-}
+})

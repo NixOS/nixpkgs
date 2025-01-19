@@ -10,7 +10,7 @@
 }:
 
 let
-  version = "1.7.3";
+  version = "1.7.6";
 in
 buildGoModule {
   pname = "actionlint";
@@ -22,10 +22,10 @@ buildGoModule {
     owner = "rhysd";
     repo = "actionlint";
     rev = "v${version}";
-    hash = "sha256-IwkTiuQ3eTZMn1y0NG1jo9UrX7AmEUBRSGQ/vq/0YL8=";
+    hash = "sha256-NHmz+r7xO84eSQFBNwaI+ctzIgd014rRQtqvi8hOWPE=";
   };
 
-  vendorHash = "sha256-SIY79SjYYXW2slUQr2Bm9dLH8K2wE3l/TL3QP0m8GLs=";
+  vendorHash = "sha256-4hBIDrFOADGo3gsTRW8hjBYzmWRo/5yyoM7Ylv3KJBk=";
 
   nativeBuildInputs = [
     makeWrapper

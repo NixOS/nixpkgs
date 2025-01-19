@@ -36,10 +36,7 @@ rec {
     :::
   */
   # TODO(Profpatsch): add tests that check stderr
-  assertMsg =
-    pred:
-    msg:
-    pred || builtins.throw msg;
+  assertMsg = pred: msg: pred || builtins.throw msg;
 
   /**
     Specialized `assertMsg` for checking if `val` is one of the elements
@@ -81,14 +78,10 @@ rec {
     :::
   */
   assertOneOf =
-    name:
-    val:
-    xs:
-    assertMsg
-    (lib.elem val xs)
-    "${name} must be one of ${
-      lib.generators.toPretty {} xs}, but is: ${
-        lib.generators.toPretty {} val}";
+    name: val: xs:
+    assertMsg (lib.elem val xs) "${name} must be one of ${lib.generators.toPretty { } xs}, but is: ${
+      lib.generators.toPretty { } val
+    }";
 
   /**
     Specialized `assertMsg` for checking if every one of `vals` is one of the elements
@@ -133,12 +126,9 @@ rec {
     :::
   */
   assertEachOneOf =
-    name:
-    vals:
-    xs:
-    assertMsg
-    (lib.all (val: lib.elem val xs) vals)
-    "each element in ${name} must be one of ${
-      lib.generators.toPretty {} xs}, but is: ${
-        lib.generators.toPretty {} vals}";
+    name: vals: xs:
+    assertMsg (lib.all (val: lib.elem val xs) vals)
+      "each element in ${name} must be one of ${lib.generators.toPretty { } xs}, but is: ${
+        lib.generators.toPretty { } vals
+      }";
 }

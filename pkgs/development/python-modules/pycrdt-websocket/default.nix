@@ -26,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "pycrdt-websocket";
-  version = "0.15.1";
+  version = "0.15.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jupyter-server";
     repo = "pycrdt-websocket";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-O0GRk81at8bgv+/4au8A55dZK2A28+ghy3sitAAZQBI=";
+    tag = "v${version}";
+    hash = "sha256-VK4nSsxF/FbCnyS1RM/JHCPS0Omj4rvdwjzLNDq2hjk=";
   };
 
   build-system = [ hatchling ];

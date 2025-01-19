@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jodal";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-2baFwZPNuVU39Kt5B8QvGKu7jMbg+GZ3ROoTxzPOXac=";
   };
 

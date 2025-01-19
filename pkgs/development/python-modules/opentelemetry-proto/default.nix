@@ -16,6 +16,8 @@ buildPythonPackage {
 
   sourceRoot = "${opentelemetry-api.src.name}/opentelemetry-proto";
 
+  pythonRelaxDeps = [ "protobuf" ];
+
   build-system = [ hatchling ];
 
   dependencies = [ protobuf ];

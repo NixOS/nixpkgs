@@ -1,0 +1,139 @@
+From ba00547a25bfea641d0c8a5dba42a6ace990767b Mon Sep 17 00:00:00 2001
+From: wxt <3264117476@qq.com>
+Date: Mon, 4 Nov 2024 11:04:05 +0800
+Subject: [PATCH] Add go.mod & go.sum
+
+---
+ go.mod | 36 ++++++++++++++++++++++++++++
+ go.sum | 76 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 112 insertions(+)
+ create mode 100644 go.mod
+ create mode 100644 go.sum
+
+diff --git a/go.mod b/go.mod
+new file mode 100644
+index 0000000..b09f764
+--- /dev/null
++++ b/go.mod
+@@ -0,0 +1,36 @@
++module github.com/mailhog/MailHog
++
++go 1.23.2
++
++require (
++	github.com/gorilla/pat v1.0.2
++	github.com/ian-kent/envconf v0.0.0-20141026121121-c19809918c02
++	github.com/ian-kent/go-log v0.0.0-20160113211217-5731446c36ab
++	github.com/mailhog/MailHog-Server v1.0.1
++	github.com/mailhog/MailHog-UI v1.0.1
++	github.com/mailhog/http v1.0.1
++	github.com/mailhog/mhsendmail v0.2.0
++	golang.org/x/crypto v0.28.0
++)
++
++require (
++	github.com/bmizerany/assert v0.0.0-20160611221934-b7ed37b82869 // indirect
++	github.com/gorilla/context v1.1.2 // indirect
++	github.com/gorilla/mux v1.8.1 // indirect
++	github.com/gorilla/websocket v1.5.3 // indirect
++	github.com/ian-kent/goose v0.0.0-20141221090059-c3541ea826ad // indirect
++	github.com/ian-kent/linkio v0.0.0-20170807205755-97566b872887 // indirect
++	github.com/kr/pretty v0.3.1 // indirect
++	github.com/mailhog/data v1.0.1 // indirect
++	github.com/mailhog/smtp v1.0.1 // indirect
++	github.com/mailhog/storage v1.0.1 // indirect
++	github.com/ogier/pflag v0.0.1 // indirect
++	github.com/philhofer/fwd v1.1.3-0.20240916144458-20a13a1f6b7c // indirect
++	github.com/smartystreets/goconvey v1.8.1 // indirect
++	github.com/stretchr/testify v1.9.0 // indirect
++	github.com/t-k/fluent-logger-golang v1.0.0 // indirect
++	github.com/tinylib/msgp v1.2.4 // indirect
++	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
++	gopkg.in/mgo.v2 v2.0.0-20190816093944-a6b53ec6cb22 // indirect
++	gopkg.in/yaml.v2 v2.4.0 // indirect
++)
+diff --git a/go.sum b/go.sum
+new file mode 100644
+index 0000000..9089971
+--- /dev/null
++++ b/go.sum
+@@ -0,0 +1,76 @@
++github.com/bmizerany/assert v0.0.0-20160611221934-b7ed37b82869 h1:DDGfHa7BWjL4YnC6+E63dPcxHo2sUxDIu8g3QgEJdRY=
++github.com/bmizerany/assert v0.0.0-20160611221934-b7ed37b82869/go.mod h1:Ekp36dRnpXw/yCqJaO+ZrUyxD+3VXMFFr56k5XYrpB4=
++github.com/creack/pty v1.1.9/go.mod h1:oKZEueFk5CKHvIhNR5MUki03XCEU+Q6VDXinZuGJ33E=
++github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
++github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
++github.com/gopherjs/gopherjs v1.17.2 h1:fQnZVsXk8uxXIStYb0N4bGk7jeyTalG/wsZjQ25dO0g=
++github.com/gopherjs/gopherjs v1.17.2/go.mod h1:pRRIvn/QzFLrKfvEz3qUuEhtE/zLCWfreZ6J5gM2i+k=
++github.com/gorilla/context v1.1.2 h1:WRkNAv2uoa03QNIc1A6u4O7DAGMUVoopZhkiXWA2V1o=
++github.com/gorilla/context v1.1.2/go.mod h1:KDPwT9i/MeWHiLl90fuTgrt4/wPcv75vFAZLaOOcbxM=
++github.com/gorilla/mux v1.8.1 h1:TuBL49tXwgrFYWhqrNgrUNEY92u81SPhu7sTdzQEiWY=
++github.com/gorilla/mux v1.8.1/go.mod h1:AKf9I4AEqPTmMytcMc0KkNouC66V3BtZ4qD5fmWSiMQ=
++github.com/gorilla/pat v1.0.2 h1:TDh/RulbnPxMQACcwbgMF5Bf00jaGoeYBNu+XUFuwtE=
++github.com/gorilla/pat v1.0.2/go.mod h1:ioQ7dFQ2KXmOmWLJs6vZAfRikcm2D2JyuLrL9b5wVCg=
++github.com/gorilla/websocket v1.5.3 h1:saDtZ6Pbx/0u+bgYQ3q96pZgCzfhKXGPqt7kZ72aNNg=
++github.com/gorilla/websocket v1.5.3/go.mod h1:YR8l580nyteQvAITg2hZ9XVh4b55+EU/adAjf1fMHhE=
++github.com/ian-kent/envconf v0.0.0-20141026121121-c19809918c02 h1:dU8zq210pt1b71X8xh9GOxC7uBHNtQ9BYC+Lb6SA/mA=
++github.com/ian-kent/envconf v0.0.0-20141026121121-c19809918c02/go.mod h1:1m5fo3aKG2moYtGHC4I2nFkXmG97+vCeaEIWC+mXTSI=
++github.com/ian-kent/go-log v0.0.0-20160113211217-5731446c36ab h1:OgrFrYWlVzY7Tc8rq7Y4ErlKo28igc70gbfJGTVWTJk=
++github.com/ian-kent/go-log v0.0.0-20160113211217-5731446c36ab/go.mod h1:6HitiSDIbT2r0dab4CoKoMAtR7tb0ORQ3OmjkjCZ+zk=
++github.com/ian-kent/goose v0.0.0-20141221090059-c3541ea826ad h1:5UZIY1lPvsBrRQRgyt00lJ1J6HH6CwWAVQB6azyAA1c=
++github.com/ian-kent/goose v0.0.0-20141221090059-c3541ea826ad/go.mod h1:VHyJj0/IJFmpYvVqWFIN2HgjCatXujj7XaLLyOMC23M=
++github.com/ian-kent/linkio v0.0.0-20170807205755-97566b872887 h1:LPaZmcRJS13h+igi07S26uKy0qxCa76u1+pArD+JGrY=
++github.com/ian-kent/linkio v0.0.0-20170807205755-97566b872887/go.mod h1:aE63iKqF9rMrshaEiYZroUYFZLaYoTuA7pBMsg3lJoY=
++github.com/jtolds/gls v4.20.0+incompatible h1:xdiiI2gbIgH/gLH7ADydsJ1uDOEzR8yvV7C0MuV77Wo=
++github.com/jtolds/gls v4.20.0+incompatible/go.mod h1:QJZ7F/aHp+rZTRtaJ1ow/lLfFfVYBRgL+9YlvaHOwJU=
++github.com/kr/pretty v0.2.1/go.mod h1:ipq/a2n7PKx3OHsz4KJII5eveXtPO4qwEXGdVfWzfnI=
++github.com/kr/pretty v0.3.1 h1:flRD4NNwYAUpkphVc1HcthR4KEIFJ65n8Mw5qdRn3LE=
++github.com/kr/pretty v0.3.1/go.mod h1:hoEshYVHaxMs3cyo3Yncou5ZscifuDolrwPKZanG3xk=
++github.com/kr/pty v1.1.1/go.mod h1:pFQYn66WHrOpPYNljwOMqo10TkYh1fy3cYio2l3bCsQ=
++github.com/kr/text v0.1.0/go.mod h1:4Jbv+DJW3UT/LiOwJeYQe1efqtUx/iVham/4vfdArNI=
++github.com/kr/text v0.2.0 h1:5Nx0Ya0ZqY2ygV366QzturHI13Jq95ApcVaJBhpS+AY=
++github.com/kr/text v0.2.0/go.mod h1:eLer722TekiGuMkidMxC/pM04lWEeraHUUmBw8l2grE=
++github.com/mailhog/MailHog-Server v1.0.1 h1:mK9inUHV2p6pO55cHZTCdZ8D4aXzd+M9wvqtU0XmWcM=
++github.com/mailhog/MailHog-Server v1.0.1/go.mod h1:ScCrImbapPxdrQ85qoxkMygsSiY74ohIj1knLzuN8J0=
++github.com/mailhog/MailHog-UI v1.0.1 h1:B3mVLiVLd4amNVQtiklr+srI3eMKiMzYSXXqDGa7JzA=
++github.com/mailhog/MailHog-UI v1.0.1/go.mod h1:zLEw2DaBMXpL6nmpdB8S5U1Y3MMSATlTcjUYSTAB7HQ=
++github.com/mailhog/data v1.0.1 h1:7I+opBvVdi4EMJaihXavM98jp/ovt4o6mz47446RAW8=
++github.com/mailhog/data v1.0.1/go.mod h1:tjR/iXRhbSUKHzAAMd99RygVaDB5rIDC/bmWc363MzU=
++github.com/mailhog/http v1.0.1 h1:i3sxAt7/WcdRXdKJZgiDRkWIAYScnrqqHQTZSxXkM0I=
++github.com/mailhog/http v1.0.1/go.mod h1:91oqUCI9ZoSDY2cTj4pWDJVBHCK1U762V2a4if4KlOw=
++github.com/mailhog/mhsendmail v0.2.0 h1:C5HUC4obHfXIkttLfGBUopYbsJmh+bnExGWHBpWQ8IA=
++github.com/mailhog/mhsendmail v0.2.0/go.mod h1:B0778+OoPEc5aEFqatEnSO4ZWl9FCTxvaY+c7OOQadM=
++github.com/mailhog/smtp v1.0.1 h1:igL3N/L+pWuGCqUaje21HX3VIVnqHoVlqWO0t+wJEYE=
++github.com/mailhog/smtp v1.0.1/go.mod h1:GMrAdv1hXro38xj5dsWPAk5ZiXJHFx9t7W9Yqsk0XUM=
++github.com/mailhog/storage v1.0.1 h1:uut2nlG5hIxbsl6f8DGznPAHwQLf3/7Na2t4gmrIais=
++github.com/mailhog/storage v1.0.1/go.mod h1:4EAUf5xaEVd7c/OhvSxOOwQ66jT6q2er+BDBQ0EVrew=
++github.com/ogier/pflag v0.0.1 h1:RW6JSWSu/RkSatfcLtogGfFgpim5p7ARQ10ECk5O750=
++github.com/ogier/pflag v0.0.1/go.mod h1:zkFki7tvTa0tafRvTBIZTvzYyAu6kQhPZFnshFFPE+g=
++github.com/philhofer/fwd v1.1.3-0.20240916144458-20a13a1f6b7c h1:dAMKvw0MlJT1GshSTtih8C2gDs04w8dReiOGXrGLNoY=
++github.com/philhofer/fwd v1.1.3-0.20240916144458-20a13a1f6b7c/go.mod h1:RqIHx9QI14HlwKwm98g9Re5prTQ6LdeRQn+gXJFxsJM=
++github.com/pkg/diff v0.0.0-20210226163009-20ebb0f2a09e/go.mod h1:pJLUxLENpZxwdsKMEsNbx1VGcRFpLqf3715MtcvvzbA=
++github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
++github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
++github.com/rogpeppe/go-internal v1.9.0 h1:73kH8U+JUqXU8lRuOHeVHaa/SZPifC7BkcraZVejAe8=
++github.com/rogpeppe/go-internal v1.9.0/go.mod h1:WtVeX8xhTBvf0smdhujwtBcq4Qrzq/fJaraNFVN+nFs=
++github.com/smarty/assertions v1.15.0 h1:cR//PqUBUiQRakZWqBiFFQ9wb8emQGDb0HeGdqGByCY=
++github.com/smarty/assertions v1.15.0/go.mod h1:yABtdzeQs6l1brC900WlRNwj6ZR55d7B+E8C6HtKdec=
++github.com/smartystreets/goconvey v1.8.1 h1:qGjIddxOk4grTu9JPOU31tVfq3cNdBlNa5sSznIX1xY=
++github.com/smartystreets/goconvey v1.8.1/go.mod h1:+/u4qLyY6x1jReYOp7GOM2FSt8aP9CzCZL03bI28W60=
++github.com/stretchr/testify v1.9.0 h1:HtqpIVDClZ4nwg75+f6Lvsy/wHu+3BoSGCbBAcpTsTg=
++github.com/stretchr/testify v1.9.0/go.mod h1:r2ic/lqez/lEtzL7wO/rwa5dbSLXVDPFyf8C91i36aY=
++github.com/t-k/fluent-logger-golang v1.0.0 h1:4IQzY+/l66Zkkhk9eB3LwF9vPkgKHJ1rpYdrRiap0EI=
++github.com/t-k/fluent-logger-golang v1.0.0/go.mod h1:6vC3Vzp9Kva0l5J9+YDY5/ROePwkAqwLK+KneCjSm4w=
++github.com/tinylib/msgp v1.2.4 h1:yLFeUGostXXSGW5vxfT5dXG/qzkn4schv2I7at5+hVU=
++github.com/tinylib/msgp v1.2.4/go.mod h1:ykjzy2wzgrlvpDCRc4LA8UXy6D8bzMSuAF3WD57Gok0=
++golang.org/x/crypto v0.28.0 h1:GBDwsMXVQi34v5CCYUm2jkJvu4cbtru2U4TN2PSyQnw=
++golang.org/x/crypto v0.28.0/go.mod h1:rmgy+3RHxRZMyY0jjAJShp2zgEdOqj2AO7U0pYmeQ7U=
++gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=
++gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c h1:Hei/4ADfdWqJk1ZMxUNpqntNwaWcugrBjAiHlqqRiVk=
++gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c/go.mod h1:JHkPIbrfpd72SG/EVd6muEfDQjcINNoR0C8j2r3qZ4Q=
++gopkg.in/mgo.v2 v2.0.0-20190816093944-a6b53ec6cb22 h1:VpOs+IwYnYBaFnrNAeB8UUWtL3vEUnzSCL1nVjPhqrw=
++gopkg.in/mgo.v2 v2.0.0-20190816093944-a6b53ec6cb22/go.mod h1:yeKp02qBN3iKW1OzL3MGk2IdtZzaj7SFntXj72NppTA=
++gopkg.in/yaml.v2 v2.4.0 h1:D8xgwECY7CYvx+Y2n4sBz93Jn9JRvxdiyyo8CTfuKaY=
++gopkg.in/yaml.v2 v2.4.0/go.mod h1:RDklbk79AGWmwhnvt/jBztapEOGDOx6ZbXqjP6csGnQ=
++gopkg.in/yaml.v3 v3.0.1 h1:fxVm/GzAzEWqLHuvctI91KS9hhNmmWOoWu0XTYJS7CA=
++gopkg.in/yaml.v3 v3.0.1/go.mod h1:K4uyk7z7BCEPqu6E+C64Yfv1cQ7kz7rIZviUmN+EgEM=
+-- 
+2.46.1
+

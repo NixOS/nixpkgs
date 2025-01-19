@@ -343,10 +343,12 @@ in
     name = "systemd-boot-edk2-uefi-shell";
     meta.maintainers = with pkgs.lib.maintainers; [ iFreilicht ];
 
-    nodes.machine = { ... }: {
-      imports = [ common ];
-      boot.loader.systemd-boot.edk2-uefi-shell.enable = true;
-    };
+    nodes.machine =
+      { ... }:
+      {
+        imports = [ common ];
+        boot.loader.systemd-boot.edk2-uefi-shell.enable = true;
+      };
 
     testScript = ''
       machine.succeed("test -e /boot/loader/entries/edk2-uefi-shell.conf")
@@ -358,21 +360,23 @@ in
     name = "systemd-boot-windows";
     meta.maintainers = with pkgs.lib.maintainers; [ iFreilicht ];
 
-    nodes.machine = { ... }: {
-      imports = [ common ];
-      boot.loader.systemd-boot.windows = {
-        "7" = {
-          efiDeviceHandle = "HD0c1";
-          sortKey = "before_all_others";
-        };
-        "Ten".efiDeviceHandle = "FS0";
-        "11" = {
-          title = "Title with-_-punctuation ...?!";
-          efiDeviceHandle = "HD0d4";
-          sortKey = "zzz";
+    nodes.machine =
+      { ... }:
+      {
+        imports = [ common ];
+        boot.loader.systemd-boot.windows = {
+          "7" = {
+            efiDeviceHandle = "HD0c1";
+            sortKey = "before_all_others";
+          };
+          "Ten".efiDeviceHandle = "FS0";
+          "11" = {
+            title = "Title with-_-punctuation ...?!";
+            efiDeviceHandle = "HD0d4";
+            sortKey = "zzz";
+          };
         };
       };
-    };
 
     testScript = ''
       machine.succeed("test -e /boot/efi/edk2-uefi-shell/shell.efi")

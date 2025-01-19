@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "QuantStack";
     repo = "pyls-memestra";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-C1d2BibjpoZCPSy39PkdcLiLIwZZG+XTDWXVjTT1Bws=";
   };
 

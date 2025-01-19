@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "approvaltests";
-  version = "14.0.0";
+  version = "14.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -29,8 +29,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "approvals";
     repo = "ApprovalTests.Python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-BTTmmtmFjYBfzbVf/Fi8PwnpVJBcOOBTdFBmGowGez4=";
+    tag = "v${version}";
+    hash = "sha256-HcF4SjAdAPxINB0+kI1RWtKQ3VBhMNpFk6BECup7E+w=";
   };
 
   build-system = [ setuptools ];

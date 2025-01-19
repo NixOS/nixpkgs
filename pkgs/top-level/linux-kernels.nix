@@ -181,16 +181,16 @@ in {
       ];
     };
 
-    linux_6_10 = callPackage ../os-specific/linux/kernel/mainline.nix {
-      branch = "6.10";
+    linux_6_11 = callPackage ../os-specific/linux/kernel/mainline.nix {
+      branch = "6.11";
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
       ];
     };
 
-    linux_6_11 = callPackage ../os-specific/linux/kernel/mainline.nix {
-      branch = "6.11";
+    linux_6_12 = callPackage ../os-specific/linux/kernel/mainline.nix {
+      branch = "6.12";
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
@@ -211,6 +211,10 @@ in {
     in if latest.kernelAtLeast testing.baseVersion
        then latest
        else testing;
+
+    linux_default = packageAliases.linux_default.kernel;
+
+    linux_latest = packageAliases.linux_latest.kernel;
 
     # Using zenKernels like this due lqx&zen came from one source, but may have different base kernel version
     # https://github.com/NixOS/nixpkgs/pull/161773#discussion_r820134708
@@ -271,6 +275,8 @@ in {
     linux_5_15_hardened = hardenedKernelFor kernels.linux_5_15 { };
     linux_6_1_hardened = hardenedKernelFor kernels.linux_6_1 { };
     linux_6_6_hardened = hardenedKernelFor kernels.linux_6_6 { };
+    linux_6_11_hardened = hardenedKernelFor kernels.linux_6_11 { };
+    linux_6_12_hardened = hardenedKernelFor kernels.linux_6_12 { };
 
   } // lib.optionalAttrs config.allowAliases {
     linux_4_14 = throw "linux 4.14 was removed because it will reach its end of life within 23.11";
@@ -280,6 +286,7 @@ in {
     linux_6_7 = throw "linux 6.7 was removed because it has reached its end of life upstream";
     linux_6_8 = throw "linux 6.8 was removed because it has reached its end of life upstream";
     linux_6_9 = throw "linux 6.9 was removed because it has reached its end of life upstream";
+    linux_6_10 = throw "linux 6.10 was removed because it has reached its end of life upstream";
 
     linux_xanmod_tt = throw "linux_xanmod_tt was removed because upstream no longer offers this option";
 
@@ -290,6 +297,7 @@ in {
     linux_6_7_hardened = throw "linux 6.7 was removed because it has reached its end of life upstream";
     linux_6_8_hardened = throw "linux 6.8 was removed because it has reached its end of life upstream";
     linux_6_9_hardened = throw "linux 6.9 was removed because it has reached its end of life upstream";
+    linux_6_10_hardened = throw "linux 6.10 was removed because it has reached its end of life upstream";
   }));
   /*  Linux kernel modules are inherently tied to a specific kernel.  So
     rather than provide specific instances of those packages for a
@@ -314,7 +322,11 @@ in {
 
     acpi_call = callPackage ../os-specific/linux/acpi-call {};
 
+    ajantv2 = callPackage ../os-specific/linux/ajantv2 { };
+
     akvcam = callPackage ../os-specific/linux/akvcam { };
+
+    amneziawg = callPackage ../os-specific/linux/amneziawg { };
 
     apfs = callPackage ../os-specific/linux/apfs { };
 
@@ -365,6 +377,8 @@ in {
 
     e1000e = if lib.versionOlder kernel.version "4.10" then  callPackage ../os-specific/linux/e1000e {} else null;
 
+    iio-utils = if lib.versionAtLeast kernel.version "4.1" then callPackage ../os-specific/linux/iio-utils { } else null;
+
     intel-speed-select = if lib.versionAtLeast kernel.version "5.3" then callPackage ../os-specific/linux/intel-speed-select { } else null;
 
     ipu6-drivers = callPackage ../os-specific/linux/ipu6-drivers {};
@@ -405,6 +419,8 @@ in {
 
     new-lg4ff = callPackage ../os-specific/linux/new-lg4ff { };
 
+    zenergy = callPackage ../os-specific/linux/zenergy { };
+
     nvidiabl = callPackage ../os-specific/linux/nvidiabl { };
 
     nvidiaPackages = dontRecurseIntoAttrs (lib.makeExtensible (_: callPackage ../os-specific/linux/nvidia-x11 { }));
@@ -418,8 +434,8 @@ in {
     nvidia_x11_production  = nvidiaPackages.production;
     nvidia_x11_vulkan_beta = nvidiaPackages.vulkan_beta;
     nvidia_dc              = nvidiaPackages.dc;
-    nvidia_dc_520          = nvidiaPackages.dc_520;
     nvidia_dc_535          = nvidiaPackages.dc_535;
+    nvidia_dc_565          = nvidiaPackages.dc_565;
 
     # this is not a replacement for nvidia_x11*
     # only the opensource kernel driver exposed for hydra to build
@@ -478,7 +494,7 @@ in {
 
     rust-out-of-tree-module = if lib.versionAtLeast kernel.version "6.7" then callPackage ../os-specific/linux/rust-out-of-tree-module { } else null;
 
-    tuxedo-keyboard = if lib.versionAtLeast kernel.version "4.14" then callPackage ../os-specific/linux/tuxedo-keyboard { } else null;
+    tuxedo-drivers = if lib.versionAtLeast kernel.version "4.14" then callPackage ../os-specific/linux/tuxedo-drivers { } else null;
 
     jool = callPackage ../os-specific/linux/jool { };
 
@@ -524,6 +540,8 @@ in {
 
     turbostat = callPackage ../os-specific/linux/turbostat { };
 
+    corefreq = callPackage ../os-specific/linux/corefreq { };
+
     trelay = callPackage ../os-specific/linux/trelay { };
 
     universal-pidff = callPackage ../os-specific/linux/universal-pidff { };
@@ -559,17 +577,19 @@ in {
 
     xpadneo = callPackage ../os-specific/linux/xpadneo { };
 
+    yt6801 = callPackage ../os-specific/linux/yt6801 { };
+
     ithc = callPackage ../os-specific/linux/ithc { };
 
     ryzen-smu = callPackage ../os-specific/linux/ryzen-smu { };
 
     zenpower = callPackage ../os-specific/linux/zenpower { };
 
-    zfs_2_1 = callPackage ../os-specific/linux/zfs/2_1.nix {
+    zfs_2_2 = callPackage ../os-specific/linux/zfs/2_2.nix {
       configFile = "kernel";
       inherit pkgs kernel;
     };
-    zfs_2_2 = callPackage ../os-specific/linux/zfs/2_2.nix {
+    zfs_2_3 = callPackage ../os-specific/linux/zfs/2_3.nix {
       configFile = "kernel";
       inherit pkgs kernel;
     };
@@ -597,7 +617,10 @@ in {
 
     msi-ec = callPackage ../os-specific/linux/msi-ec { };
 
+    tsme-test = callPackage ../os-specific/linux/tsme-test { };
+
   } // lib.optionalAttrs config.allowAliases {
+    zfs_2_1 = throw "zfs_2_1 has been removed"; # added 2024-12-25;
     ati_drivers_x11 = throw "ati drivers are no longer supported by any kernel >=4.1"; # added 2021-05-18;
     hid-nintendo = throw "hid-nintendo was added in mainline kernel version 5.16"; # Added 2023-07-30
     sch_cake = throw "sch_cake was added in mainline kernel version 4.19"; # Added 2023-06-14
@@ -606,8 +629,9 @@ in {
     xmm7360-pci = throw "Support for the XMM7360 WWAN card was added to the iosm kmod in mainline kernel version 5.18";
     amdgpu-pro = throw "amdgpu-pro was removed due to lack of maintenance"; # Added 2024-06-16
     kvdo = throw "kvdo was removed, because it was added to mainline in kernel version 6.9"; # Added 2024-07-08
-    system76-power = lib.warn "kernelPackages.system76-power is now pkgs.system76-power" pkgs.system76-power; # Added 2024-10-16
-    system76-scheduler = lib.warn "kernelPackages.system76-scheduler is now pkgs.system76-scheduler" pkgs.system76-scheduler; # Added 2024-10-16
+    system76-power = lib.warnOnInstantiate "kernelPackages.system76-power is now pkgs.system76-power" pkgs.system76-power; # Added 2024-10-16
+    system76-scheduler = lib.warnOnInstantiate "kernelPackages.system76-scheduler is now pkgs.system76-scheduler" pkgs.system76-scheduler; # Added 2024-10-16
+    tuxedo-keyboard = self.tuxedo-drivers; # Added 2024-09-28
   });
 
   hardenedPackagesFor = kernel: overrides: packagesFor (hardenedKernelFor kernel overrides);
@@ -619,8 +643,8 @@ in {
     linux_5_15 = recurseIntoAttrs (packagesFor kernels.linux_5_15);
     linux_6_1 = recurseIntoAttrs (packagesFor kernels.linux_6_1);
     linux_6_6 = recurseIntoAttrs (packagesFor kernels.linux_6_6);
-    linux_6_10 = recurseIntoAttrs (packagesFor kernels.linux_6_10);
     linux_6_11 = recurseIntoAttrs (packagesFor kernels.linux_6_11);
+    linux_6_12 = recurseIntoAttrs (packagesFor kernels.linux_6_12);
   } // lib.optionalAttrs config.allowAliases {
     linux_4_14 = throw "linux 4.14 was removed because it will reach its end of life within 23.11"; # Added 2023-10-11
     linux_4_19 = throw "linux 4.19 was removed because it will reach its end of life within 24.11"; # Added 2024-09-21
@@ -629,6 +653,7 @@ in {
     linux_6_7 = throw "linux 6.7 was removed because it reached its end of life upstream"; # Added 2024-04-04
     linux_6_8 = throw "linux 6.8 was removed because it reached its end of life upstream"; # Added 2024-08-02
     linux_6_9 = throw "linux 6.9 was removed because it reached its end of life upstream"; # Added 2024-08-02
+    linux_6_10 = throw "linux 6.10 was removed because it reached its end of life upstream"; # Added 2024-10-23
   };
 
   rtPackages = {
@@ -659,6 +684,8 @@ in {
     linux_5_15_hardened = recurseIntoAttrs (packagesFor kernels.linux_5_15_hardened);
     linux_6_1_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_1_hardened);
     linux_6_6_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_6_hardened);
+    linux_6_11_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_11_hardened);
+    linux_6_12_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_12_hardened);
 
     linux_zen = recurseIntoAttrs (packagesFor kernels.linux_zen);
     linux_lqx = recurseIntoAttrs (packagesFor kernels.linux_lqx);
@@ -684,10 +711,11 @@ in {
   packageAliases = {
     linux_default = packages.linux_6_6;
     # Update this when adding the newest kernel major version!
-    linux_latest = packages.linux_6_11;
-    linux_mptcp = throw "'linux_mptcp' has been moved to https://github.com/teto/mptcp-flake";
+    linux_latest = packages.linux_6_12;
     linux_rt_default = packages.linux_rt_5_15;
     linux_rt_latest = packages.linux_rt_6_6;
+  } // lib.optionalAttrs config.allowAliases {
+    linux_mptcp = throw "'linux_mptcp' has been moved to https://github.com/teto/mptcp-flake";
   };
 
   manualConfig = callPackage ../os-specific/linux/kernel/manual-config.nix {};

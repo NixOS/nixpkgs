@@ -1,15 +1,20 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitea
-, six
-, sphinxHook
-, sphinx-rtd-theme
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitea,
+  six,
+  sphinxHook,
+  sphinx-rtd-theme,
 }:
 
 buildPythonApplication rec {
   pname = "cdist";
   version = "7.0.0";
-  outputs = [ "out" "man" "doc" ];
+  outputs = [
+    "out"
+    "man"
+    "doc"
+  ];
 
   src = fetchFromGitea {
     domain = "code.ungleich.ch";

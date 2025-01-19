@@ -2,23 +2,23 @@
   lib,
   python3,
   fetchFromGitHub,
-  nixosTests
+  nixosTests,
 }:
 
 python3.pkgs.toPythonModule (
   python3.pkgs.buildPythonApplication rec {
     pname = "searxng";
-    version = "0-unstable-2024-10-05";
+    version = "0-unstable-2025-01-10";
 
     src = fetchFromGitHub {
       owner = "searxng";
       repo = "searxng";
-      rev = "e7a4d7d7c3d688b69737f2b1ecd23571f5e3a0b9";
-      hash = "sha256-JfcB19Tfk5e7DyArzz9TNjidOZjkSxTLEU3ZhE105qs=";
+      rev = "94a0b415ef587e013df9e7350667b752a3822e90";
+      hash = "sha256-ZeFHsoQXmG2sZXhPY7aRTsAXmFGHNT5ig0c2Hy344vw=";
     };
 
     postPatch = ''
-      sed -i 's/==.*$//' requirements.txt
+      sed -i 's/==/>=/' requirements.txt
     '';
 
     preBuild =
@@ -44,18 +44,20 @@ python3.pkgs.toPythonModule (
       with python3.pkgs;
       [
         babel
+        brotli
         certifi
-        python-dateutil
         fasttext-predict
         flask
         flask-babel
-        brotli
+        isodate
         jinja2
         lxml
+        msgspec
         pygments
-        pytomlpp
+        python-dateutil
         pyyaml
         redis
+        typer
         uvloop
         setproctitle
         httpx

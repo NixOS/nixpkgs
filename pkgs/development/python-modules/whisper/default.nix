@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "graphite-project";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-CnCbRmI2jc67mTtfupoE1uHtobrAiWoUXbfX8YeEV6A=";
   };
 

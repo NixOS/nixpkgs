@@ -1,4 +1,10 @@
-{ config, options, lib, pkgs, ... }:
+{
+  config,
+  options,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.nixpkgs.flake;
 in
@@ -72,31 +78,35 @@ in
     };
   };
 
-  config = lib.mkIf (cfg.source != null) (lib.mkMerge [
-    {
-      assertions = [
-        {
-          assertion = cfg.setNixPath -> cfg.setFlakeRegistry;
-          message = ''
-            Setting `nixpkgs.flake.setNixPath` requires that `nixpkgs.flake.setFlakeRegistry` also
-            be set, since it is implemented in terms of indirection through the flake registry.
-          '';
-        }
-      ];
-    }
-    (lib.mkIf cfg.setFlakeRegistry {
-      nix.registry.nixpkgs.to = lib.mkDefault {
-        type = "path";
-        path = cfg.source;
-      };
-    })
-    (lib.mkIf cfg.setNixPath {
-      # N.B. This does not include nixos-config in NIX_PATH unlike modules/config/nix-channel.nix
-      # because we would need some kind of evil shim taking the *calling* flake's self path,
-      # perhaps, to ever make that work (in order to know where the Nix expr for the system came
-      # from and how to call it).
-      nix.nixPath = lib.mkDefault ([ "nixpkgs=flake:nixpkgs" ]
-        ++ lib.optional config.nix.channel.enable "/nix/var/nix/profiles/per-user/root/channels");
-    })
-  ]);
+  config = lib.mkIf (cfg.source != null) (
+    lib.mkMerge [
+      {
+        assertions = [
+          {
+            assertion = cfg.setNixPath -> cfg.setFlakeRegistry;
+            message = ''
+              Setting `nixpkgs.flake.setNixPath` requires that `nixpkgs.flake.setFlakeRegistry` also
+              be set, since it is implemented in terms of indirection through the flake registry.
+            '';
+          }
+        ];
+      }
+      (lib.mkIf cfg.setFlakeRegistry {
+        nix.registry.nixpkgs.to = lib.mkDefault {
+          type = "path";
+          path = cfg.source;
+        };
+      })
+      (lib.mkIf cfg.setNixPath {
+        # N.B. This does not include nixos-config in NIX_PATH unlike modules/config/nix-channel.nix
+        # because we would need some kind of evil shim taking the *calling* flake's self path,
+        # perhaps, to ever make that work (in order to know where the Nix expr for the system came
+        # from and how to call it).
+        nix.nixPath = lib.mkDefault (
+          [ "nixpkgs=flake:nixpkgs" ]
+          ++ lib.optional config.nix.channel.enable "/nix/var/nix/profiles/per-user/root/channels"
+        );
+      })
+    ]
+  );
 }

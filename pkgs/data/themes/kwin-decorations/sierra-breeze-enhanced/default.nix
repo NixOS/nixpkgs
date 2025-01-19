@@ -1,11 +1,12 @@
-{ stdenv
-, fetchFromGitHub
-, cmake
-, extra-cmake-modules
-, wrapQtAppsHook
-, kwin
-, lib
-, useQt5 ? false
+{
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  extra-cmake-modules,
+  wrapQtAppsHook,
+  kwin,
+  lib,
+  useQt5 ? false,
 }:
 let
   latestVersion = "2.0.1";
@@ -25,7 +26,11 @@ stdenv.mkDerivation rec {
     sha256 = if useQt5 then qt5Sha256 else latestSha256;
   };
 
-  nativeBuildInputs = [ cmake extra-cmake-modules wrapQtAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    extra-cmake-modules
+    wrapQtAppsHook
+  ];
   buildInputs = [ kwin ];
 
   cmakeFlags = [

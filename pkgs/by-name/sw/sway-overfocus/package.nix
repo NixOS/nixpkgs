@@ -1,4 +1,9 @@
-{ fetchFromGitHub, lib, nix-update-script, rustPlatform }:
+{
+  fetchFromGitHub,
+  lib,
+  nix-update-script,
+  rustPlatform,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "sway-overfocus";
@@ -27,4 +32,3 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "sway-overfocus";
   };
 }
-

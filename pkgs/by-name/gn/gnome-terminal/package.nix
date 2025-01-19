@@ -1,42 +1,43 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, python3
-, libxml2
-, gitUpdater
-, nautilus
-, glib
-, gtk4
-, gtk3
-, libhandy
-, gsettings-desktop-schemas
-, vte
-, gettext
-, which
-, libuuid
-, vala
-, desktop-file-utils
-, itstool
-, wrapGAppsHook3
-, pcre2
-, libxslt
-, docbook-xsl-nons
-, nixosTests
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  libxml2,
+  gitUpdater,
+  nautilus,
+  glib,
+  gtk4,
+  gtk3,
+  libhandy,
+  gsettings-desktop-schemas,
+  vte,
+  gettext,
+  which,
+  libuuid,
+  vala,
+  desktop-file-utils,
+  itstool,
+  wrapGAppsHook3,
+  pcre2,
+  libxslt,
+  docbook-xsl-nons,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-terminal";
-  version = "3.52.2";
+  version = "3.54.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "gnome-terminal";
     rev = finalAttrs.version;
-    hash = "sha256-c6xMUyhQnJiIrFnnUEx6vGVvFghGvLjTxiAFq+nSj2A=";
+    hash = "sha256-81dOdmIwa3OmuUTciTlearqic6bFMfiX1nvoIxJCt/M=";
   };
 
   nativeBuildInputs = [
@@ -53,7 +54,6 @@ stdenv.mkDerivation (finalAttrs: {
     vala
     desktop-file-utils
     wrapGAppsHook3
-    pcre2
     python3
   ];
 
@@ -66,6 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     vte
     libuuid
     nautilus # For extension
+    pcre2
   ];
 
   postPatch = ''

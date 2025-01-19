@@ -496,7 +496,7 @@ in
                     return 302 https://$host/dav/;
                   '';
                 };
-                "~ ^(.+\.php)(.*)$" = {
+                "~ ^(.+\\.php)(.*)$" = {
                   extraConfig = ''
                     try_files                $fastcgi_script_name =404;
                     include                  ${config.services.nginx.package}/conf/fastcgi_params;

@@ -1,9 +1,10 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, notmuch
-, stdenv
-, Security
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  notmuch,
+  stdenv,
+  Security,
 }:
 
 rustPlatform.buildRustPackage rec {

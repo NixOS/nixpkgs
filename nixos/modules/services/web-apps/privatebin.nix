@@ -74,8 +74,8 @@ in
       default = false;
       description = ''
         Whether to enable nginx or not. If enabled, an nginx virtual host will
-        be created for access to firefly-iii. If not enabled, then you may use
-        `''${config.services.firefly-iii.package}` as your document root in
+        be created for access to privatebin. If not enabled, then you may use
+        `''${config.services.privatebin.package}` as your document root in
         whichever webserver you wish to setup.
       '';
     };
@@ -186,7 +186,7 @@ in
               sendfile off;
             '';
           };
-          "~ \.php$" = {
+          "~ \\.php$" = {
             extraConfig = ''
               include ${config.services.nginx.package}/conf/fastcgi_params ;
               fastcgi_param SCRIPT_FILENAME $request_filename;

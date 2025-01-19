@@ -1,4 +1,9 @@
-{ lib, buildPythonApplication, fetchFromGitHub, unar }:
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  unar,
+}:
 
 buildPythonApplication rec {
   pname = "unrar-wrapper";
@@ -12,7 +17,10 @@ buildPythonApplication rec {
   };
 
   makeWrapperArgs = [
-    "--prefix" "PATH" ":" "${lib.makeBinPath [ unar ]}"
+    "--prefix"
+    "PATH"
+    ":"
+    "${lib.makeBinPath [ unar ]}"
   ];
 
   postFixup = ''

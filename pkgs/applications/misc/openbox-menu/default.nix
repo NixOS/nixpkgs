@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, glib
-, gtk2
-, menu-cache
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  glib,
+  gtk2,
+  menu-cache,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +18,11 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ glib gtk2 menu-cache ];
+  buildInputs = [
+    glib
+    gtk2
+    menu-cache
+  ];
 
   # Enables SVG support by uncommenting the Makefile
   patches = [ ./000-enable-svg.patch ];
@@ -41,7 +46,7 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.romildo ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
     mainProgram = "openbox-menu";
   };
 }

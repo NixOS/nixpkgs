@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "eq3btsmart";
-  version = "1.1.9";
+  version = "1.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "EuleMitKeule";
     repo = "eq3btsmart";
-    rev = "refs/tags/${version}";
-    hash = "sha256-7kJqPygX2Oc7fz31qZWrS1ZA+kANZr8vxOwarUzgp/M=";
+    tag = version;
+    hash = "sha256-FRnCnSMtsiZ1AbZOMwO/I5UoFWP0xAFqRZsnrHG9WJA=";
   };
 
   build-system = [ poetry-core ];

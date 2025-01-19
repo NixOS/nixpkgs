@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, cups
-, fetchurl
-, patchPpdFilesHook
-, autoPatchelfHook
-, dpkg
-, perl
-, avahi
+{
+  lib,
+  stdenv,
+  cups,
+  fetchurl,
+  patchPpdFilesHook,
+  autoPatchelfHook,
+  dpkg,
+  perl,
+  avahi,
 }:
 
 stdenv.mkDerivation {
@@ -40,32 +41,40 @@ stdenv.mkDerivation {
   # Needed for autoPatchelfHook.
   runtimeDependencies = [ (lib.getLib cups) ];
 
-  ppdFileCommands = [ "CommandFileFilterG2" "rerouteprintoption" ];
+  ppdFileCommands = [
+    "CommandFileFilterG2"
+    "rerouteprintoption"
+  ];
 
-  installPhase = let
-    libdir =
-      if stdenv.system == "x86_64-linux"    then "lib64"
-      else if stdenv.system == "i686_linux" then "lib"
-      else throw "other platforms than i686_linux and x86_64-linux are not yet supported";
-  in ''
-    runHook preInstall
+  installPhase =
+    let
+      libdir =
+        if stdenv.system == "x86_64-linux" then
+          "lib64"
+        else if stdenv.system == "i686_linux" then
+          "lib"
+        else
+          throw "other platforms than i686_linux and x86_64-linux are not yet supported";
+    in
+    ''
+      runHook preInstall
 
-    prefix=usr/local/Lexmark/ppd/Lexmark-AEX-PPD-Files/GlobalPPD_1.4
+      prefix=usr/local/Lexmark/ppd/Lexmark-AEX-PPD-Files/GlobalPPD_1.4
 
-    # Install raster image filter.
-    install -Dm755 "$prefix/rerouteprintoption" "$out/lib/cups/filter/rerouteprintoption"
-    patchShebangs "$out/lib/cups/filter/rerouteprintoption"
+      # Install raster image filter.
+      install -Dm755 "$prefix/rerouteprintoption" "$out/lib/cups/filter/rerouteprintoption"
+      patchShebangs "$out/lib/cups/filter/rerouteprintoption"
 
-    # Install additional binary filters.
-    for i in CommandFileFilterG2 LexHBPFilter; do
-      install -Dm755 "$prefix/${libdir}/$i" "$out/lib/cups/filter/$i"
-    done
+      # Install additional binary filters.
+      for i in CommandFileFilterG2 LexHBPFilter; do
+        install -Dm755 "$prefix/${libdir}/$i" "$out/lib/cups/filter/$i"
+      done
 
-    # Install PPD.
-    install -Dm 0644 -t "$out/share/cups/model/Lexmark" "$prefix"/*.ppd
+      # Install PPD.
+      install -Dm 0644 -t "$out/share/cups/model/Lexmark" "$prefix"/*.ppd
 
-    runHook postInstall
-  '';
+      runHook postInstall
+    '';
 
   meta = with lib; {
     description = "CUPS drivers for Lexmark B2200 and MB2200 Series printers";
@@ -73,6 +82,9 @@ stdenv.mkDerivation {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = [ maintainers.tobim ];
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+    ];
   };
 }

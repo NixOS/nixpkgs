@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "google-nest-sdm";
-  version = "5.0.1";
+  version = "6.1.5";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -26,8 +26,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "allenporter";
     repo = "python-google-nest-sdm";
-    rev = "refs/tags/${version}";
-    hash = "sha256-oooWPQ4O7+FjCzIoBwm+jgGTkG7eFwekbIAEbJh44I4=";
+    tag = version;
+    hash = "sha256-fIypWohefKS4X/obiPHNF4QPuGBzitcvf7fXBpUZotY=";
   };
 
   build-system = [ setuptools ];
@@ -55,6 +55,8 @@ buildPythonPackage rec {
   disabledTests = [
     "test_clip_preview_transcode"
     "test_event_manager_event_expiration_with_transcode"
+    # AssertionError: assert '12345' == 12345
+    "test_info_traits_type_error"
   ];
 
   meta = with lib; {

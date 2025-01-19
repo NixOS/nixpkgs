@@ -1,4 +1,15 @@
-{ lib, stdenv, fetchurl, nixosTests, jre_headless, makeWrapper, udev, version, url, sha1 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  nixosTests,
+  jre_headless,
+  makeWrapper,
+  udev,
+  version,
+  url,
+  sha1,
+}:
 stdenv.mkDerivation {
   pname = "minecraft-server";
   inherit version;
@@ -34,6 +45,10 @@ stdenv.mkDerivation {
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.unfreeRedistributable;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ thoughtpolice tomberek costrouc ];
+    maintainers = with maintainers; [
+      thoughtpolice
+      tomberek
+      costrouc
+    ];
   };
 }

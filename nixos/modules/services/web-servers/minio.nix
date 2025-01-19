@@ -40,6 +40,12 @@ in
       description = "The config directory, for the access keys and other settings.";
     };
 
+    certificatesDir = mkOption {
+      default = "/var/lib/minio/certs";
+      type = types.path;
+      description = "The directory where TLS certificates are stored.";
+    };
+
     accessKey = mkOption {
       default = "";
       type = types.str;
@@ -102,7 +108,7 @@ in
         after = [ "network-online.target" ];
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
-          ExecStart = "${cfg.package}/bin/minio server --json --address ${cfg.listenAddress} --console-address ${cfg.consoleAddress} --config-dir=${cfg.configDir} ${toString cfg.dataDir}";
+          ExecStart = "${cfg.package}/bin/minio server --json --address ${cfg.listenAddress} --console-address ${cfg.consoleAddress} --config-dir=${cfg.configDir} --certs-dir=${cfg.certificatesDir} ${toString cfg.dataDir}";
           Type = "simple";
           User = "minio";
           Group = "minio";

@@ -1,9 +1,10 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, lib
-, setuptools
-, six
-, django
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
+  setuptools,
+  six,
+  django,
 }:
 buildPythonPackage rec {
   pname = "natural";
@@ -13,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tehmaze";
     repo = "natural";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-DERFKDGVUPcjYAxiTYWgWkPp+Myd/9CNytQWgRya570=";
   };
 
@@ -27,6 +28,9 @@ buildPythonPackage rec {
     description = "Convert data to their natural (human-readable) format";
     homepage = "https://github.com/tehmaze/natural";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ sailord vinetos ];
+    maintainers = with lib.maintainers; [
+      sailord
+      vinetos
+    ];
   };
 }

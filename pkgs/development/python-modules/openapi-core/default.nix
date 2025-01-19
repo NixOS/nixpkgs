@@ -39,7 +39,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "p1c2u";
     repo = "openapi-core";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-JvWusDokov8G0UO9oOkGicAI7wYZTnNywbvKMZKQWiQ=";
   };
 

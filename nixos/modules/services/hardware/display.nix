@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.hardware.display;
 in
@@ -38,16 +43,20 @@ in
           ''')
         ]
       '';
-      apply = list:
-        if list == [ ] then null else
-        (pkgs.buildEnv {
-          name = "firmware-edid";
-          paths = list;
-          pathsToLink = [ "/lib/firmware/edid" ];
-          ignoreCollisions = true;
-        }) // {
-          compressFirmware = false;
-        };
+      apply =
+        list:
+        if list == [ ] then
+          null
+        else
+          (pkgs.buildEnv {
+            name = "firmware-edid";
+            paths = list;
+            pathsToLink = [ "/lib/firmware/edid" ];
+            ignoreCollisions = true;
+          })
+          // {
+            compressFirmware = false;
+          };
     };
 
     hardware.display.edid.linuxhw = lib.mkOption {
@@ -79,9 +88,9 @@ in
           PG278Q_2014 = [ "PG278Q" "2014" ];
         }
       '';
-      apply = displays:
-        if displays == { } then null else
-        pkgs.linuxhw-edid-fetcher.override { inherit displays; };
+      apply =
+        displays:
+        if displays == { } then null else pkgs.linuxhw-edid-fetcher.override { inherit displays; };
     };
 
     hardware.display.edid.modelines = lib.mkOption {
@@ -100,53 +109,60 @@ in
           "U2711_60" = "     241.50   2560 2600 2632 2720   1440 1443 1448 1481   -hsync +vsync";
         }
       '';
-      apply = modelines:
-        if modelines == { } then null else
-        pkgs.edid-generator.overrideAttrs {
-          clean = true;
-          passthru.config = modelines;
-          modelines = lib.trivial.pipe modelines [
-            (lib.mapAttrsToList (name: value:
-              lib.throwIfNot (builtins.stringLength name <= 12) "Modeline name must be 12 characters or less"
-                ''Modeline "${name}" ${value}''
-            ))
-            (builtins.map (line: "${line}\n"))
-            (lib.strings.concatStringsSep "")
-          ];
-        };
+      apply =
+        modelines:
+        if modelines == { } then
+          null
+        else
+          pkgs.edid-generator.overrideAttrs {
+            clean = true;
+            passthru.config = modelines;
+            modelines = lib.trivial.pipe modelines [
+              (lib.mapAttrsToList (
+                name: value:
+                lib.throwIfNot (
+                  builtins.stringLength name <= 12
+                ) "Modeline name must be 12 characters or less" ''Modeline "${name}" ${value}''
+              ))
+              (builtins.map (line: "${line}\n"))
+              (lib.strings.concatStringsSep "")
+            ];
+          };
     };
 
     hardware.display.outputs = lib.mkOption {
-      type = lib.types.attrsOf (lib.types.submodule ({
-        options = {
-          edid = lib.mkOption {
-            type = with lib.types; nullOr str;
-            default = null;
-            description = ''
-              An EDID filename to be used for configured display, as in `edid/<filename>`.
-              See for more information:
-              - `hardware.display.edid.packages`
-              - https://wiki.archlinux.org/title/Kernel_mode_setting#Forcing_modes_and_EDID
-            '';
-          };
-          mode = lib.mkOption {
-            type = with lib.types; nullOr str;
-            default = null;
-            description = ''
-              A `video` kernel parameter (framebuffer mode) configuration for the specific output:
+      type = lib.types.attrsOf (
+        lib.types.submodule ({
+          options = {
+            edid = lib.mkOption {
+              type = with lib.types; nullOr str;
+              default = null;
+              description = ''
+                An EDID filename to be used for configured display, as in `edid/<filename>`.
+                See for more information:
+                - `hardware.display.edid.packages`
+                - https://wiki.archlinux.org/title/Kernel_mode_setting#Forcing_modes_and_EDID
+              '';
+            };
+            mode = lib.mkOption {
+              type = with lib.types; nullOr str;
+              default = null;
+              description = ''
+                A `video` kernel parameter (framebuffer mode) configuration for the specific output:
 
-                  <xres>x<yres>[M][R][-<bpp>][@<refresh>][i][m][eDd]
+                    <xres>x<yres>[M][R][-<bpp>][@<refresh>][i][m][eDd]
 
-              See for more information:
-              - https://docs.kernel.org/fb/modedb.html
-              - https://wiki.archlinux.org/title/Kernel_mode_setting#Forcing_modes
-            '';
-            example = lib.literalExpression ''
-              "e"
-            '';
+                See for more information:
+                - https://docs.kernel.org/fb/modedb.html
+                - https://wiki.archlinux.org/title/Kernel_mode_setting#Forcing_modes
+              '';
+              example = lib.literalExpression ''
+                "e"
+              '';
+            };
           };
-        };
-      }));
+        })
+      );
       description = ''
         Hardware/kernel-level configuration of specific outputs.
       '';
@@ -174,15 +190,13 @@ in
           (lib.attrsets.filterAttrs (_: spec: spec.mode != null))
           (lib.mapAttrsToList (output: spec: "video=${output}:${spec.mode}"))
         ]
-        ++
         # selecting EDID for displays
-        lib.trivial.pipe cfg.outputs [
+        ++ lib.trivial.pipe cfg.outputs [
           (lib.attrsets.filterAttrs (_: spec: spec.edid != null))
           (lib.mapAttrsToList (output: spec: "${output}:edid/${spec.edid}"))
           (builtins.concatStringsSep ",")
           (p: lib.optional (p != "") "drm.edid_firmware=${p}")
-        ]
-      ;
+        ];
     }
     (lib.mkIf (cfg.edid.packages != null) {
       # services.udev implements hardware.firmware option

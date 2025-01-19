@@ -134,6 +134,10 @@ let
         extraFlags+=("--network-bridge=$HOST_BRIDGE")
       fi
 
+      if [ -n "$NETWORK_NAMESPACE_PATH" ]; then
+        extraFlags+=("--network-namespace-path=$NETWORK_NAMESPACE_PATH")
+      fi
+
       extraFlags+=(${lib.escapeShellArgs (mapAttrsToList nspawnExtraVethArgs cfg.extraVeths)})
 
       for iface in $INTERFACES; do
@@ -632,6 +636,20 @@ in
               '';
             };
 
+            networkNamespace = mkOption {
+              type = types.nullOr types.path;
+              default = null;
+              description = ''
+                Takes the path to a file representing a kernel network namespace that the container
+                shall run in. The specified path should refer to a (possibly bind-mounted) network
+                namespace file, as exposed by the kernel below /proc/<PID>/ns/net. This makes the
+                container enter the given network namespace. One of the typical use cases is to give
+                a network namespace under /run/netns created by ip-netns(8).
+                Note that this option cannot be used together with other network-related options,
+                such as --private-network or --network-interface=.
+              '';
+            };
+
             interfaces = mkOption {
               type = types.listOf types.str;
               default = [];
@@ -705,7 +723,7 @@ in
             allowedDevices = mkOption {
               type = with types; listOf (submodule allowedDeviceOpts);
               default = [];
-              example = [ { node = "/dev/net/tun"; modifier = "rw"; } ];
+              example = [ { node = "/dev/net/tun"; modifier = "rwm"; } ];
               description = ''
                 A list of device nodes to which the containers has access to.
               '';
@@ -793,6 +811,11 @@ in
     {
       warnings = optional (!config.boot.enableContainers && config.containers != {})
         "containers.<name> is used, but boot.enableContainers is false. To use containers.<name>, set boot.enableContainers to true.";
+
+      assertions = let
+        mapper = name: cfg: optional (cfg.networkNamespace != null && (cfg.privateNetwork || cfg.interfaces != []))
+          "containers.${name}.networkNamespace is mutally exclusive to containers.${name}.privateNetwork and containers.${name}.interfaces.";
+      in mkMerge (mapAttrsToList mapper config.containers);
     }
 
     (mkIf (config.boot.enableContainers) (let
@@ -835,7 +858,7 @@ in
             optionalAttrs cfg.enableTun
               {
                 allowedDevices = cfg.allowedDevices
-                  ++ [ { node = "/dev/net/tun"; modifier = "rw"; } ];
+                  ++ [ { node = "/dev/net/tun"; modifier = "rwm"; } ];
                 additionalCapabilities = cfg.additionalCapabilities
                   ++ [ "CAP_NET_ADMIN" ];
               }
@@ -896,6 +919,9 @@ in
                 ${optionalString (cfg.localAddress6 != null) ''
                   LOCAL_ADDRESS6=${cfg.localAddress6}
                 ''}
+              ''}
+              ${optionalString (cfg.networkNamespace != null) ''
+                NETWORK_NAMESPACE_PATH=${cfg.networkNamespace}
               ''}
               INTERFACES="${toString cfg.interfaces}"
               MACVLANS="${toString cfg.macvlans}"

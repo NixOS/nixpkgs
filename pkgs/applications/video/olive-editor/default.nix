@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, pkg-config
-, which
-, frei0r
-, opencolorio
-, ffmpeg_6
-, CoreFoundation
-, cmake
-, wrapQtAppsHook
-, openimageio
-, openexr_3
-, portaudio
-, imath
-, qtwayland
-, qtmultimedia
-, qttools
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  pkg-config,
+  which,
+  frei0r,
+  opencolorio,
+  ffmpeg_6,
+  CoreFoundation,
+  cmake,
+  wrapQtAppsHook,
+  openimageio,
+  openexr_3,
+  portaudio,
+  imath,
+  qtwayland,
+  qtmultimedia,
+  qttools,
 }:
 
 let
@@ -24,10 +25,12 @@ let
   # we patch support for 2.3+, but 2.5 fails
   openimageio' = openimageio.overrideAttrs (old: rec {
     version = "2.4.15.0";
-    src = (old.src.override {
-      rev = "v${version}";
-      hash = "sha256-I2/JPmUBDb0bw7qbSZcAkYHB2q2Uo7En7ZurMwWhg/M=";
-    });
+    src = (
+      old.src.override {
+        rev = "v${version}";
+        hash = "sha256-I2/JPmUBDb0bw7qbSZcAkYHB2q2Uo7En7ZurMwWhg/M=";
+      }
+    );
   });
 in
 

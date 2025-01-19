@@ -1,20 +1,25 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   name = "regal";
-  version = "0.28.0";
+  version = "0.30.0";
 
   src = fetchFromGitHub {
     owner = "StyraInc";
     repo = "regal";
     rev = "v${version}";
-    hash = "sha256-bQKVebpDqmwTAbocL10WrvA4HeVjDaGcbX090cX7HPw=";
+    hash = "sha256-sr+tGfKDSgJ5SiHihJ/aMAn6AnAC8bEb838+xYdFosc=";
   };
 
-  vendorHash = "sha256-EaOMIfkaYPXmsqw/Oi3caKjarR5ijwcoK+EXwGfSUqE=";
+  vendorHash = "sha256-6JheW6JHkAidZda7WWHSfEAuPYoBdli8wWHp2sX2r5Q=";
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X github.com/styrainc/regal/pkg/version.Version=${version}"
     "-X github.com/styrainc/regal/pkg/version.Commit=${version}"
   ];

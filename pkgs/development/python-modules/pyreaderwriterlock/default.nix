@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "elarivie";
     repo = "pyReaderWriterLock";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-8FC+4aDgGpF1BmOdlkFtMy7OfWdSmvn9fjKXSmmeJlg=";
   };
 

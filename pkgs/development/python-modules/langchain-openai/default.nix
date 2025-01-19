@@ -28,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-openai";
-  version = "0.2.1";
+  version = "0.2.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    rev = "refs/tags/langchain-openai==${version}";
-    hash = "sha256-M1gyw0Nmh+aLU9scbuqmK2kPyfwtaFaCfue+T8PLguQ=";
+    tag = "langchain-openai==${version}";
+    hash = "sha256-Gm7MAOuG+kYQ3TRTRdQXJ+HcoUz+iL9j+pTXz+zAySg=";
   };
 
   sourceRoot = "${src.name}/libs/partners/openai";
@@ -72,17 +72,18 @@ buildPythonPackage rec {
 
   disabledTests = [
     # These tests require network access
+    "test__convert_dict_to_message_tool_call"
     "test__get_encoding_model"
-    "test_get_token_ids"
-    "test_azure_openai_secrets"
     "test_azure_openai_api_key_is_secret_string"
-    "test_get_num_tokens_from_messages"
     "test_azure_openai_api_key_masked_when_passed_from_env"
     "test_azure_openai_api_key_masked_when_passed_via_constructor"
+    "test_azure_openai_secrets"
     "test_azure_openai_uses_actual_secret_value_from_secretstr"
     "test_azure_serialized_secrets"
-    "test_openai_get_num_tokens"
     "test_chat_openai_get_num_tokens"
+    "test_get_num_tokens_from_messages"
+    "test_get_token_ids"
+    "test_openai_get_num_tokens"
   ];
 
   pythonImportsCheck = [ "langchain_openai" ];
@@ -96,6 +97,9 @@ buildPythonPackage rec {
     description = "Integration package connecting OpenAI and LangChain";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/partners/openai";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ natsukium ];
+    maintainers = with lib.maintainers; [
+      natsukium
+      sarahec
+    ];
   };
 }

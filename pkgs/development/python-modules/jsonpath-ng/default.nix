@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "h2non";
     repo = "jsonpath-ng";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-sfIqEc5SsNQYxK+Ur00fFdVoC0ysOkHrx4Cq/3SpGHw=";
   };
 

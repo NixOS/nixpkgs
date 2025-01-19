@@ -14,12 +14,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openjump";
-  version = "2.2.1";
-  revision = "r5222%5B94156e5%5D";
+  version = "2.3.0";
+  revision = "r5279%5Bd24616e%5D";
 
   src = fetchurl {
     url = "mirror://sourceforge/jump-pilot/OpenJUMP/${finalAttrs.version}/OpenJUMP-Portable-${finalAttrs.version}-${finalAttrs.revision}-PLUS.zip";
-    hash = "sha256-+/AMmD6NDPy+2Gq1Ji5i/QWGU7FOsU+kKsWoNXcx/VI=";
+    hash = "sha256-IO44iGnFQt/ir1WlvBrEHjdC+0DZTfJIVAJgRcxrFMI=";
   };
 
   # TODO: build from source

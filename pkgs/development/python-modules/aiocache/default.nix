@@ -11,6 +11,7 @@
   pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
+  pythonAtLeast,
   pythonOlder,
   redis,
   setuptools,
@@ -26,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "aiocache";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-4QYCRXMWlt9fsiWgUTc2pKzXG7AG/zGmd4HT5ggIZNM=";
   };
 
@@ -54,10 +55,15 @@ buildPythonPackage rec {
     "--deselect=tests/ut/backends/test_redis.py::TestRedisBackend::test_close"
   ];
 
-  disabledTests = [
-    # Test calls apache benchmark and fails, no usable output
-    "test_concurrency_error_rates"
-  ];
+  disabledTests =
+    [
+      # Test calls apache benchmark and fails, no usable output
+      "test_concurrency_error_rates"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.13") [
+      # https://github.com/aio-libs/aiocache/issues/863
+      "test_cache_write_doesnt_wait_for_future"
+    ];
 
   disabledTestPaths = [
     # Benchmark and performance tests are not relevant for Nixpkgs

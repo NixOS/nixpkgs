@@ -164,6 +164,10 @@ let
 
       RUST_LIB_SRC = lib.optionalString withRust rustPlatform.rustLibSrc;
 
+      # avoid leaking Rust source file names into the final binary, which adds
+      # a false dependency on rust-lib-src on targets with uncompressed kernels
+      KRUSTFLAGS = lib.optionalString withRust "--remap-path-prefix ${rustPlatform.rustLibSrc}=/";
+
       patches =
         map (p: p.patch) kernelPatches
         # Required for deterministic builds along with some postPatch magic.
@@ -429,12 +433,14 @@ stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.linux-kernel kernelPat
   # Absolute paths for compilers avoid any PATH-clobbering issues.
   makeFlags = [
     "O=$(buildRoot)"
-    "CC=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"
-    "HOSTCC=${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc"
-    "HOSTLD=${buildPackages.stdenv.cc.bintools}/bin/${buildPackages.stdenv.cc.targetPrefix}ld"
     "ARCH=${stdenv.hostPlatform.linuxArch}"
-  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+  ] ++ lib.optionals (stdenv.isx86_64 && stdenv.cc.bintools.isLLVM) [
+    # The wrapper for ld.lld breaks linking the kernel. We use the
+    # unwrapped linker as workaround. See:
+    #
+    # https://github.com/NixOS/nixpkgs/issues/321667
+    "LD=${stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ld"
   ] ++ (stdenv.hostPlatform.linux-kernel.makeFlags or [])
     ++ extraMakeFlags;
 

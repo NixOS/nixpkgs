@@ -3,7 +3,6 @@
   buildPythonPackage,
   chardet,
   docutils,
-  fetchpatch,
   fetchPypi,
   pbr,
   pygments,
@@ -17,24 +16,15 @@
 
 buildPythonPackage rec {
   pname = "doc8";
-  version = "1.1.1";
+  version = "1.1.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-2XqT6PWi78RxOggEZX3trYN0XMpM0diN6Rhvd/l3YAQ=";
+    hash = "sha256-EiXzAUThzJfjiNuvf+PpltKJdHOlOm2uJo3d4hw1S5g=";
   };
-
-  patches = [
-    # https://github.com/PyCQA/doc8/pull/146
-    (fetchpatch {
-      name = "remove-setuptools-scm-git-archive.patch";
-      url = "https://github.com/PyCQA/doc8/commit/06416e95041db92e4295b13ab596351618f6b32e.patch";
-      hash = "sha256-IIE3cDNOx+6RLjidGrokyazaX7MOVbMKUb7yQIM5sI0=";
-    })
-  ];
 
   nativeBuildInputs = [
     setuptools-scm

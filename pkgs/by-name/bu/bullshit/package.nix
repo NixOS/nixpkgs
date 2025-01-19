@@ -1,8 +1,9 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, gawk
-, nix-update-script
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  gawk,
+  nix-update-script,
 }:
 stdenvNoCC.mkDerivation {
   pname = "bullshit";

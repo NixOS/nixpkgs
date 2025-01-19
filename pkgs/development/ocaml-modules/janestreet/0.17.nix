@@ -402,6 +402,7 @@ with self;
     hash = "sha256-0InGCF34LWQes9S4OgbR6w+6cylThYuj1Dj0aQyTnuY=";
     meta.description = "Websocket library for use with cohttp and async";
     propagatedBuildInputs = [
+      async_ssl
       async_websocket
       cohttp-async
       ppx_jane
@@ -1535,12 +1536,25 @@ with self;
     ];
   };
 
-  ppxlib_jane = janePackage {
-    pname = "ppxlib_jane";
-    hash = "sha256-8NC8CHh3pSdFuRDQCuuhc2xxU+84UAsGFJbbJoKwd0U=";
-    meta.description = "A library for use in ppxes for constructing and matching on ASTs corresponding to the augmented parsetree";
-    propagatedBuildInputs = [ ppxlib ];
-  };
+  ppxlib_jane = janePackage (
+    {
+      pname = "ppxlib_jane";
+      meta.description = "A library for use in ppxes for constructing and matching on ASTs corresponding to the augmented parsetree";
+      propagatedBuildInputs = [ ppxlib ];
+    }
+    // (
+      if lib.versionAtLeast ocaml.version "5.3" then
+        {
+          version = "0.17.1";
+          hash = "sha256-kcGXqO1kFYds8KwLvpIQ7OKhqnp6JZs8WYYLi7o/nBw=";
+        }
+      else
+        {
+          version = "0.17.0";
+          hash = "sha256-8NC8CHh3pSdFuRDQCuuhc2xxU+84UAsGFJbbJoKwd0U=";
+        }
+    )
+  );
 
   profunctor = janePackage {
     pname = "profunctor";
@@ -1868,7 +1882,8 @@ with self;
 
   typerep = janePackage {
     pname = "typerep";
-    hash = "sha256-0KwJdWtibgjxghFmOYKyPrcOAfoLpxYGBZm2KpH8tgA=";
+    version = "0.17.1";
+    hash = "sha256-hw03erwLx9IAbkBibyhZxofA5jIi12rFJOHNEVYpLSk=";
     meta.description = "Typerep is a library for runtime types";
     propagatedBuildInputs = [ base ];
   };

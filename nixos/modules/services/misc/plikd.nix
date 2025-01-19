@@ -1,27 +1,29 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.plikd;
 
-  format = pkgs.formats.toml {};
+  format = pkgs.formats.toml { };
   plikdCfg = format.generate "plikd.cfg" cfg.settings;
 in
 {
   options = {
     services.plikd = {
-      enable = mkEnableOption "plikd, a temporary file upload system";
+      enable = lib.mkEnableOption "plikd, a temporary file upload system";
 
-      openFirewall = mkOption {
-        type = types.bool;
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Open ports in the firewall for the plikd.";
       };
 
-      settings = mkOption {
+      settings = lib.mkOption {
         type = format.type;
-        default = {};
+        default = { };
         description = ''
           Configuration for plikd, see <https://github.com/root-gg/plik/blob/master/server/plikd.cfg>
           for supported values.
@@ -30,13 +32,13 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
-    services.plikd.settings = mapAttrs (name: mkDefault) {
+  config = lib.mkIf cfg.enable {
+    services.plikd.settings = lib.mapAttrs (name: lib.mkDefault) {
       ListenPort = 8080;
       ListenAddress = "localhost";
       DataBackend = "file";
       DataBackendConfig = {
-         Directory = "/var/lib/plikd";
+        Directory = "/var/lib/plikd";
       };
       MetadataBackendConfig = {
         Driver = "sqlite3";
@@ -75,7 +77,7 @@ in
       };
     };
 
-    networking.firewall = mkIf cfg.openFirewall {
+    networking.firewall = lib.mkIf cfg.openFirewall {
       allowedTCPPorts = [ cfg.settings.ListenPort ];
     };
   };

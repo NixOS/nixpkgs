@@ -1,40 +1,44 @@
-{ lib
-, stdenv
-, makeWrapper
-, fetchurl
-, autoPatchelfHook
-, dbus
-, fontconfig
-, freetype
-, glib
-, libdrm
-, libGLU
-, libglvnd
-, libICE
-, libkrb5
-, libSM
-, libX11
-, libxcb
-, libXi
-, libxkbcommon
-, ncurses
-, wayland
-, zlib
+{
+  lib,
+  stdenv,
+  makeWrapper,
+  fetchurl,
+  autoPatchelfHook,
+  dbus,
+  fontconfig,
+  freetype,
+  glib,
+  libdrm,
+  libGLU,
+  libglvnd,
+  libICE,
+  libkrb5,
+  libSM,
+  libX11,
+  libxcb,
+  libXi,
+  libxkbcommon,
+  ncurses,
+  wayland,
+  zlib,
 }:
 
 let
-  buildNum = "2024-06-26-1341";
+  buildNum = "2024-09-26-1411";
 in
 stdenv.mkDerivation {
   pname = "rgp";
-  version = "2.2";
+  version = "2.3";
 
   src = fetchurl {
     url = "https://gpuopen.com/download/radeon-developer-tool-suite/RadeonDeveloperToolSuite-${buildNum}.tgz";
-    hash = "sha256-mpm4hxWyunq6Z6kdSuk4jqnYOTuLFVe+XzXZvHJPf/Q=";
+    hash = "sha256-mgIFDStgat4E+67TaSLrcwgWTu7zLf7Nkn6zBlgeVcQ=";
   };
 
-  nativeBuildInputs = [ makeWrapper autoPatchelfHook ];
+  nativeBuildInputs = [
+    makeWrapper
+    autoPatchelfHook
+  ];
 
   buildInputs = [
     dbus

@@ -18,15 +18,15 @@
 
 buildPythonPackage rec {
   pname = "pystac-client";
-  version = "0.8.4";
+  version = "0.8.5";
   pyproject = true;
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "stac-utils";
     repo = "pystac-client";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-EetS0MD5DLBR+ht9YfD+oRdfHbVONuVHdSZj3FQ5Sm8=";
+    tag = "v${version}";
+    hash = "sha256-bryJCg0JqjxQi5tAvd5Y2f/hXmHoIGEFiHuSPCjqfYk=";
   };
 
   build-system = [ setuptools ];

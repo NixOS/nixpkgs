@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Iskramis";
     repo = "pyiskra";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-OLNUa11UULiW6E8nVy5rUyN7iAD7KdM+R76m2zaDOgc=";
   };
 

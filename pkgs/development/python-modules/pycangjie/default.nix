@@ -1,53 +1,60 @@
 {
   lib,
-  fetchFromGitHub,
-  bash,
-  autoconf,
-  automake,
-  libtool,
+  fetchFromGitLab,
   pkg-config,
   libcangjie,
   sqlite,
   buildPythonPackage,
   cython,
+  meson,
+  ninja,
+  cmake,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "pycangjie";
-  version = "unstable-2015-05-03";
+  version = "1.5.0";
+
   format = "other";
 
-  src = fetchFromGitHub {
-    owner = "Cangjians";
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "cangjie";
     repo = "pycangjie";
-    rev = "361bb413203fd43bab624d98edf6f7d20ce6bfd3";
-    hash = "sha256-sS0Demzm89WtEIN4Efz0OTsUQ/c3gIX+/koekQGOca4=";
+    rev = version;
+    hash = "sha256-REWX6u3Rc72+e5lIImBwV5uFoBBUTMM5BOfYdKIFL4k=";
   };
+
+  preConfigure = ''
+    (
+      cd subprojects
+      set -x
+      cp -R --no-preserve=mode,ownership ${libcangjie.src} libcangjie
+    )
+  '';
 
   nativeBuildInputs = [
     pkg-config
-    libtool
-    autoconf
-    automake
+    meson
+    ninja
     cython
+    cmake
   ];
+
   buildInputs = [
-    libcangjie
     sqlite
   ];
 
-  preConfigure = ''
-    find . -name '*.sh' -exec sed -e 's@#!/bin/bash@${bash}/bin/bash@' -i '{}' ';'
-    sed -i 's@/usr@${libcangjie}@' tests/__init__.py
+  pythonImportsCheck = [ "cangjie" ];
+
+  # `buildPythonApplication` skips checkPhase
+  postInstallCheck = ''
+    mesonCheckPhase
   '';
-
-  configureScript = "./autogen.sh";
-
-  doCheck = true;
 
   meta = with lib; {
     description = "Python wrapper to libcangjie";
-    homepage = "http://cangjians.github.io/projects/pycangjie/";
+    homepage = "https://cangjians.github.io/projects/pycangjie/";
     license = licenses.lgpl3Plus;
     maintainers = [ maintainers.linquize ];
     platforms = platforms.all;

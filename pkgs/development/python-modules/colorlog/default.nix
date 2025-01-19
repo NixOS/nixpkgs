@@ -8,15 +8,15 @@
 
 buildPythonPackage rec {
   pname = "colorlog";
-  version = "6.8.2";
+  version = "6.9.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Pj4HmkH+taG2T5eLXqT0YECpTxHw6Lu4Jh49u+ymTUQ=";
+    hash = "sha256-v7pUobk7lPVOH0/kg5VyWj2S/SpK9wL2vXCUa9wMasI=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   pythonImportsCheck = [ "colorlog" ];
 

@@ -28,6 +28,12 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
+  env = {
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=incompatible-pointer-types"
+    ];
+  };
+
   postInstall = ''
     install -D --target-directory=$out/bin canokey-usbip
   '';

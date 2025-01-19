@@ -1,4 +1,4 @@
-{stdenv, klibc}:
+{ stdenv, klibc }:
 
 stdenv.mkDerivation {
   # !!! For now, the name has to be exactly as long as the original
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
       #patchelf --set-interpreter $new $i
     done
   ''; # */
-  allowedReferences = ["out"];
+  allowedReferences = [ "out" ];
 
   inherit (klibc) meta;
 }

@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchurl
-, gettext
-, bzip2
-, db
-, zlib
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gettext,
+  bzip2,
+  db,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {

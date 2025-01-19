@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "calmjs-parse";
-  version = "1.3.1";
+  version = "1.3.2";
 
   pyproject = true;
 
@@ -17,17 +17,17 @@ buildPythonPackage rec {
     owner = "calmjs";
     repo = "calmjs.parse";
     rev = version;
-    hash = "sha256-xph+NuTkWfW0t/1vxWBSgsjU7YHQMnsm/W/XdkAnl7I=";
+    hash = "sha256-+tel9AJFaKqsuSjqS1KPyRjO6iU7V90ECSEYLBdfqZU=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "env['PYTHONPATH'] = 'src'" "env['PYTHONPATH'] += ':src'"
+      --replace-fail "env['PYTHONPATH'] = 'src'" "env['PYTHONPATH'] += ':src'"
   '';
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     setuptools
     ply
   ];

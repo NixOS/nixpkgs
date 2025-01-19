@@ -1,14 +1,15 @@
-{ stdenvNoCC
-, fetchurl
-, lib
+{
+  stdenvNoCC,
+  fetchurl,
+  lib,
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "lxgw-wenkai-tc";
-  version = "1.500";
+  version = "1.501";
   src = fetchurl {
     url = "https://github.com/lxgw/LxgwWenKaiTC/releases/download/v${version}/lxgw-wenkai-tc-v${version}.tar.gz";
-    hash = "sha256-GuGIRgBQTmlKmarEVFmZ2RgYtlw6mz3nfFdWbjlm934=";
+    hash = "sha256-GnllwWRO2Pa7hlehZKrGJr2f4kRJN1JPxtz4UGMbqyg=";
   };
 
   installPhase = ''

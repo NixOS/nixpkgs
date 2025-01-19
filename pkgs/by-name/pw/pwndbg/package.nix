@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, python3
-, makeWrapper
-, gdb
+{
+  lib,
+  stdenv,
+  python3,
+  makeWrapper,
+  gdb,
 }:
 
 let
@@ -10,12 +11,15 @@ let
 
   pythonPath = python3.pkgs.makePythonPath [ pwndbg-py ];
 
-  binPath = lib.makeBinPath ([
-    python3.pkgs.pwntools # ref: https://github.com/pwndbg/pwndbg/blob/2022.12.19/pwndbg/wrappers/checksec.py#L8
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    python3.pkgs.ropper # ref: https://github.com/pwndbg/pwndbg/blob/2022.12.19/pwndbg/commands/ropper.py#L30
-    python3.pkgs.ropgadget # ref: https://github.com/pwndbg/pwndbg/blob/2022.12.19/pwndbg/commands/rop.py#L32
-  ]);
+  binPath = lib.makeBinPath (
+    [
+      python3.pkgs.pwntools # ref: https://github.com/pwndbg/pwndbg/blob/2022.12.19/pwndbg/wrappers/checksec.py#L8
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      python3.pkgs.ropper # ref: https://github.com/pwndbg/pwndbg/blob/2022.12.19/pwndbg/commands/ropper.py#L30
+      python3.pkgs.ropgadget # ref: https://github.com/pwndbg/pwndbg/blob/2022.12.19/pwndbg/commands/rop.py#L32
+    ]
+  );
 in
 stdenv.mkDerivation {
   pname = "pwndbg";
@@ -62,7 +66,11 @@ stdenv.mkDerivation {
     homepage = "https://github.com/pwndbg/pwndbg";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ mic92 patryk4815 msanft ];
+    maintainers = with maintainers; [
+      mic92
+      patryk4815
+      msanft
+    ];
     # not supported on aarch64-darwin see: https://inbox.sourceware.org/gdb/3185c3b8-8a91-4beb-a5d5-9db6afb93713@Spark/
     broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
   };

@@ -9,6 +9,7 @@ runCommand "llvm-binutils-${version}"
   passthru = {
     isLLVM = true;
     inherit targetPrefix;
+    inherit llvm lld;
   };
 }
   (''

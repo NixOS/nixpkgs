@@ -1,11 +1,12 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, autoconf
-, automake
-, libtool
-, gnutls
-, libmicrohttpd
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  libtool,
+  gnutls,
+  libmicrohttpd,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,9 +20,16 @@ stdenv.mkDerivation rec {
     hash = "sha256-Pc3Fvd8D4Ymp7dG9YgU58mDceOqNfhWE1JtnpVaNx/Y=";
   };
 
-  nativeBuildInputs = [ autoconf automake libtool ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+    libtool
+  ];
 
-  buildInputs = [ gnutls libmicrohttpd ];
+  buildInputs = [
+    gnutls
+    libmicrohttpd
+  ];
 
   enableParallelBuilding = true;
 

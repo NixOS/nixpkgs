@@ -10,12 +10,14 @@
 # This mapping contains all maintainers in ../../mainatainer-list.nix, but it
 # ignores maintainers who don't have a GitHub account or an email address.
 let
-  pkgs = import ../../.. {};
+  pkgs = import ../../.. { };
   maintainers = import ../../maintainer-list.nix;
   inherit (pkgs) lib;
-  mkMailGithubPair = _: maintainer:
+  mkMailGithubPair =
+    _: maintainer:
     if (maintainer ? email) && (maintainer ? github) then
       { "${maintainer.email}" = maintainer.github; }
     else
-      {};
-in lib.zipAttrsWith (_: builtins.head) (lib.mapAttrsToList mkMailGithubPair maintainers)
+      { };
+in
+lib.zipAttrsWith (_: builtins.head) (lib.mapAttrsToList mkMailGithubPair maintainers)

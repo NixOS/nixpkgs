@@ -1,3 +1,5 @@
+set -euo pipefail
+
 # The real pg_config needs to be in the same path as the "postgres" binary
 # to return proper paths. However, we want it in the -dev output to prevent
 # cyclic references and to prevent blowing up the runtime closure. Thus, we

@@ -15,12 +15,14 @@ lib.packagesFromDirectoryRecursive {
     inherit (pkgs) codeium;
   };
 
-  consult-gh = callPackage ./manual-packages/consult-gh {
-    inherit (pkgs) gh;
-  };
-
   lsp-bridge = callPackage ./manual-packages/lsp-bridge {
-    inherit (pkgs) basedpyright git go gopls python3;
+    inherit (pkgs)
+      basedpyright
+      git
+      go
+      gopls
+      python3
+      ;
   };
 
   structured-haskell-mode = self.shm;

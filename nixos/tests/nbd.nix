@@ -1,68 +1,80 @@
-import ./make-test-python.nix ({ pkgs, ... }:
+import ./make-test-python.nix (
+  { pkgs, ... }:
   let
     listenPort = 30123;
     testString = "It works!";
-    mkCreateSmallFileService = { path, loop ? false }: {
-      script = ''
-        ${pkgs.coreutils}/bin/dd if=/dev/zero of=${path} bs=1K count=100
-        ${pkgs.lib.optionalString loop
-          "${pkgs.util-linux}/bin/losetup --find ${path}"}
-      '';
-      serviceConfig = {
-        Type = "oneshot";
+    mkCreateSmallFileService =
+      {
+        path,
+        loop ? false,
+      }:
+      {
+        script = ''
+          ${pkgs.coreutils}/bin/dd if=/dev/zero of=${path} bs=1K count=100
+          ${pkgs.lib.optionalString loop "${pkgs.util-linux}/bin/losetup --find ${path}"}
+        '';
+        serviceConfig = {
+          Type = "oneshot";
+        };
+        wantedBy = [ "multi-user.target" ];
+        before = [ "nbd-server.service" ];
       };
-      wantedBy = [ "multi-user.target" ];
-      before = [ "nbd-server.service" ];
-    };
   in
   {
     name = "nbd";
 
     nodes = {
-      server = { config, pkgs, ... }: {
-        # Create some small files of zeros to use as the ndb disks
-        ## `vault-pub.disk` is accessible from any IP
-        systemd.services.create-pub-file =
-          mkCreateSmallFileService { path = "/vault-pub.disk"; };
-        ## `vault-priv.disk` is accessible only from localhost.
-        ## It's also a loopback device to test exporting /dev/...
-        systemd.services.create-priv-file =
-          mkCreateSmallFileService { path = "/vault-priv.disk"; loop = true; };
-        ## `aaa.disk` is just here because "[aaa]" sorts before
-        ## "[generic]" lexicographically, and nbd-server breaks if
-        ## "[generic]" isn't the first section.
-        systemd.services.create-aaa-file =
-          mkCreateSmallFileService { path = "/aaa.disk"; };
-
-        # Needed only for nbd-client used in the tests.
-        environment.systemPackages = [ pkgs.nbd ];
-
-        # Open the nbd port in the firewall
-        networking.firewall.allowedTCPPorts = [ listenPort ];
-
-        # Run the nbd server and expose the small file created above
-        services.nbd.server = {
-          enable = true;
-          exports = {
-            aaa = {
-              path = "/aaa.disk";
-            };
-            vault-pub = {
-              path = "/vault-pub.disk";
-            };
-            vault-priv = {
-              path = "/dev/loop0";
-              allowAddresses = [ "127.0.0.1" "::1" ];
-            };
+      server =
+        { config, pkgs, ... }:
+        {
+          # Create some small files of zeros to use as the ndb disks
+          ## `vault-pub.disk` is accessible from any IP
+          systemd.services.create-pub-file = mkCreateSmallFileService { path = "/vault-pub.disk"; };
+          ## `vault-priv.disk` is accessible only from localhost.
+          ## It's also a loopback device to test exporting /dev/...
+          systemd.services.create-priv-file = mkCreateSmallFileService {
+            path = "/vault-priv.disk";
+            loop = true;
           };
-          listenAddress = "0.0.0.0";
-          listenPort = listenPort;
-        };
-      };
+          ## `aaa.disk` is just here because "[aaa]" sorts before
+          ## "[generic]" lexicographically, and nbd-server breaks if
+          ## "[generic]" isn't the first section.
+          systemd.services.create-aaa-file = mkCreateSmallFileService { path = "/aaa.disk"; };
 
-      client = { config, pkgs, ... }: {
-        programs.nbd.enable = true;
-      };
+          # Needed only for nbd-client used in the tests.
+          environment.systemPackages = [ pkgs.nbd ];
+
+          # Open the nbd port in the firewall
+          networking.firewall.allowedTCPPorts = [ listenPort ];
+
+          # Run the nbd server and expose the small file created above
+          services.nbd.server = {
+            enable = true;
+            exports = {
+              aaa = {
+                path = "/aaa.disk";
+              };
+              vault-pub = {
+                path = "/vault-pub.disk";
+              };
+              vault-priv = {
+                path = "/dev/loop0";
+                allowAddresses = [
+                  "127.0.0.1"
+                  "::1"
+                ];
+              };
+            };
+            listenAddress = "0.0.0.0";
+            listenPort = listenPort;
+          };
+        };
+
+      client =
+        { config, pkgs, ... }:
+        {
+          programs.nbd.enable = true;
+        };
     };
 
     testScript = ''
@@ -100,4 +112,5 @@ import ./make-test-python.nix ({ pkgs, ... }:
          raise Exception(f"Read the wrong string from nbd disk. Expected: '{testString}'. Found: '{foundString}'")
       server.succeed("nbd-client -d /dev/nbd0")
     '';
-  })
+  }
+)

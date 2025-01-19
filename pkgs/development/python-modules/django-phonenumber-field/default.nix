@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "stefanfoulis";
     repo = "django-phonenumber-field";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-l+BAh7QYGN0AgDHICvlQnBYAcpEn8acu+JBmoo85kF0=";
   };
 

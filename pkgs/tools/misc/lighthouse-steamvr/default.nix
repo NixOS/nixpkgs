@@ -23,16 +23,13 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ dbus ] ++ lib.optionals stdenv.isDarwin [ AppKit ];
+  buildInputs = [ dbus ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ AppKit ];
 
   meta = with lib; {
     description = "VR Lighthouse power state management";
     homepage = "https://github.com/ShayBox/Lighthouse";
     license = licenses.mit;
-    maintainers = with maintainers; [
-      expipiplus1
-      bddvlpr
-    ];
+    maintainers = with maintainers; [ bddvlpr ];
     mainProgram = "lighthouse";
   };
 }

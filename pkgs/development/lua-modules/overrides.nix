@@ -302,6 +302,12 @@ in
     ];
   });
 
+  luacheck = prev.luacheck.overrideAttrs (oa: {
+    meta = oa.meta // {
+      mainProgram = "luacheck";
+    };
+  });
+
   lua-curl = prev.lua-curl.overrideAttrs (oa: {
     buildInputs = oa.buildInputs ++ [
       curl.dev
@@ -343,9 +349,8 @@ in
 
     luarocksConfig = lib.recursiveUpdate oa.luarocksConfig {
       variables = {
-        # Can't just be /include and /lib, unfortunately needs the trailing 'mysql'
-        MYSQL_INCDIR = "${libmysqlclient.dev}/include/mysql";
-        MYSQL_LIBDIR = "${libmysqlclient}/lib/mysql";
+        MYSQL_INCDIR = "${lib.getDev libmysqlclient}/include/";
+        MYSQL_LIBDIR = "${lib.getLib libmysqlclient}/lib/";
       };
     };
     buildInputs = oa.buildInputs ++ [
@@ -356,7 +361,7 @@ in
 
   luadbi-postgresql = prev.luadbi-postgresql.overrideAttrs (oa: {
     buildInputs = oa.buildInputs ++ [
-      postgresql
+      (lib.getDev postgresql)
     ];
   });
 
@@ -415,11 +420,17 @@ in
     ];
   });
 
-  luaprompt = prev.luaprompt.overrideAttrs (_: {
+  luaprompt = prev.luaprompt.overrideAttrs (oa: {
     externalDeps = [
       { name = "READLINE"; dep = readline; }
       { name = "HISTORY"; dep = readline; }
     ];
+
+    nativeBuildInputs = oa.nativeBuildInputs ++ [ installShellFiles ];
+
+    postInstall = ''
+      installManPage luap.1
+    '';
   });
 
   # As a nix user, use this derivation instead of "luarocks_bootstrap"
@@ -555,7 +566,7 @@ in
   });
 
   neotest  = prev.neotest.overrideAttrs(oa: {
-    doCheck = stdenv.isLinux;
+    doCheck = stdenv.hostPlatform.isLinux;
     nativeCheckInputs = oa.nativeCheckInputs ++ [
       final.nlua final.busted neovim-unwrapped
     ];
@@ -754,7 +765,7 @@ in
     ];
 
     meta = {
-      homepage = "http://pjb.com.au/comp/lua/readline.html";
+      homepage = "https://pjb.com.au/comp/lua/readline.html";
       description = "Interface to the readline library";
       license.fullName = "MIT/X11";
       broken = (luaOlder "5.1") || (luaAtLeast "5.5");
@@ -831,7 +842,7 @@ in
 
     cargoDeps = rustPlatform.fetchCargoTarball {
       src = oa.src;
-      hash = "sha256-PLihirhJshcUQI3L1eTcnQiZvocDl29eQHhdBwJQRU8=";
+      hash = "sha256-lguGj8fDqztrvqvEYVcJLmiuxPDaCpXU8aztInKjF+E=";
     };
 
     NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin
@@ -855,17 +866,17 @@ in
     ];
   });
 
+  tl = prev.tl.overrideAttrs ({
+    preConfigure = ''
+      rm luarocks.lock
+    '';
+  });
+
   vstruct = prev.vstruct.overrideAttrs (_: {
     meta.broken = (luaOlder "5.1" || luaAtLeast "5.4");
   });
 
   vusted = prev.vusted.overrideAttrs (_: {
-    postConfigure = ''
-      cat ''${rockspecFilename}
-      substituteInPlace ''${rockspecFilename} \
-        --replace-fail '"luasystem = 0.2.1",' "'luasystem >= 0.2',"
-    '';
-
     # make sure vusted_entry.vim doesn't get wrapped
     postInstall = ''
       chmod -x $out/bin/vusted_entry.vim

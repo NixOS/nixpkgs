@@ -1,42 +1,47 @@
-{ lib
-, fetchFromGitHub
-, meerk40t-camera
-, python3Packages
-, gtk3
-, wrapGAppsHook3
+{
+  lib,
+  fetchFromGitHub,
+  meerk40t-camera,
+  python3Packages,
+  gtk3,
+  wrapGAppsHook3,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "MeerK40t";
-  version = "0.9.4000";
+  version = "0.9.5300";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "meerk40t";
     repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-ceDnnHdmJ6VOrM9pSxjeKQ748E8fsIqSQ36qFpXc9Ac=";
+    tag = version;
+    hash = "sha256-dybmbmEvvTka0wMBIUDYemqDaCvG9odgCbIWYhROJLI=";
   };
 
-  nativeBuildInputs = [
-    wrapGAppsHook3
-  ] ++ (with python3Packages; [
-    setuptools
-  ]);
+  nativeBuildInputs =
+    [
+      wrapGAppsHook3
+    ]
+    ++ (with python3Packages; [
+      setuptools
+    ]);
 
   # prevent double wrapping
   dontWrapGApps = true;
 
   # https://github.com/meerk40t/meerk40t/blob/main/setup.py
-  propagatedBuildInputs = with python3Packages; [
-    meerk40t-camera
-    numpy
-    pyserial
-    pyusb
-    setuptools
-    wxpython
-  ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  propagatedBuildInputs =
+    with python3Packages;
+    [
+      meerk40t-camera
+      numpy
+      pyserial
+      pyusb
+      setuptools
+      wxpython
+    ]
+    ++ lib.flatten (lib.attrValues optional-dependencies);
 
   optional-dependencies = with python3Packages; {
     cam = [

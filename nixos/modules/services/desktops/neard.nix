@@ -11,7 +11,7 @@ let
     mkIf
     mkOption
     types
-  ;
+    ;
   cfg = config.services.neard;
   format = pkgs.formats.ini { };
   configFile = format.generate "neard.conf" cfg.settings;
@@ -52,7 +52,7 @@ in
           };
         };
       };
-      default = {};
+      default = { };
       description = ''
         Neard INI-style configuration file as a Nix attribute set.
 

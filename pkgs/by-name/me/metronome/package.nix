@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, rustPlatform
-, rustc
-, cargo
-, wrapGAppsHook4
-, desktop-file-utils
-, libadwaita
-, gst_all_1
-, darwin
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  pkg-config,
+  rustPlatform,
+  rustc,
+  cargo,
+  wrapGAppsHook4,
+  desktop-file-utils,
+  libadwaita,
+  gst_all_1,
+  darwin,
 }:
 
 stdenv.mkDerivation rec {
@@ -43,23 +44,22 @@ stdenv.mkDerivation rec {
     desktop-file-utils
   ];
 
-  buildInputs = [
-    libadwaita
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-bad
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Foundation
-  ];
+  buildInputs =
+    [
+      libadwaita
+      gst_all_1.gstreamer
+      gst_all_1.gst-plugins-base
+      gst_all_1.gst-plugins-bad
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.Foundation
+    ];
 
   # Workaround for the gettext-sys issue
   # https://github.com/Koka/gettext-rs/issues/114
-  env.NIX_CFLAGS_COMPILE = lib.optionalString
-    (
-      stdenv.cc.isClang &&
-      lib.versionAtLeast stdenv.cc.version "16"
-    )
-    "-Wno-error=incompatible-function-pointer-types";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString (
+    stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.version "16"
+  ) "-Wno-error=incompatible-function-pointer-types";
 
   meta = with lib; {
     description = "Keep the tempo";

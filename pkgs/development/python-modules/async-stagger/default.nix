@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "twisteroidambassador";
     repo = "async_stagger";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-uJohc3EsAKevqT0J+N0Cqop3xy0PCM5jsP6YYtx+HuQ=";
   };
 

@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mwilliamson";
     repo = "jq.py";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-c6tJI/mPlBGIYTk5ObIQ1CUTq73HouQ2quMZVWG8FFg=";
   };
 

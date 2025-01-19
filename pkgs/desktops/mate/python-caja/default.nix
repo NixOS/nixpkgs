@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, gettext
-, caja
-, gtk3
-, python3Packages
-, mateUpdateScript
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gettext,
+  caja,
+  gtk3,
+  python3Packages,
+  mateUpdateScript,
 }:
 
 stdenv.mkDerivation rec {

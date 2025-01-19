@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "charset-normalizer";
-  version = "3.3.2";
+  version = "3.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.5";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Ousret";
     repo = "charset_normalizer";
-    rev = "refs/tags/${version}";
-    hash = "sha256-T9lnlS05Ogb2eLLHYWFnjBtRaB/OBqGWHQ/2WLunrNY=";
+    tag = version;
+    hash = "sha256-de6rg/e9RPfuO44+/Uipad75YqZQrnqiSPopfBNOFP8=";
   };
 
   postPatch = ''

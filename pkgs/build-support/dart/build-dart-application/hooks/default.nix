@@ -1,4 +1,10 @@
-{ lib, makeSetupHook, dart, yq, jq }:
+{
+  lib,
+  makeSetupHook,
+  dart,
+  yq,
+  jq,
+}:
 
 {
   dartConfigHook = makeSetupHook {

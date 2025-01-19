@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    rev = "refs/tags/langchain-chroma==${version}";
+    tag = "langchain-chroma==${version}";
     hash = "sha256-pU7H8OYXa+JjdkSO36xESPI6r3xA+9cFXxeJnfpYuHc=";
   };
 
@@ -28,7 +28,10 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  pythonRelaxDeps = [ "chromadb" ];
+  pythonRelaxDeps = [
+    "chromadb"
+    "numpy"
+  ];
 
   dependencies = [
     langchain-core

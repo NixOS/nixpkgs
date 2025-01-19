@@ -1,12 +1,15 @@
-{ lib, mkDerivation, fetchFromGitHub
-, libkiwix
-, pkg-config
-, qmake
-, qtbase
-, qtwebengine
-, qtsvg
-, qtimageformats
-, aria2
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  libkiwix,
+  pkg-config,
+  qmake,
+  qtbase,
+  qtwebengine,
+  qtsvg,
+  qtimageformats,
+  aria2,
 }:
 
 mkDerivation {

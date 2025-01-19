@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.apache-kafka;
 
@@ -12,21 +17,24 @@ let
   # Make sure every `freeformType` and any specific option type in `settings` is
   # supported here.
 
-  mkPropertyString = let
-    render = {
-      bool = lib.boolToString;
-      int = toString;
-      list = lib.concatMapStringsSep "," mkPropertyString;
-      string = lib.id;
-    };
-  in
+  mkPropertyString =
+    let
+      render = {
+        bool = lib.boolToString;
+        int = toString;
+        list = lib.concatMapStringsSep "," mkPropertyString;
+        string = lib.id;
+      };
+    in
     v: render.${builtins.typeOf v} v;
 
-  stringlySettings = lib.mapAttrs (_: mkPropertyString)
-    (lib.filterAttrs (_: v:  v != null) cfg.settings);
+  stringlySettings = lib.mapAttrs (_: mkPropertyString) (
+    lib.filterAttrs (_: v: v != null) cfg.settings
+  );
 
-  generator = (pkgs.formats.javaProperties {}).generate;
-in {
+  generator = (pkgs.formats.javaProperties { }).generate;
+in
+{
 
   options.services.apache-kafka = {
     enable = lib.mkEnableOption "Apache Kafka event streaming broker";
@@ -40,11 +48,18 @@ in {
         Keys with dots are NOT represented by nested attrs in these settings,
         but instead as quoted strings (ie. `settings."broker.id"`, NOT
         `settings.broker.id`).
-     '';
+      '';
       type = lib.types.submodule {
-        freeformType = with lib.types; let
-          primitive = oneOf [bool int str];
-        in lazyAttrsOf (nullOr (either primitive (listOf primitive)));
+        freeformType =
+          with lib.types;
+          let
+            primitive = oneOf [
+              bool
+              int
+              str
+            ];
+          in
+          lazyAttrsOf (nullOr (either primitive (listOf primitive)));
 
         options = {
           "broker.id" = lib.mkOption {
@@ -129,7 +144,7 @@ in {
 
     jvmOptions = lib.mkOption {
       description = "Extra command line options for the JVM running Kafka.";
-      default = [];
+      default = [ ];
       type = lib.types.listOf lib.types.str;
       example = [
         "-Djava.net.preferIPv4Stack=true"
@@ -151,22 +166,37 @@ in {
   imports = [
     (lib.mkRenamedOptionModule
       [ "services" "apache-kafka" "brokerId" ]
-      [ "services" "apache-kafka" "settings" ''broker.id'' ])
+      [ "services" "apache-kafka" "settings" ''broker.id'' ]
+    )
     (lib.mkRenamedOptionModule
       [ "services" "apache-kafka" "logDirs" ]
-      [ "services" "apache-kafka" "settings" ''log.dirs'' ])
+      [ "services" "apache-kafka" "settings" ''log.dirs'' ]
+    )
     (lib.mkRenamedOptionModule
       [ "services" "apache-kafka" "zookeeper" ]
-      [ "services" "apache-kafka" "settings" ''zookeeper.connect'' ])
+      [ "services" "apache-kafka" "settings" ''zookeeper.connect'' ]
+    )
 
-    (lib.mkRemovedOptionModule [ "services" "apache-kafka" "port" ]
-      "Please see services.apache-kafka.settings.listeners and its documentation instead")
-    (lib.mkRemovedOptionModule [ "services" "apache-kafka" "hostname" ]
-      "Please see services.apache-kafka.settings.listeners and its documentation instead")
-    (lib.mkRemovedOptionModule [ "services" "apache-kafka" "extraProperties" ]
-      "Please see services.apache-kafka.settings and its documentation instead")
-    (lib.mkRemovedOptionModule [ "services" "apache-kafka" "serverProperties" ]
-      "Please see services.apache-kafka.settings and its documentation instead")
+    (lib.mkRemovedOptionModule [
+      "services"
+      "apache-kafka"
+      "port"
+    ] "Please see services.apache-kafka.settings.listeners and its documentation instead")
+    (lib.mkRemovedOptionModule [
+      "services"
+      "apache-kafka"
+      "hostname"
+    ] "Please see services.apache-kafka.settings.listeners and its documentation instead")
+    (lib.mkRemovedOptionModule [
+      "services"
+      "apache-kafka"
+      "extraProperties"
+    ] "Please see services.apache-kafka.settings and its documentation instead")
+    (lib.mkRemovedOptionModule [
+      "services"
+      "apache-kafka"
+      "serverProperties"
+    ] "Please see services.apache-kafka.settings and its documentation instead")
   ];
 
   config = lib.mkIf cfg.enable {
@@ -177,22 +207,30 @@ in {
       group = "apache-kafka";
       description = "Apache Kafka daemon user";
     };
-    users.groups.apache-kafka = {};
+    users.groups.apache-kafka = { };
 
-    systemd.tmpfiles.rules = map (logDir: "d '${logDir}' 0700 apache-kafka - - -") cfg.settings."log.dirs";
+    systemd.tmpfiles.rules = map (
+      logDir: "d '${logDir}' 0700 apache-kafka - - -"
+    ) cfg.settings."log.dirs";
 
     systemd.services.apache-kafka = {
       description = "Apache Kafka Daemon";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
-      preStart = lib.mkIf cfg.formatLogDirs
-        (if cfg.formatLogDirsIgnoreFormatted then ''
-          ${cfg.package}/bin/kafka-storage.sh format -t "${cfg.clusterId}" -c ${cfg.configFiles.serverProperties} --ignore-formatted
-        '' else ''
-          if ${lib.concatMapStringsSep " && " (l: ''[ ! -f "${l}/meta.properties" ]'') cfg.settings."log.dirs"}; then
-            ${cfg.package}/bin/kafka-storage.sh format -t "${cfg.clusterId}" -c ${cfg.configFiles.serverProperties}
-          fi
-        '');
+      preStart = lib.mkIf cfg.formatLogDirs (
+        if cfg.formatLogDirsIgnoreFormatted then
+          ''
+            ${cfg.package}/bin/kafka-storage.sh format -t "${cfg.clusterId}" -c ${cfg.configFiles.serverProperties} --ignore-formatted
+          ''
+        else
+          ''
+            if ${
+              lib.concatMapStringsSep " && " (l: ''[ ! -f "${l}/meta.properties" ]'') cfg.settings."log.dirs"
+            }; then
+              ${cfg.package}/bin/kafka-storage.sh format -t "${cfg.clusterId}" -c ${cfg.configFiles.serverProperties}
+            fi
+          ''
+      );
       serviceConfig = {
         ExecStart = ''
           ${cfg.jre}/bin/java \

@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "httpcore";
-  version = "1.0.5";
+  version = "1.0.7";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -32,16 +32,16 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "encode";
     repo = "httpcore";
-    rev = "refs/tags/${version}";
-    hash = "sha256-05jYLrBiPRg1qQEz8mRvYJKHFsfneh7z9yHIXuYYa5o=";
+    tag = version;
+    hash = "sha256-hEGKYJnsTjygRu++lNrPWfx/xiUR7Cp+DTUVPa0m5fM=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatchling
     hatch-fancy-pypi-readme
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     certifi
     h11
   ];

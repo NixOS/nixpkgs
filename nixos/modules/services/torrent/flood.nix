@@ -1,4 +1,10 @@
-{ config, lib, pkgs, utils, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  utils,
+  ...
+}:
 
 let
   cfg = config.services.flood;
@@ -43,14 +49,17 @@ in
       serviceConfig = {
         Restart = "on-failure";
         RestartSec = "3s";
-        ExecStart = utils.escapeSystemdExecArgs ([
-          (lib.getExe cfg.package)
-          "--host"
-          cfg.host
-          "--port"
-          (toString cfg.port)
-          "--rundir=/var/lib/flood"
-        ] ++ cfg.extraArgs);
+        ExecStart = utils.escapeSystemdExecArgs (
+          [
+            (lib.getExe cfg.package)
+            "--host"
+            cfg.host
+            "--port"
+            (toString cfg.port)
+            "--rundir=/var/lib/flood"
+          ]
+          ++ cfg.extraArgs
+        );
 
         CapabilityBoundingSet = [ "" ];
         DynamicUser = true;
@@ -67,13 +76,21 @@ in
         ProtectKernelTunables = true;
         ProtectProc = "invisible";
         ProtectSystem = "strict";
-        RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
+        RestrictAddressFamilies = [
+          "AF_UNIX"
+          "AF_INET"
+          "AF_INET6"
+        ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
         StateDirectory = "flood";
         SystemCallArchitectures = "native";
-        SystemCallFilter = [ "@system-service" "@pkey" "~@privileged" ];
+        SystemCallFilter = [
+          "@system-service"
+          "@pkey"
+          "~@privileged"
+        ];
       };
     };
 
@@ -82,4 +99,3 @@ in
     ];
   };
 }
-

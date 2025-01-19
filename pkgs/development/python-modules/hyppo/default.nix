@@ -1,31 +1,32 @@
 {
   lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  setuptools,
-  pytestCheckHook,
   autograd,
+  buildPythonPackage,
+  fetchFromGitHub,
+  future,
+  matplotlib,
   numba,
   numpy,
+  pytestCheckHook,
+  pythonOlder,
   scikit-learn,
   scipy,
-  matplotlib,
   seaborn,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "hyppo";
-  version = "0.4.0";
+  version = "0.5.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "neurodata";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-QRE3oSxTEobTQ/7DzCAUOdjzIZmWUn9bgPmJWj6JuZg=";
+    repo = "hyppo";
+    tag = "v${version}";
+    hash = "sha256-bYxqYSOOifQE3gbw8vNk/A13D5TPx7ERSgFvRHMXKGM=";
   };
 
   # some of the doctests (4/21) are broken, e.g. unbound variables, nondeterministic with insufficient tolerance, etc.
@@ -36,8 +37,9 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     autograd
+    future
     numba
     numpy
     scikit-learn

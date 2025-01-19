@@ -1,14 +1,15 @@
-{ lib
-, buildDunePackage
-, fetchurl
-, xmlm
-, eio
-, logs
-, fmt
-, cstruct
-, cmdliner
-, alcotest
-, eio_main
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  xmlm,
+  eio,
+  logs,
+  fmt,
+  cstruct,
+  cmdliner,
+  alcotest,
+  eio_main,
 }:
 
 buildDunePackage rec {

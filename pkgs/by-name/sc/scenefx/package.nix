@@ -13,7 +13,7 @@
   pixman,
   wayland-protocols,
   libGL,
-  mesa,
+  libgbm,
   validatePkgConfig,
   testers,
   wayland-scanner,
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "wlrfx";
     repo = "scenefx";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-vBmunqXwGbMNiGRd372TdMU4siWhIVYn5RVYne9C7uQ=";
   };
 
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     libdrm
     libGL
     libxkbcommon
-    mesa
+    libgbm
     pixman
     wayland
     wayland-protocols

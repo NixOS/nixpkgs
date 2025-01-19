@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "IntelPython";
     repo = "mkl-service";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-o5mjZhqQc7tu44EjrScuGzv6pZNlnZnndMIAhl8pY5o=";
   };
 

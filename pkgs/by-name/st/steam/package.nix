@@ -52,7 +52,7 @@ let
       libGL
 
       libdrm
-      mesa  # for libgbm
+      libgbm
       udev
       libudev0-shim
       libva

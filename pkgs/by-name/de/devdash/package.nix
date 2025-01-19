@@ -1,19 +1,19 @@
 {
-  lib
-, buildGoModule
-, fetchFromGitHub
-, nix-update-script
-, coreutils
+  lib,
+  buildGo122Module,
+  fetchFromGitHub,
+  nix-update-script,
+  coreutils,
 }:
 
-buildGoModule rec {
+buildGo122Module rec {
   pname = "devdash";
   version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "Phantas0s";
     repo = "devdash";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-RUPpgMVl9Cm8uhztdfKnuQ6KdMn9m9PewlT59NnTSiY=";
   };
 

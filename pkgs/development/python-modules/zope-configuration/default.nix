@@ -1,50 +1,49 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
+  fetchFromGitHub,
+  python,
   setuptools,
   zope-i18nmessageid,
   zope-interface,
   zope-schema,
-  pytestCheckHook,
-  zope-testing,
-  zope-testrunner,
-  manuel,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "zope-configuration";
-  version = "5.0.1";
+  version = "6.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    pname = "zope.configuration";
-    inherit version;
-    hash = "sha256-81h36tXpmANjhdLdxGkZ6ryZjmmcBZh5ZPFxrY3ZJxs=";
+  src = fetchFromGitHub {
+    owner = "zopefoundation";
+    repo = "zope.configuration";
+    tag = version;
+    hash = "sha256-dkEVIHaXk/oP4uYYzI1hgSnPZXBMDjDu97zmOXnj9NA=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools < 74" "setuptools"
+  '';
 
-  nativeCheckInputs = [
-    manuel
-    pytestCheckHook
-    zope-testing
-    zope-testrunner
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     zope-i18nmessageid
     zope-interface
     zope-schema
   ];
 
-  # Need to investigate how to run the tests with zope-testrunner
-  doCheck = false;
-
   pythonImportsCheck = [ "zope.configuration" ];
+
+  nativeCheckInputs = [ unittestCheckHook ];
+
+  preCheck = ''
+    cd $out/${python.sitePackages}/zope/
+  '';
+
+  unittestFlagsArray = [ "configuration/tests" ];
 
   pythonNamespaces = [ "zope" ];
 

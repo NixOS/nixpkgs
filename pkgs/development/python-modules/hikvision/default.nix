@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fbradyirl";
     repo = "hikvision";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-tiJUqr5WtRvnKll1OymJ9Uva1tUT5so4Zzc4SHLcH9A=";
   };
 

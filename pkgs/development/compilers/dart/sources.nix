@@ -1,24 +1,27 @@
-let version = "3.5.3"; in
-{ fetchurl }: {
+let
+  version = "3.6.0";
+in
+{ fetchurl }:
+{
   versionUsed = version;
   "${version}-x86_64-darwin" = fetchurl {
     url = "https://storage.googleapis.com/dart-archive/channels/stable/release/${version}/sdk/dartsdk-macos-x64-release.zip";
-    sha256 = "1z6hl6pqsg2l7pfchzr5dk90b2dchidhwnnnc4q5dzz0xjikqrvx";
+    sha256 = "0avky36jmknnp3jwz4p0yz5yv8wqwl0v7rhv0s4v75r9v6mv2ndq";
   };
   "${version}-aarch64-darwin" = fetchurl {
     url = "https://storage.googleapis.com/dart-archive/channels/stable/release/${version}/sdk/dartsdk-macos-arm64-release.zip";
-    sha256 = "12rzl1nm1y0q5ff9p8gslki4cz37y3bdn8p2s3x2nc81bdda4gn7";
+    sha256 = "1802lx2ijpi4lkbbnvlkk1swn579rpbnmxmvghz6flxa99acdnqv";
   };
   "${version}-aarch64-linux" = fetchurl {
     url = "https://storage.googleapis.com/dart-archive/channels/stable/release/${version}/sdk/dartsdk-linux-arm64-release.zip";
-    sha256 = "1rp54g8di8j715n955wdr6i0pcrx2dn73qmvmrisyahi0qjrk0py";
+    sha256 = "1gz7ai977ynl554rplfjnd585q5m429ax51js3806w4ch07z30hg";
   };
   "${version}-x86_64-linux" = fetchurl {
     url = "https://storage.googleapis.com/dart-archive/channels/stable/release/${version}/sdk/dartsdk-linux-x64-release.zip";
-    sha256 = "001mpb3fniamlmnqmhxdpbvp8crdvnf6sam13vvfmnr6na1fpxil";
+    sha256 = "18smc4nj77dvsg99mk69d0h1y9cp3914zjdbimhp5v0ydr1zy54f";
   };
   "${version}-i686-linux" = fetchurl {
     url = "https://storage.googleapis.com/dart-archive/channels/stable/release/${version}/sdk/dartsdk-linux-ia32-release.zip";
-    sha256 = "0z9qjx2b2rmiqyqww0a5slj0pi1k8sn4fjihkn53im65rhhqra2y";
+    sha256 = "0k8ikz0rwhbgx6gdnxysikm8zcv3k6gf8d3a47wb5xx9dhgyk3vw";
   };
 }

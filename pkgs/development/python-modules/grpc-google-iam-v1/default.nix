@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "python-grpc-google-iam-v1";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-FLDx2zbM0qqLa+k/7xexyv5/YHlSOdikrbU2eYbxDM0=";
   };
 

@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-artifact-registry";
-  version = "1.11.5";
+  version = "1.14.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "google_cloud_artifact_registry";
     inherit version;
-    hash = "sha256-lNWDbgu9DDNRSh7cC1TfiYvy237bH16QduskPzQt9Mg=";
+    hash = "sha256-xn4OBhidFxwfNHcCoXecZqMbGyFNIJ75f5u75Fi5yQ4=";
   };
 
   build-system = [ setuptools ];

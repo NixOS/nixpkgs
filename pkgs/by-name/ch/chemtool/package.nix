@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, libX11
-, gtk2
-, fig2dev
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libX11,
+  gtk2,
+  fig2dev,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +18,10 @@ stdenv.mkDerivation rec {
     sha256 = "hhYaBGE4azNKX/sXzfCUpJGUGIRngnL0V0mBNRTdr8s=";
   };
 
-  nativeBuildInputs = [ pkg-config wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    pkg-config
+    wrapGAppsHook3
+  ];
   buildInputs = [
     libX11
     gtk2

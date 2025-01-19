@@ -1,6 +1,11 @@
 # at-spi2-core daemon.
 
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
 
@@ -28,7 +33,6 @@
     };
 
   };
-
 
   ###### implementation
 

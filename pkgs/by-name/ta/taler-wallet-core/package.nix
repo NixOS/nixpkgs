@@ -8,9 +8,9 @@
   srcOnly,
   removeReferencesTo,
   nodejs,
-  pnpm,
+  pnpm_9,
   python3,
-  git,
+  gitMinimal,
   jq,
   zip,
 }:
@@ -37,26 +37,26 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "taler-wallet-core";
-  version = "0.13.3";
+  version = "0.14.1";
 
   src = fetchgit {
     url = "https://git.taler.net/wallet-core.git";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-9pRhaQNnIzbhahMaTVVZqLTlAxh7GZxoz4Gf3TDldAA=";
+    hash = "sha256-Sae83qGPqVwuxKf30zHCmdOoo5rDPBHKSOE1hxNn7Xo=";
   };
 
   nativeBuildInputs = [
     customPython
     nodejs
-    pnpm.configHook
-    git
+    pnpm_9.configHook
+    gitMinimal
     jq
     zip
   ];
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-7az1wJ6BK9nPKirtW/fmXo3013JCPf+TNk/aG/mGTfo=";
+    hash = "sha256-BVVmv0VVvQ2YhL0zOKiM1oVKJKvqwMGNR47DkcCj874=";
   };
 
   buildInputs = [ nodejs ];

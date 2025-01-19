@@ -30,7 +30,7 @@
 let
   src' =
     if monorepoSrc != null then
-      runCommand "lldb-src-${version}" { } (''
+      runCommand "lldb-src-${version}" { inherit (monorepoSrc) passthru; } (''
         mkdir -p "$out"
       '' + lib.optionalString (lib.versionAtLeast release_version "14") ''
         cp -r ${monorepoSrc}/cmake "$out"
@@ -90,33 +90,8 @@ stdenv.mkDerivation (rec {
     # buildInputs cc-wrapper will set up rpath correctly for us.
     (lib.getLib libclang)
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.libobjc
-    darwin.apple_sdk.libs.xpc
-    darwin.apple_sdk.frameworks.Foundation
     darwin.bootstrap_cmds
-    darwin.apple_sdk.frameworks.Carbon
-    darwin.apple_sdk.frameworks.Cocoa
-  ]
-  # The older libSystem used on x86_64 macOS is missing the
-  # `<bsm/audit_session.h>` header which `lldb` uses.
-  #
-  # We copy this header over from macOS 10.12 SDK.
-  #
-  # See here for context:
-  # https://github.com/NixOS/nixpkgs/pull/194634#issuecomment-1272129132
-  ++ lib.optional
-    (
-      stdenv.targetPlatform.isDarwin
-        && lib.versionOlder stdenv.targetPlatform.darwinSdkVersion "11.0"
-        && (lib.versionAtLeast release_version "15")
-    )
-    (
-      runCommand "bsm-audit-session-header" { } ''
-        install -Dm444 \
-          "${lib.getDev darwin.apple_sdk.sdk}/include/bsm/audit_session.h" \
-          "$out/include/bsm/audit_session.h"
-      ''
-    );
+  ];
 
   hardeningDisable = [ "format" ];
 
@@ -130,7 +105,7 @@ stdenv.mkDerivation (rec {
   ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     "-DLLDB_CODESIGN_IDENTITY=" # codesigning makes nondeterministic
   ] ++ lib.optionals (lib.versionAtLeast release_version "17") [
-    "-DCLANG_RESOURCE_DIR=../../../../${libclang.lib}"
+    "-DCLANG_RESOURCE_DIR=../../../../${lib.getLib libclang}"
   ] ++ lib.optionals enableManpages ([
     "-DLLVM_ENABLE_SPHINX=ON"
     "-DSPHINX_OUTPUT_MAN=ON"

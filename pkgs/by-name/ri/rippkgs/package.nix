@@ -1,8 +1,9 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, sqlite
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  sqlite,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -12,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "replit";
     repo = "rippkgs";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-k50q78ycjrFVFTDstTdOLF8aJjsUpQ3lFRbFD1nL8xM=";
   };
 

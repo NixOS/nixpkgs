@@ -1,11 +1,25 @@
-{ lib, stdenv, fetchFromGitHub, fuse3, macfuse-stubs, pkg-config, sqlite, pcre2 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fuse3,
+  macfuse-stubs,
+  pkg-config,
+  sqlite,
+  pcre2,
+}:
 
 let
   fuse = if stdenv.hostPlatform.isDarwin then macfuse-stubs else fuse3;
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "tup";
   version = "0.8";
-  outputs = [ "bin" "man" "out" ];
+  outputs = [
+    "bin"
+    "man"
+    "out"
+  ];
 
   src = fetchFromGitHub {
     owner = "gittup";
@@ -15,7 +29,11 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ fuse pcre2 sqlite ];
+  buildInputs = [
+    fuse
+    pcre2
+    sqlite
+  ];
 
   patches = [ ./fusermount-setuid.patch ];
 
@@ -65,12 +83,5 @@ in stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ ehmry ];
     platforms = platforms.unix;
-
-    # TODO: Remove once nixpkgs uses newer SDKs that supports '*at' functions.
-    # Probably MacOS SDK 10.13 or later. Check the current version in
-    # ../../../../os-specific/darwin/apple-sdk/default.nix
-    #
-    # https://github.com/gittup/tup/commit/3697c74
-    broken = stdenv.hostPlatform.isDarwin;
   };
 }

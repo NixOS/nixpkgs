@@ -1,4 +1,15 @@
-{ mkDerivation, lib, fetchFromGitLab, qtbase, poppler, qtwebengine, cmake, ninja, libcprime, libcsys }:
+{
+  mkDerivation,
+  lib,
+  fetchFromGitLab,
+  qtbase,
+  poppler,
+  qtwebengine,
+  cmake,
+  ninja,
+  libcprime,
+  libcsys,
+}:
 
 mkDerivation rec {
   pname = "corepdf";

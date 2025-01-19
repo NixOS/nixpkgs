@@ -1,6 +1,7 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -10,7 +11,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "pgf-tikz";
     repo = "pgf";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-/zU2aTV39XpQhSpHVi8pBNsaAshcIhl6s+vOL1SO3Vw=";
   };
 

@@ -17,6 +17,8 @@
   fftwSinglePrec,
   lame,
   mpg123,
+  withFlac ? true,
+  flac,
 }:
 
 stdenv.mkDerivation rec {
@@ -48,12 +50,12 @@ stdenv.mkDerivation rec {
     qt5compat
     rtl-sdr
     soapysdr-with-plugins
-  ];
+  ] ++ lib.optional withFlac flac;
 
   cmakeFlags = [
     "-DRTLSDR=true"
     "-DSOAPYSDR=true"
-  ];
+  ] ++ lib.optional withFlac "-DFLAC=true";
 
   meta = {
     description = "DAB/DAB+ Software Radio";

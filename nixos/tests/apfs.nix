@@ -1,4 +1,5 @@
-{ lib, ... }: {
+{ lib, ... }:
+{
   name = "apfs";
   meta.maintainers = with lib.maintainers; [ Luflosi ];
 

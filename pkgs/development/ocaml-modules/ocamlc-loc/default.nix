@@ -1,4 +1,9 @@
-{ lib, buildDunePackage, dune_3, dyn }:
+{
+  lib,
+  buildDunePackage,
+  dune_3,
+  dyn,
+}:
 
 buildDunePackage {
   pname = "ocamlc-loc";

@@ -1,13 +1,14 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, qmake
-, wrapQtAppsHook
-, libX11
-, libXmu
-, libXpm
-, qtbase
-, qtx11extras
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  qmake,
+  wrapQtAppsHook,
+  libX11,
+  libXmu,
+  libXpm,
+  qtbase,
+  qtx11extras,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

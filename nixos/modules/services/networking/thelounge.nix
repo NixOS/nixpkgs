@@ -11,7 +11,9 @@ let
   pluginManifest = {
     dependencies = builtins.listToAttrs (builtins.map (pkg: { name = getName pkg; value = getVersion pkg; }) cfg.plugins);
   };
-  plugins = pkgs.runCommandLocal "thelounge-plugins" { } ''
+  plugins = pkgs.runCommand "thelounge-plugins" {
+    preferLocalBuild = true;
+  } ''
     mkdir -p $out/node_modules
     echo ${escapeShellArg (builtins.toJSON pluginManifest)} >> $out/package.json
     ${concatMapStringsSep "\n" (pkg: ''

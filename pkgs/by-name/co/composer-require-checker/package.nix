@@ -1,20 +1,21 @@
-{ lib
-, fetchFromGitHub
-, php
+{
+  lib,
+  fetchgit,
+  php,
 }:
 
-php.buildComposerProject (finalAttrs: {
+php.buildComposerProject2 (finalAttrs: {
   pname = "composer-require-checker";
-  version = "4.8.0";
+  version = "4.14.0";
 
-  src = fetchFromGitHub {
-    owner = "maglnet";
-    repo = "ComposerRequireChecker";
-    rev = finalAttrs.version;
-    hash = "sha256-qCHUNaPunCPuWax/YUbYXaVh1JlJEwYvG/NmaSc1VpA=";
+  # Upstream no longer provides the composer.lock in their release artifact
+  src = fetchgit {
+    url = "https://github.com/maglnet/ComposerRequireChecker";
+    tag = finalAttrs.version;
+    hash = "sha256-dBUDkgbuUBKA3MKB4fxwHhDoT9wYRl49m/2ZCvIcNMM=";
   };
 
-  vendorHash = "sha256-B5w5n2S/mTF7vpsLuHtf2DGR5aPBfO9QGmodYGXE+Cg=";
+  vendorHash = "sha256-JNdSek3f3WEtJQHjSV+HF6b8l9eZvbI0n4g3UUUVja4=";
 
   meta = {
     description = "CLI tool to check whether a specific composer package uses imported symbols that aren't part of its direct composer dependencies";

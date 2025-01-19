@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
 
@@ -17,7 +22,7 @@ in
       enable = lib.mkEnableOption "the 1Password CLI tool";
 
       package = lib.mkPackageOption pkgs "1Password CLI" {
-        default = [ "_1password" ];
+        default = [ "_1password-cli" ];
       };
     };
   };

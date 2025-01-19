@@ -34,6 +34,7 @@
 , xcb-imdkit
 , libxkbfile
 , nixosTests
+, gettext
 }:
 let
   enDictVer = "20121020";
@@ -62,9 +63,11 @@ stdenv.mkDerivation rec {
     extra-cmake-modules
     pkg-config
     wayland-scanner
+    gettext
   ];
 
   buildInputs = [
+    extra-cmake-modules # required to please CMake
     expat
     fmt
     isocodes
@@ -94,6 +97,8 @@ stdenv.mkDerivation rec {
     libxkbfile
   ];
 
+  strictDeps = true;
+
   passthru = {
     updateScript = ./update.py;
     tests = {
@@ -105,6 +110,7 @@ stdenv.mkDerivation rec {
     description = "Next generation of fcitx";
     homepage = "https://github.com/fcitx/fcitx5";
     license = licenses.lgpl21Plus;
+    mainProgram = "fcitx5";
     maintainers = with maintainers; [ poscat ];
     platforms = platforms.linux;
   };

@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.jitsi-videobridge;
   attrsToArgs = a: lib.concatStringsSep " " (lib.mapAttrsToList (k: v: "${k}=${toString v}") a);
@@ -7,7 +12,10 @@ let
 
   # We're passing passwords in environment variables that have names generated
   # from an attribute name, which may not be a valid bash identifier.
-  toVarName = s: "XMPP_PASSWORD_" + lib.stringAsChars (c: if builtins.match "[A-Za-z0-9]" c != null then c else "_") s;
+  toVarName =
+    s:
+    "XMPP_PASSWORD_"
+    + lib.stringAsChars (c: if builtins.match "[A-Za-z0-9]" c != null then c else "_") s;
 
   defaultJvbConfig = {
     videobridge = {
@@ -22,15 +30,17 @@ let
         enabled = true;
         transports = [ { type = "muc"; } ];
       };
-      apis.xmpp-client.configs = lib.flip lib.mapAttrs cfg.xmppConfigs (name: xmppConfig: {
-        hostname = xmppConfig.hostName;
-        domain = xmppConfig.domain;
-        username = xmppConfig.userName;
-        password = format.lib.mkSubstitution (toVarName name);
-        muc_jids = xmppConfig.mucJids;
-        muc_nickname = xmppConfig.mucNickname;
-        disable_certificate_verification = xmppConfig.disableCertificateVerification;
-      });
+      apis.xmpp-client.configs = lib.flip lib.mapAttrs cfg.xmppConfigs (
+        name: xmppConfig: {
+          hostname = xmppConfig.hostName;
+          domain = xmppConfig.domain;
+          username = xmppConfig.userName;
+          password = format.lib.mkSubstitution (toVarName name);
+          muc_jids = xmppConfig.mucJids;
+          muc_nickname = xmppConfig.mucNickname;
+          disable_certificate_verification = xmppConfig.disableCertificateVerification;
+        }
+      );
       apis.rest.enabled = cfg.colibriRestApi;
     };
   };
@@ -87,67 +97,72 @@ in
           };
         }
       '';
-      type = attrsOf (submodule ({ name, ... }: {
-        options = {
-          hostName = lib.mkOption {
-            type = str;
-            example = "xmpp.example.org";
-            description = ''
-              Hostname of the XMPP server to connect to. Name of the attribute set is used by default.
-            '';
-          };
-          domain = lib.mkOption {
-            type = nullOr str;
-            default = null;
-            example = "auth.xmpp.example.org";
-            description = ''
-              Domain part of JID of the XMPP user, if it is different from hostName.
-            '';
-          };
-          userName = lib.mkOption {
-            type = str;
-            default = "jvb";
-            description = ''
-              User part of the JID.
-            '';
-          };
-          passwordFile = lib.mkOption {
-            type = str;
-            example = "/run/keys/jitsi-videobridge-xmpp1";
-            description = ''
-              File containing the password for the user.
-            '';
-          };
-          mucJids = lib.mkOption {
-            type = str;
-            example = "jvbbrewery@internal.xmpp.example.org";
-            description = ''
-              JID of the MUC to join. JiCoFo needs to be configured to join the same MUC.
-            '';
-          };
-          mucNickname = lib.mkOption {
-            # Upstream DEBs use UUID, let's use hostname instead.
-            type = str;
-            description = ''
-              Videobridges use the same XMPP account and need to be distinguished by the
-              nickname (aka resource part of the JID). By default, system hostname is used.
-            '';
-          };
-          disableCertificateVerification = lib.mkOption {
-            type = bool;
-            default = false;
-            description = ''
-              Whether to skip validation of the server's certificate.
-            '';
-          };
-        };
-        config = {
-          hostName = lib.mkDefault name;
-          mucNickname = lib.mkDefault (builtins.replaceStrings [ "." ] [ "-" ] (
-            config.networking.fqdnOrHostName
-          ));
-        };
-      }));
+      type = attrsOf (
+        submodule (
+          { name, ... }:
+          {
+            options = {
+              hostName = lib.mkOption {
+                type = str;
+                example = "xmpp.example.org";
+                description = ''
+                  Hostname of the XMPP server to connect to. Name of the attribute set is used by default.
+                '';
+              };
+              domain = lib.mkOption {
+                type = nullOr str;
+                default = null;
+                example = "auth.xmpp.example.org";
+                description = ''
+                  Domain part of JID of the XMPP user, if it is different from hostName.
+                '';
+              };
+              userName = lib.mkOption {
+                type = str;
+                default = "jvb";
+                description = ''
+                  User part of the JID.
+                '';
+              };
+              passwordFile = lib.mkOption {
+                type = str;
+                example = "/run/keys/jitsi-videobridge-xmpp1";
+                description = ''
+                  File containing the password for the user.
+                '';
+              };
+              mucJids = lib.mkOption {
+                type = str;
+                example = "jvbbrewery@internal.xmpp.example.org";
+                description = ''
+                  JID of the MUC to join. JiCoFo needs to be configured to join the same MUC.
+                '';
+              };
+              mucNickname = lib.mkOption {
+                # Upstream DEBs use UUID, let's use hostname instead.
+                type = str;
+                description = ''
+                  Videobridges use the same XMPP account and need to be distinguished by the
+                  nickname (aka resource part of the JID). By default, system hostname is used.
+                '';
+              };
+              disableCertificateVerification = lib.mkOption {
+                type = bool;
+                default = false;
+                description = ''
+                  Whether to skip validation of the server's certificate.
+                '';
+              };
+            };
+            config = {
+              hostName = lib.mkDefault name;
+              mucNickname = lib.mkDefault (
+                builtins.replaceStrings [ "." ] [ "-" ] (config.networking.fqdnOrHostName)
+              );
+            };
+          }
+        )
+      );
     };
 
     nat = {
@@ -176,7 +191,7 @@ in
           "stun.framasoft.org:3478"
           "meet-jit-si-turnrelay.jitsi.net:443"
         ];
-        example = [];
+        example = [ ];
         description = ''
           Addresses of public STUN services to use to automatically find
           the public and local addresses of this Jitsi-Videobridge instance
@@ -215,69 +230,81 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    users.groups.jitsi-meet = {};
+    users.groups.jitsi-meet = { };
 
     services.jitsi-videobridge.extraProperties =
-      if (cfg.nat.localAddress != null) then {
-        "org.ice4j.ice.harvest.NAT_HARVESTER_LOCAL_ADDRESS" = cfg.nat.localAddress;
-        "org.ice4j.ice.harvest.NAT_HARVESTER_PUBLIC_ADDRESS" = cfg.nat.publicAddress;
-      } else {
-        "org.ice4j.ice.harvest.STUN_MAPPING_HARVESTER_ADDRESSES" = lib.concatStringsSep "," cfg.nat.harvesterAddresses;
+      if (cfg.nat.localAddress != null) then
+        {
+          "org.ice4j.ice.harvest.NAT_HARVESTER_LOCAL_ADDRESS" = cfg.nat.localAddress;
+          "org.ice4j.ice.harvest.NAT_HARVESTER_PUBLIC_ADDRESS" = cfg.nat.publicAddress;
+        }
+      else
+        {
+          "org.ice4j.ice.harvest.STUN_MAPPING_HARVESTER_ADDRESSES" =
+            lib.concatStringsSep "," cfg.nat.harvesterAddresses;
+        };
+
+    systemd.services.jitsi-videobridge2 =
+      let
+        jvbProps = {
+          "-Dnet.java.sip.communicator.SC_HOME_DIR_LOCATION" = "/etc/jitsi";
+          "-Dnet.java.sip.communicator.SC_HOME_DIR_NAME" = "videobridge";
+          "-Djava.util.logging.config.file" = "/etc/jitsi/videobridge/logging.properties";
+          "-Dconfig.file" = format.generate "jvb.conf" jvbConfig;
+          # Mitigate CVE-2021-44228
+          "-Dlog4j2.formatMsgNoLookups" = true;
+        } // (lib.mapAttrs' (k: v: lib.nameValuePair "-D${k}" v) cfg.extraProperties);
+      in
+      {
+        aliases = [ "jitsi-videobridge.service" ];
+        description = "Jitsi Videobridge";
+        after = [ "network.target" ];
+        wantedBy = [ "multi-user.target" ];
+
+        environment.JAVA_SYS_PROPS = attrsToArgs jvbProps;
+
+        script =
+          (lib.concatStrings (
+            lib.mapAttrsToList (
+              name: xmppConfig: "export ${toVarName name}=$(cat ${xmppConfig.passwordFile})\n"
+            ) cfg.xmppConfigs
+          ))
+          + ''
+            ${pkgs.jitsi-videobridge}/bin/jitsi-videobridge
+          '';
+
+        serviceConfig = {
+          Type = "exec";
+
+          DynamicUser = true;
+          User = "jitsi-videobridge";
+          Group = "jitsi-meet";
+
+          CapabilityBoundingSet = "";
+          NoNewPrivileges = true;
+          ProtectSystem = "strict";
+          ProtectHome = true;
+          PrivateTmp = true;
+          PrivateDevices = true;
+          ProtectHostname = true;
+          ProtectKernelTunables = true;
+          ProtectKernelModules = true;
+          ProtectControlGroups = true;
+          RestrictAddressFamilies = [
+            "AF_INET"
+            "AF_INET6"
+            "AF_UNIX"
+          ];
+          RestrictNamespaces = true;
+          LockPersonality = true;
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
+
+          TasksMax = 65000;
+          LimitNPROC = 65000;
+          LimitNOFILE = 65000;
+        };
       };
-
-    systemd.services.jitsi-videobridge2 = let
-      jvbProps = {
-        "-Dnet.java.sip.communicator.SC_HOME_DIR_LOCATION" = "/etc/jitsi";
-        "-Dnet.java.sip.communicator.SC_HOME_DIR_NAME" = "videobridge";
-        "-Djava.util.logging.config.file" = "/etc/jitsi/videobridge/logging.properties";
-        "-Dconfig.file" = format.generate "jvb.conf" jvbConfig;
-        # Mitigate CVE-2021-44228
-        "-Dlog4j2.formatMsgNoLookups" = true;
-      } // (lib.mapAttrs' (k: v: lib.nameValuePair "-D${k}" v) cfg.extraProperties);
-    in
-    {
-      aliases = [ "jitsi-videobridge.service" ];
-      description = "Jitsi Videobridge";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
-
-      environment.JAVA_SYS_PROPS = attrsToArgs jvbProps;
-
-      script = (lib.concatStrings (lib.mapAttrsToList (name: xmppConfig:
-        "export ${toVarName name}=$(cat ${xmppConfig.passwordFile})\n"
-      ) cfg.xmppConfigs))
-      + ''
-        ${pkgs.jitsi-videobridge}/bin/jitsi-videobridge
-      '';
-
-      serviceConfig = {
-        Type = "exec";
-
-        DynamicUser = true;
-        User = "jitsi-videobridge";
-        Group = "jitsi-meet";
-
-        CapabilityBoundingSet = "";
-        NoNewPrivileges = true;
-        ProtectSystem = "strict";
-        ProtectHome = true;
-        PrivateTmp = true;
-        PrivateDevices = true;
-        ProtectHostname = true;
-        ProtectKernelTunables = true;
-        ProtectKernelModules = true;
-        ProtectControlGroups = true;
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
-        RestrictNamespaces = true;
-        LockPersonality = true;
-        RestrictRealtime = true;
-        RestrictSUIDSGID = true;
-
-        TasksMax = 65000;
-        LimitNPROC = 65000;
-        LimitNOFILE = 65000;
-      };
-    };
 
     environment.etc."jitsi/videobridge/logging.properties".source =
       lib.mkDefault "${pkgs.jitsi-videobridge}/etc/jitsi/videobridge/logging.properties-journal";
@@ -287,15 +314,19 @@ in
     boot.kernel.sysctl."net.core.rmem_max" = lib.mkDefault 10485760;
     boot.kernel.sysctl."net.core.netdev_max_backlog" = lib.mkDefault 100000;
 
-    networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall
-      [ jvbConfig.videobridge.ice.tcp.port ];
-    networking.firewall.allowedUDPPorts = lib.mkIf cfg.openFirewall
-      [ jvbConfig.videobridge.ice.udp.port ];
+    networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [
+      jvbConfig.videobridge.ice.tcp.port
+    ];
+    networking.firewall.allowedUDPPorts = lib.mkIf cfg.openFirewall [
+      jvbConfig.videobridge.ice.udp.port
+    ];
 
-    assertions = [{
-      message = "publicAddress must be set if and only if localAddress is set";
-      assertion = (cfg.nat.publicAddress == null) == (cfg.nat.localAddress == null);
-    }];
+    assertions = [
+      {
+        message = "publicAddress must be set if and only if localAddress is set";
+        assertion = (cfg.nat.publicAddress == null) == (cfg.nat.localAddress == null);
+      }
+    ];
   };
 
   meta.maintainers = lib.teams.jitsi.members;

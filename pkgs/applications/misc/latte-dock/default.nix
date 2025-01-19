@@ -1,8 +1,22 @@
-{ lib, mkDerivation, fetchFromGitLab
-, cmake, extra-cmake-modules, karchive, kwindowsystem, qtx11extras, kcrash
-, knewstuff, wayland-scanner
-, plasma-framework, plasma-wayland-protocols, plasma-workspace, plasma-desktop, qtwayland
-, wayland, xorg
+{
+  lib,
+  mkDerivation,
+  fetchFromGitLab,
+  cmake,
+  extra-cmake-modules,
+  karchive,
+  kwindowsystem,
+  qtx11extras,
+  kcrash,
+  knewstuff,
+  wayland-scanner,
+  plasma-framework,
+  plasma-wayland-protocols,
+  plasma-workspace,
+  plasma-desktop,
+  qtwayland,
+  wayland,
+  xorg,
 }:
 
 mkDerivation rec {
@@ -17,10 +31,28 @@ mkDerivation rec {
     sha256 = "sha256-C1FvgkdxCzny+F6igS2YjsHOpkK34wl6je2tHlGQwU0=";
   };
 
-  buildInputs = [ plasma-framework plasma-wayland-protocols qtwayland xorg.libpthreadstubs xorg.libXdmcp xorg.libSM wayland plasma-workspace plasma-desktop ];
+  buildInputs = [
+    plasma-framework
+    plasma-wayland-protocols
+    qtwayland
+    xorg.libpthreadstubs
+    xorg.libXdmcp
+    xorg.libSM
+    wayland
+    plasma-workspace
+    plasma-desktop
+  ];
 
-  nativeBuildInputs = [ extra-cmake-modules cmake karchive kwindowsystem
-    qtx11extras kcrash knewstuff wayland-scanner ];
+  nativeBuildInputs = [
+    extra-cmake-modules
+    cmake
+    karchive
+    kwindowsystem
+    qtx11extras
+    kcrash
+    knewstuff
+    wayland-scanner
+  ];
 
   patches = [
     ./0001-Disable-autostart.patch
@@ -39,6 +71,5 @@ mkDerivation rec {
     platforms = platforms.unix;
     maintainers = [ maintainers.ysndr ];
   };
-
 
 }

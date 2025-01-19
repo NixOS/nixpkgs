@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rocmUpdateScript
-, cmake
-, rocm-cmake
-, rocm-runtime
-, busybox
-, python3
-, gnugrep
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rocmUpdateScript,
+  cmake,
+  rocm-cmake,
+  rocm-runtime,
+  busybox,
+  python3,
+  gnugrep,
   # rocminfo requires that the calling user have a password and be in
   # the video group. If we let rocm_agent_enumerator rely upon
   # rocminfo's output, then it, too, has those requirements. Instead,
   # we can specify the GPU targets for this system (e.g. "gfx803" for
   # Polaris) such that no system call is needed for downstream
   # compilers to determine the desired target.
-, defaultTargets ? []
+  defaultTargets ? [ ],
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -58,6 +59,9 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.ncsa;
     maintainers = with maintainers; [ lovesegfault ] ++ teams.rocm.members;
     platforms = platforms.linux;
-    broken = stdenv.hostPlatform.isAarch64 || versions.minor finalAttrs.version != versions.minor stdenv.cc.version || versionAtLeast finalAttrs.version "6.0.0";
+    broken =
+      stdenv.hostPlatform.isAarch64
+      || versions.minor finalAttrs.version != versions.minor stdenv.cc.version
+      || versionAtLeast finalAttrs.version "6.0.0";
   };
 })

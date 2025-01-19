@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -52,7 +53,7 @@
   onnx,
   onnxruntime,
   pytest,
-  pytest-cov,
+  pytest-cov-stub,
 
   # tests
   pytestCheckHook,
@@ -66,7 +67,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyg-team";
     repo = "pytorch_geometric";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Zw9YqPQw2N0ZKn5i5Kl4Cjk9JDTmvZmyO/VvIVr6fTU=";
   };
 
@@ -137,7 +138,7 @@ buildPythonPackage rec {
       onnx
       onnxruntime
       pytest
-      pytest-cov
+      pytest-cov-stub
     ];
   };
 
@@ -153,21 +154,27 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  disabledTests = [
-    # TODO: try to re-enable when triton will have been updated to 3.0
-    # torch._dynamo.exc.BackendCompilerFailed: backend='inductor' raised:
-    # LoweringException: ImportError: cannot import name 'triton_key' from 'triton.compiler.compiler'
-    "test_compile_hetero_conv_graph_breaks"
-    "test_compile_multi_aggr_sage_conv"
+  disabledTests =
+    [
+      # TODO: try to re-enable when triton will have been updated to 3.0
+      # torch._dynamo.exc.BackendCompilerFailed: backend='inductor' raised:
+      # LoweringException: ImportError: cannot import name 'triton_key' from 'triton.compiler.compiler'
+      "test_compile_hetero_conv_graph_breaks"
+      "test_compile_multi_aggr_sage_conv"
 
-    # RuntimeError: addmm: computation on CPU is not implemented for SparseCsr + SparseCsr @ SparseCsr without MKL.
-    # PyTorch built with MKL has better support for addmm with sparse CPU tensors.
-    "test_asap"
-    "test_graph_unet"
+      # RuntimeError: addmm: computation on CPU is not implemented for SparseCsr + SparseCsr @ SparseCsr without MKL.
+      # PyTorch built with MKL has better support for addmm with sparse CPU tensors.
+      "test_asap"
+      "test_graph_unet"
 
-    # AttributeError: type object 'Any' has no attribute '_name'
-    "test_type_repr"
-  ];
+      # AttributeError: type object 'Any' has no attribute '_name'
+      "test_type_repr"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # This test uses `torch.jit` which might not be working on darwin:
+      # RuntimeError: required keyword attribute 'value' has the wrong type
+      "test_traceable_my_conv_with_self_loops"
+    ];
 
   meta = {
     description = "Graph Neural Network Library for PyTorch";

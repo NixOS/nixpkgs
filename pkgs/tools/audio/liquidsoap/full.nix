@@ -1,8 +1,24 @@
-{ lib, stdenv, makeWrapper, fetchFromGitHub, which, pkg-config
-, libjpeg
-, ocamlPackages
-, awscli2, bubblewrap, curl, ffmpeg, yt-dlp
-, runtimePackages ? [ awscli2 bubblewrap curl ffmpeg yt-dlp ]
+{
+  lib,
+  stdenv,
+  makeWrapper,
+  fetchFromGitHub,
+  which,
+  pkg-config,
+  libjpeg,
+  ocamlPackages,
+  awscli2,
+  bubblewrap,
+  curl,
+  ffmpeg,
+  yt-dlp,
+  runtimePackages ? [
+    awscli2
+    bubblewrap
+    curl
+    ffmpeg
+    yt-dlp
+  ],
 }:
 
 let
@@ -136,8 +152,11 @@ stdenv.mkDerivation {
     mainProgram = "liquidsoap";
     homepage = "https://www.liquidsoap.info/";
     changelog = "https://raw.githubusercontent.com/savonet/liquidsoap/main/CHANGES.md";
-    maintainers = with lib.maintainers; [ dandellion ehmry ];
+    maintainers = with lib.maintainers; [
+      dandellion
+      ehmry
+    ];
     license = lib.licenses.gpl2Plus;
-    platforms = ocamlPackages.ocaml.meta.platforms or [];
+    platforms = ocamlPackages.ocaml.meta.platforms or [ ];
   };
 }

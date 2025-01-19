@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "flask-api";
     repo = "flask-api";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-nHgeI5FLKkDp4uWO+0eaT4YSOMkeQ0wE3ffyJF+WzTM=";
   };
 

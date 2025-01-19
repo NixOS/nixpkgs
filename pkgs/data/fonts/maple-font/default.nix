@@ -1,12 +1,18 @@
-{ lib
-, stdenv
-, unzip
-, fetchurl
+{
+  lib,
+  stdenv,
+  unzip,
+  fetchurl,
 }:
 
 let
-  maple-font = { pname, sha256, desc }:
-    stdenv.mkDerivation rec{
+  maple-font =
+    {
+      pname,
+      sha256,
+      desc,
+    }:
+    stdenv.mkDerivation rec {
       inherit pname;
       version = "6.4";
       src = fetchurl {
@@ -73,5 +79,3 @@ in
     desc = "ttf autohint";
   };
 }
-
-

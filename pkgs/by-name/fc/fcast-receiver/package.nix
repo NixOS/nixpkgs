@@ -1,10 +1,11 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitLab
-, makeDesktopItem
-, copyDesktopItems
-, makeWrapper
-, electron
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitLab,
+  makeDesktopItem,
+  copyDesktopItems,
+  makeWrapper,
+  electron,
 }:
 
 buildNpmPackage rec {

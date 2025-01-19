@@ -90,6 +90,9 @@ import ../make-test-python.nix (
       with subtest("should wait for etcdctl endpoint status to succeed"):
           etcd.wait_until_succeeds("etcdctl endpoint status")
 
+      with subtest("should wait for etcdctl endpoint health to succeed"):
+          etcd.wait_until_succeeds("etcdctl endpoint health")
+
       with subtest("should start k3s"):
           k3s.start()
           k3s.wait_for_unit("k3s")

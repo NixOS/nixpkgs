@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, Security }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  Security,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-asm";
@@ -23,6 +29,6 @@ rustPlatform.buildRustPackage rec {
     description = "Display the assembly or LLVM-IR generated for Rust source code";
     homepage = "https://github.com/gnzlbg/cargo-asm";
     license = licenses.mit;
-    maintainers = [ ];
+    maintainers = with maintainers; [ matthiasbeyer ];
   };
 }

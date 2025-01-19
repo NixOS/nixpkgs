@@ -18,18 +18,19 @@
   cloudpickle,
   dm-tree,
   pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "chex";
-  version = "0.1.87";
+  version = "0.1.88";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "deepmind";
     repo = "chex";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-TPh7XLWHk0y/VLXxHLANUiDmfveHPeMLks9QKf16doo=";
+    tag = "v${version}";
+    hash = "sha256-umRq+FZwyx1hz839ZibRTEFKjbBugrfUJuE8PagjqI4=";
   };
 
   build-system = [ setuptools ];
@@ -51,8 +52,13 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  # AttributeError: module 'unittest' has no attribute 'makeSuite'
+  # https://github.com/google-deepmind/chex/issues/371
+  # TODO: re-enable at next release
+  doCheck = pythonOlder "3.13";
+
   meta = {
-    description = "Chex is a library of utilities for helping to write reliable JAX code";
+    description = "Library of utilities for helping to write reliable JAX code";
     homepage = "https://github.com/deepmind/chex";
     changelog = "https://github.com/google-deepmind/chex/releases/tag/v${version}";
     license = lib.licenses.asl20;

@@ -1,14 +1,31 @@
-{ lib, stdenv, fetchFromGitHub, openssl, flex, bison, pkg-config, groff, libxml2, util-linux
-, coreutils, file, libtool, which, boost, autoreconfHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+
+  autoreconfHook,
+  pkg-config,
+  flex,
+  bison,
+
+  openssl,
+  groff,
+  libxml2,
+  util-linux,
+  libtool,
+  which,
+  coreutils,
+  boost,
+  zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "torque";
   version = "6.1.3h2";
 
   src = fetchFromGitHub {
     owner = "adaptivecomputing";
-    repo = pname;
+    repo = "torque";
     # branch 6.1.3h2, as they aren't pushing tags
     # https://github.com/adaptivecomputing/torque/issues/467
     rev = "458883319157cfc5c509046d09f9eb8e68e8d398";
@@ -16,10 +33,24 @@ stdenv.mkDerivation rec {
   };
 
   strictDeps = true;
-  nativeBuildInputs = [ autoreconfHook pkg-config flex bison libxml2 ];
+
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    flex
+    bison
+    libxml2
+  ];
+
   buildInputs = [
-    openssl groff libxml2 util-linux libtool
-    which boost
+    openssl
+    groff
+    libxml2
+    util-linux
+    libtool
+    which
+    boost
+    zlib
   ];
 
   enableParallelBuilding = true;
@@ -29,25 +60,22 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace Makefile.am \
-      --replace "contrib/init.d contrib/systemd" ""
+      --replace-fail "contrib/init.d contrib/systemd" ""
     substituteInPlace src/cmds/Makefile.am \
-      --replace "/etc/" "$out/etc/"
+      --replace-fail "/etc/" "$out/etc/"
     substituteInPlace src/mom_rcp/pathnames.h \
-      --replace /bin/cp ${coreutils}/bin/cp
+      --replace-fail /bin/cp ${coreutils}/bin/cp
     substituteInPlace src/resmom/requests.c \
-      --replace /bin/cp ${coreutils}/bin/cp
+      --replace-fail /bin/cp ${coreutils}/bin/cp
   '';
 
   preConfigure = ''
-    substituteInPlace ./configure \
-      --replace '/usr/bin/file' '${file}/bin/file'
-
     # fix broken libxml2 detection
     sed -i '/xmlLib\=/c\xmlLib=xml2' ./configure
 
     for s in fifo cray_t3e dec_cluster msic_cluster sgi_origin umn_cluster; do
       substituteInPlace src/scheduler.cc/samples/$s/Makefile.in \
-        --replace "schedprivdir = " "schedprivdir = $out/"
+        --replace-fail "schedprivdir = " "schedprivdir = $out/"
     done
 
     for f in $(find ./ -name Makefile.in); do
@@ -59,9 +87,7 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    cp -v buildutils/pbs_mkdirs $out/bin/
-    cp -v torque.setup $out/bin/
-    chmod +x $out/bin/pbs_mkdirs $out/bin/torque.setup
+    install -Dm755 torque.setup buildutils/pbs_mkdirs -t $out/bin/
   '';
 
   meta = with lib; {

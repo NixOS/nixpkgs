@@ -41,7 +41,7 @@ in
   nativeBuildInputs = [ makeWrapper ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ unzip ];
-  buildInputs = [ stdenv.cc.cc.lib ];
+  buildInputs = [ (lib.getLib stdenv.cc.cc) ];
 
   dontUnpack = stdenv.hostPlatform.isLinux;
   dontConfigure = true;
@@ -84,7 +84,7 @@ in
     makeWrapper ${electron_27}/bin/electron $out/bin/logseq \
       --set "LOCAL_GIT_DIRECTORY" ${git} \
       --add-flags $out/share/logseq/resources/app \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
   '';
 
   passthru.updateScript = nix-update-script { };

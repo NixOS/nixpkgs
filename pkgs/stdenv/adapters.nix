@@ -130,30 +130,27 @@ rec {
           "--disable-shared"
         ];
         cmakeFlags = (args.cmakeFlags or []) ++ [ "-DBUILD_SHARED_LIBS:BOOL=OFF" ];
-        mesonFlags = (args.mesonFlags or []) ++ [ "-Ddefault_library=static" ];
+        mesonFlags = (args.mesonFlags or []) ++ [
+          "-Ddefault_library=static"
+          "-Ddefault_both_libraries=static"
+        ];
       });
     });
 
   # Best effort static binaries. Will still be linked to libSystem,
   # but more portable than Nix store binaries.
   makeStaticDarwin = stdenv: stdenv.override (old: {
-    # extraBuildInputs are dropped in cross.nix, but darwin still needs them
-    extraBuildInputs = [ pkgs.buildPackages.darwin.CF ];
     mkDerivationFromStdenv = withOldMkDerivation old (stdenv: mkDerivationSuper: args:
-    (mkDerivationSuper args).overrideAttrs (prevAttrs: {
-      NIX_CFLAGS_LINK = toString (prevAttrs.NIX_CFLAGS_LINK or "")
-        + lib.optionalString (stdenv.cc.isGNU or false) " -static-libgcc";
-      nativeBuildInputs = (prevAttrs.nativeBuildInputs or [])
-        ++ lib.optionals stdenv.hasCC [
-          (pkgs.buildPackages.makeSetupHook {
-            name = "darwin-portable-libSystem-hook";
-            substitutions = {
-              libsystem = "${stdenv.cc.libc}/lib/libSystem.B.dylib";
-              targetPrefix = stdenv.cc.bintools.targetPrefix;
-            };
-          } ./darwin/portable-libsystem.sh)
-        ];
-    }));
+    (mkDerivationSuper args).overrideAttrs (prevAttrs:
+      if prevAttrs ? env.NIX_CFLAGS_LINK then {
+        env = prevAttrs.env // {
+          NIX_CFLAGS_LINK = toString args.env.NIX_CFLAGS_LINK
+            + lib.optionalString (stdenv.cc.isGNU or false) " -static-libgcc";
+        };
+      } else {
+        NIX_CFLAGS_LINK = toString (prevAttrs.NIX_CFLAGS_LINK or "")
+          + lib.optionalString (stdenv.cc.isGNU or false) " -static-libgcc";
+      }));
   });
 
   # Puts all the other ones together
@@ -327,17 +324,9 @@ rec {
   # `sdkVersion` can be any of the following:
   # * A version string indicating the requested SDK version; or
   # * An attrset consisting of either or both of the following fields: darwinSdkVersion and darwinMinVersion.
-  overrideSDK = import ./darwin/override-sdk.nix {
-    inherit lib extendMkDerivationArgs;
-    inherit (pkgs)
-      stdenvNoCC
-      pkgsBuildBuild
-      pkgsBuildHost
-      pkgsBuildTarget
-      pkgsHostHost
-      pkgsHostTarget
-      pkgsTargetTarget;
-  };
+  #
+  # Note: `overrideSDK` is deprecated. Add the versioned variants of `apple-sdk` to `buildInputs` change the SDK.
+  overrideSDK = pkgs.callPackage ./darwin/override-sdk.nix { inherit lib extendMkDerivationArgs; };
 
   withDefaultHardeningFlags = defaultHardeningFlags: stdenv: let
     bintools = let

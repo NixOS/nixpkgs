@@ -1,7 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, nix-update-script
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nix-update-script,
 }:
 
 buildGoModule rec {
@@ -11,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "git-releaser";
     repo = "git-releaser";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-bXW2/FpZnYV/zZ/DlaW2pUe2RUHLElPwqHm/J5gKJZI=";
   };
 

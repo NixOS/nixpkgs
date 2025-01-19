@@ -10,27 +10,23 @@
 
   # tests
   hypothesis,
+  pytest-cov-stub,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "cbor2";
-  version = "5.6.4";
+  version = "5.6.5";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-HFM8UN3oa+8caVBgIFSg/6PDduiw4gx7j1sQh5P2mD4=";
+    hash = "sha256-toKCBnfuHbukX32hGJjScg+S4Gvjas7CkIZ9Xr89fgk=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov" ""
-  '';
-
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
@@ -39,6 +35,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     hypothesis
+    pytest-cov-stub
     pytestCheckHook
   ];
 

@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitLab, autoreconfHook, pkg-config, texinfo, guile }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  autoreconfHook,
+  pkg-config,
+  texinfo,
+  guile,
+}:
 
 stdenv.mkDerivation rec {
   pname = "guile-config";
@@ -11,7 +19,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-n4ukGCyIx5G1ITfKSqS6FGJ6dnDBsyxXKSFNi81E4Gg=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config texinfo ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    texinfo
+  ];
 
   buildInputs = [ guile ];
 

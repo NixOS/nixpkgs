@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "AyatanaIndicators";
     repo = "ayatana-indicator-power";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-M7BzyQRPKyXMEY0FTMBXsCemC3+w8upjTHApWkRf71I=";
   };
 

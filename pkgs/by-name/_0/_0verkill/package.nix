@@ -1,10 +1,11 @@
-{ lib
-, gccStdenv
-, fetchFromGitHub
-, autoreconfHook269
-, xorgproto
-, libX11
-, libXpm
+{
+  lib,
+  gccStdenv,
+  fetchFromGitHub,
+  autoreconfHook269,
+  xorgproto,
+  libX11,
+  libXpm,
 }:
 
 gccStdenv.mkDerivation rec {
@@ -19,7 +20,11 @@ gccStdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook269 ];
-  buildInputs = [ libX11 xorgproto libXpm ];
+  buildInputs = [
+    libX11
+    xorgproto
+    libXpm
+  ];
 
   configureFlags = [ "--with-x" ];
 

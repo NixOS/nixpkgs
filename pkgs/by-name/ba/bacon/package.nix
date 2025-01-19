@@ -1,33 +1,25 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitHub,
-  darwin,
   versionCheckHook,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "bacon";
-  version = "3.0.0";
+  version = "3.8.0";
 
   src = fetchFromGitHub {
     owner = "Canop";
     repo = "bacon";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-fSlakjZbY8jrFkCqVxPr3UKwf1Oq4yPhLmVbzsksSeg=";
+    tag = "v${version}";
+    hash = "sha256-IWjG1esLwiEnESmnDE5kpuMu+LFaNrIomgrZoktkA2Q=";
   };
 
-  cargoHash = "sha256-WT0uXmchhapss3AU4+e2wA3nBVjzikfRNRyAvQnpJfY=";
+  cargoHash = "sha256-IQ8vTr5Z17ylcOCQ+iqKP6+tawZXd+pMiYoSH5h7Zjg=";
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.CoreServices
-  ];
-
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
+  nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = [ "--version" ];
   doInstallCheck = true;
 
@@ -41,6 +33,9 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Canop/bacon";
     changelog = "https://github.com/Canop/bacon/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ FlorianFranzen ];
+    maintainers = with lib.maintainers; [
+      FlorianFranzen
+      matthiasbeyer
+    ];
   };
 }

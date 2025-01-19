@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lib60870";
-  version = "2.3.2";
+  version = "2.3.3";
 
   src = fetchFromGitHub {
     owner = "mz-automation";
     repo = "lib60870";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-9o+gWQbpCJb+UZzPNmzGqpWD0QbGjg41is/f1POUEQs=";
+    hash = "sha256-me+EYS2XDITRdI4okMj/ZqeewUS2bKj8Opecu6/1+Cs=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/lib60870-C";
@@ -32,11 +32,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of the IEC 60870-5-101/104 protocol";
     homepage = "https://libiec61850.com/";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ stv0g ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ stv0g ];
+    platforms = lib.platforms.unix;
   };
 })

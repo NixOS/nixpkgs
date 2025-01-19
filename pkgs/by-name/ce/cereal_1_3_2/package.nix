@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -24,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Header-only C++11 serialization library";
     changelog = "https://github.com/USCiLab/cereal/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.all;
   };
 })

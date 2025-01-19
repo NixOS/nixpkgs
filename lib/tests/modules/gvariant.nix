@@ -10,7 +10,7 @@
     examples = with lib.gvariant; {
       bool = true;
       float = 3.14;
-      int32 = mkInt32 (- 42);
+      int32 = mkInt32 (-42);
       uint32 = mkUint32 42;
       int16 = mkInt16 (-42);
       uint16 = mkUint16 42;
@@ -24,7 +24,10 @@
       escapedString = ''
         '\
       '';
-      tuple = mkTuple [ (mkInt32 1) [ "foo" ] ];
+      tuple = mkTuple [
+        (mkInt32 1)
+        [ "foo" ]
+      ];
       maybe1 = mkNothing type.string;
       maybe2 = mkJust (mkUint32 4);
       variant = mkVariant "foo";

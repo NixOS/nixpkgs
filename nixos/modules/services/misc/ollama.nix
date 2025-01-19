@@ -224,6 +224,8 @@ in
             # ROCm
             "char-drm"
             "char-kfd"
+            # WSL (Windows Subsystem for Linux)
+            "/dev/dxg"
           ];
           DevicePolicy = "closed";
           LockPersonality = true;

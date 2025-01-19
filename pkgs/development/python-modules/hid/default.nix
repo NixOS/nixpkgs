@@ -34,6 +34,6 @@ buildPythonPackage rec {
     description = "hidapi bindings in ctypes";
     homepage = "https://github.com/apmorton/pyhidapi";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
   };
 }

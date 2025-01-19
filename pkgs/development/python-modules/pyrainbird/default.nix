@@ -10,6 +10,7 @@
   pycryptodome,
   pytest-aiohttp,
   pytest-asyncio,
+  pytest-cov-stub,
   pytest-golden,
   pytest-mock,
   pytestCheckHook,
@@ -32,14 +33,9 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "allenporter";
     repo = "pyrainbird";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-CcoZZ60PItqy0bCc36WfyNF9Fc28aHwQ6hhnY41lBNg=";
   };
-
-  postPatch = ''
-    substituteInPlace pytest.ini \
-      --replace-fail "--cov=pyrainbird --cov-report=term-missing" ""
-  '';
 
   build-system = [ setuptools ];
 
@@ -60,6 +56,7 @@ buildPythonPackage rec {
     parameterized
     pytest-aiohttp
     pytest-asyncio
+    pytest-cov-stub
     pytest-golden
     pytest-mock
     pytestCheckHook
@@ -73,7 +70,7 @@ buildPythonPackage rec {
     description = "Module to interact with Rainbird controllers";
     homepage = "https://github.com/allenporter/pyrainbird";
     changelog = "https://github.com/allenporter/pyrainbird/releases/tag/${version}";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }

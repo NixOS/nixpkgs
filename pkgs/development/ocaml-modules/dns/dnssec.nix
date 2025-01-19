@@ -1,23 +1,21 @@
-{ buildDunePackage
-, cstruct
-, dns
-, mirage-crypto
-, mirage-crypto-pk
-, mirage-crypto-ec
-, domain-name
-, logs
-, alcotest
-, base64
+{
+  buildDunePackage,
+  dns,
+  mirage-crypto,
+  mirage-crypto-pk,
+  mirage-crypto-ec,
+  domain-name,
+  logs,
+  alcotest,
+  base64,
 }:
 
 buildDunePackage {
   pname = "dnssec";
 
   inherit (dns) version src;
-  duneVersion = "3";
 
   propagatedBuildInputs = [
-    cstruct
     dns
     mirage-crypto
     mirage-crypto-pk

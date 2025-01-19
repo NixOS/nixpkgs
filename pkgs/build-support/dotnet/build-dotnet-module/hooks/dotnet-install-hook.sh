@@ -20,13 +20,15 @@ dotnetInstallHook() {
         local dotnetRuntimeIdsArray=($dotnetRuntimeIds)
     fi
 
-    if [[ -n ${dotnetSelfContainedBuild-} ]]; then
-        dotnetInstallFlagsArray+=("--self-contained")
-    else
-        dotnetInstallFlagsArray+=("--no-self-contained")
-        # https://learn.microsoft.com/en-us/dotnet/core/deploying/trimming/trim-self-contained
-        # Trimming is only available for self-contained build, so force disable it here
-        dotnetInstallFlagsArray+=("-p:PublishTrimmed=false")
+    if [[ -v dotnetSelfContainedBuild ]]; then
+        if [[ -n $dotnetSelfContainedBuild ]]; then
+            dotnetInstallFlagsArray+=("--self-contained")
+        else
+            dotnetInstallFlagsArray+=("--no-self-contained")
+            # https://learn.microsoft.com/en-us/dotnet/core/deploying/trimming/trim-self-contained
+            # Trimming is only available for self-contained build, so force disable it here
+            dotnetInstallFlagsArray+=("-p:PublishTrimmed=false")
+        fi
     fi
 
     if [[ -n ${dotnetUseAppHost-} ]]; then

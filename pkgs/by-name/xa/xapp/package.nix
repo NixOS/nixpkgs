@@ -1,36 +1,41 @@
-{ fetchFromGitHub
-, glib
-, gobject-introspection
-, gtk3
-, libgnomekbd
-, gdk-pixbuf
-, cairo
-, xorg
-, meson
-, ninja
-, pkg-config
-, python3
-, lib
-, stdenv
-, vala
-, wrapGAppsHook3
-, inxi
-, mate
-, dbus
-, libdbusmenu-gtk3
+{
+  fetchFromGitHub,
+  glib,
+  gobject-introspection,
+  gtk3,
+  libgnomekbd,
+  gdk-pixbuf,
+  cairo,
+  xorg,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  lib,
+  stdenv,
+  vala,
+  wrapGAppsHook3,
+  file,
+  inxi,
+  mate,
+  dbus,
+  libdbusmenu-gtk3,
 }:
 
 stdenv.mkDerivation rec {
   pname = "xapp";
-  version = "2.8.5";
+  version = "2.8.8";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-HGWaa1S+maphP9colWdWSzGyoA0f4vJkF889X5/rzvs=";
+    hash = "sha256-vd3uAihOF4dgZ49VVhRjG+Cx7sjMvHI/0oRLvIs2ZaM=";
   };
 
   # Recommended by upstream, which enables the build of xapp-debug.
@@ -48,10 +53,12 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    (python3.withPackages (ps: with ps; [
-      pygobject3
-      setproctitle # mate applet
-    ]))
+    (python3.withPackages (
+      ps: with ps; [
+        pygobject3
+        setproctitle # mate applet
+      ]
+    ))
     libgnomekbd
     gdk-pixbuf
     xorg.libxkbfile
@@ -76,13 +83,18 @@ stdenv.mkDerivation rec {
     chmod +x schemas/meson_install_schemas.py # patchShebangs requires executable file
     patchShebangs schemas/meson_install_schemas.py
 
-    # Patch pastebin & inxi location
-    sed "s|/usr/bin/pastebin|$out/bin/pastebin|" -i scripts/upload-system-info
-    sed "s|'inxi'|'${inxi}/bin/inxi'|" -i scripts/upload-system-info
+    # Used in cinnamon-settings
+    substituteInPlace scripts/upload-system-info \
+      --replace-fail "'/usr/bin/pastebin'" "'$out/bin/pastebin'" \
+      --replace-fail "'inxi'" "'${inxi}/bin/inxi'"
+
+    # Used in x-d-p-xapp
+    substituteInPlace scripts/xfce4-set-wallpaper \
+      --replace-fail "file --mime-type" "${file}/bin/file --mime-type"
   '';
 
   # Fix gtk3 module target dir. Proper upstream solution should be using define_variable.
-  PKG_CONFIG_GTK__3_0_LIBDIR = "${placeholder "out"}/lib";
+  env.PKG_CONFIG_GTK__3_0_LIBDIR = "${placeholder "out"}/lib";
 
   meta = with lib; {
     homepage = "https://github.com/linuxmint/xapp";

@@ -1,4 +1,10 @@
-{ config, lib, pkgs, options, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  options,
+  ...
+}:
 
 let
   cfg = config.services.prometheus.exporters.lnd;
@@ -40,6 +46,9 @@ in
         ${concatStringsSep " \\\n  " cfg.extraFlags}
     '';
     LogsDirectory = "prometheus-lnd-exporter";
-    ReadOnlyPaths = [ cfg.lndTlsPath cfg.lndMacaroonDir ];
+    ReadOnlyPaths = [
+      cfg.lndTlsPath
+      cfg.lndMacaroonDir
+    ];
   };
 }

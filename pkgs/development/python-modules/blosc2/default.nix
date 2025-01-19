@@ -19,6 +19,7 @@
   # propagates
   msgpack,
   ndindex,
+  numexpr,
   numpy,
   py-cpuinfo,
   rich,
@@ -31,20 +32,22 @@
 
 buildPythonPackage rec {
   pname = "blosc2";
-  version = "2.5.1";
+  version = "2.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Blosc";
     repo = "python-blosc2";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-yBgnNJU1q+FktIkpQn74LuRP19Ta/fNC60Z8TxzlWPk=";
+    tag = "v${version}";
+    hash = "sha256-2aLfyd+/I8cy9OqdU4yNXY/bkf0AdXu+hZPLDdM3g5g=";
   };
 
   postPatch = ''
     substituteInPlace requirements-runtime.txt \
       --replace "pytest" ""
   '';
+
+  pythonRelaxDeps = [ "numpy" ];
 
   nativeBuildInputs = [
     cmake
@@ -65,6 +68,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     msgpack
     ndindex
+    numexpr
     numpy
     py-cpuinfo
     rich

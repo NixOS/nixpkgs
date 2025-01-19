@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = "objax";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-WD+pmR8cEay4iziRXqF3sHUzCMBjmLJ3wZ3iYOD+hzk=";
   };
 

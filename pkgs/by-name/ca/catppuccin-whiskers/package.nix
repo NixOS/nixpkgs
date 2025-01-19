@@ -1,13 +1,19 @@
-{ lib, fetchFromGitHub, rustPlatform }:
-let version = "2.5.1";
-in rustPlatform.buildRustPackage {
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+}:
+let
+  version = "2.5.1";
+in
+rustPlatform.buildRustPackage {
   pname = "catppuccin-whiskers";
   inherit version;
 
   src = fetchFromGitHub {
     owner = "catppuccin";
     repo = "whiskers";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-OLEXy9MCrPQu1KWICsYhe/ayVqxkYIFwyJoJhgiNDz4=";
   };
 

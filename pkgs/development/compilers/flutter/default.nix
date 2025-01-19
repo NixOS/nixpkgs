@@ -1,28 +1,52 @@
-{ useNixpkgsEngine ? false, callPackage, fetchzip, fetchFromGitHub, dart, lib, stdenv }:
+{
+  useNixpkgsEngine ? false,
+  callPackage,
+  fetchzip,
+  fetchFromGitHub,
+  dart,
+  lib,
+  stdenv,
+}:
 let
   mkCustomFlutter = args: callPackage ./flutter.nix args;
   wrapFlutter = flutter: callPackage ./wrapper.nix { inherit flutter; };
-  getPatches = dir:
-    let files = builtins.attrNames (builtins.readDir dir);
-    in if (builtins.pathExists dir) then map (f: dir + ("/" + f)) files else [ ];
+  getPatches =
+    dir:
+    let
+      files = builtins.attrNames (builtins.readDir dir);
+    in
+    if (builtins.pathExists dir) then map (f: dir + ("/" + f)) files else [ ];
   mkFlutter =
-    { version
-    , engineVersion
-    , engineSwiftShaderHash
-    , engineSwiftShaderRev
-    , engineHashes
-    , enginePatches
-    , dartVersion
-    , flutterHash
-    , dartHash
-    , patches
-    , pubspecLock
-    , artifactHashes
-    , channel
+    {
+      version,
+      engineVersion,
+      engineSwiftShaderHash,
+      engineSwiftShaderRev,
+      engineHashes,
+      enginePatches,
+      dartVersion,
+      flutterHash,
+      dartHash,
+      patches,
+      pubspecLock,
+      artifactHashes,
+      channel,
     }:
     let
       args = {
-        inherit version engineVersion engineSwiftShaderRev engineSwiftShaderHash engineHashes enginePatches patches pubspecLock artifactHashes useNixpkgsEngine channel;
+        inherit
+          version
+          engineVersion
+          engineSwiftShaderRev
+          engineSwiftShaderHash
+          engineHashes
+          enginePatches
+          patches
+          pubspecLock
+          artifactHashes
+          useNixpkgsEngine
+          channel
+          ;
 
         dart = dart.override {
           version = dartVersion;
@@ -53,29 +77,41 @@ let
         };
       };
     in
-    (mkCustomFlutter args).overrideAttrs (prev: next: {
-      passthru = next.passthru // rec {
-        inherit wrapFlutter mkCustomFlutter mkFlutter;
-        buildFlutterApplication = callPackage ./build-support/build-flutter-application.nix { flutter = wrapFlutter (mkCustomFlutter args); };
-      };
-    });
+    (mkCustomFlutter args).overrideAttrs (
+      prev: next: {
+        passthru = next.passthru // rec {
+          inherit wrapFlutter mkCustomFlutter mkFlutter;
+          buildFlutterApplication = callPackage ./build-support/build-flutter-application.nix {
+            flutter = wrapFlutter (mkCustomFlutter args);
+          };
+        };
+      }
+    );
 
-  flutterVersions = lib.mapAttrs'
-    (version: _:
-      let
-        versionDir = ./versions + "/${version}";
-        data = lib.importJSON (versionDir + "/data.json");
-      in
-      lib.nameValuePair "v${version}" (wrapFlutter (mkFlutter ({
-        patches = (getPatches ./patches) ++ (getPatches (versionDir + "/patches"));
-        enginePatches = (getPatches ./engine/patches) ++ (getPatches (versionDir + "/engine/patches"));
-      } // data))))
-    (builtins.readDir ./versions);
+  flutterVersions = lib.mapAttrs' (
+    version: _:
+    let
+      versionDir = ./versions + "/${version}";
+      data = lib.importJSON (versionDir + "/data.json");
+    in
+    lib.nameValuePair "v${version}" (
+      wrapFlutter (
+        mkFlutter (
+          {
+            patches = (getPatches ./patches) ++ (getPatches (versionDir + "/patches"));
+            enginePatches = (getPatches ./engine/patches) ++ (getPatches (versionDir + "/engine/patches"));
+          }
+          // data
+        )
+      )
+    )
+  ) (builtins.readDir ./versions);
 
   stableFlutterVersions = lib.attrsets.filterAttrs (_: v: v.channel == "stable") flutterVersions;
   betaFlutterVersions = lib.attrsets.filterAttrs (_: v: v.channel == "beta") flutterVersions;
 in
-flutterVersions // {
+flutterVersions
+// {
   beta = flutterVersions.${lib.last (lib.naturalSort (builtins.attrNames betaFlutterVersions))};
   stable = flutterVersions.${lib.last (lib.naturalSort (builtins.attrNames stableFlutterVersions))};
   inherit wrapFlutter mkFlutter;

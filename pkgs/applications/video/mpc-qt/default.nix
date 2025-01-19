@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, qmake
-, qttools
-, qtbase
-, mpv
-, wrapQtAppsHook
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  qmake,
+  qttools,
+  qtbase,
+  mpv,
+  wrapQtAppsHook,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {

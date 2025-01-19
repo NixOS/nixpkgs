@@ -1,11 +1,18 @@
-{ config, lib, pkgs, utils, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  utils,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.systemd.coredump;
   systemd = config.systemd.package;
-in {
+in
+{
   options = {
     systemd.coredump.enable = mkOption {
       default = true;
@@ -37,8 +44,7 @@ in {
       ];
 
       environment.etc = {
-        "systemd/coredump.conf".text =
-        ''
+        "systemd/coredump.conf".text = ''
           [Coredump]
           ${cfg.extraConfig}
         '';
@@ -55,7 +61,10 @@ in {
             substitutions = [
               "--replace-fail"
               "${systemd}"
-              "${pkgs.symlinkJoin { name = "systemd"; paths = [ systemd ]; }}"
+              "${pkgs.symlinkJoin {
+                name = "systemd";
+                paths = [ systemd ];
+              }}"
             ];
           };
 
@@ -66,11 +75,11 @@ in {
         uid = config.ids.uids.systemd-coredump;
         group = "systemd-coredump";
       };
-      users.groups.systemd-coredump = {};
+      users.groups.systemd-coredump = { };
     })
 
     (mkIf (!cfg.enable) {
-     boot.kernel.sysctl."kernel.core_pattern" = mkDefault "core";
+      boot.kernel.sysctl."kernel.core_pattern" = mkDefault "core";
     })
 
   ];

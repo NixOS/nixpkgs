@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nixosTests
-, cmake
-, pkg-config
-, AppKit
-, ApplicationServices
-, Carbon
-, libX11
-, libxkbcommon
-, xinput
-, xorg
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nixosTests,
+  cmake,
+  pkg-config,
+  AppKit,
+  ApplicationServices,
+  Carbon,
+  libX11,
+  libxkbcommon,
+  xinput,
+  xorg,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,27 +25,39 @@ stdenv.mkDerivation rec {
     sha256 = "1qlz55fp4i9dd8sdwmy1m8i4i1jy1s09cpmlxzrgf7v34w72ncm7";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   buildInputs =
-    if stdenv.hostPlatform.isDarwin then [ AppKit ApplicationServices Carbon ]
-    else [
-      libX11
-      libxkbcommon
-      xinput
-    ] ++
-    (with xorg; [
-      libXau
-      libXdmcp
-      libXi
-      libXinerama
-      libXt
-      libXtst
-      libXext
-      libxkbfile
-    ]);
+    if stdenv.hostPlatform.isDarwin then
+      [
+        AppKit
+        ApplicationServices
+        Carbon
+      ]
+    else
+      [
+        libX11
+        libxkbcommon
+        xinput
+      ]
+      ++ (with xorg; [
+        libXau
+        libXdmcp
+        libXi
+        libXinerama
+        libXt
+        libXtst
+        libXext
+        libxkbfile
+      ]);
 
-  outputs = [ "out" "test" ];
+  outputs = [
+    "out"
+    "test"
+  ];
 
   # We build the tests, but they're only installed when using the "test" output.
   # This will produce a "uiohook_tests" binary which can be run to test the

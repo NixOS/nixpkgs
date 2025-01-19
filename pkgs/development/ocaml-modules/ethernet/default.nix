@@ -1,11 +1,12 @@
-{ lib
-, buildDunePackage
-, fetchurl
-, cstruct
-, logs
-, lwt
-, macaddr
-, mirage-net
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  cstruct,
+  logs,
+  lwt,
+  macaddr,
+  mirage-net,
 }:
 
 buildDunePackage rec {

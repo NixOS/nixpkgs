@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, python3, asciidoc }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  python3,
+  asciidoc,
+}:
 
 stdenv.mkDerivation rec {
   pname = "eweb";
@@ -9,7 +15,10 @@ stdenv.mkDerivation rec {
     sha256 = "1xy7vm2sj5q6s620fm25klmnwnz9xkrxmx4q2f8h6c85ydisayd5";
   };
 
-  buildInputs = [ python3 asciidoc ];
+  buildInputs = [
+    python3
+    asciidoc
+  ];
 
   installPhase = ''
     install -d $out/bin $out/share/doc/${pname}-${version}

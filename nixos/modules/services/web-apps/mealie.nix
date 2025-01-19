@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ...}:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.mealie;
   pkg = cfg.package;
@@ -23,7 +28,7 @@ in
 
     settings = lib.mkOption {
       type = with lib.types; attrsOf anything;
-      default = {};
+      default = { };
       description = ''
         Configuration of the Mealie service.
 
@@ -70,7 +75,7 @@ in
         ExecStart = "${lib.getExe pkg} -b ${cfg.listenAddress}:${builtins.toString cfg.port}";
         EnvironmentFile = lib.mkIf (cfg.credentialsFile != null) cfg.credentialsFile;
         StateDirectory = "mealie";
-        StandardOutput="journal";
+        StandardOutput = "journal";
       };
     };
   };

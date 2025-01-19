@@ -1,4 +1,10 @@
-{ lib, fetchFromGitHub, buildDunePackage, alcotest, pkg-config }:
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  alcotest,
+  pkg-config,
+}:
 
 buildDunePackage rec {
   pname = "bigstringaf";

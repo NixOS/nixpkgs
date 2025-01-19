@@ -1,7 +1,8 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-, optim
+{
+  buildOctavePackage,
+  lib,
+  fetchurl,
+  optim,
 }:
 
 buildOctavePackage rec {

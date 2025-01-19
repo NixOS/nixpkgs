@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation rec {
   pname = "vault-bin";
-  version = "1.18.0";
+  version = "1.18.3";
 
   src =
     let
@@ -20,11 +20,11 @@ stdenv.mkDerivation rec {
         aarch64-darwin = "darwin_arm64";
       };
       hash = selectSystem {
-        x86_64-linux = "sha256-fyVkSZ20tUcBv9/iT1h3o/2KkoCJ5op7DBoMc0US7SM=";
-        aarch64-linux = "sha256-Vsc0ra+OzrDBwmKke0ef4kfy5CWu5m34gC7u0BDL7uo=";
-        i686-linux = "sha256-3uAkBPOoMbdfS5EfII03JbVl1ekfRXm4yv1rL5A7x7c=";
-        x86_64-darwin = "sha256-fydYqDEihbGuZ9I1quJSJk+lJxnSkqF+t1mOP8EA2Ok=";
-        aarch64-darwin = "sha256-yJmNM9eQydbRdY6+JK28hhzXJ9Hj3CcwUJkhS60aCyA=";
+        x86_64-linux = "sha256-pELGadExnOMVC+BZMk6vmth6cN2f0DdVz8gQmaHDv8Y=";
+        aarch64-linux = "sha256-53LGpPcJUz+1Dw8UKE5tX6VGMJc4LfXw2MaiKKfYbvI=";
+        i686-linux = "sha256-3SEw3iOEYC/HopzvjJNXgtYZhpSag1lgsmsq7goyZDs=";
+        x86_64-darwin = "sha256-Bz0mhmFOfJL3m1qX7lmLHNGuZCkyKXu14X523M9Dp0Q=";
+        aarch64-darwin = "sha256-GM6pN4cngjt7dhF5mNqeoygS4+fkCjsCGyxo/IEaMWs=";
       };
     in
     fetchzip {
@@ -69,7 +69,6 @@ stdenv.mkDerivation rec {
         psyanticy
         Chili-Man
         techknowlogick
-        mkaito
       ];
     mainProgram = "vault";
     platforms = [

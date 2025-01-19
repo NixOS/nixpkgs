@@ -1,28 +1,45 @@
 {
   lib,
-  bokeh,
   buildPythonPackage,
-  colorcet,
   fetchPypi,
+  pythonOlder,
+
+  # build-system
+  setuptools-scm,
+
+  # dependencies
+  bokeh,
+  colorcet,
   holoviews,
   pandas,
-  pythonOlder,
-  setuptools-scm,
+
+  # tests
+  pytestCheckHook,
+  dask,
+  xarray,
+  bokeh-sampledata,
+  parameterized,
+  selenium,
+  matplotlib,
+  scipy,
+  plotly,
 }:
 
 buildPythonPackage rec {
   pname = "hvplot";
-  version = "0.10.0";
+  version = "0.11.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-6HSGqVv+FRq1LvFjpek9nL0EOZLPC3Vcyt0r82/t03Y=";
+    hash = "sha256-t60fLxxwXkfiayLInBFxGoT3d0+qq6t1a0Xo0eAKYBA=";
   };
 
-  build-system = [ setuptools-scm ];
+  build-system = [
+    setuptools-scm
+  ];
 
   dependencies = [
     bokeh
@@ -31,16 +48,40 @@ buildPythonPackage rec {
     pandas
   ];
 
-  # Many tests require a network connection
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+    dask
+    xarray
+    bokeh-sampledata
+    parameterized
+    selenium
+    matplotlib
+    scipy
+    plotly
+  ];
+
+  disabledTestPaths = [
+    # All of the following below require xarray.tutorial files that require
+    # downloading files from the internet (not possible in the sandbox).
+    "hvplot/tests/testgeo.py"
+    "hvplot/tests/testinteractive.py"
+    "hvplot/tests/testui.py"
+    "hvplot/tests/testutil.py"
+  ];
+
+  # need to set MPLBACKEND=agg for headless matplotlib for darwin
+  # https://github.com/matplotlib/matplotlib/issues/26292
+  preCheck = ''
+    export MPLBACKEND=agg
+  '';
 
   pythonImportsCheck = [ "hvplot.pandas" ];
 
-  meta = with lib; {
+  meta = {
     description = "High-level plotting API for the PyData ecosystem built on HoloViews";
     homepage = "https://hvplot.pyviz.org";
     changelog = "https://github.com/holoviz/hvplot/releases/tag/v${version}";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

@@ -1,13 +1,14 @@
-{ lib
-, callPackage
-, stdenv
-, chromium
-, fetchFromGitHub
-, fetchYarnDeps
-, makeWrapper
-, nodejs
-, fixup-yarn-lock
-, yarn
+{
+  lib,
+  callPackage,
+  stdenv,
+  chromium,
+  fetchFromGitHub,
+  fetchYarnDeps,
+  makeWrapper,
+  nodejs,
+  fixup-yarn-lock,
+  yarn,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "aws-azure-login";

@@ -1,4 +1,9 @@
-{ lib, pkgs, config, ... }:
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}:
 
 let
   cfg = config.programs.hyprlock;
@@ -18,7 +23,7 @@ in
     services.hypridle.enable = true;
 
     # Hyprlock needs PAM access to authenticate, else it fallbacks to su
-    security.pam.services.hyprlock = {};
+    security.pam.services.hyprlock = { };
   };
 
   meta.maintainers = with lib.maintainers; [ johnrtitor ];

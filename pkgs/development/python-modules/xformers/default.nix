@@ -5,12 +5,13 @@
   pythonOlder,
   fetchFromGitHub,
   which,
+  setuptools,
   # runtime dependencies
   numpy,
   torch,
   # check dependencies
   pytestCheckHook,
-  pytest-cov,
+  pytest-cov-stub,
   # , pytest-mpi
   pytest-timeout,
   # , pytorch-image-models
@@ -29,24 +30,26 @@
 }:
 let
   inherit (torch) cudaCapabilities cudaPackages cudaSupport;
-  version = "0.0.23.post1";
+  version = "0.0.28.post3";
 in
 buildPythonPackage {
   pname = "xformers";
   inherit version;
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "facebookresearch";
     repo = "xformers";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-AJXow8MmX4GxtEE2jJJ/ZIBr+3i+uS4cA6vofb390rY=";
+    tag = "v${version}";
+    hash = "sha256-23tnhCHK+Z0No8fqZxkgDFp2VIgXZR4jpM+pkb/vvmw=";
     fetchSubmodules = true;
   };
 
   patches = [ ./0001-fix-allow-building-without-git.patch ];
+
+  build-system = [ setuptools ];
 
   preBuild = ''
     cat << EOF > ./xformers/version.py
@@ -81,7 +84,7 @@ buildPythonPackage {
     which
   ] ++ lib.optionals cudaSupport (with cudaPackages; [ cuda_nvcc ]);
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     torch
   ];
@@ -99,7 +102,7 @@ buildPythonPackage {
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-cov
+    pytest-cov-stub
     pytest-timeout
     hydra-core
     fairscale
@@ -115,7 +118,7 @@ buildPythonPackage {
   ];
 
   meta = with lib; {
-    description = "XFormers: A collection of composable Transformer building blocks";
+    description = "Collection of composable Transformer building blocks";
     homepage = "https://github.com/facebookresearch/xformers";
     changelog = "https://github.com/facebookresearch/xformers/blob/${version}/CHANGELOG.md";
     license = licenses.bsd3;

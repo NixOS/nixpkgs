@@ -13,11 +13,13 @@ lib.makeScope newScope (self: {
 
   findcrypt = self.callPackage ./extensions/findcrypt { };
 
-  ghidraninja-ghidra-scripts = self.callPackage ./extensions/ghidraninja-ghidra-scripts { };
-
   ghidra-delinker-extension = self.callPackage ./extensions/ghidra-delinker-extension {
     inherit ghidra;
   };
+
+  ghidra-golanganalyzerextension = self.callPackage ./extensions/ghidra-golanganalyzerextension { };
+
+  ghidraninja-ghidra-scripts = self.callPackage ./extensions/ghidraninja-ghidra-scripts { };
 
   gnudisassembler = self.callPackage ./extensions/gnudisassembler { inherit ghidra; };
 
@@ -29,4 +31,5 @@ lib.makeScope newScope (self: {
 
   sleighdevtools = self.callPackage ./extensions/sleighdevtools { inherit ghidra; };
 
+  wasm = self.callPackage ./extensions/wasm { inherit ghidra; };
 })

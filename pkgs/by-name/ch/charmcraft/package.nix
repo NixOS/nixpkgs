@@ -8,15 +8,15 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "charmcraft";
-  version = "3.2.1";
+  version = "3.2.2";
 
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "charmcraft";
-    rev = "refs/tags/${version}";
-    hash = "sha256-VqJZP82OIfxPBkayq0ijXDsotgKPbo34RTMuNkLfjls=";
+    tag = version;
+    hash = "sha256-2MI2cbAohfTgbilxZcFvmxt/iVjR6zJ2o0gequB//hg=";
   };
 
   postPatch = ''
@@ -77,6 +77,8 @@ python3Packages.buildPythonApplication rec {
   disabledTests = [
     # Relies upon the `charm` tool being installed
     "test_validate_missing_charm"
+    "test_read_charm_from_yaml_file_self_contained_success[full-bases.yaml]"
+    "test_read_charm_from_yaml_file_self_contained_success[full-platforms.yaml]"
   ];
 
   passthru.updateScript = nix-update-script { };

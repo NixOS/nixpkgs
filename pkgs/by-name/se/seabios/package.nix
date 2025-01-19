@@ -9,7 +9,7 @@
   ___build-type ? "csm",
 }:
 
-assert lib.elem (___build-type) [
+assert lib.elem ___build-type [
   "coreboot"
   # SeaBIOS with CSM (Compatible Support Module) support; learn more at
   # https://www.electronicshub.org/what-is-csm-bios/
@@ -61,6 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
   hardeningDisable = [
     "fortify"
     "pic"
+    "pie" # ld: warning: creating DT_TEXTREL in a PIE (and more)
     "stackprotector"
   ];
 
@@ -103,7 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
       use of coreboot.
     '';
     license = with lib.licenses; [ lgpl3Plus ];
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ sigmasquadron ];
     platforms = lib.systems.inspect.patternLogicalAnd lib.systems.inspect.patterns.isUnix lib.systems.inspect.patterns.isx86;
     badPlatforms = [ lib.systems.inspect.patterns.isDarwin ];
   };

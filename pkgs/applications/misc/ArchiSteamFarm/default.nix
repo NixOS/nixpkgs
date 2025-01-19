@@ -11,19 +11,19 @@
 buildDotnetModule rec {
   pname = "ArchiSteamFarm";
   # nixpkgs-update: no auto update
-  version = "6.0.6.4";
+  version = "6.1.0.3";
 
   src = fetchFromGitHub {
     owner = "JustArchiNET";
     repo = "ArchiSteamFarm";
     rev = version;
-    hash = "sha256-U4RApOUtrZ9su4O1jamjDbVrjozujW+vYRI1R7rSzpc=";
+    hash = "sha256-3NOeKdXb1tz4qx+tCs6QKfze2KLfyodKwt/aNx6tLvI=";
   };
 
-  dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-runtime = dotnetCorePackages.aspnetcore_9_0;
+  dotnet-sdk = dotnetCorePackages.sdk_9_0;
 
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   projectFile = "ArchiSteamFarm.sln";
   executable = "ArchiSteamFarm";
@@ -38,7 +38,7 @@ buildDotnetModule rec {
   ]
   ;
   dotnetBuildFlags = [
-    "--framework=net8.0"
+    "--framework=net9.0"
   ];
   dotnetInstallFlags = dotnetBuildFlags;
 

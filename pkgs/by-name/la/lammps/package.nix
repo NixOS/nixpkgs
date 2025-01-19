@@ -70,9 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   passthru = {
-    # Remove these at some point - perhaps after release 23.11. See discussion at:
-    # https://github.com/NixOS/nixpkgs/pull/238771#discussion_r1235459961
-    mpi = throw "`lammps-mpi.passthru.mpi` was removed in favor of `extraBuildInputs`";
     inherit packages;
     inherit extraCmakeFlags;
     inherit extraBuildInputs;
@@ -84,13 +81,16 @@ stdenv.mkDerivation (finalAttrs: {
     ++ (lib.mapAttrsToList (n: v: lib.cmakeBool "PKG_${n}" v) packages)
     ++ (lib.mapAttrsToList (n: v: "-D${n}=${v}") extraCmakeFlags);
 
-  buildInputs = [
-    fftw
-    libpng
-    blas
-    lapack
-    gzip
-  ] ++ lib.optionals packages.PYTHON [ python3 ] ++ extraBuildInputs;
+  buildInputs =
+    [
+      fftw
+      libpng
+      blas
+      lapack
+      gzip
+    ]
+    ++ lib.optionals packages.PYTHON [ python3 ]
+    ++ extraBuildInputs;
 
   postInstall = ''
     # For backwards compatibility

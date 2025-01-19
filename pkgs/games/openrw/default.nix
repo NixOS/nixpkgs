@@ -1,20 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, ninja
-, sfml
-, libGLU
-, libGL
-, bullet
-, glm
-, libmad
-, openal
-, SDL2
-, boost
-, ffmpeg_6
-, Cocoa
-, OpenAL }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  ninja,
+  sfml,
+  libGLU,
+  libGL,
+  bullet,
+  glm,
+  libmad,
+  openal,
+  SDL2,
+  boost,
+  ffmpeg_6,
+  Cocoa,
+  OpenAL,
+}:
 
 stdenv.mkDerivation {
   version = "0-unstable-2024-04-20";
@@ -34,16 +36,33 @@ stdenv.mkDerivation {
     ./fix-ffmpeg-6.patch
   ];
 
-  postPatch = lib.optional (stdenv.cc.isClang && (lib.versionAtLeast stdenv.cc.version "9"))''
+  postPatch = lib.optional (stdenv.cc.isClang && (lib.versionAtLeast stdenv.cc.version "9")) ''
     substituteInPlace cmake_configure.cmake \
       --replace 'target_link_libraries(rw_interface INTERFACE "stdc++fs")' ""
   '';
 
-  nativeBuildInputs = [ cmake ninja ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+  ];
 
-  buildInputs = [
-    sfml libGLU libGL bullet glm libmad openal SDL2 boost ffmpeg_6
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ OpenAL Cocoa ];
+  buildInputs =
+    [
+      sfml
+      libGLU
+      libGL
+      bullet
+      glm
+      libmad
+      openal
+      SDL2
+      boost
+      ffmpeg_6
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      OpenAL
+      Cocoa
+    ];
 
   meta = with lib; {
     description = "Unofficial open source recreation of the classic Grand Theft Auto III game executable";

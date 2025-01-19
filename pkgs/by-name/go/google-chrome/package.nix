@@ -39,7 +39,7 @@
   libXScrnSaver,
   libxshmfence,
   libXtst,
-  mesa,
+  libgbm,
   nspr,
   nss,
   pango,
@@ -142,7 +142,7 @@ let
       libXScrnSaver
       libxshmfence
       libXtst
-      mesa
+      libgbm
       nspr
       nss
       opusWithCustomModes
@@ -166,11 +166,11 @@ let
 
   linux = stdenv.mkDerivation (finalAttrs: {
     inherit pname meta passthru;
-    version = "130.0.6723.58";
+    version = "132.0.6834.83";
 
     src = fetchurl {
       url = "https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${finalAttrs.version}-1_amd64.deb";
-      hash = "sha256-HWFC+9Op4ja/S3eP56N9hkOkMbCrbF+NHEcxSLb85Hg=";
+      hash = "sha256-qufv7m7iQ8yX6WeNajTbPELCmRhr4GGBa8Wzy+iMFhg=";
     };
 
     # With strictDeps on, some shebangs were not being patched correctly
@@ -248,7 +248,7 @@ let
         --suffix PATH            : "${lib.makeBinPath [ xdg-utils ]}" \
         --prefix XDG_DATA_DIRS   : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH:${addDriverRunpath.driverLink}/share" \
         --set CHROME_WRAPPER  "google-chrome-$dist" \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
         --add-flags "--simulate-outdated-no-au='Tue, 31 Dec 2099 23:59:59 GMT'" \
         --add-flags ${lib.escapeShellArg commandLineArgs}
 
@@ -266,11 +266,11 @@ let
 
   darwin = stdenvNoCC.mkDerivation (finalAttrs: {
     inherit pname meta passthru;
-    version = "130.0.6723.59";
+    version = "132.0.6834.84";
 
     src = fetchurl {
-      url = "http://dl.google.com/release2/chrome/oehlfkedv43jkzlol2mqd6xife_130.0.6723.59/GoogleChrome-130.0.6723.59.dmg";
-      hash = "sha256-ioEWtD49XtZTItz+bCiDobV0nW82Dv6S41/oHlUsatU=";
+      url = "http://dl.google.com/release2/chrome/acpvuq6jnnfhesngduj6lnfmy3zq_132.0.6834.84/GoogleChrome-132.0.6834.84.dmg";
+      hash = "sha256-SX8IUdTnIJHwfF9ZwIHZwGZUncJ/NLQpuEL/X8p1KJo=";
     };
 
     dontPatch = true;

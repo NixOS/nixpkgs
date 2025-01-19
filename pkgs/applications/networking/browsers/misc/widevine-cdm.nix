@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchzip
+{
+  lib,
+  stdenv,
+  fetchzip,
 }:
 
 stdenv.mkDerivation rec {
   pname = "widevine-cdm";
-  version = "4.10.2710.0";
+  version = "4.10.2830.0";
 
   src = fetchzip {
     url = "https://dl.google.com/widevine-cdm/${version}-linux-x64.zip";
-    hash = "sha256-lGTrSzUk5FluH1o4E/9atLIabEpco3C3gZw+y6H6LJo=";
+    hash = "sha256-XDnsan1ulnIK87Owedb2s9XWLzk1K2viGGQe9LN/kcE=";
     stripRoot = false;
   };
 

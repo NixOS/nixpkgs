@@ -3,7 +3,7 @@
   stdenv,
   auditwheel,
   buildPythonPackage,
-  git,
+  gitMinimal,
   greenlet,
   fetchFromGitHub,
   pyee,
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "playwright-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-C/spH54hhLI0Egs2jjTjQ5BH1pIw1syrfSyUvVQRoKM=";
   };
 
@@ -71,12 +71,15 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
-    git
+    gitMinimal
     setuptools-scm
     setuptools
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [ auditwheel ];
 
-  pythonRelaxDeps = [ "pyee" ];
+  pythonRelaxDeps = [
+    "greenlet"
+    "pyee"
+  ];
 
   propagatedBuildInputs = [
     greenlet

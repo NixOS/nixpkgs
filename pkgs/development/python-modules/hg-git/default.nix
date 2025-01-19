@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "hg-git";
-  version = "1.1.2";
+  version = "1.1.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "hg_git";
     inherit version;
-    hash = "sha256-BZzcElZa0pMBSGXSiSB+d+YFhJMM5PAdT2Txq5qLZCU=";
+    hash = "sha256-XF9vAtvUK5yRP4OxZv83/AA2jde5t7za3jqgyuXc5eU=";
   };
 
   build-system = [

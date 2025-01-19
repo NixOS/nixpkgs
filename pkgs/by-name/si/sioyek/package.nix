@@ -24,17 +24,20 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-MOqWitXnYn8efk2LSeAOhmpcxGn6hbvjXbNTXEDdxIM=";
   };
 
-  buildInputs = [
-    gumbo
-    harfbuzz
-    jbig2dec
-    mujs
-    mupdf
-    openjpeg
-    qt6.qt3d
-    qt6.qtbase
-    qt6.qtspeech
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ freetype ];
+  buildInputs =
+    [
+      gumbo
+      harfbuzz
+      jbig2dec
+      mujs
+      mupdf
+      openjpeg
+      qt6.qt3d
+      qt6.qtbase
+      qt6.qtspeech
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ qt6.qtwayland ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ freetype ];
 
   nativeBuildInputs = [
     installShellFiles
@@ -54,10 +57,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postInstall =
-    if stdenv.isDarwin then
+    if stdenv.hostPlatform.isDarwin then
       ''
         cp -r pdf_viewer/shaders sioyek.app/Contents/MacOS/shaders
-        cp pdf_viewer/{prefs,prefs_user,keys,key_user}.config tutorial.pdf sioyek.app/Contents/MacOS/
+        cp pdf_viewer/{prefs,prefs_user,keys,keys_user}.config tutorial.pdf sioyek.app/Contents/MacOS/
 
         mkdir -p $out/Applications $out/bin
         cp -r sioyek.app $out/Applications

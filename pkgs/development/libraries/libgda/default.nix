@@ -1,25 +1,26 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, intltool
-, itstool
-, libxml2
-, gtk3
-, openssl
-, gnome
-, gobject-introspection
-, vala
-, libgee
-, fetchpatch
-, autoreconfHook
-, gtk-doc
-, autoconf-archive
-, yelp-tools
-, mysqlSupport ? false
-, libmysqlclient
-, postgresSupport ? false
-, postgresql
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  intltool,
+  itstool,
+  libxml2,
+  gtk3,
+  openssl,
+  gnome,
+  gobject-introspection,
+  vala,
+  libgee,
+  fetchpatch,
+  autoreconfHook,
+  gtk-doc,
+  autoconf-archive,
+  yelp-tools,
+  mysqlSupport ? false,
+  libmysqlclient,
+  postgresSupport ? false,
+  postgresql,
 }:
 
 stdenv.mkDerivation rec {
@@ -56,15 +57,18 @@ stdenv.mkDerivation rec {
     yelp-tools
   ];
 
-  buildInputs = [
-    gtk3
-    openssl
-    libgee
-  ] ++ lib.optionals mysqlSupport [
-    libmysqlclient
-  ] ++ lib.optionals postgresSupport [
-    postgresql
-  ];
+  buildInputs =
+    [
+      gtk3
+      openssl
+      libgee
+    ]
+    ++ lib.optionals mysqlSupport [
+      libmysqlclient
+    ]
+    ++ lib.optionals postgresSupport [
+      postgresql
+    ];
 
   propagatedBuildInputs = [
     libxml2
@@ -82,7 +86,7 @@ stdenv.mkDerivation rec {
     "--enable-system-sqlite=${if stdenv.hostPlatform.isDarwin then "no" else "yes"}"
   ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=incompatible-function-pointer-types";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
 
   enableParallelBuilding = true;
 

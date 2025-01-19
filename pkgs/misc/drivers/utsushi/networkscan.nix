@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, rpmextract }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  rpmextract,
+}:
 
 stdenv.mkDerivation rec {
   pname = "imagescan-plugin-networkscan";

@@ -1,4 +1,9 @@
-{ lib, buildDunePackage, dune_3, dune-private-libs }:
+{
+  lib,
+  buildDunePackage,
+  dune_3,
+  dune-private-libs,
+}:
 
 buildDunePackage rec {
   pname = "dune-glob";

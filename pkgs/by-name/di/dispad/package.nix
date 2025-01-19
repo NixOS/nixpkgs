@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, libX11, libXi, libconfuse }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libX11,
+  libXi,
+  libconfuse,
+}:
 
 stdenv.mkDerivation rec {
   pname = "dispad";
@@ -11,7 +18,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-PtwvaNtnCm3Y+6vlxPDc21RyIA2v3vkMOHpoGFxNFng=";
   };
 
-  buildInputs = [ libX11 libXi libconfuse ];
+  buildInputs = [
+    libX11
+    libXi
+    libconfuse
+  ];
 
   meta = with lib; {
     description = "Small daemon for disabling trackpads while typing";

@@ -1,4 +1,10 @@
-{ lib, buildKodiBinaryAddon, fetchFromGitHub, libretro, twenty-fortyeight }:
+{
+  lib,
+  buildKodiBinaryAddon,
+  fetchFromGitHub,
+  libretro,
+  twenty-fortyeight,
+}:
 
 buildKodiBinaryAddon rec {
   pname = "libretro-2048";

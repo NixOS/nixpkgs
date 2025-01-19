@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl gnugrep gnused jq yq-go nix-prefetch
+#!nix-shell -i bash -p curl gnugrep gnused jq nurl yq-go
 
 set -x -eu -o pipefail
 
@@ -10,6 +10,7 @@ trap "rm -rf ${WORKDIR}" EXIT
 
 NIXPKGS_ROOT="$(git rev-parse --show-toplevel)"/
 NIXPKGS_K3S_PATH=$(cd $(dirname ${BASH_SOURCE[0]}); pwd -P)/
+OLD_VERSION="$(nix-instantiate --eval -E "with import $NIXPKGS_ROOT. {}; k3s_1_${MINOR_VERSION}.version or (builtins.parseDrvName k3s_1_${MINOR_VERSION}.name).version" | tr -d '"')"
 cd ${NIXPKGS_K3S_PATH}
 
 cd 1_${MINOR_VERSION}
@@ -141,7 +142,7 @@ cat >versions.nix <<EOF
 EOF
 
 set +e
-K3S_VENDOR_HASH=$(nix-prefetch -I nixpkgs=${NIXPKGS_ROOT} "{ sha256 }: (import ${NIXPKGS_ROOT}. {}).k3s_1_${MINOR_VERSION}.goModules.overrideAttrs (_: { vendorHash = sha256; })")
+K3S_VENDOR_HASH=$(nurl -e "(import ${NIXPKGS_ROOT}. {}).k3s_1_${MINOR_VERSION}.goModules")
 set -e
 
 if [ -n "${K3S_VENDOR_HASH:-}" ]; then
@@ -153,12 +154,11 @@ fi
 
 # Implement commit
 # See https://nixos.org/manual/nixpkgs/stable/#var-passthru-updateScript-commit
-OLD_VERSION="$(nix-instantiate --eval -E "with import $NIXPKGS_ROOT. {}; k3s.version or (builtins.parseDrvName k3s.name).version" | tr -d '"')"
 cat <<EOF
 [{
     "attrPath": "k3s_1_${MINOR_VERSION}",
     "oldVersion": "$OLD_VERSION",
     "newVersion": "$K3S_VERSION",
-    "files": ["$PWD/versions.nix","$PWD/chart-versions.nix"]
+    "files": ["$PWD/versions.nix","$PWD/chart-versions.nix","$PWD/images-versions.json"]
 }]
 EOF

@@ -1,4 +1,8 @@
-{ lib, fetchurl, buildDunePackage }:
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+}:
 
 buildDunePackage rec {
   pname = "rusage";

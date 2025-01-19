@@ -1,4 +1,11 @@
-{ lib, buildDunePackage, ocaml, fetchurl, seq, qcheck-alcotest }:
+{
+  lib,
+  buildDunePackage,
+  ocaml,
+  fetchurl,
+  seq,
+  qcheck-alcotest,
+}:
 
 buildDunePackage rec {
   minimalOCamlVersion = "4.03";

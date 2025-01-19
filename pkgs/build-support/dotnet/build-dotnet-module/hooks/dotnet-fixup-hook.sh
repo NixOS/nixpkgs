@@ -44,10 +44,12 @@ dotnetFromEnv'
             # if dotnet CLI is available, set DOTNET_ROOT based on it. Otherwise set to default .NET runtime
             dotnetRootFlagsArray+=("--suffix" "PATH" ":" "$wrapperPath")
             dotnetRootFlagsArray+=("--run" "$dotnetFromEnvScript")
-            dotnetRootFlagsArray+=("--set-default" "DOTNET_ROOT" "$dotnetRuntime")
-            dotnetRootFlagsArray+=("--suffix" "PATH" ":" "$dotnetRuntime/bin")
-        else
-            dotnetRootFlagsArray+=("--set" "DOTNET_ROOT" "$dotnetRuntime")
+            if [[ -n $dotnetRuntime ]]; then
+                dotnetRootFlagsArray+=("--set-default" "DOTNET_ROOT" "$dotnetRuntime/share/dotnet")
+                dotnetRootFlagsArray+=("--suffix" "PATH" ":" "$dotnetRuntime/bin")
+            fi
+        elif [[ -n $dotnetRuntime ]]; then
+            dotnetRootFlagsArray+=("--set" "DOTNET_ROOT" "$dotnetRuntime/share/dotnet")
             dotnetRootFlagsArray+=("--prefix" "PATH" ":" "$dotnetRuntime/bin")
         fi
     fi
@@ -95,5 +97,5 @@ dotnetFixupHook() {
 }
 
 if [[ -z "${dontFixup-}" && -z "${dontDotnetFixup-}" ]]; then
-    preFixupPhases+=" dotnetFixupHook"
+    appendToVar preFixupPhases dotnetFixupHook
 fi

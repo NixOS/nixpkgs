@@ -12,7 +12,7 @@ index b1b74d8..a46c80b 100644
          this.fs = ctx.fs;
          this.flushToDisk = ctx.flushToDisk;
 -        this.serverDistDir = ctx.serverDistDir;
-+        this.serverDistDir = path.join(process.env.HOMEPAGE_CACHE_DIR, "homepage");
++        this.serverDistDir = path.join(process.env.NIXPKGS_HOMEPAGE_CACHE_DIR, "homepage");
          this.appDir = !!ctx._appDir;
          if (ctx.maxMemoryCacheSize) {
              this.memoryCache = new _lruCache.default({

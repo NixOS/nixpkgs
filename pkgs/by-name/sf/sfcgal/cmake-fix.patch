@@ -1,8 +1,8 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index a3babfae..11ea637c 100644
+index 07a6c2e5..37c33d92 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -209,7 +209,7 @@ if(NOT DEFINED CMAKE_INSTALL_LIBDIR)
+@@ -221,7 +221,7 @@ if(NOT DEFINED CMAKE_INSTALL_LIBDIR)
    set(CMAKE_INSTALL_LIBDIR "${_LIBDIR_DEFAULT}" CACHE PATH "object code libraries (${_LIBDIR_DEFAULT})")
  endif()
  
@@ -11,6 +11,17 @@ index a3babfae..11ea637c 100644
  SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
  #SET(CMAKE_MACOSX_RPATH ON)
  
+@@ -260,6 +260,10 @@ if ( "${CMAKE_BUILD_TYPE}" STREQUAL "Debug" )
+ else()
+   set( SFCGAL_LIB_NAME "SFCGAL" )
+ endif()
++
++if ( UNIX )
++  include(GNUInstallDirs)
++endif()
+ #set( SFCGAL_LIB_NAME ${${CMAKE_BUILD_TYPE}
+ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/sfcgal-config.in ${CMAKE_CURRENT_BINARY_DIR}/sfcgal-config @ONLY)
+ install( PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/sfcgal-config DESTINATION bin )
 diff --git a/sfcgal-config.in b/sfcgal-config.in
 index a0e992c5..49615c13 100755
 --- a/sfcgal-config.in

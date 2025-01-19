@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "secynic";
     repo = "ipwhois";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-PY3SUPELcCvS/o5kfko4OD1BlTc9DnyqfkSFuzcAOSY=";
   };
 

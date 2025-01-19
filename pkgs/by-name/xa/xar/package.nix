@@ -30,14 +30,14 @@
   xar,
 }:
 stdenv.mkDerivation (finalAttrs: {
-  pname = "xar";
-  version = "498";
+  pname = "xar${lib.optionalString (e2fsprogs == null) "-minimal"}";
+  version = "501";
 
   src = fetchFromGitHub {
     owner = "apple-oss-distributions";
     repo = "xar";
     rev = "xar-${finalAttrs.version}";
-    hash = "sha256-RyWeR/ZnDBHIZhwzVxETdrTTPQA2VgsLZegRkxX1240=";
+    hash = "sha256-Fq+Re0LCBIGhW2FR+pgV8SWtaDOEFgTh+rQ8JFWK/k0=";
   };
 
   # Update patch set with
@@ -48,7 +48,11 @@ stdenv.mkDerivation (finalAttrs: {
   #   # …
   #   rm -r ../pkgs/by-name/xa/xar/patches
   #   git format-patch --zero-commit --output-directory ../pkgs/by-name/xa/xar/patches main
-  patches = lib.filesystem.listFilesRecursive ./patches;
+  patches =
+    # Avoid Darwin rebuilds on staging-next
+    lib.filter (
+      p: stdenv.hostPlatform.isDarwin -> baseNameOf p != "0020-Fall-back-to-readlink-on-Linux.patch"
+    ) (lib.filesystem.listFilesRecursive ./patches);
 
   # We do not use or modify files outside of the xar subdirectory.
   patchFlags = [ "-p2" ];
@@ -80,7 +84,8 @@ stdenv.mkDerivation (finalAttrs: {
       xz
       e2fsprogs
     ]
-    ++ lib.optional stdenv.hostPlatform.isLinux acl ++ lib.optional stdenv.hostPlatform.isMusl musl-fts;
+    ++ lib.optional stdenv.hostPlatform.isLinux acl
+    ++ lib.optional stdenv.hostPlatform.isMusl musl-fts;
 
   passthru =
     let

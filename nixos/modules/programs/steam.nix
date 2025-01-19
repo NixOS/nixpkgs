@@ -197,7 +197,7 @@ in {
     services.displayManager.sessionPackages = lib.mkIf cfg.gamescopeSession.enable [ gamescopeSessionFile ];
 
     # enable 32bit pulseaudio/pipewire support if needed
-    hardware.pulseaudio.support32Bit = config.hardware.pulseaudio.enable;
+    services.pulseaudio.support32Bit = config.services.pulseaudio.enable;
     services.pipewire.alsa.support32Bit = config.services.pipewire.alsa.enable;
 
     hardware.steam-hardware.enable = true;

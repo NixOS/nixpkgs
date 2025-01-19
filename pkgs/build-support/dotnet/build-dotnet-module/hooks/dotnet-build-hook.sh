@@ -27,10 +27,12 @@ dotnetBuildHook() {
         local -r parallelBuildFlag="false"
     fi
 
-    if [[ -n ${dotnetSelfContainedBuild-} ]]; then
-        dotnetBuildFlagsArray+=("-p:SelfContained=true")
-    else
-        dotnetBuildFlagsArray+=("-p:SelfContained=false")
+    if [[ -v dotnetSelfContainedBuild ]]; then
+        if [[ -n $dotnetSelfContainedBuild ]]; then
+            dotnetBuildFlagsArray+=("-p:SelfContained=true")
+        else
+            dotnetBuildFlagsArray+=("-p:SelfContained=false")
+        fi
     fi
 
     if [[ -n ${dotnetUseAppHost-} ]]; then

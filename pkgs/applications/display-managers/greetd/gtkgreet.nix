@@ -1,16 +1,17 @@
-{ stdenv
-, lib
-, fetchFromSourcehut
-, wrapGAppsHook3
-, pkg-config
-, cmake
-, meson
-, ninja
-, gtk3
-, gtk-layer-shell
-, json_c
-, librsvg
-, scdoc
+{
+  stdenv,
+  lib,
+  fetchFromSourcehut,
+  wrapGAppsHook3,
+  pkg-config,
+  cmake,
+  meson,
+  ninja,
+  gtk3,
+  gtk-layer-shell,
+  json_c,
+  librsvg,
+  scdoc,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,11 +25,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-GKBYql0hzqB6uY87SsAqHwf3qLAr7xznMnAjRtP4HS8=";
   };
 
+  depsBuildBuild = [ pkg-config ];
   nativeBuildInputs = [
     pkg-config
     meson
     ninja
     cmake
+    scdoc
     wrapGAppsHook3
   ];
 
@@ -36,13 +39,17 @@ stdenv.mkDerivation rec {
     gtk3
     gtk-layer-shell
     json_c
-    scdoc
     librsvg
   ];
 
   mesonFlags = [
     "-Dlayershell=enabled"
   ];
+
+  postPatch = ''
+    substituteInPlace meson.build \
+      --replace "dependency('scdoc'," "dependency('scdoc', native:true,"
+  '';
 
   # G_APPLICATION_FLAGS_NONE is deprecated in GLib 2.73.3+.
   env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
@@ -51,7 +58,7 @@ stdenv.mkDerivation rec {
     description = "GTK based greeter for greetd, to be run under cage or similar";
     homepage = "https://git.sr.ht/~kennylevinsen/gtkgreet";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ luc65r ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
     mainProgram = "gtkgreet";
   };

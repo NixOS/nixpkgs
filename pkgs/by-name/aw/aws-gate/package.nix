@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitHub
-, installShellFiles
-, python3Packages
-, ssm-session-manager-plugin
+{
+  lib,
+  fetchFromGitHub,
+  installShellFiles,
+  python3Packages,
+  ssm-session-manager-plugin,
 }:
 
 python3Packages.buildPythonApplication rec {

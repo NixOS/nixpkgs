@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "quietvoid";
     repo = "hdr10plus_tool";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-eP77LHADP9oenMACctPKU6xPzg4atC0dPOqyrFse/1s=";
   };
 

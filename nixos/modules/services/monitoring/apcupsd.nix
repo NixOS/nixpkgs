@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.apcupsd;
 
@@ -58,14 +55,15 @@ let
     rm "$out/apcupsd.conf"
     # Set the SCRIPTDIR= line in apccontrol to the dir we're creating now
     sed -i -e "s|^SCRIPTDIR=.*|SCRIPTDIR=$out|" "$out/apccontrol"
-    '' + concatStringsSep "\n" (map eventToShellCmds eventList)
+    '' + lib.concatStringsSep "\n" (map eventToShellCmds eventList)
 
   );
 
   # Ensure the CLI uses our generated configFile
-  wrappedBinaries = pkgs.runCommandLocal "apcupsd-wrapped-binaries"
-    { nativeBuildInputs = [ pkgs.makeWrapper ]; }
-    ''
+  wrappedBinaries = pkgs.runCommand "apcupsd-wrapped-binaries" {
+    preferLocalBuild = true;
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+  } ''
       for p in "${lib.getBin pkgs.apcupsd}/bin/"*; do
           bname=$(basename "$p")
           makeWrapper "$p" "$out/bin/$bname" --add-flags "-f ${configFile}"
@@ -87,9 +85,9 @@ in
 
     services.apcupsd = {
 
-      enable = mkOption {
+      enable = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           Whether to enable the APC UPS daemon. apcupsd monitors your UPS and
           permits orderly shutdown of your computer in the event of a power
@@ -99,14 +97,14 @@ in
         '';
       };
 
-      configText = mkOption {
+      configText = lib.mkOption {
         default = ''
           UPSTYPE usb
           NISIP 127.0.0.1
           BATTERYLEVEL 50
           MINUTES 5
         '';
-        type = types.lines;
+        type = lib.types.lines;
         description = ''
           Contents of the runtime configuration file, apcupsd.conf. The default
           settings makes apcupsd autodetect USB UPSes, limit network access to
@@ -116,12 +114,12 @@ in
         '';
       };
 
-      hooks = mkOption {
+      hooks = lib.mkOption {
         default = {};
         example = {
           doshutdown = "# shell commands to notify that the computer is shutting down";
         };
-        type = types.attrsOf types.lines;
+        type = lib.types.attrsOf lib.types.lines;
         description = ''
           Each attribute in this option names an apcupsd event and the string
           value it contains will be executed in a shell, in response to that
@@ -141,10 +139,10 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     assertions = [ {
-      assertion = let hooknames = builtins.attrNames cfg.hooks; in all (x: elem x eventList) hooknames;
+      assertion = let hooknames = builtins.attrNames cfg.hooks; in lib.all (x: lib.elem x eventList) hooknames;
       message = ''
         One (or more) attribute names in services.apcupsd.hooks are invalid.
         Current attribute names: ${toString (builtins.attrNames cfg.hooks)}

@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gtk2
-, pkg-config
-, autoreconfHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gtk2,
+  pkg-config,
+  autoreconfHook,
 }:
 
 stdenv.mkDerivation {
@@ -39,4 +40,3 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [ _3JlOy-PYCCKUi ];
   };
 }
-

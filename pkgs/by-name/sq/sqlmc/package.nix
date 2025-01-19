@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "malvads";
     repo = "sqlmc";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-8p+9A1j+J3WItc1u8kG7LHY086kcwMGhEMENym2p/Fo=";
   };
 

@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "cython";
-  version = "3.0.11";
+  version = "3.0.11-1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cython";
     repo = "cython";
-    rev = version;
-    hash = "sha256-ZyDNv95eS9YrVHIh5C/Xq8OvfX1cnI3f9GjA+OfaONA=";
+    tag = version;
+    hash = "sha256-P2k21uNC6X+R6a1dWAIspGnUc6JwAzRXUleVfZG+vqY=";
   };
 
   build-system = [
@@ -118,7 +118,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/cython/cython/blob/${version}/CHANGES.rst";
     license = lib.licenses.asl20;
     mainProgram = "cython";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
   };
 }
 # TODO: investigate recursive loop when doCheck is true

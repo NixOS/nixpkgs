@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "NeuralEnsemble";
     repo = "python-neo";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-7Q80vbQInVWxPCr6VvmI9tFfTIAzo9FPJ19q51Xd2KM=";
   };
 

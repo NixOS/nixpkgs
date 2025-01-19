@@ -47,6 +47,8 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DENABLE_QT=ON" ];
 
+  env.NIX_CFLAGS_COMPILE = "-Wno-deprecated-declarations";
+
   dontWrapQtApps = true;
 
   meta = with lib; {

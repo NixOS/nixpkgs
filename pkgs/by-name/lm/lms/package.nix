@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lms";
-  version = "3.58.0";
+  version = "3.62.1";
 
   src = fetchFromGitHub {
     owner = "epoupon";
     repo = "lms";
     rev = "v${version}";
-    hash = "sha256-sWlD/n9Qjwiu/UfZrxRxwv2rc4XwRZN35fyjIriGZPY=";
+    hash = "sha256-LzDEK17Gh/r3tXGRItQfOeTCD9yGcRzIYMBX77MuwAU=";
   };
 
   strictDeps = true;
@@ -54,10 +54,7 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace src/lms/main.cpp --replace-fail "/etc/lms.conf" "$out/share/lms/lms.conf"
-    substituteInPlace src/tools/recommendation/LmsRecommendation.cpp --replace-fail "/etc/lms.conf" "$out/share/lms/lms.conf"
-    substituteInPlace src/tools/db-generator/LmsDbGenerator.cpp --replace-fail "/etc/lms.conf" "$out/share/lms/lms.conf"
-    substituteInPlace src/tools/cover/LmsCover.cpp --replace-fail "/etc/lms.conf" "$out/share/lms/lms.conf"
+    substituteInPlace src/libs/core/include/core/SystemPaths.hpp --replace-fail "/etc" "$out/share/lms"
   '';
 
   postInstall = ''
@@ -71,11 +68,26 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     wrapProgram $out/bin/lms \
-      --prefix LD_LIBRARY_PATH : "${lib.strings.makeLibraryPath [libSM libICE]}"
+      --prefix LD_LIBRARY_PATH : "${
+        lib.strings.makeLibraryPath [
+          libSM
+          libICE
+        ]
+      }"
     wrapProgram $out/bin/lms-metadata \
-      --prefix LD_LIBRARY_PATH : "${lib.strings.makeLibraryPath [libSM libICE]}"
+      --prefix LD_LIBRARY_PATH : "${
+        lib.strings.makeLibraryPath [
+          libSM
+          libICE
+        ]
+      }"
     wrapProgram $out/bin/lms-recommendation \
-      --prefix LD_LIBRARY_PATH : "${lib.strings.makeLibraryPath [libSM libICE]}"
+      --prefix LD_LIBRARY_PATH : "${
+        lib.strings.makeLibraryPath [
+          libSM
+          libICE
+        ]
+      }"
   '';
 
   meta = {

@@ -45,10 +45,10 @@ buildPythonPackage rec {
     setproctitle = [ setproctitle ];
   };
 
-  pytestFlagsArray = [
-    # pytest can already use xdist at this point
-    "--numprocesses=$NIX_BUILD_CORES"
-  ];
+  # pytest can already use xdist at this point
+  preCheck = ''
+    appendToVar pytestFlags "--numprocesses=$NIX_BUILD_CORES"
+  '';
 
   # access file system
   disabledTests = [

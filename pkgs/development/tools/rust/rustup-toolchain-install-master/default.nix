@@ -1,14 +1,15 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, runCommand
-, stdenv
-, patchelf
-, zlib
-, pkg-config
-, openssl
-, xz
-, Security
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  runCommand,
+  stdenv,
+  patchelf,
+  zlib,
+  pkg-config,
+  openssl,
+  xz,
+  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -28,28 +29,32 @@ rustPlatform.buildRustPackage rec {
 
   patches =
     let
-      patchelfPatch = runCommand "0001-dynamically-patchelf-binaries.patch" {
-        CC = stdenv.cc;
-        patchelf = patchelf;
-        libPath = "$ORIGIN/../lib:${lib.makeLibraryPath [ zlib ]}";
-      }
-      ''
-        export dynamicLinker=$(cat $CC/nix-support/dynamic-linker)
-        substitute ${./0001-dynamically-patchelf-binaries.patch} $out \
-          --subst-var patchelf \
-          --subst-var dynamicLinker \
-          --subst-var libPath
-      '';
+      patchelfPatch =
+        runCommand "0001-dynamically-patchelf-binaries.patch"
+          {
+            CC = stdenv.cc;
+            patchelf = patchelf;
+            libPath = "$ORIGIN/../lib:${lib.makeLibraryPath [ zlib ]}";
+          }
+          ''
+            export dynamicLinker=$(cat $CC/nix-support/dynamic-linker)
+            substitute ${./0001-dynamically-patchelf-binaries.patch} $out \
+              --subst-var patchelf \
+              --subst-var dynamicLinker \
+              --subst-var libPath
+          '';
     in
     lib.optionals stdenv.hostPlatform.isLinux [ patchelfPatch ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [
-    openssl
-    xz
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Security
-  ];
+  buildInputs =
+    [
+      openssl
+      xz
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Security
+    ];
 
   # update Cargo.lock to work with openssl 3
   postPatch = ''

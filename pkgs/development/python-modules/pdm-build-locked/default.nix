@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pdm-build-locked";
-  version = "0.3.3";
+  version = "0.3.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pdm-project";
     repo = "pdm-build-locked";
-    rev = "refs/tags/${version}";
-    hash = "sha256-tgLC1tUgmyX7QvlLpNb/SMQRTDZ+DNFV3o0JELAZEeo=";
+    tag = version;
+    hash = "sha256-22p9QQZOiDp4IlMK7tn4eSws3lKcThcHvIQpIX/cYrU=";
   };
 
   postPatch = ''

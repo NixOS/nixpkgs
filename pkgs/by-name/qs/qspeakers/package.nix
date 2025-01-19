@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, libsForQt5
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libsForQt5,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qspeakers";
-  version = "1.6.9";
+  version = "1.7";
 
   src = fetchFromGitHub {
     owner = "be1";
     repo = "qspeakers";
-    rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-V4rcDUJU27ijzsc6zhsEiQ/7SdvHmGR2402iIazrMfE=";
+    tag = finalAttrs.version;
+    hash = "sha256-CQzUeC2nbKMWG6/2715+bf4rFu9IytT+bdqkZYVrYGc=";
   };
 
   nativeBuildInputs = [

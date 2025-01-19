@@ -2,6 +2,7 @@
   lib,
   aws-sam-translator,
   buildPythonPackage,
+  defusedxml,
   fetchFromGitHub,
   jschema-to-python,
   jsonpatch,
@@ -15,24 +16,27 @@
   pyyaml,
   regex,
   sarif-om,
+  setuptools,
   sympy,
 }:
 
 buildPythonPackage rec {
   pname = "cfn-lint";
-  version = "0.87.7";
-  format = "setuptools";
+  version = "1.18.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "aws-cloudformation";
     repo = "cfn-lint";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-em6Vi9zIn8ikmcHVbljA1vr+R3t8ZpJ57p3Ix3bqMYU=";
+    tag = "v${version}";
+    hash = "sha256-e06ytX1scIsmw/SezIVVnGn0day1l6kQ/wb05E8O7h0=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aws-sam-translator
     jschema-to-python
     jsonpatch
@@ -46,11 +50,26 @@ buildPythonPackage rec {
     sympy
   ];
 
+  optional-dependencies = {
+    graph = [ pydot ];
+    junit = [ junit-xml ];
+    sarif = [
+      jschema-to-python
+      sarif-om
+    ];
+    full = [
+      jschema-to-python
+      junit-xml
+      pydot
+      sarif-om
+    ];
+  };
+
   nativeCheckInputs = [
+    defusedxml
     mock
-    pydot
     pytestCheckHook
-  ];
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   preCheck = ''
     export PATH=$out/bin:$PATH
@@ -68,6 +87,8 @@ buildPythonPackage rec {
     "test_override_parameters"
     "test_positional_template_parameters"
     "test_template_config"
+    # Assertion error
+    "test_build_graph"
   ];
 
   pythonImportsCheck = [ "cfnlint" ];

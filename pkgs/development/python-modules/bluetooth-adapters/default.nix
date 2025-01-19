@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "bluetooth-adapters";
-  version = "0.20.0";
+  version = "0.20.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -29,8 +29,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "bluetooth-adapters";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-dQjoaBK+WMHQss/7nQRRCE8Jv4S0iq6awa/t3SMGUiE=";
+    tag = "v${version}";
+    hash = "sha256-JeYqzwlR0zY0BGC6iFCTu9EDlYnu+wdpGeje2xKwcVI=";
   };
 
   postPatch = ''

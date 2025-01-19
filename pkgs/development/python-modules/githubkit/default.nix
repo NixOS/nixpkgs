@@ -17,22 +17,21 @@
 
 buildPythonPackage rec {
   pname = "githubkit";
-  version = "0.11.11";
+  version = "0.12.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "yanyongyu";
     repo = "githubkit";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-/jtTNQ9r4JJAXLIEEO7lR0IhpJ5vzbV0mNTdKgkH1FE=";
+    tag = "v${version}";
+    hash = "sha256-h2XoHb3ukh6MKQG2v0TZg81mcwNGk4cfK8CWjzhM8W4=";
   };
 
   pythonRelaxDeps = [ "hishel" ];
 
   build-system = [ poetry-core ];
-
 
   dependencies = [
     hishel

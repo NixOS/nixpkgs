@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "FreeOpcUa";
     repo = "opcua-asyncio";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-XXjzYDOEBdA4uk0VCzscHrPCY2Lgin0JBAVDdxmSOio=";
     fetchSubmodules = true;
   };
@@ -61,17 +61,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "asyncua" ];
 
-  disabledTests = [
-    # Failed: DID NOT RAISE <class 'asyncio.exceptions.TimeoutError'>
-    "test_publish"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # OSError: [Errno 48] error while attempting to bind on address ('127.0.0.1',...
-    "test_anonymous_rejection"
-    "test_certificate_handling_success"
-    "test_encrypted_private_key_handling_success"
-    "test_encrypted_private_key_handling_success_with_cert_props"
-    "test_encrypted_private_key_handling_failure"
-  ];
+  disabledTests =
+    [
+      # Failed: DID NOT RAISE <class 'asyncio.exceptions.TimeoutError'>
+      "test_publish"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # OSError: [Errno 48] error while attempting to bind on address ('127.0.0.1',...
+      "test_anonymous_rejection"
+      "test_certificate_handling_success"
+      "test_encrypted_private_key_handling_success"
+      "test_encrypted_private_key_handling_success_with_cert_props"
+      "test_encrypted_private_key_handling_failure"
+    ];
 
   meta = with lib; {
     description = "OPC UA / IEC 62541 Client and Server for Python";

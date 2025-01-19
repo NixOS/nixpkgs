@@ -1,8 +1,13 @@
-{ lib, stdenv, fetchurl, unzip }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+}:
 
 stdenv.mkDerivation rec {
   pname = "premake";
-  version  = "4.3";
+  version = "4.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/premake/premake-${version}-src.zip";

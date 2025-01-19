@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, groff
-, makeWrapper
-, ncurses
-, runtimeShell
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  groff,
+  makeWrapper,
+  ncurses,
+  runtimeShell,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -14,22 +14,22 @@
 
 buildPythonPackage rec {
   pname = "axis";
-  version = "62";
+  version = "64";
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "Kane610";
     repo = "axis";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ey0yt+AIbMO74brHepnCFtekDS4XscTKswshlTrS41A=";
+    tag = "v${version}";
+    hash = "sha256-6g4Dqk+oGlEcqlNuMiwep+NCVFmwRZjKgEZC1OzmKw0=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==68.0.0" "setuptools" \
-      --replace-fail "wheel==0.40.0" "wheel"
+      --replace-fail "setuptools==75.6.0" "setuptools" \
+      --replace-fail "wheel==0.45.1" "wheel"
   '';
 
   build-system = [ setuptools ];
@@ -50,10 +50,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python library for communicating with devices from Axis Communications";
-    mainProgram = "axis";
     homepage = "https://github.com/Kane610/axis";
     changelog = "https://github.com/Kane610/axis/releases/tag/v${version}";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "axis";
   };
 }

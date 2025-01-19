@@ -428,7 +428,26 @@ NOTE: It is highly recommended to use a pinned version of pnpm (i.e. `pnpm_8` or
 
 In case you are patching `package.json` or `pnpm-lock.yaml`, make sure to pass `finalAttrs.patches` to the function as well (i.e. `inherit (finalAttrs) patches`.
 
-`pnpm.configHook` supports adding additional `pnpm install` flags via `pnpmInstallFlags` which can be set to a Nix string array.
+`pnpm.configHook` supports adding additional `pnpm install` flags via `pnpmInstallFlags` which can be set to a Nix string array:
+
+```nix
+{
+  pnpm,
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "foo";
+  version = "0-unstable-1980-01-01";
+
+  src = ...;
+
+  pnpmInstallFlags = [ "--shamefully-hoist" ];
+
+  pnpmDeps = pnpm.fetchDeps {
+    inherit (finalAttrs) pnpmInstallFlags;
+  };
+})
+```
 
 #### Dealing with `sourceRoot` {#javascript-pnpm-sourceRoot}
 
@@ -459,16 +478,16 @@ Assuming the following directory structure, we can define `sourceRoot` and `pnpm
 
 #### PNPM Workspaces {#javascript-pnpm-workspaces}
 
-If you need to use a PNPM workspace for your project, then set `pnpmWorkspace = "<workspace project name>"` in your `pnpm.fetchDeps` call,
-which will make PNPM only install dependencies for that workspace package.
+If you need to use a PNPM workspace for your project, then set `pnpmWorkspaces = [ "<workspace project name 1>" "<workspace project name 2>" ]`, etc, in your `pnpm.fetchDeps` call,
+which will make PNPM only install dependencies for those workspace packages.
 
 For example:
 
 ```nix
 ...
-pnpmWorkspace = "@astrojs/language-server";
+pnpmWorkspaces = [ "@astrojs/language-server" ];
 pnpmDeps = pnpm.fetchDeps {
-  inherit (finalAttrs) pnpmWorkspace;
+  inherit (finalAttrs) pnpmWorkspaces;
   ...
 }
 ```
@@ -476,7 +495,7 @@ pnpmDeps = pnpm.fetchDeps {
 The above would make `pnpm.fetchDeps` call only install dependencies for the `@astrojs/language-server` workspace package.
 Note that you do not need to set `sourceRoot` to make this work.
 
-Usually in such cases, you'd want to use `pnpm --filter=$pnpmWorkspace build` to build your project, as `npmHooks.npmBuildHook` probably won't work. A `buildPhase` based on the following example will probably fit most workspace projects:
+Usually in such cases, you'd want to use `pnpm --filter=<pnpm workspace name> build` to build your project, as `npmHooks.npmBuildHook` probably won't work. A `buildPhase` based on the following example will probably fit most workspace projects:
 
 ```nix
 buildPhase = ''

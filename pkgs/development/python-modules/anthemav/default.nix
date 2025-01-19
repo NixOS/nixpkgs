@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nugget";
     repo = "python-anthemav";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ZjAt4oODx09Qij0PwBvLCplSjwdBx2fReiwjmKhdPa0=";
   };
 

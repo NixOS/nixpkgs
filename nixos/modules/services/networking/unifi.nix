@@ -143,10 +143,10 @@ in
       restartTriggers = [ cfg.unifiPackage cfg.mongodbPackage ];
 
       serviceConfig = {
-        Type = "simple";
+        Type = "notify";
         ExecStart = "${cmd} start";
         ExecStop = "${cmd} stop";
-        Restart = "on-failure";
+        Restart = "always";
         TimeoutSec = "5min";
         User = "unifi";
         UMask = "0077";

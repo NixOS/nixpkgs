@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-QUjeG84KwI5Y3MU1wrmjHBXU2tEJ0CuiR3Y/S+dX7Gs=";
   };
 

@@ -9,6 +9,7 @@
 , enableStatic ? stdenv.hostPlatform.isStatic
 , withCxx ? !stdenv.hostPlatform.useAndroidPrebuilt
 , mouseSupport ? false, gpm
+, withTermlib ? false
 , unicodeSupport ? true
 , testers
 , binlore
@@ -19,7 +20,10 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "ncurses" + lib.optionalString (abiVersion == "5") "-abi5-compat";
 
   src = fetchurl {
-    url = "https://invisible-island.net/archives/ncurses/ncurses-${lib.versions.majorMinor finalAttrs.version}.tar.gz";
+    urls = [
+      "https://invisible-island.net/archives/ncurses/ncurses-${lib.versions.majorMinor finalAttrs.version}.tar.gz"
+      "https://ftp.gnu.org/gnu/ncurses/ncurses-${lib.versions.majorMinor finalAttrs.version}.tar.gz"
+    ];
     hash = "sha256-aTEoPZrIfFBz8wtikMTHXyFjK7T8NgOsgQCBK+0kgVk=";
   };
 
@@ -38,6 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional (!withCxx) "--without-cxx"
     ++ lib.optional (abiVersion == "5") "--with-abi-version=5"
     ++ lib.optional stdenv.hostPlatform.isNetBSD "--enable-rpath"
+    ++ lib.optional withTermlib "--with-termlib"
     ++ lib.optionals stdenv.hostPlatform.isWindows [
       "--enable-sp-funcs"
       "--enable-term-driver"

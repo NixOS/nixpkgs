@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, autoreconfHook, gmp, flex, bison }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  gmp,
+  flex,
+  bison,
+}:
 
 stdenv.mkDerivation {
   pname = "veriT";
@@ -9,7 +17,11 @@ stdenv.mkDerivation {
     sha256 = "1yjvvxnsix0rhilc81ycx1s85dymq366c6zh1hwwd8qxp7k1zca2";
   };
 
-  nativeBuildInputs = [ autoreconfHook flex bison ];
+  nativeBuildInputs = [
+    autoreconfHook
+    flex
+    bison
+  ];
   buildInputs = [ gmp ];
 
   # --disable-static actually enables static linking here...

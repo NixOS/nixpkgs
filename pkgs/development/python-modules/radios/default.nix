@@ -15,12 +15,13 @@
   yarl,
   aresponses,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "radios";
-  version = "0.3.1";
+  version = "0.3.2";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -28,23 +29,20 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-radios";
-    rev = "v${version}";
-    hash = "sha256-c0zfpfEdZvjvKtwGcNLLgEkBihhtz/wouHuYRLCxtBY=";
+    tag = "v${version}";
+    hash = "sha256-GXiLwwjZ/pN3HquzLLWq/2EfhmrJyCXq0sovIGRB3uQ=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "0.0.0" "${version}" \
-      --replace "--cov" ""
+      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
-  pythonRelaxDeps = [ "pycountry" ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     aiodns
     aiohttp
     awesomeversion
@@ -59,6 +57,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aresponses
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
   ];
 

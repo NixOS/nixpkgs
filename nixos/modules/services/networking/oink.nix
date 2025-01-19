@@ -1,11 +1,16 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.oink;
-  makeOinkConfig = attrs: (pkgs.formats.json { }).generate
-    "oink.json" (mapAttrs' (k: v: nameValuePair (toLower k) v) attrs);
+  makeOinkConfig =
+    attrs:
+    (pkgs.formats.json { }).generate "oink.json" (
+      lib.mapAttrs' (k: v: lib.nameValuePair (lib.toLower k) v) attrs
+    );
   oinkConfig = makeOinkConfig {
     global = cfg.settings;
     domains = cfg.domains;
@@ -13,25 +18,25 @@ let
 in
 {
   options.services.oink = {
-    enable = mkEnableOption "Oink, a dynamic DNS client for Porkbun";
-    package = mkPackageOption pkgs "oink" { };
+    enable = lib.mkEnableOption "Oink, a dynamic DNS client for Porkbun";
+    package = lib.mkPackageOption pkgs "oink" { };
     settings = {
-      apiKey = mkOption {
-        type = types.str;
+      apiKey = lib.mkOption {
+        type = lib.types.str;
         description = "API key to use when modifying DNS records.";
       };
-      secretApiKey = mkOption {
-        type = types.str;
+      secretApiKey = lib.mkOption {
+        type = lib.types.str;
         description = "Secret API key to use when modifying DNS records.";
       };
-      interval = mkOption {
+      interval = lib.mkOption {
         # https://github.com/rlado/oink/blob/v1.1.1/src/main.go#L364
-        type = types.ints.between 60 172800; # 48 hours
+        type = lib.types.ints.between 60 172800; # 48 hours
         default = 900;
         description = "Seconds to wait before sending another request.";
       };
-      ttl = mkOption {
-        type = types.ints.between 600 172800;
+      ttl = lib.mkOption {
+        type = lib.types.ints.between 600 172800;
         default = 600;
         description = ''
           The TTL ("Time to Live") value to set for your DNS records.
@@ -41,9 +46,9 @@ in
         '';
       };
     };
-    domains = mkOption {
-      type = with types; listOf (attrsOf anything);
-      default = [];
+    domains = lib.mkOption {
+      type = with lib.types; listOf (attrsOf anything);
+      default = [ ];
       example = [
         {
           domain = "nixos.org";
@@ -74,7 +79,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.oink = {
       description = "Dynamic DNS client for Porkbun";
       after = [ "network.target" ];

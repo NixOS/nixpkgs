@@ -33,13 +33,12 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
   ];
 
-  nativeBuildInputs = [
-    SDL
-    freetype
-  ];
+  # pass in correct *-config for cross builds
+  env.SDL_CONFIG = lib.getExe' SDL.dev "sdl-config";
+  env.FREETYPE_CONFIG = lib.getExe' freetype.dev "freetype-config";
 
   configureFlags = [
-    (lib.enableFeature enableSdltest "-sdltest")
+    (lib.enableFeature enableSdltest "sdltest")
   ];
 
   strictDeps = true;
@@ -48,8 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/libsdl-org/SDL_ttf";
     description = "SDL TrueType library";
     license = lib.licenses.zlib;
-    maintainers = lib.teams.sdl.members
-                  ++ (with lib.maintainers; [ ]);
+    maintainers = lib.teams.sdl.members ++ (with lib.maintainers; [ ]);
     inherit (SDL.meta) platforms;
   };
 })

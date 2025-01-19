@@ -5,22 +5,25 @@
   fetchFromGitHub,
   git,
   nix-update-script,
+  installShellFiles,
 }:
 
 buildGo123Module rec {
   pname = "git-spice";
-  version = "0.7.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "abhinav";
     repo = "git-spice";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ap0ZGRDdHQMVYSk9J8vsZNpvaAwpHFmPT5REiCxYepQ=";
+    tag = "v${version}";
+    hash = "sha256-1EWuKjvDeOV6W+nntdevUI/SO68ssYgoxJ5QIy5jkFM=";
   };
 
-  vendorHash = "sha256-YJ8OxmonnxNu4W17tD1Z7K625LCINlh6ZgoxOpmtNC0=";
+  vendorHash = "sha256-F9CyhUtdkwvEsmQ+T5zt2n+TBRhVgyr2CEOvIzcXpug=";
 
   subPackages = [ "." ];
+
+  nativeBuildInputs = [ installShellFiles ];
 
   nativeCheckInputs = [ git ];
 
@@ -38,6 +41,13 @@ buildGo123Module rec {
     # timeout
     rm testdata/script/branch_submit_remote_prompt.txt
     rm testdata/script/branch_submit_multiple_pr_templates.txt
+  '';
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd gs \
+      --bash <($out/bin/gs shell completion bash) \
+      --zsh <($out/bin/gs shell completion zsh) \
+      --fish <($out/bin/gs shell completion fish)
   '';
 
   passthru.updateScript = nix-update-script { };

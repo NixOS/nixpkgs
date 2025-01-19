@@ -22,19 +22,21 @@
   lsb-release,
   mesa-demos,
   vdpauinfo,
+
+  # passthru
+  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "gpu-viewer";
-  version = "3.06";
-
-  format = "other";
+  version = "3.10";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "arunsivaramanneo";
     repo = "gpu-viewer";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-vFU2VdafY1HmPGRa20PwT6n+Xf4bKBzKJ5jWpvwyMWg=";
+    tag = "v${version}";
+    hash = "sha256-0rbg3T9OXnSZ5+2cjgfNitAv1LgdO0N90wWJifzHcsg=";
   };
 
   nativeBuildInputs = [
@@ -77,6 +79,10 @@ python3Packages.buildPythonApplication rec {
       ''${makeWrapperArgs[@]} \
       ''${gappsWrapperArgs[@]}
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     homepage = "https://github.com/arunsivaramanneo/GPU-Viewer";

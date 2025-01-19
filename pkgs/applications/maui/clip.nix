@@ -1,19 +1,20 @@
-{ lib
-, mkDerivation
-, cmake
-, extra-cmake-modules
-, applet-window-buttons
-, karchive
-, kcoreaddons
-, ki18n
-, kio
-, kirigami2
-, mauikit
-, mauikit-filebrowsing
-, qtmultimedia
-, qtquickcontrols2
-, taglib
-, ffmpeg
+{
+  lib,
+  mkDerivation,
+  cmake,
+  extra-cmake-modules,
+  applet-window-buttons,
+  karchive,
+  kcoreaddons,
+  ki18n,
+  kio,
+  kirigami2,
+  mauikit,
+  mauikit-filebrowsing,
+  qtmultimedia,
+  qtquickcontrols2,
+  taglib,
+  ffmpeg,
 }:
 
 mkDerivation {

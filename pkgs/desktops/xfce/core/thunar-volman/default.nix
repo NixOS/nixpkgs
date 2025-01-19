@@ -3,11 +3,11 @@
 mkXfceDerivation {
   category = "xfce";
   pname = "thunar-volman";
-  version = "4.18.0";
+  version = "4.20.0";
 
   buildInputs = [ exo gtk3 libgudev libxfce4ui libxfce4util xfconf ];
 
-  sha256 = "sha256-NRVoakU8jTCJVe+iyJQwW1xPti2vjd/8n8CYrIYGII0=";
+  sha256 = "sha256-XIVs/vRwy3QJQW/U7eLBvGdzplWlhdxn3f1lyTQsmpE=";
 
   odd-unstable = false;
 

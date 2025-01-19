@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "worron";
     repo = "cavalcade";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-VyWOPNidN0+pfuxsgPWq6lI5gXQsiRpmYjQYjZW6i9w=";
   };
 

@@ -1,9 +1,14 @@
-{ lib, stdenv, fetchurl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 
 let
   version = "31+20240202-2ubuntu8"; # Oriole 2024-10-03
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "kmod-blacklist";
   inherit version;
 
@@ -33,6 +38,9 @@ in stdenv.mkDerivation {
     homepage = "https://launchpad.net/ubuntu/+source/kmod";
     description = "Linux kernel module blacklists from Ubuntu";
     platforms = platforms.linux;
-    license = with licenses; [ gpl2Plus lgpl21Plus ];
+    license = with licenses; [
+      gpl2Plus
+      lgpl21Plus
+    ];
   };
 }

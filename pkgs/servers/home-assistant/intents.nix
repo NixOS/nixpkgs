@@ -1,27 +1,28 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# codegen
-, hassil
-, python
-, pyyaml
-, voluptuous
-, regex
-, jinja2
+  # codegen
+  hassil,
+  python,
+  pyyaml,
+  voluptuous,
+  regex,
+  jinja2,
 
-# tests
-, pytest-xdist
-, pytestCheckHook
+  # tests
+  pytest-xdist,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "home-assistant-intents";
-  version = "2024.10.2";
+  version = "2025.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -31,7 +32,7 @@ buildPythonPackage rec {
     repo = "intents-package";
     rev = "refs/tags/${version}";
     fetchSubmodules = true;
-    hash = "sha256-bVKsZvQ4JhVpwILkRR/+lUzchBGwG2D4TTdBD7lDRcY=";
+    hash = "sha256-OeGupmeZ2KLpQHc0d50itTvlrA5XziKU8cAz9i6ztSw=";
   };
 
   build-system = [

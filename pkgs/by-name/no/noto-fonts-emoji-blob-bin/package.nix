@@ -1,6 +1,7 @@
- { lib
-, stdenvNoCC
-, fetchurl
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -23,8 +24,14 @@ stdenvNoCC.mkDerivation rec {
   meta = {
     description = "Noto Emoji with extended Blob support";
     homepage = "https://github.com/C1710/blobmoji";
-    license = with lib.licenses; [ ofl asl20 ];
+    license = with lib.licenses; [
+      ofl
+      asl20
+    ];
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ rileyinman jk ];
+    maintainers = with lib.maintainers; [
+      rileyinman
+      jk
+    ];
   };
 }

@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, makeWrapper, cfg }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  cfg,
+}:
 
 stdenv.mkDerivation rec {
   pname = "sbcl-bootstrap";

@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Salamek";
     repo = "huawei-lte-api";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-L6xCX+NHASunB876N1R++xMOx55Z8zc77j5QwKqHsNY=";
   };
 

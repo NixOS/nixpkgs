@@ -1,4 +1,9 @@
-{ lib, fetchPypi, pythonPackages, mopidy }:
+{
+  lib,
+  fetchPypi,
+  pythonPackages,
+  mopidy,
+}:
 
 pythonPackages.buildPythonApplication rec {
   pname = "Mopidy-Notify";

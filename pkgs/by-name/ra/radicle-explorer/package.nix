@@ -57,21 +57,13 @@ let
           passthru = prev.passthru // mkPassthru final args;
         })
       );
-
-    # By default, radicle-explorer includes a dependency that sends requests
-    # to a web analytics tracking service. Using this attribute yields a
-    # version of radicle-explorer with this dependency removed.
-    withoutTrackers = self {
-      patches = [ ./0001-remove-dependency-on-plausible.patch ];
-      npmDepsHash = "sha256:1hbrzfjkfc0q8qk03yi6qb9zqm57h7hnkn7fl0yxkrzbrljaljaz";
-    };
   };
 in
 lib.fix (
   self:
   lib.makeOverridable (
     {
-      npmDepsHash ? "sha256:0kw6rvqm0s21j1rss35idvgcrzzczfy6qi3323y385djw4ygk5xs",
+      npmDepsHash ? "sha256-XBWwTgfiQX3oW8f4bhfjn85M6KbC6mcIxmwRg224asM=",
       patches ? [ ],
     }@args:
     buildNpmPackage {
@@ -85,7 +77,7 @@ lib.fix (
       # separate hash.
       src = fetchgit {
         inherit (radicle-httpd.src) url rev;
-        hash = "sha256:09m13238h6j7g02r6332ihgyyzbjx90pgz14rz29pgv7936h6il8";
+        hash = "sha256-HQbyQWkp8YikSMMcX+zBfbscuUqDEGIe3oATtaHikZk=";
       };
 
       postPatch = ''

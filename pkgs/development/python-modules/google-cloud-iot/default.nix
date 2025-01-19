@@ -39,6 +39,15 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  # including_default_value_fields was deprecated, the new version is called
+  # always_print_fields_with_no_presence
+  postPatch = ''
+    substituteInPlace "tests/unit/gapic/iot_v1/test_device_manager.py" \
+      --replace-fail "including_default_value_fields" "always_print_fields_with_no_presence"
+    substituteInPlace "google/cloud/iot_v1/services/device_manager/transports/rest.py" \
+      --replace-fail "including_default_value_fields" "always_print_fields_with_no_presence"
+  '';
+
   disabledTests = [
     # requires credentials
     "test_list_device_registries"

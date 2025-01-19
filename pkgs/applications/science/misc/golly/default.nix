@@ -1,19 +1,36 @@
-{lib, stdenv, fetchurl, wxGTK, python3, zlib, libGLU, libGL, libX11, SDL2}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  wxGTK,
+  python3,
+  zlib,
+  libGLU,
+  libGL,
+  libX11,
+  SDL2,
+}:
 stdenv.mkDerivation rec {
   pname = "golly";
   version = "4.3";
 
   src = fetchurl {
     hash = "sha256-UdJHgGPn7FDN4rYTgfPBAoYE5FGC43TP8OFBmYIqCB0=";
-    url="mirror://sourceforge/project/golly/golly/golly-${version}/golly-${version}-src.tar.gz";
+    url = "mirror://sourceforge/project/golly/golly/golly-${version}/golly-${version}-src.tar.gz";
   };
 
   buildInputs = [
-    wxGTK python3 zlib libGLU libGL libX11 SDL2
+    wxGTK
+    python3
+    zlib
+    libGLU
+    libGL
+    libX11
+    SDL2
   ];
 
   nativeBuildInputs = [
-    (python3.withPackages (ps: [ps.setuptools]))
+    (python3.withPackages (ps: [ ps.setuptools ]))
   ];
 
   setSourceRoot = ''
@@ -27,8 +44,9 @@ stdenv.mkDerivation rec {
     grep /lib/libpython wxprefs.cpp
   '';
 
-  makeFlags=[
-    "-f" "makefile-gtk"
+  makeFlags = [
+    "-f"
+    "makefile-gtk"
     "ENABLE_SOUND=1"
     "GOLLYDIR=${placeholder "out"}/share/golly"
   ];
@@ -47,7 +65,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Cellular automata simulation program";
     license = lib.licenses.gpl2;
-    maintainers = [lib.maintainers.raskin];
+    maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.linux;
     downloadPage = "https://sourceforge.net/projects/golly/files/golly";
   };

@@ -1,21 +1,22 @@
 # Test of IPv6 functionality in NixOS, including whether router
 # solicication/advertisement using radvd works.
 
-import ./make-test-python.nix ({ pkgs, lib, ...} : {
-  name = "ipv6";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ ];
-  };
+import ./make-test-python.nix (
+  { pkgs, lib, ... }:
+  {
+    name = "ipv6";
+    meta = with pkgs.lib.maintainers; {
+      maintainers = [ ];
+    };
 
-  nodes =
-    {
+    nodes = {
       # We use lib.mkForce here to remove the interface configuration
       # provided by makeTest, so that the interfaces are all configured
       # implicitly.
 
       # This client should use privacy extensions fully, having a
       # completely-default network configuration.
-      client_defaults.networking.interfaces = lib.mkForce {};
+      client_defaults.networking.interfaces = lib.mkForce { };
 
       # Both of these clients should obtain temporary addresses, but
       # not use them as the default source IP. We thus run the same
@@ -24,7 +25,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
 
       # Here, by using an altered default value for the global setting...
       client_global_setting = {
-        networking.interfaces = lib.mkForce {};
+        networking.interfaces = lib.mkForce { };
         networking.tempAddresses = "enabled";
       };
       # and here, by setting this on the interface explicitly.
@@ -35,30 +36,29 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
         };
       };
 
-      server =
-        { services.httpd.enable = true;
-          services.httpd.adminAddr = "foo@example.org";
-          networking.firewall.allowedTCPPorts = [ 80 ];
-          # disable testing driver's default IPv6 address.
-          networking.interfaces.eth1.ipv6.addresses = lib.mkForce [ ];
-        };
+      server = {
+        services.httpd.enable = true;
+        services.httpd.adminAddr = "foo@example.org";
+        networking.firewall.allowedTCPPorts = [ 80 ];
+        # disable testing driver's default IPv6 address.
+        networking.interfaces.eth1.ipv6.addresses = lib.mkForce [ ];
+      };
 
       router =
         { ... }:
-        { services.radvd.enable = true;
-          services.radvd.config =
-            ''
-              interface eth1 {
-                AdvSendAdvert on;
-                # ULA prefix (RFC 4193).
-                prefix fd60:cc69:b537:1::/64 { };
-              };
-            '';
+        {
+          services.radvd.enable = true;
+          services.radvd.config = ''
+            interface eth1 {
+              AdvSendAdvert on;
+              # ULA prefix (RFC 4193).
+              prefix fd60:cc69:b537:1::/64 { };
+            };
+          '';
         };
     };
 
-  testScript =
-    ''
+    testScript = ''
       import re
 
       # Start the router first so that it respond to router solicitations.
@@ -129,4 +129,5 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
               # But using the EUI-64 one.
               client.succeed(f"ip route get 2001:db8:: | grep 'src {ip}'")
     '';
-})
+  }
+)

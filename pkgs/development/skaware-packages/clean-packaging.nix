@@ -3,26 +3,30 @@
 # files were either discarded or moved to outputs.
 # This ensures nothing is forgotten and new files
 # are correctly handled on update.
-{ lib, stdenv, file, writeScript }:
+{
+  lib,
+  stdenv,
+  file,
+  writeScript,
+}:
 
 let
   globWith = lib.concatMapStringsSep "\n";
-  rmNoise = noiseGlobs: globWith (f:
-    "rm -rf ${f}") noiseGlobs;
-  mvDoc = docGlobs: globWith
-    (f: ''mv ${f} "$DOCDIR" 2>/dev/null || true'')
-    docGlobs;
+  rmNoise = noiseGlobs: globWith (f: "rm -rf ${f}") noiseGlobs;
+  mvDoc = docGlobs: globWith (f: ''mv ${f} "$DOCDIR" 2>/dev/null || true'') docGlobs;
 
   # Shell script that implements common move & remove actions
   # $1 is the doc directory (will be created).
   # Best used in conjunction with checkForRemainingFiles
   commonFileActions =
-    { # list of fileglobs that are removed from the source dir
-      noiseFiles
+    {
+      # list of fileglobs that are removed from the source dir
+      noiseFiles,
       # files that are moved to the doc directory ($1)
       # TODO(Profpatsch): allow to set target dir with
       # { glob = …; to = "html" } (relative to docdir)
-    , docFiles }:
+      docFiles,
+    }:
     writeScript "common-file-actions.sh" ''
       #!${stdenv.shell}
       set -e
@@ -48,6 +52,7 @@ let
     fi
   '';
 
-in {
+in
+{
   inherit commonFileActions checkForRemainingFiles;
 }

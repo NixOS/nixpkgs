@@ -1,6 +1,21 @@
-{ mkDerivation, avh4-lib, base, containers, fetchgit, filepath
-, hspec, hspec-core, hspec-golden, lib, mtl, split, tasty
-, tasty-discover, tasty-hspec, tasty-hunit, text
+{
+  mkDerivation,
+  avh4-lib,
+  base,
+  containers,
+  fetchgit,
+  filepath,
+  hspec,
+  hspec-core,
+  hspec-golden,
+  lib,
+  mtl,
+  split,
+  tasty,
+  tasty-discover,
+  tasty-hspec,
+  tasty-hunit,
+  text,
 }:
 mkDerivation {
   pname = "elm-format-test-lib";
@@ -13,12 +28,32 @@ mkDerivation {
   };
   postUnpack = "sourceRoot+=/elm-format-test-lib; echo source root reset to $sourceRoot";
   libraryHaskellDepends = [
-    avh4-lib base containers filepath hspec hspec-core hspec-golden mtl
-    split tasty-hunit text
+    avh4-lib
+    base
+    containers
+    filepath
+    hspec
+    hspec-core
+    hspec-golden
+    mtl
+    split
+    tasty-hunit
+    text
   ];
   testHaskellDepends = [
-    avh4-lib base containers filepath hspec hspec-core hspec-golden mtl
-    split tasty tasty-hspec tasty-hunit text
+    avh4-lib
+    base
+    containers
+    filepath
+    hspec
+    hspec-core
+    hspec-golden
+    mtl
+    split
+    tasty
+    tasty-hspec
+    tasty-hunit
+    text
   ];
   testToolDepends = [ tasty-discover ];
   description = "Test helpers used by elm-format-tests and elm-refactor-tests";

@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -27,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = "mobly";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-77wZK5dqxXUkOgWE7NBpGJBbbtYYxRCJwPbtwLIX09I=";
   };
 
@@ -45,6 +46,13 @@ buildPythonPackage rec {
     procps
     pytestCheckHook
     pytz
+  ];
+
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # cannot access /usr/bin/pgrep from the sandbox
+    "test_stop_standing_subproc"
+    "test_stop_standing_subproc_and_descendants"
+    "test_stop_standing_subproc_without_pipe"
   ];
 
   __darwinAllowLocalNetworking = true;

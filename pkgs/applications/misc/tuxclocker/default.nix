@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, boost
-, fetchFromGitHub
-, git
-, makeWrapper
-, meson
-, ninja
-, pkg-config
-, python3
-, qtbase
-, qtcharts
-, tuxclocker-plugins
-, tuxclocker-without-unfree
-, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  boost,
+  fetchFromGitHub,
+  git,
+  makeWrapper,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  qtbase,
+  qtcharts,
+  tuxclocker-plugins,
+  tuxclocker-without-unfree,
+  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

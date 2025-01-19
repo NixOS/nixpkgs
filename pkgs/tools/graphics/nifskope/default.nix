@@ -1,4 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, qmake, qtbase, qttools, substituteAll, libGLU, wrapQtAppsHook, fetchpatch }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qmake,
+  qtbase,
+  qttools,
+  replaceVars,
+  libGLU,
+  wrapQtAppsHook,
+  fetchpatch,
+}:
 
 stdenv.mkDerivation {
   pname = "nifskope";
@@ -14,8 +25,7 @@ stdenv.mkDerivation {
 
   patches = [
     ./external-lib-paths.patch
-    (substituteAll {
-      src = ./qttools-bins.patch;
+    (replaceVars ./qttools-bins.patch {
       qttools = "${qttools.dev}/bin";
     })
     (fetchpatch {
@@ -25,8 +35,15 @@ stdenv.mkDerivation {
     })
   ] ++ (lib.optional stdenv.hostPlatform.isAarch64 ./no-sse-on-arm.patch);
 
-  buildInputs = [ qtbase qttools libGLU ];
-  nativeBuildInputs = [ qmake wrapQtAppsHook ];
+  buildInputs = [
+    qtbase
+    qttools
+    libGLU
+  ];
+  nativeBuildInputs = [
+    qmake
+    wrapQtAppsHook
+  ];
 
   preConfigure = ''
     shopt -s globstar
@@ -58,7 +75,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    homepage = "https://niftools.sourceforge.net/wiki/NifSkope";
+    homepage = "https://github.com/niftools/nifskope";
     description = "Tool for analyzing and editing NetImmerse/Gamebryo '*.nif' files";
     maintainers = [ ];
     platforms = platforms.linux;

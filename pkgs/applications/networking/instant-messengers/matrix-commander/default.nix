@@ -1,29 +1,30 @@
-{ lib
-, fetchFromGitHub
-, buildPythonApplication
-, cacert
-, setuptools
-, matrix-nio
-, python-magic
-, markdown
-, pillow
-, aiofiles
-, notify2
-, dbus-python
-, pyxdg
-, python-olm
-, emoji
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonApplication,
+  cacert,
+  setuptools,
+  matrix-nio,
+  python-magic,
+  markdown,
+  pillow,
+  aiofiles,
+  notify2,
+  dbus-python,
+  pyxdg,
+  python-olm,
+  emoji,
 }:
 
 buildPythonApplication rec {
   pname = "matrix-commander";
-  version = "7.6.2";
+  version = "8.0.4";
 
   src = fetchFromGitHub {
     owner = "8go";
     repo = "matrix-commander";
     rev = "v${version}";
-    hash = "sha256-BiQShJHCTvEdkhp21uxxCTxBZ1eezuWE6btMc/wkPlc=";
+    hash = "sha256-JZcdAo6d7huwDQ9hJE8oT5FH0ZQjg0DhoglOkhOyk1o=";
   };
 
   format = "pyproject";

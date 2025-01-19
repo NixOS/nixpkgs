@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage {
   cargoLock = {
     lockFile = ./Cargo.lock;
     extraRegistries = {
-        "sparse+https://index.crates.io/" = "https://static.crates.io/crates";
+      "sparse+https://index.crates.io/" = "https://static.crates.io/crates";
     };
   };
 

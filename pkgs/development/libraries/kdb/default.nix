@@ -1,15 +1,16 @@
-{ mkDerivation
-, lib
-, fetchurl
-, fetchpatch
-, extra-cmake-modules
-, qtbase
-, kcoreaddons
-, python3
-, sqlite
-, postgresql
-, libmysqlclient
-, qttools
+{
+  mkDerivation,
+  lib,
+  fetchurl,
+  fetchpatch,
+  extra-cmake-modules,
+  qtbase,
+  kcoreaddons,
+  python3,
+  sqlite,
+  postgresql,
+  libmysqlclient,
+  qttools,
 }:
 
 mkDerivation rec {
@@ -34,9 +35,18 @@ mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ extra-cmake-modules qttools ];
+  nativeBuildInputs = [
+    extra-cmake-modules
+    qttools
+  ];
 
-  buildInputs = [ kcoreaddons python3 sqlite postgresql libmysqlclient ];
+  buildInputs = [
+    kcoreaddons
+    python3
+    sqlite
+    postgresql
+    libmysqlclient
+  ];
 
   propagatedBuildInputs = [ qtbase ];
 

@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "llama-index-cli";
-  version = "0.3.1";
+  version = "0.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "llama_index_cli";
     inherit version;
-    hash = "sha256-GJDdaHz0QPNlE2WlSeMDNjFiwWe4772Ho6oQBY1tXHc=";
+    hash = "sha256-1qsgE1mWKoo0Norto6Sbu+Z+ngCcWb2SXE+yvkrOOQY=";
   };
 
   build-system = [ poetry-core ];

@@ -13,7 +13,7 @@
   nss,
   udev,
   gnome-keyring,
-  mesa,
+  libgbm,
   gtk3,
   libusb1,
   libsecret,
@@ -63,7 +63,7 @@ let
     libXtst
     libxshmfence
     gnome-keyring
-    mesa
+    libgbm
     gtk3
     libusb1
     libsecret
@@ -112,13 +112,10 @@ else
     nativeBuildInputs = [
       autoPatchelfHook
       wrapGAppsHook3
+      dpkg
     ];
 
     buildInputs = libraries;
-
-    unpackPhase = ''
-      ${dpkg}/bin/dpkg-deb --fsys-tarfile $src | tar --extract
-    '';
 
     installPhase = ''
       runHook preInstall

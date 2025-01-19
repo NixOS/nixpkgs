@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hynek";
     repo = "structlog";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-z3ecgsep/BQJ+Fv78rV4XiFU4+1aaUEfNEtIqy44KV4=";
   };
 

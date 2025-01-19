@@ -1,14 +1,15 @@
-{ lib
-, callPackage
-, python3Packages
-, fetchFromGitHub
-, installShellFiles
-, platformio
-, esptool
-, git
-, inetutils
-, stdenv
-, nixosTests
+{
+  lib,
+  callPackage,
+  python3Packages,
+  fetchFromGitHub,
+  installShellFiles,
+  platformio,
+  esptool,
+  git,
+  inetutils,
+  stdenv,
+  nixosTests,
 }:
 
 let
@@ -21,14 +22,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "2024.10.0";
+  version = "2024.12.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-EdxCq/123OJm63NBfGnt5pfqdUXPti+NmbSVRu/gwqc=";
+    tag = version;
+    hash = "sha256-Ff3NuLHKRLoBbjqb92vvDcSbSJnjCwm5FmSDwnEI0p4=";
   };
 
   build-systems = with python.pkgs; [
@@ -49,24 +50,20 @@ python.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==" "setuptools>="
+      --replace-fail "setuptools==" "setuptools>=" \
+      --replace-fail "wheel~=" "wheel>="
 
     # ensure component dependencies are available
     cat requirements_optional.txt >> requirements.txt
-    # relax strict runtime version check
-    substituteInPlace esphome/components/font/__init__.py \
-      --replace-fail "10.2.0" "${python.pkgs.pillow.version}"
   '';
 
   # Remove esptool and platformio from requirements
   env.ESPHOME_USE_SUBPROCESS = "";
 
   # esphome has optional dependencies it does not declare, they are
-  # loaded when certain config blocks are used, like `font`, `image`
-  # or `animation`.
+  # loaded when certain config blocks are used.
   # They have validation functions like:
-  # - validate_cryptography_installed
-  # - validate_pillow_installed
+  # - validate_cryptography_installed for the wifi component
   dependencies = with python.pkgs; [
     aioesphomeapi
     argcomplete
@@ -75,7 +72,9 @@ python.pkgs.buildPythonApplication rec {
     colorama
     cryptography
     esphome-dashboard
+    freetype-py
     icmplib
+    glyphsets
     kconfiglib
     packaging
     paho-mqtt
@@ -99,10 +98,19 @@ python.pkgs.buildPythonApplication rec {
     # esptool is used in esphome/__main__.py
     # git is used in esphome/writer.py
     # inetutils is used in esphome/dashboard/status/ping.py
-    "--prefix PATH : ${lib.makeBinPath [ platformio esptool git inetutils ]}"
+    "--prefix PATH : ${
+      lib.makeBinPath [
+        platformio
+        esptool
+        git
+        inetutils
+      ]
+    }"
     "--prefix PYTHONPATH : ${python.pkgs.makePythonPath dependencies}" # will show better error messages
-    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}"
+    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ stdenv.cc.cc ]}"
     "--set ESPHOME_USE_SUBPROCESS ''"
+    # https://github.com/NixOS/nixpkgs/issues/362193
+    "--set PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION 'python'"
   ];
 
   # Needed for tests
@@ -146,7 +154,10 @@ python.pkgs.buildPythonApplication rec {
       mit # The C++/runtime codebase of the ESPHome project (file extensions .c, .cpp, .h, .hpp, .tcc, .ino)
       gpl3Only # The python codebase and all other parts of this codebase
     ];
-    maintainers = with maintainers; [ globin hexa ];
+    maintainers = with maintainers; [
+      globin
+      hexa
+    ];
     mainProgram = "esphome";
   };
 }

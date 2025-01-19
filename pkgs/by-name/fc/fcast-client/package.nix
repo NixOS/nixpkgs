@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
       implementations, enabling third-party developers to create their own
       receiver devices or integrate the FCast protocol into their own apps.
     '';
-    mainProgram = "fcast-client";
+    mainProgram = "fcast";
     maintainers = with lib.maintainers; [ drupol ];
     platforms = lib.platforms.linux;
   };

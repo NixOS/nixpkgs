@@ -1,12 +1,15 @@
 {
   mkDerivation,
   extra-cmake-modules,
-  qtbase
+  qtbase,
 }:
 
 mkDerivation {
   pname = "threadweaver";
   nativeBuildInputs = [ extra-cmake-modules ];
   propagatedBuildInputs = [ qtbase ];
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 }

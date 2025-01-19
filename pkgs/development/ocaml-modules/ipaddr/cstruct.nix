@@ -1,5 +1,7 @@
-{ buildDunePackage
-, ipaddr, cstruct
+{
+  buildDunePackage,
+  ipaddr,
+  cstruct,
 }:
 
 buildDunePackage rec {
@@ -9,7 +11,10 @@ buildDunePackage rec {
 
   duneVersion = "3";
 
-  propagatedBuildInputs = [ ipaddr cstruct ];
+  propagatedBuildInputs = [
+    ipaddr
+    cstruct
+  ];
 
   doCheck = true;
 

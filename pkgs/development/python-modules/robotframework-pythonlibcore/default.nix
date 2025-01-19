@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "robotframework";
     repo = "PythonLibCore";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-5RUi65+DljCqWoB8vZxc0hyIefEFOWuKluplXrD0SkI=";
   };
 

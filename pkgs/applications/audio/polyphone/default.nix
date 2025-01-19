@@ -17,14 +17,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.4.0";
+  version = "2.4.1";
   pname = "polyphone";
 
   src = fetchFromGitHub {
     owner = "davy7125";
     repo = "polyphone";
     rev = version;
-    hash = "sha256-cPHLmqsS4ReqOCcsgOf77V/ShIkk7chGoJ6bU4W5ejs=";
+    hash = "sha256-43EswCgNJv11Ov+4vmj2vS/yJ2atyzkRmk/SoCKYD/0=";
   };
 
   nativeBuildInputs = [

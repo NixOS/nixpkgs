@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, SDL2
-, cmake
-, libpng
-, libzip
-, openal
-, pkg-config
-, yaml-cpp
-, fmt
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  SDL2,
+  cmake,
+  libpng,
+  libzip,
+  openal,
+  pkg-config,
+  yaml-cpp,
+  fmt,
 }:
 
 stdenv.mkDerivation rec {

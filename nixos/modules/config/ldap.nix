@@ -1,7 +1,19 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
-  inherit (lib) mkEnableOption mkIf mkMerge mkOption mkRenamedOptionModule types;
+  inherit (lib)
+    mkEnableOption
+    mkIf
+    mkMerge
+    mkOption
+    mkRenamedOptionModule
+    types
+    ;
 
   cfg = config.users.ldap;
 
@@ -21,7 +33,7 @@ let
       ${lib.optionalString (config.users.ldap.bind.distinguishedName != "") ''
         binddn ${config.users.ldap.bind.distinguishedName}
       ''}
-      ${lib.optionalString (cfg.extraConfig != "") cfg.extraConfig }
+      ${lib.optionalString (cfg.extraConfig != "") cfg.extraConfig}
     '';
   };
 
@@ -30,11 +42,9 @@ let
     base ${cfg.base}
     timelimit ${toString cfg.timeLimit}
     bind_timelimit ${toString cfg.bind.timeLimit}
-    ${lib.optionalString (cfg.bind.distinguishedName != "")
-      "binddn ${cfg.bind.distinguishedName}" }
-    ${lib.optionalString (cfg.daemon.rootpwmoddn != "")
-      "rootpwmoddn ${cfg.daemon.rootpwmoddn}" }
-    ${lib.optionalString (cfg.daemon.extraConfig != "") cfg.daemon.extraConfig }
+    ${lib.optionalString (cfg.bind.distinguishedName != "") "binddn ${cfg.bind.distinguishedName}"}
+    ${lib.optionalString (cfg.daemon.rootpwmoddn != "") "rootpwmoddn ${cfg.daemon.rootpwmoddn}"}
+    ${lib.optionalString (cfg.daemon.extraConfig != "") cfg.daemon.extraConfig}
   '';
 
   # nslcd normally reads configuration from /etc/nslcd.conf.
@@ -121,13 +131,13 @@ in
         };
 
         extraConfig = mkOption {
-          default =  "";
+          default = "";
           type = types.lines;
-          description =  ''
+          description = ''
             Extra configuration options that will be added verbatim at
             the end of the nslcd configuration file (`nslcd.conf(5)`).
           '';
-        } ;
+        };
 
         rootpwmoddn = mkOption {
           default = "";
@@ -183,7 +193,11 @@ in
 
         policy = mkOption {
           default = "hard_open";
-          type = types.enum [ "hard_open" "hard_init" "soft" ];
+          type = types.enum [
+            "hard_open"
+            "hard_init"
+            "soft"
+          ];
           description = ''
             Specifies the policy to use for reconnecting to an unavailable
             LDAP server. The default is `hard_open`, which
@@ -203,7 +217,7 @@ in
       extraConfig = mkOption {
         default = "";
         type = types.lines;
-        description =  ''
+        description = ''
           Extra configuration options that will be added verbatim at
           the end of the ldap configuration file (`ldap.conf(5)`).
           If {option}`users.ldap.daemon` is enabled, this
@@ -224,9 +238,9 @@ in
       "ldap.conf" = ldapConfig;
     };
 
-    system.nssModules = mkIf cfg.nsswitch (lib.singleton (
-      if cfg.daemon.enable then pkgs.nss_pam_ldapd else pkgs.nss_ldap
-    ));
+    system.nssModules = mkIf cfg.nsswitch (
+      lib.singleton (if cfg.daemon.enable then pkgs.nss_pam_ldapd else pkgs.nss_ldap)
+    );
 
     system.nssDatabases.group = lib.optional cfg.nsswitch "ldap";
     system.nssDatabases.passwd = lib.optional cfg.nsswitch "ldap";
@@ -248,7 +262,10 @@ in
       (mkIf (!cfg.daemon.enable) {
         ldap-password = {
           wantedBy = [ "sysinit.target" ];
-          before = [ "sysinit.target" "shutdown.target" ];
+          before = [
+            "sysinit.target"
+            "shutdown.target"
+          ];
           conflicts = [ "shutdown.target" ];
           unitConfig.DefaultDependencies = false;
           serviceConfig.Type = "oneshot";
@@ -304,7 +321,10 @@ in
 
   };
 
-  imports =
-    [ (mkRenamedOptionModule [ "users" "ldap" "bind" "password"] [ "users" "ldap" "bind" "passwordFile"])
-    ];
+  imports = [
+    (mkRenamedOptionModule
+      [ "users" "ldap" "bind" "password" ]
+      [ "users" "ldap" "bind" "passwordFile" ]
+    )
+  ];
 }

@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "omerbenamram";
     repo = "pyevtx-rs";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-wo6CeHlEBbu3klzzC4dUbjSfu7XwLo/cmtmZsVIKgS8=";
   };
 

@@ -69,6 +69,22 @@ in
         default = true;
         description = "Enable the XFCE screensaver.";
       };
+
+      enableWaylandSession = mkEnableOption "the experimental Xfce Wayland session";
+
+      waylandSessionCompositor = mkOption {
+        type = lib.types.str;
+        default = "";
+        example = "wayfire";
+        description = ''
+          Command line to run a Wayland compositor, defaults to `labwc --startup`
+          if not specified. Note that `xfce4-session` will be passed to it as an
+          argument, see `startxfce4 --help` for details.
+
+          Some compositors do not have an option equivalent to labwc's `--startup`
+          and you might have to add xfce4-session somewhere in their configurations.
+        '';
+      };
     };
 
     environment.xfce.excludePackages = mkOption {
@@ -114,26 +130,28 @@ in
       xfce.xfce4-taskmanager
       xfce.xfce4-terminal
     ] # TODO: NetworkManager doesn't belong here
-      ++ optional config.networking.networkmanager.enable networkmanagerapplet
-      ++ optional config.powerManagement.enable xfce.xfce4-power-manager
-      ++ optionals (config.hardware.pulseaudio.enable || config.services.pipewire.pulse.enable) [
+      ++ lib.optional config.networking.networkmanager.enable networkmanagerapplet
+      ++ lib.optional config.powerManagement.enable xfce.xfce4-power-manager
+      ++ lib.optionals (config.services.pulseaudio.enable || config.services.pipewire.pulse.enable) [
         pavucontrol
         # volume up/down keys support:
         # xfce4-pulseaudio-plugin includes all the functionalities of xfce4-volumed-pulse
         # but can only be used with xfce4-panel, so for no-desktop usage we still include
         # xfce4-volumed-pulse
         (if cfg.noDesktop then xfce.xfce4-volumed-pulse else xfce.xfce4-pulseaudio-plugin)
-      ] ++ optionals cfg.enableXfwm [
+      ] ++ lib.optionals cfg.enableXfwm [
         xfce.xfwm4
         xfce.xfwm4-themes
-      ] ++ optionals (!cfg.noDesktop) [
+      ] ++ lib.optionals (!cfg.noDesktop) [
         xfce.xfce4-panel
         xfce.xfdesktop
-      ] ++ optional cfg.enableScreensaver xfce.xfce4-screensaver) excludePackages;
+      ] ++ lib.optional cfg.enableScreensaver xfce.xfce4-screensaver) excludePackages;
 
     programs.gnupg.agent.pinentryPackage = mkDefault pkgs.pinentry-gtk2;
     programs.xfconf.enable = true;
     programs.thunar.enable = true;
+    programs.labwc.enable = mkDefault (cfg.enableWaylandSession && (
+      cfg.waylandSessionCompositor == "" || lib.substring 0 5 cfg.waylandSessionCompositor == "labwc"));
 
     environment.pathsToLink = [
       "/share/xfce4"
@@ -144,6 +162,7 @@ in
 
     services.xserver.desktopManager.session = [{
       name = "xfce";
+      prettyName = "Xfce Session";
       desktopNames = [ "XFCE" ];
       bgSupport = !cfg.noDesktop;
       start = ''
@@ -151,6 +170,22 @@ in
         waitPID=$!
       '';
     }];
+
+    # Copied from https://gitlab.xfce.org/xfce/xfce4-session/-/blob/xfce4-session-4.19.2/xfce-wayland.desktop.in
+    # to maintain consistent l10n state with X11 session file and to support the waylandSessionCompositor option.
+    services.displayManager.sessionPackages = optionals cfg.enableWaylandSession [
+      ((pkgs.writeTextDir "share/wayland-sessions/xfce-wayland.desktop" ''
+        [Desktop Entry]
+        Version=1.0
+        Name=Xfce Session (Wayland)
+        Comment=Use this session to run Xfce as your desktop environment
+        Exec=startxfce4 --wayland ${cfg.waylandSessionCompositor}
+        Icon=
+        Type=Application
+        DesktopNames=XFCE
+        Keywords=xfce;wayland;desktop;environment;session;
+      '').overrideAttrs (_: { passthru.providedSessions = [ "xfce-wayland" ]; }))
+    ];
 
     services.xserver.updateDbusEnvironment = true;
     programs.gdk-pixbuf.modulePackages = [ pkgs.librsvg ];

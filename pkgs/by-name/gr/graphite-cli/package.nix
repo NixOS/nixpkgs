@@ -1,20 +1,21 @@
-{ lib
-, buildNpmPackage
-, fetchurl
-, git
-, installShellFiles
+{
+  lib,
+  buildNpmPackage,
+  fetchurl,
+  git,
+  installShellFiles,
 }:
 
 buildNpmPackage rec {
   pname = "graphite-cli";
-  version = "1.4.6";
+  version = "1.4.11";
 
   src = fetchurl {
     url = "https://registry.npmjs.org/@withgraphite/graphite-cli/-/graphite-cli-${version}.tgz";
-    hash = "sha256-RXVGy46DL+fxXIErCssspLeSh/iySLTzUCqQY2YNEVc=";
+    hash = "sha256-gky/nv7GS6hR3Zjm+J1Ob0SSbw4PneOm54WK7Ls9i9g=";
   };
 
-  npmDepsHash = "sha256-I5WXcdDWBbfc+y7Tdh6UCi/WfHvHx75OAqtQsXujzSM=";
+  npmDepsHash = "sha256-WvLASGTsNbM/IC+qyOAruiYKnHSx0bGc03Bh1wtnPn8=";
 
   postPatch = ''
     ln -s ${./package-lock.json} package-lock.json

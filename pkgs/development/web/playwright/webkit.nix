@@ -37,7 +37,7 @@
   libxkbcommon,
   libxml2,
   libxslt,
-  mesa,
+  libgbm,
   sqlite,
   systemdLibs,
   wayland-scanner,
@@ -113,7 +113,7 @@ stdenv.mkDerivation {
     libvpx'
     libxml2
     libxslt
-    mesa
+    libgbm
     sqlite
     systemdLibs
     wayland-scanner

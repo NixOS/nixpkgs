@@ -3,10 +3,8 @@
   buildPythonPackage,
   fetchFromGitHub,
   replaceVars,
-  pythonOlder,
   hatch-vcs,
   hatchling,
-  backports-zoneinfo,
   python-dateutil,
   tzdata,
   hypothesis,
@@ -14,15 +12,15 @@
 }:
 
 buildPythonPackage rec {
-  version = "6.0.1";
+  version = "6.1.0";
   pname = "icalendar";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "collective";
     repo = "icalendar";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-pcTiXRiHtx7jVzxDkY6WDhzo8sg8fPecqTpRSRIdvfs=";
+    tag = "v${version}";
+    hash = "sha256-P+cUwNFSBjyTzqdBnIricoM3rUWUXQc8k1912jil79Q=";
   };
 
   patches = [
@@ -39,7 +37,7 @@ buildPythonPackage rec {
   dependencies = [
     python-dateutil
     tzdata
-  ] ++ lib.optionals (pythonOlder "3.9") [ backports-zoneinfo ];
+  ];
 
   nativeCheckInputs = [
     hypothesis

@@ -43,7 +43,7 @@
   libXtst,
   libxcb,
   libxshmfence,
-  mesa,
+  libgbm,
   nspr,
   nss,
   pango,
@@ -51,6 +51,7 @@
   libappindicator-gtk3,
   libdbusmenu,
   writeScript,
+  pipewire,
   python3,
   runCommand,
   libunity,
@@ -100,7 +101,7 @@ stdenv.mkDerivation rec {
     libXtst
     libxcb
     libxshmfence
-    mesa
+    libgbm
     nss
     wrapGAppsHook3
     makeShellWrapper
@@ -114,7 +115,7 @@ stdenv.mkDerivation rec {
       systemd
       libpulseaudio
       libdrm
-      mesa
+      libgbm
       stdenv.cc.cc
       alsa-lib
       atk
@@ -146,6 +147,7 @@ stdenv.mkDerivation rec {
       nspr
       libxcb
       pango
+      pipewire
       libXScrnSaver
       libappindicator-gtk3
       libdbusmenu
@@ -166,7 +168,7 @@ stdenv.mkDerivation rec {
 
     wrapProgramShell $out/opt/${binaryName}/${binaryName} \
         "''${gappsWrapperArgs[@]}" \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations}}" \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
         ${lib.strings.optionalString withTTS "--add-flags \"--enable-speech-dispatcher\""} \
         --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
         --prefix LD_LIBRARY_PATH : ${libPath}:$out/opt/${binaryName} \

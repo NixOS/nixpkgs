@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "deepin-editor";
-  version = "6.5.2";
+  version = "6.5.8";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-Z3fsnjo4Pcu1e8lKvWdWBhpoOFFy0dSrI2HehRYKJ0k=";
+    hash = "sha256-QMq7DIggMhY4EseIa7/tvgxGwZn07OitOm1YjrzMFHg=";
   };
 
   nativeBuildInputs = [

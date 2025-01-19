@@ -44,6 +44,7 @@
     mkdir -p $out/share/inkscape/extensions
     cp ${inkcut}/share/inkscape/extensions/* $out/share/inkscape/extensions
   '');
+  inkstitch = callPackage ./extensions/inkstitch { };
   silhouette = callPackage ./extensions/silhouette { };
   textext = callPackage ./extensions/textext {
     pdflatex = texlive.combined.scheme-basic;

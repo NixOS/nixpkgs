@@ -49,7 +49,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "facebookresearch";
     repo = "faiss";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-P8TynU6jz5NbcWLdI7n4LX5Gdz0Ks72bmOzQ3LGjQCQ=";
   };
 

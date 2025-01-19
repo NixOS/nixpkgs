@@ -29,7 +29,7 @@
   libxcb,
   libxkbcommon,
   makeWrapper,
-  mesa,
+  libgbm,
   mupdf,
   openal,
   openjpeg,
@@ -101,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
     libvncserver
     libxcb
     libxkbcommon
-    mesa
+    libgbm
     mupdf
     openal
     openjpeg
@@ -129,7 +129,12 @@ stdenv.mkDerivation (finalAttrs: {
     "../src"
   ];
 
-  outputs = [ "out" "dev" "lib" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "lib"
+    "man"
+  ];
 
   hardeningDisable = [ "format" ];
 

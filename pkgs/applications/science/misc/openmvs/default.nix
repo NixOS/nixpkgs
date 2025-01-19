@@ -1,23 +1,24 @@
-{ lib
-, boost
-, breakpad
-, ceres-solver
-, cgal
-, cmake
-, eigen
-, fetchFromGitHub
-, glfw
-, gmp
-, libjpeg
-, libpng
-, libtiff
-, mpfr
-, opencv
-, openmp
-, pkg-config
-, stdenv
-, vcg
-, zstd
+{
+  lib,
+  boost,
+  breakpad,
+  ceres-solver,
+  cgal,
+  cmake,
+  eigen,
+  fetchFromGitHub,
+  glfw,
+  gmp,
+  libjpeg,
+  libpng,
+  libtiff,
+  mpfr,
+  opencv,
+  openmp,
+  pkg-config,
+  stdenv,
+  vcg,
+  zstd,
 }:
 
 let
@@ -57,7 +58,10 @@ stdenv.mkDerivation rec {
     vcg
   ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   postInstall = ''
     mv $out/bin/OpenMVS/* $out/bin

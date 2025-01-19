@@ -1,16 +1,17 @@
-{ fetchFromGitHub
-, fetchurl
-, lib
-, stdenv
-, cmake
-, git
-, pkg-config
-, glib
-, gnutls
-, perl
-, heimdal
-, popt
-, libunistring
+{
+  fetchFromGitHub,
+  fetchurl,
+  lib,
+  stdenv,
+  cmake,
+  git,
+  pkg-config,
+  glib,
+  gnutls,
+  perl,
+  heimdal,
+  popt,
+  libunistring,
 }:
 let
   heimdalConfigHeader = fetchurl {
@@ -25,7 +26,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = "openvas-smb";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-wnlBOHYOTWNbwzoHCpsXbuhp0uH3wBH6+Oo4Y+zSsfg=";
   };
 
@@ -66,6 +67,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ mi-ael ];
     mainProgram = "wmic";
-    platforms = platforms.unix;
+    platforms = platforms.linux;
   };
 }

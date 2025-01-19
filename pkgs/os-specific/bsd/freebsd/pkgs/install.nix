@@ -26,6 +26,9 @@ let
       @out@/bin/xinstall "''${args[@]}"
     ''
   );
+  libmd' = libmd.override {
+    bootstrapInstallation = true;
+  };
 in
 mkDerivation {
   path = "usr.bin/xinstall";
@@ -39,10 +42,14 @@ mkDerivation {
     (if stdenv.hostPlatform == stdenv.buildPlatform then boot-install else install)
   ];
   skipIncludesPhase = true;
-  buildInputs = compatIfNeeded ++ [
-    libmd
-    libnetbsd
-  ];
+  buildInputs =
+    compatIfNeeded
+    ++ lib.optionals (!stdenv.hostPlatform.isFreeBSD) [
+      libmd'
+    ]
+    ++ [
+      libnetbsd
+    ];
   makeFlags =
     [
       "STRIP=-s" # flag to install, not command

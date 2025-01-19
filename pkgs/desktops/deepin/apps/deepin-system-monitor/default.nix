@@ -4,19 +4,14 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  qttools,
   deepin-gettext-tools,
-  wrapQtAppsHook,
+  libsForQt5,
   dtkwidget,
   qt5integration,
   qt5platform-plugins,
-  qtbase,
-  qtsvg,
-  qtx11extras,
   dde-qt-dbus-factory,
   dde-tray-loader,
   gsettings-qt,
-  polkit-qt,
   procps,
   libpcap,
   libnl,
@@ -60,22 +55,22 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    qttools
+    libsForQt5.qttools
     deepin-gettext-tools
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
     dtkwidget
     qt5integration
     qt5platform-plugins
-    qtbase
-    qtsvg
-    qtx11extras
+    libsForQt5.qtbase
+    libsForQt5.qtsvg
+    libsForQt5.qtx11extras
     dde-qt-dbus-factory
     dde-tray-loader
     gsettings-qt
-    polkit-qt
+    libsForQt5.polkit-qt
     procps
     libpcap
     libnl
@@ -84,6 +79,8 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [ "-DVERSION=${version}" ];
+
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
 
   strictDeps = true;
 

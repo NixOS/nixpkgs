@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl jq
+#!nix-shell -i bash -p curl jq libxml2
 
 set -eu -o pipefail
 
@@ -11,13 +11,15 @@ path="$nixpkgs/pkgs/os-specific/linux/prl-tools/default.nix"
 kb_url="https://kb.parallels.com/en/130212"
 content="$(curl -s "$kb_url")"
 
-# Match latest version from Parallels knowledge base
-regex='<meta property="og:description" content="[^"]*Parallels Desktop[\ 0-9]*for Mac ([0-9]+\.[0-9]+\.[0-9+]) \(([0-9]+)\)[^"]*" />'
-if [[ $content =~ $regex ]]; then
+# Parse HTML content and retrieve og:description for header metadata
+description=$(echo "$content" | xmllint --recover --html --xpath 'string(//meta[@property="og:description"]/@content)' - 2>/dev/null)
+regex='[^0-9]+([0-9]+\.[0-9]+\.[0-9]+)[^\(]+\(([0-9]+)\)'
+if [[ $description =~ $regex ]]; then
     version="${BASH_REMATCH[1]}-${BASH_REMATCH[2]}"
     echo "Found latest version: $version"
 else
     echo "Failed to extract version from $kb_url" >&2
+    echo "Retrived description: $description" >&2
     exit 1
 fi
 
@@ -35,5 +37,4 @@ sha256="$(nix store prefetch-file $dmg_url --json | jq -r '.hash')"
 sed -i -e "s,version = \"$old_version\",version = \"$version\"," \
     -e "s,hash = \"sha256-.*\",hash = \"$sha256\"," "$path"
 
-git commit -qm "linuxPackages_latest.prl-tools: $old_version -> $version" "$path"
 echo "Updated linuxPackages_latest.prl-tools $old_version -> $version"

@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pallets";
     repo = "click";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-8YqIKRyw5MegnRwAO7YTCZateEFQFTH2PHpE8gTPTow=";
   };
 

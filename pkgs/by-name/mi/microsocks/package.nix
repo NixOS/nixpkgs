@@ -1,4 +1,5 @@
-{ stdenv,
+{
+  stdenv,
   fetchFromGitHub,
   lib,
 }:

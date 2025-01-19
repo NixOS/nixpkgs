@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, zstd }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  zstd,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ovh-ttyrec";
@@ -24,6 +29,9 @@ stdenv.mkDerivation rec {
     description = "Terminal interaction recorder and player";
     license = licenses.bsd3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ chaduffy zimbatm ];
+    maintainers = with maintainers; [
+      chaduffy
+      zimbatm
+    ];
   };
 }

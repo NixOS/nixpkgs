@@ -1,10 +1,16 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   inherit (lib) mkIf mkOption types;
   cfg = config.services.jenkinsSlave;
   masterCfg = config.services.jenkins;
-in {
+in
+{
   options = {
     services.jenkinsSlave = {
       # todo:

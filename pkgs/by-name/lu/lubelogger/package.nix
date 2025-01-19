@@ -6,17 +6,17 @@
 
 buildDotnetModule rec {
   pname = "lubelogger";
-  version = "1.3.8";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "hargata";
     repo = "lubelog";
     rev = "v${version}";
-    hash = "sha256-f9lj2Er0gQpptzmLpZsxR8hSU6kJlJkwHwpZ7wAq6bk=";
+    hash = "sha256-+c/eXcOzl42Sc5V9hUr3FNcdnL8z28wreIbKrz6c45s=";
   };
 
   projectFile = "CarCareTracker.sln";
-  nugetDeps = ./deps.nix; # File generated with `nix-build -A package.passthru.fetch-deps`.
+  nugetDeps = ./deps.json; # File generated with `nix-build -A lubelogger.passthru.fetch-deps`.
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
   dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;

@@ -1,17 +1,26 @@
-{ lib, stdenv, dotnetfx }:
-
-let dotnetenv =
 {
-  buildSolution = import ./build-solution.nix {
-    inherit lib stdenv;
-    dotnetfx = dotnetfx.pkg;
-  };
+  lib,
+  stdenv,
+  dotnetfx,
+}:
 
-  buildWrapper = import ./wrapper.nix {
-    inherit dotnetenv;
-  };
+let
+  dotnetenv = {
+    buildSolution = import ./build-solution.nix {
+      inherit lib stdenv;
+      dotnetfx = dotnetfx.pkg;
+    };
 
-  inherit (dotnetfx) assembly20Path wcfPath referenceAssembly30Path referenceAssembly35Path;
-};
+    buildWrapper = import ./wrapper.nix {
+      inherit dotnetenv;
+    };
+
+    inherit (dotnetfx)
+      assembly20Path
+      wcfPath
+      referenceAssembly30Path
+      referenceAssembly35Path
+      ;
+  };
 in
 dotnetenv

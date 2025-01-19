@@ -1,4 +1,10 @@
-{ buildGoModule, fetchFromGitHub, installShellFiles, lib, stdenv }:
+{
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  lib,
+  stdenv,
+}:
 
 buildGoModule rec {
   pname = "go-passbolt-cli";

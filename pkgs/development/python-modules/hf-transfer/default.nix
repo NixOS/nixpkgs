@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "hf_transfer";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Uh8q14OeN0fYsywYyNrH8C3wq/qRjQKEAIufi/a5RXA=";
   };
 
@@ -46,7 +46,7 @@ buildPythonPackage rec {
     [
       openssl
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.Security
       darwin.apple_sdk.frameworks.SystemConfiguration
       libiconv

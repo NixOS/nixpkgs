@@ -22,7 +22,7 @@ buildGoModule rec {
   # disabled because it is required to run on docker.
   doCheck = false;
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
   ldflags = [
     "-s"
     "-w"

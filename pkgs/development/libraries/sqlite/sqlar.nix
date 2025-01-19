@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, fuse, zlib
-, withFuse ? true }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fuse,
+  zlib,
+  withFuse ? true,
+}:
 
 stdenv.mkDerivation {
   pname = "sqlar";
@@ -15,17 +21,20 @@ stdenv.mkDerivation {
       --replace 'gcc' '${stdenv.cc.targetPrefix}cc'
   '';
 
-  buildInputs = [ zlib ]
-    ++ lib.optional withFuse fuse;
+  buildInputs = [ zlib ] ++ lib.optional withFuse fuse;
 
-  buildFlags = [ "CFLAGS=-Wno-error" "sqlar" ]
-    ++ lib.optional withFuse "sqlarfs";
+  buildFlags = [
+    "CFLAGS=-Wno-error"
+    "sqlar"
+  ] ++ lib.optional withFuse "sqlarfs";
 
-  installPhase = ''
-    install -D -t $out/bin sqlar
-  '' + lib.optionalString withFuse ''
-    install -D -t $out/bin sqlarfs
-  '';
+  installPhase =
+    ''
+      install -D -t $out/bin sqlar
+    ''
+    + lib.optionalString withFuse ''
+      install -D -t $out/bin sqlarfs
+    '';
 
   meta = with lib; {
     homepage = "https://sqlite.org/sqlar";

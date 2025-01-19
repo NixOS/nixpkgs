@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "valohai";
     repo = "django-allauth-2fa";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-bm2RwhvX2nfhYs74MM0iZl9U2gHgm0lLlh2tuRRcGso=";
   };
 

@@ -1,17 +1,18 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, click
-, semantic-version
-, requests
-, colorama
-, pyserial
-, wheel
-, scons
-, setuptools
-, tinyprog
-, flit-core
-, pytestCheckHook
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  click,
+  semantic-version,
+  requests,
+  colorama,
+  pyserial,
+  wheel,
+  scons,
+  setuptools,
+  tinyprog,
+  flit-core,
+  pytestCheckHook,
 }:
 
 buildPythonApplication rec {

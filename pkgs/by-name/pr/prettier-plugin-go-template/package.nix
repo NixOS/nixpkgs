@@ -6,7 +6,7 @@
 
 buildNpmPackage rec {
   pname = "prettier-plugin-go-template";
-  version = "0-unstable-2023-07-26";
+  version = "0.0.15-unstable-2023-07-26";
 
   src = fetchFromGitHub {
     owner = "NiklasPor";
@@ -16,6 +16,15 @@ buildNpmPackage rec {
   };
 
   npmDepsHash = "sha256-PpJnVZFRxpUHux2jIBDtyBS4qNo6IJY4kwTAq6stEVQ=";
+
+  dontNpmPrune = true;
+
+  # Fixes error: Cannot find module 'prettier'
+  postInstall = ''
+    pushd "$nodeModulesPath"
+    find -mindepth 1 -maxdepth 1 -type d -print0 | grep --null-data -Exv "\./(ulid|prettier)" | xargs -0 rm -rfv
+    popd
+  '';
 
   meta = {
     description = "Fixes prettier formatting for go templates";

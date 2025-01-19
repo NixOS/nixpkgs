@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchgit
-, SDL2
-, alsa-lib
-, babl
-, bash
-, curl
-, libdrm # Not documented
-, pkg-config
-, xxd
-, enableFb ? false
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchgit,
+  SDL2,
+  alsa-lib,
+  babl,
+  bash,
+  curl,
+  libdrm, # Not documented
+  pkg-config,
+  xxd,
+  enableFb ? false,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -57,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureScript = "./configure.sh";
   configureFlags = lib.optional enableFb "--enable-fb";
-  configurePlatforms = [];
+  configurePlatforms = [ ];
   dontAddPrefix = true;
   dontDisableStatic = true;
 
