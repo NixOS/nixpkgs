@@ -86,6 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     # error when using a kernel that's too old
     "-D=linux-4-17=true"
     "-D=system-console-users=gdm,sddm,lightdm"
+    "-D=docs=true"
   ];
 
   PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
