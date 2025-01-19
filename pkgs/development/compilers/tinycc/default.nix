@@ -132,7 +132,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "tcc";
     maintainers = with lib.maintainers; [
       joachifm
-      AndersonTorres
       onemoresuza
     ];
     platforms = lib.platforms.unix;
