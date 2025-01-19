@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "pyfluidsynth";
-  version = "1.3.3";
+  version = "1.3.4";
   format = "pyproject";
 
   src = fetchPypi {
     pname = "pyFluidSynth";
     inherit version;
-    hash = "sha256-1Q1LVQc+dYCyo8pHCZK2xRwnnbocVRLchRNVlfQtaIE=";
+    hash = "sha256-ynQcJity5IljFJxzv4roDkXITCPJvfgDomujJMuy1bI=";
   };
 
   nativeBuildInputs = [
