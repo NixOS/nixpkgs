@@ -31,6 +31,14 @@ stdenv.mkDerivation rec {
       url = "https://github.com/troglobit/editline/commit/f444a316f5178b8e20fe31e7b2d979e651da077e.patch";
       hash = "sha256-m3jExTkPvE+ZBwHzf/A+ugzzfbLmeWYn726l7Po7f10=";
     })
+
+    # Pending editline new release:
+    #   https://github.com/troglobit/editline/pull/70
+    (fetchpatch {
+      name = "alt-left-and-alt-right.patch";
+      url = "https://github.com/troglobit/editline/commit/fb4d7268de024ed31ad2417f533cc0cbc2cd9b29.patch";
+      hash = "sha256-MDFe24lRDXKxEchACQXvC+Sw4sG0wpzBYdfe6UHa+iY=";
+    })
   ];
 
   configureFlags = [ (lib.enableFeature true "sigstop") ];
