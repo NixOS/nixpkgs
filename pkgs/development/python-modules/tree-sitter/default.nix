@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "tree-sitter";
-  version = "0.23.2";
+  version = "0.24.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "tree-sitter";
     repo = "py-tree-sitter";
     tag = "v${version}";
-    hash = "sha256-RWnt1g7WN5CDbgWY5YSTuPFZomoxtRgDaSLkG9y2B6w=";
+    hash = "sha256-ZDt/8suteaAjGdk71l8eej7jDkkVpVDBIZS63SA8tsU=";
     fetchSubmodules = true;
   };
   patches = [
@@ -55,7 +55,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python bindings to the Tree-sitter parsing library";
     homepage = "https://github.com/tree-sitter/py-tree-sitter";
-    changelog = "https://github.com/tree-sitter/py-tree-sitter/releases/tag/v${version}";
+    changelog = "https://github.com/tree-sitter/py-tree-sitter/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
