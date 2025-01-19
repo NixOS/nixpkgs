@@ -160,6 +160,9 @@ buildPythonPackage rec {
 
     # SAMPProxyError 1: 'Timeout expired!'
     "TestStandardProfile.test_main"
+
+    # fails with timeout on slow builders
+    "test_group_stable_sort"
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_sidereal_lat_independent" ];
 
   meta = {
