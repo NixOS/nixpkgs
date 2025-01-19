@@ -9,6 +9,7 @@
   itstool,
   libtool,
   texinfo,
+  systemdMinimal,
   util-linux,
   autoreconfHook,
   glib,
@@ -78,6 +79,9 @@ stdenv.mkDerivation rec {
       libao
       libpulseaudio
       python
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      systemdMinimal # libsystemd
     ]
     ++ lib.optionals withAlsa [
       alsa-lib
