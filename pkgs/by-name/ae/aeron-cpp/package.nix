@@ -36,7 +36,6 @@ let
   sbeAll = sbeAll_1_34_1;
 
 in
-
 stdenv.mkDerivation {
   pname = "aeron-cpp";
   inherit version;
@@ -117,7 +116,7 @@ stdenv.mkDerivation {
 
     mkdir --parents "$out"
     cp --archive --verbose --target-directory="$out" install/*
-    
+
     runHook postInstall
   '';
 
