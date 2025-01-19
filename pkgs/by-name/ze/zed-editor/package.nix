@@ -309,12 +309,16 @@ rustPlatform.buildRustPackage rec {
     };
     fhs = fhs { };
     fhsWithPackages = f: fhs { additionalPkgs = f; };
-    tests = {
-      remoteServerVersion = testers.testVersion {
-        package = zed-editor.remote_server;
-        command = "zed-remote-server-stable-${version} version";
+    tests =
+      {
+        remoteServerVersion = testers.testVersion {
+          package = zed-editor.remote_server;
+          command = "zed-remote-server-stable-${version} version";
+        };
+      }
+      // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+        withGles = zed-editor.override { withGLES = true; };
       };
-    };
   };
 
   meta = {
