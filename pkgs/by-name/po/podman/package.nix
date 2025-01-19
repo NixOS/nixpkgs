@@ -19,7 +19,7 @@
   makeWrapper,
   runtimeShell,
   symlinkJoin,
-  substituteAll,
+  replaceVars,
   extraPackages ? [ ],
   crun,
   runc,
@@ -85,8 +85,7 @@ buildGoModule rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./hardcode-paths.patch;
+    (replaceVars ./hardcode-paths.patch {
       bin_path = helpersBin;
     })
 

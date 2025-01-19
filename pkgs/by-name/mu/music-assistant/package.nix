@@ -4,7 +4,7 @@
   fetchFromGitHub,
   ffmpeg-headless,
   nixosTests,
-  substituteAll,
+  replaceVars,
   providers ? [ ],
 }:
 
@@ -38,8 +38,7 @@ python.pkgs.buildPythonApplication rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./ffmpeg.patch;
+    (replaceVars ./ffmpeg.patch {
       ffmpeg = "${lib.getBin ffmpeg-headless}/bin/ffmpeg";
       ffprobe = "${lib.getBin ffmpeg-headless}/bin/ffprobe";
     })

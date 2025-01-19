@@ -4,7 +4,7 @@
   stdenv,
   systemd,
   meson,
-  substituteAll,
+  replaceVars,
   swaybg,
   ninja,
   pkg-config,
@@ -57,8 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     [
       ./load-configuration-from-etc.patch
 
-      (substituteAll {
-        src = ./fix-paths.patch;
+      (replaceVars ./fix-paths.patch {
         inherit swaybg;
       })
     ]
