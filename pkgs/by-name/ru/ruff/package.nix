@@ -52,9 +52,7 @@ rustPlatform.buildRustPackage rec {
   # tests do not appear to respect linker options on doctests
   # Upstream issue: https://github.com/rust-lang/cargo/issues/14189
   # This causes errors like "error: linker `cc` not found" on static builds
-  postInstallCheck = lib.optionalString (!stdenv.hostPlatform.isStatic) ''
-    cargoCheckHook
-  '';
+  doCheck = !stdenv.hostPlatform.isStatic;
 
   # Failing on darwin for an unclear reason, but probably due to sandbox.
   # According to the maintainers, those tests are from an experimental crate that isn't actually
