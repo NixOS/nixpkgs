@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "bpython";
-  version = "0.24";
+  version = "0.25";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-mHNv/XqMSP0r+1PYmKR19CQb3gtnISVwavBNnQj9Pb0=";
+    hash = "sha256-wkb8kJ723MJunYy0YVsOaxYT81Q9EiabGf/QeCFmxls=";
   };
 
   propagatedBuildInputs = [
