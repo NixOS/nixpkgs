@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "pymbolic";
-  version = "2022.2";
+  version = "2024.2.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+Cd2lCuzy3Iyn6Hxqito7AnyN9uReMlc/ckqaup87Ik=";
+    hash = "sha256-l2zP8O0bnVrTRxzyuqDQLiMBwevtXld7LgX2M8L1P+w=";
   };
 
   patches = [
