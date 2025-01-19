@@ -3415,7 +3415,9 @@ self: super: with self; {
 
   django-auditlog = callPackage ../development/python-modules/django-auditlog { };
 
-  django-auth-ldap = callPackage ../development/python-modules/django-auth-ldap { };
+  django-auth-ldap = callPackage ../development/python-modules/django-auth-ldap {
+    inherit (pkgs) openldap;
+  };
 
   django-autocomplete-light = callPackage ../development/python-modules/django-autocomplete-light { };
 
