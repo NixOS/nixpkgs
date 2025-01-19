@@ -29,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "moderngl-window";
-  version = "3.1.0";
+  version = "3.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "moderngl";
     repo = "moderngl_window";
     tag = version;
-    hash = "sha256-oXUdYTvpvaML1YsqK7HudQV/RvUx6N0K/xYuiNp8uos=";
+    hash = "sha256-pElSwzNbZlZT8imK1UsLy2TyvS8TEM7hsVqLxEK1tbg=";
   };
 
   build-system = [
