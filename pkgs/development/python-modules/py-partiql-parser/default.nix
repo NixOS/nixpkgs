@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "py-partiql-parser";
-  version = "0.5.6";
+  version = "0.6.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "getmoto";
     repo = "py-partiql-parser";
     tag = version;
-    hash = "sha256-uEpgcY2bBaeFaK/0gWg1ef81FmKJy7m5G21aETW9QXU=";
+    hash = "sha256-2qCGNRoeMRe5fPzoWFD9umZgUDW6by7jNfO/BByQGwE=";
   };
 
   build-system = [ hatchling ];
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Tokenizer/parser/executor for the PartiQL-language";
     homepage = "https://github.com/getmoto/py-partiql-parser";
-    changelog = "https://github.com/getmoto/py-partiql-parser/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/getmoto/py-partiql-parser/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ centromere ];
   };
