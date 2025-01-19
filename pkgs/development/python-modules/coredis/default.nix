@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "coredis";
-  version = "4.17.0";
+  version = "4.18.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "alisaifee";
     repo = pname;
     tag = version;
-    hash = "sha256-HfGmsIi8PnYbnC2020x474gtq0eqHjF7mSmRSHb0QxY=";
+    hash = "sha256-QZKE6/pkHdhpl3uBaY+tOg7FzUzzfxYzkqbEY+HhAYQ=";
   };
 
   postPatch = ''
@@ -57,7 +57,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Async redis client with support for redis server, cluster & sentinel";
     homepage = "https://github.com/alisaifee/coredis";
-    changelog = "https://github.com/alisaifee/coredis/blob/${src.rev}/HISTORY.rst";
+    changelog = "https://github.com/alisaifee/coredis/blob/${src.tag}/HISTORY.rst";
     license = licenses.mit;
     maintainers = teams.wdz.members;
   };
