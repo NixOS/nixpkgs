@@ -41,7 +41,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportCheck = [
+  pythonImportsCheck = [
     "llm_cmd"
   ];
 
