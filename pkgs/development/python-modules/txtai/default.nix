@@ -87,7 +87,7 @@
   pytestCheckHook,
 }:
 let
-  version = "8.1.0";
+  version = "8.2.0";
   ann = [
     annoy
     hnswlib
@@ -217,18 +217,18 @@ let
       all
       ;
   };
-in
-buildPythonPackage {
-  pname = "txtai";
-  inherit version;
-  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "neuml";
     repo = "txtai";
     tag = "v${version}";
-    hash = "sha256-12EeYzZEHUS5HVxpKlTnV6mwnnOw1pQVG0f0ID/Ugik=";
+    hash = "sha256-fMzCYw9eqlpGI5FKoyYyxT17EhUFmFP9lrCn/LFC6ks=";
   };
+in
+buildPythonPackage {
+  pname = "txtai";
+  inherit version src;
+  pyproject = true;
 
   build-system = [ setuptools ];
 
@@ -298,7 +298,7 @@ buildPythonPackage {
 
   meta = {
     description = "Semantic search and workflows powered by language models";
-    changelog = "https://github.com/neuml/txtai/releases/tag/v${version}";
+    changelog = "https://github.com/neuml/txtai/releases/tag/${src.tag}";
     homepage = "https://github.com/neuml/txtai";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ happysalada ];
