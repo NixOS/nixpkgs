@@ -113,7 +113,7 @@
 , kwindowsystem ? null
 , variant ? "fresh"
 , symlinkJoin
-, postgresql
+, libpq
 , makeFontsConf
 , amiri
 , caladea
@@ -395,7 +395,7 @@ in stdenv.mkDerivation (finalAttrs: {
     pam
     perl
     poppler
-    postgresql
+    libpq
     python311
     sane-backends
     unixODBC

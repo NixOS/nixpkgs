@@ -8,7 +8,7 @@
   substituteAll,
 
   # build
-  postgresql,
+  libpq,
   setuptools,
 
   # propagates
@@ -29,6 +29,7 @@
   pproxy,
   pytest-randomly,
   pytestCheckHook,
+  postgresql,
   postgresqlTestHook,
 }:
 
@@ -46,7 +47,7 @@ let
   patches = [
     (substituteAll {
       src = ./ctypes.patch;
-      libpq = "${postgresql.lib}/lib/libpq${stdenv.hostPlatform.extensions.sharedLibrary}";
+      libpq = "${libpq}/lib/libpq${stdenv.hostPlatform.extensions.sharedLibrary}";
       libc = "${stdenv.cc.libc}/lib/libc.so.6";
     })
   ];
@@ -74,13 +75,13 @@ let
     nativeBuildInputs = [
       cython
       # needed to find pg_config with strictDeps
-      postgresql
+      libpq
       setuptools
       tomli
     ];
 
     buildInputs = [
-      postgresql
+      libpq
     ];
 
     # tested in psycopg

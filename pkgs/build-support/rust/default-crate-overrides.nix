@@ -34,7 +34,7 @@
 , openssl
 , pango
 , pkg-config
-, postgresql
+, libpq
 , protobuf
 , python3
 , rdkafka
@@ -259,7 +259,7 @@ in
 
   pq-sys = attr: {
     nativeBuildInputs = [ pkg-config ];
-    buildInputs = [ postgresql ];
+    buildInputs = [ libpq ];
   };
 
   prost-build = attr: {

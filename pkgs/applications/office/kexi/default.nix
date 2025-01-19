@@ -30,8 +30,8 @@
   kreport,
   lcms2,
   libmysqlclient,
+  libpq,
   marble,
-  postgresql,
 }:
 
 mkDerivation rec {
@@ -74,8 +74,8 @@ mkDerivation rec {
     kreport
     lcms2
     libmysqlclient
+    libpq
     marble
-    postgresql
   ];
 
   propagatedUserEnvPkgs = [ kproperty ];

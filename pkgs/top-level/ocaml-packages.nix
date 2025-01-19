@@ -1540,7 +1540,7 @@ let
     posix-types = callPackage ../development/ocaml-modules/posix/types.nix { };
 
     postgresql = callPackage ../development/ocaml-modules/postgresql {
-      inherit (pkgs) postgresql;
+      inherit (pkgs) libpq;
     };
 
     pp = callPackage ../development/ocaml-modules/pp { };

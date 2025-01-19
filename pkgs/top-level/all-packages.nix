@@ -1039,9 +1039,7 @@ with pkgs;
     systemd = pkgs.systemd;
   };
 
-  nominatim = callPackage ../servers/nominatim {
-    postgresql = postgresql_14;
-  };
+  nominatim = callPackage ../servers/nominatim { };
 
   ocs-url = libsForQt5.callPackage ../tools/misc/ocs-url { };
 
@@ -11677,6 +11675,8 @@ with pkgs;
 
   postgresqlVersions = import ../servers/sql/postgresql pkgs;
   inherit (postgresqlVersions)
+    libpq
+
     postgresql_13
     postgresql_14
     postgresql_15
