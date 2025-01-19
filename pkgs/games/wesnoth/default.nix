@@ -3,6 +3,10 @@
 , pango, gettext, boost, libvorbis, fribidi, dbus, libpng, pcre, openssl, icu
 , lua, curl
 , Cocoa, Foundation
+, testers
+, headless ? false
+, wesnoth
+, wesnoth-server
 }:
 
 stdenv.mkDerivation rec {
@@ -18,13 +22,19 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [ SDL2 SDL2_image SDL2_mixer SDL2_net SDL2_ttf pango gettext boost
-                  libvorbis fribidi dbus libpng pcre openssl icu lua curl ]
+  buildInputs = [boost openssl icu lua]
+                ++ lib.optionals (!headless) [dbus curl gettext libpng pcre SDL2 SDL2_image SDL2_mixer SDL2_net SDL2_ttf pango libvorbis fribidi ]
                 ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa Foundation];
 
   cmakeFlags = [
     "-DENABLE_SYSTEM_LUA=ON"
-  ];
+  ] ++ (lib.optionals (headless) ["-DENABLE_GAME=OFF"]);
+
+  passthru.tests.version = testers.testVersion {
+    package = if headless then wesnoth-server else wesnoth;
+    command = "${meta.mainProgram} --version";
+    version = version;
+  };
 
   NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-framework AppKit";
 
@@ -42,5 +52,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ abbradar ];
     platforms = platforms.unix;
+    mainProgram = if headless then "wesnothd" else "wesnoth";
   };
 }

@@ -16698,6 +16698,7 @@ with pkgs;
     };
   };
 
+  wesnoth-server = wesnoth.override { headless = true; };
   wesnoth-dev = wesnoth;
 
   inherit (callPackage ../games/xonotic { })
