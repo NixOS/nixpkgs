@@ -10034,6 +10034,8 @@ self: super: with self; {
 
   paragraphs = callPackage ../development/python-modules/paragraphs { };
 
+  parallel-ssh = callPackage ../development/python-modules/parallel-ssh { };
+
   param = callPackage ../development/python-modules/param { };
 
   parameter-expansion-patched = callPackage ../development/python-modules/parameter-expansion-patched { };
