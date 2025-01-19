@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "glyphsets";
-  version = "1.0.0";
+  version = "1.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-fa+W1IGIZcn1P1xNKm1Yb/TOuf4QdDVnIvlDkOLOcLY=";
+    hash = "sha256-jza6VQ3PZAQPku2hyo0KeO59r64Q9TpqLCI0dIX/URU=";
   };
 
   env.PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION = "python";
