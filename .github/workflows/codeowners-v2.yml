@@ -24,7 +24,8 @@ name: Codeowners v2
 
 on:
   pull_request_target:
-    types: [opened, ready_for_review, synchronize, reopened, edited]
+    types: [opened, ready_for_review, synchronize, reopened]
+  workflow_call:
 
 permissions: {}
 

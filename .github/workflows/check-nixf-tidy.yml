@@ -2,7 +2,7 @@ name: Check changed Nix files with nixf-tidy (experimental)
 
 on:
   pull_request_target:
-    types: [opened, synchronize, reopened, edited]
+  workflow_call:
 
 permissions: {}
 

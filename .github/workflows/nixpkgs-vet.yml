@@ -7,11 +7,7 @@ name: Vet nixpkgs
 
 on:
   pull_request_target:
-    # This workflow depends on the base branch of the PR, but changing the base branch is not included in the default trigger events, which would be `opened`, `synchronize` or `reopened`.
-    # Instead it causes an `edited` event, so we need to add it explicitly here.
-    # While `edited` is also triggered when the PR title/body is changed, this PR action is fairly quick, and PRs don't get edited **that** often, so it shouldn't be a problem.
-    # There is a feature request for adding a `base_changed` event: https://github.com/orgs/community/discussions/35058
-    types: [opened, synchronize, reopened, edited]
+  workflow_call:
 
 permissions: {}
 

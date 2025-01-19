@@ -1,0 +1,46 @@
+# Instead of adding all the jobs to run on a changed base to "edited.yml", we use this intermediate layer.
+# This will make it, that in the case of editing the title or description, there will only be a single skipped job
+# appearing in the checks list, instead of all the jobs below cluttering the output.
+
+name: "Edited Base"
+
+on:
+  workflow_call:
+
+permissions: {}
+
+jobs:
+  check-nix-format:
+    name: Check that Nix files are formatted
+    uses: ./.github/workflows/check-nix-format.yml
+
+  check-nixf-tidy:
+    name: Check changed Nix files with nixf-tidy (experimental)
+    uses: ./.github/workflows/check-nixf-tidy.yml
+
+  codeowners-v2:
+    name: Codeowners v2
+    uses: ./.github/workflows/codeowners-v2.yml
+
+  eval:
+    name: Eval
+    uses: ./.github/workflows/eval.yml
+    permissions:
+      pull-requests: write
+      statuses: write
+
+  labels:
+    name: Label PR
+    uses: ./.github/workflows/labels.yml
+    permissions:
+      contents: read
+      pull-requests: write
+
+  nixpkgs-vet:
+    name: Vet nixpkgs
+    uses: ./.github/workflows/nixpkgs-vet.yml
+
+  no-channel:
+    name: No channel PR
+    if: startsWith(github.event.pull_request.base.ref, 'nixos-') || startsWith(github.event.pull_request.base.ref, 'nixpkgs-')
+    uses: ./.github/workflows/no-channel.yml
