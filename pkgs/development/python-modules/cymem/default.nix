@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "cymem";
-  version = "2.0.10";
+  version = "2.0.11";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "explosion";
     repo = "cymem";
     tag = "release-v${version}";
-    hash = "sha256-lMbovEIYdXYQvLeVaCm8KfYaQ2TFSAi6picu7Ju9peg=";
+    hash = "sha256-4srwdQS06KeBAIaJm6XxmsHEZto0eiXBznrCHgT/BAc=";
   };
 
   build-system = [
@@ -40,7 +40,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Cython memory pool for RAII-style memory management";
     homepage = "https://github.com/explosion/cymem";
-    changelog = "https://github.com/explosion/cymem/releases/tag/release-v${version}";
+    changelog = "https://github.com/explosion/cymem/releases/tag/release-${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ nickcao ];
   };
