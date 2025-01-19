@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "py-vapid";
-  version = "1.9.1";
+  version = "1.9.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "py_vapid";
     inherit version;
-    hash = "sha256-/itUYb9Fx7r/EDnfaYHwO4f6qHzeBIKt36NbP+Y2rBs=";
+    hash = "sha256-PIlzts+DhK0MmuZNYnDMxIDguSxwLY9eoswD5rUSR/k=";
   };
 
   propagatedBuildInputs = [ cryptography ];
