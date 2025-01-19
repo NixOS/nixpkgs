@@ -4509,6 +4509,8 @@ self: super: with self; {
     inherit (self) python;
   });
 
+  fastmri = callPackage ../development/python-modules/fastmri { };
+
   fastnumbers = callPackage ../development/python-modules/fastnumbers { };
 
   fastparquet = callPackage ../development/python-modules/fastparquet { };
