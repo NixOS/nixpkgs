@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "durus";
-  version = "4.2";
+  version = "4.3";
 
   src = fetchPypi {
     pname = "Durus";
     inherit version;
-    hash = "sha256:1gzxg43zawwgqjrfixvcrilwpikb1ix9b7710rsl5ffk7q50yi3c";
+    hash = "sha256-aQM0I26juo2WbjrszgJUd5CdayQNCzID0zJ/YkNyYAc=";
   };
 
   # Checks disabled due to missing python unittest framework 'sancho' in nixpkgs
