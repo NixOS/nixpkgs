@@ -1483,7 +1483,15 @@ self: super: builtins.intersectAttrs super {
     })
     super.postgresql-libpq-configure;
 
-  postgresql-libpq-pkgconfig = addPkgconfigDepend pkgs.libpq super.postgresql-libpq-pkgconfig;
+  postgresql-libpq-pkgconfig = addPkgconfigDepend
+    # Building postgresql-libpq with PG17 in pkgsStatic works fine, but downstream can't link against it with:
+    # > /nix/store/7ir63m9sbqzflf3yfynn45i109w6a5iz-x86_64-unknown-linux-musl-binutils-2.43.1/bin/x86_64-unknown-linux-musl-ld:
+    #   /nix/store/vj7fwxbyvs15zrjbb9vafxbwmc05hl70-postgresql-static-x86_64-unknown-linux-musl-17.2-dev/lib/libpq.a(fe-connect.o):
+    #   in function `PQsetClientEncoding':
+    # > (.text.PQsetClientEncoding+0xdf): undefined reference to `pg_encoding_to_char'
+    # Falling back to v16 to work around it.
+    (if pkgs.stdenv.hostPlatform.isStatic then pkgs.postgresql_16 else pkgs.libpq)
+    super.postgresql-libpq-pkgconfig;
 
   # Test failure is related to a GHC implementation detail of primitives and doesn't
   # cause actual problems in dependent packages, see https://github.com/lehins/pvar/issues/4
