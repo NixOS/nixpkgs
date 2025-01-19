@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  substituteAll,
+  replaceVarsWith,
   jam,
   cctools,
   pkg-config,
@@ -77,8 +77,8 @@ stdenv.mkDerivation rec {
 
   installPhase =
     if stdenv.hostPlatform.isDarwin then
-      (substituteAll {
-        inherit (stdenv) shell;
+      (replaceVarsWith {
+        replacements = { inherit (stdenv) shell; };
         isExecutable = true;
         src = ./darwin.sh;
       })

@@ -15,6 +15,7 @@
   libiconv,
   libintl,
   libjpeg,
+  libtiff,
   ninja,
   openjpeg,
   pkg-config,
@@ -123,6 +124,7 @@ stdenv.mkDerivation (finalAttrs: rec {
     ++ lib.optionals (!minimal) [
       cairo
       lcms
+      libtiff
       curl
       nss
     ]

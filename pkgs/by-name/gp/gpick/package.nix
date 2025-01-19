@@ -36,6 +36,10 @@ stdenv.mkDerivation rec {
       hash = "sha256-DnRU90VPyFhLYTk4GPJoiVYadJgtYgjMS4MLgmpYLP0=";
     })
   ];
+  # https://github.com/thezbyg/gpick/pull/227
+  postPatch = ''
+    sed '1i#include <boost/version.hpp>' -i source/dynv/Types.cpp
+  '';
 
   nativeBuildInputs = [
     cmake

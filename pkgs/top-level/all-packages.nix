@@ -768,7 +768,9 @@ with pkgs;
     cutoffPackages = [ newDependency ];
   };
 
-  replaceVars = callPackage ../build-support/replace-vars { };
+  replaceVarsWith = callPackage ../build-support/replace-vars/replace-vars-with.nix { };
+
+  replaceVars = callPackage ../build-support/replace-vars/replace-vars.nix { };
 
   replaceDirectDependencies = callPackage ../build-support/replace-direct-dependencies.nix { };
 
@@ -3306,19 +3308,6 @@ with pkgs;
 
   fastlane = callPackage ../tools/admin/fastlane { };
 
-  fontforge = lowPrio (callPackage ../tools/misc/fontforge {
-    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
-    python = python3;
-  });
-  fontforge-gtk = fontforge.override {
-    withSpiro = true;
-    withGTK = true;
-    gtk3 = gtk3-x11;
-    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
-  };
-
-  fontforge-fonttools = callPackage ../tools/misc/fontforge/fontforge-fonttools.nix { };
-
   fontmatrix = libsForQt5.callPackage ../applications/graphics/fontmatrix { };
 
   fox = callPackage ../development/libraries/fox {};
@@ -4614,7 +4603,7 @@ with pkgs;
 
   pakcs = callPackage ../development/compilers/pakcs { };
 
-  pandoc_3_5 = callPackage ../by-name/pa/pandoc/package.nix { selectPandocCLI = (p: p.pandoc-cli_3_5); };
+  pandoc_3_6 = callPackage ../by-name/pa/pandoc/package.nix { selectPandocCLI = (p: p.pandoc-cli_3_6); };
 
   paperwork = callPackage ../applications/office/paperwork/paperwork-gtk.nix { };
 
@@ -4701,9 +4690,7 @@ with pkgs;
     pinentry-tty
     pinentry-all;
 
-  pinentry_mac = callPackage ../tools/security/pinentry/mac.nix {
-    inherit (darwin.apple_sdk.frameworks) Cocoa;
-  };
+  pinentry_mac = callPackage ../tools/security/pinentry/mac.nix { };
 
   pingu = callPackage ../tools/networking/pingu {
     buildGoModule = buildGo122Module;
@@ -5572,9 +5559,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  xtreemfs = callPackage ../tools/filesystems/xtreemfs {
-    boost = boost179;
-  };
+  xtreemfs = callPackage ../tools/filesystems/xtreemfs { };
 
   xorriso = libisoburn;
 
@@ -8259,7 +8244,7 @@ with pkgs;
 
   inherit (regclient) regbot regctl regsync;
 
-  reno = with python311Packages; toPythonApplication reno;
+  reno = with python312Packages; toPythonApplication reno;
 
   replace-secret = callPackage ../build-support/replace-secret/replace-secret.nix { };
 
@@ -8390,9 +8375,7 @@ with pkgs;
 
   travis = callPackage ../development/tools/misc/travis { };
 
-  tree-sitter = makeOverridable (callPackage ../development/tools/parsing/tree-sitter) {
-    inherit (darwin.apple_sdk.frameworks) Security CoreServices;
-  };
+  tree-sitter = makeOverridable (callPackage ../development/tools/parsing/tree-sitter) { };
 
   tree-sitter-grammars = recurseIntoAttrs tree-sitter.builtGrammars;
 
@@ -8570,6 +8553,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreAudio AudioToolbox;
   };
 
+  aws-spend-summary = haskellPackages.aws-spend-summary.bin;
+
   backlight-auto = callPackage ../by-name/ba/backlight-auto/package.nix {
     zig = buildPackages.zig_0_11;
   };
@@ -8595,7 +8580,7 @@ with pkgs;
     boost187
   ;
 
-  boost = boost186;
+  boost = boost187;
 
   inherit (callPackages ../development/libraries/botan { })
     botan2
@@ -9314,7 +9299,12 @@ with pkgs;
     icu76
   ;
 
-  icu = icu74;
+  # Use Apple’s fork of ICU by default, which provides additional APIs that are not present in upstream ICU.
+  #
+  # `icuReal` is provided in case the upstream icu package is needed on Darwin instead of the fork.
+  # Note that the versioned icu packages always correspond to the upstream versions.
+  icuReal = icu74;
+  icu = if stdenv.hostPlatform.isDarwin then darwin.ICU else icuReal;
 
   idasen = with python3Packages; toPythonApplication idasen;
 
@@ -9578,7 +9568,12 @@ with pkgs;
     python = python3;
   };
 
-  libffi = callPackage ../development/libraries/libffi { };
+  # Use Apple’s fork of libffi by default, which provides APIs and trampoline functionality that is not yet
+  # merged upstream. This is needed by some packages (such as cffi).
+  #
+  # `libffiReal` is provided in case the upstream libffi package is needed on Darwin instead of the fork.
+  libffiReal = callPackage ../development/libraries/libffi { };
+  libffi = if stdenv.hostPlatform.isDarwin then darwin.libffi else libffiReal;
   libffi_3_3 = callPackage ../development/libraries/libffi/3.3.nix { };
   libffiBoot = libffi.override {
     doCheck = false;
@@ -10201,21 +10196,21 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AGL Accelerate Carbon Cocoa Foundation;
   };
 
-  openstackclient = with python311Packages; toPythonApplication python-openstackclient;
+  openstackclient = with python312Packages; toPythonApplication python-openstackclient;
   openstackclient-full = openstackclient.overridePythonAttrs (oldAttrs: {
     dependencies = oldAttrs.dependencies ++ oldAttrs.optional-dependencies.cli-plugins;
   });
-  barbicanclient = with python311Packages; toPythonApplication python-barbicanclient;
-  glanceclient = with python311Packages; toPythonApplication python-glanceclient;
-  heatclient = with python311Packages; toPythonApplication python-heatclient;
-  ironicclient = with python311Packages; toPythonApplication python-ironicclient;
-  magnumclient = with python311Packages; toPythonApplication python-magnumclient;
-  manilaclient = with python311Packages; toPythonApplication python-manilaclient;
-  mistralclient = with python311Packages; toPythonApplication python-mistralclient;
-  swiftclient = with python311Packages; toPythonApplication python-swiftclient;
-  troveclient = with python311Packages; toPythonApplication python-troveclient;
-  watcherclient = with python311Packages; toPythonApplication python-watcherclient;
-  zunclient = with python311Packages; toPythonApplication python-zunclient;
+  barbicanclient = with python312Packages; toPythonApplication python-barbicanclient;
+  glanceclient = with python312Packages; toPythonApplication python-glanceclient;
+  heatclient = with python312Packages; toPythonApplication python-heatclient;
+  ironicclient = with python312Packages; toPythonApplication python-ironicclient;
+  magnumclient = with python312Packages; toPythonApplication python-magnumclient;
+  manilaclient = with python312Packages; toPythonApplication python-manilaclient;
+  mistralclient = with python312Packages; toPythonApplication python-mistralclient;
+  swiftclient = with python312Packages; toPythonApplication python-swiftclient;
+  troveclient = with python312Packages; toPythonApplication python-troveclient;
+  watcherclient = with python312Packages; toPythonApplication python-watcherclient;
+  zunclient = with python312Packages; toPythonApplication python-zunclient;
 
   openvdb = callPackage ../development/libraries/openvdb { };
   openvdb_11 = callPackage ../development/libraries/openvdb/11.nix { };
@@ -10878,9 +10873,6 @@ with pkgs;
         stdenv;
   };
 
-  zeromq4 = callPackage ../development/libraries/zeromq/4.x.nix { };
-  zeromq = zeromq4;
-
   # requires a newer Apple SDK
   zig_0_9 = darwin.apple_sdk_11_0.callPackage ../development/compilers/zig/0.9 {
     llvmPackages = llvmPackages_13;
@@ -11103,17 +11095,17 @@ with pkgs;
     faslExt = "fasl";
     flags = [ "--dynamic-space-size" "3000" ];
   };
-  sbcl_2_4_9 = wrapLisp {
-    pkg = callPackage ../development/compilers/sbcl { version = "2.4.9"; };
-    faslExt = "fasl";
-    flags = [ "--dynamic-space-size" "3000" ];
-  };
   sbcl_2_4_10 = wrapLisp {
     pkg = callPackage ../development/compilers/sbcl { version = "2.4.10"; };
     faslExt = "fasl";
     flags = [ "--dynamic-space-size" "3000" ];
   };
-  sbcl = sbcl_2_4_10;
+  sbcl_2_4_11 = wrapLisp {
+    pkg = callPackage ../development/compilers/sbcl { version = "2.4.11"; };
+    faslExt = "fasl";
+    flags = [ "--dynamic-space-size" "3000" ];
+  };
+  sbcl = sbcl_2_4_11;
 
   sbclPackages = recurseIntoAttrs sbcl.pkgs;
 
@@ -12391,6 +12383,7 @@ with pkgs;
     withDocumentation = false;
     withEfi = false;
     withFido2 = false;
+    withGcrypt = false;
     withHostnamed = false;
     withHomed = false;
     withHwdb = false;
@@ -12404,6 +12397,7 @@ with pkgs;
     withNetworkd = false;
     withNss = false;
     withOomd = false;
+    withOpenSSL = false;
     withPCRE2 = false;
     withPam = false;
     withPolkit = false;
@@ -13412,6 +13406,7 @@ with pkgs;
   gnuradio = callPackage ../applications/radio/gnuradio/wrapper.nix {
     unwrapped = callPackage ../applications/radio/gnuradio {
       python = python311;
+      boost = boost186;  # fails with 187
     };
   };
   gnuradioPackages = lib.recurseIntoAttrs gnuradio.pkgs;
@@ -15219,14 +15214,16 @@ with pkgs;
 
   inherit (ocaml-ng.ocamlPackages) stog;
 
+  # Stumpwm is broken on SBCL 2.4.11, see
+  # https://github.com/NixOS/nixpkgs/pull/360320
   stumpwm = callPackage ../applications/window-managers/stumpwm {
     stdenv = stdenvNoCC;
-    sbcl = sbcl.withPackages (ps: with ps; [
+    sbcl = sbcl_2_4_10.withPackages (ps: with ps; [
       alexandria cl-ppcre clx fiasco
     ]);
   };
 
-  stumpwm-unwrapped = sbclPackages.stumpwm;
+  stumpwm-unwrapped = sbcl_2_4_10.pkgs.stumpwm;
 
   sublime3Packages = recurseIntoAttrs (callPackage ../applications/editors/sublime/3/packages.nix { });
 

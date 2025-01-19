@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, substituteAll, swaybg
+{ lib, stdenv, fetchFromGitHub, fetchpatch, substituteAll, swaybg
 , meson, ninja, pkg-config, wayland-scanner, scdoc
 , libGL, wayland, libxkbcommon, pcre2, json_c, libevdev
 , pango, cairo, libinput, gdk-pixbuf, librsvg
@@ -31,6 +31,18 @@ stdenv.mkDerivation (finalAttrs: {
       inherit swaybg;
     })
 
+    # libinput-1.27 support:
+    #   https://github.com/swaywm/sway/pull/8470
+    (fetchpatch {
+      name = "libinput-1.27-p1.patch";
+      url = "https://github.com/swaywm/sway/commit/bbadf9b8b10d171a6d5196da7716ea50ee7a6062.patch";
+      hash = "sha256-lA+oL1vqGQOm7K+AthzHYBzmOALrDgxzX/5Dx7naq84=";
+    })
+    (fetchpatch {
+      name = "libinput-1.27-p2.patch";
+      url = "https://github.com/swaywm/sway/commit/e2409aa49611bee1e1b99033461bfab0a7550c48.patch";
+      hash = "sha256-l598qfq+rpKy3/0arQruwd+BsELx85XDjwIDkb/o6og=";
+    })
   ] ++ lib.optionals (!finalAttrs.isNixOS) [
     # References to /nix/store/... will get GC'ed which causes problems when
     # copying the default configuration:

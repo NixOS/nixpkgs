@@ -4867,7 +4867,7 @@ self: super: with self; {
     (pythonOlder "3.10")
     (toPythonModule (pkgs.fontforge.override {
       withPython = true;
-      inherit python;
+      python3 = python;
     }));
 
   fontmath = callPackage ../development/python-modules/fontmath { };

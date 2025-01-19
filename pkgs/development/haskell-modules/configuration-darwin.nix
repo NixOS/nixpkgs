@@ -332,6 +332,22 @@ self: super: ({
   # Tests fail on macOS https://github.com/mrkkrp/zip/issues/112
   zip = dontCheck super.zip;
 
+  http-streams = super.http-streams.overrideAttrs (drv: {
+    __darwinAllowLocalNetworking = true;
+  });
+
+  io-streams = super.io-streams.overrideAttrs (drv: {
+    __darwinAllowLocalNetworking = true;
+  });
+
+  io-streams-haproxy = super.io-streams-haproxy.overrideAttrs (drv: {
+    __darwinAllowLocalNetworking = true;
+  });
+
+  openssl-streams = super.openssl-streams.overrideAttrs (drv: {
+    __darwinAllowLocalNetworking = true;
+  });
+
   snap = super.snap.overrideAttrs (drv: {
     __darwinAllowLocalNetworking = true;
   });
@@ -367,6 +383,10 @@ self: super: ({
         "2 @=? List.length (List.nub (List.sort (map Di.log_time logs)))" ""
     '';
   }) super.di-core;
+
+  # Require /usr/bin/security which breaks sandbox
+  http-reverse-proxy = dontCheck super.http-reverse-proxy;
+  servant-auth-server = dontCheck super.servant-auth-server;
 
 } // lib.optionalAttrs pkgs.stdenv.hostPlatform.isAarch64 {  # aarch64-darwin
 
@@ -439,11 +459,6 @@ self: super: ({
   tmp-proc-postgres = dontCheck super.tmp-proc-postgres;
 
 } // lib.optionalAttrs pkgs.stdenv.hostPlatform.isx86_64 {  # x86_64-darwin
-
-  # Work around store corruption on one of our Hydra builders
-  # https://github.com/NixOS/nixpkgs/issues/356741
-  filepath-bytestring = triggerRebuild 1 super.filepath-bytestring;
-  magic = triggerRebuild 1 super.magic;
 
   # tests appear to be failing to link or something:
   # https://hydra.nixos.org/build/174540882/nixlog/9

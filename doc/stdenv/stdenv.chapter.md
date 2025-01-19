@@ -75,17 +75,9 @@ stdenv.mkDerivation {
 }
 ```
 
-where the builder can do anything it wants, but typically starts with
+where `stdenv` sets up the environment automatically (e.g. by resetting `PATH` and populating it from build inputs). If you want, you can use `stdenv`’s generic builder:
 
 ```bash
-source $stdenv/setup
-```
-
-to let `stdenv` set up the environment (e.g. by resetting `PATH` and populating it from build inputs). If you want, you can still use `stdenv`’s generic builder:
-
-```bash
-source $stdenv/setup
-
 buildPhase() {
   echo "... this is my custom build phase ..."
   gcc foo.c -o foo
@@ -1276,7 +1268,7 @@ addEnvHooks "$hostOffset" myBashFunction
 
 The *existence* of setups hooks has long been documented and packages inside Nixpkgs are free to use this mechanism. Other packages, however, should not rely on these mechanisms not changing between Nixpkgs versions. Because of the existing issues with this system, there’s little benefit from mandating it be stable for any period of time.
 
-First, let’s cover some setup hooks that are part of Nixpkgs default `stdenv`. This means that they are run for every package built using `stdenv.mkDerivation` or when using a custom builder that has `source $stdenv/setup`. Some of these are platform specific, so they may run on Linux but not Darwin or vice-versa.
+First, let’s cover some setup hooks that are part of Nixpkgs default `stdenv`. This means that they are run for every package built using `stdenv.mkDerivation`, even with custom builders. Some of these are platform specific, so they may run on Linux but not Darwin or vice-versa.
 
 ### `move-docs.sh` {#move-docs.sh}
 
@@ -1411,6 +1403,7 @@ these in the [Hooks Reference](#chap-hooks).
 ### Compiler and Linker wrapper hooks {#compiler-linker-wrapper-hooks}
 
 If the file `${cc}/nix-support/cc-wrapper-hook` exists, it will be run at the end of the [compiler wrapper](#cc-wrapper).
+If the file `${binutils}/nix-support/ld-wrapper-hook` exists, it will be run at the end of the linker wrapper, before the linker runs.
 If the file `${binutils}/nix-support/post-link-hook` exists, it will be run at the end of the linker wrapper.
 These hooks allow a user to inject code into the wrappers.
 As an example, these hooks can be used to extract `extraBefore`, `params` and `extraAfter` which store all the command line arguments passed to the compiler and linker respectively.

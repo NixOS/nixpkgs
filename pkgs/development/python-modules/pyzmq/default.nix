@@ -63,6 +63,11 @@ buildPythonPackage rec {
     rm -r zmq
   '';
 
+  pytestFlagsArray = [
+    "-m"
+    "'not flaky'"
+  ];
+
   disabledTests = [
     # Tests hang
     "test_socket"
