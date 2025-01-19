@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
   flit-core,
   pythonOlder,
   defusedxml,
@@ -31,6 +32,14 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-QbFENC/Msc4pkEOPdDztjyl+2TXtAbMTHPJNAsUB978=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      # Sphinx 8.1 compat
+      url = "https://github.com/executablebooks/MyST-Parser/commit/9fe724ebf1d02fd979632d82387f802c91e0d6f6.patch";
+      hash = "sha256-KkAV9tP+dFax9KuxqkhqNlGWx6wSO6M2dWpah+GYG0E=";
+    })
+  ];
 
   build-system = [ flit-core ];
 
