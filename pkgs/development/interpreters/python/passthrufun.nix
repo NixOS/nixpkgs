@@ -139,8 +139,16 @@ rec {
     sitePackages
     ;
   inherit sourceVersion;
-  pythonAtLeast = lib.versionAtLeast pythonVersion;
-  pythonOlder = lib.versionOlder pythonVersion;
+  pythonAtLeast =
+    x:
+    lib.warnIf (lib.length (lib.splitVersion x) >= 3) "pythonAtLeast does not support patch versions" (
+      lib.versionAtLeast pythonVersion x
+    );
+  pythonOlder =
+    x:
+    lib.warnIf (lib.length (lib.splitVersion x) >= 3) "pythonOlder does not support patch versions" (
+      lib.versionOlder pythonVersion x
+    );
   inherit hasDistutilsCxxPatch;
   pythonOnBuildForHost = pythonOnBuildForHost_overridden;
 
