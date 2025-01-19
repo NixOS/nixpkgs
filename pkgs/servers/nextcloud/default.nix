@@ -3,7 +3,6 @@
   stdenvNoCC,
   fetchurl,
   nixosTests,
-  nextcloud28Packages,
   nextcloud29Packages,
   nextcloud30Packages,
 }:
@@ -58,12 +57,6 @@ let
     };
 in
 {
-  nextcloud28 = generic {
-    version = "28.0.14";
-    hash = "sha256-SpN/GIJIZCbJcD5Z7EspP2Ib6NCAt/hQFvYpkDw68zY=";
-    packages = nextcloud28Packages;
-  };
-
   nextcloud29 = generic {
     version = "29.0.11";
     hash = "sha256-UGf8F91zICzC39m5ccp7uUy5UEghRgJ9rGILEjweztE=";
