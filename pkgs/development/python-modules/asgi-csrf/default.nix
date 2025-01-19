@@ -12,7 +12,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.10";
+  version = "0.11";
   format = "setuptools";
   pname = "asgi-csrf";
   disabled = isPy27;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "simonw";
     repo = pname;
     tag = version;
-    hash = "sha256-VclgePMQh60xXofrquI3sCyPUPlkV4maZ5yybt+4HCs=";
+    hash = "sha256-STitMWabAPz61AU+5gFJSHBBqf67Q8UtS6ks8Q/ZybY=";
   };
 
   propagatedBuildInputs = [
