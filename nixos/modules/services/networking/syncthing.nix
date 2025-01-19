@@ -621,6 +621,21 @@ in {
 
   config = mkIf cfg.enable {
 
+    vars.generators.syncthing = {
+      files."cert.pem" = {};
+      files."key.pem" = {};
+      files."syncthing.pub".secret = false;
+      runtimeInputs = [
+        pkgs.coreutils
+        pkgs.gnugrep
+        pkgs.syncthing
+      ];
+      script = ''
+        syncthing generate --config "$out"
+        < "$out"/config.xml grep -oP '(?<=<device id=")[^"]+' | uniq > "$out"/syncthing.pub
+      '';
+    };
+
     networking.firewall = mkIf cfg.openDefaultPorts {
       allowedTCPPorts = [ 22000 ];
       allowedUDPPorts = [ 21027 22000 ];
