@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pyexcel-io";
-  version = "0.6.6";
+  version = "0.6.7";
   format = "setuptools";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-9ghL8a+l+/TGHPffRDcPpROCGvGIsC4+GbXvtm2Klp8=";
+    hash = "sha256-LDPY31BeIaE77Vhaxqt9MOyCap8Va3WDlK9dIjWb3bk=";
   };
 
   propagatedBuildInputs = [ lml ];
