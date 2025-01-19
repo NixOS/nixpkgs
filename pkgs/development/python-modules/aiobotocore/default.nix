@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "aiobotocore";
-  version = "2.15.1";
+  version = "2.18.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "aio-libs";
     repo = "aiobotocore";
     tag = version;
-    hash = "sha256-kPSkvvXBBwnWrdf0jmDNiTG6T1qpm5pNcPDHpnMFdmc=";
+    hash = "sha256-4S0CZtk5k+xke2WVwYrNyvP2up32xrOcdKNP72kO6zQ=";
   };
 
   # Relax version constraints: aiobotocore works with newer botocore versions
@@ -64,7 +64,6 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     # Tests require network access
-    "tests/boto_tests/test_signers.py"
     "tests/python3.8/"
     "tests/test_basic_s3.py"
     "tests/test_batch.py"
@@ -79,6 +78,8 @@ buildPythonPackage rec {
     "tests/test_sqs.py"
     "tests/test_version.py"
     "tests/test_waiter.py"
+    # moto compat issues
+    "tests/boto_tests/unit/test_signers.py"
   ];
 
   disabledTests =
@@ -101,7 +102,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python client for amazon services";
     homepage = "https://github.com/aio-libs/aiobotocore";
-    changelog = "https://github.com/aio-libs/aiobotocore/releases/tag/${version}";
+    changelog = "https://github.com/aio-libs/aiobotocore/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ teh ];
   };
