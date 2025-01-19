@@ -4509,6 +4509,8 @@ self: super: with self; {
     inherit (self) python;
   });
 
+  fastmri = callPackage ../development/python-modules/fastmri { };
+
   fastnumbers = callPackage ../development/python-modules/fastnumbers { };
 
   fastparquet = callPackage ../development/python-modules/fastparquet { };
@@ -7733,6 +7735,8 @@ self: super: with self; {
 
   lrcalc-python = callPackage ../development/python-modules/lrcalc-python { };
 
+  lrclibapi = callPackage ../development/python-modules/lrclibapi { };
+
   lru-dict = callPackage ../development/python-modules/lru-dict { };
 
   lsassy = callPackage ../development/python-modules/lsassy { };
@@ -8500,6 +8504,8 @@ self: super: with self; {
   mplleaflet = callPackage ../development/python-modules/mplleaflet { };
 
   mpl-scatter-density = callPackage ../development/python-modules/mpl-scatter-density { };
+
+  mpl-typst = callPackage ../development/python-modules/mpl-typst { };
 
   mpmath = callPackage ../development/python-modules/mpmath { };
 
