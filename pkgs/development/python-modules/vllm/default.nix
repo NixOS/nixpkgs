@@ -167,6 +167,9 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "vllm" ];
 
+  # updates the cutlass fetcher instead
+  passthru.skipBulkUpdate = true;
+
   meta = with lib; {
     description = "High-throughput and memory-efficient inference and serving engine for LLMs";
     changelog = "https://github.com/vllm-project/vllm/releases/tag/v${version}";
