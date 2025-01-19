@@ -7,6 +7,7 @@ let
     attrsOf
     listOf
     unique
+    nullOr
     ;
 in
 {
@@ -34,6 +35,13 @@ in
         options.mergedUnique = mkOption {
           type = unique { message = ""; } (listOf types.str);
         };
+        # nullOr
+        options.nullOr = mkOption {
+          type = nullOr (listOf types.str);
+        };
+        options.mergedNullOr = mkOption {
+          type = nullOr (listOf types.str);
+        };
       }
     )
     # Module B
@@ -48,6 +56,9 @@ in
         };
         options.mergedUnique = mkOption {
           type = unique { message = ""; } (listOf types.str);
+        };
+        options.mergedNullOr = mkOption {
+          type = nullOr (listOf types.str);
         };
       }
     )
