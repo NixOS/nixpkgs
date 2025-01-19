@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   autoreconfHook,
+  ncurses,
   nix-update-script,
   fetchpatch,
 }:
@@ -41,9 +42,18 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  configureFlags = [ (lib.enableFeature true "sigstop") ];
+  configureFlags = [
+    # Enable SIGSTOP (Ctrl-Z) behavior.
+    (lib.enableFeature true "sigstop")
+    # Enable ANSI arrow keys.
+    (lib.enableFeature true "arrow-keys")
+    # Use termcap library to query terminal size.
+    (lib.enableFeature true "termcap")
+  ];
 
   nativeBuildInputs = [ autoreconfHook ];
+
+  propagatedBuildInputs = [ ncurses ];
 
   outputs = [
     "out"
@@ -56,7 +66,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://troglobit.com/projects/editline/";
-    description = "Readline() replacement for UNIX without termcap (ncurses)";
+    description = "Readline() replacement for UNIX";
     license = licenses.bsdOriginal;
     maintainers = with maintainers; [ oxalica ];
     platforms = platforms.all;
