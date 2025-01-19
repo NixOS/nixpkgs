@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pueblo";
-  version = "0.0.10";
+  version = "0.0.11";
   pyproject = true;
 
   # This tarball doesn't include tests unfortuneatly, and the GitHub tarball
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   # should work for us as well.
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7uFLlApTR58KiV7yRydo37RsVE4QPvTbjgYNEG64mUo=";
+    hash = "sha256-IQ5NFn1EMh5oLgRlth7VWQmSyMx2/7cmC/U1VW1B4OE=";
   };
 
   nativeBuildInputs = [
