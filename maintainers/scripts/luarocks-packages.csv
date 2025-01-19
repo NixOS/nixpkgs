@@ -125,6 +125,7 @@ nvim-nio,,,,,,mrcjkb
 pathlib.nvim,,,,,,
 papis-nvim,,,,,,GaetanLepage
 penlight,,,,,,alerque
+plc,,,,,5.3,
 plenary.nvim,https://raw.githubusercontent.com/nvim-lua/plenary.nvim/master/plenary.nvim-scm-1.rockspec,,,,5.1,
 psl,,,,0.3,,
 rapidjson,,,,,,
