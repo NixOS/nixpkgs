@@ -1,0 +1,13 @@
+diff -Naur gdbm-1.24/src/systems.h gdbm-1.24-patched/src/systems.h
+--- gdbm-1.24/src/systems.h	2024-06-17 17:30:13.000000000 +0300
++++ gdbm-1.24-patched/src/systems.h	2025-01-14 22:53:18.560773303 +0300
+@@ -27,7 +27,8 @@
+ #include <stdlib.h>
+ #if HAVE_STRING_H
+ # include <string.h>
+-#else
++#endif
++#if HAVE_STRINGS_H
+ # include <strings.h>
+ #endif
+ #include <unistd.h>
