@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
 
   # build-system
   setuptools,
@@ -67,6 +68,15 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-doYvjwajwXqqaKZ363p2SE//9eupfkwrG66j0iUAnU0=";
   };
+
+  patches = [
+    # Remove on the next major version bump
+    (fetchpatch {
+      url = "https://github.com/huggingface/transformers/commit/db864b5526d56fd99143619abff969bfcb5596d5.patch?full_index=1";
+      name = "dont-import-torch-distributed-if-not-available.patch";
+      hash = "sha256-XOraJmSt9Rp/oNiil6vDUBqZhd8MDbA0nz1Tx16Mk14=";
+    })
+  ];
 
   build-system = [ setuptools ];
 
