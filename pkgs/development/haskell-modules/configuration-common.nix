@@ -2774,36 +2774,41 @@ self: super: {
   # unbreak with tasty-quickcheck 0.11, can be dropped for Stackage LTS >= 23.9
   text-builder = doDistribute self.text-builder_0_6_7_3;
 
-  postgrest = lib.pipe super.postgrest [
-    # 2023-12-20: New version needs extra dependencies
-    (addBuildDepends [ self.extra self.fuzzyset_0_2_4 self.cache self.timeit ])
-    # 2022-12-02: Too strict bounds.
-    doJailbreak
-    # 2022-12-02: Hackage release lags behind actual releases: https://github.com/PostgREST/postgrest/issues/2275
-    (overrideSrc rec {
-      version = "12.0.3";
-      src = pkgs.fetchFromGitHub {
-        owner = "PostgREST";
-        repo = "postgrest";
-        rev = "v${version}";
-        hash = "sha256-peXM5/K034Phcy5vNhc5AT3/9oGXohVogFN9gRsSosY=";
-      };
-    })
-    # 2024-11-03: Needed for the patch below. Can be dropped after updating to 12.2+.
-    (appendPatches [
-      (fetchpatch {
-        url = "https://github.com/PostgREST/postgrest/commit/d311fb17c46ad2ab9064c7aba1954d3500ef0e54.patch";
-        hash = "sha256-O/bBm93V6GIPSB5dwhNUFgX3vXA01LPJapZQoeJmbIU=";
+  postgrest = lib.pipe
+    (super.postgrest.overrideScope (self: super: {
+      # 2025-01-19: Upstream is stuck at hasql < 1.7
+      # Jailbreaking for newer postgresql-libpq, which seems to work fine
+      postgresql-binary = dontCheck (doJailbreak super.postgresql-binary_0_13_1_3);
+      hasql = dontCheck (doJailbreak super.hasql_1_6_4_4);
+      # Matching dependencies for hasql < 1.6.x
+      hasql-dynamic-statements = dontCheck super.hasql-dynamic-statements_0_3_1_5;
+      hasql-implicits = dontCheck super.hasql-implicits_0_1_1_3;
+      hasql-notifications = dontCheck super.hasql-notifications_0_2_2_0;
+      hasql-pool = dontCheck super.hasql-pool_1_0_1;
+      hasql-transaction = dontCheck super.hasql-transaction_1_1_0_1;
+    })) [
+      # 2023-12-20: New version needs extra dependencies
+      (addBuildDepends [ self.extra self.fuzzyset_0_2_4 self.cache self.timeit self.prometheus-client ])
+      # 2022-12-02: Too strict bounds.
+      doJailbreak
+      # 2022-12-02: Hackage release lags behind actual releases: https://github.com/PostgREST/postgrest/issues/2275
+      (overrideSrc rec {
+        version = "12.2.7";
+        src = pkgs.fetchFromGitHub {
+          owner = "PostgREST";
+          repo = "postgrest";
+          rev = "v${version}";
+          hash = "sha256-4lKA+U7J8maKiDX9CWxWGjepGKSUu4ZOAA188yMt0bU=";
+        };
       })
-    ])
-    # 2024-11-03: Fixes build on aarch64-darwin. Can be removed after updating to 13+.
-    (appendPatches [
-      (fetchpatch {
-        url = "https://github.com/PostgREST/postgrest/commit/c045b261c4f7d2c2514e858120950be6b3ddfba8.patch";
-        hash = "sha256-6SeteL5sb+/K1y3f9XL7yNzXDdD1KQp91RNP4kutSLE=";
-      })
-    ])
-  ];
+      # 2024-11-03: Fixes build on aarch64-darwin. Can be removed after updating to 13+.
+      (appendPatches [
+        (fetchpatch {
+          url = "https://github.com/PostgREST/postgrest/commit/c045b261c4f7d2c2514e858120950be6b3ddfba8.patch";
+          hash = "sha256-6SeteL5sb+/K1y3f9XL7yNzXDdD1KQp91RNP4kutSLE=";
+        })
+      ])
+    ];
 
   # Too strict bounds on hspec < 2.11
   fuzzyset_0_2_4 = doJailbreak super.fuzzyset_0_2_4;
