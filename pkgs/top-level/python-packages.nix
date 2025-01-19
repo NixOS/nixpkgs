@@ -4615,6 +4615,8 @@ self: super: with self; {
 
   firebase-messaging = callPackage ../development/python-modules/firebase-messaging { };
 
+  firebase-admin = callPackage ../development/python-modules/firebase-admin { };
+
   fireflyalgorithm = callPackage ../development/python-modules/fireflyalgorithm { };
 
   firetv = callPackage ../development/python-modules/firetv { };
