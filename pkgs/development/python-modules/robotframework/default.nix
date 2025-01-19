@@ -22,7 +22,7 @@ buildPythonPackage rec {
     hash = "sha256-G+mmSeTLr6h0e2YCJOpbYaRNZ5M6PXWBYXdn9xGitkM=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ jsonschema ];
 
@@ -30,11 +30,11 @@ buildPythonPackage rec {
     ${python.interpreter} utest/run.py
   '';
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/robotframework/robotframework/blob/master/doc/releasenotes/rf-${version}.rst";
     description = "Generic test automation framework";
     homepage = "https://robotframework.org/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bjornfor ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bjornfor ];
   };
 }
