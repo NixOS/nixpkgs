@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "blis";
-  version = "1.0.2";
+  version = "1.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "explosion";
     repo = "cython-blis";
     tag = "release-v${version}";
-    hash = "sha256-J/EaJNmImcK4zScpbYPlQuoLyjoUkUgxUp6926P6rUQ=";
+    hash = "sha256-TyyB0kPGX517fe0rI4T+VkSnFvTRCFR06BLwo67X9zQ=";
   };
 
   postPatch = ''
@@ -66,7 +66,7 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    changelog = "https://github.com/explosion/cython-blis/releases/tag/release-v${version}";
+    changelog = "https://github.com/explosion/cython-blis/releases/tag/release-${src.tag}";
     description = "BLAS-like linear algebra library";
     homepage = "https://github.com/explosion/cython-blis";
     license = licenses.bsd3;
