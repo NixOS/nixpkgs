@@ -56,6 +56,8 @@ let
           patchShebangs .
         '';
 
+        postFixup = "rm -rf $out/sbin";
+
         makeFlags = [
           "INSTALL=install"
           "PREFIX=${placeholder "out"}"
@@ -128,7 +130,6 @@ let
         "x86_64-linux"
         "i686-linux"
       ];
-      preInstall = "mkdir -p $out/sbin";
     };
     inteltool = generic {
       pname = "inteltool";
@@ -168,7 +169,7 @@ let
 
         runHook postInstall
       '';
-      postFixup = ''
+      fixupPhase = ''
         wrapProgram $out/bin/acpidump-all \
           --set PATH ${
             lib.makeBinPath [
@@ -179,21 +180,21 @@ let
               file
             ]
           }
+        runHook postFixup
       '';
     };
   };
 
 in
-utils
-// {
-  coreboot-utils =
+{
+  full =
     (buildEnv {
       name = "coreboot-utils-${version}";
       paths = lib.filter (lib.meta.availableOn stdenv.hostPlatform) (lib.attrValues utils);
-      postBuild = "rm -rf $out/sbin";
     })
     // {
       inherit version;
       meta = commonMeta;
     };
 }
+// utils
