@@ -7657,6 +7657,8 @@ self: super: with self; {
     llvm = pkgs.llvm_14;
   };
 
+  lm-eval = callPackage ../development/python-modules/lm-eval { };
+
   lm-format-enforcer = callPackage ../development/python-modules/lm-format-enforcer { };
 
   lmdb = callPackage ../development/python-modules/lmdb {
