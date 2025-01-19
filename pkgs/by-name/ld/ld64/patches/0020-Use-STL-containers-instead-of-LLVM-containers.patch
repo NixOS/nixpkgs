@@ -1,0 +1,2813 @@
+From 25f59388ea44cc407c1d835e11e5f600ea2212ad Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Wed, 13 Nov 2024 13:53:14 -0500
+Subject: [PATCH 20/20] Use STL containers instead of LLVM containers
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Upstream LLVM doesn’t support `std::string_view` in `DenseMap`s.
+---
+ src/abstraction/Containers.h |    4 +-
+ src/llvm/llvm-AlignOf.h      |  171 -----
+ src/llvm/llvm-DenseMap.h     | 1323 ----------------------------------
+ src/llvm/llvm-DenseMapInfo.h |  253 -------
+ src/llvm/llvm-DenseSet.h     |  291 --------
+ src/llvm/llvm-MathExtras.h   |  486 -------------
+ src/llvm/llvm-type_traits.h  |  204 ------
+ 7 files changed, 2 insertions(+), 2730 deletions(-)
+ delete mode 100644 src/llvm/llvm-AlignOf.h
+ delete mode 100644 src/llvm/llvm-DenseMap.h
+ delete mode 100644 src/llvm/llvm-DenseMapInfo.h
+ delete mode 100644 src/llvm/llvm-DenseSet.h
+ delete mode 100644 src/llvm/llvm-MathExtras.h
+ delete mode 100644 src/llvm/llvm-type_traits.h
+
+diff --git a/src/abstraction/Containers.h b/src/abstraction/Containers.h
+index a27dc83..fca312c 100644
+--- a/src/abstraction/Containers.h
++++ b/src/abstraction/Containers.h
+@@ -31,14 +31,14 @@
+ #include <set>
+ #include <string_view>
+ 
+-#define USE_LLVM_CONTAINERS 1
++#define USE_LLVM_CONTAINERS 0
+ 
+ #if USE_LLVM_CONTAINERS
+ #include "../llvm/llvm-DenseSet.h"
+ #include "../llvm/llvm-DenseMap.h"
+ #else
+ // Include DenseMapInfo helpers even when not using LLVM containers.
+-#include "../llvm/llvm-DenseMapInfo.h"
++// #include "../llvm/llvm-DenseMapInfo.h"
+ #endif
+ 
+ namespace ld {
+diff --git a/src/llvm/llvm-AlignOf.h b/src/llvm/llvm-AlignOf.h
+deleted file mode 100644
+index df1b178..0000000
+--- a/src/llvm/llvm-AlignOf.h
++++ /dev/null
+@@ -1,171 +0,0 @@
+-//===--- AlignOf.h - Portable calculation of type alignment -----*- C++ -*-===//
+-//
+-//                     The LLVM Compiler Infrastructure
+-//
+-// This file is distributed under the University of Illinois Open Source
+-// License. See LICENSE.TXT for details.
+-//
+-//===----------------------------------------------------------------------===//
+-//
+-// This file defines the AlignOf function that computes alignments for
+-// arbitrary types.
+-//
+-//===----------------------------------------------------------------------===//
+-
+-// Taken from llvmCore-3425.0.31.
+-
+-#ifndef LLVM_SUPPORT_ALIGNOF_H
+-#define LLVM_SUPPORT_ALIGNOF_H
+-
+-#include <cstddef>
+-
+-namespace ld::llvm {
+-
+-template <typename T>
+-struct AlignmentCalcImpl {
+-  char x;
+-  T t;
+-private:
+-  AlignmentCalcImpl() {} // Never instantiate.
+-};
+-
+-/// AlignOf - A templated class that contains an enum value representing
+-///  the alignment of the template argument.  For example,
+-///  AlignOf<int>::Alignment represents the alignment of type "int".  The
+-///  alignment calculated is the minimum alignment, and not necessarily
+-///  the "desired" alignment returned by GCC's __alignof__ (for example).  Note
+-///  that because the alignment is an enum value, it can be used as a
+-///  compile-time constant (e.g., for template instantiation).
+-template <typename T>
+-struct AlignOf {
+-  enum { Alignment =
+-         static_cast<unsigned int>(sizeof(AlignmentCalcImpl<T>) - sizeof(T)) };
+-
+-  enum { Alignment_GreaterEqual_2Bytes = Alignment >= 2 ? 1 : 0 };
+-  enum { Alignment_GreaterEqual_4Bytes = Alignment >= 4 ? 1 : 0 };
+-  enum { Alignment_GreaterEqual_8Bytes = Alignment >= 8 ? 1 : 0 };
+-  enum { Alignment_GreaterEqual_16Bytes = Alignment >= 16 ? 1 : 0 };
+-
+-  enum { Alignment_LessEqual_2Bytes = Alignment <= 2 ? 1 : 0 };
+-  enum { Alignment_LessEqual_4Bytes = Alignment <= 4 ? 1 : 0 };
+-  enum { Alignment_LessEqual_8Bytes = Alignment <= 8 ? 1 : 0 };
+-  enum { Alignment_LessEqual_16Bytes = Alignment <= 16 ? 1 : 0 };
+-
+-};
+-
+-/// alignOf - A templated function that returns the minimum alignment of
+-///  of a type.  This provides no extra functionality beyond the AlignOf
+-///  class besides some cosmetic cleanliness.  Example usage:
+-///  alignOf<int>() returns the alignment of an int.
+-template <typename T>
+-inline unsigned alignOf() { return AlignOf<T>::Alignment; }
+-
+-
+-/// \brief Helper for building an aligned character array type.
+-///
+-/// This template is used to explicitly build up a collection of aligned
+-/// character types. We have to build these up using a macro and explicit
+-/// specialization to cope with old versions of MSVC and GCC where only an
+-/// integer literal can be used to specify an alignment constraint. Once built
+-/// up here, we can then begin to indirect between these using normal C++
+-/// template parameters.
+-template <size_t Alignment> struct AlignedCharArrayImpl;
+-
+-// MSVC requires special handling here.
+-#ifndef _MSC_VER
+-
+-#if __has_feature(cxx_alignas)
+-#define LLVM_ALIGNEDCHARARRAY_TEMPLATE_ALIGNMENT(x) \
+-  template <> struct AlignedCharArrayImpl<x> { \
+-    char aligned alignas(x); \
+-  }
+-#elif defined(__GNUC__)
+-#define LLVM_ALIGNEDCHARARRAY_TEMPLATE_ALIGNMENT(x) \
+-  template <> struct AlignedCharArrayImpl<x> { \
+-    char aligned __attribute__((aligned(x))); \
+-  }
+-#else
+-# error No supported align as directive.
+-#endif
+-
+-LLVM_ALIGNEDCHARARRAY_TEMPLATE_ALIGNMENT(1);
+-LLVM_ALIGNEDCHARARRAY_TEMPLATE_ALIGNMENT(2);
+-LLVM_ALIGNEDCHARARRAY_TEMPLATE_ALIGNMENT(4);
+-LLVM_ALIGNEDCHARARRAY_TEMPLATE_ALIGNMENT(8);
+-LLVM_ALIGNEDCHARARRAY_TEMPLATE_ALIGNMENT(16);
+-LLVM_ALIGNEDCHARARRAY_TEMPLATE_ALIGNMENT(32);
+-LLVM_ALIGNEDCHARARRAY_TEMPLATE_ALIGNMENT(64);
+-LLVM_ALIGNEDCHARARRAY_TEMPLATE_ALIGNMENT(128);
+-LLVM_ALIGNEDCHARARRAY_TEMPLATE_ALIGNMENT(512);
+-LLVM_ALIGNEDCHARARRAY_TEMPLATE_ALIGNMENT(1024);
+-LLVM_ALIGNEDCHARARRAY_TEMPLATE_ALIGNMENT(2048);
+-LLVM_ALIGNEDCHARARRAY_TEMPLATE_ALIGNMENT(4096);
+-LLVM_ALIGNEDCHARARRAY_TEMPLATE_ALIGNMENT(8192);
+-
+-#undef LLVM_ALIGNEDCHARARRAY_TEMPLATE_ALIGNMENT
+-
+-#else // _MSC_VER
+-
+-// We provide special variations of this template for the most common
+-// alignments because __declspec(align(...)) doesn't actually work when it is
+-// a member of a by-value function argument in MSVC, even if the alignment
+-// request is something reasonably like 8-byte or 16-byte.
+-template <> struct AlignedCharArrayImpl<1> { char aligned; };
+-template <> struct AlignedCharArrayImpl<2> { short aligned; };
+-template <> struct AlignedCharArrayImpl<4> { int aligned; };
+-template <> struct AlignedCharArrayImpl<8> { double aligned; };
+-
+-#define LLVM_ALIGNEDCHARARRAY_TEMPLATE_ALIGNMENT(x) \
+-  template <> struct AlignedCharArrayImpl<x> { \
+-    __declspec(align(x)) char aligned; \
+-  }
+-LLVM_ALIGNEDCHARARRAY_TEMPLATE_ALIGNMENT(16);
+-LLVM_ALIGNEDCHARARRAY_TEMPLATE_ALIGNMENT(32);
+-LLVM_ALIGNEDCHARARRAY_TEMPLATE_ALIGNMENT(64);
+-LLVM_ALIGNEDCHARARRAY_TEMPLATE_ALIGNMENT(128);
+-LLVM_ALIGNEDCHARARRAY_TEMPLATE_ALIGNMENT(512);
+-LLVM_ALIGNEDCHARARRAY_TEMPLATE_ALIGNMENT(1024);
+-LLVM_ALIGNEDCHARARRAY_TEMPLATE_ALIGNMENT(2048);
+-LLVM_ALIGNEDCHARARRAY_TEMPLATE_ALIGNMENT(4096);
+-LLVM_ALIGNEDCHARARRAY_TEMPLATE_ALIGNMENT(8192);
+-// Any larger and MSVC complains.
+-#undef LLVM_ALIGNEDCHARARRAY_TEMPLATE_ALIGNMENT
+-
+-#endif // _MSC_VER
+-
+-/// \brief This union template exposes a suitably aligned and sized character
+-/// array member which can hold elements of any of up to four types.
+-///
+-/// These types may be arrays, structs, or any other types. The goal is to
+-/// produce a union type containing a character array which, when used, forms
+-/// storage suitable to placement new any of these types over. Support for more
+-/// than four types can be added at the cost of more boiler plate.
+-template <typename T1,
+-          typename T2 = char, typename T3 = char, typename T4 = char>
+-union AlignedCharArrayUnion {
+-private:
+-  class AlignerImpl {
+-    T1 t1; T2 t2; T3 t3; T4 t4;
+-
+-    AlignerImpl(); // Never defined or instantiated.
+-  };
+-  union SizerImpl {
+-    char arr1[sizeof(T1)], arr2[sizeof(T2)], arr3[sizeof(T3)], arr4[sizeof(T4)];
+-  };
+-
+-public:
+-  /// \brief The character array buffer for use by clients.
+-  ///
+-  /// No other member of this union should be referenced. The exist purely to
+-  /// constrain the layout of this character array.
+-  char buffer[sizeof(SizerImpl)];
+-
+-private:
+-  // Tests seem to indicate that both Clang and GCC will properly register the
+-  // alignment of a struct containing an aligned member, and this alignment
+-  // should carry over to the character array in the union.
+-  AlignedCharArrayImpl<AlignOf<AlignerImpl>::Alignment> nonce_member;
+-};
+-
+-} // end namespace objc
+-#endif
+diff --git a/src/llvm/llvm-DenseMap.h b/src/llvm/llvm-DenseMap.h
+deleted file mode 100644
+index 35dffd4..0000000
+--- a/src/llvm/llvm-DenseMap.h
++++ /dev/null
+@@ -1,1323 +0,0 @@
+-//===- llvm/ADT/DenseMap.h - Dense probed hash table ------------*- C++ -*-===//
+-//
+-//                     The LLVM Compiler Infrastructure
+-//
+-// This file is distributed under the University of Illinois Open Source
+-// License. See LICENSE.TXT for details.
+-//
+-//===----------------------------------------------------------------------===//
+-//
+-// This file defines the DenseMap class.
+-//
+-//===----------------------------------------------------------------------===//
+-
+-// Taken from clang-1100.247.11.10.9
+-
+-#ifndef LLVM_ADT_DENSEMAP_H
+-#define LLVM_ADT_DENSEMAP_H
+-
+-#include "llvm-type_traits.h"
+-#include "llvm-MathExtras.h"
+-#include "llvm-AlignOf.h"
+-#include "llvm-DenseMapInfo.h"
+-#include <algorithm>
+-#include <cassert>
+-#include <cstddef>
+-#include <cstring>
+-#include <iterator>
+-#include <new>
+-#include <type_traits>
+-#include <utility>
+-#include <TargetConditionals.h>
+-#include <malloc/malloc.h>
+-
+-#define MIN_BUCKETS 4
+-#define MIN_COMPACT 1024
+-
+-#define fastpath(x) (__builtin_expect(bool(x), 1))
+-#define slowpath(x) (__builtin_expect(bool(x), 0))
+-
+-#define LLVM_UNLIKELY slowpath
+-#define LLVM_LIKELY fastpath
+-
+-extern void throwf (const char* format, ...) __attribute__ ((noreturn,format(printf, 1, 2)));
+-
+-static inline void *alloc_overflow(size_t n, size_t m) {
+-    size_t total;
+-    if (__builtin_mul_overflow(n, m, &total)) {
+-        throwf("attempt to allocate %zu * %zu bytes would overflow", n, m);
+-    }
+-    return malloc(total);
+-}
+-
+-namespace ld::llvm {
+-
+-namespace detail {
+-
+-// We extend a pair to allow users to override the bucket type with their own
+-// implementation without requiring two members.
+-template <typename KeyT, typename ValueT>
+-struct DenseMapPair : public std::pair<KeyT, ValueT> {
+-
+-  // FIXME: Switch to inheriting constructors when we drop support for older
+-  //        clang versions.
+-  // NOTE: This default constructor is declared with '{}' rather than
+-  //       '= default' to work around a separate bug in clang-3.8. This can
+-  //       also go when we switch to inheriting constructors.
+-  DenseMapPair() {}
+-
+-  DenseMapPair(const KeyT &Key, const ValueT &Value)
+-      : std::pair<KeyT, ValueT>(Key, Value) {}
+-
+-  DenseMapPair(KeyT &&Key, ValueT &&Value)
+-      : std::pair<KeyT, ValueT>(std::move(Key), std::move(Value)) {}
+-
+-  template <typename AltKeyT, typename AltValueT>
+-  DenseMapPair(AltKeyT &&AltKey, AltValueT &&AltValue,
+-               typename std::enable_if<
+-                   std::is_convertible<AltKeyT, KeyT>::value &&
+-                   std::is_convertible<AltValueT, ValueT>::value>::type * = 0)
+-      : std::pair<KeyT, ValueT>(std::forward<AltKeyT>(AltKey),
+-                                std::forward<AltValueT>(AltValue)) {}
+-
+-  template <typename AltPairT>
+-  DenseMapPair(AltPairT &&AltPair,
+-               typename std::enable_if<std::is_convertible<
+-                   AltPairT, std::pair<KeyT, ValueT>>::value>::type * = 0)
+-      : std::pair<KeyT, ValueT>(std::forward<AltPairT>(AltPair)) {}
+-
+-  KeyT &getFirst() { return std::pair<KeyT, ValueT>::first; }
+-  const KeyT &getFirst() const { return std::pair<KeyT, ValueT>::first; }
+-  ValueT &getSecond() { return std::pair<KeyT, ValueT>::second; }
+-  const ValueT &getSecond() const { return std::pair<KeyT, ValueT>::second; }
+-};
+-
+-} // end namespace detail
+-
+-template <
+-    typename KeyT, typename ValueT,
+-    typename ValueInfoT = DenseMapValueInfo<ValueT>,
+-    typename KeyInfoT = DenseMapInfo<KeyT>,
+-    typename Bucket = detail::DenseMapPair<KeyT, ValueT>,
+-	bool IsConst = false>
+-class DenseMapIterator;
+-
+-// ValueInfoT is used by the refcount table.
+-// A key/value pair with value==0 is not required to be stored 
+-//   in the refcount table; it could correctly be erased instead.
+-// For performance, we do keep zero values in the table when the 
+-//   true refcount decreases to 1: this makes any future retain faster.
+-// For memory size, we allow rehashes and table insertions to 
+-//   remove a zero value as if it were a tombstone.
+-template <typename DerivedT, typename KeyT, typename ValueT,
+-          typename ValueInfoT, typename KeyInfoT, typename BucketT>
+-class DenseMapBase {
+-  template <typename T>
+-  using const_arg_type_t = typename const_pointer_or_const_ref<T>::type;
+-
+-public:
+-  using size_type = unsigned;
+-  using key_type = KeyT;
+-  using mapped_type = ValueT;
+-  using value_type = BucketT;
+-
+-  using iterator = DenseMapIterator<KeyT, ValueT, ValueInfoT, KeyInfoT, BucketT>;
+-  using const_iterator =
+-      DenseMapIterator<KeyT, ValueT, ValueInfoT, KeyInfoT, BucketT, true>;
+-
+-  inline iterator begin() {
+-    // When the map is empty, avoid the overhead of advancing/retreating past
+-    // empty buckets.
+-    if (empty())
+-      return end();
+-    return makeIterator(getBuckets(), getBucketsEnd());
+-  }
+-  inline iterator end() {
+-    return makeIterator(getBucketsEnd(), getBucketsEnd(), true);
+-  }
+-  inline const_iterator begin() const {
+-    if (empty())
+-      return end();
+-    return makeConstIterator(getBuckets(), getBucketsEnd());
+-  }
+-  inline const_iterator end() const {
+-    return makeConstIterator(getBucketsEnd(), getBucketsEnd(), true);
+-  }
+-
+-  bool empty() const {
+-    return getNumEntries() == 0;
+-  }
+-  unsigned size() const { return getNumEntries(); }
+-
+-  /// Grow the densemap so that it can contain at least \p NumEntries items
+-  /// before resizing again.
+-  void reserve(size_type NumEntries) {
+-    auto NumBuckets = getMinBucketToReserveForEntries(NumEntries);
+-    if (NumBuckets > getNumBuckets())
+-      grow(NumBuckets);
+-  }
+-
+-  void clear() {
+-    if (getNumEntries() == 0 && getNumTombstones() == 0) return;
+-
+-    // If the capacity of the array is huge, and the # elements used is small,
+-    // shrink the array.
+-    if (getNumEntries() * 4 < getNumBuckets() && getNumBuckets() > MIN_BUCKETS) {
+-      shrink_and_clear();
+-      return;
+-    }
+-
+-    const KeyT EmptyKey = getEmptyKey(), TombstoneKey = getTombstoneKey();
+-    if (is_trivially_copyable<KeyT>::value &&
+-        is_trivially_copyable<ValueT>::value) {
+-      // Use a simpler loop when these are trivial types.
+-      for (BucketT *P = getBuckets(), *E = getBucketsEnd(); P != E; ++P)
+-        P->getFirst() = EmptyKey;
+-    } else {
+-      unsigned NumEntries = getNumEntries();
+-    for (BucketT *P = getBuckets(), *E = getBucketsEnd(); P != E; ++P) {
+-        if (!KeyInfoT::isEqual(P->getFirst(), EmptyKey)) {
+-          if (!KeyInfoT::isEqual(P->getFirst(), TombstoneKey)) {
+-            P->getSecond().~ValueT();
+-            --NumEntries;
+-          }
+-          P->getFirst() = EmptyKey;
+-        }
+-      }
+-      assert(NumEntries == 0 && "Node count imbalance!");
+-    }
+-    setNumEntries(0);
+-    setNumTombstones(0);
+-  }
+-
+-  /// Return 1 if the specified key is in the map, 0 otherwise.
+-  size_type count(const_arg_type_t<KeyT> Val) const {
+-    const BucketT *TheBucket;
+-    return LookupBucketFor(Val, TheBucket) ? 1 : 0;
+-  }
+-
+-  iterator find(const_arg_type_t<KeyT> Val) {
+-    BucketT *TheBucket;
+-    if (LookupBucketFor(Val, TheBucket))
+-      return makeIterator(TheBucket, getBucketsEnd(), true);
+-    return end();
+-  }
+-  const_iterator find(const_arg_type_t<KeyT> Val) const {
+-    const BucketT *TheBucket;
+-    if (LookupBucketFor(Val, TheBucket))
+-      return makeConstIterator(TheBucket, getBucketsEnd(), true);
+-    return end();
+-  }
+-
+-  /// Alternate version of find() which allows a different, and possibly
+-  /// less expensive, key type.
+-  /// The DenseMapInfo is responsible for supplying methods
+-  /// getHashValue(LookupKeyT) and isEqual(LookupKeyT, KeyT) for each key
+-  /// type used.
+-  template<class LookupKeyT>
+-  iterator find_as(const LookupKeyT &Val) {
+-    BucketT *TheBucket;
+-    if (LookupBucketFor(Val, TheBucket))
+-      return makeIterator(TheBucket, getBucketsEnd(), true);
+-    return end();
+-  }
+-  template<class LookupKeyT>
+-  const_iterator find_as(const LookupKeyT &Val) const {
+-    const BucketT *TheBucket;
+-    if (LookupBucketFor(Val, TheBucket))
+-      return makeConstIterator(TheBucket, getBucketsEnd(), true);
+-    return end();
+-  }
+-
+-  /// lookup - Return the entry for the specified key, or a default
+-  /// constructed value if no such entry exists.
+-  ValueT lookup(const_arg_type_t<KeyT> Val) const {
+-    const BucketT *TheBucket;
+-    if (LookupBucketFor(Val, TheBucket))
+-      return TheBucket->getSecond();
+-    return ValueT();
+-  }
+-
+-  // Inserts key,value pair into the map if the key isn't already in the map.
+-  // If the key is already in the map, it returns false and doesn't update the
+-  // value.
+-  std::pair<iterator, bool> insert(const std::pair<KeyT, ValueT> &KV) {
+-    return try_emplace(KV.first, KV.second);
+-  }
+-
+-  // Inserts key,value pair into the map if the key isn't already in the map.
+-  // If the key is already in the map, it returns false and doesn't update the
+-  // value.
+-  std::pair<iterator, bool> insert(std::pair<KeyT, ValueT> &&KV) {
+-    return try_emplace(std::move(KV.first), std::move(KV.second));
+-  }
+-
+-  // Inserts key,value pair into the map if the key isn't already in the map.
+-  // The value is constructed in-place if the key is not in the map, otherwise
+-  // it is not moved.
+-  template <typename... Ts>
+-  std::pair<iterator, bool> try_emplace(KeyT &&Key, Ts &&... Args) {
+-    BucketT *TheBucket;
+-    if (LookupBucketFor(Key, TheBucket))
+-      return std::make_pair(
+-               makeIterator(TheBucket, getBucketsEnd(), true),
+-               false); // Already in map.
+-
+-    // Otherwise, insert the new element.
+-    TheBucket =
+-        InsertIntoBucket(TheBucket, std::move(Key), std::forward<Ts>(Args)...);
+-    return std::make_pair(
+-             makeIterator(TheBucket, getBucketsEnd(), true),
+-             true);
+-  }
+-
+-  // Inserts key,value pair into the map if the key isn't already in the map.
+-  // The value is constructed in-place if the key is not in the map, otherwise
+-  // it is not moved.
+-  template <typename... Ts>
+-  std::pair<iterator, bool> try_emplace(const KeyT &Key, Ts &&... Args) {
+-    BucketT *TheBucket;
+-    if (LookupBucketFor(Key, TheBucket))
+-      return std::make_pair(
+-               makeIterator(TheBucket, getBucketsEnd(), true),
+-               false); // Already in map.
+-
+-    // Otherwise, insert the new element.
+-    TheBucket = InsertIntoBucket(TheBucket, Key, std::forward<Ts>(Args)...);
+-    return std::make_pair(
+-             makeIterator(TheBucket, getBucketsEnd(), true),
+-             true);
+-  }
+-
+-  /// Alternate version of insert() which allows a different, and possibly
+-  /// less expensive, key type.
+-  /// The DenseMapInfo is responsible for supplying methods
+-  /// getHashValue(LookupKeyT) and isEqual(LookupKeyT, KeyT) for each key
+-  /// type used.
+-  template <typename LookupKeyT>
+-  std::pair<iterator, bool> insert_as(std::pair<KeyT, ValueT> &&KV,
+-                                      const LookupKeyT &Val) {
+-    BucketT *TheBucket;
+-    if (LookupBucketFor(Val, TheBucket))
+-      return std::make_pair(
+-               makeIterator(TheBucket, getBucketsEnd(), *this, true),
+-               false); // Already in map.
+-
+-    // Otherwise, insert the new element.
+-    TheBucket = InsertIntoBucketWithLookup(TheBucket, std::move(KV.first),
+-                                           std::move(KV.second), Val);
+-    return std::make_pair(
+-             makeIterator(TheBucket, getBucketsEnd(), *this, true),
+-             true);
+-  }
+-
+-  /// insert - Range insertion of pairs.
+-  template<typename InputIt>
+-  void insert(InputIt I, InputIt E) {
+-    for (; I != E; ++I)
+-      insert(*I);
+-  }
+-
+-  // Clear if empty.
+-  // Shrink if at least 15/16 empty and larger than MIN_COMPACT.
+-  void compact() {
+-    if (getNumEntries() == 0) {
+-      shrink_and_clear();
+-    }
+-    else if (getNumBuckets() / 16 > getNumEntries()  &&
+-             getNumBuckets() > MIN_COMPACT)
+-    {
+-      grow(getNumEntries() * 2);
+-    }
+-  }
+-
+-  bool erase(const KeyT &Val) {
+-    BucketT *TheBucket;
+-    if (!LookupBucketFor(Val, TheBucket))
+-      return false; // not in map.
+-
+-    TheBucket->getSecond().~ValueT();
+-    TheBucket->getFirst() = getTombstoneKey();
+-    decrementNumEntries();
+-    incrementNumTombstones();
+-    compact();
+-    return true;
+-  }
+-  void erase(iterator I) {
+-    BucketT *TheBucket = &*I;
+-    TheBucket->getSecond().~ValueT();
+-    TheBucket->getFirst() = getTombstoneKey();
+-    decrementNumEntries();
+-    incrementNumTombstones();
+-    compact();
+-  }
+-
+-  value_type& FindAndConstruct(const KeyT &Key) {
+-    BucketT *TheBucket;
+-    if (LookupBucketFor(Key, TheBucket))
+-      return *TheBucket;
+-
+-    return *InsertIntoBucket(TheBucket, Key);
+-  }
+-
+-  ValueT &operator[](const KeyT &Key) {
+-    return FindAndConstruct(Key).second;
+-  }
+-
+-  value_type& FindAndConstruct(KeyT &&Key) {
+-    BucketT *TheBucket;
+-    if (LookupBucketFor(Key, TheBucket))
+-      return *TheBucket;
+-
+-    return *InsertIntoBucket(TheBucket, std::move(Key));
+-  }
+-
+-  ValueT &operator[](KeyT &&Key) {
+-    return FindAndConstruct(std::move(Key)).second;
+-  }
+-
+-  /// isPointerIntoBucketsArray - Return true if the specified pointer points
+-  /// somewhere into the DenseMap's array of buckets (i.e. either to a key or
+-  /// value in the DenseMap).
+-  bool isPointerIntoBucketsArray(const void *Ptr) const {
+-    return Ptr >= getBuckets() && Ptr < getBucketsEnd();
+-  }
+-
+-  /// getPointerIntoBucketsArray() - Return an opaque pointer into the buckets
+-  /// array.  In conjunction with the previous method, this can be used to
+-  /// determine whether an insertion caused the DenseMap to reallocate.
+-  const void *getPointerIntoBucketsArray() const { return getBuckets(); }
+-
+-protected:
+-  DenseMapBase() = default;
+-
+-  void destroyAll() {
+-    if (getNumBuckets() == 0) // Nothing to do.
+-      return;
+-
+-    const KeyT EmptyKey = getEmptyKey(), TombstoneKey = getTombstoneKey();
+-    for (BucketT *P = getBuckets(), *E = getBucketsEnd(); P != E; ++P) {
+-      if (!KeyInfoT::isEqual(P->getFirst(), EmptyKey) &&
+-          !KeyInfoT::isEqual(P->getFirst(), TombstoneKey))
+-        P->getSecond().~ValueT();
+-      P->getFirst().~KeyT();
+-    }
+-  }
+-
+-  void initEmpty() {
+-    setNumEntries(0);
+-    setNumTombstones(0);
+-
+-    assert((getNumBuckets() & (getNumBuckets()-1)) == 0 &&
+-           "# initial buckets must be a power of two!");
+-    const KeyT EmptyKey = getEmptyKey();
+-    for (BucketT *B = getBuckets(), *E = getBucketsEnd(); B != E; ++B)
+-      ::new (&B->getFirst()) KeyT(EmptyKey);
+-  }
+-
+-  /// Returns the number of buckets to allocate to ensure that the DenseMap can
+-  /// accommodate \p NumEntries without need to grow().
+-  unsigned getMinBucketToReserveForEntries(unsigned NumEntries) {
+-    // Ensure that "NumEntries * 4 < NumBuckets * 3"
+-    if (NumEntries == 0)
+-      return 0;
+-    // +1 is required because of the strict equality.
+-    // For example if NumEntries is 48, we need to return 401.
+-    return NextPowerOf2(NumEntries * 4 / 3 + 1);
+-  }
+-
+-  void moveFromOldBuckets(BucketT *OldBucketsBegin, BucketT *OldBucketsEnd) {
+-    initEmpty();
+-
+-    // Insert all the old elements.
+-    const KeyT EmptyKey = getEmptyKey();
+-    const KeyT TombstoneKey = getTombstoneKey();
+-    for (BucketT *B = OldBucketsBegin, *E = OldBucketsEnd; B != E; ++B) {
+-      if (ValueInfoT::isPurgeable(B->getSecond())) {
+-        // Free the value.
+-        B->getSecond().~ValueT();
+-	  } else if (!KeyInfoT::isEqual(B->getFirst(), EmptyKey) &&
+-          !KeyInfoT::isEqual(B->getFirst(), TombstoneKey)) {
+-        // Insert the key/value into the new table.
+-        BucketT *DestBucket;
+-        bool FoundVal = LookupBucketFor(B->getFirst(), DestBucket);
+-        (void)FoundVal; // silence warning.
+-        assert(!FoundVal && "Key already in new map?");
+-        DestBucket->getFirst() = std::move(B->getFirst());
+-        ::new (&DestBucket->getSecond()) ValueT(std::move(B->getSecond()));
+-        incrementNumEntries();
+-
+-        // Free the value.
+-        B->getSecond().~ValueT();
+-      }
+-      B->getFirst().~KeyT();
+-    }
+-  }
+-
+-  template <typename OtherBaseT>
+-  void copyFrom(
+-      const DenseMapBase<OtherBaseT, KeyT, ValueT, ValueInfoT, KeyInfoT, BucketT> &other) {
+-    assert(&other != this);
+-    assert(getNumBuckets() == other.getNumBuckets());
+-
+-    setNumEntries(other.getNumEntries());
+-    setNumTombstones(other.getNumTombstones());
+-
+-    if (is_trivially_copyable<KeyT>::value &&
+-        is_trivially_copyable<ValueT>::value)
+-      memcpy(reinterpret_cast<void *>(getBuckets()), other.getBuckets(),
+-             getNumBuckets() * sizeof(BucketT));
+-    else
+-      for (size_t i = 0; i < getNumBuckets(); ++i) {
+-        ::new (&getBuckets()[i].getFirst())
+-            KeyT(other.getBuckets()[i].getFirst());
+-        if (!KeyInfoT::isEqual(getBuckets()[i].getFirst(), getEmptyKey()) &&
+-            !KeyInfoT::isEqual(getBuckets()[i].getFirst(), getTombstoneKey()))
+-          ::new (&getBuckets()[i].getSecond())
+-              ValueT(other.getBuckets()[i].getSecond());
+-      }
+-  }
+-
+-  static unsigned getHashValue(const KeyT &Val) {
+-    return KeyInfoT::getHashValue(Val);
+-  }
+-
+-  template<typename LookupKeyT>
+-  static unsigned getHashValue(const LookupKeyT &Val) {
+-    return KeyInfoT::getHashValue(Val);
+-  }
+-
+-  static const KeyT getEmptyKey() {
+-    static_assert(std::is_base_of<DenseMapBase, DerivedT>::value,
+-                  "Must pass the derived type to this template!");
+-    return KeyInfoT::getEmptyKey();
+-  }
+-
+-  static const KeyT getTombstoneKey() {
+-    return KeyInfoT::getTombstoneKey();
+-  }
+-
+-private:
+-  iterator makeIterator(BucketT *P, BucketT *E,
+-                        bool NoAdvance=false) {
+-    return iterator(P, E, NoAdvance);
+-  }
+-
+-  const_iterator makeConstIterator(const BucketT *P, const BucketT *E,
+-                                   const bool NoAdvance=false) const {
+-    return const_iterator(P, E, NoAdvance);
+-  }
+-
+-  unsigned getNumEntries() const {
+-    return static_cast<const DerivedT *>(this)->getNumEntries();
+-  }
+-
+-  void setNumEntries(unsigned Num) {
+-    static_cast<DerivedT *>(this)->setNumEntries(Num);
+-  }
+-
+-  void incrementNumEntries() {
+-    setNumEntries(getNumEntries() + 1);
+-  }
+-
+-  void decrementNumEntries() {
+-    setNumEntries(getNumEntries() - 1);
+-  }
+-
+-  unsigned getNumTombstones() const {
+-    return static_cast<const DerivedT *>(this)->getNumTombstones();
+-  }
+-
+-  void setNumTombstones(unsigned Num) {
+-    static_cast<DerivedT *>(this)->setNumTombstones(Num);
+-  }
+-
+-  void incrementNumTombstones() {
+-    setNumTombstones(getNumTombstones() + 1);
+-  }
+-
+-  void decrementNumTombstones() {
+-    setNumTombstones(getNumTombstones() - 1);
+-  }
+-
+-  const BucketT *getBuckets() const {
+-    return static_cast<const DerivedT *>(this)->getBuckets();
+-  }
+-
+-  BucketT *getBuckets() {
+-    return static_cast<DerivedT *>(this)->getBuckets();
+-  }
+-
+-  unsigned getNumBuckets() const {
+-    return static_cast<const DerivedT *>(this)->getNumBuckets();
+-  }
+-
+-  BucketT *getBucketsEnd() {
+-    return getBuckets() + getNumBuckets();
+-  }
+-
+-  const BucketT *getBucketsEnd() const {
+-    return getBuckets() + getNumBuckets();
+-  }
+-
+-  void grow(unsigned AtLeast) {
+-    static_cast<DerivedT *>(this)->grow(AtLeast);
+-  }
+-
+-  void shrink_and_clear() {
+-    static_cast<DerivedT *>(this)->shrink_and_clear();
+-  }
+-
+-  template <typename KeyArg, typename... ValueArgs>
+-  BucketT *InsertIntoBucket(BucketT *TheBucket, KeyArg &&Key,
+-                            ValueArgs &&... Values) {
+-    TheBucket = InsertIntoBucketImpl(Key, Key, TheBucket);
+-
+-    TheBucket->getFirst() = std::forward<KeyArg>(Key);
+-    ::new (&TheBucket->getSecond()) ValueT(std::forward<ValueArgs>(Values)...);
+-    return TheBucket;
+-  }
+-
+-  template <typename LookupKeyT>
+-  BucketT *InsertIntoBucketWithLookup(BucketT *TheBucket, KeyT &&Key,
+-                                      ValueT &&Value, LookupKeyT &Lookup) {
+-    TheBucket = InsertIntoBucketImpl(Key, Lookup, TheBucket);
+-
+-    TheBucket->getFirst() = std::move(Key);
+-    ::new (&TheBucket->getSecond()) ValueT(std::move(Value));
+-    return TheBucket;
+-  }
+-
+-  template <typename LookupKeyT>
+-  BucketT *InsertIntoBucketImpl(const KeyT &Key, const LookupKeyT &Lookup,
+-                                BucketT *TheBucket) {
+-    // If the load of the hash table is more than 3/4, or if fewer than 1/8 of
+-    // the buckets are empty (meaning that many are filled with tombstones),
+-    // grow the table.
+-    //
+-    // The later case is tricky.  For example, if we had one empty bucket with
+-    // tons of tombstones, failing lookups (e.g. for insertion) would have to
+-    // probe almost the entire table until it found the empty bucket.  If the
+-    // table completely filled with tombstones, no lookup would ever succeed,
+-    // causing infinite loops in lookup.
+-    unsigned NewNumEntries = getNumEntries() + 1;
+-    unsigned NumBuckets = getNumBuckets();
+-    if (LLVM_UNLIKELY(NewNumEntries * 4 >= NumBuckets * 3)) {
+-      this->grow(NumBuckets * 2);
+-      LookupBucketFor(Lookup, TheBucket);
+-      NumBuckets = getNumBuckets();
+-    } else if (LLVM_UNLIKELY(NumBuckets-(NewNumEntries+getNumTombstones()) <=
+-                             NumBuckets/8)) {
+-      this->grow(NumBuckets);
+-      LookupBucketFor(Lookup, TheBucket);
+-    }
+-    assert(TheBucket);
+-
+-    // Only update the state after we've grown our bucket space appropriately
+-    // so that when growing buckets we have self-consistent entry count.
+-    // If we are writing over a tombstone or zero value, remember this.
+-    if (KeyInfoT::isEqual(TheBucket->getFirst(), getEmptyKey())) {
+-      // Replacing an empty bucket.
+-      incrementNumEntries();
+-    } else if (KeyInfoT::isEqual(TheBucket->getFirst(), getTombstoneKey())) {
+-      // Replacing a tombstone.
+-      incrementNumEntries();
+-      decrementNumTombstones();
+-    } else {
+-      // we should be purging a zero. No accounting changes.
+-      assert(ValueInfoT::isPurgeable(TheBucket->getSecond()));
+-      TheBucket->getSecond().~ValueT();
+-    }
+-
+-    return TheBucket;
+-  }
+-
+-  __attribute__((noinline, noreturn, cold))
+-  void FatalCorruptHashTables(const BucketT *BucketsPtr, unsigned NumBuckets) const
+-  {
+-    throwf("Hash table corrupted. This is probably a memory error "
+-                "somewhere. (table at %p, buckets at %p (%zu bytes), "
+-                "%u buckets, %u entries, %u tombstones, "
+-                "data %p %p %p %p)",
+-                this, BucketsPtr, malloc_size(BucketsPtr),
+-                NumBuckets, getNumEntries(), getNumTombstones(),
+-                ((void**)BucketsPtr)[0], ((void**)BucketsPtr)[1],
+-                ((void**)BucketsPtr)[2], ((void**)BucketsPtr)[3]);
+-  }
+-
+-  /// LookupBucketFor - Lookup the appropriate bucket for Val, returning it in
+-  /// FoundBucket.  If the bucket contains the key and a value, this returns
+-  /// true, otherwise it returns a bucket with an empty marker or tombstone and
+-  /// returns false.
+-  template<typename LookupKeyT>
+-  bool LookupBucketFor(const LookupKeyT &Val,
+-                       const BucketT *&FoundBucket) const {
+-    const BucketT *BucketsPtr = getBuckets();
+-    const unsigned NumBuckets = getNumBuckets();
+-
+-    if (NumBuckets == 0) {
+-      FoundBucket = nullptr;
+-      return false;
+-    }
+-
+-    // FoundTombstone - Keep track of whether we find a tombstone while probing.
+-    const BucketT *FoundTombstone = nullptr;
+-    const KeyT EmptyKey = getEmptyKey();
+-    const KeyT TombstoneKey = getTombstoneKey();
+-    assert(!KeyInfoT::isEqual(Val, EmptyKey) &&
+-           !KeyInfoT::isEqual(Val, TombstoneKey) &&
+-           "Empty/Tombstone value shouldn't be inserted into map!");
+-
+-    unsigned BucketNo = getHashValue(Val) & (NumBuckets-1);
+-    unsigned ProbeAmt = 1;
+-    while (true) {
+-      const BucketT *ThisBucket = BucketsPtr + BucketNo;
+-      // Found Val's bucket?  If so, return it.
+-      if (LLVM_LIKELY(KeyInfoT::isEqual(Val, ThisBucket->getFirst()))) {
+-        FoundBucket = ThisBucket;
+-        return true;
+-      }
+-
+-      // If we found an empty bucket, the key doesn't exist in the set.
+-      // Insert it and return the default value.
+-      if (LLVM_LIKELY(KeyInfoT::isEqual(ThisBucket->getFirst(), EmptyKey))) {
+-        // If we've already seen a tombstone while probing, fill it in instead
+-        // of the empty bucket we eventually probed to.
+-        FoundBucket = FoundTombstone ? FoundTombstone : ThisBucket;
+-        return false;
+-      }
+-
+-      // If this is a tombstone, remember it.  If Val ends up not in the map, we
+-      // prefer to return it than something that would require more probing.
+-      // Ditto for zero values.
+-      if (KeyInfoT::isEqual(ThisBucket->getFirst(), TombstoneKey) &&
+-          !FoundTombstone)
+-        FoundTombstone = ThisBucket;  // Remember the first tombstone found.
+-      if (ValueInfoT::isPurgeable(ThisBucket->getSecond())  &&  !FoundTombstone)
+-        FoundTombstone = ThisBucket;
+-
+-      // Otherwise, it's a hash collision or a tombstone, continue quadratic
+-      // probing.
+-      if (ProbeAmt > NumBuckets) {
+-        FatalCorruptHashTables(BucketsPtr, NumBuckets);
+-      }
+-      BucketNo += ProbeAmt++;
+-      BucketNo &= (NumBuckets-1);
+-    }
+-  }
+-
+-  template <typename LookupKeyT>
+-  bool LookupBucketFor(const LookupKeyT &Val, BucketT *&FoundBucket) {
+-    const BucketT *ConstFoundBucket;
+-    bool Result = const_cast<const DenseMapBase *>(this)
+-      ->LookupBucketFor(Val, ConstFoundBucket);
+-    FoundBucket = const_cast<BucketT *>(ConstFoundBucket);
+-    return Result;
+-  }
+-
+-public:
+-  /// Return the approximate size (in bytes) of the actual map.
+-  /// This is just the raw memory used by DenseMap.
+-  /// If entries are pointers to objects, the size of the referenced objects
+-  /// are not included.
+-  size_t getMemorySize() const {
+-    return getNumBuckets() * sizeof(BucketT);
+-  }
+-};
+-
+-/// Equality comparison for DenseMap.
+-///
+-/// Iterates over elements of LHS confirming that each (key, value) pair in LHS
+-/// is also in RHS, and that no additional pairs are in RHS.
+-/// Equivalent to N calls to RHS.find and N value comparisons. Amortized
+-/// complexity is linear, worst case is O(N^2) (if every hash collides).
+-template <typename DerivedT, typename KeyT, typename ValueT,
+-          typename ValueInfoT, typename KeyInfoT, typename BucketT>
+-bool operator==(
+-    const DenseMapBase<DerivedT, KeyT, ValueT, ValueInfoT, KeyInfoT, BucketT> &LHS,
+-    const DenseMapBase<DerivedT, KeyT, ValueT, ValueInfoT, KeyInfoT, BucketT> &RHS) {
+-  if (LHS.size() != RHS.size())
+-    return false;
+-
+-  for (auto &KV : LHS) {
+-    auto I = RHS.find(KV.first);
+-    if (I == RHS.end() || I->second != KV.second)
+-      return false;
+-  }
+-
+-  return true;
+-}
+-
+-/// Inequality comparison for DenseMap.
+-///
+-/// Equivalent to !(LHS == RHS). See operator== for performance notes.
+-template <typename DerivedT, typename KeyT, typename ValueT,
+-          typename ValueInfoT, typename KeyInfoT, typename BucketT>
+-bool operator!=(
+-    const DenseMapBase<DerivedT, KeyT, ValueT, ValueInfoT, KeyInfoT, BucketT> &LHS,
+-    const DenseMapBase<DerivedT, KeyT, ValueT, ValueInfoT, KeyInfoT, BucketT> &RHS) {
+-  return !(LHS == RHS);
+-}
+-
+-template <typename KeyT, typename ValueT,
+-          typename ValueInfoT = DenseMapValueInfo<ValueT>,
+-          typename KeyInfoT = DenseMapInfo<KeyT>,
+-          typename BucketT = detail::DenseMapPair<KeyT, ValueT>>
+-class DenseMap : public DenseMapBase<DenseMap<KeyT, ValueT, ValueInfoT, KeyInfoT, BucketT>,
+-                                     KeyT, ValueT, ValueInfoT, KeyInfoT, BucketT> {
+-  friend class DenseMapBase<DenseMap, KeyT, ValueT, ValueInfoT, KeyInfoT, BucketT>;
+-
+-  // Lift some types from the dependent base class into this class for
+-  // simplicity of referring to them.
+-  using BaseT = DenseMapBase<DenseMap, KeyT, ValueT, ValueInfoT, KeyInfoT, BucketT>;
+-
+-  BucketT *Buckets;
+-  unsigned NumEntries;
+-  unsigned NumTombstones;
+-  unsigned NumBuckets;
+-
+-public:
+-  /// Create a DenseMap wth an optional \p InitialReserve that guarantee that
+-  /// this number of elements can be inserted in the map without grow()
+-  explicit DenseMap(unsigned InitialReserve = 0) { init(InitialReserve); }
+-
+-  DenseMap(const DenseMap &other) : BaseT() {
+-    init(0);
+-    copyFrom(other);
+-  }
+-
+-  DenseMap(DenseMap &&other) : BaseT() {
+-    init(0);
+-    swap(other);
+-  }
+-
+-  template<typename InputIt>
+-  DenseMap(const InputIt &I, const InputIt &E) {
+-    init(std::distance(I, E));
+-    this->insert(I, E);
+-  }
+-
+-  DenseMap(std::initializer_list<typename BaseT::value_type> Vals) {
+-    init(Vals.size());
+-    this->insert(Vals.begin(), Vals.end());
+-  }
+-
+-  ~DenseMap() {
+-    this->destroyAll();
+-    operator delete(Buckets);
+-  }
+-
+-  void swap(DenseMap& RHS) {
+-    std::swap(Buckets, RHS.Buckets);
+-    std::swap(NumEntries, RHS.NumEntries);
+-    std::swap(NumTombstones, RHS.NumTombstones);
+-    std::swap(NumBuckets, RHS.NumBuckets);
+-  }
+-
+-  DenseMap& operator=(const DenseMap& other) {
+-    if (&other != this)
+-      copyFrom(other);
+-    return *this;
+-  }
+-
+-  DenseMap& operator=(DenseMap &&other) {
+-    this->destroyAll();
+-    operator delete(Buckets);
+-    init(0);
+-    swap(other);
+-    return *this;
+-  }
+-
+-  void copyFrom(const DenseMap& other) {
+-    this->destroyAll();
+-    operator delete(Buckets);
+-    if (allocateBuckets(other.NumBuckets)) {
+-      this->BaseT::copyFrom(other);
+-    } else {
+-      NumEntries = 0;
+-      NumTombstones = 0;
+-    }
+-  }
+-
+-  void init(unsigned InitNumEntries) {
+-    auto InitBuckets = BaseT::getMinBucketToReserveForEntries(InitNumEntries);
+-    if (allocateBuckets(InitBuckets)) {
+-      this->BaseT::initEmpty();
+-    } else {
+-      NumEntries = 0;
+-      NumTombstones = 0;
+-    }
+-  }
+-
+-  void grow(unsigned AtLeast) {
+-    unsigned OldNumBuckets = NumBuckets;
+-    BucketT *OldBuckets = Buckets;
+-
+-    allocateBuckets(std::max<unsigned>(MIN_BUCKETS, static_cast<unsigned>(NextPowerOf2(AtLeast-1))));
+-    assert(Buckets);
+-    if (!OldBuckets) {
+-      this->BaseT::initEmpty();
+-      return;
+-    }
+-
+-    this->moveFromOldBuckets(OldBuckets, OldBuckets+OldNumBuckets);
+-
+-    // Free the old table.
+-    operator delete(OldBuckets);
+-  }
+-
+-  void shrink_and_clear() {
+-    unsigned OldNumEntries = NumEntries;
+-    this->destroyAll();
+-
+-    // Reduce the number of buckets.
+-    unsigned NewNumBuckets = 0;
+-    if (OldNumEntries)
+-      NewNumBuckets = std::max(MIN_BUCKETS, 1 << (Log2_32_Ceil(OldNumEntries) + 1));
+-    if (NewNumBuckets == NumBuckets) {
+-      this->BaseT::initEmpty();
+-      return;
+-    }
+-
+-    operator delete(Buckets);
+-    init(NewNumBuckets);
+-  }
+-
+-private:
+-  unsigned getNumEntries() const {
+-    return NumEntries;
+-  }
+-
+-  void setNumEntries(unsigned Num) {
+-    NumEntries = Num;
+-  }
+-
+-  unsigned getNumTombstones() const {
+-    return NumTombstones;
+-  }
+-
+-  void setNumTombstones(unsigned Num) {
+-    NumTombstones = Num;
+-  }
+-
+-  BucketT *getBuckets() const {
+-    return Buckets;
+-  }
+-
+-  unsigned getNumBuckets() const {
+-    return NumBuckets;
+-  }
+-
+-  bool allocateBuckets(unsigned Num) {
+-    NumBuckets = Num;
+-    if (NumBuckets == 0) {
+-      Buckets = nullptr;
+-      return false;
+-    }
+-
+-    Buckets = static_cast<BucketT*>(alloc_overflow(sizeof(BucketT), NumBuckets));
+-    return true;
+-  }
+-};
+-
+-template <typename KeyT, typename ValueT, unsigned InlineBuckets = 4,
+-          typename ValueInfoT = DenseMapValueInfo<ValueT>,
+-          typename KeyInfoT = DenseMapInfo<KeyT>,
+-          typename BucketT = detail::DenseMapPair<KeyT, ValueT>>
+-class SmallDenseMap
+-    : public DenseMapBase<
+-          SmallDenseMap<KeyT, ValueT, InlineBuckets, ValueInfoT, KeyInfoT, BucketT>, KeyT,
+-          ValueT, ValueInfoT, KeyInfoT, BucketT> {
+-  friend class DenseMapBase<SmallDenseMap, KeyT, ValueT, ValueInfoT, KeyInfoT, BucketT>;
+-
+-  // Lift some types from the dependent base class into this class for
+-  // simplicity of referring to them.
+-  using BaseT = DenseMapBase<SmallDenseMap, KeyT, ValueT, ValueInfoT, KeyInfoT, BucketT>;
+-
+-  static_assert(IsPowerOf2(InlineBuckets),
+-                "InlineBuckets must be a power of 2.");
+-
+-  unsigned Small : 1;
+-  unsigned NumEntries : 31;
+-  unsigned NumTombstones;
+-
+-  struct LargeRep {
+-    BucketT *Buckets;
+-    unsigned NumBuckets;
+-  };
+-
+-  /// A "union" of an inline bucket array and the struct representing
+-  /// a large bucket. This union will be discriminated by the 'Small' bit.
+-  AlignedCharArrayUnion<BucketT[InlineBuckets], LargeRep> storage;
+-
+-public:
+-  explicit SmallDenseMap(unsigned NumInitBuckets = 0) {
+-    init(NumInitBuckets);
+-  }
+-
+-  SmallDenseMap(const SmallDenseMap &other) : BaseT() {
+-    init(0);
+-    copyFrom(other);
+-  }
+-
+-  SmallDenseMap(SmallDenseMap &&other) : BaseT() {
+-    init(0);
+-    swap(other);
+-  }
+-
+-  template<typename InputIt>
+-  SmallDenseMap(const InputIt &I, const InputIt &E) {
+-    init(NextPowerOf2(std::distance(I, E)));
+-    this->insert(I, E);
+-  }
+-
+-  ~SmallDenseMap() {
+-    this->destroyAll();
+-    deallocateBuckets();
+-  }
+-
+-  void swap(SmallDenseMap& RHS) {
+-    unsigned TmpNumEntries = RHS.NumEntries;
+-    RHS.NumEntries = NumEntries;
+-    NumEntries = TmpNumEntries;
+-    std::swap(NumTombstones, RHS.NumTombstones);
+-
+-    const KeyT EmptyKey = this->getEmptyKey();
+-    const KeyT TombstoneKey = this->getTombstoneKey();
+-    if (Small && RHS.Small) {
+-      // If we're swapping inline bucket arrays, we have to cope with some of
+-      // the tricky bits of DenseMap's storage system: the buckets are not
+-      // fully initialized. Thus we swap every key, but we may have
+-      // a one-directional move of the value.
+-      for (unsigned i = 0, e = InlineBuckets; i != e; ++i) {
+-        BucketT *LHSB = &getInlineBuckets()[i],
+-                *RHSB = &RHS.getInlineBuckets()[i];
+-        bool hasLHSValue = (!KeyInfoT::isEqual(LHSB->getFirst(), EmptyKey) &&
+-                            !KeyInfoT::isEqual(LHSB->getFirst(), TombstoneKey));
+-        bool hasRHSValue = (!KeyInfoT::isEqual(RHSB->getFirst(), EmptyKey) &&
+-                            !KeyInfoT::isEqual(RHSB->getFirst(), TombstoneKey));
+-        if (hasLHSValue && hasRHSValue) {
+-          // Swap together if we can...
+-          std::swap(*LHSB, *RHSB);
+-          continue;
+-        }
+-        // Swap separately and handle any assymetry.
+-        std::swap(LHSB->getFirst(), RHSB->getFirst());
+-        if (hasLHSValue) {
+-          ::new (&RHSB->getSecond()) ValueT(std::move(LHSB->getSecond()));
+-          LHSB->getSecond().~ValueT();
+-        } else if (hasRHSValue) {
+-          ::new (&LHSB->getSecond()) ValueT(std::move(RHSB->getSecond()));
+-          RHSB->getSecond().~ValueT();
+-        }
+-      }
+-      return;
+-    }
+-    if (!Small && !RHS.Small) {
+-      std::swap(getLargeRep()->Buckets, RHS.getLargeRep()->Buckets);
+-      std::swap(getLargeRep()->NumBuckets, RHS.getLargeRep()->NumBuckets);
+-      return;
+-    }
+-
+-    SmallDenseMap &SmallSide = Small ? *this : RHS;
+-    SmallDenseMap &LargeSide = Small ? RHS : *this;
+-
+-    // First stash the large side's rep and move the small side across.
+-    LargeRep TmpRep = std::move(*LargeSide.getLargeRep());
+-    LargeSide.getLargeRep()->~LargeRep();
+-    LargeSide.Small = true;
+-    // This is similar to the standard move-from-old-buckets, but the bucket
+-    // count hasn't actually rotated in this case. So we have to carefully
+-    // move construct the keys and values into their new locations, but there
+-    // is no need to re-hash things.
+-    for (unsigned i = 0, e = InlineBuckets; i != e; ++i) {
+-      BucketT *NewB = &LargeSide.getInlineBuckets()[i],
+-              *OldB = &SmallSide.getInlineBuckets()[i];
+-      ::new (&NewB->getFirst()) KeyT(std::move(OldB->getFirst()));
+-      OldB->getFirst().~KeyT();
+-      if (!KeyInfoT::isEqual(NewB->getFirst(), EmptyKey) &&
+-          !KeyInfoT::isEqual(NewB->getFirst(), TombstoneKey)) {
+-        ::new (&NewB->getSecond()) ValueT(std::move(OldB->getSecond()));
+-        OldB->getSecond().~ValueT();
+-      }
+-    }
+-
+-    // The hard part of moving the small buckets across is done, just move
+-    // the TmpRep into its new home.
+-    SmallSide.Small = false;
+-    new (SmallSide.getLargeRep()) LargeRep(std::move(TmpRep));
+-  }
+-
+-  SmallDenseMap& operator=(const SmallDenseMap& other) {
+-    if (&other != this)
+-      copyFrom(other);
+-    return *this;
+-  }
+-
+-  SmallDenseMap& operator=(SmallDenseMap &&other) {
+-    this->destroyAll();
+-    deallocateBuckets();
+-    init(0);
+-    swap(other);
+-    return *this;
+-  }
+-
+-  void copyFrom(const SmallDenseMap& other) {
+-    this->destroyAll();
+-    deallocateBuckets();
+-    Small = true;
+-    if (other.getNumBuckets() > InlineBuckets) {
+-      Small = false;
+-      new (getLargeRep()) LargeRep(allocateBuckets(other.getNumBuckets()));
+-    }
+-    this->BaseT::copyFrom(other);
+-  }
+-
+-  void init(unsigned InitBuckets) {
+-    Small = true;
+-    if (InitBuckets > InlineBuckets) {
+-      Small = false;
+-      new (getLargeRep()) LargeRep(allocateBuckets(InitBuckets));
+-    }
+-    this->BaseT::initEmpty();
+-  }
+-
+-  void grow(unsigned AtLeast) {
+-    if (AtLeast >= InlineBuckets)
+-      AtLeast = std::max<unsigned>(MIN_BUCKETS, NextPowerOf2(AtLeast));
+-
+-    if (Small) {
+-      if (AtLeast < InlineBuckets)
+-        return; // Nothing to do.
+-
+-      // First move the inline buckets into a temporary storage.
+-      AlignedCharArrayUnion<BucketT[InlineBuckets]> TmpStorage;
+-      BucketT *TmpBegin = reinterpret_cast<BucketT *>(TmpStorage.buffer);
+-      BucketT *TmpEnd = TmpBegin;
+-
+-      // Loop over the buckets, moving non-empty, non-tombstones into the
+-      // temporary storage. Have the loop move the TmpEnd forward as it goes.
+-      const KeyT EmptyKey = this->getEmptyKey();
+-      const KeyT TombstoneKey = this->getTombstoneKey();
+-      for (BucketT *P = getBuckets(), *E = P + InlineBuckets; P != E; ++P) {
+-        if (!KeyInfoT::isEqual(P->getFirst(), EmptyKey) &&
+-            !KeyInfoT::isEqual(P->getFirst(), TombstoneKey)) {
+-          assert(size_t(TmpEnd - TmpBegin) < InlineBuckets &&
+-                 "Too many inline buckets!");
+-          ::new (&TmpEnd->getFirst()) KeyT(std::move(P->getFirst()));
+-          ::new (&TmpEnd->getSecond()) ValueT(std::move(P->getSecond()));
+-          ++TmpEnd;
+-          P->getSecond().~ValueT();
+-        }
+-        P->getFirst().~KeyT();
+-      }
+-
+-      // Now make this map use the large rep, and move all the entries back
+-      // into it.
+-      Small = false;
+-      new (getLargeRep()) LargeRep(allocateBuckets(AtLeast));
+-      this->moveFromOldBuckets(TmpBegin, TmpEnd);
+-      return;
+-    }
+-
+-    LargeRep OldRep = std::move(*getLargeRep());
+-    getLargeRep()->~LargeRep();
+-    if (AtLeast <= InlineBuckets) {
+-      Small = true;
+-    } else {
+-      new (getLargeRep()) LargeRep(allocateBuckets(AtLeast));
+-    }
+-
+-    this->moveFromOldBuckets(OldRep.Buckets, OldRep.Buckets+OldRep.NumBuckets);
+-
+-    // Free the old table.
+-    operator delete(OldRep.Buckets);
+-  }
+-
+-  void shrink_and_clear() {
+-    unsigned OldSize = this->size();
+-    this->destroyAll();
+-
+-    // Reduce the number of buckets.
+-    unsigned NewNumBuckets = 0;
+-    if (OldSize) {
+-      NewNumBuckets = 1 << (Log2_32_Ceil(OldSize) + 1);
+-      if (NewNumBuckets > InlineBuckets && NewNumBuckets < MIN_BUCKETS)
+-        NewNumBuckets = MIN_BUCKETS;
+-    }
+-    if ((Small && NewNumBuckets <= InlineBuckets) ||
+-        (!Small && NewNumBuckets == getLargeRep()->NumBuckets)) {
+-      this->BaseT::initEmpty();
+-      return;
+-    }
+-
+-    deallocateBuckets();
+-    init(NewNumBuckets);
+-  }
+-
+-private:
+-  unsigned getNumEntries() const {
+-    return NumEntries;
+-  }
+-
+-  void setNumEntries(unsigned Num) {
+-    // NumEntries is hardcoded to be 31 bits wide.
+-    assert(Num < (1U << 31) && "Cannot support more than 1<<31 entries");
+-    NumEntries = Num;
+-  }
+-
+-  unsigned getNumTombstones() const {
+-    return NumTombstones;
+-  }
+-
+-  void setNumTombstones(unsigned Num) {
+-    NumTombstones = Num;
+-  }
+-
+-  const BucketT *getInlineBuckets() const {
+-    assert(Small);
+-    // Note that this cast does not violate aliasing rules as we assert that
+-    // the memory's dynamic type is the small, inline bucket buffer, and the
+-    // 'storage.buffer' static type is 'char *'.
+-    return reinterpret_cast<const BucketT *>(storage.buffer);
+-  }
+-
+-  BucketT *getInlineBuckets() {
+-    return const_cast<BucketT *>(
+-      const_cast<const SmallDenseMap *>(this)->getInlineBuckets());
+-  }
+-
+-  const LargeRep *getLargeRep() const {
+-    assert(!Small);
+-    // Note, same rule about aliasing as with getInlineBuckets.
+-    return reinterpret_cast<const LargeRep *>(storage.buffer);
+-  }
+-
+-  LargeRep *getLargeRep() {
+-    return const_cast<LargeRep *>(
+-      const_cast<const SmallDenseMap *>(this)->getLargeRep());
+-  }
+-
+-  const BucketT *getBuckets() const {
+-    return Small ? getInlineBuckets() : getLargeRep()->Buckets;
+-  }
+-
+-  BucketT *getBuckets() {
+-    return const_cast<BucketT *>(
+-      const_cast<const SmallDenseMap *>(this)->getBuckets());
+-  }
+-
+-  unsigned getNumBuckets() const {
+-    return Small ? InlineBuckets : getLargeRep()->NumBuckets;
+-  }
+-
+-  void deallocateBuckets() {
+-    if (Small)
+-      return;
+-
+-    operator delete(getLargeRep()->Buckets);
+-    getLargeRep()->~LargeRep();
+-  }
+-
+-  LargeRep allocateBuckets(unsigned Num) {
+-    assert(Num > InlineBuckets && "Must allocate more buckets than are inline");
+-
+-    LargeRep Rep = {
+-      static_cast<BucketT*>(alloc_overflow(sizeof(BucketT), Num)), Num
+-    };
+-    return Rep;
+-  }
+-};
+-
+-template <typename KeyT, typename ValueT, typename ValueInfoT,
+-          typename KeyInfoT, typename Bucket, bool IsConst>
+-class DenseMapIterator {
+-  friend class DenseMapIterator<KeyT, ValueT, ValueInfoT, KeyInfoT, Bucket, true>;
+-  friend class DenseMapIterator<KeyT, ValueT, ValueInfoT, KeyInfoT, Bucket, false>;
+-
+-  using ConstIterator = DenseMapIterator<KeyT, ValueT, ValueInfoT, KeyInfoT, Bucket, true>;
+-
+-public:
+-  using difference_type = ptrdiff_t;
+-  using value_type =
+-      typename std::conditional<IsConst, const Bucket, Bucket>::type;
+-  using pointer = value_type *;
+-  using reference = value_type &;
+-  using iterator_category = std::forward_iterator_tag;
+-
+-private:
+-  pointer Ptr = nullptr;
+-  pointer End = nullptr;
+-
+-public:
+-  DenseMapIterator() = default;
+-
+-  DenseMapIterator(pointer Pos, pointer E,
+-                   bool NoAdvance = false)
+-      : Ptr(Pos), End(E) {
+-    if (NoAdvance) return;
+-    AdvancePastEmptyBuckets();
+-  }
+-
+-  // Converting ctor from non-const iterators to const iterators. SFINAE'd out
+-  // for const iterator destinations so it doesn't end up as a user defined copy
+-  // constructor.
+-  template <bool IsConstSrc,
+-            typename = typename std::enable_if<!IsConstSrc && IsConst>::type>
+-  DenseMapIterator(
+-      const DenseMapIterator<KeyT, ValueT, ValueInfoT, KeyInfoT, Bucket, IsConstSrc> &I)
+-      : Ptr(I.Ptr), End(I.End) {}
+-
+-  reference operator*() const {
+-    return *Ptr;
+-  }
+-  pointer operator->() const {
+-    return Ptr;
+-  }
+-
+-  friend bool operator==(const DenseMapIterator& LHS, const DenseMapIterator &RHS) {
+-    return LHS.Ptr == RHS.Ptr;
+-  }
+-  friend bool operator!=(const DenseMapIterator& LHS, const DenseMapIterator &RHS) {
+-    return LHS.Ptr != RHS.Ptr;
+-  }
+-
+-  inline DenseMapIterator& operator++() {  // Preincrement
+-    ++Ptr;
+-    AdvancePastEmptyBuckets();
+-    return *this;
+-  }
+-  DenseMapIterator operator++(int) {  // Postincrement
+-    DenseMapIterator tmp = *this; ++*this; return tmp;
+-  }
+-
+-private:
+-  void AdvancePastEmptyBuckets() {
+-    assert(Ptr <= End);
+-    const KeyT Empty = KeyInfoT::getEmptyKey();
+-    const KeyT Tombstone = KeyInfoT::getTombstoneKey();
+-
+-    while (Ptr != End && (KeyInfoT::isEqual(Ptr->getFirst(), Empty) ||
+-                          KeyInfoT::isEqual(Ptr->getFirst(), Tombstone)))
+-      ++Ptr;
+-  }
+-
+-  void RetreatPastEmptyBuckets() {
+-    assert(Ptr >= End);
+-    const KeyT Empty = KeyInfoT::getEmptyKey();
+-    const KeyT Tombstone = KeyInfoT::getTombstoneKey();
+-
+-    while (Ptr != End && (KeyInfoT::isEqual(Ptr[-1].getFirst(), Empty) ||
+-                          KeyInfoT::isEqual(Ptr[-1].getFirst(), Tombstone)))
+-      --Ptr;
+-  }
+-};
+-
+-template <typename KeyT, typename ValueT, typename KeyInfoT>
+-inline size_t capacity_in_bytes(const DenseMap<KeyT, ValueT, KeyInfoT> &X) {
+-  return X.getMemorySize();
+-}
+-
+-} // end namespace objc
+-
+-#endif // LLVM_ADT_DENSEMAP_H
+diff --git a/src/llvm/llvm-DenseMapInfo.h b/src/llvm/llvm-DenseMapInfo.h
+deleted file mode 100644
+index 3efbeff..0000000
+--- a/src/llvm/llvm-DenseMapInfo.h
++++ /dev/null
+@@ -1,253 +0,0 @@
+-//===- llvm/ADT/DenseMapInfo.h - Type traits for DenseMap -------*- C++ -*-===//
+-//
+-//                     The LLVM Compiler Infrastructure
+-//
+-// This file is distributed under the University of Illinois Open Source
+-// License. See LICENSE.TXT for details.
+-//
+-//===----------------------------------------------------------------------===//
+-//
+-// This file defines DenseMapInfo traits for DenseMap.
+-//
+-//===----------------------------------------------------------------------===//
+-
+-// Taken from llvmCore-3425.0.31.
+-
+-#ifndef LLVM_ADT_DENSEMAPINFO_H
+-#define LLVM_ADT_DENSEMAPINFO_H
+-
+-#include <algorithm>
+-#include <string>
+-#include <string_view>
+-
+-#include "llvm-type_traits.h"
+-
+-namespace ld::llvm {
+-
+-template<typename T>
+-struct DenseMapInfo {
+-  //static inline T getEmptyKey();
+-  //static inline T getTombstoneKey();
+-  //static unsigned getHashValue(const T &Val);
+-  //static bool isEqual(const T &LHS, const T &RHS);
+-};
+-
+-// Provide DenseMapInfo for all pointers.
+-template<typename T>
+-struct DenseMapInfo<T*> {
+-  static inline T* getEmptyKey() {
+-    uintptr_t Val = static_cast<uintptr_t>(-1);
+-    return reinterpret_cast<T*>(Val);
+-  }
+-  static inline T* getTombstoneKey() {
+-    uintptr_t Val = static_cast<uintptr_t>(-2);
+-    return reinterpret_cast<T*>(Val);
+-  }
+-  static unsigned getHashValue(const T *PtrVal) {
+-    return std::hash<uintptr_t>{}((uintptr_t)PtrVal);
+-  }
+-  static bool isEqual(const T *LHS, const T *RHS) { return LHS == RHS; }
+-};
+-
+-// Provide customizable DenseMapInfo for custom hash/eq op of pointer keys.
+-template<typename T, typename Op>
+-struct PointerContentDenseMapInfo {
+-  static inline T* getEmptyKey() {
+-    uintptr_t Val = static_cast<uintptr_t>(-1);
+-    return reinterpret_cast<T*>(Val);
+-  }
+-  static inline T* getTombstoneKey() {
+-    uintptr_t Val = static_cast<uintptr_t>(-2);
+-    return reinterpret_cast<T*>(Val);
+-  }
+-  static unsigned getHashValue(const T *PtrVal) {
+-    return Op{}(PtrVal);
+-  }
+-  static bool isEqual(const T *LHS, const T *RHS) {
+-    if (LHS == RHS)
+-      return true;
+-
+-    if (LHS == getEmptyKey() || RHS == getEmptyKey())
+-      return false;
+-    if (LHS == getTombstoneKey() || RHS == getTombstoneKey())
+-      return false;
+-
+-    return Op{}(LHS, RHS); }
+-};
+-
+-// Provide DenseMapInfo for cstrings.
+-template<> struct DenseMapInfo<const char*> {
+-  static inline const char* getEmptyKey() { 
+-    return reinterpret_cast<const char *>((intptr_t)-1); 
+-  }
+-  static inline const char* getTombstoneKey() { 
+-    return reinterpret_cast<const char *>((intptr_t)-2); 
+-  }
+-  static unsigned getHashValue(const char* Val) {
+-    return std::hash<std::string_view>{}(Val);
+-  }
+-  static bool isEqual(const char* const &LHS, const char* const &RHS) {
+-    if (LHS == RHS) {
+-      return true;
+-    }
+-    if (LHS == getEmptyKey() || RHS == getEmptyKey()) {
+-      return false;
+-    }
+-    if (LHS == getTombstoneKey() || RHS == getTombstoneKey()) {
+-      return false;
+-    }
+-    return (strcmp(LHS, RHS) == 0);
+-  }
+-};
+-
+-template<> struct DenseMapInfo<std::string_view> {
+-  static inline std::string_view getEmptyKey() { 
+-    return std::string_view(DenseMapInfo<const char*>::getEmptyKey(), 0);
+-  }
+-  static inline std::string_view getTombstoneKey() { 
+-    return std::string_view(DenseMapInfo<const char*>::getTombstoneKey(), 0);
+-  }
+-  static unsigned getHashValue(const std::string_view &Val) { 
+-    return std::hash<std::string_view>{}(Val);
+-  }
+-  static bool isEqual(const std::string_view& LHS, const std::string_view& RHS) {
+-    if ( LHS.size() != RHS.size() )
+-      return false;
+-    if ( LHS.data() == RHS.data() )
+-      return true;
+-
+-    if (LHS.data() == getEmptyKey().data() || RHS.data() == getEmptyKey().data())
+-      return false;
+-    if (LHS.data() == getTombstoneKey().data() || RHS.data() == getTombstoneKey().data())
+-      return false;
+-
+-    return (strcmp(LHS.data(), RHS.data()) == 0);
+-  }
+-};
+-
+-// Provide DenseMapInfo for chars.
+-template<> struct DenseMapInfo<char> {
+-  static inline char getEmptyKey() { return ~0; }
+-  static inline char getTombstoneKey() { return ~0 - 1; }
+-  static unsigned getHashValue(const char& Val) { return Val * 37U; }
+-  static bool isEqual(const char &LHS, const char &RHS) {
+-    return LHS == RHS;
+-  }
+-};
+-  
+-// Provide DenseMapInfo for unsigned ints.
+-template<> struct DenseMapInfo<unsigned> {
+-  static inline unsigned getEmptyKey() { return ~0U; }
+-  static inline unsigned getTombstoneKey() { return ~0U - 1; }
+-  static unsigned getHashValue(const unsigned& Val) { return Val * 37U; }
+-  static bool isEqual(const unsigned& LHS, const unsigned& RHS) {
+-    return LHS == RHS;
+-  }
+-};
+-
+-// Provide DenseMapInfo for unsigned longs.
+-template<> struct DenseMapInfo<unsigned long> {
+-  static inline unsigned long getEmptyKey() { return ~0UL; }
+-  static inline unsigned long getTombstoneKey() { return ~0UL - 1L; }
+-  static unsigned getHashValue(const unsigned long& Val) {
+-    return (unsigned)(Val * 37UL);
+-  }
+-  static bool isEqual(const unsigned long& LHS, const unsigned long& RHS) {
+-    return LHS == RHS;
+-  }
+-};
+-
+-// Provide DenseMapInfo for unsigned long longs.
+-template<> struct DenseMapInfo<unsigned long long> {
+-  static inline unsigned long long getEmptyKey() { return ~0ULL; }
+-  static inline unsigned long long getTombstoneKey() { return ~0ULL - 1ULL; }
+-  static unsigned getHashValue(const unsigned long long& Val) {
+-    return (unsigned)(Val * 37ULL);
+-  }
+-  static bool isEqual(const unsigned long long& LHS,
+-                      const unsigned long long& RHS) {
+-    return LHS == RHS;
+-  }
+-};
+-
+-// Provide DenseMapInfo for ints.
+-template<> struct DenseMapInfo<int> {
+-  static inline int getEmptyKey() { return 0x7fffffff; }
+-  static inline int getTombstoneKey() { return -0x7fffffff - 1; }
+-  static unsigned getHashValue(const int& Val) { return (unsigned)(Val * 37U); }
+-  static bool isEqual(const int& LHS, const int& RHS) {
+-    return LHS == RHS;
+-  }
+-};
+-
+-// Provide DenseMapInfo for longs.
+-template<> struct DenseMapInfo<long> {
+-  static inline long getEmptyKey() {
+-    return (1UL << (sizeof(long) * 8 - 1)) - 1UL;
+-  }
+-  static inline long getTombstoneKey() { return getEmptyKey() - 1L; }
+-  static unsigned getHashValue(const long& Val) {
+-    return (unsigned)(Val * 37UL);
+-  }
+-  static bool isEqual(const long& LHS, const long& RHS) {
+-    return LHS == RHS;
+-  }
+-};
+-
+-// Provide DenseMapInfo for long longs.
+-template<> struct DenseMapInfo<long long> {
+-  static inline long long getEmptyKey() { return 0x7fffffffffffffffLL; }
+-  static inline long long getTombstoneKey() { return -0x7fffffffffffffffLL-1; }
+-  static unsigned getHashValue(const long long& Val) {
+-    return (unsigned)(Val * 37ULL);
+-  }
+-  static bool isEqual(const long long& LHS,
+-                      const long long& RHS) {
+-    return LHS == RHS;
+-  }
+-};
+-
+-// Provide DenseMapInfo for all pairs whose members have info.
+-template<typename T, typename U>
+-struct DenseMapInfo<std::pair<T, U> > {
+-  typedef std::pair<T, U> Pair;
+-  typedef DenseMapInfo<T> FirstInfo;
+-  typedef DenseMapInfo<U> SecondInfo;
+-
+-  static inline Pair getEmptyKey() {
+-    return std::make_pair(FirstInfo::getEmptyKey(),
+-                          SecondInfo::getEmptyKey());
+-  }
+-  static inline Pair getTombstoneKey() {
+-    return std::make_pair(FirstInfo::getTombstoneKey(),
+-                          SecondInfo::getTombstoneKey());
+-  }
+-  static unsigned getHashValue(const Pair& PairVal) {
+-    uint64_t key = (uint64_t)FirstInfo::getHashValue(PairVal.first) << 32
+-          | (uint64_t)SecondInfo::getHashValue(PairVal.second);
+-    key += ~(key << 32);
+-    key ^= (key >> 22);
+-    key += ~(key << 13);
+-    key ^= (key >> 8);
+-    key += (key << 3);
+-    key ^= (key >> 15);
+-    key += ~(key << 27);
+-    key ^= (key >> 31);
+-    return (unsigned)key;
+-  }
+-  static bool isEqual(const Pair &LHS, const Pair &RHS) {
+-    return FirstInfo::isEqual(LHS.first, RHS.first) &&
+-           SecondInfo::isEqual(LHS.second, RHS.second);
+-  }
+-};
+-
+-template<typename T>
+-struct DenseMapValueInfo {
+-    static inline bool isPurgeable(const T &value) {
+-        return false;
+-    }
+-};
+-
+-} // end namespace objc
+-
+-#endif
+diff --git a/src/llvm/llvm-DenseSet.h b/src/llvm/llvm-DenseSet.h
+deleted file mode 100644
+index efc5ea2..0000000
+--- a/src/llvm/llvm-DenseSet.h
++++ /dev/null
+@@ -1,291 +0,0 @@
+-//===- llvm/ADT/DenseSet.h - Dense probed hash table ------------*- C++ -*-===//
+-//
+-//                     The LLVM Compiler Infrastructure
+-//
+-// This file is distributed under the University of Illinois Open Source
+-// License. See LICENSE.TXT for details.
+-//
+-//===----------------------------------------------------------------------===//
+-//
+-// This file defines the DenseSet and SmallDenseSet classes.
+-//
+-//===----------------------------------------------------------------------===//
+-
+-// Taken from clang-1100.247.11.10.9
+-
+-#ifndef LLVM_ADT_DENSESET_H
+-#define LLVM_ADT_DENSESET_H
+-
+-#include "llvm-DenseMap.h"
+-#include "llvm-DenseMapInfo.h"
+-#include "llvm-type_traits.h"
+-#include <algorithm>
+-#include <cstddef>
+-#include <initializer_list>
+-#include <iterator>
+-#include <utility>
+-#include <TargetConditionals.h>
+-
+-namespace ld::llvm {
+-
+-namespace detail {
+-
+-struct DenseSetEmpty {};
+-
+-// Use the empty base class trick so we can create a DenseMap where the buckets
+-// contain only a single item.
+-template <typename KeyT> class DenseSetPair : public DenseSetEmpty {
+-  KeyT key;
+-
+-public:
+-  KeyT &getFirst() { return key; }
+-  const KeyT &getFirst() const { return key; }
+-  DenseSetEmpty &getSecond() { return *this; }
+-  const DenseSetEmpty &getSecond() const { return *this; }
+-};
+-
+-/// Base class for DenseSet and DenseSmallSet.
+-///
+-/// MapTy should be either
+-///
+-///   DenseMap<ValueT, detail::DenseSetEmpty,
+-///            DenseMapValueInfo<detail::DenseSetEmpty>,
+-///            ValueInfoT, detail::DenseSetPair<ValueT>>
+-///
+-/// or the equivalent SmallDenseMap type.  ValueInfoT must implement the
+-/// DenseMapInfo "concept".
+-template <typename ValueT, typename MapTy, typename ValueInfoT>
+-class DenseSetImpl {
+-  static_assert(sizeof(typename MapTy::value_type) == sizeof(ValueT),
+-                "DenseMap buckets unexpectedly large!");
+-  MapTy TheMap;
+-
+-  template <typename T>
+-  using const_arg_type_t = typename const_pointer_or_const_ref<T>::type;
+-
+-public:
+-  using key_type = ValueT;
+-  using value_type = ValueT;
+-  using size_type = unsigned;
+-
+-  explicit DenseSetImpl(unsigned InitialReserve = 0) : TheMap(InitialReserve) {}
+-
+-  DenseSetImpl(std::initializer_list<ValueT> Elems)
+-      : DenseSetImpl(PowerOf2Ceil(Elems.size())) {
+-    insert(Elems.begin(), Elems.end());
+-  }
+-
+-  bool empty() const { return TheMap.empty(); }
+-  size_type size() const { return TheMap.size(); }
+-  size_t getMemorySize() const { return TheMap.getMemorySize(); }
+-
+-  /// Grow the DenseSet so that it has at least Size buckets. Will not shrink
+-  /// the Size of the set.
+-  void resize(size_t Size) { TheMap.resize(Size); }
+-
+-  /// Grow the DenseSet so that it can contain at least \p NumEntries items
+-  /// before resizing again.
+-  void reserve(size_t Size) { TheMap.reserve(Size); }
+-
+-  void clear() {
+-    TheMap.clear();
+-  }
+-
+-  /// Return 1 if the specified key is in the set, 0 otherwise.
+-  size_type count(const_arg_type_t<ValueT> V) const {
+-    return TheMap.count(V);
+-  }
+-
+-  bool erase(const ValueT &V) {
+-    return TheMap.erase(V);
+-  }
+-
+-  void swap(DenseSetImpl &RHS) { TheMap.swap(RHS.TheMap); }
+-
+-  // Iterators.
+-
+-  class ConstIterator;
+-
+-  class Iterator {
+-    typename MapTy::iterator I;
+-    friend class DenseSetImpl;
+-    friend class ConstIterator;
+-
+-  public:
+-    using difference_type = typename MapTy::iterator::difference_type;
+-    using value_type = ValueT;
+-    using pointer = value_type *;
+-    using reference = value_type &;
+-    using iterator_category = std::forward_iterator_tag;
+-
+-    Iterator() = default;
+-    Iterator(const typename MapTy::iterator &i) : I(i) {}
+-
+-    ValueT &operator*() { return I->getFirst(); }
+-    const ValueT &operator*() const { return I->getFirst(); }
+-    ValueT *operator->() { return &I->getFirst(); }
+-    const ValueT *operator->() const { return &I->getFirst(); }
+-
+-    Iterator& operator++() { ++I; return *this; }
+-    Iterator operator++(int) { auto T = *this; ++I; return T; }
+-    friend bool operator==(const Iterator& LHS, const Iterator& RHS) { return LHS.I == RHS.I; }
+-    friend bool operator!=(const Iterator& LHS, const Iterator& RHS) { return LHS.I != RHS.I; }
+-  };
+-
+-  class ConstIterator {
+-    typename MapTy::const_iterator I;
+-    friend class DenseSet;
+-    friend class Iterator;
+-
+-  public:
+-    using difference_type = typename MapTy::const_iterator::difference_type;
+-    using value_type = ValueT;
+-    using pointer = const value_type *;
+-    using reference = const value_type &;
+-    using iterator_category = std::forward_iterator_tag;
+-
+-    ConstIterator() = default;
+-    ConstIterator(const Iterator &B) : I(B.I) {}
+-    ConstIterator(const typename MapTy::const_iterator &i) : I(i) {}
+-
+-    const ValueT &operator*() const { return I->getFirst(); }
+-    const ValueT *operator->() const { return &I->getFirst(); }
+-
+-    ConstIterator& operator++() { ++I; return *this; }
+-    ConstIterator operator++(int) { auto T = *this; ++I; return T; }
+-    friend bool operator==(const ConstIterator& LHS, const ConstIterator& RHS) { return LHS.I == RHS.I; }
+-    friend bool operator!=(const ConstIterator& LHS, const ConstIterator& RHS) { return LHS.I != RHS.I; }
+-  };
+-
+-  using iterator = Iterator;
+-  using const_iterator = ConstIterator;
+-
+-  iterator begin() { return Iterator(TheMap.begin()); }
+-  iterator end() { return Iterator(TheMap.end()); }
+-
+-  const_iterator begin() const { return ConstIterator(TheMap.begin()); }
+-  const_iterator end() const { return ConstIterator(TheMap.end()); }
+-
+-  iterator find(const_arg_type_t<ValueT> V) { return Iterator(TheMap.find(V)); }
+-  const_iterator find(const_arg_type_t<ValueT> V) const {
+-    return ConstIterator(TheMap.find(V));
+-  }
+-
+-  /// Alternative version of find() which allows a different, and possibly less
+-  /// expensive, key type.
+-  /// The DenseMapInfo is responsible for supplying methods
+-  /// getHashValue(LookupKeyT) and isEqual(LookupKeyT, KeyT) for each key type
+-  /// used.
+-  template <class LookupKeyT>
+-  iterator find_as(const LookupKeyT &Val) {
+-    return Iterator(TheMap.find_as(Val));
+-  }
+-  template <class LookupKeyT>
+-  const_iterator find_as(const LookupKeyT &Val) const {
+-    return ConstIterator(TheMap.find_as(Val));
+-  }
+-
+-  void erase(Iterator I) { return TheMap.erase(I.I); }
+-  void erase(ConstIterator CI) { return TheMap.erase(CI.I); }
+-
+-  std::pair<iterator, bool> insert(const ValueT &V) {
+-    detail::DenseSetEmpty Empty;
+-    return TheMap.try_emplace(V, Empty);
+-  }
+-
+-  std::pair<iterator, bool> insert(ValueT &&V) {
+-    detail::DenseSetEmpty Empty;
+-    return TheMap.try_emplace(std::move(V), Empty);
+-  }
+-
+-  /// Alternative version of insert that uses a different (and possibly less
+-  /// expensive) key type.
+-  template <typename LookupKeyT>
+-  std::pair<iterator, bool> insert_as(const ValueT &V,
+-                                      const LookupKeyT &LookupKey) {
+-    return TheMap.insert_as({V, detail::DenseSetEmpty()}, LookupKey);
+-  }
+-  template <typename LookupKeyT>
+-  std::pair<iterator, bool> insert_as(ValueT &&V, const LookupKeyT &LookupKey) {
+-    return TheMap.insert_as({std::move(V), detail::DenseSetEmpty()}, LookupKey);
+-  }
+-
+-  // Range insertion of values.
+-  template<typename InputIt>
+-  void insert(InputIt I, InputIt E) {
+-    for (; I != E; ++I)
+-      insert(*I);
+-  }
+-};
+-
+-/// Equality comparison for DenseSet.
+-///
+-/// Iterates over elements of LHS confirming that each element is also a member
+-/// of RHS, and that RHS contains no additional values.
+-/// Equivalent to N calls to RHS.count. Amortized complexity is linear, worst
+-/// case is O(N^2) (if every hash collides).
+-template <typename ValueT, typename MapTy, typename ValueInfoT>
+-bool operator==(const DenseSetImpl<ValueT, MapTy, ValueInfoT> &LHS,
+-                const DenseSetImpl<ValueT, MapTy, ValueInfoT> &RHS) {
+-  if (LHS.size() != RHS.size())
+-    return false;
+-
+-  for (auto &E : LHS)
+-    if (!RHS.count(E))
+-      return false;
+-
+-  return true;
+-}
+-
+-/// Inequality comparison for DenseSet.
+-///
+-/// Equivalent to !(LHS == RHS). See operator== for performance notes.
+-template <typename ValueT, typename MapTy, typename ValueInfoT>
+-bool operator!=(const DenseSetImpl<ValueT, MapTy, ValueInfoT> &LHS,
+-                const DenseSetImpl<ValueT, MapTy, ValueInfoT> &RHS) {
+-  return !(LHS == RHS);
+-}
+-
+-} // end namespace detail
+-
+-/// Implements a dense probed hash-table based set.
+-template <typename ValueT, typename ValueInfoT = DenseMapInfo<ValueT>>
+-class DenseSet : public detail::DenseSetImpl<
+-                     ValueT, DenseMap<ValueT, detail::DenseSetEmpty,
+-                                      DenseMapValueInfo<detail::DenseSetEmpty>,
+-                                      ValueInfoT, detail::DenseSetPair<ValueT>>,
+-                     ValueInfoT> {
+-  using BaseT =
+-      detail::DenseSetImpl<ValueT,
+-                           DenseMap<ValueT, detail::DenseSetEmpty,
+-                                    DenseMapValueInfo<detail::DenseSetEmpty>,
+-                                    ValueInfoT, detail::DenseSetPair<ValueT>>,
+-                           ValueInfoT>;
+-
+-public:
+-  using BaseT::BaseT;
+-};
+-
+-/// Implements a dense probed hash-table based set with some number of buckets
+-/// stored inline.
+-template <typename ValueT, unsigned InlineBuckets = 4,
+-          typename ValueInfoT = DenseMapInfo<ValueT>>
+-class SmallDenseSet
+-    : public detail::DenseSetImpl<
+-          ValueT, SmallDenseMap<ValueT, detail::DenseSetEmpty, InlineBuckets,
+-                                DenseMapValueInfo<detail::DenseSetEmpty>,
+-                                ValueInfoT, detail::DenseSetPair<ValueT>>,
+-          ValueInfoT> {
+-  using BaseT = detail::DenseSetImpl<
+-      ValueT, SmallDenseMap<ValueT, detail::DenseSetEmpty, InlineBuckets,
+-                            DenseMapValueInfo<detail::DenseSetEmpty>,
+-                            ValueInfoT, detail::DenseSetPair<ValueT>>,
+-      ValueInfoT>;
+-
+-public:
+-  using BaseT::BaseT;
+-};
+-
+-} // end namespace objc
+-
+-#endif // LLVM_ADT_DENSESET_H
+diff --git a/src/llvm/llvm-MathExtras.h b/src/llvm/llvm-MathExtras.h
+deleted file mode 100644
+index 27974e4..0000000
+--- a/src/llvm/llvm-MathExtras.h
++++ /dev/null
+@@ -1,486 +0,0 @@
+-//===-- llvm/Support/MathExtras.h - Useful math functions -------*- C++ -*-===//
+-//
+-//                     The LLVM Compiler Infrastructure
+-//
+-// This file is distributed under the University of Illinois Open Source
+-// License. See LICENSE.TXT for details.
+-//
+-//===----------------------------------------------------------------------===//
+-//
+-// This file contains some functions that are useful for math stuff.
+-//
+-//===----------------------------------------------------------------------===//
+-
+-// Taken from llvmCore-3425.0.31.
+-
+-#ifndef LLVM_SUPPORT_MATHEXTRAS_H
+-#define LLVM_SUPPORT_MATHEXTRAS_H
+-
+-#include <stdint.h>
+-
+-namespace ld::llvm {
+-
+-// NOTE: The following support functions use the _32/_64 extensions instead of
+-// type overloading so that signed and unsigned integers can be used without
+-// ambiguity.
+-
+-/// Hi_32 - This function returns the high 32 bits of a 64 bit value.
+-inline uint32_t Hi_32(uint64_t Value) {
+-  return static_cast<uint32_t>(Value >> 32);
+-}
+-
+-/// Lo_32 - This function returns the low 32 bits of a 64 bit value.
+-inline uint32_t Lo_32(uint64_t Value) {
+-  return static_cast<uint32_t>(Value);
+-}
+-
+-/// isInt - Checks if an integer fits into the given bit width.
+-template<unsigned N>
+-inline bool isInt(int64_t x) {
+-  return N >= 64 || (-(INT64_C(1)<<(N-1)) <= x && x < (INT64_C(1)<<(N-1)));
+-}
+-// Template specializations to get better code for common cases.
+-template<>
+-inline bool isInt<8>(int64_t x) {
+-  return static_cast<int8_t>(x) == x;
+-}
+-template<>
+-inline bool isInt<16>(int64_t x) {
+-  return static_cast<int16_t>(x) == x;
+-}
+-template<>
+-inline bool isInt<32>(int64_t x) {
+-  return static_cast<int32_t>(x) == x;
+-}
+-
+-/// isShiftedInt<N,S> - Checks if a signed integer is an N bit number shifted
+-///                     left by S.
+-template<unsigned N, unsigned S>
+-inline bool isShiftedInt(int64_t x) {
+-  return isInt<N+S>(x) && (x % (1<<S) == 0);
+-}
+-
+-/// isUInt - Checks if an unsigned integer fits into the given bit width.
+-template<unsigned N>
+-inline bool isUInt(uint64_t x) {
+-  return N >= 64 || x < (UINT64_C(1)<<N);
+-}
+-// Template specializations to get better code for common cases.
+-template<>
+-inline bool isUInt<8>(uint64_t x) {
+-  return static_cast<uint8_t>(x) == x;
+-}
+-template<>
+-inline bool isUInt<16>(uint64_t x) {
+-  return static_cast<uint16_t>(x) == x;
+-}
+-template<>
+-inline bool isUInt<32>(uint64_t x) {
+-  return static_cast<uint32_t>(x) == x;
+-}
+-
+-/// isShiftedUInt<N,S> - Checks if a unsigned integer is an N bit number shifted
+-///                     left by S.
+-template<unsigned N, unsigned S>
+-inline bool isShiftedUInt(uint64_t x) {
+-  return isUInt<N+S>(x) && (x % (1<<S) == 0);
+-}
+-
+-/// isUIntN - Checks if an unsigned integer fits into the given (dynamic)
+-/// bit width.
+-inline bool isUIntN(unsigned N, uint64_t x) {
+-  return x == (x & (~0ULL >> (64 - N)));
+-}
+-
+-/// isIntN - Checks if an signed integer fits into the given (dynamic)
+-/// bit width.
+-inline bool isIntN(unsigned N, int64_t x) {
+-  return N >= 64 || (-(INT64_C(1)<<(N-1)) <= x && x < (INT64_C(1)<<(N-1)));
+-}
+-
+-/// isMask_32 - This function returns true if the argument is a sequence of ones
+-/// starting at the least significant bit with the remainder zero (32 bit
+-/// version).   Ex. isMask_32(0x0000FFFFU) == true.
+-inline bool isMask_32(uint32_t Value) {
+-  return Value && ((Value + 1) & Value) == 0;
+-}
+-
+-/// isMask_64 - This function returns true if the argument is a sequence of ones
+-/// starting at the least significant bit with the remainder zero (64 bit
+-/// version).
+-inline bool isMask_64(uint64_t Value) {
+-  return Value && ((Value + 1) & Value) == 0;
+-}
+-
+-/// isShiftedMask_32 - This function returns true if the argument contains a
+-/// sequence of ones with the remainder zero (32 bit version.)
+-/// Ex. isShiftedMask_32(0x0000FF00U) == true.
+-inline bool isShiftedMask_32(uint32_t Value) {
+-  return isMask_32((Value - 1) | Value);
+-}
+-
+-/// isShiftedMask_64 - This function returns true if the argument contains a
+-/// sequence of ones with the remainder zero (64 bit version.)
+-inline bool isShiftedMask_64(uint64_t Value) {
+-  return isMask_64((Value - 1) | Value);
+-}
+-
+-/// isPowerOf2_32 - This function returns true if the argument is a power of
+-/// two > 0. Ex. isPowerOf2_32(0x00100000U) == true (32 bit edition.)
+-inline bool isPowerOf2_32(uint32_t Value) {
+-  return Value && !(Value & (Value - 1));
+-}
+-
+-/// isPowerOf2_64 - This function returns true if the argument is a power of two
+-/// > 0 (64 bit edition.)
+-inline bool isPowerOf2_64(uint64_t Value) {
+-  return Value && !(Value & (Value - int64_t(1L)));
+-}
+-
+-/// CountLeadingZeros_32 - this function performs the platform optimal form of
+-/// counting the number of zeros from the most significant bit to the first one
+-/// bit.  Ex. CountLeadingZeros_32(0x00F000FF) == 8.
+-/// Returns 32 if the word is zero.
+-inline unsigned CountLeadingZeros_32(uint32_t Value) {
+-  unsigned Count; // result
+-#if __GNUC__ >= 4
+-  // PowerPC is defined for __builtin_clz(0)
+-#if !defined(__ppc__) && !defined(__ppc64__)
+-  if (!Value) return 32;
+-#endif
+-  Count = __builtin_clz(Value);
+-#else
+-  if (!Value) return 32;
+-  Count = 0;
+-  // bisection method for count leading zeros
+-  for (unsigned Shift = 32 >> 1; Shift; Shift >>= 1) {
+-    uint32_t Tmp = Value >> Shift;
+-    if (Tmp) {
+-      Value = Tmp;
+-    } else {
+-      Count |= Shift;
+-    }
+-  }
+-#endif
+-  return Count;
+-}
+-
+-/// CountLeadingOnes_32 - this function performs the operation of
+-/// counting the number of ones from the most significant bit to the first zero
+-/// bit.  Ex. CountLeadingOnes_32(0xFF0FFF00) == 8.
+-/// Returns 32 if the word is all ones.
+-inline unsigned CountLeadingOnes_32(uint32_t Value) {
+-  return CountLeadingZeros_32(~Value);
+-}
+-
+-/// CountLeadingZeros_64 - This function performs the platform optimal form
+-/// of counting the number of zeros from the most significant bit to the first
+-/// one bit (64 bit edition.)
+-/// Returns 64 if the word is zero.
+-inline unsigned CountLeadingZeros_64(uint64_t Value) {
+-  unsigned Count; // result
+-#if __GNUC__ >= 4
+-  // PowerPC is defined for __builtin_clzll(0)
+-#if !defined(__ppc__) && !defined(__ppc64__)
+-  if (!Value) return 64;
+-#endif
+-  Count = __builtin_clzll(Value);
+-#else
+-  if (sizeof(long) == sizeof(int64_t)) {
+-    if (!Value) return 64;
+-    Count = 0;
+-    // bisection method for count leading zeros
+-    for (unsigned Shift = 64 >> 1; Shift; Shift >>= 1) {
+-      uint64_t Tmp = Value >> Shift;
+-      if (Tmp) {
+-        Value = Tmp;
+-      } else {
+-        Count |= Shift;
+-      }
+-    }
+-  } else {
+-    // get hi portion
+-    uint32_t Hi = Hi_32(Value);
+-
+-    // if some bits in hi portion
+-    if (Hi) {
+-        // leading zeros in hi portion plus all bits in lo portion
+-        Count = CountLeadingZeros_32(Hi);
+-    } else {
+-        // get lo portion
+-        uint32_t Lo = Lo_32(Value);
+-        // same as 32 bit value
+-        Count = CountLeadingZeros_32(Lo)+32;
+-    }
+-  }
+-#endif
+-  return Count;
+-}
+-
+-/// CountLeadingOnes_64 - This function performs the operation
+-/// of counting the number of ones from the most significant bit to the first
+-/// zero bit (64 bit edition.)
+-/// Returns 64 if the word is all ones.
+-inline unsigned CountLeadingOnes_64(uint64_t Value) {
+-  return CountLeadingZeros_64(~Value);
+-}
+-
+-/// CountTrailingZeros_32 - this function performs the platform optimal form of
+-/// counting the number of zeros from the least significant bit to the first one
+-/// bit.  Ex. CountTrailingZeros_32(0xFF00FF00) == 8.
+-/// Returns 32 if the word is zero.
+-inline unsigned CountTrailingZeros_32(uint32_t Value) {
+-#if __GNUC__ >= 4
+-  return Value ? __builtin_ctz(Value) : 32;
+-#else
+-  static const unsigned Mod37BitPosition[] = {
+-    32, 0, 1, 26, 2, 23, 27, 0, 3, 16, 24, 30, 28, 11, 0, 13,
+-    4, 7, 17, 0, 25, 22, 31, 15, 29, 10, 12, 6, 0, 21, 14, 9,
+-    5, 20, 8, 19, 18
+-  };
+-  return Mod37BitPosition[(-Value & Value) % 37];
+-#endif
+-}
+-
+-/// CountTrailingOnes_32 - this function performs the operation of
+-/// counting the number of ones from the least significant bit to the first zero
+-/// bit.  Ex. CountTrailingOnes_32(0x00FF00FF) == 8.
+-/// Returns 32 if the word is all ones.
+-inline unsigned CountTrailingOnes_32(uint32_t Value) {
+-  return CountTrailingZeros_32(~Value);
+-}
+-
+-/// CountTrailingZeros_64 - This function performs the platform optimal form
+-/// of counting the number of zeros from the least significant bit to the first
+-/// one bit (64 bit edition.)
+-/// Returns 64 if the word is zero.
+-inline unsigned CountTrailingZeros_64(uint64_t Value) {
+-#if __GNUC__ >= 4
+-  return Value ? __builtin_ctzll(Value) : 64;
+-#else
+-  static const unsigned Mod67Position[] = {
+-    64, 0, 1, 39, 2, 15, 40, 23, 3, 12, 16, 59, 41, 19, 24, 54,
+-    4, 64, 13, 10, 17, 62, 60, 28, 42, 30, 20, 51, 25, 44, 55,
+-    47, 5, 32, 65, 38, 14, 22, 11, 58, 18, 53, 63, 9, 61, 27,
+-    29, 50, 43, 46, 31, 37, 21, 57, 52, 8, 26, 49, 45, 36, 56,
+-    7, 48, 35, 6, 34, 33, 0
+-  };
+-  return Mod67Position[(-Value & Value) % 67];
+-#endif
+-}
+-
+-/// CountTrailingOnes_64 - This function performs the operation
+-/// of counting the number of ones from the least significant bit to the first
+-/// zero bit (64 bit edition.)
+-/// Returns 64 if the word is all ones.
+-inline unsigned CountTrailingOnes_64(uint64_t Value) {
+-  return CountTrailingZeros_64(~Value);
+-}
+-
+-/// CountPopulation_32 - this function counts the number of set bits in a value.
+-/// Ex. CountPopulation(0xF000F000) = 8
+-/// Returns 0 if the word is zero.
+-inline unsigned CountPopulation_32(uint32_t Value) {
+-#if __GNUC__ >= 4
+-  return __builtin_popcount(Value);
+-#else
+-  uint32_t v = Value - ((Value >> 1) & 0x55555555);
+-  v = (v & 0x33333333) + ((v >> 2) & 0x33333333);
+-  return ((v + (v >> 4) & 0xF0F0F0F) * 0x1010101) >> 24;
+-#endif
+-}
+-
+-/// CountPopulation_64 - this function counts the number of set bits in a value,
+-/// (64 bit edition.)
+-inline unsigned CountPopulation_64(uint64_t Value) {
+-#if __GNUC__ >= 4
+-  return __builtin_popcountll(Value);
+-#else
+-  uint64_t v = Value - ((Value >> 1) & 0x5555555555555555ULL);
+-  v = (v & 0x3333333333333333ULL) + ((v >> 2) & 0x3333333333333333ULL);
+-  v = (v + (v >> 4)) & 0x0F0F0F0F0F0F0F0FULL;
+-  return unsigned((uint64_t)(v * 0x0101010101010101ULL) >> 56);
+-#endif
+-}
+-
+-/// Log2_32 - This function returns the floor log base 2 of the specified value,
+-/// -1 if the value is zero. (32 bit edition.)
+-/// Ex. Log2_32(32) == 5, Log2_32(1) == 0, Log2_32(0) == -1, Log2_32(6) == 2
+-inline unsigned Log2_32(uint32_t Value) {
+-  return 31 - CountLeadingZeros_32(Value);
+-}
+-
+-/// Log2_64 - This function returns the floor log base 2 of the specified value,
+-/// -1 if the value is zero. (64 bit edition.)
+-inline unsigned Log2_64(uint64_t Value) {
+-  return 63 - CountLeadingZeros_64(Value);
+-}
+-
+-/// Log2_32_Ceil - This function returns the ceil log base 2 of the specified
+-/// value, 32 if the value is zero. (32 bit edition).
+-/// Ex. Log2_32_Ceil(32) == 5, Log2_32_Ceil(1) == 0, Log2_32_Ceil(6) == 3
+-inline unsigned Log2_32_Ceil(uint32_t Value) {
+-  return 32-CountLeadingZeros_32(Value-1);
+-}
+-
+-/// Log2_64_Ceil - This function returns the ceil log base 2 of the specified
+-/// value, 64 if the value is zero. (64 bit edition.)
+-inline unsigned Log2_64_Ceil(uint64_t Value) {
+-  return 64-CountLeadingZeros_64(Value-1);
+-}
+-
+-/// GreatestCommonDivisor64 - Return the greatest common divisor of the two
+-/// values using Euclid's algorithm.
+-inline uint64_t GreatestCommonDivisor64(uint64_t A, uint64_t B) {
+-  while (B) {
+-    uint64_t T = B;
+-    B = A % B;
+-    A = T;
+-  }
+-  return A;
+-}
+-
+-/// BitsToDouble - This function takes a 64-bit integer and returns the bit
+-/// equivalent double.
+-inline double BitsToDouble(uint64_t Bits) {
+-  union {
+-    uint64_t L;
+-    double D;
+-  } T;
+-  T.L = Bits;
+-  return T.D;
+-}
+-
+-/// BitsToFloat - This function takes a 32-bit integer and returns the bit
+-/// equivalent float.
+-inline float BitsToFloat(uint32_t Bits) {
+-  union {
+-    uint32_t I;
+-    float F;
+-  } T;
+-  T.I = Bits;
+-  return T.F;
+-}
+-
+-/// DoubleToBits - This function takes a double and returns the bit
+-/// equivalent 64-bit integer.  Note that copying doubles around
+-/// changes the bits of NaNs on some hosts, notably x86, so this
+-/// routine cannot be used if these bits are needed.
+-inline uint64_t DoubleToBits(double Double) {
+-  union {
+-    uint64_t L;
+-    double D;
+-  } T;
+-  T.D = Double;
+-  return T.L;
+-}
+-
+-/// FloatToBits - This function takes a float and returns the bit
+-/// equivalent 32-bit integer.  Note that copying floats around
+-/// changes the bits of NaNs on some hosts, notably x86, so this
+-/// routine cannot be used if these bits are needed.
+-inline uint32_t FloatToBits(float Float) {
+-  union {
+-    uint32_t I;
+-    float F;
+-  } T;
+-  T.F = Float;
+-  return T.I;
+-}
+-
+-/// Platform-independent wrappers for the C99 isnan() function.
+-int IsNAN(float f);
+-int IsNAN(double d);
+-
+-/// Platform-independent wrappers for the C99 isinf() function.
+-int IsInf(float f);
+-int IsInf(double d);
+-
+-/// MinAlign - A and B are either alignments or offsets.  Return the minimum
+-/// alignment that may be assumed after adding the two together.
+-inline uint64_t MinAlign(uint64_t A, uint64_t B) {
+-  // The largest power of 2 that divides both A and B.
+-  return (A | B) & -(A | B);
+-}
+-
+-/// NextPowerOf2 - Returns the next power of two (in 64-bits)
+-/// that is strictly greater than A.  Returns zero on overflow.
+-inline uint64_t NextPowerOf2(uint64_t A) {
+-  A |= (A >> 1);
+-  A |= (A >> 2);
+-  A |= (A >> 4);
+-  A |= (A >> 8);
+-  A |= (A >> 16);
+-  A |= (A >> 32);
+-  return A + 1;
+-}
+-
+-/// NextPowerOf2 - Returns the next power of two (in 32-bits)
+-/// that is strictly greater than A.  Returns zero on overflow.
+-inline uint32_t NextPowerOf2(uint32_t A) {
+-  A |= (A >> 1);
+-  A |= (A >> 2);
+-  A |= (A >> 4);
+-  A |= (A >> 8);
+-  A |= (A >> 16);
+-  return A + 1;
+-}
+-
+-/// Returns true if \p x is a power of 2.
+-template <typename T>
+-constexpr bool IsPowerOf2(T x) { return ((x-1) & x) == 0; }
+-
+-/// Returns the next integer (mod 2**64) that is greater than or equal to
+-/// \p Value and is a multiple of \p Align. \p Align must be non-zero.
+-///
+-/// Examples:
+-/// \code
+-///   RoundUpToAlignment(5, 8) = 8
+-///   RoundUpToAlignment(17, 8) = 24
+-///   RoundUpToAlignment(~0LL, 8) = 0
+-/// \endcode
+-inline uint64_t RoundUpToAlignment(uint64_t Value, uint64_t Align) {
+-  return ((Value + Align - 1) / Align) * Align;
+-}
+-
+-/// Returns the offset to the next integer (mod 2**64) that is greater than
+-/// or equal to \p Value and is a multiple of \p Align. \p Align must be
+-/// non-zero.
+-inline uint64_t OffsetToAlignment(uint64_t Value, uint64_t Align) {
+-  return RoundUpToAlignment(Value, Align) - Value;
+-}
+-
+-/// abs64 - absolute value of a 64-bit int.  Not all environments support
+-/// "abs" on whatever their name for the 64-bit int type is.  The absolute
+-/// value of the largest negative number is undefined, as with "abs".
+-inline int64_t abs64(int64_t x) {
+-  return (x < 0) ? -x : x;
+-}
+-
+-/// SignExtend32 - Sign extend B-bit number x to 32-bit int.
+-/// Usage int32_t r = SignExtend32<5>(x);
+-template <unsigned B> inline int32_t SignExtend32(uint32_t x) {
+-  return int32_t(x << (32 - B)) >> (32 - B);
+-}
+-
+-/// \brief Sign extend number in the bottom B bits of X to a 32-bit int.
+-/// Requires 0 < B <= 32.
+-inline int32_t SignExtend32(uint32_t X, unsigned B) {
+-  return int32_t(X << (32 - B)) >> (32 - B);
+-}
+-
+-/// SignExtend64 - Sign extend B-bit number x to 64-bit int.
+-/// Usage int64_t r = SignExtend64<5>(x);
+-template <unsigned B> inline int64_t SignExtend64(uint64_t x) {
+-  return int64_t(x << (64 - B)) >> (64 - B);
+-}
+-
+-/// \brief Sign extend number in the bottom B bits of X to a 64-bit int.
+-/// Requires 0 < B <= 64.
+-inline int64_t SignExtend64(uint64_t X, unsigned B) {
+-  return int64_t(X << (64 - B)) >> (64 - B);
+-}
+-
+-} // End llvm namespace
+-
+-#endif
+diff --git a/src/llvm/llvm-type_traits.h b/src/llvm/llvm-type_traits.h
+deleted file mode 100644
+index 882b175..0000000
+--- a/src/llvm/llvm-type_traits.h
++++ /dev/null
+@@ -1,204 +0,0 @@
+-//===- llvm/Support/type_traits.h - Simplfied type traits -------*- C++ -*-===//
+-//
+-// Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
+-// See https://llvm.org/LICENSE.txt for license information.
+-// SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+-//
+-//===----------------------------------------------------------------------===//
+-//
+-// This file provides useful additions to the standard type_traits library.
+-//
+-//===----------------------------------------------------------------------===//
+-
+-// Taken from clang-1100.247.11.10.9
+-
+-#ifndef LLVM_SUPPORT_TYPE_TRAITS_H
+-#define LLVM_SUPPORT_TYPE_TRAITS_H
+-
+-#define HAVE_STD_IS_TRIVIALLY_COPYABLE 1
+-
+-#include <cstddef>
+-#include <utility>
+-
+-#ifndef __has_feature
+-#define LLVM_DEFINED_HAS_FEATURE
+-#define __has_feature(x) 0
+-#endif
+-
+-namespace ld::llvm {
+-
+-
+-/// Metafunction that determines whether the given type is either an
+-/// integral type or an enumeration type, including enum classes.
+-///
+-/// Note that this accepts potentially more integral types than is_integral
+-/// because it is based on being implicitly convertible to an integral type.
+-/// Also note that enum classes aren't implicitly convertible to integral types,
+-/// the value may therefore need to be explicitly converted before being used.
+-template <typename T> class is_integral_or_enum {
+-  using UnderlyingT = typename std::remove_reference<T>::type;
+-
+-public:
+-  static const bool value =
+-      !std::is_class<UnderlyingT>::value && // Filter conversion operators.
+-      !std::is_pointer<UnderlyingT>::value &&
+-      !std::is_floating_point<UnderlyingT>::value &&
+-      (std::is_enum<UnderlyingT>::value ||
+-       std::is_convertible<UnderlyingT, unsigned long long>::value);
+-};
+-
+-/// If T is a pointer, just return it. If it is not, return T&.
+-template<typename T, typename Enable = void>
+-struct add_lvalue_reference_if_not_pointer { using type = T &; };
+-
+-template <typename T>
+-struct add_lvalue_reference_if_not_pointer<
+-    T, typename std::enable_if<std::is_pointer<T>::value>::type> {
+-  using type = T;
+-};
+-
+-/// If T is a pointer to X, return a pointer to const X. If it is not,
+-/// return const T.
+-template<typename T, typename Enable = void>
+-struct add_const_past_pointer { using type = const T; };
+-
+-template <typename T>
+-struct add_const_past_pointer<
+-    T, typename std::enable_if<std::is_pointer<T>::value>::type> {
+-  using type = const typename std::remove_pointer<T>::type *;
+-};
+-
+-template <typename T, typename Enable = void>
+-struct const_pointer_or_const_ref {
+-  using type = const T &;
+-};
+-template <typename T>
+-struct const_pointer_or_const_ref<
+-    T, typename std::enable_if<std::is_pointer<T>::value>::type> {
+-  using type = typename add_const_past_pointer<T>::type;
+-};
+-
+-namespace detail {
+-/// Internal utility to detect trivial copy construction.
+-template<typename T> union copy_construction_triviality_helper {
+-    T t;
+-    copy_construction_triviality_helper() = default;
+-    copy_construction_triviality_helper(const copy_construction_triviality_helper&) = default;
+-    ~copy_construction_triviality_helper() = default;
+-};
+-/// Internal utility to detect trivial move construction.
+-template<typename T> union move_construction_triviality_helper {
+-    T t;
+-    move_construction_triviality_helper() = default;
+-    move_construction_triviality_helper(move_construction_triviality_helper&&) = default;
+-    ~move_construction_triviality_helper() = default;
+-};
+-
+-template<class T>
+-union trivial_helper {
+-    T t;
+-};
+-
+-} // end namespace detail
+-
+-/// An implementation of `std::is_trivially_copy_constructible` since we have
+-/// users with STLs that don't yet include it.
+-template <typename T>
+-struct is_trivially_copy_constructible
+-    : std::is_copy_constructible<
+-          ::ld::llvm::detail::copy_construction_triviality_helper<T>> {};
+-template <typename T>
+-struct is_trivially_copy_constructible<T &> : std::true_type {};
+-template <typename T>
+-struct is_trivially_copy_constructible<T &&> : std::false_type {};
+-
+-/// An implementation of `std::is_trivially_move_constructible` since we have
+-/// users with STLs that don't yet include it.
+-template <typename T>
+-struct is_trivially_move_constructible
+-    : std::is_move_constructible<
+-          ::ld::llvm::detail::move_construction_triviality_helper<T>> {};
+-template <typename T>
+-struct is_trivially_move_constructible<T &> : std::true_type {};
+-template <typename T>
+-struct is_trivially_move_constructible<T &&> : std::true_type {};
+-
+-
+-template <typename T>
+-struct is_copy_assignable {
+-  template<class F>
+-    static auto get(F*) -> decltype(std::declval<F &>() = std::declval<const F &>(), std::true_type{});
+-    static std::false_type get(...);
+-    static constexpr bool value = decltype(get((T*)nullptr))::value;
+-};
+-
+-template <typename T>
+-struct is_move_assignable {
+-  template<class F>
+-    static auto get(F*) -> decltype(std::declval<F &>() = std::declval<F &&>(), std::true_type{});
+-    static std::false_type get(...);
+-    static constexpr bool value = decltype(get((T*)nullptr))::value;
+-};
+-
+-
+-// An implementation of `std::is_trivially_copyable` since STL version
+-// is not equally supported by all compilers, especially GCC 4.9.
+-// Uniform implementation of this trait is important for ABI compatibility
+-// as it has an impact on SmallVector's ABI (among others).
+-template <typename T>
+-class is_trivially_copyable {
+-
+-  // copy constructors
+-  static constexpr bool has_trivial_copy_constructor =
+-      std::is_copy_constructible<detail::trivial_helper<T>>::value;
+-  static constexpr bool has_deleted_copy_constructor =
+-      !std::is_copy_constructible<T>::value;
+-
+-  // move constructors
+-  static constexpr bool has_trivial_move_constructor =
+-      std::is_move_constructible<detail::trivial_helper<T>>::value;
+-  static constexpr bool has_deleted_move_constructor =
+-      !std::is_move_constructible<T>::value;
+-
+-  // copy assign
+-  static constexpr bool has_trivial_copy_assign =
+-      is_copy_assignable<detail::trivial_helper<T>>::value;
+-  static constexpr bool has_deleted_copy_assign =
+-      !is_copy_assignable<T>::value;
+-
+-  // move assign
+-  static constexpr bool has_trivial_move_assign =
+-      is_move_assignable<detail::trivial_helper<T>>::value;
+-  static constexpr bool has_deleted_move_assign =
+-      !is_move_assignable<T>::value;
+-
+-  // destructor
+-  static constexpr bool has_trivial_destructor =
+-      std::is_destructible<detail::trivial_helper<T>>::value;
+-
+-  public:
+-
+-  static constexpr bool value =
+-      has_trivial_destructor &&
+-      (has_deleted_move_assign || has_trivial_move_assign) &&
+-      (has_deleted_move_constructor || has_trivial_move_constructor) &&
+-      (has_deleted_copy_assign || has_trivial_copy_assign) &&
+-      (has_deleted_copy_constructor || has_trivial_copy_constructor);
+-
+-#ifdef HAVE_STD_IS_TRIVIALLY_COPYABLE
+-  static_assert(value == std::is_trivially_copyable<T>::value,
+-                "inconsistent behavior between llvm:: and std:: implementation of is_trivially_copyable");
+-#endif
+-};
+-template <typename T>
+-class is_trivially_copyable<T*> : public std::true_type {
+-};
+-
+-
+-} // end namespace llvm
+-
+-#ifdef LLVM_DEFINED_HAS_FEATURE
+-#undef __has_feature
+-#endif
+-
+-#endif // LLVM_SUPPORT_TYPE_TRAITS_H
+-- 
+2.47.0
+
