@@ -1,83 +1,96 @@
 {
-  callPackage,
-  fetchFromGitHub,
-  installShellFiles,
   lib,
-  makeWrapper,
+  fetchFromGitHub,
+  nix-update-script,
+
   ocamlPackages,
+  which,
+  makeWrapper,
   removeReferencesTo,
-  stdenv,
-  writeScript,
+  installShellFiles,
   z3,
 }:
 
-let
-
-  version = "2024.09.05";
+ocamlPackages.buildDunePackage rec {
+  pname = "fstar";
+  version = "2025.01.17";
 
   src = fetchFromGitHub {
     owner = "FStarLang";
     repo = "FStar";
     rev = "v${version}";
-    hash = "sha256-yaA6WpP2XIQhjK7kpXBdBFUgKZyvtThd6JmSchUCfbI=";
+    hash = "sha256-D0CofKeDrL6KY1DG5WW0QhRCw73GANo/K0Hu822kDtU=";
   };
 
-  fstar-dune = ocamlPackages.callPackage ./dune.nix { inherit version src; };
-
-  fstar-ulib = callPackage ./ulib.nix {
-    inherit
-      version
-      src
-      fstar-dune
-      z3
-      ;
-  };
-
-in
-
-stdenv.mkDerivation {
-  pname = "fstar";
-  inherit version src;
+  duneVersion = "3";
 
   nativeBuildInputs = [
+    ocamlPackages.menhir
+    which
     installShellFiles
     makeWrapper
     removeReferencesTo
   ];
 
-  inherit (fstar-dune) propagatedBuildInputs;
+  prePatch = ''
+    patchShebangs .scripts/*.sh
+    patchShebangs ulib/ml/app/ints/mk_int_file.sh
 
-  dontBuild = true;
+    # Z3 version is hardcoded. Un-hardcode it.
+    find . -type f -exec sed -i 's/--z3version [0-9]\+\.[0-9]\+\.[0-9]\+/--z3version ${z3.version}/g' {} \;
+  '';
+
+  buildInputs = with ocamlPackages; [
+    batteries
+    menhir
+    menhirLib
+    pprint
+    ppx_deriving
+    ppx_deriving_yojson
+    ppxlib
+    process
+    sedlex
+    stdint
+    yojson
+    zarith
+    memtrace
+    mtime
+  ];
+
+  buildPhase = ''
+    runHook preBuild
+    PATH="${lib.makeBinPath [ z3 ]}''${PATH:+:}$PATH" make -j$NIX_BUILD_CORES
+    runHook postBuild
+  '';
 
   installPhase = ''
-    mkdir $out
+    runHook preInstall
+    PREFIX=$out make install
 
-    CP="cp -r --no-preserve=mode"
-    $CP ${fstar-dune}/* $out
-    $CP ${fstar-ulib}/* $out
-
-    PREFIX=$out make -C src/ocaml-output install-sides
-
-    chmod +x $out/bin/fstar.exe
-    wrapProgram $out/bin/fstar.exe --prefix PATH ":" ${z3}/bin
     remove-references-to -t '${ocamlPackages.ocaml}' $out/bin/fstar.exe
 
-    substituteInPlace $out/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib/fstar/dune-package \
-      --replace ${fstar-dune} $out
+    for binary in $out/bin/*; do
+      wrapProgram "$binary" --prefix PATH : "${lib.makeBinPath [ z3 ]}"
+    done
 
-    installShellCompletion --bash .completion/bash/fstar.exe.bash
-    installShellCompletion --fish .completion/fish/fstar.exe.fish
-    installShellCompletion --zsh --name _fstar.exe .completion/zsh/__fstar.exe
+    src="$(pwd)"
+    cd $out
+    installShellCompletion --bash $src/.completion/bash/fstar.exe.bash
+    installShellCompletion --fish $src/.completion/fish/fstar.exe.fish
+    installShellCompletion --zsh --name _fstar.exe $src/.completion/zsh/__fstar.exe
+    cd $src
+
+    runHook postInstall
   '';
 
-  passthru.updateScript = writeScript "update-fstar" ''
-    #!/usr/bin/env nix-shell
-    #!nix-shell -i bash -p git gnugrep common-updater-scripts
-    set -eu -o pipefail
+  enableParallelBuilding = true;
 
-    version="$(git ls-remote --tags git@github.com:FStarLang/FStar.git | grep -Po 'v\K\d{4}\.\d{2}\.\d{2}' | sort | tail -n1)"
-    update-source-version fstar "$version"
-  '';
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "v(\d{4}\.\d{2}\.\d{2})$"
+    ];
+  };
 
   meta = with lib; {
     description = "ML-like functional programming language aimed at program verification";

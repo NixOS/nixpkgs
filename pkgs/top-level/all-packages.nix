@@ -6271,7 +6271,6 @@ with pkgs;
 
   fstar = callPackage ../development/compilers/fstar {
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
-    z3 = z3_4_8_5;
   };
 
   dotnetPackages = recurseIntoAttrs (callPackage ./dotnet-packages.nix {});
