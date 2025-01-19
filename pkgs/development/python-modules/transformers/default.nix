@@ -68,6 +68,12 @@ buildPythonPackage rec {
     hash = "sha256-jh2bMmvTC0G0kLJl7xXpsvXvBmlbZEDA88AfosoE9sA=";
   };
 
+  patches = [
+    # don't import torch.distributed on darwin:
+    # https://github.com/huggingface/transformers/pull/35777
+    ./avoid-distributed-import-when-not-available.patch
+  ];
+
   build-system = [ setuptools ];
 
   dependencies = [
