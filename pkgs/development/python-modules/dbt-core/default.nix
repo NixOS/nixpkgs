@@ -29,7 +29,7 @@
 
 buildPythonPackage rec {
   pname = "dbt-core";
-  version = "1.8.9";
+  version = "1.9.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     owner = "dbt-labs";
     repo = "dbt-core";
     tag = "v${version}";
-    hash = "sha256-BoCp3aNVR7Bvjda5YLwRAwvZub4sqNJLRoEQ+tePP5g=";
+    hash = "sha256-2WFCFzAS3HWx/cwYi1D6LZ0APFp83lGjpP1l7Yfcups=";
   };
 
   sourceRoot = "${src.name}/core";
@@ -110,7 +110,7 @@ buildPythonPackage rec {
         ])
     '';
     homepage = "https://github.com/dbt-labs/dbt-core";
-    changelog = "https://github.com/dbt-labs/dbt-core/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/dbt-labs/dbt-core/blob/${src.tag}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [
       mausch
