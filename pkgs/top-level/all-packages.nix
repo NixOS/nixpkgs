@@ -9584,11 +9584,6 @@ with pkgs;
     doCheck = false;
   };
 
-  libfreefare = callPackage ../development/libraries/libfreefare {
-    inherit (darwin.apple_sdk.frameworks) IOKit Security;
-    inherit (darwin) libobjc;
-  };
-
   libftdi = callPackage ../development/libraries/libftdi {
     inherit (darwin) libobjc;
     inherit (darwin.apple_sdk.frameworks) IOKit Security;
