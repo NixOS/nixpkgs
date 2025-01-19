@@ -1575,6 +1575,8 @@ self: super: with self; {
 
   beancount = callPackage ../development/python-modules/beancount { };
 
+  beancount3 = callPackage ../development/python-modules/beancount/3.nix { };
+
   beancount-black = callPackage ../development/python-modules/beancount-black { };
 
   beancount-parser = callPackage ../development/python-modules/beancount-parser { };
@@ -1582,6 +1584,8 @@ self: super: with self; {
   beancount-docverif = callPackage ../development/python-modules/beancount-docverif { };
 
   beancount-plugin-utils = callPackage ../development/python-modules/beancount-plugin-utils { };
+
+  beangulp = callPackage ../development/python-modules/beangulp { };
 
   beanhub-cli = callPackage ../development/python-modules/beanhub-cli { };
 
@@ -9467,6 +9471,8 @@ self: super: with self; {
   nsz = callPackage ../development/python-modules/nsz { };
 
   nxt-python = callPackage ../development/python-modules/nxt-python { };
+
+  petl = callPackage ../development/python-modules/petl { };
 
   plugp100 = callPackage ../development/python-modules/plugp100 {};
 
