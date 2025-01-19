@@ -91,6 +91,9 @@ buildPythonPackage rec {
     "highdicom.sc"
   ];
 
+  # updates the wrong fetcher
+  passthru.skipBulkUpdate = true;
+
   meta = with lib; {
     description = "High-level DICOM abstractions for Python";
     homepage = "https://highdicom.readthedocs.io";
