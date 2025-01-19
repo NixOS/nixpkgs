@@ -16,13 +16,13 @@ let
   test_data = fetchFromGitHub {
     owner = "pydicom";
     repo = "pydicom-data";
-    rev = "cbb9b2148bccf0f550e3758c07aca3d0e328e768";
+    tag = "v${version}";
     hash = "sha256-nF/j7pfcEpWHjjsqqTtIkW8hCEbuQ3J4IxpRk0qc1CQ=";
   };
 in
 buildPythonPackage rec {
   pname = "highdicom";
-  version = "0.22.0";
+  version = "0.23.1";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "MGHComputationalPathology";
     repo = "highdicom";
     tag = "v${version}";
-    hash = "sha256-KHSJWEnm8u0xHkeeLF/U7MY4FfiWb6Q0GQQy2w1mnKw=";
+    hash = "sha256-LrsG85/bpqIEP++LgvyaVyw4tMsuUTtHNwWl7apuToM=";
   };
 
   propagatedBuildInputs = [
@@ -71,7 +71,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "High-level DICOM abstractions for Python";
     homepage = "https://highdicom.readthedocs.io";
-    changelog = "https://github.com/ImagingDataCommons/highdicom/releases/tag/v${version}";
+    changelog = "https://github.com/ImagingDataCommons/highdicom/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ bcdarwin ];
   };
