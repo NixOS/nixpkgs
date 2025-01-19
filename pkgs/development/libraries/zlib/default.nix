@@ -43,6 +43,8 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-mpOyt9/ax3zrpaVYpYDnRmfdb+3kWFuR7vtg8Dty3yM=";
     };
 
+  patches = lib.optional stdenv.hostPlatform.isWindows ./mingw-shared.patch;
+
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace configure \
       --replace '/usr/bin/libtool' '${stdenv.cc.targetPrefix}ar' \
@@ -57,8 +59,6 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optional splitStaticOutput "static";
   setOutputFlags = false;
   outputDoc = "dev"; # single tiny man3 page
-
-  dontConfigure = stdenv.hostPlatform.isMinGW;
 
   preConfigure = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     export CHOST=${stdenv.hostPlatform.config}
@@ -104,7 +104,8 @@ stdenv.mkDerivation (finalAttrs: {
     # Non-typical naming confuses libtool which then refuses to use zlib's DLL
     # in some cases, e.g. when compiling libpng.
     + lib.optionalString (stdenv.hostPlatform.isMinGW && shared) ''
-      ln -s zlib1.dll $out/bin/libz.dll
+      mkdir -p $out/bin
+      mv $out/lib/*.dll* $out/bin
     '';
 
   env =
@@ -113,7 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
       # to the bootstrap-tools libgcc (as uses to happen on arm/mips)
       NIX_CFLAGS_COMPILE = "-static-libgcc";
     }
-    // lib.optionalAttrs (stdenv.hostPlatform.linker == "lld") {
+    // lib.optionalAttrs (stdenv.hostPlatform.linker == "lld" && !stdenv.hostPlatform.isWindows) {
       # lld 16 enables --no-undefined-version by defualt
       # This makes configure think it can't build dynamic libraries
       # this may be removed when a version is packaged with https://github.com/madler/zlib/issues/960 fixed
@@ -137,10 +138,6 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags =
     [
       "PREFIX=${stdenv.cc.targetPrefix}"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isMinGW [
-      "-f"
-      "win32/Makefile.gcc"
     ]
     ++ lib.optionals shared [
       # Note that as of writing (zlib 1.2.11), this flag only has an effect
