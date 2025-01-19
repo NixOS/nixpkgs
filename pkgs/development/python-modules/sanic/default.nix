@@ -28,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "sanic";
-  version = "24.6.0";
+  version = "24.12.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     owner = "sanic-org";
     repo = "sanic";
     tag = "v${version}";
-    hash = "sha256-AviYqdr+r5ya4mFJKGUatBsaMMmCQGqE3YtDJwTuaY0=";
+    hash = "sha256-17Nr0iNeZC1sHm0JETIufdMVqrhORts1WxCh8cukCKg=";
   };
 
   build-system = [ setuptools ];
@@ -155,7 +155,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Web server and web framework";
     homepage = "https://github.com/sanic-org/sanic/";
-    changelog = "https://github.com/sanic-org/sanic/releases/tag/v${version}";
+    changelog = "https://github.com/sanic-org/sanic/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = [ ];
     mainProgram = "sanic";
