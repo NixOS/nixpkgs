@@ -32,7 +32,7 @@
 
 buildPythonPackage rec {
   pname = "httpx";
-  version = "0.27.2";
+  version = "0.28.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     owner = "encode";
     repo = pname;
     tag = version;
-    hash = "sha256-N0ztVA/KMui9kKIovmOfNTwwrdvSimmNkSvvC+3gpck=";
+    hash = "sha256-tB8uZm0kPRnmeOvsDdrkrHcMVIYfGanB4l/xHsTKpgE=";
   };
 
   build-system = [
