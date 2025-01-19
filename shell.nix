@@ -32,8 +32,5 @@ curPkgs
     # The default formatter for Nix code
     # See https://github.com/NixOS/nixfmt
     nixfmt-rfc-style
-    # Helper to review Nixpkgs PRs
-    # See CONTRIBUTING.md
-    nixpkgs-review
   ];
 }
