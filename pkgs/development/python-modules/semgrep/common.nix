@@ -1,9 +1,9 @@
 { lib }:
 
 rec {
-  version = "1.74.0";
+  version = "1.96.0";
 
-  srcHash = "sha256-PH0fTT6n6o3Jtuq+cyyRb048Tuv3VGNduCZCEKTXMrE=";
+  srcHash = "sha256-5acpMDSUqQvQuUWho7Uk5RwU0FopaIzvCQ3/SmmE36Q=";
 
   # submodule dependencies
   # these are fetched so we:
@@ -13,8 +13,8 @@ rec {
     "cli/src/semgrep/semgrep_interfaces" = {
       owner = "semgrep";
       repo = "semgrep-interfaces";
-      rev = "9f38254957c50c68ea402eebae0f7aa40dd01cbf";
-      hash = "sha256-/P8b7nSwNZSrm7dUFkehDaGz+r+bofrlFfuIo4U7tJM=";
+      rev = "14462086a61d29cafd5e0b19c3ccd950dad9643f";
+      hash = "sha256-ASBpKPlb9NrttYnmd+b8hifgel/QDZAx2TfIZLRdzSg=";
     };
   };
 
@@ -25,19 +25,19 @@ rec {
   core = {
     x86_64-linux = {
       platform = "any";
-      hash = "sha256-ZA5KlbSLkC0IJGqyK0XhuDKRx53987vf53vSM0zwD9k=";
+      hash = "sha256-tVxw9KjBqqgEDk7LLTbzWPjBMg2mRwtbVe94EQkBYEo=";
     };
     aarch64-linux = {
       platform = "musllinux_1_0_aarch64.manylinux2014_aarch64";
-      hash = "sha256-aHq87uzk9TtnlMDfAS6492ocXRJSHdBinng0hu2xLas=";
+      hash = "sha256-c11y057rAyAs4U18GOHSNSbb8mXkfDsR7Dz+fHRQg7w=";
     };
     x86_64-darwin = {
       platform = "macosx_10_14_x86_64";
-      hash = "sha256-OorDXQ0oYHV8aPu9o1dQAd22u78/EjpUWA2yPYG0S9E=";
+      hash = "sha256-JVKYxHHNX9oY92L62vz788m4IzOv6nBoN6FO6p5nnJ0=";
     };
     aarch64-darwin = {
       platform = "macosx_11_0_arm64";
-      hash = "sha256-g8sFLh2V9NDIvAZOaDhMpFxKqbS/S1eKep4v1vlOOo8=";
+      hash = "sha256-F3xDN18Zh2y9wVlzTe+khA9Tf31lPDDzte/OsqTloGc=";
     };
   };
 
