@@ -34,6 +34,7 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [
       sigmasquadron
       bloxx12
+      ALameLlama
     ];
     mainProgram = "pay-respects";
   };
