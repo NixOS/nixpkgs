@@ -2005,7 +2005,6 @@ broken-packages:
   - ghc-clippy-plugin # failure in job https://hydra.nixos.org/build/233227499 at 2023-09-02
   - ghc-core-smallstep # failure in job https://hydra.nixos.org/build/233209763 at 2023-09-02
   - ghc-corroborate # failure in job https://hydra.nixos.org/build/233223692 at 2023-09-02
-  - ghc-datasize # failure in job https://hydra.nixos.org/build/233196292 at 2023-09-02
   - ghc-definitions-th # failure in job https://hydra.nixos.org/build/233254844 at 2023-09-02
   - ghc-dump-core # failure in job https://hydra.nixos.org/build/233214478 at 2023-09-02
   - ghc-dump-tree # failure in job https://hydra.nixos.org/build/233237228 at 2023-09-02
@@ -4990,6 +4989,7 @@ broken-packages:
   - rattle # failure in job https://hydra.nixos.org/build/233234335 at 2023-09-02
   - rattletrap # failure in job https://hydra.nixos.org/build/233206840 at 2023-09-02
   - raven-haskell-scotty # failure in job https://hydra.nixos.org/build/233244270 at 2023-09-02
+  - rawr # fails to build after unbreaking ghc-datasize at 2025-01-19
   - raylib-imgui # failure in job https://hydra.nixos.org/build/233222471 at 2023-09-02
   - raz # failure in job https://hydra.nixos.org/build/233218482 at 2023-09-02
   - rbst # failure in job https://hydra.nixos.org/build/233238184 at 2023-09-02
