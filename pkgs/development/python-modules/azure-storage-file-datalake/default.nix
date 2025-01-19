@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "azure-storage-file-datalake";
-  version = "12.17.0";
+  version = "33.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "azure-sdk-for-python";
-    tag = "azure-storage-file-datalake_${version}";
-    hash = "sha256-FT51a7yuSMLJSnMFK9N09Rc8p/uaoYCcj9WliSvY6UA=";
+    tag = "azure-mgmt-compute_${version}";
+    hash = "sha256-Lrr2LMvr7xHOq+bJOUMwO6sY6X+a0MLvdD2P8L166iM=";
   };
 
   sourceRoot = "${src.name}/sdk/storage/azure-storage-file-datalake";
