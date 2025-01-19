@@ -1,11 +1,9 @@
 {
   lib,
-  buildPackages,
   buildPythonPackage,
   fetchFromGitHub,
   python,
   pythonOlder,
-  python3,
 
   # build
   meson,
@@ -90,8 +88,7 @@ let
 
     # remove references to buildPackages.python3, which is not allowed for cross builds.
     preFixup = ''
-      nuke-refs -e "${buildPackages.python3}" \
-        $out/${python3.sitePackages}/contourpy/util/{_build_config.py,__pycache__/_build_config.*}
+      nuke-refs $out/${python.sitePackages}/contourpy/util/{_build_config.py,__pycache__/_build_config.*}
     '';
 
     meta = with lib; {
