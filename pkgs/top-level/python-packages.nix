@@ -5793,7 +5793,7 @@ self: super: with self; {
 
   hakuin = callPackage ../development/python-modules/hakuin { };
 
-  halide = toPythonModule (pkgs.halide.override { pythonSupport = true; python3Packages = self; });
+  halide = toPythonModule (pkgs.halide.override { pythonSupport = true; python3Packages = self; }).lib;
 
   halo = callPackage ../development/python-modules/halo { };
 
