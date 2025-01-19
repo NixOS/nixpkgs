@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "aiorpcx";
-  version = "0.23.1";
+  version = "0.24.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit version;
     pname = "aiorpcX";
-    hash = "sha256-WyMALxpNXTCF4xVVoHUZxe+NTEAHHrSZVW/9qBFIYKI=";
+    hash = "sha256-IwLYJ3ltUqqHpFfiBKWcbluzB3ks0xN5qchfZJSkpZo=";
   };
 
   propagatedBuildInputs = [ attrs ];
