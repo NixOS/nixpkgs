@@ -9,6 +9,7 @@
   itstool,
   libtool,
   texinfo,
+  systemdMinimal,
   util-linux,
   autoreconfHook,
   glib,
@@ -79,6 +80,9 @@ stdenv.mkDerivation (finalAttrs: {
       libpulseaudio
       python
     ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      systemdMinimal # libsystemd
+    ]
     ++ lib.optionals withAlsa [
       alsa-lib
     ]
@@ -103,6 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
       # Audio method falls back from left to right.
       "--with-default-audio-method=\"libao,pulse,alsa,oss\""
       "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
+      "--with-systemduserunitdir=${placeholder "out"}/lib/systemd/user"
     ]
     ++ lib.optionals withPulse [
       "--with-pulse"
