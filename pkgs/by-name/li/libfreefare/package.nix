@@ -6,9 +6,7 @@
   pkg-config,
   libnfc,
   openssl,
-  libobjc ? null,
-  IOKit,
-  Security,
+  darwin,
 }:
 
 stdenv.mkDerivation {
@@ -17,7 +15,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/libfreefare/libfreefare-0.4.0.tar.bz2";
-    sha256 = "0r5wfvwgf35lb1v65wavnwz2wlfyfdims6a9xpslf4lsm4a1v8xz";
+    hash = "sha256-v6MdFKmaEkf17UkZXWNz3lEuPrdb8WJ2WLQM9/h2vGQ=";
   };
 
   nativeBuildInputs = [
@@ -30,16 +28,21 @@ stdenv.mkDerivation {
       openssl
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libobjc
-      IOKit
-      Security
+      darwin.libobjc
+      darwin.apple_sdk
     ];
 
-  meta = with lib; {
+  env = {
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=implicit-function-declaration"
+    ];
+  };
+
+  meta = {
     description = "Libfreefare project aims to provide a convenient API for MIFARE card manipulations";
-    license = licenses.lgpl3;
+    license = lib.licenses.lgpl3;
     homepage = "https://github.com/nfc-tools/libfreefare";
-    maintainers = with maintainers; [ bobvanderlinden ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ bobvanderlinden ];
+    platforms = lib.platforms.unix;
   };
 }

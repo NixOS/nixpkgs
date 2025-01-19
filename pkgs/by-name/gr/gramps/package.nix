@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   gtk3,
-  pythonPackages,
+  python3Packages,
   glibcLocales,
   intltool,
   gexiv2,
@@ -21,10 +21,10 @@
 }:
 
 let
-  inherit (pythonPackages) buildPythonApplication pythonOlder;
+  inherit (python3Packages) buildPythonApplication pythonOlder;
 in
 buildPythonApplication rec {
-  version = "5.2.3";
+  version = "5.2.4";
   pname = "gramps";
   pyproject = true;
 
@@ -34,7 +34,7 @@ buildPythonApplication rec {
     owner = "gramps-project";
     repo = "gramps";
     tag = "v${version}";
-    hash = "sha256-DfKKB+rgMGQ8HTqhCp11UTYLj3Fdd0B0v4a922GJ8L8=";
+    hash = "sha256-Jue5V4pzfd1MaZwEhkGam+MhNjaisio7byMBPgGmiFg=";
   };
 
   patches = [
@@ -49,15 +49,15 @@ buildPythonApplication rec {
     intltool
     gettext
     gobject-introspection
-    pythonPackages.setuptools
+    python3Packages.setuptools
   ];
 
   nativeCheckInputs = [
     glibcLocales
-    pythonPackages.unittestCheckHook
-    pythonPackages.jsonschema
-    pythonPackages.mock
-    pythonPackages.lxml
+    python3Packages.unittestCheckHook
+    python3Packages.jsonschema
+    python3Packages.mock
+    python3Packages.lxml
   ];
 
   buildInputs =
@@ -76,7 +76,7 @@ buildPythonApplication rec {
     # Ghostscript support
     ++ lib.optional enableGhostscript ghostscript;
 
-  propagatedBuildInputs = with pythonPackages; [
+  propagatedBuildInputs = with python3Packages; [
     berkeleydb
     pyicu
     pygobject3
