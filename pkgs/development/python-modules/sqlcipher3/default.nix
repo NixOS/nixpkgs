@@ -28,7 +28,7 @@ buildPythonPackage {
     openssl
   ];
 
-  pythonImportChecks = [
+  pythonImportsCheck = [
     "sqlcipher3"
   ];
 
