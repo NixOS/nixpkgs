@@ -1,9 +1,8 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
-  importlib-metadata,
+  flit-core,
   pytestCheckHook,
 
   # large-rebuild downstream dependencies and applications
@@ -16,19 +15,17 @@
 
 buildPythonPackage rec {
   pname = "click";
-  version = "8.1.7";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "8.2.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pallets";
     repo = "click";
     tag = version;
-    hash = "sha256-8YqIKRyw5MegnRwAO7YTCZateEFQFTH2PHpE8gTPTow=";
+    hash = "sha256-YjceWqNrMGu4ABVCZI+GLmXtptQfOiykbU4VK3x9j2A=";
   };
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  build-system = [ flit-core ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -48,6 +45,7 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
+    changelog = "https://github.com/pallets/click/blob/${src.tag}/CHANGES.rst";
     homepage = "https://click.palletsprojects.com/";
     description = "Create beautiful command line interfaces in Python";
     longDescription = ''
