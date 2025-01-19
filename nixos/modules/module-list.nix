@@ -268,6 +268,7 @@
   ./programs/oblogout.nix
   ./programs/oddjobd.nix
   ./programs/openvpn3.nix
+  ./programs/orca-slicer.nix
   ./programs/obs-studio.nix
   ./programs/partition-manager.nix
   ./programs/pay-respects.nix
