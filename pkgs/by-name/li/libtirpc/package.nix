@@ -40,6 +40,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  # Fix undefined reference errors with version script under LLVM.
+  env.NIX_LDFLAGS = lib.optionalString (
+    stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17"
+  ) "--undefined-version";
+
   meta = with lib; {
     homepage = "https://sourceforge.net/projects/libtirpc/";
     description = "Transport-independent Sun RPC implementation (TI-RPC)";
