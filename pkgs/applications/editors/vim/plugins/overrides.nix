@@ -2776,6 +2776,20 @@ in
 
   rocks-nvim = neovimUtils.buildNeovimPlugin {
     luaAttr = luaPackages.rocks-nvim;
+
+    # luaInterpreter = config.programs.neovim.package.lua;
+
+    #       "${luaInterpreter.pkgs.luarocks_bootstrap}/bin/luarocks"
+    # should I add a luarocksConfig ?
+    # ["rocks_trees"] = {
+    #   {
+    #     ["name"] = "rocks.nvim",
+    #     ["root"] = "/home/teto/.local/share/nvim/rocks"
+    #   },
+
+    passthru.initLua = ''
+      vim.g.luarocks_binary = "${neovim-unwrapped.lua.pkgs.luarocks_bootstrap}/bin/luarocks"
+    '';
   };
 
   rocks-config-nvim = neovimUtils.buildNeovimPlugin {
