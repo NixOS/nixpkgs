@@ -1,16 +1,18 @@
 {
   lib,
+  aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "aiooui";
-  version = "0.1.7";
+  version = "0.1.9";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -19,22 +21,24 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = "aiooui";
     tag = "v${version}";
-    hash = "sha256-vnO3Lh+d/8mES2i4jKTH4RviURUFqb3Vj6u5sxUGf1o=";
+    hash = "sha256-tY8/hb3BpxzKM/IB7anfmqGcXK6FmiuoJVxqpFW1Maw=";
   };
 
   postPatch = ''
     # Remove requirements and build part for the OUI data
     substituteInPlace pyproject.toml \
-      --replace-fail "-v -Wdefault --cov=aiooui --cov-report=term-missing:skip-covered" "" \
       --replace-fail 'script = "build_oui.py"' "" \
       --replace-fail ", 'requests'" "" \
       --replace-fail '"setuptools>=65.4.1", ' ""
   '';
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
+
+  dependencies = [ aiohttp ];
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
   ];
 
