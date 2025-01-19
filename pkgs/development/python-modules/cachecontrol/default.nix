@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "cachecontrol";
-  version = "0.14.1";
+  version = "0.14.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "ionrock";
     repo = "cachecontrol";
     tag = "v${version}";
-    hash = "sha256-qeTq2NfMOmNtjBItLmjxlaxqqy/Uvb6JfBpCBRvRLh4=";
+    hash = "sha256-m3ywSskVtZrOA+ksLz5XZflAJsbSAjdJsRpeq341q70=";
   };
 
   build-system = [ flit-core ];
@@ -54,7 +54,7 @@ buildPythonPackage rec {
     description = "Httplib2 caching for requests";
     mainProgram = "doesitcache";
     homepage = "https://github.com/ionrock/cachecontrol";
-    changelog = "https://github.com/psf/cachecontrol/releases/tag/v${version}";
+    changelog = "https://github.com/psf/cachecontrol/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ dotlambda ];
   };
