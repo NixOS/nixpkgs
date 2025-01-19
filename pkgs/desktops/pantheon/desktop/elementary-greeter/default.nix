@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , nix-update-script
 , linkFarm
-, substituteAll
+, replaceVars
 , elementary-greeter
 , pkg-config
 , meson
@@ -43,8 +43,7 @@ stdenv.mkDerivation rec {
   patches = [
     ./sysconfdir-install.patch
     # Needed until https://github.com/elementary/greeter/issues/360 is fixed
-    (substituteAll {
-      src = ./hardcode-fallback-background.patch;
+    (replaceVars ./hardcode-fallback-background.patch {
       default_wallpaper = "${nixos-artwork.wallpapers.simple-dark-gray.gnomeFilePath}";
     })
   ];

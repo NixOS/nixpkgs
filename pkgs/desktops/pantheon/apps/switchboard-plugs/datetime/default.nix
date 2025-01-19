@@ -5,7 +5,7 @@
   nix-update-script,
   meson,
   ninja,
-  substituteAll,
+  replaceVars,
   pkg-config,
   vala,
   libadwaita,
@@ -31,8 +31,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       tzdata = tzdata;
     })
   ];
