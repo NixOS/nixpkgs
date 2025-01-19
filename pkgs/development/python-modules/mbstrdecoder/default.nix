@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "mbstrdecoder";
-  version = "1.1.3";
+  version = "1.1.4";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "thombashi";
     repo = pname;
     tag = "v${version}";
-    hash = "sha256-GcAxXcCYC2XAE8xu/jdDxjPxkLJzbmvWZ3OgmcvQcmk=";
+    hash = "sha256-rJ3Q7/xYPO0jBuzhYm2aIhPar2tbJIxHnHR0y0HWtik=";
   };
 
   nativeBuildInputs = [ setuptools ];
