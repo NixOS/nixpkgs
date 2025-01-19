@@ -2,6 +2,7 @@
   lib,
   stdenv,
   python3,
+  fetchpatch,
   fetchPypi,
   openssl,
   # Many Salt modules require various Python modules to be installed,
@@ -21,6 +22,11 @@ python3.pkgs.buildPythonApplication rec {
 
   patches = [
     ./fix-libcrypto-loading.patch
+    (fetchpatch {
+      name = "urllib.patch";
+      url = "https://src.fedoraproject.org/rpms/salt/raw/1c6e7b7a88fb81902f5fcee32e04fa80713b81f8/f/urllib.patch";
+      hash = "sha256-yldIurafduOAYpf2X0PcTQyyNjz5KKl/N7J2OTEF/c0=";
+    })
   ];
 
   postPatch = ''
