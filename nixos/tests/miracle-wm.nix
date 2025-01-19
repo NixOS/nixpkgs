@@ -22,6 +22,8 @@
         user = "alice";
       };
 
+      programs.ydotool.enable = true;
+
       services.xserver.enable = true;
       services.displayManager.defaultSession = lib.mkForce "miracle-wm";
 
@@ -114,7 +116,17 @@
           machine.wait_for_file("/tmp/test-wayland-exit-ok")
           machine.copy_from_vm("/tmp/test-wayland.out")
           machine.screenshot("foot_wayland_info")
+
+          # please actually register that we want to close the window
+          machine.succeed("ydotool mousemove -- 10 10")
+          machine.sleep(3)
+
           machine.send_chars("exit\n")
+
+          # please actually register that we want to close the window
+          machine.succeed("ydotool mousemove -- 10 10")
+          machine.sleep(3)
+
           machine.wait_until_fails("pgrep foot")
 
       # Test XWayland
@@ -125,7 +137,17 @@
           machine.wait_for_file("/tmp/test-x11-exit-ok")
           machine.copy_from_vm("/tmp/test-x11.out")
           machine.screenshot("alacritty_glinfo")
+
+          # please actually register that we want to close the window
+          machine.succeed("ydotool mousemove -- 10 10")
+          machine.sleep(3)
+
           machine.send_chars("exit\n")
+
+          # please actually register that we want to close the window
+          machine.succeed("ydotool mousemove -- 10 10")
+          machine.sleep(3)
+
           machine.wait_until_fails("pgrep alacritty")
     '';
 }
