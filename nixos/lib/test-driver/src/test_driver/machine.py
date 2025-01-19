@@ -105,14 +105,16 @@ def _perform_ocr_on_screenshot(
 
     tess_args = "-c debug_file=/dev/null --psm 11"
 
-    cmd = f"convert {magick_args} '{screenshot_path}' 'tiff:{screenshot_path}.tiff'"
+    cmd = f"magick convert {magick_args} '{screenshot_path}' '{screenshot_path}.png'"
     ret = subprocess.run(cmd, shell=True, capture_output=True)
     if ret.returncode != 0:
-        raise Exception(f"TIFF conversion failed with exit code {ret.returncode}")
+        raise Exception(
+            f"Image processing failed with exit code {ret.returncode}, stdout: {ret.stdout.decode()}, stderr: {ret.stderr.decode()}"
+        )
 
     model_results = []
     for model_id in model_ids:
-        cmd = f"tesseract '{screenshot_path}.tiff' - {tess_args} --oem '{model_id}'"
+        cmd = f"tesseract '{screenshot_path}.png' - {tess_args} --oem '{model_id}'"
         ret = subprocess.run(cmd, shell=True, capture_output=True)
         if ret.returncode != 0:
             raise Exception(f"OCR failed with exit code {ret.returncode}")
