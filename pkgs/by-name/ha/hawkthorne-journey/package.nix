@@ -2,12 +2,12 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  buildGoModule,
   love,
   lua,
   zip,
   makeWrapper,
   makeDesktopItem,
+  copyDesktopItems,
   tmx2lua,
 }:
 
@@ -25,6 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     zip
     makeWrapper
+    copyDesktopItems
   ];
 
   buildInputs = [
@@ -38,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Convert TMX maps to Lua
     for tmxfile in src/maps/*.tmx; do
-      ${tmx2lua}/bin/tmx2lua "$tmxfile"
+      tmx2lua "$tmxfile"
     done
 
     # Create the .love file
@@ -67,23 +68,22 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper ${love}/bin/love $out/bin/hawkthorne \
       --add-flags "$out/share/games/hawkthorne/hawkthorne.love"
 
-    mkdir -p $out/share/applications
-    cp ${finalAttrs.desktopItem}/share/applications/* $out/share/applications/
-
     runHook postInstall
   '';
 
-  desktopItem = makeDesktopItem {
-    name = "hawkthorne";
-    exec = "hawkthorne";
-    icon = "hawkthorne";
-    desktopName = "Journey to the Center of Hawkthorne";
-    genericName = "Platform Game";
-    categories = [
-      "Game"
-      "ArcadeGame"
-    ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "hawkthorne";
+      exec = "hawkthorne";
+      icon = "hawkthorne";
+      desktopName = "Journey to the Center of Hawkthorne";
+      genericName = "Platform Game";
+      categories = [
+        "Game"
+        "ArcadeGame"
+      ];
+    })
+  ];
 
   meta = {
     description = "Journey to the Center of Hawkthorne - Community Fan Game";
