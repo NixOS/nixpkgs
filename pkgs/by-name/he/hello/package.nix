@@ -46,6 +46,11 @@ mkPackage (
 
           run = callPackage ./test.nix { hello = this.public; };
         };
+        # Other packages and tests expect to reuse our src
+        /**
+          Fetched sources of GNU hello
+        */
+        inherit (this.setup) src;
       };
 
       meta = {
