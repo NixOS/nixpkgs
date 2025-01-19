@@ -174,6 +174,7 @@ let
       })
       // {
         home = jdk;
+        bundle = "${jdk}/zulu-${lib.versions.major version}.jdk";
       };
 
     meta = {
