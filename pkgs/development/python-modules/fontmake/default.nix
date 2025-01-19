@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "fontmake";
-  version = "3.9.0";
+  version = "3.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "fontmake";
-    rev = "v${version}";
-    hash = "sha256-q6ul9MYbq85RpZE0ozHOCBNAR4r9InIjumadT1GyJ6k=";
+    tag = "v${version}";
+    hash = "sha256-ZlK8QyZ5cIEphFiZXMV/Z5pL9H62X2UwLBtpwLGpUMQ=";
   };
 
   build-system = [
@@ -57,7 +57,7 @@ buildPythonPackage rec {
   meta = {
     description = "Compiles fonts from various sources (.glyphs, .ufo, designspace) into binaries formats (.otf, .ttf)";
     homepage = "https://github.com/googlefonts/fontmake";
-    changelog = "https://github.com/googlefonts/fontmake/releases/tag/v${version}";
+    changelog = "https://github.com/googlefonts/fontmake/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.BarinovMaxim ];
   };
