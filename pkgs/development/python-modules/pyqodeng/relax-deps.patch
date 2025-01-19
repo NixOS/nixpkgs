@@ -1,0 +1,13 @@
+diff --git a/setup.py b/setup.py
+index 3b5b080c..1cd29c1f 100644
+--- a/setup.py
++++ b/setup.py
+@@ -77,7 +77,7 @@ setup(
+     author_email='colin.duquesnoy@gmail.com',
+     description=DESCRIPTION,
+     long_description=readme(),
+-    install_requires=[pygments_req, 'qtpy>=2.2.1', 'future', "PySide6-Essentials"],
++    install_requires=[pygments_req, 'qtpy>=2.2.1', 'future', "PySide6"],
+     tests_require=['pytest-xdist', 'pytest-cov', 'pytest-pep8', 'pytest'],
+     entry_points={
+         'console_scripts': [

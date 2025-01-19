@@ -1,0 +1,13 @@
+diff --git a/setup.cfg b/setup.cfg
+index 9a1f7f9..fceb3ed 100644
+--- a/setup.cfg
++++ b/setup.cfg
+@@ -27,7 +27,7 @@ install_requires =
+     tomlkit
+     pyobjc-framework-Cocoa;platform_system == "Darwin"
+     thefuzz[speedup]
+-    binsync==4.0.0
++    binsync>=4.0.0
+     rpyc
+ 
+     # requirements for vendorized qtconsole package

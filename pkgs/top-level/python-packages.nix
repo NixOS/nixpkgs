@@ -602,7 +602,9 @@ self: super: with self; {
 
   anel-pwrctrl-homeassistant = callPackage ../development/python-modules/anel-pwrctrl-homeassistant { };
 
-  angr = callPackage ../development/python-modules/angr { };
+  angr = callPackage ../development/python-modules/angr {
+    unicorn-emu = pkgs.unicorn;
+  };
 
   angrcli = callPackage ../development/python-modules/angrcli {
     inherit (pkgs) coreutils;
@@ -1673,6 +1675,8 @@ self: super: with self; {
 
   binho-host-adapter = callPackage ../development/python-modules/binho-host-adapter { };
 
+  binsync = callPackage ../development/python-modules/binsync { };
+
   biom-format = callPackage ../development/python-modules/biom-format { };
 
   biopandas = callPackage ../development/python-modules/biopandas { };
@@ -2471,6 +2475,8 @@ self: super: with self; {
   cmaes = callPackage ../development/python-modules/cmaes { };
 
   cmake = callPackage ../development/python-modules/cmake { inherit (pkgs) cmake; };
+
+  cmake-build-extension = callPackage ../development/python-modules/cmake-build-extension { };
 
   cmarkgfm = callPackage ../development/python-modules/cmarkgfm { };
 
@@ -5240,6 +5246,8 @@ self: super: with self; {
 
   ghdiff = callPackage ../development/python-modules/ghdiff { };
 
+  ghidra-bridge = callPackage ../development/python-modules/ghidra-bridge { };
+
   ghp-import = callPackage ../development/python-modules/ghp-import { };
 
   ghrepo-stats = callPackage ../development/python-modules/ghrepo-stats { };
@@ -6634,6 +6642,8 @@ self: super: with self; {
 
   jh2 = callPackage ../development/python-modules/jh2 { };
 
+  jfx-bridge = callPackage ../development/python-modules/jfx-bridge { };
+
   jianpu-ly = callPackage ../development/python-modules/jianpu-ly { };
 
   jieba = callPackage ../development/python-modules/jieba { };
@@ -7255,6 +7265,8 @@ self: super: with self; {
   });
 
   libagent = callPackage ../development/python-modules/libagent { };
+
+  libbs = callPackage ../development/python-modules/libbs { };
 
   pa-ringbuffer = callPackage ../development/python-modules/pa-ringbuffer { };
 
@@ -10616,6 +10628,8 @@ self: super: with self; {
 
   pyhepmc = callPackage ../development/python-modules/pyhepmc { };
 
+  pyhidra = callPackage ../development/python-modules/pyhidra { };
+
   pyhiveapi = callPackage ../development/python-modules/pyhiveapi { };
 
   pyhumps = callPackage ../development/python-modules/pyhumps { };
@@ -12415,6 +12429,8 @@ self: super: with self; {
 
   pyqldb = callPackage ../development/python-modules/pyqldb { };
 
+  pyqodeng = callPackage ../development/python-modules/pyqodeng { };
+
   pyqrcode = callPackage ../development/python-modules/pyqrcode { };
 
   pyqt-builder = callPackage ../development/python-modules/pyqt-builder { };
@@ -12642,6 +12658,8 @@ self: super: with self; {
   pyside6 = toPythonModule (callPackage ../development/python-modules/pyside6 {
     inherit (pkgs) cmake ninja;
   });
+
+  pyside6-qtads = callPackage ../development/python-modules/pyside6-qtads { };
 
   pysigma = callPackage ../development/python-modules/pysigma { };
 

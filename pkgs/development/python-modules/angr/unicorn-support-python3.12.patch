@@ -1,0 +1,12 @@
+diff --git a/unicorn/unicorn.py b/unicorn/unicorn.py
+index 2e6a938..c51ce05 100644
+--- a/unicorn/unicorn.py
++++ b/unicorn/unicorn.py
+@@ -2,6 +2,7 @@
+ from __future__ import annotations
+ import ctypes
+ import ctypes.util
++__import__("setuptools")
+ import distutils.sysconfig
+ from functools import wraps
+ from typing import Any, Callable, List, Tuple, Union

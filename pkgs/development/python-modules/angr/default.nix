@@ -1,40 +1,45 @@
 {
   lib,
   stdenv,
-  ailment,
-  archinfo,
-  buildPythonPackage,
-  cachetools,
-  capstone,
-  cffi,
-  claripy,
-  cle,
-  cppheaderparser,
-  dpkt,
   fetchFromGitHub,
-  gitpython,
-  itanium-demangler,
-  mulpyplexer,
-  nampa,
-  networkx,
-  progressbar2,
-  protobuf,
-  psutil,
-  pycparser,
-  pyformlang,
+  fetchPypi,
+  python,
   pythonOlder,
-  pyvex,
-  rich,
-  rpyc,
-  setuptools,
-  sortedcontainers,
-  sqlalchemy,
-  sympy,
   unicorn,
-  unique-log-filter,
+  unicorn-emu,
+  cmake,
+  pkg-config,
+  cctools,
+  darwin,
+  pkgs,
 }:
 
-buildPythonPackage rec {
+let
+  unicorn-emu-for-angr = unicorn-emu.overrideAttrs (
+    self: super: rec {
+      version = "2.0.1.post1";
+
+      src = fetchFromGitHub {
+        owner = "unicorn-engine";
+        repo = self.pname;
+        rev = version;
+        hash = "sha256-Jz5C35rwnDz0CXcfcvWjkwScGNQO1uijF7JrtZhM7mI=";
+      };
+    }
+  );
+
+  packageOverrides = self: super: {
+    unicorn = (super.unicorn.override { unicorn = unicorn-emu-for-angr; }).overrideAttrs (
+      self: super: { patches = [ ./unicorn-support-python3.12.patch ]; }
+    );
+  };
+
+  overriddenPython = python.override {
+    self = overriddenPython;
+    inherit packageOverrides;
+  };
+in
+overriddenPython.pkgs.buildPythonPackage rec {
   pname = "angr";
   version = "9.2.137";
   pyproject = true;
@@ -48,20 +53,12 @@ buildPythonPackage rec {
     hash = "sha256-RIsgE/WE7QEmOIyujLObnpTpUR0GgUbavPmgs9QwakE=";
   };
 
-  postPatch = ''
-    # unicorn is also part of build-system
-    substituteInPlace pyproject.toml \
-      --replace-fail "unicorn==2.0.1.post1" "unicorn"
-  '';
-
-  pythonRelaxDeps = [
-    "capstone"
-    "unicorn"
+  build-system = with overriddenPython.pkgs; [
+    setuptools
+    overriddenPython.pkgs.unicorn # must explicitly reference
   ];
 
-  build-system = [ setuptools ];
-
-  dependencies = [
+  dependencies = with overriddenPython.pkgs; [
     ailment
     archinfo
     cachetools
@@ -87,12 +84,13 @@ buildPythonPackage rec {
     sortedcontainers
     sqlalchemy
     sympy
-    unicorn
+    overriddenPython.pkgs.unicorn # must explicitly reference
     unique-log-filter
+    pyvex
   ];
 
   optional-dependencies = {
-    AngrDB = [ sqlalchemy ];
+    AngrDB = with overriddenPython.pkgs; [ sqlalchemy ];
   };
 
   setupPyBuildFlags = lib.optionals stdenv.hostPlatform.isLinux [
@@ -116,8 +114,9 @@ buildPythonPackage rec {
     description = "Powerful and user-friendly binary analysis platform";
     homepage = "https://angr.io/";
     license = with licenses; [ bsd2 ];
-    maintainers = with maintainers; [ fab ];
-    # angr is pining unicorn
-    broken = versionAtLeast unicorn.version "2.0.1.post1";
+    maintainers = with maintainers; [
+      fab
+      scoder12
+    ];
   };
 }
