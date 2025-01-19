@@ -25,7 +25,7 @@ stdenvNoCC.mkDerivation (self: {
   sourceRoot = "${self.src.name}/themes";
   installPhase = ''
     runHook preInstall
-    install -Dt $out *.toml
+    install -Dt $out/share/alacritty-theme *.toml
     runHook postInstall
   '';
 
