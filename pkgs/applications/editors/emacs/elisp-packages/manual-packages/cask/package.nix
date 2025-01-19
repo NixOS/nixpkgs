@@ -73,6 +73,6 @@ melpaBuild (finalAttrs: {
     '';
     license = lib.licenses.gpl3Plus;
     mainProgram = "cask";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
   };
 })
