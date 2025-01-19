@@ -13720,10 +13720,6 @@ with pkgs;
 
   gphoto2fs = callPackage ../applications/misc/gphoto2/gphotofs.nix { };
 
-  gramps = callPackage ../applications/misc/gramps {
-        pythonPackages = python3Packages;
-  };
-
   graphicsmagick_q16 = graphicsmagick.override { quantumdepth = 16; };
   graphicsmagick-imagemagick-compat = graphicsmagick.imagemagick-compat;
 
