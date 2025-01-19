@@ -1134,13 +1134,13 @@ rec {
                then t2.merge loc defs
           else mergeOneOption loc defs;
       typeMerge = f':
-        let mt1 = t1.typeMerge (elemAt f'.wrapped 0).functor;
-            mt2 = t2.typeMerge (elemAt f'.wrapped 1).functor;
+        let mt1 = t1.typeMerge (elemAt f'.payload.elemType 0).functor;
+            mt2 = t2.typeMerge (elemAt f'.payload.elemType 1).functor;
         in
            if (name == f'.name) && (mt1 != null) && (mt2 != null)
            then functor.type mt1 mt2
            else null;
-      functor = (defaultFunctor name) // { wrapped = [ t1 t2 ]; };
+      functor = elemTypeFunctor name { elemType = [ t1 t2 ]; };
       nestedTypes.left = t1;
       nestedTypes.right = t2;
     };
