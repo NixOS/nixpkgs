@@ -30,11 +30,11 @@ buildPythonPackage rec {
     export DYLD_LIBRARY_PATH="${libgit2}/lib"
   '';
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   buildInputs = [ libgit2 ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cached-property
     pycparser
   ] ++ lib.optionals (!isPyPy) [ cffi ];
