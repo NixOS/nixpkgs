@@ -8,6 +8,7 @@ let
     listOf
     unique
     nullOr
+    functionTo
     ;
 in
 {
@@ -42,6 +43,13 @@ in
         options.mergedNullOr = mkOption {
           type = nullOr (listOf types.str);
         };
+        # nullOr
+        options.functionTo = mkOption {
+          type = functionTo (listOf types.str);
+        };
+        options.mergedFunctionTo = mkOption {
+          type = functionTo (listOf types.str);
+        };
       }
     )
     # Module B
@@ -59,6 +67,9 @@ in
         };
         options.mergedNullOr = mkOption {
           type = nullOr (listOf types.str);
+        };
+        options.mergedFunctionTo = mkOption {
+          type = functionTo (listOf types.str);
         };
       }
     )

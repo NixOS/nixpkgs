@@ -427,6 +427,12 @@ NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribu
 
 NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.nullOr.type.nestedTypes.elemType.functor.wrapped ./deprecated-wrapped.nix
 NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.mergedNullOr.type.nestedTypes.elemType.functor.wrapped ./deprecated-wrapped.nix
+# functionTo
+NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.functionTo.type.functor.wrapped ./deprecated-wrapped.nix
+NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.mergedFunctionTo.type.functor.wrapped ./deprecated-wrapped.nix
+
+NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.functionTo.type.nestedTypes.elemType.functor.wrapped ./deprecated-wrapped.nix
+NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.mergedFunctionTo.type.nestedTypes.elemType.functor.wrapped ./deprecated-wrapped.nix
 
 # Even with multiple assignments, a type error should be thrown if any of them aren't valid
 checkConfigError 'A definition for option .* is not of type .*' \
