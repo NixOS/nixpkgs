@@ -113,6 +113,13 @@ stdenv.mkDerivation (finalAttrs: {
     # double-conversion is a dependency of 2geom
     substituteInPlace CMakeScripts/DefineDependsandFlags.cmake \
       --replace-fail 'find_package(DoubleConversion REQUIRED)' ""
+    # use native Python when cross-compiling
+    shopt -s globstar
+    for f in **/CMakeLists.txt; do
+      substituteInPlace $f \
+        --replace-quiet "COMMAND python3" "COMMAND ${lib.getExe python3Env.pythonOnBuildForHost}"
+    done
+    shopt -u globstar
   '';
 
   nativeBuildInputs = [
