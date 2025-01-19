@@ -12,9 +12,9 @@
   pkgs,
   ...
 }:
-
-with lib;
-
+let
+  inherit (lib) mkDefault mkOverride;
+in
 {
   meta = {
     maintainers = [
