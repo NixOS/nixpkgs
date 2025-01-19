@@ -8,13 +8,13 @@
 
 melpaBuild {
   pname = "edraw";
-  version = "1.2.0-unstable-2025-01-06";
+  version = "1.2.0-unstable-2025-01-16";
 
   src = fetchFromGitHub {
     owner = "misohena";
     repo = "el-easydraw";
-    rev = "9a5b5e2b071be99350bfc8db6fbc2c9c667f3725";
-    hash = "sha256-lQYSUQFAv6rqvZySsFbe8B7ZqEaa2L+L3HXB231D4OQ=";
+    rev = "449c1226f7108e1cf8b4b447a65fa053b6bd782f";
+    hash = "sha256-u6lc2s4fqNWNCuICu832vAbMmV5X6FB8fIkJwgdBKfg=";
   };
 
   propagatedUserEnvPkgs = [ gzip ];
