@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "tag-expressions";
-  version = "2.0.0";
+  version = "2.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-/6Ym72jlgVdpel4V2W2aCKNtISDT9y5qz7+gTllUuPg=";
+    hash = "sha256-EbSwfAH+sL3JGW+COfDA2f7cLGyKmQMsbyyDGy13Lkg=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
