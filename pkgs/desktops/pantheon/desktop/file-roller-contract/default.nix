@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   unstableGitUpdater,
-  substituteAll,
+  replaceVars,
   file-roller,
 }:
 
@@ -19,8 +19,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./exec-path.patch;
+    (replaceVars ./exec-path.patch {
       file_roller = file-roller;
     })
   ];
