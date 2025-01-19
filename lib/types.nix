@@ -844,7 +844,9 @@ rec {
       getSubOptions = type.getSubOptions;
       getSubModules = type.getSubModules;
       substSubModules = m: uniq (type.substSubModules m);
-      functor = (defaultFunctor name) // { wrapped = type; };
+      functor = elemTypeFunctor name { elemType = type; } // {
+        type = payload: types.unique { inherit message; } payload.elemType;
+      };
       nestedTypes.elemType = type;
     };
 

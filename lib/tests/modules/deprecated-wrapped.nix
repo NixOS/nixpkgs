@@ -6,6 +6,7 @@ let
     # attrsOf uses attrsWith internally
     attrsOf
     listOf
+    unique
     ;
 in
 {
@@ -26,6 +27,13 @@ in
         options.mergedListOf = mkOption {
           type = listOf (listOf types.str);
         };
+        # unique
+        options.unique = mkOption {
+          type = unique { message = ""; } (listOf types.str);
+        };
+        options.mergedUnique = mkOption {
+          type = unique { message = ""; } (listOf types.str);
+        };
       }
     )
     # Module B
@@ -37,6 +45,9 @@ in
         };
         options.mergedListOf = mkOption {
           type = listOf (listOf types.str);
+        };
+        options.mergedUnique = mkOption {
+          type = unique { message = ""; } (listOf types.str);
         };
       }
     )
