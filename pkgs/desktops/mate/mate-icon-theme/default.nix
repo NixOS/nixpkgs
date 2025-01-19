@@ -20,9 +20,16 @@ stdenv.mkDerivation rec {
     sha256 = "lNYHkGDKXfdFQpId5O6ji30C0HVhyRk1bZXeh2+abTo=";
   };
 
+  postPatch = ''
+    # configure script does not recognize utils when cross-compiling
+    substituteInPlace ./configure \
+      --replace-fail 'have_utils=no' 'have_utils=yes'
+  '';
+
   nativeBuildInputs = [
     pkg-config
     gettext
+    gtk3 # gtk-update-icon-cache
     iconnamingutils
   ];
 
@@ -38,7 +45,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     for theme in "$out"/share/icons/*; do
-      "${gtk3.out}/bin/gtk-update-icon-cache" "$theme"
+      gtk-update-icon-cache "$theme"
     done
   '';
 
