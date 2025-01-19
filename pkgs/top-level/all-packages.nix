@@ -1009,8 +1009,6 @@ with pkgs;
 
   kanata-with-cmd = kanata.override { withCmd = true; };
 
-  kdocker = libsForQt5.callPackage ../tools/X11/kdocker { };
-
   ksnip = libsForQt5.callPackage ../tools/misc/ksnip { };
 
   linux-router-without-wifi = linux-router.override { useWifiDependencies = false; };
