@@ -24919,7 +24919,7 @@
   };
   x123 = {
     name = "x123";
-    email = "nix@boxchop.city";
+    email = "nix@nixlink.net";
     github = "x123";
     githubId = 5481629;
   };
