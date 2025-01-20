@@ -581,6 +581,14 @@ rec {
       merge = mergeEqualOption;
     };
 
+    pathNotInStore = mkOptionType {
+      name = "pathNotInStore";
+      description = "path not in the Nix store";
+      descriptionClass = "noun";
+      check = x: isString x && builtins.substring 0 1 (toString x) == "/" && builtins.match "${builtins.storeDir}/.+" (toString x) == null;
+      merge = mergeEqualOption;
+    };
+
     listOf = elemType: mkOptionType rec {
       name = "listOf";
       description = "list of ${optionDescriptionPhrase (class: class == "noun" || class == "composite") elemType}";
