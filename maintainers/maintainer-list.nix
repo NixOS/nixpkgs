@@ -16116,6 +16116,12 @@
     githubId = 1859691;
     name = "Amedeo Molnár";
   };
+  nekitdev = {
+    email = "nekit@nekit.dev";
+    github = "nekitdev";
+    githubId = 43587167;
+    name = "Nikita Tikhonov";
+  };
   nelsonjeppesen = {
     email = "nix@jeppesen.io";
     github = "NelsonJeppesen";
