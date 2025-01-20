@@ -8134,6 +8134,8 @@ self: super: with self; {
 
   messagebird = callPackage ../development/python-modules/messagebird { };
 
+  metaflow = callPackage ../development/python-modules/metaflow { };
+
   metakernel = callPackage ../development/python-modules/metakernel { };
 
   metar = callPackage ../development/python-modules/metar { };

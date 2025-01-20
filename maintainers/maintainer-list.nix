@@ -6431,6 +6431,12 @@
     githubId = 7875;
     name = "Rommel Martinez";
   };
+  Echoz = {
+    name = "Echoz";
+    email = "nixpkgs@echoz.io";
+    github = "echozio";
+    githubId = 7262891;
+  };
   ecklf = {
     email = "ecklf@icloud.com";
     github = "ecklf";
