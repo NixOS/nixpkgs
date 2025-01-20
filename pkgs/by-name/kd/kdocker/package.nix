@@ -2,48 +2,35 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  qmake,
-  wrapQtAppsHook,
+  cmake,
   libX11,
-  libXmu,
-  libXpm,
-  qtbase,
-  qtx11extras,
+  libxcb,
+  perl, # For pod2man
+  qt6,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kdocker";
-  version = "5.4";
+  version = "6.2";
 
   src = fetchFromGitHub {
     owner = "user-none";
     repo = "KDocker";
     rev = "${finalAttrs.version}";
-    hash = "sha256-CTz2M9nv5Rf1amnSpLiIUZLH9Q3te6ZyFNUzSGHdYJc=";
+    hash = "sha256-ckTi/w2Yynsl3aJzV9Uxfc7WxJtcCt44glJyqEEZrig=";
   };
 
   nativeBuildInputs = [
-    qmake
-    wrapQtAppsHook
+    cmake
+    perl
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
     libX11
-    libXmu
-    libXpm
-    qtbase
-    qtx11extras
+    libxcb
+    qt6.qtbase
   ];
-
-  prePatch = ''
-    for h in Xatom Xlib Xmu; do
-      sed -i "s|#include <$h|#include <X11/$h|" src/xlibutil.h src/{kdocker,scanner,trayitem,trayitemmanager}.cpp
-    done
-    for t in target icons desktop appdata; do
-      sed -i "s|$t.path = /usr|$t.path = $out|" kdocker.pro
-    done
-    sed -i "s|/etc/bash_completion.d|$out/share/bash-completion/completions|" kdocker.pro
-  '';
 
   meta = with lib; {
     description = "Dock any application into the system tray";
