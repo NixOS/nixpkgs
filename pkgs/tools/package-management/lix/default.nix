@@ -4,6 +4,8 @@
   boehmgc,
   callPackage,
   fetchFromGitHub,
+  clangStdenv,
+  stdenv,
   fetchpatch,
   Security,
 
@@ -35,7 +37,8 @@ let
       };
 
   # Since Lix 2.91 does not use boost coroutines, it does not need boehmgc patches either.
-  needsBoehmgcPatches = version: lib.versionOlder version "2.91";
+  needsBoehmgcPatches = version: lib.versionOlder   version "2.91";
+  needsClang          = version: lib.versionAtLeast version "2.92";
 
   common =
     args:
@@ -48,6 +51,7 @@ let
         ;
       boehmgc = if needsBoehmgcPatches args.version then boehmgc-nix else boehmgc-nix_2_3;
       aws-sdk-cpp = aws-sdk-cpp-nix;
+      stdenv = if (needsClang args.version) then clangStdenv else stdenv;
     };
 in
 lib.makeExtensible (self: {
@@ -69,6 +73,20 @@ lib.makeExtensible (self: {
     }
   );
 
-  latest = self.lix_2_91;
-  stable = self.lix_2_91;
+  lix_2_92 = (
+    common {
+      version = "2.92.0";
+      hash = "sha256-vm5Ddu2PFeu/zACE+M/xyT04sfZ4FApvyiUgrZ0BA84=";
+      docCargoHash = "sha256-waA1VX/xW9Yj+EBcu6bnAXgJN2pNkPfnIuV+cwxozc8=";
+      cargoHash = "sha256-YMyNOXdlx0I30SkcmdW/6DU0BYc3ZOa2FMJSKMkr7I8=";
+      postFetch = ''
+        echo symlinking Cargo.lock to lix/lix-doc/
+        cd "$out/lix/lix-doc"
+        ln -s ../../Cargo.lock Cargo.lock
+      '';
+    }
+  );
+
+  latest = self.lix_2_92;
+  stable = self.lix_2_92;
 })
