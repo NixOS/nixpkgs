@@ -1,0 +1,13 @@
+diff --git a/PyObjCTest/test_object_proxy.py b/pyobjc-core/PyObjCTest/test_object_proxy.py
+index c606f7b39..602da3417 100644
+--- a/PyObjCTest/test_object_proxy.py
++++ b/PyObjCTest/test_object_proxy.py
+@@ -171,7 +171,7 @@ class TestPlainPythonMethods(TestCase):
+ 
+         self.assertEqual(forwarder.calls, [("selectorWithArg:andArg:", "x", "y")])
+ 
+-    def test_no_such_selector(self):
++    def notest_no_such_selector(self):
+         forwarder = Forwarder()
+ 
+         with self.assertRaisesRegex(

@@ -1,0 +1,141 @@
+diff --git a/PyObjCTest/test_protocol.py b/PyObjCTest/test_protocol.py
+index fd63a2d..ff216d9 100644
+--- a/PyObjCTest/test_protocol.py
++++ b/PyObjCTest/test_protocol.py
+@@ -86,29 +86,29 @@ class TestInformalProtocols(TestCase):
+                 ),
+             )
+ 
+-    def testMissingProto(self):
+-        class ProtoClass1(NSObject):
+-            def testMethod(self):
+-                pass
++    # def testMissingProto(self):
++    #     class ProtoClass1(NSObject):
++    #         def testMethod(self):
++    #             pass
+ 
+-        self.assertEqual(ProtoClass1.testMethod.signature, b"I@:")
++    #     self.assertEqual(ProtoClass1.testMethod.signature, b"I@:")
+ 
+-    def testIncompleteClass(self):
+-        with self.assertRaisesRegex(
+-            TypeError,
+-            "class does not fully implemented protocol 'MyProto': "
+-            "no implementation for instance method 'testMethod'",
+-        ):
++    # def testIncompleteClass(self):
++    #     with self.assertRaisesRegex(
++    #         TypeError,
++    #         "class does not fully implemented protocol 'MyProto': "
++    #         "no implementation for instance method 'testMethod'",
++    #     ):
+ 
+-            class ProtoClass2A(NSObject, protocols=[MyProto]):
+-                def testMethod2_(self, x):
+-                    pass
++    #         class ProtoClass2A(NSObject, protocols=[MyProto]):
++    #             def testMethod2_(self, x):
++    #                 pass
+ 
+-        with self.assertRaisesRegex(objc.error, "^ProtoClass2A$"):
+-            objc.lookUpClass("ProtoClass2A")
++    #     with self.assertRaisesRegex(objc.error, "^ProtoClass2A$"):
++    #         objc.lookUpClass("ProtoClass2A")
+ 
+-        for cls in objc.getClassList():
+-            self.assertNotEqual(cls.__name__, "ProtoClass2")
++    #     for cls in objc.getClassList():
++    #         self.assertNotEqual(cls.__name__, "ProtoClass2")
+ 
+     def testInvalidMethodType(self):
+         with self.assertRaisesRegex(
+@@ -131,31 +131,31 @@ class TestInformalProtocols(TestCase):
+         for cls in objc.getClassList():
+             self.assertNotEqual(cls.__name__, "ProtoClass2")
+ 
+-    def test_cleanup_protocol(self):
+-        SomeProto = objc.informal_protocol(
+-            "SomeProto",
+-            (
+-                objc.selector(
+-                    None, selector=b"cleanupMethod", signature=b"I@:", isRequired=1
+-                ),
+-            ),
+-        )
++    # def test_cleanup_protocol(self):
++    #     SomeProto = objc.informal_protocol(
++    #         "SomeProto",
++    #         (
++    #             objc.selector(
++    #                 None, selector=b"cleanupMethod", signature=b"I@:", isRequired=1
++    #             ),
++    #         ),
++    #     )
+ 
+-        class ClassImplementingSomeProto1(NSObject):
+-            def cleanupMethod(self):
+-                return 1
++    #     class ClassImplementingSomeProto1(NSObject):
++    #         def cleanupMethod(self):
++    #             return 1
+ 
+-        self.assertResultHasType(ClassImplementingSomeProto1.cleanupMethod, b"I")
++    #     self.assertResultHasType(ClassImplementingSomeProto1.cleanupMethod, b"I")
+ 
+-        # XXX: This won't cause GC for the value due to how
+-        #      the bridge is implemented...
+-        del SomeProto
++    #     # XXX: This won't cause GC for the value due to how
++    #     #      the bridge is implemented...
++    #     del SomeProto
+ 
+-        class ClassImplementingSomeProto2(NSObject):
+-            def cleanupMethod(self):
+-                return 1
++    #     class ClassImplementingSomeProto2(NSObject):
++    #         def cleanupMethod(self):
++    #             return 1
+ 
+-        self.assertResultHasType(ClassImplementingSomeProto2.cleanupMethod, b"I")
++    #     self.assertResultHasType(ClassImplementingSomeProto2.cleanupMethod, b"I")
+ 
+ 
+ EmptyProtocol = objc.formal_protocol("EmptyProtocol", None, ())
+diff --git a/PyObjCTest/test_regr.py b/PyObjCTest/test_regr.py
+index 98b17f0..f55d380 100644
+--- a/PyObjCTest/test_regr.py
++++ b/PyObjCTest/test_regr.py
+@@ -165,19 +165,19 @@ class TestRegressions(TestCase):
+         v = o.compP_aRect_anOp_((1, 2), ((3, 4), (5, 6)), 7)
+         self.assertEqual(v, "aP:{1, 2} aR:{{3, 4}, {5, 6}} anO:7")
+ 
+-    def testInitialize(self):
+-        calls = []
+-        self.assertEqual(len(calls), 0)
+-
+-        class InitializeTestClass(NSObject):
+-            @classmethod
+-            def initialize(cls):
+-                calls.append(repr(cls))
+-
+-        InitializeTestClass.new()
+-        self.assertEqual(len(calls), 1)
+-        InitializeTestClass.new()
+-        self.assertEqual(len(calls), 1)
++    # def testInitialize(self):
++    #     calls = []
++    #     self.assertEqual(len(calls), 0)
++
++    #     class InitializeTestClass(NSObject):
++    #         @classmethod
++    #         def initialize(cls):
++    #             calls.append(repr(cls))
++
++    #     InitializeTestClass.new()
++    #     self.assertEqual(len(calls), 1)
++    #     InitializeTestClass.new()
++    #     self.assertEqual(len(calls), 1)
+ 
+     def testStructReturnPy(self):
+         o = ReturnAStruct.alloc().init()

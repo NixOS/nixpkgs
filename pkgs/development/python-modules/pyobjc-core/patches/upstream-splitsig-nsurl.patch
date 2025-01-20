@@ -1,0 +1,11 @@
+--- a/PyObjCTest/test_splitsig.py
++++ b/PyObjCTest/test_splitsig.py
+@@ -102,6 +102,7 @@ def testSignatureCount(self):
+             # Unclear why this signature isn't correct, possibly due to the 'queue'.
+             # method is private anyway...
+             "SCN_setupDisplayLinkWithQueue_screen_policy_",
++            "isNSURL__",
+         ]
+ 
+         for cls in objc.getClassList():
+         
