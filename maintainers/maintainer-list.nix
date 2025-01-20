@@ -21374,6 +21374,11 @@
     name = "Sebastian Kowalak";
     matrix = "@scl:tchncs.de";
   };
+  S-K-Tiger = {
+    name = "Vicar Tineamica";
+    github = "S-K-Tiger";
+    githubId = 55139409;
+  };
   skyesoss = {
     name = "Skye Soss";
     matrix = "@skyesoss:matrix.org";
