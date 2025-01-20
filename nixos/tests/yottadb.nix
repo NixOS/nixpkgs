@@ -1,8 +1,10 @@
-import ./make-test-python.nix ({ pkgs, ... }:
+import ./make-test-python.nix ({ pkgs,
+
+  # TODO: test co-existence of multiple versions
+  yottadbPackage ? pkgs.yottadb, ... }:
+
   let
-    # TODO: test co-existence of multiple versions
-    ydbBase = pkgs.yottadb.latest;
-    ydbWithAsan = ydbBase.override { enableAsan = true; };
+    ydbWithAsan = yottadbPackage.override { enableAsan = true; };
     ydbTestRtn = pkgs.writeText "ydbTest.m" ''
       writeDb N I F I=0:1:100 S ^ydbTest(I)=$J
         ZHALT $G(^ydbTest($R(100)))'=$J

@@ -1,6 +1,4 @@
-{ ydbVersion, ydbCommitRef, ydbNixHash,
-
-enableAsan ? false,
+{ ydbVersion, ydbCommitRef, ydbNixHash, enableAsan,
 
 lib, config, makeWrapper, stdenv, writeText, writeScript,
 
@@ -242,7 +240,7 @@ stdenv.mkDerivation rec {
     ln -rs $libYdbUtil-utf8.so $libYdbUtil.so
   '';
 
-  passthru.tests = nixosTests.yottadb;
+  passthru.tests = { inherit (nixosTests) yottadb; };
 
   meta = with lib; {
     description = "A proven Multi-Language NoSQL database engine";
