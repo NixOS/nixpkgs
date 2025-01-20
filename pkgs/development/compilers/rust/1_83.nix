@@ -36,7 +36,7 @@ let
       {
         enableSharedLibraries = true;
       }
-      // lib.optionalAttrs (stdenv.targetPlatform.useLLVM or false) {
+      // lib.optionalAttrs (stdenv.targetPlatform.toolchain == "llvm") {
         # Force LLVM to compile using clang + LLVM libs when targeting pkgsLLVM
         stdenv = pkgSet.stdenv.override {
           allowedRequisites = null;
@@ -59,7 +59,7 @@ import ./default.nix
 
     # Expose llvmPackages used for rustc from rustc via passthru for LTO in Firefox
     llvmPackages =
-      if (stdenv.targetPlatform.useLLVM or false) then
+      if (stdenv.targetPlatform.toolchain == "llvm") then
         callPackage (
           {
             pkgs,

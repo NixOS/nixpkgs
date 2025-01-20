@@ -122,6 +122,9 @@ let
       inherit (self.pkgsBuildHost.xorg) lndir;
     };
 
+  cleanToolchain = platform: builtins.removeAttrs platform
+    [ "toolchain" "cc" "bintools" "linker" "libc" "libcxx" "unwinderlib" "rtlib" ];
+
   stdenvBootstappingAndPlatforms = self: super: let
     withFallback = thisPkgs:
       (if adjacentPackages == null then self else thisPkgs)
@@ -205,9 +208,8 @@ let
       # Bootstrap a cross stdenv using the LLVM toolchain.
       # This is currently not possible when compiling natively,
       # so we don't need to check hostPlatform != buildPlatform.
-      crossSystem = stdenv.hostPlatform // {
-        useLLVM = true;
-        linker = "lld";
+      crossSystem = (cleanToolchain stdenv.hostPlatform) // {
+        toolchain = "llvm";
       };
     };
 
@@ -233,8 +235,9 @@ let
       # Bootstrap a cross stdenv using the Aro C compiler.
       # This is currently not possible when compiling natively,
       # so we don't need to check hostPlatform != buildPlatform.
-      crossSystem = stdenv.hostPlatform // {
-        useArocc = true;
+      crossSystem = (cleanToolchain stdenv.hostPlatform) // {
+        toolchain = "llvm";
+        cc = "arocc";
         linker = "lld";
       };
     };
@@ -248,8 +251,9 @@ let
       # Bootstrap a cross stdenv using the Zig toolchain.
       # This is currently not possible when compiling natively,
       # so we don't need to check hostPlatform != buildPlatform.
-      crossSystem = stdenv.hostPlatform // {
-        useZig = true;
+      crossSystem = (cleanToolchain stdenv.hostPlatform) // {
+        toolchain = "llvm";
+        cc = "zig";
         linker = "lld";
       };
     };

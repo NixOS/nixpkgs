@@ -52,7 +52,7 @@ let
     concatStringsSep
     ;
   inherit (darwin.apple_sdk.frameworks) Security;
-  useLLVM = stdenv.targetPlatform.useLLVM or false;
+  useLLVM = stdenv.targetPlatform.toolchain == "llvm";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "${targetPackages.stdenv.cc.targetPrefix}rustc";
@@ -207,7 +207,7 @@ stdenv.mkDerivation (finalAttrs: {
       # doesn't work) to build a linker.
       "--disable-llvm-bitcode-linker"
     ]
-    ++ optionals (stdenv.targetPlatform.isLinux && !(stdenv.targetPlatform.useLLVM or false)) [
+    ++ optionals (stdenv.targetPlatform.isLinux && !(stdenv.targetPlatform.toolchain == "llvm")) [
       "--enable-profiler" # build libprofiler_builtins
     ]
     ++ optionals stdenv.buildPlatform.isMusl [

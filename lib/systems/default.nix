@@ -66,7 +66,11 @@ let
   # `parsed` is inferred from args, both because there are two options with one
   # clearly preferred, and to prevent cycles. A simpler fixed point where the RHS
   # always just used `final.*` would fail on both counts.
-  elaborate = systemOrArgs: let
+  elaborate = systemOrArgs:
+    assert lib.assertMsg (systemOrArgs ? useLLVM == false) "elaborate cannot contain the deprecated useLLVM attribute";
+    assert lib.assertMsg (systemOrArgs ? useArocc == false) "elaborate cannot contain the deprecated useArocc attribute";
+    assert lib.assertMsg (systemOrArgs ? useZig == false) "elaborate cannot contain the deprecated useZig attribute";
+    let
     allArgs = systemToAttrs systemOrArgs;
 
     # Those two will always be derived from "config", if given, so they should NOT
@@ -76,22 +80,26 @@ let
     # TODO: deprecate args.rustc in favour of args.rust after 23.05 is EOL.
     rust = args.rust or args.rustc or {};
 
-    final = {
-      # Prefer to parse `config` as it is strictly more informative.
-      parsed = parse.mkSystemFromString (args.config or allArgs.system);
-      # This can be losslessly-extracted from `parsed` iff parsing succeeds.
-      system = parse.doubleFromSystem final.parsed;
-      # TODO: This currently can't be losslessly-extracted from `parsed`, for example
-      # because of -mingw32.
-      config = parse.tripleFromSystem final.parsed;
-      # Determine whether we can execute binaries built for the provided platform.
-      canExecute = platform:
-        final.isAndroid == platform.isAndroid &&
-        parse.isCompatible final.parsed.cpu platform.parsed.cpu
-        && final.parsed.kernel == platform.parsed.kernel;
-      isCompatible = _: throw "2022-05-23: isCompatible has been removed in favor of canExecute, refer to the 22.11 changelog for details";
-      # Derived meta-data
-      useLLVM = final.isFreeBSD || final.isOpenBSD;
+    defaults = {
+      toolchain =
+        /**/ if final.isDarwin then "apple"
+        else if final.isFreeBSD || final.isOpenBSD then "llvm"
+        else "gnu";
+
+      cc = if final.toolchain == "apple" || final.toolchain == "llvm" then
+        "clang"
+      else "gcc";
+
+      bintools = if final.toolchain == "llvm" then
+        "llvm"
+      else if final.toolchain == "apple" then
+        "apple"
+      else "gnu";
+
+      cxxlib =
+        /**/ if final.toolchain == "llvm" then "libcxx"
+        else if final.toolchain == "gnu" then "libstdcxx"
+        else null;
 
       libc =
         /**/ if final.isDarwin                then "libSystem"
@@ -112,6 +120,17 @@ let
         else if final.isNone                  then "newlib"
         # TODO(@Ericson2314) think more about other operating systems
         else                                     "native/impure";
+
+      unwinderlib =
+        /**/ if final.toolchain == "llvm" then "libunwinder"
+        else if final.toolchain == "gnu" then "libgcc_s"
+        else null;
+
+      rtlib =
+        /**/ if final.toolchain == "llvm" then "compiler-rt"
+        else if final.toolchain == "gnu" then "libgcc"
+        else null;
+
       # Choose what linker we wish to use by default. Someday we might also
       # choose the C compiler, runtime library, C++ standard library, etc. in
       # this way, nice and orthogonally, and deprecate `useLLVM`. But due to
@@ -119,12 +138,30 @@ let
       # independently, so we are just doing `linker` and keeping `useLLVM` for
       # now.
       linker =
-        /**/ if final.useLLVM or false      then "lld"
-        else if final.isDarwin              then "cctools"
+        /**/ if final.toolchain == "llvm" then "lld"
+        else if final.toolchain == "apple" then "cctools"
         # "bfd" and "gold" both come from GNU binutils. The existence of Gold
         # is why we use the more obscure "bfd" and not "binutils" for this
         # choice.
         else                                     "bfd";
+    };
+
+    final = {
+      # Prefer to parse `config` as it is strictly more informative.
+      parsed = parse.mkSystemFromString (args.config or allArgs.system);
+      # This can be losslessly-extracted from `parsed` iff parsing succeeds.
+      system = parse.doubleFromSystem final.parsed;
+      # TODO: This currently can't be losslessly-extracted from `parsed`, for example
+      # because of -mingw32.
+      config = parse.tripleFromSystem final.parsed;
+      # Determine whether we can execute binaries built for the provided platform.
+      canExecute = platform:
+        final.isAndroid == platform.isAndroid &&
+        parse.isCompatible final.parsed.cpu platform.parsed.cpu
+        && final.parsed.kernel == platform.parsed.kernel;
+      isCompatible = _: throw "2022-05-23: isCompatible has been removed in favor of canExecute, refer to the 22.11 changelog for details";
+
+      # Derived meta-data
       # The standard lib directory name that non-nixpkgs binaries distributed
       # for this platform normally assume.
       libDir = if final.isLinux then
@@ -318,7 +355,10 @@ let
 
     }) // mapAttrs (n: v: v final.parsed) inspect.predicates
       // mapAttrs (n: v: v final.gcc.arch or "default") architectures.predicates
-      // args // {
+      // defaults // args // {
+        inherit defaults;
+        usingDefault = mapAttrs (k: v: final.${k} == v) defaults;
+
         rust = rust // {
           # Once args.rustc.platform.target-family is deprecated and
           # removed, there will no longer be any need to modify any

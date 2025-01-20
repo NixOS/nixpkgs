@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
   buildInputs =
     [ boost ]
-    ++ lib.optional (stdenv.targetPlatform.useLLVM or false) (
+    ++ lib.optional (stdenv.hostPlatform.rtlib == "compiler-rt") (
       llvmPackages.compiler-rt.override {
         doFakeLibgcc = true;
       }
@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }
-// lib.optionalAttrs (stdenv.targetPlatform.useLLVM or false) {
+// lib.optionalAttrs (stdenv.targetPlatform.rtlib == "libunwind") {
   # Force linking to "libgcc" so tests pass
   NIX_CFLAGS_COMPILE = "-lgcc";
 }

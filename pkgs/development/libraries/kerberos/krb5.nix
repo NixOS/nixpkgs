@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals (
       stdenv.hostPlatform.isLinux
       && stdenv.hostPlatform.libc != "bionic"
-      && !(stdenv.hostPlatform.useLLVM or false)
+      && !(stdenv.hostPlatform.toolchain == "llvm")
     ) [ keyutils ]
     ++ lib.optionals withLdap [ openldap ]
     ++ lib.optionals withLibedit [ libedit ]

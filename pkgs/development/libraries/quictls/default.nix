@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
 
   separateDebugInfo =
     !stdenv.hostPlatform.isDarwin &&
-    !(stdenv.hostPlatform.useLLVM or false) &&
+    !stdenv.cc.isClang &&
     stdenv.cc.isGNU;
 
   # TODO(@Ericson2314): Improve with mass rebuild

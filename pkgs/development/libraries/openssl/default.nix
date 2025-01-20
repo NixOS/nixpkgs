@@ -98,7 +98,8 @@ let
         ++ lib.optional static "etc";
       setOutputFlags = false;
       separateDebugInfo =
-        !stdenv.hostPlatform.isDarwin && !(stdenv.hostPlatform.useLLVM or false) && stdenv.cc.isGNU;
+        # Using "cc.isClang" causes infinite recursion.
+        !stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.cc != "clang" && stdenv.cc.isGNU;
 
       nativeBuildInputs =
         lib.optional (!stdenv.hostPlatform.isWindows) makeBinaryWrapper
