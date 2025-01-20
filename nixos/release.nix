@@ -169,6 +169,12 @@ in rec {
     inherit system;
   });
 
+  iso_gui = forAllSystems (system: makeIso {
+    module = ./modules/installer/cd-dvd/installation-cd-gui.nix;
+    type = "gui";
+    inherit system;
+  });
+
   iso_plasma5 = forMatchingSystems supportedSystems (system: makeIso {
     module = ./modules/installer/cd-dvd/installation-cd-graphical-calamares-plasma5.nix;
     type = "plasma5";
