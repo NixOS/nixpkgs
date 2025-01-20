@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  buildPackages,
+  fetchpatch,
   cmake,
   installShellFiles,
   boost,
@@ -26,6 +26,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-rB5oP03yaIzklwkGsIeS9ELbHOY9AObwjRrK9HBQFI4=";
   };
 
+  patches = [
+    # fixes for Boost 1.86
+    (fetchpatch {
+      url = "https://github.com/systemed/tilemaker/commit/6509f0cf50943a90b36b5c6802118b72124b1e7a.patch";
+      hash = "sha256-C4aCUGTTUtY24oARihMnljjRbw80xRdMUyvu/b1Nsdw=";
+    })
+  ];
+
   postPatch = ''
     substituteInPlace src/options_parser.cpp \
       --replace-fail "config.json" "$out/share/tilemaker/config-openmaptiles.json" \
@@ -48,10 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
     sqlite
     zlib
   ];
-
-  cmakeFlags = lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) (
-    lib.cmakeFeature "PROTOBUF_PROTOC_EXECUTABLE" "${buildPackages.protobuf}/bin/protoc"
-  );
 
   env.NIX_CFLAGS_COMPILE = toString [ "-DTM_VERSION=${finalAttrs.version}" ];
 

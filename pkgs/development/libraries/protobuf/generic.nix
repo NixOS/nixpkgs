@@ -36,10 +36,19 @@ stdenv.mkDerivation (finalAttrs: {
     inherit hash;
   };
 
-  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace src/google/protobuf/testing/googletest.cc \
-      --replace 'tmpnam(b)' '"'$TMPDIR'/foo"'
-  '';
+  postPatch =
+    lib.optionalString (stdenv.hostPlatform.isDarwin && lib.versionOlder version "29") ''
+      substituteInPlace src/google/protobuf/testing/googletest.cc \
+        --replace-fail 'tmpnam(b)' '"'$TMPDIR'/foo"'
+    ''
+    + (lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+      for f in cmake/protobuf-config.cmake.in cmake/protobuf-generate.cmake; do
+        [ ! -f $f ] && continue
+        substituteInPlace $f \
+          --replace-quiet 'COMMAND protobuf::protoc' \
+          'COMMAND ${lib.getExe buildPackages."protobuf_${lib.versions.major version}"}'
+      done
+    '');
 
   patches = lib.optionals (lib.versionOlder version "22") [
     # fix protobuf-targets.cmake installation paths, and allow for CMAKE_INSTALL_LIBDIR to be absolute
