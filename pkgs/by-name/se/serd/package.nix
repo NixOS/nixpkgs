@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation rec {
   pname = "serd";
-  version = "0.32.2";
+  version = "0.32.4";
 
   outputs = [
     "out"
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://download.drobilla.net/${pname}-${version}.tar.xz";
-    hash = "sha256-333CyW8rod7P11bkWOBh3tfYFY0lVVTnaTSDrAljxWs=";
+    hash = "sha256-y++1aejbaGvoxpyzhmqVOMfLBV6PJCF91qRHHv+n00k=";
   };
 
   nativeBuildInputs = [
