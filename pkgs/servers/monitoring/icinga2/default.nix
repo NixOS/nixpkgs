@@ -7,7 +7,7 @@
   flex,
   bison,
   systemd,
-  boost,
+  boost186,
   openssl,
   patchelf,
   mariadb-connector-c,
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    boost
+    boost186
     openssl
     systemd
   ] ++ lib.optional withPostgresql postgresql;

@@ -372,7 +372,7 @@ let
 
         appendToVar makeWrapperArgs --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
         concatTo makeWrapperArgs oldWrapperArgs
-        makeWrapper "$oldExe" "''${executablePath}${nameSuffix}" ''${makeWrapperArgs[@]}
+        makeWrapper "$oldExe" "''${executablePath}${nameSuffix}" "''${makeWrapperArgs[@]}"
         #############################
         #                           #
         #   END EXTRA PREF CHANGES  #
