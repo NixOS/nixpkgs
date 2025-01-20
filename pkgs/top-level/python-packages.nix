@@ -8012,6 +8012,8 @@ self: super: with self; {
 
   mcdreforged = callPackage ../development/python-modules/mcdreforged { };
 
+  mcp = callPackage ../development/python-modules/mcp { };
+
   mcstatus = callPackage ../development/python-modules/mcstatus { };
 
   mcuuid = callPackage ../development/python-modules/mcuuid { };
@@ -16091,6 +16093,8 @@ self: super: with self; {
   textual-slider = callPackage ../development/python-modules/textual-slider { };
 
   textual-universal-directorytree = callPackage ../development/python-modules/textual-universal-directorytree { };
+
+  textualeffects = callPackage ../development/python-modules/textualeffects { };
 
   textual-textarea = callPackage ../development/python-modules/textual-textarea { };
 
