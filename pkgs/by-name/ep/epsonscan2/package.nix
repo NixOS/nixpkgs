@@ -2,7 +2,7 @@
   lib,
   stdenv,
   autoPatchelfHook,
-  boost,
+  boost186,
   cmake,
   copyDesktopItems,
   imagemagick,
@@ -90,7 +90,7 @@ stdenv.mkDerivation {
 
   buildInputs =
     [
-      boost
+      boost186 # uses Boost.Optional but epsonscan2 is pre-C++11.
       libjpeg
       libpng
       libtiff
