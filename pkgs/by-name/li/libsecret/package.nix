@@ -25,7 +25,14 @@
   gjs,
   libintl,
   dbus,
+  withTpm2Tss ? lib.meta.availableOn stdenv.hostPlatform tpm2-tss && stdenv.hostPlatform.isx86_64,
+  abrmdSupport ? withTpm2Tss,
+  tpm2-tss,
+  swtpm,
+  tpm2-abrmd,
 }:
+
+assert abrmdSupport -> withTpm2Tss;
 
 stdenv.mkDerivation rec {
   pname = "libsecret";
@@ -71,25 +78,34 @@ stdenv.mkDerivation rec {
       gobject-introspection
     ];
 
-  buildInputs = [
-    libgcrypt
-  ];
+  buildInputs =
+    [
+      libgcrypt
+    ]
+    ++ lib.optionals withTpm2Tss [ tpm2-tss ]
+    ++ lib.optionals abrmdSupport [ tpm2-abrmd ];
 
   propagatedBuildInputs = [
     glib
   ];
 
-  nativeCheckInputs = [
-    python3
-    python3Packages.dbus-python
-    python3Packages.pygobject3
-    dbus
-    gjs
-  ];
+  nativeCheckInputs =
+    [
+      python3
+      python3Packages.dbus-python
+      python3Packages.pygobject3
+      dbus
+      gjs
+    ]
+    ++ lib.optionals withTpm2Tss [
+      swtpm
+      tpm2-abrmd
+    ];
 
   mesonFlags = [
     (lib.mesonBool "introspection" withIntrospection)
     (lib.mesonBool "gtk_doc" withIntrospection)
+    (lib.mesonBool "tpm2" withTpm2Tss)
   ];
 
   doCheck = stdenv.hostPlatform.isLinux && withIntrospection;
@@ -99,25 +115,80 @@ stdenv.mkDerivation rec {
     patchShebangs ./tool/test-*.sh
   '';
 
-  preCheck = ''
-    # Our gobject-introspection patches make the shared library paths absolute
-    # in the GIR files. When running tests, the library is not yet installed,
-    # though, so we need to replace the absolute path with a local one during build.
-    # We are using a symlink that will be overwitten during installation.
-    mkdir -p $out/lib $out/lib
-    ln -s "$PWD/libsecret/libmock-service.so" "$out/lib/libmock-service.so"
-    ln -s "$PWD/libsecret/libsecret-1.so.0" "$out/lib/libsecret-1.so.0"
+  preConfigure = lib.optionalString abrmdSupport ''
+    # Add dependencies on TCTI modules required for user‐space TPM resource
+    # manager support so that they can be loaded at run‐time.
+    mesonFlagsArray+=("-Dc_link_args=-Wl,--push-state,--no-as-needed -ltss2-tcti-tabrmd -ltss2-tcti-device -Wl,--pop-state")
   '';
 
-  checkPhase = ''
-    runHook preCheck
+  preCheck =
+    ''
+      # Our gobject-introspection patches make the shared library paths absolute
+      # in the GIR files. When running tests, the library is not yet installed,
+      # though, so we need to replace the absolute path with a local one during build.
+      # We are using a symlink that will be overwitten during installation.
+      mkdir -p $out/lib $out/lib
+      ln -s "$PWD/libsecret/libmock-service.so" "$out/lib/libmock-service.so"
+      ln -s "$PWD/libsecret/libsecret-1.so.0" "$out/lib/libsecret-1.so.0"
+    ''
+    + lib.optionalString withTpm2Tss ''
+      export XDG_CONFIG_HOME="$(mktemp -d)"
 
-    dbus-run-session \
-      --config-file=${dbus}/share/dbus-1/session.conf \
-      meson test --print-errorlogs --timeout-multiplier 0
+      export swtpm="$(mktemp -d)"
+      mkdir "$swtpm/state"
 
-    runHook postCheck
-  '';
+      swtpm_setup --create-config-files --root
+      swtpm_setup \
+        --tpm-state "$swtpm/state" \
+        --tpm2 \
+        --createek \
+        --allow-signing \
+        --decryption \
+        --create-ek-cert \
+        --create-platform-cert \
+        --lock-nvram
+    '';
+
+  checkPhase =
+    let
+      checkScript =
+        lib.optionalString withTpm2Tss ''
+          swtpm socket \
+            --server "type=unixio,path=$swtpm/sock" \
+            --daemon \
+            --ctrl "type=unixio,path=$swtpm/sock.ctrl" \
+            --tpmstate "dir=$swtpm/state" \
+            --tpm2 \
+            --flags startup-clear
+
+          trap "swtpm_ioctl --unix '$swtpm/sock.ctrl' -s" EXIT
+
+          tpm2-abrmd \
+            --tcti="swtpm:path=$swtpm/sock" \
+            --allow-root \
+            --flush-all \
+            --session &
+
+          export TCTI="tabrmd:bus_type=session"
+        ''
+        + lib.optionalString (!abrmdSupport) ''
+          # Ensure that user‐space resource manager TCTI module can be loaded
+          # for testing.
+          export LD_LIBRARY_PATH+=":${lib.makeLibraryPath [ tpm2-abrmd ]}"
+        ''
+        + ''
+          meson test --print-errorlogs --timeout-multiplier 0
+        '';
+    in
+    ''
+      runHook preCheck
+
+      dbus-run-session \
+        --config-file=${dbus}/share/dbus-1/session.conf \
+        sh -c ${lib.escapeShellArg checkScript}
+
+      runHook postCheck
+    '';
 
   postCheck = ''
     # This is test-only so it won’t be overwritten during installation.
