@@ -31,6 +31,17 @@ stdenv.mkDerivation (finalAttrs: {
     ./dev-prefix.patch
   ];
 
+  postPatch = ''
+    substituteInPlace meson.build \
+      --replace-fail "dependency('vapigen'," "dependency('vapigen', native: true,"
+  '';
+
+  strictDeps = true;
+
+  depsBuildBuild = [
+    pkg-config
+  ];
+
   nativeBuildInputs = [
     meson
     ninja
@@ -44,15 +55,11 @@ stdenv.mkDerivation (finalAttrs: {
     lcms2
   ];
 
-  mesonFlags =
-    [
-      "-Dprefix-dev=${placeholder "dev"}"
-    ]
-    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-      # Docs are opt-out in native but opt-in in cross builds.
-      "-Dwith-docs=true"
-      "-Denable-gir=true"
-    ];
+  mesonFlags = [
+    (lib.mesonOption "prefix-dev" (placeholder "dev"))
+    (lib.mesonBool "with-docs" true)
+    (lib.mesonBool "enable-gir" true)
+  ];
 
   postFixup = ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
