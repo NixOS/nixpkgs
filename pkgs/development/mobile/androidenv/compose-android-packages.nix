@@ -354,16 +354,16 @@ rec {
       # Link extras
       ${lib.concatMapStrings (identifier:
         let
-          path = addons.extras.${identifier}.path;
-          addon = deployAndroidPackage {
-            inherit os;
-            package = addons.extras.${identifier};
+          package = addons.extras.${identifier};
+          path = package.path;
+          extras = callPackage ./extras.nix {
+            inherit deployAndroidPackage package os path;
           };
         in
         ''
           targetDir=$(dirname ${path})
           mkdir -p $targetDir
-          ln -s ${addon}/libexec/android-sdk/${path} $targetDir
+          ln -s ${extras}/libexec/android-sdk/${path} $targetDir
         '') includeExtras}
 
       # Expose common executables in bin/
