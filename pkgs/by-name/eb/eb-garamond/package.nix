@@ -1,16 +1,17 @@
 {
   lib,
   stdenvNoCC,
-  fetchzip,
+  fetchFromGitHub,
 }:
-
 stdenvNoCC.mkDerivation rec {
   pname = "eb-garamond";
   version = "0.016";
 
-  src = fetchzip {
-    url = "https://bitbucket.org/georgd/eb-garamond/downloads/EBGaramond-${version}.zip";
-    hash = "sha256-P2VCLcqcMBBoTDJyRLP9vlHI+jE0EqPjPziN2MJbgEg=";
+  src = fetchFromGitHub {
+    owner = "georgd";
+    repo = "EB-Garamond";
+    tag = "v${version}";
+    hash = "sha256-ajieKhTeH6yv2qiE2xqnHFoMS65//4ZKiccAlC2PXGQ=";
   };
 
   installPhase = ''
