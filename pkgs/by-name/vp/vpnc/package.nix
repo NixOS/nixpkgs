@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation {
   pname = "vpnc";
-  version = "unstable-2021-11-04";
+  version = "unstable-2024-12-20";
 
   src = fetchFromGitHub {
     owner = "streambinder";
     repo = "vpnc";
-    rev = "c8bb5371b881f8853f191c495e762f834c9def5d";
-    sha256 = "1j1p83nfc2fpwczjcggsby0b44hk97ky0s6vns6md3awlbpgdn57";
+    rev = "d58afaaafb6a43cb21bb08282b54480d7b2cc6ab";
+    sha256 = "sha256-79DaK1s+YmROKbcWIXte+GZh0qq9LAQlSmczooR86H8=";
     fetchSubmodules = true;
   };
 
