@@ -87,6 +87,12 @@ buildPythonPackage rec {
     "test_load_remote_encoding"
     "test_load_external"
     "test_conf_syslog"
+
+    # Caused by pyopenssl update to 24.3.0
+    # https://github.com/IdentityPython/pysaml2/issues/975
+    "test_encrypted_response_6"
+    "test_validate_cert_chains"
+    "test_validate_with_root_cert"
   ];
 
   pythonImportsCheck = [ "saml2" ];
