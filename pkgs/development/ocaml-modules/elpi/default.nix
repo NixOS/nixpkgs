@@ -36,10 +36,11 @@ let fetched = coqPackages.metaFetch ({
       else "elpi-v${v}.tbz";
     location = { domain = "github.com"; owner = "LPCIC"; repo = "elpi"; };
   }) version;
-in
-buildDunePackage {
+in let inherit (fetched) version;
+in buildDunePackage {
   pname = "elpi";
-  inherit (fetched) version src;
+  inherit version;
+  inherit (fetched) src;
 
   patches = lib.optional (version == "1.16.5")
     ./atd_2_10.patch;
