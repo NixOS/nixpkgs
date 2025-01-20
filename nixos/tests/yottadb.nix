@@ -1,8 +1,10 @@
 import ./make-test-python.nix ({ pkgs, ...} :
 let
-  ydbWithAsan = pkgs.yottadb.overrideAttrs (_prev: {
+  # TODO: test co-existence of multiple versions
+  ydbBase = pkgs.yottadb.latest;
+  ydbWithAsan = ydbBase.override {
     enableAsan = true;
-  });
+  };
   ydbTestRtn = pkgs.writeText "ydbTest.m" ''
     writeDb N I F I=0:1:100 S ^ydbTest(I)=$J
       ZHALT $G(^ydbTest($R(100)))'=$J
@@ -39,7 +41,7 @@ in {
         package = ydbWithAsan;
       };
       environment = {
-        systemPackages = [ ydbWithAsan pkgs.lsof ];
+        systemPackages = [ pkgs.lsof ];
         variables = {
           ydb_routines = "${ydbWithAsan}/lib/libyottadbutil-utf8.so /tmp/";
           ydb_gbldir = "/tmp/ydbtest.gld";
