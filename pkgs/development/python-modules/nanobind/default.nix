@@ -49,6 +49,12 @@ buildPythonPackage rec {
 
   dontUseCmakeBuildDir = true;
 
+  # jaxlib is leaking, see: https://github.com/wjakob/nanobind/issues/578
+  postPatch = ''
+    substituteInPlace tests/CMakeLists.txt --replace-fail \
+      "add_definitions(-DNB_ABORT_ON_LEAK)" ""
+  '';
+
   preCheck = ''
     # TODO: added 2.2.0, re-enable on next bump
     # https://github.com/wjakob/nanobind/issues/754
