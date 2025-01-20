@@ -212,7 +212,7 @@ because their behaviour is different:
 * `dependencies ? []`: Aside from propagating dependencies,
   `buildPythonPackage` also injects code into and wraps executables with the
   paths included in this list. Items listed in `install_requires` go here.
-* `optional-dependencies ? { }`: Optional feature flagged dependencies.  Items listed in `extras_requires` go here.
+* `optional-dependencies ? { }`: Optional feature flagged dependencies.  Items listed in `extras_require` go here.
 
 
 ##### Overriding Python packages {#overriding-python-packages}
