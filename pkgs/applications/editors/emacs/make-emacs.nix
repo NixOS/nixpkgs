@@ -34,6 +34,7 @@
   libXcursor,
   libXi,
   libXpm,
+  libXft,
   libgccjit,
   libjpeg,
   libotf,
@@ -88,6 +89,8 @@
   withTreeSitter ? lib.versionAtLeast version "29",
   withWebP ? lib.versionAtLeast version "29",
   withX ? !(stdenv.hostPlatform.isDarwin || noGui || withPgtk),
+  withCairo ? withX && !withXft,
+  withXft ? false,
   withXinput2 ? withX && lib.versionAtLeast version "29",
   withXwidgets ?
     !stdenv.hostPlatform.isDarwin
@@ -333,7 +336,6 @@ mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals withX [
       Xaw3d
-      cairo
       giflib
       libXaw
       libXpm
@@ -341,6 +343,12 @@ mkDerivation (finalAttrs: {
       libpng
       librsvg
       libtiff
+    ]
+    ++ lib.optionals withCairo [
+      cairo
+    ]
+    ++ lib.optionals withXft [
+      libXft
     ]
     ++ lib.optionals withXinput2 [
       libXi
@@ -396,8 +404,8 @@ mkDerivation (finalAttrs: {
       else if withX then
         [
           (lib.withFeatureAs true "x-toolkit" toolkit)
-          (lib.withFeature true "cairo")
-          (lib.withFeature true "xft")
+          (lib.withFeature withCairo "cairo")
+          (lib.withFeature withXft "xft")
         ]
       else if withPgtk then
         [
