@@ -451,6 +451,96 @@ rec {
       }
     );
 
+  /*
+    Creates an overridable attrset with encapsulation.
+
+    This is like `makeExtensible`, but only the `public` attribute of the fixed
+    point is returned.
+
+    Synopsis:
+
+        r = encapsulate (final@{extend, ...}: {
+
+          # ... private attributes for `final` ...
+
+          public = {
+            # ... returned attributes for r, in terms of `final` ...
+            inherit extend; # optional, don't invoke too often; see below
+          };
+        })
+
+        s = r.extend (final: previous: {
+
+          # ... updates to private attributes ...
+
+          # optionally
+          public = previous.public // {
+            # ... updates to public attributes ...
+          };
+        })
+
+    = Performance
+
+    The `extend` function evaluates the whole fixed point all over, reusing
+    no "intermediate results" from the existing object.
+    This is necessary, because `final` has changed.
+    So the cost is quadratic; O(n^2) where n = number of chained invocations.
+    This has consequences for interface design.
+    Although enticing, `extend` is not suitable for directly implementing "fluent interfaces", where the caller makes many calls to `extend` via domain-specific "setters" or `with*` functions.
+    Fluent interfaces can not be implemented efficiently in Nix and have very little to offer over attribute sets in terms of usability.*
+
+    Example:
+
+        # cd nixpkgs; nix repl lib
+
+        nix-repl> multiplier = encapsulate (self: {
+          a = 1;
+          b = 1;
+          public = {
+            r = self.a * self.b;
+
+            # Publishing extend makes the attrset open for any kind of change.
+            inherit (self) extend;
+
+            # Instead, or additionally, you can add domain-specific functions.
+            # Offer a single method with multiple arguments, and not a
+            # "fluent interface" of a method per argument, because all extension
+            # functions are called for every `extend`. See the Performance section.
+            withParams = args@{ a ? null, b ? null }: # NB: defaults are not used
+              self.extend (self: super: args);
+
+          };
+        })
+
+        nix-repl> multiplier
+        { extend = «lambda»; r = 1; withParams =«lambda»; }
+
+        nix-repl> multiplier.withParams { a = 42; b = 10; }
+        { extend = «lambda»; r = 420; withParams =«lambda»; }
+
+        nix-repl> multiplier3 = multiplier.extend (self: super: {
+          c = 1;
+          public = super.public // {
+            r = super.public.r * self.c;
+          };
+        })
+
+        nix-repl> multiplier3.extend (self: super: { a = 2; b = 3; c = 10; })
+        { extend = «lambda»; r = 60; withParams =«lambda»; }
+
+    (*) Final note on Fluent APIs: While the asymptotic complexity can be fixed
+        by avoiding overlay extension or perhaps using it only at the end of the
+        chain only, one problem remains. Every method invocation has to produce
+        a new, immutable state value, which means copying the whole state up to
+        that point.
+  */
+  encapsulate =
+    layerZero:
+    let
+      fixed = layerZero ({ extend = f: encapsulate (extends f layerZero); } // fixed);
+    in
+    fixed.public;
+
   /**
     Convert to an extending function (overlay).
 
