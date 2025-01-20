@@ -12558,7 +12558,7 @@ with pkgs;
     zfs_2_2
     zfs_2_3
     zfs_unstable;
-  zfs = zfs_2_2;
+  zfs = zfs_2_3;
 
   ### DATA
 
@@ -15487,10 +15487,6 @@ with pkgs;
   uuagc = haskell.lib.compose.justStaticExecutables haskellPackages.uuagc;
 
   valentina = libsForQt5.callPackage ../applications/misc/valentina { };
-
-  vcprompt = callPackage ../applications/version-management/vcprompt {
-    autoconf = buildPackages.autoconf269;
-  };
 
   vdirsyncer = with python3Packages; toPythonApplication vdirsyncer;
 
