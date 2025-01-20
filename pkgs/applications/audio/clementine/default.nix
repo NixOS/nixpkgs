@@ -10,7 +10,7 @@
 , qtbase
 , qtx11extras
 , qttools
-, taglib
+, taglib_1
 , fftw
 , glew
 , qjson
@@ -93,7 +93,7 @@ mkDerivation {
     qtx11extras
     qttools
     sqlite
-    taglib
+    taglib_1
 
     alsa-lib
   ]

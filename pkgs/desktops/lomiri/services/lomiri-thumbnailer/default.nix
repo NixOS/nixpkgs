@@ -88,10 +88,23 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.com/ubports/development/core/lomiri-thumbnailer/-/commit/657be3bd1aeb227edc04e26b597b2fe97b2dc51a.patch";
       hash = "sha256-XEvdWV3JJujG16+87iewYor0jFK7NTeE5459iT96SkU=";
     })
+
+    # Fix compat with newer gtest
     (fetchpatch {
       name = "0008-fix-googletest-1-13.patch";
       url = "https://salsa.debian.org/ubports-team/lomiri-thumbnailer/-/raw/debian/3.0.3-1/debian/patches/0001_fix_googletest_1_13.patch";
       hash = "sha256-oBcdspQMhCxh4L/XotG9NRp/Ij2YzIjpC8xg/jdiptw=";
+    })
+
+    # Fix compat with taglib 2.x
+    # Remove when version > 3.0.4
+    (fetchpatch {
+      url = "https://gitlab.com/ubports/development/core/lomiri-thumbnailer/-/commit/8506408021a2c254d49309836ab3622525b00627.patch";
+      hash = "sha256-gQoVv9uky7ilQrpzKsc6F6Z917MnsoxFQlZshs+VGeI=";
+    })
+    (fetchpatch {
+      url = "https://gitlab.com/ubports/development/core/lomiri-thumbnailer/-/commit/ca826d354296ea8072672dd87ac8330c06bf381b.patch";
+      hash = "sha256-96NqfR3PS1ZcvBCQdvcG/koPGOCiPeDq8LAzBLvV4t0=";
     })
   ];
 

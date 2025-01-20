@@ -23,7 +23,7 @@
 , cmake, libssh2, openssl, openssl_1_1, libmysqlclient, git, perl, pcre2, gecode_3, curl
 , libsodium, snappy, libossp_uuid, lxc, libpcap, xorg, gtk3, lerc, buildRubyGem
 , cairo, expat, re2, rake, gobject-introspection, gdk-pixbuf, zeromq, czmq, graphicsmagick, libcxx
-, file, libvirt, glib, vips, taglib, libopus, linux-pam, libidn, protobuf, fribidi, harfbuzz
+, file, libvirt, glib, vips, taglib_1, libopus, linux-pam, libidn, protobuf, fribidi, harfbuzz
 , bison, flex, pango, python3, patchelf, binutils, freetds, wrapGAppsHook3, atk
 , bundler, libsass, dart-sass, libexif, libselinux, libsepol, shared-mime-info, libthai, libdatrie
 , CoreServices, DarwinTools, cctools, libtool, discount, exiv2, libepoxy, libxkbcommon, libmaxminddb, libyaml
@@ -848,7 +848,7 @@ in
   };
 
   taglib-ruby = attrs: {
-    buildInputs = [ taglib ];
+    buildInputs = [ taglib_1 ];
   };
 
   timfel-krb5-auth = attrs: {
