@@ -41,6 +41,8 @@
   wayland,
   # The themes here are soft dependencies; only icons are missing without them.
   adwaita-icon-theme,
+  withGtkVnc ? stdenv.hostPlatform.isLinux,
+  gtk-vnc,
   withKf5Wallet ? stdenv.hostPlatform.isLinux,
   libsForQt5,
   withLibsecret ? stdenv.hostPlatform.isLinux,
@@ -104,6 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
       libappindicator-gtk3
       libdbusmenu-gtk3
     ]
+    ++ lib.optionals withGtkVnc [ gtk-vnc ]
     ++ lib.optionals withLibsecret [ libsecret ]
     ++ lib.optionals withKf5Wallet [ libsForQt5.kwallet ]
     ++ lib.optionals withWebkitGtk [ webkitgtk_4_1 ]
@@ -118,6 +121,9 @@ stdenv.mkDerivation (finalAttrs: {
       "-DWITH_KF5WALLET=${if withKf5Wallet then "ON" else "OFF"}"
       "-DWITH_LIBSECRET=${if withLibsecret then "ON" else "OFF"}"
       "-DWITH_WEBKIT2GTK=${if withWebkitGtk then "ON" else "OFF"}"
+    ]
+    ++ lib.optionals withGtkVnc [
+      "-DWITH_GVNC=ON"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "-DHAVE_LIBAPPINDICATOR=OFF"
