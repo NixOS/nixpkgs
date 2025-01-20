@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage rec {
     description = "Independent Rust text editor that runs in your terminal";
     homepage = "https://github.com/curlpipe/ox";
     changelog = "https://github.com/curlpipe/ox/releases/tag/${version}";
-    license = licenses.gpl2Only;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [
       moni
       kachick
