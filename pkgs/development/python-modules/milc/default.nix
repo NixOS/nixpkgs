@@ -8,6 +8,7 @@
   platformdirs,
   spinners,
   types-colorama,
+  setuptools,
   nose2,
   semver,
 }:
@@ -15,7 +16,7 @@
 buildPythonPackage rec {
   pname = "milc";
   version = "1.9.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "clueboard";
@@ -24,7 +25,20 @@ buildPythonPackage rec {
     hash = "sha256-Vuc69ikRXpeECqU/22/h3+TmMi0jD0Ik+cVW8e9eWbw=";
   };
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    # Needed for tests
+    patchShebangs --build \
+      example \
+      custom_logger \
+      questions \
+      sparkline \
+      hello \
+      passwd_confirm \
+      passwd_complexity \
+      config_source
+  '';
+
+  dependencies = [
     argcomplete
     colorama
     halo
@@ -33,10 +47,20 @@ buildPythonPackage rec {
     types-colorama
   ];
 
-  nativeCheckInputs = [
+  build-system = [
+    setuptools
     nose2
     semver
   ];
+
+  checkPhase = ''
+    runHook preCheck
+
+    # Run tests
+    nose2 -v
+
+    runHook postCheck
+  '';
 
   pythonImportsCheck = [ "milc" ];
 
