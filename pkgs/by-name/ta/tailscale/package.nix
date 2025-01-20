@@ -8,6 +8,7 @@
   getent,
   iproute2,
   iptables,
+  lsof,
   shadow,
   procps,
   nixosTests,
@@ -45,7 +46,8 @@ buildGo123Module {
 
   vendorHash = "sha256-0VB7q9HKd5/QKaWBMpCYycRRiNTWCEjUMc3g3z6agc8=";
 
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ makeWrapper ] ++ [
+  nativeBuildInputs = [
+    makeWrapper
     installShellFiles
   ];
 
@@ -76,6 +78,16 @@ buildGo123Module {
       ln -s $out/bin/tailscaled $out/bin/tailscale
       moveToOutput "bin/derper" "$derper"
       moveToOutput "bin/derpprobe" "$derper"
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      wrapProgram $out/bin/tailscaled \
+        --prefix PATH : ${
+          lib.makeBinPath [
+            # Uses lsof only on macOS to detect socket location
+            # See tailscale safesocket_darwin.go
+            lsof
+          ]
+        }
     ''
     + lib.optionalString stdenv.hostPlatform.isLinux ''
       wrapProgram $out/bin/tailscaled \
