@@ -6,9 +6,10 @@
   dtc,
   libusb1,
   zlib,
+  unstableGitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "sunxi-tools";
   version = "unstable-2024-10-13";
 
@@ -38,11 +39,13 @@ stdenv.mkDerivation rec {
     "install-misc"
   ];
 
-  meta = with lib; {
+  passthru.updateScript = unstableGitUpdater { };
+
+  meta = {
     description = "Tools for Allwinner SoC devices";
     homepage = "http://linux-sunxi.org/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ elitak ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.elitak ];
   };
 }
