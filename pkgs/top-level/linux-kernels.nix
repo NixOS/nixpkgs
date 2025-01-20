@@ -627,6 +627,8 @@ in {
 
     tsme-test = callPackage ../os-specific/linux/tsme-test { };
 
+    librem-ec-acpi = callPackage ../os-specific/linux/purism/librem-ec-acpi { };
+
   } // lib.optionalAttrs config.allowAliases {
     zfs_2_1 = throw "zfs_2_1 has been removed"; # added 2024-12-25;
     ati_drivers_x11 = throw "ati drivers are no longer supported by any kernel >=4.1"; # added 2021-05-18;
