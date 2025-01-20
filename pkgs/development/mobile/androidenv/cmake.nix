@@ -1,7 +1,7 @@
 {deployAndroidPackage, lib, package, os, autoPatchelfHook, pkgs, stdenv}:
 
 deployAndroidPackage {
-  inherit package os;
+  inherit package;
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
   buildInputs = lib.optionals (os == "linux") [ pkgs.stdenv.cc.libc pkgs.stdenv.cc.cc pkgs.ncurses5 ];
   patchInstructions = lib.optionalString (os == "linux") ''

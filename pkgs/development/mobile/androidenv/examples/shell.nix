@@ -179,8 +179,7 @@ pkgs.mkShell rec {
         "system-images;android-31;google_apis_playstore;x86_64" \
         "system-images;android-32;google_apis_playstore;x86_64" \
         "system-images;android-33;google_apis_playstore;x86_64" \
-        "system-images;android-34;google_apis;x86_64" \
-        "system-images;android-35;google_apis_playstore_ps16k;x86_64"
+        "system-images;android-34;google_apis;x86_64"
       )
 
       for package in "''${packages[@]}"; do

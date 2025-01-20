@@ -157,8 +157,12 @@ def package_archives package
   archives = {}
   package.css('> archives > archive').each do |archive|
     host_os = text archive.at_css('> host-os')
+    host_arch = text archive.at_css('> host-arch')
     host_os = 'all' if empty?(host_os)
-    archives[host_os] = {
+    host_arch = 'all' if empty?(host_arch)
+    archives[host_os + host_arch] = {
+      'os' => host_os,
+      'arch' => host_arch,
       'size' => Integer(text(archive.at_css('> complete > size'))),
       'sha1' => text(archive.at_css('> complete > checksum')),
       'url' => yield(text(archive.at_css('> complete > url')))
@@ -184,7 +188,7 @@ def fixup value
   Hash[value.map do |k, v|
     if k == 'archives' && v.is_a?(Hash)
       [k, v.map do |os, archive|
-        fixup({'os' => os}.merge(archive))
+        fixup(archive)
       end]
     elsif v.is_a?(Hash)
       [k, fixup(v)]

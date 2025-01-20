@@ -1,7 +1,7 @@
 {deployAndroidPackage, lib, package, os, autoPatchelfHook, makeWrapper, pkgs, pkgsi686Linux, postInstall}:
 
 deployAndroidPackage {
-  inherit package os;
+  inherit package;
   nativeBuildInputs = [ makeWrapper ]
     ++ lib.optionals (os == "linux") [ autoPatchelfHook ];
   buildInputs = lib.optionals (os == "linux") [ pkgs.glibc pkgs.zlib pkgs.ncurses5 pkgsi686Linux.glibc pkgsi686Linux.zlib pkgsi686Linux.ncurses5 pkgs.libcxx ];

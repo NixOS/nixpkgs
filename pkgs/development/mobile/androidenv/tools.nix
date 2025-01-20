@@ -2,7 +2,7 @@
 
 deployAndroidPackage {
   name = "androidsdk-tools";
-  inherit os package;
+  inherit package;
   nativeBuildInputs = [ makeWrapper ]
     ++ lib.optionals (os == "linux") [ autoPatchelfHook ];
   buildInputs = lib.optional (os == "linux") (
