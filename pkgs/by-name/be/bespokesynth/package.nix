@@ -3,6 +3,8 @@
   stdenv,
   fetchFromGitHub,
   fetchzip,
+  gitUpdater,
+  apple-sdk_11,
   cmake,
   pkg-config,
   ninja,
@@ -11,6 +13,7 @@
   alsa-lib,
   alsa-tools,
   freetype,
+  jsoncpp,
   libusb1,
   libX11,
   libXrandr,
@@ -31,13 +34,6 @@
   pcre,
   mount,
   zenity,
-  Accelerate,
-  Cocoa,
-  WebKit,
-  CoreServices,
-  CoreAudioKit,
-  IOBluetooth,
-  MetalKit,
   # It is not allowed to distribute binaries with the VST2 SDK plugin without a license
   # (the author of Bespoke has such a licence but not Nix). VST3 should work out of the box.
   # Read more in https://github.com/NixOS/nixpkgs/issues/145607
@@ -58,24 +54,47 @@ let
   };
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bespokesynth";
-  version = "1.2.1";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "BespokeSynth";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-vDvNm9sW9BfWloB0CA+JHTp/bfDWAP/T0hDXjoMZ3X4=";
+    repo = "bespokesynth";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-ad8wdLos3jM0gRMpcfRKeaiUxJsPGqWd/7XeDz87ToQ=";
     fetchSubmodules = true;
   };
 
+  patches = [
+    # Fix compatibility with pipewire's JACK emulation
+    # https://github.com/BespokeSynth/BespokeSynth/issues/1405#issuecomment-1721437868
+    ./2001-bespokesynth-fix-pipewire-jack.patch
+  ];
+
+  # Linux builds are sandboxed properly, this always returns "localhost" there.
+  # Darwin builds doesn't have the same amount of sandboxing by default, and the builder's hostname is returned.
+  # In case this ever gets embedded into VersionInfoBld.cpp, hardcode it to the Linux value
+  postPatch = ''
+    substituteInPlace Source/cmake/versiontools.cmake \
+      --replace-fail 'cmake_host_system_information(RESULT BESPOKE_BUILD_FQDN QUERY FQDN)' 'set(BESPOKE_BUILD_FQDN "localhost")'
+  '';
+
   cmakeBuildType = "Release";
 
-  cmakeFlags = lib.optionals enableVST2 [ "-DBESPOKE_VST2_SDK_LOCATION=${vst-sdk}/VST2_SDK" ];
+  cmakeFlags =
+    [
+      (lib.cmakeBool "BESPOKE_SYSTEM_PYBIND11" true)
+      (lib.cmakeBool "BESPOKE_SYSTEM_JSONCPP" true)
+    ]
+    ++ lib.optionals enableVST2 [
+      (lib.cmakeFeature "BESPOKE_VST2_SDK_LOCATION" "${vst-sdk}/VST2_SDK")
+    ];
+
+  strictDeps = true;
 
   nativeBuildInputs = [
-    python3
+    python3 # interpreter
     makeWrapper
     cmake
     pkg-config
@@ -83,7 +102,16 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [
+    [
+      jsoncpp
+      # library & headers
+      (python3.withPackages (
+        ps: with ps; [
+          pybind11
+        ]
+      ))
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       # List obtained from https://github.com/BespokeSynth/BespokeSynth/blob/main/azure-pipelines.yml
       libX11
       libXrandr
@@ -110,25 +138,14 @@ stdenv.mkDerivation rec {
       mount
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Accelerate
-      Cocoa
-      WebKit
-      CoreServices
-      CoreAudioKit
-      IOBluetooth
-      MetalKit
+      apple-sdk_11
     ];
-
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin (toString [
-    # Fails to find fp.h on its own
-    "-isystem ${CoreServices}/Library/Frameworks/CoreServices.framework/Versions/Current/Frameworks/CarbonCore.framework/Versions/Current/Headers/"
-  ]);
 
   postInstall =
     if stdenv.hostPlatform.isDarwin then
       ''
         mkdir -p $out/{Applications,bin}
-        mv Source/BespokeSynth_artefacts/${cmakeBuildType}/BespokeSynth.app $out/Applications/
+        mv Source/BespokeSynth_artefacts/${finalAttrs.cmakeBuildType}/BespokeSynth.app $out/Applications/
         # Symlinking confuses the resource finding about the actual location of the binary
         # Resources are looked up relative to the executed file's location
         makeWrapper $out/{Applications/BespokeSynth.app/Contents/MacOS,bin}/BespokeSynth
@@ -158,24 +175,29 @@ stdenv.mkDerivation rec {
       libXScrnSaver
     ])
   }";
+
   dontPatchELF = true; # needed or nix will try to optimize the binary by removing "useless" rpath
 
-  meta = with lib; {
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+  };
+
+  meta = {
     description = "Software modular synth with controllers support, scripting and VST";
     homepage = "https://www.bespokesynth.com/";
     license =
-      with licenses;
+      with lib.licenses;
       [
         gpl3Plus
       ]
       ++ lib.optional enableVST2 unfree;
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       astro
       tobiasBora
       OPNA2608
       PowerUser64
     ];
     mainProgram = "BespokeSynth";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
-}
+})
