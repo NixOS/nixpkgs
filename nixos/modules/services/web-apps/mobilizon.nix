@@ -5,9 +5,17 @@
   ...
 }:
 
-with lib;
-
 let
+  inherit (lib)
+    mkEnableOption
+    mkPackageOption
+    mkOption
+    mkDefault
+    mkIf
+    types
+    literalExpression
+    ;
+
   cfg = config.services.mobilizon;
 
   user = "mobilizon";
@@ -20,7 +28,7 @@ let
   # Make a package containing launchers with the correct envirenment, instead of
   # setting it with systemd services, so that the user can also use them without
   # troubles
-  launchers = pkgs.stdenv.mkDerivation rec {
+  launchers = pkgs.stdenv.mkDerivation {
     pname = "${cfg.package.pname}-launchers";
     inherit (cfg.package) version;
 
@@ -432,24 +440,34 @@ in
             proxy_set_header X-Real-IP $remote_addr;
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
             proxy_set_header X-Forwarded-Proto $scheme;
+
+            error_page 500 501 502 503 504 @error;
           '';
           locations."/" = {
             inherit proxyPass;
+            extraConfig = ''
+              expires off;
+              add_header Cache-Control "public, max-age=0, s-maxage=0, must-revalidate" always;
+            '';
           };
-          locations."~ ^/(js|css|img)" = {
+          locations."~ ^/(assets|img)" = {
             root = "${cfg.package}/lib/mobilizon-${cfg.package.version}/priv/static";
             extraConfig = ''
-              etag off;
               access_log off;
-              add_header Cache-Control "public, max-age=31536000, immutable";
+              add_header Cache-Control "public, max-age=31536000, s-maxage=31536000, immutable";
             '';
           };
           locations."~ ^/(media|proxy)" = {
             inherit proxyPass;
             extraConfig = ''
-              etag off;
               access_log off;
-              add_header Cache-Control "public, max-age=31536000, immutable";
+              add_header Cache-Control "public, max-age=31536000, s-maxage=31536000, immutable";
+            '';
+          };
+          locations."@error" = {
+            root = "${cfg.package}/lib/mobilizon-${cfg.package.version}/priv/errors";
+            extraConfig = ''
+              try_files /error.html 502;
             '';
           };
         };
