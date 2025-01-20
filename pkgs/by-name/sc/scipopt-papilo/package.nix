@@ -1,6 +1,5 @@
 {
   lib,
-  pkgs,
   stdenv,
   cmake,
   fetchFromGitHub,
