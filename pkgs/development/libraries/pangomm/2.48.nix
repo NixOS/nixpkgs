@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation rec {
   pname = "pangomm";
-  version = "2.54.0";
+  version = "2.56.1";
 
   outputs = [
     "out"
@@ -23,8 +23,8 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-Slsf0bfEehr0UnfqgrWr6sqOCPsQon2qY5TPiNdOes8=";
+    url = "mirror://gnome/sources/pangomm/${lib.versions.majorMinor version}/pangomm-${version}.tar.xz";
+    hash = "sha256-U59apg6b3GuVW7RI4qYswUVidE32kCWAQPu3S/iFdV0=";
   };
 
   nativeBuildInputs =
@@ -48,8 +48,8 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
-      attrPath = "${pname}_2_48";
+      packageName = "pangomm";
+      attrPath = "pangomm_2_48";
       versionPolicy = "odd-unstable";
     };
   };
