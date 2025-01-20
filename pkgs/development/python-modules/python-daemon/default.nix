@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  changelog-chug,
   docutils,
   lockfile,
   packaging,
@@ -20,20 +21,18 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "python_daemon";
+    inherit version;
     hash = "sha256-97BDNa3Ec96Hf1EX4m1fEUL0yffNdlQI8Id3V75a+/Q=";
   };
 
-  postPatch = ''
-    sed -i "s/setuptools\.extern\.//g" version.py test_version.py
-  '';
-
-  nativeBuildInputs = [
+  build-system = [
+    changelog-chug
     setuptools
     packaging
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     docutils
     lockfile
   ];
