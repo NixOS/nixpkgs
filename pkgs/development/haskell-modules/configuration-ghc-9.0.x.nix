@@ -60,6 +60,9 @@ self: super: {
   # their existence to callPackages, but their is no shim for lower GHC versions.
   system-cxx-std-lib = null;
 
+  # Becomes a core package in GHC >= 9.8
+  semaphore-compat = doDistribute self.semaphore-compat_1_0_0;
+
   # Jailbreaks & Version Updates
 
   # For GHC < 9.4, some packages need data-array-byte as an extra dependency

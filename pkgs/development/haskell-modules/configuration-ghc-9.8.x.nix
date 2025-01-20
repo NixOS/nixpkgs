@@ -40,6 +40,7 @@ self: super: {
   process = null;
   rts = null;
   stm = null;
+  semaphore-compat = null;
   system-cxx-std-lib = null;
   template-haskell = null;
   # GHC only builds terminfo if it is a native compiler
@@ -53,42 +54,9 @@ self: super: {
   #
   # Version upgrades
   #
-  th-abstraction = doDistribute self.th-abstraction_0_7_1_0;
-  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_8_4_20241130;
-  ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_8_0_2;
-  ghc-lib = doDistribute self.ghc-lib_9_8_4_20241130;
   megaparsec = doDistribute self.megaparsec_9_7_0;
-  # aeson 2.2.3.0 seemingly unnecessesarily bumped the lower bound on hashable
-  # https://github.com/haskell/aeson/commit/1a666febd0775d8e88d315ece1b97cd20602fb5f
-  aeson = doJailbreak (doDistribute self.aeson_2_2_3_0);
-  attoparsec-aeson = doDistribute self.attoparsec-aeson_2_2_2_0;
-  dependent-sum-template = self.dependent-sum-template_0_2_0_1; # template-haskell < 2.22
-  xmonad = doDistribute self.xmonad_0_18_0;
-  apply-refact = self.apply-refact_0_14_0_0;
-  ormolu = self.ormolu_0_7_4_0;
-  fourmolu = self.fourmolu_0_15_0_0;
-  stylish-haskell = self.stylish-haskell_0_14_6_0;
-  hlint = self.hlint_3_8;
   ghc-syntax-highlighter = self.ghc-syntax-highlighter_0_0_12_0;
-  websockets = self.websockets_0_13_0_0;
-  th-desugar = doJailbreak self.th-desugar_1_16; # th-abstraction >=0.6 && <0.7
-  singletons-th = self.singletons-th_3_3;
-  singletons-base = self.singletons-base_3_3;
   ghc-tags = self.ghc-tags_1_8;
-
-  # A given major version of ghc-exactprint only supports one version of GHC.
-  ghc-exactprint = self.ghc-exactprint_1_8_0_0;
-  ghc-exactprint_1_8_0_0 = addBuildDepends [
-    self.Diff
-    self.HUnit
-    self.data-default
-    self.extra
-    self.free
-    self.ghc-paths
-    self.ordered-containers
-    self.silently
-    self.syb
-  ] super.ghc-exactprint_1_8_0_0;
 
   #
   # Jailbreaks
@@ -98,7 +66,6 @@ self: super: {
   diagrams-lib = doJailbreak super.diagrams-lib; # base <4.19, text <2.1
   diagrams-postscript = doJailbreak super.diagrams-postscript;  # base <4.19, bytestring <0.12
   diagrams-svg = doJailbreak super.diagrams-svg;  # base <4.19, text <2.1
-  generics-sop = doJailbreak super.generics-sop_0_5_1_4; # th-abstraction >=0.6 && <0.7
   ghc-trace-events = doJailbreak super.ghc-trace-events; # text < 2.1, bytestring < 0.12, base < 4.19
   hashing = doJailbreak super.hashing; # bytestring <0.12
   json-sop = doJailbreak super.json-sop; # aeson <2.2, base <4.19, text <2.1

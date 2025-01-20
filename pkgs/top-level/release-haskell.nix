@@ -563,7 +563,7 @@ let
       ] released;
       Cabal_3_10_3_0 = released;
       Cabal_3_12_1_0 = released;
-      Cabal_3_14_1_0 = released;
+      Cabal_3_14_1_1 = released;
       cabal2nix = released;
       cabal2nix-unstable = released;
       funcmp = released;
@@ -603,6 +603,15 @@ let
       ] released;
       hashable = released;
       primitive = released;
+      semaphore-compat = [
+        # Compiler < 9.8 don't have the semaphore-compat core package
+        compilerNames.ghc865Binary
+        compilerNames.ghc8107
+        compilerNames.ghc902
+        compilerNames.ghc928
+        compilerNames.ghc948
+        compilerNames.ghc966
+      ];
       weeder = lib.subtractLists [
         compilerNames.ghc9101
         compilerNames.ghc9121

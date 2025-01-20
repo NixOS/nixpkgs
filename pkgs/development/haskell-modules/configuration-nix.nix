@@ -113,36 +113,6 @@ self: super: builtins.intersectAttrs super {
     '' + drv.preCheck or "";
   }) super.agda2lagda;
 
-  # - Disable scrypt support since the library used only works on x86 due to SSE2:
-  #   https://github.com/informatikr/scrypt/issues/8
-  # - Use crypton as the encryption backend. That override becomes obsolete with
-  #   3.1.* since cabal2nix picks crypton by default then.
-  password =
-    let
-      scryptSupported = pkgs.stdenv.hostPlatform.isx86;
-    in
-
-      lib.pipe
-        (super.password.override ({
-          cryptonite = self.crypton;
-        } // lib.optionalAttrs (!scryptSupported) {
-          scrypt = null;
-        }))
-        ([
-          (enableCabalFlag "crypton")
-          (disableCabalFlag "cryptonite")
-          # https://github.com/cdepillabout/password/pull/84
-          (appendPatch ./patches/password-3.0.4.0-scrypt-conditional.patch)
-          (overrideCabal (drv: {
-            # patch doesn't apply otherwise because of revisions
-            prePatch = drv.prePatch or "" + ''
-              ${pkgs.buildPackages.dos2unix}/bin/dos2unix *.cabal
-            '';
-          }))
-        ] ++ lib.optionals (!scryptSupported) [
-          (disableCabalFlag "scrypt")
-        ]);
-
   audacity = enableCabalFlag "buildExamples" (overrideCabal (drv: {
       executableHaskellDepends = [self.optparse-applicative self.soxlib];
     }) super.audacity);
@@ -983,7 +953,6 @@ self: super: builtins.intersectAttrs super {
   # break infinite recursion with base-orphans
   primitive = dontCheck super.primitive;
   primitive_0_7_1_0 = dontCheck super.primitive_0_7_1_0;
-  primitive_0_9_0_0 = dontCheck super.primitive_0_9_0_0;
 
   cut-the-crap =
     let path = pkgs.lib.makeBinPath [ pkgs.ffmpeg pkgs.youtube-dl ];
@@ -1345,12 +1314,22 @@ self: super: builtins.intersectAttrs super {
 
   # Test have become more fussy in >= 2.0. We need to have which available for
   # tests to succeed and the makefile no longer finds happy by itself.
-  happy_2_1_3 = overrideCabal (drv: {
-    buildTools = drv.buildTools or [ ] ++ [ pkgs.buildPackages.which ];
-    preCheck = drv.preCheck or "" + ''
-      export PATH="$PWD/dist/build/happy:$PATH"
-    '';
-  }) super.happy_2_1_3;
+  inherit
+    (lib.mapAttrs (_: overrideCabal (drv: {
+      buildTools = drv.buildTools or [ ] ++ [ pkgs.buildPackages.which ];
+      preCheck = drv.preCheck or "" + ''
+        export PATH="$PWD/dist/build/happy:$PATH"
+      '';
+    })) {
+      inherit (super) happy;
+      happy_2_1_3 = super.happy_2_1_3.override {
+        happy-lib = self.happy-lib_2_1_3;
+      };
+    })
+    happy_2_1_3
+    happy
+    ;
+
   # Additionally install documentation
   jacinda = overrideCabal (drv: {
     enableSeparateDocOutput = true;
@@ -1455,14 +1434,21 @@ self: super: builtins.intersectAttrs super {
     __onlyPropagateKnownPkgConfigModules = true;
     }) super)
       gi-javascriptcore
+      gi-javascriptcore4
+      gi-javascriptcore6
       gi-webkit2webextension
-      gi-gtk_4_0_11
-      gi-gdk_4_0_9
+      gi-gtk_4_0_12
+      gi-gdk_4_0_10
+      gi-gdk4
+      gi-gdkx114
+      gi-gtk4
+      gi-gtksource5
       gi-gsk
       gi-adwaita
       sdl2-ttf
       sdl2
       dear-imgui
+      libremidi
       ;
 
     webkit2gtk3-javascriptcore = lib.pipe super.webkit2gtk3-javascriptcore [
@@ -1484,7 +1470,7 @@ self: super: builtins.intersectAttrs super {
         mpiImpl = pkgs.mpi.pname;
         disableUnused = with builtins; map disableCabalFlag (filter (n: n != mpiImpl) validMpi);
      in lib.pipe
-          (super.mpi-hs_0_7_3_1.override { ompi = pkgs.mpi; })
+          (super.mpi-hs.override { ompi = pkgs.mpi; })
           ( [ (addTestToolDepends [ pkgs.openssh pkgs.mpiCheckPhaseHook ]) ]
             ++ disableUnused
             ++ lib.optional (builtins.elem mpiImpl validMpi) (enableCabalFlag mpiImpl)
@@ -1497,13 +1483,19 @@ self: super: builtins.intersectAttrs super {
     mpi-hs-binary
     ;
 
-  postgresql-libpq = overrideCabal (drv: {
-    # Using use-pkg-config flag, because pg_config won't work when cross-compiling.
-    configureFlags = drv.configureFlags or [] ++ [ "-fuse-pkg-config" ];
-    # Move postgresql from SystemDepends to PkgconfigDepends
-    libraryPkgconfigDepends = drv.librarySystemDepends;
-    librarySystemDepends = [];
-  }) super.postgresql-libpq;
+  postgresql-libpq = lib.pipe super.postgresql-libpq [
+    (x: x.override { postgresql-libpq-configure = null; })
+    (appendConfigureFlag "-fuse-pkg-config")
+    (addBuildDepend self.postgresql-libpq-pkgconfig)
+  ];
+
+  postgresql-libpq-configure = overrideCabal
+    (drv: {
+      librarySystemDepends = (drv.librarySystemDepends or [ ]) ++ [ pkgs.postgresql ];
+    })
+    super.postgresql-libpq-configure;
+
+  postgresql-libpq-pkgconfig = addPkgconfigDepend pkgs.postgresql super.postgresql-libpq-pkgconfig;
 
   # Test failure is related to a GHC implementation detail of primitives and doesn't
   # cause actual problems in dependent packages, see https://github.com/lehins/pvar/issues/4
@@ -1533,4 +1525,13 @@ self: super: builtins.intersectAttrs super {
   # certificate used only 1024 Bit RSA key and SHA-1, which is not allowed in OpenSSL 3.1+
   # security level 2
   openssl-streams = appendPatch ./patches/openssl-streams-cert.patch super.openssl-streams;
+
+  libtorch-ffi = appendConfigureFlags ([
+    "--extra-include-dirs=${lib.getDev pkgs.libtorch-bin}/include/torch/csrc/api/include"
+  ] ++ (lib.optionals pkgs.config.cudaSupport [ "-f" "cuda" ])
+  ) (super.libtorch-ffi.override ({
+    c10 = pkgs.libtorch-bin;
+    torch = pkgs.libtorch-bin;
+    torch_cpu = pkgs.libtorch-bin;
+  }));
 }
