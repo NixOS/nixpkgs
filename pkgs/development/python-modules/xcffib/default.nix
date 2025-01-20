@@ -1,6 +1,8 @@
 {
   lib,
   buildPythonPackage,
+  isPyPy,
+  setuptools,
   cffi,
   fetchPypi,
   pytestCheckHook,
@@ -10,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "xcffib";
-  version = "1.5.0";
-  format = "setuptools";
+  version = "1.7.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-qVyUZfL5e0/O3mBr0eCEB6Mt9xy3YP1Xv+U2d9tpGsw=";
+    hash = "sha256-M3dcHQRh8ZJV/FTiLOkU4QoT+2W8e7oOq6/ufwh4z9s=";
   };
 
   postPatch = ''
@@ -25,9 +27,9 @@ buildPythonPackage rec {
     sed -e 's,ffi\.dlopen(,&"${xorg.libxcb.out}/lib/" + ,' -i xcffib/__init__.py
   '';
 
-  propagatedNativeBuildInputs = [ cffi ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ cffi ];
+  dependencies = lib.optionals (!isPyPy) [ cffi ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -45,12 +47,12 @@ buildPythonPackage rec {
   # Tests use xvfb
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Drop in replacement for xpyb, an XCB python binding";
     homepage = "https://github.com/tych0/xcffib";
     changelog = "https://github.com/tych0/xcffib/releases/tag/v${version}";
-    license = licenses.asl20;
-    platforms = platforms.linux ++ platforms.darwin ++ platforms.windows;
-    maintainers = with maintainers; [ kamilchm ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin ++ lib.platforms.windows;
+    maintainers = with lib.maintainers; [ kamilchm ];
   };
 }
