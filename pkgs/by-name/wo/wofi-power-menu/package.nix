@@ -37,6 +37,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Highly configurable power menu using the wofi launcher power-menu";
     homepage = "https://github.com/szaffarano/wofi-power-menu";
+    changelog = "https://github.com/szaffarano/wofi-power-menu/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ defelo ];
     mainProgram = "wofi-power-menu";
