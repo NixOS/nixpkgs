@@ -10,6 +10,7 @@ let
   };
   env-vars = {
     DATA_PATH = cfg.dataDir;
+  } // lib.optionalAttrs (cfg.extensions != []) {
     THIRDPARTY_EXTENSIONS_PATH = "${extension-env}/share/freshrss/";
   };
 in
