@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
     gettext
     itstool
     inkscape
+    libxml2 # xmllint
     wrapGAppsHook3
   ];
 
@@ -43,7 +44,6 @@ stdenv.mkDerivation rec {
     gtk3
     libgtop
     libcanberra-gtk3
-    libxml2
     udisks2
     mate-desktop
     mate-panel

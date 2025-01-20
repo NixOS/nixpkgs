@@ -45,13 +45,13 @@ stdenv.mkDerivation rec {
     pkg-config
     gettext
     itstool
+    libxml2 # xmllint
     desktop-file-utils
     wrapGAppsHook3
   ];
 
   buildInputs = [
     accountsservice
-    libxml2
     dbus-glib
     libxklavier
     libcanberra-gtk3
