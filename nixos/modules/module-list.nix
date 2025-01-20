@@ -344,6 +344,7 @@
   ./programs/yazi.nix
   ./programs/ydotool.nix
   ./programs/yubikey-touch-detector.nix
+  ./programs/yottadb.nix
   ./programs/zmap.nix
   ./programs/zsh/oh-my-zsh.nix
   ./programs/zsh/zsh-autoenv.nix
