@@ -10,6 +10,7 @@ lib:
   pauseVersion,
   ccmVersion,
   dockerizedVersion,
+  imagesVersions,
   ...
 }:
 
@@ -21,6 +22,7 @@ lib:
   go,
   makeWrapper,
   fetchzip,
+  fetchurl,
 
   # Runtime dependencies
   procps,
@@ -120,18 +122,19 @@ buildGoModule rec {
 
   doCheck = false;
 
-  passthru.updateScript = updateScript;
-
-  passthru.tests =
-    {
-      version = testers.testVersion {
-        package = rke2;
-        version = "v${version}";
+  passthru = {
+    inherit updateScript;
+    tests =
+      {
+        version = testers.testVersion {
+          package = rke2;
+          version = "v${version}";
+        };
+      }
+      // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+        inherit (nixosTests) rke2;
       };
-    }
-    // lib.optionalAttrs stdenv.hostPlatform.isLinux {
-      inherit (nixosTests) rke2;
-    };
+  } // (lib.mapAttrs (_: value: fetchurl value) imagesVersions);
 
   meta = with lib; {
     homepage = "https://github.com/rancher/rke2";

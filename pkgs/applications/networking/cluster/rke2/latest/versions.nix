@@ -11,4 +11,5 @@
   dockerizedVersion = "v1.32.1-rke2r1";
   golangVersion = "go1.23.4";
   eol = "2026-02-28";
+  imagesVersions = with builtins; fromJSON (readFile ./images-versions.json);
 }
