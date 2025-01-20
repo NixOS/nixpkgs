@@ -32,6 +32,8 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
+  pythonRelaxDeps = [ "referencing" ];
+
   propagatedBuildInputs = [
     pathable
     pyyaml
