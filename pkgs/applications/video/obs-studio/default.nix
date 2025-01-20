@@ -2,6 +2,7 @@
 , uthash
 , lib
 , stdenv
+, ninja
 , nv-codec-headers-12
 , fetchFromGitHub
 , fetchpatch
@@ -42,6 +43,7 @@
 , pipewire
 , libdrm
 , librist
+, cjson
 , libva
 , srt
 , qtwayland
@@ -63,13 +65,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "obs-studio";
-  version = "30.2.3";
+  version = "31.0.0";
 
   src = fetchFromGitHub {
     owner = "obsproject";
     repo = "obs-studio";
     rev = finalAttrs.version;
-    hash = "sha256-4bAzW62xX9apKOAJyn3iys1bFdHj4re2reMZtlGsn5s=";
+    hash = "sha256-KJ92oCgtj7Ns+/9d7qpzO0brSXe9hseuYN9/nrFo9mQ=";
     fetchSubmodules = true;
   };
 
@@ -79,34 +81,12 @@ stdenv.mkDerivation (finalAttrs: {
     # Lets obs-browser build against CEF 90.1.0+
     ./Enable-file-access-and-universal-access-for-file-URL.patch
     ./fix-nix-plugin-path.patch
-
-    # Fix libobs.pc for plugins on non-x86 systems
-    (fetchpatch {
-      name = "fix-arm64-cmake.patch";
-      url = "https://git.alpinelinux.org/aports/plain/community/obs-studio/broken-config.patch?id=a92887564dcc65e07b6be8a6224fda730259ae2b";
-      hash = "sha256-yRSw4VWDwMwysDB3Hw/tsmTjEQUhipvrVRQcZkbtuoI=";
-      includes = [ "*/CompilerConfig.cmake" ];
-    })
-
-    (fetchpatch {
-      name = "qt-6.8.patch";
-      url = "https://github.com/obsproject/obs-websocket/commit/d9befb9e0a4898695eef5ccbc91a4fac02027854.patch";
-      extraPrefix = "plugins/obs-websocket/";
-      stripLen = 1;
-      hash = "sha256-7SDBRr9G40b9DfbgdaYJxTeiDSLUfVixtMtM3cLTVZs=";
-    })
-
-    # Fix lossless audio, ffmpeg 7,1 compatibility issue
-    (fetchpatch {
-      name = "fix-lossless-audio.patch";
-      url = "https://github.com/obsproject/obs-studio/commit/dfc3a69c5276edf84c933035ff2a7e278fa13c9a.patch";
-      hash = "sha256-wiF3nolBpZKp7LR7NloNfJ+v4Uq/nBgwCVoKZX+VEMA=";
-    })
   ];
 
   nativeBuildInputs = [
     addDriverRunpath
     cmake
+    ninja
     pkg-config
     wrapGAppsHook3
     wrapQtAppsHook
@@ -132,6 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
     mbedtls
     pciutils
     librist
+    cjson
     libva
     srt
     qtwayland
@@ -157,18 +138,25 @@ stdenv.mkDerivation (finalAttrs: {
       ln -s $i cef/Release/
       ln -s $i cef/Resources/
     done
-    ln -s ${libcef}/lib/libcef.so cef/Release/
+    ln -s ${libcef}/lib/*.so* cef/Release/
+    ln -s ${libcef}/libexec/cef/chrome-sandbox cef/Release/
     ln -s ${libcef}/lib/libcef_dll_wrapper.a cef/libcef_dll_wrapper/
     ln -s ${libcef}/include cef/
   '';
 
+  postPatch = ''
+    cp ${./CMakeUserPresets.json} ./CMakeUserPresets.json
+  '';
+
   cmakeFlags = [
+    "--preset" "nixpkgs-${if stdenv.hostPlatform.isDarwin then "darwin" else "linux"}"
     "-DOBS_VERSION_OVERRIDE=${finalAttrs.version}"
     "-Wno-dev" # kill dev warnings that are useless for packaging
     # Add support for browser source
-    "-DBUILD_BROWSER=ON"
+    "-DENABLE_BROWSER=ON"
     "-DCEF_ROOT_DIR=../../cef"
     "-DENABLE_JACK=ON"
+    "-DENABLE_WEBRTC=ON"
     (lib.cmakeBool "ENABLE_QSV11" stdenv.hostPlatform.isx86_64)
     (lib.cmakeBool "ENABLE_LIBFDK" withFdk)
     (lib.cmakeBool "ENABLE_ALSA" alsaSupport)
@@ -193,8 +181,13 @@ stdenv.mkDerivation (finalAttrs: {
       blackmagic-desktop-video
     ];
   in ''
-    # Remove libcef before patchelf, otherwise it will fail
+    # Remove cef components before patchelf, otherwise it will fail
     rm $out/lib/obs-plugins/libcef.so
+    rm $out/lib/obs-plugins/libEGL.so
+    rm $out/lib/obs-plugins/libGLESv2.so
+    rm $out/lib/obs-plugins/libvk_swiftshader.so
+    rm $out/lib/obs-plugins/libvulkan.so.1
+    rm $out/lib/obs-plugins/chrome-sandbox
 
     qtWrapperArgs+=(
       --prefix LD_LIBRARY_PATH : "$out/lib:${lib.makeLibraryPath wrapperLibraries}"
@@ -206,8 +199,9 @@ stdenv.mkDerivation (finalAttrs: {
     addDriverRunpath $out/lib/lib*.so
     addDriverRunpath $out/lib/obs-plugins/*.so
 
-    # Link libcef again after patchelfing other libs
+    # Link cef components again after patchelfing other libs
     ln -s ${libcef}/lib/* $out/lib/obs-plugins/
+    ln -s ${libcef}/libexec/cef/* $out/lib/obs-plugins/
   '';
 
   passthru.updateScript = nix-update-script { };
