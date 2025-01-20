@@ -64,9 +64,9 @@ buildPythonPackage rec {
 
   disabledTests = [
     # sphinx 7.4 compat
-    "test_gettext"
-    "test_gettext_additional_targets"
     "test_amsmath"
+    # pygments 2.19 compat
+    "test_includes"
   ];
 
   pythonImportsCheck = [ "myst_parser" ];
