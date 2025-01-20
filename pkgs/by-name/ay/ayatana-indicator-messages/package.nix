@@ -40,6 +40,10 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ] ++ lib.optionals withDocumentation [ "devdoc" ];
 
+  patches = [
+    ./fix-pie.patch
+  ];
+
   postPatch =
     ''
       # Uses pkg_get_variable, cannot substitute prefix with that
