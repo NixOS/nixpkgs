@@ -121,13 +121,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gerbera";
-  version = "2.3.0";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     repo = "gerbera";
     owner = "gerbera";
     rev = "v${version}";
-    sha256 = "sha256-SUMXnVCmrxoEbKKuzh+b7uvIanxilvpDDiH5ihjAm38=";
+    sha256 = "sha256-bqqD6juae0+plX6kEtHhWYgMd0KDz/1N7jJf7F6dMgQ=";
   };
 
   postPatch =
