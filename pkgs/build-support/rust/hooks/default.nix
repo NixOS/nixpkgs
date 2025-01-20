@@ -67,11 +67,11 @@
         cargoConfig = ''
           [target."${stdenv.buildPlatform.rust.rustcTarget}"]
           "linker" = "${rust.envVars.ccForBuild}"
-          ${lib.optionalString (stdenv.buildPlatform.config != stdenv.hostPlatform.config) ''
-            [target."${stdenv.hostPlatform.rust.rustcTarget}"]
-            "linker" = "${rust.envVars.ccForHost}"
+          ${lib.optionalString (stdenv.hostPlatform.config != stdenv.targetPlatform.config) ''
+          [target."${stdenv.targetPlatform.rust.rustcTarget}"]
+          "linker" = "${rust.envVars.ccForTarget}"
           ''}
-          "rustflags" = [ "-C", "target-feature=${if stdenv.hostPlatform.isStatic then "+" else "-"}crt-static" ]
+          "rustflags" = [ "-C", "target-feature=${if stdenv.targetPlatform.isStatic then "+" else "-"}crt-static" ]
         '';
       };
     } ./cargo-setup-hook.sh) {};
