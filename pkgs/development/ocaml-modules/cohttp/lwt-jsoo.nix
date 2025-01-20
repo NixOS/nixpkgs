@@ -9,6 +9,7 @@
   js_of_ocaml-lwt,
   nodejs,
   lwt_ppx,
+  ppx_expect
 }:
 
 buildDunePackage {
@@ -31,6 +32,7 @@ buildDunePackage {
   checkInputs = [
     nodejs
     lwt_ppx
+    ppx_expect
   ];
 
   meta = cohttp-lwt.meta // {

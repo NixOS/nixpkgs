@@ -1,4 +1,8 @@
-{ buildDunePackage, cohttp }:
+{
+  buildDunePackage,
+  cohttp,
+  ppx_expect,
+}:
 
 buildDunePackage {
   pname = "cohttp-top";
@@ -7,6 +11,8 @@ buildDunePackage {
   duneVersion = "3";
 
   propagatedBuildInputs = [ cohttp ];
+
+  checkInputs = [ ppx_expect ];
 
   doCheck = true;
 
