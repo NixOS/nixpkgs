@@ -15,7 +15,7 @@
   cython,
   fetchFromGitHub,
   git,
-  IOKit,
+  darwin,
   jsoncpp,
   nsync,
   openssl,
@@ -242,25 +242,22 @@ let
       which
     ] ++ lib.optionals effectiveStdenv.hostPlatform.isDarwin [ cctools ];
 
-    buildInputs =
-      [
-        curl
-        double-conversion
-        giflib
-        jsoncpp
-        libjpeg_turbo
-        numpy
-        openssl
-        pkgs.flatbuffers
-        pkgs.protobuf
-        pybind11
-        scipy
-        six
-        snappy
-        zlib
-      ]
-      ++ lib.optionals effectiveStdenv.hostPlatform.isDarwin [ IOKit ]
-      ++ lib.optionals (!effectiveStdenv.hostPlatform.isDarwin) [ nsync ];
+    buildInputs = [
+      curl
+      double-conversion
+      giflib
+      jsoncpp
+      libjpeg_turbo
+      numpy
+      openssl
+      pkgs.flatbuffers
+      pkgs.protobuf
+      pybind11
+      scipy
+      six
+      snappy
+      zlib
+    ] ++ lib.optionals (!effectiveStdenv.hostPlatform.isDarwin) [ nsync ];
 
     # We don't want to be quite so picky regarding bazel version
     postPatch = ''
@@ -393,12 +390,12 @@ let
             }
         ).${effectiveStdenv.system} or (throw "jaxlib: unsupported system: ${effectiveStdenv.system}");
 
-        # Non-reproducible fetch https://github.com/NixOS/nixpkgs/issues/321920#issuecomment-2184940546
-        preInstall = ''
-          cat << \EOF > "$bazelOut/external/go_sdk/versions.json"
-          []
-          EOF
-        '';
+      # Non-reproducible fetch https://github.com/NixOS/nixpkgs/issues/321920#issuecomment-2184940546
+      preInstall = ''
+        cat << \EOF > "$bazelOut/external/go_sdk/versions.json"
+        []
+        EOF
+      '';
     };
 
     buildAttrs = {
@@ -415,7 +412,7 @@ let
       # are not available yet. Framework search paths aren't added by bintools
       # hook. See https://github.com/NixOS/nixpkgs/pull/41914.
       preBuild = lib.optionalString effectiveStdenv.hostPlatform.isDarwin ''
-        export NIX_LDFLAGS+=" -F${IOKit}/Library/Frameworks"
+        export NIX_LDFLAGS+=" -F${darwin.apple_sdk.frameworks.IOKit}/Library/Frameworks"
         substituteInPlace ../output/external/rules_cc/cc/private/toolchain/osx_cc_wrapper.sh.tpl \
           --replace "/usr/bin/install_name_tool" "${cctools}/bin/install_name_tool"
         substituteInPlace ../output/external/rules_cc/cc/private/toolchain/unix_cc_configure.bzl \
