@@ -32,11 +32,11 @@ stdenv.mkDerivation {
   ];
 
   cmakeFlags = [
-    "-D GMP=ON"
-    "-D QUADMATH=ON"
-    "-D TBB=ON"
-    "-D TBB_DOWNLOAD=OFF"
-    "-D SOPLEX=OFF"
+    (lib.cmakeBool "GMP" true)
+    (lib.cmakeBool "QUADMATH" true)
+    (lib.cmakeBool "TBB" true)
+    (lib.cmakeBool "TBB_DOWNLOAD" false)
+    (lib.cmakeBool "SOPLEX" false)
   ];
 
   meta = {
