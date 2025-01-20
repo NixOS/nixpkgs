@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "turn-rs";
-  version = "3.3.2";
+  version = "3.3.3";
 
   src = fetchFromGitHub {
     owner = "mycrl";
     repo = "turn-rs";
     tag = "v${version}";
-    hash = "sha256-ITs6kNI1g7k8bcSSG6GwPGY5U+mFGqCTU6JIEj9mH/Q=";
+    hash = "sha256-kNE6FbHAFVWH04uTJBCRkrB0yzIjuXX3rxi2h5WmKWo=";
   };
 
-  cargoHash = "sha256-bmeTDMa/khX7fTDCGpf3U2LZPnkXL+bi69sv6NPnANI=";
+  cargoHash = "sha256-D2gvvHal3hRtm0na4nxEPv16m7vIDs1rchfap25ScHk=";
 
   passthru = {
     updateScript = nix-update-script { };
