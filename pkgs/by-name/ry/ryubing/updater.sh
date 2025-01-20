@@ -25,7 +25,7 @@ if [ -z ${NEW_VERSION+x} ] && [ -z ${COMMIT+x} ]; then
     RELEASE_DATA=$(
         curl -s -H "Accept: application/vnd.github.v3+json" \
             ${GITHUB_TOKEN:+ -H "Authorization: bearer $GITHUB_TOKEN"} \
-            https://api.github.com/repos/GreemDev/Ryujinx/releases
+            https://api.github.com/repos/Ryubing/Ryujinx/releases
     )
     if [ -z "$RELEASE_DATA" ] || [[ $RELEASE_DATA =~ "rate limit exceeded" ]]; then
         echo "failed to get release job data" >&2
@@ -47,11 +47,11 @@ fi
 cd ../../../..
 
 if [[ "${1-default}" != "--deps-only" ]]; then
-    SHA="$(nix-prefetch-git https://github.com/GreemDev/Ryujinx --rev "$NEW_VERSION" --quiet | jq -r '.sha256')"
+    SHA="$(nix-prefetch-git https://github.com/Ryubing/Ryujinx --rev "$NEW_VERSION" --quiet | jq -r '.sha256')"
     SRI=$(nix --experimental-features nix-command hash to-sri "sha256:$SHA")
-    update-source-version ryujinx-greemdev "$NEW_VERSION" "$SRI"
+    update-source-version ryubing "$NEW_VERSION" "$SRI"
 fi
 
 echo "building Nuget lockfile"
 
-eval "$(nix-build -A ryujinx-greemdev.fetch-deps --no-out-link)"
+eval "$(nix-build -A ryubing.fetch-deps --no-out-link)"
