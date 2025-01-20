@@ -2,10 +2,10 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  appdirs,
   argcomplete,
   colorama,
   halo,
+  platformdirs,
   spinners,
   types-colorama,
   nose2,
@@ -14,21 +14,21 @@
 
 buildPythonPackage rec {
   pname = "milc";
-  version = "1.8.0";
+  version = "1.9.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "clueboard";
     repo = "milc";
     rev = version;
-    hash = "sha256-DUA79R/pf/arG4diJKaJTSLNdB4E0XnS4NULlqP4h/M=";
+    hash = "sha256-Vuc69ikRXpeECqU/22/h3+TmMi0jD0Ik+cVW8e9eWbw=";
   };
 
   propagatedBuildInputs = [
-    appdirs
     argcomplete
     colorama
     halo
+    platformdirs
     spinners
     types-colorama
   ];
