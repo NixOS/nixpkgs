@@ -669,6 +669,11 @@
     githubId = 10677343;
     name = "Eugene";
   };
+  afermg = {
+    github = "afermg";
+    githubId = 14353896;
+    name = "Alan Munoz";
+  };
   afh = {
     email = "surryhill+nix@gmail.com";
     github = "afh";
