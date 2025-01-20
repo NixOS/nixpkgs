@@ -61,6 +61,7 @@ done <<<"${IMAGES_ARCHIVES}" | jq --slurp 'reduce .[] as $item ({}; . * $item)' 
 
 cat << EOF > "${WORKDIR}/${CHANNEL_NAME}/versions.nix"
 {
+  releaseName = "rke2_${CHANNEL_NAME}";
   rke2Version = "${RKE2_VERSION}";
   rke2Commit = "${RKE2_COMMIT}";
   rke2TarballHash = "${STORE_HASH}";

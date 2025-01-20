@@ -1,4 +1,5 @@
 {
+  releaseName = "rke2_testing";
   rke2Version = "1.31.4-rc3+rke2r1";
   rke2Commit = "b2d8003d79075e7331ab8f2d1e1a3c494ed944b9";
   rke2TarballHash = "sha256-eTA+/fF6HuXDT4EUnvPIaJtLfbNGk9BXG+z3zCRPh9s=";
