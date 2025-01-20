@@ -4,6 +4,7 @@
   fetchFromGitHub,
   python312,
   nixosTests,
+  nix-update-script,
 }:
 let
   pname = "open-webui";
@@ -156,6 +157,8 @@ python312.pkgs.buildPythonApplication rec {
     };
     updateScript = ./update.sh;
   };
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/open-webui/open-webui/blob/${src.tag}/CHANGELOG.md";
