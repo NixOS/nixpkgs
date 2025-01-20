@@ -9273,6 +9273,11 @@ with pkgs;
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 
+  hppcorbaserver = with python3Packages; hpp-corbaserver.withPlugins [
+    hpp-manipulation
+    hpp-manipulation-corba
+  ];
+
   hpx = callPackage ../development/libraries/hpx { };
 
   hspell = callPackage ../development/libraries/hspell { };
