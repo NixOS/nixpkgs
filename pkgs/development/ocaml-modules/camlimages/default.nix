@@ -2,37 +2,51 @@
   lib,
   fetchFromGitLab,
   buildDunePackage,
+  pkg-config,
   findlib,
   dune-configurator,
   cppo,
   graphics,
   lablgtk,
+  libexif,
+  libpng,
+  libjpeg,
+  libtiff,
+  giflib,
+  libwebp,
+  freetype,
   stdio,
+  xorg,
 }:
 
 buildDunePackage rec {
   pname = "camlimages";
-  version = "5.0.4";
+  version = "5.0.5-unstable-2024-11-23";
 
-  minimalOCamlVersion = "4.07";
+  minimalOCamlVersion = "5.0";
 
   src = fetchFromGitLab {
     owner = "camlspotter";
     repo = pname;
-    rev = version;
-    sha256 = "1m2c76ghisg73dikz2ifdkrbkgiwa0hcmp21f2fm2rkbf02rq3f4";
+    rev = "a9f60a4420e05d3de4ac5383c6b371d5c4d3ed80";
+    hash = "sha256-rRD+6HrTgODvc0ZlW2taCXr8dBRVvwuJ0tkPNFY6ddU=";
   };
 
-  # stdio v0.17 compatibility; also replaces `String.lowercase` with `String.lowercase_ascii`
-  patches = [ ./camlimages.patch ];
-
-  nativeBuildInputs = [ cppo ];
+  nativeBuildInputs = [ cppo pkg-config ];
   buildInputs = [
     dune-configurator
     findlib
+    giflib
     graphics
     lablgtk
+    libexif
+    libpng
+    libjpeg
+    libtiff
+    libwebp
+    freetype
     stdio
+    xorg.libXpm
   ];
 
   meta = with lib; {

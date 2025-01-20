@@ -23,7 +23,7 @@
 
 let
   pname = "liquidsoap";
-  version = "2.2.5";
+  version = "2.3.0";
 in
 stdenv.mkDerivation {
   inherit pname version;
@@ -31,8 +31,10 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "liquidsoap";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-o3P7oTizO2l2WkB4LormZ/Ses5jZOpgQ1r1zB1Y3Bjs=";
+    # tag = "v${version}";
+    # hash = "sha256-wNOENkIQw8LWfceI24aa8Ja3ZkePgTIGdIpGgqs/3Ss=";
+    rev = "c0cd13a1f58164d2cab8cb322b90a24064beda17";
+    hash = "sha256-5GTUEQX0rntVw0cNIyTtCMBmAbWVhHhjwhobWpA83kc=";
   };
 
   postPatch = ''
@@ -87,64 +89,80 @@ stdenv.mkDerivation {
     ocamlPackages.dtools
     ocamlPackages.duppy
     ocamlPackages.mm
+    ocamlPackages.re
+    # ocamlPackages.ocaml_pcre
     ocamlPackages.ocurl
-    ocamlPackages.ocaml_pcre
     ocamlPackages.cry
     ocamlPackages.camomile
     ocamlPackages.uri
     ocamlPackages.fileutils
-    ocamlPackages.magic-mime
-    ocamlPackages.menhir # liquidsoap-lang
     ocamlPackages.menhirLib
+    ocamlPackages.mem_usage
     ocamlPackages.metadata
+    ocamlPackages.magic-mime
     ocamlPackages.dune-build-info
-    ocamlPackages.re
-    ocamlPackages.sedlex # liquidsoap-lang
     ocamlPackages.ppx_string
-
-    # Recommended dependencies
-    ocamlPackages.ffmpeg
+    ## Liquidoap-lang
+    ocamlPackages.saturn_lockfree
+    ocamlPackages.ppx_hash
+    ocamlPackages.sedlex
+    # ocamlPackages.menhir
+    ocamlPackages.xml-light
 
     # Optional dependencies
     ocamlPackages.alsa
     ocamlPackages.ao
     ocamlPackages.bjack
     ocamlPackages.camlimages
+    ocamlPackages.ctypes-foreign
     ocamlPackages.dssi
     ocamlPackages.faad
     ocamlPackages.fdkaac
+    ocamlPackages.ffmpeg
     ocamlPackages.flac
     ocamlPackages.frei0r
     ocamlPackages.gd
     ocamlPackages.graphics
-    # ocamlPackages.gstreamer # Broken but advertised feature
     ocamlPackages.imagelib
     ocamlPackages.inotify
+    # ocamlPackages.irc-client-unix # Missing
+    # ocamlPackages.jemalloc # Missing
     ocamlPackages.ladspa
     ocamlPackages.lame
     ocamlPackages.lastfm
     ocamlPackages.lilv
     ocamlPackages.lo
     ocamlPackages.mad
+    ocamlPackages.memtrace
     ocamlPackages.ogg
     ocamlPackages.opus
+    # ocamlPackages.osc-unix # Missing
     ocamlPackages.portaudio
     ocamlPackages.posix-time2
     ocamlPackages.pulseaudio
+    ## prometheus-liquidsoap # Missing
     ocamlPackages.samplerate
     ocamlPackages.shine
     ocamlPackages.soundtouch
     ocamlPackages.speex
+    # ocamlPackages.sqlite3 # Missing
     ocamlPackages.srt
     ocamlPackages.ssl
-    ocamlPackages.taglib
+    ## tls-liquidsoap
+    ocamlPackages.tls
+    ocamlPackages.ca-certs
+    ocamlPackages.mirage-crypto-rng
+    ocamlPackages.cstruct
+    ##
     ocamlPackages.theora
+    ## sdl-liquidsoap
     ocamlPackages.tsdl
     ocamlPackages.tsdl-image
     ocamlPackages.tsdl-ttf
+    ##
     ocamlPackages.vorbis
-    ocamlPackages.xmlplaylist
     ocamlPackages.yaml
+    ocamlPackages.xmlplaylist
   ];
 
   meta = {

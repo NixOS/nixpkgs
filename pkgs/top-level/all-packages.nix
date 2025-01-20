@@ -3909,7 +3909,6 @@ with pkgs;
 
   liquidsoap = callPackage ../tools/audio/liquidsoap/full.nix {
     ffmpeg = ffmpeg_6-full;
-    ocamlPackages = ocaml-ng.ocamlPackages_4_14;
   };
 
   lldpd = callPackage ../tools/networking/lldpd {
