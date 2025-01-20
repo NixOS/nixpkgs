@@ -12,7 +12,6 @@
   freetype,
   glib,
   glm,
-  glog,
   libapparmor,
   libdrm,
   libepoxy,
@@ -112,7 +111,6 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
     glib
     glm
-    glog
     libdrm
     libepoxy
     libevdev
