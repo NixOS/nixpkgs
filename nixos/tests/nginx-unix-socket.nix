@@ -1,6 +1,7 @@
 import ./make-test-python.nix (
   { pkgs, ... }:
   let
+    defaultNginxSocketPath = "/var/run/nginx/default-test.sock";
     nginxSocketPath = "/var/run/nginx/test.sock";
   in
   {
@@ -12,6 +13,14 @@ import ./make-test-python.nix (
         {
           services.nginx = {
             enable = true;
+
+            defaultListen = [ { addr = "unix:${defaultNginxSocketPath}"; } ];
+
+            virtualHosts.defaultLocalhost = {
+              serverName = "defaultLocalhost";
+              locations."/default".return = "200 'bar'";
+            };
+
             virtualHosts.localhost = {
               serverName = "localhost";
               listen = [ { addr = "unix:${nginxSocketPath}"; } ];
@@ -23,8 +32,10 @@ import ./make-test-python.nix (
 
     testScript = ''
       webserver.wait_for_unit("nginx")
+      webserver.wait_for_open_unix_socket("${defaultNginxSocketPath}")
       webserver.wait_for_open_unix_socket("${nginxSocketPath}")
 
+      webserver.succeed("curl --fail --silent --unix-socket '${defaultNginxSocketPath}' http://defaultLocalhost/default | grep '^bar$'")
       webserver.succeed("curl --fail --silent --unix-socket '${nginxSocketPath}' http://localhost/test | grep '^foo$'")
     '';
   }
