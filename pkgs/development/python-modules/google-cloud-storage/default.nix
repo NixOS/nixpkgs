@@ -66,6 +66,7 @@ buildPythonPackage rec {
     "test_hmac_key_crud"
     "test_list_buckets"
     "test_open"
+    "test_restore_bucket"
     "test_set_api_request_attr"
     "upload"
   ];
