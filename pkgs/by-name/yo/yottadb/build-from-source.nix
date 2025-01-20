@@ -1,11 +1,34 @@
-{ ydbVersion, ydbCommitRef, ydbNixHash, enableAsan,
+{
+  ydbVersion,
+  ydbCommitRef,
+  ydbNixHash,
+  enableAsan,
 
-lib, config, makeWrapper, stdenv, writeText, writeScript,
+  lib,
+  config,
+  makeWrapper,
+  stdenv,
+  writeText,
+  writeScript,
 
-cmake, coreutils-full, elfutils, fetchFromGitLab, git, glibcLocales, libxcrypt
-, icu, ncurses, readline, openssl, pkg-config, tcsh, util-linux, zlib,
+  cmake,
+  coreutils-full,
+  elfutils,
+  fetchFromGitLab,
+  git,
+  glibcLocales,
+  libxcrypt,
+  icu,
+  ncurses,
+  readline,
+  openssl,
+  pkg-config,
+  tcsh,
+  util-linux,
+  zlib,
 
-nixosTests }:
+  nixosTests,
+}:
 
 # To test this package, go to $NIXPKGS/nixos/tests and run:
 #   $ $(nix-build -A driverInteractive yottadb.nix)/bin/nixos-test-driver -I
@@ -25,8 +48,7 @@ stdenv.mkDerivation rec {
     hash = "${ydbNixHash}";
   };
 
-  env.NIX_CFLAGS_COMPILE =
-    ''-DYDB_EXTERNAL_SECSHR_PARENT_DIR="${ydbSecRunDir}"'';
+  env.NIX_CFLAGS_COMPILE = ''-DYDB_EXTERNAL_SECSHR_PARENT_DIR="${ydbSecRunDir}"'';
 
   enableParallelBuilding = true;
 
@@ -60,17 +82,17 @@ stdenv.mkDerivation rec {
     util-linux
   ];
 
-  asanOptions = lib.concatStringsSep ":"
-    (lib.mapAttrsToList (x: y: "${x}=${if y then "1" else "0"}") {
+  asanOptions = lib.concatStringsSep ":" (
+    lib.mapAttrsToList (x: y: "${x}=${if y then "1" else "0"}") {
       detect_leaks = false;
       disable_coredump = false;
       unmap_shadow_on_exit = true;
       abort_on_error = true;
-    });
+    }
+  );
 
   cmakeFlags = [
-    (lib.cmakeOptionType "filepath" "YDB_INSTALL_DIR"
-      "${placeholder "out"}/dist")
+    (lib.cmakeOptionType "filepath" "YDB_INSTALL_DIR" "${placeholder "out"}/dist")
     (lib.cmakeBool "ENABLE_ASAN" enableAsan)
   ];
 
@@ -252,4 +274,3 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
   };
 }
-

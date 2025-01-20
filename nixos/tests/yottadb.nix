@@ -1,7 +1,11 @@
-import ./make-test-python.nix ({ pkgs,
+import ./make-test-python.nix (
+  {
+    pkgs,
 
-  # TODO: test co-existence of multiple versions
-  yottadbPackage ? pkgs.yottadb, ... }:
+    # TODO: test co-existence of multiple versions
+    yottadbPackage ? pkgs.yottadb,
+    ...
+  }:
 
   let
     ydbWithAsan = yottadbPackage.override { enableAsan = true; };
@@ -28,26 +32,31 @@ import ./make-test-python.nix ({ pkgs,
       EX
     '';
     testJnl = "/tmp/test.mjl";
-  in {
+  in
+  {
     name = "yottadb";
-    meta = with pkgs.lib.maintainers; { maintainers = [ ztmr ]; };
+    meta = with pkgs.lib.maintainers; {
+      maintainers = [ ztmr ];
+    };
 
     nodes = {
-      ydbvm = { pkgs, ... }: {
-        programs.yottadb = {
-          enable = true;
-          package = ydbWithAsan;
-        };
-        environment = {
-          systemPackages = [ pkgs.lsof ];
-          variables = {
-            ydb_routines = "${ydbWithAsan}/lib/libyottadbutil-utf8.so /tmp/";
-            ydb_gbldir = "/tmp/ydbtest.gld";
-            ydb_dist = "${ydbWithAsan}/dist";
-            ASAN_OPTIONS = ydbWithAsan.asanOptions;
+      ydbvm =
+        { pkgs, ... }:
+        {
+          programs.yottadb = {
+            enable = true;
+            package = ydbWithAsan;
+          };
+          environment = {
+            systemPackages = [ pkgs.lsof ];
+            variables = {
+              ydb_routines = "${ydbWithAsan}/lib/libyottadbutil-utf8.so /tmp/";
+              ydb_gbldir = "/tmp/ydbtest.gld";
+              ydb_dist = "${ydbWithAsan}/dist";
+              ASAN_OPTIONS = ydbWithAsan.asanOptions;
+            };
           };
         };
-      };
     };
 
     testScript = ''
@@ -113,4 +122,5 @@ import ./make-test-python.nix ({ pkgs,
 
       ydbvm.shutdown()
     '';
-  })
+  }
+)
