@@ -1,0 +1,13 @@
+diff --git a/src/portal-impl.c b/src/portal-impl.c
+index 85b3a23..6d43636 100644
+--- a/src/portal-impl.c
++++ b/src/portal-impl.c
+@@ -275,6 +275,8 @@ load_installed_portals (gboolean opt_verbose)
+ 
+   /* We need to override this in the tests */
+   portal_dir = g_getenv ("XDG_DESKTOP_PORTAL_DIR");
++  if (portal_dir == NULL)
++    portal_dir = g_getenv ("NIX_XDG_DESKTOP_PORTAL_DIR");
+   if (portal_dir == NULL)
+     portal_dir = DATADIR "/xdg-desktop-portal/portals";
+ 

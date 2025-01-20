@@ -1,0 +1,25 @@
+From 419c469634891d09f6688d56da9e26431018f342 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Wed, 10 Apr 2024 20:36:53 -0400
+Subject: [PATCH 2/6] Rely on libcd_is_blob_a_linker_signature
+
+---
+ libstuff/code_directory.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/libstuff/code_directory.c b/libstuff/code_directory.c
+index 7c158fa..3b8eb77 100644
+--- a/libstuff/code_directory.c
++++ b/libstuff/code_directory.c
+@@ -146,7 +146,7 @@ static const char* format_version_xyz(uint32_t version)
+  */
+ int codedir_is_linker_signed(const char* data, uint32_t size)
+ {
+-#if 1
++#if 0
+     // HACK: libcodedirectory.h is in both the macOS SDK in /usr/local/include, and in the tool chain at /usr/include.
+     // but there is no way to control clang's search path to look in the toolchain first.
+     // So, declare newer API locally. Once this new header is in all SDKs we can remove this.
+-- 
+2.45.2
+

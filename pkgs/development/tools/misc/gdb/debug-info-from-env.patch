@@ -1,0 +1,17 @@
+--- a/gdb/main.c
++++ b/gdb/main.c
+@@ -708,8 +708,12 @@ captured_main_1 (struct captured_main_args *context)
+   if (gdb_sysroot.empty ())
+     gdb_sysroot = TARGET_SYSROOT_PREFIX;
+ 
+-  debug_file_directory
+-    = relocate_gdb_directory (DEBUGDIR, DEBUGDIR_RELOCATABLE);
++  const char * nix_debug = getenv ("NIX_DEBUG_INFO_DIRS");
++  if (nix_debug != NULL)
++      debug_file_directory = nix_debug;
++  else
++    debug_file_directory
++      = relocate_gdb_directory (DEBUGDIR, DEBUGDIR_RELOCATABLE);
+ 
+   gdb_datadir = relocate_gdb_directory (GDB_DATADIR,
+ 					GDB_DATADIR_RELOCATABLE);

@@ -1,0 +1,18 @@
+diff --git a/rainbowstream/c_image.py b/rainbowstream/c_image.py
+index f050150..a0fb77d 100644
+--- a/rainbowstream/c_image.py
++++ b/rainbowstream/c_image.py
+@@ -12,11 +12,7 @@ def call_c():
+     """
+     Call the C program for converting RGB to Ansi colors
+     """
+-    library = expanduser('~/.image.so')
+-    sauce = join(dirname(__file__), 'image.c')
+-    if not exists(library) or getmtime(sauce) > getmtime(library):
+-        build = "cc -fPIC -shared -o %s %s" % (library, sauce)
+-        os.system(build + " >/dev/null 2>&1")
++    library = '@CLIB@'
+     image_c = ctypes.cdll.LoadLibrary(library)
+     image_c.init()
+     return image_c.rgb_to_ansi
+

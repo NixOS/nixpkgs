@@ -1,0 +1,31 @@
+From 563f023aba1034f4f433f412302b825b059ef5a5 Mon Sep 17 00:00:00 2001
+From: Mark Barbone <mark.l.barbone@gmail.com>
+Date: Sun, 19 Jul 2020 17:24:30 -0400
+Subject: [PATCH] Fix to-string.agda to compile with Agda 2.6.1
+
+---
+Adapted from https://github.com/cedille/cedille/pull/156.
+
+ src/to-string.agda | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/src/to-string.agda b/src/to-string.agda
+index 2505942..051a2da 100644
+--- a/src/to-string.agda
++++ b/src/to-string.agda
+@@ -100,9 +100,9 @@ no-parens {TK} _ _ _ = tt
+ no-parens {QUALIF} _ _ _ = tt
+ no-parens {ARG} _ _ _ = tt
+ 
+-pattern ced-ops-drop-spine = cedille-options.options.mk-options _ _ _ _ ff _ _ _ ff _
+-pattern ced-ops-conv-arr = cedille-options.options.mk-options _ _ _ _ _ _ _ _ ff _
+-pattern ced-ops-conv-abs = cedille-options.options.mk-options _ _ _ _ _ _ _ _ tt _
++pattern ced-ops-drop-spine = cedille-options.mk-options _ _ _ _ ff _ _ _ ff _
++pattern ced-ops-conv-arr = cedille-options.mk-options _ _ _ _ _ _ _ _ ff _
++pattern ced-ops-conv-abs = cedille-options.mk-options _ _ _ _ _ _ _ _ tt _
+ 
+ drop-spine : cedille-options.options → {ed : exprd} → ctxt → ⟦ ed ⟧ → ⟦ ed ⟧
+ drop-spine ops @ ced-ops-drop-spine = h
+-- 
+2.27.0
+

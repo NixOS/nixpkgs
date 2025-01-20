@@ -1,0 +1,24 @@
+diff --git a/libspeexdsp/Makefile.am b/libspeexdsp/Makefile.am
+index d0499b9..42e8d50 100644
+--- a/libspeexdsp/Makefile.am
++++ b/libspeexdsp/Makefile.am
+@@ -29,7 +29,7 @@ noinst_HEADERS = 	arch.h 	bfin.h \
+ 	pseudofloat.h smallft.h vorbis_psy.h resample_sse.h resample_neon.h
+ 
+ libspeexdsp_la_LDFLAGS = -no-undefined -version-info @SPEEXDSP_LT_CURRENT@:@SPEEXDSP_LT_REVISION@:@SPEEXDSP_LT_AGE@
+-libspeexdsp_la_LIBADD = $(LIBM)
++libspeexdsp_la_LIBADD = @FFT_LIBS@ $(LIBM)
+ 
+ if BUILD_EXAMPLES
+ noinst_PROGRAMS = testdenoise testecho testjitter testresample
+diff --git a/speexdsp.pc.in b/speexdsp.pc.in
+index 6c6d26f..d40d856 100644
+--- a/speexdsp.pc.in
++++ b/speexdsp.pc.in
+@@ -11,5 +11,5 @@ Version: @PACKAGE_VERSION@
+ Requires: @FFT_PKGCONFIG@
+ Conflicts:
+ Libs: -L${libdir} -lspeexdsp
+-Libs.private: @LIBM@
++Libs.private: @FFT_LIBS@ @LIBM@
+ Cflags: -I${includedir}

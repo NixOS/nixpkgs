@@ -1,0 +1,22 @@
+From 7d62095b94f8df3891c984a1535026d2658bb177 Mon Sep 17 00:00:00 2001
+From: Edmund Wu <fangkazuto@gmail.com>
+Date: Sat, 11 Apr 2020 16:59:35 -0400
+Subject: [PATCH] meson: actually use systemd_systemunitdir
+
+---
+ meson.build | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/meson.build b/meson.build
+index 02e6c73..ba5ba1e 100644
+--- a/meson.build
++++ b/meson.build
+@@ -58,7 +58,7 @@ if policydir == ''
+         policydir = get_option('datadir') / 'polkit-1' / 'actions'
+ endif
+ 
+-systemunitdir = ''
++systemunitdir = get_option('systemd_systemunitdir')
+ if systemunitdir == '' and systemd_dep.found()
+         systemunitdir = systemd_dep.get_pkgconfig_variable(
+                 'systemdsystemunitdir',
