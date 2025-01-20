@@ -129,7 +129,7 @@ let
   wrapperArgs = builtins.concatStringsSep " " wrapperOptions;
 
   goBuild =
-    if enableCuda then buildGoModule.override { stdenv = overrideCC stdenv gcc12; } else buildGoModule;
+    if enableCuda then buildGoModule.override { stdenv = cudaPackages.backendStdenv; } else buildGoModule;
   inherit (lib) licenses platforms maintainers;
 in
 goBuild {
