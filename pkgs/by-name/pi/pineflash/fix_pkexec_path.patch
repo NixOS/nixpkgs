@@ -1,0 +1,22 @@
+diff --git a/src/submodules/flash.rs b/src/submodules/flash.rs
+index 5b224b2..e30f286 100644
+--- a/src/submodules/flash.rs
++++ b/src/submodules/flash.rs
+@@ -107,7 +107,7 @@ impl Flasher {
+             let dfupath = "dfu-util";
+ 
+             #[cfg(target_os = "linux")]
+-            let command = Command::new("pkexec")
++            let command = Command::new("/run/wrappers/bin/pkexec")
+                 // .env("PATH", path)
+                 .arg(dfupath)
+                 .arg("-D")
+@@ -182,7 +182,7 @@ impl Flasher {
+             let blisppath = "blisp";
+ 
+             #[cfg(target_os = "linux")]
+-            let command = Command::new("pkexec")
++            let command = Command::new("/run/wrappers/bin/pkexec")
+                 .env("PATH", "/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:linux")
+                 .arg(blisppath)
+                 .arg("write")
