@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pico-sdk";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
       if (withSubmodules) then
         "sha256-fVSpBVmjeP5pwkSPhhSCfBaEr/FEtA82mQOe/cHFh0A="
       else
-        "sha256-d6mEjuG8S5jvJS4g8e90gFII3sEqUVlT2fgd9M9LUkA=";
+        "sha256-QKc16Wnx2AvpM0/bklY8CnbsShVR1r5ejtRlvE8f8mM=";
   };
 
   nativeBuildInputs = [ cmake ];
