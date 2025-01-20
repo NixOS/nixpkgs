@@ -6,20 +6,21 @@
   poetry-core,
   setuptools,
   fnvhash,
+  pytest-codspeed,
   pytest-cov-stub,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "fnv-hash-fast";
-  version = "1.0.2";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "fnv-hash-fast";
     tag = "v${version}";
-    hash = "sha256-kJQZnj1ja7cVZSDOuUI3rkNIvyH508wFKAvJ5XfwCNU=";
+    hash = "sha256-QkLCqIwzJebG3EOylbtB3jFG3bpA5KBUB9arM3Cpros=";
   };
 
   build-system = [
@@ -33,6 +34,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "fnv_hash_fast" ];
 
   nativeCheckInputs = [
+    pytest-codspeed
     pytest-cov-stub
     pytestCheckHook
   ];
