@@ -11,7 +11,7 @@ let
 in
 buildNpmPackage {
   pname = "mongosh";
-  inherit (source) version;
+  version = source.version;
 
   src = fetchurl {
     url = "https://registry.npmjs.org/mongosh/-/${source.filename}";
