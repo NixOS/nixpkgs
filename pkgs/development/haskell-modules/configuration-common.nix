@@ -2622,6 +2622,17 @@ self: super: {
   # https://github.com/phadej/crypt-sha512/issues/13
   crypt-sha512 = dontCheck super.crypt-sha512;
 
+  # Latest release depends on crypton-connection ==0.3.2 https://github.com/ndmitchell/hoogle/issues/435
+  hoogle = overrideSrc {
+    version = "unstable-2024-07-29";
+    src = pkgs.fetchFromGitHub {
+      owner = "ndmitchell";
+      repo = "hoogle";
+      rev = "8149c93c40a542bf8f098047e1acbc347fc9f4e6";
+      hash = "sha256-k3UdmTq8c+iNF8inKM+oWf/NgJqRgUSFS3YwRKVg8Mw=";
+    };
+  } super.hoogle;
+
   # Too strict upper bound on HTTP
   oeis = doJailbreak super.oeis;
 
