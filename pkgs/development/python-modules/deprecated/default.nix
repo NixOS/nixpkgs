@@ -26,6 +26,11 @@ buildPythonPackage rec {
     hash = "sha256-slMPL2L0TZ7L19nfHMOM4jQlkJ7HIyyDPlfC9yhhd98=";
   };
 
+  patches = [
+    # https://github.com/laurent-laporte-pro/deprecated/pull/79
+    ./sphinx8-compat.patch
+  ];
+
   build-system = [ setuptools ];
 
   nativeBuildInputs = [ sphinxHook ];
