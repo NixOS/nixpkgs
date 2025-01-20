@@ -5,7 +5,7 @@
   fetchFromGitHub,
   fetchpatch2,
   python3,
-  nodejs_20,
+  nodejs,
   node-gyp,
   runCommand,
   nixosTests,
@@ -27,7 +27,6 @@
   vips,
 }:
 let
-  nodejs = nodejs_20;
   buildNpmPackage' = buildNpmPackage.override { inherit nodejs; };
   sources = lib.importJSON ./sources.json;
   inherit (sources) version;
@@ -132,12 +131,12 @@ let
 
   node-addon-api = stdenvNoCC.mkDerivation rec {
     pname = "node-addon-api";
-    version = "8.0.0";
+    version = "8.3.0";
     src = fetchFromGitHub {
       owner = "nodejs";
       repo = "node-addon-api";
       tag = "v${version}";
-      hash = "sha256-k3v8lK7uaEJvcaj1sucTjFZ6+i5A6w/0Uj9rYlPhjCE=";
+      hash = "sha256-7KkJkMNX352XnWTOC6mJB+IcFrda20UENcNwoXWDm+s=";
     };
     installPhase = ''
       mkdir $out
@@ -181,7 +180,15 @@ buildNpmPackage' {
   # Required because vips tries to write to the cache dir
   makeCacheWritable = true;
 
+  # we manually build sharp from source later on
+  # FIXME figure out why otherwise it fails with
+  #     error: 'NewOrCopy' is not a member of 'Napi::Buffer<char>'
+  env.SHARP_IGNORE_GLOBAL_LIBVIPS = 1;
+
   preBuild = ''
+    unset SHARP_IGNORE_GLOBAL_LIBVIPS
+    export SHARP_FORCE_GLOBAL_LIBVIPS=1
+
     pushd node_modules/sharp
 
     mkdir node_modules
@@ -205,8 +212,7 @@ buildNpmPackage' {
     npm prune --omit=dev
 
     # remove build artifacts that bloat the closure
-    rm -r node_modules/bcrypt/{build-tmp-napi-v3,node_modules/node-addon-api,src,test}
-    rm -r node_modules/msgpackr-extract/build
+    rm -r node_modules/**/{*.target.mk,binding.Makefile,config.gypi,Makefile,Release/.deps}
 
     mkdir -p $out/build
     mv package.json package-lock.json node_modules dist resources $out/
