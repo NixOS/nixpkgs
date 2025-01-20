@@ -1,7 +1,7 @@
 {
   "AvailabilityVersions": {
     "hash": "sha256-CmFrmbk3XJXhGStc+prNoFTDJiFu4n2wVP3OvMfQwOU=",
-    "version": "143.3"
+    "version": "143.4"
   },
   "Csu": {
     "hash": "sha256-l8RI8aiin7ovZuoDh54thDmd/b502w+dtjN5ZoISZBg=",
@@ -16,8 +16,8 @@
     "version": "125"
   },
   "PowerManagement": {
-    "hash": "sha256-BBEh2+ldmT+8tFvKcTp+4A253hxbUrmY3j7omBXRYf0=",
-    "version": "1740.0.7"
+    "hash": "sha256-biRkZEiieUtFo1bP0hFebwEtirGzfB5cVGoL1JHGzUk=",
+    "version": "1740.40.12"
   },
   "adv_cmds": {
     "hash": "sha256-alJOcKeHmIh67ZmN7/YdIouCP/qzakkhimsuZaOkr+c=",
@@ -32,8 +32,8 @@
     "version": "136"
   },
   "copyfile": {
-    "hash": "sha256-lIhl5sr1gewIHkh10hD+H/I7MVPzlHlONGRMOO7OZuA=",
-    "version": "213"
+    "hash": "sha256-Vz1fo4p2b6S8xfyDPu1FNgMkH1aX0tkpXCZkdzkRdq0=",
+    "version": "213.40.2"
   },
   "developer_cmds": {
     "hash": "sha256-rgmmPHxlKPb84BHVs8oY99E8iGWbqEjS4B8H7+JK7NY=",
@@ -100,15 +100,15 @@
     "version": "319.0.1"
   },
   "system_cmds": {
-    "hash": "sha256-SZfgMX0znyESzRNNzqyq/FAa9NQeI+5yiBS2xIvsP5g=",
-    "version": "1012"
+    "hash": "sha256-qMLttGk8ik1TkB1nXbH+HNpkVA7Oai3tS3XuSgMSeH0=",
+    "version": "1012.40.3"
   },
   "text_cmds": {
     "hash": "sha256-76dagwRcAf5fpoyH5FDR5kdCldv6Mgre6aFBzxaCRkg=",
     "version": "190.0.1"
   },
   "top": {
-    "hash": "sha256-jz7udjXO5INtMHTDDdTUYAc4Tpy8v9nW0401LAHiPpA=",
-    "version": "139"
+    "hash": "sha256-e+k/jE49BMZZ24ge9JCa2ct5f1og6ewWb6U5ZMWdIEc=",
+    "version": "139.40.2"
   }
 }
