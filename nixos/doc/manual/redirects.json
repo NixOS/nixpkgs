@@ -47,6 +47,18 @@
   "ch-installation": [
     "index.html#ch-installation"
   ],
+  "sec-mattermost": [
+    "index.html#sec-mattermost"
+  ],
+  "sec-mattermost-derivation": [
+    "index.html#sec-mattermost-derivation"
+  ],
+  "sec-mattermost-plugins": [
+    "index.html#sec-mattermost-plugins"
+  ],
+  "sec-mattermost-plugins-build": [
+    "index.html#sec-mattermost-plugins-build"
+  ],
   "sec-obtaining": [
     "index.html#sec-obtaining"
   ],
