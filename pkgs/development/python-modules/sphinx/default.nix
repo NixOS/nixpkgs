@@ -62,6 +62,11 @@ buildPythonPackage rec {
     hash = "sha256-AObNQz2gKoPHfvC5aoefynXfQMe3bnQpEx6KrLNQBoQ=";
   };
 
+  patches = [
+    # https://github.com/sphinx-doc/sphinx/commit/5ff3740063c1ac57f17ecd697bcd06cc1de4e75c
+    ./pygments-2.19-compat.patch
+  ];
+
   build-system = [ flit-core ];
 
   dependencies =
