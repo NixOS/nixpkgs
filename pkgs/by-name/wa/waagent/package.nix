@@ -4,7 +4,6 @@
   lib,
   python3,
   bash,
-  gitUpdater,
   nixosTests,
 }:
 
@@ -65,13 +64,8 @@ python.pkgs.buildPythonApplication rec {
 
   dontWrapPythonPrograms = false;
 
-  passthru = {
-    tests = {
-      inherit (nixosTests) waagent;
-    };
-    updateScript = gitUpdater {
-      rev-prefix = "v";
-    };
+  passthru.tests = {
+    inherit (nixosTests) waagent;
   };
 
   meta = {
