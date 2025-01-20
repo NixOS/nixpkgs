@@ -71,46 +71,6 @@ let
     tryUnlock ${name} ${firstDevice fs}
   '';
 
-  mkUnits = prefix: name: fs: let
-    mountUnit = "${utils.escapeSystemdPath (prefix + (lib.removeSuffix "/" fs.mountPoint))}.mount";
-    device = firstDevice fs;
-    deviceUnit = "${utils.escapeSystemdPath device}.device";
-  in {
-    name = "unlock-bcachefs-${utils.escapeSystemdPath fs.mountPoint}";
-    value = {
-      description = "Unlock bcachefs for ${fs.mountPoint}";
-      requiredBy = [ mountUnit ];
-      after = [ deviceUnit ];
-      before = [ mountUnit "shutdown.target" ];
-      bindsTo = [ deviceUnit ];
-      conflicts = [ "shutdown.target" ];
-      unitConfig.DefaultDependencies = false;
-      serviceConfig = {
-        Type = "oneshot";
-        ExecCondition = "${pkgs.bcachefs-tools}/bin/bcachefs unlock -c \"${device}\"";
-        Restart = "on-failure";
-        RestartMode = "direct";
-        # Ideally, this service would lock the key on stop.
-        # As is, RemainAfterExit doesn't accomplish anything.
-        RemainAfterExit = true;
-      };
-      script = let
-        unlock = ''${pkgs.bcachefs-tools}/bin/bcachefs unlock "${device}"'';
-        unlockInteractively = ''${config.boot.initrd.systemd.package}/bin/systemd-ask-password --timeout=0 "enter passphrase for ${name}" | exec ${unlock}'';
-      in if useClevis fs then ''
-        if ${config.boot.initrd.clevis.package}/bin/clevis decrypt < "/etc/clevis/${device}.jwe" | ${unlock}
-        then
-          printf "unlocked ${name} using clevis\n"
-        else
-          printf "falling back to interactive unlocking...\n"
-          ${unlockInteractively}
-        fi
-      '' else ''
-        ${unlockInteractively}
-      '';
-    };
-  };
-
   assertions = [
     {
       assertion = let
@@ -140,10 +100,7 @@ in
       boot.kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
       services.udev.packages = [ pkgs.bcachefs-tools ];
 
-      systemd = {
-        packages = [ pkgs.bcachefs-tools ];
-        services = lib.mapAttrs' (mkUnits "") (lib.filterAttrs (n: fs: (fs.fsType == "bcachefs") && (!utils.fsNeededForBoot fs)) config.fileSystems);
-      };
+      systemd.packages = [ pkgs.bcachefs-tools ];
     }
 
     (lib.mkIf ((config.boot.initrd.supportedFilesystems.bcachefs or false) || (bootFs != {})) {
@@ -164,8 +121,6 @@ in
       '';
 
       boot.initrd.postDeviceCommands = lib.mkIf (!config.boot.initrd.systemd.enable) (commonFunctions + lib.concatStrings (lib.mapAttrsToList openCommand bootFs));
-
-      boot.initrd.systemd.services = lib.mapAttrs' (mkUnits "/sysroot") bootFs;
     })
   ]);
 }
