@@ -38,6 +38,7 @@ let
         libnvidia-container
         libxfs
         lvm2
+        lxcfs
         minio
         minio-client
         nftables
@@ -121,6 +122,7 @@ let
   environment = lib.mkMerge [
     {
       INCUS_EDK2_PATH = ovmf;
+      INCUS_LXC_HOOK = "${cfg.lxcPackage}/share/lxc/hooks";
       INCUS_LXC_TEMPLATE_CONFIG = "${pkgs.lxcfs}/share/lxc/config";
       INCUS_USBIDS_PATH = "${pkgs.hwdata}/share/hwdata/usb.ids";
       PATH = lib.mkForce serverBinPath;
@@ -401,6 +403,7 @@ in
         "incus.socket"
       ];
       requires = [ "incus.socket" ];
+      wantedBy = config.systemd.services.incus.wantedBy;
 
       serviceConfig = {
         ExecStart = "${incus-startup} start";
