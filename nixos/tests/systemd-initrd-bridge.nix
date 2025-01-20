@@ -25,20 +25,23 @@ import ./make-test-python.nix (
             serviceConfig.Type = "oneshot";
           };
 
-          networking.primaryIPAddress = "192.168.1.${toString config.virtualisation.test.nodeNumber}";
+          networking.primaryIPAddress = lib.mkForce "192.168.1.${toString config.virtualisation.test.nodeNumber}";
 
-          virtualisation.vlans = [
-            1
-            2
-          ];
+          virtualisation.interfaces.eth1 = {
+            vlan = 1;
+            assignIP = false;
+          };
+          virtualisation.interfaces.eth2 = {
+            vlan = 2;
+            assignIP = false;
+          };
+
           networking.bridges.br0.interfaces = [
             "eth1"
             "eth2"
           ];
 
           networking.interfaces = {
-            eth1.ipv4.addresses = lib.mkForce [ ];
-            eth2.ipv4.addresses = lib.mkForce [ ];
             br0.ipv4.addresses = [
               {
                 address = config.networking.primaryIPAddress;
