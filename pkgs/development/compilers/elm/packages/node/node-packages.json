@@ -13,7 +13,6 @@
   "create-elm-app",
   "elm-optimize-level-2",
   "elm-pages",
-  "elm-review",
   "elm-git-install",
   "@dillonkearns/elm-graphql"
 ]
