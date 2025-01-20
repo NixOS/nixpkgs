@@ -30,8 +30,11 @@ stdenvNoCC.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    install -Dm644 otf/*.otf                                 -t $out/share/fonts/opentype
-    install -Dm644 Changes README.markdown README.xelualatex -t $out/share/doc/${pname}-${version}
+    install -Dm644 build/*.ttf  -t $out/share/fonts/truetype
+    install -Dm644 build/*.otf  -t $out/share/fonts/opentype
+    install -Dm644 web/*.woff   -t $out/share/fonts/woff
+
+    install -Dm644 Changes README.md README.xelualatex -t $out/share/doc/${pname}-${version}
 
     runHook postInstall
   '';
