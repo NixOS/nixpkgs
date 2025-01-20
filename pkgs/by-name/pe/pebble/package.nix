@@ -25,7 +25,8 @@ buildGoModule rec {
   ];
 
   passthru.tests = {
-    smoke-test = nixosTests.acme;
+    smoke-test-http = nixosTests.acme.http01-builtin;
+    smoke-test-dns = nixosTests.acme.dns01;
   };
 
   meta = {
