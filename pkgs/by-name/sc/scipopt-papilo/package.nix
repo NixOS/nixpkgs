@@ -10,7 +10,7 @@
   gfortran,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "scipopt-papilo";
   version = "2.4.0";
 
