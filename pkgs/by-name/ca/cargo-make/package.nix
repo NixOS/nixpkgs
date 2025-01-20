@@ -8,20 +8,22 @@
   openssl,
   stdenv,
   darwin,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-make";
-  version = "0.37.23";
+  version = "0.37.24";
 
   src = fetchFromGitHub {
     owner = "sagiegurari";
     repo = "cargo-make";
     rev = version;
-    hash = "sha256-yYZasrnfxpLf0z6GndLYhkIFfVNjTkx4zdfHYX6WyXk=";
+    hash = "sha256-hrUd4J15cDyd78BVVzi8jiDqJI1dE35WUdOo6Tq8gH8=";
   };
 
-  cargoHash = "sha256-X4FhUqhf58wbl3A8nlXAqnYkkaXajxxqRyJn5K7BVqM=";
+  cargoHash = "sha256-kSoEqiaKeS0VYk7MTir6twY/gXJWjEbS+nFlC3CH8HU=";
 
   nativeBuildInputs = [
     pkg-config
@@ -46,6 +48,15 @@ rustPlatform.buildRustPackage rec {
   # See also:
   #   https://travis-ci.org/sagiegurari/cargo-make
   doCheck = false;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgram = "${placeholder "out"}/bin/makers";
+  versionCheckProgramArg = [ "--version" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Rust task runner and build tool";
