@@ -81,8 +81,8 @@
   },
   {
     "pname": "CliWrap",
-    "version": "3.7.0",
-    "hash": "sha256-hXClLGuhscCrcBaymrp57Prh4m8Qe0vdE4S2ErIM13w="
+    "version": "3.7.1",
+    "hash": "sha256-e0snh/9Ai6/Gw5ycQox2H5nGrPhKfT2sH9dQNjbrrCI="
   },
   {
     "pname": "DialogHost.Avalonia",
@@ -91,8 +91,8 @@
   },
   {
     "pname": "Downloader",
-    "version": "3.3.1",
-    "hash": "sha256-vJRRKgA+pUr5/kWBTu7oMy+pat+jKL9SD/G7CmV0WLk="
+    "version": "3.3.3",
+    "hash": "sha256-H8HJKL71qC+nHVmuhhPDEHy434/NXJNqPeitJOe856k="
   },
   {
     "pname": "DynamicData",
@@ -285,11 +285,6 @@
     "hash": "sha256-e56+FgxEHqV3SGQx0ZAqzlscPxNUPXJ8Ls9rtqET1S4="
   },
   {
-    "pname": "System.CodeDom",
-    "version": "9.0.0",
-    "hash": "sha256-578lcBgswW0eM16r0EnJzfGodPx86RxxFoZHc2PSzsw="
-  },
-  {
     "pname": "System.Collections.Immutable",
     "version": "8.0.0",
     "hash": "sha256-F7OVjKNwpqbUh8lTidbqJWYi476nsq9n+6k0+QVRo3w="
@@ -308,11 +303,6 @@
     "pname": "System.IO.Pipelines",
     "version": "8.0.0",
     "hash": "sha256-LdpB1s4vQzsOODaxiKstLks57X9DTD5D6cPx8DE1wwE="
-  },
-  {
-    "pname": "System.Management",
-    "version": "9.0.0",
-    "hash": "sha256-UyLO5dgNVC7rBT1S6o/Ix6EQGlVTSWUQtVC+/cyTkfQ="
   },
   {
     "pname": "System.Memory",
