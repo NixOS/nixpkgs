@@ -18,13 +18,13 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "gurk-rs";
-  version = "0.6.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "boxdot";
     repo = "gurk-rs";
     tag = "v${version}";
-    hash = "sha256-FPbEtk2A7qs/85VsmfV1uPsVZ7V5WKhMKeWrzUt5L4w=";
+    hash = "sha256-cNKUQlCzhOgyWoitHjRoVdehj8AUEslHBCGxH9nRWF4=";
   };
 
   postPatch = ''
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
 
   useFetchCargoVendor = true;
 
-  cargoHash = "sha256-yLZKat6NNZkbyTpAVpOvDAbbNajh4Vaebc7fmK0I3Mc=";
+  cargoHash = "sha256-eh7ZD8ZX1oKiJbJcVtk6pczb6HxNM6md93P/22Qn5u0=";
 
   nativeBuildInputs = [
     protobuf
