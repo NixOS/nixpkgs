@@ -34,7 +34,7 @@
 
 buildPythonPackage rec {
   pname = "django-filingcabinet";
-  version = "0-unstable-2024-11-15";
+  version = "0.17-unstable-2024-11-15";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -113,6 +113,8 @@ buildPythonPackage rec {
     # playwright._impl._errors.TimeoutError: Locator.click: Timeout 30000ms exceeded
     "test_sidebar_hide"
     "test_show_search_bar"
+    # Unable to lauch browser
+    "test_document_viewer"
   ];
 
   preCheck = ''
@@ -125,6 +127,7 @@ buildPythonPackage rec {
   meta = {
     description = "Django app that manages documents with pages, annotations and collections";
     homepage = "https://github.com/okfde/django-filingcabinet";
+    changelog = "https://github.com/feincms/django-cabinet/blob/${version}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.onny ];
   };
