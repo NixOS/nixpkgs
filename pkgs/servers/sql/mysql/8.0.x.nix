@@ -47,12 +47,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./no-force-outline-atomics.patch # Do not force compilers to turn on -moutline-atomics switch
+    # Fix compilation with LLVM 19 https://bugs.freebsd.org/bugzilla/show_bug.cgi?id=280695
+    # Note: This patch is a subset of the original patch applied to mysql 8.4 due to several version differences
+    ./clang_libcpp19.patch
   ];
 
   ## NOTE: MySQL upstream frequently twiddles the invocations of libtool. When updating, you might proactively grep for libtool references.
-  postPatch = ''
-    substituteInPlace cmake/libutils.cmake --replace /usr/bin/libtool libtool
-    substituteInPlace cmake/os/Darwin.cmake --replace /usr/bin/libtool libtool
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace cmake/libutils.cmake --replace-fail /usr/bin/libtool ${cctools}/bin/libtool
+    substituteInPlace cmake/os/Darwin.cmake --replace-fail /usr/bin/libtool ${cctools}/bin/libtool
+    substituteInPlace cmake/package_name.cmake --replace-fail "COMMAND sw_vers" "COMMAND ${DarwinTools}/bin/sw_vers"
   '';
 
   buildInputs =
@@ -77,10 +81,8 @@ stdenv.mkDerivation (finalAttrs: {
       libtirpc
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      cctools
       CoreServices
       developer_cmds
-      DarwinTools
     ];
 
   strictDeps = true;
