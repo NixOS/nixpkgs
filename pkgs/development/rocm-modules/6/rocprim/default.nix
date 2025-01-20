@@ -90,6 +90,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
     platforms = platforms.linux;
-    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version || versionAtLeast finalAttrs.version "7.0.0";
+    broken = versions.minor finalAttrs.version != versions.minor clr.rocmClang.version || versionAtLeast finalAttrs.version "7.0.0";
   };
 })

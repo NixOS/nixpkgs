@@ -7,6 +7,7 @@
   pkg-config,
   cmake,
   xxd,
+  llvm,
   rocm-device-libs,
   rocm-thunk,
   elfutils,
@@ -36,6 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    llvm
     rocm-thunk
     elfutils
     libdrm
@@ -80,8 +82,8 @@ stdenv.mkDerivation (finalAttrs: {
     license = with licenses; [ ncsa ];
     maintainers = with maintainers; [ lovesegfault ] ++ teams.rocm.members;
     platforms = platforms.linux;
-    broken =
-      versions.minor finalAttrs.version != versions.minor stdenv.cc.version
-      || versionAtLeast finalAttrs.version "7.0.0";
+    # broken =
+    #   versions.minor finalAttrs.version != versions.minor stdenv.cc.version
+    #   || versionAtLeast finalAttrs.version "7.0.0";
   };
 })
