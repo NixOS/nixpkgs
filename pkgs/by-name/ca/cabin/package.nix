@@ -1,46 +1,77 @@
 {
   lib,
-  stdenvNoCC,
+  stdenv,
   fetchFromGitHub,
+  tbb_2021_11,
+  libgit2,
+  curl,
+  fmt,
+  nlohmann_json,
+  pkg-config,
 }:
 
-stdenvNoCC.mkDerivation rec {
+let
+  toml11 = fetchFromGitHub rec {
+    owner = "ToruNiina";
+    repo = "toml11";
+    version = "4.2.0";
+    tag = "v${version}";
+    sha256 = "sha256-NUuEgTpq86rDcsQnpG0IsSmgLT0cXhd1y32gT57QPAw=";
+  };
+in
+stdenv.mkDerivation rec {
   pname = "cabin";
-  version = "1.005";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
-    owner = "impallari";
-    repo = "Cabin";
-    rev = "982839c790e9dc57c343972aa34c51ed3b3677fd";
-    hash = "sha256-9l4QcwCot340Bq41ER68HSZGQ9h0opyzgG3DG/fVZ5s=";
+    owner = "cabinpkg";
+    repo = "cabin";
+    tag = version;
+    sha256 = "sha256-LIP99Shxu/lOdZ31KVA8RYawZ6dRLtXEGKZs1mUFCus=";
   };
 
-  installPhase = ''
-    runHook preInstall
+  strictDeps = true;
 
-    install -m444 -Dt $out/share/fonts/opentype fonts/OTF/*.otf
-    install -m444 -Dt $out/share/doc/${pname}-${version} README.md FONTLOG.txt
+  nativeBuildInputs = [
+    pkg-config
+  ];
 
-    runHook postInstall
+  buildInputs = [
+    libgit2
+    fmt
+    tbb_2021_11
+    nlohmann_json
+    curl
+  ];
+
+  # Skip git cloning toml11
+  preConfigure = ''
+    substituteInPlace Makefile \
+       --replace-fail "git clone https://github.com/ToruNiina/toml11.git \$@" ":" \
+       --replace-fail "git -C \$@ reset --hard v4.2.0" ":"
   '';
 
-  meta = with lib; {
-    description = "Humanist sans with 4 weights and true italics";
-    longDescription = ''
-      The Cabin font family is a humanist sans with 4 weights and true italics,
-      inspired by Edward Johnston’s and Eric Gill’s typefaces, with a touch of
-      modernism. Cabin incorporates modern proportions, optical adjustments, and
-      some elements of the geometric sans. It remains true to its roots, but has
-      its own personality.
+  preBuild = ''
+    mkdir -p build/DEPS/
+    cp -rf ${toml11} build/DEPS/toml11
+  '';
 
-      The weight distribution is almost monotone, although top and bottom curves
-      are slightly thin. Counters of the b, g, p and q are rounded and optically
-      adjusted. The curved stem endings have a 10 degree angle. E and F have
-      shorter center arms. M is splashed.
-    '';
-    homepage = "http://www.impallari.com/cabin";
-    license = licenses.ofl;
-    maintainers = with maintainers; [ cmfwyp ];
-    platforms = platforms.all;
+  makeFlags = [
+    "RELEASE=1"
+    "COMMIT_HASH="
+    "COMMIT_SHORT_HASH="
+    "COMMIT_DATE="
+  ];
+
+  installFlags = [ "PREFIX=${placeholder "out"}" ];
+
+  meta = {
+    broken = (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64);
+    homepage = "https://cabinpkg.com";
+    description = "A package manager and build system for C++";
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.qwqawawow ];
+    platforms = lib.platforms.unix;
+    mainProgram = "cabin";
   };
 }
