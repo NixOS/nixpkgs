@@ -77,6 +77,7 @@ let
              (hasAttr dev cfg.macvlans) ||
              (hasAttr dev cfg.sits) ||
              (hasAttr dev cfg.vlans) ||
+             (hasAttr dev cfg.greTunnels) ||
              (hasAttr dev cfg.vswitches)
           then [ "${dev}-netdev.service" ]
           else optional (!config.boot.isContainer) (subsystemDevice dev);
@@ -182,7 +183,8 @@ let
             # there may need ip addresses configured
             before = [ "network-setup.service" ];
             bindsTo = deviceDependency i.name;
-            after = [ "network-pre.target" ] ++ (deviceDependency i.name);
+            after = [ "network-pre.target" "systemd-udevd.service" ] ++ (deviceDependency i.name);
+            requires = [ "systemd-udevd.service" ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
             # Restart rather than stop+start this unit to prevent the
