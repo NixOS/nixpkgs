@@ -9,7 +9,10 @@
 let
   inherit (stdenvNoCC.hostPlatform) system;
   sources =
-    if "${version-channel}" == "main" then import ./sources-main.nix else import ./sources-stable.nix;
+    if "${version-channel}" == "main" then
+      lib.importJSON ./sources-main.json
+    else
+      lib.importJSON ./sources-stable.json;
   arch = sources.archMap.${system};
 
 in
@@ -18,13 +21,13 @@ stdenvNoCC.mkDerivation {
   version = sources.version;
   srcs = [
     (fetchurl {
-      url = sources.fetchurlAttrSet.${system}.docker-credential-up.url;
-      sha256 = sources.fetchurlAttrSet.${system}.docker-credential-up.hash;
+      url = sources.fetchurlAttrSet.docker-credential-up.${system}.url;
+      sha256 = sources.fetchurlAttrSet.docker-credential-up.${system}.hash;
     })
 
     (fetchurl {
-      url = sources.fetchurlAttrSet.${system}.up.url;
-      sha256 = sources.fetchurlAttrSet.${system}.up.hash;
+      url = sources.fetchurlAttrSet.up.${system}.url;
+      sha256 = sources.fetchurlAttrSet.up.${system}.hash;
     })
   ];
 
@@ -59,7 +62,7 @@ stdenvNoCC.mkDerivation {
   doCheck = false;
 
   passthru.updateScript = [
-    ./update.sh
+    ./update
     "${version-channel}"
   ];
 
