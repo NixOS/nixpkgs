@@ -56,8 +56,12 @@ import ./make-test-python.nix (
 
       client.wait_until_succeeds("curl -f http://varnish/nix-cache-info");
 
-      client.wait_until_succeeds("nix-store -r ${testPath}");
-      client.succeed("${testPath}/bin/hello");
+      client.wait_until_succeeds("nix-store -r ${testPath}")
+      client.succeed("${testPath}/bin/hello")
+
+      output = varnish.succeed("varnishadm status")
+      print(output)
+      assert "Child in state running" in output, "Unexpected varnishadm response"
     '';
   }
 )
