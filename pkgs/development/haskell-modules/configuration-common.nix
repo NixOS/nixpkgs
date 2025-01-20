@@ -3075,4 +3075,14 @@ self: super: {
     "--extra-include-dirs=${lib.getDev pkgs.opencascade-occt}/include/opencascade"
   ] super.opencascade-hs;
 
+  # https://github.com/haskell-grpc-native/http2-client/pull/96
+  http2-client = overrideCabal (drv: {
+    patches = drv.patches or [ ] ++ [
+      (pkgs.fetchpatch {
+        url = "https://patch-diff.githubusercontent.com/raw/haskell-grpc-native/http2-client/pull/96.patch";
+        sha256 = "1q0n7338rjz7zl6xpw51lljp7xw1gl128s1d5877kfil3fc23npp";
+      })
+    ];
+  }) super.http2-client;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
