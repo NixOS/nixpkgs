@@ -13,7 +13,7 @@
   writeScript,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "serd";
   version = "0.32.4";
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://download.drobilla.net/${pname}-${version}.tar.xz";
+    url = "https://download.drobilla.net/serd-${finalAttrs.version}.tar.xz";
     hash = "sha256-y++1aejbaGvoxpyzhmqVOMfLBV6PJCF91qRHHv+n00k=";
   };
 
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
       new_version="$(curl -s https://drobilla.net/category/serd/ |
           pcregrep -o1 'download.drobilla.net/serd-([0-9.]+).tar.xz' |
           head -n1)"
-      update-source-version ${pname} "$new_version"
+      update-source-version ${finalAttrs.pname} "$new_version"
     '';
   };
 
@@ -67,4 +67,4 @@ stdenv.mkDerivation rec {
     mainProgram = "serdi";
     platforms = lib.platforms.unix;
   };
-}
+})
