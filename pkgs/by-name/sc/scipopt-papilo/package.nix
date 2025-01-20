@@ -17,8 +17,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "scipopt";
     repo = "papilo";
-    rev = "v2.4.0";
-    sha256 = "WMw9v57nuP6MHj9Ft4l5FxdIF5VUWCRm/909tbz7VD4=";
+    tag = "v${version}";
+    hash = "WMw9v57nuP6MHj9Ft4l5FxdIF5VUWCRm/909tbz7VD4=";
   };
 
   nativeBuildInputs = [ cmake ];
