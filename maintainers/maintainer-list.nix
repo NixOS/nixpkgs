@@ -10411,6 +10411,12 @@
     githubId = 45598;
     name = "William Casarin";
   };
+  jbbjarnason = {
+    email = "jbbjarnason@gmail.com";
+    github = "jbbjarnason";
+    githubId = 15651464;
+    name = "Jón Bjarni Bjarnason";
+  };
   jbcrail = {
     name = "Joseph Crail";
     email = "jbcrail@gmail.com";
