@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "SaIo/U9cconmGRxEPV5M7IO6+L9wGCaXqxifefUzFk4=";
   };
 
-  sourceRoot = "source/ug";
+  sourceRoot = "${src.name}/ug";
 
   nativeBuildInputs = [
     cmake
