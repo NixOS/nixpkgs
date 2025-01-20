@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  stdenvNoLibc,
   llvm_meta,
   src ? null,
   monorepoSrc ? null,
@@ -26,19 +27,21 @@ let
     cp -r ${monorepoSrc}/${pname} "$out"
   '');
 
-  stdenv' =
-    if stdenv.cc.isClang then
-      stdenv.override {
-        cc = stdenv.cc.override {
-          nixSupport = stdenv.cc.nixSupport // {
-            cc-cflags = lib.remove "-lunwind" stdenv.cc.nixSupport.cc-cflags;
+  stdenv' = if isFullBuild then stdenvNoLibc else stdenv;
+
+  stdenv'' =
+    if stdenv'.cc.isClang then
+      stdenv'.override {
+        cc = stdenv'.cc.override {
+          nixSupport = stdenv'.cc.nixSupport // {
+            cc-cflags = lib.remove "-lunwind" stdenv'.cc.nixSupport.cc-cflags;
           };
         };
       }
     else
-      stdenv;
+      stdenv';
 in
-stdenv'.mkDerivation (finalAttrs: {
+stdenv''.mkDerivation (finalAttrs: {
   inherit pname version patches;
 
   src = src';
@@ -52,6 +55,8 @@ stdenv'.mkDerivation (finalAttrs: {
     ]
     ++ (lib.optional (lib.versionAtLeast release_version "15") ninja)
     ++ (lib.optional isFullBuild python3Packages.pyyaml);
+
+  strictDeps = true;
 
   buildInputs = lib.optional isFullBuild linuxHeaders;
 
@@ -75,7 +80,7 @@ stdenv'.mkDerivation (finalAttrs: {
     substituteAll ${./libc-shim.so} $out/lib/libc.so
   '';
 
-  libc = if (!isFullBuild) then stdenv.cc.libc else null;
+  libc = if (!isFullBuild) then stdenv' else null;
 
   cmakeFlags = [
     (lib.cmakeBool "LLVM_LIBC_FULL_BUILD" isFullBuild)
