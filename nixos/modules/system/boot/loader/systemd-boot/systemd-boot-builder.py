@@ -277,7 +277,7 @@ def get_profiles() -> list[str]:
 def install_bootloader(args: argparse.Namespace) -> None:
     try:
         with open("/etc/machine-id") as machine_file:
-            machine_id = machine_file.readlines()[0]
+            machine_id = machine_file.readlines()[0].strip()
     except IOError as e:
         if e.errno != errno.ENOENT:
             raise
