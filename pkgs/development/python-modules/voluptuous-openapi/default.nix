@@ -11,25 +11,29 @@
 
   # tests
   pytestCheckHook,
+  openapi-schema-validator,
 }:
 
 buildPythonPackage rec {
   pname = "voluptuous-openapi";
-  version = "0.0.5";
+  version = "0.0.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "voluptuous-openapi";
     rev = "v${version}";
-    hash = "sha256-QZi2uxFrYMSJVKIHTRBlGAM1sCD6oIzsZNQH7zkXL8w=";
+    hash = "sha256-D8TafOOGiZO2IpSE7aGB1CVey2zpZgGzZpUvagT9B6Q=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [ voluptuous ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    openapi-schema-validator
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "voluptuous_openapi" ];
 
