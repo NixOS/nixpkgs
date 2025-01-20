@@ -3557,6 +3557,18 @@ with pkgs;
     xenSupport = true;
   };
 
+  grub2_xen_pvh = grub2.override {
+    xenPvhSupport = true;
+  };
+
+  grub2_pvgrub_image = callPackage ../by-name/gr/grub2-xen-images/package.nix {
+    buildPvImage = true;
+  };
+
+  grub2_pvhgrub_image = callPackage ../by-name/gr/grub2-xen-images/package.nix {
+    buildPvhImage = true;
+  };
+
   grub4dos = callPackage ../tools/misc/grub4dos {
     stdenv = stdenv_32bit;
   };
