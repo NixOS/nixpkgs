@@ -15,8 +15,8 @@
 #
 # See the NixOS manual for how to run this test:
 # https://nixos.org/nixos/manual/index.html#sec-running-nixos-tests-interactively
-
-import ./make-test-python.nix (
+{ package }:
+import ../make-test-python.nix (
   { pkgs, ... }:
 
   let
@@ -76,6 +76,7 @@ import ./make-test-python.nix (
           environment.systemPackages = [ strongswan ];
           services.strongswan-swanctl = {
             enable = true;
+            inherit package;
             swanctl = {
               connections = {
                 rw = {
@@ -121,6 +122,7 @@ import ./make-test-python.nix (
           environment.systemPackages = [ strongswan ];
           services.strongswan-swanctl = {
             enable = true;
+            inherit package;
             swanctl = {
               connections = {
                 home = {
