@@ -9,6 +9,15 @@ import ./make-test-python.nix (
         -subj '/CN=machine.${domain}'
       install -D -t $out key.pem cert.pem
     '';
+
+    ssh-keys = import ./ssh-keys.nix pkgs;
+
+    # Git repositories paths in Gitolite.
+    # Here only their baseNameOf is used for configuring public-inbox inboxes.
+    gitoliteRepositories = [
+      "user/repo1"
+      "user/repo2"
+    ];
   in
   {
     name = "public-inbox";
@@ -24,12 +33,6 @@ import ./make-test-python.nix (
       }:
       let
         inherit (config.services) gitolite public-inbox;
-        # Git repositories paths in Gitolite.
-        # Only their baseNameOf is used for configuring public-inbox.
-        repositories = [
-          "user/repo1"
-          "user/repo2"
-        ];
       in
       {
         virtualisation.diskSize = 1 * 1024;
@@ -80,7 +83,7 @@ import ./make-test-python.nix (
           };
           inboxes =
             lib.recursiveUpdate
-              (lib.genAttrs (map baseNameOf repositories) (repo: {
+              (lib.genAttrs (map baseNameOf gitoliteRepositories) (repo: {
                 address = [
                   # Routed to the "public-inbox:" transport in services.postfix.transport
                   "${repo}@${domain}"
@@ -104,19 +107,19 @@ import ./make-test-python.nix (
               };
           settings.coderepo = lib.listToAttrs (
             map (
-              path:
-              lib.nameValuePair (baseNameOf path) {
-                dir = "/var/lib/gitolite/repositories/${path}.git";
-                cgitUrl = "https://git.${domain}/${path}.git";
+              repositoryName:
+              lib.nameValuePair (baseNameOf repositoryName) {
+                dir = "/var/lib/gitolite/repositories/${repositoryName}.git";
+                cgitUrl = "https://git.${domain}/${repositoryName}.git";
               }
-            ) repositories
+            ) gitoliteRepositories
           );
         };
 
         # Use gitolite to store Git repositories listed in coderepo entries
         services.gitolite = {
           enable = true;
-          adminPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJmoTOQnGqX+//us5oye8UuE+tQBx9QEM7PN13jrwgqY root@localhost";
+          adminPubkey = ssh-keys.snakeOilPublicKey;
         };
         systemd.services.public-inbox-httpd = {
           serviceConfig.SupplementaryGroups = [ gitolite.group ];
@@ -172,6 +175,14 @@ import ./make-test-python.nix (
           };
         };
 
+        services.openssh.enable = true;
+        programs.ssh.extraConfig = ''
+          Host machine.${domain}
+            UserKnownHostsFile /dev/null
+            StrictHostKeyChecking no
+            PreferredAuthentications publickey
+        '';
+
         services.postfix = {
           enable = true;
           setSendmail = true;
@@ -189,12 +200,37 @@ import ./make-test-python.nix (
 
     testScript = ''
       start_all()
+
+      # The threshold and/or hardening may have to be changed with new features/checks
+      with subtest("systemd hardening thresholds"):
+        print(machine.succeed("systemd-analyze security public-inbox-httpd.service --threshold=5 --no-pager"))
+        print(machine.succeed("systemd-analyze security public-inbox-imapd.service --threshold=5 --no-pager"))
+        print(machine.succeed("systemd-analyze security public-inbox-nntpd.service --threshold=4 --no-pager"))
+
+      with subtest("can setup ssh keys on system"):
+          machine.succeed("install -D -m 600 ${ssh-keys.snakeOilPrivateKey} ~root/.ssh/id_ed25519")
+      machine.wait_for_unit("sshd.service")
+      machine.wait_for_open_port(22)
+
+      machine.wait_for_unit("gitolite-init.service")
+      with subtest("create gitolite repositories"):
+          machine.succeed(
+              "git config --global user.name 'System Administrator'",
+              "git config --global user.email root@machine.${domain}",
+              "git clone gitolite@machine.${domain}:gitolite-admin.git",
+              "cat >>gitolite-admin/conf/gitolite.conf ${
+                pkgs.writeText "gitolite-admin-conf-snippet" (
+                  lib.concatMapStringsSep "\n" (repositoryName: ''
+                    repo ${repositoryName}
+                      RW+ = @all
+                  '') gitoliteRepositories
+                )
+              }",
+              "(cd gitolite-admin && git add . && git commit -m 'Add repositories' && git push)",
+          )
+
       machine.wait_for_unit("multi-user.target")
       machine.wait_for_unit("public-inbox-init.service")
-
-      # Very basic check that Gitolite can work;
-      # Gitolite is not needed for the rest of this testScript
-      machine.wait_for_unit("gitolite-init.service")
 
       # List inboxes through public-inbox-httpd
       machine.wait_for_unit("nginx.service")
