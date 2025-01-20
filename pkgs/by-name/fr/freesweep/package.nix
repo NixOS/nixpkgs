@@ -3,30 +3,40 @@
   ncurses,
   lib,
   stdenv,
-  updateAutotoolsGnuConfigScriptsHook,
+  autoconf,
+  automake,
+  pkg-config,
   installShellFiles,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "freesweep";
-  version = "1.0.2";
+  version = "1.1.0-unstable-2024-04-19";
 
   src = fetchFromGitHub {
     owner = "rwestlund";
     repo = "freesweep";
-    rev = "v${version}";
-    hash = "sha256-iuu81yHbNrjdPsimBrPK58PJ0d8i3ySM7rFUG/d8NJM";
+    rev = "68c0ee5b29d1087d216d95875a7036713cd25fc0";
+    hash = "sha256-ZnAH7mIuBMFLdrtJOY8PzNbxv+GDEFAgyEtWCpTH2Us=";
   };
 
+  patches = [
+    ./0001-include-strings.h.patch
+    ./0002-fix-Wformat-security.patch
+    ./0003-remove-ac_func_malloc.patch
+  ];
+
   nativeBuildInputs = [
-    updateAutotoolsGnuConfigScriptsHook
+    autoconf
+    automake
+    pkg-config
     installShellFiles
   ];
   buildInputs = [ ncurses ];
 
-  configureFlags = [ "--with-prefsdir=$out/share" ];
-
   enableParallelBuilding = true;
+
+  preConfigure = "./autogen.sh";
 
   installPhase = ''
     runHook preInstall
@@ -41,7 +51,7 @@ stdenv.mkDerivation rec {
     mainProgram = "freesweep";
     homepage = "https://github.com/rwestlund/freesweep";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ ];
+    maintainers = [ maintainers.sanana ];
     platforms = platforms.unix;
   };
 }
