@@ -7,9 +7,9 @@ rec {
   latest = r202;
 
   r202 = callPackage ./build-from-source.nix {
-    ydbVersion   = "2.02";
-    ydbCommitRef = "6b6853170ca3b3bf71176d2802573d4410d83dad";  # r2.02 tag
-    ydbNixHash   = "sha256-CpwzEhkusyA5veiKzMdA7fZVDnpHKAeXR1ukcfVVazg=";
+    ydbVersion = "2.02";
+    ydbCommitRef = "6b6853170ca3b3bf71176d2802573d4410d83dad"; # r2.02 tag
+    ydbNixHash = "sha256-CpwzEhkusyA5veiKzMdA7fZVDnpHKAeXR1ukcfVVazg=";
   };
 }
 
