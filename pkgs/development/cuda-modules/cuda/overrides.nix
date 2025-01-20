@@ -288,6 +288,7 @@ filterAndCreateOverrides {
       cudaOlder,
       gst_all_1,
       lib,
+      libssh,
       nss,
       numactl,
       pulseaudio,
@@ -315,7 +316,9 @@ filterAndCreateOverrides {
       # https://github.com/ConnorBaker/cuda-redist-find-features/issues/11
       env.rmPatterns = toString [
         "nsight-systems/*/*/lib{arrow,jpeg}*"
-        "nsight-systems/*/*/lib{ssl,ssh,crypto}*"
+        "nsight-systems/*/*/libssl*"
+        "nsight-systems/*/*/libssh*"
+        "nsight-systems/*/*/libcrypto*"
         "nsight-systems/*/*/libboost*"
         "nsight-systems/*/*/libexec"
         "nsight-systems/*/*/libQt*"
@@ -328,8 +331,11 @@ filterAndCreateOverrides {
         prevAttrs.postPatch or ""
         + ''
           for path in $rmPatterns; do
-            rm -r "$path"
+            rm -r $path
           done
+        ''
+        + ''
+          patchShebangs nsight-systems
         '';
       nativeBuildInputs = prevAttrs.nativeBuildInputs ++ [ qt.wrapQtAppsHook ];
       buildInputs = prevAttrs.buildInputs ++ [
@@ -350,6 +356,7 @@ filterAndCreateOverrides {
         xorg.libXdamage
         xorg.libXrandr
         xorg.libXtst
+        libssh
       ];
 
       brokenConditions = prevAttrs.brokenConditions // {
@@ -358,6 +365,17 @@ filterAndCreateOverrides {
         "Qt 5 missing (<2022.4.2.1)" = !(versionOlder version "2022.4.2.1" -> qt5 != null);
         "Qt 6 missing (>=2022.4.2.1)" = !(versionAtLeast version "2022.4.2.1" -> qt6 != null);
       };
+      postInstall =
+        let
+          inherit (prevAttrs) version;
+          versionString = with lib.versions; "${majorMinor version}.${patch version}";
+        in
+        ''
+          moveToOutput 'nsight-systems/*/host-linux-*' "''${!outputBin}"
+          moveToOutput 'nsight-systems/*/target-linux-*' "''${!outputBin}"
+          substituteInPlace $bin/bin/nsys $bin/bin/nsys-ui \
+            --replace-fail 'nsight-systems-#VERSION_RSPLIT#' nsight-systems/${versionString}
+        '';
     };
 
   nvidia_driver =
