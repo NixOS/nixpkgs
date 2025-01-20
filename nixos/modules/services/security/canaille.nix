@@ -33,9 +33,12 @@ let
       old.dependencies
       ++ old.optional-dependencies.front
       ++ old.optional-dependencies.oidc
+      ++ old.optional-dependencies.scim
       ++ old.optional-dependencies.ldap
       ++ old.optional-dependencies.sentry
-      ++ old.optional-dependencies.postgresql;
+      ++ old.optional-dependencies.postgresql
+      ++ old.optional-dependencies.otp
+      ++ old.optional-dependencies.sms;
     makeWrapperArgs = (old.makeWrapperArgs or [ ]) ++ [
       "--set CONFIG /etc/canaille/config.toml"
       "--set SECRETS_DIR \"${secretsDir}\""
