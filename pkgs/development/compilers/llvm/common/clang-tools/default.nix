@@ -1,6 +1,9 @@
 {
   lib,
   stdenv,
+  runCommand,
+  writeText,
+  linkFarm,
   clang-unwrapped,
   clang,
   libcxxClang,
@@ -10,50 +13,90 @@
   enableLibcxx ? false,
 }:
 
-stdenv.mkDerivation {
-  unwrapped = clang-unwrapped;
+let
+  clang-tools = stdenv.mkDerivation {
+    unwrapped = clang-unwrapped;
 
-  pname = "clang-tools";
-  version = lib.getVersion clang-unwrapped;
-  dontUnpack = true;
-  clang = if enableLibcxx then libcxxClang else clang;
+    pname = "clang-tools";
+    version = lib.getVersion clang-unwrapped;
+    dontUnpack = true;
+    clang = if enableLibcxx then libcxxClang else clang;
 
-  installPhase = ''
-    runHook preInstall
+    installPhase = ''
+      runHook preInstall
 
-    mkdir -p $out/bin
+      function wrapTool {
+        local tool="$1"
+        local toolName="$2"
 
-    for tool in $unwrapped/bin/clang-*; do
-      tool=$(basename "$tool")
+        cp $tool $out/bin/$toolName.unwrapped
+        substituteAll ${./wrapper} $out/bin/$toolName
+        chmod +x $out/bin/$toolName
+      }
 
-      # Compilers have their own derivation, no need to include them here:
-      if [[ $tool == "clang-cl" || $tool == "clang-cpp" ]]; then
-        continue
-      fi
+      mkdir -p $out/bin
+      wrapTool ${clang-unwrapped}/bin/clangd clangd
 
-      # Clang's derivation produces a lot of binaries, but the tools we are
-      # interested in follow the `clang-something` naming convention - except
-      # for clang-$version (e.g. clang-13), which is the compiler again:
-      if [[ ! $tool =~ ^clang\-[a-zA-Z_\-]+$ ]]; then
-        continue
-      fi
+      for tool in ${clang-unwrapped}/bin/clang-*; do
+        toolName=$(basename "$tool")
 
-      ln -s $out/bin/clangd $out/bin/$tool
-    done
+        # Compilers have their own derivation, no need to include them here:
+        if [[ $toolName == "clang-cl" || $toolName == "clang-cpp" ]]; then
+          continue
+        fi
 
-    if [[ -z "$(ls -A $out/bin)" ]]; then
-      echo "Found no binaries - maybe their location or naming convention changed?"
-      exit 1
-    fi
+        # Clang's derivation produces a lot of binaries, but the tools we are
+        # interested in follow the `clang-something` naming convention - except
+        # for clang-$version (e.g. clang-13), which is the compiler again:
+        if [[ ! $toolName =~ ^clang\-[a-zA-Z_\-]+$ ]]; then
+          continue
+        fi
 
-    substituteAll ${./wrapper} $out/bin/clangd
-    chmod +x $out/bin/clangd
+        wrapTool $tool $toolName
+      done
 
-    runHook postInstall
-  '';
+      ln -s ${clang-unwrapped.lib}/lib $out/lib
 
-  meta = llvm_meta // {
-    description = "Standalone command line tools for C++ development";
-    maintainers = with lib.maintainers; [ patryk27 ];
+      runHook postInstall
+    '';
+
+    passthru.tests.smokeOk =
+      let
+        src = writeText "main.cpp" ''
+          #include <iostream>
+
+          int main() {
+            std::cout << "Hi!";
+          }
+        '';
+
+      in
+      runCommand "clang-tools-test-smoke-ok" { } ''
+        ${clang-tools}/bin/clangd --check=${src}
+        touch $out
+      '';
+
+    passthru.tests.smokeErr =
+      let
+        src = writeText "main.cpp" ''
+          int main() {
+             std::cout << "Hi!";
+          }
+        '';
+
+      in
+      runCommand "clang-tools-test-smoke-err" { } ''
+        (${clang-tools}/bin/clangd --check=${src} 2>&1 || true) \
+            | grep 'use of undeclared identifier'
+
+        touch $out
+      '';
+
+    meta = llvm_meta // {
+      description = "Standalone command line tools for C++ development";
+      maintainers = with lib.maintainers; [ patryk27 ];
+    };
   };
-}
+
+in
+clang-tools
