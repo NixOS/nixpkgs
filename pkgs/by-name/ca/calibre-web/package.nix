@@ -15,13 +15,13 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "calibre-web";
-  version = "0.6.22";
+  version = "0.6.23";
 
   src = fetchFromGitHub {
     owner = "janeczku";
     repo = "calibre-web";
     rev = version;
-    hash = "sha256-nWZmDasBH+DW/+Cvw510mOv11CXorRnoBwNFpoKPErY=";
+    hash = "sha256-U0rWygCMOEGzbcuC/XnK2d33VDHyvYivbzs3zeoeG1A=";
   };
 
   propagatedBuildInputs = with python.pkgs; [
