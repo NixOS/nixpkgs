@@ -14,6 +14,7 @@
   withPulseAudio ? false,
   libpulseaudio,
   withRodio ? true,
+  withLibmDNS ? true,
   withAvahi ? false,
   avahi-compat,
 }:
@@ -53,7 +54,8 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optional withALSA "alsa-backend"
     ++ lib.optional withAvahi "with-avahi"
     ++ lib.optional withPortAudio "portaudio-backend"
-    ++ lib.optional withPulseAudio "pulseaudio-backend";
+    ++ lib.optional withPulseAudio "pulseaudio-backend"
+    ++ lib.optional withLibmDNS "with-libmdns";
 
   postFixup = lib.optionalString withALSA ''
     wrapProgram "$out/bin/librespot" \
