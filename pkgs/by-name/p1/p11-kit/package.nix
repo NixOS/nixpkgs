@@ -96,5 +96,6 @@ stdenv.mkDerivation rec {
     ];
     platforms = platforms.all;
     license = licenses.bsd3;
+    mainProgram = "p11-kit";
   };
 }
