@@ -22,20 +22,15 @@
 
 buildPythonPackage rec {
   pname = "eventlet";
-  version = "0.37.0";
+  version = "0.38.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "eventlet";
     repo = "eventlet";
     tag = version;
-    hash = "sha256-R/nRHsz4z4phG51YYDwkGqvnXssGoiJxIPexuhAf0BI=";
+    hash = "sha256-oQCHnW+t4VczEFvV7neLUQTCCwRigJsUGpTRkivdyjU=";
   };
-
-  patches = [
-    # https://github.com/eventlet/eventlet/pull/988
-    ./python-3.13-compat.patch
-  ];
 
   nativeBuildInputs = [
     hatch-vcs

@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-ollama";
-  version = "0.2.0";
+  version = "0.3.30";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    tag = "langchain-ollama==${version}";
-    hash = "sha256-NtlJqIevdaoOO4oDqKsL4OFbw8tHb3FjV9LrTytOGKE=";
+    tag = "langchain-core==${version}";
+    hash = "sha256-108DlyLAmL7CxEkYWol5wybylpvklFeGaGjGBcbRWg4=";
   };
 
   sourceRoot = "${src.name}/libs/partners/ollama";
@@ -59,7 +59,7 @@ buildPythonPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain/releases/tag/langchain-ollama==${version}";
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/langchain-ollama==${src.tag}";
     description = "Integration package connecting Ollama and LangChain";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/partners/ollama";
     license = lib.licenses.mit;

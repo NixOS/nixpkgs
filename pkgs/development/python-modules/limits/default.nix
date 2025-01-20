@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "limits";
-  version = "3.13.0";
+  version = "4.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     postFetch = ''
       rm "$out/limits/_version.py"
     '';
-    hash = "sha256-y5iMx+AC52ZgGvAvThRaeKFqCGkwmukyZsJ+nzR2AFM=";
+    hash = "sha256-JXXjRVn3RQMqNYRYXF4LuV2DHzVF8PTeGepFkt4jDFM=";
   };
 
   patches = [
@@ -114,7 +114,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Rate limiting using various strategies and storage backends such as redis & memcached";
     homepage = "https://github.com/alisaifee/limits";
-    changelog = "https://github.com/alisaifee/limits/releases/tag/${version}";
+    changelog = "https://github.com/alisaifee/limits/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = [ ];
   };

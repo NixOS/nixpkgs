@@ -45,14 +45,14 @@ let
 in
 buildPythonPackage rec {
   pname = "pymdown-extensions";
-  version = "10.13";
+  version = "10.14";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "facelessuser";
     repo = "pymdown-extensions";
     tag = version;
-    hash = "sha256-uReUfJaGRQ4gMel5szTZJ5fsgJxeeNCy2I7zPf+rvts=";
+    hash = "sha256-7EzIUNAjTa7ohn6Cf08D/lxtieKeoCqOj7FD606DLWo=";
   };
 
   build-system = [ hatchling ];

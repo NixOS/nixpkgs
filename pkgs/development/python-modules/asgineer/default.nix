@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "asgineer";
-  version = "0.8.2";
+  version = "0.8.3";
   format = "setuptools";
 
   # PyPI tarball doesn't include tests directory
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "almarklein";
     repo = pname;
     tag = "v${version}";
-    sha256 = "sha256-UYnVlsdEhEAJF21zVmjAXX01K6LQR2I+Dfw5tSsmf5E=";
+    sha256 = "sha256-9F/66Yi394C1tZWK/BiaCltvRZGVNq+cREDHUoyVLr4=";
   };
 
   nativeCheckInputs = [

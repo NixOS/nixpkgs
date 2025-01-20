@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "pymilvus";
-  version = "2.3.6";
+  version = "2.5.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "milvus-io";
     repo = "pymilvus";
     tag = "v${version}";
-    hash = "sha256-K7k3MTOEm9+HDwMps9C8Al0Jmp1ptJw3pN1LEBOUz0U=";
+    hash = "sha256-oWuaxiiwheJ7lGPN+nUOGuJLgoZORDmM8h8ND6D3uII=";
   };
 
   pythonRelaxDeps = [
@@ -68,7 +68,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python SDK for Milvus";
     homepage = "https://github.com/milvus-io/pymilvus";
-    changelog = "https://github.com/milvus-io/pymilvus/releases/tag/v${version}";
+    changelog = "https://github.com/milvus-io/pymilvus/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ happysalada ];
   };

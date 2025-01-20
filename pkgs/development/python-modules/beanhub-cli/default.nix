@@ -25,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "beanhub-cli";
-  version = "1.4.1";
+  version = "2.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     owner = "LaunchPlatform";
     repo = "beanhub-cli";
     tag = version;
-    hash = "sha256-ZPRQLdNDp/LOXmxU9H6fh9raPPiDsTiEW3j8ncgt8sY=";
+    hash = "sha256-PRhodc0Pjcgx2xjYlBI47JsQ0oLX6hrVLyE58LHoxSw=";
   };
 
   build-system = [ poetry-core ];
@@ -68,7 +68,7 @@ buildPythonPackage rec {
     description = "Command line tools for BeanHub or Beancount users";
     mainProgram = "bh";
     homepage = "https://github.com/LaunchPlatform/beanhub-cli/";
-    changelog = "https://github.com/LaunchPlatform/beanhub-cli/releases/tag/${version}";
+    changelog = "https://github.com/LaunchPlatform/beanhub-cli/releases/tag/${src.tag}";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fangpen ];
   };

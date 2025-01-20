@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "types-lxml";
-  version = "2024.09.16";
+  version = "2024.12.13";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "abelcheung";
     repo = "types-lxml";
     tag = version;
-    hash = "sha256-LQqs9wg6kgubY4SygTNQt5YTtF3LsFj7+RkAlcp4SSo=";
+    hash = "sha256-iqIOwQIg6EB/m8FIoUzkvh1W0w4bKmS9zi4Z+5qlC+0=";
   };
 
   build-system = [ pdm-backend ];
@@ -63,7 +63,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Complete lxml external type annotation";
     homepage = "https://github.com/abelcheung/types-lxml";
-    changelog = "https://github.com/abelcheung/types-lxml/releases/tag/${version}";
+    changelog = "https://github.com/abelcheung/types-lxml/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

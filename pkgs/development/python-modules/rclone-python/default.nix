@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "rclone-python";
-  version = "0.1.12";
+  version = "0.1.20";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "kqHSHF4iVXTbQ4kIpCUi7/l+Rn8L/uvSAHyDcjqDSos=";
+    sha256 = "sha256-qkK6Hvitn6v7F1d5E4rX64Tcm81LIDoyPaj/eA/EtHQ=";
   };
 
   propagatedBuildInputs = [

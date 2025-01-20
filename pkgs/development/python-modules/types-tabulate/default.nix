@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "types-tabulate";
-  version = "0.9.0.20240106";
+  version = "0.9.0.20241207";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ybbbEN1/z1W9FxLdNTf4bdznKgj9Yrsa9DOMcJbOlH4=";
+    hash = "sha256-rBrBdHUMCjhd/SSO3GJ5+jKKr06jF5FauHmi7EeDMjA=";
   };
 
   nativeBuildInputs = [ setuptools ];

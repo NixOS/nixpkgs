@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "simple-term-menu";
-  version = "1.6.4";
+  version = "1.6.6";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-vpxdvY3xKkBLFM2Oldb8AtWMYOJVX2Xd3kF3fEh/s7k=";
+    hash = "sha256-mBPTb1dJ1i0gClWZseyIRpxxN4MSrcCEwAwAv7s4OJM=";
   };
 
   nativeBuildInputs = [ setuptools ];

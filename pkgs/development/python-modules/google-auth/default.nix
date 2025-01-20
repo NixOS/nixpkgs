@@ -27,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "google-auth";
-  version = "2.36.0";
+  version = "2.37.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "google_auth";
     inherit version;
-    hash = "sha256-VF6WGPLfC8u33LxFpUZIWxISYkcWl1oepa6BSc52mrE=";
+    hash = "sha256-AFRiOr8fnINJLGPT9H538KVEyqPUCy2Y4JmmEcLdXQA=";
   };
 
   nativeBuildInputs = [ setuptools ];

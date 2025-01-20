@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pygsl";
-  version = "2.5.0";
+  version = "2.5.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pygsl";
     repo = "pygsl";
     tag = "v${version}";
-    hash = "sha256-ym7wCCaqY1y4Q7LDaNfGoao//DcG+H/6Fmg0YZUThOU=";
+    hash = "sha256-Xgb37uY8CV0gkBZ7Rgg8d5uD+bIBsPfi1ss8PT1LMAY=";
   };
 
   # error: no member named 'n' in 'gsl_bspline_workspace'
@@ -47,7 +47,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python interface for GNU Scientific Library";
     homepage = "https://github.com/pygsl/pygsl";
-    changelog = "https://github.com/pygsl/pygsl/blob/v${version}/ChangeLog";
+    changelog = "https://github.com/pygsl/pygsl/blob/${src.tag}/ChangeLog";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ amesgen ];
   };

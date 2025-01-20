@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "diceware";
-  version = "0.10";
+  version = "1.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-srTMm1n1aNLvUb/fn34a+UHSX7j1wl8XAZHburzpZWk=";
+    hash = "sha256-VLaQgJ8MVqswhaGOFaDDgE1KDRJ/OK7wtc9fhZ0PZjk=";
   };
 
   postPatch = ''

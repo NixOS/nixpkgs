@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "django-auth-ldap";
-  version = "4.8.0";
+  version = "5.1.0";
   format = "pyproject";
 
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-YEJQk43cn9phnyR8elmwsvBuU6fT9GoVbyiqMN1xpzg=";
+    hash = "sha256-nGB+jZxTzyoMyvvgrPwz6x0f1HTEbsUtMK7g3KHalmg=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];

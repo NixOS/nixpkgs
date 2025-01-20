@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-text-splitters";
-  version = "0.3.2";
+  version = "0.3.30";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    tag = "langchain-text-splitters==${version}";
-    hash = "sha256-TaK8lnPxKUqwvKLtQIfzg2l8McQ1fd0g9vocHM0+kjY=";
+    tag = "langchain-core==${version}";
+    hash = "sha256-108DlyLAmL7CxEkYWol5wybylpvklFeGaGjGBcbRWg4=";
   };
 
   sourceRoot = "${src.name}/libs/text-splitters";
@@ -48,7 +48,7 @@ buildPythonPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain/releases/tag/langchain-text-splitters==${version}";
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/langchain-text-splitters==${src.tag}";
     description = "LangChain utilities for splitting into chunks a wide variety of text documents";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/text-splitters";
     license = lib.licenses.mit;

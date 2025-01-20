@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "flask-jwt-extended";
-  version = "4.6.0";
+  version = "4.7.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "Flask-JWT-Extended";
     inherit version;
-    hash = "sha256-khXQWpQT04VXZLzWcDXnWBnSOvL6+2tVGX61ozE/37I=";
+    hash = "sha256-gIXWdXUFtvMpGiY4yE0gfo8K0N5mLR9Gqi935ligyXY=";
   };
 
   propagatedBuildInputs = [

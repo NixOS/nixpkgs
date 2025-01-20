@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "moviepy";
-  version = "1.0.3";
+  version = "2.1.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "Zulko";
     repo = "moviepy";
     tag = "v${version}";
-    hash = "sha256-l7AwzAKSaEV+pPbltKgwllK6X54oruU2w0AvoCsrESE=";
+    hash = "sha256-dha+rPBkcEyqQ7EfnFg81GDq0Lc2uoQ3meCTjdajaBM=";
   };
 
   postPatch = ''
@@ -92,7 +92,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Video editing with Python";
     homepage = "https://zulko.github.io/moviepy/";
-    changelog = "https://github.com/Zulko/moviepy/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/Zulko/moviepy/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = [ ];
   };

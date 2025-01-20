@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "sse-starlette";
-  version = "2.1.3";
+  version = "2.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "sysid";
     repo = "sse-starlette";
     tag = "v${version}";
-    hash = "sha256-cnUx3wYawyqt/m/FB6abxknMbc64k09a1kAJoA4yN6w=";
+    hash = "sha256-gBwr4WHJXlh/G3qGbZUPD3pKeX1CI1iTlrI91MVmnJY=";
   };
 
   build-system = [ pdm-backend ];
@@ -59,7 +59,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Server Sent Events for Starlette and FastAPI";
     homepage = "https://github.com/sysid/sse-starlette";
-    changelog = "https://github.com/sysid/sse-starlette/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/sysid/sse-starlette/blob/${src.tag}/CHANGELOG.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];
   };

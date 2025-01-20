@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "snitun";
-  version = "0.39.1";
+  version = "0.40.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "NabuCasa";
     repo = "snitun";
     tag = version;
-    hash = "sha256-jewDQqvLUh/066BSEADXkCvjLFRnodKtUPKfvi0KUpI=";
+    hash = "sha256-wit0GVuWFMl1u+VC7Aw+dPcvqLGyviSz/DVUKXvSvAs=";
   };
 
   build-system = [ setuptools ];
@@ -78,7 +78,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "SNI proxy with TCP multiplexer";
-    changelog = "https://github.com/NabuCasa/snitun/releases/tag/${version}";
+    changelog = "https://github.com/NabuCasa/snitun/releases/tag/${src.tag}";
     homepage = "https://github.com/nabucasa/snitun";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ Scriptkiddi ];

@@ -11,14 +11,14 @@
 }:
 buildPythonPackage rec {
   pname = "cli-ui";
-  version = "0.17.2";
+  version = "0.18.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8.1";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-L2flDPR052rRYMPmYLutmL+LjfuNhHdl86Jht+E8Bfo=";
+    hash = "sha256-PmyAraW0sJxnAcqT2vMd+LcEhsZDSNH8fzKI7zvQR5w=";
   };
 
   pythonRelaxDeps = [ "tabulate" ];

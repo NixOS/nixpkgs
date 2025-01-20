@@ -57,7 +57,7 @@ let
       meta.description = "Release-critical packages from the python package sets";
       constituents = [
         jobs.nixos-render-docs.x86_64-linux # Used in nixos manual
-        jobs.remarshal.x86_64-linux # Used in pkgs.formats helper
+        jobs.remarshal_0_17.x86_64-linux # Used in pkgs.formats.yaml_1_1
         jobs.python312Packages.afdko.x86_64-linux # Used in noto-fonts-color-emoji
         jobs.python312Packages.buildcatrust.x86_64-linux # Used in pkgs.cacert
         jobs.python312Packages.colorama.x86_64-linux # Used in nixos test-driver

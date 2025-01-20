@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "parse-type";
-  version = "0.6.3";
+  version = "0.6.4";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "jenisys";
     repo = "parse_type";
     tag = "v${version}";
-    hash = "sha256-oKPyzEKrP9umnDzPC3HwSgWmWkCg/h0ChYVrpseklf8=";
+    hash = "sha256-R0HMrZaKjv0KITfHnQBjuXhs3RUgSJzkDXiehRICUUM=";
   };
 
   propagatedBuildInputs = [

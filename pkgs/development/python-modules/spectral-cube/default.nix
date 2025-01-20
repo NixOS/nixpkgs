@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "spectral-cube";
-  version = "0.6.5";
+  version = "0.6.6";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-gJzrr3+/FsQN/HHDERxf/NECArwOaTqFwmI/Q2Z9HTM=";
+    hash = "sha256-bjBghr5WrfC4NH5cyiy9RUiCmJSUHBtyD61bd1i/4kM=";
   };
 
   patches = [ ./distutils-looseversion.patch ];

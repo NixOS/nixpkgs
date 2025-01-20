@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-redhatopenshift";
-  version = "1.5.0";
+  version = "2.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Uft0KcOciKzJ+ic9n4nxkwNSBmKZam19jhEiqY9fJSc=";
+    hash = "sha256-nTBKy7p8n0JWEmn3ByEKranHteoJkPJyLfYFmaCOOq4=";
   };
 
   propagatedBuildInputs = [

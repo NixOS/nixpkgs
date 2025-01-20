@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "array-api-compat";
-  version = "1.9.1";
+  version = "1.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "data-apis";
     repo = "array-api-compat";
     tag = version;
-    hash = "sha256-X6y6hX/HdkiLZkj9AOEYsZOlYhR7wUt9kQjHfMfWqIc=";
+    hash = "sha256-4QuyJwS7ff0rAcALXbMG7PIt3YCL/aouVcovlq02wyQ=";
   };
 
   build-system = [ setuptools ];
@@ -51,7 +51,7 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://data-apis.org/array-api-compat";
-    changelog = "https://github.com/data-apis/array-api-compat/releases/tag/${version}";
+    changelog = "https://github.com/data-apis/array-api-compat/releases/tag/${src.tag}";
     description = "Compatibility layer for NumPy to support the Python array API";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ berquist ];

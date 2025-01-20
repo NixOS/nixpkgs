@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "trafilatura";
-  version = "1.12.2";
+  version = "2.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-TJyxQ09+E+8LFstE7h1E6EUj7HJolAuVWcN05+/8mpY=";
+    hash = "sha256-zrcJSm7Ml+cv6nPH26NnFMXFtXe2Rw5FINyok3BtYkc=";
   };
 
   # Patch out gui cli because it is not supported in this packaging and

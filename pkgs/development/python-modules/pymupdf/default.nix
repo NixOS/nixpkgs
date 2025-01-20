@@ -41,7 +41,7 @@ let
 in
 buildPythonPackage rec {
   pname = "pymupdf";
-  version = "1.25.1";
+  version = "1.25.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -50,7 +50,7 @@ buildPythonPackage rec {
     owner = "pymupdf";
     repo = "PyMuPDF";
     tag = version;
-    hash = "sha256-kdu8CuQJ5+h8+PS66acWEfcttgALiD+JBoWWyGtjBzs=";
+    hash = "sha256-6XbHQ8PE9IF0kngUhYkFSGjwgt+r+19v+PeDAQin2Ko=";
   };
 
   # swig is not wrapped as Python package
@@ -133,7 +133,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python bindings for MuPDF's rendering library";
     homepage = "https://github.com/pymupdf/PyMuPDF";
-    changelog = "https://github.com/pymupdf/PyMuPDF/releases/tag/${version}";
+    changelog = "https://github.com/pymupdf/PyMuPDF/releases/tag/${src.tag}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ teto ];
     platforms = lib.platforms.unix;

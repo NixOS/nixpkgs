@@ -34,14 +34,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-core";
-  version = "0.3.15";
+  version = "0.3.30";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-core==${version}";
-    hash = "sha256-lSXAqjjnihuucTZOSwQJk8gtrtFbUOTHN4J587iLKy0=";
+    hash = "sha256-108DlyLAmL7CxEkYWol5wybylpvklFeGaGjGBcbRWg4=";
   };
 
   sourceRoot = "${src.name}/libs/core";
@@ -148,7 +148,7 @@ buildPythonPackage rec {
   meta = {
     description = "Building applications with LLMs through composability";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/core";
-    changelog = "https://github.com/langchain-ai/langchain/releases/tag/v${version}";
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       natsukium

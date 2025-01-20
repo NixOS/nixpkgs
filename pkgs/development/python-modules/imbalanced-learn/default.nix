@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "imbalanced-learn";
-  version = "0.12.4";
+  version = "0.13.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-gVO6OF0pawfZfgkBomJKhsBrSMlML5LaOlNUgnaXt6M=";
+    hash = "sha256-1KjWNyCGmCNQ1t4cflse1ezp5Bv5MEO00OnqHEIqZgY=";
   };
 
   nativeBuildInputs = [ setuptools ];

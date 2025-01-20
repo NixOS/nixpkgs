@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "langgraph-checkpoint-duckdb";
-  version = "2.0.1";
+  version = "2.0.13";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -22,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
-    tag = "checkpointduckdb==${version}";
-    hash = "sha256-wSrlFBfTcTgyE46uwv9GCyxRT1xVafgWyP2g87KUTAU=";
+    tag = "checkpointpostgres==${version}";
+    hash = "sha256-Vz2ZoikEZuMvt3j9tvBIcXCwWSrCV8MI7x9PIHodl8Y=";
   };
 
   sourceRoot = "${src.name}/libs/checkpoint-duckdb";
@@ -53,7 +53,7 @@ buildPythonPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/checkpointduckdb==${version}";
+    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/checkpointduckdb==${src.tag}";
     description = "Library with a DuckDB implementation of LangGraph checkpoint saver";
     homepage = "https://github.com/langchain-ai/langgraph/tree/main/libs/checkpoint-duckdb";
     license = lib.licenses.mit;

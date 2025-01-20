@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "flit";
-  version = "3.10.0";
+  version = "3.10.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "flit";
     rev = version;
-    hash = "sha256-4JMoK1UxYcHoSvKDF7Yn4iqMXokyCPCswQknK0a070k=";
+    hash = "sha256-GOup/iiR0zKM07dFiTFNzBEVBwzNp4ERWp1l4w9hOME=";
   };
 
   build-system = [ flit-core ];

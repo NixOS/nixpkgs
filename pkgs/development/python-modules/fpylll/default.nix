@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "fpylll";
-  version = "0.6.1";
+  version = "0.6.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fplll";
     repo = "fpylll";
     tag = version;
-    hash = "sha256-M3ZnDL0Ui3UAa5Jn/Wr5pAHhghP7EAaQD/sx5QZ58ZQ=";
+    hash = "sha256-3+DXfCUuHQG+VSzJGEPa8qP6oxC+nngMa44XyFCJAVY=";
   };
 
   patches = [
@@ -78,7 +78,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python interface for fplll";
-    changelog = "https://github.com/fplll/fpylll/releases/tag/${version}";
+    changelog = "https://github.com/fplll/fpylll/releases/tag/${src.tag}";
     homepage = "https://github.com/fplll/fpylll";
     maintainers = teams.sage.members;
     license = licenses.gpl2Plus;

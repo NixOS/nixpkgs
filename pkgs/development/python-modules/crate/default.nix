@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "crate";
-  version = "0.35.2";
+  version = "1.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4hGACtsK71hvcn8L9ggID7zR+umtTwvskBxSHBpLyME=";
+    hash = "sha256-lDMm7FkdSgvyN0gxmZZHd9WbSXPZUeil15MzWO3uyns=";
   };
   patches = [
     # Fix a pandas issue https://github.com/crate/crate-python/commit/db7ba4d0e1f4f4087739a8f9ebe1d71946333979

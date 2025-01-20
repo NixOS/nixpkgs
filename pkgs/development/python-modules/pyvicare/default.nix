@@ -2,6 +2,7 @@
   lib,
   authlib,
   buildPythonPackage,
+  deprecated,
   fetchFromGitHub,
   poetry-core,
   requests,
@@ -12,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pyvicare";
-  version = "2.39.1";
+  version = "2.40.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openviess";
     repo = "PyViCare";
     tag = version;
-    hash = "sha256-gD6eLhng8oUmXPHOwYZoyLRpMQBgH0xbopaVJ6qJQsg=";
+    hash = "sha256-jEnTzCQpJOiWtdaZbBgm4G1OsMXctjSRmU2AY2VZgqA=";
   };
 
   postPatch = ''
@@ -31,6 +32,7 @@ buildPythonPackage rec {
 
   dependencies = [
     authlib
+    deprecated
     requests
   ];
 

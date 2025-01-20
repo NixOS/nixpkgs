@@ -35,7 +35,7 @@
 }:
 buildPythonPackage rec {
   pname = "manim-slides";
-  version = "5.1.9";
+  version = "5.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -44,7 +44,7 @@ buildPythonPackage rec {
     owner = "jeertmans";
     repo = "manim-slides";
     tag = "v${version}";
-    hash = "sha256-M500u7x0jQqcqCd3RbS0CpI1nuwNs9URFlHPeGkiT7E=";
+    hash = "sha256-HIZ83So4kwU6gRkFHdxjeSfm9AGKaJgQAUVVAblD6t4=";
   };
 
   build-system = [
@@ -90,7 +90,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "manim_slides" ];
 
   meta = with lib; {
-    changelog = "https://github.com/jeertmans/manim-slides/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/jeertmans/manim-slides/blob/${src.tag}/CHANGELOG.md";
     description = "Tool for live presentations using manim";
     homepage = "https://github.com/jeertmans/manim-slides";
     license = licenses.mit;

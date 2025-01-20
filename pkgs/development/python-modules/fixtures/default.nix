@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "fixtures";
-  version = "4.1.0";
+  version = "4.2.2";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-grHF5p9hVSbvbAZxiKHmxgZ99/iDMlCcmfi4/buXdvM=";
+    hash = "sha256-r5Noc3+tb9UBY4ypnHgADD8/sD+kCmD56dOapk80K8E=";
   };
 
   nativeBuildInputs = [

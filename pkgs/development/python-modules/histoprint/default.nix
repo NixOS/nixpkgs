@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "histoprint";
-  version = "2.5.0";
+  version = "2.6.0";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-kJfnOWqzqag8kW9+U8Ri6kbk9kXBrZFgRzjy2Dg+/U8=";
+    sha256 = "sha256-4d9yk1BFW0V+l/IIg1N650Uih558M8YJ3xLyR8ykoh0=";
   };
 
   buildInputs = [

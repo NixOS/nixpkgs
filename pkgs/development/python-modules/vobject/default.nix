@@ -11,13 +11,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.9.8";
+  version = "0.9.9";
   pname = "vobject";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-2wCn9NtJOXFV3YpoceiioBdabrpaZUww6RD4KylRS1g=";
+    hash = "sha256-rETl1+IHnYTB1SxQphW5vsSxupWGCMTH/kDL8zJHs44=";
   };
 
   disabled = isPyPy;

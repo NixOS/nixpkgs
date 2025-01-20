@@ -26,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "locust";
-  version = "2.31.2";
+  version = "2.32.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "locustio";
     repo = "locust";
     tag = version;
-    hash = "sha256-xDquVQjkWVER9h0a6DHWRZH6KtRf0jsThycSojDEdh4=";
+    hash = "sha256-KWPIZLdOx09iMlnczjmlzPmy32ozw0xEBZI9li+fJ24=";
   };
 
   postPatch = ''
@@ -98,7 +98,7 @@ buildPythonPackage rec {
   meta = {
     description = "Developer-friendly load testing framework";
     homepage = "https://docs.locust.io/";
-    changelog = "https://github.com/locustio/locust/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/locustio/locust/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jokatzke ];
   };

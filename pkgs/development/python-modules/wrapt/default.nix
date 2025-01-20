@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "wrapt";
-  version = "1.17.0dev4";
+  version = "1.17.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GrahamDumpleton";
     repo = "wrapt";
     tag = version;
-    hash = "sha256-q2DYCzTWxGpuIa5v6cyDCTekXfDlFML4eo8J60YdCsc=";
+    hash = "sha256-k1OuGzUFF2gRsx3xrJ5/YwpXB6ksK0TsaZq6x3+ckf0=";
   };
 
   build-system = [ setuptools ];

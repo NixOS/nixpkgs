@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "habanero";
-  version = "1.2.6";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sckott";
     repo = pname;
     tag = "v${version}";
-    hash = "sha256-Pw0TgXxDRmR565hdNGipfDZ7P32pxWkmPWfaYK0RaI4=";
+    hash = "sha256-GvrHCTmNEgqCiNzXPg7/L9QPd5FhSZBq3FA3qMBT0l4=";
   };
 
   build-system = [ setuptools-scm ];

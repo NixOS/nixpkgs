@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "certbot";
-  version = "2.11.0";
+  version = "3.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "certbot";
     repo = "certbot";
     tag = "v${version}";
-    hash = "sha256-Qee7lUjgliG5fmUWWPm3MzpGJHUF/DXZ08UA6kkWjjk=";
+    hash = "sha256-lYGJgUNDzX+bE64GJ+djdKR+DXmhpcNbFJrAEnP86yQ=";
   };
 
   patches = [
@@ -95,7 +95,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/certbot/certbot";
-    changelog = "https://github.com/certbot/certbot/blob/${src.rev}/certbot/CHANGELOG.md";
+    changelog = "https://github.com/certbot/certbot/blob/${src.tag}/certbot/CHANGELOG.md";
     description = "ACME client that can obtain certs and extensibly update server configurations";
     platforms = platforms.unix;
     mainProgram = "certbot";

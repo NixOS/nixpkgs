@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "gphoto2";
-  version = "2.5.0";
+  version = "2.5.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-l9B6PEIGf8rkUlYApOytW2s9OhgcxMHVlDgfQR5ZnoA=";
+    hash = "sha256-Jgh7ff+iUaeNQtBsXw2Jm+2gj1ctvrY3oahGrbxx3uE=";
   };
 
   # only convert first 2 values from setuptools_version to ints to avoid

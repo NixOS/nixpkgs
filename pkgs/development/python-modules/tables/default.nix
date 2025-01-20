@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "tables";
-  version = "3.10.1";
+  version = "3.10.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-SqB6xzS5wDe66vRK7GTskCrSR/V4EbWfMMTjHTHxJs8=";
+    hash = "sha256-JUSBKnGG+tuoMdbdNOtJzNeI1qg/TkwrQxuDW2eWyRA=";
   };
 
   build-system = [

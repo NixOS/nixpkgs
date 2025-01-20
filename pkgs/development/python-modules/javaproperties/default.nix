@@ -9,15 +9,15 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.8.1";
+  version = "0.8.2";
   pname = "javaproperties";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "jwodder";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "16rcdw5gd4a21v2xb1j166lc9z2dqcv68gqvk5mvpnm0x6nwadgp";
+    tag = "v${version}";
+    sha256 = "sha256-8Deo6icInp7QpTqa+Ou6l36/23skxKOYRef2GbumDqo=";
   };
 
   nativeBuildInputs = [ setuptools ];

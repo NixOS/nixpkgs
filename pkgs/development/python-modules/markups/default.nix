@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "markups";
-  version = "4.0.0";
+  version = "4.1.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "Markups";
     inherit version;
-    hash = "sha256-Pdua+xxV0M/4EuM5LKM/RoSYwHB6T6iy4F0LoNMsAZ4=";
+    hash = "sha256-JSFENPNW01MDTC7023arUOhnpjuhln62vMgEcsUB3dk=";
   };
 
   nativeBuildInputs = [ setuptools ];

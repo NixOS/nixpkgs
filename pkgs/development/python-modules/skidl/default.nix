@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "skidl";
-  version = "1.0.0";
+  version = "2.0.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "xesscorp";
     repo = "skidl";
-    rev = version;
-    sha256 = "1m0hllvmr5nkl4zy8yyzfgw9zmbrrzd5pw87ahd2mq68fjpcaqq5";
+    tag = version;
+    sha256 = "sha256-EzKtXdQFB6kjaIuCYAsyFPlwmkefb5RJcnpFYCVHHb8=";
   };
 
   propagatedBuildInputs = [

@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-aws";
-  version = "0.2.1";
+  version = "0.2.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain-aws";
     tag = "v${version}";
-    hash = "sha256-LHhyEkgu1sjOk4E4WMy4vYGyikqdVD3WvRPjoAP1CfA=";
+    hash = "sha256-tEkwa+rpitGxstci754JH5HCqD7+WX0No6ielJJnbxk=";
   };
 
   postPatch = ''
@@ -65,7 +65,7 @@ buildPythonPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain-aws/releases/tag/v${version}";
+    changelog = "https://github.com/langchain-ai/langchain-aws/releases/tag/${src.tag}";
     description = "Build LangChain application on AWS";
     homepage = "https://github.com/langchain-ai/langchain-aws/";
     license = lib.licenses.mit;

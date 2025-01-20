@@ -31,14 +31,14 @@ let
 in
 buildPythonPackage rec {
   pname = "python-dbusmock";
-  version = "0.32.2";
+  version = "0.34.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "martinpitt";
     repo = pname;
     tag = version;
-    hash = "sha256-TOs6wAZDcSD1eP+Hbj78YXoAtKbReC5di5QSpQdwp8E=";
+    hash = "sha256-7h5SIcgWcbzInmCkbGz/ulfPJvqPPguWLJY+AXJuo0c=";
   };
 
   patches = [
@@ -85,7 +85,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    changelog = "https://github.com/martinpitt/python-dbusmock/releases/tag/${version}";
+    changelog = "https://github.com/martinpitt/python-dbusmock/releases/tag/${src.tag}";
     description = "Mock D-Bus objects for tests";
     homepage = "https://github.com/martinpitt/python-dbusmock";
     license = licenses.lgpl3Plus;

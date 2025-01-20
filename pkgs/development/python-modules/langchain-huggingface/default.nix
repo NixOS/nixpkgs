@@ -30,14 +30,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-huggingface";
-  version = "0.1.2";
+  version = "0.3.30";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    tag = "langchain-huggingface==${version}";
-    hash = "sha256-ACR+JzKcnYXROGOQe6DlZeqcYd40KlesgXSUOybOT20=";
+    tag = "langchain-core==${version}";
+    hash = "sha256-108DlyLAmL7CxEkYWol5wybylpvklFeGaGjGBcbRWg4=";
   };
 
   sourceRoot = "${src.name}/libs/partners/huggingface";
@@ -76,7 +76,7 @@ buildPythonPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain/releases/tag/langchain-huggingface==${version}";
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/langchain-huggingface==${src.tag}";
     description = "An integration package connecting Huggingface related classes and LangChain";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/partners/huggingface";
     license = lib.licenses.mit;

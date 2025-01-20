@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "adafruit-board-toolkit";
-  version = "1.1.1";
+  version = "1.1.2";
   pyproject = true;
 
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-k8TwmztGnCqS6F5ZrXSBnefZzc2kvuUqYxGAejRAdsI=";
+    hash = "sha256-A83FntenO44kpK1VvYEguonQD9EOT+usGQPAZGaHkV4=";
   };
 
   # Project has not published tests yet

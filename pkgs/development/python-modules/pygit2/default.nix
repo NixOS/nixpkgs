@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "pygit2";
-  version = "1.16.0";
+  version = "1.17.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-eymmeWuqFfyJ1EOsjVF3VBHZseWwbcQNRYxWyFdrSKI=";
+    hash = "sha256-+ivAULLC0+c7VNbVQceSF4Vho0TwfkCfUy1buXrHuJQ=";
   };
 
   patches = [

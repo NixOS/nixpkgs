@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "confluent-kafka";
-  version = "2.6.1";
+  version = "2.8.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "confluentinc";
     repo = "confluent-kafka-python";
     tag = "v${version}";
-    hash = "sha256-SFmZ/KriysvLkGT5mvIS9SJcUHWmvZXrqFAY0lC6bGc=";
+    hash = "sha256-EDEp260G/t7s17RlbT+Bcl7FZlVQFagNijDNw53DFpY=";
   };
 
   buildInputs = [ rdkafka ];
@@ -69,7 +69,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Confluent's Apache Kafka client for Python";
     homepage = "https://github.com/confluentinc/confluent-kafka-python";
-    changelog = "https://github.com/confluentinc/confluent-kafka-python/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/confluentinc/confluent-kafka-python/blob/${src.tag}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ mlieberman85 ];
   };

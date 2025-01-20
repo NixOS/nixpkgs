@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "azure-data-tables";
-  version = "12.5.0";
+  version = "12.6.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7qOTpjgMQusD6AeCXAN4MgA9CcgjKUgx2hXoEVWgtOY=";
+    hash = "sha256-4NVZgROFX5EU/XZxYj01UJ+Ddylwz9xZeQGzX0LcMTQ=";
   };
 
   propagatedBuildInputs = [

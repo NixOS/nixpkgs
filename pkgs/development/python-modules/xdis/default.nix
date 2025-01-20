@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "xdis";
-  version = "6.1.1";
+  version = "6.1.3";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "rocky";
     repo = "python-xdis";
     tag = version;
-    hash = "sha256-Fn1cyUPMrn1SEXl4sdQwJiNHaY+BbxBDz3nKZY965/0=";
+    hash = "sha256-fdLZg3MFMS9EIPC5EPE8DAT6K5a6l780msCfzTiZwoo=";
   };
 
   # Backport magics for newer newer python versions
@@ -86,7 +86,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python cross-version byte-code disassembler and marshal routines";
     homepage = "https://github.com/rocky/python-xdis";
-    changelog = "https://github.com/rocky/python-xdis/releases/tag/${version}";
+    changelog = "https://github.com/rocky/python-xdis/releases/tag/${src.tag}";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       onny

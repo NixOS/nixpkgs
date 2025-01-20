@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-mongodb";
-  version = "0.2.0";
+  version = "0.3.30";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    tag = "langchain-mongodb==${version}";
-    hash = "sha256-Jd9toXkS9dGtSIrJQ/5W+swV1z2BJOJKBtkyGzj3oSc=";
+    tag = "langchain-core==${version}";
+    hash = "sha256-108DlyLAmL7CxEkYWol5wybylpvklFeGaGjGBcbRWg4=";
   };
 
   sourceRoot = "${src.name}/libs/partners/mongodb";
@@ -65,7 +65,7 @@ buildPythonPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain/releases/tag/langchain-mongodb==${version}";
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/langchain-mongodb==${src.tag}";
     description = "Integration package connecting MongoDB and LangChain";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/partners/mongodb";
     license = lib.licenses.mit;

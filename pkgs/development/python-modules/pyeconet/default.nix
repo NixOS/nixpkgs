@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pyeconet";
-  version = "0.1.23";
+  version = "0.1.25";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "w1ll1am23";
     repo = pname;
     tag = "v${version}";
-    hash = "sha256-zpaKUEg78vzvuTtVauCUUt0U92NXVyNhEfgKVrRzdnM=";
+    hash = "sha256-qbg8QzzT81fmjFeyEgVPXp3QKGOs3oKjTUUUTHIR8OI=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -37,7 +37,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python interface to the EcoNet API";
     homepage = "https://github.com/w1ll1am23/pyeconet";
-    changelog = "https://github.com/w1ll1am23/pyeconet/releases/tag/v${version}";
+    changelog = "https://github.com/w1ll1am23/pyeconet/releases/tag/${src.tag}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

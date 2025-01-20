@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "microsoft-kiota-abstractions";
-  version = "1.3.3";
+  version = "1.8.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -22,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "kiota-abstractions-python";
-    tag = "v${version}";
-    hash = "sha256-TgHj5Ga6Aw/sN2Hobn0OocFB/iGRHTKEeOa2j2aqnRY=";
+    tag = "microsoft-kiota-serialization-text-v${version}";
+    hash = "sha256-bXgnALYzGuOqB/nzxFVFIIkEhTlYQJNTN+ZkW2xW3jM=";
   };
 
   build-system = [ flit-core ];
@@ -45,7 +45,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Abstractions library for Kiota generated Python clients";
     homepage = "https://github.com/microsoft/kiota-abstractions-python";
-    changelog = "https://github.com/microsoft/kiota-abstractions-python/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/microsoft/kiota-abstractions-python/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

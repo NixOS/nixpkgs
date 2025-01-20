@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "smart-open";
-  version = "7.0.4";
+  version = "7.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "RaRe-Technologies";
     repo = "smart_open";
     tag = "v${version}";
-    hash = "sha256-4HOTaF6AKXGlVCvSGKnnaH73aa4IO0aRxz03XQ4gSd8=";
+    hash = "sha256-ANbM0bKmkK25WCKxV7KHlPjzfTAY7dP67mmahRwtXI8=";
   };
 
   patches = [
@@ -82,7 +82,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    changelog = "https://github.com/piskvorky/smart_open/releases/tag/v${version}";
+    changelog = "https://github.com/piskvorky/smart_open/releases/tag/${src.tag}";
     description = "Library for efficient streaming of very large file";
     homepage = "https://github.com/RaRe-Technologies/smart_open";
     license = licenses.mit;

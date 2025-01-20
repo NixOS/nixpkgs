@@ -35,7 +35,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Utility library to parse, normalize and compare License expressions";
     homepage = "https://github.com/aboutcode-org/license-expression";
-    changelog = "https://github.com/aboutcode-org/license-expression/blob/v${version}/CHANGELOG.rst";
+    changelog = "https://github.com/aboutcode-org/license-expression/blob/${src.tag}/CHANGELOG.rst";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

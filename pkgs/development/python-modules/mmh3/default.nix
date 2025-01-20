@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "mmh3";
-  version = "4.1.0";
+  version = "5.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-oc8lNIuazSKd2kZKCU1hcPR9KFCh/Ldio7YXLSzmyko=";
+    hash = "sha256-fasIAGGusxpgaaGB8nxHOh9nkzhU42o0ZJMfJxZQiJY=";
   };
 
   pythonImportsCheck = [ "mmh3" ];

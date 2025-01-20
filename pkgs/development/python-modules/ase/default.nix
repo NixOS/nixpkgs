@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "ase";
-  version = "3.23.0";
+  version = "3.24.0";
   pyproject = true;
 
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-kaKqMdib2QsO/f5KfoQmTzKCiyq/yfOOZeBBrXb+yK4=";
+    hash = "sha256-msyT1tqvSM0nuETFb4v0lCi52wVC+qPMMNnVuOGEIZU=";
   };
 
   patches = [

@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "zeroconf";
-  version = "0.139.0";
+  version = "0.140.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "jstasiak";
     repo = "python-zeroconf";
     tag = version;
-    hash = "sha256-qhfr4MIBSOyXCQ+RP43016gedXo8bCgxz1tt5oSHAgo=";
+    hash = "sha256-+F0pq6fmfyEtfKS16y5JjjRZl4BeaWi6honZyyHJApY=";
   };
 
   build-system = [
@@ -64,7 +64,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python implementation of multicast DNS service discovery";
     homepage = "https://github.com/python-zeroconf/python-zeroconf";
-    changelog = "https://github.com/python-zeroconf/python-zeroconf/releases/tag/${version}";
+    changelog = "https://github.com/python-zeroconf/python-zeroconf/releases/tag/${src.tag}";
     license = licenses.lgpl21Only;
     maintainers = with maintainers; [ abbradar ];
   };

@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-doctestplus";
-  version = "1.2.1";
+  version = "1.3.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-JHKoosjOo00vZfZJlUP663SO7LWcWXhS/ZiDm0cwdnk=";
+    hash = "sha256-cJrSPqmNqag1rOCkNlyFNxw3bgAPKGDzDebfOm8Acoo=";
   };
 
   patches = [

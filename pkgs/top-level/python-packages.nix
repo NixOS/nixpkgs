@@ -5906,7 +5906,7 @@ self: super: with self; {
   };
 
   hidapi = callPackage ../development/python-modules/hidapi {
-    inherit (pkgs) udev;
+    inherit (pkgs) hidapi udev;
   };
 
   hid-parser = callPackage ../development/python-modules/hid-parser { };
@@ -10760,6 +10760,8 @@ self: super: with self; {
 
   pytest-mockito = callPackage ../development/python-modules/pytest-mockito { };
 
+  pytest-pook = callPackage ../development/python-modules/pytest-pook { };
+
   pytest-pudb = callPackage ../development/python-modules/pytest-pudb { };
 
   pytest-ruff = callPackage ../development/python-modules/pytest-ruff { };
@@ -11397,6 +11399,8 @@ self: super: with self; {
   pyasn1-modules = callPackage ../development/python-modules/pyasn1-modules { };
 
   pyasuswrt = callPackage ../development/python-modules/pyasuswrt { };
+
+  pyasynchat = callPackage ../development/python-modules/pyasynchat { };
 
   pyasyncore = callPackage ../development/python-modules/pyasyncore { };
 

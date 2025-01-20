@@ -97,7 +97,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python native client for easy interaction with a Weaviate instance";
     homepage = "https://github.com/weaviate/weaviate-python-client";
-    changelog = "https://github.com/weaviate/weaviate-python-client/releases/tag/v${version}";
+    changelog = "https://github.com/weaviate/weaviate-python-client/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ happysalada ];
   };

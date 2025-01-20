@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "motor";
-  version = "3.6.0";
+  version = "3.6.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,13 +20,15 @@ buildPythonPackage rec {
     owner = "mongodb";
     repo = "motor";
     tag = version;
-    hash = "sha256-fSHb39C4WaQVt7jT714kxwkpUw3mV9jNgkdUyVnD+S4=";
+    hash = "sha256-9U1dUkjhsQ1PkeXfqFCRL8DOJ2xTRzH9lc/inm8gyIY=";
   };
 
   build-system = [
     hatchling
     hatch-requirements-txt
   ];
+
+  pythonRelaxDeps = [ "pymongo" ];
 
   dependencies = [ pymongo ];
 

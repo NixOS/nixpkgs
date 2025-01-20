@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "gssapi";
-  version = "1.8.3";
+  version = "1.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     owner = "pythongssapi";
     repo = "python-${pname}";
     tag = "v${version}";
-    hash = "sha256-H1JfdvxJvX5dmC9aTqIOkjAqFEL44KoUXEhoYj2uRY8=";
+    hash = "sha256-Y53HoLcamoFIrwZtNcL1BOrzBjRD09mT3AiS0QUT7dY=";
   };
 
   postPatch = ''

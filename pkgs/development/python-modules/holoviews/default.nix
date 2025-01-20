@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "holoviews";
-  version = "1.19.1";
+  version = "1.20.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-uehejAcnWkVsDvjQa8FX0Cs37/Zvs2AqoS9chvCEhlw=";
+    hash = "sha256-KdGDBF+vo9hG3tqZnZaHuZuKvcGowGcS5Ur6V2uwKz4=";
   };
 
   build-system = [

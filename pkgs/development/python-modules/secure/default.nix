@@ -8,7 +8,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.3.0";
+  version = "1.0.1";
   format = "setuptools";
   pname = "secure";
   disabled = isPy27;
@@ -16,8 +16,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "typeerror";
     repo = "secure.py";
-    rev = version;
-    sha256 = "1ajz1nx0nnhsc80xbgbc42ib2h08qnccvsp5i583rd9b0f9pklwk";
+    tag = "v${version}";
+    sha256 = "sha256-lyosOejztFEINGKO0wAYv3PWBL7vpmAq+eQunwP9h5I=";
   };
 
   propagatedBuildInputs = [

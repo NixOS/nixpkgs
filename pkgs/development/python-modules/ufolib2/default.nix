@@ -16,13 +16,13 @@
 
 buildPythonPackage rec {
   pname = "ufolib2";
-  version = "0.16.0";
+  version = "0.17.0";
   format = "pyproject";
 
   src = fetchPypi {
     pname = "ufoLib2";
     inherit version;
-    hash = "sha256-SfDcf3LMrP5/rv4NU9N5cdRWZNiwVj7zaVb6e/pVor0=";
+    hash = "sha256-iRUkBSs2NqJbmpLxP3/Ywk4VSDuslszQJFrpR9EnJIs=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];

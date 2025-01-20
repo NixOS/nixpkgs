@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pyezviz";
-  version = "0.2.2.4a";
+  version = "1.0.0.6";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "baqs";
     repo = "pyEzviz";
     tag = version;
-    hash = "sha256-OgDplQ6TrK2CZbNgJpoYC8TkK1sG73HdpUyHE+2ZTLk=";
+    hash = "sha256-KtAqmM4k1o89lG/yb2er1r792zGyNx+TgIQhELr3yTc=";
   };
 
   build-system = [ setuptools ];
@@ -43,7 +43,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python interface for for Ezviz cameras";
     homepage = "https://github.com/baqs/pyEzviz/";
-    changelog = "https://github.com/BaQs/pyEzviz/releases/tag/${version}";
+    changelog = "https://github.com/BaQs/pyEzviz/releases/tag/${src.tag}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
     mainProgram = "pyezviz";

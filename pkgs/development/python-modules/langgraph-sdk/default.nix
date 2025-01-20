@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "langgraph-sdk";
-  version = "0.1.43";
+  version = "2.0.13";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
-    tag = "sdk==${version}";
-    hash = "sha256-mG04V36Aa5Df5pUgr+xWej8i2XYx+O/N61sSzxwN9Go=";
+    tag = "checkpointpostgres==${version}";
+    hash = "sha256-Vz2ZoikEZuMvt3j9tvBIcXCwWSrCV8MI7x9PIHodl8Y=";
   };
 
   sourceRoot = "${src.name}/libs/sdk-py";
@@ -59,7 +59,7 @@ buildPythonPackage rec {
   meta = {
     description = "SDK for interacting with the LangGraph Cloud REST API";
     homepage = "https://github.com/langchain-ai/langgraphtree/main/libs/sdk-py";
-    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/sdk==${version}";
+    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/sdk==${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sarahec ];
   };

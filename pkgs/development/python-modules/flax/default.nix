@@ -39,14 +39,14 @@
 
 buildPythonPackage rec {
   pname = "flax";
-  version = "0.10.1";
+  version = "0.10.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "flax";
     tag = "v${version}";
-    hash = "sha256-+URbQGnmqmSNgucEyWvI5DMnzXjpmJzLA+Pho2lX+S4=";
+    hash = "sha256-dW3tX9I2S22uEGQsOA8mK0rsMNJ7Q/tCEiosfNL9jTc=";
   };
 
   build-system = [
@@ -133,7 +133,7 @@ buildPythonPackage rec {
   meta = {
     description = "Neural network library for JAX";
     homepage = "https://github.com/google/flax";
-    changelog = "https://github.com/google/flax/releases/tag/v${version}";
+    changelog = "https://github.com/google/flax/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ndl ];
   };
