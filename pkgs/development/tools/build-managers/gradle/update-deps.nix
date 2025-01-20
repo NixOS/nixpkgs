@@ -120,7 +120,7 @@ lib.makeOverridable (
       MITM_CACHE_PID="$!"
       # wait for mitm-cache to fully start
       for i in {0..20}; do
-        ps -p "$MITM_CACHE_PID" >/dev/null || (echo "Failed to start mitm-cache" && exit 1)
+        ps -p "$MITM_CACHE_PID" -o comm= >/dev/null || (echo "Failed to start mitm-cache" && exit 1)
         curl -so/dev/null "$MITM_CACHE_ADDRESS" && break
         [[ "$i" -eq 20 ]] && (echo "Failed to start mitm-cache" && exit 1)
         sleep 0.5
