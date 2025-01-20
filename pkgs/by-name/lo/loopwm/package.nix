@@ -7,11 +7,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "loopwm";
-  version = "1.1.1";
+  version = "1.2.0";
 
   src = fetchurl {
     url = "https://github.com/MrKai77/Loop/releases/download/${finalAttrs.version}/Loop.zip";
-    hash = "sha256-eF8B4rmkyTtT0vWTcjdaNaWCHWSlPfS4uVV29L+wXiM=";
+    hash = "sha256-MofFucp/GUquU7Bx4gePIWSSrAqFUf0q59IM8MgJIPs=";
   };
 
   sourceRoot = ".";
