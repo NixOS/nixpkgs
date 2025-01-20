@@ -26,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "pycrdt-websocket";
-  version = "0.15.1";
+  version = "0.15.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jupyter-server";
     repo = "pycrdt-websocket";
     tag = "v${version}";
-    hash = "sha256-O0GRk81at8bgv+/4au8A55dZK2A28+ghy3sitAAZQBI=";
+    hash = "sha256-VK4nSsxF/FbCnyS1RM/JHCPS0Omj4rvdwjzLNDq2hjk=";
   };
 
   build-system = [ hatchling ];
@@ -70,7 +70,7 @@ buildPythonPackage rec {
   meta = {
     description = "WebSocket Connector for pycrdt";
     homepage = "https://github.com/jupyter-server/pycrdt-websocket";
-    changelog = "https://github.com/jupyter-server/pycrdt-websocket/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/jupyter-server/pycrdt-websocket/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = lib.teams.jupyter.members;
   };
