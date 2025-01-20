@@ -2250,6 +2250,8 @@ self: super: with self; {
 
   changefinder = callPackage ../development/python-modules/changefinder { };
 
+  changelog-chug = callPackage ../development/python-modules/changelog-chug { };
+
   channels = callPackage ../development/python-modules/channels { };
 
   channels-redis = callPackage ../development/python-modules/channels-redis { };
