@@ -4,7 +4,7 @@
   protobuf,
   rustPlatform,
   fetchFromGitHub,
-  Cocoa,
+  darwin,
   pkgsBuildHost,
   openssl,
   pkg-config,
@@ -13,6 +13,9 @@
   gurk-rs,
 }:
 
+let
+  inherit (darwin.apple_sdk.frameworks) Cocoa;
+in
 rustPlatform.buildRustPackage rec {
   pname = "gurk-rs";
   version = "0.6.0";

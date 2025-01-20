@@ -13455,10 +13455,6 @@ with pkgs;
     fftw = fftwSinglePrec;
   };
 
-  gurk-rs = callPackage ../applications/networking/instant-messengers/gurk-rs {
-    inherit (darwin.apple_sdk.frameworks) Cocoa;
-  };
-
   puddletag = libsForQt5.callPackage ../applications/audio/puddletag { };
 
   welle-io = qt6Packages.callPackage ../applications/radio/welle-io { };
