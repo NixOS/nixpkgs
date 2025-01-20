@@ -44,6 +44,7 @@ let
     '';
 
     meta = meta // {
+      broken = stdenv.isDarwin; # https://github.com/numediart/MBROLA/issues/9
       description = "Speech synthesizer based on the concatenation of diphones (binary only)";
     };
   };
