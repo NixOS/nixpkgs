@@ -90,6 +90,8 @@ in {
   loongarch64   = filterDoubles predicates.isLoongArch64;
   js            = filterDoubles predicates.isJavaScript;
 
+  "32bit"       = filterDoubles predicates.is32bit;
+  "64bit"       = filterDoubles predicates.is64bit;
   bigEndian     = filterDoubles predicates.isBigEndian;
   littleEndian  = filterDoubles predicates.isLittleEndian;
 

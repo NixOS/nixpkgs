@@ -2530,6 +2530,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AppKit Security;
   };
 
+  ourpaint = callPackage ../applications/graphics/ourpaint { };
+
   pastel = callPackage ../applications/misc/pastel {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -9407,6 +9409,8 @@ with pkgs;
   l-smash = callPackage ../development/libraries/l-smash {
     stdenv = gccStdenv;
   };
+
+  lagui = callPackage ../development/libraries/lagui { };
 
   languageMachines = recurseIntoAttrs (import ../development/libraries/languagemachines/packages.nix {
     inherit pkgs;
