@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "scipopt";
     repo = "papilo";
     tag = "v${version}";
-    hash = "WMw9v57nuP6MHj9Ft4l5FxdIF5VUWCRm/909tbz7VD4=";
+    hash = "sha256-WMw9v57nuP6MHj9Ft4l5FxdIF5VUWCRm/909tbz7VD4=";
   };
 
   nativeBuildInputs = [ cmake ];
