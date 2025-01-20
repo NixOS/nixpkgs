@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     vapoursynth
-    ffmpeg
+    (ffmpeg.override { withLcms2 = true; })
     xxHash
   ];
 
