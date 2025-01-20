@@ -115,7 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
       (
         cd $out${finalAttrs.passthru.libdir}
 
-        for f in librdimon.a libc.a libg.a; do
+        for f in librdimon.a libc.a libm.a libg.a libgloss.a; do
           # Some libraries are only available for specific architectures.
           # For example, librdimon.a is only available on ARM.
           [ -f "$f" ] && cp "$f" "''${f%%\.a}_nano.a"

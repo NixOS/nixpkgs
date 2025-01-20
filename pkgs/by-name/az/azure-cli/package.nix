@@ -26,14 +26,14 @@
 }:
 
 let
-  version = "2.67.0";
+  version = "2.68.0";
 
   src = fetchFromGitHub {
     name = "azure-cli-${version}-src";
     owner = "Azure";
     repo = "azure-cli";
     rev = "azure-cli-${version}";
-    hash = "sha256-UrWReU9x7n2GqFt+OO9SLo0uAuwQBXUr4rYtTZfHlfY=";
+    hash = "sha256-WJkuLZUWNzbjAmOPilOK6jnjmax/3ct+ZVWQB3ho/BI=";
   };
 
   # put packages that needs to be overridden in the py package scope
@@ -251,6 +251,7 @@ py.pkgs.toPythonApplication (
         # remove garbage
         rm $out/bin/az.bat
         rm $out/bin/az.completion.sh
+        rm $out/bin/azps.ps1
       '';
 
     # wrap the executable so that the python packages are available

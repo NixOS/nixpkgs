@@ -24,6 +24,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-9fWKunafTniBsY9hK09+xYwvB7IgGPhZmgqauPHgB/g=";
   };
 
+  patches = [ ./unset-darwin-cmake-flags.patch ];
+
   env.NIX_CFLAGS_COMPILE = toString (
     lib.optionals stdenv.cc.isGNU [
       "-Wno-maybe-uninitialized"

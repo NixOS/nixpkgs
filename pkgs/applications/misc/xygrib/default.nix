@@ -8,7 +8,7 @@
   qtbase,
   qttools,
   libnova,
-  proj_7,
+  proj,
   libpng,
   openjpeg,
 }:
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     bzip2
     qtbase
     libnova
-    proj_7
+    proj
     openjpeg
     libpng
   ];

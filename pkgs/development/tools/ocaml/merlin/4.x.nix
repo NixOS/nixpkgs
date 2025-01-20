@@ -20,14 +20,15 @@
       "4.12.1" = "4.7-412";
       "4.13.0" = "4.7-413";
       "4.13.1" = "4.7-413";
-      "4.14.0" = "4.17.1-414";
-      "4.14.1" = "4.17.1-414";
-      "4.14.2" = "4.17.1-414";
+      "4.14.0" = "4.18-414";
+      "4.14.1" = "4.18-414";
+      "4.14.2" = "4.18-414";
       "5.0.0" = "4.14-500";
       "5.1.0" = "4.17.1-501";
       "5.1.1" = "4.17.1-501";
-      "5.2.0" = "5.2.1-502";
-      "5.2.1" = "5.2.1-502";
+      "5.2.0" = "5.3-502";
+      "5.2.1" = "5.3-502";
+      "5.3.0" = "5.4.1-503";
     }
     ."${ocaml.version}",
 }:
@@ -38,11 +39,12 @@ let
     "4.7-412" = "sha256-0U3Ia7EblKULNy8AuXFVKACZvGN0arYJv7BWiBRgT0Y=";
     "4.7-413" = "sha256-aVmGWS4bJBLuwsxDKsng/n0A6qlyJ/pnDTcYab/5gyU=";
     "4.14-500" = "sha256-7CPzJPh1UgzYiX8wPMbU5ZXz1wAJFNQQcp8WuGrR1w4=";
-    "4.16-414" = "sha256-xekZdfPfVoSeGzBvNWwxcJorE519V2NLjSHkcyZvzy0=";
-    "4.16-501" = "sha256-2lvzCbBAZFwpKuRXLMagpwDb0rz8mWrBPI5cODbCHiY=";
-    "4.17.1-414" = "sha256-vz+AbvSGMgU4YdVLc73vlTm6QhivAh2LCsrY435kX8Y=";
+    "4.16-414" = "sha256-xekZdfPfVoSeGzBvNWwxcJorE519V2NLjSHkcyZvzy0="; # Used by ocaml-lsp
+    "4.16-501" = "sha256-2lvzCbBAZFwpKuRXLMagpwDb0rz8mWrBPI5cODbCHiY="; # Used by ocaml-lsp
+    "4.18-414" = "sha256-9tb3omYUHjWMGoaWEsgTXIWRhdVH6julya17tn/jDME=";
     "4.17.1-501" = "sha256-N2cHqocfCeljlFbT++S4miHJrXXHdOlMu75n+EKwpQA=";
-    "5.2.1-502" = "sha256-XALccbLTG2GYUcFKlluRxlCk281Jv1YATu5h4MWNWEw=";
+    "5.3-502" = "sha256-LOpG8SOX+m4x7wwNT14Rwc/ZFu5JQgaUAFyV67OqJLw=";
+    "5.4.1-503" = "sha256-SbO0x3jBISX8dAXnN5CwsxLV15dJ3XPUg4tlYqJTMCI=";
   };
 
 in

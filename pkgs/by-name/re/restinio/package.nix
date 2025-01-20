@@ -54,12 +54,13 @@ stdenv.mkDerivation (finalAttrs: {
         ]
     );
 
-  checkInputs = [
+  buildInputs = [
     catch2_3
   ];
 
   cmakeDir = "../dev";
   cmakeFlags = [
+    "-DCMAKE_CATCH_DISCOVER_TESTS_DISCOVERY_MODE=PRE_TEST"
     "-DRESTINIO_TEST=ON"
     "-DRESTINIO_SAMPLE=OFF"
     "-DRESTINIO_BENCHMARK=OFF"

@@ -43,17 +43,19 @@ let
     else if fetchzip ? override then fetchzip.override { withUnzip = false; }
     else fetchzip;
   privateAttrs = lib.optionalAttrs private {
-    netrcPhase = ''
-      if [ -z "''$${varBase}USERNAME" -o -z "''$${varBase}PASSWORD" ]; then
-        echo "Error: Private fetchFromGitHub requires the nix building process (nix-daemon in multi user mode) to have the ${varBase}USERNAME and ${varBase}PASSWORD env vars set." >&2
-        exit 1
-      fi
-      cat > netrc <<EOF
-      machine ${githubBase}
-              login ''$${varBase}USERNAME
-              password ''$${varBase}PASSWORD
-      EOF
-    '';
+    netrcPhase =
+      let machineName = if githubBase == "github.com" then "api.github.com" else githubBase;
+      in ''
+        if [ -z "''$${varBase}USERNAME" -o -z "''$${varBase}PASSWORD" ]; then
+          echo "Error: Private fetchFromGitHub requires the nix building process (nix-daemon in multi user mode) to have the ${varBase}USERNAME and ${varBase}PASSWORD env vars set." >&2
+          exit 1
+        fi
+        cat > netrc <<EOF
+        machine ${machineName}
+                login ''$${varBase}USERNAME
+                password ''$${varBase}PASSWORD
+        EOF
+      '';
     netrcImpureEnvVars = [ "${varBase}USERNAME" "${varBase}PASSWORD" ];
   };
 
@@ -66,7 +68,23 @@ let
       inherit tag rev deepClone fetchSubmodules sparseCheckout fetchLFS; url = gitRepoUrl;
     } // lib.optionalAttrs (leaveDotGit != null) { inherit leaveDotGit; }
     else {
-      url = "${baseUrl}/archive/${revWithTag}.tar.gz";
+      # Use the API endpoint for private repos, as the archive URI doesn't
+      # support access with GitHub's fine-grained access tokens.
+      #
+      # Use the archive URI for non-private repos, as the API endpoint has
+      # relatively restrictive rate limits for unauthenticated users.
+      url =
+        if private then
+          let
+            endpoint = "/repos/${owner}/${repo}/tarball/${revWithTag}";
+          in
+          if githubBase == "github.com" then
+            "https://api.github.com${endpoint}"
+          else
+            "https://${githubBase}/api/v3${endpoint}"
+        else
+          "${baseUrl}/archive/${revWithTag}.tar.gz";
+      extension = "tar.gz";
 
       passthru = {
         inherit gitRepoUrl;

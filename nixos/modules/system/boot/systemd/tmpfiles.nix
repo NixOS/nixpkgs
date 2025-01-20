@@ -322,7 +322,7 @@ in
         description = "Create Volatile Files and Directories in the Real Root";
         after = [ "initrd-fs.target" ];
         before = [
-          "initrd-nixos-activation.service"
+          "initrd.target"
           "shutdown.target" "initrd-switch-root.target"
         ];
         conflicts = [ "shutdown.target" "initrd-switch-root.target" ];

@@ -42,7 +42,6 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    git
     python3
   ];
   nativeBuildInputs = [
@@ -51,7 +50,13 @@ stdenv.mkDerivation {
     makeWrapper
   ];
 
-  postPatch = "patchShebangs .";
+  configurePlatforms = [ ];
+
+  postPatch = ''
+    patchShebangs --build .
+    substituteInPlace ./config/configure \
+      --replace-fail 'bup_git=' 'bup_git="${lib.getExe git}" #'
+  '';
 
   dontAddPrefix = true;
 
@@ -62,6 +67,7 @@ stdenv.mkDerivation {
     "LIBDIR=$(out)/lib/bup"
   ];
 
+  env.BUP_PYTHON_CONFIG = lib.getExe' (lib.getDev python3) "python-config";
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=implicit-function-declaration -Wno-error=implicit-int";
 
   postInstall = ''
@@ -88,5 +94,7 @@ stdenv.mkDerivation {
 
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ rnhmjoj ];
+    # bespoke ./configure does not like cross
+    broken = stdenv.buildPlatform != stdenv.hostPlatform;
   };
 }

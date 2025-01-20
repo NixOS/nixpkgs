@@ -26,13 +26,15 @@ stdenv.mkDerivation {
     hash = "sha256-SV8E+4qu5J7MueHmdsdTDKNx4CH085fidgIJyewj8RQ=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    python3
+  ];
 
   buildInputs = [
     glm
     jsoncpp
     libGL
-    python3
     vulkan-headers
     vulkan-loader
     xorg.libX11

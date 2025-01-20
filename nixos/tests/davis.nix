@@ -48,7 +48,7 @@ import ./make-test-python.nix (
               "curl -c /tmp/cookies -sSfL --resolve davis.example.com:80:127.0.0.1 http://davis.example.com/login | grep '_csrf_token' | sed -E 's,.*value=\"(.*)\".*,\\1,g'"
           )
           r = machine.succeed(
-              f"curl -b /tmp/cookies --resolve davis.example.com:80:127.0.0.1 http://davis.example.com/login -X POST -F username=admin -F password=nixos -F _csrf_token={csrf_token.strip()} -D headers"
+              f"curl -b /tmp/cookies --resolve davis.example.com:80:127.0.0.1 http://davis.example.com/login -X POST -F _username=admin -F _password=nixos -F _csrf_token={csrf_token.strip()} -D headers"
           )
           print(r)
           machine.succeed(

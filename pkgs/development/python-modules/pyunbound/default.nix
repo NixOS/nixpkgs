@@ -5,6 +5,8 @@
   openssl,
   expat,
   libevent,
+  bison,
+  flex,
   swig,
   python,
   stdenv,
@@ -17,7 +19,11 @@ buildPythonPackage rec {
 
   patches = unbound.patches or null;
 
-  nativeBuildInputs = [ swig ];
+  nativeBuildInputs = [
+    bison
+    flex
+    swig
+  ];
 
   buildInputs = [
     openssl

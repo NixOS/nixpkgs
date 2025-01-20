@@ -84,7 +84,7 @@ index 40ed515..00da327 100644
      if to_spawn:
          command += ' &'
 -        sudo_prefix += ' /usr/bin/nohup'
-+        sudo_prefix += ' @nohup@'
++        sudo_prefix += ' @coreutils@/bin/nohup'
        
      # If as_user is the CURRENT then there's no need to sudo
      if as_user != Users.CURRENT:
@@ -102,10 +102,10 @@ index 40ed515..00da327 100644
      def get_file_owner(self, path, as_user = Users.CURRENT, user_password = None):
          if self.target_os == wbaOS.linux:
 -          command = 'LC_ALL=C stat -c %U '
-+          command = 'LC_ALL=C @stat@ -c %U '
++          command = 'LC_ALL=C @coreutils@/bin/stat -c %U '
          else:
 -          command = 'LC_ALL=C /usr/bin/stat -f "%Su" '
-+          command = 'LC_ALL=C @stat@ -f "%Su" '
++          command = 'LC_ALL=C @coreutils@/bin/stat -f "%Su" '
        
          output = io.StringIO()
          command = command + quote_path(path)
@@ -114,10 +114,10 @@ index 40ed515..00da327 100644
                  raise PermissionDeniedError("Cannot set owner of directory %s" % path)        
              else:
 -                command = "/bin/mkdir %s && chown %s %s" % (quote_path(path), with_owner, quote_path(path))
-+                command = "@mkdir@ %s && chown %s %s" % (quote_path(path), with_owner, quote_path(path))
++                command = "@coreutils@/bin/mkdir %s && chown %s %s" % (quote_path(path), with_owner, quote_path(path))
          else:
 -            command = "/bin/mkdir %s" % (quote_path(path))
-+            command = "@mkdir@ %s" % (quote_path(path))
++            command = "@coreutils@/bin/mkdir %s" % (quote_path(path))
              
          res = self.process_ops.exec_cmd(command,
                                          as_user   = as_user,
@@ -126,7 +126,7 @@ index 40ed515..00da327 100644
      def remove_directory(self, path, as_user = Users.CURRENT, user_password = None):
          output = io.StringIO()
 -        res = self.process_ops.exec_cmd('/bin/rmdir ' + quote_path(path),
-+        res = self.process_ops.exec_cmd('@rmdir@ ' + quote_path(path),
++        res = self.process_ops.exec_cmd('@coreutils@/bin/rmdir ' + quote_path(path),
                                          as_user   = as_user,
                                          user_password = user_password,
                                          output_handler = output.write,
@@ -135,7 +135,7 @@ index 40ed515..00da327 100644
      def remove_directory_recursive(self, path, as_user = Users.CURRENT, user_password = None):
          output = io.StringIO()
 -        res = self.process_ops.exec_cmd('/bin/rm -R ' + quote_path(path),
-+        res = self.process_ops.exec_cmd('@rm@ -R ' + quote_path(path),
++        res = self.process_ops.exec_cmd('@coreutils@/bin/rm -R ' + quote_path(path),
                                          as_user   = as_user,
                                          user_password = user_password,
                                          output_handler = output.write,
@@ -144,7 +144,7 @@ index 40ed515..00da327 100644
      def delete_file(self, path, as_user = Users.CURRENT, user_password = None):
          output = io.StringIO()
 -        res = self.process_ops.exec_cmd("/bin/rm " + quote_path(path),
-+        res = self.process_ops.exec_cmd("@rm@ " + quote_path(path),
++        res = self.process_ops.exec_cmd("@coreutils@/bin/rm " + quote_path(path),
                                          as_user   = as_user,
                                          user_password = user_password,
                                          output_handler = output.write,
@@ -153,7 +153,7 @@ index 40ed515..00da327 100644
          output = io.StringIO()
          
 -        res = self.process_ops.exec_cmd("LC_ALL=C /bin/cp " + quote_path(source) + " " + quote_path(dest),
-+        res = self.process_ops.exec_cmd("LC_ALL=C @cp@ " + quote_path(source) + " " + quote_path(dest),
++        res = self.process_ops.exec_cmd("LC_ALL=C @coreutils@/bin/cp " + quote_path(source) + " " + quote_path(dest),
                        as_user   = as_user,
                        user_password = user_password,
                        output_handler = output.write,
@@ -162,10 +162,10 @@ index 40ed515..00da327 100644
              # since both cases are possible, we need to handle both at the same time (1st line being total <nnnn> or not)
              # the good news is that if the line is there, then it will always start with total, regardless of the locale
 -            command = 'LC_ALL=C /bin/ls -l -p %s' % quote_path(path)
-+            command = 'LC_ALL=C @ls@ -l -p %s' % quote_path(path)
++            command = 'LC_ALL=C @coreutils@/bin/ls -l -p %s' % quote_path(path)
          else:
 -            command = 'LC_ALL=C /bin/ls -1 -p %s' % quote_path(path)
-+            command = 'LC_ALL=C @ls@ -1 -p %s' % quote_path(path)
++            command = 'LC_ALL=C @coreutils@/bin/ls -1 -p %s' % quote_path(path)
              
          output = io.StringIO()
          res = self.process_ops.exec_cmd(command,
@@ -174,10 +174,10 @@ index 40ed515..00da327 100644
          f = io.StringIO()
          if not self._need_sudo:
 -            ret = self.server_helper.execute_command("/bin/dd if=%s ibs=1 skip=%i count=%i 2> /dev/null" % (quote_path(self.path), start, end-start), as_user = Users.CURRENT, user_password=None, output_handler=f.write)
-+            ret = self.server_helper.execute_command("@dd@ if=%s ibs=1 skip=%i count=%i 2> /dev/null" % (quote_path(self.path), start, end-start), as_user = Users.CURRENT, user_password=None, output_handler=f.write)
++            ret = self.server_helper.execute_command("@coreutils@/bin/dd if=%s ibs=1 skip=%i count=%i 2> /dev/null" % (quote_path(self.path), start, end-start), as_user = Users.CURRENT, user_password=None, output_handler=f.write)
          else:
 -            ret = self.server_helper.execute_command("/bin/dd if=%s ibs=1 skip=%i count=%i 2> /dev/null" % (quote_path(self.path), start, end-start), as_user = Users.ADMIN, user_password=self.get_password, output_handler=f.write)
-+            ret = self.server_helper.execute_command("@dd@ if=%s ibs=1 skip=%i count=%i 2> /dev/null" % (quote_path(self.path), start, end-start), as_user = Users.ADMIN, user_password=self.get_password, output_handler=f.write)
++            ret = self.server_helper.execute_command("@coreutils@/bin/dd if=%s ibs=1 skip=%i count=%i 2> /dev/null" % (quote_path(self.path), start, end-start), as_user = Users.ADMIN, user_password=self.get_password, output_handler=f.write)
  
          if ret != 0:
              raise RuntimeError("Could not get data from file %s" % self.path)
@@ -186,10 +186,10 @@ index 40ed515..00da327 100644
      def read_task(self, offset, file):
          if not self._need_sudo:
 -            self.server_helper.execute_command("/bin/dd if=%s ibs=1 skip=%i 2> /dev/null" % (quote_path(self.path), offset), as_user = Users.CURRENT, user_password=None, output_handler=file.write)
-+            self.server_helper.execute_command("@dd@ if=%s ibs=1 skip=%i 2> /dev/null" % (quote_path(self.path), offset), as_user = Users.CURRENT, user_password=None, output_handler=file.write)
++            self.server_helper.execute_command("@coreutils@/bin/dd if=%s ibs=1 skip=%i 2> /dev/null" % (quote_path(self.path), offset), as_user = Users.CURRENT, user_password=None, output_handler=file.write)
          else:
 -            self.server_helper.execute_command("/bin/dd if=%s ibs=1 skip=%i 2> /dev/null" % (quote_path(self.path), offset), as_user = Users.ADMIN, user_password=self.get_password, output_handler=file.write)
-+            self.server_helper.execute_command("@dd@ if=%s ibs=1 skip=%i 2> /dev/null" % (quote_path(self.path), offset), as_user = Users.ADMIN, user_password=self.get_password, output_handler=file.write)
++            self.server_helper.execute_command("@coreutils@/bin/dd if=%s ibs=1 skip=%i 2> /dev/null" % (quote_path(self.path), offset), as_user = Users.ADMIN, user_password=self.get_password, output_handler=file.write)
          # this will signal the reader end that there's no more data
          file.close()
  
@@ -198,10 +198,10 @@ index 40ed515..00da327 100644
          f = io.StringIO()
          if not self._need_sudo:
 -            self.server_helper.execute_command("/bin/dd if=%s ibs=1 skip=%i 2> /dev/null" % (quote_path(self.path), offset), as_user = Users.CURRENT, user_password=None, output_handler=f.write)
-+            self.server_helper.execute_command("@dd@ if=%s ibs=1 skip=%i 2> /dev/null" % (quote_path(self.path), offset), as_user = Users.CURRENT, user_password=None, output_handler=f.write)
++            self.server_helper.execute_command("@coreutils@/bin/dd if=%s ibs=1 skip=%i 2> /dev/null" % (quote_path(self.path), offset), as_user = Users.CURRENT, user_password=None, output_handler=f.write)
          else:
 -            self.server_helper.execute_command("/bin/dd if=%s ibs=1 skip=%i 2> /dev/null" % (quote_path(self.path), offset), as_user = Users.ADMIN, user_password=self._password, output_handler=f.write)
-+            self.server_helper.execute_command("@dd@ if=%s ibs=1 skip=%i 2> /dev/null" % (quote_path(self.path), offset), as_user = Users.ADMIN, user_password=self._password, output_handler=f.write)
++            self.server_helper.execute_command("@coreutils@/bin/dd if=%s ibs=1 skip=%i 2> /dev/null" % (quote_path(self.path), offset), as_user = Users.ADMIN, user_password=self._password, output_handler=f.write)
          self.data = f
          self.data.seek(0)
          if self.skip_first_newline:

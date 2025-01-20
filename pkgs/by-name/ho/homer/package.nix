@@ -2,7 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
-  pnpm,
+  pnpm_9,
   nodejs,
   dart-sass,
   nix-update-script,
@@ -17,7 +17,7 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-nOhovVqWlHPunwruJrgqFhhDxccKBp/iEyB3Y3C5Cz8=";
   };
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = pnpm_9.fetchDeps {
     inherit
       pname
       version
@@ -33,7 +33,7 @@ stdenvNoCC.mkDerivation rec {
   nativeBuildInputs = [
     nodejs
     dart-sass
-    pnpm.configHook
+    pnpm_9.configHook
   ];
 
   buildPhase = ''

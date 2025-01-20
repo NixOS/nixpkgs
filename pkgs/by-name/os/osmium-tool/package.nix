@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   installShellFiles,
   pandoc,
@@ -11,33 +10,21 @@
   expat,
   libosmium,
   lz4,
+  nlohmann_json,
   protozero,
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "osmium-tool";
-  version = "1.16.0";
+  version = "1.17.0";
 
   src = fetchFromGitHub {
     owner = "osmcode";
     repo = "osmium-tool";
-    rev = "v${version}";
-    sha256 = "sha256-DObqbzdPA4RlrlcZhqA0MQtWBE+D6GRD1pd9U4DARIk=";
+    tag = "v${finalAttrs.version}";
+    sha256 = "sha256-l6C2DGGKcbMUkKDruM8QzpriqFMvDnsi4OE99a2EzhA=";
   };
-
-  patches = [
-    # Work around https://github.com/osmcode/osmium-tool/issues/276
-    # by applying changes from https://github.com/Tencent/rapidjson/pull/719
-    (fetchpatch {
-      url = "https://github.com/Tencent/rapidjson/commit/3b2441b87f99ab65f37b141a7b548ebadb607b96.patch";
-      hash = "sha256-Edmq+hdJQFQ4hT3Oz1cv5gX95qQxPLD4aY8QMTonDe8=";
-    })
-    (fetchpatch {
-      url = "https://github.com/Tencent/rapidjson/commit/862c39be371278a45a88d4d1d75164be57bb7e2d.patch";
-      hash = "sha256-V5zbq/THUY75p1RdEPKJK2NVnxbZs07MMwJBAH7nAMg=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -51,6 +38,7 @@ stdenv.mkDerivation rec {
     expat
     libosmium
     lz4
+    nlohmann_json
     protozero
     zlib
   ];
@@ -61,16 +49,16 @@ stdenv.mkDerivation rec {
     installShellCompletion --zsh ../zsh_completion/_osmium
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Multipurpose command line tool for working with OpenStreetMap data based on the Osmium library";
     homepage = "https://osmcode.org/osmium-tool/";
-    changelog = "https://github.com/osmcode/osmium-tool/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [
+    changelog = "https://github.com/osmcode/osmium-tool/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = with lib.licenses; [
       gpl3Plus
       mit
       bsd3
     ];
-    maintainers = with maintainers; teams.geospatial.members ++ [ das-g ];
+    maintainers = lib.teams.geospatial.members ++ (with lib.maintainers; [ das-g ]);
     mainProgram = "osmium";
   };
-}
+})

@@ -144,6 +144,7 @@ in {
   auth-mysql = handleTest ./auth-mysql.nix {};
   authelia = handleTest ./authelia.nix {};
   auto-cpufreq = handleTest ./auto-cpufreq.nix {};
+  autobrr = handleTest ./autobrr.nix {};
   avahi = handleTest ./avahi.nix {};
   avahi-with-resolved = handleTest ./avahi.nix { networkd = true; };
   ayatana-indicators = runTest ./ayatana-indicators.nix;
@@ -294,6 +295,7 @@ in {
   early-mount-options = handleTest ./early-mount-options.nix {};
   ec2-config = (handleTestOn ["x86_64-linux"] ./ec2.nix {}).boot-ec2-config or {};
   ec2-nixops = (handleTestOn ["x86_64-linux"] ./ec2.nix {}).boot-ec2-nixops or {};
+  echoip = handleTest ./echoip.nix {};
   ecryptfs = handleTest ./ecryptfs.nix {};
   fscrypt = handleTest ./fscrypt.nix {};
   fastnetmon-advanced = runTest ./fastnetmon-advanced.nix;
@@ -1064,6 +1066,7 @@ in {
   systemd-userdbd = handleTest ./systemd-userdbd.nix {};
   systemd-homed = handleTest ./systemd-homed.nix {};
   systemtap = handleTest ./systemtap.nix {};
+  taler = handleTest ./taler {};
   tandoor-recipes = handleTest ./tandoor-recipes.nix {};
   tandoor-recipes-script-name = handleTest ./tandoor-recipes-script-name.nix {};
   tang = handleTest ./tang.nix {};
@@ -1194,10 +1197,12 @@ in {
   zeronet-conservancy = handleTest ./zeronet-conservancy.nix {};
   zfs = handleTest ./zfs.nix {};
   zigbee2mqtt = handleTest ./zigbee2mqtt.nix {};
+  zipline = handleTest ./zipline.nix {};
   zoneminder = handleTest ./zoneminder.nix {};
   zookeeper = handleTest ./zookeeper.nix {};
   zram-generator = handleTest ./zram-generator.nix {};
   zrepl = handleTest ./zrepl.nix {};
   zsh-history = handleTest ./zsh-history.nix {};
   zwave-js = handleTest ./zwave-js.nix {};
+  zwave-js-ui = handleTest ./zwave-js-ui.nix {};
 }

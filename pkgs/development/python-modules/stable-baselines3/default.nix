@@ -22,14 +22,16 @@
 }:
 buildPythonPackage rec {
   pname = "stable-baselines3";
-  version = "2.4.0";
+  # TODO: To this date, the latest release (2.4.1) is not compatible with numpy 2 and does not build
+  # successfully on nixpkgs
+  version = "2.4.1-unstable-2025-01-07";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "DLR-RM";
     repo = "stable-baselines3";
-    tag = "v${version}";
-    hash = "sha256-OFmjAkUS0wrns5CkWjqR7zTjKLVPI/NrpVIKJhLAwYM=";
+    rev = "b7c64a1aa4dd2fd3efed96e7a9ddb4d1f5c96112";
+    hash = "sha256-oyTOBRZsKkhhGKwwBN9HCV0t8+MkJYpWsTRdS+upMeI=";
   };
 
   build-system = [ setuptools ];

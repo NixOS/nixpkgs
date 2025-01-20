@@ -41,7 +41,7 @@ let
 in
 buildPythonPackage rec {
   pname = "pymupdf";
-  version = "1.24.14";
+  version = "1.25.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -50,7 +50,7 @@ buildPythonPackage rec {
     owner = "pymupdf";
     repo = "PyMuPDF";
     tag = version;
-    hash = "sha256-M7Ca3nqnqeClp4MGJqTAVGZhAGRniregjRrjtAhRkBc=";
+    hash = "sha256-kdu8CuQJ5+h8+PS66acWEfcttgALiD+JBoWWyGtjBzs=";
   };
 
   # swig is not wrapped as Python package
@@ -123,6 +123,11 @@ buildPythonPackage rec {
 
   preCheck = ''
     export PATH="$out/bin:$PATH";
+
+    # Fixes at least one test; see:
+    # * <https://github.com/pymupdf/PyMuPDF/blob/refs/tags/1.25.1/scripts/sysinstall.py#L390>
+    # * <https://github.com/pymupdf/PyMuPDF/blob/refs/tags/1.25.1/tests/test_pixmap.py#L425-L428>
+    export PYMUPDF_SYSINSTALL_TEST=1
   '';
 
   meta = {

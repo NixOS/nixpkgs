@@ -16,13 +16,13 @@
 
 buildGoModule rec {
   pname = "mautrix-signal";
-  version = "0.7.4";
+  version = "0.7.5";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "signal";
     rev = "v${version}";
-    hash = "sha256-1UI2oYDnmwy9+URBMA2yTBMEoFsE8qnkhn7E0l/lOTs=";
+    hash = "sha256-iBZoVfHec9g+W7xaBAAew/aY9h/errwLdC05biFaZ78=";
   };
 
   buildInputs =
@@ -38,7 +38,7 @@ buildGoModule rec {
 
   CGO_LDFLAGS = lib.optional withGoolm [ "-lstdc++" ];
 
-  vendorHash = "sha256-ADuW6KMNUwJeGqFlQsJ8qSI0alPQpSAFx1zrhwsAmsI=";
+  vendorHash = "sha256-RKBewWc98+WpdpXF4QA/ULyZXDR0CKym8KdyeSMd0KA=";
 
   doCheck = true;
   preCheck =

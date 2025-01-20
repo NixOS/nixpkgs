@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "cerberus";
-  version = "1.3.6";
+  version = "1.3.7";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "pyeve";
     repo = "cerberus";
     tag = version;
-    hash = "sha256-puQcU8USYtylW5XN0VQzG/dizQR24s7+YgrOxIwaDKQ=";
+    hash = "sha256-KYZpd8adKXahSc/amQHZMFdJtEtZLklZZgwfkYu8/qY=";
   };
 
   build-system = [

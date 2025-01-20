@@ -637,7 +637,7 @@ buildLuarocksPackage {
   disabled = lua.luaversion != "5.1";
 
   meta = {
-    homepage = "http://github.com/lewis6991/gitsigns.nvim";
+    homepage = "https://github.com/lewis6991/gitsigns.nvim";
     description = "Git signs written in pure lua";
     license.fullName = "MIT/X11";
   };
@@ -1175,7 +1175,7 @@ buildLuarocksPackage {
   disabled = luaOlder "5.1";
 
   meta = {
-    homepage = "http://github.com/antirez/lua-cmsgpack";
+    homepage = "https://github.com/antirez/lua-cmsgpack";
     description = "MessagePack C implementation and bindings for Lua 5.1/5.2/5.3";
     license.fullName = "Two-clause BSD";
   };
@@ -1573,7 +1573,7 @@ buildLuarocksPackage {
   disabled = luaOlder "5.1";
 
   meta = {
-    homepage = "http://github.com/brimworks/lua-yajl";
+    homepage = "https://github.com/brimworks/lua-yajl";
     description = "Integrate the yajl JSON library with Lua.";
     maintainers = with lib.maintainers; [ pstn ];
     license.fullName = "MIT/X11";
@@ -2007,7 +2007,7 @@ buildLuarocksPackage {
   propagatedBuildInputs = [ bit32 ];
 
   meta = {
-    homepage = "http://github.com/luaposix/luaposix/";
+    homepage = "https://github.com/luaposix/luaposix/";
     description = "Lua bindings for POSIX";
     maintainers = with lib.maintainers; [ vyp lblasc ];
     license.fullName = "MIT/X11";
@@ -2367,7 +2367,7 @@ buildLuarocksPackage {
   disabled = luaOlder "5.1" || luaAtLeast "5.5";
 
   meta = {
-    homepage = "http://github.com/bluebird75/luaunit";
+    homepage = "https://github.com/bluebird75/luaunit";
     description = "A unit testing framework for Lua";
     maintainers = with lib.maintainers; [ lockejan ];
     license.fullName = "BSD";
@@ -2390,7 +2390,7 @@ buildLuarocksPackage {
   disabled = luaOlder "5.1";
 
   meta = {
-    homepage = "http://github.com/starwing/luautf8";
+    homepage = "https://github.com/starwing/luautf8";
     description = "A UTF-8 support module for Lua";
     maintainers = with lib.maintainers; [ pstn ];
     license.fullName = "MIT";
@@ -2994,7 +2994,7 @@ buildLuarocksPackage {
   propagatedBuildInputs = [ luassert ];
 
   meta = {
-    homepage = "http://github.com/nvim-lua/plenary.nvim";
+    homepage = "https://github.com/nvim-lua/plenary.nvim";
     description = "lua functions you don't want to write ";
     license.fullName = "MIT/X11";
   };
@@ -3589,7 +3589,7 @@ buildLuarocksPackage {
   disabled = luaOlder "5.1";
 
   meta = {
-    homepage = "http://manoelcampos.github.io/xml2lua/";
+    homepage = "https://manoelcampos.github.io/xml2lua/";
     description = "An XML Parser written entirely in Lua that works for Lua 5.1+";
     maintainers = with lib.maintainers; [ teto ];
     license.fullName = "MIT";

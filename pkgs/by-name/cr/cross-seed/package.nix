@@ -6,16 +6,16 @@
 
 buildNpmPackage rec {
   pname = "cross-seed";
-  version = "6.8.4";
+  version = "6.8.5";
 
   src = fetchFromGitHub {
     owner = "cross-seed";
     repo = "cross-seed";
     tag = "v${version}";
-    hash = "sha256-R0mgrRWb9pM7DWC4Y5cASkuwWBJAtk6iKz2tIa5rLVE=";
+    hash = "sha256-PrpS4GzGkicfN04yqGDeFZBVk0RA5RFlZPbNVHpNN8E=";
   };
 
-  npmDepsHash = "sha256-1xP0KwuVZMeIxg3dXd0CAGW0517i/6WBu3qGOkwsoks=";
+  npmDepsHash = "sha256-xX0su3q31R42m8jksF2IoSZCe9dFjUlrvaI5uMD/HGQ=";
 
   meta = {
     description = "Fully-automatic torrent cross-seeding with Torznab";

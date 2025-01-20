@@ -12,16 +12,16 @@
 
 buildGoModule rec {
   pname = "vhs";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-kUsh+jy4dXYW1uAUfFv/HKBqIIyVogLKUYNjBhIKlls=";
+    hash = "sha256-ceY4zLd+4EwXpwunKiWnaAB25qutSK1b1SyIriAbAI0=";
   };
 
-  vendorHash = "sha256-1UBhiRemJ+dQNm20+8pbOJus5abvTwVcuzxNMzrniN8=";
+  vendorHash = "sha256-2vRAI+Mm8Pzk3u4rndtwYnUlrAtjffe0kpoA1EHprQk=";
 
   nativeBuildInputs = [
     installShellFiles

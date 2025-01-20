@@ -277,15 +277,6 @@ self: super:
     outputs = [ "out" "dev" "devdoc" ];
   });
 
-  luit = super.luit.overrideAttrs (attrs: {
-    # See https://bugs.freedesktop.org/show_bug.cgi?id=47792
-    # Once the bug is fixed upstream, this can be removed.
-    configureFlags = [ "--disable-selective-werror" ];
-
-    buildInputs = attrs.buildInputs ++ [libiconv];
-    meta = attrs.meta // { mainProgram = "luit"; };
-  });
-
   libICE = super.libICE.overrideAttrs (attrs: {
     outputs = [ "out" "dev" "doc" ];
   });
@@ -592,8 +583,13 @@ self: super:
   });
 
   xf86videonouveau = super.xf86videonouveau.overrideAttrs (attrs: {
-    nativeBuildInputs = attrs.nativeBuildInputs ++ [ autoreconfHook ];
-    buildInputs =  attrs.buildInputs ++ [ xorg.utilmacros ];
+    nativeBuildInputs = attrs.nativeBuildInputs ++ [
+      autoreconfHook
+      buildPackages.xorg.utilmacros # For xorg-utils.m4 macros
+      buildPackages.xorg.xorgserver # For xorg-server.m4 macros
+    ];
+    # fixes `implicit declaration of function 'wfbScreenInit'; did you mean 'fbScreenInit'?
+    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
   });
 
   xf86videoglint = super.xf86videoglint.overrideAttrs (attrs: {
@@ -1117,15 +1113,6 @@ self: super:
   xsetroot = addMainProgram super.xsetroot { };
   xsm = addMainProgram super.xsm { };
   xstdcmap = addMainProgram super.xstdcmap { };
-  xtrans = super.xtrans.overrideAttrs (attrs: {
-    patches = [
-      # https://gitlab.freedesktop.org/xorg/lib/libxtrans/-/merge_requests/22
-      (fetchpatch {
-        url = "https://gitlab.freedesktop.org/xorg/lib/libxtrans/-/commit/ae99ac32f61e0db92a45179579030a23fe1b5770.patch";
-        hash = "sha256-QnTTcZPd9QaHS5up4Ne7iuNL/OBu+DnzXprovWnW4cw=";
-      })
-    ];
-  });
   xwd = addMainProgram super.xwd { };
   xwininfo = addMainProgram super.xwininfo { };
   xwud = addMainProgram super.xwud { };

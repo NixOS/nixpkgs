@@ -126,6 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
         [
           zlib
           cyrus_sasl
+          sqlite
         ]
         # Darwin doesn't have libuuid, try to build without it
         ++ lib.optional (!stdenv.hostPlatform.isDarwin) libuuid;

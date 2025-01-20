@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "recipe-scrapers";
-  version = "15.3.3";
+  version = "15.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -26,19 +26,22 @@ buildPythonPackage rec {
     owner = "hhursev";
     repo = "recipe-scrapers";
     tag = version;
-    hash = "sha256-rIQ6OfxsVczidLYVvXtkfpBk/KGLgDo+h4kqKXXSD80=";
+    hash = "sha256-IAsa/GjTydKZq9Nh9MSVRb2DujICVQT38hMPTjzQyBw=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     beautifulsoup4
     extruct
     isodate
     language-tags
     regex
-    requests
   ];
+
+  optional-dependencies = {
+    online = [ requests ];
+  };
 
   nativeCheckInputs = [
     pytestCheckHook

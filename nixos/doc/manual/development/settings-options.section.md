@@ -343,6 +343,21 @@ have a predefined type and string generator already declared under
     and returning a set with TOML-specific attributes `type` and
     `generate` as specified [below](#pkgs-formats-result).
 
+`pkgs.formats.xml` { format ? "badgerfish", withHeader ? true}
+
+:   A function taking an attribute set with values
+    and returning a set with XML-specific attributes `type` and
+    `generate` as specified [below](#pkgs-formats-result).
+
+    `format`
+
+    :   Input format. Because XML can not be translated one-to-one, we have to use intermediate formats. Possible values:
+      - `"badgerfish"`: Uses [badgerfish](http://www.sklar.com/badgerfish/) conversion.
+
+    `withHeader`
+
+    :   Outputs the xml with header.
+
 `pkgs.formats.cdn` { }
 
 :   A function taking an empty attribute set (for future extensibility)

@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "goslide-api";
-  version = "0.7.3";
+  version = "0.7.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ualex73";
     repo = "goslide-api";
     tag = version;
-    hash = "sha256-s8MtOBNieg0o8U6pkf0e/EF8GtVkb7BgQBP6n/xmKJk=";
+    hash = "sha256-Z3+GijoI+351zV7IpLSBQu6LE2OhhXho4ygNMVbg2xs=";
   };
 
   build-system = [ setuptools ];

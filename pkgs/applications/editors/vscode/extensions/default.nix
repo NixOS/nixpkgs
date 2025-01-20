@@ -4231,8 +4231,8 @@ let
         mktplcRef = {
           name = "wikitext";
           publisher = "RoweWilsonFrederiskHolme";
-          version = "3.8.2";
-          hash = "sha256-rWifSoJSN37xPIaCQgPyXRz9tCX2Akahl/3CuqzXq94=";
+          version = "4.0.1";
+          hash = "sha256-DN7VRLr5IaqCdsbADriH0AuUODGL8OeZWbCSozQTboU=";
         };
         meta = {
           description = "Extension that helps users view and write MediaWiki's Wikitext files";

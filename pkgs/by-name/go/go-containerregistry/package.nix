@@ -14,13 +14,13 @@ in
 
 buildGoModule rec {
   pname = "go-containerregistry";
-  version = "0.20.2";
+  version = "0.20.3";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-5f5zheFPSKmpUaVmcAfeZgFSDu3rvdtQh8mau9jdqz4=";
+    sha256 = "sha256-HiksVzVuY4uub7Lwfyh3GN8wpH2MgIjKSO4mQJZeNvs=";
   };
   vendorHash = null;
 

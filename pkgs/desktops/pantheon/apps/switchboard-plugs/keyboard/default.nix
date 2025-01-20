@@ -2,13 +2,14 @@
 , stdenv
 , fetchFromGitHub
 , nix-update-script
-, substituteAll
+, replaceVars
 , meson
 , ninja
 , pkg-config
 , vala
 , libadwaita
 , libgee
+, gettext
 , gnome-settings-daemon
 , granite7
 , gsettings-desktop-schemas
@@ -37,13 +38,13 @@ stdenv.mkDerivation rec {
     # https://github.com/elementary/switchboard-plug-keyboard/issues/324
     ./hide-install-unlisted-engines-button.patch
 
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       inherit onboard libgnomekbd;
     })
   ];
 
   nativeBuildInputs = [
+    gettext # msgfmt
     libxml2
     meson
     ninja

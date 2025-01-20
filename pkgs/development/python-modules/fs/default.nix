@@ -30,6 +30,7 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
+    setuptools
     six
     appdirs
     pytz

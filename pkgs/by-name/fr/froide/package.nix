@@ -5,7 +5,7 @@
   makeWrapper,
   gdal,
   geos,
-  pnpm,
+  pnpm_9,
   nodejs,
   postgresql,
   postgresqlTestHook,
@@ -42,7 +42,7 @@ python.pkgs.buildPythonApplication rec {
   nativeBuildInputs = [
     makeWrapper
     nodejs
-    pnpm.configHook
+    pnpm_9.configHook
   ];
 
   dependencies = with python.pkgs; [
@@ -99,7 +99,7 @@ python.pkgs.buildPythonApplication rec {
     websockets
   ];
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version src;
     hash = "sha256-DMoaXNm5S64XBERHFnFM6IKBkzXRGDEYWSTruccK9Hc=";
   };

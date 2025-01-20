@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
       pkg-config
       gobject-introspection
     ]
-    ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
+    ++ lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
       gtk-doc
       docbook-xsl-nons
       docbook_xml_dtd_412
@@ -45,11 +45,19 @@ stdenv.mkDerivation rec {
     libxml2
   ];
 
+  strictDeps = true;
+
   configureFlags = [
-    (lib.enableFeature (stdenv.hostPlatform == stdenv.buildPlatform) "gtk-doc")
+    (lib.enableFeature (stdenv.buildPlatform.canExecute stdenv.hostPlatform) "gtk-doc")
     # Remove when https://gitlab.gnome.org/GNOME/librest/merge_requests/2 is merged.
     "--with-ca-certificates=/etc/ssl/certs/ca-certificates.crt"
   ];
+
+  postPatch = ''
+    # pkg-config doesn't look in $PATH if strictDeps is on
+    substituteInPlace ./configure \
+      --replace-fail 'have_gtk_doc=no' "echo gtk-doc is present"
+  '';
 
   passthru = {
     updateScript = gnome.updateScript {

@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     # Public domain + permissive (non-copyleft) licensing of some files.
     license = lib.licenses.publicDomain;
 
-    homepage = "http://people.csail.mit.edu/jaffer/SLIB";
+    homepage = "https://people.csail.mit.edu/jaffer/SLIB";
 
     maintainers = [ ];
     platforms = lib.platforms.unix;

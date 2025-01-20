@@ -84,6 +84,9 @@ Reviewing process:
 - Ensure that the introduced options are correct.
   - Type should be appropriate (string related types differs in their merging capabilities, `loaOf` and `string` types are deprecated).
   - Description, default and example should be provided.
+    - Defaults may only be omitted if both:
+      1. The user is required to set the default in order to properly use the service.
+      2. The lack of a default does not break evaluation when the module is not enabled.
 - Ensure that module `meta` field is present
   - Maintainers should be declared in `meta.maintainers`.
   - Module documentation should be declared with `meta.doc`.

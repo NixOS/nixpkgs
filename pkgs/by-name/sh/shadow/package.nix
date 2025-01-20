@@ -18,13 +18,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "shadow";
-  version = "4.16.0";
+  version = "4.17.2";
 
   src = fetchFromGitHub {
     owner = "shadow-maint";
     repo = pname;
     rev = version;
-    hash = "sha256-GAwwpyIN5qWSIapjGFfOxPbOx5G6//fEbTpPmkXh6uA=";
+    hash = "sha256-IoHAr35ziujHTukMbA5QN15YbnpwBT7pUYcqRr+rdog=";
   };
 
   outputs = [ "out" "su" "dev" "man" ];
@@ -77,10 +77,6 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    # Don't install ‘groups’, since coreutils already provides it.
-    rm $out/bin/groups
-    rm $man/share/man/man1/groups.*
-
     # Move the su binary into the su package
     mkdir -p $su/bin
     mv $out/bin/su $su/bin

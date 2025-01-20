@@ -148,6 +148,7 @@
   ./programs/_1password.nix
   ./programs/adb.nix
   ./programs/alvr.nix
+  ./programs/amnezia-vpn.nix
   ./programs/appgate-sdp.nix
   ./programs/appimage.nix
   ./programs/arp-scan.nix
@@ -571,7 +572,13 @@
   ./services/editors/emacs.nix
   ./services/editors/haste.nix
   ./services/editors/infinoted.nix
+  ./services/finance/libeufin/bank.nix
+  ./services/finance/libeufin/module.nix
+  ./services/finance/libeufin/nexus.nix
   ./services/finance/odoo.nix
+  ./services/finance/taler/exchange.nix
+  ./services/finance/taler/merchant.nix
+  ./services/finance/taler/module.nix
   ./services/games/archisteamfarm.nix
   ./services/games/armagetronad.nix
   ./services/games/crossfire-server.nix
@@ -661,6 +668,7 @@
   ./services/home-automation/wyoming/satellite.nix
   ./services/home-automation/zigbee2mqtt.nix
   ./services/home-automation/zwave-js.nix
+  ./services/home-automation/zwave-js-ui.nix
   ./services/logging/SystemdJournal2Gelf.nix
   ./services/logging/awstats.nix
   ./services/logging/filebeat.nix
@@ -740,6 +748,7 @@
   ./services/misc/anki-sync-server.nix
   ./services/misc/apache-kafka.nix
   ./services/misc/atuin.nix
+  ./services/misc/autobrr.nix
   ./services/misc/autofs.nix
   ./services/misc/autorandr.nix
   ./services/misc/autosuspend.nix
@@ -849,6 +858,7 @@
   ./services/misc/radarr.nix
   ./services/misc/radicle.nix
   ./services/misc/readarr.nix
+  ./services/misc/realmd.nix
   ./services/misc/redlib.nix
   ./services/misc/redmine.nix
   ./services/misc/renovate.nix
@@ -1319,6 +1329,7 @@
   ./services/networking/xrdp.nix
   ./services/networking/yggdrasil.nix
   ./services/networking/zapret.nix
+  ./services/networking/yggdrasil-jumper.nix
   ./services/networking/zerobin.nix
   ./services/networking/zenohd.nix
   ./services/networking/zeronet.nix
@@ -1459,6 +1470,7 @@
   ./services/web-apps/documize.nix
   ./services/web-apps/dokuwiki.nix
   ./services/web-apps/dolibarr.nix
+  ./services/web-apps/echoip.nix
   ./services/web-apps/eintopf.nix
   ./services/web-apps/engelsystem.nix
   ./services/web-apps/ethercalc.nix
@@ -1576,6 +1588,7 @@
   ./services/web-apps/your_spotify.nix
   ./services/web-apps/youtrack.nix
   ./services/web-apps/zabbix.nix
+  ./services/web-apps/zipline.nix
   ./services/web-apps/zitadel.nix
   ./services/web-servers/agate.nix
   ./services/web-servers/apache-httpd/default.nix

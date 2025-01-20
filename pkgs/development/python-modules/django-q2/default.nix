@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "django-q2";
     repo = "django-q2";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-mp/IZkfT64xW42B1TEO6lSHxvLQbeH4td8vqZH7wUxM=";
   };
 
@@ -53,7 +53,7 @@ buildPythonPackage rec {
       new: old: {
         version = "3.1.0";
         src = old.src.override {
-          rev = "refs/tags/v${new.version}";
+          tag = "v${new.version}";
           hash = "sha256-ID5OJdARd2N2GYEpcYOpxenpZlhWnWr5fAClAgqEgGg=";
         };
       }

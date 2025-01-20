@@ -59,6 +59,7 @@ let
    "8.19.1".sha256   = "sha256-kmZ8Uk8jpzjOd67aAPp3C+vU2oNaBw9pr7+Uixcgg94=";
    "8.19.2".sha256   = "sha256-q+i07JsMZp83Gqav6v1jxsgPLN7sPvp5/oszVnavmz0=";
    "8.20.0".sha256   = "sha256-WFpZlA6CzFVAruPhWcHQI7VOBVhrGLdFzWrHW0DTSl0=";
+   "8.20.1".sha256   = "sha256-nRaLODPG4E3gUDzGrCK40vhl4+VhPyd+/fXFK/HC3Ig=";
   };
   releaseRev = v: "V${v}";
   fetched = import ../../../../build-support/coq/meta-fetch/default.nix
@@ -231,17 +232,29 @@ self = stdenv.mkDerivation {
     mainProgram = "coqide";
   };
 }; in
-if coqAtLeast "8.17" then self.overrideAttrs(_: let
-  core-stdlib-package = if coqAtLeast "8.21" then "rocq-core" else "coq-stdlib"; in {
+if coqAtLeast "8.21" then self.overrideAttrs(_: {
+  # coq-core is now a shim for rocq
   buildPhase = ''
     runHook preBuild
     make dunestrap
-    dune build -p coq-core${lib.optionalString (coqAtLeast "8.21") ",rocq-runtime"},${core-stdlib-package},coqide-server${lib.optionalString buildIde ",coqide"} -j $NIX_BUILD_CORES
+    dune build -p rocq-runtime,rocq-core,coq-core,coqide-server${lib.optionalString buildIde ",rocqide"} -j $NIX_BUILD_CORES
     runHook postBuild
   '';
   installPhase = ''
     runHook preInstall
-    dune install --prefix $out coq-core ${lib.optionalString (coqAtLeast "8.21") "rocq-runtime"} ${core-stdlib-package} coqide-server${lib.optionalString buildIde " coqide"}
+    dune install --prefix $out rocq-runtime rocq-core coq-core coqide-server${lib.optionalString buildIde " rocqide"}
+    runHook postInstall
+  '';
+}) else if coqAtLeast "8.17" then self.overrideAttrs(_: {
+  buildPhase = ''
+    runHook preBuild
+    make dunestrap
+    dune build -p coq-core,coq-stdlib,coqide-server${lib.optionalString buildIde ",coqide"} -j $NIX_BUILD_CORES
+    runHook postBuild
+  '';
+  installPhase = ''
+    runHook preInstall
+    dune install --prefix $out coq-core coq-stdlib coqide-server${lib.optionalString buildIde " coqide"}
     runHook postInstall
   '';
 }) else self

@@ -52,6 +52,16 @@ import ./make-test-python.nix (
           ];
       };
       immutable = makeMattermost {
+        package = pkgs.mattermost.overrideAttrs (prev: {
+          webapp = prev.webapp.overrideAttrs (prevWebapp: {
+            # Ensure that users can add patches.
+            postPatch =
+              prevWebapp.postPatch or ""
+              + ''
+                substituteInPlace channels/src/root.html --replace-fail "Mattermost" "Patched Mattermost"
+              '';
+          });
+        });
         mutableConfig = false;
         extraConfig.SupportSettings.HelpLink = "https://search.nixos.org";
       };
@@ -94,6 +104,8 @@ import ./make-test-python.nix (
         ## Mutable node tests ##
         mutable.wait_for_unit("mattermost.service")
         mutable.wait_for_open_port(8065)
+        mutable.succeed("curl -L http://localhost:8065/index.html | grep '${siteName}'")
+        mutable.succeed("curl -L http://localhost:8065/index.html | grep 'Mattermost'")
 
         # Get the initial config
         mutable.succeed("${expectConfig ''.AboutLink == "https://nixos.org" and .HelpLink == "https://search.nixos.org"''}")
@@ -110,6 +122,8 @@ import ./make-test-python.nix (
         ## Mostly mutable node tests ##
         mostlyMutable.wait_for_unit("mattermost.service")
         mostlyMutable.wait_for_open_port(8065)
+        mostlyMutable.succeed("curl -L http://localhost:8065/index.html | grep '${siteName}'")
+        mostlyMutable.succeed("curl -L http://localhost:8065/index.html | grep 'Mattermost'")
 
         # Get the initial config
         mostlyMutable.succeed("${expectConfig ''.AboutLink == "https://nixos.org"''}")
@@ -126,6 +140,8 @@ import ./make-test-python.nix (
         ## Immutable node tests ##
         immutable.wait_for_unit("mattermost.service")
         immutable.wait_for_open_port(8065)
+        # Since we patched it, it doesn't replace the site name at runtime anymore
+        immutable.succeed("curl -L http://localhost:8065/index.html | grep 'Patched Mattermost'")
 
         # Get the initial config
         immutable.succeed("${expectConfig ''.AboutLink == "https://nixos.org" and .HelpLink == "https://search.nixos.org"''}")
@@ -143,6 +159,8 @@ import ./make-test-python.nix (
         ## Environment File node tests ##
         environmentFile.wait_for_unit("mattermost.service")
         environmentFile.wait_for_open_port(8065)
+        environmentFile.succeed("curl -L http://localhost:8065/index.html | grep '${siteName}'")
+        environmentFile.succeed("curl -L http://localhost:8065/index.html | grep 'Mattermost'")
 
         # Settings in the environment file should override settings set otherwise
         environmentFile.succeed("${expectConfig ''.AboutLink == "https://nixos.org"''}")

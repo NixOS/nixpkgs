@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "adlfs";
-  version = "2024.7.0";
+  version = "2024.12.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "fsspec";
     repo = "adlfs";
     tag = version;
-    hash = "sha256-V0Uzfj9xuPfLgfILwVbtId+B81w/25cO+G1Y/KOEOyI=";
+    hash = "sha256-s3nMvaH3YecABnFS7E4XPRWk8GwPVyqb9Qe2ejeXsZI=";
   };
 
   build-system = [

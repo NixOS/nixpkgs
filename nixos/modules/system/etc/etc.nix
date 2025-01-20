@@ -268,10 +268,10 @@ in
 
             ${lib.optionalString config.system.etc.overlay.mutable ''
               # These directories are usually created in initrd,
-              # but we need to create them here when we didn't we're called directly,
+              # but we need to create them here when we're called directly,
               # for instance by nixos-enter
               mkdir --parents /.rw-etc/upper /.rw-etc/work
-              chmod --recursive 0755 /.rw-etc
+              chmod 0755 /.rw-etc /.rw-etc/upper /.rw-etc/work
             ''}
 
             tmpMetadataMount=$(TMPDIR="/run" mktemp --directory -t nixos-etc-metadata.XXXXXXXXXX)

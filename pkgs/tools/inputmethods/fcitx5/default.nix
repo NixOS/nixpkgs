@@ -34,6 +34,7 @@
 , xcb-imdkit
 , libxkbfile
 , nixosTests
+, gettext
 }:
 let
   enDictVer = "20121020";
@@ -62,9 +63,11 @@ stdenv.mkDerivation rec {
     extra-cmake-modules
     pkg-config
     wayland-scanner
+    gettext
   ];
 
   buildInputs = [
+    extra-cmake-modules # required to please CMake
     expat
     fmt
     isocodes
@@ -93,6 +96,8 @@ stdenv.mkDerivation rec {
     xkeyboard_config
     libxkbfile
   ];
+
+  strictDeps = true;
 
   passthru = {
     updateScript = ./update.py;

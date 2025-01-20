@@ -644,4 +644,31 @@ in runBuildTests {
     '';
   };
 
+  badgerfishToXmlGenerate = shouldPass {
+    format = formats.xml { };
+    input = {
+      root = {
+        "@id" = "123";
+        "@class" = "example";
+        child1 = {
+          "@name" = "child1Name";
+          "#text" = "text node";
+        };
+        child2 = {
+          grandchild = "This is a grandchild text node.";
+        };
+        nulltest = null;
+      };
+    };
+    expected = ''
+      <?xml version="1.0" encoding="utf-8"?>
+      <root class="example" id="123">
+        <child1 name="child1Name">text node</child1>
+        <child2>
+          <grandchild>This is a grandchild text node.</grandchild>
+        </child2>
+        <nulltest></nulltest>
+      </root>
+    '';
+  };
 }

@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://vsqlite.virtuosic-bytes.com/";
+    homepage = "https://vsqlite.virtuosic-bytes.com/";
     description = "C++ wrapper library for sqlite";
     license = licenses.bsd3;
     platforms = platforms.unix;

@@ -44,11 +44,12 @@ buildPythonPackage rec {
   };
 
   patches = [
-    # https://github.com/cleanlab/cleanlab/pull/1224
+    # https://github.com/cleanlab/cleanlab/pull/1224 (merged)
+    # TODO: remove this patch when updating to the next release (2.8.0)
     (fetchpatch {
       name = "numpy2-compatibility";
-      url = "https://github.com/GaetanLepage/cleanlab/commit/7d4cef11cf8d58b0ca7dba78f4c64995ed709274.patch";
-      hash = "sha256-1mLEITYj30F9tJh8tajWnpGC5FANh8he/lgw1f+LAsI=";
+      url = "https://github.com/cleanlab/cleanlab/commit/bed10f5bdf538358e760ad98a0965f9b447b45ad.patch";
+      hash = "sha256-czSK05wrLfSpJF2j+YwcDeDIKspkcCEB2hKlX5H3Gns=";
     })
   ];
 

@@ -180,7 +180,8 @@ let
       #                           #
       #############################
 
-    in stdenv.mkDerivation {
+    in stdenv.mkDerivation (finalAttrs: {
+      __structuredAttrs = true;
       inherit pname version;
 
       desktopItem = makeDesktopItem ({
@@ -245,6 +246,62 @@ let
       nativeBuildInputs = [ makeWrapper lndir jq ];
       buildInputs = [ browser.gtk3 ];
 
+      makeWrapperArgs = [
+        "--prefix"
+        "LD_LIBRARY_PATH"
+        ":"
+        "${finalAttrs.libs}"
+
+        "--suffix"
+        "GTK_PATH"
+        ":"
+        "${lib.concatStringsSep ":" finalAttrs.gtk_modules}"
+
+        "--suffix" "PATH"
+        ":"
+        "${placeholder "out"}/bin"
+
+        "--set"
+        "MOZ_APP_LAUNCHER"
+        launcherName
+
+        "--set"
+        "MOZ_LEGACY_PROFILES"
+        "1"
+
+        "--set"
+        "MOZ_ALLOW_DOWNGRADE"
+        "1"
+
+        "--suffix"
+        "XDG_DATA_DIRS"
+        ":"
+        "${adwaita-icon-theme}/share"
+
+        "--set-default"
+        "MOZ_ENABLE_WAYLAND"
+        "1"
+
+      ] ++ lib.optionals (!xdg-utils.meta.broken) [
+        # make xdg-open overrideable at runtime
+        "--suffix"
+        "PATH"
+        ":"
+        "${lib.makeBinPath [ xdg-utils ]}"
+
+      ] ++ lib.optionals hasMozSystemDirPatch [
+        "--set"
+        "MOZ_SYSTEM_DIR"
+        "${placeholder "out"}/lib/mozilla"
+
+      ] ++ lib.optionals (!hasMozSystemDirPatch && allNativeMessagingHosts != [ ]) [
+        "--run"
+        ''mkdir -p ''${MOZ_HOME:-~/.mozilla}/native-messaging-hosts''
+
+      ] ++ lib.optionals (!hasMozSystemDirPatch) (lib.concatMap (ext: [
+        "--run"
+        ''ln -sfLt ''${MOZ_HOME:-~/.mozilla}/native-messaging-hosts ${ext}/lib/mozilla/native-messaging-hosts/*''
+      ]) allNativeMessagingHosts);
 
       buildCommand = ''
         if [ ! -x "${browser}/bin/${applicationName}" ]
@@ -313,27 +370,9 @@ let
           mv "$executablePath" "$oldExe"
         fi
 
-        # make xdg-open overrideable at runtime
-        makeWrapper "$oldExe" \
-          "''${executablePath}${nameSuffix}" \
-            --prefix LD_LIBRARY_PATH ':' "$libs" \
-            --suffix-each GTK_PATH ':' "$gtk_modules" \
-            ${lib.optionalString (!xdg-utils.meta.broken) "--suffix PATH ':' \"${xdg-utils}/bin\""} \
-            --suffix PATH ':' "$out/bin" \
-            --set MOZ_APP_LAUNCHER "${launcherName}" \
-        '' + lib.optionalString hasMozSystemDirPatch ''
-            --set MOZ_SYSTEM_DIR "$out/lib/mozilla" \
-        '' + ''
-            --set MOZ_LEGACY_PROFILES 1 \
-            --set MOZ_ALLOW_DOWNGRADE 1 \
-            --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
-            --suffix XDG_DATA_DIRS : '${adwaita-icon-theme}/share' \
-            --set-default MOZ_ENABLE_WAYLAND 1 \
-        '' + lib.optionalString (!hasMozSystemDirPatch) ''
-            ${lib.optionalString (allNativeMessagingHosts != []) "--run \"mkdir -p \\\${MOZ_HOME:-~/.mozilla}/native-messaging-hosts\""} \
-            ${lib.concatMapStringsSep " " (ext: "--run \"ln -sfLt \\\${MOZ_HOME:-~/.mozilla}/native-messaging-hosts ${ext}/lib/mozilla/native-messaging-hosts/*\"") allNativeMessagingHosts} \
-        '' + ''
-            "''${oldWrapperArgs[@]}"
+        appendToVar makeWrapperArgs --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
+        concatTo makeWrapperArgs oldWrapperArgs
+        makeWrapper "$oldExe" "''${executablePath}${nameSuffix}" "''${makeWrapperArgs[@]}"
         #############################
         #                           #
         #   END EXTRA PREF CHANGES  #
@@ -431,5 +470,5 @@ let
         hydraPlatforms = [];
         priority = (browser.meta.priority or lib.meta.defaultPriority) - 1; # prefer wrapper over the package
       };
-    };
+    });
 in lib.makeOverridable wrapper

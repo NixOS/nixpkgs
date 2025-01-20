@@ -3,7 +3,7 @@
   runtimeShell,
   nix,
   lib,
-  substituteAll,
+  replaceVarsWith,
   nuget-to-nix,
   nixfmt-rfc-style,
   nuget-to-json,
@@ -84,15 +84,16 @@ attrs
         let
           drv = builtins.unsafeDiscardOutputDependency fetch-drv.drvPath;
 
-          innerScript = substituteAll {
+          innerScript = replaceVarsWith {
             src = ./fetch-deps.sh;
             isExecutable = true;
-            inherit cacert;
-            binPath = lib.makeBinPath [
-              nuget-to-nix
-              nixfmt-rfc-style
-              nuget-to-json
-            ];
+            replacements = {
+              binPath = lib.makeBinPath [
+                nuget-to-nix
+                nixfmt-rfc-style
+                nuget-to-json
+              ];
+            };
           };
 
           defaultDepsFile =

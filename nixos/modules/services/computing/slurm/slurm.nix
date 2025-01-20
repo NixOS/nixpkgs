@@ -331,7 +331,6 @@ in
         name = "wrappedSlurm";
 
         builder = pkgs.writeText "builder.sh" ''
-          source $stdenv/setup
           mkdir -p $out/bin
           find  ${lib.getBin cfg.package}/bin -type f -executable | while read EXE
           do

@@ -14,13 +14,13 @@
 }:
 flutter327.buildFlutterApplication rec {
   pname = "kazumi";
-  version = "1.5.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "Predidit";
     repo = "Kazumi";
     tag = version;
-    hash = "sha256-YYg8DpW/O517R9YZ9jpikNIy2MfLQdiLsdhO3uhCusc=";
+    hash = "sha256-JEVZptPD3PZqaIRmzYAaz6HHfNQqAQX6F/K/5bnLyl4=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;

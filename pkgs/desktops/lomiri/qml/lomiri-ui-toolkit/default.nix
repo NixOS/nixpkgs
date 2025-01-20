@@ -61,6 +61,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
+    ./2001-Mark-problematic-tests.patch
+
     (substituteAll {
       src = ./2002-Nixpkgs-versioned-QML-path.patch.in;
       name = "2002-Nixpkgs-versioned-QML-path.patch";

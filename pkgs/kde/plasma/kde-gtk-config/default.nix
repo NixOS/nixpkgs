@@ -1,7 +1,7 @@
 {
   lib,
   mkKdeDerivation,
-  substituteAll,
+  replaceVars,
   procps,
   xsettingsd,
   pkg-config,
@@ -17,8 +17,7 @@ mkKdeDerivation {
   # aren't found.
   patches = [
     ./0001-gsettings-schemas-path.patch
-    (substituteAll {
-      src = ./dependency-paths.patch;
+    (replaceVars ./dependency-paths.patch {
       pgrep = lib.getExe' procps "pgrep";
       xsettingsd = lib.getExe xsettingsd;
     })

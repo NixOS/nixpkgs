@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "goose";
-  version = "3.24.0";
+  version = "3.24.1";
 
   src = fetchFromGitHub {
     owner = "pressly";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-VAdRlmEY4fAMQtKLfleleW/thnPJJcfSBw+efCNNSmc=";
+    hash = "sha256-Dy6HHmf1kHd0KJ1EuPnNaa/zIQPUClvwJ8gUR7pi3Cw=";
   };
 
   proxyVendor = true;

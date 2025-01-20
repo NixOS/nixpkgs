@@ -6,24 +6,33 @@
   nix-update-script,
   npm-lockfile-fix,
   fetchNpmDeps,
-  diffutils,
   jq,
   nixosTests,
+
+  versionInfo ? {
+    # ESR releases only.
+    # See https://docs.mattermost.com/upgrade/extended-support-release.html
+    # When a new ESR version is available (e.g. 8.1.x -> 9.5.x), update
+    # the version regex here as well.
+    #
+    # Ensure you also check ../mattermostLatest/package.nix.
+    regex = "^v(9\.11\.[0-9]+)$";
+    version = "9.11.7";
+    srcHash = "sha256-KeGpYy3jr7/B2mtBk9em2MXJBJR2+Wajmvtz/yT4SG8=";
+    vendorHash = "sha256-alLPBfnA1o6bUUgPRqvYW/98UKR9wltmFTzKIGtVEm4=";
+    npmDepsHash = "sha256-ysz38ywGxJ5DXrrcDmcmezKbc5Y7aug9jOWUzHRAs/0=";
+  },
 }:
 
 buildGoModule rec {
   pname = "mattermost";
-  # ESR releases only.
-  # See https://docs.mattermost.com/upgrade/extended-support-release.html
-  # When a new ESR version is available (e.g. 8.1.x -> 9.5.x), update
-  # the version regex in passthru.updateScript as well.
-  version = "9.11.6";
+  inherit (versionInfo) version;
 
   src = fetchFromGitHub {
     owner = "mattermost";
     repo = "mattermost";
-    rev = "v${version}";
-    hash = "sha256-G9RYktnnVXdhNWp8q+bNbdlHB9ZOGtnESnZVOA7lDvE=";
+    tag = "v${version}";
+    hash = versionInfo.srcHash;
     postFetch = ''
       cd $out/webapp
 
@@ -32,6 +41,18 @@ buildGoModule rec {
         def desuffix(version): version | gsub("^(?<prefix>[^\\+]+)\\+.*$"; "\(.prefix)");
         .packages |= map_values(if has("version") then .version = desuffix(.version) else . end)
       ' < package-lock.json > package-lock.fixed.json
+
+      # Run the lockfile overlay, if present.
+      ${lib.optionalString (versionInfo.lockfileOverlay or null != null) ''
+        ${lib.getExe jq} ${lib.escapeShellArg ''
+          # Unlock a dependency and let npm-lockfile-fix relock it.
+          def unlock(root; dependency; path):
+            root | .packages[path] |= del(.resolved, .integrity)
+                 | .packages[path].version = root.packages.channels.dependencies[dependency];
+          ${versionInfo.lockfileOverlay}
+        ''} < package-lock.fixed.json > package-lock.overlaid.json
+        mv package-lock.overlaid.json package-lock.fixed.json
+      ''}
       ${lib.getExe npm-lockfile-fix} package-lock.fixed.json
 
       rm -f package-lock.json
@@ -55,7 +76,7 @@ buildGoModule rec {
   npmDeps = fetchNpmDeps {
     inherit src;
     sourceRoot = "${src.name}/webapp";
-    hash = "sha256-ysz38ywGxJ5DXrrcDmcmezKbc5Y7aug9jOWUzHRAs/0=";
+    hash = versionInfo.npmDepsHash;
     makeCacheWritable = true;
     forceGitDeps = true;
   };
@@ -94,13 +115,13 @@ buildGoModule rec {
       runHook preInstall
 
       mkdir -p $out
-      cp -r channels/dist/* $out
+      cp -a channels/dist/* $out
 
       runHook postInstall
     '';
   };
 
-  vendorHash = "sha256-Gwv6clnq7ihoFC8ox8iEM5xp/us9jWUrcmqA9/XbxBE=";
+  inherit (versionInfo) vendorHash;
 
   modRoot = "./server";
   preBuild = ''
@@ -123,21 +144,35 @@ buildGoModule rec {
   ];
 
   postInstall = ''
-    mkdir -p $out/{client,i18n,fonts,templates,config}
-    cp -r ${webapp}/* $out/client/
-    cp -r ${src}/server/i18n/* $out/i18n/
-    cp -r ${src}/server/fonts/* $out/fonts/
-    cp -r ${src}/server/templates/* $out/templates/
+    shopt -s extglob
+    mkdir -p $out/{i18n,fonts,templates,config}
+
+    # Link in the client and copy the language packs.
+    ln -sf $webapp $out/client
+    cp -a $src/server/i18n/* $out/i18n/
+
+    # Fonts have the execute bit set, remove it.
+    cp --no-preserve=mode $src/server/fonts/* $out/fonts/
+
+    # Don't copy the Makefile.
+    cp -a $src/server/templates/!(Makefile) $out/templates/
+
+    # Generate the config.
     OUTPUT_CONFIG=$out/config/config.json \
       go run -tags production ./scripts/config_generator
   '';
 
   passthru = {
     updateScript = nix-update-script {
-      extraArgs = [
-        "--version-regex"
-        "^v(9\.11\.[0-9]+)$"
-      ];
+      extraArgs =
+        [
+          "--version-regex"
+          versionInfo.regex
+        ]
+        ++ lib.optionals (versionInfo.autoUpdate or null != null) [
+          "--override-filename"
+          versionInfo.autoUpdate
+        ];
     };
     tests.mattermost = nixosTests.mattermost;
   };

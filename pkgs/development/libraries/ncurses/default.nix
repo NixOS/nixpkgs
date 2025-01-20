@@ -20,7 +20,10 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "ncurses" + lib.optionalString (abiVersion == "5") "-abi5-compat";
 
   src = fetchurl {
-    url = "https://invisible-island.net/archives/ncurses/ncurses-${lib.versions.majorMinor finalAttrs.version}.tar.gz";
+    urls = [
+      "https://invisible-island.net/archives/ncurses/ncurses-${lib.versions.majorMinor finalAttrs.version}.tar.gz"
+      "https://ftp.gnu.org/gnu/ncurses/ncurses-${lib.versions.majorMinor finalAttrs.version}.tar.gz"
+    ];
     hash = "sha256-aTEoPZrIfFBz8wtikMTHXyFjK7T8NgOsgQCBK+0kgVk=";
   };
 

@@ -24,14 +24,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "recordbox";
-  version = "0.8.3";
+  version = "0.9.0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "edestcroix";
     repo = "Recordbox";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-/yg/75LswCj3HhsUhMXgIDpx2tlNkdTuImkqMwU6uio=";
+    hash = "sha256-KfIlh9ORqjJ5V8mNOx7Q9jsYg4OJDX6q+ht+eckxMRU=";
   };
 
   # Patch in our Cargo.lock and ensure AppStream tests don't use the network

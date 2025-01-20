@@ -765,7 +765,7 @@ in
     ];
 
     meta = {
-      homepage = "http://pjb.com.au/comp/lua/readline.html";
+      homepage = "https://pjb.com.au/comp/lua/readline.html";
       description = "Interface to the readline library";
       license.fullName = "MIT/X11";
       broken = (luaOlder "5.1") || (luaAtLeast "5.5");

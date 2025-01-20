@@ -34,13 +34,13 @@ assert lib.assertMsg (
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "prismlauncher-unwrapped";
-  version = "9.1";
+  version = "9.2";
 
   src = fetchFromGitHub {
     owner = "PrismLauncher";
     repo = "PrismLauncher";
     tag = finalAttrs.version;
-    hash = "sha256-LVrWFBsI4+BOY5hlevfzqfRXQM6AFd5bMnXbBqTrxzA=";
+    hash = "sha256-0KDhX8mfh11pyYQS/lB6qlUvRSOcYEbQKgsdQVA+Q3U=";
   };
 
   postUnpack = ''
