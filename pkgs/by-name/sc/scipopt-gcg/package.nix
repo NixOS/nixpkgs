@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "scipopt";
     repo = "gcg";
-    rev = "v370";
-    sha256 = "s7VmBWwDSGa7fAoydg54OHvulFWda8E48nEVsdCdQt8=";
+    tag = "v${version}";
+    hash = "s7VmBWwDSGa7fAoydg54OHvulFWda8E48nEVsdCdQt8=";
   };
 
   nativeBuildInputs = [
