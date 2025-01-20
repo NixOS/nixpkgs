@@ -2,7 +2,8 @@
   lib,
   SDL2,
   addDriverRunpath,
-  boost,
+  # pin Boost 1.86 due to use of boost::asio::io_service
+  boost186,
   cmake,
   cubeb,
   curl,
@@ -81,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     SDL2
-    boost
+    boost186
     cubeb
     curl
     fmt_9
