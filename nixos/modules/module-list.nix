@@ -1805,7 +1805,7 @@
   ./virtualisation/waagent.nix
   ./virtualisation/waydroid.nix
   ./virtualisation/xe-guest-utilities.nix
-  ./virtualisation/xen-dom0.nix
+  ./virtualisation/xen/dom0.nix
   {
     documentation.nixos.extraModules = [
       ./virtualisation/qemu-vm.nix
