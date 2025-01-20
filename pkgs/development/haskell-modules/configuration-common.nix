@@ -2379,19 +2379,24 @@ self: super: {
     ] ++ drv.testFlags or [];
   }) super.hschema-aeson;
   # https://github.com/minio/minio-hs/issues/165
-  # https://github.com/minio/minio-hs/pull/191 Use crypton-connection instead of unmaintained connection
   minio-hs = overrideCabal (drv: {
     testFlags = [
       "-p" "!/Test mkSelectRequest/"
     ] ++ drv.testFlags or [];
     patches = drv.patches or [ ] ++ [
       (pkgs.fetchpatch {
-        name = "use-crypton-connection.patch";
-        url = "https://github.com/minio/minio-hs/commit/786cf1881f0b62b7539e63547e76afc3c1ade36a.patch";
-        sha256 = "sha256-zw0/jhKzShpqV1sUyxWTl73sQOzm6kA/yQOZ9n0L1Ag";
+        name = "compatibility-with-crypton-connection-0-4-0.patch";
+        url = "https://github.com/minio/minio-hs/commit/e2169892a5fea444aaf9e551243da811003d3188.patch";
+        sha256 = "1xsl98svk9bp3d0d203sbgd93k4mndzr43q87in6cmq1524rz5cj";
       })
     ];
-  }) (super.minio-hs.override { connection = self.crypton-connection; });
+    src = pkgs.fetchFromGitHub {
+      owner = "minio";
+      repo = "minio-hs";
+      rev = "fd202f75df43e5bd18048e2f9106582b37d7f249";
+      sha256 = "0kwkf1z0zmjlfmrsi9g6jjp5zbkh34jcld6cxirhb4bxbl82vyxf";
+    };
+  });
 
   # Invalid CPP in test suite: https://github.com/cdornan/memory-cd/issues/1
   memory-cd = dontCheck super.memory-cd;
