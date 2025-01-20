@@ -3298,7 +3298,6 @@ dont-distribute-packages:
  - rascal
  - raw-feldspar
  - rawlock
- - rawr
  - razom-text-util
  - rbr
  - rc
