@@ -76,7 +76,7 @@ import ./make-test-python.nix (
                 };
               };
 
-              networking.firewall.allowedTCPPorts = [ 80 ];
+              networking.firewall.allowedTCPPorts = [ 80 443 ];
               networking.hosts."127.0.0.1" = [
                 "site1.local"
                 "site2.local"
@@ -107,7 +107,7 @@ import ./make-test-python.nix (
               machine.wait_for_unit(f"phpfpm-wordpress-{site_name}")
 
               with subtest("website returns welcome screen"):
-                  assert "Welcome to the famous" in machine.succeed(f"curl -L {site_name}")
+                  assert "Welcome to the famous" in machine.succeed(f"curl -k -L {site_name}")
 
               with subtest("wordpress-init went through"):
                   info = machine.get_unit_info(f"wordpress-init-{site_name}")
