@@ -14,7 +14,7 @@ in
   options.services.xserver.windowManager.qtile = {
     enable = mkEnableOption "qtile";
 
-    package = mkPackageOption pkgs "qtile-unwrapped" { };
+    package = mkPackageOption pkgs "qtile" { };
 
     configFile = mkOption {
       type = with types; nullOr path;
