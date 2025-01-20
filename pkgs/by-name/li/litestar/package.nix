@@ -45,6 +45,21 @@ python3Packages.buildPythonApplication rec {
     picologging
   ];
 
+  nativeCheckInputs = with python3Packages; [
+    pytestCheckHook
+    pytest-lazy-fixtures
+    pytest-xdist
+    pytest-mock
+    pytest-asyncio
+    pytest-timeout
+    pytest-rerunfailures
+  ];
+
+  pytestFlagsArray = [
+    # Follow github CI
+    "docs/examples/"
+  ];
+
   meta = {
     homepage = "https://litestar.dev/";
     platforms = lib.platforms.unix;

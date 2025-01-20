@@ -7,7 +7,7 @@
   pytestCheckHook,
   pythonOlder,
 
-  cython_0,
+  cython,
   geos,
   numpy,
   oldest-supported-numpy,
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
-    cython_0
+    cython
     geos # for geos-config
     oldest-supported-numpy
     setuptools
@@ -45,7 +45,7 @@ buildPythonPackage rec {
 
   buildInputs = [ geos ];
 
-  propagatedBuildInputs = [ numpy ];
+  dependencies = [ numpy ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -68,11 +68,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "shapely" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/shapely/shapely/blob/${version}/CHANGES.txt";
     description = "Manipulation and analysis of geometric objects";
     homepage = "https://github.com/shapely/shapely";
-    license = licenses.bsd3;
-    maintainers = teams.geospatial.members;
+    license = lib.licenses.bsd3;
+    maintainers = lib.teams.geospatial.members;
   };
 }
