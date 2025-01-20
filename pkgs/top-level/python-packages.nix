@@ -2576,6 +2576,8 @@ self: super: with self; {
 
   compressai = callPackage ../development/python-modules/compressai { };
 
+  compressed-tensors = callPackage ../development/python-modules/compressed-tensors { };
+
   compressed-rtf = callPackage ../development/python-modules/compressed-rtf { };
 
   concurrent-log-handler = callPackage ../development/python-modules/concurrent-log-handler { };
@@ -8254,6 +8256,8 @@ self: super: with self; {
 
   mistletoe = callPackage ../development/python-modules/mistletoe { };
 
+  mistral-common = callPackage ../development/python-modules/mistral-common { };
+
   mistune = callPackage ../development/python-modules/mistune { };
 
   mitmproxy = callPackage ../development/python-modules/mitmproxy { };
@@ -10061,6 +10065,8 @@ self: super: with self; {
   partd = callPackage ../development/python-modules/partd { };
 
   parts = callPackage ../development/python-modules/parts { };
+
+  partial-json-parser = callPackage ../development/python-modules/partial-json-parser { };
 
   particle = callPackage ../development/python-modules/particle { };
 

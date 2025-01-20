@@ -47,6 +47,8 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.7";
 
+  stdenv = cudaPackages.backendStdenv;
+
   src = fetchFromGitHub {
     owner = "cupy";
     repo = "cupy";
@@ -54,14 +56,6 @@ buildPythonPackage rec {
     hash = "sha256-eQZwOGCaWZ4b0JCHZlrPHVQVXQwSkibHb02j0czAMt8=";
     fetchSubmodules = true;
   };
-
-  patches = [
-    (fetchpatch {
-      url =
-        "https://github.com/cfhammill/cupy/commit/67526c756e4a0a70f0420bf0e7f081b8a35a8ee5.patch";
-      hash = "sha256-WZgexBdM9J0ep5s+9CGZriVq0ZidCRccox+g0iDDywQ=";
-    })
-  ];
 
   # See https://docs.cupy.dev/en/v10.2.0/reference/environment.html. Seting both
   # CUPY_NUM_BUILD_JOBS and CUPY_NUM_NVCC_THREADS to NIX_BUILD_CORES results in
