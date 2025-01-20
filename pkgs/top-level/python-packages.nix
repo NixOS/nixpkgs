@@ -7544,6 +7544,10 @@ self: super: with self; {
 
   litemapy = callPackage ../development/python-modules/litemapy { };
 
+  litestar = toPythonModule (pkgs.litestar.override {
+    python3Packages = pythonPackages;
+  });
+
   litestar-htmx = callPackage ../development/python-modules/litestar-htmx { };
 
   littleutils = callPackage ../development/python-modules/littleutils { };
