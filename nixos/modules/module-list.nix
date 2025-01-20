@@ -140,7 +140,7 @@
   ./misc/meta.nix
   ./misc/nixops-autoluks.nix
   ./misc/nixpkgs.nix
-  ./misc/nixpkgs-flake.nix
+  ./misc/nixpkgs-pin.nix
   ./misc/passthru.nix
   ./misc/version.nix
   ./misc/wordlist.nix
