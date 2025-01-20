@@ -116,8 +116,8 @@ let
         enable = true;
       };
       metricProvider = {
-        services.bird2.enable = true;
-        services.bird2.config = ''
+        services.bird.enable = true;
+        services.bird.config = ''
           router id 127.0.0.1;
 
           protocol kernel MyObviousTestString {
