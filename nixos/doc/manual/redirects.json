@@ -836,6 +836,12 @@
   "module-services-netbird-multiple-connections": [
     "index.html#module-services-netbird-multiple-connections"
   ],
+  "module-services-netbird-firewall": [
+    "index.html#module-services-netbird-firewall"
+  ],
+  "module-services-netbird-customization": [
+    "index.html#module-services-netbird-customization"
+  ],
   "module-services-mosquitto": [
     "index.html#module-services-mosquitto"
   ],
