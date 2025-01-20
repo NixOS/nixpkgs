@@ -60,7 +60,6 @@ rustPlatform.buildRustPackage rec {
   # According to the maintainers, those tests are from an experimental crate that isn't actually
   # used by ruff currently and can thus be safely skipped.
   checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
-    "--skip=added_package"
     "--skip=add_search_path"
     "--skip=changed_file"
     "--skip=changed_versions_file"
