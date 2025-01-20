@@ -53,7 +53,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   vendor = stdenvNoCC.mkDerivation {
     pname = "${finalAttrs.pname}-vendor";
 
-    inherit (finalAttrs) src version;
+    inherit (finalAttrs) src version patches;
 
     nativeBuildInputs = [
       cacert
@@ -97,7 +97,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "sha256-McyO3Z4PSyC6LiWt8rsXziAIbEqOhiaT77gUdzZ6tzw=";
+    outputHash = "sha256-0VbIaOuXeBNRd41q4Ogde8/B4hApueb5FeZ8cGHwB7s=";
   };
 
   installPhase = ''
