@@ -7285,7 +7285,7 @@ with pkgs;
   wireplumber = callPackage ../development/libraries/pipewire/wireplumber.nix { };
 
   racket = callPackage ../development/interpreters/racket { };
-  racket-minimal = racket.override { isMinimal = true; };
+  racket-minimal = callPackage ../development/interpreters/racket/minimal.nix { };
 
   rakudo = callPackage ../development/interpreters/rakudo { };
   moarvm = darwin.apple_sdk_11_0.callPackage ../development/interpreters/rakudo/moarvm.nix {
