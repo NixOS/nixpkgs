@@ -163,6 +163,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   cmakeFlags = [
+    "-DCMAKE_COMPILE_WARNING_AS_ERROR=OFF"
     "-DOBS_VERSION_OVERRIDE=${finalAttrs.version}"
     "-Wno-dev" # kill dev warnings that are useless for packaging
     # Add support for browser source
