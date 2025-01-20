@@ -45,6 +45,11 @@ in
         default = 14;
       };
     };
+    allow-client-ids = lib.mkOption {
+      description = "Allow clients to specify their own UUIDs";
+      type = types.listOf types.str;
+      default = [ ];
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -77,7 +82,8 @@ in
             --port ${builtins.toString cfg.port} \
             --data-dir ${cfg.dataDir} \
             --snapshot-versions ${builtins.toString cfg.snapshot.versions} \
-            --snapshot-days ${builtins.toString cfg.snapshot.days}
+            --snapshot-days ${builtins.toString cfg.snapshot.days} \
+            ${lib.concatStringsSep " " (lib.map (id: "--allow-client-id ${id}") cfg.allow-client-ids)}
         '';
       };
     };
