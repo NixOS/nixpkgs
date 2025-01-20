@@ -6,6 +6,7 @@
   fetchFromGitHub,
   pympler,
   pytest-asyncio,
+  pytest-lazy-fixtures,
   pytestCheckHook,
   pythonOlder,
   redis,
@@ -42,6 +43,7 @@ buildPythonPackage rec {
     pytestCheckHook
     redis
     pytest-asyncio
+    pytest-lazy-fixtures
   ];
 
   pythonImportsCheck = [ "coredis" ];
