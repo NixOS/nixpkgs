@@ -4,6 +4,7 @@
   fetchFromGitLab,
   fetchpatch,
   gitUpdater,
+  nixosTests,
   testers,
   boost,
   cmake,
@@ -209,7 +210,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    tests = {
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+      # music app relies on thumbnailer to extract embedded cover art
+      vm = nixosTests.lomiri-music-app;
+    };
     updateScript = gitUpdater { };
   };
 

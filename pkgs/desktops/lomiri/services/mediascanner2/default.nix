@@ -2,7 +2,9 @@
   stdenv,
   lib,
   fetchFromGitLab,
+  fetchpatch,
   gitUpdater,
+  nixosTests,
   testers,
   boost,
   cmake,
@@ -40,6 +42,14 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [
     "out"
     "dev"
+  ];
+
+  patches = [
+    (fetchpatch {
+      name = "0001-mediascanner2-scannerdaemon-Drop-desktop-and-MEDIASCANNER_RUN-check.patch";
+      url = "https://gitlab.com/ubports/development/core/mediascanner2/-/commit/1e65b32e32a0536b9e2f283ba563fa78b6ef6d61.patch";
+      hash = "sha256-Xhm5+/E/pP+mn+4enqdsor1oRqfYTzabg1ODVfIhra4=";
+    })
   ];
 
   postPatch = ''
@@ -99,7 +109,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    tests = {
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+      # music app needs mediascanner to work properly, so it can find files
+      vm = nixosTests.lomiri-music-app;
+    };
     updateScript = gitUpdater { };
   };
 
