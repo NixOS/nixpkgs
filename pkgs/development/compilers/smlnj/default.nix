@@ -5,7 +5,7 @@
   Libsystem,
 }:
 let
-  version = "110.99.6.1";
+  version = "110.99.7.1";
   baseurl = "https://smlnj.cs.uchicago.edu/dist/working/${version}";
 
   arch = if stdenv.hostPlatform.is64bit then "64" else "32";
