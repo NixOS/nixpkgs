@@ -21,8 +21,12 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
-    # wheel metadata version mismatch 2.1 vs 2.3
+    # wheel metadata version mismatch 2.1 vs 2.2
+    "test_get_metadata_w_module"
+    "test_get_metadata_w_package_name"
     "test_installed_ctor_w_dist_info"
+    "test_installed_ctor_w_name"
+    "test_installed_ctor_w_package"
   ];
 
   pythonImportsCheck = [ "pkginfo" ];
