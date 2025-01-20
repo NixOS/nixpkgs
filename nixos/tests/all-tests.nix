@@ -105,7 +105,7 @@ in {
 
   _3proxy = runTest ./3proxy.nix;
   aaaaxy = runTest ./aaaaxy.nix;
-  acme = runTest ./acme.nix;
+  acme = import ./acme/default.nix { inherit runTest; };
   acme-dns = handleTest ./acme-dns.nix {};
   actual = handleTest ./actual.nix {};
   adguardhome = runTest ./adguardhome.nix;
