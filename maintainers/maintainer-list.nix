@@ -10790,6 +10790,12 @@
     githubId = 1476865;
     name = "jigglycrumb";
   };
+  jinser = {
+    name = "Jinser Kafka";
+    email = "aimer@purejs.icu";
+    github = "jetjinser";
+    githubId = 46820840;
+  };
   jiriks74 = {
     name = "Jiří Štefka";
     email = "jiri@stefka.eu";
