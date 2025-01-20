@@ -19,6 +19,7 @@
   libffi,
   libxml2,
   removeReferencesTo,
+  fetchpatch,
   # Build compilers and stdenv suitable for profiling
   # compressed line tables (-g1 -gz) and
   # frame pointers for sampling profilers (-fno-omit-frame-pointer -momit-leaf-frame-pointer)
@@ -411,7 +412,18 @@ rec {
   clang-tools = llvmPackagesRocm.clang-tools.override {
     inherit clang-unwrapped clang;
   };
-  inherit (llvmPackagesRocm) compiler-rt compiler-rt-libc;
+  # inherit (llvmPackagesRocm) compiler-rt compiler-rt-libc;
+  compiler-rt-libc = llvmPackagesRocm.compiler-rt-libc.overrideAttrs (old: {
+    patches = old.patches ++ [
+      (fetchpatch {
+        name = "Fix-missing-main-function-in-float16-bfloat16-support-checks.patch";
+        url = "https://github.com/ROCm/llvm-project/commit/68d8b3846ab1e6550910f2a9a685690eee558af2.patch";
+        hash = "sha256-Db+L1HFMWVj4CrofsGbn5lnMoCzEcU+7q12KKFb17/g=";
+        relative = "compiler-rt";
+      })
+    ];
+  });
+  compiler-rt = compiler-rt-libc;
   bintools = wrapBintoolsWith {
     bintools = llvmPackagesRocm.bintools-unwrapped.override {
       inherit lld llvm;
