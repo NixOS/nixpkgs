@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation rec {
   pname = "rocksndiamonds";
-  version = "4.4.0.0";
+  version = "4.4.0.1";
 
   src = fetchurl {
     url = "https://www.artsoft.org/RELEASES/linux/${pname}/${pname}-${version}-linux.tar.gz";
-    hash = "sha256-aKHHD/v+zqxCsOYp06nqB2TShlwCwE1JaU0adO4T4Cw=";
+    hash = "sha256-tqII3zuZnPYkmwixZpqwHRwwFDPl9dQYEUnCP5Gqm1k=";
   };
 
   desktopItem = makeDesktopItem {
