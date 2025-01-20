@@ -2,17 +2,19 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   pkg-config,
   boost,
   curl,
+  cxxopts,
   geos,
   libspatialite,
   luajit,
+  lz4,
   prime-server,
   protobuf,
   python3,
+  rapidjson,
   sqlite,
   zeromq,
   zlib,
@@ -21,35 +23,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "valhalla";
-  version = "3.4.0";
+  version = "3.5.1";
 
   src = fetchFromGitHub {
     owner = "valhalla";
     repo = "valhalla";
     rev = finalAttrs.version;
-    hash = "sha256-1X9vsWsgnzmXn7bCMhN2PNwtfV0RRdzRFZIrQN2PLfA=";
+    hash = "sha256-v/EwoJA1j8PuF9jOsmxQL6i+MT0rXbyLUE4HvBHUWDo=";
     fetchSubmodules = true;
   };
 
-  patches = [
-    # Fix build
-    (fetchpatch {
-      url = "https://github.com/valhalla/valhalla/commit/e4845b68e8ef8de9eabb359b23bf34c879e21f2b.patch";
-      hash = "sha256-xCufmXHGj1JxaMwm64JT9FPY+o0+x4glfJSYLdvHI8U=";
-    })
-
-    # Fix gcc-13 build:
-    #   https://github.com/valhalla/valhalla/pull/4154
-    (fetchpatch {
-      name = "gcc-13.patch";
-      url = "https://github.com/valhalla/valhalla/commit/ed93f30272377cc6803533a1bb94fe81d14af81c.patch";
-      hash = "sha256-w4pnOqk/Jj3unVuesE64QSecrUIVSqwK69t9xNVc4GA=";
-    })
-  ];
-
   postPatch = ''
     substituteInPlace src/bindings/python/CMakeLists.txt \
-      --replace "\''${Python_SITEARCH}" "${placeholder "out"}/${python3.sitePackages}"
+      --replace-fail "\''${Python_SITEARCH}" "${placeholder "out"}/${python3.sitePackages}"
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "rapidjson_include_dir rapidjson" "rapidjson_include_dir RapidJSON"
   '';
 
   nativeBuildInputs = [
@@ -60,23 +48,25 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-DENABLE_TESTS=OFF"
     "-DENABLE_BENCHMARKS=OFF"
-  ];
-
-  env.NIX_CFLAGS_COMPILE = toString [
-    # Needed for date submodule with GCC 12 https://github.com/HowardHinnant/date/issues/750
-    "-Wno-error=stringop-overflow"
+    "-DENABLE_SINGLE_FILES_WERROR=OFF"
+    "-DPREFER_EXTERNAL_DEPS=ON"
   ];
 
   buildInputs = [
     boost
     curl
+    cxxopts
     geos
+    #howard-hinnant-date
     libspatialite
     luajit
+    lz4
     prime-server
     protobuf
-    python3
+    (python3.withPackages (ps: [ ps.pybind11 ]))
+    rapidjson
     sqlite
+    #unordered_dense
     zeromq
     zlib
   ];

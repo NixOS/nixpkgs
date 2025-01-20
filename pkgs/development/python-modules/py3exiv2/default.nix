@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  boost,
+  boost-python,
   buildPythonPackage,
   exiv2,
   fetchPypi,
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [
-    boost
+    boost-python
     exiv2
   ];
 

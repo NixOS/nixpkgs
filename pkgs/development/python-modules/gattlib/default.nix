@@ -11,7 +11,7 @@
 
   # runtime
   bluez,
-  boost,
+  boost-python,
   glib,
 
 }:
@@ -49,7 +49,7 @@ buildPythonPackage {
 
   buildInputs = [
     bluez
-    boost
+    boost-python
     glib
   ];
 

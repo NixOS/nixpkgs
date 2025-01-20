@@ -22,7 +22,7 @@
 , libxslt
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "freeorion";
   version = "0.5.0.1-unstable-2024-07-28";
 
@@ -36,8 +36,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    (boost.override { enablePython = true; python = python3; })
     (python3.withPackages (p: with p; [ pycodestyle ]))
+    (boost.withPython python3)
     SDL2
     freetype
     glew
