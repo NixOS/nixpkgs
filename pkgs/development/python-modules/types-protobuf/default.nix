@@ -11,7 +11,8 @@ buildPythonPackage rec {
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "types_protobuf";
+    inherit version;
     hash = "sha256-LrytuKs+8uPi8GfgiCkG1kug3GX8Ww/XqLaSMVtKC+k=";
   };
 
