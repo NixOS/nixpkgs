@@ -21,8 +21,8 @@
 }:
 
 buildPythonPackage rec {
-  pname = "mne-python";
-  version = "1.8.0";
+  pname = "mne";
+  version = "1.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "mne-tools";
     repo = "mne-python";
     tag = "v${version}";
-    hash = "sha256-WPRTX8yB4oP/L5DjSq9M6WOmHJDpQv0sAbuosp7ZGVw=";
+    hash = "sha256-Y9xkp1tji0+muP8+HqogRj5TGKCtpJzapKYWtmGw+F0=";
   };
 
   postPatch = ''
