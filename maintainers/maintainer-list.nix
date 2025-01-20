@@ -1824,6 +1824,12 @@
     githubId = 53097078;
     name = "AJ Reifsnyder";
   };
+  arexon = {
+    email = "arexonreal@gmail.com";
+    github = "arexon";
+    githubId = 65680034;
+    name = "arexon";
+  };
   arezvov = {
     email = "alex@rezvov.ru";
     github = "arezvov";
