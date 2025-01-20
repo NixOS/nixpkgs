@@ -170,6 +170,9 @@ stdenv.mkDerivation {
       [ "--with-http_geoip_module" ] ++ lib.optional withStream "--with-stream_geoip_module"
     )
     ++ lib.optional (with stdenv.hostPlatform; isLinux || isFreeBSD) "--with-file-aio"
+    ++ lib.optional (
+      stdenv.buildPlatform != stdenv.hostPlatform
+    ) "--crossbuild=${stdenv.hostPlatform.uname.system}::${stdenv.hostPlatform.uname.processor}"
     ++ configureFlags
     ++ map (mod: "--add-module=${mod.src}") modules;
 
