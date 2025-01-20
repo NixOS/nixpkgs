@@ -2,6 +2,8 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  python3,
+  ttfautohint,
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "eb-garamond";
@@ -13,6 +15,22 @@ stdenvNoCC.mkDerivation rec {
     tag = "v${version}";
     hash = "sha256-ajieKhTeH6yv2qiE2xqnHFoMS65//4ZKiccAlC2PXGQ=";
   };
+
+  nativeBuildInputs = [
+    (python3.withPackages (p: [ p.fontforge ]))
+    ttfautohint
+  ];
+
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace-fail "@\$(SFNTTOOL) -w \$< \$@"   "@fontforge -lang=ff -c 'Open(\$\$1); Generate(\$\$2)' \$< \$@"
+  '';
+
+  buildPhase = ''
+    runHook preBuild
+    make WEB=build EOT="" all
+    runHook postBuild
+  '';
 
   installPhase = ''
     runHook preInstall
