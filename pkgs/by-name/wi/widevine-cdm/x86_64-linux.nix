@@ -4,12 +4,12 @@
   fetchzip,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "widevine-cdm";
   version = "4.10.2830.0";
 
   src = fetchzip {
-    url = "https://dl.google.com/widevine-cdm/${version}-linux-x64.zip";
+    url = "https://dl.google.com/widevine-cdm/${finalAttrs.version}-linux-x64.zip";
     hash = "sha256-XDnsan1ulnIK87Owedb2s9XWLzk1K2viGGQe9LN/kcE=";
     stripRoot = false;
   };
@@ -24,12 +24,5 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
-    description = "Widevine CDM";
-    homepage = "https://www.widevine.com";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [ jlamur ];
-    platforms = [ "x86_64-linux" ];
-  };
-}
+  meta = import ./meta.nix lib;
+})
