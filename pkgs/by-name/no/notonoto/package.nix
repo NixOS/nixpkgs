@@ -1,24 +1,23 @@
 {
   lib,
-  fetchFromGitHub,
+  fetchzip,
   stdenvNoCC,
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "notonoto";
   version = "0.0.3";
 
-  src = fetchFromGitHub {
-    owner = "yuru7";
-    repo = "NOTONOTO";
-    tag = "v${version}";
-    hash = "sha256-1dbx4yC8gL41OEAE/LNDyoDb4xhAwV5h8oRmdlPULUo=";
+  src = fetchzip {
+    url = "https://github.com/yuru7/NOTONOTO/releases/download/v${version}/NOTONOTO_v${version}.zip";
+    hash = "sha256-Yww8c8INAQIOFZuCLgEVm6HycQ1AkpK8F45dmyeF70g=";
   };
 
   installPhase = ''
     runHook preInstall
-
-    find . -name '*.ttf' -exec install -m444 -Dt $out/share/fonts/notonoto {} \;
-
+    install -Dm444 NOTONOTO/*.ttf -t $out/share/fonts/truetype/notonoto
+    install -Dm444 NOTONOTO35/*.ttf -t $out/share/fonts/truetype/notonoto-35
+    install -Dm444 NOTONOTOConsole/*.ttf -t $out/share/fonts/truetype/notonoto-console
+    install -Dm444 NOTONOTO35Console/*.ttf -t $out/share/fonts/truetype/notonoto-35console
     runHook postInstall
   '';
 
@@ -27,7 +26,6 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/yuru7/NOTONOTO";
     license = lib.licenses.ofl;
     maintainers = with lib.maintainers; [ genga898 ];
-    mainProgram = "notonoto";
+    platforms = lib.platforms.all;
   };
-
 }
