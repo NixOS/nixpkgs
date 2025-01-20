@@ -2,7 +2,7 @@
   lib,
   mkCoqDerivation,
   coq,
-  version ? null
+  version ? null,
 }:
 mkCoqDerivation {
   pname = "matrix";
