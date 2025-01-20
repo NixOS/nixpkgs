@@ -71,6 +71,7 @@ let
       "--http.port=${toString cfg.http.port}"
     ]
     ++ lib.optional (cfg.http.docRoot != null) "--http.doc_root=\"${toString cfg.http.docRoot}\""
+    ++ cfg.extraArgs
   );
 
 in
@@ -208,6 +209,15 @@ in
         defaultText = lib.literalExpression "pkgs.snapweb";
         description = ''
           Path to serve from the HTTP servers root.
+        '';
+      };
+
+      extraArgs = lib.mkOption {
+        type = with lib.types; listOf str;
+        default = [ ];
+        example = [ "--logging.filter debug" ];
+        description = ''
+          Set extra config options or cli flags, that are not covered by other module options
         '';
       };
 
