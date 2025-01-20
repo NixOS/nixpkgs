@@ -122,6 +122,7 @@ let
           tree-sitter-markdown-inline = grammars'.tree-sitter-markdown // {
             language = "tree-sitter-markdown_inline";
             location = "tree-sitter-markdown-inline";
+            broken = true;
           };
         }
         // {
