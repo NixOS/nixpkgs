@@ -42,7 +42,7 @@ buildGo123Module rec {
     description = "Modern reverse proxy";
     changelog = "https://github.com/traefik/traefik/raw/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ vdemeester ];
+    maintainers = with maintainers; [ vdemeester therealgramdalf ];
     mainProgram = "traefik";
   };
 }
