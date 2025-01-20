@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "scipopt";
     repo = "scip";
-    rev = "v920";
-    sha256 = "sha256-F9PBnPuGh+vDYuBL9R0pWg0PUiDrrKT4YdOH1K22dRk=";
+    tag = "v${lib.replaceStrings [ "." ] [ "" ] version}";
+    hash = "sha256-F9PBnPuGh+vDYuBL9R0pWg0PUiDrrKT4YdOH1K22dRk=";
   };
 
   nativeBuildInputs = [ cmake ];
