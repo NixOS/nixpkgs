@@ -1087,6 +1087,8 @@ let
 
     memtrace = callPackage ../development/ocaml-modules/memtrace { };
 
+    mem_usage = callPackage ../development/ocaml-modules/mem_usage { };
+
     menhir = callPackage ../development/ocaml-modules/menhir { };
 
     menhirLib = callPackage ../development/ocaml-modules/menhir/lib.nix { };
