@@ -191,23 +191,26 @@ stdenv.mkDerivation (finalAttrs: {
       cudaPackages.cudatoolkit
     ];
 
-  cmakeFlags = [
-    (lib.cmakeBool "WIVRN_USE_NVENC" cudaSupport)
-    (lib.cmakeBool "WIVRN_USE_VAAPI" true)
-    (lib.cmakeBool "WIVRN_USE_VULKAN" true)
-    (lib.cmakeBool "WIVRN_USE_X264" true)
-    (lib.cmakeBool "WIVRN_USE_PIPEWIRE" true)
-    (lib.cmakeBool "WIVRN_USE_PULSEAUDIO" true)
-    (lib.cmakeBool "WIVRN_FEATURE_STEAMVR_LIGHTHOUSE" true)
-    (lib.cmakeBool "WIVRN_BUILD_CLIENT" false)
-    (lib.cmakeBool "WIVRN_BUILD_DASHBOARD" true)
-    (lib.cmakeBool "WIVRN_CHECK_CAPSYSNICE" false)
-    (lib.cmakeBool "FETCHCONTENT_FULLY_DISCONNECTED" true)
-    (lib.cmakeFeature "WIVRN_OPENXR_MANIFEST_TYPE" "absolute")
-    (lib.cmakeFeature "GIT_DESC" "${finalAttrs.version}")
-    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_MONADO" "${finalAttrs.monado}")
-    (lib.cmakeFeature "CUDA_TOOLKIT_ROOT_DIR" "${cudaPackages.cudatoolkit}")
-  ];
+  cmakeFlags =
+    [
+      (lib.cmakeBool "WIVRN_USE_NVENC" cudaSupport)
+      (lib.cmakeBool "WIVRN_USE_VAAPI" true)
+      (lib.cmakeBool "WIVRN_USE_VULKAN" true)
+      (lib.cmakeBool "WIVRN_USE_X264" true)
+      (lib.cmakeBool "WIVRN_USE_PIPEWIRE" true)
+      (lib.cmakeBool "WIVRN_USE_PULSEAUDIO" true)
+      (lib.cmakeBool "WIVRN_FEATURE_STEAMVR_LIGHTHOUSE" true)
+      (lib.cmakeBool "WIVRN_BUILD_CLIENT" false)
+      (lib.cmakeBool "WIVRN_BUILD_DASHBOARD" true)
+      (lib.cmakeBool "WIVRN_CHECK_CAPSYSNICE" false)
+      (lib.cmakeBool "FETCHCONTENT_FULLY_DISCONNECTED" true)
+      (lib.cmakeFeature "WIVRN_OPENXR_MANIFEST_TYPE" "absolute")
+      (lib.cmakeFeature "GIT_DESC" "${finalAttrs.version}")
+      (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_MONADO" "${finalAttrs.monado}")
+    ]
+    ++ lib.optionals cudaSupport [
+      (lib.cmakeFeature "CUDA_TOOLKIT_ROOT_DIR" "${cudaPackages.cudatoolkit}")
+    ];
 
   desktopItems = [
     (makeDesktopItem {
