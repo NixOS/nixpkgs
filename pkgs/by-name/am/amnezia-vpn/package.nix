@@ -20,6 +20,7 @@
   zlib,
   tun2socks,
   xray,
+  nix-update-script,
 }:
 let
   amnezia-tun2socks = tun2socks.overrideAttrs (
@@ -35,13 +36,6 @@ let
       };
 
       vendorHash = "sha256-VvOaTJ6dBFlbGZGxnHy2sCtds1tyhu6VsPewYpsDBiM=";
-
-      ldflags = [
-        "-w"
-        "-s"
-        "-X github.com/amnezia-vpn/amnezia-tun2socks/v2/internal/version.Version=v${finalAttrs.version}"
-        "-X github.com/amnezia-vpn/amnezia-tun2socks/v2/internal/version.GitCommit=v${finalAttrs.version}"
-      ];
     }
   );
 
@@ -63,17 +57,15 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "amnezia-vpn";
-  version = "4.8.2.3";
+  version = "4.8.3.1";
 
   src = fetchFromGitHub {
     owner = "amnezia-vpn";
     repo = "amnezia-client";
     tag = finalAttrs.version;
-    hash = "sha256-bCWPyRW2xnnopcwfPHgQrdP85Ct0CDufJRQ1PvCAiDE=";
+    hash = "sha256-U/fVO9GcSdxFg5r57vX5Ylgu6CMjG4GKyInIgBNUiEw=";
     fetchSubmodules = true;
   };
-
-  patches = [ ./router.patch ];
 
   postPatch =
     ''
@@ -82,8 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
       substituteInPlace client/utilities.cpp \
         --replace-fail 'return Utils::executable("../../client/bin/openvpn", true);' 'return Utils::executable("${openvpn}/bin/openvpn", false);' \
         --replace-fail 'return Utils::executable("../../client/bin/tun2socks", true);' 'return Utils::executable("${amnezia-tun2socks}/bin/amnezia-tun2socks", false);' \
-        --replace-fail 'return Utils::usrExecutable("wg-quick");' 'return Utils::executable("${wireguard-tools}/bin/wg-quick", false);' \
-        --replace-fail 'QProcess::execute(QString("pkill %1").arg(name));' 'return QProcess::execute(QString("pkill -f %1").arg(name)) == 0;'
+        --replace-fail 'return Utils::usrExecutable("wg-quick");' 'return Utils::executable("${wireguard-tools}/bin/wg-quick", false);'
       substituteInPlace client/protocols/xrayprotocol.cpp \
         --replace-fail 'return Utils::executable(QString("xray"), true);' 'return Utils::executable(QString("${amnezia-xray}/bin/xray"), false);'
       substituteInPlace client/protocols/openvpnovercloakprotocol.cpp \
@@ -144,6 +135,18 @@ stdenv.mkDerivation (finalAttrs: {
     cp ../deploy/data/linux/AmneziaVPN.png $out/share/pixmaps/
     cp ../deploy/data/linux/AmneziaVPN.service $out/lib/systemd/system/
   '';
+
+  passthru = {
+    inherit amnezia-tun2socks amnezia-xray;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "amnezia-tun2socks"
+        "--subpackage"
+        "amnezia-xray"
+      ];
+    };
+  };
 
   meta = with lib; {
     description = "Amnezia VPN Client";
