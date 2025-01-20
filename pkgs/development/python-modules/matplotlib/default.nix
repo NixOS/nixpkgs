@@ -93,7 +93,7 @@ buildPythonPackage rec {
   pname = "matplotlib";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
@@ -110,6 +110,9 @@ buildPythonPackage rec {
   # script.
   postPatch =
     ''
+      substituteInPlace pyproject.toml \
+        --replace-fail "meson-python>=0.13.1,<0.17.0" meson-python
+
       patchShebangs tools
     ''
     + lib.optionalString (stdenv.hostPlatform.isLinux && interactive) ''
