@@ -2919,7 +2919,9 @@ self: super: {
   unleash-client-haskell = doJailbreak super.unleash-client-haskell;
 
   # Tests rely on (missing) submodule
-  unleash-client-haskell-core = dontCheck super.unleash-client-haskell-core;
+  # Too strict bounds on aeson, text and text-show
+  # https://github.com/finn-no/unleash-client-haskell-core/issues/24
+  unleash-client-haskell-core = doJailbreak (dontCheck super.unleash-client-haskell-core);
 
   # Workaround for Cabal failing to find nonexistent SDL2 library?!
   # https://github.com/NixOS/nixpkgs/issues/260863
