@@ -88,6 +88,7 @@ buildNpmPackage rec {
     mainProgram = "webcord";
     maintainers = with lib.maintainers; [
       huantian
+      NotAShelf
     ];
     platforms = lib.platforms.linux;
   };
