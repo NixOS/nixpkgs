@@ -8343,10 +8343,11 @@
     name = "Tobias Happ";
   };
   getchoo = {
+    name = "Seth Flynn";
     email = "getchoo@tuta.io";
+    matrix = "@getchoo:matrix.org";
     github = "getchoo";
     githubId = 48872998;
-    name = "Seth";
   };
   getpsyched = {
     name = "Priyanshu Tripathi";
