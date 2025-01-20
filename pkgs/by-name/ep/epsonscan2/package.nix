@@ -25,13 +25,17 @@
 let
   pname = "epsonscan2";
   description = "Epson Scan 2 scanner driver for many modern Epson scanners and multifunction printers";
-  version = "6.7.70.0";
+  # Epson updates projects without changing their version numbers.
+  # There can be multiple different packages identified by the same
+  #version, so we also tag them with the month and year shown in
+  # the Epson download page.
+  version = "6.7.70.0-01-2025";
 
   system = stdenv.hostPlatform.system;
 
   src = fetchzip {
-    url = "https://download3.ebz.epson.net/dsc/f/03/00/16/14/37/7577ee65efdad48ee2d2f38d9eda75418e490552/epsonscan2-6.7.70.0-1.src.tar.gz";
-    hash = "sha256-y7XGxrOpVou/ZSfUffV3qv+SsFFpTiU7pWvtfsiLZWc=";
+    url = "https://download3.ebz.epson.net/dsc/f/03/00/16/60/70/c7fc14e41ec84255008c6125b63bcac40f55e11c/epsonscan2-6.7.70.0-1.src.tar.gz";
+    hash = "sha256-WvNBy5hAxNJfwgjBR5VGaXuyTCK2YEiD3i7SMDl3U/U=";
   };
   bundle =
     {
@@ -65,8 +69,6 @@ stdenv.mkDerivation {
   ];
 
   postPatch = ''
-    rm CMakeCache.txt
-
     substituteInPlace src/Controller/Src/Scanner/Engine.cpp \
       --replace-fail '@KILLALL@' ${killall}/bin/killall
 
