@@ -31,13 +31,13 @@ let
 in
 buildGoModule rec {
   pname = "frankenphp";
-  version = "1.4.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "dunglas";
     repo = "frankenphp";
     tag = "v${version}";
-    hash = "sha256-DxKNem7U5DD2l34vIwE6s3TIM1PSixq2J/5jufk1JUc=";
+    hash = "sha256-eXyO+Z/qD15smqb2/S1los/zsBVlxuYq+DAkvksMz/s=";
   };
 
   sourceRoot = "${src.name}/caddy";
