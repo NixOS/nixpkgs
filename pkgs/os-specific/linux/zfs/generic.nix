@@ -58,7 +58,6 @@ let
         optionals
         optional
         makeBinPath
-        versionAtLeast
         ;
 
       smartmon = smartmontools.override { inherit enableMail; };
@@ -71,7 +70,6 @@ let
         "user"
         "all"
       ];
-      isAtLeast22Series = versionAtLeast version "2.2.0";
 
       # XXX: You always want to build kernel modules with the same stdenv as the
       # kernel was built with. However, since zfs can also be built for userspace we
@@ -121,8 +119,7 @@ let
                                                         --replace-fail "/etc/default"            "$out/etc/default"
           substituteInPlace ./contrib/initramfs/Makefile.am \
             --replace-fail "/usr/share/initramfs-tools" "$out/usr/share/initramfs-tools"
-        ''
-        + optionalString isAtLeast22Series ''
+
           substituteInPlace ./udev/vdev_id \
             --replace-fail "PATH=/bin:/sbin:/usr/bin:/usr/sbin" \
              "PATH=${
@@ -140,24 +137,6 @@ let
               "bashcompletiondir=$out/share/bash-completion/completions"
 
           substituteInPlace ./cmd/arc_summary --replace-fail "/sbin/modinfo" "modinfo"
-        ''
-        + optionalString (!isAtLeast22Series) ''
-          substituteInPlace ./etc/zfs/Makefile.am --replace-fail "\$(sysconfdir)/zfs" "$out/etc/zfs"
-
-          find ./contrib/initramfs -name Makefile.am -exec sed -i -e 's|/usr/share/initramfs-tools|'$out'/share/initramfs-tools|g' {} \;
-
-          substituteInPlace ./cmd/arc_summary/arc_summary3 --replace-fail "/sbin/modinfo" "modinfo"
-          substituteInPlace ./cmd/vdev_id/vdev_id \
-            --replace-fail "PATH=/bin:/sbin:/usr/bin:/usr/sbin" \
-            "PATH=${
-              makeBinPath [
-                coreutils
-                gawk
-                gnused
-                gnugrep
-                systemd
-              ]
-            }"
         '';
 
       nativeBuildInputs =
@@ -260,12 +239,6 @@ let
 
           # Remove tests because they add a runtime dependency on gcc
           rm -rf $out/share/zfs/zfs-tests
-
-          ${optionalString (lib.versionOlder version "2.2") ''
-            # Add Bash completions.
-            install -v -m444 -D -t $out/share/bash-completion/completions contrib/bash_completion.d/zfs
-            (cd $out/share/bash-completion/completions; ln -s zfs zpool)
-          ''}
         '';
 
       postFixup =
