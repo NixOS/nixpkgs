@@ -2222,7 +2222,11 @@ with pkgs;
   easyaudiosync = qt6Packages.callPackage ../applications/audio/easyaudiosync {};
 
   easycrypt = callPackage ../applications/science/logic/easycrypt {
-    why3 = pkgs.why3.override { ideSupport = false; };
+    why3 = pkgs.why3.override {
+      ideSupport = false;
+      version = "1.7.2";
+      coqPackages = { coq = null; flocq = null; };
+    };
   };
 
   easycrypt-runtest = callPackage ../applications/science/logic/easycrypt/runtest.nix { };
@@ -7951,6 +7955,10 @@ with pkgs;
   flow = callPackage ../development/tools/analysis/flow {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
+  };
+
+  framac = callPackage ../by-name/fr/framac/package.nix {
+    why3 = why3.override { version = "1.7.2"; coqPackages = coqPackages_8_18; };
   };
 
   fswatch = callPackage ../development/tools/misc/fswatch {
@@ -17234,9 +17242,7 @@ with pkgs;
     stdenv = gccStdenv;
   };
 
-  why3 = callPackage ../applications/science/logic/why3 {
-    coqPackages = coqPackages_8_18;
-  };
+  why3 = callPackage ../applications/science/logic/why3 { };
 
   yices = callPackage ../applications/science/logic/yices {
     gmp-static = gmp.override { withStatic = true; };
