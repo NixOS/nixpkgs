@@ -11,7 +11,7 @@
   libjpeg,
   libpng,
   libtiff,
-  openexr,
+  openexr_3,
   python3,
 }:
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     libjpeg
     libpng
     libtiff
-    openexr
+    openexr_3
     python
   ];
 
