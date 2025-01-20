@@ -9,7 +9,6 @@
   gettext,
   gitMinimal,
   glib,
-  gst_all_1,
   gtk4,
   libadwaita,
   meson,
@@ -20,14 +19,13 @@
   rustc,
   sqlite,
   wrapGAppsHook4,
-  libshumate,
   libseccomp,
   lcms2,
-  nix-update-script,
 
   python3,
   webkitgtk_6_0,
   libsoup_3,
+  yq,
 }:
 
 stdenv.mkDerivation rec {
@@ -46,14 +44,24 @@ stdenv.mkDerivation rec {
     inherit src;
     name = "${pname}-${version}";
     hash = "sha256-OTkiX7u36hi1OcwSurfBCCX0BoVyJcTBQrZrQ9pGOfE=";
+
+    nativeBuildInputs = [ yq ];
+
+    # Work around https://github.com/rust-lang/cargo/issues/10801
+    # See https://discourse.nixos.org/t/rust-tauri-v2-error-no-matching-package-found/56751/4
+    preBuild = ''
+      tomlq -it '.dependencies.envelib.features += ["async_closure"]' Cargo.toml
+    '';
   };
 
   # requires nightly features
-  #RUSTC_BOOTSTRAP = 1;
   env.RUSTC_BOOTSTRAP = 1;
 
   postPatch = ''
     patchShebangs build-aux/meson-cargo-manifest.py
+
+    # Enable feature which is unstable for the Rust version in use
+    sed -i '6i #![feature(async_closure)]' envelib/src/lib.rs
   '';
 
   nativeBuildInputs = [
@@ -79,21 +87,14 @@ stdenv.mkDerivation rec {
       glib
       gtk4
       libadwaita
-      openssl
-      sqlite
-      libshumate
-      libseccomp
-      lcms2
+      #sqlite
+      #libseccomp
+      #lcms2
 
+      openssl
       webkitgtk_6_0
       libsoup_3
-    ]
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-bad
-    ]);
+    ];
 
   meta = {
     description = "a mobile-first email client for the GNOME ecosystem";
