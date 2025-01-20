@@ -983,7 +983,7 @@ in {
           '';
         }
         (let exclusiveAttrs = {
-          inherit (data) dnsProvider webroot listenHTTP s3Bucket;
+          inherit (data) dnsProvider webroot listenHTTP s3Bucket tlsMode;
         }; in {
           assertion = lib.length (lib.filter (x: x != null) (builtins.attrValues exclusiveAttrs)) == 1;
           message = ''
@@ -992,6 +992,7 @@ in {
             `security.acme.certs.${cert}.webroot`,
             `security.acme.certs.${cert}.listenHTTP` and
             `security.acme.certs.${cert}.s3Bucket`
+            `security.acme.certs.${cert}.tlsMode`
             is required.
             Current values: ${(lib.generators.toPretty {} exclusiveAttrs)}.
           '';
