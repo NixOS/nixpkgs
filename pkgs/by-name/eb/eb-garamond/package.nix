@@ -2,6 +2,8 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  python3,
+  ttfautohint,
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "eb-garamond";
@@ -13,6 +15,17 @@ stdenvNoCC.mkDerivation rec {
     tag = "v${version}";
     hash = "sha256-ajieKhTeH6yv2qiE2xqnHFoMS65//4ZKiccAlC2PXGQ=";
   };
+
+  nativeBuildInputs = [
+    (python3.withPackages (p: [ p.fontforge ]))
+    ttfautohint
+  ];
+
+  buildPhase = ''
+    runHook preBuild
+    make TAG_COMMIT=${src.rev} TAG=v${version} COMMIT=${src.rev} DATE=19700101
+    runHook postBuild
+  '';
 
   installPhase = ''
     runHook preInstall
