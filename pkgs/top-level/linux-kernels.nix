@@ -709,7 +709,7 @@ in {
   });
 
   packageAliases = {
-    linux_default = packages.linux_6_6;
+    linux_default = packages.linux_6_12;
     # Update this when adding the newest kernel major version!
     linux_latest = packages.linux_6_12;
     linux_rt_default = packages.linux_rt_5_15;
