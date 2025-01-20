@@ -10,16 +10,16 @@
 
 buildPythonPackage rec {
   pname = "securetar";
-  version = "2024.11.0";
+  version = "2025.1.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "pvizeli";
     repo = "securetar";
     tag = version;
-    hash = "sha256-h0GubDuwINDNfDxBVJv74yu/OnzMasq5f0lPoIrNNCA=";
+    hash = "sha256-flsDFXNzpwfNraR4MvjkxOjH6BUNvGqu6g7RXlvl8sU=";
   };
 
   build-system = [ setuptools ];
