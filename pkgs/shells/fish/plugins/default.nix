@@ -40,6 +40,8 @@ lib.makeScope newScope (self: with self; {
 
   fzf-fish = callPackage ./fzf-fish.nix { };
 
+  getopts = callPackage ./getopts.nix { };
+
   github-copilot-cli-fish = callPackage ./github-copilot-cli-fish.nix { };
 
   git-abbr = callPackage ./git-abbr.nix { };
