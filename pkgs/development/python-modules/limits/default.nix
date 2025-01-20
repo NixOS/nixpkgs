@@ -6,7 +6,6 @@
   deprecated,
   etcd3,
   fetchFromGitHub,
-  fetchpatch2,
   flaky,
   hiro,
   importlib-resources,
@@ -16,7 +15,8 @@
   pymongo,
   pytest-asyncio,
   pytest-benchmark,
-  pytest-lazy-fixture,
+  pytest-cov-stub,
+  pytest-lazy-fixtures,
   pytestCheckHook,
   pythonOlder,
   redis,
@@ -45,19 +45,11 @@ buildPythonPackage rec {
   };
 
   patches = [
-    (fetchpatch2 {
-      name = "fix-incompatibility-with-latest-pytest-asyncio.patch";
-      url = "https://github.com/alisaifee/limits/commit/f6dcdb253cd44ca8dc7380c481da1afd8b57af6b.patch";
-      excludes = [ "requirements/test.txt" ];
-      hash = "sha256-NwtN8WHNrwsRcIq18pRjzzGmm7XCzn6O5y+jo9Qr6iQ=";
-    })
-    ./remove-fixed-start-from-async-tests.patch
     ./only-test-in-memory.patch
   ];
 
   postPatch = ''
     substituteInPlace pytest.ini \
-      --replace-fail "--cov=limits" "" \
       --replace-fail "-K" ""
 
     substituteInPlace setup.py \
@@ -96,14 +88,13 @@ buildPythonPackage rec {
     PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION = "python";
   };
 
-  doCheck = pythonOlder "3.12"; # SystemError in protobuf
-
   nativeCheckInputs = [
     flaky
     hiro
     pytest-asyncio
     pytest-benchmark
-    pytest-lazy-fixture
+    pytest-cov-stub
+    pytest-lazy-fixtures
     pytestCheckHook
   ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
