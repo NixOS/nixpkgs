@@ -116,21 +116,30 @@ let
       else
         null;
 
-    installPhase = ''
-      mkdir -p $out
-      mv * $out
+    installPhase =
+      ''
+        mkdir -p $out
+        mv * $out
+      ''
+      + lib.optionalString stdenv.hostPlatform.isDarwin ''
+        mkdir -p $out/Library/Java/JavaVirtualMachines
+        bundle=$out/Library/Java/JavaVirtualMachines/zulu-${lib.versions.major version}.jdk
+        mv $out/zulu-${lib.versions.major version}.jdk $bundle
+        ln -sf $bundle/Contents/Home/* $out/
+      ''
+      + ''
 
-      unzip ${jce-policies}
-      mv -f ZuluJCEPolicies/*.jar $out/${lib.optionalString isJdk8 "jre/"}lib/security/
+        unzip ${jce-policies}
+        mv -f ZuluJCEPolicies/*.jar $out/${lib.optionalString isJdk8 "jre/"}lib/security/
 
-      # jni.h expects jni_md.h to be in the header search path.
-      ln -s $out/include/${stdenv.hostPlatform.parsed.kernel.name}/*_md.h $out/include/
+        # jni.h expects jni_md.h to be in the header search path.
+        ln -s $out/include/${stdenv.hostPlatform.parsed.kernel.name}/*_md.h $out/include/
 
-      if [ -f $out/LICENSE ]; then
-        install -D $out/LICENSE $out/share/zulu/LICENSE
-        rm $out/LICENSE
-      fi
-    '';
+        if [ -f $out/LICENSE ]; then
+          install -D $out/LICENSE $out/share/zulu/LICENSE
+          rm $out/LICENSE
+        fi
+      '';
 
     preFixup =
       ''
@@ -174,7 +183,9 @@ let
       })
       // {
         home = jdk;
-        bundle = "${jdk}/zulu-${lib.versions.major version}.jdk";
+      }
+      // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+        bundle = "${jdk}/Library/Java/JavaVirtualMachines/zulu-${lib.versions.major version}.jdk";
       };
 
     meta = {
