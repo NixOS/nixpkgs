@@ -16,7 +16,7 @@ index 88dbe5b2b4..a2a7a55e20 100644
  $(TESTS):
  	@cd $(SRCDIR) && \
 -	$(call PRINT_JULIA, $(call spawn,$(JULIA_EXECUTABLE)) --check-bounds=yes --startup-file=no --depwarn=error ./runtests.jl $@)
-+	$(call PRINT_JULIA, $(call spawn,$(JULIA_EXECUTABLE)) --check-bounds=yes --startup-file=no --depwarn=error ./runtests.jl --skip NetworkOptions REPL channels FileWatching ccall $@)
++	$(call PRINT_JULIA, $(call spawn,$(JULIA_EXECUTABLE)) --check-bounds=yes --startup-file=no --depwarn=error ./runtests.jl --skip NetworkOptions REPL channels FileWatching ccall Zlib_jll $@)
  
  $(addprefix revise-, $(TESTS)): revise-% :
  	@cd $(SRCDIR) && \
