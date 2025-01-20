@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
   passthru = {
     inherit apr aprutil sslSupport proxySupport ldapSupport luaSupport lua5;
     tests = {
-      acme-integration = nixosTests.acme;
+      acme-integration = nixosTests.acme.httpd;
       proxy = nixosTests.proxy;
       php = nixosTests.php.httpd;
       cross = runCommand "apacheHttpd-test-cross" { } ''
