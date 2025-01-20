@@ -56,8 +56,13 @@ let
     let
       efiSysMountPoint = if args.efiSysMountPoint == null then args.path else args.efiSysMountPoint;
       efiSysMountPoint' = replaceStrings [ "/" ] [ "-" ] efiSysMountPoint;
+      writer =
+        if cfg.useInstallNg then
+          (pkgs.formats.json {}).generate "grub-config.json"
+        else
+          (s: pkgs.writeText "grub-config.xml" (builtins.toXML s));
     in
-    pkgs.writeText "grub-config.xml" (builtins.toXML
+    writer
     { splashImage = f cfg.splashImage;
       splashMode = f cfg.splashMode;
       backgroundColor = f cfg.backgroundColor;
@@ -79,6 +84,7 @@ let
       timeout = if config.boot.loader.timeout == null then -1 else config.boot.loader.timeout;
       theme = f cfg.theme;
       inherit efiSysMountPoint;
+      inherit (builtins) storeDir;
       inherit (args) devices;
       inherit (efi) canTouchEfiVariables;
       inherit (cfg)
@@ -97,7 +103,7 @@ let
              if lib.last (lib.splitString "." cfg.font) == "pf2"
              then cfg.font
              else "${convertedFont}");
-    });
+    };
 
   bootDeviceCounters = foldr (device: attr: attr // { ${device} = (attr.${device} or 0) + 1; }) {}
     (concatMap (args: args.devices) cfg.mirroredBoots);
@@ -694,6 +700,14 @@ in
         '';
       };
 
+      useInstallNg = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Whether to use `install-grub-ng`, an experimental rewrite of `install-grub`
+          in Rust, with the goal of replacing the original Perl script.
+        '';
+      };
     };
 
   };
@@ -738,13 +752,23 @@ in
             XMLLibXML XMLSAX XMLSAXBase
             ListCompare JSON
           ]);
-        in pkgs.writeScript "install-grub.sh" (''
-        #!${pkgs.runtimeShell}
-        set -e
-        ${optionalString cfg.enableCryptodisk "export GRUB_ENABLE_CRYPTODISK=y"}
-      '' + flip concatMapStrings cfg.mirroredBoots (args: ''
-        ${perl}/bin/perl ${install-grub-pl} ${grubConfig args} $@
-      '') + cfg.extraInstallCommands);
+          ng = pkgs.install-grub-ng.override {
+            inherit (config.system.nixos) distroName;
+          };
+          genRun = args: if cfg.useInstallNg then
+            ''${lib.getExe ng} ${grubConfig args} "$@"\n''
+          else
+            ''${lib.getExe perl} ${install-grub-pl} ${grubConfig args} "$@"\n'';
+        in
+        pkgs.writeScript "install-grub.sh" (
+          ''
+            #!${pkgs.runtimeShell}
+            set -e
+            ${optionalString cfg.enableCryptodisk "export GRUB_ENABLE_CRYPTODISK=y"}
+          ''
+          + flip concatMapStrings cfg.mirroredBoots genRun
+          + cfg.extraInstallCommands
+        );
 
       system.build.grub = grub;
 
