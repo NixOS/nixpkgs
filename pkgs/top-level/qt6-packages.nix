@@ -24,9 +24,24 @@ in
 
 makeScopeWithSplicing' {
   otherSplices = generateSplicesForMkScope "qt6Packages";
+
   f = (self: let
+    libsForQt6 = self;
     inherit (self) callPackage;
     noExtraAttrs = set: lib.attrsets.removeAttrs set [ "extend" "override" "overrideScope" "overrideDerivation" ];
+
+    kdeGear = let
+      mkGear = import ../applications/kde;
+      attrs = {
+        inherit libsForQt6;
+        inherit (pkgs) lib fetchurl;
+      };
+    in (lib.makeOverridable mkGear attrs);
+
+    # Alias for backwards compatibility. Added 2021-05-07.
+    kdeApplications = kdeGear;
+
+
   in (noExtraAttrs qt6) // {
 
   # LIBRARIES
