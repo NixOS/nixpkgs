@@ -1,0 +1,47 @@
+diff --git a/apps/desktop/desktop_native/napi/index.js b/apps/desktop/desktop_native/napi/index.js
+index a0cfee8..ca0b41f 100644
+--- a/apps/desktop/desktop_native/napi/index.js
++++ b/apps/desktop/desktop_native/napi/index.js
+@@ -21,6 +21,7 @@ function isMusl() {
+   }
+ }
+ 
++/*
+ switch (platform) {
+   case 'android':
+     switch (arch) {
+@@ -198,6 +199,8 @@ switch (platform) {
+   default:
+     throw new Error(`Unsupported OS: ${platform}, architecture: ${arch}`)
+ }
++*/
++nativeBinding = require('./desktop_napi.node')
+ 
+ if (!nativeBinding) {
+   if (loadError) {
+diff --git a/apps/desktop/desktop_native/napi/package.json b/apps/desktop/desktop_native/napi/package.json
+index d557ccf..2e47c79 100644
+--- a/apps/desktop/desktop_native/napi/package.json
++++ b/apps/desktop/desktop_native/napi/package.json
+@@ -3,7 +3,7 @@
+   "version": "0.1.0",
+   "description": "",
+   "scripts": {
+-    "build": "napi build --platform --js false",
++    "build": "napi build --js false",
+     "test": "cargo test"
+   },
+   "author": "",
+diff --git a/apps/desktop/electron-builder.json b/apps/desktop/electron-builder.json
+index 9a8bc45..59d7f32 100644
+--- a/apps/desktop/electron-builder.json
++++ b/apps/desktop/electron-builder.json
+@@ -18,7 +18,7 @@
+     "**/*",
+     "!**/node_modules/@bitwarden/desktop-napi/**/*",
+     "**/node_modules/@bitwarden/desktop-napi/index.js",
+-    "**/node_modules/@bitwarden/desktop-napi/desktop_napi.${platform}-${arch}*.node",
++    "**/node_modules/@bitwarden/desktop-napi/desktop_napi.node",
+ 
+     "!**/node_modules/argon2/**/*",
+     "**/node_modules/argon2/argon2.cjs",
