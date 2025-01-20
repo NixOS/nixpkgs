@@ -6,7 +6,9 @@
   backoff,
   buildPythonPackage,
   fetchFromGitHub,
+  mashumaro,
   multidict,
+  orjson,
   poetry-core,
   pytest-asyncio,
   pytest-cov-stub,
@@ -17,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "python-homewizard-energy";
-  version = "7.0.1";
+  version = "8.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -26,7 +28,7 @@ buildPythonPackage rec {
     owner = "DCSBL";
     repo = "python-homewizard-energy";
     tag = "v${version}";
-    hash = "sha256-ugTdqo3XIqOtjPVj8X5shoy+/z7VKk2H0kFHJVZxkUQ=";
+    hash = "sha256-e1UB9Hegnl4JR1fBQz9/caTeo82LGGQX4qETI0O9OLc=";
   };
 
   postPatch = ''
@@ -40,7 +42,9 @@ buildPythonPackage rec {
     aiohttp
     async-timeout
     backoff
+    mashumaro
     multidict
+    orjson
   ];
 
   __darwinAllowLocalNetworking = true;
