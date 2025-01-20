@@ -9,23 +9,37 @@
   spinners,
   types-colorama,
   typing-extensions,
-  nose2,
+  setuptools,
+  pytestCheckHook,
   semver,
 }:
 
 buildPythonPackage rec {
   pname = "milc";
   version = "1.9.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "clueboard";
     repo = "milc";
-    rev = version;
+    tag = version;
     hash = "sha256-byj2mcDxLl7rZEFjAt/g1kHllnVxiTIQaTMG24GeSVc=";
   };
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    # Needed for tests
+    patchShebangs --build \
+      example \
+      custom_logger \
+      questions \
+      sparkline \
+      hello \
+      passwd_confirm \
+      passwd_complexity \
+      config_source
+  '';
+
+  dependencies = [
     argcomplete
     colorama
     halo
@@ -35,8 +49,12 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
+  build-system = [
+    setuptools
+  ];
+
   nativeCheckInputs = [
-    nose2
+    pytestCheckHook
     semver
   ];
 
