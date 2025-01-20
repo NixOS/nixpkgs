@@ -71,8 +71,8 @@ stdenv.mkDerivation {
     stripRoot = false;
     hash =
       {
-        x86_64-linux = "sha256-pHYGQYwu47jdOAD+/mLrP6Dd+2aDMHENddVwAu0uEfI=";
-        aarch64-linux = "sha256-0UeYWjeFnQ8yVa3juWg7Z7VF1GDbP4pJ9OUJRbv1OJw=";
+        x86_64-linux = "sha256-h6fX2/2GqYJAWS/uABTJgduQJxZdLS/kzwEGBRNCjxU=";
+        aarch64-linux = "sha256-b/J5oI7xTfZbZrdUtioGfw7PUEVPU5Ypld04GBdJUp0=";
       }
       .${system} or throwSystem;
   };
