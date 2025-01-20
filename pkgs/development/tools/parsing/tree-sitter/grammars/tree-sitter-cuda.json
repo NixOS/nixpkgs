@@ -1,5 +1,5 @@
 {
-  "url": "https://github.com/thehamsta/tree-sitter-cuda",
+  "url": "https://github.com/tree-sitter-grammars/tree-sitter-cuda",
   "rev": "cbce8aedc6fa35313a4cecd206196011a08a85c4",
   "date": "2024-08-22T22:57:54+02:00",
   "path": "/nix/store/4ygv7b9ap52kb03cv7mihsq86g6vgfpc-tree-sitter-cuda",
@@ -8,5 +8,6 @@
   "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,
-  "leaveDotGit": false
+  "leaveDotGit": false,
+  "isBroken": true
 }

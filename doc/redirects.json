@@ -29,6 +29,9 @@
   "chap-packageconfig": [
     "index.html#chap-packageconfig"
   ],
+  "python-tree-sitter": [
+    "index.html#python-tree-sitter"
+  ],
   "sec-allow-broken": [
     "index.html#sec-allow-broken"
   ],
