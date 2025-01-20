@@ -51,8 +51,6 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  cmakeFlags = [ ];
-
   meta = {
     maintainers = with lib.maintainers; [ fettgoenner ];
     description = "Branch-and-Price & Column Generation for Everyone";
