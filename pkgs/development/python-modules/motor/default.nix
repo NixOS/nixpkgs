@@ -28,6 +28,8 @@ buildPythonPackage rec {
     hatch-requirements-txt
   ];
 
+  pythonRelaxDeps = [ "pymongo" ];
+
   dependencies = [ pymongo ];
 
   nativeCheckInputs = [ mockupdb ];
