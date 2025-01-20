@@ -138,20 +138,20 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
 
-  postBuild = (lib.optionalString withManual ''
+  postBuild = lib.optionalString withManual ''
     # Need to build the main Git documentation before building the
     # contrib/subtree documentation, as the latter depends on the
     # asciidoc.conf file created by the former.
     make -C Documentation
-  '') + ''
+  '' + ''
     make -C contrib/subtree all ${lib.optionalString withManual "doc"}
-  '' + (lib.optionalString perlSupport ''
+  '' + lib.optionalString perlSupport ''
     make -C contrib/diff-highlight
-  '') + (lib.optionalString osxkeychainSupport ''
+  '' + lib.optionalString osxkeychainSupport ''
     make -C contrib/credential/osxkeychain
-  '') + (lib.optionalString withLibsecret ''
+  '' + lib.optionalString withLibsecret ''
     make -C contrib/credential/libsecret
-  '');
+  '';
 
 
   ## Install
@@ -161,15 +161,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   installFlags = [ "NO_INSTALL_HARDLINKS=1" ];
 
-  preInstall = (lib.optionalString osxkeychainSupport ''
+  preInstall = lib.optionalString osxkeychainSupport ''
     mkdir -p $out/bin
     ln -s $out/share/git/contrib/credential/osxkeychain/git-credential-osxkeychain $out/bin/
     rm -f $PWD/contrib/credential/osxkeychain/git-credential-osxkeychain.o
-  '') + (lib.optionalString withLibsecret ''
+  '' + lib.optionalString withLibsecret ''
     mkdir -p $out/bin
     ln -s $out/share/git/contrib/credential/libsecret/git-credential-libsecret $out/bin/
     rm -f $PWD/contrib/credential/libsecret/git-credential-libsecret.o
-  '');
+  '';
 
   postInstall =
     ''
