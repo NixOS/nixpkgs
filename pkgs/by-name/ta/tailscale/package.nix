@@ -12,6 +12,7 @@
   getent,
   iproute2,
   iptables,
+  lsof,
   shadow,
   procps,
   # runtime tooling - darwin
@@ -51,7 +52,8 @@ buildGoModule {
 
   vendorHash = "sha256-81UOjoC5GJqhNs4vWcQ2/B9FMaDWtl0rbuFXmxbu5dI=";
 
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ makeWrapper ] ++ [
+  nativeBuildInputs = [
+    makeWrapper
     installShellFiles
   ];
 
@@ -137,6 +139,16 @@ buildGoModule {
     ''
       ln -s $out/bin/tailscaled $out/bin/tailscale
       moveToOutput "bin/derper" "$derper"
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      wrapProgram $out/bin/tailscaled \
+        --prefix PATH : ${
+          lib.makeBinPath [
+            # Uses lsof only on macOS to detect socket location
+            # See tailscale safesocket_darwin.go
+            lsof
+          ]
+        }
     ''
     + lib.optionalString stdenv.hostPlatform.isLinux ''
       wrapProgram $out/bin/tailscaled \
