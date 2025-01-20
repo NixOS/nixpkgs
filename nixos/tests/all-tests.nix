@@ -384,6 +384,7 @@ in {
   gitea = handleTest ./gitea.nix { giteaPackage = pkgs.gitea; };
   github-runner = handleTest ./github-runner.nix {};
   gitlab = runTest ./gitlab.nix;
+  gitlab-fetch-private = runTest ./gitlab-fetch-private.nix;
   gitolite = handleTest ./gitolite.nix {};
   gitolite-fcgiwrap = handleTest ./gitolite-fcgiwrap.nix {};
   glance = runTest ./glance.nix;
