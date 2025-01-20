@@ -1,0 +1,32 @@
+{
+    "elpa": {
+        "overlay_url": "https://raw.githubusercontent.com/nix-community/emacs-overlay/master/repos/elpa/elpa-generated.nix",
+        "generated_file": "elpa-generated.nix",
+        "nix_attribute": "emacsPackages.elpaPackages"
+    },
+    "elpa-devel": {
+        "overlay_url": "https://raw.githubusercontent.com/nix-community/emacs-overlay/master/repos/elpa/elpa-devel-generated.nix",
+        "generated_file": "elpa-devel-generated.nix",
+        "nix_attribute": "emacsPackages.elpaDevelPackages"
+    },
+    "melpa": {
+        "overlay_url": "https://raw.githubusercontent.com/nix-community/emacs-overlay/master/repos/melpa/recipes-archive-melpa.json",
+        "generated_file": "recipes-archive-melpa.json",
+        "nix_attribute": "emacsPackages.melpaPackages"
+    },
+    "melpa-stable": {
+        "overlay_url": "https://raw.githubusercontent.com/nix-community/emacs-overlay/master/repos/melpa/recipes-archive-melpa.json",
+        "generated_file": "recipes-archive-melpa.json",
+        "nix_attribute": "emacsPackages.melpaStablePackages"
+    },
+    "nongnu": {
+        "overlay_url": "https://raw.githubusercontent.com/nix-community/emacs-overlay/master/repos/nongnu/nongnu-generated.nix",
+        "generated_file": "nongnu-generated.nix",
+        "nix_attribute": "emacsPackages.nongnuPackages"
+    },
+    "nongnu-devel": {
+        "overlay_url": "https://raw.githubusercontent.com/nix-community/emacs-overlay/master/repos/nongnu/nongnu-devel-generated.nix",
+        "generated_file": "nongnu-devel-generated.nix",
+        "nix_attribute": "emacsPackages.nongnuDevelPackages"
+    }
+}
