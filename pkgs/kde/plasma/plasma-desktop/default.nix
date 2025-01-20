@@ -16,6 +16,7 @@
   xkeyboard_config,
   xorg,
   libcanberra,
+  libwacom,
   libxkbfile,
   ibus,
 }:
@@ -53,6 +54,7 @@ mkKdeDerivation {
 
     SDL2
     libcanberra
+    libwacom
     libxkbfile
     xkeyboard_config
 
