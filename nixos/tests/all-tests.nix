@@ -593,7 +593,7 @@ in {
   matrix-synapse-workers = handleTest ./matrix/synapse-workers.nix {};
   mautrix-meta-postgres = handleTest ./matrix/mautrix-meta-postgres.nix {};
   mautrix-meta-sqlite = handleTest ./matrix/mautrix-meta-sqlite.nix {};
-  mattermost = handleTest ./mattermost.nix {};
+  mattermost = handleTest ./mattermost {};
   mealie = handleTest ./mealie.nix {};
   mediamtx = handleTest ./mediamtx.nix {};
   mediatomb = handleTest ./mediatomb.nix {};
