@@ -181,6 +181,7 @@ let
 
       makeFlags = [
         "CRYSTAL_CONFIG_VERSION=${version}"
+        "CRYSTAL_CONFIG_TARGET=${stdenv.targetPlatform.config}"
         "progress=1"
       ];
 
