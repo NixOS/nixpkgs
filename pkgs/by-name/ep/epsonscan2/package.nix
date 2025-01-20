@@ -70,7 +70,7 @@ stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace src/Controller/Src/Scanner/Engine.cpp \
-      --replace-fail '@KILLALL@' ${killall}/bin/killall
+      --replace-fail '@KILLALL@' ${lib.getExe killall}
 
     substituteInPlace src/Controller/Src/Filter/GetOrientation.cpp \
       --replace-fail '@OCR_ENGINE_GETROTATE@' $out/libexec/epsonscan2-ocr/ocr-engine-getrotate
@@ -137,7 +137,7 @@ stdenv.mkDerivation {
 
   desktopItems = lib.optionals withGui [
     (makeDesktopItem {
-      name = pname;
+      name = "epsonscan2";
       exec = "epsonscan2";
       icon = "epsonscan2";
       desktopName = "Epson Scan 2";
@@ -154,22 +154,27 @@ stdenv.mkDerivation {
     inherit description;
     mainProgram = "epsonscan2";
     longDescription = ''
-      Epson Scan 2 scanner driver including optional non-free plugins such as OCR and network
-      scanning.
+      The Epson Scan 2 scanner driver, including optional non-free plugins such
+      as OCR and network scanning.
 
       To use the SANE backend:
-      <literal>
-      hardware.sane.extraBackends = [ pkgs.epsonscan2 ];
-      </literal>
+      ```nix
+      {
+        hardware.sane.extraBackends = [ pkgs.epsonscan2 ];
+      }
+      ```
 
-      Overrides can be used to customise this package. For example, to enable non-free plugins and
-      disable the Epson GUI:
-      <literal>
-      pkgs.epsonscan2.override { withNonFreePlugins = true; withGui = false; }
-      </literal>
+      Overrides can be used to customise this package. For example, to enable
+      non-free plugins and disable the Epson GUI:
+      ```nix
+      pkgs.epsonscan2.override {
+        withNonFreePlugins = true;
+        withGui = false;
+      }
+      ```
     '';
     homepage = "https://support.epson.net/linux/en/epsonscan2.php";
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.systems.inspect.patternLogicalAnd lib.systems.inspect.patterns.isLinux lib.systems.inspect.patterns.isx86_64;
     sourceProvenance =
       with lib.sourceTypes;
       [ fromSource ] ++ lib.optionals withNonFreePlugins [ binaryNativeCode ];
