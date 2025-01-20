@@ -14,7 +14,7 @@ let
   revbump = "rev25"; # don't forget to change forum download id...
 in
 stdenv.mkDerivation rec {
-  name = "linux-phc-intel-${version}-${kernel.version}";
+  pname = "linux-phc-intel";
   version = "${release}-${revbump}";
 
   src = fetchurl {

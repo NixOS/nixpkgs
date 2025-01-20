@@ -7,7 +7,7 @@
   lvm2,
 }:
 stdenv.mkDerivation (finalAttrs: {
-  name = "shufflecake";
+  pname = "shufflecake";
   version = "0.5.1";
   src = fetchFromGitea {
     domain = "codeberg.org";

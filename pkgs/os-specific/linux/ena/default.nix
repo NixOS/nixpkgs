@@ -11,7 +11,7 @@ let
 in
 stdenv.mkDerivation {
   inherit version;
-  name = "ena-${version}-${kernel.version}";
+  pname = "ena";
 
   src = fetchFromGitHub {
     owner = "amzn";

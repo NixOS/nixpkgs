@@ -9,7 +9,8 @@ let
   hash = "sha256-VE6sCehjXlRuOVcK4EN2H+FhaVaBi/jrAYx4TZjbreA=";
 in
 stdenv.mkDerivation {
-  name = "system76-io-module-${version}-${kernel.version}";
+  pname = "system76-io-module";
+  inherit version;
 
   passthru.moduleName = "system76_io";
 

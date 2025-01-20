@@ -14,7 +14,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "tp_smapi-${version}-${kernel.version}";
+  pname = "tp_smapi";
   version = "0.43";
 
   src = fetchFromGitHub {

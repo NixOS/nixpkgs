@@ -11,7 +11,8 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "jool-${sourceAttrs.version}-${kernel.version}";
+  pname = "jool";
+  inherit (sourceAttrs) version;
 
   src = sourceAttrs.src;
 
