@@ -7603,6 +7603,8 @@ self: super: with self; {
 
   litestar-htmx = callPackage ../development/python-modules/litestar-htmx { };
 
+  litestar = callPackage ../development/python-modules/litestar { };
+
   littleutils = callPackage ../development/python-modules/littleutils { };
 
   livelossplot = callPackage ../development/python-modules/livelossplot { };
