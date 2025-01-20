@@ -120,6 +120,13 @@ let
       mkdir -p $out
       mv * $out
 
+      ${lib.optionalString stdenv.hostPlatform.isDarwin ''
+        mkdir -p $out/Library/Java/JavaVirtualMachines
+        bundle=$out/Library/Java/JavaVirtualMachines/zulu-${lib.versions.major version}.jdk
+        mv $out/zulu-${lib.versions.major version}.jdk $bundle
+        ln -sf $bundle/Contents/Home/* $out/
+      ''}
+
       unzip ${jce-policies}
       mv -f ZuluJCEPolicies/*.jar $out/${lib.optionalString isJdk8 "jre/"}lib/security/
 
@@ -174,8 +181,10 @@ let
       })
       // {
         home = jdk;
-        bundle = "${jdk}/zulu-${lib.versions.major version}.jdk";
-      };
+      }
+      // (lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+        bundle = "${jdk}/Library/Java/JavaVirtualMachines/zulu-${lib.versions.major version}.jdk";
+      });
 
     meta = {
       description = "Certified builds of OpenJDK";
