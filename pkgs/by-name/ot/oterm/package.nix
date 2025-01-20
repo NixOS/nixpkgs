@@ -40,6 +40,7 @@ python3Packages.buildPythonApplication rec {
     python-dotenv
     rich-pixels
     textual
+    textualeffects
     typer
   ];
 
@@ -53,7 +54,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/ggozad/oterm";
     changelog = "https://github.com/ggozad/oterm/releases/tag/${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ suhr ];
+    maintainers = with lib.maintainers; [ gaelj ];
     mainProgram = "oterm";
   };
 }
