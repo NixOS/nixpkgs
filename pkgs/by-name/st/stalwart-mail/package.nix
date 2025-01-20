@@ -13,33 +13,23 @@
   darwin,
   nix-update-script,
   nixosTests,
-  rocksdb_8_11,
+  rocksdb,
   callPackage,
 }:
 
-let
-  # Stalwart depends on rocksdb crate:
-  # https://github.com/stalwartlabs/mail-server/blob/v0.8.0/crates/store/Cargo.toml#L10
-  # which expects a specific rocksdb versions:
-  # https://github.com/rust-rocksdb/rust-rocksdb/blob/v0.22.0/librocksdb-sys/Cargo.toml#L3
-  # See upstream issue for rocksdb 9.X support
-  # https://github.com/stalwartlabs/mail-server/issues/407
-  rocksdb = rocksdb_8_11;
-  version = "0.10.7";
-in
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "stalwart-mail";
-  inherit version;
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "stalwartlabs";
     repo = "mail-server";
     tag = "v${version}";
-    hash = "sha256-BATkLgfkz94u2M+Xy6PYQi+7EIxBe86VLYTnBI8PzzY=";
+    hash = "sha256-Ku6WfsEpBCR4HbS3HTQLmoJipJT1heZ3AQvPSbnc7tI=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-4MUw9nBx4uZgUOGQksiurFuyStmWXwYuOOGT1e9AoLg=";
+  cargoHash = "sha256-I8rGpHqcyXxnPopFd/v/itmCpgqSsvr5Vg/vREY1GeI=";
 
   nativeBuildInputs = [
     pkg-config
