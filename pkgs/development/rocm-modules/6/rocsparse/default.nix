@@ -15,12 +15,12 @@
   python3Packages,
   buildTests ? false,
   buildBenchmarks ? false, # Seems to depend on tests
-  gpuTargets ? [ ],
+  gpuTargets ? clr.localGpuTargets or clr.gpuTargets,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocsparse";
-  version = "6.0.2";
+  version = "6.3.1";
 
   outputs =
     [
@@ -37,11 +37,14 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "rocSPARSE";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-nTYnEHkTtq0jBeMj4HXpqkJu8LQc+Z6mpjhMP7tJAHQ=";
+    hash = "sha256-vyLfXbnxPZlR6mfbLh1E7S7HdOSHjuhGQcfihAlvvwY=";
   };
+  # env.CFLAGS = "-fsanitize=undefined";
+  # env.CXXFLAGS = "-fsanitize=undefined";
 
   nativeBuildInputs = [
     cmake
+    # no ninja, it buffers console output and nix times out long periods of no output
     rocm-cmake
     clr
     gfortran
@@ -61,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags =
     [
-      "-DCMAKE_CXX_COMPILER=hipcc"
+      "-DCMAKE_BUILD_TYPE=Release"
       # Manually define CMAKE_INSTALL_<DIR>
       # See: https://github.com/NixOS/nixpkgs/pull/197838
       "-DCMAKE_INSTALL_BINDIR=bin"
@@ -145,8 +148,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     updateScript = rocmUpdateScript {
       name = finalAttrs.pname;
-      owner = finalAttrs.src.owner;
-      repo = finalAttrs.src.repo;
+      inherit (finalAttrs.src) owner;
+      inherit (finalAttrs.src) repo;
     };
   };
 
@@ -156,8 +159,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
     platforms = platforms.linux;
-    broken =
-      versions.minor finalAttrs.version != versions.minor stdenv.cc.version
-      || versionAtLeast finalAttrs.version "7.0.0";
   };
 })
