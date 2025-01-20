@@ -7647,6 +7647,8 @@ self: super: with self; {
     llvm = pkgs.llvm_14;
   };
 
+  lm-eval = callPackage ../development/python-modules/lm-eval { };
+
   lm-format-enforcer = callPackage ../development/python-modules/lm-format-enforcer { };
 
   lmdb = callPackage ../development/python-modules/lmdb {
@@ -16413,6 +16415,8 @@ self: super: with self; {
 
   tqdm = callPackage ../development/python-modules/tqdm { };
 
+  tqdm-multiprocess = callPackage ../development/python-modules/tqdm-multiprocess { };
+
   traceback2 = callPackage ../development/python-modules/traceback2 { };
 
   tracerite = callPackage ../development/python-modules/tracerite { };
@@ -18163,6 +18167,8 @@ self: super: with self; {
   woob = callPackage ../development/python-modules/woob { };
 
   woodblock = callPackage ../development/python-modules/woodblock { };
+
+  word2number = callPackage ../development/python-modules/word2number { };
 
   wordcloud = callPackage ../development/python-modules/wordcloud { };
 
