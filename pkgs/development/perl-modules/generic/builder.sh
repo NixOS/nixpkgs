@@ -23,7 +23,9 @@ preConfigure() {
     local flagsArray=()
     concatTo flagsArray makeMakerFlags
 
-    perl Makefile.PL PREFIX=$out INSTALLDIRS=site "${flagsArray[@]}" PERL=$(type -P perl) FULLPERL=\"$fullperl/bin/perl\"
+    perl Makefile.PL AR=$AR FULL_AR=$AR CC=$CC LD=$CC CPPRUN="$CC -E" \
+        PREFIX=$out INSTALLDIRS=site "${flagsArray[@]}" \
+        PERL=$(type -P perl) FULLPERL=\"$fullperl/bin/perl\"
 }
 
 if test -n "$perlPreHook"; then
