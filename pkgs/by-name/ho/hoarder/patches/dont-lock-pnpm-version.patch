@@ -1,0 +1,23 @@
+diff --git a/package.json b/package.json
+index 66bfbae..ea57ac7 100644
+--- a/package.json
++++ b/package.json
+@@ -33,7 +33,7 @@
+     "turbo": "^2.1.2"
+   },
+   "prettier": "@hoarder/prettier-config",
+-  "packageManager": "pnpm@9.0.0-alpha.8+sha256.a433a59569b00389a951352956faf25d1fdf43b568213fbde591c36274d4bc30",
++  "packageManager": "pnpm",
+   "pnpm": {
+     "patchedDependencies": {
+       "xcode@3.0.1": "patches/xcode@3.0.1.patch"
+diff --git a/pnpm-lock.yaml b/pnpm-lock.yaml
+index a677c7d..ca8c34a 100644
+--- a/pnpm-lock.yaml
++++ b/pnpm-lock.yaml
+@@ -1,4 +1,4 @@
+-lockfileVersion: '7.0'
++lockfileVersion: '9.0'
+ 
+ settings:
+   autoInstallPeers: true
