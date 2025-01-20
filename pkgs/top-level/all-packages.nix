@@ -5942,7 +5942,6 @@ with pkgs;
         isl = if !stdenv.hostPlatform.isDarwin then isl_0_20 else null;
 
         withoutTargetLibc = true;
-        langCC = false;
         libcCross = libcCross1;
         targetPackages.stdenv.cc.bintools = binutilsNoLibc;
         enableShared =
@@ -9005,6 +9004,7 @@ with pkgs;
     else if name == "newlib" && stdenv.targetPlatform.isOr1k then targetPackages.or1k-newlib or or1k-newlib
     else if name == "newlib" then targetPackages.newlib or newlib
     else if name == "newlib-nano" then targetPackages.newlib-nano or newlib-nano
+    else if name == "mlibc" then targetPackages.mlibc or mlibc
     else if name == "musl" then targetPackages.muslCross or muslCross
     else if name == "msvcrt" then targetPackages.windows.mingw_w64 or windows.mingw_w64
     else if name == "ucrt" then targetPackages.windows.mingw_w64 or windows.mingw_w64

@@ -5,8 +5,8 @@
 let
   platforms = import ./platforms.nix { inherit lib; };
 
-  riscv = bits: {
-    config = "riscv${bits}-unknown-linux-gnu";
+  riscv = bits: abi: {
+    config = "riscv${bits}-unknown-linux-${abi}";
   };
 in
 
@@ -82,6 +82,10 @@ rec {
     useLLVM = true;
   };
 
+  aarch64-linux-mlibc = {
+    config = "aarch64-unknown-linux-mlibc";
+  };
+
   pogoplug4 = {
     config = "armv5tel-unknown-linux-gnueabi";
   } // platforms.pogoplug4;
@@ -118,11 +122,16 @@ rec {
   gnu64_simplekernel = gnu64 // platforms.pc_simplekernel; # see test/cross/default.nix
   gnu32  = { config = "i686-unknown-linux-gnu"; };
 
+  x86_64-linux-mlibc = { config = "x86_64-unknown-linux-mlibc"; };
+  i686-linux-mlibc = { config = "i686-unknown-linux-mlibc"; };
+
   musl64 = { config = "x86_64-unknown-linux-musl"; };
   musl32  = { config = "i686-unknown-linux-musl"; };
 
-  riscv64 = riscv "64";
-  riscv32 = riscv "32";
+  riscv64 = riscv "64" "gnu";
+  riscv32 = riscv "32" "gnu";
+
+  riscv64-linux-mlibc = riscv "64" "mlibc";
 
   riscv64-embedded = {
     config = "riscv64-none-elf";
@@ -179,6 +188,10 @@ rec {
 
   m68k = {
     config = "m68k-unknown-linux-gnu";
+  };
+
+  m68k-linux-mlibc = {
+    config = "m68k-unknown-linux-mlibc";
   };
 
   s390 = {

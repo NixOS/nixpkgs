@@ -15,6 +15,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-aV6YJ/33Y1E/EzkQvH5s/bkYeUOk/slD5XRJcj0rjb8=";
   };
 
+  patches = [
+    ./0001-fix-strings.h.patch
+  ];
+
   nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
 
   configureFlags = [ (lib.enableFeature true "libgdbm-compat") ];
@@ -27,7 +31,10 @@ stdenv.mkDerivation (finalAttrs: {
     "man"
   ];
 
-  doCheck = true;
+  # Test #9 (dumpload) fails on mlibc platforms because mlibc does not respect
+  # the TZ environment variable and expects /etc/localtime to exist (which does
+  # not exist in the nix build environment).
+  doCheck = !stdenv.hostPlatform.isMlibc;
 
   enableParallelBuilding = true;
 

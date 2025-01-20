@@ -68,6 +68,11 @@ let
       "--disable-libatomic" # requires libc
       "--disable-decimal-float" # requires libc
       "--disable-libmpx" # requires libc
+      "--disable-hosted-libstdcxx"
+      "--disable-libstdcxx-backtrace"
+      "--disable-linux-futex"
+      "--disable-libvtv"
+      "--disable-libitm"
     ] ++ lib.optionals crossMingw [
       "--with-headers=${lib.getDev libcCross}/include"
       "--with-gcc"
@@ -93,7 +98,7 @@ let
                           else if targetPlatform.isWindows then (threadsCross.model or "win32")
                           else "single"}"
       "--enable-nls"
-    ] ++ lib.optionals (targetPlatform.libc == "uclibc" || targetPlatform.libc == "musl") [
+    ] ++ lib.optionals (lib.elem targetPlatform.libc [ "mlibc" "musl" "uclibc" ]) [
       # libsanitizer requires netrom/netrom.h which is not
       # available in uclibc.
       "--disable-libsanitizer"
@@ -217,6 +222,7 @@ let
       # On Illumos/Solaris GNU as is preferred
       "--with-gnu-as" "--without-gnu-ld"
     ]
+    ++ lib.optional (targetPlatform.libc == "mlibc") "--disable-libsanitizer"
     ++ lib.optional (targetPlatform.libc == "musl")
       # musl at least, disable: https://git.buildroot.net/buildroot/commit/?id=873d4019f7fb00f6a80592224236b3ba7d657865
       "--disable-libmpx"

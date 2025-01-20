@@ -408,6 +408,8 @@ rec {
     gnuabielfv2  = { abi = "elfv2"; };
     gnuabielfv1  = { abi = "elfv1"; };
 
+    mlibc        = {};
+
     musleabi     = { float = "soft"; };
     musleabihf   = { float = "hard"; };
     musl         = {};
