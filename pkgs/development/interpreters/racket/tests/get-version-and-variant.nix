@@ -1,11 +1,17 @@
-{ runCommandLocal, racket }:
+{
+  runCommandLocal,
+  racket,
+
+  version ? racket.version,
+  variant ? "cs",
+}:
 
 runCommandLocal "racket-test-get-version-and-variant"
   {
     nativeBuildInputs = [ racket ];
   }
   ''
-    expectation="${racket.version}"
+    expectation="${version}"
 
     output="$(racket -e '(display (version))')"
 
@@ -14,7 +20,7 @@ runCommandLocal "racket-test-get-version-and-variant"
         exit 1
     fi
 
-    expectation="cs"
+    expectation="${variant}"
 
     output="$(racket -e '(require launcher/launcher) (display (current-launcher-variant))')"
 

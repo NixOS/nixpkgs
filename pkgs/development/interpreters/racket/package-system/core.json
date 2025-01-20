@@ -1,0 +1,4561 @@
+{
+  "_2d": {
+    "checksum": "4b70b2dc77a9e8d2497a2c7373cacd659a3de23c",
+    "dependencies": [
+      "2d-lib",
+      "2d-doc"
+    ],
+    "description": "2d syntax",
+    "license": "Apache-2.0",
+    "name": "2d",
+    "source": {
+      "args": {
+        "hash": "sha256-BzcSk86Ipwrrcy7Rl0Ko+oLqRfa4rj94R0BTVIDZZTk=",
+        "owner": "racket",
+        "repo": "2d"
+      },
+      "method": "github",
+      "path": "2d"
+    }
+  },
+  "_2d-doc": {
+    "checksum": "4b70b2dc77a9e8d2497a2c7373cacd659a3de23c",
+    "dependencies": [
+      "2d-lib",
+      "scribble-lib",
+      "racket-doc",
+      "syntax-color-doc",
+      "syntax-color-lib"
+    ],
+    "description": "Documentation for \"2d\"",
+    "license": "Apache-2.0",
+    "name": "2d-doc",
+    "source": {
+      "args": {
+        "hash": "sha256-BzcSk86Ipwrrcy7Rl0Ko+oLqRfa4rj94R0BTVIDZZTk=",
+        "owner": "racket",
+        "repo": "2d"
+      },
+      "method": "github",
+      "path": "2d-doc"
+    }
+  },
+  "_2d-lib": {
+    "checksum": "4b70b2dc77a9e8d2497a2c7373cacd659a3de23c",
+    "dependencies": [
+      "scribble-lib",
+      "syntax-color-lib"
+    ],
+    "description": "Implementation (no documentation) for \"2d\"",
+    "license": "Apache-2.0",
+    "name": "2d-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-BzcSk86Ipwrrcy7Rl0Ko+oLqRfa4rj94R0BTVIDZZTk=",
+        "owner": "racket",
+        "repo": "2d"
+      },
+      "method": "github",
+      "path": "2d-lib"
+    }
+  },
+  "algol60": {
+    "checksum": "ddc6046986103ab486419e17823a52ff6a559555",
+    "dependencies": [
+      "compatibility-lib",
+      "drracket-plugin-lib",
+      "errortrace-lib",
+      "gui-lib",
+      "parser-tools-lib",
+      "string-constants-lib",
+      "at-exp-lib",
+      "rackunit-lib",
+      "racket-doc",
+      "scribble-doc",
+      "scribble-lib",
+      "drracket-tool-lib",
+      "drracket-plugin-lib"
+    ],
+    "description": "An implementation of the Algol60 language",
+    "license": "Apache-2.0",
+    "name": "algol60",
+    "source": {
+      "args": {
+        "hash": "sha256-ZrkWxDfAAvRrCKwNII1XBz9jV9s1qoeN8YcSC/tpUw0=",
+        "owner": "racket",
+        "repo": "algol60"
+      },
+      "method": "github"
+    }
+  },
+  "at-exp-lib": {
+    "checksum": "458013dc341deb3072b1a667e407482c0ba855aa",
+    "description": "Libraries for @-expressions",
+    "license": "Apache-2.0",
+    "name": "at-exp-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-WXkJA6DNqQ54BMegdivL1AgwsACAIq/dO6dKA6U35bk=",
+        "owner": "racket",
+        "repo": "racket"
+      },
+      "method": "github",
+      "path": "pkgs/at-exp-lib"
+    }
+  },
+  "cext-lib": {
+    "checksum": "6c32f1c8365fbce7232f7fb35f8e68cd7619f007",
+    "dependencies": [
+      "compiler-lib",
+      "dynext-lib",
+      "scheme-lib"
+    ],
+    "description": "Tools for managing C extensions, such as `raco ctool`",
+    "license": "Apache-2.0",
+    "name": "cext-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-jD/6/NOiKAI0DRPUqJlnGw1FD7gB/os7QUMnbIvMsQU=",
+        "owner": "racket",
+        "repo": "cext-lib"
+      },
+      "method": "github",
+      "path": "cext-lib"
+    }
+  },
+  "class-iop-lib": {
+    "checksum": "f640064b50109887c40da6df3d3cebf635040794",
+    "description": "Implementation (no documentation) for \"class-iop\"",
+    "license": "Apache-2.0",
+    "name": "class-iop-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-tPjn94eDIhR23/5oJ8P9yVVdYYMDKvQMtPxkNhA+5SM=",
+        "owner": "racket",
+        "repo": "class-iop"
+      },
+      "method": "github",
+      "path": "class-iop-lib"
+    }
+  },
+  "compatibility": {
+    "checksum": "a393782feeb140dceda4bdcf3747659d9cfa82a6",
+    "dependencies": [
+      "compatibility-lib",
+      "compatibility-doc"
+    ],
+    "description": "Libraries that implement legacy interfaces",
+    "license": "Apache-2.0",
+    "name": "compatibility",
+    "source": {
+      "args": {
+        "hash": "sha256-4l8YglvUEbkwztQMAaIr6lrHvBGqkQ3YNZlna1URQbo=",
+        "owner": "racket",
+        "repo": "compatibility"
+      },
+      "method": "github",
+      "path": "compatibility"
+    }
+  },
+  "compatibility-doc": {
+    "checksum": "a393782feeb140dceda4bdcf3747659d9cfa82a6",
+    "dependencies": [
+      "scribble-lib",
+      "compatibility-lib",
+      "pconvert-lib",
+      "sandbox-lib",
+      "compiler-lib",
+      "gui-lib",
+      "racket-doc",
+      "data-doc",
+      "mzscheme-doc",
+      "scheme-lib",
+      "scheme-doc"
+    ],
+    "description": "documentation part of \"compatibility\"",
+    "license": "Apache-2.0",
+    "name": "compatibility-doc",
+    "source": {
+      "args": {
+        "hash": "sha256-4l8YglvUEbkwztQMAaIr6lrHvBGqkQ3YNZlna1URQbo=",
+        "owner": "racket",
+        "repo": "compatibility"
+      },
+      "method": "github",
+      "path": "compatibility-doc"
+    }
+  },
+  "compatibility-lib": {
+    "checksum": "a393782feeb140dceda4bdcf3747659d9cfa82a6",
+    "dependencies": [
+      "scheme-lib",
+      "net-lib",
+      "sandbox-lib"
+    ],
+    "description": "implementation (no documentation) part of \"compatibility\"",
+    "license": "Apache-2.0",
+    "name": "compatibility-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-4l8YglvUEbkwztQMAaIr6lrHvBGqkQ3YNZlna1URQbo=",
+        "owner": "racket",
+        "repo": "compatibility"
+      },
+      "method": "github",
+      "path": "compatibility-lib"
+    }
+  },
+  "compiler": {
+    "checksum": "458013dc341deb3072b1a667e407482c0ba855aa",
+    "dependencies": [
+      "compiler-lib"
+    ],
+    "description": "Racket compilation tools, such as `raco exe'",
+    "license": "Apache-2.0",
+    "name": "compiler",
+    "source": {
+      "args": {
+        "hash": "sha256-WXkJA6DNqQ54BMegdivL1AgwsACAIq/dO6dKA6U35bk=",
+        "owner": "racket",
+        "repo": "racket"
+      },
+      "method": "github",
+      "path": "pkgs/compiler"
+    }
+  },
+  "compiler-lib": {
+    "checksum": "458013dc341deb3072b1a667e407482c0ba855aa",
+    "dependencies": [
+      "scheme-lib",
+      "zo-lib"
+    ],
+    "description": "implementation (no documentation) part of \"compiler\"",
+    "license": "Apache-2.0",
+    "name": "compiler-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-WXkJA6DNqQ54BMegdivL1AgwsACAIq/dO6dKA6U35bk=",
+        "owner": "racket",
+        "repo": "racket"
+      },
+      "method": "github",
+      "path": "pkgs/compiler-lib"
+    }
+  },
+  "contract-profile": {
+    "checksum": "95d980a076126b8e4e4284e912f2a7d9d3ab6860",
+    "dependencies": [
+      "math-lib",
+      "profile-lib",
+      "racket-doc",
+      "scribble-lib",
+      "rackunit-lib"
+    ],
+    "description": "Profiling tool for contracts",
+    "license": "Apache-2.0",
+    "name": "contract-profile",
+    "source": {
+      "args": {
+        "hash": "sha256-Q6o7zp3q8LAxWr3fptdLPSIV+gbIPC1gamXfBh76ovY=",
+        "owner": "racket",
+        "repo": "contract-profile"
+      },
+      "method": "github"
+    }
+  },
+  "data": {
+    "checksum": "0f85d3ced88a1e39c08153ffae5951f32b43cd81",
+    "dependencies": [
+      "data-lib",
+      "data-enumerate-lib",
+      "data-doc"
+    ],
+    "description": "Data strucutures",
+    "license": "Apache-2.0",
+    "name": "data",
+    "source": {
+      "args": {
+        "hash": "sha256-irSfBU6+gRoqZviGeeXa2T8ipSoE2G4YXSsvABMzUYU=",
+        "owner": "racket",
+        "repo": "data"
+      },
+      "method": "github",
+      "path": "data"
+    }
+  },
+  "data-doc": {
+    "checksum": "0f85d3ced88a1e39c08153ffae5951f32b43cd81",
+    "dependencies": [
+      "data-lib",
+      "data-enumerate-lib",
+      "racket-doc",
+      "scribble-lib",
+      "plot-lib",
+      "math-doc",
+      "math-lib",
+      "pict-doc",
+      "pict-lib"
+    ],
+    "description": "documentation part of \"data\"",
+    "license": "Apache-2.0",
+    "name": "data-doc",
+    "source": {
+      "args": {
+        "hash": "sha256-irSfBU6+gRoqZviGeeXa2T8ipSoE2G4YXSsvABMzUYU=",
+        "owner": "racket",
+        "repo": "data"
+      },
+      "method": "github",
+      "path": "data-doc"
+    }
+  },
+  "data-enumerate-lib": {
+    "checksum": "0f85d3ced88a1e39c08153ffae5951f32b43cd81",
+    "dependencies": [
+      "data-lib",
+      "math-lib",
+      "rackunit-lib"
+    ],
+    "description": "implementation (no documentation) of \"data/enumerate\"",
+    "license": "Apache-2.0",
+    "name": "data-enumerate-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-irSfBU6+gRoqZviGeeXa2T8ipSoE2G4YXSsvABMzUYU=",
+        "owner": "racket",
+        "repo": "data"
+      },
+      "method": "github",
+      "path": "data-enumerate-lib"
+    }
+  },
+  "data-lib": {
+    "checksum": "0f85d3ced88a1e39c08153ffae5951f32b43cd81",
+    "dependencies": [
+      "rackunit-lib"
+    ],
+    "description": "implementation (no documentation) part of \"data\"",
+    "license": "Apache-2.0",
+    "name": "data-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-irSfBU6+gRoqZviGeeXa2T8ipSoE2G4YXSsvABMzUYU=",
+        "owner": "racket",
+        "repo": "data"
+      },
+      "method": "github",
+      "path": "data-lib"
+    }
+  },
+  "datalog": {
+    "checksum": "3a30258c7a11f6f1836f52590e26542c11865714",
+    "dependencies": [
+      "parser-tools-lib",
+      "syntax-color-lib",
+      "racket-doc",
+      "scribble-lib",
+      "rackunit-lib"
+    ],
+    "description": "An implementation of the Datalog language",
+    "license": "Apache-2.0",
+    "name": "datalog",
+    "source": {
+      "args": {
+        "hash": "sha256-OmCOzSZfgSb/LelhcN9AOv11lTjWG3XfdtBf2Yhnxlk=",
+        "owner": "racket",
+        "repo": "datalog"
+      },
+      "method": "github"
+    }
+  },
+  "db": {
+    "checksum": "fe5771bdc49f873aad8e1eede0f89ac3d36f6355",
+    "dependencies": [
+      "db-lib",
+      "db-doc"
+    ],
+    "description": "Database connectivity",
+    "license": "Apache-2.0",
+    "name": "db",
+    "source": {
+      "args": {
+        "hash": "sha256-0mxL9U9AsBIkl4uiLQqURPnALG3AP495JkYUSIQ+hwM=",
+        "owner": "racket",
+        "repo": "db"
+      },
+      "method": "github",
+      "path": "db"
+    }
+  },
+  "db-doc": {
+    "checksum": "fe5771bdc49f873aad8e1eede0f89ac3d36f6355",
+    "dependencies": [
+      "srfi-lite-lib",
+      "web-server-doc",
+      "scribble-lib",
+      "sandbox-lib",
+      "web-server-lib",
+      "db-lib",
+      "racket-doc"
+    ],
+    "description": "documentation part of \"db\"",
+    "license": "Apache-2.0",
+    "name": "db-doc",
+    "source": {
+      "args": {
+        "hash": "sha256-0mxL9U9AsBIkl4uiLQqURPnALG3AP495JkYUSIQ+hwM=",
+        "owner": "racket",
+        "repo": "db"
+      },
+      "method": "github",
+      "path": "db-doc"
+    }
+  },
+  "db-lib": {
+    "checksum": "fe5771bdc49f873aad8e1eede0f89ac3d36f6355",
+    "dependencies": [
+      "srfi-lite-lib",
+      "unix-socket-lib",
+      "sasl-lib"
+    ],
+    "description": "implementation (no documentation) part of \"db\"",
+    "license": "Apache-2.0",
+    "name": "db-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-0mxL9U9AsBIkl4uiLQqURPnALG3AP495JkYUSIQ+hwM=",
+        "owner": "racket",
+        "repo": "db"
+      },
+      "method": "github",
+      "path": "db-lib"
+    }
+  },
+  "deinprogramm": {
+    "checksum": "19b387829072ebdade8c77ada0ef4fbd7cc53cfc",
+    "dependencies": [
+      "deinprogramm-lib",
+      "deinprogramm-doc",
+      "deinprogramm-tool"
+    ],
+    "description": "Teaching languages for _Die Macht der Abstraktion_",
+    "license": "Apache-2.0",
+    "name": "deinprogramm",
+    "source": {
+      "args": {
+        "hash": "sha256-e4aPtjeMq0DpCG7OwkQNtSA3F4Vho72BLVUPBu8vm3M=",
+        "owner": "racket",
+        "repo": "deinprogramm"
+      },
+      "method": "github",
+      "path": "deinprogramm"
+    }
+  },
+  "deinprogramm-doc": {
+    "checksum": "19b387829072ebdade8c77ada0ef4fbd7cc53cfc",
+    "dependencies": [
+      "compatibility-lib",
+      "deinprogramm-signature",
+      "errortrace-lib",
+      "htdp-lib",
+      "pconvert-lib",
+      "scheme-lib",
+      "simple-tree-text-markup-lib",
+      "string-constants-lib",
+      "trace",
+      "wxme-lib",
+      "snip-lib",
+      "draw-lib",
+      "deinprogramm-lib",
+      "at-exp-lib",
+      "htdp-doc",
+      "racket-doc",
+      "racket-index",
+      "scribble-lib",
+      "gui-lib"
+    ],
+    "description": "documentation part of \"deinprogramm\"",
+    "license": "Apache-2.0",
+    "name": "deinprogramm-doc",
+    "source": {
+      "args": {
+        "hash": "sha256-OFMak7wTJN4nuRuQa4WuFviDGI/CRLMYOT0s5jYa52I=",
+        "url": "https://github.com/racket/deinprogramm.git"
+      },
+      "method": "git",
+      "path": "deinprogramm-doc"
+    }
+  },
+  "deinprogramm-lib": {
+    "checksum": "19b387829072ebdade8c77ada0ef4fbd7cc53cfc",
+    "dependencies": [
+      "compatibility-lib",
+      "deinprogramm-signature",
+      "errortrace-lib",
+      "htdp-lib",
+      "pconvert-lib",
+      "scheme-lib",
+      "simple-tree-text-markup-lib",
+      "string-constants-lib",
+      "trace",
+      "gui-lib",
+      "wxme-lib",
+      "snip-lib",
+      "draw-lib",
+      "at-exp-lib",
+      "racket-index",
+      "rackunit-lib"
+    ],
+    "description": "implementation part of \"deinprogramm\"",
+    "license": "Apache-2.0",
+    "name": "deinprogramm-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-/U2TogNlX521WTim5MSG1OHbBExKDFQUql5WpPfk5no=",
+        "url": "https://github.com/racket/deinprogramm.git"
+      },
+      "method": "git",
+      "path": "deinprogramm-lib"
+    }
+  },
+  "deinprogramm-signature": {
+    "checksum": "19b387829072ebdade8c77ada0ef4fbd7cc53cfc",
+    "dependencies": [
+      "compatibility-lib",
+      "drracket-plugin-lib",
+      "gui-lib",
+      "htdp-lib",
+      "scheme-lib",
+      "srfi-lib",
+      "string-constants-lib"
+    ],
+    "description": "Signature support for teaching languages for _Die Macht der Abstraktion_",
+    "license": "Apache-2.0",
+    "name": "deinprogramm-signature",
+    "source": {
+      "args": {
+        "hash": "sha256-e4aPtjeMq0DpCG7OwkQNtSA3F4Vho72BLVUPBu8vm3M=",
+        "owner": "racket",
+        "repo": "deinprogramm"
+      },
+      "method": "github",
+      "path": "deinprogramm-signature"
+    }
+  },
+  "deinprogramm-tool": {
+    "checksum": "19b387829072ebdade8c77ada0ef4fbd7cc53cfc",
+    "dependencies": [
+      "scribble-lib",
+      "deinprogramm-lib",
+      "drracket-plugin-lib",
+      "scheme-lib",
+      "string-constants-lib",
+      "gui-lib",
+      "compatibility-lib",
+      "htdp-lib",
+      "pconvert-lib",
+      "errortrace-lib",
+      "trace",
+      "wxme-lib",
+      "at-exp-lib"
+    ],
+    "description": "Tool for menu-based DeinProgramm teaching languages",
+    "license": "Apache-2.0",
+    "name": "deinprogramm-tool",
+    "source": {
+      "args": {
+        "hash": "sha256-Sl0HBkqV8DeyE/KcxiiNWY1U07n723XiezkcdusmvLQ=",
+        "url": "https://github.com/racket/deinprogramm.git"
+      },
+      "method": "git",
+      "path": "deinprogramm-tool"
+    }
+  },
+  "distributed-places": {
+    "checksum": "4e75977ab091999dfd7de765e7807fabc06a6bf3",
+    "dependencies": [
+      "distributed-places-lib",
+      "distributed-places-doc"
+    ],
+    "description": "Libraries for distributed computations",
+    "license": "Apache-2.0",
+    "name": "distributed-places",
+    "source": {
+      "args": {
+        "hash": "sha256-QN22NmEqxqyY3aXnjPAOUKTyJYdpNmb2ZZiqleS8UrU=",
+        "owner": "racket",
+        "repo": "distributed-places"
+      },
+      "method": "github",
+      "path": "distributed-places"
+    }
+  },
+  "distributed-places-doc": {
+    "checksum": "4e75977ab091999dfd7de765e7807fabc06a6bf3",
+    "dependencies": [
+      "distributed-places-lib",
+      "racket-doc",
+      "sandbox-lib",
+      "scribble-lib"
+    ],
+    "description": "documentation part of \"distributed-places\"",
+    "license": "Apache-2.0",
+    "name": "distributed-places-doc",
+    "source": {
+      "args": {
+        "hash": "sha256-QN22NmEqxqyY3aXnjPAOUKTyJYdpNmb2ZZiqleS8UrU=",
+        "owner": "racket",
+        "repo": "distributed-places"
+      },
+      "method": "github",
+      "path": "distributed-places-doc"
+    }
+  },
+  "distributed-places-lib": {
+    "checksum": "4e75977ab091999dfd7de765e7807fabc06a6bf3",
+    "description": "implementation (no documentation) part of \"distributed-places\"",
+    "license": "Apache-2.0",
+    "name": "distributed-places-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-QN22NmEqxqyY3aXnjPAOUKTyJYdpNmb2ZZiqleS8UrU=",
+        "owner": "racket",
+        "repo": "distributed-places"
+      },
+      "method": "github",
+      "path": "distributed-places-lib"
+    }
+  },
+  "draw": {
+    "checksum": "57b2e050a287e4f0c7e26662d4850c6ac62935c3",
+    "dependencies": [
+      "draw-lib",
+      "draw-doc"
+    ],
+    "description": "Drawing libraries",
+    "license": "Apache-2.0",
+    "name": "draw",
+    "source": {
+      "args": {
+        "hash": "sha256-lNlK82UvYVMSDVQiO4h9YBCrWXBTgjxkfUx65NVk9cA=",
+        "owner": "racket",
+        "repo": "draw"
+      },
+      "method": "github",
+      "path": "draw"
+    }
+  },
+  "draw-doc": {
+    "checksum": "57b2e050a287e4f0c7e26662d4850c6ac62935c3",
+    "dependencies": [
+      "gui-doc",
+      "pict-doc",
+      "at-exp-lib",
+      "gui-lib",
+      "pict-lib",
+      "scribble-lib",
+      "draw-lib",
+      "racket-doc"
+    ],
+    "description": "documentation part of \"draw\"",
+    "license": "Apache-2.0",
+    "name": "draw-doc",
+    "source": {
+      "args": {
+        "hash": "sha256-lNlK82UvYVMSDVQiO4h9YBCrWXBTgjxkfUx65NVk9cA=",
+        "owner": "racket",
+        "repo": "draw"
+      },
+      "method": "github",
+      "path": "draw-doc"
+    }
+  },
+  "draw-lib": {
+    "checksum": "57b2e050a287e4f0c7e26662d4850c6ac62935c3",
+    "description": "implementation (no documentation) part of \"draw\"",
+    "license": "Apache-2.0",
+    "name": "draw-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-lNlK82UvYVMSDVQiO4h9YBCrWXBTgjxkfUx65NVk9cA=",
+        "owner": "racket",
+        "repo": "draw"
+      },
+      "method": "github",
+      "path": "draw-lib"
+    }
+  },
+  "drracket": {
+    "checksum": "780c72fbd80fffd79bab5ca660cabb026e9e9808",
+    "dependencies": [
+      "scheme-lib",
+      "data-lib",
+      "compiler-lib",
+      "planet-lib",
+      "compatibility-lib",
+      "draw-lib",
+      "errortrace-lib",
+      "macro-debugger-text-lib",
+      "parser-tools-lib",
+      "pconvert-lib",
+      "pict-lib",
+      "profile-lib",
+      "sandbox-lib",
+      "scribble-lib",
+      "snip-lib",
+      "string-constants-lib",
+      "typed-racket-lib",
+      "wxme-lib",
+      "gui-lib",
+      "racket-index",
+      "racket-doc",
+      "html-lib",
+      "images-lib",
+      "icons",
+      "typed-racket-more",
+      "trace",
+      "macro-debugger",
+      "net-lib",
+      "tex-table",
+      "htdp-lib",
+      "drracket-plugin-lib",
+      "gui-pkg-manager-lib",
+      "drracket-tool-lib",
+      "drracket-tool-doc",
+      "pict-snip-lib",
+      "option-contract-lib",
+      "syntax-color-lib",
+      "quickscript",
+      "simple-tree-text-markup-lib",
+      "mzscheme-doc",
+      "net-doc",
+      "planet-doc",
+      "compatibility-doc",
+      "string-constants-doc",
+      "draw-doc",
+      "errortrace-doc",
+      "gui-doc",
+      "pict-doc",
+      "profile-doc",
+      "r5rs-doc",
+      "at-exp-lib",
+      "rackunit-lib",
+      "scheme-doc",
+      "syntax-color-doc"
+    ],
+    "description": "The DrRacket programming environment",
+    "license": "Apache-2.0",
+    "name": "drracket",
+    "source": {
+      "args": {
+        "hash": "sha256-db2JJu+OTSf+iJhzgogJV+3T9LYZdWg4Zbrx5OmnM1U=",
+        "owner": "racket",
+        "repo": "drracket"
+      },
+      "method": "github",
+      "path": "drracket"
+    }
+  },
+  "drracket-plugin-lib": {
+    "checksum": "780c72fbd80fffd79bab5ca660cabb026e9e9808",
+    "dependencies": [
+      "compatibility-lib"
+    ],
+    "description": "DrRacket's plugin API",
+    "license": "Apache-2.0",
+    "name": "drracket-plugin-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-db2JJu+OTSf+iJhzgogJV+3T9LYZdWg4Zbrx5OmnM1U=",
+        "owner": "racket",
+        "repo": "drracket"
+      },
+      "method": "github",
+      "path": "drracket-plugin-lib"
+    }
+  },
+  "drracket-tool": {
+    "checksum": "780c72fbd80fffd79bab5ca660cabb026e9e9808",
+    "dependencies": [
+      "drracket-tool-lib",
+      "drracket-tool-doc"
+    ],
+    "description": "Programmatic interface to some IDE tools that DrRacket supports",
+    "license": "Apache-2.0",
+    "name": "drracket-tool",
+    "source": {
+      "args": {
+        "hash": "sha256-db2JJu+OTSf+iJhzgogJV+3T9LYZdWg4Zbrx5OmnM1U=",
+        "owner": "racket",
+        "repo": "drracket"
+      },
+      "method": "github",
+      "path": "drracket-tool"
+    }
+  },
+  "drracket-tool-doc": {
+    "checksum": "780c72fbd80fffd79bab5ca660cabb026e9e9808",
+    "dependencies": [
+      "scribble-lib",
+      "drracket-tool-lib",
+      "racket-doc",
+      "gui-doc",
+      "gui-lib",
+      "drracket"
+    ],
+    "description": "Docs for the programmatic interface to some IDE tools that DrRacket supports",
+    "license": "Apache-2.0",
+    "name": "drracket-tool-doc",
+    "source": {
+      "args": {
+        "hash": "sha256-db2JJu+OTSf+iJhzgogJV+3T9LYZdWg4Zbrx5OmnM1U=",
+        "owner": "racket",
+        "repo": "drracket"
+      },
+      "method": "github",
+      "path": "drracket-tool-doc"
+    }
+  },
+  "drracket-tool-lib": {
+    "checksum": "780c72fbd80fffd79bab5ca660cabb026e9e9808",
+    "dependencies": [
+      "drracket-tool-text-lib",
+      "scribble-lib",
+      "string-constants-lib",
+      "scribble-lib",
+      "racket-index",
+      "gui-lib",
+      "at-exp-lib",
+      "rackunit-lib"
+    ],
+    "description": "Code implementing programmatic interfaces to some IDE tools that DrRacket supports",
+    "license": "Apache-2.0",
+    "name": "drracket-tool-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-db2JJu+OTSf+iJhzgogJV+3T9LYZdWg4Zbrx5OmnM1U=",
+        "owner": "racket",
+        "repo": "drracket"
+      },
+      "method": "github",
+      "path": "drracket-tool-lib"
+    }
+  },
+  "drracket-tool-text-lib": {
+    "checksum": "780c72fbd80fffd79bab5ca660cabb026e9e9808",
+    "dependencies": [
+      "scribble-lib",
+      "string-constants-lib",
+      "racket-index",
+      "at-exp-lib",
+      "rackunit-lib"
+    ],
+    "description": "Code implementing non-GUI programmatic interfaces to some IDE tools that DrRacket supports",
+    "license": "Apache-2.0",
+    "name": "drracket-tool-text-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-db2JJu+OTSf+iJhzgogJV+3T9LYZdWg4Zbrx5OmnM1U=",
+        "owner": "racket",
+        "repo": "drracket"
+      },
+      "method": "github",
+      "path": "drracket-tool-text-lib"
+    }
+  },
+  "ds-store": {
+    "checksum": "949ca63dd00522b3ab8aec2d71c543ece8266872",
+    "dependencies": [
+      "ds-store-lib",
+      "ds-store-doc"
+    ],
+    "description": "Libraries for manipulating \".DS_Store\" files",
+    "license": "Apache-2.0",
+    "name": "ds-store",
+    "source": {
+      "args": {
+        "hash": "sha256-wZhbg9Kf+VpWOllwl7mEkB44loZP6UhxyI3cG+cRWSo=",
+        "owner": "racket",
+        "repo": "ds-store"
+      },
+      "method": "github",
+      "path": "ds-store"
+    }
+  },
+  "ds-store-doc": {
+    "checksum": "949ca63dd00522b3ab8aec2d71c543ece8266872",
+    "dependencies": [
+      "scribble-lib",
+      "racket-doc",
+      "ds-store-lib"
+    ],
+    "description": "documentation part of \"ds-store\"",
+    "license": "Apache-2.0",
+    "name": "ds-store-doc",
+    "source": {
+      "args": {
+        "hash": "sha256-wZhbg9Kf+VpWOllwl7mEkB44loZP6UhxyI3cG+cRWSo=",
+        "owner": "racket",
+        "repo": "ds-store"
+      },
+      "method": "github",
+      "path": "ds-store-doc"
+    }
+  },
+  "ds-store-lib": {
+    "checksum": "949ca63dd00522b3ab8aec2d71c543ece8266872",
+    "description": "implementation (no documentation) part of \"ds-store\"",
+    "license": "Apache-2.0",
+    "name": "ds-store-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-wZhbg9Kf+VpWOllwl7mEkB44loZP6UhxyI3cG+cRWSo=",
+        "owner": "racket",
+        "repo": "ds-store"
+      },
+      "method": "github",
+      "path": "ds-store-lib"
+    }
+  },
+  "dynext-lib": {
+    "checksum": "6c32f1c8365fbce7232f7fb35f8e68cd7619f007",
+    "description": "Library for running a C compiler/linker",
+    "license": "Apache-2.0",
+    "name": "dynext-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-jD/6/NOiKAI0DRPUqJlnGw1FD7gB/os7QUMnbIvMsQU=",
+        "owner": "racket",
+        "repo": "cext-lib"
+      },
+      "method": "github",
+      "path": "dynext-lib"
+    }
+  },
+  "eli-tester": {
+    "checksum": "036e07d43a1f478ea1750881d5591d983ce1ffaf",
+    "dependencies": [
+      "rackunit-lib"
+    ],
+    "description": "Testing framework",
+    "license": "Apache-2.0",
+    "name": "eli-tester",
+    "source": {
+      "args": {
+        "hash": "sha256-02MJneovcpNb7WVholWeXR+EH75XBlzbRFU+Eiw3nUU=",
+        "owner": "racket",
+        "repo": "eli-tester"
+      },
+      "method": "github"
+    }
+  },
+  "eopl": {
+    "checksum": "d313612cd68709eb43b753941b550a2d4b18b516",
+    "dependencies": [
+      "compatibility-lib",
+      "rackunit-lib",
+      "racket-doc",
+      "scribble-lib",
+      "scheme-doc"
+    ],
+    "description": "Teaching language for _Essentials of Programming Languages_",
+    "license": "Apache-2.0",
+    "name": "eopl",
+    "source": {
+      "args": {
+        "hash": "sha256-JfDhGvLqcPTT9Xv4/P6bp/hfazVcO6MXPFg4fptUMGI=",
+        "owner": "racket",
+        "repo": "eopl"
+      },
+      "method": "github"
+    }
+  },
+  "errortrace": {
+    "checksum": "6fb1bd2a1c2de8af52d2bc85d096347381d17fee",
+    "dependencies": [
+      "errortrace-lib",
+      "errortrace-doc"
+    ],
+    "license": "Apache-2.0",
+    "name": "errortrace",
+    "source": {
+      "args": {
+        "hash": "sha256-fCxIz9kT17yml6q/7PZf/Rqjhzl6wT5Pi1OSb3oWM1E=",
+        "owner": "racket",
+        "repo": "errortrace"
+      },
+      "method": "github",
+      "path": "errortrace"
+    }
+  },
+  "errortrace-doc": {
+    "checksum": "6fb1bd2a1c2de8af52d2bc85d096347381d17fee",
+    "dependencies": [
+      "racket-doc",
+      "errortrace-lib",
+      "scribble-lib"
+    ],
+    "description": "documentation part of \"errortrace\"",
+    "license": "Apache-2.0",
+    "name": "errortrace-doc",
+    "source": {
+      "args": {
+        "hash": "sha256-fCxIz9kT17yml6q/7PZf/Rqjhzl6wT5Pi1OSb3oWM1E=",
+        "owner": "racket",
+        "repo": "errortrace"
+      },
+      "method": "github",
+      "path": "errortrace-doc"
+    }
+  },
+  "errortrace-lib": {
+    "checksum": "6fb1bd2a1c2de8af52d2bc85d096347381d17fee",
+    "dependencies": [
+      "source-syntax"
+    ],
+    "description": "implementation (no documentation) part of \"errortrace\"",
+    "license": "Apache-2.0",
+    "name": "errortrace-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-fCxIz9kT17yml6q/7PZf/Rqjhzl6wT5Pi1OSb3oWM1E=",
+        "owner": "racket",
+        "repo": "errortrace"
+      },
+      "method": "github",
+      "path": "errortrace-lib"
+    }
+  },
+  "expeditor": {
+    "checksum": "aad241246d474725ae1a095f6ed42bdb14360fd5",
+    "dependencies": [
+      "expeditor-lib",
+      "expeditor-doc"
+    ],
+    "description": "Terminal expression editor",
+    "license": "Apache-2.0",
+    "name": "expeditor",
+    "source": {
+      "args": {
+        "hash": "sha256-EFdNUDsWc7/d3dsU9jytN/4JxGqWiY8mFbJSVvQDzNo=",
+        "url": "https://github.com/racket/expeditor.git"
+      },
+      "method": "git",
+      "path": "expeditor"
+    }
+  },
+  "expeditor-doc": {
+    "checksum": "aad241246d474725ae1a095f6ed42bdb14360fd5",
+    "dependencies": [
+      "scribble-lib",
+      "expeditor-lib",
+      "racket-doc"
+    ],
+    "description": "documentation part of \"expeditor\"",
+    "license": "Apache-2.0",
+    "name": "expeditor-doc",
+    "source": {
+      "args": {
+        "hash": "sha256-OVhNT/oFXfzPjlhOzvzKyo/m1raJLTLds8vIbX4RKBk=",
+        "url": "https://github.com/racket/expeditor.git"
+      },
+      "method": "git",
+      "path": "expeditor-doc"
+    }
+  },
+  "expeditor-lib": {
+    "checksum": "aad241246d474725ae1a095f6ed42bdb14360fd5",
+    "dependencies": [
+      "syntax-color-lib"
+    ],
+    "description": "implementation (no documentation) part of \"expeditor\"",
+    "license": "Apache-2.0",
+    "name": "expeditor-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-MgXsC8EtRD3fBbjtc0MV5nFwyHuSo8ulzBXvf6BFpFU=",
+        "url": "https://github.com/racket/expeditor.git"
+      },
+      "method": "git",
+      "path": "expeditor-lib"
+    }
+  },
+  "frtime": {
+    "checksum": "a3c93aeae3e3d2a421afb7269ff282c573507cd0",
+    "dependencies": [
+      "srfi-lite-lib",
+      "compatibility-lib",
+      "drracket",
+      "gui-lib",
+      "pict-lib",
+      "string-constants-lib",
+      "draw-doc",
+      "gui-doc",
+      "racket-doc",
+      "scribble-lib",
+      "rackunit"
+    ],
+    "description": "The implementation of the FrTime language",
+    "license": "Apache-2.0",
+    "name": "frtime",
+    "source": {
+      "args": {
+        "hash": "sha256-pbkLZxdtO+1zQnEQ0ow3KgwHumdcU57X+WbvjawXv3k=",
+        "owner": "racket",
+        "repo": "frtime"
+      },
+      "method": "github"
+    }
+  },
+  "future-visualizer": {
+    "checksum": "cdbbb2c6530ad4dd9346dba247c41235727b7ecb",
+    "dependencies": [
+      "data-lib",
+      "draw-lib",
+      "pict-lib",
+      "gui-lib",
+      "future-visualizer-pict",
+      "scheme-lib",
+      "scribble-lib",
+      "racket-doc",
+      "rackunit-lib"
+    ],
+    "description": "Graphical performance tools for using futures",
+    "license": "Apache-2.0",
+    "name": "future-visualizer",
+    "source": {
+      "args": {
+        "hash": "sha256-oPrLtec07xCXNgZ+M1MG5MVmag2iam05ESLBoinR7ns=",
+        "owner": "racket",
+        "repo": "future-visualizer"
+      },
+      "method": "github",
+      "path": "future-visualizer"
+    }
+  },
+  "future-visualizer-pict": {
+    "checksum": "cdbbb2c6530ad4dd9346dba247c41235727b7ecb",
+    "dependencies": [
+      "data-lib",
+      "draw-lib",
+      "pict-lib"
+    ],
+    "description": "The drawing and data representation portions of the future visualizer",
+    "license": "Apache-2.0",
+    "name": "future-visualizer-pict",
+    "source": {
+      "args": {
+        "hash": "sha256-wG1pqtjyIsaCrOu/N6528ASRtosK3mxTGaXJicVrIzA=",
+        "url": "https://github.com/racket/future-visualizer.git"
+      },
+      "method": "git",
+      "path": "future-visualizer-pict"
+    }
+  },
+  "future-visualizer-typed": {
+    "checksum": "cdbbb2c6530ad4dd9346dba247c41235727b7ecb",
+    "dependencies": [
+      "future-visualizer",
+      "typed-racket-lib"
+    ],
+    "description": "type declarations for \"future-visualizer\"",
+    "license": "Apache-2.0",
+    "name": "future-visualizer-typed",
+    "source": {
+      "args": {
+        "hash": "sha256-oPrLtec07xCXNgZ+M1MG5MVmag2iam05ESLBoinR7ns=",
+        "owner": "racket",
+        "repo": "future-visualizer"
+      },
+      "method": "github",
+      "path": "future-visualizer-typed"
+    }
+  },
+  "games": {
+    "checksum": "eba5c6fa54c524871badb8b0e205fe37640d6c3e",
+    "dependencies": [
+      "draw-lib",
+      "drracket",
+      "gui-lib",
+      "net-lib",
+      "htdp-lib",
+      "math-lib",
+      "scribble-lib",
+      "racket-index",
+      "sgl",
+      "srfi-lib",
+      "string-constants-lib",
+      "data-enumerate-lib",
+      "typed-racket-lib",
+      "typed-racket-more",
+      "draw-doc",
+      "gui-doc",
+      "racket-doc",
+      "pict-lib",
+      "rackunit-lib",
+      "htdp-doc"
+    ],
+    "description": "Games",
+    "license": "Apache-2.0",
+    "name": "games",
+    "source": {
+      "args": {
+        "hash": "sha256-8VNv7O8DnYrhMFn46uGFpE28oFsWsO4qRUkjkpd1548=",
+        "owner": "racket",
+        "repo": "games"
+      },
+      "method": "github"
+    }
+  },
+  "gui": {
+    "checksum": "cb920d90d8a6867860a9b1bb41f85355fd44852e",
+    "dependencies": [
+      "gui-lib",
+      "gui-doc"
+    ],
+    "description": "Graphical user interface toolkit",
+    "license": "Apache-2.0",
+    "name": "gui",
+    "source": {
+      "args": {
+        "hash": "sha256-DifgPG7zk8FBWfX1fhqUfql83vFCfyJp4Ag5tUNkAc8=",
+        "owner": "racket",
+        "repo": "gui"
+      },
+      "method": "github",
+      "path": "gui"
+    }
+  },
+  "gui-doc": {
+    "checksum": "cb920d90d8a6867860a9b1bb41f85355fd44852e",
+    "dependencies": [
+      "scheme-lib",
+      "syntax-color-doc",
+      "at-exp-lib",
+      "draw-doc",
+      "draw-lib",
+      "scribble-lib",
+      "snip-lib",
+      "string-constants-lib",
+      "syntax-color-lib",
+      "wxme-lib",
+      "gui-lib",
+      "pict-lib",
+      "racket-doc",
+      "string-constants-doc",
+      "simple-tree-text-markup-doc"
+    ],
+    "description": "documentation part of \"gui\"",
+    "license": "Apache-2.0",
+    "name": "gui-doc",
+    "source": {
+      "args": {
+        "hash": "sha256-DifgPG7zk8FBWfX1fhqUfql83vFCfyJp4Ag5tUNkAc8=",
+        "owner": "racket",
+        "repo": "gui"
+      },
+      "method": "github",
+      "path": "gui-doc"
+    }
+  },
+  "gui-lib": {
+    "checksum": "cb920d90d8a6867860a9b1bb41f85355fd44852e",
+    "dependencies": [
+      "srfi-lite-lib",
+      "data-lib",
+      "icons",
+      "syntax-color-lib",
+      "draw-lib",
+      "snip-lib",
+      "wxme-lib",
+      "pict-lib",
+      "scheme-lib",
+      "scribble-lib",
+      "string-constants-lib",
+      "option-contract-lib",
+      "2d-lib",
+      "compatibility-lib",
+      "tex-table",
+      "simple-tree-text-markup-lib",
+      "at-exp-lib",
+      "rackunit-lib"
+    ],
+    "description": "implementation (no documentation) part of \"gui\"",
+    "license": "Apache-2.0",
+    "name": "gui-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-DifgPG7zk8FBWfX1fhqUfql83vFCfyJp4Ag5tUNkAc8=",
+        "owner": "racket",
+        "repo": "gui"
+      },
+      "method": "github",
+      "path": "gui-lib"
+    }
+  },
+  "gui-pkg-manager-lib": {
+    "checksum": "1cbf111b5a11d5461d1b176c0c2d02660e5cb5dd",
+    "dependencies": [
+      "gui-lib",
+      "string-constants-lib"
+    ],
+    "description": "implementation (no documentation) part of \"gui-pkg-manager\"",
+    "license": "Apache-2.0",
+    "name": "gui-pkg-manager-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-9GIF4POUCni+VABw5tRbY/OtZs6XlMQkxHNXPiZAiAg=",
+        "owner": "racket",
+        "repo": "gui-pkg-manager"
+      },
+      "method": "github",
+      "path": "gui-pkg-manager-lib"
+    }
+  },
+  "htdp": {
+    "checksum": "70daff078c3cace89e6eba7ae43907f6f4974d45",
+    "dependencies": [
+      "htdp-lib",
+      "htdp-doc"
+    ],
+    "description": "Teaching languages for _How to Design Programs_",
+    "license": "Apache-2.0",
+    "name": "htdp",
+    "source": {
+      "args": {
+        "hash": "sha256-qa9eSuyJeLW2Wzs8/s6/PnXikYe6a0/oOK4zcPNN/Ts=",
+        "owner": "racket",
+        "repo": "htdp"
+      },
+      "method": "github",
+      "path": "htdp"
+    }
+  },
+  "htdp-doc": {
+    "checksum": "70daff078c3cace89e6eba7ae43907f6f4974d45",
+    "dependencies": [
+      "scribble-lib",
+      "at-exp-lib",
+      "draw-lib",
+      "gui-lib",
+      "htdp-lib",
+      "plai",
+      "sandbox-lib",
+      "pict-lib",
+      "mzscheme-doc",
+      "scheme-lib",
+      "compatibility-doc",
+      "draw-doc",
+      "drracket",
+      "gui-doc",
+      "pict-doc",
+      "racket-doc"
+    ],
+    "description": "documentation part of \"htdp\"",
+    "license": "Apache-2.0",
+    "name": "htdp-doc",
+    "source": {
+      "args": {
+        "hash": "sha256-qa9eSuyJeLW2Wzs8/s6/PnXikYe6a0/oOK4zcPNN/Ts=",
+        "owner": "racket",
+        "repo": "htdp"
+      },
+      "method": "github",
+      "path": "htdp-doc"
+    }
+  },
+  "htdp-lib": {
+    "checksum": "70daff078c3cace89e6eba7ae43907f6f4974d45",
+    "dependencies": [
+      "compatibility-lib",
+      "draw-lib",
+      "drracket-plugin-lib",
+      "errortrace-lib",
+      "html-lib",
+      "images-gui-lib",
+      "images-lib",
+      "net-lib",
+      "pconvert-lib",
+      "plai-lib",
+      "r5rs-lib",
+      "sandbox-lib",
+      "scheme-lib",
+      "scribble-lib",
+      "simple-tree-text-markup-lib",
+      "slideshow-lib",
+      "snip-lib",
+      "srfi-lite-lib",
+      "string-constants-lib",
+      "typed-racket-lib",
+      "typed-racket-more",
+      "web-server-lib",
+      "wxme-lib",
+      "gui-lib",
+      "deinprogramm-signature",
+      "pict-lib",
+      "racket-index",
+      "at-exp-lib",
+      "rackunit-lib"
+    ],
+    "description": "implementation (no documentation) part of \"htdp\"",
+    "license": "Apache-2.0",
+    "name": "htdp-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-qa9eSuyJeLW2Wzs8/s6/PnXikYe6a0/oOK4zcPNN/Ts=",
+        "owner": "racket",
+        "repo": "htdp"
+      },
+      "method": "github",
+      "path": "htdp-lib"
+    }
+  },
+  "html": {
+    "checksum": "9331d4f7169f8c5932f8d2ae721b2a96515ac895",
+    "dependencies": [
+      "html-lib",
+      "html-doc"
+    ],
+    "description": "HTML parsing and generation",
+    "license": "Apache-2.0",
+    "name": "html",
+    "source": {
+      "args": {
+        "hash": "sha256-XXSrALigIzClg+ZN3vBDAKNlC4r3NrQtYna6/6SVwaI=",
+        "owner": "racket",
+        "repo": "html"
+      },
+      "method": "github",
+      "path": "html"
+    }
+  },
+  "html-doc": {
+    "checksum": "9331d4f7169f8c5932f8d2ae721b2a96515ac895",
+    "dependencies": [
+      "scribble-lib",
+      "html-lib",
+      "racket-doc"
+    ],
+    "description": "documentation part of \"html\"",
+    "license": "Apache-2.0",
+    "name": "html-doc",
+    "source": {
+      "args": {
+        "hash": "sha256-XXSrALigIzClg+ZN3vBDAKNlC4r3NrQtYna6/6SVwaI=",
+        "owner": "racket",
+        "repo": "html"
+      },
+      "method": "github",
+      "path": "html-doc"
+    }
+  },
+  "html-lib": {
+    "checksum": "9331d4f7169f8c5932f8d2ae721b2a96515ac895",
+    "description": "implementation (no documentation) part of \"html\"",
+    "license": "Apache-2.0",
+    "name": "html-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-XXSrALigIzClg+ZN3vBDAKNlC4r3NrQtYna6/6SVwaI=",
+        "owner": "racket",
+        "repo": "html"
+      },
+      "method": "github",
+      "path": "html-lib"
+    }
+  },
+  "icons": {
+    "checksum": "14b164c20e1214ffa1e7585d0b6597d5c3f0351a",
+    "description": "An assortment of images",
+    "license": "Apache-2.0",
+    "name": "icons",
+    "source": {
+      "args": {
+        "hash": "sha256-573QMj4ihyD0Gse/iBbCp6ET8MGi7rNMbm48F4I0qug=",
+        "owner": "racket",
+        "repo": "icons"
+      },
+      "method": "github"
+    }
+  },
+  "images": {
+    "checksum": "b3d032087d9544a0561b61fedc09adc2c63ed29d",
+    "dependencies": [
+      "images-lib",
+      "images-gui-lib",
+      "images-doc"
+    ],
+    "description": "Functions (and docs and tests) for constructing icons and logos",
+    "license": "Apache-2.0",
+    "name": "images",
+    "source": {
+      "args": {
+        "hash": "sha256-1G0ccYJ4iiTW96z35j0NP+mTa6CNBjgRqAUvMjju8mY=",
+        "owner": "racket",
+        "repo": "images"
+      },
+      "method": "github",
+      "path": "images"
+    }
+  },
+  "images-doc": {
+    "checksum": "b3d032087d9544a0561b61fedc09adc2c63ed29d",
+    "dependencies": [
+      "images-lib",
+      "draw-doc",
+      "gui-doc",
+      "pict-doc",
+      "slideshow-doc",
+      "typed-racket-doc",
+      "draw-lib",
+      "gui-lib",
+      "pict-lib",
+      "racket-doc",
+      "scribble-lib",
+      "slideshow-lib",
+      "typed-racket-lib"
+    ],
+    "description": "Documentation for images-lib",
+    "license": "Apache-2.0",
+    "name": "images-doc",
+    "source": {
+      "args": {
+        "hash": "sha256-1G0ccYJ4iiTW96z35j0NP+mTa6CNBjgRqAUvMjju8mY=",
+        "owner": "racket",
+        "repo": "images"
+      },
+      "method": "github",
+      "path": "images-doc"
+    }
+  },
+  "images-gui-lib": {
+    "checksum": "b3d032087d9544a0561b61fedc09adc2c63ed29d",
+    "dependencies": [
+      "draw-lib",
+      "gui-lib",
+      "string-constants-lib"
+    ],
+    "description": "Functions for constructing icons and logos",
+    "license": "Apache-2.0",
+    "name": "images-gui-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-1G0ccYJ4iiTW96z35j0NP+mTa6CNBjgRqAUvMjju8mY=",
+        "owner": "racket",
+        "repo": "images"
+      },
+      "method": "github",
+      "path": "images-gui-lib"
+    }
+  },
+  "images-lib": {
+    "checksum": "b3d032087d9544a0561b61fedc09adc2c63ed29d",
+    "dependencies": [
+      "draw-lib",
+      "typed-racket-lib",
+      "scribble-lib"
+    ],
+    "description": "Functions for constructing icons and logos",
+    "license": "Apache-2.0",
+    "name": "images-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-1G0ccYJ4iiTW96z35j0NP+mTa6CNBjgRqAUvMjju8mY=",
+        "owner": "racket",
+        "repo": "images"
+      },
+      "method": "github",
+      "path": "images-lib"
+    }
+  },
+  "lazy": {
+    "checksum": "985fb8dde464388b52efb6654f87c61b5ec56ddc",
+    "dependencies": [
+      "drracket-plugin-lib",
+      "htdp-lib",
+      "string-constants-lib",
+      "compatibility-lib",
+      "mzscheme-doc",
+      "scheme-lib",
+      "eli-tester",
+      "racket-doc",
+      "scribble-lib"
+    ],
+    "description": "The implementation of the Lazy Racket language",
+    "license": "Apache-2.0",
+    "name": "lazy",
+    "source": {
+      "args": {
+        "hash": "sha256-g9hHt4xFmmUTguuZ5iHBRqGTStxNnhekM1wdGEGbyGY=",
+        "owner": "racket",
+        "repo": "lazy"
+      },
+      "method": "github"
+    }
+  },
+  "macro-debugger": {
+    "checksum": "047c36a4d6a0b15a31d0fa7509999b9bf2c5f295",
+    "dependencies": [
+      "class-iop-lib",
+      "compatibility-lib",
+      "data-lib",
+      "gui-lib",
+      "images-lib",
+      "images-gui-lib",
+      "parser-tools-lib",
+      "macro-debugger-text-lib",
+      "snip-lib",
+      "wxme-lib",
+      "draw-lib",
+      "racket-index",
+      "rackunit-lib",
+      "scribble-lib",
+      "racket-doc"
+    ],
+    "description": "The macro debugger tool",
+    "license": "Apache-2.0",
+    "name": "macro-debugger",
+    "source": {
+      "args": {
+        "hash": "sha256-L7xVlBNvjic5f/tPv0jvhoZe+X6TjFs1c2pt1S85a4w=",
+        "owner": "racket",
+        "repo": "macro-debugger"
+      },
+      "method": "github",
+      "path": "macro-debugger"
+    }
+  },
+  "macro-debugger-text-lib": {
+    "checksum": "047c36a4d6a0b15a31d0fa7509999b9bf2c5f295",
+    "dependencies": [
+      "db-lib",
+      "class-iop-lib",
+      "parser-tools-lib"
+    ],
+    "description": "The macro debugger tool with a console interface",
+    "license": "Apache-2.0",
+    "name": "macro-debugger-text-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-L7xVlBNvjic5f/tPv0jvhoZe+X6TjFs1c2pt1S85a4w=",
+        "owner": "racket",
+        "repo": "macro-debugger"
+      },
+      "method": "github",
+      "path": "macro-debugger-text-lib"
+    }
+  },
+  "main-distribution": {
+    "checksum": "df36b6bb46f038f6e22a19b7b9d7d061b9631600",
+    "dependencies": [
+      "2d",
+      "algol60",
+      "at-exp-lib",
+      "compatibility",
+      "contract-profile",
+      "compiler",
+      "data",
+      "datalog",
+      "db",
+      "deinprogramm",
+      "draw",
+      "draw-doc",
+      "draw-lib",
+      "drracket",
+      "drracket-tool",
+      "eopl",
+      "expeditor",
+      "errortrace",
+      "future-visualizer",
+      "future-visualizer-typed",
+      "frtime",
+      "games",
+      "gui",
+      "htdp",
+      "html",
+      "icons",
+      "images",
+      "lazy",
+      "macro-debugger",
+      "macro-debugger-text-lib",
+      "make",
+      "math",
+      "mysterx",
+      "mzcom",
+      "mzscheme",
+      "net",
+      "net-cookies",
+      "optimization-coach",
+      "option-contract",
+      "parser-tools",
+      "pconvert-lib",
+      "pict",
+      "pict-snip",
+      "picturing-programs",
+      "plai",
+      "planet",
+      "plot",
+      "preprocessor",
+      "profile",
+      "r5rs",
+      "r6rs",
+      "racket-doc",
+      "distributed-places",
+      "racket-cheat",
+      "racket-index",
+      "racklog",
+      "rackunit",
+      "rackunit-typed",
+      "readline",
+      "realm",
+      "redex",
+      "sandbox-lib",
+      "sasl",
+      "schemeunit",
+      "scribble",
+      "serialize-cstruct-lib",
+      "sgl",
+      "shell-completion",
+      "simple-tree-text-markup",
+      "slatex",
+      "slideshow",
+      "snip",
+      "srfi",
+      "string-constants",
+      "swindle",
+      "syntax-color",
+      "trace",
+      "typed-racket",
+      "typed-racket-more",
+      "unix-socket",
+      "web-server",
+      "wxme",
+      "xrepl",
+      "ds-store"
+    ],
+    "description": "A package that combines all of the packages in the main Racket distribution",
+    "license": "Apache-2.0",
+    "name": "main-distribution",
+    "source": {
+      "args": {
+        "hash": "sha256-/uCPD88ZQsYLnImX6FWpjXmJaKqZe2KfUEQhLYZOVlQ=",
+        "owner": "racket",
+        "repo": "main-distribution"
+      },
+      "method": "github"
+    }
+  },
+  "make": {
+    "checksum": "7493795aba151f7164caf497003746dd049b8ae4",
+    "dependencies": [
+      "scheme-lib",
+      "cext-lib",
+      "compiler-lib",
+      "compatibility-lib",
+      "racket-doc",
+      "scribble-lib"
+    ],
+    "description": "Simple timestamp- and dependency-triggered actions",
+    "license": "Apache-2.0",
+    "name": "make",
+    "source": {
+      "args": {
+        "hash": "sha256-SosHIrR9DqeTkAGsRwj0xb/pztAptcEMyeUvMKQTBYE=",
+        "owner": "racket",
+        "repo": "make"
+      },
+      "method": "github"
+    }
+  },
+  "math": {
+    "checksum": "f69552c38622b46823341db1a2fd7a097b236007",
+    "dependencies": [
+      "math-lib",
+      "math-doc"
+    ],
+    "description": "Functions and data structures useful for working with numbers and collections of numbers, along with docs and tests",
+    "license": "Apache-2.0",
+    "name": "math",
+    "source": {
+      "args": {
+        "hash": "sha256-I3tS+ZnzzVoaZysrB9yGpwRcOpIvKISaQ0V8mW6Ffb8=",
+        "owner": "racket",
+        "repo": "math"
+      },
+      "method": "github",
+      "path": "math"
+    }
+  },
+  "math-doc": {
+    "checksum": "f69552c38622b46823341db1a2fd7a097b236007",
+    "dependencies": [
+      "at-exp-lib",
+      "math-lib",
+      "plot-doc",
+      "plot-gui-lib",
+      "racket-doc",
+      "sandbox-lib",
+      "scribble-lib",
+      "typed-racket-doc",
+      "typed-racket-lib",
+      "2d-lib"
+    ],
+    "description": "Math library documentation",
+    "license": "Apache-2.0",
+    "name": "math-doc",
+    "source": {
+      "args": {
+        "hash": "sha256-I3tS+ZnzzVoaZysrB9yGpwRcOpIvKISaQ0V8mW6Ffb8=",
+        "owner": "racket",
+        "repo": "math"
+      },
+      "method": "github",
+      "path": "math-doc"
+    }
+  },
+  "math-lib": {
+    "checksum": "f69552c38622b46823341db1a2fd7a097b236007",
+    "dependencies": [
+      "r6rs-lib",
+      "typed-racket-lib"
+    ],
+    "description": "Math library",
+    "license": "Apache-2.0",
+    "name": "math-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-I3tS+ZnzzVoaZysrB9yGpwRcOpIvKISaQ0V8mW6Ffb8=",
+        "owner": "racket",
+        "repo": "math"
+      },
+      "method": "github",
+      "path": "math-lib"
+    }
+  },
+  "mysterx": {
+    "checksum": "905834527683db700b87ba2b510c07aa0c688de4",
+    "dependencies": [
+      "scheme-lib",
+      "racket-doc",
+      "at-exp-lib",
+      "scribble-lib"
+    ],
+    "description": "Legacy library for working with COM on Windows",
+    "license": "Apache-2.0",
+    "name": "mysterx",
+    "source": {
+      "args": {
+        "hash": "sha256-iGTf5J9g3ixY9BkiXFAISOx8etdEM0DhjxBwp/KX6YY=",
+        "owner": "racket",
+        "repo": "mysterx"
+      },
+      "method": "github"
+    }
+  },
+  "mzcom": {
+    "checksum": "14a3d57e7020e5fc65d60d20849ca6378f4d4def",
+    "dependencies": [
+      "compatibility-lib",
+      "scheme-lib",
+      "racket-doc",
+      "mysterx",
+      "scribble-lib"
+    ],
+    "description": "COM control to instantate a Racket instance",
+    "license": "Apache-2.0",
+    "name": "mzcom",
+    "source": {
+      "args": {
+        "hash": "sha256-RJm43H8Ja33ms17kirbQpYeozV+RbQzfV6Xyd6S7iWU=",
+        "owner": "racket",
+        "repo": "mzcom"
+      },
+      "method": "github"
+    }
+  },
+  "mzscheme": {
+    "checksum": "64d63a78795b4bf3f9ac451ff727ae45183d4cb5",
+    "dependencies": [
+      "mzscheme-lib",
+      "mzscheme-doc"
+    ],
+    "description": "The legacy MzScheme language",
+    "license": "Apache-2.0",
+    "name": "mzscheme",
+    "source": {
+      "args": {
+        "hash": "sha256-XUvoCLCpesFHRiSNiXGN+h+yHdH1HscUndUQbD/MfhI=",
+        "owner": "racket",
+        "repo": "mzscheme"
+      },
+      "method": "github",
+      "path": "mzscheme"
+    }
+  },
+  "mzscheme-doc": {
+    "checksum": "64d63a78795b4bf3f9ac451ff727ae45183d4cb5",
+    "dependencies": [
+      "compatibility-lib",
+      "r5rs-doc",
+      "r5rs-lib",
+      "racket-doc",
+      "scheme-lib",
+      "scheme-doc",
+      "scribble-lib"
+    ],
+    "description": "documentation part of \"mzscheme\"",
+    "license": "Apache-2.0",
+    "name": "mzscheme-doc",
+    "source": {
+      "args": {
+        "hash": "sha256-XUvoCLCpesFHRiSNiXGN+h+yHdH1HscUndUQbD/MfhI=",
+        "owner": "racket",
+        "repo": "mzscheme"
+      },
+      "method": "github",
+      "path": "mzscheme-doc"
+    }
+  },
+  "mzscheme-lib": {
+    "checksum": "64d63a78795b4bf3f9ac451ff727ae45183d4cb5",
+    "dependencies": [
+      "scheme-lib"
+    ],
+    "description": "implementation (no documentation) part of \"mzscheme\"",
+    "license": "Apache-2.0",
+    "name": "mzscheme-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-XUvoCLCpesFHRiSNiXGN+h+yHdH1HscUndUQbD/MfhI=",
+        "owner": "racket",
+        "repo": "mzscheme"
+      },
+      "method": "github",
+      "path": "mzscheme-lib"
+    }
+  },
+  "net": {
+    "checksum": "458013dc341deb3072b1a667e407482c0ba855aa",
+    "dependencies": [
+      "net-lib",
+      "net-doc"
+    ],
+    "description": "Networking libraries",
+    "license": "Apache-2.0",
+    "name": "net",
+    "source": {
+      "args": {
+        "hash": "sha256-WXkJA6DNqQ54BMegdivL1AgwsACAIq/dO6dKA6U35bk=",
+        "owner": "racket",
+        "repo": "racket"
+      },
+      "method": "github",
+      "path": "pkgs/net"
+    }
+  },
+  "net-cookies": {
+    "checksum": "01bad8ad41f212bebc0d2019b3fc383faaaf7bef",
+    "dependencies": [
+      "net-cookies-lib",
+      "net-cookies-doc"
+    ],
+    "description": "RFC6265-compliant cookie handling for client and server",
+    "license": "Apache-2.0",
+    "name": "net-cookies",
+    "source": {
+      "args": {
+        "hash": "sha256-HCydwFQF/qTmYfLy/gBjAebQWuv829GbXwGgwk84dLk=",
+        "owner": "RenaissanceBug",
+        "repo": "racket-cookies"
+      },
+      "method": "github",
+      "path": "net-cookies"
+    }
+  },
+  "net-cookies-doc": {
+    "checksum": "01bad8ad41f212bebc0d2019b3fc383faaaf7bef",
+    "dependencies": [
+      "net-cookies-lib",
+      "racket-doc",
+      "web-server-lib",
+      "web-server-doc",
+      "net-doc",
+      "scribble-lib"
+    ],
+    "description": "RFC6265-compliant cookie handling for client and server (doc)",
+    "license": "Apache-2.0",
+    "name": "net-cookies-doc",
+    "source": {
+      "args": {
+        "hash": "sha256-HCydwFQF/qTmYfLy/gBjAebQWuv829GbXwGgwk84dLk=",
+        "owner": "RenaissanceBug",
+        "repo": "racket-cookies"
+      },
+      "method": "github",
+      "path": "net-cookies-doc"
+    }
+  },
+  "net-cookies-lib": {
+    "checksum": "01bad8ad41f212bebc0d2019b3fc383faaaf7bef",
+    "description": "RFC6265-compliant cookie handling for client and server (lib)",
+    "license": "Apache-2.0",
+    "name": "net-cookies-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-HCydwFQF/qTmYfLy/gBjAebQWuv829GbXwGgwk84dLk=",
+        "owner": "RenaissanceBug",
+        "repo": "racket-cookies"
+      },
+      "method": "github",
+      "path": "net-cookies-lib"
+    }
+  },
+  "net-doc": {
+    "checksum": "458013dc341deb3072b1a667e407482c0ba855aa",
+    "dependencies": [
+      "compatibility-lib",
+      "net-lib",
+      "racket-doc",
+      "scribble-lib"
+    ],
+    "description": "documentation part of \"net\"",
+    "license": "Apache-2.0",
+    "name": "net-doc",
+    "source": {
+      "args": {
+        "hash": "sha256-WXkJA6DNqQ54BMegdivL1AgwsACAIq/dO6dKA6U35bk=",
+        "owner": "racket",
+        "repo": "racket"
+      },
+      "method": "github",
+      "path": "pkgs/net-doc"
+    }
+  },
+  "net-lib": {
+    "checksum": "458013dc341deb3072b1a667e407482c0ba855aa",
+    "dependencies": [
+      "srfi-lite-lib"
+    ],
+    "description": "implementation (no documentation) part of \"net\"",
+    "license": "Apache-2.0",
+    "name": "net-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-WXkJA6DNqQ54BMegdivL1AgwsACAIq/dO6dKA6U35bk=",
+        "owner": "racket",
+        "repo": "racket"
+      },
+      "method": "github",
+      "path": "pkgs/net-lib"
+    }
+  },
+  "optimization-coach": {
+    "checksum": "dbd6cf06613bf285b4540301ea86dd87239eab7d",
+    "dependencies": [
+      "drracket",
+      "typed-racket-lib",
+      "profile-lib",
+      "rackunit-lib",
+      "gui-lib",
+      "data-lib",
+      "source-syntax",
+      "images-lib",
+      "sandbox-lib",
+      "string-constants-lib",
+      "scribble-lib"
+    ],
+    "description": "Optimization Coach Plug-In for DrRacket",
+    "license": "Apache-2.0",
+    "name": "optimization-coach",
+    "source": {
+      "args": {
+        "hash": "sha256-IWv1DCQF1ylJswJZPQQL7+6UVz4MIRsh+DCfhgjXRyw=",
+        "owner": "stamourv",
+        "repo": "optimization-coach"
+      },
+      "method": "github"
+    }
+  },
+  "option-contract": {
+    "checksum": "50d72f706ef944689e21b65a6c94b3c819989c59",
+    "dependencies": [
+      "option-contract-lib",
+      "option-contract-doc"
+    ],
+    "description": "Experimental libraries for option contracts",
+    "license": "Apache-2.0",
+    "name": "option-contract",
+    "source": {
+      "args": {
+        "hash": "sha256-6kLvaQdvTYerirwWtFpH3PMJJE21fXvZePdj4ztrJKQ=",
+        "owner": "racket",
+        "repo": "option-contract"
+      },
+      "method": "github",
+      "path": "option-contract"
+    }
+  },
+  "option-contract-doc": {
+    "checksum": "50d72f706ef944689e21b65a6c94b3c819989c59",
+    "dependencies": [
+      "option-contract-lib",
+      "scribble-lib",
+      "racket-doc"
+    ],
+    "description": "Documentation for \"option-contract\"",
+    "license": "Apache-2.0",
+    "name": "option-contract-doc",
+    "source": {
+      "args": {
+        "hash": "sha256-6kLvaQdvTYerirwWtFpH3PMJJE21fXvZePdj4ztrJKQ=",
+        "owner": "racket",
+        "repo": "option-contract"
+      },
+      "method": "github",
+      "path": "option-contract-doc"
+    }
+  },
+  "option-contract-lib": {
+    "checksum": "50d72f706ef944689e21b65a6c94b3c819989c59",
+    "description": "Implementation (no documentation) for \"option-contract\"",
+    "license": "Apache-2.0",
+    "name": "option-contract-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-6kLvaQdvTYerirwWtFpH3PMJJE21fXvZePdj4ztrJKQ=",
+        "owner": "racket",
+        "repo": "option-contract"
+      },
+      "method": "github",
+      "path": "option-contract-lib"
+    }
+  },
+  "parser-tools": {
+    "checksum": "1fe9d2d3f30302a744914d14f33683d9f8fd41bc",
+    "dependencies": [
+      "parser-tools-lib",
+      "parser-tools-doc"
+    ],
+    "description": "Lex- and Yacc-style parsing tools",
+    "license": "Apache-2.0",
+    "name": "parser-tools",
+    "source": {
+      "args": {
+        "hash": "sha256-6wLZS6y8xIzDC48W6g3ou7c+zMLA0VwPHQCbGc8VAkU=",
+        "owner": "racket",
+        "repo": "parser-tools"
+      },
+      "method": "github",
+      "path": "parser-tools"
+    }
+  },
+  "parser-tools-doc": {
+    "checksum": "1fe9d2d3f30302a744914d14f33683d9f8fd41bc",
+    "dependencies": [
+      "scheme-lib",
+      "racket-doc",
+      "syntax-color-doc",
+      "parser-tools-lib",
+      "scribble-lib"
+    ],
+    "description": "documentation part of \"parser-tools\"",
+    "license": "Apache-2.0",
+    "name": "parser-tools-doc",
+    "source": {
+      "args": {
+        "hash": "sha256-6wLZS6y8xIzDC48W6g3ou7c+zMLA0VwPHQCbGc8VAkU=",
+        "owner": "racket",
+        "repo": "parser-tools"
+      },
+      "method": "github",
+      "path": "parser-tools-doc"
+    }
+  },
+  "parser-tools-lib": {
+    "checksum": "1fe9d2d3f30302a744914d14f33683d9f8fd41bc",
+    "dependencies": [
+      "rackunit-lib"
+    ],
+    "description": "implementation (no documentation) part of \"parser-tools\"",
+    "license": "Apache-2.0",
+    "name": "parser-tools-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-6wLZS6y8xIzDC48W6g3ou7c+zMLA0VwPHQCbGc8VAkU=",
+        "owner": "racket",
+        "repo": "parser-tools"
+      },
+      "method": "github",
+      "path": "parser-tools-lib"
+    }
+  },
+  "pconvert-lib": {
+    "checksum": "0a09c615441004773c75edebcb91b35fc9a5243b",
+    "dependencies": [
+      "compatibility-lib"
+    ],
+    "description": "Legacy library for printing Racket values",
+    "license": "Apache-2.0",
+    "name": "pconvert-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-qLZ+xAs/oITbOKlLGl1HLlYBIs+BDK+LNFFhdW6uZy0=",
+        "owner": "racket",
+        "repo": "pconvert"
+      },
+      "method": "github",
+      "path": "pconvert-lib"
+    }
+  },
+  "pict": {
+    "checksum": "0948ecd79f58338d571d17ce4f724dbf2356ebf6",
+    "dependencies": [
+      "pict-lib",
+      "pict-doc"
+    ],
+    "description": "Building pictures with functional combinators",
+    "license": "Apache-2.0",
+    "name": "pict",
+    "source": {
+      "args": {
+        "hash": "sha256-JeGHIGwEGKBZThyGm6JmEWd3LrBAPKwSedjE7wmhBaM=",
+        "owner": "racket",
+        "repo": "pict"
+      },
+      "method": "github",
+      "path": "pict"
+    }
+  },
+  "pict-doc": {
+    "checksum": "0948ecd79f58338d571d17ce4f724dbf2356ebf6",
+    "dependencies": [
+      "mzscheme-doc",
+      "draw-doc",
+      "gui-doc",
+      "slideshow-doc",
+      "draw-lib",
+      "gui-lib",
+      "scribble-lib",
+      "slideshow-lib",
+      "pict-lib",
+      "racket-doc",
+      "scribble-doc"
+    ],
+    "description": "documentation part of \"pict\"",
+    "license": "Apache-2.0",
+    "name": "pict-doc",
+    "source": {
+      "args": {
+        "hash": "sha256-JeGHIGwEGKBZThyGm6JmEWd3LrBAPKwSedjE7wmhBaM=",
+        "owner": "racket",
+        "repo": "pict"
+      },
+      "method": "github",
+      "path": "pict-doc"
+    }
+  },
+  "pict-lib": {
+    "checksum": "0948ecd79f58338d571d17ce4f724dbf2356ebf6",
+    "dependencies": [
+      "scheme-lib",
+      "compatibility-lib",
+      "draw-lib",
+      "syntax-color-lib",
+      "rackunit-lib"
+    ],
+    "description": "implementation (no documentation) part of \"pict\"",
+    "license": "Apache-2.0",
+    "name": "pict-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-JeGHIGwEGKBZThyGm6JmEWd3LrBAPKwSedjE7wmhBaM=",
+        "owner": "racket",
+        "repo": "pict"
+      },
+      "method": "github",
+      "path": "pict-lib"
+    }
+  },
+  "pict-snip": {
+    "checksum": "cd389ba6471a045c791e2dd6e483e356017499d8",
+    "dependencies": [
+      "pict-snip-lib",
+      "pict-snip-doc"
+    ],
+    "description": "Build snips out of picts",
+    "license": "Apache-2.0",
+    "name": "pict-snip",
+    "source": {
+      "args": {
+        "hash": "sha256-3Tw7SYVsZG/tiM3+SFX5c0jg4MLQBM37ccQCRXzkNiA=",
+        "owner": "racket",
+        "repo": "pict-snip"
+      },
+      "method": "github",
+      "path": "pict-snip"
+    }
+  },
+  "pict-snip-doc": {
+    "checksum": "cd389ba6471a045c791e2dd6e483e356017499d8",
+    "dependencies": [
+      "pict-snip-lib",
+      "gui-doc",
+      "pict-doc",
+      "pict-lib",
+      "racket-doc",
+      "scribble-lib",
+      "snip-lib"
+    ],
+    "description": "documentation part of \"pict\"",
+    "license": "Apache-2.0",
+    "name": "pict-snip-doc",
+    "source": {
+      "args": {
+        "hash": "sha256-3Tw7SYVsZG/tiM3+SFX5c0jg4MLQBM37ccQCRXzkNiA=",
+        "owner": "racket",
+        "repo": "pict-snip"
+      },
+      "method": "github",
+      "path": "pict-snip-doc"
+    }
+  },
+  "pict-snip-lib": {
+    "checksum": "cd389ba6471a045c791e2dd6e483e356017499d8",
+    "dependencies": [
+      "draw-lib",
+      "snip-lib",
+      "pict-lib",
+      "wxme-lib",
+      "rackunit-lib",
+      "gui-lib"
+    ],
+    "description": "implementation (no documentation) part of \"pict-snip\"",
+    "license": "Apache-2.0",
+    "name": "pict-snip-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-3Tw7SYVsZG/tiM3+SFX5c0jg4MLQBM37ccQCRXzkNiA=",
+        "owner": "racket",
+        "repo": "pict-snip"
+      },
+      "method": "github",
+      "path": "pict-snip-lib"
+    }
+  },
+  "picturing-programs": {
+    "checksum": "23fc427fed7cfe81d2a84644333ce797c98a0a08",
+    "dependencies": [
+      "draw-lib",
+      "gui-lib",
+      "snip-lib",
+      "htdp-lib",
+      "racket-doc",
+      "htdp-doc",
+      "scribble-lib"
+    ],
+    "description": "Teaching libraries for _Picturing Programs_",
+    "license": "Apache-2.0",
+    "name": "picturing-programs",
+    "source": {
+      "args": {
+        "hash": "sha256-ns8+ETk0KJMXUoKhubsj8xB+uM1v2xAOWUcgm7g1bag=",
+        "owner": "racket",
+        "repo": "picturing-programs"
+      },
+      "method": "github"
+    }
+  },
+  "plai": {
+    "checksum": "96c8807a2acde9249f124498e46650223a47e24a",
+    "dependencies": [
+      "plai-doc",
+      "plai-lib"
+    ],
+    "description": "Teaching languages for _Programming Languages: Application and Interpretation_",
+    "license": "Apache-2.0",
+    "name": "plai",
+    "source": {
+      "args": {
+        "hash": "sha256-WDXMJtxS7BzgaWy3MW1pBqUcE7ZAOVKBBZmL+XOll+0=",
+        "owner": "racket",
+        "repo": "plai"
+      },
+      "method": "github",
+      "path": "plai"
+    }
+  },
+  "plai-doc": {
+    "checksum": "96c8807a2acde9249f124498e46650223a47e24a",
+    "dependencies": [
+      "scheme-lib",
+      "srfi-lite-lib",
+      "gui-lib",
+      "sandbox-lib",
+      "web-server-lib",
+      "plai-lib",
+      "at-exp-lib",
+      "scheme-doc",
+      "eli-tester",
+      "pconvert-lib",
+      "rackunit-lib",
+      "racket-doc",
+      "web-server-doc",
+      "scribble-lib",
+      "drracket-tool-lib"
+    ],
+    "description": "Documentation for teaching languages for _Programming Languages: Application and Interpretation_",
+    "license": "Apache-2.0",
+    "name": "plai-doc",
+    "source": {
+      "args": {
+        "hash": "sha256-WDXMJtxS7BzgaWy3MW1pBqUcE7ZAOVKBBZmL+XOll+0=",
+        "owner": "racket",
+        "repo": "plai"
+      },
+      "method": "github",
+      "path": "plai-doc"
+    }
+  },
+  "plai-lib": {
+    "checksum": "96c8807a2acde9249f124498e46650223a47e24a",
+    "dependencies": [
+      "scheme-lib",
+      "srfi-lite-lib",
+      "gui-lib",
+      "draw-lib",
+      "sandbox-lib",
+      "web-server-lib",
+      "at-exp-lib",
+      "eli-tester",
+      "pconvert-lib",
+      "rackunit-lib",
+      "drracket-tool-lib"
+    ],
+    "description": "Implementation (no documentation) for teaching languages for _Programming Languages: Application and Interpretation_",
+    "license": "Apache-2.0",
+    "name": "plai-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-WDXMJtxS7BzgaWy3MW1pBqUcE7ZAOVKBBZmL+XOll+0=",
+        "owner": "racket",
+        "repo": "plai"
+      },
+      "method": "github",
+      "path": "plai-lib"
+    }
+  },
+  "planet": {
+    "checksum": "350f5da48d98303fe6ee510892c958ed46766154",
+    "dependencies": [
+      "planet-lib",
+      "planet-doc"
+    ],
+    "description": "Legacy support for automatic package distribution",
+    "license": "Apache-2.0",
+    "name": "planet",
+    "source": {
+      "args": {
+        "hash": "sha256-iRekAXe3sgyrADrUgcroLP9Z2KcQmklC9lK2mn/GXmQ=",
+        "owner": "racket",
+        "repo": "planet"
+      },
+      "method": "github",
+      "path": "planet"
+    }
+  },
+  "planet-doc": {
+    "checksum": "350f5da48d98303fe6ee510892c958ed46766154",
+    "dependencies": [
+      "planet-lib",
+      "scribble-lib",
+      "racket-doc",
+      "scribble-doc"
+    ],
+    "description": "documentation part of \"planet\"",
+    "license": "Apache-2.0",
+    "name": "planet-doc",
+    "source": {
+      "args": {
+        "hash": "sha256-iRekAXe3sgyrADrUgcroLP9Z2KcQmklC9lK2mn/GXmQ=",
+        "owner": "racket",
+        "repo": "planet"
+      },
+      "method": "github",
+      "path": "planet-doc"
+    }
+  },
+  "planet-lib": {
+    "checksum": "350f5da48d98303fe6ee510892c958ed46766154",
+    "dependencies": [
+      "srfi-lite-lib"
+    ],
+    "description": "implementation (no documentation) part of \"planet\"",
+    "license": "Apache-2.0",
+    "name": "planet-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-iRekAXe3sgyrADrUgcroLP9Z2KcQmklC9lK2mn/GXmQ=",
+        "owner": "racket",
+        "repo": "planet"
+      },
+      "method": "github",
+      "path": "planet-lib"
+    }
+  },
+  "plot": {
+    "checksum": "a14222e19736f75bdb9c660ca9c3b78c6e2ee9b3",
+    "dependencies": [
+      "plot-lib",
+      "plot-gui-lib",
+      "plot-doc"
+    ],
+    "description": "Functions (and docs and tests) for plotting",
+    "license": "Apache-2.0",
+    "name": "plot",
+    "source": {
+      "args": {
+        "hash": "sha256-Qs7ARwALTU/NlHGI5kZr6VA1+W5DPDu6H7B2aUmOdWo=",
+        "owner": "racket",
+        "repo": "plot"
+      },
+      "method": "github",
+      "path": "plot"
+    }
+  },
+  "plot-compat": {
+    "checksum": "a14222e19736f75bdb9c660ca9c3b78c6e2ee9b3",
+    "dependencies": [
+      "plot-gui-lib",
+      "draw-lib",
+      "plot-lib",
+      "snip-lib"
+    ],
+    "description": "Compatibility library for Plot 5.1.3 and earlier",
+    "license": "Apache-2.0",
+    "name": "plot-compat",
+    "source": {
+      "args": {
+        "hash": "sha256-Qs7ARwALTU/NlHGI5kZr6VA1+W5DPDu6H7B2aUmOdWo=",
+        "owner": "racket",
+        "repo": "plot"
+      },
+      "method": "github",
+      "path": "plot-compat"
+    }
+  },
+  "plot-doc": {
+    "checksum": "a14222e19736f75bdb9c660ca9c3b78c6e2ee9b3",
+    "dependencies": [
+      "plot-lib",
+      "plot-gui-lib",
+      "db-doc",
+      "db-lib",
+      "draw-doc",
+      "draw-lib",
+      "gui-doc",
+      "gui-lib",
+      "pict-doc",
+      "pict-lib",
+      "plot-compat",
+      "racket-doc",
+      "scribble-lib",
+      "slideshow-doc",
+      "slideshow-lib",
+      "srfi-doc",
+      "math-lib",
+      "math-doc"
+    ],
+    "description": "Documentation for plot",
+    "license": "Apache-2.0",
+    "name": "plot-doc",
+    "source": {
+      "args": {
+        "hash": "sha256-Qs7ARwALTU/NlHGI5kZr6VA1+W5DPDu6H7B2aUmOdWo=",
+        "owner": "racket",
+        "repo": "plot"
+      },
+      "method": "github",
+      "path": "plot-doc"
+    }
+  },
+  "plot-gui-lib": {
+    "checksum": "a14222e19736f75bdb9c660ca9c3b78c6e2ee9b3",
+    "dependencies": [
+      "plot-lib",
+      "math-lib",
+      "gui-lib",
+      "snip-lib",
+      "typed-racket-lib",
+      "typed-racket-more"
+    ],
+    "description": "Plot GUI interface",
+    "license": "Apache-2.0",
+    "name": "plot-gui-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-Qs7ARwALTU/NlHGI5kZr6VA1+W5DPDu6H7B2aUmOdWo=",
+        "owner": "racket",
+        "repo": "plot"
+      },
+      "method": "github",
+      "path": "plot-gui-lib"
+    }
+  },
+  "plot-lib": {
+    "checksum": "a14222e19736f75bdb9c660ca9c3b78c6e2ee9b3",
+    "dependencies": [
+      "draw-lib",
+      "pict-lib",
+      "db-lib",
+      "srfi-lite-lib",
+      "typed-racket-lib",
+      "typed-racket-more",
+      "compatibility-lib",
+      "math-lib"
+    ],
+    "description": "Plot non-GUI interface",
+    "license": "Apache-2.0",
+    "name": "plot-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-Qs7ARwALTU/NlHGI5kZr6VA1+W5DPDu6H7B2aUmOdWo=",
+        "owner": "racket",
+        "repo": "plot"
+      },
+      "method": "github",
+      "path": "plot-lib"
+    }
+  },
+  "preprocessor": {
+    "checksum": "8e683244eea9dd5526324529f972947f7111810f",
+    "dependencies": [
+      "scheme-lib",
+      "compatibility-lib",
+      "racket-doc",
+      "scribble-lib"
+    ],
+    "description": "Preprocessors for text with embedded Racket code (mostly replaced by scribble/text)",
+    "license": "Apache-2.0",
+    "name": "preprocessor",
+    "source": {
+      "args": {
+        "hash": "sha256-rwZhyhxfoDBvluWkHYwpYqaBWUFQe0A78dK6iEqLqtw=",
+        "owner": "racket",
+        "repo": "preprocessor"
+      },
+      "method": "github"
+    }
+  },
+  "profile": {
+    "checksum": "9abad640b1a335c04656f9de975f41e76b89608e",
+    "dependencies": [
+      "profile-lib",
+      "profile-doc"
+    ],
+    "description": "Libraries for statistical performance profiling",
+    "license": "Apache-2.0",
+    "name": "profile",
+    "source": {
+      "args": {
+        "hash": "sha256-+kuPM0rn/YIeQkEGSfJeN1Qr68x4WUoHARNDVH4cm4I=",
+        "owner": "racket",
+        "repo": "profile"
+      },
+      "method": "github",
+      "path": "profile"
+    }
+  },
+  "profile-doc": {
+    "checksum": "9abad640b1a335c04656f9de975f41e76b89608e",
+    "dependencies": [
+      "scribble-lib",
+      "profile-lib",
+      "errortrace-doc",
+      "errortrace-lib",
+      "racket-doc"
+    ],
+    "description": "documentation part of \"profile\"",
+    "license": "Apache-2.0",
+    "name": "profile-doc",
+    "source": {
+      "args": {
+        "hash": "sha256-+kuPM0rn/YIeQkEGSfJeN1Qr68x4WUoHARNDVH4cm4I=",
+        "owner": "racket",
+        "repo": "profile"
+      },
+      "method": "github",
+      "path": "profile-doc"
+    }
+  },
+  "profile-lib": {
+    "checksum": "9abad640b1a335c04656f9de975f41e76b89608e",
+    "dependencies": [
+      "errortrace-lib",
+      "at-exp-lib",
+      "rackunit-lib"
+    ],
+    "description": "implementation (no documentation) part of \"profile\"",
+    "license": "Apache-2.0",
+    "name": "profile-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-+kuPM0rn/YIeQkEGSfJeN1Qr68x4WUoHARNDVH4cm4I=",
+        "owner": "racket",
+        "repo": "profile"
+      },
+      "method": "github",
+      "path": "profile-lib"
+    }
+  },
+  "quickscript": {
+    "checksum": "5870a5a6087275b984c38a5761f2a8c62fc8f7a2",
+    "dependencies": [
+      "drracket-plugin-lib",
+      "drracket",
+      "gui-lib",
+      "net-lib",
+      "scribble-lib",
+      "at-exp-lib",
+      "drracket",
+      "gui-doc",
+      "racket-doc",
+      "draw-doc",
+      "rackunit-lib"
+    ],
+    "description": "Scripting engine for DrRacket.\r\nExtends DrRacket with scripting capabilities and menu items. The package quickscript-extra contains additional sample scripts.",
+    "license": "Apache-2.0",
+    "name": "quickscript",
+    "source": {
+      "args": {
+        "hash": "sha256-2NPuI855RKbqPTtbjQvZAfDfN6qAc9lWsF/0hlwqyfs=",
+        "url": "https://github.com/Metaxal/quickscript.git"
+      },
+      "method": "git"
+    }
+  },
+  "r5rs": {
+    "checksum": "b2672d845419893d69e96453fe4d6d3d587ae22f",
+    "dependencies": [
+      "r5rs-lib",
+      "r5rs-doc"
+    ],
+    "description": "Legacy R5RS (Scheme) language",
+    "license": "Apache-2.0",
+    "name": "r5rs",
+    "source": {
+      "args": {
+        "hash": "sha256-9go42rR1l4peqsdB0BCkSbsRnquCWGWPyI0TDKM6PBs=",
+        "owner": "racket",
+        "repo": "r5rs"
+      },
+      "method": "github",
+      "path": "r5rs"
+    }
+  },
+  "r5rs-doc": {
+    "checksum": "b2672d845419893d69e96453fe4d6d3d587ae22f",
+    "dependencies": [
+      "mzscheme-doc",
+      "scheme-lib",
+      "scribble-lib",
+      "r5rs-lib",
+      "compatibility-lib",
+      "racket-doc"
+    ],
+    "description": "documentation part of \"r5rs\"",
+    "license": [
+      "SchemeReport",
+      "Apache-2.0"
+    ],
+    "name": "r5rs-doc",
+    "source": {
+      "args": {
+        "hash": "sha256-9go42rR1l4peqsdB0BCkSbsRnquCWGWPyI0TDKM6PBs=",
+        "owner": "racket",
+        "repo": "r5rs"
+      },
+      "method": "github",
+      "path": "r5rs-doc"
+    }
+  },
+  "r5rs-lib": {
+    "checksum": "b2672d845419893d69e96453fe4d6d3d587ae22f",
+    "dependencies": [
+      "scheme-lib",
+      "compatibility-lib"
+    ],
+    "description": "implementation (no documentation) part of \"r5rs\"",
+    "license": "Apache-2.0",
+    "name": "r5rs-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-9go42rR1l4peqsdB0BCkSbsRnquCWGWPyI0TDKM6PBs=",
+        "owner": "racket",
+        "repo": "r5rs"
+      },
+      "method": "github",
+      "path": "r5rs-lib"
+    }
+  },
+  "r6rs": {
+    "checksum": "850b1278e327897bba4b245fc696dee66ceead02",
+    "dependencies": [
+      "r6rs-lib",
+      "r6rs-doc"
+    ],
+    "description": "Legacy R6RS (Scheme) language",
+    "license": "Apache-2.0",
+    "name": "r6rs",
+    "source": {
+      "args": {
+        "hash": "sha256-8avKhu2a6/TgfKTzqppY1UHBvasMsIVkEhAeMHvAXPQ=",
+        "owner": "racket",
+        "repo": "r6rs"
+      },
+      "method": "github",
+      "path": "r6rs"
+    }
+  },
+  "r6rs-doc": {
+    "checksum": "850b1278e327897bba4b245fc696dee66ceead02",
+    "dependencies": [
+      "racket-index",
+      "r5rs-doc",
+      "scribble-lib",
+      "r6rs-lib",
+      "racket-doc"
+    ],
+    "description": "documentation part of \"r6rs\"",
+    "license": [
+      "SchemeReport",
+      "Apache-2.0"
+    ],
+    "name": "r6rs-doc",
+    "source": {
+      "args": {
+        "hash": "sha256-8avKhu2a6/TgfKTzqppY1UHBvasMsIVkEhAeMHvAXPQ=",
+        "owner": "racket",
+        "repo": "r6rs"
+      },
+      "method": "github",
+      "path": "r6rs-doc"
+    }
+  },
+  "r6rs-lib": {
+    "checksum": "850b1278e327897bba4b245fc696dee66ceead02",
+    "dependencies": [
+      "scheme-lib",
+      "r5rs-lib",
+      "compatibility-lib"
+    ],
+    "description": "implementation (no documentation) part of \"r6rs\"",
+    "license": "Apache-2.0",
+    "name": "r6rs-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-8avKhu2a6/TgfKTzqppY1UHBvasMsIVkEhAeMHvAXPQ=",
+        "owner": "racket",
+        "repo": "r6rs"
+      },
+      "method": "github",
+      "path": "r6rs-lib"
+    }
+  },
+  "racket-cheat": {
+    "checksum": "e66066e8476d7a31f336c9537b56a2b05fa0ea29",
+    "dependencies": [
+      "scribble-lib",
+      "db-doc",
+      "db-lib",
+      "drracket",
+      "net-doc",
+      "net-lib",
+      "parser-tools-doc",
+      "parser-tools-lib",
+      "pict-doc",
+      "pict-lib",
+      "racket-doc",
+      "sandbox-lib",
+      "slideshow-doc",
+      "slideshow-lib"
+    ],
+    "description": "a user-friendly index into the Racket documentation",
+    "license": "Apache-2.0",
+    "name": "racket-cheat",
+    "source": {
+      "args": {
+        "hash": "sha256-XBDBUQLzQ0HVYXVY64QJF4Z+Hm3dj3AcMdIRU+FQDeA=",
+        "owner": "jeapostrophe",
+        "repo": "racket-cheat"
+      },
+      "method": "github"
+    }
+  },
+  "racket-doc": {
+    "checksum": "458013dc341deb3072b1a667e407482c0ba855aa",
+    "dependencies": [
+      "scheme-lib",
+      "net-lib",
+      "sandbox-lib",
+      "scribble-lib",
+      "racket-index",
+      "rackunit-doc",
+      "errortrace-doc",
+      "at-exp-lib",
+      "rackunit-lib",
+      "gui-doc",
+      "gui-lib",
+      "draw-doc",
+      "draw-lib",
+      "pict-lib",
+      "readline-lib",
+      "readline-doc",
+      "syntax-color-doc",
+      "syntax-color-lib",
+      "scribble-doc",
+      "future-visualizer",
+      "distributed-places-doc",
+      "distributed-places-lib",
+      "serialize-cstruct-lib",
+      "cext-lib",
+      "net-doc",
+      "planet-doc",
+      "compiler-lib",
+      "compatibility-lib",
+      "xrepl-lib",
+      "xrepl-doc"
+    ],
+    "description": "Base Racket documentation",
+    "license": "Apache-2.0",
+    "name": "racket-doc",
+    "source": {
+      "args": {
+        "hash": "sha256-WXkJA6DNqQ54BMegdivL1AgwsACAIq/dO6dKA6U35bk=",
+        "owner": "racket",
+        "repo": "racket"
+      },
+      "method": "github",
+      "path": "pkgs/racket-doc"
+    }
+  },
+  "racket-index": {
+    "checksum": "458013dc341deb3072b1a667e407482c0ba855aa",
+    "dependencies": [
+      "scribble-lib",
+      "scheme-lib",
+      "at-exp-lib"
+    ],
+    "description": "Racket Documentation driver",
+    "license": "Apache-2.0",
+    "name": "racket-index",
+    "source": {
+      "args": {
+        "hash": "sha256-WXkJA6DNqQ54BMegdivL1AgwsACAIq/dO6dKA6U35bk=",
+        "owner": "racket",
+        "repo": "racket"
+      },
+      "method": "github",
+      "path": "pkgs/racket-index"
+    }
+  },
+  "racklog": {
+    "checksum": "5e1277066f3f6fcb7a385835ace312ca3e2e4760",
+    "dependencies": [
+      "datalog",
+      "eli-tester",
+      "rackunit-lib",
+      "racket-doc",
+      "scribble-lib"
+    ],
+    "description": "The implementation of the Racklog (embedded Prolog) language",
+    "license": "Apache-2.0",
+    "name": "racklog",
+    "source": {
+      "args": {
+        "hash": "sha256-YgBNXWZezRG2pDLLIb1wwtAhJYnNNWN5tU5rDWTsKDs=",
+        "owner": "racket",
+        "repo": "racklog"
+      },
+      "method": "github"
+    }
+  },
+  "rackunit": {
+    "checksum": "66bd6a38229c82dd35759c4ef20921c911637973",
+    "dependencies": [
+      "rackunit-lib",
+      "rackunit-doc",
+      "rackunit-gui",
+      "rackunit-plugin-lib"
+    ],
+    "description": "RackUnit testing framework",
+    "license": "Apache-2.0",
+    "name": "rackunit",
+    "source": {
+      "args": {
+        "hash": "sha256-Uvf89tBwef0BMOAbmM3dCWqEfI6SAikhYVGemdfvTjM=",
+        "owner": "racket",
+        "repo": "rackunit"
+      },
+      "method": "github",
+      "path": "rackunit"
+    }
+  },
+  "rackunit-doc": {
+    "checksum": "66bd6a38229c82dd35759c4ef20921c911637973",
+    "dependencies": [
+      "compiler-lib",
+      "racket-index",
+      "racket-doc",
+      "rackunit-gui",
+      "rackunit-lib",
+      "scribble-lib"
+    ],
+    "description": "RackUnit documentation",
+    "license": "Apache-2.0",
+    "name": "rackunit-doc",
+    "source": {
+      "args": {
+        "hash": "sha256-Uvf89tBwef0BMOAbmM3dCWqEfI6SAikhYVGemdfvTjM=",
+        "owner": "racket",
+        "repo": "rackunit"
+      },
+      "method": "github",
+      "path": "rackunit-doc"
+    }
+  },
+  "rackunit-gui": {
+    "checksum": "66bd6a38229c82dd35759c4ef20921c911637973",
+    "dependencies": [
+      "rackunit-lib",
+      "class-iop-lib",
+      "data-lib",
+      "gui-lib"
+    ],
+    "description": "RackUnit test runner GUI",
+    "license": "Apache-2.0",
+    "name": "rackunit-gui",
+    "source": {
+      "args": {
+        "hash": "sha256-Uvf89tBwef0BMOAbmM3dCWqEfI6SAikhYVGemdfvTjM=",
+        "owner": "racket",
+        "repo": "rackunit"
+      },
+      "method": "github",
+      "path": "rackunit-gui"
+    }
+  },
+  "rackunit-lib": {
+    "checksum": "66bd6a38229c82dd35759c4ef20921c911637973",
+    "dependencies": [
+      "testing-util-lib"
+    ],
+    "description": "RackUnit testing framework",
+    "license": "Apache-2.0",
+    "name": "rackunit-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-Uvf89tBwef0BMOAbmM3dCWqEfI6SAikhYVGemdfvTjM=",
+        "owner": "racket",
+        "repo": "rackunit"
+      },
+      "method": "github",
+      "path": "rackunit-lib"
+    }
+  },
+  "rackunit-plugin-lib": {
+    "checksum": "66bd6a38229c82dd35759c4ef20921c911637973",
+    "dependencies": [
+      "rackunit-lib",
+      "rackunit-gui",
+      "gui-lib",
+      "drracket-plugin-lib"
+    ],
+    "description": "RackUnit testing framework DrRacket plugin",
+    "license": "Apache-2.0",
+    "name": "rackunit-plugin-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-Uvf89tBwef0BMOAbmM3dCWqEfI6SAikhYVGemdfvTjM=",
+        "owner": "racket",
+        "repo": "rackunit"
+      },
+      "method": "github",
+      "path": "rackunit-plugin-lib"
+    }
+  },
+  "rackunit-typed": {
+    "checksum": "66bd6a38229c82dd35759c4ef20921c911637973",
+    "dependencies": [
+      "racket-index",
+      "rackunit-gui",
+      "rackunit-lib",
+      "typed-racket-lib",
+      "testing-util-lib"
+    ],
+    "description": "Typed Racket interface to the RackUnit testing framework",
+    "license": "Apache-2.0",
+    "name": "rackunit-typed",
+    "source": {
+      "args": {
+        "hash": "sha256-4Z6DcUzqH8JprX7+31ckp95UN3SKpxVrA/VJ8M8zErY=",
+        "url": "https://github.com/racket/rackunit.git"
+      },
+      "method": "git",
+      "path": "rackunit-typed"
+    }
+  },
+  "readline": {
+    "checksum": "df55a811d57d6677959fde479106bc43b99d6bdd",
+    "dependencies": [
+      "readline-lib",
+      "readline-doc"
+    ],
+    "description": "GNU Readline access from Racket",
+    "license": "Apache-2.0",
+    "name": "readline",
+    "source": {
+      "args": {
+        "hash": "sha256-lrvZr+Cg/9VS3XcSDzCPaK4zLMqD1wROE2hDxoVla44=",
+        "owner": "racket",
+        "repo": "readline"
+      },
+      "method": "github",
+      "path": "readline"
+    }
+  },
+  "readline-doc": {
+    "checksum": "df55a811d57d6677959fde479106bc43b99d6bdd",
+    "dependencies": [
+      "scribble-lib",
+      "readline-lib",
+      "racket-doc"
+    ],
+    "description": "documentation part of \"readline\"",
+    "license": "Apache-2.0",
+    "name": "readline-doc",
+    "source": {
+      "args": {
+        "hash": "sha256-lrvZr+Cg/9VS3XcSDzCPaK4zLMqD1wROE2hDxoVla44=",
+        "owner": "racket",
+        "repo": "readline"
+      },
+      "method": "github",
+      "path": "readline-doc"
+    }
+  },
+  "readline-lib": {
+    "checksum": "df55a811d57d6677959fde479106bc43b99d6bdd",
+    "description": "implementation (no documentation) part of \"readline\"",
+    "license": "Apache-2.0",
+    "name": "readline-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-lrvZr+Cg/9VS3XcSDzCPaK4zLMqD1wROE2hDxoVla44=",
+        "owner": "racket",
+        "repo": "readline"
+      },
+      "method": "github",
+      "path": "readline-lib"
+    }
+  },
+  "realm": {
+    "checksum": "d4509a0c42171f4ffbdd67b9acb0b774957be02b",
+    "dependencies": [
+      "htdp-lib",
+      "rackunit-lib"
+    ],
+    "description": "Sample code for _Realm of Racket_",
+    "license": "Apache-2.0",
+    "name": "realm",
+    "source": {
+      "args": {
+        "hash": "sha256-j3Sz+qw+Upite62UgtjH2xkybkO3KKLaB9TfbJrnm2Y=",
+        "owner": "racket",
+        "repo": "realm"
+      },
+      "method": "github"
+    }
+  },
+  "redex": {
+    "checksum": "14a6ea14281baa3869cf1bd84fb564249ec87902",
+    "dependencies": [
+      "redex-doc",
+      "redex-examples",
+      "redex-lib",
+      "redex-gui-lib"
+    ],
+    "description": "PLT Redex libraries for practical semantics engineering",
+    "license": "Apache-2.0",
+    "name": "redex",
+    "source": {
+      "args": {
+        "hash": "sha256-I4vvIrJftucenc+6U1BKUfq4r31FXdEGkEnSauyW/3s=",
+        "owner": "racket",
+        "repo": "redex"
+      },
+      "method": "github",
+      "path": "redex"
+    }
+  },
+  "redex-benchmark": {
+    "checksum": "14a6ea14281baa3869cf1bd84fb564249ec87902",
+    "dependencies": [
+      "compiler-lib",
+      "rackunit-lib",
+      "redex-lib",
+      "redex-examples",
+      "math-lib",
+      "plot-lib"
+    ],
+    "description": "PLT Redex Benchmark",
+    "license": "Apache-2.0",
+    "name": "redex-benchmark",
+    "source": {
+      "args": {
+        "hash": "sha256-I4vvIrJftucenc+6U1BKUfq4r31FXdEGkEnSauyW/3s=",
+        "owner": "racket",
+        "repo": "redex"
+      },
+      "method": "github",
+      "path": "redex-benchmark"
+    }
+  },
+  "redex-doc": {
+    "checksum": "14a6ea14281baa3869cf1bd84fb564249ec87902",
+    "dependencies": [
+      "racket-doc",
+      "draw-doc",
+      "gui-doc",
+      "htdp-doc",
+      "pict-doc",
+      "slideshow-doc",
+      "at-exp-lib",
+      "data-doc",
+      "data-enumerate-lib",
+      "scribble-lib",
+      "gui-lib",
+      "htdp-lib",
+      "pict-lib",
+      "redex-gui-lib",
+      "redex-benchmark",
+      "rackunit-lib",
+      "sandbox-lib"
+    ],
+    "description": "documentation part of \"redex\"",
+    "license": "Apache-2.0",
+    "name": "redex-doc",
+    "source": {
+      "args": {
+        "hash": "sha256-I4vvIrJftucenc+6U1BKUfq4r31FXdEGkEnSauyW/3s=",
+        "owner": "racket",
+        "repo": "redex"
+      },
+      "method": "github",
+      "path": "redex-doc"
+    }
+  },
+  "redex-examples": {
+    "checksum": "14a6ea14281baa3869cf1bd84fb564249ec87902",
+    "dependencies": [
+      "compiler-lib",
+      "rackunit-lib",
+      "redex-gui-lib",
+      "slideshow-lib",
+      "math-lib",
+      "plot-lib"
+    ],
+    "description": "PLT Redex examples",
+    "license": "Apache-2.0",
+    "name": "redex-examples",
+    "source": {
+      "args": {
+        "hash": "sha256-I4vvIrJftucenc+6U1BKUfq4r31FXdEGkEnSauyW/3s=",
+        "owner": "racket",
+        "repo": "redex"
+      },
+      "method": "github",
+      "path": "redex-examples"
+    }
+  },
+  "redex-gui-lib": {
+    "checksum": "14a6ea14281baa3869cf1bd84fb564249ec87902",
+    "dependencies": [
+      "scheme-lib",
+      "draw-lib",
+      "gui-lib",
+      "data-lib",
+      "profile-lib",
+      "redex-lib",
+      "redex-pict-lib",
+      "pict-lib",
+      "rackunit-lib"
+    ],
+    "description": "implementation (no documentation) part of \"redex\" gui",
+    "license": "Apache-2.0",
+    "name": "redex-gui-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-I4vvIrJftucenc+6U1BKUfq4r31FXdEGkEnSauyW/3s=",
+        "owner": "racket",
+        "repo": "redex"
+      },
+      "method": "github",
+      "path": "redex-gui-lib"
+    }
+  },
+  "redex-lib": {
+    "checksum": "14a6ea14281baa3869cf1bd84fb564249ec87902",
+    "dependencies": [
+      "data-enumerate-lib",
+      "scheme-lib",
+      "data-lib",
+      "math-lib",
+      "tex-table",
+      "profile-lib",
+      "typed-racket-lib",
+      "testing-util-lib",
+      "2d-lib",
+      "rackunit-lib"
+    ],
+    "description": "implementation (no documentation) part of \"redex\"",
+    "license": "Apache-2.0",
+    "name": "redex-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-I4vvIrJftucenc+6U1BKUfq4r31FXdEGkEnSauyW/3s=",
+        "owner": "racket",
+        "repo": "redex"
+      },
+      "method": "github",
+      "path": "redex-lib"
+    }
+  },
+  "redex-pict-lib": {
+    "checksum": "14a6ea14281baa3869cf1bd84fb564249ec87902",
+    "dependencies": [
+      "scheme-lib",
+      "draw-lib",
+      "data-lib",
+      "profile-lib",
+      "redex-lib",
+      "pict-lib",
+      "rackunit-lib"
+    ],
+    "description": "implementation (no documentation) part of \"redex\" using picts",
+    "license": "Apache-2.0",
+    "name": "redex-pict-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-I4vvIrJftucenc+6U1BKUfq4r31FXdEGkEnSauyW/3s=",
+        "owner": "racket",
+        "repo": "redex"
+      },
+      "method": "github",
+      "path": "redex-pict-lib"
+    }
+  },
+  "sandbox-lib": {
+    "checksum": "458013dc341deb3072b1a667e407482c0ba855aa",
+    "dependencies": [
+      "scheme-lib",
+      "errortrace-lib"
+    ],
+    "description": "Library for sandboxing Racket programs",
+    "license": "Apache-2.0",
+    "name": "sandbox-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-uusDHmYfsp1m8zmU/ZxY3nby+woUNVn+MZ9XyARPoPI=",
+        "url": "https://github.com/racket/racket.git"
+      },
+      "method": "git",
+      "path": "pkgs/sandbox-lib"
+    }
+  },
+  "sasl": {
+    "checksum": "961c9f07287c963236aec8f541ddb1335782db48",
+    "dependencies": [
+      "sasl-lib",
+      "sasl-doc"
+    ],
+    "description": "SASL authentication client support",
+    "license": "Apache-2.0",
+    "name": "sasl",
+    "source": {
+      "args": {
+        "hash": "sha256-MowGKX3IeEthbxf0yoGvdrLBlONIa+dTTaYLMV51LUs=",
+        "url": "https://github.com/racket/sasl.git"
+      },
+      "method": "git",
+      "path": "sasl"
+    }
+  },
+  "sasl-doc": {
+    "checksum": "961c9f07287c963236aec8f541ddb1335782db48",
+    "dependencies": [
+      "scribble-lib",
+      "sasl-lib",
+      "racket-doc"
+    ],
+    "description": "SASL authentication client support",
+    "license": "Apache-2.0",
+    "name": "sasl-doc",
+    "source": {
+      "args": {
+        "hash": "sha256-0WnUh4IrS6cxC3ejJ64xflN5KQZK/kITmhRiaxcvwsE=",
+        "url": "https://github.com/racket/sasl.git"
+      },
+      "method": "git",
+      "path": "sasl-doc"
+    }
+  },
+  "sasl-lib": {
+    "checksum": "961c9f07287c963236aec8f541ddb1335782db48",
+    "description": "SASL authentication client support",
+    "license": "Apache-2.0",
+    "name": "sasl-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-wgkBp/KoT7RcHFNYgsM39e3bASyU0u4+mF4mElW8vXk=",
+        "url": "https://github.com/racket/sasl.git"
+      },
+      "method": "git",
+      "path": "sasl-lib"
+    }
+  },
+  "scheme-doc": {
+    "checksum": "458013dc341deb3072b1a667e407482c0ba855aa",
+    "dependencies": [
+      "scheme-lib",
+      "net-lib",
+      "sandbox-lib",
+      "scribble-lib",
+      "racket-index",
+      "racket-doc",
+      "gui-lib",
+      "gui-doc",
+      "compatibility-doc"
+    ],
+    "description": "Documentation for scheme languages.",
+    "license": "Apache-2.0",
+    "name": "scheme-doc",
+    "source": {
+      "args": {
+        "hash": "sha256-+4U67hA/1e7Taoa8m9TIe638mJgvQa0moUGA/h5Cu0M=",
+        "url": "https://github.com/racket/racket.git"
+      },
+      "method": "git",
+      "path": "pkgs/scheme-doc"
+    }
+  },
+  "scheme-lib": {
+    "checksum": "408f9398ec237b791ca103bb9e1400df1cef18f5",
+    "description": "Legacy (Scheme) libraries",
+    "license": "Apache-2.0",
+    "name": "scheme-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-HXUZ+qfTX/XP1Mrm7Bq7HODYStaF8/IVlB6Tm5EHjl0=",
+        "owner": "racket",
+        "repo": "scheme-lib"
+      },
+      "method": "github"
+    }
+  },
+  "schemeunit": {
+    "checksum": "66bd6a38229c82dd35759c4ef20921c911637973",
+    "dependencies": [
+      "rackunit-lib",
+      "rackunit-gui"
+    ],
+    "description": "Legacy SchemeUnit testing framework",
+    "license": "Apache-2.0",
+    "name": "schemeunit",
+    "source": {
+      "args": {
+        "hash": "sha256-Uvf89tBwef0BMOAbmM3dCWqEfI6SAikhYVGemdfvTjM=",
+        "owner": "racket",
+        "repo": "rackunit"
+      },
+      "method": "github",
+      "path": "schemeunit"
+    }
+  },
+  "scribble": {
+    "checksum": "e5ff04fc86da8f4885ad789c28db38485e5456fc",
+    "dependencies": [
+      "scribble-lib",
+      "scribble-doc"
+    ],
+    "description": "Racket documentatation and typesetting tool",
+    "license": "Apache-2.0",
+    "name": "scribble",
+    "source": {
+      "args": {
+        "hash": "sha256-sFeGeNdq0O4clC2LDVZ6F9f95Jdf4Xk2THYvmqLuu6Q=",
+        "owner": "racket",
+        "repo": "scribble"
+      },
+      "method": "github",
+      "path": "scribble"
+    }
+  },
+  "scribble-doc": {
+    "checksum": "e5ff04fc86da8f4885ad789c28db38485e5456fc",
+    "dependencies": [
+      "racket-index",
+      "net-doc",
+      "scheme-lib",
+      "draw-doc",
+      "at-exp-lib",
+      "compatibility-lib",
+      "draw-lib",
+      "pict-lib",
+      "pict-doc",
+      "sandbox-lib",
+      "scribble-lib",
+      "scribble-text-lib",
+      "racket-doc"
+    ],
+    "description": "documentation part of \"scribble\"",
+    "license": "Apache-2.0",
+    "name": "scribble-doc",
+    "source": {
+      "args": {
+        "hash": "sha256-sFeGeNdq0O4clC2LDVZ6F9f95Jdf4Xk2THYvmqLuu6Q=",
+        "owner": "racket",
+        "repo": "scribble"
+      },
+      "method": "github",
+      "path": "scribble-doc"
+    }
+  },
+  "scribble-html-lib": {
+    "checksum": "e5ff04fc86da8f4885ad789c28db38485e5456fc",
+    "dependencies": [
+      "scheme-lib",
+      "at-exp-lib",
+      "scribble-text-lib"
+    ],
+    "description": "Language for HTML with embedded Racket code",
+    "license": "Apache-2.0",
+    "name": "scribble-html-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-sFeGeNdq0O4clC2LDVZ6F9f95Jdf4Xk2THYvmqLuu6Q=",
+        "owner": "racket",
+        "repo": "scribble"
+      },
+      "method": "github",
+      "path": "scribble-html-lib"
+    }
+  },
+  "scribble-lib": {
+    "checksum": "e5ff04fc86da8f4885ad789c28db38485e5456fc",
+    "dependencies": [
+      "scheme-lib",
+      "compatibility-lib",
+      "scribble-text-lib",
+      "scribble-html-lib",
+      "planet-lib",
+      "net-lib",
+      "at-exp-lib",
+      "draw-lib",
+      "syntax-color-lib",
+      "sandbox-lib",
+      "typed-racket-lib",
+      "rackunit-lib"
+    ],
+    "description": "implementation (no documentation) part of \"scribble\"",
+    "license": [
+      "Apache-2.0",
+      "CC-BY-3.0",
+      "LPPL-1.3c+",
+      "LPPL-1.0+"
+    ],
+    "name": "scribble-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-sFeGeNdq0O4clC2LDVZ6F9f95Jdf4Xk2THYvmqLuu6Q=",
+        "owner": "racket",
+        "repo": "scribble"
+      },
+      "method": "github",
+      "path": "scribble-lib"
+    }
+  },
+  "scribble-text-lib": {
+    "checksum": "e5ff04fc86da8f4885ad789c28db38485e5456fc",
+    "dependencies": [
+      "scheme-lib",
+      "at-exp-lib"
+    ],
+    "description": "Language for text with embedded Racket code",
+    "license": "Apache-2.0",
+    "name": "scribble-text-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-sFeGeNdq0O4clC2LDVZ6F9f95Jdf4Xk2THYvmqLuu6Q=",
+        "owner": "racket",
+        "repo": "scribble"
+      },
+      "method": "github",
+      "path": "scribble-text-lib"
+    }
+  },
+  "serialize-cstruct-lib": {
+    "checksum": "cabf4188a34c70af2f6a376fc3b0f55d035a2ab7",
+    "description": "serialization support for C structs",
+    "license": "Apache-2.0",
+    "name": "serialize-cstruct-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-37rqpeEN93H/otP/m1ngmsrzIlw+wUxH57LRo1ywA+c=",
+        "owner": "racket",
+        "repo": "serialize-cstruct-lib"
+      },
+      "method": "github"
+    }
+  },
+  "sgl": {
+    "checksum": "d1906923a74a362a2bfb32f3b9bfe1351f4d1534",
+    "dependencies": [
+      "scheme-lib",
+      "compatibility-lib",
+      "gui-lib",
+      "draw-doc",
+      "gui-doc",
+      "racket-doc",
+      "scribble-lib"
+    ],
+    "description": "Legacy OpenGL library",
+    "license": "Apache-2.0",
+    "name": "sgl",
+    "source": {
+      "args": {
+        "hash": "sha256-+6eHccb+eAjg7zzqJ0hUow9/4C+cyJQCLJFn6Rusflo=",
+        "owner": "racket",
+        "repo": "sgl"
+      },
+      "method": "github"
+    }
+  },
+  "shell-completion": {
+    "checksum": "3bc582e4167a46ade43dfd50df06a2e6e08e90ab",
+    "description": "Completion scribpts for bash and zsh",
+    "license": "Apache-2.0",
+    "name": "shell-completion",
+    "source": {
+      "args": {
+        "hash": "sha256-UndK7r14o8FoetAxnSbSvKIsuQhusWxwdORW4R8hoRI=",
+        "owner": "racket",
+        "repo": "shell-completion"
+      },
+      "method": "github"
+    }
+  },
+  "simple-tree-text-markup": {
+    "checksum": "06bbcd3651e518a53cffa5f8484fe127574fed06",
+    "dependencies": [
+      "simple-tree-text-markup-lib",
+      "simple-tree-text-markup-doc"
+    ],
+    "description": "This is a tree-based combinator library for simple markup, mainly for\r\ndisplaying messages in a REPL.\r\n\r\nThis is a meta-package, containing simple-tree-text-markup-lib and simple-tree-text-markup-doc.",
+    "license": "Apache-2.0",
+    "name": "simple-tree-text-markup",
+    "source": {
+      "args": {
+        "hash": "sha256-BWz8lJzPW6O1TwxKijoWmaNpUrmWAiJU2kJOwoJSQhE=",
+        "url": "https://github.com/racket/simple-tree-text-markup.git"
+      },
+      "method": "git",
+      "path": "simple-tree-text-markup"
+    }
+  },
+  "simple-tree-text-markup-doc": {
+    "checksum": "06bbcd3651e518a53cffa5f8484fe127574fed06",
+    "dependencies": [
+      "scheme-lib",
+      "at-exp-lib",
+      "scribble-lib",
+      "racket-doc",
+      "simple-tree-text-markup-lib",
+      "draw-doc",
+      "draw-lib",
+      "gui-doc",
+      "snip-lib"
+    ],
+    "description": "This is a tree-based combinator library for simple markup, mainly for\r\ndisplaying messages in a REPL.\r\n\r\nThis package contains the documentation.",
+    "license": "Apache-2.0",
+    "name": "simple-tree-text-markup-doc",
+    "source": {
+      "args": {
+        "hash": "sha256-lvr8m656x5cdxvWYaK5dxlaIpIxtVRPBbSdGOkVD4nQ=",
+        "url": "https://github.com/racket/simple-tree-text-markup.git"
+      },
+      "method": "git",
+      "path": "simple-tree-text-markup-doc"
+    }
+  },
+  "simple-tree-text-markup-lib": {
+    "checksum": "06bbcd3651e518a53cffa5f8484fe127574fed06",
+    "description": "This is a tree-based combinator library for simple markup, mainly for\r\ndisplaying messages in a REPL.\r\n\r\nThis package contains the actual implementation.",
+    "license": "Apache-2.0",
+    "name": "simple-tree-text-markup-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-11865eDdptYlr5sHzG6Rx6Kfm20wuQKZm/82s964T1M=",
+        "url": "https://github.com/racket/simple-tree-text-markup.git"
+      },
+      "method": "git",
+      "path": "simple-tree-text-markup-lib"
+    }
+  },
+  "slatex": {
+    "checksum": "47e1d3e3e33d826bc2b26f9e8998eb235b23a9a5",
+    "dependencies": [
+      "scheme-lib",
+      "compatibility-lib",
+      "racket-index",
+      "eli-tester",
+      "racket-doc",
+      "scribble-lib"
+    ],
+    "description": "SLaTeX (Scheme in LaTeX)",
+    "license": "Apache-2.0",
+    "name": "slatex",
+    "source": {
+      "args": {
+        "hash": "sha256-oKP9KWxoFn0J7oFfNQvPjYOcD8Ws65WpHma2tXQUdV4=",
+        "owner": "racket",
+        "repo": "slatex"
+      },
+      "method": "github"
+    }
+  },
+  "slideshow": {
+    "checksum": "7c445d257842becc8dcd864d9448e60b77a1475d",
+    "dependencies": [
+      "slideshow-lib",
+      "slideshow-exe",
+      "slideshow-plugin",
+      "slideshow-doc"
+    ],
+    "description": "Slide-presentation tool",
+    "license": "Apache-2.0",
+    "name": "slideshow",
+    "source": {
+      "args": {
+        "hash": "sha256-vED2yYuKnScFlHidg7K5mpVbEADt4QzGGDRF4BPge5I=",
+        "owner": "racket",
+        "repo": "slideshow"
+      },
+      "method": "github",
+      "path": "slideshow"
+    }
+  },
+  "slideshow-doc": {
+    "checksum": "7c445d257842becc8dcd864d9448e60b77a1475d",
+    "dependencies": [
+      "scheme-lib",
+      "draw-doc",
+      "gui-doc",
+      "pict-doc",
+      "scribble-doc",
+      "gui-lib",
+      "pict-lib",
+      "scribble-lib",
+      "slideshow-lib",
+      "racket-doc",
+      "at-exp-lib"
+    ],
+    "description": "documentation part of \"slideshow\"",
+    "license": "Apache-2.0",
+    "name": "slideshow-doc",
+    "source": {
+      "args": {
+        "hash": "sha256-vED2yYuKnScFlHidg7K5mpVbEADt4QzGGDRF4BPge5I=",
+        "owner": "racket",
+        "repo": "slideshow"
+      },
+      "method": "github",
+      "path": "slideshow-doc"
+    }
+  },
+  "slideshow-exe": {
+    "checksum": "7c445d257842becc8dcd864d9448e60b77a1475d",
+    "dependencies": [
+      "compatibility-lib",
+      "gui-lib",
+      "pict-lib",
+      "slideshow-lib"
+    ],
+    "description": "executables for \"slideshow\"",
+    "license": "Apache-2.0",
+    "name": "slideshow-exe",
+    "source": {
+      "args": {
+        "hash": "sha256-vED2yYuKnScFlHidg7K5mpVbEADt4QzGGDRF4BPge5I=",
+        "owner": "racket",
+        "repo": "slideshow"
+      },
+      "method": "github",
+      "path": "slideshow-exe"
+    }
+  },
+  "slideshow-lib": {
+    "checksum": "7c445d257842becc8dcd864d9448e60b77a1475d",
+    "dependencies": [
+      "scheme-lib",
+      "compatibility-lib",
+      "draw-lib",
+      "pict-lib",
+      "gui-lib"
+    ],
+    "description": "implementation (no documentation) part of \"slideshow\"",
+    "license": "Apache-2.0",
+    "name": "slideshow-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-vED2yYuKnScFlHidg7K5mpVbEADt4QzGGDRF4BPge5I=",
+        "owner": "racket",
+        "repo": "slideshow"
+      },
+      "method": "github",
+      "path": "slideshow-lib"
+    }
+  },
+  "slideshow-plugin": {
+    "checksum": "7c445d257842becc8dcd864d9448e60b77a1475d",
+    "dependencies": [
+      "slideshow-lib",
+      "pict-lib",
+      "string-constants-lib",
+      "compatibility-lib",
+      "drracket-plugin-lib",
+      "gui-lib"
+    ],
+    "description": "Slideshow's DrRacket plugin",
+    "license": "Apache-2.0",
+    "name": "slideshow-plugin",
+    "source": {
+      "args": {
+        "hash": "sha256-vED2yYuKnScFlHidg7K5mpVbEADt4QzGGDRF4BPge5I=",
+        "owner": "racket",
+        "repo": "slideshow"
+      },
+      "method": "github",
+      "path": "slideshow-plugin"
+    }
+  },
+  "snip": {
+    "checksum": "883d29239170a3eb6dc68ed49714c596b940bc64",
+    "dependencies": [
+      "snip-lib",
+      "gui-doc"
+    ],
+    "description": "Text and graphics editor extension protocol",
+    "license": "Apache-2.0",
+    "name": "snip",
+    "source": {
+      "args": {
+        "hash": "sha256-GuCa5v/o0gtuHu0ZqIhlFG/dpcyffib1+3oljsQp/so=",
+        "owner": "racket",
+        "repo": "snip"
+      },
+      "method": "github",
+      "path": "snip"
+    }
+  },
+  "snip-lib": {
+    "checksum": "883d29239170a3eb6dc68ed49714c596b940bc64",
+    "dependencies": [
+      "draw-lib"
+    ],
+    "description": "implementation (no documentation) part of \"snip\"",
+    "license": "Apache-2.0",
+    "name": "snip-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-GuCa5v/o0gtuHu0ZqIhlFG/dpcyffib1+3oljsQp/so=",
+        "owner": "racket",
+        "repo": "snip"
+      },
+      "method": "github",
+      "path": "snip-lib"
+    }
+  },
+  "source-syntax": {
+    "checksum": "a01eb21c633c0e7e37659b47fc7206369c42b0df",
+    "description": "find mappings from expanded to source syntax",
+    "license": "Apache-2.0",
+    "name": "source-syntax",
+    "source": {
+      "args": {
+        "hash": "sha256-0C1ELMM0+BfXlmZlSKLJ5N8a/1/3Xc1J/nQOpwWLXmU=",
+        "owner": "racket",
+        "repo": "typed-racket"
+      },
+      "method": "github",
+      "path": "source-syntax"
+    }
+  },
+  "srfi": {
+    "checksum": "cab009da67adf40737ae7ff02cd7c8bd6316d61d",
+    "dependencies": [
+      "srfi-lib",
+      "srfi-doc"
+    ],
+    "description": "Legacy SRFI (Scheme) libraries",
+    "license": "Apache-2.0",
+    "name": "srfi",
+    "source": {
+      "args": {
+        "hash": "sha256-kH05ehhKB3vsT6+qgF74rpB+hcbf/lUxWczU9DVk83w=",
+        "owner": "racket",
+        "repo": "srfi"
+      },
+      "method": "github",
+      "path": "srfi"
+    }
+  },
+  "srfi-doc": {
+    "checksum": "cab009da67adf40737ae7ff02cd7c8bd6316d61d",
+    "dependencies": [
+      "mzscheme-doc",
+      "scheme-doc",
+      "scheme-lib",
+      "scribble-lib",
+      "srfi-lib",
+      "racket-doc",
+      "racket-index",
+      "compatibility-lib"
+    ],
+    "description": "documentation part of \"srfi\"",
+    "license": "Apache-2.0",
+    "name": "srfi-doc",
+    "source": {
+      "args": {
+        "hash": "sha256-kH05ehhKB3vsT6+qgF74rpB+hcbf/lUxWczU9DVk83w=",
+        "owner": "racket",
+        "repo": "srfi"
+      },
+      "method": "github",
+      "path": "srfi-doc"
+    }
+  },
+  "srfi-lib": {
+    "checksum": "cab009da67adf40737ae7ff02cd7c8bd6316d61d",
+    "dependencies": [
+      "scheme-lib",
+      "srfi-lite-lib",
+      "r6rs-lib",
+      "compatibility-lib"
+    ],
+    "description": "implementation (no documentation) part of \"srfi\"",
+    "license": "Apache-2.0",
+    "name": "srfi-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-kH05ehhKB3vsT6+qgF74rpB+hcbf/lUxWczU9DVk83w=",
+        "owner": "racket",
+        "repo": "srfi"
+      },
+      "method": "github",
+      "path": "srfi-lib"
+    }
+  },
+  "srfi-lite-lib": {
+    "checksum": "cab009da67adf40737ae7ff02cd7c8bd6316d61d",
+    "description": "implementation of the most widely used \"srfi\" libraries",
+    "license": "Apache-2.0",
+    "name": "srfi-lite-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-kH05ehhKB3vsT6+qgF74rpB+hcbf/lUxWczU9DVk83w=",
+        "owner": "racket",
+        "repo": "srfi"
+      },
+      "method": "github",
+      "path": "srfi-lite-lib"
+    }
+  },
+  "string-constants": {
+    "checksum": "62e705843169908091da34ba4f84f3e62b8ab445",
+    "dependencies": [
+      "string-constants-lib",
+      "string-constants-doc"
+    ],
+    "description": "String constants to support internationalization, especially in DrRacket",
+    "license": "Apache-2.0",
+    "name": "string-constants",
+    "source": {
+      "args": {
+        "hash": "sha256-X5d/KZTj0XAoNddLe9JV2vMno+xeaoOJcK8PkhPDyMA=",
+        "owner": "racket",
+        "repo": "string-constants"
+      },
+      "method": "github",
+      "path": "string-constants"
+    }
+  },
+  "string-constants-doc": {
+    "checksum": "62e705843169908091da34ba4f84f3e62b8ab445",
+    "dependencies": [
+      "string-constants-lib",
+      "racket-doc",
+      "scribble-lib"
+    ],
+    "description": "String constants documentation",
+    "license": "Apache-2.0",
+    "name": "string-constants-doc",
+    "source": {
+      "args": {
+        "hash": "sha256-X5d/KZTj0XAoNddLe9JV2vMno+xeaoOJcK8PkhPDyMA=",
+        "owner": "racket",
+        "repo": "string-constants"
+      },
+      "method": "github",
+      "path": "string-constants-doc"
+    }
+  },
+  "string-constants-lib": {
+    "checksum": "62e705843169908091da34ba4f84f3e62b8ab445",
+    "description": "String constants to support internationalization, especially in DrRacket",
+    "license": "Apache-2.0",
+    "name": "string-constants-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-X5d/KZTj0XAoNddLe9JV2vMno+xeaoOJcK8PkhPDyMA=",
+        "owner": "racket",
+        "repo": "string-constants"
+      },
+      "method": "github",
+      "path": "string-constants-lib"
+    }
+  },
+  "swindle": {
+    "checksum": "2d57ccb91e1193b8591c6aab72ae1aba3c19bf96",
+    "dependencies": [
+      "scheme-lib",
+      "compatibility-lib",
+      "drracket-plugin-lib",
+      "gui-lib",
+      "net-lib",
+      "string-constants-lib",
+      "compatibility-doc",
+      "racket-doc",
+      "scribble-lib"
+    ],
+    "description": "The implementation of the Swindle language",
+    "license": [
+      "Xerox",
+      "Apache-2.0"
+    ],
+    "name": "swindle",
+    "source": {
+      "args": {
+        "hash": "sha256-SaKnG7ID0ItmEln3OHFtavtCllJMaF8Fb/x/9m9vG+E=",
+        "owner": "racket",
+        "repo": "swindle"
+      },
+      "method": "github"
+    }
+  },
+  "syntax-color": {
+    "checksum": "ed90fe2eaa64f2bb761b9463094c139aaabad832",
+    "dependencies": [
+      "syntax-color-lib",
+      "syntax-color-doc"
+    ],
+    "description": "Program syntax coloring for editors and typesetting",
+    "license": "Apache-2.0",
+    "name": "syntax-color",
+    "source": {
+      "args": {
+        "hash": "sha256-ijm4+VGS94Xf1PmZnwUUVit53ZbGWcPw6GsiWnTPNsA=",
+        "owner": "racket",
+        "repo": "syntax-color"
+      },
+      "method": "github",
+      "path": "syntax-color"
+    }
+  },
+  "syntax-color-doc": {
+    "checksum": "ed90fe2eaa64f2bb761b9463094c139aaabad832",
+    "dependencies": [
+      "gui-doc",
+      "scribble-doc",
+      "gui-lib",
+      "scribble-lib",
+      "racket-doc",
+      "syntax-color-lib"
+    ],
+    "description": "documentation part of \"syntax-color\"",
+    "license": "Apache-2.0",
+    "name": "syntax-color-doc",
+    "source": {
+      "args": {
+        "hash": "sha256-ijm4+VGS94Xf1PmZnwUUVit53ZbGWcPw6GsiWnTPNsA=",
+        "owner": "racket",
+        "repo": "syntax-color"
+      },
+      "method": "github",
+      "path": "syntax-color-doc"
+    }
+  },
+  "syntax-color-lib": {
+    "checksum": "ed90fe2eaa64f2bb761b9463094c139aaabad832",
+    "dependencies": [
+      "parser-tools-lib",
+      "option-contract-lib",
+      "rackunit-lib"
+    ],
+    "description": "implementation (no documentation) part of \"syntax-color\"",
+    "license": "Apache-2.0",
+    "name": "syntax-color-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-ijm4+VGS94Xf1PmZnwUUVit53ZbGWcPw6GsiWnTPNsA=",
+        "owner": "racket",
+        "repo": "syntax-color"
+      },
+      "method": "github",
+      "path": "syntax-color-lib"
+    }
+  },
+  "testing-util-lib": {
+    "checksum": "66bd6a38229c82dd35759c4ef20921c911637973",
+    "dependencies": [
+      "compiler-lib"
+    ],
+    "description": "For tracking test results and displaying a summary message (used by RackUnit)",
+    "license": "Apache-2.0",
+    "name": "testing-util-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-Uvf89tBwef0BMOAbmM3dCWqEfI6SAikhYVGemdfvTjM=",
+        "owner": "racket",
+        "repo": "rackunit"
+      },
+      "method": "github",
+      "path": "testing-util-lib"
+    }
+  },
+  "tex-table": {
+    "checksum": "cb920d90d8a6867860a9b1bb41f85355fd44852e",
+    "description": "Table of TeX-style abbreviations",
+    "license": "Apache-2.0",
+    "name": "tex-table",
+    "source": {
+      "args": {
+        "hash": "sha256-DifgPG7zk8FBWfX1fhqUfql83vFCfyJp4Ag5tUNkAc8=",
+        "owner": "racket",
+        "repo": "gui"
+      },
+      "method": "github",
+      "path": "tex-table"
+    }
+  },
+  "trace": {
+    "checksum": "7878c9ed33da27810a55d8bdd603f56dd4c89fb7",
+    "dependencies": [
+      "scheme-lib",
+      "compatibility-lib",
+      "scribble-lib",
+      "racket-doc"
+    ],
+    "description": "Instrumentation to show function calls",
+    "license": "Apache-2.0",
+    "name": "trace",
+    "source": {
+      "args": {
+        "hash": "sha256-KsK9Yq4kJS8TgQ9qUOq0HchOLG+dF5tVgyYdWRSFERw=",
+        "owner": "racket",
+        "repo": "trace"
+      },
+      "method": "github"
+    }
+  },
+  "typed-racket": {
+    "checksum": "a01eb21c633c0e7e37659b47fc7206369c42b0df",
+    "dependencies": [
+      "typed-racket-lib",
+      "typed-racket-doc"
+    ],
+    "description": "The implementation of the Typed Racket language",
+    "license": "Apache-2.0",
+    "name": "typed-racket",
+    "source": {
+      "args": {
+        "hash": "sha256-0C1ELMM0+BfXlmZlSKLJ5N8a/1/3Xc1J/nQOpwWLXmU=",
+        "owner": "racket",
+        "repo": "typed-racket"
+      },
+      "method": "github",
+      "path": "typed-racket"
+    }
+  },
+  "typed-racket-compatibility": {
+    "checksum": "a01eb21c633c0e7e37659b47fc7206369c42b0df",
+    "dependencies": [
+      "scheme-lib",
+      "typed-racket-lib"
+    ],
+    "description": "compatibility library for older Typed Racket-based languages",
+    "license": "Apache-2.0",
+    "name": "typed-racket-compatibility",
+    "source": {
+      "args": {
+        "hash": "sha256-0C1ELMM0+BfXlmZlSKLJ5N8a/1/3Xc1J/nQOpwWLXmU=",
+        "owner": "racket",
+        "repo": "typed-racket"
+      },
+      "method": "github",
+      "path": "typed-racket-compatibility"
+    }
+  },
+  "typed-racket-doc": {
+    "checksum": "a01eb21c633c0e7e37659b47fc7206369c42b0df",
+    "dependencies": [
+      "net-doc",
+      "net-cookies-doc",
+      "scheme-lib",
+      "srfi-lite-lib",
+      "r6rs-doc",
+      "srfi-doc",
+      "r6rs-lib",
+      "sandbox-lib",
+      "at-exp-lib",
+      "scribble-lib",
+      "pict-lib",
+      "typed-racket-lib",
+      "typed-racket-compatibility",
+      "typed-racket-more",
+      "racket-doc",
+      "draw-lib",
+      "web-server-doc",
+      "scheme-doc"
+    ],
+    "description": "documentation part of \"typed-racket\"",
+    "license": "Apache-2.0",
+    "name": "typed-racket-doc",
+    "source": {
+      "args": {
+        "hash": "sha256-0C1ELMM0+BfXlmZlSKLJ5N8a/1/3Xc1J/nQOpwWLXmU=",
+        "owner": "racket",
+        "repo": "typed-racket"
+      },
+      "method": "github",
+      "path": "typed-racket-doc"
+    }
+  },
+  "typed-racket-lib": {
+    "checksum": "a01eb21c633c0e7e37659b47fc7206369c42b0df",
+    "dependencies": [
+      "source-syntax",
+      "pconvert-lib",
+      "compatibility-lib",
+      "string-constants-lib"
+    ],
+    "description": "implementation (no documentation) part of \"typed-racket\"",
+    "license": "Apache-2.0",
+    "name": "typed-racket-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-0C1ELMM0+BfXlmZlSKLJ5N8a/1/3Xc1J/nQOpwWLXmU=",
+        "owner": "racket",
+        "repo": "typed-racket"
+      },
+      "method": "github",
+      "path": "typed-racket-lib"
+    }
+  },
+  "typed-racket-more": {
+    "checksum": "a01eb21c633c0e7e37659b47fc7206369c42b0df",
+    "dependencies": [
+      "srfi-lite-lib",
+      "net-lib",
+      "net-cookies-lib",
+      "web-server-lib",
+      "db-lib",
+      "draw-lib",
+      "rackunit-lib",
+      "rackunit-gui",
+      "rackunit-typed",
+      "snip-lib",
+      "typed-racket-lib",
+      "gui-lib",
+      "pict-lib",
+      "images-lib",
+      "racket-index",
+      "sandbox-lib",
+      "pconvert-lib"
+    ],
+    "description": "Types for various libraries",
+    "license": "Apache-2.0",
+    "name": "typed-racket-more",
+    "source": {
+      "args": {
+        "hash": "sha256-0C1ELMM0+BfXlmZlSKLJ5N8a/1/3Xc1J/nQOpwWLXmU=",
+        "owner": "racket",
+        "repo": "typed-racket"
+      },
+      "method": "github",
+      "path": "typed-racket-more"
+    }
+  },
+  "unix-socket": {
+    "checksum": "698eade65ae2cd8b747ba08a3820950e385b2a81",
+    "dependencies": [
+      "unix-socket-lib",
+      "unix-socket-doc"
+    ],
+    "description": "Unix Domain Sockets",
+    "license": "Apache-2.0",
+    "name": "unix-socket",
+    "source": {
+      "args": {
+        "hash": "sha256-HuCd4E0WTJRjpXnroz0v/oz1OFl8Jk7O93dZX7Tirgk=",
+        "owner": "racket",
+        "repo": "unix-socket"
+      },
+      "method": "github",
+      "path": "unix-socket"
+    }
+  },
+  "unix-socket-doc": {
+    "checksum": "698eade65ae2cd8b747ba08a3820950e385b2a81",
+    "dependencies": [
+      "net-lib",
+      "unix-socket-lib",
+      "web-server-lib",
+      "scribble-lib",
+      "net-doc",
+      "racket-doc",
+      "web-server-doc"
+    ],
+    "description": "Documentation for \"unix-socket\"",
+    "license": "Apache-2.0",
+    "name": "unix-socket-doc",
+    "source": {
+      "args": {
+        "hash": "sha256-HuCd4E0WTJRjpXnroz0v/oz1OFl8Jk7O93dZX7Tirgk=",
+        "owner": "racket",
+        "repo": "unix-socket"
+      },
+      "method": "github",
+      "path": "unix-socket-doc"
+    }
+  },
+  "unix-socket-lib": {
+    "checksum": "698eade65ae2cd8b747ba08a3820950e385b2a81",
+    "dependencies": [
+      "net-lib"
+    ],
+    "description": "Implementation (no documentation) for \"unix-socket\"",
+    "license": "Apache-2.0",
+    "name": "unix-socket-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-HuCd4E0WTJRjpXnroz0v/oz1OFl8Jk7O93dZX7Tirgk=",
+        "owner": "racket",
+        "repo": "unix-socket"
+      },
+      "method": "github",
+      "path": "unix-socket-lib"
+    }
+  },
+  "web-server": {
+    "checksum": "87a1e58a9b92c621f7d96c76de1da39587f04140",
+    "dependencies": [
+      "web-server-lib",
+      "web-server-doc"
+    ],
+    "description": "An HTTP server",
+    "license": "Apache-2.0",
+    "name": "web-server",
+    "source": {
+      "args": {
+        "hash": "sha256-LYkXanHbcQ5ro0+nC//pXqfEUGQ8v6srTLQa0CTfxWc=",
+        "owner": "racket",
+        "repo": "web-server"
+      },
+      "method": "github",
+      "path": "web-server"
+    }
+  },
+  "web-server-doc": {
+    "checksum": "87a1e58a9b92c621f7d96c76de1da39587f04140",
+    "dependencies": [
+      "net-doc",
+      "net-cookies-doc",
+      "rackunit-doc",
+      "db-doc",
+      "scribble-doc",
+      "db-lib",
+      "net-lib",
+      "net-cookies-lib",
+      "rackunit-lib",
+      "sandbox-lib",
+      "scribble-lib",
+      "web-server-lib",
+      "racket-doc"
+    ],
+    "description": "documentation part of \"web-server\"",
+    "license": "Apache-2.0",
+    "name": "web-server-doc",
+    "source": {
+      "args": {
+        "hash": "sha256-LYkXanHbcQ5ro0+nC//pXqfEUGQ8v6srTLQa0CTfxWc=",
+        "owner": "racket",
+        "repo": "web-server"
+      },
+      "method": "github",
+      "path": "web-server-doc"
+    }
+  },
+  "web-server-lib": {
+    "checksum": "87a1e58a9b92c621f7d96c76de1da39587f04140",
+    "dependencies": [
+      "srfi-lite-lib",
+      "net-lib",
+      "net-cookies-lib",
+      "scribble-text-lib",
+      "parser-tools-lib",
+      "rackunit-lib"
+    ],
+    "description": "implementation (no documentation) part of \"web-server\"",
+    "license": "Apache-2.0",
+    "name": "web-server-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-LYkXanHbcQ5ro0+nC//pXqfEUGQ8v6srTLQa0CTfxWc=",
+        "owner": "racket",
+        "repo": "web-server"
+      },
+      "method": "github",
+      "path": "web-server-lib"
+    }
+  },
+  "wxme": {
+    "checksum": "555a380a63e63977fec77c4063d58f6bdf646249",
+    "dependencies": [
+      "wxme-lib",
+      "gui-doc"
+    ],
+    "description": "Decoding the WXME graphical file format in a text-only environment",
+    "license": "Apache-2.0",
+    "name": "wxme",
+    "source": {
+      "args": {
+        "hash": "sha256-C9idY5XTCroRhpZ4cuGIhO+yvSfVcKoGjlNp/FJ+5eI=",
+        "owner": "racket",
+        "repo": "wxme"
+      },
+      "method": "github",
+      "path": "wxme"
+    }
+  },
+  "wxme-lib": {
+    "checksum": "555a380a63e63977fec77c4063d58f6bdf646249",
+    "dependencies": [
+      "scheme-lib",
+      "compatibility-lib",
+      "snip-lib"
+    ],
+    "description": "implementation (no documentation) part of \"wxme\"",
+    "license": "Apache-2.0",
+    "name": "wxme-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-C9idY5XTCroRhpZ4cuGIhO+yvSfVcKoGjlNp/FJ+5eI=",
+        "owner": "racket",
+        "repo": "wxme"
+      },
+      "method": "github",
+      "path": "wxme-lib"
+    }
+  },
+  "xrepl": {
+    "checksum": "3240161a25073e204cb7618deac5a632f6477aa5",
+    "dependencies": [
+      "xrepl-lib",
+      "xrepl-doc"
+    ],
+    "description": "Console-oriented extended REPL for Racket",
+    "license": "Apache-2.0",
+    "name": "xrepl",
+    "source": {
+      "args": {
+        "hash": "sha256-NMJZhv1q0HUoAqUVacPz0mmAoyOqFZjrZLijtn8YhWs=",
+        "owner": "racket",
+        "repo": "xrepl"
+      },
+      "method": "github",
+      "path": "xrepl"
+    }
+  },
+  "xrepl-doc": {
+    "checksum": "3240161a25073e204cb7618deac5a632f6477aa5",
+    "dependencies": [
+      "sandbox-lib",
+      "scribble-lib",
+      "errortrace-doc",
+      "macro-debugger",
+      "profile-doc",
+      "readline-doc",
+      "macro-debugger-text-lib",
+      "profile-lib",
+      "readline-lib",
+      "xrepl-lib",
+      "racket-doc"
+    ],
+    "description": "documentation part of \"xrepl\"",
+    "license": "Apache-2.0",
+    "name": "xrepl-doc",
+    "source": {
+      "args": {
+        "hash": "sha256-NMJZhv1q0HUoAqUVacPz0mmAoyOqFZjrZLijtn8YhWs=",
+        "owner": "racket",
+        "repo": "xrepl"
+      },
+      "method": "github",
+      "path": "xrepl-doc"
+    }
+  },
+  "xrepl-lib": {
+    "checksum": "3240161a25073e204cb7618deac5a632f6477aa5",
+    "dependencies": [
+      "readline-lib",
+      "scribble-text-lib"
+    ],
+    "description": "implementation (no documentation) part of \"xrepl\"",
+    "license": "Apache-2.0",
+    "name": "xrepl-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-NMJZhv1q0HUoAqUVacPz0mmAoyOqFZjrZLijtn8YhWs=",
+        "owner": "racket",
+        "repo": "xrepl"
+      },
+      "method": "github",
+      "path": "xrepl-lib"
+    }
+  },
+  "zo-lib": {
+    "checksum": "458013dc341deb3072b1a667e407482c0ba855aa",
+    "description": "Library for handling zo files",
+    "license": "Apache-2.0",
+    "name": "zo-lib",
+    "source": {
+      "args": {
+        "hash": "sha256-WXkJA6DNqQ54BMegdivL1AgwsACAIq/dO6dKA6U35bk=",
+        "owner": "racket",
+        "repo": "racket"
+      },
+      "method": "github",
+      "path": "pkgs/zo-lib"
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "args": {
+    "hash": "sha256-1oxJ9XgdlPq0Llk8RKdJtZctvL2F0NgxBe3DITCVMDM=",
+    "owner": "racket",
+    "repo": "racket",
+    "rev": "72b83f784ad1c6fb6ee3fb7b31df165bebfb21ed"
+  },
+  "version": "8.16.0.1-unstable-2025-01-19"
+}
