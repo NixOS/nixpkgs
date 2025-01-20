@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.hostPlatform.isMusl [ ./musl-error_h.patch ]
     # Prevent headers and binaries from colliding which results in an error.
     # https://sourceware.org/pipermail/elfutils-devel/2024q3/007281.html
-    ++ lib.optional (stdenv.hostPlatform.libcxx == "libcxx") ./cxx-header-collision.patch;
+    ++ lib.optional (stdenv.hostPlatform.cxxlib == "libcxx") ./cxx-header-collision.patch;
 
   postPatch =
     ''
@@ -94,7 +94,7 @@ stdenv.mkDerivation rec {
       bzip2
     ]
     ++ lib.optional enableDebuginfod pkg-config
-    ++ lib.optional (stdenv.hostPlatform.libcxx == "libcxx") autoreconfHook;
+    ++ lib.optional (stdenv.hostPlatform.cxxlib == "libcxx") autoreconfHook;
   buildInputs =
     [
       zlib
