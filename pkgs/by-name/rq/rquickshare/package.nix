@@ -97,17 +97,16 @@ rustPlatform.buildRustPackage rec {
       libsoup_2_4
     ];
 
-  passthru.updateScript =
-    let
+  passthru =
+    # Don't set an update script for the legacy version
+    # so r-ryantm won't create two duplicate PRs
+    lib.optionalAttrs (app-type == "main") {
       updateScript = writeShellScript "update-rquickshare.sh" ''
         ${lib.getExe nix-update} rquickshare
         sed -i 's/version = "0.0.0";/' pkgs/by-name/rq/rquickshare/package.nix
         ${lib.getExe nix-update} rquickshare-legacy
       '';
-    in
-    # Don't set an update script for the legacy version
-    # so r-ryantm won't create two duplicate PRs
-    app-type-either updateScript null;
+    };
 
   meta = {
     description = "Rust implementation of NearbyShare/QuickShare from Android for Linux and macOS";
