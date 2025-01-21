@@ -4,13 +4,8 @@
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
-  darwin,
   cmake,
 }:
-
-let
-  inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
-in
 rustPlatform.buildRustPackage rec {
   pname = "lune";
   version = "0.8.9";
@@ -28,11 +23,6 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     pkg-config
     cmake # required for libz-ng-sys
-  ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    Security
-    SystemConfiguration
   ];
 
   # error: linker `aarch64-linux-gnu-gcc` not found
