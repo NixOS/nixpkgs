@@ -24,7 +24,7 @@ buildPythonPackage rec {
     setuptools
     setuptools-scm
   ];
-
+  nativeCheckInputs = [ pytestCheckHook ];
   meta = {
     homepage = "https://codeberg.org/miurahr/inflate64";
     description = "Compress and decompress with Enhanced Deflate compression algorithm";
