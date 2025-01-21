@@ -178,6 +178,11 @@ in
       # from /etc/default/earlyoom.
       serviceConfig.EnvironmentFile = "";
 
+      # Workaround: Upstream DynamicUser=true prevents notifications being sent to D-Bus.
+      # - earlyoom: https://github.com/NixOS/nixpkgs/issues/374959
+      # - systemd: https://github.com/systemd/systemd/issues/22737
+      serviceConfig.DynamicUser = mkDefault (!cfg.enableNotifications);
+
       environment.EARLYOOM_ARGS =
         lib.cli.toGNUCommandLineShell { } {
           m =
