@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/leahneukirchen/xe";
     license = lib.licenses.publicDomain;
     platforms = lib.platforms.all;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.pbsds ];
     mainProgram = "xe";
   };
 }
