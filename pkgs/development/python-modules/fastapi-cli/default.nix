@@ -3,8 +3,8 @@
   buildPythonPackage,
   fetchFromGitHub,
   pdm-backend,
+  rich-toolkit,
   typer,
-  fastapi,
   uvicorn,
 
   # checks
@@ -28,6 +28,7 @@ let
     build-system = [ pdm-backend ];
 
     dependencies = [
+      rich-toolkit
       typer
       uvicorn
     ] ++ uvicorn.optional-dependencies.standard;
