@@ -23,6 +23,8 @@ import ./make-test-python.nix (
           user = "alice";
         };
 
+        programs.ydotool.enable = true;
+
         services.xserver.enable = true;
         services.displayManager.defaultSession = lib.mkForce "miriway";
 
@@ -55,7 +57,7 @@ import ./make-test-python.nix (
           ];
 
           # To help with OCR
-          etc."xdg/foot/foot.ini".text = lib.generators.toINI { } {
+          etc."xdg/foot/foot.ini".source = (pkgs.formats.ini { }).generate "foot.ini" {
             main = {
               font = "inconsolata:size=16";
             };
@@ -65,7 +67,7 @@ import ./make-test-python.nix (
               regular2 = foreground;
             };
           };
-          etc."xdg/alacritty/alacritty.yml".text = lib.generators.toYAML { } {
+          etc."xdg/alacritty/alacritty.toml".source = (pkgs.formats.toml { }).generate "alacritty.toml" {
             font = rec {
               normal.family = "Inconsolata";
               bold.family = normal.family;
@@ -109,10 +111,18 @@ import ./make-test-python.nix (
         machine.wait_for_file("/tmp/test-wayland-exit-ok")
         machine.copy_from_vm("/tmp/test-wayland.out")
         machine.screenshot("foot_wayland_info")
-        # Only succeeds when a mouse is moved inside an interactive session?
-        # machine.send_chars("exit\n")
-        # machine.wait_until_fails("pgrep foot")
-        machine.succeed("pkill foot")
+
+        # please actually register that we want to close the window
+        machine.succeed("ydotool mousemove -- 10 10")
+        machine.sleep(3)
+
+        machine.send_chars("exit\n")
+
+        # please actually register that we want to close the window
+        machine.succeed("ydotool mousemove -- 10 10")
+        machine.sleep(3)
+
+        machine.wait_until_fails("pgrep foot")
 
         # Test XWayland
         machine.send_key("ctrl-alt-a")
@@ -121,10 +131,18 @@ import ./make-test-python.nix (
         machine.wait_for_file("/tmp/test-x11-exit-ok")
         machine.copy_from_vm("/tmp/test-x11.out")
         machine.screenshot("alacritty_glinfo")
-        # Only succeeds when a mouse is moved inside an interactive session?
-        # machine.send_chars("exit\n")
-        # machine.wait_until_fails("pgrep alacritty")
-        machine.succeed("pkill alacritty")
+
+        # please actually register that we want to close the window
+        machine.succeed("ydotool mousemove -- 10 10")
+        machine.sleep(3)
+
+        machine.send_chars("exit\n")
+
+        # please actually register that we want to close the window
+        machine.succeed("ydotool mousemove -- 10 10")
+        machine.sleep(3)
+
+        machine.wait_until_fails("pgrep alacritty")
       '';
   }
 )

@@ -29,14 +29,14 @@
 }:
 
 buildDotnetModule rec {
-  pname = "ryujinx-greemdev";
-  version = "1.2.78";
+  pname = "ryubing";
+  version = "1.2.80";
 
   src = fetchFromGitHub {
-    owner = "GreemDev";
+    owner = "Ryubing";
     repo = "Ryujinx";
     rev = version;
-    hash = "sha256-kAF5Klve4132wSlFdkRqlpISpozRpZfCizEX1KvHc4I=";
+    hash = "sha256-BIiqXXtkc55FQL0HAXxtyx3rA42DTcTxG2pdNmEa5jE=";
   };
 
   nativeBuildInputs = lib.optional stdenv.isDarwin [
@@ -46,8 +46,8 @@ buildDotnetModule rec {
 
   enableParallelBuilding = false;
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  dotnet-runtime = dotnetCorePackages.runtime_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_9_0;
+  dotnet-runtime = dotnetCorePackages.runtime_9_0;
 
   nugetDeps = ./deps.json;
 
@@ -92,7 +92,6 @@ buildDotnetModule rec {
   ];
 
   executables = [
-    "Ryujinx.Headless.SDL2"
     "Ryujinx"
   ];
 
@@ -128,9 +127,9 @@ buildDotnetModule rec {
   passthru.updateScript = ./updater.sh;
 
   meta = with lib; {
-    homepage = "https://github.com/GreemDev/Ryujinx";
-    changelog = "https://github.com/GreemDev/Ryujinx/wiki/Changelog";
-    description = "Experimental Nintendo Switch Emulator written in C# (QoL fork)";
+    homepage = "https://github.com/Ryubing/Ryujinx";
+    changelog = "https://github.com/Ryubing/Ryujinx/wiki/Changelog";
+    description = "Experimental Nintendo Switch Emulator written in C# (community fork of Ryujinx)";
     longDescription = ''
       Ryujinx is an open-source Nintendo Switch emulator, created by gdkchan,
       written in C#. This emulator aims at providing excellent accuracy and

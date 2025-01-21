@@ -10792,6 +10792,12 @@
     githubId = 1476865;
     name = "jigglycrumb";
   };
+  jinser = {
+    name = "Jinser Kafka";
+    email = "aimer@purejs.icu";
+    github = "jetjinser";
+    githubId = 46820840;
+  };
   jiriks74 = {
     name = "Jiří Štefka";
     email = "jiri@stefka.eu";
@@ -22908,6 +22914,13 @@
     githubId = 72568063;
     name = "Rouven Seifert";
     keys = [ { fingerprint = "1169 87A8 DD3F 78FF 8601  BF4D B95E 8FE6 B11C 4D09"; } ];
+  };
+  theredstonedev = {
+    email = "theredstonedev@devellight.space";
+    matrix = "@theredstonedev_de:matrix.devellight.space";
+    github = "TheRedstoneDEV-DE";
+    githubId = 75328096;
+    name = "Robert Richter";
   };
   therishidesai = {
     email = "desai.rishi1@gmail.com";
