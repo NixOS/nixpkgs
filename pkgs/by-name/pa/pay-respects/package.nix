@@ -4,6 +4,7 @@
   rustPlatform,
   pkg-config,
   openssl,
+  curl,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "pay-respects";
@@ -25,6 +26,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     openssl
+    curl
   ];
 
   meta = {
