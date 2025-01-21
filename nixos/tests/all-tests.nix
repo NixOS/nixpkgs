@@ -622,7 +622,7 @@ in {
   monado = handleTest ./monado.nix {};
   monetdb = handleTest ./monetdb.nix {};
   monica = handleTest ./web-apps/monica.nix {};
-  mongodb = handleTest ./mongodb.nix {};
+  mongodb = runTest ./mongodb.nix;
   moodle = handleTest ./moodle.nix {};
   moonraker = handleTest ./moonraker.nix {};
   mopidy = handleTest ./mopidy.nix {};
