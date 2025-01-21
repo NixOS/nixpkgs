@@ -4,30 +4,30 @@
   fetchFromGitHub,
   stdenv,
   makeWrapper,
-  nodejs_20,
+  nodejs_22,
   python3,
   sqlite,
   nix-update-script,
 }:
 
 let
-  nodejs = nodejs_20;
+  nodejs = nodejs_22;
   pnpm = pnpm_9.override { inherit nodejs; };
 in
 stdenv.mkDerivation rec {
   pname = "jellyseerr";
-  version = "2.2.3";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "Fallenbagel";
     repo = "jellyseerr";
     rev = "v${version}";
-    hash = "sha256-JkbmCyunaMngAKUNLQHxfa1pktXxTjeL6ngvIgiAsGo=";
+    hash = "sha256-vAMuiHcf13CDyOB0k36DXUk+i6K6h/R7dmBLJsMkzNA=";
   };
 
   pnpmDeps = pnpm.fetchDeps {
     inherit pname version src;
-    hash = "sha256-1r2+aeRb6zdpqqimufibVRjeAdvwHL0GiQSu5pHBh+U=";
+    hash = "sha256-iSzs+lMQzcFjUz4K3rYP0I6g/wVz6u49FSQuPHXbVRM=";
   };
 
   buildInputs = [ sqlite ];
