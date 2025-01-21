@@ -442,7 +442,7 @@ let
             inherit (prevStage.freebsd) libc;
             inherit (prevStage) gnugrep coreutils expand-response-params;
             runtimeShell = shell;
-            bintools = prevStage.binutils-unwrapped;
+            bintools = (prevStage.llvmPackages or { }).bintools-unwrapped or prevStage.binutils-unwrapped;
             propagateDoc = false;
             nativeTools = false;
             nativeLibc = false;
