@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     description = "C++ bindings for libgda";
     homepage = "https://www.gnome-db.org/";
     license = licenses.lgpl21Plus;
-    maintainers = teams.gnome.members;
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }
