@@ -5,14 +5,14 @@
   qt6,
   nix-update-script,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dsda-launcher";
   version = "1.4";
 
   src = fetchFromGitHub {
     owner = "Pedro-Beirao";
     repo = "dsda-launcher";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-OMgxhb+9GdLK00nl/df9QiYYewr+YEjdX2KjQWvu1mk=";
   };
 
@@ -51,4 +51,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ Gliczy ];
   };
-}
+})
