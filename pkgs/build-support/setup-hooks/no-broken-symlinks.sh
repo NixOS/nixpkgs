@@ -51,22 +51,22 @@ noBrokenSymlinks() {
       fi
     fi
 
-    if [[ ! -e $symlinkTarget ]]; then
+    if [[ $path == "$symlinkTarget" ]]; then
+      # symlinkTarget is reflexive
+      errorMessage="the symlink $path is reflexive $symlinkTarget"
+      if [[ -z ${allowReflexiveSymlinks-} ]]; then
+        nixErrorLog "$errorMessage"
+        numReflexiveSymlinks+=1
+      else
+        nixInfoLog "$errorMessage"
+      fi
+
+    elif [[ ! -e $symlinkTarget ]]; then
       # symlinkTarget does not exist
       errorMessage="the symlink $path points to a missing target $symlinkTarget"
       if [[ -z ${allowDanglingSymlinks-} ]]; then
         nixErrorLog "$errorMessage"
         numDanglingSymlinks+=1
-      else
-        nixInfoLog "$errorMessage"
-      fi
-
-    elif [[ $path == "$symlinkTarget" ]]; then
-      # symlinkTarget is exists and is reflexive
-      errorMessage="the symlink $path is reflexive $symlinkTarget"
-      if [[ -z ${allowReflexiveSymlinks-} ]]; then
-        nixErrorLog "$errorMessage"
-        numReflexiveSymlinks+=1
       else
         nixInfoLog "$errorMessage"
       fi
