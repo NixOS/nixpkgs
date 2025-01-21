@@ -9015,6 +9015,9 @@ with pkgs;
     else if name == "nblibc" then targetPackages.netbsd.libc or netbsd.libc
     else if name == "wasilibc" then targetPackages.wasilibc or wasilibc
     else if name == "relibc" then targetPackages.relibc or relibc
+    else if name == "llvm" then
+      # Use llvmPackages_git until LLVM 20 is the default.
+      targetPackages.llvmPackages_git.libc or llvmPackages_git.libc
     else throw "Unknown libc ${name}";
 
   libcCross =
@@ -12553,7 +12556,7 @@ with pkgs;
     zfs_2_2
     zfs_2_3
     zfs_unstable;
-  zfs = zfs_2_2;
+  zfs = zfs_2_3;
 
   ### DATA
 
@@ -13448,10 +13451,6 @@ with pkgs;
 
   guitarix = callPackage ../applications/audio/guitarix {
     fftw = fftwSinglePrec;
-  };
-
-  gurk-rs = callPackage ../applications/networking/instant-messengers/gurk-rs {
-    inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
   puddletag = libsForQt5.callPackage ../applications/audio/puddletag { };
@@ -15482,10 +15481,6 @@ with pkgs;
   uuagc = haskell.lib.compose.justStaticExecutables haskellPackages.uuagc;
 
   valentina = libsForQt5.callPackage ../applications/misc/valentina { };
-
-  vcprompt = callPackage ../applications/version-management/vcprompt {
-    autoconf = buildPackages.autoconf269;
-  };
 
   vdirsyncer = with python3Packages; toPythonApplication vdirsyncer;
 

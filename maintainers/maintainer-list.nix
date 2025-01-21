@@ -3241,6 +3241,12 @@
     matrix = "@boozedog:matrix.org";
     name = "David A. Buser";
   };
+  boralg = {
+    name = "boralg";
+    github = "boralg";
+    githubId = 144260188;
+    matrix = "@boralg:matrix.org";
+  };
   borisbabic = {
     email = "boris.ivan.babic@gmail.com";
     github = "borisbabic";
@@ -7063,6 +7069,7 @@
   };
   ethancedwards8 = {
     email = "ethan@ethancedwards.com";
+    matrix = "@ethancedwards8:matrix.org";
     github = "ethancedwards8";
     githubId = 60861925;
     name = "Ethan Carter Edwards";
@@ -8337,10 +8344,11 @@
     name = "Tobias Happ";
   };
   getchoo = {
+    name = "Seth Flynn";
     email = "getchoo@tuta.io";
+    matrix = "@getchoo:matrix.org";
     github = "getchoo";
     githubId = 48872998;
-    name = "Seth";
   };
   getpsyched = {
     name = "Priyanshu Tripathi";
@@ -20188,7 +20196,7 @@
     github = "rytswd";
     githubId = 23435099;
     name = "Ryota";
-    keys = [ { fingerprint = "537E 712F 0EC3 91C2 B47F  56E2 EB5D 1A84 5333 43BB"; } ];
+    keys = [ { fingerprint = "2FAC 1A25 5175 125E F60B  BC04 B89E C8B6 EE43 39C4"; } ];
   };
   ryze = {
     name = "Ryze";
@@ -22969,11 +22977,6 @@
     email = "thilo.billerbeck@officerent.de";
     github = "thilobillerbeck";
     githubId = 7442383;
-  };
-  thinnerthinker = {
-    name = "thinnerthinker";
-    github = "thinnerthinker";
-    githubId = 144260188;
   };
   thled = {
     name = "Thomas Le Duc";

@@ -91,11 +91,11 @@ with self; {
 
   ack = buildPerlPackage rec {
     pname = "ack";
-    version = "3.7.0";
+    version = "3.8.0";
 
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PETDANCE/ack-v${version}.tar.gz";
-      hash = "sha256-6nyqFPdX3ggzEO0suimGYd3Mpd7gbsjxgEPqYlp53yA=";
+      hash = "sha256-ZAsaGzbKFaTR0XkvKkTmmurlg5HPDSH6iilmWoiV9xg=";
     };
 
     outputs = [ "out" "man" ];
@@ -11464,7 +11464,7 @@ with self; {
     '';
     meta = {
       description = "Pluggable Markov engine analogous to MegaHAL";
-      homepage = "https://hailo.org";
+      homepage = "https://github.com/hailo/hailo";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       mainProgram = "hailo";
     };

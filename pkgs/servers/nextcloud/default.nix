@@ -48,6 +48,7 @@ let
           bachp
           globin
           ma27
+          britter
         ];
         license = lib.licenses.agpl3Plus;
         platforms = lib.platforms.linux;
