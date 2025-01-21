@@ -71,5 +71,6 @@ in
     moni
     artturin
     frontear
+    pandapip1
   ];
 }
