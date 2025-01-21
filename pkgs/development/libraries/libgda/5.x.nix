@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/libgda/${lib.versions.majorMinor version}/libgda-${version}.tar.xz";
-    hash = "sha256-1j1l4dwjgw6w4d1v4bl5a4kwyj7bcih8mj700ywm7xakh1xxyv3g";
+    hash = "sha256-b2zfe4BT9VO5B+DIimBk60jPJ1GFLrJDI9zwJ3kjNMg=";
   };
 
   patches = [
@@ -113,7 +113,7 @@ stdenv.mkDerivation rec {
       # CLI tools
       gpl2Plus
     ];
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.bot-wxt1221 ];
     platforms = lib.platforms.unix;
   };
 }
