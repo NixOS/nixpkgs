@@ -223,11 +223,24 @@ in
       description = "ClamAV Antivirus Slice";
     };
 
+    systemd.sockets.clamav-daemon = lib.mkIf cfg.daemon.enable {
+      description = "Socket for ClamAV daemon (clamd)";
+      wantedBy = [ "sockets.target" ];
+      listenStreams = [
+        cfg.daemon.settings.LocalSocket
+      ];
+      socketConfig = {
+        SocketUser = clamavUser;
+        SocketGroup = clamavGroup;
+      };
+    };
+
     systemd.services.clamav-daemon = lib.mkIf cfg.daemon.enable {
       description = "ClamAV daemon (clamd)";
       documentation = [ "man:clamd(8)" ];
       after = lib.optionals cfg.updater.enable [ "clamav-freshclam.service" ];
       wants = lib.optionals cfg.updater.enable [ "clamav-freshclam.service" ];
+      requires = [ "clamav-daemon.socket" ];
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ clamdConfigFile ];
 
