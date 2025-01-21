@@ -9,6 +9,7 @@
   buildPythonPackage,
   cython,
   fetchFromGitHub,
+  freezegun,
   poetry-core,
   pytest-asyncio,
   pytest-codspeed,
@@ -48,6 +49,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    freezegun
     pytest-asyncio
     pytest-codspeed
     pytest-cov-stub
