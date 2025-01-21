@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
@@ -76,29 +75,18 @@ buildPythonPackage rec {
       # https://github.com/google/jaxopt/issues/592
       "test_solve_sparse"
 
+      # https://github.com/google/jaxopt/issues/593
+      # Makes the test suite crash
+      "test_dtype_consistency"
+
       # AssertionError: Not equal to tolerance rtol=1e-06, atol=1e-06
       # https://github.com/google/jaxopt/issues/618
       "test_binary_logit_log_likelihood"
 
       # AssertionError (flaky numerical tests)
       "test_logreg_with_intercept_manual_loop3"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
-      # Flaky (AssertionError)
       "test_inv_hessian_product_pytree3"
-
-      # https://github.com/google/jaxopt/issues/593
-      # Makes the test suite crash
-      "test_dtype_consistency"
-      # AssertionError: Array(0.01411963, dtype=float32) not less than or equal to 0.01
       "test_multiclass_logreg6"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Fatal Python error: Aborted
-      "test_dtype_consistency"
-
-      # AssertionError (flaky numerical tests)
-      "test_inv_hessian_product_pytree3"
     ];
 
   meta = {
