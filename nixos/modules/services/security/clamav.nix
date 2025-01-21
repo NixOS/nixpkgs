@@ -65,6 +65,11 @@ in
           '';
         };
       };
+
+      clamonacc = {
+        enable = lib.mkEnableOption "ClamAV on-access scanner";
+      };
+
       updater = {
         enable = lib.mkEnableOption "ClamAV freshclam updater";
 
@@ -177,6 +182,10 @@ in
         assertion = cfg.scanner.enable -> cfg.daemon.enable;
         message = "ClamAV scanner requires ClamAV daemon to operate";
       }
+      {
+        assertion = cfg.clamonacc.enable -> cfg.daemon.enable;
+        message = "ClamAV on-access scanner requires ClamAV daemon to operate";
+      }
     ];
 
     environment.systemPackages = [ cfg.package ];
@@ -198,6 +207,8 @@ in
       PidFile = "/run/clamav/clamd.pid";
       User = clamavUser;
       Foreground = true;
+      # Prevent infinite recursion in scanning
+      OnAccessExcludeUname = clamavUser;
     };
 
     services.clamav.updater.settings = {
@@ -253,6 +264,20 @@ in
         PrivateTmp = "yes";
         PrivateDevices = "yes";
         PrivateNetwork = "yes";
+        Slice = "system-clamav.slice";
+      };
+    };
+
+    systemd.services.clamav-clamonacc = lib.mkIf cfg.clamonacc.enable {
+      description = "ClamAV on-access scanner (clamonacc)";
+      after = [ "clamav-daemon.service" ];
+      requires = [ "clamav-daemon.service" ];
+      wantedBy = [ "multi-user.target" ];
+      restartTriggers = [ clamdConfigFile ];
+
+      # This unit must start as root to be able to use fanotify.
+      serviceConfig = {
+        ExecStart = "${cfg.package}/bin/clamonacc -F --fdpass";
         Slice = "system-clamav.slice";
       };
     };
