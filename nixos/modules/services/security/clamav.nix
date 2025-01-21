@@ -172,6 +172,13 @@ in
   };
 
   config = lib.mkIf (cfg.updater.enable || cfg.daemon.enable) {
+    assertions = [
+      {
+        assertion = cfg.scanner.enable -> cfg.daemon.enable;
+        message = "ClamAV scanner requires ClamAV daemon to operate";
+      }
+    ];
+
     environment.systemPackages = [ cfg.package ];
 
     users.users.${clamavUser} = {
@@ -189,7 +196,7 @@ in
       DatabaseDirectory = stateDir;
       LocalSocket = "/run/clamav/clamd.ctl";
       PidFile = "/run/clamav/clamd.pid";
-      User = "clamav";
+      User = clamavUser;
       Foreground = true;
     };
 
