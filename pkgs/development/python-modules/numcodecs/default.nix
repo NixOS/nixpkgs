@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchPypi,
-  python,
   pythonOlder,
 
   # build-system
@@ -13,6 +12,7 @@
   py-cpuinfo,
 
   # dependencies
+  deprecated,
   numpy,
 
   # tests
@@ -40,7 +40,10 @@ buildPythonPackage rec {
     py-cpuinfo
   ];
 
-  dependencies = [ numpy ];
+  dependencies = [
+    deprecated
+    numpy
+  ];
 
   optional-dependencies = {
     msgpack = [ msgpack ];
