@@ -10,6 +10,7 @@
   # propagates
   distutils,
   pyyaml,
+  standard-pipes,
 
   # optionals
   boto3,
@@ -46,6 +47,7 @@ buildPythonPackage rec {
   dependencies = [
     distutils
     pyyaml
+    standard-pipes
   ];
 
   optional-dependencies = {
