@@ -223,3 +223,6 @@ adb9714bd909df283c66bbd641bd631ff50a4260
 
 # tmuxPlugins sha-to-sri.py script
 516b1e74c358a9c4b06e5591f8c1a2897aad0c33
+
+# nixos/iso-image.nix: nixfmt
+8577a89061e35f6a9323d7db276fbd8db2d3d9d1
