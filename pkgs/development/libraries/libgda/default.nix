@@ -29,20 +29,23 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1j1l4dwjgw6w4d1v4bl5a4kwyj7bcih8mj700ywm7xakh1xxyv3g";
+    hash = "sha256-b2zfe4BT9VO5B+DIimBk60jPJ1GFLrJDI9zwJ3kjNMg=";
   };
 
   patches = [
     # fix compile error with mysql
     (fetchpatch {
       url = "https://gitlab.gnome.org/GNOME/libgda/-/commit/9859479884fad5f39e6c37e8995e57c28b11b1b9.diff";
-      sha256 = "158sncc5bg9lkri1wb0i1ri1nhx4c34rzi47gbfkwphlp7qd4qqv";
+      hash = "sha256-G2PS8LkUXj7deofEn8lgpEMbYg4RLB5injS9VRizGpU=";
     })
     (fetchpatch {
       name = "CVE-2021-39359.patch";
       url = "https://src.fedoraproject.org/rpms/libgda5/raw/72bb769f12e861e27e883dac5fab34f1ba4bd97e/f/bebdffb4de586fb43fd07ac549121f4b22f6812d.patch";
-      sha256 = "sha256-hIKuY5NEqOzntdlLb541bA4xZU5ypTRmV1u765K6KbM=";
+      hash = "sha256-hIKuY5NEqOzntdlLb541bA4xZU5ypTRmV1u765K6KbM=";
     })
+
+    # Fix configure detection of features with c99.
+    ./0001-gcc14-fix.patch
   ];
 
   nativeBuildInputs = [
@@ -100,16 +103,16 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Database access library";
     homepage = "https://www.gnome-db.org/";
-    license = with licenses; [
+    license = with lib.licenses; [
       # library
       lgpl2Plus
       # CLI tools
       gpl2Plus
     ];
-    maintainers = teams.gnome.members;
-    platforms = platforms.unix;
+    maintainers = lib.teams.gnome.members;
+    platforms = lib.platforms.unix;
   };
 }
