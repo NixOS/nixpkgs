@@ -3289,6 +3289,18 @@ with pkgs;
 
   fastlane = callPackage ../tools/admin/fastlane { };
 
+  firezone-server-api = callPackage ../by-name/fi/firezone-server/package.nix {
+    mixReleaseName = "api";
+  };
+
+  firezone-server-domain = callPackage ../by-name/fi/firezone-server/package.nix {
+    mixReleaseName = "domain";
+  };
+
+  firezone-server-web = callPackage ../by-name/fi/firezone-server/package.nix {
+    mixReleaseName = "web";
+  };
+
   fontmatrix = libsForQt5.callPackage ../applications/graphics/fontmatrix { };
 
   fox = callPackage ../development/libraries/fox {};
