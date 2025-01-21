@@ -311,29 +311,30 @@ rec {
       {
         nullable ? false,
         default ? name,
+        defaultText ? null,
         example ? null,
         extraDescription ? "",
         pkgsText ? "pkgs"
       }:
       let
-        name' = if isList name then last name else name;
-        default' = if isList default then default else [ default ];
-        defaultText = concatStringsSep "." default';
-        defaultValue = attrByPath default'
-          (throw "${defaultText} cannot be found in ${pkgsText}") pkgs;
+        name' = if lib.isList name then lib.last name else name;
+        default' = if lib.isList default then default else [ default ];
+        defaultText' = lib.showAttrPath default';
+        defaultValue = lib.attrByPath default'
+          (throw "${defaultText'} cannot be found in ${pkgsText}") pkgs;
         defaults = if default != null then {
           default = defaultValue;
-          defaultText = literalExpression ("${pkgsText}." + defaultText);
-        } else optionalAttrs nullable {
+          defaultText = if defaultText != null then defaultText else lib.literalExpression ("${pkgsText}." + defaultText');
+        } else lib.optionalAttrs nullable {
           default = null;
         };
       in mkOption (defaults // {
         description = "The ${name'} package to use."
           + (if extraDescription == "" then "" else " ") + extraDescription;
-        type = with lib.types; (if nullable then nullOr else lib.id) package;
-      } // optionalAttrs (example != null) {
-        example = literalExpression
-          (if isList example then "${pkgsText}." + concatStringsSep "." example else example);
+        type = (if nullable then lib.types.nullOr else lib.id) lib.types.package;
+      } // lib.optionalAttrs (example != null) {
+        example = lib.literalExpression
+          (if lib.isList example then "${pkgsText}." + concatStringsSep "." example else example);
       });
 
   /**

@@ -48,6 +48,10 @@ in
       pkgsText = "myPkgs";
     };
 
+    packageWithDefaultText = lib.mkPackageOption pkgs "hello" {
+      defaultText = lib.literalExpression "if config.useGo then pkgs.hello-go else pkgs.hello";
+    };
+
     packageFromOtherSet =
       let
         myPkgs = {
