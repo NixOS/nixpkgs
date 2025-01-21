@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , pkg-config
 , python3
@@ -33,6 +34,14 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-v32yGMo5oFEl6HUdg8czCsCLDL+sy9PPT0AEWmKxUhk=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "libgit2-darwin-case-sensitive-build.patch";
+      url = "https://github.com/libgit2/libgit2/commit/1b348a31349e847b1d8548281aa92f26b9783f2f.patch";
+      hash = "sha256-CBaUuEr3nPdUuOdyJtmPgyqR0MNnVyOFYbYXF3ncupU=";
+    })
+  ];
 
   cmakeFlags = [
     "-DREGEX_BACKEND=pcre2"
