@@ -27,8 +27,8 @@ let
   # 2) nix-build -A tree-sitter.updater.update-all-grammars
   # 3) Set GITHUB_TOKEN env variable to avoid api rate limit (Use a Personal Access Token from https://github.com/settings/tokens It does not need any permissions)
   # 4) run the ./result script that is output by that (it updates ./grammars)
-  version = "0.24.6";
-  hash = "sha256-L7F2/S22knqEdB2hxfqLe5Tcgk0WQqBdFQ7BvHFl4EI=";
+  version = "0.24.7";
+  hash = "sha256-nLnAhGZ3MxvD7iNCZ6TW99+53NT+IyqIW0lDvaknD+o=";
 
   src = fetchFromGitHub {
     owner = "tree-sitter";
@@ -169,7 +169,7 @@ rustPlatform.buildRustPackage {
   pname = "tree-sitter";
   inherit src version;
 
-  cargoHash = "sha256-mk3aw1aFu7N+b4AQL5kiaHuIAuJv24KonFeGKid427Q=";
+  cargoHash = "sha256-ec67w84L5FSq8rPegq3CGxRBAjdyPmFuxuPOdxzwofQ=";
 
   buildInputs = [ installShellFiles ];
   nativeBuildInputs = [ which ] ++ lib.optionals webUISupport [ emscripten ];
