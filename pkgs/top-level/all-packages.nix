@@ -243,6 +243,9 @@ with pkgs;
       auto-patchelf
       bintools
     ];
+    substitutions = {
+      hostPlatform = stdenv.hostPlatform.config;
+    };
   } ../build-support/setup-hooks/auto-patchelf.sh;
 
   appimageTools = callPackage ../build-support/appimage { };
