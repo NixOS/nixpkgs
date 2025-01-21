@@ -34,6 +34,9 @@ buildPythonPackage rec {
   version = "1.3.0";
   pyproject = true;
 
+  # Dynamo is not supported on Python 3.13+
+  disabled = pythonAtLeast "3.13";
+
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "accelerate";
