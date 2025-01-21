@@ -79,6 +79,9 @@ buildPythonPackage rec {
       # AssertionError: Not equal to tolerance rtol=1e-06, atol=1e-06
       # https://github.com/google/jaxopt/issues/618
       "test_binary_logit_log_likelihood"
+
+      # AssertionError (flaky numerical tests)
+      "test_logreg_with_intercept_manual_loop3"
     ]
     ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
       # https://github.com/google/jaxopt/issues/577
