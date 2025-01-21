@@ -728,10 +728,14 @@ let
                 hash = "sha256-eFcvxZaAuBsY/bda1h9212QevrXyvCHw8Cr9ngetDr0=";
               })
             ]
-            ++ lib.optional (lib.versionOlder metadata.release_version "14") (
-              metadata.getVersionFile "lldb/gnu-install-dirs.patch"
-            )
-            ++ lib.optional (lib.versionAtLeast metadata.release_version "14") ./lldb/gnu-install-dirs.patch;
+            ++ lib.optionals (lib.versionOlder metadata.release_version "14") [
+              (metadata.getVersionFile "lldb/gnu-install-dirs.patch")
+              (metadata.getVersionFile "lldb/fix-cross-python.patch")
+            ]
+            ++ lib.optionals (lib.versionAtLeast metadata.release_version "14") [
+              ./lldb/gnu-install-dirs.patch
+              ./lldb/fix-cross-python.patch
+            ];
         }
         // lib.optionalAttrs (lib.versions.major metadata.release_version == "16") {
           src = callPackage (

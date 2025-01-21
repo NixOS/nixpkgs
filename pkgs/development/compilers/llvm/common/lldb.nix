@@ -18,6 +18,7 @@
 , makeWrapper
 , lua5_3
 , ninja
+, buildLlvmTools
 , runCommand
 , src ? null
 , monorepoSrc ? null
@@ -62,12 +63,10 @@ stdenv.mkDerivation (rec {
 
   nativeBuildInputs = [
     cmake
-    python3
     which
     swig
     lit
     makeWrapper
-    lua5_3
   ] ++ lib.optionals enableManpages [
     python3.pkgs.sphinx
   ] ++ lib.optionals (lib.versionOlder release_version "18" && enableManpages) [
@@ -84,6 +83,8 @@ stdenv.mkDerivation (rec {
     libedit
     libxml2
     libllvm
+    python3
+    lua5_3
   ] ++ lib.optionals (lib.versionAtLeast release_version "16") [
     # Starting with LLVM 16, the resource dir patch is no longer enough to get
     # libclang into the rpath of the lldb executables. By putting it into
@@ -100,6 +101,9 @@ stdenv.mkDerivation (rec {
     "-DLLVM_ENABLE_RTTI=OFF"
     "-DClang_DIR=${lib.getDev libclang}/lib/cmake"
     "-DLLVM_EXTERNAL_LIT=${lit}/bin/lit"
+    "-DLLVM_TABLEGEN=${buildLlvmTools.tblgen}/bin/llvm-tblgen"
+    "-DCLANG_TABLEGEN=${buildLlvmTools.tblgen}/bin/clang-tblgen"
+    "-DLLDB_TABLEGEN_EXE=${buildLlvmTools.tblgen}/bin/lldb-tblgen"
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-DLLDB_USE_SYSTEM_DEBUGSERVER=ON"
   ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
