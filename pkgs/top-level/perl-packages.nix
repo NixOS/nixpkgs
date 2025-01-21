@@ -22795,8 +22795,12 @@ with self; {
       hash = "sha256-RokV+joE3PZXT8lX7/SVkV4kVpQ0lwyR7o5OFFn8kRQ=";
     };
     setOutputFlags = false;
-    buildInputs = [ pkgs.which ];
+    nativeBuildInputs = [ pkgs.which ];
     patches = [ ../development/perl-modules/Socket6-sv_undef.patch ];
+    preConfigure = lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      substituteInPlace configure \
+        --replace-fail 'cross_compiling=no' 'cross_compiling=yes;ipv6_cv_can_inet_ntop=yes'
+    '';
     meta = {
       description = "IPv6 related part of the C socket.h defines and structure manipulators";
       license = with lib.licenses; [ bsd3 ];
