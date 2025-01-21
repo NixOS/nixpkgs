@@ -1,9 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  dos2unix,
   fetchPypi,
-  fetchpatch2,
   numpy,
   pytestCheckHook,
   setuptools,
@@ -18,21 +16,6 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-sK/2tI68mdL1Tye19zpYy5L95lCu/xs5fHHIeItP/xo=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      # https://github.com/pydata/numexpr/pull/491
-      name = "fix-test.patch";
-      url = "https://github.com/pydata/numexpr/commit/2c7bb85e117147570db5619ed299497a42af9f54.patch";
-      hash = "sha256-cv2logZ8dKeWNB5+bPmPfpfiWaV7k8+2sE9lZa+dUsA=";
-    })
-  ];
-
-  prePatch = ''
-    dos2unix numexpr/tests/test_numexpr.py
-  '';
-
-  nativeBuildInputs = [ dos2unix ];
 
   build-system = [
     setuptools
