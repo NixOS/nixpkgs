@@ -10,8 +10,8 @@
 
   # dependencies
   decorator,
-  httptools,
-  python-magic,
+  h11,
+  puremagic,
   urllib3,
 
   # optional-dependencies
@@ -45,12 +45,12 @@ buildPythonPackage rec {
     hash = "sha256-Gms2WOZowrwf6EQt94QLW3cxhUT1wVeplSd2sX6/8qI=";
   };
 
-  nativeBuildInputs = [ hatchling ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     decorator
-    httptools
-    python-magic
+    h11
+    puremagic
     urllib3
   ];
 
@@ -61,6 +61,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs =
     [
+      aiohttp
       asgiref
       fastapi
       gevent
@@ -73,8 +74,7 @@ buildPythonPackage rec {
       requests
       sure
     ]
-    ++ lib.optionals (pythonOlder "3.12") [ aiohttp ]
-    ++ lib.flatten (builtins.attrValues optional-dependencies);
+    ++ lib.flatten (lib.attrValues optional-dependencies);
 
   preCheck = lib.optionalString stdenv.hostPlatform.isLinux ''
     ${redis-server}/bin/redis-server &
