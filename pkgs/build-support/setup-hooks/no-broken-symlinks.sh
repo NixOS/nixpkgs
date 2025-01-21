@@ -47,7 +47,7 @@ noBrokenSymlinks() {
       # If it does, Nix probably won't be able to resolve or track dependencies.
       if [[ $symlinkTarget != "$output" && $symlinkTarget != "$output"/* ]]; then
         nixErrorLog "symlink $path points to target $symlinkTarget, which escapes the current store path $output"
-        return 1
+        exit 1
       fi
     fi
 
@@ -79,7 +79,7 @@ noBrokenSymlinks() {
 
   if ((numDanglingSymlinks > 0 || numReflexiveSymlinks > 0)); then
     nixErrorLog "found $numDanglingSymlinks dangling symlinks and $numReflexiveSymlinks reflexive symlinks"
-    return 1
+    exit 1
   fi
   return 0
 }
