@@ -15,21 +15,26 @@
   typing-extensions,
   urwid,
   watchdog,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "bpython";
-  version = "0.24";
-  format = "setuptools";
+  version = "0.25";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-mHNv/XqMSP0r+1PYmKR19CQb3gtnISVwavBNnQj9Pb0=";
+    hash = "sha256-wkb8kJ723MJunYy0YVsOaxYT81Q9EiabGf/QeCFmxls=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     curtsies
     cwcwidth
     greenlet
@@ -57,11 +62,11 @@ buildPythonPackage rec {
     "test_syntaxerror"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Fancy curses interface to the Python interactive interpreter";
     homepage = "https://bpython-interpreter.org/";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       flokli
       dotlambda
     ];
