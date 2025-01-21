@@ -13,14 +13,14 @@ let
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "khoj";
-  version = "1.30.7";
+  version = "1.34.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "debanjum";
     repo = "khoj";
     rev = "refs/tags/${version}";
-    hash = "sha256-upZqXNlDhTk/aXrLtnvdOJdrE58CnbdqUZdiaqM3xao=";
+    hash = "sha256-2phYdEkhqRVFlYAeJLH1UlbaqP3Q1V0OM06BDUqbGa0=";
   };
 
   env = {
@@ -68,13 +68,13 @@ python3.pkgs.buildPythonApplication rec {
       uvicorn
       aiohttp
       langchain
-      langchain-openai
       langchain-community
       requests
       # Tenacity is duplicated in the upstream pyproject.toml file
       anyio
       pymupdf
       django_5
+      # django-unfold
       authlib
       # llama-cpp-python # not yet packaged
       itsdangerous
@@ -99,6 +99,9 @@ python3.pkgs.buildPythonApplication rec {
       anthropic
       docx2txt
       google-generativeai
+      pyjson5
+      resend
+      email-validator
     ]
     ++ python3.pkgs.pydantic.optional-dependencies.email;
 
