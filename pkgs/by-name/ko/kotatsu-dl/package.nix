@@ -6,7 +6,7 @@ pkgs.stdenv.mkDerivation rec {
 
   src = pkgs.fetchurl {
     url = "https://github.com/KotatsuApp/kotatsu-dl/releases/download/v${version}/kotatsu-dl.jar";
-    sha256 = "sha256-KwVm4+fe7wCP2J4ikOYyDRfXwyqi+ZfjDh0a5lmqFpA=";
+    sha256 = "sha256-GI/PLt8wbVs2R78PbQg/9/Rea33j6CFQjuqhYIQGimM=";
   };
 
   # Skip the unpackPhase since it's just a JAR file, not an archive
