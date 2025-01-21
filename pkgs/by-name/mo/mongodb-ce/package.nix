@@ -12,6 +12,7 @@
   nix-update,
   gitMinimal,
   pup,
+  nixosTests,
 }:
 
 let
@@ -102,9 +103,12 @@ stdenv.mkDerivation (finalAttrs: {
         command = lib.getExe script;
       };
 
-    tests.version = testers.testVersion {
-      package = mongodb-ce;
-      command = "mongod --version";
+    tests = {
+      inherit (nixosTests) mongodb-ce;
+      version = testers.testVersion {
+        package = mongodb-ce;
+        command = "mongod --version";
+      };
     };
   };
 
