@@ -2248,6 +2248,10 @@ in
     doInstallCheck = true;
   };
 
+  nvim-dap-view = super.nvim-dap-view.overrideAttrs {
+    dependencies = [ self.nvim-dap ];
+  };
+
   nvim-dap-virtual-text = super.nvim-dap-virtual-text.overrideAttrs {
     dependencies = [ self.nvim-dap ];
   };
