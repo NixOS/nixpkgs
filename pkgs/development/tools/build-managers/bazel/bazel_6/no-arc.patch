@@ -1,0 +1,42 @@
+diff --git a/tools/osx/BUILD b/tools/osx/BUILD
+index 990afe3e8c..cd5b7b1b7a 100644
+--- a/tools/osx/BUILD
++++ b/tools/osx/BUILD
+@@ -28,8 +28,8 @@ exports_files([
+ ])
+ 
+ DARWIN_XCODE_LOCATOR_COMPILE_COMMAND = """
+-  /usr/bin/xcrun --sdk macosx clang -mmacosx-version-min=10.13 -fobjc-arc -framework CoreServices \
+-      -framework Foundation -arch arm64 -arch x86_64 -Wl,-no_adhoc_codesign -Wl,-no_uuid -o $@ $< && \
++  /usr/bin/xcrun --sdk macosx clang -mmacosx-version-min=10.13 -framework CoreServices \
++      -framework Foundation -arch @multiBinPatch@ -Wl,-no_uuid -o $@ $< && \
+   env -i codesign --identifier $@ --force --sign - $@
+ """
+ 
+diff --git a/tools/osx/xcode_configure.bzl b/tools/osx/xcode_configure.bzl
+index 2b819f07ec..a98ce37673 100644
+--- a/tools/osx/xcode_configure.bzl
++++ b/tools/osx/xcode_configure.bzl
+@@ -127,7 +127,6 @@ def run_xcode_locator(repository_ctx, xcode_locator_src_label):
+         "macosx",
+         "clang",
+         "-mmacosx-version-min=10.13",
+-        "-fobjc-arc",
+         "-framework",
+         "CoreServices",
+         "-framework",
+diff --git a/tools/osx/xcode_locator.m b/tools/osx/xcode_locator.m
+index ed2ef87453..e0ce6dbdd1 100644
+--- a/tools/osx/xcode_locator.m
++++ b/tools/osx/xcode_locator.m
+@@ -21,10 +21,6 @@
+ // 6,6.4,6.4.1 = 6.4.1
+ // 6.3,6.3.0 = 6.3
+ 
+-#if !defined(__has_feature) || !__has_feature(objc_arc)
+-#error "This file requires ARC support."
+-#endif
+-
+ #import <CoreServices/CoreServices.h>
+ #import <Foundation/Foundation.h>
+ 

@@ -1,0 +1,34 @@
+--- a/platforms/unix/plugins/UnicodePlugin/Makefile.inc
++++ b/platforms/unix/plugins/UnicodePlugin/Makefile.inc
+@@ -1,2 +1,2 @@
+-XCPPFLAGS=	-I/usr/include/cairo -I/usr/include/pango-1.0 -I/usr/include/glib-2.0  -I/usr/lib/glib-2.0/include -I/usr/lib/arm-linux-gnueabihf/glib-2.0/include -I/usr/lib/i386-linux-gnu/glib-2.0/include
++XCPPFLAGS=	[unicode_plugin_cflags]
+-XLDFLAGS= -lpangocairo-1.0 -lcairo -lpango-1.0 -lgobject-2.0 -lglib-2.0
++XLDFLAGS=	[unicode_plugin_libs]
+--- a/platforms/unix/plugins/UnicodePlugin/acinclude.m4
++++ b/platforms/unix/plugins/UnicodePlugin/acinclude.m4
+@@ -2,9 +2,14 @@
+ 
+ AC_MSG_CHECKING([for PangoCairo libraries])
+ save_CPPFLAGS="$CPPFLAGS"
+-CPPFLAGS="-I/usr/include/cairo -I/usr/include/pango-1.0 -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include -I/usr/lib/arm-linux-gnueabihf/glib-2.0/include -I/usr/lib/i386-linux-gnu/glib-2.0/include"
++CPPFLAGS=`pkg-config --cflags glib-2.0 pangocairo`
+ AC_TRY_COMPILE([#include <pango/pangocairo.h>],[{}],[
+   AC_MSG_RESULT(yes)
++  PKG_CHECK_MODULES([UNICODE_PLUGIN],[glib-2.0 pangocairo])
++  AC_SUBST([UNICODE_PLUGIN_CFLAGS])
++  AC_SUBST([UNICODE_PLUGIN_LIBS])
++  AC_PLUGIN_DEFINE_UNQUOTED([unicode_plugin_cflags],[$UNICODE_PLUGIN_CFLAGS])
++  AC_PLUGIN_DEFINE_UNQUOTED([unicode_plugin_libs],[$UNICODE_PLUGIN_LIBS])
+ ],[
+   AC_MSG_RESULT(no)
+   AC_PLUGIN_DISABLE
+--- a/platforms/unix/plugins/XDisplayControlPlugin/acinclude.m4
++++ b/platforms/unix/plugins/XDisplayControlPlugin/acinclude.m4
+@@ -1,5 +1,3 @@
+ # Require X11
+ 
+-AC_CHECK_LIB(X11,XOpenDisplay,
+-  [AC_PLUGIN_USE_LIB(X11)],
+-  [AC_PLUGIN_DISABLE])
++AC_PLUGIN_CHECK_LIB(X11,XOpenDisplay)

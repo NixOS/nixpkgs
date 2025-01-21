@@ -1,0 +1,153 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Ivan Trubach <mr.trubach@icloud.com>
+Date: Sat, 27 Jul 2024 16:34:17 +0300
+Subject: [PATCH 02/19] Update for modern liblzma5 versions
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This change updates liblzma usage for modern xz versions (≥ 5, that is,
+released less than a decade ago).
+
+It also fixes missing realloc buffer calls that were supposed to be
+there but were lost in xar-420 (and Apple does not ship xar with LZMA
+support so nobody noticed). See also the offending commit:
+https://github.com/apple-oss-distributions/xar/commit/2426082efec74e9ed545cc4f5812ad16322bdf2c
+---
+ xar/lib/lzmaxar.c | 65 ++++++++---------------------------------------
+ 1 file changed, 10 insertions(+), 55 deletions(-)
+
+diff --git a/xar/lib/lzmaxar.c b/xar/lib/lzmaxar.c
+index ba9c868..8dcb484 100644
+--- a/xar/lib/lzmaxar.c
++++ b/xar/lib/lzmaxar.c
+@@ -54,27 +54,12 @@
+ 
+ #ifdef HAVE_LIBLZMA
+ 
+-#ifndef UINT32_C
+-#define UINT32_C(v)  (v ## U) /* from <stdint.h> normally */
+-#endif
+-#ifndef LZMA_VERSION
+-#define LZMA_VERSION UINT32_C(40420000) /* = 4.42.0alpha6 */
+-#endif
+-
+ struct _lzma_context{
+ 	uint8_t		lzmacompressed;
+ 	lzma_stream	lzma;
+-	lzma_options_stream options;
+-	lzma_allocator allocator;
+-#if LZMA_VERSION < 40420010U
+-	lzma_memory_limitter *limit;
+-#else
+-	lzma_memlimit *limit;
+-#endif
+ };
+ 
+ #define preset_level 7
+-#define memory_limit 93*1024*1024 /* 1=1M, 5=24M, 6=39M, 7=93M, 8=185M, 9=369M */
+ 
+ #define LZMA_CONTEXT(x) ((struct _lzma_context *)(*x))
+ #endif
+@@ -116,9 +101,7 @@ int xar_lzma_fromheap_in(xar_t x, xar_file_t f, xar_prop_t p, void **in, size_t
+ 		if( !opt ) return 0;
+ 		if( strcmp(opt, "application/x-lzma") != 0 ) return 0;
+ 		
+-		lzma_init_decoder();
+-		LZMA_CONTEXT(context)->lzma = LZMA_STREAM_INIT_VAR;
+-		r = lzma_stream_decoder(&LZMA_CONTEXT(context)->lzma, NULL, NULL);
++		r = lzma_stream_decoder(&LZMA_CONTEXT(context)->lzma, UINT64_MAX, LZMA_CONCATENATED);
+ 		if( (r != LZMA_OK) ) {
+ 			xar_err_new(x);
+ 			xar_err_set_file(x, f);
+@@ -194,11 +177,6 @@ int xar_lzma_toheap_done(xar_t x, xar_file_t f, xar_prop_t p, void **context) {
+ 	
+ 	if( LZMA_CONTEXT(context)->lzmacompressed){
+ 		lzma_end(&LZMA_CONTEXT(context)->lzma);		
+-#if LZMA_VERSION < 40420010U
+-		lzma_memory_limitter_end(LZMA_CONTEXT(context)->limit, 1);
+-#else
+-		lzma_memlimit_end(LZMA_CONTEXT(context)->limit, 1);
+-#endif
+ 
+ 		tmpp = xar_prop_pset(f, p, "encoding", NULL);
+ 		if( tmpp )
+@@ -222,7 +200,7 @@ int32_t xar_lzma_toheap_in(xar_t x, xar_file_t f, xar_prop_t p, void **in, size_
+ 
+ 	/* on first run, we init the context and check the compression type */
+ 	if( !LZMA_CONTEXT(context) ) {
+-		int level = preset_level;
++		uint32_t level = preset_level;
+ 		*context = calloc(1,sizeof(struct _lzma_context));
+ 		
+ 		opt = xar_opt_get(x, XAR_OPT_COMPRESSION);
+@@ -243,35 +221,7 @@ int32_t xar_lzma_toheap_in(xar_t x, xar_file_t f, xar_prop_t p, void **in, size_
+ 			}
+ 		}
+ 		
+-		lzma_init_encoder();
+-		LZMA_CONTEXT(context)->options.check = LZMA_CHECK_CRC64;
+-		LZMA_CONTEXT(context)->options.has_crc32 = 1; /* true */
+-		LZMA_CONTEXT(context)->options.alignment = 0;
+-#if defined (__ppc__) || defined (powerpc) || defined (__ppc64__)
+-		LZMA_CONTEXT(context)->options.filters[0].id = LZMA_FILTER_POWERPC;
+-#elif defined (__i386__) || defined (__amd64__) || defined(__x86_64__)
+-		LZMA_CONTEXT(context)->options.filters[0].id = LZMA_FILTER_X86;
+-#else
+-		LZMA_CONTEXT(context)->options.filters[0].id = LZMA_FILTER_COPY;
+-#endif
+-		LZMA_CONTEXT(context)->options.filters[0].options = NULL;
+-		LZMA_CONTEXT(context)->options.filters[1].id = LZMA_FILTER_LZMA;
+-		LZMA_CONTEXT(context)->options.filters[1].options = (lzma_options_lzma *)(lzma_preset_lzma + level - 1);
+-		/* Terminate the filter options array. */
+-		LZMA_CONTEXT(context)->options.filters[2].id = UINT64_MAX;
+-		LZMA_CONTEXT(context)->lzma = LZMA_STREAM_INIT_VAR;
+-#if LZMA_VERSION < 40420010U
+-		LZMA_CONTEXT(context)->limit = lzma_memory_limitter_create(memory_limit);
+-		LZMA_CONTEXT(context)->allocator.alloc = (void*) lzma_memory_alloc;
+-		LZMA_CONTEXT(context)->allocator.free = (void*) lzma_memory_free;
+-#else
+-		LZMA_CONTEXT(context)->limit = lzma_memlimit_create(memory_limit);
+-		LZMA_CONTEXT(context)->allocator.alloc = (void*) lzma_memlimit_alloc;
+-		LZMA_CONTEXT(context)->allocator.free = (void*) lzma_memlimit_free;
+-#endif
+-		LZMA_CONTEXT(context)->allocator.opaque = LZMA_CONTEXT(context)->limit;
+-		LZMA_CONTEXT(context)->lzma.allocator = &LZMA_CONTEXT(context)->allocator;
+-		r = lzma_stream_encoder_single(&LZMA_CONTEXT(context)->lzma, &(LZMA_CONTEXT(context)->options));
++		r = lzma_easy_encoder(&LZMA_CONTEXT(context)->lzma, level, LZMA_CHECK_CRC64);
+ 		if( (r != LZMA_OK) ) {
+ 			xar_err_new(x);
+ 			xar_err_set_file(x, f);
+@@ -279,6 +229,7 @@ int32_t xar_lzma_toheap_in(xar_t x, xar_file_t f, xar_prop_t p, void **in, size_
+ 			xar_err_callback(x, XAR_SEVERITY_FATAL, XAR_ERR_ARCHIVE_CREATION);
+ 			return -1;
+ 		}
++
+ 		LZMA_CONTEXT(context)->lzmacompressed = 1;
+ 		if( *inlen == 0 )
+ 			return 0;
+@@ -303,7 +254,8 @@ int32_t xar_lzma_toheap_in(xar_t x, xar_file_t f, xar_prop_t p, void **in, size_
+ 				outlen = newlen;
+ 			else
+ 				abort();	/* Someone has somehow malloced over 2^64 bits of ram. */
+-			
++
++			out = realloc(out, outlen);
+ 			if( out == NULL ) abort();
+ 
+ 			LZMA_CONTEXT(context)->lzma.next_out = ((unsigned char *)out) + offset;
+@@ -318,7 +270,10 @@ int32_t xar_lzma_toheap_in(xar_t x, xar_file_t f, xar_prop_t p, void **in, size_
+ 			if (newlen > outlen)
+ 				outlen = newlen;
+ 			else
+-				abort();	/* Someone has somehow malloced over 2^64 bits of ram. */			if( out == NULL ) abort();
++				abort();	/* Someone has somehow malloced over 2^64 bits of ram. */
++
++			out = realloc(out, outlen);
++			if( out == NULL ) abort();
+ 
+ 			LZMA_CONTEXT(context)->lzma.next_out = ((unsigned char *)out) + offset;
+ 			LZMA_CONTEXT(context)->lzma.avail_out = outlen - offset;
+-- 
+2.44.1
+

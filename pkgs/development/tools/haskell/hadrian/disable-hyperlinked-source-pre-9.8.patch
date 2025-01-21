@@ -1,0 +1,12 @@
+diff --git a/hadrian/src/Settings/Builders/Haddock.hs b/hadrian/src/Settings/Builders/Haddock.hs
+index 902b2f85e2..429a441c3b 100644
+--- a/hadrian/src/Settings/Builders/Haddock.hs
++++ b/hadrian/src/Settings/Builders/Haddock.hs
+@@ -57,7 +57,6 @@ haddockBuilderArgs = mconcat
+             , arg $ "--odir=" ++ takeDirectory output
+             , arg $ "--dump-interface=" ++ output
+             , arg "--html"
+-            , arg "--hyperlinked-source"
+             , arg "--hoogle"
+             , arg "--quickjump"
+             , arg $ "--title=" ++ pkgName pkg ++ "-" ++ version

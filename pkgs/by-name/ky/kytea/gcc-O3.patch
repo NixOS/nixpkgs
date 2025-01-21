@@ -1,0 +1,13 @@
+diff --git a/src/lib/kytea-util.cpp b/src/lib/kytea-util.cpp
+index 7c8c4c6..4492df1 100644
+--- a/src/lib/kytea-util.cpp
++++ b/src/lib/kytea-util.cpp
+@@ -49,5 +49,8 @@ void checkValueVecEqual(const std::vector<T> * a, const std::vector<T> * b) {
+ 
++template void checkValueVecEqual(const std::vector<unsigned int> & a, const std::vector<unsigned int> & b);
+ template void checkValueVecEqual(const std::vector<unsigned int> * a, const std::vector<unsigned int> * b);
++template void checkValueVecEqual(const std::vector<short> & a, const std::vector<short> & b);
+ template void checkValueVecEqual(const std::vector<short> * a, const std::vector<short> * b);
+ template void checkValueVecEqual(const std::vector<vector<KyteaString> > * a, const std::vector<vector<KyteaString> > * b);
++template void checkValueVecEqual(const std::vector<int> & a, const std::vector<int> & b);
+ template void checkValueVecEqual(const std::vector<int> * a, const std::vector<int> * b);
