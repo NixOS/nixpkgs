@@ -25,14 +25,6 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-BUpMNdYu72/R36r6XXHQqwIWL/ip+O+yE4WxcQQ3ZLY=";
   };
-  patches = [
-    # Fixes https://github.com/pydata/xarray/issues/9873
-    (fetchpatch {
-      name = "xarray-PR9879-fix-tests.patch";
-      url = "https://github.com/pydata/xarray/commit/50f3a04855d7cf79ddf132ed07d74fb534e57f3a.patch";
-      hash = "sha256-PKYzzBOG1Dccpt9D7rcQV1Hxgw11mDOAx3iUfD0rrUc=";
-    })
-  ];
 
   build-system = [
     setuptools
