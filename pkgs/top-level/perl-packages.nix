@@ -27714,7 +27714,21 @@ with self; {
       # in an error with clang 16.
       ../development/perl-modules/tk-configure-implicit-int-fix.patch
     ];
-    makeMakerFlags = [ "X11INC=${pkgs.xorg.libX11.dev}/include" "X11LIB=${pkgs.xorg.libX11.out}/lib" ];
+    postPatch = ''
+      substituteInPlace pTk/mTk/additions/imgWindow.c \
+        --replace-fail '"X11/Xproto.h"' "<X11/Xproto.h>"
+      substituteInPlace PNG/zlib/Makefile.in \
+        --replace-fail '$(AR) $@' '$(AR) rc $@'
+      substituteInPlace PNG/libpng/scripts/makefile.gcc \
+        --replace-fail 'AR_RC = ar rcs' 'AR_RC = ${pkgs.stdenv.cc.targetPrefix}ar rcs'
+      substituteInPlace JPEG/jpeg/makefile.cfg \
+        --replace-fail 'AR= ar rc' 'AR= ${pkgs.stdenv.cc.targetPrefix}ar rc'
+    '';
+    makeMakerFlags = [
+      "AR=${pkgs.stdenv.cc.targetPrefix}ar"
+      "X11INC=${pkgs.xorg.libX11.dev}/include"
+      "X11LIB=${pkgs.xorg.libX11.out}/lib"
+    ];
     buildInputs = [ pkgs.xorg.libX11 pkgs.libpng ];
     env = lib.optionalAttrs stdenv.cc.isGNU {
       NIX_CFLAGS_COMPILE = toString [
