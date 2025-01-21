@@ -84,11 +84,6 @@ buildPythonPackage rec {
       "test_logreg_with_intercept_manual_loop3"
     ]
     ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
-      # https://github.com/google/jaxopt/issues/577
-      "test_binary_logit_log_likelihood"
-      "test_solve_sparse"
-      "test_logreg_with_intercept_manual_loop3"
-
       # Flaky (AssertionError)
       "test_inv_hessian_product_pytree3"
 
@@ -103,8 +98,6 @@ buildPythonPackage rec {
       "test_dtype_consistency"
 
       # AssertionError (flaky numerical tests)
-      "test_logreg_with_intercept_manual_loop3"
-      "test_binary_logit_log_likelihood"
       "test_inv_hessian_product_pytree3"
     ];
 
