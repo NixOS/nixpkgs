@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "ghostunnel";
-  version = "1.8.3";
+  version = "1.8.4";
 
   src = fetchFromGitHub {
     owner = "ghostunnel";
     repo = "ghostunnel";
     rev = "v${version}";
-    hash = "sha256-WO7dyz+S8dBSFfNCTHHg1lGDlUGSBqa5pcR5GCiWsl8=";
+    hash = "sha256-NnRm1HEdfK6WI5ntilLSwdR2B5czG5CIcMFzl2TzEds=";
   };
 
   vendorHash = null;
