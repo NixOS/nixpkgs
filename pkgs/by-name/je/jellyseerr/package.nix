@@ -14,19 +14,19 @@ let
   nodejs = nodejs_22;
   pnpm = pnpm_9.override { inherit nodejs; };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jellyseerr";
   version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "Fallenbagel";
     repo = "jellyseerr";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-vAMuiHcf13CDyOB0k36DXUk+i6K6h/R7dmBLJsMkzNA=";
   };
 
   pnpmDeps = pnpm.fetchDeps {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-iSzs+lMQzcFjUz4K3rYP0I6g/wVz6u49FSQuPHXbVRM=";
   };
 
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Fork of overseerr for jellyfin support";
     homepage = "https://github.com/Fallenbagel/jellyseerr";
     longDescription = ''
@@ -79,9 +79,9 @@ stdenv.mkDerivation rec {
       requests for your media library. It is a a fork of Overseerr built to
       bring support for Jellyfin & Emby media servers!
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ camillemndn ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.camillemndn ];
+    platforms = lib.platforms.linux;
     mainProgram = "jellyseerr";
   };
-}
+})
