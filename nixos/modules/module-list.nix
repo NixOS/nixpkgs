@@ -1474,6 +1474,7 @@
   ./services/web-apps/eintopf.nix
   ./services/web-apps/engelsystem.nix
   ./services/web-apps/ethercalc.nix
+  ./services/web-apps/fider.nix
   ./services/web-apps/filesender.nix
   ./services/web-apps/firefly-iii.nix
   ./services/web-apps/firefly-iii-data-importer.nix
@@ -1566,6 +1567,7 @@
   ./services/web-apps/screego.nix
   ./services/web-apps/sftpgo.nix
   ./services/web-apps/suwayomi-server.nix
+  ./services/web-apps/readeck.nix
   ./services/web-apps/rss-bridge.nix
   ./services/web-apps/selfoss.nix
   ./services/web-apps/shiori.nix

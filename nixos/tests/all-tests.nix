@@ -336,6 +336,7 @@ in {
   fenics = handleTest ./fenics.nix {};
   ferm = handleTest ./ferm.nix {};
   ferretdb = handleTest ./ferretdb.nix {};
+  fider = runTest ./fider.nix;
   filesender = handleTest ./filesender.nix {};
   filesystems-overlayfs = runTest ./filesystems-overlayfs.nix;
   firefly-iii = handleTest ./firefly-iii.nix {};
@@ -893,6 +894,7 @@ in {
   rathole = handleTest ./rathole.nix {};
   readarr = handleTest ./readarr.nix {};
   realm = handleTest ./realm.nix {};
+  readeck = runTest ./readeck.nix;
   redis = handleTest ./redis.nix {};
   redlib = handleTest ./redlib.nix {};
   redmine = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./redmine.nix {};
