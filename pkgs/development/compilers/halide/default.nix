@@ -12,6 +12,8 @@
   libGL,
   eigen,
   openblas,
+  vulkan-headers,
+  wabt,
   blas,
   lapack,
   pythonSupport ? false,
@@ -20,25 +22,25 @@
 
 assert blas.implementation == "openblas" && lapack.implementation == "openblas";
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "halide";
-  version = "18.0.0";
+  version = "19.0.0";
 
   src = fetchFromGitHub {
     owner = "halide";
     repo = "Halide";
-    rev = "v${version}";
-    hash = "sha256-BPalUh9EgdCqVaWC1HoreyyRcPQc4QMIYnLrRoNDDCI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-0SFGX4G6UR8NS4UsdFOb99IBq2/hEkr/Cm2p6zkIh/8=";
   };
 
-  postPatch = ''
-    # See https://github.com/halide/Halide/issues/7785
-    substituteInPlace 'src/runtime/HalideRuntime.h' \
-      --replace '#if defined(__x86_64__) || defined(__i386__) || defined(__arm__) || defined(__aarch64__)
-    #define HALIDE_CPP_COMPILER_HAS_FLOAT16' \
-                '#if defined(__x86_64__) || defined(__i386__)
-    #define HALIDE_CPP_COMPILER_HAS_FLOAT16'
-  '';
+  # postPatch = ''
+  #   # See https://github.com/halide/Halide/issues/7785
+  #   substituteInPlace 'src/runtime/HalideRuntime.h' \
+  #     --replace-fail '#if defined(__x86_64__) || defined(__i386__) || defined(__arm__) || defined(__aarch64__)
+  #   #define HALIDE_CPP_COMPILER_HAS_FLOAT16' \
+  #               '#if defined(__x86_64__) || defined(__i386__)
+  #   #define HALIDE_CPP_COMPILER_HAS_FLOAT16'
+  # '';
 
   cmakeFlags = [
     "-DWARNINGS_AS_ERRORS=OFF"
@@ -50,9 +52,8 @@ stdenv.mkDerivation rec {
     # v16 release (See https://github.com/halide/Halide/commit/09c5d1d19ec8e6280ccbc01a8a12decfb27226ba)
     # These tests also fail to compile on Darwin because of some missing command line options...
     "-DWITH_TEST_FUZZ=OFF"
-    # Disable FetchContent for flatbuffers and use the version from nixpkgs instead
-    "-DFLATBUFFERS_USE_FETCHCONTENT=OFF"
-    "-DPYBIND11_USE_FETCHCONTENT=OFF"
+    # Instead of fetching dependencies, use the one from nixpkgs
+    "-DHalide_USE_FETCHCONTENT=OFF"
   ];
 
   doCheck = true;
@@ -93,6 +94,8 @@ stdenv.mkDerivation rec {
       libjpeg
       eigen
       openblas
+      vulkan-headers
+      wabt
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       libgbm
@@ -114,15 +117,16 @@ stdenv.mkDerivation rec {
     python3Packages.imageio
   ];
 
-  meta = with lib; {
+  meta = {
     description = "C++ based language for image processing and computational photography";
     homepage = "https://halide-lang.org";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/halide/Halide/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       ck3d
       atila
       twesterhout
     ];
   };
-}
+})
