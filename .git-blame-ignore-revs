@@ -238,3 +238,6 @@ e0fe216f4912dd88a021d12a44155fd2cfeb31c8
 
 # nixos/movim: format with nixfmt-rfc-style
 43c1654cae47cbf987cb63758c06245fa95c1e3b
+
+# nixos/iso-image.nix: nixfmt
+da9a092c34cef6947d7aee2b134f61df45171631
