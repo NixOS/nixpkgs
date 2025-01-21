@@ -51,6 +51,10 @@ stdenv.mkDerivation (finalAttrs: {
       revert = true;
       hash = "sha256-xS0Wz6d+bZWj/kDGK2WhOduzyP4Rgz3n9n2XY1Zu5hE=";
     })
+
+    # Fix compatibility with glog 0.7.x
+    # Remove when https://gitlab.com/ubports/development/core/lomiri-download-manager/-/merge_requests/29 merged & in release (vendored patch was manually backported)
+    ./1001-treewide-Switch-to-glog-CMake-module.patch
   ];
 
   postPatch = ''
