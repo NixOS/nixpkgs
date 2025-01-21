@@ -351,6 +351,7 @@ in {
   firejail = handleTest ./firejail.nix {};
   firewall = handleTest ./firewall.nix { nftables = false; };
   firewall-nftables = handleTest ./firewall.nix { nftables = true; };
+  firezone = handleTest ./firezone/firezone.nix {};
   fish = handleTest ./fish.nix {};
   flannel = handleTestOn ["x86_64-linux"] ./flannel.nix {};
   flaresolverr = handleTest ./flaresolverr.nix {};
