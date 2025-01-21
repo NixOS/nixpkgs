@@ -21,8 +21,7 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    pname = "QtPy";
-    inherit version;
+    inherit pname version;
     hash = "sha256-nW7JGlh8wUlerr0jEw92Ga+lzdNKJ3rLh3NbStfGUVY=";
   };
 
