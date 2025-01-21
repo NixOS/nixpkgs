@@ -8,8 +8,9 @@
   pyserial,
   pythonOlder,
   pyyaml,
+  rich,
+  ruamel-yaml,
   scp,
-  setuptools,
   textfsm,
 }:
 
@@ -18,7 +19,7 @@ buildPythonPackage rec {
   version = "4.5.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
@@ -31,15 +32,16 @@ buildPythonPackage rec {
       --replace-fail "poetry.masonry.api" "poetry.core.masonry.api"
   '';
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     ntc-templates
     paramiko
     pyserial
     pyyaml
+    rich
+    ruamel-yaml
     scp
-    setuptools
     textfsm
   ];
 
