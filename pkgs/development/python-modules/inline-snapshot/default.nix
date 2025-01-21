@@ -7,10 +7,12 @@
   dirty-equals,
   executing,
   fetchFromGitHub,
+  freezegun,
   hatchling,
   hypothesis,
   pydantic,
   pyright,
+  pytest-freezer,
   pytest-subtests,
   pytest-xdist,
   pytestCheckHook,
@@ -54,9 +56,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     dirty-equals
+    freezegun
     hypothesis
     pydantic
     pyright
+    pytest-freezer
     pytest-subtests
     pytest-xdist
     pytestCheckHook
@@ -68,6 +72,7 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Tests don't play nice with pytest-xdist
     "tests/test_typing.py"
+    "tests/test_formating.py"
   ];
 
   meta = with lib; {
