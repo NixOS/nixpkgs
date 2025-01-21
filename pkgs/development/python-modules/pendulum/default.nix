@@ -9,6 +9,7 @@
 
   # build-system
   poetry-core,
+  python,
   rustPlatform,
 
   # native dependencies
@@ -70,6 +71,8 @@ buildPythonPackage rec {
   ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ iconv ];
+
+  maturinBuildFlags = [ "--interpreter ${python.executable}" ];
 
   propagatedBuildInputs =
     [
