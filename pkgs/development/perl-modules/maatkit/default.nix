@@ -43,6 +43,6 @@ buildPerlPackage {
       growing variety of other databases and technologies.
     '';
     license = licenses.gpl2Plus;
-    homepage = "http://www.maatkit.org/";
+    homepage = "https://code.google.com/archive/p/maatkit/";
   };
 }

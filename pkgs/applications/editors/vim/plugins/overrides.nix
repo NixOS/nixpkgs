@@ -1725,6 +1725,18 @@ in
     dependencies = [ self.plenary-nvim ];
   };
 
+  git-conflict-nvim = super.git-conflict-nvim.overrideAttrs {
+    # TODO: Remove after next fixed version
+    # https://github.com/akinsho/git-conflict.nvim/issues/103
+    version = "2.1.0";
+    src = fetchFromGitHub {
+      owner = "akinsho";
+      repo = "git-conflict.nvim";
+      tag = "v2.1.0";
+      hash = "sha256-1t0kKxTGLuOvuRkoLgkoqMZpF+oKo8+gMsTdgPsSb+8=";
+    };
+  };
+
   minimap-vim = super.minimap-vim.overrideAttrs {
     preFixup = ''
       substituteInPlace $out/plugin/minimap.vim \
