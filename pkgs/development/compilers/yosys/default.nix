@@ -105,20 +105,22 @@ stdenv.mkDerivation (finalAttrs: {
     bison
     flex
   ];
-  propagatedBuildInputs = [
-    tcl
-    readline
-    libffi
-    zlib
-    (python3.withPackages (
-      pp: with pp; [
-        click
-      ]
-    ))
-  ] ++ lib.optionals enablePython  [
-    boost
-    (boost.pythonLib python3)
-  ];
+  propagatedBuildInputs =
+    [
+      tcl
+      readline
+      libffi
+      zlib
+      (python3.withPackages (
+        pp: with pp; [
+          click
+        ]
+      ))
+    ]
+    ++ lib.optionals enablePython [
+      boost
+      (boost.pythonLib python3)
+    ];
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
