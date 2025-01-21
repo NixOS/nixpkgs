@@ -39,8 +39,6 @@ stdenvNoCC.mkDerivation rec {
     install -Dm644 build/*.otf  -t $out/share/fonts/opentype
     install -Dm644 build/*.woff -t $out/share/fonts/woff
 
-    install -Dm644 Changes README.markdown README.xelualatex -t $out/share/doc/${pname}-${version}
-
     runHook postInstall
   '';
 
