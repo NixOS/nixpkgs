@@ -10,7 +10,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://updates.signal.org/desktop/signal-desktop-mac-universal-${finalAttrs.version}.dmg";
-    hash = "sha256-C5wzKhJcH2FJQJk5u2FGBrGDbezHBIIIUMkkVV6T8S4=";
+    hash = "sha256-bSpiK8Q5A0q4fUuVmLBaEjlVB7fXOcSHo5epelgHPA0=";
   };
   sourceRoot = ".";
 

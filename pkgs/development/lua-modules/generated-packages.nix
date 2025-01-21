@@ -2907,6 +2907,29 @@ buildLuarocksPackage {
   };
 }) {};
 
+orgmode = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, luaOlder, tree-sitter-orgmode }:
+buildLuarocksPackage {
+  pname = "orgmode";
+  version = "0.3.61-1";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/orgmode-0.3.61-1.rockspec";
+    sha256 = "1sdmqaq3vzpb0c74n45piqrlcw3liiqlv282nrgr16jzsz1c870g";
+  }).outPath;
+  src = fetchzip {
+    url    = "https://github.com/nvim-orgmode/orgmode/archive/0.3.61.zip";
+    sha256 = "1gkpwyfvw9z92277q6311r924rmb9zidgmlr4xxkmn2xrj5qwl7x";
+  };
+
+  disabled = luaOlder "5.1";
+  propagatedBuildInputs = [ tree-sitter-orgmode ];
+
+  meta = {
+    homepage = "https://nvim-orgmode.github.io/";
+    description = "Orgmode clone written in Lua for Neovim 0.9+.";
+    license.fullName = "MIT";
+  };
+}) {};
+
 pathlib-nvim = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, luaOlder, nvim-nio }:
 buildLuarocksPackage {
   pname = "pathlib.nvim";
@@ -3519,6 +3542,28 @@ buildLuarocksPackage {
     homepage = "https://github.com/nvim-neorg/tree-sitter-norg";
     description = "The official tree-sitter parser for Norg documents.";
     maintainers = with lib.maintainers; [ mrcjkb ];
+    license.fullName = "MIT";
+  };
+}) {};
+
+tree-sitter-orgmode = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, luarocks-build-treesitter-parser }:
+buildLuarocksPackage {
+  pname = "tree-sitter-orgmode";
+  version = "1.3.2-1";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/tree-sitter-orgmode-1.3.2-1.rockspec";
+    sha256 = "1md45ic96yf3agay30w9icr9c1v5fs0p6zs4dd5d0clrsc9029c4";
+  }).outPath;
+  src = fetchzip {
+    url    = "https://github.com/nvim-orgmode/tree-sitter-org/archive/v1.3.2.zip";
+    sha256 = "1y1dyabvmm2q51nmi58lv0zf7sdz066i319s5j3ch6abcm1wv24i";
+  };
+
+  nativeBuildInputs = [ luarocks-build-treesitter-parser ];
+
+  meta = {
+    homepage = "https://github.com/nvim-orgmode/tree-sitter-org";
+    description = "A fork of tree-sitter-org, for use with the orgmode Neovim plugin";
     license.fullName = "MIT";
   };
 }) {};
