@@ -155,7 +155,11 @@ stdenv.mkDerivation rec {
     ];
     # TODO: remove checks for `withEspeak && espeak.mbrolaSupport` once PR #375038 is merged
     # TODO: remove checks for `withPico` once PR #375450 is merged
-    platforms = if withAlsa || (withEspeak && espeak.mbrolaSupport) || withPico then platforms.linux else platforms.unix;
+    platforms =
+      if withAlsa || (withEspeak && espeak.mbrolaSupport) || withPico then
+        platforms.linux
+      else
+        platforms.unix;
     mainProgram = "speech-dispatcher";
   };
 }
