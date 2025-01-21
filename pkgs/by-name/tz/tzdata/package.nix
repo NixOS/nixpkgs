@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   buildPackages,
+  postgresql,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -81,6 +82,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   setupHook = ./tzdata-setup-hook.sh;
+
+  # PostgreSQL is sensitive to tzdata updates, because the test-suite often breaks.
+  # Upstream provides patches very quickly, we just need to apply them until the next
+  # minor releases.
+  passthru.tests = postgresql;
 
   meta = with lib; {
     homepage = "http://www.iana.org/time-zones";
