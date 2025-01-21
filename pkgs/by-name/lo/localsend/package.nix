@@ -7,7 +7,6 @@
   makeDesktopItem,
   copyDesktopItems,
   nixosTests,
-  pkg-config,
   libayatana-appindicator,
   undmg,
   makeBinaryWrapper,
@@ -35,6 +34,11 @@ let
       permission_handler_windows = "sha256-+TP3neqlQRZnW6BxHaXr2EbmdITIx1Yo7AEn5iwAhwM=";
       pasteboard = "sha256-lJA5OWoAHfxORqWMglKzhsL1IFr9YcdAQP/NVOLYB4o=";
     };
+
+    postPatch = ''
+      substituteInPlace lib/util/native/autostart_helper.dart \
+        --replace-fail 'Exec=''${Platform.resolvedExecutable}' "Exec=localsend_app"
+    '';
 
     nativeBuildInputs = [
       copyDesktopItems
