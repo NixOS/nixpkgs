@@ -9,6 +9,7 @@
   libcap,
   libnl,
   nixosTests,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation rec {
@@ -59,8 +60,11 @@ stdenv.mkDerivation rec {
     "zerocallusedregs"
   ];
 
-  passthru.tests = {
-    inherit (nixosTests) bpftune;
+  passthru = {
+    tests = {
+      inherit (nixosTests) bpftune;
+    };
+    updateScript = unstableGitUpdater { };
   };
 
   enableParallelBuilding = true;
