@@ -3419,7 +3419,8 @@
       ];
     "mfi" =
       ps: with ps; [
-      ]; # missing inputs: mficlient
+        mficlient
+      ];
     "microbees" =
       ps: with ps; [
       ]; # missing inputs: microBeesPy
@@ -6964,6 +6965,7 @@
     "meteo_france"
     "meteoclimatic"
     "metoffice"
+    "mfi"
     "microsoft_face"
     "microsoft_face_detect"
     "microsoft_face_identify"
