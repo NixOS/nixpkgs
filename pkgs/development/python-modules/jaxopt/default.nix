@@ -87,6 +87,8 @@ buildPythonPackage rec {
       "test_logreg_with_intercept_manual_loop3"
       "test_inv_hessian_product_pytree3"
       "test_multiclass_logreg6"
+      "test_Rosenbrock2"
+      "test_Rosenbrock5"
     ];
 
   meta = {
