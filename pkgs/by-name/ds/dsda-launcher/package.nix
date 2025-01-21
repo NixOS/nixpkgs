@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   qt6,
+  nix-update-script,
 }:
 stdenv.mkDerivation rec {
   pname = "dsda-launcher";
@@ -39,6 +40,8 @@ stdenv.mkDerivation rec {
     install -Dm444 ../icons/dsda-launcher.png $out/share/pixmaps/dsda-launcher.png
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/Pedro-Beirao/dsda-launcher";
