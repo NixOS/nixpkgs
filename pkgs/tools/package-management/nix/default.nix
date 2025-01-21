@@ -8,7 +8,6 @@
 , fetchFromGitHub
 , fetchpatch2
 , runCommand
-, buildPackages
 , Security
 
 , storeDir ? "/nix/store"
@@ -85,28 +84,6 @@ let
     requiredSystemFeatures = [ ];
   };
 
-  libgit2-thin-packfile = libgit2.overrideAttrs (args: {
-    nativeBuildInputs = args.nativeBuildInputs or []
-      # gitMinimal does not build on Windows. See packbuilder patch.
-      ++ lib.optionals (!stdenv.hostPlatform.isWindows) [
-        # Needed for `git apply`; see `prePatch`
-        buildPackages.gitMinimal
-      ];
-    # Only `git apply` can handle git binary patches
-    prePatch = args.prePatch or ""
-      + lib.optionalString (!stdenv.hostPlatform.isWindows) ''
-        patch() {
-          git apply
-        }
-      '';
-    # taken from https://github.com/NixOS/nix/tree/master/packaging/patches
-    patches = (args.patches or []) ++ [
-      ./patches/libgit2-mempack-thin-packfile.patch
-    ] ++ lib.optionals (!stdenv.hostPlatform.isWindows) [
-      ./patches/libgit2-packbuilder-callback-interruptible.patch
-    ];
-  });
-
   common = args:
     callPackage
       (import ./common.nix ({ inherit lib fetchFromGitHub; } // args))
@@ -114,7 +91,6 @@ let
         inherit Security storeDir stateDir confDir;
         boehmgc = boehmgc-nix;
         aws-sdk-cpp = if lib.versionAtLeast args.version "2.12pre" then aws-sdk-cpp-nix else aws-sdk-cpp-old-nix;
-        libgit2 = if lib.versionAtLeast args.version "2.25.0" then libgit2-thin-packfile else libgit2;
       };
 
   # https://github.com/NixOS/nix/pull/7585
