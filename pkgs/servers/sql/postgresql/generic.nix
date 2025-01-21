@@ -237,6 +237,11 @@ let
           ./patches/paths-for-split-outputs.patch
           ./patches/paths-with-postgresql-suffix.patch
 
+          (fetchpatch {
+            url = "https://github.com/postgres/postgres/commit/8108674f0e5639baebcf03b54b7ccf9e9a8662a2.patch";
+            hash = "sha256-EQJkDR0eb7QWCjyMzXMn+Vbcwx3MMdC83oN7XSVJP0U=";
+          })
+
           (substituteAll {
             src = ./patches/locale-binary-path.patch;
             locale = "${
