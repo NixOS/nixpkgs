@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   rocmUpdateScript,
   pkg-config,
   cmake,
@@ -81,7 +82,6 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-A7VhPR3eSsmjq2cTBSjBIz9i//WiNjoXm0EsRKtF+ns=";
     })
     ./remove-hsa-aqlprofile-dep.patch
-    ./ub.patch
   ];
 
   postPatch = ''

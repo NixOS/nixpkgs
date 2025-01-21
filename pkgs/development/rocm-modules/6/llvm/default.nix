@@ -309,7 +309,13 @@ rec {
           pname = "${old.pname}-rocm";
           patches = filteredPatches ++ [
             ./clang-bodge-ignore-systemwide-incls.diff
-            ./clang-log-jobs.diff # FIXME: rebase for 20+?
+            ./clang-log-jobs.diff
+            (fetchpatch {
+              # [ClangOffloadBundler]: Add GetBundleIDsInFile to OffloadBundler
+              sha256 = "sha256-G/mzUdFfrJ2bLJgo4+mBcR6Ox7xGhWu5X+XxT4kH2c8=";
+              url = "https://github.com/GZGavinZhao/rocm-llvm-project/commit/6d296f879b0fed830c54b2a9d26240da86c8bb3a.patch";
+              relative = "clang";
+            })
             # FIXME: if llvm was overrideable properly this wouldn't be needed
             (substituteAll {
               src = ./clang-at-least-16-LLVMgold-path.patch;

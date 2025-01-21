@@ -76,6 +76,7 @@ stdenv.mkDerivation (
     requiredSystemFeatures = [ "big-parallel" ];
 
     patches = [
+      # TensileCreateExtOpLibraries build failure https://github.com/ROCm/hipBLASLt/issues/1571
       ./ext-op-first.diff
     ];
 

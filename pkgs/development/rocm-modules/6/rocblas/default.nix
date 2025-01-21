@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   rocmUpdateScript,
   cmake,
   rocm-cmake,
@@ -170,12 +171,11 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.amdgpu_targets = gpuTargets';
 
   patches = [
-    # (fetchpatch {
-    #   name = "Extend-rocBLAS-HIP-ISA-compatibility.patch";
-    #   url = "https://github.com/GZGavinZhao/rocBLAS/commit/89b75ff9cc731f71f370fad90517395e117b03bb.patch";
-    #   hash = "sha256-W/ohOOyNCcYYLOiQlPzsrTlNtCBdJpKVxO8s+4G7sjo=";
-    # })
-    # ./offload-compress.diff
+    (fetchpatch {
+      name = "Extend-rocBLAS-HIP-ISA-compatibility.patch";
+      url = "https://github.com/GZGavinZhao/rocBLAS/commit/89b75ff9cc731f71f370fad90517395e117b03bb.patch";
+      hash = "sha256-W/ohOOyNCcYYLOiQlPzsrTlNtCBdJpKVxO8s+4G7sjo=";
+    })
   ];
 
   # Pass $NIX_BUILD_CORES to Tensile

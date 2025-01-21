@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  fetchpatch,
   cmake,
   python3,
   rocm-merged-llvm,
@@ -26,6 +27,21 @@ stdenv.mkDerivation (finalAttrs: {
   src = rocm-merged-llvm.llvm-src;
 
   sourceRoot = "${finalAttrs.src.name}/amd/comgr";
+
+  patches = [
+    # [Comgr] Extend ISA compatibility
+    (fetchpatch {
+      sha256 = "sha256-dgow0kwSWM1TnkqWOZDRQrh5nuF8p5jbYyOLCpQsH4k=";
+      url = "https://github.com/GZGavinZhao/rocm-llvm-project/commit/a439e4f37ce71de48d4a979594276e3be0e6278f.patch";
+      relative = "amd/comgr";
+    })
+    #[Comgr] Extend ISA compatibility for CCOB
+    (fetchpatch {
+      sha256 = "sha256-6Rwz12Lk4R2JK3olii3cr2Zd0ZLYe7VSpK1YRCOsJWY=";
+      url = "https://github.com/GZGavinZhao/rocm-llvm-project/commit/2d8c459a4d4c0567a7a275b4b54560d88e5c6919.patch";
+      relative = "amd/comgr";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake

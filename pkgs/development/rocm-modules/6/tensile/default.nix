@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   rocmUpdateScript,
   buildPythonPackage,
   pytestCheckHook,
@@ -83,6 +84,11 @@ buildPythonPackage rec {
 
   patches =
     (lib.optional (!isTensileLite) ./tensile-6.3.0-create-library-dont-copy-twice.diff)
+    ++ (lib.optional (!isTensileLite) (fetchpatch {
+      # [PATCH] Extend Tensile HIP ISA compatibility
+      sha256 = "sha256-d+fVf/vz+sxGqJ96vuxe0jRMgbC5K6j5FQ5SJ1e3Sl8=";
+      url = "https://github.com/GZGavinZhao/Tensile/commit/855cb15839849addb0816a6dde45772034a3e41f.patch";
+    }))
     ++ (lib.optional isTensileLite ./tensile-create-library-dont-copy-twice.diff)
     ++ (lib.optional isTensileLite ./gen_assembly-venv-err-handling.diff)
     ++ (lib.optional isTensileLite ./log-fallback.diff);

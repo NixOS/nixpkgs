@@ -3,6 +3,7 @@
   stdenv,
   callPackage,
   fetchFromGitHub,
+  fetchpatch,
   rocmUpdateScript,
   makeWrapper,
   cmake,
@@ -123,29 +124,33 @@ stdenv.mkDerivation (finalAttrs: {
   # TODO: rebase patches
   patches = [
     ./cmake-find-x11-libgl.patch
-    ./0001-handle-v1-of-compressed-fatbins.patch # https://github.com/ROCm/clr/issues/99
-    # ./fix-null-stream-sync-perf.patch # https://github.com/ROCm/clr/issues/78
-    # (fetchpatch {
-    #   name = "add-missing-operators.patch";
-    #   url = "https://github.com/ROCm/clr/commit/86bd518981b364c138f9901b28a529899d8654f3.patch";
-    #   hash = "sha256-lbswri+zKLxif0hPp4aeJDeVfadhWZz4z+m+G2XcCPI=";
-    # })
-    # (fetchpatch {
-    #   name = "static-functions.patch";
-    #   url = "https://github.com/ROCm/clr/commit/77c581a3ebd47b5e2908973b70adea66891159ee.patch";
-    #   hash = "sha256-auBedbd7rghlKav7A9V6l64J7VmtE9GizIdi5gWj+fs=";
-    # })
 
-    # (fetchpatch {
-    #   name = "extend-hip-isa-compatibility-check.patch";
-    #   url = "https://salsa.debian.org/rocm-team/rocm-hipamd/-/raw/d6d20142c37e1dff820950b16ff8f0523241d935/debian/patches/0026-extend-hip-isa-compatibility-check.patch";
-    #   hash = "sha256-eG0ALZZQLRzD7zJueJFhi2emontmYy6xx8Rsm346nQI=";
-    # })
-    # (fetchpatch {
-    #   name = "improve-rocclr-isa-compatibility-check.patch";
-    #   url = "https://salsa.debian.org/rocm-team/rocm-hipamd/-/raw/d6d20142c37e1dff820950b16ff8f0523241d935/debian/patches/0025-improve-rocclr-isa-compatibility-check.patch";
-    #   hash = "sha256-8eowuRiOAdd9ucKv4Eg9FPU7c6367H3eP3fRAGfXc6Y=";
-    # })
+    (fetchpatch {
+      # Fix handling of old fatbin version https://github.com/ROCm/clr/issues/99
+      sha256 = "sha256-CK/QwgWJQEruiG4DqetF9YM0VEWpSiUMxAf1gGdJkuA=";
+      url = "https://src.fedoraproject.org/rpms/rocclr/raw/rawhide/f/0001-handle-v1-of-compressed-fatbins.patch";
+    })
+    (fetchpatch {
+      # improve rocclr isa compatibility check
+      sha256 = "sha256-wUrhpYN68AbEXeFU5f366C6peqHyq25kujJXY/bBJMs=";
+      url = "https://github.com/GZGavinZhao/clr/commit/22c17a0ac09c6b77866febf366591f669a1ed133.patch";
+    })
+    (fetchpatch {
+      # [PATCH] Improve hipamd compat check
+      sha256 = "sha256-uZQ8rMrWH61CCbxwLqQGggDmXFmYTi6x8OcgYPrZRC8=";
+      url = "https://github.com/GZGavinZhao/clr/commit/63c6ee630966744d4199fdfb854e98d2da9e1122.patch";
+    })
+    (fetchpatch {
+      # [PATCH] SWDEV-504340 - Move cast of cl_mem inside the condition
+      # Fixes crash due to UB in KernelBlitManager::setArgument
+      sha256 = "sha256-nL4CZ7EOXqsTVUtYhuu9DLOMpnMeMRUhkhylEQLTg9I=";
+      url = "https://github.com/ROCm/clr/commit/fa63919a6339ea2a61111981ba2362c97fbdf743.patch";
+    })
+    (fetchpatch {
+      # [PATCH] SWDEV-507104 - Removes alignment requirement for Semaphore class to resolve runtime misaligned memory issues
+      sha256 = "sha256-nStJ22B/CM0fzQTvYjbHDbQt0GlE8DXxVK+UDU9BAx4=";
+      url = "https://github.com/ROCm/clr/commit/21d764518363d74187deaef2e66c1a127bc5aa64.patch";
+    })
   ];
 
   postPatch = ''
