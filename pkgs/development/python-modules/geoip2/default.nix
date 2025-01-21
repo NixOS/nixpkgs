@@ -10,6 +10,7 @@
   pythonAtLeast,
   pythonOlder,
   requests-mock,
+  pytest-httpserver,
   requests,
   setuptools-scm,
   setuptools,
@@ -45,6 +46,7 @@ buildPythonPackage rec {
     mocket
     requests-mock
     pytestCheckHook
+    pytest-httpserver
   ];
 
   pythonImportsCheck = [ "geoip2" ];
