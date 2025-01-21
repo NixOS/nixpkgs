@@ -41,6 +41,11 @@ stdenv.mkDerivation (finalAttrs: {
       Makefile
   '';
 
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-incompatible-pointer-types"
+    "-Wno-implicit-function-declaration"
+  ];
+
   meta = {
     description = "Open-Source Free Cross-platform Multi-protocol VPN Program";
     homepage = "https://www.softether.org/";
