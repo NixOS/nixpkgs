@@ -27,6 +27,13 @@ let
 in
 
 {
+  imports = [
+    (lib.mkRemovedOptionModule [
+      "services"
+      "mongodb"
+      "initialRootPassword"
+    ] "Use services.mongodb.initialRootPasswordFile to securely provide the initial root password.")
+  ];
 
   ###### interface
 
@@ -64,10 +71,10 @@ in
         description = "Enable client authentication. Creates a default superuser with username root!";
       };
 
-      initialRootPassword = lib.mkOption {
-        type = lib.types.nullOr lib.types.str;
+      initialRootPasswordFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default = null;
-        description = "Password for the root user if auth is enabled.";
+        description = "Path to the file containing the password for the root user if auth is enabled.";
       };
 
       dbpath = lib.mkOption {
@@ -116,8 +123,8 @@ in
   config = lib.mkIf config.services.mongodb.enable {
     assertions = [
       {
-        assertion = !cfg.enableAuth || cfg.initialRootPassword != null;
-        message = "`enableAuth` requires `initialRootPassword` to be set.";
+        assertion = !cfg.enableAuth || cfg.initialRootPasswordFile != null;
+        message = "`enableAuth` requires `initialRootPasswordFile` to be set.";
       }
     ];
 
@@ -168,12 +175,13 @@ in
             # wait for mongodb
             while ! ${mongoshExe} --eval "db.version()" > /dev/null 2>&1; do sleep 0.1; done
 
+            initialRootPassword=$(<${cfg.initialRootPasswordFile})
           ${mongoshExe} <<EOF
             use admin;
             db.createUser(
               {
                 user: "root",
-                pwd: "${cfg.initialRootPassword}",
+                pwd: "$initialRootPassword",
                 roles: [
                   { role: "userAdminAnyDatabase", db: "admin" },
                   { role: "dbAdminAnyDatabase", db: "admin" },
@@ -189,7 +197,8 @@ in
       postStart = ''
         if test -e "${cfg.dbpath}/.first_startup"; then
           ${lib.optionalString (cfg.initialScript != null) ''
-            ${mongoshExe} ${lib.optionalString (cfg.enableAuth) "-u root -p ${cfg.initialRootPassword}"} admin "${cfg.initialScript}"
+            initialRootPassword=$(<${cfg.initialRootPasswordFile})
+            ${mongoshExe} ${lib.optionalString (cfg.enableAuth) "-u root -p $initialRootPassword"} admin "${cfg.initialScript}"
           ''}
           rm -f "${cfg.dbpath}/.first_startup"
         fi
