@@ -10,6 +10,8 @@ let
 
   mongodb = cfg.package;
 
+  mongoshExe = lib.getExe cfg.mongoshPackage;
+
   mongoCnf =
     cfg:
     pkgs.writeText "mongodb.conf" ''
@@ -35,6 +37,8 @@ in
       enable = lib.mkEnableOption "the MongoDB server";
 
       package = lib.mkPackageOption pkgs "mongodb" { };
+
+      mongoshPackage = lib.mkPackageOption pkgs "mongosh" { };
 
       user = lib.mkOption {
         type = lib.types.str;
@@ -125,8 +129,6 @@ in
     };
     users.groups.mongodb = lib.mkIf (cfg.user == "mongodb") { };
 
-    environment.systemPackages = [ mongodb ];
-
     systemd.services.mongodb = {
       description = "MongoDB server";
 
@@ -164,10 +166,10 @@ in
           if ! test -e "${cfg.dbpath}/.auth_setup_complete"; then
             systemd-run --unit=mongodb-for-setup --uid=${cfg.user} ${mongodb}/bin/mongod --config ${mongoCnf cfg_}
             # wait for mongodb
-            while ! ${mongodb}/bin/mongo --eval "db.version()" > /dev/null 2>&1; do sleep 0.1; done
+            while ! ${mongoshExe} --eval "db.version()" > /dev/null 2>&1; do sleep 0.1; done
 
-          ${mongodb}/bin/mongo <<EOF
-            use admin
+          ${mongoshExe} <<EOF
+            use admin;
             db.createUser(
               {
                 user: "root",
@@ -187,7 +189,7 @@ in
       postStart = ''
         if test -e "${cfg.dbpath}/.first_startup"; then
           ${lib.optionalString (cfg.initialScript != null) ''
-            ${mongodb}/bin/mongo ${lib.optionalString (cfg.enableAuth) "-u root -p ${cfg.initialRootPassword}"} admin "${cfg.initialScript}"
+            ${mongoshExe} ${lib.optionalString (cfg.enableAuth) "-u root -p ${cfg.initialRootPassword}"} admin "${cfg.initialScript}"
           ''}
           rm -f "${cfg.dbpath}/.first_startup"
         fi
