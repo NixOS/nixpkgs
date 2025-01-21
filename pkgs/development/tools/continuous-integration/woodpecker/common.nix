@@ -18,18 +18,16 @@ in
     cd $out/bin
     for f in *; do
       if [ "$f" = cli ]; then
-        mv -- "$f" "woodpecker"
         # Issue a warning to the user if they call the deprecated executable
-        cat >woodpecker-cli << EOF
+        cat >woodpecker << EOF
     #!/bin/sh
-    echo 'WARNING: calling \`woodpecker-cli\` is deprecated, use \`woodpecker\` instead.' >&2
-    $out/bin/woodpecker "\$@"
+    echo 'WARNING: calling \`woodpecker\` is deprecated, use \`woodpecker-cli\` instead.' >&2
+    $out/bin/woodpecker-cli "\$@"
     EOF
-        chmod +x woodpecker-cli
-        patchShebangs woodpecker-cli
-      else
-        mv -- "$f" "woodpecker-$f"
+        chmod +x woodpecker
+        patchShebangs woodpecker
       fi
+        mv -- "$f" "woodpecker-$f"
     done
     cd -
   '';
