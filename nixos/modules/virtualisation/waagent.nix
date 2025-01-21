@@ -192,15 +192,6 @@ let
             If set to `null`, the system defaults are used.
           '';
         };
-
-        OpensslPath = lib.mkOption {
-          type = types.nullOr types.path;
-          default = lib.getExe pkgs.openssl;
-          defaultText = literalExpression "lib.getExe pkgs.openssl";
-          description = ''
-            Specify a path for the openssl binary to use for cryptographic operations.
-          '';
-        };
       };
 
       HttpProxy = {
