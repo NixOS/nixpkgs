@@ -10600,6 +10600,8 @@ self: super: with self; {
 
   odfpy = callPackage ../development/python-modules/odfpy { };
 
+  odoorpc = callPackage ../development/python-modules/odoorpc { };
+
   odp-amsterdam = callPackage ../development/python-modules/odp-amsterdam { };
 
   oelint-data = callPackage ../development/python-modules/oelint-data { };
