@@ -7,14 +7,14 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "exo";
-  version = "0.0.5-alpha";
+  version = "0.0.9-alpha";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "exo-explore";
     repo = "exo";
     tag = "v${version}";
-    hash = "sha256-bAbKmLoJbDVwGoWTxA3a0CUzVFoso6/Uz6e48MSJDgw=";
+    hash = "sha256-H3Jxq0GS3Ha9cDsIHCsTupD0/Mp80Mxf2NvAyZytTb0=";
   };
 
   build-system = with python3Packages; [ setuptools ];
@@ -30,7 +30,6 @@ python3Packages.buildPythonApplication rec {
     grpcio
     grpcio-tools
     jinja2
-    netifaces
     numpy
     nuitka
     nvidia-ml-py
@@ -42,6 +41,7 @@ python3Packages.buildPythonApplication rec {
     pydantic
     requests
     rich
+    scapy
     tenacity
     tqdm
     transformers
@@ -74,6 +74,7 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Run your own AI cluster at home with everyday devices";
     homepage = "https://github.com/exo-explore/exo";
+    changelog = "https://github.com/exo-explore/exo/releases/tag/v${version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "exo";
