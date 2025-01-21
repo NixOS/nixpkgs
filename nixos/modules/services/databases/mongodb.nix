@@ -43,7 +43,9 @@ in
 
       enable = lib.mkEnableOption "the MongoDB server";
 
-      package = lib.mkPackageOption pkgs "mongodb" { };
+      package = lib.mkPackageOption pkgs "mongodb" {
+        example = "pkgs.mongodb-ce";
+      };
 
       mongoshPackage = lib.mkPackageOption pkgs "mongosh" { };
 
