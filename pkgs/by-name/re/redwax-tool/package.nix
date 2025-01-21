@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl
 , autoreconfHook, pkg-config, txt2man, which
-, openssl, nss, p11-kit, libical, ldns, libunbound, apr, aprutil
+, openssl, nss, p11-kit, libical, ldns, unbound, apr, aprutil
 }:
 
 stdenv.mkDerivation rec {
