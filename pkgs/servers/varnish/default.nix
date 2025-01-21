@@ -54,7 +54,7 @@ let
         ++ lib.optional stdenv.hostPlatform.isDarwin libunwind
         ++ lib.optional stdenv.hostPlatform.isLinux jemalloc;
 
-      buildFlags = [ "localstatedir=/var/spool" ];
+      buildFlags = [ "localstatedir=/var/run" ];
 
       postPatch = ''
         substituteInPlace bin/varnishtest/vtc_main.c --replace /bin/rm "${coreutils}/bin/rm"
@@ -83,7 +83,7 @@ let
         description = "Web application accelerator also known as a caching HTTP reverse proxy";
         homepage = "https://www.varnish-cache.org";
         license = licenses.bsd2;
-        maintainers = [ ];
+        maintainers = lib.teams.flyingcircus.members;
         platforms = platforms.unix;
       };
     };
@@ -98,5 +98,10 @@ in
   varnish75 = common {
     version = "7.5.0";
     hash = "sha256-/KYbmDE54arGHEVG0SoaOrmAfbsdgxRXHjFIyT/3K10=";
+  };
+  # EOL 2025-09-15
+  varnish76 = common {
+    version = "7.6.1";
+    hash = "sha256-Wpu1oUn/J4Z7VKZs4W0qS5Pt/6VHPLh8nHH3aZz4Rbo=";
   };
 }
