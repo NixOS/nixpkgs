@@ -68,6 +68,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/ramonhagenaars/nptyping";
     changelog = "https://github.com/ramonhagenaars/nptyping/blob/v${version}/HISTORY.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ bcdarwin ];
+    maintainers = with maintainers; [
+      bcdarwin
+      pandapip1
+    ];
   };
 }
