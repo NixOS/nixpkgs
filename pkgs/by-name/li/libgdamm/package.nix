@@ -4,7 +4,7 @@
   fetchurl,
   pkg-config,
   glibmm,
-  libgda,
+  libgda5,
   libxml2,
   gnome,
   mysqlSupport ? false,
@@ -12,7 +12,7 @@
 }:
 
 let
-  gda = libgda.override {
+  gda = libgda5.override {
     inherit mysqlSupport postgresSupport;
   };
 in
