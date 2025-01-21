@@ -59,22 +59,20 @@ buildPythonPackage rec {
     speedups = [ xxhash ];
   };
 
-  nativeCheckInputs =
-    [
-      aiohttp
-      asgiref
-      fastapi
-      gevent
-      httpx
-      psutil
-      pytest-asyncio
-      pytest-cov-stub
-      pytestCheckHook
-      redis
-      requests
-      sure
-    ]
-    ++ lib.flatten (lib.attrValues optional-dependencies);
+  nativeCheckInputs = [
+    aiohttp
+    asgiref
+    fastapi
+    gevent
+    httpx
+    psutil
+    pytest-asyncio
+    pytest-cov-stub
+    pytestCheckHook
+    redis
+    requests
+    sure
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   preCheck = lib.optionalString stdenv.hostPlatform.isLinux ''
     ${redis-server}/bin/redis-server &
