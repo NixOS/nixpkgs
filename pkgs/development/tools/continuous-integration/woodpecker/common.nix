@@ -1,7 +1,7 @@
 { lib, fetchzip }:
 let
-  version = "2.8.3";
-  srcHash = "sha256-/Ozzibz2BhVSxQeH9tg3cC5uVl0gEA/Hw2AMOELW/I8=";
+  version = "3.0.0";
+  srcHash = "sha256-AM+qMTbvlLOLtuADJGWKRmeqwK+ssV7YxydOsx+L8Nc=";
   # The tarball contains vendored dependencies
   vendorHash = null;
 in
@@ -37,7 +37,7 @@ in
   ldflags = [
     "-s"
     "-w"
-    "-X go.woodpecker-ci.org/woodpecker/v2/version.Version=${version}"
+    "-X go.woodpecker-ci.org/woodpecker/v3/version.Version=${version}"
   ];
 
   meta = with lib; {
