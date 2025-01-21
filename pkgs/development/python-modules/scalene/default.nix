@@ -11,7 +11,6 @@
   nvidia-ml-py,
   psutil,
   pydantic,
-  pynvml,
   pytestCheckHook,
   pythonOlder,
   rich,
@@ -75,7 +74,6 @@ buildPythonPackage rec {
     numpy
     psutil
     pydantic
-    pynvml
     rich
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [ nvidia-ml-py ];
 
