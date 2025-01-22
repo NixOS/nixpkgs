@@ -44,10 +44,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postInstall = ''
-    substituteInPlace $out/bin/vpnbridge --replace-fail /var/lib/softether/vpnbridge/vpnbridge $out/var/lib/softether/vpnbridge/vpnbridge 
-    substituteInPlace $out/bin/vpnclient --replace-fail /var/lib/softether/vpnclient/vpnclient $out/var/lib/softether/vpnclient/vpnclient 
-    substituteInPlace $out/bin/vpncmd --replace-fail /var/lib/softether/vpncmd/vpncmd $out/var/lib/softether/vpncmd/vpncmd 
-    substituteInPlace $out/bin/vpnserver --replace-fail /var/lib/softether/vpnserver/vpnserver $out/var/lib/softether/vpnserver/vpnserver 
+    substituteInPlace $out/bin/vpnbridge --replace-fail /var/lib/softether/vpnbridge/vpnbridge $out/var/lib/softether/vpnbridge/vpnbridge
+    substituteInPlace $out/bin/vpnclient --replace-fail /var/lib/softether/vpnclient/vpnclient $out/var/lib/softether/vpnclient/vpnclient
+    substituteInPlace $out/bin/vpncmd --replace-fail /var/lib/softether/vpncmd/vpncmd $out/var/lib/softether/vpncmd/vpncmd
+    substituteInPlace $out/bin/vpnserver --replace-fail /var/lib/softether/vpnserver/vpnserver $out/var/lib/softether/vpnserver/vpnserver
   '';
 
   env.NIX_CFLAGS_COMPILE = toString [
