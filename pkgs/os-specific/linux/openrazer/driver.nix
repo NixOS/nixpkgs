@@ -24,6 +24,10 @@ stdenv.mkDerivation (
       "KERNELDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     ];
 
+    preBuild = ''
+      export buildRoot=.
+    '';
+
     installPhase = ''
       runHook preInstall
 
