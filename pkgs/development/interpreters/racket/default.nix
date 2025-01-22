@@ -4,8 +4,6 @@
   fetchurl,
   racket-minimal,
 
-  openssl,
-
   cairo,
   fontconfig,
   glib,
@@ -17,7 +15,6 @@
   libpng,
   makeFontsConf,
   pango,
-  sqlite,
   unixODBC,
   wrapGAppsHook3,
 
@@ -38,23 +35,6 @@ let
 
   manifest = lib.importJSON ./manifest.json;
   inherit (stdenv.hostPlatform) isDarwin;
-
-  runtimeDeps = [
-    openssl
-  ];
-
-  mainDistDeps = [
-    (if isDarwin then libiodbc else unixODBC)
-    cairo
-    fontconfig
-    glib
-    gtk3
-    libGL
-    libjpeg
-    libpng
-    pango
-    sqlite
-  ];
 in
 
 minimal.overrideAttrs (
@@ -64,13 +44,25 @@ minimal.overrideAttrs (
       inherit (manifest.full) sha256;
     };
 
+    buildInputs = prevAttrs.buildInputs ++ [
+      (if isDarwin then libiodbc else unixODBC)
+      cairo
+      fontconfig.lib
+      glib
+      gtk3
+      libGL
+      libjpeg
+      libpng
+      pango
+    ];
+
     nativeBuildInputs = [
       wrapGAppsHook3
     ];
 
     preBuild =
       let
-        libPaths = makeLibPaths mainDistDeps;
+        libPaths = makeLibPaths finalAttrs.buildInputs;
         libPathsVar = if isDarwin then "DYLD_FALLBACK_LIBRARY_PATH" else "LD_LIBRARY_PATH";
       in
       /*
@@ -91,27 +83,6 @@ minimal.overrideAttrs (
     preFixup = lib.optionalString (!isDarwin) ''
       gappsWrapperArgs+=("--set" "LOCALE_ARCHIVE" "${glibcLocales}/lib/locale/locale-archive")
     '';
-
-    postFixup =
-      let
-        libPaths = makeLibPaths (runtimeDeps ++ mainDistDeps);
-      in
-      ''
-        $out/bin/racket -f - <<EOF
-        (require setup/dirs)
-
-        (define config-path (build-path (find-config-dir) "config.rktd"))
-
-        (define prev-config (with-input-from-file config-path read))
-        (define prev-lib-search-dirs (hash-ref prev-config 'lib-search-dirs '(#f)))
-
-        (define lib-search-dirs (append '(${libPaths}) prev-lib-search-dirs))
-        (define config (hash-set prev-config 'lib-search-dirs lib-search-dirs))
-
-        (with-output-to-file config-path (thunk (pretty-write config))
-          #:exists 'replace)
-        EOF
-      '';
 
     passthru =
       let
