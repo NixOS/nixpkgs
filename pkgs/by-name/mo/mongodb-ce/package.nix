@@ -5,8 +5,7 @@
   autoPatchelfHook,
   curl,
   openssl,
-  testers,
-  mongodb-ce,
+  versionCheckHook,
   writeShellApplication,
   jq,
   nix-update,
@@ -64,6 +63,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgram = "${placeholder "out"}/bin/mongod";
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
+
   passthru = {
 
     updateScript =
@@ -105,10 +109,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     tests = {
       inherit (nixosTests) mongodb-ce;
-      version = testers.testVersion {
-        package = mongodb-ce;
-        command = "mongod --version";
-      };
     };
   };
 
