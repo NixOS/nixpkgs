@@ -19,7 +19,7 @@
   libpulseaudio,
   libusb1,
   libxkbcommon,
-  mesa,
+  libgbm,
   ninja,
   nix-update-script,
   nixosTests,
@@ -38,7 +38,7 @@
   ibusSupport ? stdenv.hostPlatform.isUnix && !stdenv.hostPlatform.isDarwin,
   jackSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
   libdecorSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
-  openglSupport ? lib.meta.availableOn stdenv.hostPlatform mesa,
+  openglSupport ? lib.meta.availableOn stdenv.hostPlatform libGL,
   pipewireSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
   pulseaudioSupport ?
     config.pulseaudio or stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
@@ -110,7 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional dbusSupport dbus
     ++ lib.optionals drmSupport [
       libdrm
-      mesa # libgbm
+      libgbm
     ]
     ++ lib.optional jackSupport libjack2
     ++ lib.optional libdecorSupport libdecor
