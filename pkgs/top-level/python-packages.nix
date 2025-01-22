@@ -10461,8 +10461,6 @@ self: super: with self; {
 
   pipe = callPackage ../development/python-modules/pipe { };
 
-  pipenv-poetry-migrate = callPackage ../development/python-modules/pipenv-poetry-migrate { };
-
   piper-phonemize = callPackage ../development/python-modules/piper-phonemize {
     onnxruntime-native = pkgs.onnxruntime;
     piper-phonemize-native = pkgs.piper-phonemize;
