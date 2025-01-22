@@ -6,7 +6,7 @@
   cmake,
   pkg-config,
   wrapGAppsHook3,
-  boost,
+  boost186,
   cereal,
   cgal,
   curl,
@@ -56,13 +56,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "orca-slicer";
-  version = "v2.2.0-unstable-2025-01-06";
+  version = "v2.2.0-unstable-2025-01-22";
 
   src = fetchFromGitHub {
     owner = "SoftFever";
     repo = "OrcaSlicer";
-    rev = "99a0facfb3a5c9b4e661e536825c08393053cb53";
-    hash = "sha256-XWM04Vx65q+Vc+s3YLucS63IhGVw8ODhL2m+47nZKs8=";
+    rev = "4f82fee592e81204e32b02a681c05208850f3f5f";
+    hash = "sha256-E760I6rcy5dLwOIdE0ICEU8/y4hKRLo4b0bVaHvEk+w=";
   };
 
   nativeBuildInputs = [
@@ -127,7 +127,6 @@ stdenv.mkDerivation rec {
     # Fix for webkitgtk linking
     ./patches/0001-not-for-upstream-CMakeLists-Link-against-webkit2gtk-.patch
     ./patches/dont-link-opencv-world-orca.patch
-    ./patches/fix-boost.patch
   ];
 
   doCheck = true;
