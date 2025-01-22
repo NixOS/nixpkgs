@@ -3,10 +3,10 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
+  audioop-lts,
   ffmpeg-full,
   pytestCheckHook,
-  pythonOlder,
-  setuptools,
+  setuptools-scm,
   substituteAll,
 }:
 
@@ -14,8 +14,6 @@ buildPythonPackage rec {
   pname = "pydub";
   version = "0.25.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jiaaro";
@@ -40,7 +38,18 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [
+    setuptools-scm
+  ];
+
+  dependencies = [
+    # in-tree re-implementation has a bug in import statement:
+    # https://github.com/jiaaro/pydub/issues/815
+    # Note: even if import is fixed, there are reports that the in-tree code
+    # has additional problems in how it parses audio files. Hence, using the
+    # external audioop-lts package instead.
+    audioop-lts
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -54,11 +63,11 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "test/test.py" ];
 
-  meta = with lib; {
+  meta = {
     description = "Manipulate audio with a simple and easy high level interface";
     homepage = "http://pydub.com";
     changelog = "https://github.com/jiaaro/pydub/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }
