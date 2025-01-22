@@ -28,6 +28,8 @@
   systemdLibs,
   testers,
   validatePkgConfig,
+  vulkan-headers,
+  vulkan-loader,
   wayland,
   wayland-scanner,
   xorg,
@@ -136,7 +138,11 @@ stdenv.mkDerivation (finalAttrs: {
   propagatedBuildInputs = finalAttrs.dlopenPropagatedBuildInputs;
 
   dlopenPropagatedBuildInputs =
-    lib.optional (openglSupport && !stdenv.hostPlatform.isDarwin) libGL
+    [
+      vulkan-headers
+      vulkan-loader
+    ]
+    ++ lib.optional (openglSupport && !stdenv.hostPlatform.isDarwin) libGL
     ++ lib.optional x11Support xorg.libX11;
 
   cmakeFlags = [
