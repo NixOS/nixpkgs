@@ -273,6 +273,7 @@ let
   # Keep extra attributes from `attrs`, e.g., `patchPhase', etc.
   self = toPythonModule (
     stdenv.mkDerivation (
+      finalAttrs:
       (cleanAttrs attrs)
       // {
 
@@ -402,7 +403,7 @@ let
           // {
             updateScript =
               let
-                filename = head (splitString ":" self.meta.position);
+                filename = head (splitString ":" finalAttrs.finalPackage.meta.position);
               in
               [
                 update-python-libraries
