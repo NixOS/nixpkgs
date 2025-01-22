@@ -221,6 +221,10 @@ in lib.makeExtensible (self: ({
     self_attribute_name = "nix_2_25";
   };
 
+  nix_2_26 = callPackage ./2_26/componentized.nix {
+    inherit libgit2-thin-packfile;
+  };
+
   git = common rec {
     version = "2.25.0";
     suffix = "pre20241101_${lib.substring 0 8 src.rev}";
