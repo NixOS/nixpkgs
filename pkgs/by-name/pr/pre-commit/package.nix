@@ -30,7 +30,7 @@ buildPythonApplication rec {
     owner = "pre-commit";
     repo = "pre-commit";
     tag = "v${version}";
-    hash = "sha256-XXXnzAxJOS7mabHmGYZ/VkDrpaZbqTJyETSCxq/OrGQ=";
+    hash = "sha256-prnJC86Dg5AYG9chAAJR7KhMlJzjnjNDJHn6OG7jQYY=";
   };
 
   patches = [
