@@ -1,0 +1,36 @@
+From 0a93bc8850b4b1608d77b123cdb1875f60635e6d Mon Sep 17 00:00:00 2001
+From: OPNA2608 <opna2608@protonmail.com>
+Date: Sat, 7 Dec 2024 10:47:29 +0100
+Subject: [PATCH] Support keypad-less keyboards everywhere
+
+---
+ src/sdl_window.cpp | 7 -------
+ 1 file changed, 7 deletions(-)
+
+diff --git a/src/sdl_window.cpp b/src/sdl_window.cpp
+index d95e8d63..ac8c5c72 100644
+--- a/src/sdl_window.cpp
++++ b/src/sdl_window.cpp
+@@ -174,19 +174,12 @@ void WindowSDL::OnResize() {
+ }
+ 
+ void WindowSDL::OnKeyPress(const SDL_Event* event) {
+-#ifdef __APPLE__
+     // Use keys that are more friendly for keyboards without a keypad.
+     // Once there are key binding options this won't be necessary.
+     constexpr SDL_Keycode CrossKey = SDLK_N;
+     constexpr SDL_Keycode CircleKey = SDLK_B;
+     constexpr SDL_Keycode SquareKey = SDLK_V;
+     constexpr SDL_Keycode TriangleKey = SDLK_C;
+-#else
+-    constexpr SDL_Keycode CrossKey = SDLK_KP_2;
+-    constexpr SDL_Keycode CircleKey = SDLK_KP_6;
+-    constexpr SDL_Keycode SquareKey = SDLK_KP_4;
+-    constexpr SDL_Keycode TriangleKey = SDLK_KP_8;
+-#endif
+ 
+     auto button = OrbisPadButtonDataOffset::None;
+     Input::Axis axis = Input::Axis::AxisMax;
+-- 
+2.47.0
+

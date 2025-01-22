@@ -1,0 +1,15 @@
+Don't hardcode /usr, use @prefix@.
+
+Author: Bjørn Forsman
+diff -uNr espeakedit-1.48.03.orig/src/speech.h espeakedit-1.48.03/src/speech.h
+--- espeakedit-1.48.03.orig/src/speech.h	2014-03-04 17:48:12.000000000 +0100
++++ espeakedit-1.48.03/src/speech.h	2014-07-22 18:21:40.860790719 +0200
+@@ -58,7 +58,7 @@
+ 
+ // will look for espeak_data directory here, and also in user's home directory
+ #ifndef PATH_ESPEAK_DATA
+-   #define PATH_ESPEAK_DATA  "/usr/share/espeak-data"
++   #define PATH_ESPEAK_DATA  "@prefix@/share/espeak-data"
+ #endif
+ 
+ typedef unsigned short USHORT;

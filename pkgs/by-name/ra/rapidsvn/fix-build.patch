@@ -1,0 +1,122 @@
+--- a/src/svncpp/client_ls.cpp
++++ b/src/svncpp/client_ls.cpp
+@@ -25,6 +25,7 @@
+ #include "svn_client.h"
+ #include "svn_path.h"
+ #include "svn_sorts.h"
++#include "svn_version.h"
+ //#include "svn_utf.h"
+ 
+ // svncpp
+@@ -35,6 +36,7 @@
+ #include "m_is_empty.hpp"
+ 
+ 
++#if SVN_VER_MAJOR == 1 && SVN_VER_MINOR < 8
+ static int
+ compare_items_as_paths(const svn_sort__item_t *a, const svn_sort__item_t *b)
+ {
+@@ -84,6 +86,72 @@ namespace svn
+   }
+ }
+ 
++#else
++
++#include <algorithm>
++
++static svn_error_t* store_entry(
++        void *baton,
++        const char *path,
++        const svn_dirent_t *dirent,
++        const svn_lock_t *,
++        const char *abs_path,
++        const char *,
++        const char *,
++        apr_pool_t *scratch_pool)
++{
++  svn::DirEntries *entries = reinterpret_cast<svn::DirEntries*>(baton);
++  if (path[0] == '\0') {
++    if (dirent->kind == svn_node_file) {
++      // for compatibility with svn_client_ls behaviour, listing a file
++      // stores that file name
++      entries->push_back(svn::DirEntry(svn_path_basename(abs_path, scratch_pool), dirent));
++    }
++  } else {
++    entries->push_back(svn::DirEntry(path, dirent));
++  }
++  return SVN_NO_ERROR;
++}
++
++static bool sort_by_path(svn::DirEntry const& a, svn::DirEntry const& b)
++{
++  return svn_path_compare_paths(a.name(), b.name()) < 0;
++}
++
++namespace svn
++{
++  DirEntries
++  Client::list(const char * pathOrUrl,
++               svn_opt_revision_t * revision,
++               bool recurse) throw(ClientException)
++  {
++    Pool pool;
++    DirEntries entries;
++
++    svn_error_t * error =
++      svn_client_list3(pathOrUrl,
++                       revision,
++                       revision,
++                       SVN_DEPTH_INFINITY_OR_IMMEDIATES(recurse),
++                       SVN_DIRENT_ALL,
++                       FALSE, // fetch locks
++                       FALSE, // include externals
++                       &store_entry,
++                       &entries,
++                       *m_context,
++                       pool);
++
++    if (error != SVN_NO_ERROR)
++      throw ClientException(error);
++
++    std::sort(entries.begin(), entries.end(), &sort_by_path);
++
++    return entries;
++  }
++}
++
++#endif
++
+ /* -----------------------------------------------------------------
+  * local variables:
+  * eval: (load-file "../../rapidsvn-dev.el")
+--- a/src/svncpp/dirent.cpp	2017-03-19 15:48:58.956827337 +0100
++++ b/src/svncpp/dirent.cpp	2017-03-19 15:50:19.111527279 +0100
+@@ -47,7 +47,7 @@
+     {
+     }
+ 
+-    Data(const char * _name, svn_dirent_t * dirEntry)
++    Data(const char * _name, const svn_dirent_t * dirEntry)
+         : name(_name), kind(dirEntry->kind), size(dirEntry->size),
+         hasProps(dirEntry->has_props != 0),
+         createdRev(dirEntry->created_rev), time(dirEntry->time)
+@@ -78,7 +78,7 @@
+   {
+   }
+ 
+-  DirEntry::DirEntry(const char * name, svn_dirent_t * DirEntry)
++  DirEntry::DirEntry(const char * name, const svn_dirent_t * DirEntry)
+       : m(new Data(name, DirEntry))
+   {
+   }
+--- a/include/svncpp/dirent.hpp	2017-03-19 15:50:54.860506116 +0100
++++ b/include/svncpp/dirent.hpp	2017-03-19 15:50:58.314407598 +0100
+@@ -41,7 +41,7 @@
+     /**
+      * constructor for existing @a svn_dirent_t entries
+      */
+-    DirEntry(const char * name, svn_dirent_t * dirEntry);
++    DirEntry(const char * name, const svn_dirent_t * dirEntry);
+ 
+     /**
+      * copy constructor
