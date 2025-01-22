@@ -3,7 +3,7 @@
   stdenv,
   buildNpmPackage,
   fetchFromGitHub,
-  electron_31,
+  electron_33,
   darwin,
   copyDesktopItems,
   makeDesktopItem,
@@ -20,7 +20,7 @@ let
     hash = "sha256-UpNtRZhAqRq/sRVkgg/RbLUWNXvHkAyGhu29zWE6Lk0=";
   };
 
-  electron = electron_31;
+  electron = electron_33;
 in
 buildNpmPackage {
   inherit pname version;
