@@ -38,19 +38,18 @@ let
 in
 buildDotnetModule rec {
   pname = "Dafny";
-  version = "4.8.0";
+  version = "4.9.1";
 
   src = fetchFromGitHub {
     owner = "dafny-lang";
     repo = "dafny";
-    rev = "v${version}";
-    hash = "sha256-x/fX4o+R72Pl02u1Zsr80Rh/4Wb/aKw90fhAGmsfFUI=";
+    tag = "v${version}";
+    hash = "sha256-fCBaOF1mDrqJaUiATZAhzLjlK3NGVFnxdOwgHbOkkgY=";
   };
 
   postPatch =
     let
-      # This file wasn't updated between 4.6.0 and 4.7.0.
-      runtimeJarVersion = "4.6.0";
+      runtimeJarVersion = "4.9.1";
     in
     ''
       cp ${writeScript "fake-gradlew-for-dafny" ''
