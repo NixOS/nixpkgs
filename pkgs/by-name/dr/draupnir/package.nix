@@ -11,6 +11,8 @@
   mkYarnPackage,
   fetchYarnDeps,
   nixosTests,
+  stdenv,
+  cctools,
 }:
 
 # docs: https://github.com/NixOS/nixpkgs/blob/master/doc/languages-frameworks/javascript.section.md#yarn2nix-javascript-yarn2nix
@@ -53,7 +55,7 @@ mkYarnPackage rec {
     };
 
     better-sqlite3 = {
-      nativeBuildInputs = [ python3 ];
+      nativeBuildInputs = [ python3 ] ++ lib.optional stdenv.hostPlatform.isDarwin cctools.libtool;
       postInstall = ''
         # build native sqlite bindings
         npm run build-release --offline --nodedir="${nodeSources}"
