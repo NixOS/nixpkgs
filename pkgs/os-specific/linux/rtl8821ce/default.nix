@@ -19,8 +19,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   hardeningDisable = [ "pic" ];
 
+  env = {
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=incompatible-pointer-types"
+    ];
+  };
+
   nativeBuildInputs = [ bc ] ++ kernel.moduleBuildDependencies;
   makeFlags = kernel.makeFlags;
+
+  preBuild = ''
+    export buildRoot=.
+  '';
 
   prePatch = ''
     substituteInPlace ./Makefile \
