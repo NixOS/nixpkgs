@@ -8,6 +8,7 @@
   lz4,
   ncurses,
   openssl,
+  sqlite,
 
   disableDocs ? false,
 
@@ -35,6 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
     libz
     lz4
     ncurses
+    openssl
+    sqlite.out
   ];
 
   patches = lib.optionals isDarwin [
@@ -86,22 +89,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontStrip = isDarwin;
 
-  postFixup = ''
-    $out/bin/racket -f - <<EOF
-    (require setup/dirs)
-
-    (define config-path (build-path (find-config-dir) "config.rktd"))
-
-    (define prev-config (with-input-from-file config-path read))
-    (define prev-lib-search-dirs (hash-ref prev-config 'lib-search-dirs '(#f)))
-
-    (define lib-search-dirs (append '("${lib.getLib openssl}/lib") prev-lib-search-dirs))
-    (define config (hash-set prev-config 'lib-search-dirs lib-search-dirs))
-
-    (with-output-to-file config-path (thunk (pretty-write config))
-      #:exists 'replace)
-    EOF
-  '';
+  postFixup =
+    let
+      configureInstallation = builtins.path {
+        name = "configure-installation.rkt";
+        path = ./configure-installation.rkt;
+      };
+    in
+    ''
+      $out/bin/racket -U -u ${configureInstallation}
+    '';
 
   passthru = {
     # Functionalities #
