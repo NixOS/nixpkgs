@@ -1,25 +1,16 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   nix-update-script,
-  mkDerivation,
-  qtbase,
-  qtsvg,
-  qtserialport,
-  qtwebengine,
-  qtmultimedia,
-  qttools,
-  qtconnectivity,
-  qtcharts,
+  qt6,
   libusb-compat-0_1,
   gsl,
   blas,
   bison,
   flex,
   zlib,
-  qmake,
   makeDesktopItem,
-  wrapQtAppsHook,
 }:
 
 let
@@ -33,37 +24,45 @@ let
     categories = [ "Utility" ];
   };
 in
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "golden-cheetah";
   version = "3.7-DEV2408";
 
   src = fetchFromGitHub {
     owner = "GoldenCheetah";
     repo = "GoldenCheetah";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-6JAdnYaKULJsc/zdcTMbCkbOCbiVtnJivEazDKL721c=";
   };
 
-  buildInputs = [
-    qtbase
-    qtsvg
-    qtserialport
-    qtwebengine
-    qtmultimedia
-    qttools
-    zlib
-    qtconnectivity
-    qtcharts
-    libusb-compat-0_1
-    gsl
-    blas
-  ];
-  nativeBuildInputs = [
-    flex
-    wrapQtAppsHook
-    qmake
-    bison
-  ];
+  buildInputs =
+    with qt6;
+    [
+      qt5compat
+      qtbase
+      qtcharts
+      qtconnectivity
+      qtmultimedia
+      qtserialport
+      qtsvg
+      qttools
+      qtwebengine
+    ]
+    ++ [
+      blas
+      gsl
+      libusb-compat-0_1
+      zlib
+    ];
+  nativeBuildInputs =
+    [
+      bison
+      flex
+    ]
+    ++ (with qt6; [
+      qmake
+      wrapQtAppsHook
+    ]);
 
   patches = [
     # allow building with bison 3.7
@@ -84,30 +83,41 @@ mkDerivation rec {
   preConfigure = ''
     cp src/gcconfig.pri.in src/gcconfig.pri
     cp qwt/qwtconfig.pri.in qwt/qwtconfig.pri
-    sed -i 's,^#QMAKE_LRELEASE.*,QMAKE_LRELEASE = ${qttools.dev}/bin/lrelease,' src/gcconfig.pri
+    sed -i 's,^#QMAKE_LRELEASE.*,QMAKE_LRELEASE = ${qt6.qttools.dev}/bin/lrelease,' src/gcconfig.pri
     sed -i 's,^#LIBUSB_INSTALL.*,LIBUSB_INSTALL = ${libusb-compat-0_1},' src/gcconfig.pri
     sed -i 's,^#LIBUSB_INCLUDE.*,LIBUSB_INCLUDE = ${libusb-compat-0_1.dev}/include,' src/gcconfig.pri
     sed -i 's,^#LIBUSB_LIBS.*,LIBUSB_LIBS = -L${libusb-compat-0_1}/lib -lusb,' src/gcconfig.pri
   '';
 
-  installPhase = ''
-    runHook preInstall
+  installPhase =
+    if stdenv.isLinux then
+      ''
+        runHook preInstall
 
-    mkdir -p $out/bin
-    cp src/GoldenCheetah $out/bin
-    install -Dm644 "${desktopItem}/share/applications/"* -t $out/share/applications/
-    install -Dm644 src/Resources/images/gc.png $out/share/pixmaps/goldencheetah.png
+        mkdir -p $out/bin
+        cp src/GoldenCheetah $out/bin
+        install -Dm644 "${desktopItem}/share/applications/"* -t $out/share/applications/
+        install -Dm644 src/Resources/images/gc.png $out/share/pixmaps/goldencheetah.png
 
-    runHook postInstall
-  '';
+        runHook postInstall
+      ''
+    else if stdenv.isDarwin then
+      ''
+        runHook preInstall
+        mkdir -p $out/Applications
+        cp -r src/GoldenCheetah.app $out/Applications
+        runHook postInstall
+      ''
+    else
+      abort "unsupported platform";
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Performance software for cyclists, runners and triathletes. Built from source and without API tokens";
     mainProgram = "GoldenCheetah";
-    platforms = lib.platforms.linux;
+    platforms = with lib.platforms; darwin ++ linux;
     maintainers = with lib.maintainers; [ adamcstephens ];
     license = lib.licenses.gpl2Plus;
   };
-}
+})
