@@ -8501,6 +8501,12 @@
     githubId = 60962839;
     name = "Mazen Zahr";
   };
+  GKHWB = {
+    github = "GKHWB";
+    githubId = 68881230;
+    name = "GKHWB";
+    email = "kingdomg@tuta.com";
+  };
   gkleen = {
     name = "Gregor Kleen";
     email = "xpnfr@bouncy.email";
