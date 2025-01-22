@@ -41,6 +41,11 @@ stdenv.mkDerivation (finalAttrs: {
     python
   ];
 
+  postPatch = ''
+    chmod +x config/run_test.sh.in
+    patchShebangs --build config/run_test.sh.in
+  '';
+
   cmakeFlags =
     [
       "-DWITH_OPENEXR=1"
@@ -52,6 +57,14 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
   enableParallelBuilding = true;
+
+  passthru = {
+    tests = {
+      check = finalAttrs.finalPackage.overrideAttrs (previousAttrs: {
+        doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+      });
+    };
+  };
 
   meta = with lib; {
     description = "Novel computer vision C++ library with customizable algorithms and data structures";
