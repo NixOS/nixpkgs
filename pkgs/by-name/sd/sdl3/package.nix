@@ -28,6 +28,8 @@
   systemdLibs,
   testers,
   validatePkgConfig,
+  vulkan-headers,
+  vulkan-loader,
   wayland,
   wayland-scanner,
   xorg,
@@ -51,7 +53,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sdl3";
-  version = "3.1.8";
+  version = "3.2.0";
 
   outputs = [
     "lib"
@@ -62,8 +64,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "libsdl-org";
     repo = "SDL";
-    tag = "preview-${finalAttrs.version}";
-    hash = "sha256-yfnW5y99EegifRavvZWmXPH2NFPKWoe90RmGDGk6PI4=";
+    tag = "release-${finalAttrs.version}";
+    hash = "sha256-gVLZPuXtMdFhylxh3+LC/SJCaQiOwZpbVcBGctyGGYY=";
   };
 
   postPatch =
@@ -136,7 +138,11 @@ stdenv.mkDerivation (finalAttrs: {
   propagatedBuildInputs = finalAttrs.dlopenPropagatedBuildInputs;
 
   dlopenPropagatedBuildInputs =
-    lib.optional (openglSupport && !stdenv.hostPlatform.isDarwin) libGL
+    [
+      vulkan-headers
+      vulkan-loader
+    ]
+    ++ lib.optional (openglSupport && !stdenv.hostPlatform.isDarwin) libGL
     ++ lib.optional x11Support xorg.libX11;
 
   cmakeFlags = [
@@ -213,13 +219,13 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script {
       extraArgs = [
         "--version-regex"
-        "'preview-(.*)'"
+        "'release-(.*)'"
       ];
     };
   };
 
   meta = {
-    description = "Cross-platform development library (Preview version)";
+    description = "Cross-platform development library";
     homepage = "https://libsdl.org";
     changelog = "https://github.com/libsdl-org/SDL/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.zlib;
