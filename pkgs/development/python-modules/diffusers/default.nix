@@ -40,7 +40,7 @@
 
 buildPythonPackage rec {
   pname = "diffusers";
-  version = "0.30.3";
+  version = "0.32.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -49,7 +49,7 @@ buildPythonPackage rec {
     owner = "huggingface";
     repo = "diffusers";
     tag = "v${version}";
-    hash = "sha256-/3lHJdsNblKb6xX03OluSCApMK3EXJbRLboBk8CjobE=";
+    hash = "sha256-TwmII38EA0Vux+Jh39pTAA6r+FRNuKHQWOOqsEe2Z+E=";
   };
 
   build-system = [ setuptools ];
