@@ -2,7 +2,6 @@
   lib,
   rustPlatform,
   fetchgit,
-  fetchpatch,
   pkg-config,
   protobuf,
   python3,
@@ -22,27 +21,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "crosvm";
-  version = "130.0";
+  version = "0-unstable-2025-01-21";
 
   src = fetchgit {
     url = "https://chromium.googlesource.com/chromiumos/platform/crosvm";
-    rev = "9d42f918373f962b7d035ff52a1629e184cb496e";
-    hash = "sha256-h8nAZ4kTidblKNvugEEZUorBthjGi0FmImcBwYy4EHQ=";
+    rev = "c93c22f1da264919ba551db84d43d4a11ea55d8d";
+    hash = "sha256-edhg1ZtlbzsqvmeVO/AddMfmFBcicxTWV5VvZZ25v6U=";
     fetchSubmodules = true;
   };
 
-  patches = [
-    (fetchpatch {
-      name = "cross-domain.patch";
-      url = "https://chromium.googlesource.com/chromiumos/platform/crosvm/+/60053cdf0b360a03084292b39120365fff65d410%5E%21/?format=TEXT";
-      decode = "base64 -d";
-      hash = "sha256-U5eOxuAtVLjJ+8h16lmbJYNxsP/AOEv/1ec4WlUxP2E=";
-    })
-  ];
-
   separateDebugInfo = true;
 
-  cargoHash = "sha256-FvDJhmrSBShxRTpc23C0jEk9YRbtGyYgC1Z8ekxNnb8=";
+  cargoHash = "sha256-6n9KhLcTSdv2iwFNHvghxOl7G1ht7Ngm3Vw3L9cM6E0=";
 
   nativeBuildInputs = [
     pkg-config
