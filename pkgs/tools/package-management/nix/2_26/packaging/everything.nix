@@ -68,50 +68,52 @@ let
           ;
       };
 
-  dev = nixAttrs: stdenv.mkDerivation (finalAttrs: {
-    name = "nix-${nix-cli.version}-dev";
-    pname = "nix";
-    version = nix-cli.version;
-    dontUnpack = true;
-    dontBuild = true;
-    libs = map lib.getDev (lib.attrValues libs);
-    installPhase = ''
-      mkdir -p $out/nix-support
-      echo $libs >> $out/nix-support/propagated-build-inputs
-      echo ${nixAttrs.finalPackage} >> $out/nix-support/propagated-build-inputs
-    '';
-    passthru = {
-      tests = {
-        # TODO: is this supposed to work for a dev output?
-        # pkg-config = testers.hasPkgConfigModules {
-        #   package = finalAttrs.finalPackage;
-        # };
+  dev =
+    nixAttrs:
+    stdenv.mkDerivation (finalAttrs: {
+      name = "nix-${nix-cli.version}-dev";
+      pname = "nix";
+      version = nix-cli.version;
+      dontUnpack = true;
+      dontBuild = true;
+      libs = map lib.getDev (lib.attrValues libs);
+      installPhase = ''
+        mkdir -p $out/nix-support
+        echo $libs >> $out/nix-support/propagated-build-inputs
+        echo ${nixAttrs.finalPackage} >> $out/nix-support/propagated-build-inputs
+      '';
+      passthru = {
+        tests = {
+          # TODO: is this supposed to work for a dev output?
+          # pkg-config = testers.hasPkgConfigModules {
+          #   package = finalAttrs.finalPackage;
+          # };
+        };
+
+        # If we were to fully emulate output selection here, we'd confuse the Nix CLIs,
+        # because they rely on `drvPath`.
+        dev = finalAttrs.finalPackage.out;
+        out = nixAttrs.finalPackage.out;
+
+        libs = throw "`nix.dev.libs` is not meant to be used; use `nix.libs` instead.";
       };
-
-      # If we were to fully emulate output selection here, we'd confuse the Nix CLIs,
-      # because they rely on `drvPath`.
-      dev = finalAttrs.finalPackage.out;
-      out = nixAttrs.finalPackage.out;
-
-      libs = throw "`nix.dev.libs` is not meant to be used; use `nix.libs` instead.";
-    };
-    meta = {
-      pkgConfigModules = [
-        "nix-cmd"
-        "nix-expr"
-        "nix-expr-c"
-        "nix-fetchers"
-        "nix-flake"
-        "nix-flake-c"
-        "nix-main"
-        "nix-main-c"
-        "nix-store"
-        "nix-store-c"
-        "nix-util"
-        "nix-util-c"
-      ];
-    };
-  });
+      meta = {
+        pkgConfigModules = [
+          "nix-cmd"
+          "nix-expr"
+          "nix-expr-c"
+          "nix-fetchers"
+          "nix-flake"
+          "nix-flake-c"
+          "nix-main"
+          "nix-main-c"
+          "nix-store"
+          "nix-store-c"
+          "nix-util"
+          "nix-util-c"
+        ];
+      };
+    });
   devdoc = buildEnv {
     name = "nix-${nix-cli.version}-devdoc";
     paths = [
