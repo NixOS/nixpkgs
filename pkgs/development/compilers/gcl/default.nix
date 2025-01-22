@@ -61,5 +61,6 @@ stdenv.mkDerivation rec {
     maintainers = lib.teams.lisp.members;
     license = licenses.gpl2;
     platforms = platforms.linux;
+    broken = true; # 2025-01-21; to check after 2.7.0 is tagged
   };
 }
