@@ -32,6 +32,9 @@
   # depends on some previous commits.
   tensileSepArch ? true,
   tensileLazyLib ? true,
+  # TODO: ideally this can be turned off depending on `gpuTargets` as hipBLASLt
+  # only supports a small number of targets.
+  withHipBlasLt ? true,
   # `gfx940`, `gfx941` are not present in this list because they are early
   # engineering samples, and all final MI300 hardware are `gfx942`:
   # https://github.com/NixOS/nixpkgs/pull/298388#issuecomment-2032791130
@@ -94,6 +97,8 @@ stdenv.mkDerivation (finalAttrs: {
     [
       python3
       hipblas-common
+    ]
+    ++ lib.optionals withHipBlasLt [
       hipblaslt
     ]
     ++ lib.optionals buildTensile [
@@ -143,6 +148,7 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.cmakeBool "BUILD_WITH_TENSILE" buildTensile)
       (lib.cmakeBool "ROCM_SYMLINK_LIBS" false)
       (lib.cmakeFeature "ROCBLAS_TENSILE_LIBRARY_DIR" "lib/rocblas")
+      (lib.cmakeBool "BUILD_WITH_HIPBLASLT" withHipBlasLt)
       (lib.cmakeBool "BUILD_CLIENTS_TESTS" buildTests)
       (lib.cmakeBool "BUILD_CLIENTS_BENCHMARKS" buildBenchmarks)
       (lib.cmakeBool "BUILD_CLIENTS_SAMPLES" buildBenchmarks)
