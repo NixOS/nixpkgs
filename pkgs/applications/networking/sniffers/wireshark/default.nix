@@ -48,6 +48,7 @@
   zlib-ng,
   zstd,
 
+  withStratoshark ? true,
   withQt ? true,
   qt6 ? null,
 }:
@@ -55,10 +56,11 @@ let
   isAppBundle = withQt && stdenv.hostPlatform.isDarwin;
 in
 assert withQt -> qt6 != null;
+assert withStratoshark -> withQt;
 
 stdenv.mkDerivation rec {
   pname = "wireshark-${if withQt then "qt" else "cli"}";
-  version = "4.4.3";
+  version = "ssv0.9.0";
 
   outputs = [
     "out"
@@ -68,8 +70,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     repo = "wireshark";
     owner = "wireshark";
-    rev = "v${version}";
-    hash = "sha256-QTDOwJXo9+A2J/uXdyTtK5D5DVYLUAaUKT8desQGvd4=";
+    tag = "${version}";
+    hash = "sha256-P2Bx/GoV2l7iPLlh0WzKRPAUxSiWfG7pkMRGfSdDXBU=";
   };
 
   patches = [
@@ -158,6 +160,10 @@ stdenv.mkDerivation rec {
   cmakeFlags =
     [
       "-DBUILD_wireshark=${if withQt then "ON" else "OFF"}"
+      "-DBUILD_stratoshark=${if withStratoshark then "ON" else "OFF"}"
+      "-DBUILD_falcodump=${if withStratoshark then "ON" else "OFF"}"
+      "-DBUILD_sshdig=${if withStratoshark then "ON" else "OFF"}"
+      "-DENABLE_WERROR=OFF" # FIXME: Required on ssv0.9.0, please check if we can remove this later
       # Fix `extcap` and `plugins` paths. See https://bugs.wireshark.org/bugzilla/show_bug.cgi?id=16444
       "-DCMAKE_INSTALL_LIBDIR=lib"
       "-DENABLE_APPLICATION_BUNDLE=${if isAppBundle then "ON" else "OFF"}"
