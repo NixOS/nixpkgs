@@ -3853,6 +3853,8 @@ self: super: with self; {
 
   dominate = callPackage ../development/python-modules/dominate { };
 
+  donfig = callPackage ../development/python-modules/donfig { };
+
   doorbirdpy = callPackage ../development/python-modules/doorbirdpy { };
 
   dopy = callPackage ../development/python-modules/dopy { };
