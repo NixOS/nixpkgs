@@ -14,17 +14,6 @@ let
   format = pkgs.formats.json { };
 
   configFile = format.generate "nats.conf" cfg.settings;
-
-  validateConfig =
-    file:
-    pkgs.runCommand "validate-nats-conf"
-      {
-        nativeBuildInputs = [ pkgs.nats-server ];
-      }
-      ''
-        nats-server --config "${configFile}" -t
-        ln -s "${configFile}" "$out"
-      '';
 in
 {
 
@@ -120,7 +109,9 @@ in
         })
         {
           Type = "simple";
-          ExecStart = "${pkgs.nats-server}/bin/nats-server -c ${validateConfig configFile}";
+
+          ExecStartPre = "${pkgs.nats-server}/bin/nats-server -c ${configFile} -t";
+          ExecStart = "${pkgs.nats-server}/bin/nats-server -c ${configFile}";
           ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
           ExecStop = "${pkgs.coreutils}/bin/kill -SIGINT $MAINPID";
           Restart = "on-failure";
