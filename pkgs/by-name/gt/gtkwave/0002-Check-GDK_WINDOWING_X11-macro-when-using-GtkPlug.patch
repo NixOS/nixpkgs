@@ -1,0 +1,101 @@
+From 6045177a0d4753bb7a6a6ffc3f1a4a3e96129c6d Mon Sep 17 00:00:00 2001
+From: Jiajie Chen <c@jia.je>
+Date: Wed, 22 Jun 2022 17:03:29 +0800
+Subject: [PATCH 2/2] Check GDK_WINDOWING_X11 macro when using GtkPlug
+
+---
+ src/main.c     |  5 +++++
+ src/twinwave.c | 12 ++++++++++--
+ 2 files changed, 15 insertions(+), 2 deletions(-)
+
+diff --git a/src/main.c b/src/main.c
+index 81bf505..b89f629 100644
+--- a/src/main.c
++++ b/src/main.c
+@@ -2080,10 +2080,15 @@ if(!GLOBALS->socket_xid)
+ #ifdef WAVE_USE_XID
+ 	else
+ 	{
++#ifdef GDK_WINDOWING_X11
+         GLOBALS->mainwindow = gtk_plug_new(GLOBALS->socket_xid);
+         gtk_widget_show(GLOBALS->mainwindow);
+ 
+         g_signal_connect(XXX_GTK_OBJECT(GLOBALS->mainwindow), "destroy",   /* formerly was "destroy" */G_CALLBACK(plug_destroy),"Plug destroy");
++#else
++	fprintf(stderr, "GTKWAVE | GtkPlug widget is unavailable\n");
++	exit(1);
++#endif
+ 	}
+ #endif
+ }
+diff --git a/src/twinwave.c b/src/twinwave.c
+index 590c7f6..d5c60f2 100644
+--- a/src/twinwave.c
++++ b/src/twinwave.c
+@@ -143,15 +143,19 @@ if(GDK_IS_WAYLAND_DISPLAY(gdk_display_get_default()))
+ 	use_embedded = 0;
+ 	}
+ #endif
++#if defined(__GTK_SOCKET_H__) && defined(GDK_WINDOWING_X11)
+ 	{
+ 	xsocket[0] = gtk_socket_new ();
+ 	xsocket[1] = gtk_socket_new ();
+ 	gtk_widget_show (xsocket[0]);
+ 	gtk_widget_show (xsocket[1]);
+ 	}
++#endif
+ 
++#if defined(__GTK_SOCKET_H__) && defined(GDK_WINDOWING_X11)
+ if(!twinwayland)
+ g_signal_connect(XXX_GTK_OBJECT(xsocket[0]), "plug-removed", G_CALLBACK(plug_removed), NULL);
++#endif
+ 
+ #if GTK_CHECK_VERSION(3,0,0)
+ main_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
+@@ -208,7 +212,7 @@ if(hMapFile != NULL)
+ 				memset(&pi, 0, sizeof(PROCESS_INFORMATION));
+ 
+ 				sprintf(buf, "0+%08X", shmid);
+-#ifdef MINGW_USE_XID
++#if defined(MINGW_USE_XID) && defined(__GTK_SOCKET_H__) && defined(GDK_WINDOWING_X11)
+ 				sprintf(buf2, "%x", gtk_socket_get_id (GTK_SOCKET(xsocket[0])));
+ #else
+ 				sprintf(buf2, "%x", 0);
+@@ -279,7 +283,7 @@ if(hMapFile != NULL)
+ 				memset(&pi, 0, sizeof(PROCESS_INFORMATION));
+ 
+ 				sprintf(buf, "1+%08X", shmid);
+-#ifdef MINGW_USE_XID
++#if defined(MINGW_USE_XID) && defined(__GTK_SOCKET_H__) && defined(GDK_WINDOWING_X11)
+ 				sprintf(buf2, "%x", gtk_socket_get_id (GTK_SOCKET(xsocket[1])));
+ #else
+ 				sprintf(buf2, "%x", 0);
+@@ -429,10 +433,12 @@ if(shmid >=0)
+ 				sprintf(buf, "0+%08X", shmid);
+ 				if(use_embedded)
+ 					{
++#if defined(__GTK_SOCKET_H__) && defined(GDK_WINDOWING_X11)
+ #ifdef MAC_INTEGRATION
+ 					sprintf(buf2, "%x", gtk_socket_get_id (GTK_SOCKET(xsocket[0])));
+ #else
+ 					sprintf(buf2, "%lx", (long)gtk_socket_get_id (GTK_SOCKET(xsocket[0])));
++#endif
+ #endif
+ 					}
+ 					else
+@@ -467,10 +473,12 @@ if(shmid >=0)
+ 			sprintf(buf, "1+%08X", shmid);
+ 			if(use_embedded)
+ 				{
++#if defined(__GTK_SOCKET_H__) && defined(GDK_WINDOWING_X11)
+ #ifdef MAC_INTEGRATION
+ 				sprintf(buf2, "%x", gtk_socket_get_id (GTK_SOCKET(xsocket[1])));
+ #else
+ 				sprintf(buf2, "%lx", (long)gtk_socket_get_id (GTK_SOCKET(xsocket[1])));
++#endif
+ #endif
+ 				}
+ 				else
+-- 
+2.36.1
+

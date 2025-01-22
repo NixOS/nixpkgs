@@ -1,0 +1,36 @@
+diff --git a/writerperfect/Library_wpftcalc.mk b/writerperfect/Library_wpftcalc.mk
+index 3f7f82329..b7a11088a 100644
+--- a/writerperfect/Library_wpftcalc.mk
++++ b/writerperfect/Library_wpftcalc.mk
+@@ -60,6 +60,7 @@ $(eval $(call gb_Library_use_externals,wpftcalc,\
+ 	icu_headers \
+ 	icui18n \
+ 	icuuc \
++	zlib \
+ ))
+ 
+ ifneq ($(ENABLE_WASM_STRIP_SCEXPORTS),TRUE)
+diff --git a/writerperfect/Library_wpftdraw.mk b/writerperfect/Library_wpftdraw.mk
+index a369a626c..cd2fc2be9 100644
+--- a/writerperfect/Library_wpftdraw.mk
++++ b/writerperfect/Library_wpftdraw.mk
+@@ -65,6 +65,7 @@ $(eval $(call gb_Library_use_externals,wpftdraw,\
+ 	icu_headers \
+ 	icui18n \
+ 	icuuc \
++	zlib \
+ ))
+ 
+ $(eval $(call gb_Library_add_exception_objects,wpftdraw,\
+diff --git a/writerperfect/Library_wpftimpress.mk b/writerperfect/Library_wpftimpress.mk
+index 3fa007ae5..9b0e37b4b 100644
+--- a/writerperfect/Library_wpftimpress.mk
++++ b/writerperfect/Library_wpftimpress.mk
+@@ -50,6 +50,7 @@ $(eval $(call gb_Library_use_externals,wpftimpress,\
+ 	odfgen \
+ 	staroffice \
+ 	revenge \
++	zlib \
+ ))
+ 
+ $(eval $(call gb_Library_add_exception_objects,wpftimpress,\

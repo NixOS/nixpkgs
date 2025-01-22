@@ -1,0 +1,13 @@
+diff --git a/configure b/configure
+index c564dc1..e13c67c 100755
+--- a/configure
++++ b/configure
+@@ -6512,7 +6512,7 @@ else
+ #include <stdlib.h>
+ #include <readline/readline.h>
+ 
+-main()
++int main()
+ {
+ 	FILE *fp;
+ 	fp = fopen("conftest.rlv", "w");

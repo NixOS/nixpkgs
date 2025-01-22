@@ -1,0 +1,13 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index 3b63c3d..38a0fc0 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -3141,7 +3141,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "rusty-psn"
+-version = "0.3.3"
++version = "0.3.7"
+ dependencies = [
+  "bytesize",
+  "clap",

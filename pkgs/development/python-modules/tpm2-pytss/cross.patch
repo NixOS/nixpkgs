@@ -1,0 +1,22 @@
+diff --git a/setup.py b/setup.py
+index 1b5f513..d660b9a 100644
+--- a/setup.py
++++ b/setup.py
+@@ -184,7 +184,8 @@ class type_generator(build_ext):
+                 f"unable to find tss2_tpm2_types.h in {pk['include_dirs']}"
+             )
+         pdata = preprocess_file(
+-            header_path, cpp_args=["-D__extension__=", "-D__attribute__(x)="]
++            header_path, cpp_args=["-D__extension__=", "-D__attribute__(x)="],
++            cpp_path="@crossPrefix@-cpp",
+         )
+         parser = c_parser.CParser()
+         ast = parser.parse(pdata, "tss2_tpm2_types.h")
+@@ -210,6 +211,7 @@ class type_generator(build_ext):
+                         "-D__float128=long double",
+                         "-D_FORTIFY_SOURCE=0",
+                     ],
++                    cpp_path="@crossPrefix@-cpp",
+                 )
+                 parser = c_parser.CParser()
+                 past = parser.parse(pdata, "tss2_policy.h")

@@ -1,0 +1,168 @@
+Author: Nanley Chery <nanleychery@gmail.com>
+Subject: Update deprecated gtk casts and replace deprecated function calls with their analogous cairo counterparts.
+Bug-Debian: http://bugs.debian.org/622005
+Bug-Debian: http://bugs.debian.org/610321
+---
+--- a/src/gui.c
++++ b/src/gui.c
+@@ -27,10 +27,10 @@
+ GtkWidget *mainwindow = NULL;
+ 
+ GdkColor colorWhite = { 0, 0xFFFF, 0xFFFF, 0xFFFF };
+-    
+-GdkColormap *cmap = NULL;
+ 
+-GdkPixmap *theme = NULL;
++GdkPixbuf *theme = NULL;
++
++cairo_surface_t *surface = NULL;
+ 
+ /* Destroy the main window. */
+ gint destroy_gui( GtkWidget *widget, gpointer data ) {
+@@ -76,17 +76,16 @@
+     }
+ }
+ 
+-static void draw_digits( GtkWidget *widget, const gchar *digits, int highLow )
++static void draw_digits( GtkWidget *widget, cairo_t *cr, const gchar *digits, int highLow )
+ {
+     const gchar *digit = digits;
+     int pos = 0, x = 0, y = 0, w = 0;
+ 
+     while ( *digit ) {
+         get_pm_location( *digit, &x, &y, &w );
+-        gdk_draw_drawable( widget->window,
+-                           widget->style->fg_gc[ GTK_WIDGET_STATE
+-                           (widget) ], theme, x, y + highLow,
+-                           pos, 0, w, 30 );
++        cairo_set_source_surface (cr, surface, pos-x, 0-(y + highLow));
++		cairo_rectangle(cr, pos, 0, w, 30);
++		cairo_fill(cr);
+         pos += w;
+         digit++;
+     }
+@@ -102,6 +101,8 @@
+ 
+     gchar result[7];
+ 
++    cairo_t *cr = gdk_cairo_create(widget->window);
++
+ #ifdef DEBUG_XSENSORS
+     printf( "area.width = %d, area.height = %d\n", event->area.width,
+             event->area.height );
+@@ -117,13 +118,11 @@
+ 
+             /* Display the digits */
+             if ( g_snprintf( result, 6, "%5.0f", current->curvalue ) >= 0 )
+-               draw_digits( widget, result, highLow );
++               draw_digits( widget, cr, result, highLow );
+ 
+             /* Display RPM */
+-            gdk_draw_drawable( widget->window, 
+-                               widget->style->fg_gc[ GTK_WIDGET_STATE 
+-                               (widget) ], theme, 0, 120 + highLow, 
+-                               90, 0, 57, 30 );
++            cairo_set_source_surface (cr, surface, 90-0, 0-(120 + highLow));
++     	    cairo_rectangle(cr, 90, 0, 57, 30);
+             break;
+         case TEMP:
+             if ( current->curvalue > current->curmax )
+@@ -134,17 +133,15 @@
+ 
+             /* Display the digits */
+             if ( g_snprintf( result, 7, "%6.1f", current->curvalue ) >= 0 )
+-               draw_digits( widget, result, highLow );
++               draw_digits( widget, cr, result, highLow );
+ 
+             /* Display degree symbol */
+             if ( tf == FALSE )
+                 x = 0;
+             else
+                 x = 57;
+-            gdk_draw_drawable( widget->window, 
+-                             widget->style->fg_gc[ GTK_WIDGET_STATE 
+-                             (widget) ], theme, x, 60 + highLow, 
+-                             96, 0, 57, 30 );
++            cairo_set_source_surface (cr, surface, 96-x, 0-(60 + highLow));
++     	    cairo_rectangle(cr, 96, 0, 57, 30);
+             
+             break;
+         case VOLT:
+@@ -154,20 +151,17 @@
+             
+             /* Display the digits */
+             if ( g_snprintf( result, 7, "%6.2f", current->curvalue ) >= 0 )
+-               draw_digits( widget, result, highLow );
++               draw_digits( widget, cr, result, highLow );
+ 
+             /* Display V */
+-            gdk_draw_drawable( widget->window, 
+-                             widget->style->fg_gc[ GTK_WIDGET_STATE 
+-                             (widget) ], theme, 114, 60 + highLow, 
+-                             96, 0, 57, 30 );
+-
+-
++            cairo_set_source_surface (cr, surface, 96-114, 0-(60 + highLow));
++     	    cairo_rectangle(cr, 96, 0, 57, 30);
+             break;
+         default:
+             break;
+     }
+-            
++    cairo_fill(cr);
++    cairo_destroy(cr);
+     return TRUE;
+ }
+ 
+@@ -260,7 +254,7 @@
+ 
+     /* Setup timer for updates. */
+     g_timeout_add( update_time * 1000,
+-                             (GtkFunction) update_sensor_data, 
++                             (GSourceFunc) update_sensor_data,
+ 			     (gpointer) data );
+ 
+     return SUCCESS;
+@@ -460,8 +454,6 @@
+     g_signal_connect( G_OBJECT (mainwindow), "delete_event",
+                       G_CALLBACK (destroy_gui), NULL );
+ 
+-    /* Graphics needed for drawing info. */
+-    cmap = gtk_widget_get_colormap( mainwindow );
+ 
+     /* Set up the image file used for displaying characters. */
+     if ( imagefile == NULL ) {
+@@ -481,12 +473,10 @@
+                        "Image file not found in either location!  Exiting!\n" );
+                 exit( 1 );
+             } else {
+-                theme = gdk_pixmap_colormap_create_from_xpm( NULL, cmap,
+-                        NULL, NULL, "./images/default.xpm" );
++                theme = gdk_pixbuf_new_from_file("./images/default.xpm", NULL );
+             }
+         } else {
+-            theme = gdk_pixmap_colormap_create_from_xpm( NULL, cmap,
+-                    NULL, NULL, imagefile );
++            theme = gdk_pixbuf_new_from_file(imagefile, NULL );
+         }
+     } else {
+         if ( stat( imagefile, &sbuf ) != 0 ) {
+@@ -495,11 +485,15 @@
+                     "Image file not found in specified location!  Exiting!\n" );
+             exit( 1 );
+         } else {
+-            theme = gdk_pixmap_colormap_create_from_xpm( NULL, cmap,
+-                    NULL, NULL, imagefile );
++            theme = gdk_pixbuf_new_from_file(imagefile, NULL );
+         }
+     }
+-    
++    surface = cairo_image_surface_create_for_data(gdk_pixbuf_get_pixels(theme),
++                                        CAIRO_FORMAT_RGB24,
++										gdk_pixbuf_get_width(theme),
++										gdk_pixbuf_get_height(theme),
++										gdk_pixbuf_get_rowstride(theme));
++
+     /* Create notebook for sensors. */
+     notebook = gtk_notebook_new( );
+     gtk_widget_modify_bg( notebook, GTK_STATE_NORMAL, &colorWhite );
