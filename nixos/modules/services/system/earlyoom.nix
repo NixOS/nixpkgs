@@ -178,6 +178,14 @@ in
       # from /etc/default/earlyoom.
       serviceConfig.EnvironmentFile = "";
 
+      # Workaround: DynamicUser=true breaks D-Bus sending. This issue only
+      # exists on default dbus implementation, not on dbus-broker.
+      # - earlyoom: https://github.com/NixOS/nixpkgs/issues/374959
+      # - systemd: https://github.com/systemd/systemd/issues/22737
+      serviceConfig.DynamicUser = mkDefault (
+        !cfg.enableNotifications || config.services.dbus.implementation != "dbus"
+      );
+
       environment.EARLYOOM_ARGS =
         lib.cli.toGNUCommandLineShell { } {
           m =

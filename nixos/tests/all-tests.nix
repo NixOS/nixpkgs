@@ -291,7 +291,15 @@ in {
   druid = handleTestOn [ "x86_64-linux" ] ./druid {};
   drbd-driver = handleTest ./drbd-driver.nix {};
   dublin-traceroute = handleTest ./dublin-traceroute.nix {};
-  earlyoom = handleTestOn ["x86_64-linux"] ./earlyoom.nix {};
+  earlyoom.basic = runTestOn ["x86_64-linux"] ./earlyoom/basic.nix;
+  earlyoom.notify-dbus = runTestOn ["x86_64-linux"] {
+    imports = [ ./earlyoom/notify.nix ];
+    defaults.services.dbus.implementation = "dbus";
+  };
+  earlyoom.notify-broker = runTestOn ["x86_64-linux"] {
+    imports = [ ./earlyoom/notify.nix ];
+    defaults.services.dbus.implementation = "broker";
+  };
   early-mount-options = handleTest ./early-mount-options.nix {};
   ec2-config = (handleTestOn ["x86_64-linux"] ./ec2.nix {}).boot-ec2-config or {};
   ec2-nixops = (handleTestOn ["x86_64-linux"] ./ec2.nix {}).boot-ec2-nixops or {};
