@@ -1,11 +1,12 @@
-{ lib
-, mkMesonDerivation
+{
+  lib,
+  mkMesonDerivation,
 
-, doxygen
+  doxygen,
 
-# Configuration Options
+  # Configuration Options
 
-, version
+  version,
 }:
 
 let
@@ -39,11 +40,10 @@ mkMesonDerivation (finalAttrs: {
     doxygen
   ];
 
-  preConfigure =
-    ''
-      chmod u+w ./.version
-      echo ${finalAttrs.version} > ./.version
-    '';
+  preConfigure = ''
+    chmod u+w ./.version
+    echo ${finalAttrs.version} > ./.version
+  '';
 
   postInstall = ''
     mkdir -p ''${!outputDoc}/nix-support

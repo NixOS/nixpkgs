@@ -1,15 +1,16 @@
-{ lib
-, mkMesonLibrary
+{
+  lib,
+  mkMesonLibrary,
 
-, nix-util
-, nix-store
-, nix-fetchers
-, nix-expr
-, nlohmann_json
+  nix-util,
+  nix-store,
+  nix-fetchers,
+  nix-expr,
+  nlohmann_json,
 
-# Configuration Options
+  # Configuration Options
 
-, version
+  version,
 }:
 
 let

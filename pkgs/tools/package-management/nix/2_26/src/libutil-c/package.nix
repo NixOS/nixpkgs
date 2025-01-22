@@ -1,11 +1,12 @@
-{ lib
-, mkMesonLibrary
+{
+  lib,
+  mkMesonLibrary,
 
-, nix-util
+  nix-util,
 
-# Configuration Options
+  # Configuration Options
 
-, version
+  version,
 }:
 
 let

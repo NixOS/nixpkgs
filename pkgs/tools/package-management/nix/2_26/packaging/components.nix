@@ -13,9 +13,11 @@ let
 
   versionSuffix = lib.optionalString (!officialRelease) "pre";
 
-  fineVersionSuffix = lib.optionalString
-    (!officialRelease)
-    "pre${builtins.substring 0 8 (src.lastModifiedDate or src.lastModified or "19700101")}_${src.shortRev or "dirty"}";
+  fineVersionSuffix =
+    lib.optionalString (!officialRelease)
+      "pre${
+        builtins.substring 0 8 (src.lastModifiedDate or src.lastModified or "19700101")
+      }_${src.shortRev or "dirty"}";
 
   fineVersion = baseVersion + fineVersionSuffix;
 in
