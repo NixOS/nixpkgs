@@ -68,7 +68,7 @@ let
           ;
       };
 
-  dev = stdenv.mkDerivation (finalAttrs: {
+  dev = nixAttrs: stdenv.mkDerivation (finalAttrs: {
     name = "nix-${nix-cli.version}-dev";
     pname = "nix";
     version = nix-cli.version;
@@ -78,17 +78,20 @@ let
     installPhase = ''
       mkdir -p $out/nix-support
       echo $libs >> $out/nix-support/propagated-build-inputs
+      echo ${nixAttrs.finalPackage} >> $out/nix-support/propagated-build-inputs
     '';
     passthru = {
       tests = {
-        pkg-config = testers.hasPkgConfigModules {
-          package = finalAttrs.finalPackage;
-        };
+        # TODO: is this supposed to work for a dev output?
+        # pkg-config = testers.hasPkgConfigModules {
+        #   package = finalAttrs.finalPackage;
+        # };
       };
 
       # If we were to fully emulate output selection here, we'd confuse the Nix CLIs,
       # because they rely on `drvPath`.
       dev = finalAttrs.finalPackage.out;
+      out = nixAttrs.finalPackage.out;
 
       libs = throw "`nix.dev.libs` is not meant to be used; use `nix.libs` instead.";
     };
@@ -143,10 +146,6 @@ in
 
           # Make sure the functional tests have passed
           nix-functional-tests
-
-          # dev bundle is ok
-          # (checkInputs must be empty paths??)
-          (runCommand "check-pkg-config" { checked = dev.tests.pkg-config; } "mkdir $out")
         ]
         ++ lib.optionals
           (!stdenv.hostPlatform.isStatic && stdenv.buildPlatform.canExecute stdenv.hostPlatform)
@@ -178,17 +177,15 @@ in
         inherit libs;
 
         tests = prevAttrs.passthru.tests or { } // {
-          # TODO: create a proper fixpoint and:
-          # pkg-config =
-          #   testers.hasPkgConfigModules {
-          #     package = finalPackage;
-          #   };
+          pkg-config = testers.hasPkgConfigModules {
+            package = finalAttrs.finalPackage;
+          };
         };
 
         /**
           A derivation referencing the `dev` outputs of the Nix libraries.
         */
-        inherit dev;
+        dev = dev finalAttrs;
         inherit devdoc;
         doc = nix-manual;
         outputs = [
@@ -203,7 +200,7 @@ in
       };
       meta = prevAttrs.meta // {
         description = "The Nix package manager";
-        pkgConfigModules = dev.meta.pkgConfigModules;
+        pkgConfigModules = (dev finalAttrs).meta.pkgConfigModules;
       };
     }
   )
