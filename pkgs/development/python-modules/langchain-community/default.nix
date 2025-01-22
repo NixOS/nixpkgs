@@ -9,8 +9,9 @@
   # dependencies
   aiohttp,
   dataclasses-json,
-  langchain-core,
+  httpx-sse,
   langchain,
+  langchain-core,
   langsmith,
   pydantic-settings,
   pyyaml,
@@ -38,14 +39,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-community";
-  version = "0.3.6";
+  version = "0.3.15";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    tag = "langchain-core==${version}";
-    hash = "sha256-ACR+JzKcnYXROGOQe6DlZeqcYd40KlesgXSUOybOT20=";
+    tag = "langchain-community==${version}";
+    hash = "sha256-2/Zrl/wED/zm1m+NqgAD4AdrEh/LjFOeQoOSSM05e+s=";
   };
 
   sourceRoot = "${src.name}/libs/community";
@@ -61,8 +62,9 @@ buildPythonPackage rec {
   dependencies = [
     aiohttp
     dataclasses-json
-    langchain-core
+    httpx-sse
     langchain
+    langchain-core
     langsmith
     pydantic-settings
     pyyaml
