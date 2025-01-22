@@ -1,6 +1,12 @@
 {
+  "chap-build-helpers-finalAttrs": [
+    "index.html#chap-build-helpers-finalAttrs"
+  ],
   "chap-release-notes": [
     "release-notes.html#chap-release-notes"
+  ],
+  "ex-build-helpers-extendMkDerivation": [
+    "index.html#ex-build-helpers-extendMkDerivation"
   ],
   "neovim": [
     "index.html#neovim"
@@ -40,6 +46,9 @@
   ],
   "sec-allow-insecure": [
     "index.html#sec-allow-insecure"
+  ],
+  "sec-build-helper-extendMkDerivation": [
+    "index.html#sec-build-helper-extendMkDerivation"
   ],
   "sec-modify-via-packageOverrides": [
     "index.html#sec-modify-via-packageOverrides"
