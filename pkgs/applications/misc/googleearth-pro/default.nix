@@ -38,11 +38,11 @@ let
 in
 mkDerivation rec {
   pname = "googleearth-pro";
-  version = "7.3.6.9796";
+  version = "7.3.6.10201";
 
   src = fetchurl {
     url = "https://dl.google.com/linux/earth/deb/pool/main/g/google-earth-pro-stable/google-earth-pro-stable_${version}-r0_${arch}.deb";
-    sha256 = "sha256-Wv2jPGN7LC5T32WdX3W1BfGYrcXTNWTI1Wv+PmD0gNM=";
+    sha256 = "sha256-LqkXOSfE52+7x+Y0DBjYzvVKO0meytLNHuS/ia88FbI=";
   };
 
   nativeBuildInputs = [
