@@ -2995,6 +2995,8 @@ self: super: with self; {
 
   datalad-next = callPackage ../development/python-modules/datalad-next { };
 
+  datamodel-code-generator = callPackage ../development/python-modules/datamodel-code-generator { };
+
   datamodeldict = callPackage ../development/python-modules/datamodeldict { };
 
   datapoint = callPackage ../development/python-modules/datapoint { };
@@ -5137,6 +5139,8 @@ self: super: with self; {
   genshi = callPackage ../development/python-modules/genshi { };
 
   gensim = callPackage ../development/python-modules/gensim { };
+
+  genson = callPackage ../development/python-modules/genson { };
 
   gentools = callPackage ../development/python-modules/gentools { };
 
@@ -8153,6 +8157,8 @@ self: super: with self; {
   mezzanine = callPackage ../development/python-modules/mezzanine { };
 
   mf2py = callPackage ../development/python-modules/mf2py { };
+
+  mficlient = callPackage ../development/python-modules/mficlient { };
 
   mhcflurry = callPackage ../development/python-modules/mhcflurry { };
 
@@ -15599,6 +15605,8 @@ self: super: with self; {
   standard-chunk = if pythonAtLeast "3.13" then callPackage ../development/python-modules/standard-chunk { } else null;
 
   standard-imghdr = if pythonAtLeast "3.13" then callPackage ../development/python-modules/standard-imghdr { } else null;
+
+  standard-pipes = if pythonAtLeast "3.13" then callPackage ../development/python-modules/standard-pipes { } else null;
 
   standard-telnetlib = if pythonAtLeast "3.13" then callPackage ../development/python-modules/standard-telnetlib { } else null;
 
