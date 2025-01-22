@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [
     libgit2 scheme-bytestructures
   ];
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  doCheck = true;
   makeFlags = [ "GUILE_AUTO_COMPILE=0" ];
 
   enableParallelBuilding = true;
@@ -44,6 +44,8 @@ stdenv.mkDerivation rec {
   postConfigure = ''
     sed -i -e '94i (test-skip 1)' ./tests/proxy.scm
   '';
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "Bindings to Libgit2 for GNU Guile";
