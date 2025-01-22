@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  fetchFromGitHub,
 
   # build-system
   poetry-core,
@@ -16,16 +17,22 @@
   # tests
   numpy,
   pytest-asyncio,
+  pytest-socket,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
-  pname = "langchain-standard-tests";
+  pname = "langchain-tests";
+  version = "0.3.8";
   pyproject = true;
 
-  # this is an internal library, so there are no tags
-  # sync source with langchain-core for easy updates
-  inherit (langchain-core) src version;
+  src = fetchFromGitHub {
+    owner = "langchain-ai";
+    repo = "langchain";
+    tag = "langchain-tests==${version}";
+    hash = "sha256-IZJo4EZFVKinBQdacM5xQ8ip3qTB64eqwZ9n+Z5mzWY=";
+  };
+
   sourceRoot = "${src.name}/libs/standard-tests";
 
   build-system = [ poetry-core ];
@@ -33,16 +40,17 @@ buildPythonPackage rec {
   dependencies = [
     httpx
     langchain-core
+    pytest-asyncio
+    pytest-socket
     syrupy
   ];
 
   buildInputs = [ pytest ];
 
-  pythonImportsCheck = [ "langchain_standard_tests" ];
+  pythonImportsCheck = [ "langchain_tests" ];
 
   nativeBuildInputs = [
     numpy
-    pytest-asyncio
     pytestCheckHook
   ];
 

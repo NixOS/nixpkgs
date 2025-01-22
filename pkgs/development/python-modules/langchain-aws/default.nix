@@ -13,7 +13,7 @@
   pydantic,
 
   # tests
-  langchain-standard-tests,
+  langchain-tests,
   pytest-asyncio,
   pytestCheckHook,
 }:
@@ -55,7 +55,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    langchain-standard-tests
+    langchain-tests
     pytest-asyncio
     pytestCheckHook
   ];

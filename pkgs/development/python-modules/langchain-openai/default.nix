@@ -13,7 +13,7 @@
 
   # tests
   freezegun,
-  langchain-standard-tests,
+  langchain-tests,
   lark,
   pandas,
   pytest-asyncio,
@@ -55,7 +55,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     freezegun
-    langchain-standard-tests
+    langchain-tests
     lark
     pandas
     pytest-asyncio

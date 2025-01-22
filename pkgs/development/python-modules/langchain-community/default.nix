@@ -25,7 +25,7 @@
 
   # tests
   httpx,
-  langchain-standard-tests,
+  langchain-tests,
   lark,
   pandas,
   pytest-asyncio,
@@ -82,7 +82,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     httpx
-    langchain-standard-tests
+    langchain-tests
     lark
     pandas
     pytest-asyncio

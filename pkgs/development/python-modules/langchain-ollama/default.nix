@@ -11,7 +11,7 @@
   ollama,
 
   # testing
-  langchain-standard-tests,
+  langchain-tests,
   pytestCheckHook,
   pytest-asyncio,
   syrupy,
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    langchain-standard-tests
+    langchain-tests
     pytestCheckHook
     pytest-asyncio
     syrupy
