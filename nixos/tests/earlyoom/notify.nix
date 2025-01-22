@@ -11,7 +11,7 @@
     { pkgs, ... }:
     {
       # Automatically login on tty1 as a normal user:
-      imports = [ ./common/user-account.nix ];
+      imports = [ ../common/user-account.nix ];
       services.getty.autologinUser = "alice";
 
       # Limit VM resource usage.
