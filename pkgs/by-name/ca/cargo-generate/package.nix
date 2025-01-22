@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  fetchpatch,
   pkg-config,
   libgit2,
   openssl,
@@ -22,7 +23,16 @@ rustPlatform.buildRustPackage rec {
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-bYxUqgFiO0SuttVFvHIX+Dorno5n4jK+2ck89ngssBM=";
+
+  cargoPatches = [
+    (fetchpatch {
+      name = "git2-version.patch";
+      url = "https://github.com/cargo-generate/cargo-generate/commit/be2237177ee7ae996e2991189b07a5d211cd0d01.patch";
+      hash = "sha256-F/o1EeDBfRhIB8atpOHoc6ZnUFCyD1QkCERv4m/YeWE=";
+    })
+  ];
+
+  cargoHash = "sha256-5cfROJQWIhQNMbDhaCs2bfv4I3KDWcXBsmbbbDQ331s=";
 
   nativeBuildInputs = [ pkg-config ];
 
