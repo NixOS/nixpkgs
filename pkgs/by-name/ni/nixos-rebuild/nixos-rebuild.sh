@@ -1,7 +1,7 @@
 #! @runtimeShell@
 # shellcheck shell=bash
 
-if [ -x "@runtimeShell@" ]; then export SHELL="@runtimeShell@"; fi;
+if [[ -x "@runtimeShell@" ]]; then export SHELL="@runtimeShell@"; fi
 
 set -e
 set -o pipefail
@@ -13,7 +13,6 @@ showSyntax() {
     exec man nixos-rebuild
     exit 1
 }
-
 
 # Parse the command line.
 origArgs=("$@")
@@ -47,24 +46,25 @@ log() {
     echo "$@" >&2
 }
 
-while [ "$#" -gt 0 ]; do
-    i="$1"; shift 1
+while [[ "$#" -gt 0 ]]; do
+    i="$1"
+    shift 1
     case "$i" in
-      --help)
+    --help)
         showSyntax
         ;;
-      switch|boot|test|build|edit|repl|dry-build|dry-run|dry-activate|build-vm|build-vm-with-bootloader|build-image|list-generations)
-        if [ "$i" = dry-run ]; then i=dry-build; fi
-        if [ "$i" = list-generations ]; then
+    switch | boot | test | build | edit | repl | dry-build | dry-run | dry-activate | build-vm | build-vm-with-bootloader | build-image | list-generations)
+        if [[ "$i" = dry-run ]]; then i=dry-build; fi
+        if [[ "$i" = list-generations ]]; then
             buildNix=
             fast=1
         fi
         # exactly one action mandatory, bail out if multiple are given
-        if [ -n "$action" ]; then showSyntax; fi
+        if [[ -n "$action" ]]; then showSyntax; fi
         action="$i"
         ;;
-      --file|-f)
-        if [ -z "$1" ]; then
+    --file | -f)
+        if [[ -z "$1" ]]; then
             log "$0: '$i' requires an argument"
             exit 1
         fi
@@ -72,8 +72,8 @@ while [ "$#" -gt 0 ]; do
         buildingAttribute=
         shift 1
         ;;
-      --attr|-A)
-        if [ -z "$1" ]; then
+    --attr | -A)
+        if [[ -z "$1" ]]; then
             log "$0: '$i' requires an argument"
             exit 1
         fi
@@ -81,124 +81,131 @@ while [ "$#" -gt 0 ]; do
         buildingAttribute=
         shift 1
         ;;
-      --install-grub)
+    --install-grub)
         log "$0: --install-grub deprecated, use --install-bootloader instead"
         installBootloader=1
         ;;
-      --install-bootloader)
+    --install-bootloader)
         installBootloader=1
         ;;
-      --no-build-nix)
+    --no-build-nix)
         buildNix=
         ;;
-      --rollback)
+    --rollback)
         rollback=1
         ;;
-      --upgrade)
+    --upgrade)
         upgrade=1
         ;;
-      --upgrade-all)
+    --upgrade-all)
         upgrade=1
         upgrade_all=1
         ;;
-      --use-substitutes|--substitute-on-destination|-s)
+    --use-substitutes | --substitute-on-destination | -s)
         copyFlags+=("-s")
         ;;
-      -I|--builders)
-        j="$1"; shift 1
+    -I | --builders)
+        j="$1"
+        shift 1
         extraBuildFlags+=("$i" "$j")
         ;;
-      --max-jobs|-j|--cores|--log-format)
-        j="$1"; shift 1
+    --max-jobs | -j | --cores | --log-format)
+        j="$1"
+        shift 1
         extraBuildFlags+=("$i" "$j")
         copyFlags+=("$i" "$j")
         ;;
-      --accept-flake-config|-j*|--quiet|--print-build-logs|-L|--no-build-output|-Q|--show-trace|--refresh|--impure|--offline|--no-net)
+    --accept-flake-config | -j* | --quiet | --print-build-logs | -L | --no-build-output | -Q | --show-trace | --refresh | --impure | --offline | --no-net)
         extraBuildFlags+=("$i")
         ;;
-      --keep-going|-k|--keep-failed|-K|--fallback|--repair)
+    --keep-going | -k | --keep-failed | -K | --fallback | --repair)
         extraBuildFlags+=("$i")
         copyFlags+=("$i")
         ;;
-      --verbose|-v|-vv|-vvv|-vvvv|-vvvvv)
+    --verbose | -v | -vv | -vvv | -vvvv | -vvvvv)
         verboseScript="true"
         extraBuildFlags+=("$i")
         copyFlags+=("$i")
         ;;
-      --option)
-        j="$1"; shift 1
-        k="$1"; shift 1
+    --option)
+        j="$1"
+        shift 1
+        k="$1"
+        shift 1
         extraBuildFlags+=("$i" "$j" "$k")
         copyFlags+=("$i" "$j" "$k")
         ;;
-      --fast)
+    --fast)
         buildNix=
         fast=1
         ;;
-      --profile-name|-p)
-        if [ -z "$1" ]; then
+    --profile-name | -p)
+        if [[ -z "$1" ]]; then
             log "$0: ‘--profile-name’ requires an argument"
             exit 1
         fi
-        if [ "$1" != system ]; then
+        if [[ "$1" != system ]]; then
             profile="/nix/var/nix/profiles/system-profiles/$1"
             (umask 022 && mkdir -p "$(dirname "$profile")")
         fi
         shift 1
         ;;
-      --specialisation|-c)
-        if [ -z "$1" ]; then
+    --specialisation | -c)
+        if [[ -z "$1" ]]; then
             log "$0: ‘--specialisation’ requires an argument"
             exit 1
         fi
         specialisation="$1"
         shift 1
         ;;
-      --image-variant)
-        if [ -z "$1" ]; then
+    --image-variant)
+        if [[ -z "$1" ]]; then
             log "$0: ‘--image-variant’ requires an argument"
             exit 1
         fi
         imageVariant="$1"
         shift 1
         ;;
-      --build-host)
+    --build-host)
         buildHost="$1"
         shift 1
         ;;
-      --target-host)
+    --target-host)
         targetHost="$1"
         shift 1
         ;;
-      --use-remote-sudo)
+    --use-remote-sudo)
         remoteSudo=1
         ;;
-      --no-ssh-tty)
+    --no-ssh-tty)
         noSSHTTY=1
         ;;
-      --flake)
+    --flake)
         flake="$1"
         shift 1
         ;;
-      --no-flake)
+    --no-flake)
         noFlake=1
         ;;
-      --recreate-lock-file|--no-update-lock-file|--no-write-lock-file|--no-registries|--commit-lock-file)
+    --recreate-lock-file | --no-update-lock-file | --no-write-lock-file | --no-registries | --commit-lock-file)
         lockFlags+=("$i")
         ;;
-      --update-input)
-        j="$1"; shift 1
+    --update-input)
+        j="$1"
+        shift 1
         lockFlags+=("$i" "$j")
         ;;
-      --override-input)
-        j="$1"; shift 1
-        k="$1"; shift 1
+    --override-input)
+        j="$1"
+        shift 1
+        k="$1"
+        shift 1
         lockFlags+=("$i" "$j" "$k")
         ;;
-      --json)
+    --json)
         json=1
         ;;
-      *)
+    *)
         log "$0: unknown option \`$i'"
         exit 1
         ;;
@@ -207,8 +214,8 @@ done
 
 # log the given argument to stderr if verbose mode is on
 logVerbose() {
-    if [ -n "$verboseScript" ]; then
-      echo "$@" >&2
+    if [[ -n "$verboseScript" ]]; then
+        echo "$@" >&2
     fi
 }
 
@@ -226,9 +233,9 @@ buildHostCmd() {
         c=()
     fi
 
-    if [ -z "$buildHost" ]; then
+    if [[ -z "$buildHost" ]]; then
         runCmd "$@"
-    elif [ -n "$remoteNix" ]; then
+    elif [[ -n "$remoteNix" ]]; then
         runCmd ssh $SSHOPTS "$buildHost" "${c[@]}" env PATH="$remoteNix":'$PATH' "$@"
     else
         runCmd ssh $SSHOPTS "$buildHost" "${c[@]}" "$@"
@@ -243,7 +250,7 @@ targetHostCmd() {
         c=()
     fi
 
-    if [ -z "$targetHost" ]; then
+    if [[ -z "$targetHost" ]]; then
         runCmd "${c[@]}" "$@"
     else
         runCmd ssh $SSHOPTS "$targetHost" "${c[@]}" "$@"
@@ -256,7 +263,7 @@ targetHostSudoCmd() {
         t="-t"
     fi
 
-    if [ -n "$remoteSudo" ]; then
+    if [[ -n "$remoteSudo" ]]; then
         useSudo=1 SSHOPTS="$SSHOPTS $t" targetHostCmd "$@"
     else
         # While a tty might not be necessary, we apply it to be consistent with
@@ -267,11 +274,11 @@ targetHostSudoCmd() {
 }
 
 copyToTarget() {
-    if ! [ "$targetHost" = "$buildHost" ]; then
-        if [ -z "$targetHost" ]; then
+    if ! [[ "$targetHost" = "$buildHost" ]]; then
+        if [[ -z "$targetHost" ]]; then
             logVerbose "Running nix-copy-closure with these NIX_SSHOPTS: $SSHOPTS"
             NIX_SSHOPTS=$SSHOPTS runCmd nix-copy-closure "${copyFlags[@]}" --from "$buildHost" "$1"
-        elif [ -z "$buildHost" ]; then
+        elif [[ -z "$buildHost" ]]; then
             logVerbose "Running nix-copy-closure with these NIX_SSHOPTS: $SSHOPTS"
             NIX_SSHOPTS=$SSHOPTS runCmd nix-copy-closure "${copyFlags[@]}" --to "$targetHost" "$1"
         else
@@ -282,7 +289,7 @@ copyToTarget() {
 
 nixBuild() {
     logVerbose "Building in legacy (non-flake) mode."
-    if [ -z "$buildHost" ]; then
+    if [[ -z "$buildHost" ]]; then
         logVerbose "No --build-host given, running nix-build locally"
         runCmd nix-build "$@"
     else
@@ -291,26 +298,29 @@ nixBuild() {
         local buildArgs=()
         local drv=
 
-        while [ "$#" -gt 0 ]; do
-            local i="$1"; shift 1
+        while [[ "$#" -gt 0 ]]; do
+            local i="$1"
+            shift 1
             case "$i" in
-              -o)
-                local out="$1"; shift 1
+            -o)
+                local out="$1"
+                shift 1
                 buildArgs+=("--add-root" "$out" "--indirect")
                 ;;
-              -A)
-                local j="$1"; shift 1
+            -A)
+                local j="$1"
+                shift 1
                 instArgs+=("$i" "$j")
                 ;;
-              -I) # We don't want this in buildArgs
+            -I) # We don't want this in buildArgs
                 shift 1
                 ;;
-              --no-out-link) # We don't want this in buildArgs
+            --no-out-link) # We don't want this in buildArgs
                 ;;
-              "<"*) # nix paths
+            "<"*) # nix paths
                 instArgs+=("$i")
                 ;;
-              *)
+            *)
                 buildArgs+=("$i")
                 ;;
             esac
@@ -321,7 +331,7 @@ nixBuild() {
         fi
 
         drv="$(runCmd nix-instantiate "${instArgs[@]}" "${extraBuildFlags[@]}")"
-        if [ -a "$drv" ]; then
+        if [[ -e "$drv" ]]; then
             logVerbose "Running nix-copy-closure with these NIX_SSHOPTS: $SSHOPTS"
             NIX_SSHOPTS=$SSHOPTS runCmd nix-copy-closure --to "$buildHost" "$drv"
             buildHostCmd nix-store -r "$drv" "${buildArgs[@]}"
@@ -329,16 +339,15 @@ nixBuild() {
             log "nix-instantiate failed"
             exit 1
         fi
-  fi
+    fi
 }
 
 nixFlakeBuild() {
     logVerbose "Building in flake mode."
-    if [[ -z "$buildHost" && -z "$targetHost" && "$action" != switch && "$action" != boot && "$action" != test && "$action" != dry-activate ]]
-    then
+    if [[ -z "$buildHost" && -z "$targetHost" && "$action" != switch && "$action" != boot && "$action" != test && "$action" != dry-activate ]]; then
         runCmd nix "${flakeFlags[@]}" build "$@"
         readlink -f ./result
-    elif [ -z "$buildHost" ]; then
+    elif [[ -z "$buildHost" ]]; then
         runCmd nix "${flakeFlags[@]}" build "$@" --out-link "${tmpDir}/result"
         readlink -f "${tmpDir}/result"
     else
@@ -348,31 +357,35 @@ nixFlakeBuild() {
         local buildArgs=()
         local drv=
 
-        while [ "$#" -gt 0 ]; do
-            local i="$1"; shift 1
+        while [[ "$#" -gt 0 ]]; do
+            local i="$1"
+            shift 1
             case "$i" in
-              --recreate-lock-file|--no-update-lock-file|--no-write-lock-file|--no-registries|--commit-lock-file)
+            --recreate-lock-file | --no-update-lock-file | --no-write-lock-file | --no-registries | --commit-lock-file)
                 evalArgs+=("$i")
                 ;;
-              --update-input)
-                local j="$1"; shift 1
+            --update-input)
+                local j="$1"
+                shift 1
                 evalArgs+=("$i" "$j")
                 ;;
-              --override-input)
-                local j="$1"; shift 1
-                local k="$1"; shift 1
+            --override-input)
+                local j="$1"
+                shift 1
+                local k="$1"
+                shift 1
                 evalArgs+=("$i" "$j" "$k")
                 ;;
-              --impure) # We don't want this in buildArgs, it's only needed at evaluation time, and unsupported during realisation
+            --impure) # We don't want this in buildArgs, it's only needed at evaluation time, and unsupported during realisation
                 ;;
-              *)
+            *)
                 buildArgs+=("$i")
                 ;;
             esac
         done
 
         drv="$(runCmd nix "${flakeFlags[@]}" eval --raw "${attr}.drvPath" "${evalArgs[@]}" "${extraBuildFlags[@]}")"
-        if [ -a "$drv" ]; then
+        if [[ -e "$drv" ]]; then
             logVerbose "Running nix with these NIX_SSHOPTS: $SSHOPTS"
             NIX_SSHOPTS=$SSHOPTS runCmd nix "${flakeFlags[@]}" copy "${copyFlags[@]}" --derivation --to "ssh://$buildHost" "$drv"
             buildHostCmd nix-store -r "$drv" "${buildArgs[@]}"
@@ -383,8 +396,7 @@ nixFlakeBuild() {
     fi
 }
 
-
-if [ -z "$action" ]; then showSyntax; fi
+if [[ -z "$action" ]]; then showSyntax; fi
 
 # Only run shell scripts from the Nixpkgs tree if the action is
 # "switch", "boot", or "test". With other actions (such as "build"),
@@ -415,9 +427,9 @@ if [[ -n $upgrade && -z $_NIXOS_REBUILD_REEXEC && -z $flake ]]; then
 
         if [[ "$channel_name" == "nixos" ]]; then
             runCmd nix-channel --update "$channel_name"
-        elif [ -e "$channelpath/.update-on-nixos-rebuild" ]; then
+        elif [[ -e "$channelpath/.update-on-nixos-rebuild" ]]; then
             runCmd nix-channel --update "$channel_name"
-        elif [[ -n $upgrade_all ]] ; then
+        elif [[ -n $upgrade_all ]]; then
             runCmd nix-channel --update "$channel_name"
         fi
     done
@@ -430,7 +442,7 @@ fi
 # amd64 system the user has an i686 Nix package in her PATH, then we
 # would silently downgrade the whole system to be i686 NixOS on the
 # next reboot.
-if [ -z "$_NIXOS_REBUILD_REEXEC" ]; then
+if [[ -z "$_NIXOS_REBUILD_REEXEC" ]]; then
     export PATH=@nix@/bin:$PATH
 fi
 
@@ -463,8 +475,8 @@ SSHOPTS="$NIX_SSHOPTS -o ControlMaster=auto -o ControlPath=$tmpDir/ssh-%n -o Con
 # build from the flake.
 if [[ -n $flake ]]; then
     if [[ $flake =~ ^(.*)\#([^\#\"]*)$ ]]; then
-       flake="${BASH_REMATCH[1]}"
-       flakeAttr="${BASH_REMATCH[2]}"
+        flake="${BASH_REMATCH[1]}"
+        flakeAttr="${BASH_REMATCH[2]}"
     fi
     if [[ -z $flakeAttr ]]; then
         hostname="$(targetHostCmd cat /proc/sys/kernel/hostname)"
@@ -481,7 +493,6 @@ if [[ ! -z "$specialisation" && ! "$action" = switch && ! "$action" = test ]]; t
     log "error: ‘--specialisation’ can only be used with ‘switch’ and ‘test’"
     exit 1
 fi
-
 
 # Re-execute nixos-rebuild from the Nixpkgs tree.
 if [[ -z $_NIXOS_REBUILD_REEXEC && -n $canRun && -z $fast ]]; then
@@ -509,7 +520,7 @@ if [[ -z $_NIXOS_REBUILD_REEXEC && -n $canRun && -z $fast ]]; then
 fi
 
 # Find configuration.nix and open editor instead of building.
-if [ "$action" = edit ]; then
+if [[ "$action" = edit ]]; then
     if [[ -z $buildingAttribute ]]; then
         log "error: '--file' and '--attr' are not supported with 'edit'"
         exit 1
@@ -541,7 +552,7 @@ nixSystem() {
 
 prebuiltNix() {
     machine="$1"
-    if [ "$machine" = x86_64 ]; then
+    if [[ "$machine" = x86_64 ]]; then
         echo @nix_x86_64_linux@
     elif [[ "$machine" =~ i.86 ]]; then
         echo @nix_i686_linux@
@@ -570,12 +581,12 @@ getNixDrv() {
         log "warning: don't know how to get latest Nix"
     fi
     # Older version of nix-store -r don't support --add-root.
-    [ -e "$tmpDir/nix" ] || ln -sf "$nixStorePath" "$tmpDir/nix"
-    if [ -n "$buildHost" ]; then
+    [[ -e "$tmpDir/nix" ]] || ln -sf "$nixStorePath" "$tmpDir/nix"
+    if [[ -n "$buildHost" ]]; then
         remoteNixStorePath="$(runCmd prebuiltNix "$(buildHostCmd uname -m)")"
         remoteNix="$remoteNixStorePath/bin"
         if ! buildHostCmd nix-store -r "$remoteNixStorePath" \
-          --option extra-binary-caches https://cache.nixos.org/ >/dev/null; then
+            --option extra-binary-caches https://cache.nixos.org/ >/dev/null; then
             remoteNix=
             log "warning: don't know how to get latest Nix"
         fi
@@ -586,8 +597,8 @@ getVersion() {
     local dir="$1"
     local rev=
     local gitDir="$dir/.git"
-    if [ -e "$gitDir" ]; then
-        if [ -z "$(type -P git)" ]; then
+    if [[ -e "$gitDir" ]]; then
+        if [[ -z "$(type -P git)" ]]; then
             echo "warning: Git not found; cannot figure out revision of $dir" >&2
             return
         fi
@@ -598,18 +609,17 @@ getVersion() {
         fi
     fi
 
-    if [ -n "$rev" ]; then
+    if [[ -n "$rev" ]]; then
         echo ".git.$rev"
     fi
 }
 
-
 if [[ -n $buildNix && -z $flake ]]; then
     log "building Nix..."
     getNixDrv
-    if [ -a "$nixDrv" ]; then
+    if [[ -e "$nixDrv" ]]; then
         nix-store -r "$nixDrv"'!'"out" --add-root "$tmpDir/nix" --indirect >/dev/null
-        if [ -n "$buildHost" ]; then
+        if [[ -n "$buildHost" ]]; then
             nix-copy-closure "${copyFlags[@]}" --to "$buildHost" "$nixDrv"
             # The nix build produces multiple outputs, we add them all to the remote path
             for p in $(buildHostCmd nix-store -r "$(readlink "$nixDrv")" "${buildArgs[@]}"); do
@@ -620,24 +630,22 @@ if [[ -n $buildNix && -z $flake ]]; then
     PATH="$tmpDir/nix/bin:$PATH"
 fi
 
-
 # Update the version suffix if we're building from Git (so that
 # nixos-version shows something useful).
 if [[ -n $canRun && -z $flake ]]; then
     if nixpkgs=$(runCmd nix-instantiate --find-file nixpkgs "${extraBuildFlags[@]}"); then
         suffix=$(getVersion "$nixpkgs" || true)
-        if [ -n "$suffix" ]; then
-            echo -n "$suffix" > "$nixpkgs/.version-suffix" || true
+        if [[ -n "$suffix" ]]; then
+            echo -n "$suffix" >"$nixpkgs/.version-suffix" || true
         fi
     fi
 fi
 
-
-if [ "$action" = dry-build ]; then
+if [[ "$action" = dry-build ]]; then
     extraBuildFlags+=(--dry-run)
 fi
 
-if [ "$action" = repl ]; then
+if [[ "$action" = repl ]]; then
     # This is a very end user command, implemented using sub-optimal means.
     # You should feel free to improve its behavior, as well as resolve tech
     # debt in "breaking" ways. Humans adapt quite well.
@@ -708,8 +716,8 @@ if [ "$action" = repl ]; then
     fi
 fi
 
-if [ "$action" = list-generations ]; then
-    if [ ! -L "$profile" ]; then
+if [[ "$action" = list-generations ]]; then
+    if [[ ! -L "$profile" ]]; then
         log "No profile \`$(basename "$profile")' found"
         exit 1
     fi
@@ -717,46 +725,46 @@ if [ "$action" = list-generations ]; then
     generation_from_dir() {
         generation_dir="$1"
         generation_base="$(basename "$generation_dir")" # Has the format "system-123-link" for generation 123
-        no_link_gen="${generation_base%-link}"  # remove the "-link"
-        echo "${no_link_gen##*-}" # remove everything before the last dash
+        no_link_gen="${generation_base%-link}"          # remove the "-link"
+        echo "${no_link_gen##*-}"                       # remove everything before the last dash
     }
-    describe_generation(){
+    describe_generation() {
         generation_dir="$1"
         generation_number="$(generation_from_dir "$generation_dir")"
-        nixos_version="$(cat "$generation_dir/nixos-version" 2> /dev/null || echo "Unknown")"
+        nixos_version="$(cat "$generation_dir/nixos-version" 2>/dev/null || echo "Unknown")"
 
         kernel_dir="$(dirname "$(realpath "$generation_dir/kernel")")"
         kernel_version="$(ls "$kernel_dir/lib/modules" || echo "Unknown")"
 
-        configurationRevision="$("$generation_dir/sw/bin/nixos-version" --configuration-revision 2> /dev/null || true)"
+        configurationRevision="$("$generation_dir/sw/bin/nixos-version" --configuration-revision 2>/dev/null || true)"
 
         # Old nixos-version output ignored unknown flags and just printed the version
         # therefore the following workaround is done not to show the default output
         nixos_version_default="$("$generation_dir/sw/bin/nixos-version")"
-        if [ "$configurationRevision" == "$nixos_version_default" ]; then
-             configurationRevision=""
+        if [[ "$configurationRevision" == "$nixos_version_default" ]]; then
+            configurationRevision=""
         fi
 
         # jq automatically quotes the output => don't try to quote it in output!
         build_date="$(stat "$generation_dir" --format=%W | jq 'todate')"
 
-        pushd "$generation_dir/specialisation/" > /dev/null || :
+        pushd "$generation_dir/specialisation/" >/dev/null || :
         specialisation_list=(*)
-        popd > /dev/null || :
+        popd >/dev/null || :
 
         specialisations="$(jq --compact-output --null-input '$ARGS.positional' --args -- "${specialisation_list[@]}")"
 
-        if [ "$(basename "$generation_dir")" = "$(readlink "$profile")" ]; then
+        if [[ "$(basename "$generation_dir")" = "$(readlink "$profile")" ]]; then
             current_generation_tag="true"
         else
             current_generation_tag="false"
         fi
 
         # Escape userdefined strings
-        nixos_version="$(jq -aR <<< "$nixos_version")"
-        kernel_version="$(jq -aR <<< "$kernel_version")"
-        configurationRevision="$(jq -aR <<< "$configurationRevision")"
-        cat << EOF
+        nixos_version="$(jq -aR <<<"$nixos_version")"
+        kernel_version="$(jq -aR <<<"$kernel_version")"
+        configurationRevision="$(jq -aR <<<"$configurationRevision")"
+        cat <<EOF
 {
   "generation": $generation_number,
   "date": $build_date,
@@ -774,7 +782,7 @@ EOF
         while read -r generation_dir; do
             describe_generation "$generation_dir"
         done |
-        if [ -z "$json" ]; then
+        if [[ -z "$json" ]]; then
             jq --slurp -r '.[] | [
                     ([.generation, (if .current == true then "current" else "" end)] | join(" ")),
                     (.date | fromdate | strflocaltime("%Y-%m-%d %H:%M:%S")),
@@ -788,11 +796,10 @@ EOF
     exit 0
 fi
 
-
 # Either upgrade the configuration in the system profile (for "switch"
 # or "boot"), or just build it and create a symlink "result" in the
 # current directory (for "build" and "test").
-if [ -z "$rollback" ]; then
+if [[ -z "$rollback" ]]; then
     log "building the system configuration..."
     if [[ "$action" = switch || "$action" = boot ]]; then
         if [[ -z $buildingAttribute ]]; then
@@ -812,7 +819,7 @@ if [ -z "$rollback" ]; then
         else
             pathToConfig="$(nixFlakeBuild "$flake#$flakeAttr.config.system.build.toplevel" "${extraBuildFlags[@]}" "${lockFlags[@]}")"
         fi
-    elif [ "$action" = build-vm ]; then
+    elif [[ "$action" = build-vm ]]; then
         if [[ -z $buildingAttribute ]]; then
             pathToConfig="$(nixBuild $buildFile -A "${attr:+$attr.}config.system.build.vm" "${extraBuildFlags[@]}")"
         elif [[ -z $flake ]]; then
@@ -820,7 +827,7 @@ if [ -z "$rollback" ]; then
         else
             pathToConfig="$(nixFlakeBuild "$flake#$flakeAttr.config.system.build.vm" "${extraBuildFlags[@]}" "${lockFlags[@]}")"
         fi
-    elif [ "$action" = build-vm-with-bootloader ]; then
+    elif [[ "$action" = build-vm-with-bootloader ]]; then
         if [[ -z $buildingAttribute ]]; then
             pathToConfig="$(nixBuild $buildFile -A "${attr:+$attr.}config.system.build.vmWithBootLoader" "${extraBuildFlags[@]}")"
         elif [[ -z $flake ]]; then
@@ -828,30 +835,30 @@ if [ -z "$rollback" ]; then
         else
             pathToConfig="$(nixFlakeBuild "$flake#$flakeAttr.config.system.build.vmWithBootLoader" "${extraBuildFlags[@]}" "${lockFlags[@]}")"
         fi
-    elif [ "$action" = build-image ]; then
+    elif [[ "$action" = build-image ]]; then
         if [[ -z $buildingAttribute ]]; then
             variants="$(
                 runCmd nix-instantiate --eval --strict --json --expr \
-                "let
+                    "let
                     value = import \"$(realpath $buildFile)\";
                     set = if builtins.isFunction value then value {} else value;
                 in builtins.mapAttrs (n: v: v.passthru.filePath) set.${attr:+$attr.}config.system.build.images" \
-                "${extraBuildFlags[@]}"
+                    "${extraBuildFlags[@]}"
             )"
         elif [[ -z $flake ]]; then
             variants="$(
                 runCmd nix-instantiate --eval --strict --json --expr \
-                "with import <nixpkgs/nixos> {}; builtins.mapAttrs (n: v: v.passthru.filePath) config.system.build.images" \
-                "${extraBuildFlags[@]}"
+                    "with import <nixpkgs/nixos> {}; builtins.mapAttrs (n: v: v.passthru.filePath) config.system.build.images" \
+                    "${extraBuildFlags[@]}"
             )"
         else
             variants="$(
                 runCmd nix "${flakeFlags[@]}" eval --json \
-                "$flake#$flakeAttr.config.system.build.images" \
-                --apply "builtins.mapAttrs (n: v: v.passthru.filePath)" "${evalArgs[@]}" "${extraBuildFlags[@]}"
+                    "$flake#$flakeAttr.config.system.build.images" \
+                    --apply "builtins.mapAttrs (n: v: v.passthru.filePath)" "${evalArgs[@]}" "${extraBuildFlags[@]}"
             )"
         fi
-        if ! echo "$variants" | jq -e --arg variant "$imageVariant" "keys | any(. == \$variant)" > /dev/null; then
+        if ! echo "$variants" | jq -e --arg variant "$imageVariant" "keys | any(. == \$variant)" >/dev/null; then
             echo -e "Please specify one of the following supported image variants via --image-variant:\n" >&2
             echo "$variants" | jq -r '. | keys | join ("\n")'
             exit 1
@@ -872,24 +879,23 @@ if [ -z "$rollback" ]; then
     if ! [[ "$action" = switch || "$action" = boot ]]; then
         copyToTarget "$pathToConfig"
     fi
-else # [ -n "$rollback" ]
+else # [[ -n "$rollback" ]]
     if [[ "$action" = switch || "$action" = boot ]]; then
         targetHostSudoCmd nix-env --rollback -p "$profile"
         pathToConfig="$profile"
     elif [[ "$action" = test || "$action" = build ]]; then
         systemNumber=$(
             targetHostCmd nix-env -p "$profile" --list-generations |
-            sed -n '/current/ {g; p;}; s/ *\([0-9]*\).*/\1/; h'
+                sed -n '/current/ {g; p;}; s/ *\([0-9]*\).*/\1/; h'
         )
         pathToConfig="$profile"-${systemNumber}-link
-        if [ -z "$targetHost" ]; then
+        if [[ -z "$targetHost" ]]; then
             ln -sT "$pathToConfig" ./result
         fi
     else
         showSyntax
     fi
 fi
-
 
 # If we're not just building, then make the new configuration the boot
 # default and/or activate it now.
@@ -934,7 +940,7 @@ if [[ "$action" = switch || "$action" = boot || "$action" = test || "$action" = 
     else
         cmd+=("$pathToConfig/specialisation/$specialisation/bin/switch-to-configuration")
 
-        if [ -z "$targetHost" ]; then
+        if [[ -z "$targetHost" ]]; then
             specialisationExists=$(test -f "${cmd[-1]}")
         else
             specialisationExists=$(targetHostCmd test -f "${cmd[-1]}")
@@ -951,7 +957,6 @@ if [[ "$action" = switch || "$action" = boot || "$action" = test || "$action" = 
         exit 1
     fi
 fi
-
 
 if [[ "$action" = build-vm || "$action" = build-vm-with-bootloader ]]; then
     cat >&2 <<EOF
