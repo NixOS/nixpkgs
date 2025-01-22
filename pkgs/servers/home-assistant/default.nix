@@ -4,6 +4,7 @@
   callPackage,
   fetchFromGitHub,
   fetchPypi,
+  fetchpatch2,
   python313,
   substituteAll,
   ffmpeg-headless,
@@ -359,6 +360,12 @@ python.pkgs.buildPythonApplication rec {
     (substituteAll {
       src = ./patches/ffmpeg-path.patch;
       ffmpeg = "${lib.getExe ffmpeg-headless}";
+    })
+
+    (fetchpatch2 {
+      # python-matter-server 7.0 compat
+      url = "https://github.com/home-assistant/core/commit/ea4931ca3a91920b66a747a18a2dece2c8215d4f.patch";
+      hash = "sha256-evfMdBdEYsVSu2iDZ5xgNTg/QljJ+MXrV69g9liNcN4=";
     })
   ];
 
