@@ -1,19 +1,20 @@
-{ lib
-, mkMesonDerivation
+{
+  lib,
+  mkMesonDerivation,
 
-, meson
-, ninja
-, lowdown-unsandboxed
-, mdbook
-, mdbook-linkcheck
-, jq
-, python3
-, rsync
-, nix-cli
+  meson,
+  ninja,
+  lowdown-unsandboxed,
+  mdbook,
+  mdbook-linkcheck,
+  jq,
+  python3,
+  rsync,
+  nix-cli,
 
-# Configuration Options
+  # Configuration Options
 
-, version
+  version,
 }:
 
 let
@@ -25,18 +26,22 @@ mkMesonDerivation (finalAttrs: {
   inherit version;
 
   workDir = ./.;
-  fileset = fileset.difference
-    (fileset.unions [
-      ../../.version
-      # Too many different types of files to filter for now
-      ../../doc/manual
-      ./.
-    ])
-    # Do a blacklist instead
-    ../../doc/manual/package.nix;
+  fileset =
+    fileset.difference
+      (fileset.unions [
+        ../../.version
+        # Too many different types of files to filter for now
+        ../../doc/manual
+        ./.
+      ])
+      # Do a blacklist instead
+      ../../doc/manual/package.nix;
 
   # TODO the man pages should probably be separate
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   # Hack for sake of the dev shell
   passthru.externalNativeBuildInputs = [
@@ -54,11 +59,10 @@ mkMesonDerivation (finalAttrs: {
     nix-cli
   ];
 
-  preConfigure =
-    ''
-      chmod u+w ./.version
-      echo ${finalAttrs.version} > ./.version
-    '';
+  preConfigure = ''
+    chmod u+w ./.version
+    echo ${finalAttrs.version} > ./.version
+  '';
 
   postInstall = ''
     mkdir -p ''$out/nix-support

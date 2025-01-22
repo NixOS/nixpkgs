@@ -1,20 +1,21 @@
-{ lib
-, buildPackages
-, stdenv
-, mkMesonExecutable
+{
+  lib,
+  buildPackages,
+  stdenv,
+  mkMesonExecutable,
 
-, nix-flake
-, nix-flake-c
-, nix-expr-test-support
+  nix-flake,
+  nix-flake-c,
+  nix-expr-test-support,
 
-, rapidcheck
-, gtest
-, runCommand
+  rapidcheck,
+  gtest,
+  runCommand,
 
-# Configuration Options
+  # Configuration Options
 
-, version
-, resolvePath
+  version,
+  resolvePath,
 }:
 
 let
@@ -58,17 +59,23 @@ mkMesonExecutable (finalAttrs: {
 
   passthru = {
     tests = {
-      run = runCommand "${finalAttrs.pname}-run" {
-        meta.broken = !stdenv.hostPlatform.emulatorAvailable buildPackages;
-      } (lib.optionalString stdenv.hostPlatform.isWindows ''
-        export HOME="$PWD/home-dir"
-        mkdir -p "$HOME"
-      '' + ''
-        export _NIX_TEST_UNIT_DATA=${resolvePath ./data}
-        export NIX_CONFIG="extra-experimental-features = flakes"
-        ${stdenv.hostPlatform.emulator buildPackages} ${lib.getExe finalAttrs.finalPackage}
-        touch $out
-      '');
+      run =
+        runCommand "${finalAttrs.pname}-run"
+          {
+            meta.broken = !stdenv.hostPlatform.emulatorAvailable buildPackages;
+          }
+          (
+            lib.optionalString stdenv.hostPlatform.isWindows ''
+              export HOME="$PWD/home-dir"
+              mkdir -p "$HOME"
+            ''
+            + ''
+              export _NIX_TEST_UNIT_DATA=${resolvePath ./data}
+              export NIX_CONFIG="extra-experimental-features = flakes"
+              ${stdenv.hostPlatform.emulator buildPackages} ${lib.getExe finalAttrs.finalPackage}
+              touch $out
+            ''
+          );
     };
   };
 

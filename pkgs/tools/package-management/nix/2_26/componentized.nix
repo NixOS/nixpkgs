@@ -1,7 +1,14 @@
-
-{ lib, fetchFromGitHub, splicePackages, generateSplicesForMkScope, newScope, pkgs, stdenv,
+{
+  lib,
+  fetchFromGitHub,
+  splicePackages,
+  generateSplicesForMkScope,
+  newScope,
+  pkgs,
+  stdenv,
   libgit2-thin-packfile,
-  ... }:
+  ...
+}:
 let
   officialRelease = true;
   src = fetchFromGitHub (builtins.fromJSON (builtins.readFile ./source.json));
@@ -41,4 +48,4 @@ let
         };
       };
 in
-  nixComponents.nix-everything
+nixComponents.nix-everything

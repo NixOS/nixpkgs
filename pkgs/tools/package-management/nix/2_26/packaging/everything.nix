@@ -42,27 +42,31 @@
 }:
 
 let
-  libs = {
-    inherit
-      nix-util
-      nix-util-c
-      nix-store
-      nix-store-c
-      nix-fetchers
-      nix-expr
-      nix-expr-c
-      nix-flake
-      nix-flake-c
-      nix-main
-      nix-main-c
-      nix-cmd
-    ;
-  } // lib.optionalAttrs (!stdenv.hostPlatform.isStatic && stdenv.buildPlatform.canExecute stdenv.hostPlatform) {
-    # Currently fails in static build
-    inherit
-      nix-perl-bindings
-    ;
-  };
+  libs =
+    {
+      inherit
+        nix-util
+        nix-util-c
+        nix-store
+        nix-store-c
+        nix-fetchers
+        nix-expr
+        nix-expr-c
+        nix-flake
+        nix-flake-c
+        nix-main
+        nix-main-c
+        nix-cmd
+        ;
+    }
+    // lib.optionalAttrs
+      (!stdenv.hostPlatform.isStatic && stdenv.buildPlatform.canExecute stdenv.hostPlatform)
+      {
+        # Currently fails in static build
+        inherit
+          nix-perl-bindings
+          ;
+      };
 
   dev = stdenv.mkDerivation (finalAttrs: {
     name = "nix-${nix-cli.version}-dev";
@@ -77,10 +81,9 @@ let
     '';
     passthru = {
       tests = {
-        pkg-config =
-          testers.hasPkgConfigModules {
-            package = finalAttrs.finalPackage;
-          };
+        pkg-config = testers.hasPkgConfigModules {
+          package = finalAttrs.finalPackage;
+        };
       };
 
       # If we were to fully emulate output selection here, we'd confuse the Nix CLIs,
@@ -123,70 +126,84 @@ in
   ];
 
   meta.mainProgram = "nix";
-}).overrideAttrs (finalAttrs: prevAttrs: {
-  doCheck = true;
-  doInstallCheck = true;
+}).overrideAttrs
+  (
+    finalAttrs: prevAttrs: {
+      doCheck = true;
+      doInstallCheck = true;
 
-  checkInputs = [
-    # Make sure the unit tests have passed
-    nix-util-tests.tests.run
-    nix-store-tests.tests.run
-    nix-expr-tests.tests.run
-    nix-fetchers-tests.tests.run
-    nix-flake-tests.tests.run
+      checkInputs =
+        [
+          # Make sure the unit tests have passed
+          nix-util-tests.tests.run
+          nix-store-tests.tests.run
+          nix-expr-tests.tests.run
+          nix-fetchers-tests.tests.run
+          nix-flake-tests.tests.run
 
-    # Make sure the functional tests have passed
-    nix-functional-tests
+          # Make sure the functional tests have passed
+          nix-functional-tests
 
-    # dev bundle is ok
-    # (checkInputs must be empty paths??)
-    (runCommand "check-pkg-config" { checked = dev.tests.pkg-config; } "mkdir $out")
-  ] ++ lib.optionals (!stdenv.hostPlatform.isStatic && stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-    # Perl currently fails in static build
-    # TODO: Split out tests into a separate derivation?
-    nix-perl-bindings
-  ];
-  passthru = prevAttrs.passthru // {
-    inherit (nix-cli) version;
+          # dev bundle is ok
+          # (checkInputs must be empty paths??)
+          (runCommand "check-pkg-config" { checked = dev.tests.pkg-config; } "mkdir $out")
+        ]
+        ++ lib.optionals
+          (!stdenv.hostPlatform.isStatic && stdenv.buildPlatform.canExecute stdenv.hostPlatform)
+          [
+            # Perl currently fails in static build
+            # TODO: Split out tests into a separate derivation?
+            nix-perl-bindings
+          ];
+      passthru = prevAttrs.passthru // {
+        inherit (nix-cli) version;
 
-    /**
-      These are the libraries that are part of the Nix project. They are used
-      by the Nix CLI and other tools.
+        /**
+          These are the libraries that are part of the Nix project. They are used
+          by the Nix CLI and other tools.
 
-      If you need to use these libraries in your project, we recommend to use
-      the `-c` C API libraries exclusively, if possible.
+          If you need to use these libraries in your project, we recommend to use
+          the `-c` C API libraries exclusively, if possible.
 
-      We also recommend that you build the complete package to ensure that the unit tests pass.
-      You could do this in CI, or by passing it in an unused environment variable. e.g in a `mkDerivation` call:
+          We also recommend that you build the complete package to ensure that the unit tests pass.
+          You could do this in CI, or by passing it in an unused environment variable. e.g in a `mkDerivation` call:
 
-      ```nix
-        buildInputs = [ nix.libs.nix-util-c nix.libs.nix-store-c ];
-        # Make sure the nix libs we use are ok
-        unusedInputsForTests = [ nix ];
-        disallowedReferences = nix.all;
-      ```
-     */
-    inherit libs;
+          ```nix
+            buildInputs = [ nix.libs.nix-util-c nix.libs.nix-store-c ];
+            # Make sure the nix libs we use are ok
+            unusedInputsForTests = [ nix ];
+            disallowedReferences = nix.all;
+          ```
+        */
+        inherit libs;
 
-    tests = prevAttrs.passthru.tests or {} // {
-      # TODO: create a proper fixpoint and:
-      # pkg-config =
-      #   testers.hasPkgConfigModules {
-      #     package = finalPackage;
-      #   };
-    };
+        tests = prevAttrs.passthru.tests or { } // {
+          # TODO: create a proper fixpoint and:
+          # pkg-config =
+          #   testers.hasPkgConfigModules {
+          #     package = finalPackage;
+          #   };
+        };
 
-    /**
-      A derivation referencing the `dev` outputs of the Nix libraries.
-     */
-    inherit dev;
-    inherit devdoc;
-    doc = nix-manual;
-    outputs = [ "out" "dev" "devdoc" "doc" ];
-    all = lib.attrValues (lib.genAttrs finalAttrs.passthru.outputs (outName: finalAttrs.finalPackage.${outName}));
-  };
-  meta = prevAttrs.meta // {
-    description = "The Nix package manager";
-    pkgConfigModules = dev.meta.pkgConfigModules;
-  };
-})
+        /**
+          A derivation referencing the `dev` outputs of the Nix libraries.
+        */
+        inherit dev;
+        inherit devdoc;
+        doc = nix-manual;
+        outputs = [
+          "out"
+          "dev"
+          "devdoc"
+          "doc"
+        ];
+        all = lib.attrValues (
+          lib.genAttrs finalAttrs.passthru.outputs (outName: finalAttrs.finalPackage.${outName})
+        );
+      };
+      meta = prevAttrs.meta // {
+        description = "The Nix package manager";
+        pkgConfigModules = dev.meta.pkgConfigModules;
+      };
+    }
+  )
