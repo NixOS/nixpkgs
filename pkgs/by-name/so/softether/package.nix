@@ -6,6 +6,7 @@
   readline,
   ncurses,
   zlib,
+  bash,
   dataDir ? "/var/lib/softether",
 }:
 
@@ -25,6 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     readline
     ncurses
     zlib
+    bash
   ];
 
   preConfigure = ''
