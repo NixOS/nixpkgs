@@ -68,7 +68,13 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  patches = map (patch: "${rpmFusionPatches}/${patch}") patchset;
+  patches = map (patch: "${rpmFusionPatches}/${patch}") patchset ++ [
+    # Fix for Kernel 6.13
+    (fetchpatch2 {
+      url = "https://gist.githubusercontent.com/joanbm/72189c81ff67b39d36a660cf00483ccb/raw/17cae74c8d3ebb90e5bfcb84dc176c32f2519078/broadcom-wl-fix-linux-6.13.patch";
+      hash = "sha256-b4XE3Dys0d7finPmNhTtvQqxXBSX1CXEj2Krq7qGHAw=";
+    })
+  ];
 
   makeFlags = [ "KBASE=${kernel.dev}/lib/modules/${kernel.modDirVersion}" ];
 
