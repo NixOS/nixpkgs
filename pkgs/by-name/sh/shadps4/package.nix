@@ -17,7 +17,7 @@
   libunwind,
   libusb1,
   magic-enum,
-  mesa,
+  libgbm,
   pkg-config,
   pugixml,
   qt6,
@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libX11
     xorg.libXext
     magic-enum
-    mesa
+    libgbm
     pugixml
     qt6.qtbase
     qt6.qtdeclarative
