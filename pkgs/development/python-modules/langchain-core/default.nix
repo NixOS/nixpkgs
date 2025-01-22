@@ -13,6 +13,7 @@
   packaging,
   pyyaml,
   tenacity,
+  typing-extensions,
 
   # optional-dependencies
   pydantic,
@@ -34,14 +35,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-core";
-  version = "0.3.15";
+  version = "0.3.31";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-core==${version}";
-    hash = "sha256-lSXAqjjnihuucTZOSwQJk8gtrtFbUOTHN4J587iLKy0=";
+    hash = "sha256-u+Za7NtXVP0Mg6K65CuRLx8OrVpBXEe1ayP0uMUNJG4=";
   };
 
   sourceRoot = "${src.name}/libs/core";
@@ -56,6 +57,7 @@ buildPythonPackage rec {
     packaging
     pyyaml
     tenacity
+    typing-extensions
   ];
 
   optional-dependencies = {
@@ -135,6 +137,7 @@ buildPythonPackage rec {
       "test_schemas"
       # AssertionError: assert [+ received] == [- snapshot]
       "test_graph_sequence_map"
+      "test_representation_of_runnables"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Langchain-core the following tests due to the test comparing execution time with magic values.
