@@ -110,6 +110,8 @@ stdenv.mkDerivation (
         --replace-fail "virtualenv_install(\''${Tensile_TEST_LOCAL_PATH})" "" \
         --replace-fail "virtualenv_install(\''${CMAKE_SOURCE_DIR}/tensilelite)" "" \
         --replace-fail 'find_package(Tensile 4.33.0 EXACT REQUIRED HIP LLVM OpenMP PATHS "''${INSTALLED_TENSILE_PATH}")' "find_package(Tensile)"
+      substituteInPlace CMakeLists.txt \
+        --replace-fail 'Tensile_CPU_THREADS ""' 'Tensile_CPU_THREADS "$ENV{NIX_BUILD_CORES}"'
       if [ -f library/src/amd_detail/rocblaslt/src/kernels/compile_code_object.sh ]; then
         substituteInPlace library/src/amd_detail/rocblaslt/src/kernels/compile_code_object.sh \
           --replace-fail '${"\${rocm_path}"}/bin/' ""
