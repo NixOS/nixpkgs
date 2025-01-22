@@ -14,6 +14,9 @@
   virglrenderer,
   wayland,
   wayland-protocols,
+  writeShellScript,
+  unstableGitUpdater,
+  nix-update,
   pkgsCross,
 }:
 
@@ -69,7 +72,15 @@ rustPlatform.buildRustPackage rec {
   buildFeatures = [ "virgl_renderer" ];
 
   passthru = {
-    updateScript = ./update.py;
+    updateScript = writeShellScript "update-crosvm.sh" ''
+      set -ue
+      ${lib.escapeShellArgs (unstableGitUpdater {
+        url = "https://chromium.googlesource.com/crosvm/crosvm.git";
+        hardcodeZeroVersion = true;
+      })}
+      exec ${lib.getExe nix-update} --version=skip
+    '';
+
     tests = {
       musl = pkgsCross.musl64.crosvm;
     };
