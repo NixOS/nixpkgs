@@ -6,6 +6,8 @@
   nixosTests,
   boost,
   cmake,
+  coreutils,
+  dbus,
   glib,
   glm,
   gtest,
@@ -16,29 +18,31 @@
   libuuid,
   libxkbcommon,
   libgbm,
+  makeWrapper,
   mir,
   nlohmann_json,
   pcre2,
   pkg-config,
+  systemd,
   wayland,
   yaml-cpp,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "miracle-wm";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "miracle-wm-org";
     repo = "miracle-wm";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-IuYRgQm3DM6ZgsfRt37GCXC3hb1vGIrqw7WxYN+Bets=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-LPcVLpskpmHc8EzdNqMT6BnbY8Le/BVojpXPIqy6tGI=";
   };
 
   postPatch =
     ''
-      substituteInPlace session/usr/local/share/wayland-sessions/miracle-wm.desktop.in \
-        --replace-fail '@CMAKE_INSTALL_FULL_BINDIR@/miracle-wm' 'miracle-wm'
+      substituteInPlace CMakeLists.txt \
+        --replace-fail 'DESTINATION /usr/lib' 'DESTINATION ''${CMAKE_INSTALL_LIBDIR}'
     ''
     + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
       substituteInPlace CMakeLists.txt \
@@ -52,6 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    makeWrapper
     pkg-config
   ];
 
@@ -75,6 +80,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   checkInputs = [ gtest ];
 
+  cmakeFlags = [
+    (lib.cmakeBool "SYSTEMD_INTEGRATION" true)
+  ];
+
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   checkPhase = ''
@@ -83,6 +92,18 @@ stdenv.mkDerivation (finalAttrs: {
     ./bin/miracle-wm-tests
 
     runHook postCheck
+  '';
+
+  postFixup = ''
+    patchShebangs $out/libexec/miracle-wm-session-setup
+    wrapProgram $out/libexec/miracle-wm-session-setup \
+      --prefix PATH : "$out/bin:${
+        lib.makeBinPath [
+          coreutils # cat
+          dbus # dbus-update-activation-environment
+          systemd # systemctl
+        ]
+      }"
   '';
 
   passthru = {
