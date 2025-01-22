@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, mkMesonLibrary
+{
+  lib,
+  stdenv,
+  mkMesonLibrary,
 
-, boost
-, brotli
-, libarchive
-, libcpuid
-, libsodium
-, nlohmann_json
-, openssl
+  boost,
+  brotli,
+  libarchive,
+  libcpuid,
+  libsodium,
+  nlohmann_json,
+  openssl,
 
-# Configuration Options
+  # Configuration Options
 
-, version
+  version,
 }:
 
 let
@@ -43,8 +44,7 @@ mkMesonLibrary (finalAttrs: {
     brotli
     libsodium
     openssl
-  ] ++ lib.optional stdenv.hostPlatform.isx86_64 libcpuid
-  ;
+  ] ++ lib.optional stdenv.hostPlatform.isx86_64 libcpuid;
 
   propagatedBuildInputs = [
     boost

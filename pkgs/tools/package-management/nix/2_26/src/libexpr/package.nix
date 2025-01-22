@@ -1,33 +1,34 @@
-{ lib
-, stdenv
-, mkMesonLibrary
+{
+  lib,
+  stdenv,
+  mkMesonLibrary,
 
-, bison
-, flex
-, cmake # for resolving toml11 dep
+  bison,
+  flex,
+  cmake, # for resolving toml11 dep
 
-, nix-util
-, nix-store
-, nix-fetchers
-, boost
-, boehmgc
-, nlohmann_json
-, toml11
+  nix-util,
+  nix-store,
+  nix-fetchers,
+  boost,
+  boehmgc,
+  nlohmann_json,
+  toml11,
 
-# Configuration Options
+  # Configuration Options
 
-, version
+  version,
 
-# Whether to use garbage collection for the Nix language evaluator.
-#
-# If it is disabled, we just leak memory, but this is not as bad as it
-# sounds so long as evaluation just takes places within short-lived
-# processes. (When the process exits, the memory is reclaimed; it is
-# only leaked *within* the process.)
-#
-# Temporarily disabled on Windows because the `GC_throw_bad_alloc`
-# symbol is missing during linking.
-, enableGC ? !stdenv.hostPlatform.isWindows
+  # Whether to use garbage collection for the Nix language evaluator.
+  #
+  # If it is disabled, we just leak memory, but this is not as bad as it
+  # sounds so long as evaluation just takes places within short-lived
+  # processes. (When the process exits, the memory is reclaimed; it is
+  # only leaked *within* the process.)
+  #
+  # Temporarily disabled on Windows because the `GC_throw_bad_alloc`
+  # symbol is missing during linking.
+  enableGC ? !stdenv.hostPlatform.isWindows,
 }:
 
 let
@@ -51,10 +52,7 @@ mkMesonLibrary (finalAttrs: {
     (fileset.fileFilter (file: file.hasExt "hh") ./.)
     ./lexer.l
     ./parser.y
-    (fileset.difference
-      (fileset.fileFilter (file: file.hasExt "nix") ./.)
-      ./package.nix
-    )
+    (fileset.difference (fileset.fileFilter (file: file.hasExt "nix") ./.) ./package.nix)
   ];
 
   nativeBuildInputs = [

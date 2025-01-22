@@ -1,25 +1,26 @@
-{ lib
-, stdenv
-, mkMesonLibrary
+{
+  lib,
+  stdenv,
+  mkMesonLibrary,
 
-, unixtools
-, darwin
+  unixtools,
+  darwin,
 
-, nix-util
-, boost
-, curl
-, aws-sdk-cpp
-, libseccomp
-, nlohmann_json
-, sqlite
+  nix-util,
+  boost,
+  curl,
+  aws-sdk-cpp,
+  libseccomp,
+  nlohmann_json,
+  sqlite,
 
-, busybox-sandbox-shell ? null
+  busybox-sandbox-shell ? null,
 
-# Configuration Options
+  # Configuration Options
 
-, version
+  version,
 
-, embeddedSandboxShell ? stdenv.hostPlatform.isStatic
+  embeddedSandboxShell ? stdenv.hostPlatform.isStatic,
 }:
 
 let
@@ -48,19 +49,20 @@ mkMesonLibrary (finalAttrs: {
     (fileset.fileFilter (file: file.hasExt "sql") ./.)
   ];
 
-  nativeBuildInputs =
-    lib.optional embeddedSandboxShell unixtools.hexdump;
+  nativeBuildInputs = lib.optional embeddedSandboxShell unixtools.hexdump;
 
-  buildInputs = [
-    boost
-    curl
-    sqlite
-  ] ++ lib.optional stdenv.hostPlatform.isLinux libseccomp
+  buildInputs =
+    [
+      boost
+      curl
+      sqlite
+    ]
+    ++ lib.optional stdenv.hostPlatform.isLinux libseccomp
     # There have been issues building these dependencies
     ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.libs.sandbox
-    ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform && (stdenv.isLinux || stdenv.isDarwin))
-      aws-sdk-cpp
-  ;
+    ++ lib.optional (
+      stdenv.hostPlatform == stdenv.buildPlatform && (stdenv.isLinux || stdenv.isDarwin)
+    ) aws-sdk-cpp;
 
   propagatedBuildInputs = [
     nix-util
@@ -75,12 +77,14 @@ mkMesonLibrary (finalAttrs: {
       echo ${version} > ../../.version
     '';
 
-  mesonFlags = [
-    (lib.mesonEnable "seccomp-sandboxing" stdenv.hostPlatform.isLinux)
-    (lib.mesonBool "embedded-sandbox-shell" embeddedSandboxShell)
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    (lib.mesonOption "sandbox-shell" "${busybox-sandbox-shell}/bin/busybox")
-  ];
+  mesonFlags =
+    [
+      (lib.mesonEnable "seccomp-sandboxing" stdenv.hostPlatform.isLinux)
+      (lib.mesonBool "embedded-sandbox-shell" embeddedSandboxShell)
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      (lib.mesonOption "sandbox-shell" "${busybox-sandbox-shell}/bin/busybox")
+    ];
 
   env = {
     # Needed for Meson to find Boost.
