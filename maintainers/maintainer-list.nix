@@ -2792,12 +2792,6 @@
     githubId = 29384538;
     keys = [ { fingerprint = "D35E C9CE E631 638F F1D8  B401 6F0E 410D C3EE D02"; } ];
   };
-  bengsparks = {
-    email = "benjamin.sparks@protonmail.com";
-    github = "bengsparks";
-    githubId = 4313548;
-    name = "Ben Sparks";
-  };
   benhiemer = {
     name = "Benedikt Hiemer";
     email = "ben.email@posteo.de";
@@ -5172,6 +5166,12 @@
     github = "Daru-san";
     githubId = 135046711;
   };
+  darwincereska = {
+    name = "Darwin Cereska";
+    email = "darwin@durrstudios.dev";
+    github = "darwincereska";
+    githubId = 157426553;
+  };
   das-g = {
     email = "nixpkgs@raphael.dasgupta.ch";
     github = "das-g";
@@ -5376,12 +5376,6 @@
     github = "d-brasher";
     githubId = 175485311;
     name = "D. Brasher";
-  };
-  dbreyfogle = {
-    email = "dnbyfg@proton.me";
-    github = "dbreyfogle";
-    githubId = 27653146;
-    name = "Danny Breyfogle";
   };
   dbrgn = {
     email = "nix@dbrgn.ch";
@@ -5833,8 +5827,6 @@
   };
   DimitarNestorov = {
     name = "Dimitar Nestorov";
-    email = "nix@dimitarnestorov.com";
-    matrix = "@dimitarnestorov:matrix.org";
     github = "DimitarNestorov";
     githubId = 8790386;
   };
@@ -8501,12 +8493,6 @@
     githubId = 60962839;
     name = "Mazen Zahr";
   };
-  GKHWB = {
-    github = "GKHWB";
-    githubId = 68881230;
-    name = "GKHWB";
-    email = "kingdomg@tuta.com";
-  };
   gkleen = {
     name = "Gregor Kleen";
     email = "xpnfr@bouncy.email";
@@ -10811,12 +10797,6 @@
     github = "jigglycrumb";
     githubId = 1476865;
     name = "jigglycrumb";
-  };
-  jinser = {
-    name = "Jinser Kafka";
-    email = "aimer@purejs.icu";
-    github = "jetjinser";
-    githubId = 46820840;
   };
   jiriks74 = {
     name = "Jiří Štefka";
@@ -22934,13 +22914,6 @@
     githubId = 72568063;
     name = "Rouven Seifert";
     keys = [ { fingerprint = "1169 87A8 DD3F 78FF 8601  BF4D B95E 8FE6 B11C 4D09"; } ];
-  };
-  theredstonedev = {
-    email = "theredstonedev@devellight.space";
-    matrix = "@theredstonedev_de:matrix.devellight.space";
-    github = "TheRedstoneDEV-DE";
-    githubId = 75328096;
-    name = "Robert Richter";
   };
   therishidesai = {
     email = "desai.rishi1@gmail.com";
