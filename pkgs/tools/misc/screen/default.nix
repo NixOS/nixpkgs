@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "screen";
-  version = "4.9.1";
+  version = "5.0.0";
 
   src = fetchurl {
     url = "mirror://gnu/screen/screen-${version}.tar.gz";
-    hash = "sha256-Js7z48QlccDUhK1vrxEMXBUJH7+HKwb6eqR2bHQFrGk=";
+    hash = "sha256-8Eo50AoOXHyGpVM4gIkDCCrV301z3xov00JZdq7ZSXE=";
   };
 
   configureFlags = [
@@ -25,6 +25,9 @@ stdenv.mkDerivation rec {
     "--enable-colors256"
     "--enable-rxvt_osc"
   ];
+
+  # We need _GNU_SOURCE so that mallocmock_reset() is defined: https://savannah.gnu.org/bugs/?66416
+  NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.cc.isGNU) "-D_GNU_SOURCE=1 -Wno-int-conversion -Wno-incompatible-pointer-types";
 
   nativeBuildInputs = [
     autoreconfHook
