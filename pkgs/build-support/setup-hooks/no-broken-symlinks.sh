@@ -19,11 +19,10 @@ noBrokenSymlinks() {
   local path
   local pathParent
   local symlinkTarget
-  local errorMessage
   local -i numDanglingSymlinks=0
   local -i numReflexiveSymlinks=0
 
-  # TODO(@connorbaker): This hook doesn't check for cycles in symlinks.
+  # NOTE(@connorbaker): This hook doesn't check for cycles in symlinks.
 
   if [[ ! -e $output ]]; then
     nixWarnLog "skipping non-existent output $output"
@@ -52,28 +51,13 @@ noBrokenSymlinks() {
     fi
 
     if [[ $path == "$symlinkTarget" ]]; then
-      # symlinkTarget is reflexive
-      errorMessage="the symlink $path is reflexive $symlinkTarget"
-      if [[ -z ${allowReflexiveSymlinks-} ]]; then
-        nixErrorLog "$errorMessage"
-        numReflexiveSymlinks+=1
-      else
-        nixInfoLog "$errorMessage"
-      fi
-
+      nixErrorLog "the symlink $path is reflexive $symlinkTarget"
+      numReflexiveSymlinks+=1
     elif [[ ! -e $symlinkTarget ]]; then
-      # symlinkTarget does not exist
-      errorMessage="the symlink $path points to a missing target $symlinkTarget"
-      if [[ -z ${allowDanglingSymlinks-} ]]; then
-        nixErrorLog "$errorMessage"
-        numDanglingSymlinks+=1
-      else
-        nixInfoLog "$errorMessage"
-      fi
-
+      nixErrorLog "the symlink $path points to a missing target $symlinkTarget"
+      numDanglingSymlinks+=1
     else
-      # symlinkTarget exists and is irreflexive
-      nixInfoLog "the symlink $path is irreflexive and points to a target which exists"
+      nixDebugLog "the symlink $path is irreflexive and points to a target which exists"
     fi
   done < <(find "$output" -type l -print0)
 

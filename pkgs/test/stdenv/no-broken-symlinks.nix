@@ -9,17 +9,17 @@ let
   inherit (pkgs) runCommand;
   inherit (pkgs.testers) testBuildFailure;
 
-  mkDanglingSymlink = ''
-    ln -sr "$out/dangling" "$out/dangling-symlink"
+  mkDanglingSymlink = absolute: ''
+    ln -s${if absolute then "r" else ""} "$out/dangling" "$out/dangling-symlink"
   '';
 
-  mkReflexiveSymlink = ''
-    ln -sr "$out/reflexive-symlink" "$out/reflexive-symlink"
+  mkReflexiveSymlink = absolute: ''
+    ln -s${if absolute then "r" else ""} "$out/reflexive-symlink" "$out/reflexive-symlink"
   '';
 
-  mkValidSymlink = ''
+  mkValidSymlink = absolute: ''
     touch "$out/valid"
-    ln -sr "$out/valid" "$out/valid-symlink"
+    ln -s${if absolute then "r" else ""} "$out/valid" "$out/valid-symlink"
   '';
 
   testBuilder =
@@ -47,13 +47,12 @@ let
     );
 in
 {
-  # Dangling symlinks (allowDanglingSymlinks)
-  fail-dangling-symlink =
-    runCommand "fail-dangling-symlink"
+  fail-dangling-symlink-relative =
+    runCommand "fail-dangling-symlink-relative"
       {
         failed = testBuildFailure (testBuilder {
-          name = "fail-dangling-symlink-inner";
-          commands = [ mkDanglingSymlink ];
+          name = "fail-dangling-symlink-relative-inner";
+          commands = [ (mkDanglingSymlink false) ];
         });
       }
       ''
@@ -62,19 +61,38 @@ in
         touch $out
       '';
 
-  pass-dangling-symlink-allowed = testBuilder {
-    name = "pass-symlink-dangling-allowed";
-    commands = [ mkDanglingSymlink ];
-    derivationArgs.allowDanglingSymlinks = true;
+  pass-dangling-symlink-relative-allowed = testBuilder {
+    name = "pass-dangling-symlink-relative-allowed";
+    commands = [ (mkDanglingSymlink false) ];
+    derivationArgs.dontCheckForBrokenSymlinks = true;
   };
 
-  # Reflexive symlinks (allowReflexiveSymlinks)
-  fail-reflexive-symlink =
-    runCommand "fail-reflexive-symlink"
+  fail-dangling-symlink-absolute =
+    runCommand "fail-dangling-symlink-absolute"
       {
         failed = testBuildFailure (testBuilder {
-          name = "fail-reflexive-symlink-inner";
-          commands = [ mkReflexiveSymlink ];
+          name = "fail-dangling-symlink-absolute-inner";
+          commands = [ (mkDanglingSymlink true) ];
+        });
+      }
+      ''
+        (( 1 == "$(cat "$failed/testBuildFailure.exit")" ))
+        grep -F 'found 1 dangling symlinks and 0 reflexive symlinks' "$failed/testBuildFailure.log"
+        touch $out
+      '';
+
+  pass-dangling-symlink-absolute-allowed = testBuilder {
+    name = "pass-dangling-symlink-absolute-allowed";
+    commands = [ (mkDanglingSymlink true) ];
+    derivationArgs.dontCheckForBrokenSymlinks = true;
+  };
+
+  fail-reflexive-symlink-relative =
+    runCommand "fail-reflexive-symlink-relative"
+      {
+        failed = testBuildFailure (testBuilder {
+          name = "fail-reflexive-symlink-relative-inner";
+          commands = [ (mkReflexiveSymlink false) ];
         });
       }
       ''
@@ -83,21 +101,40 @@ in
         touch $out
       '';
 
-  pass-reflexive-symlink-allowed = testBuilder {
-    name = "pass-reflexive-symlink-allowed";
-    commands = [ mkReflexiveSymlink ];
-    derivationArgs.allowReflexiveSymlinks = true;
+  pass-reflexive-symlink-relative-allowed = testBuilder {
+    name = "pass-reflexive-symlink-relative-allowed";
+    commands = [ (mkReflexiveSymlink false) ];
+    derivationArgs.dontCheckForBrokenSymlinks = true;
   };
 
-  # Global (dontCheckForBrokenSymlinks)
-  fail-broken-symlinks =
-    runCommand "fail-broken-symlinks"
+  fail-reflexive-symlink-absolute =
+    runCommand "fail-reflexive-symlink-absolute"
       {
         failed = testBuildFailure (testBuilder {
-          name = "fail-broken-symlinks-inner";
+          name = "fail-reflexive-symlink-absolute-inner";
+          commands = [ (mkReflexiveSymlink true) ];
+        });
+      }
+      ''
+        (( 1 == "$(cat "$failed/testBuildFailure.exit")" ))
+        grep -F 'found 0 dangling symlinks and 1 reflexive symlinks' "$failed/testBuildFailure.log"
+        touch $out
+      '';
+
+  pass-reflexive-symlink-absolute-allowed = testBuilder {
+    name = "pass-reflexive-symlink-absolute-allowed";
+    commands = [ (mkReflexiveSymlink true) ];
+    derivationArgs.dontCheckForBrokenSymlinks = true;
+  };
+
+  fail-broken-symlinks-relative =
+    runCommand "fail-broken-symlinks-relative"
+      {
+        failed = testBuildFailure (testBuilder {
+          name = "fail-broken-symlinks-relative-inner";
           commands = [
-            mkDanglingSymlink
-            mkReflexiveSymlink
+            (mkDanglingSymlink false)
+            (mkReflexiveSymlink false)
           ];
         });
       }
@@ -107,17 +144,48 @@ in
         touch $out
       '';
 
-  pass-broken-symlinks-allowed = testBuilder {
-    name = "fail-broken-symlinks-allowed";
+  pass-broken-symlinks-relative-allowed = testBuilder {
+    name = "pass-broken-symlinks-relative-allowed";
     commands = [
-      mkDanglingSymlink
-      mkReflexiveSymlink
+      (mkDanglingSymlink false)
+      (mkReflexiveSymlink false)
     ];
     derivationArgs.dontCheckForBrokenSymlinks = true;
   };
 
-  pass-valid-symlink = testBuilder {
-    name = "pass-valid-symlink";
-    commands = [ mkValidSymlink ];
+  fail-broken-symlinks-absolute =
+    runCommand "fail-broken-symlinks-absolute"
+      {
+        failed = testBuildFailure (testBuilder {
+          name = "fail-broken-symlinks-absolute-inner";
+          commands = [
+            (mkDanglingSymlink true)
+            (mkReflexiveSymlink true)
+          ];
+        });
+      }
+      ''
+        (( 1 == "$(cat "$failed/testBuildFailure.exit")" ))
+        grep -F 'found 1 dangling symlinks and 1 reflexive symlinks' "$failed/testBuildFailure.log"
+        touch $out
+      '';
+
+  pass-broken-symlinks-absolute-allowed = testBuilder {
+    name = "pass-broken-symlinks-absolute-allowed";
+    commands = [
+      (mkDanglingSymlink true)
+      (mkReflexiveSymlink true)
+    ];
+    derivationArgs.dontCheckForBrokenSymlinks = true;
+  };
+
+  pass-valid-symlink-relative = testBuilder {
+    name = "pass-valid-symlink-relative";
+    commands = [ (mkValidSymlink false) ];
+  };
+
+  pass-valid-symlink-absolute = testBuilder {
+    name = "pass-valid-symlink-absolute";
+    commands = [ (mkValidSymlink true) ];
   };
 }
