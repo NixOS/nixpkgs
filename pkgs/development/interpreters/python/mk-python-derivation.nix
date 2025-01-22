@@ -205,10 +205,9 @@ in
   ...
 }@attrs:
 
-assert (pyproject != null) -> (format == null);
-
 let
   format' =
+    assert (pyproject != null) -> (format == null);
     if pyproject != null then
       if pyproject then "pyproject" else "other"
     else if format != null then
