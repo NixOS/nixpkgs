@@ -9,11 +9,10 @@
   exiv2,
   fftwFloat,
   gsl,
-  ilmbase,
   lcms2,
   libraw,
   libtiff,
-  openexr,
+  openexr_3,
   qtbase,
   qtdeclarative,
   qttools,
@@ -40,8 +39,6 @@ mkDerivation rec {
     })
   ];
 
-  env.NIX_CFLAGS_COMPILE = "-I${ilmbase.dev}/include/OpenEXR";
-
   buildInputs = [
     qtbase
     qtdeclarative
@@ -52,11 +49,10 @@ mkDerivation rec {
     exiv2
     fftwFloat
     gsl
-    ilmbase
     lcms2
     libraw
     libtiff
-    openexr
+    openexr_3
   ];
 
   nativeBuildInputs = [
