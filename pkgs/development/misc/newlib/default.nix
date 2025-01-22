@@ -118,7 +118,11 @@ stdenv.mkDerivation (finalAttrs: {
         for f in librdimon.a libc.a libm.a libg.a libgloss.a; do
           # Some libraries are only available for specific architectures.
           # For example, librdimon.a is only available on ARM.
-          [ -f "$f" ] && cp "$f" "''${f%%\.a}_nano.a"
+          if [ -f "$f" ]; then
+            dst="''${f%%\.a}_nano.a"
+            >&2 echo "$f -> $dst"
+            cp "$f" "$dst"
+          fi
         done
       )
     ''
