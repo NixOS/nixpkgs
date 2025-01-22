@@ -542,6 +542,10 @@ are used in [`buildPythonPackage`](#buildpythonpackage-function).
   with the `pipInstallHook`.
 - `unittestCheckHook` will run tests with `python -m unittest discover`. See [example usage](#using-unittestcheckhook).
 
+#### Overriding build helpers {#overriding-python-build-helpers}
+
+Like most of the build helpers provided by Nixpkgs, most Python build helpers provide a `<function>.override` attributes. It works like [<pkg>.override](#sec-pkg-override), and can be used to override the dependencies of each build helper. Specifically, the `stdenv` used by `buildPythonPackage` and `buildPythonApplication`, which defaults to `python.stdenv`, can be overridden with `buildPythonPackage.override { stdenv = customStdenv; }` and `buildPythonApplication.override { stdenv = customStdenv; }`, respectively.
+
 ## User Guide {#user-guide}
 
 ### Using Python {#using-python}

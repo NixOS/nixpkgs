@@ -3406,6 +3406,9 @@
   "buildpythonpackage-parameters": [
     "index.html#buildpythonpackage-parameters"
   ],
+  "overriding-python-build-helpers": [
+    "index.html#overriding-python-build-helpers"
+  ],
   "overriding-python-packages": [
     "index.html#overriding-python-packages"
   ],
