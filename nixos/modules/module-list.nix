@@ -209,6 +209,7 @@
   ./programs/gamescope.nix
   ./programs/gdk-pixbuf.nix
   ./programs/geary.nix
+  ./programs/ghidra.nix
   ./programs/git.nix
   ./programs/git-worktree-switcher.nix
   ./programs/gnome-disks.nix
