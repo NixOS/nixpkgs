@@ -9,7 +9,6 @@
   f,
   fetchFromGitHub,
   git,
-  gitUpdater,
   melpaBuild,
   package-build,
   s,
@@ -58,10 +57,6 @@ melpaBuild (finalAttrs: {
   postInstall = ''
     install -D -t $out/bin bin/cask
   '';
-
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "v";
-  };
 
   meta = {
     homepage = "https://github.com/cask/cask";

@@ -13,7 +13,6 @@
   melpaBuild,
   nav-flash,
   porthole,
-  unstableGitUpdater,
   yasnippet,
   el-patch,
 }:
@@ -48,8 +47,6 @@ melpaBuild {
     yasnippet
     el-patch
   ];
-
-  passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
   meta = {
     homepage = "https://github.com/jcaw/voicemacs/";
