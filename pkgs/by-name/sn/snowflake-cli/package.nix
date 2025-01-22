@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
     owner = "snowflakedb";
     repo = "snowflake-cli";
     tag = "v${version}";
-    hash = "sha256-1AXp2bCBNuYwnyQMIQn3uLLKdWVznBRK6HcB/E7Yjo8=";
+    hash = "sha256-G1jX9v0OliDMqojNu3ZSGVfvH74OlIsIQjRiLprrxYA=";
   };
 
   build-system = with python3Packages; [
