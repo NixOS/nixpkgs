@@ -33,13 +33,14 @@
 }:
 
 let
-  hipClangPath = rocm-merged-llvm;
+  hipClang = rocm-merged-llvm;
+  hipClangPath = "${hipClang}/bin";
   wrapperArgs = [
     "--prefix PATH : $out/bin"
     "--prefix LD_LIBRARY_PATH : ${rocm-runtime}"
     "--set HIP_PLATFORM amd"
     "--set HIP_PATH $out"
-    "--set HIP_CLANG_PATH ${hipClangPath}/bin"
+    "--set HIP_CLANG_PATH ${hipClangPath}"
     "--set DEVICE_LIB_PATH ${rocm-device-libs}/amdgcn/bitcode"
     "--set HSA_PATH ${rocm-runtime}"
     "--set ROCM_PATH $out"
@@ -84,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
     libX11
     khronos-ocl-icd-loader
-    hipClangPath
+    hipClang
     libffi
     zstd
     zlib
@@ -163,7 +164,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "install(PROGRAMS \''${HIPCC_BIN_DIR}/hipconfig.bat DESTINATION bin)" ""
 
     substituteInPlace hipamd/src/hip_embed_pch.sh \
-      --replace "\''$LLVM_DIR/bin/clang" "${hipClangPath}/bin/clang"
+      --replace "\''$LLVM_DIR/bin/clang" "${hipClangPath}/clang"
 
     substituteInPlace opencl/khronos/icd/loader/icd_platform.h \
       --replace-fail '#define ICD_VENDOR_PATH "/etc/OpenCL/vendors/";' \
@@ -205,7 +206,7 @@ stdenv.mkDerivation (finalAttrs: {
     export HIP_PLATFORM=amd
     export HIP_DEVICE_LIB_PATH="${rocm-device-libs}/amdgcn/bitcode"
     export NIX_CC_USE_RESPONSE_FILE=0
-    export HIP_CLANG_PATH="${hipClangPath}/bin"
+    export HIP_CLANG_PATH="${hipClangPath}"
     export ROCM_LIBPATCH_VERSION="${ROCM_LIBPATCH_VERSION}"
     export HSA_PATH="${rocm-runtime}"' > $out/nix-support/setup-hook
 
@@ -220,7 +221,7 @@ stdenv.mkDerivation (finalAttrs: {
     # add version info to output (downstream rocmPackages look for this)
     ln -s ${rocm-core}/.info/ $out/.info
 
-    ln -s ${hipClangPath} $out/llvm
+    ln -s ${hipClang} $out/llvm
   '';
 
   disallowedRequisites = [
@@ -257,6 +258,8 @@ stdenv.mkDerivation (finalAttrs: {
         "1101"
         "1102"
       ] (target: "gfx${target}");
+
+      hipClangPath = hipClangPath;
 
       updateScript = rocmUpdateScript {
         name = finalAttrs.pname;
