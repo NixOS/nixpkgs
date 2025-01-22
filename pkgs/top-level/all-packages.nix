@@ -16277,6 +16277,8 @@ with pkgs;
 
   lilypond-with-fonts = callPackage ../misc/lilypond/with-fonts.nix { };
 
+  m5ops = callPackage ../by-name/ge/gem5/m5ops.nix { };
+
   openlilylib-fonts = callPackage ../misc/lilypond/fonts.nix { };
 
   mailcore2 = callPackage ../development/libraries/mailcore2 {
