@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   rocmUpdateScript,
   cmake,
   rocm-cmake,
@@ -47,6 +48,15 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Rz1KAhBUbvErHTF2PM1AkVhqo4OHldfSNMSpp5Tx9yk=";
   };
 
+  patches = [
+    # https://github.com/ROCm/hipBLAS/pull/952
+    (fetchpatch {
+      name = "transitively-depend-hipblas-common.patch";
+      url = "https://github.com/ROCm/hipBLAS/commit/54220fdaebf0fb4fd0921ee9e418ace5b143ec8f.patch";
+      hash = "sha256-MFEhv8Bkrd2zD0FFIDg9oJzO7ztdyMAF+R9oYA0rmwQ=";
+    })
+  ];
+
   postPatch = ''
     substituteInPlace library/CMakeLists.txt \
       --replace-fail "find_package(Git REQUIRED)" ""
@@ -63,6 +73,8 @@ stdenv.mkDerivation (finalAttrs: {
     '')
   ];
 
+  propagatedBuildInputs = [ hipblas-common ];
+
   buildInputs =
     [
       rocblas
@@ -70,7 +82,6 @@ stdenv.mkDerivation (finalAttrs: {
       rocsparse
       rocsolver
       # hipblaslt
-      hipblas-common
     ]
     ++ lib.optionals buildTests [
       gtest
