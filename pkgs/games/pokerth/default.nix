@@ -46,6 +46,11 @@ mkDerivation rec {
       url = "https://aur.archlinux.org/cgit/aur.git/plain/pokerth-1.1.2.patch.2020?h=pokerth&id=7734029cf9c6ef58f42ed873e1b9c3c19eb1df3b";
       hash = "sha256-I2qrgLGSMvFDHyUZFWGPGnuecZ914NBf2uGK02X/wOg=";
     })
+    (fetchpatch {
+      name = "boost-1.85.patch";
+      url = "https://github.com/pokerth/pokerth/pull/427/commits/f42fa9a604f9f4faa1addd1b02c491cd0fe59736.patch";
+      hash = "sha256-t9ZgAWIQ6iJC7b0fCUIwQfnptLG/zR+V9oCJQIt23pw=";
+    })
   ];
 
   postPatch = ''
