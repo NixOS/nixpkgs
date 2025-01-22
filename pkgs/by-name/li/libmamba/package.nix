@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libmamba";
-  version = "2.0.5";
+  version = "1.5.12";
 
   src = fetchFromGitHub {
     owner = "mamba-org";
     repo = "mamba";
     rev = "libmamba-${finalAttrs.version}";
-    hash = "sha256-o5shAmsplJS2WZ4HhAt1U27KqUheVxZTkjlyxR7EYxI=";
+    hash = "sha256-JdJ3ymDoiU/+r3UYFhyqG/TvDz9gBgKSdnrZS1369l8=";
   };
 
   nativeBuildInputs = [
