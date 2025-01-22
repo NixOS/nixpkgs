@@ -21,7 +21,7 @@ let
 in
 buildPythonApplication rec {
   pname = "pre-commit";
-  version = "4.0.1";
+  version = "4.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -30,7 +30,7 @@ buildPythonApplication rec {
     owner = "pre-commit";
     repo = "pre-commit";
     tag = "v${version}";
-    hash = "sha256-qMNnzAxJOS7mabHmGYZ/VkDrpaZbqTJyETSCxq/OrGQ=";
+    hash = "sha256-XXXnzAxJOS7mabHmGYZ/VkDrpaZbqTJyETSCxq/OrGQ=";
   };
 
   patches = [
