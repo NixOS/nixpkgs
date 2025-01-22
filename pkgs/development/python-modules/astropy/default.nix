@@ -6,6 +6,7 @@
   pythonOlder,
 
   # build time
+  stdenv,
   cython,
   extension-helpers,
   setuptools,
@@ -43,7 +44,6 @@
 
   # testing
   pytestCheckHook,
-  stdenv,
   pytest-xdist,
   pytest-astropy-header,
   pytest-astropy,
