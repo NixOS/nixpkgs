@@ -14,6 +14,7 @@
   gdk-pixbuf,
   glib,
   gtk4,
+  openssl,
   libadwaita,
   pango,
   gettext,
@@ -24,19 +25,18 @@
 
 stdenv.mkDerivation rec {
   pname = "diebahn";
-  version = "2.7.1";
+  version = "2.7.2";
 
   src = fetchFromGitLab {
     owner = "schmiddi-on-mobile";
     repo = "railway";
-    rev = version;
-    hash = "sha256-SLZJiCkHUS2p7cNk3i3yO2c3tWR4T4ch+zJ1iYEkS6E=";
+    tag = version;
+    hash = "sha256-jk2Pn/kqjMx5reMkIL8nLMWMZylwdoVq4FmnzaohnjU=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
-    name = "${pname}-${src}";
-    inherit src;
-    hash = "sha256-XYlRm8yqQr9ZNV7jQeuR8kvqFNudUjJlzE6h9X0zq0Y=";
+    inherit pname version src;
+    hash = "sha256-UE+N6cvcWVJTxE8m4hHmBLyd5RBecDQy1kR4zDzPyf0=";
   };
 
   nativeBuildInputs = [
@@ -58,6 +58,7 @@ stdenv.mkDerivation rec {
       glib
       gtk4
       libadwaita
+      openssl
       pango
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin (
