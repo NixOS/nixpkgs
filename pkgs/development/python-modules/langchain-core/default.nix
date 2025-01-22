@@ -22,6 +22,8 @@
   freezegun,
   grandalf,
   httpx,
+  langchain-core,
+  langchain-tests,
   numpy,
   pytest-asyncio,
   pytest-mock,
@@ -66,10 +68,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain_core" ];
 
+  # avoid infinite recursion
+  doCheck = false;
+
   nativeCheckInputs = [
     freezegun
     grandalf
     httpx
+    langchain-tests
     numpy
     pytest-asyncio
     pytest-mock
@@ -80,13 +86,10 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "tests/unit_tests" ];
 
-  # don't add langchain-standard-tests to nativeCheckInputs
-  # to avoid circular import
-  preCheck = ''
-    export PYTHONPATH=${src}/libs/standard-tests:$PYTHONPATH
-  '';
-
   passthru = {
+    tests.pytest = langchain-core.overridePythonAttrs (_: {
+      doCheck = true;
+    });
     # Updates to core tend to drive updates in everything else
     updateScript = writeScript "update.sh" ''
       #!/usr/bin/env nix-shell
