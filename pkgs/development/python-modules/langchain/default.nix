@@ -136,6 +136,8 @@ buildPythonPackage rec {
 
   passthru = {
     updateScript = langchain-core.updateScript;
+    # updates the wrong fetcher rev attribute
+    skipBulkUpdate = true;
   };
 
   meta = {
