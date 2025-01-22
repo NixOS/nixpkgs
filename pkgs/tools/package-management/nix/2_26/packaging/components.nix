@@ -54,7 +54,7 @@ in
 
   nix-cli = callPackage ../src/nix/package.nix { version = fineVersion; };
 
-  nix-functional-tests = callPackage ../src/nix-functional-tests/package.nix { version = fineVersion; };
+  nix-functional-tests = callPackage ../tests/functional/package.nix { version = fineVersion; };
 
   nix-manual = callPackage ../doc/manual/package.nix { version = fineVersion; };
   nix-internal-api-docs = callPackage ../src/internal-api-docs/package.nix { version = fineVersion; };
