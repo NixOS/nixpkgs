@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-LCmc0yYuy51r2wHEzsJMfssCElG1AbnLLWYYnbk0Ddw=";
+  cargoHash = "sha256-4ejtMCuJOwT5bJQZaPQ1OjrB5O70we77yEXk9RmhywE=";
 
   meta = with lib; {
     description = "Git Explorer: cross-platform git workflow improvement tool inspired by Magit";
