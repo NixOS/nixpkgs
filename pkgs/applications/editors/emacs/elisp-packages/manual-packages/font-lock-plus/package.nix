@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   melpaBuild,
-  unstableGitUpdater,
 }:
 
 melpaBuild {
@@ -16,8 +15,6 @@ melpaBuild {
     rev = "aa1c82d05c9222b09099a0ccd7468e955497940c";
     hash = "sha256-er+knxqAejgKAtOnhqHfsGN286biHFdeMIUlbW7JyYw=";
   };
-
-  passthru.updateScript = unstableGitUpdater { };
 
   meta = {
     homepage = "https://github.com/emacsmirror/font-lock-plus";

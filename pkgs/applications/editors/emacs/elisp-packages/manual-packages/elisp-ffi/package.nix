@@ -4,7 +4,6 @@
   libffi,
   melpaBuild,
   pkg-config,
-  unstableGitUpdater,
 }:
 
 melpaBuild {
@@ -28,8 +27,6 @@ melpaBuild {
   preBuild = ''
     make CXX=$CXX
   '';
-
-  passthru.updateScript = unstableGitUpdater { };
 
   meta = {
     homepage = "https://github.com/skeeto/elisp-ffi";
