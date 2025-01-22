@@ -18,18 +18,6 @@ let
   repo = "git@github.com:scala/scala.git";
 
   versionMap = {
-    "2.10" = {
-      version = "2.10.7";
-      hash = "sha256-koMRmRb2u3cU4HaihAzPItWIGbNVIo7RWRrm92kp8RE=";
-      pname = "scala_2_10";
-    };
-
-    "2.11" = {
-      version = "2.11.12";
-      hash = "sha256-sR19M2mcpPYLw7K2hY/ZU+PeK4UiyUP0zaS2dDFhlqg=";
-      pname = "scala_2_11";
-    };
-
     "2.12" = {
       version = "2.12.18";
       hash = "sha256-naIJCET+YPrbXln39F9aU3DBdnjcn7PYMmhDxETOA5g=";
