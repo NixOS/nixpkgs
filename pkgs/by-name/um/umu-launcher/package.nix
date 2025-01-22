@@ -7,7 +7,8 @@ buildFHSEnv {
   pname = "umu-launcher";
   inherit (umu-launcher-unwrapped) version meta;
 
-  targetPkgs = pkgs: [ pkgs.umu-launcher-unwrapped ];
+  # Use umu-launcher-unwrapped from the package args, to simplify overriding
+  targetPkgs = _: [ umu-launcher-unwrapped ];
 
   executableName = umu-launcher-unwrapped.meta.mainProgram;
   runScript = lib.getExe umu-launcher-unwrapped;
