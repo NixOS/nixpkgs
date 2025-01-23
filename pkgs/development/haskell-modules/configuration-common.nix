@@ -3107,12 +3107,12 @@ let
   ) {}) gogolServices;
 in
 {
-  gogol-core = lib.pipe
+  gogol-core = assert super.gogol-core.version == "0.5.0"; lib.pipe
     super.gogol-core
     [
       (setGogolSourceRoot "lib/gogol-core")
       (addBuildDepend self.base64_1_0)
       (overrideCabal (drv: { editedCabalFile = null; revision = null; }))
     ];
-  gogol = setGogolSourceRoot "lib/gogol" super.gogol;
+  gogol = assert super.gogol.version == "0.5.0"; setGogolSourceRoot "lib/gogol" super.gogol;
 } // gogolServiceOverrides)
