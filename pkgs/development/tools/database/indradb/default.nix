@@ -28,7 +28,8 @@ in
     version = "unstable-2021-01-05";
     inherit src meta;
 
-    cargoHash = "sha256-3WtiW31AkyNX7HiT/zqfNo2VSKR7Q57/wCigST066Js=";
+    useFetchCargoVendor = true;
+    cargoHash = "sha256-wehQU0EOSkxQatoViqBJwgu4LG7NsbKjVZvKE6SoOFs=";
 
     buildAndTestSubdir = "server";
 
@@ -49,7 +50,8 @@ in
     version = "unstable-2021-01-05";
     inherit src meta;
 
-    cargoHash = "sha256-pxan6W/CEsOxv8DbbytEBuIqxWn/C4qT4ze/RnvESOM=";
+    useFetchCargoVendor = true;
+    cargoHash = "sha256-wehQU0EOSkxQatoViqBJwgu4LG7NsbKjVZvKE6SoOFs=";
 
     PROTOC = "${protobuf}/bin/protoc";
 

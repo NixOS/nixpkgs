@@ -25,7 +25,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-OxE0+KK2qt06gAi7rw3hiG2lczBqbyNThb4aCpyM6q8=";
   };
 
-  cargoHash = "sha256-RtN3+TWRNsOgVb4KrCEN0cxB8ctBZ5qNUXbux3RKkqc=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-MdRK4mQ09KatcgjTu/0l6Qkd3FYefiwC+UcmXOgsQ0A=";
 
   preCheck = ''
     export HOME=$(mktemp -d)

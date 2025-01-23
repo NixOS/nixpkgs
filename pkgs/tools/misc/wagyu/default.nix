@@ -19,7 +19,8 @@ rustPlatform.buildRustPackage rec {
 
   cargoPatches = [ ./fix-rustc-serialize-version.patch ];
 
-  cargoHash = "sha256-vseTtok0E0ddg9ALQ1ql3NPPxirfyMPHOSWsM2qu2jU=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-vtNxRW/b8kvy21YQezCUiZNtLnlMSkdTRr/OkGy6UAw=";
 
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
 
