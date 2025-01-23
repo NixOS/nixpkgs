@@ -21,7 +21,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-L26jzAn8vwnw9kFd6ciyYS/OLEFTbN8doNKy3P8qKRE=";
   };
 
-  cargoHash = "sha256-/0XS4xF5gzEBWXS39f0FsIK1dFwmGT4McaExR/srB5Y=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-dqVnIiaGXnoKLvwQm/aiwSptKksikNGgAOu704rhDPA=";
 
   # needed for librocksdb-sys
   nativeBuildInputs = [ rustPlatform.bindgenHook ];
