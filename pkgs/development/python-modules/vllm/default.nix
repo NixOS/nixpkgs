@@ -45,7 +45,7 @@
   rocmSupport ? !config.cudaSupport,
   rocmPackages ? { },
   gpuTargets ? [ ],
-}@args:
+}:
 
 let
   cutlass = fetchFromGitHub {
@@ -56,12 +56,13 @@ let
   };
 in
 
-buildPythonPackage rec {
+let
+  stdenv' = if cudaSupport then cudaPackages.backendStdenv else stdenv;
+in
+buildPythonPackage.override { stdenv = stdenv'; } rec {
   pname = "vllm";
   version = "0.6.2";
   pyproject = true;
-
-  stdenv = if cudaSupport then cudaPackages.backendStdenv else args.stdenv;
 
   src = fetchFromGitHub {
     owner = "vllm-project";
