@@ -18107,7 +18107,7 @@ with pkgs;
   });
 
   wine-wayland = lowPrio (winePackages.full.override {
-    wineRelease = "wayland";
+    x11Support = false;
   });
 
   inherit (callPackage ../servers/web-apps/wordpress {})
