@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-ejMqTMGLbVr/Aaqw8U0ojV43N6t0GeWdYIcP0guAsO0="; # When updating: Use `lib.fakeHash` for recomputing the hash once. Run: 'nix-build -A versatiles'. Swap with new hash and proceed.
   };
 
-  cargoHash = "sha256-2C/oPB48CTX7i4xoF1iegrpNvaSMkIbVeEyy/WteKqM="; # When updating: Same as above
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-ZvkuA/6TQc5CsBvjQHlVb2AFA60q6Wa5mrfxjh49uYE="; # When updating: Same as above
 
   # Testing only necessary for the `bins` and `lib` features
   cargoTestFlags = [

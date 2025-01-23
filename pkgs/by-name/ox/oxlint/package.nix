@@ -17,7 +17,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-cH3Sosfmx0eOWWOjglcB3puiK0XKbO0wua45/YMZe+0=";
   };
 
-  cargoHash = "sha256-Yfk5DGOo3GLHzqJYCFrlLB7soHFI+zBRR93daVOgrmk=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-T03nFJChCTSfP+9+LnXMzngAqAaTATq9tTfpylR9QWY=";
 
   buildInputs = [
     rust-jemalloc-sys

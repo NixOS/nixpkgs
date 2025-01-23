@@ -16,7 +16,8 @@ rustPlatform.buildRustPackage rec {
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-mBY+J6JcIhV++tO6Dhw5JvYLSwoYZR3lB3l0KTjkcQM=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-dy66ZkU9lIYGe9T3oR8m5cGcBQO5MF1KsLjfaHTtvlY=";
 
   meta = with lib; {
     description = "Tool to validate GitHub Action and Workflow YAML files";

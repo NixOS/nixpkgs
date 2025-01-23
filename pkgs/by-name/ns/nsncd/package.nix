@@ -22,7 +22,8 @@ rustPlatform.buildRustPackage {
     hash = "sha256-0cFCX5pKvYv6yr4+X5kXGz8clNi/LYndFtHaxSmHN+I=";
   };
 
-  cargoHash = "sha256-1n+yCjuJ7kQkd68AOCVz5MWWe1qItaceT1rDlLi1Vqo=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-9M8Y0WwXFlrpRleSQPYDpnjNnxKGvrtO6Istl9qM30M=";
 
   checkFlags = [
     # Relies on the test environment to be able to resolve "localhost"

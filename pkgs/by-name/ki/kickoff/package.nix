@@ -20,7 +20,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-q/+Ik8L58LxOllpEosYyvD38RJb+NIQHslYpgGSwjKc=";
   };
 
-  cargoHash = "sha256-8LSz/YeqdbtFXpWq2MMhEI9+8mxsLdE4LUyQHcgLkZY=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-iTTwclBbmOALjMnT89w6k8Ix8HKTbBOxKHVgePbbXkA=";
 
   libPath = lib.makeLibraryPath [
     wayland

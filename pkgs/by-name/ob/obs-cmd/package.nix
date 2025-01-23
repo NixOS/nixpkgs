@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-+unUjGPDUSVGXyf91+mnPrLAslTpDxsCCmSnT34s7S0=";
   };
 
-  cargoHash = "sha256-zEd8LUNZOspcrA90qJur6V2Dt/+9XJWvwBBjjFAPAg8=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-ZKHm6N7y5FbDFiK2QfQ+9siexgzrdLpBs5Xikh1SRLo=";
 
   meta = with lib; {
     description = "Minimal CLI to control OBS Studio via obs-websocket";

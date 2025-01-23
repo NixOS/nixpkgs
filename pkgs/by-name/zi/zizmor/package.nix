@@ -17,7 +17,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-J2pKaGPbRYWlupWHeXbDpxMDpWk+Px0yuKsH6wiFq5M=";
   };
 
-  cargoHash = "sha256-YrQBR5RVBAqYqdAucRiqO8cFmgdVvqA8HEYOXFieSsU=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-64H/eJn6gHw7M96FhcmLW7ItjS7b4H/fecYZTosS9Oc=";
 
   passthru.tests.version = testers.testVersion {
     package = zizmor;

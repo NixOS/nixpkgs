@@ -23,7 +23,8 @@ rustPlatform.buildRustPackage rec {
     libsixel
   ];
 
-  cargoHash = "sha256-IC72l1xbH/AdCHdcgY8ODv6+YZUmT5NYVisP9oIMpGA=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-akIgYZUOu5QcjLFPSUxaunvfrVseEGQGm9yyaCI2cPg=";
 
   # Crashes at runtime on darwin with:
   # Library not loaded: .../out/lib/libsixel.1.dylib

@@ -33,7 +33,8 @@ rustPlatform.buildRustPackage {
     ./0001-fix-remove-flaky-test.patch
   ];
 
-  cargoHash = "sha256-IufJPCvUEWR5p4PrFlaiQPW9wyIFj/Pd/JHki69L6Es=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-6qydjT4aSbh4uk+BpOzgZt1wctKkuDINvAPNtVbWH0k=";
 
   nativeBuildInputs = [ pkg-config ];
 

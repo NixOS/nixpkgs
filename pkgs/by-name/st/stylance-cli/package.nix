@@ -12,7 +12,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-YN7Y8dxwpZel1SeEgyckh4ZPuRqcAsNvc/fGRgvzeDw=";
   };
 
-  cargoHash = "sha256-VKfQzsTTKIbh+X0suXyUXDsd8sDSRsc5SnO8qxcxGPQ=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-qIxmegxxFnN0SXWArbPyaAM2PwMt1IUYPbhbkKOZ0lY=";
 
   meta = with lib; {
     description = "Library and cli tool for working with scoped CSS in rust";
