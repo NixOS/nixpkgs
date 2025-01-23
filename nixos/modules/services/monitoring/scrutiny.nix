@@ -1,14 +1,15 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 let
   inherit (lib) maintainers;
   inherit (lib.meta) getExe;
   inherit (lib.modules) mkIf mkMerge;
   inherit (lib.options) literalExpression mkEnableOption mkOption mkPackageOption;
   inherit (lib.types) bool enum nullOr port str submodule;
+  inherit (utils) genJqSecretsReplacementSnippet;
 
   cfg = config.services.scrutiny;
   # Define the settings format used for this program
-  settingsFormat = pkgs.formats.yaml { };
+  settingsFormat = pkgs.formats.json { };
 in
 {
   options = {
@@ -36,6 +37,8 @@ in
           Scrutiny settings to be rendered into the configuration file.
 
           See https://github.com/AnalogJ/scrutiny/blob/master/example.scrutiny.yaml.
+
+          Options containing secret data should be set to an attribute set containing the attribute `_secret` - a string pointing to a file containing the value the option should be set to.
         '';
         default = { };
         type = submodule {
@@ -177,6 +180,11 @@ in
           SCRUTINY_WEB_DATABASE_LOCATION = "/var/lib/scrutiny/scrutiny.db";
           SCRUTINY_WEB_SRC_FRONTEND_PATH = "${cfg.package}/share/scrutiny";
         };
+        preStart = ''
+          ${genJqSecretsReplacementSnippet cfg.settings "/etc/scrutiny/config.json"}
+          cat /etc/scrutiny/config.json | ${getExe pkgs.yj} -r > /etc/scrutiny/config.yaml
+          rm /etc/scrutiny/config.json
+        '';
         postStart = ''
           for i in $(seq 300); do
               if "${lib.getExe pkgs.curl}" --fail --silent --head "http://${cfg.settings.web.listen.host}:${toString cfg.settings.web.listen.port}" >/dev/null; then
@@ -191,8 +199,10 @@ in
         '';
         serviceConfig = {
           DynamicUser = true;
-          ExecStart = "${getExe cfg.package} start --config ${settingsFormat.generate "scrutiny.yaml" cfg.settings}";
+          ExecStart = "${getExe cfg.package} start --config /etc/scrutiny/config.yaml";
           Restart = "always";
+          ConfigurationDirectory = "scrutiny";
+          ConfigurationDirectoryMode = "0750";
           StateDirectory = "scrutiny";
           StateDirectoryMode = "0750";
         };
@@ -216,9 +226,16 @@ in
             COLLECTOR_VERSION = "1";
             COLLECTOR_API_ENDPOINT = cfg.collector.settings.api.endpoint;
           };
+          preStart = ''
+            ${genJqSecretsReplacementSnippet cfg.settings "/etc/scrutiny-collector/config.json"}
+            cat /etc/scrutiny-collector/config.json | ${getExe pkgs.yj} -r > /etc/scrutiny-collector/config.yaml
+            rm /etc/scrutiny-collector/config.json
+          '';
           serviceConfig = {
             Type = "oneshot";
-            ExecStart = "${getExe cfg.collector.package} run --config ${settingsFormat.generate "scrutiny-collector.yaml" cfg.collector.settings}";
+            ExecStart = "${getExe cfg.collector.package} run --config /etc/scrutiny-collector/config.yaml";
+            ConfigurationDirectory = "scrutiny-collector";
+            ConfigurationDirectoryMode = "0750";
           };
           startAt = cfg.collector.schedule;
         };
