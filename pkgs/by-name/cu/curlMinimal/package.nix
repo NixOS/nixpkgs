@@ -67,6 +67,8 @@ stdenv.mkDerivation (finalAttrs: {
   patches = lib.optionals (!stdenv.isDarwin) [
     # https://github.com/curl/curl/issues/15725
     ./fix-eventfd-free.patch
+    # https://github.com/curl/curl/issues/15767
+    ./fix-password-less-netrc.patch
   ];
 
   # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
