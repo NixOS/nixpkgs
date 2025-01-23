@@ -213,8 +213,6 @@ with pkgs;
       }
     '');
 
-  checkMeta = callPackage ../stdenv/generic/check-meta.nix { };
-
   # addDriverRunpath is the preferred package name, as this enables
   # many more scenarios than just opengl now.
   anime-downloader = callPackage ../applications/video/anime-downloader { };
