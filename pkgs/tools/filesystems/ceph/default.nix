@@ -231,11 +231,11 @@ let
             hash = "sha256-J9N1kDrIJhz+QEf2cJ0W99GNObHskqr3KvmJVSplDr0=";
           };
           cargoRoot = "src/_bcrypt";
-          cargoDeps = rustPlatform.fetchCargoTarball {
+          cargoDeps = rustPlatform.fetchCargoVendor {
             inherit src;
             sourceRoot = "${pname}-${version}/${cargoRoot}";
             name = "${pname}-${version}";
-            hash = "sha256-lDWX69YENZFMu7pyBmavUZaalGvFqbHSHfkwkzmDQaY=";
+            hash = "sha256-8PyCgh/rUO8uynzGdgylAsb5k55dP9fCnf40UOTCR/M=";
           };
         });
 
