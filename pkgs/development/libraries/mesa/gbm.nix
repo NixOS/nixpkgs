@@ -15,9 +15,17 @@
 let
   common = import ./common.nix { inherit lib fetchFromGitLab; };
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "mesa-libgbm";
-  inherit (common) version src meta;
+  version = "24.3.3";
+
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "mesa";
+    repo = "mesa";
+    rev = "mesa-${version}";
+    hash = "sha256-OThJ/txyJ6p879jG5qOXX6mL27t7Uz/tbr620iRMeIc=";
+  };
 
   mesonAutoFeatures = "disabled";
 
@@ -52,4 +60,6 @@ stdenv.mkDerivation {
     python3Packages.mako
     python3Packages.pyyaml
   ];
+
+  inherit (common) meta;
 }
