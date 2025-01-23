@@ -27,6 +27,9 @@
   sparsehash,
 }:
 
+let
+  stdenv = python.stdenv;
+in
 buildPythonPackage rec {
   pname = "python-mapnik";
   version = "3.0.16-unstable-2024-02-22";
@@ -52,8 +55,6 @@ buildPythonPackage rec {
     # https://github.com/mapnik/python-mapnik/commit/e9f88a95a03dc081826a69da67bbec3e4cccd5eb
     ./python-mapnik_std_optional.patch
   ];
-
-  stdenv = python.stdenv;
 
   build-system = [ setuptools ];
 
