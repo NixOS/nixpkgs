@@ -22,6 +22,10 @@ let
     ln -s${if absolute then "r" else ""} "$out/valid" "$out/valid-symlink"
   '';
 
+  mkValidSymlinkOutsideNixStore = absolute: ''
+    ln -s${if absolute then "r" else ""} "/etc/my_file" "$out/valid-symlink"
+  '';
+
   testBuilder =
     {
       name,
@@ -187,5 +191,15 @@ in
   pass-valid-symlink-absolute = testBuilder {
     name = "pass-valid-symlink-absolute";
     commands = [ (mkValidSymlink true) ];
+  };
+
+  pass-valid-symlink-outside-nix-store-relative = testBuilder {
+    name = "pass-valid-symlink-outside-nix-store-relative";
+    commands = [ (mkValidSymlinkOutsideNixStore false) ];
+  };
+
+  pass-valid-symlink-outside-nix-store-absolute = testBuilder {
+    name = "pass-valid-symlink-outside-nix-store-absolute";
+    commands = [ (mkValidSymlinkOutsideNixStore true) ];
   };
 }
