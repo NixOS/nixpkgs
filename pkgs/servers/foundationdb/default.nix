@@ -11,7 +11,7 @@
   openjdk,
   mono,
   openssl,
-  boost,
+  boost186,
   pkg-config,
   msgpack-cxx,
   toml11,
@@ -26,7 +26,7 @@ in
   foundationdb73 = cmakeBuild {
     version = "7.3.42";
     hash = "sha256-jQcm+HLai5da2pZZ7iLdN6fpQZxf5+/kkfv9OSXQ57c=";
-    inherit boost;
+    boost = boost186;
     ssl = openssl;
 
     patches = [
