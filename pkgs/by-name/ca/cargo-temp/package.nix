@@ -11,7 +11,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-fy4bG+UoN/51hiveYecl3ciJPV1g8/fC2dTFnUJZqAY=";
   };
 
-  cargoHash = "sha256-st8BLru9hp1qi784Zm4yVB8AJQfowF36201Yw8uQQ2k=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-E7msh553ijldpVI2OJ6PL0Wp+Z4eLbv8Oexl7NtBdYc=";
 
   meta = with lib; {
     description = "CLI tool that allow you to create a temporary new Rust project using cargo with already installed dependencies";

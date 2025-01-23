@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-LRVZPAS4V5PtrqyOkKUfrZuwLqPZbLoyjn2DPxCFE2o=";
   };
 
-  cargoHash = "sha256-CtVyRwfIS8R48LUecKXoak+HHB5yNZ5RgguIWOhyFA8=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-tLMZQb05UPYVHH7b1+qtxalaLRMAWEDJ1Nkm9UqoApg=";
 
   meta = {
     homepage = "https://github.com/areif-dev/river-bsp-layout";

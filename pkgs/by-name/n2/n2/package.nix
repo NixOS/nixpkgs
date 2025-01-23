@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage {
     hash = "sha256-svJPcriSrqloJlr7pIp/k84O712l4ZEPlSr58GPANXY=";
   };
 
-  cargoHash = "sha256-jrIo0N3o2fYe3NgNG33shkMd0rJxi5evtidCL9BcfVc=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-bVvtTsaLnsmfzv2wMFx81a2ef91pj8XGtXhj8X9WFlc=";
 
   meta = with lib; {
     homepage = "https://github.com/evmar/n2";

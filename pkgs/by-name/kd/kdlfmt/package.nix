@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-XqcexHeXXVfNoIu0h0Ooxlkm/FaDh/ctkH3cod1mlwY=";
   };
 
-  cargoHash = "sha256-ZlaILIVG3gLVFGqv1cozDtbHcL+dxUJXq/DvuJ077O8=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-ptsymAtW4hn0ureox1i+GObIWyhPuSqT3GcKUBKnXC4=";
 
   meta = {
     description = "Formatter for kdl documents";

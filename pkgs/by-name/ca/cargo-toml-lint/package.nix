@@ -13,7 +13,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-U3y9gnFvkqJmyFqRAUQorJQY0iRzAE9UUXzFmgZIyaM=";
   };
 
-  cargoHash = "sha256-ujdekIucqes2Wya4jwTMLstb8JMptbAlqYhgMxfp2gg=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-ymf91oCLOY5vo1pncCT83j3k8wyLEwAl3/8lnAyPdzI=";
 
   meta = with lib; {
     description = "Simple linter for Cargo.toml manifests";

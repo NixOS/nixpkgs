@@ -19,7 +19,8 @@ rustPlatform.buildRustPackage rec {
     ./test-exe.patch
   ];
 
-  cargoHash = "sha256-mmhTG3WXVjIKtaz2xP9aYI9GQNTbx4l3c6UgKSMgQJU=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-gJj+4NAtvSpAlX3q2GEQh1CgqKhw5vd6huPrV8NRsiE=";
 
   meta = {
     description = "Implementation of BLAKE3 verified streaming";

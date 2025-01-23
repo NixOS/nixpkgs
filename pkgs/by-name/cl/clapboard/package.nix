@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-dXlUOIYgptYqUIIC7batc0TVQeP89i8vizwYSIUlzGA=";
   };
 
-  cargoHash = "sha256-Ll2fpH0v3ZWizrl6Mip0gaPCHlQAdddh9F9bNXveb/0=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-TcOu+wReDfQl6pbRJjB/mG7VY65pIyyvSBxbj6RhNlU=";
 
   meta = with lib; {
     description = "Wayland clipboard manager that will make you clap";

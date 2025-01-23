@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-gxqUMtONjYPjSmxyguE9/GBC91PUK1rdFGsISGaSe44=";
   };
 
-  cargoHash = "sha256-pMYqIl0Td2awAxe3BRglBcOychwTmFZ+pZV0QOT0CL4=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-OZzelg7UZiCcPXUNbmN5gwL5RctiVWseQIZzOaJdFSU=";
 
   meta = with lib; {
     description = "CLI tool to insert spacers when command output stops";

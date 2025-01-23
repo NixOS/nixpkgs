@@ -22,7 +22,8 @@ rustPlatform.buildRustPackage rec {
   # requires network
   checkFlags = [ "--skip=tools::tests::download_and_install_binaries" ];
 
-  cargoHash = "sha256-m09ZV0Z4bNyAfO6XNiDKyqMeqv2/tx4vpQnWlesCW2A=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-MkH0khm4b/xumrzwBfwq4CbBgqeL71iag9WTOoi/IOw=";
 
   meta = with lib; {
     homepage = "https://github.com/trunk-rs/trunk";

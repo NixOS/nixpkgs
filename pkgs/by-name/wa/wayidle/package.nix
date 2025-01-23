@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-7hFk/YGOQ5+gQy6pT5DRgMLThQ1vFAvUvdHekTyzIRU=";
   };
 
-  cargoHash = "sha256-PohfLmUoK+2a7Glnje4Rbym2rvzydUJAYW+edOj7qeo=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-WnEIzcdgX5mFF2/GHykV5ATlr8lSqblvmbv1NnOEaiU=";
 
   meta = with lib; {
     description = "Execute a program when a Wayland compositor reports being N seconds idle";

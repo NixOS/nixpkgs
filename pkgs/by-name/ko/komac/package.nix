@@ -30,7 +30,8 @@ rustPlatform.buildRustPackage {
 
   pname = "komac";
 
-  cargoHash = "sha256-IM+swMrLoHeY/sk9w6CB66IGCNNioVJzNyKKtXimN5g=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-UBVjZyHv+qLdDFD01BnrlMMGpWN8QwmkXqrntIVm6rA=";
 
   nativeBuildInputs =
     [

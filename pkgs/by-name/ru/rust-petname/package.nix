@@ -14,7 +14,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-KP+GdGlwLHcKE8nAmFr2wHbt5RD9Ptpiz1X5HgJ6BgU=";
   };
 
-  cargoHash = "sha256-R1Xahr9R4G8Tr2cGRJ2oydVaLohPz2VM6tnbtE8Hysk=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-gZxZeirvGHwm8C87HdCBYr30+0bbjwnWxIQzcLgl3iQ=";
 
   meta = with lib; {
     description = "Generate human readable random names";

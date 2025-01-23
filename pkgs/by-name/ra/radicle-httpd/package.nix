@@ -25,7 +25,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   sourceRoot = "${src.name}/radicle-httpd";
-  cargoHash = "sha256-LmUZCu10RsuA8Lu3FjWcV8MzjX5FxBCV6+4zG0GEN2c=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-YE72rhJXPcsonpOQLs/gZn5RE3DkSAGhWtYvg4jQ2D8=";
 
   nativeBuildInputs = [
     asciidoctor
