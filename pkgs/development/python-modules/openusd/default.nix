@@ -48,6 +48,8 @@ let
   pyside-tools-uic = writeShellScriptBin "pyside6-uic" ''
     exec ${qt6.qtbase}/libexec/uic -g python "$@"
   '';
+
+  stdenv = python.stdenv;
 in
 
 buildPythonPackage rec {
@@ -61,8 +63,6 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-slBJleeDi0mCVThty4NUX4M9vaCLV+E8rnp1Ab77TmE=";
   };
-
-  stdenv = python.stdenv;
 
   outputs = [ "out" ] ++ lib.optional withDocs "doc";
 
