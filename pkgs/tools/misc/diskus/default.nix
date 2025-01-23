@@ -19,7 +19,8 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
-  cargoHash = "sha256-7xGt+HDX20Bxwdff0Ca/D6lcT3baumeiUmIPXSh5NYM=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-keBnhE4ltOVMEuxPifiB2EAHk32u3PqaPGTeVexVXWM=";
 
   meta = with lib; {
     description = "Minimal, fast alternative to 'du -sh'";

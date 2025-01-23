@@ -21,7 +21,8 @@ let
     pname = "sg-nvim-rust";
     inherit version src;
 
-    cargoHash = "sha256-t0+0Zw8NjCD1VB1hTrSjOa1130IVanoTALdFoTloFe4=";
+    useFetchCargoVendor = true;
+    cargoHash = "sha256-yY/5w2ztmTKJAYDxBJND8itCOwRNi1negiFq3PyFaSM=";
 
     nativeBuildInputs = [ pkg-config ];
 

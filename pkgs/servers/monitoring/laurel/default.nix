@@ -16,7 +16,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-mp1XTFD6mvH3RzvzvnJ58iJ6/EjENKYSzOavC2rVixs=";
   };
 
-  cargoHash = "sha256-F5yMNm1JaE9q0NQJ3PDmPlW4WdjfyJj/J9er18acsKw=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-hqOtICFufmx7mNzinPpj2/abjKINR4QGoNZrk5I3GIQ=";
 
   postPatch = ''
     # Upstream started to redirect aarch64-unknown-linux-gnu to aarch64-linux-gnu-gcc
