@@ -12,7 +12,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "gurk-rs";
-  version = "0.5.1";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "boxdot";
