@@ -50,7 +50,8 @@ rustPlatform.buildRustPackage rec {
     popd
   '';
 
-  cargoHash = "sha256-4PprZdTIcYa8y7FwQVrG0ZBg7N/Xe6HDt/z6ZmaHd5Y=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-LWatmnmLBDf4BFq5RMQBbN4wmptYuz3xqyzz6gJGzX8=";
 
   useNextest = true;
 

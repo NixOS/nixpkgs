@@ -19,7 +19,8 @@ rustPlatform.buildRustPackage rec {
     Security
   ];
 
-  cargoHash = "sha256-UqPvvqX+QHFiRil2XadiHyO1EMA51IAUGk6cNH3um54=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-W800jepxDv6OjbcxRKphAnDU2OuBGGGSLELe8gAfTr8=";
 
   meta = with lib; {
     description = "Cargo command to create the README.md from your crate's documentation";

@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-2a3WJTNIMqWnTlHB+2U/6ifuoecbOlTP6e7YjD/UvPM=";
   };
 
-  cargoHash = "sha256-Qf+QYOIBmSgax7p5K32SkaDT0MoKUY4TkxLbf/ZbM+U=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Ve8s+LLjJiP/I+A/X23CnGiRsbfz5sxFr6kySAgYTyE=";
 
   meta = with lib; {
     description = "Pandoc filter to render math equations using KaTeX";

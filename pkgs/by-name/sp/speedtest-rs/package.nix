@@ -31,7 +31,8 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  cargoHash = "sha256-0YPCBzidE1+LgIYk457eSoerLvQuuZs9cTd7uUt1Lr8=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-T8OG6jmUILeRmvPLjGDFlJyBm87Xdgy4bw4n7V0BQMk=";
 
   # Fail for unclear reasons (only on darwin)
   checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [

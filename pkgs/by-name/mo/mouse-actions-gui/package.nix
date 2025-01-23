@@ -58,7 +58,8 @@ rustPlatform.buildRustPackage rec {
   cargoRoot = "src-tauri";
   buildAndTestSubdir = cargoRoot;
 
-  cargoHash = "sha256-H8TMpYFJWp227jPA5H2ZhSqTMiT/U6pT6eLyjibuoLU=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-G5PQWPcPOVhq11BQIplbB3mLAGFCVm+vQ4eM4/5MFwI=";
 
   postInstall = ''
     install -Dm644 ${./80-mouse-actions.rules} $out/etc/udev/rules.d/80-mouse-actions.rules

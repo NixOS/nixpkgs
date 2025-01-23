@@ -18,7 +18,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-iT6kRzD+w7cb7ZjMt7NfkqwFJOzbt6kxc5vDjI7By84=";
   };
 
-  cargoHash = "sha256-y7yIgM4pIvqsX7LuLU/6P/9oNxsJrg/o/4CqqJ8uitU=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-48BuZUPY3VH5QmwiNtGVg4BHBvpiBr+Bg98WWfseH0I=";
 
   postInstall = ''
     wrapProgram $out/bin/lazyjj \

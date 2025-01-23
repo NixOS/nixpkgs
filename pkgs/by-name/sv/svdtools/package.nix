@@ -13,7 +13,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-cZLLpFYjKIF4bhZJWXFUpTSKSUOWkLZ0DTQ0PpZnPIg=";
   };
 
-  cargoHash = "sha256-Pt810QwfO+b6L5GYtzDAxIIuD/qv9inGMJAGjVIVUtM=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-UEXFkiz4brOXGDa0Ffea712Ng5E8t/yBm4H8y7Lz9Mc=";
 
   meta = with lib; {
     description = "Tools to handle vendor-supplied, often buggy SVD files";

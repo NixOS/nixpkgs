@@ -20,7 +20,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-2fBajVFpmgNHb90NbK59yUeaYLWR7rhQxpce9Tq1uQU=";
   };
 
-  cargoHash = "sha256-54KD20C1oFK2KlH6aCwvjT4tf4p15FJV5y6pJUoQXG0=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-WViLfoPOFQz2zod2ZSWgmX5VqYiXKvdBUUqPPt9ereE=";
 
   env.YAZI_GEN_COMPLETIONS = true;
   env.VERGEN_GIT_SHA = "Nixpkgs";

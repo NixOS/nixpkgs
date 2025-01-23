@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-pzGTKswETm7RR0up1eSWC+X633rsVmEAJ3DYM8z6paQ=";
   };
 
-  cargoHash = "sha256-FjggpBTzxj9AOJjUq5PmbuE/ImmTMpxN0se9uxRy4KQ=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-J7uibeoIKLC3jo5TstzC8udK+miAA52321eapOHVzbM=";
 
   cargoBuildFlags = [ "--package ${pname}" ];
   # cargoTestFlags is not used because genemichaels is tightly coupled to the

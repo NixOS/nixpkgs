@@ -14,7 +14,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-qSY12WjSPMoWqJHkYnPvhCtZAuI3eq+sA+/Yr9Yssp8=";
   };
 
-  cargoHash = "sha256-dgOEztAlX823M+bc+vnrOvmeWtxxCsCR6+k1Yho82EM=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-nMo8qO0dKwtZJY78+r4kLrR9Cw6Eu5Hq8IPp6ilJqfk=";
 
   postInstall = ''
     mv $out/bin/svgbob_cli $out/bin/svgbob
