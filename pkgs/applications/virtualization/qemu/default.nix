@@ -31,6 +31,7 @@
 , uringSupport ? stdenv.hostPlatform.isLinux && !userOnly, liburing
 , canokeySupport ? !minimal, canokey-qemu
 , capstoneSupport ? !minimal, capstone
+, u2fSupport ? !minimal, libu2f-emu
 , pluginsSupport ? !stdenv.hostPlatform.isStatic
 , enableDocs ? !minimal || toolsOnly
 , enableTools ? !minimal || toolsOnly
@@ -122,7 +123,8 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals smbdSupport [ samba ]
     ++ lib.optionals uringSupport [ liburing ]
     ++ lib.optionals canokeySupport [ canokey-qemu ]
-    ++ lib.optionals capstoneSupport [ capstone ];
+    ++ lib.optionals capstoneSupport [ capstone ]
+    ++ lib.optionals u2fSupport [ libu2f-emu ];
 
   dontUseMesonConfigure = true; # meson's configurePhase isn't compatible with qemu build
   dontAddStaticConfigureFlags = true;
@@ -192,6 +194,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional uringSupport "--enable-linux-io-uring"
     ++ lib.optional canokeySupport "--enable-canokey"
     ++ lib.optional capstoneSupport "--enable-capstone"
+    ++ lib.optional u2fSupport "--enable-u2f"
     ++ lib.optional (!pluginsSupport) "--disable-plugins"
     ++ lib.optional (!enableBlobs) "--disable-install-blobs"
     ++ lib.optional userOnly "--disable-system"
