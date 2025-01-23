@@ -340,6 +340,10 @@ stdenvNoCC.mkDerivation {
   dontConfigure = true;
   enableParallelBuilding = true;
 
+  # TODO(@connorbaker):
+  # This is a quick fix unblock builds broken by https://github.com/NixOS/nixpkgs/pull/370750.
+  dontCheckForBrokenSymlinks = true;
+
   unpackPhase = ''
     src=$PWD
   '';
