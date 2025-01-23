@@ -72,7 +72,7 @@ nixLog() {
 
 # Identical to nixLog, but additionally prefixed by the logLevel.
 # NOTE: This function is only every meant to be called from the nix*Log family of functions.
-nixLogWithLevel() {
+_nixLogWithLevel() {
   # Return a value explicitly instead of the implicit return of the last command (result of the test).
   [[ -z ${NIX_LOG_FD-} || ${NIX_DEBUG:-0} -lt ${1:?} ]] && return 0
 
@@ -87,7 +87,7 @@ nixLogWithLevel() {
   6) logLevel=DEBUG ;;
   7) logLevel=VOMIT ;;
   *)
-    echo "nixLogWithLevel: called with invalid log level: ${1:?}" >&"$NIX_LOG_FD"
+    echo "_nixLogWithLevel: called with invalid log level: ${1:?}" >&"$NIX_LOG_FD"
     return 1
     ;;
   esac
@@ -107,49 +107,49 @@ nixLogWithLevel() {
 # All provided arguments are joined with a space then directed to $NIX_LOG_FD, if it's set.
 # Corresponds to `Verbosity::lvlError` in the Nix source.
 nixErrorLog() {
-  nixLogWithLevel 0 "$*"
+  _nixLogWithLevel 0 "$*"
 }
 
 # All provided arguments are joined with a space then directed to $NIX_LOG_FD, if it's set.
 # Corresponds to `Verbosity::lvlWarn` in the Nix source.
 nixWarnLog() {
-  nixLogWithLevel 1 "$*"
+  _nixLogWithLevel 1 "$*"
 }
 
 # All provided arguments are joined with a space then directed to $NIX_LOG_FD, if it's set.
 # Corresponds to `Verbosity::lvlNotice` in the Nix source.
 nixNoticeLog() {
-  nixLogWithLevel 2 "$*"
+  _nixLogWithLevel 2 "$*"
 }
 
 # All provided arguments are joined with a space then directed to $NIX_LOG_FD, if it's set.
 # Corresponds to `Verbosity::lvlInfo` in the Nix source.
 nixInfoLog() {
-  nixLogWithLevel 3 "$*"
+  _nixLogWithLevel 3 "$*"
 }
 
 # All provided arguments are joined with a space then directed to $NIX_LOG_FD, if it's set.
 # Corresponds to `Verbosity::lvlTalkative` in the Nix source.
 nixTalkativeLog() {
-  nixLogWithLevel 4 "$*"
+  _nixLogWithLevel 4 "$*"
 }
 
 # All provided arguments are joined with a space then directed to $NIX_LOG_FD, if it's set.
 # Corresponds to `Verbosity::lvlChatty` in the Nix source.
 nixChattyLog() {
-  nixLogWithLevel 5 "$*"
+  _nixLogWithLevel 5 "$*"
 }
 
 # All provided arguments are joined with a space then directed to $NIX_LOG_FD, if it's set.
 # Corresponds to `Verbosity::lvlDebug` in the Nix source.
 nixDebugLog() {
-  nixLogWithLevel 6 "$*"
+  _nixLogWithLevel 6 "$*"
 }
 
 # All provided arguments are joined with a space then directed to $NIX_LOG_FD, if it's set.
 # Corresponds to `Verbosity::lvlVomit` in the Nix source.
 nixVomitLog() {
-  nixLogWithLevel 7 "$*"
+  _nixLogWithLevel 7 "$*"
 }
 
 # Log a hook, to be run before the hook is actually called.
