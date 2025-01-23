@@ -25,7 +25,7 @@
   sourceHighlight,
   libiconv,
 
-  pythonSupport ? stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.hostPlatform.isCygwin,
+  pythonSupport ? !stdenv.hostPlatform.isCygwin,
   python3 ? null,
   enableDebuginfod ? lib.meta.availableOn stdenv.hostPlatform elfutils,
   elfutils,
@@ -75,6 +75,7 @@ stdenv.mkDerivation rec {
   patches =
     [
       ./debug-info-from-env.patch
+      ./fix-cross-compile-python.patch
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       ./darwin-target-match.patch
@@ -167,6 +168,7 @@ stdenv.mkDerivation rec {
       "--with-auto-load-safe-path=${builtins.concatStringsSep ":" safePaths}"
     ]
     ++ lib.optional (!pythonSupport) "--without-python"
+    ++ lib.optional pythonSupport "--with-python=${python3.pythonOnBuildForHost.interpreter}"
     ++ lib.optional stdenv.hostPlatform.isMusl "--disable-nls"
     ++ lib.optional stdenv.hostPlatform.isStatic "--disable-inprocess-agent"
     ++ lib.optional enableDebuginfod "--with-debuginfod=yes"
