@@ -1,0 +1,29 @@
+--- a/build.xml	(revision 4555)
++++ a/build.xml	(working copy)
+@@ -228,7 +228,7 @@
+ 	</target>
+ 
+ 	<!-- Compile the product itself (no tests). -->
+-	<target name="compile" depends="prepare, resolve-compile"
++	<target name="compile" depends="prepare"
+ 					description="main compilation">
+ 
+ 		<javac srcdir="${src}" destdir="${build.classes}" encoding="utf-8" debug="true" includeantruntime="false">
+@@ -263,7 +263,7 @@
+ 	</target>
+ 
+ 	<!-- Compile the test classes -->
+-	<target name="build-test" depends="build, resolve-test">
++	<target name="build-test" depends="build">
+ 		<mkdir dir="${build.test}" />
+ 		<javac srcdir="${test}" destdir="${build.test}" encoding="utf-8" debug="true" includeantruntime="false">
+ 			<include name="**/*.java" />
+@@ -271,7 +271,7 @@
+ 		</javac>
+ 	</target>
+ 
+-	<target name="test" depends="build-test, obtain-test-input-files" description="Run the junit tests">
++	<target name="test" depends="build-test" description="Run the junit tests">
+ 		<mkdir dir="tmp/report"/>
+ 		<junit printsummary="yes" failureproperty="junit.failure" forkmode="once">
+ 

@@ -1,0 +1,94 @@
+diff --git a/tests/test_inspect.py b/tests/test_inspect.py
+index 98d6592..3a2a1f2 100644
+--- a/tests/test_inspect.py
++++ b/tests/test_inspect.py
+@@ -8,6 +8,7 @@ import unittest2 as unittest
+ 
+ import funcsigs as inspect
+ 
++import platform
+ 
+ class TestSignatureObject(unittest.TestCase):
+     @staticmethod
+@@ -409,7 +410,7 @@ def test_signature_on_decorated(self):
+                       Ellipsis))
+ """)
+ 
+-    if sys.version_info[0] > 2:
++    if sys.version_info[0] > 2 and platform.python_implementation() != "PyPy":
+         exec("""
+ def test_signature_on_class(self):
+     class C:
+@@ -493,41 +494,44 @@ def test_signature_on_class(self):
+                       Ellipsis))
+ """)
+ 
+-    def test_signature_on_callable_objects(self):
+-        class Foo(object):
+-            def __call__(self, a):
+-                pass
++    if platform.python_implementation() != "PyPy":
++        exec("""
++def test_signature_on_callable_objects(self):
++    class Foo(object):
++        def __call__(self, a):
++            pass
+ 
+-        self.assertEqual(self.signature(Foo()),
+-                         ((('a', Ellipsis, Ellipsis, "positional_or_keyword"),),
+-                          Ellipsis))
++    self.assertEqual(self.signature(Foo()),
++                     ((('a', Ellipsis, Ellipsis, "positional_or_keyword"),),
++                      Ellipsis))
+ 
+-        class Spam(object):
+-            pass
+-        with self.assertRaisesRegex(TypeError, "is not a callable object"):
+-            inspect.signature(Spam())
++    class Spam(object):
++        pass
++    with self.assertRaisesRegex(TypeError, "is not a callable object"):
++        inspect.signature(Spam())
+ 
+-        class Bar(Spam, Foo):
+-            pass
++    class Bar(Spam, Foo):
++        pass
+ 
+-        self.assertEqual(self.signature(Bar()),
+-                         ((('a', Ellipsis, Ellipsis, "positional_or_keyword"),),
+-                          Ellipsis))
++    self.assertEqual(self.signature(Bar()),
++                     ((('a', Ellipsis, Ellipsis, "positional_or_keyword"),),
++                      Ellipsis))
+ 
+-        class ToFail(object):
+-            __call__ = type
+-        with self.assertRaisesRegex(ValueError, "not supported by signature"):
+-            inspect.signature(ToFail())
++    class ToFail(object):
++        __call__ = type
++    with self.assertRaisesRegex(ValueError, "not supported by signature"):
++        inspect.signature(ToFail())
+ 
+-        if sys.version_info[0] < 3:
+-            return
++    if sys.version_info[0] < 3:
++        return
+ 
+-        class Wrapped(object):
+-            pass
+-        Wrapped.__wrapped__ = lambda a: None
+-        self.assertEqual(self.signature(Wrapped),
+-                         ((('a', Ellipsis, Ellipsis, "positional_or_keyword"),),
+-                          Ellipsis))
++    class Wrapped(object):
++        pass
++    Wrapped.__wrapped__ = lambda a: None
++    self.assertEqual(self.signature(Wrapped),
++                     ((('a', Ellipsis, Ellipsis, "positional_or_keyword"),),
++                      Ellipsis))
++""")
+ 
+     def test_signature_on_lambdas(self):
+         self.assertEqual(self.signature((lambda a=10: a)),

@@ -1,0 +1,87 @@
+diff '--color=auto' -ur '--color=never' a/tests/libqtdbustest/TestDBusTestRunner.cpp b/tests/libqtdbustest/TestDBusTestRunner.cpp
+--- a/tests/libqtdbustest/TestDBusTestRunner.cpp	2023-01-20 21:36:16.948292559 +0100
++++ b/tests/libqtdbustest/TestDBusTestRunner.cpp	2023-01-20 21:55:40.554530221 +0100
+@@ -44,7 +44,7 @@
+ TEST_F(TestDBusTestRunner, StartsSessionService) {
+ 	QSharedPointer<QProcessDBusService> process(
+ 			new QProcessDBusService("test.session.name",
+-					QDBusConnection::SessionBus, "/usr/bin/python3",
++					QDBusConnection::SessionBus, "python3",
+ 					QStringList() << "-m" << "dbusmock" << "test.session.name"
+ 							<< "/test/object" << "test.Interface"));
+ 
+@@ -58,15 +58,14 @@
+ 	pgrep.waitForFinished();
+ 	pgrep.waitForReadyRead();
+ 
+-	EXPECT_EQ(
+-			"/usr/bin/python3 -m dbusmock test.session.name /test/object test.Interface",
+-			QString::fromUtf8(pgrep.readAll().trimmed()).toStdString());
++	EXPECT_TRUE(
++			pgrep.readAll().contains("python3 -m dbusmock test.session.name /test/object test.Interface"));
+ }
+ 
+ TEST_F(TestDBusTestRunner, StartsSystemService) {
+ 	QSharedPointer<QProcessDBusService> process(
+ 			new QProcessDBusService("test.system.name",
+-					QDBusConnection::SystemBus, "/usr/bin/python3",
++					QDBusConnection::SystemBus, "python3",
+ 					QStringList() << "-m" << "dbusmock" << "-s"
+ 							<< "test.system.name" << "/test/object"
+ 							<< "test.Interface"));
+@@ -81,9 +80,8 @@
+ 	pgrep.waitForFinished();
+ 	pgrep.waitForReadyRead();
+ 
+-	EXPECT_EQ(
+-			"/usr/bin/python3 -m dbusmock -s test.system.name /test/object test.Interface",
+-			QString::fromUtf8(pgrep.readAll().trimmed()).toStdString());
++	EXPECT_TRUE(
++			pgrep.readAll().contains("python3 -m dbusmock -s test.system.name /test/object test.Interface"));
+ }
+ 
+ TEST_F(TestDBusTestRunner, SetsEnvironmentVariables) {
+diff '--color=auto' -ur '--color=never' a/tests/libqtdbustest/TestQProcessDBusService.cpp b/tests/libqtdbustest/TestQProcessDBusService.cpp
+--- a/tests/libqtdbustest/TestQProcessDBusService.cpp	2023-01-20 21:36:16.948292559 +0100
++++ b/tests/libqtdbustest/TestQProcessDBusService.cpp	2023-01-20 21:54:34.633384937 +0100
+@@ -45,7 +45,7 @@
+ 
+ TEST_F(TestQProcessDBusService, WaitsForServiceAppeared) {
+ 	QProcessDBusService process("test.name", QDBusConnection::SessionBus,
+-			"/usr/bin/python3",
++			"python3",
+ 			QStringList() << "-m" << "dbusmock" << "test.name" << "/test/object"
+ 					<< "test.Interface");
+ 
+@@ -58,14 +58,13 @@
+ 	pgrep.waitForFinished();
+ 	pgrep.waitForReadyRead();
+ 
+-	EXPECT_EQ(
+-			"/usr/bin/python3 -m dbusmock test.name /test/object test.Interface",
+-			QString::fromUtf8(pgrep.readAll().trimmed()).toStdString());
++	EXPECT_TRUE(
++			pgrep.readAll().contains("python3 -m dbusmock test.name /test/object test.Interface"));
+ }
+ 
+ TEST_F(TestQProcessDBusService, ThrowsErrorForFailToStart) {
+ 	QProcessDBusService process("test.name", QDBusConnection::SessionBus,
+-			"/usr/bin/python3",
++			"python3",
+ 			QStringList() << "-m" << "dbusmock" << "not.test.name"
+ 					<< "/test/object" << "test.Interface");
+ 
+diff '--color=auto' -ur '--color=never' a/tests/libqtdbustest/TestSuicidalProcess.cpp b/tests/libqtdbustest/TestSuicidalProcess.cpp
+--- a/tests/libqtdbustest/TestSuicidalProcess.cpp	2023-01-20 21:36:16.948292559 +0100
++++ b/tests/libqtdbustest/TestSuicidalProcess.cpp	2023-01-20 21:55:07.219951081 +0100
+@@ -51,9 +51,7 @@
+ 	pgrep.waitForFinished();
+ 	pgrep.waitForReadyRead();
+
+-	EXPECT_TRUE(QString::fromUtf8(pgrep.readAll().trimmed())
+-                .toStdString()
+-                .find("sleep 5") != std::string::npos);
++	EXPECT_TRUE(pgrep.readAll().contains("sleep 5"));
+ }
+ 
+ } // namespace

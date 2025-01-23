@@ -1,0 +1,24 @@
+commit a5fde72bd15e0baba008ea54270a1ffe017544a0
+Author: sternenseemann <sternenseemann@systemli.org>
+Date:   Tue Oct 5 18:17:20 2021 +0200
+
+    Don't use pypi distributions of build tools
+    
+    We want to use regular cmake and ninja and not the pypi projects which
+    somehow wrap and vendor a version of the proper tool.
+
+diff --git a/setup.py b/setup.py
+index 973e2826..dba58766 100644
+--- a/setup.py
++++ b/setup.py
+@@ -198,9 +198,7 @@ def main():
+           setup_requires=[
+               'wheel',
+               'setuptools_scm',
+-              'scikit-build',
+-              'cmake',
+-              'ninja'
++              'scikit-build'
+           ],
+           tests_require=[
+               'pytest',
