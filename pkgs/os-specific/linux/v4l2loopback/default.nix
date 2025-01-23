@@ -28,7 +28,7 @@ in stdenv.mkDerivation {
 
   outputs = [ "out" "bin" ];
 
-  makeFlags = kernel.makeFlags ++ [
+  makeFlags = kernel.moduleMakeFlags ++ [
     "KERNELRELEASE=${kernel.modDirVersion}"
     "KERNEL_DIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];

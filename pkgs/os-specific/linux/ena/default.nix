@@ -23,7 +23,7 @@ stdenv.mkDerivation {
   hardeningDisable = [ "pic" ];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
-  makeFlags = kernel.makeFlags;
+  makeFlags = kernel.moduleMakeFlags;
 
   env.KERNEL_BUILD_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
 
