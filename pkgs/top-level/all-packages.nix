@@ -314,6 +314,10 @@ with pkgs;
 
   coolercontrol = recurseIntoAttrs (callPackage ../applications/system/coolercontrol { });
 
+  curv = callPackage ../by-name/cu/curv/package.nix {
+    openexr = openexr_3;
+  };
+
   databricks-sql-cli = python3Packages.callPackage ../applications/misc/databricks-sql-cli { };
 
   deck = callPackage ../by-name/de/deck/package.nix {
