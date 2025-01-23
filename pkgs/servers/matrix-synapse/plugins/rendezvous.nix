@@ -22,10 +22,10 @@ buildPythonPackage rec {
     cp ${./rendezvous-Cargo.lock} Cargo.lock
   '';
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src postPatch;
     name = "${pname}-${version}";
-    hash = "sha256-TyxDq6YxZUArRj5gpjB1afDQgtUlCVer3Uhq6YKvVYM=";
+    hash = "sha256-CDUyH08s96xUy0VhK+4ym0w9IgAq9P1UjUipVjlpl9c=";
   };
 
   nativeBuildInputs =
