@@ -58,11 +58,9 @@ rec {
   stagingFull = full.override { wineRelease = "staging"; };
 
   wayland = base.override {
-    wineRelease = "wayland";
-    waylandSupport = true;
+    x11Support = false;
   };
   waylandFull = full.override {
-    wineRelease = "wayland";
-    waylandSupport = true;
+    x11Support = false;
   };
 }
