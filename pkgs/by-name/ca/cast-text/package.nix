@@ -19,6 +19,6 @@ buildGoModule rec {
     description = "Zero latency, easy-to-use full-text news terminal reader";
     homepage = "https://github.com/piqoni/cast-text";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ darwincereskax ];
+    maintainers = with lib.maintainers; [ darwincereska ];
   };
 }
