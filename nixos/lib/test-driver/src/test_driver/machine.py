@@ -107,18 +107,19 @@ def _preprocess_screenshot(screenshot_path: str, negate: bool = False) -> str:
         "1",
         "-posterize",
         "3",
-        "-gamma",
-        "100",
-        "-blur",
-        "1x65535",
     ]
-
     out_file = screenshot_path
 
     if negate:
         magick_args.append("-negate")
         out_file += ".negative"
 
+    magick_args += [
+        "-gamma",
+        "100",
+        "-blur",
+        "1x65535",
+    ]
     out_file += ".png"
 
     ret = subprocess.run(
