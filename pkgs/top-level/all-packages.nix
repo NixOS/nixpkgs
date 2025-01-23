@@ -1256,10 +1256,6 @@ with pkgs;
     pythonPackages = python3Packages;
   };
 
-  git-workspace = callPackage ../applications/version-management/git-workspace {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
   gitlint = python3Packages.callPackage ../applications/version-management/gitlint { };
 
   gitmux = callPackage ../applications/version-management/gitmux { buildGoModule = buildGo122Module; };
