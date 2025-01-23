@@ -1,21 +1,35 @@
-{ lib, pkgs, ... }:
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}:
 let
-  preSwitchCheckScript =
-    set:
-    lib.concatLines (
-      lib.mapAttrsToList (name: text: ''
-        # pre-switch check ${name}
-        (
-          ${text}
-        )
-        if [[ $? != 0 ]]; then
-          echo "Pre-switch check '${name}' failed"
-          exit 1
-        fi
-      '') set
-    );
+  preSwitchCheckScript = lib.concatLines (
+    lib.mapAttrsToList (name: text: ''
+      # pre-switch check ${name}
+      if ! (
+        ${text}
+      ) >&2 ; then
+        echo "Pre-switch check '${name}' failed" >&2
+        exit 1
+      fi
+    '') config.system.preSwitchChecks
+  );
 in
 {
+  options.system.preSwitchChecksScript = lib.mkOption {
+    type = lib.types.pathInStore;
+    internal = true;
+    readOnly = true;
+    default = lib.getExe (
+      pkgs.writeShellApplication {
+        name = "pre-switch-checks";
+        text = preSwitchCheckScript;
+      }
+    );
+  };
+
   options.system.preSwitchChecks = lib.mkOption {
     default = { };
     example = lib.literalExpression ''
@@ -33,12 +47,5 @@ in
     '';
 
     type = lib.types.attrsOf lib.types.str;
-
-    apply =
-      set:
-      set
-      // {
-        script = pkgs.writeShellScript "pre-switch-checks" (preSwitchCheckScript set);
-      };
   };
 }
