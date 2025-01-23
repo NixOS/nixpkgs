@@ -15,19 +15,19 @@ let
     owner = "ToruNiina";
     repo = "toml11";
     version = "4.2.0";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-NUuEgTpq86rDcsQnpG0IsSmgLT0cXhd1y32gT57QPAw=";
   };
 in
 stdenv.mkDerivation rec {
-  pname = "poac";
-  version = "0.10.1";
+  pname = "cabinpkg";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
-    owner = "poac-dev";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    sha256 = "sha256-uUVNM70HNJwrr38KB+44fNvLpWihoKyDpRj7d7kbo7k=";
+    owner = "cabinpkg";
+    repo = "cabin";
+    tag = version;
+    sha256 = "sha256-LIP99Shxu/lOdZ31KVA8RYawZ6dRLtXEGKZs1mUFCus=";
   };
 
   strictDeps = true;
@@ -44,30 +44,34 @@ stdenv.mkDerivation rec {
     curl
   ];
 
+  # Skip git cloning toml11
   preConfigure = ''
-    #Skip git clone toml11
     substituteInPlace Makefile \
-       --replace-fail "git clone" "\#git clone"
-    substituteInPlace Makefile \
-       --replace-fail "git -C" "\#git -c"
+       --replace-fail "git clone https://github.com/ToruNiina/toml11.git \$@" ":" \
+       --replace-fail "git -C \$@ reset --hard v4.2.0" ":"
   '';
 
   preBuild = ''
-    mkdir -p build-out/DEPS/
-    cp -rf ${toml11} build-out/DEPS/toml11
+    mkdir -p build/DEPS/
+    cp -rf ${toml11} build/DEPS/toml11
   '';
 
-  makeFlags = [ "RELEASE=1" ];
+  makeFlags = [
+    "RELEASE=1"
+    "COMMIT_HASH="
+    "COMMIT_SHORT_HASH="
+    "COMMIT_DATE="
+  ];
 
   installFlags = [ "PREFIX=${placeholder "out"}" ];
 
   meta = {
     broken = (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64);
-    homepage = "https://poac.dev";
+    homepage = "https://cabinpkg.com";
     description = "A package manager and build system for C++";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.qwqawawow ];
     platforms = lib.platforms.unix;
-    mainProgram = "poac";
+    mainProgram = "cabin";
   };
 }
