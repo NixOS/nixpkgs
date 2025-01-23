@@ -949,7 +949,13 @@ if [[ "$action" = switch || "$action" = boot || "$action" = test || "$action" = 
     if ! targetHostSudoCmd "${cmd[@]}" "$action"; then
         log "warning: error(s) occurred while switching to the new configuration"
         exit 1
+    else
+        echo -n "Done. The new configuration is " >&2
+        echo "$pathToConfig"
     fi
+elif [[ "$action" = build ]]; then
+    echo -n "Done. The new configuration is " >&2
+    echo "$pathToConfig"
 fi
 
 
