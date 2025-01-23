@@ -132,6 +132,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = stdenv.hostPlatform.isx86_64;
 
+  # TODO(@connorbaker):
+  # This is a quick fix to unblock builds broken by https://github.com/NixOS/nixpkgs/pull/370750.
+  # Fails due to dangling symlinks:
+  # bluez> ERROR: noBrokenSymlinks: the symlink $out/etc/bluetooth/main.conf points to a missing target /etc/bluetooth/main.conf
+  # bluez> ERROR: noBrokenSymlinks: the symlink $out/etc/bluetooth/input.conf points to a missing target /etc/bluetooth/input.conf
+  # bluez> ERROR: noBrokenSymlinks: the symlink $out/etc/bluetooth/network.conf points to a missing target /etc/bluetooth/network.conf
+  dontCheckForBrokenSymlinks = true;
+
   postInstall =
     let
       pythonPath = with python3Packages; [
