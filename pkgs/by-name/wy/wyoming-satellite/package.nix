@@ -21,14 +21,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "wyoming-satellite";
-  version = "1.2.0";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "wyoming-satellite";
     tag = "v${version}";
-    hash = "sha256-KIWhWE9Qaxs72fJ1LRTkvk6QtpBJOFlmZv2od69O15g=";
+    hash = "sha256-9UgfD0Hs/IgOszd/QBbe6DYY6kBWh7q/e57gghQ1/Bk=";
   };
 
   build-system = with python.pkgs; [
