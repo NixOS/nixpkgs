@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  unstableGitUpdater,
   fetchurl,
   rustPlatform,
   pkg-config,
@@ -57,6 +58,8 @@ rustPlatform.buildRustPackage {
   preCheck = ''
     rm -rf target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/build/
   '';
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = {
     description = "Open source web search engine hosted at stract.com targeted towards tinkerers and developers.";
