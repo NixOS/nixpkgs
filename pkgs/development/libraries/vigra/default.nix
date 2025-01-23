@@ -17,14 +17,14 @@
 let
   python = python3.withPackages (py: with py; [ numpy ]);
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vigra";
   version = "1.12.1";
 
   src = fetchFromGitHub {
     owner = "ukoethe";
     repo = "vigra";
-    tag = "Version-${lib.replaceStrings [ "." ] [ "-" ] version}";
+    tag = "Version-${lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version}";
     hash = "sha256-ZmHj1BSyoMBCuxI5hrRiBEb5pDUsGzis+T5FSX27UN8=";
   };
 
@@ -61,4 +61,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = platforms.unix;
   };
-}
+})
