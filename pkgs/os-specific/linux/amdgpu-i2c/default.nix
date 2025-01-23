@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/twifty/amd-gpu-i2c";
     downloadPage = "https://github.com/twifty/amd-gpu-i2c";
     description = "Exposes i2c interface to set colors on AMD GPUs";
-    broken = lib.versionOlder kernel.version "6.11.0";
+    broken = kernel.kernelOlder "6.11.0" || kernel.isLibre;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ thardin ];
