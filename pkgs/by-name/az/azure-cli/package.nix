@@ -54,6 +54,9 @@ let
       {
         format = "wheel";
         src = fetchurl { inherit url hash; };
+        passthru = {
+          updateScript = extensionUpdateScript { inherit pname; };
+        } // args.passthru or { };
         meta = {
           inherit description;
           inherit (azure-cli.meta) platforms maintainers;
@@ -67,13 +70,24 @@ let
         "url"
         "hash"
         "description"
+        "passthru"
         "meta"
       ])
     );
+  # Update script for azure cli extensions. Currently only works for manual extensions.
+  extensionUpdateScript =
+    { pname }:
+    [
+      "${lib.getExe azure-cli.extensions-tool}"
+      "--cli-version"
+      "${azure-cli.version}"
+      "--extension"
+      "${pname}"
+    ];
 
-  extensions-generated = lib.mapAttrs (name: ext: mkAzExtension ext) (
-    builtins.fromJSON (builtins.readFile ./extensions-generated.json)
-  );
+  extensions-generated = lib.mapAttrs (
+    name: ext: mkAzExtension (ext // { passthru.updateScript = [ ]; })
+  ) (builtins.fromJSON (builtins.readFile ./extensions-generated.json));
   extensions-manual = callPackages ./extensions-manual.nix {
     inherit mkAzExtension;
     python3Packages = python3.pkgs;
@@ -408,7 +422,6 @@ py.pkgs.toPythonApplication (
           }
           ''
             black --check --diff $src
-            # mypy --strict $src
             isort --profile=black --check --diff $src
 
             install -Dm755 $src $out/bin/extensions-tool
