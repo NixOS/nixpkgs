@@ -48,12 +48,25 @@ let
     lib.setFunctionArgs (
       args:
       if !(lib.isFunction args) && (args ? stdenv) then
-        f.override { stdenv = args.stdenv; } args
+        let
+          pos = builtins.unsafeGetAttrPos "stdenv" args;
+          deprecate = lib.warn "${toString pos.file}:${toString pos.line}:${toString pos.column}: Passing argument stdenv into buildPython* is deprecated. Pass into buildPython*.override instead.";
+        in
+        f.override {
+          stdenv = args.stdenv // {
+            mkDerivation = fpArgs: (args.stdenv.mkDerivation fpArgs).overrideAttrs (previousAttrs: {
+              name = deprecate previousAttrs.name;
+            });
+          };
+        } args
       else
         f args
     ) (removeAttrs (lib.functionArgs f) [ "stdenv" ])
     // {
       # Intentionally drop the effect of overrideStdenvCompat when calling `buildPython*.override`.
+      # Users can therefore remedy the warning caused by upstream projects
+      # using `buildPythonPackageCustom.override { /* stdenv = ...; */ }`
+      # or `custom-package.override (previousAttrs: { buildPythonPackage = previousAttrs.buildPythonPackage.override { /* stdenv = ...; */ }; })`
       inherit (f) override;
     };
 
