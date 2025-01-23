@@ -1397,6 +1397,7 @@ self: super: {
     pkgs.postgresqlTestHook
   ] super.users-postgresql-simple;
 
+  gargoyle = doJailbreak super.gargoyle;
   gargoyle-postgresql-nix = addBuildTool [pkgs.postgresql] super.gargoyle-postgresql-nix;
 
   # PortMidi needs an environment variable to have ALSA find its plugins:
@@ -1902,6 +1903,8 @@ self: super: {
       });
     } super.reflex);
 
+  reflex-gadt-api = doJailbreak super.reflex-gadt-api;
+
   # 2024-03-02: vty <5.39 - https://github.com/reflex-frp/reflex-ghci/pull/33
   reflex-ghci = assert super.reflex-ghci.version == "0.2.0.1"; doJailbreak super.reflex-ghci;
 
@@ -2084,7 +2087,7 @@ self: super: {
   # Need https://github.com/obsidiansystems/cli-extras/pull/12 and more
   cli-extras = doJailbreak super.cli-extras;
 
-  cli-git = addBuildTool pkgs.git super.cli-git;
+  cli-git = addBuildTool pkgs.git (doJailbreak super.cli-git);
 
   # Need https://github.com/obsidiansystems/cli-nix/pull/5 and more
   cli-nix = addBuildTools [
