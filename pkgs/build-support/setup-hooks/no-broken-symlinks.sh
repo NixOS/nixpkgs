@@ -45,6 +45,11 @@ noBrokenSymlinks() {
       symlinkTarget="$(realpath --no-symlinks --canonicalize-missing "$pathParent/$symlinkTarget")"
     fi
 
+    if [[ $symlinkTarget != "$NIX_STORE"/* ]]; then
+      nixInfoLog "symlink $path points outside the Nix store; ignoring"
+      continue
+    fi
+
     if [[ $path == "$symlinkTarget" ]]; then
       nixErrorLog "the symlink $path is reflexive $symlinkTarget"
       numReflexiveSymlinks+=1
