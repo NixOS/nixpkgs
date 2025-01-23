@@ -12,21 +12,22 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "ashell";
-  version = "0.3.1";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "MalpenZibo";
     repo = "ashell";
     tag = version;
-    hash = "sha256-QZe67kjyHzJkZFoAOQhntYsHvvuM6L1y2wtGYTwizd4=";
+    hash = "sha256-a0yvmAq/4TDe+W1FLeLPSLppX81G6fdAOhzDmDJg3II=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-iFg+xcdb0cMrrxmGr6VvbuD00eVknIlZeB7B7A1l4EI=";
+  cargoHash = "sha256-Vh/+4iApi+03ZmMIDSXc9Mn408v3wC+WlNJsXNcva+Q=";
 
   nativeBuildInputs = [
     pkg-config
     autoPatchelfHook
+    rustPlatform.bindgenHook
   ];
 
   runtimeDependencies = [
@@ -36,7 +37,6 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     libpulseaudio
-    rustPlatform.bindgenHook
     libxkbcommon
     pipewire
   ] ++ runtimeDependencies;
