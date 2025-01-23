@@ -667,6 +667,7 @@ package-maintainers:
     - minio-hs
     - smtp-mail
     - pdftotext
+    - warp-systemd
   wolfgangwalther:
     - postgrest
 
