@@ -32,7 +32,12 @@ let
   };
 in
 flutter324.buildFlutterApplication {
-  inherit pname version src;
+  inherit
+    pname
+    version
+    src
+    rustDep
+    ;
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
@@ -103,6 +108,8 @@ flutter324.buildFlutterApplication {
   extraWrapProgramArgs = ''
     --prefix LD_LIBRARY_PATH : "$out/app/${pname}/lib"
   '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     changelog = "https://github.com/kodjodevf/mangayomi/releases/tag/v${version}";
