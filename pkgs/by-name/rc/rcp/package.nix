@@ -8,13 +8,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rcp";
-  version = "0.15.0";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "wykurz";
     repo = "rcp";
     rev = "v${version}";
-    hash = "sha256-gFkrUqG3GXPAg9Zqv7Wr3axQ30axYGXw8bo+P1kmSJM=";
+    hash = "sha256-mMSO5twpuxiA6pMG/bNMn3WJjs3ZwuoOk62M0WIrRBk=";
   };
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
     ]
   );
 
-  cargoHash = "sha256-loS55mQUVbIm+5VcQnPf6olERNTm3dbnQu5SPXe6a8I=";
+  cargoHash = "sha256-bscQsFwR9CB8/TAXYUf7ftyj5ALSHud/LhUBJnQdYC8=";
 
   RUSTFLAGS = "--cfg tokio_unstable";
 
