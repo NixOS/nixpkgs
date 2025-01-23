@@ -1,5 +1,6 @@
 {
   buildNpmPackage,
+  frigate,
   src,
   version,
 }:
@@ -33,4 +34,6 @@ buildNpmPackage {
   installPhase = ''
     cp -rv dist/ $out
   '';
+
+  inherit (frigate) meta;
 }
