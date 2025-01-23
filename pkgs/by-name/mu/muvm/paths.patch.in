@@ -1,0 +1,40 @@
+diff --git a/crates/muvm/src/guest/mount.rs b/crates/muvm/src/guest/mount.rs
+index 3126ca0..35472d6 100644
+--- a/crates/muvm/src/guest/mount.rs
++++ b/crates/muvm/src/guest/mount.rs
+@@ -84,7 +84,7 @@ fn mount_fex_rootfs() -> Result<()> {
+     // Now we need to tell FEX about this. One of the FEX share directories has an unmounted rootfs
+     // and a Config.json telling FEX to use FUSE. Neither should be visible to the guest. Instead,
+     // we want to replace the folders and tell FEX to use our mounted rootfs
+-    for base in ["/usr/share/fex-emu", "/usr/local/share/fex-emu"] {
++    for base in ["@fex@/share/fex-emu"] {
+         if Path::new(base).exists() {
+             let json = format!("{{\"Config\":{{\"RootFS\":\"{dir_rootfs}\"}}}}\n");
+             let path = base.to_string() + "/Config.json";
+diff --git a/crates/muvm/src/monitor.rs b/crates/muvm/src/monitor.rs
+index 7628d83..bc43a5c 100644
+--- a/crates/muvm/src/monitor.rs
++++ b/crates/muvm/src/monitor.rs
+@@ -50,7 +50,7 @@ fn set_guest_pressure(server_port: u32, cookie: Uuid, pressure: GuestPressure) -
+     let wsf: u32 = pressure.into();
+     debug!("setting watermark_scale_factor to {wsf}");
+
+-    let command = PathBuf::from("/sbin/sysctl");
++    let command = PathBuf::from("@procps@/bin/sysctl");
+     let command_args = vec![format!("vm.watermark_scale_factor={}", wsf)];
+     let env = HashMap::new();
+     request_launch(server_port, cookie, command, command_args, env, 0, false)
+diff --git a/crates/muvm/src/server/bin/muvm-server.rs b/crates/muvm/src/server/bin/muvm-server.rs
+index b538091..dae8895 100644
+--- a/crates/muvm/src/server/bin/muvm-server.rs
++++ b/crates/muvm/src/server/bin/muvm-server.rs
+@@ -36,7 +36,7 @@ async fn tokio_main(cookie: String) -> Result<()> {
+         };
+         (
+             server_port,
+-            PathBuf::from("/bin/sleep"),
++            PathBuf::from("@coreutils@/bin/sleep"),
+             vec!["inf".to_string()],
+         )
+     } else {
+
