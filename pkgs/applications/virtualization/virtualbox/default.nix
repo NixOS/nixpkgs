@@ -74,8 +74,9 @@ let
   buildType = "release";
   # Use maintainers/scripts/update.nix to update the version and all related hashes or
   # change the hashes in extpack.nix and guest-additions/default.nix as well manually.
-  virtualboxVersion = "7.1.4";
-  virtualboxSha256 = "872e7a42b41f8558abbf887f1bdc7aac932bb88b2764d07cbce270cab57e3b5e";
+  virtualboxVersion = "7.1.6";
+  virtualboxSubVersion = "a";
+  virtualboxSha256 = "5a7b13066ec71990af0cc00a5eea9c7ec3c71ca5ed99bb549c85494ce2ea395d";
 
   kvmPatchVersion = "20241220";
   kvmPatchHash = "sha256-SYyD79iN6Sp/Mxat+ml3fee9X1vFUFyrwHPnQNboc1c=";
@@ -84,7 +85,9 @@ let
   # modsrc at all.
   withModsrc = !enableKvm;
 
-  virtualboxGuestAdditionsIso = callPackage guest-additions-iso/default.nix { };
+  virtualboxGuestAdditionsIso = callPackage guest-additions-iso/default.nix {
+    inherit virtualboxVersion;
+  };
 
   inherit (lib)
     optional
@@ -104,11 +107,12 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "virtualbox";
-  version = finalAttrs.virtualboxVersion;
+  version = "${finalAttrs.virtualboxVersion}${finalAttrs.virtualboxSubVersion}";
 
   inherit
     buildType
     virtualboxVersion
+    virtualboxSubVersion
     virtualboxSha256
     kvmPatchVersion
     kvmPatchHash
@@ -116,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
     ;
 
   src = fetchurl {
-    url = "https://download.virtualbox.org/virtualbox/${finalAttrs.virtualboxVersion}/VirtualBox-${finalAttrs.virtualboxVersion}.tar.bz2";
+    url = "https://download.virtualbox.org/virtualbox/${finalAttrs.virtualboxVersion}/VirtualBox-${finalAttrs.virtualboxVersion}${finalAttrs.virtualboxSubVersion}.tar.bz2";
     sha256 = finalAttrs.virtualboxSha256;
   };
 
