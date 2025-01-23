@@ -408,7 +408,6 @@ py.pkgs.toPythonApplication (
           }
           ''
             black --check --diff $src
-            # mypy --strict $src
             isort --profile=black --check --diff $src
 
             install -Dm755 $src $out/bin/extensions-tool
