@@ -5083,6 +5083,8 @@ self: super: with self; {
 
   gcovr = callPackage ../development/python-modules/gcovr { };
 
+  gcp-storage-emulator = callPackage ../development/python-modules/gcp-storage-emulator { };
+
   gcsa = callPackage ../development/python-modules/gcsa { };
 
   gcsfs = callPackage ../development/python-modules/gcsfs { };
@@ -7108,7 +7110,7 @@ self: super: with self; {
 
   langchain-openai = callPackage ../development/python-modules/langchain-openai { };
 
-  langchain-standard-tests = callPackage ../development/python-modules/langchain-standard-tests { };
+  langchain-tests = callPackage ../development/python-modules/langchain-tests { };
 
   langchain-text-splitters = callPackage ../development/python-modules/langchain-text-splitters { };
 

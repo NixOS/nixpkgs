@@ -7,6 +7,7 @@
   cubeb,
   curl,
   fetchFromGitHub,
+  fetchpatch,
   fmt_9,
   gamemode,
   glm,
@@ -65,6 +66,11 @@ stdenv.mkDerivation (finalAttrs: {
     # > SPIRV-Tools-opt
     ./0000-spirv-tools-opt-cmakelists.patch
     ./0001-glslang-cmake-target.patch
+    (fetchpatch {
+      name = "fix-building-against-boost-187.patch";
+      url = "https://github.com/cemu-project/Cemu/commit/2b0cbf7f6b6c34c748585d255ee7756ff592a502.patch";
+      hash = "sha256-jHB/9MWZ/oNfUgZtxtgkSN/OnRARSuGVfXFFB9ldDpI=";
+    })
   ];
 
   nativeBuildInputs = [
