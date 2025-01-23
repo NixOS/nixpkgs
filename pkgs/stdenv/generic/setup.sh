@@ -60,6 +60,7 @@ getAllOutputNames() {
 # the hook name if the caller was an implicit hook), then directed to $NIX_LOG_FD, if it's set.
 nixLog() {
   # Return a value explicitly instead of the implicit return of the last command (result of the test).
+  # NOTE: By requiring NIX_LOG_FD be set, we avoid dumping logging inside of nix-shell.
   [[ -z ${NIX_LOG_FD-} ]] && return 0
 
   # Use the function name of the caller, unless it is _callImplicitHook, in which case use the name of the hook.
@@ -74,6 +75,7 @@ nixLog() {
 # NOTE: This function is only every meant to be called from the nix*Log family of functions.
 _nixLogWithLevel() {
   # Return a value explicitly instead of the implicit return of the last command (result of the test).
+  # NOTE: By requiring NIX_LOG_FD be set, we avoid dumping logging inside of nix-shell.
   [[ -z ${NIX_LOG_FD-} || ${NIX_DEBUG:-0} -lt ${1:?} ]] && return 0
 
   local logLevel
