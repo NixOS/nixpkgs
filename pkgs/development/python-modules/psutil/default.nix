@@ -11,12 +11,10 @@
   pythonOlder,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage.override { inherit stdenv; } rec {
   pname = "psutil";
   version = "6.1.1";
   pyproject = true;
-
-  inherit stdenv;
 
   disabled = pythonOlder "3.7";
 
