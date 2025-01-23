@@ -502,6 +502,9 @@ def execute(argv: list[str]) -> None:
                         specialisation=args.specialisation,
                         install_bootloader=args.install_bootloader,
                     )
+                    print_result("Done. The new configuration is", path_to_config)
+                case Action.BUILD:
+                    print_result("Done. The new configuration is", path_to_config)
                 case Action.BUILD_VM | Action.BUILD_VM_WITH_BOOTLOADER:
                     # If you get `not-found`, please open an issue
                     vm_path = next(path_to_config.glob("bin/run-*-vm"), "not-found")
