@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "zarf";
-  version = "0.41.0";
+  version = "0.46.0";
 
   src = fetchFromGitHub {
-    owner = "defenseunicorns";
+    owner = "zarf-dev";
     repo = "zarf";
     rev = "v${version}";
-    hash = "sha256-rY9xWqJ+2Yfs6VRHTF89LmuEruAavDI7MgBm4UFEuBs=";
+    hash = "sha256-oxqa/6FMj7Fq1chPTBIyMfsA3JqjukwvIgLc/gajXMY=";
   };
 
-  vendorHash = "sha256-Cz+w0tOEamCxf61hvQ03X/kXPY+qrmdBN8s26lr/wZ8=";
+  vendorHash = "sha256-hycNgwv/hPcgZoeBDAIppT/Lg8zX/bBhWYkK78+Rams=";
   proxyVendor = true;
 
   nativeBuildInputs = [ installShellFiles ];
@@ -25,6 +25,7 @@ buildGoModule rec {
   preBuild = ''
     mkdir -p build/ui
     touch build/ui/index.html
+    rm -rf hack/schema
   '';
 
   doCheck = false;
@@ -33,7 +34,7 @@ buildGoModule rec {
     "-s"
     "-w"
     "-X"
-    "github.com/defenseunicorns/zarf/src/config.CLIVersion=${src.rev}"
+    "github.com/zarf-dev/zarf/src/config.CLIVersion=${src.rev}"
     "-X"
     "k8s.io/component-base/version.gitVersion=v0.0.0+zarf${src.rev}"
     "-X"
