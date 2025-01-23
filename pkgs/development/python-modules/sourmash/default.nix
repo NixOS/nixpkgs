@@ -24,13 +24,11 @@ let
   stdenv' =
     if stdenv.hostPlatform.isDarwin then overrideSDK stdenv { darwinMinVersion = "10.14"; } else stdenv;
 in
-buildPythonPackage rec {
+buildPythonPackage.override { stdenv = stdenv'; } rec {
   pname = "sourmash";
   version = "4.8.12";
   pyproject = true;
   disabled = pythonOlder "3.9";
-
-  stdenv = stdenv';
 
   src = fetchPypi {
     inherit pname version;
