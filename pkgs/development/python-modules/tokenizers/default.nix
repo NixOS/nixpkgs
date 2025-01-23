@@ -80,14 +80,14 @@ buildPythonPackage rec {
     hash = "sha256-G65XiVlvJXOC9zqcVr9vWamUnpC0aa4kyYkE2v1K2iY=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit
       pname
       version
       src
       sourceRoot
       ;
-    hash = "sha256-5cw63ydyhpMup2tOe/hpG2W6YZ+cvT75MJBkE5Wap4s=";
+    hash = "sha256-jj5nuwxlfJm1ugYd5zW+wjyczOZHWCmRGYpmiMDqFlk=";
   };
 
   sourceRoot = "${src.name}/bindings/python";

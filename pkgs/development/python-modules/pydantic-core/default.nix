@@ -30,10 +30,10 @@ let
 
     patches = [ ./01-remove-benchmark-flags.patch ];
 
-    cargoDeps = rustPlatform.fetchCargoTarball {
+    cargoDeps = rustPlatform.fetchCargoVendor {
       inherit src;
       name = "${pname}-${version}";
-      hash = "sha256-kY+XSiwfh1ao0vvqz1M23CONeh/T8uN8YpHf/GOphTk=";
+      hash = "sha256-4mwhe+e2xgFMYZAv+Nblj3AAnDinLvuGGYs8KAHT2Sw=";
     };
 
     nativeBuildInputs = [

@@ -76,9 +76,9 @@ mkDerivation rec {
     sha256 = "sha256-NS1aQlWpn3f+SW0oUjlYwHtOS9ZgbjFTrE9grjK5REM=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    hash = "sha256-V36yiwraXK7qlJd1r8EtEA4ULxlgvMEmpn/ka3m9GjA=";
+    hash = "sha256-rY4zWSCBfVXvl6p9GvtDg/PFZfLkWTl8FTYdlKTzWYM=";
   };
 
   nativeBuildInputs = [

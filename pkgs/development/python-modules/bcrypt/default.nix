@@ -32,11 +32,11 @@ buildPythonPackage rec {
   };
 
   cargoRoot = "src/_bcrypt";
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     sourceRoot = "${pname}-${version}/${cargoRoot}";
     name = "${pname}-${version}";
-    hash = "sha256-dOS9A3pTwXYkzPFFNh5emxJw7pSdDyY+mNIoHdwNdmg=";
+    hash = "sha256-TD1Qacr2BS3CutGzDcUSweTrlMuKy0U/eIS/oBLxTlI=";
   };
 
   nativeBuildInputs = [

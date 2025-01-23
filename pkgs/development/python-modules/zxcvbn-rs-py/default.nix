@@ -26,10 +26,10 @@ buildPythonPackage rec {
     rustPlatform.maturinBuildHook
   ];
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     name = "${pname}-${version}";
     inherit src;
-    hash = "sha256-OA6iyojBMAG9GtjHaIQ9cM0SEMwMa2bKFRIXmqp4OBE=";
+    hash = "sha256-Tzd0XEbrvXrX7oMT41R5kUJi7equhdL7/pUHp7ghyeg=";
   };
 
   pythonImportsCheck = [ "zxcvbn_rs_py" ];
