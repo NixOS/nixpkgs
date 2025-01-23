@@ -258,6 +258,24 @@ in
       '';
     };
 
+    boot.initrd.allowMissingModules = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether the initrd can be built even though modules listed in
+        {option}`boot.initrd.kernelModules` or
+        {option}`boot.initrd.availableKernelModules` are missing from
+        the kernel. This is useful when combining configurations that
+        include a lot of modules, such as
+        {option}`hardware.enableAllHardware`, with kernels that don't
+        provide as many modules as typical NixOS kernels.
+
+        Note that enabling this is discouraged. Instead, try disabling
+        individual modules by setting e.g.
+        `boot.initrd.availableKernelModules.foo = lib.mkForce false;`
+      '';
+    };
+
     system.modulesTree = mkOption {
       type = types.listOf types.path;
       internal = true;
