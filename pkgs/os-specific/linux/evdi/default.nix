@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3WithLibs
   ];
 
-  makeFlags = kernel.makeFlags ++ [
+  makeFlags = kernel.moduleMakeFlags ++ [
     "KVER=${kernel.modDirVersion}"
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
