@@ -6574,7 +6574,6 @@ broken-packages:
   - warc # failure in job https://hydra.nixos.org/build/233215734 at 2023-09-02
   - warp-dynamic # failure in job https://hydra.nixos.org/build/233220479 at 2023-09-02
   - warp-static # failure in job https://hydra.nixos.org/build/233239581 at 2023-09-02
-  - warp-systemd # failure in job https://hydra.nixos.org/build/233215956 at 2023-09-02
   - warp-tls-uid # failure in job https://hydra.nixos.org/build/252725883 at 2024-03-16
   - wasm # failure in job https://hydra.nixos.org/build/233249877 at 2023-09-02
   - watcher # failure in job https://hydra.nixos.org/build/233245056 at 2023-09-02
