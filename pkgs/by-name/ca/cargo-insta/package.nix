@@ -1,20 +1,21 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, nix-update-script
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-insta";
-  version = "1.40";
+  version = "1.41.1";
 
   src = fetchFromGitHub {
     owner = "mitsuhiko";
     repo = "insta";
-    rev = "83f33653b687c84823fe6af00806107e1dd4f4b8";
-    hash = "sha256-eau5h75oZpxufTrf0fLHfr+3TIOFXB/kSgHX+o2GtiE=";
+    rev = version;
+    hash = "sha256-4u/BXHKkp7vlXFFlbZg+jon37jszPCtg7P00SfTkBIQ=";
   };
 
-  cargoHash = "sha256-OqM8SERSWHtbvW6SZfM7lOrQZu66uzsv5wiD3Iqaf3s=";
+  cargoHash = "sha256-Nr+7XmqWt3qAhb8HxKg8qGlS5ZX3uR5FEr/pf7qNiBY=";
 
   checkFlags = [
   # Depends on `rustfmt` and does not matter for packaging.
@@ -22,6 +23,10 @@ rustPlatform.buildRustPackage rec {
   # Requires networking
   "--skip=test_force_update_snapshots"
   ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Cargo subcommand for snapshot testing";
