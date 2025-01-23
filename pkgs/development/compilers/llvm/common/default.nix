@@ -502,9 +502,11 @@ let
       llvm = tools.libllvm;
 
       tblgen = callPackage ./tblgen.nix {
-        patches = builtins.filter
-          # Crude method to drop polly patches if present, they're not needed for tblgen.
-          (p: (!lib.hasInfix "-polly" p)) tools.libllvm.patches;
+        patches =
+          builtins.filter
+            # Crude method to drop polly patches if present, they're not needed for tblgen.
+            (p: (!lib.hasInfix "-polly" p))
+            tools.libllvm.patches;
         clangPatches = [
           # Would take tools.libclang.patches, but this introduces a cycle due
           # to replacements depending on the llvm outpath (e.g. the LLVMgold patch).
@@ -526,12 +528,13 @@ let
             # libraries. eg: `clang -munsupported hello.c -lc`
             ./clang/clang-unsupported-option.patch
           ]
-          ++ lib.optional (lib.versions.major metadata.release_version == "13")
-            # Revert of https://reviews.llvm.org/D100879
-            # The malloc alignment assumption is incorrect for jemalloc and causes
-            # mis-compilation in firefox.
-            # See: https://bugzilla.mozilla.org/show_bug.cgi?id=1741454
-            (metadata.getVersionFile "clang/revert-malloc-alignment-assumption.patch")
+          ++
+            lib.optional (lib.versions.major metadata.release_version == "13")
+              # Revert of https://reviews.llvm.org/D100879
+              # The malloc alignment assumption is incorrect for jemalloc and causes
+              # mis-compilation in firefox.
+              # See: https://bugzilla.mozilla.org/show_bug.cgi?id=1741454
+              (metadata.getVersionFile "clang/revert-malloc-alignment-assumption.patch")
           ++ lib.optional (lib.versionOlder metadata.release_version "17") (
             if lib.versionAtLeast metadata.release_version "14" then
               fetchpatch {
@@ -660,7 +663,7 @@ let
       lldbPlugins = lib.makeExtensible (
         lldbPlugins:
         let
-          callPackage = newScope ( lldbPlugins // tools // args // metadata );
+          callPackage = newScope (lldbPlugins // tools // args // metadata);
         in
         lib.recurseIntoAttrs { llef = callPackage ./lldb-plugins/llef.nix { }; }
       );
