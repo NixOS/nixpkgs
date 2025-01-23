@@ -10,8 +10,8 @@ let
       # pre-switch check ${name}
       if ! (
         ${text}
-      ); then
-        echo "Pre-switch check '${name}' failed"
+      ) >&2 ; then
+        echo "Pre-switch check '${name}' failed" >&2
         exit 1
       fi
     '') config.system.preSwitchChecks
