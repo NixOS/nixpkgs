@@ -727,8 +727,6 @@ with pkgs;
     callPackages ../build-support/setup-hooks/patch-rc-path-hooks { }
   ) patchRcPathBash patchRcPathCsh patchRcPathFish patchRcPathPosix;
 
-  pathsFromGraph = ../build-support/kernel/paths-from-graph.pl;
-
   pruneLibtoolFiles = makeSetupHook { name = "prune-libtool-files"; }
     ../build-support/setup-hooks/prune-libtool-files.sh;
 
