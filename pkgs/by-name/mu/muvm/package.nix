@@ -12,6 +12,10 @@
   systemd,
   udev,
   pkg-config,
+  fex,
+  coreutils,
+  procps,
+  substituteAll,
   withSommelier ? false,
 }:
 
@@ -33,6 +37,15 @@ rustPlatform.buildRustPackage rec {
     substituteAll crates/muvm/src/guest/bin/muvm-guest.rs \
       --replace-fail "/usr/lib/systemd/systemd-udevd" "${systemd}/lib/systemd/systemd-udevd"
   '';
+
+  patches = [
+    (substituteAll {
+      src = ./paths.patch.in;
+      env = {
+        inherit procps coreutils fex;
+      };
+    })
+  ];
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
