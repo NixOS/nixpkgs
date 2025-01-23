@@ -3102,9 +3102,7 @@ let
     });
   isGogolService = name: lib.hasPrefix "gogol-" name && name != "gogol-core";
   gogolServices = lib.filter isGogolService (lib.attrNames super);
-  gogolServiceOverrides = (lib.foldl' (acc: name:
-    acc // { "${name}" = setGogolSourceRoot "lib/services/${name}" super.${name}; }
-  ) {}) gogolServices;
+  gogolServiceOverrides = (lib.genAttrs gogolServices (name: setGogolSourceRoot "lib/services/${name}" super.${name}));
 in
 {
   gogol-core = assert super.gogol-core.version == "0.5.0"; lib.pipe
