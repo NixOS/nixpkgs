@@ -43,5 +43,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/rhasspy/wyoming-faster-whisper";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];
+    mainProgram = "wyoming-faster-whisper";
   };
 }

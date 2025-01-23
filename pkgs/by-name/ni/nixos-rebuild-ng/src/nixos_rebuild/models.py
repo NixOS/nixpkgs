@@ -61,6 +61,25 @@ class BuildAttr:
         return cls(Path(file or "default.nix"), attr)
 
 
+def discover_git(location: Path) -> str | None:
+    current = location.resolve()
+    previous = None
+
+    while current.is_dir() and current != previous:
+        dotgit = current / ".git"
+        if dotgit.is_dir():
+            return str(current)
+        elif dotgit.is_file():  # this is a worktree
+            with dotgit.open() as f:
+                dotgit_content = f.read().strip()
+                if dotgit_content.startswith("gitdir: "):
+                    return dotgit_content.split("gitdir: ")[1]
+        previous = current
+        current = current.parent
+
+    return None
+
+
 @dataclass(frozen=True)
 class Flake:
     path: Path | str
@@ -84,11 +103,15 @@ class Flake:
         assert m is not None, f"got no matches for {flake_str}"
         attr = m.group("attr")
         nixos_attr = f"nixosConfigurations.{attr or hostname_fn() or 'default'}"
-        path = m.group("path")
-        if ":" in path:
-            return cls(path, nixos_attr)
+        path_str = m.group("path")
+        if ":" in path_str:
+            return cls(path_str, nixos_attr)
         else:
-            return cls(Path(path), nixos_attr)
+            path = Path(path_str)
+            git_repo = discover_git(path)
+            if git_repo is not None:
+                return cls(f"git+file://{git_repo}", nixos_attr)
+            return cls(path, nixos_attr)
 
     @classmethod
     def from_arg(cls, flake_arg: Any, target_host: Remote | None) -> Self | None:
