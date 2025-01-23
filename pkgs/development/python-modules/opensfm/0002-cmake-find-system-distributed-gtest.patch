@@ -1,0 +1,57 @@
+From 79577371be21df40f1f6d4a4fe3453be6df9e93c Mon Sep 17 00:00:00 2001
+From: Someone Serge <sergei.kozlukov@aalto.fi>
+Date: Fri, 31 Dec 2021 10:03:25 +0200
+Subject: [PATCH 2/4] cmake: find system-distributed gtest
+
+---
+ opensfm/src/CMakeLists.txt | 19 +++++++------------
+ 1 file changed, 7 insertions(+), 12 deletions(-)
+
+diff --git a/opensfm/src/CMakeLists.txt b/opensfm/src/CMakeLists.txt
+index c85aa6fb..640d47a6 100644
+--- a/opensfm/src/CMakeLists.txt
++++ b/opensfm/src/CMakeLists.txt
+@@ -52,12 +52,14 @@ if (OPENMP_FOUND)
+   set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+ endif()
+ 
++find_package(gflags REQUIRED)
++
+ find_package(LAPACK)
+ find_package(SuiteSparse)
+ find_package(Eigen3 REQUIRED)
+ find_package(Ceres)
+-find_package(Gflags REQUIRED)
+-find_package(Glog REQUIRED)
++find_package(glog REQUIRED)
++find_package(GTest REQUIRED)
+ 
+ # Ceres2 exposes Ceres::ceres target.
+ # Ceres1 exposes just ceres.
+@@ -100,20 +102,13 @@ option(OPENSFM_BUILD_TESTS "Build OpenSfM unit tests." on)
+ 
+ if (OPENSFM_BUILD_TESTS)
+   enable_testing()
+-  include_directories(third_party/gtest)
+-  add_definitions(-DCERES_GFLAGS_NAMESPACE=${GFLAGS_NAMESPACE})
+-
+-  add_library(gtest
+-              third_party/gtest/gmock_gtest_all.cc
+-              third_party/gtest/gmock_main.cc)
+-  target_include_directories(gtest PRIVATE ${GFLAGS_INCLUDE_DIR})
+ 
+   set(TEST_MAIN test_main)
+   add_library(${TEST_MAIN} testing_main.cc)
+   target_link_libraries(${TEST_MAIN}
+-                        ${GFLAGS_LIBRARY}
+-                        ${GLOG_LIBRARY}
+-                        gtest)
++      gflags
++      glog::glog
++      GTest::gtest)
+ endif()
+ 
+ ####### OpenSfM libraries #######
+-- 
+2.33.1
+

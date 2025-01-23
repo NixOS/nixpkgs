@@ -1,0 +1,13 @@
+diff --git a/modules/setting/server.go b/modules/setting/server.go
+index c20dd1949d..c9bcdce99a 100644
+--- a/modules/setting/server.go
++++ b/modules/setting/server.go
+@@ -317,7 +317,7 @@ func loadServerFrom(rootCfg ConfigProvider) {
+ 	RedirectorUseProxyProtocol = sec.Key("REDIRECTOR_USE_PROXY_PROTOCOL").MustBool(UseProxyProtocol)
+ 	OfflineMode = sec.Key("OFFLINE_MODE").MustBool(true)
+ 	if len(StaticRootPath) == 0 {
+-		StaticRootPath = AppWorkPath
++		StaticRootPath = "@data@"
+ 	}
+ 	StaticRootPath = sec.Key("STATIC_ROOT_PATH").MustString(StaticRootPath)
+ 	StaticCacheTime = sec.Key("STATIC_CACHE_TIME").MustDuration(6 * time.Hour)

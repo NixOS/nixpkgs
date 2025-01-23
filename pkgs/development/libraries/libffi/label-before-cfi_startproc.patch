@@ -1,0 +1,47 @@
+From 3065c530d3aa50c2b5ee9c01f88a9c0b61732805 Mon Sep 17 00:00:00 2001
+From: Ivan Tadeu Ferreira Antunes Filho <antunesi@google.com>
+Date: Mon, 16 Sep 2024 16:10:39 -0400
+Subject: [PATCH] Move cfi_startproc after CNAME(label)
+
+This is a fix for https://github.com/libffi/libffi/issues/852: error: invalid CFI advance_loc expression on apple targets.
+
+The CFI for darwin arm64 was broken because the CNAME macro was being used after the
+cfi_startproc macro.
+---
+ src/aarch64/sysv.S | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/src/aarch64/sysv.S b/src/aarch64/sysv.S
+index 6a9a5611f..e83bc65de 100644
+--- a/src/aarch64/sysv.S
++++ b/src/aarch64/sysv.S
+@@ -89,8 +89,8 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.  */
+    x5 closure
+ */
+ 
+-	cfi_startproc
+ CNAME(ffi_call_SYSV):
++	cfi_startproc
+ 	BTI_C
+ 	PAC_CFI_WINDOW_SAVE
+ 	/* Sign the lr with x1 since that is the CFA which is the modifer used in auth instructions */
+@@ -348,8 +348,8 @@ CNAME(ffi_closure_SYSV_V):
+ #endif
+ 
+ 	.align	4
+-	cfi_startproc
+ CNAME(ffi_closure_SYSV):
++	cfi_startproc
+ 	BTI_C
+ 	SIGN_LR
+ 	PAC_CFI_WINDOW_SAVE
+@@ -647,8 +647,8 @@ CNAME(ffi_go_closure_SYSV_V):
+ #endif
+ 
+ 	.align	4
+-	cfi_startproc
+ CNAME(ffi_go_closure_SYSV):
++	cfi_startproc
+ 	BTI_C
+ 	SIGN_LR_LINUX_ONLY
+ 	PAC_CFI_WINDOW_SAVE

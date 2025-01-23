@@ -1,0 +1,22 @@
+From ad7be040894661b708f9c861696499640ac7f9dc Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Tomi=20L=C3=A4hteenm=C3=A4ki?= <lihis@lihis.net>
+Date: Fri, 1 Dec 2023 16:01:59 +0200
+Subject: [PATCH] SoundSource.cpp: return AVERROR_EOF when buffer is empty
+
+---
+ rwengine/src/audio/SoundSource.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/rwengine/src/audio/SoundSource.cpp b/rwengine/src/audio/SoundSource.cpp
+index c93376e73..d355cab74 100644
+--- a/rwengine/src/audio/SoundSource.cpp
++++ b/rwengine/src/audio/SoundSource.cpp
+@@ -55,7 +55,7 @@ int read_packet(void* opaque, uint8_t* buf, int buf_size) {
+     memcpy(buf, input->ptr, buf_size);
+     input->ptr += buf_size;
+     input->size -= buf_size;
+-    return buf_size;
++    return buf_size <= 0 ? AVERROR_EOF : buf_size;
+ }
+ }  // namespace
+ 

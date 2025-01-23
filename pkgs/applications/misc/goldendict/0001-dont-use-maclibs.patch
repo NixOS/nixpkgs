@@ -1,0 +1,62 @@
+diff --git i/goldendict.pro w/goldendict.pro
+index 4a4a3094..082b728f 100644
+--- i/goldendict.pro
++++ w/goldendict.pro
+@@ -212,22 +212,19 @@ mac {
+         -llzo2
+     !CONFIG( no_ffmpeg_player ) {
+         LIBS += -lao \
+-            -lswresample-gd \
+-            -lavutil-gd \
+-            -lavformat-gd \
+-            -lavcodec-gd
++            -lswresample \
++            -lavutil \
++            -lavformat \
++            -lavcodec
+     }
+-    INCLUDEPATH = $${PWD}/maclibs/include
+-    LIBS += -L$${PWD}/maclibs/lib -framework AppKit -framework Carbon
++    LIBS += -framework AppKit -framework Carbon
+     OBJECTIVE_SOURCES += lionsupport.mm \
+                          machotkeywrapper.mm \
+                          macmouseover.mm \
+                          speechclient_mac.mm
+     ICON = icons/macicon.icns
+     QMAKE_INFO_PLIST = myInfo.plist
+-    QMAKE_POST_LINK = mkdir -p GoldenDict.app/Contents/Frameworks & \
+-                      cp -nR $${PWD}/maclibs/lib/ GoldenDict.app/Contents/Frameworks/ & \
+-                      mkdir -p GoldenDict.app/Contents/MacOS/locale & \
++    QMAKE_POST_LINK = mkdir -p GoldenDict.app/Contents/MacOS/locale & \
+                       cp -R locale/*.qm GoldenDict.app/Contents/MacOS/locale/ & \
+                       mkdir -p GoldenDict.app/Contents/MacOS/help & \
+                       cp -R $${PWD}/help/*.qch GoldenDict.app/Contents/MacOS/help/
+@@ -235,15 +232,6 @@ mac {
+     CONFIG += zim_support
+     !CONFIG( no_chinese_conversion_support ) {
+         CONFIG += chinese_conversion_support
+-        CONFIG( x86 ) {
+-            QMAKE_POST_LINK += & mkdir -p GoldenDict.app/Contents/MacOS/opencc & \
+-                                 cp -R $${PWD}/opencc/*.json GoldenDict.app/Contents/MacOS/opencc/ & \
+-                                 cp -R $${PWD}/opencc/*.ocd GoldenDict.app/Contents/MacOS/opencc/
+-        } else {
+-            QMAKE_POST_LINK += & mkdir -p GoldenDict.app/Contents/MacOS/opencc & \
+-                                 cp -R $${PWD}/opencc/x64/*.json GoldenDict.app/Contents/MacOS/opencc/ & \
+-                                 cp -R $${PWD}/opencc/x64/*.ocd GoldenDict.app/Contents/MacOS/opencc/
+-        }
+     }
+ }
+ DEFINES += PROGRAM_VERSION=\\\"$$VERSION\\\"
+diff --git i/tiff.cc w/tiff.cc
+index e3cb8bf5..95dd812f 100644
+--- i/tiff.cc
++++ w/tiff.cc
+@@ -5,7 +5,7 @@
+ 
+ #include "tiff.hh"
+ 
+-#if defined (Q_OS_MAC) || defined (Q_OS_WIN)
++#if defined (Q_OS_WIN)
+ #include "tiff/tiff.h"
+ #include "tiff/tiffio.h"
+ #else

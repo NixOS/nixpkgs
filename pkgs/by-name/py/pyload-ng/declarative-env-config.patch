@@ -1,0 +1,18 @@
+diff --git a/src/pyload/core/__init__.py b/src/pyload/core/__init__.py
+index 4324fc700..5d915a85e 100644
+--- a/src/pyload/core/__init__.py
++++ b/src/pyload/core/__init__.py
+@@ -128,6 +128,13 @@ class Core:
+         else:
+             self._debug = max(0, int(debug))
+
++        # Allow setting any option declaratively, for the NixOS module
++        for env, value in os.environ.items():
++            if not env.startswith("PYLOAD__"):
++                continue
++            section, opt = env.removeprefix("PYLOAD__").lower().split("__")
++            self.config.set(section, opt, value)
++
+         # If no argument set, read storage dir from config file,
+         # otherwise save setting to config dir
+         if storagedir is None:
