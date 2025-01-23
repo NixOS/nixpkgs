@@ -30,6 +30,7 @@
   metalSupport ? stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 && !openclSupport,
   vulkanSupport ? false,
   rpcSupport ? false,
+  curl,
   shaderc,
   vulkan-headers,
   vulkan-loader,
@@ -130,13 +131,15 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     ++ optionals openclSupport [ clblast ]
     ++ optionals rocmSupport rocmBuildInputs
     ++ optionals blasSupport [ blas ]
-    ++ optionals vulkanSupport vulkanBuildInputs;
+    ++ optionals vulkanSupport vulkanBuildInputs
+    ++ [ curl ];
 
   cmakeFlags =
     [
       # -march=native is non-deterministic; override with platform-specific flags if needed
       (cmakeBool "GGML_NATIVE" false)
       (cmakeBool "LLAMA_BUILD_SERVER" true)
+      (cmakeBool "LLAMA_CURL" true)
       (cmakeBool "BUILD_SHARED_LIBS" true)
       (cmakeBool "GGML_BLAS" blasSupport)
       (cmakeBool "GGML_CLBLAST" openclSupport)
