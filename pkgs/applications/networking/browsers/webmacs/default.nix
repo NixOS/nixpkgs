@@ -7,9 +7,7 @@
   herbstluftwm,
 }:
 
-mkDerivationWith python3Packages.buildPythonApplication rec {
-  inherit stdenv;
-
+mkDerivationWith python3Packages.buildPythonApplication.override { inherit stdenv; } rec {
   pname = "webmacs";
   version = "0.8";
 
