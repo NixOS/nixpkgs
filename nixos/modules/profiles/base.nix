@@ -45,7 +45,10 @@
     # Some compression/archiver tools.
     pkgs.unzip
     pkgs.zip
-  ];
+  ] ++
+  # Upstream bug?
+  # https://github.com/koverstreet/bcachefs-tools/issues/276
+  lib.optional (config.boot.supportedFilesystems.bcachefs or false) pkgs.keyutils;
 
   # Include support for various filesystems and tools to create / manipulate them.
   boot.supportedFilesystems = lib.mkMerge [
@@ -57,6 +60,9 @@
       "vfat"
       "xfs"
     ]
+    (lib.mkIf (config.boot.kernelPackages.kernel.kernelAtLeast "6.7") {
+      bcachefs = lib.mkDefault true;
+    })
     (lib.mkIf (lib.meta.availableOn pkgs.stdenv.hostPlatform config.boot.zfs.package) {
       zfs = lib.mkDefault true;
     })
