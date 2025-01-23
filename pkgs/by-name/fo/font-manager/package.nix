@@ -29,13 +29,13 @@
 
 stdenv.mkDerivation rec {
   pname = "font-manager";
-  version = "0.9.0";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "FontManager";
     repo = "font-manager";
     rev = version;
-    hash = "sha256-nUFxjqUiL8zLfPJrLM1aQ/SZ2x6CYFKFJI1W/eXlrV8=";
+    hash = "sha256-x7ZRC/xwF6Y2BhbtApVZ4hPZGNGaJiilqpxLyax9r2g=";
   };
 
   nativeBuildInputs = [
