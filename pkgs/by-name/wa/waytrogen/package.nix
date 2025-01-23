@@ -10,25 +10,27 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "waytrogen";
-  version = "0.5.8";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "nikolaizombie1";
     repo = "waytrogen";
     tag = version;
-    hash = "sha256-tq5cC0Z0kmrYopOGbdoAERBHQXrAw799zWdQP06rTYw=";
+    hash = "sha256-jkrvtwkzlsQgbw8/N4uzeqQ3fVSur2oa21IOXRRgh9I=";
   };
 
-  cargoHash = "sha256-05YfQBezDbQ8KfNvl/4Av5vf/rxJU3Ej6RDgSnSfjtM=";
+  cargoHash = "sha256-UkYQ/oN1+C9WQ+4hbhXxORw5J3Ypwe7DaDg5LhgP2d0=";
 
   nativeBuildInputs = [
     pkg-config
     wrapGAppsHook4
   ];
 
-  buildInputs = [
-    glib
-  ];
+  buildInputs = [ glib ];
+
+  env = {
+    OPENSSL_NO_VENDOR = 1;
+  };
 
   postBuild = ''
     install -Dm644 org.Waytrogen.Waytrogen.gschema.xml -t $out/share/gsettings-schemas/$name/glib-2.0/schemas
@@ -38,6 +40,10 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     install -Dm644 waytrogen.desktop $out/share/applications/waytrogen.desktop
     install -Dm644 README-Assets/WaytrogenLogo.svg $out/share/icons/hicolor/scalable/apps/waytrogen.svg
+    while IFS= read -r lang; do
+          mkdir -p $out/share/locale/$lang/LC_MESSAGES
+          msgfmt locales/$lang/LC_MESSAGES/waytrogen.po -o $out/share/locale/$lang/LC_MESSAGES/waytrogen.mo
+    done < locales/LINGUAS
   '';
 
   passthru.updateScript = nix-update-script { };
@@ -52,7 +58,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/nikolaizombie1/waytrogen";
     changelog = "https://github.com/nikolaizombie1/waytrogen/releases/tag/${version}";
     license = lib.licenses.unlicense;
-    maintainers = with lib.maintainers; [ genga898 ];
+    maintainers = with lib.maintainers; [
+      genga898
+      nikolaizombie1
+    ];
     mainProgram = "waytrogen";
     platforms = lib.platforms.linux;
   };
