@@ -328,8 +328,10 @@ let
         jsoncpp
         libjpeg_turbo
         libpng
-        (pybind11.overridePythonAttrs (_: {
-          inherit stdenv;
+        (pybind11.override (previousArgs: {
+          buildPythonPackage = previousArgs.buildPythonPackage.override {
+            inherit stdenv;
+          };
         }))
         snappy
         sqlite
