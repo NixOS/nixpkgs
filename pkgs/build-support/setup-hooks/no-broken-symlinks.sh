@@ -40,14 +40,9 @@ noBrokenSymlinks() {
       nixInfoLog "symlink $path points to absolute target $symlinkTarget"
     else
       nixInfoLog "symlink $path points to relative target $symlinkTarget"
-      symlinkTarget="$pathParent/$symlinkTarget"
-
-      # Check to make sure the interpolated target doesn't escape the store path of `output`.
-      # If it does, Nix probably won't be able to resolve or track dependencies.
-      if [[ $symlinkTarget != "$output" && $symlinkTarget != "$output"/* ]]; then
-        nixErrorLog "symlink $path points to target $symlinkTarget, which escapes the current store path $output"
-        exit 1
-      fi
+      # Use --no-symlinks to avoid dereferencing again and --canonicalize-missing to avoid existence
+      # checks at this step (which can lead to infinite recursion).
+      symlinkTarget="$(realpath --no-symlinks --canonicalize-missing "$pathParent/$symlinkTarget")"
     fi
 
     if [[ $path == "$symlinkTarget" ]]; then
