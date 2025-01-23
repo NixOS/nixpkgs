@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     description = "Sokoban-like game";
     mainProgram = "npush";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
     platforms = with platforms; unix;
   };
 }
