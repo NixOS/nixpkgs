@@ -26,13 +26,13 @@
   xorg,
 }:
 let
-  version = "2.14.4";
+  version = "2.14.5";
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     tag = "v${version}";
-    hash = "sha256-asjTRjEMnJcmyAZNZQ+VxXeyGc+j0j1JAAOrOaQ7ma4=";
+    hash = "sha256-ML38TErINQPjBGweCY673zFlGEjTjgJcYJTJUbTov+4=";
   };
 
   # subpath installation is broken with uvicorn >= 0.26
@@ -86,7 +86,7 @@ let
       cd src-ui
     '';
 
-    npmDepsHash = "sha256-JUmYSHHrNWpJNp01Er2zMgiVVIIOAC+QlKw1HAjD7/E=";
+    npmDepsHash = "sha256-hK7Soop9gBZP4m2UzbEIAsLkPKpbQkLmVruY2So4CSs=";
 
     nativeBuildInputs =
       [

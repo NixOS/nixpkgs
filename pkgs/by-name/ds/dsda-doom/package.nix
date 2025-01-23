@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dsda-doom";
-  version = "0.28.2";
+  version = "0.28.3";
 
   src = fetchFromGitHub {
     owner = "kraflab";
     repo = "dsda-doom";
     rev = "v${version}";
-    hash = "sha256-TuDiClIq8GLY/3qGildlPpwUUHmpFNATRz5CNTLpfeM=";
+    hash = "sha256-66o/k5DvyKxwa0sZPCfSycVRxEhrRhUJXJVz2p817OE=";
   };
 
   sourceRoot = "${src.name}/prboom2";

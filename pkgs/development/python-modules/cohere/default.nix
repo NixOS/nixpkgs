@@ -10,7 +10,6 @@
   fastavro,
   httpx,
   httpx-sse,
-  parameterized,
   pydantic,
   pydantic-core,
   requests,
@@ -21,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "cohere";
-  version = "5.13.6";
+  version = "5.13.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cohere-ai";
     repo = "cohere-python";
     tag = version;
-    hash = "sha256-LfEHyZT/x8cIXN9eMpMTVoY22uPNaBCMfw5Y9rI7WGk=";
+    hash = "sha256-vDf5EoXCnYJhPnn9uj9L2cAnj7z1HVG1KxtxXByjwt8=";
   };
 
   build-system = [ poetry-core ];
@@ -37,7 +36,6 @@ buildPythonPackage rec {
     fastavro
     httpx
     httpx-sse
-    parameterized
     pydantic
     pydantic-core
     requests

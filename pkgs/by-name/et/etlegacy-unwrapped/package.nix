@@ -3,7 +3,6 @@
   stdenv,
   writeShellApplication,
   fetchFromGitHub,
-  fetchpatch,
   cjson,
   cmake,
   git,
@@ -24,7 +23,7 @@
   zlib,
 }:
 let
-  version = "2.83.1";
+  version = "2.83.2";
   fakeGit = writeShellApplication {
     name = "git";
 
@@ -43,18 +42,8 @@ stdenv.mkDerivation {
     owner = "etlegacy";
     repo = "etlegacy";
     tag = "v${version}";
-    hash = "sha256-k1H3irA9UVOICY3keKGVJMtBczW/b5ObyNvB7fGAcFA=";
+    hash = "sha256-hZwLYaYV0j3YwFi8KRr4DZV73L2yIwFJ3XqCyq6L7hE=";
   };
-
-  patches = lib.optionals stdenv.hostPlatform.isDarwin [
-    # Fix compilation on Darwin archs
-    # Reported upstream at https://github.com/etlegacy/etlegacy/pull/3005
-    # Remove this patch when the PR is merged
-    (fetchpatch {
-      url = "https://github.com/etlegacy/etlegacy/commit/2767d15c67fe0680178d9cc85ed4cf2ad1d88ad0.patch?full_index=1";
-      hash = "sha256-rGfNIWb9zohk1QJLrYg9nqw6sMvXM0IbIl9kvYXRBuk=";
-    })
-  ];
 
   nativeBuildInputs = [
     cjson
