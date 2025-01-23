@@ -24,6 +24,8 @@
 
         - `lib.nixos` for other NixOS-provided functionality, such as [`runTest`](https://nixos.org/manual/nixos/unstable/#sec-call-nixos-test-outside-nixos)
       */
+      # DON'T USE lib.extend TO ADD NEW FUNCTIONALITY.
+      # THIS WAS A MISTAKE. See the warning in lib/default.nix.
       lib = lib.extend (final: prev: {
 
         /**
