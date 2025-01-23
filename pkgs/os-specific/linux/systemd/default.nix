@@ -774,6 +774,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = false; # fails a bunch of tests
 
+  # NOTE: There is a broken (from within the Nix sandbox) symlink installed in the output which points to
+  # /etc/environment. This is a compatibility shim, so we do not remove it. Instead, we disable the check
+  # for broken symlinks.
+  # For more, see https://www.freedesktop.org/software/systemd/man/latest/environment.d.html#Description.
+  dontCheckForBrokenSymlinks = true;
+
   # trigger the test -n "$DESTDIR" || mutate in upstreams build system
   preInstall = ''
     export DESTDIR=/
