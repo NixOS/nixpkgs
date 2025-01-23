@@ -39,6 +39,8 @@ lib.overrideDerivation
         }
         .${toString rpiVersion};
 
+      ignoreConfigErrors = true;
+
       features = {
         efiBootStub = false;
       } // (args.features or { });
