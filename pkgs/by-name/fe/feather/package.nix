@@ -1,6 +1,6 @@
 {
   bc-ur,
-  boost,
+  boost186,
   cmake,
   fetchFromGitHub,
   hidapi,
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs =
     [
       bc-ur
-      boost
+      boost186
       hidapi
       libsodium
       libusb1
