@@ -26,7 +26,8 @@ rustPlatform.buildRustPackage rec {
     util-linux # used by tests/regression/shell/input.md
   ];
 
-  cargoHash = "sha256-gT3DyQRJWn1HuR6fXeqk8aUPb+jmC+V1McdDN2JGXuI=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-C3Rg+WXHBA7KyUDFdhBz4mOm8CFH/f7UVA8KOLs9ClE=";
 
   meta = with lib; {
     description = "mdbook preprocessor to run arbitrary commands";

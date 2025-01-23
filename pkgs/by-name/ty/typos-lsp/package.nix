@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-FunbE4HxDmugLmR2XwFFAjvNBTVbLAhiHtacxuPXMVE=";
   };
 
-  cargoHash = "sha256-hmKm8mPIZlEDcAPuvyUUQZUpIy51mSksahcRknMnMW0=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-JFsDq9FaOvQmCCO2He2BIUJO6E8x5aMTBQy0B5kY4lQ=";
 
   # fix for compilation on aarch64
   # see https://github.com/NixOS/nixpkgs/issues/145726

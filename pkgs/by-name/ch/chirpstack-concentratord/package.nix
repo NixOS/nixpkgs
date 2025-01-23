@@ -19,7 +19,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-O5QevCYFZEJzZcLM3wh9b+RvbkFwLlvIcFhVbhVDOXU=";
   };
 
-  cargoHash = "sha256-oRy8yGBRD/PGh+RtY9nk03oV6SRBGucRABwfgJbnuxM=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-73BYFUbfiOaYtw4G+WNbiCGPR1L59PqGWhqsrOp06QU=";
 
   buildInputs = [
     libloragw-2g4

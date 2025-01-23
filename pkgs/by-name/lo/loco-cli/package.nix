@@ -12,7 +12,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-AhL+k5XEf8m1pyOECTlPwALUG/ELJeACfV2kulxlzaA=";
   };
 
-  cargoHash = "sha256-BtunTti1cPbG1Qiv39tLdbXHM413UzsCckyqL5CJEUA=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-TwsnEkD6SVgyvtJHgG0Da+6K/bbDwnM8b4CMhba+ej8=";
 
   #Skip trycmd integration tests
   checkFlags = [ "--skip=cli_tests" ];

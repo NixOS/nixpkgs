@@ -24,7 +24,8 @@ rustPlatform.buildRustPackage rec {
       --replace '"resources"' '"${placeholder "out"}/share/resources"'
   '';
 
-  cargoHash = "sha256-fFvuxLOerqdjYogfTH3JiSlNPw2t7QT09lxp7prIpA8=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-/VKveTtB8BbWgRBEzWBjrSrW84uFcz08cz6tZTuMMeE=";
 
   # prepare the resources before the build so that the binary can find sudachidict
   preBuild = ''

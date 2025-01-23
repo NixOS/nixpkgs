@@ -14,7 +14,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-se5+8Zf+RKtvfkmDDxKiUVp5J+bQ9j9RFedDK/pxCgA=";
   };
 
-  cargoHash = "sha256-5TfLAMPl3I9gkd3SSjPlBeBJzANK9u5XjY0ReHVSTJw=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-neXFAMeo/LG3beNoR9q2gAZhlNrk0T4A5IdqR2cZocs=";
 
   meta = {
     description = "CLI tool to control your Turing Pi 2 board";

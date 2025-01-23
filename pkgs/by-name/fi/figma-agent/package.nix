@@ -21,7 +21,8 @@ rustPlatform.buildRustPackage rec {
     ./0001-update-time.patch
   ];
 
-  cargoHash = "sha256-4X1sFgvrJuBeEPbcxrAt6tClOG63kwJ6eUzIRIv8tBs=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-4OAce76XCLlngC7BrX8eiQlHo+Mi2Tfrb9t1Rc/gSFA=";
 
   nativeBuildInputs = [
     pkg-config

@@ -32,7 +32,8 @@ rustPlatform.buildRustPackage rec {
 
   sourceRoot = "${src.name}/src-tauri";
 
-  cargoHash = "sha256-0EIKozFwy7XihFRpjLZ3Am7h1wOU7ZGcHSoTnFnYzTU=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-79MO2JaOBKVfiE7OLFR3kobnE2yH5g44mRt2TKIEfxA=";
 
   postPatch =
     let
