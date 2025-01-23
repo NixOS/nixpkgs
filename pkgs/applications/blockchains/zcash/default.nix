@@ -42,7 +42,8 @@ rustPlatform.buildRustPackage.override { inherit stdenv; } rec {
       --replace "linker = \"aarch64-linux-gnu-gcc\"" ""
   '';
 
-  cargoHash = "sha256-Mz8mr/RDcOfwJvXhY19rZmWHP8mUeEf9GYD+3JAPNOw=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-VBqasLpxqI4kr73Mr7OVuwb2OIhUwnY9CTyZZOyEElU=";
 
   nativeBuildInputs = [
     autoreconfHook
