@@ -10769,6 +10769,7 @@ with pkgs;
 
   vigra = callPackage ../development/libraries/vigra {
     hdf5 = hdf5.override { usev110Api = true; };
+    openexr = openexr_3;
   };
 
   vte-gtk4 = vte.override {
@@ -13974,6 +13975,7 @@ with pkgs;
 
   imagemagick = lowPrio (callPackage ../applications/graphics/ImageMagick {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices Foundation;
+    openexr = openexr_3;
   });
 
   imagemagickBig = lowPrio (imagemagick.override {

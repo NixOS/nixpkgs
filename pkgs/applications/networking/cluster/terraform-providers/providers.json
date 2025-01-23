@@ -90,13 +90,13 @@
     "vendorHash": "sha256-gF8aLRn2OCOzGRS6jb+K6M1cSbXPcQoVrIqrrRc7sMg="
   },
   "auth0": {
-    "hash": "sha256-BBMWsBMuR361tDVGMtQB97Fd7PsuZYK6qBwacG569vA=",
+    "hash": "sha256-4ZHTy4mBQ+ZgiUOZQEku8n+AfMmA9azioyAPeWUUae0=",
     "homepage": "https://registry.terraform.io/providers/auth0/auth0",
     "owner": "auth0",
     "repo": "terraform-provider-auth0",
-    "rev": "v1.9.1",
+    "rev": "v1.10.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-ez/qfjqPu8IOHcc5q2OpHm0zO762DXsWvg2vLM8hVas="
+    "vendorHash": "sha256-mvudiybfS6eLemCTXUJSIV4mD+GzR7Ed2H+lfA0de8E="
   },
   "avi": {
     "hash": "sha256-ErZE6MA8Pn8KDDZLX2/yoeqck78vDAcFYdMhYMbcYuI=",
@@ -1255,13 +1255,13 @@
     "vendorHash": "sha256-Q/fFd3ahIY1L2s8vE8KY/DtahS948qnoaFLQBQfyNH4="
   },
   "talos": {
-    "hash": "sha256-7VBoihwejNDRnIYsFS/dAiCE+JaMALkuVVqHaKQYUGU=",
+    "hash": "sha256-49woELLSpheuyGnXuwamZwsHdOfjwSB4v8/INzSrMRU=",
     "homepage": "https://registry.terraform.io/providers/siderolabs/talos",
     "owner": "siderolabs",
     "repo": "terraform-provider-talos",
-    "rev": "v0.7.0",
+    "rev": "v0.7.1",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-4jsFsHuKMujOkBMA/+rGcYmHinWLuhon10CoO01DZsY="
+    "vendorHash": "sha256-iEi3zkr4kIZ1FTAft/Fy//v7xtlX/8uSrnbuxgFTDyA="
   },
   "temporalcloud": {
     "hash": "sha256-nAOHdok/nK33zyEYmyB2nA+y2/mpkigZk4WTyl2F7XA=",
