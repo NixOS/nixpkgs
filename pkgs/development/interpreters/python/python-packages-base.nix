@@ -23,7 +23,19 @@ let
       origArgs:
       let
         result = f origArgs;
-        overrideWith = newArgs: origArgs // lib.toFunction newArgs origArgs;
+
+        # Ensuring that stdenvCompat works by:
+        # 1. Let fixed-point arguments remain fixed-point arguments
+        #    and plain arguments remain plain.
+        # 2. Making overridePythonAttrs always reject extension-like newArgs.
+        overrideWith =
+          newArgs:
+          if lib.isFunction origArgs then
+            # Explicitly reject extension-like newArgs.
+            lib.extend (_: lib.toFunction newArgs) origArgs
+          else
+            origArgs // lib.toFunction newArgs origArgs;
+
         # Change the result of the function call by applying `transform` to it
         overrideResult = transform: makeOverridablePythonPackage (args: transform (f args)) origArgs;
       in
