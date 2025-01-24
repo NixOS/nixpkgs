@@ -98,7 +98,12 @@ stdenv.mkDerivation rec {
     cp logo-256.png $out/share/icons/hicolor/64x64/apps/${pname}.png
 
     makeWrapper $out/share/${pname}/TeamSpeak $out/bin/TeamSpeak \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ udev libGL ]}"
+      --prefix LD_LIBRARY_PATH : "${
+        lib.makeLibraryPath [
+          udev
+          libGL
+        ]
+      }"
 
     runHook postInstall
   '';
