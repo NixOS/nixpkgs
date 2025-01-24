@@ -6626,6 +6626,18 @@ final: prev:
     meta.homepage = "https://github.com/Bilal2453/luvit-meta/";
   };
 
+  magenta-nvim = buildVimPlugin {
+    pname = "magenta.nvim";
+    version = "2025-01-24";
+    src = fetchFromGitHub {
+      owner = "dlants";
+      repo = "magenta.nvim";
+      rev = "cbf61f80a9738f615f01a7b6fcb5fc8d8f88ca2b";
+      sha256 = "09ds9ihgp4jac8av4y4zsyv2sjhyz82d7cdszfzkn5am4zpkvnca";
+    };
+    meta.homepage = "https://github.com/dlants/magenta.nvim/";
+  };
+
   magma-nvim = buildVimPlugin {
     pname = "magma-nvim";
     version = "2023-07-08";
