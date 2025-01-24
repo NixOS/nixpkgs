@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage {
     hash = "sha256-ZzeWk01migUrKR7GndtNo0kLYSCUXCg0H0eCXgrDXaM==";
   };
 
-  cargoHash = "sha256-5u5240PL5cKhnHsT7sRdccrbZBAbRN+fa+FhJP1gX/4==";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Pf8Jj8XGYbNOAyYEBdAysOK92S3S7bZHerQh/2UlrbQ=";
 
   meta = with lib; {
     description = "A simple CLI browser for the peertube federated video platform";
