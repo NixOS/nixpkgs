@@ -13,7 +13,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "tillig";
     repo = "json-sort-cli";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-h7RlAFSb2pFolkd+0M5tddPxM5RgZJtNLLAoTuYNdIQ=";
   };
 
