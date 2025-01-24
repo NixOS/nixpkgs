@@ -24,13 +24,14 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [
-    libtool
+  buildInputs = [
     libtommath
   ];
 
   postPatch = ''
-    substituteInPlace makefile.shared --replace "LIBTOOL:=glibtool" "LIBTOOL:=libtool"
+    substituteInPlace makefile.shared \
+      --replace-fail "LIBTOOL:=glibtool" "LIBTOOL:=libtool" \
+      --replace-fail libtool "${lib.getExe libtool}"
   '';
 
   preBuild = ''
