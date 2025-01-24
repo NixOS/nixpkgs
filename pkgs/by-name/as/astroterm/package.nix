@@ -31,11 +31,15 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     xxd
-    versionCheckHook
   ];
   buildInputs = [
     argtable
     ncurses
+  ];
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    versionCheckHook
   ];
 
   postPatch = ''
