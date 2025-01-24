@@ -61,8 +61,8 @@ with pkgs;
       # thing to to create an earlier thing (leading to infinite recursion) and
       # we also would still respect the stage arguments choices for these
       # things.
-      (if stdenvNoCC.hostPlatform.isDarwin || stdenvNoCC.hostPlatform.useLLVM or false
-       then overrideCC stdenvNoCC buildPackages.llvmPackages.clangNoCompilerRt
+      (if stdenvNoCC.hostPlatform.cc == "clang"
+       then assert stdenvNoCC.hostPlatform.rtlib == "compiler-rt"; overrideCC stdenvNoCC buildPackages.llvmPackages.clangNoCompilerRt
        else gccCrossLibcStdenv)
     else mkStdenvNoLibs stdenv;
 
