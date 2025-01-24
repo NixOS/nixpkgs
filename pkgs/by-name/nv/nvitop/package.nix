@@ -25,7 +25,8 @@ python3Packages.buildPythonApplication rec {
     nvidia-ml-py
   ];
 
-  nativeCheckInputs = [
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
     versionCheckHook
   ];
   versionCheckProgramArg = [ "--version" ];
