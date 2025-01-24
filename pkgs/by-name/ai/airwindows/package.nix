@@ -66,9 +66,12 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
-    mkdir -p $out/lib/vst/airwindows
+    runHook preInstall
 
+    mkdir -p $out/lib/vst/airwindows
     find "$PWD" -type f -name "*.so" -exec install -Dm755 {} $out/lib/vst/airwindows \;
+
+    runHook postInstall
   '';
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
