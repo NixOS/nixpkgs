@@ -7664,7 +7664,7 @@ self: super: with self; {
 
   llvmlite = callPackage ../development/python-modules/llvmlite {
     # llvmlite always requires a specific version of llvm.
-    llvm = pkgs.llvm_14;
+    llvm = pkgs.llvm_15;
   };
 
   lm-format-enforcer = callPackage ../development/python-modules/lm-format-enforcer { };
