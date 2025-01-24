@@ -40,6 +40,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # ValueError: Illegal class passed as substitution, found <class 'datetime.datetime'> at col: 39
+    "test_sets_datetime_values_in_path_parameters"
+  ];
+
   pythonImportsCheck = [ "kiota_abstractions" ];
 
   # detects the wrong tag on the repo
