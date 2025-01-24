@@ -9,6 +9,7 @@
   pkg-config,
   protobuf,
   rustfmt,
+  nasm,
   # buildInputs
   freetype,
   glib,
@@ -48,6 +49,7 @@ rustPlatform.buildRustPackage rec {
   buildFeatures = [
     "native_viewer"
     "web_viewer"
+    "nasm"
   ];
 
   # When web_viewer is compiled, the wasm webviewer first needs to be built
@@ -77,6 +79,7 @@ rustPlatform.buildRustPackage rec {
     pkg-config
     protobuf
     rustfmt
+    nasm
   ];
 
   buildInputs = [
