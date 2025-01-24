@@ -14701,6 +14701,14 @@
     githubId = 8263431;
     name = "Matt Miemiec";
   };
+  mel = {
+    email = "mel@rnrd.eu";
+    github = "melnary";
+    githubId = 10659529;
+    matrix = "@mel:rnrd.eu";
+    name = "Mel G.";
+    keys = [ { fingerprint = "D75A C286 ACA7 00B4 D8EC  377D 2082 F8EC 11CC 009B"; } ];
+  };
   melchips = {
     email = "truphemus.francois@gmail.com";
     github = "melchips";
