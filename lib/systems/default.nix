@@ -66,15 +66,59 @@ let
   # `parsed` is inferred from args, both because there are two options with one
   # clearly preferred, and to prevent cycles. A simpler fixed point where the RHS
   # always just used `final.*` would fail on both counts.
-  elaborate = systemOrArgs: let
+  elaborate = systemOrArgs:
+    assert lib.assertMsg (!(lib.oldestSupportedReleaseIsAtLeast 2511 && systemOrArgs ? useZig)) "The useZig attribute has been deprecated in favor of the toolchain attributes.";
+    let
     allArgs = systemToAttrs systemOrArgs;
 
     # Those two will always be derived from "config", if given, so they should NOT
     # be overridden further down with "// args".
-    args = builtins.removeAttrs allArgs [ "parsed" "system" ];
+    args = lib.pipe (builtins.removeAttrs allArgs [ "parsed" "system" ]) [
+      (lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2511 && systemOrArgs ? useLLVM) "The useLLVM attribute has been deprecated in favor of the toolchain attributes.")
+      (lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2511 && systemOrArgs ? useArocc) "The useArocc attribute has been deprecated in favor of the toolchain attributes.")
+      (lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2511 && systemOrArgs ? useZig) "The useZig attribute has been deprecated in favor of the toolchain attributes.")
+    ];
 
     # TODO: deprecate args.rustc in favour of args.rust after 23.05 is EOL.
     rust = args.rust or args.rustc or {};
+
+    toolchain = {
+      cc = if final.useLLVM || final.isDarwin then "clang"
+        else if final.useArocc then "arocc"
+        else if final.useZig then "zig"
+        else "gcc";
+
+      bintools = if final.useLLVM || final.useArocc || final.useZig || final.isDarwin then
+        "llvm"
+      else "gnu";
+
+      cxxlib =
+        /**/ if final.useLLVM || final.useArocc || final.useZig || final.isDarwin then "libcxx"
+        else "libstdcxx";
+
+      unwinderlib =
+        /**/ if final.useLLVM || final.useArocc || final.useZig then "libunwind"
+        else if final.isDarwin then "libunwind-system"
+        else "libgcc_s";
+
+      rtlib =
+        /**/ if final.useLLVM || final.useArocc || final.useZig || final.isDarwin then "compiler-rt"
+        else "libgcc";
+
+      # Choose what linker we wish to use by default. Someday we might also
+      # choose the C compiler, runtime library, C++ standard library, etc. in
+      # this way, nice and orthogonally, and deprecate `useLLVM`. But due to
+      # the monolithic GCC build we cannot actually make those choices
+      # independently, so we are just doing `linker` and keeping `useLLVM` for
+      # now.
+      linker =
+        /**/ if final.useLLVM then "lld"
+        else if final.isDarwin then "cctools"
+        # "bfd" and "gold" both come from GNU binutils. The existence of Gold
+        # is why we use the more obscure "bfd" and not "binutils" for this
+        # choice.
+        else "bfd";
+    };
 
     final = {
       # Prefer to parse `config` as it is strictly more informative.
@@ -92,6 +136,8 @@ let
       isCompatible = _: throw "2022-05-23: isCompatible has been removed in favor of canExecute, refer to the 22.11 changelog for details";
       # Derived meta-data
       useLLVM = final.isFreeBSD || final.isOpenBSD;
+      useArocc = false;
+      useZig = false;
 
       libc =
         /**/ if final.isDarwin                then "libSystem"
@@ -112,19 +158,7 @@ let
         else if final.isNone                  then "newlib"
         # TODO(@Ericson2314) think more about other operating systems
         else                                     "native/impure";
-      # Choose what linker we wish to use by default. Someday we might also
-      # choose the C compiler, runtime library, C++ standard library, etc. in
-      # this way, nice and orthogonally, and deprecate `useLLVM`. But due to
-      # the monolithic GCC build we cannot actually make those choices
-      # independently, so we are just doing `linker` and keeping `useLLVM` for
-      # now.
-      linker =
-        /**/ if final.useLLVM or false      then "lld"
-        else if final.isDarwin              then "cctools"
-        # "bfd" and "gold" both come from GNU binutils. The existence of Gold
-        # is why we use the more obscure "bfd" and not "binutils" for this
-        # choice.
-        else                                     "bfd";
+
       # The standard lib directory name that non-nixpkgs binaries distributed
       # for this platform normally assume.
       libDir = if final.isLinux then
@@ -318,7 +352,7 @@ let
 
     }) // mapAttrs (n: v: v final.parsed) inspect.predicates
       // mapAttrs (n: v: v final.gcc.arch or "default") architectures.predicates
-      // args // {
+      // toolchain // args // {
         rust = rust // {
           # Once args.rustc.platform.target-family is deprecated and
           # removed, there will no longer be any need to modify any
@@ -430,6 +464,7 @@ let
          else throw message)
        true
        (final.parsed.abi.assertions or []);
+    assert (lib.listToAttrs (lib.map (key: lib.nameValuePair key final.${key}) (lib.attrNames toolchain))) == toolchain;
     final;
 
 in
