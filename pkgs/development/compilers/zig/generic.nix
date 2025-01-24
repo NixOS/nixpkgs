@@ -28,13 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit hash;
   };
 
-  patches =
-    args.patches or [ ]
-    ++
-      lib.optional (lib.versions.majorMinor finalAttrs.version == "0.10")
-        # Backport alignment related panics from zig-master to 0.10.
-        # Upstream issue: https://github.com/ziglang/zig/issues/14559
-        ./patches/0.10-macho-fixes.patch;
+  patches = args.patches or [ ];
 
   nativeBuildInputs = [
     cmake
@@ -63,7 +57,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [
     "out"
-  ] ++ lib.optional (lib.versionAtLeast finalAttrs.version "0.10") "doc";
+    "doc"
+  ];
 
   # strictDeps breaks zig when clang is being used.
   # https://github.com/NixOS/nixpkgs/issues/317055#issuecomment-2148438395
@@ -102,28 +97,20 @@ stdenv.mkDerivation (finalAttrs: {
       ''
         stage3/bin/zig build langref
       ''
-    else if lib.versionAtLeast finalAttrs.version "0.11" then
+    else
       ''
         stage3/bin/zig run ../tools/docgen.zig -- ../doc/langref.html.in langref.html --zig $PWD/stage3/bin/zig
-      ''
-    else if lib.versionAtLeast finalAttrs.version "0.10" then
-      ''
-        ./zig2 run ../doc/docgen.zig -- ./zig2 ../doc/langref.html.in langref.html
-      ''
-    else
-      null;
+      '';
 
   postInstall =
     if lib.versionAtLeast finalAttrs.version "0.13" then
       ''
         install -Dm444 ../zig-out/doc/langref.html -t $doc/share/doc/zig-${finalAttrs.version}/html
       ''
-    else if lib.versionAtLeast finalAttrs.version "0.10" then
+    else
       ''
         install -Dm444 langref.html -t $doc/share/doc/zig-${finalAttrs.version}/html
-      ''
-    else
-      null;
+      '';
 
   doInstallCheck = true;
   installCheckPhase = ''
