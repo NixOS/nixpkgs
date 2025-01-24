@@ -30,12 +30,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches =
     args.patches or [ ]
-    ++ lib.optionals (lib.versions.majorMinor finalAttrs.version == "0.9") [
-      # Fix index out of bounds reading RPATH (cherry-picked from 0.10-dev)
-      ./patches/0.9-read-dynstr-at-rpath-offset.patch
-      # Fix build on macOS 13 (cherry-picked from 0.10-dev)
-      ./patches/0.9-bump-macos-supported-version.patch
-    ]
     ++
       lib.optional (lib.versions.majorMinor finalAttrs.version == "0.10")
         # Backport alignment related panics from zig-master to 0.10.
