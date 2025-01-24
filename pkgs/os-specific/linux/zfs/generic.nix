@@ -191,10 +191,10 @@ let
             "--with-linux=${kernel.dev}/lib/modules/${kernel.modDirVersion}/source"
             "--with-linux-obj=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
           ]
-          ++ kernel.makeFlags
+          ++ kernel.moduleMakeFlags
         );
 
-      makeFlags = optionals buildKernel kernel.makeFlags;
+      makeFlags = optionals buildKernel kernel.moduleMakeFlags;
 
       enableParallelBuilding = true;
 

@@ -40,7 +40,7 @@ let
 in
 buildPythonPackage rec {
   pname = "jax";
-  version = "0.4.38";
+  version = "0.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -48,7 +48,7 @@ buildPythonPackage rec {
     repo = "jax";
     # google/jax contains tags for jax and jaxlib. Only use jax tags!
     tag = "jax-v${version}";
-    hash = "sha256-H8I9Mkz6Ia1RxJmnuJOSevLGHN2J8ey59ZTlFx8YfnA=";
+    hash = "sha256-D6n9Z34nrCbBd9IS8YW6uio5Yi9GLCo9PViO3YYbkQ8=";
   };
 
   build-system = [ setuptools ];
@@ -154,6 +154,7 @@ buildPythonPackage rec {
       "testInAxesPyTreePrefixMismatchErrorKwargs"
       "testOutAxesPyTreePrefixMismatchError"
       "test_tree_map"
+      "test_tree_prefix_error"
       "test_vjp_rule_inconsistent_pytree_structures_error"
       "test_vmap_in_axes_tree_prefix_error"
       "test_vmap_mismatched_axis_sizes_error_message_issue_705"
