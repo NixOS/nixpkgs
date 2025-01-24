@@ -26,7 +26,7 @@ lib.makeScope newScope (
 
     # FIXME untested with llvmPackages_16 was using llvmPackages_8
     crossThreadsStdenv = overrideCC stdenvNoLibc (
-      if stdenv.hostPlatform.useLLVM or false then
+      if stdenv.hostPlatform.cc == "clang" then
         buildPackages.llvmPackages.clangNoLibcxx
       else
         buildPackages.gccWithoutTargetLibc.override (old: {
