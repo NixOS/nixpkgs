@@ -6302,6 +6302,18 @@ final: prev:
     meta.homepage = "https://github.com/smjonas/live-command.nvim/";
   };
 
+  llama-vim = buildVimPlugin {
+    pname = "llama.vim";
+    version = "2025-01-24";
+    src = fetchFromGitHub {
+      owner = "ggml-org";
+      repo = "llama.vim/";
+      rev = "81e6802ebd00f177a8db73d62c7eeaf14a30819a";
+      sha256 = "0fcg0xmdjc9z25ssjmg9pl5q0vk1h1k65ipd4dfzxchvmfzirl5j";
+    };
+    meta.homepage = "https://github.com/ggml-org/llama.vim";
+  };
+
   llm-nvim = buildVimPlugin {
     pname = "llm.nvim";
     version = "2025-01-09";
