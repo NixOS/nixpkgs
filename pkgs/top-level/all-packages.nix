@@ -12997,10 +12997,6 @@ with pkgs;
 
   barrier = libsForQt5.callPackage ../applications/misc/barrier { };
 
-  bespokesynth = darwin.apple_sdk_11_0.callPackage ../applications/audio/bespokesynth {
-    inherit (darwin.apple_sdk_11_0.frameworks) Accelerate Cocoa WebKit CoreServices CoreAudioKit IOBluetooth MetalKit;
-  };
-
   bespokesynth-with-vst2 = bespokesynth.override {
     enableVST2 = true;
   };
@@ -13787,6 +13783,7 @@ with pkgs;
 
   hugin = callPackage ../applications/graphics/hugin {
     wxGTK = wxGTK32;
+    openexr = openexr_3;
   };
 
   huggle = libsForQt5.callPackage ../applications/misc/huggle { };
