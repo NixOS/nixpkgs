@@ -2004,17 +2004,22 @@ self: super: {
   # https://github.com/NixOS/nixpkgs/pull/349683
   pandoc-cli_3_6 = super.pandoc-cli_3_6.overrideScope (
     self: super: {
+      commonmark-extensions = self.commonmark-extensions_0_2_5_6;
+      commonmark-pandoc = self.commonmark-pandoc_0_2_2_3;
       doclayout = self.doclayout_0_5;
       hslua-module-doclayout = self.hslua-module-doclayout_1_2_0;
       lpeg = self.lpeg_1_1_0;
       pandoc = self.pandoc_3_6;
       pandoc-lua-engine = self.pandoc-lua-engine_0_4;
+      pandoc-lua-marshal = self.pandoc-lua-marshal_0_3_0;
       pandoc-server = self.pandoc-server_0_1_0_10;
+      skylighting = self.skylighting_0_14_5;
+      skylighting-core = self.skylighting-core_0_14_5;
       texmath = self.texmath_0_12_8_12;
       tls = self.tls_2_0_6;
       toml-parser = self.toml-parser_2_0_1_0;
       typst = self.typst_0_6_1;
-      typst-symbols = self.typst-symbols_0_1_6;
+      typst-symbols = self.typst-symbols_0_1_7;
     }
   );
 
