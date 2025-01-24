@@ -76,5 +76,6 @@ buildDotnetModule {
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.naxdy ];
     platforms = lib.platforms.linux;
+    mainProgram = "RetroSpy";
   };
 }
