@@ -19,10 +19,19 @@ in
 mixRelease rec {
   inherit (common) pname version src;
 
-  # Version 5.1.1 failed to bump their internal package version,
-  # which causes issues with static file serving in the NixOS module.
-  # See https://github.com/NixOS/nixpkgs/pull/370277
-  patches = [ ./0001-fix-version.patch ];
+  patches = [
+    # Version 5.1.1 failed to bump their internal package version,
+    # which causes issues with static file serving in the NixOS module.
+    # See https://github.com/NixOS/nixpkgs/pull/370277
+    ./0001-fix-version.patch
+    # Mobilizon uses chunked Transfer-Encoding for the media proxy but also
+    # sets the Content-Length header. This is a HTTP/1.1 protocol violation
+    # and results in nginx >=1.24 rejecting the response with this error:
+    # 'upstream sent "Content-Length" and "Transfer-Encoding" headers at the same
+    # time while reading response header from upstream'
+    # Upstream PR: https://framagit.org/framasoft/mobilizon/-/merge_requests/1604
+    ./0002-fix-media-proxy.patch
+  ];
 
   nativeBuildInputs = [
     git
