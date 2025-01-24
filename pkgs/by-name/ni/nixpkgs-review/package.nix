@@ -70,7 +70,8 @@ python3Packages.buildPythonApplication rec {
     done
   '';
 
-  nativeCheckInputs = [
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
     versionCheckHook
   ];
   versionCheckProgramArg = [ "--version" ];
