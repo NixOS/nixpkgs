@@ -14,6 +14,7 @@
   pkg-config,
   systemd,
   cppunit,
+  esi ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -57,6 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
       "--enable-x-accelerator-vary"
       "--enable-htcp"
     ]
+    ++ lib.optional (!esi) "--disable-esi"
     ++ lib.optional (
       stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isMusl
     ) "--enable-linux-netfilter";
