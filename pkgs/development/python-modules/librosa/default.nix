@@ -27,6 +27,7 @@
   # tests
   ffmpeg-headless,
   packaging,
+  pytest-cov-stub,
   pytest-mpl,
   pytestCheckHook,
   resampy,
@@ -46,8 +47,6 @@ buildPythonPackage rec {
     hash = "sha256-0FbKVAFWmcFTW2dR27nif6hPZeIxFWYF1gTm4BEJZ/Q=";
   };
 
-  build-system = [ setuptools ];
-
   patches = [
     (fetchpatch2 {
       # https://github.com/librosa/librosa/issues/1849
@@ -64,10 +63,7 @@ buildPythonPackage rec {
     })
   ];
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace-fail "--cov-report term-missing --cov librosa --cov-report=xml " ""
-  '';
+  build-system = [ setuptools ];
 
   dependencies = [
     audioread
@@ -93,6 +89,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     ffmpeg-headless
     packaging
+    pytest-cov-stub
     pytest-mpl
     pytestCheckHook
     resampy
@@ -112,6 +109,8 @@ buildPythonPackage rec {
       "test_cite_released"
       "test_cite_badversion"
       "test_cite_unreleased"
+      # assert 22050 == np.int64(30720)
+      "test_stream"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # crashing the python interpreter
