@@ -69,7 +69,7 @@ with pkgs;
   stdenvNoLibc =
     if stdenvNoCC.hostPlatform != stdenvNoCC.buildPlatform
     then
-      (if stdenvNoCC.hostPlatform.isDarwin || stdenvNoCC.hostPlatform.useLLVM or false
+      (if stdenvNoCC.hostPlatform.cc == "clang"
        then overrideCC stdenvNoCC buildPackages.llvmPackages.clangNoLibc
        else gccCrossLibcStdenv)
     else mkStdenvNoLibs stdenv;
