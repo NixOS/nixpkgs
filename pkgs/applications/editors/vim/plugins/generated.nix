@@ -5219,6 +5219,18 @@ final: prev:
     meta.homepage = "https://github.com/pimalaya/himalaya-vim/";
   };
 
+  hlchunk-nvim = buildVimPlugin {
+    pname = "hlchunk.nvim";
+    version = "2024-11-23";
+    src = fetchFromGitHub {
+      owner = "shellRaining";
+      repo = "hlchunk.nvim";
+      rev = "5465dd33ade8676d63f6e8493252283060cd72ca";
+      sha256 = "0vksi1idliaxk5l3hksfhhbps4sw6d8lk58m5ja4wrnmjxz5b5bz";
+    };
+    meta.homepage = "https://github.com/shellRaining/hlchunk.nvim/";
+  };
+
   hlint-refactor-vim = buildVimPlugin {
     pname = "hlint-refactor-vim";
     version = "2015-12-05";
@@ -10458,7 +10470,7 @@ final: prev:
     meta.homepage = "https://github.com/salkin-mada/openscad.nvim/";
   };
 
-  orgmode = buildVimPlugin {
+  orgmode = buildNeovimPlugin {
     pname = "orgmode";
     version = "2025-01-19";
     src = fetchFromGitHub {
