@@ -9385,6 +9385,8 @@ self: super: with self; {
 
   nixpkgs-pytools = callPackage ../development/python-modules/nixpkgs-pytools { };
 
+  nixpkgs-updaters-library = callPackage ../development/python-modules/nixpkgs-updaters-library { };
+
   nix-prefetch-github = callPackage ../development/python-modules/nix-prefetch-github { };
 
   nkdfu = callPackage ../development/python-modules/nkdfu { };
