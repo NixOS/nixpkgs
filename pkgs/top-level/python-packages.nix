@@ -9125,6 +9125,8 @@ self: super: with self; {
 
   nomadnet = callPackage ../development/python-modules/nomadnet { };
 
+  nonbloat-db = callPackage ../development/python-modules/nonbloat-db { };
+
   noneprompt = callPackage ../development/python-modules/noneprompt {  };
 
   nox = callPackage ../development/python-modules/nox { };
