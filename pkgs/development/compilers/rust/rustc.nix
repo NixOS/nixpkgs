@@ -52,7 +52,6 @@ let
     concatStringsSep
     ;
   inherit (darwin.apple_sdk.frameworks) Security;
-  useLLVM = stdenv.targetPlatform.useLLVM or false;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "${targetPackages.stdenv.cc.targetPrefix}rustc";
@@ -97,11 +96,21 @@ stdenv.mkDerivation (finalAttrs: {
     # This doesn't apply to cross-building for FreeBSD because the host
     # uses libstdc++, but the target (used for building std) uses libc++
     optional (
-      stdenv.hostPlatform.isLinux && !withBundledLLVM && !stdenv.targetPlatform.isFreeBSD && !useLLVM
+      stdenv.hostPlatform.isLinux
+      && !withBundledLLVM
+      && !stdenv.targetPlatform.isFreeBSD
+      && !stdenv.targetPlatform.isDarwin
+      && stdenv.targetPlatform.cxxlib == "libstdcxx"
     ) "--push-state --as-needed -lstdc++ --pop-state"
     ++
       optional
-        (stdenv.hostPlatform.isLinux && !withBundledLLVM && !stdenv.targetPlatform.isFreeBSD && useLLVM)
+        (
+          stdenv.hostPlatform.isLinux
+          && !withBundledLLVM
+          && !stdenv.targetPlatform.isFreeBSD
+          && !stdenv.targetPlatform.isDarwin
+          && stdenv.targetPlatform.cxxlib == "libcxx"
+        )
         "--push-state --as-needed -L${llvmPackages.libcxx}/lib -lc++ -lc++abi -lLLVM-${lib.versions.major llvmPackages.llvm.version} --pop-state"
     ++ optional (stdenv.hostPlatform.isDarwin && !withBundledLLVM) "-lc++ -lc++abi"
     ++ optional stdenv.hostPlatform.isFreeBSD "-rpath ${llvmPackages.libunwind}/lib"
@@ -207,7 +216,7 @@ stdenv.mkDerivation (finalAttrs: {
       # doesn't work) to build a linker.
       "--disable-llvm-bitcode-linker"
     ]
-    ++ optionals (stdenv.targetPlatform.isLinux && !(stdenv.targetPlatform.useLLVM or false)) [
+    ++ optionals (stdenv.targetPlatform.isLinux && stdenv.hostPlatform.rtlib != "compiler-rt") [
       "--enable-profiler" # build libprofiler_builtins
     ]
     ++ optionals stdenv.buildPlatform.isMusl [
@@ -226,11 +235,15 @@ stdenv.mkDerivation (finalAttrs: {
       # https://github.com/rust-lang/rust/issues/92173
       "--set rust.jemalloc"
     ]
-    ++ optionals (useLLVM && !stdenv.targetPlatform.isFreeBSD) [
-      # https://github.com/NixOS/nixpkgs/issues/311930
-      "--llvm-libunwind=${if withBundledLLVM then "in-tree" else "system"}"
-      "--enable-use-libcxx"
-    ];
+    ++
+      optional (stdenv.targetPlatform.unwinderlib == "libunwind" && !stdenv.targetPlatform.isFreeBSD)
+        # https://github.com/NixOS/nixpkgs/issues/311930
+        "--llvm-libunwind=${if withBundledLLVM then "in-tree" else "system"}"
+    ++ optional (
+      stdenv.targetPlatform.cxxlib == "libcxx"
+      && !stdenv.targetPlatform.isFreeBSD
+      && !stdenv.targetPlatform.isDarwin
+    ) "--enable-use-libcxx";
 
   # if we already have a rust compiler for build just compile the target std
   # library and reuse compiler
@@ -353,15 +366,22 @@ stdenv.mkDerivation (finalAttrs: {
       zlib
     ]
     ++ optional (!withBundledLLVM) llvmShared.lib
-    ++ optional (useLLVM && !withBundledLLVM && !stdenv.targetPlatform.isFreeBSD) [
-      llvmPackages.libunwind
-      # Hack which is used upstream https://github.com/gentoo/gentoo/blob/master/dev-lang/rust/rust-1.78.0.ebuild#L284
-      (runCommandLocal "libunwind-libgcc" { } ''
-        mkdir -p $out/lib
-        ln -s ${llvmPackages.libunwind}/lib/libunwind.so $out/lib/libgcc_s.so
-        ln -s ${llvmPackages.libunwind}/lib/libunwind.so $out/lib/libgcc_s.so.1
-      '')
-    ];
+    ++
+      optionals
+        (
+          stdenv.targetPlatform.unwinderlib == "libunwind"
+          && !withBundledLLVM
+          && !stdenv.targetPlatform.isFreeBSD
+        )
+        [
+          llvmPackages.libunwind
+          # Hack which is used upstream https://github.com/gentoo/gentoo/blob/master/dev-lang/rust/rust-1.78.0.ebuild#L284
+          (runCommandLocal "libunwind-libgcc" { } ''
+            mkdir -p $out/lib
+            ln -s ${llvmPackages.libunwind}/lib/libunwind.so $out/lib/libgcc_s.so
+            ln -s ${llvmPackages.libunwind}/lib/libunwind.so $out/lib/libgcc_s.so.1
+          '')
+        ];
 
   outputs = [
     "out"
@@ -421,10 +441,5 @@ stdenv.mkDerivation (finalAttrs: {
     # If rustc can't target a platform, we also can't build rustc for
     # that platform.
     badPlatforms = rustc.badTargetPlatforms;
-    # Builds, but can't actually compile anything
-    # https://github.com/NixOS/nixpkgs/issues/311930
-    # https://github.com/rust-lang/rust/issues/55120
-    # https://github.com/rust-lang/rust/issues/82521
-    broken = stdenv.hostPlatform.useLLVM;
   };
 })
