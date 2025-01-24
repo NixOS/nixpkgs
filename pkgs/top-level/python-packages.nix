@@ -5404,6 +5404,8 @@ self: super: with self; {
 
   google-cloud-dns = callPackage ../development/python-modules/google-cloud-dns { };
 
+  google-cloud-documentai = callPackage ../development/python-modules/google-cloud-documentai { };
+
   google-cloud-error-reporting = callPackage ../development/python-modules/google-cloud-error-reporting { };
 
   google-cloud-firestore = callPackage ../development/python-modules/google-cloud-firestore { };
