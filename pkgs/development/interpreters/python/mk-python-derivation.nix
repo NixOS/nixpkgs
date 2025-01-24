@@ -99,7 +99,12 @@ let
     "wheel"
   ];
 
-  cleanAttrs = flip removeAttrs [
+in
+
+lib.extendMkDerivation {
+  constructDrv = stdenv.mkDerivation;
+
+  excludeDrvArgNames = [
     "disabled"
     "checkPhase"
     "checkInputs"
@@ -114,8 +119,8 @@ let
     "build-system"
   ];
 
-in
-
+  extendDrvArgs =
+    finalAttrs:
 {
   # Build-time dependencies for the package
   nativeBuildInputs ? [ ],
@@ -197,10 +202,6 @@ in
   ...
 }@attrs:
 
-let
-  # Keep extra attributes from `attrs`, e.g., `patchPhase', etc.
-  self = stdenv.mkDerivation (
-    finalAttrs:
     let
       getFinalPassthru =
         let
@@ -283,8 +284,7 @@ let
       name = namePrefix + attrs.name or "${finalAttrs.pname}-${finalAttrs.version}";
 
     in
-    (cleanAttrs attrs)
-    // {
+    {
       inherit name;
 
       inherit catchConflicts;
@@ -448,7 +448,7 @@ let
             "enabledTests"
           ] attrs
         )
-  );
+  ;
 
   # This derivation transformation function must be independent to `attrs`
   # for fixed-point arguments support in the future.
@@ -468,6 +468,4 @@ let
         };
     in
     drv: disablePythonPackage (toPythonModule drv);
-
-in
-transformDrv self
+}
