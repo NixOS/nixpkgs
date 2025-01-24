@@ -83,7 +83,7 @@ multiStdenv.mkDerivation {
     wrapProgram $out/libexec/airwave-host-64.exe --set WINELOADER ${wine-xembed}/bin/wine64
   '';
 
-  meta = with lib; {
+  meta = {
     description = "WINE-based VST bridge for Linux VST hosts";
     longDescription = ''
       Airwave is a wine based VST bridge, that allows for the use of
@@ -94,9 +94,9 @@ multiStdenv.mkDerivation {
       window.
     '';
     homepage = "https://github.com/phantom-code/airwave";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ michalrus ];
+    maintainers = with lib.maintainers; [ michalrus ];
     hydraPlatforms = [ ];
   };
 }
