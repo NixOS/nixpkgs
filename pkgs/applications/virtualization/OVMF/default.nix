@@ -253,6 +253,7 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
       prefix = "${finalAttrs.finalPackage.fd}/FV/${fwPrefix}";
     in
     {
+      mergedFirmware = "${prefix}.fd";
       firmware = "${prefix}_CODE.fd";
       variables = "${prefix}_VARS.fd";
       variablesMs =

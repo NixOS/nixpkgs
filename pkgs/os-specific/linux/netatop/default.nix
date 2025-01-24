@@ -48,7 +48,7 @@ stdenv.mkDerivation {
     kmod=${kmod} substituteAllInPlace netatop.service
   '';
 
-  makeFlags = kernel.makeFlags;
+  makeFlags = kernel.moduleMakeFlags;
 
   preInstall = ''
     mkdir -p $out/lib/systemd/system $out/bin $out/sbin $out/share/man/man{4,8}

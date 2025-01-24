@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "guile-hoot";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitLab {
     owner = "spritely";
     repo = "guile-hoot";
     rev = "v${version}";
-    hash = "sha256-n8u0xK2qDLGySxiYWH882/tkL8ggu3hivHn3qdDO9eI=";
+    hash = "sha256-xPU4uLyh3gd2ubyGednCqB3uzKrabhXQhs6vBc8z0ps=";
   };
 
   nativeBuildInputs = [

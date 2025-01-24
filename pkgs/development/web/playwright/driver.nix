@@ -27,20 +27,20 @@ let
     }
     .${system} or throwSystem;
 
-  version = "1.47.0";
+  version = "1.48.1";
 
   src = fetchFromGitHub {
     owner = "Microsoft";
     repo = "playwright";
     rev = "v${version}";
-    hash = "sha256-cKjVDy1wFo8NlF8v+8YBuQUF2OUYjCmv27uhEoVUrno=";
+    hash = "sha256-VMp/Tjd5w2v+IHD+CMaR/XdMJHkS/u7wFe0hNxa1TbE=";
   };
 
   babel-bundle = buildNpmPackage {
     pname = "babel-bundle";
     inherit version src;
     sourceRoot = "${src.name}/packages/playwright/bundles/babel";
-    npmDepsHash = "sha256-HrDTkP2lHl2XKD8aGpmnf6YtSe/w9UePH5W9QfbaoMg=";
+    npmDepsHash = "sha256-kHuNFgxmyIoxTmvT+cyzDRfKNy18zzeUH3T+gJopWeA=";
     dontNpmBuild = true;
     installPhase = ''
       cp -r . "$out"
@@ -50,7 +50,7 @@ let
     pname = "expect-bundle";
     inherit version src;
     sourceRoot = "${src.name}/packages/playwright/bundles/expect";
-    npmDepsHash = "sha256-qnFx/AQZtmxNFrrabfOpsWy6I64DFJf3sWrJzL1wfU4=";
+    npmDepsHash = "sha256-KwxNqPefvPPHG4vbco2O4G8WlA7l33toJdfNWHMTDOQ=";
     dontNpmBuild = true;
     installPhase = ''
       cp -r . "$out"
@@ -92,7 +92,7 @@ let
     inherit version src;
 
     sourceRoot = "${src.name}"; # update.sh depends on sourceRoot presence
-    npmDepsHash = "sha256-FaDTJmIiaaOCvq6tARfiWX5IBTTNOJ/iVkRsO4D8aqc=";
+    npmDepsHash = "sha256-cmUmYuUL7zfB7WEBKft43r69f7vaZDEjku8uwR3RZ1A=";
 
     nativeBuildInputs = [ cacert ];
 
@@ -159,15 +159,11 @@ let
 
     passthru = {
       browsersJSON = (lib.importJSON ./browsers.json).browsers;
-      browsers =
-        {
-          x86_64-linux = browsers-linux { };
-          aarch64-linux = browsers-linux { };
-          x86_64-darwin = browsers-mac;
-          aarch64-darwin = browsers-mac;
-        }
-        .${system} or throwSystem;
-      browsers-chromium = browsers-linux { };
+      browsers = browsers { };
+      browsers-chromium = browsers {
+        withFirefox = false;
+        withWebkit = false;
+      };
     };
   });
 
@@ -196,28 +192,7 @@ let
     };
   });
 
-  browsers-mac = stdenv.mkDerivation {
-    pname = "playwright-browsers";
-    inherit (playwright) version;
-
-    dontUnpack = true;
-
-    nativeBuildInputs = [ cacert ];
-
-    installPhase = ''
-      runHook preInstall
-
-      export PLAYWRIGHT_BROWSERS_PATH=$out
-      ${playwright-core}/cli.js install
-      rm -r $out/.links
-
-      runHook postInstall
-    '';
-
-    meta.platforms = lib.platforms.darwin;
-  };
-
-  browsers-linux = lib.makeOverridable (
+  browsers = lib.makeOverridable (
     {
       withChromium ? true,
       withFirefox ? true,

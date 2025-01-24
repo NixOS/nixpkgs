@@ -8,7 +8,7 @@
 , gobject-introspection
 , gsound
 , hddtemp
-, libgda
+, libgda6
 , libgtop
 , libhandy
 , liquidctl
@@ -119,7 +119,7 @@ super: lib.trivial.pipe super [
     };
     preInstall = ''
       substituteInPlace extension.js \
-        --replace-fail "import Gda from 'gi://Gda?version>=5.0'" "imports.gi.GIRepository.Repository.prepend_search_path('${libgda}/lib/girepository-1.0'); const Gda = (await import('gi://Gda')).default" \
+        --replace-fail "import Gda from 'gi://Gda?version>=5.0'" "imports.gi.GIRepository.Repository.prepend_search_path('${libgda6}/lib/girepository-1.0'); const Gda = (await import('gi://Gda')).default" \
         --replace-fail "import GSound from 'gi://GSound'" "imports.gi.GIRepository.Repository.prepend_search_path('${gsound}/lib/girepository-1.0'); const GSound = (await import('gi://GSound')).default"
     '';
   }))
