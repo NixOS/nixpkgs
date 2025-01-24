@@ -11866,7 +11866,7 @@ with pkgs;
 
   busybox = callPackage ../os-specific/linux/busybox {
     # Fixes libunwind from being dynamically linked to a static binary.
-    stdenv = if (stdenv.targetPlatform.useLLVM or false) then
+    stdenv = if stdenv.cc.isClang && stdenv.hostPlatform.unwinderlib == "libunwind" then
       overrideCC stdenv buildPackages.llvmPackages.clangNoLibcxx
     else stdenv;
   };
