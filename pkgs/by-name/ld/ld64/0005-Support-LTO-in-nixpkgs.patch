@@ -1,0 +1,48 @@
+From faa5ab7c6e8d9a6c6157a2b681edad592ce78555 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Sun, 7 Apr 2024 15:33:36 -0400
+Subject: [PATCH 5/8] Support LTO in nixpkgs
+
+---
+ src/ld/InputFiles.cpp       | 11 ++---------
+ src/ld/parsers/lto_file.cpp |  2 +-
+ 2 files changed, 3 insertions(+), 10 deletions(-)
+
+diff --git a/src/ld/InputFiles.cpp b/src/ld/InputFiles.cpp
+index 427ab09..b8a9870 100644
+--- a/src/ld/InputFiles.cpp
++++ b/src/ld/InputFiles.cpp
+@@ -464,15 +464,8 @@ ld::File* InputFiles::makeFile(const Options::FileInfo& info, bool indirectDylib
+ 			if ( _options.overridePathlibLTO() != NULL ) {
+ 				libLTO = _options.overridePathlibLTO();
+ 			}
+-			else if ( _NSGetExecutablePath(ldPath, &bufSize) != -1 ) {
+-				if ( realpath(ldPath, tmpPath) != NULL ) {
+-					char* lastSlash = strrchr(tmpPath, '/');
+-					if ( lastSlash != NULL )
+-						strcpy(lastSlash, "/../lib/libLTO.dylib");
+-					libLTO = tmpPath;
+-					if ( realpath(tmpPath, libLTOPath) != NULL ) 
+-						libLTO = libLTOPath;
+-				}
++			else {
++				libLTO = "@libllvm@/lib/libLTO.dylib";
+ 			}
+ 			throwf("could not process llvm bitcode object file, because %s could not be loaded", libLTO);
+ 		}
+diff --git a/src/ld/parsers/lto_file.cpp b/src/ld/parsers/lto_file.cpp
+index 5318212..e18e974 100644
+--- a/src/ld/parsers/lto_file.cpp
++++ b/src/ld/parsers/lto_file.cpp
+@@ -1807,7 +1807,7 @@ bool optimize(  const std::vector<const ld::Atom*>&	allAtoms,
+ 
+ }; // namespace lto
+ 
+-static const char *sLTODylib = "@rpath/libLTO.dylib";
++static const char *sLTODylib = "@libllvm@/lib/libLTO.dylib";
+ static std::atomic<bool> sLTOIsLoaded(false);
+ 
+ static void *getHandle() {
+-- 
+2.45.1
+

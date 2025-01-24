@@ -1,0 +1,21 @@
+--- fehlstart-9f4342d75ec5e2a46c13c99c34894bc275798441-src/fehlstart.c	1970-01-01 01:00:01.000000000 +0100
++++ fehlstart.c	2016-08-10 12:21:11.231638418 +0200
+@@ -779,8 +779,15 @@
+     read_settings(setting_file, &settings);
+     update_commands();
+     g_hash_table_foreach(action_map, update_launcher, NULL);
+-    add_launchers(STR_S(APPLICATIONS_DIR_0));
+-    add_launchers(STR_S(APPLICATIONS_DIR_1));
+-    add_launchers(STR_S(USER_APPLICATIONS_DIR));
++    const char* nixprofiles = getenv("NIX_PROFILES");
++    if(nixprofiles != NULL) {
++      const char* pch = strtok(nixprofiles, " ");
++      while (pch != NULL)
++      {
++          String nix_dir = str_concat((String) { pch, strlen(pch), false },STR_S("/share/applications"));
++          add_launchers(nix_dir);
++          pch = strtok(NULL, " ");
++      }
++    }
+     return NULL;
+ }

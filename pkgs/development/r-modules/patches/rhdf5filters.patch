@@ -1,0 +1,13 @@
+diff --git a/src/Makevars.in b/src/Makevars.in
+index 3e55470..656eae4 100644
+--- a/src/Makevars.in
++++ b/src/Makevars.in
+@@ -15,7 +15,7 @@ export PKG_CXXPICFLAGS=@CXXPICFLAGS@
+ export RANLIB=@RANLIB@
+ export MAKE=@MAKE@
+ export AR=@AR@
+-export PKG_CPPFLAGS=@CPPFLAGS@ -I"@RHDF5_INCLUDE@"
++export PKG_CPPFLAGS=@CPPFLAGS@
+ export PKG_LDFLAGS=@LDFLAGS@
+ 
+ all: copying $(SHLIB)

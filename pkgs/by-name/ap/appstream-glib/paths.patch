@@ -1,0 +1,11 @@
+--- a/libappstream-builder/asb-utils.c
++++ b/libappstream-builder/asb-utils.c
+@@ -294,7 +294,7 @@
+ {
+ 	g_autofree gchar *standard_error = NULL;
+ 	gint exit_status = 0;
+-	const gchar *argv[] = { "/usr/bin/pngquant", "--skip-if-larger",
++	const gchar *argv[] = { "@pngquant@", "--skip-if-larger",
+ 				"--strip", "--ext", ".png",
+ 				"--force", "--speed", "1", filename, NULL };
+ 	if (!g_file_test (argv[0], G_FILE_TEST_IS_EXECUTABLE))

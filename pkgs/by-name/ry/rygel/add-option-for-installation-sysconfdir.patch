@@ -1,0 +1,35 @@
+diff --git a/meson.build b/meson.build
+index 27bde61f..3d434de9 100644
+--- a/meson.build
++++ b/meson.build
+@@ -22,7 +22,11 @@ if not get_option('uninstalled')
+     rygel_datadir = join_paths(get_option('prefix'), get_option('datadir'), 'rygel')
+     rygel_libexecdir = join_paths(get_option('prefix'), get_option('libexecdir'),
+     'rygel')
+-    rygel_sysconfdir = join_paths(get_option('prefix'), get_option('sysconfdir'))
++    if get_option('sysconfdir_install') != ''
++        rygel_sysconfdir = join_paths(get_option('prefix'), get_option('sysconfdir_install'))
++    else
++        rygel_sysconfdir = join_paths(get_option('prefix'), get_option('sysconfdir'))
++    endif
+     rygel_plugindir = join_paths(rygel_libdir, 'rygel-2.8', 'plugins')
+     rygel_enginedir = join_paths(rygel_libdir, 'rygel-2.8', 'engines')
+     rygel_presetdir = join_paths(rygel_datadir, 'presets')
+@@ -57,7 +61,7 @@ conf.set_quoted('DATA_DIR', rygel_datadir)
+ conf.set_quoted('PLUGIN_DIR', rygel_plugindir)
+ conf.set_quoted('BIG_ICON_DIR', rygel_bigicondir)
+ conf.set_quoted('SMALL_ICON_DIR', rygel_smallicondir)
+-conf.set_quoted('SYS_CONFIG_DIR', rygel_sysconfdir)
++conf.set_quoted('SYS_CONFIG_DIR', get_option('sysconfdir'))
+ conf.set_quoted('LOCALEDIR', join_paths(get_option('prefix'), get_option('localedir')))
+ conf.set_quoted('MX_EXTRACT_PATH', join_paths(rygel_libexecdir, 'mx-extract'))
+ conf.set_quoted('DESKTOP_DIR', join_paths(get_option('prefix'), get_option('datadir'), 'applications'))
+diff --git a/meson_options.txt b/meson_options.txt
+index fd04776a..3dee43ba 100644
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -1,3 +1,4 @@
++option('sysconfdir_install', type: 'string', value: '', description: 'sysconfdir to use during installation')
+ option('uninstalled', type: 'boolean', value: 'false', description: 'Run Rygel from build directory only')
+ option('api-docs', type: 'boolean', value: 'false', description: 'Build the API documentation')
+ option('man_pages', type: 'boolean', value: 'true', description: 'Build the man pages')

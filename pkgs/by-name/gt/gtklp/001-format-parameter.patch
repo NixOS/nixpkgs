@@ -1,0 +1,22 @@
+Patch source: http://sophie.zarb.org/rpms/68e90a72e0052022f558148d97c9ea2a/files/1
+
+--- a/libgtklp/libgtklp.c	2020-08-25 17:31:52.427298559 +0100
++++ b/libgtklp/libgtklp.c	2020-08-25 17:36:37.728154682 +0100
+@@ -939,7 +939,7 @@
+ 		gtk_widget_show(pixmapwid);
+ 
+ 		if (strlen(gerror2) == 0)
+-			snprintf(tmplabel, (size_t) MAXLINE, gerror1);
++			snprintf(tmplabel, (size_t) MAXLINE, "%s", gerror1);
+ 		else
+ 			snprintf(tmplabel, (size_t) MAXLINE, gerror1, gerror2);
+ 		label = gtk_label_new(tmplabel);
+@@ -973,7 +973,7 @@
+ #endif
+ 	} else {
+ 		if (strlen(gerror2) == 0)
+-			g_warning(gerror1);
++			g_warning("%s", gerror1);
+ 		else
+ 			g_warning(gerror1, gerror2);
+ 	}

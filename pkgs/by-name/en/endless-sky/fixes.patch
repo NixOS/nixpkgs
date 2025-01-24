@@ -1,0 +1,53 @@
+diff --git a/SConstruct b/SConstruct
+index 48fd080..419b40d 100644
+--- a/SConstruct
++++ b/SConstruct
+@@ -55,7 +55,7 @@ sky = env.Program("endless-sky", Glob("build/" + env["mode"] + "/*.cpp"))
+ 
+ 
+ # Install the binary:
+-env.Install("$DESTDIR$PREFIX/games", sky)
++env.Install("$DESTDIR$PREFIX/bin", sky)
+ 
+ # Install the desktop file:
+ env.Install("$DESTDIR$PREFIX/share/applications", "endless-sky.desktop")
+diff --git a/source/Files.cpp b/source/Files.cpp
+index de27023e..4225051f 100644
+--- a/source/Files.cpp
++++ b/source/Files.cpp
+@@ -108,32 +108,9 @@ void Files::Init(const char * const *argv)
+ 		resources = str;
+ 		SDL_free(str);
+ 	}
+-#if defined _WIN32
+-	FixWindowsSlashes(resources);
+-#endif
+-	if(resources.back() != '/')
+-		resources += '/';
+-#if defined __linux__ || defined __FreeBSD__ || defined __DragonFly__
+-	// Special case, for Linux: the resource files are not in the same place as
+-	// the executable, but are under the same prefix (/usr or /usr/local).
+-	static const string LOCAL_PATH = "/usr/local/";
+-	static const string STANDARD_PATH = "/usr/";
+-	static const string RESOURCE_PATH = "share/games/endless-sky/";
+-	if(!resources.compare(0, LOCAL_PATH.length(), LOCAL_PATH))
+-		resources = LOCAL_PATH + RESOURCE_PATH;
+-	else if(!resources.compare(0, STANDARD_PATH.length(), STANDARD_PATH))
+-		resources = STANDARD_PATH + RESOURCE_PATH;
+-#endif
+-	// If the resources are not here, search in the directories containing this
+-	// one. This allows, for example, a Mac app that does not actually have the
+-	// resources embedded within it.
+-	while(!Exists(resources + "credits.txt"))
+-	{
+-		size_t pos = resources.rfind('/', resources.length() - 2);
+-		if(pos == string::npos || pos == 0)
+-			throw runtime_error("Unable to find the resource directories!");
+-		resources.erase(pos + 1);
+-	}
++
++	resources = "%NIXPKGS_RESOURCES_PATH%";
++
+ 	dataPath = resources + "data/";
+ 	imagePath = resources + "images/";
+ 	soundPath = resources + "sounds/";

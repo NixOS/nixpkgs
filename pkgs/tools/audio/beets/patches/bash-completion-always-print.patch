@@ -1,0 +1,45 @@
+diff --git i/beets/ui/commands.py w/beets/ui/commands.py
+index ad4f7821..5077191d 100755
+--- i/beets/ui/commands.py
++++ w/beets/ui/commands.py
+@@ -2381,22 +2381,6 @@ default_commands.append(config_cmd)
+ def print_completion(*args):
+     for line in completion_script(default_commands + plugins.commands()):
+         print_(line, end="")
+-    if not any(os.path.isfile(syspath(p)) for p in BASH_COMPLETION_PATHS):
+-        log.warning(
+-            "Warning: Unable to find the bash-completion package. "
+-            "Command line completion might not work."
+-        )
+-
+-
+-BASH_COMPLETION_PATHS = [
+-    b"/etc/bash_completion",
+-    b"/usr/share/bash-completion/bash_completion",
+-    b"/usr/local/share/bash-completion/bash_completion",
+-    # SmartOS
+-    b"/opt/local/share/bash-completion/bash_completion",
+-    # Homebrew (before bash-completion2)
+-    b"/usr/local/etc/bash_completion",
+-]
+ 
+ 
+ def completion_script(commands):
+diff --git i/test/test_ui.py w/test/test_ui.py
+index cae86148..faf266a8 100644
+--- i/test/test_ui.py
++++ w/test/test_ui.py
+@@ -1434,12 +1434,7 @@ class CompletionTest(_common.TestCase, TestHelper):
+         )
+ 
+         # Load bash_completion library.
+-        for path in commands.BASH_COMPLETION_PATHS:
+-            if os.path.exists(syspath(path)):
+-                bash_completion = path
+-                break
+-        else:
+-            self.skipTest("bash-completion script not found")
++        self.skipTest("bash-completion script not found")
+         try:
+             with open(util.syspath(bash_completion), "rb") as f:
+                 tester.stdin.writelines(f)

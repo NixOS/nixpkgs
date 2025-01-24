@@ -1,0 +1,79 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Misty De Meo <mistydemeo@gmail.com>
+Date: Tue, 15 Sep 2020 16:57:26 -0700
+Subject: [PATCH] Check for __arm64__, not just __arm__
+
+On at least one 64-bit ARM processor I've tested (Apple Silicon on macOS),
+__arm__ isn't defined but __arm64__ is. As a result, some of the
+ARM-specific macros are missing and calls to them fail.
+---
+ src/cr-core.c    | 2 +-
+ src/dev32s.h     | 2 +-
+ src/pffft-wrap.c | 2 +-
+ src/pffft.c      | 4 ++--
+ 4 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/src/cr-core.c b/src/cr-core.c
+index 159a5d9..fe5ea8a 100644
+--- a/src/cr-core.c
++++ b/src/cr-core.c
+@@ -80,7 +80,7 @@ static void cubic_stage_fn(stage_t * p, fifo_t * output_fifo)
+   #define DEFINED_X86 0
+ #endif
+ 
+-#if defined __arm__
++#if defined(__arm__) || defined(__arm64__)
+   #define DEFINED_ARM 1
+ #else
+   #define DEFINED_ARM 0
+diff --git a/src/dev32s.h b/src/dev32s.h
+index 7edae86..a14d7ad 100644
+--- a/src/dev32s.h
++++ b/src/dev32s.h
+@@ -31,7 +31,7 @@ SIMD_INLINE(void) vStorSum(float * a, v4_t b) {
+   v4_t t = vAdd(_mm_movehl_ps(b, b), b);
+   _mm_store_ss(a, vAdd(t, _mm_shuffle_ps(t,t,1)));}
+ 
+-#elif defined __arm__
++#elif defined(__arm__) || defined(__arm64__)
+ 
+ #include <arm_neon.h>
+ 
+diff --git a/src/pffft-wrap.c b/src/pffft-wrap.c
+index c920f06..1641fc4 100644
+--- a/src/pffft-wrap.c
++++ b/src/pffft-wrap.c
+@@ -40,7 +40,7 @@ static void pffft_zconvolve(PFFFT_Setup *s, const float *a, const float *b, floa
+ 
+   float ar, ai, br, bi;
+ 
+-#ifdef __arm__
++#if defined(__arm__) || defined(__arm64__)
+   __builtin_prefetch(va);
+   __builtin_prefetch(vb);
+   __builtin_prefetch(va+2);
+diff --git a/src/pffft.c b/src/pffft.c
+index 46c841e..8c775a9 100644
+--- a/src/pffft.c
++++ b/src/pffft.c
+@@ -157,7 +157,7 @@ typedef __m128 v4sf;
+ /*
+   ARM NEON support macros
+ */
+-#elif !defined(PFFFT_SIMD_DISABLE) && defined(__arm__)
++#elif !defined(PFFFT_SIMD_DISABLE) && (defined(__arm__) || defined(__arm64__))
+ #  include <arm_neon.h>
+ typedef float32x4_t v4sf;
+ #  define SIMD_SZ 4
+@@ -1732,7 +1732,7 @@ void pffft_zconvolve_accumulate(PFFFT_Setup *s, const float *a, const float *b,
+   const v4sf * RESTRICT vb = (const v4sf*)b;
+   v4sf * RESTRICT vab = (v4sf*)ab;
+ 
+-#ifdef __arm__
++#if defined(__arm__) || defined(__arm64__)
+   __builtin_prefetch(va);
+   __builtin_prefetch(vb);
+   __builtin_prefetch(vab);
+-- 
+2.30.1
+

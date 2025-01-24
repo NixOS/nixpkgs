@@ -1,0 +1,28 @@
+--- a/cmake/QtFinishPrlFile.cmake
++++ b/cmake/QtFinishPrlFile.cmake
+@@ -69,9 +69,10 @@ foreach(line ${lines})
+                         endif()
+                         list(APPEND adjusted_libs "-framework" "${CMAKE_MATCH_1}")
+                     else()
+-                        # Not a framework, transform the Qt module into relocatable relative path.
+-                        qt_strip_library_version_suffix(relative_lib "${relative_lib}")
+-                        list(APPEND adjusted_libs "$$[QT_INSTALL_LIBS]/${relative_lib}")
++                        # Not a framework, extract the library name and prepend an -l to make
++                        # it relocatable.
++                        qt_transform_absolute_library_paths_to_link_flags(lib_with_link_flag "${lib}")
++                        list(APPEND adjusted_libs "${lib_with_link_flag}")
+                     endif()
+                 endif()
+             else()
+--- a/cmake/QtGenerateLibHelpers.cmake
++++ b/cmake/QtGenerateLibHelpers.cmake
+@@ -82,9 +82,6 @@ function(qt_transform_absolute_library_paths_to_link_flags out_var library_path_
+                 # If library_path isn't in default link directories, we should add it to link flags.
+                 # But we shouldn't add it duplicately.
+                 list(FIND IMPLICIT_LINK_DIRECTORIES_LOWER "${dir_lower}" index)
+-                if(index EQUAL -1 AND NOT "-L\"${dir}\"" IN_LIST out_list)
+-                    list(APPEND out_list "-L\"${dir}\"")
+-                endif()
+             endif()
+             list(APPEND out_list "${lib_name_with_link_flag}")
+         else()

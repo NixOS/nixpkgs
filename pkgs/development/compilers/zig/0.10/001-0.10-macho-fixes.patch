@@ -1,0 +1,367 @@
+From 405801d8a8be734425eca4f3eebc56287804ac93 Mon Sep 17 00:00:00 2001
+From: Jakub Konka <kubkon@jakubkonka.com>
+Date: Sun, 5 Feb 2023 10:04:34 +0100
+Subject: [PATCH] macho: temp fix alignment and enable some logs
+
+---
+ src/link/MachO/Object.zig  | 80 ++++++++++++++++++++++++++------------
+ src/link/MachO/ZldAtom.zig | 29 +++++++-------
+ src/link/MachO/zld.zig     | 22 +++++------
+ 3 files changed, 79 insertions(+), 52 deletions(-)
+
+diff --git a/src/link/MachO/Object.zig b/src/link/MachO/Object.zig
+index 401184da515..05638c1f858 100644
+--- a/src/link/MachO/Object.zig
++++ b/src/link/MachO/Object.zig
+@@ -54,12 +54,18 @@ atom_by_index_table: []AtomIndex = undefined,
+ /// Can be undefined as set together with in_symtab.
+ globals_lookup: []i64 = undefined,
+ 
++/// All relocs sorted and flattened.
++relocs: std.ArrayListUnmanaged(macho.relocation_info) = .{},
++sect_relocs_lookup: std.ArrayListUnmanaged(u32) = .{},
++
+ atoms: std.ArrayListUnmanaged(AtomIndex) = .{},
+ 
+ pub fn deinit(self: *Object, gpa: Allocator) void {
+     self.atoms.deinit(gpa);
+     gpa.free(self.name);
+     gpa.free(self.contents);
++    self.relocs.deinit(gpa);
++    self.sect_relocs_lookup.deinit(gpa);
+     if (self.in_symtab) |_| {
+         gpa.free(self.source_symtab_lookup);
+         gpa.free(self.source_address_lookup);
+@@ -101,6 +107,10 @@ pub fn parse(self: *Object, allocator: Allocator, cpu_arch: std.Target.Cpu.Arch)
+         return error.MismatchedCpuArchitecture;
+     }
+ 
++    const nsects = self.getSourceSections().len;
++    try self.sect_relocs_lookup.resize(allocator, nsects);
++    mem.set(u32, self.sect_relocs_lookup.items, 0);
++
+     var it = LoadCommandIterator{
+         .ncmds = self.header.ncmds,
+         .buffer = self.contents[@sizeOf(macho.mach_header_64)..][0..self.header.sizeofcmds],
+@@ -110,13 +120,11 @@ pub fn parse(self: *Object, allocator: Allocator, cpu_arch: std.Target.Cpu.Arch)
+             .SYMTAB => {
+                 const symtab = cmd.cast(macho.symtab_command).?;
+                 self.in_symtab = @ptrCast(
+-                    [*]const macho.nlist_64,
+-                    @alignCast(@alignOf(macho.nlist_64), &self.contents[symtab.symoff]),
++                    [*]align(1) const macho.nlist_64,
++                    self.contents.ptr + symtab.symoff,
+                 )[0..symtab.nsyms];
+                 self.in_strtab = self.contents[symtab.stroff..][0..symtab.strsize];
+ 
+-                const nsects = self.getSourceSections().len;
+-
+                 self.symtab = try allocator.alloc(macho.nlist_64, self.in_symtab.?.len + nsects);
+                 self.source_symtab_lookup = try allocator.alloc(u32, self.in_symtab.?.len);
+                 self.strtab_lookup = try allocator.alloc(u32, self.in_symtab.?.len);
+@@ -192,6 +200,17 @@ const SymbolAtIndex = struct {
+         return mem.sliceTo(@ptrCast([*:0]const u8, ctx.in_strtab.?.ptr + off), 0);
+     }
+ 
++    fn getSymbolSeniority(self: SymbolAtIndex, ctx: Context) u2 {
++        const sym = self.getSymbol(ctx);
++        if (!sym.ext()) {
++            const sym_name = self.getSymbolName(ctx);
++            if (mem.startsWith(u8, sym_name, "l") or mem.startsWith(u8, sym_name, "L")) return 0;
++            return 1;
++        }
++        if (sym.weakDef() or sym.pext()) return 2;
++        return 3;
++    }
++
+     /// Performs lexicographic-like check.
+     /// * lhs and rhs defined
+     ///   * if lhs == rhs
+@@ -206,23 +225,15 @@ const SymbolAtIndex = struct {
+         if (lhs.sect() and rhs.sect()) {
+             if (lhs.n_value == rhs.n_value) {
+                 if (lhs.n_sect == rhs.n_sect) {
+-                    if (lhs.ext() and rhs.ext()) {
+-                        if ((lhs.pext() or lhs.weakDef()) and (rhs.pext() or rhs.weakDef())) {
+-                            return false;
+-                        } else return rhs.pext() or rhs.weakDef();
+-                    } else {
+-                        const lhs_name = lhs_index.getSymbolName(ctx);
+-                        const lhs_temp = mem.startsWith(u8, lhs_name, "l") or mem.startsWith(u8, lhs_name, "L");
+-                        const rhs_name = rhs_index.getSymbolName(ctx);
+-                        const rhs_temp = mem.startsWith(u8, rhs_name, "l") or mem.startsWith(u8, rhs_name, "L");
+-                        if (lhs_temp and rhs_temp) {
+-                            return false;
+-                        } else return rhs_temp;
+-                    }
++                    const lhs_senior = lhs_index.getSymbolSeniority(ctx);
++                    const rhs_senior = rhs_index.getSymbolSeniority(ctx);
++                    if (lhs_senior == rhs_senior) {
++                        return lessThanByNStrx(ctx, lhs_index, rhs_index);
++                    } else return lhs_senior < rhs_senior;
+                 } else return lhs.n_sect < rhs.n_sect;
+             } else return lhs.n_value < rhs.n_value;
+         } else if (lhs.undf() and rhs.undf()) {
+-            return false;
++            return lessThanByNStrx(ctx, lhs_index, rhs_index);
+         } else return rhs.undf();
+     }
+ 
+@@ -393,6 +404,16 @@ pub fn splitIntoAtoms(self: *Object, zld: *Zld, object_id: u31) !void {
+             zld.sections.items(.header)[out_sect_id].sectName(),
+         });
+ 
++        // Parse all relocs for the input section, and sort in descending order.
++        // Previously, I have wrongly assumed the compilers output relocations for each
++        // section in a sorted manner which is simply not true.
++        const start = @intCast(u32, self.relocs.items.len);
++        if (self.getSourceRelocs(section.header)) |relocs| {
++            try self.relocs.appendUnalignedSlice(gpa, relocs);
++            std.sort.sort(macho.relocation_info, self.relocs.items[start..], {}, relocGreaterThan);
++        }
++        self.sect_relocs_lookup.items[section.id] = start;
++
+         const cpu_arch = zld.options.target.cpu.arch;
+         const sect_loc = filterSymbolsBySection(symtab[sect_sym_index..], sect_id + 1);
+         const sect_start_index = sect_sym_index + sect_loc.index;
+@@ -559,7 +580,7 @@ pub fn getSourceSections(self: Object) []const macho.section_64 {
+     } else unreachable;
+ }
+ 
+-pub fn parseDataInCode(self: Object) ?[]const macho.data_in_code_entry {
++pub fn parseDataInCode(self: Object) ?[]align(1) const macho.data_in_code_entry {
+     var it = LoadCommandIterator{
+         .ncmds = self.header.ncmds,
+         .buffer = self.contents[@sizeOf(macho.mach_header_64)..][0..self.header.sizeofcmds],
+@@ -569,10 +590,7 @@ pub fn parseDataInCode(self: Object) ?[]const macho.data_in_code_entry {
+             .DATA_IN_CODE => {
+                 const dice = cmd.cast(macho.linkedit_data_command).?;
+                 const ndice = @divExact(dice.datasize, @sizeOf(macho.data_in_code_entry));
+-                return @ptrCast(
+-                    [*]const macho.data_in_code_entry,
+-                    @alignCast(@alignOf(macho.data_in_code_entry), &self.contents[dice.dataoff]),
+-                )[0..ndice];
++                return @ptrCast([*]align(1) const macho.data_in_code_entry, self.contents.ptr + dice.dataoff)[0..ndice];
+             },
+             else => {},
+         }
+@@ -632,11 +650,23 @@ pub fn getSectionAliasSymbolPtr(self: *Object, sect_id: u8) *macho.nlist_64 {
+     return &self.symtab[self.getSectionAliasSymbolIndex(sect_id)];
+ }
+ 
+-pub fn getRelocs(self: Object, sect: macho.section_64) []align(1) const macho.relocation_info {
+-    if (sect.nreloc == 0) return &[0]macho.relocation_info{};
++fn getSourceRelocs(self: Object, sect: macho.section_64) ?[]align(1) const macho.relocation_info {
++    if (sect.nreloc == 0) return null;
+     return @ptrCast([*]align(1) const macho.relocation_info, self.contents.ptr + sect.reloff)[0..sect.nreloc];
+ }
+ 
++pub fn getRelocs(self: Object, sect_id: u16) []const macho.relocation_info {
++    const sect = self.getSourceSection(sect_id);
++    const start = self.sect_relocs_lookup.items[sect_id];
++    const len = sect.nreloc;
++    return self.relocs.items[start..][0..len];
++}
++
++fn relocGreaterThan(ctx: void, lhs: macho.relocation_info, rhs: macho.relocation_info) bool {
++    _ = ctx;
++    return lhs.r_address > rhs.r_address;
++}
++
+ pub fn getSymbolName(self: Object, index: u32) []const u8 {
+     const strtab = self.in_strtab.?;
+     const sym = self.symtab[index];
+diff --git a/src/link/MachO/ZldAtom.zig b/src/link/MachO/ZldAtom.zig
+index 817aa816625..b42309598d7 100644
+--- a/src/link/MachO/ZldAtom.zig
++++ b/src/link/MachO/ZldAtom.zig
+@@ -465,7 +465,7 @@ pub fn resolveRelocs(
+     zld: *Zld,
+     atom_index: AtomIndex,
+     atom_code: []u8,
+-    atom_relocs: []align(1) const macho.relocation_info,
++    atom_relocs: []const macho.relocation_info,
+     reverse_lookup: []u32,
+ ) !void {
+     const arch = zld.options.target.cpu.arch;
+@@ -540,7 +540,7 @@ fn resolveRelocsArm64(
+     zld: *Zld,
+     atom_index: AtomIndex,
+     atom_code: []u8,
+-    atom_relocs: []align(1) const macho.relocation_info,
++    atom_relocs: []const macho.relocation_info,
+     reverse_lookup: []u32,
+     context: RelocContext,
+ ) !void {
+@@ -579,7 +579,6 @@ fn resolveRelocsArm64(
+         }
+ 
+         const target = parseRelocTarget(zld, atom_index, rel, reverse_lookup);
+-        const rel_offset = @intCast(u32, rel.r_address - context.base_offset);
+ 
+         log.debug("  RELA({s}) @ {x} => %{d} ('{s}') in object({?})", .{
+             @tagName(rel_type),
+@@ -589,6 +588,7 @@ fn resolveRelocsArm64(
+             target.file,
+         });
+ 
++        const rel_offset = @intCast(u32, rel.r_address - context.base_offset);
+         const source_addr = blk: {
+             const source_sym = zld.getSymbol(atom.getSymbolWithLoc());
+             break :blk source_sym.n_value + rel_offset;
+@@ -596,7 +596,7 @@ fn resolveRelocsArm64(
+         const is_tlv = is_tlv: {
+             const source_sym = zld.getSymbol(atom.getSymbolWithLoc());
+             const header = zld.sections.items(.header)[source_sym.n_sect - 1];
+-            break :is_tlv header.@"type"() == macho.S_THREAD_LOCAL_VARIABLES;
++            break :is_tlv header.type() == macho.S_THREAD_LOCAL_VARIABLES;
+         };
+         const target_addr = try getRelocTargetAddress(zld, rel, target, is_tlv);
+ 
+@@ -831,7 +831,7 @@ fn resolveRelocsX86(
+     zld: *Zld,
+     atom_index: AtomIndex,
+     atom_code: []u8,
+-    atom_relocs: []align(1) const macho.relocation_info,
++    atom_relocs: []const macho.relocation_info,
+     reverse_lookup: []u32,
+     context: RelocContext,
+ ) !void {
+@@ -877,7 +877,7 @@ fn resolveRelocsX86(
+         const is_tlv = is_tlv: {
+             const source_sym = zld.getSymbol(atom.getSymbolWithLoc());
+             const header = zld.sections.items(.header)[source_sym.n_sect - 1];
+-            break :is_tlv header.@"type"() == macho.S_THREAD_LOCAL_VARIABLES;
++            break :is_tlv header.type() == macho.S_THREAD_LOCAL_VARIABLES;
+         };
+ 
+         log.debug("    | source_addr = 0x{x}", .{source_addr});
+@@ -1015,27 +1015,24 @@ pub fn getAtomCode(zld: *Zld, atom_index: AtomIndex) []const u8 {
+     return code[offset..][0..code_len];
+ }
+ 
+-pub fn getAtomRelocs(zld: *Zld, atom_index: AtomIndex) []align(1) const macho.relocation_info {
++pub fn getAtomRelocs(zld: *Zld, atom_index: AtomIndex) []const macho.relocation_info {
+     const atom = zld.getAtomPtr(atom_index);
+     assert(atom.getFile() != null); // Synthetic atom shouldn't need to unique for relocs.
+     const object = zld.objects.items[atom.getFile().?];
+ 
+-    const source_sect = if (object.getSourceSymbol(atom.sym_index)) |source_sym| blk: {
+-        const source_sect = object.getSourceSection(source_sym.n_sect - 1);
+-        assert(!source_sect.isZerofill());
+-        break :blk source_sect;
++    const source_sect_id = if (object.getSourceSymbol(atom.sym_index)) |source_sym| blk: {
++        break :blk source_sym.n_sect - 1;
+     } else blk: {
+         // If there was no matching symbol present in the source symtab, this means
+         // we are dealing with either an entire section, or part of it, but also
+         // starting at the beginning.
+         const nbase = @intCast(u32, object.in_symtab.?.len);
+         const sect_id = @intCast(u16, atom.sym_index - nbase);
+-        const source_sect = object.getSourceSection(sect_id);
+-        assert(!source_sect.isZerofill());
+-        break :blk source_sect;
++        break :blk sect_id;
+     };
+-
+-    const relocs = object.getRelocs(source_sect);
++    const source_sect = object.getSourceSection(source_sect_id);
++    assert(!source_sect.isZerofill());
++    const relocs = object.getRelocs(source_sect_id);
+ 
+     if (atom.cached_relocs_start == -1) {
+         const indexes = if (object.getSourceSymbol(atom.sym_index)) |source_sym| blk: {
+diff --git a/src/link/MachO/zld.zig b/src/link/MachO/zld.zig
+index 3a2ea79c6ec..cee3f302c08 100644
+--- a/src/link/MachO/zld.zig
++++ b/src/link/MachO/zld.zig
+@@ -396,7 +396,7 @@ pub const Zld = struct {
+                 break :blk null;
+             }
+ 
+-            switch (sect.@"type"()) {
++            switch (sect.type()) {
+                 macho.S_4BYTE_LITERALS,
+                 macho.S_8BYTE_LITERALS,
+                 macho.S_16BYTE_LITERALS,
+@@ -1701,7 +1701,7 @@ pub const Zld = struct {
+                             break :outer;
+                         }
+                     }
+-                    switch (header.@"type"()) {
++                    switch (header.type()) {
+                         macho.S_NON_LAZY_SYMBOL_POINTERS => {
+                             try self.writeGotPointer(count, buffer.writer());
+                         },
+@@ -1718,7 +1718,7 @@ pub const Zld = struct {
+                                     break :outer;
+                                 }
+                             }
+-                            if (header.@"type"() == macho.S_SYMBOL_STUBS) {
++                            if (header.type() == macho.S_SYMBOL_STUBS) {
+                                 try self.writeStubCode(atom_index, count, buffer.writer());
+                             } else if (mem.eql(u8, header.sectName(), "__stub_helper")) {
+                                 try self.writeStubHelperCode(atom_index, buffer.writer());
+@@ -1802,7 +1802,7 @@ pub const Zld = struct {
+         for (slice.items(.header)) |*header, sect_id| {
+             if (header.size == 0) continue;
+             if (self.requiresThunks()) {
+-                if (header.isCode() and !(header.@"type"() == macho.S_SYMBOL_STUBS) and !mem.eql(u8, header.sectName(), "__stub_helper")) continue;
++                if (header.isCode() and !(header.type() == macho.S_SYMBOL_STUBS) and !mem.eql(u8, header.sectName(), "__stub_helper")) continue;
+             }
+ 
+             var atom_index = slice.items(.first_atom_index)[sect_id];
+@@ -1830,7 +1830,7 @@ pub const Zld = struct {
+         if (self.requiresThunks()) {
+             for (slice.items(.header)) |header, sect_id| {
+                 if (!header.isCode()) continue;
+-                if (header.@"type"() == macho.S_SYMBOL_STUBS) continue;
++                if (header.type() == macho.S_SYMBOL_STUBS) continue;
+                 if (mem.eql(u8, header.sectName(), "__stub_helper")) continue;
+ 
+                 // Create jump/branch range extenders if needed.
+@@ -1994,10 +1994,10 @@ pub const Zld = struct {
+         const section_precedence: u4 = blk: {
+             if (header.isCode()) {
+                 if (mem.eql(u8, "__text", header.sectName())) break :blk 0x0;
+-                if (header.@"type"() == macho.S_SYMBOL_STUBS) break :blk 0x1;
++                if (header.type() == macho.S_SYMBOL_STUBS) break :blk 0x1;
+                 break :blk 0x2;
+             }
+-            switch (header.@"type"()) {
++            switch (header.type()) {
+                 macho.S_NON_LAZY_SYMBOL_POINTERS,
+                 macho.S_LAZY_SYMBOL_POINTERS,
+                 => break :blk 0x0,
+@@ -2121,7 +2121,7 @@ pub const Zld = struct {
+ 
+         // Finally, unpack the rest.
+         for (slice.items(.header)) |header, sect_id| {
+-            switch (header.@"type"()) {
++            switch (header.type()) {
+                 macho.S_LITERAL_POINTERS,
+                 macho.S_REGULAR,
+                 macho.S_MOD_INIT_FUNC_POINTERS,
+@@ -2252,7 +2252,7 @@ pub const Zld = struct {
+         // Finally, unpack the rest.
+         const slice = self.sections.slice();
+         for (slice.items(.header)) |header, sect_id| {
+-            switch (header.@"type"()) {
++            switch (header.type()) {
+                 macho.S_LITERAL_POINTERS,
+                 macho.S_REGULAR,
+                 macho.S_MOD_INIT_FUNC_POINTERS,
+@@ -2707,10 +2707,10 @@ pub const Zld = struct {
+     }
+ 
+     fn filterDataInCode(
+-        dices: []const macho.data_in_code_entry,
++        dices: []align(1) const macho.data_in_code_entry,
+         start_addr: u64,
+         end_addr: u64,
+-    ) []const macho.data_in_code_entry {
++    ) []align(1) const macho.data_in_code_entry {
+         const Predicate = struct {
+             addr: u64,
+ 
+
