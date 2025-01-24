@@ -20,6 +20,7 @@
   libXScrnSaver,
   libGL,
   libxcb,
+  vst2-sdk,
   xcbutil,
   libxkbcommon,
   xcbutilkeysyms,
@@ -44,20 +45,6 @@
   enableVST2 ? false,
 }:
 
-let
-  # equal to vst-sdk in ../oxefmsynth/default.nix
-  vst-sdk = stdenv.mkDerivation rec {
-    name = "vstsdk3610_11_06_2018_build_37";
-    src = fetchzip {
-      url = "https://web.archive.org/web/20181016150224if_/https://download.steinberg.net/sdk_downloads/${name}.zip";
-      sha256 = "0da16iwac590wphz2sm5afrfj42jrsnkr1bxcy93lj7a369ildkj";
-    };
-    installPhase = ''
-      cp -r . $out
-    '';
-  };
-
-in
 stdenv.mkDerivation rec {
   pname = "bespokesynth";
   version = "1.2.1";
@@ -72,7 +59,7 @@ stdenv.mkDerivation rec {
 
   cmakeBuildType = "Release";
 
-  cmakeFlags = lib.optionals enableVST2 [ "-DBESPOKE_VST2_SDK_LOCATION=${vst-sdk}/VST2_SDK" ];
+  cmakeFlags = lib.optionals enableVST2 [ "-DBESPOKE_VST2_SDK_LOCATION=${vst2-sdk}" ];
 
   nativeBuildInputs = [
     python3
@@ -160,22 +147,17 @@ stdenv.mkDerivation rec {
   }";
   dontPatchELF = true; # needed or nix will try to optimize the binary by removing "useless" rpath
 
-  meta = with lib; {
+  meta = {
     description = "Software modular synth with controllers support, scripting and VST";
     homepage = "https://www.bespokesynth.com/";
-    license =
-      with licenses;
-      [
-        gpl3Plus
-      ]
-      ++ lib.optional enableVST2 unfree;
-    maintainers = with maintainers; [
+    license = [ lib.licenses.gpl3Plus ];
+    maintainers = with lib.maintainers; [
       astro
       tobiasBora
       OPNA2608
       PowerUser64
     ];
     mainProgram = "BespokeSynth";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }
