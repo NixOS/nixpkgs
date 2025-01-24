@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "clipper2";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "AngusJohnson";
     repo = "Clipper2";
     rev = "Clipper2_${version}";
-    hash = "sha256-ASL9uKkXsWyIbD1qaKEL7gf/JuCqzZQZSKHwLT5dKJU=";
+    hash = "sha256-O0fHGJhbQ+dd5O1scfLMCxsAzRQp+TfcihbyhW8mQbs=";
   };
 
   sourceRoot = "${src.name}/CPP";
