@@ -10,18 +10,19 @@
   swig,
   perl,
   gcc,
+  gitUpdater,
 }:
 
 let
   self = stdenv.mkDerivation rec {
     pname = "highlight";
-    version = "4.14";
+    version = "4.15";
 
     src = fetchFromGitLab {
       owner = "saalen";
       repo = "highlight";
-      rev = "v${version}";
-      hash = "sha256-UxbgYspocoy9ul2dhIhvIwqKMeWSG7vJY1df3UkgpHQ=";
+      tag = "v${version}";
+      hash = "sha256-CpbVm5Z9cKPQdOzBNOXsgrX3rfC6DTVE7xfmOAshbEs=";
     };
 
     enableParallelBuilding = true;
@@ -38,6 +39,8 @@ let
       boost
       libxcrypt
     ];
+
+    passthru.updateScript = gitUpdater { };
 
     postPatch =
       ''
