@@ -91,9 +91,6 @@ stdenv.mkDerivation (finalAttrs: {
     openldap # optional
     pam # optional
   ];
-  # Disable parallel build, errors:
-  #  *** No rule to make target '../util/libfaxutil.so.7.0.4', needed by 'faxmsg'.  Stop.
-  enableParallelBuilding = false;
 
   postPatch = ". ${postPatch}";
   dontAddPrefix = true;
