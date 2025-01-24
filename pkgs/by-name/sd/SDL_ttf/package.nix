@@ -50,5 +50,8 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.zlib;
     maintainers = lib.teams.sdl.members ++ (with lib.maintainers; [ ]);
     inherit (SDL.meta) platforms;
+    knownVulnerabilities = [
+      "CVE-2022-27470"
+    ];
   };
 })
