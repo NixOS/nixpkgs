@@ -1,0 +1,13 @@
+diff --git a/src/LanguageServer/Microsoft.CodeAnalysis.LanguageServer/Program.cs b/src/LanguageServer/Microsoft.CodeAnalysis.LanguageServer/Program.cs
+index 5c80f55e9dd..17373f36ebf 100644
+--- a/src/LanguageServer/Microsoft.CodeAnalysis.LanguageServer/Program.cs
++++ b/src/LanguageServer/Microsoft.CodeAnalysis.LanguageServer/Program.cs
+@@ -97,7 +97,7 @@ static async Task RunAsync(ServerConfiguration serverConfiguration, Cancellation
+     var assemblyLoader = new CustomExportAssemblyLoader(extensionManager, loggerFactory);
+     var typeRefResolver = new ExtensionTypeRefResolver(assemblyLoader, loggerFactory);
+ 
+-    var cacheDirectory = Path.Combine(Path.GetDirectoryName(typeof(Program).Assembly.Location)!, "cache");
++    var cacheDirectory = Path.Combine(Environment.GetEnvironmentVariable("XDG_CACHE_HOME") ?? Path.Combine(Environment.GetEnvironmentVariable("HOME")!, ".cache"), "roslyn");
+ 
+     using var exportProvider = await ExportProviderBuilder.CreateExportProviderAsync(extensionManager, assemblyLoader, serverConfiguration.DevKitDependencyPath, cacheDirectory, loggerFactory);
+ 
