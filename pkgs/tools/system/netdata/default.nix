@@ -288,6 +288,8 @@ stdenv'.mkDerivation (finalAttrs: {
     changelog = "https://github.com/netdata/netdata/releases/tag/v${version}";
     license = [ licenses.gpl3Plus ] ++ lib.optionals (withCloudUi) [ licenses.ncul1 ];
     platforms = platforms.unix;
-    maintainers = [ ];
+    maintainers = with maintainers; [
+      mkg20001
+    ];
   };
 })
