@@ -1,66 +1,89 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
+  symlinkJoin,
   acl,
-  autoreconfHook,
   avahi,
-  db,
+  bison,
+  cmark-gfm,
+  db53,
+  dbus,
+  glib,
+  docbook-xsl-nons,
+  docbook_xml_dtd_412,
+  file,
+  flex,
   libevent,
   libgcrypt,
-  libiconv,
+  localsearch,
+  meson,
+  ninja,
+  perl,
   openssl,
   pam,
-  perl,
   pkg-config,
-  python3,
+  tinysparql,
+  libxslt,
+  talloc,
+  cups,
+  libkrb5,
 }:
+
+let db53Combined = 
+    symlinkJoin {name = "db53Combined"; paths = [ db53.out db53.dev ];};
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "netatalk";
-  version = "3.1.19";
+  version = "4.1.0";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/netatalk/netatalk/netatalk-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-p0pzHwnjNNWPsWRBflgaZB+ijMP5bF99TEdLs4mVKsI=";
+  src = fetchFromGitHub {
+    owner = "Netatalk";
+    repo = "netatalk";
+    rev = "netatalk-${builtins.replaceStrings ["."] ["-"] finalAttrs.version}";
+    # tags are 'netatalk-4-1-0'
+    hash = "sha256-+ger7c2ixkTI6i0qn/KiWDZA4kYrhkaL7Wr79ctgkH4=";
   };
 
-  patches = [
-    ./000-no-suid.patch
-    ./001-omit-localstatedir-creation.patch
-  ];
+  postPatch = ''
+    substituteInPlace meson.build --replace /usr/bin/file ${file}/bin/file
+  '';
 
   nativeBuildInputs = [
-    autoreconfHook
+    meson
+    ninja
     pkg-config
-    perl
-    python3
-    python3.pkgs.wrapPython
+    bison
+    cmark-gfm
+    flex
+    libxslt
+    docbook-xsl-nons
+    docbook_xml_dtd_412
+  ];
+
+  mesonFlags = [ 
+    "-Dwith-bdb-path=${db53Combined}"
+    "-Dwith-install-hooks=false"
   ];
 
   buildInputs = [
     acl
     avahi
-    db
+    db53Combined
+    dbus
+    glib
     libevent
     libgcrypt
-    libiconv
+    localsearch
     openssl
+    tinysparql
     pam
+    talloc
+    cups
+    libkrb5
+    perl
   ];
-
-  configureFlags = [
-    "--with-bdb=${db.dev}"
-    "--with-ssl-dir=${openssl.dev}"
-    "--with-lockfile=/run/lock/netatalk"
-    "--localstatedir=/var/lib"
-  ];
-
-  postInstall = ''
-    sed -i -e "s%/usr/bin/env python%${python3}/bin/python3%" $out/bin/afpstats
-    buildPythonPath ${python3.pkgs.dbus-python}
-    patchPythonScript $out/bin/afpstats
-  '';
 
   enableParallelBuilding = true;
 
@@ -68,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Apple Filing Protocol Server";
     homepage = "http://netatalk.sourceforge.net/";
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ jcumming ];
   };
 })
