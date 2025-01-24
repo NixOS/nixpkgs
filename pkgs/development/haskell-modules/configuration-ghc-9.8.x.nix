@@ -68,6 +68,11 @@ self: super: {
   diagrams-svg = doJailbreak super.diagrams-svg;  # base <4.19, text <2.1
   ghc-trace-events = doJailbreak super.ghc-trace-events; # text < 2.1, bytestring < 0.12, base < 4.19
   hashing = doJailbreak super.hashing; # bytestring <0.12
+  hevm = appendPatch (pkgs.fetchpatch {
+    url = "https://github.com/hellwolf/hevm/commit/338674d1fe22d46ea1e8582b24c224d76d47d0f3.patch";
+    name = "release-0.54.2-ghc-9.8.4-patch";
+    sha256 = "sha256-Mo65FfP1nh7QTY+oLia22hj4eV2v9hpXlYsrFKljA3E=";
+  }) super.hevm;
   json-sop = doJailbreak super.json-sop; # aeson <2.2, base <4.19, text <2.1
   primitive-unlifted = doJailbreak super.primitive-unlifted; # bytestring < 0.12
   statestack = doJailbreak super.statestack; # base < 4.19
