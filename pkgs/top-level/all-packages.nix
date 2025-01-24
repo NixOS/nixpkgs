@@ -1759,8 +1759,6 @@ with pkgs;
 
   dkimpy = with python3Packages; toPythonApplication dkimpy;
 
-  echidna = haskell.lib.compose.justStaticExecutables (haskellPackages.callPackage ../tools/security/echidna { });
-
   esbuild = callPackage ../development/tools/esbuild { };
 
   esbuild_netlify = callPackage ../development/tools/esbuild/netlify.nix { };
