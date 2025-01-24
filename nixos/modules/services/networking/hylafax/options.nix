@@ -8,6 +8,7 @@
 let
 
   inherit (lib)
+    getExe'
     literalExpression
     mkDefault
     mkEnableOption
@@ -110,11 +111,11 @@ let
       # Otherwise, we use `false` to provoke
       # an error if hylafax tries to use it.
       c.sendmailPath = mkMerge [
-        (mkIfDefault noWrapper "${pkgs.coreutils}/bin/false")
+        (mkIfDefault noWrapper (getExe' pkgs.coreutils "false"))
         (mkIfDefault (!noWrapper) "${wrapperDir}/${program}")
       ];
       importDefaultConfig =
-        file: lib.attrsets.mapAttrs (lib.trivial.const mkDefault) (import file { inherit pkgs; });
+        file: lib.attrsets.mapAttrs (lib.trivial.const mkDefault) (import file { inherit lib pkgs; });
       c.commonModemConfig = importDefaultConfig ./modem-default.nix;
       c.faxqConfig = importDefaultConfig ./faxq-default.nix;
       c.hfaxdConfig = importDefaultConfig ./hfaxd-default.nix;
