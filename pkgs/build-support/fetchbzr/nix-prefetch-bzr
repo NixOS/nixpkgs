@@ -1,0 +1,76 @@
+#! /bin/sh -e
+
+url=$1
+rev=$2
+expHash=$3
+
+hashType=$NIX_HASH_ALGO
+if test -z "$hashType"; then
+    hashType=sha256
+fi
+if test -z "$hashFormat"; then
+    hashFormat=--sri
+fi
+
+if test -z "$url"; then
+    echo "syntax: nix-prefetch-bzr URL [REVISION [EXPECTED-HASH]]" >&2
+    exit 1
+fi
+
+revarg="-r $rev"
+test -n "$rev" || revarg=""
+
+repoName=$(echo $url | sed '
+  s,.*/\([^/]\+\)/trunk/*$,\1,;t
+  s,.*/\([^/]\+\)/branches/\([^/]\+\)/*$,\1-\2,;t
+  s,.*/\([^/]\+\)/tags/\([^/]\+\)/*$,\1-\2,;t
+  s,.*/\([^/]\+\)/*$,\1,;t
+')
+dstFile="bzr-export"
+
+# If the hash was given, a file with that hash may already be in the
+# store.
+if test -n "$expHash"; then
+    finalPath=$(nix-store --print-fixed-path --recursive "$hashType" "$expHash" $dstFile)
+    if ! nix-store --check-validity "$finalPath" 2> /dev/null; then
+        finalPath=
+    fi
+    hash=$expHash
+fi
+
+
+# If we don't know the hash or a path with that hash doesn't exist,
+# download the file and add it to the store.
+if test -z "$finalPath"; then
+    # nix>=2.20 rejects adding symlinked paths to the store, so use realpath
+    # to resolve to a physical path. https://github.com/NixOS/nix/issues/11941
+    tmpPath="$(realpath "$(mktemp -d --tmpdir bzr-checkout-tmp-XXXXXXXX)")"
+    trap "rm -rf \"$tmpPath\"" EXIT
+
+    tmpFile="$tmpPath/$dstFile"
+
+    # Perform the checkout.
+    bzr -Ossl.cert_reqs=none export $revarg --format=dir "$tmpFile" "$url"
+
+    echo "bzr revision is $(bzr revno $revarg "$url")"
+
+    # Compute the hash.
+    hash=$(nix-hash --type $hashType $hashFormat $tmpFile)
+    if ! test -n "$QUIET"; then echo "hash is $hash" >&2; fi
+
+    # Add the downloaded file to the Nix store.
+    finalPath=$(nix-store --add-fixed --recursive "$hashType" $tmpFile)
+
+    if test -n "$expHash" -a "$expHash" != "$hash"; then
+        echo "hash mismatch for URL \`$url'"
+        exit 1
+    fi
+fi
+
+if ! test -n "$QUIET"; then echo "path is $finalPath" >&2; fi
+
+echo $hash
+
+if test -n "$PRINT_PATH"; then
+    echo $finalPath
+fi

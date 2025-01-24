@@ -1,0 +1,41 @@
+commit d94c29b7397362857b81d8c877a989fdb28490d8
+Author: Kjetil Orbekk <kjetil.orbekk@gmail.com>
+Date:   Tue Nov 21 15:37:42 2017 -0500
+
+    Keep environment variables instead of overwriting them.
+
+diff --git a/common/lib/Munin/Common/Defaults.pm b/common/lib/Munin/Common/Defaults.pm
+index 131f52c0..bbf42697 100644
+--- a/common/lib/Munin/Common/Defaults.pm
++++ b/common/lib/Munin/Common/Defaults.pm
+@@ -71,7 +71,7 @@ sub export_to_environment {
+ 
+     my %defaults = %{$class->get_defaults()};
+     while (my ($k, $v) = each %defaults) {
+-        $ENV{$k} = $v;
++        $ENV{$k} = $ENV{$k} || $v;
+     }
+ 
+     return
+diff --git a/node/lib/Munin/Node/Service.pm b/node/lib/Munin/Node/Service.pm
+index 1b4f6114..be58bd77 100644
+--- a/node/lib/Munin/Node/Service.pm
++++ b/node/lib/Munin/Node/Service.pm
+@@ -122,7 +122,7 @@ sub export_service_environment {
+     # We append the USER to the MUNIN_PLUGSTATE, to avoid CVE-2012-3512
+     my $uid = $self->_resolve_uid($service);
+     my $user = getpwuid($uid);
+-    $ENV{MUNIN_PLUGSTATE} = "$Munin::Common::Defaults::MUNIN_PLUGSTATE/$user";
++    $ENV{MUNIN_PLUGSTATE} = "$ENV{MUNIN_PLUGSTATE}/$user";
+ 
+     # Provide a consistent default state-file.
+     $ENV{MUNIN_STATEFILE} = "$ENV{MUNIN_PLUGSTATE}/$service-$ENV{MUNIN_MASTER_IP}";
+@@ -243,7 +243,7 @@ sub exec_service
+ 
+     # XXX - Create the statedir for the user
+     my $uid = $self->_resolve_uid($service);
+-    Munin::Node::OS->mkdir_subdir("$Munin::Common::Defaults::MUNIN_PLUGSTATE", $uid);
++    Munin::Node::OS->mkdir_subdir("$ENV{MUNIN_PLUGSTATE}", $uid);
+ 
+     $self->change_real_and_effective_user_and_group($service);
+ 

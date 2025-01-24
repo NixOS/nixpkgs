@@ -1,0 +1,39 @@
+From 93f4f92b017935a35988e7210036db8020753f9e Mon Sep 17 00:00:00 2001
+From: Jake Hillion <jake@hillion.co.uk>
+Date: Sun, 21 Feb 2021 21:26:39 +0000
+Subject: [PATCH] removed dependency for systemcertpool
+
+---
+ drone/internal/util.go | 7 +++++--
+ go.mod                 | 1 -
+ 2 files changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/drone/internal/util.go b/drone/internal/util.go
+index 46c8ec6f..25d4def7 100644
+--- a/drone/internal/util.go
++++ b/drone/internal/util.go
+@@ -2,11 +2,11 @@ package internal
+ 
+ import (
+ 	"crypto/tls"
++	"crypto/x509"
+ 	"fmt"
+ 	"net/http"
+ 	"strings"
+ 
+-	"github.com/jackspirou/syscerts"
+ 	"github.com/urfave/cli"
+ 	"golang.org/x/net/proxy"
+ 	"golang.org/x/oauth2"
+@@ -35,7 +35,10 @@ func NewClient(c *cli.Context) (drone.Client, error) {
+ 	}
+ 
+ 	// attempt to find system CA certs
+-	certs := syscerts.SystemRootsPool()
++	certs, err := x509.SystemCertPool()
++	if err != nil {
++		return nil, err
++	}
+ 	tlsConfig := &tls.Config{
+ 		RootCAs:            certs,
+ 		InsecureSkipVerify: skip,
