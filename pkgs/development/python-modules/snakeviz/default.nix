@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "snakeviz";
-  version = "2.2.0";
+  version = "2.2.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "jiffyclub";
     repo = pname;
     tag = "v${version}";
-    hash = "sha256-tW1zUfCgOGQ8TjrKo2lBzGb0MSe25dP0/P9Q6x3736E=";
+    hash = "sha256-s/OATRnkooucRkLer5A66X9xDEA7aKNo+c10m1N7Guw=";
   };
 
   nativeBuildInputs = [ setuptools ];
