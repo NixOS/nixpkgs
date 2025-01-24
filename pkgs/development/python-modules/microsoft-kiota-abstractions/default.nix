@@ -42,6 +42,9 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "kiota_abstractions" ];
 
+  # detects the wrong tag on the repo
+  passthru.skipBulkUpdate = true;
+
   meta = with lib; {
     description = "Abstractions library for Kiota generated Python clients";
     homepage = "https://github.com/microsoft/kiota-abstractions-python";
