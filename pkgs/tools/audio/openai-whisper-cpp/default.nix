@@ -15,6 +15,8 @@
 , autoAddDriverRunpath
 , cudaSupport ? config.cudaSupport
 , cudaPackages ? {}
+
+, withSDL ? true
 }:
 
 let
@@ -48,7 +50,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
       autoAddDriverRunpath
     ];
 
-  buildInputs = [
+  buildInputs = lib.optionals withSDL [
       SDL2
     ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       Accelerate
