@@ -7,13 +7,12 @@
 let
   cfg = config.services.mstpd;
 in
-with lib;
 {
   options.services.mstpd = {
 
-    enable = mkOption {
+    enable = lib.mkOption {
       default = false;
-      type = types.bool;
+      type = lib.types.bool;
       description = ''
         Whether to enable the multiple spanning tree protocol daemon.
       '';
@@ -21,7 +20,7 @@ with lib;
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ pkgs.mstpd ];
 
     systemd.services.mstpd = {

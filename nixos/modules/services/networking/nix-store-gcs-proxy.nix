@@ -4,28 +4,25 @@
   pkgs,
   ...
 }:
-
-with lib;
-
 let
   opts =
     { name, config, ... }:
     {
       options = {
-        enable = mkOption {
+        enable = lib.mkOption {
           default = true;
-          type = types.bool;
+          type = lib.types.bool;
           example = true;
           description = "Whether to enable proxy for this bucket";
         };
-        bucketName = mkOption {
-          type = types.str;
+        bucketName = lib.mkOption {
+          type = lib.types.str;
           default = name;
           example = "my-bucket-name";
           description = "Name of Google storage bucket";
         };
-        address = mkOption {
-          type = types.str;
+        address = lib.mkOption {
+          type = lib.types.str;
           example = "localhost:3000";
           description = "The address of the proxy.";
         };
@@ -35,8 +32,8 @@ let
   mapProxies = function: lib.mkMerge (lib.mapAttrsToList function enabledProxies);
 in
 {
-  options.services.nix-store-gcs-proxy = mkOption {
-    type = types.attrsOf (types.submodule opts);
+  options.services.nix-store-gcs-proxy = lib.mkOption {
+    type = lib.types.attrsOf (lib.types.submodule opts);
     default = { };
     description = ''
       An attribute set describing an HTTP to GCS proxy that allows us to use GCS
@@ -80,5 +77,5 @@ in
     }
   );
 
-  meta.maintainers = [ maintainers.mrkkrp ];
+  meta.maintainers = [ lib.maintainers.mrkkrp ];
 }

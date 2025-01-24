@@ -4,9 +4,6 @@
   pkgs,
   ...
 }:
-
-with lib;
-
 let
 
   cfg = config.services.polipo;
@@ -14,9 +11,9 @@ let
   polipoConfig = pkgs.writeText "polipo.conf" ''
     proxyAddress = ${cfg.proxyAddress}
     proxyPort = ${toString cfg.proxyPort}
-    allowedClients = ${concatStringsSep ", " cfg.allowedClients}
-    ${optionalString (cfg.parentProxy != "") "parentProxy = ${cfg.parentProxy}"}
-    ${optionalString (cfg.socksParentProxy != "") "socksParentProxy = ${cfg.socksParentProxy}"}
+    allowedClients = ${lib.concatStringsSep ", " cfg.allowedClients}
+    ${lib.optionalString (cfg.parentProxy != "") "parentProxy = ${cfg.parentProxy}"}
+    ${lib.optionalString (cfg.socksParentProxy != "") "socksParentProxy = ${cfg.socksParentProxy}"}
     ${config.services.polipo.extraConfig}
   '';
 
@@ -28,22 +25,22 @@ in
 
     services.polipo = {
 
-      enable = mkEnableOption "polipo caching web proxy";
+      enable = lib.mkEnableOption "polipo caching web proxy";
 
-      proxyAddress = mkOption {
-        type = types.str;
+      proxyAddress = lib.mkOption {
+        type = lib.types.str;
         default = "127.0.0.1";
         description = "IP address on which Polipo will listen.";
       };
 
-      proxyPort = mkOption {
-        type = types.port;
+      proxyPort = lib.mkOption {
+        type = lib.types.port;
         default = 8123;
         description = "TCP port on which Polipo will listen.";
       };
 
-      allowedClients = mkOption {
-        type = types.listOf types.str;
+      allowedClients = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [
           "127.0.0.1"
           "::1"
@@ -59,8 +56,8 @@ in
         '';
       };
 
-      parentProxy = mkOption {
-        type = types.str;
+      parentProxy = lib.mkOption {
+        type = lib.types.str;
         default = "";
         example = "localhost:8124";
         description = ''
@@ -69,8 +66,8 @@ in
         '';
       };
 
-      socksParentProxy = mkOption {
-        type = types.str;
+      socksParentProxy = lib.mkOption {
+        type = lib.types.str;
         default = "";
         example = "localhost:9050";
         description = ''
@@ -79,8 +76,8 @@ in
         '';
       };
 
-      extraConfig = mkOption {
-        type = types.lines;
+      extraConfig = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description = ''
           Polio configuration. Contents will be added
@@ -92,7 +89,7 @@ in
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     users.users.polipo = {
       uid = config.ids.uids.polipo;
