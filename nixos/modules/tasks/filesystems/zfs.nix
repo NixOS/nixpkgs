@@ -964,7 +964,6 @@ in
         description = "ZFS pools trim";
         after = [ "zfs-import.target" ];
         path = [ cfgZfs.package ];
-        startAt = cfgTrim.interval;
         # By default we ignore errors returned by the trim command, in case:
         # - HDDs are mixed with SSDs
         # - There is a SSDs in a pool that is currently trimmed.
@@ -972,9 +971,13 @@ in
         serviceConfig.ExecStart = "${pkgs.runtimeShell} -c 'for pool in $(zpool list -H -o name); do zpool trim $pool;  done || true' ";
       };
 
-      systemd.timers.zpool-trim.timerConfig = {
-        Persistent = cfgTrim.persistent;
-        RandomizedDelaySec = cfgTrim.randomizedDelaySec;
+      systemd.timers.zpool-trim = {
+        wantedBy = [ "timers.target" ];
+        timerConfig = {
+          OnCalendar = cfgTrim.interval;
+          Persistent = cfgTrim.persistent;
+          RandomizedDelaySec = cfgTrim.randomizedDelaySec;
+        };
       };
     })
   ];
