@@ -1,34 +1,44 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, rustPlatform
-, pkg-config
-, libgit2
-, openssl
-, sqlite
-, libiconv
-, Security
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  rustPlatform,
+  pkg-config,
+  # libgit2,
+  openssl,
+  sqlite,
+  libiconv,
+  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "terminal-typeracer";
-  version = "2.1.3";
+  version = "2.1.5";
 
   src = fetchFromGitLab {
     owner = "ttyperacer";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-S3OW6KihRd6ReTWUXRb1OWC7+YoxehjFRBxcnJVgImU=";
+    hash = "sha256-7LKpOO+PVGGtFJh1dZW/n/zovTxxZbb2VQwzgmjZhIY=";
   };
 
-  cargoHash = "sha256-OwbFIbKB/arj+3gq2tfEq8yTKSUPBQNYJNzrWvDv4A4=";
+  cargoHash = "sha256-SpuZk/o25UpZcgRp4UueexAqvtRgzCN7JYW5Yj9w+0U=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ libgit2 openssl sqlite ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv Security ];
+  buildInputs =
+    [
+      openssl
+      sqlite
+      # libgit2
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libiconv
+      Security
+    ];
 
   OPENSSL_NO_VENDOR = 1;
-  LIBGIT2_NO_VENDOR = 1;
+  LIBGIT2_NO_VENDOR = 0; # FIXME
 
   meta = with lib; {
     description = "Open source terminal based version of Typeracer written in rust";
