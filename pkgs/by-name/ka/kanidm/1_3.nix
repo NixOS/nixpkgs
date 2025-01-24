@@ -1,7 +1,7 @@
 import ./generic.nix {
   version = "1.3.3";
   hash = "sha256-W5G7osV4du6w/BfyY9YrDzorcLNizRsoz70RMfO2AbY=";
-  cargoHash = "sha256-iziTHr0gvv319Rzgkze9J1H4UzPR7WxMmCkiGVsb33k=";
+  cargoHash = "sha256-QgEoeXjGm7fhPnJBbquWJYDYPg+Uv1IjZnaI5yUEYlQ=";
   patchDir = ./patches/1_3;
   extraMeta = {
     knownVulnerabilities = [
