@@ -1,0 +1,9 @@
+--- a/cube/CMakeLists.txt
++++ b/cube/CMakeLists.txt
+@@ -96,7 +96,6 @@
+         pkg_get_variable(WAYLAND_SCANNER_EXECUTABLE wayland-scanner wayland_scanner)
+         message(DEBUG "WAYLAND_SCANNER_EXECUTABLE = ${WAYLAND_SCANNER_EXECUTABLE}")
+
+-        pkg_get_variable(WAYLAND_CLIENT_PATH wayland-client pkgdatadir)
+         message(DEBUG "WAYLAND_CLIENT_PATH = ${WAYLAND_CLIENT_PATH}")
+         set(WAYLAND_CODE_PROTOCOL ${WAYLAND_CLIENT_PATH}/wayland.xml)

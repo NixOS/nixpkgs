@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vulkan-tools";
-  version = "1.3.296.0";
+  version = "1.4.304.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-Tools";
     rev = "vulkan-sdk-${version}";
-    hash = "sha256-+24IVmmcxuPaT/vYRYZ4yluHS/uKfWiVa7yIvzsdTuQ=";
+    hash = "sha256-PtxzLsywYwaL4vhbDiabryLaMUMcwJGcL14dt8dnzvs=";
   };
 
   nativeBuildInputs = [
@@ -70,6 +70,10 @@ stdenv.mkDerivation rec {
 
   dontPatchELF = true;
 
+  patches = lib.optionals stdenv.hostPlatform.isLinux [
+    ./fix-wayland-protocols-path.patch
+  ];
+
   env.PKG_CONFIG_WAYLAND_SCANNER_WAYLAND_SCANNER = lib.getExe buildPackages.wayland-scanner;
 
   cmakeFlags =
@@ -86,6 +90,9 @@ stdenv.mkDerivation rec {
       "-DMOLTENVK_REPO_ROOT=${moltenvk}/share/vulkan/icd.d"
       # Don’t build the cube demo because it requires `ibtool`, which is not available in nixpkgs.
       "-DBUILD_CUBE=OFF"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      "-DWAYLAND_CLIENT_PATH=${buildPackages.wayland-scanner}/share/wayland"
     ];
 
   meta = with lib; {
