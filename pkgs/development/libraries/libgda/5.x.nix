@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   version = "5.2.10";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/libgda/${lib.versions.majorMinor version}/libgda-${version}.tar.xz";
     hash = "sha256-b2zfe4BT9VO5B+DIimBk60jPJ1GFLrJDI9zwJ3kjNMg=";
   };
 
@@ -97,7 +97,8 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "libgda";
+      attrPath = "libgda5";
       versionPolicy = "odd-unstable";
       freeze = true;
     };
@@ -112,7 +113,7 @@ stdenv.mkDerivation rec {
       # CLI tools
       gpl2Plus
     ];
-    maintainers = lib.teams.gnome.members;
+    maintainers = [ lib.maintainers.bot-wxt1221 ];
     platforms = lib.platforms.unix;
   };
 }

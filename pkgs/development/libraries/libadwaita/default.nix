@@ -25,7 +25,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libadwaita";
-  version = "1.6.2";
+  version = "1.6.3";
 
   outputs = [
     "out"
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "GNOME";
     repo = "libadwaita";
     rev = finalAttrs.version;
-    hash = "sha256-HNj6gCQFs1ECjJETtQ7oWEVT02IqRssiEtbhg1dQmY8=";
+    hash = "sha256-4rYiNI6Oj++iqbPIwe8KvwviGnh93sAZ9wp1cIPZcBA=";
   };
 
   depsBuildBuild = [
