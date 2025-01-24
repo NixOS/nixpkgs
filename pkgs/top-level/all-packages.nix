@@ -17142,6 +17142,7 @@ with pkgs;
     coqPackages_8_18 coq_8_18
     coqPackages_8_19 coq_8_19
     coqPackages_8_20 coq_8_20
+    coqPackages_9_0 coq_9_0
     coqPackages      coq
   ;
 

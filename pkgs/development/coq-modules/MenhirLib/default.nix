@@ -16,7 +16,7 @@ let
       with lib.versions;
       lib.switch coq.coq-version [
         {
-          case = range "8.12" "8.20";
+          case = range "8.12" "9.0";
           out = "20240715";
         }
         {
