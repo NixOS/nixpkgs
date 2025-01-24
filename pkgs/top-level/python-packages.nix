@@ -4523,6 +4523,8 @@ self: super: with self; {
 
   fastprogress = callPackage ../development/python-modules/fastprogress { };
 
+  fastremap = callPackage ../development/python-modules/fastremap { };
+
   fastrlock = callPackage ../development/python-modules/fastrlock { };
 
   fasttext = callPackage ../development/python-modules/fasttext { };
