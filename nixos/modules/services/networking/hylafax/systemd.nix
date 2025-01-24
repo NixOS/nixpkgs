@@ -8,6 +8,7 @@
 let
 
   inherit (lib)
+    concatLines
     concatStringsSep
     mkIf
     mkMerge
@@ -29,7 +30,7 @@ let
       include = mkLines { Include = conf.Include or [ ]; };
       other = mkLines (conf // { Include = [ ]; });
     in
-    pkgs.writeText "hylafax-config${name}" (concatStringsSep "\n" (include ++ other));
+    pkgs.writeText "hylafax-config${name}" (concatLines (include ++ other));
 
   globalConfigPath = mkConfigFile "" cfg.faxqConfig;
 
@@ -51,7 +52,7 @@ let
     in
     pkgs.runCommand "hylafax-config-modems" {
       preferLocalBuild = true;
-    } ''mkdir --parents "$out/" ${concatStringsSep "\n" (mapModems mkLine)}'';
+    } ''mkdir --parents "$out/" ${concatLines (mapModems mkLine)}'';
 
   setupSpoolScript = pkgs.replaceVarsWith {
     name = "hylafax-setup-spool.sh";
