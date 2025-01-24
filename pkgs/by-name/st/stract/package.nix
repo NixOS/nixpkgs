@@ -62,7 +62,11 @@ rustPlatform.buildRustPackage {
   passthru.updateScript = unstableGitUpdater { };
 
   meta = {
-    description = "Open source web search engine hosted at stract.com targeted towards tinkerers and developers.";
+    description = "Open source web search engine";
+    longDescription = ''
+      Stract is an open source web search engine targeted towards tinkerers and
+      developers, with an official instance hosted at stract.com
+    '';
     homepage = "https://github.com/StractOrg/stract";
     license = lib.licenses.agpl3Only;
     maintainers =
