@@ -57,17 +57,13 @@ rustPlatform.buildRustPackage rec {
   # The command is taken from https://github.com/rerun-io/rerun/blob/dd025f1384f9944d785d0fb75ca4ca1cd1792f17/pixi.toml#L198C72-L198C187
   # Note that cargoBuildFeatures reference what buildFeatures is set to in stdenv.mkDerivation,
   # so that user can easily create an overlay to set cargoBuildFeatures to what he needs
-  configurePhase = ''
-    runHook preConfigure
-
+  preBuild = ''
     if [[ " $cargoBuildFeatures " == *" web_viewer "* ]]; then
       echo "Building with web_viewer feature..."
       cargo run -p re_dev_tools -- build-web-viewer --no-default-features --features analytics,grpc,map_view --release -g
     else
       echo "web_viewer feature not enabled, skipping web viewer build."
     fi
-
-    runHook postConfigure
   '';
 
   nativeBuildInputs = [
