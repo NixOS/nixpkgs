@@ -64,10 +64,10 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hylafaxplus";
-  version = "7.0.9";
+  version = "7.0.10";
   src = fetchurl {
     url = "mirror://sourceforge/hylafax/hylafax-${finalAttrs.version}.tar.gz";
-    hash = "sha512-3OJwM4vFC9pzPozPobFLiNNx/Qnkl8BpNNziRUpJNBDLBxjtg/eDm3GnprS2hpt7VUoV4PCsFvp1hxhNnhlUwQ==";
+    hash = "sha512-6HdYMHq4cLbS06UXs+FEg3XtsMRyXflrgn/NEsgyMFkTS/MoGW8RVXgbXxAhcArpFvMsY0NUPLE3jdbqqWWQCw==";
   };
   patches = [
     # adjust configure check to work with libtiff > 4.1
