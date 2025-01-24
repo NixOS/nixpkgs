@@ -8,7 +8,6 @@
   eigen,
   libGLU,
   fltk,
-  itk,
   vtk,
   zlib,
   tbb,
@@ -28,17 +27,15 @@ stdenv.mkDerivation {
 
   cmakeFlags = [
     "-DWITH_VTK=ON"
-    "-DBUILD_ALL_MODULES=ON"
+    "-DMODULE_Deformable=ON"
+    "-DMODULE_Mapping=ON"
+    "-DMODULE_Scripting=ON"
+    "-DMODULE_Viewer=ON"
+    "-DMODULE_DrawEM=OFF"
     "-DWITH_TBB=ON"
-    "-DWITH_ITK=ON"
     "-DWITH_GIFTICLIB=ON"
     "-DWITH_NIFTILIB=ON"
   ];
-
-  # tries to download data during configuration
-  postPatch = ''
-    substituteInPlace Packages/DrawEM/CMakeLists.txt --replace "include(Atlases.cmake)" ""
-  '';
 
   # tests don't seem to be maintained and gtest fails to link with BUILD_TESTING=ON;
   # unclear if specific to Nixpkgs
@@ -55,7 +52,6 @@ stdenv.mkDerivation {
     boost186
     eigen
     fltk
-    itk
     libGLU
     python3
     tbb
@@ -63,12 +59,12 @@ stdenv.mkDerivation {
     zlib
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/BioMedIA/MIRTK";
     description = "Medical image registration library and tools";
     mainProgram = "mirtk";
-    maintainers = with maintainers; [ bcdarwin ];
-    platforms = platforms.linux;
-    license = licenses.asl20;
+    maintainers = with lib.maintainers; [ bcdarwin ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.asl20;
   };
 }

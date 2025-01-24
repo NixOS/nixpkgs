@@ -15201,7 +15201,7 @@ with pkgs;
     inherit (llvmPackages) openmp;
   };
 
-  mirtk = callPackage ../development/libraries/science/biology/mirtk { itk = itk_5_2; };
+  mirtk = callPackage ../development/libraries/science/biology/mirtk { };
 
   nest = callPackage ../applications/science/biology/nest { };
 
