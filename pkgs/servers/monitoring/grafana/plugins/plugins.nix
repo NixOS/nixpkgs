@@ -28,6 +28,7 @@
   redis-datasource = callPackage ./redis-datasource { };
   redis-explorer-app = callPackage ./redis-explorer-app { };
   ventura-psychrometric-panel = callPackage ./ventura-psychrometric-panel { };
+  victoriametrics-logs-datasource = callPackage ./victoriametrics-logs-datasource { };
   volkovlabs-echarts-panel = callPackage ./volkovlabs-echarts-panel { };
   volkovlabs-form-panel = callPackage ./volkovlabs-form-panel { };
   volkovlabs-rss-datasource = callPackage ./volkovlabs-rss-datasource { };
