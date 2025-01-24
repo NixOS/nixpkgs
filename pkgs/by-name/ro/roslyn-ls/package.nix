@@ -50,9 +50,14 @@ buildDotnetModule rec {
 
   nativeBuildInputs = [ jq ];
 
-  # until upstream updates net6.0 here:
-  # https://github.com/dotnet/roslyn/blob/6cc106c0eaa9b0ae070dba3138a23aeab9b50c13/eng/targets/TargetFrameworks.props#L20
-  patches = [ ./force-sdk_8_0.patch ];
+  patches = [
+    # until upstream updates net6.0 here:
+    # https://github.com/dotnet/roslyn/blob/6cc106c0eaa9b0ae070dba3138a23aeab9b50c13/eng/targets/TargetFrameworks.props#L20
+    ./force-sdk_8_0.patch
+    # until made configurable/and or different location
+    # https://github.com/dotnet/roslyn/issues/76892
+    ./cachedirectory.patch
+  ];
 
   postPatch = ''
     # Upstream uses rollForward = latestPatch, which pins to an *exact* .NET SDK version.
