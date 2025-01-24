@@ -9668,6 +9668,12 @@
     githubId = 3661115;
     name = "Ingo Blechschmidt";
   };
+  IbrahimOuhamou = {
+    name = "Ibrahim Ouhamou";
+    email = "ouhamouy10@gmail.com";
+    github = "IbrahimOuhamou";
+    githubId = "130257576";
+  };
   icewind1991 = {
     name = "Robin Appelman";
     email = "robin@icewind.nl";
