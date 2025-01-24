@@ -10,11 +10,9 @@ import ./make-test-python.nix (
       install -D -t $out key.pem cert.pem
     '';
 
-    # Git repositories paths in Gitolite.
-    # Here only their baseNameOf is used for configuring public-inbox inboxes.
     gitRepositories = [
-      "user/repo1"
-      "user/repo2"
+      "repo1"
+      "repo2"
     ];
   in
   {
@@ -81,7 +79,7 @@ import ./make-test-python.nix (
           };
           inboxes =
             lib.recursiveUpdate
-              (lib.genAttrs (map baseNameOf gitRepositories) (repo: {
+              (lib.genAttrs gitRepositories (repo: {
                 address = [
                   # Routed to the "public-inbox:" transport in services.postfix.transport
                   "${repo}@${domain}"
@@ -106,7 +104,7 @@ import ./make-test-python.nix (
           settings.coderepo = lib.listToAttrs (
             map (
               repositoryName:
-              lib.nameValuePair (baseNameOf repositoryName) {
+              lib.nameValuePair repositoryName {
                 dir = "/var/lib/public-inbox/repositories/${repositoryName}.git";
                 cgitUrl = "https://git.${domain}/${repositoryName}.git";
               }
