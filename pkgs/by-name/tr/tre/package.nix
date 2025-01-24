@@ -29,16 +29,13 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     autoconf
     automake
+    gettext # autopoint
     libtool
   ];
 
-  buildInputs =
-    [
-      gettext
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
 
   preConfigure = ''
     ./utils/autogen.sh
