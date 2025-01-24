@@ -27,7 +27,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-FSip1EY6DCgmIgpkhzEF6h3yV8tJqZKnBpqgBDg1TKQ=";
   };
 
-  cargoHash = "sha256-35XKqVBXlK6iPHec1ALhymYCD1GG1ZnCU2ET3PRGidk=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-uLGdrPTXAHwZrevGPgZGiNorxVNkYiHn6mPyxd8O8zw=";
 
   postPatch = ''
     # upstream uses lld on aarch64-darwin for faster builds
