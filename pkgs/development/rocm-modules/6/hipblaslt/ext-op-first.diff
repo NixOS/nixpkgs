@@ -1,0 +1,22 @@
+diff --git a/library/src/amd_detail/rocblaslt/src/CMakeLists.txt b/library/src/amd_detail/rocblaslt/src/CMakeLists.txt
+index 3d5ace35..8c5a3841 100644
+--- a/library/src/amd_detail/rocblaslt/src/CMakeLists.txt
++++ b/library/src/amd_detail/rocblaslt/src/CMakeLists.txt
+@@ -58,6 +58,8 @@ if( BUILD_WITH_TENSILE )
+     set(Tensile_Options ${Tensile_Options} LAZY_LIBRARY_LOADING)
+   endif()
+ 
++  #TensileCreateExtOpLibraries("${PROJECT_BINARY_DIR}/Tensile/library" "${Tensile_ARCHITECTURE}")
++
+   # Add a build target for Tensile kernel library
+   # Runtime language is HIP by default
+   # warning our Tensile_ variables may shadow variable in TensileCreateLibraryFiles
+@@ -86,8 +88,6 @@ if( BUILD_WITH_TENSILE )
+     )
+   endif()
+ 
+-  TensileCreateExtOpLibraries("${PROJECT_BINARY_DIR}/Tensile/library" "${Tensile_ARCHITECTURE}")
+-
+   # Create a unique name for TensileHost compiled for rocBLAS
+   set_target_properties( TensileHost PROPERTIES OUTPUT_NAME rocblaslt-tensile CXX_EXTENSIONS NO )
+ 

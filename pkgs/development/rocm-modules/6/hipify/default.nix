@@ -1,39 +1,57 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rocmUpdateScript
-, cmake
-, clang
-, libxml2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rocmUpdateScript,
+  cmake,
+  clang,
+  libxml2,
+  rocm-merged-llvm,
+  zlib,
+  zstd,
+  perl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipify";
-  version = "6.0.2";
+  version = "6.3.1";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "HIPIFY";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-nNyWrPPhUwT7FyASzc3kf5NCTzeqvHybVOc+6hBzkA4=";
+    hash = "sha256-o/1LNsNtAyQcSug1gf7ujGNRRbvC33kwldrJKZi2LA0=";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ libxml2 ];
+  nativeBuildInputs = [
+    cmake
+  ];
+
+  buildInputs = [
+    libxml2
+    rocm-merged-llvm
+    zlib
+    zstd
+    perl
+  ];
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
       --replace "\''${LLVM_TOOLS_BINARY_DIR}/clang" "${clang}/bin/clang"
+    chmod +x bin/*
   '';
 
   passthru.updateScript = rocmUpdateScript {
     name = finalAttrs.pname;
-    owner = finalAttrs.src.owner;
-    repo = finalAttrs.src.repo;
+    inherit (finalAttrs.src) owner;
+    inherit (finalAttrs.src) repo;
   };
 
   postInstall = ''
-    patchShebangs $out/bin
+    chmod +x $out/bin/*
+    chmod +x $out/libexec/*
+    patchShebangs $out/bin/
+    patchShebangs $out/libexec/
   '';
 
   meta = with lib; {
@@ -42,6 +60,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
     platforms = platforms.linux;
-    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version || versionAtLeast finalAttrs.version "7.0.0";
   };
 })
