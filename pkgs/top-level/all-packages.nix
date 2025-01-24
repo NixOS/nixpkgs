@@ -9399,7 +9399,7 @@ with pkgs;
   libcomps = callPackage ../tools/package-management/libcomps { python = python3; };
 
   libcxxrt = callPackage ../development/libraries/libcxxrt {
-    stdenv = if stdenv.hostPlatform.useLLVM or false
+    stdenv = if stdenv.hostPlatform.cxxlib == "libcxx" && stdenv.hostPlatform.cxxlib != "libcxx"
              then overrideCC stdenv buildPackages.llvmPackages.tools.clangNoLibcxx
              else stdenv;
   };
