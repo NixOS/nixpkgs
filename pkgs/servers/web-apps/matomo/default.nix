@@ -18,11 +18,11 @@ let
       hash = "sha256-ZEwz/KKZZwTFsKfwR0iKZM1ta4CUXJsWgBXika+pjb0=";
     };
     matomo-beta = {
-      version = "5.2.1";
+      version = "5.2.2";
       # `beta` examples: "b1", "rc1", null
       # when updating: use null if stable version is >= latest beta or release candidate
       beta = null;
-      hash = "sha256-5glMwwIG0Uo8bu904u40FUa+yaUlrQe1nUCkv9/ATks=";
+      hash = "sha256-ZEwz/KKZZwTFsKfwR0iKZM1ta4CUXJsWgBXika+pjb0=";
     };
   };
   common =
