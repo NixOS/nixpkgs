@@ -13,13 +13,13 @@
 buildPythonPackage rec {
   pname = "snakeviz";
   version = "2.2.2";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jiffyclub";
-    repo = pname;
+    repo = "snakeviz";
     tag = "v${version}";
     hash = "sha256-s/OATRnkooucRkLer5A66X9xDEA7aKNo+c10m1N7Guw=";
   };
@@ -40,6 +40,8 @@ buildPythonPackage rec {
 
   preCheck = ''
     export PATH="$PATH:$out/bin";
+    export HOME="$PWD/.home"
+    mkdir -p "$HOME"
   '';
 
   meta = with lib; {
@@ -48,6 +50,9 @@ buildPythonPackage rec {
     homepage = "https://jiffyclub.github.io/snakeviz";
     changelog = "https://github.com/jiffyclub/snakeviz/blob/v${version}/CHANGES.rst";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ nixy ];
+    maintainers = with maintainers; [
+      nixy
+      pbsds
+    ];
   };
 }
