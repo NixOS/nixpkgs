@@ -183,6 +183,12 @@ import ./make-test-python.nix (
     testScript = ''
       start_all()
 
+      # The threshold and/or hardening may have to be changed with new features/checks
+      with subtest("systemd hardening thresholds"):
+        print(machine.succeed("systemd-analyze security public-inbox-httpd.service --threshold=5 --no-pager"))
+        print(machine.succeed("systemd-analyze security public-inbox-imapd.service --threshold=5 --no-pager"))
+        print(machine.succeed("systemd-analyze security public-inbox-nntpd.service --threshold=4 --no-pager"))
+
       machine.wait_for_unit("multi-user.target")
       machine.wait_for_unit("public-inbox-init.service")
 
