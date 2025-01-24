@@ -27,16 +27,27 @@ new_hash=$(nix store prefetch-file --json --hash-type sha256 \
 
 sed -i "s|$current_hash|$new_hash|g" $positron_nix
 
-# Update Linux hash.
-current_hash=$(nix store prefetch-file --json --hash-type sha256 \
+# Update Linux hash for x64.
+current_hash_x64=$(nix store prefetch-file --json --hash-type sha256 \
     "https://github.com/posit-dev/positron/releases/download/${current_version}/Positron-${current_version}.deb" \
     | jq -r .hash)
 
-new_hash=$(nix store prefetch-file --json --hash-type sha256 \
+new_hash_x64=$(nix store prefetch-file --json --hash-type sha256 \
     "https://github.com/posit-dev/positron/releases/download/${new_version}/Positron-${new_version}-x64.deb" \
     | jq -r .hash)
 
-sed -i "s|$current_hash|$new_hash|g" $positron_nix
+sed -i "s|$current_hash_x64|$new_hash_x64|g" $positron_nix
+
+# Update Linux hash for arm64.
+current_hash_arm64=$(nix store prefetch-file --json --hash-type sha256 \
+    "https://github.com/posit-dev/positron/releases/download/${current_version}/Positron-${current_version}.deb" \
+    | jq -r .hash)
+
+new_hash_arm64=$(nix store prefetch-file --json --hash-type sha256 \
+    "https://github.com/posit-dev/positron/releases/download/${new_version}/Positron-${new_version}-arm64.deb" \
+    | jq -r .hash)
+
+sed -i "s|$current_hash_arm64|$new_hash_arm64|g" $positron_nix
 
 # Update version
 sed -i "s|$current_version|$new_version|g" $positron_nix

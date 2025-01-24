@@ -32,11 +32,21 @@ stdenv.mkDerivation {
         url = "https://github.com/posit-dev/positron/releases/download/${version}/Positron-${version}.dmg";
         hash = "sha256-eqThNxOLxxoysOaYQPwGFFG7tCESBDERxbYzwBoIbxI=";
       }
+    else if stdenv.hostPlatform.isLinux then
+      if stdenv.hostPlatform.system == "x86_64-linux" then
+        fetchurl {
+          url = "https://github.com/posit-dev/positron/releases/download/${version}/Positron-${version}-x64.deb";
+          hash = "sha256-XJ5otDdqMGKitCl6oSECT8al6ZE/MEBrt/EE2wS/Ayg=";
+        }
+      else if stdenv.hostPlatform.system == "aarch64-linux" then
+        fetchurl {
+          url = "https://github.com/posit-dev/positron/releases/download/${version}/Positron-${version}-arm64.deb";
+          hash = "sha256-JCNu87XJjNYaYmRwdjkZfsp0uAmHscGNocI48sPoXjU";
+        }
+      else
+        throw "Unsupported Linux platform: ${stdenv.hostPlatform.system}"
     else
-      fetchurl {
-        url = "https://github.com/posit-dev/positron/releases/download/${version}/Positron-${version}-x64.deb";
-        hash = "sha256-XJ5otDdqMGKitCl6oSECT8al6ZE/MEBrt/EE2wS/Ayg=";
-      };
+      throw "Unsupported platform: ${stdenv.hostPlatform.system}";
 
   buildInputs =
     [ makeShellWrapper ]
@@ -73,6 +83,17 @@ stdenv.mkDerivation {
     # Needed to fix the "Zygote could not fork" error.
     (lib.getLib systemd)
   ];
+
+  unpackPhase =
+    if stdenv.hostPlatform.isLinux then
+      ''
+        runHook preUnpack
+        # The deb file contains a setuid binary, so 'dpkg -x' doesn't work here
+        dpkg-deb --fsys-tarfile $src | tar -x --no-same-permissions --no-same-owner
+        runHook postUnpack
+      ''
+    else
+      "";
 
   installPhase =
     if stdenv.hostPlatform.isDarwin then
@@ -128,6 +149,9 @@ stdenv.mkDerivation {
       detroyejr
     ];
     mainProgram = "positron";
-    platforms = [ "x86_64-linux" ] ++ platforms.darwin;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ] ++ platforms.darwin;
   };
 }
