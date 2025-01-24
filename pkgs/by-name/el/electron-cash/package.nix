@@ -9,13 +9,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "electron-cash";
-  version = "4.3.1";
+  version = "4.4.2";
 
   src = fetchFromGitHub {
     owner = "Electron-Cash";
     repo = "Electron-Cash";
     tag = version;
-    sha256 = "sha256-xOyj5XerOwgfvI0qj7+7oshDvd18h5IeZvcJTis8nWo=";
+    sha256 = "sha256-hqaPxetS6JONvlRMjNonXUGFpdmnuadD00gcPzY07x0=";
   };
 
   build-system = with python3Packages; [
@@ -44,6 +44,7 @@ python3Packages.buildPythonApplication rec {
     psutil
     pycryptodomex
     cryptography
+    zxing-cpp
 
     # requirements-hw
     trezor
@@ -59,32 +60,38 @@ python3Packages.buildPythonApplication rec {
 
   buildInputs = [ ] ++ lib.optional stdenv.hostPlatform.isLinux qt5.qtwayland;
 
-  postPatch = ''
-    substituteInPlace contrib/requirements/requirements.txt \
-      --replace "qdarkstyle==2.6.8" "qdarkstyle<3"
-
-    substituteInPlace setup.py \
-      --replace "(share_dir" "(\"share\""
-  '';
-
   # If secp256k1 wasn't added to the library path, the following warning is given:
   #
   #   Electron Cash was unable to find the secp256k1 library on this system.
   #   Elliptic curve cryptography operations will be performed in slow
   #   Python-only mode.
+  #
+  # Upstream hardcoded `libsecp256k1.so.0` where we provides
+  # `libsecp256k1.so.5`. The only breaking change is the removal of two
+  # functions which seem not used by electron-cash.
+  # See: <https://github.com/Electron-Cash/Electron-Cash/issues/3009>
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "(share_dir" '("share"'
+    substituteInPlace electroncash/secp256k1.py \
+      --replace-fail "libsecp256k1.so.0" "${secp256k1}/lib/libsecp256k1.so.5"
+  '';
+
   preFixup = ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
-    makeWrapperArgs+=(
-      "--prefix" "LD_LIBRARY_PATH" ":" "${secp256k1}/lib"
-    )
   '';
 
   doInstallCheck = true;
   installCheckPhase = ''
-    $out/bin/electron-cash help >/dev/null
+    output="$($out/bin/electron-cash help 2>&1)"
+    if [[ "$output" == *"failed to load"* ]]; then
+      echo "$output"
+      echo "Forbidden text detected: failed to load"
+      exit 1
+    fi
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Bitcoin Cash SPV Wallet";
     mainProgram = "electron-cash";
     longDescription = ''
@@ -94,12 +101,12 @@ python3Packages.buildPythonApplication rec {
       of the blockchain.
     '';
     homepage = "https://www.electroncash.org/";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       lassulus
       nyanloutre
       oxalica
     ];
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }
