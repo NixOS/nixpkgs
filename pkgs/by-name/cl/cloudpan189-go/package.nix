@@ -22,6 +22,7 @@ buildGo122Module rec {
     '';
   };
 
+  doInstallCheck = true;
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
