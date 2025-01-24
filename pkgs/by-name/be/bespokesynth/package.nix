@@ -23,6 +23,7 @@
   libXScrnSaver,
   libGL,
   libxcb,
+  vst2-sdk,
   xcbutil,
   libxkbcommon,
   xcbutilkeysyms,
@@ -40,20 +41,6 @@
   enableVST2 ? false,
 }:
 
-let
-  # equal to vst-sdk in ../oxefmsynth/default.nix
-  vst-sdk = stdenv.mkDerivation rec {
-    name = "vstsdk3610_11_06_2018_build_37";
-    src = fetchzip {
-      url = "https://web.archive.org/web/20181016150224if_/https://download.steinberg.net/sdk_downloads/${name}.zip";
-      sha256 = "0da16iwac590wphz2sm5afrfj42jrsnkr1bxcy93lj7a369ildkj";
-    };
-    installPhase = ''
-      cp -r . $out
-    '';
-  };
-
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "bespokesynth";
   version = "1.3.0";
@@ -88,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.cmakeBool "BESPOKE_SYSTEM_JSONCPP" true)
     ]
     ++ lib.optionals enableVST2 [
-      (lib.cmakeFeature "BESPOKE_VST2_SDK_LOCATION" "${vst-sdk}/VST2_SDK")
+      (lib.cmakeFeature "BESPOKE_VST2_SDK_LOCATION" "${vst2-sdk}")
     ];
 
   strictDeps = true;
@@ -185,12 +172,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Software modular synth with controllers support, scripting and VST";
     homepage = "https://www.bespokesynth.com/";
-    license =
-      with lib.licenses;
-      [
-        gpl3Plus
-      ]
-      ++ lib.optional enableVST2 unfree;
+    license = [ lib.licenses.gpl3Plus ];
     maintainers = with lib.maintainers; [
       astro
       tobiasBora
