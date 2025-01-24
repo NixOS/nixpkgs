@@ -41,7 +41,7 @@ let
     fetchSubmodules = true;
   };
 
-  vcvRackSdk = if enableVCVRack then (srcOnly pkgs.vcv-rack) else null;
+  vcvRackSdk = srcOnly pkgs.vcv-rack;
   pname = "airwin2rack";
   version = "2.13.0";
 in
@@ -150,7 +150,7 @@ stdenv.mkDerivation {
     ln -s ${clapJuceExtensions} src-juce/clap-juce-extensions
   '';
 
-  preConfigure = (lib.optionalString enableVCVRack ''export RACK_DIR=${vcvRackSdk}'');
+  preConfigure = lib.optionalString enableVCVRack ''export RACK_DIR=${vcvRackSdk}'';
 
   buildPhase = ''
     cmake --build . --target awcons-products ${lib.optionalString enableVCVRack "build_plugin"} --parallel $NIX_BUILD_CORES
