@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.hostPlatform.isMusl [ ./musl-error_h.patch ]
     # Prevent headers and binaries from colliding which results in an error.
     # https://sourceware.org/pipermail/elfutils-devel/2024q3/007281.html
-    ++ lib.optional (stdenv.targetPlatform.useLLVM or false) ./cxx-header-collision.patch;
+    ++ lib.optional (stdenv.targetPlatform.cxxlib == "libcxx") ./cxx-header-collision.patch;
 
   postPatch =
     ''
@@ -94,7 +94,7 @@ stdenv.mkDerivation rec {
       bzip2
     ]
     ++ lib.optional enableDebuginfod pkg-config
-    ++ lib.optional (stdenv.targetPlatform.useLLVM or false) autoreconfHook;
+    ++ lib.optional (stdenv.targetPlatform.cxxlib == "libcxx") autoreconfHook;
   buildInputs =
     [
       zlib
@@ -128,7 +128,7 @@ stdenv.mkDerivation rec {
       # Versioned symbols are nice to have, but we can do without.
       (lib.enableFeature (!stdenv.hostPlatform.isMicroBlaze) "symbol-versioning")
     ]
-    ++ lib.optional (stdenv.targetPlatform.useLLVM or false) "--disable-demangler"
+    ++ lib.optional (stdenv.targetPlatform.cxxlib == "libcxx") "--disable-demangler"
     ++ lib.optionals stdenv.cc.isClang [
       "CFLAGS=-Wno-unused-private-field"
       "CXXFLAGS=-Wno-unused-private-field"
