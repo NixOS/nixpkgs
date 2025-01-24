@@ -3907,6 +3907,21 @@ let
         };
       };
 
+      nsd.vscode-epics = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-epics";
+          publisher = "nsd";
+          version = "1.1.0";
+          hash = "sha256-ljd0UFFv0hA5jiM6xl4xOjM+z7u9I+H8O/j6m/U5U2c=";
+        };
+        meta = {
+          description = "EPICS syntax highlighting and tools.";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=nsd.vscode-epics";
+          publisher = "nsd";
+          license = lib.licenses.mit;
+        };
+      };
+
       nvarner.typst-lsp = callPackage ./nvarner.typst-lsp { };
 
       ocamllabs.ocaml-platform = buildVscodeMarketplaceExtension {
