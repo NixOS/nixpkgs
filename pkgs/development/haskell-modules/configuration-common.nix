@@ -2299,11 +2299,6 @@ self: super: {
   # 2021-08-18: streamly-posix was released with hspec 2.8.2, but it works with older versions too.
   streamly-posix = doJailbreak super.streamly-posix;
 
-  # Fix from https://github.com/brendanhay/gogol/pull/144 which has seen no release
-  # Can't use fetchpatch as it required tweaking the line endings as the .cabal
-  # file revision on hackage was gifted CRLF line endings
-  gogol-core = appendPatch ./patches/gogol-core-144.patch super.gogol-core;
-
   # Stackage LTS 19 still has 10.*
   hadolint = super.hadolint.override {
     language-docker = self.language-docker_11_0_0;
@@ -3089,3 +3084,33 @@ self: super: {
     # 2025-01-23: jailbreak to allow base >= 4.17
     warp-systemd = doJailbreak super.warp-systemd;
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
+
+# Gogol Packages
+# 2024-12-27: use latest source files from github, as the hackage release is outdated
+// (
+let
+  gogolSrc = pkgs.fetchFromGitHub {
+    owner = "brendanhay";
+    repo = "gogol";
+    rev = "a9d50bbd73d2cb9675bd9bff0f50fcd108f95608";
+    sha256 = "sha256-8ilQe/Z5MLFIDY8T68azFpYW5KkSyhy3c6pgWtsje9w=";
+  };
+  setGogolSourceRoot =
+    dir: drv:
+    (overrideCabal (drv: { src = gogolSrc; }) drv).overrideAttrs (_oldAttrs: {
+      sourceRoot = "${gogolSrc.name}/${dir}";
+    });
+  isGogolService = name: lib.hasPrefix "gogol-" name && name != "gogol-core";
+  gogolServices = lib.filter isGogolService (lib.attrNames super);
+  gogolServiceOverrides = (lib.genAttrs gogolServices (name: setGogolSourceRoot "lib/services/${name}" super.${name}));
+in
+{
+  gogol-core = assert super.gogol-core.version == "0.5.0"; lib.pipe
+    super.gogol-core
+    [
+      (setGogolSourceRoot "lib/gogol-core")
+      (addBuildDepend self.base64)
+      (overrideCabal (drv: { editedCabalFile = null; revision = null; }))
+    ];
+  gogol = assert super.gogol.version == "0.5.0"; setGogolSourceRoot "lib/gogol" super.gogol;
+} // gogolServiceOverrides)

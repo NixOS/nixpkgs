@@ -2121,7 +2121,6 @@ broken-packages:
   - godot-megaparsec # failure in job https://hydra.nixos.org/build/233252882 at 2023-09-02
   - gofer-prelude # failure in job https://hydra.nixos.org/build/233237015 at 2023-09-02
   - goggles-gcs # failure in job https://hydra.nixos.org/build/252711128 at 2024-03-16
-  - gogol-core # failure in job https://hydra.nixos.org/build/233245807 at 2023-09-02
   - gooey # failure in job https://hydra.nixos.org/build/233192207 at 2023-09-02
   - google-cloud # failure in job https://hydra.nixos.org/build/233218503 at 2023-09-02
   - GoogleCodeJam # failure in job https://hydra.nixos.org/build/233234738 at 2023-09-02
