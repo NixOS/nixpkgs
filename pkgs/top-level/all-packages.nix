@@ -8932,7 +8932,13 @@ with pkgs;
     else libcCrossChooser stdenv.targetPlatform.libc;
 
   threadsCross =
-    lib.optionalAttrs (stdenv.targetPlatform.isMinGW && !(stdenv.targetPlatform.useLLVM or false)) {
+    lib.optionalAttrs (
+      stdenv.targetPlatform.isMinGW
+      && !(stdenv.targetPlatform.cc == "clang"
+        && stdenv.targetPlatform.cxxlib == "libcxx"
+        && stdenv.targetPlatform.rtlib == "compiler-rt"
+        && stdenv.targetPlatform.unwinderlib == "libunwind")
+    ) {
       # other possible values: win32 or posix
       model = "mcf";
       # For win32 or posix set this to null
