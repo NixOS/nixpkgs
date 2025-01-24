@@ -3109,7 +3109,7 @@ in
     super.gogol-core
     [
       (setGogolSourceRoot "lib/gogol-core")
-      (addBuildDepend self.base64_1_0)
+      (addBuildDepend self.base64)
       (overrideCabal (drv: { editedCabalFile = null; revision = null; }))
     ];
   gogol = assert super.gogol.version == "0.5.0"; setGogolSourceRoot "lib/gogol" super.gogol;
