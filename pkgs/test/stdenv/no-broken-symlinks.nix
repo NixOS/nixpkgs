@@ -5,25 +5,25 @@
 }:
 
 let
-  inherit (lib.strings) concatStringsSep;
+  inherit (lib.strings) concatStringsSep optionalString;
   inherit (pkgs) runCommand;
   inherit (pkgs.testers) testBuildFailure;
 
   mkDanglingSymlink = absolute: ''
-    ln -s${if absolute then "r" else ""} "$out/dangling" "$out/dangling-symlink"
+    ln -s${optionalString (!absolute) "r"} "$out/dangling" "$out/dangling-symlink"
   '';
 
   mkReflexiveSymlink = absolute: ''
-    ln -s${if absolute then "r" else ""} "$out/reflexive-symlink" "$out/reflexive-symlink"
+    ln -s${optionalString (!absolute) "r"} "$out/reflexive-symlink" "$out/reflexive-symlink"
   '';
 
   mkValidSymlink = absolute: ''
     touch "$out/valid"
-    ln -s${if absolute then "r" else ""} "$out/valid" "$out/valid-symlink"
+    ln -s${optionalString (!absolute) "r"} "$out/valid" "$out/valid-symlink"
   '';
 
   mkValidSymlinkOutsideNixStore = absolute: ''
-    ln -s${if absolute then "r" else ""} "/etc/my_file" "$out/valid-symlink"
+    ln -s${optionalString (!absolute) "r"} "/etc/my_file" "$out/valid-symlink"
   '';
 
   testBuilder =
