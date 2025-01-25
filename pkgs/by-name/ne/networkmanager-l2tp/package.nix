@@ -38,16 +38,20 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [
-    autoreconfHook
-    pkg-config
-  ];
+  nativeBuildInputs =
+    [
+      autoreconfHook
+      glib # for gdbus-codegen
+      pkg-config
+    ]
+    ++ lib.optionals withGnome [
+      gtk4 # for gtk4-builder-tool
+    ];
 
   buildInputs =
     [
       networkmanager
       ppp
-      glib
       openssl
       nss
     ]
@@ -67,6 +71,7 @@ stdenv.mkDerivation rec {
   ];
 
   enableParallelBuilding = true;
+  strictDeps = true;
 
   passthru = {
     networkManagerPlugin = "VPN/nm-l2tp-service.name";
