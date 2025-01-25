@@ -63,7 +63,7 @@ stdenv.mkDerivation {
     owner = "baconpaul";
     repo = "airwin2rack";
     tag = "DAWPlugin";
-    hash = "sha256-utqDmQgnYUtUv0E0xhO5rGx+9RXTAn8kKhTzkyXjcbE=";
+    hash = "sha256-xjE9M5fMeOOYncq7xe+v++XvfUL6QZc2tF0jnYWSwKQ=";
     fetchSubmodules = true;
   };
 
