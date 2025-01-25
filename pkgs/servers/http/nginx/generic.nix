@@ -12,7 +12,7 @@ outer@{
 
   nixosTests,
   installShellFiles,
-  substituteAll,
+  replaceVars,
   removeReferencesTo,
   gd,
   geoip,
@@ -40,7 +40,7 @@ outer@{
   buildInputs ? [ ],
   extraPatches ? [ ],
   fixPatch ? p: p,
-  postPatch ? "",
+  postPatch ? null,
   preConfigure ? "",
   preInstall ? "",
   postInstall ? "",
@@ -214,12 +214,7 @@ stdenv.mkDerivation {
   patches =
     map fixPatch (
       [
-        (substituteAll {
-          src = ./nix-etag-1.15.4.patch;
-          preInstall = ''
-            export nixStoreDir="$NIX_STORE" nixStoreDirLen="''${#NIX_STORE}"
-          '';
-        })
+        ./nix-etag-1.15.4.patch
         ./nix-skip-check-logs-path.patch
       ]
       ++
@@ -255,7 +250,11 @@ stdenv.mkDerivation {
     )
     ++ extraPatches;
 
-  inherit postPatch;
+  postPatch = lib.defaultTo ''
+    substituteInPlace src/http/ngx_http_core_module.c \
+      --replace-fail '@nixStoreDir@' "$NIX_STORE" \
+      --replace-fail '@nixStoreDirLen@' "''${#NIX_STORE}"
+  '' postPatch;
 
   hardeningEnable = lib.optional (!stdenv.hostPlatform.isDarwin) "pie";
 
