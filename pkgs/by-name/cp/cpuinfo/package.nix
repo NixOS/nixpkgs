@@ -10,13 +10,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "cpuinfo";
-  version = "0-unstable-2024-12-09";
+  version = "0-unstable-2025-01-10";
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "cpuinfo";
-    rev = "ca156f7bc9109c552973414a63d310f76ef0cbf8";
-    hash = "sha256-hIGizsl1NSGySXPI9Xx69xCfQLAMpYviYhBXX201N4o=";
+    rev = "8a1772a0c5c447df2d18edf33ec4603a8c9c04a6";
+    hash = "sha256-dKmZ5YXLhvVdxaJ4PefR+SWlh+MTFHNxOMeM6Vj7Gvo=";
   };
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
