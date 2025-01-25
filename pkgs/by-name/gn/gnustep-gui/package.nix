@@ -1,13 +1,12 @@
 {
   lib,
-  stdenv,
-  make,
-  wrapGNUstepAppsHook,
+  clangStdenv,
   fetchzip,
-  base,
+  gnustep-base,
+  wrapGNUstepAppsHook,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+clangStdenv.mkDerivation (finalAttrs: {
   version = "0.31.1";
   pname = "gnustep-gui";
 
@@ -16,15 +15,14 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-+4XEJ6PKpantbIbyNroFMaNBTFffkuW/ajSocGQO9Mo=";
   };
 
-  nativeBuildInputs = [
-    make
-    wrapGNUstepAppsHook
-  ];
-  buildInputs = [ base ];
+  nativeBuildInputs = [ wrapGNUstepAppsHook ];
+
+  propagatedBuildInputs = [ gnustep-base ];
 
   patches = [
     ./fixup-all.patch
   ];
+
   meta = {
     changelog = "https://github.com/gnustep/libs-gui/releases/tag/gui-${
       builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
@@ -34,8 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl2Plus;
     maintainers = with lib.maintainers; [
       ashalkhakov
-      matthewbauer
       dblsaiko
+      matthewbauer
     ];
     platforms = lib.platforms.linux;
   };

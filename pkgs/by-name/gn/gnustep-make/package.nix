@@ -1,12 +1,12 @@
 {
   lib,
-  stdenv,
+  clangStdenv,
   fetchurl,
+  gnustep-libobjc,
   which,
-  libobjc,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+clangStdenv.mkDerivation (finalAttrs: {
   pname = "gnustep-make";
   version = "2.9.2";
 
@@ -18,14 +18,17 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags = [
     "--with-layout=fhs-system"
     "--disable-install-p"
-    "--with-config-file=${placeholder "out"}/etc/GNUstep/GNUstep.conf"
   ];
+
+  preConfigure = ''
+    configureFlags="$configureFlags --with-config-file=$out/etc/GNUstep/GNUstep.conf"
+  '';
 
   makeFlags = [
     "GNUSTEP_INSTALLATION_DOMAIN=SYSTEM"
   ];
 
-  buildInputs = [ libobjc ];
+  buildInputs = [ gnustep-libobjc ];
 
   propagatedBuildInputs = [ which ];
 
@@ -41,8 +44,8 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl2Plus;
     maintainers = with lib.maintainers; [
       ashalkhakov
-      matthewbauer
       dblsaiko
+      matthewbauer
     ];
     platforms = lib.platforms.unix;
   };
