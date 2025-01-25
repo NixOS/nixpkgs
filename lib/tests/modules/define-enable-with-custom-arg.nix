@@ -1,7 +1,0 @@
-{ custom, ... }:
-
-{
-  config = {
-    enable = custom;
-  };
-}

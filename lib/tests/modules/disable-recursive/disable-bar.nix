@@ -1,7 +1,0 @@
-{
-
-  disabledModules = [
-    ./bar.nix
-  ];
-
-}

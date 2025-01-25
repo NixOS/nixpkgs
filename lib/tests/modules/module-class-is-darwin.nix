@@ -1,4 +1,0 @@
-{
-  _class = "darwin";
-  config = { };
-}

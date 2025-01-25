@@ -1,3 +1,0 @@
-= Antora
-
-== Minimal Working Example

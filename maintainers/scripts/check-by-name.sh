@@ -1,1 +1,0 @@
-../../ci/nixpkgs-vet.sh

@@ -1,5 +1,0 @@
-abi <abi/4.0>,
-include <tunables/global>
-profile sl /bin/sl {
-  include <abstractions/base>
-}

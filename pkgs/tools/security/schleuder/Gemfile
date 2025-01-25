@@ -1,4 +1,0 @@
-source 'https://rubygems.org' do
-  gem 'schleuder'
-  gem 'net-smtp'
-end

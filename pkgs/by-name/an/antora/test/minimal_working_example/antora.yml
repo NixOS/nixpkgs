@@ -1,7 +1,0 @@
----
-name: Antora
-
-nav:
-  - modules/ROOT/nav.adoc
-
-version: ~

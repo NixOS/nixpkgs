@@ -1,1 +1,0 @@
-{:deps {clojupyter/clojupyter {:mvn/version "0.3.6"}}}

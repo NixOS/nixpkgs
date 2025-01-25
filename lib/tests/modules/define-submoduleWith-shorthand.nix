@@ -1,3 +1,0 @@
-{
-  submodule.config = true;
-}

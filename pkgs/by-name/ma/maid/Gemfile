@@ -1,3 +1,0 @@
-source 'https://rubygems.org'
-gem 'maid', '~> 0.10.0'
-gem 'rake'

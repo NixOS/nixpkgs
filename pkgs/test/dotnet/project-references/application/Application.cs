@@ -1,1 +1,0 @@
-ProjectReferencesTest.Library.Hello();

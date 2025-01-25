@@ -1,5 +1,0 @@
-{ ... }:
-
-{
-  disabledModules = [ ./declare-enable.nix ];
-}

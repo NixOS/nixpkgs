@@ -1,7 +1,0 @@
-plugins {
-    id('application')
-}
-
-application {
-    mainClass = 'Main'
-}

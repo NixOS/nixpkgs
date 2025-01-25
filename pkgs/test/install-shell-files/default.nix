@@ -1,3 +1,0 @@
-{ installShellFiles }:
-
-installShellFiles.tests
