@@ -27,8 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-qPknv8BvfJoewFfORXsFZlUnae36czHfOPXmtGccrOk=";
   };
 
-  patches =
-    [ ./fix-pkgconfig.patch ];
+  patches = [ ./fix-pkgconfig.patch ];
 
   nativeBuildInputs = [
     cmake
