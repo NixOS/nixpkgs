@@ -2,6 +2,7 @@
   buildPythonPackage,
   fetchFromGitea,
   lib,
+  pytestCheckHook,
   setuptools,
   setuptools-scm,
 }:
