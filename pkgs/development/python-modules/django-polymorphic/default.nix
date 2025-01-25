@@ -21,6 +21,11 @@ buildPythonPackage rec {
     hash = "sha256-cEV9gnc9gLpAVmYkzSaQwDbgXsklMTq71edndDJeP9E=";
   };
 
+  patches = [
+    # https://github.com/jazzband/django-polymorphic/issues/616
+    ./django-5.1-compat.patch
+  ];
+
   build-system = [ setuptools ];
 
   dependencies = [ django ];
