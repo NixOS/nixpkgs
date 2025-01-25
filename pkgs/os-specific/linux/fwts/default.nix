@@ -4,7 +4,6 @@
   fetchzip,
   autoreconfHook,
   pkg-config,
-  gnumake42,
   glib,
   pcre,
   json_c,
@@ -27,11 +26,9 @@ stdenv.mkDerivation rec {
     stripRoot = false;
   };
 
-  # fails with make 4.4
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
-    gnumake42
   ];
 
   buildInputs = [
