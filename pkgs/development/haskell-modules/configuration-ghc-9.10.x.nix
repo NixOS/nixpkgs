@@ -83,18 +83,14 @@ self: super: {
   # Jailbreaks
   #
   base64 = doJailbreak super.base64; # base <4.20
-  commutative-semigroups = doJailbreak super.commutative-semigroups; # base <4.20
-  dejafu = doJailbreak super.dejafu; # containers <0.7
   floskell = doJailbreak super.floskell; # base <4.20
   lucid = doJailbreak super.lucid; # base <4.20
-  tar = doJailbreak super.tar; # base <4.20
   tasty-coverage = doJailbreak super.tasty-coverage; # base <4.20, filepath <1.5
   tree-diff = doJailbreak super.tree-diff; # base <4.20
   time-compat = doJailbreak super.time-compat; # base <4.20
 
   bitvec = doJailbreak super.bitvec; # primitive <0.9
 
-  hashable = doJailbreak super.hashable; # relax bounds for QuickCheck, tasty, and tasty-quickcheck
   hashable_1_5_0_0 = doJailbreak super.hashable_1_5_0_0; # relax bounds for QuickCheck, tasty, and tasty-quickcheck
 
   broadcast-chan = doJailbreak super.broadcast-chan; # base <4.19  https://github.com/merijn/broadcast-chan/pull/19
@@ -104,7 +100,6 @@ self: super: {
   #
   call-stack = dontCheck super.call-stack; # https://github.com/sol/call-stack/issues/19
   lifted-base = dontCheck super.lifted-base; # doesn't compile with transformers ==0.6.*
-  resolv = dontCheck super.resolv; # doesn't compile with filepath ==1.5.*
   primitive-unlifted = dontCheck super.primitive-unlifted; # doesn't compile with primitive ==0.9.*
   bsb-http-chunked = pkgs.haskell.lib.dontCheck super.bsb-http-chunked; # https://github.com/sjakobi/bsb-http-chunked/issues/45
   hinotify = pkgs.haskell.lib.dontCheck super.hinotify; # https://github.com/kolmodin/hinotify/issues/38
