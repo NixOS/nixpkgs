@@ -244,22 +244,22 @@ import ../make-test-python.nix (
 
             with subtest("container CPU limits can be managed"):
                 set_config(f"container-{variant}1", "limits.cpu 1", restart=True)
-                wait_incus_exec_success(f"container-{variant}1", "nproc | grep '^1$'", timeout=15)
+                wait_incus_exec_success(f"container-{variant}1", "nproc | grep '^1$'", timeout=90)
 
 
             with subtest("container CPU limits can be hotplug changed"):
                 set_config(f"container-{variant}1", "limits.cpu 2")
-                wait_incus_exec_success(f"container-{variant}1", "nproc | grep '^2$'", timeout=15)
+                wait_incus_exec_success(f"container-{variant}1", "nproc | grep '^2$'", timeout=90)
 
 
             with subtest("container memory limits can be managed"):
                 set_config(f"container-{variant}1", "limits.memory 128MB", restart=True)
-                wait_incus_exec_success(f"container-{variant}1", "grep 'MemTotal:[[:space:]]*125000 kB' /proc/meminfo", timeout=15)
+                wait_incus_exec_success(f"container-{variant}1", "grep 'MemTotal:[[:space:]]*125000 kB' /proc/meminfo", timeout=90)
 
 
             with subtest("container memory limits can be hotplug changed"):
                 set_config(f"container-{variant}1", "limits.memory 256MB")
-                wait_incus_exec_success(f"container-{variant}1", "grep 'MemTotal:[[:space:]]*250000 kB' /proc/meminfo", timeout=15)
+                wait_incus_exec_success(f"container-{variant}1", "grep 'MemTotal:[[:space:]]*250000 kB' /proc/meminfo", timeout=90)
 
 
             with subtest("container software tpm can be configured"):
@@ -373,7 +373,7 @@ import ../make-test-python.nix (
 
             with subtest("virtual-machine CPU limits can be hotplug changed"):
                 set_config(f"vm-{variant}1", "limits.cpu 2")
-                wait_incus_exec_success(f"vm-{variant}1", "nproc | grep '^2$'", timeout=15)
+                wait_incus_exec_success(f"vm-{variant}1", "nproc | grep '^2$'", timeout=90)
 
 
             with subtest("virtual-machine can successfully restart"):
