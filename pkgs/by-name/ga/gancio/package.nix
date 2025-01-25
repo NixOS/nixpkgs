@@ -14,18 +14,19 @@
   sqlite,
 
   nixosTests,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gancio";
-  version = "1.19.4";
+  version = "1.21.0";
 
   src = fetchFromGitLab {
     domain = "framagit.org";
     owner = "les";
     repo = "gancio";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-x8s7eBVmHCY3kAjHjACotCncvZq6OBiLPJGF6hvfawE=";
+    hash = "sha256-hpOTiGU2DGOeKqggYQhdBZgFBp6S0CAQ2stpr9zzItg=";
   };
 
   offlineCache = fetchYarnDeps {
@@ -69,6 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     tests = {
       inherit (nixosTests) gancio;
     };
+    updateScript = nix-update-script { };
   };
 
   meta = {
