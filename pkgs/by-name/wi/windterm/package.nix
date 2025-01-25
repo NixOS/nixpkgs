@@ -98,7 +98,7 @@ stdenv.mkDerivation rec {
     mainProgram = "windterm";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ aucub ];
+    maintainers = with lib.maintainers; [ ];
     platforms = [ "x86_64-linux" ];
   };
 }
