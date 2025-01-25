@@ -85,10 +85,10 @@ in
               "${cfg.package}/share/openvswitch/vswitch.ovsschema"
           fi
           chmod -R +w /var/db/openvswitch
-          if ${cfg.package}/bin/ovsdb-tool needs-conversion /var/db/openvswitch/conf.db | grep -q "yes"
+          if ${cfg.package}/bin/ovsdb-tool needs-conversion /var/db/openvswitch/conf.db "${cfg.package}/share/openvswitch/vswitch.ovsschema" | grep -q "yes"
           then
             echo "Performing database upgrade"
-            ${cfg.package}/bin/ovsdb-tool convert /var/db/openvswitch/conf.db
+            ${cfg.package}/bin/ovsdb-tool convert /var/db/openvswitch/conf.db "${cfg.package}/share/openvswitch/vswitch.ovsschema"
           else
             echo "Database already up to date"
           fi
