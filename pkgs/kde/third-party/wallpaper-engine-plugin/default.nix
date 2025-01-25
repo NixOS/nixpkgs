@@ -17,17 +17,17 @@
 }:
 mkKdeDerivation {
   pname = "wallpaper-engine-kde-plugin";
-  version = "0.5.5-unstable-2024-06-16";
+  version = "0.5.5-unstable-2024-11-03";
 
   src = fetchFromGitHub {
     owner = "catsout";
     repo = "wallpaper-engine-kde-plugin";
-    rev = "1e604105c586c7938c5b2c19e3dc8677b2eb4bb4";
-    hash = "sha256-bKGQxyS8gUi+37lODLVHphMoQwLKZt/hpSjR5MN+5GA=";
+    rev = "ed58dd8b920dbb2bf0859ab64e0b5939b8a32a0e";
+    hash = "sha256-ICQLtw+qaOMf0lkqKegp+Dkl7eUgPqKDn8Fj5Osb7eA=";
     fetchSubmodules = true;
   };
 
-  patches = [ ./nix-plugin.patch ];
+  patches = [./nix-plugin.patch];
 
   extraNativeBuildInputs = [
     kpackage
@@ -42,33 +42,28 @@ mkKdeDerivation {
   ];
 
   extraCmakeFlags = [
-    "-DQML2_CMAKE_PATH=${
-      lib.makeSearchPath "lib/qt-6/qml" [
-        qtmultimedia
-        qtwebchannel
-        qtwebengine
-        qtwebsockets
-      ]
-    }"
-    "-DQt6_DIR=${qtbase}/lib/cmake/Qt6"
-    "-DUSE_PLASMAPKG=ON"
+    (lib.cmakeFeature "QML_LIB" (lib.makeSearchPathOutput "out" "lib/qt-6/qml" [
+      qtmultimedia
+      qtwebchannel
+      qtwebengine
+      qtwebsockets
+    ]))
+    (lib.cmakeFeature "Qt6_DIR" "${qtbase}/lib/cmake/Qt6")
   ];
 
-  postInstall =
-    let
-      py3-ws = python3.withPackages (ps: with ps; [ websockets ]);
-    in
-    ''
-      cd ../plugin
-      PATH=${py3-ws}/bin:$PATH patchShebangs --build ./contents/pyext.py
-      substituteInPlace ./contents/ui/Pyext.qml --replace-fail NIX_STORE_PACKAGE_PATH ${placeholder "out"}
-      kpackagetool6 -i ./ -p $out/share/plasma/wallpapers/
-    '';
+  postInstall = let
+    py3-ws = python3.withPackages (ps: with ps; [websockets]);
+  in ''
+    cd $out/share/plasma/wallpapers/com.github.catsout.wallpaperEngineKde
+    chmod +x ./contents/pyext.py
+    PATH=${py3-ws}/bin:$PATH patchShebangs --build ./contents/pyext.py
+    substituteInPlace ./contents/ui/Pyext.qml --replace-fail NIX_STORE_PACKAGE_PATH ${placeholder "out"}
+  '';
 
   meta = with lib; {
     description = "KDE wallpaper plugin integrating Wallpaper Engine";
     homepage = "https://github.com/catsout/wallpaper-engine-kde-plugin";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ macronova ];
+    maintainers = with maintainers; [macronova];
   };
 }
