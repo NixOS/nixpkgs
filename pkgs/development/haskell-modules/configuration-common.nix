@@ -2707,13 +2707,14 @@ self: super: {
 
   # Overly strict bounds on tasty-quickcheck (test suite) (< 0.11)
   hashable = doJailbreak super.hashable;
-
   # https://github.com/haskell/aeson/pull/1126
   text-iso8601 = doJailbreak super.text-iso8601;
   # https://github.com/well-typed/cborg/issues/340
   cborg = doJailbreak super.cborg;
   # Doesn't compile with tasty-quickcheck == 0.11 (see issue above)
   serialise = dontCheck super.serialise;
+  # https://github.com/Bodigrim/data-array-byte/issues/1
+  data-array-byte = doJailbreak super.data-array-byte;
 
   psqueues = lib.pipe super.psqueues [
     (overrideCabal { editedCabalFile = null; revision = null; } )
