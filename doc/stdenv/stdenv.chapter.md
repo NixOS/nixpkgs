@@ -1378,6 +1378,10 @@ This setup hook checks for, reports, and (by default) fails builds when "broken"
 This hook can be disabled by setting `dontCheckForBrokenSymlinks`.
 
 ::: {.note}
+The hook only considers symlinks with targets inside the Nix store.
+:::
+
+::: {.note}
 The check for reflexivity is direct and does not account for transitivity, so this hook will not prevent cycles in symlinks.
 :::
 
