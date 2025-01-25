@@ -38,6 +38,8 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
+  pythonRelaxDeps = [ "ncclient" ];
+
   dependencies = [
     jinja2
     lxml
