@@ -203,9 +203,8 @@ in
       description = ''
         This option effectively allows adding setuid/setgid bits, capabilities,
         changing file ownership and permissions of a program without directly
-        modifying it. This works by creating a wrapper program under the
-        {option}`security.wrapperDir` directory, which is then added to
-        the shell `PATH`.
+        modifying it. This works by creating a wrapper program in a directory
+        (not configurable), which is then added to the shell `PATH`.
       '';
     };
 
