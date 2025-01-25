@@ -42,5 +42,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.drivetrust.com";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
+    mainProgram = "sedutil-cli";
   };
 }
