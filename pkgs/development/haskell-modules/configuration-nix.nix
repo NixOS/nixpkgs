@@ -1381,9 +1381,9 @@ self: super: builtins.intersectAttrs super {
   # is not commonly installed on systems, so we add it to PATH. Closure size
   # penalty is about 10MB at the time of writing this (2022-08-20).
   cabal-install = overrideCabal (old: {
-    executableToolDepends = [
+    buildTools = [
       pkgs.buildPackages.makeWrapper
-    ] ++ old.buildToolDepends or [];
+    ] ++ old.buildTools or [];
     postInstall = old.postInstall + ''
       mkdir -p "$out/share/man/man1"
       "$out/bin/cabal" man --raw > "$out/share/man/man1/cabal.1"
