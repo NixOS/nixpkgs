@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-szeEBiolg2rVD2XZoNrncUYnA8KPhWwhQPYsjuxp904=";
   };
 
-  cargoHash = "sha256-hQuWRcg9dWYYaHXxocJ+XG1K7aTWLhR2RZVUc4geJLI=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-xUNvVG5jdAXsro2P8je3LFxqMycJEB4j7w3abf6jilw=";
 
   meta = with lib; {
     description = "Clean, simple, and fast process viewer";
