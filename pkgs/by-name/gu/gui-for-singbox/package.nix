@@ -12,8 +12,10 @@
   autoPatchelfHook,
   makeDesktopItem,
   copyDesktopItems,
-  replaceVars,
+  nix-update-script,
+  _experimental-update-script-combinators,
 }:
+
 let
   pname = "gui-for-singbox";
   version = "1.9.0";
@@ -65,8 +67,14 @@ let
     };
   });
 in
+
 buildGoModule {
-  inherit pname version src;
+  inherit
+    pname
+    version
+    src
+    frontend
+    ;
 
   patches = [ ./bridge.patch ];
 
@@ -126,6 +134,14 @@ buildGoModule {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = _experimental-update-script-combinators.sequence [
+    (nix-update-script { })
+    (nix-update-script {
+      attrPath = "gui-for-singbox.frontend";
+      extraArgs = [ "--version=skip" ];
+    })
+  ];
 
   meta = {
     description = "SingBox GUI program developed by vue3 + wails";
