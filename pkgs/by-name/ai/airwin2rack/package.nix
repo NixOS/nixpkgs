@@ -80,8 +80,8 @@ stdenv.mkDerivation {
       copyDesktopItems
     ]
     ++ lib.optionals enableVCVRack [
-      pkgs.jq
-      pkgs.zstd
+      jq
+      zstd
     ];
 
   buildInputs =
@@ -136,7 +136,7 @@ stdenv.mkDerivation {
     ]
     ++ lib.optionals enableVCVRack [
       (lib.cmakeBool "BUILD_RACK_PLUGIN" true)
-      "-DRACK_SDK_DIR=${vcvRackSdk}"
+      (lib.cmakeFeature "RACK_SDK_DIR" "${vcvRackSdk}")
     ];
 
   cmakeBuildType = "Release";
@@ -153,7 +153,9 @@ stdenv.mkDerivation {
   preConfigure = lib.optionalString enableVCVRack ''export RACK_DIR=${vcvRackSdk}'';
 
   buildPhase = ''
+    runHook preBuild
     cmake --build . --target awcons-products ${lib.optionalString enableVCVRack "build_plugin"} --parallel $NIX_BUILD_CORES
+    runHook postBuild
   '';
 
   installPhase = ''
