@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  propagatedNativeBuildInputs = [ cffi ];
+  nativeBuildInputs = [ cffi ];
 
   dependencies = [
     cffi

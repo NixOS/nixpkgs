@@ -27,11 +27,12 @@ buildPythonPackage rec {
     sha256 = "8ac7448f09ab85811607bdd21ec2464495ac8b7c66d146bf545b0f08fb9220ba";
   };
 
-  nativeBuildInputs = [ sphinxHook ];
+  nativeBuildInputs = [
+    cffi
+    sphinxHook
+  ];
 
   buildInputs = [ libsodium ];
-
-  propagatedNativeBuildInputs = [ cffi ];
 
   propagatedBuildInputs = [ cffi ];
 

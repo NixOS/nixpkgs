@@ -35,7 +35,7 @@ buildPythonPackage {
     lapack
   ];
 
-  propagatedNativeBuildInputs = [ cffi ];
+  nativeBuildInputs = [ cffi ];
 
   enableParallelBuilding = true;
 

@@ -44,7 +44,7 @@ buildPythonPackage rec {
     export DYLD_LIBRARY_PATH="${libgit2}/lib"
   '';
 
-  nativeBuildInputs = [ setuptools ];
+  nativeBuildInputs = [ setuptools ] ++ lib.optionals (!isPyPy) [ cffi ];
 
   buildInputs = [ libgit2 ];
 
@@ -52,8 +52,6 @@ buildPythonPackage rec {
     cached-property
     pycparser
   ] ++ lib.optionals (!isPyPy) [ cffi ];
-
-  propagatedNativeBuildInputs = lib.optionals (!isPyPy) [ cffi ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

@@ -19,7 +19,7 @@ buildPythonPackage rec {
     hash = "sha256-stjGLQjnJV9o96dAuuhbPJuOVGa6qcv39X8c3grGvAk=";
   };
 
-  propagatedNativeBuildInputs = [ cffi ];
+  nativeBuildInputs = [ cffi ];
 
   propagatedBuildInputs = [ cffi ];
 

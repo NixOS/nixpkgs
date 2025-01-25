@@ -28,7 +28,7 @@ buildPythonPackage {
     future
   ];
 
-  propagatedNativeBuildInputs = [ cffi ];
+  nativeBuildInputs = [ cffi ];
 
   pythonImportsCheck = [ "olm" ];
 
