@@ -57,16 +57,6 @@ self: super: {
   unix = null;
   xhtml = null;
 
-  # Version upgrades
-  jailbreak-cabal = overrideCabal {
-    # Manually update jailbreak-cabal to 1.4.1 (which supports Cabal >= 3.14)
-    # since Hackage bump containing it is tied up in the update to Stackage LTS 23.
-    version = "1.4.1";
-    sha256 = "0q6l608m965s6932xabm7v2kav5cxrihb5qcbrwz0c4xiwrz4l5x";
-
-    revision = null;
-    editedCabalFile = null;
-  } super.jailbreak-cabal;
   htree = doDistribute self.htree_0_2_0_0;
   tagged = doDistribute self.tagged_0_8_9;
 
