@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage {
     hash = "sha256-kI/dOw9JnhXmLqIgaljhRMc/SX35m7WQ9b6bQa6diZ0=";
   };
 
-  cargoHash = "sha256-nOccHmac6nYoS9LtJwg6CkA0nryDHR4DuMkVUmGNJ7M=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-/Ul8+5MmTntQ0OprfG4QhUNjc3PktCandzTTWn4FD0Y=";
 
   meta = with lib; {
     description = "Utility for easy management of Tensorflow containers";
