@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  cython_0,
+  cython,
   setuptools,
 
   # dependencies
@@ -31,18 +31,18 @@
 
 buildPythonPackage rec {
   pname = "plotpy";
-  version = "2.6.3";
+  version = "2.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PlotPyStack";
     repo = "PlotPy";
     tag = "v${version}";
-    hash = "sha256-kMVq8X6XP18B5x35BTuC7Q5uFFwds1JxCaxlDuD/UfE=";
+    hash = "sha256-Ava3rtF/W6MdL/iaK8zbwYBCD5WFAhpzcQnHwfuXOzc=";
   };
 
   build-system = [
-    cython_0
+    cython
     setuptools
   ];
   # Both numpy versions are supported, see:
