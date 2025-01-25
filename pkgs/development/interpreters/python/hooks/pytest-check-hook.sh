@@ -5,7 +5,7 @@ echo "Sourcing pytest-check-hook"
 
 function pytestCheckPhase() {
     echo "Executing pytestCheckPhase"
-    runHook preCheck
+    runHook preInstallCheck
 
     # Compose arguments
     local -a flagsArray=(-m pytest)
@@ -38,7 +38,7 @@ EOF
     echoCmd 'pytest flags' "${flagsArray[@]}"
     @pythonCheckInterpreter@ "${flagsArray[@]}"
 
-    runHook postCheck
+    runHook postInstallCheck
     echo "Finished executing pytestCheckPhase"
 }
 
