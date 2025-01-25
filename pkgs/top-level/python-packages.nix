@@ -4082,8 +4082,6 @@ self: super: with self; {
   django-widget-tweaks = callPackage ../development/python-modules/django-widget-tweaks { };
 
   # LTS in extended support phase
-  django_3 = callPackage ../development/python-modules/django/3.nix { };
-
   django_4 = callPackage ../development/python-modules/django/4.nix { };
 
   django_5 = self.django_5_2;
