@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl, fetchpatch, python3Packages, zlib, pkg-config, glib, overrideSDK, buildPackages
-, pixman, vde2, alsa-lib, flex, pcre2
+{ lib, stdenv, fetchurl, fetchpatch, python3Packages, zlib, pkg-config, glib, buildPackages
+, pixman, vde2, alsa-lib, flex
 , bison, lzo, snappy, libaio, libtasn1, gnutls, curl, dtc, ninja, meson, perl
 , sigtool
 , makeWrapper, removeReferencesTo
