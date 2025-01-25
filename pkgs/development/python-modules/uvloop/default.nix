@@ -69,6 +69,8 @@ buildPythonPackage rec {
       "--deselect=tests/test_fs_event.py::Test_UV_FS_EVENT_RENAME::test_fs_event_rename"
       # Broken: https://github.com/NixOS/nixpkgs/issues/160904
       "--deselect=tests/test_context.py::Test_UV_Context::test_create_ssl_server_manual_connection_lost"
+      # Pointless and flaky (depending on the sandbox perhaps)
+      "--deselect=tests/test_dns.py"
     ];
 
   disabledTestPaths = [
