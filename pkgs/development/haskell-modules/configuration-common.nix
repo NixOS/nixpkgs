@@ -3081,9 +3081,6 @@ self: super: {
       sha256 = "1q0n7338rjz7zl6xpw51lljp7xw1gl128s1d5877kfil3fc23npp";
     }) super.http2-client;
 
-    # 2025-01-23: jailbreak to allow base >= 4.17
-    warp-systemd = doJailbreak super.warp-systemd;
-
   yesod-core = appendPatch
     (fetchpatch {
       # Relax dependency constraints,
