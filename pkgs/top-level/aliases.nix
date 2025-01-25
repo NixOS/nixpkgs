@@ -132,6 +132,7 @@ mapAliases {
   auditBlasHook = throw "'auditBlasHook' has been removed since it never worked"; # Added 2024-04-02
   aumix = throw "'aumix' has been removed due to lack of maintenance upstream. Consider using 'pamixer' for CLI or 'pavucontrol' for GUI"; # Added 2024-09-14
   authy = throw "'authy' has been removed since it reached end of life"; # Added 2024-04-19
+  autoadb = throw "'autoadb' has been removed due to lack of maintenance upstream"; # Added 2025-01-25
   avldrums-lv2 = throw "'avldrums-lv2' has been renamed to/replaced by 'x42-avldrums'"; # Converted to throw 2024-10-17
   avrlibcCross = avrlibc; # Added 2024-09-06
   awesome-4-0 = awesome; # Added 2022-05-05
