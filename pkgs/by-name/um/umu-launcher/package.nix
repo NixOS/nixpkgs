@@ -2,13 +2,21 @@
   buildFHSEnv,
   lib,
   umu-launcher-unwrapped,
+  extraPkgs ? pkgs: [ ],
+  extraLibraries ? pkgs: [ ],
 }:
 buildFHSEnv {
   pname = "umu-launcher";
   inherit (umu-launcher-unwrapped) version meta;
 
-  # Use umu-launcher-unwrapped from the package args, to simplify overriding
-  targetPkgs = _: [ umu-launcher-unwrapped ];
+  targetPkgs =
+    pkgs:
+    [
+      # Use umu-launcher-unwrapped from the package args, to support overriding
+      umu-launcher-unwrapped
+    ]
+    ++ extraPkgs pkgs;
+  multiPkgs = extraLibraries;
 
   executableName = umu-launcher-unwrapped.meta.mainProgram;
   runScript = lib.getExe umu-launcher-unwrapped;
