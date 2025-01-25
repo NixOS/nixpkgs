@@ -1,70 +1,78 @@
 {
   lib,
-  stdenv,
+  clangStdenv,
+  fetchpatch,
+  fetchzip,
   aspell,
   audiofile,
-  make,
-  wrapGNUstepAppsHook,
-  cups,
-  fetchzip,
-  fetchpatch,
-  gmp,
-  gnutls,
-  libffi,
   binutils-unwrapped,
-  libjpeg,
-  libtiff,
-  libpng,
+  cups,
   giflib,
+  gmp,
+  gnustep-libobjc,
+  gnustep-make,
+  gnutls,
+  icu,
+  libffi,
+  libgcrypt,
+  libiberty,
+  libiconv,
+  libjpeg,
+  libpng,
+  libtiff,
   libxml2,
   libxslt,
-  libiconv,
-  libobjc,
-  libgcrypt,
-  icu,
   pkg-config,
   portaudio,
-  libiberty,
+  wrapGNUstepAppsHook,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+clangStdenv.mkDerivation (finalAttrs: {
   pname = "gnustep-base";
   version = "1.29.0";
+
   src = fetchzip {
     url = "ftp://ftp.gnustep.org/pub/gnustep/core/gnustep-base-${finalAttrs.version}.tar.gz";
     hash = "sha256-4fjdsLBsYEDxLOFrq17dKii2sLKvOaFCu0cw3qQtM5U=";
   };
+
   outputs = [
     "out"
     "dev"
     "lib"
   ];
+
   nativeBuildInputs = [
     pkg-config
-    make
     wrapGNUstepAppsHook
   ];
+
+  propagatedNativeBuildInputs = [
+    gnustep-make
+  ];
+
   propagatedBuildInputs = [
     aspell
     audiofile
-    cups
-    gmp
-    gnutls
-    libffi
     binutils-unwrapped
-    libjpeg
-    libtiff
-    libpng
+    cups
     giflib
+    gmp
+    gnustep-libobjc
+    gnutls
+    icu
+    libffi
+    libgcrypt
+    libiberty
+    libiconv
+    libjpeg
+    libpng
+    libtiff
     libxml2
     libxslt
-    libiconv
-    libobjc
-    libgcrypt
-    icu
     portaudio
-    libiberty
   ];
+
   patches = [
     ./fixup-paths.patch
     # https://github.com/gnustep/libs-base/issues/212 / https://www.sogo.nu/bugs/view.php?id=5416#c15585
@@ -95,8 +103,8 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl2Plus;
     maintainers = with lib.maintainers; [
       ashalkhakov
-      matthewbauer
       dblsaiko
+      matthewbauer
     ];
     platforms = lib.platforms.linux;
   };
