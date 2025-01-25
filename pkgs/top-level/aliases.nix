@@ -1301,6 +1301,7 @@ mapAliases {
   strawberry-qt5 = throw "strawberry-qt5 has been replaced by strawberry-qt6"; # Added 2024-11-22
   sumneko-lua-language-server = lua-language-server; # Added 2023-02-07
   sumokoin = throw "sumokoin has been removed as it was abandoned upstream"; # Added 2024-11-23
+  swapview = throw "'swapview' has been removed due to lack of upstream maintenance"; # Added 2025-01-25
   swiProlog = lib.warnOnInstantiate "swiProlog has been renamed to swi-prolog" swi-prolog; # Added 2024-09-07
   swiPrologWithGui = lib.warnOnInstantiate "swiPrologWithGui has been renamed to swi-prolog-gui" swi-prolog-gui; # Added 2024-09-07
   swig1 = throw "swig1 has been removed as it is obsolete"; # Added 2024-08-23
