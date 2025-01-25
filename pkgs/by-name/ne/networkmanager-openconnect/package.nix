@@ -39,7 +39,6 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [
-      glib
       libxml2
       openconnect
       networkmanager
@@ -55,6 +54,7 @@ stdenv.mkDerivation rec {
     ];
 
   nativeBuildInputs = [
+    glib
     intltool
     pkg-config
     file
