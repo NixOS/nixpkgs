@@ -1489,6 +1489,7 @@ mapAliases {
   ''; # Add 2023-07-29
   waypoint = throw "waypoint has been removed from nixpkgs as the upstream project was archived"; # Added 2024-04-24
   webkitgtk = lib.warnOnInstantiate "Explicitly set the ABI version of 'webkitgtk'" webkitgtk_4_0;
+  webmetro = throw "'webmetro' has been removed due to lack of upstream maintenance"; # Added 2025-01-25
   wg-bond = throw "'wg-bond' has been removed due to lack of upstream maintenance"; # Added 2025-01-25
   wineWayland = wine-wayland;
   win-virtio = virtio-win; # Added 2023-10-17
