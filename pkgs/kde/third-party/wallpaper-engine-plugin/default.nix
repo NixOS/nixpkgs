@@ -1,20 +1,6 @@
-{
-  extra-cmake-modules,
-  fetchFromGitHub,
-  kpackage,
-  libplasma,
-  lib,
-  lz4,
-  mkKdeDerivation,
-  mpv,
-  pkg-config,
-  python3,
-  qtbase,
-  qtmultimedia,
-  qtwebchannel,
-  qtwebengine,
-  qtwebsockets,
-}:
+{ extra-cmake-modules, fetchFromGitHub, kpackage, libplasma, lib, lz4
+, mkKdeDerivation, mpv, pkg-config, python3, qtbase, qtmultimedia, qtwebchannel
+, qtwebengine, qtwebsockets, }:
 mkKdeDerivation {
   pname = "wallpaper-engine-kde-plugin";
   version = "0.5.5-unstable-2024-11-03";
@@ -27,19 +13,11 @@ mkKdeDerivation {
     fetchSubmodules = true;
   };
 
-  patches = [./nix-plugin.patch];
+  patches = [ ./nix-plugin.patch ];
 
-  extraNativeBuildInputs = [
-    kpackage
-    pkg-config
-  ];
+  extraNativeBuildInputs = [ kpackage pkg-config ];
 
-  extraBuildInputs = [
-    extra-cmake-modules
-    libplasma
-    lz4
-    mpv
-  ];
+  extraBuildInputs = [ extra-cmake-modules libplasma lz4 mpv ];
 
   extraCmakeFlags = [
     (lib.cmakeFeature "QML_LIB" (lib.makeSearchPathOutput "out" "lib/qt-6/qml" [
@@ -51,19 +29,20 @@ mkKdeDerivation {
     (lib.cmakeFeature "Qt6_DIR" "${qtbase}/lib/cmake/Qt6")
   ];
 
-  postInstall = let
-    py3-ws = python3.withPackages (ps: with ps; [websockets]);
+  postInstall = let py3-ws = python3.withPackages (ps: with ps; [ websockets ]);
   in ''
     cd $out/share/plasma/wallpapers/com.github.catsout.wallpaperEngineKde
     chmod +x ./contents/pyext.py
     PATH=${py3-ws}/bin:$PATH patchShebangs --build ./contents/pyext.py
-    substituteInPlace ./contents/ui/Pyext.qml --replace-fail NIX_STORE_PACKAGE_PATH ${placeholder "out"}
+    substituteInPlace ./contents/ui/Pyext.qml --replace-fail NIX_STORE_PACKAGE_PATH ${
+      placeholder "out"
+    }
   '';
 
   meta = with lib; {
     description = "KDE wallpaper plugin integrating Wallpaper Engine";
     homepage = "https://github.com/catsout/wallpaper-engine-kde-plugin";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [macronova];
+    maintainers = with maintainers; [ macronova ];
   };
 }
