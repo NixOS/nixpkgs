@@ -458,6 +458,8 @@ in {
 
     r8125 = callPackage ../os-specific/linux/r8125 { };
 
+    r8126 = callPackage ../os-specific/linux/r8126 { };
+
     r8168 = callPackage ../os-specific/linux/r8168 { };
 
     rtl8188eus-aircrack = callPackage ../os-specific/linux/rtl8188eus-aircrack { };
