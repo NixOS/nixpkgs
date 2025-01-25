@@ -15,7 +15,7 @@
   ninja,
   pkg-config,
   stdenv,
-  substituteAll,
+  replaceVars,
   vala,
 }:
 
@@ -46,8 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
 
       # Hardcode path to Settings schemas for GNOME & related desktops.
       # Otherwise every app using libproxy would need to be wrapped individually.
-      (substituteAll {
-        src = ./hardcode-gsettings.patch;
+      (replaceVars ./hardcode-gsettings.patch {
         gds = glib.getSchemaPath gsettings-desktop-schemas;
       })
     ];

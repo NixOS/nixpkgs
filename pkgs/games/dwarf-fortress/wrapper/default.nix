@@ -2,7 +2,7 @@
   stdenv,
   lib,
   buildEnv,
-  substituteAll,
+  replaceVars,
   makeWrapper,
   runCommand,
   coreutils,
@@ -185,11 +185,8 @@ lib.throwIf (enableTWBT' && !enableDFHack) "dwarf-fortress: TWBT requires DFHack
     pname = "dwarf-fortress";
     version = dwarf-fortress.dfVersion;
 
-    dfInit = substituteAll {
-      name = "dwarf-fortress-init";
-      src = ./dwarf-fortress-init.in;
+    dfInit = replaceVars ./dwarf-fortress-init.in {
       inherit env;
-      inherit (dwarf-fortress) exe;
       stdenv_shell = "${stdenv.shell}";
       cp = "${coreutils}/bin/cp";
       rm = "${coreutils}/bin/rm";

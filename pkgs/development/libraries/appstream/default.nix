@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, substituteAll
+, replaceVars
 , fetchFromGitHub
 , meson
 , mesonEmulatorHook
@@ -50,8 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     # Fix hardcoded paths
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       libstemmer_includedir = "${lib.getDev libstemmer}/include";
     })
 

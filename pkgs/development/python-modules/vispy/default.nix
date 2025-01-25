@@ -2,7 +2,7 @@
   lib,
   stdenv,
   buildPythonPackage,
-  substituteAll,
+  replaceVars,
   fetchPypi,
   cython,
   fontconfig,
@@ -32,8 +32,7 @@ buildPythonPackage rec {
   };
 
   patches = lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    (substituteAll {
-      src = ./library-paths.patch;
+    (replaceVars ./library-paths.patch {
       fontconfig = "${fontconfig.lib}/lib/libfontconfig${stdenv.hostPlatform.extensions.sharedLibrary}";
       gl = "${libGL.out}/lib/libGL${stdenv.hostPlatform.extensions.sharedLibrary}";
     })

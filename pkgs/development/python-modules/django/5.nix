@@ -5,7 +5,7 @@
   fetchFromGitHub,
   fetchpatch,
   pythonOlder,
-  substituteAll,
+  replaceVars,
 
   # build-system
   setuptools,
@@ -58,8 +58,7 @@ buildPythonPackage rec {
 
   patches =
     [
-      (substituteAll {
-        src = ./django_5_set_zoneinfo_dir.patch;
+      (replaceVars ./django_5_set_zoneinfo_dir.patch {
         zoneinfo = tzdata + "/share/zoneinfo";
       })
       # prevent tests from messing with our pythonpath
@@ -75,8 +74,7 @@ buildPythonPackage rec {
       })
     ]
     ++ lib.optionals withGdal [
-      (substituteAll {
-        src = ./django_5_set_geos_gdal_lib.patch;
+      (replaceVars ./django_5_set_geos_gdal_lib.patch {
         geos = geos;
         gdal = gdal;
         extension = stdenv.hostPlatform.extensions.sharedLibrary;

@@ -1325,9 +1325,11 @@ self: super: builtins.intersectAttrs super {
   # whatever graphviz is in PATH.
   graphviz = overrideCabal (drv: {
     patches = [
-      (pkgs.substituteAll {
-        src = ./patches/graphviz-hardcode-graphviz-store-path.patch;
+      (pkgs.replaceVars ./patches/graphviz-hardcode-graphviz-store-path.patch {
         inherit (pkgs) graphviz;
+        # patch context
+        dot = null;
+        PATH = null;
       })
     ] ++ (drv.patches or []);
   }) super.graphviz;

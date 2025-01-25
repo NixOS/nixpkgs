@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, substituteAll
+, replaceVars
 , fetchurl
 , pkg-config
 , gettext
@@ -53,8 +53,7 @@
 
 let
 
-  gtkCleanImmodulesCache = substituteAll {
-    src = ./hooks/clean-immodules-cache.sh;
+  gtkCleanImmodulesCache = replaceVars ./hooks/clean-immodules-cache.sh {
     gtk_module_path = "gtk-3.0";
     gtk_binary_version = "3.0.0";
   };
