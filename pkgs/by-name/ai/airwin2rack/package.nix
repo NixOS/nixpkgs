@@ -1,7 +1,6 @@
 {
   stdenv,
   fetchFromGitHub,
-  pkgs,
   lib,
   makeDesktopItem,
   copyDesktopItems,
