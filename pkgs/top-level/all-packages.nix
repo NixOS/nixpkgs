@@ -17669,8 +17669,6 @@ with pkgs;
     icu = icu71;
   };
 
-  mongoc = darwin.apple_sdk_11_0.callPackage ../development/libraries/mongoc { };
-
   mongocxx = callPackage ../development/libraries/mongocxx/default.nix { };
 
   muse = libsForQt5.callPackage ../applications/audio/muse { };
