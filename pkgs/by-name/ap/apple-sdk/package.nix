@@ -62,6 +62,12 @@ stdenvNoCC.mkDerivation (
 
     dontConfigure = true;
 
+    # TODO(@connorbaker):
+    # This is a quick fix unblock builds broken by https://github.com/NixOS/nixpkgs/pull/370750.
+    # Fails due to a reflexive symlink:
+    # $out/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.3.sdk/System/Library/PrivateFrameworks/CoreSymbolication.framework/Versions/A/A
+    dontCheckForBrokenSymlinks = true;
+
     strictDeps = true;
 
     setupHooks = [
