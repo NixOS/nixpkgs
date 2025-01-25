@@ -1503,6 +1503,7 @@ mapAliases {
   xulrunner = firefox-unwrapped; # Added 2023-11-03
   xvfb_run = throw "'xvfb_run' has been renamed to/replaced by 'xvfb-run'"; # Converted to throw 2024-10-17
   xwaylandvideobridge = libsForQt5.xwaylandvideobridge; # Added 2024-09-27
+  xxv = throw "'xxv' has been removed due to lack of upstream maintenance"; # Added 2025-01-25
 
   ### Y ###
 
