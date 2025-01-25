@@ -2,7 +2,7 @@
   hash,
   lts ? false,
   patches ? [ ],
-  updateScriptArgs ? "",
+  nixUpdateExtraArgs ? [ ],
   vendorHash,
   version,
 }:
@@ -12,7 +12,6 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  writeScript,
   acl,
   cowsql,
   libcap,
@@ -21,6 +20,7 @@
   sqlite,
   udev,
   installShellFiles,
+  nix-update-script,
   nixosTests,
 }:
 
@@ -128,9 +128,9 @@ buildGoModule rec {
 
     ui = callPackage ./ui.nix { };
 
-    updateScript = writeScript "ovs-update.py" ''
-      ${./update.py} ${updateScriptArgs}
-    '';
+    updateScript = nix-update-script {
+      extraArgs = nixUpdateExtraArgs;
+    };
   };
 
   meta = {
