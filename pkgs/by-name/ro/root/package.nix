@@ -6,7 +6,6 @@
   fetchurl,
   makeWrapper,
   writeText,
-  apple-sdk,
   cmake,
   coreutils,
   git,
@@ -115,7 +114,6 @@ stdenv.mkDerivation rec {
       zlib
       zstd
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk.privateFrameworksHook ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       libX11
       libXpm
