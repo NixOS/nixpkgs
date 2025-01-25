@@ -185,7 +185,7 @@ self: super: builtins.intersectAttrs super {
       });
     in
     {
-      hledger = installHledgerExtraFiles "" super.hledger;
+      hledger = installHledgerExtraFiles "embeddedfiles" super.hledger;
       hledger-web = installHledgerExtraFiles "" (hledgerWebTestFix super.hledger-web);
       hledger-ui = installHledgerExtraFiles "" super.hledger-ui;
 
