@@ -21,13 +21,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "cabinpkg";
-  version = "0.11.0";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "cabinpkg";
     repo = "cabin";
     tag = version;
-    sha256 = "sha256-LIP99Shxu/lOdZ31KVA8RYawZ6dRLtXEGKZs1mUFCus=";
+    sha256 = "sha256-qMmfViu3ol8+Tpyy8hn0j5r+bql0SFeKPVVj/ox4AGQ=";
   };
 
   strictDeps = true;

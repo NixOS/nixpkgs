@@ -5219,6 +5219,18 @@ final: prev:
     meta.homepage = "https://github.com/pimalaya/himalaya-vim/";
   };
 
+  hlchunk-nvim = buildVimPlugin {
+    pname = "hlchunk.nvim";
+    version = "2024-11-23";
+    src = fetchFromGitHub {
+      owner = "shellRaining";
+      repo = "hlchunk.nvim";
+      rev = "5465dd33ade8676d63f6e8493252283060cd72ca";
+      sha256 = "0vksi1idliaxk5l3hksfhhbps4sw6d8lk58m5ja4wrnmjxz5b5bz";
+    };
+    meta.homepage = "https://github.com/shellRaining/hlchunk.nvim/";
+  };
+
   hlint-refactor-vim = buildVimPlugin {
     pname = "hlint-refactor-vim";
     version = "2015-12-05";
@@ -6288,6 +6300,18 @@ final: prev:
       sha256 = "08fmcj5r1l80bi6gqsm8g6px4zfqr9sq4kck89y5rfs99j6janyk";
     };
     meta.homepage = "https://github.com/smjonas/live-command.nvim/";
+  };
+
+  llama-vim = buildVimPlugin {
+    pname = "llama.vim";
+    version = "2025-01-24";
+    src = fetchFromGitHub {
+      owner = "ggml-org";
+      repo = "llama.vim";
+      rev = "81e6802ebd00f177a8db73d62c7eeaf14a30819a";
+      sha256 = "0fcg0xmdjc9z25ssjmg9pl5q0vk1h1k65ipd4dfzxchvmfzirl5j";
+    };
+    meta.homepage = "https://github.com/ggml-org/llama.vim/";
   };
 
   llm-nvim = buildVimPlugin {
@@ -10458,7 +10482,7 @@ final: prev:
     meta.homepage = "https://github.com/salkin-mada/openscad.nvim/";
   };
 
-  orgmode = buildVimPlugin {
+  orgmode = buildNeovimPlugin {
     pname = "orgmode";
     version = "2025-01-19";
     src = fetchFromGitHub {

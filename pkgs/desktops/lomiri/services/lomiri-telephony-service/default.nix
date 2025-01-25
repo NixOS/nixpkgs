@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitLab,
-  fetchpatch,
   gitUpdater,
   nixosTests,
   runCommand,
@@ -43,55 +42,15 @@ let
     "--replace-fail \"\\\${DBUS_SERVICES_DIR}/${name}\" \"${pkg}/share/dbus-1/services/${name}\"";
 in
 stdenv.mkDerivation (finalAttrs: {
-  pname = "telephony-service";
-  version = "0.5.3";
+  pname = "lomiri-telephony-service";
+  version = "0.6.0";
 
   src = fetchFromGitLab {
     owner = "ubports";
-    repo = "development/core/telephony-service";
-    rev = finalAttrs.version;
-    hash = "sha256-eLGwAJmBDDvSODQUNr/zcPA/0DdXtVBiS7vg+iIYPDo=";
+    repo = "development/core/lomiri-telephony-service";
+    tag = finalAttrs.version;
+    hash = "sha256-vEMTnflHszgANSZHcVGx1goMWVe7/6eZLYCIxq8aMt4=";
   };
-
-  patches = [
-    # Remove when https://gitlab.com/ubports/development/core/telephony-service/-/merge_requests/90 merged & in release
-    (fetchpatch {
-      name = "0001-lomiri-telephony-service-CMakeLists-Make-tests-optional.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-telephony-service/-/commit/9a8297bcf9b34d77ffdae3dfe4ad2636022976fb.patch";
-      hash = "sha256-Za4ZGKnw9iz2RP1LzLhKrEJ1vLUufWk8J07LmWDW40E=";
-    })
-
-    # Remove when version > 0.5.3
-    (fetchpatch {
-      name = "0002-lomiri-telephony-service-Fix-gettext-funcs-in-wrong-namespace.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-telephony-service/-/commit/18e0ba8e025b097eef1217d97d98ef4a4940fe84.patch";
-      hash = "sha256-vOIy+B/OQeccsVn4pXsnr8LYyEapqbebW1I6dBg5u2c=";
-    })
-
-    # Remove when version > 0.5.3
-    (fetchpatch {
-      name = "0003-lomiri-telephony-service-Handle-renamed-history-service.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-telephony-service/-/commit/3a387670ed13041db069068292b1f41229e79583.patch";
-      hash = "sha256-b7gxzr6Mmtogclq3hR7a/zl+816H2wmJqv3oHjUJggw=";
-    })
-
-    # Remove when version > 0.5.3
-    # Patched to be compatible with pre-rename code
-    (runCommand "0004-lomiri-telephony-service-Fix-NotificationInterface-regeneration-backported.patch"
-      {
-        src = fetchpatch {
-          name = "0004-lomiri-telephony-service-Fix-NotificationInterface-regeneration.patch";
-          url = "https://gitlab.com/ubports/development/core/lomiri-telephony-service/-/commit/9533ce1a9495e5c11e9b78fc0166e903e19519b4.patch";
-          hash = "sha256-3rsZ08bz2CxKpcwYWCCd6f7gJ22v9jl7Lg7JPnWz50A=";
-        };
-      }
-      ''
-        cp $src $out
-        substituteInPlace $out \
-          --replace-fail 'lomiritelephony' 'telephony'
-      ''
-    )
-  ];
 
   postPatch =
     ''
@@ -226,8 +185,8 @@ stdenv.mkDerivation (finalAttrs: {
       }
 
     # These SystemD services are referenced by the installed D-Bus services, but not part of the installation. Why?
-    for service in telephony-service-{approver,indicator}; do
-      install -Dm644 ../debian/telephony-service."$service".user.service $out/lib/systemd/user/"$service".service
+    for service in lomiri-telephony-service-approver lomiri-indicator-telephony-service; do
+      install -Dm644 ../debian/lomiri-telephony-service."$service".user.service $out/lib/systemd/user/"$service".service
 
       # ofono-setup.service would be provided by ubuntu-touch-session, we don't plan to package it
       # Doesn't make sense to provide on non-Lomiri
@@ -235,17 +194,17 @@ stdenv.mkDerivation (finalAttrs: {
         --replace-fail '/usr' "$out" \
         --replace-warn 'Requires=ofono-setup.service' "" \
         --replace-warn 'After=ofono-setup.service' "" \
-        --replace-warn 'WantedBy=ayatana-indicators.target' 'WantedBy=lomiri-indicators.target'
+        --replace-warn 'ayatana-indicators.target' 'lomiri-indicators.target'
     done
 
     # Parses the call & SMS indicator desktop files & tries to find its own executable in PATH
-    wrapProgram $out/bin/telephony-service-indicator \
+    wrapProgram $out/bin/lomiri-indicator-telephony-service \
       --prefix PATH : "$out/bin"
   '';
 
   passthru = {
     ayatana-indicators = {
-      telephony-service-indicator = [ "lomiri" ];
+      lomiri-indicator-telephony-service = [ "lomiri" ];
     };
     tests.vm = nixosTests.ayatana-indicators;
     updateScript = gitUpdater { };
@@ -253,8 +212,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Backend dispatcher service for various mobile phone related operations";
-    homepage = "https://gitlab.com/ubports/development/core/telephony-service";
-    changelog = "https://gitlab.com/ubports/development/core/telephony-service/-/blob/${finalAttrs.version}/ChangeLog";
+    homepage = "https://gitlab.com/ubports/development/core/lomiri-telephony-service";
+    changelog = "https://gitlab.com/ubports/development/core/lomiri-telephony-service/-/blob/${finalAttrs.version}/ChangeLog";
     license = lib.licenses.gpl3Only;
     maintainers = lib.teams.lomiri.members;
     platforms = lib.platforms.linux;

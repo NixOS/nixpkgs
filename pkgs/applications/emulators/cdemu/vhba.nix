@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-zjTLriw2zvjX0Jxfa9QtaHG5tTC7cLTKEA+WSCP+Dpg=";
   };
 
-  makeFlags = kernel.makeFlags ++ [
+  makeFlags = kernel.moduleMakeFlags ++ [
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "INSTALL_MOD_PATH=$(out)"
   ];

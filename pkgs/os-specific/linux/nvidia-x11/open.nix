@@ -25,7 +25,7 @@ stdenv.mkDerivation (
 
     nativeBuildInputs = kernel.moduleBuildDependencies;
 
-    makeFlags = kernel.makeFlags ++ [
+    makeFlags = kernel.moduleMakeFlags ++ [
       "SYSSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/source"
       "SYSOUT=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
       "MODLIB=$(out)/lib/modules/${kernel.modDirVersion}"
