@@ -17,7 +17,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-d1csT7iHf48kLkn6/cGhoIoEN/kiYc6vlUwHDNmbnMI=";
   };
 
-  cargoHash = "sha256-DS9lpjR9BCgo6VJG1XD0qzVr/8fw9NR2L2UWaE6gqtw=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-b8/n3y6fTqP5+rZySEDEb8Z5DPHQ2jUasp5SvaJJlGo=";
 
   meta = {
     description = "Generate changelogs from local git metadata";
