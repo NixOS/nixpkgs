@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  substituteAll,
+  replaceVars,
   fetchPypi,
   hatchling,
 }:
@@ -20,8 +20,7 @@ buildPythonPackage rec {
 
   patches = [
     # Cannot use hatch-vcs, due to an inifinite recursion
-    (substituteAll {
-      src = ./version.patch;
+    (replaceVars ./version.patch {
       inherit version;
     })
   ];

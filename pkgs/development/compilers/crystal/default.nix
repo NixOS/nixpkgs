@@ -4,7 +4,7 @@
 , fetchurl
 , fetchpatch
 , lib
-, substituteAll
+, replaceVars
   # Dependencies
 , boehmgc
 , coreutils
@@ -95,8 +95,7 @@ let
       };
 
       patches = [
-          (substituteAll {
-            src = ./tzdata.patch;
+          (replaceVars ./tzdata.patch {
             inherit tzdata;
           })
         ]

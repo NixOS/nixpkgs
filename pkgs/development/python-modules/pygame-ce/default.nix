@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  substituteAll,
+  replaceVars,
   fetchFromGitHub,
   buildPythonPackage,
   pythonOlder,
@@ -45,8 +45,7 @@ buildPythonPackage rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-dependency-finding.patch;
+    (replaceVars ./fix-dependency-finding.patch {
       buildinputs_include = builtins.toJSON (
         builtins.concatMap (dep: [
           "${lib.getDev dep}/"
