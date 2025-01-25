@@ -9,17 +9,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "timewall";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "bcyran";
     repo = "timewall";
     rev = version;
-    hash = "sha256-B3pZCjl7Z78vAYYzceicwjmGfTbzYgrhpldUJnY8Aqs=";
+    hash = "sha256-4mlI/1BaxIaHTfPvd1smJ13hc0XNBrjMkDP2SsTleJs=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-M7o2EKBVvx0RzPDwinHUJp20NHqcFwBO6QTRvGMfHa0=";
+  cargoHash = "sha256-CHWwkfUieV71EvPdquG9L3smtthq/2DRtYr/Xj5NpiY=";
 
   nativeBuildInputs = [ installShellFiles ];
 
