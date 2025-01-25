@@ -605,7 +605,6 @@ in {
       configFile = "kernel";
       inherit pkgs kernel;
     };
-    zfs = zfs_2_2;
 
     can-isotp = callPackage ../os-specific/linux/can-isotp { };
 
@@ -628,6 +627,7 @@ in {
     tsme-test = callPackage ../os-specific/linux/tsme-test { };
 
   } // lib.optionalAttrs config.allowAliases {
+    zfs = throw "linuxPackages.zfs has been removed, use zfs_* instead, or linuxPackages.\${pkgs.zfs.kernelModuleAttribute}"; # added 2025-01-23
     zfs_2_1 = throw "zfs_2_1 has been removed"; # added 2024-12-25;
     ati_drivers_x11 = throw "ati drivers are no longer supported by any kernel >=4.1"; # added 2021-05-18;
     hid-nintendo = throw "hid-nintendo was added in mainline kernel version 5.16"; # Added 2023-07-30
