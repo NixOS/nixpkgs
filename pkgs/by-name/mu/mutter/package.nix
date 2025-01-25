@@ -17,6 +17,7 @@
   xvfb-run,
   libadwaita,
   libxcvt,
+  libGL,
   libICE,
   libX11,
   libXcomposite,
@@ -106,6 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     desktop-file-utils
     gettext
+    glib
     libxcvt
     meson
     ninja
@@ -133,6 +135,7 @@ stdenv.mkDerivation (finalAttrs: {
     libdrm
     libei
     libdisplay-info
+    libGL
     libgudev
     libinput
     libstartup_notification
@@ -175,10 +178,6 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "libadwaita-1.so.0" "${libadwaita}/lib/libadwaita-1.so.0"
   '';
 
-  postInstall = ''
-    ${glib.dev}/bin/glib-compile-schemas "$out/share/glib-2.0/schemas"
-  '';
-
   postFixup = ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
     # TODO: Move this into a directory devhelp can find.
@@ -189,6 +188,7 @@ stdenv.mkDerivation (finalAttrs: {
   PKG_CONFIG_UDEV_UDEVDIR = "${placeholder "out"}/lib/udev";
 
   separateDebugInfo = true;
+  strictDeps = true;
 
   passthru = {
     libdir = "${finalAttrs.finalPackage}/lib/mutter-15";
