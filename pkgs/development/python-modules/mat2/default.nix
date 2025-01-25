@@ -5,7 +5,7 @@
   pytestCheckHook,
   pythonOlder,
   fetchFromGitLab,
-  substituteAll,
+  replaceVars,
   bubblewrap,
   exiftool,
   ffmpeg,
@@ -40,22 +40,21 @@ buildPythonPackage rec {
   patches =
     [
       # hardcode paths to some binaries
-      (substituteAll (
-        {
-          src = ./paths.patch;
-          exiftool = "${exiftool}/bin/exiftool";
-          ffmpeg = "${ffmpeg}/bin/ffmpeg";
-        }
-        // lib.optionalAttrs dolphinIntegration { kdialog = "${plasma5Packages.kdialog}/bin/kdialog"; }
-      ))
+      (replaceVars ./paths.patch {
+        exiftool = "${exiftool}/bin/exiftool";
+        ffmpeg = "${ffmpeg}/bin/ffmpeg";
+        kdialog = if dolphinIntegration then "${plasma5Packages.kdialog}/bin/kdialog" else null;
+        # replaced in postPatch
+        mat2 = null;
+        mat2svg = null;
+      })
       # the executable shouldn't be called .mat2-wrapped
       ./executable-name.patch
       # hardcode path to mat2 executable
       ./tests.patch
     ]
     ++ lib.optionals (stdenv.hostPlatform.isLinux) [
-      (substituteAll {
-        src = ./bubblewrap-path.patch;
+      (replaceVars ./bubblewrap-path.patch {
         bwrap = "${bubblewrap}/bin/bwrap";
       })
     ];
