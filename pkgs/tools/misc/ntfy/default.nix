@@ -85,25 +85,25 @@ python.pkgs.buildPythonApplication rec {
         appdirs
         ntfy-webpush
       ]
-      ++ (lib.optionals withXmpp [
+      ++ lib.optionals withXmpp [
         sleekxmpp
         dnspython
-      ])
-      ++ (lib.optionals withMatrix [
+      ]
+      ++ lib.optionals withMatrix [
         matrix-client
-      ])
-      ++ (lib.optionals withSlack [
+      ]
+      ++ lib.optionals withSlack [
         slack-sdk
-      ])
-      ++ (lib.optionals withEmoji [
+      ]
+      ++ lib.optionals withEmoji [
         emoji
-      ])
-      ++ (lib.optionals withPid [
+      ]
+      ++ lib.optionals withPid [
         psutil
-      ])
-      ++ (lib.optionals withDbus [
+      ]
+      ++ lib.optionals withDbus [
         dbus-python
-      ])
+      ]
     );
 
   nativeCheckInputs = with python.pkgs; [
