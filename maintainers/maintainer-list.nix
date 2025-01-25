@@ -2243,11 +2243,6 @@
     github = "auchter";
     githubId = 1190483;
   };
-  aucub = {
-    name = "aucub";
-    github = "aucub";
-    githubId = 78630225;
-  };
   augustebaum = {
     email = "auguste.apple@gmail.com";
     github = "augustebaum";
