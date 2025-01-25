@@ -29,7 +29,7 @@ buildGoModule rec {
 
   passthru.tests.version = testers.testVersion {
     package = lazysql;
-    command = "lazysql version";
+    command = "lazysql --version";
   };
 
   meta = with lib; {
