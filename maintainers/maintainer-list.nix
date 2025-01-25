@@ -5274,6 +5274,11 @@
     githubId = 118536343;
     name = "David Hamelin";
   };
+  davidkna = {
+    name = "David Knaack";
+    github = "davidkna";
+    githubId = 835177;
+  };
   David-Kopczynski = {
     name = "David Elias Chris Kopczynski";
     email = "mail@davidkopczynski.com";
