@@ -51,7 +51,7 @@ let
     fetchSubmodules = true;
   };
 
-  vcvRackSdk = srcOnly pkgs.vcv-rack;
+  vcvRackSdk = srcOnly vcv-rack;
   pname = "airwin2rack";
   version = "2.13.0";
 in
