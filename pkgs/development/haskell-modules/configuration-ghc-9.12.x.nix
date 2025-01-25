@@ -70,6 +70,11 @@ self: super: {
   htree = doDistribute self.htree_0_2_0_0;
   tagged = doDistribute self.tagged_0_8_9;
 
+  #
+  # Jailbreaks
+  #
+  lucid = doJailbreak super.lucid; # base <4.21
+
   # Test suite issues
   call-stack = dontCheck super.call-stack; # https://github.com/sol/call-stack/issues/19
 }

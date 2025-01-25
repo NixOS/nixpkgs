@@ -84,7 +84,6 @@ self: super: {
   #
   base64 = doJailbreak super.base64; # base <4.20
   floskell = doJailbreak super.floskell; # base <4.20
-  lucid = doJailbreak super.lucid; # base <4.20
   tasty-coverage = doJailbreak super.tasty-coverage; # base <4.20, filepath <1.5
   tree-diff = doJailbreak super.tree-diff; # base <4.20
   time-compat = doJailbreak super.time-compat; # base <4.20
