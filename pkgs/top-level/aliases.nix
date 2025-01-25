@@ -730,6 +730,7 @@ mapAliases {
   libxplayer-plparser = throw "libxplayer-plparser has been removed as the upstream project was archived"; # Added 2024-12-27
   libyamlcpp = yaml-cpp; # Added 2023-01-29
   libyamlcpp_0_3 = yaml-cpp_0_3; # Added 2023-01-29
+  licensor = throw "'licensor' has been removed due to lack of upstream maintenance"; # Added 2025-01-25
   lightdm_gtk_greeter = lightdm-gtk-greeter; # Added 2022-08-01
   lightstep-tracer-cpp = throw "lightstep-tracer-cpp is deprecated since 2022-08-29; the upstream recommends migration to opentelemetry projects.";
   limesctl = throw "limesctl has been removed because it is insignificant."; # Added 2024-11-25
