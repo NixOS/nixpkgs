@@ -3083,6 +3083,14 @@ self: super: {
 
     # 2025-01-23: jailbreak to allow base >= 4.17
     warp-systemd = doJailbreak super.warp-systemd;
+
+  yesod-core = appendPatch
+    (fetchpatch {
+      # Relax dependency constraints,
+      url = "https://github.com/DamienCassou/yesod/commit/8e7d7de4920e47ab4d05b6a540b1a96ca4c2b053.patch";
+      sha256 = "sha256-IxtyHFKygbrUK7JTAytWBZVHh+M1xQTv2IPCG3mjTGE=";
+      stripLen = 1;
+    }) super.yesod-core;
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
 
 # Gogol Packages
