@@ -320,7 +320,7 @@ let
       jnsgruk
       johnrtitor
     ];
-    platforms = lib.platforms.darwin ++ [ "x86_64-linux" ];
+    platforms = lib.platforms.darwin ++ [ "x86_64-linux" "aarch64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "google-chrome-stable";
   };
