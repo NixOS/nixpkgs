@@ -446,8 +446,8 @@ rec {
       "sha256-YrzTW5fEsZPDu4p84jhY4avS/wM01XybrvGCOtF48cQ=";
 
   mypy-boto3-ec2 =
-    buildMypyBoto3Package "ec2" "1.36.2"
-      "sha256-IwQg73lI34QtCjedW3ctRC0tzNAOXvgJl2s09GV6Zg0=";
+    buildMypyBoto3Package "ec2" "1.36.5"
+      "sha256-BKeub+Y+DKAAMTtps97o9nMVHpcPA+QF10sRAIH5VE8=";
 
   mypy-boto3-ec2-instance-connect =
     buildMypyBoto3Package "ec2-instance-connect" "1.36.0"
@@ -574,8 +574,8 @@ rec {
       "sha256-1Xjn3SfQQOXthfqH1dwHkldEIgSmUGEnn8N83H7ALXQ=";
 
   mypy-boto3-glue =
-    buildMypyBoto3Package "glue" "1.36.0"
-      "sha256-qaBq4p1EWHOjW5L4s/Nz3tprCyln9xuvp7/Nj+n4pcU=";
+    buildMypyBoto3Package "glue" "1.36.4"
+      "sha256-b4YwzN4ovNNGyg/GDDOjlKo6anyHjdDrIuJVy0ZO1fQ=";
 
   mypy-boto3-grafana =
     buildMypyBoto3Package "grafana" "1.36.0"
@@ -866,8 +866,8 @@ rec {
       "sha256-d4AwaMKqhplnUnpLQv+zukeKX7+TlhGt5YwTZFCPlKo=";
 
   mypy-boto3-medialive =
-    buildMypyBoto3Package "medialive" "1.36.0"
-      "sha256-94Jmz9TmRnGZOJXqChyRlKE74iVt2Cjiu8jsQQo0sB0=";
+    buildMypyBoto3Package "medialive" "1.36.4"
+      "sha256-ehAZOo4ekOoPdKXhUOXv7YK67bJhd4haHM3GjuTQiBs=";
 
   mypy-boto3-mediapackage =
     buildMypyBoto3Package "mediapackage" "1.36.0"
