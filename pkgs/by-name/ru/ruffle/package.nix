@@ -114,7 +114,6 @@ rustPlatform.buildRustPackage {
       lib.licenses.asl20
     ];
     maintainers = [
-      lib.maintainers.govanify
       lib.maintainers.jchw
       lib.maintainers.normalcea
     ];
