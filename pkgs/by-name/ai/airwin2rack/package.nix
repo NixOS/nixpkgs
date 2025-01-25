@@ -214,8 +214,10 @@ stdenv.mkDerivation {
     description = "JUCE Plugin Version of Airwindows Consolidated";
     homepage = "https://airwindows.com/";
     platforms = [ "x86_64-linux" ];
-    license = with lib.licenses
-      [ mit ] ++ lib.optional enableVCVRack [
+    license =
+      with lib.licenses;
+      [ mit ]
+      ++ lib.optional enableVCVRack [
         gpl3Plus
         cc-by-nc-40
         unfreeRedistributable
