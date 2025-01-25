@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1c7h4ivgfdyygz2hyh6nfibxlkz8kdk868a576qkkjgj5gn78xyv";
   };
 
-  patches = lib.optionals stdenv.cc.isClang [
+  patches = [
     # Fixes a call to undeclared function `utf8_decode`.
     # https://github.com/xiph/vorbis-tools/pull/33
     (fetchpatch {
@@ -20,9 +20,16 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  # ld64 on darwin doesn't support nested archives and as the nested lib
+  # (libbase64.a) is not required to build so leave it out
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace share/Makefile.am \
+      --replace-fail libpicture_a_LIBADD '#libpicture_a_LIBADD'
+  '';
+
   nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ libogg libvorbis libao curl speex flac ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   meta = with lib; {
     description = "Extra tools for Ogg-Vorbis audio codec";

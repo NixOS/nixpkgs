@@ -11,41 +11,40 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "music-player";
-  version = "0.2.0-alpha.14-unstable-2024-08-24";
+  version = "0.2.0-alpha.14-unstable-2024-10-02";
 
   src = fetchFromGitHub {
     owner = "tsirysndr";
     repo = "music-player";
-    # No patch for 0.2.0, diff patch has a big size, temporarily until the next release
-    rev = "cf01ae4d2dcf5c804559250f2c7f922d870ae26d";
-    hash = "sha256-8C8uFnXSBalLD2MUgzzfg4ylvTVecyPJOSUri5jbvkM=";
+    rev = "cbf03c3f2f0f9baca831b08ec27d9b31438faa3d";
+    hash = "sha256-BG0MU6IdFQX+C4BxTZlq5I7a4BQmUTvwAQALw5/UPBE=";
   };
 
-  cargoHash = "sha256-JmyuA5p6/7jtNuOMWuAuspYYid+dGOeollIlS0DRCIE=";
+  cargoHash = "sha256-t/jdVTdmaJk8Sb43XEuVCKa4kSR+ZrIEmMQKWeVpB70=";
 
   nativeBuildInputs =
     [
       protobuf
       rustPlatform.bindgenHook
     ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       pkg-config
     ];
 
   buildInputs =
-    lib.optionals stdenv.isLinux [
+    lib.optionals stdenv.hostPlatform.isLinux [
       alsa-lib
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.AudioUnit
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Extensible music player daemon written in Rust";
     homepage = "https://github.com/tsirysndr/music-player";
     changelog = "https://github.com/tsirysndr/music-player/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = [ ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.sigmasquadron ];
     mainProgram = "music-player";
   };
 }

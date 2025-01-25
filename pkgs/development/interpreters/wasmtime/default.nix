@@ -2,24 +2,24 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wasmtime";
-  version = "24.0.0";
+  version = "28.0.1";
 
   src = fetchFromGitHub {
     owner = "bytecodealliance";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-pR6yjJf0szjB73+vqXT4d8P9WD+SIOkEOe4Wl6EgIqQ=";
+    hash = "sha256-bZh9zwP1Sux4aRDD/l3L5gu4iXwMbjJ+6+yJ42lNYtY=";
     fetchSubmodules = true;
   };
 
   # Disable cargo-auditable until https://github.com/rust-secure-code/cargo-auditable/issues/124 is solved.
   auditable = false;
-  cargoHash = "sha256-bZtBEmzmu63wNlGhYvN0gYKkLPxzBHZ1iO16BMPD3tE=";
+  cargoHash = "sha256-h5vSdKETereFCS06HYqQPSExBWPGxJHnWCj8SJNeqE4=";
   cargoBuildFlags = [ "--package" "wasmtime-cli" "--package" "wasmtime-c-api" ];
 
   outputs = [ "out" "dev" ];
 
-  buildInputs = lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
 
   # rustfmt is brought into scope to fix the following
   #   warning: cranelift-codegen@0.108.0:
@@ -45,7 +45,7 @@ rustPlatform.buildRustPackage rec {
     install -d -m0755 $dev/include/wasmtime
     install -m0644 $src/crates/c-api/include/*.h $dev/include
     install -m0644 $src/crates/c-api/include/wasmtime/*.h $dev/include/wasmtime
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -id \
       $dev/lib/libwasmtime.dylib \
       $dev/lib/libwasmtime.dylib

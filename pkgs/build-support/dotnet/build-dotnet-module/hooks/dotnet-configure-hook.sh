@@ -24,6 +24,14 @@ dotnetConfigureHook() {
         local -r parallelFlag="--disable-parallel"
     fi
 
+    if [[ -v dotnetSelfContainedBuild ]]; then
+        if [[ -n $dotnetSelfContainedBuild ]]; then
+            dotnetRestoreFlagsArray+=("-p:SelfContained=true")
+        else
+            dotnetRestoreFlagsArray+=("-p:SelfContained=false")
+        fi
+    fi
+
     dotnetRestore() {
         local -r projectFile="${1-}"
         for runtimeId in "${dotnetRuntimeIdsArray[@]}"; do
@@ -37,18 +45,6 @@ dotnetConfigureHook() {
                 "${dotnetFlagsArray[@]}"
         done
     }
-
-    find -iname nuget.config -print0 | while IFS= read -rd "" config; do
-        if [[ -n "${keepNugetConfig-}" ]]; then
-            # If we're keeping the existing configs, we'll add _nix everywhere,
-            # in case sources are cleared.
-            dotnet nuget add source "$nugetSource" -n _nix --configfile "$config"
-        else
-            # This will allow everything to fall through to our config in the
-            # build root. Deleting them causes some build failures.
-            xq -xi '.configuration={}' "$config"
-        fi
-    done
 
     if [[ -f .config/dotnet-tools.json || -f dotnet-tools.json ]]; then
         dotnet tool restore

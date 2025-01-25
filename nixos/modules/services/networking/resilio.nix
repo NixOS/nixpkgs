@@ -5,8 +5,6 @@ with lib;
 let
   cfg = config.services.resilio;
 
-  resilioSync = pkgs.resilio-sync;
-
   sharedFoldersRecord = map (entry: {
     dir = entry.directory;
 
@@ -82,6 +80,8 @@ in
           NixOS configuration.
         '';
       };
+
+      package = mkPackageOption pkgs "resilio-sync" { };
 
       deviceName = mkOption {
         type = types.str;
@@ -272,7 +272,7 @@ in
       group           = "rslsync";
     };
 
-    users.groups.rslsync = {};
+    users.groups.rslsync.gid = config.ids.gids.rslsync;
 
     systemd.services.resilio = with pkgs; {
       description = "Resilio Sync Service";
@@ -285,7 +285,7 @@ in
         RuntimeDirectory = "rslsync";
         ExecStartPre = "${createConfig}/bin/create-resilio-config";
         ExecStart = ''
-          ${resilioSync}/bin/rslsync --nodaemon --config ${runConfigPath}
+          ${lib.getExe cfg.package} --nodaemon --config ${runConfigPath}
         '';
       };
     };

@@ -5,7 +5,7 @@
 , makeWrapper
 , stdenv
 , tcl
-, tclx
+, tclPackages
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     espeak-ng
     tcl
-    tclx
+    tclPackages.tclx
   ];
 
   strictDeps = true;
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     find "$d" -type f -not -executable -execdir chmod 644 {} +
     makeWrapper ${lib.getExe emacs} $out/bin/emacspeak \
         --set DTK_PROGRAM "${placeholder "out"}/share/emacs/site-lisp/emacspeak/servers/espeak" \
-        --set TCLLIBPATH "${tclx}/lib" \
+        --set TCLLIBPATH "${tclPackages.tclx}/lib" \
         --add-flags '-l "${placeholder "out"}/share/emacs/site-lisp/emacspeak/lisp/emacspeak-setup.elc"'
   '';
 

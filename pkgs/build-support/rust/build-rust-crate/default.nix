@@ -283,7 +283,7 @@ crate_: lib.makeOverridable
         ++ lib.optionals stdenv.hasCC [ stdenv.cc ]
         ++ lib.optionals stdenv.buildPlatform.isDarwin [ libiconv ]
         ++ (crate.nativeBuildInputs or [ ]) ++ nativeBuildInputs_;
-      buildInputs = lib.optionals stdenv.isDarwin [ libiconv ] ++ (crate.buildInputs or [ ]) ++ buildInputs_;
+      buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ] ++ (crate.buildInputs or [ ]) ++ buildInputs_;
       dependencies = map lib.getLib dependencies_;
       buildDependencies = map lib.getLib buildDependencies_;
 

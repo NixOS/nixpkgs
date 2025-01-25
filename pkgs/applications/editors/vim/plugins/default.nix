@@ -1,13 +1,20 @@
 # TODO check that no license information gets lost
-{ callPackage, config, lib, vimUtils, vim, darwin, llvmPackages
-, neovimUtils
-, luaPackages
+{
+  callPackage,
+  config,
+  lib,
+  vimUtils,
+  vim,
+  llvmPackages,
+  neovim-unwrapped,
+  neovimUtils,
 }:
 
 let
 
-  inherit (vimUtils.override {inherit vim;})
-    buildVimPlugin;
+  inherit (vimUtils.override { inherit vim; })
+    buildVimPlugin
+    ;
 
   inherit (lib) extends;
 
@@ -25,18 +32,14 @@ let
   # If additional modifications to the build process are required,
   # add to ./overrides.nix.
   overrides = callPackage ./overrides.nix {
-    inherit (darwin.apple_sdk.frameworks) Cocoa CoreFoundation CoreServices;
     inherit buildVimPlugin;
-    inherit llvmPackages luaPackages;
+    inherit llvmPackages;
   };
 
-  aliases = if config.allowAliases then (import ./aliases.nix lib) else final: prev: {};
+  aliases = if config.allowAliases then (import ./aliases.nix lib) else final: prev: { };
 
-  extensible-self = lib.makeExtensible
-    (extends aliases
-      (extends overrides
-        (extends plugins initialPackages)
-      )
-    );
+  extensible-self = lib.makeExtensible (
+    extends aliases (extends overrides (extends plugins initialPackages))
+  );
 in
-  extensible-self
+extensible-self

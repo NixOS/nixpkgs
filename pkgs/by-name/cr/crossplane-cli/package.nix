@@ -1,23 +1,24 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, nix-update-script
-, testers
-, crossplane-cli
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nix-update-script,
+  testers,
+  crossplane-cli,
 }:
 
 buildGoModule rec {
   pname = "crossplane-cli";
-  version = "1.16.1";
+  version = "1.18.2";
 
   src = fetchFromGitHub {
     owner = "crossplane";
     repo = "crossplane";
     rev = "v${version}";
-    hash = "sha256-wRbQKpWEzos5fzzf1tUF2xQAlk8KIrhXJ/QZ9JKCa2M=";
+    hash = "sha256-G4Kve77BoQ/RphvggLHIVV+hhkjmTS3q1nQWnDhAjHA=";
   };
 
-  vendorHash = "sha256-XzIDLtEP4wrz23Cewz1QFuS62F/XQr7JNoaPAQfanEs=";
+  vendorHash = "sha256-yUaCmiY+qPUfUi2/+c9deSa2atPRWtZ03jHHQ2HmjTM=";
 
   ldflags = [
     "-s"

@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "torchio";
-  version = "0.19.6";
+  version = "0.20.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -28,8 +28,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fepegar";
     repo = "torchio";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-FlsjDgthXDGVjj4L0Yw+8UzBROw9jiM4Z+qi67D5ygU=";
+    tag = "v${version}";
+    hash = "sha256-Soew23+Skpc2IpVBMuOnC5LBW0vFL/9LszLijkJgQoQ=";
   };
 
   propagatedBuildInputs = [
@@ -54,7 +54,7 @@ buildPythonPackage rec {
       # tries to download models:
       "test_load_all"
     ]
-    ++ lib.optionals stdenv.isAarch64 [
+    ++ lib.optionals stdenv.hostPlatform.isAarch64 [
       # RuntimeError: DataLoader worker (pid(s) <...>) exited unexpectedly
       "test_queue_multiprocessing"
     ];

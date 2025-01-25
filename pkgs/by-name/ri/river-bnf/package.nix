@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromSourcehut
-, wayland
-, wayland-scanner
-, unstableGitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromSourcehut,
+  wayland,
+  wayland-scanner,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation rec {

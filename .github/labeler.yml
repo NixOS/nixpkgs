@@ -1,3 +1,4 @@
+# NOTE: bsd, darwin and cross-compilation labels are handled by ofborg
 "6.topic: agda":
   - any:
     - changed-files:
@@ -20,6 +21,47 @@
         - pkgs/by-name/mu/muffin/**/*
         - pkgs/by-name/ne/nemo/**/*
         - pkgs/by-name/ne/nemo-*/**/*
+
+"6.topic: continuous integration":
+  - any:
+    - changed-files:
+      - any-glob-to-any-file:
+        - .github/**/*
+        - ci/**/*
+
+"6.topic: coq":
+  - any:
+    - changed-files:
+      - any-glob-to-any-file:
+        - pkgs/applications/science/logic/coq/**/*
+        - pkgs/development/coq-modules/**/*
+        - pkgs/top-level/coq-packages.nix
+
+"6.topic: crystal":
+  - any:
+    - changed-files:
+      - any-glob-to-any-file:
+        - pkgs/development/compilers/crystal/**/*
+
+"6.topic: cuda":
+  - any:
+    - changed-files:
+      - any-glob-to-any-file:
+        - pkgs/development/cuda-modules/**/*
+        - pkgs/top-level/cuda-packages.nix
+
+"6.topic: deepin":
+  - any:
+    - changed-files:
+      - any-glob-to-any-file:
+        - nixos/modules/services/desktops/deepin/**/*
+        - pkgs/desktops/deepin/**/*
+
+"6.topic: docker tools":
+  - any:
+    - changed-files:
+      - any-glob-to-any-file:
+        - pkgs/applications/virtualization/docker/**/*
 
 "6.topic: dotnet":
   - any:
@@ -86,6 +128,12 @@
         - pkgs/build-support/flutter/*.nix
         - pkgs/development/compilers/flutter/**/*.nix
 
+"6.topic: games":
+  - any:
+    - changed-files:
+      - any-glob-to-any-file:
+        - pkgs/games/**/*
+
 "6.topic: GNOME":
   - any:
     - changed-files:
@@ -105,6 +153,12 @@
         - pkgs/build-support/go/**/*
         - pkgs/development/compilers/go/**/*
 
+"6.topic: hardware":
+  - any:
+    - changed-files:
+      - any-glob-to-any-file:
+        - nixos/modules/hardware/**/*
+
 "6.topic: haskell":
   - any:
     - changed-files:
@@ -117,6 +171,48 @@
         - pkgs/test/haskell/**/*
         - pkgs/top-level/haskell-packages.nix
         - pkgs/top-level/release-haskell.nix
+
+"6.topic: java":
+  - any:
+    - changed-files:
+      - any-glob-to-any-file:
+        # Distributions
+        - pkgs/development/compilers/adoptopenjdk-icedtea-web/**/*
+        - pkgs/development/compilers/corretto/**/*
+        - pkgs/development/compilers/graalvm/**/*
+        - pkgs/development/compilers/openjdk/**/*
+        - pkgs/by-name/op/openjfx/**/*
+        - pkgs/development/compilers/semeru-bin/**/*
+        - pkgs/development/compilers/temurin-bin/**/*
+        - pkgs/development/compilers/zulu/**/*
+        # Documentation
+        - doc/languages-frameworks/java.section.md
+        # Gradle
+        - doc/languages-frameworks/gradle.section.md
+        - pkgs/development/tools/build-managers/gradle/**/*
+        - pkgs/by-name/gr/gradle-completion/**/*
+        # Maven
+        - pkgs/by-name/ma/maven/**/*
+        - doc/languages-frameworks/maven.section.md
+        # Ant
+        - pkgs/by-name/an/ant/**/*
+        # javaPackages attrset
+        - pkgs/development/java-modules/**/*
+        - pkgs/top-level/java-packages.nix
+        # Maintainer tooling
+        - pkgs/by-name/ni/nixpkgs-openjdk-updater/**/*
+        # Misc
+        - nixos/modules/programs/java.nix
+
+"6.topic: jitsi":
+  - any:
+    - changed-files:
+      - any-glob-to-any-file:
+        - nixos/modules/services/networking/jitsi-videobridge.nix
+        - nixos/modules/services/web-apps/jitsi-meet.nix
+        - pkgs/servers/web-apps/jitsi-meet/**/*
+        - pkgs/servers/jitsi-videobridge/**/*
+        - pkgs/applications/networking/instant-messengers/jitsi/**/*
 
 "6.topic: julia":
   - any:
@@ -205,21 +301,37 @@
         - lib/tests/modules.sh
         - lib/tests/modules/**
 
+"6.topic: musl":
+  - any:
+    - changed-files:
+      - any-glob-to-any-file:
+        - pkgs/os-specific/linux/musl/**/*
+
 "6.topic: nixos":
   - any:
     - changed-files:
       - any-glob-to-any-file:
         - nixos/**/*
+        - pkgs/by-name/sw/switch-to-configuration-ng/**/*
+        - pkgs/by-name/ni/nixos-rebuild-ng/**/*
         - pkgs/os-specific/linux/nixos-rebuild/**/*
+
+"6.topic: nixos-container":
+  - any:
+    - changed-files:
+      - any-glob-to-any-file:
+        - nixos/modules/virtualisation/nixos-containers.nix
+        - pkgs/tools/virtualization/nixos-container/**/*
 
 "6.topic: nim":
   - any:
     - changed-files:
       - any-glob-to-any-file:
         - doc/languages-frameworks/nim.section.md
-        - pkgs/development/compilers/nim/*
-        - pkgs/development/nim-packages/**/*
-        - pkgs/top-level/nim-packages.nix
+        - pkgs/build-support/build-nim-package.nix
+        - pkgs/build-support/build-nim-sbom.nix
+        - pkgs/by-name/ni/nim*
+        - pkgs/top-level/nim-overrides.nix
 
 "6.topic: nodejs":
   - any:
@@ -232,6 +344,15 @@
         - pkgs/development/tools/yarn2nix-moretea/**/*
         - pkgs/development/tools/pnpm/**/*
         - pkgs/development/web/nodejs/*
+
+"6.topic: nvidia":
+  - any:
+    - changed-files:
+      - any-glob-to-any-file:
+        - nixos/modules/hardware/video/nvidia.nix
+        - nixos/modules/services/hardware/nvidia-container-toolkit/**/*
+        - nixos/modules/services/hardware/nvidia-optimus.nix
+        - pkgs/os-specific/linux/nvidia-x11/**/*
 
 "6.topic: ocaml":
   - any:
@@ -259,8 +380,9 @@
     - changed-files:
       - any-glob-to-any-file:
         - doc/languages-frameworks/php.section.md
+        - nixos/tests/php/**/*
         - pkgs/build-support/php/**/*
-        - pkgs/development/interpreters/php/*
+        - pkgs/development/interpreters/php/**/*
         - pkgs/development/php-packages/**/*
         - pkgs/test/php/default.nix
         - pkgs/top-level/php-packages.nix
@@ -270,6 +392,12 @@
     - changed-files:
       - any-glob-to-any-file:
         - .github/**/*
+        - CONTRIBUTING.md
+        - pkgs/README.md
+        - nixos/README.md
+        - maintainers/README.md
+        - lib/README.md
+        - doc/README.md
 
 "6.topic: printing":
   - any:
@@ -299,6 +427,19 @@
         - pkgs/development/libraries/kde-frameworks/**/*
         - pkgs/development/libraries/qt-5/**/*
 
+"6.topic: R":
+  - any:
+    - changed-files:
+      - any-glob-to-any-file:
+        - pkgs/applications/science/math/R/**/*
+        - pkgs/development/r-modules/**/*
+
+"6.topic: rocm":
+  - any:
+    - changed-files:
+      - any-glob-to-any-file:
+        - pkgs/development/rocm-modules/**/*
+
 "6.topic: ruby":
   - any:
     - changed-files:
@@ -306,6 +447,7 @@
         - doc/languages-frameworks/ruby.section.md
         - pkgs/development/interpreters/ruby/**/*
         - pkgs/development/ruby-modules/**/*
+        - pkgs/top-level/ruby-packages.nix
 
 "6.topic: rust":
   - any:
@@ -334,6 +476,15 @@
         - pkgs/os-specific/linux/systemd/**/*
         - nixos/modules/system/boot/systemd*/**/*
 
+"6.topic: tcl":
+  - any:
+    - changed-files:
+      - any-glob-to-any-file:
+        - doc/languages-frameworks/tcl.section.md
+        - pkgs/development/interpreters/tcl/*
+        - pkgs/development/tcl-modules/**/*
+        - pkgs/top-level/tcl-packages.nix
+
 "6.topic: TeX":
   - any:
     - changed-files:
@@ -358,6 +509,12 @@
         - nixos/tests/make-test-python.nix  # legacy
         # lib/debug.nix has a test framework (runTests) but it's not the main focus
 
+"6.topic: updaters":
+  - any:
+    - changed-files:
+      - any-glob-to-any-file:
+        - pkgs/common-updater/**/*
+
 "6.topic: vim":
   - any:
     - changed-files:
@@ -373,6 +530,25 @@
     - changed-files:
       - any-glob-to-any-file:
         - pkgs/applications/editors/vscode/**/*
+
+"6.topic: windows":
+  - any:
+    - changed-files:
+      - any-glob-to-any-file:
+        - pkgs/os-specific/windows/**/*
+
+"6.topic: xen-project":
+  - any:
+    - changed-files:
+      - any-glob-to-any-file:
+        - nixos/modules/virtualisation/xen*
+        - pkgs/by-name/xe/xen/*
+        - pkgs/by-name/qe/qemu_xen/*
+        - pkgs/by-name/xe/xen-guest-agent/*
+        - pkgs/by-name/xt/xtf/*
+        - pkgs/build-support/xen/*
+        - pkgs/development/ocaml-modules/xen*/*
+        - pkgs/development/ocaml-modules/vchan/*
 
 "6.topic: xfce":
   - any:

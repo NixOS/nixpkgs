@@ -42,7 +42,7 @@
 
 buildPythonPackage rec {
   pname = "jupyterhub";
-  version = "5.1.0";
+  version = "5.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -51,12 +51,12 @@ buildPythonPackage rec {
     owner = "jupyterhub";
     repo = "jupyterhub";
     rev = "refs/tags/${version}";
-    hash = "sha256-3L83FLhLCdTgOuFRgRMbz316cYbai0Z+hJwxXUCYB2Y=";
+    hash = "sha256-zOWcXpByJRzI9sTjTl+w/vo99suKOEN0TvPn1ZWlNmc=";
   };
 
   npmDeps = fetchNpmDeps {
     inherit src;
-    hash = "sha256-b7j6iGYXrwco4YruqRPEEi4yWRF6otTUD2jKCEPcLTE=";
+    hash = "sha256-My7WUAqIvOrbbVTxSnA6a5NviM6u95+iyykx1xbudpw=";
   };
 
   postPatch = ''
@@ -171,6 +171,6 @@ buildPythonPackage rec {
     license = licenses.bsd3;
     maintainers = teams.jupyter.members;
     # darwin: E   OSError: dlopen(/nix/store/43zml0mlr17r5jsagxr00xxx91hz9lky-openpam-20170430/lib/libpam.so, 6): image not found
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

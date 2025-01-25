@@ -4,14 +4,13 @@ with lib;
 let
   cfg = config.services.freshrss;
 
-  poolName = "freshrss";
-
   extension-env = pkgs.buildEnv {
     name = "freshrss-extensions";
     paths = cfg.extensions;
   };
   env-vars = {
     DATA_PATH = cfg.dataDir;
+  } // lib.optionalAttrs (cfg.extensions != []) {
     THIRDPARTY_EXTENSIONS_PATH = "${extension-env}/share/freshrss/";
   };
 in
@@ -141,8 +140,8 @@ in
     };
 
     pool = mkOption {
-      type = types.str;
-      default = poolName;
+      type = types.nullOr types.str;
+      default = "freshrss";
       description = ''
         Name of the php-fpm pool to use and setup. If not specified, a pool will be created
         with default values.
@@ -166,7 +165,6 @@ in
     let
       defaultServiceConfig = {
         ReadWritePaths = "${cfg.dataDir}";
-        CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
         DeviceAllow = "";
         LockPersonality = true;
         NoNewPrivileges = true;
@@ -214,7 +212,7 @@ in
 
           # php files handling
           # this regex is mandatory because of the API
-          locations."~ ^.+?\.php(/.*)?$".extraConfig = ''
+          locations."~ ^.+?\\.php(/.*)?$".extraConfig = ''
             fastcgi_pass unix:${config.services.phpfpm.pools.${cfg.pool}.socket};
             fastcgi_split_path_info ^(.+\.php)(/.*)$;
             # By default, the variable PATH_INFO is not set under PHP-FPM
@@ -235,8 +233,8 @@ in
       };
 
       # Set up phpfpm pool
-      services.phpfpm.pools = mkIf (cfg.pool == poolName) {
-        ${poolName} = {
+      services.phpfpm.pools = mkIf (cfg.pool != null) {
+        ${cfg.pool} = {
           user = "freshrss";
           settings = {
             "listen.owner" = "nginx";
@@ -271,9 +269,9 @@ in
         let
           settingsFlags = concatStringsSep " \\\n    "
             (mapAttrsToList (k: v: "${k} ${toString v}") {
-              "--default_user" = ''"${cfg.defaultUser}"'';
-              "--auth_type" = ''"${cfg.authType}"'';
-              "--base_url" = ''"${cfg.baseUrl}"'';
+              "--default-user" = ''"${cfg.defaultUser}"'';
+              "--auth-type" = ''"${cfg.authType}"'';
+              "--base-url" = ''"${cfg.baseUrl}"'';
               "--language" = ''"${cfg.language}"'';
               "--db-type" = ''"${cfg.database.type}"'';
               # The following attributes are optional depending on the type of

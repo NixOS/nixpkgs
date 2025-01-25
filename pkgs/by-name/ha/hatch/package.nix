@@ -1,27 +1,26 @@
 {
   lib,
+  stdenv,
   python3Packages,
   fetchFromGitHub,
   replaceVars,
   git,
   cargo,
-  stdenv,
+  versionCheckHook,
   darwin,
   nix-update-script,
-  testers,
-  hatch,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "hatch";
-  version = "1.12.0";
+  version = "1.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "hatch";
-    rev = "refs/tags/hatch-v${version}";
-    hash = "sha256-HW2vDVsFrdFRRaPNuGDg9DZpJd8OuYDIqA3KQRa3m9o=";
+    tag = "hatch-v${version}";
+    hash = "sha256-JwFPNoFoNqAXkLCGhliLN98VAS+VCwRzo+JqWLIrxsw=";
   };
 
   patches = [ (replaceVars ./paths.patch { uv = lib.getExe python3Packages.uv; }) ];
@@ -61,14 +60,32 @@ python3Packages.buildPythonApplication rec {
       pytest-xdist
       setuptools
     ]
-    ++ [ cargo ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ [
+      cargo
+      versionCheckHook
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.ps
     ];
+
+  versionCheckProgramArg = [ "--version" ];
 
   preCheck = ''
     export HOME=$(mktemp -d);
   '';
+
+  pytestFlagsArray = [
+    # AssertionError on the version metadata
+    # https://github.com/pypa/hatch/issues/1877
+    "--deselect=tests/backend/metadata/test_spec.py::TestCoreMetadataV21::test_all"
+    "--deselect=tests/backend/metadata/test_spec.py::TestCoreMetadataV21::test_license_expression"
+    "--deselect=tests/backend/metadata/test_spec.py::TestCoreMetadataV22::test_all"
+    "--deselect=tests/backend/metadata/test_spec.py::TestCoreMetadataV22::test_license_expression"
+    "--deselect=tests/backend/metadata/test_spec.py::TestCoreMetadataV23::test_all"
+    "--deselect=tests/backend/metadata/test_spec.py::TestCoreMetadataV23::test_license_expression"
+    "--deselect=tests/backend/metadata/test_spec.py::TestCoreMetadataV23::test_license_files"
+    "--deselect=tests/backend/metadata/test_spec.py::TestProjectMetadataFromCoreMetadata::test_license_files"
+  ];
 
   disabledTests =
     [
@@ -100,10 +117,7 @@ python3Packages.buildPythonApplication rec {
       # Could not read ELF interpreter from any of the following paths: /bin/sh, /usr/bin/env, /bin/dash, /bin/ls
       "test_new_selected_python"
     ]
-    ++ lib.optionals stdenv.isDarwin [
-      # https://github.com/NixOS/nixpkgs/issues/209358
-      "test_scripts_no_environment"
-
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # This test assumes it is running on macOS with a system shell on the PATH.
       # It is not possible to run it in a nix build using a /nix/store shell.
       # See https://github.com/pypa/hatch/pull/709 for the relevant code.
@@ -114,20 +128,31 @@ python3Packages.buildPythonApplication rec {
       "test_macos_archflags"
       "test_macos_max_compat"
     ]
-    ++ lib.optionals stdenv.isAarch64 [ "test_resolve" ];
+    ++ lib.optionals stdenv.hostPlatform.isAarch64 [ "test_resolve" ];
 
-  disabledTestPaths = lib.optionals stdenv.isDarwin [
-    # AssertionError: assert [call('test h...2p32/bin/sh')] == [call('test h..., shell=True)]
-    # At index 0 diff:
-    #    call('test hatch-test.py3.10', shell=True, executable='/nix/store/b34ianga4diikh0kymkpqwmvba0mmzf7-bash-5.2p32/bin/sh')
-    # != call('test hatch-test.py3.10', shell=True)
-    "tests/cli/fmt/test_fmt.py"
-    "tests/cli/test/test_test.py"
-  ];
+  disabledTestPaths =
+    [
+      # ModuleNotFoundError: No module named 'hatchling.licenses.parse'
+      # https://github.com/pypa/hatch/issues/1850
+      "tests/backend/licenses/test_parse.py"
+      "tests/backend/licenses/test_supported.py"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # AssertionError: assert [call('test h...2p32/bin/sh')] == [call('test h..., shell=True)]
+      # At index 0 diff:
+      #    call('test hatch-test.py3.10', shell=True, executable='/nix/store/b34ianga4diikh0kymkpqwmvba0mmzf7-bash-5.2p32/bin/sh')
+      # != call('test hatch-test.py3.10', shell=True)
+      "tests/cli/fmt/test_fmt.py"
+      "tests/cli/test/test_test.py"
+    ];
 
   passthru = {
-    tests.version = testers.testVersion { package = hatch; };
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "hatch-v([0-9.]+)"
+      ];
+    };
   };
 
   meta = {

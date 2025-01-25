@@ -17,7 +17,7 @@
   pre-commit,
   pynput,
   pytest,
-  pytest-cov,
+  pytest-cov-stub,
   pytest-markdown-docs,
   pytest-xdist,
   pytestCheckHook,
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Farama-Foundation";
     repo = "PettingZoo";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-TVM4MrA4W6AIWEdBIecI85ahJAAc21f27OzCxSpOoZU=";
   };
 
@@ -48,7 +48,7 @@ buildPythonPackage rec {
     numpy
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     all = [
       chess
       # multi-agent-ale-py
@@ -87,7 +87,7 @@ buildPythonPackage rec {
       pre-commit
       pynput
       pytest
-      pytest-cov
+      pytest-cov-stub
       pytest-markdown-docs
       pytest-xdist
     ];
@@ -117,7 +117,7 @@ buildPythonPackage rec {
       # ImportError: cannot import name 'pytest_plugins' from 'pettingzoo.classic'
       "test_chess"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Crashes on darwin: `Fatal Python error: Aborted`
       "test_multi_episode_parallel_env_wrapper"
     ];

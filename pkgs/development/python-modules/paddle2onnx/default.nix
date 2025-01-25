@@ -9,7 +9,7 @@
 }:
 let
   pname = "paddle2onnx";
-  version = "1.2.4";
+  version = "1.2.9";
   format = "wheel";
   pyShortVersion = "cp${builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion}";
   src = fetchPypi {
@@ -18,7 +18,7 @@ let
     python = pyShortVersion;
     abi = pyShortVersion;
     platform = "manylinux_2_12_x86_64.manylinux2010_x86_64";
-    hash = "sha256-2muP4Y1zvqYVxvN6I9wjdMY+YE2d0nRmIwFFI/BsIKE=";
+    hash = "sha256-52U6F2UGteEOV7muLB2vfDHazb0sTy/17Il39kA5XZs=";
   };
 in
 buildPythonPackage {

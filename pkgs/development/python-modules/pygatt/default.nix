@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "peplin";
     repo = "pygatt";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-TMIqC+JvNOLU38a9jkacRAbdmAAd4UekFUDRoAWhHFo=";
   };
 

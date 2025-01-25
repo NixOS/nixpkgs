@@ -364,13 +364,13 @@
 
 buildPythonPackage rec {
   pname = "types-aiobotocore";
-  version = "2.15.0";
+  version = "2.17.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "types_aiobotocore";
     inherit version;
-    hash = "sha256-65wheAyrOIe6rwrjygLF/gq3uYj0qaXEPnr/L4lNfKc=";
+    hash = "sha256-wvDAWFochrlLQPUGfJTW69v/FK0rwlo9yym1eRXl7rA=";
   };
 
   build-system = [ setuptools ];
@@ -380,7 +380,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     accessanalyzer = [ types-aiobotocore-accessanalyzer ];
     account = [ types-aiobotocore-account ];
     acm = [ types-aiobotocore-acm ];

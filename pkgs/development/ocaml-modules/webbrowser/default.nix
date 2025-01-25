@@ -1,5 +1,15 @@
-{ stdenv, lib, fetchurl, ocaml, findlib, ocamlbuild, topkg
-, astring, bos, cmdliner, rresult
+{
+  stdenv,
+  lib,
+  fetchurl,
+  ocaml,
+  findlib,
+  ocamlbuild,
+  topkg,
+  astring,
+  bos,
+  cmdliner,
+  rresult,
 }:
 
 stdenv.mkDerivation rec {
@@ -10,9 +20,19 @@ stdenv.mkDerivation rec {
     sha256 = "137a948bx7b71zfv4za3hhznrn5lzbbrgzjy0das83zms508isx3";
   };
 
-  nativeBuildInputs = [ ocaml findlib ocamlbuild topkg ];
+  nativeBuildInputs = [
+    ocaml
+    findlib
+    ocamlbuild
+    topkg
+  ];
   buildInputs = [ topkg ];
-  propagatedBuildInputs = [ astring bos cmdliner rresult ];
+  propagatedBuildInputs = [
+    astring
+    bos
+    cmdliner
+    rresult
+  ];
 
   strictDeps = true;
 

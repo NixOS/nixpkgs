@@ -1,4 +1,11 @@
-{ stdenv, lib, fetchFromGitHub, boost, cmake, git }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  boost,
+  cmake,
+  git,
+}:
 
 stdenv.mkDerivation rec {
   pname = "openttd-grfcodec";
@@ -11,8 +18,11 @@ stdenv.mkDerivation rec {
     sha256 = "0b4xnnkqc01d3r834lhkq744ymar6c8iyxk51wc4c7hvz0vp9vmy";
   };
 
-  buildInputs = [boost];
-  nativeBuildInputs = [cmake git];
+  buildInputs = [ boost ];
+  nativeBuildInputs = [
+    cmake
+    git
+  ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -21,8 +31,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Low-level (dis)assembler and linter for OpenTTD GRF files";
-    homepage    = "http://openttd.org/";
-    license     = licenses.gpl2Plus;
+    homepage = "http://openttd.org/";
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ ToxicFrog ];
   };
 }

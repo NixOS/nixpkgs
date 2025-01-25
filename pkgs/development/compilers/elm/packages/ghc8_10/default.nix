@@ -1,12 +1,14 @@
 { pkgs, lib }:
 
-self: pkgs.haskell.packages.ghc810.override {
-  overrides = self: super:
+self:
+pkgs.haskell.packages.ghc810.override {
+  overrides =
+    self: super:
     let
       inherit (pkgs.haskell.lib.compose) justStaticExecutables overrideCabal doJailbreak;
       elmPkgs = rec {
-        elmi-to-json = justStaticExecutables (overrideCabal
-          (drv: {
+        elmi-to-json = justStaticExecutables (
+          overrideCabal (drv: {
             version = "unstable-2021-07-19";
             src = pkgs.fetchgit {
               url = "https://github.com/stoeffel/elmi-to-json";
@@ -25,11 +27,11 @@ self: pkgs.haskell.packages.ghc810.override {
             homepage = "https://github.com/stoeffel/elmi-to-json";
             license = lib.licenses.bsd3;
             maintainers = [ lib.maintainers.turbomack ];
-          })
-          (self.callPackage ./elmi-to-json { }));
+          }) (self.callPackage ./elmi-to-json { })
+        );
 
-        elm-instrument = justStaticExecutables (overrideCabal
-          (drv: {
+        elm-instrument = justStaticExecutables (
+          overrideCabal (drv: {
             version = "unstable-2020-03-16";
             src = pkgs.fetchgit {
               url = "https://github.com/zwilias/elm-instrument";
@@ -58,11 +60,12 @@ self: pkgs.haskell.packages.ghc810.override {
             homepage = "https://github.com/zwilias/elm-instrument";
             license = lib.licenses.bsd3;
             maintainers = [ lib.maintainers.turbomack ];
-          })
-          (self.callPackage ./elm-instrument { }));
+          }) (self.callPackage ./elm-instrument { })
+        );
       };
     in
-    elmPkgs // {
+    elmPkgs
+    // {
       inherit elmPkgs;
 
       # We need attoparsec < 0.14 to build elm for now

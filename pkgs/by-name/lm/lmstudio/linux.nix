@@ -1,19 +1,26 @@
-{ appimageTools
-, fetchurl
-, version
-, pname
-, meta
+{
+  appimageTools,
+  fetchurl,
+  version,
+  rev,
+  pname,
+  meta,
 }:
 let
   src = fetchurl {
-    url = "https://releases.lmstudio.ai/linux/x86/${version}/LM_Studio-${version}.AppImage";
-    hash = "sha256-w+g7/YezpOr/mBNZbmtLMPt3xTRDIHgGTSroo6mRXxw=";
+    url = "https://installers.lmstudio.ai/linux/x64/${version}-${rev}/LM-Studio-${version}-${rev}-x64.AppImage";
+    hash = "sha256-laROBUr1HLoaQT6rYhhhulR1KZuKczNomKbrXXkDANY=";
   };
 
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
 in
 appimageTools.wrapType2 {
-  inherit meta pname version src;
+  inherit
+    meta
+    pname
+    version
+    src
+    ;
 
   extraPkgs = pkgs: [ pkgs.ocl-icd ];
 
@@ -25,4 +32,3 @@ appimageTools.wrapType2 {
       --replace-fail 'Exec=AppRun --no-sandbox %U' 'Exec=lmstudio'
   '';
 }
-

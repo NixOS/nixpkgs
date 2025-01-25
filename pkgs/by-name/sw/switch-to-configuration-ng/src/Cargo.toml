@@ -12,7 +12,9 @@ glob = "0.3.1"
 log = "0.4.21"
 nix = { version = "0.28.0", features = ["fs", "signal"] }
 regex = "1.10.4"
-rust-ini = "0.21.0"
+rust-ini = { git = "https://github.com/zonyitoo/rust-ini", rev = "5748ae57a178216a920b88dfac1296618e967447", features = [
+  "inline-comment",
+] }
 syslog = "6.1.1"
 
 [build-dependencies]

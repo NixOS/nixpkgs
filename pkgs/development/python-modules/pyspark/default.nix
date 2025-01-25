@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pyspark";
-  version = "3.5.1";
+  version = "3.5.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-3WVp5Uc2Xq3E+Ie/V/FT5NWCpoxLSQ3kddVbmYFmSRA=";
+    hash = "sha256-HCkm1jAgkCFj9YIiRmrfb4AW9sQ8HzGbjnpx26oF/FE=";
   };
 
   # pypandoc is broken with pandoc2, so we just lose docs.
@@ -42,7 +42,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ py4j ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     ml = [ numpy ];
     mllib = [ numpy ];
     sql = [

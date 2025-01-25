@@ -4,8 +4,13 @@
   pythonAtLeast,
   fetchFromGitHub,
 
+  # build-system
+  setuptools,
+
   # propagates
+  distutils,
   pyyaml,
+  standard-pipes,
 
   # optionals
   boto3,
@@ -26,20 +31,26 @@
 buildPythonPackage rec {
   pname = "mrjob";
   version = "0.7.4";
-
-  # https://github.com/Yelp/mrjob/issues/2222
-  disabled = pythonAtLeast "3.12";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Yelp";
     repo = "mrjob";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Yp4yUx6tkyGB622I9y+AWK2AkIDVGKQPMM+LtB/M3uo=";
   };
 
-  propagatedBuildInputs = [ pyyaml ];
+  build-system = [
+    setuptools
+  ];
 
-  passthru.optional-dependencies = {
+  dependencies = [
+    distutils
+    pyyaml
+    standard-pipes
+  ];
+
+  optional-dependencies = {
     aws = [
       boto3
       botocore
@@ -60,7 +71,7 @@ buildPythonPackage rec {
     pyspark
     unittestCheckHook
     warcio
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   unittestFlagsArray = [ "-v" ];
 

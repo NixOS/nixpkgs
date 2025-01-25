@@ -19,12 +19,12 @@
   libuuid,
   curl,
   libhandy,
-  webkitgtk,
+  webkitgtk_4_0,
   gnome,
   adwaita-icon-theme,
   libxml2,
   gsettings-desktop-schemas,
-  tracker,
+  tinysparql,
 }:
 
 stdenv.mkDerivation rec {
@@ -71,8 +71,8 @@ stdenv.mkDerivation rec {
     libuuid
     curl
     libhandy
-    webkitgtk
-    tracker
+    webkitgtk_4_0
+    tinysparql
     gnome-online-accounts
     gsettings-desktop-schemas
     evolution-data-server

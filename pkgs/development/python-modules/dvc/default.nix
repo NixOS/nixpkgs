@@ -57,7 +57,7 @@
 
 buildPythonPackage rec {
   pname = "dvc";
-  version = "3.55.2";
+  version = "3.59.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -65,8 +65,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "iterative";
     repo = "dvc";
-    rev = "refs/tags/${version}";
-    hash = "sha256-yNnOSYh4lCefTnIgNstsKaRbrPCgSiWEgKeF66KD66k=";
+    tag = version;
+    hash = "sha256-kjaYn0DJAKETtVDcBs43OTif0TwKsAaKs4jnLODNQz8=";
   };
 
   pythonRelaxDeps = [
@@ -82,7 +82,6 @@ buildPythonPackage rec {
   '';
 
   build-system = [ setuptools-scm ];
-
 
   dependencies =
     [
@@ -124,14 +123,14 @@ buildPythonPackage rec {
       voluptuous
       zc-lockfile
     ]
-    ++ lib.optionals enableGoogle passthru.optional-dependencies.gs
-    ++ lib.optionals enableAWS passthru.optional-dependencies.s3
-    ++ lib.optionals enableAzure passthru.optional-dependencies.azure
-    ++ lib.optionals enableSSH passthru.optional-dependencies.ssh
+    ++ lib.optionals enableGoogle optional-dependencies.gs
+    ++ lib.optionals enableAWS optional-dependencies.s3
+    ++ lib.optionals enableAzure optional-dependencies.azure
+    ++ lib.optionals enableSSH optional-dependencies.ssh
     ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ]
     ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     azure = [ dvc-azure ];
     gdrive = [ dvc-gdrive ];
     gs = [ dvc-gs ];

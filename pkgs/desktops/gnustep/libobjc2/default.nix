@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, robin-map
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  robin-map,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -23,11 +24,15 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [ "-DCMAKE_INSTALL_LIBDIR=lib" ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Objective-C runtime for use with GNUstep";
     homepage = "https://gnustep.github.io/";
     license = licenses.mit;
-    maintainers = with lib.maintainers; [ ashalkhakov matthewbauer dblsaiko ];
+    maintainers = with lib.maintainers; [
+      ashalkhakov
+      matthewbauer
+      dblsaiko
+    ];
     platforms = platforms.unix;
   };
 })

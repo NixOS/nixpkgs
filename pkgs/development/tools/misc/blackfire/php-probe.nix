@@ -1,12 +1,13 @@
-{ stdenv
-, lib
-, fetchurl
-, autoPatchelfHook
-, php
-, writeShellScript
-, curl
-, jq
-, common-updater-scripts
+{
+  stdenv,
+  lib,
+  fetchurl,
+  autoPatchelfHook,
+  php,
+  writeShellScript,
+  curl,
+  jq,
+  common-updater-scripts,
 }:
 
 assert lib.assertMsg (!php.ztsSupport) "blackfire only supports non zts versions of PHP";
@@ -15,62 +16,67 @@ let
   phpMajor = lib.versions.majorMinor php.version;
   inherit (stdenv.hostPlatform) system;
 
-  version = "1.92.22";
+  version = "1.92.32";
 
   hashes = {
     "x86_64-linux" = {
       system = "amd64";
       hash = {
-        "8.1" = "sha256-MWAKoshKC+hW8ldRLfYQIcMwpSHvW+hV9dRMvZ4rqcU=";
-        "8.2" = "sha256-xAdECbxuaV5PxG+X7+o2p5pOEG9lgRLuOTp46k5I4RM=";
-        "8.3" = "sha256-4vCLpSy4kJ4qwOSonSFvlevCfNMxjIU6AUswm0uG59o=";
+        "8.1" = "sha256-oRd6PbBLOboH9EVRfZl5u71ZoVMFO4K/uftxlL/vm18=";
+        "8.2" = "sha256-95qBidNHIGLGCb3QbUIzBMHsRi2GTPhwAjJg+JTteDk=";
+        "8.3" = "sha256-8TO28o4YYFK1r2tInjXKenki/izHzZL0Dblaippekl8=";
       };
     };
     "i686-linux" = {
       system = "i386";
       hash = {
-        "8.1" = "sha256-fvXv3Yn3FXBO4EIgb/5LI3jJxV5HA2Q2JCNy14bA8eU=";
-        "8.2" = "sha256-0m2ze1e09IUGjTpxbyTOchQBBMa86cpiMrAImiXrAZ0=";
-        "8.3" = "sha256-nhVP4/Ls71MxPN6Ko1bDG8PSHkHQt+vC08EbP0WAL8g=";
+        "8.1" = "sha256-mXJ1hO8NcODG7Wj3lQ+5lkSjcbkKLN5OOzcobigScKI=";
+        "8.2" = "sha256-P5fQTVfE/DvLD4E3kUPE+eeOM9YVNNixgWVRq3Ca5M4=";
+        "8.3" = "sha256-rMUv2EUlepBahMaEvs60i7RFTmaBe4P4qB1hcARqP9Y=";
       };
     };
     "aarch64-linux" = {
       system = "arm64";
       hash = {
-        "8.1" = "sha256-pvzKVvtpBh+nwppqSqxSsR989mWzwyAHtwIdDjWx08o=";
-        "8.2" = "sha256-O6RhO/PY2C4GubYl/jcTzpWeiUKSGy8Np4/KrlMsE1Y=";
-        "8.3" = "sha256-3sfjwXq980oRV8u+IAamyYKDp2UMREFaynigz/dpyXE=";
+        "8.1" = "sha256-Tj7LHXS4m9hF9gY/9vfOQPJVP+vHM1h8XdBY9vyRhFo=";
+        "8.2" = "sha256-6kfotMptfVLPL414mr6LeJZ3ODnjepYQYnKvg4fHIAg=";
+        "8.3" = "sha256-M/GTdinOi3Em7GJOm1iUKkuDNg8La3iQpG+wGHp0ycE=";
       };
     };
     "aarch64-darwin" = {
       system = "arm64";
       hash = {
-        "8.1" = "sha256-peZmwxzQ2NCKkq5qSraIb4pnnJDwcRkCyGW8qeBSGRk=";
-        "8.2" = "sha256-MvF7S+VITEnsJSLz3xEy927zIR6TN+p3nRGQFjKqtu8=";
-        "8.3" = "sha256-sUlD8cPk7emJPtz4en6AcFxs/7NUjxUMkqf/Qs3INIA=";
+        "8.1" = "sha256-TZ6D8sTlLuM+8707ncECPNQlpySc7BYKIwSEth3MUT8=";
+        "8.2" = "sha256-4VJBo1TzEkstKo2ed9bxb/3g0JFjHlfTIfmDq2dCfUk=";
+        "8.3" = "sha256-gIIoRRNCed5cgbcFxvwXKgWZs4HgoOMCx6k0urVPxbs=";
       };
     };
     "x86_64-darwin" = {
       system = "amd64";
       hash = {
-        "8.1" = "sha256-kMftb/fC9uyMZyjP4jmtYLM+xEhFqP7umQ5FLvR9vAo=";
-        "8.2" = "sha256-W8LXYz8KzWlzdpyqmo7XQmkzuyfXO0BZSkiBIlfi18g=";
-        "8.3" = "sha256-a/Q7avEJr/we5GF2NxTZywpsal5AkAGxEABMPCgy2LM=";
+        "8.1" = "sha256-tO52c8FKZXXgx7+0IGiwy5rPLEsU/5ji/c79wzb1S34=";
+        "8.2" = "sha256-eUkM5KzZLPK2hCnFqRN8eOwLiX54qXuLkdfxJdjuZTk=";
+        "8.3" = "sha256-CaRs3DI5TTHNSk91pqFaHt1OVQzGozATOUs7GNi8cqY=";
       };
     };
   };
 
-  makeSource = { system, phpMajor }:
+  makeSource =
+    { system, phpMajor }:
     let
       isLinux = builtins.match ".+-linux" system != null;
     in
     fetchurl {
-      url = "https://packages.blackfire.io/binaries/blackfire-php/${version}/blackfire-php-${if isLinux then "linux" else "darwin"}_${hashes.${system}.system}-php-${builtins.replaceStrings [ "." ] [ "" ] phpMajor}.so";
+      url = "https://packages.blackfire.io/binaries/blackfire-php/${version}/blackfire-php-${
+        if isLinux then "linux" else "darwin"
+      }_${hashes.${system}.system}-php-${builtins.replaceStrings [ "." ] [ "" ] phpMajor}.so";
       hash = hashes.${system}.hash.${phpMajor};
     };
 in
 
-assert lib.assertMsg (hashes ? ${system}.hash.${phpMajor}) "blackfire does not support PHP version ${phpMajor} on ${system}.";
+assert lib.assertMsg (
+  hashes ? ${system}.hash.${phpMajor}
+) "blackfire does not support PHP version ${phpMajor} on ${system}.";
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "php-blackfire";
@@ -81,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit system phpMajor;
   };
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     autoPatchelfHook
   ];
 
@@ -100,7 +106,13 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     updateScript = writeShellScript "update-${finalAttrs.pname}" ''
       set -o errexit
-      export PATH="${lib.makeBinPath [ curl jq common-updater-scripts ]}"
+      export PATH="${
+        lib.makeBinPath [
+          curl
+          jq
+          common-updater-scripts
+        ]
+      }"
       NEW_VERSION=$(curl --silent https://blackfire.io/api/v1/releases | jq .probe.php --raw-output)
 
       if [[ "${version}" = "$NEW_VERSION" ]]; then
@@ -116,15 +128,16 @@ stdenv.mkDerivation (finalAttrs: {
     # All sources for updating by the update script.
     updateables =
       let
-        createName = { phpMajor, system }:
-          "php${builtins.replaceStrings [ "." ] [ "" ] phpMajor}_${system}";
+        createName =
+          { phpMajor, system }: "php${builtins.replaceStrings [ "." ] [ "" ] phpMajor}_${system}";
 
-        createUpdateable = sourceParams:
-          lib.nameValuePair
-            (createName sourceParams)
-            (finalAttrs.finalPackage.overrideAttrs (attrs: {
+        createUpdateable =
+          sourceParams:
+          lib.nameValuePair (createName sourceParams) (
+            finalAttrs.finalPackage.overrideAttrs (attrs: {
               src = makeSource sourceParams;
-            }));
+            })
+          );
       in
       lib.concatMapAttrs (
         system:
@@ -139,7 +152,13 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://blackfire.io/";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ shyim ];
-    platforms = [ "x86_64-linux" "aarch64-linux" "i686-linux" "x86_64-darwin" "aarch64-darwin" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "i686-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 })

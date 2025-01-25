@@ -1,8 +1,8 @@
 diff --git a/script/generate-licenses b/script/generate-licenses
-index 43b2f5c458..c740a3afa2 100755
+index 9602813f0c..d16d11c203 100755
 --- a/script/generate-licenses
 +++ b/script/generate-licenses
-@@ -15,12 +15,6 @@ cat assets/icons/LICENSES >> $OUTPUT_FILE
+@@ -16,16 +16,9 @@ cat assets/icons/LICENSES >> $OUTPUT_FILE
  
  echo -e "# ###### CODE LICENSES ######\n" >> $OUTPUT_FILE
  
@@ -14,4 +14,8 @@ index 43b2f5c458..c740a3afa2 100755
 -fi
  
  echo "Generating cargo licenses"
- cargo about generate --fail -c script/licenses/zed-licenses.toml script/licenses/template.hbs.md >> $OUTPUT_FILE
+ cargo about generate \
+-    --fail \
+     -c script/licenses/zed-licenses.toml \
+     "${TEMPLATE_FILE}" >> $OUTPUT_FILE
+ 

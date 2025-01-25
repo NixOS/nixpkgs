@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "inducer";
     repo = "loopy";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-mU8vXEPR88QpJpzXZlZdDhMtlwIx5YpeYhXU8Vw2T9g=";
     fetchSubmodules = true; # submodule at `loopy/target/c/compyte`
   };

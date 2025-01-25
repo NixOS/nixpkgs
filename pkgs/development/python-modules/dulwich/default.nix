@@ -4,7 +4,6 @@
   buildPythonPackage,
   fastimport,
   fetchFromGitHub,
-  fetchpatch2,
   gevent,
   geventhttpclient,
   git,
@@ -12,7 +11,7 @@
   gnupg,
   gpgme,
   paramiko,
-  unittestCheckHook,
+  pytestCheckHook,
   pythonOlder,
   setuptools,
   setuptools-rust,
@@ -20,26 +19,18 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.22.1";
   pname = "dulwich";
-  format = "setuptools";
+  version = "0.22.6";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jelmer";
     repo = "dulwich";
-    rev = "refs/tags/dulwich-${version}";
-    hash = "sha256-bf3ZUMX4afpdTBpFnx0HMyzCNG6V/p4eOl36djxGbtk=";
+    tag = "v${version}";
+    hash = "sha256-sE5du5Nv2AOyiBpQ2hDJss1dVSVBzWypnGWk3/hI8UI=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      name = "dulwich-geventhttpclient-api-breakage.patch";
-      url = "https://github.com/jelmer/dulwich/commit/5f0497de9c37ac4f4e8f27bed8decce13765d3df.patch";
-      hash = "sha256-0GgDgmYuLCsMc9nRRLNL2W6WYrkZ/1ZnZBQusEAzLKI=";
-    })
-  ];
 
   build-system = [
     setuptools
@@ -60,28 +51,27 @@ buildPythonPackage rec {
     paramiko = [ paramiko ];
   };
 
-  nativeCheckInputs =
-    [
-      gevent
-      geventhttpclient
-      git
-      glibcLocales
-      unittestCheckHook
-    ]
-    ++ lib.flatten (lib.attrValues optional-dependencies);
+  nativeCheckInputs = [
+    gevent
+    geventhttpclient
+    git
+    glibcLocales
+    pytestCheckHook
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  preCheck = ''
+  pytestFlagsArray = [ "tests" ];
+
+  disabledTests = [
+    # AssertionError: 'C:\\\\foo.bar\\\\baz' != 'C:\\foo.bar\\baz'
+    "test_file_win"
+  ];
+
+  disabledTestPaths = [
     # requires swift config file
-    rm tests/contrib/test_swift_smoke.py
+    "tests/contrib/test_swift_smoke.py"
+  ];
 
-    # ImportError: attempted relative import beyond top-level package
-    rm tests/test_greenthreads.py
-
-    # git crashes; https://github.com/jelmer/dulwich/issues/1359
-    rm tests/compat/test_pack.py
-  '';
-
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   pythonImportsCheck = [ "dulwich" ];
 

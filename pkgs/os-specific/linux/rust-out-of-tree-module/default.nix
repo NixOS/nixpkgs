@@ -1,4 +1,9 @@
-{ lib, fetchFromGitHub, kernel, unstableGitUpdater }:
+{
+  lib,
+  fetchFromGitHub,
+  kernel,
+  unstableGitUpdater,
+}:
 kernel.stdenv.mkDerivation {
   pname = "rust-out-of-tree-module";
   version = "0-unstable-2024-05-06";
@@ -12,7 +17,9 @@ kernel.stdenv.mkDerivation {
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
-  makeFlags = kernel.makeFlags ++ [ "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build" ];
+  makeFlags = kernel.moduleMakeFlags ++ [
+    "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+  ];
 
   installFlags = [ "INSTALL_MOD_PATH=${placeholder "out"}" ];
   installTargets = [ "modules_install" ];
@@ -25,8 +32,7 @@ kernel.stdenv.mkDerivation {
     homepage = "https://github.com/Rust-for-Linux/rust-out-of-tree-module";
     license = lib.licenses.gpl2Only;
     maintainers = [ lib.maintainers.blitz ];
-    platforms = [ "x86_64-linux" ]
-      ++ lib.optional (kernel.kernelAtLeast "6.9") "aarch64-linux";
+    platforms = [ "x86_64-linux" ] ++ lib.optional (kernel.kernelAtLeast "6.9") "aarch64-linux";
   };
 
 }

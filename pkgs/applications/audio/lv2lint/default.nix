@@ -1,4 +1,16 @@
-{ stdenv, lib, fetchFromSourcehut, pkg-config, meson, ninja, lv2, lilv, curl, elfutils, xorg }:
+{
+  stdenv,
+  lib,
+  fetchFromSourcehut,
+  pkg-config,
+  meson,
+  ninja,
+  lv2,
+  lilv,
+  curl,
+  elfutils,
+  xorg,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lv2lint";
@@ -12,9 +24,19 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-NkzbKteLZ+P+Py+CMOYYipvu6psDslWnM1MAV1XB0TM=";
   };
 
-  nativeBuildInputs = [ pkg-config meson ninja ];
+  nativeBuildInputs = [
+    pkg-config
+    meson
+    ninja
+  ];
 
-  buildInputs = [ lv2 lilv curl elfutils xorg.libX11 ];
+  buildInputs = [
+    lv2
+    lilv
+    curl
+    elfutils
+    xorg.libX11
+  ];
 
   mesonFlags = [
     (lib.mesonEnable "online-tests" true)

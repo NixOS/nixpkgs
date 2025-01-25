@@ -3,13 +3,13 @@
 buildKodiBinaryAddon rec {
   pname = "visualization-projectm";
   namespace = "visualization.projectm";
-  version = "21.0.1";
+  version = "21.0.2";
 
   src = fetchFromGitHub {
     owner = "xbmc";
     repo = namespace;
     rev = "${version}-${rel}";
-    hash = "sha256-wjSQmOtQb4KjY3iH3Xh7AdQwE6ked+cpW6/gdNYS+NA=";
+    hash = "sha256-M+sHws9wp0sp1PnYXCLMZ9w48tJkG159XkyNvzHJNYo=";
   };
 
   extraBuildInputs = [ pkg-config libGL projectm ];

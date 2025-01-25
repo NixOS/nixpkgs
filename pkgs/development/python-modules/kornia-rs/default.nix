@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kornia";
     repo = "kornia-rs";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-7toCMaHzFAzm6gThVLBxKLgQVgFJatdJseDlfdeS8RE=";
   };
 

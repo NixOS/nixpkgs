@@ -3,6 +3,7 @@
   fetchFromGitHub,
   buildPythonPackage,
   selenium-manager,
+  setuptools,
   certifi,
   pytestCheckHook,
   pythonOlder,
@@ -19,8 +20,8 @@
 
 buildPythonPackage rec {
   pname = "selenium";
-  version = "4.22.0";
-  format = "setuptools";
+  version = "4.27.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -28,9 +29,11 @@ buildPythonPackage rec {
     owner = "SeleniumHQ";
     repo = "selenium";
     # check if there is a newer tag with or without -python suffix
-    rev = "refs/tags/selenium-${version}";
-    hash = "sha256-qBuZgI5SSBwxbSBrAT0W/HzzV2JmPL00hPJ6s57QTeg=";
+    tag = "selenium-${version}-python";
+    hash = "sha256-XpTfZCERA2SmLOj6dcERVJ47K0gFhdXMTl9VCeE6eD8=";
   };
+
+  patches = [ ./dont-build-the-selenium-manager.patch ];
 
   preConfigure = ''
     cd py
@@ -47,16 +50,18 @@ buildPythonPackage rec {
       cp ../javascript/cdp-support/mutation-listener.js $DST_REMOTE
       cp ../third_party/js/selenium/webdriver.json $DST_FF/webdriver_prefs.json
     ''
-    + lib.optionalString stdenv.isDarwin ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       mkdir -p $DST_PREFIX/common/macos
       ln -s ${lib.getExe selenium-manager} $DST_PREFIX/common/macos/
     ''
-    + lib.optionalString stdenv.isLinux ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
       mkdir -p $DST_PREFIX/common/linux/
       ln -s ${lib.getExe selenium-manager} $DST_PREFIX/common/linux/
     '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     certifi
     trio
     trio-websocket

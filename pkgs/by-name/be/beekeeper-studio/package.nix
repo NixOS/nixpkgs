@@ -1,23 +1,28 @@
-{ appimageTools
-, fetchurl
-, lib
-, makeWrapper
-, stdenv
+{
+  appimageTools,
+  fetchurl,
+  lib,
+  makeWrapper,
+  stdenv,
 }:
 
 let
   pname = "beekeeper-studio";
-  version = "4.6.2";
+  version = "5.0.9";
 
-  plat = {
-    aarch64-linux = "-arm64";
-    x86_64-linux = "";
-  }.${stdenv.hostPlatform.system};
+  plat =
+    {
+      aarch64-linux = "-arm64";
+      x86_64-linux = "";
+    }
+    .${stdenv.hostPlatform.system};
 
-  hash = {
-    aarch64-linux = "sha256-ZxqwxCON21S+RPG0/M2TtcI2Ave7ZT05lKQdyysQFUk=";
-    x86_64-linux = "sha256-8sGFNoAsX+X3IJDXpwlYRt78nokauPYz88yDEYy6NP8=";
-  }.${stdenv.hostPlatform.system};
+  hash =
+    {
+      aarch64-linux = "sha256-Ky7nowci7PNp9IAbmnr1W8+sN8A9f2BakBRUQHx14HY=";
+      x86_64-linux = "sha256-DAxY2b6WAl9llgDr5SNlvp8ZnwQuVKVrC4T++1FyiZE=";
+    }
+    .${stdenv.hostPlatform.system};
 
   src = fetchurl {
     url = "https://github.com/beekeeper-studio/beekeeper-studio/releases/download/v${version}/Beekeeper-Studio-${version}${plat}.AppImage";
@@ -29,10 +34,11 @@ in
 appimageTools.wrapType2 {
   inherit pname version src;
 
+  nativeBuildInputs = [ makeWrapper ];
+
   extraInstallCommands = ''
-    source "${makeWrapper}/nix-support/setup-hook"
     wrapProgram $out/bin/${pname} \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
     install -Dm444 ${appimageContents}/${pname}.desktop -t $out/share/applications/
     install -Dm444 ${appimageContents}/${pname}.png -t $out/share/pixmaps/
     substituteInPlace $out/share/applications/${pname}.desktop \
@@ -46,7 +52,13 @@ appimageTools.wrapType2 {
     license = lib.licenses.gpl3Only;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "beekeeper-studio";
-    maintainers = with lib.maintainers; [ milogert alexnortung ];
-    platforms = [ "aarch64-linux" "x86_64-linux" ];
+    maintainers = with lib.maintainers; [
+      milogert
+      alexnortung
+    ];
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
   };
 }

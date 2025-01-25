@@ -36,7 +36,7 @@
 
 buildPythonPackage rec {
   pname = "pandas-stubs";
-  version = "2.2.2.240909";
+  version = "2.2.3.241126";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -44,8 +44,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pandas-dev";
     repo = "pandas-stubs";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Dt2a4l5WAOizUeaDa80CRuvyPT9mWfFz+zGZMm3vQP4=";
+    tag = "v${version}";
+    hash = "sha256-y+td1x33mALh/AfDh0uIq7ebCBWWWCJewhvBQ4WNe3U=";
   };
 
   build-system = [ poetry-core ];
@@ -89,10 +89,10 @@ buildPythonPackage rec {
       "test_timedelta_cmp"
       "test_timestamp_cmp"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "test_clipboard" # FileNotFoundError: [Errno 2] No such file or directory: 'pbcopy'
     ]
-    ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
       # Disable tests for types that are not supported on aarch64 in `numpy` < 2.0
       "test_astype_float" # `f16` and `float128`
       "test_astype_complex" # `c32` and `complex256`

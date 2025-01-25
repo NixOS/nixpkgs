@@ -33,7 +33,7 @@ buildPythonPackage rec {
   };
 
   # Note: to reflect the extra_requires in main/setup.py.
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     ipfs = [ ipfshttpclient ];
   };
 

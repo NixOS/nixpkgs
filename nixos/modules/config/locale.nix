@@ -1,10 +1,16 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   tzdir = "${pkgs.tzdata}/share/zoneinfo";
-  nospace  = str: lib.filter (c: c == " ") (lib.stringToCharacters str) == [];
-  timezone = lib.types.nullOr (lib.types.addCheck lib.types.str nospace)
-    // { description = "null or string without spaces"; };
+  nospace = str: lib.filter (c: c == " ") (lib.stringToCharacters str) == [ ];
+  timezone = lib.types.nullOr (lib.types.addCheck lib.types.str nospace) // {
+    description = "null or string without spaces";
+  };
 
   lcfg = config.location;
 
@@ -57,7 +63,10 @@ in
       };
 
       provider = lib.mkOption {
-        type = lib.types.enum [ "manual" "geoclue2" ];
+        type = lib.types.enum [
+          "manual"
+          "geoclue2"
+        ];
         default = "manual";
         description = ''
           The location provider to use for determining your location. If set to
@@ -77,11 +86,15 @@ in
     # This way services are restarted when tzdata changes.
     systemd.globalEnvironment.TZDIR = tzdir;
 
-    systemd.services.systemd-timedated.environment = lib.optionalAttrs (config.time.timeZone != null) { NIXOS_STATIC_TIMEZONE = "1"; };
+    systemd.services.systemd-timedated.environment = lib.optionalAttrs (config.time.timeZone != null) {
+      NIXOS_STATIC_TIMEZONE = "1";
+    };
 
-    environment.etc = {
-      zoneinfo.source = tzdir;
-    } // lib.optionalAttrs (config.time.timeZone != null) {
+    environment.etc =
+      {
+        zoneinfo.source = tzdir;
+      }
+      // lib.optionalAttrs (config.time.timeZone != null) {
         localtime.source = "/etc/zoneinfo/${config.time.timeZone}";
         localtime.mode = "direct-symlink";
       };

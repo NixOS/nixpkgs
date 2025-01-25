@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "CoffeaTeam";
     repo = "fsspec-xrootd";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Ge7pVrcCYNp8yNV+ZkBftLeCCSUhtO+HJHsSHT58jcs=";
   };
 

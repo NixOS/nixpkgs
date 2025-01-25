@@ -1,17 +1,19 @@
-{ lib, options, ... }: with lib.types; {
+{ lib, options, ... }:
+with lib.types;
+{
 
   options.fooDeclarations = lib.mkOption {
-    default = (options.free.type.getSubOptions [])._freeformOptions.foo.declarations;
+    default = (options.free.type.getSubOptions [ ])._freeformOptions.foo.declarations;
   };
 
   options.free = lib.mkOption {
     type = submodule {
       config._module.freeformType = lib.mkMerge [
         (attrsOf (submodule {
-          options.foo = lib.mkOption {};
+          options.foo = lib.mkOption { };
         }))
         (attrsOf (submodule {
-          options.bar = lib.mkOption {};
+          options.bar = lib.mkOption { };
         }))
       ];
     };

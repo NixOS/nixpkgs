@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "wasi-master";
     repo = "rich-rst";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-jbzGTEth5Qoc0ORFCS3sZMrGUpoQQOVsd+l3/zMWy20=";
   };
 

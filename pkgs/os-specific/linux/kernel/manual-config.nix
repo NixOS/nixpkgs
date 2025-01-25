@@ -164,6 +164,10 @@ let
 
       RUST_LIB_SRC = lib.optionalString withRust rustPlatform.rustLibSrc;
 
+      # avoid leaking Rust source file names into the final binary, which adds
+      # a false dependency on rust-lib-src on targets with uncompressed kernels
+      KRUSTFLAGS = lib.optionalString withRust "--remap-path-prefix ${rustPlatform.rustLibSrc}=/";
+
       patches =
         map (p: p.patch) kernelPatches
         # Required for deterministic builds along with some postPatch magic.
@@ -396,6 +400,9 @@ let
       requiredSystemFeatures = [ "big-parallel" ];
 
       meta = {
+        # https://github.com/NixOS/nixpkgs/pull/345534#issuecomment-2391238381
+        broken = withRust && lib.versionOlder version "6.12";
+
         description =
           "The Linux kernel" +
           (if kernelPatches == [] then "" else
@@ -414,26 +421,41 @@ let
         timeout = 14400; # 4 hours
       } // extraMeta;
     };
-in
-
-stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.linux-kernel kernelPatches configfile) // {
-  inherit pname version;
-
-  enableParallelBuilding = true;
-
-  hardeningDisable = [ "bindnow" "format" "fortify" "stackprotector" "pic" "pie" ];
 
   # Absolute paths for compilers avoid any PATH-clobbering issues.
-  makeFlags = [
-    "O=$(buildRoot)"
-    "CC=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"
-    "HOSTCC=${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc"
-    "HOSTLD=${buildPackages.stdenv.cc.bintools}/bin/${buildPackages.stdenv.cc.targetPrefix}ld"
+  commonMakeFlags = [
     "ARCH=${stdenv.hostPlatform.linuxArch}"
-  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+  ] ++ lib.optionals (stdenv.isx86_64 && stdenv.cc.bintools.isLLVM) [
+    # The wrapper for ld.lld breaks linking the kernel. We use the
+    # unwrapped linker as workaround. See:
+    #
+    # https://github.com/NixOS/nixpkgs/issues/321667
+    "LD=${stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ld"
   ] ++ (stdenv.hostPlatform.linux-kernel.makeFlags or [])
     ++ extraMakeFlags;
 
-  karch = stdenv.hostPlatform.linuxArch;
-} // (optionalAttrs (pos != null) { inherit pos; })))
+  finalKernel = stdenv.mkDerivation (
+    builtins.foldl' lib.recursiveUpdate {} [
+      (drvAttrs config stdenv.hostPlatform.linux-kernel kernelPatches configfile)
+      {
+        inherit pname version;
+
+        enableParallelBuilding = true;
+
+        hardeningDisable = [ "bindnow" "format" "fortify" "stackprotector" "pic" "pie" ];
+
+        makeFlags = [
+          "O=$(buildRoot)"
+        ] ++ commonMakeFlags;
+
+        passthru.moduleMakeFlags = [
+          "KBUILD_OUTPUT=${finalKernel.dev}/lib/modules/${finalKernel.modDirVersion}/build"
+        ] ++ commonMakeFlags;
+
+        karch = stdenv.hostPlatform.linuxArch;
+      }
+      (optionalAttrs (pos != null) { inherit pos; })
+    ]
+  );
+in finalKernel)

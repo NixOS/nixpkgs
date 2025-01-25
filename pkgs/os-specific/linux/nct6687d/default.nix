@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, kernel
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "nct6687d";
-  version = "0-unstable-2024-02-23";
+  version = "0-unstable-2024-11-05";
 
   src = fetchFromGitHub {
     owner = "Fred78290";
     repo = "nct6687d";
-    rev = "0ee35ed9541bde22fe219305d1647b51ed010c5e";
-    hash = "sha256-g81U+ngnsOslBDCQP51uDDyHPpCv9T/j+KmFUAQfz/M=";
+    rev = "2f1a27a29f71797922c74afda6a39ce368e80356";
+    hash = "sha256-fnSy3C6R8SHlu+xB+1ID8m4Eqfgb2+2y3DkDlp3blVo=";
   };
 
   setSourceRoot = ''
@@ -22,8 +23,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  makeFlags = kernel.makeFlags ++ [
-    "-C" "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+  makeFlags = kernel.moduleMakeFlags ++ [
+    "-C"
+    "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "M=$(sourceRoot)"
   ];
 

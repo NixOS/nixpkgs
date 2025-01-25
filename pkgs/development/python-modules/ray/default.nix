@@ -8,55 +8,64 @@
   autoPatchelfHook,
 
   # dependencies
-  aiohttp,
-  aiohttp-cors,
   aiosignal,
-  attrs,
   click,
-  cloudpickle,
-  colorama,
-  colorful,
-  cython,
   filelock,
   frozenlist,
-  gpustat,
-  grpcio,
   jsonschema,
   msgpack,
-  numpy,
-  opencensus,
   packaging,
-  prometheus-client,
-  psutil,
-  pydantic,
-  py-spy,
+  protobuf,
   pyyaml,
   requests,
-  setproctitle,
-  smart-open,
-  virtualenv,
+  watchfiles,
 
   # optional-dependencies
+  # cgraph
+  cupy,
+  # client
+  grpcio,
+  # data
   fsspec,
+  numpy,
   pandas,
   pyarrow,
+  # default
+  aiohttp,
+  aiohttp-cors,
+  colorful,
+  opencensus,
+  prometheus-client,
+  pydantic,
+  py-spy,
+  smart-open,
+  virtualenv,
+  # observability
+  memray,
+  opentelemetry-api,
+  opentelemetry-sdk,
+  opentelemetry-exporter-otlp,
+  # rllib
   dm-tree,
-  gym,
+  gymnasium,
   lz4,
-  matplotlib,
-  scikit-image,
+  # ormsgpack,
   scipy,
-  aiorwlock,
+  typer,
+  rich,
+  # serve
   fastapi,
   starlette,
   uvicorn,
-  tabulate,
+  # serve-grpc
+  pyopenssl,
+  # tune
   tensorboardx,
 }:
 
 let
   pname = "ray";
-  version = "2.35.0";
+  version = "2.41.0";
 in
 buildPythonPackage rec {
   inherit pname version;
@@ -67,85 +76,105 @@ buildPythonPackage rec {
   src =
     let
       pyShortVersion = "cp${builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion}";
-      binary-hash = (import ./binary-hashes.nix)."${pyShortVersion}" or { };
+      binary-hashes = {
+        cp310 = "sha256-OTLW2zqJgsUZbbCM9W4u0L9QuFaFCM/khr6N5jui2V0=";
+        cp311 = "sha256-//XpzFpTgV07WGomHjS9D+8cMkss3tTJuOeQ4ePcOZc=";
+        cp312 = "sha256-PXassHD6i9Tr2wEazfoiu4m9vps1+3iuxZgdt26sK2A=";
+      };
     in
-    fetchPypi (
-      {
-        inherit pname version format;
-        dist = pyShortVersion;
-        python = pyShortVersion;
-        abi = pyShortVersion;
-        platform = "manylinux2014_x86_64";
-      }
-      // binary-hash
-    );
+    fetchPypi {
+      inherit pname version format;
+      dist = pyShortVersion;
+      python = pyShortVersion;
+      abi = pyShortVersion;
+      platform = "manylinux2014_x86_64";
+      hash = binary-hashes.${pyShortVersion} or { };
+    };
 
   nativeBuildInputs = [
     autoPatchelfHook
   ];
 
-  pythonRelaxDeps = [
-    "click"
-    "grpcio"
-    "protobuf"
-    "virtualenv"
-  ];
-
   dependencies = [
-    aiohttp
-    aiohttp-cors
-    aiosignal
-    attrs
     click
-    cloudpickle
-    colorama
-    colorful
-    cython
+    aiosignal
     filelock
     frozenlist
-    gpustat
-    grpcio
     jsonschema
     msgpack
-    numpy
-    opencensus
     packaging
-    prometheus-client
-    psutil
-    pydantic
-    py-spy
+    protobuf
     pyyaml
     requests
-    setproctitle
-    smart-open
-    virtualenv
+    watchfiles
   ];
 
   optional-dependencies = rec {
-    air-deps = data-deps ++ serve-deps ++ tune-deps ++ rllib-deps;
-    data-deps = [
+    adag = cgraph;
+    air = lib.unique (data ++ serve ++ tune ++ train);
+    all = lib.flatten (builtins.attrValues optional-dependencies);
+    cgraph = [
+      cupy
+    ];
+    client = [ grpcio ];
+    data = [
       fsspec
+      numpy
       pandas
       pyarrow
     ];
-    rllib-deps = tune-deps ++ [
+    default = [
+      aiohttp
+      aiohttp-cors
+      colorful
+      grpcio
+      opencensus
+      prometheus-client
+      pydantic
+      py-spy
+      requests
+      smart-open
+      virtualenv
+    ];
+    observability = [
+      memray
+      opentelemetry-api
+      opentelemetry-sdk
+      opentelemetry-exporter-otlp
+    ];
+    rllib = [
       dm-tree
-      gym
+      gymnasium
       lz4
-      matplotlib
+      # ormsgpack
       pyyaml
-      scikit-image
       scipy
+      typer
+      rich
     ];
-    serve-deps = [
-      aiorwlock
-      fastapi
+    serve = lib.unique (
+      [
+        fastapi
+        requests
+        starlette
+        uvicorn
+        watchfiles
+      ]
+      ++ default
+    );
+    serve-grpc = lib.unique (
+      [
+        grpcio
+        pyopenssl
+      ]
+      ++ serve
+    );
+    train = tune;
+    tune = [
+      fsspec
       pandas
-      starlette
-      uvicorn
-    ];
-    tune-deps = [
-      tabulate
+      pyarrow
+      requests
       tensorboardx
     ];
   };
@@ -162,6 +191,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/ray-project/ray/releases/tag/ray-${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ billhuang ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = [ "x86_64-linux" ];
   };
 }

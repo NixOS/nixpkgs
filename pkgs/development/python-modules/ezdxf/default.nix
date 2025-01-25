@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mozman";
     repo = "ezdxf";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-BzdLl2GjLh2ABJzJ6bhdbic9jlSABIVR3XGrYiLJHa0=";
   };
 

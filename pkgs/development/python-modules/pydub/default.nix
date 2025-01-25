@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jiaaro";
     repo = "pydub";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-FTEMT47wPXK5i4ZGjTVAhI/NjJio3F2dbBZzYzClU3c=";
   };
 

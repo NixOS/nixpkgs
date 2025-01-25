@@ -4,7 +4,6 @@
   fetchPypi,
   rstr,
   sre-yield,
-  pythonImportsCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -21,7 +20,6 @@ buildPythonPackage rec {
     rstr
     sre-yield
   ];
-  nativeBuildInputs = [ pythonImportsCheckHook ];
 
   # Package has no tests
   doCheck = false;

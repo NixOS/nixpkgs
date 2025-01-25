@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  llvmPackages_19,
   fetchFromGitHub,
 
   gtest,
@@ -23,15 +24,18 @@
   testers,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+let
+  stdenv' = if stdenv.hostPlatform.isDarwin then llvmPackages_19.stdenv else stdenv;
+in
+stdenv'.mkDerivation (finalAttrs: {
   pname = "mesonlsp";
-  version = "4.3.4";
+  version = "4.3.7";
 
   src = fetchFromGitHub {
     owner = "JCWasmx86";
     repo = "mesonlsp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-eSp2QyuO5sU2AqpFTTlXOSrcGy7nQLfvrY5/3N2qIqU=";
+    hash = "sha256-QhZv4PTcf1jzSOcp1+bPZWf5COugCIMq1zkhc0PJjUQ=";
   };
 
   patches = [ ./disable-tests-that-require-network-access.patch ];
@@ -52,11 +56,11 @@ stdenv.mkDerivation (finalAttrs: {
       libpkgconf
       nlohmann_json
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libossp_uuid
       pkgsStatic.fmt
     ]
-    ++ lib.optionals stdenv.isLinux [ libuuid ];
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ libuuid ];
 
   mesonFlags = [ "-Dbenchmarks=false" ];
 
@@ -163,5 +167,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "mesonlsp";
     maintainers = with maintainers; [ paveloom ];
     platforms = platforms.unix;
+    # ../src/liblog/log.cpp:41:7: error: call to 'format' is ambiguous
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };
 })

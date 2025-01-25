@@ -1,4 +1,6 @@
-self: super: {
+self: super: let
+  inherit (self) lib config;
+in {
 
     age = super.callPackage ./age.nix { };
 
@@ -26,8 +28,6 @@ self: super: {
 
     pg_ed25519 = super.callPackage ./pg_ed25519.nix { };
 
-    pg_embedding = super.callPackage ./pg_embedding.nix { };
-
     pg_hint_plan = super.callPackage ./pg_hint_plan.nix { };
 
     pg_ivm = super.callPackage ./pg_ivm.nix { };
@@ -41,6 +41,8 @@ self: super: {
     pg_similarity = super.callPackage ./pg_similarity.nix { };
 
     pgaudit = super.callPackage ./pgaudit.nix { };
+
+    pgmq = super.callPackage ./pgmq.nix { };
 
     pgroonga = super.callPackage ./pgroonga.nix { };
 
@@ -70,6 +72,10 @@ self: super: {
 
     pg_net = super.callPackage ./pg_net.nix { };
 
+    pg-gvm = super.callPackage ./pg-gvm.nix { };
+
+    pg-semver = super.callPackage ./pg-semver.nix { };
+
     pgtap = super.callPackage ./pgtap.nix { };
 
     smlar = super.callPackage ./smlar.nix { };
@@ -83,11 +89,11 @@ self: super: {
 
     timescaledb_toolkit = super.callPackage ./timescaledb_toolkit.nix { };
 
-    tsearch_extras = super.callPackage ./tsearch_extras.nix { };
-
     tds_fdw = super.callPackage ./tds_fdw.nix { };
 
     pgrouting = super.callPackage ./pgrouting.nix { };
+
+    pgx_ulid = super.callPackage ./pgx_ulid.nix { };
 
     pg_partman = super.callPackage ./pg_partman.nix { };
 
@@ -105,7 +111,11 @@ self: super: {
 
     rum = super.callPackage ./rum.nix { };
 
+    sqlite_fdw = super.callPackage ./sqlite_fdw.nix { };
+
     tsja = super.callPackage ./tsja.nix { };
 
     wal2json = super.callPackage ./wal2json.nix { };
+} // lib.optionalAttrs config.allowAliases {
+  pg_embedding = throw "PostgreSQL extension `pg_embedding` has been removed since the project has been abandoned. Upstream's recommendation is to use pgvector instead (https://neon.tech/docs/extensions/pg_embedding#migrate-from-pg_embedding-to-pgvector)";
 }

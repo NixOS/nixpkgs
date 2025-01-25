@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, testers
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  testers,
 
-, static ? stdenv.hostPlatform.isStatic
+  static ? stdenv.hostPlatform.isStatic,
 
-, lz4
-, zlib
-, zstd
+  lz4,
+  zlib,
+  zstd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

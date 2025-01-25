@@ -1,10 +1,11 @@
-{ lib
-, python3
-, fetchPypi
-, pandoc
-, git
-, scriv
-, testers
+{
+  lib,
+  python3,
+  fetchPypi,
+  pandoc,
+  git,
+  scriv,
+  testers,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -16,16 +17,19 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-MK6f+NFE+ODPOUxOHTeVQvGzgjdnZClVtU7EDcALMrY=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
-    attrs
-    click
-    click-log
-    jinja2
-    markdown-it-py
-    requests
-  ] ++ lib.optionals (python3.pythonOlder "3.11") [
-    tomli
-  ];
+  propagatedBuildInputs =
+    with python3.pkgs;
+    [
+      attrs
+      click
+      click-log
+      jinja2
+      markdown-it-py
+      requests
+    ]
+    ++ lib.optionals (python3.pythonOlder "3.11") [
+      tomli
+    ];
 
   nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook

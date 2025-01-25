@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyapp-kit";
     repo = "pydantic-compat";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-YJUfWu+nyGlwpJpxYghCKzj3CasdAaqYoNVCcfo/7YE=";
     leaveDotGit = true;
   };

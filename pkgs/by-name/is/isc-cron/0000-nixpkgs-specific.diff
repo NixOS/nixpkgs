@@ -35,10 +35,10 @@ diff -Naur cron-old/pathnames.h cron-new/pathnames.h
 +#define _PATH_SENDMAIL "@sendmailPath@"
 +
 +#undef _PATH_VI
-+#define _PATH_VI "@VIPATH@"
++#define _PATH_VI "@viPath@"
 +
 +#undef _PATH_DEFPATH
-+#define _PATH_DEFPATH "@DEFPATH@"
++#define _PATH_DEFPATH "@defPath@"
 +
 +/* Nixpkgs-specific patch end */
 +

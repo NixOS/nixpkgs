@@ -1,29 +1,30 @@
-{ lib
-, desktop-file-utils
-, fetchFromGitLab
-, gobject-introspection
-, gtk4
-, gtksourceview5
-, libadwaita
-, libspelling
-, meson
-, ninja
-, pkg-config
-, python3
-, stdenv
-, wrapGAppsHook4
+{
+  lib,
+  desktop-file-utils,
+  fetchFromGitLab,
+  gobject-introspection,
+  gtk4,
+  gtksourceview5,
+  libadwaita,
+  libspelling,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  stdenv,
+  wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "buffer";
-  version = "0.9.5";
+  version = "0.9.7";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "cheywood";
     repo = "buffer";
     rev = finalAttrs.version;
-    hash = "sha256-WhUSiZ2Nty5CdaJC8zZVkUptP5cRnMByZKy3e9TAyjs=";
+    hash = "sha256-W6LTTQvIMAB99q2W11EBlBknJnOuv4ptgf5SSM422Cg=";
   };
 
   nativeBuildInputs = [
@@ -40,9 +41,11 @@ stdenv.mkDerivation (finalAttrs: {
     gtksourceview5
     libadwaita
     libspelling
-    (python3.withPackages (ps: with ps; [
-      pygobject3
-    ]))
+    (python3.withPackages (
+      ps: with ps; [
+        pygobject3
+      ]
+    ))
   ];
 
   preFixup = ''

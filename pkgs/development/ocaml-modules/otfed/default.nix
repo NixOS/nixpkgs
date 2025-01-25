@@ -1,11 +1,12 @@
-{ lib
-, buildDunePackage
-, fetchFromGitHub
-, base
-, ppx_deriving
-, ppx_inline_test
-, uutf
-, alcotest
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  base,
+  ppx_deriving,
+  ppx_inline_test,
+  uutf,
+  alcotest,
 }:
 
 buildDunePackage rec {

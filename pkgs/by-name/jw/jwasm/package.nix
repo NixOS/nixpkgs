@@ -10,12 +10,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "Baron-von-Riedesel";
-    repo  = "JWasm";
+    repo = "JWasm";
     rev = "v${finalAttrs.version}";
     hash = "sha256-xbiyGBTzIkAfUy45JdAl77gbvArzVUQNPOxa+H2uGFo=";
   };
 
-  outputs = [ "out" "doc" ];
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   dontConfigure = true;
 
@@ -44,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.unix;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })
 # TODO: generalize for Windows builds

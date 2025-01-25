@@ -36,7 +36,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ap--";
     repo = "python-seabreeze";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-NzZ+ZRfJ97Ufp6hmqN6ziBFfdvJXpmWwh9A66od/8Hc=";
     leaveDotGit = true;
   };
@@ -63,7 +63,7 @@ buildPythonPackage rec {
     libusb-compat-0_1
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     pyseabreeze = [ pyusb ];
   };
 
@@ -77,7 +77,7 @@ buildPythonPackage rec {
     pytestCheckHook
     mock
     zipp
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   disabledTests = [ "TestHardware" ];
 

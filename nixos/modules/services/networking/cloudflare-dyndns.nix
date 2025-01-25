@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.cloudflare-dyndns;
 in
@@ -72,32 +77,35 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    systemd.services.cloudflare-dyndns = {
-      description = "CloudFlare Dynamic DNS Client";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+    systemd.services.cloudflare-dyndns =
+      {
+        description = "CloudFlare Dynamic DNS Client";
+        after = [ "network.target" ];
+        wantedBy = [ "multi-user.target" ];
 
-      environment = {
-        CLOUDFLARE_DOMAINS = toString cfg.domains;
-      };
+        environment = {
+          CLOUDFLARE_DOMAINS = toString cfg.domains;
+        };
 
-      serviceConfig = {
-        Type = "simple";
-        DynamicUser = true;
-        StateDirectory = "cloudflare-dyndns";
-        EnvironmentFile = cfg.apiTokenFile;
-        ExecStart =
-          let
-            args = [ "--cache-file /var/lib/cloudflare-dyndns/ip.cache" ]
-              ++ (if cfg.ipv4 then [ "-4" ] else [ "-no-4" ])
-              ++ (if cfg.ipv6 then [ "-6" ] else [ "-no-6" ])
-              ++ lib.optional cfg.deleteMissing "--delete-missing"
-              ++ lib.optional cfg.proxied "--proxied";
-          in
-          "${lib.getExe cfg.package} ${toString args}";
+        serviceConfig = {
+          Type = "simple";
+          DynamicUser = true;
+          StateDirectory = "cloudflare-dyndns";
+          EnvironmentFile = cfg.apiTokenFile;
+          ExecStart =
+            let
+              args =
+                [ "--cache-file /var/lib/cloudflare-dyndns/ip.cache" ]
+                ++ (if cfg.ipv4 then [ "-4" ] else [ "-no-4" ])
+                ++ (if cfg.ipv6 then [ "-6" ] else [ "-no-6" ])
+                ++ lib.optional cfg.deleteMissing "--delete-missing"
+                ++ lib.optional cfg.proxied "--proxied";
+            in
+            "${lib.getExe cfg.package} ${toString args}";
+        };
+      }
+      // lib.optionalAttrs (cfg.frequency != null) {
+        startAt = cfg.frequency;
       };
-    } // lib.optionalAttrs (cfg.frequency != null) {
-      startAt = cfg.frequency;
-    };
   };
 }

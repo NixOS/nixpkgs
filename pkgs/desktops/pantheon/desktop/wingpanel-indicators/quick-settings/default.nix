@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wingpanel-quick-settings";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "quick-settings";
     rev = finalAttrs.version;
-    hash = "sha256-k8K6zGTLYGSsi5NtohbaGg4oVVovktR7BInN8BUE5bQ=";
+    hash = "sha256-I5RCMd3lkWOkpoawCXYuGHDa49A+wVlIlM8U2hRfq/o=";
   };
 
   nativeBuildInputs = [

@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "c4deszes";
     repo = "ldfparser";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-SZ9mWV5PjkQ2OiScPSMrunkKQWmuYW2lB2JvpTGNbY4=";
   };
 

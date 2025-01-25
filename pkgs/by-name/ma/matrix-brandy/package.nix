@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, SDL
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  SDL,
 }:
 
 stdenv.mkDerivation rec {
@@ -33,4 +34,3 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ fiq ];
   };
 }
-

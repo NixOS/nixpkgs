@@ -9,9 +9,9 @@
   stdenv,
   curl,
   darwin,
-  version ? "0.2.93",
-  hash ? "sha256-DDdu5mM3gneraM85pAepBXWn3TMofarVR4NbjMdz3r0=",
-  cargoHash ? "sha256-birrg+XABBHHKJxfTKAMSlmTVYLmnmqMDfRnmG6g/YQ=",
+  version ? "0.2.100",
+  hash ? "sha256-3RJzK7mkYFrs7C/WkhW9Rr4LdP5ofb2FdYGz1P7Uxog=",
+  cargoHash ? "sha256-tD0OY2PounRqsRiFh8Js5nyknQ809ZcHMvCOLrvYHRE=",
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs =
     [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       curl
       darwin.apple_sdk.frameworks.Security
     ];

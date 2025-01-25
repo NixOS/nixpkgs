@@ -2,10 +2,9 @@
   lib,
   fetchFromGitLab,
   rustPlatform,
-  youtube-dl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "peertube-viewer";
   version = "1.8.6";
 
@@ -23,5 +22,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://gitlab.com/peertube-viewer/peertube-viewer-rs";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ haruki7049 ];
+    mainProgram = "peertube-viewer-rs";
   };
 }

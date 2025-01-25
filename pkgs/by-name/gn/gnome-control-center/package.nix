@@ -60,8 +60,8 @@
   shadow,
   shared-mime-info,
   sound-theme-freedesktop,
-  tracker,
-  tracker-miners,
+  tinysparql,
+  localsearch,
   tzdata,
   udisks2,
   upower,
@@ -74,11 +74,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-control-center";
-  version = "46.4";
+  version = "47.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-control-center/${lib.versions.major finalAttrs.version}/gnome-control-center-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Wb0wWDl3v6KOVCJ+7iEeqG9If81tORXtIfWTJCZxAeA=";
+    hash = "sha256-eDgdWn8dWyl8mhlhEUXuXgWE8GrFde0IrQcKDAe76qI=";
   };
 
   patches = [
@@ -144,8 +144,8 @@ stdenv.mkDerivation (finalAttrs: {
     networkmanager
     polkit
     samba
-    tracker
-    tracker-miners # for search locations dialog
+    tinysparql
+    localsearch # for search locations dialog
     udisks2
     upower
     # For animations in Mouse panel.
@@ -197,9 +197,6 @@ stdenv.mkDerivation (finalAttrs: {
       # WM keyboard shortcuts
       --prefix XDG_DATA_DIRS : "${mutter}/share"
     )
-    for i in $out/share/applications/*; do
-      substituteInPlace $i --replace "Exec=gnome-control-center" "Exec=$out/bin/gnome-control-center"
-    done
   '';
 
   separateDebugInfo = true;

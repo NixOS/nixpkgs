@@ -8,7 +8,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Electron-Cash";
     repo = "Electron-Cash";
-    rev = "refs/tags/${version}";
+    tag = version;
     sha256 = "sha256-xOyj5XerOwgfvI0qj7+7oshDvd18h5IeZvcJTis8nWo=";
   };
 
@@ -51,7 +51,7 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [ wrapQtAppsHook ];
 
-  buildInputs = [ ] ++ lib.optional stdenv.isLinux qtwayland;
+  buildInputs = [ ] ++ lib.optional stdenv.hostPlatform.isLinux qtwayland;
 
   postPatch = ''
     substituteInPlace contrib/requirements/requirements.txt \
@@ -59,11 +59,6 @@ python3Packages.buildPythonApplication rec {
 
     substituteInPlace setup.py \
       --replace "(share_dir" "(\"share\""
-  '';
-
-  postInstall = lib.optionalString stdenv.isLinux ''
-    substituteInPlace $out/share/applications/electron-cash.desktop \
-      --replace "Exec=electron-cash" "Exec=$out/bin/electron-cash"
   '';
 
   # If secp256k1 wasn't added to the library path, the following warning is given:

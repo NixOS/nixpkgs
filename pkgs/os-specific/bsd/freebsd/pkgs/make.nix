@@ -13,7 +13,7 @@ mkDerivation {
       export NIX_CFLAGS_COMPILE+=" -D_PATH_DEFSYSPATH=\"$out/share/mk\""
 
     ''
-    + lib.optionalString stdenv.isDarwin ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       substituteInPlace $BSDSRCDIR/share/mk/bsd.sys.mk \
         --replace '-Wl,--fatal-warnings' "" \
         --replace '-Wl,--warn-shared-textrel' ""

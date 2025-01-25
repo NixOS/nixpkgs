@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, cairo
-, pkg-config
-, rofi-unwrapped
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  cairo,
+  pkg-config,
+  rofi-unwrapped,
 }:
 
 stdenv.mkDerivation {

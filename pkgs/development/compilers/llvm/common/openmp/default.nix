@@ -15,25 +15,26 @@
 , perl
 , pkg-config
 , version
+, devExtraCmakeFlags ? []
 }:
 let
   pname = "openmp";
   src' =
     if monorepoSrc != null then
-      runCommand "${pname}-src-${version}" {} ''
+      runCommand "${pname}-src-${version}" { inherit (monorepoSrc) passthru; } (''
         mkdir -p "$out"
+      '' + lib.optionalString (lib.versionAtLeast release_version "14") ''
         cp -r ${monorepoSrc}/cmake "$out"
+      '' + ''
         cp -r ${monorepoSrc}/${pname} "$out"
-      '' else src;
+      '') else src;
 in
 stdenv.mkDerivation (rec {
   inherit pname version patches;
 
   src = src';
 
-  sourceRoot =
-    if lib.versionOlder release_version "13" then null
-    else "${src.name}/${pname}";
+  sourceRoot = "${src.name}/${pname}";
 
   outputs = [ "out" ]
     ++ lib.optionals (lib.versionAtLeast release_version "14") [ "dev" ];
@@ -60,7 +61,7 @@ stdenv.mkDerivation (rec {
     "-DCLANG_TOOL=${clang-unwrapped}/bin/clang"
     "-DOPT_TOOL=${llvm}/bin/opt"
     "-DLINK_TOOL=${llvm}/bin/llvm-link"
-  ];
+  ] ++ devExtraCmakeFlags;
 
   meta = llvm_meta // {
     homepage = "https://openmp.llvm.org/";

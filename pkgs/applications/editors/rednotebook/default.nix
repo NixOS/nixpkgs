@@ -1,17 +1,29 @@
-{ lib, buildPythonApplication, fetchFromGitHub
-, gdk-pixbuf, glib, gobject-introspection, gtk3, gtksourceview, pango, webkitgtk
-, pygobject3, pyyaml
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  gdk-pixbuf,
+  glib,
+  gobject-introspection,
+  gtk3,
+  gtksourceview,
+  pango,
+  webkitgtk_4_0,
+  pygobject3,
+  pyyaml,
+  setuptools,
 }:
 
 buildPythonApplication rec {
   pname = "rednotebook";
-  version = "2.33";
+  version = "2.37";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jendrikseipp";
     repo = "rednotebook";
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-K4uEZZZXU2mZ61t6Ak5mpiCsm/mcNhm+xJSzfJPiuwo=";
+    tag = "v${version}";
+    sha256 = "sha256-ytaj29xZflq20+6Iqmynsr34Q9DP5uOvSBkg+vIWXgU=";
   };
 
   # We have not packaged tests.
@@ -19,9 +31,17 @@ buildPythonApplication rec {
 
   nativeBuildInputs = [ gobject-introspection ];
 
+  build-system = [ setuptools ];
+
   propagatedBuildInputs = [
-    gdk-pixbuf glib gtk3 gtksourceview pango webkitgtk
-    pygobject3 pyyaml
+    gdk-pixbuf
+    glib
+    gtk3
+    gtksourceview
+    pango
+    webkitgtk_4_0
+    pygobject3
+    pyyaml
   ];
 
   makeWrapperArgs = [
@@ -29,6 +49,8 @@ buildPythonApplication rec {
     "--prefix XDG_DATA_DIRS : $out/share"
     "--suffix XDG_DATA_DIRS : $XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
   ];
+
+  pythonImportsCheck = [ "rednotebook" ];
 
   meta = with lib; {
     homepage = "https://rednotebook.sourceforge.io/";

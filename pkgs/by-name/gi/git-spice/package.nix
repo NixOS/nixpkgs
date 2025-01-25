@@ -1,34 +1,29 @@
 {
   lib,
-  fetchpatch,
+  stdenv,
   buildGo123Module,
   fetchFromGitHub,
   git,
   nix-update-script,
+  installShellFiles,
 }:
 
 buildGo123Module rec {
   pname = "git-spice";
-  version = "0.5.2";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "abhinav";
     repo = "git-spice";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ftNLe/3akvk6nUrseBqpbJQSiUPEJO6cTEc7uEBKX3k=";
+    tag = "v${version}";
+    hash = "sha256-1EWuKjvDeOV6W+nntdevUI/SO68ssYgoxJ5QIy5jkFM=";
   };
 
-  vendorHash = "sha256-f7bjlTVwCFoQrgbeyAvsVAS6vy5uE/AvMGKEutE1lfs=";
-
-  # Fixes flaky test. Remove next release.
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/abhinav/git-spice/commit/92c28474bab81881443129e4a8e9bfc3f1564931.patch";
-      hash = "sha256-6v++jG7Wm6awqHRiNzwjX25BB8X9yGYhSzcUDNQKJ7k=";
-    })
-  ];
+  vendorHash = "sha256-F9CyhUtdkwvEsmQ+T5zt2n+TBRhVgyr2CEOvIzcXpug=";
 
   subPackages = [ "." ];
+
+  nativeBuildInputs = [ installShellFiles ];
 
   nativeCheckInputs = [ git ];
 
@@ -39,6 +34,21 @@ buildGo123Module rec {
     "-w"
     "-X=main._version=${version}"
   ];
+
+  __darwinAllowLocalNetworking = true;
+
+  preCheck = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
+    # timeout
+    rm testdata/script/branch_submit_remote_prompt.txt
+    rm testdata/script/branch_submit_multiple_pr_templates.txt
+  '';
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd gs \
+      --bash <($out/bin/gs shell completion bash) \
+      --zsh <($out/bin/gs shell completion zsh) \
+      --fish <($out/bin/gs shell completion fish)
+  '';
 
   passthru.updateScript = nix-update-script { };
 

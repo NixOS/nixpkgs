@@ -1,7 +1,13 @@
 {
-  mkDerivation, lib,
-  extra-cmake-modules, isocodes,
-  kcoreaddons, kconfig, kcodecs, ki18n, qtbase,
+  mkDerivation,
+  lib,
+  extra-cmake-modules,
+  isocodes,
+  kcoreaddons,
+  kconfig,
+  kcodecs,
+  ki18n,
+  qtbase,
 }:
 
 mkDerivation {
@@ -13,6 +19,15 @@ mkDerivation {
     isocodes
   ];
   nativeBuildInputs = [ extra-cmake-modules ];
-  buildInputs = [ kcoreaddons kconfig kcodecs ki18n qtbase ];
-  outputs = [ "out" "dev" ];
+  buildInputs = [
+    kcoreaddons
+    kconfig
+    kcodecs
+    ki18n
+    qtbase
+  ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 }

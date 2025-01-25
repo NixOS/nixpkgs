@@ -1,5 +1,6 @@
 {
   lib,
+  bleak,
   buildPythonPackage,
   cryptography,
   esptool,
@@ -13,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "rns";
-  version = "0.7.7";
+  version = "0.9.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "markqvist";
     repo = "Reticulum";
-    rev = "refs/tags/${version}";
-    hash = "sha256-cNOVk7JCu4kMevH9MAWWvtLIzfbBBy+h7bhTBhkfrvI=";
+    tag = version;
+    hash = "sha256-AR7JMvx5qWPFtMhotO2MlqKH5d/CcGOrvpaB031vTX8=";
   };
 
   patches = [
@@ -34,6 +35,7 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
+    bleak
     cryptography
     netifaces
     pyserial
@@ -49,6 +51,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/markqvist/Reticulum";
     changelog = "https://github.com/markqvist/Reticulum/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [
+      fab
+      qbit
+    ];
   };
 }

@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "ncclient";
-  version = "0.6.15";
+  version = "0.6.16";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,15 +19,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-mdFoSTUS4QhY05rY0fqKTpRQTR9oLvOMTVr4kWJbiUQ=";
+    tag = "v${version}";
+    hash = "sha256-IMCMlGt5/G4PRz525ZomsovU55vBnGhHndBtC7ym6lc=";
   };
 
   propagatedBuildInputs = [
     paramiko
     lxml
     six
-  ];
+  ] ++ paramiko.optional-dependencies.ed25519;
 
   nativeCheckInputs = [ pytestCheckHook ];
 

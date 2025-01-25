@@ -2,6 +2,7 @@
   stdenv,
   lib,
   substituteAll,
+  buildPackages,
   fetchurl,
   meson,
   ninja,
@@ -37,15 +38,16 @@
   tzdata,
   gcr_4,
   gnome-session-ctl,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-settings-daemon";
-  version = "46.0";
+  version = "47.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-settings-daemon/${lib.versions.major finalAttrs.version}/gnome-settings-daemon-${finalAttrs.version}.tar.xz";
-    hash = "sha256-C5oPZPoYqOfgm0yVo/dU+gM8LNvS3DVwHwYYVywcs9c=";
+    hash = "sha256-HrdYhi6Ij1WghpGTCH8c+8x6EWNlTmMAmf9DQt0/alo=";
   };
 
   patches = [
@@ -58,12 +60,18 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  depsBuildBuild = [
+    buildPackages.stdenv.cc
+    pkg-config
+  ];
+
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
     perl
     gettext
+    glib
     libxml2
     libxslt
     docbook_xsl
@@ -71,41 +79,48 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
-  buildInputs = [
-    gtk3
-    glib
-    gsettings-desktop-schemas
-    modemmanager
-    networkmanager
-    libnotify
-    libgnomekbd # for org.gnome.libgnomekbd.keyboard schema
-    gnome-desktop
-    libpulseaudio
-    alsa-lib
-    libcanberra-gtk3
-    upower
-    colord
-    libgweather
-    polkit
-    geocode-glib_2
-    geoclue2
-    systemd
-    libgudev
-    libwacom
-    gcr_4
-  ];
+  buildInputs =
+    [
+      gtk3
+      glib
+      gsettings-desktop-schemas
+      modemmanager
+      networkmanager
+      libnotify
+      libgnomekbd # for org.gnome.libgnomekbd.keyboard schema
+      gnome-desktop
+      libpulseaudio
+      alsa-lib
+      libcanberra-gtk3
+      upower
+      colord
+      libgweather
+      polkit
+      geocode-glib_2
+      geoclue2
+      libgudev
+      libwacom
+      gcr_4
+    ]
+    ++ lib.optionals withSystemd [
+      systemd
+    ];
 
-  mesonFlags = [
-    "-Dudev_dir=${placeholder "out"}/lib/udev"
-    "-Dgnome_session_ctl_path=${gnome-session-ctl}/libexec/gnome-session-ctl"
-  ];
+  mesonFlags =
+    [
+      "-Dudev_dir=${placeholder "out"}/lib/udev"
+      (lib.mesonBool "systemd" withSystemd)
+    ]
+    ++ lib.optionals withSystemd [
+      "-Dgnome_session_ctl_path=${gnome-session-ctl}/libexec/gnome-session-ctl"
+    ];
 
   # Default for release buildtype but passed manually because
   # we're using plain
   env.NIX_CFLAGS_COMPILE = "-DG_DISABLE_CAST_CHECKS";
 
   postPatch = ''
-    for f in gnome-settings-daemon/codegen.py plugins/power/gsd-power-constants-update.pl; do
+    for f in plugins/power/gsd-power-constants-update.pl; do
       chmod +x $f
       patchShebangs $f
     done

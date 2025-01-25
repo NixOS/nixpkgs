@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, Security }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  Security,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "diffr";
@@ -13,7 +19,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-RmQu55OnKfeuDGcJrfjhMKnxDatdowkvh3Kh4N8I8Sg=";
 
-  buildInputs = (lib.optional stdenv.isDarwin Security);
+  buildInputs = (lib.optional stdenv.hostPlatform.isDarwin Security);
 
   preCheck = ''
     export DIFFR_TESTS_BINARY_PATH=$releaseDir/diffr

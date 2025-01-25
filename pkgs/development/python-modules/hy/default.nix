@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "hy";
-  version = "0.29.0";
+  version = "1.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -22,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hylang";
     repo = "hy";
-    rev = "refs/tags/${version}";
-    hash = "sha256-8b2V78mwzSThmVl1SfMGBw8VSpE5rCuucnIyD0nq5To=";
+    tag = version;
+    hash = "sha256-o6txdC8TOdaILAJP9LDAhJ587p+mw0bUEGLneQQYW9c=";
   };
 
   # https://github.com/hylang/hy/blob/1.0a4/get_version.py#L9-L10
@@ -66,7 +66,6 @@ buildPythonPackage rec {
     maintainers = with maintainers; [
       mazurel
       nixy
-      thiagokokada
     ];
   };
 }

@@ -1,10 +1,11 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-, jack2
-, alsa-lib
-, rtmidi
-, pkg-config
+{
+  buildOctavePackage,
+  lib,
+  fetchurl,
+  jack2,
+  alsa-lib,
+  rtmidi,
+  pkg-config,
 }:
 
 buildOctavePackage rec {

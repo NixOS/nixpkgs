@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "oxan";
     repo = "djangorestframework-dataclasses";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-12EdSaGpsX0qDXgJ2QWYj6qAUbsrITQjWowk+gJFwwY=";
   };
 

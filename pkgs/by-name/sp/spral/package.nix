@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "spral";
-  version = "2024.05.08";
+  version = "2025.01.08";
 
   src = fetchFromGitHub {
     owner = "ralna";
     repo = "spral";
     rev = "v${version}";
-    hash = "sha256-1CdRwQ0LQrYcXvoGtGxR9Ug3Q2N4skXq8z+LdNpv8p4=";
+    hash = "sha256-tuhJClSjah/ud6PVr6biOq5KdKtspJ7hpWZ350yzz+U=";
   };
 
   postPatch =
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
         "subdir('ssids')" \
         ""
     ''
-    + lib.optionalString stdenv.isDarwin ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       # Skipped test: lsmrt, segfault
       substituteInPlace tests/meson.build --replace-fail \
         "['lsmrt', files('lsmr.f90')]," \
@@ -47,11 +47,11 @@ stdenv.mkDerivation rec {
     blas
     lapack
     metis
-  ] ++ lib.optionals stdenv.isDarwin [ llvmPackages.openmp ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.openmp ];
 
   mesonFlags = [ (lib.mesonBool "tests" true) ];
 
-  LDFLAGS = lib.optionals stdenv.isDarwin [ "-lomp" ];
+  LDFLAGS = lib.optionals stdenv.hostPlatform.isDarwin [ "-lomp" ];
 
   doCheck = true;
 

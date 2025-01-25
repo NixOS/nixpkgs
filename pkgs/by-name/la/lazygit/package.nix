@@ -1,19 +1,20 @@
 {
   lib,
-  buildGoModule,
+  buildGo122Module,
   fetchFromGitHub,
   lazygit,
   testers,
 }:
-buildGoModule rec {
+# Regression in go1.23 see https://github.com/jesseduffield/lazygit/issues/4002
+buildGo122Module rec {
   pname = "lazygit";
-  version = "0.44.0";
+  version = "0.45.2";
 
   src = fetchFromGitHub {
     owner = "jesseduffield";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-bJ2wdS0BCAGjfbnMoQSUhw/xAkC5HPRklefXx2ux078=";
+    tag = "v${version}";
+    hash = "sha256-B8z0NqCFdCAYVZnujfDJ9Y4qFXuhy5A/RG51Qb2J4ts=";
   };
 
   vendorHash = null;
@@ -26,16 +27,18 @@ buildGoModule rec {
 
   passthru.tests.version = testers.testVersion { package = lazygit; };
 
-  meta = with lib; {
+  meta = {
     description = "Simple terminal UI for git commands";
     homepage = "https://github.com/jesseduffield/lazygit";
     changelog = "https://github.com/jesseduffield/lazygit/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       Br1ght0ne
       equirosa
+      khaneliman
       paveloom
       starsep
+      sigmasquadron
     ];
     mainProgram = "lazygit";
   };

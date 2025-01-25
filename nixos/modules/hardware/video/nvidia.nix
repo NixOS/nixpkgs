@@ -10,13 +10,15 @@ let
 
   cfg = config.hardware.nvidia;
 
+  useOpenModules = cfg.open == true;
+
   pCfg = cfg.prime;
   syncCfg = pCfg.sync;
   offloadCfg = pCfg.offload;
   reverseSyncCfg = pCfg.reverseSync;
   primeEnabled = syncCfg.enable || reverseSyncCfg.enable || offloadCfg.enable;
-  busIDType = lib.types.strMatching "([[:print:]]+[\:\@][0-9]{1,3}\:[0-9]{1,2}\:[0-9])?";
-  ibtSupport = cfg.open || (nvidia_x11.ibtSupport or false);
+  busIDType = lib.types.strMatching "([[:print:]]+[:@][0-9]{1,3}:[0-9]{1,2}:[0-9])?";
+  ibtSupport = useOpenModules || (nvidia_x11.ibtSupport or false);
   settingsFormat = pkgs.formats.keyValue { };
 in
 {
@@ -90,21 +92,23 @@ in
         information, see the NVIDIA docs, on Chapter 23. Dynamic Boost on Linux
       '';
 
-      modesetting.enable = lib.mkEnableOption ''
-        kernel modesetting when using the NVIDIA proprietary driver.
+      modesetting.enable =
+        lib.mkEnableOption ''
+          kernel modesetting when using the NVIDIA proprietary driver.
 
-        Enabling this fixes screen tearing when using Optimus via PRIME (see
-        {option}`hardware.nvidia.prime.sync.enable`. This is not enabled
-        by default because it is not officially supported by NVIDIA and would not
-        work with SLI.
+          Enabling this fixes screen tearing when using Optimus via PRIME (see
+          {option}`hardware.nvidia.prime.sync.enable`. This is not enabled
+          by default because it is not officially supported by NVIDIA and would not
+          work with SLI.
 
-        Enabling this and using version 545 or newer of the proprietary NVIDIA
-        driver causes it to provide its own framebuffer device, which can cause
-        Wayland compositors to work when they otherwise wouldn't.
-      '' // {
-        default = lib.versionAtLeast cfg.package.version "535";
-        defaultText = lib.literalExpression "lib.versionAtLeast cfg.package.version \"535\"";
-      };
+          Enabling this and using version 545 or newer of the proprietary NVIDIA
+          driver causes it to provide its own framebuffer device, which can cause
+          Wayland compositors to work when they otherwise wouldn't.
+        ''
+        // {
+          default = lib.versionAtLeast cfg.package.version "535";
+          defaultText = lib.literalExpression "lib.versionAtLeast cfg.package.version \"535\"";
+        };
 
       prime.nvidiaBusId = lib.mkOption {
         type = busIDType;
@@ -257,19 +261,31 @@ in
       open = lib.mkOption {
         example = true;
         description = "Whether to enable the open source NVIDIA kernel module.";
-        type = lib.types.bool;
+        type = lib.types.nullOr lib.types.bool;
+        default = if lib.versionOlder nvidia_x11.version "560" then false else null;
         defaultText = lib.literalExpression ''
-          lib.mkIf (lib.versionOlder config.hardware.nvidia.package.version "560") false
+          if lib.versionOlder config.hardware.nvidia.package.version "560" then false else null
         '';
       };
 
-      gsp.enable = lib.mkEnableOption ''
-        the GPU System Processor (GSP) on the video card
-      '' // {
-        defaultText = lib.literalExpression ''
-          config.hardware.nvidia.open || lib.versionAtLeast config.hardware.nvidia.package.version "555"
-        '';
-      };
+      gsp.enable =
+        lib.mkEnableOption ''
+          the GPU System Processor (GSP) on the video card
+        ''
+        // {
+          default = useOpenModules || lib.versionAtLeast nvidia_x11.version "555";
+          defaultText = lib.literalExpression ''
+            config.hardware.nvidia.open == true || lib.versionAtLeast config.hardware.nvidia.package.version "555"
+          '';
+        };
+
+      videoAcceleration =
+        (lib.mkEnableOption ''
+          Whether video acceleration (VA-API) should be enabled.
+        '')
+        // {
+          default = true;
+        };
     };
   };
 
@@ -286,6 +302,13 @@ in
             {
               assertion = !(nvidiaEnabled && cfg.datacenter.enable);
               message = "You cannot configure both X11 and Data Center drivers at the same time.";
+            }
+            {
+              assertion = cfg.open != null || cfg.datacenter.enable;
+              message = ''
+                You must configure `hardware.nvidia.open` on NVIDIA driver versions >= 560.
+                It is suggested to use the open source kernel modules on Turing or later GPUs (RTX series, GTX 16xx), and the closed source modules otherwise.
+              '';
             }
           ];
           boot = {
@@ -304,7 +327,9 @@ in
               softdep nvidia post: nvidia-uvm
             '';
           };
-          systemd.tmpfiles.rules = lib.mkIf config.virtualisation.docker.enableNvidia [ "L+ /run/nvidia-docker/bin - - - - ${nvidia_x11.bin}/origBin" ];
+          systemd.tmpfiles.rules = lib.mkIf config.virtualisation.docker.enableNvidia [
+            "L+ /run/nvidia-docker/bin - - - - ${nvidia_x11.bin}/origBin"
+          ];
           services.udev.extraRules = ''
             # Create /dev/nvidia-uvm when the nvidia-uvm module is loaded.
             KERNEL=="nvidia", RUN+="${pkgs.runtimeShell} -c 'mknod -m 666 /dev/nvidiactl c 195 255'"
@@ -318,9 +343,6 @@ in
             extraPackages32 = [ nvidia_x11.lib32 ];
           };
           environment.systemPackages = [ nvidia_x11.bin ];
-
-          hardware.nvidia.open = lib.mkIf (lib.versionOlder nvidia_x11.version "560") (lib.mkDefault false);
-          hardware.nvidia.gsp.enable = lib.mkDefault (cfg.open || lib.versionAtLeast nvidia_x11.version "555");
         })
 
         # X11
@@ -384,12 +406,12 @@ in
             }
 
             {
-              assertion = cfg.open -> (cfg.package ? open);
+              assertion = useOpenModules -> (cfg.package ? open);
               message = "This version of NVIDIA driver does not provide a corresponding opensource kernel driver.";
             }
 
             {
-              assertion = cfg.open -> cfg.gsp.enable;
+              assertion = useOpenModules -> cfg.gsp.enable;
               message = "The GSP cannot be disabled when using the opensource kernel driver.";
             }
 
@@ -496,9 +518,7 @@ in
             "egl/egl_external_platform.d".source = "/run/opengl-driver/share/egl/egl_external_platform.d/";
           };
 
-          hardware.graphics = {
-            extraPackages = [ pkgs.nvidia-vaapi-driver ];
-          };
+          hardware.graphics.extraPackages = lib.optional cfg.videoAcceleration pkgs.nvidia-vaapi-driver;
 
           environment.systemPackages =
             lib.optional cfg.nvidiaSettings nvidia_x11.settings
@@ -592,7 +612,7 @@ in
               "L+ /run/nvidia-docker/extras/bin/nvidia-persistenced - - - - ${nvidia_x11.persistenced}/origBin/nvidia-persistenced";
 
           boot = {
-            extraModulePackages = if cfg.open then [ nvidia_x11.open ] else [ nvidia_x11.bin ];
+            extraModulePackages = if useOpenModules then [ nvidia_x11.open ] else [ nvidia_x11.bin ];
             # nvidia-uvm is required by CUDA applications.
             kernelModules =
               lib.optionals config.services.xserver.enable [
@@ -603,14 +623,16 @@ in
               # With the open driver, nvidia-uvm does not automatically load as
               # a softdep of the nvidia module, so we explicitly load it for now.
               # See https://github.com/NixOS/nixpkgs/issues/334180
-              ++ lib.optionals (config.services.xserver.enable && cfg.open) [ "nvidia_uvm" ];
+              ++ lib.optionals (config.services.xserver.enable && useOpenModules) [ "nvidia_uvm" ];
 
             # If requested enable modesetting via kernel parameters.
             kernelParams =
               lib.optional (offloadCfg.enable || cfg.modesetting.enable) "nvidia-drm.modeset=1"
-              ++ lib.optional ((offloadCfg.enable || cfg.modesetting.enable) && lib.versionAtLeast nvidia_x11.version "545") "nvidia-drm.fbdev=1"
+              ++ lib.optional (
+                (offloadCfg.enable || cfg.modesetting.enable) && lib.versionAtLeast nvidia_x11.version "545"
+              ) "nvidia-drm.fbdev=1"
               ++ lib.optional cfg.powerManagement.enable "nvidia.NVreg_PreserveVideoMemoryAllocations=1"
-              ++ lib.optional cfg.open "nvidia.NVreg_OpenRmEnableUnsupportedGpus=1"
+              ++ lib.optional useOpenModules "nvidia.NVreg_OpenRmEnableUnsupportedGpus=1"
               ++ lib.optional (config.boot.kernelPackages.kernel.kernelAtLeast "6.2" && !ibtSupport) "ibt=off";
 
             # enable finegrained power management
@@ -669,7 +691,9 @@ in
                           TOPOLOGY_FILE_PATH = "${nvidia_x11.fabricmanager}/share/nvidia-fabricmanager/nvidia/nvswitch";
                           DATABASE_PATH = "${nvidia_x11.fabricmanager}/share/nvidia-fabricmanager/nvidia/nvswitch";
                         };
-                        nv-fab-conf = settingsFormat.generate "fabricmanager.conf" (fabricManagerConfDefaults // cfg.datacenter.settings);
+                        nv-fab-conf = settingsFormat.generate "fabricmanager.conf" (
+                          fabricManagerConfDefaults // cfg.datacenter.settings
+                        );
                       in
                       "${lib.getExe nvidia_x11.fabricmanager} -c ${nv-fab-conf}";
                     LimitCORE = "infinity";

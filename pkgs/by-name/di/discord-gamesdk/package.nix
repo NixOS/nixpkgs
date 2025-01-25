@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ (stdenv.cc.cc.libgcc or null) ];
 
-  nativeBuildInputs = lib.optional stdenv.isLinux autoPatchelfHook;
+  nativeBuildInputs = lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
 
   installPhase =
     let

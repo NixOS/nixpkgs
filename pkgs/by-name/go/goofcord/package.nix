@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  pnpm,
+  pnpm_9,
   nodejs_22,
   nix-update-script,
   electron,
@@ -14,17 +14,17 @@
 }:
 
 let
-  pnpm' = pnpm.override { nodejs = nodejs_22; };
+  pnpm' = pnpm_9.override { nodejs = nodejs_22; };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "goofcord";
-  version = "1.6.0";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "Milkshiift";
     repo = "GoofCord";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-hG8nHAuEHw/tjFnGKhSXwO+2l91OOnQUIAK05SvEquU=";
+    hash = "sha256-fx/RKnUhXhaWVd/KYPVxr19/Q8o1ovm2TgMTcTYjE3Q=";
   };
 
   nativeBuildInputs = [
@@ -34,15 +34,15 @@ stdenv.mkDerivation (finalAttrs: {
     copyDesktopItems
   ];
 
-  buildInputs = lib.optionals stdenv.isLinux [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     libpulseaudio
     pipewire
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
   ];
 
   pnpmDeps = pnpm'.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-wF7G8rs1Fg7whEftQ554s4C2CixP5/1oFudR5yY07Rk=";
+    hash = "sha256-8dSyU9arSvISc2kDWbg/CP6L4sZjZi/Zv7TZN4ONOjQ=";
   };
 
   env = {
@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeShellWrapper "${lib.getExe electron}" "$out/bin/goofcord" \
       --add-flags "$out/share/lib/goofcord/resources/app.asar" \
       "''${gappsWrapperArgs[@]}" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=UseOzonePlatform,WaylandWindowDecorations,WebRTCPipeWireCapturer}}" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=UseOzonePlatform,WaylandWindowDecorations,WebRTCPipeWireCapturer --enable-wayland-ime=true}}" \
       --set-default ELECTRON_IS_DEV 0 \
       --inherit-argv0
 
@@ -115,7 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/Milkshiift/GoofCord";
     downloadPage = "https://github.com/Milkshiift/GoofCord";
     license = lib.licenses.osl3;
-    maintainers = with lib.maintainers; [ nyanbinary ];
+    maintainers = with lib.maintainers; [ nyabinary ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

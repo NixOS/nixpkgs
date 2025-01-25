@@ -2,29 +2,35 @@
   buildPythonPackage,
   lib,
   fetchFromGitHub,
+  setuptools,
   pexpect,
 }:
 
 buildPythonPackage rec {
   version = "0.1.1";
-  pname = "delegator.py";
+  pname = "delegator-py";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "amitt001";
     repo = "delegator.py";
-    rev = "v${version}";
-    sha256 = "17n9h3xzjsfxmwclh33vc4yg3c9yzh9hfhaj12kv5ah3fy8rklwb";
+    tag = "v${version}";
+    hash = "sha256-i9OZkXcDqrKnCFJBBxP8PrHxPGF7DEgZr91p+fuAyZ4=";
   };
 
-  propagatedBuildInputs = [ pexpect ];
+  build-system = [ setuptools ];
+
+  dependencies = [ pexpect ];
+
+  pythonImportsCheck = [ "delegator" ];
 
   # no tests in github or pypi
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Subprocesses for Humans 2.0";
     homepage = "https://github.com/amitt001/delegator.py";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

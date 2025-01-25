@@ -27,8 +27,8 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs =
-    lib.optionals stdenv.isLinux [ udev ]
-    ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.IOKit ];
+    lib.optionals stdenv.hostPlatform.isLinux [ udev ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.IOKit ];
 
   meta = with lib; {
     description = "Client for mcumgr commands";

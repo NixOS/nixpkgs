@@ -1,12 +1,31 @@
-{ lib, stdenv, fetchurl, fetchpatch, perlPackages, gettext, makeWrapper, ImageMagick, which, highlight
-, gitSupport ? false, git
-, docutilsSupport ? false, python, docutils
-, monotoneSupport ? false, monotone
-, bazaarSupport ? false, breezy
-, cvsSupport ? false, cvs, cvsps
-, subversionSupport ? false, subversion
-, mercurialSupport ? false, mercurial
-, extraUtils ? []
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  perlPackages,
+  gettext,
+  makeWrapper,
+  ImageMagick,
+  which,
+  highlight,
+  gitSupport ? false,
+  git,
+  docutilsSupport ? false,
+  python,
+  docutils,
+  monotoneSupport ? false,
+  monotone,
+  bazaarSupport ? false,
+  breezy,
+  cvsSupport ? false,
+  cvs,
+  cvsps,
+  subversionSupport ? false,
+  subversion,
+  mercurialSupport ? false,
+  mercurial,
+  extraUtils ? [ ],
 }:
 
 stdenv.mkDerivation rec {
@@ -19,21 +38,49 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ which highlight ]
-    ++ (with perlPackages; [ perl TextMarkdown URI HTMLParser HTMLScrubber HTMLTemplate
-      TimeDate gettext DBFile CGISession CGIFormBuilder LocaleGettext
-      RpcXML XMLSimple ImageMagick YAML YAMLLibYAML HTMLTree AuthenPassphrase
-      NetOpenIDConsumer LWPxParanoidAgent CryptSSLeay ])
+  buildInputs =
+    [
+      which
+      highlight
+    ]
+    ++ (with perlPackages; [
+      perl
+      TextMarkdown
+      URI
+      HTMLParser
+      HTMLScrubber
+      HTMLTemplate
+      TimeDate
+      gettext
+      DBFile
+      CGISession
+      CGIFormBuilder
+      LocaleGettext
+      RpcXML
+      XMLSimple
+      ImageMagick
+      YAML
+      YAMLLibYAML
+      HTMLTree
+      AuthenPassphrase
+      NetOpenIDConsumer
+      LWPxParanoidAgent
+      CryptSSLeay
+    ])
     ++ lib.optionals docutilsSupport [
-         (python.withPackages (pp: with pp; [ pygments ]))
-         docutils
-       ]
-    ++ lib.optionals gitSupport [git]
-    ++ lib.optionals monotoneSupport [monotone]
-    ++ lib.optionals bazaarSupport [breezy]
-    ++ lib.optionals cvsSupport [cvs cvsps perlPackages.Filechdir]
-    ++ lib.optionals subversionSupport [subversion]
-    ++ lib.optionals mercurialSupport [mercurial];
+      (python.withPackages (pp: with pp; [ pygments ]))
+      docutils
+    ]
+    ++ lib.optionals gitSupport [ git ]
+    ++ lib.optionals monotoneSupport [ monotone ]
+    ++ lib.optionals bazaarSupport [ breezy ]
+    ++ lib.optionals cvsSupport [
+      cvs
+      cvsps
+      perlPackages.Filechdir
+    ]
+    ++ lib.optionals subversionSupport [ subversion ]
+    ++ lib.optionals mercurialSupport [ mercurial ];
 
   patches = [
     # A few markdown tests fail, but this is expected when using Text::Markdown

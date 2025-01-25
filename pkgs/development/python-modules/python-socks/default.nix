@@ -10,6 +10,7 @@
   pytest-trio,
   pythonOlder,
   pytestCheckHook,
+  setuptools,
   trio,
   trustme,
   yarl,
@@ -17,8 +18,8 @@
 
 buildPythonPackage rec {
   pname = "python-socks";
-  version = "2.4.4";
-  format = "setuptools";
+  version = "2.5.3";
+  pyproject = true;
 
   disabled = pythonOlder "3.6.2";
 
@@ -27,15 +28,24 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "romis2012";
     repo = "python-socks";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-c1fjSHi7LvaOeZwTOTSY/ZVr27/j03CdAra1PSa9Jt0=";
+    tag = "v${version}";
+    hash = "sha256-KpL3MAPbeKQh/NZyXlAAB6O7ljx1bVMBRO8fGJT2Zvo=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     trio
     curio
     async-timeout
   ];
+
+  optional-dependencies = {
+    asyncio = lib.optionals (pythonOlder "3.11") [ async-timeout ];
+    trio = [ trio ];
+    curio = [ curio ];
+    anyio = [ anyio ];
+  };
 
   doCheck = false; # requires tiny_proxy module
 

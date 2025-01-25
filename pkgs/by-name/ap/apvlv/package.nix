@@ -20,7 +20,7 @@
   poppler,
   stdenv,
   testers,
-  webkitgtk,
+  webkitgtk_4_0,
   wrapGAppsHook3,
 }:
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "naihe2010";
     repo = "apvlv";
-    rev = "refs/tags/v0.5.0-final";
+    tag = "v0.5.0-final";
     hash = "sha256-5Wbv3dXieymhhPmEKQu8X/38WsDA1T/IBPoMXdpzcaA=";
   };
 
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxshmfence # otherwise warnings in compilation
     pcre
     poppler
-    webkitgtk
+    webkitgtk_4_0
   ];
 
   installPhase = ''
@@ -106,7 +106,10 @@ stdenv.mkDerivation (finalAttrs: {
       with Vim-like behaviour.
     '';
     mainProgram = "apvlv";
-    maintainers = with lib.maintainers; [ ardumont anthonyroussel ];
+    maintainers = with lib.maintainers; [
+      ardumont
+      anthonyroussel
+    ];
     platforms = lib.platforms.linux;
   };
 })

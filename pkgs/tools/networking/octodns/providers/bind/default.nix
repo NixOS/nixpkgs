@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, octodns
-, pytestCheckHook
-, pythonOlder
-, dnspython
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  octodns,
+  pytestCheckHook,
+  pythonOlder,
+  dnspython,
+  setuptools,
 }:
 
 buildPythonPackage rec {

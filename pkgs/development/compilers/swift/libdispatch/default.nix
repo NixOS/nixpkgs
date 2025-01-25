@@ -1,23 +1,34 @@
-{ lib
-, stdenv
-, callPackage
-, cmake
-, ninja
-, useSwift ? true, swift
+{
+  lib,
+  stdenv,
+  callPackage,
+  cmake,
+  ninja,
+  useSwift ? true,
+  swift,
 }:
 
 let
   sources = callPackage ../sources.nix { };
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "swift-corelibs-libdispatch";
 
   inherit (sources) version;
   src = sources.swift-corelibs-libdispatch;
 
-  outputs = [ "out" "dev" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "man"
+  ];
 
-  nativeBuildInputs = [ cmake ]
-    ++ lib.optionals useSwift [ ninja swift ];
+  nativeBuildInputs =
+    [ cmake ]
+    ++ lib.optionals useSwift [
+      ninja
+      swift
+    ];
 
   patches = [ ./disable-swift-overlay.patch ];
 

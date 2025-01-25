@@ -6,9 +6,9 @@ let
     filterAttrs
     foldl
     hasInfix
+    isAttrs
     isFunction
     isList
-    isString
     mapAttrs
     optional
     optionalAttrs
@@ -55,24 +55,34 @@ let
   */
   flakeExposed = import ./flake-systems.nix { };
 
+  # Turn localSystem or crossSystem, which could be system-string or attrset, into
+  # attrset.
+  systemToAttrs = systemOrArgs:
+    if isAttrs systemOrArgs then systemOrArgs else { system = systemOrArgs; };
+
   # Elaborate a `localSystem` or `crossSystem` so that it contains everything
   # necessary.
   #
   # `parsed` is inferred from args, both because there are two options with one
   # clearly preferred, and to prevent cycles. A simpler fixed point where the RHS
   # always just used `final.*` would fail on both counts.
-  elaborate = args': let
-    args = if isString args' then { system = args'; }
-           else args';
+  elaborate = systemOrArgs: let
+    allArgs = systemToAttrs systemOrArgs;
+
+    # Those two will always be derived from "config", if given, so they should NOT
+    # be overridden further down with "// args".
+    args = builtins.removeAttrs allArgs [ "parsed" "system" ];
 
     # TODO: deprecate args.rustc in favour of args.rust after 23.05 is EOL.
     rust = args.rust or args.rustc or {};
 
     final = {
       # Prefer to parse `config` as it is strictly more informative.
-      parsed = parse.mkSystemFromString (if args ? config then args.config else args.system);
-      # Either of these can be losslessly-extracted from `parsed` iff parsing succeeds.
+      parsed = parse.mkSystemFromString (args.config or allArgs.system);
+      # This can be losslessly-extracted from `parsed` iff parsing succeeds.
       system = parse.doubleFromSystem final.parsed;
+      # TODO: This currently can't be losslessly-extracted from `parsed`, for example
+      # because of -mingw32.
       config = parse.tripleFromSystem final.parsed;
       # Determine whether we can execute binaries built for the provided platform.
       canExecute = platform:
@@ -92,6 +102,7 @@ let
         else if final.isMusl                  then "musl"
         else if final.isUClibc                then "uclibc"
         else if final.isAndroid               then "bionic"
+        else if final.isLLVMLibc              then "llvm"
         else if final.isLinux  /* default */  then "glibc"
         else if final.isFreeBSD               then "fblibc"
         else if final.isOpenBSD               then "oblibc"
@@ -251,7 +262,7 @@ let
         else null;
       # The canonical name for this attribute is darwinSdkVersion, but some
       # platforms define the old name "sdkVer".
-      darwinSdkVersion = final.sdkVer or (if final.isAarch64 then "11.0" else "10.12");
+      darwinSdkVersion = final.sdkVer or "11.3";
       darwinMinVersion = final.darwinSdkVersion;
       darwinMinVersionVariable =
         if final.isMacOS then "MACOSX_DEPLOYMENT_TARGET"
@@ -277,36 +288,17 @@ let
       let
         selectEmulator = pkgs:
           let
-            qemu-user = pkgs.qemu.override {
-              smartcardSupport = false;
-              spiceSupport = false;
-              openGLSupport = false;
-              virglSupport = false;
-              vncSupport = false;
-              gtkSupport = false;
-              sdlSupport = false;
-              alsaSupport = false;
-              pulseSupport = false;
-              pipewireSupport = false;
-              jackSupport = false;
-              smbdSupport = false;
-              seccompSupport = false;
-              tpmSupport = false;
-              capstoneSupport = false;
-              enableDocs = false;
-              hostCpuTargets = [ "${final.qemuArch}-linux-user" ];
-            };
             wine = (pkgs.winePackagesFor "wine${toString final.parsed.cpu.bits}").minimal;
           in
           # Note: we guarantee that the return value is either `null` or a path
           # to an emulator program. That is, if an emulator requires additional
           # arguments, a wrapper should be used.
           if pkgs.stdenv.hostPlatform.canExecute final
-          then "${pkgs.execline}/bin/exec"
+          then lib.getExe (pkgs.writeShellScriptBin "exec" ''exec "$@"'')
           else if final.isWindows
           then "${wine}/bin/wine${optionalString (final.parsed.cpu.bits == 64) "64"}"
           else if final.isLinux && pkgs.stdenv.hostPlatform.isLinux && final.qemuArch != null
-          then "${qemu-user}/bin/qemu-${final.qemuArch}"
+          then "${pkgs.qemu-user}/bin/qemu-${final.qemuArch}"
           else if final.isWasi
           then "${pkgs.wasmtime}/bin/wasmtime"
           else if final.isMmix
@@ -314,6 +306,10 @@ let
           else null;
       in {
         emulatorAvailable = pkgs: (selectEmulator pkgs) != null;
+
+        # whether final.emulator pkgs.pkgsStatic works
+        staticEmulatorAvailable = pkgs: final.emulatorAvailable pkgs
+          && (final.isLinux || final.isWasi || final.isMmix);
 
         emulator = pkgs:
           if (final.emulatorAvailable pkgs)
@@ -384,8 +380,17 @@ let
             }.${cpu.name} or cpu.name;
             vendor_ = final.rust.platform.vendor;
           # TODO: deprecate args.rustc in favour of args.rust after 23.05 is EOL.
-          in args.rust.rustcTarget or args.rustc.config
-            or "${cpu_}-${vendor_}-${kernel.name}${optionalString (abi.name != "unknown") "-${abi.name}"}";
+          in
+            args.rust.rustcTarget or
+            args.rustc.config or (
+              # Rust uses `wasm32-wasip?` rather than `wasm32-unknown-wasi`.
+              # We cannot know which subversion does the user want, and
+              # currently use WASI 0.1 as default for compatibility. Custom
+              # users can set `rust.rustcTarget` to override it.
+              if final.isWasi
+              then "${cpu_}-wasip1"
+              else "${cpu_}-${vendor_}-${kernel.name}${optionalString (abi.name != "unknown") "-${abi.name}"}"
+            );
 
           # The name of the rust target if it is standard, or the json file
           # containing the custom target spec.
@@ -441,5 +446,6 @@ in
     inspect
     parse
     platforms
+    systemToAttrs
     ;
 }

@@ -37,13 +37,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dxvk";
-  version = "2.4";
+  version = "2.5.3";
 
   src = fetchFromGitHub {
     owner = "doitsujin";
     repo = "dxvk";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-4U0Z1oR0BKIHZ6YNT/+8sFe2I/ZKmPecInMXUho4MHg=";
+    hash = "sha256-/dXU5x+YdOHF2mpUy5wykibShQuIfo3OHS4DzXUymIs=";
     fetchSubmodules = true; # Needed for the DirectX headers and libdisplay-info
   };
 
@@ -102,5 +102,12 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.zlib;
     badPlatforms = lib.platforms.darwin;
     platforms = lib.platforms.windows ++ lib.platforms.unix;
+    pkgConfigModules = [
+      "dxvk-d3d10core"
+      "dxvk-d3d11"
+      "dxvk-d3d8"
+      "dxvk-d3d9"
+      "dxvk-dxgi"
+    ];
   };
 })

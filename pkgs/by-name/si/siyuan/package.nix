@@ -2,8 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  buildGoModule,
-  substituteAll,
+  buildGo123Module,
+  replaceVars,
   pandoc,
   nodejs,
   pnpm_9,
@@ -11,6 +11,7 @@
   makeWrapper,
   makeDesktopItem,
   copyDesktopItems,
+  nix-update-script,
 }:
 
 let
@@ -34,24 +35,23 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "siyuan";
-  version = "3.1.0";
+  version = "3.1.19";
 
   src = fetchFromGitHub {
     owner = "siyuan-note";
     repo = "siyuan";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-UIPASTSW7YGpxJJHfCq28M/U6CzyqaJiISZGtE0aDPw=";
+    hash = "sha256-5+IFCdLH+zHsJjLJauMTfBHB5vCyXbKniSa9bWHblRA=";
   };
 
-  kernel = buildGoModule {
+  kernel = buildGo123Module {
     name = "${finalAttrs.pname}-${finalAttrs.version}-kernel";
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/kernel";
-    vendorHash = "sha256-s4dW43Qy3Lrc5WPpugQpN6BDEFVxqnorXpp40SGFk7I=";
+    vendorHash = "sha256-JoQTWGhWfU6UOdFbZq3thfx0Nfth/gD1ruA4fs8/qBw=";
 
     patches = [
-      (substituteAll {
-        src = ./set-pandoc-path.patch;
+      (replaceVars ./set-pandoc-path.patch {
         pandoc_path = lib.getExe pandoc;
       })
     ];
@@ -89,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
       src
       sourceRoot
       ;
-    hash = "sha256-QSaBNs0m13Pfrvl8uUVqRpP3m8PoOBIY5VU5Cg/G2jY=";
+    hash = "sha256-357iBgxevtXus0Dpa8+LHKsO42HoHibkhRSy+tpD8jo=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/app";
@@ -129,7 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
         --chdir $out/share/siyuan/resources \
         --add-flags $out/share/siyuan/resources/app \
         --set ELECTRON_FORCE_IS_PACKAGED 1 \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime}}" \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
         --inherit-argv0
 
     install -Dm644 src/assets/icon.svg $out/share/icons/hicolor/scalable/apps/siyuan.svg
@@ -139,12 +139,25 @@ stdenv.mkDerivation (finalAttrs: {
 
   desktopItems = [ desktopEntry ];
 
+  passthru = {
+    inherit (finalAttrs.kernel) goModules; # this tricks nix-update into also updating the kernel goModules FOD
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "^v(\\d+\\.\\d+\\.\\d+)$"
+      ];
+    };
+  };
+
   meta = {
     description = "Privacy-first personal knowledge management system that supports complete offline usage, as well as end-to-end encrypted data sync";
     homepage = "https://b3log.org/siyuan/";
     license = lib.licenses.agpl3Plus;
     mainProgram = "siyuan";
-    maintainers = with lib.maintainers; [ tomasajt ];
+    maintainers = with lib.maintainers; [
+      tomasajt
+      ltrump
+    ];
     platforms = lib.attrNames platformIds;
   };
 })

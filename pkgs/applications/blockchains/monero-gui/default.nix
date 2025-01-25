@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   makeDesktopItem,
-  boost,
+  boost186,
   cmake,
   libgcrypt,
   libgpg-error,
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [
-      boost
+      boost186 # uses boost/asio/io_service.hpp
       libgcrypt
       libgpg-error
       libsodium
@@ -73,14 +73,14 @@ stdenv.mkDerivation rec {
       unbound
       zeromq
     ]
-    ++ lib.optionals stdenv.isDarwin [ qtmacextras ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ qtmacextras ]
     ++ lib.optionals trezorSupport [
       hidapi
       libusb1
       protobuf_21
       python3
     ]
-    ++ lib.optionals (trezorSupport && stdenv.isLinux) [
+    ++ lib.optionals (trezorSupport && stdenv.hostPlatform.isLinux) [
       udev
     ];
 
@@ -126,7 +126,10 @@ stdenv.mkDerivation rec {
     icon = "monero";
     desktopName = "Monero";
     genericName = "Wallet";
-    categories = [ "Network" "Utility" ];
+    categories = [
+      "Network"
+      "Utility"
+    ];
   };
 
   postInstall = ''

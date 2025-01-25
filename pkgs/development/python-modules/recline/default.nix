@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "NetApp";
     repo = "recline";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-Qc4oofuhSZ2S5zuCY9Ce9ISldYI3MDUJXFc8VcXdLIU=";
   };
 

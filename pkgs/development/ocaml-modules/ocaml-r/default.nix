@@ -1,5 +1,13 @@
-{ lib, fetchFromGitHub, fetchpatch, buildDunePackage, pkg-config, dune-configurator, stdio, R
-, alcotest
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  buildDunePackage,
+  pkg-config,
+  dune-configurator,
+  stdio,
+  R,
+  alcotest,
 }:
 
 buildDunePackage rec {
@@ -25,8 +33,15 @@ buildDunePackage rec {
     })
   ];
 
-  nativeBuildInputs = [ pkg-config R ];
-  buildInputs = [ dune-configurator stdio R ];
+  nativeBuildInputs = [
+    pkg-config
+    R
+  ];
+  buildInputs = [
+    dune-configurator
+    stdio
+    R
+  ];
 
   doCheck = true;
   checkInputs = [ alcotest ];

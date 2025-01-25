@@ -14,12 +14,12 @@
 
 stdenv.mkDerivation rec {
   pname = "xml-tooling-c";
-  version = "3.2.4";
+  version = "3.3.0";
 
   src = fetchgit {
     url = "https://git.shibboleth.net/git/cpp-xmltooling.git";
     rev = version;
-    hash = "sha256-FQ109ahOSWj3hvaxu1r/0FTpCuWaLgSEKM8NBio+wqU=";
+    hash = "sha256-czmBu7ThDwq+x7FahgZDMHqid8jeUNnTuKMI/Fj4IIw=";
   };
 
   buildInputs = [
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (!stdenv.isDarwin) "-std=c++14";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString (!stdenv.hostPlatform.isDarwin) "-std=c++14";
 
   enableParallelBuilding = true;
 

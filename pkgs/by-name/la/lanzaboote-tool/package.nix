@@ -1,11 +1,12 @@
-{ systemd
-, stdenv
-, makeWrapper
-, binutils-unwrapped
-, sbsigntool
-, rustPlatform
-, fetchFromGitHub
-, lib
+{
+  systemd,
+  stdenv,
+  makeWrapper,
+  binutils-unwrapped,
+  sbsigntool,
+  rustPlatform,
+  fetchFromGitHub,
+  lib,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "lanzaboote-tool";
@@ -34,7 +35,12 @@ rustPlatform.buildRustPackage rec {
     # UEFI stub location.
     mv $out/bin/lzbt $out/bin/lzbt-unwrapped
     wrapProgram $out/bin/lzbt-unwrapped \
-      --set PATH ${lib.makeBinPath [ binutils-unwrapped sbsigntool ]}
+      --set PATH ${
+        lib.makeBinPath [
+          binutils-unwrapped
+          sbsigntool
+        ]
+      }
   '';
 
   nativeCheckInputs = [
@@ -47,9 +53,15 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/nix-community/lanzaboote";
     license = licenses.gpl3Only;
     mainProgram = "lzbt";
-    maintainers = with maintainers; [ raitobezarius nikstur ];
+    maintainers = with maintainers; [
+      raitobezarius
+      nikstur
+    ];
     # Broken on aarch64-linux and any other architecture for now.
     # Wait for 0.4.0.
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+    ];
   };
 }

@@ -1,11 +1,20 @@
-{ lib, stdenv, fetchurl, makeWrapper, dpkg, jre_headless, openssl, nixosTests }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  dpkg,
+  jre_headless,
+  openssl,
+  nixosTests,
+}:
 
 let
   pname = "jitsi-videobridge2";
-  version = "2.3-160-g97a1f15b";
+  version = "2.3-187-gc7ef8e66";
   src = fetchurl {
     url = "https://download.jitsi.org/stable/${pname}_${version}-1_all.deb";
-    sha256 = "fxAmpsScNTwSrITZYE2dsKTlGqlMcAAf8RVixpmcqvI=";
+    sha256 = "ExihaHPQeShvKgnZKOsPJTDFTqU9KkOHMnknF1ksJB4=";
   };
 in
 stdenv.mkDerivation {
@@ -13,9 +22,10 @@ stdenv.mkDerivation {
 
   dontBuild = true;
 
-  unpackCmd = "${dpkg}/bin/dpkg-deb -x $src debcontents";
-
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    dpkg
+    makeWrapper
+  ];
 
   installPhase = ''
     runHook preInstall

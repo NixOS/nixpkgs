@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, wrapQtAppsHook, qtbase }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  wrapQtAppsHook,
+  qtbase,
+}:
 
 stdenv.mkDerivation rec {
   pname = "rclone-browser";
@@ -19,7 +27,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake wrapQtAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    wrapQtAppsHook
+  ];
 
   buildInputs = [ qtbase ];
 

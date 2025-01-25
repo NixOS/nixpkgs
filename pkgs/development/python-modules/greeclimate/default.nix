@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cmroche";
     repo = "greeclimate";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-SO7/uheAPVFZ1C2qrzP7jB88u6EH79f1+qMZIgHZaCE=";
   };
 
@@ -63,7 +63,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Discover, connect and control Gree based minisplit systems";
     homepage = "https://github.com/cmroche/greeclimate";
     changelog = "https://github.com/cmroche/greeclimate/blob/${src.rev}/CHANGELOG.md";

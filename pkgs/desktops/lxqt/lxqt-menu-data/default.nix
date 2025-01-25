@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, lxqt-build-tools
-, qttools
-, wrapQtAppsHook
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  lxqt-build-tools,
+  qttools,
+  wrapQtAppsHook,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
   pname = "lxqt-menu-data";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    hash = "sha256-CNY23xdFiDQKKJf9GccwDOuBWXwfc7WNI7vMv/zOM9U=";
+    hash = "sha256-Q9VPPGPyMueoFrTTdAMlIR+VnWVXu0J2uXhaOlJPTAs=";
   };
 
   nativeBuildInputs = [

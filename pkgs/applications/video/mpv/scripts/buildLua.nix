@@ -67,9 +67,9 @@ lib.makeOverridable (
             cp -a "${scriptPath}" "${scriptsDir}/${scriptName}"
           else
             install -m644 -Dt "${scriptsDir}" ${escaped scriptPath}
-            ${
-              lib.optionalString (extraScripts != [ ]) ''cp -at "${scriptsDir}/" ${escapedList extraScripts}''
-            }
+            ${lib.optionalString (
+              extraScripts != [ ]
+            ) ''cp -at "${scriptsDir}/" ${escapedList extraScripts}''}
           fi
 
           runHook postInstall

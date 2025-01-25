@@ -41,7 +41,7 @@ buildPythonPackage {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  disabledTests = [ "test_tvp_1d" ] ++ lib.optionals stdenv.isDarwin [ "test_tv2_1d" ];
+  disabledTests = [ "test_tvp_1d" ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_tv2_1d" ];
 
   meta = with lib; {
     homepage = "https://github.com/albarji/proxTV";

@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pysmart";
-  version = "1.3.0";
+  version = "1.4.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "truenas";
     repo = "py-SMART";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-1k+5XnIT/AfZmzKUxkyU/uc0eW05CvugpY6OdJCoALc=";
+    tag = "v${version}";
+    hash = "sha256-gsMFJbh2I64W1CDbwu9HUHjzS2pxsw91nD3lOYlBUEY=";
   };
 
   postPatch = ''

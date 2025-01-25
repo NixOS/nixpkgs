@@ -32,13 +32,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "wkeeling";
     repo = "selenium-wire";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-KgaDxHS0dAK6CT53L1qqx1aORMmkeaiXAUtGC82hiIQ=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     blinker
     brotli
     certifi
@@ -73,5 +73,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/wkeeling/selenium-wire/blob/${version}/HISTORY.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    broken = versionAtLeast blinker.version "1.8";
   };
 }

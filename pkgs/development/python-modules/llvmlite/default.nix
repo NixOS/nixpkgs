@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "numba";
     repo = "llvmlite";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-5QBSRDb28Bui9IOhGofj+c7Rk7J5fNv5nPksEPY/O5o=";
   };
 
@@ -48,7 +48,7 @@ buildPythonPackage rec {
     cd $out
   '';
 
-  __impureHostDeps = lib.optionals stdenv.isDarwin [ "/usr/lib/libm.dylib" ];
+  __impureHostDeps = lib.optionals stdenv.hostPlatform.isDarwin [ "/usr/lib/libm.dylib" ];
 
   passthru = lib.optionalAttrs (!withStaticLLVM) { inherit llvm; };
 

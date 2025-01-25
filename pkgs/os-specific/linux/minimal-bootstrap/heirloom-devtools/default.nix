@@ -1,10 +1,11 @@
-{ lib
-, fetchurl
-, kaem
-, tinycc
-, gnumake
-, gnupatch
-, coreutils
+{
+  lib,
+  fetchurl,
+  kaem,
+  tinycc,
+  gnumake,
+  gnupatch,
+  coreutils,
 }:
 let
   pname = "heirloom-devtools";
@@ -32,66 +33,72 @@ let
     })
   ];
 in
-kaem.runCommand "${pname}-${version}" {
-  inherit pname version;
+kaem.runCommand "${pname}-${version}"
+  {
+    inherit pname version;
 
-  nativeBuildInputs = [
-    tinycc.compiler
-    gnumake
-    gnupatch
-    coreutils
-  ];
+    nativeBuildInputs = [
+      tinycc.compiler
+      gnumake
+      gnupatch
+      coreutils
+    ];
 
-  meta = with lib; {
-    description = "Portable yacc and lex derived from OpenSolaris";
-    homepage = "https://heirloom.sourceforge.net/devtools.html";
-    license = with licenses; [ cddl bsdOriginalUC caldera ];
-    maintainers = teams.minimal-bootstrap.members;
-    platforms = platforms.unix;
-  };
-} ''
-  # Unpack
-  unbz2 --file ${src} --output heirloom-devtools.tar
-  untar --file heirloom-devtools.tar
-  rm heirloom-devtools.tar
-  build=''${NIX_BUILD_TOP}/heirloom-devtools-${version}
-  cd ''${build}
+    meta = with lib; {
+      description = "Portable yacc and lex derived from OpenSolaris";
+      homepage = "https://heirloom.sourceforge.net/devtools.html";
+      license = with licenses; [
+        cddl
+        bsdOriginalUC
+        caldera
+      ];
+      maintainers = teams.minimal-bootstrap.members;
+      platforms = platforms.unix;
+    };
+  }
+  ''
+    # Unpack
+    unbz2 --file ${src} --output heirloom-devtools.tar
+    untar --file heirloom-devtools.tar
+    rm heirloom-devtools.tar
+    build=''${NIX_BUILD_TOP}/heirloom-devtools-${version}
+    cd ''${build}
 
-  # Patch
-  ${lib.concatLines (map (f: "patch -Np0 -i ${f}") patches)}
+    # Patch
+    ${lib.concatLines (map (f: "patch -Np0 -i ${f}") patches)}
 
-  # Build yacc
-  cd yacc
-  make -f Makefile.mk \
-    CC="tcc -B ${tinycc.libs}/lib" \
-    AR="tcc -ar" \
-    CFLAGS="-DMAXPATHLEN=4096 -DEILSEQ=84 -DMB_LEN_MAX=100" \
-    LDFLAGS="-lgetopt" \
-    RANLIB=true \
-    LIBDIR=''${out}/lib
+    # Build yacc
+    cd yacc
+    make -f Makefile.mk \
+      CC="tcc -B ${tinycc.libs}/lib" \
+      AR="tcc -ar" \
+      CFLAGS="-DMAXPATHLEN=4096 -DEILSEQ=84 -DMB_LEN_MAX=100" \
+      LDFLAGS="-lgetopt" \
+      RANLIB=true \
+      LIBDIR=''${out}/lib
 
-  # Install yacc
-  install -D yacc ''${out}/bin/yacc
-  install -Dm 444 liby.a ''${out}/lib/liby.a
-  install -Dm 444 yaccpar ''${out}/lib/yaccpar
+    # Install yacc
+    install -D yacc ''${out}/bin/yacc
+    install -Dm 444 liby.a ''${out}/lib/liby.a
+    install -Dm 444 yaccpar ''${out}/lib/yaccpar
 
-  # Make yacc available to lex
-  PATH="''${out}/bin:''${PATH}"
+    # Make yacc available to lex
+    PATH="''${out}/bin:''${PATH}"
 
-  # Build lex
-  cd ../lex
-  make -f Makefile.mk \
-    CC="tcc -B ${tinycc.libs}/lib" \
-    AR="tcc -ar" \
-    CFLAGS="-DEILSEQ=84 -DMB_LEN_MAX=100" \
-    LDFLAGS="-lgetopt" \
-    RANLIB=true \
-    LIBDIR=''${out}/lib
+    # Build lex
+    cd ../lex
+    make -f Makefile.mk \
+      CC="tcc -B ${tinycc.libs}/lib" \
+      AR="tcc -ar" \
+      CFLAGS="-DEILSEQ=84 -DMB_LEN_MAX=100" \
+      LDFLAGS="-lgetopt" \
+      RANLIB=true \
+      LIBDIR=''${out}/lib
 
-  # Install lex
-  install -D lex ''${out}/bin/lex
-  install -Dm 444 ncform ''${out}/lib/lex/ncform
-  install -Dm 444 nceucform ''${out}/lib/lex/nceucform
-  install -Dm 444 nrform ''${out}/lib/lex/nrform
-  install -Dm 444 libl.a ''${out}/lib/libl.a
-''
+    # Install lex
+    install -D lex ''${out}/bin/lex
+    install -Dm 444 ncform ''${out}/lib/lex/ncform
+    install -Dm 444 nceucform ''${out}/lib/lex/nceucform
+    install -Dm 444 nrform ''${out}/lib/lex/nrform
+    install -Dm 444 libl.a ''${out}/lib/libl.a
+  ''

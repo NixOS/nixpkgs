@@ -1,9 +1,10 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, flit
-, aiohttp
-, beautifulsoup4
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  flit,
+  aiohttp,
+  beautifulsoup4,
 }:
 
 buildPythonApplication rec {

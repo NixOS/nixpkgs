@@ -10,27 +10,30 @@
   pylibmc,
   pytestCheckHook,
   redis,
+  setuptools,
   watchdog,
   watchdog-gevent,
 }:
 
 buildPythonPackage rec {
   pname = "dramatiq";
-  version = "1.17.0";
-  format = "setuptools";
+  version = "1.17.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Bogdanp";
     repo = "dramatiq";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-xKHTBo2AirxDXe/CLSqo++3AgxP4pVkGTNdgS5CCZ3c=";
+    tag = "v${version}";
+    hash = "sha256-NeUGhG+H6r+JGd2qnJxRUbQ61G7n+3tsuDugTin3iJ4=";
   };
 
-  propagatedBuildInputs = [ prometheus-client ];
+  build-system = [ setuptools ];
 
-  passthru.optional-dependencies = {
+  dependencies = [ prometheus-client ];
+
+  optional-dependencies = {
     all = [
       gevent
       pika
@@ -88,7 +91,7 @@ buildPythonPackage rec {
       "test_rabbitmq_process_10k_fib_with_cli"
       "test_rabbitmq_process_1k_latency_with_cli"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Takes too long for darwin ofborg
       "test_retry_exceptions_can_specify_a_delay"
     ];

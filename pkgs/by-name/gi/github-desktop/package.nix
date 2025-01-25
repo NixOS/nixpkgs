@@ -1,23 +1,23 @@
-{ stdenvNoCC
-, lib
-, fetchurl
-, autoPatchelfHook
-, wrapGAppsHook3
-, makeWrapper
-, gnome-keyring
-, libsecret
-, git
-, curl
-, nss
-, nspr
-, xorg
-, libdrm
-, alsa-lib
-, cups
-, mesa
-, systemd
-, openssl
-, libglvnd
+{
+  stdenvNoCC,
+  lib,
+  fetchurl,
+  autoPatchelfHook,
+  buildPackages,
+  gnome-keyring,
+  libsecret,
+  git,
+  curl,
+  nss,
+  nspr,
+  xorg,
+  libdrm,
+  alsa-lib,
+  cups,
+  libgbm,
+  systemd,
+  openssl,
+  libglvnd,
 }:
 
 let
@@ -40,11 +40,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         };
       };
     in
-    fetchurl urls."${stdenvNoCC.hostPlatform.system}" or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
+    fetchurl
+      urls."${stdenvNoCC.hostPlatform.system}"
+        or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
 
   nativeBuildInputs = [
     autoPatchelfHook
-    (wrapGAppsHook3.override { inherit makeWrapper; })
+    # override doesn't preserve splicing https://github.com/NixOS/nixpkgs/issues/132651
+    # Has to use `makeShellWrapper` from `buildPackages` even though `makeShellWrapper` from the inputs is spliced because `propagatedBuildInputs` would pick the wrong one because of a different offset.
+    (buildPackages.wrapGAppsHook3.override { makeWrapper = buildPackages.makeShellWrapper; })
   ];
 
   buildInputs = [
@@ -59,7 +63,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     libdrm
     alsa-lib
     cups
-    mesa
+    libgbm
     openssl
   ];
 
@@ -82,7 +86,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-wayland-ime=true}}"
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libglvnd ]}
     )
   '';

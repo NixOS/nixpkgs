@@ -1,7 +1,9 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.radarr;
 
@@ -9,37 +11,37 @@ in
 {
   options = {
     services.radarr = {
-      enable = mkEnableOption "Radarr, a UsetNet/BitTorrent movie downloader";
+      enable = lib.mkEnableOption "Radarr, a UsetNet/BitTorrent movie downloader";
 
-      package = mkPackageOption pkgs "radarr" { };
+      package = lib.mkPackageOption pkgs "radarr" { };
 
-      dataDir = mkOption {
-        type = types.str;
+      dataDir = lib.mkOption {
+        type = lib.types.str;
         default = "/var/lib/radarr/.config/Radarr";
         description = "The directory where Radarr stores its data files.";
       };
 
-      openFirewall = mkOption {
-        type = types.bool;
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Open ports in the firewall for the Radarr web interface.";
       };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "radarr";
         description = "User account under which Radarr runs.";
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "radarr";
         description = "Group under which Radarr runs.";
       };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.tmpfiles.settings."10-radarr".${cfg.dataDir}.d = {
       inherit (cfg) user group;
       mode = "0700";
@@ -59,11 +61,11 @@ in
       };
     };
 
-    networking.firewall = mkIf cfg.openFirewall {
+    networking.firewall = lib.mkIf cfg.openFirewall {
       allowedTCPPorts = [ 7878 ];
     };
 
-    users.users = mkIf (cfg.user == "radarr") {
+    users.users = lib.mkIf (cfg.user == "radarr") {
       radarr = {
         group = cfg.group;
         home = cfg.dataDir;
@@ -71,7 +73,7 @@ in
       };
     };
 
-    users.groups = mkIf (cfg.group == "radarr") {
+    users.groups = lib.mkIf (cfg.group == "radarr") {
       radarr.gid = config.ids.gids.radarr;
     };
   };

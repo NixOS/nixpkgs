@@ -131,8 +131,8 @@ in
               ${getExe pkgs.replace-secret} @password@ ${cfg.passwordFile} /run/coturn/turnserver.cfg
             '')
             + (optionalString cfg.useAcmeCertificates ''
-              ${getExe pkgs.replace-secret} @cert@ "$CREDENTIALS_DIRECTORY/cert.pem" /run/coturn/turnserver.cfg
-              ${getExe pkgs.replace-secret} @pkey@ "$CREDENTIALS_DIRECTORY/pkey.pem" /run/coturn/turnserver.cfg
+              ${getExe pkgs.replace-secret} @cert@ <(echo -n "$CREDENTIALS_DIRECTORY/cert.pem") /run/coturn/turnserver.cfg
+              ${getExe pkgs.replace-secret} @pkey@ <(echo -n "$CREDENTIALS_DIRECTORY/pkey.pem") /run/coturn/turnserver.cfg
             '');
         in
         (optionalAttrs (preStart' != "") { preStart = mkAfter preStart'; })

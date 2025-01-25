@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-openapi";
     repo = "openapi-spec-validator";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-X0ePdHQeBSWjsCFQgCoNloQZRhKbvPBE43aavBppvmg=";
   };
 

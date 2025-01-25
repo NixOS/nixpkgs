@@ -1,14 +1,15 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, makeWrapper
-, cargo
-, llvm_16
-, stdenv
-, libffi
-, libz
-, libxml2
-, ncurses
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  makeWrapper,
+  cargo,
+  llvm_16,
+  stdenv,
+  libffi,
+  libz,
+  libxml2,
+  ncurses,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -25,7 +26,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-EP3fS4lAGOaXJXAM22ZCn4+9Ah8TM1+wvNerKCKByo0=";
 
   buildInputs = [
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
   ];
 
   nativeBuildInputs = [
@@ -34,13 +35,21 @@ rustPlatform.buildRustPackage rec {
 
   postFixup = ''
     wrapProgram $out/bin/ivm \
-      --prefix PATH : ${lib.makeBinPath [ cargo llvm_16.dev stdenv.cc ]} \
-      --prefix LIBRARY_PATH : ${lib.makeLibraryPath [
-        libffi
-        libz
-        libxml2
-        ncurses
-      ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          cargo
+          llvm_16.dev
+          stdenv.cc
+        ]
+      } \
+      --prefix LIBRARY_PATH : ${
+        lib.makeLibraryPath [
+          libffi
+          libz
+          libxml2
+          ncurses
+        ]
+      }
   '';
 
   meta = {

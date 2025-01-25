@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, cmake, gfortran, lhapdf }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  gfortran,
+  lhapdf,
+}:
 
 stdenv.mkDerivation rec {
   pname = "MCFM";
@@ -15,7 +22,10 @@ stdenv.mkDerivation rec {
                 'target_link_libraries(mcfm ''${lhapdf_lib})'
   '';
 
-  nativeBuildInputs = [ cmake gfortran ];
+  nativeBuildInputs = [
+    cmake
+    gfortran
+  ];
   buildInputs = [ lhapdf ];
 
   cmakeFlags = [

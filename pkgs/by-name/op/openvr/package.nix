@@ -1,13 +1,14 @@
-{ AppKit
-, cmake
-, fetchFromGitHub
-, fetchpatch2
-, Foundation
-, jsoncpp
-, lib
-, libGL
-, stdenv
-, nix-update-script
+{
+  AppKit,
+  cmake,
+  fetchFromGitHub,
+  fetchpatch2,
+  Foundation,
+  jsoncpp,
+  lib,
+  libGL,
+  stdenv,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -47,20 +48,25 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ];
 
-  buildInputs = [
-    jsoncpp
-    libGL
-  ] ++ lib.optionals stdenv.isDarwin [
-    AppKit
-    Foundation
-  ];
+  buildInputs =
+    [
+      jsoncpp
+      libGL
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      AppKit
+      Foundation
+    ];
 
-  cmakeFlags = [ "-DUSE_SYSTEM_JSONCPP=ON" "-DBUILD_SHARED=1" ];
+  cmakeFlags = [
+    "-DUSE_SYSTEM_JSONCPP=ON"
+    "-DBUILD_SHARED=1"
+  ];
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "API and runtime that allows access to VR hardware from multiple vendors without requiring that applications have specific knowledge of the hardware they are targeting";
     homepage = "https://github.com/ValveSoftware/openvr";
     license = lib.licenses.bsd3;

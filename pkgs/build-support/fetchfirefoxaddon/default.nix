@@ -33,8 +33,6 @@ stdenv.mkDerivation {
   };
 
   builder = writeScript "xpibuilder" ''
-    source $stdenv/setup
-
     echo "firefox addon $name into $out"
 
     UUID="${extid}"

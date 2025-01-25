@@ -1,18 +1,19 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, extra-cmake-modules
-, qtx11extras
-, kcoreaddons
-, kguiaddons
-, kconfig
-, kdecoration
-, kconfigwidgets
-, kwindowsystem
-, kiconthemes
-, kwayland
-, unstableGitUpdater
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  cmake,
+  extra-cmake-modules,
+  qtx11extras,
+  kcoreaddons,
+  kguiaddons,
+  kconfig,
+  kdecoration,
+  kconfigwidgets,
+  kwindowsystem,
+  kiconthemes,
+  kwayland,
+  unstableGitUpdater,
 }:
 
 mkDerivation rec {
@@ -32,7 +33,10 @@ mkDerivation rec {
       --replace "add_definitions (-Wall -Werror)" "add_definitions (-Wall)"
   '';
 
-  nativeBuildInputs = [ cmake extra-cmake-modules ];
+  nativeBuildInputs = [
+    cmake
+    extra-cmake-modules
+  ];
 
   buildInputs = [
     qtx11extras

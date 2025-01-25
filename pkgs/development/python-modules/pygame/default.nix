@@ -1,49 +1,44 @@
 {
-  stdenv,
   lib,
-  substituteAll,
-  fetchpatch,
-  fetchFromGitHub,
+  stdenv,
   buildPythonPackage,
-  pythonOlder,
+  fetchFromGitHub,
+  substituteAll,
+  fontconfig,
+  python,
 
   # build-system
   cython,
   setuptools,
+
+  # nativeBuildInputs
+  SDL2,
   pkg-config,
 
-  # native dependencies
-  AppKit,
-  fontconfig,
+  # buildInputs
   freetype,
   libjpeg,
   libpng,
   libX11,
   portmidi,
-  SDL2,
   SDL2_image,
   SDL2_mixer,
   SDL2_ttf,
-
-  # tests
-  python,
 }:
 
 buildPythonPackage rec {
   pname = "pygame";
-  version = "2.5.2";
+  version = "2.6.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "refs/tags/${version}";
+    owner = "pygame";
+    repo = "pygame";
+    tag = version;
     # Unicode file names lead to different checksums on HFS+ vs. other
     # filesystems because of unicode normalisation. The documentation
     # has such files and will be removed.
-    hash = "sha256-+gRv3Rim+2aL2uhPPGfVD0QDgB013lTf6wPx8rOwgXg=";
+    hash = "sha256-paSDF0oPogq0g0HSDRagGu0OfsqIku6q4GGAMveGntk=";
     postFetch = "rm -rf $out/docs/reST";
   };
 
@@ -65,15 +60,9 @@ buildPythonPackage rec {
         ]) buildInputs
       );
     })
-    # Skip tests that should be disabled without video driver
-    ./skip-surface-tests.patch
 
-    # removes distutils unbreaking py312, part of https://github.com/pygame/pygame/pull/4211
-    (fetchpatch {
-      name = "remove-distutils.patch";
-      url = "https://github.com/pygame/pygame/commit/6038e7d6583a7a25fcc6e15387cf6240e427e5a7.patch";
-      hash = "sha256-HxcYjjhsu/Y9HiK9xDvY4X5dgWPP4XFLxdYGXC6tdWM=";
-    })
+    # mixer queue test returns busy queue when it shouldn't
+    ./skip-mixer-test.patch
   ];
 
   postPatch = ''
@@ -82,11 +71,14 @@ buildPythonPackage rec {
       --replace-fail /usr/X11/bin/fc-list ${fontconfig}/bin/fc-list
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     cython
-    pkg-config
-    SDL2
     setuptools
+  ];
+
+  nativeBuildInputs = [
+    SDL2
+    pkg-config
   ];
 
   buildInputs = [
@@ -99,7 +91,7 @@ buildPythonPackage rec {
     SDL2_image
     SDL2_mixer
     SDL2_ttf
-  ] ++ lib.optionals stdenv.isDarwin [ AppKit ];
+  ];
 
   preConfigure = ''
     ${python.pythonOnBuildForHost.interpreter} buildconfig/config.py
@@ -116,17 +108,20 @@ buildPythonPackage rec {
     export SDL_VIDEODRIVER=dummy
     export SDL_AUDIODRIVER=disk
 
-    ${python.interpreter} -m pygame.tests -v --exclude opengl,timing --time_out 300
+    ${python.interpreter} -m pygame.tests -v \
+      --exclude opengl,timing \
+      --time_out 300
 
     runHook postCheck
   '';
   pythonImportsCheck = [ "pygame" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for games";
     homepage = "https://www.pygame.org/";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ emilytrau ];
-    platforms = platforms.unix;
+    changelog = "https://github.com/pygame/pygame/releases/tag/${src.tag}";
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ emilytrau ];
+    platforms = lib.platforms.unix;
   };
 }

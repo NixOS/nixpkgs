@@ -32,7 +32,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [ "test_ssh" ];
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [ "test_ssh" ];
 
   # don't swallow stdout/stderr
   pytestFlagsArray = [ "-s" ];

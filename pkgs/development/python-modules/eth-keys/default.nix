@@ -44,7 +44,7 @@ buildPythonPackage rec {
       pyasn1
       pytestCheckHook
     ]
-    ++ passthru.optional-dependencies.coincurve
+    ++ optional-dependencies.coincurve
     ++ lib.optional (!isPyPy) eth-hash.optional-dependencies.pysha3
     ++ lib.optional isPyPy eth-hash.optional-dependencies.pycryptodome;
 
@@ -63,7 +63,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "eth_keys" ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     coincurve = [ coincurve ];
   };
 

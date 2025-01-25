@@ -52,10 +52,26 @@ in
 
     daemon.settings =
       mkOption {
-        type = settingsFormat.type;
+        type = types.submodule {
+          freeformType = settingsFormat.type;
+          options = {
+            live-restore = mkOption {
+              type = types.bool;
+              # Prior to NixOS 24.11, this was set to true by default, while upstream defaulted to false.
+              # Keep the option unset to follow upstream defaults
+              default = versionOlder config.system.stateVersion "24.11";
+              defaultText = literalExpression "lib.versionOlder config.system.stateVersion \"24.11\"";
+              description = ''
+                Allow dockerd to be restarted without affecting running container.
+                This option is incompatible with docker swarm.
+              '';
+            };
+          };
+        };
         default = { };
         example = {
           ipv6 = true;
+          "live-restore" = true;
           "fixed-cidr-v6" = "fd00::/80";
         };
         description = ''
@@ -73,16 +89,6 @@ in
 
           Enable nvidia-docker wrapper, supporting NVIDIA GPUs inside docker containers.
         '';
-      };
-
-    liveRestore =
-      mkOption {
-        type = types.bool;
-        default = true;
-        description = ''
-            Allow dockerd to be restarted without affecting running container.
-            This option is incompatible with docker swarm.
-          '';
       };
 
     storageDriver =
@@ -167,6 +173,11 @@ in
     };
   };
 
+  imports = [
+    (mkRemovedOptionModule ["virtualisation" "docker" "socketActivation"] "This option was removed and socket activation is now always active")
+    (mkAliasOptionModule ["virtualisation" "docker" "liveRestore"] ["virtualisation" "docker" "daemon" "settings" "live-restore"])
+  ];
+
   ###### implementation
 
   config = mkIf cfg.enable (mkMerge [{
@@ -244,7 +255,7 @@ in
       };
 
       assertions = [
-        { assertion = cfg.enableNvidia && pkgs.stdenv.isx86_64 -> config.hardware.graphics.enable32Bit or false;
+        { assertion = cfg.enableNvidia && pkgs.stdenv.hostPlatform.isx86_64 -> config.hardware.graphics.enable32Bit or false;
           message = "Option enableNvidia on x86_64 requires 32-bit support libraries";
         }];
 
@@ -253,7 +264,6 @@ in
         hosts = [ "fd://" ];
         log-driver = mkDefault cfg.logDriver;
         storage-driver = mkIf (cfg.storageDriver != null) (mkDefault cfg.storageDriver);
-        live-restore = mkDefault cfg.liveRestore;
         runtimes = mkIf cfg.enableNvidia {
           nvidia = {
             # Use the legacy nvidia-container-runtime wrapper to allow
@@ -266,9 +276,4 @@ in
       };
     }
   ]);
-
-  imports = [
-    (mkRemovedOptionModule ["virtualisation" "docker" "socketActivation"] "This option was removed and socket activation is now always active")
-  ];
-
 }

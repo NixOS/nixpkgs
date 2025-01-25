@@ -30,14 +30,11 @@ let
       hash = "sha256-DB/ETVZhbT82IMZA97TmHG6gJcGpFavxDKDTwPzIF80=";
     };
 
-    buildPhase = (if stdenv.isDarwin then ''
-      LDFLAGS="-dynamic -undefined dynamic_lookup -lSystem"
-    '' else ''
-      LDFLAGS="-fPIC -shared"
-    '') + ''
+    buildPhase = ''
       CFLAGS="-fPIC -I."
+      LDFLAGS="-fPIC -shared"
       $CC $CFLAGS -c sha1.c -o sha1.o
-      $LD $LDFLAGS sha1.o -o libsha1.so
+      $CC $LDFLAGS sha1.o -o libsha1.so
     '';
 
     installPhase = ''
@@ -52,7 +49,7 @@ in stdenv.mkDerivation (finalAttrs: rec {
   dirname = "Isabelle${version}";
 
   src =
-    if stdenv.isDarwin
+    if stdenv.hostPlatform.isDarwin
     then
       fetchurl
         {
@@ -73,15 +70,16 @@ in stdenv.mkDerivation (finalAttrs: rec {
 
   nativeBuildInputs = [ java ];
 
-  buildInputs = [ polyml veriT vampire eprover-ho nettools ]
-    ++ lib.optionals (!stdenv.isDarwin) [ java procps ];
+  buildInputs = [ polyml veriT vampire eprover-ho nettools ];
 
-  sourceRoot = "${dirname}${lib.optionalString stdenv.isDarwin ".app"}";
+  propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ procps ];
+
+  sourceRoot = "${dirname}${lib.optionalString stdenv.hostPlatform.isDarwin ".app"}";
 
   doCheck = stdenv.hostPlatform.system != "aarch64-linux";
   checkPhase = "bin/isabelle build -v HOL-SMT_Examples";
 
-  postUnpack = lib.optionalString stdenv.isDarwin ''
+  postUnpack = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mv $sourceRoot ${dirname}
     sourceRoot=${dirname}
   '';
@@ -144,17 +142,17 @@ in stdenv.mkDerivation (finalAttrs: rec {
   '' + lib.optionalString (stdenv.hostPlatform.system == "x86_64-darwin") ''
     substituteInPlace lib/scripts/isabelle-platform \
       --replace-fail 'ISABELLE_APPLE_PLATFORM64=arm64-darwin' ""
-  '' + lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     arch=${if stdenv.hostPlatform.system == "aarch64-linux" then "arm64-linux" else stdenv.hostPlatform.system}
     for f in contrib/*/$arch/{z3,nunchaku,spass,zipperposition}; do
-      patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) "$f"${lib.optionalString stdenv.isAarch64 " || true"}
+      patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) "$f"${lib.optionalString stdenv.hostPlatform.isAarch64 " || true"}
     done
     patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) contrib/bash_process-*/$arch/bash_process
     for d in contrib/kodkodi-*/jni/$arch; do
-      patchelf --set-rpath "${lib.concatStringsSep ":" [ "${java}/lib/openjdk/lib/server" "${stdenv.cc.cc.lib}/lib" ]}" $d/*.so
+      patchelf --set-rpath "${lib.concatStringsSep ":" [ "${java}/lib/openjdk/lib/server" "${lib.getLib stdenv.cc.cc}/lib" ]}" $d/*.so
     done
   '' + lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux") ''
-    patchelf --set-rpath "${stdenv.cc.cc.lib}/lib" contrib/z3-*/$arch/z3
+    patchelf --set-rpath "${lib.getLib stdenv.cc.cc}/lib" contrib/z3-*/$arch/z3
   '';
 
   buildPhase = ''
@@ -221,7 +219,6 @@ in stdenv.mkDerivation (finalAttrs: rec {
     license = licenses.bsd3;
     maintainers = [ maintainers.jwiegley maintainers.jvanbruegge ];
     platforms = platforms.unix;
-    broken = stdenv.isDarwin;
   };
 
   passthru.withComponents = f:

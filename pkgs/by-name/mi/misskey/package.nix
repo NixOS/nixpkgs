@@ -4,40 +4,41 @@
   nixosTests,
   fetchFromGitHub,
   nodejs,
-  pnpm,
+  pnpm_9,
   makeWrapper,
   python3,
   bash,
   jemalloc,
   ffmpeg-headless,
   writeShellScript,
+  xcbuild,
   ...
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "misskey";
 
-  version = "2024.5.0";
+  version = "2024.11.0";
 
   src = fetchFromGitHub {
     owner = "misskey-dev";
     repo = finalAttrs.pname;
     rev = finalAttrs.version;
-    hash = "sha256-nKf+SfuF6MQtNO53E6vN9CMDvQzKMv3PrD6gs9Qa86w=";
+    hash = "sha256-uei5Ojx39kCbS8DCjHZ5PoEAsqJ5vC6SsFqIEIJ16n8=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
     nodejs
-    pnpm.configHook
+    pnpm_9.configHook
     makeWrapper
     python3
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcrun ];
 
   # https://nixos.org/manual/nixpkgs/unstable/#javascript-pnpm
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-A1JBLa6lIw5tXFuD2L3vvkH6pHS5rlwt8vU2+UUQYdg=";
+    hash = "sha256-YWZhm5eKjB6JGP45WC3UrIkr7vuBUI4Q3oiK8Lst3dI=";
   };
 
   buildPhase = ''
@@ -86,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
       # Otherwise, maybe somehow bindmount a writable directory into <package>/data/files.
       ln -s /var/lib/misskey $out/data/files
 
-      makeWrapper ${pnpm}/bin/pnpm $out/bin/misskey \
+      makeWrapper ${pnpm_9}/bin/pnpm $out/bin/misskey \
         --run "${checkEnvVarScript} || exit" \
         --chdir $out/data \
         --add-flags run \
@@ -94,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
         --prefix PATH : ${
           lib.makeBinPath [
             nodejs
-            pnpm
+            pnpm_9
             bash
           ]
         } \
@@ -102,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
           lib.makeLibraryPath [
             jemalloc
             ffmpeg-headless
-            stdenv.cc.cc.lib
+            stdenv.cc.cc
           ]
         }
 

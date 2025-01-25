@@ -1,5 +1,13 @@
 src: version:
-{ lib, fetchYarnDeps, nodejs_18, fixup-yarn-lock, stdenv, yarn }: stdenv.mkDerivation {
+{
+  lib,
+  fetchYarnDeps,
+  nodejs_18,
+  fixup-yarn-lock,
+  stdenv,
+  yarn,
+}:
+stdenv.mkDerivation {
   name = "mealie-frontend";
   inherit version;
   src = "${src}/frontend";

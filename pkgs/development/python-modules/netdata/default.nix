@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "netdata";
-  version = "1.2.0";
+  version = "1.3.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -21,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "home-assistant-ecosystem";
     repo = "python-netdata";
-    rev = "refs/tags/${version}";
-    hash = "sha256-ViiGh5CsRpMJ6zvPmje+eB5LuO6t47bjObaYh5a2Kw8=";
+    tag = version;
+    hash = "sha256-Et9T/+xonHSXjGQabgizW4pVBIYpTz0flud+vlfBNQE=";
   };
 
   nativeBuildInputs = [ poetry-core ];

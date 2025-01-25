@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "TheR1D";
     repo = "shell_gpt";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-4/5CLzIq+RXVTJk4chrd65GeazRp8VFKdOMt3fT+mbI=";
   };
 
@@ -25,7 +25,6 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   build-system = with python3.pkgs; [ hatchling ];
-
 
   propagatedBuildInputs = with python3.pkgs; [
     click

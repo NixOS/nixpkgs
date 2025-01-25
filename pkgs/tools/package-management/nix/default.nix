@@ -3,12 +3,12 @@
 , stdenv
 , aws-sdk-cpp
 , boehmgc
+, libgit2
 , callPackage
 , fetchFromGitHub
-, fetchpatch
 , fetchpatch2
 , runCommand
-, overrideSDK
+, buildPackages
 , Security
 
 , storeDir ? "/nix/store"
@@ -66,7 +66,7 @@ let
       rm aws-cpp-sdk-core-tests/aws/auth/AWSAuthSignerTest.cpp
       # TestRandomURLMultiThreaded fails
       rm aws-cpp-sdk-core-tests/http/HttpClientTest.cpp
-    '' + lib.optionalString aws-sdk-cpp.stdenv.isi686 ''
+    '' + lib.optionalString aws-sdk-cpp.stdenv.hostPlatform.isi686 ''
       # EPSILON is exceeded
       rm aws-cpp-sdk-core-tests/aws/client/AdaptiveRetryStrategyTest.cpp
     '';
@@ -85,6 +85,27 @@ let
     requiredSystemFeatures = [ ];
   };
 
+  libgit2-thin-packfile = libgit2.overrideAttrs (args: {
+    nativeBuildInputs = args.nativeBuildInputs or []
+      # gitMinimal does not build on Windows. See packbuilder patch.
+      ++ lib.optionals (!stdenv.hostPlatform.isWindows) [
+        # Needed for `git apply`; see `prePatch`
+        buildPackages.gitMinimal
+      ];
+    # Only `git apply` can handle git binary patches
+    prePatch = args.prePatch or ""
+      + lib.optionalString (!stdenv.hostPlatform.isWindows) ''
+        patch() {
+          git apply
+        }
+      '';
+    # taken from https://github.com/NixOS/nix/tree/master/packaging/patches
+    patches = (args.patches or []) ++ [
+      ./patches/libgit2-mempack-thin-packfile.patch
+    ] ++ lib.optionals (!stdenv.hostPlatform.isWindows) [
+      ./patches/libgit2-packbuilder-callback-interruptible.patch
+    ];
+  });
 
   common = args:
     callPackage
@@ -93,6 +114,7 @@ let
         inherit Security storeDir stateDir confDir;
         boehmgc = boehmgc-nix;
         aws-sdk-cpp = if lib.versionAtLeast args.version "2.12pre" then aws-sdk-cpp-nix else aws-sdk-cpp-old-nix;
+        libgit2 = if lib.versionAtLeast args.version "2.25.0" then libgit2-thin-packfile else libgit2;
       };
 
   # https://github.com/NixOS/nix/pull/7585
@@ -115,7 +137,9 @@ let
         runCommand "test-nix-fallback-paths-version-equals-nix-stable" {
           paths = lib.concatStringsSep "\n" (builtins.attrValues (import ../../../../nixos/modules/installer/tools/nix-fallback-paths.nix));
         } ''
-          if [[ "" != $(grep -v 'nix-${pkg.version}$' <<< "$paths") ]]; then
+          # NOTE: name may contain cross compilation details between the pname
+          #       and version this is permitted thanks to ([^-]*-)*
+          if [[ "" != $(grep -vE 'nix-([^-]*-)*${lib.strings.replaceStrings ["."] ["\\."] pkg.version}$' <<< "$paths") ]]; then
             echo "nix-fallback-paths not up to date with nixVersions.stable (nix-${pkg.version})"
             echo "The following paths are not up to date:"
             grep -v 'nix-${pkg.version}$' <<< "$paths"
@@ -148,79 +172,31 @@ in lib.makeExtensible (self: ({
     enableParallelChecking = false;
   };
 
-  nix_2_18 = common {
-    version = "2.18.5";
-    hash = "sha256-xEcYQuJz6DjdYfS6GxIYcn8U+3Hgopne3CvqrNoGguQ=";
-    self_attribute_name = "nix_2_18";
-  };
-
-  nix_2_19 = common {
-    version = "2.19.6";
-    hash = "sha256-XT5xiwOLgXf+TdyOjbJVOl992wu9mBO25WXHoyli/Tk=";
-    self_attribute_name = "nix_2_19";
-  };
-
-  nix_2_20 = common {
-    version = "2.20.8";
-    hash = "sha256-M2tkMtjKi8LDdNLsKi3IvD8oY/i3rtarjMpvhybS3WY=";
-    self_attribute_name = "nix_2_20";
-  };
-
-  nix_2_21 = common {
-    version = "2.21.4";
-    hash = "sha256-c6nVZ0pSrfhFX3eVKqayS+ioqyAGp3zG9ZPO5rkXFRQ=";
-    self_attribute_name = "nix_2_21";
-  };
-
-  nix_2_22 = common {
-    version = "2.22.3";
-    hash = "sha256-l04csH5rTWsK7eXPWVxJBUVRPMZXllFoSkYFTq/i8WU=";
-    self_attribute_name = "nix_2_22";
-  };
-
-  nix_2_23 = common {
-    version = "2.23.3";
-    hash = "sha256-lAoLGVIhRFrfgv7wcyduEkyc83QKrtsfsq4of+WrBeg=";
-    self_attribute_name = "nix_2_23";
-  };
-
-  nix_2_24 = (common {
-    version = "2.24.6";
-    hash = "sha256-kgq3B+olx62bzGD5C6ighdAoDweLq+AebxVHcDnKH4w=";
+  nix_2_24 = common {
+    version = "2.24.11";
+    hash = "sha256-ZizmbJM+DbhkaizxbjKg9fNfMrxh3PfAZ6jApQrazks=";
     self_attribute_name = "nix_2_24";
-  }).override (lib.optionalAttrs (stdenv.isDarwin && stdenv.isx86_64) {
-    # Fix the following error with the default x86_64-darwin SDK:
-    #
-    #     error: aligned allocation function of type 'void *(std::size_t, std::align_val_t)' is only available on macOS 10.13 or newer
-    #
-    # Despite the use of the 10.13 deployment target here, the aligned
-    # allocation function Clang uses with this setting actually works
-    # all the way back to 10.6.
-    stdenv = overrideSDK stdenv { darwinMinVersion = "10.13"; };
-  });
+  };
 
-  git = (common rec {
+  nix_2_25 = common {
+    version = "2.25.4";
+    hash = "sha256-cB/1vIYk8LWvL71hiKFu8froJHTUAfsYOOxBlBeNglI=";
+    self_attribute_name = "nix_2_25";
+  };
+
+  git = common rec {
     version = "2.25.0";
-    suffix = "pre20240910_${lib.substring 0 8 src.rev}";
+    suffix = "pre20241101_${lib.substring 0 8 src.rev}";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "b9d3cdfbd2b873cf34600b262247d77109dfd905";
-      hash = "sha256-7zH8TU5g3Bsg6ES0O8RcTm6JGYOMuDCGlSI3AQKbKy8=";
+      rev = "2e5759e3778c460efc5f7cfc4cb0b84827b5ffbe";
+      hash = "sha256-E1Sp0JHtbD1CaGO3UbBH6QajCtOGqcrVfPSKL0n63yo=";
     };
     self_attribute_name = "git";
-  }).override (lib.optionalAttrs (stdenv.isDarwin && stdenv.isx86_64) {
-    # Fix the following error with the default x86_64-darwin SDK:
-    #
-    #     error: aligned allocation function of type 'void *(std::size_t, std::align_val_t)' is only available on macOS 10.13 or newer
-    #
-    # Despite the use of the 10.13 deployment target here, the aligned
-    # allocation function Clang uses with this setting actually works
-    # all the way back to 10.6.
-    stdenv = overrideSDK stdenv { darwinMinVersion = "10.13"; };
-  });
+  };
 
-  latest = self.nix_2_24;
+  latest = self.nix_2_25;
 
   # The minimum Nix version supported by Nixpkgs
   # Note that some functionality *might* have been backported into this Nix version,
@@ -239,7 +215,8 @@ in lib.makeExtensible (self: ({
     else
       nix;
 
-  stable = addFallbackPathsCheck self.nix_2_18;
+  # Read ./README.md before bumping a major release
+  stable = addFallbackPathsCheck self.nix_2_24;
 } // lib.optionalAttrs config.allowAliases (
   lib.listToAttrs (map (
     minor:
@@ -247,7 +224,7 @@ in lib.makeExtensible (self: ({
       attr = "nix_2_${toString minor}";
     in
     lib.nameValuePair attr (throw "${attr} has been removed")
-  ) (lib.range 4 17))
+  ) (lib.range 4 23))
   // {
     unstable = throw "nixVersions.unstable has been removed. For bleeding edge (Nix master, roughly weekly updated) use nixVersions.git, otherwise use nixVersions.latest.";
   }

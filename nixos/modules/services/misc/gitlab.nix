@@ -1080,12 +1080,13 @@ in {
     warnings = [
       (mkIf
         (cfg.registry.enable && versionAtLeast (getVersion cfg.packages.gitlab) "16.0.0" && cfg.registry.package == pkgs.docker-distribution)
-        ''Support for container registries other than gitlab-container-registry has ended since GitLab 16.0.0 and is scheduled for removal in a future release.
+        ''
+          Support for container registries other than gitlab-container-registry has ended since GitLab 16.0.0 and is scheduled for removal in a future release.
           Please back up your data and migrate to the gitlab-container-registry package.''
       )
       (mkIf
-        (versionAtLeast (getVersion cfg.packages.gitlab) "16.2.0" && versionOlder (getVersion cfg.packages.gitlab) "16.5.0")
-        ''GitLab instances created or updated between versions [15.11.0, 15.11.2] have an incorrect database schema.
+        (versionAtLeast (getVersion cfg.packages.gitlab) "16.2.0" && versionOlder (getVersion cfg.packages.gitlab) "16.5.0") ''
+        GitLab instances created or updated between versions [15.11.0, 15.11.2] have an incorrect database schema.
         Check the upstream documentation for a workaround: https://docs.gitlab.com/ee/update/versions/gitlab_16_changes.html#undefined-column-error-upgrading-to-162-or-later''
       )
     ];
@@ -1126,6 +1127,11 @@ in {
     ];
 
     environment.systemPackages = [ gitlab-rake gitlab-rails cfg.packages.gitlab-shell ];
+
+    systemd.slices.system-gitlab = {
+      description = "GitLab DevOps Platform Slice";
+      documentation = [ "https://docs.gitlab.com/" ];
+    };
 
     systemd.targets.gitlab = {
       description = "Common target for all GitLab services.";
@@ -1197,6 +1203,7 @@ in {
       '';
 
       serviceConfig = {
+        Slice = "system-gitlab.slice";
         User = pgsql.superUser;
         Type = "oneshot";
         RemainAfterExit = true;
@@ -1220,6 +1227,9 @@ in {
       unitConfig = {
         ConditionPathExists = "!${cfg.registry.certFile}";
       };
+      serviceConfig = {
+        Slice = "system-gitlab.slice";
+      };
     };
 
     # Ensure Docker Registry launches after the certificate generation job
@@ -1233,6 +1243,7 @@ in {
       enable = true;
       enableDelete = true; # This must be true, otherwise GitLab won't manage it correctly
       package = cfg.registry.package;
+      port = cfg.registry.port;
       extraConfig = {
         auth.token = {
           realm = "http${optionalString (cfg.https == true) "s"}://${cfg.host}/jwt/auth";
@@ -1308,6 +1319,7 @@ in {
         TimeoutSec = "infinity";
         Restart = "on-failure";
         WorkingDirectory = "${cfg.packages.gitlab}/share/gitlab";
+        Slice = "system-gitlab.slice";
         RemainAfterExit = true;
 
         ExecStartPre = let
@@ -1338,7 +1350,7 @@ in {
           ln -sf ${cableYml} ${cfg.statePath}/config/cable.yml
           ln -sf ${resqueYml} ${cfg.statePath}/config/resque.yml
 
-          ${cfg.packages.gitlab-shell}/bin/gitlab-shell-install
+          ${cfg.packages.gitlab-shell}/support/make_necessary_dirs
 
           ${optionalString cfg.smtp.enable ''
               install -m u=rw ${smtpSettings} ${cfg.statePath}/config/initializers/smtp_settings.rb
@@ -1424,6 +1436,7 @@ in {
         TimeoutSec = "infinity";
         Restart = "on-failure";
         WorkingDirectory = "${cfg.packages.gitlab}/share/gitlab";
+        Slice = "system-gitlab.slice";
         RemainAfterExit = true;
 
         ExecStart = pkgs.writeShellScript "gitlab-db-config" ''
@@ -1480,6 +1493,7 @@ in {
         TimeoutSec = "infinity";
         Restart = "always";
         WorkingDirectory = "${cfg.packages.gitlab}/share/gitlab";
+        Slice = "system-gitlab.slice";
         ExecStart = utils.escapeSystemdExecArgs (
           [
             "${cfg.packages.gitlab}/share/gitlab/bin/sidekiq-cluster"
@@ -1512,6 +1526,7 @@ in {
         Restart = "on-failure";
         WorkingDirectory = gitlabEnv.HOME;
         RuntimeDirectory = "gitaly";
+        Slice = "system-gitlab.slice";
         ExecStart = "${cfg.packages.gitaly}/bin/gitaly ${gitalyToml}";
       };
     };
@@ -1573,6 +1588,7 @@ in {
             WorkingDirectory = gitlabEnv.HOME;
             RuntimeDirectory = "gitlab-pages";
             RuntimeDirectoryMode = "0700";
+            Slice = "system-gitlab.slice";
           };
         };
 
@@ -1596,6 +1612,7 @@ in {
         TimeoutSec = "infinity";
         Restart = "on-failure";
         WorkingDirectory = gitlabEnv.HOME;
+        Slice = "system-gitlab.slice";
         ExecStartPre = pkgs.writeShellScript "gitlab-workhorse-pre-start" ''
           set -o errexit -o pipefail -o nounset
           shopt -s dotglob nullglob inherit_errexit
@@ -1637,6 +1654,7 @@ in {
         Group = cfg.group;
         ExecStart = "${cfg.packages.gitlab.rubyEnv}/bin/bundle exec mail_room -c ${cfg.statePath}/config/mail_room.yml";
         WorkingDirectory = gitlabEnv.HOME;
+        Slice = "system-gitlab.slice";
       };
     };
 
@@ -1671,6 +1689,7 @@ in {
         TimeoutSec = "infinity";
         Restart = "on-failure";
         WorkingDirectory = "${cfg.packages.gitlab}/share/gitlab";
+        Slice = "system-gitlab.slice";
         ExecStart = concatStringsSep " " [
           "${cfg.packages.gitlab.rubyEnv}/bin/bundle" "exec" "puma"
           "-e production"
@@ -1695,6 +1714,7 @@ in {
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
+        Slice = "system-gitlab.slice";
         ExecStart = "${gitlab-rake}/bin/gitlab-rake gitlab:backup:create";
       };
     };

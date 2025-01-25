@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, argtable
-, cmake
-, libserialport
-, pkg-config
-, testers
-, IOKit
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  argtable,
+  cmake,
+  libserialport,
+  pkg-config,
+  testers,
+  IOKit,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -20,19 +21,22 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-cN35VLbdQFA3KTZ8PxgpbsLGXqfFhw5eh3nEBRZqAm4=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   buildInputs = [
     argtable
     libserialport
-  ] ++ lib.optional stdenv.isDarwin IOKit;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin IOKit;
 
   cmakeFlags = [
     "-DBLISP_BUILD_CLI=ON"
     "-DBLISP_USE_SYSTEM_LIBRARIES=ON"
   ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-error=implicit-function-declaration";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-error=implicit-function-declaration";
 
   passthru.tests.version = testers.testVersion {
     package = finalAttrs.finalPackage;

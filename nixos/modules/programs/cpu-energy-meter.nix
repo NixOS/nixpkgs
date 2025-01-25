@@ -1,8 +1,10 @@
-{ config
-, lib
-, pkgs
-, ...
-}: {
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+{
   options.programs.cpu-energy-meter = {
     enable = lib.mkEnableOption "CPU Energy Meter";
     package = lib.mkPackageOption pkgs "cpu-energy-meter" { };

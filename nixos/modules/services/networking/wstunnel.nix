@@ -168,7 +168,7 @@ let
         };
 
         localToRemote = lib.mkOption {
-          description = ''Listen on local and forwards traffic from remote.'';
+          description = "Listen on local and forwards traffic from remote.";
           type = lib.types.listOf (lib.types.str);
           default = [ ];
           example = [
@@ -318,10 +318,21 @@ let
               lib.cli.toGNUCommandLineShell { } (
                 lib.recursiveUpdate {
                   restrict-to = map hostPortToString restrictTo;
-                  tls-certificate =
-                    if useACMEHost != null then "${certConfig.directory}/fullchain.pem" else "${tlsCertificate}";
-                  tls-private-key = if useACMEHost != null then "${certConfig.directory}/key.pem" else "${tlsKey}";
                   websocket-ping-frequency-sec = websocketPingInterval;
+                  tls-certificate =
+                    if !enableHTTPS then
+                      null
+                    else if useACMEHost != null then
+                      "${certConfig.directory}/fullchain.pem"
+                    else
+                      "${tlsCertificate}";
+                  tls-private-key =
+                    if !enableHTTPS then
+                      null
+                    else if useACMEHost != null then
+                      "${certConfig.directory}/key.pem"
+                    else
+                      "${tlsKey}";
                 } extraArgs
               )
             } \
@@ -457,10 +468,11 @@ in
 
         (lib.mapAttrsToList (name: serverCfg: {
           assertion =
-            (serverCfg.tlsCertificate == null && serverCfg.tlsKey == null)
-            || (serverCfg.tlsCertificate != null && serverCfg.tlsKey != null);
+            serverCfg.enableHTTPS
+            ->
+              (serverCfg.useACMEHost != null) || (serverCfg.tlsCertificate != null && serverCfg.tlsKey != null);
           message = ''
-            services.wstunnel.servers."${name}".tlsCertificate and services.wstunnel.servers."${name}".tlsKey need to be set together.
+            If services.wstunnel.servers."${name}".enableHTTPS is set to true, either services.wstunnel.servers."${name}".useACMEHost or both services.wstunnel.servers."${name}".tlsKey and services.wstunnel.servers."${name}".tlsCertificate need to be set.
           '';
         }) cfg.servers)
       ++
@@ -475,6 +487,7 @@ in
 
   meta.maintainers = with lib.maintainers; [
     alyaeanyx
+    raylas
     rvdp
     neverbehave
   ];

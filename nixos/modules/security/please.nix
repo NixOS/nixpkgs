@@ -1,22 +1,24 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.security.please;
   ini = pkgs.formats.ini { };
 in
 {
   options.security.please = {
-    enable = mkEnableOption ''
+    enable = lib.mkEnableOption ''
       please, a Sudo clone which allows a users to execute a command or edit a
       file as another user
     '';
 
-    package = mkPackageOption pkgs "please" { };
+    package = lib.mkPackageOption pkgs "please" { };
 
-    wheelNeedsPassword = mkOption {
-      type = types.bool;
+    wheelNeedsPassword = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = ''
         Whether users of the `wheel` group must provide a password to run
@@ -25,7 +27,7 @@ in
       '';
     };
 
-    settings = mkOption {
+    settings = lib.mkOption {
       type = ini.type;
       default = { };
       example = {
@@ -53,7 +55,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     security.wrappers =
       let
         owner = "root";
@@ -82,15 +84,20 @@ in
         rule = ".*";
         require_pass = cfg.wheelNeedsPassword;
       };
-      wheel_edit_as_any = wheel_run_as_any // { type = "edit"; };
-      wheel_list_as_any = wheel_run_as_any // { type = "list"; };
+      wheel_edit_as_any = wheel_run_as_any // {
+        type = "edit";
+      };
+      wheel_list_as_any = wheel_run_as_any // {
+        type = "list";
+      };
     };
 
     environment = {
       systemPackages = [ cfg.package ];
 
-      etc."please.ini".source = ini.generate "please.ini"
-        (cfg.settings // (rec {
+      etc."please.ini".source = ini.generate "please.ini" (
+        cfg.settings
+        // (rec {
           # The "root" user is allowed to do anything by default and this cannot
           # be overridden.
           root_run_as_any = {
@@ -100,9 +107,14 @@ in
             rule = ".*";
             require_pass = false;
           };
-          root_edit_as_any = root_run_as_any // { type = "edit"; };
-          root_list_as_any = root_run_as_any // { type = "list"; };
-        }));
+          root_edit_as_any = root_run_as_any // {
+            type = "edit";
+          };
+          root_list_as_any = root_run_as_any // {
+            type = "list";
+          };
+        })
+      );
     };
 
     security.pam.services.please = {
@@ -110,6 +122,6 @@ in
       usshAuth = true;
     };
 
-    meta.maintainers = with maintainers; [ azahi ];
+    meta.maintainers = with lib.maintainers; [ azahi ];
   };
 }

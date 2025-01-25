@@ -2,7 +2,7 @@
   dbus,
   openssl,
   gtk3,
-  webkitgtk,
+  webkitgtk_4_1,
   pkg-config,
   wrapGAppsHook3,
   fetchFromGitHub,
@@ -14,21 +14,22 @@
   makeDesktopItem,
   alsa-lib,
   darwin,
+  nix-update-script,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "lrcget";
-  version = "0.4.0";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "tranxuanthang";
     repo = "lrcget";
     rev = "${version}";
-    hash = "sha256-OrmSaRKhGCl5sTirzICx8PBsQm23pYUBBtb07+P1ZbY=";
+    hash = "sha256-ia+on2VZeOzxsZAELhXjq6wSo4Jtn8oZNXZ9hByHtYs=";
   };
 
   sourceRoot = "${src.name}/src-tauri";
 
-  cargoHash = "sha256-V9+/sfCxeZJ39nOuMBv2YlkzewoS+N3kFyBGdIqkw/A=";
+  cargoHash = "sha256-xGOUR4DWVi5Sx9AEnvIeeRaF2kb5YAv1BBruAk712L8=";
 
   frontend = buildNpmPackage {
     inherit version src;
@@ -41,7 +42,7 @@ rustPlatform.buildRustPackage rec {
     # To fix `npm ERR! Your cache folder contains root-owned files`
     makeCacheWritable = true;
 
-    npmDepsHash = "sha256-qQ5UMO3UuD6IvUveTRF35qTlGq5PMbxp1Q4UroDqVtk=";
+    npmDepsHash = "sha256-N48+C3NNPYg/rOpnRNmkZfZU/ZHp8imrG/tiDaMGsCE=";
 
     postBuild = ''
       cp -r dist/ $out
@@ -53,7 +54,8 @@ rustPlatform.buildRustPackage rec {
   postPatch = ''
     cp -r $frontend ./frontend
 
-    substituteInPlace tauri.conf.json --replace-fail '"distDir": "../dist"' '"distDir": "./frontend"'
+    substituteInPlace tauri.conf.json \
+      --replace-fail '"frontendDist": "../dist"' '"frontendDist": "./frontend"'
   '';
 
   nativeBuildInputs = [
@@ -69,11 +71,11 @@ rustPlatform.buildRustPackage rec {
       openssl
       gtk3
     ]
-    ++ lib.optionals (!stdenv.isDarwin) [
-      webkitgtk
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      webkitgtk_4_1
       alsa-lib
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.CoreAudio
       darwin.apple_sdk.frameworks.WebKit
     ];
@@ -102,6 +104,8 @@ rustPlatform.buildRustPackage rec {
       comment = meta.description;
     })
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Utility for mass-downloading LRC synced lyrics for your offline music library";

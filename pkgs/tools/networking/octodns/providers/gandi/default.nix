@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, octodns
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests-mock
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  octodns,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  requests-mock,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -19,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "octodns";
     repo = "octodns-gandi";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-L7kDkqTVmU8OqjMS3GkML1xBxEuwb9iyYi/YZBB4NSU=";
   };
 

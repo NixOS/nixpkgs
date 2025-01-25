@@ -4,10 +4,7 @@
 , cmake
 , enableVTK ? true
 , vtk
-, ApplicationServices
-, Cocoa
 , DarwinTools # sw_vers
-, libiconv
 , enablePython ? false
 , python ? null
 , swig
@@ -19,13 +16,13 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "gdcm";
+  pname = if enablePython then "python-gdcm" else "gdcm";
   version = "3.0.24";
 
   src = fetchFromGitHub {
     owner = "malaterre";
     repo = "GDCM";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Zlb6UCP4aFZOJJNhFQBBrwzst+f37gs1zaCBMTOUgZE=";
   };
 
@@ -45,13 +42,13 @@ stdenv.mkDerivation rec {
     "-DGDCM_USE_VTK=ON"
   ] ++ lib.optionals enablePython [
     "-DGDCM_WRAP_PYTHON:BOOL=ON"
-    "-DGDCM_INSTALL_PYTHONMODULE_DIR=${placeholder "out"}/${python.sitePackages}"
+    "-DGDCM_INSTALL_PYTHONMODULE_DIR=${placeholder "out"}/${python.sitePackages}/python_gdcm"
   ];
 
   nativeBuildInputs = [
     cmake
     pkg-config
-  ] ++ lib.optional stdenv.isDarwin DarwinTools;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin DarwinTools;
 
   buildInputs = [
     expat
@@ -60,11 +57,14 @@ stdenv.mkDerivation rec {
     zlib
   ] ++ lib.optionals enableVTK [
     vtk
-  ] ++ lib.optionals stdenv.isDarwin [
-    ApplicationServices
-    Cocoa
-    libiconv
   ] ++ lib.optionals enablePython [ swig python ];
+
+  postInstall = lib.optionalString enablePython ''
+    substitute \
+      ${./python_gdcm.egg-info} \
+      $out/${python.sitePackages}/python_gdcm-${version}.egg-info \
+      --subst-var-by GDCM_VER "${version}"
+  '';
 
   disabledTests = [
     # require networking:
@@ -77,7 +77,9 @@ stdenv.mkDerivation rec {
     "TestSCUValidation"
     # errors because 3 classes not wrapped:
     "TestWrapPython"
-  ] ++ lib.optionals (stdenv.isAarch64 && stdenv.isLinux) [
+    # AttributeError: module 'gdcm' has no attribute 'UIDGenerator_SetRoot'; maybe a wrapping regression:
+    "TestUIDGeneratorPython"
+  ] ++ lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) [
     "TestRescaler2"
   ];
 

@@ -9,22 +9,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "shpool";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "shell-pool";
     repo = "shpool";
     rev = "v${version}";
-    hash = "sha256-4d194y9scjXi5wpTRP66apApXl2R9N3ACAVXkXHfQDM=";
+    hash = "sha256-pSSMC4pUtB38c6UNOj+Ma/Y1jcSfm33QV1B4tA/MyKY=";
   };
-
 
   postPatch = ''
     substituteInPlace systemd/shpool.service \
       --replace-fail '/usr/bin/shpool' "$out/bin/shpool"
   '';
 
-  cargoHash = "sha256-lkwgjrEaLuTY0sDSxa+wbT9LX09aCDp1wDUqNQE07Xw=";
+  cargoHash = "sha256-NUo9Y/c4Wm3d8lbhdHEqu9Zp7tX8giq2wnYwz8SMTXo=";
 
   buildInputs = [
     linux-pam

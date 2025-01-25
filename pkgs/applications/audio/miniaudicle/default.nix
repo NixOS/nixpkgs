@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "miniaudicle";
-  version = "1.5.2.0";
+  version = "1.5.4.2";
 
   src = fetchFromGitHub {
     owner = "ccrma";
     repo = "miniAudicle";
     rev = "chuck-${finalAttrs.version}";
-    hash = "sha256-jpPF2Qx/6tiotsj92m1XmxsEUgtm5029ijpu3O8B9qM=";
+    hash = "sha256-LYr9Fc4Siqk0BFKHVXfIV2XskJYAN+/0P+nb6FJLsLE=";
     fetchSubmodules = true;
   };
 
@@ -59,6 +59,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
-    broken = stdenv.isDarwin; # not attempted
+    broken = stdenv.hostPlatform.isDarwin; # not attempted
   };
 })

@@ -1,30 +1,47 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, python3
-, nix-update-script
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  python3,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "nickel";
-  version = "1.8.0";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "tweag";
     repo = "nickel";
-    rev = "refs/tags/${version}";
-    hash = "sha256-mjmT1ogvUJgy3Jb6m/npE+1if1Uy191wPU80nNlVwdM=";
+    tag = version;
+    hash = "sha256-oOcVbAWNj0iVC3128QF4lKYfZbasqegwIfzv7qD8fDs=";
   };
 
-  cargoHash = "sha256-XDDvuIVWvmsO09aQLF28OyH5n+9aO5J+89EQLru7Jrc=";
+  cargoHash = "sha256-y5ZV6aLXzFZg41ZHGSSL6t+BN30EBHKzXuT6478hQUY=";
 
-  cargoBuildFlags = [ "-p nickel-lang-cli" "-p nickel-lang-lsp" ];
+  cargoBuildFlags = [
+    "-p nickel-lang-cli"
+    "-p nickel-lang-lsp"
+  ];
 
   nativeBuildInputs = [
     python3
   ];
 
-  outputs = [ "out" "nls" ];
+  outputs = [
+    "out"
+    "nls"
+  ];
+
+  # This fixes the way comrak is defined as a dependency, without the sed the build fails:
+  #
+  # cargo metadata failure: error: Package `nickel-lang-core v0.10.0
+  # (/build/source/core)` does not have feature `comrak`. It has an optional
+  # dependency with that name, but that dependency uses the "dep:" syntax in
+  # the features table, so it does not have an implicit feature with that name.
+  preBuild = ''
+    sed -i 's/dep:comrak/comrak/' core/Cargo.toml
+  '';
 
   postInstall = ''
     mkdir -p $nls/bin
@@ -46,7 +63,10 @@ rustPlatform.buildRustPackage rec {
     '';
     changelog = "https://github.com/tweag/nickel/blob/${version}/RELEASES.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres felschr matthiasbeyer ];
+    maintainers = with maintainers; [
+      felschr
+      matthiasbeyer
+    ];
     mainProgram = "nickel";
   };
 }

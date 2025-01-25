@@ -17,12 +17,13 @@
   gtk3,
   lib,
   libdrm,
+  libGL,
   libnotify,
   libsecret,
   libuuid,
   libxcb,
   libxkbcommon,
-  mesa,
+  libgbm,
   nspr,
   nss,
   pango,
@@ -33,7 +34,7 @@
 }:
 
 let
-  version = "1.44.0";
+  version = "1.45.1";
 
   rpath = lib.makeLibraryPath [
     alsa-lib
@@ -51,12 +52,13 @@ let
     glib
     gtk3
     libdrm
+    libGL
     libnotify
     libsecret
     libuuid
     libxcb
     libxkbcommon
-    mesa
+    libgbm
     nspr
     nss
     pango
@@ -82,7 +84,7 @@ let
     if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchurl {
         url = "https://downloads.mongodb.com/compass/mongodb-compass_${version}_amd64.deb";
-        hash = "sha256-EtICvM7oHToQS//kztOoVb6qPw5M/5+bHjNCcuFaCRA=";
+        hash = "sha256-EEpP1M51Lyki4MJ3iMNpcxJbqPYl4bZGE3frax8kD0k=";
       }
     else
       throw "MongoDB compass is not supported on ${stdenv.hostPlatform.system}";
@@ -134,7 +136,10 @@ stdenv.mkDerivation {
 
   meta = {
     description = "GUI for MongoDB";
-    maintainers = with lib.maintainers; [ bryanasdev000 ];
+    maintainers = with lib.maintainers; [
+      bryanasdev000
+      friedow
+    ];
     homepage = "https://github.com/mongodb-js/compass";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.sspl;

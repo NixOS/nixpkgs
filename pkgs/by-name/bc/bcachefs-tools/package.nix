@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   pkg-config,
   libuuid,
   libsodium,
@@ -28,14 +29,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bcachefs-tools";
-  version = "1.11.0";
+  version = "1.13.0";
 
   src = fetchFromGitHub {
     owner = "koverstreet";
     repo = "bcachefs-tools";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-L2eIYdQnnmKNI8QWSy8nk4GzJ8jv+qt98gqdzcJH31Q=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-w55Fs1RZ4c55vTvb3jArPcmBLij1nuLi2MUHMMXPhng=";
   };
+
+  patches = [
+    # backport patch to fix build with latest liburcu
+    (fetchpatch {
+      url = "https://github.com/koverstreet/bcachefs-tools/commit/634c812a1ed05de8e3d1dc146eed95b942e1e38d.patch";
+      hash = "sha256-AL+nflQHKIwzI35NXZG2rniNjUfgLmv3osHHdpB1cGs=";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -63,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     src = finalAttrs.src;
-    hash = "sha256-Ol3wKdxKYJWDC/JREOfVSQRNnWVano7qilMRvqrLsgA==";
+    hash = "sha256-rO4AjCnxmHQPk0hxgXK4yxUK5eag/+Q+fRG/BsRi0i0=";
   };
 
   makeFlags = [

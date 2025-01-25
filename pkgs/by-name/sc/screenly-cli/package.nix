@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "screenly-cli";
-  version = "1.0.0";
+  version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "screenly";
     repo = "cli";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-th/V0hyTMcraJHbRM5VoSM19oE6CKqIQ3qdM86TR4vE=";
+    tag = "v${version}";
+    hash = "sha256-sRi0CpdaPCH54m2XojicARLXZELB4PFcLLw0KB0j6jE=";
   };
 
-  cargoHash = "sha256-sv59Yu+oSxp/IVePokHrXD4FI+bZcz6aERSTLScYaLk=";
+  cargoHash = "sha256-6IK1aO4bx09ZVve7z340O7KMOttCcq3MqMs/XM6L0l4=";
 
   nativeBuildInputs = [
     pkg-config
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs =
     [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.CoreFoundation
       darwin.apple_sdk.frameworks.CoreServices
       darwin.apple_sdk.frameworks.Security

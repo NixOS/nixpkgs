@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -11,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zigpy-cli";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-69E6PkrCE5S498pO33uEz7g2dV41H0vNfFinUHDATTQ=";
   };
 

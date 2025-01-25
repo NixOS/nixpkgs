@@ -1,4 +1,4 @@
-{ lib, stdenv, callPackage, ecl, coreutils, fetchurl, strace, texinfo, which, writeText, zstd
+{ lib, stdenv, callPackage, ecl, coreutils, fetchurl, ps, strace, texinfo, which, writeText, zstd
 , version
   # Set this to a lisp binary to use a custom bootstrap lisp compiler for SBCL.
   # Leave as null to use the default.  This is useful for local development of
@@ -10,14 +10,17 @@
 
 let
   versionMap = {
+    # Necessary for Nyxt
     "2.4.6" = {
       sha256 = "sha256-pImQeELa4JoXJtYphb96VmcKrqLz7KH7cCO8pnw/MJE=";
     };
-    "2.4.7" = {
-      sha256 = "sha256-aFRNJQNjWs0BXVNMzJsq6faJltQptakGP9Iv8JJQEdI=";
+    # By unofficial and very loose convention we keep the latest version of
+    # SBCL, and the previous one in case someone quickly needs to roll back.
+    "2.4.10" = {
+      sha256 = "sha256-zus5a2nSkT7uBIQcKva+ylw0LOFGTD/j5FPy3hDF4vg=";
     };
-    "2.4.8" = {
-      sha256 = "sha256-/G7NzFOOgKFKmY1TDMw4SkF5D09Pxs1//oyxJqZ3aUw=";
+    "2.4.11" = {
+      sha256 = "sha256-TwPlhG81g0wQcAu+Iy2kG6S9v4G9zKyx1N4kKXZXpBU=";
     };
   };
   # Collection of pre-built SBCL binaries for platforms that need them for
@@ -77,6 +80,8 @@ stdenv.mkDerivation (self: {
       which
     ] ++ lib.optionals (builtins.elem stdenv.system strace.meta.platforms) [
       strace
+    ] ++ lib.optionals (lib.versionOlder "2.4.10" self.version) [
+      ps
     ]
   );
   buildInputs = lib.optionals self.coreCompression (
@@ -167,7 +172,7 @@ stdenv.mkDerivation (self: {
     lib.optional self.threadSupport "sb-thread" ++
     lib.optional self.linkableRuntime "sb-linkable-runtime" ++
     lib.optional self.coreCompression "sb-core-compression" ++
-    lib.optional stdenv.isAarch32 "arm" ++
+    lib.optional stdenv.hostPlatform.isAarch32 "arm" ++
     lib.optional self.markRegionGC "mark-region-gc";
 
   disableFeatures =

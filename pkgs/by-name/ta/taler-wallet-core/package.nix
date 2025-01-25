@@ -7,15 +7,15 @@
   fetchgit,
   srcOnly,
   removeReferencesTo,
-  nodejs,
-  pnpm,
+  nodejs_20,
+  pnpm_9,
   python3,
   git,
   jq,
   zip,
 }:
 let
-  nodeSources = srcOnly nodejs;
+  nodeSources = srcOnly nodejs_20;
   esbuild' = esbuild.override {
     buildGoModule =
       args:
@@ -37,29 +37,29 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "taler-wallet-core";
-  version = "0.13.1";
+  version = "0.14.1";
 
   src = fetchgit {
     url = "https://git.taler.net/wallet-core.git";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-1TM2kD4HfL3QPzZ3Xzq5Sfycevf94Pkw7HpEoMkujN8=";
+    hash = "sha256-Sae83qGPqVwuxKf30zHCmdOoo5rDPBHKSOE1hxNn7Xo=";
   };
 
   nativeBuildInputs = [
     customPython
-    nodejs
-    pnpm.configHook
+    nodejs_20
+    pnpm_9.configHook
     git
     jq
     zip
   ];
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-7az1wJ6BK9nPKirtW/fmXo3013JCPf+TNk/aG/mGTfo=";
+    hash = "sha256-BVVmv0VVvQ2YhL0zOKiM1oVKJKvqwMGNR47DkcCj874=";
   };
 
-  buildInputs = [ nodejs ];
+  buildInputs = [ nodejs_20 ];
 
   # Make a fake git repo with a commit.
   # Without this, the package does not build.
@@ -101,9 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://git.taler.net/wallet-core.git/";
     description = "CLI wallet for GNU Taler written in TypeScript and Anastasis Web UI";
     license = lib.licenses.gpl3Plus;
-    maintainers = [
-      # maintained by the team working on NGI-supported software, no group for this yet
-    ];
+    maintainers = lib.teams.ngi.members;
     platforms = lib.platforms.linux;
     mainProgram = "taler-wallet-cli";
   };

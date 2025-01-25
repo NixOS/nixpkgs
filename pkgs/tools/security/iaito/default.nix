@@ -1,25 +1,26 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, python3
-, qtbase
-, qttools
-, radare2
-, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  qtbase,
+  qttools,
+  radare2,
+  wrapQtAppsHook,
 }:
 
 let
   pname = "iaito";
-  version = "5.9.4";
+  version = "5.9.6";
 
   main_src = fetchFromGitHub rec {
     owner = "radareorg";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-o+DeHifhixWwFX6V/sDXou46rrz5qeQ1Ky8UaAVyDPM=";
+    hash = "sha256-rkL7qH1BLXw3eXdCoVuan2C6k05pE5LOIOTbIEtfUbE=";
     name = repo;
   };
 
@@ -34,7 +35,10 @@ in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname version;
 
-  srcs = [ main_src translations_src ];
+  srcs = [
+    main_src
+    translations_src
+  ];
   sourceRoot = "${main_src.name}/src";
 
   postUnpack = ''

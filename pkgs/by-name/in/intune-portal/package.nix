@@ -1,25 +1,26 @@
-{ stdenv
-, lib
-, fetchurl
-, dpkg
-, libuuid
-, xorg
-, curlMinimal
-, openssl
-, libsecret
-, webkitgtk
-, libsoup
-, gtk3
-, atk
-, pango
-, glib
-, sqlite
-, zlib
-, systemd
-, msalsdk-dbusclient
-, pam
-, dbus
-, nixosTests
+{
+  stdenv,
+  lib,
+  fetchurl,
+  dpkg,
+  libuuid,
+  xorg,
+  curlMinimal,
+  openssl,
+  libsecret,
+  webkitgtk_4_0,
+  libsoup_2_4,
+  gtk3,
+  atk,
+  pango,
+  glib,
+  sqlite,
+  zlib,
+  systemd,
+  msalsdk-dbusclient,
+  pam,
+  dbus,
+  nixosTests,
 }:
 stdenv.mkDerivation rec {
   pname = "intune-portal";
@@ -36,14 +37,14 @@ stdenv.mkDerivation rec {
     let
       libPath = {
         intune = lib.makeLibraryPath [
-          stdenv.cc.cc.lib
+          stdenv.cc.cc
           libuuid
           xorg.libX11
           curlMinimal
           openssl
           libsecret
-          webkitgtk
-          libsoup
+          webkitgtk_4_0
+          libsoup_2_4
           gtk3
           atk
           glib
@@ -109,5 +110,6 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ rhysmdnz ];
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
 }

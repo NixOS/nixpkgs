@@ -1,5 +1,18 @@
-{ lib, stdenv, fetchurl, cups, dpkg, gnused, makeWrapper, ghostscript, file
-, a2ps, coreutils, perl, gnugrep, which
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cups,
+  dpkg,
+  gnused,
+  makeWrapper,
+  ghostscript,
+  file,
+  a2ps,
+  coreutils,
+  perl,
+  gnugrep,
+  which,
 }:
 
 let
@@ -20,7 +33,12 @@ stdenv.mkDerivation {
   inherit version;
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ cups ghostscript dpkg a2ps ];
+  buildInputs = [
+    cups
+    ghostscript
+    dpkg
+    a2ps
+  ];
 
   dontUnpack = true;
 
@@ -45,9 +63,14 @@ stdenv.mkDerivation {
       $out/opt/brother/Printers/HLL2340D/cupswrapper/paperconfigml1 \
     ; do
       wrapProgram $f \
-        --prefix PATH : ${lib.makeBinPath [
-          coreutils ghostscript gnugrep gnused
-        ]}
+        --prefix PATH : ${
+          lib.makeBinPath [
+            coreutils
+            ghostscript
+            gnugrep
+            gnused
+          ]
+        }
     done
 
     mkdir -p $out/lib/cups/filter/
@@ -57,8 +80,18 @@ stdenv.mkDerivation {
     ln -s $out/opt/brother/Printers/HLL2340D/cupswrapper/brother-HLL2340D-cups-en.ppd $out/share/cups/model/
 
     wrapProgram $out/opt/brother/Printers/HLL2340D/lpd/filter_HLL2340D \
-      --prefix PATH ":" ${ lib.makeBinPath [ ghostscript a2ps file gnused gnugrep coreutils which ] }
-    '';
+      --prefix PATH ":" ${
+        lib.makeBinPath [
+          ghostscript
+          a2ps
+          file
+          gnused
+          gnugrep
+          coreutils
+          which
+        ]
+      }
+  '';
 
   meta = with lib; {
     homepage = "http://www.brother.com/";

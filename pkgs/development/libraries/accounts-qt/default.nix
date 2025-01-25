@@ -1,4 +1,16 @@
-{ stdenv, lib, fetchFromGitLab, gitUpdater, doxygen, glib, libaccounts-glib, pkg-config, qmake, qtbase, wrapQtAppsHook }:
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  gitUpdater,
+  doxygen,
+  glib,
+  libaccounts-glib,
+  pkg-config,
+  qmake,
+  qtbase,
+  wrapQtAppsHook,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "accounts-qt";
@@ -12,9 +24,17 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-mPZgD4r7vlUP6wklvZVknGqTXZBckSOtNzK7p6e2qSA=";
   };
 
-  propagatedBuildInputs = [ glib libaccounts-glib ];
+  propagatedBuildInputs = [
+    glib
+    libaccounts-glib
+  ];
   buildInputs = [ qtbase ];
-  nativeBuildInputs = [ doxygen pkg-config qmake wrapQtAppsHook ];
+  nativeBuildInputs = [
+    doxygen
+    pkg-config
+    qmake
+    wrapQtAppsHook
+  ];
 
   # remove forbidden references to /build
   preFixup = ''

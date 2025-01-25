@@ -46,7 +46,7 @@ index 3aca22c0b..3115353e3 100644
                       DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/lib/libscanbuild/${lib})
    list(APPEND Depends ${CMAKE_BINARY_DIR}/lib/libscanbuild/${lib})
    install(FILES lib/libscanbuild/${lib}
--          DESTINATION lib${CLANG_LIBDIR_SUFFIX}/libscanbuild
+-          DESTINATION lib/libscanbuild
 +          DESTINATION "${CMAKE_INSTALL_LIBDIR}/libscanbuild"
            COMPONENT scan-build-py)
  endforeach()
@@ -55,7 +55,7 @@ index 3aca22c0b..3115353e3 100644
                       DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/lib/libscanbuild/resources/${resource})
    list(APPEND Depends ${CMAKE_BINARY_DIR}/lib/libscanbuild/resources/${resource})
    install(FILES lib/libscanbuild/resources/${resource}
--          DESTINATION lib${CLANG_LIBDIR_SUFFIX}/libscanbuild/resources
+-          DESTINATION lib/libscanbuild/resources
 +          DESTINATION "${CMAKE_INSTALL_LIBDIR}/libscanbuild/resources"
            COMPONENT scan-build-py)
  endforeach()
@@ -64,7 +64,7 @@ index 3aca22c0b..3115353e3 100644
                       DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/lib/libear/${lib})
    list(APPEND Depends ${CMAKE_BINARY_DIR}/lib/libear/${lib})
    install(FILES lib/libear/${lib}
--          DESTINATION lib${CLANG_LIBDIR_SUFFIX}/libear
+-          DESTINATION lib/libear
 +          DESTINATION "${CMAKE_INSTALL_LIBDIR}/libear"
            COMPONENT scan-build-py)
  endforeach()

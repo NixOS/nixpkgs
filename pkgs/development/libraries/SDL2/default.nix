@@ -5,10 +5,11 @@
   fetchFromGitHub,
   nix-update-script,
   pkg-config,
+  mesa,
   libGLSupported ? lib.elem stdenv.hostPlatform.system mesa.meta.platforms,
   openglSupport ? libGLSupported,
   libGL,
-  alsaSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid,
+  alsaSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
   alsa-lib,
   x11Support ? !stdenv.hostPlatform.isWindows && !stdenv.hostPlatform.isAndroid,
   libX11,
@@ -21,25 +22,26 @@
   libXext,
   libXxf86vm,
   libXrandr,
-  waylandSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid,
+  waylandSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
   wayland,
   wayland-protocols,
   wayland-scanner,
   drmSupport ? false,
   libdrm,
-  mesa,
+  libgbm,
   libxkbcommon,
-  dbusSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid,
+  dbusSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
   dbus,
-  udevSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid,
+  udevSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
   udev,
   ibusSupport ? false,
   ibus,
-  libdecorSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid,
+  libdecorSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
   libdecor,
-  pipewireSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid,
+  pipewireSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
   pipewire, # NOTE: must be built with SDL2 without pipewire support
-  pulseaudioSupport ? config.pulseaudio or stdenv.isLinux && !stdenv.hostPlatform.isAndroid,
+  pulseaudioSupport ?
+    config.pulseaudio or stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
   libpulseaudio,
   AudioUnit,
   Cocoa,
@@ -68,13 +70,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "SDL2";
-  version = "2.30.6";
+  version = "2.30.11";
 
   src = fetchFromGitHub {
     owner = "libsdl-org";
     repo = "SDL";
     rev = "release-${finalAttrs.version}";
-    hash = "sha256-ij9/VhSacUaPbMGX1hx2nz0n8b1tDb1PnC7IO9TlNhE=";
+    hash = "sha256-2NVZNqYhnAsljuF0BhBSJ5HmE9cS41gJep4Q3VxUGkY=";
   };
   dontDisableStatic = if withStatic then 1 else 0;
   outputs = [
@@ -112,7 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
   dlopenPropagatedBuildInputs =
     [ ]
     # Propagated for #include <GLES/gl.h> in SDL_opengles.h.
-    ++ lib.optional (openglSupport && !stdenv.isDarwin) libGL
+    ++ lib.optional (openglSupport && !stdenv.hostPlatform.isDarwin) libGL
     # Propagated for #include <X11/Xlib.h> and <X11/Xatom.h> in SDL_syswm.h.
     ++ lib.optionals x11Support [ libX11 ];
 
@@ -145,7 +147,7 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals drmSupport [
       libdrm
-      mesa
+      libgbm
     ];
 
   buildInputs =
@@ -153,7 +155,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ finalAttrs.dlopenBuildInputs
     ++ lib.optional ibusSupport ibus
     ++ lib.optionals waylandSupport [ wayland-protocols ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       AudioUnit
       Cocoa
       CoreAudio
@@ -169,7 +171,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional (!x11Support) "--without-x"
     ++ lib.optional alsaSupport "--with-alsa-prefix=${alsa-lib.out}/lib"
     ++ lib.optional stdenv.hostPlatform.isWindows "--disable-video-opengles"
-    ++ lib.optional stdenv.isDarwin "--disable-sdltest";
+    ++ lib.optional stdenv.hostPlatform.isDarwin "--disable-sdltest";
 
   # We remove libtool .la files when static libs are requested,
   # because they make the builds of downstream libs like `SDL_tff`

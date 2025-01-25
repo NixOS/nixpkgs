@@ -1,33 +1,31 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  stdenv,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "flexget";
-  version = "3.11.43";
+  version = "3.13.6";
   pyproject = true;
 
   # Fetch from GitHub in order to use `requirements.in`
   src = fetchFromGitHub {
     owner = "Flexget";
     repo = "Flexget";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-KX7Bvu4rt+Q7x2XkBiZMngAgqRKYu90EVi2oQ21o5AI=";
+    tag = "v${version}";
+    hash = "sha256-I6AQtoGk/YUDM5DzegvLi8QmVvoma16zJGZ8BMUUN3c=";
   };
 
-  postPatch = ''
-    # remove dependency constraints but keep environment constraints
-    sed 's/[~<>=][^;]*//' -i requirements.txt
-  '';
+  # relax dep constrains, keep environment constraints
+  pythonRelaxDeps = true;
 
-  build-system = with python3.pkgs; [
-    setuptools
-    wheel
-  ];
+  build-system = with python3Packages; [ setuptools ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = with python3Packages; [
     # See https://github.com/Flexget/Flexget/blob/master/pyproject.toml
+    # and https://github.com/Flexget/Flexget/blob/develop/requirements.txt
     apscheduler
     beautifulsoup4
     colorama
@@ -43,11 +41,13 @@ python3.pkgs.buildPythonApplication rec {
     pyrss2gen
     python-dateutil
     pyyaml
+    rarfile
     rebulk
     requests
     rich
     rpyc
     sqlalchemy
+    zstandard
 
     # WebUI requirements
     cherrypy
@@ -68,6 +68,7 @@ python3.pkgs.buildPythonApplication rec {
     deluge-client
     cloudscraper
     python-telegram-bot
+    boto3
   ];
 
   pythonImportsCheck = [
@@ -95,14 +96,69 @@ python3.pkgs.buildPythonApplication rec {
     "flexget.plugins.services.pogcal_acquired"
   ];
 
-  # ~400 failures
-  doCheck = false;
+  nativeCheckInputs = [
+    python3Packages.pytestCheckHook
+    python3Packages.pytest-vcr
+    python3Packages.paramiko
+  ];
 
-  meta = with lib; {
+  doCheck = !stdenv.isDarwin;
+
+  disabledTests = [
+    # reach the Internet
+    "TestExistsMovie"
+    "TestImdb"
+    "TestImdbLookup"
+    "TestImdbParser"
+    "TestInputHtml"
+    "TestInputSites"
+    "TestNfoLookupWithMovies"
+    "TestNpoWatchlistInfo"
+    "TestNpoWatchlistLanguageTheTVDBLookup"
+    "TestNpoWatchlistPremium"
+    "TestPlex"
+    "TestRadarrListActions"
+    "TestRssOnline"
+    "TestSeriesRootAPI"
+    "TestSftpDownload"
+    "TestSftpList"
+    "TestSonarrListActions"
+    "TestSubtitleList"
+    "TestTMDBMovieLookupAPI"
+    "TestTVDBEpisodeABSLookupAPI"
+    "TestTVDBEpisodeAirDateLookupAPI"
+    "TestTVDBEpisodeLookupAPI"
+    "TestTVDBExpire"
+    "TestTVDBFavorites"
+    "TestTVDBLanguages"
+    "TestTVDBList"
+    "TestTVDBLookup"
+    "TestTVDBLookup"
+    "TestTVDBSeriesActorsLookupAPI"
+    "TestTVDBSeriesLookupAPI"
+    "TestTVDSearchIMDBLookupAPI"
+    "TestTVDSearchNameLookupAPI"
+    "TestTVDSearchZAP2ITLookupAPI"
+    "TestTVMAzeSeriesLookupAPI"
+    "TestTVMazeSeasonLookup"
+    "TestTVMazeShowLookup"
+    "TestTVMazeUnicodeLookup"
+    "TestTaskParsing::test_selected_parser_cleared"
+    "TestTheTVDBLanguages"
+    "TestTheTVDBList"
+    "TestTmdbLookup"
+    "TestURLRewriters"
+    "TestURLRewriters::test_ettv"
+    # others
+    "TestRegexp"
+    "TestYamlLists"
+  ];
+
+  meta = {
     homepage = "https://flexget.com/";
     changelog = "https://github.com/Flexget/Flexget/releases/tag/v${version}";
     description = "Multipurpose automation tool for all of your media";
-    license = licenses.mit;
-    maintainers = with maintainers; [ pbsds ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ pbsds ];
   };
 }

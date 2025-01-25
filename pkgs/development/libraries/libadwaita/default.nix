@@ -1,32 +1,37 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, gi-docgen
-, meson
-, ninja
-, pkg-config
-, sassc
-, vala
-, gobject-introspection
-, appstream
-, fribidi
-, glib
-, gtk4
-, gnome
-, adwaita-icon-theme
-, gsettings-desktop-schemas
-, desktop-file-utils
-, xvfb-run
-, AppKit
-, Foundation
-, testers
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  gi-docgen,
+  meson,
+  ninja,
+  pkg-config,
+  sassc,
+  vala,
+  gobject-introspection,
+  appstream,
+  fribidi,
+  glib,
+  gtk4,
+  gnome,
+  adwaita-icon-theme,
+  gsettings-desktop-schemas,
+  desktop-file-utils,
+  xvfb-run,
+  AppKit,
+  Foundation,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libadwaita";
-  version = "1.5.3";
+  version = "1.6.3";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
   outputBin = "devdoc"; # demo app
 
   src = fetchFromGitLab {
@@ -34,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "GNOME";
     repo = "libadwaita";
     rev = finalAttrs.version;
-    hash = "sha256-NCQCd/QnJg2fEI6q5ys8HQXinGnKaoxhMUHd8rwxAmk=";
+    hash = "sha256-4rYiNI6Oj++iqbPIwe8KvwviGnh93sAZ9wp1cIPZcBA=";
   };
 
   depsBuildBuild = [
@@ -49,38 +54,44 @@ stdenv.mkDerivation (finalAttrs: {
     sassc
     vala
     gobject-introspection
-    desktop-file-utils  # for validate-desktop-file
+    desktop-file-utils # for validate-desktop-file
   ];
 
-  mesonFlags = [
-    "-Dgtk_doc=true"
-  ] ++ lib.optionals (!finalAttrs.finalPackage.doCheck) [
-    "-Dtests=false"
-  ];
+  mesonFlags =
+    [
+      "-Dgtk_doc=true"
+    ]
+    ++ lib.optionals (!finalAttrs.finalPackage.doCheck) [
+      "-Dtests=false"
+    ];
 
-  buildInputs = [
-    appstream
-    fribidi
-  ] ++ lib.optionals stdenv.isDarwin [
-    AppKit
-    Foundation
-  ];
+  buildInputs =
+    [
+      appstream
+      fribidi
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      AppKit
+      Foundation
+    ];
 
   propagatedBuildInputs = [
     gtk4
   ];
 
-  nativeCheckInputs = [
-    adwaita-icon-theme
-  ] ++ lib.optionals (!stdenv.isDarwin) [
-    xvfb-run
-  ];
+  nativeCheckInputs =
+    [
+      adwaita-icon-theme
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      xvfb-run
+    ];
 
   # Tests had to be disabled on Darwin because test-button-content fails
   #
   # not ok /Adwaita/ButtonContent/style_class_button - Gdk-FATAL-CRITICAL:
   # gdk_macos_monitor_get_workarea: assertion 'GDK_IS_MACOS_MONITOR (self)' failed
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
   separateDebugInfo = true;
 
   checkPhase = ''
@@ -93,12 +104,14 @@ stdenv.mkDerivation (finalAttrs: {
       # AdwSettings needs to be initialized from “org.gnome.desktop.interface” GSettings schema when portal is not used for color scheme.
       # It will not actually be used since the “color-scheme” key will only have been introduced in GNOME 42, falling back to detecting theme name.
       # See adw_settings_constructed function in https://gitlab.gnome.org/GNOME/libadwaita/commit/60ec69f0a5d49cad8a6d79e4ecefd06dc6e3db12
-      "XDG_DATA_DIRS=${glib.getSchemaDataDirPath gsettings-desktop-schemas}"
+      #
+      # The "Validate docs" test looks for various GIR dependencies, thus preserve the existing paths.
+      "XDG_DATA_DIRS=$XDG_DATA_DIRS:${glib.getSchemaDataDirPath gsettings-desktop-schemas}"
 
       # Tests need a cache directory
       "HOME=$TMPDIR"
     )
-    env "''${testEnvironment[@]}" ${lib.optionalString (!stdenv.isDarwin) "xvfb-run"} \
+    env "''${testEnvironment[@]}" ${lib.optionalString (!stdenv.hostPlatform.isDarwin) "xvfb-run"} \
       meson test --print-errorlogs
 
     runHook postCheck

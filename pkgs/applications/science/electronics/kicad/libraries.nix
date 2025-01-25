@@ -1,20 +1,23 @@
-{ lib, stdenv
-, cmake
-, gettext
-, libSrc
-, stepreduce
-, parallel
-, zip
+{
+  lib,
+  stdenv,
+  cmake,
+  libSrc,
+  stepreduce,
+  parallel,
+  zip,
 }:
 let
-  mkLib = name:
+  mkLib =
+    name:
     stdenv.mkDerivation {
       pname = "kicad-${name}";
       version = builtins.substring 0 10 (libSrc name).rev;
 
       src = libSrc name;
 
-      nativeBuildInputs = [ cmake ]
+      nativeBuildInputs =
+        [ cmake ]
         ++ lib.optionals (name == "packages3d") [
           stepreduce
           parallel

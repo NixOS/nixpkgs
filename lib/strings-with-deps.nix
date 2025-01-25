@@ -52,10 +52,81 @@ let
 in
 rec {
 
-  /* !!! The interface of this function is kind of messed up, since
-     it's way too overloaded and almost but not quite computes a
-     topological sort of the depstrings. */
+  /**
+    Topologically sort a collection of dependent strings.
+    Only the values to keys listed in `arg` and their dependencies will be included in the result.
 
+    ::: {.note}
+    This function doesn't formally fulfill the definition of topological sorting, but it's good enough for our purposes in Nixpkgs.
+    :::
+
+    # Inputs
+
+    `predefined` (attribute set)
+
+    : strings with annotated dependencies (strings or attribute set)
+      A value can be a simple string if it has no dependencies.
+      Otherwise, is can be an attribute set with the following attributes:
+      - `deps` (list of strings)
+      - `text` (Any
+
+    `arg` (list of strings)
+
+    : Keys for which the values in the dependency closure will be included in the result
+
+    # Type
+
+    ```
+    textClosureList :: { ${phase} :: { deps :: [String]; text :: String; } | String; } -> [String] -> [String]
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.stringsWithDeps.textClosureList` usage example
+
+    ```nix
+    textClosureList {
+      a = {
+        deps = [ "b" "c" "e" ];
+        text = "a: depends on b, c and e";
+      };
+      b = {
+        deps = [ ];
+        text = "b: no dependencies";
+      };
+      c = {
+        deps = [ "b" ];
+        text = "c: depends on b";
+      };
+      d = {
+        deps = [ "c" ];
+        text = "d: not being depended on by anything in `arg`";
+      };
+      e = {
+        deps = [ "c" ];
+        text = "e: depends on c, depended on by a, not in `arg`";
+      };
+    } [
+      "a"
+      "b"
+      "c"
+    ]
+    => [
+      "b: no dependencies"
+      "c: depends on b"
+      "e: depends on c, depended on by a, not in `arg`"
+      "a: depends on b, c and e"
+    ]
+    ```
+    :::
+
+    Common real world usages are:
+    - Ordering the dependent phases of `system.activationScripts`
+    - Ordering the dependent phases of `system.userActivationScripts`
+
+    For further examples see: [NixOS activation script](https://nixos.org/manual/nixos/stable/#sec-activation-script)
+
+  */
   textClosureList = predefined: arg:
     let
       f = done: todo:

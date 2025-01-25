@@ -42,7 +42,7 @@ buildPythonPackage rec {
       "remote ref"
       "definitions"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "test_compile_to_code_custom_format" # cannot import temporary module created during test
     ];
 

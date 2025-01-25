@@ -9,8 +9,9 @@
   # dependencies
   aiohttp,
   dataclasses-json,
-  langchain-core,
+  httpx-sse,
   langchain,
+  langchain-core,
   langsmith,
   pydantic-settings,
   pyyaml,
@@ -24,7 +25,7 @@
 
   # tests
   httpx,
-  langchain-standard-tests,
+  langchain-tests,
   lark,
   pandas,
   pytest-asyncio,
@@ -38,27 +39,32 @@
 
 buildPythonPackage rec {
   pname = "langchain-community";
-  version = "0.3.0";
+  version = "0.3.15";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    rev = "refs/tags/langchain-community==${version}";
-    hash = "sha256-8kF7KlXcWbquRtp8EumkFYhGd0onxifVZsts0SU1dzE=";
+    tag = "langchain-community==${version}";
+    hash = "sha256-2/Zrl/wED/zm1m+NqgAD4AdrEh/LjFOeQoOSSM05e+s=";
   };
 
   sourceRoot = "${src.name}/libs/community";
 
   build-system = [ poetry-core ];
 
-  pythonRelaxDeps = [ "pydantic-settings" ];
+  pythonRelaxDeps = [
+    "numpy"
+    "pydantic-settings"
+    "tenacity"
+  ];
 
   dependencies = [
     aiohttp
     dataclasses-json
-    langchain-core
+    httpx-sse
     langchain
+    langchain-core
     langsmith
     pydantic-settings
     pyyaml
@@ -76,7 +82,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     httpx
-    langchain-standard-tests
+    langchain-tests
     lark
     pandas
     pytest-asyncio
@@ -91,7 +97,7 @@ buildPythonPackage rec {
   pytestFlagsArray = [ "tests/unit_tests" ];
 
   passthru = {
-    updateScript = langchain-core.updateScript;
+    inherit (langchain-core) updateScript;
   };
 
   __darwinAllowLocalNetworking = true;
@@ -104,6 +110,12 @@ buildPythonPackage rec {
     # See https://github.com/NixOS/nixpkgs/pull/326337 and https://github.com/wasmerio/wasmer-python/issues/778
     "test_table_info"
     "test_sql_database_run"
+    # pydantic.errors.PydanticUserError: `SQLDatabaseToolkit` is not fully defined; you should define `BaseCache`, then call `SQLDatabaseToolkit.model_rebuild()`.
+    "test_create_sql_agent"
+    # pydantic.errors.PydanticUserError: `NatBotChain` is not fully defined; you should define `BaseCache`, then call `NatBotChain.model_rebuild()`.
+    "test_proper_inputs"
+    # pydantic.errors.PydanticUserError: `NatBotChain` is not fully defined; you should define `BaseCache`, then call `NatBotChain.model_rebuild()`.
+    "test_variable_key_naming"
   ];
 
   meta = {

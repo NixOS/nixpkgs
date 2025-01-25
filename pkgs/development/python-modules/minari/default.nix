@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
@@ -20,6 +19,7 @@
   google-cloud-storage,
   tqdm,
   h5py,
+  huggingface-hub,
   mktestdocs,
   pytest,
 
@@ -30,16 +30,14 @@
 
 buildPythonPackage rec {
   pname = "minari";
-  version = "0.5.0";
+  version = "0.5.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Farama-Foundation";
     repo = "Minari";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-SVt93d0GbCxeZXhh5vMPvnsBAeJAfGWNceFi0W9RgeM=";
+    tag = "v${version}";
+    hash = "sha256-7iIM1WGQRmhUh8idP/vtLnAbBncK6ezMyTvSAKW/9FE=";
   };
 
   build-system = [
@@ -62,6 +60,11 @@ buildPythonPackage rec {
       tqdm
     ];
     hdf5 = [ h5py ];
+    hf = [ huggingface-hub ];
+    integrations = [
+      # agilerl
+      # d3rlpy
+    ];
     testing = [
       # gymnasium-robotics
       mktestdocs

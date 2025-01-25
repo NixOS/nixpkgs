@@ -125,6 +125,8 @@ A set of functions that build a predefined set of minimal Linux distributions im
   * `debian10x86_64`
   * `debian11i386`
   * `debian11x86_64`
+  * `debian12i386`
+  * `debian12x86_64`
 
 ### Attributes {#vm-tools-diskImageFuns-attributes}
 

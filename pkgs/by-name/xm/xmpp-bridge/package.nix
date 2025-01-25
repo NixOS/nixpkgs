@@ -45,5 +45,6 @@ stdenv.mkDerivation rec {
     mainProgram = "xmpp-bridge";
     maintainers = with lib.maintainers; [ gigahawk ];
     platforms = lib.platforms.unix;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

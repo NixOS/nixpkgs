@@ -5,9 +5,11 @@
   google-api-core,
   google-cloud-testutils,
   grpc-google-iam-v1,
-  grpcio,
   grpcio-status,
+  grpcio,
   libcst,
+  opentelemetry-api,
+  opentelemetry-sdk,
   proto-plus,
   protobuf,
   pytest-asyncio,
@@ -18,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-pubsub";
-  version = "2.23.1";
+  version = "2.27.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -26,7 +28,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "google_cloud_pubsub";
     inherit version;
-    hash = "sha256-4f3nm1tktyEpCvTAIpB6/LuDUS2S9OXDNMORz7sCKss=";
+    hash = "sha256-2SwVbH3dDlElAI+XeJgZjXsa52YCYFZJcnG+xJCWR/4=";
   };
 
   build-system = [ setuptools ];
@@ -37,11 +39,13 @@ buildPythonPackage rec {
     grpcio
     grpcio-status
     libcst
+    opentelemetry-api
+    opentelemetry-sdk
     proto-plus
     protobuf
   ] ++ google-api-core.optional-dependencies.grpc;
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     libcst = [ libcst ];
   };
 

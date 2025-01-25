@@ -1,28 +1,50 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.i18n.inputMethod;
 
-  allowedTypes = lib.types.enum [ "ibus" "fcitx5" "nabi" "uim" "hime" "kime" ];
+  allowedTypes = lib.types.enum [
+    "ibus"
+    "fcitx5"
+    "nabi"
+    "uim"
+    "hime"
+    "kime"
+  ];
 
-  gtk2_cache = pkgs.runCommand "gtk2-immodule.cache"
-    { preferLocalBuild = true;
-      allowSubstitutes = false;
-      buildInputs = [ pkgs.gtk2 cfg.package ];
-    }
-    ''
-      mkdir -p $out/etc/gtk-2.0/
-      GTK_PATH=${cfg.package}/lib/gtk-2.0/ gtk-query-immodules-2.0 > $out/etc/gtk-2.0/immodules.cache
-    '';
+  gtk2_cache =
+    pkgs.runCommand "gtk2-immodule.cache"
+      {
+        preferLocalBuild = true;
+        allowSubstitutes = false;
+        buildInputs = [
+          pkgs.gtk2
+          cfg.package
+        ];
+      }
+      ''
+        mkdir -p $out/etc/gtk-2.0/
+        GTK_PATH=${cfg.package}/lib/gtk-2.0/ gtk-query-immodules-2.0 > $out/etc/gtk-2.0/immodules.cache
+      '';
 
-  gtk3_cache = pkgs.runCommand "gtk3-immodule.cache"
-    { preferLocalBuild = true;
-      allowSubstitutes = false;
-      buildInputs = [ pkgs.gtk3 cfg.package ];
-    }
-    ''
-      mkdir -p $out/etc/gtk-3.0/
-      GTK_PATH=${cfg.package}/lib/gtk-3.0/ gtk-query-immodules-3.0 > $out/etc/gtk-3.0/immodules.cache
-    '';
+  gtk3_cache =
+    pkgs.runCommand "gtk3-immodule.cache"
+      {
+        preferLocalBuild = true;
+        allowSubstitutes = false;
+        buildInputs = [
+          pkgs.gtk3
+          cfg.package
+        ];
+      }
+      ''
+        mkdir -p $out/etc/gtk-3.0/
+        GTK_PATH=${cfg.package}/lib/gtk-3.0/ gtk-query-immodules-3.0 > $out/etc/gtk-3.0/immodules.cache
+      '';
 
 in
 {
@@ -34,14 +56,14 @@ in
       };
 
       enabled = lib.mkOption {
-        type    = lib.types.nullOr allowedTypes;
+        type = lib.types.nullOr allowedTypes;
         default = null;
         example = "fcitx5";
         description = "Deprecated - use `type` and `enable = true` instead";
       };
 
       type = lib.mkOption {
-        type    = lib.types.nullOr allowedTypes;
+        type = lib.types.nullOr allowedTypes;
         default = cfg.enabled;
         defaultText = lib.literalMD "The value of the deprecated option `enabled`, defaulting to null";
         example = "fcitx5";
@@ -63,8 +85,8 @@ in
 
       package = lib.mkOption {
         internal = true;
-        type     = lib.types.nullOr lib.types.path;
-        default  = null;
+        type = lib.types.nullOr lib.types.path;
+        default = null;
         description = ''
           The input method method package.
         '';
@@ -73,8 +95,14 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    warnings = lib.optional (cfg.enabled != null) "i18n.inputMethod.enabled will be removed in a future release. Please use .type, and .enable = true instead";
-    environment.systemPackages = [ cfg.package gtk2_cache gtk3_cache ];
+    warnings =
+      lib.optional (cfg.enabled != null)
+        "i18n.inputMethod.enabled will be removed in a future release. Please use .type, and .enable = true instead";
+    environment.systemPackages = [
+      cfg.package
+      gtk2_cache
+      gtk3_cache
+    ];
   };
 
   meta = {

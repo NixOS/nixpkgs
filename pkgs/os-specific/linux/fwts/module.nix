@@ -1,4 +1,9 @@
-{ lib, stdenv, fwts, kernel }:
+{
+  lib,
+  stdenv,
+  fwts,
+  kernel,
+}:
 
 stdenv.mkDerivation rec {
   pname = "fwts-efi-runtime";
@@ -18,7 +23,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "pic" ];
 
-  makeFlags = kernel.makeFlags ++ [
+  makeFlags = kernel.moduleMakeFlags ++ [
     "INSTALL_MOD_PATH=${placeholder "out"}"
   ];
 

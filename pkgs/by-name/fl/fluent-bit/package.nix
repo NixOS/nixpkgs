@@ -14,17 +14,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fluent-bit";
-  version = "3.1.7";
+  version = "3.2.4";
 
   src = fetchFromGitHub {
     owner = "fluent";
     repo = "fluent-bit";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-aolwCWZa+HS7NEbRxkcH+8Lv3Q3sDYqa4uFS1fANRHI=";
+    hash = "sha256-oTCGjDmGVovsfj+4fjIKy/xpiuYc0Q44LYwYPI4dSF8=";
   };
 
   # optional only to avoid linux rebuild
-  patches = lib.optionals stdenv.isDarwin [ ./macos-11-sdk-compat.patch ];
+  patches = lib.optionals stdenv.hostPlatform.isDarwin [ ./macos-11-sdk-compat.patch ];
 
   nativeBuildInputs = [
     cmake
@@ -38,8 +38,8 @@ stdenv.mkDerivation (finalAttrs: {
       libyaml
       postgresql
     ]
-    ++ lib.optionals stdenv.isLinux [ systemd ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ systemd ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk_11_0.frameworks.IOKit
       darwin.apple_sdk_11_0.frameworks.Foundation
     ];
@@ -49,14 +49,12 @@ stdenv.mkDerivation (finalAttrs: {
     "-DFLB_METRICS=ON"
     "-DFLB_HTTP_SERVER=ON"
     "-DFLB_OUT_PGSQL=ON"
-  ] ++ lib.optionals stdenv.isDarwin [ "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.13" ];
+  ];
 
   env.NIX_CFLAGS_COMPILE = toString (
-    # Used by the embedded luajit, but is not predefined on older mac SDKs.
-    lib.optionals stdenv.isDarwin [ "-DTARGET_OS_IPHONE=0" ]
     # Assumes GNU version of strerror_r, and the posix version has an
     # incompatible return type.
-    ++ lib.optionals (!stdenv.hostPlatform.isGnu) [ "-Wno-int-conversion" ]
+    lib.optionals (!stdenv.hostPlatform.isGnu) [ "-Wno-int-conversion" ]
   );
 
   outputs = [

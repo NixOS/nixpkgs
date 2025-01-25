@@ -55,6 +55,11 @@ buildPythonPackage rec {
   postPatch = ''
     # Remove overly restrictive version constraints
     sed -i -e "s/>=.*//" requirements.txt
+
+    # https://github.com/coddingtonbear/python-measurement/pull/8
+    substituteInPlace tests/test_client.py \
+      --replace-fail "Weight" "Mass" \
+      --replace-fail '"Mass"' '"Weight"'
   '';
 
   disabledTests = [
@@ -64,11 +69,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "myfitnesspal" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to access meal tracking data stored in MyFitnessPal";
     mainProgram = "myfitnesspal";
     homepage = "https://github.com/coddingtonbear/python-myfitnesspal";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bhipple ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bhipple ];
   };
 }

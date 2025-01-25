@@ -1,7 +1,8 @@
-{ config
-, lib
-, pkgs
-, ...
+{
+  config,
+  lib,
+  pkgs,
+  ...
 }:
 let
   cfg = config.programs.gamescope;
@@ -9,8 +10,7 @@ let
   gamescope =
     let
       wrapperArgs =
-        lib.optional (cfg.args != [ ])
-          ''--add-flags "${builtins.toString cfg.args}"''
+        lib.optional (cfg.args != [ ]) ''--add-flags "${builtins.toString cfg.args}"''
         ++ builtins.attrValues (builtins.mapAttrs (var: val: "--set-default ${var} ${val}") cfg.env);
     in
     pkgs.runCommand "gamescope" { nativeBuildInputs = [ pkgs.makeBinaryWrapper ]; } ''
@@ -38,7 +38,10 @@ in
     args = lib.mkOption {
       type = lib.types.listOf lib.types.str;
       default = [ ];
-      example = [ "--rt" "--prefer-vk-device 8086:9bc4" ];
+      example = [
+        "--rt"
+        "--prefer-vk-device 8086:9bc4"
+      ];
       description = ''
         Arguments passed to GameScope on startup.
       '';

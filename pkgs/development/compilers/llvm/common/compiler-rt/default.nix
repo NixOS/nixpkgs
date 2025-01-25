@@ -10,10 +10,11 @@
 , cmake
 , ninja
 , python3
-, xcbuild
 , libllvm
+, jq
 , libcxx
 , linuxHeaders
+, freebsd
 , libxcrypt
 
 # Some platforms have switched to using compiler-rt, but still want a
@@ -27,6 +28,7 @@
 # `libcompiler_rt` library, at least under certain configurations. Some
 # platforms stil expect this, however, so we symlink one into place.
 , forceLinkCompilerRt ? stdenv.hostPlatform.isOpenBSD
+, devExtraCmakeFlags ? []
 }:
 
 let
@@ -38,48 +40,51 @@ let
   # use clean up the `cmakeFlags` rats nest below.
   haveLibcxx = stdenv.cc.libcxx != null;
   isDarwinStatic = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isStatic && lib.versionAtLeast release_version "16";
-  inherit (stdenv.hostPlatform) isMusl isAarch64;
-  noSanitizers = !haveLibc || bareMetal || isMusl || isDarwinStatic;
+  inherit (stdenv.hostPlatform) isMusl isAarch64 isWindows;
+  noSanitizers = !haveLibc || bareMetal || isMusl || isDarwinStatic || isWindows;
 
   baseName = "compiler-rt";
   pname = baseName + lib.optionalString (haveLibc) "-libc";
 
   src' = if monorepoSrc != null then
-    runCommand "${baseName}-src-${version}" {} ''
+    runCommand "${baseName}-src-${version}" { inherit (monorepoSrc) passthru; } (''
       mkdir -p "$out"
+    '' + lib.optionalString (lib.versionAtLeast release_version "14") ''
       cp -r ${monorepoSrc}/cmake "$out"
+    '' + ''
       cp -r ${monorepoSrc}/${baseName} "$out"
-    '' else src;
-
-  preConfigure = lib.optionalString (!haveLibc) ''
-    cmakeFlagsArray+=(-DCMAKE_C_FLAGS="-nodefaultlibs -ffreestanding")
-  '';
+    '') else src;
 in
 
-stdenv.mkDerivation ({
+stdenv.mkDerivation {
   inherit pname version patches;
 
   src = src';
-  sourceRoot = if lib.versionOlder release_version "13" then null
-    else "${src'.name}/${baseName}";
+  sourceRoot = "${src'.name}/${baseName}";
 
   nativeBuildInputs = [ cmake ]
     ++ (lib.optional (lib.versionAtLeast release_version "15") ninja)
     ++ [ python3 libllvm.dev ]
-    ++ lib.optional stdenv.isDarwin xcbuild.xcrun;
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ jq ];
   buildInputs =
-    lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isRiscV) linuxHeaders;
+    lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isRiscV) linuxHeaders
+    ++ lib.optional (stdenv.hostPlatform.isFreeBSD) freebsd.include;
 
-  env.NIX_CFLAGS_COMPILE = toString ([
-    "-DSCUDO_DEFAULT_OPTIONS=DeleteSizeMismatch=0:DeallocationTypeMismatch=0"
-  ] ++ lib.optionals (!haveLibc) [
-    # The compiler got stricter about this, and there is a usellvm patch below
-    # which patches out the assert include causing an implicit definition of
-    # assert. It would be nicer to understand why compiler-rt thinks it should
-    # be able to #include <assert.h> in the first place; perhaps it's in the
-    # wrong, or perhaps there is a way to provide an assert.h.
-    "-Wno-error=implicit-function-declaration"
-  ]);
+  env = {
+    NIX_CFLAGS_COMPILE = toString ([
+      "-DSCUDO_DEFAULT_OPTIONS=DeleteSizeMismatch=0:DeallocationTypeMismatch=0"
+    ] ++ lib.optionals (!haveLibc) [
+      # The compiler got stricter about this, and there is a usellvm patch below
+      # which patches out the assert include causing an implicit definition of
+      # assert. It would be nicer to understand why compiler-rt thinks it should
+      # be able to #include <assert.h> in the first place; perhaps it's in the
+      # wrong, or perhaps there is a way to provide an assert.h.
+      "-Wno-error=implicit-function-declaration"
+    ]);
+  } // lib.optionalAttrs (stdenv.hostPlatform.isDarwin) {
+    # Work around clang’s trying to invoke unprefixed-ld on Darwin when `-target` is passed.
+    NIX_CFLAGS_LINK = "--ld-path=${stdenv.cc.bintools}/bin/${stdenv.cc.targetPrefix}ld";
+  };
 
   cmakeFlags = [
     "-DCOMPILER_RT_DEFAULT_TARGET_ONLY=ON"
@@ -122,55 +127,65 @@ stdenv.mkDerivation ({
     "-DCOMPILER_RT_OS_DIR=baremetal"
   ] ++ lib.optionals (stdenv.hostPlatform.isDarwin) (lib.optionals (lib.versionAtLeast release_version "16") [
     "-DCMAKE_LIPO=${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}lipo"
+  ] ++ lib.optionals (!haveLibcxx) [
+    # Darwin fails to detect that the compiler supports the `-g` flag when there is no libc++ during the
+    # compiler-rt bootstrap, which prevents compiler-rt from building. The `-g` flag is required by the
+    # Darwin support, so force it to be enabled during the first stage of the compiler-rt bootstrap.
+    "-DCOMPILER_RT_HAS_G_FLAG=ON"
   ] ++ [
-    "-DDARWIN_macosx_OVERRIDE_SDK_VERSION=ON"
     "-DDARWIN_osx_ARCHS=${stdenv.hostPlatform.darwinArch}"
     "-DDARWIN_osx_BUILTIN_ARCHS=${stdenv.hostPlatform.darwinArch}"
+    "-DSANITIZER_MIN_OSX_VERSION=${stdenv.hostPlatform.darwinMinVersion}"
   ] ++ lib.optionals (lib.versionAtLeast release_version "15") [
     # `COMPILER_RT_DEFAULT_TARGET_ONLY` does not apply to Darwin:
     # https://github.com/llvm/llvm-project/blob/27ef42bec80b6c010b7b3729ed0528619521a690/compiler-rt/cmake/base-config-ix.cmake#L153
     "-DCOMPILER_RT_ENABLE_IOS=OFF"
-  ]) ++ lib.optionals (lib.versionAtLeast version "19" && stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13") [
-    "-DSANITIZER_MIN_OSX_VERSION=10.10"
-  ]  ++ lib.optionals (noSanitizers && lib.versionAtLeast release_version "19") [
+  ]) ++ lib.optionals (noSanitizers && lib.versionAtLeast release_version "19") [
     "-DCOMPILER_RT_BUILD_CTX_PROFILE=OFF"
-  ];
+  ] ++ devExtraCmakeFlags;
 
   outputs = [ "out" "dev" ];
 
-  # TSAN requires XPC on Darwin, which we have no public/free source files for. We can depend on the Apple frameworks
-  # to get it, but they're unfree. Since LLVM is rather central to the stdenv, we patch out TSAN support so that Hydra
-  # can build this. If we didn't do it, basically the entire nixpkgs on Darwin would have an unfree dependency and we'd
-  # get no binary cache for the entire platform. If you really find yourself wanting the TSAN, make this controllable by
-  # a flag and turn the flag off during the stdenv build.
-  postPatch = lib.optionalString (!stdenv.isDarwin) ''
+  postPatch = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     substituteInPlace cmake/builtin-config-ix.cmake \
-      --replace 'set(X86 i386)' 'set(X86 i386 i486 i586 i686)'
-  '' + lib.optionalString stdenv.isDarwin ''
-    substituteInPlace cmake/config-ix.cmake \
-      --replace 'set(COMPILER_RT_HAS_TSAN TRUE)' 'set(COMPILER_RT_HAS_TSAN FALSE)'
-  '' + lib.optionalString (!haveLibc) ((lib.optionalString (lib.versionAtLeast release_version "18") ''
+      --replace-fail 'set(X86 i386)' 'set(X86 i386 i486 i586 i686)'
+  '' + lib.optionalString (!haveLibc) ((lib.optionalString (lib.versions.major release_version == "18") ''
     substituteInPlace lib/builtins/aarch64/sme-libc-routines.c \
-      --replace "<stdlib.h>" "<stddef.h>"
+      --replace-fail "<stdlib.h>" "<stddef.h>"
   '') + ''
     substituteInPlace lib/builtins/int_util.c \
-      --replace "#include <stdlib.h>" ""
-  '' + (if stdenv.hostPlatform.isFreeBSD then
-    # As per above, but in FreeBSD assert is a macro and simply allowing it to be implicitly declared causes Issues!!!!!
+      --replace-fail "#include <stdlib.h>" ""
+  '' + (lib.optionalString (!stdenv.hostPlatform.isFreeBSD)
+    # On FreeBSD, assert/static_assert are macros and allowing them to be implicitly declared causes link errors.
+    # see description above for why we're nuking assert.h normally but that doesn't work here.
+    # instead, we add the freebsd.include dependency explicitly
     ''
-    substituteInPlace lib/builtins/clear_cache.c lib/builtins/cpu_model${lib.optionalString (lib.versionAtLeast version "18") "/x86"}.c \
-      --replace "#include <assert.h>" "#define assert(e) ((e)?(void)0:__assert(__FUNCTION__,__FILE__,__LINE__,#e))"
-    '' else ''
     substituteInPlace lib/builtins/clear_cache.c \
-      --replace "#include <assert.h>" ""
-    substituteInPlace lib/builtins/cpu_model${lib.optionalString (lib.versionAtLeast version "18") "/x86"}.c \
-      --replace "#include <assert.h>" ""
+      --replace-fail "#include <assert.h>" ""
+    substituteInPlace lib/builtins/cpu_model${lib.optionalString (lib.versionAtLeast release_version "18") "/x86"}.c \
+      --replace-fail "#include <assert.h>" ""
   '')) + lib.optionalString (lib.versionAtLeast release_version "13" && lib.versionOlder release_version "14") ''
     # https://github.com/llvm/llvm-project/blob/llvmorg-14.0.6/libcxx/utils/merge_archives.py
     # Seems to only be used in v13 though it's present in v12 and v14, and dropped in v15.
     substituteInPlace ../libcxx/utils/merge_archives.py \
       --replace-fail "import distutils.spawn" "from shutil import which as find_executable" \
       --replace-fail "distutils.spawn." ""
+  '' + lib.optionalString (lib.versionAtLeast release_version "19")
+    # codesign in sigtool doesn't support the various options used by the build
+    # and is present in the bootstrap-tools. Removing find_program prevents the
+    # build from trying to use it and failing.
+    ''
+    substituteInPlace cmake/Modules/AddCompilerRT.cmake \
+      --replace-fail 'find_program(CODESIGN codesign)' ""
+  '';
+
+  preConfigure = lib.optionalString (lib.versionOlder release_version "16" && !haveLibc) ''
+    cmakeFlagsArray+=(-DCMAKE_C_FLAGS="-nodefaultlibs -ffreestanding")
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    cmakeFlagsArray+=(
+      "-DDARWIN_macosx_CACHED_SYSROOT=$SDKROOT"
+      "-DDARWIN_macosx_OVERRIDE_SDK_VERSION=$(jq -r .Version "$SDKROOT/SDKSettings.json")"
+    )
   '';
 
   # Hack around weird upsream RPATH bug
@@ -215,4 +230,4 @@ stdenv.mkDerivation ({
       # `enable_execute_stack.c` Also doesn't sound like something WASM would support.
       || (stdenv.hostPlatform.isWasm && haveLibc);
   };
-} // (if lib.versionOlder release_version "16" then { inherit preConfigure; } else {}))
+}

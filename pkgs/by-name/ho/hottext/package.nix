@@ -1,4 +1,10 @@
-{ lib, buildNimPackage, fetchFromSourcehut, gentium, makeDesktopItem }:
+{
+  lib,
+  buildNimPackage,
+  fetchFromSourcehut,
+  gentium,
+  makeDesktopItem,
+}:
 
 buildNimPackage (finalAttrs: {
   pname = "hottext";

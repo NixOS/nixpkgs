@@ -38,6 +38,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/huashengdun/webssh/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ davidtwco ];
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

@@ -10,12 +10,12 @@
   pytestCheckHook,
   pythonOlder,
   setuptools,
-  syrupy
+  syrupy,
 }:
 
 buildPythonPackage rec {
   pname = "brother";
-  version = "4.3.0";
+  version = "4.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -23,8 +23,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bieniu";
     repo = "brother";
-    rev = "refs/tags/${version}";
-    hash = "sha256-JnIJgR8OiN6y6ib0Y+FXa98Q/4dtvJ8q2r6tgQSRvN4=";
+    tag = version;
+    hash = "sha256-fWa5FNBGV8tnJ3CozMicXLGsDvnTjNzU8PdV266MeeQ=";
   };
 
   build-system = [ setuptools ];

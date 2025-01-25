@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "KaveIO";
     repo = "PhiK";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-YsH7vVn6gzejunUjUY/RIcvWtaQ/W1gbciJWKi5LDTk=";
   };
 

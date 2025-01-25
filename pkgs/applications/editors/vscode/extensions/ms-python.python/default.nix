@@ -48,7 +48,7 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
     + lib.optionalString pythonUseFixed ''
       # Patch `packages.json` so that nix's *python* is used as default value for `python.pythonPath`.
       substituteInPlace "./package.json" \
-        --replace "\"default\": \"python\"" "\"default\": \"${python3.interpreter}\""
+        --replace-fail "\"default\":\"python\"" "\"default\":\"${python3.interpreter}\""
     '';
 
   passthru.updateScript = writeScript "update" ''
@@ -88,6 +88,7 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
     changelog = "https://github.com/microsoft/vscode-python/releases";
     license = lib.licenses.mit;
     platforms = [
+      "aarch64-linux"
       "x86_64-linux"
       "aarch64-darwin"
       "x86_64-darwin"

@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SKY-ALIN";
     repo = "telegram-text";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-eUy4kyCmM/5Ag/0s9hYW2IIg+OTX2L7EsoOYivhd0pU=";
   };
 

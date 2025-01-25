@@ -1,21 +1,25 @@
-{ lib
-, buildDotnetModule
-, fetchFromGitHub
+{
+  lib,
+  buildDotnetModule,
+  fetchFromGitHub,
+  dotnetCorePackages,
 }:
 
 buildDotnetModule rec {
   pname = "depotdownloader";
-  version = "2.5.0";
+  version = "2.7.4";
 
   src = fetchFromGitHub {
     owner = "SteamRE";
     repo = "DepotDownloader";
     rev = "DepotDownloader_${version}";
-    sha256 = "Kgi0u+H5BIAhrjk9e+8H1h0p5Edm3+2twYBPY3JQGps=";
+    hash = "sha256-XcUWNr3l1Bsl8SRYm8OS7t2JYppfKJVrVWyM5OILFDA=";
   };
 
   projectFile = "DepotDownloader.sln";
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
+  dotnet-sdk = dotnetCorePackages.sdk_9_0;
+  dotnet-runtime = dotnetCorePackages.runtime_9_0;
 
   passthru.updateScript = ./update.sh;
 
@@ -24,7 +28,12 @@ buildDotnetModule rec {
     changelog = "https://github.com/SteamRE/DepotDownloader/releases/tag/DepotDownloader_${version}";
     license = licenses.gpl2Only;
     maintainers = [ maintainers.babbaj ];
-    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
     mainProgram = "DepotDownloader";
   };
 }

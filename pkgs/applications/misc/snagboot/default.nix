@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, python3
-, snagboot
-, testers
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
+  snagboot,
+  testers,
+  gitUpdater,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -39,7 +40,7 @@ python3.pkgs.buildPythonApplication rec {
     tftpy
   ];
 
-  postInstall = lib.optionalString stdenv.isLinux ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     rules="src/snagrecover/50-snagboot.rules"
     if [ ! -f "$rules" ]; then
         echo "$rules is missing, must update the Nix file."

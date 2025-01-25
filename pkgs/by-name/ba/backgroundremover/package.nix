@@ -1,9 +1,10 @@
-{ python3
-, lib
-, runCommand
-, fetchFromGitHub
-, fetchurl
-, gitUpdater
+{
+  python3,
+  lib,
+  runCommand,
+  fetchFromGitHub,
+  fetchurl,
+  gitUpdater,
 }:
 
 let
@@ -20,7 +21,7 @@ let
       hash = "sha256-LjVT4j0OzfbVSQgU0z/gzRTLm7N0RQRrfxtTugWwOxs=";
     };
 
-    models = runCommand "background-remover-models" {} ''
+    models = runCommand "background-remover-models" { } ''
       mkdir $out
       cat ${src}/models/u2a{a,b,c,d} > $out/u2net.pth
       cat ${src}/models/u2ha{a,b,c,d} > $out/u2net_human_seg.pth
@@ -32,9 +33,15 @@ let
         --replace-fail 'os.path.expanduser(os.path.join("~", ".u2net", model_name + ".pth"))' "os.path.join(\"$models\", model_name + \".pth\")"
     '';
 
-    nativeBuildInputs = [ p.setuptools p.wheel ];
+    nativeBuildInputs = [
+      p.setuptools
+      p.wheel
+    ];
 
-    pythonRelaxDeps = [ "pillow" "torchvision" ];
+    pythonRelaxDeps = [
+      "pillow"
+      "torchvision"
+    ];
 
     propagatedBuildInputs = [
       p.certifi
@@ -66,18 +73,22 @@ let
     passthru = {
       inherit models;
       tests = {
-        image = let
-          # random no copyright car image from the internet
-          demoImage = fetchurl {
-            url = "https://pics.craiyon.com/2023-07-16/38653769ac3b4e068181cb5ab1e542a1.webp";
-            hash = "sha256-Kvd06eZdibgDbabVVe0+cNTeS1rDnMXIZZpPlHIlfBo=";
-          };
-        in runCommand "backgroundremover-image-test.png" {
-          buildInputs = [ self ];
-        } ''
-          export NUMBA_CACHE_DIR=$(mktemp -d)
-          backgroundremover -i ${demoImage} -o $out
-        '';
+        image =
+          let
+            # random no copyright car image from the internet
+            demoImage = fetchurl {
+              url = "https://pics.craiyon.com/2023-07-16/38653769ac3b4e068181cb5ab1e542a1.webp";
+              hash = "sha256-Kvd06eZdibgDbabVVe0+cNTeS1rDnMXIZZpPlHIlfBo=";
+            };
+          in
+          runCommand "backgroundremover-image-test.png"
+            {
+              buildInputs = [ self ];
+            }
+            ''
+              export NUMBA_CACHE_DIR=$(mktemp -d)
+              backgroundremover -i ${demoImage} -o $out
+            '';
       };
       updateScript = gitUpdater { rev-prefix = "v"; };
     };
@@ -93,4 +104,5 @@ let
       maintainers = [ maintainers.lucasew ];
     };
   };
-in self
+in
+self

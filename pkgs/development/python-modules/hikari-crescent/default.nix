@@ -9,7 +9,7 @@
   python-dotenv,
   pytest-asyncio,
   croniter,
-  pynacl
+  pynacl,
 }:
 
 buildPythonPackage rec {
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hikari-crescent";
     repo = "hikari-crescent";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-0eDPdN+3lalgHiBNXuZUEJllAKFxdKK6paTFNHU5jIM=";
   };
 

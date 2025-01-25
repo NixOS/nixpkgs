@@ -59,7 +59,7 @@ let
 in
 buildPythonPackage rec {
   pname = "numpy";
-  version = "2.1.1";
+  version = "2.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -67,7 +67,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     extension = "tar.gz";
-    hash = "sha256-0M99VbEFE4eAdAWziY76+oYpl7TLqKpdvmV755Sv6v0=";
+    hash = "sha256-FA3YD/iYGlg6YJgL4aZVBo+K3r96RaBqaFjIc/zc1KA=";
   };
 
   patches = lib.optionals python.hasDistutilsCxxPatch [
@@ -90,7 +90,7 @@ buildPythonPackage rec {
       meson-python
       pkg-config
     ]
-    ++ lib.optionals stdenv.isDarwin [ xcbuild.xcrun ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcrun ]
     ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [ mesonEmulatorHook ];
 
   # we default openblas to build with 64 threads
@@ -99,11 +99,6 @@ buildPythonPackage rec {
   preConfigure = ''
     sed -i 's/-faltivec//' numpy/distutils/system_info.py
     export OMP_NUM_THREADS=$((NIX_BUILD_CORES > 64 ? 64 : NIX_BUILD_CORES))
-  '';
-
-  # HACK: copy mesonEmulatorHook's flags to the variable used by meson-python
-  postConfigure = ''
-    mesonFlags="$mesonFlags ''${mesonFlagsArray[@]}"
   '';
 
   buildInputs = [
@@ -140,11 +135,15 @@ buildPythonPackage rec {
   ];
 
   disabledTests =
-    lib.optionals (pythonAtLeast "3.13") [
+    [
+      # Tries to import numpy.distutils.msvccompiler, removed in setuptools 74.0
+      "test_api_importable"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.13") [
       # https://github.com/numpy/numpy/issues/26713
       "test_iter_refcount"
     ]
-    ++ lib.optionals stdenv.isAarch32 [
+    ++ lib.optionals stdenv.hostPlatform.isAarch32 [
       # https://github.com/numpy/numpy/issues/24548
       "test_impossible_feature_enable" # AssertionError: Failed to generate error
       "test_features" # AssertionError: Failure Detection
@@ -157,7 +156,7 @@ buildPythonPackage rec {
       "test_big_arrays" # ValueError: array is too big; `arr.size * arr.dtype.itemsize` is larger tha...
       "test_multinomial_pvals_float32" # Failed: DID NOT RAISE <class 'ValueError'>
     ]
-    ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
       # AssertionError: (np.int64(0), np.longdouble('9.9999999999999994515e-21'), np.longdouble('3.9696755572509052902e+20'), 'arctanh')
       "test_loss_of_precision"
     ];

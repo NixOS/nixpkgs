@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, qt5
-, openssl
-, protobuf
-, pkg-config
-, cmake
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qt5,
+  openssl,
+  protobuf,
+  pkg-config,
+  cmake,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -24,16 +25,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  buildInputs = (with qt5; [
-    qtbase
-    qttools
-    qtmultimedia
-    qtquickcontrols2
-    qtwayland
-  ]) ++ [
-    openssl
-    protobuf
-  ];
+  buildInputs =
+    (with qt5; [
+      qtbase
+      qttools
+      qtmultimedia
+      qtquickcontrols2
+      qtwayland
+    ])
+    ++ [
+      openssl
+      protobuf
+    ];
 
   nativeBuildInputs = [
     pkg-config
@@ -44,9 +47,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+  cmakeBuildType = "MinSizeRel";
+
   # https://github.com/blueprint-freespeech/ricochet-refresh/blob/main/BUILDING.md
   cmakeFlags = [
-    (lib.cmakeFeature "CMAKE_BUILD_TYPE" "MinSizeRel")
     (lib.cmakeBool "RICOCHET_REFRESH_INSTALL_DESKTOP" true)
     (lib.cmakeBool "USE_SUBMODULE_FMT" true)
   ];

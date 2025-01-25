@@ -4,7 +4,6 @@
   fetchFromGitHub,
   flit-core,
   pretend,
-  pydantic,
   pytestCheckHook,
   pythonOlder,
   requests,
@@ -12,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "id";
-  version = "1.4.0";
+  version = "1.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,16 +19,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "di";
     repo = "id";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-lmUBy0hJAxfF65RcBP7tTizrg8j2Zypu4sKgOUQCYh8=";
+    tag = "v${version}";
+    hash = "sha256-6Vkbs/i1roAtPGwLxdM+XKDrMTo0+NfVpAUpw6GPg9U=";
   };
 
   build-system = [ flit-core ];
 
-  dependencies = [
-    pydantic
-    requests
-  ];
+  dependencies = [ requests ];
 
   nativeCheckInputs = [
     pretend

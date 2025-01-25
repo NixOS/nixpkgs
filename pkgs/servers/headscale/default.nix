@@ -4,35 +4,34 @@
   fetchFromGitHub,
   installShellFiles,
   nixosTests,
+  postgresql,
 }:
 buildGoModule rec {
   pname = "headscale";
-  version = "0.22.3";
+  version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "juanfont";
     repo = "headscale";
     rev = "v${version}";
-    hash = "sha256-nqmTqe3F3Oh8rnJH0clwACD/0RpqmfOMXNubr3C8rEc=";
+    hash = "sha256-s9zzhN8NTC6YxOO6fyO+A0jleeY8bhN1wcbf4pvGkpI=";
   };
 
-  vendorHash = "sha256-IOkbbFtE6+tNKnglE/8ZuNxhPSnloqM2sLgTvagMmnc=";
+  vendorHash = "sha256-SBfeixT8DQOrK2SWmHHSOBtzRdSZs+pwomHpw6Jd+qc=";
 
-  patches = [
-    # backport of https://github.com/juanfont/headscale/pull/1697
-    ./trim-oidc-secret-path.patch
+  subPackages = [ "cmd/headscale" ];
 
-    # fix for headscale not reacting to SIGTERM
-    # see https://github.com/juanfont/headscale/pull/1480 and https://github.com/juanfont/headscale/issues/1461
-    ./sigterm-fix.patch
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/juanfont/headscale/cmd/headscale/cli.Version=v${version}"
   ];
 
-  ldflags = ["-s" "-w" "-X github.com/juanfont/headscale/cmd/headscale/cli.Version=v${version}"];
+  nativeBuildInputs = [ installShellFiles ];
 
-  nativeBuildInputs = [installShellFiles];
+  nativeCheckInputs = [ postgresql ];
+
   checkFlags = ["-short"];
-
-  tags = ["ts2019"];
 
   postInstall = ''
     installShellCompletion --cmd headscale \
@@ -63,6 +62,10 @@ buildGoModule rec {
       Headscale implements this coordination server.
     '';
     license = licenses.bsd3;
-    maintainers = with maintainers; [nkje jk kradalby misterio77 ghuntley];
+    mainProgram = "headscale";
+    maintainers = with maintainers; [
+      kradalby
+      misterio77
+    ];
   };
 }

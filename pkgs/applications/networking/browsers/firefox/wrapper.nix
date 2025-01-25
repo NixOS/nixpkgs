@@ -12,13 +12,13 @@
 , udev
 , libkrb5
 , libva
-, mesa # firefox wants gbm for drm+dmabuf
+, libgbm
 , cups
 , pciutils
+, vulkan-loader
 , sndio
 , libjack2
 , speechd-minimal
-, removeReferencesTo
 }:
 
 ## configurability of the wrapper itself
@@ -50,8 +50,9 @@ let
     # https://mozilla.github.io/policy-templates/
     , extraPolicies ? {}
     , extraPoliciesFiles ? []
-    , libName ? browser.libName or "firefox" # Important for tor package or the like
+    , libName ? browser.libName or applicationName # Important for tor package or the like
     , nixExtensions ? null
+    , hasMozSystemDirPatch ? (lib.hasPrefix "firefox" pname && !lib.hasSuffix "-bin" pname)
     }:
 
     let
@@ -86,7 +87,10 @@ let
                 else [])
        );
 
-      libs =   lib.optionals stdenv.isLinux [ udev libva mesa libnotify xorg.libXScrnSaver cups pciutils ]
+       libs = lib.optionals stdenv.hostPlatform.isLinux (
+            [ udev libva libgbm libnotify xorg.libXScrnSaver cups pciutils vulkan-loader ]
+            ++ lib.optional (cfg.speechSynthesisSupport or true) speechd-minimal
+       )
             ++ lib.optional pipewireSupport pipewire
             ++ lib.optional ffmpegSupport ffmpeg
             ++ lib.optional gssSupport libkrb5
@@ -98,7 +102,6 @@ let
             ++ lib.optional sndioSupport sndio
             ++ lib.optional jackSupport libjack2
             ++ lib.optional smartcardSupport opensc
-            ++ lib.optional (cfg.speechSynthesisSupport or true) speechd-minimal
             ++ pkcs11Modules
             ++ gtk_modules;
       gtk_modules = [ libcanberra-gtk3 ];
@@ -177,7 +180,8 @@ let
       #                           #
       #############################
 
-    in stdenv.mkDerivation {
+    in stdenv.mkDerivation (finalAttrs: {
+      __structuredAttrs = true;
       inherit pname version;
 
       desktopItem = makeDesktopItem ({
@@ -239,9 +243,65 @@ let
               };
             }));
 
-      nativeBuildInputs = [ makeWrapper lndir jq removeReferencesTo ];
+      nativeBuildInputs = [ makeWrapper lndir jq ];
       buildInputs = [ browser.gtk3 ];
 
+      makeWrapperArgs = [
+        "--prefix"
+        "LD_LIBRARY_PATH"
+        ":"
+        "${finalAttrs.libs}"
+
+        "--suffix"
+        "GTK_PATH"
+        ":"
+        "${lib.concatStringsSep ":" finalAttrs.gtk_modules}"
+
+        "--suffix" "PATH"
+        ":"
+        "${placeholder "out"}/bin"
+
+        "--set"
+        "MOZ_APP_LAUNCHER"
+        launcherName
+
+        "--set"
+        "MOZ_LEGACY_PROFILES"
+        "1"
+
+        "--set"
+        "MOZ_ALLOW_DOWNGRADE"
+        "1"
+
+        "--suffix"
+        "XDG_DATA_DIRS"
+        ":"
+        "${adwaita-icon-theme}/share"
+
+        "--set-default"
+        "MOZ_ENABLE_WAYLAND"
+        "1"
+
+      ] ++ lib.optionals (!xdg-utils.meta.broken) [
+        # make xdg-open overrideable at runtime
+        "--suffix"
+        "PATH"
+        ":"
+        "${lib.makeBinPath [ xdg-utils ]}"
+
+      ] ++ lib.optionals hasMozSystemDirPatch [
+        "--set"
+        "MOZ_SYSTEM_DIR"
+        "${placeholder "out"}/lib/mozilla"
+
+      ] ++ lib.optionals (!hasMozSystemDirPatch && allNativeMessagingHosts != [ ]) [
+        "--run"
+        ''mkdir -p ''${MOZ_HOME:-~/.mozilla}/native-messaging-hosts''
+
+      ] ++ lib.optionals (!hasMozSystemDirPatch) (lib.concatMap (ext: [
+        "--run"
+        ''ln -sfLt ''${MOZ_HOME:-~/.mozilla}/native-messaging-hosts ${ext}/lib/mozilla/native-messaging-hosts/*''
+      ]) allNativeMessagingHosts);
 
       buildCommand = ''
         if [ ! -x "${browser}/bin/${applicationName}" ]
@@ -310,21 +370,9 @@ let
           mv "$executablePath" "$oldExe"
         fi
 
-        # make xdg-open overrideable at runtime
-        makeWrapper "$oldExe" \
-          "''${executablePath}${nameSuffix}" \
-            --prefix LD_LIBRARY_PATH ':' "$libs" \
-            --suffix-each GTK_PATH ':' "$gtk_modules" \
-            ${lib.optionalString (!xdg-utils.meta.broken) "--suffix PATH ':' \"${xdg-utils}/bin\""} \
-            --suffix PATH ':' "$out/bin" \
-            --set MOZ_APP_LAUNCHER "${launcherName}" \
-            --set MOZ_SYSTEM_DIR "$out/lib/mozilla" \
-            --set MOZ_LEGACY_PROFILES 1 \
-            --set MOZ_ALLOW_DOWNGRADE 1 \
-            --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
-            --suffix XDG_DATA_DIRS : '${adwaita-icon-theme}/share' \
-            --set-default MOZ_ENABLE_WAYLAND 1 \
-            "''${oldWrapperArgs[@]}"
+        appendToVar makeWrapperArgs --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
+        concatTo makeWrapperArgs oldWrapperArgs
+        makeWrapper "$oldExe" "''${executablePath}${nameSuffix}" "''${makeWrapperArgs[@]}"
         #############################
         #                           #
         #   END EXTRA PREF CHANGES  #
@@ -346,10 +394,12 @@ let
 
         install -D -t $out/share/applications $desktopItem/share/applications/*
 
+      '' + lib.optionalString hasMozSystemDirPatch ''
         mkdir -p $out/lib/mozilla/native-messaging-hosts
         for ext in ${toString allNativeMessagingHosts}; do
             ln -sLt $out/lib/mozilla/native-messaging-hosts $ext/lib/mozilla/native-messaging-hosts/*
         done
+      '' + ''
 
         mkdir -p $out/lib/mozilla/pkcs11-modules
         for ext in ${toString pkcs11Modules}; do
@@ -414,14 +464,11 @@ let
       passthru = { unwrapped = browser; };
 
       disallowedRequisites = [ stdenv.cc ];
-      postInstall = ''
-        find "$out" -type f -exec remove-references-to -t ${stdenv.cc} '{}' +
-      '';
       meta = browser.meta // {
         inherit (browser.meta) description;
         mainProgram = launcherName;
         hydraPlatforms = [];
         priority = (browser.meta.priority or lib.meta.defaultPriority) - 1; # prefer wrapper over the package
       };
-    };
+    });
 in lib.makeOverridable wrapper

@@ -20,6 +20,12 @@ let
       ''}
 
       ln -s ${config.system.build.etc}/etc $out/etc
+
+      ${lib.optionalString config.system.etc.overlay.enable ''
+        ln -s ${config.system.build.etcMetadataImage} $out/etc-metadata-image
+        ln -s ${config.system.build.etcBasedir} $out/etc-basedir
+      ''}
+
       ln -s ${config.system.path} $out/sw
       ln -s "$systemd" $out/systemd
 
@@ -68,9 +74,19 @@ let
     else showWarnings config.warnings baseSystem;
 
   # Replace runtime dependencies
-  system = foldr ({ oldDependency, newDependency }: drv:
-      pkgs.replaceDependency { inherit oldDependency newDependency drv; }
-    ) baseSystemAssertWarn config.system.replaceRuntimeDependencies;
+  system = let inherit (config.system.replaceDependencies) replacements cutoffPackages; in
+    if replacements == [] then
+      # Avoid IFD if possible, by sidestepping replaceDependencies if no replacements are specified.
+      baseSystemAssertWarn
+    else
+      (pkgs.replaceDependencies.override {
+        replaceDirectDependencies = pkgs.replaceDirectDependencies.override {
+          nix = config.nix.package;
+        };
+      }) {
+        drv = baseSystemAssertWarn;
+        inherit replacements cutoffPackages;
+      };
 
   systemWithBuildDeps = system.overrideAttrs (o: {
     systemBuildClosure = pkgs.closureInfo { rootPaths = [ system.drvPath ]; };
@@ -87,6 +103,7 @@ in
     (mkRemovedOptionModule [ "nesting" "clone" ] "Use `specialisation.«name» = { inheritParentConfig = true; configuration = { ... }; }` instead.")
     (mkRemovedOptionModule [ "nesting" "children" ] "Use `specialisation.«name».configuration = { ... }` instead.")
     (mkRenamedOptionModule [ "system" "forbiddenDependenciesRegex" ] [ "system" "forbiddenDependenciesRegexes" ])
+    (mkRenamedOptionModule [ "system" "replaceRuntimeDependencies" ] [ "system" "replaceDependencies" "replacements" ])
   ];
 
   options = {
@@ -137,9 +154,10 @@ in
       description = ''
         If enabled, copies the NixOS configuration file
         (usually {file}`/etc/nixos/configuration.nix`)
-        and links it from the resulting system
+        and symlinks it from the resulting system
         (getting to {file}`/run/current-system/configuration.nix`).
         Note that only this single file is copied, even if it imports others.
+        Warning: This feature cannot be used when the system is configured by a flake
       '';
     };
 
@@ -205,31 +223,47 @@ in
       '';
     };
 
-    system.replaceRuntimeDependencies = mkOption {
-      default = [];
-      example = lib.literalExpression "[ ({ original = pkgs.openssl; replacement = pkgs.callPackage /path/to/openssl { }; }) ]";
-      type = types.listOf (types.submodule (
-        { ... }: {
-          options.original = mkOption {
-            type = types.package;
-            description = "The original package to override.";
-          };
+    system.replaceDependencies = {
+      replacements = mkOption {
+        default = [];
+        example = lib.literalExpression "[ ({ oldDependency = pkgs.openssl; newDependency = pkgs.callPackage /path/to/openssl { }; }) ]";
+        type = types.listOf (types.submodule (
+          { ... }: {
+            imports = [
+              (mkRenamedOptionModule [ "original" ] [ "oldDependency" ])
+              (mkRenamedOptionModule [ "replacement" ] [ "newDependency" ])
+            ];
 
-          options.replacement = mkOption {
-            type = types.package;
-            description = "The replacement package.";
-          };
-        })
-      );
-      apply = map ({ original, replacement, ... }: {
-        oldDependency = original;
-        newDependency = replacement;
-      });
-      description = ''
-        List of packages to override without doing a full rebuild.
-        The original derivation and replacement derivation must have the same
-        name length, and ideally should have close-to-identical directory layout.
-      '';
+            options.oldDependency = mkOption {
+              type = types.package;
+              description = "The original package to override.";
+            };
+
+            options.newDependency = mkOption {
+              type = types.package;
+              description = "The replacement package.";
+            };
+          })
+        );
+        apply = map ({ oldDependency, newDependency, ... }: {
+          inherit oldDependency newDependency;
+        });
+        description = ''
+          List of packages to override without doing a full rebuild.
+          The original derivation and replacement derivation must have the same
+          name length, and ideally should have close-to-identical directory layout.
+        '';
+      };
+
+      cutoffPackages = mkOption {
+        default = [ config.system.build.initialRamdisk ];
+        defaultText = literalExpression "[ config.system.build.initialRamdisk ]";
+        type = types.listOf types.package;
+        description = ''
+          Packages to which no replacements should be applied.
+          The initrd is matched by default, because its structure renders the replacement process ineffective and prone to breakage.
+        '';
+      };
     };
 
     system.name = mkOption {
@@ -285,8 +319,8 @@ in
 
     system.extraSystemBuilderCmds =
       optionalString
-        config.system.copySystemConfiguration
-        ''ln -s '${import ../../../lib/from-env.nix "NIXOS_CONFIG" <nixos-config>}' \
+        config.system.copySystemConfiguration ''
+          ln -s '${import ../../../lib/from-env.nix "NIXOS_CONFIG" <nixos-config>}' \
             "$out/configuration.nix"
         '' +
       optionalString
@@ -309,6 +343,7 @@ in
       perl = pkgs.perl.withPackages (p: with p; [ ConfigIniFiles FileSlurp ]);
       # End if legacy environment variables
 
+      preSwitchCheck = config.system.preSwitchChecksScript;
 
       # Not actually used in the builder. `passedChecks` is just here to create
       # the build dependencies. Checks are similar to build dependencies in the

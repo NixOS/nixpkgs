@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Danielhiversen";
     repo = "pyAirthings";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-HdH/z5xsumOXU0ZYOUc8LHpjKGkfp5e5yGER+Nm8xB4=";
   };
 

@@ -1,28 +1,25 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, cmake
-, gitMinimal
-, pkg-config
-, libusb1
-, openssl
-, DarwinTools
-, AppKit
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  libusb1,
+  openssl,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "probe-rs-tools";
-  version = "0.24.0";
+  version = "0.26.0";
 
   src = fetchFromGitHub {
     owner = "probe-rs";
     repo = "probe-rs";
-    rev = "v${version}";
-    hash = "sha256-H1RT+H7aQjZmesW+/0mjPH2M01J1eBZ47Rern5lCqWk=";
+    tag = "v${version}";
+    hash = "sha256-cVRa5idgAi6UoQkEFvhFd27Mp9AVkfzEuGnWrThm9+Q=";
   };
 
-  cargoHash = "sha256-aTBtWPcOYT5koIu/uw5S2oKTnsvXcqB39SFbe8U1NJY=";
+  cargoHash = "sha256-Z2oDuSqUpGM3iw3za77+W8mMb79GutM4s6LFeAgRgPA=";
 
   buildAndTestSubdir = pname;
 
@@ -30,18 +27,23 @@ rustPlatform.buildRustPackage rec {
     # required by libz-sys, no option for dynamic linking
     # https://github.com/rust-lang/libz-sys/issues/158
     cmake
-    # build.rs fails without git
-    # https://github.com/probe-rs/probe-rs/pull/2492
-    gitMinimal
     pkg-config
-  ] ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
+  ];
 
-  buildInputs = [ libusb1 openssl ] ++ lib.optionals stdenv.isDarwin [ AppKit ];
+  buildInputs = [
+    libusb1
+    openssl
+  ];
 
   checkFlags = [
     # require a physical probe
     "--skip=cmd::dap_server::server::debugger::test::attach_request"
     "--skip=cmd::dap_server::server::debugger::test::attach_with_flashing"
+    "--skip=cmd::dap_server::server::debugger::test::disassemble::instructions_after_and_not_including_the_ref_address"
+    "--skip=cmd::dap_server::server::debugger::test::disassemble::instructions_before_and_not_including_the_ref_address_multiple_locations"
+    "--skip=cmd::dap_server::server::debugger::test::disassemble::instructions_including_the_ref_address_location_cloned_from_earlier_line"
+    "--skip=cmd::dap_server::server::debugger::test::disassemble::negative_byte_offset_of_exactly_one_instruction_aligned_"
+    "--skip=cmd::dap_server::server::debugger::test::disassemble::positive_byte_offset_that_lands_in_the_middle_of_an_instruction_unaligned_"
     "--skip=cmd::dap_server::server::debugger::test::launch_and_threads"
     "--skip=cmd::dap_server::server::debugger::test::launch_with_config_error"
     "--skip=cmd::dap_server::server::debugger::test::test_initalize_request"
@@ -63,7 +65,13 @@ rustPlatform.buildRustPackage rec {
     description = "CLI tool for on-chip debugging and flashing of ARM chips";
     homepage = "https://probe.rs/";
     changelog = "https://github.com/probe-rs/probe-rs/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ xgroleau newam ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
+    maintainers = with maintainers; [
+      xgroleau
+      newam
+    ];
   };
 }

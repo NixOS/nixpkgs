@@ -1,16 +1,17 @@
-{ callPackage
-, fetchFromGitHub
+{
+  callPackage,
+  fetchFromGitHub,
 }:
 
 callPackage ../generic.nix rec {
   pname = "rat-king-adventure";
-  version = "1.5.3";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "TrashboxBobylev";
     repo = "Rat-King-Adventure";
     rev = version;
-    hash = "sha256-Q/smIObu7khcRnwdT8m7+WstpPE1tbDFJcZ4OGYJ338=";
+    hash = "sha256-mh54m2YwGOmE03fxndk3wNX/xi6UyIdXWEguiC3mDeA=";
   };
 
   desktopName = "Rat King Adventure";

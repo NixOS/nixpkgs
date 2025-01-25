@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   inherit (lib)
@@ -9,7 +14,8 @@ let
     mkPackageOption
     optionalAttrs
     optional
-    types;
+    types
+    ;
 
   cfg = config.services.legit;
 
@@ -59,7 +65,10 @@ in
           };
           mainBranch = mkOption {
             type = types.listOf types.str;
-            default = [ "main" "master" ];
+            default = [
+              "main"
+              "master"
+            ];
             description = "Main branch to look for.";
           };
           ignore = mkOption {
@@ -142,10 +151,11 @@ in
         Restart = "always";
 
         WorkingDirectory = cfg.settings.repo.scanPath;
-        StateDirectory = [ ] ++
-          optional (cfg.settings.repo.scanPath == defaultStateDir) "legit" ++
-          optional (cfg.settings.dirs.static == defaultStaticDir) "legit/static" ++
-          optional (cfg.settings.dirs.templates == defaultTemplatesDir) "legit/templates";
+        StateDirectory =
+          [ ]
+          ++ optional (cfg.settings.repo.scanPath == defaultStateDir) "legit"
+          ++ optional (cfg.settings.dirs.static == defaultStaticDir) "legit/static"
+          ++ optional (cfg.settings.dirs.templates == defaultTemplatesDir) "legit/templates";
 
         # Hardening
         CapabilityBoundingSet = [ "" ];
@@ -168,12 +178,18 @@ in
         ProtectSystem = "strict";
         ReadWritePaths = cfg.settings.repo.scanPath;
         RemoveIPC = true;
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+        ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
         SystemCallArchitectures = "native";
-        SystemCallFilter = [ "@system-service" "~@privileged" ];
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
+        ];
         UMask = "0077";
       };
     };

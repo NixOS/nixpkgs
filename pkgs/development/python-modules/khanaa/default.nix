@@ -20,11 +20,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cakimpei";
     repo = "khanaa";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-QFvvahVEld3BooINeUYJDahZyfh5xmQNtWRLAOdr6lw=";
   };
 
   build-system = [ setuptools ];
+
+  patches = [
+    ./001-skip-broken-test.patch
+  ];
 
   nativeCheckInputs = [ unittestCheckHook ];
 

@@ -52,7 +52,7 @@ python3Packages.buildPythonApplication rec {
       importlib-metadata
       evdev
     ]
-    ++ lib.optionals stdenv.isLinux [ qt6.qtwayland ];
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ qt6.qtwayland ];
 
   nativeCheckInputs =
     [ xvfb-run ]

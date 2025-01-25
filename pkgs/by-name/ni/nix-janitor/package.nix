@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nix-janitor";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "nobbz";
     repo = "nix-janitor";
-    rev = "refs/tags/${version}";
-    hash = "sha256-xoVByI17rt2SCY3ULg12S8QsoXGhQWZlOpPpK2mfcPY=";
+    tag = version;
+    hash = "sha256-MRhTkxPl0tlObbXO7/0cD2pbd9/uQCeRKV3DStGvZMQ=";
   };
 
-  cargoHash = "sha256-QG2hHM4KBSU6+droew2WnOFxWRTpk9griIPMD8MLSbw=";
+  cargoHash = "sha256-XFO4ec++lT04JpwqGtD3kWX4vmgmeBPSULxZENddYm0=";
 
   nativeBuildInputs = [ installShellFiles ];
 

@@ -8,22 +8,32 @@ rec {
       , runcRev, runcHash
       , containerdRev, containerdHash
       , tiniRev, tiniHash
-      , buildxSupport ? true, composeSupport ? true, sbomSupport ? false
+      , buildxSupport ? true, composeSupport ? true, sbomSupport ? false, initSupport ? false
       # package dependencies
       , stdenv, fetchFromGitHub, fetchpatch, buildGoModule
       , makeWrapper, installShellFiles, pkg-config, glibc
-      , go-md2man, go, containerd, runc, tini, libtool
-      , sqlite, iproute2, docker-buildx, docker-compose, docker-sbom
-      , iptables, e2fsprogs, xz, util-linux, xfsprogs, git
+      , go-md2man, go, containerd, runc, tini, libtool, bash
+      , sqlite, iproute2, docker-buildx, docker-compose, docker-sbom, docker-init
+      , iptables, e2fsprogs, xz, util-linux, xfsprogs, gitMinimal
       , procps, rootlesskit, slirp4netns, fuse-overlayfs, nixosTests
-      , clientOnly ? !stdenv.isLinux, symlinkJoin
+      , clientOnly ? !stdenv.hostPlatform.isLinux, symlinkJoin
       , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
-      , withBtrfs ? stdenv.isLinux, btrfs-progs
-      , withLvm ? stdenv.isLinux, lvm2
-      , withSeccomp ? stdenv.isLinux, libseccomp
+      , withBtrfs ? stdenv.hostPlatform.isLinux, btrfs-progs
+      , withLvm ? stdenv.hostPlatform.isLinux, lvm2
+      , withSeccomp ? stdenv.hostPlatform.isLinux, libseccomp
       , knownVulnerabilities ? []
     }:
   let
+    docker-meta = {
+      license = lib.licenses.asl20;
+      maintainers = with lib.maintainers; [
+        offline
+        vdemeester
+        periklis
+        teutat3s
+      ];
+    };
+
     docker-runc = runc.overrideAttrs {
       pname = "docker-runc";
       inherit version;
@@ -35,6 +45,10 @@ rec {
         hash = runcHash;
       };
 
+      preBuild = ''
+        substituteInPlace Makefile --replace-warn "/bin/bash" "${lib.getExe bash}"
+      '';
+
       # docker/runc already include these patches / are not applicable
       patches = [];
     };
@@ -42,6 +56,9 @@ rec {
     docker-containerd = containerd.overrideAttrs (oldAttrs: {
       pname = "docker-containerd";
       inherit version;
+
+      # We only need binaries
+      outputs = [ "out" ];
 
       src = fetchFromGitHub {
         owner = "containerd";
@@ -52,6 +69,9 @@ rec {
 
       buildInputs = oldAttrs.buildInputs
         ++ lib.optionals withSeccomp [ libseccomp ];
+
+      # See above
+      installTargets = "install";
     });
 
     docker-tini = tini.overrideAttrs {
@@ -80,7 +100,7 @@ rec {
       hash = mobyHash;
     };
 
-    moby = buildGoModule (lib.optionalAttrs stdenv.isLinux rec {
+    moby = buildGoModule (lib.optionalAttrs stdenv.hostPlatform.isLinux rec {
       pname = "moby";
       inherit version;
 
@@ -95,30 +115,9 @@ rec {
         ++ lib.optional withSystemd systemd
         ++ lib.optional withSeccomp libseccomp;
 
-      extraPath = lib.optionals stdenv.isLinux (lib.makeBinPath [ iproute2 iptables e2fsprogs xz xfsprogs procps util-linux git ]);
+      extraPath = lib.optionals stdenv.hostPlatform.isLinux (lib.makeBinPath [ iproute2 iptables e2fsprogs xz xfsprogs procps util-linux gitMinimal ]);
 
-      extraUserPath = lib.optionals (stdenv.isLinux && !clientOnly) (lib.makeBinPath [ rootlesskit slirp4netns fuse-overlayfs ]);
-
-      patches = lib.optionals (lib.versionOlder version "23") [
-        # This patch incorporates code from a PR fixing using buildkit with the ZFS graph driver.
-        # It could be removed when a version incorporating this patch is released.
-        (fetchpatch {
-          name = "buildkit-zfs.patch";
-          url = "https://github.com/moby/moby/pull/43136.patch";
-          hash = "sha256-1WZfpVnnqFwLMYqaHLploOodls0gHF8OCp7MrM26iX8=";
-        })
-      ] ++ lib.optionals (lib.versions.major version == "24") [
-        # docker_24 has LimitNOFILE set to "infinity", which causes a wide variety of issues in containers.
-        # Issues range from higher-than-usual ressource usage, to containers not starting at all.
-        # This patch (part of the release candidates for docker_25) simply removes this unit option
-        # making systemd use its default "1024:524288", which is sane. See commit message and/or the PR for
-        # more details: https://github.com/moby/moby/pull/45534
-        (fetchpatch {
-          name = "LimitNOFILE-systemd-default.patch";
-          url = "https://github.com/moby/moby/pull/45534/commits/c8930105bc9fc3c1a8a90886c23535cc6c41e130.patch";
-          hash = "sha256-nyGLxFrJaD0TrDqsAwOD6Iph0aHcFH9sABj1Fy74sec=";
-        })
-      ];
+      extraUserPath = lib.optionals (stdenv.hostPlatform.isLinux && !clientOnly) (lib.makeBinPath [ rootlesskit slirp4netns fuse-overlayfs ]);
 
       postPatch = ''
         patchShebangs hack/make.sh hack/make/ hack/with-go-mod.sh
@@ -160,11 +159,17 @@ rec {
         ++ lib.optional (!withBtrfs) "exclude_graphdriver_btrfs"
         ++ lib.optional (!withLvm) "exclude_graphdriver_devicemapper"
         ++ lib.optional withSeccomp "seccomp";
+
+      meta = docker-meta // {
+          homepage = "https://mobyproject.org/";
+          description = "A collaborative project for the container ecosystem to assemble container-based systems.";
+        };
     });
 
     plugins = lib.optional buildxSupport docker-buildx
       ++ lib.optional composeSupport docker-compose
-      ++ lib.optional sbomSupport docker-sbom;
+      ++ lib.optional sbomSupport docker-sbom
+      ++ lib.optional initSupport docker-init;
     pluginsRef = symlinkJoin { name = "docker-plugins"; paths = plugins; };
   in
   buildGoModule (lib.optionalAttrs (!clientOnly) {
@@ -188,7 +193,7 @@ rec {
       makeWrapper pkg-config go-md2man go libtool installShellFiles
     ];
 
-    buildInputs = plugins ++ lib.optionals (lib.versionAtLeast version "23" && stdenv.isLinux) [
+    buildInputs = plugins ++ lib.optionals (stdenv.hostPlatform.isLinux) [
       glibc
       glibc.static
     ];
@@ -216,7 +221,7 @@ rec {
 
     '';
 
-    outputs = ["out"] ++ lib.optional (lib.versionOlder version "23") "man";
+    outputs = ["out"];
 
     installPhase = ''
       install -Dm755 ./build/docker $out/libexec/docker/docker
@@ -237,27 +242,15 @@ rec {
       installShellCompletion --bash ./contrib/completion/bash/docker
       installShellCompletion --fish ./contrib/completion/fish/docker.fish
       installShellCompletion --zsh  ./contrib/completion/zsh/_docker
-    '' + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform && lib.versionOlder version "23") ''
-      # Generate man pages from cobra commands
-      echo "Generate man pages from cobra"
-      mkdir -p ./man/man1
-      go build -o ./gen-manpages github.com/docker/cli/man
-      ./gen-manpages --root . --target ./man/man1
-    '' + lib.optionalString (lib.versionOlder version "23") ''
-      # Generate legacy pages from markdown
-      echo "Generate legacy manpages"
-      ./man/md2man-all.sh -q
-
-      installManPage man/*/*.[1-9]
     '';
 
     passthru = {
       # Exposed for tarsum build on non-linux systems (build-support/docker/default.nix)
       inherit moby-src;
-      tests = lib.optionals (!clientOnly) { inherit (nixosTests) docker; };
+      tests = lib.optionalAttrs (!clientOnly) { inherit (nixosTests) docker; };
     };
 
-    meta = with lib; {
+    meta = docker-meta // {
       homepage = "https://www.docker.com/";
       description = "Open source project to pack, ship and run any application as a lightweight container";
       longDescription = ''
@@ -265,8 +258,6 @@ rec {
 
         To enable the docker daemon on NixOS, set the `virtualisation.docker.enable` option to `true`.
       '';
-      license = licenses.asl20;
-      maintainers = with maintainers; [ offline vdemeester periklis teutat3s ];
       mainProgram = "docker";
       inherit knownVulnerabilities;
     };
@@ -274,26 +265,6 @@ rec {
 
   # Get revisions from
   # https://github.com/moby/moby/tree/${version}/hack/dockerfile/install/*
-  docker_24 = callPackage dockerGen rec {
-    version = "24.0.9";
-    cliRev = "v${version}";
-    cliHash = "sha256-nXIZtE0X1OoQT908IGuRhVHb0tiLbqQLP0Md3YWt0/Q=";
-    mobyRev = "v${version}";
-    mobyHash = "sha256-KRS99heyMAPBnjjr7If8TOlJf6v6866S7J3YGkOhFiA=";
-    runcRev = "v1.1.12";
-    runcHash = "sha256-N77CU5XiGYIdwQNPFyluXjseTeaYuNJ//OsEUS0g/v0=";
-    containerdRev = "v1.7.13";
-    containerdHash = "sha256-y3CYDZbA2QjIn1vyq/p1F1pAVxQHi/0a6hGWZCRWzyk=";
-    tiniRev = "v0.19.0";
-    tiniHash = "sha256-ZDKu/8yE5G0RYFJdhgmCdN3obJNyRWv6K/Gd17zc1sI=";
-    knownVulnerabilities = [
-      "CVE-2024-23651"
-      "CVE-2024-23652"
-      "CVE-2024-23653"
-      "CVE-2024-41110"
-    ];
-  };
-
   docker_25 = callPackage dockerGen rec {
     version = "25.0.6";
     cliRev = "v${version}";
@@ -323,15 +294,15 @@ rec {
   };
 
   docker_27 = callPackage dockerGen rec {
-    version = "27.2.0";
+    version = "27.5.0";
     cliRev = "v${version}";
-    cliHash = "sha256-Fa1EUwJjxh5jzhQJ4tllDZBfB7KACHDEe9ETVzMfUNY=";
+    cliHash = "sha256-PbdT1CL8jSHHPV2iygTXNwoY0qcNF2XUDEAHHsM4fPM=";
     mobyRev = "v${version}";
-    mobyHash = "sha256-grxKlsbhxumQZNOyM96aURSiVFE1Fe5NFxUoPzFX/Qk=";
-    runcRev = "v1.1.13";
-    runcHash = "sha256-RQsM8Q7HogDVGbNpen3wxXNGR9lfqmNhkXTRoC+LBk8=";
-    containerdRev = "v1.7.21";
-    containerdHash = "sha256-cL1RKFg+B2gTPMg963DKup5BCLLgF9t9VZn2WlmmWPI=";
+    mobyHash = "sha256-OSkI8F8bUjsCUT/pRWWbfTq9Fno5z35hW9OnLXHrIiQ=";
+    runcRev = "v1.2.3";
+    runcHash = "sha256-SdeCmPttMXQdIn3kGWsIM3dfhQCx1C5bMyAM889VVUc=";
+    containerdRev = "v1.7.24";
+    containerdHash = "sha256-03vJs61AnTuFAdImZjBfn1izFcoalVJdVs9DZeDcABI=";
     tiniRev = "v0.19.0";
     tiniHash = "sha256-ZDKu/8yE5G0RYFJdhgmCdN3obJNyRWv6K/Gd17zc1sI=";
   };

@@ -6,7 +6,6 @@
   # build-system
   setuptools,
   versioningit,
-  wheel,
 
   # dependencies
   broadbean,
@@ -45,8 +44,6 @@
   sphinx,
   sphinx-issues,
   towncrier,
-  opencensus,
-  opencensus-ext-azure,
 
   # checks
   deepdiff,
@@ -62,20 +59,19 @@
 
 buildPythonPackage rec {
   pname = "qcodes";
-  version = "0.48.0";
+  version = "0.50.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "Qcodes";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Q1WyuK1mCbs75kGY1Aaw7S5EfFRjwqzZnhNyeSx7qc8=";
+    tag = "v${version}";
+    hash = "sha256-oNJVOz2FMMhUkYIajeWwRmHzLcXu5qTSQzjk0gciOnE=";
   };
 
   build-system = [
     setuptools
     versioningit
-    wheel
   ];
 
   dependencies = [
@@ -125,10 +121,6 @@ buildPythonPackage rec {
     loop = [
       # qcodes-loop
     ];
-    opencensus = [
-      opencensus
-      opencensus-ext-azure
-    ];
     refactor = [
       libcst
     ];
@@ -156,8 +148,6 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [
     "-v"
-    "-n"
-    "$NIX_BUILD_CORES"
     # Follow upstream with settings
     "-m 'not serial'"
     "--hypothesis-profile ci"

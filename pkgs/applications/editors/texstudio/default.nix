@@ -1,17 +1,30 @@
-{ stdenv, lib, fetchFromGitHub, cmake, qtbase, qttools, qtsvg, qt5compat, quazip
-, qtwayland
-, hunspell
-, wrapQtAppsHook, poppler, zlib, pkg-config }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  qtbase,
+  qttools,
+  qtsvg,
+  qt5compat,
+  quazip,
+  qtwayland,
+  hunspell,
+  wrapQtAppsHook,
+  poppler,
+  zlib,
+  pkg-config,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "texstudio";
-  version = "4.8.2";
+  version = "4.8.5";
 
   src = fetchFromGitHub {
     owner = "texstudio-org";
     repo = "texstudio";
     rev = finalAttrs.version;
-    hash = "sha256-q6dy9CS8zxMlLC4M76t4RjYlMJyUG55Cb0KREyDfM78=";
+    hash = "sha256-/sxXtapR55+/pTljFl03DYlJa7dMZVNlPji4/a06yZI=";
   };
 
   nativeBuildInputs = [
@@ -19,20 +32,22 @@ stdenv.mkDerivation (finalAttrs: {
     wrapQtAppsHook
     pkg-config
   ];
-  buildInputs = [
-    hunspell
-    poppler
-    qt5compat
-    qtbase
-    qtsvg
-    qttools
-    quazip
-    zlib
-  ] ++ lib.optionals stdenv.isLinux [
-    qtwayland
-  ];
+  buildInputs =
+    [
+      hunspell
+      poppler
+      qt5compat
+      qtbase
+      qtsvg
+      qttools
+      quazip
+      zlib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      qtwayland
+    ];
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p "$out/Applications"
     mv "$out/bin/texstudio.app" "$out/Applications"
     rm -d "$out/bin"
@@ -40,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "TeX and LaTeX editor";
-    longDescription=''
+    longDescription = ''
       Fork of TeXMaker, this editor is a full fledged IDE for
       LaTeX editing with completion, structure viewer, preview,
       spell checking and support of any compilation chain.
@@ -49,7 +64,10 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/texstudio-org/texstudio/blob/${finalAttrs.version}/utilities/manual/source/CHANGELOG.md";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ajs124 cfouche ];
+    maintainers = with maintainers; [
+      ajs124
+      cfouche
+    ];
     mainProgram = "texstudio";
   };
 })

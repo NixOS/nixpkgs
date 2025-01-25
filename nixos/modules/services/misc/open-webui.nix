@@ -56,7 +56,7 @@ in
         '';
         description = ''
           Extra environment variables for Open-WebUI.
-          For more details see https://docs.openwebui.com/getting-started/env-configuration/
+          For more details see https://docs.openwebui.com/getting-started/advanced-topics/env-configuration/
         '';
       };
 
@@ -93,6 +93,7 @@ in
         DATA_DIR = ".";
         HF_HOME = ".";
         SENTENCE_TRANSFORMERS_HOME = ".";
+        WEBUI_URL = "http://localhost:${toString cfg.port}";
       } // cfg.environment;
 
       serviceConfig = {

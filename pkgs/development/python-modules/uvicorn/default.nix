@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "uvicorn";
-  version = "0.29.0";
+  version = "0.32.1";
   disabled = pythonOlder "3.8";
 
   pyproject = true;
@@ -26,8 +26,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "encode";
     repo = "uvicorn";
-    rev = "refs/tags/${version}";
-    hash = "sha256-D0FdZxaDB+9N/7p73GF8qw0UwbXTQrKc1WOgy9UltxA=";
+    tag = version;
+    hash = "sha256-Kx5OwIMqstiFCkqE2wunKSkttd9C8gM+a2KWJuhBN1c=";
   };
 
   outputs = [
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     h11
   ] ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ];
 
-  passthru.optional-dependencies.standard = [
+  optional-dependencies.standard = [
     httptools
     python-dotenv
     pyyaml

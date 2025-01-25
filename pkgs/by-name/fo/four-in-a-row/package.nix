@@ -57,6 +57,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/four-in-a-row";
+    changelog = "https://gitlab.gnome.org/GNOME/four-in-a-row/-/blob/${version}/NEWS?ref_type=tags";
     description = "Make lines of the same color to win";
     mainProgram = "four-in-a-row";
     maintainers = teams.gnome.members;

@@ -1,11 +1,12 @@
-{ lib
-, SDL2
-, SDL2_image
-, SDL2_mixer
-, SDL2_ttf
-, directoryListingUpdater
-, fetchurl
-, stdenv
+{
+  lib,
+  SDL2,
+  SDL2_image,
+  SDL2_mixer,
+  SDL2_ttf,
+  directoryListingUpdater,
+  fetchurl,
+  stdenv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -39,6 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "lbreakouthd";
     maintainers = with lib.maintainers; [ AndersonTorres ];
     inherit (SDL2.meta) platforms;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

@@ -10,6 +10,7 @@
 , stdenvNoCC
 , runtimeShell
 , cc ? null, libc ? null, bintools, coreutils ? null
+, apple-sdk ? null
 , zlib ? null
 , nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
 , propagateDoc ? cc != null && cc ? man
@@ -114,7 +115,8 @@ let
   # without interfering. For the moment, it is defined as the target triple,
   # adjusted to be a valid bash identifier. This should be considered an
   # unstable implementation detail, however.
-  suffixSalt = replaceStrings ["-" "."] ["_" "_"] targetPlatform.config;
+  suffixSalt = replaceStrings ["-" "."] ["_" "_"] targetPlatform.config
+    + lib.optionalString (targetPlatform.isDarwin && targetPlatform.isStatic) "_static";
 
   useGccForLibs = useCcForLibs
     && libcxx == null
@@ -162,6 +164,8 @@ let
         tigerlake      = versionAtLeast ccVersion "10.0";
         knm            = versionAtLeast ccVersion "8.0";
         alderlake      = versionAtLeast ccVersion "12.0";
+        sapphirerapids = versionAtLeast ccVersion "11.0";
+        emeraldrapids  = versionAtLeast ccVersion "13.0";
 
         # AMD
         znver1         = true;
@@ -181,6 +185,8 @@ let
         icelake-server = versionAtLeast ccVersion "7.0";
         knm            = versionAtLeast ccVersion "7.0";
         alderlake      = versionAtLeast ccVersion "16.0";
+        sapphirerapids = versionAtLeast ccVersion "12.0";
+        emeraldrapids  = versionAtLeast ccVersion "16.0";
 
         # AMD
         znver1         = versionAtLeast ccVersion "4.0";
@@ -278,13 +284,6 @@ let
     if (targetPlatform.darwinPlatform == "macos" && isGNU) then "macosx"
     else targetPlatform.darwinPlatform
   );
-
-  darwinMinVersion = optionalString targetPlatform.isDarwin (
-    targetPlatform.darwinMinVersion
-  );
-
-  darwinMinVersionVariable = optionalString targetPlatform.isDarwin
-    targetPlatform.darwinMinVersionVariable;
 in
 
 assert includeFortifyHeaders' -> fortify-headers != null;
@@ -630,6 +629,20 @@ stdenvNoCC.mkDerivation {
       echo " -L${libcxx_solib}" >> $out/nix-support/cc-ldflags
     ''
 
+    ## Prevent clang from seeing /usr/include. There is a desire to achieve this
+    ## through alternate means because it breaks -sysroot and related functionality.
+    #
+    # This flag prevents global system header directories from
+    # leaking through on non‐NixOS Linux. However, on macOS, the
+    # SDK path is used as the sysroot, and forcing `-nostdlibinc`
+    # breaks `-isysroot` with an unwrapped compiler. As macOS has
+    # no `/usr/include`, there’s essentially no risk to dropping
+    # the flag there. See discussion in NixOS/nixpkgs#191152.
+    #
+    + optionalString ((cc.isClang or false) && !(cc.isROCm or false) && !targetPlatform.isDarwin) ''
+      echo " -nostdlibinc" >> $out/nix-support/cc-cflags
+    ''
+
     ##
     ## Man page and info support
     ##
@@ -683,10 +696,6 @@ stdenvNoCC.mkDerivation {
       done
     ''
 
-    + optionalString targetPlatform.isDarwin ''
-        echo "-arch ${targetPlatform.darwinArch}" >> $out/nix-support/cc-cflags
-    ''
-
     + optionalString targetPlatform.isAndroid ''
       echo "-D__ANDROID_API__=${targetPlatform.androidSdkVersion}" >> $out/nix-support/cc-cflags
     ''
@@ -701,6 +710,7 @@ stdenvNoCC.mkDerivation {
       substituteAll ${./add-flags.sh} $out/nix-support/add-flags.sh
       substituteAll ${./add-hardening.sh} $out/nix-support/add-hardening.sh
       substituteAll ${../wrapper-common/utils.bash} $out/nix-support/utils.bash
+      substituteAll ${../wrapper-common/darwin-sdk-setup.bash} $out/nix-support/darwin-sdk-setup.bash
     ''
 
     + optionalString cc.langAda or false ''
@@ -733,18 +743,26 @@ stdenvNoCC.mkDerivation {
 
     # for substitution in utils.bash
     # TODO(@sternenseemann): invent something cleaner than passing in "" in case of absence
-    expandResponseParams = "${expand-response-params}/bin/expand-response-params";
+    expandResponseParams = lib.optionalString (expand-response-params != "") (lib.getExe expand-response-params);
     # TODO(@sternenseemann): rename env var via stdenv rebuild
     shell = getBin runtimeShell + runtimeShell.shellPath or "";
     gnugrep_bin = optionalString (!nativeTools) gnugrep;
+    rm = if nativeTools then "rm" else lib.getExe' coreutils "rm";
+    mktemp = if nativeTools then "mktemp" else lib.getExe' coreutils "mktemp";
     # stdenv.cc.cc should not be null and we have nothing better for now.
     # if the native impure bootstrap is gotten rid of this can become `inherit cc;` again.
     cc = optionalString (!nativeTools) cc;
     wrapperName = "CC_WRAPPER";
     inherit suffixSalt coreutils_bin bintools;
     inherit libc_bin libc_dev libc_lib;
-    inherit darwinPlatformForCC darwinMinVersion darwinMinVersionVariable;
+    inherit darwinPlatformForCC;
     default_hardening_flags_str = builtins.toString defaultHardeningFlags;
+  } // lib.mapAttrs (_: lib.optionalString targetPlatform.isDarwin) {
+    # These will become empty strings when not targeting Darwin.
+    inherit (targetPlatform) darwinMinVersion darwinMinVersionVariable;
+  } // lib.optionalAttrs (apple-sdk != null && stdenvNoCC.targetPlatform.isDarwin) {
+    # Wrapped compilers should do something useful even when no SDK is provided at `DEVELOPER_DIR`.
+    fallback_sdk = apple-sdk.__spliced.buildTarget or apple-sdk;
   };
 
   meta =

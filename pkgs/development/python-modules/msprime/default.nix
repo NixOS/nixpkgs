@@ -18,15 +18,21 @@
 
 buildPythonPackage rec {
   pname = "msprime";
-  version = "1.3.1";
+  version = "1.3.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-s/Ys1RatLkPIQS6h8kKsrRvJOTkc/pyqGWJYdOLjSDU=";
+    hash = "sha256-2K55gHYWf2Mrj9fszVCJ+qqEyQNMppQi+IZCX5SlsBs=";
   };
+
+  postPatch = ''
+    # build-time constriant, used to ensure forward and backward compat
+    substituteInPlace pyproject.toml \
+      --replace-fail "numpy>=2" "numpy"
+  '';
 
   nativeBuildInputs = [
     gsl

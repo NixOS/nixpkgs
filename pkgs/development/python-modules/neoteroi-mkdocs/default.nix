@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Neoteroi";
     repo = "mkdocs-plugins";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-qizF1Y3BUyr0ekoATJVa62q7gvpbMW3fIKViov2tFTI=";
   };
 

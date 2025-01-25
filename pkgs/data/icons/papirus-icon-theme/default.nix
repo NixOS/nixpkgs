@@ -1,14 +1,15 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, gtk3
-, breeze-icons
-, elementary-icon-theme
-, hicolor-icon-theme
-, papirus-folders
-, color ? null
-, withElementary ? false
-, gitUpdater
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  gtk3,
+  breeze-icons,
+  elementary-icon-theme,
+  hicolor-icon-theme,
+  papirus-folders,
+  color ? null,
+  withElementary ? false,
+  gitUpdater,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -27,12 +28,14 @@ stdenvNoCC.mkDerivation rec {
     papirus-folders
   ];
 
-  propagatedBuildInputs = [
-    breeze-icons
-    hicolor-icon-theme
-  ] ++ lib.optional withElementary [
-    elementary-icon-theme
-  ];
+  propagatedBuildInputs =
+    [
+      breeze-icons
+      hicolor-icon-theme
+    ]
+    ++ lib.optional withElementary [
+      elementary-icon-theme
+    ];
 
   dontDropIconThemeCache = true;
 
@@ -43,7 +46,9 @@ stdenvNoCC.mkDerivation rec {
     mv ${lib.optionalString withElementary "{,e}"}Papirus* $out/share/icons
 
     for theme in $out/share/icons/*; do
-      ${lib.optionalString (color != null) "${papirus-folders}/bin/papirus-folders -t $theme -o -C ${color}"}
+      ${lib.optionalString (
+        color != null
+      ) "${papirus-folders}/bin/papirus-folders -t $theme -o -C ${color}"}
       gtk-update-icon-cache --force $theme
     done
 
@@ -58,6 +63,9 @@ stdenvNoCC.mkDerivation rec {
     license = licenses.gpl3Only;
     # darwin gives hash mismatch in source, probably because of file names differing only in case
     platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo moni ];
+    maintainers = with maintainers; [
+      romildo
+      moni
+    ];
   };
 }

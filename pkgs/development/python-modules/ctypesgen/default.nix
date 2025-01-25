@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  unittestCheckHook,
   pythonOlder,
   setuptools-scm,
   setuptools,
@@ -20,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ctypesgen";
     repo = "ctypesgen";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-TwIWPellmjMpTGQ+adJBLNMdAqB0kLOMl4YAubvXKqo=";
   };
 

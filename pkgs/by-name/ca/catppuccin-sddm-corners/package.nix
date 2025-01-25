@@ -1,8 +1,9 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, libsForQt5
-, unstableGitUpdater
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  libsForQt5,
+  unstableGitUpdater,
 }:
 
 stdenvNoCC.mkDerivation {

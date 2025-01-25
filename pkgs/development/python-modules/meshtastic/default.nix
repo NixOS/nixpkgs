@@ -1,21 +1,23 @@
 {
   lib,
+  argcomplete,
   bleak,
   buildPythonPackage,
   dash-bootstrap-components,
+  dash,
   dotmap,
   fetchFromGitHub,
   hypothesis,
   packaging,
+  pandas-stubs,
+  pandas,
   parse,
-  pexpect,
   platformdirs,
   poetry-core,
   ppk2-api,
   print-color,
   protobuf,
   pyarrow,
-  pyparsing,
   pypubsub,
   pyqrcode,
   pyserial,
@@ -27,22 +29,21 @@
   riden,
   setuptools,
   tabulate,
-  timeago,
-  webencodings,
+  wcwidth,
 }:
 
 buildPythonPackage rec {
   pname = "meshtastic";
-  version = "2.4.3";
+  version = "2.5.10";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "meshtastic";
     repo = "Meshtastic-python";
-    rev = "refs/tags/${version}";
-    hash = "sha256-cI3ETBz/3Megd3T/JVFdsN7Ap7SPj89IEIaA316INTk=";
+    tag = version;
+    hash = "sha256-uXyHblcV5qm/NJ/zYsPIr12lqI914n6KYxl4gun7XdM=";
   };
 
   pythonRelaxDeps = [
@@ -54,37 +55,44 @@ buildPythonPackage rec {
 
   dependencies = [
     bleak
-    dotmap
     packaging
-    parse
-    pexpect
-    platformdirs
-    ppk2-api
-    print-color
     protobuf
-    pyarrow
-    pyparsing
     pypubsub
-    pyqrcode
     pyserial
     pyyaml
     requests
     setuptools
     tabulate
-    timeago
-    webencodings
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
+    analysis = [
+      dash
+      dash-bootstrap-components
+      pandas
+      pandas-stubs
+    ];
+    cli = [
+      argcomplete
+      dotmap
+      print-color
+      pyqrcode
+      wcwidth
+    ];
+    powermon = [
+      parse
+      platformdirs
+      ppk2-api
+      pyarrow
+      riden
+    ];
     tunnel = [ pytap2 ];
   };
 
   nativeCheckInputs = [
-    dash-bootstrap-components
     hypothesis
     pytestCheckHook
-    riden
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   preCheck = ''
     export PATH="$PATH:$out/bin";
@@ -117,7 +125,7 @@ buildPythonPackage rec {
     description = "Python API for talking to Meshtastic devices";
     homepage = "https://github.com/meshtastic/Meshtastic-python";
     changelog = "https://github.com/meshtastic/python/releases/tag/${version}";
-    license = with licenses; [ asl20 ];
+    license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };
 }

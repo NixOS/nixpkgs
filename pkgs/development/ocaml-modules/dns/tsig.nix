@@ -1,13 +1,18 @@
-{ buildDunePackage, dns, mirage-crypto, base64, alcotest }:
+{
+  buildDunePackage,
+  dns,
+  digestif,
+  base64,
+  alcotest,
+}:
 
 buildDunePackage {
   pname = "dns-tsig";
 
   inherit (dns) version src;
-  duneVersion = "3";
 
   propagatedBuildInputs = [
-    mirage-crypto
+    digestif
     dns
     base64
   ];

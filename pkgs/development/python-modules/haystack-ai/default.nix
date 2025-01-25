@@ -42,7 +42,7 @@
   pylint,
   pytest,
   pytest-asyncio,
-  pytest-cov,
+  pytest-cov-stub,
   # , pytest-custom-exit-code
   python-multipart,
   reno,
@@ -91,14 +91,14 @@
 
 buildPythonPackage rec {
   pname = "haystack-ai";
-  version = "2.2.3";
+  version = "2.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "deepset-ai";
     repo = "haystack";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-vaZ8bn36Eezf3/SnJ6ao0CvFZaHrpgbX+nM0IOqG2oo=";
+    tag = "v${version}";
+    hash = "sha256-9lhAiM9uqa6CLb8A59mPVffA1Bnfs4A37/+kKA94cCQ=";
   };
 
   nativeBuildInputs = [
@@ -138,7 +138,7 @@ buildPythonPackage rec {
 
   env.HOME = "$(mktemp -d)";
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     # all = [
     #   farm-haystack
     # ];
@@ -167,7 +167,7 @@ buildPythonPackage rec {
       pylint
       pytest
       pytest-asyncio
-      pytest-cov
+      pytest-cov-stub
       # pytest-custom-exit-code
       python-multipart
       reno
@@ -262,7 +262,7 @@ buildPythonPackage rec {
     longDescription = ''
       LLM orchestration framework to build customizable, production-ready LLM applications. Connect components (models, vector DBs, file converters) to pipelines or agents that can interact with your data. With advanced retrieval methods, it's best suited for building RAG, question answering, semantic search or conversational agent chatbots
     '';
-    changelog = "https://github.com/deepset-ai/haystack/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
+    changelog = "https://github.com/deepset-ai/haystack/releases/tag/v${version}";
     homepage = "https://github.com/deepset-ai/haystack";
     license = licenses.asl20;
     maintainers = with maintainers; [ happysalada ];

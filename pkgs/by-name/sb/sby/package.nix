@@ -10,7 +10,6 @@
   z3,
   aiger,
   btor2tools,
-  python3Packages,
   nix-update-script,
 }:
 
@@ -20,18 +19,18 @@ in
 
 stdenv.mkDerivation rec {
   pname = "sby";
-  version = "0.45";
+  version = "0.48";
 
   src = fetchFromGitHub {
     owner = "YosysHQ";
     repo = "sby";
-    rev = "yosys-${version}";
-    hash = "sha256-HRQ5ZL0w3GLUySTFekE/T/VlxJLFIQQr0bW8l7rp/zs=";
+    tag = "v${version}";
+    hash = "sha256-icOlWutvajHMCi2YUIGU4v5S63YobXw4fYYUvPoSzo4=";
   };
 
-  nativeBuildInputs = [ bash ];
-  buildInputs = [
-    pythonEnv
+  nativeCheckInputs = [
+    python3
+    python3.pkgs.xmlschema
     yosys
     boolector
     yices
@@ -41,7 +40,8 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    patchShebangs docs/source/conf.py \
+    patchShebangs --build \
+      docs/source/conf.py \
       docs/source/conf.diff \
       tests/autotune/*.sh \
       tests/keepgoing/*.sh \
@@ -64,8 +64,6 @@ stdenv.mkDerivation rec {
     substituteInPlace sbysrc/sby.py \
       --replace-fail '/usr/bin/env python3' '${pythonEnv}/bin/python'
     substituteInPlace sbysrc/sby_autotune.py \
-      --replace-fail '["btorsim", "--vcd"]' '["${btor2tools}/bin/btorsim", "--vcd"]'
-    substituteInPlace tests/make/required_tools.py \
       --replace-fail '["btorsim", "--vcd"]' '["${btor2tools}/bin/btorsim", "--vcd"]'
   '';
 
@@ -90,12 +88,7 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "yosys-([0-9].*)"
-    ];
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "SymbiYosys, a front-end for Yosys-based formal verification flows";

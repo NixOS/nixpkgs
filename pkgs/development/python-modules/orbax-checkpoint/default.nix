@@ -13,12 +13,12 @@
   humanize,
   importlib-resources,
   jax,
-  jaxlib,
   msgpack,
   nest-asyncio,
   numpy,
   protobuf,
   pyyaml,
+  simplejson,
   tensorstore,
   typing-extensions,
 
@@ -26,20 +26,21 @@
   chex,
   google-cloud-logging,
   mock,
+  optax,
   pytest-xdist,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "orbax-checkpoint";
-  version = "0.6.3";
+  version = "0.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "orbax";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-yqccXQGEvxYnWP8rWmRLjjB0pkSEeXBrRvJIwVowUx0=";
+    tag = "v${version}";
+    hash = "sha256-pVRXWJfiiqV2ZFM0CgXdwD6/lnRa1HFFPrfS5975mVA=";
   };
 
   sourceRoot = "${src.name}/checkpoint";
@@ -52,12 +53,12 @@ buildPythonPackage rec {
     humanize
     importlib-resources
     jax
-    jaxlib
     msgpack
     nest-asyncio
     numpy
     protobuf
     pyyaml
+    simplejson
     tensorstore
     typing-extensions
   ];
@@ -66,6 +67,7 @@ buildPythonPackage rec {
     chex
     google-cloud-logging
     mock
+    optax
     pytest-xdist
     pytestCheckHook
   ];
@@ -75,7 +77,7 @@ buildPythonPackage rec {
     "orbax.checkpoint"
   ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # Probably failing because of a filesystem impurity
     # self.assertFalse(os.path.exists(dst_dir))
     # AssertionError: True is not false
@@ -84,14 +86,19 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     # Circular dependency flax
+    "orbax/checkpoint/_src/metadata/empty_values_test.py"
+    "orbax/checkpoint/_src/metadata/tree_rich_types_test.py"
+    "orbax/checkpoint/_src/metadata/tree_test.py"
+    "orbax/checkpoint/_src/testing/test_tree_utils.py"
+    "orbax/checkpoint/_src/tree/utils_test.py"
+    "orbax/checkpoint/single_host_test.py"
     "orbax/checkpoint/transform_utils_test.py"
-    "orbax/checkpoint/utils_test.py"
   ];
 
   meta = {
     description = "Orbax provides common utility libraries for JAX users";
     homepage = "https://github.com/google/orbax/tree/main/checkpoint";
-    changelog = "https://github.com/google/orbax/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/google/orbax/blob/v${version}/checkpoint/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };

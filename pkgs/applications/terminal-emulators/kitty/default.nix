@@ -2,7 +2,7 @@
 , harfbuzz, fontconfig, pkg-config, ncurses, imagemagick
 , libstartup_notification, libGL, libX11, libXrandr, libXinerama, libXcursor
 , libxkbcommon, libXi, libXext, wayland-protocols, wayland, xxHash
-, nerdfonts
+, nerd-fonts
 , lcms2
 , librsync
 , openssl
@@ -25,28 +25,30 @@
 , zsh
 , fish
 , nixosTests
-, go
-, buildGoModule
+, go_1_23
+, buildGo123Module
 , nix-update-script
+, makeBinaryWrapper
+, autoSignDarwinBinariesHook
 }:
 
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.36.1";
+  version = "0.38.1";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-7+MxxgQQlAje7klfJvvEWe8CfxyN0oTGQJ/QOORFUsY=";
+    tag = "v${version}";
+    hash = "sha256-0M4Bvhh3j9vPedE/d+8zaiZdET4mXcrSNUgLllhaPJw=";
   };
 
-  goModules = (buildGoModule {
+  goModules = (buildGo123Module {
     pname = "kitty-go-modules";
     inherit src version;
-    vendorHash = "sha256-YN4sSdDNDIVgtcykg60H0bZEryRHJJfZ5rXWUMYXGr4=";
+    vendorHash = "sha256-K12P81jE7oOU7qX2yQ+VtVHX/igKG0nPMSBkZ7wsR0o=";
   }).goModules;
 
   buildInputs = [
@@ -55,9 +57,10 @@ buildPythonApplication rec {
     simde
     lcms2
     librsync
+    matplotlib
     openssl.dev
     xxHash
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Cocoa
     Kernel
     UniformTypeIdentifiers
@@ -65,9 +68,9 @@ buildPythonApplication rec {
     libpng
     python3
     zlib
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
     Libsystem
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     fontconfig libunistring libcanberra libX11
     libXrandr libXinerama libXcursor libxkbcommon libXi libXext
     wayland-protocols wayland dbus libGL
@@ -82,12 +85,14 @@ buildPythonApplication rec {
     sphinx-copybutton
     sphinxext-opengraph
     sphinx-inline-tabs
-    go
+    go_1_23
     fontconfig
-  ] ++ lib.optionals stdenv.isDarwin [
+    makeBinaryWrapper
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     imagemagick
     libicns  # For the png2icns tool.
-  ] ++ lib.optionals stdenv.isLinux [
+    autoSignDarwinBinariesHook
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     wayland-scanner
   ];
 
@@ -115,7 +120,7 @@ buildPythonApplication rec {
     "fortify3"
   ];
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
   GOFLAGS = "-trimpath";
 
   configurePhase = ''
@@ -139,10 +144,9 @@ buildPythonApplication rec {
 
     # Add the font by hand because fontconfig does not finds it in darwin
     mkdir ./fonts/
-    cp "${(nerdfonts.override {fonts = ["NerdFontsSymbolsOnly"];})}/share/fonts/truetype/NerdFonts/SymbolsNerdFontMono-Regular.ttf" ./fonts/
+    cp "${nerd-fonts.symbols-only}/share/fonts/truetype/NerdFonts/Symbols/SymbolsNerdFontMono-Regular.ttf" ./fonts/
 
-    ${ lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) "export MACOSX_DEPLOYMENT_TARGET=11" }
-    ${if stdenv.isDarwin then ''
+    ${if stdenv.hostPlatform.isDarwin then ''
       ${python.pythonOnBuildForHost.interpreter} setup.py build ${darwinOptions}
       make docs
       ${python.pythonOnBuildForHost.interpreter} setup.py kitty.app ${darwinOptions}
@@ -165,27 +169,16 @@ buildPythonApplication rec {
     bashInteractive
     zsh
     fish
-  ] ++ lib.optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     # integration tests need sudo
     sudo
   ];
 
   # skip failing tests due to darwin sandbox
-  preCheck = lib.optionalString stdenv.isDarwin ''
+  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # can be re-enabled with the next kitty release, see https://github.com/kovidgoyal/kitty/pull/7939
     substituteInPlace kitty_tests/file_transmission.py \
-      --replace test_file_get dont_test_file_get \
-      --replace test_path_mapping_receive dont_test_path_mapping_receive \
       --replace test_transfer_send dont_test_transfer_send
-    substituteInPlace kitty_tests/shell_integration.py \
-      --replace test_fish_integration dont_test_fish_integration
-    substituteInPlace kitty_tests/shell_integration.py \
-      --replace test_bash_integration dont_test_bash_integration
-    substituteInPlace kitty_tests/open_actions.py \
-      --replace test_parsing_of_open_actions dont_test_parsing_of_open_actions
-    substituteInPlace kitty_tests/ssh.py \
-      --replace test_ssh_connection_data dont_test_ssh_connection_data
-    substituteInPlace kitty_tests/fonts.py \
-      --replace 'class Rendering(BaseTest)' 'class Rendering'
     # theme collection test starts an http server
     rm tools/themes/collection_test.go
     # passwd_test tries to exec /usr/bin/dscl
@@ -209,7 +202,7 @@ buildPythonApplication rec {
     runHook preInstall
     mkdir -p "$out"
     mkdir -p "$kitten/bin"
-    ${if stdenv.isDarwin then ''
+    ${if stdenv.hostPlatform.isDarwin then ''
     mkdir "$out/bin"
     ln -s ../Applications/kitty.app/Contents/MacOS/kitty "$out/bin/kitty"
     ln -s ../Applications/kitty.app/Contents/MacOS/kitten "$out/bin/kitten"
@@ -232,7 +225,7 @@ buildPythonApplication rec {
       --fish <("$out/bin/kitty" +complete setup fish2) \
       --zsh  <("$out/bin/kitty" +complete setup zsh)
 
-    terminfo_src=${if stdenv.isDarwin then
+    terminfo_src=${if stdenv.hostPlatform.isDarwin then
       ''"$out/Applications/kitty.app/Contents/Resources/terminfo"''
       else
       "$out/share/terminfo"}
@@ -249,7 +242,7 @@ buildPythonApplication rec {
   '';
 
   passthru = {
-    tests = lib.optionalAttrs stdenv.isLinux {
+    tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
       default = nixosTests.terminal-emulators.kitty;
     };
     updateScript = nix-update-script {};

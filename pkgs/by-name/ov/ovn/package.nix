@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ovn";
-  version = "24.09.0";
+  version = "24.09.2";
 
   src = fetchFromGitHub {
     owner = "ovn-org";
     repo = "ovn";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-0KXr9oxZqIhPD0HIkDUECCjfEK50JkkJxx8xsZIoAnc=";
+    tag = "v${version}";
+    hash = "sha256-MKwta7XRIFpcNWu6duuNaLarlWm0B8+gph1R0qS29wI=";
     fetchSubmodules = true;
   };
 
@@ -52,7 +52,11 @@ stdenv.mkDerivation rec {
     popd
   '';
 
-  configureFlags = [ "--localstatedir=/var" ];
+  configureFlags = [
+    "--localstatedir=/var"
+    "--with-dbdir=/var/lib/ovn"
+    "--enable-ssl"
+  ];
 
   enableParallelBuilding = true;
 
@@ -63,6 +67,20 @@ stdenv.mkDerivation rec {
     gnused
     procps
   ];
+
+  postInstall = ''
+    mkdir -vp $out/share/openvswitch/scripts
+    mkdir -vp $out/etc/ovn
+    cp ovs/ovsdb/ovsdb-client $out/share/openvswitch/scripts
+    cp ovs/ovsdb/ovsdb-server $out/share/openvswitch/scripts
+    cp ovs/ovsdb/ovsdb-tool $out/share/openvswitch/scripts
+    cp ovs/utilities/ovs-appctl $out/share/openvswitch/scripts
+    cp ovs/utilities/ovs-vsctl $out/share/openvswitch/scripts
+    cp ovs/utilities/ovs-lib $out/share/openvswitch/scripts
+    sed -i "s#/usr/local/bin#$out/share/openvswitch/scripts#g" $out/share/openvswitch/scripts/ovs-lib
+    sed -i "s#/usr/local/sbin#$out/share/openvswitch/scripts#g" $out/share/openvswitch/scripts/ovs-lib
+    sed -i '/chown -R $INSTALL_USER:$INSTALL_GROUP $ovn_etcdir/d' $out/share/ovn/scripts/ovn-ctl
+  '';
 
   # https://docs.ovn.org/en/latest/topics/testing.html
   preCheck = ''

@@ -1,58 +1,74 @@
-{ lib
-, stdenv
-, fetchurl
-, unzip
-, jre
-, jre8
-, genericUpdater
-, writeShellScript
-, common-updater-scripts
-, gnused
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  jre,
+  jre8,
+  genericUpdater,
+  writeShellScript,
+  common-updater-scripts,
+  gnused,
 }:
 
 let
   inherit (lib.versions) major majorMinor splitVersion;
   inherit (lib.strings) concatStringsSep versionAtLeast;
 
-  common = { pname, version, src, description, java ? jre
-           , prog ? null, jar ? null, license ? lib.licenses.mpl20
-           , updateScript ? null }:
-    stdenv.mkDerivation (finalAttrs: let
-      mainProgram = if prog == null then pname else prog;
-      jar' = if jar == null then pname else jar;
-    in {
-      inherit pname version src;
+  common =
+    {
+      pname,
+      version,
+      src,
+      description,
+      java ? jre,
+      prog ? null,
+      jar ? null,
+      license ? lib.licenses.mpl20,
+      updateScript ? null,
+    }:
+    stdenv.mkDerivation (
+      finalAttrs:
+      let
+        mainProgram = if prog == null then pname else prog;
+        jar' = if jar == null then pname else jar;
+      in
+      {
+        inherit pname version src;
 
-      nativeBuildInputs = [ unzip ];
+        nativeBuildInputs = [ unzip ];
 
-      buildCommand = ''
-        unzip $src -d $out
-        mkdir -p $out/bin $out/share $out/share/java
-        cp -s "$out"/*.jar "$out/share/java/"  # */
-        rm -rf $out/notices
-        mv $out/doc $out/share
-        cat > $out/bin/${mainProgram} <<EOF
-        #! $shell
-        export JAVA_HOME=${jre}
-        exec ${jre}/bin/java -jar $out/${jar'}.jar "\$@"
-        EOF
-        chmod a+x $out/bin/${mainProgram}
-      '';
+        buildCommand = ''
+          unzip $src -d $out
+          mkdir -p $out/bin $out/share $out/share/java
+          cp -s "$out"/*.jar "$out/share/java/"  # */
+          rm -rf $out/notices
+          mv $out/doc $out/share
+          cat > $out/bin/${mainProgram} <<EOF
+          #! $shell
+          export JAVA_HOME=${jre}
+          exec ${jre}/bin/java -jar $out/${jar'}.jar "\$@"
+          EOF
+          chmod a+x $out/bin/${mainProgram}
+        '';
 
-      passthru = lib.optionalAttrs (updateScript != null) {
-        inherit updateScript;
-      };
+        passthru = lib.optionalAttrs (updateScript != null) {
+          inherit updateScript;
+        };
 
-      meta = with lib; {
-        inherit description license mainProgram;
-        homepage = if versionAtLeast finalAttrs.version "11"
-          then "https://www.saxonica.com/products/latest.xml"
-          else "https://www.saxonica.com/products/archive.xml";
-        sourceProvenance = with sourceTypes; [ binaryBytecode ];
-        maintainers = with maintainers; [ rvl ];
-        platforms = platforms.all;
-      };
-    });
+        meta = with lib; {
+          inherit description license mainProgram;
+          homepage =
+            if versionAtLeast finalAttrs.version "11" then
+              "https://www.saxonica.com/products/latest.xml"
+            else
+              "https://www.saxonica.com/products/archive.xml";
+          sourceProvenance = with sourceTypes; [ binaryBytecode ];
+          maintainers = with maintainers; [ rvl ];
+          platforms = platforms.all;
+        };
+      }
+    );
 
   # Saxon release zipfiles and tags often use dashes instead of dots.
   dashify = version: concatStringsSep "-" (splitVersion version);
@@ -63,25 +79,35 @@ let
   # Older releases were uploaded to SourceForge. They are also
   # available from the Saxon-Archive GitHub repository.
   github = {
-    updateScript = version: genericUpdater {
-      versionLister = writeShellScript "saxon-he-versionLister" ''
-        export PATH="${lib.makeBinPath [ common-updater-scripts gnused ]}:$PATH"
-        major_ver="${major version}"
-        list-git-tags --url="https://github.com/Saxonica/Saxon-HE.git" \
-          | sed -En \
-            -e "s/SaxonHE([0-9]+)-([0-9]+)/\1.\2/" \
-            -e "/^''${major_ver:-[0-9]+}\./p"
+    updateScript =
+      version:
+      genericUpdater {
+        versionLister = writeShellScript "saxon-he-versionLister" ''
+          export PATH="${
+            lib.makeBinPath [
+              common-updater-scripts
+              gnused
+            ]
+          }:$PATH"
+          major_ver="${major version}"
+          list-git-tags --url="https://github.com/Saxonica/Saxon-HE.git" \
+            | sed -En \
+              -e "s/SaxonHE([0-9]+)-([0-9]+)/\1.\2/" \
+              -e "/^''${major_ver:-[0-9]+}\./p"
         '';
       };
 
-    downloadUrl = version: let
-      tag = "SaxonHE${dashify version}";
-      filename = "${major version}/Java/${tag}J.zip";
-    in
+    downloadUrl =
+      version:
+      let
+        tag = "SaxonHE${dashify version}";
+        filename = "${major version}/Java/${tag}J.zip";
+      in
       "https://raw.githubusercontent.com/Saxonica/Saxon-HE/${tag}/${filename}";
   };
 
-in {
+in
+{
   saxon = common rec {
     pname = "saxon";
     version = "6.5.3";

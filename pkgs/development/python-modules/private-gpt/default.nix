@@ -36,7 +36,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zylon-ai";
     repo = "private-gpt";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-IYTysU3W/NrtBuLe3ZJkztVSK+gzjkGIg0qcBYzB3bs=";
   };
 
@@ -47,6 +47,7 @@ buildPythonPackage rec {
     "fastapi"
     "llama-index-core"
     "llama-index-readers-file"
+    "python-multipart"
   ];
 
   dependencies = [

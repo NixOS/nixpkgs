@@ -412,7 +412,7 @@ in
       ]}
       PATH=${config.systemd.services."restic-backups-${name}".environment.PATH}:$PATH
 
-      exec ${resticCmd} $@
+      exec ${resticCmd} "$@"
     '') (lib.filterAttrs (_: v: v.createWrapper) config.services.restic.backups);
   };
 }

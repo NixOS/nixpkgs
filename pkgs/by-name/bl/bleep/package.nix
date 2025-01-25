@@ -6,6 +6,7 @@
   makeWrapper,
   lib,
   zlib,
+  testers,
 }:
 let
   platform =
@@ -18,15 +19,15 @@ let
 
   hash =
     {
-      x86_64-linux = "sha256-dB8reN5rTlY5czFH7BaRya7qBa6czAIH2NkFWZh81ek=";
-      x86_64-darwin = "sha256-tpUcduCPCbVVaYZZOhWdPlN6SW3LGZPWSO9bDStVDms=";
-      aarch64-darwin = "sha256-V8QGF3Dpuy9I6CqKsJRHBHRdaLhc4XKZkv/rI7zs+qQ=";
+      x86_64-linux = "sha256-Y9vWtuv1eyrPmJn/XpAw4uDHxhLUdhKszwJZmMIOCqI=";
+      x86_64-darwin = "sha256-p8Y6XKHb/CmRcnQ7po3s3oUZh0f+1iIHk38sAu2qym8=";
+      aarch64-darwin = "sha256-Qfqeo5syprwtLoNdi/EwsI+EYdpKkkVlFVja8uIFDsM=";
     }
     ."${stdenvNoCC.system}" or (throw "unsupported system ${stdenvNoCC.hostPlatform.system}");
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "bleep";
-  version = "0.0.7";
+  version = "0.0.11";
 
   src = fetchzip {
     url = "https://github.com/oyvindberg/bleep/releases/download/v${finalAttrs.version}/bleep-${platform}.tar.gz";
@@ -36,7 +37,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     installShellFiles
     makeWrapper
-  ] ++ lib.optional stdenvNoCC.isLinux autoPatchelfHook;
+  ] ++ lib.optional stdenvNoCC.hostPlatform.isLinux autoPatchelfHook;
 
   buildInputs = [ zlib ];
 
@@ -49,7 +50,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   dontAutoPatchelf = true;
 
   postFixup =
-    lib.optionalString stdenvNoCC.isLinux ''
+    lib.optionalString stdenvNoCC.hostPlatform.isLinux ''
       autoPatchelf $out
     ''
     + ''
@@ -58,6 +59,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         --bash <(bleep install-tab-completions-bash --stdout) \
         --zsh <(bleep install-tab-completions-zsh --stdout) \
     '';
+
+  passthru.tests.version = testers.testVersion {
+    package = finalAttrs.finalPackage;
+    command = "bleep --help | sed -n '/Bleeping/s/[^0-9.]//gp'";
+  };
 
   meta = {
     homepage = "https://bleep.build/";

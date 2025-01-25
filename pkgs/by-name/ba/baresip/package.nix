@@ -38,35 +38,48 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     hash = "sha256-0huZP1hopHaN5R1Hki6YutpvoASfIHzHMl/Y4czHHMo=";
   };
-  prePatch = ''
-    substituteInPlace cmake/FindGTK3.cmake --replace-fail GTK3_CFLAGS_OTHER ""
-  '' + lib.optionalString (!dbusSupport) ''
-    substituteInPlace cmake/modules.cmake --replace-fail 'list(APPEND MODULES ctrl_dbus)' ""
-  '';
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [
-    SDL2
-    alsa-lib
-    cairo
-    celt
-    ffmpeg
-    gsm
-    gtk3
-    libre
-    librem
-    libsndfile
-    libuuid
-    libv4l
-    libvpx
-    mpg123
-    openssl
-    pipewire
-    portaudio
-    spandsp3
-    speex
-    srtp
-    zlib
-  ] ++ (with gst_all_1; [ gstreamer gst-libav gst-plugins-base gst-plugins-bad gst-plugins-good ]);
+  prePatch =
+    ''
+      substituteInPlace cmake/FindGTK3.cmake --replace-fail GTK3_CFLAGS_OTHER ""
+    ''
+    + lib.optionalString (!dbusSupport) ''
+      substituteInPlace cmake/modules.cmake --replace-fail 'list(APPEND MODULES ctrl_dbus)' ""
+    '';
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+  buildInputs =
+    [
+      SDL2
+      alsa-lib
+      cairo
+      celt
+      ffmpeg
+      gsm
+      gtk3
+      libre
+      librem
+      libsndfile
+      libuuid
+      libv4l
+      libvpx
+      mpg123
+      openssl
+      pipewire
+      portaudio
+      spandsp3
+      speex
+      srtp
+      zlib
+    ]
+    ++ (with gst_all_1; [
+      gstreamer
+      gst-libav
+      gst-plugins-base
+      gst-plugins-bad
+      gst-plugins-good
+    ]);
 
   cmakeFlags = [
     "-DCMAKE_SKIP_BUILD_RPATH=ON"
@@ -76,19 +89,21 @@ stdenv.mkDerivation rec {
     "-DGST_INCLUDE_DIRS=${lib.getDev gst_all_1.gstreamer}/include/gstreamer-1.0"
   ];
 
-  makeFlags = [
-    "PREFIX=$(out)"
-    "CCACHE_DISABLE=1"
-  ]
-  ++ lib.optional (stdenv.cc.cc != null) "SYSROOT_ALT=${stdenv.cc.cc}"
-  ++ lib.optional (stdenv.cc.libc != null) "SYSROOT=${stdenv.cc.libc}"
-  ;
+  makeFlags =
+    [
+      "PREFIX=$(out)"
+      "CCACHE_DISABLE=1"
+    ]
+    ++ lib.optional (stdenv.cc.cc != null) "SYSROOT_ALT=${stdenv.cc.cc}"
+    ++ lib.optional (stdenv.cc.libc != null) "SYSROOT=${stdenv.cc.libc}";
 
   enableParallelBuilding = true;
 
-  env.NIX_CFLAGS_COMPILE = '' -I${librem}/include/rem -I${gsm}/include/gsm
+  env.NIX_CFLAGS_COMPILE = ''
+    -I${librem}/include/rem -I${gsm}/include/gsm
     -DHAVE_INTTYPES_H -D__GLIBC__
-    -D__need_timeval -D__need_timespec -D__need_time_t '';
+    -D__need_timeval -D__need_timespec -D__need_time_t
+  '';
 
   doInstallCheck = true;
   # CMake feature detection is prone to breakage between upgrades:
@@ -160,7 +175,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Modular SIP User-Agent with audio and video support";
     homepage = "https://github.com/baresip/baresip";
-    maintainers = with lib.maintainers; [ raskin ehmry ];
+    maintainers = with lib.maintainers; [
+      raskin
+      ehmry
+    ];
     mainProgram = "baresip";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;

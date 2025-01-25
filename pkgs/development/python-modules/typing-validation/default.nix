@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hashberg-io";
     repo = "typing-validation";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-0scXoAPkx/VBIbNRMtFoRRbmGpC2RzNRmQG4mRXSxrs=";
   };
 

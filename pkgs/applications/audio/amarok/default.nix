@@ -1,30 +1,103 @@
-{ stdenv, fetchurl, lib
-, extra-cmake-modules, kdoctools
-, qca-qt5, qjson, qtquickcontrols2, qtscript, qtwebengine
-, karchive, kcmutils, kconfig, kdnssd, kguiaddons, kinit, kirigami2, knewstuff, knotifyconfig, ktexteditor, kwindowsystem
-, fftw, phonon, plasma-framework, threadweaver, breeze-icons, wrapQtAppsHook
-, curl, ffmpeg, gdk-pixbuf, libaio, liblastfm, libmtp, loudmouth, lzo, lz4, mariadb-embedded, pcre, snappy, taglib, taglib_extras
+{
+  stdenv,
+  fetchurl,
+  lib,
+  extra-cmake-modules,
+  kdoctools,
+  qca-qt5,
+  qjson,
+  qtquickcontrols2,
+  qtscript,
+  qtwebengine,
+  karchive,
+  kcmutils,
+  kconfig,
+  kdnssd,
+  kguiaddons,
+  kinit,
+  kirigami2,
+  knewstuff,
+  knotifyconfig,
+  ktexteditor,
+  kwindowsystem,
+  fftw,
+  phonon,
+  plasma-framework,
+  threadweaver,
+  breeze-icons,
+  wrapQtAppsHook,
+  curl,
+  ffmpeg,
+  gdk-pixbuf,
+  libaio,
+  liblastfm,
+  libmtp,
+  loudmouth,
+  lzo,
+  lz4,
+  mariadb-embedded,
+  pcre,
+  snappy,
+  taglib,
+  taglib_extras,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "amarok";
-  version = "3.1.0";
+  version = "3.1.1";
 
   src = fetchurl {
     url = "mirror://kde/stable/amarok/${finalAttrs.version}/amarok-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-yXuZZ/qPFbjp9N+2YYTKxqfsncZloQW8UWjY5yD+Fus=";
+    sha256 = "sha256-CrilxE8v6OcEdnWlfmQM54fxyAE0rB5VX8vvzZRyLmY=";
   };
 
-  outputs = [ "out" "doc" ];
+  outputs = [
+    "out"
+    "doc"
+  ];
 
-  nativeBuildInputs = [ extra-cmake-modules kdoctools wrapQtAppsHook ];
+  nativeBuildInputs = [
+    extra-cmake-modules
+    kdoctools
+    wrapQtAppsHook
+  ];
 
   propagatedBuildInputs = [
-    qca-qt5 qjson qtquickcontrols2 qtscript qtwebengine
-    karchive kcmutils kconfig kdnssd kguiaddons kinit kirigami2 knewstuff knotifyconfig ktexteditor kwindowsystem
-    phonon plasma-framework threadweaver
-    curl fftw ffmpeg gdk-pixbuf libaio liblastfm libmtp loudmouth lz4 lzo mariadb-embedded
-    pcre snappy taglib taglib_extras breeze-icons
+    qca-qt5
+    qjson
+    qtquickcontrols2
+    qtscript
+    qtwebengine
+    karchive
+    kcmutils
+    kconfig
+    kdnssd
+    kguiaddons
+    kinit
+    kirigami2
+    knewstuff
+    knotifyconfig
+    ktexteditor
+    kwindowsystem
+    phonon
+    plasma-framework
+    threadweaver
+    curl
+    fftw
+    ffmpeg
+    gdk-pixbuf
+    libaio
+    liblastfm
+    libmtp
+    loudmouth
+    lz4
+    lzo
+    mariadb-embedded
+    pcre
+    snappy
+    taglib
+    taglib_extras
+    breeze-icons
   ];
 
   enableParallelBuilding = true;

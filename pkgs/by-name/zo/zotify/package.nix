@@ -20,8 +20,6 @@ python3Packages.buildPythonApplication rec {
 
   build-system = [ python3Packages.setuptools ];
 
-  nativeBuildInputs = [ python3Packages.pythonRelaxDepsHook ];
-
   pythonRelaxDeps = [ "protobuf" ];
 
   dependencies = with python3Packages; [
@@ -40,6 +38,7 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Fast and customizable music and podcast downloader";
     homepage = "https://github.com/zotify-dev/zotify";
+    changelog = "https://github.com/zotify-dev/zotify/blob/main/CHANGELOG.md";
     license = lib.licenses.zlib;
     mainProgram = "zotify";
     maintainers = with lib.maintainers; [ bwkam ];

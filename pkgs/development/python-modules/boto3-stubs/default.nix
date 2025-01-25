@@ -359,7 +359,7 @@
 
 buildPythonPackage rec {
   pname = "boto3-stubs";
-  version = "1.34.160";
+  version = "1.36.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -367,7 +367,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "boto3_stubs";
     inherit version;
-    hash = "sha256-xrHf6zyuZz7tWW8BQJM54uC5VaUkGhbO5p8pMD2bN94=";
+    hash = "sha256-9KCsaCAuaZSG9/tyg5he3RcJMAYzuin+tMec5IjOWf4=";
   };
 
   build-system = [ setuptools ];
@@ -378,7 +378,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     accessanalyzer = [ mypy-boto3-accessanalyzer ];
     account = [ mypy-boto3-account ];
     acm = [ mypy-boto3-acm ];

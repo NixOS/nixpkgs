@@ -39,7 +39,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyro-ppl";
     repo = "funsor";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Prj1saT0yoPAP8rDE0ipBEpR3QMk4PS12VSJlxc22p8=";
   };
 
@@ -81,7 +81,7 @@ buildPythonPackage rec {
       # TODO: Try to re-enable this test at next release
       "test_torch_save"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Failures related to JIT
       # RuntimeError: required keyword attribute 'Subgraph' has the wrong type
       "test_local_param_ok"

@@ -1,7 +1,8 @@
-{ stdenv
-, lib
-, rkbin
-, qemu
+{
+  stdenv,
+  lib,
+  rkbin,
+  qemu,
 }:
 
 stdenv.mkDerivation {
@@ -19,7 +20,7 @@ stdenv.mkDerivation {
     do
       # The proprietary, statically linked binaries to perform boot_merge are
       # x86_64 only. Though we use box64 to emulate if building on aarch64-linux
-      ${lib.optionalString stdenv.isAarch64 "${qemu}/bin/qemu-x86_64"} ./tools/boot_merger "$i" || true
+      ${lib.optionalString stdenv.hostPlatform.isAarch64 "${qemu}/bin/qemu-x86_64"} ./tools/boot_merger "$i" || true
     done
   '';
 
@@ -38,6 +39,9 @@ stdenv.mkDerivation {
     homepage = "https://github.com/rockchip-linux/rkbin";
     license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ matthewcroughan ];
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
   };
 }

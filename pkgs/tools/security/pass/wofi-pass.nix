@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pass-wayland
-, coreutils
-, gnugrep
-, libnotify
-, pwgen
-, findutils
-, makeWrapper
-, wl-clipboard
-, wtype
-, wofi
-, extensions ? exts: []
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pass-wayland,
+  coreutils,
+  gnugrep,
+  libnotify,
+  pwgen,
+  findutils,
+  makeWrapper,
+  wl-clipboard,
+  wtype,
+  wofi,
+  extensions ? exts: [ ],
 }:
 
 let
@@ -29,13 +30,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "wofi-pass";
-  version = "24.0.2";
+  version = "24.1.0";
 
   src = fetchFromGitHub {
     owner = "schmidtandreas";
     repo = "wofi-pass";
     rev = "v${version}";
-    sha256 = "sha256-OtUz0YLKuEzA4kv+llrOll0L84nMTkYH6JPxrkQKB6I=";
+    sha256 = "sha256-oRGDhr28UQjr+g//fWcLKWXqKSsRUWtdh39UMFSaPfw=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

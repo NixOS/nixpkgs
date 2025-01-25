@@ -19,14 +19,15 @@
   jbig2dec,
   libjpeg_turbo,
   gumbo,
-  memstreamHook,
 
   # dependencies
   mupdf,
 
   # tests
-  fonttools,
   pytestCheckHook,
+  fonttools,
+  pillow,
+  pymupdf-fonts,
 }:
 
 let
@@ -40,7 +41,7 @@ let
 in
 buildPythonPackage rec {
   pname = "pymupdf";
-  version = "1.24.8";
+  version = "1.25.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -48,8 +49,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pymupdf";
     repo = "PyMuPDF";
-    rev = "refs/tags/${version}";
-    hash = "sha256-NG4ZJYMYTQHiqpnaOz7hxf5UW417UKawe5EqXaBnKJ8=";
+    tag = version;
+    hash = "sha256-kdu8CuQJ5+h8+PS66acWEfcttgALiD+JBoWWyGtjBzs=";
   };
 
   # swig is not wrapped as Python package
@@ -73,7 +74,7 @@ buildPythonPackage rec {
     jbig2dec
     libjpeg_turbo
     gumbo
-  ] ++ lib.optionals (stdenv.system == "x86_64-darwin") [ memstreamHook ];
+  ];
 
   propagatedBuildInputs = [ mupdf-cxx ];
 
@@ -88,7 +89,7 @@ buildPythonPackage rec {
   };
 
   # TODO: manually add mupdf rpath until upstream fixes it
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     for lib in */*.so $out/${python.sitePackages}/*/*.so; do
       install_name_tool -add_rpath ${lib.getLib mupdf-cxx}/lib "$lib"
     done
@@ -96,96 +97,38 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+  ];
+
+  checkInputs = [
     fonttools
+    pillow
+    pymupdf-fonts
+  ];
+
+  disabledTests = [
+    # Do not lint code
+    "test_codespell"
+    "test_pylint"
+    "test_flake8"
+    # Upstream recommends disabling these when not using bundled MuPDF build
+    "test_color_count"
+    "test_3050"
+    "test_textbox3"
+  ];
+
+  pythonImportsCheck = [
+    "pymupdf"
+    "fitz"
   ];
 
   preCheck = ''
-    export PATH="$PATH:$out/bin";
+    export PATH="$out/bin:$PATH";
+
+    # Fixes at least one test; see:
+    # * <https://github.com/pymupdf/PyMuPDF/blob/refs/tags/1.25.1/scripts/sysinstall.py#L390>
+    # * <https://github.com/pymupdf/PyMuPDF/blob/refs/tags/1.25.1/tests/test_pixmap.py#L425-L428>
+    export PYMUPDF_SYSINSTALL_TEST=1
   '';
-
-  disabledTests =
-    [
-      # Fails in release tarballs without .git
-      "test_codespell"
-      "test_pylint"
-      # fails for indeterminate reasons
-      "test_2548"
-      "test_2753"
-      "test_3020"
-      "test_3050"
-      "test_3058"
-      "test_3177"
-      "test_3186"
-      "test_color_count"
-      "test_pilsave"
-      "test_fz_write_pixmap_as_jpeg"
-      # NotImplementedError
-      "test_1824"
-      "test_2093"
-      "test_2093"
-      "test_2108"
-      "test_2182"
-      "test_2182"
-      "test_2246"
-      "test_2270"
-      "test_2270"
-      "test_2391"
-      "test_2788"
-      "test_2861"
-      "test_2871"
-      "test_2886"
-      "test_2904"
-      "test_2922"
-      "test_2934"
-      "test_2957"
-      "test_2969"
-      "test_3070"
-      "test_3131"
-      "test_3140"
-      "test_3209"
-      "test_3209"
-      "test_3301"
-      "test_3347"
-      "test_caret"
-      "test_deletion"
-      "test_file_info"
-      "test_line"
-      "test_page_links_generator"
-      "test_polyline"
-      "test_redact"
-      "test_techwriter_append"
-      "test_text2"
-      # Issue with FzArchive
-      "test_htmlbox"
-      "test_2246"
-      "test_3140"
-      "test_3400"
-      "test_707560"
-      "test_open"
-      "test_objectstream1"
-      "test_objectstream2"
-      "test_objectstream3"
-      "test_fit_springer"
-      "test_write_stabilized_with_links"
-      "test_textbox"
-      "test_delete_image"
-      # Fonts not available
-      "test_fontarchive"
-      "test_subset_fonts"
-      # Exclude lint tests
-      "test_flake8"
-    ]
-    ++ lib.optionals stdenv.isDarwin [
-      # darwin does not support OCR right now
-      "test_tesseract"
-    ];
-
-  disabledTestPaths = [
-    # Issue with FzArchive
-    "tests/test_docs_samples.py"
-  ];
-
-  pythonImportsCheck = [ "fitz" ];
 
   meta = {
     description = "Python bindings for MuPDF's rendering library";
@@ -194,8 +137,5 @@ buildPythonPackage rec {
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ teto ];
     platforms = lib.platforms.unix;
-    # ImportError: cannot import name '_mupdf' from partially initialized module 'mupdf'
-    # (most likely due to a circular import)
-    broken = true;
   };
 }

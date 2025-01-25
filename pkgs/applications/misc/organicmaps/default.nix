@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , ninja
 , pkg-config
@@ -25,20 +26,28 @@ let
   world_feed_integration_tests_data = fetchFromGitHub {
     owner = "organicmaps";
     repo = "world_feed_integration_tests_data";
-    rev = "3b66e59eaae85ebc583ce20baa3bdf27811349c4";
-    hash = "sha256-wOZKqwYxJLllyxCr44rAcropKhohLUIVCtsR5tz9TRw=";
+    rev = "30ecb0b3fe694a582edfacc2a7425b6f01f9fec6";
+    hash = "sha256-1FF658OhKg8a5kKX/7TVmsxZ9amimn4lB6bX9i7pnI4=";
   };
 in stdenv.mkDerivation rec {
   pname = "organicmaps";
-  version = "2024.08.16-5";
+  version = "2024.11.27-12";
 
   src = fetchFromGitHub {
     owner = "organicmaps";
     repo = "organicmaps";
     rev = "${version}-android";
-    hash = "sha256-qVLeZySVdncHEwA0aTiScGJ/RAIpvVVVse3O/sXLto0=";
+    hash = "sha256-lBEDPqxdnaajMHlf7G/d1TYYL9yPZo8AGekoKmF1ObM=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    # Fix for https://github.com/organicmaps/organicmaps/issues/7838
+    (fetchpatch {
+      url = "https://github.com/organicmaps/organicmaps/commit/1caf64e315c988cd8d5196c80be96efec6c74ccc.patch";
+      hash = "sha256-k3VVRgHCFDhviHxduQMVRUUvQDgMwFHIiDZKa4BNTyk=";
+    })
+  ];
 
   postPatch = ''
     # Disable certificate check. It's dependent on time
@@ -51,7 +60,7 @@ in stdenv.mkDerivation rec {
     patchShebangs 3party/boost/tools/build/src/engine/build.sh
 
     # Prefetch test data, or the build system will try to fetch it with git.
-    ln -s ${world_feed_integration_tests_data} data/world_feed_integration_tests_data
+    ln -s ${world_feed_integration_tests_data} data/test_data/world_feed_integration_tests_data
   '';
 
   nativeBuildInputs = [
@@ -91,7 +100,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     # darwin: "invalid application of 'sizeof' to a function type"
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://organicmaps.app/";
     description = "Detailed Offline Maps for Travellers, Tourists, Hikers and Cyclists";
     license = licenses.asl20;

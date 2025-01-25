@@ -2,9 +2,9 @@
 , lib
 , fetchzip
 
-  # Only used for Linux's x86/x86_64
+  # Only useful on Linux x86/x86_64, and brings in non‐free Open Watcom
 , uasm
-, useUasm ? (stdenv.isLinux && stdenv.hostPlatform.isx86)
+, useUasm ? false
 
   # RAR code is under non-free unRAR license
   # see the meta.license section below for more details
@@ -25,13 +25,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "7zz";
-  version = "24.08";
+  version = "24.09";
 
   src = fetchzip {
     url = "https://7-zip.org/a/7z${lib.replaceStrings [ "." ] [ "" ] finalAttrs.version}-src.tar.xz";
     hash = {
-      free = "sha256-2lv2Z4rrjmawD6aI8TmrACgo62StD720WQWOa0/u7KE=";
-      unfree = "sha256-f6hibHeTlF6RRnFiC7tOZ/A+IQdjhIrxYq6JrDVhnYI=";
+      free = "sha256-iQJ2m2OZrdkzf2sDIbKuyu0wIUktfvySTpsGFSLDZOM=";
+      unfree = "sha256-HVSu5GvdCY3lVXLUkHxaXco22WO52J2ldkGgfsyMVVg=";
     }.${if enableUnfree then "unfree" else "free"};
     stripRoot = false;
     # remove the unRAR related code from the src drv
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace windres.exe ${stdenv.cc.targetPrefix}windres
   '';
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.hostPlatform.isDarwin [
     "-Wno-deprecated-copy-dtor"
   ] ++ lib.optionals stdenv.hostPlatform.isMinGW [
     "-Wno-conversion"
@@ -77,10 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
       "CXX=${stdenv.cc.targetPrefix}c++"
     ]
     ++ lib.optionals useUasm [ "MY_ASM=uasm" ]
-    # We need at minimum 10.13 here because of utimensat, however since
-    # we need a bump anyway, let's set the same minimum version as the one in
-    # aarch64-darwin so we don't need additional changes for it
-    ++ lib.optionals stdenv.isDarwin [ "MACOSX_DEPLOYMENT_TARGET=10.16" ]
+    ++ lib.optionals (!useUasm && stdenv.hostPlatform.isx86) [ "USE_ASM=" ]
     # it's the compression code with the restriction, see DOC/License.txt
     ++ lib.optionals (!enableUnfree) [ "DISABLE_RAR_COMPRESS=true" ]
     ++ lib.optionals (stdenv.hostPlatform.isMinGW) [ "IS_MINGW=1" "MSYSTEM=1" ];

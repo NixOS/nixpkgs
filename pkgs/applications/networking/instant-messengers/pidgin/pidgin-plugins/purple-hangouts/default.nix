@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchhg, pidgin, glib, json-glib, protobuf, protobufc }:
+{
+  lib,
+  stdenv,
+  fetchhg,
+  pidgin,
+  glib,
+  json-glib,
+  protobuf,
+  protobufc,
+}:
 
 stdenv.mkDerivation {
   pname = "purple-hangouts-hg";
@@ -10,7 +19,13 @@ stdenv.mkDerivation {
     sha256 = "1zd1rlzqvw1zkb0ydyz039n3xa1kv1f20a4l6rkm9a8sp6rpf3pi";
   };
 
-  buildInputs = [ pidgin glib json-glib protobuf protobufc ];
+  buildInputs = [
+    pidgin
+    glib
+    json-glib
+    protobuf
+    protobufc
+  ];
 
   PKG_CONFIG_PURPLE_PLUGINDIR = "${placeholder "out"}/lib/purple-2";
   PKG_CONFIG_PURPLE_DATADIR = "${placeholder "out"}/share";

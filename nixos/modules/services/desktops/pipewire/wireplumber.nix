@@ -61,7 +61,8 @@ in
         # in sections.
         type = attrsOf (attrsOf json.type);
         default = { };
-        example = literalExpression ''{
+        example = literalExpression ''
+        {
           "log-level-debug" = {
             "context.properties" = {
               # Output Debug log messages as opposed to only the default level (Notice)
@@ -88,7 +89,8 @@ in
               }
             ];
           };
-        }'';
+        }
+        '';
         description = ''
           Additional configuration for the WirePlumber daemon when run in
           single-instance mode (the default in nixpkgs and currently the only
@@ -166,7 +168,8 @@ in
       configPackages = mkOption {
         type = listOf package;
         default = [ ];
-        example = literalExpression ''[
+        example = literalExpression ''
+        [
           (pkgs.writeTextDir "share/wireplumber/wireplumber.conf.d/10-bluez.conf" '''
             monitor.bluez.properties = {
               bluez5.roles = [ a2dp_sink a2dp_source bap_sink bap_source hsp_hs hsp_ag hfp_hf hfp_ag ]
@@ -175,7 +178,8 @@ in
               bluez5.hfphsp-backend = "native"
             }
           ''')
-        ]'';
+        ]
+        '';
         description = ''
           List of packages that provide WirePlumber configuration, in the form of
           `share/wireplumber/*/*.conf` files.

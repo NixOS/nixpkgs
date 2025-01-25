@@ -1,6 +1,6 @@
 { lib
 , buildGraalvmNativeImage
-, graalvmCEPackages
+, graalvmPackages
 , fetchurl
 , writeScript
 , installShellFiles
@@ -9,14 +9,14 @@
 let
   babashka-unwrapped = buildGraalvmNativeImage rec {
     pname = "babashka-unwrapped";
-    version = "1.4.192";
+    version = "1.12.196";
 
     src = fetchurl {
       url = "https://github.com/babashka/babashka/releases/download/v${version}/babashka-${version}-standalone.jar";
-      sha256 = "sha256-uVRk1/lfOXMSp3qOdeMoAFpwJaEBxF1MYtFOv364H7Y=";
+      sha256 = "sha256-11HrLQi/BYX+LqqUAN3mZx13775dzXCDFxpJP33bKQY=";
     };
 
-    graalvmDrv = graalvmCEPackages.graalvm-ce;
+    graalvmDrv = graalvmPackages.graalvm-ce;
 
     executable = "bb";
 
@@ -37,6 +37,7 @@ let
       $out/bin/bb '(vec (dedupe *input*))' <<< '[1 1 1 1 2]' | fgrep '[1 2]'
       $out/bin/bb '(prn "bépo àê")' | fgrep 'bépo àê'
       $out/bin/bb '(:out (babashka.process/sh "echo" "ä"))' | fgrep 'ä'
+      $out/bin/bb '(into-array [:f])'
     '';
 
     postInstall = ''
@@ -107,7 +108,6 @@ let
         bhougland
         DerGuteMoritz
         jlesquembre
-        thiagokokada
       ];
     };
   };

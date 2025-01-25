@@ -6,6 +6,6 @@
 mkKdeDerivation {
   pname = "lokalize";
 
-  extraNativeBuildInputs = [pkg-config];
-  extraBuildInputs = [hunspell];
+  extraNativeBuildInputs = [ pkg-config ];
+  extraBuildInputs = [ hunspell ];
 }

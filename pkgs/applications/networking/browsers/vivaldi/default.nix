@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, zlib, libX11, libXext, libSM, libICE, libxkbcommon, libxshmfence
+{ lib, stdenv, coreutils, fetchurl, zlib, libX11, libXext, libSM, libICE, libxkbcommon, libxshmfence
 , libXfixes, libXt, libXi, libXcursor, libXScrnSaver, libXcomposite, libXdamage, libXtst, libXrandr
 , alsa-lib, dbus, cups, libexif, ffmpeg, systemd, libva, libGL
 , freetype, fontconfig, libXft, libXrender, libxcb, expat
@@ -6,7 +6,7 @@
 , libxml2
 , glib, gtk3, pango, gdk-pixbuf, cairo, atk, at-spi2-atk, at-spi2-core
 , qt5
-, libdrm, mesa
+, libdrm, libgbm
 , vulkan-loader
 , nss, nspr
 , patchelf, makeWrapper
@@ -15,7 +15,7 @@
 , proprietaryCodecs ? false, vivaldi-ffmpeg-codecs ? null
 , enableWidevine ? false, widevine-cdm ? null
 , commandLineArgs ? ""
-, pulseSupport ? stdenv.isLinux, libpulseaudio
+, pulseSupport ? stdenv.hostPlatform.isLinux, libpulseaudio
 , kerberosSupport ? true, libkrb5
 }:
 
@@ -24,7 +24,7 @@ let
   vivaldiName = if isSnapshot then "vivaldi-snapshot" else "vivaldi";
 in stdenv.mkDerivation rec {
   pname = "vivaldi";
-  version = "6.9.3447.41";
+  version = "7.0.3495.29";
 
   suffix = {
     aarch64-linux = "arm64";
@@ -34,8 +34,8 @@ in stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://downloads.vivaldi.com/${branch}/vivaldi-${branch}_${version}-1_${suffix}.deb";
     hash = {
-      aarch64-linux = "sha256-Up2n7G3vatsQC9JKF1A1jAIBbdWm9UhL/75AXuxDCsg=";
-      x86_64-linux = "sha256-Hcd8W8bDlRUT/zPYP+aiJnUmepS38KuK0wRFYB3uW1Y=";
+      aarch64-linux = "sha256-GdywFoaxx2VSpOJ0FJIhFcIRDJEhozCWvYvdatmEi5o=";
+      x86_64-linux = "sha256-PNSGx2oCIbB3vaNFS+7coM9Xw+2qDELJBXX8zA1UC3Q=";
     }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
@@ -55,14 +55,14 @@ in stdenv.mkDerivation rec {
     qt5.qtbase
     freetype fontconfig libXrender libuuid expat glib nss nspr libGL
     libxml2 pango cairo
-    libdrm mesa vulkan-loader
+    libdrm libgbm vulkan-loader
     wayland pipewire
   ] ++ lib.optional proprietaryCodecs vivaldi-ffmpeg-codecs
     ++ lib.optional pulseSupport libpulseaudio
     ++ lib.optional kerberosSupport libkrb5;
 
   libPath = lib.makeLibraryPath buildInputs
-    + lib.optionalString (stdenv.is64bit)
+    + lib.optionalString (stdenv.hostPlatform.is64bit)
       (":" + lib.makeSearchPathOutput "lib" "lib64" buildInputs)
     + ":$out/opt/${vivaldiName}/lib";
 
@@ -110,10 +110,11 @@ in stdenv.mkDerivation rec {
     done
     wrapProgram "$out/bin/vivaldi" \
       --add-flags ${lib.escapeShellArg commandLineArgs} \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --set-default FONTCONFIG_FILE "${fontconfig.out}/etc/fonts/fonts.conf" \
       --set-default FONTCONFIG_PATH "${fontconfig.out}/etc/fonts" \
       --suffix XDG_DATA_DIRS : ${gtk3}/share/gsettings-schemas/${gtk3.name}/ \
+      --prefix PATH : ${coreutils}/bin \
       ${lib.optionalString enableWidevine "--suffix LD_LIBRARY_PATH : ${libPath}"}
   '' + lib.optionalString enableWidevine ''
     ln -sf ${widevine-cdm}/share/google/chrome/WidevineCdm $out/opt/${vivaldiName}/WidevineCdm

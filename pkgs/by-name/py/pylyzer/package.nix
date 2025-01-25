@@ -7,41 +7,36 @@
   python3,
   makeWrapper,
   writeScriptBin,
-  darwin,
-  which,
+  versionCheckHook,
   nix-update-script,
-  testers,
-  pylyzer,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "pylyzer";
-  version = "0.0.61";
+  version = "0.0.77";
 
   src = fetchFromGitHub {
     owner = "mtshiba";
     repo = "pylyzer";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-t0BzNNofjeBlNqf6iqaWrTzVpzEACyyrZ3YKDYz713U=";
+    tag = "v${version}";
+    hash = "sha256-MlDW3dNe9fdOzWp38VkjgoiqOYgBF+ezwTQE0+6SXCc=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "rustpython-ast-0.4.0" = "sha256-kMUuqOVFSvvSHOeiYMjWdsLnDu12RyQld3qtTyd5tAM=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-bkYRPwiB2BN4WNZ0HcOBiDbFyidftbHWyIDvJasnePc=";
 
   nativeBuildInputs = [
     git
     python3
     makeWrapper
-  ] ++ lib.optionals stdenv.isDarwin [ (writeScriptBin "diskutil" "") ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ (writeScriptBin "diskutil" "") ];
 
-  buildInputs = [ python3 ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+  buildInputs = [
+    python3
+  ];
 
   preBuild = ''
-    export HOME=$TMPDIR
+    export HOME=$(mktemp -d)
   '';
 
   postInstall = ''
@@ -49,21 +44,18 @@ rustPlatform.buildRustPackage rec {
     cp -r $HOME/.erg/ $out/lib/erg
   '';
 
-  nativeCheckInputs = [ which ];
-
-  checkFlags = [
-    # this test causes stack overflow
-    # > thread 'exec_import' has overflowed its stack
-    "--skip=exec_import"
-  ];
-
   postFixup = ''
     wrapProgram $out/bin/pylyzer --set ERG_PATH $out/lib/erg
   '';
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
+
   passthru = {
     updateScript = nix-update-script { };
-    tests.version = testers.testVersion { package = pylyzer; };
   };
 
   meta = {

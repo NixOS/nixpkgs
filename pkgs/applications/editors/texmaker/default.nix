@@ -10,7 +10,7 @@
   qttools,
   qtwebengine,
   qt5compat,
-  zlib
+  zlib,
 }:
 
 stdenv.mkDerivation rec {

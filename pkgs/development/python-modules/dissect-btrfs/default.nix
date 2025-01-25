@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "dissect-btrfs";
-  version = "1.4";
+  version = "1.6";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.btrfs";
-    rev = "refs/tags/${version}";
-    hash = "sha256-cQC9lY80JOgLJZpNCwpvDldWjfbbI14uc9q/miAOBGM=";
+    tag = version;
+    hash = "sha256-p7gtzZhKOovA+BcM7jYdicP301ueMS1IMGkBbmOxaIA=";
   };
 
   nativeBuildInputs = [
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     dissect-util
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     full = [
       python-lzo
       zstandard

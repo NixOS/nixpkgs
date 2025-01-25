@@ -3,6 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   pkg-config,
+  vips,
   gobject-introspection,
   wrapGAppsHook4,
   gtk4,
@@ -12,16 +13,16 @@
 
 buildGoModule rec {
   pname = "walker";
-  version = "0.7.7";
+  version = "0.12.10";
 
   src = fetchFromGitHub {
     owner = "abenz1267";
     repo = "walker";
     rev = "v${version}";
-    hash = "sha256-UJxLVnKfMLPkzec3XwNHcHE1x5kPFMoyqed0VNgFJ4w=";
+    hash = "sha256-nrt/uHHAtnQbOwzXCfNrdk/ywRUWWLLpy9PO2VkGwkQ=";
   };
 
-  vendorHash = "sha256-xLhpHrggOGq5VLjQO7OvH/Ei5YivJJhTsy2ek2AudRs=";
+  vendorHash = "sha256-urAtl2aSuNw7UVnuacSACUE8PCwAsrRQbuMb7xItjao=";
   subPackages = [ "cmd/walker.go" ];
 
   passthru.updateScript = nix-update-script { };
@@ -34,6 +35,7 @@ buildGoModule rec {
 
   buildInputs = [
     gtk4
+    vips
     gtk4-layer-shell
   ];
 

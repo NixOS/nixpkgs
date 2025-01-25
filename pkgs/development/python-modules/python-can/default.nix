@@ -9,10 +9,12 @@
   parameterized,
   msgpack,
   pyserial,
+  pytest-cov-stub,
   pytest-timeout,
   pytestCheckHook,
   pythonOlder,
   setuptools,
+  setuptools-scm,
   typing-extensions,
   wrapt,
   uptime,
@@ -20,33 +22,31 @@
 
 buildPythonPackage rec {
   pname = "python-can";
-  version = "4.4.2";
+  version = "4.5.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "hardbyte";
     repo = "python-can";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-p3B1LWSygDX0UhIx4XhXv15H7Hwn9UB20jFIPDZnuNs=";
+    tag = "v${version}";
+    hash = "sha256-XCv2oOkGq8c2gTo+8UcZbuBYXyhhQstWLyddk3db38s=";
   };
 
-  postPatch = ''
-    substituteInPlace tox.ini \
-      --replace " --cov=can --cov-config=tox.ini --cov-report=lcov --cov-report=term" ""
-  '';
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
-  nativeBuildInputs = [ setuptools ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     msgpack
     packaging
     typing-extensions
     wrapt
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     serial = [ pyserial ];
     seeedstudio = [ pyserial ];
     pcan = [ uptime ];
@@ -56,9 +56,10 @@ buildPythonPackage rec {
     future
     hypothesis
     parameterized
+    pytest-cov-stub
     pytest-timeout
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.serial;
+  ] ++ optional-dependencies.serial;
 
   disabledTestPaths = [
     # We don't support all interfaces
@@ -74,7 +75,7 @@ buildPythonPackage rec {
       "test_pack_unpack"
       "test_receive"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # timing sensitive
       "test_general"
       "test_gap"

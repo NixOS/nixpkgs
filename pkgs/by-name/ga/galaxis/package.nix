@@ -1,8 +1,9 @@
-{ lib
-, asciidoctor
-, fetchFromGitLab
-, ncurses
-, stdenv
+{
+  lib,
+  asciidoctor,
+  fetchFromGitLab,
+  ncurses,
+  stdenv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -16,7 +17,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-fSzifGoSdWyFGt99slzAsqCMDoeLbBqQGXujX8QAfGc=";
   };
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   nativeBuildInputs = [
     asciidoctor

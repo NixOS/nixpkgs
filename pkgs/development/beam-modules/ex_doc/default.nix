@@ -1,4 +1,4 @@
-{ lib, elixir, fetchFromGitHub, fetchMixDeps, mixRelease, nix-update-script }:
+{ lib, elixir, fetchFromGitHub, fetchMixDeps, mixRelease }:
 # Based on ../elixir-ls/default.nix
 
 let
@@ -51,5 +51,4 @@ mixRelease {
     mainProgram = "ex_doc";
     maintainers = with maintainers; [chiroptical];
   };
-  passthru.updateScript = nix-update-script { };
 }

@@ -10,17 +10,19 @@
   glib,
   gtk3,
   pango,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "browsers";
-  version = "0.5.8";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "Browsers-software";
     repo = "browsers";
-    rev = "refs/tags/${version}";
-    hash = "sha256-o9vyrHQsZQ3qywA4bviM+W4xx64IZL24VHErMFAEMFE=";
+    tag = version;
+    hash = "sha256-qLqyv5XXG7cpW+/eNCWguqemT3G2BhnolntHi2zZJ0o=";
   };
 
   cargoLock = {
@@ -36,14 +38,21 @@ rustPlatform.buildRustPackage rec {
     wrapGAppsHook3
   ];
 
-  buildInputs = [
-    atk
-    cairo
-    gdk-pixbuf
-    glib
-    gtk3
-    pango
-  ];
+  buildInputs =
+    [
+      atk
+      cairo
+      gdk-pixbuf
+      glib
+      gtk3
+      pango
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.AppKit
+      darwin.apple_sdk.frameworks.CoreGraphics
+      darwin.apple_sdk.frameworks.CoreText
+      darwin.apple_sdk.frameworks.Foundation
+    ];
 
   postInstall = ''
     install -m 444 \
@@ -67,7 +76,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/Browsers-software/browsers/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ravenz46 ];
-    platforms = lib.platforms.linux;
     mainProgram = "browsers";
   };
 }

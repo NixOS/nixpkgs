@@ -4,6 +4,7 @@
   substituteAll,
   lib,
   stdenv,
+  docutils,
   meson,
   ninja,
   pkg-config,
@@ -23,7 +24,6 @@
   librsvg,
   webp-pixbuf-loader,
   geoclue2,
-  perl,
   desktop-file-utils,
   libpulseaudio,
   libical,
@@ -56,9 +56,8 @@
   gnome-settings-daemon,
   gnome-autoar,
   gnome-tecla,
-  asciidoc,
   bash-completion,
-  mesa,
+  libgbm,
   libGL,
   libXi,
   libX11,
@@ -70,7 +69,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-shell";
-  version = "46.4";
+  version = "47.3";
 
   outputs = [
     "out"
@@ -79,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell/${lib.versions.major finalAttrs.version}/gnome-shell-${finalAttrs.version}.tar.xz";
-    hash = "sha256-GIRo/nLpCsSyNOnU0HB9YH/q85oT0lvTqj63XlWj4FI=";
+    hash = "sha256-eD3rmghlEeSlPbEFdL+7ppVXb2mAeCGMpsgMse/sKT4=";
   };
 
   patches = [
@@ -112,17 +111,16 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
+    docutils # for rst2man
     meson
     ninja
     pkg-config
     gettext
     gi-docgen
-    perl
     wrapGAppsHook4
     sassc
     desktop-file-utils
     libxslt.bin
-    asciidoc
     gobject-introspection
   ];
 
@@ -155,7 +153,7 @@ stdenv.mkDerivation (finalAttrs: {
     ibus
     gnome-desktop
     gnome-settings-daemon
-    mesa
+    libgbm
     libGL # for egl, required by mutter-clutter
     libXi # required by libmutter
     libX11
@@ -186,7 +184,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    patchShebangs src/data-to-c.pl
+    patchShebangs src/data-to-c.py
 
     # We can generate it ourselves.
     rm -f man/gnome-shell.1
@@ -237,6 +235,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Core user interface for the GNOME 3 desktop";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-shell";
+    changelog = "https://gitlab.gnome.org/GNOME/gnome-shell/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;

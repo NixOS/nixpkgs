@@ -22,11 +22,23 @@ buildDotnetModule rec {
   };
 
   projectFile = "NAPS2.App.Gtk/NAPS2.App.Gtk.csproj";
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   executables = [ "naps2" ];
 
-  dotnet-sdk = with dotnetCorePackages; combinePackages [ sdk_6_0 sdk_8_0 ];
+  dotnet-sdk =
+    with dotnetCorePackages;
+    sdk_8_0
+    // {
+      inherit
+        (combinePackages [
+          sdk_8_0
+          sdk_6_0
+        ])
+        packages
+        targetPackages
+        ;
+    };
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
   selfContainedBuild = true;
   runtimeDeps = [
@@ -55,7 +67,7 @@ buildDotnetModule rec {
     maintainers = with lib.maintainers; [ eliandoran ];
     platforms = lib.platforms.linux;
     mainProgram = "naps2";
-    broken = stdenv.isAarch64;  # Google.Protobuf.Tools dependency fails to build.
+    broken = stdenv.hostPlatform.isAarch64;  # Google.Protobuf.Tools dependency fails to build.
   };
 
 }

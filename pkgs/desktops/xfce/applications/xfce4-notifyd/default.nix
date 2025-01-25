@@ -1,17 +1,18 @@
-{ lib
-, mkXfceDerivation
-, dbus
-, glib
-, gtk3
-, gtk-layer-shell
-, libcanberra-gtk3
-, libnotify
-, libX11
-, libxfce4ui
-, libxfce4util
-, sqlite
-, xfce4-panel
-, xfconf
+{
+  lib,
+  mkXfceDerivation,
+  dbus,
+  glib,
+  gtk3,
+  gtk-layer-shell,
+  libcanberra-gtk3,
+  libnotify,
+  libX11,
+  libxfce4ui,
+  libxfce4util,
+  sqlite,
+  xfce4-panel,
+  xfconf,
 }:
 
 mkXfceDerivation {

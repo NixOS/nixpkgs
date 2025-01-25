@@ -7,7 +7,7 @@
 }:
 let
   buildNpmPackage' = buildNpmPackage.override {
-    stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+    stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
   };
 in
 buildNpmPackage' rec {
@@ -17,7 +17,7 @@ buildNpmPackage' rec {
   src = fetchFromGitHub {
     owner = "eslint";
     repo = "eslint";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-R5DO4xN3PkwGAIfyMkohs9SvFiLjWf1ddOwkY6wbsjA=";
   };
 

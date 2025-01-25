@@ -1,4 +1,11 @@
-{ lib, buildPythonApplication, fetchFromGitHub, substituteAll, requests, dmenu }:
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  replaceVars,
+  requests,
+  dmenu,
+}:
 
 buildPythonApplication rec {
   pname = "dmensamenu";
@@ -12,8 +19,7 @@ buildPythonApplication rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./dmenu-path.patch;
+    (replaceVars ./dmenu-path.patch {
       inherit dmenu;
     })
   ];

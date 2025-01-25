@@ -1,15 +1,16 @@
-{ stdenv
-, lib
-, cmake
-, extra-cmake-modules
-, fetchFromGitHub
-, fetchpatch
-, kcolorpicker
-, kimageannotator
-, wrapQtAppsHook
-, qtsvg
-, qttools
-, qtx11extras
+{
+  stdenv,
+  lib,
+  cmake,
+  extra-cmake-modules,
+  fetchFromGitHub,
+  fetchpatch,
+  kcolorpicker,
+  kimageannotator,
+  wrapQtAppsHook,
+  qtsvg,
+  qttools,
+  qtx11extras,
 }:
 
 stdenv.mkDerivation rec {

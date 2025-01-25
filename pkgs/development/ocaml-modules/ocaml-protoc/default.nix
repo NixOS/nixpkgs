@@ -1,6 +1,7 @@
-{ buildDunePackage
-, pbrt
-, stdlib-shims
+{
+  buildDunePackage,
+  pbrt,
+  stdlib-shims,
 }:
 
 buildDunePackage rec {

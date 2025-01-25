@@ -1,23 +1,28 @@
-{ lib, stdenv, fetchFromGitLab, kernel, fetchpatch }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  kernel,
+  fetchpatch,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ddcci-driver";
-  version = "0.4.4";
+  version = "0.4.5-unstable-2024-09-26";
   name = "${pname}-${kernel.version}-${version}";
 
   src = fetchFromGitLab {
     owner = "${pname}-linux";
     repo = "${pname}-linux";
-    rev = "v${version}";
-    hash = "sha256-4pCfXJcteWwU6cK8OOSph4XlhKTk289QqLxsSWY7cac=";
+    rev = "0233e1ee5eddb4b8a706464f3097bad5620b65f4";
+    hash = "sha256-Osvojt8UE+cenOuMoSY+T+sODTAAKkvY/XmBa5bQX88=";
   };
 
   patches = [
-    # See https://gitlab.com/ddcci-driver-linux/ddcci-driver-linux/-/merge_requests/15
+    # See https://gitlab.com/ddcci-driver-linux/ddcci-driver-linux/-/merge_requests/17
     (fetchpatch {
-      name = "fix-build-with-linux68.patch";
-      url = "https://gitlab.com/ddcci-driver-linux/ddcci-driver-linux/-/commit/3eb20df68a545d07b8501f13fa9d20e9c6f577ed.patch";
-      hash = "sha256-Y1ktYaJTd9DtT/mwDqtjt/YasW9cVm0wI43wsQhl7Bg=";
+      url = "https://gitlab.com/ddcci-driver-linux/ddcci-driver-linux/-/commit/e0605c9cdff7bf3fe9587434614473ba8b7e5f63.patch";
+      hash = "sha256-sTq03HtWQBd7Wy4o1XbdmMjXQE2dG+1jajx4HtwBHjM=";
     })
   ];
 
@@ -34,7 +39,7 @@ stdenv.mkDerivation rec {
       --replace depmod \#
   '';
 
-  makeFlags = kernel.makeFlags ++ [
+  makeFlags = kernel.moduleMakeFlags ++ [
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "KVER=${kernel.modDirVersion}"
     "KERNEL_MODLIB=$(out)/lib/modules/${kernel.modDirVersion}"

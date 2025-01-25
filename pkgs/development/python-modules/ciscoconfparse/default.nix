@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mpenning";
     repo = "ciscoconfparse";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-vL/CQdYcOP356EyRToviWylP1EBtxmeov6qkhfQNZ2Y=";
   };
 

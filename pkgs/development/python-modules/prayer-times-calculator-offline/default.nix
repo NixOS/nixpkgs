@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cpfair";
     repo = "prayer-times-calculator-offline";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-sVEdjtwxwGa354YimeaNqjqZ9yEecNXg8kk6Pafvvd4=";
   };
 

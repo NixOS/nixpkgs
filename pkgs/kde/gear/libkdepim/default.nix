@@ -5,5 +5,5 @@
 mkKdeDerivation {
   pname = "libkdepim";
 
-  extraNativeBuildInputs = [qttools];
+  extraNativeBuildInputs = [ qttools ];
 }

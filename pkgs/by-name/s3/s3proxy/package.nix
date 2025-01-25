@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, jre
-, makeWrapper
-, maven
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  jre,
+  makeWrapper,
+  maven,
 }:
 
 let
@@ -21,7 +22,7 @@ maven.buildMavenPackage {
     hash = "sha256-GhZPvo8wlXInHwg8rSmpwMMkZVw5SMpnZyKqFUYLbrE=";
   };
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -41,4 +42,3 @@ maven.buildMavenPackage {
     maintainers = with maintainers; [ camelpunch ];
   };
 }
-

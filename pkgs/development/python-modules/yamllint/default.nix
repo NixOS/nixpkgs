@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "adrienverge";
     repo = "yamllint";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-+7Q2cPl4XElI2IfLAkteifFVTrGkj2IjZk7nPuc6eYM=";
   };
 
@@ -38,7 +38,7 @@ buildPythonPackage rec {
       # test failure reported upstream: https://github.com/adrienverge/yamllint/issues/373
       "test_find_files_recursively"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # locale tests are broken on BSDs; see https://github.com/adrienverge/yamllint/issues/307
       "test_locale_accents"
       "test_locale_case"

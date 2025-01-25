@@ -1,31 +1,47 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, bashInteractive
-, coreutils
-, installShellFiles
-, libiconv
-, mdbook
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  bashInteractive,
+  coreutils,
+  installShellFiles,
+  libiconv,
+  mdbook,
+  nix-update-script,
+  # run the compiled `just` to build the completions
+  installShellCompletions ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
+  # run the compiled `just` to build the man pages
+  installManPages ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
+  # run the compiled `generate-book` utility to prepare the files for mdbook
+  withDocumentation ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "just";
-  version = "1.35.0";
-  outputs = [ "out" "man" "doc" ];
+  version = "1.38.0";
+  outputs =
+    [
+      "out"
+    ]
+    ++ lib.optionals installManPages [
+      "man"
+    ]
+    ++ lib.optionals withDocumentation [ "doc" ];
 
   src = fetchFromGitHub {
     owner = "casey";
     repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-/5UzieioBzltFhzUoPOm6B4QKHFEquXCKo/2SPHkp2M=";
+    tag = version;
+    hash = "sha256-jIc8+SFAcH2TsY12+txwlMoJmpDdDpC0H+UrjYH61Lk=";
   };
 
-  cargoHash = "sha256-X3noVDRnnrR6xuOBfoH4JPdcPLOBHbGQb6opNvzK/TE=";
+  cargoHash = "sha256-JHLkjMy5b1spJrAqFCCzqgnlYTAKA1Z9Tx4w1WWuiAI=";
 
-  nativeBuildInputs = [ installShellFiles mdbook ];
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+  nativeBuildInputs =
+    lib.optionals (installShellCompletions || installManPages) [ installShellFiles ]
+    ++ lib.optionals withDocumentation [ mdbook ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   preCheck = ''
     # USER must not be empty
@@ -53,22 +69,9 @@ rustPlatform.buildRustPackage rec {
     ./fix-just-path-in-tests.patch
   ];
 
-  postBuild = ''
-    cargo run --package generate-book
-
-    mkdir -p completions man
-
-    cargo run -- --man > man/just.1
-
-    for shell in bash fish zsh; do
-        cargo run -- --completions $shell > completions/just.$shell
-    done
-
-    # No linkcheck in sandbox
-    echo 'optional = true' >> book/en/book.toml
-    mdbook build book/en
-    find .
-  '';
+  cargoBuildFlags = [
+    "--package=just"
+  ] ++ (lib.optionals withDocumentation [ "--package=generate-book" ]);
 
   checkFlags = [
     "--skip=backticks::trailing_newlines_are_stripped" # Wants to use python3 as alternate shell
@@ -79,16 +82,26 @@ rustPlatform.buildRustPackage rec {
     "--skip=shebang::run_shebang" # test case very rarely fails with "Text file busy"
   ];
 
-  postInstall = ''
-    mkdir -p $doc/share/doc/$name
-    mv ./book/en/build/html $doc/share/doc/$name
-    installManPage man/just.1
-
-    installShellCompletion --cmd just \
-      --bash completions/just.bash \
-      --fish completions/just.fish \
-      --zsh completions/just.zsh
-  '';
+  postInstall =
+    lib.optionalString withDocumentation ''
+      $out/bin/generate-book
+      rm $out/bin/generate-book
+      # No linkcheck in sandbox
+      echo 'optional = true' >> book/en/book.toml
+      mdbook build book/en
+      mkdir -p $doc/share/doc/$name
+      mv ./book/en/build/html $doc/share/doc/$name
+    ''
+    + lib.optionalString installManPages ''
+      $out/bin/just --man > ./just.1
+      installManPage ./just.1
+    ''
+    + lib.optionalString installShellCompletions ''
+      installShellCompletion --cmd just \
+        --bash <($out/bin/just --completions bash) \
+        --fish <($out/bin/just --completions fish) \
+        --zsh <($out/bin/just --completions zsh)
+    '';
 
   setupHook = ./setup-hook.sh;
 
@@ -99,7 +112,10 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/casey/just/blob/${version}/CHANGELOG.md";
     description = "Handy way to save and run project-specific commands";
     license = licenses.cc0;
-    maintainers = with maintainers; [ xrelkd jk ];
+    maintainers = with maintainers; [
+      xrelkd
+      jk
+    ];
     mainProgram = "just";
   };
 }

@@ -1,71 +1,49 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, wrapGAppsHook3
-, wrapQtAppsHook
-, pkg-config
-, ninja
-, alsa-lib
-, alsa-plugins
-, freetype
-, libjack2
-, lame
-, libogg
-, libpulseaudio
-, libsndfile
-, libvorbis
-, portaudio
-, portmidi
-, qtbase
-, qtdeclarative
-, flac
-, libopusenc
-, libopus
-, tinyxml-2
-, qt5compat
-, qtwayland
-, qtsvg
-, qtscxml
-, qtnetworkauth
-, qttools
-, nixosTests
-, darwin
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  wrapGAppsHook3,
+  wrapQtAppsHook,
+  pkg-config,
+  ninja,
+  alsa-lib,
+  alsa-plugins,
+  freetype,
+  libjack2,
+  lame,
+  libogg,
+  libpulseaudio,
+  libsndfile,
+  libvorbis,
+  portaudio,
+  portmidi,
+  qtbase,
+  qtdeclarative,
+  flac,
+  libopusenc,
+  libopus,
+  tinyxml-2,
+  qt5compat,
+  qtwayland,
+  qtsvg,
+  qtscxml,
+  qtnetworkauth,
+  qttools,
+  nixosTests,
 }:
 
-let
-  stdenv' = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
-  # portaudio propagates Darwin frameworks. Rebuild it using the 11.0 stdenv
-  # from Qt and the 11.0 SDK frameworks.
-  portaudio' = if stdenv.isDarwin then portaudio.override {
-    stdenv = stdenv';
-    inherit (darwin.apple_sdk_11_0.frameworks)
-      AudioUnit
-      AudioToolbox
-      CoreAudio
-      CoreServices
-      Carbon
-    ;
-  } else portaudio;
-in stdenv'.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "musescore";
-  version = "4.4.1";
+  version = "4.4.4";
 
   src = fetchFromGitHub {
     owner = "musescore";
     repo = "MuseScore";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-eLtpLgXSc8L5y1Mg3s1wrxr09+/vBxNqJEtl9IoKYSM=";
+    sha256 = "sha256-/1kAgzmSbnuCqd6YxbaYW2+gE0Gvy373y5VfUK4OVzI=";
   };
-  patches = [
-    # https://github.com/musescore/MuseScore/pull/24326
-    (fetchpatch {
-      name = "fix-menubar-with-qt6.5+.patch";
-      url = "https://github.com/musescore/MuseScore/pull/24326/commits/b274f13311ad0b2bce339634a006ba22fbd3379e.patch";
-      hash = "sha256-ZGmjRa01CBEIxJdJYQMhdg4A9yjWdlgn0pCPmENBTq0=";
-    })
-  ];
 
   cmakeFlags = [
     "-DMUSE_APP_BUILD_MODE=release"
@@ -83,18 +61,25 @@ in stdenv'.mkDerivation (finalAttrs: {
     # Don't bundle qt qml files, relevant really only for darwin, but we set
     # this for all platforms anyway.
     "-DMUE_COMPILE_INSTALL_QTQML_FILES=OFF"
+    # Don't build unit tests unless we are going to run them.
+    (lib.cmakeBool "MUSE_ENABLE_UNIT_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 
-  qtWrapperArgs = [
-    # MuseScore JACK backend loads libjack at runtime.
-    "--prefix ${lib.optionalString stdenv.isDarwin "DY"}LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libjack2 ]}"
-  ] ++ lib.optionals (stdenv.isLinux) [
-    "--set ALSA_PLUGIN_DIR ${alsa-plugins}/lib/alsa-lib"
-  ] ++ lib.optionals (!stdenv.isDarwin) [
-    # There are some issues with using the wayland backend, see:
-    # https://musescore.org/en/node/321936
-    "--set-default QT_QPA_PLATFORM xcb"
-  ];
+  qtWrapperArgs =
+    [
+      # MuseScore JACK backend loads libjack at runtime.
+      "--prefix ${lib.optionalString stdenv.hostPlatform.isDarwin "DY"}LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [ libjack2 ]
+      }"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux) [
+      "--set ALSA_PLUGIN_DIR ${alsa-plugins}/lib/alsa-lib"
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      # There are some issues with using the wayland backend, see:
+      # https://musescore.org/en/node/321936
+      "--set-default QT_QPA_PLATFORM xcb"
+    ];
 
   preFixup = ''
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
@@ -102,50 +87,80 @@ in stdenv'.mkDerivation (finalAttrs: {
 
   dontWrapGApps = true;
 
-  nativeBuildInputs = [
-    wrapGAppsHook3
-    wrapQtAppsHook
-    cmake
-    qttools
-    pkg-config
-    ninja
-  ];
+  nativeBuildInputs =
+    [
+      wrapQtAppsHook
+      cmake
+      qttools
+      pkg-config
+      ninja
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      # Since https://github.com/musescore/MuseScore/pull/13847/commits/685ac998
+      # GTK3 is needed for file dialogs. Fixes crash with No GSettings schemas error.
+      wrapGAppsHook3
+    ];
 
-  buildInputs = [
-    libjack2
-    freetype
-    lame
-    libogg
-    libpulseaudio
-    libsndfile
-    libvorbis
-    portaudio'
-    portmidi
-    flac
-    libopusenc
-    libopus
-    tinyxml-2
-    qtbase
-    qtdeclarative
-    qt5compat
-    qtsvg
-    qtscxml
-    qtnetworkauth
-  ] ++ lib.optionals stdenv.isLinux [
-    alsa-lib
-    qtwayland
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk_11_0.frameworks.Cocoa
-  ];
+  buildInputs =
+    [
+      libjack2
+      freetype
+      lame
+      libogg
+      libpulseaudio
+      libsndfile
+      libvorbis
+      portaudio
+      portmidi
+      flac
+      libopusenc
+      libopus
+      tinyxml-2
+      qtbase
+      qtdeclarative
+      qt5compat
+      qtsvg
+      qtscxml
+      qtnetworkauth
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      alsa-lib
+      qtwayland
+    ];
 
-  postInstall = ''
-    # Remove unneeded bundled libraries and headers
-    rm -r $out/{include,lib}
-  '' + lib.optionalString stdenv.isDarwin ''
-    mkdir -p "$out/Applications"
-    mv "$out/mscore.app" "$out/Applications/mscore.app"
-    mkdir -p $out/bin
-    ln -s $out/Applications/mscore.app/Contents/MacOS/mscore $out/bin/mscore
+  postInstall =
+    ''
+      # Remove unneeded bundled libraries and headers
+      rm -r $out/{include,lib}
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      mkdir -p "$out/Applications"
+      mv "$out/mscore.app" "$out/Applications/mscore.app"
+      mkdir -p $out/bin
+      ln -s $out/Applications/mscore.app/Contents/MacOS/mscore $out/bin/mscore
+    '';
+
+  # muse-sounds-manager installs Muse Sounds sampler libMuseSamplerCoreLib.so.
+  # It requires that argv0 of the calling process ends with "/mscore" or "/MuseScore-4".
+  # We need to ensure this in two cases:
+  #
+  # 1) when the user invokes MuseScore as "mscore" on the command line or from
+  #    the .desktop file, and the normal argv0 is "mscore" (no "/");
+  # 2) when MuseScore invokes itself via File -> New, and the normal argv0 is
+  #    the target of /proc/self/exe, which in Nixpkgs was "{...}/.mscore-wrapped"
+  #
+  # In order to achieve (2) we install the final binary as $out/libexec/mscore, and
+  # in order to achieve (1) we use makeWrapper without --inherit-argv0.
+  #
+  # wrapQtAppsHook uses wrapQtApp -> wrapProgram -> makeBinaryWrapper --inherit-argv0
+  # so we disable it and explicitly use makeQtWrapper.
+  #
+  # TODO: check if something like this is also needed for macOS.
+  dontWrapQtApps = stdenv.hostPlatform.isLinux;
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+    mkdir -p $out/libexec
+    mv $out/bin/mscore $out/libexec
+    makeQtWrapper $out/libexec/mscore $out/bin/mscore
   '';
 
   # Don't run bundled upstreams tests, as they require a running X window system.
@@ -157,7 +172,11 @@ in stdenv'.mkDerivation (finalAttrs: {
     description = "Music notation and composition software";
     homepage = "https://musescore.org/";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ vandenoever doronbehar ];
+    maintainers = with maintainers; [
+      vandenoever
+      doronbehar
+      orivej
+    ];
     mainProgram = "mscore";
     platforms = platforms.unix;
   };

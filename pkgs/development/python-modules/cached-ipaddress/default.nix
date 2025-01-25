@@ -8,11 +8,12 @@
   pytestCheckHook,
   pythonOlder,
   setuptools,
+  propcache,
 }:
 
 buildPythonPackage rec {
   pname = "cached-ipaddress";
-  version = "0.5.0";
+  version = "0.8.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "cached-ipaddress";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Ec2tW1X0iYdQFd5XFRABwUTPjqxV5lhwT6UEimmF+/o=";
+    tag = "v${version}";
+    hash = "sha256-VD5z9lKECglx77VYDUeI4iD6mbncSutSlavxY+f3OVo=";
   };
 
   build-system = [
@@ -29,6 +30,8 @@ buildPythonPackage rec {
     poetry-core
     setuptools
   ];
+
+  dependencies = [ propcache ];
 
   nativeCheckInputs = [
     pytest-cov-stub

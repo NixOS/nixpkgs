@@ -13,7 +13,12 @@ let
   '';
   qemuConfigFile = pkgs.writeText "qemu.conf" ''
     ${optionalString cfg.qemu.ovmf.enable ''
-      nvram = [ "/run/libvirt/nix-ovmf/AAVMF_CODE.fd:/run/libvirt/nix-ovmf/AAVMF_VARS.fd", "/run/libvirt/nix-ovmf/OVMF_CODE.fd:/run/libvirt/nix-ovmf/OVMF_VARS.fd" ]
+      nvram = [
+        "/run/libvirt/nix-ovmf/AAVMF_CODE.fd:/run/libvirt/nix-ovmf/AAVMF_VARS.fd",
+        "/run/libvirt/nix-ovmf/AAVMF_CODE.ms.fd:/run/libvirt/nix-ovmf/AAVMF_VARS.ms.fd",
+        "/run/libvirt/nix-ovmf/OVMF_CODE.fd:/run/libvirt/nix-ovmf/OVMF_VARS.fd",
+        "/run/libvirt/nix-ovmf/OVMF_CODE.ms.fd:/run/libvirt/nix-ovmf/OVMF_VARS.ms.fd"
+      ]
     ''}
     ${optionalString (!cfg.qemu.runAsRoot) ''
       user = "qemu-libvirtd"
@@ -301,6 +306,27 @@ in
       '';
     };
 
+    shutdownTimeout = mkOption {
+      type = types.ints.unsigned;
+      default = 300;
+      description = ''
+        Number of seconds we're willing to wait for a guest to shut down.
+        If parallel shutdown is enabled, this timeout applies as a timeout
+        for shutting down all guests on a single URI defined in the variable URIS.
+        If this is 0, then there is no time out (use with caution, as guests might not
+        respond to a shutdown request).
+      '';
+    };
+
+    startDelay = mkOption {
+      type = types.ints.unsigned;
+      default = 0;
+      description = ''
+        Number of seconds to wait between each guest start.
+        If set to 0, all guests will start up in parallel.
+      '';
+    };
+
     allowedBridges = mkOption {
       type = types.listOf types.str;
       default = [ "virbr0" ];
@@ -405,9 +431,11 @@ in
             libvirt/qemu/networks/*.xml \
             libvirt/nwfilter/*.xml );
         do
-            mkdir -p /var/lib/$(dirname $i) -m 755
-            if [ ! -e /var/lib/$i ]; then
-              cp -pd ${cfg.package}/var/lib/$i /var/lib/$i
+            # Intended behavior
+            # shellcheck disable=SC2174
+            mkdir -p "/var/lib/$(dirname "$i")" -m 755
+            if [ ! -e "/var/lib/$i" ]; then
+              cp -pd "${cfg.package}/var/lib/$i" "/var/lib/$i"
             fi
         done
 
@@ -419,9 +447,7 @@ in
           ln -s --force "$emulator" /run/${dirName}/nix-emulators/
         done
 
-        for helper in bin/qemu-pr-helper; do
-          ln -s --force ${cfg.qemu.package}/$helper /run/${dirName}/nix-helpers/
-        done
+        ln -s --force ${cfg.qemu.package}/bin/qemu-pr-helper /run/${dirName}/nix-helpers/
 
         ${optionalString cfg.qemu.ovmf.enable (let
           ovmfpackage = pkgs.buildEnv {
@@ -430,10 +456,10 @@ in
           };
         in
           ''
-          ln -s --force ${ovmfpackage}/FV/AAVMF_CODE.fd /run/${dirName}/nix-ovmf/
-          ln -s --force ${ovmfpackage}/FV/OVMF_CODE.fd /run/${dirName}/nix-ovmf/
-          ln -s --force ${ovmfpackage}/FV/AAVMF_VARS.fd /run/${dirName}/nix-ovmf/
-          ln -s --force ${ovmfpackage}/FV/OVMF_VARS.fd /run/${dirName}/nix-ovmf/
+          ln -s --force ${ovmfpackage}/FV/AAVMF_CODE{,.ms}.fd /run/${dirName}/nix-ovmf/
+          ln -s --force ${ovmfpackage}/FV/OVMF_CODE{,.ms}.fd /run/${dirName}/nix-ovmf/
+          ln -s --force ${ovmfpackage}/FV/AAVMF_VARS{,.ms}.fd /run/${dirName}/nix-ovmf/
+          ln -s --force ${ovmfpackage}/FV/OVMF_VARS{,.ms}.fd /run/${dirName}/nix-ovmf/
         '')}
 
         # Symlink hooks to /var/lib/libvirt
@@ -495,6 +521,8 @@ in
       environment.ON_BOOT = "${cfg.onBoot}";
       environment.ON_SHUTDOWN = "${cfg.onShutdown}";
       environment.PARALLEL_SHUTDOWN = "${toString cfg.parallelShutdown}";
+      environment.SHUTDOWN_TIMEOUT = "${toString cfg.shutdownTimeout}";
+      environment.START_DELAY = "${toString cfg.startDelay}";
     };
 
     systemd.sockets.virtlogd = {
@@ -530,7 +558,10 @@ in
         paths = cfg.qemu.vhostUserPackages;
         pathsToLink = [ "/share/qemu/vhost-user" ];
       };
-    in [ "L+ /var/lib/qemu/vhost-user - - - - ${vhostUserCollection}/share/qemu/vhost-user" ];
+    in [
+      "L+ /var/lib/qemu/vhost-user - - - - ${vhostUserCollection}/share/qemu/vhost-user"
+      "L+ /var/lib/qemu/firmware - - - - ${cfg.qemu.package}/share/qemu/firmware"
+    ];
 
     security.polkit = {
       enable = true;

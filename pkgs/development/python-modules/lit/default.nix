@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "lit";
-  version = "18.1.7";
+  version = "18.1.8";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Ld2b4mvcxtoDrqPsRWxpRetaCdveVI01AL/5uO1HY7s=";
+    hash = "sha256-R8F0oYaUGugw8E3tdqNERgC+Z9Xl+4KCw3g/umccTts=";
   };
 
   nativeBuildInputs = [ setuptools ];

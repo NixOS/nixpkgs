@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fluidsynth";
-  version = "2.3.5";
+  version = "2.4.2";
 
   src = fetchFromGitHub {
     owner = "FluidSynth";
     repo = "fluidsynth";
     rev = "v${version}";
-    hash = "sha256-CzKfvQzhF4Mz2WZaJM/Nt6XjF6ThlX4jyQSaXfZukG8=";
+    hash = "sha256-rpTL1eOm3PQIBuxoPEZwj64QXasNQN80kGSW7h6dDdw=";
   };
 
   outputs = [ "out" "dev" "man" ];
@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ buildPackages.stdenv.cc pkg-config cmake ];
 
   buildInputs = [ glib libsndfile libjack2 ]
-    ++ lib.optionals stdenv.isLinux [ alsa-lib libpulseaudio ]
-    ++ lib.optionals stdenv.isDarwin [ AppKit AudioUnit CoreAudio CoreMIDI CoreServices ];
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib libpulseaudio ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ AppKit AudioUnit CoreAudio CoreMIDI CoreServices ];
 
   cmakeFlags = [
     "-Denable-framework=off"

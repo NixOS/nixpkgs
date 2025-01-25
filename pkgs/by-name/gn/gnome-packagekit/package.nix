@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, meson
-, ninja
-, gettext
-, gnome
-, packagekit
-, polkit
-, gtk3
-, systemd
-, wrapGAppsHook3
-, desktop-file-utils
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  meson,
+  ninja,
+  gettext,
+  gnome,
+  packagekit,
+  polkit,
+  gtk3,
+  systemd,
+  wrapGAppsHook3,
+  desktop-file-utils,
 }:
 
 stdenv.mkDerivation rec {

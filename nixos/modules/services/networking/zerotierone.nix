@@ -1,11 +1,16 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.zerotierone;
 
-  settingsFormat = pkgs.formats.json {};
+  settingsFormat = pkgs.formats.json { };
   localConfFile = settingsFormat.generate "zt-local.conf" cfg.localConf;
   localConfFilePath = "/var/lib/zerotier-one/local.conf";
 in
@@ -13,7 +18,7 @@ in
   options.services.zerotierone.enable = mkEnableOption "ZeroTierOne";
 
   options.services.zerotierone.joinNetworks = mkOption {
-    default = [];
+    default = [ ];
     example = [ "a8a2c3c10c1a68de" ];
     type = types.listOf types.str;
     description = ''
@@ -34,7 +39,7 @@ in
   options.services.zerotierone.package = mkPackageOption pkgs "zerotierone" { };
 
   options.services.zerotierone.localConf = mkOption {
-    default = {};
+    default = { };
     description = ''
       Optional configuration to be written to the Zerotier JSON-based local.conf.
       If set, the configuration will be symlinked to `/var/lib/zerotier-one/local.conf` at build time.
@@ -56,24 +61,27 @@ in
 
       path = [ cfg.package ];
 
-      preStart = ''
-        mkdir -p /var/lib/zerotier-one/networks.d
-        chmod 700 /var/lib/zerotier-one
-        chown -R root:root /var/lib/zerotier-one
+      preStart =
+        ''
+          mkdir -p /var/lib/zerotier-one/networks.d
+          chmod 700 /var/lib/zerotier-one
+          chown -R root:root /var/lib/zerotier-one
 
-        # cleans up old symlinks also if we unset localConf
-        if [[ -L "${localConfFilePath}" && "$(readlink "${localConfFilePath}")" =~ ^${builtins.storeDir}.* ]]; then
-          rm ${localConfFilePath}
-        fi
-      '' + (concatMapStrings (netId: ''
-        touch "/var/lib/zerotier-one/networks.d/${netId}.conf"
-      '') cfg.joinNetworks) + lib.optionalString (cfg.localConf != {}) ''
-        # in case the user has applied manual changes to the local.conf, we backup the file
-        if [ -f "${localConfFilePath}" ]; then
-          mv ${localConfFilePath} ${localConfFilePath}.bak
-        fi
-        ln -s ${localConfFile} ${localConfFilePath}
-      '';
+          # cleans up old symlinks also if we unset localConf
+          if [[ -L "${localConfFilePath}" && "$(readlink "${localConfFilePath}")" =~ ^${builtins.storeDir}.* ]]; then
+            rm ${localConfFilePath}
+          fi
+        ''
+        + (concatMapStrings (netId: ''
+          touch "/var/lib/zerotier-one/networks.d/${netId}.conf"
+        '') cfg.joinNetworks)
+        + lib.optionalString (cfg.localConf != { }) ''
+          # in case the user has applied manual changes to the local.conf, we backup the file
+          if [ -f "${localConfFilePath}" ]; then
+            mv ${localConfFilePath} ${localConfFilePath}.bak
+          fi
+          ln -s ${localConfFile} ${localConfFilePath}
+        '';
 
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/zerotier-one -p${toString cfg.port}";

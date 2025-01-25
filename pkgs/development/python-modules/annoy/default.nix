@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "spotify";
     repo = "annoy";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-oJHW4lULRun2in35pBGOKg44s5kgLH2BKiMOzVu4rf4=";
   };
 

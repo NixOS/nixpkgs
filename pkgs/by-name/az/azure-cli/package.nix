@@ -8,7 +8,12 @@
   runCommand,
   installShellFiles,
   python3,
-  writeScriptBin,
+  writeShellScriptBin,
+
+  black,
+  isort,
+  mypy,
+  makeWrapper,
 
   # Whether to include patches that enable placing certain behavior-defining
   # configuration files in the Nix store.
@@ -21,14 +26,14 @@
 }:
 
 let
-  version = "2.64.0";
+  version = "2.68.0";
 
   src = fetchFromGitHub {
     name = "azure-cli-${version}-src";
     owner = "Azure";
     repo = "azure-cli";
     rev = "azure-cli-${version}";
-    hash = "sha256-1FnrUvRpAkZ0nAxen3seam2S49tBkK5N37ZD99OkvB0=";
+    hash = "sha256-WJkuLZUWNzbjAmOPilOK6jnjmax/3ct+ZVWQB3ho/BI=";
   };
 
   # put packages that needs to be overridden in the py package scope
@@ -41,14 +46,17 @@ let
       pname,
       version,
       url,
-      sha256,
+      hash,
       description,
       ...
     }@args:
     python3.pkgs.buildPythonPackage (
       {
         format = "wheel";
-        src = fetchurl { inherit url sha256; };
+        src = fetchurl { inherit url hash; };
+        passthru = {
+          updateScript = extensionUpdateScript { inherit pname; };
+        } // args.passthru or { };
         meta = {
           inherit description;
           inherit (azure-cli.meta) platforms maintainers;
@@ -60,18 +68,31 @@ let
       }
       // (removeAttrs args [
         "url"
-        "sha256"
+        "hash"
         "description"
+        "passthru"
         "meta"
       ])
     );
+  # Update script for azure cli extensions. Currently only works for manual extensions.
+  extensionUpdateScript =
+    { pname }:
+    [
+      "${lib.getExe azure-cli.extensions-tool}"
+      "--cli-version"
+      "${azure-cli.version}"
+      "--extension"
+      "${pname}"
+    ];
 
-  extensions =
-    callPackages ./extensions-generated.nix { inherit mkAzExtension; }
-    // callPackages ./extensions-manual.nix {
-      inherit mkAzExtension;
-      python3Packages = python3.pkgs;
-    };
+  extensions-generated = lib.mapAttrs (
+    name: ext: mkAzExtension (ext // { passthru.updateScript = [ ]; })
+  ) (builtins.fromJSON (builtins.readFile ./extensions-generated.json));
+  extensions-manual = callPackages ./extensions-manual.nix {
+    inherit mkAzExtension;
+    python3Packages = python3.pkgs;
+  };
+  extensions = extensions-generated // extensions-manual;
 
   extensionDir = stdenvNoCC.mkDerivation {
     name = "azure-cli-extensions";
@@ -100,7 +121,10 @@ py.pkgs.toPythonApplication (
 
     sourceRoot = "${src.name}/src/azure-cli";
 
-    nativeBuildInputs = [ installShellFiles ];
+    nativeBuildInputs = [
+      installShellFiles
+      py.pkgs.argcomplete
+    ];
 
     # Dependencies from:
     # https://github.com/Azure/azure-cli/blob/azure-cli-2.62.0/src/azure-cli/setup.py#L52
@@ -138,6 +162,7 @@ py.pkgs.toPythonApplication (
         azure-mgmt-containerservice
         azure-mgmt-cosmosdb
         azure-mgmt-databoxedge
+        azure-mgmt-datalake-store
         azure-mgmt-datamigration
         azure-mgmt-devtestlabs
         azure-mgmt-dns
@@ -159,8 +184,10 @@ py.pkgs.toPythonApplication (
         azure-mgmt-media
         azure-mgmt-monitor
         azure-mgmt-msi
+        azure-mgmt-mysqlflexibleservers
         azure-mgmt-netapp
         azure-mgmt-policyinsights
+        azure-mgmt-postgresqlflexibleservers
         azure-mgmt-privatedns
         azure-mgmt-rdbms
         azure-mgmt-recoveryservicesbackup
@@ -191,7 +218,7 @@ py.pkgs.toPythonApplication (
         chardet
         colorama
       ]
-      ++ lib.optional stdenv.isLinux distro
+      ++ lib.optional stdenv.hostPlatform.isLinux distro
       ++ [
         fabric
         javaproperties
@@ -221,11 +248,11 @@ py.pkgs.toPythonApplication (
       ++ lib.concatMap (extension: extension.propagatedBuildInputs) withExtensions;
 
     postInstall =
-      ''
-        substituteInPlace az.completion.sh \
-          --replace-fail register-python-argcomplete ${py.pkgs.argcomplete}/bin/register-python-argcomplete
-        installShellCompletion --bash --name az.bash az.completion.sh
-        installShellCompletion --zsh --name _az az.completion.sh
+      lib.optionalString (stdenvNoCC.buildPlatform.canExecute stdenvNoCC.hostPlatform) ''
+        installShellCompletion --cmd az \
+          --bash <(register-python-argcomplete az --shell bash) \
+          --zsh <(register-python-argcomplete az --shell zsh) \
+          --fish <(register-python-argcomplete az --shell fish)
       ''
       + lib.optionalString withImmutableConfig ''
         export HOME=$TMPDIR
@@ -238,6 +265,7 @@ py.pkgs.toPythonApplication (
         # remove garbage
         rm $out/bin/az.bat
         rm $out/bin/az.completion.sh
+        rm $out/bin/azps.ps1
       '';
 
     # wrap the executable so that the python packages are available
@@ -370,20 +398,47 @@ py.pkgs.toPythonApplication (
             ${lib.getExe az} --version || exit 1
             touch $out
           '';
+
+        # Ensure the extensions-tool builds.
+        inherit (azure-cli) extensions-tool;
       };
 
-      generate-extensions = writeScriptBin "${pname}-update-extensions" ''
-        export FILE=extensions-generated.nix
-        echo "# This file is automatically generated. DO NOT EDIT! Read README.md" > $FILE
-        echo "{ mkAzExtension }:" >> $FILE
-        echo "{" >> $FILE
-        ${./query-extension-index.sh} --requirements=false --download --nix --cli-version=${version} \
-          | xargs -n1 -d '\n' echo " " >> $FILE
-        echo "" >> $FILE
-        echo "}" >> $FILE
-        echo "Extension was saved to \"extensions-generated.nix\" file."
-        echo "Move it to \"{nixpkgs}/pkgs/by-name/az/azure-cli/extensions-generated.nix\"."
+      generate-extensions = writeShellScriptBin "${pname}-update-extensions" ''
+        ${lib.getExe azure-cli.extensions-tool} --cli-version ${azure-cli.version} --commit
       '';
+
+      extensions-tool =
+        runCommand "azure-cli-extensions-tool"
+          {
+            src = ./extensions-tool.py;
+            nativeBuildInputs = [
+              black
+              isort
+              makeWrapper
+              mypy
+              python3
+            ];
+            meta.mainProgram = "extensions-tool";
+          }
+          ''
+            black --check --diff $src
+            isort --profile=black --check --diff $src
+
+            install -Dm755 $src $out/bin/extensions-tool
+
+            patchShebangs --build $out
+            wrapProgram $out/bin/extensions-tool \
+              --set PYTHONPATH "${
+                python3.pkgs.makePythonPath (
+                  with python3.pkgs;
+                  [
+                    packaging
+                    semver
+                    gitpython
+                  ]
+                )
+              }"
+          '';
     };
 
     meta = {

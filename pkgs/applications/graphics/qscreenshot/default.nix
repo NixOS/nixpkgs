@@ -1,11 +1,13 @@
-{ stdenv
-, lib
-, fetchgit
-, qtbase
-, qttools
-, qtx11extras
-, wrapQtAppsHook
-, cmake }:
+{
+  stdenv,
+  lib,
+  fetchgit,
+  qtbase,
+  qttools,
+  qtx11extras,
+  wrapQtAppsHook,
+  cmake,
+}:
 
 stdenv.mkDerivation rec {
   pname = "qscreenshot";

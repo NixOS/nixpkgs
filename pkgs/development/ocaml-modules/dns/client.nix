@@ -1,6 +1,11 @@
-{ buildDunePackage, dns
-, mirage-crypto-rng, mtime, randomconv
-, domain-name, alcotest
+{
+  buildDunePackage,
+  dns,
+  mirage-crypto-rng,
+  mtime,
+  randomconv,
+  domain-name,
+  alcotest,
 }:
 
 buildDunePackage {

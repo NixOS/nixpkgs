@@ -2,33 +2,33 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
+  giflib,
   python3,
   pkg-config,
   pixman,
   cairo,
   pango,
   stdenv,
-  darwin,
   olm,
+  nodejs_20,
 }:
 
 buildNpmPackage rec {
   pname = "cinny-unwrapped";
-  version = "4.1.0";
+  version = "4.2.3";
 
   src = fetchFromGitHub {
     owner = "cinnyapp";
     repo = "cinny";
     rev = "v${version}";
-    hash = "sha256-GC+TvTPfirov4GxkTp0N3tkDQEAEdmPB71NzOBZQiqs=";
+    hash = "sha256-BoUQURCfEu5kocMm8T25cVl8hgZGxcxrMzQZOl2fAbY=";
   };
 
-  npmDepsHash = "sha256-dP+m/ocGn8szZuakrz8slSReNeepOF4Jf7L0/gnXWGU=";
+  # canvas, a transitive dependency of cinny, fails to build with Node 22
+  # https://github.com/Automattic/node-canvas/issues/2448
+  nodejs = nodejs_20;
 
-  # Fix error: no member named 'aligned_alloc' in the global namespace
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (
-    stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinSdkVersion "11.0"
-  ) "-D_LIBCPP_HAS_NO_LIBRARY_ALIGNED_ALLOCATION=1";
+  npmDepsHash = "sha256-fDoia6evCmXZgeIKL0coRo3yunX1dfud31ROgmop2Sc=";
 
   nativeBuildInputs = [
     python3
@@ -39,7 +39,7 @@ buildNpmPackage rec {
     pixman
     cairo
     pango
-  ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.CoreText ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ giflib ];
 
   installPhase = ''
     runHook preInstall

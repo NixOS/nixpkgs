@@ -9,19 +9,19 @@
 
 buildPythonPackage rec {
   pname = "send2trash";
-  version = "1.8.2";
+  version = "1.8.3";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "hsoft";
     repo = "send2trash";
-    rev = "refs/tags/${version}";
-    hash = "sha256-p0Pd9g+nLoT+oruthwjBn2E9rznvcx35VmzOAce2iTY=";
+    tag = version;
+    hash = "sha256-3RbKfluKOvl+sGJldtAt2bVfcasVKjCqVxmF6hVwh+Y=";
   };
 
   nativeBuildInputs = [ setuptools ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   preCheck = ''
     export HOME=$TMPDIR

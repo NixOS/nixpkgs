@@ -5,7 +5,7 @@
   fetchFromGitHub,
   typing-extensions,
   pytestCheckHook,
-  pytest-cov,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-injector";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-5O4vJSXfYNTrUzmv5XuT9pSUndNSvTZTxfVwiAd+0ck=";
   };
 
@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-cov
+    pytest-cov-stub
   ];
 
   pythonImportsCheck = [ "injector" ];

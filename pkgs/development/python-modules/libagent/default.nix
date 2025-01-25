@@ -13,7 +13,6 @@
   unidecode,
   mock,
   pytestCheckHook,
-  backports-shutil-which,
   configargparse,
   python-daemon,
   pymsgbox,
@@ -30,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "romanz";
     repo = "trezor-agent";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-NmpFyLjLdR9r1tc06iDNH8Tc7isUelTg13mWPrQvxSc=";
   };
 
@@ -43,9 +42,11 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
+  # https://github.com/romanz/trezor-agent/pull/481
+  pythonRemoveDeps = [ "backports.shutil-which" ];
+
   dependencies = [
     unidecode
-    backports-shutil-which
     configargparse
     python-daemon
     pymsgbox

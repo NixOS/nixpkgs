@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "nibe";
-  version = "2.12.0";
+  version = "2.15.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -27,9 +27,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "yozik04";
     repo = "nibe";
-    rev = "refs/tags/${version}";
-    hash = "sha256-Sqwwk++iA/PsAKZRkUPjXuzgSrhnH4N02c072pIVEyw=";
+    tag = version;
+    hash = "sha256-lV5Wp2Qp1v6RE/zA1VqvdWHFZXb+aeFdmhA87wnF46U=";
   };
+
+  pythonRelaxDeps = [ "async-modbus" ];
 
   build-system = [ setuptools ];
 
@@ -41,7 +43,7 @@ buildPythonPackage rec {
     tenacity
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     convert = [
       pandas
       python-slugify
@@ -53,7 +55,7 @@ buildPythonPackage rec {
     aresponses
     pytest-asyncio
     pytestCheckHook
-  ];
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "nibe" ];
 

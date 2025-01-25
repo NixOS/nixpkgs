@@ -1,12 +1,22 @@
-{ lib, mkCoqDerivation, coq, version ? null }:
+{
+  lib,
+  mkCoqDerivation,
+  coq,
+  version ? null,
+}:
 
- mkCoqDerivation rec {
+mkCoqDerivation rec {
   pname = "coq-record-update";
   owner = "tchajed";
   inherit version;
-  defaultVersion = with lib.versions; lib.switch coq.coq-version [
-    { case = range "8.10" "8.20";  out = "0.3.4"; }
-  ] null;
+  defaultVersion =
+    with lib.versions;
+    lib.switch coq.coq-version [
+      {
+        case = range "8.10" "8.20";
+        out = "0.3.4";
+      }
+    ] null;
   release."0.3.4".sha256 = "sha256-AhEcugUiVIsgbq884Lur/bQIuGw8prk+3AlNkP1omcw=";
   release."0.3.3".sha256 = "sha256-HDIPeFHiC9EwhiOH7yMGJ9d2zJMhboTpRGf9kWcB9Io=";
   release."0.3.1".sha256 = "sha256-DyGxO2tqmYZZluXN6Oy5Tw6fuLMyuyxonj8CCToWKkk=";

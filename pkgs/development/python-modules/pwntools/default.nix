@@ -33,12 +33,12 @@ let
 in
 buildPythonPackage rec {
   pname = "pwntools";
-  version = "4.13.0";
+  version = "4.14.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-HVyiU4PsEPtk4o0ULB2Gj5HqHFOpPTUx0wFdgwgo08M=";
+    hash = "sha256-g7MkfeCD3/r6w79A9NFFVzLxbiXOMQX9CbVawPDRLoM=";
   };
 
   postPatch = ''
@@ -82,7 +82,7 @@ buildPythonPackage rec {
     installShellCompletion --bash extra/bash_completion.d/shellcraft
   '';
 
-  postFixup = lib.optionalString (!stdenv.isDarwin) ''
+  postFixup = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     mkdir -p "$out/bin"
     makeWrapper "${debugger}/bin/${debuggerName}" "$out/bin/pwntools-gdb"
   '';

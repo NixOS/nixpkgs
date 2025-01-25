@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "horazont";
     repo = "aioopenssl";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-7Q+4/DlP+kUnC3YNk7woJaxLEEiuVmolUOajepM003Q=";
   };
 

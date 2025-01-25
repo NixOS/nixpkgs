@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "universal-pidff";
-  version = "0.0.8";
+  version = "0.0.12";
 
   src = fetchFromGitHub {
     owner = "JacKeTUs";
     repo = "universal-pidff";
-    rev = "refs/tags/${version}";
-    hash = "sha256-DptLqyjfRCpkbyFAQI8sylyKu2XyZZGrSITva9vcXGQ=";
+    rev = "23ec6488eddaa9f5b370b53b0198ba7b656ffa3d";
+    hash = "sha256-aA1iRXoVgJ1wVQMxFZm7/GqB7G/IjcLXifAk6B8odCs=";
   };
 
   postPatch = ''
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/JacKeTUs/universal-pidff";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
-      danerieber
+      computerdane
       racci
     ];
     platforms = lib.platforms.linux;

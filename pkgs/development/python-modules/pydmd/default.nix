@@ -25,7 +25,7 @@ let
     src = fetchFromGitHub {
       owner = "PyDMD";
       repo = "PyDMD";
-      rev = "refs/tags/v${version}";
+      tag = "v${version}";
       hash = "sha256-vprvq3sl/eNtu4cqg0A4XV96dzUt0nOtPmfwEv0h+PI=";
     };
 

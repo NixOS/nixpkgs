@@ -1,0 +1,61 @@
+# Build settings based on the upstream Xcode project.
+# See: https://github.com/apple-oss-distributions/bootstrap_cmds/blob/main/mig.xcodeproj/project.pbxproj
+
+# Project settings
+project('bootstrap_cmds', 'c', version : '@version@')
+
+
+# Dependencies
+cc = meson.get_compiler('c')
+
+
+# Generators
+bison_bin = find_program('bison', required : true)
+flex_bin = find_program('flex', required : true)
+
+bison = generator(
+    bison_bin,
+    arguments : ['@INPUT@', '--header=@OUTPUT0@', '--output=@OUTPUT1@'],
+    output : [ '@BASENAME@.tab.h', '@BASENAME@.tab.c'],
+)
+
+flex = generator(
+    flex_bin,
+    arguments : ['--header-file=@OUTPUT0@', '--outfile=@OUTPUT1@', '@INPUT@'],
+    output : ['@BASENAME@.yy.h', '@BASENAME@.yy.c'],
+)
+
+
+# Binaries
+executable(
+    'migcom',
+    c_args: ['-DMIG_VERSION="migcom-@version@"'],
+    include_directories : 'migcom.tproj',
+    install : true,
+    install_dir : get_option('libexecdir'),
+    sources : [
+        'migcom.tproj/error.c',
+        'migcom.tproj/global.c',
+        # Redundant file that’s not actually used. Trying to compile it results in compile errors.
+        # 'migcom.tproj/handler.c',
+        'migcom.tproj/header.c',
+        'migcom.tproj/mig.c',
+        'migcom.tproj/routine.c',
+        'migcom.tproj/server.c',
+        'migcom.tproj/statement.c',
+        'migcom.tproj/string.c',
+        'migcom.tproj/type.c',
+        'migcom.tproj/user.c',
+        'migcom.tproj/utils.c',
+        bison.process('migcom.tproj/parser.y'),
+        flex.process('migcom.tproj/lexxer.l'),
+    ],
+)
+install_data(
+    'migcom.tproj/mig.sh',
+    install_dir : get_option('bindir'),
+)
+install_man(
+    'migcom.tproj/mig.1',
+    'migcom.tproj/migcom.1',
+)

@@ -6,6 +6,7 @@
   fetchFromGitHub,
   darwin,
   libiconv,
+  openssl,
   pkg-config,
   protobuf,
   attrs,
@@ -28,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "lancedb";
-  version = "0.13.0";
+  version = "0.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lancedb";
     repo = "lancedb";
-    rev = "refs/tags/python-v${version}";
-    hash = "sha256-6E20WgyoEALdxmiOfgq89dCkqovvIMzc/wy+kvjDWwU=";
+    tag = "python-v${version}";
+    hash = "sha256-lw2tZ26Py6JUxuetaokJKnxOv/WoLK4spxssLKxvxJA=";
   };
 
   buildAndTestSubdir = "python";
@@ -50,15 +51,16 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     pkg-config
+    protobuf
     rustPlatform.cargoSetupHook
   ];
 
   buildInputs =
     [
       libiconv
-      protobuf
+      openssl
     ]
-    ++ lib.optionals stdenv.isDarwin (
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
       with darwin.apple_sdk.frameworks;
       [
         IOKit
@@ -96,14 +98,21 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "-m 'not slow'" ];
 
-  disabledTests = [
-    # require tantivy which is not packaged in nixpkgs
-    "test_basic"
+  disabledTests =
+    [
+      # require tantivy which is not packaged in nixpkgs
+      "test_basic"
 
-    # polars.exceptions.ComputeError: TypeError: _scan_pyarrow_dataset_impl() got multiple values for argument 'batch_size'
-    # https://github.com/lancedb/lancedb/issues/1539
-    "test_polars"
-  ];
+      # polars.exceptions.ComputeError: TypeError: _scan_pyarrow_dataset_impl() got multiple values for argument 'batch_size'
+      # https://github.com/lancedb/lancedb/issues/1539
+      "test_polars"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # fail with darwin sandbox
+      "test_async_remote_db"
+      "test_http_error"
+      "test_retry_error"
+    ];
 
   disabledTestPaths = [
     # touch the network

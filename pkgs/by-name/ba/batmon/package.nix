@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "6543";
     repo = "batmon";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-+kjDNQKlaoI5fQ5FqYF6IPCKeE92WKxIhVCKafqfE0o=";
   };
 
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
     license = licenses.asl20;
     mainProgram = "batmon";
     platforms = with platforms; unix ++ windows;
-    broken = stdenv.isDarwin && stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
     maintainers = with maintainers; [ _6543 ];
   };
 }

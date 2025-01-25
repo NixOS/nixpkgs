@@ -1,52 +1,15 @@
 { callPackage
 , nixosTests
-, python311
-, fetchFromGitHub
+, python3
 }:
 let
-  # python-ldap-3.4.4 does not work with python3(12)
-  python = python311.override {
-    self = python;
-    packageOverrides = self: super: {
-      validators = super.validators.overridePythonAttrs (_: rec {
-        version = "0.20.0";
-        src = fetchFromGitHub {
-          owner = "python-validators";
-          repo = "validators";
-          rev = version;
-          hash = "sha256-ZnLyTHlsrXthGnaPzlV2ga/UTm5SSEHLTwC/tobiPak=";
-        };
-        propagatedBuildInputs = [ super.decorator super.six ];
-      });
-
-      djangorestframework = super.djangorestframework.overridePythonAttrs (oldAttrs: rec {
-        version = "3.14.0";
-        src = oldAttrs.src.override {
-          rev = version;
-          hash = "sha256-Fnj0n3NS3SetOlwSmGkLE979vNJnYE6i6xwVBslpNz4=";
-        };
-        nativeCheckInputs = with super; [
-          pytest7CheckHook
-          pytest-django
-        ];
-      });
-
-      # python3.11-extruct-0.16.0 doesn't work with lxml-5.2.2
-      lxml = super.lxml.overridePythonAttrs (oldAttrs: rec {
-        version = "5.1.0";
-        src = oldAttrs.src.override {
-          rev = version;
-          hash = "sha256-eWLYzZWatYDmhuBTZynsdytlNFKKmtWQ1XIyzVD8sDY=";
-        };
-      });
-    };
-  };
+  python = python3;
 
   common = callPackage ./common.nix { };
 
   frontend = callPackage ./frontend.nix { };
 in
-python.pkgs.pythonPackages.buildPythonPackage rec {
+python.pkgs.pythonPackages.buildPythonPackage {
   pname = "tandoor-recipes";
 
   inherit (common) version src;
@@ -62,50 +25,51 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = with python.pkgs; [
-    aiohttp
-    beautifulsoup4
-    bleach
-    bleach-allowlist
-    boto3
-    cryptography
     django
-    django-allauth
+    cryptography
     django-annoying
-    django-auth-ldap
     django-cleanup
-    django-cors-headers
     django-crispy-forms
     django-crispy-bootstrap4
-    django-hcaptcha
-    django-js-reverse
-    django-oauth-toolkit
-    django-prometheus
-    django-scopes
-    django-storages
     django-tables2
-    django-webpack-loader
-    django-treebeard
     djangorestframework
     drf-writable-nested
+    django-oauth-toolkit
+    bleach
     gunicorn
-    icalendar
-    jinja2
     lxml
     markdown
-    microdata
     pillow
     psycopg2
-    pyppeteer
     python-dotenv
-    pytube
-    pyyaml
-    recipe-scrapers
     requests
     six
-    uritemplate
-    validators
     webdavclient3
     whitenoise
+    icalendar
+    pyyaml
+    uritemplate
+    beautifulsoup4
+    microdata
+    jinja2
+    django-webpack-loader
+    django-js-reverse
+    django-allauth
+    recipe-scrapers
+    django-scopes
+    django-treebeard
+    django-cors-headers
+    django-storages
+    boto3
+    django-prometheus
+    django-hcaptcha
+    python-ldap
+    django-auth-ldap
+    pyppeteer
+    pytubefix
+    aiohttp
+    inflection
+    redis
   ];
 
   configurePhase = ''

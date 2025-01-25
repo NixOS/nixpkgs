@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pyjson5";
-  version = "1.6.6";
+  version = "1.6.7";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Kijewski";
     repo = "pyjson5";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-LNcz9JEOw6HO9eIf71w4NJdPOB4yixBfBeD7B/NLbfE=";
+    tag = "v${version}";
+    hash = "sha256-QggO1go9iQIy235I9CYOeC6JCoOT2sfDsrbSySN3mMw=";
     fetchSubmodules = true;
   };
 

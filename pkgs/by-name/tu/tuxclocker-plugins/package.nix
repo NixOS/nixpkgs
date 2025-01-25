@@ -1,13 +1,14 @@
-{ stdenv
-, boost
-, gettext
-, libdrm
-, meson
-, ninja
-, openssl
-, pkg-config
-, python3
-, tuxclocker
+{
+  stdenv,
+  boost,
+  gettext,
+  libdrm,
+  meson,
+  ninja,
+  openssl,
+  pkg-config,
+  python3,
+  tuxclocker,
 }:
 
 stdenv.mkDerivation {
@@ -20,7 +21,7 @@ stdenv.mkDerivation {
     meson
     ninja
     pkg-config
-    (python3.withPackages(p: [ p.hwdata ]))
+    (python3.withPackages (p: [ p.hwdata ]))
   ];
 
   buildInputs = [

@@ -6,18 +6,18 @@
   roave-backward-compatibility-check,
 }:
 
-php.buildComposerProject (finalAttrs: {
+php.buildComposerProject2 (finalAttrs: {
   pname = "roave-backward-compatibility-check";
-  version = "8.9.0";
+  version = "8.10.0";
 
   src = fetchFromGitHub {
     owner = "Roave";
     repo = "BackwardCompatibilityCheck";
     rev = finalAttrs.version;
-    hash = "sha256-Bvqo2SmtRWvatXxtHbctBrY0xe0KA+knNmEg+KC8hgY=";
+    hash = "sha256-wOqF7FkwOnTxYe7OnAl8R7NyGkdJ37H0OIr5e/1Q03I=";
   };
 
-  vendorHash = "sha256-cMVOcLRvfwFbxd2mXJhDx1iaUTHPEsI4vh9/JCoOj3M=";
+  vendorHash = "sha256-Xd+SxqLbm5QCROwq4jDm4cWLxF2nraqA+xdrZxW3ILY=";
 
   passthru = {
     tests.version = testers.testVersion {

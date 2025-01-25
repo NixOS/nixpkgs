@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "reegnz";
     repo = "jq-zsh-plugin";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-q/xQZ850kifmd8rCMW+aAEhuA43vB9ZAW22sss9e4SE=";
   };
 

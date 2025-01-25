@@ -42,7 +42,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "gb_io" ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://github.com/althonos/gb-io.py";
     description = "Python interface to gb-io, a fast GenBank parser written in Rust";
     license = licenses.mit;

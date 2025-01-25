@@ -29,7 +29,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "gdm-settings";
     repo = "gdm-settings";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-3Te8bhv2TkpJFz4llm1itRhzg9v64M7Drtrm4s9EyiQ=";
   };
 

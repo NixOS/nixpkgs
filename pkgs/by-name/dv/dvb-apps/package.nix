@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, perl
-, fetchpatch
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+  fetchpatch,
 }:
 stdenv.mkDerivation {
   pname = "dvb-apps";

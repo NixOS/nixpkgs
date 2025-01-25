@@ -38,7 +38,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cielong";
     repo = "pyfx";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Q5ihWnoa7nf4EkrY4SgrwjaNvTva4RdW9GRbnbsPXPc=";
   };
 
@@ -81,7 +81,7 @@ buildPythonPackage rec {
   ];
 
   # FAILED tests/test_event_loops.py::TwistedEventLoopTest::test_run - AssertionError: 'callback called with future outcome: True' not found in ['...
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   pythonImportsCheck = [ "pyfx" ];
 

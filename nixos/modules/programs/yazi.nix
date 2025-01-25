@@ -1,11 +1,20 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.yazi;
 
   settingsFormat = pkgs.formats.toml { };
 
-  files = [ "yazi" "theme" "keymap" ];
+  files = [
+    "yazi"
+    "theme"
+    "keymap"
+  ];
 in
 {
   options.programs.yazi = {
@@ -14,19 +23,28 @@ in
     package = lib.mkPackageOption pkgs "yazi" { };
 
     settings = lib.mkOption {
-      type = with lib.types; submodule {
-        options = (lib.listToAttrs (map
-          (name: lib.nameValuePair name (lib.mkOption {
-            inherit (settingsFormat) type;
-            default = { };
-            description = ''
-              Configuration included in `${name}.toml`.
+      type =
+        with lib.types;
+        submodule {
+          options = (
+            lib.listToAttrs (
+              map (
+                name:
+                lib.nameValuePair name (
+                  lib.mkOption {
+                    inherit (settingsFormat) type;
+                    default = { };
+                    description = ''
+                      Configuration included in `${name}.toml`.
 
-              See https://yazi-rs.github.io/docs/configuration/${name}/ for documentation.
-            '';
-          }))
-          files));
-      };
+                      See https://yazi-rs.github.io/docs/configuration/${name}/ for documentation.
+                    '';
+                  }
+                )
+              ) files
+            )
+          );
+        };
       default = { };
       description = ''
         Configuration included in `$YAZI_CONFIG_HOME`.
@@ -43,7 +61,12 @@ in
     };
 
     plugins = lib.mkOption {
-      type = with lib.types; attrsOf (oneOf [ path package ]);
+      type =
+        with lib.types;
+        attrsOf (oneOf [
+          path
+          package
+        ]);
       default = { };
       description = ''
         Lua plugins.
@@ -59,7 +82,12 @@ in
     };
 
     flavors = lib.mkOption {
-      type = with lib.types; attrsOf (oneOf [ path package ]);
+      type =
+        with lib.types;
+        attrsOf (oneOf [
+          path
+          package
+        ]);
       default = { };
       description = ''
         Pre-made themes.
@@ -79,7 +107,12 @@ in
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [
       (cfg.package.override {
-        inherit (cfg) settings initLua plugins flavors;
+        inherit (cfg)
+          settings
+          initLua
+          plugins
+          flavors
+          ;
       })
     ];
   };

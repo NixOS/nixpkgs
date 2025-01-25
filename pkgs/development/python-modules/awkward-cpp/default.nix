@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   cmake,
   ninja,
@@ -12,15 +11,13 @@
 
 buildPythonPackage rec {
   pname = "awkward-cpp";
-  version = "37";
+  version = "43";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "awkward_cpp";
     inherit version;
-    hash = "sha256-bf9fzkr8rbSSu/fLIJCFctmb3DKqK+qGgbrPtpsqqG0=";
+    hash = "sha256-we11WW7IKvZm2ghLW/gF2bcsg1MtA10rZeB5WQXSXq0=";
   };
 
   build-system = [
@@ -39,7 +36,6 @@ buildPythonPackage rec {
   meta = {
     description = "CPU kernels and compiled extensions for Awkward Array";
     homepage = "https://github.com/scikit-hep/awkward";
-    changelog = "https://github.com/scikit-hep/awkward/releases/tag/v${version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ veprbl ];
   };

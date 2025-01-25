@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "isal";
-  version = "1.7.0";
+  version = "1.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pycompression";
     repo = "python-isal";
     rev = "v${version}";
-    hash = "sha256-wasybbNWBa6Zd0JI2/lBNUkvEOY3/iBqsVWh/4WPM2s=";
+    hash = "sha256-KLnSE7QLM3q8DdoWnCEN6dOxsMr8eSH9k3FqFquZFlE=";
   };
 
   patches = [

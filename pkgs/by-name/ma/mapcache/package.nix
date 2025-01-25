@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     (lib.cmakeFeature "APACHE_MODULE_DIR" "${placeholder "out"}/modules")
   ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-std=c99";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-std=c99";
 
   meta = {
     description = "Server that implements tile caching to speed up access to WMS layers";

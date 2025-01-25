@@ -1,20 +1,21 @@
-{ alsa-lib
-, autoreconfHook
-, fetchFromGitHub
-, gtk3
-, json-glib
-, lib
-, libpulseaudio
-, libsamplerate
-, libsndfile
-, libzip
-, pkg-config
-, stdenv
-, zlib
+{
+  alsa-lib,
+  autoreconfHook,
+  fetchFromGitHub,
+  gtk3,
+  json-glib,
+  lib,
+  libpulseaudio,
+  libsamplerate,
+  libsndfile,
+  libzip,
+  pkg-config,
+  stdenv,
+  zlib,
 }:
 
 let
-  version = "3.0.1";
+  version = "3.1";
 in
 stdenv.mkDerivation {
   inherit version;
@@ -25,7 +26,7 @@ stdenv.mkDerivation {
     owner = "dagargo";
     repo = "elektroid";
     rev = version;
-    hash = "sha256-Qv4jvk6N0IMgYGCPWNYGDZJKGA+UPzhHeYfSrkq5hy4=";
+    hash = "sha256-YJcvJlnRUhwjQ6P3jgjyDtoJhuije1uY77mGNGZure0=";
   };
 
   nativeBuildInputs = [

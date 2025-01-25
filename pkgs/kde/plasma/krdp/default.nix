@@ -1,7 +1,7 @@
 {
   lib,
   mkKdeDerivation,
-  substituteAll,
+  replaceVars,
   openssl,
   pkg-config,
   qtkeychain,
@@ -14,13 +14,12 @@ mkKdeDerivation {
   pname = "krdp";
 
   patches = [
-    (substituteAll {
-      src = ./hardcode-openssl-path.patch;
+    (replaceVars ./hardcode-openssl-path.patch {
       openssl = lib.getExe openssl;
     })
   ];
 
-  extraNativeBuildInputs = [pkg-config];
+  extraNativeBuildInputs = [ pkg-config ];
   extraBuildInputs = [
     qtkeychain
     qtwayland

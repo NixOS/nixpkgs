@@ -2,7 +2,12 @@
 # This allows an instance to be created with a bigger root filesystem
 # than provided by the machine image.
 
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -25,7 +30,10 @@ with lib;
     systemd.services.growpart = {
       wantedBy = [ "-.mount" ];
       after = [ "-.mount" ];
-      before = [ "systemd-growfs-root.service" "shutdown.target" ];
+      before = [
+        "systemd-growfs-root.service"
+        "shutdown.target"
+      ];
       conflicts = [ "shutdown.target" ];
       unitConfig.DefaultDependencies = false;
       serviceConfig = {
@@ -43,7 +51,7 @@ with lib;
         while [ "''${parentDevice%[0-9]}" != "''${parentDevice}" ]; do
           parentDevice="''${parentDevice%[0-9]}";
         done
-        partNum="''${rootDevice#''${parentDevice}}"
+        partNum="''${rootDevice#"''${parentDevice}"}"
         if [ "''${parentDevice%[0-9]p}" != "''${parentDevice}" ] && [ -b "''${parentDevice%p}" ]; then
           parentDevice="''${parentDevice%p}"
         fi

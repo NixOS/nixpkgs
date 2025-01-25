@@ -1,23 +1,24 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, makeWrapper
-, pluginsDir ? null
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  makeWrapper,
+  pluginsDir ? null,
 }:
 
 buildGoModule rec {
   pname = "helmfile";
-  version = "0.167.1";
+  version = "0.170.0";
 
   src = fetchFromGitHub {
     owner = "helmfile";
     repo = "helmfile";
     rev = "v${version}";
-    hash = "sha256-v5H5CQtLUmWCAh1Fhnf63gObxz3Wchpczi4gsPOh2ps=";
+    hash = "sha256-HlSpY7+Qct2vxtAejrwmmWhnWq+jVycjuxQ42KScpSs=";
   };
 
-  vendorHash = "sha256-QVFCPTGhYcCya9MGtj0vVZ3BJCcJeaxENrrJVef0H4Y=";
+  vendorHash = "sha256-BmEtzUUORY/ck158+1ItVeiG9mzXdikjjUX7XwQ7xoo=";
 
   proxyVendor = true; # darwin/linux hash mismatch
 
@@ -25,21 +26,25 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  ldflags = [ "-s" "-w" "-X go.szostok.io/version.version=v${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X go.szostok.io/version.version=v${version}"
+  ];
 
-  nativeBuildInputs =
-    [ installShellFiles ] ++
-    lib.optional (pluginsDir != null) makeWrapper;
+  nativeBuildInputs = [ installShellFiles ] ++ lib.optional (pluginsDir != null) makeWrapper;
 
-  postInstall = lib.optionalString (pluginsDir != null) ''
-    wrapProgram $out/bin/helmfile \
-      --set HELM_PLUGINS "${pluginsDir}"
-  '' + ''
-    installShellCompletion --cmd helmfile \
-      --bash <($out/bin/helmfile completion bash) \
-      --fish <($out/bin/helmfile completion fish) \
-      --zsh <($out/bin/helmfile completion zsh)
-  '';
+  postInstall =
+    lib.optionalString (pluginsDir != null) ''
+      wrapProgram $out/bin/helmfile \
+        --set HELM_PLUGINS "${pluginsDir}"
+    ''
+    + ''
+      installShellCompletion --cmd helmfile \
+        --bash <($out/bin/helmfile completion bash) \
+        --fish <($out/bin/helmfile completion fish) \
+        --zsh <($out/bin/helmfile completion zsh)
+    '';
 
   meta = {
     description = "Declarative spec for deploying Helm charts";
@@ -50,6 +55,9 @@ buildGoModule rec {
     '';
     homepage = "https://helmfile.readthedocs.io/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pneumaticat yurrriq ];
+    maintainers = with lib.maintainers; [
+      pneumaticat
+      yurrriq
+    ];
   };
 }

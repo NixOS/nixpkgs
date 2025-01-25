@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cc65
-, lzsa
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cc65,
+  lzsa,
+  python3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -54,6 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ AndersonTorres ];
     inherit (cc65.meta) platforms;
-    broken = stdenv.isDarwin && stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
   };
 })

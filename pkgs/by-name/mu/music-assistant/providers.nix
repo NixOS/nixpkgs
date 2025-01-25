@@ -1,86 +1,108 @@
 # Do not edit manually, run ./update-providers.py
 
 {
-  version = "2.2.3";
+  version = "2.3.4";
   providers = {
-    airplay = [
+    airplay = ps: [
     ];
-    apple_music = [
+    apple_music = ps: [
     ]; # missing pywidevine
-    builtin = [
+    bluesound =
+      ps: with ps; [
+        pyblu
+      ];
+    builtin = ps: [
     ];
-    chromecast = ps: with ps; [
-      pychromecast
+    chromecast =
+      ps: with ps; [
+        pychromecast
+      ];
+    deezer =
+      ps: with ps; [
+        pycryptodome
+      ]; # missing deezer-python-async
+    dlna =
+      ps: with ps; [
+        async-upnp-client
+      ];
+    fanarttv = ps: [
     ];
-    deezer = ps: with ps; [
-      pycryptodome
-    ]; # missing deezer-python-async
-    dlna = ps: with ps; [
-      async-upnp-client
+    filesystem_local = ps: [
     ];
-    fanarttv = [
+    filesystem_smb = ps: [
     ];
-    filesystem_local = [
+    fully_kiosk =
+      ps: with ps; [
+        python-fullykiosk
+      ];
+    hass =
+      ps: with ps; [
+        hass-client
+      ];
+    hass_players = ps: [
     ];
-    filesystem_smb = [
+    jellyfin =
+      ps: with ps; [
+        aiojellyfin
+      ];
+    musicbrainz = ps: [
     ];
-    fully_kiosk = ps: with ps; [
-      python-fullykiosk
+    opensubsonic =
+      ps: with ps; [
+        py-opensonic
+      ];
+    player_group = ps: [
     ];
-    hass = ps: with ps; [
-      hass-client
+    plex =
+      ps: with ps; [
+        plexapi
+      ];
+    qobuz = ps: [
     ];
-    hass_players = [
-    ];
-    jellyfin = ps: with ps; [
-      aiojellyfin
-    ];
-    musicbrainz = [
-    ];
-    opensubsonic = ps: with ps; [
-      py-opensonic
-    ];
-    plex = ps: with ps; [
-      plexapi
-    ];
-    qobuz = [
-    ];
-    radiobrowser = ps: with ps; [
-      radios
-    ];
-    slimproto = ps: with ps; [
-      aioslimproto
-    ];
-    snapcast = ps: with ps; [
-      bidict
-      snapcast
-    ];
-    sonos = ps: with ps; [
-      defusedxml
-      soco
-      sonos-websocket
-    ];
-    soundcloud = [
+    radiobrowser =
+      ps: with ps; [
+        radios
+      ];
+    siriusxm = ps: [
+    ]; # missing sxm
+    slimproto =
+      ps: with ps; [
+        aioslimproto
+      ];
+    snapcast =
+      ps: with ps; [
+        bidict
+        snapcast
+      ];
+    sonos = ps: [
+    ]; # missing aiosonos
+    sonos_s1 =
+      ps: with ps; [
+        defusedxml
+        soco
+      ];
+    soundcloud = ps: [
     ]; # missing soundcloudpy
-    spotify = ps: with ps; [
-      pkce
+    spotify =
+      ps: with ps; [
+        pkce
+      ];
+    template_player_provider = ps: [
     ];
-    template_player_provider = [
+    test = ps: [
     ];
-    test = [
+    theaudiodb = ps: [
     ];
-    theaudiodb = [
+    tidal =
+      ps: with ps; [
+        tidalapi
+      ];
+    tunein = ps: [
     ];
-    tidal = ps: with ps; [
-      tidalapi
-    ];
-    tunein = [
-    ];
-    ugp = [
-    ];
-    ytmusic = ps: with ps; [
-      yt-dlp
-      ytmusicapi
-    ]; # missing yt-dlp-youtube-accesstoken
+    ytmusic =
+      ps: with ps; [
+        yt-dlp
+        ytmusicapi
+      ];
   };
 }

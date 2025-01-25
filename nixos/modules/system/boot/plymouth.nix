@@ -35,6 +35,13 @@ let
     # See: https://gitlab.freedesktop.org/plymouth/plymouth/-/issues/106
     mkdir -p $out/share/plymouth/themes/spinfinity
     ln -s $logo $out/share/plymouth/themes/spinfinity/header-image.png
+
+    # Logo for catppuccin (two-step) theme
+    for flavour in mocha macchiato latte frappe
+    do
+      mkdir -p $out/share/plymouth/themes/catppuccin-"$flavour"
+      ln -s $logo $out/share/plymouth/themes/catppuccin-"$flavour"/header-image.png
+    done
   '';
 
   themesEnv = pkgs.buildEnv {
@@ -326,26 +333,41 @@ in
 
     # We use `mkAfter` to ensure that LUKS password prompt would be shown earlier than the splash screen.
     boot.initrd.preLVMCommands = mkIf (!config.boot.initrd.systemd.enable) (mkAfter ''
-      mkdir -p /etc/plymouth
-      mkdir -p /run/plymouth
-      ln -s $extraUtils/etc/plymouth/logo.png /etc/plymouth/logo.png
-      ln -s ${configFile} /etc/plymouth/plymouthd.conf
-      ln -s $extraUtils/share/plymouth/plymouthd.defaults /run/plymouth/plymouthd.defaults
-      ln -s $extraUtils/share/plymouth/themes /run/plymouth/themes
-      ln -s $extraUtils/lib/plymouth /run/plymouth/plugins
-      ln -s $extraUtils/etc/fonts /etc/fonts
+      plymouth_enabled=1
+      for o in $(cat /proc/cmdline); do
+          case $o in
+              plymouth.enable=0)
+                  plymouth_enabled=0
+                  ;;
+          esac
+      done
 
-      plymouthd --mode=boot --pid-file=/run/plymouth/pid --attach-to-session
-      plymouth show-splash
+      if [ "$plymouth_enabled" != 0 ]; then
+        mkdir -p /etc/plymouth
+        mkdir -p /run/plymouth
+        ln -s $extraUtils/etc/plymouth/logo.png /etc/plymouth/logo.png
+        ln -s ${configFile} /etc/plymouth/plymouthd.conf
+        ln -s $extraUtils/share/plymouth/plymouthd.defaults /run/plymouth/plymouthd.defaults
+        ln -s $extraUtils/share/plymouth/themes /run/plymouth/themes
+        ln -s $extraUtils/lib/plymouth /run/plymouth/plugins
+        ln -s $extraUtils/etc/fonts /etc/fonts
+
+        plymouthd --mode=boot --pid-file=/run/plymouth/pid --attach-to-session
+        plymouth show-splash
+      fi
     '');
 
     boot.initrd.postMountCommands = mkIf (!config.boot.initrd.systemd.enable) ''
-      plymouth update-root-fs --new-root-dir="$targetRoot"
+      if [ "$plymouth_enabled" != 0 ]; then
+        plymouth update-root-fs --new-root-dir="$targetRoot"
+      fi
     '';
 
     # `mkBefore` to ensure that any custom prompts would be visible.
     boot.initrd.preFailCommands = mkIf (!config.boot.initrd.systemd.enable) (mkBefore ''
-      plymouth quit --wait
+      if [ "$plymouth_enabled" != 0 ]; then
+        plymouth quit --wait
+      fi
     '');
 
   };

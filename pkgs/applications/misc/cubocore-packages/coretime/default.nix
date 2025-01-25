@@ -1,4 +1,14 @@
-{ mkDerivation, lib, fetchFromGitLab, qtbase, qtmultimedia, cmake, ninja, libcprime, libcsys }:
+{
+  mkDerivation,
+  lib,
+  fetchFromGitLab,
+  qtbase,
+  qtmultimedia,
+  cmake,
+  ninja,
+  libcprime,
+  libcsys,
+}:
 
 mkDerivation rec {
   pname = "coretime";

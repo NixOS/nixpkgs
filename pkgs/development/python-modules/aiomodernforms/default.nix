@@ -34,6 +34,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # https://github.com/wonderslug/aiomodernforms/issues/273
+    "test_connection_error"
+    "test_empty_response"
+  ];
+
   pythonImportsCheck = [ "aiomodernforms" ];
 
   meta = with lib; {

@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "aiopegelonline";
-  version = "0.0.10";
+  version = "0.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -20,9 +20,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mib1185";
     repo = "aiopegelonline";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-nKuqAzT1O5n9X/fEUm+M2RdB4u7moUGQzFA7knSEpBs=";
+    tag = "v${version}";
+    hash = "sha256-kDz+q4Y6ImgXbY7OSC/PKXPtKdktixW+ee51xHMX9o4=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools==75.6.0" "setuptools"
+  '';
 
   build-system = [ setuptools ];
 

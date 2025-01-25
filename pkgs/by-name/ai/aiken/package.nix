@@ -10,20 +10,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "aiken";
-  version = "1.0.29-alpha"; # all releases are 'alpha'
+  version = "1.1.10";
 
   src = fetchFromGitHub {
     owner = "aiken-lang";
     repo = "aiken";
     rev = "v${version}";
-    hash = "sha256-fikXypc9HKil4Ut4jdgQtTTy/CHEogEpDprwdTgd9b4=";
+    hash = "sha256-qM6rBBBwLUwB3g+jjT0R6z0473x929t2W8tOY663EcI=";
   };
 
-  cargoHash = "sha256-UWDPXnq2k/PoogrfuW93ieRW8AfuNIEfri9Jo6gHkdg=";
+  cargoHash = "sha256-rxxbmba189vcpNve5b7kfeFCZqF2fx9YNU78wgtGtKE=";
 
   buildInputs =
     [ openssl ]
-    ++ lib.optionals stdenv.isDarwin (
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
       with darwin.apple_sdk.frameworks;
       [
         Security

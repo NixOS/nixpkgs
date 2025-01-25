@@ -10,13 +10,14 @@
   pythonOlder,
   setuptools-scm,
   six,
+  setuptools,
   typecode,
 }:
 
 buildPythonPackage rec {
   pname = "extractcode";
   version = "31.0.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
@@ -33,9 +34,9 @@ buildPythonPackage rec {
 
   dontConfigure = true;
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     typecode
     patch
     extractcode-libarchive
@@ -67,16 +68,18 @@ buildPythonPackage rec {
     "test_patch_info_patch_patches_windows_plugin_explorer_patch"
     # AssertionError: assert [['linux-2.6...._end;', ...]]] == [['linux-2.6...._end;', ...]]]
     "test_patch_info_patch_patches_misc_linux_st710x_patches_motorola_rootdisk_c_patch"
+    # extractcode.libarchive2.ArchiveErrorRetryable: Damaged tar archive
+    "test_extract_python_testtar_tar_archive_with_special_files"
   ];
 
   pythonImportsCheck = [ "extractcode" ];
 
   meta = with lib; {
     description = "Universal archive extractor using z7zip, libarchive, other libraries and the Python standard library";
-    mainProgram = "extractcode";
-    homepage = "https://github.com/nexB/extractcode";
-    changelog = "https://github.com/nexB/extractcode/releases/tag/v${version}";
+    homepage = "https://github.com/aboutcode-org/extractcode";
+    changelog = "https://github.com/aboutcode-org/extractcode/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = [ ];
+    mainProgram = "extractcode";
   };
 }

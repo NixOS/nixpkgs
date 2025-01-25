@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "deeptools";
     repo = "pyBigWig";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-ch9nZrQAnzFQQ62/NF4J51pV4DQAbVq4/f/6LaXf5hM=";
   };
 

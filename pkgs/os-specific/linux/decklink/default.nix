@@ -1,7 +1,8 @@
-{ stdenv
-, lib
-, blackmagic-desktop-video
-, kernel
+{
+  stdenv,
+  lib,
+  blackmagic-desktop-video,
+  kernel,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "decklink";
@@ -14,15 +15,17 @@ stdenv.mkDerivation (finalAttrs: {
   KERNELDIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
   INSTALL_MOD_PATH = placeholder "out";
 
-  nativeBuildInputs =  kernel.moduleBuildDependencies;
+  nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  postUnpack = let
-    arch = stdenv.hostPlatform.uname.processor;
-  in ''
-    tar xf Blackmagic_Desktop_Video_Linux_${lib.head (lib.splitString "a" finalAttrs.version)}/other/${arch}/desktopvideo-${finalAttrs.version}-${arch}.tar.gz
-    moduleRoot=$NIX_BUILD_TOP/desktopvideo-${finalAttrs.version}-${stdenv.hostPlatform.uname.processor}/usr/src
-    sourceRoot=$moduleRoot
-  '';
+  postUnpack =
+    let
+      arch = stdenv.hostPlatform.uname.processor;
+    in
+    ''
+      tar xf Blackmagic_Desktop_Video_Linux_${lib.head (lib.splitString "a" finalAttrs.version)}/other/${arch}/desktopvideo-${finalAttrs.version}-${arch}.tar.gz
+      moduleRoot=$NIX_BUILD_TOP/desktopvideo-${finalAttrs.version}-${stdenv.hostPlatform.uname.processor}/usr/src
+      sourceRoot=$moduleRoot
+    '';
 
   buildPhase = ''
     runHook preBuild

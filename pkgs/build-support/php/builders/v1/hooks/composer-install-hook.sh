@@ -24,7 +24,7 @@ composerInstallConfigureHook() {
     fi
 
     if [[ ! -f "composer.lock" ]]; then
-        setComposeRootVersion
+        setComposerRootVersion
 
         composer \
             --no-install \
@@ -79,7 +79,7 @@ composerInstallConfigureHook() {
 composerInstallBuildHook() {
     echo "Executing composerInstallBuildHook"
 
-    setComposeRootVersion
+    setComposerRootVersion
 
     # Since this file cannot be generated in the composer-repository-hook.sh
     # because the file contains hardcoded nix store paths, we generate it here.
@@ -99,7 +99,8 @@ composerInstallCheckHook() {
 composerInstallInstallHook() {
     echo "Executing composerInstallInstallHook"
 
-    setComposeRootVersion
+    setComposerRootVersion
+    setComposerEnvVariables
 
     # Finally, run `composer install` to install the dependencies and generate
     # the autoloader.

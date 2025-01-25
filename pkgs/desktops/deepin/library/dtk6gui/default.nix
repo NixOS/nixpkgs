@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dtk6gui";
-  version = "6.0.18";
+  version = "6.0.24";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = "dtk6gui";
     rev = finalAttrs.version;
-    hash = "sha256-w8tyc06v/juTP0YSsyWai1ONl4Aa7dzREIc5wLnI/vw=";
+    hash = "sha256-Ybi68lTSUJpAipx92JF7wj6y+GTYDodJKRCVFhfnBvQ=";
   };
 
   patches = [
@@ -41,6 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     qt6Packages.qtbase
+    qt6Packages.qtwayland
     librsvg
   ];
 

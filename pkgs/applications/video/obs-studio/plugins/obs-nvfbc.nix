@@ -1,5 +1,13 @@
-{ stdenv, lib, fetchFromGitLab, meson, ninja, pkg-config
-, obs-studio, libGL, libX11
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  pkg-config,
+  obs-studio,
+  libGL,
+  libX11,
 }:
 
 stdenv.mkDerivation rec {
@@ -13,8 +21,16 @@ stdenv.mkDerivation rec {
     hash = "sha256-AJ3K0O1vrixskn+/Tpg7LsgRO8N4sgDo1Y6gg3CwGVo=";
   };
 
-  nativeBuildInputs = [ meson pkg-config ninja ];
-  buildInputs = [ obs-studio libGL libX11 ];
+  nativeBuildInputs = [
+    meson
+    pkg-config
+    ninja
+  ];
+  buildInputs = [
+    obs-studio
+    libGL
+    libX11
+  ];
 
   meta = with lib; {
     description = "OBS Studio source plugin for NVIDIA FBC API";

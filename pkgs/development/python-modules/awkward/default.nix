@@ -24,24 +24,18 @@
   pyarrow,
   pytest-xdist,
   pytestCheckHook,
-  jax,
-  jaxlib,
-
-  stdenv,
 }:
 
 buildPythonPackage rec {
   pname = "awkward";
-  version = "2.6.7";
+  version = "2.7.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "awkward";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-6Q2eXriMYmfrgv69ytxvyrxK9HPMX8AIZ3ZStZUMGIk=";
+    tag = "v${version}";
+    hash = "sha256-nOKMwAQ5t8tc64bEKz0j8JxxoVQQu39Iu8Zr9cqSx7A=";
   };
 
   build-system = [
@@ -63,33 +57,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "awkward" ];
 
-  nativeCheckInputs =
-    [
-      fsspec
-      numba
-      setuptools
-      numexpr
-      pandas
-      pyarrow
-      pytest-xdist
-      pytestCheckHook
-    ]
-    ++ lib.optionals (!stdenv.isDarwin) [
-      # no support for darwin
-      jax
-      jaxlib
-    ];
+  nativeCheckInputs = [
+    fsspec
+    numba
+    setuptools
+    numexpr
+    pandas
+    pyarrow
+    pytest-xdist
+    pytestCheckHook
+  ];
 
-  # The following tests have been disabled because they need to be run on a GPU platform.
   disabledTestPaths = [
+    # Need to be run on a GPU platform.
     "tests-cuda"
-    # Disable tests dependending on jax on darwin
-  ] ++ lib.optionals stdenv.isDarwin [ "tests/test_2603_custom_behaviors_with_jax.py" ];
-
-  disabledTests = [
-    # AssertionError: Regex pattern did not match.
-    "test_serialise_with_nonserialisable_attrs"
-    "test_serialise_with_nonserialisable_attrs"
   ];
 
   meta = {

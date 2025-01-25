@@ -1,16 +1,17 @@
-{ mkDerivation
-, extra-cmake-modules
-, boost
-, kconfig
-, kcoreaddons
-, kdbusaddons
-, ki18n
-, kio
-, kglobalaccel
-, kwindowsystem
-, kxmlgui
-, kcrash
-, qtbase
+{
+  mkDerivation,
+  extra-cmake-modules,
+  boost,
+  kconfig,
+  kcoreaddons,
+  kdbusaddons,
+  ki18n,
+  kio,
+  kglobalaccel,
+  kwindowsystem,
+  kxmlgui,
+  kcrash,
+  qtbase,
 }:
 
 mkDerivation {

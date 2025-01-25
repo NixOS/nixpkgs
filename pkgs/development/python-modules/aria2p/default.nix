@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pawamoy";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-WlbZP2+qUSyfmeFFiuarXI3VaNZvD9cnOef/WM+J0OE=";
   };
 
@@ -45,7 +45,7 @@ buildPythonPackage rec {
     websocket-client
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     tui = [
       asciimatics
       pyperclip
@@ -64,7 +64,7 @@ buildPythonPackage rec {
     responses
     psutil
     uvicorn
-  ] ++ passthru.optional-dependencies.tui;
+  ] ++ optional-dependencies.tui;
 
   disabledTests = [
     # require a running display server

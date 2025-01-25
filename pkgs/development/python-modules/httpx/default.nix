@@ -27,11 +27,12 @@
   pytest-trio,
   trustme,
   uvicorn,
+  zstandard,
 }:
 
 buildPythonPackage rec {
   pname = "httpx";
-  version = "0.27.0";
+  version = "0.27.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -39,11 +40,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "encode";
     repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-13EnSzrCkseK6s6Yz9OpLzqo/2PTFiB31m5fAIJLoZg=";
+    tag = version;
+    hash = "sha256-N0ztVA/KMui9kKIovmOfNTwwrdvSimmNkSvvC+3gpck=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-fancy-pypi-readme
     hatchling
   ];
@@ -56,19 +57,20 @@ buildPythonPackage rec {
     sniffio
   ];
 
-  passthru.optional-dependencies = {
-    http2 = [ h2 ];
-    socks = [ socksio ];
+  optional-dependencies = {
     brotli = if isPyPy then [ brotlicffi ] else [ brotli ];
     cli = [
       click
       rich
       pygments
     ];
+    http2 = [ h2 ];
+    socks = [ socksio ];
+    zstd = [ zstandard ];
   };
 
   # trustme uses pyopenssl
-  doCheck = !(stdenv.isDarwin && stdenv.isAarch64);
+  doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64);
 
   nativeCheckInputs = [
     chardet
@@ -78,7 +80,7 @@ buildPythonPackage rec {
     pytest-trio
     trustme
     uvicorn
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   # testsuite wants to find installed packages for testing entrypoint
   preCheck = ''
@@ -98,6 +100,8 @@ buildPythonPackage rec {
     # httpcore.ConnectError: [Errno -2] Name or service not known
     "test_async_proxy_close"
     "test_sync_proxy_close"
+    # ResourceWarning: Async generator 'httpx._content.ByteStream.__aiter__' was garbage collected before it had been exhausted. Surround its use in 'async with aclosing(...):' to ensure that it gets cleaned up as soon as you're done using it.
+    "test_write_timeout" # trio variant
   ];
 
   disabledTestPaths = [ "tests/test_main.py" ];

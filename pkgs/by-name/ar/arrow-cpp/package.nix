@@ -3,6 +3,7 @@
   lib,
   fetchurl,
   fetchFromGitHub,
+  fetchpatch,
   fixDarwinDylibNames,
   autoconf,
   aws-sdk-cpp,
@@ -35,6 +36,7 @@
   nlohmann_json,
   openssl,
   perl,
+  pkg-config,
   protobuf,
   python3,
   rapidjson,
@@ -49,14 +51,14 @@
   zstd,
   testers,
   enableShared ? !stdenv.hostPlatform.isStatic,
-  enableFlight ? true,
-  enableJemalloc ? !stdenv.isDarwin,
+  enableFlight ? stdenv.buildPlatform == stdenv.hostPlatform,
+  enableJemalloc ? !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isAarch64,
   enableS3 ? true,
-  enableGcs ? !stdenv.isDarwin,
+  enableGcs ? !stdenv.hostPlatform.isDarwin,
 }:
 
 assert lib.asserts.assertMsg (
-  (enableS3 && stdenv.isDarwin)
+  (enableS3 && stdenv.hostPlatform.isDarwin)
   -> (lib.versionOlder boost.version "1.69" || lib.versionAtLeast boost.version "1.70")
 ) "S3 on Darwin requires Boost != 1.69";
 
@@ -65,31 +67,50 @@ let
     name = "arrow-testing";
     owner = "apache";
     repo = "arrow-testing";
-    rev = "735ae7128d571398dd798d7ff004adebeb342883";
-    hash = "sha256-67KwnSt+EeEDvk+9kxR51tErL2wJqEPRITKb/dN+HMQ=";
+    rev = "4d209492d514c2d3cb2d392681b9aa00e6d8da1c";
+    hash = "sha256-IkiCbuy0bWyClPZ4ZEdkEP7jFYLhM7RCuNLd6Lazd4o=";
   };
 
   parquet-testing = fetchFromGitHub {
     name = "parquet-testing";
     owner = "apache";
     repo = "parquet-testing";
-    rev = "74278bc4a1122d74945969e6dec405abd1533ec3";
-    hash = "sha256-WbpndtAviph6+I/F2bevuMI9DkfSv4SMPgMaP98k6Qo=";
+    rev = "a7f1d288e693dbb08e3199851c4eb2140ff8dff2";
+    hash = "sha256-zLWJOWcW7OYL32OwBm9VFtHbmG+ibhteRfHlKr9G3CQ=";
   };
 
+  version = "18.1.0";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "arrow-cpp";
-  version = "17.0.0";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "arrow";
-    rev = "apache-arrow-17.0.0";
-    hash = "sha256-ZQqi1RFb4Ey0A0UVCThuIxM7DoFfkLwaeRAc2z8u9so=";
+    rev = "apache-arrow-${version}";
+    hash = "sha256-Jo3be5bVuDaDcSbW3pS8y9Wc2sz1W2tS6QTwf0XpODA";
   };
 
   sourceRoot = "${finalAttrs.src.name}/cpp";
+
+  patches = [
+    # fixes build with libcxx-19 (llvm-19) remove on update
+    (fetchpatch {
+      name = "libcxx-19-fixes.patch";
+      url = "https://github.com/apache/arrow/commit/29e8ea011045ba4318a552567a26b2bb0a7d3f05.patch";
+      relative = "cpp";
+      includes = [ "src/arrow/buffer_test.cc" ];
+      hash = "sha256-ZHkznOilypi1J22d56PhLlw/hbz8RqwsOGDMqI1NsMs=";
+    })
+    # https://github.com/apache/arrow/pull/45057 remove on update
+    (fetchpatch {
+      name = "boost-187.patch";
+      url = "https://github.com/apache/arrow/commit/5ec8b64668896ff06a86b6a41e700145324e1e34.patch";
+      relative = "cpp";
+      hash = "sha256-GkB7u4YnnaCApOMQPYFJuLdY7R2LtLzKccMEpKCO9ic=";
+    })
+  ];
 
   # versions are all taken from
   # https://github.com/apache/arrow/blob/apache-arrow-${version}/cpp/thirdparty/versions.txt
@@ -125,10 +146,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    pkg-config
     ninja
     autoconf # for vendored jemalloc
     flatbuffers
-  ] ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
   buildInputs =
     [
       boost
@@ -171,7 +193,7 @@ stdenv.mkDerivation (finalAttrs: {
   preConfigure = ''
     patchShebangs build-support/
     substituteInPlace "src/arrow/vendored/datetime/tz.cpp" \
-      --replace 'discover_tz_dir();' '"${tzdata}/share/zoneinfo";'
+      --replace-fail 'discover_tz_dir();' '"${tzdata}/share/zoneinfo";'
   '';
 
   cmakeFlags =
@@ -179,7 +201,7 @@ stdenv.mkDerivation (finalAttrs: {
       "-DCMAKE_FIND_PACKAGE_PREFER_CONFIG=ON"
       "-DARROW_BUILD_SHARED=${if enableShared then "ON" else "OFF"}"
       "-DARROW_BUILD_STATIC=${if enableShared then "OFF" else "ON"}"
-      "-DARROW_BUILD_TESTS=ON"
+      "-DARROW_BUILD_TESTS=${if enableShared then "ON" else "OFF"}"
       "-DARROW_BUILD_INTEGRATION=ON"
       "-DARROW_BUILD_UTILITIES=ON"
       "-DARROW_EXTRA_ERROR_CONTEXT=ON"
@@ -218,10 +240,10 @@ stdenv.mkDerivation (finalAttrs: {
       "-DPARQUET_REQUIRE_ENCRYPTION=ON"
     ]
     ++ lib.optionals (!enableShared) [ "-DARROW_TEST_LINKAGE=static" ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "-DCMAKE_INSTALL_RPATH=@loader_path/../lib" # needed for tools executables
     ]
-    ++ lib.optionals (!stdenv.isx86_64) [ "-DARROW_USE_SIMD=OFF" ]
+    ++ lib.optionals (!stdenv.hostPlatform.isx86_64) [ "-DARROW_USE_SIMD=OFF" ]
     ++ lib.optionals enableS3 [
       "-DAWSSDK_CORE_HEADER_FILE=${aws-sdk-cpp-arrow}/include/aws/core/Aws.h"
     ];
@@ -247,7 +269,7 @@ stdenv.mkDerivation (finalAttrs: {
           "TestS3FS.*"
           "TestS3FSGeneric.*"
         ]
-        ++ lib.optionals stdenv.isDarwin [
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [
           # TODO: revisit at 12.0.0 or when
           # https://github.com/apache/arrow/commit/295c6644ca6b67c95a662410b2c7faea0920c989
           # is available, see
@@ -259,11 +281,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
-  nativeInstallCheckInputs = [
-    perl
-    which
-    sqlite
-  ] ++ lib.optionals enableS3 [ minio ] ++ lib.optionals enableFlight [ python3 ];
+  nativeInstallCheckInputs =
+    [
+      perl
+      which
+      sqlite
+    ]
+    ++ lib.optionals enableS3 [ minio ]
+    ++ lib.optionals enableFlight [ python3 ];
 
   installCheckPhase =
     let

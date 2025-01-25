@@ -9,16 +9,16 @@
 
 php.buildComposerProject2 (finalAttrs: {
   pname = "castor";
-  version = "0.17.1";
+  version = "0.22.0";
 
   src = fetchFromGitHub {
     owner = "jolicode";
     repo = "castor";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ng32vuGlGffpkzf3hXu0sNbj0PCDu4DpZnMnbDV9pZk=";
+    hash = "sha256-PJtl1/Eete7zK81grQHdWtr9PBbLL0lC3nwz0vxtFx0=";
   };
 
-  vendorHash = "sha256-0aDT0hPhoPl0U/QbstiGmUHaqDdQb1ReY2hy9FEnzwM=";
+  vendorHash = "sha256-TjvbuvOwML9v1fMOA+ld9PM2wyysgL4Ws9Swf+N2nwk=";
 
   nativeBuildInputs = [ installShellFiles ];
 

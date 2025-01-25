@@ -12,7 +12,6 @@
   setuptools,
 
   # propagates
-  backports-zoneinfo,
   typing-extensions,
 
   # psycopg-c
@@ -35,13 +34,13 @@
 
 let
   pname = "psycopg";
-  version = "3.2.1";
+  version = "3.2.3";
 
   src = fetchFromGitHub {
     owner = "psycopg";
     repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-jQMIgfMyQpd9bD3F1IhPff39BrFaBD6U7Exryna+Acw=";
+    tag = version;
+    hash = "sha256-vcUZvQeD5MnEM02phk73I9dpf0Eug95V7Rspi0s6S2M=";
   };
 
   patches = [
@@ -153,7 +152,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     psycopg-c
     typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.9") [ backports-zoneinfo ];
+  ];
 
   pythonImportsCheck = [
     "psycopg"
@@ -161,7 +160,7 @@ buildPythonPackage rec {
     "psycopg_pool"
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     c = [ psycopg-c ];
     pool = [ psycopg-pool ];
   };
@@ -174,9 +173,9 @@ buildPythonPackage rec {
       pytestCheckHook
       postgresql
     ]
-    ++ lib.optional (stdenv.isLinux) postgresqlTestHook
-    ++ passthru.optional-dependencies.c
-    ++ passthru.optional-dependencies.pool;
+    ++ lib.optional (stdenv.hostPlatform.isLinux) postgresqlTestHook
+    ++ optional-dependencies.c
+    ++ optional-dependencies.pool;
 
   env = {
     postgresqlEnableTCP = 1;
@@ -188,7 +187,7 @@ buildPythonPackage rec {
     ''
       cd ..
     ''
-    + lib.optionalString (stdenv.isLinux) ''
+    + lib.optionalString (stdenv.hostPlatform.isLinux) ''
       export PSYCOPG_TEST_DSN="host=/build/run/postgresql user=$PGUSER"
     '';
 
@@ -205,13 +204,15 @@ buildPythonPackage rec {
     # Mypy typing test
     "tests/test_typing.py"
     "tests/crdb/test_typing.py"
+    # https://github.com/psycopg/psycopg/pull/915
+    "tests/test_notify.py"
+    "tests/test_notify_async.py"
   ];
 
   pytestFlagsArray = [
-    "-o"
-    "cache_dir=$TMPDIR"
+    "-o cache_dir=.cache"
     "-m"
-    "'not refcount and not timing'"
+    "'not refcount and not timing and not flakey'"
     # pytest.PytestRemovedIn9Warning: Marks applied to fixtures have no effect
     "-W"
     "ignore::pytest.PytestRemovedIn9Warning"

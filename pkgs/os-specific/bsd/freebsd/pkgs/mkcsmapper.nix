@@ -13,8 +13,6 @@ mkDerivation {
     "lib/libiconv_modules/mapper_std"
   ];
 
-  BOOTSTRAPPING = !stdenv.hostPlatform.isFreeBSD;
-
   extraNativeBuildInputs = [
     byacc
     flex

@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "mitogen";
-  version = "0.3.9";
+  version = "0.3.21";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -16,8 +16,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mitogen-hq";
     repo = "mitogen";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-dfOufUvDsrBFvnz8/mp7iY9Tm52KoFFuQQnbq85qTGs=";
+    tag = "v${version}";
+    hash = "sha256-F8W15JHOuQ+MhQtQZz+zssgeZqFC+agqINnFaKP0lto=";
   };
 
   build-system = [ setuptools ];

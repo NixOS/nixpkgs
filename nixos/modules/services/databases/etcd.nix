@@ -1,9 +1,16 @@
-{ config, lib, options, pkgs, ... }:
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.etcd;
   opt = options.services.etcd;
 
-in {
+in
+{
 
   options.services.etcd = {
     enable = lib.mkOption {
@@ -30,13 +37,13 @@ in {
 
     listenClientUrls = lib.mkOption {
       description = "Etcd list of URLs to listen on for client traffic.";
-      default = ["http://127.0.0.1:2379"];
+      default = [ "http://127.0.0.1:2379" ];
       type = lib.types.listOf lib.types.str;
     };
 
     listenPeerUrls = lib.mkOption {
       description = "Etcd list of URLs to listen on for peer traffic.";
-      default = ["http://127.0.0.1:2380"];
+      default = [ "http://127.0.0.1:2380" ];
       type = lib.types.listOf lib.types.str;
     };
 
@@ -49,7 +56,7 @@ in {
 
     initialCluster = lib.mkOption {
       description = "Etcd initial cluster configuration for bootstrapping.";
-      default = ["${cfg.name}=http://127.0.0.1:2380"];
+      default = [ "${cfg.name}=http://127.0.0.1:2380" ];
       defaultText = lib.literalExpression ''["''${config.${opt.name}}=http://127.0.0.1:2380"]'';
       type = lib.types.listOf lib.types.str;
     };
@@ -57,7 +64,10 @@ in {
     initialClusterState = lib.mkOption {
       description = "Etcd initial cluster configuration for bootstrapping.";
       default = "new";
-      type = lib.types.enum ["new" "existing"];
+      type = lib.types.enum [
+        "new"
+        "existing"
+      ];
     };
 
     initialClusterToken = lib.mkOption {
@@ -140,7 +150,7 @@ in {
         <https://github.com/coreos/etcd/blob/master/Documentation/op-guide/configuration.md#configuration-flags>
       '';
       type = lib.types.attrsOf lib.types.str;
-      default = {};
+      default = { };
       example = lib.literalExpression ''
         {
           "CORS" = "*";
@@ -168,32 +178,37 @@ in {
     systemd.services.etcd = {
       description = "etcd key-value store";
       wantedBy = [ "multi-user.target" ];
-      after = [ "network-online.target" ]
-        ++ lib.optional config.networking.firewall.enable "firewall.service";
-      wants = [ "network-online.target" ]
-        ++ lib.optional config.networking.firewall.enable "firewall.service";
+      after = [
+        "network-online.target"
+      ] ++ lib.optional config.networking.firewall.enable "firewall.service";
+      wants = [
+        "network-online.target"
+      ] ++ lib.optional config.networking.firewall.enable "firewall.service";
 
-      environment = (lib.filterAttrs (n: v: v != null) {
-        ETCD_NAME = cfg.name;
-        ETCD_DISCOVERY = cfg.discovery;
-        ETCD_DATA_DIR = cfg.dataDir;
-        ETCD_ADVERTISE_CLIENT_URLS = lib.concatStringsSep "," cfg.advertiseClientUrls;
-        ETCD_LISTEN_CLIENT_URLS = lib.concatStringsSep "," cfg.listenClientUrls;
-        ETCD_LISTEN_PEER_URLS = lib.concatStringsSep "," cfg.listenPeerUrls;
-        ETCD_INITIAL_ADVERTISE_PEER_URLS = lib.concatStringsSep "," cfg.initialAdvertisePeerUrls;
-        ETCD_PEER_CLIENT_CERT_AUTH = toString cfg.peerClientCertAuth;
-        ETCD_PEER_TRUSTED_CA_FILE = cfg.peerTrustedCaFile;
-        ETCD_PEER_CERT_FILE = cfg.peerCertFile;
-        ETCD_PEER_KEY_FILE = cfg.peerKeyFile;
-        ETCD_CLIENT_CERT_AUTH = toString cfg.clientCertAuth;
-        ETCD_TRUSTED_CA_FILE = cfg.trustedCaFile;
-        ETCD_CERT_FILE = cfg.certFile;
-        ETCD_KEY_FILE = cfg.keyFile;
-      }) // (lib.optionalAttrs (cfg.discovery == ""){
-        ETCD_INITIAL_CLUSTER = lib.concatStringsSep "," cfg.initialCluster;
-        ETCD_INITIAL_CLUSTER_STATE = cfg.initialClusterState;
-        ETCD_INITIAL_CLUSTER_TOKEN = cfg.initialClusterToken;
-      }) // (lib.mapAttrs' (n: v: lib.nameValuePair "ETCD_${n}" v) cfg.extraConf);
+      environment =
+        (lib.filterAttrs (n: v: v != null) {
+          ETCD_NAME = cfg.name;
+          ETCD_DISCOVERY = cfg.discovery;
+          ETCD_DATA_DIR = cfg.dataDir;
+          ETCD_ADVERTISE_CLIENT_URLS = lib.concatStringsSep "," cfg.advertiseClientUrls;
+          ETCD_LISTEN_CLIENT_URLS = lib.concatStringsSep "," cfg.listenClientUrls;
+          ETCD_LISTEN_PEER_URLS = lib.concatStringsSep "," cfg.listenPeerUrls;
+          ETCD_INITIAL_ADVERTISE_PEER_URLS = lib.concatStringsSep "," cfg.initialAdvertisePeerUrls;
+          ETCD_PEER_CLIENT_CERT_AUTH = toString cfg.peerClientCertAuth;
+          ETCD_PEER_TRUSTED_CA_FILE = cfg.peerTrustedCaFile;
+          ETCD_PEER_CERT_FILE = cfg.peerCertFile;
+          ETCD_PEER_KEY_FILE = cfg.peerKeyFile;
+          ETCD_CLIENT_CERT_AUTH = toString cfg.clientCertAuth;
+          ETCD_TRUSTED_CA_FILE = cfg.trustedCaFile;
+          ETCD_CERT_FILE = cfg.certFile;
+          ETCD_KEY_FILE = cfg.keyFile;
+        })
+        // (lib.optionalAttrs (cfg.discovery == "") {
+          ETCD_INITIAL_CLUSTER = lib.concatStringsSep "," cfg.initialCluster;
+          ETCD_INITIAL_CLUSTER_STATE = cfg.initialClusterState;
+          ETCD_INITIAL_CLUSTER_TOKEN = cfg.initialClusterToken;
+        })
+        // (lib.mapAttrs' (n: v: lib.nameValuePair "ETCD_${n}" v) cfg.extraConf);
 
       unitConfig = {
         Documentation = "https://github.com/coreos/etcd";
@@ -224,6 +239,6 @@ in {
       description = "Etcd daemon user";
       home = cfg.dataDir;
     };
-    users.groups.etcd = {};
+    users.groups.etcd = { };
   };
 }

@@ -585,7 +585,8 @@ in
                       if ! [ -h "${k.path}" ]; then
                           rm -f "${k.path}"
                       fi
-                      mkdir -m 0755 -p "$(dirname '${k.path}')"
+                      mkdir -p "$(dirname '${k.path}')"
+                      chmod 0755 "$(dirname '${k.path}')"
                       ssh-keygen \
                         -t "${k.type}" \
                         ${lib.optionalString (k ? bits) "-b ${toString k.bits}"} \

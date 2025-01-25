@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, opencbm
-, cc65
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  opencbm,
+  cc65,
 }:
 
 stdenv.mkDerivation {
@@ -27,7 +28,11 @@ stdenv.mkDerivation {
   ];
 
   preBuild = "mkdir build";
-  makeFlags = [ "-f" "GNU/Makefile" "linux" ];
+  makeFlags = [
+    "-f"
+    "GNU/Makefile"
+    "linux"
+  ];
 
   installPhase = ''
     runHook preInstall

@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "aioesphomeapi";
-  version = "25.3.2";
+  version = "28.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -34,8 +34,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "aioesphomeapi";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ITNXPwQTKOyH0TXYr8v/VI5rPNCvKGb/zIE1q+Ja8j0=";
+    tag = "v${version}";
+    hash = "sha256-MAlgr+DaJWQnO4Y8KesP/d9aCRbSjUb9ciuvR5DHz+w=";
   };
 
   build-system = [
@@ -68,6 +68,11 @@ buildPythonPackage rec {
     # https://github.com/esphome/aioesphomeapi/issues/889
     "test_start_connection_cannot_increase_recv_buffer"
     "test_start_connection_can_only_increase_buffer_size_to_262144"
+  ];
+
+  disabledTestPaths = [
+    # benchmarking requires pytest-codespeed
+    "tests/test_bluetooth_benchmarks.py"
   ];
 
   pythonImportsCheck = [ "aioesphomeapi" ];

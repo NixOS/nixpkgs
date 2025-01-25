@@ -1,5 +1,6 @@
-{ seclists
-, stdenvNoCC
+{
+  seclists,
+  stdenvNoCC,
 }:
 stdenvNoCC.mkDerivation {
   pname = "rockyou";

@@ -7,21 +7,22 @@
   defusedxml,
   docker,
   fetchFromGitHub,
-  hatch-vcs,
-  hatchling,
   numpy,
   pillow,
+  pkg-config,
   pycountry,
   pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
+  rustPlatform,
   svg-py,
   testfixtures,
+  xz,
 }:
 
 buildPythonPackage rec {
   pname = "deebot-client";
-  version = "8.4.0";
+  version = "11.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -29,8 +30,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "DeebotUniverse";
     repo = "client.py";
-    rev = "refs/tags/${version}";
-    hash = "sha256-VWXJykG9XSrpTjnv5radUAp/OMCH2YVlmkT6L8S+wyI=";
+    tag = version;
+    hash = "sha256-G8NLirz81+b2YJBvxmfCEPpy2M9MMvs3n6JmdXR+3oc=";
+  };
+
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit pname version src;
+    hash = "sha256-9rXd5FFR+Ma0LJfKXwkDqZp096PA34V7TzPe/tahE7c=";
   };
 
   pythonRelaxDeps = [
@@ -38,9 +44,17 @@ buildPythonPackage rec {
     "defusedxml"
   ];
 
-  build-system = [
-    hatch-vcs
-    hatchling
+  build-system = with rustPlatform; [
+    cargoSetupHook
+    maturinBuildHook
+  ];
+
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    xz
   ];
 
   dependencies = [
@@ -60,6 +74,10 @@ buildPythonPackage rec {
     pytestCheckHook
     testfixtures
   ];
+
+  preCheck = ''
+    rm -rf deebot_client
+  '';
 
   pythonImportsCheck = [ "deebot_client" ];
 

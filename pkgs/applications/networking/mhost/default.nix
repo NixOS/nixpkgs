@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, Security, SystemConfiguration }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  Security,
+  SystemConfiguration,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "mhost";
@@ -13,7 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-d2JYT/eJaGm8pfmjsuSZiQxlzcsypFH53F/9joW0J6I=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     Security
     SystemConfiguration
   ];
@@ -25,7 +32,10 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Modern take on the classic host DNS lookup utility including an easy to use and very fast Rust lookup library";
     homepage = "https://github.com/lukaspustina/mhost";
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
     maintainers = [ maintainers.mgttlinger ];
     mainProgram = "mhost";
   };

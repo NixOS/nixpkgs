@@ -43,6 +43,8 @@ in
       "${variant}Support" = true;
       inHydra = true;
     };
+
+    __allowFileset = false;
   },
   ...
 }@args:
@@ -87,7 +89,6 @@ let
       cholmod-extra = linux;
       colmap = linux;
       ctranslate2 = linux;
-      deepin.image-editor = linux;
       ffmpeg-full = linux;
       gimp = linux;
       gpu-screen-recorder = linux;
@@ -118,9 +119,7 @@ let
       python3Packages = {
         boxx = linux;
         bpycv = linux;
-        caffe = linux;
         catboost = linux;
-        chainer = linux;
         cupy = linux;
         faiss = linux;
         faster-whisper = linux;

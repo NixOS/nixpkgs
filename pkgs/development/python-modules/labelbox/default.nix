@@ -10,7 +10,7 @@
   nbconvert,
   nbformat,
   numpy,
-  opencv4,
+  opencv-python-headless,
   pillow,
   pydantic,
   pyproj,
@@ -31,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "labelbox";
-  version = "3.78.0";
+  version = "5.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -39,15 +39,16 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Labelbox";
     repo = "labelbox-python";
-    rev = "refs/tags/v.${version}";
-    hash = "sha256-P/yhN1DdUWuQ4UtqRtvJxdjgTAh2IAs5oS0zxFLunuU=";
+    tag = "v.${version}";
+    hash = "sha256-vfhlzkCTm1fhvCpzwAaXWPyXE8/2Yx63fTVHl5CWon4=";
   };
 
   sourceRoot = "${src.name}/libs/labelbox";
 
-  pythonRelaxDeps = [ "python-dateutil" ];
-
-  pythonRemoveDeps = [ "opencv-python-headless" ];
+  pythonRelaxDeps = [
+    "mypy"
+    "python-dateutil"
+  ];
 
   build-system = [ hatchling ];
 
@@ -67,7 +68,7 @@ buildPythonPackage rec {
       shapely
       numpy
       pillow
-      opencv4
+      opencv-python-headless
       typeguard
       imagesize
       pyproj
@@ -99,7 +100,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Platform API for LabelBox";
     homepage = "https://github.com/Labelbox/labelbox-python";
-    changelog = "https://github.com/Labelbox/labelbox-python/blob/v.${version}/CHANGELOG.md";
+    changelog = "https://github.com/Labelbox/labelbox-python/releases/tag/v.${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ rakesh4g ];
   };

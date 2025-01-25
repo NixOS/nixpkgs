@@ -85,7 +85,7 @@ buildPythonPackage rec {
     export LOCAL_PATH="$PWD/.storage"
   '';
 
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # flaky, depends on test order
     "test_ensuring_pk"
     # flaky, of-by-one
@@ -99,7 +99,7 @@ buildPythonPackage rec {
       # needs mongodb running on port 27017
       "tests/mongoengine"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # very flaky, sandbox issues?
       # libcloud.storage.types.ContainerDoesNotExistError
       # sqlite3.OperationalError: attempt to write a readonly database

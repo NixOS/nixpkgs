@@ -1,28 +1,20 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
-, fetchPypi
-, nodejs
-, python3
-, gettext
-, nixosTests
-, plugins ? [ ]
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  fetchPypi,
+  fetchpatch2,
+  nodejs,
+  python3,
+  gettext,
+  nixosTests,
+  plugins ? [ ],
 }:
 
 let
   python = python3.override {
     self = python;
     packageOverrides = self: super: {
-      bleach = super.bleach.overridePythonAttrs (oldAttrs: rec {
-        version = "5.0.1";
-
-        src = fetchPypi {
-          pname = "bleach";
-          inherit version;
-          hash = "sha256-DQMlXEfrm9Lyaqm7fyEHcy5+j+GVyi9kcJ/POwpKCFw=";
-        };
-      });
-
       django = super.django_4;
 
       django-oauth-toolkit = super.django-oauth-toolkit.overridePythonAttrs (oldAttrs: {
@@ -51,13 +43,13 @@ let
   };
 
   pname = "pretix";
-  version = "2024.8.0";
+  version = "2024.11.0";
 
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "pretix";
     rev = "refs/tags/v${version}";
-    hash = "sha256-3flZoDzS3SI7nAi1skEqVPXJM9vSBrGN+F0esbYKQDw=";
+    hash = "sha256-vmk7oW9foXkZdt3XOLJDbPldX2TruJOgd8mmi5tGqNw=";
   };
 
   npmDeps = buildNpmPackage {
@@ -65,7 +57,7 @@ let
     inherit version src;
 
     sourceRoot = "${src.name}/src/pretix/static/npm_dir";
-    npmDepsHash = "sha256-ZS+80LLyS2UBnVGRclYhwVwF1BR17D/79F2moQtqh80=";
+    npmDepsHash = "sha256-4PrOrI2cykkuzob+DMeAu/GF5OMCho40G3BjCwVW/tE=";
 
     dontBuild = true;
 
@@ -87,19 +79,31 @@ python.pkgs.buildPythonApplication rec {
     # Discover pretix.plugin entrypoints during build and add them into
     # INSTALLED_APPS, so that their static files are collected.
     ./plugin-build.patch
+
+    (fetchpatch2 {
+      # fix tests after 2025-01-01
+      url = "https://github.com/pretix/pretix/commit/5a5a551c21461d9ef36337480c9874d65a9fdba9.patch";
+      hash = "sha256-ZtSVI6nVlJtNrnBZ9ktIqFGtNf+oWtvNsgCWwOUwVug=";
+    })
   ];
 
   pythonRelaxDeps = [
     "django-phonenumber-field"
+    "dnspython"
     "importlib-metadata"
     "kombu"
     "markdown"
     "pillow"
     "protobuf"
+    "pycryptodome"
     "pyjwt"
     "python-bidi"
+    "qrcode"
+    "redis"
     "requests"
     "sentry-sdk"
+    "ua-parser"
+    "webauthn"
   ];
 
   pythonRemoveDeps = [
@@ -127,86 +131,88 @@ python.pkgs.buildPythonApplication rec {
     tomli
   ];
 
-  dependencies = with python.pkgs; [
-    arabic-reshaper
-    babel
-    beautifulsoup4
-    bleach
-    celery
-    chardet
-    cryptography
-    css-inline
-    defusedcsv
-    django
-    django-bootstrap3
-    django-compressor
-    django-countries
-    django-filter
-    django-formset-js-improved
-    django-formtools
-    django-hierarkey
-    django-hijack
-    django-i18nfield
-    django-libsass
-    django-localflavor
-    django-markup
-    django-oauth-toolkit
-    django-otp
-    django-phonenumber-field
-    django-redis
-    django-scopes
-    django-statici18n
-    djangorestframework
-    dnspython
-    drf-ujson2
-    geoip2
-    importlib-metadata
-    isoweek
-    jsonschema
-    kombu
-    libsass
-    lxml
-    markdown
-    mt-940
-    oauthlib
-    openpyxl
-    packaging
-    paypalrestsdk
-    paypal-checkout-serversdk
-    pyjwt
-    phonenumberslite
-    pillow
-    pretix-plugin-build
-    protobuf
-    psycopg2-binary
-    pycountry
-    pycparser
-    pycryptodome
-    pypdf
-    python-bidi
-    python-dateutil
-    pytz
-    pytz-deprecation-shim
-    pyuca
-    qrcode
-    redis
-    reportlab
-    requests
-    sentry-sdk
-    sepaxml
-    slimit
-    stripe
-    text-unidecode
-    tlds
-    tqdm
-    ua-parser
-    vat-moss
-    vobject
-    webauthn
-    zeep
-  ]
-  ++ django.optional-dependencies.argon2
-  ++ plugins;
+  dependencies =
+    with python.pkgs;
+    [
+      arabic-reshaper
+      babel
+      beautifulsoup4
+      bleach
+      celery
+      chardet
+      cryptography
+      css-inline
+      defusedcsv
+      django
+      django-bootstrap3
+      django-compressor
+      django-countries
+      django-filter
+      django-formset-js-improved
+      django-formtools
+      django-hierarkey
+      django-hijack
+      django-i18nfield
+      django-libsass
+      django-localflavor
+      django-markup
+      django-oauth-toolkit
+      django-otp
+      django-phonenumber-field
+      django-redis
+      django-scopes
+      django-statici18n
+      djangorestframework
+      dnspython
+      drf-ujson2
+      geoip2
+      importlib-metadata
+      isoweek
+      jsonschema
+      kombu
+      libsass
+      lxml
+      markdown
+      mt-940
+      oauthlib
+      openpyxl
+      packaging
+      paypalrestsdk
+      paypal-checkout-serversdk
+      pyjwt
+      phonenumberslite
+      pillow
+      pretix-plugin-build
+      protobuf
+      psycopg2-binary
+      pycountry
+      pycparser
+      pycryptodome
+      pypdf
+      python-bidi
+      python-dateutil
+      pytz
+      pytz-deprecation-shim
+      pyuca
+      qrcode
+      redis
+      reportlab
+      requests
+      sentry-sdk
+      sepaxml
+      slimit
+      stripe
+      text-unidecode
+      tlds
+      tqdm
+      ua-parser
+      vat-moss
+      vobject
+      webauthn
+      zeep
+    ]
+    ++ django.optional-dependencies.argon2
+    ++ plugins;
 
   optional-dependencies = with python.pkgs; {
     memcached = [
@@ -224,20 +230,24 @@ python.pkgs.buildPythonApplication rec {
 
   dontStrip = true; # no binaries
 
-  nativeCheckInputs = with python.pkgs; [
-    pytestCheckHook
-    pytest-xdist
-    pytest-mock
-    pytest-django
-    pytest-asyncio
-    pytest-rerunfailures
-    freezegun
-    fakeredis
-    responses
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  nativeCheckInputs =
+    with python.pkgs;
+    [
+      pytestCheckHook
+      pytest-xdist
+      pytest-mock
+      pytest-django
+      pytest-asyncio
+      pytest-rerunfailures
+      freezegun
+      fakeredis
+      responses
+    ]
+    ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pytestFlagsArray = [
-    "--reruns" "3"
+    "--reruns"
+    "3"
   ];
 
   disabledTests = [
@@ -261,9 +271,9 @@ python.pkgs.buildPythonApplication rec {
     inherit
       npmDeps
       python
-    ;
-    plugins = lib.recurseIntoAttrs
-      (python.pkgs.callPackage ./plugins {
+      ;
+    plugins = lib.recurseIntoAttrs (
+      python.pkgs.callPackage ./plugins {
         inherit (python.pkgs) callPackage;
       }
     );

@@ -1,22 +1,50 @@
-{stdenv, lib, fetchFromGitHub, makeWrapper, gettext,
-python3, rsync, cron, openssh, sshfs-fuse, encfs }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  makeWrapper,
+  gettext,
+  python3,
+  rsync,
+  cron,
+  openssh,
+  sshfs-fuse,
+  encfs,
+}:
 
 let
-  python' = python3.withPackages (ps: with ps; [ dbus-python keyring packaging ]);
+  python' = python3.withPackages (
+    ps: with ps; [
+      dbus-python
+      keyring
+      packaging
+    ]
+  );
 
-  apps = lib.makeBinPath [ openssh python' cron rsync sshfs-fuse encfs ];
-in stdenv.mkDerivation rec {
+  apps = lib.makeBinPath [
+    openssh
+    python'
+    cron
+    rsync
+    sshfs-fuse
+    encfs
+  ];
+in
+stdenv.mkDerivation rec {
   pname = "backintime-common";
-  version = "1.5.2";
+  version = "1.5.3";
 
   src = fetchFromGitHub {
     owner = "bit-team";
     repo = "backintime";
     rev = "v${version}";
-    sha256 = "sha256-yfCSTzCmhXDBC1vYqwgVjsYUtc5VO1VW74BmIB0hHfE=";
+    sha256 = "sha256-byJyRsjZND0CQAfx45jQa3PNHhqzF2O0cFGSfN4o/QA=";
   };
 
-  nativeBuildInputs = [ makeWrapper gettext ];
+  nativeBuildInputs = [
+    makeWrapper
+    gettext
+  ];
   buildInputs = [ python' ];
 
   installFlags = [ "DEST=$(out)" ];
@@ -38,7 +66,7 @@ in stdenv.mkDerivation rec {
   preFixup = ''
     wrapProgram "$out/bin/backintime" \
       --prefix PATH : ${apps}
-    '';
+  '';
 
   meta = {
     homepage = "https://github.com/bit-team/backintime";

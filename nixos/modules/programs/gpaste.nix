@@ -1,11 +1,16 @@
 # GPaste.
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
 
   ###### interface
   options = {
-     programs.gpaste = {
+    programs.gpaste = {
       enable = lib.mkOption {
         type = lib.types.bool;
         default = false;

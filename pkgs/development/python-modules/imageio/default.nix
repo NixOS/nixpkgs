@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   isPyPy,
   substituteAll,
@@ -32,19 +31,17 @@
 
 buildPythonPackage rec {
   pname = "imageio";
-  version = "2.35.1";
+  version = "2.37.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "imageio";
     repo = "imageio";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-WeoZE2TPBAhzBBcZNQqoiqvribMCLSZWk/XpdMydvCQ=";
+    tag = "v${version}";
+    hash = "sha256-/nxJxZrTYX7F2grafIWwx9SyfR47ZXyaUwPHMEOdKkI=";
   };
 
-  patches = lib.optionals (!stdenv.isDarwin) [
+  patches = lib.optionals (!stdenv.hostPlatform.isDarwin) [
     (substituteAll {
       src = ./libgl-path.patch;
       libgl = "${libGL.out}/lib/libGL${stdenv.hostPlatform.extensions.sharedLibrary}";
@@ -79,41 +76,26 @@ buildPythonPackage rec {
     heif = [ pillow-heif ];
   };
 
-  nativeCheckInputs = [
-    fsspec
-    psutil
-    pytestCheckHook
-  ] ++ fsspec.optional-dependencies.github ++ lib.flatten (builtins.attrValues optional-dependencies);
+  nativeCheckInputs =
+    [
+      fsspec
+      psutil
+      pytestCheckHook
+    ]
+    ++ fsspec.optional-dependencies.github
+    ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pytestFlagsArray = [ "-m 'not needs_internet'" ];
 
   preCheck = ''
-    export IMAGEIO_USERDIR="$TMP"
-    export HOME=$TMPDIR
+    export IMAGEIO_USERDIR=$(mktemp -d)
+    export HOME=$(mktemp -d)
   '';
-
-  disabledTestPaths = [
-    # tries to fetch fixtures over the network
-    "tests/test_freeimage.py"
-    "tests/test_pillow.py"
-    "tests/test_spe.py"
-    "tests/test_swf.py"
-  ];
-
-  disabledTests = lib.optionals stdenv.isDarwin [
-    # Segmentation fault
-    "test_bayer_write"
-    # RuntimeError: No valid H.264 encoder was found with the ffmpeg installation
-    "test_writer_file_properly_closed"
-    "test_writer_pixelformat_size_verbose"
-    "test_writer_ffmpeg_params"
-    "test_reverse_read"
-  ];
 
   meta = {
     description = "Library for reading and writing a wide range of image, video, scientific, and volumetric data formats";
     homepage = "https://imageio.readthedocs.io";
-    changelog = "https://github.com/imageio/imageio/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/imageio/imageio/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ Luflosi ];
   };

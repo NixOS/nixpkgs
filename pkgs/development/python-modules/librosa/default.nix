@@ -8,7 +8,7 @@
   # build-system
   setuptools,
 
-  # runtime
+  # dependencies
   audioread,
   decorator,
   joblib,
@@ -41,12 +41,12 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "librosa";
     repo = "librosa";
-    rev = "refs/tags/${version}";
+    tag = version;
     fetchSubmodules = true; # for test data
     hash = "sha256-0FbKVAFWmcFTW2dR27nif6hPZeIxFWYF1gTm4BEJZ/Q=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   patches = [
     (fetchpatch2 {
@@ -55,6 +55,13 @@ buildPythonPackage rec {
       url = "https://github.com/librosa/librosa/commit/d0a12c87cdff715ffb8ac1c7383bba1031aa71e4.patch";
       hash = "sha256-NHuGo4U1FRikb5OIkycQBvuZ+0OdG/VykTcuhXkLUug=";
     })
+    # Fix numpy2 test incompatibilities
+    # TODO: remove when updating to the next release
+    (fetchpatch2 {
+      name = "numpy2-support-tests";
+      url = "https://github.com/librosa/librosa/commit/7eb0a09e703a72a5979049ec546a522c70285aff.patch";
+      hash = "sha256-m9UpSDKOAr7qzTtahVQktu259cp8QDYjDChpQV0xuY0=";
+    })
   ];
 
   postPatch = ''
@@ -62,7 +69,7 @@ buildPythonPackage rec {
       --replace-fail "--cov-report term-missing --cov librosa --cov-report=xml " ""
   '';
 
-  propagatedBuildInputs = [
+  dependencies = [
     audioread
     decorator
     joblib
@@ -78,7 +85,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  passthru.optional-dependencies.matplotlib = [ matplotlib ];
+  optional-dependencies.matplotlib = [ matplotlib ];
 
   # check that import works, this allows to capture errors like https://github.com/librosa/librosa/issues/1160
   pythonImportsCheck = [ "librosa" ];
@@ -90,10 +97,10 @@ buildPythonPackage rec {
     pytestCheckHook
     resampy
     samplerate
-  ] ++ passthru.optional-dependencies.matplotlib;
+  ] ++ optional-dependencies.matplotlib;
 
   preCheck = ''
-    export HOME=$TMPDIR
+    export HOME=$(mktemp -d)
   '';
 
   disabledTests =
@@ -106,7 +113,7 @@ buildPythonPackage rec {
       "test_cite_badversion"
       "test_cite_unreleased"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # crashing the python interpreter
       "test_unknown_time_unit"
       "test_unknown_wavaxis"
@@ -117,13 +124,19 @@ buildPythonPackage rec {
       "test_unknown_axis"
       "test_axis_bound_warning"
       "test_auto_aspect"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+      # Flaky (numerical comparison fails)
+      "test_istft_multi"
+      "test_pitch_shift_multi"
+      "test_time_stretch_multi"
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for audio and music analysis";
     homepage = "https://github.com/librosa/librosa";
     changelog = "https://github.com/librosa/librosa/releases/tag/${version}";
-    license = licenses.isc;
-    maintainers = with maintainers; [ GuillaumeDesforges ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ GuillaumeDesforges ];
   };
 }

@@ -56,7 +56,7 @@ let
           --replace "package.metadata.maturin" "broken"
       '';
 
-      buildInputs = lib.optionals stdenv.isDarwin [ libiconv ] ++ extraBuildInputs;
+      buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ] ++ extraBuildInputs;
 
       inherit buildAndTestSubdir;
 

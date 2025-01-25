@@ -1,11 +1,12 @@
-{ lib
-, fetchPypi
-, fetchpatch
-, callPackage
-, runCommand
-, python3
-, encryptionSupport ? true
-, sqliteSupport ? true
+{
+  lib,
+  fetchPypi,
+  fetchpatch,
+  callPackage,
+  runCommand,
+  python3,
+  encryptionSupport ? true,
+  sqliteSupport ? true,
 }:
 
 let
@@ -52,33 +53,35 @@ let
       })
     ];
 
-    propagatedBuildInputs = with python.pkgs; [
-      # requirements.txt
-      (mautrix.override { withOlm = encryptionSupport; })
-      aiohttp
-      yarl
-      asyncpg
-      aiosqlite
-      commonmark
-      ruamel-yaml
-      attrs
-      bcrypt
-      packaging
-      click
-      colorama
-      questionary
-      jinja2
-      setuptools
-    ]
-    # optional-requirements.txt
-    ++ lib.optionals encryptionSupport [
-      python-olm
-      pycryptodome
-      unpaddedbase64
-    ]
-    ++ lib.optionals sqliteSupport [
-      sqlalchemy
-    ];
+    propagatedBuildInputs =
+      with python.pkgs;
+      [
+        # requirements.txt
+        (mautrix.override { withOlm = encryptionSupport; })
+        aiohttp
+        yarl
+        asyncpg
+        aiosqlite
+        commonmark
+        ruamel-yaml
+        attrs
+        bcrypt
+        packaging
+        click
+        colorama
+        questionary
+        jinja2
+        setuptools
+      ]
+      # optional-requirements.txt
+      ++ lib.optionals encryptionSupport [
+        python-olm
+        pycryptodome
+        unpaddedbase64
+      ]
+      ++ lib.optionals sqliteSupport [
+        sqlalchemy
+      ];
 
     # used for plugin tests
     propagatedNativeBuildInputs = with python.pkgs; [
@@ -97,34 +100,35 @@ let
       "maubot"
     ];
 
-    passthru = let
-      wrapper = callPackage ./wrapper.nix {
-        unwrapped = maubot;
-        python3 = python;
+    passthru =
+      let
+        wrapper = callPackage ./wrapper.nix {
+          unwrapped = maubot;
+          python3 = python;
+        };
+      in
+      {
+        tests = {
+          simple = runCommand "${pname}-tests" { } ''
+            ${maubot}/bin/mbc --help > $out
+          '';
+        };
+
+        inherit python;
+
+        plugins = callPackage ./plugins {
+          maubot = maubot;
+          python3 = python;
+        };
+
+        withPythonPackages = pythonPackages: wrapper { inherit pythonPackages; };
+
+        # This adds the plugins to lib/maubot-plugins
+        withPlugins = plugins: wrapper { inherit plugins; };
+
+        # This changes example-config.yaml in module directory
+        withBaseConfig = baseConfig: wrapper { inherit baseConfig; };
       };
-    in
-    {
-      tests = {
-        simple = runCommand "${pname}-tests" { } ''
-          ${maubot}/bin/mbc --help > $out
-        '';
-      };
-
-      inherit python;
-
-      plugins = callPackage ./plugins {
-        maubot = maubot;
-        python3 = python;
-      };
-
-      withPythonPackages = pythonPackages: wrapper { inherit pythonPackages; };
-
-      # This adds the plugins to lib/maubot-plugins
-      withPlugins = plugins: wrapper { inherit plugins; };
-
-      # This changes example-config.yaml in module directory
-      withBaseConfig = baseConfig: wrapper { inherit baseConfig; };
-    };
 
     meta = with lib; {
       description = "Plugin-based Matrix bot system written in Python";

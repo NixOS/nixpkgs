@@ -12,7 +12,7 @@
 
 { lib, ncurses, graphviz, lua, fetchzip,
   mkCoqDerivation, withDoc ? false, single ? false,
-  coq, hierarchy-builder, version ? null }@args:
+  coq, hierarchy-builder, stdlib, version ? null }@args:
 
 let
   repo  = "math-comp";
@@ -20,6 +20,7 @@ let
   withDoc = single && (args.withDoc or false);
   defaultVersion = let inherit (lib.versions) range; in
     lib.switch coq.coq-version [
+      { case = range "8.19" "8.20"; out = "2.3.0"; }
       { case = range "8.17" "8.20"; out = "2.2.0"; }
       { case = range "8.17" "8.18"; out = "2.1.0"; }
       { case = range "8.17" "8.18"; out = "2.0.0"; }
@@ -39,6 +40,7 @@ let
       { case = range "8.5" "8.7";   out = "1.6.4";  }
     ] null;
   release = {
+    "2.3.0".sha256  = "sha256-wa6OBig8rhAT4iwupSylyCAMhO69rADa0MQIX5zzL+Q=";
     "2.2.0".sha256  = "sha256-SPyWSI5kIP5w7VpgnQ4vnK56yEuWnJylNQOT7M77yoQ=";
     "2.1.0".sha256  = "sha256-XDLx0BIkVRkSJ4sGCIE51j3rtkSGemNTs/cdVmTvxqo=";
     "2.0.0".sha256  = "sha256-dpOmrHYUXBBS9kmmz7puzufxlbNpIZofpcTvJFLG5DI=";
@@ -65,7 +67,7 @@ let
 
   mathcomp_ = package: let
       mathcomp-deps = lib.optionals (package != "single") (map mathcomp_ (lib.head (lib.splitList (lib.pred.equal package) packages)));
-      pkgpath = if package == "single" then "mathcomp" else "mathcomp/${package}";
+      pkgpath = if package == "single" then "." else package;
       pname = if package == "single" then "mathcomp" else "mathcomp-${package}";
       pkgallMake = ''
         echo "all.v"  > Make
@@ -78,7 +80,7 @@ let
         mlPlugin = lib.versions.isLe "8.6" coq.coq-version;
         nativeBuildInputs = lib.optionals withDoc [ graphviz lua ];
         buildInputs = [ ncurses ];
-        propagatedBuildInputs = mathcomp-deps;
+        propagatedBuildInputs = [ stdlib ] ++ mathcomp-deps;
 
         buildFlags = lib.optional withDoc "doc";
 
@@ -90,6 +92,8 @@ let
           then patchShebangs etc/buildlibgraph
           fi
         '' + ''
+          # handle mathcomp < 2.4.0 which had an extra base mathcomp directory
+          test -d mathcomp && cd mathcomp
           cd ${pkgpath}
         '' + lib.optionalString (package == "all") pkgallMake;
 

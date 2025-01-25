@@ -1,23 +1,26 @@
-{ self
-, lib
-, testers
-, fetchzip
-, fetchurl
-, writers
-, symlinkJoin
-, jq
-, prom2json
+{
+  self,
+  lib,
+  testers,
+  fetchzip,
+  fetchurl,
+  writers,
+  symlinkJoin,
+  jq,
+  prom2json,
 }:
 let
-  common-config = { config, ... }: {
-    imports = [ ./module.nix ];
-    services.local-ai = {
-      enable = true;
-      package = self;
-      threads = config.virtualisation.cores;
-      logLevel = "debug";
+  common-config =
+    { config, ... }:
+    {
+      imports = [ ./module.nix ];
+      services.local-ai = {
+        enable = true;
+        package = self;
+        threads = config.virtualisation.cores;
+        logLevel = "debug";
+      };
     };
-  };
 
   inherit (self.lib) genModels;
 in
@@ -30,7 +33,10 @@ in
 
   health = testers.runNixOSTest {
     name = self.name + "-health";
-    nodes.machine = common-config;
+    nodes.machine = {
+      imports = [ common-config ];
+      virtualisation.memorySize = 2048;
+    };
     testScript =
       let
         port = "8080";
@@ -44,17 +50,18 @@ in
       '';
   };
 
-  # https://localai.io/features/embeddings/#bert-embeddings
-  bert =
+}
+// lib.optionalAttrs (!self.features.with_cublas && !self.features.with_clblas) {
+  # https://localai.io/features/embeddings/#llamacpp-embeddings
+  llamacpp-embeddings =
     let
       model = "embedding";
       model-configs.${model} = {
-        # Note: q4_0 and q4_1 models can not be loaded
         parameters.model = fetchurl {
-          url = "https://huggingface.co/skeskinen/ggml/resolve/main/all-MiniLM-L6-v2/ggml-model-f16.bin";
-          hash = "sha256-nBlbJFOk/vYKT2vjqIo5IRNmIU32SYpP5IhcniIxT1A=";
+          url = "https://huggingface.co/hugging-quants/Llama-3.2-1B-Instruct-Q4_K_M-GGUF/resolve/main/llama-3.2-1b-instruct-q4_k_m.gguf";
+          sha256 = "1d0e9419ec4e12aef73ccf4ffd122703e94c48344a96bc7c5f0f2772c2152ce3";
         };
-        backend = "bert-embeddings";
+        backend = "llama-cpp";
         embeddings = true;
       };
 
@@ -66,14 +73,16 @@ in
       };
     in
     testers.runNixOSTest {
-      name = self.name + "-bert";
+      name = self.name + "-llamacpp-embeddings";
       nodes.machine = {
         imports = [ common-config ];
         virtualisation.cores = 2;
-        virtualisation.memorySize = 2048;
+        virtualisation.memorySize = 4096;
         services.local-ai.models = models;
       };
-      passthru = { inherit models requests; };
+      passthru = {
+        inherit models requests;
+      };
       testScript =
         let
           port = "8080";
@@ -93,7 +102,6 @@ in
         '';
     };
 
-} // lib.optionalAttrs (!self.features.with_cublas && !self.features.with_clblas) {
   # https://localai.io/docs/getting-started/manual/
   llama =
     let
@@ -107,7 +115,7 @@ in
           # https://ai.meta.com/blog/meta-llama-3-1/
           model = fetchurl {
             url = "https://huggingface.co/lmstudio-community/Meta-Llama-3.1-8B-Instruct-GGUF/resolve/main/Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf";
-            hash = "sha256-8r4+GiOcEsnz8BqWKxH7KAf4Ay/bY7ClUC6kLd71XkQ=";
+            sha256 = "f2be3e1a239c12c9f3f01a962b11fb2807f8032fdb63b0a5502ea42ddef55e44";
           };
           # defaults from:
           # https://deepinfra.com/meta-llama/Meta-Llama-3.1-8B-Instruct
@@ -146,7 +154,12 @@ in
         # https://localai.io/features/text-generation/#chat-completions
         chat-completions = {
           inherit model;
-          messages = [{ role = "user"; content = "1 + 2 = ?"; }];
+          messages = [
+            {
+              role = "user";
+              content = "1 + 2 = ?";
+            }
+          ];
         };
         # https://localai.io/features/text-generation/#edit-completions
         edit-completions = {
@@ -172,7 +185,9 @@ in
         # TODO: Add test case parallel requests
         services.local-ai.parallelRequests = 2;
       };
-      passthru = { inherit models requests; };
+      passthru = {
+        inherit models requests;
+      };
       testScript =
         let
           port = "8080";
@@ -196,80 +211,88 @@ in
           machine.succeed("curl -f http://localhost:${port}/v1/completions --json @${writers.writeJSON "request-completions.json" requests.completions} --output completions.json")
           machine.copy_from_vm("completions.json")
           machine.succeed("${jq}/bin/jq --exit-status 'debug | .object ==\"text_completion\"' completions.json")
-          machine.succeed("${jq}/bin/jq --exit-status '.usage.completion_tokens | debug == ${toString model-configs.${model}.parameters.max_tokens}' completions.json")
+          machine.succeed("${jq}/bin/jq --exit-status '.usage.completion_tokens | debug == ${
+            toString model-configs.${model}.parameters.max_tokens
+          }' completions.json")
 
           machine.succeed("${prom2json}/bin/prom2json http://localhost:${port}/metrics > metrics.json")
           machine.copy_from_vm("metrics.json")
         '';
     };
 
-} // lib.optionalAttrs (self.features.with_tts && !self.features.with_cublas && !self.features.with_clblas) {
-  # https://localai.io/features/text-to-audio/#piper
-  tts =
-    let
-      model-stt = "whisper-en";
-      model-configs.${model-stt} = {
-        backend = "whisper";
-        parameters.model = fetchurl {
-          url = "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-tiny.en-q5_1.bin";
-          hash = "sha256-x3xXZvHO8JtrfUfyG1Rsvd1BV4hrO11tT3CekeZsfCs=";
-        };
-      };
-
-      model-tts = "piper-en";
-      model-configs.${model-tts} = {
-        backend = "piper";
-        parameters.model = "en-us-danny-low.onnx";
-      };
-
-      models =
-        let
-          models = genModels model-configs;
-        in
-        symlinkJoin {
-          inherit (models) name;
-          paths = [
-            models
-            (fetchzip {
-              url = "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-en-us-danny-low.tar.gz";
-              hash = "sha256-5wf+6H5HeQY0qgdqnAG1vSqtjIFM9lXH53OgouuPm0M=";
-              stripRoot = false;
-            })
-          ];
-        };
-
-      requests.request = {
-        model = model-tts;
-        input = "Hello, how are you?";
-      };
-    in
-    testers.runNixOSTest {
-      name = self.name + "-tts";
-      nodes.machine = {
-        imports = [ common-config ];
-        virtualisation.cores = 2;
-        services.local-ai.models = models;
-      };
-      passthru = { inherit models requests; };
-      testScript =
-        let
-          port = "8080";
-        in
-        ''
-          machine.wait_for_open_port(${port})
-          machine.succeed("curl -f http://localhost:${port}/readyz")
-          machine.succeed("curl -f http://localhost:${port}/v1/models --output models.json")
-          machine.succeed("${jq}/bin/jq --exit-status 'debug' models.json")
-
-          machine.succeed("curl -f http://localhost:${port}/tts --json @${writers.writeJSON "request.json" requests.request} --output out.wav")
-          machine.copy_from_vm("out.wav")
-
-          machine.succeed("curl -f http://localhost:${port}/v1/audio/transcriptions --header 'Content-Type: multipart/form-data' --form file=@out.wav --form model=${model-stt} --output transcription.json")
-          machine.copy_from_vm("transcription.json")
-          machine.succeed("${jq}/bin/jq --exit-status 'debug | .segments | first.text == \"${requests.request.input}\"' transcription.json")
-
-          machine.succeed("${prom2json}/bin/prom2json http://localhost:${port}/metrics > metrics.json")
-          machine.copy_from_vm("metrics.json")
-        '';
-    };
 }
+//
+  lib.optionalAttrs
+    (self.features.with_tts && !self.features.with_cublas && !self.features.with_clblas)
+    {
+      # https://localai.io/features/text-to-audio/#piper
+      tts =
+        let
+          model-stt = "whisper-en";
+          model-configs.${model-stt} = {
+            backend = "whisper";
+            parameters.model = fetchurl {
+              url = "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-tiny.en-q5_1.bin";
+              hash = "sha256-x3xXZvHO8JtrfUfyG1Rsvd1BV4hrO11tT3CekeZsfCs=";
+            };
+          };
+
+          model-tts = "piper-en";
+          model-configs.${model-tts} = {
+            backend = "piper";
+            parameters.model = "en-us-danny-low.onnx";
+          };
+
+          models =
+            let
+              models = genModels model-configs;
+            in
+            symlinkJoin {
+              inherit (models) name;
+              paths = [
+                models
+                (fetchzip {
+                  url = "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-en-us-danny-low.tar.gz";
+                  hash = "sha256-5wf+6H5HeQY0qgdqnAG1vSqtjIFM9lXH53OgouuPm0M=";
+                  stripRoot = false;
+                })
+              ];
+            };
+
+          requests.request = {
+            model = model-tts;
+            input = "Hello, how are you?";
+          };
+        in
+        testers.runNixOSTest {
+          name = self.name + "-tts";
+          nodes.machine = {
+            imports = [ common-config ];
+            virtualisation.cores = 2;
+            services.local-ai.models = models;
+          };
+          passthru = {
+            inherit models requests;
+          };
+          testScript =
+            let
+              port = "8080";
+            in
+            ''
+              machine.wait_for_open_port(${port})
+              machine.succeed("curl -f http://localhost:${port}/readyz")
+              machine.succeed("curl -f http://localhost:${port}/v1/models --output models.json")
+              machine.succeed("${jq}/bin/jq --exit-status 'debug' models.json")
+
+              machine.succeed("curl -f http://localhost:${port}/tts --json @${writers.writeJSON "request.json" requests.request} --output out.wav")
+              machine.copy_from_vm("out.wav")
+
+              machine.succeed("curl -f http://localhost:${port}/v1/audio/transcriptions --header 'Content-Type: multipart/form-data' --form file=@out.wav --form model=${model-stt} --output transcription.json")
+              machine.copy_from_vm("transcription.json")
+              machine.succeed("${jq}/bin/jq --exit-status 'debug | .segments | first.text == \"${requests.request.input}\"' transcription.json")
+
+              machine.succeed("${prom2json}/bin/prom2json http://localhost:${port}/metrics > metrics.json")
+              machine.copy_from_vm("metrics.json")
+            '';
+        };
+    }

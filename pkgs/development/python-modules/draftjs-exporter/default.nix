@@ -16,11 +16,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     repo = "draftjs_exporter";
     owner = "springload";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-4MmCVRx350p6N9XqTZSo8ROI/OJ0s4aKSYH9+Oxgvf4=";
   };
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     lxml = [ lxml ];
     html5lib = [
       beautifulsoup4
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = passthru.optional-dependencies.lxml ++ passthru.optional-dependencies.html5lib;
+  checkInputs = optional-dependencies.lxml ++ optional-dependencies.html5lib;
 
   checkPhase = ''
     # 2 tests in this file randomly fail because they depend on the order of

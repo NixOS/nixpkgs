@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, IOKit }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  IOKit,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "tab-rs";
@@ -13,7 +19,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-56gy9AH3i4OSvExMuR3n/2hF5pJgbn5JJpxZLXKfu2w=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ IOKit ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ IOKit ];
 
   # many tests are failing
   doCheck = false;
@@ -24,6 +30,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     maintainers = [ ];
     mainProgram = "tab";
-    broken = (stdenv.isDarwin && stdenv.isAarch64); # Added 2023-11-13
+    broken = (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64); # Added 2023-11-13
   };
 }

@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, python3
-, openssl
-, libiconv
-, cargo
-, rustPlatform
-, rustc
-, nixosTests
-, callPackage
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
+  openssl,
+  libiconv,
+  cargo,
+  rustPlatform,
+  rustc,
+  nixosTests,
+  callPackage,
 }:
 
 let
@@ -17,20 +18,20 @@ let
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "1.114.0";
+  version = "1.122.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "synapse";
     rev = "v${version}";
-    hash = "sha256-AvUc6vE2gjsUEbRLaexDbvEPwJio7W3YMyN3fJvr4c0=";
+    hash = "sha256-pucGVKEjQNihlHmFxhgJSiX7sxpQYrCpSwhZByBtbe8=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-cAGTEi7UwNVfTzckWBpjxfEMWXZRZDdkXIhx/HjAiTg=";
+    hash = "sha256-AZi3QIPHqfxfCGcZAAD0rzmzLH6tUxhuq+Tc38qdUKc=";
   };
 
   postPatch = ''
@@ -46,6 +47,10 @@ python3.pkgs.buildPythonApplication rec {
     # Don't force pillow to be 10.0.1 because we already have patched it, and
     # we don't use the pillow wheels.
     sed -i 's/Pillow = ".*"/Pillow = ">=5.4.0"/' pyproject.toml
+
+    # https://github.com/element-hq/synapse/pull/17878#issuecomment-2575412821
+    substituteInPlace tests/storage/databases/main/test_events_worker.py \
+      --replace-fail "def test_recovery" "def no_test_recovery"
   '';
 
   nativeBuildInputs = with python3.pkgs; [
@@ -56,52 +61,60 @@ python3.pkgs.buildPythonApplication rec {
     rustc
   ];
 
-  buildInputs = [
-    openssl
-  ] ++ lib.optionals stdenv.isDarwin [
-    libiconv
-  ];
-
-  propagatedBuildInputs = with python3.pkgs; [
-    attrs
-    bcrypt
-    bleach
-    canonicaljson
-    cryptography
-    ijson
-    immutabledict
-    jinja2
-    jsonschema
-    matrix-common
-    msgpack
-    python-multipart
-    netaddr
-    packaging
-    phonenumbers
-    pillow
-    prometheus-client
-    pyasn1
-    pyasn1-modules
-    pydantic
-    pymacaroons
-    pyopenssl
-    pyyaml
-    service-identity
-    signedjson
-    sortedcontainers
-    treq
-    twisted
-    typing-extensions
-    unpaddedbase64
-  ]
-  ++ twisted.optional-dependencies.tls;
-
-  passthru.optional-dependencies = with python3.pkgs; {
-    postgres = if isPyPy then [
-      psycopg2cffi
-    ] else [
-      psycopg2
+  buildInputs =
+    [
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libiconv
     ];
+
+  propagatedBuildInputs =
+    with python3.pkgs;
+    [
+      attrs
+      bcrypt
+      bleach
+      canonicaljson
+      cryptography
+      ijson
+      immutabledict
+      jinja2
+      jsonschema
+      matrix-common
+      msgpack
+      python-multipart
+      netaddr
+      packaging
+      phonenumbers
+      pillow
+      prometheus-client
+      pyasn1
+      pyasn1-modules
+      pydantic
+      pymacaroons
+      pyopenssl
+      pyyaml
+      service-identity
+      signedjson
+      sortedcontainers
+      treq
+      twisted
+      typing-extensions
+      unpaddedbase64
+    ]
+    ++ twisted.optional-dependencies.tls;
+
+  optional-dependencies = with python3.pkgs; {
+    postgres =
+      if isPyPy then
+        [
+          psycopg2cffi
+        ]
+      else
+        [
+          psycopg2
+        ];
     saml2 = [
       pysaml2
     ];
@@ -132,15 +145,17 @@ python3.pkgs.buildPythonApplication rec {
     ];
   };
 
-  nativeCheckInputs = [
-    openssl
-  ] ++ (with python3.pkgs; [
-    mock
-    parameterized
-  ])
-  ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  nativeCheckInputs =
+    [
+      openssl
+    ]
+    ++ (with python3.pkgs; [
+      mock
+      parameterized
+    ])
+    ++ builtins.filter (p: !p.meta.broken) (lib.flatten (lib.attrValues optional-dependencies));
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   checkPhase = ''
     runHook preCheck

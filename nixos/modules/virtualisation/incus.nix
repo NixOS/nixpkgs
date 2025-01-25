@@ -81,43 +81,50 @@ let
     fdSize2MB = true;
   };
   ovmf-prefix = if pkgs.stdenv.hostPlatform.isAarch64 then "AAVMF" else "OVMF";
-  ovmf = pkgs.linkFarm "incus-ovmf" [
-    # 2MB must remain the default or existing VMs will fail to boot. New VMs will prefer 4MB
-    {
-      name = "OVMF_CODE.fd";
-      path = "${OVMF2MB.fd}/FV/${ovmf-prefix}_CODE.fd";
-    }
-    {
-      name = "OVMF_VARS.fd";
-      path = "${OVMF2MB.fd}/FV/${ovmf-prefix}_VARS.fd";
-    }
-    {
-      name = "OVMF_VARS.ms.fd";
-      path = "${OVMF2MB.fd}/FV/${ovmf-prefix}_VARS.fd";
-    }
+  ovmf = pkgs.linkFarm "incus-ovmf" (
+    [
+      # 2MB must remain the default or existing VMs will fail to boot. New VMs will prefer 4MB
+      {
+        name = "OVMF_CODE.fd";
+        path = "${OVMF2MB.fd}/FV/${ovmf-prefix}_CODE.fd";
+      }
+      {
+        name = "OVMF_VARS.fd";
+        path = "${OVMF2MB.fd}/FV/${ovmf-prefix}_VARS.fd";
+      }
+      {
+        name = "OVMF_VARS.ms.fd";
+        path = "${OVMF2MB.fd}/FV/${ovmf-prefix}_VARS.fd";
+      }
 
-    {
-      name = "OVMF_CODE.4MB.fd";
-      path = "${pkgs.OVMFFull.fd}/FV/${ovmf-prefix}_CODE.fd";
-    }
-    {
-      name = "OVMF_VARS.4MB.fd";
-      path = "${pkgs.OVMFFull.fd}/FV/${ovmf-prefix}_VARS.fd";
-    }
-    {
-      name = "OVMF_VARS.4MB.ms.fd";
-      path = "${pkgs.OVMFFull.fd}/FV/${ovmf-prefix}_VARS.fd";
-    }
-  ];
+      {
+        name = "OVMF_CODE.4MB.fd";
+        path = "${pkgs.OVMFFull.fd}/FV/${ovmf-prefix}_CODE.fd";
+      }
+      {
+        name = "OVMF_VARS.4MB.fd";
+        path = "${pkgs.OVMFFull.fd}/FV/${ovmf-prefix}_VARS.fd";
+      }
+      {
+        name = "OVMF_VARS.4MB.ms.fd";
+        path = "${pkgs.OVMFFull.fd}/FV/${ovmf-prefix}_VARS.fd";
+      }
+    ]
+    ++ lib.optionals pkgs.stdenv.hostPlatform.isx86_64 [
+      {
+        name = "seabios.bin";
+        path = "${pkgs.seabios-qemu}/share/seabios/bios.bin";
+      }
+    ]
+  );
 
   environment = lib.mkMerge [
     {
+      INCUS_EDK2_PATH = ovmf;
       INCUS_LXC_TEMPLATE_CONFIG = "${pkgs.lxcfs}/share/lxc/config";
       INCUS_USBIDS_PATH = "${pkgs.hwdata}/share/hwdata/usb.ids";
       PATH = lib.mkForce serverBinPath;
     }
-    (lib.mkIf (lib.versionOlder cfg.package.version "6.3.0") { INCUS_OVMF_PATH = ovmf; })
-    (lib.mkIf (lib.versionAtLeast cfg.package.version "6.3.0") { INCUS_EDK2_PATH = ovmf; })
     (lib.mkIf (cfg.ui.enable) { "INCUS_UI" = cfg.ui.package; })
   ];
 
@@ -154,7 +161,10 @@ in
 
         Users in the "incus-admin" group can interact with
         the daemon (e.g. to start or stop containers) using the
-        {command}`incus` command line tool, among others
+        {command}`incus` command line tool, among others.
+        Users in the "incus" group can also interact with
+        the daemon, but with lower permissions
+        (i.e. administrative operations are forbidden).
       '';
 
       package = lib.mkPackageOption pkgs "incus-lts" { };
@@ -360,6 +370,27 @@ in
       };
     };
 
+    systemd.services.incus-user = {
+      description = "Incus Container and Virtual Machine Management User Daemon";
+
+      inherit environment;
+
+      after = [
+        "incus.service"
+        "incus-user.socket"
+      ];
+
+      requires = [
+        "incus-user.socket"
+      ];
+
+      serviceConfig = {
+        ExecStart = "${cfg.package}/bin/incus-user --group incus";
+
+        Restart = "on-failure";
+      };
+    };
+
     systemd.services.incus-startup = lib.mkIf cfg.softDaemonRestart {
       description = "Incus Instances Startup/Shutdown";
 
@@ -392,6 +423,17 @@ in
       };
     };
 
+    systemd.sockets.incus-user = {
+      description = "Incus user UNIX socket";
+      wantedBy = [ "sockets.target" ];
+
+      socketConfig = {
+        ListenStream = "/var/lib/incus/unix.socket.user";
+        SocketMode = "0660";
+        SocketGroup = "incus";
+      };
+    };
+
     systemd.services.incus-preseed = lib.mkIf (cfg.preseed != null) {
       description = "Incus initialization with preseed file";
 
@@ -410,6 +452,7 @@ in
       };
     };
 
+    users.groups.incus = { };
     users.groups.incus-admin = { };
 
     users.users.root = {

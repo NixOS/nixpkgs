@@ -8,14 +8,14 @@
   wrapGAppsHook3,
   cargo,
   rustc,
-  cargo-tauri,
+  cargo-tauri_1,
   pkg-config,
   esbuild,
   buildGoModule,
   libayatana-appindicator,
   gtk3,
-  webkitgtk,
-  libsoup,
+  webkitgtk_4_0,
+  libsoup_2_4,
   openssl,
   xdotool,
 }:
@@ -25,13 +25,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "pot";
-  version = "3.0.5";
+  version = "3.0.6";
 
   src = fetchFromGitHub {
     owner = "pot-app";
     repo = "pot-desktop";
     rev = finalAttrs.version;
-    hash = "sha256-Y0/N5xunEXOG+FuZE23xsSwFd6PL1XClV5UIckTYNPs=";
+    hash = "sha256-PUXZT1kiInM/CXUoRko/5qlrRurGpQ4ym5YMTgFwuxE=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src-tauri";
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-AmMV8Nrn+zH/9bDkFX3Mx5xIQjkoXR8SzkdJRXkxTbA=";
+    hash = "sha256-iYQNGRWqXYBU+WIH/Xm8qndgOQ6RKYCtAyi93kb7xrQ=";
   };
 
   pnpmRoot = "..";
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     lockFile = ./Cargo.lock;
     outputHashes = {
       # All other crates in the same workspace reuse this hash.
-      "tauri-plugin-autostart-0.0.0" = "sha256-fgJvoe3rKom2DdXXgd5rx7kzaWL/uvvye8jfL2SNhrM=";
+      "tauri-plugin-autostart-0.0.0" = "sha256-rWk9Qz1XmByqPRIgR+f12743uYvnEGTHno9RrxmT8JE=";
     };
   };
 
@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     rustPlatform.cargoSetupHook
     cargo
     rustc
-    cargo-tauri
+    cargo-tauri_1.hook
     nodejs
     pnpm.configHook
     wrapGAppsHook3
@@ -69,10 +69,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     gtk3
-    libsoup
+    libsoup_2_4
     libayatana-appindicator
     openssl
-    webkitgtk
+    webkitgtk_4_0
     xdotool
   ];
 
@@ -101,21 +101,12 @@ stdenv.mkDerivation (finalAttrs: {
     chmod +w ..
   '';
 
-  preBuild = ''
-    # Use cargo-tauri from nixpkgs instead of pnpm tauri from npm
-    cargo tauri build -b deb
-  '';
-
-  preInstall = ''
-    mv target/release/bundle/deb/*/data/usr/ $out
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "Cross-platform translation software";
     mainProgram = "pot";
-    homepage = "https://pot.pylogmon.com";
-    platforms = platforms.linux;
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ linsui ];
+    homepage = "https://pot-app.com";
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ linsui ];
   };
 })

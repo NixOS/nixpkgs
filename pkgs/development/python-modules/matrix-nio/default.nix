@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  poetry-core,
+  setuptools,
 
   # dependencies
   aiofiles,
@@ -44,14 +44,14 @@
 
 buildPythonPackage rec {
   pname = "matrix-nio";
-  version = "0.25.0";
+  version = "0.25.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "poljar";
     repo = "matrix-nio";
-    rev = "refs/tags/${version}";
-    hash = "sha256-wk1UjnazBdK4BCWXRG5Bn9Rasrk+yy3qqideS8tEAk8=";
+    tag = version;
+    hash = "sha256-ZNYK5D4aDKE+N62A/hPmTphir+UsWvj3BW2EPG1z+R4=";
   };
 
   patches = [
@@ -59,7 +59,7 @@ buildPythonPackage rec {
     ./allow-tests-without-olm.patch
   ];
 
-  build-system = [ poetry-core ];
+  build-system = [ setuptools ];
 
   dependencies = [
     aiofiles

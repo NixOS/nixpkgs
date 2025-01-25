@@ -42,18 +42,18 @@
   withDBengine ? true,
   withDebug ? false,
   withEbpf ? false,
-  withIpmi ? (stdenv.isLinux),
-  withNetfilter ? (stdenv.isLinux),
-  withNetworkViewer ? (stdenv.isLinux),
+  withIpmi ? (stdenv.hostPlatform.isLinux),
+  withNetfilter ? (stdenv.hostPlatform.isLinux),
+  withNetworkViewer ? (stdenv.hostPlatform.isLinux),
   withSsl ? true,
-  withSystemdJournal ? (stdenv.isLinux),
+  withSystemdJournal ? (stdenv.hostPlatform.isLinux),
   zlib,
 }:
 let
-  stdenv' = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+  stdenv' = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
 in
 stdenv'.mkDerivation (finalAttrs: {
-  version = "1.47.1";
+  version = "1.47.5";
   pname = "netdata";
 
   src = fetchFromGitHub {
@@ -62,10 +62,10 @@ stdenv'.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash =
       if withCloudUi then
-        "sha256-/iXmIjWpZ0s/LELZM7rYYQ9cjLNdfdisyOvDyLddSY4="
+        "sha256-+cPYwjxg/+A5bNa517zg9xKEjUa8uPM9WD67tToPH5o="
       # we delete the v2 GUI after fetching
       else
-        "sha256-pAqxxsWYgqbmF6wFBfTCYYc3x/Ufyz2Xs4bwB1ToHjo=";
+        "sha256-0aiBUkDymmdIT/u1y2PG30QYAvb8Zc4i8ZgjOtlzt+A=";
     fetchSubmodules = true;
 
     # Remove v2 dashboard distributed under NCUL1. Make sure an empty
@@ -96,7 +96,7 @@ stdenv'.mkDerivation (finalAttrs: {
       zlib
       libyaml
     ]
-    ++ lib.optionals stdenv.isDarwin (
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
       with darwin.apple_sdk.frameworks;
       [
         CoreFoundation
@@ -104,7 +104,7 @@ stdenv'.mkDerivation (finalAttrs: {
         libossp_uuid
       ]
     )
-    ++ lib.optionals (stdenv.isLinux) [
+    ++ lib.optionals (stdenv.hostPlatform.isLinux) [
       libcap
       libuuid
       lm_sensors
@@ -153,7 +153,7 @@ stdenv'.mkDerivation (finalAttrs: {
       # Relocate one folder above.
       mv $out/usr/* $out/
     ''
-    + lib.optionalString (stdenv.isLinux) ''
+    + lib.optionalString (stdenv.hostPlatform.isLinux) ''
       # rename this plugin so netdata will look for setuid wrapper
       mv $out/libexec/netdata/plugins.d/apps.plugin \
          $out/libexec/netdata/plugins.d/apps.plugin.org
@@ -234,6 +234,7 @@ stdenv'.mkDerivation (finalAttrs: {
     wrapProgram $out/bin/netdata-claim.sh --prefix PATH : ${lib.makeBinPath [ openssl ]}
     wrapProgram $out/libexec/netdata/plugins.d/cgroup-network-helper.sh --prefix PATH : ${lib.makeBinPath [ bash ]}
     wrapProgram $out/bin/netdatacli --set NETDATA_PIPENAME /run/netdata/ipc
+    substituteInPlace $out/lib/netdata/conf.d/go.d/sensors.conf --replace-fail '/usr/bin/sensors' '${lm_sensors}/bin/sensors'
 
     # Time to cleanup the output directory.
     unlink $out/sbin
@@ -242,7 +243,7 @@ stdenv'.mkDerivation (finalAttrs: {
     rm -rf $out/{var,usr,etc}
   '';
 
-  enableParallelBuild = true;
+  enableParallelBuilding = true;
 
   passthru = rec {
     netdata-go-modules =

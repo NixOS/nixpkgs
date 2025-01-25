@@ -12,6 +12,7 @@
   absl-py,
   google-auth-oauthlib,
   setuptools,
+  standard-imghdr,
   tensorboard-data-server,
   tensorboard-plugin-wit,
   tensorboard-plugin-profile,
@@ -23,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "tensorboard";
-  version = "2.17.0";
+  version = "2.18.0";
   format = "wheel";
   disabled = pythonOlder "3.9";
 
@@ -31,9 +32,8 @@ buildPythonPackage rec {
     inherit pname version format;
     dist = "py3";
     python = "py3";
-    hash = "sha256-hZpJmpsftooFiFiWRIZicQC3H8shZGhhxh0xhGpkePs=";
+    hash = "sha256-EHykghdF9z4q76AsUP9wqbaU8595CxHm9oL30yZ0Xqs=";
   };
-
 
   pythonRelaxDeps = [
     "google-auth-oauthlib"
@@ -48,6 +48,7 @@ buildPythonPackage rec {
     numpy
     protobuf
     setuptools
+    standard-imghdr
     tensorboard-data-server
     tensorboard-plugin-profile
     tensorboard-plugin-wit

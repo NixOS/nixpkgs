@@ -12,28 +12,28 @@
 
 buildNpmPackage rec {
   pname = "blockbench";
-  version = "4.10.4";
+  version = "4.12.0";
 
   src = fetchFromGitHub {
     owner = "JannisX11";
     repo = "blockbench";
-    rev = "v${version}";
-    hash = "sha256-TjT93nx52PxuHuW4NONTfI3G7+Dl0NFX2aKpZDEF8+8=";
+    tag = "v${version}";
+    hash = "sha256-1pIIy2ifbV05hnmBoUcMfs0KDiBQDS6opwFqj6ECTIA=";
   };
 
   nativeBuildInputs =
     [ makeWrapper ]
-    ++ lib.optionals (!stdenv.isDarwin) [
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       imagemagick # for icon resizing
       copyDesktopItems
     ];
 
-  npmDepsHash = "sha256-WkOn1bLJ9xmJdQcY6ak+hs/YW+crIXhTWA6tjMSVq9I=";
+  npmDepsHash = "sha256-ytuAyEuf4zZm1hm/RXdltjisPNsmYrVnTfL1U3ULcCw=";
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
 
   # disable code signing on Darwin
-  postConfigure = lib.optionalString stdenv.isDarwin ''
+  postConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
     export CSC_IDENTITY_AUTO_DISCOVERY=false
     sed -i "/afterSign/d" package.json
   '';
@@ -54,13 +54,13 @@ buildNpmPackage rec {
   installPhase = ''
     runHook preInstall
 
-    ${lib.optionalString stdenv.isDarwin ''
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
       mkdir -p $out/Applications
       cp -r dist/mac*/Blockbench.app $out/Applications
       makeWrapper $out/Applications/Blockbench.app/Contents/MacOS/Blockbench $out/bin/blockbench
     ''}
 
-    ${lib.optionalString (!stdenv.isDarwin) ''
+    ${lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
       mkdir -p $out/share/blockbench
       cp -r dist/*-unpacked/{locales,resources{,.pak}} $out/share/blockbench
 
@@ -71,7 +71,7 @@ buildNpmPackage rec {
 
       makeWrapper ${lib.getExe electron} $out/bin/blockbench \
           --add-flags $out/share/blockbench/resources/app.asar \
-          --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+          --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
           --inherit-argv0
     ''}
 
@@ -93,7 +93,7 @@ buildNpmPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/JannisX11/blockbench/releases/tag/${src.rev}";
+    changelog = "https://github.com/JannisX11/blockbench/releases/tag/v${version}";
     description = "Low-poly 3D modeling and animation software";
     homepage = "https://blockbench.net/";
     license = lib.licenses.gpl3Only;

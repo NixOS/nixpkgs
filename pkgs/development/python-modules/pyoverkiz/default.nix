@@ -17,16 +17,16 @@
 
 buildPythonPackage rec {
   pname = "pyoverkiz";
-  version = "1.14.1";
+  version = "1.15.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "iMicknl";
     repo = "python-overkiz-api";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-mpD8seRGZZ+1Rgg1ADFiFgYZ1JmLRNdscRwfXIK6Pr4=";
+    tag = "v${version}";
+    hash = "sha256-Oah/cTRWl1uj7M5VExDrRPwkWOSajZ2Zqh3jH90hXho=";
   };
 
   build-system = [ poetry-core ];

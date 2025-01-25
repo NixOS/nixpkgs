@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "nice-go";
-  version = "0.3.8";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "IceBotYT";
     repo = "nice-go";
-    rev = "refs/tags/${version}";
-    hash = "sha256-d035AA8N2yjkUJh2TBqkp2RLvH89cJXC4mFrny1sJ6k=";
+    tag = version;
+    hash = "sha256-u4AhFYhRYwcAGUrXhUgP+SgR0aoric864qSyWhc7Gmo=";
   };
 
   build-system = [ poetry-core ];
@@ -50,7 +50,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/IceBotYT/nice-go/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/IceBotYT/nice-go/blob/${src.tag}/CHANGELOG.md";
     description = "Control various Nice access control products";
     homepage = "https://github.com/IceBotYT/nice-go";
     license = lib.licenses.mit;

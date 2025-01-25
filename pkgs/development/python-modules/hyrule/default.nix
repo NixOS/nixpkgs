@@ -4,27 +4,24 @@
   fetchFromGitHub,
   hy,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "hyrule";
-  version = "0.6.0";
+  version = "0.8.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "hylang";
     repo = "hyrule";
-    rev = "refs/tags/${version}";
-    hash = "sha256-pmJhhOpNxVEUH8YwBUKSywYgYu43oLSmpWJM4HXGMiI=";
+    tag = version;
+    hash = "sha256-FJ7iu+ohbe4nhADka2OC+JHAmwZkkJgFVLyHD0Fms1E=";
   };
 
   build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ hy ];
+  dependencies = [ hy ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -36,8 +33,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Utility library for the Hy programming language";
     homepage = "https://github.com/hylang/hyrule";
-    changelog = "https://github.com/hylang/hylure/releases/tag/${version}";
+    changelog = "https://github.com/hylang/hyrule/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ thiagokokada ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "napari";
     repo = "napari-svg";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ywN9lUwBFW8zP7ivP7MNTYFbTCcmaZxAuKr056uY68Q=";
   };
 

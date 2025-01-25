@@ -6,6 +6,7 @@
   makeWrapper,
   setuptools,
   numpy,
+  scipy,
   distutils,
   pytestCheckHook,
   mock,
@@ -21,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "i-pi";
     repo = "i-pi";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-SJ0qTwwdIOR1nXs9MV6O1oxJPR6/6H86wscDy/sLc/g=";
   };
 
@@ -32,7 +33,10 @@ buildPythonPackage rec {
     makeWrapper
   ];
 
-  dependencies = [ numpy ];
+  dependencies = [
+    numpy
+    scipy
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook

@@ -43,11 +43,11 @@ buildPythonPackage rec {
 
   buildInputs =
     [ ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       libjack2
       alsa-lib
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       CoreAudio
       CoreMIDI
       CoreServices

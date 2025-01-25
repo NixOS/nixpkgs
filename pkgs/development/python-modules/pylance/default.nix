@@ -35,14 +35,14 @@
 
 buildPythonPackage rec {
   pname = "pylance";
-  version = "0.17.0";
+  version = "0.18.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lancedb";
     repo = "lance";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-E+29CbVNbzmrQnBZt0860IvL4xYZqzE+uzSuKDwgxzg=";
+    tag = "v${version}";
+    hash = "sha256-CIIZbeRrraTqWronkspDpBVP/Z4JVoaiS5iBIXfsZGg=";
   };
 
   buildAndTestSubdir = "python";
@@ -55,6 +55,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     pkg-config
+    protobuf # for protoc
     rustPlatform.cargoSetupHook
   ];
 
@@ -65,7 +66,7 @@ buildPythonPackage rec {
       libiconv
       protobuf
     ]
-    ++ lib.optionals stdenv.isDarwin (
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
       with darwin.apple_sdk.frameworks;
       [
         Security
@@ -100,16 +101,21 @@ buildPythonPackage rec {
     cd python/python/tests
   '';
 
-  disabledTests = lib.optionals stdenv.isDarwin [
-    # AttributeError: module 'torch.distributed' has no attribute 'is_initialized'
-    "test_convert_int_tensors"
-    "test_ground_truth"
-    "test_index_cast_centroids"
-    "test_index_with_no_centroid_movement"
-    "test_iter_filter"
-    "test_iter_over_dataset_fixed_shape_tensor"
-    "test_iter_over_dataset_fixed_size_lists"
-  ];
+  disabledTests =
+    lib.optionals stdenv.hostPlatform.isDarwin [
+      # AttributeError: module 'torch.distributed' has no attribute 'is_initialized'
+      "test_convert_int_tensors"
+      "test_ground_truth"
+      "test_index_cast_centroids"
+      "test_index_with_no_centroid_movement"
+      "test_iter_filter"
+      "test_iter_over_dataset_fixed_shape_tensor"
+      "test_iter_over_dataset_fixed_size_lists"
+    ]
+    ++ [
+      # incompatible with duckdb 1.1.1
+      "test_duckdb_pushdown_extension_types"
+    ];
 
   passthru.updateScript = nix-update-script {
     extraArgs = [
@@ -127,6 +133,6 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ natsukium ];
     # test_indices.py ...sss.Fatal Python error: Fatal Python error: Illegal instructionIllegal instruction
     # File "/nix/store/wiiccrs0vd1qbh4j6ki9p40xmamsjix3-python3.12-pylance-0.17.0/lib/python3.12/site-packages/lance/indices.py", line 237 in train_ivf
-    broken = stdenv.isDarwin && stdenv.isx86_64;
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };
 }

@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   rustPlatform,
+  libiconv,
   pytestCheckHook,
 }:
 
@@ -14,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "MeirKriheli";
     repo = "python-bidi";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-LrXt9qaXfy8Rn9HjU4YSTFT4WsqzwCgh0flcxXOTF6E=";
   };
 
@@ -23,6 +24,8 @@ buildPythonPackage rec {
     name = "${pname}-${version}";
     hash = "sha256-34R8T8cXiX1iRx/Zb51Eb/nf0wLpN38hz0VnsmzPzws=";
   };
+
+  buildInputs = [ libiconv ];
 
   build-system = [
     rustPlatform.cargoSetupHook
@@ -35,11 +38,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/MeirKriheli/python-bidi";
     description = "Pure python implementation of the BiDi layout algorithm";
     mainProgram = "pybidi";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ freezeboy ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ freezeboy ];
   };
 }

@@ -4,41 +4,31 @@
 , fetchzip
 , fetchurl
 , cacert
-, tzdata
 , unicode-emoji
 , unicode-character-database
 , cmake
 , ninja
 , pkg-config
+, curl
 , libavif
 , libjxl
-, libtiff
+, libpulseaudio
 , libwebp
 , libxcrypt
+, openssl
 , python3
 , qt6Packages
 , woff2
 , ffmpeg
+, fontconfig
 , simdutf
 , skia
 , nixosTests
-, AppKit
-, Cocoa
-, Foundation
-, OpenGL
+, unstableGitUpdater
+, apple-sdk_14
 }:
 
 let
-  inherit (builtins) elemAt;
-  cldr_version = "45.0.0";
-  cldr-json = fetchzip {
-    url = "https://github.com/unicode-org/cldr-json/releases/download/${cldr_version}/cldr-${cldr_version}-json-modern.zip";
-    stripRoot = false;
-    hash = "sha256-BPDvYjlvJMudX/YlS7HrwKEABYx+1KzjiFlLYA5+Oew=";
-    postFetch = ''
-      echo -n ${cldr_version} > $out/version.txt
-    '';
-  };
   unicode-idna = fetchurl {
     url = "https://www.unicode.org/Public/idna/${unicode-character-database.version}/IdnaMappingTable.txt";
     hash = "sha256-QCy9KF8flS/NCDS2NUHVT2nT2PG4+Fmb9xoaFJNfgsQ=";
@@ -58,49 +48,33 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ladybird";
-  version = "0-unstable-2024-09-08";
+  version = "0-unstable-2024-12-30";
 
   src = fetchFromGitHub {
     owner = "LadybirdWebBrowser";
     repo = "ladybird";
-    rev = "8d6f36f8d6c0aea0253df8c84746f8c99bf79b4d";
-    hash = "sha256-EB26SAh9eckpq/HrO8O+PivMMmLpFtCdCNkOJcLQvZw=";
+    rev = "4324439006a6df1179440ce4f415b67658919957";
+    hash = "sha256-vg2Nb85+fegs7Idika9Mbq+f27wrIO48pWQSUidLKwE=";
   };
 
   postPatch = ''
-    sed -i '/iconutil/d' Ladybird/CMakeLists.txt
+    sed -i '/iconutil/d' UI/CMakeLists.txt
 
     # Don't set absolute paths in RPATH
     substituteInPlace Meta/CMake/lagom_install_options.cmake \
       --replace-fail "\''${CMAKE_INSTALL_BINDIR}" "bin" \
       --replace-fail "\''${CMAKE_INSTALL_LIBDIR}" "lib"
-
-    # libwebp is not built with cmake support yet
-    # https://github.com/NixOS/nixpkgs/issues/334148
-    cat > Meta/CMake/FindWebP.cmake <<'EOF'
-    find_package(PkgConfig)
-    pkg_check_modules(WEBP libwebp REQUIRED)
-    include_directories(''${WEBP_INCLUDE_DIRS})
-    link_directories(''${WEBP_LIBRARY_DIRS})
-    EOF
-    substituteInPlace Userland/Libraries/LibGfx/CMakeLists.txt \
-      --replace-fail 'WebP::' "" \
-      --replace-fail libwebpmux webpmux
   '';
 
   preConfigure = ''
-    # Setup caches for LibLocale, LibUnicode, LibTimezone, LibTLS and LibGfx
+    # Setup caches for LibUnicode, LibTLS and LibGfx
     # Note that the versions of the input data packages must match the
     # expected version in the package's CMake.
 
     # Check that the versions match
-    grep -F 'locale_version = "${cldr_version}"' Meta/gn/secondary/Userland/Libraries/LibLocale/BUILD.gn || (echo cldr_version mismatch && exit 1)
-    grep -F 'tzdb_version = "${tzdata.version}"' Meta/gn/secondary/Userland/Libraries/LibTimeZone/BUILD.gn || (echo tzdata.version mismatch && exit 1)
     grep -F 'set(CACERT_VERSION "${cacert_version}")' Meta/CMake/ca_certificates_data.cmake || (echo cacert_version mismatch && exit 1)
 
     mkdir -p build/Caches
-
-    ln -s ${cldr-json} build/Caches/CLDR
 
     cp -r ${unicode-character-database}/share/unicode build/Caches/UCD
     chmod +w build/Caches/UCD
@@ -108,10 +82,6 @@ stdenv.mkDerivation (finalAttrs: {
     cp ${unicode-idna} build/Caches/UCD/IdnaMappingTable.txt
     echo -n ${unicode-character-database.version} > build/Caches/UCD/version.txt
     chmod -w build/Caches/UCD
-
-    mkdir build/Caches/TZDB
-    tar -xzf ${elemAt tzdata.srcs 0} -C build/Caches/TZDB
-    echo -n ${tzdata.version} > build/Caches/TZDB/version.txt
 
     mkdir build/Caches/CACERT
     cp ${cacert}/etc/ssl/certs/ca-bundle.crt build/Caches/CACERT/cacert-${cacert_version}.pem
@@ -134,59 +104,64 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = with qt6Packages; [
+    curl
     ffmpeg
+    fontconfig
     libavif
     libjxl
     libwebp
     libxcrypt
+    openssl
     qtbase
     qtmultimedia
     simdutf
-    skia
+    (skia.overrideAttrs (prev: {
+      gnFlags = prev.gnFlags ++ [
+        # https://github.com/LadybirdBrowser/ladybird/commit/af3d46dc06829dad65309306be5ea6fbc6a587ec
+        # https://github.com/LadybirdBrowser/ladybird/commit/4d7b7178f9d50fff97101ea18277ebc9b60e2c7c
+        # Remove when/if this gets upstreamed in skia.
+        "extra_cflags+=[\"-DSKCMS_API=__attribute__((visibility(\\\"default\\\")))\"]"
+      ];
+    }))
     woff2
-  ] ++ lib.optional stdenv.isLinux [
+  ] ++ lib.optional stdenv.hostPlatform.isLinux [
+    libpulseaudio.dev
     qtwayland
-  ] ++ lib.optionals stdenv.isDarwin [
-    AppKit
-    Cocoa
-    Foundation
-    OpenGL
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_14
   ];
 
   cmakeFlags = [
     # Disable network operations
     "-DSERENITY_CACHE_DIR=Caches"
     "-DENABLE_NETWORK_DOWNLOADS=OFF"
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     "-DCMAKE_INSTALL_LIBEXECDIR=libexec"
   ];
 
   # FIXME: Add an option to -DENABLE_QT=ON on macOS to use Qt rather than Cocoa for the GUI
-  # FIXME: Add an option to enable PulseAudio rather than using Qt multimedia on non-macOS
 
-  env.NIX_CFLAGS_COMPILE = "-Wno-error";
-
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications $out/bin
     mv $out/bundle/Ladybird.app $out/Applications
   '';
 
   # Only Ladybird and WebContent need wrapped, if Qt is enabled.
   # On linux we end up wraping some non-Qt apps, like headless-browser.
-  dontWrapQtApps = stdenv.isDarwin;
+  dontWrapQtApps = stdenv.hostPlatform.isDarwin;
 
   passthru.tests = {
     nixosTest = nixosTests.ladybird;
   };
 
+  passthru.updateScript = unstableGitUpdater { };
+
   meta = with lib; {
     description = "Browser using the SerenityOS LibWeb engine with a Qt or Cocoa GUI";
-    homepage = "https://ladybird.dev";
+    homepage = "https://ladybird.org";
     license = licenses.bsd2;
     maintainers = with maintainers; [ fgaz ];
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
     mainProgram = "Ladybird";
-    # use of undeclared identifier 'NSBezelStyleAccessoryBarAction'
-    broken = stdenv.isDarwin;
   };
 })

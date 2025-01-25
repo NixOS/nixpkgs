@@ -32,7 +32,7 @@
 
 buildPythonPackage rec {
   pname = "anyio";
-  version = "4.4.0";
+  version = "4.6.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -40,8 +40,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "agronholm";
     repo = "anyio";
-    rev = "refs/tags/${version}";
-    hash = "sha256-Sz/wWOT59T7LOAq68fBujgkTaY9ydMsIoSxeP3fBaoY=";
+    tag = version;
+    hash = "sha256-8QLOAjQpiNtbd+YSHfqcBVdtMSGJFRevOcacZErKuso=";
   };
 
   build-system = [ setuptools-scm ];
@@ -56,7 +56,7 @@ buildPythonPackage rec {
       typing-extensions
     ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     trio = [ trio ];
   };
 
@@ -69,7 +69,7 @@ buildPythonPackage rec {
     pytestCheckHook
     trustme
     uvloop
-  ] ++ passthru.optional-dependencies.trio;
+  ] ++ optional-dependencies.trio;
 
   pytestFlagsArray = [
     "-W"
@@ -78,10 +78,19 @@ buildPythonPackage rec {
     "'not network'"
   ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
-    # PermissionError: [Errno 1] Operation not permitted: '/dev/console'
-    "test_is_block_device"
-  ];
+  disabledTests =
+    [
+      # TypeError: __subprocess_run() got an unexpected keyword argument 'umask'
+      "test_py39_arguments"
+      # AttributeError: 'module' object at __main__ has no attribute '__file__'
+      "test_nonexistent_main_module"
+      #  3 second timeout expired
+      "test_keyboardinterrupt_during_test"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # PermissionError: [Errno 1] Operation not permitted: '/dev/console'
+      "test_is_block_device"
+    ];
 
   disabledTestPaths = [
     # lots of DNS lookups

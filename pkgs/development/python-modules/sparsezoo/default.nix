@@ -32,7 +32,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "neuralmagic";
     repo = "sparsezoo";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-c4F95eVvj673eFO/rbmv4LY3pGmqo+arbsYqElznwdA=";
   };
 

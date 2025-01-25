@@ -39,6 +39,7 @@ assert (hash == null) -> (src != null);
   libcpuid,
   libsodium,
   lowdown,
+  lowdown-unsandboxed,
   lsof,
   mercurial,
   mdbook,
@@ -65,7 +66,7 @@ assert (hash == null) -> (src != null);
 
   enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
   enableStatic ? stdenv.hostPlatform.isStatic,
-  withAWS ? !enableStatic && (stdenv.isLinux || stdenv.isDarwin),
+  withAWS ? !enableStatic && (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin),
   aws-sdk-cpp,
   # RISC-V support in progress https://github.com/seccomp/libseccomp/pull/50
   withLibseccomp ? lib.meta.availableOn stdenv.hostPlatform libseccomp,
@@ -119,12 +120,12 @@ stdenv.mkDerivation {
     ]
     ++ lib.optionals isLegacyParser [ bison ]
     ++ lib.optionals enableDocumentation [
-      (lib.getBin lowdown)
+      (lib.getBin lowdown-unsandboxed)
       mdbook
       mdbook-linkcheck
       doxygen
     ]
-    ++ lib.optionals stdenv.isLinux [ util-linuxMinimal ];
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ util-linuxMinimal ];
 
   buildInputs =
     [
@@ -145,8 +146,8 @@ stdenv.mkDerivation {
       lix-doc
     ]
     ++ lib.optionals (!isLegacyParser) [ pegtl ]
-    ++ lib.optionals stdenv.isDarwin [ Security ]
-    ++ lib.optionals (stdenv.isx86_64) [ libcpuid ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ]
+    ++ lib.optionals (stdenv.hostPlatform.isx86_64) [ libcpuid ]
     ++ lib.optionals withLibseccomp [ libseccomp ]
     ++ lib.optionals withAWS [ aws-sdk-cpp ];
 
@@ -166,9 +167,9 @@ stdenv.mkDerivation {
       mkdir -p $out/lib
       cp -pd ${boost}/lib/{libboost_context*,libboost_thread*,libboost_system*} $out/lib
       rm -f $out/lib/*.a
-      ${lib.optionalString stdenv.isLinux ''
+      ${lib.optionalString stdenv.hostPlatform.isLinux ''
         chmod u+w $out/lib/*.so.*
-        patchelf --set-rpath $out/lib:${stdenv.cc.cc.lib}/lib $out/lib/libboost_thread.so.*
+        patchelf --set-rpath $out/lib:${lib.getLib stdenv.cc.cc}/lib $out/lib/libboost_thread.so.*
       ''}
       ${lib.optionalString stdenv.hostPlatform.isDarwin ''
         for LIB in $out/lib/*.dylib; do
@@ -189,19 +190,21 @@ stdenv.mkDerivation {
     [
       # Enable LTO, since it improves eval performance a fair amount
       # LTO is disabled on static due to strange linking errors
-      (lib.mesonBool "b_lto" (!stdenv.hostPlatform.isStatic))
+      (lib.mesonBool "b_lto" (!stdenv.hostPlatform.isStatic && stdenv.cc.isGNU))
       (lib.mesonEnable "gc" true)
       (lib.mesonBool "enable-tests" true)
       (lib.mesonBool "enable-docs" enableDocumentation)
       (lib.mesonEnable "internal-api-docs" enableDocumentation)
-      (lib.mesonBool "enable-embedded-sandbox-shell" (stdenv.isLinux && stdenv.hostPlatform.isStatic))
+      (lib.mesonBool "enable-embedded-sandbox-shell" (
+        stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isStatic
+      ))
       (lib.mesonEnable "seccomp-sandboxing" withLibseccomp)
 
       (lib.mesonOption "store-dir" storeDir)
       (lib.mesonOption "state-dir" stateDir)
       (lib.mesonOption "sysconfdir" confDir)
     ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       (lib.mesonOption "sandbox-shell" "${busybox-sandbox-shell}/bin/busybox")
     ];
 
@@ -219,7 +222,7 @@ stdenv.mkDerivation {
       mkdir -p $out/nix-support
       echo "file binary-dist $out/bin/nix" >> $out/nix-support/hydra-build-products
     ''
-    + lib.optionalString stdenv.isDarwin ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       for lib in liblixutil.dylib liblixexpr.dylib; do
         install_name_tool \
           -change "${lib.getLib boost}/lib/libboost_context.dylib" \
@@ -264,16 +267,17 @@ stdenv.mkDerivation {
     meson test --no-rebuild "''${flagsArray[@]}"
     runHook postInstallCheck
   '';
-  hardeningDisable = [
-    "shadowstack"
-    # strictoverflow is disabled because we trap on signed overflow instead
-    "strictoverflow"
-  ]
-  # fortify breaks the build with lto and musl for some reason
-  ++ lib.optional stdenv.hostPlatform.isMusl "fortify";
+  hardeningDisable =
+    [
+      "shadowstack"
+      # strictoverflow is disabled because we trap on signed overflow instead
+      "strictoverflow"
+    ]
+    # fortify breaks the build with lto and musl for some reason
+    ++ lib.optional stdenv.hostPlatform.isMusl "fortify";
 
-  # hardeningEnable = lib.optionals (!stdenv.isDarwin) [ "pie" ];
-  separateDebugInfo = stdenv.isLinux && !enableStatic;
+  # hardeningEnable = lib.optionals (!stdenv.hostPlatform.isDarwin) [ "pie" ];
+  separateDebugInfo = stdenv.hostPlatform.isLinux && !enableStatic;
   enableParallelBuilding = true;
 
   # Used by (1) test which has dynamic port assignment.

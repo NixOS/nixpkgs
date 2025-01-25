@@ -7,6 +7,7 @@
   orjson,
   pydevccu,
   pytest-aiohttp,
+  pytest-socket,
   pytestCheckHook,
   python-slugify,
   pythonOlder,
@@ -16,24 +17,23 @@
 
 buildPythonPackage rec {
   pname = "hahomematic";
-  version = "2024.8.13";
+  version = "2025.1.11";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
-    owner = "danielperna84";
+    owner = "SukramJ";
     repo = "hahomematic";
-    rev = "refs/tags/${version}";
-    hash = "sha256-dojgIKF3AGkJm2USspV0rm8UZnTLxYf4dgt86WwonQk=";
+    tag = version;
+    hash = "sha256-XHXQ1A6s5ew5hsivlC83oufYiImpKCRJ7v7NsAn6PJs=";
   };
 
   __darwinAllowLocalNetworking = true;
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools~=69.2.0" "setuptools" \
-      --replace-fail "wheel~=0.43.0" "wheel"
+      --replace-fail "setuptools==75.6.0" "setuptools" \
   '';
 
   build-system = [ setuptools ];
@@ -49,6 +49,7 @@ buildPythonPackage rec {
     freezegun
     pydevccu
     pytest-aiohttp
+    pytest-socket
     pytestCheckHook
   ];
 
@@ -56,8 +57,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python module to interact with HomeMatic devices";
-    homepage = "https://github.com/danielperna84/hahomematic";
-    changelog = "https://github.com/danielperna84/hahomematic/blob/${src.rev}/changelog.md";
+    homepage = "https://github.com/SukramJ/hahomematic";
+    changelog = "https://github.com/SukramJ/hahomematic/blob/${src.tag}/changelog.md";
     license = licenses.mit;
     maintainers = with maintainers; [
       dotlambda

@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, cmake, alsa-lib }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  alsa-lib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "sof-tools";

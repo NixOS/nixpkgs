@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   ninja,
   SDL2,
@@ -24,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ZDoom";
     repo = "Raze";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-R3Sm/cibg+D2QPS4UisRp91xvz3Ine2BUR8jF5Rbj1g=";
     leaveDotGit = true;
     postFetch = ''
@@ -33,6 +34,15 @@ stdenv.mkDerivation (finalAttrs: {
       rm -rf .git
     '';
   };
+
+  patches = [
+    # Fix build with gcc14
+    (fetchpatch {
+      name = "fix-gcc14.patch";
+      url = "https://github.com/ZDoom/Raze/commit/f3cad8426cd808be5ded036ed12a497d27d3742e.patch";
+      hash = "sha256-TMx5gFmcuSQbVPjpBnKgK7EluqPSWhLF+TU8ZRaL7LE=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -54,7 +64,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    (lib.cmakeFeature "CMAKE_BUILD_TYPE" "Release")
     (lib.cmakeBool "DYN_GTK" false)
     (lib.cmakeBool "DYN_OPENAL" false)
   ];

@@ -31,7 +31,7 @@ let
 
     buildInputs =
       [ openssl ]
-      ++ lib.optionals stdenv.isDarwin [
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
         libiconv
         CoreServices
         Security
@@ -59,7 +59,6 @@ let
       mainProgram = "so";
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
-        AndersonTorres
         unsolvedcypher
       ];
     };

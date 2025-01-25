@@ -29,7 +29,7 @@ let
     src = fetchFromGitHub {
       owner = "jupyter";
       repo = pname;
-      rev = "refs/tags/v${version}";
+      tag = "v${version}";
       hash = "sha256-8OLkpwX4Gpam9VSFUtNS41Ypxe4+2yN3ng6iVY9DSqY=";
     };
 

@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  aapt,
   abootimg,
   acl,
   apksigcopier,
@@ -54,6 +55,7 @@
   openssh,
   openssl,
   pdftk,
+  perl,
   pgpdump,
   poppler_utils,
   procyon,
@@ -63,6 +65,7 @@
   sng,
   sqlite,
   squashfsTools,
+  systemdUkify,
   tcpdump,
   ubootTools,
   unzip,
@@ -72,6 +75,7 @@
   xz,
   zip,
   zstd,
+  binwalk,
   # updater only
   writeScript,
 }:
@@ -90,7 +94,7 @@ let
         {
           inherit version;
           src = src.override {
-            rev = version;
+            tag = version;
             hash = "sha256-ZYEjT/yShfA4+zpbGOtaFOx1nSSOWPtMvskPhHv3c9U=";
           };
         }
@@ -102,11 +106,11 @@ in
 # Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
 python.pkgs.buildPythonApplication rec {
   pname = "diffoscope";
-  version = "277";
+  version = "285";
 
   src = fetchurl {
     url = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
-    hash = "sha256-ZDW9EzoQG5b0dmydKi850rdf0a8UWKFjrk+toxgBicY=";
+    hash = "sha256-OTS4Lr2OF1mdIAiPGK31Ptc/gr3D216Z1kvKOMNeaJI=";
   };
 
   outputs = [
@@ -135,7 +139,6 @@ python.pkgs.buildPythonApplication rec {
   #
   # Still missing these tools:
   # Android-specific tools:
-  # aapt2
   # dexdump
   # Darwin-specific tools:
   # lipo
@@ -189,7 +192,7 @@ python.pkgs.buildPythonApplication rec {
     ]
     ++ (with python.pkgs; [
       argcomplete
-      debian
+      python-debian
       defusedxml
       jsbeautifier
       jsondiff
@@ -203,6 +206,7 @@ python.pkgs.buildPythonApplication rec {
     ])
     ++ lib.optionals enableBloat (
       [
+        aapt
         abootimg
         apksigcopier
         apksigner
@@ -215,6 +219,7 @@ python.pkgs.buildPythonApplication rec {
         ghc
         ghostscriptX
         giflib
+        gnumeric
         gnupg
         hdf5
         imagemagick
@@ -226,18 +231,21 @@ python.pkgs.buildPythonApplication rec {
         odt2txt
         openssh
         pdftk
+        perl
         poppler_utils
         procyon
         qemu
         R
+        systemdUkify
         tcpdump
         ubootTools
         wabt
         xmlbeans
+        binwalk
       ]
       ++ (with python.pkgs; [
         androguard
-        binwalk
+        black
         guestfs
         h5py
         pdfminer-six
@@ -245,9 +253,7 @@ python.pkgs.buildPythonApplication rec {
         # docx2txt, nixpkgs packages another project named the same, which does not work
       ])
       # oggvideotools is broken on Darwin, please put it back when it will be fixed?
-      ++ lib.optionals stdenv.isLinux [ oggvideotools ]
-      # This doesn't work on aarch64-darwin
-      ++ lib.optionals (stdenv.hostPlatform.system != "aarch64-darwin") [ gnumeric ]
+      ++ lib.optionals stdenv.hostPlatform.isLinux [ oggvideotools ]
     )
   );
 
@@ -272,7 +278,7 @@ python.pkgs.buildPythonApplication rec {
       # Fails because it fails to determine llvm version
       "test_item3_deflate_llvm_bitcode"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Disable flaky tests on Darwin
       "test_non_unicode_filename"
       "test_listing"
@@ -288,7 +294,7 @@ python.pkgs.buildPythonApplication rec {
       "test_libmix_differences"
     ];
 
-  disabledTestPaths = lib.optionals stdenv.isDarwin [
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
     "tests/comparators/test_git.py"
     "tests/comparators/test_java.py"
     "tests/comparators/test_uimage.py"

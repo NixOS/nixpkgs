@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, substituteAll, gjs, vte, gnome }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  replaceVars,
+  gjs,
+  vte,
+  gnome,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-drop-down-terminal";
@@ -17,8 +25,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix_vte_and_gjs.patch;
+    (replaceVars ./fix_vte_and_gjs.patch {
       inherit gjs vte;
     })
   ];

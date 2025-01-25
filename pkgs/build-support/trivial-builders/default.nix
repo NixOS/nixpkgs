@@ -82,10 +82,18 @@ rec {
     , destination ? ""
     , checkPhase ? ""
     , meta ? { }
+    , passthru ? { }
     , allowSubstitutes ? false
     , preferLocalBuild ? true
     , derivationArgs ? { }
     }:
+    assert lib.assertMsg (destination != "" -> (lib.hasPrefix "/" destination && destination != "/")) ''
+      destination must be an absolute path, relative to the derivation's out path,
+      got '${destination}' instead.
+
+      Ensure that the path starts with a / and specifies at least the filename.
+    '';
+
     let
       matches = builtins.match "/bin/([^/]+)" destination;
     in
@@ -98,7 +106,8 @@ rec {
           {
             mainProgram = lib.head matches;
           } // meta // derivationArgs.meta or {};
-      } // removeAttrs derivationArgs [ "passAsFile" "meta" ])
+        passthru = passthru // derivationArgs.passthru or {};
+      } // removeAttrs derivationArgs [ "passAsFile" "meta" "passthru" ])
       ''
         target=$out${lib.escapeShellArg destination}
         mkdir -p "$(dirname "$target")"
@@ -214,6 +223,12 @@ rec {
        */
       meta ? { },
       /*
+         `stdenv.mkDerivation`'s `passthru` argument.
+
+         Type: AttrSet
+       */
+      passthru ? { },
+      /*
          The `checkPhase` to run. Defaults to `shellcheck` on supported
          platforms and `bash -n`.
 
@@ -256,7 +271,7 @@ rec {
       derivationArgs ? { },
     }:
     writeTextFile {
-      inherit name meta derivationArgs;
+      inherit name meta passthru derivationArgs;
       executable = true;
       destination = "/bin/${name}";
       allowSubstitutes = true;
@@ -284,7 +299,7 @@ rec {
         # GHC (=> shellcheck) isn't supported on some platforms (such as risc-v)
         # but we still want to use writeShellApplication on those platforms
         let
-          shellcheckSupported = lib.meta.availableOn stdenv.buildPlatform shellcheck-minimal.compiler;
+          shellcheckSupported = lib.meta.availableOn stdenv.buildPlatform shellcheck-minimal.compiler && (builtins.tryEval shellcheck-minimal.compiler.outPath).success;
           excludeFlags = lib.optionals (excludeShellChecks != [ ]) [ "--exclude" (lib.concatStringsSep "," excludeShellChecks) ];
           shellcheckCommand = lib.optionalString shellcheckSupported ''
             # use shellcheck which does not include docs
@@ -359,9 +374,10 @@ rec {
     , destination ? ""   # relative path appended to $out eg "/bin/foo"
     , checkPhase ? ""    # syntax checks, e.g. for scripts
     , meta ? { }
+    , passthru ? { }
     }:
     runCommandLocal name
-      { inherit files executable checkPhase meta destination; }
+      { inherit files executable checkPhase meta passthru destination; }
       ''
         file=$out$destination
         mkdir -p "$(dirname "$file")"
@@ -462,7 +478,11 @@ rec {
     as a easy way to build multiple derivations at once.
    */
   symlinkJoin =
-    args_@{ name
+    args_@{
+      name ?
+        assert lib.assertMsg (args_ ? pname && args_ ? version)
+          "symlinkJoin requires either a `name` OR `pname` and `version`";
+        "${args_.pname}-${args_.version}"
     , paths
     , preferLocalBuild ? true
     , allowSubstitutes ? false
@@ -587,8 +607,7 @@ rec {
   # See https://nixos.org/manual/nixpkgs/unstable/#sec-pkgs.makeSetupHook
   makeSetupHook =
     { name ? lib.warn "calling makeSetupHook without passing a name is deprecated." "hook"
-    , deps ? [ ]
-      # hooks go in nativeBuildInput so these will be nativeBuildInput
+      # hooks go in nativeBuildInputs so these will be nativeBuildInputs
     , propagatedBuildInputs ? [ ]
       # these will be buildInputs
     , depsTargetTargetPropagated ? [ ]
@@ -605,11 +624,7 @@ rec {
         __structuredAttrs = false;
         inherit meta;
         inherit depsTargetTargetPropagated;
-        propagatedBuildInputs =
-          # remove list conditionals before 23.11
-          lib.warnIf (!lib.isList deps) "'deps' argument to makeSetupHook must be a list. content of deps: ${toString deps}"
-            (lib.warnIf (deps != [ ]) "'deps' argument to makeSetupHook is deprecated and will be removed in release 23.11., Please use propagatedBuildInputs instead. content of deps: ${toString deps}"
-              propagatedBuildInputs ++ (if lib.isList deps then deps else [ deps ]));
+        inherit propagatedBuildInputs;
         strictDeps = true;
         # TODO 2023-01, no backport: simplify to inherit passthru;
         passthru = passthru
@@ -625,13 +640,8 @@ rec {
         substituteAll ${script} $out/nix-support/setup-hook
       '');
 
-
-  # Docs in doc/build-helpers/trivial-build-helpers.chapter.md
-  # See https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-writeReferencesToFile
-  # TODO: Convert to throw after Nixpkgs 24.05 branch-off.
-  writeReferencesToFile = (if config.allowAliases then lib.warn else throw)
-    "writeReferencesToFile is deprecated in favour of writeClosure"
-    (path: writeClosure [ path ]);
+  # Remove after 25.05 branch-off
+  writeReferencesToFile = throw "writeReferencesToFile has been removed. Use writeClosure instead.";
 
   # Docs in doc/build-helpers/trivial-build-helpers.chapter.md
   # See https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-writeClosure
@@ -709,7 +719,7 @@ rec {
           (name: value:
             {
               inherit value;
-              name = lib.head (builtins.match "${builtins.storeDir}/[${nixHashChars}]+-(.*)\.drv" name);
+              name = lib.head (builtins.match "${builtins.storeDir}/[${nixHashChars}]+-(.*)\\.drv" name);
             })
           derivations;
       # The syntax of output paths differs between outputs named `out`

@@ -5,10 +5,16 @@
   rustPlatform,
   cargo-about,
   nix-update-script,
+  pkg-config,
+  libbpf,
+  elfutils,
+  libseccomp,
+  zlib,
+  clang,
 }:
 let
   pname = "tracexec";
-  version = "0.5.2";
+  version = "0.8.2";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -16,32 +22,43 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "kxxt";
     repo = "tracexec";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-PLUB0t9eDR0mYUI6TiUxafo6yMymwdTux7ykF8rTGGc=";
+    tag = "v${version}";
+    hash = "sha256-qLvox7ef9eU1Vvg4gZGCKkic4+mcOIz9BZWTi/Q2grk=";
   };
 
-  cargoHash = "sha256-PJclGjQTAOvnl8LJTxlDyEuzdWE1R7A2gJe1I1sKde0=";
+  cargoHash = "sha256-yagXxTEWsR7FkLVo9DZHxmlXD/L6R+IoateUUQxn77E=";
 
-  nativeBuildInputs = [ cargo-about ];
+  hardeningDisable = [ "zerocallusedregs" ];
 
-  # Remove RiscV64 specialisation when this is fixed:
-  # * https://github.com/NixOS/nixpkgs/pull/310158#pullrequestreview-2046944158
-  # * https://github.com/rust-vmm/seccompiler/pull/72
-  cargoBuildFlags = lib.optional stdenv.hostPlatform.isRiscV64 "--no-default-features";
+  nativeBuildInputs = [
+    cargo-about
+    pkg-config
+    clang
+  ];
+  buildInputs = [
+    libbpf
+    elfutils
+    libseccomp
+    zlib
+  ];
+
+  cargoBuildFlags =
+    [
+      "--no-default-features"
+      "--features=recommended"
+    ]
+    # Remove RiscV64 specialisation when this is fixed:
+    # * https://github.com/NixOS/nixpkgs/pull/310158#pullrequestreview-2046944158
+    # * https://github.com/rust-vmm/seccompiler/pull/72
+    ++ lib.optional stdenv.hostPlatform.isRiscV64 "--no-default-features";
 
   preBuild = ''
     sed -i '1ino-clearly-defined = true' about.toml  # disable network requests
     cargo about generate --config about.toml -o THIRD_PARTY_LICENSES.HTML about.hbs
   '';
 
-  # Tests don't work for native non-x86 compilation
-  # because upstream overrides the name of the linker executables,
-  # see https://github.com/NixOS/nixpkgs/pull/310158#issuecomment-2118845043
-  doCheck = stdenv.hostPlatform.isx86_64;
-
   checkFlags = [
     "--skip=cli::test::log_mode_without_args_works" # `Permission denied` (needs `CAP_SYS_PTRACE`)
-    "--skip=tracer::test::tracer_emits_exec_event" # needs `/bin/true`
   ];
 
   postInstall = ''

@@ -1,21 +1,37 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
+  installShellFiles,
+  buildPackages,
 }:
 
 buildGoModule rec {
   pname = "spacectl";
-  version = "1.0.1";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "spacelift-io";
     repo = "spacectl";
     rev = "v${version}";
-    hash = "sha256-w49nsPzEWfYeYxWNOl4VrWdQvL3zGafLxL5kUH4YaqM=";
+    hash = "sha256-24aw5ooN6ru9p+/21M64VlZdzcep0S76XA27wtZ0xyA=";
   };
 
-  vendorHash = "sha256-hVAQaM8Xank+l283D1Tq9TA/yiOiLGO7/3IyZkXj15Q=";
+  vendorHash = "sha256-VfhbwbKQOmXzLjS/O8BDdYHtZT2kBuxRcAPpHMlenUc=";
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall =
+    let
+      emulator = stdenv.hostPlatform.emulator buildPackages;
+    in
+    ''
+      installShellCompletion --cmd spacectl \
+        --bash <(${emulator} $out/bin/spacectl completion bash) \
+        --fish <(${emulator} $out/bin/spacectl completion fish) \
+        --zsh <(${emulator} $out/bin/spacectl completion zsh) \
+    '';
 
   meta = {
     homepage = "https://github.com/spacelift-io/spacectl";

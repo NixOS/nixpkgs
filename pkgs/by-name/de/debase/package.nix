@@ -1,5 +1,4 @@
 {
-  darwin,
   fetchFromGitHub,
   fetchpatch, # Delete at next version bump.
   lib,
@@ -16,7 +15,7 @@ stdenv.mkDerivation rec {
     (fetchFromGitHub {
       owner = "toasterllc";
       repo = "debase";
-      rev = "refs/tags/v${version}";
+      tag = "v${version}";
       hash = "sha256-6AavH8Ag+879ntcxJDbVgsg8V6U4cxwPQYPKvq2PpoQ=";
       fetchSubmodules = true;
     }).overrideAttrs
@@ -53,11 +52,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libgit2
-  ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk_11_0.frameworks.Foundation ];
+  ];
 
   installPhase = ''
     runHook preInstall
-    install -Dm755 build-${if stdenv.isDarwin then "mac" else "linux"}/release/debase $out/bin/debase
+    install -Dm755 build-${
+      if stdenv.hostPlatform.isDarwin then "mac" else "linux"
+    }/release/debase $out/bin/debase
     runHook postInstall
   '';
 
@@ -65,12 +66,12 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "ARCHS=${
-      if stdenv.isx86_64 then
+      if stdenv.hostPlatform.isx86_64 then
         "x86_64"
-      else if stdenv.isAarch64 then
+      else if stdenv.hostPlatform.isAarch64 then
         "arm64"
       else
-        abort "unsupported system: ${stdenv.system}"
+        throw "unsupported system: ${stdenv.system}"
     }"
   ];
 

@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "schodet";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-v65KEP5DuJsZAifd1Rh46x9lSAgBZgyo+e8PKSDKnhw=";
   };
 

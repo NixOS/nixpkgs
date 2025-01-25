@@ -15,22 +15,22 @@
 let
   pname = "anki-bin";
   # Update hashes for both Linux and Darwin!
-  version = "24.06.3";
+  version = "24.11";
 
   sources = {
     linux = fetchurl {
       url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-linux-qt6.tar.zst";
-      hash = "sha256-/oyQy4QHU9DCqYplcuINy5y0d2/n+fJCpgwNDURguYU=";
+      hash = "sha256-JXn4oxhRODHh6b5hFFj393xMRlaJRVcbMJ5AyXr+jq8=";
     };
 
     # For some reason anki distributes completely separate dmg-files for the aarch64 version and the x86_64 version
     darwin-x86_64 = fetchurl {
       url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-mac-intel-qt6.dmg";
-      hash = "sha256-UQRdp/GhiRGfsBF+mV6hCKpEQGFv/I9D9KTtc1p776o=";
+      hash = "sha256-d94lfk1pUJgxk4Dylw+fC2qt8wfRJ7tJQYm+Chp1J5k=";
     };
     darwin-aarch64 = fetchurl {
       url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-mac-apple-qt6.dmg";
-      hash = "sha256-zi9yjJirNxFFD7wGa4++J+mDaE5dYZW+X0UUddGkjTU=";
+      hash = "sha256-AEpyrZBQ+0FI9CxwCacGlbMDMZ7eebBRPkQ0Nstubnk=";
     };
   };
 
@@ -91,6 +91,7 @@ let
         pkgs:
         (with pkgs; [
           xorg.libxkbfile
+          xorg.libxshmfence
           xcb-util-cursor-HEAD
           krb5
           zstd
@@ -115,13 +116,13 @@ let
   );
 in
 
-if stdenv.isLinux then
+if stdenv.hostPlatform.isLinux then
   fhsEnvAnki
 else
   stdenv.mkDerivation {
     inherit pname version passthru;
 
-    src = if stdenv.isAarch64 then sources.darwin-aarch64 else sources.darwin-x86_64;
+    src = if stdenv.hostPlatform.isAarch64 then sources.darwin-aarch64 else sources.darwin-x86_64;
 
     nativeBuildInputs = [ undmg ];
     sourceRoot = ".";

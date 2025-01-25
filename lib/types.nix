@@ -71,6 +71,26 @@ let
     let pos = builtins.unsafeGetAttrPos name v; in
     if pos == null then "" else " at ${pos.file}:${toString pos.line}:${toString pos.column}";
 
+  # Internal functor to help for migrating functor.wrapped to functor.payload.elemType
+  # Note that individual attributes can be overriden if needed.
+  elemTypeFunctor = name: { elemType, ... }@payload: {
+    inherit name payload;
+    type    = outer_types.types.${name};
+    binOp   = a: b:
+      let
+        merged = a.elemType.typeMerge b.elemType.functor;
+      in
+        if merged == null
+        then
+          null
+        else
+          { elemType = merged; };
+    wrappedDeprecationMessage = { loc }: lib.warn ''
+      The deprecated `type.functor.wrapped` attribute of the option `${showOption loc}` is accessed, use `type.nestedTypes.elemType` instead.
+    '' payload.elemType;
+  };
+
+
   outer_types =
 rec {
   isType = type: x: (x._type or "") == type;
@@ -83,23 +103,41 @@ rec {
   # Default type merging function
   # takes two type functors and return the merged type
   defaultTypeMerge = f: f':
-    let wrapped = f.wrapped.typeMerge f'.wrapped.functor;
-        payload = f.binOp f.payload f'.payload;
+    let
+      mergedWrapped = f.wrapped.typeMerge f'.wrapped.functor;
+      mergedPayload = f.binOp f.payload f'.payload;
+
+      hasPayload = assert (f'.payload != null) == (f.payload != null); f.payload != null;
+      hasWrapped = assert (f'.wrapped != null) == (f.wrapped != null); f.wrapped != null;
+
+      typeFromPayload = if mergedPayload == null then null else f.type mergedPayload;
+      typeFromWrapped = if mergedWrapped == null then null else f.type mergedWrapped;
     in
-    # cannot merge different types
+    # Abort early: cannot merge different types
     if f.name != f'.name
        then null
-    # simple types
-    else if    (f.wrapped == null && f'.wrapped == null)
-            && (f.payload == null && f'.payload == null)
-       then f.type
-    # composed types
-    else if (f.wrapped != null && f'.wrapped != null) && (wrapped != null)
-       then f.type wrapped
-    # value types
-    else if (f.payload != null && f'.payload != null) && (payload != null)
-       then f.type payload
-    else null;
+    else
+
+    if hasPayload then
+      # Just return the payload if returning wrapped is deprecated
+      if f ? wrappedDeprecationMessage then
+        typeFromPayload
+      else if hasWrapped then
+        # Has both wrapped and payload
+        throw ''
+          Type ${f.name} defines both `functor.payload` and `functor.wrapped` at the same time, which is not supported.
+
+          Use either `functor.payload` or `functor.wrapped` but not both.
+
+          If your code worked before remove either `functor.wrapped` or `functor.payload` from the type definition.
+        ''
+      else
+        typeFromPayload
+    else
+      if hasWrapped then
+        typeFromWrapped
+      else
+        f.type;
 
   # Default type functor
   defaultFunctor = name: {
@@ -253,12 +291,6 @@ rec {
           mergeFunction = {
             # Recursively merge attribute sets
             set = (attrsOf anything).merge;
-            # Safe and deterministic behavior for lists is to only accept one definition
-            # listOf only used to apply mkIf and co.
-            list =
-              if length defs > 1
-              then throw "The option `${showOption loc}' has conflicting definitions, in ${showFiles (getFiles defs)}."
-              else (listOf anything).merge;
             # This is the type of packages, only accept a single definition
             stringCoercibleSet = mergeOneOption;
             lambda = loc: defs: arg: anything.merge
@@ -449,6 +481,11 @@ rec {
       descriptionClass = "noun";
       check = x: str.check x && builtins.match pattern x != null;
       inherit (str) merge;
+      functor = defaultFunctor "strMatching" // {
+        type = payload: strMatching payload.pattern;
+        payload = { inherit pattern; };
+        binOp = lhs: rhs: if lhs == rhs then lhs else null;
+      };
     };
 
     # Merge multiple definitions by concatenating them (with the given
@@ -463,9 +500,10 @@ rec {
       check = isString;
       merge = loc: defs: concatStringsSep sep (getValues defs);
       functor = (defaultFunctor name) // {
-        payload = sep;
-        binOp = sepLhs: sepRhs:
-          if sepLhs == sepRhs then sepLhs
+        payload = { inherit sep; };
+        type = payload: types.separatedString payload.sep;
+        binOp = lhs: rhs:
+          if lhs.sep == rhs.sep then { inherit (lhs) sep; }
           else null;
       };
     };
@@ -562,7 +600,9 @@ rec {
       getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["*"]);
       getSubModules = elemType.getSubModules;
       substSubModules = m: listOf (elemType.substSubModules m);
-      functor = (defaultFunctor name) // { wrapped = elemType; };
+      functor = (elemTypeFunctor name { inherit elemType; }) // {
+        type = payload: types.listOf payload.elemType;
+      };
       nestedTypes.elemType = elemType;
     };
 
@@ -574,48 +614,84 @@ rec {
         substSubModules = m: nonEmptyListOf (elemType.substSubModules m);
       };
 
-    attrsOf = elemType: mkOptionType rec {
-      name = "attrsOf";
-      description = "attribute set of ${optionDescriptionPhrase (class: class == "noun" || class == "composite") elemType}";
-      descriptionClass = "composite";
-      check = isAttrs;
-      merge = loc: defs:
-        mapAttrs (n: v: v.value) (filterAttrs (n: v: v ? value) (zipAttrsWith (name: defs:
-            (mergeDefinitions (loc ++ [name]) elemType defs).optionalValue
-          )
-          # Push down position info.
-          (map (def: mapAttrs (n: v: { inherit (def) file; value = v; }) def.value) defs)));
-      emptyValue = { value = {}; };
-      getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["<name>"]);
-      getSubModules = elemType.getSubModules;
-      substSubModules = m: attrsOf (elemType.substSubModules m);
-      functor = (defaultFunctor name) // { wrapped = elemType; };
-      nestedTypes.elemType = elemType;
-    };
+    attrsOf = elemType: attrsWith { inherit elemType; };
 
     # A version of attrsOf that's lazy in its values at the expense of
     # conditional definitions not working properly. E.g. defining a value with
     # `foo.attr = mkIf false 10`, then `foo ? attr == true`, whereas with
     # attrsOf it would correctly be `false`. Accessing `foo.attr` would throw an
     # error that it's not defined. Use only if conditional definitions don't make sense.
-    lazyAttrsOf = elemType: mkOptionType rec {
-      name = "lazyAttrsOf";
-      description = "lazy attribute set of ${optionDescriptionPhrase (class: class == "noun" || class == "composite") elemType}";
+    lazyAttrsOf = elemType: attrsWith { inherit elemType; lazy = true; };
+
+    # base type for lazyAttrsOf and attrsOf
+    attrsWith =
+    let
+      # Push down position info.
+      pushPositions = map (def: mapAttrs (n: v: { inherit (def) file; value = v; }) def.value);
+      binOp = lhs: rhs:
+        let
+          elemType = lhs.elemType.typeMerge rhs.elemType.functor;
+          lazy =
+            if lhs.lazy == rhs.lazy then
+              lhs.lazy
+            else
+              null;
+          placeholder =
+            if lhs.placeholder == rhs.placeholder then
+              lhs.placeholder
+            else if lhs.placeholder == "name" then
+              rhs.placeholder
+            else if rhs.placeholder == "name" then
+              lhs.placeholder
+            else
+              null;
+        in
+        if elemType == null || lazy == null || placeholder == null then
+          null
+        else
+          {
+            inherit elemType lazy placeholder;
+          };
+    in
+    {
+      elemType,
+      lazy ? false,
+      placeholder ? "name",
+    }:
+    mkOptionType {
+      name = if lazy then "lazyAttrsOf" else "attrsOf";
+      description = (if lazy then "lazy attribute set" else "attribute set") + " of ${optionDescriptionPhrase (class: class == "noun" || class == "composite") elemType}";
       descriptionClass = "composite";
       check = isAttrs;
-      merge = loc: defs:
-        zipAttrsWith (name: defs:
-          let merged = mergeDefinitions (loc ++ [name]) elemType defs;
-          # mergedValue will trigger an appropriate error when accessed
-          in merged.optionalValue.value or elemType.emptyValue.value or merged.mergedValue
-        )
-        # Push down position info.
-        (map (def: mapAttrs (n: v: { inherit (def) file; value = v; }) def.value) defs);
+      merge = if lazy then (
+        # Lazy merge Function
+        loc: defs:
+          zipAttrsWith (name: defs:
+            let merged = mergeDefinitions (loc ++ [name]) elemType defs;
+            # mergedValue will trigger an appropriate error when accessed
+            in merged.optionalValue.value or elemType.emptyValue.value or merged.mergedValue
+          )
+          # Push down position info.
+          (pushPositions defs)
+      ) else (
+        # Non-lazy merge Function
+        loc: defs:
+          mapAttrs (n: v: v.value) (filterAttrs (n: v: v ? value) (zipAttrsWith (name: defs:
+              (mergeDefinitions (loc ++ [name]) elemType (defs)).optionalValue
+            )
+          # Push down position info.
+          (pushPositions defs)))
+      );
       emptyValue = { value = {}; };
-      getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["<name>"]);
+      getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["<${placeholder}>"]);
       getSubModules = elemType.getSubModules;
-      substSubModules = m: lazyAttrsOf (elemType.substSubModules m);
-      functor = (defaultFunctor name) // { wrapped = elemType; };
+      substSubModules = m: attrsWith { elemType = elemType.substSubModules m; inherit lazy placeholder; };
+      functor = (elemTypeFunctor "attrsWith" {
+          inherit elemType lazy placeholder;
+      }) // {
+        # Custom type merging required because of the "placeholder" attribute
+        inherit binOp;
+      };
       nestedTypes.elemType = elemType;
     };
 
@@ -972,7 +1048,11 @@ rec {
           else "conjunction";
         check = flip elem values;
         merge = mergeEqualOption;
-        functor = (defaultFunctor name) // { payload = values; binOp = a: b: unique (a ++ b); };
+        functor = (defaultFunctor name) // {
+          payload = { inherit values; };
+          type = payload: types.enum payload.values;
+          binOp = a: b: { values = unique (a.values ++ b.values); };
+        };
       };
 
     # Either value of type `t1` or `t2`.

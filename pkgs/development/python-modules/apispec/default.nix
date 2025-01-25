@@ -15,21 +15,21 @@
 
 buildPythonPackage rec {
   pname = "apispec";
-  version = "6.6.1";
+  version = "6.8.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-9cqkfO51/gO5xQtVlASLTAUu7KLCEuDawS27YXXZplk=";
+    hash = "sha256-9JFsu3vhVpY7GPWSmg5CvSNJE1g0toCoGxJDK8+qmjk=";
   };
 
   nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [ packaging ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     marshmallow = [ marshmallow ];
     yaml = [ pyyaml ];
     validation = [
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     mock
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "apispec" ];
 

@@ -13,13 +13,13 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "julien-r44";
     repo = "fast-ssh";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Wn1kwuY1tRJVe9DJexyQ/h+Z1gNtluj78QpBYjeCbSE=";
   };
 
   cargoHash = "sha256-CJ3Xx5jaTD01Ai7YAY4vB7RB5lU1BIXq7530B6+KeX4=";
 
-  buildInputs = lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
 
   meta = with lib; {
     description = "TUI tool to use the SSH config for connections";

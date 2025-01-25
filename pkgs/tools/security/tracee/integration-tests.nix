@@ -1,18 +1,24 @@
-{ lib, tracee, makeWrapper }:
+{
+  lib,
+  tracee,
+  makeWrapper,
+}:
 tracee.overrideAttrs (oa: {
   pname = oa.pname + "-integration";
-  postPatch = oa.postPatch or "" + ''
-    # fix the test to look at nixos paths for running programs
-      # --replace-fail '"integration.tes"' '"tracee-integrat"' \
-    substituteInPlace tests/integration/event_filters_test.go \
-      --replace-fail "exec=/usr/bin/dockerd" "comm=dockerd" \
-      --replace-fail "exec=/usr/bin" "exec=/tmp/testdir" \
-      --replace-fail "/usr/bin/tee" "tee" \
-      --replace-fail "/usr/bin" "/run/current-system/sw/bin" \
-      --replace-fail 'syscallerAbsPath := filepath.Join("..", "..", "dist", "syscaller")' "syscallerAbsPath := filepath.Join(\"$out/bin/syscaller\")"
-    substituteInPlace tests/integration/exec_test.go \
-      --replace-fail "/usr/bin" "/run/current-system/sw/bin"
-  '';
+  postPatch =
+    oa.postPatch or ""
+    + ''
+      # fix the test to look at nixos paths for running programs
+        # --replace-fail '"integration.tes"' '"tracee-integrat"' \
+      substituteInPlace tests/integration/event_filters_test.go \
+        --replace-fail "exec=/usr/bin/dockerd" "comm=dockerd" \
+        --replace-fail "exec=/usr/bin" "exec=/tmp/testdir" \
+        --replace-fail "/usr/bin/tee" "tee" \
+        --replace-fail "/usr/bin" "/run/current-system/sw/bin" \
+        --replace-fail 'syscallerAbsPath := filepath.Join("..", "..", "dist", "syscaller")' "syscallerAbsPath := filepath.Join(\"$out/bin/syscaller\")"
+      substituteInPlace tests/integration/exec_test.go \
+        --replace-fail "/usr/bin" "/run/current-system/sw/bin"
+    '';
   nativeBuildInputs = oa.nativeBuildInputs or [ ] ++ [ makeWrapper ];
   buildPhase = ''
     runHook preBuild

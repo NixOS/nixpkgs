@@ -7,29 +7,31 @@
   colored,
   pytestCheckHook,
   numpy,
+  pandas,
 }:
 
 buildPythonPackage rec {
   pname = "ansitable";
-  version = "0.10.0";
+  version = "0.11.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ehPPpZ9C/Nrly9WoJJfZtv2YfZ9MEcQsKtuxNpcJe7U=";
+    hash = "sha256-XUjXVs9/ETlbbtvYz8YJqCsP1BFajqQKQfSM+Rvm4O0=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ colored ];
+  dependencies = [ colored ];
 
   pythonImportsCheck = [ "ansitable" ];
 
   nativeCheckInputs = [
     pytestCheckHook
     numpy
+    pandas
   ];
 
   meta = with lib; {

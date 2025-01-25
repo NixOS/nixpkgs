@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rkoopmans";
     repo = "python-certificate-chain-resolver";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-2itpu/Ap5GNnqAiw3Cp+8rndreWlwfPd+WwM99G7U2E=";
   };
 

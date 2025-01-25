@@ -7,10 +7,10 @@
 let
   appthreat-vulnerability-db = (
     python3.pkgs.appthreat-vulnerability-db.overrideAttrs (oldAttrs: rec {
-      version = "5.7.3";
+      version = "5.7.8";
       src = oldAttrs.src.override {
         rev = "refs/tags/v${version}";
-        hash = "sha256-MrlgBUx3T2G46Pnah3obe5b4yKDzsAFVC/B7AHM0kZY=";
+        hash = "sha256-R00/a9+1NctVPi+EL7K65w/e88c9oSW5xXGgno+MCXo=";
       };
     })
   );
@@ -18,15 +18,17 @@ let
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "dep-scan";
-  version = "5.4.3";
+  version = "5.4.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "owasp-dep-scan";
     repo = "dep-scan";
     rev = "refs/tags/v${version}";
-    hash = "sha256-m0vDsCetOSfScu1eprrGaDJ1VuXxuNFBitK8N5GtfSQ=";
+    hash = "sha256-QTvxKoqBxTb/xFaIHsYe3N+7ABJ6sDd2vVcjkMbm3xI=";
   };
+
+  pythonRelaxDeps = [ "oras" ];
 
   build-system = with python3.pkgs; [ setuptools ];
 

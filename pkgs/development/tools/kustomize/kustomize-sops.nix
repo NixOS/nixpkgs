@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "kustomize-sops";
@@ -14,8 +18,10 @@ buildGoModule rec {
   vendorHash = "sha256-1qnNJltam04uLMhH8YftAl2jjEZP2UhVIMp9Vcy3jeg=";
 
   installPhase = ''
+    mkdir -p $out/lib/viaduct.ai/v1/ksops/
     mkdir -p $out/lib/viaduct.ai/v1/ksops-exec/
-    mv $GOPATH/bin/kustomize-sops $out/lib/viaduct.ai/v1/ksops-exec/ksops-exec
+    mv $GOPATH/bin/kustomize-sops $out/lib/viaduct.ai/v1/ksops/ksops
+    ln -s $out/lib/viaduct.ai/v1/ksops/ksops $out/lib/viaduct.ai/v1/ksops-exec/ksops-exec
   '';
 
   # Tests are broken in a nix environment

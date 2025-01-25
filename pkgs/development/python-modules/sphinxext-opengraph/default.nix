@@ -20,13 +20,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "wpilibsuite";
     repo = "sphinxext-opengraph";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-B+bJ1tKqTTlbNeJLxk56o2a21n3Yg6OHwJiFfCx46aw=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     social_cards_generation = [ matplotlib ];
   };
 
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     beautifulsoup4
-  ] ++ passthru.optional-dependencies.social_cards_generation;
+  ] ++ optional-dependencies.social_cards_generation;
 
   pythonImportsCheck = [ "sphinxext.opengraph" ];
 

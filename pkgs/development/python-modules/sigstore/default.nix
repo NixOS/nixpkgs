@@ -15,15 +15,20 @@
   pythonOlder,
   requests,
   rich,
+  nix-update-script,
   securesystemslib,
   sigstore-protobuf-specs,
   sigstore-rekor-types,
+  rfc3161-client,
   tuf,
+  rfc8785,
+  pyasn1,
+  platformdirs,
 }:
 
 buildPythonPackage rec {
   pname = "sigstore-python";
-  version = "2.1.5";
+  version = "3.6.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -31,9 +36,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sigstore";
     repo = "sigstore-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-lqmrM4r1yPVCcvWNC9CKYMyryuIyliI2Y+TAYgAwA1Y=";
+    tag = "v${version}";
+    hash = "sha256-BdVX2LWCsMx9r0bDTJjMdrvy4Hqn6hrw9wAcub0nRMk=";
   };
+
+  pythonRelaxDeps = [
+    "sigstore-rekor-types"
+    "rfc3161-client"
+  ];
 
   build-system = [ flit-core ];
 
@@ -45,6 +55,10 @@ buildPythonPackage rec {
     pydantic
     pyjwt
     pyopenssl
+    pyasn1
+    rfc8785
+    rfc3161-client
+    platformdirs
     requests
     rich
     securesystemslib
@@ -75,14 +89,21 @@ buildPythonPackage rec {
     "test_sign_rekor_entry_consistent"
     "test_verification_materials_retrieves_rekor_entry"
     "test_verifier"
+    "test_fix_bundle_fixes_missing_checkpoint"
+    "test_trust_root_bundled_get"
+    "test_fix_bundle_upgrades_bundle"
+    "test_trust_root_tuf_caches_and_requests"
+    "test_regression_verify_legacy_bundle"
   ];
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Codesigning tool for Python packages";
     homepage = "https://github.com/sigstore/sigstore-python";
     changelog = "https://github.com/sigstore/sigstore-python/blob/${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = [ ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bot-wxt1221 ];
     mainProgram = "sigstore";
   };
 }

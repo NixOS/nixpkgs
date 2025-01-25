@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.security.sudo-rs;
@@ -6,12 +11,14 @@ let
   toUserString = user: if (lib.isInt user) then "#${toString user}" else "${user}";
   toGroupString = group: if (lib.isInt group) then "%#${toString group}" else "%${group}";
 
-  toCommandOptionsString = options:
-    "${lib.concatStringsSep ":" options}${lib.optionalString (lib.length options != 0) ":"} ";
+  toCommandOptionsString =
+    options: "${lib.concatStringsSep ":" options}${lib.optionalString (lib.length options != 0) ":"} ";
 
-  toCommandsString = commands:
+  toCommandsString =
+    commands:
     lib.concatStringsSep ", " (
-      map (command:
+      map (
+        command:
         if (lib.isString command) then
           command
         else
@@ -29,7 +36,7 @@ in
 
     defaultOptions = lib.mkOption {
       type = with lib.types; listOf str;
-      default = [];
+      default = [ ];
       description = ''
         Options used for the default rules, granting `root` and the
         `wheel` group permission to run any command as any user.
@@ -50,7 +57,7 @@ in
         Whether users of the `wheel` group must
         provide a password to run commands as super user via {command}`sudo`.
       '';
-      };
+    };
 
     execWheelOnly = lib.mkOption {
       type = lib.types.bool;
@@ -80,7 +87,7 @@ in
         yield the expected behavior. You can use `lib.mkBefore`/`lib.mkAfter` to ensure
         this is the case when configuration options are merged.
       '';
-      default = [];
+      default = [ ];
       example = lib.literalExpression ''
         [
           # Allow execution of any command by all users in group sudo,
@@ -100,73 +107,92 @@ in
                   { command = '''/home/baz/cmd2.sh ""'''; options = [ "SETENV" ]; } ]; }
         ]
       '';
-      type = with lib.types; listOf (submodule {
-        options = {
-          users = lib.mkOption {
-            type = with lib.types; listOf (either str int);
-            description = ''
-              The usernames / UIDs this rule should apply for.
-            '';
-            default = [];
+      type =
+        with lib.types;
+        listOf (submodule {
+          options = {
+            users = lib.mkOption {
+              type = with lib.types; listOf (either str int);
+              description = ''
+                The usernames / UIDs this rule should apply for.
+              '';
+              default = [ ];
+            };
+
+            groups = lib.mkOption {
+              type = with lib.types; listOf (either str int);
+              description = ''
+                The groups / GIDs this rule should apply for.
+              '';
+              default = [ ];
+            };
+
+            host = lib.mkOption {
+              type = lib.types.str;
+              default = "ALL";
+              description = ''
+                For what host this rule should apply.
+              '';
+            };
+
+            runAs = lib.mkOption {
+              type = with lib.types; str;
+              default = "ALL:ALL";
+              description = ''
+                Under which user/group the specified command is allowed to run.
+
+                A user can be specified using just the username: `"foo"`.
+                It is also possible to specify a user/group combination using `"foo:bar"`
+                or to only allow running as a specific group with `":bar"`.
+              '';
+            };
+
+            commands = lib.mkOption {
+              description = ''
+                The commands for which the rule should apply.
+              '';
+              type =
+                with lib.types;
+                listOf (
+                  either str (submodule {
+
+                    options = {
+                      command = lib.mkOption {
+                        type = with lib.types; str;
+                        description = ''
+                          A command being either just a path to a binary to allow any arguments,
+                          the full command with arguments pre-set or with `""` used as the argument,
+                          not allowing arguments to the command at all.
+                        '';
+                      };
+
+                      options = lib.mkOption {
+                        type =
+                          with lib.types;
+                          listOf (enum [
+                            "NOPASSWD"
+                            "PASSWD"
+                            "NOEXEC"
+                            "EXEC"
+                            "SETENV"
+                            "NOSETENV"
+                            "LOG_INPUT"
+                            "NOLOG_INPUT"
+                            "LOG_OUTPUT"
+                            "NOLOG_OUTPUT"
+                          ]);
+                        description = ''
+                          Options for running the command. Refer to the [sudo manual](https://www.sudo.ws/man/1.7.10/sudoers.man.html).
+                        '';
+                        default = [ ];
+                      };
+                    };
+
+                  })
+                );
+            };
           };
-
-          groups = lib.mkOption {
-            type = with lib.types; listOf (either str int);
-            description = ''
-              The groups / GIDs this rule should apply for.
-            '';
-            default = [];
-          };
-
-          host = lib.mkOption {
-            type = lib.types.str;
-            default = "ALL";
-            description = ''
-              For what host this rule should apply.
-            '';
-          };
-
-          runAs = lib.mkOption {
-            type = with lib.types; str;
-            default = "ALL:ALL";
-            description = ''
-              Under which user/group the specified command is allowed to run.
-
-              A user can be specified using just the username: `"foo"`.
-              It is also possible to specify a user/group combination using `"foo:bar"`
-              or to only allow running as a specific group with `":bar"`.
-            '';
-          };
-
-          commands = lib.mkOption {
-            description = ''
-              The commands for which the rule should apply.
-            '';
-            type = with lib.types; listOf (either str (submodule {
-
-              options = {
-                command = lib.mkOption {
-                  type = with lib.types; str;
-                  description = ''
-                    A command being either just a path to a binary to allow any arguments,
-                    the full command with arguments pre-set or with `""` used as the argument,
-                    not allowing arguments to the command at all.
-                  '';
-                };
-
-                options = lib.mkOption {
-                  type = with lib.types; listOf (enum [ "NOPASSWD" "PASSWD" "NOEXEC" "EXEC" "SETENV" "NOSETENV" "LOG_INPUT" "NOLOG_INPUT" "LOG_OUTPUT" "NOLOG_OUTPUT" ]);
-                  description = ''
-                    Options for running the command. Refer to the [sudo manual](https://www.sudo.ws/man/1.7.10/sudoers.man.html).
-                  '';
-                  default = [];
-                };
-              };
-
-            }));
-          };
-        };
-      });
+        });
     };
 
     extraConfig = lib.mkOption {
@@ -178,29 +204,43 @@ in
     };
   };
 
-
   ###### implementation
 
   config = lib.mkIf cfg.enable {
-    assertions = [ {
-      assertion = ! config.security.sudo.enable;
-      message = "`security.sudo` and `security.sudo-rs` cannot both be enabled";
-    }];
+    assertions = [
+      {
+        assertion = !config.security.sudo.enable;
+        message = "`security.sudo` and `security.sudo-rs` cannot both be enabled";
+      }
+    ];
     security.sudo.enable = lib.mkDefault false;
 
     security.sudo-rs.extraRules =
       let
-        defaultRule = { users ? [], groups ? [], opts ? [] }: [ {
-          inherit users groups;
-          commands = [ {
-            command = "ALL";
-            options = opts ++ cfg.defaultOptions;
-          } ];
-        } ];
-      in lib.mkMerge [
+        defaultRule =
+          {
+            users ? [ ],
+            groups ? [ ],
+            opts ? [ ],
+          }:
+          [
+            {
+              inherit users groups;
+              commands = [
+                {
+                  command = "ALL";
+                  options = opts ++ cfg.defaultOptions;
+                }
+              ];
+            }
+          ];
+      in
+      lib.mkMerge [
         # This is ordered before users' `lib.mkBefore` rules,
         # so as not to introduce unexpected changes.
-        (lib.mkOrder 400 (defaultRule { users = [ "root" ]; }))
+        (lib.mkOrder 400 (defaultRule {
+          users = [ "root" ];
+        }))
 
         # This is ordered to show before (most) other rules, but
         # late-enough for a user to `lib.mkBefore` it.
@@ -210,54 +250,70 @@ in
         }))
       ];
 
-    security.sudo-rs.configFile = lib.concatStringsSep "\n" (lib.filter (s: s != "") [
-      ''
-        # Don't edit this file. Set the NixOS options ‘security.sudo-rs.configFile’
-        # or ‘security.sudo-rs.extraRules’ instead.
-      ''
-      (lib.pipe cfg.extraRules [
-        (lib.filter (rule: lib.length rule.commands != 0))
-        (map (rule: [
-          (map (user: "${toUserString user}     ${rule.host}=(${rule.runAs})    ${toCommandsString rule.commands}") rule.users)
-          (map (group: "${toGroupString group}  ${rule.host}=(${rule.runAs})    ${toCommandsString rule.commands}") rule.groups)
-        ]))
-        lib.flatten
-        (lib.concatStringsSep "\n")
-      ])
-      "\n"
-      (lib.optionalString (cfg.extraConfig != "") ''
-        # extraConfig
-        ${cfg.extraConfig}
-      '')
-    ]);
+    security.sudo-rs.configFile = lib.concatStringsSep "\n" (
+      lib.filter (s: s != "") [
+        ''
+          # Don't edit this file. Set the NixOS options ‘security.sudo-rs.configFile’
+          # or ‘security.sudo-rs.extraRules’ instead.
+        ''
+        (lib.pipe cfg.extraRules [
+          (lib.filter (rule: lib.length rule.commands != 0))
+          (map (rule: [
+            (map (
+              user: "${toUserString user}     ${rule.host}=(${rule.runAs})    ${toCommandsString rule.commands}"
+            ) rule.users)
+            (map (
+              group: "${toGroupString group}  ${rule.host}=(${rule.runAs})    ${toCommandsString rule.commands}"
+            ) rule.groups)
+          ]))
+          lib.flatten
+          (lib.concatStringsSep "\n")
+        ])
+        "\n"
+        (lib.optionalString (cfg.extraConfig != "") ''
+          # extraConfig
+          ${cfg.extraConfig}
+        '')
+      ]
+    );
 
-    security.wrappers = let
-      owner = "root";
-      group = if cfg.execWheelOnly then "wheel" else "root";
-      setuid = true;
-      permissions = if cfg.execWheelOnly then "u+rx,g+x" else "u+rx,g+x,o+x";
-    in {
-      sudo = {
-        source = "${cfg.package.out}/bin/sudo";
-        inherit owner group setuid permissions;
+    security.wrappers =
+      let
+        owner = "root";
+        group = if cfg.execWheelOnly then "wheel" else "root";
+        setuid = true;
+        permissions = if cfg.execWheelOnly then "u+rx,g+x" else "u+rx,g+x,o+x";
+      in
+      {
+        sudo = {
+          source = "${cfg.package.out}/bin/sudo";
+          inherit
+            owner
+            group
+            setuid
+            permissions
+            ;
+        };
       };
-    };
 
     environment.systemPackages = [ cfg.package ];
 
-    security.pam.services.sudo = { sshAgentAuth = true; usshAuth = true; };
-    security.pam.services.sudo-i = { sshAgentAuth = true; usshAuth = true; };
+    security.pam.services.sudo = {
+      sshAgentAuth = true;
+      usshAuth = true;
+    };
+    security.pam.services.sudo-i = {
+      sshAgentAuth = true;
+      usshAuth = true;
+    };
 
-    environment.etc.sudoers =
-      { source =
-          pkgs.runCommand "sudoers"
-          {
-            src = pkgs.writeText "sudoers-in" cfg.configFile;
-            preferLocalBuild = true;
-          }
-          "${pkgs.buildPackages.sudo-rs}/bin/visudo -f $src -c && cp $src $out";
-        mode = "0440";
-      };
+    environment.etc.sudoers = {
+      source = pkgs.runCommand "sudoers" {
+        src = pkgs.writeText "sudoers-in" cfg.configFile;
+        preferLocalBuild = true;
+      } "${pkgs.buildPackages.sudo-rs}/bin/visudo -f $src -c && cp $src $out";
+      mode = "0440";
+    };
 
   };
 

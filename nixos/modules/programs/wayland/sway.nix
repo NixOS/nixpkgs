@@ -85,9 +85,10 @@ in
 
     extraPackages = lib.mkOption {
       type = with lib.types; listOf package;
-      default = with pkgs; [ swaylock swayidle foot dmenu wmenu ];
+      # Packages used in default config
+      default = with pkgs; [ brightnessctl foot grim pulseaudio swayidle swaylock wmenu ];
       defaultText = lib.literalExpression ''
-        with pkgs; [ swaylock swayidle foot dmenu wmenu ];
+        with pkgs; [ brightnessctl foot grim pulseaudio swayidle swaylock wmenu ];
       '';
       example = lib.literalExpression ''
         with pkgs; [ i3status i3status-rust termite rofi light ]
@@ -111,6 +112,16 @@ in
           '';
         }
       ];
+
+      warnings =
+          lib.mkIf
+            (
+              (lib.elem "nvidia" config.services.xserver.videoDrivers)
+              && (lib.versionOlder (lib.versions.major (lib.getVersion config.hardware.nvidia.package)) "551")
+            )
+            [
+              "Using Sway with Nvidia driver version <= 550 may result in a broken system. Configure hardware.nvidia.package to use a newer version."
+            ];
 
       environment = {
         systemPackages = lib.optional (cfg.package != null) cfg.package ++ cfg.extraPackages;
@@ -144,11 +155,23 @@ in
       services.displayManager.sessionPackages = lib.optional (cfg.package != null) cfg.package;
 
       # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1050913
-      xdg.portal.config.sway.default = lib.mkDefault [ "wlr" "gtk" ];
+      # https://github.com/emersion/xdg-desktop-portal-wlr/blob/master/contrib/wlroots-portals.conf
+      # https://github.com/emersion/xdg-desktop-portal-wlr/pull/315
+      xdg.portal.config.sway = {
+        # Use xdg-desktop-portal-gtk for every portal interface...
+        default = "gtk";
+        # ... except for the ScreenCast, Screenshot and Secret
+        "org.freedesktop.impl.portal.ScreenCast" = "wlr";
+        "org.freedesktop.impl.portal.Screenshot" = "wlr";
+        # ignore inhibit bc gtk portal always returns as success,
+        # despite sway/the wlr portal not having an implementation,
+        # stopping firefox from using wayland idle-inhibit
+        "org.freedesktop.impl.portal.Inhibit" = "none";
+      };
     }
 
     (import ./wayland-session.nix {
-      inherit lib;
+      inherit lib pkgs;
       enableXWayland = cfg.xwayland.enable;
     })
   ]);

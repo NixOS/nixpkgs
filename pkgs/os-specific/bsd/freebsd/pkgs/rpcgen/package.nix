@@ -2,7 +2,6 @@
   lib,
   mkDerivation,
   stdenv,
-  patchesRoot,
 }:
 
 mkDerivation {

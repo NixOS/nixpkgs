@@ -25,7 +25,7 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "mjpost";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-evSBHvDFOJlE2f9uM+NNCQeABY5lCc3Rs9dq11n7v5c=";
   };
 

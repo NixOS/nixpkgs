@@ -5,14 +5,14 @@
 # nix build .#legacyPackages.x86_64-darwin.mesa .#legacyPackages.aarch64-darwin.mesa
 rec {
   pname = "mesa";
-  version = "24.2.2";
+  version = "24.3.4";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "mesa";
     repo = "mesa";
     rev = "mesa-${version}";
-    hash = "sha256-1aRnG5BnFDuBOnGIb7X3yDk4PkhpBbMpp+IjfpmgtkM=";
+    hash = "sha256-1RUHbTgcCxdDrWjqB0EG4Ny/nwdjQHHpyPauiW/yogU=";
   };
 
   meta = {
@@ -27,9 +27,13 @@ rec {
       complete hardware acceleration for modern GPUs.
     '';
     homepage = "https://www.mesa3d.org/";
-    changelog = "https://www.mesa3d.org/relnotes/${version}.html";
+    changelog = "https://docs.mesa3d.org/relnotes/${version}.html";
     license = with lib.licenses; [ mit ]; # X11 variant, in most files
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ primeos vcunat ]; # Help is welcome :)
+    maintainers = with lib.maintainers; [
+      k900
+      primeos
+      vcunat
+    ]; # Help is welcome :)
   };
 }

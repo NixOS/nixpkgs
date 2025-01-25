@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.dkimproxy-out;
   keydir = "/var/lib/dkimproxy-out";
@@ -13,11 +18,11 @@ in
         type = lib.types.bool;
         default = false;
         description = ''
-            Whether to enable dkimproxy_out.
+          Whether to enable dkimproxy_out.
 
-            Note that a key will be auto-generated, and can be found in
-            ${keydir}.
-          '';
+          Note that a key will be auto-generated, and can be found in
+          ${keydir}.
+        '';
       };
 
       listen = lib.mkOption {
@@ -34,7 +39,10 @@ in
 
       domains = lib.mkOption {
         type = with lib.types; listOf str;
-        example = [ "example.org" "example.com" ];
+        example = [
+          "example.org"
+          "example.com"
+        ];
         description = "List of domains DKIMproxy can sign for.";
       };
 
@@ -42,22 +50,22 @@ in
         type = lib.types.str;
         example = "selector1";
         description = ''
-            The selector to use for DKIM key identification.
+          The selector to use for DKIM key identification.
 
-            For example, if 'selector1' is used here, then for each domain
-            'example.org' given in `domain`, 'selector1._domainkey.example.org'
-            should contain the TXT record indicating the public key is the one
-            in ${pubkey}: "v=DKIM1; t=s; p=[THE PUBLIC KEY]".
-          '';
+          For example, if 'selector1' is used here, then for each domain
+          'example.org' given in `domain`, 'selector1._domainkey.example.org'
+          should contain the TXT record indicating the public key is the one
+          in ${pubkey}: "v=DKIM1; t=s; p=[THE PUBLIC KEY]".
+        '';
       };
 
       keySize = lib.mkOption {
         type = lib.types.int;
         default = 2048;
         description = ''
-            Size of the RSA key to use to sign outgoing emails. Note that the
-            maximum mandatorily verified as per RFC6376 is 2048.
-          '';
+          Size of the RSA key to use to sign outgoing emails. Note that the
+          maximum mandatorily verified as per RFC6376 is 2048.
+        '';
       };
 
       # TODO: allow signature for other schemes than dkim(c=relaxed/relaxed)?
@@ -67,9 +75,9 @@ in
   };
 
   ##### implementation
-  config = let
-    configfile = pkgs.writeText "dkimproxy_out.conf"
-      ''
+  config =
+    let
+      configfile = pkgs.writeText "dkimproxy_out.conf" ''
         listen ${cfg.listen}
         relay ${cfg.relay}
 
@@ -80,9 +88,9 @@ in
 
         keyfile ${privkey}
       '';
-  in
+    in
     lib.mkIf cfg.enable {
-      users.groups.dkimproxy-out = {};
+      users.groups.dkimproxy-out = { };
       users.users.dkimproxy-out = {
         description = "DKIMproxy_out daemon";
         group = "dkimproxy-out";

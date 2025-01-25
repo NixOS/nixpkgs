@@ -1,8 +1,9 @@
-{ lib
-, mkDerivation
-, cmake
-, extra-cmake-modules
-, qtsystems
+{
+  lib,
+  mkDerivation,
+  cmake,
+  extra-cmake-modules,
+  qtsystems,
 }:
 
 mkDerivation {

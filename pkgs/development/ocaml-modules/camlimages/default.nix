@@ -1,5 +1,13 @@
-{ lib, fetchFromGitLab, buildDunePackage, findlib, dune-configurator, cppo
-, graphics, lablgtk, stdio
+{
+  lib,
+  fetchFromGitLab,
+  buildDunePackage,
+  findlib,
+  dune-configurator,
+  cppo,
+  graphics,
+  lablgtk,
+  stdio,
 }:
 
 buildDunePackage rec {
@@ -19,13 +27,22 @@ buildDunePackage rec {
   patches = [ ./camlimages.patch ];
 
   nativeBuildInputs = [ cppo ];
-  buildInputs = [ dune-configurator findlib graphics lablgtk stdio ];
+  buildInputs = [
+    dune-configurator
+    findlib
+    graphics
+    lablgtk
+    stdio
+  ];
 
   meta = with lib; {
     branch = "5.0";
     inherit (src.meta) homepage;
     description = "OCaml image processing library";
     license = licenses.lgpl2;
-    maintainers = [ maintainers.vbgl maintainers.mt-caret ];
+    maintainers = [
+      maintainers.vbgl
+      maintainers.mt-caret
+    ];
   };
 }

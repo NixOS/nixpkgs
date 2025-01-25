@@ -1,21 +1,27 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.powerdns-admin;
 
-  configText = ''
-    ${cfg.config}
-  ''
-  + optionalString (cfg.secretKeyFile != null) ''
-    with open('${cfg.secretKeyFile}') as file:
-      SECRET_KEY = file.read()
-  ''
-  + optionalString (cfg.saltFile != null) ''
-    with open('${cfg.saltFile}') as file:
-      SALT = file.read()
-  '';
+  configText =
+    ''
+      ${cfg.config}
+    ''
+    + optionalString (cfg.secretKeyFile != null) ''
+      with open('${cfg.secretKeyFile}') as file:
+        SECRET_KEY = file.read()
+    ''
+    + optionalString (cfg.saltFile != null) ''
+      with open('${cfg.saltFile}') as file:
+        SALT = file.read()
+    '';
 in
 {
   options.services.powerdns-admin = {
@@ -87,17 +93,16 @@ in
         User = "powerdnsadmin";
         Group = "powerdnsadmin";
 
-        AmbientCapabilities = "CAP_NET_BIND_SERVICE";
-        BindReadOnlyPaths = [
-          "/nix/store"
-          "-/etc/resolv.conf"
-          "-/etc/nsswitch.conf"
-          "-/etc/hosts"
-          "-/etc/localtime"
-        ]
-        ++ (optional (cfg.secretKeyFile != null) cfg.secretKeyFile)
-        ++ (optional (cfg.saltFile != null) cfg.saltFile);
-        CapabilityBoundingSet = "CAP_NET_BIND_SERVICE";
+        BindReadOnlyPaths =
+          [
+            "/nix/store"
+            "-/etc/resolv.conf"
+            "-/etc/nsswitch.conf"
+            "-/etc/hosts"
+            "-/etc/localtime"
+          ]
+          ++ (optional (cfg.secretKeyFile != null) cfg.secretKeyFile)
+          ++ (optional (cfg.saltFile != null) cfg.saltFile);
         # ProtectClock= adds DeviceAllow=char-rtc r
         DeviceAllow = "";
         # Implies ProtectSystem=strict, which re-mounts all paths
@@ -122,7 +127,11 @@ in
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
         ProtectProc = "invisible";
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_UNIX"
+        ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;

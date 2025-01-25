@@ -1,87 +1,86 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
-  stdenv,
-  darwin,
+
   rust-jemalloc-sys,
+  buildPackages,
+  versionCheckHook,
+
+  # passthru
   ruff-lsp,
+  nixosTests,
   nix-update-script,
-  testers,
-  ruff,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ruff";
-  version = "0.6.5";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "ruff";
-    rev = "refs/tags/${version}";
-    hash = "sha256-1V95S0FWHzCxztgip+rbCjji4O71D+QdcSZ/hbABeKg=";
+    tag = version;
+    hash = "sha256-V05GUo5nA6RhVWD7mn94GF3/93In3cnljd2G3hPeBZ0=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "lsp-types-0.95.1" = "sha256-8Oh299exWXVi6A39pALOISNfp8XBya8z+KT/Z7suRxQ=";
-      "salsa-0.18.0" = "sha256-EjpCTOB6E7n5oNn1bvzNyznzs0uRJvAXrNsZggk4hgM=";
-    };
-  };
-
-  # Revert the change made in https://github.com/astral-sh/ruff/pull/13299
-  # It was causing linking issues: https://github.com/NixOS/nixpkgs/pull/341674#issuecomment-2351172084
-  postPatch = ''
-    substituteInPlace crates/ruff_benchmark/Cargo.toml \
-      --replace-fail '"unprefixed_malloc_on_supported_platforms"' ' '
-  '';
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-FpybUZZ5qjo87fYbUAnK+w4cUPx4UWGzexL92cEnIFU=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = [
     rust-jemalloc-sys
-  ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.CoreServices ];
-
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd ruff \
-      --bash <($out/bin/ruff generate-shell-completion bash) \
-      --fish <($out/bin/ruff generate-shell-completion fish) \
-      --zsh <($out/bin/ruff generate-shell-completion zsh)
-  '';
-
-  passthru.tests = {
-    inherit ruff-lsp;
-    updateScript = nix-update-script { };
-    version = testers.testVersion { package = ruff; };
-  };
-
-  # Failing on darwin for an unclear reason.
-  # According to the maintainers, those tests are from an experimental crate that isn't actually
-  # used by ruff currently and can thus be safely skipped.
-  checkFlags = lib.optionals stdenv.isDarwin [
-    "--skip=changed_file"
-    "--skip=changed_metadata"
-    "--skip=changed_versions_file"
-    "--skip=deleted_file"
-    "--skip=directory_deleted"
-    "--skip=directory_moved_to_trash"
-    "--skip=directory_moved_to_workspace"
-    "--skip=directory_renamed"
-    "--skip=hard_links_in_workspace"
-    "--skip=hard_links_to_target_outside_workspace"
-    "--skip=move_file_to_trash"
-    "--skip=move_file_to_workspace"
-    "--skip=new_file"
-    "--skip=new_ignored_file"
-    "--skip=rename_file"
-    "--skip=search_path"
-    "--skip=unix::symlink_inside_workspace"
   ];
 
+  postInstall =
+    let
+      emulator = stdenv.hostPlatform.emulator buildPackages;
+    in
+    ''
+      installShellCompletion --cmd ruff \
+        --bash <(${emulator} $out/bin/ruff generate-shell-completion bash) \
+        --fish <(${emulator} $out/bin/ruff generate-shell-completion fish) \
+        --zsh <(${emulator} $out/bin/ruff generate-shell-completion zsh)
+    '';
+
+  # Run cargo tests
+  checkType = "debug";
+
+  # tests do not appear to respect linker options on doctests
+  # Upstream issue: https://github.com/rust-lang/cargo/issues/14189
+  # This causes errors like "error: linker `cc` not found" on static builds
+  doCheck = !stdenv.hostPlatform.isStatic;
+
+  # Failing on darwin for an unclear reason, but probably due to sandbox.
+  # According to the maintainers, those tests are from an experimental crate that isn't actually
+  # used by ruff currently and can thus be safely skipped.
+  cargoTestFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    "--workspace"
+    "--exclude=red_knot"
+  ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
+
+  passthru = {
+    tests =
+      {
+        inherit ruff-lsp;
+      }
+      // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+        nixos-test-driver-busybox = nixosTests.nixos-test-driver.busybox;
+      };
+    updateScript = nix-update-script { };
+  };
+
   meta = {
-    description = "Extremely fast Python linter";
+    description = "Extremely fast Python linter and code formatter";
     homepage = "https://github.com/astral-sh/ruff";
     changelog = "https://github.com/astral-sh/ruff/releases/tag/${version}";
     license = lib.licenses.mit;

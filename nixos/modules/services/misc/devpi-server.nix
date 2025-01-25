@@ -73,9 +73,9 @@ in
       # have 0600 permissions.
       preStart =
         ''
-          ${lib.optionalString (!isNull cfg.secretFile)
-            "install -Dm 0600 \${CREDENTIALS_DIRECTORY}/devpi-secret ${runtimeDir}/${secretsFileName}"
-          }
+          ${lib.optionalString (
+            !isNull cfg.secretFile
+          ) "install -Dm 0600 \${CREDENTIALS_DIRECTORY}/devpi-secret ${runtimeDir}/${secretsFileName}"}
 
           if [ -f ${serverDir}/.nodeinfo ]; then
             # already initialized the package index, exit gracefully
@@ -85,7 +85,7 @@ in
         + lib.optionalString cfg.replica "--role=replica --master-url=${cfg.primaryUrl}";
 
       serviceConfig = {
-        LoadCredential = lib.mkIf (! isNull cfg.secretFile) [
+        LoadCredential = lib.mkIf (!isNull cfg.secretFile) [
           "devpi-secret:${cfg.secretFile}"
         ];
         Restart = "always";
@@ -98,7 +98,7 @@ in
                 "--host=${cfg.host}"
                 "--port=${builtins.toString cfg.port}"
               ]
-              ++ lib.optionals (! isNull cfg.secretFile) [
+              ++ lib.optionals (!isNull cfg.secretFile) [
                 "--secretfile=${runtimeDir}/${secretsFileName}"
               ]
               ++ (

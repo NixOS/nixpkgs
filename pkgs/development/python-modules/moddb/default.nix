@@ -20,7 +20,6 @@ buildPythonPackage rec {
     hash = "sha256-2t5QQAmSLOrdNCl0XdsFPdP2UF10/qq69DovqeQ1Vt8=";
   };
 
-
   propagatedBuildInputs = [
     beautifulsoup4
     pyrate-limiter

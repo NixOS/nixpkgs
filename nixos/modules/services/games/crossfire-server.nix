@@ -1,8 +1,14 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.crossfire-server;
   serverPort = 13327;
-in {
+in
+{
   options.services.crossfire-server = {
     enable = lib.mkOption {
       type = lib.types.bool;
@@ -94,49 +100,62 @@ in {
           ''';
         }
       '';
-      default = {};
+      default = { };
     };
   };
 
   config = lib.mkIf cfg.enable {
     users.users.crossfire = {
-      description     = "Crossfire server daemon user";
-      home            = cfg.stateDir;
-      createHome      = false;
-      isSystemUser    = true;
-      group           = "crossfire";
+      description = "Crossfire server daemon user";
+      home = cfg.stateDir;
+      createHome = false;
+      isSystemUser = true;
+      group = "crossfire";
     };
-    users.groups.crossfire = {};
+    users.groups.crossfire = { };
 
     # Merge the cfg.configFiles setting with the default files shipped with
     # Crossfire.
     # For most files this consists of reading ${crossfire}/etc/crossfire/${name}
     # and appending the user setting to it; the motd, news, and rules are handled
     # specially, with user-provided values completely replacing the original.
-    environment.etc = lib.attrsets.mapAttrs'
-      (name: value: lib.attrsets.nameValuePair "crossfire/${name}" {
-        mode = "0644";
-        text =
-          (lib.optionalString (!lib.elem name ["motd" "news" "rules"])
-            (lib.fileContents "${cfg.package}/etc/crossfire/${name}"))
-          + "\n${value}";
-      }) ({
-        ban_file = "";
-        dm_file = "";
-        exp_table = "";
-        forbid = "";
-        metaserver2 = "";
-        motd = lib.fileContents "${cfg.package}/etc/crossfire/motd";
-        news = lib.fileContents "${cfg.package}/etc/crossfire/news";
-        rules = lib.fileContents "${cfg.package}/etc/crossfire/rules";
-        settings = "";
-        stat_bonus = "";
-      } // cfg.configFiles);
+    environment.etc =
+      lib.attrsets.mapAttrs'
+        (
+          name: value:
+          lib.attrsets.nameValuePair "crossfire/${name}" {
+            mode = "0644";
+            text =
+              (lib.optionalString (
+                !lib.elem name [
+                  "motd"
+                  "news"
+                  "rules"
+                ]
+              ) (lib.fileContents "${cfg.package}/etc/crossfire/${name}"))
+              + "\n${value}";
+          }
+        )
+        (
+          {
+            ban_file = "";
+            dm_file = "";
+            exp_table = "";
+            forbid = "";
+            metaserver2 = "";
+            motd = lib.fileContents "${cfg.package}/etc/crossfire/motd";
+            news = lib.fileContents "${cfg.package}/etc/crossfire/news";
+            rules = lib.fileContents "${cfg.package}/etc/crossfire/rules";
+            settings = "";
+            stat_bonus = "";
+          }
+          // cfg.configFiles
+        );
 
     systemd.services.crossfire-server = {
-      description   = "Crossfire Server Daemon";
-      wantedBy      = [ "multi-user.target" ];
-      after         = [ "network.target" ];
+      description = "Crossfire Server Daemon";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
 
       serviceConfig = lib.mkMerge [
         {

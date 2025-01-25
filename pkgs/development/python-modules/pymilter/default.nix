@@ -4,7 +4,7 @@
   fetchFromGitHub,
   libmilter,
   berkeleydb,
-  pydns,
+  py3dns,
   iana-etc,
   libredirect,
   pyasyncore,
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sdgathman";
     repo = "pymilter";
-    rev = "refs/tags/pymilter-${version}";
+    tag = "pymilter-${version}";
     hash = "sha256-plaWXwDAIsVzEtrabZuZj7T4WNfz2ntQHgcMCVf5S70=";
   };
 
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pyasyncore ];
   dependencies = [
     berkeleydb
-    pydns
+    py3dns
   ];
 
   preBuild = ''

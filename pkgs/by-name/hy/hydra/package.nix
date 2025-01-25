@@ -21,7 +21,6 @@
 , nukeReferences
 , git
 , nlohmann_json
-, docbook_xsl
 , openssh
 , openldap
 , gnused
@@ -35,15 +34,17 @@
 , cdrkit
 , pixz
 , boost
-, autoreconfHook
 , mdbook
 , foreman
 , python3
 , libressl
 , cacert
 , glibcLocales
+, meson
+, ninja
 , fetchFromGitHub
 , nixosTests
+, unstableGitUpdater
 }:
 
 let
@@ -80,6 +81,7 @@ let
         DigestSHA1
         EmailMIME
         EmailSender
+        FileCopyRecursive
         FileLibMagic
         FileSlurper
         FileWhich
@@ -123,14 +125,16 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hydra";
-  version = "0-unstable-2024-08-27";
+  version = "0-unstable-2024-12-05";
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "hydra";
-    rev = "2d79b0a4da9e2a8ff97c1173aa56fe92e1f4629b";
-    hash = "sha256-ZU8/LzdZ0nbUxVxTsRZyMpTGEtps9oG0Yx2cpS9J8I4=";
+    rev = "250668a19fa4d8ff9a6176ee6c44ca3003adedf1";
+    hash = "sha256-r+t/0U8Pp6/Lvi3s3v8nDB9xCggvxFsnCEJ9TuZvVJc=";
   };
+
+  outputs = [ "out" "doc" ];
 
   buildInputs = [
     unzip
@@ -172,11 +176,12 @@ stdenv.mkDerivation (finalAttrs: {
       darcs
       gnused
       breezy
-    ] ++ lib.optionals stdenv.isLinux [ rpm dpkg cdrkit ]
+    ] ++ lib.optionals stdenv.hostPlatform.isLinux [ rpm dpkg cdrkit ]
   );
 
   nativeBuildInputs = [
-    autoreconfHook
+    meson
+    ninja
     makeWrapper
     pkg-config
     mdbook
@@ -192,10 +197,7 @@ stdenv.mkDerivation (finalAttrs: {
     openldap
   ];
 
-  configureFlags = [ "--with-docbook-xsl=${docbook_xsl}/xml/xsl/docbook" ];
-
   env = {
-    NIX_CFLAGS_COMPILE = "-pthread";
     OPENLDAP_ROOT = openldap;
   };
 
@@ -204,10 +206,13 @@ stdenv.mkDerivation (finalAttrs: {
     PERL5LIB=$(pwd)/src/lib:$PERL5LIB;
   '';
 
-  enableParallelBuilding = true;
+  mesonBuildType = "release";
+
+  postPatch = ''
+    patchShebangs .
+  '';
 
   preCheck = ''
-    patchShebangs .
     export LOGNAME=''${LOGNAME:-foo}
     # set $HOME for bzr so it can create its trace file
     export HOME=$(mktemp -d)
@@ -232,6 +237,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     inherit nix perlDeps;
     tests.basic = nixosTests.hydra.hydra;
+    updateScript = unstableGitUpdater {};
   };
 
   meta = with lib; {

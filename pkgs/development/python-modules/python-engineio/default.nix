@@ -9,6 +9,7 @@
   iana-etc,
   libredirect,
   mock,
+  pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
   requests,
@@ -19,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "python-engineio";
-  version = "4.9.1";
+  version = "4.11.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -27,15 +28,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "miguelgrinberg";
     repo = "python-engineio";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-wn2qiVkL05GTopGJeghHe9i+wyOQZbEeYDmEIIbXDS0=";
+    tag = "v${version}";
+    hash = "sha256-3yCT9u3Bz5QPaDtPe1Ezio+O+wWjQ+4pLh55sYAfnNc=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [ simple-websocket ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     client = [
       requests
       websocket-client
@@ -44,18 +45,16 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
-    aiohttp
     eventlet
     mock
-    requests
     tornado
-    websocket-client
+    pytest-asyncio
     pytestCheckHook
-  ];
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
-  preCheck = lib.optionalString stdenv.isLinux ''
+  preCheck = lib.optionalString stdenv.hostPlatform.isLinux ''
     echo "nameserver 127.0.0.1" > resolv.conf
     export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/resolv.conf=$(realpath resolv.conf) \
       LD_PRELOAD=${libredirect}/lib/libredirect.so
@@ -65,8 +64,12 @@ buildPythonPackage rec {
     unset NIX_REDIRECTS LD_PRELOAD
   '';
 
-  # somehow effective log level does not change?
-  disabledTests = [ "test_logger" ];
+  disabledTests = [
+    # Assertion issue
+    "test_async_mode_eventlet"
+    # Somehow effective log level does not change?
+    "test_logger"
+  ];
 
   pythonImportsCheck = [ "engineio" ];
 

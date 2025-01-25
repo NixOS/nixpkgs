@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, cmake
-, openmw
-, fetchFromGitHub
-, fetchpatch
-, luajit
-, makeWrapper
-, symlinkJoin
+{
+  lib,
+  stdenv,
+  cmake,
+  openmw,
+  fetchFromGitHub,
+  fetchpatch,
+  luajit,
+  makeWrapper,
+  symlinkJoin,
 }:
 
 # revisions are taken from https://github.com/GrimKriegor/TES3MP-deploy
@@ -133,7 +134,10 @@ let
       homepage = "https://tes3mp.com/";
       license = licenses.gpl3Only;
       maintainers = with maintainers; [ peterhoeg ];
-      platforms = [ "x86_64-linux" "i686-linux" ];
+      platforms = [
+        "x86_64-linux"
+        "i686-linux"
+      ];
     };
   });
 

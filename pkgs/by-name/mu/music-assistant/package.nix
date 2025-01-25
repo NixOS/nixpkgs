@@ -1,10 +1,11 @@
-{ lib
-, python3
-, fetchFromGitHub
-, ffmpeg-headless
-, nixosTests
-, substituteAll
-, providers ? [ ]
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  ffmpeg-headless,
+  nixosTests,
+  substituteAll,
+  providers ? [ ],
 }:
 
 let
@@ -17,21 +18,23 @@ let
 
   providerPackages = (import ./providers.nix).providers;
   providerNames = lib.attrNames providerPackages;
-  providerDependencies = lib.concatMap (provider: (providerPackages.${provider} python.pkgs)) providers;
+  providerDependencies = lib.concatMap (
+    provider: (providerPackages.${provider} python.pkgs)
+  ) providers;
 
   pythonPath = python.pkgs.makePythonPath providerDependencies;
 in
 
 python.pkgs.buildPythonApplication rec {
   pname = "music-assistant";
-  version = "2.2.3";
+  version = "2.3.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "server";
-    rev = "refs/tags/${version}";
-    hash = "sha256-7PIyo3srKwftakDiaxvZjrzo/1I9LGUwG+QGfIU5pRA=";
+    tag = version;
+    hash = "sha256-HV2R5zMTao8akUNZMGRKbU8BIxWmdjKFLsGMqA5cfBs=";
   };
 
   patches = [
@@ -40,6 +43,9 @@ python.pkgs.buildPythonApplication rec {
       ffmpeg = "${lib.getBin ffmpeg-headless}/bin/ffmpeg";
       ffprobe = "${lib.getBin ffmpeg-headless}/bin/ffprobe";
     })
+
+    # Disable interactive dependency resolution, which clashes with the immutable Python environment
+    ./dont-install-deps.patch
   ];
 
   postPatch = ''
@@ -51,11 +57,25 @@ python.pkgs.buildPythonApplication rec {
     setuptools
   ];
 
-  dependencies = with python.pkgs; [
-    aiohttp
-    mashumaro
-    orjson
-  ] ++ optional-dependencies.server;
+  pythonRelaxDeps = [
+    "aiohttp"
+    "colorlog"
+    "cryptography"
+    "mashumaro"
+    "orjson"
+    "pillow"
+    "xmltodict"
+    "zeroconf"
+  ];
+
+  dependencies =
+    with python.pkgs;
+    [
+      aiohttp
+      mashumaro
+      orjson
+    ]
+    ++ optional-dependencies.server;
 
   optional-dependencies = with python.pkgs; {
     server = [
@@ -75,6 +95,7 @@ python.pkgs.buildPythonApplication rec {
       mashumaro
       memory-tempfile
       music-assistant-frontend
+      music-assistant-models
       orjson
       pillow
       python-slugify
@@ -85,14 +106,22 @@ python.pkgs.buildPythonApplication rec {
     ];
   };
 
-  nativeCheckInputs = with python.pkgs; [
-    aiojellyfin
-    pytest-aiohttp
-    pytest-cov-stub
-    pytestCheckHook
-    syrupy
-  ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  nativeCheckInputs =
+    with python.pkgs;
+    [
+      aiojellyfin
+      pytest-aiohttp
+      pytest-cov-stub
+      pytestCheckHook
+      syrupy
+      pytest-timeout
+    ]
+    ++ lib.flatten (lib.attrValues optional-dependencies);
+
+  pytestFlagsArray = [
+    # blocks in setup
+    "--deselect=tests/server/providers/jellyfin/test_init.py::test_initial_sync"
+  ];
 
   pythonImportsCheck = [ "music_assistant" ];
 
@@ -102,7 +131,7 @@ python.pkgs.buildPythonApplication rec {
       pythonPath
       providerPackages
       providerNames
-    ;
+      ;
     tests = nixosTests.music-assistant;
   };
 

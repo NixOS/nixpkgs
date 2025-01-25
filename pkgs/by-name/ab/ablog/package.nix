@@ -1,7 +1,8 @@
-{ lib
-, python3
-, fetchFromGitHub
-, gitUpdater
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  gitUpdater,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -38,9 +39,12 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   pytestFlagsArray = [
-    "-W" "ignore::sphinx.deprecation.RemovedInSphinx90Warning"
-    "--rootdir" "src/ablog"
-    "-W" "ignore::sphinx.deprecation.RemovedInSphinx90Warning" # Ignore ImportError
+    "-W"
+    "ignore::sphinx.deprecation.RemovedInSphinx90Warning"
+    "--rootdir"
+    "src/ablog"
+    "-W"
+    "ignore::sphinx.deprecation.RemovedInSphinx90Warning" # Ignore ImportError
   ];
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };

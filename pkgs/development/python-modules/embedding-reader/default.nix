@@ -17,10 +17,9 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rom1504";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-paN6rAyH3L7qCfWPr5kXo9Xl57gRMhdcDnoyLJ7II2w=";
   };
-
 
   pythonRelaxDeps = [ "pyarrow" ];
 

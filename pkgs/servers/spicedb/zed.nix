@@ -1,20 +1,21 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
   pname = "zed";
-  version = "0.21.1";
+  version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "authzed";
     repo = "zed";
     rev = "v${version}";
-    hash = "sha256-X8kZjPjFGMUfSQLdS6/XA1eNRQH6n/FffgbC19r1WRU=";
+    hash = "sha256-gaTTHkJkKO3MY5tAVJNHEq6ZkcS1iSBSEh1eyPzsXQY=";
   };
 
-  vendorHash = "sha256-Q8OW9aBs1fcUdKin6uX1s6oD289eCUffmAK5nr3xn0s=";
+  vendorHash = "sha256-7UwpkmFwYT8XP00pTlOK25WDweaalQfA4zX7yvlFWow=";
 
   ldflags = [
     "-X 'github.com/jzelinskie/cobrautil/v2.Version=${src.rev}'"

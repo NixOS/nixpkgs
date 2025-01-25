@@ -18,31 +18,26 @@
 , libiconv
 }:
 
-let
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "email-0.0.20" = "sha256-rV4Uzqt2Qdrfi5Ti1r+Si1c2iW1kKyWLwOgLkQ5JGGw=";
-      "encoded-words-0.2.0" = "sha256-KK9st0hLFh4dsrnLd6D8lC6pRFFs8W+WpZSGMGJcosk=";
-      "lettre-0.9.2" = "sha256-+hU1cFacyyeC9UGVBpS14BWlJjHy90i/3ynMkKAzclk=";
-    };
-  };
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "libdeltachat";
-  version = "1.142.12";
+  version = "1.154.3";
 
   src = fetchFromGitHub {
     owner = "deltachat";
     repo = "deltachat-core-rust";
-    rev = "v${version}";
-    hash = "sha256-WjzmRRHdi31Eg3UAy4rD2xrx1LVew9Y4bb50Zyv+8JA=";
+    tag = "v${version}";
+    hash = "sha256-SjNFgvg6sHW40v13OuR3BL3+JdDxntDCKtbe/C/04as=";
   };
 
   patches = [
     ./no-static-lib.patch
   ];
 
-  cargoDeps = rustPlatform.importCargoLock cargoLock;
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    pname = "deltachat-core-rust";
+    inherit version src;
+    hash = "sha256-kbSRGuyCJlTxzKr/C+MLczqT7WNTqZ2/Z42psbBFW+w=";
+  };
 
   nativeBuildInputs = [
     cmake
@@ -50,7 +45,7 @@ in stdenv.mkDerivation rec {
     pkg-config
     rustPlatform.cargoSetupHook
     cargo
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     fixDarwinDylibNames
   ];
 
@@ -58,7 +53,7 @@ in stdenv.mkDerivation rec {
     openssl
     sqlcipher
     sqlite
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.CoreFoundation
     darwin.apple_sdk.frameworks.Security
     darwin.apple_sdk.frameworks.SystemConfiguration
@@ -77,8 +72,12 @@ in stdenv.mkDerivation rec {
       --replace __FILE__ '"${placeholder "out"}/include/deltachat.h"'
   '';
 
+  env = {
+    CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTarget;
+    CARGO_BUILD_RUSTFLAGS = "-C linker=${stdenv.cc.targetPrefix}cc";
+  };
+
   passthru = {
-    inherit cargoLock;
     tests = {
       inherit deltachat-desktop deltachat-repl deltachat-rpc-server;
       python = python3.pkgs.deltachat;
@@ -88,7 +87,7 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Delta Chat Rust Core library";
     homepage = "https://github.com/deltachat/deltachat-core-rust/";
-    changelog = "https://github.com/deltachat/deltachat-core-rust/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/deltachat/deltachat-core-rust/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mpl20;
     maintainers = with maintainers; [ dotlambda ];
     platforms = platforms.unix;

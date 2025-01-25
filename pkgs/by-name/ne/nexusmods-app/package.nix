@@ -1,25 +1,38 @@
 {
   _7zz,
+  avalonia,
   buildDotnetModule,
   copyDesktopItems,
   desktop-file-utils,
   dotnetCorePackages,
-  fetchFromGitHub,
-  fontconfig,
+  fetchgit,
+  imagemagick,
   lib,
+  makeFontsConf,
   runCommand,
+  xdg-utils,
   pname ? "nexusmods-app",
 }:
+let
+  # From https://nexus-mods.github.io/NexusMods.App/developers/Contributing/#for-package-maintainers
+  constants = [
+    # Tell the app it is a distro package; affects wording in update prompts
+    "INSTALLATION_METHOD_PACKAGE_MANAGER"
+
+    # Don't include upstream's 7zz binary; we use the nixpkgs version
+    "NEXUSMODS_APP_USE_SYSTEM_EXTRACTOR"
+  ];
+in
 buildDotnetModule (finalAttrs: {
   inherit pname;
-  version = "0.4.1";
+  version = "0.7.1";
 
-  src = fetchFromGitHub {
-    owner = "Nexus-Mods";
-    repo = "NexusMods.App";
-    rev = "v${finalAttrs.version}";
+  src = fetchgit {
+    url = "https://github.com/Nexus-Mods/NexusMods.App.git";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-TcT+siZMJlOYRtiQV+RAPPfM47wewfsz7WiPFaxCUkc=";
     fetchSubmodules = true;
-    hash = "sha256-FzQphMhiC1g+6qmk/R1v4rq2ldy35NcaWm0RR1UlwLA=";
+    fetchLFS = true;
   };
 
   enableParallelBuilding = false;
@@ -32,38 +45,84 @@ buildDotnetModule (finalAttrs: {
   projectFile = "src/NexusMods.App/NexusMods.App.csproj";
   testProjectFile = "NexusMods.App.sln";
 
-  nativeBuildInputs = [ copyDesktopItems ];
+  buildInputs = [
+    # TODO: bump avalonia to 11.1.3
+    # avalonia
+  ];
 
-  nugetDeps = ./deps.nix;
+  nativeCheckInputs = [ _7zz ];
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  dotnet-runtime = dotnetCorePackages.runtime_8_0;
+  nativeBuildInputs = [
+    copyDesktopItems
+    imagemagick # For resizing SVG icon in postInstall
+  ];
 
-  preConfigure = ''
-    substituteInPlace Directory.Build.props \
-      --replace '</PropertyGroup>' '<ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles></PropertyGroup>'
-  '';
+  nugetDeps = ./deps.json;
+  mapNuGetDependencies = true;
+
+  # TODO: remove .NET 8; StrawberryShake currently needs it
+  dotnet-sdk =
+    with dotnetCorePackages;
+    combinePackages [
+      sdk_9_0
+      runtime_8_0
+    ];
+  dotnet-runtime = dotnetCorePackages.runtime_9_0;
 
   postPatch = ''
-    ln --force --symbolic "${lib.getExe _7zz}" src/ArchiveManagement/NexusMods.FileExtractor/runtimes/linux-x64/native/7zz
-
     # for some reason these tests fail (intermittently?) with a zero timestamp
     touch tests/NexusMods.UI.Tests/WorkspaceSystem/*.verified.png
   '';
 
   makeWrapperArgs = [
     "--prefix PATH : ${lib.makeBinPath finalAttrs.runtimeInputs}"
-    # Make associating with nxm links work on Linux
-    "--set APPIMAGE ${placeholder "out"}/bin/NexusMods.App"
   ];
 
-  runtimeInputs = [ desktop-file-utils ];
+  postInstall = ''
+    # Desktop entry
+    # As per #308324, use mainProgram from PATH, instead of $out/bin/NexusMods.App
+    install -D -m 444 -t $out/share/applications src/NexusMods.App/com.nexusmods.app.desktop
+    substituteInPlace $out/share/applications/com.nexusmods.app.desktop \
+      --replace-fail '${"$"}{INSTALL_EXEC}' "${finalAttrs.meta.mainProgram}"
+
+    # AppStream metadata
+    install -D -m 444 -t $out/share/metainfo src/NexusMods.App/com.nexusmods.app.metainfo.xml
+
+    # Icon
+    icon=src/NexusMods.App/icon.svg
+    install -D -m 444 -T $icon $out/share/icons/hicolor/scalable/apps/com.nexusmods.app.svg
+
+    # Bitmap icons
+    for i in 16 24 48 64 96 128 256 512; do
+      size=''${i}x''${i}
+      dir=$out/share/icons/hicolor/$size/apps
+      mkdir -p $dir
+      convert -background none -resize $size $icon $dir/com.nexusmods.app.png
+    done
+  '';
+
+  runtimeInputs = [
+    _7zz
+    desktop-file-utils
+    xdg-utils
+  ];
 
   executables = [ "NexusMods.App" ];
 
+  dotnetBuildFlags = [
+    # From https://github.com/Nexus-Mods/NexusMods.App/blob/v0.7.0/src/NexusMods.App/app.pupnet.conf#L38
+    "--property:Version=${finalAttrs.version}"
+    "--property:TieredCompilation=true"
+    "--property:PublishReadyToRun=true"
+    "--property:DefineConstants=${lib.strings.concatStringsSep "%3B" constants}"
+  ];
+
   doCheck = true;
 
-  dotnetTestFlags = [ "--environment=USER=nobody" ];
+  dotnetTestFlags = [
+    "--environment=USER=nobody"
+    "--property:DefineConstants=${lib.strings.concatStringsSep "%3B" constants}"
+  ];
 
   testFilters = [
     "Category!=Disabled"
@@ -75,6 +134,9 @@ buildDotnetModule (finalAttrs: {
     [
       "NexusMods.UI.Tests.ImageCacheTests.Test_LoadAndCache_RemoteImage"
       "NexusMods.UI.Tests.ImageCacheTests.Test_LoadAndCache_ImageStoredFile"
+
+      # Fails with: Expected a <System.ArgumentException> to be thrown, but no exception was thrown.
+      "NexusMods.Networking.ModUpdates.Tests.PerFeedCacheUpdaterTests.Constructor_WithItemsFromDifferentGames_ShouldThrowArgumentException_InDebug"
     ]
     ++ lib.optionals (!_7zz.meta.unfree) [
       "NexusMods.Games.FOMOD.Tests.FomodXmlInstallerTests.InstallsFilesSimple_UsingRar"
@@ -85,10 +147,22 @@ buildDotnetModule (finalAttrs: {
       let
         runTest =
           name: script:
-          runCommand "${pname}-test-${name}" { nativeBuildInputs = [ finalAttrs.finalPackage ]; } ''
-            ${script}
-            touch $out
-          '';
+          runCommand "${pname}-test-${name}"
+            {
+              nativeBuildInputs = [ finalAttrs.finalPackage ];
+              FONTCONFIG_FILE = makeFontsConf {
+                fontDirectories = [ ];
+              };
+            }
+            ''
+              export XDG_DATA_HOME="$PWD/data"
+              export XDG_STATE_HOME="$PWD/state"
+              export XDG_CACHE_HOME="$PWD/cache"
+              mkdir -p "$XDG_DATA_HOME" "$XDG_STATE_HOME" "$XDG_CACHE_HOME"
+              # TODO: on error, print $XDG_STATE_HOME/NexusMods.App/Logs/nexusmods.app.main.current.log
+              ${script}
+              touch $out
+            '';
       in
       {
         serve = runTest "serve" ''

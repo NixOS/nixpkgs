@@ -45,7 +45,7 @@ buildPythonPackage rec {
     wrapt
   ] ++ etils.optional-dependencies.epath;
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     tensorflow = [ tensorflow ];
   };
 

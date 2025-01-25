@@ -4,26 +4,25 @@
   fetchFromGitHub,
   pytestCheckHook,
   pythonOlder,
-  pytest-runner,
   aiohttp,
   attrs,
   multidict,
   colorlog,
   pynacl,
-  pytest-cov,
+  pytest-cov-stub,
   pytest-randomly,
   pytest-asyncio,
   mock,
 }:
 buildPythonPackage rec {
   pname = "hikari";
-  version = "2.0.0.dev126";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "hikari-py";
     repo = "hikari";
-    rev = version;
-    hash = "sha256-KpF9P92IciILV7zlYTCgtMqhudT9uOR2SQJdWDtxYaA=";
+    tag = version;
+    hash = "sha256-/A3D3nG1lSCQU92dM+6YroxWlGKrv47ntkZaJZTAJUA=";
     # The git commit is part of the `hikari.__git_sha1__` original output;
     # leave that output the same in nixpkgs. Use the `.git` directory
     # to retrieve the commit SHA, and remove the directory afterwards,
@@ -36,7 +35,6 @@ buildPythonPackage rec {
     '';
   };
 
-
   propagatedBuildInputs = [
     aiohttp
     attrs
@@ -46,15 +44,14 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = true;
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     server = [ pynacl ];
   };
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-runner
     pytest-asyncio
-    pytest-cov
+    pytest-cov-stub
     pytest-randomly
     mock
   ];
@@ -66,6 +63,9 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace hikari/_about.py \
       --replace-fail "__git_sha1__: typing.Final[str] = \"HEAD\"" "__git_sha1__: typing.Final[str] = \"$(cat $src/COMMIT)\""
+    # XXX: Remove once pytest-asyncio is updated to 0.24+
+    substituteInPlace pyproject.toml \
+      --replace-fail "asyncio_default_fixture_loop_scope = \"func\"" ""
   '';
 
   meta = {
@@ -73,6 +73,9 @@ buildPythonPackage rec {
     homepage = "https://www.hikari-py.dev/";
     changelog = "https://github.com/hikari-py/hikari/releases/tag/${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ tomodachi94 sigmanificient ];
+    maintainers = with lib.maintainers; [
+      tomodachi94
+      sigmanificient
+    ];
   };
 }

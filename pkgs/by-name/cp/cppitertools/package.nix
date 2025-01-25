@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ryanhaining";
     repo = "cppitertools";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-mii4xjxF1YC3H/TuO/o4cEz8bx2ko6U0eufqNVw5LNA=";
   };
 

@@ -8,7 +8,7 @@ let
    * to a menuentry for use in grub.
    *
    *  * defaults: {name, image, params, initrd}
-   *  * options: [ option... ]
+   *  * options: [ option... ]
    *  * option: {name, params, class}
    */
   menuBuilderGrub2 =
@@ -335,12 +335,14 @@ let
       set textmode=true
       terminal_output console
     }
+
+    ${lib.optionalString (config.isoImage.grubTheme != null) ''
     hiddenentry 'GUI mode' --hotkey 'g' {
       $(find ${config.isoImage.grubTheme} -iname '*.pf2' -printf "loadfont (\$root)/EFI/BOOT/grub-theme/%P\n")
       set textmode=false
       terminal_output gfxterm
     }
-
+    ''}
 
     # If the parameter iso_path is set, append the findiso parameter to the kernel
     # line. We need this to allow the nixos iso to be booted from grub directly.
@@ -474,23 +476,33 @@ let
 in
 
 {
+  imports = [
+    (lib.mkRenamedOptionModuleWith {
+      sinceRelease = 2505;
+      from = [
+        "isoImage"
+        "isoBaseName"
+      ];
+      to = [
+        "image"
+        "baseName"
+      ];
+    })
+    (lib.mkRenamedOptionModuleWith {
+      sinceRelease = 2505;
+      from = [
+        "isoImage"
+        "isoName"
+      ];
+      to = [
+        "image"
+        "fileName"
+      ];
+    })
+    ../../image/file-options.nix
+  ];
+
   options = {
-
-    isoImage.isoName = lib.mkOption {
-      default = "${config.isoImage.isoBaseName}.iso";
-      type = lib.types.str;
-      description = ''
-        Name of the generated ISO image file.
-      '';
-    };
-
-    isoImage.isoBaseName = lib.mkOption {
-      default = config.system.nixos.distroId;
-      type = lib.types.str;
-      description = ''
-        Prefix of the name of the generated ISO image file.
-      '';
-    };
 
     isoImage.compressImage = lib.mkOption {
       default = false;
@@ -722,7 +734,7 @@ in
     "/nix/.ro-store" = lib.mkImageMediaOverride
       { fsType = "squashfs";
         device = "/iso/nix-store.squashfs";
-        options = [ "loop" ];
+        options = [ "loop" ] ++ lib.optional (config.boot.kernelPackages.kernel.kernelAtLeast "6.2") "threads=multi";
         neededForBoot = true;
       };
 
@@ -772,9 +784,10 @@ in
     # here and it causes a cyclic dependency.
     boot.loader.grub.enable = false;
 
-    environment.systemPackages =  [ grubPkgs.grub2 grubPkgs.grub2_efi ]
+    environment.systemPackages =  [ grubPkgs.grub2 ]
       ++ lib.optional (config.isoImage.makeBiosBootable) pkgs.syslinux
     ;
+    system.extraDependencies = [ grubPkgs.grub2_efi ];
 
     # In stage 1 of the boot, mount the CD as the root FS by label so
     # that we don't need to know its device.  We pass the label of the
@@ -855,8 +868,13 @@ in
     boot.loader.timeout = 10;
 
     # Create the ISO image.
+    image.extension = if config.isoImage.compressImage then "iso.zst" else "iso";
+    image.filePath = "iso/${config.image.fileName}";
+    image.baseName = "nixos${lib.optionalString (config.isoImage.edition != "") "-${config.isoImage.edition}" }-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}";
+    system.build.image = config.system.build.isoImage;
     system.build.isoImage = pkgs.callPackage ../../../lib/make-iso9660-image.nix ({
-      inherit (config.isoImage) isoName compressImage volumeID contents;
+      inherit (config.isoImage) compressImage volumeID contents;
+      isoName = "${config.image.baseName}.iso";
       bootable = config.isoImage.makeBiosBootable;
       bootImage = "/isolinux/isolinux.bin";
       syslinux = if config.isoImage.makeBiosBootable then pkgs.syslinux else null;

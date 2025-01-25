@@ -7,20 +7,19 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "ggshield";
-  version = "1.31.0";
+  version = "1.35.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GitGuardian";
     repo = "ggshield";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ShczC0DvAO92apkNq5oyYRbkqGdqwl6vaCY1hn8O6so=";
+    tag = "v${version}";
+    hash = "sha256-ystZS5TYmu6Y86lGTAEXzQlV2/eowQJ+UQqLPtvwdpE=";
   };
 
   pythonRelaxDeps = true;
 
-  build-system = with python3.pkgs; [ setuptools ];
-
+  build-system = with python3.pkgs; [ pdm-backend ];
 
   dependencies = with python3.pkgs; [
     appdirs
@@ -44,6 +43,7 @@ python3.pkgs.buildPythonApplication rec {
     ++ (with python3.pkgs; [
       jsonschema
       pyfakefs
+      pytest-factoryboy
       pytest-mock
       pytest-voluptuous
       pytestCheckHook
@@ -60,6 +60,7 @@ python3.pkgs.buildPythonApplication rec {
     "tests/unit/cmd/iac"
     "tests/unit/cmd/sca/"
     "tests/unit/cmd/scan/"
+    "tests/test_factories.py"
   ];
 
   disabledTests = [

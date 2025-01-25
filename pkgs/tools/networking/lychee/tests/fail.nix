@@ -9,13 +9,15 @@ let
 
   linkCheck = testers.lycheeLinkCheck rec {
     site = sitePkg + "/dist";
-    remap = { "https://exampl[e]\\.com" = site; };
+    remap = {
+      "https://exampl[e]\\.com" = site;
+    };
   };
 
   failure = testers.testBuildFailure linkCheck;
 
 in
-  runCommand "link-check-fail" { inherit failure; } ''
-    grep -F foos-missing-anchor $failure/testBuildFailure.log >/dev/null
-    touch $out
-  ''
+runCommand "link-check-fail" { inherit failure; } ''
+  grep -F foos-missing-anchor $failure/testBuildFailure.log >/dev/null
+  touch $out
+''

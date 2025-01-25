@@ -1,5 +1,15 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub
-, cmake, pkg-config, pffft, libpcap, libusb1, python3, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  mkDerivation,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  pffft,
+  libpcap,
+  libusb1,
+  python3,
+  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,9 +30,18 @@ stdenv.mkDerivation rec {
       --replace "[Mystery Build]" "${version}"
   '';
 
-  buildInputs = [ pffft libpcap libusb1 python3 ];
+  buildInputs = [
+    pffft
+    libpcap
+    libusb1
+    python3
+  ];
 
-  nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    wrapQtAppsHook
+  ];
 
   cmakeFlags = [ "-DUSE_SYSTEM_PFFFT=ON" ];
 

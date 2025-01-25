@@ -1,26 +1,28 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, boost
-, qtbase
-, qtimageformats
-, qttools
-, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  boost,
+  qtbase,
+  qtimageformats,
+  qttools,
+  wrapQtAppsHook,
 }:
 
 let
   boost_static = boost.override { enableStatic = true; };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "degate";
   version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "DegateCommunity";
     repo = "Degate";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-INoA3Z6ya03ZMn6E+nOCkXZLoxoo2WgPDw9v5miI09A=";
   };
 

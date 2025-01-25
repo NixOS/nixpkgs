@@ -48,7 +48,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "oscrypto" ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   disabledTests = [
     # Tests require network access

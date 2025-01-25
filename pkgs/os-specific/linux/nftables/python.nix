@@ -1,6 +1,7 @@
-{ buildPythonPackage
-, setuptools
-, nftables
+{
+  buildPythonPackage,
+  setuptools,
+  nftables,
 }:
 
 buildPythonPackage {
@@ -20,6 +21,12 @@ buildPythonPackage {
   pythonImportsCheck = [ "nftables" ];
 
   meta = {
-    inherit (nftables.meta) description homepage license platforms maintainers;
+    inherit (nftables.meta)
+      description
+      homepage
+      license
+      platforms
+      maintainers
+      ;
   };
 }

@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "scientific-python";
     repo = "lazy_loader";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-4Kid6yhm9C2liPoW+NlCsOiBZvv6iYt7hDunARc4PRY=";
   };
 
