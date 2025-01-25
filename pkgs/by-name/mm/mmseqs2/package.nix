@@ -26,13 +26,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mmseqs2";
-  version = "16-747c6";
+  version = "17-b804f";
 
   src = fetchFromGitHub {
     owner = "soedinglab";
     repo = "mmseqs2";
     tag = finalAttrs.version;
-    hash = "sha256-O7tx+gdVAmZLihPnWSo9RWNVzfPjI61LGY/XeaGHrI0=";
+    hash = "sha256-nmvFoW+Ey18NcM2w14Ak/3D/Kic52Vka/RxvBd0YoKI=";
   };
 
   nativeBuildInputs =
@@ -89,6 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Ultra fast and sensitive sequence search and clustering suite";
     mainProgram = "mmseqs";
     homepage = "https://mmseqs.com/";
+    changelog = "https://github.com/soedinglab/MMseqs2/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ natsukium ];
     platforms = platforms.unix;

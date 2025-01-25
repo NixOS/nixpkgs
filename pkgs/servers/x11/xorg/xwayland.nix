@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
       libxkbfile
       libxshmfence
       libxcvt
-      mesa
+      mesa # uses dri_interface.h
       openssl
       pixman
       systemd

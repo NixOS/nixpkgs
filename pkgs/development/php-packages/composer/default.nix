@@ -16,13 +16,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "composer";
-  version = "2.8.4";
+  version = "2.8.5";
 
   # Hash used by ../../../build-support/php/pkgs/composer-phar.nix to
   # use together with the version from this package to keep the
   # bootstrap phar file up-to-date together with the end user composer
   # package.
-  passthru.pharHash = "sha256-xMTi4b6rDqBOC9BCpdu6n+2h+/XtoNNiA5WO3TQ8Coo=";
+  passthru.pharHash = "sha256-nO8YIS4iI1GutHa4HeeypTg/d1M2R0Rnv1x8z+hKsMw=";
 
   composer = callPackage ../../../build-support/php/pkgs/composer-phar.nix {
     inherit (finalAttrs) version;
@@ -33,18 +33,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "composer";
     repo = "composer";
     tag = finalAttrs.version;
-    hash = "sha256-m4CfWWbrmMN0j27XaMx/KRbFjpW5iMMNUlAtzlrorJc=";
+    hash = "sha256-/E/fXh+jefPwzsADpmGyrJ+xqW5CSPNok0DVLD1KZDY=";
   };
-
-  patches = [
-    # Fix an issue preventing reproducible builds
-    # This patch should be removed at the next release (2.8.5)
-    # More information at https://github.com/composer/composer/pull/12090
-    (fetchpatch {
-      url = "https://github.com/composer/composer/commit/7b1e983ce9a0b30a6369cda11a7d61cca9c1ce46.patch";
-      hash = "sha256-veBdfZxzgL/R3P87GpvxQc+es3AdpaKSzCX0DCzH63U=";
-    })
-  ];
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 
@@ -53,7 +43,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   vendor = stdenvNoCC.mkDerivation {
     pname = "${finalAttrs.pname}-vendor";
 
-    inherit (finalAttrs) src version patches;
+    inherit (finalAttrs) src version;
 
     nativeBuildInputs = [
       cacert
@@ -97,7 +87,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "sha256-0VbIaOuXeBNRd41q4Ogde8/B4hApueb5FeZ8cGHwB7s=";
+    outputHash = "sha256-UcMB0leKqD8cXeExXpjDgPvF8pfhGXnCR0EN4FVWouw=";
   };
 
   installPhase = ''

@@ -62,7 +62,7 @@ import ./make-test-python.nix (
       moonlight.wait_for_console_text("Executing request.*pair")
 
       # respond to pairing request from sunshine
-      sunshine.succeed("curl --fail --insecure -u sunshine:sunshine -d '{\"pin\": \"1234\"}' https://localhost:47990/api/pin")
+      sunshine.succeed("curl --fail --insecure -u sunshine:sunshine -d '{\"pin\":\"1234\",\"name\":\"1234\"}' https://localhost:47990/api/pin")
 
       # wait until pairing is complete
       moonlight.wait_for_console_text("Executing request.*phrase=pairchallenge")

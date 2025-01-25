@@ -8,22 +8,20 @@
 
 buildDotnetModule rec {
   pname = "kryptor";
-  version = "4.1.0";
+  version = "4.1.1";
 
   src = fetchFromGitHub {
     owner = "samuel-lucas6";
     repo = "Kryptor";
     tag = "v${version}";
-    hash = "sha256-BxUmDzmfvRelQDHb5uLcQ2YPL7ClxZNFGm/gQoDK8t8=";
+    hash = "sha256-+pG3u4U3IZ6jw2p2f1jptX7C/qt0mPIcMG82XYtPzbs=";
   };
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  projectFile = "src/Kryptor.sln";
+  projectFile = "src/Kryptor/Kryptor.csproj";
   nugetDeps = ./deps.json;
 
   executables = [ "kryptor" ];
-
-  dotnetFlags = [ "-p:TargetFramework=net8.0" ];
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];

@@ -14,7 +14,7 @@
 
 let
   version = "3.6.0";
-  tag = lib.replaceStrings [ "." ] [ "-" ] version;
+  tag = "V" + lib.replaceStrings [ "." ] [ "-" ] version;
 in
 
 stdenv.mkDerivation {

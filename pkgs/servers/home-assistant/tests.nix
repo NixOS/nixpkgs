@@ -21,6 +21,7 @@ let
     matrix = [
       pydantic
     ];
+    mopeka = getComponentDeps "switchbot";
     onboarding = [
       pymetno
       radios

@@ -81,6 +81,10 @@ let
             "${config.i18n.glibcLocales}"
           ]
           ++ mapAttrsToList (name: inbox: inbox.description) cfg.inboxes
+          ++ filter (x: x != null) [
+            cfg.${proto}.cert or null
+            cfg.${proto}.key or null
+          ]
           ++
             # Without confinement the whole Nix store
             # is made available to the service

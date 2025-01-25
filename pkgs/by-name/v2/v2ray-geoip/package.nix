@@ -3,21 +3,19 @@
   stdenvNoCC,
   fetchFromGitHub,
   pkgsBuildBuild,
-  jq,
-  moreutils,
   dbip-country-lite,
 }:
 
 let
   generator = pkgsBuildBuild.buildGoModule rec {
     pname = "v2ray-geoip";
-    version = "202501160051";
+    version = "202501190004";
 
     src = fetchFromGitHub {
       owner = "v2fly";
       repo = "geoip";
       tag = version;
-      hash = "sha256-WSi7xsjKqQT37lzkOY1WZwvx5RXNKO3aMwnMiMBwMdA=";
+      hash = "sha256-l5gz3w/80o2UwexzcJ1ALhQMcwqor9m/0RG3WOBeVAc=";
     };
 
     vendorHash = "sha256-nvJsifXF6u3eWqd9X0kGZxASEs/LX2dQraZAwgnw060=";
@@ -29,32 +27,20 @@ let
       maintainers = with lib.maintainers; [ nickcao ];
     };
   };
-  input = {
-    type = "maxmindMMDB";
-    action = "add";
-    args = {
-      uri = dbip-country-lite.mmdb;
-    };
-  };
 in
 
 stdenvNoCC.mkDerivation {
   inherit (generator) pname src;
   inherit (dbip-country-lite) version;
 
-  nativeBuildInputs = [
-    jq
-    moreutils
-  ];
-
-  postPatch = ''
-    jq '.input[0] |= ${builtins.toJSON input}' config.json | sponge config.json
-  '';
+  nativeBuildInputs = [ generator ];
 
   buildPhase = ''
     runHook preBuild
 
-    ${generator}/bin/geoip
+    mkdir -p db-ip
+    ln -s ${dbip-country-lite.mmdb} ./db-ip/dbip-country-lite.mmdb
+    geoip
 
     runHook postBuild
   '';
