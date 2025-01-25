@@ -1376,6 +1376,7 @@ mapAliases {
   temurin-jre-bin-22 = throw "Temurin 22 has been removed as it has reached its end of life"; # Added 2024-09-24
   temurin-bin-22 = throw "Temurin 22 has been removed as it has reached its end of life"; # Added 2024-09-24
   tepl = libgedit-tepl; # Added 2024-04-29
+  termplay = throw "'termplay' has been removed due to lack of maintenance upstream"; # Added 2025-01-25
   testVersion = testers.testVersion; # Added 2022-04-20
   tfplugindocs = terraform-plugin-docs; # Added 2023-11-01
   invalidateFetcherByDrvHash = testers.invalidateFetcherByDrvHash; # Added 2022-05-05
