@@ -68,11 +68,13 @@ in
 buildGoModule {
   inherit pname version src;
 
-  patches = [
-    (replaceVars ./bridge.patch {
-      basepath = placeholder "out";
-    })
-  ];
+  patches = [ ./bridge.patch ];
+
+  postPatch = ''
+    # As we need the $out reference, we can't use `replaceVars` here.
+    substituteInPlace bridge/bridge.go \
+      --replace-fail '@basepath@' "$out"
+  '';
 
   vendorHash = "sha256-OrysyJF+lUMf+0vWmOZHjxUdE6fQCKArmpV4alXxtYs=";
 
