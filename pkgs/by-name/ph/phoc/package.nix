@@ -18,7 +18,7 @@
 , wayland
 , libdrm
 , libxkbcommon
-, wlroots
+, wlroots_0_17
 , xorg
 , directoryListingUpdater
 , nixosTests
@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Patch wlroots to remove a check which crashes Phosh.
   # This patch can be found within the phoc source tree.
-  wlroots = wlroots.overrideAttrs (old: {
+  wlroots = wlroots_0_17.overrideAttrs (old: {
     patches = (old.patches or []) ++ [
       (stdenvNoCC.mkDerivation {
         name = "0001-Revert-layer-shell-error-on-0-dimension-without-anch.patch";
