@@ -7,7 +7,6 @@
   pkg-config,
   mongoc,
   openssl,
-  darwin,
 }:
 
 stdenv.mkDerivation rec {
@@ -34,14 +33,11 @@ stdenv.mkDerivation rec {
     cmake
     pkg-config
   ];
-  buildInputs =
-    [
-      mongoc
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk_11_0.frameworks.Security
-    ];
+
+  buildInputs = [
+    mongoc
+    openssl
+  ];
 
   cmakeFlags = [
     # all three of these are required to use system libbson
