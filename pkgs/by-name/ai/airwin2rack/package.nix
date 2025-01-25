@@ -30,6 +30,17 @@
   glib,
   gtk3-x11,
   curl,
+  vcv-rack,
+  jansson,
+  glew,
+  glfw,
+  libarchive,
+  speexdsp,
+  libpulseaudio,
+  libsamplerate,
+  rtmidi,
+  zstd,
+  jq,
   enableVCVRack ? false,
 }:
 let
@@ -117,16 +128,16 @@ stdenv.mkDerivation {
       sqlite
     ]
     ++ lib.optionals enableVCVRack [
-      pkgs.vcv-rack
-      pkgs.jansson
-      pkgs.glew
-      pkgs.glfw
-      pkgs.libarchive
-      pkgs.speexdsp
-      pkgs.libpulseaudio
-      pkgs.libsamplerate
-      pkgs.rtmidi
-      pkgs.zstd
+      vcv-rack
+      jansson
+      glew
+      glfw
+      libarchive
+      speexdsp
+      libpulseaudio
+      libsamplerate
+      rtmidi
+      zstd
     ];
 
   cmakeFlags =
