@@ -3114,3 +3114,27 @@ in
     ];
   gogol = assert super.gogol.version == "0.5.0"; setGogolSourceRoot "lib/gogol" super.gogol;
 } // gogolServiceOverrides)
+
+# Amazonka Packages
+# 2025-01-24: use latest source files from github, as the hackage release is outdated, https://github.com/brendanhay/amazonka/issues/1001
+// (
+let
+  amazonkaSrc = pkgs.fetchFromGitHub {
+    owner = "brendanhay";
+    repo = "amazonka";
+    rev = "f3a7fca02fdbb832cc348e991983b1465225d50c";
+    sha256 = "sha256-u+R+4WeCd16X8H2dkDHzD3nOLsvsTB0lLNUsbRT23aE=";
+  };
+  setAmazonkaSourceRoot = dir: drv: (overrideSrc { version = "2.0"; src = amazonkaSrc + "/${dir}"; }) drv;
+  isAmazonkaService = name: lib.hasPrefix "amazonka-" name && name != "amazonka-test";
+  amazonkaServices = lib.filter isAmazonkaService (lib.attrNames super);
+  amazonkaServiceOverrides = (lib.genAttrs amazonkaServices (name: lib.pipe super.${name} [(setAmazonkaSourceRoot "lib/services/${name}") doJailbreak]));
+in
+amazonkaServiceOverrides // {
+  amazonka-core = assert super.amazonka-core.version == "2.0"; lib.pipe
+    super.amazonka-core
+    [ (setAmazonkaSourceRoot "lib/amazonka-core")
+      (addBuildDepends [ self.microlens self.microlens-contra self.microlens-pro ])
+    ];
+  amazonka = assert super.amazonka.version == "2.0"; setAmazonkaSourceRoot "lib/amazonka" (doJailbreak super.amazonka);
+})
