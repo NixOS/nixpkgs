@@ -3,7 +3,30 @@
 
 
 # Project settings
-project('system_cmds', 'c', 'objc', version : '@version@')
+project(
+    'system_cmds',
+    'c',
+    'objc',
+    meson_version : '>=1.2',
+    version : '@version@',
+    default_options : {
+        # TODO: Figure out why we can’t pass `paths` to `dependency()`,
+        # which would be preferable.
+        'c_args': [
+            '-iframeworkwithsysroot',
+            '/System/Library/PrivateFrameworks',
+            '-iframeworkwithsysroot',
+            '/System/Library/Frameworks/OpenDirectory.framework/Frameworks',
+        ],
+        'objc_args': [
+            '-iframeworkwithsysroot',
+            '/System/Library/PrivateFrameworks',
+            '-iframeworkwithsysroot',
+            '/System/Library/Frameworks/OpenDirectory.framework/Frameworks',
+        ],
+    },
+)
+
 
 add_project_arguments(
     '-D__FreeBSD__',
@@ -27,11 +50,11 @@ fake_gperf = find_program('awk', required : true)
 
 ## Frameworks
 core_foundation = dependency('appleframeworks', modules : 'CoreFoundation')
-core_symbolication = dependency('appleframeworks', modules : 'CoreSymbolication')
+core_symbolication = dependency('CoreSymbolication', method : 'extraframework')
 directory_service = dependency('appleframeworks', modules : 'DirectoryService')
 iokit = dependency('appleframeworks', modules : 'IOKit')
 open_directory = dependency('appleframeworks', modules : 'OpenDirectory')
-cfopen_directory = dependency('appleframeworks', modules : 'CFOpenDirectory')
+cfopen_directory = dependency('CFOpenDirectory', method : 'extraframework')
 
 
 ## Libraries
@@ -53,7 +76,7 @@ endif
 # Generators
 pgperf = generator(
     fake_gperf,
-    arguments : [ '-f', meson.source_root() + '/getconf/fake-gperf.awk', '@INPUT@' ],
+    arguments : [ '-f', meson.project_source_root() + '/getconf/fake-gperf.awk', '@INPUT@' ],
     capture : true,
     output : '@BASENAME@.gperf.c',
 )
