@@ -13,7 +13,7 @@
 
 buildPostgresqlExtension rec {
   pname = "timescaledb${lib.optionalString (!enableUnfree) "-apache"}";
-  version = "2.17.2";
+  version = "2.18.0";
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [
@@ -25,7 +25,7 @@ buildPostgresqlExtension rec {
     owner = "timescale";
     repo = "timescaledb";
     rev = version;
-    hash = "sha256-gPsAebMUBuAwP6Hoi9/vrc2IFsmTbL0wQH1g6/2k2d4=";
+    hash = "sha256-wDjzahlhUlBDXppk9HLNUOc7mlVqv56M2VGE/C04gUo=";
   };
 
   cmakeFlags =

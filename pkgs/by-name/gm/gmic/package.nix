@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fetchurl,
+  buildPackages,
   cimg,
   cmake,
   common-updater-scripts,
@@ -96,6 +97,11 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       substituteInPlace CMakeLists.txt \
         --replace "LD_LIBRARY_PATH" "DYLD_LIBRARY_PATH"
+    ''
+    + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      substituteInPlace CMakeLists.txt --replace-fail \
+        'LD_LIBRARY_PATH=''${GMIC_BINARIES_PATH} ''${GMIC_BINARIES_PATH}/gmic' \
+        '${lib.getExe buildPackages.gmic}'
     '';
 
   passthru = {
