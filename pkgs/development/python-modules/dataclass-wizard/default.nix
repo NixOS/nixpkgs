@@ -6,15 +6,16 @@
   pythonAtLeast,
   pytimeparse,
   pyyaml,
+  setuptools,
+  typing-extensions,
   pytestCheckHook,
   pytest-mock,
-  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "dataclass-wizard";
   version = "0.22.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rnag";
@@ -23,20 +24,18 @@ buildPythonPackage rec {
     hash = "sha256-Ufi4lZc+UkM6NZr4bS2OibpOmMjyiBEoVKxmrqauW50=";
   };
 
-  propagatedBuildInputs = [ ] ++ lib.optionals (pythonOlder "3.9") [ typing-extensions ];
+  build-system = [ setuptools ];
+  dependencies = lib.optional (pythonOlder "3.9") typing-extensions;
 
   optional-dependencies = {
     timedelta = [ pytimeparse ];
     yaml = [ pyyaml ];
   };
 
-  nativeCheckInputs =
-    [
-      pytestCheckHook
-      pytest-mock
-    ]
-    ++ optional-dependencies.timedelta
-    ++ optional-dependencies.yaml;
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-mock
+  ] ++ lib.concatLists (lib.attrValues optional-dependencies);
 
   disabledTests =
     [ ]
