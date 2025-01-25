@@ -227,7 +227,7 @@ buildPythonPackage rec {
     # AssertionError: assert ResourceWarning not in [<class 'ResourceWarning'>, <class 'ResourceWarning'>]
     "test_delete_object_with_version"
 
-    # KeyError beucase of ap-southeast-5-apse5-az
+    # KeyError because of ap-southeast-5-apse5-az
     "test_zoneId_in_availability_zones"
 
     # Parameter validation fails
