@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-oeQwRcDn4X/CL+O4APmGv9T19c9oD5tCBRz4K41K1Zg=";
   };
 
-  cargoHash = "sha256-x5OHZEr4TI7PXvRKQVWxwsrgbIvUjo7fq8zj1DL9slc=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-lmRo6Q67hJ3hv0jQt6epiNOckRv0rA0a0DNEKIdDoUE=";
 
   meta = with lib; {
     description = "Rust API search engine which allows you to search functions by names and type signatures";
