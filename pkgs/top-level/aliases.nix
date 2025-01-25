@@ -1058,6 +1058,7 @@ mapAliases {
 
   ### P ###
 
+  pax-rs = throw "'pax-rs' has been removed because upstream has disappeared"; # Added 2025-01-25
   PageEdit = pageedit; # Added 2024-01-21
   p2pvc = throw "p2pvc has been removed as it is unmaintained upstream and depends on OpenCV 2"; # Added 2024-08-20
   packet-cli = throw "'packet-cli' has been renamed to/replaced by 'metal-cli'"; # Converted to throw 2024-10-17
