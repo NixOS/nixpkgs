@@ -5248,6 +5248,8 @@ self: super: with self; {
 
   ghdiff = callPackage ../development/python-modules/ghdiff { };
 
+  ghidra-bridge = callPackage ../development/python-modules/ghidra-bridge { };
+
   ghp-import = callPackage ../development/python-modules/ghp-import { };
 
   ghrepo-stats = callPackage ../development/python-modules/ghrepo-stats { };
@@ -6638,6 +6640,8 @@ self: super: with self; {
 
   jh2 = callPackage ../development/python-modules/jh2 { };
 
+  jfx-bridge = callPackage ../development/python-modules/jfx-bridge { };
+
   jianpu-ly = callPackage ../development/python-modules/jianpu-ly { };
 
   jieba = callPackage ../development/python-modules/jieba { };
@@ -7255,6 +7259,8 @@ self: super: with self; {
   });
 
   libagent = callPackage ../development/python-modules/libagent { };
+
+  libbs = callPackage ../development/python-modules/libbs { };
 
   pa-ringbuffer = callPackage ../development/python-modules/pa-ringbuffer { };
 
@@ -10617,6 +10623,8 @@ self: super: with self; {
   pyheos = callPackage ../development/python-modules/pyheos { };
 
   pyhepmc = callPackage ../development/python-modules/pyhepmc { };
+
+  pyhidra = callPackage ../development/python-modules/pyhidra { };
 
   pyhiveapi = callPackage ../development/python-modules/pyhiveapi { };
 
