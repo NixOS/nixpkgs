@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "parinfer-rust";
-  version = "0.4.3";
+  version = "0.4.3-unstable-2024-05-07";
 
   src = fetchFromGitHub {
     owner = "eraserhd";
     repo = "parinfer-rust";
-    rev = "v${version}";
-    sha256 = "0hj5in5h7pj72m4ag80ing513fh65q8xlsf341qzm3vmxm3y3jgd";
+    rev = "d84828b453e158d06406f6b5e9056f6b54ff76c9";
+    sha256 = "sha256-Q2fYogfn5QcNDEie4sUaVydAmDmcFXnsvz35cxPCf+M=";
   };
 
-  cargoHash = "sha256-PW9LIQamQfusaijyJ2R9xe29LhM0GNf9BdxI9vkjVdE=";
+  cargoHash = "sha256-r0IXAft7QsZz9dWyzix243Lt8zuP9CW9iuHbFnNEM10=";
 
   nativeBuildInputs = [
     llvmPackages.clang
