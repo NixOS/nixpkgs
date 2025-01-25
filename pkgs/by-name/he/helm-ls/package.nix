@@ -9,13 +9,13 @@
 
 buildGoModule rec {
   pname = "helm-ls";
-  version = "0.1.1";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "mrjosh";
     repo = "helm-ls";
     rev = "v${version}";
-    hash = "sha256-pf/gC0jIrJUfU//uj+CGkUsNDVFeS6Wm4kx3Di9wpVI=";
+    hash = "sha256-k/JJoLRykIY/ZmjqG+ZzXuMPQRcoumqisPKrD9PPyd0=";
   };
 
   vendorHash = "sha256-VAxmMDZIbbcGHoRL06oqWkDnWZBuweKyoCLSqItWHyg=";
