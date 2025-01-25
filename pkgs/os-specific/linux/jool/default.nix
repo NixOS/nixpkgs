@@ -22,7 +22,7 @@ stdenv.mkDerivation {
     sed -e 's@/lib/modules/\$(.*)@${kernel.dev}/lib/modules/${kernel.modDirVersion}@' -i src/mod/*/Makefile
   '';
 
-  makeFlags = kernel.makeFlags ++ [
+  makeFlags = kernel.moduleMakeFlags ++ [
     "-C src/mod"
     "INSTALL_MOD_PATH=${placeholder "out"}"
   ];
