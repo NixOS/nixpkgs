@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
+  enableParallelBuilding = true;
+
   meta = with lib; {
     description = "C99 HTML parsing algorithm";
     homepage = "https://codeberg.org/gumbo-parser/gumbo-parser";
