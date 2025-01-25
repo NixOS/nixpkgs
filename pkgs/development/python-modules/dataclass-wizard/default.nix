@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  gitUpdater,
   buildPythonPackage,
   pythonOlder,
   pythonAtLeast,
@@ -50,6 +51,8 @@ buildPythonPackage rec {
     ];
 
   pythonImportsCheck = [ "dataclass_wizard" ];
+
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = with lib; {
     description = "Set of simple, yet elegant wizarding tools for interacting with the Python dataclasses module";
