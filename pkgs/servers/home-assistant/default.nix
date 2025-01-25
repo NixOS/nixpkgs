@@ -205,6 +205,34 @@ let
         };
       });
 
+      # snmp component does not support pysnmp 7.0+
+      pysnmp = super.pysnmp.overridePythonAttrs (oldAttrs: rec {
+        version = "6.2.6";
+        src = fetchFromGitHub {
+          owner = "lextudio";
+          repo = "pysnmp";
+          tag = "v${version}";
+          hash = "sha256-+FfXvsfn8XzliaGUKZlzqbozoo6vDxUkgC87JOoVasY=";
+        };
+      });
+
+      pysnmpcrypto = super.pysnmpcrypto.overridePythonAttrs (oldAttrs: rec {
+        version = "0.0.4";
+        src = fetchFromGitHub {
+          owner = "lextudio";
+          repo = "pysnmpcrypto";
+          tag = "v${version}";
+          hash = "sha256-f0w4Nucpe+5VE6nhlnePRH95AnGitXeT3BZb3dhBOTk=";
+        };
+        build-system = with self; [ setuptools ];
+        postPatch = ''
+          # ValueError: invalid literal for int() with base 10: 'post0' in File "<string>", line 104, in <listcomp>
+          substituteInPlace setup.py --replace \
+            "observed_version = [int(x) for x in setuptools.__version__.split('.')]" \
+            "observed_version = [36, 2, 0]"
+        '';
+      });
+
       pysnooz = super.pysnooz.overridePythonAttrs (oldAttrs: rec {
         version = "0.8.6";
         src = fetchFromGitHub {
