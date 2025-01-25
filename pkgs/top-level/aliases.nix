@@ -815,6 +815,7 @@ mapAliases {
   llvm_9 = throw "llvm_9 has been removed from nixpkgs"; # Added 2024-04-08
 
   lobster-two = throw "'lobster-two' has been renamed to/replaced by 'google-fonts'"; # Converted to throw 2024-10-17
+  loop = throw "'loop' has been removed due to lack of upstream maintenance"; # Added 2025-01-25
   lsh = throw "lsh has been removed as it had no maintainer in Nixpkgs and hasn't seen an upstream release in over a decade"; # Added 2024-08-14
   luna-icons = throw "luna-icons has been removed as it was removed upstream"; # Added 2024-10-29
   lv_img_conv = throw "'lv_img_conv' has been removed from nixpkgs as it is broken"; # Added 2024-06-18
