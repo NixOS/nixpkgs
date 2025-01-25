@@ -2945,9 +2945,6 @@ self: super:
   # https://github.com/snoyberg/http-client/pull/563
   http-client-tls = doJailbreak super.http-client-tls;
 
-  # 2025-01-23: jailbreak to allow base >= 4.17
-  warp-systemd = doJailbreak super.warp-systemd;
-
   bsb-http-chunked = lib.pipe super.bsb-http-chunked [
     (lib.warnIf (lib.versionOlder "0.0.0.4" super.bsb-http-chunked.version) "override for haskellPackages.bsb-http-chunked may no longer be needed")
     # Last released in 2018
