@@ -1,16 +1,15 @@
 {
-  mkDerivation,
+  stdenv,
   lib,
   fetchurl,
   cmake,
   pkg-config,
-  qttools,
-  qtx11extras,
-  drumstick,
+  qt5,
+  libsForQt5,
   docbook-xsl-nons,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "vmpk";
   version = "0.8.8";
 
@@ -22,18 +21,19 @@ mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    qttools
+    qt5.qttools
     docbook-xsl-nons
+    qt5.wrapQtAppsHook
   ];
 
   buildInputs = [
-    drumstick
-    qtx11extras
+    libsForQt5.drumstick
+    qt5.qtx11extras
   ];
 
   postInstall = ''
     # vmpk drumstickLocales looks here:
-    ln -s ${drumstick}/share/drumstick $out/share/
+    ln -s ${libsForQt5.drumstick}/share/drumstick $out/share/
   '';
 
   meta = with lib; {
