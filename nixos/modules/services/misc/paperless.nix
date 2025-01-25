@@ -259,7 +259,7 @@ in
       directory = lib.mkOption {
         type = lib.types.str;
         default = cfg.dataDir + "/export";
-        defaultText = lib.literalExpression "$''{config.services.paperless.dataDir}/export";
+        defaultText = lib.literalExpression "\${config.services.paperless.dataDir}/export";
         description = "Directory to store export.";
       };
 
