@@ -1,0 +1,19 @@
+diff --git a/Source/Common/FEXServerClient.cpp b/Source/Common/FEXServerClient.cpp
+index 424ecf0a0..501bcbac1 100644
+--- a/Source/Common/FEXServerClient.cpp
++++ b/Source/Common/FEXServerClient.cpp
+@@ -209,7 +209,13 @@ int ConnectToAndStartServer(char* InterpreterPath) {
+       return -1;
+     }
+ 
+-    fextl::string FEXServerPath = FHU::Filesystem::ParentPath(InterpreterPath) + "/FEXServer";
++    char RealInterpreterPathBuf[PATH_MAX];
++    char *RealInterpreterPath = realpath(InterpreterPath, RealInterpreterPathBuf);
++    if (!RealInterpreterPath) {
++      LogMan::Msg::EFmt("realpath failed");
++      return -1;
++    }
++    fextl::string FEXServerPath = FHU::Filesystem::ParentPath(RealInterpreterPath) + "/FEXServer";
+     // Check if a local FEXServer next to FEXInterpreter exists
+     // If it does then it takes priority over the installed one
+     if (!FHU::Filesystem::Exists(FEXServerPath)) {

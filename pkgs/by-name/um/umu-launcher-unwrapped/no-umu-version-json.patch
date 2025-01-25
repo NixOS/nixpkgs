@@ -1,0 +1,13 @@
+diff --git a/Makefile.in b/Makefile.in
+index b82053d..37db8c9 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -50,7 +50,7 @@ fix_shebangs:
+ umu/umu_version.json: umu/umu_version.json.in
+ 	$(info :: Updating $(@) )
+ 	cp $(<) $(<).tmp
+-	sed 's|##UMU_VERSION##|$(shell git describe --always --long --tags)|g' -i $(<).tmp
++	sed 's|##UMU_VERSION##|@version@|g' -i $(<).tmp
+ 	mv $(<).tmp $(@)
+ 
+ .PHONY: version

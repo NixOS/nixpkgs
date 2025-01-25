@@ -1,0 +1,29 @@
+From 6b9b3559d8ce59eda6c5cd6f04224cebaaa5d0ea Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=D0=94=D0=B0=D0=BC=D1=98=D0=B0=D0=BD=20=D0=93=D0=B5=D0=BE?=
+ =?UTF-8?q?=D1=80=D0=B3=D0=B8=D0=B5=D0=B2=D1=81=D0=BA=D0=B8?=
+ <gdamjan@gmail.com>
+Date: Tue, 8 Sep 2020 17:11:39 +0200
+Subject: [PATCH] no ext/session/php_session.h on NixOS
+
+on NixOS php_session.h is in its own package, and is not installed in
+ext/session/
+---
+ plugins/php/common.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/plugins/php/common.h b/plugins/php/common.h
+index 9bf1c069..be93f519 100644
+--- a/plugins/php/common.h
++++ b/plugins/php/common.h
+@@ -10,7 +10,7 @@
+ #endif
+ #include "ext/standard/info.h"
+ 
+-#include "ext/session/php_session.h"
++#include "php_session.h"
+ 
+ #include <uwsgi.h>
+ 
+-- 
+2.28.0
+

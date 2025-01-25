@@ -1,0 +1,15 @@
+diff --git a/runtime/Cpp/runtime/CMakeLists.txt b/runtime/Cpp/runtime/CMakeLists.txt
+index c8b16c6cf..e8da7960d 100644
+--- a/runtime/Cpp/runtime/CMakeLists.txt
++++ b/runtime/Cpp/runtime/CMakeLists.txt
+@@ -40,8 +40,8 @@ find_package(utf8cpp QUIET)
+ set(INSTALL_utf8cpp FALSE)
+ 
+ if (utf8cpp_FOUND)
+-  target_link_libraries(antlr4_shared utf8cpp)
+-  target_link_libraries(antlr4_static utf8cpp)
++  target_link_libraries(antlr4_shared utf8cpp::utf8cpp)
++  target_link_libraries(antlr4_static utf8cpp::utf8cpp)
+ else()
+ 
+   # older utf8cpp doesn't define the package above

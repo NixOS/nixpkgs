@@ -1,0 +1,33 @@
+From 1911995b1a1252d80bf2b9651840e185a1a6baf5 Mon Sep 17 00:00:00 2001
+From: Hong Xu <hong@topbug.net>
+Date: Thu, 25 Jul 2019 10:25:55 -0700
+Subject: [PATCH] On all posix systems, not just Darwin, set LDSHARED (if not
+ set) according to CC
+
+This patch is slightly different from https://bugs.python.org/issue24935
+, except that we now handle LDSHARED according to CC on all posix
+systems, not just Darwin or Linux.
+---
+ Lib/distutils/sysconfig.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Lib/distutils/sysconfig.py b/Lib/distutils/sysconfig.py
+index 37feae5df7..9fdce6896d 100644
+--- a/Lib/distutils/sysconfig.py
++++ b/Lib/distutils/sysconfig.py
+@@ -199,10 +199,10 @@ def customize_compiler(compiler):
+ 
+         if 'CC' in os.environ:
+             newcc = os.environ['CC']
+-            if (sys.platform == 'darwin'
++            if (os.name == 'posix'
+                     and 'LDSHARED' not in os.environ
+                     and ldshared.startswith(cc)):
+-                # On OS X, if CC is overridden, use that as the default
++                # On POSIX systems, if CC is overridden, use that as the default
+                 #       command for LDSHARED as well
+                 ldshared = newcc + ldshared[len(cc):]
+             cc = newcc
+-- 
+2.25.1
+

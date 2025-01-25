@@ -1,0 +1,61 @@
+diff --git a/src/main.rs b/src/main.rs
+index 3cb6896..7f070e0 100644
+--- a/src/main.rs
++++ b/src/main.rs
+@@ -275,7 +275,9 @@ fn install_single_toolchain(
+
+     // install
+     if maybe_dry_client.is_some() {
+-        rename(&toolchain.dest, toolchain_path)?;
++        rename(&toolchain.dest, toolchain_path.clone())?;
++        nix_patchelf(toolchain_path)
++            .expect("failed to patch toolchain for NixOS");
+         eprintln!(
+             "toolchain `{}` is successfully installed!",
+             toolchain.dest.display()
+@@ -291,6 +293,45 @@ fn install_single_toolchain(
+     Ok(())
+ }
+
++fn nix_patchelf(mut toolchain_path: PathBuf) -> Result<(), Error> {
++    toolchain_path.push("bin");
++
++    for entry in toolchain_path.read_dir()? {
++        let entry = entry?;
++        if !entry.file_type()?.is_file() {
++            continue;
++        }
++
++        eprintln!("info: you seem to be running NixOS. Attempting to patch {}",
++                  entry.path().to_str().unwrap());
++        let _ = ::std::process::Command::new("@patchelf@/bin/patchelf")
++            .arg("--set-interpreter")
++            .arg("@dynamicLinker@")
++            .arg(entry.path())
++            .output();
++    }
++
++    toolchain_path.pop();
++    toolchain_path.push("lib");
++
++    for entry in toolchain_path.read_dir()? {
++        let entry = entry?;
++        if !entry.file_type()?.is_file() {
++            continue;
++        }
++
++        eprintln!("info: you seem to be running NixOS. Attempting to patch {}",
++                  entry.path().to_str().unwrap());
++        let _ = ::std::process::Command::new("@patchelf@/bin/patchelf")
++            .arg("--set-rpath")
++            .arg("@libPath@")
++            .arg(entry.path())
++            .output();
++    }
++
++    Ok(())
++}
++
+ fn fetch_master_commit(client: &Client, github_token: Option<&str>) -> Result<String, Error> {
+     eprintln!("fetching master commit hash... ");
+     fetch_master_commit_via_git()
