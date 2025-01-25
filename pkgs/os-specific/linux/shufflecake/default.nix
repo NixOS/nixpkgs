@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     libgcrypt
     lvm2
   ];
-  makeFlags = kernel.makeFlags ++ [
+  makeFlags = kernel.moduleMakeFlags ++ [
     "KERNEL_DIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
 

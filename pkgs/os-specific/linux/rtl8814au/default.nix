@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
-  makeFlags = kernel.makeFlags;
+  makeFlags = kernel.moduleMakeFlags;
 
   hardeningDisable = [ "pic" ];
 
