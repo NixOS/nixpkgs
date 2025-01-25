@@ -3907,8 +3907,6 @@ let
         };
       };
 
-      nvarner.typst-lsp = callPackage ./nvarner.typst-lsp { };
-
       ocamllabs.ocaml-platform = buildVscodeMarketplaceExtension {
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/ocamllabs.ocaml-platform/changelog";
