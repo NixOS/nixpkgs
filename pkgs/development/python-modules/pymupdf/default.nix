@@ -41,7 +41,7 @@ let
 in
 buildPythonPackage rec {
   pname = "pymupdf";
-  version = "1.25.1";
+  version = "1.25.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -50,7 +50,7 @@ buildPythonPackage rec {
     owner = "pymupdf";
     repo = "PyMuPDF";
     tag = version;
-    hash = "sha256-kdu8CuQJ5+h8+PS66acWEfcttgALiD+JBoWWyGtjBzs=";
+    hash = "sha256-6XbHQ8PE9IF0kngUhYkFSGjwgt+r+19v+PeDAQin2Ko=";
   };
 
   # swig is not wrapped as Python package
