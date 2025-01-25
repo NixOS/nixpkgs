@@ -1,4 +1,4 @@
-{ callPackage }:
+{ callPackage, fetchpatch2 }:
 
 let
   juliaWithPackages = callPackage ../../julia-modules { };
@@ -64,6 +64,14 @@ in
       hash = "sha256-NPojubjOgy32CWlD/TDzI764Ca7cMsFj9r7vUdUW9Oc=";
       patches = [
         ./patches/1.10/0002-skip-failing-and-flaky-tests.patch
+        # Revert https://github.com/JuliaLang/julia/pull/55354
+        # [build] Some improvements to the LLVM build system
+        # Related: https://github.com/JuliaLang/julia/issues/55617
+        (fetchpatch2 {
+          url = "https://github.com/JuliaLang/julia/commit/0be37db8c5b5a440bd9a11960ae9c998027b7337.patch";
+          revert = true;
+          hash = "sha256-gXC3LE3AuHMlSdA4dW+rbAhJpSB6ZMaz9X1qrHDPX7Y=";
+        })
       ];
     })
     { });
