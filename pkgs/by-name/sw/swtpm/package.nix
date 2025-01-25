@@ -74,6 +74,9 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     patchShebangs tests/*
 
+    # Needed for cross-compilation
+    substituteInPlace configure.ac --replace-fail 'pkg-config' '${stdenv.cc.targetPrefix}pkg-config'
+
     # Makefile tries to create the directory /var/lib/swtpm-localca, which fails
     substituteInPlace samples/Makefile.am \
         --replace 'install-data-local:' 'do-not-execute:'
