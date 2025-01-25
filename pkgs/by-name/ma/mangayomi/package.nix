@@ -110,7 +110,7 @@ flutter324.buildFlutterApplication {
     homepage = "https://github.com/kodjodevf/mangayomi";
     mainProgram = "mangayomi";
     license = with lib.licenses; [ asl20 ];
-    maintainers = with lib.maintainers; [ aucub ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };
 }
