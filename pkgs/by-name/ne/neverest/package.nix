@@ -1,7 +1,7 @@
 {
   lib,
   rustPlatform,
-  fetchFromSourcehut,
+  fetchFromGitHub,
   stdenv,
   pkg-config,
   darwin,
@@ -22,9 +22,9 @@ rustPlatform.buildRustPackage rec {
   pname = "neverest";
   version = "1.0.0-beta";
 
-  src = fetchFromSourcehut {
-    owner = "~soywod";
-    repo = "neverest-cli";
+  src = fetchFromGitHub {
+    owner = "pimalaya";
+    repo = "neverest";
     rev = "v${version}";
     hash = "sha256-3PSJyhxrOCiuHUeVHO77+NecnI5fN5EZfPhYizuYvtE=";
   };
