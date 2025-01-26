@@ -15,6 +15,8 @@ lib.packagesFromDirectoryRecursive {
     inherit (pkgs) codeium;
   };
 
+  elpaca = callPackage ./manual-packages/elpaca { inherit (pkgs) git; };
+
   lsp-bridge = callPackage ./manual-packages/lsp-bridge {
     inherit (pkgs)
       basedpyright
