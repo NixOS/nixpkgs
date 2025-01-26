@@ -48,6 +48,7 @@ import ../make-test-python.nix (
               database = {
                 peerAuth = lib.mkDefault true;
               };
+              telemetry.enableSecurityAlerts = false;
               settings = {
                 SupportSettings.AboutLink = "https://nixos.org";
                 PluginSettings.AutomaticPrepackagedPlugins = false;
