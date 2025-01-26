@@ -8,44 +8,63 @@
 
   # dependencies
   numpy,
-  joblib,
   networkx,
   scipy,
-  pyyaml,
-  cython,
+  scikit-learn,
+  torch,
+  apricot-select,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pomegranate";
-  version = "0.14.8";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
-    repo = pname;
     owner = "jmschrei";
-    # no tags for recent versions: https://github.com/jmschrei/pomegranate/issues/974
+    repo = "pomegranate";
     tag = "v${version}";
-    hash = "sha256-PoDAtNm/snq4isotkoCTVYUuwr9AKKwiXIojUFMH/YE=";
+    hash = "sha256-p2Gn0FXnsAHvRUeAqx4M1KH0+XvDl3fmUZZ7MiMvPSs=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
-    joblib
     networkx
     scipy
-    pyyaml
-    cython
+    scikit-learn
+    torch
+    apricot-select
   ];
 
-  # https://github.com/etal/cnvkit/issues/815
-  passthru.skipBulkUpdate = true;
+  pythonImportsCheck = [
+    "pomegranate"
+  ];
 
-  meta = with lib; {
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    "tests/"
+  ];
+
+  disabledTestPaths = [
+    "tests/distributions/test_categorical.py" # Arrays are not almost equal to 6 decimals
+    "tests/distributions/test_independent_component.py" # Arrays are not almost equal to 3 decimals
+    "tests/distributions/test_joint_categorical.py" # Arrays are not almost equal to 3 decimals
+    "tests/test_bayesian_network.py" # Arrays are not equal
+    "tests/test_gmm.py" # Arrays are not almost equal to 3 decimals
+    "tests/test_markov_chain.py" # Arrays are not almost equal to 6 decimals
+  ];
+
+  meta = {
+    changelog = "https://github.com/jmschrei/pomegranate/releases/tag/${src.tag}";
     description = "Probabilistic and graphical models for Python, implemented in cython for speed";
     homepage = "https://github.com/jmschrei/pomegranate";
-    license = licenses.mit;
-    maintainers = with maintainers; [ rybern ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ rybern ];
   };
 }
