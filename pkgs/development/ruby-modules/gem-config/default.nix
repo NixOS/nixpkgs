@@ -308,7 +308,7 @@ in
     '';
   } // lib.optionalAttrs (lib.versionAtLeast attrs.version "1.0") {
     cargoRoot = "ext/fast_mmaped_file_rs";
-    cargoDeps = rustPlatform.fetchCargoTarball {
+    cargoDeps = rustPlatform.fetchCargoVendor {
       src = stdenv.mkDerivation {
         inherit (buildRubyGem { inherit (attrs) gemName version source; })
           name
@@ -322,11 +322,11 @@ in
         '';
       };
       hash = if lib.versionAtLeast attrs.version "1.1.2"
-        then "sha256-pNzW2fQZDcuqu8apv3GU7lUC/H1cX5WRifBBQlbE8+s="
+        then "sha256-8EpYU6MSzMG3RzneDx0GwZ2N46Po8FdA/7Khy/7KHWo="
         else
           if lib.versionAtLeast attrs.version "1.1.1"
-          then "sha256-RsN5XWX7Mj2ORccM0eczY+44WXsbXNTnJVcCMvnOATk="
-          else "sha256-XuQZPbFWqPHlrJvllkvLl1FjKeoAUbi8oKDrS2rY1KM=";
+          then "sha256-V4NlFgVJy+V9fdbZWObn52H91IFSIU1seErMcxh1x5w="
+          else "sha256-GFRIjvBPhqT4h6gE+GF32WW1wgZTaaHXRF7tIXnRM1Q=";
     };
     nativeBuildInputs = [
       cargo
