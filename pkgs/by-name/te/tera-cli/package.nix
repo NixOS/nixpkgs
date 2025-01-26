@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  rustPlatform
+  rustPlatform,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "tera-cli";
@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
     description = "Command line utility to render templates from json|toml|yaml and ENV, using the tera templating engine";
     homepage = "https://github.com/chevdor/tera-cli";
     license = licenses.mit;
-    maintainers = with maintainers; [_365tuwe];
+    maintainers = with maintainers; [ _365tuwe ];
     mainProgram = "tera";
     platforms = platforms.linux;
   };

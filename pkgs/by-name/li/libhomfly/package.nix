@@ -1,7 +1,9 @@
-{ lib, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, boehmgc
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  boehmgc,
 }:
 
 stdenv.mkDerivation rec {

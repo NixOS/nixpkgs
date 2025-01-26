@@ -1,4 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub, fetchpatch, makeWrapper }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  fetchpatch,
+  makeWrapper,
+}:
 
 buildGoModule rec {
   pname = "3mux";
@@ -53,7 +59,10 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/aaronjanse/3mux";
     license = licenses.mit;
-    maintainers = with maintainers; [ aaronjanse Br1ght0ne ];
+    maintainers = with maintainers; [
+      aaronjanse
+      Br1ght0ne
+    ];
     platforms = platforms.unix;
   };
 }

@@ -1,26 +1,38 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.dae;
   assets = cfg.assets;
-  genAssetsDrv = paths: pkgs.symlinkJoin {
-    name = "dae-assets";
-    inherit paths;
-  };
+  genAssetsDrv =
+    paths:
+    pkgs.symlinkJoin {
+      name = "dae-assets";
+      inherit paths;
+    };
 in
 {
-  meta.maintainers = with lib.maintainers; [ pokon548 oluceps ];
+  meta.maintainers = with lib.maintainers; [
+    pokon548
+    oluceps
+  ];
 
   options = {
-    services.dae = with lib;{
+    services.dae = with lib; {
       enable = mkEnableOption "dae, a Linux high-performance transparent proxy solution based on eBPF";
 
       package = mkPackageOption pkgs "dae" { };
 
-
       assets = mkOption {
-        type = with types;(listOf path);
-        default = with pkgs; [ v2ray-geoip v2ray-domain-list-community ];
+        type = with types; (listOf path);
+        default = with pkgs; [
+          v2ray-geoip
+          v2ray-domain-list-community
+        ];
         defaultText = literalExpression "with pkgs; [ v2ray-geoip v2ray-domain-list-community ]";
         description = ''
           Assets required to run dae.
@@ -43,17 +55,19 @@ in
       };
 
       openFirewall = mkOption {
-        type = with types; submodule {
-          options = {
-            enable = mkEnableOption "opening {option}`port` in the firewall";
-            port = mkOption {
-              type = types.port;
-              description = ''
-                Port to be opened. Consist with field `tproxy_port` in config file.
-              '';
+        type =
+          with types;
+          submodule {
+            options = {
+              enable = mkEnableOption "opening {option}`port` in the firewall";
+              port = mkOption {
+                type = types.port;
+                description = ''
+                  Port to be opened. Consist with field `tproxy_port` in config file.
+                '';
+              };
             };
           };
-        };
         default = {
           enable = true;
           port = 12345;
@@ -89,81 +103,87 @@ in
         '';
       };
 
-      disableTxChecksumIpGeneric =
-        mkEnableOption "" // { description = "See <https://github.com/daeuniverse/dae/issues/43>"; };
+      disableTxChecksumIpGeneric = mkEnableOption "" // {
+        description = "See <https://github.com/daeuniverse/dae/issues/43>";
+      };
 
     };
   };
 
-  config = lib.mkIf cfg.enable
+  config =
+    lib.mkIf cfg.enable
 
-    {
-      environment.systemPackages = [ cfg.package ];
-      systemd.packages = [ cfg.package ];
+      {
+        environment.systemPackages = [ cfg.package ];
+        systemd.packages = [ cfg.package ];
 
-      networking = lib.mkIf cfg.openFirewall.enable {
-        firewall =
-          let portToOpen = cfg.openFirewall.port;
-          in
-          {
-            allowedTCPPorts = [ portToOpen ];
-            allowedUDPPorts = [ portToOpen ];
-          };
-      };
-
-      systemd.services.dae =
-        let
-          daeBin = lib.getExe cfg.package;
-
-          configPath =
-            if cfg.configFile != null
-            then cfg.configFile else pkgs.writeText "config.dae" cfg.config;
-
-          TxChecksumIpGenericWorkaround = with lib;
-            (getExe pkgs.writeShellApplication {
-              name = "disable-tx-checksum-ip-generic";
-              text = with pkgs; ''
-                iface=$(${iproute2}/bin/ip route | ${lib.getExe gawk} '/default/ {print $5}')
-                ${lib.getExe ethtool} -K "$iface" tx-checksum-ip-generic off
-              '';
-            });
-        in
-        {
-          wantedBy = [ "multi-user.target" ];
-          serviceConfig = {
-            LoadCredential = [ "config.dae:${configPath}" ];
-            ExecStartPre = [ "" "${daeBin} validate -c \${CREDENTIALS_DIRECTORY}/config.dae" ]
-              ++ (with lib; optional cfg.disableTxChecksumIpGeneric TxChecksumIpGenericWorkaround);
-            ExecStart = [ "" "${daeBin} run --disable-timestamp -c \${CREDENTIALS_DIRECTORY}/config.dae" ];
-            Environment = "DAE_LOCATION_ASSET=${cfg.assetsPath}";
-          };
+        networking = lib.mkIf cfg.openFirewall.enable {
+          firewall =
+            let
+              portToOpen = cfg.openFirewall.port;
+            in
+            {
+              allowedTCPPorts = [ portToOpen ];
+              allowedUDPPorts = [ portToOpen ];
+            };
         };
 
-      assertions = [
-        {
-          assertion = lib.pathExists (toString (genAssetsDrv cfg.assets) + "/share/v2ray");
-          message = ''
-            Packages in `assets` has no preset paths included.
-            Please set `assetsPath` instead.
-          '';
-        }
+        systemd.services.dae =
+          let
+            daeBin = lib.getExe cfg.package;
 
-        {
-          assertion = !((config.services.dae.config != null)
-            && (config.services.dae.configFile != null));
-          message = ''
-            Option `config` and `configFile` could not be set
-            at the same time.
-          '';
-        }
+            configPath =
+              if cfg.configFile != null then cfg.configFile else pkgs.writeText "config.dae" cfg.config;
 
-        {
-          assertion = !((config.services.dae.config == null)
-            && (config.services.dae.configFile == null));
-          message = ''
-            Either `config` or `configFile` should be set.
-          '';
-        }
-      ];
-    };
+            TxChecksumIpGenericWorkaround =
+              with lib;
+              (getExe pkgs.writeShellApplication {
+                name = "disable-tx-checksum-ip-generic";
+                text = with pkgs; ''
+                  iface=$(${iproute2}/bin/ip route | ${lib.getExe gawk} '/default/ {print $5}')
+                  ${lib.getExe ethtool} -K "$iface" tx-checksum-ip-generic off
+                '';
+              });
+          in
+          {
+            wantedBy = [ "multi-user.target" ];
+            serviceConfig = {
+              LoadCredential = [ "config.dae:${configPath}" ];
+              ExecStartPre = [
+                ""
+                "${daeBin} validate -c \${CREDENTIALS_DIRECTORY}/config.dae"
+              ] ++ (with lib; optional cfg.disableTxChecksumIpGeneric TxChecksumIpGenericWorkaround);
+              ExecStart = [
+                ""
+                "${daeBin} run --disable-timestamp -c \${CREDENTIALS_DIRECTORY}/config.dae"
+              ];
+              Environment = "DAE_LOCATION_ASSET=${cfg.assetsPath}";
+            };
+          };
+
+        assertions = [
+          {
+            assertion = lib.pathExists (toString (genAssetsDrv cfg.assets) + "/share/v2ray");
+            message = ''
+              Packages in `assets` has no preset paths included.
+              Please set `assetsPath` instead.
+            '';
+          }
+
+          {
+            assertion = !((config.services.dae.config != null) && (config.services.dae.configFile != null));
+            message = ''
+              Option `config` and `configFile` could not be set
+              at the same time.
+            '';
+          }
+
+          {
+            assertion = !((config.services.dae.config == null) && (config.services.dae.configFile == null));
+            message = ''
+              Either `config` or `configFile` should be set.
+            '';
+          }
+        ];
+      };
 }

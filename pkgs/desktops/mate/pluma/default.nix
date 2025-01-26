@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, gettext
-, perl
-, itstool
-, isocodes
-, enchant
-, libxml2
-, python3
-, gtksourceview4
-, libpeas
-, mate-desktop
-, wrapGAppsHook3
-, mateUpdateScript
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gettext,
+  perl,
+  itstool,
+  isocodes,
+  enchant,
+  libxml2,
+  python3,
+  gtksourceview4,
+  libpeas,
+  mate-desktop,
+  wrapGAppsHook3,
+  mateUpdateScript,
 }:
 
 stdenv.mkDerivation rec {
@@ -62,7 +63,11 @@ stdenv.mkDerivation rec {
     description = "Powerful text editor for the MATE desktop";
     mainProgram = "pluma";
     homepage = "https://mate-desktop.org";
-    license = with licenses; [ gpl2Plus lgpl2Plus fdl11Plus ];
+    license = with licenses; [
+      gpl2Plus
+      lgpl2Plus
+      fdl11Plus
+    ];
     platforms = platforms.unix;
     maintainers = teams.mate.members;
   };

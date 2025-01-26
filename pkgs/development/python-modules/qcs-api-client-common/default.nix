@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rigetti";
     repo = "qcs-api-client-rust";
-    rev = "refs/tags/common/v${version}";
+    tag = "common/v${version}";
     hash = "sha256-WXTqzdbBZmBj/+mVK/watOuaq/WqKtaMVhp+ogjmhqM=";
   };
 

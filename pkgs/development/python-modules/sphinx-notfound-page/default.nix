@@ -31,7 +31,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "readthedocs";
     repo = "sphinx-notfound-page";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-tG71UuYbdlWNgq6Y5xRH3aWc9/eTr/RlsRNWSUjrbBE=";
   };
 

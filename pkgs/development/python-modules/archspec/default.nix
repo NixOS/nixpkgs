@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "archspec";
     repo = "archspec";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     fetchSubmodules = true;
     hash = "sha256-Xg1XdmKk2b6fqzOdedU3SGIgy65CjExxDByt/Xvmr24=";
   };

@@ -17,7 +17,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "httptoolkit";
     repo = "httptoolkit-desktop";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-e+ngBZMwMTvwzY1K7IaxlNoRkZUPDdJvKxvxuCsc9pw=";
   };
 
@@ -62,7 +62,7 @@ buildNpmPackage rec {
 
       makeWrapper ${lib.getExe electron} $out/bin/httptoolkit \
           --add-flags $out/share/httptoolkit/resources/app.asar \
-          --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+          --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
           --inherit-argv0
     ''}
 

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "GNS3";
     repo = "ubridge";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-utzXLPF0VszMZORoik5/0lKhiyKO9heKuNO4KPsPVsI=";
   };
 

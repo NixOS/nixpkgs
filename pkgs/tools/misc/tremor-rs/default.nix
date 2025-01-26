@@ -43,8 +43,10 @@ rustPlatform.buildRustPackage rec {
   # error: `log_error` isn't a valid `#[macro_export]` argument
   # note: `#[deny(invalid_macro_export_arguments)]` implied by `#[deny(warnings)]`
   postPatch = ''
-    substituteInPlace src/lib.rs \
-      --replace '#![deny(' '#![warn('
+    shopt -s globstar
+    substituteInPlace **/*.rs \
+      --replace-quiet '#![deny(warnings)]' ""
+    shopt -u globstar
   '';
 
   # TODO export TREMOR_PATH($out/lib) variable

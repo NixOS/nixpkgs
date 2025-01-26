@@ -1,4 +1,12 @@
-{ stdenv, lib, fetchFromGitHub, cmake, gtest, openssl, pe-parse }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  gtest,
+  openssl,
+  pe-parse,
+}:
 
 stdenv.mkDerivation rec {
   pname = "uthenticode";
@@ -11,11 +19,17 @@ stdenv.mkDerivation rec {
     hash = "sha256-NGVOGXMRlgpSRw56jr63rJc/5/qCmPjtAFa0D21ogd4=";
   };
 
-  cmakeFlags = [ "-DBUILD_TESTS=1" "-DUSE_EXTERNAL_GTEST=1" ];
+  cmakeFlags = [
+    "-DBUILD_TESTS=1"
+    "-DUSE_EXTERNAL_GTEST=1"
+  ];
 
   nativeBuildInputs = [ cmake ];
   nativeCheckInputs = [ gtest ];
-  buildInputs = [ pe-parse openssl ];
+  buildInputs = [
+    pe-parse
+    openssl
+  ];
 
   doCheck = true;
   checkPhase = "test/uthenticode_test";

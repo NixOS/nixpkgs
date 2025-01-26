@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "forlilab";
     repo = "Meeko";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-I/kAO0a6DbDqmzjS36ETuoH/Z1gR2eNpyE3herHDKMs=";
   };
 
@@ -52,7 +52,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python package for preparing small molecule for docking";
     homepage = "https://github.com/forlilab/Meeko";
-    changelog = "https://github.com/forlilab/Meeko/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
+    changelog = "https://github.com/forlilab/Meeko/releases/tag/v${version}";
     license = lib.licenses.lgpl21Only;
     maintainers = with lib.maintainers; [ natsukium ];
   };

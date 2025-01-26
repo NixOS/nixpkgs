@@ -1,24 +1,28 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, testers
-, piknik
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  piknik,
 }:
 
 buildGoModule rec {
   pname = "piknik";
-  version = "0.10.1";
+  version = "0.10.2";
 
   src = fetchFromGitHub {
     owner = "jedisct1";
     repo = "piknik";
     rev = version;
-    hash = "sha256-3yvr2H1a9YtgOEEBwn1HlGXIWFzRwQPBw9+KQxW3/jo=";
+    hash = "sha256-Kdqh3sQuO0iT0RW2hU+nrmBltxCFiqOSL00cbDHZJjc=";
   };
 
-  vendorHash = null;
+  vendorHash = "sha256-t7w8uKYda6gT08ymAJqS38JgY70kuKNkQvjHFK91j8s=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   passthru.tests = {
     version = testers.testVersion {

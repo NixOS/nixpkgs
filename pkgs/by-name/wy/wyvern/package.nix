@@ -1,9 +1,10 @@
-{ lib
-, fetchCrate
-, rustPlatform
-, cmake
-, pkg-config
-, openssl
+{
+  lib,
+  fetchCrate,
+  rustPlatform,
+  cmake,
+  pkg-config,
+  openssl,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,7 +20,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-cwk8yFt8JrYkYlNUW9n/bgMUA6jyOpG0TSh5C+eERLY=";
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
   buildInputs = [ openssl ];
 
   meta = with lib; {

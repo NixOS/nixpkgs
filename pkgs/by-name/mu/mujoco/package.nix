@@ -1,13 +1,14 @@
 {
-  cereal_1_3_2,
-  cmake,
+  lib,
+  stdenv,
   fetchFromGitHub,
+  cmake,
   fetchFromGitLab,
   glfw,
   glm,
-  lib,
   spdlog,
-  stdenv,
+  cereal_1_3_2,
+  python3Packages,
 }:
 
 let
@@ -23,8 +24,8 @@ let
     benchmark = fetchFromGitHub {
       owner = "google";
       repo = "benchmark";
-      rev = "7c8ed6b082aa3c7a3402f18e50da4480421d08fd";
-      hash = "sha256-xX3o4wX7RUvw1x2gOlT6sGhutDYLBZ/JzFnv68qN6E8=";
+      rev = "24e0bd827a8bec8121b128b0634cb34402fb3259";
+      hash = "sha256-h3QllJC/tiUzl5UlGCTIoDuDcKG6J538MCY2Pqe2IOE=";
     };
     ccd = fetchFromGitHub {
       owner = "danfis";
@@ -35,8 +36,8 @@ let
     eigen3 = fetchFromGitLab {
       owner = "libeigen";
       repo = "eigen";
-      rev = "b396a6fbb2e173f52edb3360485dedf3389ef830";
-      hash = "sha256-UroGjERR5TW9KbyLwR/NBpytXrW1tHfu6ZvQPngROq4=";
+      rev = "7f2377859377da6f22152015c28b12c04752af77";
+      hash = "sha256-SmyvY/WlU9jryD9ZpSw73dQEc9jI4ySQPRnplg/BC4w=";
     };
     googletest = fetchFromGitHub {
       owner = "google";
@@ -131,15 +132,15 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mujoco";
-  version = "3.2.5";
+  version = "3.2.7";
 
   # Bumping version? Make sure to look though the MuJoCo's commit
   # history for bumped dependency pins!
   src = fetchFromGitHub {
     owner = "google-deepmind";
     repo = "mujoco";
-    rev = "refs/tags/${version}";
-    hash = "sha256-MyQL/WV8ehH7nYNlB/H5DgSrOrd252I6GFV2KLeef5g=";
+    tag = version;
+    hash = "sha256-TAhgu3h7tCflIMscVS+jYuUfMmIYcCcI3JFxUlj8g9E=";
   };
 
   patches = [ ./mujoco-system-deps-dont-fetch.patch ];
@@ -177,8 +178,13 @@ stdenv.mkDerivation rec {
     ln -s ${pin.marchingcubecpp} build/_deps/marchingcubecpp-src
   '';
 
-  passthru.pin = {
-    inherit (pin) lodepng eigen3 abseil-cpp;
+  passthru = {
+    pin = {
+      inherit (pin) lodepng eigen3 abseil-cpp;
+    };
+    tests = {
+      pythonMujoco = python3Packages.mujoco;
+    };
   };
 
   meta = {

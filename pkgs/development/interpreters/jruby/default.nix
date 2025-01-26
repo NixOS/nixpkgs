@@ -1,4 +1,13 @@
-{ lib, stdenv, callPackage, fetchurl, gitUpdater, mkRubyVersion, makeBinaryWrapper, jre }:
+{
+  lib,
+  stdenv,
+  callPackage,
+  fetchurl,
+  gitUpdater,
+  mkRubyVersion,
+  makeBinaryWrapper,
+  jre,
+}:
 
 let
   # The version number here is whatever is reported by the RUBY_VERSION string
@@ -61,7 +70,11 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Ruby interpreter written in Java";
     homepage = "https://www.jruby.org/";
     changelog = "https://github.com/jruby/jruby/releases/tag/${finalAttrs.version}";
-    license = with licenses; [ cpl10 gpl2 lgpl21 ];
+    license = with licenses; [
+      cpl10
+      gpl2
+      lgpl21
+    ];
     platforms = jre.meta.platforms;
     maintainers = [ maintainers.fzakaria ];
     sourceProvenance = with sourceTypes; [ binaryBytecode ];

@@ -1,10 +1,11 @@
-{ lib
-, makeWrapper
-, fetchFromGitHub
-, rustPackages
-, pkg-config
-, elfutils
-, zlib
+{
+  lib,
+  makeWrapper,
+  fetchFromGitHub,
+  rustPackages,
+  pkg-config,
+  elfutils,
+  zlib,
 }:
 let
   inherit (rustPackages.rustc) llvmPackages;
@@ -53,18 +54,18 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "ecc";
-  version = "1.0.12";
+  version = "1.0.27";
 
   src = fetchFromGitHub {
     owner = "eunomia-bpf";
     repo = "eunomia-bpf";
     rev = "v${version}";
-    hash = "sha256-EK/SZ9LNAk88JpHJEoxw12NHje6QdCqO/vT2TfkWlb0=";
+    hash = "sha256-KfYCC+TJbmjHrV46LoshD+uXcaBVMKk6+cN7TZKKYp4=";
   };
 
   sourceRoot = "${src.name}/compiler/cmd";
 
-  cargoHash = "sha256-ymBEzFsMTxKSdJRYoDY3AC0QpgtcMlU0fQV03emCxQc=";
+  cargoHash = "sha256-t8sPwAha90SMC/SJqZngXD9hpoaWh9e91X/kuHN4G7o=";
 
   nativeBuildInputs = [
     pkg-config
@@ -111,7 +112,15 @@ rustPlatform.buildRustPackage rec {
   postFixup = ''
     wrapProgram $out/bin/ecc-rs \
       --prefix LIBCLANG_PATH : ${lib.getLib llvmPackages.libclang}/lib \
-      --prefix PATH : ${lib.makeBinPath (with llvmPackages; [clang bintools-unwrapped])}
+      --prefix PATH : ${
+        lib.makeBinPath (
+          with llvmPackages;
+          [
+            clang
+            bintools-unwrapped
+          ]
+        )
+      }
   '';
 
   meta = with lib; {

@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "oras-project";
     repo = "oras-py";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-o9PSd5vZ5qllL73WPSlSaLA5QmKKLshGgfidiM4h+5g=";
   };
 

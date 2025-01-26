@@ -1,9 +1,15 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.ecryptfs;
 
-in {
+in
+{
   options.programs.ecryptfs = {
     enable = lib.mkEnableOption "ecryptfs setuid mount wrappers";
   };

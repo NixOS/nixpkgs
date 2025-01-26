@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
@@ -18,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "prometheus";
     repo = "client_python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-LrCBCfIcpxNjy/yjwCG4J34eJO4AdUr21kp9FBwSeAY=";
   };
 
@@ -31,6 +32,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "prometheus_client" ];
+
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # fails in darwin sandbox: Operation not permitted
+    "test_instance_ip_grouping_key"
+  ];
 
   meta = with lib; {
     description = "Prometheus instrumentation library for Python applications";

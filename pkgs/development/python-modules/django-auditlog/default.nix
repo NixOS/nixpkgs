@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
@@ -41,6 +42,8 @@ buildPythonPackage rec {
     postgresql
     postgresqlTestHook
   ];
+
+  doCheck = stdenv.hostPlatform.isLinux; # postgres fails to allocate shm on darwin
 
   postgresqlTestUserOptions = "LOGIN SUPERUSER";
 

@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, python3Packages, makeWrapper }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3Packages,
+  makeWrapper,
+}:
 
 stdenv.mkDerivation {
   pname = "carddav";
@@ -13,7 +19,11 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  propagatedBuildInputs = with python3Packages; [ requests vobject lxml ];
+  propagatedBuildInputs = with python3Packages; [
+    requests
+    vobject
+    lxml
+  ];
 
   strictDeps = true;
 

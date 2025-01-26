@@ -50,11 +50,11 @@ stdenv.mkDerivation (finalAttrs: {
     features = {
       # All of these features don't require an external depencies, althought it
       # may be implied - upstraem bundles everything they need in their repo.
-      AIRSPY =     true;
-      SDRPLAY =    true;
+      AIRSPY = true;
+      SDRPLAY = true;
       SDRPLAY_V3 = true;
-      HACKRF =     true;
-      PLUTO =      true;
+      HACKRF = true;
+      PLUTO = true;
       # Some more cmake flags are mentioned in upstream's CMakeLists.txt file
       # but they don't actually make a difference.
     } // featuresOverride;

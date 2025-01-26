@@ -1,28 +1,29 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rocmUpdateScript
-, symlinkJoin
-, substituteAll
-, cmake
-, clang
-, clr
-, rocm-core
-, rocm-thunk
-, rocm-device-libs
-, roctracer
-, rocdbgapi
-, rocm-smi
-, hsa-amd-aqlprofile-bin
-, numactl
-, libpciaccess
-, libxml2
-, elfutils
-, mpi
-, systemd
-, gtest
-, python3Packages
-, gpuTargets ? clr.gpuTargets
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rocmUpdateScript,
+  symlinkJoin,
+  substituteAll,
+  cmake,
+  clang,
+  clr,
+  rocm-core,
+  rocm-thunk,
+  rocm-device-libs,
+  roctracer,
+  rocdbgapi,
+  rocm-smi,
+  hsa-amd-aqlprofile-bin,
+  numactl,
+  libpciaccess,
+  libxml2,
+  elfutils,
+  mpi,
+  systemd,
+  gtest,
+  python3Packages,
+  gpuTargets ? clr.gpuTargets,
 }:
 
 let
@@ -44,7 +45,8 @@ let
       rm -rf $out/nix-support
     '';
   };
-in stdenv.mkDerivation (finalAttrs: {
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "rocprofiler";
   version = "6.0.2";
 
@@ -135,6 +137,8 @@ in stdenv.mkDerivation (finalAttrs: {
     license = with licenses; [ mit ]; # mitx11
     maintainers = teams.rocm.members;
     platforms = platforms.linux;
-    broken = versions.minor finalAttrs.version != versions.minor clr.version || versionAtLeast finalAttrs.version "7.0.0";
+    broken =
+      versions.minor finalAttrs.version != versions.minor clr.version
+      || versionAtLeast finalAttrs.version "7.0.0";
   };
 })

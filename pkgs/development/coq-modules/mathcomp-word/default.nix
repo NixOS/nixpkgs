@@ -1,16 +1,39 @@
-{ fetchurl, coq, mkCoqDerivation, mathcomp, lib, version ? null }:
+{
+  fetchurl,
+  coq,
+  mkCoqDerivation,
+  mathcomp,
+  lib,
+  version ? null,
+}:
 
 let
-  namePrefix = [ "coq" "mathcomp" ];
+  namePrefix = [
+    "coq"
+    "mathcomp"
+  ];
   pname = "word";
-  fetcher = { domain, owner, repo, rev, sha256 ? null, ...}:
-    let prefix = "https://${domain}/${owner}/${repo}/"; in
+  fetcher =
+    {
+      domain,
+      owner,
+      repo,
+      rev,
+      sha256 ? null,
+      ...
+    }:
+    let
+      prefix = "https://${domain}/${owner}/${repo}/";
+    in
     if sha256 == null then
-      fetchTarball { url = "${prefix}archive/refs/heads/${rev}.tar.gz"; } else
-  fetchurl {
-    url = "${prefix}releases/download/${rev}/${lib.concatStringsSep "-" (namePrefix ++ [ pname ])}-${rev}.tbz";
-    inherit sha256;
-  };
+      fetchTarball { url = "${prefix}archive/refs/heads/${rev}.tar.gz"; }
+    else
+      fetchurl {
+        url = "${prefix}releases/download/${rev}/${
+          lib.concatStringsSep "-" (namePrefix ++ [ pname ])
+        }-${rev}.tbz";
+        inherit sha256;
+      };
 in
 
 mkCoqDerivation {
@@ -31,12 +54,33 @@ mkCoqDerivation {
   release."2.0".sha256 = "sha256-ySg3AviGGY5jXqqn1cP6lTw3aS5DhawXEwNUgj7pIjA=";
 
   inherit version;
-  defaultVersion = with lib.versions; lib.switch [ coq.version mathcomp.version ] [
-    { cases = [ (range "8.16" "8.20") (isGe "2.0")          ]; out = "3.2"; }
-    { cases = [ (range "8.12" "8.20") (range "1.12" "1.19") ]; out = "2.4"; }
-  ] null;
+  defaultVersion =
+    with lib.versions;
+    lib.switch
+      [ coq.version mathcomp.version ]
+      [
+        {
+          cases = [
+            (range "8.16" "8.20")
+            (isGe "2.0")
+          ];
+          out = "3.2";
+        }
+        {
+          cases = [
+            (range "8.12" "8.20")
+            (range "1.12" "1.19")
+          ];
+          out = "2.4";
+        }
+      ]
+      null;
 
-  propagatedBuildInputs = [ mathcomp.algebra mathcomp.ssreflect mathcomp.fingroup ];
+  propagatedBuildInputs = [
+    mathcomp.algebra
+    mathcomp.ssreflect
+    mathcomp.fingroup
+  ];
 
   meta = with lib; {
     description = "Yet Another Coq Library on Machine Words";

@@ -1,8 +1,9 @@
-{ stdenv
-, lib
-, python3
-, fetchPypi
-, ffmpeg
+{
+  stdenv,
+  lib,
+  python3,
+  fetchPypi,
+  ffmpeg,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -35,11 +36,13 @@ python3.pkgs.buildPythonApplication rec {
     cryptography
   ];
 
-  nativeCheckInputs = [
-    ffmpeg
-  ] ++ (with python3.pkgs; [
-    pytestCheckHook
-  ]);
+  nativeCheckInputs =
+    [
+      ffmpeg
+    ]
+    ++ (with python3.pkgs; [
+      pytestCheckHook
+    ]);
 
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     "test_nonmedia_files"
@@ -54,6 +57,9 @@ python3.pkgs.buildPythonApplication rec {
     mainProgram = "sigal";
     homepage = "http://sigal.saimon.org/";
     license = licenses.mit;
-    maintainers = with maintainers; [ domenkozar matthiasbeyer ];
+    maintainers = with maintainers; [
+      domenkozar
+      matthiasbeyer
+    ];
   };
 }

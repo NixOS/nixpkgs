@@ -31,7 +31,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "DS4SD";
     repo = "deepsearch-toolkit";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-7XiI/VtXX4lRMreqUh6hJvdIULGvsCEdrd+zV5Jrne0=";
   };
 

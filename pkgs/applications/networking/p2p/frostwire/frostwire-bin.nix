@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, jre, makeWrapper }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jre,
+  makeWrapper,
+}:
 
 stdenv.mkDerivation rec {
   version = "6.13.3";
@@ -42,6 +48,6 @@ stdenv.mkDerivation rec {
     ];
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ gavin ];
-    platforms = [ "x86_64-linux"];
+    platforms = [ "x86_64-linux" ];
   };
 }

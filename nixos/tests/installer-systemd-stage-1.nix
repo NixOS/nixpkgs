@@ -1,12 +1,17 @@
-{ system ? builtins.currentSystem
-, config ? {}
-, pkgs ? import ../.. { inherit system config; }
+{
+  system ? builtins.currentSystem,
+  config ? { },
+  pkgs ? import ../.. { inherit system config; },
 }:
 
 {
   # Some of these tests don't work with systemd stage 1 yet. Uncomment
   # them when fixed.
-  inherit (import ./installer.nix { inherit system config pkgs; systemdStage1 = true; })
+  inherit
+    (import ./installer.nix {
+      inherit system config pkgs;
+      systemdStage1 = true;
+    })
     # bcache
     bcachefsSimple
     bcachefsEncrypted

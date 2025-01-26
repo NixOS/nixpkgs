@@ -9,13 +9,15 @@
   lru-dict,
   poetry-core,
   pytest-asyncio,
+  pytest-codspeed,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "bleak-esphome";
-  version = "1.1.0";
+  version = "2.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -23,18 +25,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bluetooth-devices";
     repo = "bleak-esphome";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-+84ODCx2XzREhSSt5Uu0+Bj55bfU+i33qf3wFMwu3wA=";
+    tag = "v${version}";
+    hash = "sha256-rN2vpXiOaUjjN6yNZxeEgTpcz0K5soUqKKiDDOhcBtc=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=bleak_esphome --cov-report=term-missing:skip-covered" ""
-  '';
+  build-system = [ poetry-core ];
 
-  nativeBuildInputs = [ poetry-core ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     aioesphomeapi
     bleak
     bluetooth-data-tools
@@ -44,6 +41,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-codspeed
+    pytest-cov-stub
     pytestCheckHook
   ];
 

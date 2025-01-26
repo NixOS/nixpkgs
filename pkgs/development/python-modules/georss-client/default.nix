@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "exxamalte";
     repo = "python-georss-client";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-DvQifO/jirpacWZccK4WPxnm/iYs1qT5nAYQUDoleO4=";
   };
 

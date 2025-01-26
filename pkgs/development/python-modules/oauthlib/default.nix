@@ -7,6 +7,7 @@
   mock,
   pyjwt,
   pytestCheckHook,
+  pythonAtLeast,
   pythonOlder,
   setuptools,
 
@@ -47,10 +48,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  disabledTests = [
-    # https://github.com/oauthlib/oauthlib/issues/877
-    "test_rsa_bad_keys"
-  ];
+  disabledTests =
+    [
+      # https://github.com/oauthlib/oauthlib/issues/877
+      "test_rsa_bad_keys"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.13") [
+      "test_filter_params"
+    ];
 
   pythonImportsCheck = [ "oauthlib" ];
 

@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "SigmaHQ";
     repo = "sigma-cli";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-bBKNKgS3V/sZ8lZMk2ZwTzOVaVecSR9GhNP2FNkWbw0=";
   };
 
@@ -47,6 +47,7 @@ python3.pkgs.buildPythonApplication rec {
     "test_plugin_install_notexisting"
     "test_plugin_install"
     "test_plugin_uninstall"
+    "test_backend_option_unknown_by_backend"
     # Tests require network access
     "test_check_with_issues"
     "test_plugin_show_identifier"

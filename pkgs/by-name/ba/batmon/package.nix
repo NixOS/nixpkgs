@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "6543";
     repo = "batmon";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-+kjDNQKlaoI5fQ5FqYF6IPCKeE92WKxIhVCKafqfE0o=";
   };
 

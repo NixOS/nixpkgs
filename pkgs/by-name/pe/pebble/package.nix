@@ -1,7 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, nixosTests
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
 }:
 
 buildGoModule rec {
@@ -18,7 +19,8 @@ buildGoModule rec {
   vendorHash = null;
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X main.version=${version}"
   ];
 

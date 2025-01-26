@@ -1,17 +1,23 @@
-{ lib, buildGoModule, fetchFromGitHub, testers, envconsul }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  envconsul,
+}:
 
 buildGoModule rec {
   pname = "envconsul";
-  version = "0.13.2";
+  version = "0.13.3";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "envconsul";
     rev = "v${version}";
-    hash = "sha256-GZU1lEAI3k5EUU/z4gHR8plECudwp+YYyPSk7E0NQtI=";
+    hash = "sha256-hPq+r4DOMu2elOpaT0xDQoelUb1D/zYM/a6fZZdu/AY=";
   };
 
-  vendorHash = "sha256-ehxeupO8CrKqkqK11ig7Pj4XTh61VOE4rT2T2SsChxw=";
+  vendorHash = "sha256-0hrZsh08oWqhVqvM6SwUskYToH6Z4YWmV/i0V2MkFMw=";
 
   ldflags = [
     "-s"

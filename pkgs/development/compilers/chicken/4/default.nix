@@ -1,9 +1,11 @@
-{ lib, newScope } :
+{ lib, newScope }:
 let
   callPackage = newScope self;
 
   self = {
-    pkgs = self // { recurseForDerivations = false; };
+    pkgs = self // {
+      recurseForDerivations = false;
+    };
 
     fetchegg = callPackage ./fetchegg { };
 
@@ -18,4 +20,5 @@ let
     egg2nix = callPackage ./egg2nix.nix { };
   };
 
-in self
+in
+self

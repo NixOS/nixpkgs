@@ -39,7 +39,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyannote";
     repo = "pyannote-audio";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-85whRoc3JoDSE4DqivY/3hfvLHcvgsubR/DLCPtLEP0=";
     fetchSubmodules = true;
   };

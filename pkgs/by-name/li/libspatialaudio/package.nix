@@ -1,4 +1,11 @@
-{ lib, stdenv, cmake, fetchFromGitHub, libmysofa, zlib }:
+{
+  lib,
+  stdenv,
+  cmake,
+  fetchFromGitHub,
+  libmysofa,
+  zlib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libspatialaudio";
@@ -12,7 +19,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ libmysofa zlib ];
+  buildInputs = [
+    libmysofa
+    zlib
+  ];
 
   postFixup = ''
     substituteInPlace "''${!outputDev}/lib/pkgconfig/spatialaudio.pc" \
@@ -20,8 +30,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description =
-      "Ambisonic encoding / decoding and binauralization library in C++";
+    description = "Ambisonic encoding / decoding and binauralization library in C++";
     homepage = "https://github.com/videolabs/libspatialaudio";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;

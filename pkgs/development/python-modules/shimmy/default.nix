@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Farama-Foundation";
     repo = "Shimmy";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-/wIXjOGb3UeMQdeifYagd7OcxbBcdGPS09mjvkFsWmk=";
   };
 

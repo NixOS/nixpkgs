@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, libX11, imlib2, pkg-config, fetchpatch
-, enableXinerama ? true, libXinerama
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libX11,
+  imlib2,
+  pkg-config,
+  fetchpatch,
+  enableXinerama ? true,
+  libXinerama,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,10 +30,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ libX11 imlib2 ]
-    ++ lib.optionals enableXinerama [ libXinerama ];
+  buildInputs = [
+    libX11
+    imlib2
+  ] ++ lib.optionals enableXinerama [ libXinerama ];
 
-  buildFlags = [ (if enableXinerama then "xinerama=1" else "xinerama=0") ] ;
+  buildFlags = [ (if enableXinerama then "xinerama=1" else "xinerama=0") ];
 
   installFlags = [ "PREFIX=$(out)" ];
 

@@ -1,19 +1,20 @@
-{ lib
-, fetchurl
-, desktop-file-utils
-, meson
-, ninja
-, pkg-config
-, gnome
-, gtk3
-, wrapGAppsHook3
-, gobject-introspection
-, itstool
-, python3
-, at-spi2-core
-, gettext
-, libwnck
-, librsvg
+{
+  lib,
+  fetchurl,
+  desktop-file-utils,
+  meson,
+  ninja,
+  pkg-config,
+  gnome,
+  gtk3,
+  wrapGAppsHook3,
+  gobject-introspection,
+  itstool,
+  python3,
+  at-spi2-core,
+  gettext,
+  libwnck,
+  librsvg,
 }:
 
 python3.pkgs.buildPythonApplication rec {

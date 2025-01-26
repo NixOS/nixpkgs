@@ -1,33 +1,34 @@
-{ mkDerivation
-, lib
+{
+  mkDerivation,
+  lib,
 
-, cmake
-, extra-cmake-modules
-, pkg-config
-, wrapQtAppsHook
+  cmake,
+  extra-cmake-modules,
+  pkg-config,
+  wrapQtAppsHook,
 
-, cmark
-, kconfig
-, kdbusaddons
-, ki18n
-, kio
-, kirigami-addons
-, kirigami2
-, kitemmodels
-, knotifications
-, kquickcharts
-, kquickimageedit
-, libpulseaudio
-, libquotient
-, libsecret
-, olm
-, qcoro
-, qqc2-desktop-style
-, qtgraphicaleffects
-, qtlocation
-, qtmultimedia
-, qtquickcontrols2
-, sonnet
+  cmark,
+  kconfig,
+  kdbusaddons,
+  ki18n,
+  kio,
+  kirigami-addons,
+  kirigami2,
+  kitemmodels,
+  knotifications,
+  kquickcharts,
+  kquickimageedit,
+  libpulseaudio,
+  libquotient,
+  libsecret,
+  olm,
+  qcoro,
+  qqc2-desktop-style,
+  qtgraphicaleffects,
+  qtlocation,
+  qtmultimedia,
+  qtquickcontrols2,
+  sonnet,
 }:
 
 mkDerivation {

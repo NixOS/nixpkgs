@@ -14,7 +14,7 @@
     !(isDarwin && (stdenv.buildPlatform != stdenv.hostPlatform))
   ), libkrb5
 , http2Support ? true, nghttp2
-, http3Support ? false, nghttp3, ngtcp2
+, http3Support ? false, nghttp3, ngtcp2, quictls
 , websocketSupport ? false
 , idnSupport ? false, libidn2
 , ldapSupport ? false, openldap
@@ -47,17 +47,27 @@
 
 assert !((lib.count (x: x) [ gnutlsSupport opensslSupport wolfsslSupport rustlsSupport ]) > 1);
 
+let
+  openssl' = if http3Support then quictls else openssl;
+in
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "curl";
-  version = "8.11.0";
+  version = "8.11.1";
 
   src = fetchurl {
     urls = [
       "https://curl.haxx.se/download/curl-${finalAttrs.version}.tar.xz"
       "https://github.com/curl/curl/releases/download/curl-${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}/curl-${finalAttrs.version}.tar.xz"
     ];
-    hash = "sha256-21nPDWccpuf1wsXsF3CEozp54EyX5xzxg6XN6iNQVOs=";
+    hash = "sha256-x8p9tIsJCXQ+rvNCUNoCwZvGHU8dzt1mA/EJQJU2q1Y=";
   };
+
+  # FIXME: avoid rebuilding darwin stdenv for now
+  patches = lib.optionals (!stdenv.isDarwin) [
+    # https://github.com/curl/curl/issues/15725
+    ./fix-eventfd-free.patch
+  ];
 
   # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
   # necessary for FreeBSD code path in configure
@@ -94,7 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
     lib.optionals http3Support [ nghttp3 ngtcp2 ] ++
     lib.optional idnSupport libidn2 ++
     lib.optional ldapSupport openldap ++
-    lib.optional opensslSupport openssl ++
+    lib.optional opensslSupport openssl' ++
     lib.optional pslSupport libpsl ++
     lib.optional rtmpSupport rtmpdump ++
     lib.optional scpSupport libssh2 ++
@@ -138,7 +148,7 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.withFeatureAs brotliSupport "brotli" (lib.getDev brotli))
       (lib.withFeatureAs gnutlsSupport "gnutls" (lib.getDev gnutls))
       (lib.withFeatureAs idnSupport "libidn2" (lib.getDev libidn2))
-      (lib.withFeatureAs opensslSupport "openssl" (lib.getDev openssl))
+      (lib.withFeatureAs opensslSupport "openssl" (lib.getDev openssl'))
       (lib.withFeatureAs scpSupport "libssh2" (lib.getDev libssh2))
       (lib.withFeatureAs wolfsslSupport "wolfssl" (lib.getDev wolfssl))
     ]
@@ -193,7 +203,8 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = let
     useThisCurl = attr: attr.override { curl = finalAttrs.finalPackage; };
   in {
-    inherit opensslSupport openssl;
+    inherit opensslSupport;
+    openssl = openssl';
     tests = {
       withCheck = finalAttrs.finalPackage.overrideAttrs (_: { doCheck = true; });
       fetchpatch = tests.fetchpatch.simple.override { fetchpatch = (fetchpatch.override { fetchurl = useThisCurl fetchurl; }) // { version = 1; }; };

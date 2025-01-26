@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, dpkg, autoPatchelfHook, makeWrapper, electron
-, asar, alsa-lib, gtk3, libxshmfence, mesa, nss }:
+, asar, alsa-lib, gtk3, libxshmfence, libgbm, nss }:
 
 stdenv.mkDerivation rec {
   pname = "morgen";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     asar
   ];
 
-  buildInputs = [ alsa-lib gtk3 libxshmfence mesa nss ];
+  buildInputs = [ alsa-lib gtk3 libxshmfence libgbm nss ];
 
   installPhase = ''
     runHook preInstall
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
       --replace '/opt/Morgen' $out/bin
 
     makeWrapper ${electron}/bin/electron $out/bin/morgen \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations,WebRTCPipeWireCapturer}} $out/opt/Morgen/resources/app.asar"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations,WebRTCPipeWireCapturer --enable-wayland-ime=true}} $out/opt/Morgen/resources/app.asar"
 
     runHook postInstall
   '';

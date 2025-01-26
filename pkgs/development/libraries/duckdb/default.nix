@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (versions) hash;
     owner = "duckdb";
     repo = "duckdb";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
   };
 
   outputs = [ "out" "lib" "dev" ];

@@ -1,28 +1,52 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, appstream, makeBinaryWrapper
-, cosmic-icons, glib, just, pkg-config, libglvnd, libxkbcommon, libinput
-, fontconfig, flatpak, freetype, openssl, wayland, xorg, vulkan-loader
-, vulkan-validation-layers, }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  rustPlatform,
+  appstream,
+  makeBinaryWrapper,
+  cosmic-icons,
+  glib,
+  just,
+  pkg-config,
+  libglvnd,
+  libxkbcommon,
+  libinput,
+  fontconfig,
+  flatpak,
+  freetype,
+  openssl,
+  wayland,
+  xorg,
+  vulkan-loader,
+  vulkan-validation-layers,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "cosmic-store";
-  version = "1.0.0-alpha.2";
+  version = "1.0.0-alpha.5.1";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-store";
-    rev = "epoch-${version}";
-    hash = "sha256-mq94ZMVOdXAPR52ID5x8nppJ9mNoTOPBfn7Eouj3T1U=";
+    tag = "epoch-${version}";
+    hash = "sha256-FK7faWiRNuQT8lIuRciP37U01csvtRGC9LyOXQCTjYk=";
     fetchSubmodules = true;
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-lhMMzT6igjEEvwpcc7d8JyyHU0DcWVIh3z9KR6eCv7c=";
+  cargoHash = "sha256-8m9zEkaaM0bnA1cOVMyIFE1EdztWqkpGEuHd1fRaass=";
 
   postPatch = ''
     substituteInPlace justfile --replace '#!/usr/bin/env' "#!$(command -v env)"
   '';
 
-  nativeBuildInputs = [ just pkg-config makeBinaryWrapper ];
+  nativeBuildInputs = [
+    just
+    pkg-config
+    makeBinaryWrapper
+  ];
   buildInputs = [
     appstream
     glib
@@ -76,11 +100,21 @@ rustPlatform.buildRustPackage rec {
       }
   '';
 
+  env.VERGEN_GIT_COMMIT_DATE = "2025-01-13";
+  env.VERGEN_GIT_SHA = src.rev;
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = with lib; {
     homepage = "https://github.com/pop-os/cosmic-store";
     description = "App Store for the COSMIC Desktop Environment";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ahoneybun nyabinary ];
+    maintainers = with maintainers; [
+      ahoneybun
+      nyabinary
+    ];
     platforms = platforms.linux;
   };
 }

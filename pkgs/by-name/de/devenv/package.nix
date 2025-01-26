@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, rustPlatform
-, testers
-, cachix
-, darwin
-, sqlx-cli
-, nixVersions
-, openssl
-, pkg-config
-, devenv  # required to run version test
+{
+  lib,
+  fetchFromGitHub,
+  makeBinaryWrapper,
+  installShellFiles,
+  rustPlatform,
+  testers,
+  cachix,
+  sqlx-cli,
+  nixVersions,
+  openssl,
+  pkg-config,
+  glibcLocalesUtf8,
+  devenv, # required to run version test
 }:
 
 let
@@ -27,7 +28,8 @@ let
   });
 
   version = "1.3.1";
-in rustPlatform.buildRustPackage {
+in
+rustPlatform.buildRustPackage {
   pname = "devenv";
   inherit version;
 
@@ -52,15 +54,42 @@ in rustPlatform.buildRustPackage {
     cargo sqlx prepare --workspace
   '';
 
-  nativeBuildInputs = [ makeWrapper pkg-config sqlx-cli ];
-
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.SystemConfiguration
+  nativeBuildInputs = [
+    installShellFiles
+    makeBinaryWrapper
+    pkg-config
+    sqlx-cli
   ];
 
-  postInstall = ''
-    wrapProgram $out/bin/devenv --set DEVENV_NIX ${devenv_nix} --prefix PATH ":" "$out/bin:${cachix}/bin"
-  '';
+  buildInputs = [ openssl ];
+
+  postInstall =
+    let
+      setDefaultLocaleArchive = lib.optionalString (glibcLocalesUtf8 != null) ''
+        --set-default LOCALE_ARCHIVE ${glibcLocalesUtf8}/lib/locale/locale-archive
+      '';
+    in
+    ''
+      wrapProgram $out/bin/devenv \
+        --prefix PATH ":" "$out/bin:${cachix}/bin" \
+        --set DEVENV_NIX ${devenv_nix} \
+        ${setDefaultLocaleArchive}
+
+      # Generate manpages
+      cargo xtask generate-manpages --out-dir man
+      installManPage man/*
+
+      # Generate shell completions
+      compdir=./completions
+      for shell in bash fish zsh; do
+        cargo xtask generate-shell-completion $shell --out-dir $compdir
+      done
+
+      installShellCompletion --cmd devenv \
+        --bash $compdir/devenv.bash \
+        --fish $compdir/devenv.fish \
+        --zsh $compdir/_devenv
+    '';
 
   passthru.tests = {
     version = testers.testVersion {

@@ -39,14 +39,14 @@
 let
   self = buildPythonPackage rec {
     pname = "dask";
-    version = "2024.11.2";
+    version = "2024.12.1";
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = "dask";
       repo = "dask";
-      rev = "refs/tags/${version}";
-      hash = "sha256-mAdjsfXzHGJ37m4nQbi+A+4qrL/CHcQNuoGaeU9Nwwo=";
+      tag = version;
+      hash = "sha256-QqvdldAHW2UYt1NXfk3Aa+oe97e+OpRbF8d6eKV3OJ4=";
     };
 
     build-system = [ setuptools ];
@@ -64,10 +64,15 @@ let
 
     optional-dependencies = lib.fix (self: {
       array = [ numpy ];
-      complete = [
-        pyarrow
-        lz4
-      ] ++ self.array ++ self.dataframe ++ self.distributed ++ self.diagnostics;
+      complete =
+        [
+          pyarrow
+          lz4
+        ]
+        ++ self.array
+        ++ self.dataframe
+        ++ self.distributed
+        ++ self.diagnostics;
       dataframe = [
         # dask-expr -> circular dependency with dask-expr
         numpy

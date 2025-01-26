@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "censys";
     repo = "censys-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-OP7+jSt4xS71Kcjy5hFzeZ5rlTPtDx22rPr3UwjI5dk=";
   };
 

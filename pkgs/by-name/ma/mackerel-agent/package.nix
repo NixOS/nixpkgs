@@ -1,14 +1,22 @@
-{ stdenv, lib, buildGoModule, fetchFromGitHub, makeWrapper, iproute2, nettools }:
+{
+  stdenv,
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  makeWrapper,
+  iproute2,
+  nettools,
+}:
 
 buildGoModule rec {
   pname = "mackerel-agent";
-  version = "0.82.0";
+  version = "0.83.0";
 
   src = fetchFromGitHub {
     owner = "mackerelio";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-zkwYYkI7oeOdJH/K9E8/ZkTOexEKyP1I2kOJlt7PcK4=";
+    sha256 = "sha256-hxABrgUdEQDj8NJxZgChGgB2/3J1/ChTdIYkFQtGsuY=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

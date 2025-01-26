@@ -1,14 +1,15 @@
-{ lib
-, blueprint-compiler
-, buildGoModule
-, fetchFromGitHub
-, gobject-introspection
-, gtk4
-, libadwaita
-, libfido2
-, libnotify
-, python3
-, wrapGAppsHook4
+{
+  lib,
+  blueprint-compiler,
+  buildGoModule,
+  fetchFromGitHub,
+  gobject-introspection,
+  gtk4,
+  libadwaita,
+  libfido2,
+  libnotify,
+  python3,
+  wrapGAppsHook4,
 }:
 
 buildGoModule rec {
@@ -40,7 +41,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-zWACjW/WZC0ZLmRV1VwcRROG218PCZ6aCPOreCG/5sE=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   nativeBuildInputs = [
     blueprint-compiler
@@ -92,7 +96,10 @@ buildGoModule rec {
     description = "Feature-packed Bitwarden compatible desktop integration";
     homepage = "https://github.com/quexten/goldwarden";
     license = licenses.mit;
-    maintainers = with maintainers; [ arthsmn justanotherariel ];
+    maintainers = with maintainers; [
+      arthsmn
+      justanotherariel
+    ];
     mainProgram = "goldwarden";
     platforms = platforms.linux; # Support for other platforms is not yet ready, see https://github.com/quexten/goldwarden/issues/4
   };

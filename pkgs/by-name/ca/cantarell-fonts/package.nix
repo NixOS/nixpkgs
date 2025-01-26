@@ -1,12 +1,13 @@
-{ stdenv
-, lib
-, fetchurl
-, meson
-, ninja
-, python3
-, gettext
-, appstream-glib
-, gnome
+{
+  stdenv,
+  lib,
+  fetchurl,
+  meson,
+  ninja,
+  python3,
+  gettext,
+  appstream-glib,
+  gnome,
 }:
 
 stdenv.mkDerivation rec {

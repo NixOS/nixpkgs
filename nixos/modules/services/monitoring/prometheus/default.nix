@@ -29,9 +29,10 @@ let
   # a wrapper that verifies that the configuration is valid
   promtoolCheck = what: name: file:
     if checkConfigEnabled then
-      pkgs.runCommandLocal
-        "${name}-${replaceStrings [" "] [""] what}-checked"
-        { nativeBuildInputs = [ cfg.package.cli ]; } ''
+      pkgs.runCommand "${name}-${replaceStrings [" "] [""] what}-checked" {
+        preferLocalBuild = true;
+        nativeBuildInputs = [ cfg.package.cli ];
+      } ''
         ln -s ${file} $out
         promtool ${what} $out
       '' else file;
@@ -274,6 +275,7 @@ let
     };
   };
 
+  # https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config
   promTypes.scrape_config = types.submodule {
     options = {
       authorization = mkOption {
@@ -297,6 +299,15 @@ let
       scrape_timeout = mkOpt types.str ''
         Per-target timeout when scraping this job. Defaults to the
         globally configured default.
+      '';
+
+      scrape_protocols = mkOpt (types.listOf types.str) ''
+        The protocols to negotiate during a scrape with the client.
+      '';
+
+      fallback_scrape_protocol = mkOpt types.str ''
+        Fallback protocol to use if a scrape returns blank, unparseable, or otherwise
+        invalid Content-Type.
       '';
 
       metrics_path = mkDefOpt types.str "/metrics" ''

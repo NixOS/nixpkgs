@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, pkg-config
-, sassc
-, vala
-, wrapGAppsHook4
-, gtk4
-, libgee
-, pango
-, pantheon
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  pkg-config,
+  sassc,
+  vala,
+  wrapGAppsHook4,
+  gtk4,
+  libgee,
+  pango,
+  pantheon,
 }:
 
 stdenv.mkDerivation rec {
@@ -34,16 +35,18 @@ stdenv.mkDerivation rec {
     wrapGAppsHook4
   ];
 
-  buildInputs = [
-    gtk4
-    libgee
-    pango
-  ] ++ (with pantheon; [
-    elementary-files # settings schemas
-    elementary-terminal # settings schemas
-    granite7
-    switchboard
-  ]);
+  buildInputs =
+    [
+      gtk4
+      libgee
+      pango
+    ]
+    ++ (with pantheon; [
+      elementary-files # settings schemas
+      elementary-terminal # settings schemas
+      granite7
+      switchboard
+    ]);
 
   postPatch = ''
     substituteInPlace src/Settings/ThemeSettings.vala \

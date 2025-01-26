@@ -13,7 +13,7 @@ buildHomeAssistantComponent rec {
   src = fetchFromGitHub {
     inherit owner;
     repo = "home-assistant-component-somweb";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-anOcpaGeblFVaP2EFVuxx1EuXnNgxy/QoYqvYJMv1Fo=";
   };
 

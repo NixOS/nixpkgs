@@ -15,6 +15,7 @@
   wrapGAppsHook4,
   appstream-glib,
   desktop-file-utils,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -53,12 +54,16 @@ stdenv.mkDerivation rec {
     libadwaita
   ];
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = {
     description = "Pick and format colors";
     homepage = "https://github.com/FineFindus/eyedropper";
     mainProgram = "eyedropper";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ zendo ];
+    maintainers = with lib.maintainers; [ zendo ] ++ lib.teams.gnome-circle.members;
   };
 }

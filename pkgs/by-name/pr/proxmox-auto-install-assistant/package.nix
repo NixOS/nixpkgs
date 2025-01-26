@@ -3,17 +3,19 @@
   fetchgit,
   rustPlatform,
   testers,
-  proxmox-auto-install-assistant,
+  pkg-config,
+  openssl,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "proxmox-auto-install-assistant";
-  version = "8.2.6";
+  version = "8.3.3";
 
   src = fetchgit {
     url = "git://git.proxmox.com/git/pve-installer.git";
-    rev = "c339618cbdcbce378bf192e01393a60903fe2b04";
-    hash = "sha256-nF2FpzXeoPIB+dW92HAI+EJZuMJxlnD012Yu3hL9OvU=";
+    rev = "cf6df4a23491071d207dcc8b00af8ddf310ae0b0";
+    hash = "sha256-n4mn8VF84QyJiUNubgoxkbMEbuyj8n5KeIdVB3Xz5iY=";
   };
 
   postPatch = ''
@@ -28,7 +30,17 @@ rustPlatform.buildRustPackage rec {
 
   cargoLock.lockFile = ./Cargo.lock;
 
-  passthru.tests.version = testers.testVersion { package = proxmox-auto-install-assistant; };
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ openssl.dev ];
+
+  postFixup = ''
+    # openssl is not actually necessary, only pulled in through a feature (unfortunately)
+    patchelf --remove-needed libssl.so.3 $out/bin/proxmox-auto-install-assistant
+  '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = [ "--version" ];
 
   meta = {
     description = "Tool to prepare a Proxmox installation ISO for automated installations";

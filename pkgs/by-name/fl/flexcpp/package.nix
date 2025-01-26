@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, bobcat, icmake, yodl }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  bobcat,
+  icmake,
+  yodl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "flexc++";
@@ -16,7 +23,10 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ bobcat ];
-  nativeBuildInputs = [ icmake yodl ];
+  nativeBuildInputs = [
+    icmake
+    yodl
+  ];
 
   postPatch = ''
     substituteInPlace INSTALL.im --replace /usr $out

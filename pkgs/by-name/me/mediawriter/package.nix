@@ -1,23 +1,24 @@
-{ lib
-, stdenv
-, adwaita-qt6
-, appstream-glib
-, cmake
-, fetchFromGitHub
-, qt6
-, udisks2
-, xz
+{
+  lib,
+  stdenv,
+  adwaita-qt6,
+  appstream-glib,
+  cmake,
+  fetchFromGitHub,
+  qt6,
+  udisks2,
+  xz,
 }:
 
 stdenv.mkDerivation rec {
   pname = "mediawriter";
-  version = "5.2.0";
+  version = "5.2.3";
 
   src = fetchFromGitHub {
     owner = "FedoraQt";
     repo = "MediaWriter";
-    rev = "refs/tags/${version}";
-    hash = "sha256-IUV6rOVPcJ65xVg/BajAJzK3cskK1cuGTHSl+RJV6ic=";
+    tag = version;
+    hash = "sha256-f8AHmRO0PbF4WZPUxrBy5cVb3Pj/PSAgBqpm5Kt/2o0=";
   };
 
   nativeBuildInputs = [

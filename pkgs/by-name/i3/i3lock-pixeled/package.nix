@@ -1,4 +1,12 @@
-{ lib, stdenv, i3lock, imagemagick, scrot, playerctl, fetchFromGitLab }:
+{
+  lib,
+  stdenv,
+  i3lock,
+  imagemagick,
+  scrot,
+  playerctl,
+  fetchFromGitLab,
+}:
 
 stdenv.mkDerivation rec {
   pname = "i3lock-pixeled";

@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "microplane";
@@ -14,7 +18,9 @@ buildGoModule rec {
   vendorHash = "sha256-DizwNph3hmSRoozvJgs3Qw/c9iMTRR1gMGC60pBCFSk=";
 
   ldflags = [
-    "-s" "-w" "-X main.version=${version}"
+    "-s"
+    "-w"
+    "-X main.version=${version}"
   ];
 
   postInstall = ''

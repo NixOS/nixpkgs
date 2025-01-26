@@ -1,12 +1,22 @@
-{ stdenv, fetchurl, pam, openldap, perl }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pam,
+  openldap,
+  perl,
+  unstableGitUpdater,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pam_ldap";
-  version = "186";
+  version = "0-unstable-2024-02-22";
 
-  src = fetchurl {
-    url = "https://www.padl.com/download/pam_ldap-${version}.tar.gz";
-    sha256 = "0lv4f7hc02jrd2l3gqxd247qq62z11sp3fafn8lgb8ymb7aj5zn8";
+  src = fetchFromGitHub {
+    owner = "PADL";
+    repo = "pam_ldap";
+    rev = "656448f091cbeb9efb3ece08e6868e40b8e7b6f8";
+    hash = "sha256-o2RBewxhaXcMW9KIRwlxFv6YaWxaBngafvjEYxFchX4=";
   };
 
   postPatch = ''
@@ -19,16 +29,22 @@ stdenv.mkDerivation rec {
   ";
 
   nativeBuildInputs = [ perl ];
-  buildInputs = [ pam openldap ];
+  buildInputs = [
+    pam
+    openldap
+  ];
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = {
     homepage = "https://www.padl.com/OSS/pam_ldap.html";
     description = "LDAP backend for PAM";
+    changelog = "https://github.com/PADL/pam_ldap/blob/master/ChangeLog";
     longDescription = ''
       The pam_ldap module provides the means for Solaris and Linux servers and
       workstations to authenticate against LDAP directories, and to change their
       passwords in the directory.'';
-    license = "LGPL";
+    license = lib.licenses.gpl2;
     inherit (pam.meta) platforms;
   };
-}
+})

@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "miniaudicle";
-  version = "1.5.3.0";
+  version = "1.5.4.2";
 
   src = fetchFromGitHub {
     owner = "ccrma";
     repo = "miniAudicle";
     rev = "chuck-${finalAttrs.version}";
-    hash = "sha256-iLmTliJXaYDM5X+s3HsXLFO2qonh18BaiWiTdDXKWjk=";
+    hash = "sha256-LYr9Fc4Siqk0BFKHVXfIV2XskJYAN+/0P+nb6FJLsLE=";
     fetchSubmodules = true;
   };
 

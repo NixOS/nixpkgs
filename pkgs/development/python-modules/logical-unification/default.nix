@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pythological";
     repo = "unification";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-uznmlkREFONU1YoI/+mcfb+Yg30NinWvsMxTfHCXzOU=";
   };
 

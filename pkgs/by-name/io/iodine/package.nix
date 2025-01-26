@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, zlib
-, nettools
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  zlib,
+  nettools,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

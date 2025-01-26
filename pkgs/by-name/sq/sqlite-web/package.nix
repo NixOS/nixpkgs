@@ -1,6 +1,7 @@
-{ lib
-, python3Packages
-, fetchPypi
+{
+  lib,
+  python3Packages,
+  fetchPypi,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -12,7 +13,11 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-5Bdd1C9M3HjvfDKdVvGSQ+/I0Iimvf1MZwPonRiqwqU=";
   };
 
-  propagatedBuildInputs = with python3Packages; [ flask peewee pygments ];
+  propagatedBuildInputs = with python3Packages; [
+    flask
+    peewee
+    pygments
+  ];
 
   # no tests in repository
   doCheck = false;

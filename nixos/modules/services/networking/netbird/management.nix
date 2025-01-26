@@ -425,6 +425,8 @@ in
           "netbird-mgmt"
           "netbird-mgmt/data"
         ];
+        StateDirectoryMode = "0750";
+        RuntimeDirectoryMode = "0750";
         WorkingDirectory = stateDir;
 
         # hardening

@@ -1,5 +1,18 @@
-{ lib, stdenv, fetchurl, makeWrapper, asciidoc, docbook_xml_dtd_45, docbook_xsl
-, coreutils, cvs, diffutils, findutils, git, python3, rsync
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  asciidoc,
+  docbook_xml_dtd_45,
+  docbook_xsl,
+  coreutils,
+  cvs,
+  diffutils,
+  findutils,
+  git,
+  python3,
+  rsync,
 }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +25,10 @@ stdenv.mkDerivation rec {
   };
 
   strictDeps = true;
-  nativeBuildInputs = [ makeWrapper asciidoc ];
+  nativeBuildInputs = [
+    makeWrapper
+    asciidoc
+  ];
   buildInputs = [ python3 ];
 
   postPatch = ''
@@ -33,9 +49,15 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/cvssync --prefix PATH : ${lib.makeBinPath [ rsync ]}
-    wrapProgram $out/bin/cvsconvert --prefix PATH : $out/bin:${lib.makeBinPath [
-      coreutils cvs diffutils findutils git
-    ]}
+    wrapProgram $out/bin/cvsconvert --prefix PATH : $out/bin:${
+      lib.makeBinPath [
+        coreutils
+        cvs
+        diffutils
+        findutils
+        git
+      ]
+    }
   '';
 
   meta = with lib; {

@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchgit
-, cwebbin
-, libX11
-, libXft
-, ncurses
-, pkg-config
-, unzip
+{
+  lib,
+  stdenv,
+  fetchgit,
+  cwebbin,
+  libX11,
+  libXft,
+  ncurses,
+  pkg-config,
+  unzip,
 }:
 
 stdenv.mkDerivation {

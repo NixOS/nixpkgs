@@ -1,8 +1,28 @@
-{ fetchurl, lib, stdenv, pkg-config, gettext, glew, python3, SDL, SDL_image, SDL_gfx, SDL_mixer, libogg, libvorbis, lua5_3, libjpeg, libpng, zlib, libiconv }:
+{
+  fetchurl,
+  lib,
+  stdenv,
+  pkg-config,
+  gettext,
+  glew,
+  python3,
+  SDL,
+  SDL_image,
+  SDL_gfx,
+  SDL_mixer,
+  libogg,
+  libvorbis,
+  lua5_3,
+  libjpeg,
+  libpng,
+  zlib,
+  libiconv,
+}:
 
 let
   version = "1.0";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "freedroidrpg";
   inherit version;
 
@@ -16,10 +36,24 @@ in stdenv.mkDerivation {
     ./drop-build-deps.patch
   ];
 
-  nativeBuildInputs = [ pkg-config gettext python3 ];
+  nativeBuildInputs = [
+    pkg-config
+    gettext
+    python3
+  ];
 
   buildInputs = [
-    glew SDL SDL_image SDL_gfx SDL_mixer libogg libvorbis lua5_3 libjpeg libpng zlib
+    glew
+    SDL
+    SDL_image
+    SDL_gfx
+    SDL_mixer
+    libogg
+    libvorbis
+    lua5_3
+    libjpeg
+    libpng
+    zlib
   ] ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
   enableParallelBuilding = true;

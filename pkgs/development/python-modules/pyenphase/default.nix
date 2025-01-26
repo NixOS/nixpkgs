@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyenphase";
     repo = "pyenphase";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-nGOxGZxPTlU5/nI2m+MXzzcVA+twxfNL1Jf51xT0XLc=";
   };
 

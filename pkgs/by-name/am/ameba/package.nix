@@ -1,4 +1,8 @@
-{ lib, fetchFromGitHub, crystal }:
+{
+  lib,
+  fetchFromGitHub,
+  crystal,
+}:
 
 crystal.buildCrystalPackage rec {
   pname = "ameba";
@@ -7,7 +11,7 @@ crystal.buildCrystalPackage rec {
   src = fetchFromGitHub {
     owner = "crystal-ameba";
     repo = "ameba";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-NwmsNz9YfHDk0hVwVb5zczuzvErrwPhd3rs75t/Fj+I=";
   };
 

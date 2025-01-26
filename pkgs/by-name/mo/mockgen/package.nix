@@ -18,7 +18,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-0OnK5/e0juEYrNJuVkr+tK66btRW/oaHpJSDakB32Bc=";
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   subPackages = [ "mockgen" ];
 

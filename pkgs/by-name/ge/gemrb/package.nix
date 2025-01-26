@@ -1,24 +1,24 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, SDL2
-, SDL2_mixer
-, freetype
-, libGL
-, libiconv
-, libpng
-, libvlc
-, libvorbis
-, openal
-, python3
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  SDL2,
+  SDL2_mixer,
+  freetype,
+  libGL,
+  libiconv,
+  libpng,
+  libvlc,
+  libvorbis,
+  openal,
+  python3,
+  zlib,
 }:
 
 let
   # the GLES backend on rpi is untested as I don't have the hardware
-  backend =
-    if stdenv.hostPlatform.isx86 then "OpenGL" else "GLES";
+  backend = if stdenv.hostPlatform.isx86 then "OpenGL" else "GLES";
 
   withVLC = stdenv.hostPlatform.isDarwin;
 
@@ -27,13 +27,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gemrb";
-  version = "0.9.3";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
     owner = "gemrb";
     repo = "gemrb";
     rev = "v${version}";
-    hash = "sha256-n01Q/27iYXahBbUDFHW1Q3lPqCtTvhstUBgownZbKtg=";
+    hash = "sha256-+aPnOJQGRblqcrblVU5ZwA8CZqeT19rxEtn3GLuofYU=";
   };
 
   buildInputs = [
@@ -47,8 +47,7 @@ stdenv.mkDerivation rec {
     openal
     python3
     zlib
-  ]
-  ++ optional withVLC libvlc;
+  ] ++ optional withVLC libvlc;
 
   nativeBuildInputs = [ cmake ];
 

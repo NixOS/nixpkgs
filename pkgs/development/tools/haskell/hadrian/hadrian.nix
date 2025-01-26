@@ -1,16 +1,31 @@
 # See also ./make-hadria.nix
-{ mkDerivation, base, bytestring, Cabal, containers, directory
-, extra, filepath, lib, mtl, parsec, shake, text, transformers
-, unordered-containers, cryptohash-sha256, base16-bytestring
-, writeText
+{
+  mkDerivation,
+  base,
+  bytestring,
+  Cabal,
+  containers,
+  directory,
+  extra,
+  filepath,
+  lib,
+  mtl,
+  parsec,
+  shake,
+  text,
+  transformers,
+  unordered-containers,
+  cryptohash-sha256,
+  base16-bytestring,
+  writeText,
   # Dependencies that are not on Hackage and only used in certain Hadrian versions
-, ghc-platform ? null
-, ghc-toolchain ? null
+  ghc-platform ? null,
+  ghc-toolchain ? null,
   # GHC source tree to build hadrian from
-, ghcSrc
-, ghcVersion
+  ghcSrc,
+  ghcVersion,
   # Customization
-, userSettings ? null
+  userSettings ? null,
 }:
 
 mkDerivation {
@@ -32,16 +47,38 @@ mkDerivation {
     # See https://gitlab.haskell.org/ghc/ghc/-/merge_requests/1190
     "-O0"
   ];
+  jailbreak =
+    # Ignore lower bound on directory. Upstream uses this to avoid a race condition
+    # that only seems to affect Windows. We never build GHC natively on Windows.
+    # https://gitlab.haskell.org/ghc/ghc/-/issues/24382
+    # https://gitlab.haskell.org/ghc/ghc/-/commit/a2c033cf82635c83f3107706634bebee43297b99
+    (lib.versionAtLeast ghcVersion "9.12" && lib.versionOlder ghcVersion "9.13");
   isLibrary = false;
   isExecutable = true;
-  executableHaskellDepends = [
-    base bytestring Cabal containers directory extra filepath mtl
-    parsec shake text transformers unordered-containers
-  ] ++ lib.optionals (lib.versionAtLeast ghcVersion "9.7") [
-    cryptohash-sha256 base16-bytestring
-  ] ++ lib.optionals (lib.versionAtLeast ghcVersion "9.9") [
-    ghc-platform ghc-toolchain
-  ];
+  executableHaskellDepends =
+    [
+      base
+      bytestring
+      Cabal
+      containers
+      directory
+      extra
+      filepath
+      mtl
+      parsec
+      shake
+      text
+      transformers
+      unordered-containers
+    ]
+    ++ lib.optionals (lib.versionAtLeast ghcVersion "9.7") [
+      cryptohash-sha256
+      base16-bytestring
+    ]
+    ++ lib.optionals (lib.versionAtLeast ghcVersion "9.9") [
+      ghc-platform
+      ghc-toolchain
+    ];
   passthru = {
     # Expose »private« dependencies if any
     inherit ghc-platform ghc-toolchain;

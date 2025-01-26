@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   pkg-config,
   libuuid,
   libsodium,
@@ -33,9 +34,17 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "koverstreet";
     repo = "bcachefs-tools";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-w55Fs1RZ4c55vTvb3jArPcmBLij1nuLi2MUHMMXPhng=";
   };
+
+  patches = [
+    # backport patch to fix build with latest liburcu
+    (fetchpatch {
+      url = "https://github.com/koverstreet/bcachefs-tools/commit/634c812a1ed05de8e3d1dc146eed95b942e1e38d.patch";
+      hash = "sha256-AL+nflQHKIwzI35NXZG2rniNjUfgLmv3osHHdpB1cGs=";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config

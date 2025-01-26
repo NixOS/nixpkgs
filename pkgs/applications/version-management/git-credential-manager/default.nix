@@ -24,7 +24,7 @@ buildDotnetModule rec {
   };
 
   projectFile = "src/shared/Git-Credential-Manager/Git-Credential-Manager.csproj";
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
   dotnetInstallFlags = [ "--framework" "net8.0" ];

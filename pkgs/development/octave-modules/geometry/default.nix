@@ -1,7 +1,8 @@
-{ buildOctavePackage
-, lib
-, fetchhg
-, matgeom
+{
+  buildOctavePackage,
+  lib,
+  fetchhg,
+  matgeom,
 }:
 
 buildOctavePackage rec {
@@ -20,7 +21,10 @@ buildOctavePackage rec {
 
   meta = with lib; {
     homepage = "https://octave.sourceforge.io/geometry/index.html";
-    license = with licenses; [ gpl3Plus boost ];
+    license = with licenses; [
+      gpl3Plus
+      boost
+    ];
     maintainers = with maintainers; [ KarlJoad ];
     description = "Library for extending MatGeom functionality";
   };

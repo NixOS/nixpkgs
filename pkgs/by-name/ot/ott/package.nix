@@ -1,31 +1,46 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, ocamlPackages, opaline }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  ocamlPackages,
+  opaline,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ott";
-  version = "0.33";
+  version = "0.34";
 
   src = fetchFromGitHub {
     owner = "ott-lang";
     repo = "ott";
     rev = version;
-    hash = "sha256-GzeEiok5kigcmfqf/K/UxvlKkl55zy0vOyiRZ2HyMiE=";
+    hash = "sha256-S6EMQgEBrtXB9hTM7x6irZPsI9c9JHeuCk/9pcpQMNg=";
   };
-
 
   strictDeps = true;
 
-  nativeBuildInputs = [ pkg-config opaline ] ++ (with ocamlPackages; [ findlib ocaml ]);
+  nativeBuildInputs =
+    [
+      pkg-config
+      opaline
+    ]
+    ++ (with ocamlPackages; [
+      findlib
+      ocaml
+    ]);
   buildInputs = with ocamlPackages; [ ocamlgraph ];
 
   installTargets = "ott.install";
 
-  postInstall = ''
-    opaline -prefix $out
-  ''
-  # There is `emacsPackages.ott-mode` for this now.
-  + ''
-    rm -r $out/share/emacs
-  '';
+  postInstall =
+    ''
+      opaline -prefix $out
+    ''
+    # There is `emacsPackages.ott-mode` for this now.
+    + ''
+      rm -r $out/share/emacs
+    '';
 
   meta = {
     description = "Tool for the working semanticist";

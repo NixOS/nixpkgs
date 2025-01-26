@@ -1,8 +1,13 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.etebase-server;
 
-  iniFmt = pkgs.formats.ini {};
+  iniFmt = pkgs.formats.ini { };
 
   configIni = iniFmt.generate "etebase-server.ini" cfg.settings;
 
@@ -10,18 +15,24 @@ let
 in
 {
   imports = [
-    (lib.mkRemovedOptionModule
-      [ "services" "etebase-server" "customIni" ]
-      "Set the option `services.etebase-server.settings' instead.")
-    (lib.mkRemovedOptionModule
-      [ "services" "etebase-server" "database" ]
-      "Set the option `services.etebase-server.settings.database' instead.")
+    (lib.mkRemovedOptionModule [
+      "services"
+      "etebase-server"
+      "customIni"
+    ] "Set the option `services.etebase-server.settings' instead.")
+    (lib.mkRemovedOptionModule [
+      "services"
+      "etebase-server"
+      "database"
+    ] "Set the option `services.etebase-server.settings.database' instead.")
     (lib.mkRenamedOptionModule
       [ "services" "etebase-server" "secretFile" ]
-      [ "services" "etebase-server" "settings" "secret_file" ])
+      [ "services" "etebase-server" "settings" "secret_file" ]
+    )
     (lib.mkRenamedOptionModule
       [ "services" "etebase-server" "host" ]
-      [ "services" "etebase-server" "settings" "allowed_hosts" "allowed_host1" ])
+      [ "services" "etebase-server" "settings" "allowed_hosts" "allowed_host1" ]
+    )
   ];
 
   options = {
@@ -120,7 +131,10 @@ in
             };
             database = {
               engine = lib.mkOption {
-                type = lib.types.enum [ "django.db.backends.sqlite3" "django.db.backends.postgresql" ];
+                type = lib.types.enum [
+                  "django.db.backends.sqlite3"
+                  "django.db.backends.postgresql"
+                ];
                 default = "django.db.backends.sqlite3";
                 description = "The database engine to use.";
               };
@@ -133,7 +147,7 @@ in
             };
           };
         };
-        default = {};
+        default = { };
         description = ''
           Configuration for `etebase-server`. Refer to
           <https://github.com/etesync/server/blob/master/etebase-server.ini.example>
@@ -162,25 +176,33 @@ in
   config = lib.mkIf cfg.enable {
 
     environment.systemPackages = with pkgs; [
-      (runCommand "etebase-server" {
-        nativeBuildInputs = [ makeWrapper ];
-      } ''
-        makeWrapper ${cfg.package}/bin/etebase-server \
-          $out/bin/etebase-server \
-          --chdir ${lib.escapeShellArg cfg.dataDir} \
-          --prefix ETEBASE_EASY_CONFIG_PATH : "${configIni}"
-      '')
+      (runCommand "etebase-server"
+        {
+          nativeBuildInputs = [ makeWrapper ];
+        }
+        ''
+          makeWrapper ${cfg.package}/bin/etebase-server \
+            $out/bin/etebase-server \
+            --chdir ${lib.escapeShellArg cfg.dataDir} \
+            --prefix ETEBASE_EASY_CONFIG_PATH : "${configIni}"
+        ''
+      )
     ];
 
-    systemd.tmpfiles.rules = [
-      "d '${cfg.dataDir}' - ${cfg.user} ${config.users.users.${cfg.user}.group} - -"
-    ] ++ lib.optionals (cfg.unixSocket != null) [
-      "d '${builtins.dirOf cfg.unixSocket}' - ${cfg.user} ${config.users.users.${cfg.user}.group} - -"
-    ];
+    systemd.tmpfiles.rules =
+      [
+        "d '${cfg.dataDir}' - ${cfg.user} ${config.users.users.${cfg.user}.group} - -"
+      ]
+      ++ lib.optionals (cfg.unixSocket != null) [
+        "d '${builtins.dirOf cfg.unixSocket}' - ${cfg.user} ${config.users.users.${cfg.user}.group} - -"
+      ];
 
     systemd.services.etebase-server = {
       description = "An Etebase (EteSync 2.0) server";
-      after = [ "network.target" "systemd-tmpfiles-setup.service" ];
+      after = [
+        "network.target"
+        "systemd-tmpfiles-setup.service"
+      ];
       path = [ cfg.package ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
@@ -204,10 +226,13 @@ in
       script =
         let
           python = cfg.package.python;
-          networking = if cfg.unixSocket != null
-          then "--uds ${cfg.unixSocket}"
-          else "--host 0.0.0.0 --port ${toString cfg.port}";
-        in ''
+          networking =
+            if cfg.unixSocket != null then
+              "--uds ${cfg.unixSocket}"
+            else
+              "--host 0.0.0.0 --port ${toString cfg.port}";
+        in
+        ''
           ${python.pkgs.uvicorn}/bin/uvicorn ${networking} \
             --app-dir ${cfg.package}/${cfg.package.python.sitePackages} \
             etebase_server.asgi:application
@@ -221,7 +246,7 @@ in
         home = cfg.dataDir;
       };
 
-      groups.${defaultUser} = {};
+      groups.${defaultUser} = { };
     };
 
     networking.firewall = lib.mkIf cfg.openFirewall {

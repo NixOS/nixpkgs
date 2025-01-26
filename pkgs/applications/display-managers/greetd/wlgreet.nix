@@ -1,10 +1,11 @@
-{ lib
-, rustPlatform
-, fetchFromSourcehut
-, autoPatchelfHook
-, gcc-unwrapped
-, wayland
-, libxkbcommon
+{
+  lib,
+  rustPlatform,
+  fetchFromSourcehut,
+  autoPatchelfHook,
+  gcc-unwrapped,
+  wayland,
+  libxkbcommon,
 }:
 
 rustPlatform.buildRustPackage rec {

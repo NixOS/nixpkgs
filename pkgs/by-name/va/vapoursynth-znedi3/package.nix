@@ -34,7 +34,7 @@ stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
 
-    install -D -t $out/lib/vapoursynth vsznedi3${stdenv.hostPlatform.extensions.sharedLibrary}
+    install -D -t $out/lib/vapoursynth vsznedi3.so
     install -D -m644 -t $out/share/nnedi3 nnedi3_weights.bin
 
     runHook postInstall

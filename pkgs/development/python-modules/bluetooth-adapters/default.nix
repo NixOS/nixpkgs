@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "bluetooth-adapters";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-JeYqzwlR0zY0BGC6iFCTu9EDlYnu+wdpGeje2xKwcVI=";
   };
 

@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchurl
-, dpkg
-, makeWrapper
-, coreutils
-, gnugrep
-, gnused
-, mfc465cnlpr
-, pkgsi686Linux
-, psutils
+{
+  lib,
+  stdenv,
+  fetchurl,
+  dpkg,
+  makeWrapper,
+  coreutils,
+  gnugrep,
+  gnused,
+  mfc465cnlpr,
+  pkgsi686Linux,
+  psutils,
 }:
 
 stdenv.mkDerivation rec {
@@ -67,9 +68,15 @@ stdenv.mkDerivation rec {
     ln $dir/cupswrapper/cupswrappermfc465cn $out/lib/cups/filter
     ln $dir/cupswrapper/brmfc465.ppd $out/share/cups/model
     sed -n '/!ENDOFWFILTER!/,/!ENDOFWFILTER!/p' "$dir/cupswrapper/cupswrappermfc465cn" | sed '1 br; b; :r s/.*/printer_model=mfc465cn; cat <<!ENDOFWFILTER!/'  | bash > $out/lib/cups/filter/brlpdwrappermfc465cn
-    sed -i "/#! \/bin\/sh/a PATH=${lib.makeBinPath [ coreutils gnused gnugrep ]}:\$PATH" $out/lib/cups/filter/brlpdwrappermfc465cn
+    sed -i "/#! \/bin\/sh/a PATH=${
+      lib.makeBinPath [
+        coreutils
+        gnused
+        gnugrep
+      ]
+    }:\$PATH" $out/lib/cups/filter/brlpdwrappermfc465cn
     chmod 755 $out/lib/cups/filter/brlpdwrappermfc465cn
-    '';
+  '';
 
   meta = with lib; {
     description = "Brother MFC-465CN CUPS wrapper driver";

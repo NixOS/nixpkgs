@@ -1,7 +1,13 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.go-shadowsocks2.server;
-in {
+in
+{
   options.services.go-shadowsocks2.server = {
     enable = lib.mkEnableOption "go-shadowsocks2 server";
 

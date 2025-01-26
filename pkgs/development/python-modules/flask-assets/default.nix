@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "miracle2k";
     repo = "flask-assets";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-R6cFTT+r/i5j5/QQ+cCFmeuO7SNTiV1F+e0JTxwIUGY=";
   };
 

@@ -1,14 +1,15 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, wayland-scanner
-, wayland
-, pango
-, glib
-, harfbuzz
-, cairo
-, pkg-config
-, libxkbcommon
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  wayland-scanner,
+  wayland,
+  pango,
+  glib,
+  harfbuzz,
+  cairo,
+  pkg-config,
+  libxkbcommon,
 }:
 
 stdenv.mkDerivation rec {

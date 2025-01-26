@@ -3,6 +3,7 @@
   buildPythonPackage,
   cryptography,
   fetchPypi,
+  hatchling,
   idna,
   pyopenssl,
   pytestCheckHook,
@@ -12,17 +13,19 @@
 
 buildPythonPackage rec {
   pname = "trustme";
-  version = "1.1.0";
-  format = "setuptools";
+  version = "1.2.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-U3Wtf7QnB0vslWWS4NTuKkz02miTThukvPQhcSa8ReY=";
+    hash = "sha256-7SJk+0bDVFnm3p5FTtS6tzvkS2oqJq1Bf5toVK67ZEo=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ hatchling ];
+
+  dependencies = [
     cryptography
     idna
   ];

@@ -1,10 +1,11 @@
-{ fetchFromGitHub
-, lib
-, stdenvNoCC
+{
+  fetchFromGitHub,
+  lib,
+  stdenvNoCC,
 
-, # build deps
-  clickgen
-, python3Packages
+  # build deps
+  clickgen,
+  python3Packages,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

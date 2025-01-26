@@ -1,26 +1,25 @@
 name: "No channel PR"
 
 on:
-  pull_request:
+  pull_request_target:
+    # Re-run should be triggered when the base branch is updated, instead of silently failing
+    types: [opened, synchronize, reopened, edited]
     branches:
       - 'nixos-**'
       - 'nixpkgs-**'
 
-permissions:
-  contents: read
+permissions: {}
 
 jobs:
   fail:
-    permissions:
-      contents: none
     name: "This PR is is targeting a channel branch"
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
-    - run: |
-        cat <<EOF
-        The nixos-* and nixpkgs-* branches are pushed to by the channel
-        release script and should not be merged into directly.
+      - run: |
+          cat <<EOF
+          The nixos-* and nixpkgs-* branches are pushed to by the channel
+          release script and should not be merged into directly.
 
-        Please target the equivalent release-* branch or master instead.
-        EOF
-        exit 1
+          Please target the equivalent release-* branch or master instead.
+          EOF
+          exit 1

@@ -12,7 +12,7 @@ python3Packages.buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "opsdroid";
     repo = "opsdroid";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-7H44wdhJD4Z6OP1sUmSGlepuvx+LlwKLq7iR8cwqR24=";
   };
 

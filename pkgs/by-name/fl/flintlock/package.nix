@@ -1,29 +1,37 @@
-{ lib
-, cni-plugins
-, buildGoModule
-, firecracker
-, containerd
-, runc
-, makeWrapper
-, fetchFromGitHub
+{
+  lib,
+  cni-plugins,
+  buildGoModule,
+  firecracker,
+  containerd,
+  runc,
+  makeWrapper,
+  fetchFromGitHub,
 }:
 
-buildGoModule rec{
+buildGoModule rec {
   pname = "flintlock";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "weaveworks";
     repo = "flintlock";
     rev = "v${version}";
-    sha256 = "sha256-jZi58mewQ2hlH/9H4iAF4Mvf9UK4F7sUR0xcCEaLzX0=";
+    sha256 = "sha256-ODr6rZYrWtGZ7S/QmRHHjK9Krb9I+0A3A98cNuyIHz0=";
   };
 
-  vendorHash = "sha256-IGfNMe1fQfAGAOVsxmn/oxleHfniqL1TJKllCwpuWOU=";
+  vendorHash = "sha256-I8An3QbgN+dYMIvFX2M7U54AbJBlvpO3pfkzixZaHrY=";
 
-  subPackages = [ "cmd/flintlock-metrics" "cmd/flintlockd" ];
+  subPackages = [
+    "cmd/flintlock-metrics"
+    "cmd/flintlockd"
+  ];
 
-  ldflags = [ "-s" "-w" "-X github.com/weaveworks/flintlock/internal/version.Version=v${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/weaveworks/flintlock/internal/version.Version=v${version}"
+  ];
 
   nativeBuildInputs = [
     makeWrapper
@@ -35,7 +43,14 @@ buildGoModule rec{
 
   postInstall = ''
     for prog in flintlockd flintlock-metrics; do
-      wrapProgram "$out/bin/$prog" --prefix PATH : ${lib.makeBinPath [ cni-plugins firecracker containerd runc ]}
+      wrapProgram "$out/bin/$prog" --prefix PATH : ${
+        lib.makeBinPath [
+          cni-plugins
+          firecracker
+          containerd
+          runc
+        ]
+      }
     done
   '';
 
@@ -43,7 +58,10 @@ buildGoModule rec{
     description = "Create and manage the lifecycle of MicroVMs backed by containerd";
     homepage = "https://github.com/weaveworks-liquidmetal/flintlock";
     license = licenses.mpl20;
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     maintainers = with maintainers; [ techknowlogick ];
   };
 }

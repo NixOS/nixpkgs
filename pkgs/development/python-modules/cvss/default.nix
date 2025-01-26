@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "RedHatProductSecurity";
     repo = "cvss";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-+8aKNPcHFPcDyBvOO9QCVb1OIbpQHAEeJgt8fob0+lM=";
   };
 

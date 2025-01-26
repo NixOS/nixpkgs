@@ -1,6 +1,26 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, gettext, pkg-config, wxGTK32,
-  boost, icu, lucenepp, asciidoc, libxslt, xmlto, gtk3, gtkspell3, pugixml,
-  nlohmann_json, hicolor-icon-theme, wrapGAppsHook3 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  libtool,
+  gettext,
+  pkg-config,
+  wxGTK32,
+  boost,
+  icu,
+  lucenepp,
+  asciidoc,
+  libxslt,
+  xmlto,
+  gtk3,
+  gtkspell3,
+  pugixml,
+  nlohmann_json,
+  hicolor-icon-theme,
+  wrapGAppsHook3,
+}:
 
 stdenv.mkDerivation rec {
   pname = "poedit";
@@ -13,10 +33,28 @@ stdenv.mkDerivation rec {
     hash = "sha256-SZjsJQYJCXQendzQ2Tobg+IgkWL6lFX5YnMfruPt7UA=";
   };
 
-  nativeBuildInputs = [ autoconf automake asciidoc wrapGAppsHook3
-    libxslt xmlto boost libtool pkg-config ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+    asciidoc
+    wrapGAppsHook3
+    libxslt
+    xmlto
+    boost
+    libtool
+    pkg-config
+  ];
 
-  buildInputs = [ lucenepp nlohmann_json wxGTK32 icu pugixml gtk3 gtkspell3 hicolor-icon-theme ];
+  buildInputs = [
+    lucenepp
+    nlohmann_json
+    wxGTK32
+    icu
+    pugixml
+    gtk3
+    gtkspell3
+    hicolor-icon-theme
+  ];
 
   propagatedBuildInputs = [ gettext ];
 

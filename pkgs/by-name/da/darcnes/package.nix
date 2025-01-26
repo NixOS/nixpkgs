@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, libX11, libXt, libXext, libXaw }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libX11,
+  libXt,
+  libXext,
+  libXaw,
+}:
 
 stdenv.mkDerivation rec {
   pname = "darcnes";
@@ -11,7 +19,12 @@ stdenv.mkDerivation rec {
 
   patches = [ ./label.patch ];
 
-  buildInputs = [ libX11 libXt libXext libXaw ];
+  buildInputs = [
+    libX11
+    libXt
+    libXext
+    libXaw
+  ];
   installPhase = "install -Dt $out/bin darcnes";
 
   meta = {

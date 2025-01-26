@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, libtickit
-, libvterm-neovim
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libtickit,
+  libvterm-neovim,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

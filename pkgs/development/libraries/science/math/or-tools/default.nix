@@ -1,22 +1,23 @@
-{ abseil-cpp
-, bzip2
-, cbc
-, cmake
-, DarwinTools # sw_vers
-, eigen
-, ensureNewerSourcesForZipFilesHook
-, fetchFromGitHub
-, substituteAll
-, glpk
-, lib
-, pkg-config
-, protobuf
-, python
-, re2
-, stdenv
-, swig
-, unzip
-, zlib
+{
+  abseil-cpp,
+  bzip2,
+  cbc,
+  cmake,
+  DarwinTools, # sw_vers
+  eigen,
+  ensureNewerSourcesForZipFilesHook,
+  fetchFromGitHub,
+  substituteAll,
+  glpk,
+  lib,
+  pkg-config,
+  protobuf,
+  python,
+  re2,
+  stdenv,
+  swig,
+  unzip,
+  zlib,
 }:
 
 let
@@ -70,20 +71,23 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    cmake
-    ensureNewerSourcesForZipFilesHook
-    pkg-config
-    python.pythonOnBuildForHost
-    swig
-    unzip
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    DarwinTools
-  ] ++ (with python.pythonOnBuildForHost.pkgs; [
-    pip
-    mypy-protobuf
-    mypy
-  ]);
+  nativeBuildInputs =
+    [
+      cmake
+      ensureNewerSourcesForZipFilesHook
+      pkg-config
+      python.pythonOnBuildForHost
+      swig
+      unzip
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      DarwinTools
+    ]
+    ++ (with python.pythonOnBuildForHost.pkgs; [
+      pip
+      mypy-protobuf
+      mypy
+    ]);
   buildInputs = [
     abseil-cpp
     bzip2
@@ -135,7 +139,10 @@ stdenv.mkDerivation rec {
     pip install --prefix="$python" python/
   '';
 
-  outputs = [ "out" "python" ];
+  outputs = [
+    "out"
+    "python"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/google/or-tools";

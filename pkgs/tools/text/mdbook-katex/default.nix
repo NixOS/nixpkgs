@@ -1,15 +1,21 @@
-{ lib, rustPlatform, fetchCrate, stdenv, CoreServices }:
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+  stdenv,
+  CoreServices,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "mdbook-katex";
-  version = "0.9.1";
+  version = "0.9.2";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-F+yNfXBTAg9S6R85bGStumr1OXdWN3o95TxC0qgUeME=";
+    hash = "sha256-O2hFv/9pqrs8cSDvHLAUnXx4mX6TN8hvPLroWgoCgwE=";
   };
 
-  cargoHash = "sha256-01lr6ZS+7MmgKmuP+xEX7j1x2qDofmzeevUqY/UqRUw=";
+  cargoHash = "sha256-ONZZ6D0Ien0wakjhy6P2lhx0AnRLH0xpuYon+N9Crg8=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
 
@@ -18,6 +24,9 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "mdbook-katex";
     homepage = "https://github.com/lzanini/${pname}";
     license = [ licenses.mit ];
-    maintainers = with maintainers; [ lovesegfault matthiasbeyer ];
+    maintainers = with maintainers; [
+      lovesegfault
+      matthiasbeyer
+    ];
   };
 }

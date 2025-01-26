@@ -34,7 +34,7 @@ buildGoModule rec {
     substituteInPlace containerd/driver.go --replace-warn 'PluginVersion = "v0.9.3"' 'PluginVersion = "v${version}"'
   '';
 
-  CGO_ENABLED = "1";
+  env.CGO_ENABLED = "1";
 
   vendorHash = "sha256-OO+a5AqhB0tf6lyodhYl9HUSaWvtXWwevRHYy1Q6VoU=";
   subPackages = [ "." ];

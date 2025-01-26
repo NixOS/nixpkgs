@@ -25,22 +25,22 @@
 
 buildPythonPackage rec {
   pname = "pikepdf";
-  version = "9.2.1";
+  version = "9.4.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pikepdf";
     repo = "pikepdf";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     # The content of .git_archival.txt is substituted upon tarball creation,
     # which creates indeterminism if master no longer points to the tag.
     # See https://github.com/jbarlow83/OCRmyPDF/issues/841
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-k50Wg/JvHgOULocUsYRjYH+q1M+5DTFLBZzHC6io+To=";
+    hash = "sha256-J/ipkKqZifkWtgv7z/MJPwRK+yB7MP/19PDdjV1NMpY=";
   };
 
   patches = [

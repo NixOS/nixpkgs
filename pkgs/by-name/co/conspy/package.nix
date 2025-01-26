@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, autoconf, automake, ncurses }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoconf,
+  automake,
+  ncurses,
+}:
 
 stdenv.mkDerivation rec {
   pname = "conspy";
@@ -10,7 +17,10 @@ stdenv.mkDerivation rec {
     curlOpts = " -A application/octet-stream ";
   };
 
-  nativeBuildInputs = [ autoconf automake ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+  ];
   buildInputs = [
     ncurses
   ];

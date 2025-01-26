@@ -5,7 +5,7 @@
   meson,
   ninja,
   librsvg,
-  xorg
+  xorg,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

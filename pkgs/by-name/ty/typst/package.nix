@@ -6,8 +6,6 @@
   pkg-config,
   openssl,
   xz,
-  stdenv,
-  darwin,
   nix-update-script,
   versionCheckHook,
 }:
@@ -19,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "typst";
     repo = "typst";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-OfTMJ7ylVOJjL295W3Flj2upTiUQXmfkyDFSE1v8+a4=";
   };
 
@@ -33,16 +31,10 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      openssl
-      xz
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.CoreFoundation
-      darwin.apple_sdk.frameworks.CoreServices
-      darwin.apple_sdk.frameworks.Security
-    ];
+  buildInputs = [
+    openssl
+    xz
+  ];
 
   env = {
     GEN_ARTIFACTS = "artifacts";

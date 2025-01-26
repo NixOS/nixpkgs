@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "CybercentreCanada";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-0dHdXb4v92681xL21FsrIkNgNQ9R5ULV1lnSCITZzP8=";
   };
 

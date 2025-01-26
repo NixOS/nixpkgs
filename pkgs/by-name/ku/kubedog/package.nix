@@ -1,22 +1,23 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, testers
-, kubedog
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  kubedog,
 }:
 
 buildGoModule rec {
   pname = "kubedog";
-  version = "0.12.3";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "werf";
     repo = "kubedog";
     rev = "v${version}";
-    hash = "sha256-dk6ieIUoS1N2UtiLig5dFq0476xh69bjueN05ZKjcLg=";
+    hash = "sha256-xBTz1Ux2W0A0leOPNu0yONiz55LiYcYiviKEi8xsUTU=";
   };
 
-  vendorHash = "sha256-lLyIVA7Mkj1bfA/u8VMTwmKmhNfibYpT+dgIWFdOiPs=";
+  vendorHash = "sha256-kCS7nMFskBw6LTV5EgPSufxo78OyfW9Zdqe5rZytgKE=";
 
   subPackages = [ "cmd/kubedog" ];
 

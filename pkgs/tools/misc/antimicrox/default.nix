@@ -1,13 +1,14 @@
-{ mkDerivation
-, lib
-, cmake
-, extra-cmake-modules
-, pkg-config
-, SDL2
-, qttools
-, xorg
-, fetchFromGitHub
-, itstool
+{
+  mkDerivation,
+  lib,
+  cmake,
+  extra-cmake-modules,
+  pkg-config,
+  SDL2,
+  qttools,
+  xorg,
+  fetchFromGitHub,
+  itstool,
 }:
 
 mkDerivation rec {
@@ -21,7 +22,12 @@ mkDerivation rec {
     sha256 = "sha256-9vpkhs3zEOZa3LnyIqdW0U+nS/9t4HzMLzFqrB2TqI8=";
   };
 
-  nativeBuildInputs = [ cmake extra-cmake-modules pkg-config itstool ];
+  nativeBuildInputs = [
+    cmake
+    extra-cmake-modules
+    pkg-config
+    itstool
+  ];
   buildInputs = [
     SDL2
     qttools

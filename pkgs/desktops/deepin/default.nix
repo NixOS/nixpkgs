@@ -21,13 +21,11 @@ let
       qt5platform-plugins = callPackage ./library/qt5platform-plugins { };
       qt5integration = callPackage ./library/qt5integration { };
       deepin-wayland-protocols = callPackage ./library/deepin-wayland-protocols { };
-      deepin-ocr-plugin-manager = callPackage ./library/deepin-ocr-plugin-manager { };
       dwayland = callPackage ./library/dwayland { };
       dde-qt-dbus-factory = callPackage ./library/dde-qt-dbus-factory { };
       disomaster = callPackage ./library/disomaster { };
       docparser = callPackage ./library/docparser { };
       gio-qt = callPackage ./library/gio-qt { };
-      image-editor = callPackage ./library/image-editor { };
       udisks2-qt5 = callPackage ./library/udisks2-qt5 { };
       util-dfm = callPackage ./library/util-dfm { };
       dtk6core = callPackage ./library/dtk6core { };
@@ -39,6 +37,7 @@ let
       qt6platform-plugins = callPackage ./library/qt6platform-plugins { };
       qt6integration = callPackage ./library/qt6integration { };
       qt6mpris = callPackage ./library/qt6mpris { };
+      treeland-protocols = callPackage ./library/treeland-protocols { };
 
       #### CORE
       deepin-kwin = callPackage ./core/deepin-kwin { };
@@ -65,22 +64,16 @@ let
       dde-api-proxy = callPackage ./core/dde-api-proxy { };
 
       #### Dtk Application
-      deepin-album = callPackage ./apps/deepin-album { };
       deepin-calculator = callPackage ./apps/deepin-calculator { };
-      deepin-camera = callPackage ./apps/deepin-camera { };
       deepin-compressor = callPackage ./apps/deepin-compressor { };
       deepin-draw = callPackage ./apps/deepin-draw { };
       deepin-editor = callPackage ./apps/deepin-editor { };
-      deepin-image-viewer = callPackage ./apps/deepin-image-viewer { };
-      deepin-movie-reborn = callPackage ./apps/deepin-movie-reborn { };
       deepin-music = callPackage ./apps/deepin-music { };
       deepin-picker = callPackage ./apps/deepin-picker { };
-      deepin-screen-recorder = callPackage ./apps/deepin-screen-recorder { };
       deepin-shortcut-viewer = callPackage ./apps/deepin-shortcut-viewer { };
       deepin-system-monitor = callPackage ./apps/deepin-system-monitor { };
       deepin-terminal = callPackage ./apps/deepin-terminal { };
       deepin-reader = callPackage ./apps/deepin-reader { };
-      deepin-voice-note = callPackage ./apps/deepin-voice-note { };
       deepin-screensaver = callPackage ./apps/deepin-screensaver { };
 
       #### Go Packages
@@ -105,16 +98,24 @@ let
 
       #### MISC
       deepin-desktop-base = callPackage ./misc/deepin-desktop-base { };
-      deepin-turbo = callPackage ./misc/deepin-turbo { };
     }
     // lib.optionalAttrs config.allowAliases {
       dde-kwin = throw "The 'deepin.dde-kwin' package was removed as it is outdated and no longer relevant."; # added 2023-09-27
       dde-launcher = throw "The 'deepin.dde-launcher' is no longer maintained. Please use 'deepin.dde-launchpad' instead."; # added 2023-11-23
       dde-dock = throw "The 'deepin.dde-dock' is no longer maintained. Please use 'deepin.dde-tray-loader' instead."; # added 2024-08-28
       deepin-clone = throw "The 'deepin.deepin-clone' package was removed as it is broken and unmaintained."; # added 2024-08-23
+      deepin-turbo = throw "The 'deepin.deepin-turbo' package was removed as it is outdated and no longer relevant."; # added 2024-12-06
       go-lib = throw "Then 'deepin.go-lib' package was removed, use 'go mod' to manage it"; # added 2024-05-31
       go-gir-generator = throw "Then 'deepin.go-gir-generator' package was removed, use 'go mod' to manage it"; # added 2024-05-31
       go-dbus-factory = throw "Then 'deepin.go-dbus-factory' package was removed, use 'go mod' to manage it"; # added 2024-05-31
+      deepin-movie-reborn = throw "'deepin.deepin-movie-reborn' has been removed as it was broken and unmaintained in nixpkgs, Please use 'vlc' instead"; # added 2025-01-16;
+      deepin-album = throw "'deepin.deepin-album' has been removed as it was broken and unmaintained in nixpkgs, Please use 'kdePackages.gwenview' instead"; # added 2025-01-16
+      deepin-voice-note = throw "'deepin.deepin-voice-note' has been removed as it depending on deepin-movie-reborn which was broken"; # added 2025-01-16
+      deepin-screen-recorder = throw "'deepin.deepin-screen-recorder' has been removed as it was broken and unmaintained in nixpkgs, Please use 'flameshot' or 'simplescreenrecorder' instead"; # added 2025-01-16
+      deepin-ocr-plugin-manager = throw "'deepin.deepin-ocr-plugin-manager' has been removed as it was outdated"; # added 2025-01-16
+      deepin-camera = throw "'deepin.deepin-camera' has been removed as it was unmaintained in nixpkgs, Please use 'snapshot' instead"; # added 2025-01-16
+      deepin-image-viewer = throw "'deepin.deepin-image-viewer' has been removed as it was broken and unmaintained in nixpkgs, Please use 'kdePackages.gwenview' instead"; # added 2025-01-16
+      image-editor = throw "'deepin.image-editor' has been removed as it was unmaintained in nixpkgs"; # added 2025-01-16
     };
 in
 lib.makeScope pkgs.newScope packages

@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "godaddy";
     repo = "tartufo";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-s7gqGvOnie7lGlpW3wfd8igWfowxwg9mftRjiHnvedc=";
   };
 

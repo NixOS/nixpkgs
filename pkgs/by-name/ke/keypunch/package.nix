@@ -19,18 +19,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "keypunch";
-  version = "4.0";
+  version = "5.1";
 
   src = fetchFromGitHub {
     owner = "bragefuglseth";
     repo = "keypunch";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-Xd4fzreComOUnoJ6l2ncMWn6DlUeRCM+YwApilhFd/8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-C0WD8vBPlKvCJHVJHSfEbMIxNARoRrCn7PNebJ0rkoI=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-agFOxSZBi8f0zEPd+ha5c3IAbSH2jHfUx2iNeHFs9jI=";
+    hash = "sha256-RufJy5mHuirAO056p5/w63jw5h00E41t+H4VQP3kPks=";
   };
 
   strictDeps = true;

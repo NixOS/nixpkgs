@@ -1,4 +1,8 @@
-{ lib, fetchFromGitHub, buildGoModule }:
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+}:
 
 buildGoModule rec {
   pname = "miller";
@@ -11,7 +15,10 @@ buildGoModule rec {
     sha256 = "sha256-eHiYIw/sQMXLow2Vy4zFTGeON28LmG0pK2Uca4ooInU=";
   };
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   vendorHash = "sha256-oc6Lp4rQ+MLmQDVcuNJ3CqYH277Vuuwu4zSSO2ICXsw=";
 
@@ -24,10 +31,10 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Like awk, sed, cut, join, and sort for data formats such as CSV, TSV, JSON, JSON Lines, and positionally-indexed";
-    homepage    = "https://github.com/johnkerl/miller";
-    license     = licenses.bsd2;
+    homepage = "https://github.com/johnkerl/miller";
+    license = licenses.bsd2;
     maintainers = with maintainers; [ mstarzyk ];
     mainProgram = "mlr";
-    platforms   = platforms.all;
+    platforms = platforms.all;
   };
 }

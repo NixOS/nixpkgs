@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "databricks-cli";
-  version = "0.234.0";
+  version = "0.237.0";
 
   src = fetchFromGitHub {
     owner = "databricks";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-I1S31a1JvXFXWw4EkS40efKEE9wsQlMdjVxEJDRTzA8=";
+    hash = "sha256-dGhEOghGs0Fif1/6Yfyy+aMzY+/ougl7GiPh3AikE1c=";
   };
 
-  vendorHash = "sha256-Zih5NftJMbtLYG0Sej1BaErJ8NnU25mwhl3pfqSOSxc=";
+  vendorHash = "sha256-GYgbZ8JdQXEOYCAxrloHccA0eS02hs9NTMRfD+hakks=";
 
   excludedPackages = [ "bundle/internal" ];
 

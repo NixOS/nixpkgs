@@ -38,7 +38,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pygame-community";
     repo = "pygame-ce";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-9e02ZfBfk18jsVDKKhMwEJiTGMG7VdBEgVh4unMJguY=";
     # Unicode file cause different checksums on HFS+ vs. other filesystems
     postFetch = "rm -rf $out/docs/reST";
@@ -109,7 +109,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     numpy
   ];
-
 
   preConfigure = ''
     ${python.pythonOnBuildForHost.interpreter} -m buildconfig.config

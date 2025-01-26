@@ -476,23 +476,33 @@ let
 in
 
 {
+  imports = [
+    (lib.mkRenamedOptionModuleWith {
+      sinceRelease = 2505;
+      from = [
+        "isoImage"
+        "isoBaseName"
+      ];
+      to = [
+        "image"
+        "baseName"
+      ];
+    })
+    (lib.mkRenamedOptionModuleWith {
+      sinceRelease = 2505;
+      from = [
+        "isoImage"
+        "isoName"
+      ];
+      to = [
+        "image"
+        "fileName"
+      ];
+    })
+    ../../image/file-options.nix
+  ];
+
   options = {
-
-    isoImage.isoName = lib.mkOption {
-      default = "${config.isoImage.isoBaseName}.iso";
-      type = lib.types.str;
-      description = ''
-        Name of the generated ISO image file.
-      '';
-    };
-
-    isoImage.isoBaseName = lib.mkOption {
-      default = config.system.nixos.distroId;
-      type = lib.types.str;
-      description = ''
-        Prefix of the name of the generated ISO image file.
-      '';
-    };
 
     isoImage.compressImage = lib.mkOption {
       default = false;
@@ -858,8 +868,13 @@ in
     boot.loader.timeout = 10;
 
     # Create the ISO image.
+    image.extension = if config.isoImage.compressImage then "iso.zst" else "iso";
+    image.filePath = "iso/${config.image.fileName}";
+    image.baseName = "nixos${lib.optionalString (config.isoImage.edition != "") "-${config.isoImage.edition}" }-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}";
+    system.build.image = config.system.build.isoImage;
     system.build.isoImage = pkgs.callPackage ../../../lib/make-iso9660-image.nix ({
-      inherit (config.isoImage) isoName compressImage volumeID contents;
+      inherit (config.isoImage) compressImage volumeID contents;
+      isoName = "${config.image.baseName}.iso";
       bootable = config.isoImage.makeBiosBootable;
       bootImage = "/isolinux/isolinux.bin";
       syslinux = if config.isoImage.makeBiosBootable then pkgs.syslinux else null;

@@ -1,28 +1,32 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, testers
-, tbls
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  testers,
+  tbls,
 }:
 
 buildGoModule rec {
   pname = "tbls";
-  version = "1.78.0";
+  version = "1.80.0";
 
   src = fetchFromGitHub {
     owner = "k1LoW";
     repo = "tbls";
     rev = "v${version}";
-    hash = "sha256-vqt4IlVvqlUjDqvcdiRctt/VuEkZ5YzCXYHvHfc87Ew=";
+    hash = "sha256-3ix0BmPPHbbQReF5XRlrmIqfYGqcHLCbbe4dcXFF3ys=";
   };
 
-  vendorHash = "sha256-cnACY+NIjsVe6BU7AjTO+yLDn0f1HO1gHnw5SgqKuy4=";
+  vendorHash = "sha256-8Kj4G/oYKaoANU09kI56nF9kURzg+Y8pB7YO1b6nvuA=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   CGO_CFLAGS = [ "-Wno-format-security" ];
 

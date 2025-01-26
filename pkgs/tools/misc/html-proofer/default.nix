@@ -1,4 +1,9 @@
-{ bundlerEnv, ruby, lib, bundlerUpdateScript }:
+{
+  bundlerEnv,
+  ruby,
+  lib,
+  bundlerUpdateScript,
+}:
 
 bundlerEnv rec {
   name = "${pname}-${version}";
@@ -12,10 +17,10 @@ bundlerEnv rec {
 
   meta = with lib; {
     description = "Tool to validate HTML files";
-    homepage    = "https://github.com/gjtorikian/html-proofer";
-    license     = licenses.mit;
+    homepage = "https://github.com/gjtorikian/html-proofer";
+    license = licenses.mit;
     maintainers = [ ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
     mainProgram = "htmlproofer";
   };
 }

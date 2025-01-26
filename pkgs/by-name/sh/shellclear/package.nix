@@ -1,6 +1,7 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -10,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "rusty-ferris-club";
     repo = "shellclear";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-/0pqegVxrqqxaQ2JiUfkkFK9hp+Vuq7eTap052HEcJs=";
   };
 

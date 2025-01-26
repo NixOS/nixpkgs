@@ -1,19 +1,21 @@
-{ lib, stdenv
-, fetchFromGitHub
-, srt
-, bc
-, pkg-config
-, perl
-, openssl
-, zlib
-, ffmpeg
-, libvpx
-, libopus
-, libuuid
-, srtp
-, jemalloc
-, pcre2
-, hiredis
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  srt,
+  bc,
+  pkg-config,
+  perl,
+  openssl,
+  zlib,
+  ffmpeg,
+  libvpx,
+  libopus,
+  libuuid,
+  srtp,
+  jemalloc,
+  pcre2,
+  hiredis,
 }:
 
 stdenv.mkDerivation rec {
@@ -33,11 +35,35 @@ stdenv.mkDerivation rec {
     ./support-ffmpeg-7.patch
   ];
 
-  makeFlags = [ "release" "CONFIG_LIBRARY_PATHS=" "CONFIG_PKG_PATHS=" "GLOBAL_CC=$(CC)" "GLOBAL_CXX=$(CXX)" "GLOBAL_LD=$(CXX)" "SHELL=${stdenv.shell}" ];
+  makeFlags = [
+    "release"
+    "CONFIG_LIBRARY_PATHS="
+    "CONFIG_PKG_PATHS="
+    "GLOBAL_CC=$(CC)"
+    "GLOBAL_CXX=$(CXX)"
+    "GLOBAL_LD=$(CXX)"
+    "SHELL=${stdenv.shell}"
+  ];
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ bc pkg-config perl ];
-  buildInputs = [ openssl srt zlib ffmpeg libvpx libopus srtp jemalloc pcre2 libuuid hiredis ];
+  nativeBuildInputs = [
+    bc
+    pkg-config
+    perl
+  ];
+  buildInputs = [
+    openssl
+    srt
+    zlib
+    ffmpeg
+    libvpx
+    libopus
+    srtp
+    jemalloc
+    pcre2
+    libuuid
+    hiredis
+  ];
 
   preBuild = ''
     cd src
@@ -60,9 +86,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Open-source streaming video service with sub-second latency";
     mainProgram = "OvenMediaEngine";
-    homepage    = "https://ovenmediaengine.com";
-    license     = licenses.agpl3Only;
+    homepage = "https://ovenmediaengine.com";
+    license = licenses.agpl3Only;
     maintainers = with maintainers; [ lukegb ];
-    platforms   = platforms.linux;
+    platforms = platforms.linux;
   };
 }

@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aws";
     repo = "serverless-application-model";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-jcRpn9STkfg1xTwYzkpoYyuG0Hrv0XnbW1h6+SxzEjA=";
   };
 

@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitLab, autoreconfHook, zlib }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  autoreconfHook,
+  zlib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "osmctools";

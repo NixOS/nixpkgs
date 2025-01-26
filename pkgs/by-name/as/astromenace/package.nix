@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, ninja
-, makeWrapper
-, xorg
-, libGLU
-, libGL
-, SDL2
-, openal
-, fontconfig
-, freealut
-, freetype
-, libogg
-, libvorbis
-, runtimeShell
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  ninja,
+  makeWrapper,
+  xorg,
+  libGLU,
+  libGL,
+  SDL2,
+  openal,
+  fontconfig,
+  freealut,
+  freetype,
+  libogg,
+  libvorbis,
+  runtimeShell,
 }:
 
 stdenv.mkDerivation rec {

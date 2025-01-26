@@ -1,36 +1,39 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }: {
-  name = "morph-browser-standalone";
-  meta.maintainers = lib.teams.lomiri.members;
+import ./make-test-python.nix (
+  { pkgs, lib, ... }:
+  {
+    name = "morph-browser-standalone";
+    meta.maintainers = lib.teams.lomiri.members;
 
-  nodes.machine = { config, pkgs, ... }: {
-    imports = [
-      ./common/x11.nix
-    ];
+    nodes.machine =
+      { config, pkgs, ... }:
+      {
+        imports = [
+          ./common/x11.nix
+        ];
 
-    services.xserver.enable = true;
+        services.xserver.enable = true;
 
-    environment = {
-      systemPackages = with pkgs.lomiri; [
-        suru-icon-theme
-        morph-browser
-      ];
-      variables = {
-        UITK_ICON_THEME = "suru";
+        environment = {
+          systemPackages = with pkgs.lomiri; [
+            suru-icon-theme
+            morph-browser
+          ];
+          variables = {
+            UITK_ICON_THEME = "suru";
+          };
+        };
+
+        i18n.supportedLocales = [ "all" ];
+
+        fonts.packages = with pkgs; [
+          # Intended font & helps with OCR
+          ubuntu-classic
+        ];
       };
-    };
 
-    i18n.supportedLocales = [ "all" ];
+    enableOCR = true;
 
-    fonts.packages = with pkgs; [
-      # Intended font & helps with OCR
-      ubuntu-classic
-    ];
-  };
-
-  enableOCR = true;
-
-  testScript =
-    ''
+    testScript = ''
       machine.wait_for_x()
 
       with subtest("morph browser launches"):
@@ -50,4 +53,5 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
           machine.wait_for_text(r"Web-Browser|Neuer|Seiten|Lesezeichen")
           machine.screenshot("morph_localised")
     '';
-})
+  }
+)

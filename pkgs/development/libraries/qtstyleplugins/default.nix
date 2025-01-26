@@ -1,4 +1,12 @@
-{ lib, mkDerivation, fetchFromGitHub, fetchpatch, qmake, pkg-config, gtk2 }:
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  fetchpatch,
+  qmake,
+  pkg-config,
+  gtk2,
+}:
 
 mkDerivation {
   pname = "qtstyleplugins";
@@ -24,7 +32,10 @@ mkDerivation {
     })
   ];
 
-  nativeBuildInputs = [ pkg-config qmake ];
+  nativeBuildInputs = [
+    pkg-config
+    qmake
+  ];
   buildInputs = [ gtk2 ];
 
   meta = with lib; {

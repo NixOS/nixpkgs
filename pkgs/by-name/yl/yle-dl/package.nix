@@ -1,5 +1,13 @@
-{ lib, fetchFromGitHub, rtmpdump, php, wget, python3Packages, ffmpeg
-, testers, yle-dl
+{
+  lib,
+  fetchFromGitHub,
+  rtmpdump,
+  php,
+  wget,
+  python3Packages,
+  ffmpeg,
+  testers,
+  yle-dl,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -14,9 +22,18 @@ python3Packages.buildPythonApplication rec {
   };
 
   propagatedBuildInputs = with python3Packages; [
-    attrs configargparse ffmpeg future lxml requests
+    attrs
+    configargparse
+    ffmpeg
+    future
+    lxml
+    requests
   ];
-  pythonPath = [ rtmpdump php wget ];
+  pythonPath = [
+    rtmpdump
+    php
+    wget
+  ];
 
   doCheck = false; # tests require network access
   nativeCheckInputs = with python3Packages; [ pytestCheckHook ];

@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3Packages
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -9,12 +10,18 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "alebastr";
     repo = "sway-systemd";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-AJ87/sPy8IVJgb5YehfUfNTOFEDithLfiTxgZfZf238=";
   };
   format = "other";
 
-  propagatedBuildInputs = with python3Packages; [ dbus-next i3ipc psutil tenacity xlib ];
+  propagatedBuildInputs = with python3Packages; [
+    dbus-next
+    i3ipc
+    psutil
+    tenacity
+    xlib
+  ];
 
   installPhase = ''
     runHook preInstall

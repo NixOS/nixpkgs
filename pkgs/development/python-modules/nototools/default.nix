@@ -43,7 +43,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "nototools";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-id4UhyWOFHrtmBZHhnaY2jHDIK0s7rcGBpg4QsBTLKs=";
   };
 

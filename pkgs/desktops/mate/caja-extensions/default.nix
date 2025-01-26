@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, gettext
-, caja
-, glib
-, gst_all_1
-, gtk3
-, gupnp
-, imagemagick
-, mate-desktop
-, wrapGAppsHook3
-, mateUpdateScript
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gettext,
+  caja,
+  glib,
+  gst_all_1,
+  gtk3,
+  gupnp,
+  imagemagick,
+  mate-desktop,
+  wrapGAppsHook3,
+  mateUpdateScript,
 }:
 
 stdenv.mkDerivation rec {

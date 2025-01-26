@@ -1,6 +1,7 @@
-{ lib
-, stdenv
-, fetchFromSourcehut
+{
+  lib,
+  stdenv,
+  fetchFromSourcehut,
 }:
 
 stdenv.mkDerivation {

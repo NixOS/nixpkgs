@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "warpnet";
     repo = "salt-lint";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Q/blaqDqs9gPrMfN+e1hkCi9IPMM0osPYTDsT6UODB4=";
   };
 

@@ -1,5 +1,7 @@
-{ buildDunePackage
-, macaddr, cstruct
+{
+  buildDunePackage,
+  macaddr,
+  cstruct,
 }:
 
 buildDunePackage {
@@ -9,7 +11,10 @@ buildDunePackage {
 
   duneVersion = "3";
 
-  propagatedBuildInputs = [ macaddr cstruct ];
+  propagatedBuildInputs = [
+    macaddr
+    cstruct
+  ];
 
   doCheck = true;
 

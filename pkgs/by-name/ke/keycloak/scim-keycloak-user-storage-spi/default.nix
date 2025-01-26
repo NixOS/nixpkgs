@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, maven
+{
+  lib,
+  fetchFromGitHub,
+  maven,
 }:
 
 maven.buildMavenPackage {

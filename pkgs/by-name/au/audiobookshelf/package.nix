@@ -22,7 +22,7 @@ let
   src = fetchFromGitHub {
     owner = "advplyr";
     repo = "audiobookshelf";
-    rev = "refs/tags/v${source.version}";
+    tag = "v${source.version}";
     inherit (source) hash;
   };
 

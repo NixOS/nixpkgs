@@ -1,33 +1,34 @@
-{ lib
-, fetchFromBitbucket
-, buildPythonApplication
-, pyqt5
-, matplotlib
-, numpy
-, cycler
-, python-dateutil
-, kiwisolver
-, six
-, setuptools
-, dill
-, rtree
-, pyopengl
-, vispy
-, ortools
-, svg-path
-, simplejson
-, shapely
-, freetype-py
-, fonttools
-, rasterio
-, lxml
-, ezdxf
-, qrcode
-, reportlab
-, svglib
-, gdal
-, pyserial
-, python3
+{
+  lib,
+  fetchFromBitbucket,
+  buildPythonApplication,
+  pyqt5,
+  matplotlib,
+  numpy,
+  cycler,
+  python-dateutil,
+  kiwisolver,
+  six,
+  setuptools,
+  dill,
+  rtree,
+  pyopengl,
+  vispy,
+  ortools,
+  svg-path,
+  simplejson,
+  shapely,
+  freetype-py,
+  fonttools,
+  rasterio,
+  lxml,
+  ezdxf,
+  qrcode,
+  reportlab,
+  svglib,
+  gdal,
+  pyserial,
+  python3,
 }:
 
 buildPythonApplication rec {
@@ -91,7 +92,9 @@ buildPythonApplication rec {
   ];
 
   postInstall = ''
-    sed -i "s|python3|${python3.withPackages (_: propagatedBuildInputs)}/bin/python3|" $out/bin/flatcam-beta
+    sed -i "s|python3|${
+      python3.withPackages (_: propagatedBuildInputs)
+    }/bin/python3|" $out/bin/flatcam-beta
     mv $out/bin/flatcam{-beta,}
   '';
 

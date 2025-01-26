@@ -1,76 +1,65 @@
-{ lib
-, fetchFromGitLab
-, gitUpdater
-, file
-, which
-, intltool
-, gobject-introspection
-, findutils
-, xdg-utils
-, dconf
-, gtk3
-, python3Packages
-, xfconf
-, wrapGAppsHook3
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  desktop-file-utils,
+  gobject-introspection,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsHook3,
+  glib,
+  gtk3,
+  python3,
+  xfconf,
+  shared-mime-info,
+  xdg-utils,
+  gitUpdater,
 }:
 
-python3Packages.buildPythonApplication rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "catfish";
-  version = "4.18.0";
+  version = "4.20.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.xfce.org";
     owner = "apps";
-    repo = pname;
-    rev = "${pname}-${version}";
-    sha256 = "sha256-hfbIgSFn48++eGrJXzhXRxhWkrjgTYsr7BX/n0EXhGo=";
+    repo = "catfish";
+    rev = "catfish-${finalAttrs.version}";
+    hash = "sha256-7ERE6R714OuqTjeNZw3K6HvQTA8OIglG6+8Kiawwzu8=";
   };
 
   nativeBuildInputs = [
-    python3Packages.distutils-extra
-    file
-    which
-    intltool
-    gobject-introspection # for setup hook populating GI_TYPELIB_PATH
+    desktop-file-utils
+    gobject-introspection
+    meson
+    ninja
+    pkg-config
     wrapGAppsHook3
   ];
 
   buildInputs = [
+    glib
     gtk3
-    dconf
-    python3Packages.pyxdg
-    python3Packages.ptyprocess
-    python3Packages.pycairo
-  ];
-
-  propagatedBuildInputs = [
-    python3Packages.dbus-python
-    python3Packages.pygobject3
-    python3Packages.pexpect
-    xdg-utils
-    findutils
+    (python3.withPackages (p: [
+      p.dbus-python
+      p.pygobject3
+      p.pexpect
+    ]))
     xfconf
   ];
 
-  # Explicitly set the prefix dir in "setup.py" because setuptools is
-  # not using "$out" as the prefix when installing catfish data. In
-  # particular the variable "__catfish_data_directory__" in
-  # "catfishconfig.py" is being set to a subdirectory in the python
-  # path in the store.
   postPatch = ''
-    sed -i "/^        if self.root/i\\        self.prefix = \"$out\"" setup.py
+    substituteInPlace catfish/CatfishWindow.py \
+      --replace-fail "/usr/share/mime" "${shared-mime-info}/share/mime"
   '';
-
-  # Disable check because there is no test in the source distribution
-  doCheck = false;
-
-  dontWrapGApps = true;
 
   preFixup = ''
-    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+    # For xdg-mime and xdg-open.
+    gappsWrapperArgs+=(--prefix PATH : "${lib.makeBinPath [ xdg-utils ]}")
   '';
 
-  passthru.updateScript = gitUpdater { rev-prefix = "${pname}-"; };
+  passthru.updateScript = gitUpdater { rev-prefix = "catfish-"; };
 
   meta = with lib; {
     homepage = "https://docs.xfce.org/apps/catfish/start";
@@ -86,4 +75,4 @@ python3Packages.buildPythonApplication rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
-}
+})

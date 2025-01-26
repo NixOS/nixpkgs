@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jupyterhub";
     repo = "ldapauthenticator";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-pb1d0dqu3VGCsuibpYgncbqCM9fz09yyoKGcKb14f4k=";
   };
 

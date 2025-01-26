@@ -1,38 +1,45 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, cmake
-, boost
-, python3
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  boost,
+  python3,
+  fmt,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation rec {
   pname = "avro-c++";
-  version = "1.11.3";
+  version = "1.12.0";
 
   src = fetchurl {
     url = "mirror://apache/avro/avro-${version}/cpp/avro-cpp-${version}.tar.gz";
-    hash = "sha256-+6JCrvd+yBnQdWH8upN1FyGVbejQyujh8vMAtUszG64=";
+    hash = "sha256-8u33cSanWw7BrRZncr4Fg1HOo9dESL5+LO8gBQwPmKs=";
   };
+
   patches = [
-    # This patch fixes boost compatibility and can be removed when
-    # upgrading beyond 1.11.3 https://github.com/apache/avro/pull/1920
-    (fetchpatch {
-      name = "fix-boost-compatibility.patch";
-      url = "https://github.com/apache/avro/commit/016323828f147f185d03f50d2223a2f50bfafce1.patch";
-      hash = "sha256-hP/5J2JzSplMvg8EjEk98Vim8DfTyZ4hZ/WGiVwvM1A=";
-    })
+    ./0001-get-rid-of-fmt-fetchcontent.patch
   ];
-  patchFlags = [ "-p3" ];
 
-  nativeBuildInputs = [ cmake python3 ];
-  buildInputs = [ boost ];
+  nativeBuildInputs = [
+    cmake
+    python3
+  ];
 
-  preConfigure = ''
-    substituteInPlace test/SchemaTests.cc --replace "BOOST_CHECKPOINT" "BOOST_TEST_CHECKPOINT"
-    substituteInPlace test/buffertest.cc --replace "BOOST_MESSAGE" "BOOST_TEST_MESSAGE"
-  '';
+  propagatedBuildInputs = [
+    boost
+    fmt
+  ];
+
+  doCheck = true;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgram = "${placeholder "out"}/bin/avrogencpp";
+  versionCheckProgramArg = [ "--version" ];
 
   meta = {
     description = "C++ library which implements parts of the Avro Specification";

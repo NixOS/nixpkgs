@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, libsodium, nixosTests }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libsodium,
+  nixosTests,
+}:
 
 stdenv.mkDerivation {
   pname = "quicktun";

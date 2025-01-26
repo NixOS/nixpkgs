@@ -1,4 +1,11 @@
-{ lib, mkCoqDerivation, coq, ceres, ExtLib, version ? null }:
+{
+  lib,
+  mkCoqDerivation,
+  coq,
+  ceres,
+  ExtLib,
+  version ? null,
+}:
 
 mkCoqDerivation {
 
@@ -6,16 +13,33 @@ mkCoqDerivation {
   repo = "coq-parsec";
   owner = "liyishuai";
 
-  propagatedBuildInputs = [ ceres ExtLib ];
+  propagatedBuildInputs = [
+    ceres
+    ExtLib
+  ];
   releaseRev = (v: "v${v}");
 
   inherit version;
-  defaultVersion = with lib.versions; lib.switch coq.version [
-    { case = range "8.14" "8.20"; out = "0.2.0"; }
-    { case = range "8.14" "8.20"; out = "0.1.2"; }
-    { case = range "8.12" "8.16"; out = "0.1.1"; }
-    { case = range "8.12" "8.13"; out = "0.1.0"; }
-  ] null;
+  defaultVersion =
+    with lib.versions;
+    lib.switch coq.version [
+      {
+        case = range "8.14" "8.20";
+        out = "0.2.0";
+      }
+      {
+        case = range "8.14" "8.20";
+        out = "0.1.2";
+      }
+      {
+        case = range "8.12" "8.16";
+        out = "0.1.1";
+      }
+      {
+        case = range "8.12" "8.13";
+        out = "0.1.0";
+      }
+    ] null;
   release."0.2.0".sha256 = "sha256-hM6LVFQ2VQ42QeHu8Ex+oz1VvJUr+g8/nZN+bYHEljQ=";
   release."0.1.2".sha256 = "sha256-QN0h1CsX86DQBDsluXLtNUvMh3r60/0iDSbYam67AhA=";
   release."0.1.1".sha256 = "sha256:1c0l18s68pzd4c8i3jimh2yz0pqm4g38pca4bm7fr18r8xmqf189";

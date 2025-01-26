@@ -1,4 +1,9 @@
-{ lib, eggDerivation, fetchegg, z3 }:
+{
+  lib,
+  eggDerivation,
+  fetchegg,
+  z3,
+}:
 
 let
   eggs = import ./eggs.nix { inherit eggDerivation fetchegg; };

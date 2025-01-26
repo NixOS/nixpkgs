@@ -1,14 +1,15 @@
-{ lib
-, python3
-, fetchFromGitLab
-, desktop-file-utils
-, gobject-introspection
-, gtk3
-, libhandy
-, meson
-, ninja
-, pkg-config
-, wrapGAppsHook3
+{
+  lib,
+  python3,
+  fetchFromGitLab,
+  desktop-file-utils,
+  gobject-introspection,
+  gtk3,
+  libhandy,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsHook3,
 }:
 
 python3.pkgs.buildPythonApplication rec {

@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "liran-funaro";
     repo = "objsize";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-wy4Tj+Q+4zymRdoN8Z7wcazJTb2lQ+XHY1Kta02R3R0=";
   };
 

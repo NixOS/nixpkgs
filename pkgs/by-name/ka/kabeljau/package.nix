@@ -1,4 +1,13 @@
-{ stdenvNoCC, lib, fetchFromGitea, just, imagemagick, makeWrapper, bash, dialog }:
+{
+  stdenvNoCC,
+  lib,
+  fetchFromGitea,
+  just,
+  imagemagick,
+  makeWrapper,
+  bash,
+  dialog,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "kabeljau";
@@ -13,7 +22,11 @@ stdenvNoCC.mkDerivation rec {
   };
 
   # Inkscape is needed in a just recipe where it is used to export the SVG icon to several different sized PNGs.
-  nativeBuildInputs = [ just imagemagick makeWrapper ];
+  nativeBuildInputs = [
+    just
+    imagemagick
+    makeWrapper
+  ];
   postPatch = ''
     patchShebangs --host ${pname}
   '';
@@ -21,9 +34,7 @@ stdenvNoCC.mkDerivation rec {
     runHook preInstall
 
     just --set bin-path $out/bin --set share-path $out/share linux-install
-    wrapProgram $out/bin/${pname} --suffix PATH : ${
-      lib.makeBinPath [ dialog ]
-    }
+    wrapProgram $out/bin/${pname} --suffix PATH : ${lib.makeBinPath [ dialog ]}
 
     runHook postInstall
   '';

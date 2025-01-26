@@ -34,14 +34,14 @@
 
 buildPythonPackage rec {
   pname = "tempest";
-  version = "41.0.0";
+  version = "42.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-e0cxWm0ZNQl2bJnVzcMiiN+Wadd65nJZoLJnBRr2Qqw=";
+    hash = "sha256-nW6cSOhC56YkyUQiXcJTqaojRseIf9q8YGSe4skhTA4=";
   };
 
   pythonRelaxDeps = [ "defusedxml" ];

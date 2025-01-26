@@ -1,4 +1,11 @@
-{ lib, rustPlatform, fetchCrate, installShellFiles, stdenv, darwin }:
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+  installShellFiles,
+  stdenv,
+  darwin,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "the-way";
@@ -33,6 +40,9 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/out-of-cheese-error/the-way";
     changelog = "https://github.com/out-of-cheese-error/the-way/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ figsoda numkem ];
+    maintainers = with maintainers; [
+      figsoda
+      numkem
+    ];
   };
 }

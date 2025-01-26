@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "raphaelm";
     repo = "defusedcsv";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-y8qLVfdkxRrDjtrTOLK5Zvi/1Vyv8eOnCueUkaRp4sQ=";
   };
 

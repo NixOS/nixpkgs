@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, help2man, curl }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  help2man,
+  curl,
+}:
 
 stdenv.mkDerivation {
   pname = "libykclient";
@@ -10,7 +18,11 @@ stdenv.mkDerivation {
     sha256 = "01b19jgv2lypih6lhw9yjjsfl8q1ahl955vhr2ai8ccshh0050yj";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config help2man ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    help2man
+  ];
   buildInputs = [ curl ];
 
   meta = with lib; {

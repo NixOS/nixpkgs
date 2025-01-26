@@ -1,4 +1,8 @@
-{ stdenv, lib, fetchurl }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "hostname-debian";
@@ -12,7 +16,10 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace Makefile --replace 'install -o root -g root' 'install'
   '';
-  makeFlags = [ "BINDIR=$(out)/bin" "MANDIR=$(out)/share/man" ];
+  makeFlags = [
+    "BINDIR=$(out)/bin"
+    "MANDIR=$(out)/share/man"
+  ];
 
   meta = with lib; {
     description = "Utility to set/show the host name or domain name";

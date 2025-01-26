@@ -66,6 +66,9 @@ buildNpmPackage {
 
     # https://github.com/vercel/next.js/discussions/58864
     ln -s /var/cache/nextjs-ollama-llm-ui $out/share/homepage/.next/cache
+    # also provide a environment variable to override the cache directory
+    substituteInPlace $out/share/homepage/node_modules/next/dist/server/image-optimizer.js \
+        --replace '_path.join)(distDir,' '_path.join)(process.env["NEXT_CACHE_DIR"] || distDir,'
 
     chmod +x $out/share/homepage/server.js
 

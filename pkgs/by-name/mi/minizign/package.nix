@@ -1,30 +1,34 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, zig_0_11
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  zig_0_13,
 }:
 
-stdenv.mkDerivation {
+let
+  zig = zig_0_13;
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "minizign";
-  version = "unstable-2023-08-13";
+  version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "jedisct1";
     repo = "zig-minisign";
-    rev = "47edc26d0c7bcfb531fe08e3b2411d8dda516d47";
-    hash = "sha256-zyxjUFxg+VufEVycYGCQPdjERE3p5Vz5iIi2UDujEjI=";
+    rev = finalAttrs.version;
+    hash = "sha256-Su66UohRc9C4INIp+7NHiW28sUq5YBfrI0EoEbGojG0=";
   };
 
   nativeBuildInputs = [
-    zig_0_11.hook
+    zig.hook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Minisign reimplemented in Zig";
     homepage = "https://github.com/jedisct1/zig-minisign";
-    license = licenses.isc;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "minizign";
-    inherit (zig_0_11.meta) platforms;
+    inherit (zig.meta) platforms;
   };
-}
+})

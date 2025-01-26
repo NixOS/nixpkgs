@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -10,13 +11,16 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "phith0n";
     repo = "zkar";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-F4bGGOZ6ftaSDbsPh3ML9qJoXmdSD6TGc7mt4HOuPkU=";
   };
 
   vendorHash = "sha256-Eyi22d6RkIsg6S5pHXOqn6kULQ/mLeoaxSxxJJkMgIQ=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   meta = with lib; {
     description = "Java serialization protocol analysis tool";

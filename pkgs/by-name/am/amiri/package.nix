@@ -1,12 +1,16 @@
-{ lib, stdenvNoCC, fetchzip }:
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "amiri";
-  version = "1.000";
+  version = "1.001";
 
   src = fetchzip {
     url = "https://github.com/alif-type/amiri/releases/download/${version}/Amiri-${version}.zip";
-    hash = "sha256-WXxKLYIIKe01WWZrI1aLOv65wRgn7aqHl6Codf4foVw=";
+    hash = "sha256-YwiDY5/Ty5Pwj3d8+UafUNLVZ3omRtFRWQCLn2RkheM=";
   };
 
   installPhase = ''
@@ -28,4 +32,3 @@ stdenvNoCC.mkDerivation rec {
     platforms = platforms.all;
   };
 }
-

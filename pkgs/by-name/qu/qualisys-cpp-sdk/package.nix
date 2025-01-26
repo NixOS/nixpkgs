@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "qualisys";
     repo = "qualisys_cpp_sdk";
-    rev = "refs/tags/rt_protocol_1.25";
+    tag = "rt_protocol_1.25";
     hash = "sha256-BeG6LF1a8m9BSoILsD9EppywXlCSheKGm0fBoLR1cak=";
   };
 

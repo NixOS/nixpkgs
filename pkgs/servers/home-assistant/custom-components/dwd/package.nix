@@ -8,13 +8,13 @@
 buildHomeAssistantComponent rec {
   owner = "hg1337";
   domain = "dwd";
-  version = "2024.9.0";
+  version = "2024.11.0";
 
   src = fetchFromGitHub {
     owner = "hg1337";
     repo = "homeassistant-dwd";
     rev = version;
-    hash = "sha256-9zS6ufy7tYt1KwFeqdg0Az8xz3x5UzU9ZO9aOyWjdQE=";
+    hash = "sha256-v5xSIUW8EMTdLY66yZ31cR/1DWVvn85CfIl/Y4xpXiw=";
   };
 
   dependencies = [ defusedxml ];

@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, runtimeShell }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  runtimeShell,
+}:
 
 stdenv.mkDerivation {
   pname = "zsh-autoenv";

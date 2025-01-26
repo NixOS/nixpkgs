@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "romis2012";
     repo = "python-socks";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-KpL3MAPbeKQh/NZyXlAAB6O7ljx1bVMBRO8fGJT2Zvo=";
   };
 

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "speartail";
     repo = "checkwmiplus";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "1as0iyhy4flpm37mb7lvah7rnd6ax88appjm1icwhy7iq03wi8pl";
   };
 

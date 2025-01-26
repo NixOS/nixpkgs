@@ -1,18 +1,12 @@
---- a/resources/systems/unix/es_find_rules.xml	2023-11-22 15:18:15.912747163 -0500
-+++ b/resources/systems/unix/es_find_rules.xml	2023-11-22 15:20:38.628250448 -0500
-@@ -45,6 +45,8 @@
-             <entry>/usr/local/lib/libretro</entry>
-             <!-- NetBSD repository -->
-             <entry>/usr/pkg/lib/libretro</entry>
-+            <!-- NixOS / Nixpkgs -->
+--- a/resources/systems/linux/es_find_rules.xml	2024-09-13 16:19:36.000000000 +0300
++++ b/resources/systems/linux/es_find_rules.xml	2024-11-26 23:08:49.204498848 +0200
+@@ -41,6 +41,9 @@
+             <entry>/usr/lib64/libretro</entry>
+             <!-- Manjaro repository -->
+             <entry>/usr/lib/libretro</entry>
++            <!-- NixOS and Nixpkgs repository -->
 +            <entry>/run/current-system/sw/lib/retroarch/cores</entry>
++            <entry>~/.nix-profile/lib/retroarch/cores</entry>
          </rule>
      </core>
      <emulator name="3DSEN-WINDOWS">
-@@ -1079,4 +1081,4 @@
-             <entry>~/bin/ZEsarUX/zesarux</entry>
-         </rule>
-     </emulator>
--</ruleList>
-\ No newline at end of file
-+</ruleList>

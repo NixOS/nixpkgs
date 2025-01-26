@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cisagov";
     repo = "lcgit";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-aMwjgN9//jAnTYnbJJvQyfE/f+5QosKxF1l4vF+3myc=";
   };
 

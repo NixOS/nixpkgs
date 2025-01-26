@@ -1,6 +1,12 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
-let cfg = config.programs.nethoscope;
+let
+  cfg = config.programs.nethoscope;
 in
 {
   meta.maintainers = with lib.maintainers; [ _0x4A6F ];

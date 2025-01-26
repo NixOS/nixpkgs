@@ -8,10 +8,10 @@
 }:
 stdenv.mkDerivation rec {
   pname = "xmake";
-  version = "2.9.6";
+  version = "2.9.7";
   src = fetchurl {
     url = "https://github.com/xmake-io/xmake/releases/download/v${version}/xmake-v${version}.tar.gz";
-    hash = "sha256-R/bvywD5DJigLDlflztNVb3TqP5FJnbc5XtVwFV1loY=";
+    hash = "sha256-JI5JalpzTInhZ/kx4mIMDqQQnnypE9wQInNRKaX/6dM=";
   };
 
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin CoreServices;

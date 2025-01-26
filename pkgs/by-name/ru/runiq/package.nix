@@ -1,4 +1,10 @@
-{ lib, rustPlatform, fetchFromGitHub, stdenv, darwin }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  darwin,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "runiq";

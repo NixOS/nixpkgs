@@ -1,4 +1,10 @@
-{ clang_15, lib, rustPlatform, fetchFromGitHub, stdenv }:
+{
+  clang_15,
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "qrscan";

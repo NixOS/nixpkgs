@@ -39,6 +39,16 @@ least specific (the system profile)"
       (setenv "EMACSNATIVELOADPATH" (when new-env-list
                                 (mapconcat 'identity new-env-list ":"))))))
 
+(let ((wrapper-invocation-directory (getenv "emacsWithPackages_invocationDirectory")))
+  (when wrapper-invocation-directory
+    (setq invocation-directory (file-name-as-directory wrapper-invocation-directory))
+    (setenv "emacsWithPackages_invocationDirectory" nil)))
+
+(let ((wrapper-invocation-name (getenv "emacsWithPackages_invocationName")))
+  (when wrapper-invocation-name
+    (setq invocation-name wrapper-invocation-name)
+    (setenv "emacsWithPackages_invocationName" nil)))
+
 ;;; Set up native-comp load path.
 (when (featurep 'native-compile)
   ;; Append native-comp subdirectories from `NIX_PROFILES'.

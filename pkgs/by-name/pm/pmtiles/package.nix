@@ -1,18 +1,27 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "pmtiles";
-  version = "1.22.1";
+  version = "1.23.1";
 
   src = fetchFromGitHub {
     owner = "protomaps";
     repo = "go-pmtiles";
     rev = "v${version}";
-    hash = "sha256-b473V082jM8d0XRn4tPzVGLryFNHn5Cab3IkNWve49s=";
+    hash = "sha256-W8TlMUAzEeHYrVxJTS3CeBkZzshpuDbFD8lC/ITJMKI=";
   };
 
-  vendorHash = "sha256-QDGs0L29W4QQBeIH1Z23nI/FYdu95kLnOAIZEWPOMWw=";
+  vendorHash = "sha256-Oi099KdfSSVDKuWektEucigwchjEHCsOxbCe48DICF8=";
 
-  ldflags = [ "-s" "-w" "-X main.version=${version}" "-X main.commit=v${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.version=${version}"
+    "-X main.commit=v${version}"
+  ];
 
   postInstall = ''
     mv $out/bin/go-pmtiles $out/bin/pmtiles

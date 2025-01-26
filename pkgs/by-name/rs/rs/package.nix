@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, installShellFiles
-, libbsd
+{
+  lib,
+  stdenv,
+  fetchurl,
+  installShellFiles,
+  libbsd,
 }:
 
 stdenv.mkDerivation rec {
@@ -68,6 +69,5 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;
-    broken = stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isDarwin; # missing strtonum()
   };
 }

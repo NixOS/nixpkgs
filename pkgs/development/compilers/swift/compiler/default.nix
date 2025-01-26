@@ -234,13 +234,11 @@ in stdenv.mkDerivation {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       apple-sdk_swift
-      (darwinMinVersionHook deploymentVersion)
     ];
 
   # Will effectively be `buildInputs` when swift is put in `nativeBuildInputs`.
   depsTargetTargetPropagated = lib.optionals stdenv.targetPlatform.isDarwin [
     apple-sdk_swift
-    (darwinMinVersionHook deploymentVersion)
   ];
 
   # This is a partial reimplementation of our setup hook. Because we reuse
@@ -541,7 +539,7 @@ in stdenv.mkDerivation {
     ";
     buildProject lldb llvm-project/lldb
 
-    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
+    ${lib.optionalString stdenv.targetPlatform.isDarwin ''
     # Need to do a standalone build of concurrency for Darwin back deployment.
     # Based on: utils/swift_build_support/swift_build_support/products/backdeployconcurrency.py
     cmakeFlags="

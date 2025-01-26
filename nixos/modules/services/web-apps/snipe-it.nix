@@ -368,7 +368,7 @@ in {
             index = "index.php";
             extraConfig = ''try_files $uri $uri/ /index.php?$query_string;'';
           };
-          "~ \.php$" = {
+          "~ \\.php$" = {
             extraConfig = ''
               try_files $uri $uri/ /index.php?$query_string;
               include ${config.services.nginx.package}/conf/fastcgi_params;
@@ -378,7 +378,7 @@ in {
               ${optionalString (cfg.nginx.addSSL || cfg.nginx.forceSSL || cfg.nginx.onlySSL || cfg.nginx.enableACME) "fastcgi_param HTTPS on;"}
             '';
           };
-          "~ \.(js|css|gif|png|ico|jpg|jpeg)$" = {
+          "~ \\.(js|css|gif|png|ico|jpg|jpeg)$" = {
             extraConfig = "expires 365d;";
           };
         };

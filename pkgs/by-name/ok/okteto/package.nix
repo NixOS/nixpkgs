@@ -1,17 +1,24 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, testers, okteto }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  testers,
+  okteto,
+}:
 
 buildGoModule rec {
   pname = "okteto";
-  version = "3.1.0";
+  version = "3.3.1";
 
   src = fetchFromGitHub {
     owner = "okteto";
     repo = "okteto";
     rev = version;
-    hash = "sha256-hs09DdTIcORd+Ys8QPsemEsC6PXzm3GkB3gtgE3ARPs=";
+    hash = "sha256-9EGtcSOCRtt1Jw/e6EyZ5i4vTpof2fjV+XhF87IrUPU=";
   };
 
-  vendorHash = "sha256-GiA/fmLT9x3gGF066bHTBWDd1yhygeG9snwCpwhOlMM=";
+  vendorHash = "sha256-4fw3Qc1VPrPFVtQNtCRW6RqPqV7aF+t9GQDL/sCqNvw=";
 
   postPatch = ''
     # Disable some tests that need file system & network access.
@@ -21,7 +28,10 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  excludedPackages = [ "integration" "samples" ];
+  excludedPackages = [
+    "integration"
+    "samples"
+  ];
 
   ldflags = [
     "-s"
@@ -29,7 +39,11 @@ buildGoModule rec {
     "-X github.com/okteto/okteto/pkg/config.VersionString=${version}"
   ];
 
-  tags = [ "osusergo" "netgo" "static_build" ];
+  tags = [
+    "osusergo"
+    "netgo"
+    "static_build"
+  ];
 
   preCheck = ''
     export HOME="$(mktemp -d)"
@@ -63,11 +77,11 @@ buildGoModule rec {
     command = "HOME=\"$(mktemp -d)\" okteto version";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Develop your applications directly in your Kubernetes Cluster";
     homepage = "https://okteto.com/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ aaronjheng ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ aaronjheng ];
     mainProgram = "okteto";
   };
 }

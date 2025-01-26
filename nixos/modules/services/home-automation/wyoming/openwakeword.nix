@@ -1,21 +1,20 @@
-{ config
-, lib
-, pkgs
-, ...
+{
+  config,
+  lib,
+  pkgs,
+  utils,
+  ...
 }:
 
 let
   cfg = config.services.wyoming.openwakeword;
 
   inherit (lib)
-    concatStringsSep
-    concatMapStringsSep
-    escapeShellArgs
+    concatMap
     mkOption
     mkEnableOption
     mkIf
     mkPackageOption
-    mkRemovedOptionModule
     types
     ;
 
@@ -23,15 +22,12 @@ let
     toString
     ;
 
+  inherit (utils)
+    escapeSystemdExecArgs
+    ;
 in
 
 {
-  imports = [
-    (mkRemovedOptionModule [ "services" "wyoming" "openwakeword" "models" ] "Configuring models has been removed, they are now dynamically discovered and loaded at runtime")
-  ];
-
-  meta.buildDocsInSandbox = false;
-
   options.services.wyoming.openwakeword = with types; {
     enable = mkEnableOption "Wyoming openWakeWord server";
 
@@ -48,7 +44,7 @@ in
 
     customModelsDirectories = mkOption {
       type = listOf types.path;
-      default = [];
+      default = [ ];
       description = ''
         Paths to directories with custom wake word models (*.tflite model files).
       '';
@@ -73,10 +69,10 @@ in
     };
 
     threshold = mkOption {
-      type = float;
+      type = numbers.between 0.0 1.0;
       default = 0.5;
       description = ''
-        Activation threshold (0-1), where higher means fewer activations.
+        Activation threshold (0.0-1.0), where higher means fewer activations.
 
         See trigger level for the relationship between activations and
         wake word detections.
@@ -85,7 +81,7 @@ in
     };
 
     triggerLevel = mkOption {
-      type = int;
+      type = ints.unsigned;
       default = 1;
       description = ''
         Number of activations before a detection is registered.
@@ -101,7 +97,6 @@ in
       description = ''
         Extra arguments to pass to the server commandline.
       '';
-      apply = escapeShellArgs;
     };
   };
 
@@ -121,15 +116,26 @@ in
         DynamicUser = true;
         User = "wyoming-openwakeword";
         # https://github.com/home-assistant/addons/blob/master/openwakeword/rootfs/etc/s6-overlay/s6-rc.d/openwakeword/run
-        ExecStart = concatStringsSep " " [
-          "${cfg.package}/bin/wyoming-openwakeword"
-          "--uri ${cfg.uri}"
-          (concatMapStringsSep " " (model: "--preload-model ${model}") cfg.preloadModels)
-          (concatMapStringsSep " " (dir: "--custom-model-dir ${toString dir}") cfg.customModelsDirectories)
-          "--threshold ${cfg.threshold}"
-          "--trigger-level ${cfg.triggerLevel}"
-          "${cfg.extraArgs}"
-        ];
+        ExecStart = escapeSystemdExecArgs (
+          [
+            (lib.getExe cfg.package)
+            "--uri"
+            cfg.uri
+            "--threshold"
+            cfg.threshold
+            "--trigger-level"
+            cfg.triggerLevel
+          ]
+          ++ (concatMap (model: [
+            "--preload-model"
+            model
+          ]) cfg.preloadModels)
+          ++ (concatMap (dir: [
+            "--custom-model-dir"
+            (toString dir)
+          ]) cfg.customModelsDirectories)
+          ++ cfg.extraArgs
+        );
         CapabilityBoundingSet = "";
         DeviceAllow = "";
         DevicePolicy = "closed";

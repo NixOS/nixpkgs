@@ -14,7 +14,7 @@
 
 buildPythonPackage {
   pname = "django-i18nfield";
-  version = "1.9.4";
+  version = "1.10.2";
   format = "setuptools";
 
   src = fetchFromGitHub {

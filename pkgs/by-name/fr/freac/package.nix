@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 
-, boca
-, smooth
-, systemd
+  boca,
+  smooth,
+  systemd,
 }:
 
 stdenv.mkDerivation rec {

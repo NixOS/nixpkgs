@@ -32,7 +32,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "wimglenn";
     repo = "advent-of-code-data";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-YZvcR97uHceloqwoP+azaBmj3GLusYNbItLIaeJ3QD0=";
   };
 

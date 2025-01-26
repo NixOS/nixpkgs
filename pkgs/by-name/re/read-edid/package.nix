@@ -1,4 +1,10 @@
-{ stdenv, lib, fetchurl, cmake, libx86 }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  cmake,
+  libx86,
+}:
 
 stdenv.mkDerivation rec {
   pname = "read-edid";
@@ -19,7 +25,6 @@ stdenv.mkDerivation rec {
   buildInputs = lib.optional stdenv.hostPlatform.isx86 libx86;
 
   cmakeFlags = [ "-DCLASSICBUILD=${if stdenv.hostPlatform.isx86 then "ON" else "OFF"}" ];
-
 
   meta = with lib; {
     description = "Tool for reading and parsing EDID data from monitors";

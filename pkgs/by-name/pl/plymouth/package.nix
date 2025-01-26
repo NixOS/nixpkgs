@@ -1,30 +1,34 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, writeText
-, substituteAll
-, meson
-, pkg-config
-, ninja
-, docbook-xsl-nons
-, gettext
-, libxslt
-, gtk3
-, libdrm
-, libevdev
-, libpng
-, libxkbcommon
-, pango
-, systemd
-, xorg
-, fontconfig
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  writeText,
+  substituteAll,
+  meson,
+  pkg-config,
+  ninja,
+  docbook-xsl-nons,
+  gettext,
+  libxslt,
+  gtk3,
+  libdrm,
+  libevdev,
+  libpng,
+  libxkbcommon,
+  pango,
+  systemd,
+  xorg,
+  fontconfig,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "plymouth";
   version = "24.004.60";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
@@ -68,25 +72,27 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.xkeyboardconfig
   ];
 
-  mesonFlags = let
-    # https://gitlab.freedesktop.org/plymouth/plymouth/-/blob/a5eda165689864cc9a25ec14fd8c6da458598f42/meson.build#L47
-    crossFile = writeText "cross-file.conf" ''
-      [binaries]
-      systemd-tty-ask-password-agent = '${lib.getBin systemd}/bin/systemd-tty-ask-password-agent'
-    '';
-  in [
-    "--sysconfdir=/etc"
-    "--localstatedir=/var"
-    "-Dlogo=/etc/plymouth/logo.png"
-    "-Dbackground-color=0x000000"
-    "-Dbackground-start-color-stop=0x000000"
-    "-Dbackground-end-color-stop=0x000000"
-    "-Drelease-file=/etc/os-release"
-    "-Dudev=enabled"
-    "-Drunstatedir=/run"
-    "-Druntime-plugins=true"
-    "--cross-file=${crossFile}"
-  ];
+  mesonFlags =
+    let
+      # https://gitlab.freedesktop.org/plymouth/plymouth/-/blob/a5eda165689864cc9a25ec14fd8c6da458598f42/meson.build#L47
+      crossFile = writeText "cross-file.conf" ''
+        [binaries]
+        systemd-tty-ask-password-agent = '${lib.getBin systemd}/bin/systemd-tty-ask-password-agent'
+      '';
+    in
+    [
+      "--sysconfdir=/etc"
+      "--localstatedir=/var"
+      "-Dlogo=/etc/plymouth/logo.png"
+      "-Dbackground-color=0x000000"
+      "-Dbackground-start-color-stop=0x000000"
+      "-Dbackground-end-color-stop=0x000000"
+      "-Drelease-file=/etc/os-release"
+      "-Dudev=enabled"
+      "-Drunstatedir=/run"
+      "-Druntime-plugins=true"
+      "--cross-file=${crossFile}"
+    ];
 
   postPatch = ''
     substituteInPlace meson.build \

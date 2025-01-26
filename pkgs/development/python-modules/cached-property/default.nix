@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pydanny";
     repo = "cached-property";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-sOThFJs18DR9aBgIpqkORU4iRmhCVKehyM3DLYUt/Wc=";
   };
 

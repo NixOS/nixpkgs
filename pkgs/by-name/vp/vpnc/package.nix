@@ -1,7 +1,15 @@
-{ lib, stdenv, fetchFromGitHub
-, makeWrapper, pkg-config, perl
-, gnutls, libgcrypt, vpnc-scripts
-, opensslSupport ? false, openssl # Distributing this is a GPL violation.
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  pkg-config,
+  perl,
+  gnutls,
+  libgcrypt,
+  vpnc-scripts,
+  opensslSupport ? false,
+  openssl, # Distributing this is a GPL violation.
 }:
 
 stdenv.mkDerivation {
@@ -16,10 +24,11 @@ stdenv.mkDerivation {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ makeWrapper ]
-    ++ lib.optional (!opensslSupport) pkg-config;
-  buildInputs = [ libgcrypt perl ]
-    ++ (if opensslSupport then [ openssl ] else [ gnutls ]);
+  nativeBuildInputs = [ makeWrapper ] ++ lib.optional (!opensslSupport) pkg-config;
+  buildInputs = [
+    libgcrypt
+    perl
+  ] ++ (if opensslSupport then [ openssl ] else [ gnutls ]);
 
   makeFlags = [
     "PREFIX=$(out)"

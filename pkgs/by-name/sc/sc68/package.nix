@@ -1,14 +1,16 @@
-{ lib, stdenv
-, fetchsvn
-, pkg-config
-, which
-, autoconf
-, automake
-, libtool
-, hexdump
-, libao
-, zlib
-, curl
+{
+  lib,
+  stdenv,
+  fetchsvn,
+  pkg-config,
+  which,
+  autoconf,
+  automake,
+  libtool,
+  hexdump,
+  libao,
+  zlib,
+  curl,
 }:
 
 stdenv.mkDerivation rec {

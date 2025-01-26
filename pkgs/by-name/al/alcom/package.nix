@@ -8,7 +8,7 @@
   glib-networking,
   google-fonts,
   lib,
-  libsoup,
+  libsoup_2_4,
   nodejs,
   npmHooks,
   openssl,
@@ -24,7 +24,7 @@ let
   src = fetchFromGitHub {
     owner = "vrc-get";
     repo = "vrc-get";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     fetchSubmodules = true;
     hash = "sha256-jkhjJTb/U2dXj/vyaip+gWoqIOdfFKSExeDl0T11DE4=";
   };
@@ -51,7 +51,7 @@ let
       "vrc-get-litedb/dotnet/vrc-get-litedb.csproj"
       "vrc-get-litedb/dotnet/LiteDB/LiteDB/LiteDB.csproj"
     ];
-    nugetDeps = ./deps.nix;
+    nugetDeps = ./deps.json;
   };
 in
 rustPlatform.buildRustPackage {
@@ -70,7 +70,7 @@ rustPlatform.buildRustPackage {
     [ openssl ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       glib-networking
-      libsoup
+      libsoup_2_4
       webkitgtk_4_0
     ]
     ++ dotnetSdk.packages

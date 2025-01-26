@@ -1,11 +1,12 @@
-{ lib
-, buildDunePackage
-, cstruct
-, dune-configurator
-, fetchurl
-, fmt
-, optint
-, mdx
+{
+  lib,
+  buildDunePackage,
+  cstruct,
+  dune-configurator,
+  fetchurl,
+  fmt,
+  optint,
+  mdx,
 }:
 
 buildDunePackage rec {
@@ -47,7 +48,10 @@ buildDunePackage rec {
     homepage = "https://github.com/ocaml-multicore/ocaml-${pname}";
     changelog = "https://github.com/ocaml-multicore/ocaml-${pname}/raw/v${version}/CHANGES.md";
     description = "Bindings to io_uring for OCaml";
-    license = with lib.licenses; [ isc mit ];
+    license = with lib.licenses; [
+      isc
+      mit
+    ];
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ toastal ];
   };

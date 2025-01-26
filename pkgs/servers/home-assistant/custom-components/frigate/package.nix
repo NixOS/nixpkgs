@@ -8,13 +8,13 @@
 buildHomeAssistantComponent rec {
   owner = "blakeblackshear";
   domain = "frigate";
-  version = "5.3.0";
+  version = "5.4.0";
 
   src = fetchFromGitHub {
     owner = "blakeblackshear";
     repo = "frigate-hass-integration";
     rev = "v${version}";
-    hash = "sha256-0eTEgRDgm4+Om2uqrt24Gj7dSdA6OJs/0oi5J5SHOyI=";
+    hash = "sha256-V2Y+xUAA/Lu7u82WUlUI5CFi9SGWe6ocVQtlXeVg2ZA=";
   };
 
   dependencies = [ pytz ];

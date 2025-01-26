@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Thriftpy";
     repo = "thriftpy2";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-GBJL+IqZpT1/msJLiwiS5YDyB4hIe/e3pYPWx0A+lWY=";
   };
 

@@ -1,12 +1,20 @@
-{ lib, stdenv, fetchurl, google-fonts, migu, fontforge, which }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  google-fonts,
+  migu,
+  fontforge,
+  which,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ricty";
   version = "4.1.1";
 
   src = fetchurl {
-      url = "https://rictyfonts.github.io/files/ricty_generator-${version}.sh";
-      sha256 = "03fngb8f5hl7ifigdm5yljhs4z2x80cq8y8kna86d07ghknhzgw6";
+    url = "https://rictyfonts.github.io/files/ricty_generator-${version}.sh";
+    sha256 = "03fngb8f5hl7ifigdm5yljhs4z2x80cq8y8kna86d07ghknhzgw6";
   };
 
   unpackPhase = ''
@@ -17,7 +25,12 @@ stdenv.mkDerivation rec {
     sed -i 's/fonts_directories=".*"/fonts_directories="$inconsolata $migu"/' ricty_generator.sh
   '';
 
-  buildInputs = [ google-fonts migu fontforge which ];
+  buildInputs = [
+    google-fonts
+    migu
+    fontforge
+    which
+  ];
 
   buildPhase = ''
     inconsolata=${google-fonts} migu=${migu} ./ricty_generator.sh auto
@@ -34,4 +47,3 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.mikoim ];
   };
 }
-

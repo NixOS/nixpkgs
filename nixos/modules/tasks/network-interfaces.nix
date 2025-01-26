@@ -1446,6 +1446,7 @@ in
 
     systemd.services = {
       network-local-commands = {
+        enable = (cfg.localCommands != "");
         description = "Extra networking commands.";
         before = [ "network.target" ];
         wantedBy = [ "network.target" ];

@@ -1,8 +1,12 @@
-{ lib, fetchurl, fetchpatch, ocaml, buildDunePackage
-, version ? if lib.versionAtLeast ocaml.version "5.0" then "0.6.3" else "0.6.2"
-, benchmark
+{
+  lib,
+  fetchurl,
+  fetchpatch,
+  ocaml,
+  buildDunePackage,
+  version ? if lib.versionAtLeast ocaml.version "5.0" then "0.6.3" else "0.6.2",
+  benchmark,
 }:
-
 
 buildDunePackage {
   pname = "rope";
@@ -11,13 +15,15 @@ buildDunePackage {
 
   src = fetchurl {
     url = "https://github.com/Chris00/ocaml-rope/releases/download/${version}/rope-${version}.tbz";
-    hash = {
-      "0.6.2" = "sha256:15cvfa0s1vjx7gjd07d3fkznilishqf4z4h2q5f20wm9ysjh2h2i";
-      "0.6.3" = "sha256-M14fiP9BDiz3WEoMqAJqZaXk4PoZ8Z1YjOk+F97z05Y=";
-    }."${version}";
+    hash =
+      {
+        "0.6.2" = "sha256:15cvfa0s1vjx7gjd07d3fkznilishqf4z4h2q5f20wm9ysjh2h2i";
+        "0.6.3" = "sha256-M14fiP9BDiz3WEoMqAJqZaXk4PoZ8Z1YjOk+F97z05Y=";
+      }
+      ."${version}";
   };
 
-  buildInputs = [ benchmark ] ;
+  buildInputs = [ benchmark ];
 
   patches = lib.optional (version == "0.6.3") (fetchpatch {
     url = "https://github.com/Chris00/ocaml-rope/commit/be53daa18dd3d1450a92881b33c997eafb1dc958.patch";

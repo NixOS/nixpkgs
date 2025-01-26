@@ -1,6 +1,7 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 }:
 
 stdenv.mkDerivation rec {
@@ -14,14 +15,14 @@ stdenv.mkDerivation rec {
     hash = "sha256-nfOmiF+t5QtAl1I7CSz26C9SGo7ZkdSziO2eiHbk6pA=";
   };
 
-  preBuild = ''
-    substituteInPlace Makefile --replace '/usr/local' $out
-    mkdir -p $out/bin
-  ''
-  +
-  lib.optionalString (!stdenv.hostPlatform.isx86_64) ''
-    sed -i s/-m64//g Makefile
-  '';
+  preBuild =
+    ''
+      substituteInPlace Makefile --replace '/usr/local' $out
+      mkdir -p $out/bin
+    ''
+    + lib.optionalString (!stdenv.hostPlatform.isx86_64) ''
+      sed -i s/-m64//g Makefile
+    '';
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
@@ -36,6 +37,9 @@ stdenv.mkDerivation rec {
     '';
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ orichter thillux ];
+    maintainers = with lib.maintainers; [
+      orichter
+      thillux
+    ];
   };
 }

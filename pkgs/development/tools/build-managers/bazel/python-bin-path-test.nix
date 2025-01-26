@@ -1,15 +1,15 @@
 {
-  bazel
-, bazelTest
-, stdenv
-, cctools
-, extraBazelArgs ? ""
-, lib
-, runLocal
-, runtimeShell
-, writeScript
-, writeText
-, distDir
+  bazel,
+  bazelTest,
+  stdenv,
+  cctools,
+  extraBazelArgs ? "",
+  lib,
+  runLocal,
+  runtimeShell,
+  writeScript,
+  writeText,
+  distDir,
 }:
 
 let
@@ -57,18 +57,20 @@ let
     )
   '';
 
-  workspaceDir = runLocal "our_workspace" {} (''
-    mkdir $out
-    cp ${WORKSPACE} $out/WORKSPACE
-    mkdir $out/python
-    cp ${pythonLib} $out/python/lib.py
-    cp ${pythonBin} $out/python/bin.py
-    cp ${pythonBUILD} $out/python/BUILD.bazel
-  ''
-  + (lib.optionalString stdenv.hostPlatform.isDarwin ''
-    mkdir $out/tools
-    cp ${toolsBazel} $out/tools/bazel
-  ''));
+  workspaceDir = runLocal "our_workspace" { } (
+    ''
+      mkdir $out
+      cp ${WORKSPACE} $out/WORKSPACE
+      mkdir $out/python
+      cp ${pythonLib} $out/python/lib.py
+      cp ${pythonBin} $out/python/bin.py
+      cp ${pythonBUILD} $out/python/BUILD.bazel
+    ''
+    + (lib.optionalString stdenv.hostPlatform.isDarwin ''
+      mkdir $out/tools
+      cp ${toolsBazel} $out/tools/bazel
+    '')
+  );
 
   testBazel = bazelTest {
     name = "${bazel.pname}-test-builtin-rules";
@@ -83,4 +85,5 @@ let
     '';
   };
 
-in testBazel
+in
+testBazel

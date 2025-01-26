@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchFromGitLab, pkg-config, autoreconfHook
-, mono, gtk-sharp-3_0, dbus-sharp-1_0, dbus-sharp-glib-1_0 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  pkg-config,
+  autoreconfHook,
+  mono,
+  gtk-sharp-3_0,
+  dbus-sharp-1_0,
+  dbus-sharp-glib-1_0,
+}:
 
 stdenv.mkDerivation rec {
   pname = "notify-sharp";
@@ -15,12 +24,15 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkg-config autoreconfHook
+    pkg-config
+    autoreconfHook
   ];
 
   buildInputs = [
-    mono gtk-sharp-3_0
-    dbus-sharp-1_0 dbus-sharp-glib-1_0
+    mono
+    gtk-sharp-3_0
+    dbus-sharp-1_0
+    dbus-sharp-glib-1_0
   ];
 
   dontStrip = true;

@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "cddmp";
     repo = "enum4linux-ng";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-MN3AUubro9CHkdPe/X1xcE11ye/D/A+Kf6zUOJTN4l0=";
   };
 

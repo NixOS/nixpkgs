@@ -1,9 +1,10 @@
-{ lib
-, python3
-, fetchFromGitHub
-, testers
-, pokete
-, faketty
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  testers,
+  pokete,
+  faketty,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -15,7 +16,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "lxgr-linux";
     repo = "pokete";
-    rev = "refs/tags/${version}";
+    tag = version;
     sha256 = "sha256-T18908Einsgful8hYMVHl0cL4sIYFvhpy0MbLIcVhxs=";
   };
 

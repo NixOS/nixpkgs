@@ -1,4 +1,9 @@
-{ stdenvNoCC, lib, fetchurl, buildFHSEnv }:
+{
+  stdenvNoCC,
+  lib,
+  fetchurl,
+  buildFHSEnv,
+}:
 
 let
   version = "2.3";
@@ -21,12 +26,14 @@ let
 
   # FHS env, as patchelf will not work
   env = buildFHSEnv {
-    name = "left4gore-env-${version}";
+    pname = "left4gore-env";
+    inherit version;
     targetPkgs = _: [ left4gore-unwrapped ];
     runScript = "left4gore";
   };
 
-in stdenvNoCC.mkDerivation {
+in
+stdenvNoCC.mkDerivation {
   pname = "left4gore";
   inherit version;
 

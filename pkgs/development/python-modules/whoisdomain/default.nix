@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mboot-github";
     repo = "WhoisDomain";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-nRj/WkYjMZuQoYF+QFIHABlek4DxvvEnOTeFYLHYvZc=";
   };
 

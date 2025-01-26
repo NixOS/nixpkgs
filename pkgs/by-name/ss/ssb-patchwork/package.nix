@@ -1,4 +1,10 @@
-{ appimageTools, symlinkJoin, lib, fetchurl, makeDesktopItem }:
+{
+  appimageTools,
+  symlinkJoin,
+  lib,
+  fetchurl,
+  makeDesktopItem,
+}:
 
 let
   pname = "ssb-patchwork";
@@ -11,12 +17,11 @@ let
   };
 
   binary = appimageTools.wrapType2 {
-    name = pname;
-    inherit src;
+    inherit pname version src;
   };
   # we only use this to extract the icon
   appimage-contents = appimageTools.extractType2 {
-    inherit name src;
+    inherit pname version src;
   };
 
   desktopItem = makeDesktopItem {
@@ -30,25 +35,29 @@ let
   };
 
 in
-  symlinkJoin {
-    inherit name;
-    paths = [ binary ];
+symlinkJoin {
+  inherit name;
+  paths = [ binary ];
 
-    postBuild = ''
-      mkdir -p $out/share/pixmaps/ $out/share/applications
-      cp ${appimage-contents}/ssb-patchwork.png $out/share/pixmaps
-      cp ${desktopItem}/share/applications/* $out/share/applications/
+  postBuild = ''
+    mkdir -p $out/share/pixmaps/ $out/share/applications
+    cp ${appimage-contents}/ssb-patchwork.png $out/share/pixmaps
+    cp ${desktopItem}/share/applications/* $out/share/applications/
+  '';
+
+  meta = with lib; {
+    description = "Decentralized messaging and sharing app built on top of Secure Scuttlebutt (SSB)";
+    longDescription = ''
+      sea-slang for gossip - a scuttlebutt is basically a watercooler on a ship.
     '';
-
-    meta = with lib; {
-      description = "Decentralized messaging and sharing app built on top of Secure Scuttlebutt (SSB)";
-      longDescription = ''
-        sea-slang for gossip - a scuttlebutt is basically a watercooler on a ship.
-      '';
-      homepage = "https://www.scuttlebutt.nz/";
-      license = licenses.agpl3Only;
-      maintainers = with maintainers; [ asymmetric picnoir cyplo ];
-      mainProgram = "ssb-patchwork";
-      platforms = [ "x86_64-linux" ];
-    };
-  }
+    homepage = "https://www.scuttlebutt.nz/";
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [
+      asymmetric
+      picnoir
+      cyplo
+    ];
+    mainProgram = "ssb-patchwork";
+    platforms = [ "x86_64-linux" ];
+  };
+}

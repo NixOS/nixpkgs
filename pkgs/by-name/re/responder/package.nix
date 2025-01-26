@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, makeWrapper
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  makeWrapper,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -12,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "lgandx";
     repo = "Responder";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-BVSA/ZhpGz6UGyDRJUc4nlRJZ1/Y7er1vVOI+IbIqGk=";
   };
 

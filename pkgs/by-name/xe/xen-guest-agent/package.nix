@@ -2,7 +2,6 @@
   lib,
   fetchFromGitLab,
   rustPlatform,
-  llvmPackages,
   pkg-config,
   xen,
 }:
@@ -21,7 +20,6 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
-    llvmPackages.clang
     pkg-config
   ];
 

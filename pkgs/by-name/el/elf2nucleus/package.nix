@@ -1,10 +1,10 @@
 {
-  installShellFiles
-, fetchFromGitHub
-, lib
-, micronucleus
-, rustPlatform
-, stdenv
+  installShellFiles,
+  fetchFromGitHub,
+  lib,
+  micronucleus,
+  rustPlatform,
+  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {

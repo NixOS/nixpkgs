@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "haversine";
-  version = "2.8.1";
+  version = "2.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mapado";
     repo = "haversine";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-MKOg2awpamupvuXstiH7VoIY4ax+hy2h2cFXDFKJ2mA=";
+    tag = "v${version}";
+    hash = "sha256-KqcDDQdAOnrmiq+kf8rLHy85rNnhatZTOzCCU91lOrU=";
   };
 
   nativeBuildInputs = [ setuptools ];

@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -14,7 +19,8 @@ let
     };
   };
 
-in {
+in
+{
   options = {
     virtualisation.kvmgt = {
       enable = mkEnableOption ''
@@ -29,7 +35,7 @@ in {
         description = "PCI ID of graphics card. You can figure it with {command}`ls /sys/class/mdev_bus`.";
       };
       vgpus = mkOption {
-        default = {};
+        default = { };
         type = with types; attrsOf (submodule [ { options = vgpuOptions; } ]);
         description = ''
           Virtual GPUs to be used in Qemu. You can find devices via {command}`ls /sys/bus/pci/devices/*/mdev_supported_types`
@@ -55,13 +61,25 @@ in {
       SUBSYSTEM=="vfio", OWNER="root", GROUP="kvm"
     '';
 
-    systemd = let
-      vgpus = listToAttrs (flatten (mapAttrsToList
-        (mdev: opt: map (id: nameValuePair "kvmgt-${id}" { inherit mdev; uuid = id; }) opt.uuid)
-        cfg.vgpus));
-    in {
-      paths = mapAttrs (_: opt:
-        {
+    systemd =
+      let
+        vgpus = listToAttrs (
+          flatten (
+            mapAttrsToList (
+              mdev: opt:
+              map (
+                id:
+                nameValuePair "kvmgt-${id}" {
+                  inherit mdev;
+                  uuid = id;
+                }
+              ) opt.uuid
+            ) cfg.vgpus
+          )
+        );
+      in
+      {
+        paths = mapAttrs (_: opt: {
           description = "KVMGT VGPU ${opt.uuid} path";
           wantedBy = [ "multi-user.target" ];
           pathConfig = {
@@ -69,8 +87,7 @@ in {
           };
         }) vgpus;
 
-      services = mapAttrs (_: opt:
-        {
+        services = mapAttrs (_: opt: {
           description = "KVMGT VGPU ${opt.uuid}";
           serviceConfig = {
             Type = "oneshot";
@@ -79,7 +96,7 @@ in {
             ExecStop = "${pkgs.runtimeShell} -c 'echo 1 > /sys/bus/pci/devices/${cfg.device}/${opt.uuid}/remove'";
           };
         }) vgpus;
-    };
+      };
   };
 
   meta.maintainers = with maintainers; [ patryk27 ];

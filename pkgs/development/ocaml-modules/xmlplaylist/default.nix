@@ -1,4 +1,10 @@
-{ lib, buildDunePackage, fetchFromGitHub, dune-configurator, xmlm }:
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  dune-configurator,
+  xmlm,
+}:
 
 buildDunePackage rec {
   pname = "xmlplaylist";

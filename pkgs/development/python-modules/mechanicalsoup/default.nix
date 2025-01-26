@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "MechanicalSoup";
     repo = "MechanicalSoup";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-iZ2nwBxikf0cTTlxzcGvHJim4N6ZEqIhlK7t1WAYdms=";
   };
 

@@ -1,20 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, pkg-config
-, vala
-, glib
-, granite7
-, gtk4
-, libadwaita
-, libgee
-, libgudev
-, libwacom
-, switchboard
-, xorg
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  gettext,
+  glib,
+  granite7,
+  gtk4,
+  libadwaita,
+  libgee,
+  libgudev,
+  libwacom,
+  switchboard,
+  xorg,
 }:
 
 stdenv.mkDerivation rec {
@@ -29,6 +31,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    gettext # msgfmt
     meson
     ninja
     pkg-config

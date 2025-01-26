@@ -1,5 +1,10 @@
-{ lib, fetchurl, buildDunePackage
-, cstruct, lwt, fmt
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  cstruct,
+  lwt,
+  fmt,
 }:
 
 buildDunePackage rec {
@@ -13,7 +18,11 @@ buildDunePackage rec {
     hash = "sha256-UALUfeL0G1mfSsLgAb/HpQ6OV12YtY+GUOYG6yhUwAI=";
   };
 
-  propagatedBuildInputs = [ cstruct lwt fmt ];
+  propagatedBuildInputs = [
+    cstruct
+    lwt
+    fmt
+  ];
 
   meta = with lib; {
     description = "Block signatures and implementations for MirageOS";

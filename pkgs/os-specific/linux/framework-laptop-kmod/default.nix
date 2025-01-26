@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, kernel
-, fetchFromGitHub
-, unstableGitUpdater
+{
+  lib,
+  stdenv,
+  kernel,
+  fetchFromGitHub,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation {
@@ -18,7 +19,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  makeFlags = kernel.makeFlags ++ [
+  makeFlags = kernel.moduleMakeFlags ++ [
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
 
@@ -27,7 +28,6 @@ stdenv.mkDerivation {
     install -D framework_laptop.ko -t $out/lib/modules/${kernel.modDirVersion}/extra
     runHook postInstall
   '';
-
 
   passthru.updateScript = unstableGitUpdater { };
 

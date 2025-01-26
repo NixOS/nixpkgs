@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pydantic";
     repo = "pydantic-extra-types";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-PgytBSue3disJifnpTl1DGNMZkp93cJEIDm8wgKMHFo=";
   };
 

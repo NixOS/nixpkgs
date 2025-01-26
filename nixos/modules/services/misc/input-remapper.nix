@@ -1,5 +1,12 @@
-{ pkgs, lib, config, ... }:
-let cfg = config.services.input-remapper; in
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
+let
+  cfg = config.services.input-remapper;
+in
 {
   options = {
     services.input-remapper = {

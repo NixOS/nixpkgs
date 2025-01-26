@@ -1,4 +1,9 @@
-{ lib, python3Packages, fetchFromGitHub, gettext }:
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  gettext,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "ibus-theme-tools";
@@ -13,7 +18,10 @@ python3Packages.buildPythonApplication rec {
 
   buildInputs = [ gettext ];
 
-  propagatedBuildInputs = with python3Packages; [ tinycss2 pygobject3 ];
+  propagatedBuildInputs = with python3Packages; [
+    tinycss2
+    pygobject3
+  ];
 
   # No test.
   doCheck = false;

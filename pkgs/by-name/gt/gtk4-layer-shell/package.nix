@@ -1,25 +1,30 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, gtk-doc
-, docbook-xsl-nons
-, docbook_xml_dtd_43
-, wayland-protocols
-, wayland-scanner
-, wayland
-, gtk4
-, gobject-introspection
-, vala
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  gtk-doc,
+  docbook-xsl-nons,
+  docbook_xml_dtd_43,
+  wayland-protocols,
+  wayland-scanner,
+  wayland,
+  gtk4,
+  gobject-introspection,
+  vala,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gtk4-layer-shell";
   version = "1.0.4";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
   outputBin = "devdoc";
 
   src = fetchFromGitHub {

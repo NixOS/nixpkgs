@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, libdvdread, pkg-config }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libdvdread,
+  pkg-config,
+}:
 
 stdenv.mkDerivation rec {
   pname = "lsdvd";

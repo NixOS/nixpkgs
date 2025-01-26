@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "snowballstem";
     repo = "pystemmer";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ngPx95ybgJmndpNPBwCa3BCNsozRg+dlEw+nhlIwI58=";
   };
 

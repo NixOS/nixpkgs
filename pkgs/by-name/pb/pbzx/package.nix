@@ -1,4 +1,10 @@
-{stdenv, lib, fetchFromGitHub, xz, xar}:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  xz,
+  xar,
+}:
 
 stdenv.mkDerivation rec {
   pname = "pbzx";
@@ -10,7 +16,10 @@ stdenv.mkDerivation rec {
     sha256 = "0bwd7wmnhpz1n5p39mh6asfyccj4cm06hwigslcwbb3pdwmvxc90";
   };
   patches = [ ./stdin.patch ];
-  buildInputs = [ xz xar ];
+  buildInputs = [
+    xz
+    xar
+  ];
   buildPhase = ''
     ${stdenv.cc.targetPrefix}cc pbzx.c -llzma -lxar -o pbzx
   '';

@@ -1,4 +1,9 @@
-{ fetchurl, lib, stdenv, elf-header }:
+{
+  fetchurl,
+  lib,
+  stdenv,
+  elf-header,
+}:
 
 stdenv.mkDerivation rec {
   pname = "paxctl";
@@ -25,9 +30,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Tool for controlling PaX flags on a per binary basis";
     mainProgram = "paxctl";
-    homepage    = "https://pax.grsecurity.net";
-    license     = licenses.gpl2Only;
-    platforms   = platforms.all;
+    homepage = "https://pax.grsecurity.net";
+    license = licenses.gpl2Only;
+    platforms = platforms.all;
     maintainers = with maintainers; [ thoughtpolice ];
   };
 }

@@ -1,4 +1,9 @@
-{lib, stdenv, fetchurl, libaal}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libaal,
+}:
 
 stdenv.mkDerivation rec {
   pname = "reiser4progs";
@@ -9,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-DBR2C5h6ue4aqHmDG50jCLXe13DSWAYwfibrzTM+7Sw=";
   };
 
-  buildInputs = [libaal];
+  buildInputs = [ libaal ];
 
   hardeningDisable = [ "format" ];
 
@@ -33,5 +38,11 @@ stdenv.mkDerivation rec {
     description = "Reiser4 utilities";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
+
+    # error: initialization of
+    # 'int (*)(uint64_t *, uint64_t,  uint32_t,  int,  int)' {aka 'int (*)(long unsigned int *, long unsigned int,  unsigned int,  int,  int)'}
+    # from incompatible pointer type
+    # 'int (*)(uint64_t *, uint32_t,  uint64_t,  int,  int)' {aka 'int (*)(long unsigned int *, unsigned int,  long unsigned int,  int,  int)'}
+    broken = true;
   };
 }

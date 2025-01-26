@@ -1,25 +1,27 @@
-{ stdenv
-, callPackage
-, fetchurl
-, lib }:
+{
+  stdenv,
+  callPackage,
+  fetchurl,
+  lib,
+}:
 
 let
 
   pname = "lens-desktop";
-  version = "2024.3.191333";
+  version = "2024.11.261604";
 
   sources = {
     x86_64-linux = {
       url = "https://api.k8slens.dev/binaries/Lens-${version}-latest.x86_64.AppImage";
-      hash = "sha256-OywOjXzeW/5uyt50JrutiLgem9S1CrlwPFqfK6gUc7U=";
+      hash = "sha256-AbuEU5gOckVU+eDIFnomc7ryLq68ihuk3c0XosoJp74=";
     };
     x86_64-darwin = {
       url = "https://api.k8slens.dev/binaries/Lens-${version}-latest.dmg";
-      hash = "sha256-yf+WBcOdOM3XsfiXJThVws2r84vG2jwfNV1c+sq6A4s=";
+      hash = "sha256-MQQRGTCe+LEHXJi6zjnpENbtlWNP+XVH9rWXRMk+26w=";
     };
     aarch64-darwin = {
       url = "https://api.k8slens.dev/binaries/Lens-${version}-latest-arm64.dmg";
-      hash = "sha256-hhd8MnwKWpvG7UebkeEoztS45SJVnpvvJ9Zy+y5swik=";
+      hash = "sha256-aakJCLnQBAnUdrrniTcahS+q3/kP09mlaPTV8FW5afI=";
     };
   };
 
@@ -31,11 +33,30 @@ let
     description = "Kubernetes IDE";
     homepage = "https://k8slens.dev/";
     license = licenses.lens;
-    maintainers = with maintainers; [ dbirks RossComputerGuy starkca90 ];
+    maintainers = with maintainers; [
+      dbirks
+      RossComputerGuy
+      starkca90
+    ];
     platforms = builtins.attrNames sources;
   };
 
-in if stdenv.hostPlatform.isDarwin then
-  callPackage ./darwin.nix { inherit pname version src meta; }
+in
+if stdenv.hostPlatform.isDarwin then
+  callPackage ./darwin.nix {
+    inherit
+      pname
+      version
+      src
+      meta
+      ;
+  }
 else
-  callPackage ./linux.nix { inherit pname version src meta; }
+  callPackage ./linux.nix {
+    inherit
+      pname
+      version
+      src
+      meta
+      ;
+  }

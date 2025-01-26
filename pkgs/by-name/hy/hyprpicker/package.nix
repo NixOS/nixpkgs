@@ -20,13 +20,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprpicker" + lib.optionalString debug "-debug";
-  version = "0.4.1";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprpicker";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-gu26MSYbTlRLMUpZ9PeYXtqqhzPDQXxEDkjiJgwzIIc=";
+    hash = "sha256-CWmzXhsdk+c1d7Ub7TXQ2BVYla1HSJ9jbgOilbVl1so=";
   };
 
   cmakeBuildType = if debug then "Debug" else "Release";

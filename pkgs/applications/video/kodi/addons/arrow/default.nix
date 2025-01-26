@@ -1,4 +1,12 @@
-{ lib, rel, buildKodiAddon, fetchzip, addonUpdateScript, dateutil, typing_extensions }:
+{
+  lib,
+  rel,
+  buildKodiAddon,
+  fetchzip,
+  addonUpdateScript,
+  dateutil,
+  typing_extensions,
+}:
 buildKodiAddon rec {
   pname = "arrow";
   namespace = "script.module.arrow";

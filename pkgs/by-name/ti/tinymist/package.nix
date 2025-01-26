@@ -1,11 +1,14 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
+  installShellFiles,
   pkg-config,
   libgit2,
   openssl,
   zlib,
+  buildPackages,
   versionCheckHook,
   nix-update-script,
   vscode-extensions,
@@ -15,19 +18,22 @@ rustPlatform.buildRustPackage rec {
   pname = "tinymist";
   # Please update the corresponding vscode extension when updating
   # this derivation.
-  version = "0.12.4";
+  version = "0.12.18";
 
   src = fetchFromGitHub {
     owner = "Myriad-Dreamin";
     repo = "tinymist";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-xX0dA6ode2YGT+aFCHDn1LjQHWcXdqRiKP+sxdoPvI0=";
+    tag = "v${version}";
+    hash = "sha256-/QalLr4kerOe+KooKY+Vq6FaGJyzGvaUHhUSu+LTphA=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-mkL7zQM7LOp9MxmGL2JZsFErnKp3rc0OSwek10Uj5tc=";
+  cargoHash = "sha256-D4UWFg22lnkqozsWAQydNSnOpDlw5AUhGCHHfuyihfU=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ];
 
   buildInputs = [
     libgit2
@@ -58,6 +64,17 @@ rustPlatform.buildRustPackage rec {
     "--skip=rename::tests::test"
     "--skip=semantic_tokens_full::tests::test"
   ];
+
+  postInstall =
+    let
+      emulator = stdenv.hostPlatform.emulator buildPackages;
+    in
+    ''
+      installShellCompletion --cmd tinymist \
+        --bash <(${emulator} $out/bin/tinymist completion bash) \
+        --fish <(${emulator} $out/bin/tinymist completion fish) \
+        --zsh <(${emulator} $out/bin/tinymist completion zsh)
+    '';
 
   nativeInstallCheckInputs = [
     versionCheckHook

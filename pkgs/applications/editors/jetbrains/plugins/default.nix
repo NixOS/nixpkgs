@@ -106,7 +106,14 @@ in {
         IFS=' ' read -ra pluginArray <<< "$newPlugins"
         for plugin in "''${pluginArray[@]}"
         do
-          ln -s "$plugin" -t "$out/${rootDir}/plugins/"
+          pluginfiles=$(ls $plugin);
+          if [ $(echo $pluginfiles | wc -l) -eq 1 ] && echo $pluginfiles | grep -E "\.jar" 1> /dev/null; then
+            # if the plugin contains a single jar file, link it directly into the plugins folder
+            ln -s "$plugin/$(echo $pluginfiles | head -1)" $out/${rootDir}/plugins/
+          else
+            # otherwise link the plugin directory itself
+            ln -s "$plugin" -t $out/${rootDir}/plugins/
+          fi
         done
         sed "s|${ide.outPath}|$out|" \
           -i $(realpath $out/bin/${meta.mainProgram})

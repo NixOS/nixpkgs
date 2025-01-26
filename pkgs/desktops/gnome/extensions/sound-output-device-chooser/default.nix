@@ -1,8 +1,10 @@
-{ lib, stdenv
-, substituteAll
-, fetchFromGitHub
-, libpulseaudio
-, python3
+{
+  lib,
+  stdenv,
+  replaceVars,
+  fetchFromGitHub,
+  libpulseaudio,
+  python3,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,8 +21,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     # Fix paths to libpulse and python
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       libpulse = "${libpulseaudio}/lib/libpulse.so";
       python = python3.interpreter;
     })

@@ -28,7 +28,7 @@ buildDotnetModule rec {
   # $ nix-build -A pinta.fetch-deps
   # $ ./result
   # TODO: create update script
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   projectFile = "Pinta";
 

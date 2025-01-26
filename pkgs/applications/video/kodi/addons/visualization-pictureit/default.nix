@@ -1,18 +1,29 @@
-{ lib, rel, buildKodiBinaryAddon, fetchFromGitHub, pkg-config, glm, libGL }:
+{
+  lib,
+  rel,
+  buildKodiBinaryAddon,
+  fetchFromGitHub,
+  pkg-config,
+  glm,
+  libGL,
+}:
 
 buildKodiBinaryAddon rec {
   pname = "visualization-pictureit";
   namespace = "visualization.pictureit";
-  version = "20.2.0";
+  version = "21.0.1";
 
   src = fetchFromGitHub {
     owner = "xbmc";
     repo = namespace;
     rev = "${version}-${rel}";
-    hash = "sha256-mQDPjpsxStU01H2XJKnX183KAHG+O1CH8JOmApMmwMc=";
+    hash = "sha256-0soMNqff/aVANDFORL3mqUUpi2BWmauUtE4EBr3QwlI=";
   };
 
-  extraBuildInputs = [ pkg-config libGL ];
+  extraBuildInputs = [
+    pkg-config
+    libGL
+  ];
 
   propagatedBuildInputs = [ glm ];
   meta = with lib; {

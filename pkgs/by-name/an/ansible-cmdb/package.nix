@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   python3Packages,
   testers,
   ansible-cmdb,
@@ -31,8 +31,7 @@ buildPythonApplication {
   };
 
   patches = [
-    (substituteAll {
-      src = ./setup.patch;
+    (replaceVars ./setup.patch {
       inherit version;
     })
   ];

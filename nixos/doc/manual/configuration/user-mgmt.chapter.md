@@ -122,7 +122,7 @@ The primary benefit of this is to remove a dependency on perl.
 This is experimental.
 :::
 
-Like systemd-sysusers, Userborn adoesn't depend on Perl but offers some more
+Like systemd-sysusers, Userborn doesn't depend on Perl but offers some more
 advantages over systemd-sysusers:
 
 1. It can create "normal" users (with a GID >= 1000).

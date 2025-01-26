@@ -1,8 +1,9 @@
-{ stdenv
-, lib
-, fetchFromGitea
-, meson
-, ninja
+{
+  stdenv,
+  lib,
+  fetchFromGitea,
+  meson,
+  ninja,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -17,7 +18,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-4WW0jGavdFO3LX9wtMPzz3Z1APCPgUQOktpmwAM0SQw=";
   };
 
-  nativeBuildInputs = [ meson ninja ];
+  nativeBuildInputs = [
+    meson
+    ninja
+  ];
 
   mesonBuildType = "release";
 

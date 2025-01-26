@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, perl, perlPackages, libjpeg_original }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  perl,
+  perlPackages,
+  libjpeg_original,
+}:
 
 stdenv.mkDerivation rec {
   pname = "jpegrescan";

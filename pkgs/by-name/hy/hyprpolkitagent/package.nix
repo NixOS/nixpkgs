@@ -11,13 +11,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprpolkitagent";
-  version = "0.1.1";
+  version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprpolkitagent";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-fhG6YqByDW0DAixXXX6AwTJOH3MqDlQ2XrVvpusZ3Ek=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-K1nSPFlh5VBWNagcaZ/157gfifAXTH8lzeyfYt/UEX8=";
   };
 
   nativeBuildInputs = [

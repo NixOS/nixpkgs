@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Miicroo";
     repo = "python-vasttrafik";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-3/toHY2PkG87J5bIMNJZHF/4mUvWaeHamMzPa1St7Xo=";
   };
 

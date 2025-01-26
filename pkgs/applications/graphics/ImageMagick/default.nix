@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch2
 , pkg-config
 , libtool
 , bzip2Support ? true, bzip2
@@ -51,21 +50,14 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "imagemagick";
-  version = "7.1.1-40";
+  version = "7.1.1-43";
 
   src = fetchFromGitHub {
     owner = "ImageMagick";
     repo = "ImageMagick";
     rev = finalAttrs.version;
-    hash = "sha256-NrTIx1OvwPIeVlA39hGkXZ2Atk4FCsU3/55SZeSc40E=";
+    hash = "sha256-4JzCBKtXiKGLsZ29+7z5U+3aN3ppusQ7mz+sOZYpXGY=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      url = "https://github.com/ImageMagick/ImageMagick/commit/bf5650f0dd41b500102a129d6867cb568f4edee4.patch";
-      hash = "sha256-nxvSTyNZ35DqjR41nM5uidWwRFWzd1e/LFE0n3fpbb8=";
-    })
-  ];
 
   outputs = [ "out" "dev" "doc" ]; # bin/ isn't really big
   outputMan = "out"; # it's tiny
@@ -128,8 +120,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     (cd "$dev/include" && ln -s ImageMagick* ImageMagick)
+    # Q16HDRI = 16 bit quantum depth with HDRI support, and is the default ImageMagick configuration
+    # If the default is changed, or the derivation is modified to use a different configuration
+    # this will need to be changed below.
     moveToOutput "bin/*-config" "$dev"
     moveToOutput "lib/ImageMagick-*/config-Q16HDRI" "$dev" # includes configure params
+    configDestination=($out/share/ImageMagick-*)
+    grep -v '/nix/store' $dev/lib/ImageMagick-*/config-Q16HDRI/configure.xml > $configDestination/configure.xml
     for file in "$dev"/bin/*-config; do
       substituteInPlace "$file" --replace pkg-config \
         "PKG_CONFIG_PATH='$dev/lib/pkgconfig' '$(command -v $PKG_CONFIG)'"

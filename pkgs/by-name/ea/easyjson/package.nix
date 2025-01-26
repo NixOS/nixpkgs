@@ -1,19 +1,20 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
   pname = "easyjson";
-  version = "0.7.7";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "mailru";
     repo = "easyjson";
     rev = "v${version}";
-    sha256 = "0clifkvvy8f45rv3cdyv58dglzagyvfcqb63wl6rij30c5j2pzc1";
+    hash = "sha256-m2WZwi6TM6hiBlCQOe+rxF5z3vvnYqtHQX8d7y5NLgI=";
   };
-  vendorHash = "sha256-L8u7QQPE2SnskcRrSIwQ4KhsX9xncqDWXJ75ytjxLJ4=";
+  vendorHash = "sha256-BsksTYmfPQezbWfIWX0NhuMbH4VvktrEx06C2Nb/FYE=";
 
   subPackages = [ "easyjson" ];
 

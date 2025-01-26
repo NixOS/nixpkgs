@@ -1,9 +1,10 @@
-{ lib
-, nodejs
-, buildNpmPackage
-, fetchFromGitHub
-, unzip
-, gauge-unwrapped
+{
+  lib,
+  nodejs,
+  buildNpmPackage,
+  fetchFromGitHub,
+  unzip,
+  gauge-unwrapped,
 }:
 buildNpmPackage rec {
   pname = "gauge-plugin-js";

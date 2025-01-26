@@ -1,10 +1,11 @@
-{ lib
-, fetchFromGitHub
-, python3
-, writeText
-, writeShellScript
-, sqlite
-, nixosTests
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+  writeText,
+  writeShellScript,
+  sqlite,
+  nixosTests,
 }:
 let
   pypkgs = python3.pkgs;
@@ -35,18 +36,23 @@ let
 in
 pypkgs.buildPythonApplication rec {
   pname = "pykms";
-  version = "unstable-2021-01-25";
+  version = "0-unstable-2024-07-06";
 
   src = fetchFromGitHub {
     owner = "Py-KMS-Organization";
     repo = "py-kms";
-    rev = "1435c86fe4f11aa7fd42d77fa61715ca3015eeab";
-    hash = "sha256-9KiMbS0uKTbWSZVIv5ziIeR9c8+EKfKd20yPmjCX7GQ=";
+    rev = "465f4d14c728819d4eb00e3419bd1cb98af7f81c";
+    hash = "sha256-/XbMbcBcZPO7joHyaprJ29Cq4gNpuuzTzj2x1XDIyj8=";
   };
 
   sourceRoot = "${src.name}/py-kms";
 
-  propagatedBuildInputs = with pypkgs; [ systemd pytz tzlocal dnspython ];
+  propagatedBuildInputs = with pypkgs; [
+    systemd
+    pytz
+    tzlocal
+    dnspython
+  ];
 
   postPatch = ''
     siteDir=$out/${python3.sitePackages}
@@ -90,6 +96,9 @@ pypkgs.buildPythonApplication rec {
     description = "Windows KMS (Key Management Service) server written in Python";
     homepage = "https://github.com/Py-KMS-Organization/py-kms";
     license = licenses.unlicense;
-    maintainers = with maintainers; [ peterhoeg zopieux ];
+    maintainers = with maintainers; [
+      peterhoeg
+      zopieux
+    ];
   };
 }

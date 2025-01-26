@@ -1,80 +1,84 @@
-{ addDriverRunpath
-, alsa-lib
-, at-spi2-atk
-, at-spi2-core
-, atk
-, autoPatchelfHook
-, cairo
-, cups
-, curl
-, dbus
-, dpkg
-, expat
-, fetchurl
-, fontconfig
-, freetype
-, gdk-pixbuf
-, glib
-, glibc
-, gnutls
-, gtk3
-, lib
-, libGL
-, libX11
-, libXScrnSaver
-, libXcomposite
-, libXcursor
-, libXdamage
-, libXext
-, libXfixes
-, libXi
-, libXrandr
-, libXrender
-, libXtst
-, libappindicator-gtk3
-, libcxx
-, libdbusmenu
-, libdrm
-, libgcrypt
-, libglvnd
-, libnotify
-, libpulseaudio
-, libuuid
-, libxcb
-, libxkbcommon
-, libxkbfile
-, libxshmfence
-, makeShellWrapper
-, mesa
-, nspr
-, nss
-, pango
-, pciutils
-, pipewire
-, pixman
-, stdenv
-, systemd
-, wayland
-, xdg-utils
-, writeScript
+{
+  addDriverRunpath,
+  alsa-lib,
+  at-spi2-atk,
+  at-spi2-core,
+  atk,
+  autoPatchelfHook,
+  cairo,
+  cups,
+  curl,
+  dbus,
+  dpkg,
+  expat,
+  fetchurl,
+  fontconfig,
+  freetype,
+  gdk-pixbuf,
+  glib,
+  glibc,
+  gnutls,
+  gtk3,
+  lib,
+  libGL,
+  libX11,
+  libXScrnSaver,
+  libXcomposite,
+  libXcursor,
+  libXdamage,
+  libXext,
+  libXfixes,
+  libXi,
+  libXrandr,
+  libXrender,
+  libXtst,
+  libappindicator-gtk3,
+  libcxx,
+  libdbusmenu,
+  libdrm,
+  libgcrypt,
+  libglvnd,
+  libnotify,
+  libpulseaudio,
+  libuuid,
+  libxcb,
+  libxkbcommon,
+  libxkbfile,
+  libxshmfence,
+  makeShellWrapper,
+  libgbm,
+  nspr,
+  nss,
+  pango,
+  pciutils,
+  pipewire,
+  pixman,
+  stdenv,
+  systemd,
+  wayland,
+  xdg-utils,
+  writeScript,
 
   # for custom command line arguments, e.g. "--use-gl=desktop"
-, commandLineArgs ? ""
+  commandLineArgs ? "",
 }:
 
 let
   sources = {
     x86_64-linux = fetchurl {
-      url = "https://sf3-cn.feishucdn.com/obj/ee-appcenter/bfdb886c/Feishu-linux_x64-7.22.9.deb";
-      sha256 = "sha256-4lLCQeW6ZRzmzrHPQ91RxKEqJCxqqa4iGuJ8snZqvkQ=";
+      url = "https://sf3-cn.feishucdn.com/obj/ee-appcenter/18b9e5d0/Feishu-linux_x64-7.32.11.deb";
+      sha256 = "sha256-gU+fNiUE2kCE3407vdjQqE7oLgR9vXynaBNuV3EZrqc=";
     };
     aarch64-linux = fetchurl {
-      url = "https://sf3-cn.feishucdn.com/obj/ee-appcenter/c3f495d6/Feishu-linux_arm64-7.22.9.deb";
-      sha256 = "sha256-cT9n1p220ya1T21fWy4b7b7dIx3hqw7lConGaSZ2+UA=";
+      url = "https://sf3-cn.feishucdn.com/obj/ee-appcenter/8946d4de/Feishu-linux_arm64-7.32.11.deb";
+      sha256 = "sha256-gYIQysbII9Ud1a7eXqQRtOsBA2rI29+xnxntAumFUdk=";
     };
   };
 
-  supportedPlatforms = [ "x86_64-linux" "aarch64-linux" ];
+  supportedPlatforms = [
+    "x86_64-linux"
+    "aarch64-linux"
+  ];
 
   rpath = lib.makeLibraryPath [
     alsa-lib
@@ -117,7 +121,7 @@ let
     libxkbcommon
     libxkbfile
     libxshmfence
-    mesa
+    libgbm
     nspr
     nss
     pango
@@ -131,10 +135,12 @@ let
   ];
 in
 stdenv.mkDerivation {
-  version = "7.22.9";
+  version = "7.32.11";
   pname = "feishu";
 
-  src = sources.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  src =
+    sources.${stdenv.hostPlatform.system}
+      or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -155,7 +161,7 @@ stdenv.mkDerivation {
     libgcrypt
     libpulseaudio
     libxshmfence
-    mesa
+    libgbm
     nspr
     nss
   ];
@@ -179,7 +185,9 @@ stdenv.mkDerivation {
       wrapProgram $executable \
         --prefix XDG_DATA_DIRS    :  "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH" \
         --prefix LD_LIBRARY_PATH  :  ${rpath}:$out/opt/bytedance/feishu:${addDriverRunpath.driverLink}/share \
-        ${lib.optionalString (commandLineArgs!="") "--add-flags ${lib.escapeShellArg commandLineArgs}"}
+        ${lib.optionalString (
+          commandLineArgs != ""
+        ) "--add-flags ${lib.escapeShellArg commandLineArgs}"}
     done
 
     mkdir -p $out/share/icons/hicolor

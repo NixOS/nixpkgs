@@ -1,24 +1,28 @@
-{ lib
-, addDriverRunpath
-, cmake
-, fetchFromGitHub
-, intel-compute-runtime
-, openvino
-, stdenv
+{
+  lib,
+  addDriverRunpath,
+  cmake,
+  fetchFromGitHub,
+  intel-compute-runtime,
+  openvino,
+  stdenv,
 }:
 
 stdenv.mkDerivation rec {
   pname = "level-zero";
-  version = "1.18.3";
+  version = "1.20.0";
 
   src = fetchFromGitHub {
     owner = "oneapi-src";
     repo = "level-zero";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ep9RYHnqmOEqfdFtYzOZnv0aWu4TA8JMyWOj0E2uSYk=";
+    tag = "v${version}";
+    hash = "sha256-dn/1EZlEBbmu4p7/5fn6LhQXOEUvI/gtAdHnCnosGEs=";
   };
 
-  nativeBuildInputs = [ cmake addDriverRunpath ];
+  nativeBuildInputs = [
+    cmake
+    addDriverRunpath
+  ];
 
   postFixup = ''
     addDriverRunpath $out/lib/libze_loader.so
@@ -37,4 +41,3 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.ziguana ];
   };
 }
-

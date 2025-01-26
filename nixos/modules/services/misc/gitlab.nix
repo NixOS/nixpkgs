@@ -1080,12 +1080,13 @@ in {
     warnings = [
       (mkIf
         (cfg.registry.enable && versionAtLeast (getVersion cfg.packages.gitlab) "16.0.0" && cfg.registry.package == pkgs.docker-distribution)
-        ''Support for container registries other than gitlab-container-registry has ended since GitLab 16.0.0 and is scheduled for removal in a future release.
+        ''
+          Support for container registries other than gitlab-container-registry has ended since GitLab 16.0.0 and is scheduled for removal in a future release.
           Please back up your data and migrate to the gitlab-container-registry package.''
       )
       (mkIf
-        (versionAtLeast (getVersion cfg.packages.gitlab) "16.2.0" && versionOlder (getVersion cfg.packages.gitlab) "16.5.0")
-        ''GitLab instances created or updated between versions [15.11.0, 15.11.2] have an incorrect database schema.
+        (versionAtLeast (getVersion cfg.packages.gitlab) "16.2.0" && versionOlder (getVersion cfg.packages.gitlab) "16.5.0") ''
+        GitLab instances created or updated between versions [15.11.0, 15.11.2] have an incorrect database schema.
         Check the upstream documentation for a workaround: https://docs.gitlab.com/ee/update/versions/gitlab_16_changes.html#undefined-column-error-upgrading-to-162-or-later''
       )
     ];
@@ -1242,6 +1243,7 @@ in {
       enable = true;
       enableDelete = true; # This must be true, otherwise GitLab won't manage it correctly
       package = cfg.registry.package;
+      port = cfg.registry.port;
       extraConfig = {
         auth.token = {
           realm = "http${optionalString (cfg.https == true) "s"}://${cfg.host}/jwt/auth";
@@ -1348,7 +1350,7 @@ in {
           ln -sf ${cableYml} ${cfg.statePath}/config/cable.yml
           ln -sf ${resqueYml} ${cfg.statePath}/config/resque.yml
 
-          ${cfg.packages.gitlab-shell}/bin/gitlab-shell-install
+          ${cfg.packages.gitlab-shell}/support/make_necessary_dirs
 
           ${optionalString cfg.smtp.enable ''
               install -m u=rw ${smtpSettings} ${cfg.statePath}/config/initializers/smtp_settings.rb

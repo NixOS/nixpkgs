@@ -1,7 +1,8 @@
-{ stdenv
-, fetchFromGitHub
-, lib
-, gtk-engine-murrine
+{
+  stdenv,
+  fetchFromGitHub,
+  lib,
+  gtk-engine-murrine,
 }:
 
 stdenv.mkDerivation rec {

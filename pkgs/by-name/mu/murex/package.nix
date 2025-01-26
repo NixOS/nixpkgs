@@ -1,17 +1,18 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
   pname = "murex";
-  version = "6.3.4225";
+  version = "6.4.2063";
 
   src = fetchFromGitHub {
     owner = "lmorg";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-y+7tRp4JNlefsKnMgU9d3b9pzgBJbSKGI98CzkcOjq8=";
+    sha256 = "sha256-czo2JCUwzENPuBBTaO4RYo7WRvepacaKElAj9DznFY0=";
   };
 
   vendorHash = "sha256-NIhg8D8snCNxpb3i2JG5tLcZteYBCGN4QbOowG/vgJE=";
@@ -23,7 +24,10 @@ buildGoModule rec {
     mainProgram = "murex";
     homepage = "https://murex.rocks";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ dit7ya kashw2 ];
+    maintainers = with maintainers; [
+      dit7ya
+      kashw2
+    ];
   };
 
   passthru = {

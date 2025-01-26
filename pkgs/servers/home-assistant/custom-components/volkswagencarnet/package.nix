@@ -15,7 +15,7 @@ buildHomeAssistantComponent rec {
   src = fetchFromGitHub {
     owner = "robinostlund";
     repo = "homeassistant-volkswagencarnet";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-3wykS2TYjr9hoQSPc1F3m5aDiLW1tzvQfjfjnr4N2Y0=";
   };
 

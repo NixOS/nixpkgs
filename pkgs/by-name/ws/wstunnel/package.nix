@@ -2,14 +2,13 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
-  stdenv,
   nixosTests,
   nix-update-script,
   versionCheckHook,
 }:
 
 let
-  version = "10.1.6";
+  version = "10.1.8";
 in
 
 rustPlatform.buildRustPackage {
@@ -20,15 +19,11 @@ rustPlatform.buildRustPackage {
     owner = "erebe";
     repo = "wstunnel";
     rev = "v${version}";
-    hash = "sha256-ufssj7m5mly2B33e1DWY2e6AH0zTPh3SozYc663QjJ4=";
+    hash = "sha256-A2c4DAHne0N96bJnjvpaI6vd2pAb4Edi45vbDWayZpo=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "fastwebsockets-0.8.0" = "sha256-eqtCh9fMOG2uvL/GLUVXNiSB+ovYLc/Apuq9zssn8hU=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-iKGt+CjshkUE5w68ZJ9x2+3mAYQJO/oDMs/M8ARL5Po=";
 
   nativeBuildInputs = [ versionCheckHook ];
 

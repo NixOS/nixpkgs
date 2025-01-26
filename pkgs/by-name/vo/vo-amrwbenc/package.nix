@@ -1,6 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+}:
 
-stdenv.mkDerivation rec{
+stdenv.mkDerivation rec {
   pname = "vo-amrwbenc";
   version = "0.1.3";
 

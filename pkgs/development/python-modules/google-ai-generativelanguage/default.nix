@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "google-ai-generativelanguage";
-  version = "0.6.12";
+  version = "0.6.14";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "google_ai_generativelanguage";
     inherit version;
-    hash = "sha256-v6A3iIAwYcgMAF4o+rXZb0Zfzxx9KKHu+xYx+0oqtn8=";
+    hash = "sha256-tUTXbekTmoMgvOI1JJUNZsF6D7MMfoO7QZ5f/PB0LyE=";
   };
 
   build-system = [ setuptools ];

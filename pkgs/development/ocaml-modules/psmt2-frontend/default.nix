@@ -1,4 +1,9 @@
-{ lib, fetchFromGitHub, buildDunePackage, menhir }:
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  menhir,
+}:
 
 buildDunePackage rec {
   version = "0.4.0";

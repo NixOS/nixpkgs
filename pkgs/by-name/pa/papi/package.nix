@@ -1,5 +1,7 @@
-{ lib, stdenv
-, fetchurl
+{
+  lib,
+  stdenv,
+  fetchurl,
 }:
 
 stdenv.mkDerivation rec {
@@ -7,7 +9,9 @@ stdenv.mkDerivation rec {
   pname = "papi";
 
   src = fetchurl {
-    url = "https://bitbucket.org/icl/papi/get/papi-${lib.replaceStrings ["."] ["-"] version}-t.tar.gz";
+    url = "https://bitbucket.org/icl/papi/get/papi-${
+      lib.replaceStrings [ "." ] [ "-" ] version
+    }-t.tar.gz";
     sha256 = "sha256-VajhmPW8sEJksfhLjBVlpBH7+AZr4fwKZPAtZxRF1Bk=";
   };
 
@@ -23,6 +27,9 @@ stdenv.mkDerivation rec {
     description = "Library providing access to various hardware performance counters";
     license = licenses.bsdOriginal;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ costrouc zhaofengli ];
+    maintainers = with maintainers; [
+      costrouc
+      zhaofengli
+    ];
   };
 }

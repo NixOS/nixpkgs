@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 }:
 
 stdenv.mkDerivation rec {
   pname = "kirc";
-  version = "0.3.2";
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "mcpcpc";
     repo = pname;
     rev = version;
-    hash = "sha256-SXPtSFjGPLgORG9OCSCEStzNzdGZFzCx72YOrW288MU=";
+    hash = "sha256-LiJZnFQMnyBEqeyyyqM56XXoYjbZPCWLfLX9OB/f+YM=";
   };
 
   dontConfigure = true;

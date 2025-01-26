@@ -1,16 +1,17 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, xdg-desktop-portal
-, gtk3
-, gnome-settings-daemon
-, gnome-desktop
-, glib
-, wrapGAppsHook3
-, gsettings-desktop-schemas
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  xdg-desktop-portal,
+  gtk3,
+  gnome-settings-daemon,
+  gnome-desktop,
+  glib,
+  wrapGAppsHook3,
+  gsettings-desktop-schemas,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ndonfris";
     repo = "fish-lsp";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-u125EZXQEouVbmJuoW3KNDNqLB5cS/TzblXraClcw6Q=";
   };
 

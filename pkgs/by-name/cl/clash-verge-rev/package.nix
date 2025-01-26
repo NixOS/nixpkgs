@@ -10,40 +10,27 @@
   v2ray-domain-list-community,
   copyDesktopItems,
   makeDesktopItem,
+  libsoup,
 }:
 let
   pname = "clash-verge-rev";
-  version = "1.7.7";
+  version = "2.0.3";
 
   src = fetchFromGitHub {
     owner = "clash-verge-rev";
     repo = "clash-verge-rev";
-    rev = "v${version}";
-    hash = "sha256-5sd0CkUCV52wrBPo0IRIa1uqf2QNkjXuZhE33cZW3SY=";
+    tag = "v${version}";
+    hash = "sha256-vHXXFHdKETJBlzbf4sU+gZpDz06My9DCx5nWdMpHmyc=";
   };
 
   src-service = fetchFromGitHub {
     owner = "clash-verge-rev";
     repo = "clash-verge-service";
-    rev = "e74e419f004275cbf35a427337d3f8c771408f07"; # no meaningful tags in this repo. The only way is updating manully every time.
-    hash = "sha256-HyRTOqPj4SnV9gktqRegxOYz9c8mQHOX+IrdZlHhYpo=";
+    rev = "7f8ad08c2f716ca50c074ecd37967728e08edf1e"; # no meaningful tags in this repo. The only way is updating manully every time.
+    hash = "sha256-kZf5O3n0xmNUN0G4hAWQDN9Oj9K7PtLpv6jnhh1C5Hg=";
   };
 
-  meta-unwrapped = {
-    description = "Clash GUI based on tauri";
-    homepage = "https://github.com/clash-verge-rev/clash-verge-rev";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [
-      Guanran928
-      bot-wxt1221
-    ];
-    platforms = [
-      "x86_64-linux"
-      "aarch64-linux"
-    ];
-  };
-
-  service-cargo-hash = "sha256-NBeHR6JvdCp06Ug/UEtLY2tu3iCmlsCU0x8umRbJXLU=";
+  service-cargo-hash = "sha256-uo/2QBsZzoTdwRiW0Kr7GGiQCpQH4lW4h5XHqWd5sTU=";
 
   service = callPackage ./service.nix {
     inherit
@@ -51,8 +38,8 @@ let
       src-service
       service-cargo-hash
       pname
+      meta
       ;
-    meta = meta-unwrapped;
   };
 
   webui = callPackage ./webui.nix {
@@ -60,37 +47,40 @@ let
       version
       src
       pname
+      meta
+      npm-hash
       ;
-    meta = meta-unwrapped;
-
   };
 
-  sysproxy-hash = "sha256-TEC51s/viqXUoEH9rJev8LdC2uHqefInNcarxeogePk=";
+  npm-hash = "sha256-vpa8WyOMOH02g2gxibJmav9yWS3QLhaVcFB0e3cZ8ok=";
+  vendor-hash = "sha256-JAAhcMfRTlkQQ8lBMLMN+whkGQ/4WHjywompirnc/GI=";
 
   unwrapped = callPackage ./unwrapped.nix {
     inherit
       pname
       version
       src
-      sysproxy-hash
+      vendor-hash
       webui
+      meta
+      libsoup
       ;
-    meta = meta-unwrapped;
   };
 
   meta = {
     description = "Clash GUI based on tauri";
     homepage = "https://github.com/clash-verge-rev/clash-verge-rev";
+    longDescription = ''
+      Clash GUI based on tauri
+      Setting NixOS option `programs.clash-verge.enable = true` is recommended.
+    '';
     license = lib.licenses.gpl3Only;
     mainProgram = "clash-verge";
     maintainers = with lib.maintainers; [
       Guanran928
       bot-wxt1221
     ];
-    platforms = [
-      "x86_64-linux"
-      "aarch64-linux"
-    ];
+    platforms = lib.platforms.linux;
   };
 in
 stdenv.mkDerivation {
@@ -122,16 +112,16 @@ stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/{bin,share,lib/clash-verge/resources}
+    mkdir -p $out/{bin,share,lib/Clash\ Verge/resources}
     cp -r ${unwrapped}/share/* $out/share
     cp -r ${unwrapped}/bin/clash-verge $out/bin/clash-verge
     # This can't be symbol linked. It will find mihomo in its runtime path
     ln -s ${service}/bin/clash-verge-service $out/bin/clash-verge-service
     ln -s ${mihomo}/bin/mihomo $out/bin/verge-mihomo
     # people who want to use alpha build show override mihomo themselves. The alpha core entry was removed in clash-verge.
-    ln -s ${v2ray-geoip}/share/v2ray/geoip.dat $out/lib/clash-verge/resources/geoip.dat
-    ln -s ${v2ray-domain-list-community}/share/v2ray/geosite.dat $out/lib/clash-verge/resources/geosite.dat
-    ln -s ${dbip-country-lite.mmdb} $out/lib/clash-verge/resources/Country.mmdb
+    ln -s ${v2ray-geoip}/share/v2ray/geoip.dat $out/lib/Clash\ Verge/resources/geoip.dat
+    ln -s ${v2ray-domain-list-community}/share/v2ray/geosite.dat $out/lib/Clash\ Verge/resources/geosite.dat
+    ln -s ${dbip-country-lite.mmdb} $out/lib/Clash\ Verge/resources/Country.mmdb
     runHook postInstall
   '';
 }

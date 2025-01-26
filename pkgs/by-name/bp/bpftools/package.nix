@@ -1,9 +1,18 @@
-{ lib, stdenv, linuxHeaders
-, libopcodes, libopcodes_2_38
-, libbfd, libbfd_2_38
-, elfutils, readline
-, zlib
-, python3, bison, flex
+{
+  lib,
+  stdenv,
+  linuxHeaders,
+  buildPackages,
+  libopcodes,
+  libopcodes_2_38,
+  libbfd,
+  libbfd_2_38,
+  elfutils,
+  readline,
+  zlib,
+  python3,
+  bison,
+  flex,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,11 +27,30 @@ stdenv.mkDerivation rec {
     ./include-asm-types-for-ppc64le.patch
   ];
 
-  nativeBuildInputs = [ python3 bison flex ];
-  buildInputs = (if (lib.versionAtLeast version "5.20")
-                 then [ libopcodes libbfd ]
-                 else [ libopcodes_2_38 libbfd_2_38 ])
-    ++ [ elfutils zlib readline ];
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs = [
+    python3
+    bison
+    flex
+  ];
+  buildInputs =
+    (
+      if (lib.versionAtLeast version "5.20") then
+        [
+          libopcodes
+          libbfd
+        ]
+      else
+        [
+          libopcodes_2_38
+          libbfd_2_38
+        ]
+    )
+    ++ [
+      elfutils
+      zlib
+      readline
+    ];
 
   preConfigure = ''
     patchShebangs scripts/bpf_doc.py
@@ -34,7 +62,11 @@ stdenv.mkDerivation rec {
       --replace '/sbin'      '/bin'
   '';
 
-  buildFlags = [ "bpftool" "bpf_asm" "bpf_dbg" ];
+  buildFlags = [
+    "bpftool"
+    "bpf_asm"
+    "bpf_dbg"
+  ];
 
   installPhase = ''
     make -C bpftool install
@@ -43,10 +75,13 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage    = "https://github.com/libbpf/bpftool";
+    homepage = "https://github.com/libbpf/bpftool";
     description = "Debugging/program analysis tools for the eBPF subsystem";
-    license     = [ licenses.gpl2Only licenses.bsd2 ];
-    platforms   = platforms.linux;
+    license = [
+      licenses.gpl2Only
+      licenses.bsd2
+    ];
+    platforms = platforms.linux;
     maintainers = with maintainers; [ thoughtpolice ];
   };
 }

@@ -11,4 +11,6 @@ mkDerivation {
   '';
 
   MK_TESTS = "no";
+
+  alwaysKeepStatic = true;
 }

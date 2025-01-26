@@ -1,4 +1,11 @@
-{ libsmbios, lib, stdenv, autoreconfHook, fetchFromGitHub, fetchpatch }:
+{
+  libsmbios,
+  lib,
+  stdenv,
+  autoreconfHook,
+  fetchFromGitHub,
+  fetchpatch,
+}:
 
 stdenv.mkDerivation {
   pname = "netperf";
@@ -26,12 +33,15 @@ stdenv.mkDerivation {
   autoreconfPhase = ''
     autoreconf -i -I src/missing/m4
   '';
-  configureFlags = [ "--enable-demo" ];
+  configureFlags = [
+    "--enable-demo"
+    "CFLAGS=-D_GNU_SOURCE"
+  ];
   enableParallelBuilding = true;
 
   meta = {
     description = "Benchmark to measure the performance of many different types of networking";
-    homepage = "http://www.netperf.org/netperf/";
+    homepage = "https://github.com/HewlettPackard/netperf/";
     license = lib.licenses.mit;
 
     platforms = lib.platforms.unix;

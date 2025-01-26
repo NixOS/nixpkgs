@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "nexia";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-dWFARVmGGQxyRhaOrDoAjwXTQNKBFHY2/swFVdEOsmo=";
   };
 

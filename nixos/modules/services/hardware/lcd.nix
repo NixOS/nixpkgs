@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.hardware.lcd;
@@ -27,7 +32,9 @@ let
     Slice = "lcd.slice";
   };
 
-in with lib; {
+in
+with lib;
+{
 
   meta.maintainers = with maintainers; [ peterhoeg ];
 
@@ -128,7 +135,9 @@ in with lib; {
   };
 
   config = mkIf (cfg.server.enable || cfg.client.enable) {
-    networking.firewall.allowedTCPPorts = mkIf (cfg.server.enable && cfg.server.openPorts) [ cfg.serverPort ];
+    networking.firewall.allowedTCPPorts = mkIf (cfg.server.enable && cfg.server.openPorts) [
+      cfg.serverPort
+    ];
 
     services.udev.extraRules = mkIf (cfg.server.enable && cfg.server.usbPermissions) ''
       ACTION=="add", SUBSYSTEMS=="usb", ATTRS{idVendor}=="${cfg.server.usbVid}", ATTRS{idProduct}=="${cfg.server.usbPid}", MODE="660", GROUP="${cfg.server.usbGroup}"
@@ -161,7 +170,10 @@ in with lib; {
 
     systemd.targets.lcd = {
       description = "LCD client/server";
-      after = [ "lcdd.service" "lcdproc.service" ];
+      after = [
+        "lcdd.service"
+        "lcdproc.service"
+      ];
       wantedBy = [ "multi-user.target" ];
     };
   };

@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  apple-sdk_11,
   cacert,
   cargo-tauri,
   desktop-file-utils,
@@ -19,27 +18,24 @@
 let
   pnpm = pnpm_9;
 in
+
 rustPlatform.buildRustPackage rec {
   pname = "modrinth-app-unwrapped";
-  version = "0.8.9";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "modrinth";
     repo = "code";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-DR1aPbSqAVhL/m/Maa3mPzNWwK4A1WvDd/PwEMVYn5g=";
+    tag = "v${version}";
+    hash = "sha256-uDG+WHeMY/quzF8mHBn5o8xod4/G5+S4/zD2lbqdN0M=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "wry-0.44.1" = "sha256-I1qkUVTu+Yqk1Imo1w5rG/lRSPLITF5BdcjBsPe+jXU=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-D9hkdliyKc8m9i2D9pG3keGmZsx+rzrgVXZws9Ot24I=";
 
   pnpmDeps = pnpm.fetchDeps {
     inherit pname version src;
-    hash = "sha256-murZ82LV2pGng/Cg08NoWr/mDIVECrf00utVrs6PKRg=";
+    hash = "sha256-nFuPFgwJw38XVxhW0QXmU31o+hqJKGJysnPg2YSg2D0=";
   };
 
   nativeBuildInputs = [
@@ -51,10 +47,13 @@ rustPlatform.buildRustPackage rec {
     pnpm.configHook
   ] ++ lib.optional stdenv.hostPlatform.isDarwin makeBinaryWrapper;
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin apple-sdk_11
-    ++ lib.optional stdenv.hostPlatform.isLinux webkitgtk_4_1;
+  buildInputs = [ openssl ] ++ lib.optional stdenv.hostPlatform.isLinux webkitgtk_4_1;
+
+  # Tests fail on other, unrelated packages in the monorepo
+  cargoTestFlags = [
+    "--package"
+    "theseus_gui"
+  ];
 
   env = {
     TURBO_BINARY_PATH = lib.getExe turbo;

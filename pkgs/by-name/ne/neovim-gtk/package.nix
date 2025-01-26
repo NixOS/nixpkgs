@@ -1,12 +1,13 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, wrapGAppsHook4
-, pkg-config
-, gdk-pixbuf
-, gtk4
-, pango
-, vte-gtk4
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  wrapGAppsHook4,
+  pkg-config,
+  gdk-pixbuf,
+  gtk4,
+  pango,
+  vte-gtk4,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -22,9 +23,17 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-9eZwCOP4xQtFOieqVRBAdXZrXmzdnae6PexGJ/eCyYc=";
 
-  nativeBuildInputs = [ wrapGAppsHook4 pkg-config ];
+  nativeBuildInputs = [
+    wrapGAppsHook4
+    pkg-config
+  ];
 
-  buildInputs = [ gdk-pixbuf gtk4 pango vte-gtk4 ];
+  buildInputs = [
+    gdk-pixbuf
+    gtk4
+    pango
+    vte-gtk4
+  ];
 
   patches = [ ./collect-box.patch ];
 

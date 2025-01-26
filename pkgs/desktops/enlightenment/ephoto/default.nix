@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, efl
-, directoryListingUpdater
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  efl,
+  directoryListingUpdater,
 }:
 
 stdenv.mkDerivation rec {

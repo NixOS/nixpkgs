@@ -1,6 +1,14 @@
-{ lib, stdenv, fetchurl, pkg-config, libnl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libnl,
+}:
 
-let cfg = import ./version.nix; in
+let
+  cfg = import ./version.nix;
+in
 
 stdenv.mkDerivation rec {
   pname = "batctl";

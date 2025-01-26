@@ -18,14 +18,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "nixpkgs-review";
-  version = "2.12.0";
+  version = "3.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "nixpkgs-review";
-    rev = "refs/tags/${version}";
-    hash = "sha256-yNdBqL3tceuoUHx8/j2y5ZTq1zeVDAm37RZtlCbC6rg=";
+    tag = version;
+    hash = "sha256-G47bfu3IVsKx5Yhfe6H6w5qRcxF2sjd48xVGSeljv/I=";
   };
 
   build-system = [
@@ -46,10 +46,13 @@ python3Packages.buildPythonApplication rec {
 
   makeWrapperArgs =
     let
-      binPath = [
-        nix
-        git
-      ] ++ lib.optional withSandboxSupport bubblewrap ++ lib.optional withNom nix-output-monitor;
+      binPath =
+        [
+          nix
+          git
+        ]
+        ++ lib.optional withSandboxSupport bubblewrap
+        ++ lib.optional withNom nix-output-monitor;
     in
     [
       "--prefix PATH : ${lib.makeBinPath binPath}"

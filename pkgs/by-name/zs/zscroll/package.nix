@@ -1,4 +1,9 @@
-{ lib, python3, python3Packages, fetchFromGitHub }:
+{
+  lib,
+  python3,
+  python3Packages,
+  fetchFromGitHub,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "zscroll";

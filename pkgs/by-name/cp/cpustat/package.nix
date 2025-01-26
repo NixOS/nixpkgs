@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, ncurses
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ncurses,
 }:
 
 stdenv.mkDerivation rec {
@@ -10,8 +11,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "ColinIanKing";
-    repo ="cpustat";
-    rev = "refs/tags/V${version}";
+    repo = "cpustat";
+    tag = "V${version}";
     hash = "sha256-Rxoj2pnQ/tEUzcsFT1F+rU960b4Th3hqZU2YR6YGwZQ=";
   };
 

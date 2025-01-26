@@ -1,6 +1,7 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,7 +22,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/solidiquis/erdtree";
     changelog = "https://github.com/solidiquis/erdtree/releases/tag/${src.rev}";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda zendo ];
+    maintainers = with maintainers; [
+      figsoda
+      zendo
+    ];
     mainProgram = "erd";
   };
 }

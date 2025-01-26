@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pysigma-pipeline-crowdstrike";
-  version = "2.0.0";
+  version = "2.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SigmaHQ";
     repo = "pySigma-pipeline-crowdstrike";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-9rYTBMVb664R9heOw/N/PUFotwOP1avdPUjPDhICkVU=";
+    tag = "v${version}";
+    hash = "sha256-WYgT0tRXdSR4qJA7UHotPn9qfnpaIJaqASBXVDG1kOU=";
   };
 
   build-system = [ poetry-core ];

@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchzip, jre_headless }:
+{
+  lib,
+  stdenv,
+  fetchzip,
+  jre_headless,
+}:
 
 stdenv.mkDerivation rec {
   pname = "xmlbeans";

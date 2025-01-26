@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchgit, autoreconfHook, pkg-config, glib, libsigrok, libsigrokdecode }:
+{
+  lib,
+  stdenv,
+  fetchgit,
+  autoreconfHook,
+  pkg-config,
+  glib,
+  libsigrok,
+  libsigrokdecode,
+}:
 
 stdenv.mkDerivation rec {
   pname = "sigrok-cli";
@@ -10,8 +19,15 @@ stdenv.mkDerivation rec {
     hash = "sha256-B2FJxRkfKELrtqxZDv5QTvntpu9zJnTK15CAUYbf+5M=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ glib libsigrok libsigrokdecode ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+  buildInputs = [
+    glib
+    libsigrok
+    libsigrokdecode
+  ];
 
   meta = with lib; {
     description = "Command-line frontend for the sigrok signal analysis software suite";
@@ -19,6 +35,9 @@ stdenv.mkDerivation rec {
     homepage = "https://sigrok.org/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ bjornfor vifino ];
+    maintainers = with maintainers; [
+      bjornfor
+      vifino
+    ];
   };
 }

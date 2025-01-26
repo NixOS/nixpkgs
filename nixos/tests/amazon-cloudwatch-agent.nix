@@ -27,7 +27,6 @@ import ./make-test-python.nix (
   in
   {
     name = "amazon-cloudwatch-agent";
-    meta.maintainers = pkgs.amazon-cloudwatch-agent.meta.maintainers;
 
     nodes.machine =
       { config, pkgs, ... }:

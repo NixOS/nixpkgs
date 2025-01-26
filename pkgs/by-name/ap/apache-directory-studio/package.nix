@@ -1,4 +1,15 @@
-{ lib, stdenv, fetchurl, jdk, makeWrapper, autoPatchelfHook, makeDesktopItem, glib, libsecret, webkitgtk_4_0 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jdk,
+  makeWrapper,
+  autoPatchelfHook,
+  makeDesktopItem,
+  glib,
+  libsecret,
+  webkitgtk_4_0,
+}:
 
 stdenv.mkDerivation rec {
   pname = "apache-directory-studio";
@@ -11,7 +22,8 @@ stdenv.mkDerivation rec {
         url = "mirror://apache/directory/studio/${versionWithDate}/ApacheDirectoryStudio-${versionWithDate}-linux.gtk.x86_64.tar.gz";
         sha256 = "19zdspzv4n3mfgb1g45s3wh0vbvn6a9zjd4xi5x2afmdjkzlwxi4";
       }
-    else throw "Unsupported system: ${stdenv.hostPlatform.system}";
+    else
+      throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   desktopItem = makeDesktopItem {
     name = "apache-directory-studio";
@@ -20,11 +32,20 @@ stdenv.mkDerivation rec {
     comment = "Eclipse-based LDAP browser and directory client";
     desktopName = "Apache Directory Studio";
     genericName = "Apache Directory Studio";
-    categories = [ "Java" "Network" ];
+    categories = [
+      "Java"
+      "Network"
+    ];
   };
 
-  buildInputs = [ glib libsecret ];
-  nativeBuildInputs = [ makeWrapper autoPatchelfHook ];
+  buildInputs = [
+    glib
+    libsecret
+  ];
+  nativeBuildInputs = [
+    makeWrapper
+    autoPatchelfHook
+  ];
 
   installPhase = ''
     dest="$out/libexec/ApacheDirectoryStudio"

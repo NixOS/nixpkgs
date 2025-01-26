@@ -1,19 +1,39 @@
-{ lib, fetchFromGitHub, erlang, makeWrapper, coreutils, bash, buildRebar3, buildHex }:
+{
+  lib,
+  fetchFromGitHub,
+  erlang,
+  makeWrapper,
+  coreutils,
+  bash,
+  buildRebar3,
+  buildHex,
+}:
 
-{ baseName ? "lfe"
-, version
-, maximumOTPVersion
-, sha256 ? ""
-, hash ? ""
-, rev ? version
-, src ? fetchFromGitHub { inherit hash rev sha256; owner = "lfe"; repo = "lfe"; }
-, patches ? []
+{
+  baseName ? "lfe",
+  version,
+  maximumOTPVersion,
+  sha256 ? "",
+  hash ? "",
+  rev ? version,
+  src ? fetchFromGitHub {
+    inherit hash rev sha256;
+    owner = "lfe";
+    repo = "lfe";
+  },
+  patches ? [ ],
 }:
 
 let
   inherit (lib)
-    assertMsg makeBinPath optionalString
-    getVersion versionAtLeast versionOlder versions;
+    assertMsg
+    makeBinPath
+    optionalString
+    getVersion
+    versionAtLeast
+    versionOlder
+    versions
+    ;
 
   mainVersion = versions.major (getVersion erlang);
 
@@ -21,7 +41,7 @@ let
     name = "proper";
     version = "1.4.0";
 
-    sha256  = "sha256-GChYQhhb0z772pfRNKXLWgiEOE2zYRn+4OPPpIhWjLs=";
+    sha256 = "sha256-GChYQhhb0z772pfRNKXLWgiEOE2zYRn+4OPPpIhWjLs=";
   };
 
 in
@@ -34,13 +54,23 @@ buildRebar3 {
 
   inherit src version;
 
-  nativeBuildInputs = [ makeWrapper erlang ];
-  beamDeps    = [ proper ];
-  patches     = [ ./fix-rebar-config.patch ./dedup-ebins.patch ] ++ patches;
-  doCheck     = true;
+  nativeBuildInputs = [
+    makeWrapper
+    erlang
+  ];
+  beamDeps = [ proper ];
+  patches = [
+    ./fix-rebar-config.patch
+    ./dedup-ebins.patch
+  ] ++ patches;
+  doCheck = true;
   checkTarget = "travis";
 
-  makeFlags = [ "-e" "MANDB=''" "PREFIX=$$out"];
+  makeFlags = [
+    "-e"
+    "MANDB=''"
+    "PREFIX=$$out"
+  ];
 
   # These installPhase tricks are based on Elixir's Makefile.
   # TODO: Make, upload, and apply a patch.
@@ -67,24 +97,30 @@ buildRebar3 {
     # Add some stuff to PATH so the scripts can run without problems.
     for f in $out/bin/*; do
       wrapProgram $f \
-        --prefix PATH ":" "${makeBinPath [ erlang coreutils bash ]}:$out/bin"
+        --prefix PATH ":" "${
+          makeBinPath [
+            erlang
+            coreutils
+            bash
+          ]
+        }:$out/bin"
       substituteInPlace $f --replace "/usr/bin/env" "${coreutils}/bin/env"
     done
   '';
 
   meta = with lib; {
-    description     = "Best of Erlang and of Lisp; at the same time!";
+    description = "Best of Erlang and of Lisp; at the same time!";
     longDescription = ''
       LFE, Lisp Flavoured Erlang, is a lisp syntax front-end to the Erlang
       compiler. Code produced with it is compatible with "normal" Erlang
       code. An LFE evaluator and shell is also included.
     '';
 
-    homepage     = "https://lfe.io";
+    homepage = "https://lfe.io";
     downloadPage = "https://github.com/rvirding/lfe/releases";
 
-    license      = licenses.asl20;
-    maintainers  = teams.beam.members;
-    platforms    = platforms.unix;
+    license = licenses.asl20;
+    maintainers = teams.beam.members;
+    platforms = platforms.unix;
   };
 }

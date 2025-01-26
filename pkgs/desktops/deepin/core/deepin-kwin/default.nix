@@ -11,7 +11,7 @@
   gsettings-qt,
   libepoxy,
   libinput,
-  mesa,
+  libgbm,
   lcms2,
   xorg,
 }:
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
       gsettings-qt
 
       libinput
-      mesa
+      libgbm
       lcms2
 
       xorg.libxcb

@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyvista";
     repo = "pyvista";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ZQfI0lmh/cwE224yk6a2G3gLUCsBjCQqPI1y4zYj0FI=";
   };
 

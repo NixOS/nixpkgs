@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, curl
-, libimobiledevice
-, libirecovery
-, libzip
-, libusbmuxd
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  curl,
+  libimobiledevice,
+  libirecovery,
+  libzip,
+  libusbmuxd,
 }:
 
 stdenv.mkDerivation rec {

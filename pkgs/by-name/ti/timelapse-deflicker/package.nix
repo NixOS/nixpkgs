@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, perl, perlPackages }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  perl,
+  perlPackages,
+}:
 
 stdenv.mkDerivation rec {
   pname = "timelapse-deflicker";
@@ -19,8 +26,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = with perlPackages; [
     perl
-    ImageMagick TermProgressBar ImageExifTool
-    FileType ClassMethodMaker
+    ImageMagick
+    TermProgressBar
+    ImageExifTool
+    FileType
+    ClassMethodMaker
   ];
 
   meta = with lib; {

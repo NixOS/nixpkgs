@@ -1,13 +1,14 @@
-{ lib
-, bash
-, coreutils
-, fetchFromGitHub
-, gawk
-, gnugrep
-, gnused
-, help2man
-, resholve
-, xrandr
+{
+  lib,
+  bash,
+  coreutils,
+  fetchFromGitHub,
+  gawk,
+  gnugrep,
+  gnused,
+  help2man,
+  resholve,
+  xrandr,
 }:
 
 resholve.mkDerivation rec {
@@ -42,7 +43,10 @@ resholve.mkDerivation rec {
 
   solutions = {
     mons = {
-      scripts = [ "bin/mons" "lib/libshlist/liblist.sh" ];
+      scripts = [
+        "bin/mons"
+        "lib/libshlist/liblist.sh"
+      ];
       interpreter = "${bash}/bin/sh";
       inputs = [
         bash
@@ -58,8 +62,8 @@ resholve.mkDerivation rec {
       };
       keep = {
         /*
-        has a whole slate of *flag variables that it sets to either
-        the true or false builtin and then executes...
+          has a whole slate of *flag variables that it sets to either
+          the true or false builtin and then executes...
         */
         "$aFlag" = true;
         "$dFlag" = true;

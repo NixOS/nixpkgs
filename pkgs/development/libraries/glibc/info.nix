@@ -1,15 +1,22 @@
-{ callPackage, texinfo, perl }:
+{
+  callPackage,
+  texinfo,
+  perl,
+}:
 
-callPackage ./common.nix {} {
+callPackage ./common.nix { } {
   pname = "glibc-info";
 
   outputs = [ "out" ];
 
   configureFlags = [ "--enable-add-ons" ];
 
-  extraNativeBuildInputs = [ texinfo perl ];
+  extraNativeBuildInputs = [
+    texinfo
+    perl
+  ];
 
-  makeFlags = [ "info" ];
+  buildFlags = [ "info" ];
 
   # I don't know why the info is not generated in 'build'
   # Somehow building the info still does not work, because the final

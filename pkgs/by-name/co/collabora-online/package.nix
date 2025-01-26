@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "CollaboraOnline";
     repo = "online";
-    rev = "refs/tags/cp-${finalAttrs.version}";
+    tag = "cp-${finalAttrs.version}";
     hash = "sha256-0IvymvXAozsjm+GXJK9AGWo79QMaIACrAfkYfX67fBc=";
   };
 

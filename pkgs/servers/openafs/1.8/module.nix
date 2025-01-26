@@ -11,7 +11,6 @@
 , perl
 , libtool_2
 , libkrb5
-, fetchpatch
 }:
 
 let
@@ -19,10 +18,6 @@ let
 
   modDestDir = "$out/lib/modules/${kernel.modDirVersion}/extra/openafs";
   kernelBuildDir = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
-
-  fetchBase64Patch = args: (fetchpatch args).overrideAttrs (o: {
-    postFetch = "mv $out p; base64 -d p > $out; " + o.postFetch;
-  });
 
 in
 stdenv.mkDerivation {

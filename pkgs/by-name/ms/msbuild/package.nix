@@ -14,7 +14,7 @@ let
   mkPackage = attrs: stdenv.mkDerivation (finalAttrs:
     dotnetCorePackages.addNuGetDeps
       {
-        nugetDeps = ./deps.nix;
+        nugetDeps = ./deps.json;
         overrideFetchAttrs = a: {
           dontBuild = false;
         };

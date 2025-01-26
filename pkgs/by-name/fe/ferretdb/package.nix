@@ -22,7 +22,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-GT6e9yd6LF6GFlGBWVAmcM6ysB/6cIGLbnM0hxfX5TE=";
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   subPackages = [ "cmd/ferretdb" ];
 

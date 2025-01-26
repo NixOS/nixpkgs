@@ -1,4 +1,8 @@
-{ rustPlatform, lib, fetchFromGitHub }:
+{
+  rustPlatform,
+  lib,
+  fetchFromGitHub,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "uwc";
@@ -7,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "dead10ck";
     repo = "uwc";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Qv8vMjCMhpVxkJyH1uTsFXu2waO8oaLPuoBETaWOUqI=";
   };
 

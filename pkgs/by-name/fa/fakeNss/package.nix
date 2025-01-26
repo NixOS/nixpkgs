@@ -2,13 +2,22 @@
 # Useful when packaging binaries that insist on using nss to look up
 # username/groups (like nginx).
 # /bin/sh is fine to not exist, and provided by another shim.
-{ lib, symlinkJoin, writeTextDir, runCommand, extraPasswdLines ? [], extraGroupLines ? [] }:
+{
+  lib,
+  symlinkJoin,
+  writeTextDir,
+  runCommand,
+  extraPasswdLines ? [ ],
+  extraGroupLines ? [ ],
+}:
 symlinkJoin {
   name = "fake-nss";
   paths = [
     (writeTextDir "etc/passwd" ''
       root:x:0:0:root user:/var/empty:/bin/sh
-      ${lib.concatStrings (map (line: line + "\n") extraPasswdLines)}nobody:x:65534:65534:nobody:/var/empty:/bin/sh
+      ${
+        lib.concatStrings (map (line: line + "\n") extraPasswdLines)
+      }nobody:x:65534:65534:nobody:/var/empty:/bin/sh
     '')
     (writeTextDir "etc/group" ''
       root:x:0:

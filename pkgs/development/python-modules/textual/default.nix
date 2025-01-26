@@ -9,6 +9,7 @@
   pytest-aiohttp,
   pytest-xdist,
   pytestCheckHook,
+  pythonAtLeast,
   pythonOlder,
   rich,
   syrupy,
@@ -20,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "textual";
-  version = "0.86.1";
+  version = "1.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -28,18 +29,21 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Textualize";
     repo = "textual";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-5msCFv79nAmoaP9gZxV3DXMLTyVlSFb+qyA5jHWwc50=";
+    tag = "v${version}";
+    hash = "sha256-3pNUDkkq9X3W9DdWp4M4h4ddHN+GzUxLCFNJJdAtRJM=";
   };
 
   build-system = [ poetry-core ];
 
-  dependencies = [
-    platformdirs
-    markdown-it-py
-    rich
-    typing-extensions
-  ] ++ markdown-it-py.optional-dependencies.plugins ++ markdown-it-py.optional-dependencies.linkify;
+  dependencies =
+    [
+      platformdirs
+      markdown-it-py
+      rich
+      typing-extensions
+    ]
+    ++ markdown-it-py.optional-dependencies.plugins
+    ++ markdown-it-py.optional-dependencies.linkify;
 
   optional-dependencies = {
     syntax = [
@@ -62,14 +66,24 @@ buildPythonPackage rec {
     "tests/snapshot_tests/test_snapshots.py"
   ];
 
-  disabledTests = [
-    # Assertion issues
-    "test_textual_env_var"
+  disabledTests =
+    [
+      # Assertion issues
+      "test_textual_env_var"
 
-    # Requirements for tests are not quite ready
-    "test_register_language"
-    "test_language_binary_missing"
-  ];
+      # Requirements for tests are not quite ready
+      "test_register_language"
+
+      # Requires python bindings for tree-sitter languages
+      # https://github.com/Textualize/textual/issues/5449
+      "test_setting_unknown_language"
+      "test_update_highlight_query"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.13") [
+      # https://github.com/Textualize/textual/issues/5327
+      "test_cursor_page_up"
+      "test_cursor_page_down"
+    ];
 
   # Some tests in groups require state from previous tests
   # See https://github.com/Textualize/textual/issues/4924#issuecomment-2304889067

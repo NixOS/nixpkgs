@@ -32,7 +32,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "qdrant";
     repo = "fastembed";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-IdIGht4RcejXoBTJ8eHi5fNw2ffxIi/chuoQBNjA98g=";
   };
 

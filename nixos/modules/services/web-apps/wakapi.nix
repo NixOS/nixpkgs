@@ -26,6 +26,14 @@ in
   options.services.wakapi = {
     enable = mkEnableOption "Wakapi";
     package = mkPackageOption pkgs "wakapi" { };
+    stateDir = mkOption {
+      type = types.path;
+      default = "/var/lib/wakapi";
+      description = ''
+        The state directory where data is stored. Will also be used as the
+        working directory for the wakapi service.
+      '';
+    };
 
     settings = mkOption {
       inherit (settingsFormat) type;
@@ -142,10 +150,10 @@ in
           (mkIf (cfg.passwordSalt != null) "WAKAPI_PASSWORD_SALT=${cfg.passwordSalt}")
           (mkIf (cfg.smtpPassword != null) "WAKAPI_MAIL_SMTP_PASS=${cfg.smtpPassword}")
         ];
-        EnvironmentFile = [
-          (optional (cfg.passwordSaltFile != null) cfg.passwordSaltFile)
-          (optional (cfg.smtpPasswordFile != null) cfg.smtpPasswordFile)
-        ];
+
+        EnvironmentFile =
+          (lib.optional (cfg.passwordSaltFile != null) cfg.passwordSaltFile)
+          ++ (lib.optional (cfg.smtpPasswordFile != null) cfg.smtpPasswordFile);
 
         User = config.users.users.wakapi.name;
         Group = config.users.users.wakapi.group;
@@ -166,6 +174,8 @@ in
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
+        WorkingDirectory = cfg.stateDir;
+        RuntimeDirectory = "wakapi";
         StateDirectory = "wakapi";
         StateDirectoryMode = "0700";
         Restart = "always";

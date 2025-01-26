@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -11,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "optiv";
     repo = "Go365";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-jmsbZrqc6XogUhuEWcU59v88id2uLqN/68URwylzWZI=";
   };
 

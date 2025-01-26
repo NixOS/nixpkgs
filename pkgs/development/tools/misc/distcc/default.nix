@@ -1,8 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, popt, avahi, pkg-config, python3, gtk3, runCommand
-, gcc, autoconf, automake, which, procps, libiberty_static
-, runtimeShell
-, sysconfDir ? ""   # set this parameter to override the default value $out/etc
-, static ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  popt,
+  avahi,
+  pkg-config,
+  python3,
+  gtk3,
+  runCommand,
+  gcc,
+  autoconf,
+  automake,
+  which,
+  procps,
+  libiberty_static,
+  runtimeShell,
+  sysconfDir ? "", # set this parameter to override the default value $out/etc
+  static ? false,
 }:
 
 let
@@ -18,12 +32,20 @@ let
     };
 
     nativeBuildInputs = [
-      pkg-config autoconf automake which
+      pkg-config
+      autoconf
+      automake
+      which
       (python3.withPackages (p: [ p.setuptools ]))
     ];
-    buildInputs = [ popt avahi gtk3 procps libiberty_static ];
-    preConfigure =
-    ''
+    buildInputs = [
+      popt
+      avahi
+      gtk3
+      procps
+      libiberty_static
+    ];
+    preConfigure = ''
       export CPATH=$(ls -d ${gcc.cc}/lib/gcc/*/${gcc.cc.version}/plugin/include)
 
       configureFlagsArray=( CFLAGS="-O2 -fno-strict-aliasing"
@@ -52,8 +74,9 @@ let
       #
       # extraConfig is meant to be sh lines exporting environment
       # variables like DISTCC_HOSTS, DISTCC_DIR, ...
-      links = extraConfig: (runCommand "distcc-links" { passthru.gcc = gcc.cc; }
-        ''
+      links =
+        extraConfig:
+        (runCommand "distcc-links" { passthru.gcc = gcc.cc; } ''
           mkdir -p $out/bin
           if [ -x "${gcc.cc}/bin/gcc" ]; then
             cat > $out/bin/gcc << EOF
@@ -84,4 +107,4 @@ let
     };
   };
 in
-  distcc
+distcc

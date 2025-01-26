@@ -12,17 +12,24 @@
 
 stdenv.mkDerivation rec {
   pname = "xv";
-  version = "6.0.1";
+  version = "6.0.2";
 
   src = fetchFromGitHub {
     owner = "jasper-software";
     repo = "xv";
     rev = "v${version}";
-    sha256 = "sha256-IFbR/1oksRkpJvvu+7TwLFtDujuAmV+sX8Njn6gpgBg=";
+    sha256 = "sha256-abmMrAxgccECsOi0eIy9/y0haPkUgbOl9wCgISLy5Rs=";
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ xorg.libX11 xorg.libXt libpng libwebp libtiff jasper ];
+  buildInputs = [
+    xorg.libX11
+    xorg.libXt
+    libpng
+    libwebp
+    libtiff
+    jasper
+  ];
 
   meta = {
     description = "Classic image viewer and editor for X";

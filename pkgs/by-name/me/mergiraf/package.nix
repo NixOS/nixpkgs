@@ -11,22 +11,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mergiraf";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "mergiraf";
     repo = "mergiraf";
     rev = "refs/tags/v${version}";
-    hash = "sha256-yBLSN5+rPPoxA6Bn1O2NNGNo9cDfowZdaOtVvvUmNAM=";
+    hash = "sha256-ft3lr+k/EOfYO9z8XPgONiUd8YLn6t7D6OsnMxVETrg=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "tree-sitter-xml-0.7.0" = "sha256-RTWvOUAs3Uql9DKsP1jf9FZZHaZORE40GXd+6g6RQZw=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-PuHdAHDB2K65vJlAsdsxAyMEnj8dAOozDX99k26pI9A=";
 
   nativeCheckInputs = [
     git

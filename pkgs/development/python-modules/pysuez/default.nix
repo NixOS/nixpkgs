@@ -2,15 +2,14 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
-  regex,
-  requests,
+  hatchling,
+  aiohttp,
   pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pysuez";
-  version = "0.2.2";
+  version = "2.0.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,16 +17,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jb101010-2";
     repo = "pySuez";
-    rev = "refs/tags/${version}";
-    hash = "sha256-+pLknJDF0SsC6OsmP64D/yZeu0sGNtKo8EBGlDewBug=";
+    tag = version;
+    hash = "sha256-D/XsJL393fDIKMB1Wyzods5hLsdU3Qgq8T5aTJ3SLrM=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
-  dependencies = [
-    regex
-    requests
-  ];
+  dependencies = [ aiohttp ];
 
   # Module has no tests
   doCheck = false;
@@ -38,7 +34,7 @@ buildPythonPackage rec {
     description = "Module to get water consumption data from Suez";
     mainProgram = "pysuez";
     homepage = "https://github.com/jb101010-2/pySuez";
-    changelog = "https://github.com/jb101010-2/pySuez/releases/tag/v${version}";
+    changelog = "https://github.com/jb101010-2/pySuez/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

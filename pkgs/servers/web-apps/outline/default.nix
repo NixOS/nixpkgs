@@ -1,29 +1,37 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchYarnDeps
-, makeWrapper
-, nix-update-script
-, prefetch-yarn-deps
-, fixup-yarn-lock
-, nodejs
-, yarn
-, nixosTests
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchYarnDeps,
+  makeWrapper,
+  nix-update-script,
+  prefetch-yarn-deps,
+  fixup-yarn-lock,
+  nodejs,
+  yarn,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
   pname = "outline";
-  version = "0.81.0";
+  version = "0.81.1";
 
   src = fetchFromGitHub {
     owner = "outline";
     repo = "outline";
     rev = "v${version}";
-    hash = "sha256-PgRdIdk0VJHFa+rNRV4mlZ0A/jHmAg0O9td98y1itzw=";
+    hash = "sha256-P0JDkuEm5eeVwi0+C7uSytA2NPQXUgJEDxqPiJfRNvs=";
   };
 
-  nativeBuildInputs = [ makeWrapper prefetch-yarn-deps fixup-yarn-lock ];
-  buildInputs = [ yarn nodejs ];
+  nativeBuildInputs = [
+    makeWrapper
+    prefetch-yarn-deps
+    fixup-yarn-lock
+  ];
+  buildInputs = [
+    yarn
+    nodejs
+  ];
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
@@ -85,7 +93,13 @@ stdenv.mkDerivation rec {
     homepage = "https://www.getoutline.com/";
     changelog = "https://github.com/outline/outline/releases";
     license = licenses.bsl11;
-    maintainers = with maintainers; [ cab404 yrd ] ++ teams.cyberus.members;
+    maintainers =
+      with maintainers;
+      [
+        cab404
+        yrd
+      ]
+      ++ teams.cyberus.members;
     platforms = platforms.linux;
   };
 }

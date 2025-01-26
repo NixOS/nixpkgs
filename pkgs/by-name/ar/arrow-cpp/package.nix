@@ -3,6 +3,7 @@
   lib,
   fetchurl,
   fetchFromGitHub,
+  fetchpatch,
   fixDarwinDylibNames,
   autoconf,
   aws-sdk-cpp,
@@ -78,7 +79,7 @@ let
     hash = "sha256-zLWJOWcW7OYL32OwBm9VFtHbmG+ibhteRfHlKr9G3CQ=";
   };
 
-  version = "18.0.0";
+  version = "18.1.0";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "arrow-cpp";
@@ -88,10 +89,28 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "apache";
     repo = "arrow";
     rev = "apache-arrow-${version}";
-    hash = "sha256-V2lOYOUJwXSvPPk2G17uc1eZO88EATHKwwDnEroBrPw=";
+    hash = "sha256-Jo3be5bVuDaDcSbW3pS8y9Wc2sz1W2tS6QTwf0XpODA";
   };
 
   sourceRoot = "${finalAttrs.src.name}/cpp";
+
+  patches = [
+    # fixes build with libcxx-19 (llvm-19) remove on update
+    (fetchpatch {
+      name = "libcxx-19-fixes.patch";
+      url = "https://github.com/apache/arrow/commit/29e8ea011045ba4318a552567a26b2bb0a7d3f05.patch";
+      relative = "cpp";
+      includes = [ "src/arrow/buffer_test.cc" ];
+      hash = "sha256-ZHkznOilypi1J22d56PhLlw/hbz8RqwsOGDMqI1NsMs=";
+    })
+    # https://github.com/apache/arrow/pull/45057 remove on update
+    (fetchpatch {
+      name = "boost-187.patch";
+      url = "https://github.com/apache/arrow/commit/5ec8b64668896ff06a86b6a41e700145324e1e34.patch";
+      relative = "cpp";
+      hash = "sha256-GkB7u4YnnaCApOMQPYFJuLdY7R2LtLzKccMEpKCO9ic=";
+    })
+  ];
 
   # versions are all taken from
   # https://github.com/apache/arrow/blob/apache-arrow-${version}/cpp/thirdparty/versions.txt
@@ -262,11 +281,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
-  nativeInstallCheckInputs = [
-    perl
-    which
-    sqlite
-  ] ++ lib.optionals enableS3 [ minio ] ++ lib.optionals enableFlight [ python3 ];
+  nativeInstallCheckInputs =
+    [
+      perl
+      which
+      sqlite
+    ]
+    ++ lib.optionals enableS3 [ minio ]
+    ++ lib.optionals enableFlight [ python3 ];
 
   installCheckPhase =
     let

@@ -23,6 +23,7 @@
   libshumate,
   libseccomp,
   lcms2,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -77,11 +78,15 @@ stdenv.mkDerivation rec {
       gst-plugins-bad
     ]);
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = {
     homepage = "https://gitlab.gnome.org/World/Shortwave";
     description = "Find and listen to internet radio stations";
     mainProgram = "shortwave";
-    maintainers = with lib.maintainers; [ lasandell ];
+    maintainers = with lib.maintainers; [ lasandell ] ++ lib.teams.gnome-circle.members;
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
   };

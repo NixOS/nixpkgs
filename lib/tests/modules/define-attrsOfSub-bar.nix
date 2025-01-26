@@ -1,3 +1,3 @@
 {
-  attrsOfSub.bar = {};
+  attrsOfSub.bar = { };
 }

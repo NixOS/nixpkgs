@@ -1,11 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, ... }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ...
+}:
 
 stdenv.mkDerivation rec {
   pname = "nullidentdmod";
   version = "1.3";
 
   src = fetchFromGitHub {
-    owner = "Acidhub";
+    owner = "Ranthrall";
     repo = "nullidentdmod";
     rev = "v${version}";
     sha256 = "1ahwm5pyidc6m07rh5ls2lc25kafrj233nnbcybprgl7bqdq1b0k";
@@ -21,7 +26,7 @@ stdenv.mkDerivation rec {
     description = "Simple identd that just replies with a random string or customized userid";
     mainProgram = "nullidentdmod";
     license = licenses.gpl2Plus;
-    homepage = "http://acidhub.click/NullidentdMod";
+    homepage = "https://github.com/Ranthrall/nullidentdmod";
     maintainers = with maintainers; [ das_j ];
     platforms = platforms.linux; # Must be run by systemd
   };

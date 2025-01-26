@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, lua, boost, cmake }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  lua,
+  boost,
+  cmake,
+}:
 
 stdenv.mkDerivation rec {
   pname = "luabind";
@@ -21,7 +28,7 @@ stdenv.mkDerivation rec {
     inherit lua;
   };
 
-  patches = [./0.9.1-discover-luajit.patch];
+  patches = [ ./0.9.1-discover-luajit.patch ];
 
   meta = {
     homepage = "https://github.com/Oberon00/luabind";

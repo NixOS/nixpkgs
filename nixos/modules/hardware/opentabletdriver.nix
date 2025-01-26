@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.hardware.opentabletdriver;
 in
@@ -18,7 +23,10 @@ in
 
       blacklistedKernelModules = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default = [ "hid-uclogic" "wacom" ];
+        default = [
+          "hid-uclogic"
+          "wacom"
+        ];
         description = ''
           Blacklist of kernel modules known to conflict with OpenTabletDriver.
         '';
@@ -45,16 +53,18 @@ in
 
     boot.blacklistedKernelModules = cfg.blacklistedKernelModules;
 
-    systemd.user.services.opentabletdriver = with pkgs; lib.mkIf cfg.daemon.enable {
-      description = "Open source, cross-platform, user-mode tablet driver";
-      wantedBy = [ "graphical-session.target" ];
-      partOf = [ "graphical-session.target" ];
+    systemd.user.services.opentabletdriver =
+      with pkgs;
+      lib.mkIf cfg.daemon.enable {
+        description = "Open source, cross-platform, user-mode tablet driver";
+        wantedBy = [ "graphical-session.target" ];
+        partOf = [ "graphical-session.target" ];
 
-      serviceConfig = {
-        Type = "simple";
-        ExecStart = "${cfg.package}/bin/otd-daemon";
-        Restart = "on-failure";
+        serviceConfig = {
+          Type = "simple";
+          ExecStart = "${cfg.package}/bin/otd-daemon";
+          Restart = "on-failure";
+        };
       };
-    };
   };
 }

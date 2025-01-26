@@ -1,14 +1,20 @@
-{ stdenv, lib, fetchFromGitHub
-, qtbase
-, qttools
-, qtx11extras
-, qtmultimedia
-, qtwebkit
-, wrapQtAppsHook
-, cmake
-, openssl
-, xorgproto, libX11, libXScrnSaver
-, xz, zlib
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  qtbase,
+  qttools,
+  qtx11extras,
+  qtmultimedia,
+  qtwebkit,
+  wrapQtAppsHook,
+  cmake,
+  openssl,
+  xorgproto,
+  libX11,
+  libXScrnSaver,
+  xz,
+  zlib,
 }:
 stdenv.mkDerivation {
   pname = "vacuum-im";

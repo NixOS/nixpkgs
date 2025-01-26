@@ -5,7 +5,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch,
   gi-docgen,
   pkg-config,
   gobject-introspection,
@@ -118,7 +117,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fwupd";
-  version = "2.0.2";
+  version = "2.0.4";
 
   # libfwupd goes to lib
   # daemon, plug-ins and libfwupdplugin go to out
@@ -135,8 +134,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "fwupd";
     repo = "fwupd";
-    rev = finalAttrs.version;
-    hash = "sha256-rmMb109SJVWDGT4z5GOA4V9O0cDMptTpwx0TXdGWjvk=";
+    tag = finalAttrs.version;
+    hash = "sha256-0+2B8/ZuniZCeP1LMzLcJsvE3RzlHuw0jd6rlkoW6zY=";
   };
 
   patches = [
@@ -178,7 +177,6 @@ stdenv.mkDerivation (finalAttrs: {
       pkg-config
       gettext
       shared-mime-info
-      valgrind
       protobufc # for protoc
       wrapGAppsNoGuiHook
       vala
@@ -213,6 +211,7 @@ stdenv.mkDerivation (finalAttrs: {
       libcbor
       libqmi
       xz # for liblzma
+      valgrind
     ]
     ++ lib.optionals haveFlashrom [
       flashrom

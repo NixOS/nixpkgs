@@ -1,16 +1,25 @@
-{ stdenv, fetchFromGitHub, lib, elfutils, vendorCertFile ? null
-, defaultLoader ? null }:
+{
+  stdenv,
+  fetchFromGitHub,
+  lib,
+  elfutils,
+  vendorCertFile ? null,
+  defaultLoader ? null,
+}:
 
 let
 
   inherit (stdenv.hostPlatform) system;
   throwSystem = throw "Unsupported system: ${system}";
 
-  archSuffix = {
-    x86_64-linux = "x64";
-    aarch64-linux = "aa64";
-  }.${system} or throwSystem;
-in stdenv.mkDerivation rec {
+  archSuffix =
+    {
+      x86_64-linux = "x64";
+      aarch64-linux = "aa64";
+    }
+    .${system} or throwSystem;
+in
+stdenv.mkDerivation rec {
   pname = "shim";
   version = "15.8";
 
@@ -30,7 +39,7 @@ in stdenv.mkDerivation rec {
     lib.optional (vendorCertFile != null) "VENDOR_CERT_FILE=${vendorCertFile}"
     ++ lib.optional (defaultLoader != null) "DEFAULT_LOADER=${defaultLoader}";
 
-  installTargets = ["install-as-data"];
+  installTargets = [ "install-as-data" ];
   installFlags = [
     "DATATARGETDIR=$(out)/share/shim"
   ];
@@ -49,7 +58,13 @@ in stdenv.mkDerivation rec {
     description = "UEFI shim loader";
     homepage = "https://github.com/rhboot/shim";
     license = licenses.bsd1;
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
-    maintainers = with maintainers; [ baloo raitobezarius ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
+    maintainers = with maintainers; [
+      baloo
+      raitobezarius
+    ];
   };
 }

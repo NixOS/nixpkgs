@@ -1,4 +1,15 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper, docker, coreutils, procps, gnused, findutils, gnugrep }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  makeWrapper,
+  docker,
+  coreutils,
+  procps,
+  gnused,
+  findutils,
+  gnugrep,
+}:
 stdenv.mkDerivation rec {
   pname = "docker-gc";
   version = "unstable-2015-10-5";
@@ -17,7 +28,16 @@ stdenv.mkDerivation rec {
     cp docker-gc $out/bin
     chmod +x $out/bin/docker-gc
     wrapProgram $out/bin/docker-gc \
-        --prefix PATH : "${lib.makeBinPath [ docker coreutils procps gnused findutils gnugrep ]}"
+        --prefix PATH : "${
+          lib.makeBinPath [
+            docker
+            coreutils
+            procps
+            gnused
+            findutils
+            gnugrep
+          ]
+        }"
   '';
 
   meta = with lib; {
@@ -25,7 +45,7 @@ stdenv.mkDerivation rec {
     mainProgram = "docker-gc";
     license = licenses.asl20;
     homepage = "https://github.com/spotify/docker-gc";
-    maintainers = with maintainers; [offline];
+    maintainers = with maintainers; [ offline ];
     platforms = docker.meta.platforms;
   };
 }

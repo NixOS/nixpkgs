@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "coddingtonbear";
     repo = "python-measurement";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-QxXxx9Jbx7ykQFaw/3S6ANPUmw3mhvSa4np6crsfVtE=";
   };
 

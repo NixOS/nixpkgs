@@ -49,14 +49,14 @@
 
 buildPythonPackage rec {
   pname = "kserve";
-  version = "0.14.0";
+  version = "0.14.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kserve";
     repo = "kserve";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-N/IgiTiyBNw7WQWxcUJlXU+Q9o3UUaduD9ZBKwu0uRE=";
+    tag = "v${version}";
+    hash = "sha256-VwuUXANjshV4fN0i54Fs0zubHY81UtQcCV14JwMpXwA=";
   };
 
   sourceRoot = "${src.name}/python/kserve";
@@ -64,6 +64,7 @@ buildPythonPackage rec {
   pythonRelaxDeps = [
     "fastapi"
     "httpx"
+    "numpy"
     "prometheus-client"
     "protobuf"
     "uvicorn"

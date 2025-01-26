@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchurl
-, buildsystem
+{
+  lib,
+  stdenv,
+  fetchurl,
+  buildsystem,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

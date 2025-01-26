@@ -42,19 +42,21 @@ let
     in
     buildLua (lib.attrsets.recursiveUpdate self args);
 in
-lib.mapAttrs (name: lib.makeOverridable (mkScript name)) {
+lib.recurseIntoAttrs (
+  lib.mapAttrs (name: lib.makeOverridable (mkScript name)) {
 
-  # Usage: `pkgs.mpv.override { scripts = [ pkgs.mpvScripts.seekTo ]; }`
-  crop.meta.description = "Crop the current video in a visual manner";
-  seekTo.meta.description = "Mpv script for seeking to a specific position";
-  blacklistExtensions.meta.description = "Automatically remove playlist entries based on their extension";
+    # Usage: `pkgs.mpv.override { scripts = [ pkgs.mpvScripts.seekTo ]; }`
+    crop.meta.description = "Crop the current video in a visual manner";
+    seekTo.meta.description = "Mpv script for seeking to a specific position";
+    blacklistExtensions.meta.description = "Automatically remove playlist entries based on their extension";
 
-  encode = {
-    meta.description = "Make an extract of the video currently playing using ffmpeg";
+    encode = {
+      meta.description = "Make an extract of the video currently playing using ffmpeg";
 
-    postPatch = ''
-      substituteInPlace scripts/encode.lua \
-          --replace-fail '"ffmpeg"' '"${lib.getExe ffmpeg}"'
-    '';
-  };
-}
+      postPatch = ''
+        substituteInPlace scripts/encode.lua \
+            --replace-fail '"ffmpeg"' '"${lib.getExe ffmpeg}"'
+      '';
+    };
+  }
+)

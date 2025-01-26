@@ -1,32 +1,33 @@
-{ stdenv
-, lib
-, fetchurl
-, meson
-, ninja
-, gettext
-, gst_all_1
-, python3Packages
-, shared-mime-info
-, pkg-config
-, gtk3
-, glib
-, gobject-introspection
-, totem-pl-parser
-, wrapGAppsHook3
-, itstool
-, libxml2
-, vala
-, gnome
-, grilo
-, grilo-plugins
-, libpeas
-, libportal-gtk3
-, libhandy
-, adwaita-icon-theme
-, gnome-desktop
-, gsettings-desktop-schemas
-, gdk-pixbuf
-, xvfb-run
+{
+  stdenv,
+  lib,
+  fetchurl,
+  meson,
+  ninja,
+  gettext,
+  gst_all_1,
+  python3Packages,
+  shared-mime-info,
+  pkg-config,
+  gtk3,
+  glib,
+  gobject-introspection,
+  totem-pl-parser,
+  wrapGAppsHook3,
+  itstool,
+  libxml2,
+  vala,
+  gnome,
+  grilo,
+  grilo-plugins,
+  libpeas,
+  libportal-gtk3,
+  libhandy,
+  adwaita-icon-theme,
+  gnome-desktop,
+  gsettings-desktop-schemas,
+  gdk-pixbuf,
+  xvfb-run,
 }:
 
 stdenv.mkDerivation rec {
@@ -48,6 +49,7 @@ stdenv.mkDerivation rec {
     itstool
     gobject-introspection
     wrapGAppsHook3
+    gst_all_1.gstreamer # gst-inspect-1.0
   ];
 
   buildInputs = [
@@ -113,5 +115,7 @@ stdenv.mkDerivation rec {
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus; # with exception to allow use of non-GPL compatible plug-ins
     platforms = platforms.linux;
+    # gst-inspect-1.0 is not smart enough for cross compiling
+    broken = stdenv.buildPlatform != stdenv.hostPlatform;
   };
 }

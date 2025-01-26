@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, writeText
-, fontconfig
-, libX11
-, libXft
-, libXinerama
-, conf ? null
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  writeText,
+  fontconfig,
+  libX11,
+  libXft,
+  libXinerama,
+  conf ? null,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -31,12 +32,14 @@ stdenv.mkDerivation rec {
   postPatch =
     let
       configFile =
-        if lib.isDerivation conf || builtins.isPath conf
-        then conf else writeText "config.h" conf;
+        if lib.isDerivation conf || builtins.isPath conf then conf else writeText "config.h" conf;
     in
     lib.optionalString (conf != null) "cp ${configFile} config.h";
 
-  makeFlags = [ "CC:=$(CC)" "PREFIX=$(out)" ];
+  makeFlags = [
+    "CC:=$(CC)"
+    "PREFIX=$(out)"
+  ];
 
   passthru.updateScript = nix-update-script { };
 

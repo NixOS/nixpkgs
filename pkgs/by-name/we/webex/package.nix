@@ -1,66 +1,67 @@
-{ lib
-, writeScript
-, stdenv
-, fetchurl
-, alsa-lib
-, at-spi2-atk
-, at-spi2-core
-, atk
-, cairo
-, cups
-, dbus
-, expat
-, fontconfig
-, freetype
-, gdk-pixbuf
-, glib
-, gtk3
-, harfbuzz
-, libdrm
-, libgcrypt
-, libglvnd
-, libkrb5
-, libpulseaudio
-, libsecret
-, udev
-, libxcb
-, libxkbcommon
-, libxcrypt-legacy
-, lshw
-, mesa
-, nspr
-, nss
-, pango
-, zlib
-, libX11
-, libXcomposite
-, libXcursor
-, libXdamage
-, libXext
-, libXfixes
-, libXi
-, libXrandr
-, libXrender
-, libXtst
-, libxshmfence
-, xcbutil
-, xcbutilimage
-, xcbutilkeysyms
-, xcbutilrenderutil
-, xcbutilwm
-, p7zip
-, tbb
-, wayland
-, libXScrnSaver
+{
+  lib,
+  writeScript,
+  stdenv,
+  fetchurl,
+  alsa-lib,
+  at-spi2-atk,
+  at-spi2-core,
+  atk,
+  cairo,
+  cups,
+  dbus,
+  expat,
+  fontconfig,
+  freetype,
+  gdk-pixbuf,
+  glib,
+  gtk3,
+  harfbuzz,
+  libdrm,
+  libgcrypt,
+  libglvnd,
+  libkrb5,
+  libpulseaudio,
+  libsecret,
+  udev,
+  libxcb,
+  libxkbcommon,
+  libxcrypt-legacy,
+  lshw,
+  libgbm,
+  nspr,
+  nss,
+  pango,
+  zlib,
+  libX11,
+  libXcomposite,
+  libXcursor,
+  libXdamage,
+  libXext,
+  libXfixes,
+  libXi,
+  libXrandr,
+  libXrender,
+  libXtst,
+  libxshmfence,
+  xcbutil,
+  xcbutilimage,
+  xcbutilkeysyms,
+  xcbutilrenderutil,
+  xcbutilwm,
+  p7zip,
+  tbb,
+  wayland,
+  libXScrnSaver,
 }:
 
 stdenv.mkDerivation rec {
   pname = "webex";
-  version = "44.8.0.30404";
+  version = "44.10.2.31237";
 
   src = fetchurl {
-    url = "https://binaries.webex.com/WebexDesktop-Ubuntu-Gold/20240806164911/Webex_ubuntu.7z";
-    sha256 = "770067b495fcc3b376d77de65371f4196d0f1a0d718b84928d24aa6ea752d29b";
+    url = "https://binaries.webex.com/WebexDesktop-Ubuntu-Gold/20241119143249/Webex_ubuntu.7z";
+    sha256 = "27eb0d86fec8e6316a16913e44caed2d452b0397f188479b2e1c3d80f2d4d84e";
   };
 
   nativeBuildInputs = [
@@ -83,7 +84,7 @@ stdenv.mkDerivation rec {
     gtk3
     harfbuzz
     lshw
-    mesa
+    libgbm
     nspr
     nss
     pango

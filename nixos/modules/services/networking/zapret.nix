@@ -8,14 +8,16 @@ let
   cfg = config.services.zapret;
 
   whitelist = lib.optionalString (
-    cfg.whitelist != null
+    (builtins.length cfg.whitelist) != 0
   ) "--hostlist ${pkgs.writeText "zapret-whitelist" (lib.concatStringsSep "\n" cfg.whitelist)}";
 
   blacklist =
-    lib.optionalString (cfg.blacklist != null)
+    lib.optionalString ((builtins.length cfg.blacklist) != 0)
       "--hostlist-exclude ${pkgs.writeText "zapret-blacklist" (lib.concatStringsSep "\n" cfg.blacklist)}";
 
-  ports = if cfg.httpSupport then "80,443" else "443";
+  params = lib.concatStringsSep " " cfg.params;
+
+  qnum = toString cfg.qnum;
 in
 {
   options.services.zapret = {
@@ -29,7 +31,7 @@ in
           "--dpi-desync=fake,disorder2"
           "--dpi-desync-ttl=1"
           "--dpi-desync-autottl=2"
-        ];
+        ]
       '';
       description = ''
         Specify the bypass parameters for Zapret binary.
@@ -40,8 +42,8 @@ in
       '';
     };
     whitelist = lib.mkOption {
-      default = null;
-      type = with lib.types; nullOr (listOf str);
+      default = [ ];
+      type = with lib.types; listOf str;
       example = ''
         [
           "youtube.com"
@@ -59,8 +61,8 @@ in
       '';
     };
     blacklist = lib.mkOption {
-      default = null;
-      type = with lib.types; nullOr (listOf str);
+      default = [ ];
+      type = with lib.types; listOf str;
       example = ''
         [
           "example.com"
@@ -96,6 +98,43 @@ in
         Http bypass rarely works and you might want to disable it if you don't utilise http connections.
       '';
     };
+    httpMode = lib.mkOption {
+      default = "first";
+      type = lib.types.enum [
+        "first"
+        "full"
+      ];
+      example = "full";
+      description = ''
+        By default this service only changes the first packet sent, which is enough in most cases.
+        But there are DPIs that monitor the whole traffic within a session.
+        That requires full processing of every packet, which increases the CPU usage.
+
+        Set the mode to `full` if http doesn't work.
+      '';
+    };
+    udpSupport = lib.mkOption {
+      default = false;
+      type = lib.types.bool;
+      description = ''
+        Enable UDP routing.
+        This requires you to specify `udpPorts` and `--dpi-desync-any-protocol` parameter.
+      '';
+    };
+    udpPorts = lib.mkOption {
+      default = [ ];
+      type = with lib.types; listOf str;
+      example = ''
+        [
+          "50000:50099"
+          "1234"
+        ]
+      '';
+      description = ''
+        List of UDP ports to route.
+        Port ranges are delimited with a colon like this "50000:50099".
+      '';
+    };
   };
 
   config = lib.mkIf cfg.enable (
@@ -103,12 +142,20 @@ in
       {
         assertions = [
           {
-            assertion = (cfg.whitelist == null) || (cfg.blacklist == null);
+            assertion = (builtins.length cfg.whitelist) == 0 || (builtins.length cfg.blacklist) == 0;
             message = "Can't specify both whitelist and blacklist.";
           }
           {
             assertion = (builtins.length cfg.params) != 0;
             message = "You have to specify zapret parameters. See the params option's description.";
+          }
+          {
+            assertion = cfg.udpSupport -> (builtins.length cfg.udpPorts) != 0;
+            message = "You have to specify UDP ports or disable UDP support.";
+          }
+          {
+            assertion = !cfg.configureFirewall || !config.networking.nftables.enable;
+            message = "You need to manually configure you firewall for Zapret service when using nftables.";
           }
         ];
 
@@ -117,13 +164,13 @@ in
           wantedBy = [ "multi-user.target" ];
           after = [ "network.target" ];
           serviceConfig = {
-            ExecStart = "${cfg.package}/bin/nfqws --pidfile=/run/nfqws.pid ${lib.concatStringsSep " " cfg.params} ${whitelist} ${blacklist} --qnum=${toString cfg.qnum}";
+            ExecStart = "${cfg.package}/bin/nfqws --pidfile=/run/nfqws.pid ${params} ${whitelist} ${blacklist} --qnum=${qnum}";
             Type = "simple";
             PIDFile = "/run/nfqws.pid";
             Restart = "always";
-            RuntimeMaxSec = "1h"; # This service loves to crash silently or cause network slowdowns. It also restarts instantly. In my experience restarting it hourly provided the best experience.
+            RuntimeMaxSec = "1h"; # This service loves to crash silently or cause network slowdowns. It also restarts instantly. Restarting it at least hourly provided the best experience.
 
-            # hardening
+            # Hardening.
             DevicePolicy = "closed";
             KeyringMode = "private";
             PrivateTmp = true;
@@ -145,15 +192,28 @@ in
 
       # Route system traffic via service for specified ports.
       (lib.mkIf cfg.configureFirewall {
-        networking.firewall.extraCommands = ''
-          iptables -t mangle -I POSTROUTING -p tcp -m multiport --dports ${ports} -m connbytes --connbytes-dir=original --connbytes-mode=packets --connbytes 1:6 -m mark ! --mark 0x40000000/0x40000000 -j NFQUEUE --queue-num ${toString cfg.qnum} --queue-bypass
-        '';
+        networking.firewall.extraCommands =
+          let
+            httpParams = lib.optionalString (
+              cfg.httpMode == "first"
+            ) "-m connbytes --connbytes-dir=original --connbytes-mode=packets --connbytes 1:6";
+
+            udpPorts = lib.concatStringsSep "," cfg.udpPorts;
+          in
+          ''
+            ip46tables -t mangle -I POSTROUTING -p tcp --dport 443 -m connbytes --connbytes-dir=original --connbytes-mode=packets --connbytes 1:6 -m mark ! --mark 0x40000000/0x40000000 -j NFQUEUE --queue-num ${qnum} --queue-bypass
+          ''
+          + lib.optionalString (cfg.httpSupport) ''
+            ip46tables -t mangle -I POSTROUTING -p tcp --dport 80 ${httpParams} -m mark ! --mark 0x40000000/0x40000000 -j NFQUEUE --queue-num ${qnum} --queue-bypass
+          ''
+          + lib.optionalString (cfg.udpSupport) ''
+            ip46tables -t mangle -A POSTROUTING -p udp -m multiport --dports ${udpPorts} -m mark ! --mark 0x40000000/0x40000000 -j NFQUEUE --queue-num ${qnum} --queue-bypass
+          '';
       })
     ]
   );
 
   meta.maintainers = with lib.maintainers; [
-    voronind
     nishimara
   ];
 }

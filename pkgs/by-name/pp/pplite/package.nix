@@ -1,4 +1,10 @@
-{ stdenv, lib, fetchurl, flint, gmp }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  flint,
+  gmp,
+}:
 
 stdenv.mkDerivation {
   pname = "pplite";
@@ -9,7 +15,10 @@ stdenv.mkDerivation {
     hash = "sha256-9qulVEIZRPHV5GnVmp65nMrGrUwRGkR8i8ORbLdHb1E=";
   };
 
-  buildInputs = [ flint gmp ];
+  buildInputs = [
+    flint
+    gmp
+  ];
 
   meta = {
     homepage = "https://github.com/ezaffanella/PPLite";

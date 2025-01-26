@@ -1,10 +1,16 @@
-{ stdenv, lib, fetchFromGitHub, cmake, msgpack } :
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  msgpack,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mmtf-cpp";
   version = "1.1.0";
 
-  src = fetchFromGitHub  {
+  src = fetchFromGitHub {
     owner = "rcsb";
     repo = "mmtf-cpp";
     rev = "v${finalAttrs.version}";

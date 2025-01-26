@@ -1,13 +1,14 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cargo
-, pkg-config
-, rustPlatform
-, bzip2
-, curl
-, zlib
-, zstd
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cargo,
+  pkg-config,
+  rustPlatform,
+  bzip2,
+  curl,
+  zlib,
+  zstd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -43,6 +44,10 @@ stdenv.mkDerivation (finalAttrs: {
   ZSTD_SYS_USE_PKG_CONFIG = true;
 
   enableParallelBuilding = true;
+
+  # Disable automated version-check
+  buildNoDefaultFeatures = true;
+  checkNoDefaultFeatures = true;
 
   installPhase = ''
     runHook preInstall

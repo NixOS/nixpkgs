@@ -1,14 +1,20 @@
-{ stdenv, lib, fetchFromGitHub, kernel, fetchpatch }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  kernel,
+  fetchpatch,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xone";
-  version = "0.3-unstable-2024-03-16";
+  version = "0.3-unstable-2024-04-25";
 
   src = fetchFromGitHub {
     owner = "medusalix";
     repo = "xone";
-    rev = "948d2302acdd6333295eaba4da06d96677290ad3";
-    hash = "sha256-srAEw1ai5KT0rmVUL3Dut9R2mNb00AAZVCcINikh2sM=";
+    rev = "29ec3577e52a50f876440c81267f609575c5161e";
+    hash = "sha256-ZKIV8KtrFEyabQYzWpxz2BvOAXKV36ufTI87VpIfkFs=";
   };
 
   patches = [
@@ -41,6 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     "VERSION=${finalAttrs.version}"
   ];
 
+  enableParallelBuilding = true;
   buildFlags = [ "modules" ];
   installFlags = [ "INSTALL_MOD_PATH=${placeholder "out"}" ];
   installTargets = [ "modules_install" ];
@@ -51,6 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ rhysmdnz ];
     platforms = platforms.linux;
+    broken = kernel.kernelOlder "5.11";
   };
-}
-)
+})

@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sizmailov";
     repo = "pybind11-stubgen";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-PJiiRSQ92vP5LKWCgBuowkuDdTmC22xyuax2wsH0wOM=";
   };
 

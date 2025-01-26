@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitLab, gradle_8, jre, runtimeShell }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  gradle_8,
+  jre,
+  runtimeShell,
+}:
 let
   # "Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0."
   gradle = gradle_8;
@@ -45,10 +52,13 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.com/pdftk-java/pdftk";
     sourceProvenance = with sourceTypes; [
       fromSource
-      binaryBytecode  # deps
+      binaryBytecode # deps
     ];
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ raskin averelld ];
+    maintainers = with maintainers; [
+      raskin
+      averelld
+    ];
     platforms = platforms.unix;
     mainProgram = "pdftk";
   };

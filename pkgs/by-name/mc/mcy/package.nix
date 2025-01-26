@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub
-, yosys, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  yosys,
+  python3,
 }:
 
 let
@@ -10,9 +14,9 @@ stdenv.mkDerivation {
   version = "2020.08.03";
 
   src = fetchFromGitHub {
-    owner  = "YosysHQ";
-    repo   = "mcy";
-    rev    = "62048e69df13f8e03670424626755ae8ef4c36ff";
+    owner = "YosysHQ";
+    repo = "mcy";
+    rev = "62048e69df13f8e03670424626755ae8ef4c36ff";
     sha256 = "15xxgzx1zxzx5kshqyrxnfx33cz6cjzxcdcn6z98jhs9bwyvf96f";
   };
 
@@ -43,9 +47,9 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Mutation-based coverage testing for hardware designs, with Yosys";
-    homepage    = "https://github.com/YosysHQ/mcy";
-    license     = lib.licenses.isc;
+    homepage = "https://github.com/YosysHQ/mcy";
+    license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ thoughtpolice ];
-    platforms   = lib.platforms.all;
+    platforms = lib.platforms.all;
   };
 }

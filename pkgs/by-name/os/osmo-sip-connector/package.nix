@@ -1,16 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, libosmocore
-, sofia_sip
-, glib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  libosmocore,
+  sofia_sip,
+  glib,
 }:
-
-let
-  inherit (stdenv.hostPlatform) isLinux;
-in
 
 stdenv.mkDerivation rec {
   pname = "osmo-sip-connector";
@@ -26,7 +23,6 @@ stdenv.mkDerivation rec {
   postPatch = ''
     echo "${version}" > .tarball-version
   '';
-
 
   nativeBuildInputs = [
     autoreconfHook
@@ -46,7 +42,7 @@ stdenv.mkDerivation rec {
     mainProgram = "osmo-sip-connector";
     homepage = "https://osmocom.org/projects/osmo-sip-conector";
     license = lib.licenses.agpl3Plus;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.markuskowa ];
     platforms = lib.platforms.linux;
   };
 }

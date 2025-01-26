@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchurl
-, makeWrapper
-, undmg
-, autoPatchelfHook
-, alsa-lib
-, ncurses5
-, xorg
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  undmg,
+  autoPatchelfHook,
+  alsa-lib,
+  ncurses5,
+  xorg,
 }:
 
 let
@@ -27,19 +28,29 @@ let
       sha256 = "sha256-PuGnz2YdAhriavwnuf5Qyy0cnCeRHlWC6dQzfr7bLHk=";
     };
   };
-  src = srcs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  src =
+    srcs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   meta = {
     homepage = "http://www.scilab.org/";
     description = "Scientific software package for numerical computations (Matlab lookalike)";
-    platforms = [ "aarch64-darwin" "x86_64-darwin" "x86_64-linux" ];
+    platforms = [
+      "aarch64-darwin"
+      "x86_64-darwin"
+      "x86_64-linux"
+    ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.gpl2Only;
     mainProgram = "scilab";
   };
 
   darwin = stdenv.mkDerivation rec {
-    inherit pname version src meta;
+    inherit
+      pname
+      version
+      src
+      meta
+      ;
 
     nativeBuildInputs = [
       makeWrapper
@@ -60,27 +71,34 @@ let
   };
 
   linux = stdenv.mkDerivation rec {
-    inherit pname version src meta;
+    inherit
+      pname
+      version
+      src
+      meta
+      ;
 
     nativeBuildInputs = [
       autoPatchelfHook
     ];
 
-    buildInputs = [
-      alsa-lib
-      ncurses5
-      stdenv.cc.cc
-    ] ++ (with xorg; [
-      libX11
-      libXcursor
-      libXext
-      libXft
-      libXi
-      libXrandr
-      libXrender
-      libXtst
-      libXxf86vm
-    ]);
+    buildInputs =
+      [
+        alsa-lib
+        ncurses5
+        stdenv.cc.cc
+      ]
+      ++ (with xorg; [
+        libX11
+        libXcursor
+        libXext
+        libXft
+        libXi
+        libXrandr
+        libXrender
+        libXtst
+        libXxf86vm
+      ]);
 
     installPhase = ''
       runHook preInstall

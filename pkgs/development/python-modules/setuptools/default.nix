@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "setuptools";
-  version = "75.1.0";
+  version = "75.3.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "setuptools";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ZvhXfusayUHHFXl7ZBksFhxTi1p+Va6qAwq7Fo7Tg/s=";
+    tag = "v${version}";
+    hash = "sha256-kmuKHHzTXZrJyfkFm1EIvH1tv/MF9/p/HQoqHXcJew0=";
   };
 
   patches = [

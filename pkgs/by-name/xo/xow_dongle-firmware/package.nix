@@ -1,4 +1,9 @@
-{ stdenvNoCC, lib, fetchurl, cabextract }:
+{
+  stdenvNoCC,
+  lib,
+  fetchurl,
+  cabextract,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "xow_dongle-firmware";

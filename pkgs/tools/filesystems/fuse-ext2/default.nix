@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, e2fsprogs
-, fuse
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  e2fsprogs,
+  fuse,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

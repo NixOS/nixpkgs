@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cole";
     repo = "aiosmtplib";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-1GuxlgNvzVv6hEQY1Mkv7NxAoOik9gpIS90a6flfC+k=";
   };
 

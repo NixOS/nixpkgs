@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, gtk-doc
-, intltool
-, itstool
-, libtool
-, pkg-config
-, wrapGAppsHook3
-, yelp-tools
-, clutter-gtk
-, gst_all_1
-, glib
-, gtk2
-, libgsf
-, libxml2
-, fluidsynth
-, orc
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  gtk-doc,
+  intltool,
+  itstool,
+  libtool,
+  pkg-config,
+  wrapGAppsHook3,
+  yelp-tools,
+  clutter-gtk,
+  gst_all_1,
+  glib,
+  gtk2,
+  libgsf,
+  libxml2,
+  fluidsynth,
+  orc,
 }:
 
 stdenv.mkDerivation {
@@ -62,7 +63,8 @@ stdenv.mkDerivation {
   ];
 
   # 'g_memdup' is deprecated: Use 'g_memdup2' instead
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations"
+  env.NIX_CFLAGS_COMPILE =
+    "-Wno-error=deprecated-declarations"
     # Suppress incompatible function pointer error in clang due to libxml2 2.12 const changes
     + lib.optionalString stdenv.cc.isClang " -Wno-error=incompatible-function-pointer-types";
 

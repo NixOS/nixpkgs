@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, fuse
-, android-tools
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  fuse,
+  android-tools,
 }:
 
 stdenv.mkDerivation rec {

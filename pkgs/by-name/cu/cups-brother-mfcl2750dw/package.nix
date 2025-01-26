@@ -1,20 +1,25 @@
-{ lib
-, stdenv
-, fetchurl
-, dpkg
-, autoPatchelfHook
-, makeWrapper
-, perl
-, gnused
-, ghostscript
-, file
-, coreutils
-, gnugrep
-, which
+{
+  lib,
+  stdenv,
+  fetchurl,
+  dpkg,
+  autoPatchelfHook,
+  makeWrapper,
+  perl,
+  gnused,
+  ghostscript,
+  file,
+  coreutils,
+  gnugrep,
+  which,
 }:
 
 let
-  arches = [ "x86_64" "i686" "armv7l" ];
+  arches = [
+    "x86_64"
+    "i686"
+    "armv7l"
+  ];
 
   runtimeDeps = [
     ghostscript
@@ -30,7 +35,11 @@ stdenv.mkDerivation rec {
   pname = "cups-brother-mfcl2750dw";
   version = "4.0.0-1";
 
-  nativeBuildInputs = [ dpkg makeWrapper autoPatchelfHook ];
+  nativeBuildInputs = [
+    dpkg
+    makeWrapper
+    autoPatchelfHook
+  ];
   buildInputs = [ perl ];
 
   dontUnpack = true;
@@ -40,17 +49,20 @@ stdenv.mkDerivation rec {
     hash = "sha256-3uDwzLQTF8r1tsGZ7ChGhk4ryQmVsZYdUaj9eFaC0jc=";
   };
 
-  installPhase = ''
-    runHook preInstall
+  installPhase =
+    ''
+      runHook preInstall
 
-    mkdir -p $out
-    dpkg-deb -x $src $out
+      mkdir -p $out
+      dpkg-deb -x $src $out
 
-    # delete unnecessary files for the current architecture
-  '' + lib.concatMapStrings (arch: ''
-    echo Deleting files for ${arch}
-    rm -r "$out/opt/brother/Printers/MFCL2750DW/lpd/${arch}"
-  '') (builtins.filter (arch: arch != stdenv.hostPlatform.linuxArch) arches) + ''
+      # delete unnecessary files for the current architecture
+    ''
+    + lib.concatMapStrings (arch: ''
+      echo Deleting files for ${arch}
+      rm -r "$out/opt/brother/Printers/MFCL2750DW/lpd/${arch}"
+    '') (builtins.filter (arch: arch != stdenv.hostPlatform.linuxArch) arches)
+    + ''
 
       # bundled scripts don't understand the arch subdirectories for some reason
       ln -s \

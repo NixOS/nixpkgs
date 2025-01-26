@@ -1,30 +1,32 @@
-{ monolithic ? true # build monolithic amule
-, enableDaemon ? false # build amule daemon
-, httpServer ? false # build web interface for the daemon
-, client ? false # build amule remote gui
-, fetchFromGitHub
-, fetchpatch
-, stdenv
-, lib
-, cmake
-, zlib
-, wxGTK32
-, perl
-, cryptopp
-, libupnp
-, boost # Not using boost leads to crashes with gtk3
-, gettext
-, libpng
-, pkg-config
-, makeWrapper
-, libX11
+{
+  monolithic ? true, # build monolithic amule
+  enableDaemon ? false, # build amule daemon
+  httpServer ? false, # build web interface for the daemon
+  client ? false, # build amule remote gui
+  fetchFromGitHub,
+  fetchpatch,
+  stdenv,
+  lib,
+  cmake,
+  zlib,
+  wxGTK32,
+  perl,
+  cryptopp,
+  libupnp,
+  boost, # Not using boost leads to crashes with gtk3
+  gettext,
+  libpng,
+  pkg-config,
+  makeWrapper,
+  libX11,
 }:
 
 # daemon and client are not build monolithic
 assert monolithic || (!monolithic && (enableDaemon || client || httpServer));
 
 stdenv.mkDerivation rec {
-  pname = "amule"
+  pname =
+    "amule"
     + lib.optionalString httpServer "-web"
     + lib.optionalString enableDaemon "-daemon"
     + lib.optionalString client "-gui";
@@ -44,17 +46,24 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake gettext makeWrapper pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    gettext
+    makeWrapper
+    pkg-config
+  ];
 
-  buildInputs = [
-    zlib
-    wxGTK32
-    perl
-    cryptopp.dev
-    libupnp
-    boost
-  ] ++ lib.optional httpServer libpng
-  ++ lib.optional client libX11;
+  buildInputs =
+    [
+      zlib
+      wxGTK32
+      perl
+      cryptopp.dev
+      libupnp
+      boost
+    ]
+    ++ lib.optional httpServer libpng
+    ++ lib.optional client libX11;
 
   cmakeFlags = [
     "-DBUILD_MONOLITHIC=${if monolithic then "ON" else "OFF"}"

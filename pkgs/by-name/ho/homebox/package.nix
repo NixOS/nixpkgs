@@ -2,7 +2,7 @@
   lib,
   buildGo123Module,
   fetchFromGitHub,
-  pnpm,
+  pnpm_9,
   nodejs,
   go_1_23,
   git,
@@ -11,12 +11,12 @@
 }:
 let
   pname = "homebox";
-  version = "0.15.2";
+  version = "0.16.0";
   src = fetchFromGitHub {
     owner = "sysadminsmedia";
     repo = "homebox";
     rev = "v${version}";
-    hash = "sha256-2jB2Oo0dK36n5tQPrGNyPO3Q0yNkUms4RPQzXiDzuks=";
+    hash = "sha256-d8SQWj7S6G1ZemMH6QL9QZuPQfxNRcfCurPaTnS0Iyo=";
   };
 in
 buildGo123Module {
@@ -35,10 +35,10 @@ buildGo123Module {
     preBuild = "";
   };
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version;
     src = "${src}/frontend";
-    hash = "sha256-fOb3oboNlOv/TpIrs3BsSlxIqNbbtSCE8zLMia2RIDw=";
+    hash = "sha256-x7sWSH84UJEXNRLCgEgXc4NrTRsn6OplANi+XGtIN9Y=";
   };
   pnpmRoot = "../frontend";
 
@@ -56,13 +56,12 @@ buildGo123Module {
   '';
 
   nativeBuildInputs = [
-    pnpm
-    pnpm.configHook
+    pnpm_9
+    pnpm_9.configHook
     nodejs
   ];
 
-  CGO_ENABLED = 0;
-  GOOS = "linux";
+  env.CGO_ENABLED = 0;
   doCheck = false;
 
   ldflags = [

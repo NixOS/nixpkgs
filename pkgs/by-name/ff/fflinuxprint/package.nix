@@ -1,9 +1,10 @@
-{ autoPatchelfHook
-, cups
-, dpkg
-, fetchurl
-, lib
-, stdenv
+{
+  autoPatchelfHook,
+  cups,
+  dpkg,
+  fetchurl,
+  lib,
+  stdenv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation {
   pname = "ols";
-  version = "0-unstable-2024-10-27";
+  version = "0-unstable-2025-01-04";
 
   src = fetchFromGitHub {
     owner = "DanielGavin";
     repo = "ols";
-    rev = "a3b090c7ef9604b0d6630caedb9c204a708828ac";
-    hash = "sha256-pmxdfS8GyJneuf+ADkGyj7DZVqiyQgyNILjztxMFC0c=";
+    rev = "3589fe03d7124c9058dc69bcc21aa85910367cfe";
+    hash = "sha256-eF66PXABJaOsBPqHKyRkbif4fbaPbiOPyIVXPfwj/o4=";
   };
 
   postPatch = ''
@@ -52,7 +52,6 @@ stdenv.mkDerivation {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       astavie
-      znaniye
     ];
     mainProgram = "ols";
   };

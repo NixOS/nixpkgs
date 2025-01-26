@@ -9,7 +9,7 @@
   # tests
   pytestCheckHook,
   wcag-contrast-ratio,
-  pythonOlder
+  pythonOlder,
 }:
 
 let

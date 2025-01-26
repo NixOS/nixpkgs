@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, writeText, nixosTests }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  writeText,
+  nixosTests,
+}:
 
 stdenv.mkDerivation rec {
   pname = "limesurvey";
@@ -12,9 +18,9 @@ stdenv.mkDerivation rec {
   };
 
   phpConfig = writeText "config.php" ''
-  <?php
-    return require(getenv('LIMESURVEY_CONFIG'));
-  ?>
+    <?php
+      return require(getenv('LIMESURVEY_CONFIG'));
+    ?>
   '';
 
   installPhase = ''
@@ -35,7 +41,7 @@ stdenv.mkDerivation rec {
     description = "Open source survey application";
     license = licenses.gpl2Plus;
     homepage = "https://www.limesurvey.org";
-    maintainers = with maintainers; [offline];
+    maintainers = with maintainers; [ offline ];
     platforms = with platforms; unix;
   };
 }

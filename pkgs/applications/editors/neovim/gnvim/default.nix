@@ -1,4 +1,11 @@
-{ lib, rustPlatform, fetchFromGitHub, pkg-config, glib, gtk4 }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  glib,
+  gtk4,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "gnvim-unwrapped";
@@ -18,7 +25,10 @@ rustPlatform.buildRustPackage rec {
     # for the `glib-compile-resources` command
     glib
   ];
-  buildInputs = [ glib gtk4 ];
+  buildInputs = [
+    glib
+    gtk4
+  ];
 
   # The default build script tries to get the version through Git, so we
   # replace it

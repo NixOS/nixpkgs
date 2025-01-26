@@ -2,8 +2,7 @@
 
 shopt -s nullglob
 
-export PATH=/empty
-for i in @path@; do PATH=$PATH:$i/bin; done
+export PATH=/empty:@path@
 
 if test $# -ne 1; then
     echo "Usage: init-script-builder.sh DEFAULT-CONFIG"
@@ -28,9 +27,6 @@ tmpOther="$targetOther.tmp"
 
 
 configurationCounter=0
-numAlienEntries=`cat <<EOF | egrep '^[[:space:]]*title' | wc -l
-@extraEntries@
-EOF`
 
 
 

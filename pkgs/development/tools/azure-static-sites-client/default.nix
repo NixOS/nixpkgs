@@ -1,24 +1,27 @@
-{ lib
-, stdenv
-, fetchurl
-, autoPatchelfHook
-, curl
-, icu70
-, libkrb5
-, lttng-ust
-, openssl
-, zlib
-, azure-static-sites-client
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoPatchelfHook,
+  curl,
+  icu70,
+  libkrb5,
+  lttng-ust,
+  openssl,
+  zlib,
+  azure-static-sites-client,
   # "latest", "stable" or "backup"
-, versionFlavor ? "stable"
+  versionFlavor ? "stable",
 }:
 let
   versions = lib.importJSON ./versions.json;
   flavor = lib.head (lib.filter (x: x.version == versionFlavor) versions);
-  fetchBinary = runtimeId: fetchurl {
-    url = flavor.files.${runtimeId}.url;
-    sha256 = flavor.files.${runtimeId}.sha;
-  };
+  fetchBinary =
+    runtimeId:
+    fetchurl {
+      url = flavor.files.${runtimeId}.url;
+      sha256 = flavor.files.${runtimeId}.sha;
+    };
   sources = {
     "x86_64-linux" = fetchBinary "linux-x64";
     "x86_64-darwin" = fetchBinary "osx-x64";
@@ -28,7 +31,9 @@ stdenv.mkDerivation {
   pname = "StaticSitesClient-${versionFlavor}";
   version = flavor.buildId;
 
-  src = sources.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  src =
+    sources.${stdenv.hostPlatform.system}
+      or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -79,8 +84,8 @@ stdenv.mkDerivation {
 
   passthru = {
     # Create tests for all flavors
-    tests = lib.genAttrs (map (x: x.version) versions) (versionFlavor:
-      azure-static-sites-client.override { inherit versionFlavor; }
+    tests = lib.genAttrs (map (x: x.version) versions) (
+      versionFlavor: azure-static-sites-client.override { inherit versionFlavor; }
     );
     updateScript = ./update.sh;
   };

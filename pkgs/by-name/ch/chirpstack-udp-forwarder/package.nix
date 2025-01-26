@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  darwin,
   rustPlatform,
   fetchFromGitHub,
   nix-update-script,
@@ -23,11 +22,9 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ protobuf ];
 
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
   doInstallCheck = true;
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 

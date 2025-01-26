@@ -1,20 +1,26 @@
-import ./make-test-python.nix ({ lib, pkgs, ... } : {
-  name = "cadvisor";
-  meta.maintainers = with lib.maintainers; [ offline ];
+import ./make-test-python.nix (
+  { lib, pkgs, ... }:
+  {
+    name = "cadvisor";
+    meta.maintainers = with lib.maintainers; [ offline ];
 
-  nodes = {
-    machine = { ... }: {
-      services.cadvisor.enable = true;
+    nodes = {
+      machine =
+        { ... }:
+        {
+          services.cadvisor.enable = true;
+        };
+
+      influxdb =
+        { lib, ... }:
+        {
+          services.cadvisor.enable = true;
+          services.cadvisor.storageDriver = "influxdb";
+          services.influxdb.enable = true;
+        };
     };
 
-    influxdb = { lib, ... }: {
-      services.cadvisor.enable = true;
-      services.cadvisor.storageDriver = "influxdb";
-      services.influxdb.enable = true;
-    };
-  };
-
-  testScript =  ''
+    testScript = ''
       start_all()
       machine.wait_for_unit("cadvisor.service")
       machine.succeed("curl -f http://localhost:8080/containers/")
@@ -29,4 +35,5 @@ import ./make-test-python.nix ({ lib, pkgs, ... } : {
       influxdb.wait_for_unit("cadvisor.service")
       influxdb.succeed("curl -f http://localhost:8080/containers/")
     '';
-})
+  }
+)

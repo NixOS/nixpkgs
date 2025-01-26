@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, libusb-compat-0_1
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libusb-compat-0_1,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,8 +1,14 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.samba-wsdd;
 
-in {
+in
+{
   options = {
     services.samba-wsdd = {
       enable = lib.mkEnableOption ''
@@ -58,7 +64,12 @@ in {
       extraOptions = lib.mkOption {
         type = lib.types.listOf lib.types.str;
         default = [ "--shortlog" ];
-        example = [ "--verbose" "--no-http" "--ipv4only" "--no-host" ];
+        example = [
+          "--verbose"
+          "--no-http"
+          "--ipv4only"
+          "--no-host"
+        ];
         description = "Additional wsdd options.";
       };
     };
@@ -76,9 +87,15 @@ in {
         DynamicUser = true;
         Type = "simple";
         ExecStart = ''
-          ${pkgs.wsdd}/bin/wsdd ${lib.optionalString (cfg.interface != null) "--interface '${cfg.interface}'"} \
-                                ${lib.optionalString (cfg.hoplimit != null) "--hoplimit '${toString cfg.hoplimit}'"} \
-                                ${lib.optionalString (cfg.workgroup != null) "--workgroup '${cfg.workgroup}'"} \
+          ${pkgs.wsdd}/bin/wsdd ${
+            lib.optionalString (cfg.interface != null) "--interface '${cfg.interface}'"
+          } \
+                                ${
+                                  lib.optionalString (cfg.hoplimit != null) "--hoplimit '${toString cfg.hoplimit}'"
+                                } \
+                                ${
+                                  lib.optionalString (cfg.workgroup != null) "--workgroup '${cfg.workgroup}'"
+                                } \
                                 ${lib.optionalString (cfg.hostname != null) "--hostname '${cfg.hostname}'"} \
                                 ${lib.optionalString (cfg.domain != null) "--domain '${cfg.domain}'"} \
                                 ${lib.optionalString cfg.discovery "--discovery --listen '${cfg.listen}'"} \
@@ -105,7 +122,12 @@ in {
         ProtectKernelModules = true;
         ProtectKernelLogs = true;
         ProtectControlGroups = true;
-        RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" "AF_NETLINK" ];
+        RestrictAddressFamilies = [
+          "AF_UNIX"
+          "AF_INET"
+          "AF_INET6"
+          "AF_NETLINK"
+        ];
         RestrictNamespaces = true;
         LockPersonality = true;
         MemoryDenyWriteExecute = true;

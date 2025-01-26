@@ -1,9 +1,10 @@
-{ lib
-, rustPlatform
-, fetchFromGitLab
-, installShellFiles
-, pam
-, nixosTests
+{
+  lib,
+  rustPlatform,
+  fetchFromGitLab,
+  installShellFiles,
+  pam,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage rec {

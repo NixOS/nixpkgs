@@ -13,7 +13,6 @@ let
     filterAttrsRecursive
     hasPrefix
     makeLibraryPath
-    match
     mkDefault
     mkEnableOption
     mkPackageOption
@@ -108,10 +107,6 @@ let
   withCoralUSB = any (d: d.type == "edgetpu" && hasPrefix "usb" d.device or "") detectors;
   withCoralPCI =  any (d: d.type == "edgetpu" && hasPrefix "pci" d.device or "") detectors;
   withCoral = withCoralPCI || withCoralUSB;
-
-  # Provide ffmpeg-full for NVIDIA hardware acceleration
-  ffmpegArgs = cfg.settings.ffmpeg.hwaccel_args or "";
-  ffmpeg' = if match "/nvidia/" ffmpegArgs != null then pkgs.ffmpeg-full else pkgs.ffmpeg-headless;
 in
 
 {
@@ -206,6 +201,7 @@ in
       enable = true;
       additionalModules = with pkgs.nginxModules; [
         develkit
+        rtmp
         secure-token
         set-misc
         vod
@@ -407,7 +403,7 @@ in
               }
             '';
           };
-          "~* /api/.*\.(jpg|jpeg|png|webp|gif)$" = {
+          "~* /api/.*\\.(jpg|jpeg|png|webp|gif)$" = {
             proxyPass = "http://frigate-api";
             recommendedProxySettings = true;
             extraConfig = nginxAuthRequest + nginxProxySettings + ''
@@ -481,6 +477,10 @@ in
           };
         };
         extraConfig = ''
+          # Frigate wants to connect on 127.0.0.1:5000 for unauthenticated requests
+          # https://github.com/NixOS/nixpkgs/issues/370349
+          listen 127.0.0.1:5000;
+
           # vod settings
           vod_base_url "";
           vod_segments_base_url "";
@@ -571,7 +571,7 @@ in
       path = with pkgs; [
         # unfree:
         # config.boot.kernelPackages.nvidiaPackages.latest.bin
-        ffmpeg'
+        ffmpeg-headless
         libva-utils
         procps
         radeontop

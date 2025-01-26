@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  gcc14Stdenv,
   fetchFromGitHub,
   pkg-config,
   cmake,
@@ -14,7 +14,7 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+gcc14Stdenv.mkDerivation (finalAttrs: {
   pname = "hypridle";
   version = "0.1.5";
 

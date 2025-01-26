@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, mkDerivation
-, fetchFromGitHub
-, boost
-, qtbase
-, xz
-, qmake
-, pkg-config
+{
+  lib,
+  stdenv,
+  mkDerivation,
+  fetchFromGitHub,
+  boost,
+  qtbase,
+  xz,
+  qmake,
+  pkg-config,
 }:
 
 mkDerivation rec {
@@ -25,9 +26,16 @@ mkDerivation rec {
       --replace /usr ""
   '';
 
-  buildInputs = [ qtbase xz boost ];
+  buildInputs = [
+    qtbase
+    xz
+    boost
+  ];
 
-  nativeBuildInputs = [ qmake pkg-config ];
+  nativeBuildInputs = [
+    qmake
+    pkg-config
+  ];
 
   installFlags = [ "INSTALL_ROOT=$(out)" ];
 

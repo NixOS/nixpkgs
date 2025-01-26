@@ -132,8 +132,15 @@ import ./make-test-python.nix (
           "cp -rT ${testDir} /opt",
           "touch /opt/excluded_file_1 /opt/excluded_file_2",
           "mkdir -p /root/restic-rclone-backup",
-          "restic-remote-noinit-backup init",
+      )
 
+      server.fail(
+          # test that noinit backup in fact does not initialize the repository
+          # and thus fails without a pre-initialized repository
+          "systemctl start restic-backups-remote-noinit-backup.service",
+      )
+
+      server.succeed(
           # test that remotebackup runs custom commands and produces a snapshot
           "timedatectl set-time '2016-12-13 13:45'",
           "systemctl start restic-backups-remotebackup.service",
@@ -152,7 +159,8 @@ import ./make-test-python.nix (
           "restic-remote-from-file-backup restore latest -t /tmp/restore-2",
           "diff -ru ${testDir} /tmp/restore-2/opt",
 
-          # test that remote-noinit-backup produces a snapshot
+          # test that remote-noinit-backup produces a snapshot once initialized
+          "restic-remote-noinit-backup init",
           "systemctl start restic-backups-remote-noinit-backup.service",
           'restic-remote-noinit-backup snapshots --json | ${pkgs.jq}/bin/jq "length | . == 1"',
 

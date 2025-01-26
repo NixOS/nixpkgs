@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, pkg-config
-, libusb1
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  pkg-config,
+  libusb1,
 }:
 
 stdenv.mkDerivation rec {

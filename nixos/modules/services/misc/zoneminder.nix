@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.zoneminder;
@@ -8,10 +13,12 @@ let
   dirName = pkg.dirName;
 
   user = "zoneminder";
-  group = {
-    nginx = config.services.nginx.group;
-    none  = user;
-  }.${cfg.webserver};
+  group =
+    {
+      nginx = config.services.nginx.group;
+      none = user;
+    }
+    .${cfg.webserver};
 
   useNginx = cfg.webserver == "nginx";
 
@@ -25,12 +32,15 @@ let
   dirs = dirList: [ dirName ] ++ map (e: "${dirName}/${e}") dirList;
 
   cacheDirs = [ "swap" ];
-  libDirs   = [ "events" "exports" "images" "sounds" ];
+  libDirs = [
+    "events"
+    "exports"
+    "images"
+    "sounds"
+  ];
 
-  dirStanzas = baseDir:
-    lib.concatStringsSep "\n" (map (e:
-      "ZM_DIR_${lib.toUpper e}=${baseDir}/${e}"
-      ) libDirs);
+  dirStanzas =
+    baseDir: lib.concatStringsSep "\n" (map (e: "ZM_DIR_${lib.toUpper e}=${baseDir}/${e}") libDirs);
 
   defaultsFile = pkgs.writeText "60-defaults.conf" ''
     # 01-system-paths.conf
@@ -63,7 +73,8 @@ let
     ${cfg.extraConfig}
   '';
 
-in {
+in
+{
   options = {
     services.zoneminder = with lib; {
       enable = lib.mkEnableOption ''
@@ -78,7 +89,10 @@ in {
       '';
 
       webserver = mkOption {
-        type = types.enum [ "nginx" "none" ];
+        type = types.enum [
+          "nginx"
+          "none"
+        ];
         default = "nginx";
         description = ''
           The webserver to configure for the PHP frontend.
@@ -186,14 +200,15 @@ in {
   config = lib.mkIf cfg.enable {
 
     assertions = [
-      { assertion = cfg.database.createLocally -> cfg.database.username == user;
+      {
+        assertion = cfg.database.createLocally -> cfg.database.username == user;
         message = "services.zoneminder.database.username must be set to ${user} if services.zoneminder.database.createLocally is set true";
       }
     ];
 
     environment.etc = {
       "zoneminder/60-defaults.conf".source = defaultsFile;
-      "zoneminder/80-nixos.conf".source    = configFile;
+      "zoneminder/80-nixos.conf".source = configFile;
     };
 
     networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [
@@ -213,10 +228,14 @@ in {
         enable = true;
         package = lib.mkDefault pkgs.mariadb;
         ensureDatabases = [ cfg.database.name ];
-        ensureUsers = [{
-          name = cfg.database.username;
-          ensurePermissions = { "${cfg.database.name}.*" = "ALL PRIVILEGES"; };
-        }];
+        ensureUsers = [
+          {
+            name = cfg.database.username;
+            ensurePermissions = {
+              "${cfg.database.name}.*" = "ALL PRIVILEGES";
+            };
+          }
+        ];
       };
 
       nginx = lib.mkIf useNginx {
@@ -225,7 +244,12 @@ in {
           ${cfg.hostname} = {
             default = true;
             root = "${pkg}/share/zoneminder/www";
-            listen = [ { addr = "0.0.0.0"; inherit (cfg) port; } ];
+            listen = [
+              {
+                addr = "0.0.0.0";
+                inherit (cfg) port;
+              }
+            ];
             extraConfig = ''
               index index.php;
 
@@ -283,7 +307,13 @@ in {
         pools.zoneminder = {
           inherit user group;
           phpPackage = pkgs.php.withExtensions (
-            { enabled, all }: enabled ++ [ all.apcu all.sysvsem ]);
+            { enabled, all }:
+            enabled
+            ++ [
+              all.apcu
+              all.sysvsem
+            ]
+          );
           phpOptions = ''
             date.timezone = "${config.time.timeZone}"
           '';
@@ -316,32 +346,37 @@ in {
         ];
         after = [ "nginx.service" ] ++ lib.optional cfg.database.createLocally "mysql.service";
         wantedBy = [ "multi-user.target" ];
-        restartTriggers = [ defaultsFile configFile ];
-        preStart = lib.optionalString useCustomDir ''
-          install -dm775 -o ${user} -g ${group} ${cfg.storageDir}/{${lib.concatStringsSep "," libDirs}}
-        '' + lib.optionalString cfg.database.createLocally ''
-          if ! test -e "/var/lib/${dirName}/db-created"; then
-            ${config.services.mysql.package}/bin/mysql < ${pkg}/share/zoneminder/db/zm_create.sql
-            touch "/var/lib/${dirName}/db-created"
-          fi
+        restartTriggers = [
+          defaultsFile
+          configFile
+        ];
+        preStart =
+          lib.optionalString useCustomDir ''
+            install -dm775 -o ${user} -g ${group} ${cfg.storageDir}/{${lib.concatStringsSep "," libDirs}}
+          ''
+          + lib.optionalString cfg.database.createLocally ''
+            if ! test -e "/var/lib/${dirName}/db-created"; then
+              ${config.services.mysql.package}/bin/mysql < ${pkg}/share/zoneminder/db/zm_create.sql
+              touch "/var/lib/${dirName}/db-created"
+            fi
 
-          ${zoneminder}/bin/zmupdate.pl -nointeractive
-          ${zoneminder}/bin/zmupdate.pl --nointeractive -f
+            ${zoneminder}/bin/zmupdate.pl -nointeractive
+            ${zoneminder}/bin/zmupdate.pl --nointeractive -f
 
-          # Update ZM's Nix store path in the configuration table. Do nothing if the config doesn't
-          # contain ZM's Nix store path.
-          ${config.services.mysql.package}/bin/mysql -u zoneminder zm << EOF
-            UPDATE Config
-              SET Value = REGEXP_REPLACE(Value, "^/nix/store/[^-/]+-zoneminder-[^/]+", "${pkgs.zoneminder}")
-              WHERE Name = "ZM_FONT_FILE_LOCATION";
-          EOF
-        '';
+            # Update ZM's Nix store path in the configuration table. Do nothing if the config doesn't
+            # contain ZM's Nix store path.
+            ${config.services.mysql.package}/bin/mysql -u zoneminder zm << EOF
+              UPDATE Config
+                SET Value = REGEXP_REPLACE(Value, "^/nix/store/[^-/]+-zoneminder-[^/]+", "${pkgs.zoneminder}")
+                WHERE Name = "ZM_FONT_FILE_LOCATION";
+            EOF
+          '';
         serviceConfig = {
           User = user;
           Group = group;
           SupplementaryGroups = [ "video" ];
-          ExecStart  = "${zoneminder}/bin/zmpkg.pl start";
-          ExecStop   = "${zoneminder}/bin/zmpkg.pl stop";
+          ExecStart = "${zoneminder}/bin/zmpkg.pl start";
+          ExecStop = "${zoneminder}/bin/zmpkg.pl stop";
           ExecReload = "${zoneminder}/bin/zmpkg.pl restart";
           PIDFile = "/run/${dirName}/zm.pid";
           Type = "forking";

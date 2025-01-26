@@ -1,17 +1,18 @@
-{ lib
-, buildGoModule
-, fetchgit
-, unstableGitUpdater
+{
+  lib,
+  buildGoModule,
+  fetchgit,
+  unstableGitUpdater,
 }:
 
 buildGoModule {
   pname = "bloat";
-  version = "0-unstable-2024-06-17";
+  version = "0-unstable-2024-12-27";
 
   src = fetchgit {
     url = "git://git.freesoftwareextremist.com/bloat";
-    rev = "51d6ff26fe224444b921b5b1f367f15782cf84d3";
-    hash = "sha256-g5CbX134o9aeFggsVYnPfbZ4bsRQUUNnAe1KhTlONuU=";
+    rev = "d171b6c2d50500cdfd2f3308bf82a5f79e22cd8b";
+    hash = "sha256-a9nL6NvZLQZLOuoqdDbZTH9dVtQ6guKopkAHughINcg=";
   };
 
   vendorHash = null;

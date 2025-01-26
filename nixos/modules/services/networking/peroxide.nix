@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -17,7 +22,15 @@ in
 
     logLevel = mkOption {
       # https://github.com/sirupsen/logrus#level-logging
-      type = types.enum [ "Panic" "Fatal" "Error" "Warning" "Info" "Debug" "Trace" ];
+      type = types.enum [
+        "Panic"
+        "Fatal"
+        "Error"
+        "Warning"
+        "Info"
+        "Debug"
+        "Trace"
+      ];
       default = "Warning";
       example = "Info";
       description = "Only log messages of this priority or higher.";
@@ -90,7 +103,10 @@ in
         LogsDirectoryMode = "0750";
         # Specify just "peroxide" so that the user has write permission, because
         # peroxide deletes and recreates the cache directory on startup.
-        CacheDirectory = [ "peroxide" "peroxide/cache" ];
+        CacheDirectory = [
+          "peroxide"
+          "peroxide/cache"
+        ];
         CacheDirectoryMode = "0700";
         StateDirectory = stateDir;
         StateDirectoryMode = "0700";
@@ -127,5 +143,8 @@ in
     environment.systemPackages = [ cfg.package ];
   };
 
-  meta.maintainers = with maintainers; [ aanderse aidalgol ];
+  meta.maintainers = with maintainers; [
+    aanderse
+    aidalgol
+  ];
 }

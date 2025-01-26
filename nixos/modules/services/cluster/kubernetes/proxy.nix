@@ -65,7 +65,8 @@ in
       path = with pkgs; [ iptables conntrack-tools ];
       serviceConfig = {
         Slice = "kubernetes.slice";
-        ExecStart = ''${top.package}/bin/kube-proxy \
+        ExecStart = ''
+          ${top.package}/bin/kube-proxy \
           --bind-address=${cfg.bindAddress} \
           ${optionalString (top.clusterCidr!=null)
             "--cluster-cidr=${top.clusterCidr}"} \

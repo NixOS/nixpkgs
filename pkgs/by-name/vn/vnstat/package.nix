@@ -1,9 +1,12 @@
-{ lib, stdenv
-, fetchFromGitHub
-, pkg-config
-, gd, ncurses
-, sqlite
-, check
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  gd,
+  ncurses,
+  sqlite,
+  check,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,7 +25,11 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ gd ncurses sqlite ];
+  buildInputs = [
+    gd
+    ncurses
+    sqlite
+  ];
 
   nativeCheckInputs = [ check ];
 

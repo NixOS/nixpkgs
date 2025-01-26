@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gdk-pixbuf
-, gtk-engine-murrine
-, gtk_engines
-, librsvg
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gdk-pixbuf,
+  gtk-engine-murrine,
+  gtk_engines,
+  librsvg,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
   pname = "marwaita-yellow";
-  version = "20.3.1";
+  version = "23";
 
   src = fetchFromGitHub {
     owner = "darkomarko42";
     repo = "marwaita-yellow";
     rev = version;
-    hash = "sha256-ClM2lvFFLNz+pF/pY7j/V5L24egB3oxpkH8cpZMSu5g=";
+    hash = "sha256-1nGQvN6xacMoRyT7WkNC2lKX/QnXA7pCBz1kIo0aOwA=";
   };
 
   buildInputs = [

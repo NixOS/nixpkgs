@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, pkg-config
-, vala
-, libadwaita
-, libcanberra
-, libgee
-, glib
-, granite7
-, gtk4
-, pulseaudio
-, switchboard
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  libadwaita,
+  libcanberra,
+  libgee,
+  glib,
+  granite7,
+  gtk4,
+  pulseaudio,
+  switchboard,
 }:
 
 stdenv.mkDerivation rec {

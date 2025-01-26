@@ -675,7 +675,6 @@ in
     systemd.services.systemd-udev-settle.restartIfChanged = false; # Causes long delays in nixos-rebuild
     systemd.targets.local-fs.unitConfig.X-StopOnReconfiguration = true;
     systemd.targets.remote-fs.unitConfig.X-StopOnReconfiguration = true;
-    systemd.targets.network-online.wantedBy = [ "multi-user.target" ];
     systemd.services.systemd-importd.environment = proxy_env;
     systemd.services.systemd-pstore.wantedBy = [ "sysinit.target" ]; # see #81138
 

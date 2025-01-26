@@ -1,6 +1,7 @@
-{ lib
-, rustPlatform
-, fetchCrate
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,7 +19,10 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Provides different tools for projects using the diesel_cli";
     homepage = "https://crates.io/crates/diesel_cli_ext";
-    license = with licenses; [ asl20 mit ];
+    license = with licenses; [
+      asl20
+      mit
+    ];
     mainProgram = "diesel_ext";
     maintainers = with maintainers; [ siph ];
   };

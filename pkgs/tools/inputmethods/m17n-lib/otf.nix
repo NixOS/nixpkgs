@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkg-config, autoreconfHook, xorg, freetype }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  pkg-config,
+  autoreconfHook,
+  xorg,
+  freetype,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libotf";
@@ -29,11 +38,20 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs = [ pkg-config autoreconfHook ];
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
+  ];
 
-  buildInputs = [ xorg.libXaw freetype ];
+  buildInputs = [
+    xorg.libXaw
+    freetype
+  ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   postInstall = ''
     mkdir -p $dev/bin

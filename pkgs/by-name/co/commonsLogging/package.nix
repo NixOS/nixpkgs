@@ -1,11 +1,15 @@
-{lib, stdenv, fetchurl}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "commons-logging";
   version = "1.3.4";
 
   src = fetchurl {
-    url    = "mirror://apache/commons/logging/binaries/commons-logging-${version}-bin.tar.gz";
+    url = "mirror://apache/commons/logging/binaries/commons-logging-${version}-bin.tar.gz";
     sha256 = "sha256-asHQ0i4bBICkRK2Hzfo7+/EmT9gX5jcv8KmFMz1qCGI=";
   };
 
@@ -22,4 +26,3 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
   };
 }
-

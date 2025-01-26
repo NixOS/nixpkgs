@@ -1,10 +1,11 @@
-{ lib
-, callPackage
-, python312
-, fetchFromGitHub
-, fetchurl
-, frigate
-, nixosTests
+{
+  lib,
+  callPackage,
+  python312,
+  fetchFromGitHub,
+  fetchurl,
+  frigate,
+  nixosTests,
 }:
 
 let
@@ -14,7 +15,7 @@ let
     name = "frigate-${version}-source";
     owner = "blakeblackshear";
     repo = "frigate";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-PfUlo9ua4SVcQJTfmSVoEXHH1MUJ8A/w3kJHFpEzll8=";
   };
 
@@ -97,6 +98,9 @@ python.pkgs.buildPythonApplication rec {
     substituteInPlace frigate/test/test_config.py \
       --replace-fail "(MODEL_CACHE_DIR" "('/build/model_cache'" \
       --replace-fail "/config/model_cache" "/build/model_cache"
+
+    substituteInPlace frigate/api/preview.py \
+      --replace-fail "/media/frigate" "/var/lib/frigate"
   '';
 
   dontBuild = true;
@@ -168,7 +172,8 @@ python.pkgs.buildPythonApplication rec {
   passthru = {
     web = frigate-web;
     inherit python;
-    pythonPath =(python.pkgs.makePythonPath propagatedBuildInputs) + ":${frigate}/${python.sitePackages}";
+    pythonPath =
+      (python.pkgs.makePythonPath propagatedBuildInputs) + ":${frigate}/${python.sitePackages}";
     tests = {
       inherit (nixosTests) frigate;
     };

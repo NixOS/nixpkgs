@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pcre2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pcre2,
 }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "jpcre2";
     repo = "jpcre2";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-CizjxAiajDLqajZKizMRAk5UEZA+jDeBSldPyIb6Ic8=";
   };
 

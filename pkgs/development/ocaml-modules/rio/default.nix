@@ -1,7 +1,8 @@
-{ lib
-, buildDunePackage
-, fetchurl
-, cstruct
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  cstruct,
 }:
 
 buildDunePackage rec {
@@ -27,4 +28,3 @@ buildDunePackage rec {
     maintainers = [ ];
   };
 }
-

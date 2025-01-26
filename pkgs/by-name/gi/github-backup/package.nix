@@ -1,20 +1,21 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
-, git
-, git-lfs
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  git,
+  git-lfs,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "github-backup";
-  version = "0.46.0";
+  version = "0.48.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "josegonzalez";
     repo = "python-github-backup";
-    rev = "refs/tags/${version}";
-    hash = "sha256-kSxkD8vWBvaT7C0sS9rs3CEP2yeWsAJ0kjPlrGezoLU=";
+    tag = version;
+    hash = "sha256-vJD+dzKHYgiDme+wXklbxkbOPKwbilOWfJknsS37+vw=";
   };
 
   build-system = with python3Packages; [
@@ -22,7 +23,13 @@ python3Packages.buildPythonApplication rec {
   ];
 
   makeWrapperArgs = [
-    "--prefix" "PATH" ":" (lib.makeBinPath [ git git-lfs ])
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      git
+      git-lfs
+    ])
   ];
 
   # has no unit tests

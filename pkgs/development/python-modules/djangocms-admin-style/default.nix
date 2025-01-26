@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "django-cms";
     repo = "djangocms-admin-style";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-cDbmC7IJTT3NuVXBnbUVqC7dUfusMdntDGu2tSvxIdQ=";
   };
 
@@ -61,7 +61,7 @@ buildPythonPackage rec {
     });
   };
 
-  pythonImportCheck = [ "djangocms_admin_style" ];
+  pythonImportsCheck = [ "djangocms_admin_style" ];
 
   meta = {
     description = "Django Theme tailored to the needs of django CMS";

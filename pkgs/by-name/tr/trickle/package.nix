@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, libevent, libtirpc }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libevent,
+  libtirpc,
+}:
 
 stdenv.mkDerivation rec {
   pname = "trickle";
@@ -9,7 +15,10 @@ stdenv.mkDerivation rec {
     sha256 = "0s1qq3k5mpcs9i7ng0l9fvr1f75abpbzfi1jaf3zpzbs1dz50dlx";
   };
 
-  buildInputs = [ libevent libtirpc ];
+  buildInputs = [
+    libevent
+    libtirpc
+  ];
 
   preConfigure = ''
     sed -i 's|libevent.a|libevent.so|' configure
@@ -19,7 +28,10 @@ stdenv.mkDerivation rec {
     sed -i '/#define in_addr_t/ s:^://:' config.h
   '';
 
-  NIX_LDFLAGS = [ "-levent" "-ltirpc" ];
+  NIX_LDFLAGS = [
+    "-levent"
+    "-ltirpc"
+  ];
   env.NIX_CFLAGS_COMPILE = toString [ "-I${libtirpc.dev}/include/tirpc" ];
 
   configureFlags = [ "--with-libevent" ];

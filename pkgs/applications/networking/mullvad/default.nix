@@ -1,5 +1,6 @@
-{ lib
-, newScope
+{
+  lib,
+  newScope,
 }:
 lib.makeScope newScope (self: {
   libwg = self.callPackage ./libwg.nix { };

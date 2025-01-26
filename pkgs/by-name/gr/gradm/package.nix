@@ -1,24 +1,32 @@
-{ lib, stdenv, fetchurl
-, bison, flex
-, pam
+{
+  lib,
+  stdenv,
+  fetchurl,
+  bison,
+  flex,
+  pam,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gradm";
-  version = "3.1-202102241600";
+  version = "3.1-202111052217";
 
-  src  = fetchurl {
-    url    = "https://grsecurity.net/stable/${pname}-${version}.tar.gz";
-    sha256 = "02ni34hpggv00140p9gvh0lqi173zdddd2qhfi96hyr1axd5pl50";
+  src = fetchurl {
+    url = "https://grsecurity.net/stable/gradm-${finalAttrs.version}.tar.gz";
+    hash = "sha256-JFkpDzZ6R8ihzk6i7Ag1l5nqM9wV7UQ2Q5WWzogoT7k=";
   };
 
-  nativeBuildInputs = [ bison flex ];
+  nativeBuildInputs = [
+    bison
+    flex
+  ];
+
   buildInputs = [ pam ];
 
   enableParallelBuilding = true;
 
   makeFlags = [
-    "DESTDIR=$(out)"
+    "DESTDIR=${placeholder "out"}"
     "LEX=${flex}/bin/flex"
     "MANDIR=/share/man"
     "MKNOD=true"
@@ -41,11 +49,14 @@ stdenv.mkDerivation rec {
 
   postInstall = "rmdir $out/dev";
 
-  meta = with lib; {
+  meta = {
     description = "grsecurity RBAC administration and policy analysis utility";
-    homepage    = "https://grsecurity.net";
-    license     = licenses.gpl2Only;
-    platforms   = platforms.linux;
-    maintainers = with maintainers; [ thoughtpolice joachifm ];
+    homepage = "https://grsecurity.net";
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      thoughtpolice
+      joachifm
+    ];
   };
-}
+})

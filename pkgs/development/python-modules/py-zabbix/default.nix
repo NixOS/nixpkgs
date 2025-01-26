@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "adubkov";
     repo = "py-zabbix";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-aPQc188pszfDQvNtsGYlRLHS5CG5VyqptSoe4/GJVvE=";
   };
 

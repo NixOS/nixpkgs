@@ -1,13 +1,14 @@
-{ stdenv
-, lib
-, fetchurl
-, writeShellScript
-, SDL
-, SDL_mixer
-, makeDesktopItem
-, copyDesktopItems
-, runtimeShell
-, buildShareware ? false
+{
+  stdenv,
+  lib,
+  fetchurl,
+  writeShellScript,
+  SDL,
+  SDL_mixer,
+  makeDesktopItem,
+  copyDesktopItems,
+  runtimeShell,
+  buildShareware ? false,
 }:
 
 let
@@ -32,7 +33,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ copyDesktopItems ];
 
-  buildInputs = [ SDL SDL_mixer ];
+  buildInputs = [
+    SDL
+    SDL_mixer
+  ];
 
   sourceRoot = "rott-${version}/rott";
 

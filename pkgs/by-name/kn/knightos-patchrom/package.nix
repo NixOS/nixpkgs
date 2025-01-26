@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, cmake, asciidoc, libxslt }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  asciidoc,
+  libxslt,
+}:
 
 stdenv.mkDerivation rec {
   pname = "patchrom";
@@ -15,16 +21,20 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs = [ asciidoc cmake libxslt.bin ];
+  nativeBuildInputs = [
+    asciidoc
+    cmake
+    libxslt.bin
+  ];
 
   hardeningDisable = [ "format" ];
 
   meta = with lib; {
-    homepage    = "https://knightos.org/";
+    homepage = "https://knightos.org/";
     description = "Patches jumptables into TI calculator ROM files and generates an include file";
     mainProgram = "patchrom";
-    license     = licenses.mit;
+    license = licenses.mit;
     maintainers = with maintainers; [ siraben ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

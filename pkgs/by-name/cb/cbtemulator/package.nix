@@ -1,9 +1,10 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, runCommand
-, cbtemulator
-, google-cloud-bigtable-tool
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  runCommand,
+  cbtemulator,
+  google-cloud-bigtable-tool,
 }:
 
 buildGoModule rec {
@@ -32,31 +33,33 @@ buildGoModule rec {
 
   passthru = {
     # Sets up a table and family, then inserts, and ensures it gets back the value.
-    tests.smoketest = runCommand "cbtemulator-smoketest"
-      {
-        nativeBuildInputs = [ google-cloud-bigtable-tool ];
-      } ''
-      # Start the emulator
-      ${lib.getExe cbtemulator} &
-      EMULATOR_PID=$!
+    tests.smoketest =
+      runCommand "cbtemulator-smoketest"
+        {
+          nativeBuildInputs = [ google-cloud-bigtable-tool ];
+        }
+        ''
+          # Start the emulator
+          ${lib.getExe cbtemulator} &
+          EMULATOR_PID=$!
 
-      cleanup() {
-        kill $EMULATOR_PID
-      }
+          cleanup() {
+            kill $EMULATOR_PID
+          }
 
-      trap cleanup EXIT
+          trap cleanup EXIT
 
-      export BIGTABLE_EMULATOR_HOST=localhost:9000
+          export BIGTABLE_EMULATOR_HOST=localhost:9000
 
-      cbt -instance instance-1 -project project-1 createtable table-1
-      cbt -instance instance-1 -project project-1 createfamily table-1 cf1
-      cbt -instance instance-1 -project project-1 ls table-1
-      cbt -instance instance-1 -project project-1 set table-1 key1 cf1:c1=value1
+          cbt -instance instance-1 -project project-1 createtable table-1
+          cbt -instance instance-1 -project project-1 createfamily table-1 cf1
+          cbt -instance instance-1 -project project-1 ls table-1
+          cbt -instance instance-1 -project project-1 set table-1 key1 cf1:c1=value1
 
-      cbt -instance instance-1 -project project-1 read table-1 | grep -q value1
+          cbt -instance instance-1 -project project-1 read table-1 | grep -q value1
 
-      touch $out;
-    '';
+          touch $out;
+        '';
   };
 
   meta = with lib; {

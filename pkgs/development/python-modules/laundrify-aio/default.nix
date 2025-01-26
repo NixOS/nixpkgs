@@ -13,13 +13,12 @@ buildPythonPackage rec {
   version = "1.2.2";
   pyproject = true;
 
-
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "laundrify";
     repo = "laundrify-pypi";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-iFQ0396BkGWM7Ma/I0gbXucd2/yPmEVF4IC3/bMK2SA=";
   };
 

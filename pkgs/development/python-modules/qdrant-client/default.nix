@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "qdrant-client";
-  version = "1.11.3";
+  version = "1.12.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -26,8 +26,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "qdrant";
     repo = "qdrant-client";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-1tBlWwD2GaphwupWUWRYwYrqGV9cTfG4k1L9N5mub/Q=";
+    tag = "v${version}";
+    hash = "sha256-oQrT3J+A0FvggAYhZ25MwOpfN3WryTG/Tkgygc7g3Ew=";
   };
 
   build-system = [ poetry-core ];

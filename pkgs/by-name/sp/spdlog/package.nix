@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "spdlog";
-  version = "1.14.1";
+  version = "1.15.0";
 
   src = fetchFromGitHub {
     owner = "gabime";
     repo  = "spdlog";
     rev   = "v${version}";
-    hash  = "sha256-F7khXbMilbh5b+eKnzcB0fPPWQqUHqAYPWJb83OnUKQ=";
+    hash  = "sha256-HCpnN28qWreg0NvL6Q9pfSSxOTHgV6glHt6P0FbH/Cw=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -41,6 +41,11 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p $out/share/doc/spdlog
     cp -rv ../example $out/share/doc/spdlog
+
+    substituteInPlace $dev/include/spdlog/tweakme.h \
+      --replace-fail \
+        '// #define SPDLOG_FMT_EXTERNAL' \
+        '#define SPDLOG_FMT_EXTERNAL'
   '';
 
   doCheck = true;

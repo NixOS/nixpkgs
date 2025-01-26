@@ -1,4 +1,9 @@
-{lib, stdenv, fetchFromGitHub, perl}:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  perl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "vmtouch";
@@ -11,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "08da6apzfkfjwasn4dxrlfxqfx7arl28apdzac5nvm0fhvws0dxk";
   };
 
-  buildInputs = [perl];
+  buildInputs = [ perl ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 

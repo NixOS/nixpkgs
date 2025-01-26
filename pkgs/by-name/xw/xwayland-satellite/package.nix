@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "Supreeeme";
     repo = "xwayland-satellite";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-nq7bouXQXaaPPo/E+Jbq+wNHnatD4dY8OxSrRqzvy6s=";
   };
 

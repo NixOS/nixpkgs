@@ -14,7 +14,7 @@ python3Packages.buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "0xB9";
     repo = "MyBBscan";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-cX1483JK+bejQWua9d7V3GDw6cPPvlnLX5w2XQjqMOQ=";
   };
 

@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, curl
-, gpgme
-, libarchive
-, bzip2
-, xz
-, attr
-, acl
-, libxml2
-, autoreconfHook
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  curl,
+  gpgme,
+  libarchive,
+  bzip2,
+  xz,
+  attr,
+  acl,
+  libxml2,
+  autoreconfHook,
 }:
 
 stdenv.mkDerivation rec {

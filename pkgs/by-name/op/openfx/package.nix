@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation {
   pname = "openfx";
@@ -11,18 +15,21 @@ stdenv.mkDerivation {
     sha256 = "0k9ggzr6bisn77mipjfvawg3mv4bz50b63v8f7w1jhldi1sfy548";
   };
 
-  outputs = [ "dev" "out" ];
+  outputs = [
+    "dev"
+    "out"
+  ];
 
   enableParallelBuilding = true;
 
   buildPhase = ''
-      mkdir $dev
-      mkdir $out
-      '';
+    mkdir $dev
+    mkdir $out
+  '';
 
   installPhase = ''
-     mkdir -p $dev/include/OpenFX/
-     cp -r include/* $dev/include/OpenFX/
+    mkdir -p $dev/include/OpenFX/
+    cp -r include/* $dev/include/OpenFX/
   '';
 
   meta = with lib; {

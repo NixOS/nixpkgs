@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, writeText
-, fontconfig
-, libX11
-, libXft
-, libXcursor
-, libXcomposite
-, conf ? null
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  writeText,
+  fontconfig,
+  libX11,
+  libXft,
+  libXcursor,
+  libXcomposite,
+  conf ? null,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -31,8 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch =
     let
       configFile =
-        if lib.isDerivation conf || builtins.isPath conf
-        then conf else writeText "config.h" conf;
+        if lib.isDerivation conf || builtins.isPath conf then conf else writeText "config.h" conf;
     in
     lib.optionalString (conf != null) "cp ${configFile} config.h";
 

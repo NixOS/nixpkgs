@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pulumi";
     repo = "pulumi-hcloud";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-m9MRXDTSC0K1raoH9gKPuxdwvUEnZ/ulp32xlY1Hsdo=";
   };
 

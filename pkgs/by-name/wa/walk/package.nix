@@ -1,4 +1,8 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+}:
 
 buildGoModule rec {
   pname = "walk";
@@ -17,7 +21,10 @@ buildGoModule rec {
     description = "Terminal file manager";
     homepage = "https://github.com/antonmedv/walk";
     license = licenses.mit;
-    maintainers = with maintainers; [ portothree surfaceflinger ];
+    maintainers = with maintainers; [
+      portothree
+      surfaceflinger
+    ];
     mainProgram = "walk";
   };
 }

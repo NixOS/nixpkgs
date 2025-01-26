@@ -48,7 +48,7 @@ mkDerivationWith buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "napari";
     repo = "napari";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-wJifLRrHlDzPgBU7OOPqjdzYpr9M+Klc+yAc/IpyZN8=";
   };
 

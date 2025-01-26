@@ -1,7 +1,9 @@
-{ lib, stdenv
-, fetchFromGitHub
-, rustPlatform
-, Security
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -30,6 +32,9 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/pemistahl/grex/releases/tag/v${version}";
     license = licenses.asl20;
     mainProgram = "grex";
-    maintainers = with maintainers; [ SuperSandro2000 mfrw ];
+    maintainers = with maintainers; [
+      SuperSandro2000
+      mfrw
+    ];
   };
 }

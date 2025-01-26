@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, elfutils
-, pcre
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  elfutils,
+  pcre,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -18,7 +19,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Using elfutils because libelf is being discontinued
   # See https://github.com/NixOS/nixpkgs/pull/271568
-  buildInputs = [ elfutils pcre ];
+  buildInputs = [
+    elfutils
+    pcre
+  ];
 
   postPatch = ''
     substituteInPlace Makefile --replace "git rev-parse --short HEAD" "echo ${finalAttrs.src.rev}"

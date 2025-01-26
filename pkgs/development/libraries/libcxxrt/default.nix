@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, cmake, unstableGitUpdater }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  unstableGitUpdater,
+}:
 
 stdenv.mkDerivation {
   pname = "libcxxrt";
@@ -13,7 +19,10 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   installPhase = ''
     mkdir -p $dev/include $out/lib

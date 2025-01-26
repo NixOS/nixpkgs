@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch } :
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+}:
 
 stdenv.mkDerivation rec {
   version = "2.5.2";
@@ -13,9 +18,9 @@ stdenv.mkDerivation rec {
 
   patches = [
     /*
-     * A patch to simplify the installation and for removing the
-     * hard coded dependency on GCC.
-     */
+      A patch to simplify the installation and for removing the
+      hard coded dependency on GCC.
+    */
     ./0001-makefile-fix-installation.patch
 
     # fix darwin build (include headers)
@@ -33,10 +38,10 @@ stdenv.mkDerivation rec {
     description = "Fault tolerant cpio archiver targeting backups";
     platforms = lib.platforms.all;
     /*
-     * Licensing is complicated due to the age of the code base, but
-     * generally free. See the file ``afio_license_issues_v5.txt`` for
-     * a comprehensive discussion.
-     */
+      Licensing is complicated due to the age of the code base, but
+      generally free. See the file ``afio_license_issues_v5.txt`` for
+      a comprehensive discussion.
+    */
     license = lib.licenses.free;
     mainProgram = "afio";
   };

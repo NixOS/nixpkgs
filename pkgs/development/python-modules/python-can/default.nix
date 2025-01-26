@@ -14,6 +14,7 @@
   pytestCheckHook,
   pythonOlder,
   setuptools,
+  setuptools-scm,
   typing-extensions,
   wrapt,
   uptime,
@@ -21,21 +22,22 @@
 
 buildPythonPackage rec {
   pname = "python-can";
-  version = "4.4.2";
+  version = "4.5.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "hardbyte";
     repo = "python-can";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-p3B1LWSygDX0UhIx4XhXv15H7Hwn9UB20jFIPDZnuNs=";
+    tag = "v${version}";
+    hash = "sha256-XCv2oOkGq8c2gTo+8UcZbuBYXyhhQstWLyddk3db38s=";
   };
 
-  pythonRelaxDeps = [ "msgpack" ];
-
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [
     msgpack

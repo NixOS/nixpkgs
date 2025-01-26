@@ -1,4 +1,9 @@
-{ lib, fetchFromGitHub, mkTclDerivation, tclx }:
+{
+  lib,
+  fetchFromGitHub,
+  mkTclDerivation,
+  tclx,
+}:
 
 mkTclDerivation rec {
   pname = "tcl-fcgi";
@@ -28,4 +33,3 @@ mkTclDerivation rec {
     maintainers = with maintainers; [ nat-418 ];
   };
 }
-

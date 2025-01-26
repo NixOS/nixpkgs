@@ -1,23 +1,24 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, freetype
-, imlib2
-, libSM
-, libXcomposite
-, libXdamage
-, libXext
-, libXfixes
-, libXft
-, libXinerama
-, libXrandr
-, libpulseaudio
-, libsndfile
-, pango
-, perl
-, python3
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  freetype,
+  imlib2,
+  libSM,
+  libXcomposite,
+  libXdamage,
+  libXext,
+  libXfixes,
+  libXft,
+  libXinerama,
+  libXrandr,
+  libpulseaudio,
+  libsndfile,
+  pango,
+  perl,
+  python3,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {

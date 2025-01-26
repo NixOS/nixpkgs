@@ -1,19 +1,27 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "mark";
-  version = "11.2.0";
+  version = "12.0.0";
 
   src = fetchFromGitHub {
-    owner  = "kovetskiy";
-    repo   = "mark";
-    rev    = version;
-    sha256 = "sha256-Pwt8HhbO+1wmEGYRny1W5HzKRWmvTneqN4fuAaKcYaA=";
+    owner = "kovetskiy";
+    repo = "mark";
+    rev = version;
+    sha256 = "sha256-kMP6+L7kfK/qfVI49ssD6Ar1c7ugKgiXUIk9yjQYXE8=";
   };
 
-  vendorHash = "sha256-uokBuQquSkdbHsI3hZ7/FxE93/QOZ6jD2zB8vDPeESI=";
+  vendorHash = "sha256-40hYy3rXyTqrmTp6lNsLI5c2GWZ6Aoi3KRPJV0Ry5Ds=";
 
-  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.version=${version}"
+  ];
 
   checkFlags =
     let
@@ -21,7 +29,8 @@ buildGoModule rec {
         # Expects to be able to launch google-chrome
         "TestExtractMermaidImage"
       ];
-    in [
+    in
+    [
       "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$"
     ];
 

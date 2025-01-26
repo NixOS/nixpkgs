@@ -1,19 +1,21 @@
-{ lib, stdenv
-, fetchurl
-, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
 
-, perlPackages
+  perlPackages,
 
-, cdparanoia
-, coreutils
-, eject
-, flac
-, gnugrep
-, nano
-, sox
-, vorbis-tools
-, vorbisgain
-, which
+  cdparanoia,
+  coreutils,
+  eject,
+  flac,
+  gnugrep,
+  nano,
+  sox,
+  vorbis-tools,
+  vorbisgain,
+  which,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +26,10 @@ stdenv.mkDerivation rec {
     sha256 = "0pk9152wll6fmkj1pki3fz3ijlf06jyk32v31yarwvdkwrk7s9xz";
   };
 
-  buildInputs = [ perlPackages.perl perlPackages.CDDB_get ];
+  buildInputs = [
+    perlPackages.perl
+    perlPackages.CDDB_get
+  ];
   nativeBuildInputs = [ makeWrapper ];
 
   toolDeps = lib.makeBinPath [
@@ -39,7 +44,11 @@ stdenv.mkDerivation rec {
     which
   ];
 
-  scripts = [ "crip" "editcomment" "editfilenames" ];
+  scripts = [
+    "crip"
+    "editcomment"
+    "editfilenames"
+  ];
 
   installPhase = ''
     mkdir -p $out/bin/

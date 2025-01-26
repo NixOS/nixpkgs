@@ -2,6 +2,7 @@
   lib,
   runCommand,
   writeShellScript,
+  writeText,
   linkFarm,
   time,
   procps,
@@ -48,10 +49,14 @@ let
         export NIX_STATE_DIR=$(mktemp -d)
         mkdir $out
         export GC_INITIAL_HEAP_SIZE=4g
-        command time -v \
+        command time -f "Attribute eval done [%MKB max resident, %Es elapsed] %C" \
           nix-instantiate --eval --strict --json --show-trace \
-          $src/pkgs/top-level/release-attrpaths-superset.nix -A paths \
-          --arg enableWarnings false > $out/paths.json
+            "$src/pkgs/top-level/release-attrpaths-superset.nix" \
+            -A paths \
+            -I "$src" \
+            --option restrict-eval true \
+            --option allow-import-from-derivation false \
+            --arg enableWarnings false > $out/paths.json
         mv "$supportedSystemsPath" $out/systems.json
       '';
 
@@ -84,6 +89,8 @@ let
         set +e
         command time -f "Chunk $myChunk on $system done [%MKB max resident, %Es elapsed] %C" \
           nix-env -f "${nixpkgs}/pkgs/top-level/release-attrpaths-parallel.nix" \
+          --option restrict-eval true \
+          --option allow-import-from-derivation false \
           --query --available \
           --no-name --attr-path --out-path \
           --show-trace \
@@ -93,6 +100,8 @@ let
           --arg systems "[ \"$system\" ]" \
           --arg checkMeta ${lib.boolToString checkMeta} \
           --arg includeBroken ${lib.boolToString includeBroken} \
+          -I ${nixpkgs} \
+          -I ${attrpathFile} \
           > "$outputDir/result/$myChunk"
         exitCode=$?
         set -e
@@ -238,16 +247,25 @@ let
           jq -s from_entries > $out/stats.json
       '';
 
+  compare = import ./compare {
+    inherit
+      lib
+      jq
+      runCommand
+      writeText
+      supportedSystems
+      ;
+  };
+
   full =
     {
-      # Whether to evaluate just a single system, by default all are evaluated
-      evalSystem ? if quickTest then "x86_64-linux" else null,
+      # Whether to evaluate on a specific set of systems, by default all are evaluated
+      evalSystems ? if quickTest then [ "x86_64-linux" ] else supportedSystems,
       # The number of attributes per chunk, see ./README.md for more info.
       chunkSize,
       quickTest ? false,
     }:
     let
-      systems = if evalSystem == null then supportedSystems else [ evalSystem ];
       results = linkFarm "results" (
         map (evalSystem: {
           name = evalSystem;
@@ -255,7 +273,7 @@ let
             inherit quickTest evalSystem chunkSize;
             attrpathFile = attrpathsSuperset + "/paths.json";
           };
-        }) systems
+        }) evalSystems
       );
     in
     combine {
@@ -268,6 +286,7 @@ in
     attrpathsSuperset
     singleSystem
     combine
+    compare
     # The above three are used by separate VMs in a GitHub workflow,
     # while the below is intended for testing on a single local machine
     full

@@ -1,22 +1,23 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, buildDotnetModule
-, dotnetCorePackages
-, openssl
-, zlib
-, nix-update-script
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  buildDotnetModule,
+  dotnetCorePackages,
+  openssl,
+  zlib,
+  nix-update-script,
 }:
 
 buildDotnetModule rec {
   pname = "pupdate";
-  version = "3.19.0";
+  version = "3.20.0";
 
   src = fetchFromGitHub {
     owner = "mattpannella";
     repo = "pupdate";
     rev = "${version}";
-    hash = "sha256-ogQ7pYLfeyoxg0p7nxUvYhmgDw5xtd7qkFM08B4FDBU=";
+    hash = "sha256-kdxqG1Vw6jRT/YyRLi60APpayYyLG73KqAFga8N9G2A=";
   };
 
   buildInputs = [
@@ -34,7 +35,7 @@ buildDotnetModule rec {
 
   projectFile = "pupdate.csproj";
 
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   selfContainedBuild = true;
 
@@ -44,8 +45,8 @@ buildDotnetModule rec {
     "-p:PackageRuntime=${dotnetCorePackages.systemToDotnetRid stdenv.hostPlatform.system} -p:TrimMode=partial"
   ];
 
-  dotnet-sdk = dotnetCorePackages.sdk_7_0;
-  dotnet-runtime = dotnetCorePackages.runtime_7_0;
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
   passthru = {
     updateScript = nix-update-script { };

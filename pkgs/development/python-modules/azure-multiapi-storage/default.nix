@@ -6,10 +6,10 @@
   cryptography,
   fetchPypi,
   msrest,
-  msrestazure,
   pythonOlder,
   requests,
   setuptools,
+  python-dateutil,
 }:
 
 buildPythonPackage rec {
@@ -31,8 +31,8 @@ buildPythonPackage rec {
     azure-core
     cryptography
     msrest
-    msrestazure
     requests
+    python-dateutil
   ];
 
   # fix namespace
@@ -42,14 +42,13 @@ buildPythonPackage rec {
   doCheck = false;
 
   pythonImportsCheck = [
-    "azure.common"
     "azure.multiapi.storage"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Microsoft Azure Storage Client Library for Python with multi API version support";
-    homepage = "https://github.com/Azure/azure-sdk-for-python";
-    license = licenses.mit;
+    homepage = "https://github.com/Azure/azure-multiapi-storage-python";
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

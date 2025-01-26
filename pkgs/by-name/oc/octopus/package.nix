@@ -1,28 +1,29 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, cmake
-, pkg-config
-, ninja
-, gfortran
-, which
-, perl
-, procps
-, libvdwxc
-, libyaml
-, libxc
-, fftw
-, blas
-, lapack
-, gsl
-, netcdf
-, arpack
-, spglib
-, metis
-, scalapack
-, mpi
-, enableMpi ? true
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  cmake,
+  pkg-config,
+  ninja,
+  gfortran,
+  which,
+  perl,
+  procps,
+  libvdwxc,
+  libyaml,
+  libxc,
+  fftw,
+  blas,
+  lapack,
+  gsl,
+  netcdf,
+  arpack,
+  spglib,
+  metis,
+  scalapack,
+  mpi,
+  enableMpi ? true,
+  python3,
 }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);
@@ -30,14 +31,19 @@ assert (blas.isILP64 == arpack.isILP64);
 
 stdenv.mkDerivation rec {
   pname = "octopus";
-  version = "14.1";
+  version = "15.1";
 
   src = fetchFromGitLab {
     owner = "octopus-code";
     repo = "octopus";
     rev = version;
-    hash = "sha256-8wZR+bYdxJFsUPMWbIGYxRdNzjLgHm+KFLjY7fSN7io=";
+    hash = "sha256-vG1HUkuNUZkhBumoJJy3AyFU6cZOo1YGmaOYcU6bPOM=";
   };
+
+  patches = [
+    # Discover all MPI languages components to avoid scalpack discovery failure
+    ./scalapack-mpi-alias.patch
+  ];
 
   nativeBuildInputs = [
     which
@@ -93,7 +99,12 @@ stdenv.mkDerivation rec {
     description = "Real-space time dependent density-functional theory code";
     homepage = "https://octopus-code.org";
     maintainers = with maintainers; [ markuskowa ];
-    license = with licenses; [ gpl2Only asl20 lgpl3Plus bsd3 ];
+    license = with licenses; [
+      gpl2Only
+      asl20
+      lgpl3Plus
+      bsd3
+    ];
     platforms = [ "x86_64-linux" ];
   };
 }

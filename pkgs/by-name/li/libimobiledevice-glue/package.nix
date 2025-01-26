@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, libplist
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  libplist,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -31,7 +32,10 @@ stdenv.mkDerivation rec {
     libplist
   ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   passthru.updateScript = nix-update-script { };
 

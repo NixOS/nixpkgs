@@ -3,29 +3,32 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
+  click,
   icalendar,
   tzdata,
   pytestCheckHook,
   restructuredtext-lint,
   pygments,
   pytz,
+  pytest-click,
 }:
 
 buildPythonPackage rec {
   pname = "x-wr-timezone";
-  version = "1.0.1";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "niccokunzmann";
     repo = "x-wr-timezone";
-    rev = "v${version}";
-    hash = "sha256-MDFniFhgRuNtYITH/IUUP/HHC79coqxgXrlErj+Yrcs=";
+    tag = "v${version}";
+    hash = "sha256-F/bNETgscbhEkpG/D1eSJaBNdpi0+xEYuNL4RURGST0=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
+    click
     icalendar
     tzdata
   ];
@@ -35,6 +38,7 @@ buildPythonPackage rec {
     restructuredtext-lint
     pygments
     pytz
+    pytest-click
   ];
 
   preCheck = ''

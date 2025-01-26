@@ -1,32 +1,34 @@
-{ lib, fetchFromGitHub, buildPythonApplication
-, gitUpdater
-, pythonOlder
-, aiohttp
-, appdirs
-, beautifulsoup4
-, defusedxml
-, devpi-common
-, execnet
-, itsdangerous
-, nginx
-, packaging
-, passlib
-, platformdirs
-, pluggy
-, py
-, httpx
-, pyramid
-, pytestCheckHook
-, repoze-lru
-, setuptools
-, strictyaml
-, waitress
-, webtest
-, testers
-, devpi-server
-, nixosTests
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonApplication,
+  gitUpdater,
+  pythonOlder,
+  aiohttp,
+  appdirs,
+  beautifulsoup4,
+  defusedxml,
+  devpi-common,
+  execnet,
+  itsdangerous,
+  nginx,
+  packaging,
+  passlib,
+  platformdirs,
+  pluggy,
+  py,
+  httpx,
+  pyramid,
+  pytestCheckHook,
+  repoze-lru,
+  setuptools,
+  strictyaml,
+  waitress,
+  webtest,
+  testers,
+  devpi-server,
+  nixosTests,
 }:
-
 
 buildPythonApplication rec {
   pname = "devpi-server";
@@ -122,7 +124,7 @@ buildPythonApplication rec {
     rev-prefix = "server-";
   };
 
-  meta = with lib;{
+  meta = with lib; {
     homepage = "http://doc.devpi.net";
     description = "Github-style pypi index server and packaging meta tool";
     changelog = "https://github.com/devpi/devpi/blob/${src.rev}/server/CHANGELOG";

@@ -1,10 +1,11 @@
-{ lib
-, mdbook
-, nodePackages
-, python3
-, util-linux
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  mdbook,
+  nodePackages,
+  python3,
+  util-linux,
+  rustPlatform,
+  fetchFromGitHub,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -32,6 +33,9 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "mdbook-cmdrun";
     homepage = "https://github.com/FauconFan/mdbook-cmdrun";
     license = licenses.mit;
-    maintainers = with maintainers; [ pinpox matthiasbeyer ];
+    maintainers = with maintainers; [
+      pinpox
+      matthiasbeyer
+    ];
   };
 }

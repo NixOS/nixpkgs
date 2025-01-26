@@ -74,6 +74,10 @@ stdenv.mkDerivation {
       } \
       --set-default ODIN_ROOT $out/share
 
+    make -C "$out/share/vendor/cgltf/src/"
+    make -C "$out/share/vendor/stb/src/"
+    make -C "$out/share/vendor/miniaudio/src/"
+
     runHook postInstall
   '';
 
@@ -87,7 +91,6 @@ stdenv.mkDerivation {
     mainProgram = "odin";
     maintainers = with lib.maintainers; [
       astavie
-      znaniye
     ];
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isMusl;

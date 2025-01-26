@@ -1,6 +1,10 @@
-{ lib, stdenv, fetchurl, libressl
-, privsepPath ? "/var/empty"
-, privsepUser ? "ntp"
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libressl,
+  privsepPath ? "/var/empty",
+  privsepUser ? "ntp",
 }:
 
 stdenv.mkDerivation rec {

@@ -1,4 +1,11 @@
-{ fetchurl, lib, stdenv, perl, perlPackages, makeWrapper }:
+{
+  fetchurl,
+  lib,
+  stdenv,
+  perl,
+  perlPackages,
+  makeWrapper,
+}:
 
 stdenv.mkDerivation rec {
   pname = "namazu";
@@ -9,11 +16,16 @@ stdenv.mkDerivation rec {
     sha256 = "1xvi7hrprdchdpzhg3fvk4yifaakzgydza5c0m50h1yvg6vay62w";
   };
 
-  buildInputs = [ perl perlPackages.FileMMagic ];
+  buildInputs = [
+    perl
+    perlPackages.FileMMagic
+  ];
   nativeBuildInputs = [ makeWrapper ];
 
   postInstall = ''
-    wrapProgram $out/bin/mknmz --set PERL5LIB ${perlPackages.makeFullPerlPath [ perlPackages.FileMMagic ]}
+    wrapProgram $out/bin/mknmz --set PERL5LIB ${
+      perlPackages.makeFullPerlPath [ perlPackages.FileMMagic ]
+    }
   '';
 
   meta = {
@@ -28,7 +40,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     homepage = "http://namazu.org/";
 
-    platforms = lib.platforms.gnu ++ lib.platforms.linux;  # arbitrary choice
+    platforms = lib.platforms.gnu ++ lib.platforms.linux; # arbitrary choice
     maintainers = [ ];
   };
 }

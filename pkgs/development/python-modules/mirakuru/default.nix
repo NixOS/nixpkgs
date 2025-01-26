@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ClearcodeHQ";
     repo = "mirakuru";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-blk4Oclb3+Cj3RH7BhzacfoPFDBIP/zgv4Ct7fawGnQ=";
   };
 

@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "django";
     repo = "django-localflavor";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-UWp3ei1VlEsEfjbJIE+MpffSzYF4X1HEQw+z+5kZoP0=";
   };
 

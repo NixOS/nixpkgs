@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchurl, cups, perl, ghostscript, which, makeWrapper}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cups,
+  perl,
+  ghostscript,
+  which,
+  makeWrapper,
+}:
 
 /*
     [Setup instructions](http://support.brother.com/g/s/id/linux/en/instruction_prn1a.html).
@@ -49,7 +58,13 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ cups perl stdenv.cc.libc ghostscript which ];
+  buildInputs = [
+    cups
+    perl
+    stdenv.cc.libc
+    ghostscript
+    which
+  ];
 
   dontBuild = true;
 
@@ -82,7 +97,6 @@ stdenv.mkDerivation rec {
   '';
 
   dontPatchELF = true;
-
 
   meta = {
     description = "Brother BrGenML1 LPR driver";

@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, fetchpatch
-, jdk_headless
-, gtest
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  fetchpatch,
+  jdk_headless,
+  gtest,
 }:
 
 stdenv.mkDerivation rec {

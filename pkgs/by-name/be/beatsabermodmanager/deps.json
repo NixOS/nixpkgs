@@ -1,0 +1,531 @@
+[
+  {
+    "pname": "Avalonia",
+    "version": "11.0.999-cibuild0030643-beta",
+    "sha256": "0bcc3h5hxy8mfkgxn07vnnq2rn8whn2gx3d67lmlpm01r16rndyc",
+    "url": "https://pkgs.dev.azure.com/AvaloniaUI/aa84306f-2981-47b9-8206-edb3bed6250d/_packaging/5ebc1fbc-7d49-4641-8a57-d18c55ed6602/nuget/v3/flat2/avalonia/11.0.999-cibuild0030643-beta/avalonia.11.0.999-cibuild0030643-beta.nupkg"
+  },
+  {
+    "pname": "Avalonia.Angle.Windows.Natives",
+    "version": "2.1.0.2023020321",
+    "sha256": "1az4s1g22ipak9a3xfh55z2h3rm6lpqh7svbpw6ag4ysrgsjjsjd"
+  },
+  {
+    "pname": "Avalonia.Controls.ColorPicker",
+    "version": "11.0.999-cibuild0030643-beta",
+    "sha256": "06n0c8dyh1q4a97nm31vyr8b6jzcq8nvvligwzp4xaxdwhkphg2x",
+    "url": "https://pkgs.dev.azure.com/AvaloniaUI/aa84306f-2981-47b9-8206-edb3bed6250d/_packaging/5ebc1fbc-7d49-4641-8a57-d18c55ed6602/nuget/v3/flat2/avalonia.controls.colorpicker/11.0.999-cibuild0030643-beta/avalonia.controls.colorpicker.11.0.999-cibuild0030643-beta.nupkg"
+  },
+  {
+    "pname": "Avalonia.Controls.DataGrid",
+    "version": "11.0.999-cibuild0030643-beta",
+    "sha256": "1vfkbjy9fl24i6skn02wgr047579x4a1liiw79qwbkx7mgvw9pvn",
+    "url": "https://pkgs.dev.azure.com/AvaloniaUI/aa84306f-2981-47b9-8206-edb3bed6250d/_packaging/5ebc1fbc-7d49-4641-8a57-d18c55ed6602/nuget/v3/flat2/avalonia.controls.datagrid/11.0.999-cibuild0030643-beta/avalonia.controls.datagrid.11.0.999-cibuild0030643-beta.nupkg"
+  },
+  {
+    "pname": "Avalonia.Desktop",
+    "version": "11.0.999-cibuild0030643-beta",
+    "sha256": "0nh6hdw07hwq92n0m1sx7qxwp4ccqash5f8sivj3lflx786s9i5f",
+    "url": "https://pkgs.dev.azure.com/AvaloniaUI/aa84306f-2981-47b9-8206-edb3bed6250d/_packaging/5ebc1fbc-7d49-4641-8a57-d18c55ed6602/nuget/v3/flat2/avalonia.desktop/11.0.999-cibuild0030643-beta/avalonia.desktop.11.0.999-cibuild0030643-beta.nupkg"
+  },
+  {
+    "pname": "Avalonia.Diagnostics",
+    "version": "11.0.999-cibuild0030643-beta",
+    "sha256": "0ddcq2w54cywpzcwb9av54zkblvpnp0g7xs4dsw6s39wrxyh8spw",
+    "url": "https://pkgs.dev.azure.com/AvaloniaUI/aa84306f-2981-47b9-8206-edb3bed6250d/_packaging/5ebc1fbc-7d49-4641-8a57-d18c55ed6602/nuget/v3/flat2/avalonia.diagnostics/11.0.999-cibuild0030643-beta/avalonia.diagnostics.11.0.999-cibuild0030643-beta.nupkg"
+  },
+  {
+    "pname": "Avalonia.FreeDesktop",
+    "version": "11.0.999-cibuild0030643-beta",
+    "sha256": "1wshqaikd1b2a91yixgsnvl8i1arhmlviavjywi67a2w1xv98das",
+    "url": "https://pkgs.dev.azure.com/AvaloniaUI/aa84306f-2981-47b9-8206-edb3bed6250d/_packaging/5ebc1fbc-7d49-4641-8a57-d18c55ed6602/nuget/v3/flat2/avalonia.freedesktop/11.0.999-cibuild0030643-beta/avalonia.freedesktop.11.0.999-cibuild0030643-beta.nupkg"
+  },
+  {
+    "pname": "Avalonia.Native",
+    "version": "11.0.999-cibuild0030643-beta",
+    "sha256": "10pp6lh5hlcfs3xrqg1rv7xkckkpnbvdvx0ndfqgpfqxyv99jdhd",
+    "url": "https://pkgs.dev.azure.com/AvaloniaUI/aa84306f-2981-47b9-8206-edb3bed6250d/_packaging/5ebc1fbc-7d49-4641-8a57-d18c55ed6602/nuget/v3/flat2/avalonia.native/11.0.999-cibuild0030643-beta/avalonia.native.11.0.999-cibuild0030643-beta.nupkg"
+  },
+  {
+    "pname": "Avalonia.ReactiveUI",
+    "version": "11.0.999-cibuild0030643-beta",
+    "sha256": "1pl35gkpc36hydd350ch6iilyfngbg8wxw3vkx5a971761lqrgbz",
+    "url": "https://pkgs.dev.azure.com/AvaloniaUI/aa84306f-2981-47b9-8206-edb3bed6250d/_packaging/5ebc1fbc-7d49-4641-8a57-d18c55ed6602/nuget/v3/flat2/avalonia.reactiveui/11.0.999-cibuild0030643-beta/avalonia.reactiveui.11.0.999-cibuild0030643-beta.nupkg"
+  },
+  {
+    "pname": "Avalonia.Remote.Protocol",
+    "version": "11.0.999-cibuild0030643-beta",
+    "sha256": "179l5w9j2hy683fhxi25q98sfgz03l48qj8mgg1asjjpqcbybgh2",
+    "url": "https://pkgs.dev.azure.com/AvaloniaUI/aa84306f-2981-47b9-8206-edb3bed6250d/_packaging/5ebc1fbc-7d49-4641-8a57-d18c55ed6602/nuget/v3/flat2/avalonia.remote.protocol/11.0.999-cibuild0030643-beta/avalonia.remote.protocol.11.0.999-cibuild0030643-beta.nupkg"
+  },
+  {
+    "pname": "Avalonia.Skia",
+    "version": "11.0.999-cibuild0030643-beta",
+    "sha256": "0fvc83phdjxhfg3pndr7j178i2km5wjbm1xiplh4bvg6pwa2xypz",
+    "url": "https://pkgs.dev.azure.com/AvaloniaUI/aa84306f-2981-47b9-8206-edb3bed6250d/_packaging/5ebc1fbc-7d49-4641-8a57-d18c55ed6602/nuget/v3/flat2/avalonia.skia/11.0.999-cibuild0030643-beta/avalonia.skia.11.0.999-cibuild0030643-beta.nupkg"
+  },
+  {
+    "pname": "Avalonia.Themes.Fluent",
+    "version": "11.0.999-cibuild0030643-beta",
+    "sha256": "1ch7v19xpg4nkq2aqap82sd237735g5nrp06h1i0m83kks4xz6as",
+    "url": "https://pkgs.dev.azure.com/AvaloniaUI/aa84306f-2981-47b9-8206-edb3bed6250d/_packaging/5ebc1fbc-7d49-4641-8a57-d18c55ed6602/nuget/v3/flat2/avalonia.themes.fluent/11.0.999-cibuild0030643-beta/avalonia.themes.fluent.11.0.999-cibuild0030643-beta.nupkg"
+  },
+  {
+    "pname": "Avalonia.Themes.Simple",
+    "version": "11.0.999-cibuild0030643-beta",
+    "sha256": "0aify5nh31bf347k4s4d5c36mhh6yc6q4l6araq3fxb05v4pb5c0",
+    "url": "https://pkgs.dev.azure.com/AvaloniaUI/aa84306f-2981-47b9-8206-edb3bed6250d/_packaging/5ebc1fbc-7d49-4641-8a57-d18c55ed6602/nuget/v3/flat2/avalonia.themes.simple/11.0.999-cibuild0030643-beta/avalonia.themes.simple.11.0.999-cibuild0030643-beta.nupkg"
+  },
+  {
+    "pname": "Avalonia.Win32",
+    "version": "11.0.999-cibuild0030643-beta",
+    "sha256": "1b86hlr25w8i3hdxxxb9qrbaf91d56vmiwm5ikywglk28c9x8zyq",
+    "url": "https://pkgs.dev.azure.com/AvaloniaUI/aa84306f-2981-47b9-8206-edb3bed6250d/_packaging/5ebc1fbc-7d49-4641-8a57-d18c55ed6602/nuget/v3/flat2/avalonia.win32/11.0.999-cibuild0030643-beta/avalonia.win32.11.0.999-cibuild0030643-beta.nupkg"
+  },
+  {
+    "pname": "Avalonia.X11",
+    "version": "11.0.999-cibuild0030643-beta",
+    "sha256": "15pcbv0hw099080s2ndi7cqm3gnyzcvva3jgp8z33g4h8qaiiyvn",
+    "url": "https://pkgs.dev.azure.com/AvaloniaUI/aa84306f-2981-47b9-8206-edb3bed6250d/_packaging/5ebc1fbc-7d49-4641-8a57-d18c55ed6602/nuget/v3/flat2/avalonia.x11/11.0.999-cibuild0030643-beta/avalonia.x11.11.0.999-cibuild0030643-beta.nupkg"
+  },
+  {
+    "pname": "Devlooped.SponsorLink",
+    "version": "0.9.6",
+    "sha256": "0d6sdy4312fb9g7l3q9x78vmw4ngrzf2f961778h4zqga8nc23rm"
+  },
+  {
+    "pname": "DynamicData",
+    "version": "7.9.5",
+    "sha256": "1m9qx8g6na5ka6kd9vhg8gjmxrnkzb6v5cl5yqp1kdjsw4rcwy6x"
+  },
+  {
+    "pname": "HarfBuzzSharp",
+    "version": "2.8.2.3",
+    "sha256": "115aybicqs9ijjlcv6k6r5v0agkjm1bm1nkd0rj3jglv8s0xvmp2"
+  },
+  {
+    "pname": "HarfBuzzSharp.NativeAssets.Linux",
+    "version": "2.8.2.3",
+    "sha256": "1f18ahwkaginrg0vwsi6s56lvnqvvxv7pzklfs5lnknasxy1a76z"
+  },
+  {
+    "pname": "HarfBuzzSharp.NativeAssets.macOS",
+    "version": "2.8.2.3",
+    "sha256": "052d8frpkj4ijs6fm6xp55xbv95b1s9biqwa0w8zp3rgm88m9236"
+  },
+  {
+    "pname": "HarfBuzzSharp.NativeAssets.WebAssembly",
+    "version": "2.8.2.3",
+    "sha256": "043hv36bg5240znbm8x5la7py17m4jfzy57q3ka32f6zjld83j36"
+  },
+  {
+    "pname": "HarfBuzzSharp.NativeAssets.Win32",
+    "version": "2.8.2.3",
+    "sha256": "08khd2jqm8sw58ljz5srangzfm2sz3gd2q1jzc5fr80lj8rv6r74"
+  },
+  {
+    "pname": "MicroCom.Runtime",
+    "version": "0.11.0",
+    "sha256": "0p9c3m0zk59x9dcqw077hzd2yk60myisbacvm36mnwpcjwzjkp2m"
+  },
+  {
+    "pname": "Microsoft.Bcl.AsyncInterfaces",
+    "version": "6.0.0",
+    "sha256": "15gqy2m14fdlvy1g59207h5kisznm355kbw010gy19vh47z8gpz3"
+  },
+  {
+    "pname": "Microsoft.CodeAnalysis.Analyzers",
+    "version": "3.0.0",
+    "sha256": "0bbl0jpqywqmzz2gagld1p2gvdfldjfjmm25hil9wj2nq1zc4di8"
+  },
+  {
+    "pname": "Microsoft.CodeAnalysis.Common",
+    "version": "3.8.0",
+    "sha256": "12n7rvr39bzkf2maw7zplw8rwpxpxss4ich3bb2pw770rx4nyvyw"
+  },
+  {
+    "pname": "Microsoft.CodeAnalysis.CSharp",
+    "version": "3.8.0",
+    "sha256": "1kmry65csvfn72zzc16vj1nfbfwam28wcmlrk3m5rzb8ydbzgylb"
+  },
+  {
+    "pname": "Microsoft.CodeAnalysis.CSharp.Scripting",
+    "version": "3.8.0",
+    "sha256": "0w0yx0lpg54iw5jazqk46h48gx43ij32gwac8iywdj6kxfxm03vw"
+  },
+  {
+    "pname": "Microsoft.CodeAnalysis.Scripting.Common",
+    "version": "3.8.0",
+    "sha256": "0hjgxcsj5zy27lqk0986m59n5dbplx2vjjla2lsvg4bwg8qa7bpk"
+  },
+  {
+    "pname": "Microsoft.CSharp",
+    "version": "4.3.0",
+    "sha256": "0gw297dgkh0al1zxvgvncqs0j15lsna9l1wpqas4rflmys440xvb"
+  },
+  {
+    "pname": "Microsoft.CSharp",
+    "version": "4.7.0",
+    "sha256": "0gd67zlw554j098kabg887b5a6pq9kzavpa3jjy5w53ccjzjfy8j"
+  },
+  {
+    "pname": "Microsoft.NETCore.Platforms",
+    "version": "1.1.0",
+    "sha256": "08vh1r12g6ykjygq5d3vq09zylgb84l63k49jc4v8faw9g93iqqm"
+  },
+  {
+    "pname": "Microsoft.NETCore.Platforms",
+    "version": "2.1.2",
+    "sha256": "1507hnpr9my3z4w1r6xk5n0s1j3y6a2c2cnynj76za7cphxi1141"
+  },
+  {
+    "pname": "Microsoft.NETCore.Platforms",
+    "version": "5.0.0",
+    "sha256": "0mwpwdflidzgzfx2dlpkvvnkgkr2ayaf0s80737h4wa35gaj11rc"
+  },
+  {
+    "pname": "Microsoft.NETCore.Targets",
+    "version": "1.1.0",
+    "sha256": "193xwf33fbm0ni3idxzbr5fdq3i2dlfgihsac9jj7whj0gd902nh"
+  },
+  {
+    "pname": "Microsoft.VisualStudio.Threading",
+    "version": "17.1.46",
+    "sha256": "0w7b17xh88rqzjjsy66gg2kfaqmg7sdmx70sharkqb7qh3pih87m"
+  },
+  {
+    "pname": "Microsoft.VisualStudio.Threading.Analyzers",
+    "version": "17.1.46",
+    "sha256": "0lgx7776ivmz0gr0whyacxpnlp6w5b80mj012a28mm79r1qxpf60"
+  },
+  {
+    "pname": "Microsoft.VisualStudio.Validation",
+    "version": "17.0.53",
+    "sha256": "0y34dvc5z6ash2cpp69mclb3wr52fd8khsmm61sv7lkql0pg03ki"
+  },
+  {
+    "pname": "Microsoft.Win32.Registry",
+    "version": "5.0.0",
+    "sha256": "102hvhq2gmlcbq8y2cb7hdr2dnmjzfp2k3asr1ycwrfacwyaak7n"
+  },
+  {
+    "pname": "Microsoft.Win32.SystemEvents",
+    "version": "6.0.0",
+    "sha256": "0c6pcj088g1yd1vs529q3ybgsd2vjlk5y1ic6dkmbhvrp5jibl9p"
+  },
+  {
+    "pname": "Nerdbank.Streams",
+    "version": "2.9.112",
+    "sha256": "1i10xr5zm9vapfzvimim9gn2pm9vgnsnb44sq3b0162r0k572rrp"
+  },
+  {
+    "pname": "ReactiveUI",
+    "version": "18.3.1",
+    "sha256": "1lxkc8yk9glj0w9n5vry2dnwwvh8152ad2c5bivk8aciq64zidyn"
+  },
+  {
+    "pname": "Serilog",
+    "version": "2.10.0",
+    "sha256": "08bih205i632ywryn3zxkhb15dwgyaxbhmm1z3b5nmby9fb25k7v"
+  },
+  {
+    "pname": "Serilog.Sinks.File",
+    "version": "5.0.1-dev-00947",
+    "sha256": "153vi3xjy65ixfr8nfs59n0bmgj0jxfyydmhjs8h3apr9f29lbh4"
+  },
+  {
+    "pname": "SkiaSharp",
+    "version": "2.88.3",
+    "sha256": "1yq694myq2rhfp2hwwpyzcg1pzpxcp7j72wib8p9pw9dfj7008sv"
+  },
+  {
+    "pname": "SkiaSharp.NativeAssets.Linux",
+    "version": "2.88.3",
+    "sha256": "0dajvr60nwvnv7s6kcqgw1w97zxdpz1c5lb7kcq7r0hi0l05ck3q"
+  },
+  {
+    "pname": "SkiaSharp.NativeAssets.macOS",
+    "version": "2.88.3",
+    "sha256": "191ajgi6fnfqcvqvkayjsxasiz6l0bv3pps8vv9abbyc4b12qvph"
+  },
+  {
+    "pname": "SkiaSharp.NativeAssets.WebAssembly",
+    "version": "2.88.3",
+    "sha256": "1w5njksq3amrrp7fqxw89nv6ar2kgc5yx092i4rxv7hrjbd1aagx"
+  },
+  {
+    "pname": "SkiaSharp.NativeAssets.Win32",
+    "version": "2.88.3",
+    "sha256": "03wwfbarsxjnk70qhqyd1dw65098dncqk2m0vksx92j70i7lry6q"
+  },
+  {
+    "pname": "Splat",
+    "version": "14.4.1",
+    "sha256": "03ycyjn2ii44npi015p4rk344xnjgdzz02cf63cmhx2ab8hv6p4b"
+  },
+  {
+    "pname": "StrongInject",
+    "version": "1.4.5-ci-20220524-023137",
+    "sha256": "1ksiv5rs22j193sxwjvdc4vhblikka9z8hhs705f4mi1r4q0x1ha"
+  },
+  {
+    "pname": "System.Collections",
+    "version": "4.3.0",
+    "sha256": "19r4y64dqyrq6k4706dnyhhw7fs24kpp3awak7whzss39dakpxk9"
+  },
+  {
+    "pname": "System.Collections.Immutable",
+    "version": "5.0.0",
+    "sha256": "1kvcllagxz2q92g81zkz81djkn2lid25ayjfgjalncyc68i15p0r"
+  },
+  {
+    "pname": "System.ComponentModel.Annotations",
+    "version": "4.5.0",
+    "sha256": "1jj6f6g87k0iwsgmg3xmnn67a14mq88np0l1ys5zkxhkvbc8976p"
+  },
+  {
+    "pname": "System.Diagnostics.Debug",
+    "version": "4.3.0",
+    "sha256": "00yjlf19wjydyr6cfviaph3vsjzg3d5nvnya26i2fvfg53sknh3y"
+  },
+  {
+    "pname": "System.Drawing.Common",
+    "version": "6.0.0",
+    "sha256": "02n8rzm58dac2np8b3xw8ychbvylja4nh6938l5k2fhyn40imlgz"
+  },
+  {
+    "pname": "System.Dynamic.Runtime",
+    "version": "4.3.0",
+    "sha256": "1d951hrvrpndk7insiag80qxjbf2y0y39y8h5hnq9612ws661glk"
+  },
+  {
+    "pname": "System.Globalization",
+    "version": "4.3.0",
+    "sha256": "1cp68vv683n6ic2zqh2s1fn4c2sd87g5hpp6l4d4nj4536jz98ki"
+  },
+  {
+    "pname": "System.IO",
+    "version": "4.3.0",
+    "sha256": "05l9qdrzhm4s5dixmx68kxwif4l99ll5gqmh7rqgw554fx0agv5f"
+  },
+  {
+    "pname": "System.IO.Pipelines",
+    "version": "6.0.3",
+    "sha256": "1jgdazpmwc21dd9naq3l9n5s8a1jnbwlvgkf1pnm0aji6jd4xqdz"
+  },
+  {
+    "pname": "System.Linq",
+    "version": "4.3.0",
+    "sha256": "1w0gmba695rbr80l1k2h4mrwzbzsyfl2z4klmpbsvsg5pm4a56s7"
+  },
+  {
+    "pname": "System.Linq.Expressions",
+    "version": "4.3.0",
+    "sha256": "0ky2nrcvh70rqq88m9a5yqabsl4fyd17bpr63iy2mbivjs2nyypv"
+  },
+  {
+    "pname": "System.Memory",
+    "version": "4.5.4",
+    "sha256": "14gbbs22mcxwggn0fcfs1b062521azb9fbb7c113x0mq6dzq9h6y"
+  },
+  {
+    "pname": "System.Numerics.Vectors",
+    "version": "4.5.0",
+    "sha256": "1kzrj37yzawf1b19jq0253rcs8hsq1l2q8g69d7ipnhzb0h97m59"
+  },
+  {
+    "pname": "System.ObjectModel",
+    "version": "4.3.0",
+    "sha256": "191p63zy5rpqx7dnrb3h7prvgixmk168fhvvkkvhlazncf8r3nc2"
+  },
+  {
+    "pname": "System.Reactive",
+    "version": "5.0.0",
+    "sha256": "1lafmpnadhiwxyd543kraxa3jfdpm6ipblxrjlibym9b1ykpr5ik"
+  },
+  {
+    "pname": "System.Reflection",
+    "version": "4.3.0",
+    "sha256": "0xl55k0mw8cd8ra6dxzh974nxif58s3k1rjv1vbd7gjbjr39j11m"
+  },
+  {
+    "pname": "System.Reflection.Emit",
+    "version": "4.3.0",
+    "sha256": "11f8y3qfysfcrscjpjym9msk7lsfxkk4fmz9qq95kn3jd0769f74"
+  },
+  {
+    "pname": "System.Reflection.Emit.ILGeneration",
+    "version": "4.3.0",
+    "sha256": "0w1n67glpv8241vnpz1kl14sy7zlnw414aqwj4hcx5nd86f6994q"
+  },
+  {
+    "pname": "System.Reflection.Emit.Lightweight",
+    "version": "4.3.0",
+    "sha256": "0ql7lcakycrvzgi9kxz1b3lljd990az1x6c4jsiwcacrvimpib5c"
+  },
+  {
+    "pname": "System.Reflection.Extensions",
+    "version": "4.3.0",
+    "sha256": "02bly8bdc98gs22lqsfx9xicblszr2yan7v2mmw3g7hy6miq5hwq"
+  },
+  {
+    "pname": "System.Reflection.Metadata",
+    "version": "5.0.0",
+    "sha256": "17qsl5nanlqk9iz0l5wijdn6ka632fs1m1fvx18dfgswm258r3ss"
+  },
+  {
+    "pname": "System.Reflection.Primitives",
+    "version": "4.3.0",
+    "sha256": "04xqa33bld78yv5r93a8n76shvc8wwcdgr1qvvjh959g3rc31276"
+  },
+  {
+    "pname": "System.Reflection.TypeExtensions",
+    "version": "4.3.0",
+    "sha256": "0y2ssg08d817p0vdag98vn238gyrrynjdj4181hdg780sif3ykp1"
+  },
+  {
+    "pname": "System.Resources.ResourceManager",
+    "version": "4.3.0",
+    "sha256": "0sjqlzsryb0mg4y4xzf35xi523s4is4hz9q4qgdvlvgivl7qxn49"
+  },
+  {
+    "pname": "System.Runtime",
+    "version": "4.3.0",
+    "sha256": "066ixvgbf2c929kgknshcxqj6539ax7b9m570cp8n179cpfkapz7"
+  },
+  {
+    "pname": "System.Runtime.CompilerServices.Unsafe",
+    "version": "4.7.1",
+    "sha256": "119br3pd85lq8zcgh4f60jzmv1g976q1kdgi3hvqdlhfbw6siz2j"
+  },
+  {
+    "pname": "System.Runtime.CompilerServices.Unsafe",
+    "version": "6.0.0",
+    "sha256": "0qm741kh4rh57wky16sq4m0v05fxmkjjr87krycf5vp9f0zbahbc"
+  },
+  {
+    "pname": "System.Runtime.Extensions",
+    "version": "4.3.0",
+    "sha256": "1ykp3dnhwvm48nap8q23893hagf665k0kn3cbgsqpwzbijdcgc60"
+  },
+  {
+    "pname": "System.Runtime.Handles",
+    "version": "4.3.0",
+    "sha256": "0sw2gfj2xr7sw9qjn0j3l9yw07x73lcs97p8xfc9w1x9h5g5m7i8"
+  },
+  {
+    "pname": "System.Runtime.InteropServices",
+    "version": "4.3.0",
+    "sha256": "00hywrn4g7hva1b2qri2s6rabzwgxnbpw9zfxmz28z09cpwwgh7j"
+  },
+  {
+    "pname": "System.Security.AccessControl",
+    "version": "5.0.0",
+    "sha256": "17n3lrrl6vahkqmhlpn3w20afgz09n7i6rv0r3qypngwi7wqdr5r"
+  },
+  {
+    "pname": "System.Security.Principal.Windows",
+    "version": "5.0.0",
+    "sha256": "1mpk7xj76lxgz97a5yg93wi8lj0l8p157a5d50mmjy3gbz1904q8"
+  },
+  {
+    "pname": "System.Text.Encoding",
+    "version": "4.3.0",
+    "sha256": "1f04lkir4iladpp51sdgmis9dj4y8v08cka0mbmsy0frc9a4gjqr"
+  },
+  {
+    "pname": "System.Text.Encoding.CodePages",
+    "version": "4.5.1",
+    "sha256": "1z21qyfs6sg76rp68qdx0c9iy57naan89pg7p6i3qpj8kyzn921w"
+  },
+  {
+    "pname": "System.Threading",
+    "version": "4.3.0",
+    "sha256": "0rw9wfamvhayp5zh3j7p1yfmx9b5khbf4q50d8k5rk993rskfd34"
+  },
+  {
+    "pname": "System.Threading.Channels",
+    "version": "7.0.0",
+    "sha256": "1qrmqa6hpzswlmyp3yqsbnmia9i5iz1y208xpqc1y88b1f6j1v8a"
+  },
+  {
+    "pname": "System.Threading.Tasks",
+    "version": "4.3.0",
+    "sha256": "134z3v9abw3a6jsw17xl3f6hqjpak5l682k2vz39spj4kmydg6k7"
+  },
+  {
+    "pname": "System.Threading.Tasks.Extensions",
+    "version": "4.5.4",
+    "sha256": "0y6ncasgfcgnjrhynaf0lwpkpkmv4a07sswwkwbwb5h7riisj153"
+  },
+  {
+    "pname": "ThisAssembly.AssemblyInfo",
+    "version": "1.2.9",
+    "sha256": "1pilnin62fb2frmybl3n0xvxn1xpr8bymbzialspl6cbw2xvag97"
+  },
+  {
+    "pname": "ThisAssembly.Prerequisites",
+    "version": "1.2.9",
+    "sha256": "0skk9sk8lc4dn9rmykz337n5apg76if9l327q7787fabisr9rbw7"
+  },
+  {
+    "pname": "Tmds.DBus.Protocol",
+    "version": "0.13.0",
+    "sha256": "1r5lc8x3iq795l7vnyzs3shvpqz92fldkayvkqmrfjxnqmy0w3kg"
+  },
+  {
+    "pname": "Tmds.DBus.SourceGenerator",
+    "version": "0.0.2",
+    "sha256": "03q0fja30216npb3hd39iapr9psriz2k35lymaf4921195y40fiq"
+  },
+  {
+    "pname": "XamlNameReferenceGenerator",
+    "version": "1.6.1",
+    "sha256": "0348gj9g5rl0pj2frx4vscj6602gfyn9ba3i1rmfcrxh9jwwa09m"
+  },
+  {
+    "pname": "Microsoft.AspNetCore.App.Ref",
+    "version": "6.0.31",
+    "hash": "sha256-rVxnpwa8B1weEzkJIxm+todHXrSdIT3KY38D09MncUI="
+  },
+  {
+    "pname": "Microsoft.AspNetCore.App.Runtime.linux-arm64",
+    "version": "6.0.31",
+    "hash": "sha256-z6HNgiyLyXN5+QlktIZmOQh9D4KRHWd6yonmKChEji4="
+  },
+  {
+    "pname": "Microsoft.AspNetCore.App.Runtime.linux-x64",
+    "version": "6.0.31",
+    "hash": "sha256-Rq97wUeAD2bZhe0XRLB9Ffq1MBU/u4Yq45KwRLz7DRQ="
+  },
+  {
+    "pname": "Microsoft.CSharp",
+    "version": "4.7.0",
+    "hash": "sha256-Enknv2RsFF68lEPdrf5M+BpV1kHoLTVRApKUwuk/pj0="
+  },
+  {
+    "pname": "Microsoft.NETCore.App.Host.linux-arm64",
+    "version": "6.0.31",
+    "hash": "sha256-mjS1IKBwxDFT2UmcyC5ZMIQ3mWSADw887CIV0pZhQRc="
+  },
+  {
+    "pname": "Microsoft.NETCore.App.Host.linux-x64",
+    "version": "6.0.31",
+    "hash": "sha256-VifKEirDStL5vpjnEe0hGsODssK20XBX/Mm6j8G4QIM="
+  },
+  {
+    "pname": "Microsoft.NETCore.App.Ref",
+    "version": "6.0.31",
+    "hash": "sha256-p/KpNGwJfvoWNRn057o4t8u8La2LvsmOjF0i2W1URKU="
+  },
+  {
+    "pname": "Microsoft.NETCore.App.Runtime.linux-arm64",
+    "version": "6.0.31",
+    "hash": "sha256-N3xRbF5nQo9Okixqg1mN86L7VB72bpDR0C6wlfzntPI="
+  },
+  {
+    "pname": "Microsoft.NETCore.App.Runtime.linux-x64",
+    "version": "6.0.31",
+    "hash": "sha256-TE1DmzoBKO9qKoATBWZPRKXBRoRzs6AafKuubeSwgl8="
+  }
+]

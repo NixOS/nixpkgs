@@ -1,10 +1,11 @@
-{ lib
-, buildDunePackage
-, fetchurl
-, digestif
-, mirage-crypto
-, alcotest
-, ohex
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  digestif,
+  mirage-crypto,
+  alcotest,
+  ohex,
 }:
 
 buildDunePackage rec {
@@ -16,9 +17,15 @@ buildDunePackage rec {
     hash = "sha256-0WFYKw7+ZtlY3WuMnCEGjp9kVM4hg3fWz4eCPexi4M4=";
   };
 
-  propagatedBuildInputs = [ digestif mirage-crypto ];
+  propagatedBuildInputs = [
+    digestif
+    mirage-crypto
+  ];
 
-  checkInputs = [ alcotest ohex ];
+  checkInputs = [
+    alcotest
+    ohex
+  ];
   doCheck = true;
 
   meta = {

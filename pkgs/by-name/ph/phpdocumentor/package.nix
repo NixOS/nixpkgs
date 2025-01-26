@@ -1,35 +1,32 @@
-{ lib
-, php
-, fetchFromGitHub
-, makeBinaryWrapper
+{
+  lib,
+  php,
+  fetchFromGitHub,
+  makeBinaryWrapper,
 }:
 
-php.buildComposerProject (finalAttrs: {
+php.buildComposerProject2 (finalAttrs: {
   pname = "phpdocumentor";
-  version = "3.5.3";
+  version = "3.6.0";
 
   src = fetchFromGitHub {
     owner = "phpDocumentor";
     repo = "phpDocumentor";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-zpAKygpxyKYfefa5ag76saTSQNLon/v3rYkl0Nj2+FM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-8TQlqXhZ3rHmOAuxsBYa+7JD+SxMQY0NZgCyElStFag=";
   };
 
-  vendorHash = "sha256-VNlAzWueF7ZXBpr9RrJghMPrAUof7f1DCh1osFIwFfs=";
+  vendorHash = "sha256-LESUhPjpj1KkFkB+JEOCGU9c6LuDQJB5Dtc/q5Bt3Og=";
 
   # Needed because of the unbound version constraint on phpdocumentor/json-path
   composerStrictValidation = false;
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 
-  installPhase = ''
-    runHook preInstall
-
+  postInstall = ''
     wrapProgram "$out/bin/phpdoc" \
       --set-default APP_CACHE_DIR /tmp \
       --set-default APP_LOG_DIR /tmp/log
-
-    runHook postInstall
   '';
 
   meta = {

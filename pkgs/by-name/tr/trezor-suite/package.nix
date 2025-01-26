@@ -1,26 +1,32 @@
-{ lib
-, stdenv
-, fetchurl
-, appimageTools
-, tor
-, trezord
+{
+  lib,
+  stdenv,
+  fetchurl,
+  appimageTools,
+  tor,
+  trezord,
 }:
 
 let
   pname = "trezor-suite";
-  version = "24.8.3";
+  version = "24.12.3";
 
-  suffix = {
-    aarch64-linux = "linux-arm64";
-    x86_64-linux  = "linux-x86_64";
-  }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  suffix =
+    {
+      aarch64-linux = "linux-arm64";
+      x86_64-linux = "linux-x86_64";
+    }
+    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   src = fetchurl {
     url = "https://github.com/trezor/trezor-suite/releases/download/v${version}/Trezor-Suite-${version}-${suffix}.AppImage";
-    hash = { # curl -Lfs https://github.com/trezor/trezor-suite/releases/download/v${version}/latest-linux{-arm64,}.yml | grep ^sha512 | sed 's/: /-/'
-      aarch64-linux = "sha512-od/OmYbPd3mmmyz131nQCVrhuSMU9znV8REHwbJLWVRoATMc21LSwCuAGZGRE1ijowJ1DI+TkLiLEq9rLldRmw=";
-      x86_64-linux  = "sha512-IeEbscMGGaCaDQbNqmHYiKqdVm/QfyNDludiLWpcfnbN7udcxWIQG6tB9C9UY2BrimyNFvZgq1z9mZMfGScEYQ==";
-    }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    hash =
+      {
+        # curl -Lfs https://github.com/trezor/trezor-suite/releases/download/v${version}/latest-linux{-arm64,}.yml | grep ^sha512 | sed 's/: /-/'
+        aarch64-linux = "sha512-erNWQTaj/WWoqy3TO7wb+ijQkwXjqfCjqvQN6/9gCVjbHswURWHX36P0rJg9vuQu6odi5EKtooDusIxjIUkQzA==";
+        x86_64-linux = "sha512-Zd+Ou3YUymlKr5lOTdWEZVdCbz3cIJx3Ho65AGDUXkNXfOrCc0v9faE8Np/9TkpJDWWqjjUoTJkkvsbapiMOOQ==";
+      }
+      .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
   appimageContents = appimageTools.extractType2 {
@@ -42,7 +48,7 @@ appimageTools.wrapType2 rec {
     install -m 444 -D ${appimageContents}/${pname}.desktop $out/share/applications/${pname}.desktop
     install -m 444 -D ${appimageContents}/resources/images/desktop/512x512.png $out/share/icons/hicolor/512x512/apps/${pname}.png
     substituteInPlace $out/share/applications/${pname}.desktop \
-      --replace 'Exec=AppRun --no-sandbox %U' 'Exec=${pname}'
+      --replace-fail 'Exec=AppRun --no-sandbox %U' 'Exec=${pname}'
 
     # symlink system binaries instead bundled ones
     mkdir -p $out/share/${pname}/resources/bin/{bridge,tor}
@@ -56,7 +62,10 @@ appimageTools.wrapType2 rec {
     changelog = "https://github.com/trezor/trezor-suite/releases/tag/v${version}";
     license = licenses.unfree;
     maintainers = with maintainers; [ prusnak ];
-    platforms = [ "aarch64-linux" "x86_64-linux" ];
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
     mainProgram = "trezor-suite";
   };
 }

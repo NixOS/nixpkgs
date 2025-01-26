@@ -1,16 +1,20 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, meson
-, ninja
-, unstableGitUpdater
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation {
   pname = "mutest";
   version = "0-unstable-2023-02-24";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchFromGitHub {
     owner = "ebassi";

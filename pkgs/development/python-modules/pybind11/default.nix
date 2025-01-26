@@ -26,27 +26,6 @@ let
       pythonSitePackages = "${python}/${python.sitePackages}";
     };
   } ./setup-hook.sh;
-
-  # clang 16 defaults to C++17, which results in the use of aligned allocations by pybind11.
-  # libc++ supports aligned allocations via `posix_memalign`, which is available since 10.6,
-  # but clang has a check hard-coded requiring 10.13 because that’s when Apple first shipped a
-  # support for C++17 aligned allocations on macOS.
-  # Tell clang we’re targeting 10.13 on x86_64-darwin while continuing to use the default SDK.
-  stdenv' =
-    if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64 then
-      python.stdenv.override (oldStdenv: {
-        buildPlatform = oldStdenv.buildPlatform // {
-          darwinMinVersion = "10.13";
-        };
-        targetPlatform = oldStdenv.targetPlatform // {
-          darwinMinVersion = "10.13";
-        };
-        hostPlatform = oldStdenv.hostPlatform // {
-          darwinMinVersion = "10.13";
-        };
-      })
-    else
-      python.stdenv;
 in
 buildPythonPackage rec {
   pname = "pybind11";
@@ -56,7 +35,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pybind";
     repo = "pybind11";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-SNLdtrOjaC3lGHN9MAqTf51U9EzNKQLyTMNPe0GcdrU=";
   };
 
@@ -68,8 +47,6 @@ buildPythonPackage rec {
 
   buildInputs = lib.optionals (pythonOlder "3.9") [ libxcrypt ];
   propagatedNativeBuildInputs = [ setupHook ];
-
-  stdenv = stdenv';
 
   dontUseCmakeBuildDir = true;
 

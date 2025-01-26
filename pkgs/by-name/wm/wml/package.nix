@@ -1,4 +1,11 @@
-{ lib, fetchurl, perlPackages, ncurses, lynx, makeWrapper }:
+{
+  lib,
+  fetchurl,
+  perlPackages,
+  ncurses,
+  lynx,
+  makeWrapper,
+}:
 
 perlPackages.buildPerlPackage {
   pname = "wml";
@@ -24,10 +31,21 @@ perlPackages.buildPerlPackage {
   '';
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = with perlPackages;
-    [ perl TermReadKey GD BitVector ncurses lynx ImageSize ];
+  buildInputs = with perlPackages; [
+    perl
+    TermReadKey
+    GD
+    BitVector
+    ncurses
+    lynx
+    ImageSize
+  ];
 
-  patches = [ ./redhat-with-thr.patch ./dynaloader.patch ./no_bitvector.patch ];
+  patches = [
+    ./redhat-with-thr.patch
+    ./dynaloader.patch
+    ./no_bitvector.patch
+  ];
 
   # Workaround build failure on -fno-common toolchains:
   #   ld: iselect_browse.o:(.bss+0x2020): multiple definition of `Line'; iselect_main.o:(.bss+0x100000): first defined here
@@ -51,9 +69,14 @@ perlPackages.buildPerlPackage {
 
   preFixup = ''
     wrapProgram $out/bin/wml \
-      --set PERL5LIB ${with perlPackages; makePerlPath [
-        BitVector TermReadKey ImageSize
-      ]}
+      --set PERL5LIB ${
+        with perlPackages;
+        makePerlPath [
+          BitVector
+          TermReadKey
+          ImageSize
+        ]
+      }
   '';
 
   enableParallelBuilding = false;

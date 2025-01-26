@@ -29,7 +29,7 @@
   spdlog_llvm,
   curl,
   bison,
-  flex
+  flex,
 }:
 
 let
@@ -127,7 +127,7 @@ rec {
 
       meta = common.meta // {
         longDescription = common.meta.longDescription + "This package provides the servers and libraries.";
-         mainProgram = "irodsServer";
+        mainProgram = "irodsServer";
       };
     }
   );

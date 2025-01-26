@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, curl
-, autoconf
-, automake
-, makeWrapper
-, sbcl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  curl,
+  autoconf,
+  automake,
+  makeWrapper,
+  sbcl,
 }:
 
 stdenv.mkDerivation rec {

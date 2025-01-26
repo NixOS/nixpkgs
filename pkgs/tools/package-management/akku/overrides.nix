@@ -49,6 +49,13 @@ in
     (pkg: old: removeAttrs old [ "unpackPhase" ])
   ];
 
+  machine-code = pkg: old: {
+    # fails on hydra with 'Log limit exceeded'
+    postPatch = ''
+      rm tests/all-a64.sps
+    '';
+  };
+
   # circular dependency on wak-trc-testing !?
   wak-foof-loop = skipTests;
 

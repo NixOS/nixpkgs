@@ -1,25 +1,26 @@
-{ stdenv
-, lib
-, fetchurl
-, dpkg
-, libuuid
-, xorg
-, curlMinimal
-, openssl
-, libsecret
-, webkitgtk_4_0
-, libsoup
-, gtk3
-, atk
-, pango
-, glib
-, sqlite
-, zlib
-, systemd
-, msalsdk-dbusclient
-, pam
-, dbus
-, nixosTests
+{
+  stdenv,
+  lib,
+  fetchurl,
+  dpkg,
+  libuuid,
+  xorg,
+  curlMinimal,
+  openssl,
+  libsecret,
+  webkitgtk_4_0,
+  libsoup_2_4,
+  gtk3,
+  atk,
+  pango,
+  glib,
+  sqlite,
+  zlib,
+  systemd,
+  msalsdk-dbusclient,
+  pam,
+  dbus,
+  nixosTests,
 }:
 stdenv.mkDerivation rec {
   pname = "intune-portal";
@@ -43,7 +44,7 @@ stdenv.mkDerivation rec {
           openssl
           libsecret
           webkitgtk_4_0
-          libsoup
+          libsoup_2_4
           gtk3
           atk
           glib

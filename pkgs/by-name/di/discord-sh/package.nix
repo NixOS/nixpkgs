@@ -1,4 +1,13 @@
-{ lib, stdenvNoCC, fetchFromGitHub, makeWrapper, curl, jq, coreutils, file }:
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  makeWrapper,
+  curl,
+  jq,
+  coreutils,
+  file,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "discord-sh";
@@ -36,7 +45,14 @@ stdenvNoCC.mkDerivation rec {
     runHook preInstall
     install -Dm555 discord.sh $out/bin/discord.sh
     wrapProgram $out/bin/discord.sh \
-      --set PATH "${lib.makeBinPath [ curl jq coreutils file ]}"
+      --set PATH "${
+        lib.makeBinPath [
+          curl
+          jq
+          coreutils
+          file
+        ]
+      }"
     runHook postInstall
   '';
 

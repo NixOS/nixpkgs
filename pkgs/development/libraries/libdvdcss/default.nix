@@ -1,4 +1,9 @@
-{lib, stdenv, fetchurl, IOKit}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  IOKit,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libdvdcss";

@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+}:
 
 stdenv.mkDerivation rec {
   pname = "lksctp-tools";
@@ -18,7 +23,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Linux Kernel Stream Control Transmission Protocol Tools";
     homepage = "https://github.com/sctp/lksctp-tools/wiki";
-    license = with licenses; [ gpl2Plus lgpl21 ]; # library is lgpl21
+    license = with licenses; [
+      gpl2Plus
+      lgpl21
+    ]; # library is lgpl21
     platforms = platforms.linux;
   };
 }

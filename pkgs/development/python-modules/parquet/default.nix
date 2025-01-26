@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jcrobak";
     repo = "parquet-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-WVDffYKGsyepK4w1d4KUUMmxB6a6ylTbJvG79Bt5G6o=";
   };
 

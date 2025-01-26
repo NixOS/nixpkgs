@@ -12,6 +12,7 @@
   libadwaita,
   meson,
   ninja,
+  nix-update-script,
   openssl,
   pkg-config,
   rustPlatform,
@@ -67,10 +68,19 @@ stdenv.mkDerivation rec {
     )
   '';
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/World/Fragments";
     description = "Easy to use BitTorrent client for the GNOME desktop environment";
-    maintainers = with maintainers; [ emilytrau ];
+    maintainers =
+      with maintainers;
+      [
+        emilytrau
+      ]
+      ++ lib.teams.gnome-circle.members;
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     mainProgram = "fragments";

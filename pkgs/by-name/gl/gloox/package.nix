@@ -1,11 +1,16 @@
-{ lib, stdenv, fetchurl
-, zlibSupport ? true, zlib
-, sslSupport ? true, openssl
-, idnSupport ? true, libidn
+{
+  lib,
+  stdenv,
+  fetchurl,
+  zlibSupport ? true,
+  zlib,
+  sslSupport ? true,
+  openssl,
+  idnSupport ? true,
+  libidn,
 }:
 
-
-stdenv.mkDerivation rec{
+stdenv.mkDerivation rec {
   pname = "gloox";
   version = "1.0.28";
 
@@ -21,7 +26,8 @@ stdenv.mkDerivation rec{
       src/examples/*.cpp
   '';
 
-  buildInputs = [ ]
+  buildInputs =
+    [ ]
     ++ lib.optional zlibSupport zlib
     ++ lib.optional sslSupport openssl
     ++ lib.optional idnSupport libidn;

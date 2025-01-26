@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitHub
-, python310Packages
-, testers
-, stig
+{
+  lib,
+  fetchFromGitHub,
+  python310Packages,
+  testers,
+  stig,
 }:
 
 python310Packages.buildPythonApplication rec {

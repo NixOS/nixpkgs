@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "djtimca";
     repo = "omnilogic-api";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-ySK2T5T+Qdq8nVQqluIARR89KmM1N3oD44oLydwcs7E=";
   };
 

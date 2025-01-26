@@ -1,6 +1,11 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
-  pcmciaUtils = pkgs.pcmciaUtils.passthru.function {
+  pcmciaUtils = pkgs.pcmciaUtils.overrideAttrs {
     inherit (config.hardware.pcmcia) firmware config;
   };
 in
@@ -20,7 +25,7 @@ in
 
       firmware = lib.mkOption {
         type = lib.types.listOf lib.types.path;
-        default = [];
+        default = [ ];
         description = ''
           List of firmware used to handle specific PCMCIA card.
         '';

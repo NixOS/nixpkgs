@@ -1,24 +1,41 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.autorandr;
   hookType = lib.types.lines;
 
-  matrixOf = n: m: elemType:
-  lib.mkOptionType rec {
-    name = "matrixOf";
-    description =
-      "${toString n}×${toString m} matrix of ${elemType.description}s";
-    check = xss:
-      let listOfSize = l: xs: lib.isList xs && lib.length xs == l;
-      in listOfSize n xss
-      && lib.all (xs: listOfSize m xs && lib.all elemType.check xs) xss;
-    merge = lib.mergeOneOption;
-    getSubOptions = prefix: elemType.getSubOptions (prefix ++ [ "*" "*" ]);
-    getSubModules = elemType.getSubModules;
-    substSubModules = mod: matrixOf n m (elemType.substSubModules mod);
-    functor = (lib.defaultFunctor name) // { wrapped = elemType; };
-  };
+  matrixOf =
+    n: m: elemType:
+    lib.mkOptionType rec {
+      name = "matrixOf";
+      description = "${toString n}×${toString m} matrix of ${elemType.description}s";
+      check =
+        xss:
+        let
+          listOfSize = l: xs: lib.isList xs && lib.length xs == l;
+        in
+        listOfSize n xss && lib.all (xs: listOfSize m xs && lib.all elemType.check xs) xss;
+      merge = lib.mergeOneOption;
+      getSubOptions =
+        prefix:
+        elemType.getSubOptions (
+          prefix
+          ++ [
+            "*"
+            "*"
+          ]
+        );
+      getSubModules = elemType.getSubModules;
+      substSubModules = mod: matrixOf n m (elemType.substSubModules mod);
+      functor = (lib.defaultFunctor name) // {
+        wrapped = elemType;
+      };
+    };
 
   profileModule = lib.types.submodule {
     options = {
@@ -95,7 +112,14 @@ let
       };
 
       rotate = lib.mkOption {
-        type = lib.types.nullOr (lib.types.enum [ "normal" "left" "right" "inverted" ]);
+        type = lib.types.nullOr (
+          lib.types.enum [
+            "normal"
+            "left"
+            "right"
+            "inverted"
+          ]
+        );
         description = "Output rotate configuration.";
         default = null;
         example = "left";
@@ -126,26 +150,31 @@ let
       };
 
       scale = lib.mkOption {
-        type = lib.types.nullOr (lib.types.submodule {
-          options = {
-            method = lib.mkOption {
-              type = lib.types.enum [ "factor" "pixel" ];
-              description = "Output scaling method.";
-              default = "factor";
-              example = "pixel";
-            };
+        type = lib.types.nullOr (
+          lib.types.submodule {
+            options = {
+              method = lib.mkOption {
+                type = lib.types.enum [
+                  "factor"
+                  "pixel"
+                ];
+                description = "Output scaling method.";
+                default = "factor";
+                example = "pixel";
+              };
 
-            x = lib.mkOption {
-              type = lib.types.either lib.types.float lib.types.ints.positive;
-              description = "Horizontal scaling factor/pixels.";
-            };
+              x = lib.mkOption {
+                type = lib.types.either lib.types.float lib.types.ints.positive;
+                description = "Horizontal scaling factor/pixels.";
+              };
 
-            y = lib.mkOption {
-              type = lib.types.either lib.types.float lib.types.ints.positive;
-              description = "Vertical scaling factor/pixels.";
+              y = lib.mkOption {
+                type = lib.types.either lib.types.float lib.types.ints.positive;
+                description = "Vertical scaling factor/pixels.";
+              };
             };
-          };
-        });
+          }
+        );
         description = ''
           Output scale configuration.
 
@@ -195,27 +224,33 @@ let
     };
   };
 
-  hookToFile = folder: name: hook:
+  hookToFile =
+    folder: name: hook:
     lib.nameValuePair "xdg/autorandr/${folder}/${name}" {
       source = "${pkgs.writeShellScriptBin "hook" hook}/bin/hook";
     };
-  profileToFiles = name: profile:
+  profileToFiles =
+    name: profile:
     with profile;
     lib.mkMerge ([
       {
-        "xdg/autorandr/${name}/setup".text = lib.concatStringsSep "\n"
-          (lib.mapAttrsToList fingerprintToString fingerprint);
-        "xdg/autorandr/${name}/config".text =
-          lib.concatStringsSep "\n" (lib.mapAttrsToList configToString profile.config);
+        "xdg/autorandr/${name}/setup".text = lib.concatStringsSep "\n" (
+          lib.mapAttrsToList fingerprintToString fingerprint
+        );
+        "xdg/autorandr/${name}/config".text = lib.concatStringsSep "\n" (
+          lib.mapAttrsToList configToString profile.config
+        );
       }
       (lib.mapAttrs' (hookToFile "${name}/postswitch.d") hooks.postswitch)
       (lib.mapAttrs' (hookToFile "${name}/preswitch.d") hooks.preswitch)
       (lib.mapAttrs' (hookToFile "${name}/predetect.d") hooks.predetect)
     ]);
   fingerprintToString = name: edid: "${name} ${edid}";
-  configToString = name: config:
+  configToString =
+    name: config:
     if config.enable then
-      lib.concatStringsSep "\n" ([ "output ${name}" ]
+      lib.concatStringsSep "\n" (
+        [ "output ${name}" ]
         ++ lib.optional (config.position != "") "pos ${config.position}"
         ++ lib.optional (config.crtc != null) "crtc ${toString config.crtc}"
         ++ lib.optional config.primary "primary"
@@ -224,17 +259,22 @@ let
         ++ lib.optional (config.mode != "") "mode ${config.mode}"
         ++ lib.optional (config.rate != "") "rate ${config.rate}"
         ++ lib.optional (config.rotate != null) "rotate ${config.rotate}"
-        ++ lib.optional (config.transform != null) ("transform "
-          + lib.concatMapStringsSep "," toString (lib.flatten config.transform))
-        ++ lib.optional (config.scale != null)
-        ((if config.scale.method == "factor" then "scale" else "scale-from")
-          + " ${toString config.scale.x}x${toString config.scale.y}"))
-    else ''
-      output ${name}
-      off
-    '';
+        ++ lib.optional (config.transform != null) (
+          "transform " + lib.concatMapStringsSep "," toString (lib.flatten config.transform)
+        )
+        ++ lib.optional (config.scale != null) (
+          (if config.scale.method == "factor" then "scale" else "scale-from")
+          + " ${toString config.scale.x}x${toString config.scale.y}"
+        )
+      )
+    else
+      ''
+        output ${name}
+        off
+      '';
 
-in {
+in
+{
 
   options = {
 

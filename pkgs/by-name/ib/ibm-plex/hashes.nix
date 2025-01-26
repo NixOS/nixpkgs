@@ -6,6 +6,7 @@
   "sans-devanagari" = "sha256-K57OVqcH5r9tZx8NFEoz1P3xpUooqpF7xxJzNmnObwE=";
   "sans-thai" = "sha256-JZVbvZdj+IfBthiqivOXHrvAUe392M9ECGsiJkm0saE=";
   "sans-thai-looped" = "sha256-cry/Ctwt1bsrdbvWkJIYWLjsvV6a1lLFsT85znqERnw=";
+  "sans-sc" = "sha256-Q3cEVlR/UkNZaGIhNMIdojId6fHmAsZdLwMsKq1zLRY=";
   "sans-tc" = "sha256-kZvzSK6fEjfVMR4kxC4lxtD7GskqvJZx8BBJVT4T9MU=";
   "sans-kr" = "sha256-FsHxMvLlI4yylgG96DOZIdW2DYpk7I+c5QgkVIkNZIE=";
   "sans-jp" = "sha256-hUl/SSkN6q3pDTtrY2mJepw3ljhhLJskGbxfsTl9TuI=";

@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, libsodium
-, postgresql
-, postgresqlTestExtension
-, buildPostgresqlExtension
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libsodium,
+  postgresql,
+  postgresqlTestExtension,
+  buildPostgresqlExtension,
 }:
 
 buildPostgresqlExtension (finalAttrs: {

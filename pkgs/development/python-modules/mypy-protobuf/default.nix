@@ -24,7 +24,6 @@ buildPythonPackage rec {
     hash = "sha256-AvJC6zQJ9miJ8rGjqlg1bsTZCc3Q+TEVYi6ecDZuyjw=";
   };
 
-
   pythonRelaxDeps = [ "protobuf" ];
 
   build-system = [ setuptools ];

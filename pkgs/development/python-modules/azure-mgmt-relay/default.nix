@@ -3,10 +3,9 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
-  msrestazure,
   azure-common,
   azure-mgmt-core,
-  azure-mgmt-nspkg,
+  msrest,
 }:
 
 buildPythonPackage rec {
@@ -23,10 +22,9 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
-    msrestazure
+    msrest
     azure-common
     azure-mgmt-core
-    azure-mgmt-nspkg
   ];
 
   preBuild = ''
@@ -39,10 +37,10 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "azure.mgmt.relay" ];
 
-  meta = with lib; {
+  meta = {
     description = "This is the Microsoft Azure Relay Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
-    license = licenses.mit;
-    maintainers = with maintainers; [ maxwilson ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ maxwilson ];
   };
 }

@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, ninja
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  ninja,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "ut";
@@ -32,4 +33,3 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.all;
   };
 })
-

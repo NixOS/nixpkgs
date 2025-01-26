@@ -1,7 +1,20 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
-  inherit (lib) mkEnableOption mkPackageOption mkOption types literalExpression mkIf mkDefault;
+  inherit (lib)
+    mkEnableOption
+    mkPackageOption
+    mkOption
+    types
+    literalExpression
+    mkIf
+    mkDefault
+    ;
   cfg = config.services.miniflux;
 
   defaultAddress = "localhost:8080";
@@ -31,7 +44,12 @@ in
       };
 
       config = mkOption {
-        type = with types; attrsOf (oneOf [ str int ]);
+        type =
+          with types;
+          attrsOf (oneOf [
+            str
+            int
+          ]);
         example = literalExpression ''
           {
             CLEANUP_FREQUENCY = 48;
@@ -63,7 +81,8 @@ in
 
   config = mkIf cfg.enable {
     assertions = [
-      { assertion = cfg.config.CREATE_ADMIN == 0 || cfg.adminCredentialsFile != null;
+      {
+        assertion = cfg.config.CREATE_ADMIN == 0 || cfg.adminCredentialsFile != null;
         message = "services.miniflux.adminCredentialsFile must be set if services.miniflux.config.CREATE_ADMIN is 1";
       }
     ];
@@ -77,17 +96,22 @@ in
 
     services.postgresql = lib.mkIf cfg.createDatabaseLocally {
       enable = true;
-      ensureUsers = [ {
-        name = "miniflux";
-        ensureDBOwnership = true;
-      } ];
+      ensureUsers = [
+        {
+          name = "miniflux";
+          ensureDBOwnership = true;
+        }
+      ];
       ensureDatabases = [ "miniflux" ];
     };
 
     systemd.services.miniflux-dbsetup = lib.mkIf cfg.createDatabaseLocally {
       description = "Miniflux database setup";
       requires = [ "postgresql.service" ];
-      after = [ "network.target" "postgresql.service" ];
+      after = [
+        "network.target"
+        "postgresql.service"
+      ];
       serviceConfig = {
         Type = "oneshot";
         User = config.services.postgresql.superUser;
@@ -99,8 +123,12 @@ in
       description = "Miniflux service";
       wantedBy = [ "multi-user.target" ];
       requires = lib.optional cfg.createDatabaseLocally "miniflux-dbsetup.service";
-      after = [ "network.target" ]
-        ++ lib.optionals cfg.createDatabaseLocally [ "postgresql.service" "miniflux-dbsetup.service" ];
+      after =
+        [ "network.target" ]
+        ++ lib.optionals cfg.createDatabaseLocally [
+          "postgresql.service"
+          "miniflux-dbsetup.service"
+        ];
 
       serviceConfig = {
         Type = "notify";
@@ -131,12 +159,19 @@ in
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
         ProtectProc = "invisible";
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_UNIX"
+        ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
         SystemCallArchitectures = "native";
-        SystemCallFilter = [ "@system-service" "~@privileged" ];
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
+        ];
         UMask = "0077";
       };
 

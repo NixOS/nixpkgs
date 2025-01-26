@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "executablebooks";
     repo = "MyST-Parser";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-QbFENC/Msc4pkEOPdDztjyl+2TXtAbMTHPJNAsUB978=";
   };
 

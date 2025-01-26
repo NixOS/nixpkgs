@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, unzip
-, cmake
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  cmake,
 }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +15,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-DFLRaIAWoLJITpylSUccTild8GB3DFeEAUTGSBX1TxA=";
   };
 
-  nativeBuildInputs = [ unzip cmake ];
+  nativeBuildInputs = [
+    unzip
+    cmake
+  ];
 
   preConfigure = ''
     export ROOT=$PWD

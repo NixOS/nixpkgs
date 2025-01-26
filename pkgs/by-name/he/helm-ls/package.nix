@@ -1,23 +1,24 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, testers
-, helm-ls
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  testers,
+  helm-ls,
 }:
 
 buildGoModule rec {
   pname = "helm-ls";
-  version = "0.1.0";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "mrjosh";
     repo = "helm-ls";
     rev = "v${version}";
-    hash = "sha256-EuZbbeRssacrctIbxBbd2GOh8zgFi2OBRregfC88se0=";
+    hash = "sha256-k/JJoLRykIY/ZmjqG+ZzXuMPQRcoumqisPKrD9PPyd0=";
   };
 
-  vendorHash = "sha256-AWKCE2BZGVYcr6Pe8URQo11Xnr3sfgWWkm9v7vvILOo=";
+  vendorHash = "sha256-VAxmMDZIbbcGHoRL06oqWkDnWZBuweKyoCLSqItWHyg=";
 
   nativeBuildInputs = [ installShellFiles ];
 

@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "craft-grammar";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-xex+7rCXqRegnws470VtVltM49fx7fSHzWDZawRmOdM=";
   };
 
@@ -36,6 +36,11 @@ buildPythonPackage rec {
   ];
 
   pytestFlagsArray = [ "tests/unit" ];
+
+  # Temp fix for test incompatibility with Python 3.13
+  disabledTests = [
+    "test_grammar_strlist_error[value2]"
+  ];
 
   passthru.updateScript = nix-update-script { };
 

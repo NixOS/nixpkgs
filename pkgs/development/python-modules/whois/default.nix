@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "DannyCork";
     repo = "python-whois";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-uKAqpxb72fo0DiaChuJvDizq0z/oFSDHWJuK4vuYIzo=";
   };
 

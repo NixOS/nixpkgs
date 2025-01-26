@@ -86,13 +86,13 @@ stdenv.mkDerivation (finalAttrs: {
     libXtst
     libcap_ng
     graphene
+    mesa # actually uses eglmesaext
   ];
 
   nativeBuildInputs = [
     desktop-file-utils
     gettext
     libxcvt
-    mesa # needed for gbm
     meson
     ninja
     xvfb-run

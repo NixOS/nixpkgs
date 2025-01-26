@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, help2man
-, libiconv
+{
+  lib,
+  stdenv,
+  fetchurl,
+  help2man,
+  libiconv,
 }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +15,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Yw7OVtnrOlVSSvCuw6reeFQ2DrqUkXKmz7R2jLj75C4=";
   };
 
-  buildInputs = [ help2man libiconv ];
+  buildInputs = [
+    help2man
+    libiconv
+  ];
 
   makeFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"

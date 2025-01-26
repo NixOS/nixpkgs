@@ -1,13 +1,15 @@
-{ lib, stdenv
-, fetchFromGitLab
-, meson
-, ninja
-, gettext
-, pkg-config
-, libxml2
-, gtk3
-, libportal-gtk3
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  gettext,
+  pkg-config,
+  libxml2,
+  gtk3,
+  libportal-gtk3,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {

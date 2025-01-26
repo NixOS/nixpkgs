@@ -12,16 +12,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "railway";
-  version = "3.18.0";
+  version = "3.20.2";
 
   src = fetchFromGitHub {
     owner = "railwayapp";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-KMmiVA6ubwX8n2MVBOTfsT+05ii89DToMSxpINuizEc=";
+    hash = "sha256-AFcgONdWHHIK4/3zON6PRJaTXEXiE/0/Ha2rZpABiyw=";
   };
 
-  cargoHash = "sha256-sDDNZAUt+4H1smA+8Pynu1EQtAdP2U6nHwC7AWo5gnk=";
+  cargoHash = "sha256-kyjEACPrHWeAbpzi/7Lq+8Fvw/ClBGN6Jn2hebert/g=";
 
   nativeBuildInputs = [ pkg-config ];
 

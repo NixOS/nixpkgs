@@ -1,12 +1,13 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
 }:
 
 let
   pname = "lefthook";
-  version = "1.8.1";
+  version = "1.10.10";
 in
 buildGoModule {
   inherit pname version;
@@ -15,14 +16,17 @@ buildGoModule {
     owner = "evilmartians";
     repo = "lefthook";
     rev = "v${version}";
-    hash = "sha256-a4fghI3iUPnfYSQUR5LoH0eQfSqRMTcW4umeb/PhDt4=";
+    hash = "sha256-i/Ke3Zdn8nY0lorxr+eBodTd5Uze7hVaPU/xS1mwbvo=";
   };
 
-  vendorHash = "sha256-dxL+t5tPL+vsiBk+ojtQKcNubO0A72+7DWblxXiwzPE=";
+  vendorHash = "sha256-uUnXIeJlZQwMEQLELnCySjFFm6QDeAq9oW4P+hFARn4=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   doCheck = false;
 

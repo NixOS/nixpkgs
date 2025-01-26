@@ -1,21 +1,22 @@
-{ lib
-, fetchFromGitHub
-, nixosTests
-, rustPlatform
+{
+  lib,
+  fetchFromGitHub,
+  nixosTests,
+  rustPlatform,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "notify_push";
-  version = "0.7.0";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "nextcloud";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-QHVWiH6qkwQay0wffoyDUyVxgxzNp10ieYIsdqoEdCM=";
+    repo = "notify_push";
+    tag = "v${version}";
+    hash = "sha256-Y71o+ARi/YB2BRDfEyORbrA9HPvsUlWdh5UjM8hzmcA=";
   };
 
-  cargoHash = "sha256-HwE/ql8rJcGIINy+hNnpaTFEJqbmuUDrIvVI8kCpfQ8=";
+  cargoHash = "sha256-Mk+0LKP55Um5YiCx2O49rUZPwaXtKFnWtRC+WPGBadE=";
 
   passthru = rec {
     test_client = rustPlatform.buildRustPackage {
@@ -24,16 +25,16 @@ rustPlatform.buildRustPackage rec {
 
       buildAndTestSubdir = "test_client";
 
-      cargoHash = "sha256-KybnPzCM9mLF55s5eZ3qr5GRcaaYFpEdNklWEo/72Ts=";
+      cargoHash = "sha256-SBEuFOTgqNjPtKx0PFDA5Gkiksn3cZEmYcs2shAo2Po=";
 
       meta = meta // {
         mainProgram = "test_client";
       };
     };
     tests =
-      lib.filterAttrs
-        (key: lib.const (lib.hasPrefix "with-postgresql-and-redis" key))
-        nixosTests.nextcloud
+      lib.filterAttrs (
+        key: lib.const (lib.hasPrefix "with-postgresql-and-redis" key)
+      ) nixosTests.nextcloud
       // {
         inherit test_client;
       };

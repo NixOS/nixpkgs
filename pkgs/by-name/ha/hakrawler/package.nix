@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -20,7 +21,7 @@ buildGoModule rec {
     description = "Web crawler for the discovery of endpoints and assets";
     mainProgram = "hakrawler";
     homepage = "https://github.com/hakluke/hakrawler";
-    longDescription =  ''
+    longDescription = ''
       Simple, fast web crawler designed for easy, quick discovery of endpoints
       and assets within a web application.
     '';

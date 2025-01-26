@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "relic";
-  version = "8.1.0";
+  version = "8.1.1";
 
   src = fetchFromGitHub {
     owner = "sassoftware";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-jBE23kGrU/q53ZTVoQ9xmeL+rVuSneObbCRqEa/zvpI=";
+    sha256 = "sha256-8pqLV4NWCI35FGe2NNqjatTAlVyvx1mskbcR/NacUvI=";
   };
 
   vendorHash = "sha256-x0EqKotZJny+7FtRvdXWUkPpG0jntFGe/IpNzKVL2pI=";

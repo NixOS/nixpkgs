@@ -1,4 +1,8 @@
-{ lib, bundlerApp, bundlerUpdateScript }:
+{
+  lib,
+  bundlerApp,
+  bundlerUpdateScript,
+}:
 
 bundlerApp {
   pname = "youplot";
@@ -10,10 +14,10 @@ bundlerApp {
 
   meta = with lib; {
     description = "Command line tool that draws plots on the terminal";
-    homepage    = "https://github.com/red-data-tools/YouPlot";
+    homepage = "https://github.com/red-data-tools/YouPlot";
     mainProgram = "uplot";
-    license     = licenses.mit;
+    license = licenses.mit;
     maintainers = with maintainers; [ purcell ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

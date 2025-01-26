@@ -1,4 +1,8 @@
-{ lib, python3, fetchPypi }:
+{
+  lib,
+  python3,
+  fetchPypi,
+}:
 
 with python3.pkgs;
 

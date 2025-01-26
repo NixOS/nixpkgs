@@ -7,19 +7,19 @@
 }:
 let
   pname = "open-webui";
-  version = "0.4.6";
+  version = "0.5.7";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Zzytv2OLy3RENNWzRjjDh7xnJyX+H9/dh1Xj2HIsn6I=";
+    tag = "v${version}";
+    hash = "sha256-spdwd3ffibmHb9LDgK1EkpUAK6OsD9d6gocrbEx/CrE=";
   };
 
   frontend = buildNpmPackage {
     inherit pname version src;
 
-    npmDepsHash = "sha256-36GdyqKcqhOYi1kRwXe0YTOtwbVUcEvLPPYy/A0IgE0=";
+    npmDepsHash = "sha256-9wu5SWtom/pZrFRP8rrsZMoGEnN4MVAlkyeydr0Fslo=";
 
     # Disabling `pyodide:fetch` as it downloads packages during `buildPhase`
     # Until this is solved, running python packages from the browser will not work.
@@ -30,6 +30,7 @@ let
 
     env.CYPRESS_INSTALL_BINARY = "0"; # disallow cypress from downloading binaries in sandbox
     env.ONNXRUNTIME_NODE_INSTALL_CUDA = "skip";
+    env.NODE_OPTIONS = "--max-old-space-size=8192";
 
     installPhase = ''
       runHook preInstall
@@ -44,6 +45,8 @@ in
 python312.pkgs.buildPythonApplication rec {
   inherit pname version src;
   pyproject = true;
+
+  build-system = with python312.pkgs; [ hatchling ];
 
   # Not force-including the frontend build directory as frontend is managed by the `frontend` derivation above.
   postPatch = ''
@@ -61,99 +64,114 @@ python312.pkgs.buildPythonApplication rec {
     "pytest-docker"
   ];
 
-  dependencies = with python312.pkgs; [
-    aiocache
-    aiofiles
-    aiohttp
-    alembic
-    anthropic
-    apscheduler
-    argon2-cffi
-    async-timeout
-    authlib
-    bcrypt
-    beautifulsoup4
-    black
-    boto3
-    chromadb
-    colbert-ai
-    docx2txt
-    duckduckgo-search
-    einops
-    extract-msg
-    fake-useragent
-    fastapi
-    faster-whisper
-    flask
-    flask-cors
-    fpdf2
-    ftfy
-    google-generativeai
-    googleapis-common-protos
-    langchain
-    langchain-chroma
-    langchain-community
-    langfuse
-    ldap3
-    markdown
-    nltk
-    openai
-    opencv-python-headless
-    openpyxl
-    opensearch-py
-    pandas
-    passlib
-    peewee
-    peewee-migrate
-    pgvector
-    psutil
-    psycopg2-binary
-    pydub
-    pyjwt
-    pymdown-extensions
-    pymilvus
-    pymongo
-    pymysql
-    pypandoc
-    pypdf
-    python-dotenv
-    python-jose
-    python-multipart
-    python-pptx
-    python-socketio
-    pytube
-    pyxlsb
-    qdrant-client
-    rank-bm25
-    rapidocr-onnxruntime
-    redis
-    requests
-    sentence-transformers
-    soundfile
-    tiktoken
-    unstructured
-    uvicorn
-    validators
-    xlrd
-    youtube-transcript-api
-  ];
-
-  build-system = with python312.pkgs; [ hatchling ];
+  dependencies =
+    with python312.pkgs;
+    [
+      aiocache
+      aiofiles
+      aiohttp
+      alembic
+      anthropic
+      apscheduler
+      argon2-cffi
+      async-timeout
+      authlib
+      bcrypt
+      beautifulsoup4
+      black
+      boto3
+      chromadb
+      colbert-ai
+      docx2txt
+      duckduckgo-search
+      einops
+      extract-msg
+      fake-useragent
+      fastapi
+      faster-whisper
+      flask
+      flask-cors
+      fpdf2
+      ftfy
+      gcp-storage-emulator
+      google-api-python-client
+      google-auth-httplib2
+      google-auth-oauthlib
+      google-cloud-storage
+      google-generativeai
+      googleapis-common-protos
+      iso-639
+      langchain
+      langchain-community
+      langdetect
+      langfuse
+      ldap3
+      markdown
+      moto
+      nltk
+      openai
+      opencv-python-headless
+      openpyxl
+      opensearch-py
+      pandas
+      passlib
+      peewee
+      peewee-migrate
+      pgvector
+      psutil
+      psycopg2-binary
+      pydub
+      pyjwt
+      pymdown-extensions
+      pymilvus
+      pymongo
+      pymysql
+      pypandoc
+      pypdf
+      python-dotenv
+      python-jose
+      python-multipart
+      python-pptx
+      python-socketio
+      pytube
+      pyxlsb
+      qdrant-client
+      rank-bm25
+      rapidocr-onnxruntime
+      redis
+      requests
+      sentence-transformers
+      soundfile
+      tiktoken
+      transformers
+      unstructured
+      uvicorn
+      validators
+      xlrd
+      youtube-transcript-api
+    ]
+    ++ moto.optional-dependencies.s3;
 
   pythonImportsCheck = [ "open_webui" ];
 
   makeWrapperArgs = [ "--set FRONTEND_BUILD_DIR ${frontend}/share/open-webui" ];
 
-  passthru.tests = {
-    inherit (nixosTests) open-webui;
+  passthru = {
+    tests = {
+      inherit (nixosTests) open-webui;
+    };
+    updateScript = ./update.sh;
   };
 
   meta = {
-    changelog = "https://github.com/open-webui/open-webui/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/open-webui/open-webui/blob/${src.tag}/CHANGELOG.md";
     description = "Comprehensive suite for LLMs with a user-friendly WebUI";
     homepage = "https://github.com/open-webui/open-webui";
     license = lib.licenses.mit;
     mainProgram = "open-webui";
-    maintainers = with lib.maintainers; [ shivaraj-bh ];
+    maintainers = with lib.maintainers; [
+      drupol
+      shivaraj-bh
+    ];
   };
 }

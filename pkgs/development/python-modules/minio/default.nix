@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "minio";
-  version = "7.2.10";
+  version = "7.2.15";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -30,8 +30,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "minio";
     repo = "minio-py";
-    rev = "refs/tags/${version}";
-    hash = "sha256-vPIMYaCt2f1OXPUtaw0OXMEADHNCv4DxpueZSyJiYqA=";
+    tag = version;
+    hash = "sha256-vJ+V8O2fJxG1XpFDwQCmaIT8VTo5pEKduDndg6rzf0s=";
   };
 
   postPatch = ''

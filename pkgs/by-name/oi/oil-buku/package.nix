@@ -1,4 +1,12 @@
-{ stdenvNoCC, lib, fetchFromGitHub, jq, gawk, peco, makeWrapper }:
+{
+  stdenvNoCC,
+  lib,
+  fetchFromGitHub,
+  jq,
+  gawk,
+  peco,
+  makeWrapper,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "oil-buku";

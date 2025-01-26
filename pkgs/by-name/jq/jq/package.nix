@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchurl
-, removeReferencesTo
-, autoreconfHook
-, bison
-, onigurumaSupport ? true
-, oniguruma
+{
+  lib,
+  stdenv,
+  fetchurl,
+  removeReferencesTo,
+  autoreconfHook,
+  bison,
+  onigurumaSupport ? true,
+  oniguruma,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +19,13 @@ stdenv.mkDerivation rec {
     hash = "sha256-R4ycoSn9LjRD/icxS0VeIR4NjGC8j/ffcDhz3u7lgMI=";
   };
 
-  outputs = [ "bin" "doc" "man" "dev" "out" ];
+  outputs = [
+    "bin"
+    "doc"
+    "man"
+    "dev"
+    "out"
+  ];
 
   # https://github.com/jqlang/jq/issues/2871
   postPatch = lib.optionalString stdenv.hostPlatform.isFreeBSD ''
@@ -41,7 +48,11 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = lib.optionals onigurumaSupport [ oniguruma ];
-  nativeBuildInputs = [ removeReferencesTo autoreconfHook bison ];
+  nativeBuildInputs = [
+    removeReferencesTo
+    autoreconfHook
+    bison
+  ];
 
   # Darwin requires _REENTRANT be defined to use functions like `lgamma_r`.
   # Otherwise, configure will detect that they’re in libm, but the build will fail
@@ -52,14 +63,16 @@ stdenv.mkDerivation rec {
     "-D_DARWIN_C_SOURCE=1"
   ]);
 
-  configureFlags = [
-    "--bindir=\${bin}/bin"
-    "--sbindir=\${bin}/bin"
-    "--datadir=\${doc}/share"
-    "--mandir=\${man}/share/man"
-  ] ++ lib.optional (!onigurumaSupport) "--with-oniguruma=no"
-  # jq is linked to libjq:
-  ++ lib.optional (!stdenv.hostPlatform.isDarwin) "LDFLAGS=-Wl,-rpath,\\\${libdir}";
+  configureFlags =
+    [
+      "--bindir=\${bin}/bin"
+      "--sbindir=\${bin}/bin"
+      "--datadir=\${doc}/share"
+      "--mandir=\${man}/share/man"
+    ]
+    ++ lib.optional (!onigurumaSupport) "--with-oniguruma=no"
+    # jq is linked to libjq:
+    ++ lib.optional (!stdenv.hostPlatform.isDarwin) "LDFLAGS=-Wl,-rpath,\\\${libdir}";
 
   # jq binary includes the whole `configureFlags` in:
   # https://github.com/jqlang/jq/commit/583e4a27188a2db097dd043dd203b9c106bba100
@@ -87,7 +100,11 @@ stdenv.mkDerivation rec {
     description = "Lightweight and flexible command-line JSON processor";
     homepage = "https://jqlang.github.io/jq/";
     license = licenses.mit;
-    maintainers = with maintainers; [ raskin artturin ncfavier ];
+    maintainers = with maintainers; [
+      raskin
+      artturin
+      ncfavier
+    ];
     platforms = platforms.unix;
     downloadPage = "https://jqlang.github.io/jq/download/";
     mainProgram = "jq";

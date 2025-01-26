@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  pnpm,
+  pnpm_9,
   nodejs,
   electron,
   makeDesktopItem,
@@ -14,26 +14,26 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gitify";
-  version = "5.16.1";
+  version = "5.18.0";
 
   src = fetchFromGitHub {
     owner = "gitify-app";
     repo = "gitify";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-mTe3Nl0ZxUfzS06oETOh/gdcjVWeXSoyXmvKKHJ2rVw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-INeOQY39IepcqigThymEcBjkrQkIC/9Py+g32/VBpmg=";
   };
 
   nativeBuildInputs = [
     nodejs
-    pnpm.configHook
+    pnpm_9.configHook
     copyDesktopItems
     imagemagick
     makeWrapper
   ];
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-xgS7MaiILErKHCSI/f2lQif8Hf3RPQEC/DGGGmOBRzk=";
+    hash = "sha256-86RiBzZwoyDX5l9wV3JiUo4efkol3sKH3tlu61D7D+0=";
   };
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
@@ -80,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
 
           makeWrapper ${lib.getExe electron} $out/bin/gitify \
               --add-flags $out/share/gitify/resources/app.asar \
-              --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+              --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
               --inherit-argv0
         ''
     }

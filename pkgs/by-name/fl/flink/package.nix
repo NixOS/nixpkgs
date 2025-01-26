@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, makeWrapper, jre }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  jre,
+}:
 
 stdenv.mkDerivation rec {
   pname = "flink";
@@ -35,6 +41,9 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     platforms = platforms.all;
-    maintainers = with maintainers; [ mbode autophagy ];
+    maintainers = with maintainers; [
+      mbode
+      autophagy
+    ];
   };
 }

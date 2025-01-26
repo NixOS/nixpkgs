@@ -1,4 +1,11 @@
-{ stdenv, lib, fetchurl, gtk2, pkg-config, lm_sensors }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  gtk2,
+  pkg-config,
+  lm_sensors,
+}:
 
 stdenv.mkDerivation rec {
   pname = "xsensors";
@@ -9,7 +16,8 @@ stdenv.mkDerivation rec {
   };
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    gtk2 lm_sensors
+    gtk2
+    lm_sensors
   ];
   patches = [
     ./remove-unused-variables.patch

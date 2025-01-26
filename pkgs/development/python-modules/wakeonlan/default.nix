@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "remcohaszing";
     repo = "pywakeonlan";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-VPdklyD3GVn0cex4I6zV61I0bUr4KQp8DdMKAM/r4io=";
   };
 

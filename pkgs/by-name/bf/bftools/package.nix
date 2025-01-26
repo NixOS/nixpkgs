@@ -1,4 +1,10 @@
-{ stdenv, lib, makeWrapper, fetchzip, jre }:
+{
+  stdenv,
+  lib,
+  makeWrapper,
+  fetchzip,
+  jre,
+}:
 
 stdenv.mkDerivation rec {
   pname = "bftools";

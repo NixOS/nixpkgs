@@ -1,15 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, rustPlatform
-, libkrun
-, makeWrapper
-, passt
-, sommelier
-, mesa
-, opengl-driver ? mesa.drivers
-, withSommelier ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  rustPlatform,
+  libkrun,
+  makeWrapper,
+  passt,
+  sommelier,
+  mesa,
+  withSommelier ? false,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -55,7 +55,7 @@ rustPlatform.buildRustPackage rec {
 
   postFixup = ''
     wrapProgram $out/bin/krun $wrapArgs \
-      --set-default OPENGL_DRIVER ${opengl-driver}
+      --set-default OPENGL_DRIVER ${mesa.driverLink}
   '';
 
   meta = {

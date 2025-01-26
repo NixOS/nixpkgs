@@ -47,6 +47,10 @@ let
 in
 
 mapAliases ({
+  ### A ###
+
+  apple_sdk_10_12 = throw "darwin.apple_sdk_10_12 was removed as Nixpkgs no longer supports macOS 10.12; see the 25.05 release notes"; # Added 2024-10-27
+
   ### B ###
 
   builder = throw "'darwin.builder' has been changed and renamed to 'darwin.linux-builder'. The default ssh port is now 31022. Please update your configuration or override the port back to 22. See https://nixos.org/manual/nixpkgs/unstable/#sec-darwin-builder"; # added 2023-07-06
@@ -59,9 +63,15 @@ mapAliases ({
   cctools-llvm = pkgs.cctools; # added 2024-07-01
   cctools-port = pkgs.cctools; # added 2024-07-17
 
+  ### D ###
+
+  discrete-scroll = pkgs.discrete-scroll; # added 2024-11-27
+
   ### I ###
 
   insert_dylib = throw "'darwin.insert_dylib' has been renamed to 'insert-dylib'"; # added 2024-04-04
+  ios-deploy = throw "'darwin.ios-deploy' has been renamed to 'ios-deploy'"; # added 2024-11-28
+  iproute2mac = lib.warnOnInstantiate "darwin.iproute2mac has been renamed to iproute2mac" pkgs.iproute2mac; # added 2024-12-08
 
   ### L ###
 

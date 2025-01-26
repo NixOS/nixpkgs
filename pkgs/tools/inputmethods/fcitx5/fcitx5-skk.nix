@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, cmake
-, extra-cmake-modules
-, gettext
-, fcitx5
-, fcitx5-qt
-, libskk
-, qtbase
-, skkDictionaries
-, enableQt ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  extra-cmake-modules,
+  gettext,
+  fcitx5,
+  fcitx5-qt,
+  libskk,
+  qtbase,
+  skkDictionaries,
+  enableQt ? false,
 }:
 
 stdenv.mkDerivation rec {
@@ -31,13 +32,15 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [
-    fcitx5
-    libskk
-  ] ++ lib.optionals enableQt [
-    fcitx5-qt
-    qtbase
-  ];
+  buildInputs =
+    [
+      fcitx5
+      libskk
+    ]
+    ++ lib.optionals enableQt [
+      fcitx5-qt
+      qtbase
+    ];
 
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_QT" enableQt)

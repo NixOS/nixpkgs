@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Grab images from a Wayland compositor";
     license = lib.licenses.mit;
     mainProgram = "grim";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ khaneliman ];
     platforms = lib.platforms.linux;
   };
 })

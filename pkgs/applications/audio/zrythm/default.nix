@@ -1,65 +1,66 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchzip
-, alsa-lib
-, appstream
-, bash-completion
-, boost
-, breeze-icons
-, carla
-, chromaprint
-, cmake
-, curl
-, dbus
-, dconf
-, fftw
-, fftwFloat
-, flex
-, glib
-, graphviz
-, gtk4
-, gtksourceview5
-, guile
-, help2man
-, jq
-, kissfft
-, libadwaita
-, libbacktrace
-, libcyaml
-, libepoxy
-, libjack2
-, libpanel
-, libpulseaudio
-, libsamplerate
-, libsndfile
-, libxml2
-, libyaml
-, lilv
-, lv2
-, meson
-, ninja
-, pcre2
-, pkg-config
-, python3
-, rtaudio_6
-, rtmidi
-, rubberband
-, sassc
-, serd
-, sord
-, sox
-, soxr
-, sratom
-, texi2html
-, vamp-plugin-sdk
-, wrapGAppsHook4
-, writeScript
-, xdg-utils
-, xxHash
-, yyjson
-, zix
-, zstd
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchzip,
+  alsa-lib,
+  appstream,
+  bash-completion,
+  boost,
+  breeze-icons,
+  carla,
+  chromaprint,
+  cmake,
+  curl,
+  dbus,
+  dconf,
+  fftw,
+  fftwFloat,
+  flex,
+  glib,
+  graphviz,
+  gtk4,
+  gtksourceview5,
+  guile,
+  help2man,
+  jq,
+  kissfft,
+  libadwaita,
+  libbacktrace,
+  libcyaml,
+  libepoxy,
+  libjack2,
+  libpanel,
+  libpulseaudio,
+  libsamplerate,
+  libsndfile,
+  libxml2,
+  libyaml,
+  lilv,
+  lv2,
+  meson,
+  ninja,
+  pcre2,
+  pkg-config,
+  python3,
+  rtaudio_6,
+  rtmidi,
+  rubberband,
+  sassc,
+  serd,
+  sord,
+  sox,
+  soxr,
+  sratom,
+  texi2html,
+  vamp-plugin-sdk,
+  wrapGAppsHook4,
+  writeScript,
+  xdg-utils,
+  xxHash,
+  yyjson,
+  zix,
+  zstd,
 }:
 
 let
@@ -79,11 +80,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "zrythm";
-  version = "1.0.0-rc.2";
+  version = "1.0.0";
 
   src = fetchzip {
     url = "https://www.zrythm.org/releases/zrythm-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-Da//nY0yXSbDPEg6t9jgL32NoT8dFYSQ4Kzc/KbHGSk=";
+    hash = "sha256-qI1UEIeIJdYQcOWMjJa55DaWjDIabx56dSwjhm64ROM=";
   };
 
   passthru.updateScript = writeScript "update-zrythm" ''
@@ -187,7 +188,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace meson.build \
-      --replace "'/usr/lib', '/usr/local/lib', '/opt/homebrew/lib'" "'${fftw}/lib'"
+      --replace-fail "'/usr/lib', '/usr/local/lib', '/opt/homebrew/lib'" "'${fftw}/lib'"
 
     chmod +x scripts/meson-post-install.sh
     patchShebangs ext/sh-manpage-completions/run.sh scripts/generic_guile_wrap.sh \
@@ -201,12 +202,18 @@ stdenv.mkDerivation (finalAttrs: {
     )
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.zrythm.org";
     description = "Automated and intuitive digital audio workstation";
-    maintainers = with maintainers; [ tshaynik magnetophon yuu astavie PowerUser64 ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [
+      tshaynik
+      magnetophon
+      yuu
+      astavie
+      PowerUser64
+    ];
+    platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
-    license = licenses.agpl3Plus;
+    license = lib.licenses.agpl3Plus;
   };
 })

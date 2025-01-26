@@ -1,38 +1,48 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, glib
-, gobject-introspection
-, intltool
-, shared-mime-info
-, gtk3
-, wrapGAppsHook3
-, libarchive
-, libxml2
-, xapp
-, meson
-, pkg-config
-, cairo
-, libsecret
-, poppler
-, libspectre
-, libgxps
-, webkitgtk_4_1
-, nodePackages
-, ninja
-, djvulibre
-, backends ? [ "pdf" "ps" /* "dvi" "t1lib" */ "djvu" "tiff" "pixbuf" "comics" "xps" "epub" ]
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  glib,
+  gobject-introspection,
+  intltool,
+  shared-mime-info,
+  gtk3,
+  wrapGAppsHook3,
+  libarchive,
+  libxml2,
+  xapp,
+  meson,
+  pkg-config,
+  cairo,
+  libsecret,
+  poppler,
+  libspectre,
+  libgxps,
+  webkitgtk_4_1,
+  nodePackages,
+  ninja,
+  djvulibre,
+  backends ? [
+    "pdf"
+    "ps" # "dvi" "t1lib"
+    "djvu"
+    "tiff"
+    "pixbuf"
+    "comics"
+    "xps"
+    "epub"
+  ],
 }:
 
 stdenv.mkDerivation rec {
   pname = "xreader";
-  version = "4.2.2";
+  version = "4.2.3";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-c3oZ+PAsu180mlriQlF86TCBAnehLBv9Nc0SCtSkUuQ=";
+    hash = "sha256-qBnnxygkAn1wF3gtqR0At1e1e+sx1/2MoSWqmshW5Qg=";
   };
 
   nativeBuildInputs = [

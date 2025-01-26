@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -23,7 +24,6 @@ python3.pkgs.buildPythonApplication rec {
     setuptools
     jmespath
   ];
-
 
   postPatch = ''
     substituteInPlace setup.py \

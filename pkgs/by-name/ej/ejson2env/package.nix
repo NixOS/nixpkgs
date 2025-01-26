@@ -1,4 +1,12 @@
-{ lib, buildGoModule, fetchFromGitHub, nix-update-script, testers, callPackage, ejson2env }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nix-update-script,
+  testers,
+  callPackage,
+  ejson2env,
+}:
 
 buildGoModule rec {
   pname = "ejson2env";
@@ -23,7 +31,7 @@ buildGoModule rec {
     updateScript = nix-update-script { };
     tests = {
       version = testers.testVersion { package = ejson2env; };
-      decryption = callPackage ./test-decryption.nix {};
+      decryption = callPackage ./test-decryption.nix { };
     };
   };
 

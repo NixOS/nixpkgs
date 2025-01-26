@@ -1,26 +1,27 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, makeWrapper
-, installShellFiles
-, coreutils
-, gnused
-, gnugrep
-, sqlite
-, wget
-, w3m
-, socat
-, gawk
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  makeWrapper,
+  installShellFiles,
+  coreutils,
+  gnused,
+  gnugrep,
+  sqlite,
+  wget,
+  w3m,
+  socat,
+  gawk,
 }:
 
 stdenv.mkDerivation rec {
-  pname   = "dasht";
+  pname = "dasht";
   version = "2.4.0";
 
   src = fetchFromGitHub {
-    owner  = "sunaku";
-    repo   = pname;
-    rev    = "v${version}";
+    owner = "sunaku";
+    repo = pname;
+    rev = "v${version}";
     sha256 = "08wssmifxi7pnvn9gqrvpzpkc2qpkfbzbhxh0dk1gff2y2211qqk";
   };
 
@@ -36,7 +37,10 @@ stdenv.mkDerivation rec {
     (placeholder "out")
   ];
 
-  nativeBuildInputs = [ makeWrapper installShellFiles ];
+  nativeBuildInputs = [
+    makeWrapper
+    installShellFiles
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -57,9 +61,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Search API docs offline, in terminal or browser";
-    homepage    = "https://sunaku.github.io/dasht/man";
-    license     = lib.licenses.isc;
-    platforms   = lib.platforms.unix; #cannot test other
+    homepage = "https://sunaku.github.io/dasht/man";
+    license = lib.licenses.isc;
+    platforms = lib.platforms.unix; # cannot test other
     maintainers = with lib.maintainers; [ matthiasbeyer ];
   };
 }

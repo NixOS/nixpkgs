@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchurl
-, zlib
-, gsl
-, boost
+{
+  lib,
+  stdenv,
+  fetchurl,
+  zlib,
+  gsl,
+  boost,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,9 +16,13 @@ stdenv.mkDerivation rec {
     sha256 = "1nd3rzsdgk47r8b8k43mdfvaagln533sm08s1jr0dz8km8nlym7y";
   };
 
-  buildInputs = [ zlib gsl boost ];
+  buildInputs = [
+    zlib
+    gsl
+    boost
+  ];
 
-  meta = with lib ; {
+  meta = with lib; {
     description = "Inference of patterns of population splitting and mixing from genome-wide allele frequency data";
     homepage = "https://bitbucket.org/nygcresearch/treemix/wiki/Home";
     license = licenses.gpl3Only;

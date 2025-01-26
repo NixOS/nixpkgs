@@ -53,8 +53,6 @@
 , libexecinfo
 , broadwaySupport ? true
 , testers
-, apple-sdk
-, apple-sdk_10_15
 , darwinMinVersionHook
 }:
 
@@ -70,7 +68,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gtk4";
-  version = "4.16.3";
+  version = "4.16.7";
 
   outputs = [ "out" "dev" ] ++ lib.optionals x11Support [ "devdoc" ];
   outputBin = "dev";
@@ -82,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = with finalAttrs; "mirror://gnome/sources/gtk/${lib.versions.majorMinor version}/gtk-${version}.tar.xz";
-    hash = "sha256-LsU+B9GMnwA7OeSmqDgFTZJZ4Ei2xMBdgMDQWqch2UQ=";
+    hash = "sha256-UwPHYk4VpIiAWRud3UM4mvuj3k+5KiGXGVGbsWQs49w=";
   };
 
   depsBuildBuild = [
@@ -162,11 +160,6 @@ stdenv.mkDerivation (finalAttrs: {
     # Required for GSettings schemas at runtime.
     # Will be picked up by wrapGAppsHook4.
     gsettings-desktop-schemas
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    (darwinMinVersionHook "10.15")
-  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin
-                   && lib.versionOlder apple-sdk.version "10.15") [
-      apple-sdk_10_15
   ];
 
   mesonFlags = [

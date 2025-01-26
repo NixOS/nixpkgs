@@ -1,11 +1,12 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, pythonOlder
-, fetchpatch
-, stdenv
-, libnotify
-, python-telegram
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  pythonOlder,
+  fetchpatch,
+  stdenv,
+  libnotify,
+  python-telegram,
 }:
 
 buildPythonApplication rec {

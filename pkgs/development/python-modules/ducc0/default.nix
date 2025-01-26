@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "ducc0";
-  version = "0.35.0";
+  version = "0.36.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "mtr";
     repo = "ducc";
     rev = "ducc0_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-LfN+rwJp5euVpR/5sUBG3XqBhF7/KbgW/485eufJtMQ=";
+    hash = "sha256-S/H3+EykNxqbs8Tca3T95SK3Hzst49hOPkO0ocs80t0=";
   };
 
   buildInputs = [ pybind11 ];

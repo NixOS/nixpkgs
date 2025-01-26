@@ -38,7 +38,7 @@
 , version ? toString revision
 , extraRevision ? ""
 , extraVersion ? ""
-, sha512
+, sha512 ? { }
 , mirrors
 , fixedHashes ? { }
 , postUnpack ? ""
@@ -48,8 +48,10 @@
 , hasHyphens ? false
 , hasInfo ? false
 , hasManpages ? false
-, hasRunfiles ? false
+, hasRunfiles ? (sha512 ? run)
 , hasTlpkg ? false
+, hasCatalogue ? true
+, catalogue ? pname
 , extraNativeBuildInputs ? [ ]
 , ...
 }@args:
@@ -73,6 +75,8 @@ let
     hydraPlatforms = [ ];
   } // lib.optionalAttrs (args ? shortdesc) {
     description = args.shortdesc;
+  } // lib.optionalAttrs hasCatalogue {
+    homepage = "https://ctan.org/pkg/${catalogue}";
   };
 
   hasBinfiles = args ? binfiles && args.binfiles != [ ];

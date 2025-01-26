@@ -27,7 +27,7 @@ buildNpmPackage rec {
     homepage = "https://github.com/olrtg/emmet-language-server";
     changelog = "https://github.com/olrtg/emmet-language-server/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ stnley ];
+    maintainers = [ ];
     mainProgram = "emmet-language-server";
   };
 }

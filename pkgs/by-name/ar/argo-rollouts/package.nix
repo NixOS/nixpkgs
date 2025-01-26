@@ -1,4 +1,8 @@
-{ buildGoModule, lib, fetchFromGitHub }:
+{
+  buildGoModule,
+  lib,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "argo-rollouts";
@@ -16,7 +20,10 @@ buildGoModule rec {
   # Disable tests since some test fail because of missing test data
   doCheck = false;
 
-  subPackages = [ "cmd/rollouts-controller" "cmd/kubectl-argo-rollouts" ];
+  subPackages = [
+    "cmd/rollouts-controller"
+    "cmd/kubectl-argo-rollouts"
+  ];
 
   meta = with lib; {
     description = "Kubernetes Progressive Delivery Controller";

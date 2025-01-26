@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, cmake
-, pkg-config
-, libdrm
-, fmt
-, libevdev
-, withPython ? false
-, python3Packages
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  cmake,
+  pkg-config,
+  libdrm,
+  fmt,
+  libevdev,
+  withPython ? false,
+  python3Packages,
 }:
 
 stdenv.mkDerivation {
@@ -25,9 +26,24 @@ stdenv.mkDerivation {
   };
 
   # Didn't detect pybind11 without cmake
-  nativeBuildInputs = [ meson ninja pkg-config ] ++ lib.optionals withPython [ cmake ];
-  buildInputs = [ libdrm fmt libevdev ]
-    ++ lib.optionals withPython (with python3Packages; [ python pybind11 ]);
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+  ] ++ lib.optionals withPython [ cmake ];
+  buildInputs =
+    [
+      libdrm
+      fmt
+      libevdev
+    ]
+    ++ lib.optionals withPython (
+      with python3Packages;
+      [
+        python
+        pybind11
+      ]
+    );
 
   dontUseCmakeConfigure = true;
 

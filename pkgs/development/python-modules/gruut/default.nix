@@ -53,7 +53,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "gruut";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-iwde6elsAbICZ+Rc7CPgcZTOux1hweVZc/gf4K+hP9M=";
   };
 

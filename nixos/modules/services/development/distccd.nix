@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.distccd;
 in
@@ -10,7 +15,11 @@ in
       allowedClients = lib.mkOption {
         type = lib.types.listOf lib.types.str;
         default = [ "127.0.0.1" ];
-        example = [ "127.0.0.1" "192.168.0.0/24" "10.0.0.0/24" ];
+        example = [
+          "127.0.0.1"
+          "192.168.0.0/24"
+          "10.0.0.0/24"
+        ];
         description = ''
           Client IPs which are allowed to connect to distccd in CIDR notation.
 
@@ -29,7 +38,16 @@ in
       };
 
       logLevel = lib.mkOption {
-        type = lib.types.nullOr (lib.types.enum [ "critical" "error" "warning" "notice" "info" "debug" ]);
+        type = lib.types.nullOr (
+          lib.types.enum [
+            "critical"
+            "error"
+            "warning"
+            "notice"
+            "info"
+            "debug"
+          ]
+        );
         default = "warning";
         description = ''
           Set the minimum severity of error that will be included in the log
@@ -45,7 +63,6 @@ in
           Maximum number of tasks distccd should execute at lib.any time.
         '';
       };
-
 
       nice = lib.mkOption {
         type = lib.types.nullOr lib.types.int;
@@ -97,8 +114,7 @@ in
 
   config = lib.mkIf cfg.enable {
     networking.firewall = lib.mkIf cfg.openFirewall {
-      allowedTCPPorts = [ cfg.port ]
-        ++ lib.optionals cfg.stats.enable [ cfg.stats.port ];
+      allowedTCPPorts = [ cfg.port ] ++ lib.optionals cfg.stats.enable [ cfg.stats.port ];
     };
 
     systemd.services.distccd = {

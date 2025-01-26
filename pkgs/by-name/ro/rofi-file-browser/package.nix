@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, rofi, gtk3 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  rofi,
+  gtk3,
+}:
 
 stdenv.mkDerivation rec {
   pname = "rofi-file-browser-extended";
@@ -18,8 +26,14 @@ stdenv.mkDerivation rec {
       --replace "/usr/share/" "$out/share/"
   '';
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ rofi gtk3 ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+  buildInputs = [
+    rofi
+    gtk3
+  ];
 
   ROFI_PLUGINS_DIR = "$out/lib/rofi";
 

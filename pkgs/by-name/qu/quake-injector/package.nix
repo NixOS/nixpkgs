@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "hrehfeld";
     repo = "QuakeInjector";
-    rev = "refs/tags/alpha${finalAttrs.version}";
+    tag = "alpha${finalAttrs.version}";
     hash = "sha256-bbvLp5/Grg+mXBuV5aJCMOSjFp1+ukZS+AivcbhBxHU=";
   };
 

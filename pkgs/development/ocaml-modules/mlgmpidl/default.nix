@@ -1,4 +1,15 @@
-{ stdenv, lib, fetchFromGitHub, perl, ocaml, findlib, camlidl, gmp, mpfr, bigarray-compat }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  perl,
+  ocaml,
+  findlib,
+  camlidl,
+  gmp,
+  mpfr,
+  bigarray-compat,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-mlgmpidl";
@@ -10,8 +21,16 @@ stdenv.mkDerivation rec {
     hash = "sha256-ZmSDKZiHko8MCeIuZL53HjupfwO6PAm8QOCc9O3xJOk=";
   };
 
-  nativeBuildInputs = [ perl ocaml findlib camlidl ];
-  buildInputs = [ gmp mpfr ];
+  nativeBuildInputs = [
+    perl
+    ocaml
+    findlib
+    camlidl
+  ];
+  buildInputs = [
+    gmp
+    mpfr
+  ];
   propagatedBuildInputs = [ bigarray-compat ];
 
   strictDeps = true;

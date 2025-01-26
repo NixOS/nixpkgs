@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "home-assistant-ecosystem";
     repo = "aiocurrencylayer";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-VOzgWN+dDPaGEcahFPSWjBR989b9eNkx4zcnI9o2Xiw=";
   };
 

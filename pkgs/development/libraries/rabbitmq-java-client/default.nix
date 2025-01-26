@@ -1,4 +1,13 @@
-{ fetchurl, lib, stdenv, ant, jdk, jre, python2, makeWrapper }:
+{
+  fetchurl,
+  lib,
+  stdenv,
+  ant,
+  jdk,
+  jre,
+  python2,
+  makeWrapper,
+}:
 
 stdenv.mkDerivation rec {
   pname = "rabbitmq-java-client";
@@ -10,7 +19,11 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ ant jdk python2 ];
+  buildInputs = [
+    ant
+    jdk
+    python2
+  ];
 
   buildPhase = "ant dist";
 
@@ -28,9 +41,12 @@ stdenv.mkDerivation rec {
     homepage = "https://www.rabbitmq.com/java-client.html";
     sourceProvenance = with sourceTypes; [
       fromSource
-      binaryBytecode  # source bundles dependencies as jars
+      binaryBytecode # source bundles dependencies as jars
     ];
-    license = with licenses; [ mpl11 gpl2 ];
+    license = with licenses; [
+      mpl11
+      gpl2
+    ];
     platforms = platforms.linux;
   };
 }

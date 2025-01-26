@@ -1,35 +1,38 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, gitUpdater
-, cmake
-, cmake-extras
-, pkg-config
-, python3
-, qtbase
-, qtdeclarative
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  gitUpdater,
+  cmake,
+  cmake-extras,
+  pkg-config,
+  python3,
+  qtbase,
+  qtdeclarative,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-settings-components";
-  version = "1.1.1";
+  version = "1.1.2";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-settings-components";
     rev = finalAttrs.version;
-    hash = "sha256-2Wyh+2AW6EeKRv26D4l+GIoH5sWC9SmOODNHOveFZPg=";
+    hash = "sha256-H7G3dzzitdyahB/MwgtfRBpo+qMOhmQSzN4EGYculks=";
   };
 
-  postPatch = ''
-    patchShebangs tests/imports/check_imports.py
+  postPatch =
+    ''
+      patchShebangs tests/imports/check_imports.py
 
-    substituteInPlace CMakeLists.txt \
-      --replace "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" '${placeholder "out"}/${qtbase.qtQmlPrefix}'
-  '' + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
-    sed -i CMakeLists.txt \
-      -e '/add_subdirectory(tests)/d'
-  '';
+      substituteInPlace CMakeLists.txt \
+        --replace "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" '${placeholder "out"}/${qtbase.qtQmlPrefix}'
+    ''
+    + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
+      sed -i CMakeLists.txt \
+        -e '/add_subdirectory(tests)/d'
+    '';
 
   strictDeps = true;
 

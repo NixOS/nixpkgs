@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "smheidrich";
     repo = "py-json-stream-rs-tokenizer";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ogX0KsfHRQW7+exRMKGwJiNINrOKPiTKxAqiTZyEWrg=";
   };
 

@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, zlib }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  zlib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "potrace";

@@ -22,14 +22,14 @@
   libXinerama,
 }:
 
-stdenv.mkDerivation (finalAttrs:{
+stdenv.mkDerivation (finalAttrs: {
   pname = "methane";
   version = "2.1.0";
 
   src = fetchFromGitHub {
     repo = "methane";
     owner = "rombust";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-rByJqkhYsRuv0gTug+vP2qgkRY8TnX+Qx4/MbAmPTOU=";
   };
 

@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, cmake, zstd }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  zstd,
+}:
 
 stdenv.mkDerivation rec {
   pname = "zarchive";

@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, expect
-, which
-, gnupg
-, coreutils
-, git
-, pinentry
-, gnutar
-, procps
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  expect,
+  which,
+  gnupg,
+  coreutils,
+  git,
+  pinentry,
+  gnutar,
+  procps,
 }:
 
 stdenv.mkDerivation rec {

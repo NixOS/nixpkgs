@@ -1,4 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, makeWrapper }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  makeWrapper,
+}:
 
 buildGoModule rec {
   pname = "skaffold";
@@ -13,16 +19,24 @@ buildGoModule rec {
 
   vendorHash = null;
 
-  subPackages = ["cmd/skaffold"];
+  subPackages = [ "cmd/skaffold" ];
 
-  ldflags = let t = "github.com/GoogleContainerTools/skaffold/v2/pkg/skaffold"; in [
-    "-s" "-w"
-    "-X ${t}/version.version=v${version}"
-    "-X ${t}/version.gitCommit=${src.rev}"
-    "-X ${t}/version.buildDate=unknown"
+  ldflags =
+    let
+      t = "github.com/GoogleContainerTools/skaffold/v2/pkg/skaffold";
+    in
+    [
+      "-s"
+      "-w"
+      "-X ${t}/version.version=v${version}"
+      "-X ${t}/version.gitCommit=${src.rev}"
+      "-X ${t}/version.buildDate=unknown"
+    ];
+
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
   ];
-
-  nativeBuildInputs = [ installShellFiles makeWrapper ];
 
   doInstallCheck = true;
   installCheckPhase = ''
@@ -49,6 +63,9 @@ buildGoModule rec {
       It also provides building blocks and describe customizations for a CI/CD pipeline.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ vdemeester bryanasdev000];
+    maintainers = with maintainers; [
+      vdemeester
+      bryanasdev000
+    ];
   };
 }

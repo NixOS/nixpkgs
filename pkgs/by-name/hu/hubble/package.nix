@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 
 buildGoModule rec {
   pname = "hubble";
@@ -14,7 +19,8 @@ buildGoModule rec {
   vendorHash = null;
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X github.com/cilium/hubble/pkg.GitBranch=none"
     "-X github.com/cilium/hubble/pkg.GitHash=none"
     "-X github.com/cilium/hubble/pkg.Version=${version}"
@@ -43,6 +49,9 @@ buildGoModule rec {
     mainProgram = "hubble";
     license = licenses.asl20;
     homepage = "https://github.com/cilium/hubble/";
-    maintainers = with maintainers; [ humancalico bryanasdev000 ];
+    maintainers = with maintainers; [
+      humancalico
+      bryanasdev000
+    ];
   };
 }

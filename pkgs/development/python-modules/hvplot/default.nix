@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "hvplot";
-  version = "0.11.1";
+  version = "0.11.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-mJ7QOJGJrcR+3NJgHS6rGL82bnSwf14oc+AhMjxKFLs=";
+    hash = "sha256-t60fLxxwXkfiayLInBFxGoT3d0+qq6t1a0Xo0eAKYBA=";
   };
 
   build-system = [
@@ -68,6 +68,12 @@ buildPythonPackage rec {
     "hvplot/tests/testui.py"
     "hvplot/tests/testutil.py"
   ];
+
+  # need to set MPLBACKEND=agg for headless matplotlib for darwin
+  # https://github.com/matplotlib/matplotlib/issues/26292
+  preCheck = ''
+    export MPLBACKEND=agg
+  '';
 
   pythonImportsCheck = [ "hvplot.pandas" ];
 

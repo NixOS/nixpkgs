@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   hardeningDisable = [ "pic" ];
 
   nativeBuildInputs = [ bc ] ++ kernel.moduleBuildDependencies;
-  makeFlags = kernel.makeFlags;
+  makeFlags = kernel.moduleMakeFlags;
 
   prePatch = ''
     substituteInPlace ./Makefile \

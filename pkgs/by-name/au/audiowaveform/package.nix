@@ -1,4 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, cmake, gtest, boost, gd, libsndfile, libmad, libid3tag }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  gtest,
+  boost,
+  gd,
+  libsndfile,
+  libmad,
+  libid3tag,
+}:
 
 stdenv.mkDerivation rec {
   pname = "audiowaveform";
@@ -16,9 +27,18 @@ stdenv.mkDerivation rec {
     "-DCMAKE_CXX_STANDARD=14"
   ];
 
-  nativeBuildInputs = [ cmake gtest ];
+  nativeBuildInputs = [
+    cmake
+    gtest
+  ];
 
-  buildInputs = [ boost gd libsndfile libmad libid3tag ];
+  buildInputs = [
+    boost
+    gd
+    libsndfile
+    libmad
+    libid3tag
+  ];
 
   preConfigure = ''
     ln -s ${gtest.src} googletest

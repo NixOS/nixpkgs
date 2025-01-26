@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, kmod
-, coreutils
+{
+  lib,
+  stdenv,
+  fetchurl,
+  kmod,
+  coreutils,
 }:
 
 stdenv.mkDerivation rec {

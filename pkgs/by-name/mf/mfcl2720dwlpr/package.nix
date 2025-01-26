@@ -1,4 +1,17 @@
-{ pkgs, lib, stdenv, fetchurl, dpkg, makeWrapper, coreutils, ghostscript, gnugrep, gnused, which, perl }:
+{
+  pkgs,
+  lib,
+  stdenv,
+  fetchurl,
+  dpkg,
+  makeWrapper,
+  coreutils,
+  ghostscript,
+  gnugrep,
+  gnused,
+  which,
+  perl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "mfcl2720dwlpr";
@@ -9,7 +22,10 @@ stdenv.mkDerivation rec {
     sha256 = "088217e9ad118ec1e7f3d3f8f60f3bd839fe2c7d7c1136b249e9ac648dc742af";
   };
 
-  nativeBuildInputs = [ dpkg makeWrapper ];
+  nativeBuildInputs = [
+    dpkg
+    makeWrapper
+  ];
 
   dontUnpack = true;
 
@@ -24,9 +40,15 @@ stdenv.mkDerivation rec {
       --replace "PRINTER =~" "PRINTER = \"MFCL2720DW\"; #"
 
     wrapProgram $dir/lpd/filter_MFCL2720DW \
-      --prefix PATH : ${lib.makeBinPath [
-        coreutils ghostscript gnugrep gnused which
-      ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          coreutils
+          ghostscript
+          gnugrep
+          gnused
+          which
+        ]
+      }
 
     # need to use i686 glibc here, these are 32bit proprietary binaries
     interpreter=${pkgs.pkgsi686Linux.glibc}/lib/ld-linux.so.2
@@ -40,7 +62,10 @@ stdenv.mkDerivation rec {
     homepage = "http://www.brother.com/";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+    ];
     maintainers = [ lib.maintainers.xeji ];
   };
 }

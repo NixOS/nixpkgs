@@ -7,20 +7,22 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "troubadix";
-  version = "24.10.2";
+  version = "25.1.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = "troubadix";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-s67701Wk+UDRoSCQWC58k54eF/dcCcqn41SijOz6cbQ=";
+    tag = "v${version}";
+    hash = "sha256-AMvYjspaLxqxq/6Nb5KMMfwWMhXfeB8NHWeveGNsWQY=";
   };
 
-  pythonRelaxDeps = [ "validators" ];
+  pythonRelaxDeps = [
+    "pontos"
+    "validators"
+  ];
 
   build-system = with python3.pkgs; [ poetry-core ];
-
 
   dependencies = with python3.pkgs; [
     chardet

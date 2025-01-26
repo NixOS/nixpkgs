@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gnumake
-, gcc
-, pkg-config
-, lua5_4
-, openssl
-, jack1
-, python3
-, alsa-lib
-, ncurses
-, libevdev
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gnumake,
+  gcc,
+  pkg-config,
+  lua5_4,
+  openssl,
+  jack1,
+  python3,
+  alsa-lib,
+  ncurses,
+  libevdev,
 }:
 
 stdenv.mkDerivation {
@@ -18,7 +19,17 @@ stdenv.mkDerivation {
   version = "0.6.0";
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [gnumake gcc lua5_4 openssl jack1 python3 alsa-lib ncurses libevdev];
+  buildInputs = [
+    gnumake
+    gcc
+    lua5_4
+    openssl
+    jack1
+    python3
+    alsa-lib
+    ncurses
+    libevdev
+  ];
 
   src = fetchFromGitHub {
     repo = "midimonster";
@@ -30,7 +41,10 @@ stdenv.mkDerivation {
   doCheck = true;
   enableParallelBuilding = true;
 
-  outputs = ["out" "man"];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   buildPhase = ''
     PLUGINS=$out/lib/midimonster make all
@@ -51,7 +65,7 @@ stdenv.mkDerivation {
     description = "Multi-protocol translation tool";
     license = licenses.bsd2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [keldu];
+    maintainers = with maintainers; [ keldu ];
     mainProgram = "midimonster";
   };
 }

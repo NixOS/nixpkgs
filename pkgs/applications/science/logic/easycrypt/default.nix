@@ -1,4 +1,12 @@
-{ lib, stdenv, darwin, fetchFromGitHub, ocamlPackages, why3, python3 }:
+{
+  lib,
+  stdenv,
+  darwin,
+  fetchFromGitHub,
+  ocamlPackages,
+  why3,
+  python3,
+}:
 
 stdenv.mkDerivation rec {
   pname = "easycrypt";
@@ -11,13 +19,16 @@ stdenv.mkDerivation rec {
     hash = "sha256-ZGYklG1eXfytRKzFvRSB6jFrOCm1gjyG8W78eMve5Ng=";
   };
 
-  nativeBuildInputs = with ocamlPackages; [
-    dune_3
-    findlib
-    menhir
-    ocaml
-    python3.pkgs.wrapPython
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin darwin.sigtool;
+  nativeBuildInputs =
+    with ocamlPackages;
+    [
+      dune_3
+      findlib
+      menhir
+      ocaml
+      python3.pkgs.wrapPython
+    ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin darwin.sigtool;
 
   buildInputs = with ocamlPackages; [
     batteries

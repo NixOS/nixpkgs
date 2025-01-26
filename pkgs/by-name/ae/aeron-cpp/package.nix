@@ -11,7 +11,7 @@
   makeWrapper,
   patchelf,
   stdenv,
-  zlib
+  zlib,
 }:
 
 let
@@ -125,4 +125,3 @@ stdenv.mkDerivation {
     ];
   };
 }
-

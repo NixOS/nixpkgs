@@ -1,8 +1,14 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.partition-manager;
-in {
+in
+{
   meta.maintainers = [ lib.maintainers.oxalica ];
 
   options = {
@@ -16,6 +22,9 @@ in {
   config = lib.mkIf config.programs.partition-manager.enable {
     services.dbus.packages = [ cfg.package.kpmcore ];
     # `kpmcore` need to be installed to pull in polkit actions.
-    environment.systemPackages = [ cfg.package.kpmcore cfg.package ];
+    environment.systemPackages = [
+      cfg.package.kpmcore
+      cfg.package
+    ];
   };
 }

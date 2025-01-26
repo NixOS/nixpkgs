@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, bison
-, desktop-file-utils
-, gettext
-, pkg-config
-, glib
-, gtk2
-, libxml2
-, libbfd
-, zlib
-, gnutls
-, enableGui ? true
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  bison,
+  desktop-file-utils,
+  gettext,
+  pkg-config,
+  glib,
+  gtk2,
+  libxml2,
+  libbfd,
+  zlib,
+  gnutls,
+  enableGui ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -31,24 +32,28 @@ stdenv.mkDerivation (finalAttrs: {
     gettext
     pkg-config
   ];
-  buildInputs = [
-    glib
-    gnutls
-    libbfd
-    libxml2
-    zlib
-  ] ++ lib.optionals enableGui [
-    gtk2
-  ];
+  buildInputs =
+    [
+      glib
+      gnutls
+      libbfd
+      libxml2
+      zlib
+    ]
+    ++ lib.optionals enableGui [
+      gtk2
+    ];
 
   configureScript = "./build.sh";
-  configureFlags = [
-    "--configure-only"
-    # See https://sourceforge.net/p/gtk-gnutella/bugs/555/
-    "--disable-malloc"
-  ] ++ lib.optionals (!enableGui) [
-    "--topless"
-  ];
+  configureFlags =
+    [
+      "--configure-only"
+      # See https://sourceforge.net/p/gtk-gnutella/bugs/555/
+      "--disable-malloc"
+    ]
+    ++ lib.optionals (!enableGui) [
+      "--topless"
+    ];
 
   enableParallelBuilding = true;
 

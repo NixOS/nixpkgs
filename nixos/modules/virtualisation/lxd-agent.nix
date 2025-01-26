@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.virtualisation.lxd.agent;
@@ -44,7 +49,8 @@ let
     # Fix up permissions.
     chown -R root:root "$PREFIX"
   '';
-in {
+in
+{
   options = {
     virtualisation.lxd.agent.enable = lib.mkEnableOption "LXD agent";
   };
@@ -54,9 +60,13 @@ in {
     systemd.services.lxd-agent = {
       enable = true;
       wantedBy = [ "multi-user.target" ];
-      before = [ "shutdown.target" ] ++ lib.optionals config.services.cloud-init.enable [
-        "cloud-init.target" "cloud-init.service" "cloud-init-local.service"
-      ];
+      before =
+        [ "shutdown.target" ]
+        ++ lib.optionals config.services.cloud-init.enable [
+          "cloud-init.target"
+          "cloud-init.service"
+          "cloud-init-local.service"
+        ];
       conflicts = [ "shutdown.target" ];
       path = [
         pkgs.kmod

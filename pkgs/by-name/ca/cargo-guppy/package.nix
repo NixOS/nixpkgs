@@ -1,10 +1,11 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, openssl
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -22,18 +23,29 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.Security
+    ];
 
-  cargoBuildFlags = [ "-p" "cargo-guppy" ];
-  cargoTestFlags = [ "-p" "cargo-guppy" ];
+  cargoBuildFlags = [
+    "-p"
+    "cargo-guppy"
+  ];
+  cargoTestFlags = [
+    "-p"
+    "cargo-guppy"
+  ];
 
   meta = with lib; {
     description = "Command-line frontend for guppy";
     mainProgram = "cargo-guppy";
     homepage = "https://github.com/guppy-rs/guppy/tree/main/cargo-guppy";
-    license = with licenses; [ mit /* or */ asl20 ];
+    license = with licenses; [
+      mit # or
+      asl20
+    ];
     maintainers = with maintainers; [ figsoda ];
   };
 }

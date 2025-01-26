@@ -1,4 +1,8 @@
-{ lib, fetchFromGitHub, python3Packages }:
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+}:
 
 python3Packages.buildPythonPackage rec {
   pname = "rivalcfg";
@@ -7,11 +11,14 @@ python3Packages.buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "flozz";
     repo = "rivalcfg";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-LQpEHcKXkepfsgG7tGYsmM43FkUSBgm1Cn5C1RmTggI=";
   };
 
-  propagatedBuildInputs = with python3Packages; [ hidapi setuptools ];
+  propagatedBuildInputs = with python3Packages; [
+    hidapi
+    setuptools
+  ];
 
   checkInputs = [ python3Packages.pytest ];
   checkPhase = "pytest";

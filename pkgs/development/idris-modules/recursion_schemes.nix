@@ -1,17 +1,24 @@
-{ build-idris-package
-, fetchFromGitHub
-, free
-, composition
-, comonad
-, bifunctors
-, hezarfen
-, lib
+{
+  build-idris-package,
+  fetchFromGitHub,
+  free,
+  composition,
+  comonad,
+  bifunctors,
+  hezarfen,
+  lib,
 }:
-build-idris-package  {
+build-idris-package {
   pname = "recursion_schemes";
   version = "2018-01-19";
 
-  idrisDeps = [ free composition comonad bifunctors hezarfen ];
+  idrisDeps = [
+    free
+    composition
+    comonad
+    bifunctors
+    hezarfen
+  ];
 
   src = fetchFromGitHub {
     owner = "vmchale";

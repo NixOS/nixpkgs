@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "zalando";
     repo = "patroni";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-if3azfBb6/OegahZYAM2RMxmWRDsCX5DNkUATTcAUrw=";
   };
 

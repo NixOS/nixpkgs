@@ -53,37 +53,71 @@ let
         "*"    # password unset
       ]);
 
+  overrideOrderMutable = ''{option}`initialHashedPassword` -> {option}`initialPassword` -> {option}`hashedPassword` -> {option}`password` -> {option}`hashedPasswordFile`'';
+
+  overrideOrderImmutable = ''{option}`initialHashedPassword` -> {option}`hashedPassword` -> {option}`initialPassword` -> {option}`password` -> {option}`hashedPasswordFile`'';
+
+  overrideOrderText = isMutable: ''
+    If the option {option}`users.mutableUsers` is
+    `${if isMutable then "true" else "false"}`, then the order of precedence is as shown
+    below, where values on the left are overridden by values on the right:
+    ${if isMutable then overrideOrderMutable else overrideOrderImmutable}
+  '';
+
+  multiplePasswordsWarning = ''
+    If multiple of these password options are set at the same time then a
+    specific order of precedence is followed, which can lead to surprising
+    results. The order of precedence differs depending on whether the
+    {option}`users.mutableUsers` option is set.
+  '';
+
+  overrideDescription = ''
+    ${multiplePasswordsWarning}
+
+    ${overrideOrderText false}
+
+    ${overrideOrderText true}
+  '';
+
   passwordDescription = ''
-    The options {option}`hashedPassword`,
-    {option}`password` and {option}`hashedPasswordFile`
-    controls what password is set for the user.
-    {option}`hashedPassword` overrides both
-    {option}`password` and {option}`hashedPasswordFile`.
-    {option}`password` overrides {option}`hashedPasswordFile`.
-    If none of these three options are set, no password is assigned to
-    the user, and the user will not be able to do password logins.
-    If the option {option}`users.mutableUsers` is true, the
-    password defined in one of the three options will only be set when
-    the user is created for the first time. After that, you are free to
-    change the password with the ordinary user management commands. If
-    {option}`users.mutableUsers` is false, you cannot change
-    user passwords, they will always be set according to the password
-    options.
+    The {option}`initialHashedPassword`, {option}`hashedPassword`,
+    {option}`initialPassword`, {option}`password` and
+    {option}`hashedPasswordFile` options all control what password is set for
+    the user.
+
+    In a system where [](#opt-systemd.sysusers.enable) is `false`, typically
+    only one of {option}`hashedPassword`, {option}`password`, or
+    {option}`hashedPasswordFile` will be set.
+
+    In a system where [](#opt-systemd.sysusers.enable) is `true`, typically
+    only one of {option}`initialPassword`, {option}`initialHashedPassword`,
+    or {option}`hashedPasswordFile` will be set.
+
+    If the option {option}`users.mutableUsers` is true, the password defined
+    in one of the above password options will only be set when the user is
+    created for the first time. After that, you are free to change the
+    password with the ordinary user management commands. If
+    {option}`users.mutableUsers` is false, you cannot change user passwords,
+    they will always be set according to the password options.
+
+    If none of the password options are set, then no password is assigned to
+    the user, and the user will not be able to do password-based logins.
+
+    ${overrideDescription}
   '';
 
   hashedPasswordDescription = ''
     To generate a hashed password run `mkpasswd`.
 
-    If set to an empty string (`""`), this user will
-    be able to log in without being asked for a password (but not via remote
-    services such as SSH, or indirectly via {command}`su` or
-    {command}`sudo`). This should only be used for e.g. bootable
-    live systems. Note: this is different from setting an empty password,
-    which can be achieved using {option}`users.users.<name?>.password`.
+    If set to an empty string (`""`), this user will be able to log in without
+    being asked for a password (but not via remote services such as SSH, or
+    indirectly via {command}`su` or {command}`sudo`). This should only be used
+    for e.g. bootable live systems. Note: this is different from setting an
+    empty password, which can be achieved using
+    {option}`users.users.<name?>.password`.
 
-    If set to `null` (default) this user will not
-    be able to log in using a password (i.e. via {command}`login`
-    command).
+    If set to `null` (default) this user will not be able to log in using a
+    password (i.e. via {command}`login` command).
   '';
 
   userOpts = { name, config, ... }: {
@@ -281,6 +315,7 @@ let
         default = null;
         description = ''
           Specifies the hashed password for the user.
+
           ${passwordDescription}
           ${hashedPasswordDescription}
         '';
@@ -294,6 +329,7 @@ let
           Warning: do not set confidential information here
           because it is world-readable in the Nix store. This option
           should only be used for public accounts.
+
           ${passwordDescription}
         '';
       };
@@ -307,6 +343,7 @@ let
           password. The password file is read on each system activation. The
           file should contain exactly one line, which should be the password in
           an encrypted form that is suitable for the `chpasswd -e` command.
+
           ${passwordDescription}
         '';
       };
@@ -329,9 +366,7 @@ let
           {command}`passwd` command. Otherwise, it's
           equivalent to setting the {option}`hashedPassword` option.
 
-          Note that the {option}`hashedPassword` option will override
-          this option if both are set.
-
+          ${passwordDescription}
           ${hashedPasswordDescription}
         '';
       };
@@ -351,8 +386,7 @@ let
           used for guest accounts or passwords that will be changed
           promptly.
 
-          Note that the {option}`password` option will override this
-          option if both are set.
+          ${passwordDescription}
         '';
       };
 
@@ -960,12 +994,11 @@ in {
           (filter (x: x != null) (map (flip getAttr user) passwordOptions));
       in optional (!unambiguousPasswordConfiguration) ''
         The user '${user.name}' has multiple of the options
-        `hashedPassword`, `password`, `hashedPasswordFile`, `initialPassword`
-        & `initialHashedPassword` set to a non-null value.
-        The options silently discard others by the order of precedence
-        given above which can lead to surprising results. To resolve this warning,
-        set at most one of the options above to a non-`null` value.
+        `initialHashedPassword`, `hashedPassword`, `initialPassword`, `password`
+        & `hashedPasswordFile` set to a non-null value.
 
+        ${multiplePasswordsWarning}
+        ${overrideOrderText cfg.mutableUsers}
         The values of these options are:
         ${concatMapStringsSep
           "\n"

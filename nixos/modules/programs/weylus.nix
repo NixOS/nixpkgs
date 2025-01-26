@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.weylus;
@@ -15,7 +20,7 @@ in
       '';
     };
 
-     users = lib.mkOption {
+    users = lib.mkOption {
       type = listOf str;
       default = [ ];
       description = ''
@@ -28,7 +33,10 @@ in
   };
   config = lib.mkIf cfg.enable {
     networking.firewall = lib.mkIf cfg.openFirewall {
-      allowedTCPPorts = [ 1701 9001 ];
+      allowedTCPPorts = [
+        1701
+        9001
+      ];
     };
 
     hardware.uinput.enable = true;

@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchYarnDeps
-, fixup-yarn-lock
-, nodejs
-, nodejs-slim
-, matrix-sdk-crypto-nodejs
-, nixosTests
-, nix-update-script
-, yarn
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchYarnDeps,
+  fixup-yarn-lock,
+  nodejs,
+  nodejs-slim,
+  matrix-sdk-crypto-nodejs,
+  nixosTests,
+  nix-update-script,
+  yarn,
 }:
 
 let
@@ -18,7 +19,7 @@ let
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Uq1sd1ZXv1JGjvCXHxBsNKvmdjMf4y4MVlOnCas4u/w=";
   };
 
@@ -30,7 +31,12 @@ let
 
 in
 stdenv.mkDerivation {
-  inherit pname version src yarnOfflineCache;
+  inherit
+    pname
+    version
+    src
+    yarnOfflineCache
+    ;
 
   strictDeps = true;
 

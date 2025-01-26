@@ -1,4 +1,17 @@
-{ lib, stdenv, pkg-config, fetchFromGitHub, fetchpatch, cmake, wrapGAppsHook3, avahi, avahi-compat, openssl, gst_all_1, libplist }:
+{
+  lib,
+  stdenv,
+  pkg-config,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  wrapGAppsHook3,
+  avahi,
+  avahi-compat,
+  openssl,
+  gst_all_1,
+  libplist,
+}:
 
 stdenv.mkDerivation rec {
   pname = "rpiplay";

@@ -1,8 +1,10 @@
-{ buildDunePackage, ocsipersist-lib
-, lwt_log
-, ocsigen_server
-, pgocaml
-, xml-light
+{
+  buildDunePackage,
+  ocsipersist-lib,
+  lwt_log,
+  ocsigen_server,
+  pgocaml,
+  xml-light,
 }:
 
 buildDunePackage {
@@ -22,4 +24,3 @@ buildDunePackage {
     description = "Persistent key/value storage (for Ocsigen) using PostgreSQL";
   };
 }
-

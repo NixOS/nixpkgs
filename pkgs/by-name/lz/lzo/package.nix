@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, updateAutotoolsGnuConfigScriptsHook }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  updateAutotoolsGnuConfigScriptsHook,
+}:
 
 stdenv.mkDerivation rec {
   pname = "lzo";
@@ -11,7 +16,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
 
-  configureFlags = lib.optional (!stdenv.hostPlatform.isStatic) "--enable-shared" ;
+  configureFlags = lib.optional (!stdenv.hostPlatform.isStatic) "--enable-shared";
 
   enableParallelBuilding = true;
 

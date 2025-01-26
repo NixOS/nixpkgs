@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, perl, which
-, openssl, sqlite }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  perl,
+  which,
+  openssl,
+  sqlite,
+}:
 
 # Instead of writing directly into $HOME, we change the default db location
 # from $HOME/.dupd_sqlite to $HOME/.cache/dupd.sqlite3
@@ -10,8 +17,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "jvirkki";
-    repo  = "dupd";
-    rev   = version;
+    repo = "dupd";
+    rev = version;
     sha256 = "sha256-ZiQroJ5fjBCIjU+M8KRA0N3Mrg9h0NVtfYUIS4cYyhw=";
   };
 
@@ -28,9 +35,15 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  buildInputs = [ openssl sqlite ];
+  buildInputs = [
+    openssl
+    sqlite
+  ];
 
-  nativeBuildInputs = [ perl which ];
+  nativeBuildInputs = [
+    perl
+    which
+  ];
 
   makeFlags = [
     "INSTALL_PREFIX=$(out)"

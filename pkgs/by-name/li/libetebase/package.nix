@@ -1,11 +1,12 @@
-{ rustPlatform
-, fetchFromGitHub
-, pkg-config
-, openssl
-, lib
-, stdenv
-, testers
-, libetebase
+{
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  lib,
+  stdenv,
+  testers,
+  libetebase,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "libetebase";

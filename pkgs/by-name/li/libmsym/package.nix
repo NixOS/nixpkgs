@@ -1,14 +1,19 @@
-{ stdenv, lib, fetchFromGitHub, cmake } :
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libmsym";
   version = "0.2.3";
 
-  src = fetchFromGitHub  {
+  src = fetchFromGitHub {
     owner = "mcodev31";
     repo = pname;
     rev = "v${version}";
-    sha256= "k+OEwrA/saupP/wX6Ii5My0vffiJ0X9xMCTrliMSMik=";
+    sha256 = "k+OEwrA/saupP/wX6Ii5My0vffiJ0X9xMCTrliMSMik=";
   };
 
   nativeBuildInputs = [ cmake ];

@@ -1,31 +1,33 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, pkg-config
-, vala
-, wrapGAppsHook4
-, appcenter
-, elementary-settings-daemon
-, glib
-, gnome-settings-daemon
-, granite7
-, gtk4
-, libadwaita
-, libgee
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  wrapGAppsHook4,
+  appcenter,
+  elementary-settings-daemon,
+  glib,
+  gnome-settings-daemon,
+  granite7,
+  gtk4,
+  libadwaita,
+  libgee,
+  pantheon-wayland,
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-onboarding";
-  version = "8.0.2";
+  version = "8.0.3";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "onboarding";
     rev = version;
-    sha256 = "sha256-tLqLGkcryXGe1wsupgwtnNtFj5aXXUPrwkpxUQmyJFM=";
+    sha256 = "sha256-e8eYBGQ+qTXsp+E3l0g5UI1nYD75z0ibTtzm0WbqlU4=";
   };
 
   nativeBuildInputs = [
@@ -45,6 +47,7 @@ stdenv.mkDerivation rec {
     gtk4
     libadwaita
     libgee
+    pantheon-wayland
   ];
 
   passthru = {

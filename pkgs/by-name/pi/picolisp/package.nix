@@ -8,7 +8,7 @@
   openssl,
   pkg-config,
   readline,
-  stdenv
+  stdenv,
 }:
 
 stdenv.mkDerivation {
@@ -20,7 +20,14 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ clang libffi llvm openssl pkg-config readline ];
+  buildInputs = [
+    clang
+    libffi
+    llvm
+    openssl
+    pkg-config
+    readline
+  ];
   sourceRoot = ''pil21'';
   buildPhase = ''
     cd src
@@ -46,4 +53,3 @@ stdenv.mkDerivation {
     platforms = platforms.all;
   };
 }
-

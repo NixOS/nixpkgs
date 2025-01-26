@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "TDAmeritrade";
     repo = "stumpy";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-S+Rb6pHphXfbqz4VMnN1p7ZrlWB/g7XCdy/T5/Q8VD8=";
   };
 

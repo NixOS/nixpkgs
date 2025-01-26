@@ -1,5 +1,6 @@
 {
-  lib, stdenv,
+  lib,
+  stdenv,
   fetchurl,
 }:
 

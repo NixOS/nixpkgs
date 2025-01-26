@@ -1,13 +1,14 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, curl
-, pkg-config
-, libgit2
-, openssl
-, zlib
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  curl,
+  pkg-config,
+  libgit2,
+  openssl,
+  zlib,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -28,20 +29,25 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs = [
-    curl
-    libgit2
-    openssl
-    zlib
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
+  buildInputs =
+    [
+      curl
+      libgit2
+      openssl
+      zlib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.Security
+    ];
 
   meta = with lib; {
     description = "Cargo subcommand for displaying when different versions of a same dependency are pulled in";
     mainProgram = "cargo-duplicates";
     homepage = "https://github.com/Keruspe/cargo-duplicates";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda matthiasbeyer ];
+    maintainers = with maintainers; [
+      figsoda
+      matthiasbeyer
+    ];
   };
 }

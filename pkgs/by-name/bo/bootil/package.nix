@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, premake4
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  premake4,
 }:
 
 stdenv.mkDerivation {

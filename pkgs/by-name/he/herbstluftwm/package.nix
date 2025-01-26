@@ -1,7 +1,28 @@
-{ lib, stdenv, fetchurl, cmake, pkg-config, python3, libX11, libXext, libXinerama, libXrandr, libXft, libXrender, libXdmcp, libXfixes, freetype, asciidoc
-, xdotool, xorgserver, xsetroot, xterm, runtimeShell
-, fetchpatch
-, nixosTests }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  pkg-config,
+  python3,
+  libX11,
+  libXext,
+  libXinerama,
+  libXrandr,
+  libXft,
+  libXrender,
+  libXdmcp,
+  libXfixes,
+  freetype,
+  asciidoc,
+  xdotool,
+  xorgserver,
+  xsetroot,
+  xterm,
+  runtimeShell,
+  fetchpatch,
+  nixosTests,
+}:
 
 stdenv.mkDerivation rec {
   pname = "herbstluftwm";
@@ -76,7 +97,13 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   nativeCheckInputs = [
-    (python3.withPackages (ps: with ps; [ ewmh pytest xlib ]))
+    (python3.withPackages (
+      ps: with ps; [
+        ewmh
+        pytest
+        xlib
+      ]
+    ))
     xdotool
     xorgserver
     xsetroot

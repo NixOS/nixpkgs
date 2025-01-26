@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, kernel, bc }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+  bc,
+}:
 
 stdenv.mkDerivation {
   pname = "rtl8821cu";
@@ -14,7 +20,7 @@ stdenv.mkDerivation {
   hardeningDisable = [ "pic" ];
 
   nativeBuildInputs = [ bc ] ++ kernel.moduleBuildDependencies;
-  makeFlags = kernel.makeFlags;
+  makeFlags = kernel.moduleMakeFlags;
 
   prePatch = ''
     substituteInPlace ./Makefile \

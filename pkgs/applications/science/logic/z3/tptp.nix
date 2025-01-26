@@ -1,4 +1,9 @@
-{lib, stdenv, z3, cmake}:
+{
+  lib,
+  stdenv,
+  z3,
+  cmake,
+}:
 stdenv.mkDerivation rec {
   pname = "z3-tptp";
   version = z3.version;
@@ -7,8 +12,8 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "${src.name}/examples/tptp";
 
-  nativeBuildInputs = [cmake];
-  buildInputs = [z3];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ z3 ];
 
   preConfigure = ''
     echo 'set(Z3_LIBRARIES "-lz3")' >> CMakeLists.new
@@ -25,6 +30,6 @@ stdenv.mkDerivation rec {
   meta = {
     inherit (z3.meta) license homepage platforms;
     description = "TPTP wrapper for Z3 prover";
-    maintainers = [lib.maintainers.raskin];
+    maintainers = [ lib.maintainers.raskin ];
   };
 }

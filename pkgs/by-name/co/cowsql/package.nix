@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "cowsql";
     repo = "cowsql";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-cr6AT/n2/6DuGK53JvGLwCkMi4+fS128qxj3X9SJYuw=";
   };
 

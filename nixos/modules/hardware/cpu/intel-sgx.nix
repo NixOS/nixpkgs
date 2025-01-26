@@ -45,7 +45,8 @@ in
           message = "Given user does not exist";
         }
         {
-          assertion = (cfg.provision.group == defaultPrvGroup) || (lib.hasAttr cfg.provision.group config.users.groups);
+          assertion =
+            (cfg.provision.group == defaultPrvGroup) || (lib.hasAttr cfg.provision.group config.users.groups);
           message = "Given group does not exist";
         }
       ];

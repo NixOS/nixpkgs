@@ -24,15 +24,13 @@
 , patches ? [ ]
 , enableManpages ? false
 , devExtraCmakeFlags ? [ ]
-, apple-sdk_11
-, darwinMinVersionHook
 , ...
 }:
 
 let
   src' =
     if monorepoSrc != null then
-      runCommand "lldb-src-${version}" { } (''
+      runCommand "lldb-src-${version}" { inherit (monorepoSrc) passthru; } (''
         mkdir -p "$out"
       '' + lib.optionalString (lib.versionAtLeast release_version "14") ''
         cp -r ${monorepoSrc}/cmake "$out"
@@ -93,14 +91,6 @@ stdenv.mkDerivation (rec {
     (lib.getLib libclang)
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.bootstrap_cmds
-  ]
-  ++ lib.optionals
-    (
-      stdenv.targetPlatform.isDarwin
-        && lib.versionOlder stdenv.targetPlatform.darwinSdkVersion "11.0"
-    ) [
-    apple-sdk_11
-    (darwinMinVersionHook "10.15")
   ];
 
   hardeningDisable = [ "format" ];
@@ -137,13 +127,13 @@ stdenv.mkDerivation (rec {
 
   # TODO: cleanup with mass-rebuild
   installCheckPhase = ''
-    if [ ! -e $lib/${python3.sitePackages}/lldb/_lldb*.so ] ; then
+    if [ ! -e ''${!outputLib}/${python3.sitePackages}/lldb/_lldb*.so ] ; then
         echo "ERROR: python files not installed where expected!";
         return 1;
     fi
   '' # Something lua is built on older versions but this file doesn't exist.
   + lib.optionalString (lib.versionAtLeast release_version "14") ''
-    if [ ! -e "$lib/lib/lua/${lua5_3.luaversion}/lldb.so" ] ; then
+    if [ ! -e "''${!outputLib}/lib/lua/${lua5_3.luaversion}/lldb.so" ] ; then
         echo "ERROR: lua files not installed where expected!";
         return 1;
     fi

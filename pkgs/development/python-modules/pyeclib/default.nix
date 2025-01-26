@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "pyeclib";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-LZQNJU7QEoHo+RWvHnQkNxBg6t322u/c3PyBhy1eVZc=";
   };
 

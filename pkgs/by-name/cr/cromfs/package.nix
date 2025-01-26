@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, pkg-config, fuse, perl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  fuse,
+  perl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "cromfs";
@@ -20,7 +27,10 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ fuse perl ];
+  buildInputs = [
+    fuse
+    perl
+  ];
 
   makeFlags = [ "CXXFLAGS=-std=c++03" ];
 

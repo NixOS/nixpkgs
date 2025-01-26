@@ -1,9 +1,10 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec{
+rustPlatform.buildRustPackage rec {
   pname = "shadow-tls";
   version = "0.2.25";
 

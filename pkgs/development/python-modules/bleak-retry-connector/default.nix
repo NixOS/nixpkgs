@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "bleak-retry-connector";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-WjowXfj9kPlMmfs3aJBHIux5/w6te7zpXXqXPaz2pks=";
   };
 

@@ -7,7 +7,7 @@
 
 let
   pname = "pack";
-  version = "0.36.0";
+  version = "0.36.4";
 in
 buildGoModule {
   inherit pname version;
@@ -16,10 +16,10 @@ buildGoModule {
     owner = "buildpacks";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-WdYV8Pcnzbt3Sd+0wYkw/htHruqFFYopPsRP/xs9WPI=";
+    hash = "sha256-6cWmBNlmPnNszmv6zaHlyd8GqncMtttKOMfQxxJGJ18=";
   };
 
-  vendorHash = "sha256-RfidlZHyC/dcIuisvIGzd7Vqk7j2DQuJjgERs8lfr0A=";
+  vendorHash = "sha256-9fO/jwTpVvCdHIy1GrE2YZr7jN7Oyw64EbS2w08VOVI=";
 
   nativeBuildInputs = [ installShellFiles ];
 

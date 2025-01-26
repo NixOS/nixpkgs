@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bachya";
     repo = "pyiqvia";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-qq6UQUz60WkmWqdmExlSQT3wapaHJr8DeH1eVrTOnpQ=";
   };
 

@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "executablebooks";
     repo = "sphinx-jupyterbook-latex";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ZTR+s6a/++xXrLMtfFRmSmAeMWa/1de12ukxfsx85g4=";
   };
 

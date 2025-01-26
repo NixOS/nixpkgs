@@ -72,6 +72,8 @@ in {
 
     pg_net = super.callPackage ./pg_net.nix { };
 
+    pg-gvm = super.callPackage ./pg-gvm.nix { };
+
     pg-semver = super.callPackage ./pg-semver.nix { };
 
     pgtap = super.callPackage ./pgtap.nix { };
@@ -87,11 +89,11 @@ in {
 
     timescaledb_toolkit = super.callPackage ./timescaledb_toolkit.nix { };
 
-    tsearch_extras = super.callPackage ./tsearch_extras.nix { };
-
     tds_fdw = super.callPackage ./tds_fdw.nix { };
 
     pgrouting = super.callPackage ./pgrouting.nix { };
+
+    pgx_ulid = super.callPackage ./pgx_ulid.nix { };
 
     pg_partman = super.callPackage ./pg_partman.nix { };
 

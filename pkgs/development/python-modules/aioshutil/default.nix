@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kumaraditya303";
     repo = "aioshutil";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-hSUNx43sIUPs4YfQ+H39FXTpj3oCMUqRzDdHX2OdRdE=";
   };
 

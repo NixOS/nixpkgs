@@ -3,7 +3,11 @@
 # See: https://www.haskellforall.com/2022/12/nixpkgs-support-for-incremental-haskell.html
 # See: https://felixspringer.xyz/homepage/blog/incrementalHaskellBuildsWithNix
 
-{ haskell, haskellPackages, lib }:
+{
+  haskell,
+  haskellPackages,
+  lib,
+}:
 
 let
   inherit (haskell.lib.compose) overrideCabal;
@@ -28,8 +32,8 @@ let
     previousIntermediates = temporary-full-build-with-incremental-output.intermediates;
   }) temporary;
 in
-  temporary-incremental-build.overrideAttrs (old: {
-    meta = {
-      maintainers = lib.teams.mercury.members;
-    };
-  })
+temporary-incremental-build.overrideAttrs (old: {
+  meta = {
+    maintainers = lib.teams.mercury.members;
+  };
+})

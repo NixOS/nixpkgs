@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, python3Packages
-, xpdf
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  xpdf,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -25,13 +26,13 @@ python3Packages.buildPythonApplication rec {
     substituteInPlace pdfdiff.py \
       --replace 'pdftotextProgram = "pdftotext"' 'pdftotextProgram = "${xpdf}/bin/pdftotext"' \
       --replace 'progName = "pdfdiff.py"' 'progName = "pdfdiff"'
-    '';
+  '';
 
   installPhase = ''
     mkdir -p $out/bin
     cp pdfdiff.py $out/bin/pdfdiff
     chmod +x $out/bin/pdfdiff
-    '';
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/cascremers/pdfdiff";

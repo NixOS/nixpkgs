@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, perl }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  perl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libx86emu";
@@ -20,10 +25,19 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace "/usr" "/"
   '';
 
-  buildFlags = [ "shared" "CC=${stdenv.cc.targetPrefix}cc" ];
+  buildFlags = [
+    "shared"
+    "CC=${stdenv.cc.targetPrefix}cc"
+  ];
+
+  NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";
+
   enableParallelBuilding = true;
 
-  installFlags = [ "DESTDIR=$(out)" "LIBDIR=/lib" ];
+  installFlags = [
+    "DESTDIR=$(out)"
+    "LIBDIR=/lib"
+  ];
 
   meta = with lib; {
     description = "x86 emulation library";

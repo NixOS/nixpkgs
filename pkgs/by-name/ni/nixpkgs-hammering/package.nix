@@ -1,11 +1,12 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, stdenv
-, makeWrapper
-, python3
-, nix
-, unstableGitUpdater
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  stdenv,
+  makeWrapper,
+  python3,
+  nix,
+  unstableGitUpdater,
 }:
 
 let
@@ -29,7 +30,8 @@ let
     pname = "nixpkgs-hammering-rust-checks";
     inherit version src meta;
     sourceRoot = "${src.name}/rust-checks";
-    cargoHash = "sha256-QrtAalZClNc0ZN6iNqN9rFRQ7w68lEZPV5e25uXYToA=";
+    useFetchCargoVendor = true;
+    cargoHash = "sha256-cE1fzdxGa0WG2WCPs8UFnE2vzaKfU7r6LS+9HLCVJ1U=";
   };
 in
 
@@ -49,7 +51,12 @@ stdenv.mkDerivation {
 
     install -Dt $out/bin tools/nixpkgs-hammer
     wrapProgram $out/bin/nixpkgs-hammer \
-      --prefix PATH : ${lib.makeBinPath [ nix rust-checks ]} \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          nix
+          rust-checks
+        ]
+      } \
       --set AST_CHECK_NAMES ''${AST_CHECK_NAMES%:}
 
     cp -r lib overlays $out

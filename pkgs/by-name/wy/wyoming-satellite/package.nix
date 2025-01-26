@@ -1,21 +1,37 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+let
+  python = python3Packages.python.override {
+    self = python;
+    packageOverrides = self: super: {
+      wyoming = super.wyoming.overridePythonAttrs (oldAttrs: rec {
+        version = "1.5.4";
+        src = fetchFromGitHub {
+          inherit (oldAttrs.src) owner repo;
+          tag = version;
+          hash = "sha256-gx9IbFkwR5fiFFAZTiQKzBbVBJ/RYz29sztgbvAEeRQ=";
+        };
+      });
+    };
+  };
+in
+python.pkgs.buildPythonApplication rec {
   pname = "wyoming-satellite";
-  version = "1.2.0";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "wyoming-satellite";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-KIWhWE9Qaxs72fJ1LRTkvk6QtpBJOFlmZv2od69O15g=";
+    tag = "v${version}";
+    hash = "sha256-9UgfD0Hs/IgOszd/QBbe6DYY6kBWh7q/e57gghQ1/Bk=";
   };
 
-  nativeBuildInputs = with python3Packages; [
+  build-system = with python.pkgs; [
     setuptools
   ];
 
@@ -24,7 +40,7 @@ python3Packages.buildPythonApplication rec {
     "zeroconf"
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python.pkgs; [
     pyring-buffer
     wyoming
     zeroconf
@@ -47,7 +63,6 @@ python3Packages.buildPythonApplication rec {
     pytest-asyncio
     pytestCheckHook
   ];
-
 
   meta = with lib; {
     description = "Remote voice satellite using Wyoming protocol";

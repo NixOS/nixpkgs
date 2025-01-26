@@ -1,7 +1,8 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, imagemagick
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  imagemagick,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

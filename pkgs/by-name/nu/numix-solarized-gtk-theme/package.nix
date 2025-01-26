@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, python3, sassc, glib, gdk-pixbuf, inkscape, gtk-engine-murrine }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
+  sassc,
+  glib,
+  gdk-pixbuf,
+  inkscape,
+  gtk-engine-murrine,
+}:
 
 stdenv.mkDerivation rec {
   pname = "numix-solarized-gtk-theme";
@@ -11,7 +21,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-r5xCe8Ew+/SuCUaZ0yjlumORTy/y1VwbQQjQ6uEyGsY=";
   };
 
-  nativeBuildInputs = [ python3 sassc glib gdk-pixbuf inkscape ];
+  nativeBuildInputs = [
+    python3
+    sassc
+    glib
+    gdk-pixbuf
+    inkscape
+  ];
 
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 

@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -35,7 +36,10 @@ stdenv.mkDerivation rec {
       any IP address or host name in the IP2Location databases.
     '';
     homepage = "https://www.ip2location.com/developers/c";
-    license = with licenses; [ gpl3Plus lgpl3Plus ];
+    license = with licenses; [
+      gpl3Plus
+      lgpl3Plus
+    ];
     maintainers = [ ];
     platforms = platforms.linux;
   };

@@ -1,29 +1,30 @@
-{ stdenv
-, fetchFromGitLab
-, lib
-, darwin
-, nettle
-, nix-update-script
-, rustPlatform
-, pkg-config
-, capnproto
-, installShellFiles
-, openssl
-, sqlite
+{
+  stdenv,
+  fetchFromGitLab,
+  lib,
+  darwin,
+  nettle,
+  nix-update-script,
+  rustPlatform,
+  pkg-config,
+  capnproto,
+  installShellFiles,
+  openssl,
+  sqlite,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "sequoia-sq";
-  version = "0.39.0";
+  version = "1.1.0";
 
   src = fetchFromGitLab {
     owner = "sequoia-pgp";
     repo = "sequoia-sq";
     rev = "v${version}";
-    hash = "sha256-nLrwf/4vbASOAyOWlc4X9ZQKFq/Kdh83XadpRuquEA4=";
+    hash = "sha256-m6uUqTXswzdtIabNgijdU54VGQSk0SkSqdh+7m1Q7RU=";
   };
 
-  cargoHash = "sha256-MnxvuO1KG7X2plFkQ/DNBHnH2cPi1X3SVbvcN8N7ZXk=";
+  cargoHash = "sha256-tq0TLiu8pdLIP0hGQ5x6TJKhweio0XdBMvlTdl8MvEY=";
 
   nativeBuildInputs = [
     pkg-config
@@ -32,11 +33,19 @@ rustPlatform.buildRustPackage rec {
     installShellFiles
   ];
 
-  buildInputs = [
-    openssl
-    sqlite
-    nettle
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [ Security SystemConfiguration ]);
+  buildInputs =
+    [
+      openssl
+      sqlite
+      nettle
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
+      with darwin.apple_sdk.frameworks;
+      [
+        Security
+        SystemConfiguration
+      ]
+    );
 
   checkFlags = [
     # https://gitlab.com/sequoia-pgp/sequoia-sq/-/issues/297
@@ -68,7 +77,11 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://sequoia-pgp.org/";
     changelog = "https://gitlab.com/sequoia-pgp/sequoia-sq/-/blob/v${version}/NEWS";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ minijackson doronbehar dvn0 ];
+    maintainers = with lib.maintainers; [
+      minijackson
+      doronbehar
+      dvn0
+    ];
     mainProgram = "sq";
   };
 }

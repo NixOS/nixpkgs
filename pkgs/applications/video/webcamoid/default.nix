@@ -1,7 +1,22 @@
-{ lib, fetchFromGitHub, fetchpatch2, pkg-config, libxcb, mkDerivation, cmake
-, qtbase, qtdeclarative, qtquickcontrols, qtquickcontrols2
-, ffmpeg, gst_all_1, libpulseaudio, alsa-lib, jack2
-, v4l-utils }:
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch2,
+  pkg-config,
+  libxcb,
+  mkDerivation,
+  cmake,
+  qtbase,
+  qtdeclarative,
+  qtquickcontrols,
+  qtquickcontrols2,
+  ffmpeg,
+  gst_all_1,
+  libpulseaudio,
+  alsa-lib,
+  jack2,
+  v4l-utils,
+}:
 mkDerivation rec {
   pname = "webcamoid";
   version = "9.1.1";
@@ -23,14 +38,23 @@ mkDerivation rec {
 
   buildInputs = [
     libxcb
-    qtbase qtdeclarative qtquickcontrols qtquickcontrols2
+    qtbase
+    qtdeclarative
+    qtquickcontrols
+    qtquickcontrols2
     ffmpeg
-    gst_all_1.gstreamer gst_all_1.gst-plugins-base
-    alsa-lib libpulseaudio jack2
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    alsa-lib
+    libpulseaudio
+    jack2
     v4l-utils
   ];
 
-  nativeBuildInputs = [ pkg-config cmake ];
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+  ];
 
   meta = with lib; {
     description = "Webcam Capture Software";

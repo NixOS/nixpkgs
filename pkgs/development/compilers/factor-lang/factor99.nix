@@ -106,13 +106,13 @@ stdenv.mkDerivation {
   buildInputs = runtimeLibs;
 
   postPatch = ''
-    sed -ie '4i GIT_LABEL = heads/master-${rev}' GNUmakefile
+    sed -i -e '4i GIT_LABEL = heads/master-${rev}' GNUmakefile
 
     # There is no ld.so.cache in NixOS so we patch out calls to that completely.
     # This should work as long as no application code relies on `find-library*`
     # to return a match, which currently is the case and also a justified assumption.
 
-    sed -ie "s#/sbin/ldconfig -p#cat $out/lib/factor/ld.so.cache#g" \
+    sed -i -e "s#/sbin/ldconfig -p#cat $out/lib/factor/ld.so.cache#g" \
       basis/alien/libraries/finder/linux/linux.factor
 
     # Some other hard-coded paths to fix:
@@ -123,7 +123,7 @@ stdenv.mkDerivation {
       extra/terminfo/terminfo.factor
 
     # De-memoize xdg-* functions, otherwise they break the image.
-    sed -ie 's/^MEMO:/:/' basis/xdg/xdg.factor
+    sed -i -e 's/^MEMO:/:/' basis/xdg/xdg.factor
 
     # update default paths in factor-listener.el for fuel mode
     substituteInPlace misc/fuel/fuel-listener.el \

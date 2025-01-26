@@ -1,10 +1,11 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
-, wrapGAppsHook3
-, p7zip
-, parted
-, grub2
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  wrapGAppsHook3,
+  p7zip,
+  parted,
+  grub2,
 }:
 
 with python3Packages;

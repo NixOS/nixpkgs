@@ -314,7 +314,7 @@ in
         binlog-ignore-db = [ "information_schema" "performance_schema" "mysql" ];
       })
       (lib.mkIf (!isMariaDB) {
-        plugin-load-add = "auth_socket.so";
+        plugin-load-add = [ "auth_socket.so" ];
       })
     ];
 

@@ -1,4 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, pkg-config, directfb, zlib, libjpeg, xorgproto }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  autoreconfHook,
+  pkg-config,
+  directfb,
+  zlib,
+  libjpeg,
+  xorgproto,
+}:
 
 stdenv.mkDerivation {
   pname = "directvnc";
@@ -22,9 +33,17 @@ stdenv.mkDerivation {
     })
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
 
-  buildInputs = [ directfb zlib libjpeg xorgproto ];
+  buildInputs = [
+    directfb
+    zlib
+    libjpeg
+    xorgproto
+  ];
 
   meta = with lib; {
     description = "DirectFB VNC client";

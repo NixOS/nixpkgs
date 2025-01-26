@@ -1,11 +1,12 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, stdenv
-, libpcap
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  stdenv,
+  libpcap,
   # Cann't be build with both pcap and rawsocket tags
-, withPcap ? (!stdenv.hostPlatform.isLinux && !withRawsocket)
-, withRawsocket ? (stdenv.hostPlatform.isLinux && !withPcap)
+  withPcap ? (!stdenv.hostPlatform.isLinux && !withRawsocket),
+  withRawsocket ? (stdenv.hostPlatform.isLinux && !withPcap),
 }:
 
 buildGoModule rec {
@@ -26,10 +27,9 @@ buildGoModule rec {
     "-w"
   ];
   buildInputs = lib.optional withPcap libpcap;
-  tags = lib.optional withPcap "pcap"
-    ++ lib.optional withRawsocket "rawsocket";
+  tags = lib.optional withPcap "pcap" ++ lib.optional withRawsocket "rawsocket";
 
-  meta = with lib;{
+  meta = with lib; {
     homepage = "https://github.com/macronut/phantomsocks";
     description = "Cross-platform proxy client/server for Linux/Windows/macOS";
     longDescription = ''

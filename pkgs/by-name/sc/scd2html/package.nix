@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromSourcehut
-, scdoc
+{
+  lib,
+  stdenv,
+  fetchFromSourcehut,
+  scdoc,
 }:
 
 stdenv.mkDerivation rec {

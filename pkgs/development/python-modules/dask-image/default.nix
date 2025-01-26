@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dask";
     repo = "dask-image";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-kXCAqJ2Zgo/2Khvo2YcK+n4oGM219GyQ2Hsq9re1Lac=";
   };
 

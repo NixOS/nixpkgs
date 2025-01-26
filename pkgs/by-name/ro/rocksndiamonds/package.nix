@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, fetchurl
-, makeDesktopItem
-, SDL2
-, SDL2_image
-, SDL2_mixer
-, SDL2_net
-, zlib
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeDesktopItem,
+  SDL2,
+  SDL2_image,
+  SDL2_mixer,
+  SDL2_net,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
   pname = "rocksndiamonds";
-  version = "4.3.8.2";
+  version = "4.4.0.2";
 
   src = fetchurl {
     url = "https://www.artsoft.org/RELEASES/linux/${pname}/${pname}-${version}-linux.tar.gz";
-    hash = "sha256-e/aYjjnEM6MP14FGX+N92U9fRNEjIaDfE1znl6A+4As=";
+    hash = "sha256-qE78cJIEwWN6b54VhJwqFKLXvTgHdL1+Upy1DJnfWD8=";
   };
 
   desktopItem = makeDesktopItem {
@@ -25,14 +26,23 @@ stdenv.mkDerivation rec {
     comment = meta.description;
     desktopName = "Rocks'n'Diamonds";
     genericName = "Tile-based puzzle";
-    categories = [ "Game" "LogicGame" ];
+    categories = [
+      "Game"
+      "LogicGame"
+    ];
   };
 
-  buildInputs = [ SDL2 SDL2_image SDL2_mixer SDL2_net zlib ];
+  buildInputs = [
+    SDL2
+    SDL2_image
+    SDL2_mixer
+    SDL2_net
+    zlib
+  ];
 
   preBuild = ''
     dataDir="$out/share/rocksndiamonds"
-    makeFlags+="BASE_PATH=$dataDir"
+    appendToVar makeFlags "BASE_PATH=$dataDir"
   '';
 
   installPhase = ''

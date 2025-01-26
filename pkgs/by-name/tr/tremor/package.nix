@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitLab, autoreconfHook, pkg-config, libogg }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  autoreconfHook,
+  pkg-config,
+  libogg,
+}:
 
 stdenv.mkDerivation {
   pname = "tremor";
@@ -12,11 +19,19 @@ stdenv.mkDerivation {
     sha256 = "0m07gq4zfgigsiz8b518xyb19v7qqp76qmp7lb262825vkqzl3zq";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
-  configureFlags = lib.optional (stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17") "LDFLAGS=-Wl,--undefined-version";
+  configureFlags = lib.optional (
+    stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17"
+  ) "LDFLAGS=-Wl,--undefined-version";
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
   propagatedBuildInputs = [ libogg ];
 
   preConfigure = ''

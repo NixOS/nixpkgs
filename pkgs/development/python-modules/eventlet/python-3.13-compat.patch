@@ -1,0 +1,181 @@
+From 0cef8bb6bbf5baf5953e2739233572060ae70b34 Mon Sep 17 00:00:00 2001
+From: Stefano Rivera <stefano@rivera.za.net>
+Date: Wed, 6 Nov 2024 21:30:29 -0800
+Subject: [PATCH] Python 3.13 support
+
+Emulate Python 3.13's start_joinable_thread API using greenthreads.
+
+We cut some corners, of course:
+* We aren't maintaining a table of green thread idents to threads, so we
+  can't wait for all threads on shutdown.
+* Our _make_thread_handle() can only make a handle for the current
+  thread (as we don't have a way to look up green threads by ident).
+* .join() on a non-GreenThread (e.g. the main thread) just returns
+  immediately.
+
+Fixes: #964
+---
+ eventlet/green/thread.py    | 66 ++++++++++++++++++++++++++++++++++---
+ eventlet/green/threading.py |  7 ++--
+ 2 files changed, 65 insertions(+), 8 deletions(-)
+
+diff --git a/eventlet/green/thread.py b/eventlet/green/thread.py
+index 053a1c3c6..e9c4f3830 100644
+--- a/eventlet/green/thread.py
++++ b/eventlet/green/thread.py
+@@ -2,13 +2,16 @@
+ import _thread as __thread
+ from eventlet.support import greenlets as greenlet
+ from eventlet import greenthread
++from eventlet.timeout import with_timeout
+ from eventlet.lock import Lock
+ import sys
+ 
+ 
+-__patched__ = ['get_ident', 'start_new_thread', 'start_new', 'allocate_lock',
+-               'allocate', 'exit', 'interrupt_main', 'stack_size', '_local',
+-               'LockType', 'Lock', '_count']
++__patched__ = ['Lock', 'LockType', '_ThreadHandle', '_count',
++               '_get_main_thread_ident', '_local', '_make_thread_handle',
++               'allocate', 'allocate_lock', 'exit', 'get_ident',
++               'interrupt_main', 'stack_size', 'start_joinable_thread',
++               'start_new', 'start_new_thread']
+ 
+ error = __thread.error
+ LockType = Lock
+@@ -47,7 +50,36 @@ def __thread_body(func, args, kwargs):
+         __threadcount -= 1
+ 
+ 
+-def start_new_thread(function, args=(), kwargs=None):
++class _ThreadHandle:
++    def __init__(self, greenthread=None):
++        self._greenthread = greenthread
++        self._done = False
++
++    def _set_done(self):
++        self._done = True
++
++    def is_done(self):
++        return self._done
++
++    @property
++    def ident(self):
++        return get_ident(self._greenthread)
++
++    def join(self, timeout=None):
++        if not hasattr(self._greenthread, "wait"):
++            return
++        if timeout is not None:
++            return with_timeout(timeout, self._greenthread.wait)
++        return self._greenthread.wait()
++
++
++def _make_thread_handle(ident):
++    greenthread = greenlet.getcurrent()
++    assert ident == get_ident(greenthread)
++    return _ThreadHandle(greenthread=greenthread)
++
++
++def __spawn_green(function, args=(), kwargs=None, joinable=False):
+     if (sys.version_info >= (3, 4)
+             and getattr(function, '__module__', '') == 'threading'
+             and hasattr(function, '__self__')):
+@@ -72,13 +104,34 @@ def wrap_bootstrap_inner():
+         thread._bootstrap_inner = wrap_bootstrap_inner
+ 
+     kwargs = kwargs or {}
+-    g = greenthread.spawn_n(__thread_body, function, args, kwargs)
++    spawn_func = greenthread.spawn if joinable else greenthread.spawn_n
++    return spawn_func(__thread_body, function, args, kwargs)
++
++
++def start_joinable_thread(function, handle=None, daemon=True):
++    g = __spawn_green(function, joinable=True)
++    if handle is None:
++        handle = _ThreadHandle(greenthread=g)
++    else:
++        handle._greenthread = g
++    return handle
++
++
++def start_new_thread(function, args=(), kwargs=None):
++    g = __spawn_green(function, args=args, kwargs=kwargs)
+     return get_ident(g)
+ 
+ 
+ start_new = start_new_thread
+ 
+ 
++def _get_main_thread_ident():
++    greenthread = greenlet.getcurrent()
++    while greenthread.parent is not None:
++        greenthread = greenthread.parent
++    return get_ident(greenthread)
++
++
+ def allocate_lock(*a):
+     return LockType(1)
+ 
+@@ -118,3 +171,6 @@ def stack_size(size=None):
+ 
+ if hasattr(__thread, 'daemon_threads_allowed'):
+     daemon_threads_allowed = __thread.daemon_threads_allowed
++
++if hasattr(__thread, '_shutdown'):
++    _shutdown = __thread._shutdown
+diff --git a/eventlet/green/threading.py b/eventlet/green/threading.py
+index 7ea20cdad..83b4c767f 100644
+--- a/eventlet/green/threading.py
++++ b/eventlet/green/threading.py
+@@ -4,9 +4,10 @@
+ from eventlet.green import time
+ from eventlet.support import greenlets as greenlet
+ 
+-__patched__ = ['_start_new_thread', '_allocate_lock',
+-               '_sleep', 'local', 'stack_size', 'Lock', 'currentThread',
+-               'current_thread', '_after_fork', '_shutdown']
++__patched__ = ['Lock', '_after_fork', '_allocate_lock', '_make_thread_handle',
++               '_shutdown', '_sleep', '_start_joinable_thread',
++               '_start_new_thread', '_ThreadHandle', 'currentThread',
++               'current_thread', 'local', 'stack_size']
+ 
+ __patched__ += ['get_ident', '_set_sentinel']
+ 
+From 969cd8de59c0b0de48e17a969027f1d041b394ef Mon Sep 17 00:00:00 2001
+From: Stefano Rivera <stefano@rivera.za.net>
+Date: Thu, 7 Nov 2024 14:38:01 -0800
+Subject: [PATCH] _tstate_lock was removed in Python 3.13
+
+In python/cpython#114271, _tstate_lock was replaced with an event on
+PyThreadState.
+---
+ eventlet/green/thread.py | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/eventlet/green/thread.py b/eventlet/green/thread.py
+index e9c4f3830..ef723ff46 100644
+--- a/eventlet/green/thread.py
++++ b/eventlet/green/thread.py
+@@ -80,10 +80,10 @@ def _make_thread_handle(ident):
+ 
+ 
+ def __spawn_green(function, args=(), kwargs=None, joinable=False):
+-    if (sys.version_info >= (3, 4)
++    if ((3, 4) <= sys.version_info < (3, 13)
+             and getattr(function, '__module__', '') == 'threading'
+             and hasattr(function, '__self__')):
+-        # Since Python 3.4, threading.Thread uses an internal lock
++        # In Python 3.4-3.12, threading.Thread uses an internal lock
+         # automatically released when the python thread state is deleted.
+         # With monkey patching, eventlet uses green threads without python
+         # thread state, so the lock is not automatically released.
+@@ -98,7 +98,7 @@ def wrap_bootstrap_inner():
+                 bootstrap_inner()
+             finally:
+                 # The lock can be cleared (ex: by a fork())
+-                if thread._tstate_lock is not None:
++                if getattr(thread, "_tstate_lock", None) is not None:
+                     thread._tstate_lock.release()
+ 
+         thread._bootstrap_inner = wrap_bootstrap_inner

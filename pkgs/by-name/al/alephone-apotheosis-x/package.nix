@@ -1,4 +1,8 @@
-{ lib, alephone, requireFile }:
+{
+  lib,
+  alephone,
+  requireFile,
+}:
 
 alephone.makeWrapper rec {
   pname = "apotheosis-x";

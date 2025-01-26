@@ -1,40 +1,24 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, boost182
+, boost
 , catch2_3
 , cmake
 , ninja
-, fmt_9
+, fmt_11
+, mimalloc
 , python3
 }:
 
-let
-  # dependency for this library has been removed in master (i.e. next release)
-  unordered_dense = stdenv.mkDerivation rec {
-    version = "2.0.1";
-    pname = "unordered_dense";
-    src = fetchFromGitHub {
-      owner = "martinus";
-      repo = pname;
-      rev = "v${version}";
-      sha256 = "sha256-9zlWYAY4lOQsL9+MYukqavBi5k96FvglRgznLIwwRyw=";
-    };
-    nativeBuildInputs = [
-      cmake
-    ];
-  };
-
-in
 stdenv.mkDerivation rec {
   pname = "sv-lang";
-  version = "3.0";
+  version = "7.0";
 
   src = fetchFromGitHub {
     owner = "MikePopoloski";
     repo = "slang";
     rev = "v${version}";
-    sha256 = "sha256-v2sStvukLFMRXGeATxvizmnwEPDE4kwnS06n+37OrJA=";
+    sha256 = "sha256-msSc6jw2xbEZfOwtqwFEDIKcwf5SDKp+j15lVbNO98g=";
   };
 
   cmakeFlags = [
@@ -52,9 +36,9 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    unordered_dense
-    boost182
-    fmt_9
+    boost
+    fmt_11
+    mimalloc
     # though only used in tests, cmake will complain its absence when configuring
     catch2_3
   ];
@@ -70,5 +54,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ sharzy ];
     mainProgram = "slang";
     platforms = platforms.all;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

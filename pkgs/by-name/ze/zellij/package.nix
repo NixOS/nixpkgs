@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "zellij-org";
     repo = "zellij";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-xdWfaXWmqFJuquE7n3moUjGuFqKB90OE6lqPuC3onOg=";
   };
 
@@ -89,6 +89,7 @@ rustPlatform.buildRustPackage rec {
       _0x4A6F
       abbe
       pyrox0
+      matthiasbeyer
     ];
     mainProgram = "zellij";
   };

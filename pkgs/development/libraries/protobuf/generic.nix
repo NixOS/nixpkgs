@@ -13,6 +13,7 @@
   zlib,
   version,
   hash,
+  versionCheckHook,
 
   # downstream dependencies
   python3,
@@ -31,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "protocolbuffers";
     repo = "protobuf";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     inherit hash;
   };
 
@@ -84,15 +85,18 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
   doCheck =
-    # FIXME: investigate.  24.x and 23.x have different errors.
-    # At least some of it is not reproduced on some other machine; example:
-    # https://hydra.nixos.org/build/235677717/nixlog/4/tail
-    !(stdenv.hostPlatform.isDarwin && lib.versionAtLeast version "23")
     # Tests fail to build on 32-bit platforms; fixed in 22.x
     # https://github.com/protocolbuffers/protobuf/issues/10418
     # Also AnyTest.TestPackFromSerializationExceedsSizeLimit fails on 32-bit platforms
     # https://github.com/protocolbuffers/protobuf/issues/8460
-    && !stdenv.hostPlatform.is32bit;
+    !stdenv.hostPlatform.is32bit;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgram = [ "${placeholder "out"}/bin/protoc" ];
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
 
   passthru = {
     tests = {

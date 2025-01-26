@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.xdg.portal.wlr;
   package = pkgs.xdg-desktop-portal-wlr;

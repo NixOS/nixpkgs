@@ -2,6 +2,7 @@
   lib,
   stdenv,
   aiohttp,
+  aioresponses,
   async-timeout,
   buildPythonPackage,
   click,
@@ -15,11 +16,12 @@
   pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
+  vacuum-map-parser-roborock,
 }:
 
 buildPythonPackage rec {
   pname = "python-roborock";
-  version = "2.7.2";
+  version = "2.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -27,8 +29,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "humbertogontijo";
     repo = "python-roborock";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-sPG3AqVrv+BiB+copgaghWDT/Rb/WU0R+Y8Z2J6l+7E=";
+    tag = "v${version}";
+    hash = "sha256-xPbq31mp1XM1WtmrknF9ZXyolxXu+iCMCqJccxC+Qd0=";
   };
 
   postPatch = ''
@@ -40,7 +42,6 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-
   propagatedBuildInputs = [
     aiohttp
     async-timeout
@@ -49,9 +50,11 @@ buildPythonPackage rec {
     dacite
     paho-mqtt
     pycryptodome
+    vacuum-map-parser-roborock
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ pycryptodomex ];
 
   nativeCheckInputs = [
+    aioresponses
     pytest-asyncio
     pytestCheckHook
   ];

@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, zlib, bzip2, xz }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  zlib,
+  bzip2,
+  xz,
+}:
 
 stdenv.mkDerivation rec {
   pname = "freebayes";
@@ -6,14 +13,18 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     name = "freebayes-${version}-src";
-    owner  = "ekg";
-    repo   = "freebayes";
-    rev    = "v${version}";
+    owner = "ekg";
+    repo = "freebayes";
+    rev = "v${version}";
     sha256 = "035nriknjqq8gvil81vvsmvqwi35v80q8h1cw24vd1gdyn1x7bys";
     fetchSubmodules = true;
   };
 
-  buildInputs = [ zlib bzip2 xz ];
+  buildInputs = [
+    zlib
+    bzip2
+    xz
+  ];
 
   # Workaround build failure on -fno-common toolchains like upstream
   # gcc-10. Otherwise build fails as:
@@ -27,8 +38,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Bayesian haplotype-based polymorphism discovery and genotyping";
-    license     = licenses.mit;
-    homepage    = "https://github.com/ekg/freebayes";
+    license = licenses.mit;
+    homepage = "https://github.com/ekg/freebayes";
     maintainers = with maintainers; [ jdagilliland ];
     platforms = [ "x86_64-linux" ];
   };

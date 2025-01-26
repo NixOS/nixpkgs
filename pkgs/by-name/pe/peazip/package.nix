@@ -1,29 +1,28 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, libsForQt5
-, fpc
-, lazarus
-, xorg
-, libqt5pas
-, runCommand
-, _7zz
-, archiver
-, brotli
-, upx
-, zpaq
-, zstd
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  qt6Packages,
+  fpc,
+  lazarus,
+  xorg,
+  runCommand,
+  _7zz,
+  brotli,
+  upx,
+  zpaq,
+  zstd,
 }:
 
 stdenv.mkDerivation rec {
   pname = "peazip";
-  version = "10.0.0";
+  version = "10.2.0";
 
   src = fetchFromGitHub {
     owner = "peazip";
     repo = pname;
     rev = version;
-    hash = "sha256-dxFGYMq1L7oRGUAfshLTBCXrYL6lzJPu5qIItrjeE5c=";
+    hash = "sha256-TyfLqT9VNSViJOWwM3KgL2tvCZE14bLlT/6DgF9IAOE=";
   };
   sourceRoot = "${src.name}/peazip-sources";
 
@@ -33,15 +32,19 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    libsForQt5.wrapQtAppsHook
+    qt6Packages.wrapQtAppsHook
     lazarus
     fpc
   ];
 
-  buildInputs = [
-    xorg.libX11
-    libqt5pas
-  ];
+  buildInputs =
+    [
+      xorg.libX11
+    ]
+    ++ (with qt6Packages; [
+      qtbase
+      libqtpas
+    ]);
 
   NIX_LDFLAGS = "--as-needed -rpath ${lib.makeLibraryPath buildInputs}";
 
@@ -50,13 +53,13 @@ stdenv.mkDerivation rec {
     export HOME=$(mktemp -d)
     pushd dev
     lazbuild --lazarusdir=${lazarus}/share/lazarus --add-package metadarkstyle/metadarkstyle.lpk
-    lazbuild --lazarusdir=${lazarus}/share/lazarus --widgetset=qt5 --build-all project_pea.lpi
-    lazbuild --lazarusdir=${lazarus}/share/lazarus --widgetset=qt5 --build-all project_peach.lpi
+    lazbuild --lazarusdir=${lazarus}/share/lazarus --widgetset=qt6 --build-all project_pea.lpi
+    lazbuild --lazarusdir=${lazarus}/share/lazarus --widgetset=qt6 --build-all project_peach.lpi
     popd
   '';
 
   # peazip looks for the "7z", not "7zz"
-  _7z = runCommand "7z" {} ''
+  _7z = runCommand "7z" { } ''
     mkdir -p $out/bin
     ln -s ${_7zz}/bin/7zz $out/bin/7z
   '';
@@ -65,14 +68,15 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     install -D dev/{pea,peazip} -t $out/lib/peazip
-    wrapProgram $out/lib/peazip/peazip --prefix PATH : ${lib.makeBinPath [
-      _7z
-      archiver
-      brotli
-      upx
-      zpaq
-      zstd
-    ]}
+    wrapProgram $out/lib/peazip/peazip --prefix PATH : ${
+      lib.makeBinPath [
+        _7z
+        brotli
+        upx
+        zpaq
+        zstd
+      ]
+    }
     mkdir -p $out/bin
     ln -s $out/lib/peazip/{pea,peazip} $out/bin/
 

@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, jre, graphviz, makeWrapper }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jre,
+  graphviz,
+  makeWrapper,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "genesys";
@@ -35,4 +42,3 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.all;
   };
 })
-

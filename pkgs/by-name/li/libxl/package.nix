@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libxl";
@@ -20,9 +24,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Library for parsing Excel files";
-    homepage    = "https://www.libxl.com/";
-    license     = licenses.unfree;
-    platforms   = platforms.linux;
+    homepage = "https://www.libxl.com/";
+    license = licenses.unfree;
+    platforms = platforms.linux;
     maintainers = [ ];
   };
 }

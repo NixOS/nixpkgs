@@ -1,18 +1,20 @@
-{ lib, stdenv
-, installShellFiles
-, tcl
-, libiconv
-, fetchurl
-, buildPackages
-, zlib
-, openssl
-, readline
-, withInternalSqlite ? true
-, sqlite
-, ed
-, which
-, tclPackages
-, withJson ? true
+{
+  lib,
+  stdenv,
+  installShellFiles,
+  tcl,
+  libiconv,
+  fetchurl,
+  buildPackages,
+  zlib,
+  openssl,
+  readline,
+  withInternalSqlite ? true,
+  sqlite,
+  ed,
+  which,
+  tclPackages,
+  withJson ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,9 +29,19 @@ stdenv.mkDerivation (finalAttrs: {
   # required for build time tool `./tools/translate.c`
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  nativeBuildInputs = [ installShellFiles tcl ];
+  nativeBuildInputs = [
+    installShellFiles
+    tcl
+  ];
 
-  buildInputs = [ zlib openssl readline which ed ]
+  buildInputs =
+    [
+      zlib
+      openssl
+      readline
+      which
+      ed
+    ]
     ++ lib.optional stdenv.hostPlatform.isDarwin libiconv
     ++ lib.optional (!withInternalSqlite) sqlite;
 

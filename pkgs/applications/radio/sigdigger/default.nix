@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, qmake
-, qtbase
-, pkg-config
-, sigutils
-, fftwSinglePrec
-, suwidgets
-, wrapQtAppsHook
-, suscan
-, libsndfile
-, soapysdr-with-plugins
-, libxml2
-, volk
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qmake,
+  qtbase,
+  pkg-config,
+  sigutils,
+  fftwSinglePrec,
+  suwidgets,
+  wrapQtAppsHook,
+  suscan,
+  libsndfile,
+  soapysdr-with-plugins,
+  libxml2,
+  volk,
 }:
 
 stdenv.mkDerivation rec {
@@ -55,6 +56,9 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/BatchDrake/SigDigger";
     license = licenses.gpl3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ polygon oxapentane ];
+    maintainers = with maintainers; [
+      polygon
+      oxapentane
+    ];
   };
 }

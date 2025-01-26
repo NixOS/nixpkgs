@@ -321,9 +321,9 @@ in
     };
 
     ###### wrappers consistency checks
-    system.checks = lib.singleton (pkgs.runCommandLocal
-      "ensure-all-wrappers-paths-exist" { }
-      ''
+    system.checks = lib.singleton (pkgs.runCommand "ensure-all-wrappers-paths-exist" {
+      preferLocalBuild = true;
+    } ''
         # make sure we produce output
         mkdir -p $out
 

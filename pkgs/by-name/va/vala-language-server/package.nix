@@ -1,17 +1,18 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, pkg-config
-, scdoc
-, gnome-builder
-, glib
-, libgee
-, json-glib
-, jsonrpc-glib
-, vala
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  pkg-config,
+  scdoc,
+  gnome-builder,
+  glib,
+  libgee,
+  json-glib,
+  jsonrpc-glib,
+  vala,
 }:
 
 stdenv.mkDerivation rec {
@@ -29,15 +30,17 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    scdoc
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    # GNOME Builder Plugin
-    gnome-builder
-  ];
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+      pkg-config
+      scdoc
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      # GNOME Builder Plugin
+      gnome-builder
+    ];
 
   buildInputs = [
     glib

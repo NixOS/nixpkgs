@@ -9,13 +9,13 @@ let
 in
 buildGoModule {
   inherit pname version;
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
   vendorHash = "sha256-F8jTvgxOhOGVtl6B8u0xAIvjNwVjBtvAhApzjIgykpY=";
 
   src = fetchFromGitHub {
     owner = "apernet";
     repo = "opengfw";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-6PFfsPfLzzeaImcteX9u/k5pwe3cvSQwT90TCizA3gI=";
   };
 

@@ -1,9 +1,10 @@
-{ fetchFromSourcehut
-, just
-, lib
-, nix-update-script
-, rustPlatform
-, scdoc
+{
+  fetchFromSourcehut,
+  just,
+  lib,
+  nix-update-script,
+  rustPlatform,
+  scdoc,
 }:
 let
   version = "0.8.0";

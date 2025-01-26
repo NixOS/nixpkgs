@@ -16,7 +16,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
   ldflags = [ "-s" "-w" "-X github.com/zu1k/nali/internal/constant.Version=${version}" ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''

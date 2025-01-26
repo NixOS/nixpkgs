@@ -1,15 +1,22 @@
-{ lib, buildKodiAddon, fetchFromGitHub, requests, inputstream-adaptive, inputstreamhelper }:
+{
+  lib,
+  buildKodiAddon,
+  fetchFromGitHub,
+  requests,
+  inputstream-adaptive,
+  inputstreamhelper,
+}:
 
 buildKodiAddon rec {
   pname = "youtube";
   namespace = "plugin.video.youtube";
-  version = "7.1.0.1";
+  version = "7.1.1.6";
 
   src = fetchFromGitHub {
     owner = "anxdpanic";
     repo = "plugin.video.youtube";
     rev = "v${version}";
-    hash = "sha256-5tctuY2vYEfkkNVjprnUPJ/crwmMGCEdcRxUQR5EQxw=";
+    hash = "sha256-fcr7FDTaStr9EaEaC3QG3uJQav0YuEITa62Y1kW1vlM=";
   };
 
   propagatedBuildInputs = [

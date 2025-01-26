@@ -24,9 +24,12 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
-    fonttools
-  ] ++ fonttools.optional-dependencies.ufo ++ fonttools.optional-dependencies.unicode;
+  propagatedBuildInputs =
+    [
+      fonttools
+    ]
+    ++ fonttools.optional-dependencies.ufo
+    ++ fonttools.optional-dependencies.unicode;
 
   nativeCheckInputs = [ pytestCheckHook ];
 

@@ -16,15 +16,15 @@
 
 buildPythonPackage rec {
   pname = "skrl";
-  version = "1.3.0";
+  version = "1.4.0";
   pyproject = true;
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "Toni-SM";
     repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-kKkAdQymmgJ9V+73nYi4MhOSJvrO2jwJ2BUYhUGPHe0=";
+    tag = version;
+    hash = "sha256-e08hhO7CTH6V+8ZUhte36GD0fL7XvuW/CgIuARU3c6E=";
   };
 
   nativeBuildInputs = [ setuptools ];

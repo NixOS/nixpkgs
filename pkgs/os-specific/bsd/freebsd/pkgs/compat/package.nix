@@ -11,6 +11,7 @@
   freebsd-lib,
   expat,
   zlib,
+  extraSrc ? [ ],
 }:
 
 let
@@ -115,7 +116,8 @@ mkDerivation {
 
       # idk bro
       "sys/sys/kbio.h"
-    ];
+    ]
+    ++ extraSrc;
 
   preBuild =
     ''
@@ -174,4 +176,6 @@ mkDerivation {
   # build build-time dependencies for building FreeBSD packages). It is
   # not needed when building for FreeBSD.
   meta.broken = stdenv.hostPlatform.isFreeBSD;
+
+  alwaysKeepStatic = true;
 }

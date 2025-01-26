@@ -8,7 +8,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Electron-Cash";
     repo = "Electron-Cash";
-    rev = "refs/tags/${version}";
+    tag = version;
     sha256 = "sha256-xOyj5XerOwgfvI0qj7+7oshDvd18h5IeZvcJTis8nWo=";
   };
 

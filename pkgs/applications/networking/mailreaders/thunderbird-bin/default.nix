@@ -3,21 +3,27 @@
 # To update `thunderbird-bin`'s `release_sources.nix`, run from the nixpkgs root:
 #
 #     nix-shell maintainers/scripts/update.nix --argstr package pkgs.thunderbird-bin-unwrapped
-{ lib, stdenv, fetchurl, config, wrapGAppsHook3, autoPatchelfHook
-, alsa-lib
-, curl
-, gtk3
-, writeScript
-, writeText
-, xidel
-, coreutils
-, gnused
-, gnugrep
-, gnupg
-, runtimeShell
-, systemLocale ? config.i18n.defaultLocale or "en_US"
-, patchelfUnstable  # have to use patchelfUnstable to support --no-clobber-old-sections
-, generated
+{
+  lib,
+  stdenv,
+  fetchurl,
+  config,
+  wrapGAppsHook3,
+  autoPatchelfHook,
+  alsa-lib,
+  curl,
+  gtk3,
+  writeScript,
+  writeText,
+  xidel,
+  coreutils,
+  gnused,
+  gnugrep,
+  gnupg,
+  runtimeShell,
+  systemLocale ? config.i18n.defaultLocale or "en_US",
+  patchelfUnstable, # have to use patchelfUnstable to support --no-clobber-old-sections
+  generated,
 }:
 
 let
@@ -30,21 +36,22 @@ let
 
   arch = mozillaPlatforms.${stdenv.hostPlatform.system};
 
-  isPrefixOf = prefix: string:
-    builtins.substring 0 (builtins.stringLength prefix) string == prefix;
+  isPrefixOf = prefix: string: builtins.substring 0 (builtins.stringLength prefix) string == prefix;
 
-  sourceMatches = locale: source:
-      (isPrefixOf source.locale locale) && source.arch == arch;
+  sourceMatches = locale: source: (isPrefixOf source.locale locale) && source.arch == arch;
 
-  policies = { DisableAppUpdate = true; } // config.thunderbird.policies or { };
+  policies = {
+    DisableAppUpdate = true;
+  } // config.thunderbird.policies or { };
   policiesJson = writeText "thunderbird-policies.json" (builtins.toJSON { inherit policies; });
 
-  defaultSource = lib.findFirst (sourceMatches "en-US") {} sources;
+  defaultSource = lib.findFirst (sourceMatches "en-US") { } sources;
 
   mozLocale =
-    if systemLocale == "ca_ES@valencia"
-    then "ca-valencia"
-    else lib.replaceStrings ["_"] ["-"] systemLocale;
+    if systemLocale == "ca_ES@valencia" then
+      "ca-valencia"
+    else
+      lib.replaceStrings [ "_" ] [ "-" ] systemLocale;
 
   source = lib.findFirst (sourceMatches mozLocale) defaultSource sources;
 
@@ -59,7 +66,11 @@ stdenv.mkDerivation {
     inherit (source) sha256;
   };
 
-  nativeBuildInputs = [ wrapGAppsHook3 autoPatchelfHook patchelfUnstable ];
+  nativeBuildInputs = [
+    wrapGAppsHook3
+    autoPatchelfHook
+    patchelfUnstable
+  ];
   buildInputs = [
     alsa-lib
   ];
@@ -71,26 +82,36 @@ stdenv.mkDerivation {
     echo 'pref("app.update.auto", "false");' >> defaults/pref/channel-prefs.js
   '';
 
-  installPhase =
-    ''
-      mkdir -p "$prefix/usr/lib/thunderbird-bin-${version}"
-      cp -r * "$prefix/usr/lib/thunderbird-bin-${version}"
+  installPhase = ''
+    mkdir -p "$prefix/usr/lib/thunderbird-bin-${version}"
+    cp -r * "$prefix/usr/lib/thunderbird-bin-${version}"
 
-      mkdir -p "$out/bin"
-      ln -s "$prefix/usr/lib/thunderbird-bin-${version}/thunderbird" "$out/bin/"
+    mkdir -p "$out/bin"
+    ln -s "$prefix/usr/lib/thunderbird-bin-${version}/thunderbird" "$out/bin/"
 
-      # wrapThunderbird expects "$out/lib" instead of "$out/usr/lib"
-      ln -s "$out/usr/lib" "$out/lib"
+    # wrapThunderbird expects "$out/lib" instead of "$out/usr/lib"
+    ln -s "$out/usr/lib" "$out/lib"
 
-      gappsWrapperArgs+=(--argv0 "$out/bin/.thunderbird-wrapped")
+    gappsWrapperArgs+=(--argv0 "$out/bin/.thunderbird-wrapped")
 
-      # See: https://github.com/mozilla/policy-templates/blob/master/README.md
-      mkdir -p "$out/lib/thunderbird-bin-${version}/distribution";
-      ln -s ${policiesJson} "$out/lib/thunderbird-bin-${version}/distribution/policies.json";
-    '';
+    # See: https://github.com/mozilla/policy-templates/blob/master/README.md
+    mkdir -p "$out/lib/thunderbird-bin-${version}/distribution";
+    ln -s ${policiesJson} "$out/lib/thunderbird-bin-${version}/distribution/policies.json";
+  '';
 
   passthru.updateScript = import ./../../browsers/firefox-bin/update.nix {
-    inherit pname lib writeScript xidel coreutils gnused gnugrep curl gnupg runtimeShell;
+    inherit
+      pname
+      lib
+      writeScript
+      xidel
+      coreutils
+      gnused
+      gnugrep
+      curl
+      gnupg
+      runtimeShell
+      ;
     baseName = "thunderbird";
     channel = "release";
     basePath = "pkgs/applications/networking/mailreaders/thunderbird-bin";

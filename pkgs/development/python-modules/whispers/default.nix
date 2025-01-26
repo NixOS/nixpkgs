@@ -16,6 +16,7 @@
   wrapt,
   semgrep,
   setuptools,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -28,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "adeptex";
     repo = "whispers";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-tjDog8+oWTNuK1eK5qUEFspiilB0riUSTX5ugTIiP3M=";
   };
 
@@ -38,9 +39,12 @@ buildPythonPackage rec {
   '';
 
   pythonRelaxDeps = [
+    "jellyfish"
     "lxml"
     "pyyaml"
     "semgrep"
+    "six"
+    "wrapt"
   ];
 
   build-system = [ setuptools ];
@@ -54,8 +58,9 @@ buildPythonPackage rec {
     luhn
     lxml
     pyyaml
-    wrapt
     semgrep
+    six
+    wrapt
   ];
 
   nativeCheckInputs = [

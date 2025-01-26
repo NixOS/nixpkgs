@@ -1,46 +1,45 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, pkg-config
-, meson
-, ninja
-, vala
-, desktop-file-utils
-, gtk3
-, granite
-, libgee
-, libhandy
-, libcanberra
-, wrapGAppsHook3
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  wrapGAppsHook4,
+  gdk-pixbuf,
+  glib,
+  granite7,
+  gtk4,
+  libportal,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-screenshot";
-  version = "8.0.0";
+  version = "8.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "screenshot";
     rev = version;
-    sha256 = "sha256-z7FP+OZYF/9YLXYCQF/ElihKjKHVfeHc38RHdPb2aIE=";
+    hash = "sha256-qhXTOdxMpiCPJR0Gp65itr6Em9e6OzMn3m/OyS7YfcA=";
   };
 
   nativeBuildInputs = [
-    desktop-file-utils
     meson
     ninja
     pkg-config
     vala
-    wrapGAppsHook3
+    wrapGAppsHook4
   ];
 
   buildInputs = [
-    granite
-    gtk3
-    libcanberra
-    libgee
-    libhandy
+    gdk-pixbuf
+    glib
+    granite7
+    gtk4
+    libportal
   ];
 
   passthru = {

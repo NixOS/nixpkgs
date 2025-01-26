@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rspeer";
     repo = "python-ftfy";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-TmwDJeUDcF+uOB2X5tMmnf9liCI9rP6dYJVmJoaqszo=";
   };
 

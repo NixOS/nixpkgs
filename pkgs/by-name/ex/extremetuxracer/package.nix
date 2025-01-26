@@ -1,7 +1,25 @@
-{ lib, stdenv, fetchurl, libGLU, libGL, libX11, xorgproto, tcl, libglut, freetype
-, sfml, libXi
-, libXmu, libXext, libXt, libSM, libICE
-, libpng, pkg-config, gettext, intltool
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libGLU,
+  libGL,
+  libX11,
+  xorgproto,
+  tcl,
+  libglut,
+  freetype,
+  sfml,
+  libXi,
+  libXmu,
+  libXext,
+  libXt,
+  libSM,
+  libICE,
+  libpng,
+  pkg-config,
+  gettext,
+  intltool,
 }:
 
 stdenv.mkDerivation rec {
@@ -13,12 +31,27 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-+jKFzAx1Wlr/Up8/LOo1FkgRFMa0uOHsB2n+7/BHc+U=";
   };
 
-  nativeBuildInputs = [ pkg-config intltool ];
+  nativeBuildInputs = [
+    pkg-config
+    intltool
+  ];
   buildInputs = [
-    libGLU libGL libX11 xorgproto tcl libglut freetype
-    sfml libXi
-    libXmu libXext libXt libSM libICE
-    libpng gettext
+    libGLU
+    libGL
+    libX11
+    xorgproto
+    tcl
+    libglut
+    freetype
+    sfml
+    libXi
+    libXmu
+    libXext
+    libXt
+    libSM
+    libICE
+    libpng
+    gettext
   ];
 
   configureFlags = [ "--with-tcl=${tcl}/lib" ];

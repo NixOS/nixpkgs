@@ -1,18 +1,21 @@
-{ lib
-, fetchFromGitHub
-, unstableGitUpdater
-, stdenvNoCC
-, ... }:
+{
+  lib,
+  fetchFromGitHub,
+  unstableGitUpdater,
+  stdenvNoCC,
+  ...
+}:
 
 stdenvNoCC.mkDerivation (self: {
   pname = "alacritty-theme";
-  version = "0-unstable-2024-10-24";
+  version = "0-unstable-2025-01-21";
 
   src = fetchFromGitHub {
     owner = "alacritty";
     repo = "alacritty-theme";
-    rev = "c424c57c8a2b6a62b6602d61ebfbc7e50f2c81d8";
-    hash = "sha256-KdjysVDs4oGU9gQwkW36aHmK30KiCdVNiREJOAETxNw=";
+    rev = "69d07c3bc280add63906a1cebf6be326687bc9eb";
+    hash = "sha256-G8sUu8GD44uqUyQ7sZrgrGxC4IOfhSn++WIc+U67zL0=";
+    sparseCheckout = [ "themes" ];
   };
 
   dontConfigure = true;

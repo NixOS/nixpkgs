@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, xorg, cairo, lv2, pkg-config }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  xorg,
+  cairo,
+  lv2,
+  pkg-config,
+}:
 
 stdenv.mkDerivation rec {
   pname = "bshapr";
@@ -13,7 +21,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    xorg.libX11 cairo lv2
+    xorg.libX11
+    cairo
+    lv2
   ];
 
   installFlags = [ "PREFIX=$(out)" ];

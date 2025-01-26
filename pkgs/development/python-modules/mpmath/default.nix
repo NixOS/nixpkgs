@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mpmath";
     repo = "mpmath";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-9BGcaC3TyolGeO65/H42T/WQY6z5vc1h+MA+8MGFChU=";
   };
 

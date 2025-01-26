@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pygobject";
     repo = "pygobject-stubs";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Y9tqfv2DP2daxxafcQAtxH33pR3FHE8av0PkzEcs0RU=";
   };
 

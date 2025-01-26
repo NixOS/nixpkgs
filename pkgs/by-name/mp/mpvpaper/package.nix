@@ -1,17 +1,18 @@
-{ stdenv
-, lib
-, meson
-, ninja
-, wayland
-, wayland-protocols
-, wayland-scanner
-, egl-wayland
-, glew
-, mpv
-, pkg-config
-, fetchFromGitHub
-, makeWrapper
-, installShellFiles
+{
+  stdenv,
+  lib,
+  meson,
+  ninja,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
+  egl-wayland,
+  glew,
+  mpv,
+  pkg-config,
+  fetchFromGitHub,
+  makeWrapper,
+  installShellFiles,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,15 +1,32 @@
-{ stdenv, lib, fetchFromGitLab, cmake, perl, python3, boost
-, fortranSupport ? false, gfortran
-, buildDocumentation ? false, fig2dev, ghostscript, doxygen
-, buildJavaBindings ? false, openjdk
-, buildPythonBindings ? true, python3Packages
-, modelCheckingSupport ? false, libunwind, libevent, elfutils # Inside elfutils: libelf and libdw
-, bmfSupport ? true, eigen
-, minimalBindings ? false
-, debug ? false
-, optimize ? (!debug)
-, moreTests ? false
-, withoutBin ? false
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  cmake,
+  perl,
+  python3,
+  boost,
+  fortranSupport ? false,
+  gfortran,
+  buildDocumentation ? false,
+  fig2dev,
+  ghostscript,
+  doxygen,
+  buildJavaBindings ? false,
+  openjdk,
+  buildPythonBindings ? true,
+  python3Packages,
+  modelCheckingSupport ? false,
+  libunwind,
+  libevent,
+  elfutils, # Inside elfutils: libelf and libdw
+  bmfSupport ? true,
+  eigen,
+  minimalBindings ? false,
+  debug ? false,
+  optimize ? (!debug),
+  moreTests ? false,
+  withoutBin ? false,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,16 +42,28 @@ stdenv.mkDerivation rec {
   };
 
   propagatedBuildInputs = [ boost ];
-  nativeBuildInputs = [ cmake perl python3 ]
+  nativeBuildInputs =
+    [
+      cmake
+      perl
+      python3
+    ]
     ++ lib.optionals fortranSupport [ gfortran ]
     ++ lib.optionals buildJavaBindings [ openjdk ]
     ++ lib.optionals buildPythonBindings [ python3Packages.pybind11 ]
-    ++ lib.optionals buildDocumentation [ fig2dev ghostscript doxygen ]
+    ++ lib.optionals buildDocumentation [
+      fig2dev
+      ghostscript
+      doxygen
+    ]
     ++ lib.optionals bmfSupport [ eigen ]
-    ++ lib.optionals modelCheckingSupport [ libunwind libevent elfutils ];
+    ++ lib.optionals modelCheckingSupport [
+      libunwind
+      libevent
+      elfutils
+    ];
 
-  outputs = [ "out" ]
-    ++ lib.optionals buildPythonBindings [ "python" ];
+  outputs = [ "out" ] ++ lib.optionals buildPythonBindings [ "python" ];
 
   # "Release" does not work. non-debug mode is Debug compiled with optimization
   cmakeBuildType = "Debug";
@@ -87,15 +116,17 @@ stdenv.mkDerivation rec {
     make tests -j $NIX_BUILD_CORES
   '';
 
-  postInstall = lib.optionalString withoutBin ''
-    # remove bin from output if requested.
-    # having a specific bin output would be cleaner but it does not work currently (circular references)
-    rm -rf $out/bin
-  '' + lib.optionalString buildPythonBindings ''
-    # manually install the python binding if requested.
-    mkdir -p $python/lib/python${lib.versions.majorMinor python3.version}/site-packages/
-    cp ./lib/simgrid.cpython*.so $python/lib/python${lib.versions.majorMinor python3.version}/site-packages/
-   '';
+  postInstall =
+    lib.optionalString withoutBin ''
+      # remove bin from output if requested.
+      # having a specific bin output would be cleaner but it does not work currently (circular references)
+      rm -rf $out/bin
+    ''
+    + lib.optionalString buildPythonBindings ''
+      # manually install the python binding if requested.
+      mkdir -p $python/lib/python${lib.versions.majorMinor python3.version}/site-packages/
+      cp ./lib/simgrid.cpython*.so $python/lib/python${lib.versions.majorMinor python3.version}/site-packages/
+    '';
 
   # improve debuggability if requested
   hardeningDisable = lib.optionals debug [ "fortify" ];
@@ -113,7 +144,10 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://simgrid.org/";
     license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ mickours mpoquet ];
+    maintainers = with maintainers; [
+      mickours
+      mpoquet
+    ];
     platforms = platforms.all;
     broken = stdenv.hostPlatform.isDarwin;
   };

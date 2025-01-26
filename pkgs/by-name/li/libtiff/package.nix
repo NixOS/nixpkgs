@@ -1,30 +1,31 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, fetchpatch
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  fetchpatch,
+  nix-update-script,
 
-, autoreconfHook
-, pkg-config
-, sphinx
+  cmake,
+  pkg-config,
+  sphinx,
 
-, lerc
-, libdeflate
-, libjpeg
-, libwebp
-, xz
-, zlib
-, zstd
+  lerc,
+  libdeflate,
+  libjpeg,
+  libwebp,
+  xz,
+  zlib,
+  zstd,
 
   # for passthru.tests
-, libgeotiff
-, python3Packages
-, imagemagick
-, graphicsmagick
-, gdal
-, openimageio
-, freeimage
-, testers
+  libgeotiff,
+  python3Packages,
+  imagemagick,
+  graphicsmagick,
+  gdal,
+  openimageio,
+  freeimage,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -39,29 +40,39 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    # FreeImage needs this patch
-    ./headers.patch
     # libc++abi 11 has an `#include <version>`, this picks up files name
     # `version` in the project's include paths
     ./rename-version.patch
+    ./static.patch
   ];
 
   postPatch = ''
     mv VERSION VERSION.txt
   '';
 
-  outputs = [ "bin" "dev" "dev_private" "out" "man" "doc" ];
+  outputs = [
+    "bin"
+    "dev"
+    "dev_private"
+    "out"
+    "man"
+    "doc"
+  ];
 
   postFixup = ''
-    moveToOutput include/tif_config.h $dev_private
-    moveToOutput include/tif_dir.h $dev_private
-    moveToOutput include/tif_hash_set.h $dev_private
-    moveToOutput include/tiffiop.h $dev_private
+    mkdir -p $dev_private/include
+    mv -t $dev_private/include \
+      libtiff/tif_config.h \
+      ../libtiff/tif_dir.h \
+      ../libtiff/tif_hash_set.h \
+      ../libtiff/tiffiop.h
   '';
 
-  # If you want to change to a different build system, please make
-  # sure cross-compilation works first!
-  nativeBuildInputs = [ autoreconfHook pkg-config sphinx ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    sphinx
+  ];
 
   buildInputs = [
     lerc
@@ -80,6 +91,10 @@ stdenv.mkDerivation (finalAttrs: {
     zstd
   ];
 
+  cmakeFlags = [
+    "-DCMAKE_FIND_PACKAGE_PREFER_CONFIG=ON"
+  ];
+
   enableParallelBuilding = true;
 
   doCheck = true;
@@ -88,7 +103,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests = {
-      inherit libgeotiff imagemagick graphicsmagick gdal openimageio freeimage;
+      inherit
+        libgeotiff
+        imagemagick
+        graphicsmagick
+        gdal
+        openimageio
+        freeimage
+        ;
       inherit (python3Packages) pillow imread;
       pkg-config = testers.hasPkgConfigModules {
         package = finalAttrs.finalPackage;

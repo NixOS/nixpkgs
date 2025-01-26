@@ -37,6 +37,7 @@ let
     RestrictNamespaces = true;
     RestrictRealtime = true;
     RestrictSUIDSGID = true;
+    UMask = "0077";
   };
   inherit (lib)
     types
@@ -350,6 +351,21 @@ in
         CacheDirectory = "immich";
         User = cfg.user;
         Group = cfg.group;
+      };
+    };
+
+    systemd.tmpfiles.settings = {
+      immich = {
+        # Redundant to the `UMask` service config setting on new installs, but installs made in
+        # early 24.11 created world-readable media storage by default, which is a privacy risk. This
+        # fixes those installs.
+        "${cfg.mediaLocation}" = {
+          e = {
+            user = cfg.user;
+            group = cfg.group;
+            mode = "0700";
+          };
+        };
       };
     };
 

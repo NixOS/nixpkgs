@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "exxamalte";
     repo = "python-aio-geojson-geonetnz-volcano";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-B+jULYeel7efk7fB26zXQyS1ZCsmFVKlOkfnKWFQFJ4=";
   };
 

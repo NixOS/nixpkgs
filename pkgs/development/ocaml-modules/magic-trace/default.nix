@@ -1,18 +1,19 @@
-{ lib
-, fetchFromGitHub
-, buildDunePackage
-, ocaml-crunch
-, angstrom
-, async
-, cohttp
-, cohttp_static_handler ? null
-, core
-, core_unix ? null
-, fzf
-, owee
-, ppx_jane
-, re
-, shell ? null
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  ocaml-crunch,
+  angstrom,
+  async,
+  cohttp,
+  cohttp_static_handler ? null,
+  core,
+  core_unix ? null,
+  fzf,
+  owee,
+  ppx_jane,
+  re,
+  shell ? null,
 }:
 
 buildDunePackage rec {
@@ -46,8 +47,7 @@ buildDunePackage rec {
   ];
 
   meta = with lib; {
-    description =
-      "Collects and displays high-resolution traces of what a process is doing";
+    description = "Collects and displays high-resolution traces of what a process is doing";
     license = licenses.mit;
     maintainers = [ maintainers.alizter ];
     homepage = "https://github.com/janestreet/magic-trace";

@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchurl
-, alsa-lib
-, libjack2
-, pkg-config
-, which
+{
+  lib,
+  stdenv,
+  fetchurl,
+  alsa-lib,
+  libjack2,
+  pkg-config,
+  which,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,12 +18,18 @@ stdenv.mkDerivation rec {
   };
 
   strictDeps = true;
-  nativeBuildInputs = [ pkg-config which ];
-  buildInputs =
-    [ libjack2 ]
-      ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform alsa-lib) [ alsa-lib ];
+  nativeBuildInputs = [
+    pkg-config
+    which
+  ];
+  buildInputs = [
+    libjack2
+  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform alsa-lib) [ alsa-lib ];
 
-  configureFlags = [ "--disable-mac-universal" "--enable-cxx" ];
+  configureFlags = [
+    "--disable-mac-universal"
+    "--enable-cxx"
+  ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=nullability-inferred-on-nested-type -Wno-error=nullability-completeness-on-arrays -Wno-error=implicit-const-int-float-conversion";
 
@@ -39,22 +46,25 @@ stdenv.mkDerivation rec {
   '';
 
   # not sure why, but all the headers seem to be installed by the make install
-  installPhase = ''
-    make install
-  '' + lib.optionalString (lib.meta.availableOn stdenv.hostPlatform alsa-lib) ''
-    # fixup .pc file to find alsa library
-    sed -i "s|-lasound|-L${alsa-lib.out}/lib -lasound|" "$out/lib/pkgconfig/"*.pc
-  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    cp include/pa_mac_core.h $out/include/pa_mac_core.h
-  '';
+  installPhase =
+    ''
+      make install
+    ''
+    + lib.optionalString (lib.meta.availableOn stdenv.hostPlatform alsa-lib) ''
+      # fixup .pc file to find alsa library
+      sed -i "s|-lasound|-L${alsa-lib.out}/lib -lasound|" "$out/lib/pkgconfig/"*.pc
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      cp include/pa_mac_core.h $out/include/pa_mac_core.h
+    '';
 
   meta = with lib; {
     description = "Portable cross-platform Audio API";
-    homepage    = "https://www.portaudio.com/";
+    homepage = "https://www.portaudio.com/";
     # Not exactly a bsd license, but alike
-    license     = licenses.mit;
+    license = licenses.mit;
     maintainers = with maintainers; [ lovek323 ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 
   passthru = {

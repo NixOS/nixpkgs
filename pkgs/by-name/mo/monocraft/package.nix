@@ -1,11 +1,17 @@
-{ stdenvNoCC, lib, fetchurl }:
+{
+  stdenvNoCC,
+  lib,
+  fetchurl,
+}:
 
 let
   version = "4.0";
-  relArtifact = name: hash: fetchurl {
-    inherit name hash;
-    url = "https://github.com/IdreesInc/Monocraft/releases/download/v${version}/${name}";
-  };
+  relArtifact =
+    name: hash:
+    fetchurl {
+      inherit name hash;
+      url = "https://github.com/IdreesInc/Monocraft/releases/download/v${version}/${name}";
+    };
 in
 stdenvNoCC.mkDerivation {
   pname = "monocraft";

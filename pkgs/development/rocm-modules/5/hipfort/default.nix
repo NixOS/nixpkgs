@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rocmUpdateScript
-, cmake
-, rocm-cmake
-, gfortran
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rocmUpdateScript,
+  cmake,
+  rocm-cmake,
+  gfortran,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -62,6 +63,8 @@ stdenv.mkDerivation (finalAttrs: {
     license = with licenses; [ mit ]; # mitx11
     maintainers = teams.rocm.members;
     platforms = platforms.linux;
-    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version || versionAtLeast finalAttrs.version "6.0.0";
+    broken =
+      versions.minor finalAttrs.version != versions.minor stdenv.cc.version
+      || versionAtLeast finalAttrs.version "6.0.0";
   };
 })

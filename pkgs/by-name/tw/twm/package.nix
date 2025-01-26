@@ -1,12 +1,13 @@
-{ lib
-, darwin
-, fetchFromGitHub
-, stdenv
-, rustPlatform
-, openssl
-, pkg-config
-, nix-update-script
-, installShellFiles
+{
+  lib,
+  darwin,
+  fetchFromGitHub,
+  stdenv,
+  rustPlatform,
+  openssl,
+  pkg-config,
+  nix-update-script,
+  installShellFiles,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -16,14 +17,19 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "vinnymeller";
     repo = "twm";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-SiwLqUq/gC8Tr31jjblLc9YP4yBi9HL38W83kgh7eJI=";
   };
 
   cargoHash = "sha256-BjQ7dDXHzX+O/V328TTwl9wGtpOq+NjOMRiZwb9O7ZU=";
 
-  nativeBuildInputs = [ pkg-config installShellFiles ];
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+  nativeBuildInputs = [
+    pkg-config
+    installShellFiles
+  ];
+  buildInputs = [
+    openssl
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd twm \
@@ -40,9 +46,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Customizable workspace manager for tmux";
     homepage = "https://github.com/vinnymeller/twm";
-    changelog = "https://github.com/vinnymeller/twm/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
+    changelog = "https://github.com/vinnymeller/twm/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers =  [ lib.maintainers.vinnymeller ];
+    maintainers = [ lib.maintainers.vinnymeller ];
     mainProgram = "twm";
   };
 }

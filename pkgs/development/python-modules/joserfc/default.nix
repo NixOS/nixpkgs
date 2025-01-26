@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "authlib";
     repo = "joserfc";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-mnJzhkdX0+5Y/XwGlHgxLP0me8Cs/Cl3p46KgTKw2ug=";
   };
 

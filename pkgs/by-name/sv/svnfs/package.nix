@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchurl, autoreconfHook, subversion, fuse, apr, perl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  subversion,
+  fuse,
+  apr,
+  perl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "svnfs";
@@ -10,7 +19,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ subversion fuse apr perl ];
+  buildInputs = [
+    subversion
+    fuse
+    apr
+    perl
+  ];
 
   # autoconf's AC_CHECK_HEADERS and AC_CHECK_LIBS fail to detect libfuse on
   # Darwin if FUSE_USE_VERSION isn't set at configure time.
@@ -23,7 +37,7 @@ stdenv.mkDerivation rec {
   configureFlags = lib.optionals stdenv.hostPlatform.isDarwin [ "CFLAGS=-DFUSE_USE_VERSION=25" ];
 
   # why is this required?
-  preConfigure=''
+  preConfigure = ''
     export LD_LIBRARY_PATH=${subversion.out}/lib
   '';
 
@@ -32,13 +46,13 @@ stdenv.mkDerivation rec {
   #   ld: svnclient.o:/build/svnfs-0.4/src/svnfs.h:40: multiple definition of
   #     `dirbuf'; svnfs.o:/build/svnfs-0.4/src/svnfs.h:40: first defined here
   env.NIX_CFLAGS_COMPILE = "-I ${subversion.dev}/include/subversion-1 -fcommon";
-  NIX_LDFLAGS="-lsvn_client-1 -lsvn_subr-1";
+  NIX_LDFLAGS = "-lsvn_client-1 -lsvn_subr-1";
 
   meta = {
     description = "FUSE filesystem for accessing Subversion repositories";
     homepage = "https://www.jmadden.eu/index.php/svnfs/";
     license = lib.licenses.gpl2Only;
-    maintainers = [lib.maintainers.marcweber];
+    maintainers = [ lib.maintainers.marcweber ];
     platforms = lib.platforms.unix;
     mainProgram = "svnfs";
   };

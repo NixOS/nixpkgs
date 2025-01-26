@@ -1,8 +1,9 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, nixosTests
-, gitUpdater
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  nixosTests,
+  gitUpdater,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -44,6 +45,9 @@ stdenvNoCC.mkDerivation rec {
     '';
     license = licenses.ofl;
     platforms = platforms.all;
-    maintainers = with maintainers; [ mathnerd314 emily ];
+    maintainers = with maintainers; [
+      mathnerd314
+      emily
+    ];
   };
 }

@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "controlplaneio";
     repo = "kubesec";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-4jVRd6XQekL4wMZ+Icoa2DEsTGzBISK2QPO+gu890kA=";
   };
 

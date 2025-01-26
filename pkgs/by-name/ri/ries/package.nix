@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchzip }:
+{
+  lib,
+  stdenv,
+  fetchzip,
+}:
 stdenv.mkDerivation rec {
   pname = "ries";
   version = "2018.04.11-1";
@@ -20,4 +24,3 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
   };
 }
-

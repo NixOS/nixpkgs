@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchgit, xorgproto, libX11, libXft, customConfig ? null, patches ? [ ] }:
+{
+  lib,
+  stdenv,
+  fetchgit,
+  xorgproto,
+  libX11,
+  libXft,
+  customConfig ? null,
+  patches ? [ ],
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tabbed";
@@ -16,7 +25,11 @@ stdenv.mkDerivation (finalAttrs: {
     cp ${builtins.toFile "config.h" customConfig} ./config.h
   '';
 
-  buildInputs = [ xorgproto libX11 libXft ];
+  buildInputs = [
+    xorgproto
+    libX11
+    libXft
+  ];
 
   makeFlags = [ "CC:=$(CC)" ];
 

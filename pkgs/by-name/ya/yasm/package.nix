@@ -1,4 +1,9 @@
-{lib, stdenv, fetchurl, buildPackages}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  buildPackages,
+}:
 
 stdenv.mkDerivation rec {
   pname = "yasm";

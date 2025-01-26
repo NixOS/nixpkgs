@@ -12,6 +12,7 @@
   absl-py,
   google-auth-oauthlib,
   setuptools,
+  standard-imghdr,
   tensorboard-data-server,
   tensorboard-plugin-wit,
   tensorboard-plugin-profile,
@@ -34,7 +35,6 @@ buildPythonPackage rec {
     hash = "sha256-EHykghdF9z4q76AsUP9wqbaU8595CxHm9oL30yZ0Xqs=";
   };
 
-
   pythonRelaxDeps = [
     "google-auth-oauthlib"
     "protobuf"
@@ -48,6 +48,7 @@ buildPythonPackage rec {
     numpy
     protobuf
     setuptools
+    standard-imghdr
     tensorboard-data-server
     tensorboard-plugin-profile
     tensorboard-plugin-wit

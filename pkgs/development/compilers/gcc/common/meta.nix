@@ -1,4 +1,4 @@
-{ lib, version, }:
+{ lib, version }:
 
 let
   inherit (lib)

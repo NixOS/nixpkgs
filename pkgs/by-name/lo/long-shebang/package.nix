@@ -1,6 +1,12 @@
-{ lib, stdenv, fetchurl }: let
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
+let
   version = "1.2.0";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "long-shebang";
   inherit version;
 

@@ -29,36 +29,50 @@ clangStdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    # FIXME: remove this when updating to next stable release
+    ./match-wrappers.patch
+
+    # FIXME: remove these when updating to next stable release
     (fetchpatch {
       name = "allow-regex-pattern-matching.patch";
       url = "https://gitlab.com/ananicy-cpp/ananicy-cpp/-/commit/6ea2dccceec39b6c4913f617dad81d859aa20f24.patch";
       hash = "sha256-C+7x/VpVwewXEPwibi7GxGfjuhDkhcjTyGbZHlYL2Bs=";
     })
-    ./match-wrappers.patch
-    # https://gitlab.com/ananicy-cpp/ananicy-cpp/-/merge_requests/27
-    ./reliable-mounts-file.patch
+    (fetchpatch {
+      name = "use-a-reliable-path-for-mounts-file.patch";
+      url = "https://gitlab.com/ananicy-cpp/ananicy-cpp/-/commit/de6f11978db98bfd13a1e87dcdab61dbe6496710.patch";
+      hash = "sha256-9bJlFCClddlAEknfqp7Gcij7NX6tqohE2wqoalLoN5I=";
+    })
+    # https://gitlab.com/ananicy-cpp/ananicy-cpp/-/merge_requests/30
+    (fetchpatch {
+      name = "fix-build-with-clang-19.patch";
+      url = "https://gitlab.com/ananicy-cpp/ananicy-cpp/-/commit/b2589a9b1faa2ecf54aeede40ea781c33bfb09a8.patch";
+      hash = "sha256-nfyCdhvnWj446z5aPFCXGi79Xgja8W0Eopl6I30fOBM=";
+    })
   ];
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-  ] ++ lib.optionals withBpf [
-    bpftools
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+      pkg-config
+    ]
+    ++ lib.optionals withBpf [
+      bpftools
+    ];
 
-  buildInputs = [
-    pcre2
-    spdlog
-    nlohmann_json
-    systemd
-    zlib
-  ] ++ lib.optionals withBpf [
-    libbpf
-    elfutils
-  ];
+  buildInputs =
+    [
+      pcre2
+      spdlog
+      nlohmann_json
+      systemd
+      zlib
+    ]
+    ++ lib.optionals withBpf [
+      libbpf
+      elfutils
+    ];
 
   # BPF A call to built-in function '__stack_chk_fail' is not supported.
   hardeningDisable = [

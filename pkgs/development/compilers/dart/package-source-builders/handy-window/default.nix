@@ -1,8 +1,9 @@
-{ stdenv
-, lib
-, writeScript
-, cairo
-, fribidi
+{
+  stdenv,
+  lib,
+  writeScript,
+  cairo,
+  fribidi,
 }:
 
 { version, src, ... }:

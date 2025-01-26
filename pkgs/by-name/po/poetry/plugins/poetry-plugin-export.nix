@@ -1,32 +1,39 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry,
+  poetry-core,
+  pytest-mock,
+  pytest-xdist,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "poetry-plugin-export";
-  version = "1.8.0";
+  version = "1.9.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "python-poetry";
     repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-ZXhj9FwCCNFMzyoAtQTD8bddOvVM4KzNtd+3sBn9i+w=";
+    tag = version;
+    hash = "sha256-AP3/njzbLEi2s4pOUSLLLzqNprvxwLe9LSY7qh08EWc=";
   };
 
-  postPatch = ''
-    sed -i '/poetry =/d' pyproject.toml
-  '';
-
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
-  # infinite recursion with poetry
-  doCheck = false;
-  pythonImportsCheck = [];
+  buildInputs = [
+    poetry
+  ];
+
+  nativeCheckInputs = [
+    pytest-mock
+    pytest-xdist
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     changelog = "https://github.com/python-poetry/poetry-plugin-export/blob/${src.rev}/CHANGELOG.md";

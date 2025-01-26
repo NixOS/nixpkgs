@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "deedy5";
     repo = "duckduckgo_search";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-NvFoiyoXeNOrynGN+VHVfIA3+D9zfAWFeWEVU8/TkZQ=";
   };
 

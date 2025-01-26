@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "weaviate-client";
-  version = "4.9.4";
+  version = "4.10.4";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -34,8 +34,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "weaviate";
     repo = "weaviate-python-client";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-lKb8oxWK8y73zPpPJVX25MYBa6C9n96ZkGxLm3Z9r9U=";
+    tag = "v${version}";
+    hash = "sha256-I5+xQkGoIFKEniwvK3l3WXB079IzPzwdKVt0JAXK3kU=";
   };
 
   pythonRelaxDeps = [
@@ -81,6 +81,7 @@ buildPythonPackage rec {
   disabledTests = [
     # Need network
     "test_bearer_token"
+    "test_auth_header_with_catchall_proxy"
     "test_token_refresh_timeout"
     "test_with_simple_auth_no_oidc_via_api_key"
     "test_client_with_extra_options"

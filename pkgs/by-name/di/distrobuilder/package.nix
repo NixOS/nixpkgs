@@ -1,34 +1,37 @@
-{ lib
-, buildGoModule
-, callPackage
-, cdrkit
-, coreutils
-, debootstrap
-, fetchFromGitHub
-, gnupg
-, gnutar
-, hivex
-, makeWrapper
-, nixosTests
-, pkg-config
-, squashfsTools
-, stdenv
-, wimlib
+{
+  lib,
+  buildGoModule,
+  callPackage,
+  cdrkit,
+  coreutils,
+  debootstrap,
+  fetchFromGitHub,
+  gnupg,
+  gnutar,
+  hivex,
+  makeWrapper,
+  nixosTests,
+  pkg-config,
+  squashfsTools,
+  stdenv,
+  wimlib,
 }:
 
 let
-  bins = [
-    coreutils
-    debootstrap
-    gnupg
-    gnutar
-    squashfsTools
-  ] ++ lib.optionals stdenv.hostPlatform.isx86_64 [
-    # repack-windows deps
-    cdrkit
-    hivex
-    wimlib
-  ];
+  bins =
+    [
+      coreutils
+      debootstrap
+      gnupg
+      gnutar
+      squashfsTools
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isx86_64 [
+      # repack-windows deps
+      cdrkit
+      hivex
+      wimlib
+    ];
 in
 buildGoModule rec {
   pname = "distrobuilder";
@@ -46,7 +49,6 @@ buildGoModule rec {
 
   buildInputs = bins;
 
-
   # tests require a local keyserver (mkg20001/nixpkgs branch distrobuilder-with-tests) but gpg is currently broken in tests
   doCheck = false;
 
@@ -61,8 +63,7 @@ buildGoModule rec {
 
   passthru = {
     tests = {
-      incus-legacy-init = nixosTests.incus.container-legacy-init;
-      incus-systemd-init = nixosTests.incus.container-systemd-init;
+      incus-lts = nixosTests.incus-lts.container;
     };
 
     generator = callPackage ./generator.nix { inherit src version; };

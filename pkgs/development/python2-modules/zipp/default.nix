@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools-scm
-, pytest
-, pytest-flake8
-, more-itertools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools-scm,
+  pytest,
+  pytest-flake8,
+  more-itertools,
 }:
 
 buildPythonPackage rec {
@@ -20,7 +21,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ more-itertools ];
 
-  nativeCheckInputs = [ pytest pytest-flake8 ];
+  nativeCheckInputs = [
+    pytest
+    pytest-flake8
+  ];
 
   checkPhase = ''
     pytest

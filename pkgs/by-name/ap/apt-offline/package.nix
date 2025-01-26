@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitHub
-, python3Packages
-, gnupg
-, installShellFiles
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  gnupg,
+  installShellFiles,
 }:
 
 let
@@ -41,14 +42,17 @@ python3Packages.buildPythonApplication {
 
   pythonImportsCheck = [ "apt_offline_core" ];
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   meta = {
     homepage = "https://github.com/rickysarraf/apt-offline";
     description = "Offline APT package manager";
     license = with lib.licenses; [ gpl3Plus ];
     mainProgram = "apt-offline";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
   };
 }
 # TODO: verify GUI and pkexec

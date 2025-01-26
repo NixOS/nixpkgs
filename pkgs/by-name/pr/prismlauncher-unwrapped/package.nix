@@ -4,7 +4,6 @@
   fetchFromGitHub,
   cmake,
   cmark,
-  apple-sdk_11,
   extra-cmake-modules,
   gamemode,
   ghc_filesystem,
@@ -35,13 +34,13 @@ assert lib.assertMsg (
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "prismlauncher-unwrapped";
-  version = "9.1";
+  version = "9.2";
 
   src = fetchFromGitHub {
     owner = "PrismLauncher";
     repo = "PrismLauncher";
-    rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-LVrWFBsI4+BOY5hlevfzqfRXQM6AFd5bMnXbBqTrxzA=";
+    tag = finalAttrs.version;
+    hash = "sha256-0KDhX8mfh11pyYQS/lB6qlUvRSOcYEbQKgsdQVA+Q3U=";
   };
 
   postUnpack = ''
@@ -57,18 +56,15 @@ stdenv.mkDerivation (finalAttrs: {
     stripJavaArchivesHook
   ];
 
-  buildInputs =
-    [
-      cmark
-      ghc_filesystem
-      kdePackages.qtbase
-      kdePackages.qtnetworkauth
-      kdePackages.quazip
-      tomlplusplus
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_11 ]
-    ++ lib.optional gamemodeSupport gamemode;
+  buildInputs = [
+    cmark
+    ghc_filesystem
+    kdePackages.qtbase
+    kdePackages.qtnetworkauth
+    kdePackages.quazip
+    tomlplusplus
+    zlib
+  ] ++ lib.optional gamemodeSupport gamemode;
 
   hardeningEnable = lib.optionals stdenv.hostPlatform.isLinux [ "pie" ];
 

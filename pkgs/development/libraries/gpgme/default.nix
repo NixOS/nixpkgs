@@ -10,12 +10,9 @@
   pth,
   libassuan,
   which,
-  ncurses,
   texinfo,
   buildPackages,
   qtbase ? null,
-  pythonSupport ? false,
-  swig ? null,
   # only for passthru.tests
   libsForQt5,
   qt6Packages,
@@ -24,7 +21,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gpgme";
-  version = "1.23.2";
+  version = "1.24.1";
   pyproject = true;
 
   outputs = [
@@ -37,12 +34,10 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnupg/gpgme/gpgme-${version}.tar.bz2";
-    hash = "sha256-lJnosfM8zLaBVSehvBYEnTWmGYpsX64BhfK9VhvOUiQ=";
+    hash = "sha256-6gXQJY5xBh1hcWWE7DTO9ZMwqRNAVx7cRreDdJc7qF8=";
   };
 
   patches = [
-    # Support Python 3.10-3.12, remove distutils, https://dev.gnupg.org/D545
-    ./python-310-312-remove-distutils.patch
     # Fix a test after disallowing compressed signatures in gpg (PR #180336)
     ./test_t-verify_double-plaintext.patch
     # Don't use deprecated LFS64 APIs (removed in musl 1.2.4)
@@ -50,31 +45,12 @@ stdenv.mkDerivation rec {
     ./LFS64.patch
   ];
 
-  postPatch = ''
-    # autoconf's beta detection requires a git repo to work
-    # and otherwise appends -unknown to the version number used in the python package which pip stumbles upon
-    substituteInPlace autogen.sh \
-      --replace-fail 'tmp="-unknown"' 'tmp=""'
-  '';
-
-  nativeBuildInputs =
-    [
-      autoreconfHook
-      gnupg
-      pkg-config
-      texinfo
-    ]
-    ++ lib.optionals pythonSupport [
-      python3.pythonOnBuildForHost
-      python3.pkgs.pip
-      python3.pkgs.setuptools
-      python3.pkgs.wheel
-      ncurses
-      swig
-      which
-    ];
-
-  buildInputs = lib.optionals pythonSupport [ python3 ];
+  nativeBuildInputs = [
+    autoreconfHook
+    gnupg
+    pkg-config
+    texinfo
+  ];
 
   propagatedBuildInputs = [
     glib
@@ -95,7 +71,6 @@ stdenv.mkDerivation rec {
       "--with-libgpg-error-prefix=${libgpg-error.dev}"
       "--with-libassuan-prefix=${libassuan.dev}"
     ]
-    ++ lib.optional pythonSupport "--enable-languages=python"
     # Tests will try to communicate with gpg-agent instance via a UNIX socket
     # which has a path length limit. Nix on darwin is using a build directory
     # that already has quite a long path and the resulting socket path doesn't

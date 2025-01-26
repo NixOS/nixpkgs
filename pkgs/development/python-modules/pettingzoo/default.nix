@@ -34,7 +34,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Farama-Foundation";
     repo = "PettingZoo";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-TVM4MrA4W6AIWEdBIecI85ahJAAc21f27OzCxSpOoZU=";
   };
 

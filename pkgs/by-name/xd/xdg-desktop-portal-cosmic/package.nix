@@ -1,36 +1,46 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, gst_all_1
-, mesa
-, pkg-config
-, libglvnd
-, libxkbcommon
-, pipewire
-, wayland
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  gst_all_1,
+  libgbm,
+  pkg-config,
+  libglvnd,
+  libxkbcommon,
+  pipewire,
+  wayland,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "xdg-desktop-portal-cosmic";
-  version = "1.0.0-alpha.3";
+  version = "1.0.0-alpha.5.1";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "xdg-desktop-portal-cosmic";
     rev = "epoch-${version}";
-    hash = "sha256-IlMcgzhli61QWjdovj5BpOxOebV3RytBeHPhxzWNXqg=";
+    hash = "sha256-wff805IIXrXC/kn5l4HrYenxNRTGDYHPmT7qTTtBi/c=";
   };
 
-  env.VERGEN_GIT_COMMIT_DATE = "2024-10-10";
+  env.VERGEN_GIT_COMMIT_DATE = "2025-01-14";
   env.VERGEN_GIT_SHA = src.rev;
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-z1vySlaAFW0stxzJ4n5jzyDFDDiN07l9lUT5jLyJnco=";
+  cargoHash = "sha256-Dwlow5nUl7qHLfu4Acic2CRCJViylpPLyLBVtBgWd9A=";
 
   separateDebugInfo = true;
 
-  nativeBuildInputs = [ rustPlatform.bindgenHook pkg-config ];
-  buildInputs = [ libglvnd libxkbcommon mesa pipewire wayland ];
+  nativeBuildInputs = [
+    rustPlatform.bindgenHook
+    pkg-config
+  ];
+  buildInputs = [
+    libglvnd
+    libxkbcommon
+    libgbm
+    pipewire
+    wayland
+  ];
   checkInputs = [ gst_all_1.gstreamer ];
 
   # Force linking to libEGL, which is always dlopen()ed, and to

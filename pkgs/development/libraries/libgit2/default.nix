@@ -7,7 +7,7 @@
 , zlib
 , libssh2
 , openssl
-, pcre
+, pcre2
 , libiconv
 , Security
 , staticBuild ? stdenv.hostPlatform.isStatic
@@ -35,6 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   cmakeFlags = [
+    "-DREGEX_BACKEND=pcre2"
     "-DUSE_HTTP_PARSER=system"
     "-DUSE_SSH=ON"
     (lib.cmakeBool "USE_GSSAPI" withGssapi)
@@ -47,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake python3 pkg-config ];
 
-  buildInputs = [ zlib libssh2 openssl pcre llhttp ]
+  buildInputs = [ zlib libssh2 openssl pcre2 llhttp ]
     ++ lib.optional withGssapi krb5
     ++ lib.optional stdenv.hostPlatform.isDarwin Security;
 

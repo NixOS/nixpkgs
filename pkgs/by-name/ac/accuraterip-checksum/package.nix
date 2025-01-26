@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, libsndfile }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libsndfile,
+}:
 
 stdenv.mkDerivation rec {
   pname = "accuraterip-checksum";

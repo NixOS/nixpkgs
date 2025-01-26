@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "briis";
     repo = "pyweatherflowudp";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-aTwGFYTtd07BsWFaFc7ns+8oh2AxTUfRFSu81Zv5OoA=";
   };
 

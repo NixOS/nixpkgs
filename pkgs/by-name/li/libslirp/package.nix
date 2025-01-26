@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, glib
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  pkg-config,
+  glib,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +22,11 @@ stdenv.mkDerivation rec {
 
   separateDebugInfo = true;
 
-  nativeBuildInputs = [ meson ninja pkg-config ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+  ];
 
   buildInputs = [ glib ];
 

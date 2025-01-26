@@ -44,6 +44,8 @@
   ocl-icd,
   opencl-headers,
 
+  with_vulkan ? false,
+
   with_tinydream ? false, # do not compile with cublas
   ncnn,
 
@@ -65,6 +67,7 @@ let
         with_openblas
         with_cublas
         with_clblas
+        with_vulkan
       ]) <= 1;
     if with_openblas then
       "openblas"
@@ -138,6 +141,7 @@ let
         openclSupport = false;
         blasSupport = false;
         rpcSupport = true;
+        vulkanSupport = false;
       };
 
   llama-cpp-grpc =
@@ -147,8 +151,8 @@ let
         src = fetchFromGitHub {
           owner = "ggerganov";
           repo = "llama.cpp";
-          rev = "45f097645efb11b6d09a5b4adbbfd7c312ac0126";
-          hash = "sha256-kZlH+Xpt38Ymc9TW7qRVyN7ISwed4ycA0M0808+UcXM=";
+          rev = "ba8a1f9c5b675459c55a83e3f97f10df3a66c788";
+          hash = "sha256-YunQh1760AcknBFwHc6uMZJ7V4OzEAKiwB9HBH1n4bc=";
           fetchSubmodules = true;
         };
         postPatch =
@@ -185,6 +189,7 @@ let
         rocmSupport = false;
         openclSupport = with_clblas;
         blasSupport = with_openblas;
+        vulkanSupport = with_vulkan;
       };
 
   espeak-ng' = espeak-ng.overrideAttrs (self: {
@@ -246,7 +251,7 @@ let
     src = fetchFromGitHub {
       owner = "mudler";
       repo = "go-piper";
-      rev = "9d0100873a7dbb0824dfea40e8cec70a1b110759";
+      rev = "e10ca041a885d4a8f3871d52924b47792d5e5aa0";
       hash = "sha256-Yv9LQkWwGpYdOS0FvtP0vZ0tRyBAx27sdmziBR4U4n8=";
       fetchSubmodules = true;
     };
@@ -275,32 +280,14 @@ let
     '';
   };
 
-  go-rwkv = stdenv.mkDerivation {
-    name = "go-rwkv";
-    src = fetchFromGitHub {
-      owner = "donomii";
-      repo = "go-rwkv.cpp";
-      rev = "661e7ae26d442f5cfebd2a0881b44e8c55949ec6";
-      hash = "sha256-byTNZQSnt7qpBMng3ANJmpISh3GJiz+F15UqfXaz6nQ=";
-      fetchSubmodules = true;
-    };
-    buildFlags = [ "librwkv.a" ];
-    dontUseCmakeConfigure = true;
-    nativeBuildInputs = [ cmake ];
-    installPhase = ''
-      cp -r --no-preserve=mode $src $out
-      cp *.a $out
-    '';
-  };
-
   # try to merge with openai-whisper-cpp in future
   whisper-cpp = effectiveStdenv.mkDerivation {
     name = "whisper-cpp";
     src = fetchFromGitHub {
       owner = "ggerganov";
       repo = "whisper.cpp";
-      rev = "a5abfe6a90495f7bf19fe70d016ecc255e97359c";
-      hash = "sha256-XSPO1Wtqlq1krwAH98jMIGWa1Npmnjd5oCJ0lc3D3H4=";
+      rev = "6266a9f9e56a5b925e9892acf650f3eb1245814d";
+      hash = "sha256-y30ZccpF3SCdRGa+P3ddF1tT1KnvlI4Fexx81wZxfTk=";
     };
 
     nativeBuildInputs = [
@@ -335,25 +322,6 @@ let
     ];
     postInstall = ''
       install -Dt $out/bin bin/*
-    '';
-  };
-
-  go-bert = stdenv.mkDerivation {
-    name = "go-bert";
-    src = fetchFromGitHub {
-      owner = "go-skynet";
-      repo = "go-bert.cpp";
-      rev = "710044b124545415f555e4260d16b146c725a6e4";
-      hash = "sha256-UNrs3unYjvSzCVaVISFFBDD+s37lmN6/7ajmGNcYgrU=";
-      fetchSubmodules = true;
-    };
-    buildFlags = [ "libgobert.a" ];
-    dontUseCmakeConfigure = true;
-    nativeBuildInputs = [ cmake ];
-    env.NIX_CFLAGS_COMPILE = "-Wformat";
-    installPhase = ''
-      cp -r --no-preserve=mode $src $out
-      cp *.a $out
     '';
   };
 
@@ -417,6 +385,45 @@ let
     meta.broken = lib.versionOlder go-tiny-dream.stdenv.cc.version "13";
   };
 
+  bark = stdenv.mkDerivation {
+    name = "bark";
+    src = fetchFromGitHub {
+      owner = "PABannier";
+      repo = "bark.cpp";
+      rev = "v1.0.0";
+      hash = "sha256-wOcggRWe8lsUzEj/wqOAUlJVypgNFmit5ISs9fbwoCE=";
+      fetchSubmodules = true;
+    };
+    installPhase = ''
+      mkdir -p $out/build
+      cp -ra $src/* $out
+      find . \( -name '*.a' -or -name '*.c.o' \) -print0 \
+        | tar cf - --null --files-from - \
+        | tar xf - -C $out/build
+    '';
+    nativeBuildInputs = [ cmake ];
+  };
+
+  stable-diffusion = stdenv.mkDerivation {
+    name = "stable-diffusion";
+    src = fetchFromGitHub {
+      owner = "leejet";
+      repo = "stable-diffusion.cpp";
+      rev = "dcf91f9e0f2cbf9da472ee2a556751ed4bab2d2a";
+      hash = "sha256-NHIjLZNfx9G6olp0VWBthuf7jIQC/qVRw6q9A6H866E=";
+      fetchSubmodules = true;
+    };
+    installPhase = ''
+      mkdir -p $out/build
+      cp -ra $src/* $out
+      find . \( -name '*.a' -or -name '*.c.o' \) -print0 \
+        | tar cf - --null --files-from - \
+        | tar xf - -C $out/build
+    '';
+    nativeBuildInputs = [ cmake ];
+    buildInputs = [ opencv ];
+  };
+
   GO_TAGS =
     lib.optional with_tinydream "tinydream"
     ++ lib.optional with_tts "tts"
@@ -431,12 +438,12 @@ let
       stdenv;
 
   pname = "local-ai";
-  version = "2.22.1";
+  version = "2.25.0";
   src = fetchFromGitHub {
     owner = "go-skynet";
     repo = "LocalAI";
     rev = "v${version}";
-    hash = "sha256-vIjjGs3IIxnWlLsybQNWJHbWNnoInVh+otJ7vNODcik=";
+    hash = "sha256-y0Pj74A2t5DpfI/tCEnV/w2zHLDZzXLJtgFLgng4MFw=";
   };
 
   prepare-sources =
@@ -447,30 +454,32 @@ let
       mkdir sources
       ${cp} ${go-llama} sources/go-llama.cpp
       ${cp} ${if with_tts then go-piper else go-piper.src} sources/go-piper
-      ${cp} ${go-rwkv} sources/go-rwkv.cpp
       ${cp} ${whisper-cpp.src} sources/whisper.cpp
       cp ${whisper-cpp}/lib/lib*.a sources/whisper.cpp
-      ${cp} ${go-bert} sources/go-bert.cpp
       ${cp} ${
         if with_stablediffusion then go-stable-diffusion else go-stable-diffusion.src
       } sources/go-stable-diffusion
       ${cp} ${if with_tinydream then go-tiny-dream else go-tiny-dream.src} sources/go-tiny-dream
+      ${cp} ${bark} sources/bark.cpp
+      ${cp} ${stable-diffusion} sources/stablediffusion-ggml.cpp
     '';
 
   self = buildGo123Module.override { stdenv = effectiveStdenv; } {
     inherit pname version src;
 
-    vendorHash = "sha256-tb2nVUCUdaOWHpJz4zMqgfJ4PYUqGwV/0lj76n36sUg=";
+    vendorHash = "sha256-5xWrPsQwmGIA2k8OFR9OH3BeCUvLETygViWEOIRgjB0=";
 
     env.NIX_CFLAGS_COMPILE = lib.optionalString with_stablediffusion " -isystem ${opencv}/include/opencv4";
 
     postPatch =
       ''
+        # TODO: add silero-vad
         sed -i Makefile \
           -e '/mod download/ d' \
           -e '/^ALL_GRPC_BACKENDS+=backend-assets\/grpc\/llama-cpp-fallback/ d' \
           -e '/^ALL_GRPC_BACKENDS+=backend-assets\/grpc\/llama-cpp-avx/ d' \
           -e '/^ALL_GRPC_BACKENDS+=backend-assets\/grpc\/llama-cpp-cuda/ d' \
+          -e '/^ALL_GRPC_BACKENDS+=backend-assets\/grpc\/silero-vad/ d' \
 
       ''
       + lib.optionalString with_cublas ''
@@ -492,7 +501,8 @@ let
         cp ${llama-cpp-rpc}/bin/llama-rpc-server backend-assets/util/llama-cpp-rpc-server
 
         # avoid rebuild of prebuilt make targets
-        touch backend-assets/grpc/* backend-assets/util/* sources/**/lib*.a
+        touch backend-assets/grpc/* backend-assets/util/*
+        find sources -name "lib*.a" -exec touch {} +
       '';
 
     buildInputs =
@@ -511,14 +521,17 @@ let
       ++ lib.optionals with_stablediffusion go-stable-diffusion.buildInputs
       ++ lib.optionals with_tts go-piper.buildInputs;
 
-    nativeBuildInputs = [
-      protobuf
-      protoc-gen-go
-      protoc-gen-go-grpc
-      makeWrapper
-      ncurses # tput
-      which
-    ] ++ lib.optional enable_upx upx ++ lib.optionals with_cublas [ cuda_nvcc ];
+    nativeBuildInputs =
+      [
+        protobuf
+        protoc-gen-go
+        protoc-gen-go-grpc
+        makeWrapper
+        ncurses # tput
+        which
+      ]
+      ++ lib.optional enable_upx upx
+      ++ lib.optionals with_cublas [ cuda_nvcc ];
 
     enableParallelBuilding = false;
 
@@ -599,8 +612,6 @@ let
     passthru.local-packages = {
       inherit
         go-tiny-dream
-        go-rwkv
-        go-bert
         go-llama
         go-piper
         llama-cpp-grpc
@@ -610,6 +621,9 @@ let
         piper-phonemize
         piper-tts'
         llama-cpp-rpc
+        go-stable-diffusion
+        bark
+        stable-diffusion
         ;
     };
 
@@ -617,6 +631,7 @@ let
       inherit
         with_cublas
         with_openblas
+        with_vulkan
         with_tts
         with_stablediffusion
         with_tinydream
@@ -629,6 +644,7 @@ let
 
     meta = with lib; {
       description = "OpenAI alternative to run local LLMs, image and audio generation";
+      mainProgram = "local-ai";
       homepage = "https://localai.io";
       license = licenses.mit;
       maintainers = with maintainers; [

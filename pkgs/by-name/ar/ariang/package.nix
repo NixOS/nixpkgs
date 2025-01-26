@@ -1,21 +1,22 @@
-{ lib
-, fetchFromGitHub
-, buildNpmPackage
-, nix-update-script
+{
+  lib,
+  fetchFromGitHub,
+  buildNpmPackage,
+  nix-update-script,
 }:
 
 buildNpmPackage rec {
   pname = "ariang";
-  version = "1.3.7";
+  version = "1.3.9";
 
   src = fetchFromGitHub {
     owner = "mayswind";
     repo = "AriaNg";
     rev = version;
-    hash = "sha256-p9EwlmI/xO3dX5ZpbDVVxajQySGYcJj5G57F84zYAD0=";
+    hash = "sha256-c3+iyw8LgdB29552jJQr4q5P2ZW80jC0aN+eaenEYFo=";
   };
 
-  npmDepsHash = "sha256-xX8hD303CWlpsYoCfwHWgOuEFSp1A+M1S53H+4pyAUQ=";
+  npmDepsHash = "sha256-N7ZK6wthBYAt8tU8sJE0QChAYxWfJ1HG5P+AjXZfIiw=";
 
   makeCacheWritable = true;
 
@@ -28,7 +29,7 @@ buildNpmPackage rec {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script {};
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Modern web frontend making aria2 easier to use";

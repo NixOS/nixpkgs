@@ -1,25 +1,33 @@
-{ lib, stdenv
-, fetchurl
-, gettext
-, gobject-introspection
-, gtk-doc
-, docbook_xsl
-, docbook_xml_dtd_43
-, pkg-config
-, meson
-, ninja
-, vala
-, glib
-, zlib
-, gnome
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gettext,
+  gobject-introspection,
+  gtk-doc,
+  docbook_xsl,
+  docbook_xml_dtd_43,
+  pkg-config,
+  meson,
+  ninja,
+  vala,
+  glib,
+  zlib,
+  gnome,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gcab";
   version = "1.6";
 
-  outputs = [ "bin" "out" "dev" "devdoc" "installedTests" ];
+  outputs = [
+    "bin"
+    "out"
+    "dev"
+    "devdoc"
+    "installedTests"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gcab/${lib.versions.majorMinor version}/gcab-${version}.tar.xz";

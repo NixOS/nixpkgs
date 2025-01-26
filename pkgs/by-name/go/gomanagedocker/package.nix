@@ -1,13 +1,17 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
-  stdenv,
-  darwin,
+  versionCheckHook,
+  nix-update-script,
   xorg,
+  pkg-config,
+  gpgme,
+  btrfs-progs,
 }:
 let
-  version = "1.4";
+  version = "1.5";
 in
 buildGoModule {
   pname = "gomanagedocker";
@@ -16,20 +20,39 @@ buildGoModule {
   src = fetchFromGitHub {
     owner = "ajayd-san";
     repo = "gomanagedocker";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-oM0DCOHdVPJFWgmHF8yeGGo6XvuTCXar7NebM1obahg=";
+    tag = "v${version}";
+    hash = "sha256-y2lepnhaLsjokd587D0bCEd9cmG7GuNBbbx+0sKSCGA=";
   };
 
-  vendorHash = "sha256-M/jfQWCBrv7hZm450yLBmcjWtNSCziKOpfipxI6U9ak=";
+  vendorHash = "sha256-hUlv3i+ri9W8Pf1zVtFxB/QSdPJu1cWCjMbquCxoSno=";
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Cocoa ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ xorg.libX11 ];
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    gpgme
+    btrfs-progs
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ xorg.libX11 ];
 
   ldflags = [
     "-s"
     "-w"
   ];
+
+  # Mocking of docker and podman containers fails
+  doCheck = false;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "TUI tool to manage your docker images, containers and volumes";

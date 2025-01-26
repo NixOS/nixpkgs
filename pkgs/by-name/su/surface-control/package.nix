@@ -1,4 +1,12 @@
-{ lib, rustPlatform, fetchFromGitHub, pkg-config, installShellFiles, udev, coreutils }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  installShellFiles,
+  udev,
+  coreutils,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "surface-control";
@@ -18,7 +26,10 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  nativeBuildInputs = [ pkg-config installShellFiles ];
+  nativeBuildInputs = [
+    pkg-config
+    installShellFiles
+  ];
   buildInputs = [ udev ];
 
   postInstall = ''
@@ -33,8 +44,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description =
-      "Control various aspects of Microsoft Surface devices on Linux from the Command-Line";
+    description = "Control various aspects of Microsoft Surface devices on Linux from the Command-Line";
     homepage = "https://github.com/linux-surface/surface-control";
     license = licenses.mit;
     maintainers = [ ];

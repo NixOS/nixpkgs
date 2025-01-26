@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "altair-viz";
     repo = "altair";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-7C51ACaBuNtOSXqLpuCI5bnLyE9U64vNXlD4/msPq2k=";
   };
 

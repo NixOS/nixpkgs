@@ -1,0 +1,24 @@
+diff -urB mcpelauncher-ui/mcpelauncher-ui-qt/ext/glfw.cmake mcpelauncher-ui-b/mcpelauncher-ui-qt/ext/glfw.cmake
+--- mcpelauncher-ui/mcpelauncher-ui-qt/ext/glfw.cmake	2024-11-28 21:12:36.794926431 -0700
++++ mcpelauncher-ui-b/mcpelauncher-ui-qt/ext/glfw.cmake	2024-12-03 15:04:28.466197081 -0700
+@@ -1,19 +1,2 @@
+-include(FetchContent)
+-
+-set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
+-set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+-set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+-set(GLFW_INSTALL OFF CACHE BOOL "" FORCE)
+-set(GLFW_BUILD_WAYLAND OFF CACHE BOOL "" FORCE)
+-
+-FetchContent_Declare(
+-        glfw3_ext
+-        URL "https://github.com/glfw/glfw/archive/master.zip"
+-)
+-
+-FetchContent_GetProperties(glfw3_ext)
+-if(NOT glfw3_ext_POPULATED)
+-  FetchContent_Populate(glfw3_ext)
+-  add_subdirectory(${glfw3_ext_SOURCE_DIR} ${glfw3_ext_BINARY_DIR})
+-endif()
++find_package(glfw3 REQUIRED)
+ add_library(glfw3 ALIAS glfw)

@@ -1,7 +1,14 @@
-{ lib, fetchFromSourcehut, rustPlatform, nix-update-script }:
+{
+  lib,
+  fetchFromSourcehut,
+  rustPlatform,
+  nix-update-script,
+}:
 
-let version = "0.5.1";
-in rustPlatform.buildRustPackage {
+let
+  version = "0.5.3";
+in
+rustPlatform.buildRustPackage {
   pname = "sd-switch";
   inherit version;
 
@@ -9,10 +16,10 @@ in rustPlatform.buildRustPackage {
     owner = "~rycee";
     repo = "sd-switch";
     rev = version;
-    hash = "sha256-Kns49Qv3oWNmbLoLTKIcWIewDz4cR7uyMA3IHnhKyxA=";
+    hash = "sha256-9aIu37mmf4ZnmZZrU0GA6z+bHKwtfkA5KnLRLY0c2r8=";
   };
 
-  cargoHash = "sha256-r20dJMF+0q3XLm2hn9/LTv43ApmhjJNgeiMCLfwBnOk=";
+  cargoHash = "sha256-3XolxgnTIySucopogAzgf13IUCguJE6W17q506tUF6U=";
 
   passthru = {
     updateScript = nix-update-script { };

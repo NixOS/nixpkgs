@@ -16,15 +16,15 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-E5dMZ0uJ1AOwiGTxD4qhbO72blplmXHh1gTYGE34H+0=";
   };
 
-  nativeBuildInputs = [cmake];
+  nativeBuildInputs = [ cmake ];
 
-  buildInputs = [boost];
+  buildInputs = [ boost ];
 
   meta = with lib; {
     description = "MQTT client/server for C++14 based on Boost.Asio";
     homepage = "https://github.com/redboltz/mqtt_cpp";
     license = licenses.boost;
-    maintainers = with maintainers; [spalf];
+    maintainers = with maintainers; [ spalf ];
     platforms = platforms.unix;
   };
 })

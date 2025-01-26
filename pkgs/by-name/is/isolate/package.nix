@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, asciidoc
-, libcap
-, pkg-config
-, systemdLibs
-, installShellFiles
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  asciidoc,
+  libcap,
+  pkg-config,
+  systemdLibs,
+  installShellFiles,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {

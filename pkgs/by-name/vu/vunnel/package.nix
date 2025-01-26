@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "vunnel";
-  version = "0.28.0";
+  version = "0.29.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anchore";
     repo = "vunnel";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-KemiM+dCLSU3a6IIbI9VKtaIeY4SVcHsuE9QwZtzNxU=";
+    tag = "v${version}";
+    hash = "sha256-oHK855EQglFZrjW30n/z0vgf/NtaXVOcntEWQMcAbDw=";
   };
 
   pythonRelaxDeps = [

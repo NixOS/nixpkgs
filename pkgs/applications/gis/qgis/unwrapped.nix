@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , makeWrapper
 , mkDerivation
-, substituteAll
+, replaceVars
 , wrapGAppsHook3
 , wrapQtAppsHook
 
@@ -30,7 +30,7 @@
 , postgresql
 , proj
 , protobuf
-, python311
+, python3
 , qca-qt5
 , qscintilla
 , qt3d
@@ -49,7 +49,7 @@
 }:
 
 let
-  py = python311.override {
+  py = python3.override {
     self = py;
     packageOverrides = self: super: {
       pyqt5 = super.pyqt5.override {
@@ -80,14 +80,14 @@ let
     urllib3
   ];
 in mkDerivation rec {
-  version = "3.38.3";
+  version = "3.40.3";
   pname = "qgis-unwrapped";
 
   src = fetchFromGitHub {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-yJFYq4t0LzBr+O2bmtBSeehQ2vfUaZIQfOY68WZcHG4=";
+    hash = "sha256-AUDohf71NIuEjFrzRQ8QsdvmEjYsZK9aI4j0msVJgcQ=";
   };
 
   passthru = {
@@ -141,8 +141,7 @@ in mkDerivation rec {
     ++ pythonBuildInputs;
 
   patches = [
-    (substituteAll {
-      src = ./set-pyqt-package-dirs.patch;
+    (replaceVars ./set-pyqt-package-dirs.patch {
       pyQt5PackageDir = "${py.pkgs.pyqt5}/${py.pkgs.python.sitePackages}";
       qsciPackageDir = "${py.pkgs.qscintilla-qt5}/${py.pkgs.python.sitePackages}";
     })

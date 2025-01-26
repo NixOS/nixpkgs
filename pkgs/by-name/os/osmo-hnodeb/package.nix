@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, libosmocore
-, lksctp-tools
-, libasn1c
-, libosmoabis
-, libosmo-netif
-, libosmo-sccp
-, osmo-iuh
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  libosmocore,
+  lksctp-tools,
+  libasn1c,
+  libosmoabis,
+  libosmo-netif,
+  libosmo-sigtran,
+  osmo-iuh,
 }:
 
 let
@@ -31,7 +32,6 @@ stdenv.mkDerivation rec {
     echo "${version}" > .tarball-version
   '';
 
-
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     libasn1c
     libosmoabis
     libosmo-netif
-    libosmo-sccp
+    libosmo-sigtran
     osmo-iuh
   ];
 

@@ -1,26 +1,47 @@
-{ lib, stdenv, buildPackages, fetchurl, gettext, pkg-config
-, icu, libuuid, readline, inih, liburcu
-, nixosTests
+{
+  lib,
+  stdenv,
+  buildPackages,
+  fetchurl,
+  gettext,
+  pkg-config,
+  icu,
+  libuuid,
+  readline,
+  inih,
+  liburcu,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
   pname = "xfsprogs";
-  version = "6.11.0";
+  version = "6.12.0";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/fs/xfs/xfsprogs/${pname}-${version}.tar.xz";
-    hash = "sha256-2uO7QyGW97GDsua9XcRL8z7b19DoW9N9JcI134G4EAo=";
+    hash = "sha256-CDJAckfbeRzHDe+W5+JUvW7fBD3ISoCmLzzNbj3/0yk=";
   };
 
-  outputs = [ "bin" "dev" "out" "doc" ];
+  outputs = [
+    "bin"
+    "dev"
+    "out"
+    "doc"
+  ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [
-    gettext pkg-config
+    gettext
+    pkg-config
     libuuid # codegen tool uses libuuid
     liburcu # required by crc32selftest
   ];
-  buildInputs = [ readline icu inih liburcu ];
+  buildInputs = [
+    readline
+    icu
+    inih
+    liburcu
+  ];
   propagatedBuildInputs = [ libuuid ]; # Dev headers include <uuid/uuid.h>
 
   enableParallelBuilding = true;
@@ -59,8 +80,15 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://xfs.wiki.kernel.org";
     description = "SGI XFS utilities";
-    license = with licenses; [ gpl2Only lgpl21 gpl3Plus ];  # see https://git.kernel.org/pub/scm/fs/xfs/xfsprogs-dev.git/tree/debian/copyright
+    license = with licenses; [
+      gpl2Only
+      lgpl21
+      gpl3Plus
+    ]; # see https://git.kernel.org/pub/scm/fs/xfs/xfsprogs-dev.git/tree/debian/copyright
     platforms = platforms.linux;
-    maintainers = with maintainers; [ dezgeg ajs124 ];
+    maintainers = with maintainers; [
+      dezgeg
+      ajs124
+    ];
   };
 }

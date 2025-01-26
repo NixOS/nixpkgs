@@ -21,7 +21,7 @@ buildPythonPackage rec {
     # 0.9.4 only release on github
     owner = "microsoft";
     repo = "picologging";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-t75D7aNKAifzeCPwtyKp8LoiXtbbXspRFYnsI0gx+V4=";
   };
 
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     hypothesis
   ];
 
-  pythonImportCheck = [ "picologging" ];
+  pythonImportsCheck = [ "picologging" ];
 
   meta = {
     homepage = "https://github.com/microsoft/picologging";

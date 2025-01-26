@@ -21,7 +21,7 @@
   watchfiles,
 
   # optional-dependencies
-  # adag
+  # cgraph
   cupy,
   # client
   grpcio,
@@ -41,6 +41,7 @@
   smart-open,
   virtualenv,
   # observability
+  memray,
   opentelemetry-api,
   opentelemetry-sdk,
   opentelemetry-exporter-otlp,
@@ -48,7 +49,7 @@
   dm-tree,
   gymnasium,
   lz4,
-  scikit-image,
+  # ormsgpack,
   scipy,
   typer,
   rich,
@@ -64,7 +65,7 @@
 
 let
   pname = "ray";
-  version = "2.39.0";
+  version = "2.41.0";
 in
 buildPythonPackage rec {
   inherit pname version;
@@ -75,18 +76,20 @@ buildPythonPackage rec {
   src =
     let
       pyShortVersion = "cp${builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion}";
-      binary-hash = (import ./binary-hashes.nix)."${pyShortVersion}" or { };
+      binary-hashes = {
+        cp310 = "sha256-OTLW2zqJgsUZbbCM9W4u0L9QuFaFCM/khr6N5jui2V0=";
+        cp311 = "sha256-//XpzFpTgV07WGomHjS9D+8cMkss3tTJuOeQ4ePcOZc=";
+        cp312 = "sha256-PXassHD6i9Tr2wEazfoiu4m9vps1+3iuxZgdt26sK2A=";
+      };
     in
-    fetchPypi (
-      {
-        inherit pname version format;
-        dist = pyShortVersion;
-        python = pyShortVersion;
-        abi = pyShortVersion;
-        platform = "manylinux2014_x86_64";
-      }
-      // binary-hash
-    );
+    fetchPypi {
+      inherit pname version format;
+      dist = pyShortVersion;
+      python = pyShortVersion;
+      abi = pyShortVersion;
+      platform = "manylinux2014_x86_64";
+      hash = binary-hashes.${pyShortVersion} or { };
+    };
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -107,11 +110,12 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = rec {
-    adag = [
-      cupy
-    ];
+    adag = cgraph;
     air = lib.unique (data ++ serve ++ tune ++ train);
     all = lib.flatten (builtins.attrValues optional-dependencies);
+    cgraph = [
+      cupy
+    ];
     client = [ grpcio ];
     data = [
       fsspec
@@ -133,6 +137,7 @@ buildPythonPackage rec {
       virtualenv
     ];
     observability = [
+      memray
       opentelemetry-api
       opentelemetry-sdk
       opentelemetry-exporter-otlp
@@ -141,8 +146,8 @@ buildPythonPackage rec {
       dm-tree
       gymnasium
       lz4
+      # ormsgpack
       pyyaml
-      scikit-image
       scipy
       typer
       rich

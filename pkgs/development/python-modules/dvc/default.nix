@@ -57,7 +57,7 @@
 
 buildPythonPackage rec {
   pname = "dvc";
-  version = "3.57.0";
+  version = "3.59.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -65,8 +65,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "iterative";
     repo = "dvc";
-    rev = "refs/tags/${version}";
-    hash = "sha256-2d/soNyOkeNdv4aXrvtfDFCdedT74kkWUlrp0k5skEM=";
+    tag = version;
+    hash = "sha256-kjaYn0DJAKETtVDcBs43OTif0TwKsAaKs4jnLODNQz8=";
   };
 
   pythonRelaxDeps = [
@@ -82,7 +82,6 @@ buildPythonPackage rec {
   '';
 
   build-system = [ setuptools-scm ];
-
 
   dependencies =
     [

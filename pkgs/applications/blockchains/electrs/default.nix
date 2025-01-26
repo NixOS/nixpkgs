@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, rocksdb_7_10
-, Security
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  rocksdb_7_10,
+  Security,
 }:
 
 let
@@ -11,16 +12,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "electrs";
-  version = "0.10.6";
+  version = "0.10.8";
 
   src = fetchFromGitHub {
     owner = "romanz";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-yp9fKD7zH9Ne2+WQUupaxvUx39RWE8RdY4U6lHuDGSc=";
+    hash = "sha256-L26jzAn8vwnw9kFd6ciyYS/OLEFTbN8doNKy3P8qKRE=";
   };
 
-  cargoHash = "sha256-J+6aek1PcW7G6f4h6cQcx5CyliryZeSxkSIQUX3yz6s=";
+  cargoHash = "sha256-/0XS4xF5gzEBWXS39f0FsIK1dFwmGT4McaExR/srB5Y=";
 
   # needed for librocksdb-sys
   nativeBuildInputs = [ rustPlatform.bindgenHook ];

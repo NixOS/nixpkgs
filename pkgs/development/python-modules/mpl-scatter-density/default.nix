@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "astrofrog";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-MMxM+iv5p9ZLcBpqa3tBBPbsMM/PTg6BXaDpGgSw+DE=";
   };
 

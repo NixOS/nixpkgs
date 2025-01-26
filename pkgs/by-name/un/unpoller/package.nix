@@ -1,24 +1,26 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, nixosTests
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
 }:
 
 buildGoModule rec {
   pname = "unpoller";
-  version = "2.11.2";
+  version = "2.14.0";
 
   src = fetchFromGitHub {
     owner = "unpoller";
     repo = "unpoller";
     rev = "v${version}";
-    hash = "sha256-/X2hCtF38X0twHsHSjpf23Mdz9aK43z3jhWbfkUo0kQ=";
+    hash = "sha256-2yDrnBi5ZaFfgpqZS1PZM3Fp3zqb5oMuMbsoAeZan8o=";
   };
 
-  vendorHash = "sha256-d7kkdiGMT3bN1dfNo8m+zp3VY8kaZM2BWO3B3iAdUQY=";
+  vendorHash = "sha256-ZylkCictJNJ/QrWEbBIXDEKElpZRw2Yrj/IHMx0lqg0=";
 
   ldflags = [
-    "-w" "-s"
+    "-w"
+    "-s"
     "-X github.com/prometheus/common/version.Branch=master"
     "-X github.com/prometheus/common/version.BuildDate=unknown"
     "-X github.com/prometheus/common/version.Revision=${src.rev}"

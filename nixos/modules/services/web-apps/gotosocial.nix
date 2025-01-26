@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.gotosocial;
   settingsFormat = pkgs.formats.yaml { };
@@ -98,17 +103,20 @@ in
       }
     ];
 
-    services.gotosocial.settings = (lib.mapAttrs (name: lib.mkDefault) (
-      defaultSettings // {
-        web-asset-base-dir = "${cfg.package}/share/gotosocial/web/assets/";
-        web-template-base-dir = "${cfg.package}/share/gotosocial/web/template/";
-      }
-    )) // (lib.optionalAttrs cfg.setupPostgresqlDB {
-      db-type = "postgres";
-      db-address = "/run/postgresql";
-      db-database = "gotosocial";
-      db-user = "gotosocial";
-    });
+    services.gotosocial.settings =
+      (lib.mapAttrs (name: lib.mkDefault) (
+        defaultSettings
+        // {
+          web-asset-base-dir = "${cfg.package}/share/gotosocial/web/assets/";
+          web-template-base-dir = "${cfg.package}/share/gotosocial/web/template/";
+        }
+      ))
+      // (lib.optionalAttrs cfg.setupPostgresqlDB {
+        db-type = "postgres";
+        db-address = "/run/postgresql";
+        db-database = "gotosocial";
+        db-user = "gotosocial";
+      });
 
     environment.systemPackages = [ gotosocial-admin ];
 
@@ -136,8 +144,7 @@ in
     systemd.services.gotosocial = {
       description = "ActivityPub social network server";
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ]
-        ++ lib.optional cfg.setupPostgresqlDB "postgresql.service";
+      after = [ "network.target" ] ++ lib.optional cfg.setupPostgresqlDB "postgresql.service";
       requires = lib.optional cfg.setupPostgresqlDB "postgresql.service";
       restartTriggers = [ configFile ];
 

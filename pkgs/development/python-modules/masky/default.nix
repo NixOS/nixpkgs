@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Z4kSec";
     repo = "Masky";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-npRuszHkxwjJ+B+q8eQywXPd0OX0zS+AfCro4TM83Uc=";
   };
 

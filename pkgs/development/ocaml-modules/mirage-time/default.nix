@@ -1,4 +1,9 @@
-{ lib, buildDunePackage, fetchurl, lwt }:
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  lwt,
+}:
 
 buildDunePackage rec {
   minimalOCamlVersion = "4.08";

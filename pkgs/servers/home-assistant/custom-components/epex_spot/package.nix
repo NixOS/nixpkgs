@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, buildHomeAssistantComponent
-, beautifulsoup4
+{
+  lib,
+  fetchFromGitHub,
+  buildHomeAssistantComponent,
+  beautifulsoup4,
 }:
 
 buildHomeAssistantComponent rec {
@@ -12,11 +13,11 @@ buildHomeAssistantComponent rec {
   src = fetchFromGitHub {
     owner = "mampfes";
     repo = "ha_epex_spot";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-PY3udPgvsaXdDRh4+NQmVlqhERswcMpaJTq5azaUFf4=";
   };
 
-  propagatedBuildInputs = [
+  dependencies = [
     beautifulsoup4
   ];
 

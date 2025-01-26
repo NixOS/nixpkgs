@@ -20,6 +20,6 @@ buildGoModule rec {
     description = "Controls golang package import order and makes it always deterministic";
     homepage = "https://github.com/daixiang0/gci";
     license = licenses.bsd3;
-    maintainers = with maintainers; [krostar];
+    maintainers = with maintainers; [ krostar ];
   };
 }

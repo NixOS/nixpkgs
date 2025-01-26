@@ -3,6 +3,7 @@
   fetchFromGitHub,
   buildPythonPackage,
   selenium-manager,
+  setuptools,
   certifi,
   pytestCheckHook,
   pythonOlder,
@@ -19,8 +20,8 @@
 
 buildPythonPackage rec {
   pname = "selenium";
-  version = "4.25.0";
-  format = "setuptools";
+  version = "4.27.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -28,8 +29,8 @@ buildPythonPackage rec {
     owner = "SeleniumHQ";
     repo = "selenium";
     # check if there is a newer tag with or without -python suffix
-    rev = "refs/tags/selenium-${version}";
-    hash = "sha256-ykZdL2Rn+bU8do3e9zf9pJtInBNRGLcXi5pD1vm7OJY=";
+    tag = "selenium-${version}-python";
+    hash = "sha256-XpTfZCERA2SmLOj6dcERVJ47K0gFhdXMTl9VCeE6eD8=";
   };
 
   patches = [ ./dont-build-the-selenium-manager.patch ];
@@ -58,7 +59,9 @@ buildPythonPackage rec {
       ln -s ${lib.getExe selenium-manager} $DST_PREFIX/common/linux/
     '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     certifi
     trio
     trio-websocket

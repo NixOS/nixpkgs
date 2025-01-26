@@ -53,7 +53,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Fake file system that mocks the Python file system modules";
-    homepage = "http://pyfakefs.org/";
+    homepage = "https://pyfakefs.org/";
     changelog = "https://github.com/jmcgeheeiv/pyfakefs/blob/v${version}/CHANGES.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ gebner ];

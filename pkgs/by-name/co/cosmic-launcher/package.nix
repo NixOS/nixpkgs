@@ -1,33 +1,44 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, just
-, pkg-config
-, makeBinaryWrapper
-, libxkbcommon
-, wayland
-, appstream-glib
-, desktop-file-utils
-, intltool
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  just,
+  pkg-config,
+  makeBinaryWrapper,
+  libxkbcommon,
+  wayland,
+  appstream-glib,
+  desktop-file-utils,
+  intltool,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cosmic-launcher";
-  version = "1.0.0-alpha.1";
+  version = "1.0.0-alpha.5.1";
 
   src = fetchFromGitHub {
     owner = "pop-os";
-    repo = pname;
+    repo = "cosmic-launcher";
     rev = "epoch-${version}";
-    hash = "sha256-LzTVtXyNgaVKyARmrmb6YUi4dWa20EwM1SYMlnawtzk=";
+    hash = "sha256-0htDjdS8431orzNnetK0ubNvjO/5748YYqeESJKTUUs=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-bHJUsXHnPH6aV2vTQv1Cdx+p4/Pplg6HMguw5BK9qJ8=";
+  cargoHash = "sha256-WW1o9MFxNd41ODS5p4piLQtpy277E5a/oN2yYdJc8y4=";
 
-  nativeBuildInputs = [ just pkg-config makeBinaryWrapper ];
-  buildInputs = [ libxkbcommon wayland appstream-glib desktop-file-utils intltool ];
+  nativeBuildInputs = [
+    just
+    pkg-config
+    makeBinaryWrapper
+  ];
+  buildInputs = [
+    libxkbcommon
+    wayland
+    appstream-glib
+    desktop-file-utils
+    intltool
+  ];
 
   dontUseJustBuild = true;
 
@@ -41,12 +52,12 @@ rustPlatform.buildRustPackage rec {
   ];
 
   postPatch = ''
-    substituteInPlace justfile --replace '#!/usr/bin/env' "#!$(command -v env)"
+    substituteInPlace justfile --replace-fail '#!/usr/bin/env' "#!$(command -v env)"
   '';
 
   postInstall = ''
     wrapProgram $out/bin/cosmic-launcher \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [wayland]}"
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ wayland ]}"
   '';
 
   RUSTFLAGS = "--cfg tokio_unstable";

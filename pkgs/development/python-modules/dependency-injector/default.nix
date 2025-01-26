@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ets-labs";
     repo = "python-dependency-injector";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-ryPNmiIKQzR4WSjt7hi4C+iTsYvfj5TYGy+9PJxX+10=";
   };
 

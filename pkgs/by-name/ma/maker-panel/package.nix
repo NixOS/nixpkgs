@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, go-md2man
-, installShellFiles
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  go-md2man,
+  installShellFiles,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,7 +21,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoPatches = [ ./update-gerber-types-to-0.3.patch ];
 
-  nativeBuildInputs = [ go-md2man installShellFiles ];
+  nativeBuildInputs = [
+    go-md2man
+    installShellFiles
+  ];
 
   postBuild = ''
     go-md2man --in docs/spec-reference.md --out maker-panel.5

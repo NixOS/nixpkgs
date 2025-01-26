@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchMavenArtifact }:
+{
+  lib,
+  stdenv,
+  fetchMavenArtifact,
+}:
 
 stdenv.mkDerivation rec {
   pname = "postgresql-jdbc";

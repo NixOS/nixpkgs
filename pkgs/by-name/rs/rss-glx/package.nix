@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchurl
-, autoconf
-, pkg-config
-, libX11
-, libXext
-, libGLU
-, libGL
-, imagemagick6
-, libtiff
-, bzip2
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoconf,
+  pkg-config,
+  libX11,
+  libXext,
+  libGLU,
+  libGL,
+  imagemagick6,
+  libtiff,
+  bzip2,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,8 +22,19 @@ stdenv.mkDerivation rec {
     sha256 = "1aikafjqrfmv23jnrrm5d56dg6injh4l67zjdxzdapv9chw7g3cg";
   };
 
-  nativeBuildInputs = [ autoconf pkg-config ];
-  buildInputs = [ libGLU libGL libX11 libXext imagemagick6 libtiff bzip2 ];
+  nativeBuildInputs = [
+    autoconf
+    pkg-config
+  ];
+  buildInputs = [
+    libGLU
+    libGL
+    libX11
+    libXext
+    imagemagick6
+    libtiff
+    bzip2
+  ];
 
   patches = [
     ./cstddef.patch

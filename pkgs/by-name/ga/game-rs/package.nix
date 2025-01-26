@@ -1,7 +1,8 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, steam-run
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  steam-run,
 }:
 
 rustPlatform.buildRustPackage rec {

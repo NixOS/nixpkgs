@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "amazon-ecs-cli";
@@ -15,16 +19,16 @@ stdenv.mkDerivation rec {
         url = "https://s3.amazonaws.com/amazon-ecs-cli/ecs-cli-darwin-amd64-v${version}";
         sha256 = "1viala49sifpcmgn3jw24h5bkrlm4ffadjiqagbxj3lr0r78i9nm";
       }
-    else throw "Architecture not supported";
+    else
+      throw "Architecture not supported";
 
   dontUnpack = true;
 
-  installPhase =
-    ''
-      mkdir -p $out/bin
-      cp $src $out/bin/ecs-cli
-      chmod +x $out/bin/ecs-cli
-    '';  # */
+  installPhase = ''
+    mkdir -p $out/bin
+    cp $src $out/bin/ecs-cli
+    chmod +x $out/bin/ecs-cli
+  ''; # */
 
   meta = with lib; {
     homepage = "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ECS_CLI.html";
@@ -33,7 +37,10 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.asl20;
     maintainers = with maintainers; [ Scriptkiddi ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+    ];
     mainProgram = "ecs-cli";
   };
 }

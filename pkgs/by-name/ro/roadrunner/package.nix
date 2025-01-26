@@ -1,18 +1,19 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
 }:
 
 buildGoModule rec {
   pname = "roadrunner";
-  version = "2024.1.2";
+  version = "2024.3.2";
 
   src = fetchFromGitHub {
     repo = "roadrunner";
     owner = "roadrunner-server";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-qaG7krLu6D08izPwRwqzSpnGVQjTgNwoSky3jmSwOdM=";
+    tag = "v${version}";
+    hash = "sha256-KkwJ/977PHp8mKMJYDohRCi4PY9Q/LsRvsIBMyElZKc=";
   };
 
   nativeBuildInputs = [
@@ -45,7 +46,7 @@ buildGoModule rec {
       --replace "127.0.0.1:0" "127.0.0.1:55554"
   '';
 
-  vendorHash = "sha256-vwOvp8hckamdN0qKnvaL2pm30nCMelQ8+LjqcPZR/ZQ=";
+  vendorHash = "sha256-vvO67zi3Zod7Kf/yEXlk9aSRpLPzf+kWmNnDFaGdCzA=";
 
   meta = {
     changelog = "https://github.com/roadrunner-server/roadrunner/blob/v${version}/CHANGELOG.md";

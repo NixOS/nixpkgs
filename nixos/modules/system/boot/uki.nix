@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
 
@@ -67,24 +72,26 @@ in
 
   config = {
 
-    boot.uki.name = lib.mkOptionDefault (if config.system.image.id != null then
-      config.system.image.id
-    else
-      "nixos");
+    boot.uki.name = lib.mkOptionDefault (
+      if config.system.image.id != null then config.system.image.id else "nixos"
+    );
 
     boot.uki.settings = {
-      UKI = {
-        Linux = lib.mkOptionDefault "${config.boot.kernelPackages.kernel}/${config.system.boot.loader.kernelFile}";
-        Initrd = lib.mkOptionDefault "${config.system.build.initialRamdisk}/${config.system.boot.loader.initrdFile}";
-        Cmdline = lib.mkOptionDefault "init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}";
-        Stub = lib.mkOptionDefault "${pkgs.systemd}/lib/systemd/boot/efi/linux${efiArch}.efi.stub";
-        Uname = lib.mkOptionDefault "${config.boot.kernelPackages.kernel.modDirVersion}";
-        OSRelease = lib.mkOptionDefault "@${config.system.build.etc}/etc/os-release";
-        # This is needed for cross compiling.
-        EFIArch = lib.mkOptionDefault efiArch;
-      } // lib.optionalAttrs (config.hardware.deviceTree.enable && config.hardware.deviceTree.name != null) {
-        DeviceTree = lib.mkOptionDefault "${config.hardware.deviceTree.package}/${config.hardware.deviceTree.name}";
-      };
+      UKI =
+        {
+          Linux = lib.mkOptionDefault "${config.boot.kernelPackages.kernel}/${config.system.boot.loader.kernelFile}";
+          Initrd = lib.mkOptionDefault "${config.system.build.initialRamdisk}/${config.system.boot.loader.initrdFile}";
+          Cmdline = lib.mkOptionDefault "init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}";
+          Stub = lib.mkOptionDefault "${pkgs.systemd}/lib/systemd/boot/efi/linux${efiArch}.efi.stub";
+          Uname = lib.mkOptionDefault "${config.boot.kernelPackages.kernel.modDirVersion}";
+          OSRelease = lib.mkOptionDefault "@${config.system.build.etc}/etc/os-release";
+          # This is needed for cross compiling.
+          EFIArch = lib.mkOptionDefault efiArch;
+        }
+        // lib.optionalAttrs (config.hardware.deviceTree.enable && config.hardware.deviceTree.name != null)
+          {
+            DeviceTree = lib.mkOptionDefault "${config.hardware.deviceTree.package}/${config.hardware.deviceTree.name}";
+          };
     };
 
     boot.uki.configFile = lib.mkOptionDefault (format.generate "ukify.conf" cfg.settings);

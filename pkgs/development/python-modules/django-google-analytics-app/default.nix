@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "praekeltfoundation";
     repo = "django-google-analytics";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-0KLfGZY8qq5JGb+LJXpQRS76+qXtrf/hv6QLenm+BhQ=";
   };
 

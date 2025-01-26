@@ -1,4 +1,8 @@
-{ fetchurl, lib, stdenv }:
+{
+  fetchurl,
+  lib,
+  stdenv,
+}:
 
 stdenv.mkDerivation rec {
   pname = "qprint";

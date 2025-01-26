@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, kernel }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+}:
 
 stdenv.mkDerivation rec {
   pname = "acpi-call";
@@ -16,7 +21,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  makeFlags = kernel.makeFlags ++ [
+  makeFlags = kernel.moduleMakeFlags ++ [
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
 
@@ -26,7 +31,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    maintainers = with maintainers; [ raskin mic92 ];
+    maintainers = with maintainers; [
+      raskin
+      mic92
+    ];
     homepage = "https://github.com/nix-community/acpi_call";
     platforms = platforms.linux;
     description = "Module allowing arbitrary ACPI calls; use case: hybrid video";

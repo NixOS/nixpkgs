@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, pkg-config
-, libuv
-, libX11
-, libXi
-, libyaml
-, luajit
-, udev
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  pkg-config,
+  libuv,
+  libX11,
+  libXi,
+  libyaml,
+  luajit,
+  udev,
 }:
 
 stdenv.mkDerivation rec {

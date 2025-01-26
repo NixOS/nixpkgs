@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mcaulifn";
     repo = "solcast";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-x91QVCDPjfC8rCVam/mrc8HP84ONa2/mJtSV64hrilc=";
   };
 
@@ -33,7 +33,6 @@ buildPythonPackage rec {
     poetry-core
     poetry-dynamic-versioning
   ];
-
 
   dependencies = [
     anyconfig

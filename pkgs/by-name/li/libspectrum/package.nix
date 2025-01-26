@@ -1,4 +1,15 @@
-{ lib, stdenv, fetchurl, perl, pkg-config, audiofile, bzip2, glib, libgcrypt, zlib }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+  pkg-config,
+  audiofile,
+  bzip2,
+  glib,
+  libgcrypt,
+  zlib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libspectrum";
@@ -9,9 +20,18 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-o1PLRumxooEGHYFjU+oBDQpv545qF6oLe3QnHKXkrPw=";
   };
 
-  nativeBuildInputs = [ perl pkg-config ];
+  nativeBuildInputs = [
+    perl
+    pkg-config
+  ];
 
-  buildInputs = [ audiofile bzip2 glib libgcrypt zlib ];
+  buildInputs = [
+    audiofile
+    bzip2
+    glib
+    libgcrypt
+    zlib
+  ];
 
   enableParallelBuilding = true;
   doCheck = true;

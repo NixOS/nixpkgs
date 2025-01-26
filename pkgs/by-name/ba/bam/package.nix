@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, lua5_3, python3 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  lua5_3,
+  python3,
+}:
 
 stdenv.mkDerivation rec {
   pname = "bam";
@@ -11,7 +17,10 @@ stdenv.mkDerivation rec {
     sha256 = "13br735ig7lygvzyfd15fc2rdygrqm503j6xj5xkrl1r7w2wipq6";
   };
 
-  nativeBuildInputs = [ lua5_3 python3 ];
+  nativeBuildInputs = [
+    lua5_3
+    python3
+  ];
 
   buildPhase = "${stdenv.shell} make_unix.sh";
 
@@ -29,8 +38,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Yet another build manager";
     mainProgram = "bam";
-    maintainers = with maintainers;
-    [
+    maintainers = with maintainers; [
       raskin
     ];
     platforms = platforms.linux;

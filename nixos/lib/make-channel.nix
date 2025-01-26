@@ -1,8 +1,14 @@
-/* Build a channel tarball. These contain, in addition to the nixpkgs
- * expressions themselves, files that indicate the version of nixpkgs
- * that they represent.
- */
-{ pkgs, nixpkgs, version, versionSuffix }:
+/*
+  Build a channel tarball. These contain, in addition to the nixpkgs
+  expressions themselves, files that indicate the version of nixpkgs
+  that they represent.
+*/
+{
+  pkgs,
+  nixpkgs,
+  version,
+  versionSuffix,
+}:
 
 pkgs.releaseTools.makeSourceTarball {
   name = "nixos-channel";

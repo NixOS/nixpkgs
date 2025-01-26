@@ -1,25 +1,26 @@
-{ lib
-, stdenv
-, fetchurl
-, cmake
-, pkg-config
-, util-linux
-, libGL
-, freetype
-, pugixml
-, SDL2
-, SDL2_image
-, openal
-, libogg
-, libvorbis
-, libGLU
-, enet
-, synfigstudio
-, inkscape
-, imagemagick
-, pngquant
-, xz
-, bc
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  pkg-config,
+  util-linux,
+  libGL,
+  freetype,
+  pugixml,
+  SDL2,
+  SDL2_image,
+  openal,
+  libogg,
+  libvorbis,
+  libGLU,
+  enet,
+  synfigstudio,
+  inkscape,
+  imagemagick,
+  pngquant,
+  xz,
+  bc,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -75,7 +76,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://hikounomizu.org/";
     downloadPage = "https://hikounomizu.org/download.html";
     maintainers = with maintainers; [ fgaz ];
-    license = [ licenses.gpl3Plus licenses.lal13 ];
+    license = [
+      licenses.gpl3Plus
+      licenses.lal13
+    ];
     platforms = platforms.all;
   };
 })

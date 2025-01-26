@@ -30,7 +30,7 @@ stdenv.mkDerivation (final: {
   src = fetchFromGitHub {
     owner = "DSSAT";
     repo = "dssat-csm-os";
-    rev = "refs/tags/v${final.version}";
+    tag = "v${final.version}";
     hash = "sha256-8OaTM7IXFZjlelx5O4O+bVNQj4dIhGzIk2iCfpqI8uA=";
   };
 

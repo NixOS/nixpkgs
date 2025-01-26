@@ -24,12 +24,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  propagatedBuildInputs =
-    [
-      manifestoo-core
-      textual
-      typer
-    ];
+  propagatedBuildInputs = [
+    manifestoo-core
+    textual
+    typer
+  ];
 
   passthru.updateScript = nix-update-script { };
 

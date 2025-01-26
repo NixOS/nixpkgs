@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "carltongibson";
     repo = "django-filter";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-4q/x9FO9ErKnGeJDEXDMcvUKA4nlA7nkwwM2xj3WGWs=";
   };
 

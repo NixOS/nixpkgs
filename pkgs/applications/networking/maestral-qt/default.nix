@@ -19,7 +19,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "SamSchott";
     repo = "maestral-qt";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-VkJOKKYnoXux3WjD1JwINGWwv1SMIXfidyV2ITE7dJc=";
   };
 

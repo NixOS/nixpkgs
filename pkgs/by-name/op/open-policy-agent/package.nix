@@ -1,13 +1,16 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
 
-, enableWasmEval ? false
+  enableWasmEval ? false,
 }:
 
-assert enableWasmEval && stdenv.hostPlatform.isDarwin -> builtins.throw "building with wasm on darwin is failing in nixpkgs";
+assert
+  enableWasmEval && stdenv.hostPlatform.isDarwin
+  -> builtins.throw "building with wasm on darwin is failing in nixpkgs";
 
 buildGoModule rec {
   pname = "open-policy-agent";
@@ -26,31 +29,38 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  ldflags = [ "-s" "-w" "-X github.com/open-policy-agent/opa/version.Version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/open-policy-agent/opa/version.Version=${version}"
+  ];
 
   tags = lib.optional enableWasmEval (
-    builtins.trace
-      ("Warning: enableWasmEval breaks reproducability, "
-        + "ensure you need wasm evaluation. "
-        + "`opa build` does not need this feature.")
-      "opa_wasm");
+    builtins.trace (
+      "Warning: enableWasmEval breaks reproducability, "
+      + "ensure you need wasm evaluation. "
+      + "`opa build` does not need this feature."
+    ) "opa_wasm"
+  );
 
   checkFlags = lib.optionals (!enableWasmEval) [
     "-skip=TestRegoTargetWasmAndTargetPluginDisablesIndexingTopdownStages"
   ];
 
-  preCheck = ''
-    # Feed in all but the e2e tests for testing
-    # This is because subPackages above limits what is built to just what we
-    # want but also limits the tests
-    # Also avoid wasm tests on darwin due to wasmtime-go build issues
-    getGoDirs() {
-      go list ./... | grep -v -e e2e ${lib.optionalString stdenv.hostPlatform.isDarwin "-e wasm"}
-    }
-  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    # remove tests that have "too many open files"/"no space left on device" issues on darwin in hydra
-    rm server/server_test.go
-  '';
+  preCheck =
+    ''
+      # Feed in all but the e2e tests for testing
+      # This is because subPackages above limits what is built to just what we
+      # want but also limits the tests
+      # Also avoid wasm tests on darwin due to wasmtime-go build issues
+      getGoDirs() {
+        go list ./... | grep -v -e e2e ${lib.optionalString stdenv.hostPlatform.isDarwin "-e wasm"}
+      }
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      # remove tests that have "too many open files"/"no space left on device" issues on darwin in hydra
+      rm server/server_test.go
+    '';
 
   postInstall = ''
     installShellCompletion --cmd opa \
@@ -86,6 +96,9 @@ buildGoModule rec {
       in microservices, Kubernetes, CI/CD pipelines, API gateways, and more.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ lewo jk ];
+    maintainers = with maintainers; [
+      lewo
+      jk
+    ];
   };
 }

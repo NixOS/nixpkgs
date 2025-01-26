@@ -6,6 +6,7 @@
   pkg-config,
   autoreconfHook,
   wrapGAppsHook3,
+  kdePackages,
   libgpg-error,
   libassuan,
   libsForQt5,
@@ -49,6 +50,7 @@ let
       buildInputs = [
         qt6.qtbase
         qt6.qtwayland
+        kdePackages.kguiaddons
       ];
       nativeBuildInputs = [ qt6.wrapQtAppsHook ];
     };

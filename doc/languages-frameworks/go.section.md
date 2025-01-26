@@ -176,31 +176,6 @@ Following example could be used to only build the example-cli and example-server
 
 Specified as a string or list of strings. Causes the builder to skip building child packages that match any of the provided values.
 
-### `CGO_ENABLED` {#var-go-CGO_ENABLED}
-
-When set to `0`, the [cgo](https://pkg.go.dev/cmd/cgo) command is disabled. As consequence, the build
-program can't link against C libraries anymore, and the resulting binary is statically linked.
-
-When building with CGO enabled, Go will likely link some packages from the Go standard library against C libraries,
-even when the target code does not explicitly call into C dependencies. With `CGO_ENABLED = 0;`, Go
-will always use the Go native implementation of these internal packages. For reference see
-[net](https://pkg.go.dev/net#hdr-Name_Resolution) and [os/user](https://pkg.go.dev/os/user#pkg-overview) packages.
-Notice that the decision whether these packages should use native Go implementation or not can also be controlled
-on a per package level using build tags (`tags`). In case CGO is disabled, these tags have no additional effect.
-
-When a Go program depends on C libraries, place those dependencies in `buildInputs`:
-
-```nix
-{
-  buildInputs = [
-    libvirt
-    libxml2
-  ];
-}
-```
-
-`CGO_ENABLED` defaults to `1`.
-
 ### `enableParallelBuilding` {#var-go-enableParallelBuilding}
 
 Whether builds and tests should run in parallel.
@@ -247,7 +222,34 @@ Alternatively, the primary derivation provides an overridable `passthru.override
 
 ## Controlling the Go environment {#ssec-go-environment}
 
-The Go build can be further tweaked by setting environment variables. In most cases, this isn't needed. Possible values can be found in the [Go documentation of accepted environment variables](https://pkg.go.dev/cmd/go#hdr-Environment_variables). Notice that some of these flags are set by the builder itself and should not be set explicitly. If in doubt, grep the implementation of the builder.
+The Go build can be further tweaked by setting environment variables via the `env` attribute. In most cases, this isn't needed. Possible values can be found in the [Go documentation of accepted environment variables](https://pkg.go.dev/cmd/go#hdr-Environment_variables). Notice that some of these flags are set by the build helper itself and should not be set explicitly. If in doubt, grep the implementation of the build helper.
+
+`buildGoModule` officially supports the following environment variables:
+
+### `env.CGO_ENABLED` {#var-go-CGO_ENABLED}
+
+When set to `0`, the [cgo](https://pkg.go.dev/cmd/cgo) command is disabled. As consequence, the build
+program can't link against C libraries anymore, and the resulting binary is statically linked.
+
+When building with CGO enabled, Go will likely link some packages from the Go standard library against C libraries,
+even when the target code does not explicitly call into C dependencies. With `env.CGO_ENABLED = 0;`, Go
+will always use the Go native implementation of these internal packages. For reference see
+[net](https://pkg.go.dev/net#hdr-Name_Resolution) and [os/user](https://pkg.go.dev/os/user#pkg-overview) packages.
+Notice that the decision whether these packages should use native Go implementation or not can also be controlled
+on a per package level using build tags (`tags`). In case CGO is disabled, these tags have no additional effect.
+
+When a Go program depends on C libraries, place those dependencies in `buildInputs`:
+
+```nix
+{
+  buildInputs = [
+    libvirt
+    libxml2
+  ];
+}
+```
+
+`env.CGO_ENABLED` defaults to `1`.
 
 ## Skipping tests {#ssec-skip-go-tests}
 

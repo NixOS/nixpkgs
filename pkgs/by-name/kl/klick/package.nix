@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, scons
-, rubberband
-, boost
-, libjack2
-, liblo
-, libsamplerate
-, libsndfile
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  scons,
+  rubberband,
+  boost,
+  libjack2,
+  liblo,
+  libsamplerate,
+  libsndfile,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,10 +25,22 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
-    rubberband
     scons
   ];
-  buildInputs = [ libsamplerate libsndfile liblo libjack2 boost ];
+  buildInputs = [
+    rubberband
+    libsamplerate
+    libsndfile
+    liblo
+    libjack2
+    boost
+  ];
+
+  preBuild = ''
+    substituteInPlace SConstruct \
+      --replace-fail 'pkg-config' "${stdenv.cc.targetPrefix}pkg-config"
+  '';
+
   prefixKey = "PREFIX=";
 
   meta = {

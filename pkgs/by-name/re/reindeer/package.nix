@@ -1,34 +1,28 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, openssl
-, stdenv
-, libiconv
-, darwin
-, nix-update-script
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "reindeer";
-  version = "2024.10.28.00";
+  version = "2025.01.20.00";
 
   src = fetchFromGitHub {
     owner = "facebookincubator";
     repo = "reindeer";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-1wbw92dZT5SVXgfWMgXd3asHhilVzH4lvqW60hTznVc=";
+    tag = "v${version}";
+    hash = "sha256-dmx9FPgyVz5s32peKTg4xA72JD7X2R9ks8HSna3msmA=";
   };
 
-  cargoHash = "sha256-OjA0OKotAdRLGRkl8n3Gn2+Z8JVcGjQYHtOszWnnFdM=";
+  cargoHash = "sha256-cZ4Xs2EdajbGLE5c+KzUGH94dJvHpHRDyCISFm/B7qc=";
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs =
-    [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.CoreServices
-    ];
+
+  buildInputs = [ openssl ];
 
   passthru.updateScript = nix-update-script { };
 
@@ -40,4 +34,3 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ nickgerace ];
   };
 }
-

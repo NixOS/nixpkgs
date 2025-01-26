@@ -1,4 +1,8 @@
-{ stdenvNoCC, lib, fetchzip }:
+{
+  stdenvNoCC,
+  lib,
+  fetchzip,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "eduli";
@@ -6,8 +10,7 @@ stdenvNoCC.mkDerivation rec {
 
   src = fetchzip {
     name = "${pname}-${version}";
-    url =
-      "http://language.moe.gov.tw/001/Upload/Files/site_content/M0001/MoeLI-3.0.zip";
+    url = "http://language.moe.gov.tw/001/Upload/Files/site_content/M0001/MoeLI-3.0.zip";
     sha256 = "0b4kjdk0h0hx446swi0wzawia0mf16qh9b6v4h4nqg8qx0p2sd3c";
   };
 
@@ -19,8 +22,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = {
-    description =
-      "The MOE Li Font, a clerical Chinese font by the Ministry of Education, ROC (Taiwan)";
+    description = "The MOE Li Font, a clerical Chinese font by the Ministry of Education, ROC (Taiwan)";
     longDescription = ''
       The MOE Li Font is a li (clerical srcipt) font
       provided by
@@ -28,8 +30,7 @@ stdenvNoCC.mkDerivation rec {
       It currently includes 4,808 Chinese characters.
       The clerical script (lishu) is an archaic style of Chinese calligraphy.
     '';
-    homepage =
-      "http://language.moe.gov.tw/result.aspx?classify_sn=23&subclassify_sn=436&content_sn=49";
+    homepage = "http://language.moe.gov.tw/result.aspx?classify_sn=23&subclassify_sn=436&content_sn=49";
     license = lib.licenses.cc-by-nd-30;
     maintainers = with lib.maintainers; [ ShamrockLee ];
   };

@@ -1,10 +1,11 @@
-{ stdenvNoCC
-, lib
-, fetchurl
-, fetchzip
-, appimageTools
-, makeWrapper
-, electron
+{
+  stdenvNoCC,
+  lib,
+  fetchurl,
+  fetchzip,
+  appimageTools,
+  makeWrapper,
+  electron,
 }:
 (stdenvNoCC.mkDerivation {
   pname = "revolt-desktop";
@@ -60,7 +61,7 @@
         postFixup = ''
           makeWrapper ${electron}/bin/electron $out/bin/revolt-desktop \
             --add-flags $out/share/revolt-desktop/resources/app.asar \
-            --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations}}"
+            --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
         '';
       }
     else

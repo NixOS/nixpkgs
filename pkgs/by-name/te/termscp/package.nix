@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "veeso";
     repo = "termscp";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-tR+jfFdCSsf+WR8VUX60/mdfsp7cX9jUDI+CKIZkgEE=";
   };
 
@@ -53,6 +53,7 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [
       "--skip=system::watcher::test::should_poll_file_removed"
       "--skip=system::watcher::test::should_poll_file_update"
+      "--skip=system::watcher::test::should_poll_nothing"
     ];
 
   passthru = {

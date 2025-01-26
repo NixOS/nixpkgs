@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, unzip, fetchpatch }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  fetchpatch,
+}:
 
 stdenv.mkDerivation rec {
   pname = "chntpw";
@@ -51,6 +57,11 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       url = "https://sources.debian.org/data/main/c/chntpw/140201-1/debian/patches/14_improve_description";
       sha256 = "11y5kc4dh4zv24nkb0jw2zwlifx6nzsd4jbizn63l6dbpqgb25rs";
+    })
+    (fetchpatch {
+      name = "17_hexdump-pointer-type.patch";
+      url = "https://git.launchpad.net/ubuntu/+source/chntpw/plain/debian/patches/17_hexdump-pointer-type.patch?id=aed501c87499f403293e7b9f505277567c2f3b52";
+      sha256 = "sha256-ir9LFl8FJq141OwF5SbyVMtjQ1kTMH1NXlHl0XZq7m8=";
     })
   ];
 

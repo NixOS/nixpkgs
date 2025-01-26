@@ -45,9 +45,9 @@ By default, PostgreSQL stores its databases in {file}`/var/lib/postgresql/$psqlS
 
 ## Initializing {#module-services-postgres-initializing}
 
-As of NixOS 23.11,
+As of NixOS 24.05,
 `services.postgresql.ensureUsers.*.ensurePermissions` has been
-deprecated, after a change to default permissions in PostgreSQL 15
+removed, after a change to default permissions in PostgreSQL 15
 invalidated most of its previous use cases:
 
 - In psql < 15, `ALL PRIVILEGES` used to include `CREATE TABLE`, where
@@ -375,6 +375,14 @@ several common hardening options from `systemd`, most notably:
 * A stricter default UMask (`0027`).
 * Only sockets of type `AF_INET`/`AF_INET6`/`AF_NETLINK`/`AF_UNIX` allowed.
 * Restricted filesystem access (private `/tmp`, most of the file-system hierachy is mounted read-only, only process directories in `/proc` that are owned by the same user).
+  * When using [`TABLESPACE`](https://www.postgresql.org/docs/current/manage-ag-tablespaces.html)s, make sure to add the filesystem paths to `ReadWritePaths` like this:
+    ```nix
+    {
+      systemd.services.postgresql.serviceConfig.ReadWritePaths = [
+        "/path/to/tablespace/location"
+      ];
+    }
+    ```
 
 The NixOS module also contains necessary adjustments for extensions from `nixpkgs`
 if these are enabled. If an extension or a postgresql feature from `nixpkgs` breaks

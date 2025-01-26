@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitHub,
   versionCheckHook,
@@ -9,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "bacon";
-  version = "3.2.0";
+  version = "3.8.0";
 
   src = fetchFromGitHub {
     owner = "Canop";
     repo = "bacon";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-WbTxy8ijXez1x2G7NGGVMcyjgE7J7MDsGgGRpb4jKXQ=";
+    tag = "v${version}";
+    hash = "sha256-IWjG1esLwiEnESmnDE5kpuMu+LFaNrIomgrZoktkA2Q=";
   };
 
-  cargoHash = "sha256-rlWNrkzUDs3rbQ5ZV4fKU/EKEy4fVbxEP0+wNwXi7Ag=";
+  cargoHash = "sha256-IQ8vTr5Z17ylcOCQ+iqKP6+tawZXd+pMiYoSH5h7Zjg=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = [ "--version" ];
@@ -34,6 +33,9 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Canop/bacon";
     changelog = "https://github.com/Canop/bacon/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ FlorianFranzen ];
+    maintainers = with lib.maintainers; [
+      FlorianFranzen
+      matthiasbeyer
+    ];
   };
 }

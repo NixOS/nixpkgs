@@ -1,104 +1,94 @@
-{ lib
-, writeScriptBin
-, bash
-, stdenv
-, fetchFromGitHub
-, fpc
-, lazarus-qt
-, wrapQtAppsHook
-, breeze-qt5
-, libGL
-, libGLU
-, libqt5pas
-, libX11
-, coreutils
-, git
-, gnugrep
-, libnotify
-, polkit
-, procps
-, systemd
-, util-linux
-, vulkan-tools
-, which
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  bash,
+  coreutils,
+  fpc,
+  git,
+  gnugrep,
+  iproute2,
+  lazarus-qt6,
+  libGL,
+  libGLU,
+  libnotify,
+  libqtpas,
+  libX11,
+  nix-update-script,
+  polkit,
+  procps,
+  qt6,
+  systemd,
+  util-linux,
+  vulkan-tools,
+  which,
+  wrapQtAppsHook,
 }:
 
-let
-  # Finds data files using the XDG Base Directory Specification
-  # See https://specifications.freedesktop.org/basedir-spec/latest
-  find-xdg-data-files = writeScriptBin "find-xdg-data-files" ''
-    #!${bash}/bin/sh
-    IFS=:
-    for xdg_data_dir in ''${XDG_DATA_HOME:-$HOME/.local/share}:''${XDG_DATA_DIRS:-/usr/local/share:/usr/share}; do
-      if [ -f "$xdg_data_dir/$1" ]; then
-        echo "$xdg_data_dir/$1"
-      fi
-    done
-  '';
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "goverlay";
-  version = "0.7.1";
+  version = "1.2";
 
   src = fetchFromGitHub {
     owner = "benjamimgois";
     repo = pname;
     rev = version;
-    sha256 = "sha256-oXkGrMHjs8uui0pzGYW8jnttet/5IX0r8eat0n5saFk=";
+    sha256 = "sha256-tSpM+XLlFQLfL750LTNWbWFg1O+0fSfsPRXuRCm/KlY=";
   };
 
-  outputs = [ "out" "man" ];
-
-  patches = [
-    # Find MangoHud & vkBasalt Vulkan layers using the XDG Base Directory Specification
-    ./find-xdg-data-files.patch
+  outputs = [
+    "out"
+    "man"
   ];
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace 'prefix = /usr/local' "prefix = $out"
+      --replace-fail 'prefix = /usr/local' "prefix = $out"
 
     substituteInPlace overlayunit.pas \
-      --replace '/usr/share/icons/hicolor/128x128/apps/goverlay.png' "$out/share/icons/hicolor/128x128/apps/goverlay.png"
+      --replace-fail '/usr/share/icons/hicolor/128x128/apps/goverlay.png' "$out/share/icons/hicolor/128x128/apps/goverlay.png" \
+      --replace-fail '/sbin/ip' "${lib.getExe' iproute2 "ip"}" \
+      --replace-fail '/bin/bash' "${lib.getExe' bash "bash"}"
   '';
 
   nativeBuildInputs = [
     fpc
-    lazarus-qt
+    lazarus-qt6
     wrapQtAppsHook
   ];
 
   buildInputs = [
-    breeze-qt5
     libGL
     libGLU
-    libqt5pas
+    libqtpas
     libX11
+    qt6.qtbase
   ];
 
   NIX_LDFLAGS = "-lGLU -rpath ${lib.makeLibraryPath buildInputs}";
 
   buildPhase = ''
     runHook preBuild
-    HOME=$(mktemp -d) lazbuild --lazarusdir=${lazarus-qt}/share/lazarus -B goverlay.lpi
+    HOME=$(mktemp -d) lazbuild --lazarusdir=${lazarus-qt6}/share/lazarus -B goverlay.lpi
     runHook postBuild
   '';
 
   qtWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath [
-      bash
-      coreutils
-      find-xdg-data-files
-      git
-      gnugrep
-      libnotify
-      polkit
-      procps
-      systemd
-      util-linux.bin
-      vulkan-tools
-      which
-    ]}"
+    "--prefix PATH : ${
+      lib.makeBinPath [
+        bash
+        coreutils
+        git
+        gnugrep
+        libnotify
+        polkit
+        procps
+        systemd
+        util-linux.bin
+        vulkan-tools
+        which
+      ]
+    }"
 
     # Force xcb since libqt5pas doesn't support Wayland
     # See https://github.com/benjamimgois/goverlay/issues/107

@@ -35,7 +35,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dask";
     repo = "dask-ml";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ZiBpCk3b4Tk0Hwb4uapJLEx+Nb/qHFROCnkBTNGDzoU=";
   };
 
@@ -45,18 +45,21 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  dependencies = [
-    dask-expr
-    dask-glm
-    distributed
-    multipledispatch
-    numba
-    numpy
-    packaging
-    pandas
-    scikit-learn
-    scipy
-  ] ++ dask.optional-dependencies.array ++ dask.optional-dependencies.dataframe;
+  dependencies =
+    [
+      dask-expr
+      dask-glm
+      distributed
+      multipledispatch
+      numba
+      numpy
+      packaging
+      pandas
+      scikit-learn
+      scipy
+    ]
+    ++ dask.optional-dependencies.array
+    ++ dask.optional-dependencies.dataframe;
 
   pythonImportsCheck = [
     "dask_ml"

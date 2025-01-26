@@ -1,18 +1,19 @@
-{ stdenv
-, fetchFromGitHub
-, openssh
-, gitMinimal
-, nix
-, coreutils
-, curl
-, gnugrep
-, gawk
-, findutils
-, gnused
-, lib
-, makeWrapper
-, sshpass
-, gnutar
+{
+  stdenv,
+  fetchFromGitHub,
+  openssh,
+  gitMinimal,
+  nix,
+  coreutils,
+  curl,
+  gnugrep,
+  gawk,
+  findutils,
+  gnused,
+  lib,
+  makeWrapper,
+  sshpass,
+  gnutar,
 }:
 let
   runtimeDeps = [
@@ -30,12 +31,12 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nixos-anywhere";
-  version = "1.5.0";
+  version = "1.6.0";
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nixos-anywhere";
     rev = finalAttrs.version;
-    hash = "sha256-LrCxIU6laEf4JD1QtOBNr+PASY6CbNPpUrjLIUizt+Y=";
+    hash = "sha256-aoTJqEImmpgsol+TyDASuyHW6tuL7NIS8gusUJ/kxyk=";
   };
   nativeBuildInputs = [ makeWrapper ];
   installPhase = ''
@@ -54,6 +55,10 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "nixos-anywhere";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = [ maintainers.mic92 maintainers.lassulus maintainers.phaer ];
+    maintainers = [
+      maintainers.mic92
+      maintainers.lassulus
+      maintainers.phaer
+    ];
   };
 })

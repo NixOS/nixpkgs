@@ -45,6 +45,12 @@ buildPythonPackage rec {
       "test_findgarbage"
       "test_get_tree"
       "test_prune"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.13") [
+      # https://github.com/pympler/pympler/issues/163
+      "test_edges_new"
+      "test_edges_old"
+      "test_split"
     ];
 
   doCheck = stdenv.hostPlatform.isLinux;

@@ -1,9 +1,10 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
-, libX11
-, pam
-, stdenv
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+  libX11,
+  pam,
+  stdenv,
 }:
 
 buildGoModule rec {
@@ -17,7 +18,10 @@ buildGoModule rec {
     hash = "sha256-xZfR4sn20fDaTNAxuxVflpr+8AFg5Z7vesO7P8Jxw6A=";
   };
 
-  buildInputs = [ pam libX11 ];
+  buildInputs = [
+    pam
+    libX11
+  ];
 
   vendorHash = "sha256-PLyemAUcCz9H7+nAxftki3G7rQoEeyPzY3YUEj2RFn4=";
 

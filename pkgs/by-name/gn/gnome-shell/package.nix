@@ -24,7 +24,6 @@
   librsvg,
   webp-pixbuf-loader,
   geoclue2,
-  perl,
   desktop-file-utils,
   libpulseaudio,
   libical,
@@ -58,7 +57,7 @@
   gnome-autoar,
   gnome-tecla,
   bash-completion,
-  mesa,
+  libgbm,
   libGL,
   libXi,
   libX11,
@@ -70,7 +69,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-shell";
-  version = "47.1";
+  version = "47.3";
 
   outputs = [
     "out"
@@ -79,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell/${lib.versions.major finalAttrs.version}/gnome-shell-${finalAttrs.version}.tar.xz";
-    hash = "sha256-tGdXX4wVnSBVclhRfw3Wjf0BR9EbSNl6uOH3CbxSKmM=";
+    hash = "sha256-eD3rmghlEeSlPbEFdL+7ppVXb2mAeCGMpsgMse/sKT4=";
   };
 
   patches = [
@@ -118,7 +117,6 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     gettext
     gi-docgen
-    perl
     wrapGAppsHook4
     sassc
     desktop-file-utils
@@ -155,7 +153,7 @@ stdenv.mkDerivation (finalAttrs: {
     ibus
     gnome-desktop
     gnome-settings-daemon
-    mesa
+    libgbm
     libGL # for egl, required by mutter-clutter
     libXi # required by libmutter
     libX11
@@ -186,7 +184,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    patchShebangs src/data-to-c.pl
+    patchShebangs src/data-to-c.py
 
     # We can generate it ourselves.
     rm -f man/gnome-shell.1

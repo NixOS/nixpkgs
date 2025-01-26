@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, python3
-, withPlatform ? "generic"
-, withPayload ? null
-, withFDT ? null
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
+  withPlatform ? "generic",
+  withPayload ? null,
+  withFDT ? null,
 }:
 
 stdenv.mkDerivation rec {
@@ -28,13 +29,16 @@ stdenv.mkDerivation rec {
     "I=$(out)"
   ];
 
-  makeFlags = [
-    "PLATFORM=${withPlatform}"
-  ] ++ lib.optionals (withPayload != null) [
-    "FW_PAYLOAD_PATH=${withPayload}"
-  ] ++ lib.optionals (withFDT != null) [
-    "FW_FDT_PATH=${withFDT}"
-  ];
+  makeFlags =
+    [
+      "PLATFORM=${withPlatform}"
+    ]
+    ++ lib.optionals (withPayload != null) [
+      "FW_PAYLOAD_PATH=${withPayload}"
+    ]
+    ++ lib.optionals (withFDT != null) [
+      "FW_FDT_PATH=${withFDT}"
+    ];
 
   enableParallelBuilding = true;
 
@@ -45,7 +49,14 @@ stdenv.mkDerivation rec {
     description = "RISC-V Open Source Supervisor Binary Interface";
     homepage = "https://github.com/riscv-software-src/opensbi";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ius nickcao zhaofengli ];
-    platforms = [ "riscv64-linux" "riscv32-linux" ];
+    maintainers = with maintainers; [
+      ius
+      nickcao
+      zhaofengli
+    ];
+    platforms = [
+      "riscv64-linux"
+      "riscv32-linux"
+    ];
   };
 }

@@ -11,10 +11,11 @@
   libglvnd,
   libxkbcommon,
   makeShellWrapper,
-  mesa,
+  libgbm,
   musl,
   nss,
   patchelf,
+  openssl,
   stdenv,
   xorg,
 }:
@@ -44,10 +45,11 @@ stdenv.mkDerivation {
       gtk3
       libglvnd
       libxkbcommon
-      mesa
+      libgbm
       musl
       nss
       stdenv.cc.cc
+      openssl
       xorg.libX11
       xorg.libXcomposite
       xorg.libXdamage

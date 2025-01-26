@@ -1,10 +1,16 @@
 # /etc files related to networking, such as /etc/services.
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.networking.resolvconf;
 
-  resolvconfOptions = cfg.extraOptions
+  resolvconfOptions =
+    cfg.extraOptions
     ++ lib.optional cfg.dnsSingleRequest "single-request"
     ++ lib.optional cfg.dnsExtensionMechanism "edns0"
     ++ lib.optional cfg.useLocalResolver "trust-ad";
@@ -15,27 +21,47 @@ let
       # a collision with an apparently unrelated environment
       # variable with the same name exported by dhcpcd.
       interface_order='lo lo[0-9]*'
-    '' + lib.optionalString config.services.nscd.enable ''
+    ''
+    + lib.optionalString config.services.nscd.enable ''
       # Invalidate the nscd cache whenever resolv.conf is
       # regenerated.
       libc_restart='/run/current-system/systemd/bin/systemctl try-restart --no-block nscd.service 2> /dev/null'
-    '' + lib.optionalString (lib.length resolvconfOptions > 0) ''
+    ''
+    + lib.optionalString (lib.length resolvconfOptions > 0) ''
       # Options as described in resolv.conf(5)
       resolv_conf_options='${lib.concatStringsSep " " resolvconfOptions}'
-    '' + lib.optionalString cfg.useLocalResolver ''
+    ''
+    + lib.optionalString cfg.useLocalResolver ''
       # This hosts runs a full-blown DNS resolver.
       name_servers='127.0.0.1${lib.optionalString config.networking.enableIPv6 " ::1"}'
-    '' + cfg.extraConfig;
+    ''
+    + cfg.extraConfig;
 
 in
 
 {
   imports = [
-    (lib.mkRenamedOptionModule [ "networking" "dnsSingleRequest" ] [ "networking" "resolvconf" "dnsSingleRequest" ])
-    (lib.mkRenamedOptionModule [ "networking" "dnsExtensionMechanism" ] [ "networking" "resolvconf" "dnsExtensionMechanism" ])
-    (lib.mkRenamedOptionModule [ "networking" "extraResolvconfConf" ] [ "networking" "resolvconf" "extraConfig" ])
-    (lib.mkRenamedOptionModule [ "networking" "resolvconfOptions" ] [ "networking" "resolvconf" "extraOptions" ])
-    (lib.mkRemovedOptionModule [ "networking" "resolvconf" "useHostResolvConf" ] "This option was never used for anything anyways")
+    (lib.mkRenamedOptionModule
+      [ "networking" "dnsSingleRequest" ]
+      [ "networking" "resolvconf" "dnsSingleRequest" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "networking" "dnsExtensionMechanism" ]
+      [ "networking" "resolvconf" "dnsExtensionMechanism" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "networking" "extraResolvconfConf" ]
+      [ "networking" "resolvconf" "extraConfig" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "networking" "resolvconfOptions" ]
+      [ "networking" "resolvconf" "extraOptions" ]
+    )
+    (lib.mkRemovedOptionModule [
+      "networking"
+      "resolvconf"
+      "useHostResolvConf"
+    ] "This option was never used for anything anyways")
   ];
 
   options = {
@@ -99,8 +125,11 @@ in
 
       extraOptions = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default = [];
-        example = [ "ndots:1" "rotate" ];
+        default = [ ];
+        example = [
+          "ndots:1"
+          "rotate"
+        ];
         description = ''
           Set the options in {file}`/etc/resolv.conf`.
         '';
@@ -116,7 +145,7 @@ in
 
       subscriberFiles = lib.mkOption {
         type = lib.types.listOf lib.types.path;
-        default = [];
+        default = [ ];
         description = ''
           Files written by resolvconf updates
         '';
@@ -137,11 +166,12 @@ in
             echo "$0 $*" >&2
             exit 1
           ''
-        else configText;
+        else
+          configText;
     }
 
     (lib.mkIf cfg.enable {
-      users.groups.resolvconf = {};
+      users.groups.resolvconf = { };
 
       networking.resolvconf.subscriberFiles = [ "/etc/resolv.conf" ];
 

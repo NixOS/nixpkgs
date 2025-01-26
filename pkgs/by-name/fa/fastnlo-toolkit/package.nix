@@ -1,16 +1,16 @@
-{ lib
-, stdenv
-, fetchurl
-, boost
-, gfortran
-, lhapdf
-, ncurses
-, perl
-, python ? null
-, swig
-, yoda
-, zlib
-, withPython ? false
+{
+  lib,
+  stdenv,
+  fetchurl,
+  boost,
+  lhapdf,
+  ncurses,
+  perl,
+  python ? null,
+  swig,
+  yoda,
+  zlib,
+  withPython ? false,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,26 +19,43 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://fastnlo.hepforge.org/code/v25/fastnlo_toolkit-${version}.tar.gz";
-    sha256 = "sha256-7aIMYCOkHC/17CHYiEfrxvtSJxTDivrS7BQ32cGiEy0=";
+    hash = "sha256-7aIMYCOkHC/17CHYiEfrxvtSJxTDivrS7BQ32cGiEy0=";
   };
+
+  postPatch = ''
+    substituteInPlace py-compile \
+      --replace-fail "import sys, os, py_compile, imp" "import sys, os, py_compile, importlib" \
+      --replace-fail "imp." "importlib." \
+      --replace-fail "hasattr(imp" "hasattr(importlib"
+  '';
 
   patches = [
     # Compatibility with YODA 2.x
     ./yoda2_support.patch
   ];
 
-  buildInputs = [
-    boost
-    gfortran
-    gfortran.cc.lib
-    lhapdf
-    yoda
-  ] ++ lib.optional withPython python
+  nativeBuildInputs = [
+    lhapdf # lhapdf-config
+    yoda # yoda-config
+  ] ++ lib.optional withPython python;
+
+  buildInputs =
+    [
+      boost
+      lhapdf
+      yoda
+    ]
+    ++ lib.optional withPython python
     ++ lib.optional (withPython && python.isPy3k) ncurses;
 
-  propagatedBuildInputs = [
-    zlib
-  ] ++ lib.optional withPython swig;
+  propagatedNativeBuildInputs = lib.optional withPython [ swig ];
+  propagatedBuildInputs =
+    [
+      zlib
+    ]
+    ++ lib.optional withPython [
+      python.pkgs.distutils
+    ];
 
   preConfigure = ''
     substituteInPlace ./fastnlotoolkit/Makefile.in \
@@ -52,6 +69,8 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-yoda=${yoda}"
   ] ++ lib.optional withPython "--enable-pyext";
+
+  strictDeps = true;
 
   enableParallelBuilding = true;
 
@@ -67,7 +86,7 @@ stdenv.mkDerivation rec {
 
   # None of our currently packaged versions of swig are C++17-friendly
   # Use a workaround from https://github.com/swig/swig/issues/1538
-  env.CXXFLAGS="-D_LIBCPP_ENABLE_CXX17_REMOVED_FEATURES";
+  env.CXXFLAGS = "-D_LIBCPP_ENABLE_CXX17_REMOVED_FEATURES";
 
   meta = with lib; {
     homepage = "http://fastnlo.hepforge.org";

@@ -8,6 +8,10 @@
 with lib;
 
 {
+  imports = [
+    ../image/file-options.nix
+  ];
+
   options.proxmoxLXC = {
     enable = mkOption {
       default = true;
@@ -46,7 +50,15 @@ with lib;
       cfg = config.proxmoxLXC;
     in
     mkIf cfg.enable {
+      system.nixos.tags = [
+        "proxmox"
+        "lxc"
+      ];
+      image.extension = "tar.xz";
+      image.filePath = "tarball/${config.image.fileName}";
+      system.build.image = config.system.build.tarball;
       system.build.tarball = pkgs.callPackage ../../lib/make-system-tarball.nix {
+        fileName = config.image.baseName;
         storeContents = [
           {
             object = config.system.build.toplevel;

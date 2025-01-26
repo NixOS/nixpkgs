@@ -13,7 +13,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sydbox";
-  version = "3.28.3";
+  version = "3.29.4";
 
   outputs = [
     "out"
@@ -25,10 +25,10 @@ rustPlatform.buildRustPackage rec {
     owner = "Sydbox";
     repo = "sydbox";
     rev = "refs/tags/v${version}";
-    hash = "sha256-9IegNFkOWYt+jdpN0rk4S/qyD/NSPaSqmFnMmCl/3Tk=";
+    hash = "sha256-k7qh375SuonybwgECI9Bl898FFigVxJ4L174AUDxntk=";
   };
 
-  cargoHash = "sha256-6/D//mkPDRW01SCLmQGWwFCClZ84aJUPhleWGVCJaKM=";
+  cargoHash = "sha256-iupVEo7ZEcKfPw3MbZoQqwWw9lKAbcFKeiLy+1DwXHU=";
 
   nativeBuildInputs = [
     mandoc
@@ -45,15 +45,17 @@ rustPlatform.buildRustPackage rec {
     "--skip=fs::tests::test_relative_symlink_resolution"
     # Failed to write C source file!: Os { code: 13, kind: PermissionDenied, message: "Permission denied" }
     "--skip=proc::tests::test_proc_set_at_secure_test_32bit_dynamic"
+    # Flakey. May only fail on OfBorg/Hydra
+    # Failed to write C source file!: Os { code: 13, kind: PermissionDenied, message: "Permission denied" }
+    "proc::tests::test_proc_set_at_secure_test_32bit_static"
+    # Failed to write C source file!: Os { code: 13, kind: PermissionDenied, message: "Permission denied" }
+    "--skip=proc::tests::test_proc_set_at_secure_test_32bit_static_pie"
     # /bin/false: Os { code: 2, kind: NotFound, message: "No such file or directory" }
     "--skip=syd_test"
 
-    # Endlessly stall. Maybe a sandbox issue?
+    # Endlessly stall or use "invalid arguments". Maybe a sandbox issue?
     "--skip=caps"
-    "--skip=landlock::compat::Compatible::set_compatibility"
-    "--skip=landlock::fs::PathBeneath"
-    "--skip=landlock::fs::PathFd"
-    "--skip=landlock::fs::path_beneath_rules"
+    "--skip=landlock"
     "--skip=proc::proc_cmdline"
     "--skip=proc::proc_comm"
   ];

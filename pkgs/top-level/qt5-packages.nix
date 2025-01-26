@@ -170,6 +170,8 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
 
   libqofono = callPackage ../development/libraries/libqofono { };
 
+  libqtpas = callPackage ../development/compilers/fpc/libqtpas.nix { };
+
   libquotient = callPackage ../development/libraries/libquotient { };
 
   libqaccessibilityclient = callPackage ../development/libraries/libqaccessibilityclient { };

@@ -1,21 +1,33 @@
-{ lib, buildGoModule, fetchFromGitHub, testers, makeWrapper, python310, kluctl }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  makeWrapper,
+  python310,
+  kluctl,
+}:
 
 buildGoModule rec {
   pname = "kluctl";
-  version = "2.25.1";
+  version = "2.26.0";
 
   src = fetchFromGitHub {
     owner = "kluctl";
     repo = "kluctl";
     rev = "v${version}";
-    hash = "sha256-EfzMDOIp/dfnpLTnaUkZ1sfGVtQqUgeGyHNiWIwSxQ4=";
+    hash = "sha256-qtntImc+fiRPMUHVM4A8d2e17zklV47CJ10M9A8oa7k=";
   };
 
   subPackages = [ "cmd" ];
 
-  vendorHash = "sha256-iE4fPRq2kalP53AO3YaaqbRMH4Cl6XB5UseJmepoW+4=";
+  vendorHash = "sha256-89VEYX8xBdV36hHNIaRP8JoXTEGXmgzL7iL/Y4+1mzA=";
 
-  ldflags = [ "-s" "-w" "-X main.version=v${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.version=v${version}"
+  ];
 
   # Depends on docker
   doCheck = false;
@@ -41,6 +53,9 @@ buildGoModule rec {
     mainProgram = "kluctl";
     homepage = "https://kluctl.io/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ sikmir netthier ];
+    maintainers = with maintainers; [
+      sikmir
+      netthier
+    ];
   };
 }

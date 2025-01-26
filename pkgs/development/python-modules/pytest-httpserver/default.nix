@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "csernazs";
     repo = "pytest-httpserver";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-BkdbCrpZKjHYikZk1mL4iSGe5gRjWUVN/w222QkmFLQ=";
   };
 

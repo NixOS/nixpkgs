@@ -12,7 +12,7 @@
 , systemd
 , xz
 , e2fsprogs
-, libsoup
+, libsoup_2_4
 , glib-networking
 , wrapGAppsNoGuiHook
 , gpgme
@@ -33,6 +33,10 @@
 , docbook-xsl-nons
 , docbook_xml_dtd_42
 , python3
+
+  # Optional ComposeFS support
+, withComposefs ? false
+, composefs
 }:
 
 let
@@ -41,13 +45,13 @@ let
   ]);
 in stdenv.mkDerivation rec {
   pname = "ostree";
-  version = "2024.8";
+  version = "2024.10";
 
   outputs = [ "out" "dev" "man" "installedTests" ];
 
   src = fetchurl {
     url = "https://github.com/ostreedev/ostree/releases/download/v${version}/libostree-${version}.tar.xz";
-    sha256 = "sha256-4hNuEWZp8RT/c0nxLimfY8C+znM0UWSUFKjc2FuGPD8=";
+    sha256 = "sha256-VOM4fe4f8WAxoGeayitg2pCrf0omwhGCIzPH8jAAq+4=";
   };
 
 
@@ -72,7 +76,7 @@ in stdenv.mkDerivation rec {
     glib
     systemd
     e2fsprogs
-    libsoup
+    libsoup_2_4
     glib-networking
     gpgme
     fuse3
@@ -87,6 +91,8 @@ in stdenv.mkDerivation rec {
     # for installed tests
     testPython
     gjs
+  ] ++ lib.optionals withComposefs [
+    (lib.getDev composefs)
   ];
 
   enableParallelBuilding = true;
@@ -97,6 +103,8 @@ in stdenv.mkDerivation rec {
     "--with-systemdsystemgeneratordir=${placeholder "out"}/lib/systemd/system-generators"
     "--enable-installed-tests"
     "--with-ed25519-libsodium"
+  ] ++ lib.optionals withComposefs [
+    "--with-composefs"
   ];
 
   makeFlags = [

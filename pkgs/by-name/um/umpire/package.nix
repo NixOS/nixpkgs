@@ -1,10 +1,11 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, config
-, cudaSupport ? config.cudaSupport
-, cudaPackages ? null
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  config,
+  cudaSupport ? config.cudaSupport,
+  cudaPackages ? null,
 }:
 
 assert cudaSupport -> cudaPackages != null;
@@ -21,16 +22,21 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [
-    cmake
-  ] ++ lib.optionals cudaSupport [
-    cudaPackages.cuda_nvcc
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+    ]
+    ++ lib.optionals cudaSupport [
+      cudaPackages.cuda_nvcc
+    ];
 
-  buildInputs = lib.optionals cudaSupport (with cudaPackages; [
-    cudatoolkit
-    cuda_cudart
-  ]);
+  buildInputs = lib.optionals cudaSupport (
+    with cudaPackages;
+    [
+      cudatoolkit
+      cuda_cudart
+    ]
+  );
 
   cmakeFlags = lib.optionals cudaSupport [
     "-DCUDA_TOOLKIT_ROOT_DIR=${cudaPackages.cudatoolkit}"

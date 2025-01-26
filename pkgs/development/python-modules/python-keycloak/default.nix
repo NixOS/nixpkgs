@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "marcospereirampj";
     repo = "python-keycloak";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ZXS29bND4GsJNhTGiUsLo+4FYd8Tubvg/+PJ33tqovY=";
   };
 

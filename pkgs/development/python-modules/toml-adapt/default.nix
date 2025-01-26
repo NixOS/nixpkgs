@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "firefly-cpp";
     repo = "toml-adapt";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-KD5dTr/wxFbDg3AbfE0jUbgNjvxqDmbHwjY5Dmp6JFI=";
   };
 

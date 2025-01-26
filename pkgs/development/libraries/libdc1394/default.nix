@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, libraw1394
-, libusb1, CoreServices }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libraw1394,
+  libusb1,
+  CoreServices,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libdc1394";
@@ -15,7 +21,8 @@ stdenv.mkDerivation rec {
     "trivialautovarinit"
   ];
 
-  buildInputs = [ libusb1 ]
+  buildInputs =
+    [ libusb1 ]
     ++ lib.optional stdenv.hostPlatform.isLinux libraw1394
     ++ lib.optional stdenv.hostPlatform.isDarwin CoreServices;
 

@@ -1,33 +1,59 @@
-{ stdenv, lib, fetchurl, writeScript, cdrtools, dvdauthor, ffmpeg, imagemagick, lame, mjpegtools, sox, transcode, vorbis-tools, runtimeShell }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  writeScript,
+  cdrtools,
+  dvdauthor,
+  ffmpeg,
+  imagemagick,
+  lame,
+  mjpegtools,
+  sox,
+  transcode,
+  vorbis-tools,
+  runtimeShell,
+}:
 
 let
-  binPath = lib.makeBinPath [ cdrtools dvdauthor ffmpeg imagemagick lame mjpegtools sox transcode vorbis-tools ];
+  binPath = lib.makeBinPath [
+    cdrtools
+    dvdauthor
+    ffmpeg
+    imagemagick
+    lame
+    mjpegtools
+    sox
+    transcode
+    vorbis-tools
+  ];
 
   wrapper = writeScript "dvd-slideshow.sh" ''
-      #!${runtimeShell}
-      # wrapper script for dvd-slideshow programs
-      export PATH=${binPath}:$PATH
+    #!${runtimeShell}
+    # wrapper script for dvd-slideshow programs
+    export PATH=${binPath}:$PATH
 
-      dir=`dirname "$0"`
-      exe=`basename "$0"`
-      case "$exe" in
-        dvd-slideshow)
-          # use mpeg2enc by default as ffmpeg is known to crash.
-          # run dvd-slideshow.ffmpeg to force ffmpeg.
-          "$dir/dvd-slideshow.real" -mpeg2enc $@
-          ;;
+    dir=`dirname "$0"`
+    exe=`basename "$0"`
+    case "$exe" in
+      dvd-slideshow)
+        # use mpeg2enc by default as ffmpeg is known to crash.
+        # run dvd-slideshow.ffmpeg to force ffmpeg.
+        "$dir/dvd-slideshow.real" -mpeg2enc $@
+        ;;
 
-        dvd-slideshow.ffmpeg)
-          "$dir/dvd-slideshow.real" $@
-          ;;
+      dvd-slideshow.ffmpeg)
+        "$dir/dvd-slideshow.real" $@
+        ;;
 
-        *)
-          "$dir/$exe.real" $@
-          ;;
-      esac
-    '';
+      *)
+        "$dir/$exe.real" $@
+        ;;
+    esac
+  '';
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "dvd-slideshow";
   version = "0.8.4-2";
 

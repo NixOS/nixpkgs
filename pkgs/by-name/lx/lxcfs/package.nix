@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lxcfs";
-  version = "6.0.2";
+  version = "6.0.3";
 
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "lxcfs";
     rev = "v${version}";
-    hash = "sha256-5r1X/yUXTMC/2dNhpI+BVYeClIydefg2lurCGt7iA8Y=";
+    hash = "sha256-+Xlx1E6ggB/Vx3yOJGgh4UfEvaVyT7uOttaxelDA7Iw=";
   };
 
   patches = [
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     help2man
     makeWrapper
     ninja
-    (python3.withPackages (p: [ p.jinja2 ]))
+    (python3.pythonOnBuildForHost.withPackages (p: [ p.jinja2 ]))
     pkg-config
   ];
   buildInputs = [ fuse3 ];
@@ -53,7 +53,12 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     # `mount` hook requires access to the `mount` command from `util-linux` and `readlink` from `coreutils`:
-    wrapProgram "$out/share/lxcfs/lxc.mount.hook" --prefix PATH : ${lib.makeBinPath [ coreutils util-linux ]}
+    wrapProgram "$out/share/lxcfs/lxc.mount.hook" --prefix PATH : ${
+      lib.makeBinPath [
+        coreutils
+        util-linux
+      ]
+    }
   '';
 
   postFixup = ''
@@ -63,8 +68,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     tests = {
-      incus-container-legacy-init = nixosTests.incus.container-legacy-init;
-      incus-container-systemd-init = nixosTests.incus.container-systemd-init;
+      incus-lts = nixosTests.incus-lts.container;
     };
 
     updateScript = nix-update-script { };

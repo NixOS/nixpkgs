@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, autoPatchelfHook }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoPatchelfHook,
+}:
 
 let
   srcs = {
@@ -36,7 +41,8 @@ stdenv.mkDerivation rec {
   pname = "droidmote";
   version = "3.0.6";
 
-  src = srcs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  src =
+    srcs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   dontUnpack = true;
   dontBuild = true;

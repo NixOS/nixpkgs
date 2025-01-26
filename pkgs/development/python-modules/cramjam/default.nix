@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "milesgranger";
     repo = "pyrus-cramjam";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-1KD5/oZjfdXav1ZByQoyyiDSzbmY4VJsSJg/FtUFdDE=";
   };
 

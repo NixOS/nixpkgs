@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "niaarm";
-  version = "0.3.12";
+  version = "0.3.13";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -24,11 +24,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "firefly-cpp";
     repo = "NiaARM";
-    rev = "refs/tags/${version}";
-    hash = "sha256-rYFfLtPJgIdSjRIzDIQeHwoQm9NrI6nM3/BF7wAMr1Y=";
+    tag = version;
+    hash = "sha256-nDgGX5KbthOBXX5jg99fGT28ZuBx0Hxb+aHak3Uvjoc=";
   };
 
-  pythonRelaxDeps = [ "scikit-learn" ];
+  pythonRelaxDeps = [
+    "numpy"
+    "scikit-learn"
+  ];
 
   nativeBuildInputs = [ poetry-core ];
 

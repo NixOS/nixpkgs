@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchurl
-, libX11
-, libXft
-, libXi
-, xorgproto
-, libSM
-, libICE
-, freetype
-, pkg-config
-, which
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libX11,
+  libXft,
+  libXi,
+  xorgproto,
+  libSM,
+  libICE,
+  freetype,
+  pkg-config,
+  which,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +24,16 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libX11 libXft libXi xorgproto libSM libICE freetype which ];
+  buildInputs = [
+    libX11
+    libXft
+    libXi
+    xorgproto
+    libSM
+    libICE
+    freetype
+    which
+  ];
 
   configureFlags = [
     "--with-x"

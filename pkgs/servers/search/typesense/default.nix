@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, autoPatchelfHook
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoPatchelfHook,
+  nixosTests,
 }:
 let
   inherit (stdenv.hostPlatform) system;

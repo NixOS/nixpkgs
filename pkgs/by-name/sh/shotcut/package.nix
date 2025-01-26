@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   stdenv,
-  substituteAll,
+  replaceVars,
   SDL2,
   frei0r,
   ladspaPlugins,
@@ -15,16 +15,17 @@
   cmake,
   darwin,
   gitUpdater,
+  ffmpeg,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "shotcut";
-  version = "24.10.13";
+  version = "24.11.17";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "shotcut";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-lt8NXjh222h6l+zfGNKGntUNPya4TUjwqA74DDdWzQo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-sOBGLQYRGHcXNoKTmqbBqmheUFHe7p696BTCiwtF5JY=";
   };
 
   nativeBuildInputs = [
@@ -48,12 +49,12 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Cocoa ];
 
   env.NIX_CFLAGS_COMPILE = "-DSHOTCUT_NOUPGRADE";
+
   cmakeFlags = [ "-DSHOTCUT_VERSION=${finalAttrs.version}" ];
 
   patches = [
-    (substituteAll {
-      inherit mlt;
-      src = ./fix-mlt-ffmpeg-path.patch;
+    (replaceVars ./fix-mlt-ffmpeg-path.patch {
+      inherit mlt ffmpeg;
     })
   ];
 
@@ -73,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
-  meta = with lib; {
+  meta = {
     description = "Free, open source, cross-platform video editor";
     longDescription = ''
       An official binary for Shotcut, which includes all the
@@ -85,12 +86,12 @@ stdenv.mkDerivation (finalAttrs: {
       please use the official build from shotcut.org instead.
     '';
     homepage = "https://shotcut.org";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       woffs
       peti
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "shotcut";
   };
 })

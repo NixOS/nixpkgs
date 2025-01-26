@@ -1,20 +1,21 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "paper-age";
-  version = "1.3.3";
+  version = "1.3.4";
 
   src = fetchFromGitHub {
     owner = "matiaskorhonen";
     repo = "paper-age";
     rev = "v${version}";
-    hash = "sha256-XnJSsxWe4/NLOqBjU7++bwLtVfIR9n8hpBxL3K8Bmho=";
+    hash = "sha256-xoxrNNlpDFXuQwltZ52SkGe0z6+B4h1Jy4XRtvQDiAg=";
   };
 
-  cargoHash = "sha256-808+lQxjE9dxgNZm/FuZwFuBFJgx/7kCpNn+FrMvuoY=";
+  cargoHash = "sha256-FmtExP4M6MiKNlekNZZRGs6Y/AY+OQrHC7dmkxkyPQQ=";
 
   meta = with lib; {
     description = "Easy and secure paper backups of secrets";

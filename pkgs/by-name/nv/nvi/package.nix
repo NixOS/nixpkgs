@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, fetchpatch, ncurses, db }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  ncurses,
+  db,
+}:
 
 stdenv.mkDerivation rec {
   pname = "nvi";
@@ -23,7 +30,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ ncurses db ];
+  buildInputs = [
+    ncurses
+    db
+  ];
 
   preConfigure = ''
     cd build.unix

@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, bash
-, cmake
-, runCommandLocal
-, bison
-, flex
-, intel-compute-runtime
-, llvmPackages_14
-, opencl-clang
-, python3
-, spirv-tools
-, spirv-headers
-, spirv-llvm-translator
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  bash,
+  cmake,
+  runCommandLocal,
+  bison,
+  flex,
+  intel-compute-runtime,
+  llvmPackages_14,
+  opencl-clang,
+  python3,
+  spirv-tools,
+  spirv-headers,
+  spirv-llvm-translator,
 
-, buildWithPatches ? true
+  buildWithPatches ? true,
 }:
 
 let
@@ -50,9 +51,26 @@ stdenv.mkDerivation rec {
     patchShebangs --build IGC/Scripts/igc_create_linker_script.sh
   '';
 
-  nativeBuildInputs = [ bash bison cmake flex (python3.withPackages (ps : with ps; [ mako pyyaml ])) ];
+  nativeBuildInputs = [
+    bash
+    bison
+    cmake
+    flex
+    (python3.withPackages (
+      ps: with ps; [
+        mako
+        pyyaml
+      ]
+    ))
+  ];
 
-  buildInputs = [ lld llvm spirv-headers spirv-llvm-translator' spirv-tools ];
+  buildInputs = [
+    lld
+    llvm
+    spirv-headers
+    spirv-llvm-translator'
+    spirv-tools
+  ];
 
   strictDeps = true;
 

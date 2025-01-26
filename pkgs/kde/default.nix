@@ -40,7 +40,10 @@ let
       ) allUrls;
     in
     (
-      qt6Packages
+      # This removes reference to deprecated `qt6Packages.stdenv`
+      # so when a KDE package asks for a stdenv, it won't trigger
+      # an eval warning
+      (lib.removeAttrs qt6Packages [ "stdenv" ])
       // frameworks
       // gear
       // plasma
@@ -68,7 +71,6 @@ let
         selenium-webdriver-at-spi = null; # Used for integration tests that we don't run, stub
 
         alpaka = self.callPackage ./misc/alpaka { };
-        calligra = self.callPackage ./misc/calligra { };
         kdiagram = self.callPackage ./misc/kdiagram { };
         kdevelop-pg-qt = self.callPackage ./misc/kdevelop-pg-qt { };
         kdsoap-ws-discovery-client = self.callPackage ./misc/kdsoap-ws-discovery-client { };
@@ -77,7 +79,6 @@ let
         kio-fuse = self.callPackage ./misc/kio-fuse { };
         klevernotes = self.callPackage ./misc/klevernotes { };
         ktextaddons = self.callPackage ./misc/ktextaddons { };
-        kunifiedpush = self.callPackage ./misc/kunifiedpush { };
         kup = self.callPackage ./misc/kup { };
         marknote = self.callPackage ./misc/marknote { };
         mpvqt = self.callPackage ./misc/mpvqt { };

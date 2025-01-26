@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, makeWrapper
-, curl
-, ncurses
-, gtk3
-, pkg-config
-, scoreDirectory ? "$HOME/.local/share"
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  makeWrapper,
+  curl,
+  ncurses,
+  gtk3,
+  pkg-config,
+  scoreDirectory ? "$HOME/.local/share",
 }:
 
 stdenv.mkDerivation (finalAttrs: {

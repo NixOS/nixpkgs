@@ -45,6 +45,6 @@ buildPythonPackage rec {
     description = "Framework for building applications whose functionalities can be extended by adding plug-ins";
     homepage = "https://github.com/enthought/envisage";
     license = licenses.bsdOriginal;
-    maintainers = with lib.maintainers; [ knedlsepp ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

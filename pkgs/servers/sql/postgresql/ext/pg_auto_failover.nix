@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, postgresql, buildPostgresqlExtension }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  postgresql,
+  buildPostgresqlExtension,
+}:
 
 buildPostgresqlExtension rec {
   pname = "pg_auto_failover";

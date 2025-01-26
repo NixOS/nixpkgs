@@ -32,7 +32,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "wkeeling";
     repo = "selenium-wire";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-KgaDxHS0dAK6CT53L1qqx1aORMmkeaiXAUtGC82hiIQ=";
   };
 

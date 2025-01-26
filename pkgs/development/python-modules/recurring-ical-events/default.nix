@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "recurring-ical-events";
-  version = "3.3.3";
+  version = "3.4.1";
 
   disabled = pythonOlder "3.8";
 
@@ -25,13 +25,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "niccokunzmann";
     repo = "python-recurring-ical-events";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-gEatTTpRiqtDAn+JtoJuVHPYKmEkc5saw3hy4ZYZfX8=";
+    tag = "v${version}";
+    hash = "sha256-JhGKowFtRJwLj/5J1lNpgMTl1d+oWsmV4wI3hfOW5io=";
   };
 
   build-system = [ setuptools ];
-
-  pythonRelaxDeps = [ "icalendar" ];
 
   dependencies = [
     icalendar

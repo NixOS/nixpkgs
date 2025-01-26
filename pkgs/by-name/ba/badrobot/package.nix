@@ -1,16 +1,21 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 
 buildGoModule rec {
   pname = "badrobot";
-  version = "0.1.3";
+  version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "controlplaneio";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-mLBJLeB85QeC4PYH4FyOI8lHz1OxIJlJbqgDfXTNnhM=";
+    sha256 = "sha256-U3b5Xw+GjnAEXteivztHdcAcXx7DYtgaUbW5oax0mIk=";
   };
-  vendorHash = "sha256-SB7gGgm7BwMSo4ocKX4UGB+OdjVY92S5YZfOmTl4VEk=";
+  vendorHash = "sha256-oYdkCEdrw1eE5tnKveeJM3upRy8hOVc24JNN1bLX+ec=";
 
   nativeBuildInputs = [ installShellFiles ];
 

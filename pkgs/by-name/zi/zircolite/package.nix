@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, makeWrapper
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  makeWrapper,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -12,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "wagga40";
     repo = "Zircolite";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-9stQa0EMNA/qEN+bU7qBOdcwUR1vMGk70Br6wxRK8cs=";
   };
 
@@ -22,20 +23,23 @@ python3.pkgs.buildPythonApplication rec {
     makeWrapper
   ];
 
-  dependencies = with python3.pkgs; [
-    aiohttp
-    colorama
-    elastic-transport
-    elasticsearch
-    evtx
-    jinja2
-    lxml
-    orjson
-    requests
-    tqdm
-    urllib3
-    xxhash
-  ] ++ elasticsearch.optional-dependencies.async;
+  dependencies =
+    with python3.pkgs;
+    [
+      aiohttp
+      colorama
+      elastic-transport
+      elasticsearch
+      evtx
+      jinja2
+      lxml
+      orjson
+      requests
+      tqdm
+      urllib3
+      xxhash
+    ]
+    ++ elasticsearch.optional-dependencies.async;
 
   installPhase = ''
     runHook preInstall

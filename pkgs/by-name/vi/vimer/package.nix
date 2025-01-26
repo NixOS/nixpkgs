@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation rec {
   version = "0.2.0";
@@ -30,4 +34,3 @@ stdenv.mkDerivation rec {
   };
 
 }
-

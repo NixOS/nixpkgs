@@ -1,6 +1,15 @@
-{ lib, gccStdenv, fetchFromGitHub, bison, flex, pcre2, libunistring, ncurses }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  bison,
+  flex,
+  pcre2,
+  libunistring,
+  ncurses,
+}:
 
-gccStdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "boxes";
   version = "2.3.1";
 
@@ -13,9 +22,16 @@ gccStdenv.mkDerivation rec {
 
   # Building instructions:
   # https://boxes.thomasjensen.com/build.html#building-on-linux--unix
-  nativeBuildInputs = [ bison flex ];
+  nativeBuildInputs = [
+    bison
+    flex
+  ];
 
-  buildInputs = [ pcre2 libunistring ncurses ];
+  buildInputs = [
+    pcre2
+    libunistring
+    ncurses
+  ];
 
   dontConfigure = true;
 
@@ -27,7 +43,7 @@ gccStdenv.mkDerivation rec {
                 "GLOBALCONF=${placeholder "out"}/share/boxes/boxes-config"
   '';
 
-  makeFlags = [ "CC=${gccStdenv.cc.targetPrefix}cc" ];
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   installPhase = ''
     install -Dm755 -t $out/bin out/boxes

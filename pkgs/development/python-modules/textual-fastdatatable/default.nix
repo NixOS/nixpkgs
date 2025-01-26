@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "textual-fastdatatable";
-  version = "0.10.0";
+  version = "0.11.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -24,8 +24,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tconbeer";
     repo = "textual-fastdatatable";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-r1evN69etFn21TkXPLuAh1OxIsurDDyPyYOKQR5uUos=";
+    tag = "v${version}";
+    hash = "sha256-Jz0ujO/nAnn15t8/OFOzZTpVBXNYsfVhxmYdGC39PpM=";
   };
 
   build-system = [ poetry-core ];

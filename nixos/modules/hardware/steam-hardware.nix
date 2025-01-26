@@ -16,7 +16,7 @@ in
 
   config = lib.mkIf cfg.enable {
     services.udev.packages = [
-      pkgs.steam-unwrapped
+      pkgs.steam-devices-udev-rules
     ];
 
     # The uinput module needs to be loaded in order to trigger the udev rules

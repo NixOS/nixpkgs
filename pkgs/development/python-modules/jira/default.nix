@@ -31,7 +31,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pycontribs";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-zE0fceCnyv0qKak8sRCXPCauC0KeOmczY/ZkVoHNcS8=";
   };
 

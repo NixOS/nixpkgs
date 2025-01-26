@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   setuptools,
   formulaic,
   click,
@@ -19,13 +19,20 @@
 
 buildPythonPackage rec {
   pname = "pybids";
-  version = "0.17.2";
+  version = "0.18.1";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-4MpFXGh2uOHCjMa213CF6QzKCyEQNiN1moyNolEcySQ=";
+  src = fetchFromGitHub {
+    owner = "bids-standard";
+    repo = "pybids";
+    rev = version;
+    hash = "sha256-nSBc4vhkCdRo7CNBwvJreCiwoxJK6ztyI5gvcpzYZ/Y=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
+  '';
 
   pythonRelaxDeps = [
     "formulaic"
@@ -54,16 +61,15 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  disabledTestPaths = [
+    # Could not connect to the endpoint URL
+    "src/bids/layout/tests/test_remote_bids.py"
+  ];
+
   disabledTests = [
-    # Test looks for missing data
-    "test_config_filename"
     # Regression associated with formulaic >= 0.6.0
     # (see https://github.com/bids-standard/pybids/issues/1000)
     "test_split"
-    # AssertionError, TypeError
-    "test_run_variable_collection_bad_length_to_df_all_dense_var"
-    "test_extension_initial_dot"
-    "test_to_df"
   ];
 
   meta = {

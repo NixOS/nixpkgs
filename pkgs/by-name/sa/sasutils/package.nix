@@ -1,4 +1,10 @@
-{ lib, python3Packages, fetchFromGitHub, installShellFiles, sg3_utils }:
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  installShellFiles,
+  sg3_utils,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "sasutils";
@@ -7,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "stanford-rc";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-rx4IxS5q1c3z617F4DBWxuxxSPHKFrw2bTW6b6/qkds=";
   };
 

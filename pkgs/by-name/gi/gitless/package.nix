@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -14,7 +15,6 @@ python3.pkgs.buildPythonApplication rec {
     rev = version;
     hash = "sha256-XDB1i2b1reMCM6i1uK3IzTnsoLXO7jldYtNlYUo1AoQ=";
   };
-
 
   propagatedBuildInputs = with python3.pkgs; [
     pygit2

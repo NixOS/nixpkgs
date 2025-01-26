@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchurl, substituteAll, autoreconfHook, pkg-config, libusb1, hwdata, python3 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  substituteAll,
+  autoreconfHook,
+  pkg-config,
+  libusb1,
+  hwdata,
+  python3,
+}:
 
 stdenv.mkDerivation rec {
   pname = "usbutils";
@@ -16,10 +26,20 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ libusb1 python3 ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+  buildInputs = [
+    libusb1
+    python3
+  ];
 
-  outputs = [ "out" "man" "python" ];
+  outputs = [
+    "out"
+    "man"
+    "python"
+  ];
 
   postBuild = ''
     $CC $NIX_CFLAGS -o usbreset usbreset.c
@@ -37,7 +57,7 @@ stdenv.mkDerivation rec {
     license = with lib.licenses; [
       gpl2Only # manpages, usbreset
       gpl2Plus # most of the code
-     ];
+    ];
     platforms = lib.platforms.linux;
     mainProgram = "lsusb";
   };

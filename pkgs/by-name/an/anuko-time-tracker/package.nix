@@ -1,8 +1,9 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, nixosTests
-, php
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  nixosTests,
+  php,
 }:
 
 stdenvNoCC.mkDerivation rec {

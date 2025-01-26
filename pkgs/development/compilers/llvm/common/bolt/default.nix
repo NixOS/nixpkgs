@@ -8,6 +8,7 @@
   cmake,
   libxml2,
   libllvm,
+  ninja,
   libclang,
   version,
   python3,
@@ -21,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   inherit version patches;
 
   # Blank llvm dir just so relative path works
-  src = runCommand "bolt-src-${finalAttrs.version}" { } (
+  src = runCommand "bolt-src-${finalAttrs.version}" { inherit (monorepoSrc) passthru; } (
     ''
       mkdir $out
     ''
@@ -32,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
       cp -r ${monorepoSrc}/${finalAttrs.pname} "$out"
       cp -r ${monorepoSrc}/third-party "$out"
 
-      # tablegen stuff, probably not the best way but it works...
+      # BOLT re-runs tablegen against LLVM sources, so needs them available.
       cp -r ${monorepoSrc}/llvm/ "$out"
       chmod -R +w $out/llvm
     ''
@@ -42,20 +43,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    ninja
     python3
   ];
 
   buildInputs = [
     libllvm
-    libclang
     libxml2
   ];
 
-  cmakeFlags =
-    lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      (lib.cmakeFeature "LLVM_TABLEGEN_EXE" "${buildLlvmTools.llvm}/bin/llvm-tblgen")
-    ]
-    ++ devExtraCmakeFlags;
+  cmakeFlags = [
+    (lib.cmakeFeature "LLVM_TABLEGEN_EXE" "${buildLlvmTools.tblgen}/bin/llvm-tblgen")
+  ] ++ devExtraCmakeFlags;
 
   postUnpack = ''
     chmod -R u+w -- $sourceRoot/..

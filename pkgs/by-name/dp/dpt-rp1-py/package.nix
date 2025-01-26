@@ -1,4 +1,8 @@
-{ lib, python3Packages, fetchFromGitHub }:
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "dpt-rp1-py";
   version = "0.1.16";

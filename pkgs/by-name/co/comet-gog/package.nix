@@ -7,17 +7,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "comet-gog";
-  version = "0.1.2";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "imLinguin";
     repo = "comet";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-TdIqdNn5HnIED7LMn4qAzKPHlA5t/Q1Dn+W+ulx5qOU=";
+    tag = "v${version}";
+    hash = "sha256-LAEt2i/SRABrz+y2CTMudrugifLgHNxkMSdC8PXYF0E=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-gAGCpcVjOkUZa/CobOjOt07WMHpvE5/q1bw+z4yBeNE=";
+  cargoHash = "sha256-eXPVImew1EOT1DcoeIVPhqQ2buqHnlpqT6A0eaqG7tI=";
 
   # error: linker `aarch64-linux-gnu-gcc` not found
   postPatch = ''

@@ -1,4 +1,9 @@
-{ pname, fetchurl, lib }: rec {
+{
+  pname,
+  fetchurl,
+  lib,
+}:
+rec {
   version = "4.3.6";
   inherit pname;
 

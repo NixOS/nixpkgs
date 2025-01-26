@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, ninja
-, meson
-, scdoc
-, wayland-protocols
-, wayland-scanner
-, freetype
-, harfbuzz
-, cairo
-, pango
-, wayland
-, libxkbcommon
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  ninja,
+  meson,
+  scdoc,
+  wayland-protocols,
+  wayland-scanner,
+  freetype,
+  harfbuzz,
+  cairo,
+  pango,
+  wayland,
+  libxkbcommon,
 }:
 
 stdenv.mkDerivation rec {
@@ -35,7 +36,14 @@ stdenv.mkDerivation rec {
     wayland-protocols
     wayland-scanner
   ];
-  buildInputs = [ freetype harfbuzz cairo pango wayland libxkbcommon ];
+  buildInputs = [
+    freetype
+    harfbuzz
+    cairo
+    pango
+    wayland
+    libxkbcommon
+  ];
 
   meta = with lib; {
     description = "Tiny dynamic menu for Wayland";

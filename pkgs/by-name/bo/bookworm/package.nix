@@ -1,30 +1,31 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, appstream
-, coreutils
-, curl
-, desktop-file-utils
-, glib
-, gnugrep
-, gobject-introspection
-, gtk3
-, html2text
-, libgee
-, libxml2
-, meson
-, ninja
-, pantheon
-, pkg-config
-, poppler
-, poppler_utils
-, python3
-, sqlite
-, unar
-, unzip
-, vala
-, webkitgtk_4_0
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  appstream,
+  coreutils,
+  curl,
+  desktop-file-utils,
+  glib,
+  gnugrep,
+  gobject-introspection,
+  gtk3,
+  html2text,
+  libgee,
+  libxml2,
+  meson,
+  ninja,
+  pantheon,
+  pkg-config,
+  poppler,
+  poppler_utils,
+  python3,
+  sqlite,
+  unar,
+  unzip,
+  vala,
+  webkitgtk_4_0,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {
@@ -70,7 +71,17 @@ stdenv.mkDerivation rec {
   # These programs are expected in PATH from the source code and scripts
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix PATH : "${lib.makeBinPath [ unzip unar poppler_utils html2text coreutils curl gnugrep ]}"
+      --prefix PATH : "${
+        lib.makeBinPath [
+          unzip
+          unar
+          poppler_utils
+          html2text
+          coreutils
+          curl
+          gnugrep
+        ]
+      }"
       --prefix PATH : $out/bin
     )
   '';

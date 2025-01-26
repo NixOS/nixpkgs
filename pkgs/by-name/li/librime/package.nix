@@ -1,6 +1,24 @@
-{ lib, stdenv, fetchFromGitHub, cmake, boost, glog, leveldb, marisa, opencc,
-  yaml-cpp, gtest, capnproto, pkg-config, librime-lua, librime-octagram,
-  plugins ? [ librime-lua librime-octagram ] }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  boost,
+  glog,
+  leveldb,
+  marisa,
+  opencc,
+  yaml-cpp,
+  gtest,
+  capnproto,
+  pkg-config,
+  librime-lua,
+  librime-octagram,
+  plugins ? [
+    librime-lua
+    librime-octagram
+  ],
+}:
 
 let
   copySinglePlugin = plug: "cp -r ${plug} plugins/${plug.name}";
@@ -12,27 +30,38 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "librime";
-  version = "1.12.0";
+  version = "1.13.0";
 
   src = fetchFromGitHub {
     owner = "rime";
     repo = pname;
     rev = version;
-    sha256 = "sha256-NwtWpH1FxIZP/+oOJbsaEmySLxXlxkCCIG+SEGo242Q=";
+    sha256 = "sha256-vkliraMsBLX05gae834R0LX4uT+XaxrfHmDkFPh1XIQ=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
-  buildInputs = [ boost glog leveldb marisa opencc yaml-cpp gtest capnproto ]
-              ++ plugins; # for propagated build inputs
+  buildInputs = [
+    boost
+    glog
+    leveldb
+    marisa
+    opencc
+    yaml-cpp
+    gtest
+    capnproto
+  ] ++ plugins; # for propagated build inputs
 
   preConfigure = copyPlugins;
 
   meta = with lib; {
-    homepage    = "https://rime.im/";
+    homepage = "https://rime.im/";
     description = "Rime Input Method Engine, the core library";
-    license     = licenses.bsd3;
+    license = licenses.bsd3;
     maintainers = with maintainers; [ vonfry ];
-    platforms   = platforms.linux ++ platforms.darwin;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

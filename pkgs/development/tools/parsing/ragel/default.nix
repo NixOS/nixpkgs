@@ -1,9 +1,22 @@
-{ lib, stdenv, fetchurl, fig2dev, texliveSmall, ghostscript, colm
-, build-manual ? false
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fig2dev,
+  texliveSmall,
+  ghostscript,
+  colm,
+  build-manual ? false,
 }:
 
 let
-  generic = { version, sha256, broken ? false, license }:
+  generic =
+    {
+      version,
+      sha256,
+      broken ? false,
+      license,
+    }:
     stdenv.mkDerivation rec {
       pname = "ragel";
       inherit version;
@@ -13,7 +26,11 @@ let
         inherit sha256;
       };
 
-      buildInputs = lib.optionals build-manual [ fig2dev ghostscript texliveSmall ];
+      buildInputs = lib.optionals build-manual [
+        fig2dev
+        ghostscript
+        texliveSmall
+      ];
 
       preConfigure = lib.optionalString build-manual ''
         sed -i "s/build_manual=no/build_manual=yes/g" DIST

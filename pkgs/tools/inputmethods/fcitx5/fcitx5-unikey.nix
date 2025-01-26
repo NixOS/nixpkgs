@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, extra-cmake-modules
-, fcitx5
-, fcitx5-qt
-, gettext
-, qtbase
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  extra-cmake-modules,
+  fcitx5,
+  fcitx5-qt,
+  gettext,
+  qtbase,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,13 +24,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
+    gettext # msgfmt
   ];
 
   buildInputs = [
     qtbase
     fcitx5
     fcitx5-qt
-    gettext
   ];
 
   cmakeFlags = [

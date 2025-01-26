@@ -1,18 +1,19 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, makeWrapper
-, writeScript
-, mupdf
-, SDL2
-, re2c
-, freetype
-, jbig2dec
-, harfbuzz
-, openjpeg
-, gumbo
-, libjpeg
-, texpresso-tectonic
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  makeWrapper,
+  writeScript,
+  mupdf,
+  SDL2,
+  re2c,
+  freetype,
+  jbig2dec,
+  harfbuzz,
+  openjpeg,
+  gumbo,
+  libjpeg,
+  texpresso-tectonic,
 }:
 
 stdenv.mkDerivation rec {
@@ -47,9 +48,11 @@ stdenv.mkDerivation rec {
 
   buildFlags = [ "texpresso" ];
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.hostPlatform.isDarwin [
-    "-Wno-error=implicit-function-declaration"
-  ]);
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals stdenv.hostPlatform.isDarwin [
+      "-Wno-error=implicit-function-declaration"
+    ]
+  );
 
   installPhase = ''
     runHook preInstall

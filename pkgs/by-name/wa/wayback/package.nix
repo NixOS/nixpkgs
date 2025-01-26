@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
-, chromium
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  chromium,
 }:
 
 buildGoModule rec {

@@ -1,4 +1,17 @@
-{ stdenv, lib, fetchFromGitHub, bash, coreutils, dtc, file, gawk, gnugrep, gnused, pandoc, which }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  bash,
+  coreutils,
+  dtc,
+  file,
+  gawk,
+  gnugrep,
+  gnused,
+  pandoc,
+  which,
+}:
 
 stdenv.mkDerivation rec {
   pname = "restool";
@@ -11,8 +24,19 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ryTDyqSy39e8Omf7l8lK4mLWr8jccDhMVPldkVGSQVo=";
   };
 
-  nativeBuildInputs = [ file pandoc ];
-  buildInputs = [ bash coreutils dtc gawk gnugrep gnused which ];
+  nativeBuildInputs = [
+    file
+    pandoc
+  ];
+  buildInputs = [
+    bash
+    coreutils
+    dtc
+    gawk
+    gnugrep
+    gnused
+    which
+  ];
 
   enableParallelBuilding = true;
   makeFlags = [

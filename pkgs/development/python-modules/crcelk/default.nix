@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zeroSteiner";
     repo = "crcelk";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-eJt0qcG0ejTQJyjOSi6Au2jH801KOMnk7f6cLbd7ADw=";
   };
 

@@ -1,46 +1,100 @@
-{ stdenv, lib, fetchurl, coreutils, ncurses, gzip, flex, bison
-, less
-, buildPackages
-, x11Mode ? false, qtMode ? false, libXaw, libXext, libXpm, bdftopcf, mkfontdir, pkg-config, qt5
-, copyDesktopItems, makeDesktopItem
+{
+  stdenv,
+  lib,
+  fetchurl,
+  coreutils,
+  ncurses,
+  gzip,
+  flex,
+  bison,
+  less,
+  buildPackages,
+  x11Mode ? false,
+  qtMode ? false,
+  libXaw,
+  libXext,
+  libXpm,
+  bdftopcf,
+  mkfontdir,
+  pkg-config,
+  qt5,
+  copyDesktopItems,
+  makeDesktopItem,
 }:
 
 let
   platform =
-    if stdenv.hostPlatform.isUnix then "unix"
-    else throw "Unknown platform for NetHack: ${stdenv.hostPlatform.system}";
+    if stdenv.hostPlatform.isUnix then
+      "unix"
+    else
+      throw "Unknown platform for NetHack: ${stdenv.hostPlatform.system}";
   unixHint =
-    if x11Mode then "linux-x11"
-    else if qtMode then "linux-qt4"
-    else if stdenv.hostPlatform.isLinux  then "linux"
-    else if stdenv.hostPlatform.isDarwin then "macosx10.14"
+    if x11Mode then
+      "linux-x11"
+    else if qtMode then
+      "linux-qt4"
+    else if stdenv.hostPlatform.isLinux then
+      "linux"
+    else if stdenv.hostPlatform.isDarwin then
+      "macosx10.14"
     # We probably want something different for Darwin
-    else "unix";
+    else
+      "unix";
   userDir = "~/.config/nethack";
-  binPath = lib.makeBinPath [ coreutils less ];
+  binPath = lib.makeBinPath [
+    coreutils
+    less
+  ];
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   version = "3.6.7";
-  pname = if x11Mode then "nethack-x11"
-         else if qtMode then "nethack-qt"
-         else "nethack";
+  pname =
+    if x11Mode then
+      "nethack-x11"
+    else if qtMode then
+      "nethack-qt"
+    else
+      "nethack";
 
   src = fetchurl {
-    url = "https://nethack.org/download/${version}/nethack-${lib.replaceStrings ["."] [""] version}-src.tgz";
+    url = "https://nethack.org/download/${version}/nethack-${
+      lib.replaceStrings [ "." ] [ "" ] version
+    }-src.tgz";
     sha256 = "sha256-mM9n323r+WaKYXRaqEwJvKs2Ll0z9blE7FFV1E0qrLI=";
   };
 
-  buildInputs = [ ncurses ]
-                ++ lib.optionals x11Mode [ libXaw libXext libXpm ]
-                ++ lib.optionals qtMode [ gzip qt5.qtbase.bin qt5.qtmultimedia.bin ];
+  buildInputs =
+    [ ncurses ]
+    ++ lib.optionals x11Mode [
+      libXaw
+      libXext
+      libXpm
+    ]
+    ++ lib.optionals qtMode [
+      gzip
+      qt5.qtbase.bin
+      qt5.qtmultimedia.bin
+    ];
 
-  nativeBuildInputs = [ flex bison copyDesktopItems ]
-                      ++ lib.optionals x11Mode [ mkfontdir bdftopcf ]
-                      ++ lib.optionals qtMode [
-                           pkg-config mkfontdir qt5.qtbase.dev
-                           qt5.qtmultimedia.dev qt5.wrapQtAppsHook
-                           bdftopcf
-                         ];
+  nativeBuildInputs =
+    [
+      flex
+      bison
+      copyDesktopItems
+    ]
+    ++ lib.optionals x11Mode [
+      mkfontdir
+      bdftopcf
+    ]
+    ++ lib.optionals qtMode [
+      pkg-config
+      mkfontdir
+      qt5.qtbase.dev
+      qt5.qtmultimedia.dev
+      qt5.wrapQtAppsHook
+      bdftopcf
+    ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
@@ -69,23 +123,24 @@ in stdenv.mkDerivation rec {
       -i sys/unix/hints/macosx10.14
     sed -e '/define CHDIR/d' -i include/config.h
     ${lib.optionalString qtMode ''
-    sed \
-      -e 's,^QTDIR *=.*,QTDIR=${qt5.qtbase.dev},' \
-      -e 's,CFLAGS.*QtGui.*,CFLAGS += `pkg-config Qt5Gui --cflags`,' \
-      -e 's,CFLAGS+=-DCOMPRESS.*,CFLAGS+=-DCOMPRESS=\\"${gzip}/bin/gzip\\" \\\
-        -DCOMPRESS_EXTENSION=\\".gz\\",' \
-      -e 's,moc-qt4,moc,' \
-      -i sys/unix/hints/linux-qt4
+      sed \
+        -e 's,^QTDIR *=.*,QTDIR=${qt5.qtbase.dev},' \
+        -e 's,CFLAGS.*QtGui.*,CFLAGS += `pkg-config Qt5Gui --cflags`,' \
+        -e 's,CFLAGS+=-DCOMPRESS.*,CFLAGS+=-DCOMPRESS=\\"${gzip}/bin/gzip\\" \\\
+          -DCOMPRESS_EXTENSION=\\".gz\\",' \
+        -e 's,moc-qt4,moc,' \
+        -i sys/unix/hints/linux-qt4
     ''}
     ${lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform)
-    # If we're cross-compiling, replace the paths to the data generation tools
-    # with the ones from the build platform's nethack package, since we can't
-    # run the ones we've built here.
-    ''
-    ${buildPackages.perl}/bin/perl -p \
-      -e 's,[a-z./]+/(makedefs|dgn_comp|lev_comp|dlb)(?!\.),${buildPackages.nethack}/libexec/nethack/\1,g' \
-      -i sys/unix/Makefile.*
-    ''}
+      # If we're cross-compiling, replace the paths to the data generation tools
+      # with the ones from the build platform's nethack package, since we can't
+      # run the ones we've built here.
+      ''
+        ${buildPackages.perl}/bin/perl -p \
+          -e 's,[a-z./]+/(makedefs|dgn_comp|lev_comp|dlb)(?!\.),${buildPackages.nethack}/libexec/nethack/\1,g' \
+          -i sys/unix/Makefile.*
+      ''
+    }
     sed -i -e '/rm -f $(MAKEDEFS)/d' sys/unix/Makefile.src
     # Fix building on darwin where otherwise __has_attribute fails with an empty parameter
     sed -e 's/define __warn_unused_result__ .*/define __warn_unused_result__ __unused__/' -i include/tradstdc.h
@@ -151,13 +206,19 @@ in stdenv.mkDerivation rec {
     (makeDesktopItem {
       name = "NetHack";
       exec =
-         if x11Mode then "nethack-x11"
-         else if qtMode then "nethack-qt"
-         else "nethack";
+        if x11Mode then
+          "nethack-x11"
+        else if qtMode then
+          "nethack-qt"
+        else
+          "nethack";
       icon = "nethack";
       desktopName = "NetHack";
       comment = "NetHack is a single player dungeon exploration game";
-      categories = [ "Game" "ActionGame" ];
+      categories = [
+        "Game"
+        "ActionGame"
+      ];
     })
   ];
 

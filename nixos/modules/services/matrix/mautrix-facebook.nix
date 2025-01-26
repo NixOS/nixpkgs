@@ -1,17 +1,19 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.mautrix-facebook;
-  settingsFormat = pkgs.formats.json {};
+  settingsFormat = pkgs.formats.json { };
   settingsFile = settingsFormat.generate "mautrix-facebook-config.json" cfg.settings;
 
-  puppetRegex = lib.concatStringsSep
-    ".*"
-    (map
-      lib.escapeRegex
-      (lib.splitString
-        "{userid}"
-        cfg.settings.bridge.username_template));
-in {
+  puppetRegex = lib.concatStringsSep ".*" (
+    map lib.escapeRegex (lib.splitString "{userid}" cfg.settings.bridge.username_template)
+  );
+in
+{
   options = {
     services.mautrix-facebook = {
       enable = lib.mkEnableOption "Mautrix-Facebook, a Matrix-Facebook hybrid puppeting/relaybot bridge";
@@ -63,7 +65,7 @@ in {
             };
             root = {
               level = "INFO";
-              handlers = ["journal"];
+              handlers = [ "journal" ];
             };
           };
         };
@@ -110,7 +112,7 @@ in {
 
       registrationData = lib.mkOption {
         type = lib.types.attrs;
-        default = {};
+        default = { };
         description = ''
           Output data for appservice registration. Simply make any desired changes and serialize to JSON. Note that this data contains secrets so think twice before putting it into the nix store.
 
@@ -121,7 +123,7 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    users.groups.mautrix-facebook = {};
+    users.groups.mautrix-facebook = { };
 
     users.users.mautrix-facebook = {
       group = "mautrix-facebook";
@@ -129,18 +131,22 @@ in {
     };
 
     services.postgresql = lib.mkIf cfg.configurePostgresql {
-      ensureDatabases = ["mautrix-facebook"];
-      ensureUsers = [{
-        name = "mautrix-facebook";
-        ensureDBOwnership = true;
-      }];
+      ensureDatabases = [ "mautrix-facebook" ];
+      ensureUsers = [
+        {
+          name = "mautrix-facebook";
+          ensureDBOwnership = true;
+        }
+      ];
     };
 
     systemd.services.mautrix-facebook = rec {
       wantedBy = [ "multi-user.target" ];
-      wants = [
-        "network-online.target"
-      ] ++ lib.optional config.services.matrix-synapse.enable config.services.matrix-synapse.serviceUnit
+      wants =
+        [
+          "network-online.target"
+        ]
+        ++ lib.optional config.services.matrix-synapse.enable config.services.matrix-synapse.serviceUnit
         ++ lib.optional cfg.configurePostgresql "postgresql.service";
       after = wants;
 
@@ -180,7 +186,7 @@ in {
               regex = "@${puppetRegex}:${lib.escapeRegex cfg.settings.homeserver.domain}";
             }
           ];
-          aliases = [];
+          aliases = [ ];
         };
 
         url = cfg.settings.appservice.address;

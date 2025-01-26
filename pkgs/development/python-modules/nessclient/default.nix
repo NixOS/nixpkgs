@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nickw444";
     repo = "nessclient";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-STDEIY7D02MlH+R6uLAKl6ghSQjhG1OEQWj71DrZP30=";
   };
 

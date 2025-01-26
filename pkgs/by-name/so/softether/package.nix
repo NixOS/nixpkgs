@@ -6,6 +6,7 @@
   readline,
   ncurses,
   zlib,
+  bash,
   dataDir ? "/var/lib/softether",
 }:
 
@@ -16,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "SoftEtherVPN";
     repo = "SoftEtherVPN_Stable";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-yvN5hlfAtE+gWm0s/TY/Lp53By5SDHyQIvvDutRnDNQ=";
   };
 
@@ -25,6 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     readline
     ncurses
     zlib
+    bash
   ];
 
   preConfigure = ''
@@ -40,6 +42,18 @@ stdenv.mkDerivation (finalAttrs: {
       -e "/echo/s|echo $out/|echo |g" \
       Makefile
   '';
+
+  postInstall = ''
+    substituteInPlace $out/bin/vpnbridge --replace-fail /var/lib/softether/vpnbridge/vpnbridge $out/var/lib/softether/vpnbridge/vpnbridge
+    substituteInPlace $out/bin/vpnclient --replace-fail /var/lib/softether/vpnclient/vpnclient $out/var/lib/softether/vpnclient/vpnclient
+    substituteInPlace $out/bin/vpncmd --replace-fail /var/lib/softether/vpncmd/vpncmd $out/var/lib/softether/vpncmd/vpncmd
+    substituteInPlace $out/bin/vpnserver --replace-fail /var/lib/softether/vpnserver/vpnserver $out/var/lib/softether/vpnserver/vpnserver
+  '';
+
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-incompatible-pointer-types"
+    "-Wno-implicit-function-declaration"
+  ];
 
   meta = {
     description = "Open-Source Free Cross-platform Multi-protocol VPN Program";

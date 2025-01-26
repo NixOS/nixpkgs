@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -36,7 +37,10 @@ python3.pkgs.buildPythonApplication rec {
     description = "JFFS2 filesystem extraction tool";
     homepage = "https://github.com/onekey-sec/jefferson";
     license = licenses.mit;
-    maintainers = with maintainers; [ tnias vlaci ];
+    maintainers = with maintainers; [
+      tnias
+      vlaci
+    ];
     mainProgram = "jefferson";
   };
 }

@@ -1,28 +1,29 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, rustPlatform
-, marked-man
-, coreutils
-, vulkan-loader
-, wayland
-, pkg-config
-, udev
-, v4l-utils
-, dbus
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  rustPlatform,
+  marked-man,
+  coreutils,
+  vulkan-loader,
+  wayland,
+  pkg-config,
+  udev,
+  v4l-utils,
+  dbus,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wluma";
-  version = "4.5.1";
+  version = "4.6.1";
 
   src = fetchFromGitHub {
     owner = "maximbaz";
     repo = "wluma";
     rev = version;
-    sha256 = "sha256-5uSExmh1a88kZDly4VrHzI8YwfTDB8wm2mMGZyvKsk4=";
+    sha256 = "sha256-ds/qBaQNyZ/HdetI1QdJOZcjVotz4xHgoIIuWI9xOEg=";
   };
 
   postPatch = ''
@@ -38,7 +39,7 @@ rustPlatform.buildRustPackage rec {
       'ExecStart=/usr/bin/wluma' 'ExecStart=${placeholder "out"}/bin/wluma'
   '';
 
-  cargoHash = "sha256-hKxKEs88tB05AiWC/LuC/0jJ1RxeUnpp35A6UTQK4xw=";
+  cargoHash = "sha256-WUczKF9Mq39HpnQ077AiXWy8jN30IehzOxqCmUFGMh0=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -72,7 +73,12 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/maximbaz/wluma";
     changelog = "https://github.com/maximbaz/wluma/releases/tag/${version}";
     license = licenses.isc;
-    maintainers = with maintainers; [ yshym jmc-figueira atemu ];
+    maintainers = with maintainers; [
+      yshym
+      jmc-figueira
+      atemu
+      Rishik-Y
+    ];
     platforms = platforms.linux;
     mainProgram = "wluma";
   };

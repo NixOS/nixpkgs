@@ -2,12 +2,14 @@
   lib,
   darwin,
   fetchFromGitHub,
+  testers,
   nix-update-script,
   rustPlatform,
   stdenv,
+  rainfrog,
 }:
 let
-  version = "0.2.9";
+  version = "0.2.11";
 in
 rustPlatform.buildRustPackage {
   inherit version;
@@ -16,11 +18,11 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "achristmascarl";
     repo = "rainfrog";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-PiJRVf+rpYFWRmys7Ca2lLfe5F9/ksIzkpKs6CQWu+A=";
+    tag = "v${version}";
+    hash = "sha256-gtiwkgNyqq+KMATkzaLOjPB6jcjVAM2qq6zwZ1WGkPE=";
   };
 
-  cargoHash = "sha256-L0gXxV/3+5oRV/Ipm4sRqr9dh9AEChWhtILO3PaNxYY=";
+  cargoHash = "sha256-u0BmDtOIlYfHEAiDp+BnY1/ne3tKwmy/Cem6+5CX3GE=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
     with darwin.apple_sdk.frameworks;
@@ -31,7 +33,17 @@ rustPlatform.buildRustPackage {
     ]
   );
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests.version = testers.testVersion {
+      package = rainfrog;
+
+      command = ''
+        RAINFROG_DATA="$(mktemp -d)" rainfrog --version
+      '';
+    };
+
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     changelog = "https://github.com/achristmascarl/rainfrog/releases/tag/v${version}";

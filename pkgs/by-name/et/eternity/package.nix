@@ -1,4 +1,14 @@
-{ lib, stdenv, cmake, libGL, SDL2, SDL2_mixer, SDL2_net, fetchFromGitHub, makeWrapper }:
+{
+  lib,
+  stdenv,
+  cmake,
+  libGL,
+  SDL2,
+  SDL2_mixer,
+  SDL2_net,
+  fetchFromGitHub,
+  makeWrapper,
+}:
 
 stdenv.mkDerivation rec {
   pname = "eternity-engine";
@@ -11,8 +21,16 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake makeWrapper ];
-  buildInputs = [ libGL SDL2 SDL2_mixer SDL2_net ];
+  nativeBuildInputs = [
+    cmake
+    makeWrapper
+  ];
+  buildInputs = [
+    libGL
+    SDL2
+    SDL2_mixer
+    SDL2_net
+  ];
 
   installPhase = ''
     install -Dm755 eternity/eternity $out/lib/eternity/eternity

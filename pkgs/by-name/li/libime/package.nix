@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchFromGitHub
-, cmake
-, extra-cmake-modules
-, boost
-, python3
-, fcitx5
-, zstd
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchFromGitHub,
+  cmake,
+  extra-cmake-modules,
+  boost,
+  python3,
+  fcitx5,
+  zstd,
 }:
 
 let

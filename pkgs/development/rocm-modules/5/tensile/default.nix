@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rocmUpdateScript
-, buildPythonPackage
-, pytestCheckHook
-, setuptools
-, pyyaml
-, msgpack
-, pandas
-, joblib
-, filelock
-, rocminfo
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rocmUpdateScript,
+  buildPythonPackage,
+  pytestCheckHook,
+  setuptools,
+  pyyaml,
+  msgpack,
+  pandas,
+  joblib,
+  filelock,
+  rocminfo,
 }:
 
 buildPythonPackage rec {
@@ -60,6 +61,7 @@ buildPythonPackage rec {
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
     platforms = platforms.linux;
-    broken = versions.minor version != versions.minor stdenv.cc.version || versionAtLeast version "6.0.0";
+    broken =
+      versions.minor version != versions.minor stdenv.cc.version || versionAtLeast version "6.0.0";
   };
 }

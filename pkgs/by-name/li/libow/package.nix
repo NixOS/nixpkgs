@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, pkg-config, libtool }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  pkg-config,
+  libtool,
+}:
 
 stdenv.mkDerivation rec {
   version = "3.2p4";
@@ -11,7 +19,12 @@ stdenv.mkDerivation rec {
     sha256 = "0dln1ar7bxwhpi36sccmpwapy7iz4j097rbf02mgn42lw5vrcg3s";
   };
 
-  nativeBuildInputs = [ autoconf automake libtool pkg-config ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+    libtool
+    pkg-config
+  ];
 
   preConfigure = ''
     # Tries to use glibtoolize on Darwin, but it shouldn't for Nix.

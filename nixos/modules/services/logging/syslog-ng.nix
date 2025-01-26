@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
 
   cfg = config.services.syslog-ng;
@@ -14,14 +19,17 @@ let
 
   syslogngOptions = [
     "--foreground"
-    "--module-path=${lib.concatStringsSep ":" (["${cfg.package}/lib/syslog-ng"] ++ cfg.extraModulePaths)}"
+    "--module-path=${
+      lib.concatStringsSep ":" ([ "${cfg.package}/lib/syslog-ng" ] ++ cfg.extraModulePaths)
+    }"
     "--cfgfile=${syslogngConfig}"
     "--control=${ctrlSocket}"
     "--persist-file=${persistFile}"
     "--pidfile=${pidFile}"
   ];
 
-in {
+in
+{
   imports = [
     (lib.mkRemovedOptionModule [ "services" "syslog-ng" "serviceName" ] "")
     (lib.mkRemovedOptionModule [ "services" "syslog-ng" "listenToJournal" ] "")
@@ -40,7 +48,7 @@ in {
       package = lib.mkPackageOption pkgs "syslogng" { };
       extraModulePaths = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default = [];
+        default = [ ];
         description = ''
           A list of paths that should be included in syslog-ng's
           `--module-path` option. They should usually

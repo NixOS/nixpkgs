@@ -1,17 +1,22 @@
-{ lib, rustPlatform, fetchFromGitHub, nixosTests }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  nixosTests,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "cntr";
-  version = "1.5.4";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "cntr";
     rev = version;
-    sha256 = "sha256-ErGratd1RCynE+iS+qn9feJi5o9f94lUNJZfy4XAjkc=";
+    sha256 = "sha256-A622DfygwZ8HVgSxmPINkuCsYFKQBAUdsnXQmB/LS8w=";
   };
 
-  cargoHash = "sha256-4EDAQ0MG0BTN0L3W4Jm0IdVY8vj5U3faO+ruUjLMBMY=";
+  cargoHash = "sha256-LRX7NuNLyEnw+2kj1MG4JvSL2jzVFxH6tMAx4+cCeow=";
 
   passthru.tests = nixosTests.cntr;
 
@@ -20,7 +25,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Mic92/cntr";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = [ maintainers.mic92 ];
+    maintainers = with maintainers; [
+      mic92
+      sigmasquadron
+    ];
     mainProgram = "cntr";
   };
 }

@@ -1,8 +1,15 @@
-{ config, lib, options, pkgs, ... }:
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.airsonic;
   opt = options.services.airsonic;
-in {
+in
+{
   options = {
 
     services.airsonic = {
@@ -140,8 +147,7 @@ in {
           -Dserver.port=${toString cfg.port} \
           -Dserver.context-path=${cfg.contextPath} \
           -Djava.awt.headless=true \
-          ${lib.optionalString (cfg.virtualHost != null)
-            "-Dserver.use-forward-headers=true"} \
+          ${lib.optionalString (cfg.virtualHost != null) "-Dserver.use-forward-headers=true"} \
           ${toString cfg.jvmOptions} \
           -verbose:gc \
           -jar ${cfg.war}
@@ -168,6 +174,6 @@ in {
       createHome = true;
       isSystemUser = true;
     };
-    users.groups.airsonic = {};
+    users.groups.airsonic = { };
   };
 }

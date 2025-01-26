@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "stac-utils";
     repo = "pystac";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-yuAam/sXaGMFp1Kwxd28v3nOV05GC3sUY+gKJ4nLwTs=";
   };
 

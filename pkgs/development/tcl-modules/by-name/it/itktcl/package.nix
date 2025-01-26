@@ -1,15 +1,25 @@
-{ lib, stdenv, fetchurl, mkTclDerivation, tk, incrtcl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  mkTclDerivation,
+  tk,
+  incrtcl,
+}:
 
 mkTclDerivation rec {
   pname = "itk-tcl";
   version = "4.1.0";
 
   src = fetchurl {
-    url    = "mirror://sourceforge/incrtcl/%5BIncr%20Tcl_Tk%5D-source/3.4/itk${version}.tar.gz";
+    url = "mirror://sourceforge/incrtcl/%5BIncr%20Tcl_Tk%5D-source/3.4/itk${version}.tar.gz";
     sha256 = "1iy964jfgsfnc1agk1w6bbm44x18ily8d4wmr7cc9z9f4acn2r6s";
   };
 
-  buildInputs = [ tk incrtcl ];
+  buildInputs = [
+    tk
+    incrtcl
+  ];
   enableParallelBuilding = true;
 
   configureFlags = [
@@ -26,13 +36,17 @@ mkTclDerivation rec {
     rmdir $out/lib/itk${version}
   '';
 
-  outputs = [ "out" "dev" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "man"
+  ];
 
   meta = with lib; {
-    homepage    = "https://incrtcl.sourceforge.net/";
+    homepage = "https://incrtcl.sourceforge.net/";
     description = "Mega-widget toolkit for incr Tk";
-    license     = licenses.tcltk;
-    platforms   = platforms.unix;
+    license = licenses.tcltk;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ thoughtpolice ];
   };
 }

@@ -14,16 +14,30 @@
   opensnitch,
   nixosTests,
 }:
+let
+  # Override protoc-gen-go-grpc to use the compatible version
+  protoc-gen-go-grpc' = protoc-gen-go-grpc.overrideAttrs (oldAttrs: rec {
+    version = "1.3.0";
 
+    src = fetchFromGitHub {
+      owner = "grpc";
+      repo = "grpc-go";
+      rev = "cmd/protoc-gen-go-grpc/v${version}";
+      hash = "sha256-Zy0k5X/KFzCao9xAGt5DNb0MMGEyqmEsDj+uvXI4xH4=";
+    };
+
+    vendorHash = "sha256-y+/hjYUTFZuq55YAZ5M4T1cwIR+XFQBmWVE+Cg1Y7PI=";
+  });
+in
 buildGoModule rec {
   pname = "opensnitch";
-  version = "1.6.6";
+  version = "1.6.7";
 
   src = fetchFromGitHub {
     owner = "evilsocket";
     repo = "opensnitch";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-pJPpkXRp7cby6Mvc7IzxH9u6MY4PcrRPkimTw3je6iI=";
+    tag = "v${version}";
+    hash = "sha256-2BwFCRbVvs7pAM5SnhynWws2+QthB/F9V6DYPViDICU=";
   };
 
   postPatch = ''
@@ -43,7 +57,7 @@ buildGoModule rec {
     protobuf
     go-protobuf
     makeWrapper
-    protoc-gen-go-grpc
+    protoc-gen-go-grpc'
   ];
 
   vendorHash = "sha256-urRujxcp58ZuhUtTAqCK0etSZ16YYG/6JY/aOUodl9g=";

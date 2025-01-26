@@ -12,7 +12,7 @@ let
   src = fetchFromGitHub {
     owner = "AnalogJ";
     repo = "scrutiny";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-WoU5rdsIEhZQ+kPoXcestrGXC76rFPvhxa0msXjFsNg=";
   };
 
@@ -47,7 +47,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-SiQw6pq0Fyy8Ia39S/Vgp9Mlfog2drtVn43g+GXiQuI=";
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   ldflags = [ "-extldflags=-static" ];
 

@@ -24,12 +24,10 @@ buildGoModule rec {
     "-X main.version=v${version}"
   ];
 
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
   doInstallCheck = true;
   versionCheckProgramArg = "version";
-
   checkFlags = [
     "-skip=TestMQTTBackend" # Depends on external MQTT broker
   ];

@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, kernel }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+}:
 
 stdenv.mkDerivation rec {
   pname = "akvcam";
@@ -13,7 +18,7 @@ stdenv.mkDerivation rec {
   sourceRoot = "${src.name}/src";
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
-  makeFlags = kernel.makeFlags ++ [
+  makeFlags = kernel.moduleMakeFlags ++ [
     "KERNEL_DIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
 

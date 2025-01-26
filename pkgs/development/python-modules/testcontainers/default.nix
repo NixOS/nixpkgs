@@ -6,25 +6,24 @@
   # build-system
   poetry-core,
 
-  # buildInputs
-  deprecation,
-  docker,
-  wrapt,
-
   # dependencies
+  docker,
+  python-dotenv,
   typing-extensions,
+  urllib3,
+  wrapt,
 }:
 
 buildPythonPackage rec {
   pname = "testcontainers";
-  version = "4.8.2";
+  version = "4.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "testcontainers";
     repo = "testcontainers-python";
-    rev = "refs/tags/testcontainers-v${version}";
-    hash = "sha256-cfvhTNUadx7zRmDPAv9Djsx+jWgBIAf9dMmwop/8oa0=";
+    tag = "testcontainers-v${version}";
+    hash = "sha256-qbOtsENvPl+l2ODGyuxmiAoJwU4EIACu1GW5GPP207c=";
   };
 
   postPatch = ''
@@ -33,18 +32,21 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  buildInputs = [
-    deprecation
+  dependencies = [
     docker
+    typing-extensions
+    python-dotenv
+    urllib3
     wrapt
   ];
-
-  dependencies = [ typing-extensions ];
 
   # Tests require various container and database services running
   doCheck = false;
 
-  pythonImportsCheck = [ "testcontainers" ];
+  pythonImportsCheck = [
+    "testcontainers"
+    "testcontainers.core.container"
+  ];
 
   meta = {
     description = "Allows using docker containers for functional and integration testing";

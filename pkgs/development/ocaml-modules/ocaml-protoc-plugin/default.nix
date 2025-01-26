@@ -1,14 +1,15 @@
-{ lib
-, fetchFromGitHub
-, buildDunePackage
-, pkg-config
-, protobuf
-, zarith
-, ppx_deriving
-, ppx_deriving_yojson
-, re
-, dune-site
-, ppx_expect
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  pkg-config,
+  protobuf,
+  zarith,
+  ppx_deriving,
+  ppx_deriving_yojson,
+  re,
+  dune-site,
+  ppx_expect,
 }:
 
 buildDunePackage rec {

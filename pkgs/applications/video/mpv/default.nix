@@ -39,7 +39,7 @@
   libxkbcommon,
   lua,
   makeWrapper,
-  mesa,
+  libgbm,
   meson,
   mujs,
   ninja,
@@ -187,7 +187,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals cmsSupport [ lcms2 ]
     ++ lib.optionals drmSupport [
       libdrm
-      mesa
+      libgbm
     ]
     ++ lib.optionals dvdnavSupport [
       libdvdnav
@@ -282,7 +282,7 @@ stdenv.mkDerivation (finalAttrs: {
       ;
 
     wrapper = callPackage ./wrapper.nix { };
-    scripts = callPackage ./scripts { };
+    scripts = callPackage ./scripts.nix { };
 
     tests = {
       inherit (nixosTests) mpv;

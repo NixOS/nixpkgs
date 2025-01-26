@@ -1,4 +1,8 @@
-{ lib, rustPlatform, fetchCrate }:
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-binutils";
@@ -18,7 +22,13 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/rust-embedded/cargo-binutils";
     changelog = "https://github.com/rust-embedded/cargo-binutils/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ asl20 mit ];
-    maintainers = with maintainers; [ stupremee matthiasbeyer ];
+    license = with licenses; [
+      asl20
+      mit
+    ];
+    maintainers = with maintainers; [
+      stupremee
+      matthiasbeyer
+    ];
   };
 }

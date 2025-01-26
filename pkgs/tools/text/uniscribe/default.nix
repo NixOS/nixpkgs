@@ -1,4 +1,10 @@
-{ stdenv, lib, bundlerEnv, bundlerUpdateScript, makeWrapper }:
+{
+  stdenv,
+  lib,
+  bundlerEnv,
+  bundlerUpdateScript,
+  makeWrapper,
+}:
 
 let
   rubyEnv = bundlerEnv {

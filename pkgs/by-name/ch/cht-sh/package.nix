@@ -1,24 +1,26 @@
-{ lib, stdenv
-, fetchFromGitHub
-, unstableGitUpdater
-, makeWrapper
-, curl
-, ncurses
-, rlwrap
-, xsel
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  unstableGitUpdater,
+  makeWrapper,
+  curl,
+  ncurses,
+  rlwrap,
+  xsel,
 }:
 
 stdenv.mkDerivation {
   pname = "cht.sh";
-  version = "0-unstable-2022-04-18";
+  version = "0-unstable-2024-12-31";
 
   nativeBuildInputs = [ makeWrapper ];
 
   src = fetchFromGitHub {
     owner = "chubin";
     repo = "cheat.sh";
-    rev = "571377f2f79422398a701cb1864487124ec3dcc6";
-    sha256 = "0e9YhYcxU9t0SFeT1TjoRGTM3h1xRC528ae69tvz+a0=";
+    rev = "045d15f074310028c0760b9ae61b96245c835325";
+    sha256 = "5Vsyd8z5qkPyDJVX41EFlMimRkRtjGFL+n+jnmONaVI=";
   };
 
   # Fix ".cht.sh-wrapped" in the help message
@@ -33,7 +35,14 @@ stdenv.mkDerivation {
     cp share/zsh.txt $out/share/zsh/site-functions/_cht
 
     wrapProgram "$out/bin/cht.sh" \
-      --prefix PATH : "${lib.makeBinPath [ curl rlwrap ncurses xsel ]}"
+      --prefix PATH : "${
+        lib.makeBinPath [
+          curl
+          rlwrap
+          ncurses
+          xsel
+        ]
+      }"
   '';
 
   passthru.updateScript = unstableGitUpdater {
@@ -43,7 +52,10 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "CLI client for cheat.sh, a community driven cheat sheet";
     license = licenses.mit;
-    maintainers = with maintainers; [ fgaz evanjs ];
+    maintainers = with maintainers; [
+      fgaz
+      evanjs
+    ];
     homepage = "https://github.com/chubin/cheat.sh";
     mainProgram = "cht.sh";
   };

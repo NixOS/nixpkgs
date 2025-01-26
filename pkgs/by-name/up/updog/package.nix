@@ -1,4 +1,8 @@
-{ lib, python3Packages, fetchPypi }:
+{
+  lib,
+  python3Packages,
+  fetchPypi,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "updog";
@@ -10,7 +14,11 @@ python3Packages.buildPythonApplication rec {
   };
 
   propagatedBuildInputs = with python3Packages; [
-    colorama flask flask-httpauth werkzeug pyopenssl
+    colorama
+    flask
+    flask-httpauth
+    werkzeug
+    pyopenssl
   ];
 
   checkPhase = ''

@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, makeDesktopItem, makeWrapper, cmake, libjpeg, zlib, libpng, libGL, SDL2
-, unstableGitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeDesktopItem,
+  makeWrapper,
+  cmake,
+  libjpeg,
+  zlib,
+  libpng,
+  libGL,
+  SDL2,
+  unstableGitUpdater,
 }:
 
 let
@@ -30,7 +41,8 @@ let
     genericName = "Jedi Outcast";
     categories = [ "Game" ];
   };
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "openjk";
   version = "0-unstable-2024-04-07";
 
@@ -43,18 +55,33 @@ in stdenv.mkDerivation {
 
   dontAddPrefix = true;
 
-  nativeBuildInputs = [ makeWrapper cmake ];
-  buildInputs = [ libjpeg zlib libpng libGL SDL2 ];
+  nativeBuildInputs = [
+    makeWrapper
+    cmake
+  ];
+  buildInputs = [
+    libjpeg
+    zlib
+    libpng
+    libGL
+    SDL2
+  ];
 
-  outputs = [ "out" "openjo" "openja" ];
+  outputs = [
+    "out"
+    "openjo"
+    "openja"
+  ];
 
   # move from $out/JediAcademy to $out/opt/JediAcademy
   preConfigure = ''
     cmakeFlagsArray=("-DCMAKE_INSTALL_PREFIX=$out/opt")
   '';
-  cmakeFlags = ["-DBuildJK2SPEngine:BOOL=ON"
-                "-DBuildJK2SPGame:BOOL=ON"
-                "-DBuildJK2SPRdVanilla:BOOL=ON"];
+  cmakeFlags = [
+    "-DBuildJK2SPEngine:BOOL=ON"
+    "-DBuildJK2SPGame:BOOL=ON"
+    "-DBuildJK2SPRdVanilla:BOOL=ON"
+  ];
 
   postInstall = ''
     mkdir -p $out/bin $openja/bin $openjo/bin

@@ -13,6 +13,7 @@ in
   imports = [
     ./azure-common.nix
     ./disk-size-option.nix
+    ../image/file-options.nix
     (lib.mkRenamedOptionModuleWith {
       sinceRelease = 2411;
       from = [
@@ -61,10 +62,14 @@ in
   };
 
   config = {
+    image.extension = "vhd";
+    system.nixos.tags = [ "azure" ];
+    system.build.image = config.system.build.azureImage;
     system.build.azureImage = import ../../lib/make-disk-image.nix {
       name = "azure-image";
+      inherit (config.image) baseName;
       postVM = ''
-        ${pkgs.vmTools.qemu}/bin/qemu-img convert -f raw -o subformat=fixed,force_size -O vpc $diskImage $out/disk.vhd
+        ${pkgs.vmTools.qemu}/bin/qemu-img convert -f raw -o subformat=fixed,force_size -O vpc $diskImage $out/${config.image.fileName}
         rm $diskImage
       '';
       configFile = ./azure-config-user.nix;

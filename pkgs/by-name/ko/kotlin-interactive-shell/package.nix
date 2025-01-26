@@ -1,4 +1,10 @@
-{ lib, maven, fetchFromGitHub, makeWrapper, jre }:
+{
+  lib,
+  maven,
+  fetchFromGitHub,
+  makeWrapper,
+  jre,
+}:
 
 maven.buildMavenPackage rec {
   pname = "kotlin-interactive-shell";

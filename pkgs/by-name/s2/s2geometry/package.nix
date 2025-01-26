@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "google";
     repo = "s2geometry";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-VjgGcGgQlKmjUq+JU0JpyhOZ9pqwPcBUFEPGV9XoHc0=";
   };
 
@@ -42,11 +42,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = with lib; {
-    changelog = "https://github.com/google/s2geometry/releases/tag/${lib.removePrefix "refs/tags/" finalAttrs.src.rev}";
+    changelog = "https://github.com/google/s2geometry/releases/tag/v${finalAttrs.version}";
     description = "Computational geometry and spatial indexing on the sphere";
     homepage = "http://s2geometry.io/";
     license = licenses.asl20;
     maintainers = [ maintainers.Thra11 ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 })

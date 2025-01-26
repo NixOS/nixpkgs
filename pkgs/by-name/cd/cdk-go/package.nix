@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -11,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "cdk-team";
     repo = "CDK";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Lpn+VuCzODOzxcgfD1l36eHmssAUz7+HgtN8vZwDNwE=";
   };
 

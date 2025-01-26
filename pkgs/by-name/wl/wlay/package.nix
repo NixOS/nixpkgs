@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, extra-cmake-modules
-, glfw3
-, libX11
-, libXau
-, libXdmcp
-, libepoxy
-, libffi
-, libxcb
-, pkg-config
-, wayland
-, wayland-scanner
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  extra-cmake-modules,
+  glfw3,
+  libX11,
+  libXau,
+  libXdmcp,
+  libepoxy,
+  libffi,
+  libxcb,
+  pkg-config,
+  wayland,
+  wayland-scanner,
 }:
 
 stdenv.mkDerivation {

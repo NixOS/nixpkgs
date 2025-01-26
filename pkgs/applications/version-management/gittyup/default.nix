@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, cmark
-, darwin
-, git
-, libssh2
-, lua5_4
-, hunspell
-, ninja
-, openssl
-, pkg-config
-, qtbase
-, qttools
-, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  cmark,
+  darwin,
+  git,
+  libssh2,
+  lua5_4,
+  hunspell,
+  ninja,
+  openssl,
+  pkg-config,
+  qtbase,
+  qttools,
+  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -28,39 +29,55 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=OFF"
-    "-DUSE_SYSTEM_CMARK=ON"
-    "-DUSE_SYSTEM_GIT=ON"
-    "-DUSE_SYSTEM_HUNSPELL=ON"
-    # upstream uses its own fork of libgit2 as of 1.2.2, however this may change in the future
-    # "-DUSE_SYSTEM_LIBGIT2=ON"
-    "-DUSE_SYSTEM_LIBSSH2=ON"
-    "-DUSE_SYSTEM_LUA=ON"
-    "-DUSE_SYSTEM_OPENSSL=ON"
-    "-DENABLE_UPDATE_OVER_GUI=OFF"
+  patches = [
+    # Fix GCC 14 build error (remove for next update)
+    # https://github.com/Murmele/Gittyup/pull/759
+    ./0001-Fix-incorrect-order-of-argument-to-calloc-345.patch
   ];
+
+  cmakeFlags =
+    let
+      inherit (lib) cmakeBool;
+    in
+    [
+      (cmakeBool "BUILD_SHARED_LIBS" false)
+      (cmakeBool "USE_SYSTEM_CMARK" true)
+      (cmakeBool "USE_SYSTEM_GIT" true)
+      (cmakeBool "USE_SYSTEM_HUNSPELL" true)
+      # upstream uses its own fork of libgit2 as of 1.2.2, however this may change in the future
+      # (cmakeBool "USE_SYSTEM_LIBGIT2" true)
+      (cmakeBool "USE_SYSTEM_LIBSSH2" true)
+      (cmakeBool "USE_SYSTEM_LUA" true)
+      (cmakeBool "USE_SYSTEM_OPENSSL" true)
+      (cmakeBool "ENABLE_UPDATE_OVER_GUI" false)
+    ];
 
   nativeBuildInputs = [
     cmake
+    cmark
     ninja
     pkg-config
     wrapQtAppsHook
   ];
 
-  buildInputs = [
-    cmark
-    git
-    hunspell
-    libssh2
-    lua5_4
-    openssl
-    qtbase
-    qttools
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
-    CoreFoundation
-    Security
-  ]);
+  buildInputs =
+    [
+      cmark
+      git
+      hunspell
+      libssh2
+      lua5_4
+      openssl
+      qtbase
+      qttools
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
+      with darwin.apple_sdk.frameworks;
+      [
+        CoreFoundation
+        Security
+      ]
+    );
 
   postInstall = ''
     # Those are not program libs, just some Qt5 libs that the build system leaks for some reason
@@ -71,7 +88,10 @@ stdenv.mkDerivation rec {
     description = "Graphical Git client designed to help you understand and manage your source code history";
     homepage = "https://murmele.github.io/Gittyup";
     license = with licenses; [ mit ];
-    maintainers = [ ];
+    maintainers = with maintainers; [
+      fliegendewurst
+      phijor
+    ];
     platforms = platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
   };

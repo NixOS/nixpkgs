@@ -1,4 +1,8 @@
-{ lib, fetchFromGitHub, buildGoModule }:
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+}:
 
 buildGoModule rec {
   pname = "drone-runner-docker";
@@ -7,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "drone-runners";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-ZoQeCuT5FRhxp/ikB0gkp3QVOQ6OS7ukkz4QanWT9G0=";
   };
 

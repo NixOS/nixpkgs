@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "htmldate";
-  version = "1.9.1";
+  version = "1.9.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -24,8 +24,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "adbar";
     repo = "htmldate";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-VjOqttpbHp1wQARyHieAZie/yO74+S2mDbBXx00PKWM=";
+    tag = "v${version}";
+    hash = "sha256-lTBLk8SlS2R4n5HORyt5mechKKEWRtMggOxUZ6kgQIc=";
   };
 
   build-system = [ setuptools ];

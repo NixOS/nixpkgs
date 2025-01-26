@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "darnstrom";
     repo = "daqp";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-9sPYyd8J78HKDxbwkogu8tW38rgYIctEWqrriqJKy0M=";
   };
 

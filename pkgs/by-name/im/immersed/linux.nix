@@ -28,7 +28,7 @@ appimageTools.wrapAppImage rec {
       libgpg-error
       fontconfig
       libGL
-      mesa
+      libgbm
       wayland
       pipewire
       fribidi

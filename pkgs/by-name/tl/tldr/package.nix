@@ -1,38 +1,68 @@
-{ lib, stdenv, fetchFromGitHub, curl, libzip, pkg-config, installShellFiles }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  installShellFiles,
+  python3Packages,
+}:
 
-stdenv.mkDerivation rec {
+python3Packages.buildPythonApplication rec {
   pname = "tldr";
-  version = "1.6.1";
+  version = "3.3.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tldr-pages";
-    repo = "tldr-c-client";
-    rev = "v${version}";
-    sha256 = "sha256-1L9frURnzfq0XvPBs8D+hBikybAw8qkb0DyZZtkZleY=";
+    repo = "tldr-python-client";
+    tag = version;
+    hash = "sha256-lc0Jen8vW4BNg784td1AZa2GTYvXC1d83FnAe5RZqpY=";
   };
 
-  buildInputs = [ curl libzip ];
-  nativeBuildInputs = [ pkg-config installShellFiles ];
+  build-system = with python3Packages; [
+    setuptools
+    wheel
+  ];
 
-  makeFlags = ["CC=${stdenv.cc.targetPrefix}cc" "LD=${stdenv.cc.targetPrefix}cc" "CFLAGS="];
+  dependencies = with python3Packages; [
+    termcolor
+    colorama
+    shtab
+  ];
 
-  installFlags = [ "PREFIX=$(out)" ];
+  nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
-    installShellCompletion --cmd tldr autocomplete/complete.{bash,fish,zsh}
+  nativeCheckInputs = with python3Packages; [
+    pytest
+  ];
+
+  checkPhase = ''
+    runHook preCheck
+    pytest -k 'not test_error_message'
+    runHook postCheck
   '';
 
-  meta = with lib; {
+  doCheck = true;
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd tldr \
+      --bash <($out/bin/tldr --print-completion bash) \
+      --zsh <($out/bin/tldr --print-completion zsh)
+  '';
+
+  meta = {
     description = "Simplified and community-driven man pages";
     longDescription = ''
       tldr pages gives common use cases for commands, so you don't need to hunt
       through a man page for the correct flags.
     '';
     homepage = "https://tldr.sh";
-    changelog = "https://github.com/tldr-pages/tldr-c-client/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ taeer carlosdagos kbdharun];
-    platforms = platforms.all;
+    changelog = "https://github.com/tldr-pages/tldr-python-client/blob/${version}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      taeer
+      carlosdagos
+      kbdharun
+    ];
     mainProgram = "tldr";
   };
 }

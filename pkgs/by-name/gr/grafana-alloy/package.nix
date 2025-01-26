@@ -1,34 +1,40 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchYarnDeps
-, buildGoModule
-, systemd
-, yarn
-, fixup-yarn-lock
-, nodejs
-, grafana-alloy
-, nixosTests
-, nix-update-script
-, installShellFiles
-, testers
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchYarnDeps,
+  buildGoModule,
+  systemd,
+  yarn,
+  fixup-yarn-lock,
+  nodejs,
+  grafana-alloy,
+  nixosTests,
+  nix-update-script,
+  installShellFiles,
+  testers,
 }:
 
 buildGoModule rec {
   pname = "grafana-alloy";
-  version = "1.4.3";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "grafana";
     repo = "alloy";
-    hash = "sha256-ISSmTdX/LgbreoGJry33xdOO9J98nh8SZBJwEFsFyvY=";
+    hash = "sha256-0aNEzEf7hbMZO2Nx+T1tXB7xuK3hsH7MCynC+i3Cnr4=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-O7x71Ghd8zI2Ns8Jj/Z5FWXKjyeHaPD8gyNmpwpIems=";
+  vendorHash = "sha256-YreRPoAxPuuulsqtWix1ZumpKUJb32iTNe0ZiIBYhY0=";
 
-  nativeBuildInputs = [ fixup-yarn-lock yarn nodejs installShellFiles ];
+  nativeBuildInputs = [
+    fixup-yarn-lock
+    yarn
+    nodejs
+    installShellFiles
+  ];
 
   ldflags =
     let
@@ -56,13 +62,15 @@ buildGoModule rec {
   ];
 
   # Skip building the frontend in the goModules FOD
-  overrideModAttrs = (_: {
-    preBuild = null;
-  });
+  overrideModAttrs = (
+    _: {
+      preBuild = null;
+    }
+  );
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/internal/web/ui/yarn.lock";
-    hash = "sha256-Q4IrOfCUlXM/5577Wk8UCIs76+XbuoHz7sIEJJTMKc4=";
+    hash = "sha256-309e799oSBtESmsbxvBWhAC8I717U032Xe/h09xQecA=";
   };
 
   preBuild = ''
@@ -84,7 +92,9 @@ buildGoModule rec {
 
   # uses go-systemd, which uses libsystemd headers
   # https://github.com/coreos/go-systemd/issues/351
-  NIX_CFLAGS_COMPILE = lib.optionals stdenv.hostPlatform.isLinux [ "-I${lib.getDev systemd}/include" ];
+  NIX_CFLAGS_COMPILE = lib.optionals stdenv.hostPlatform.isLinux [
+    "-I${lib.getDev systemd}/include"
+  ];
 
   checkFlags = [
     "-tags nonetwork" # disable network tests
@@ -96,7 +106,9 @@ buildGoModule rec {
   # Add to RUNPATH so it can be found.
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf \
-      --set-rpath "${lib.makeLibraryPath [ (lib.getLib systemd) ]}:$(patchelf --print-rpath $out/bin/alloy)" \
+      --set-rpath "${
+        lib.makeLibraryPath [ (lib.getLib systemd) ]
+      }:$(patchelf --print-rpath $out/bin/alloy)" \
       $out/bin/alloy
   '';
 
@@ -126,7 +138,12 @@ buildGoModule rec {
     license = licenses.asl20;
     homepage = "https://grafana.com/oss/alloy";
     changelog = "https://github.com/grafana/alloy/blob/${src.rev}/CHANGELOG.md";
-    maintainers = with maintainers; [ azahi flokli emilylange hbjydev ];
+    maintainers = with maintainers; [
+      azahi
+      flokli
+      emilylange
+      hbjydev
+    ];
     platforms = lib.platforms.unix;
   };
 }

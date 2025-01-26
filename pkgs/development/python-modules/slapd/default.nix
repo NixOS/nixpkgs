@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-ldap";
     repo = "python-slapd";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-AiJvhgJ62vCj75m6l5kuIEb7k2qCh/QJybS0uqw2vBY=";
   };
 

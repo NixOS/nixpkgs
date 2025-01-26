@@ -6,8 +6,6 @@
   cmake,
   pkg-config,
 
-  apple-sdk_11,
-  darwinMinVersionHook,
   dbus,
   openssl,
   sqlite,
@@ -15,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "signalbackup-tools";
-  version = "20241119";
+  version = "20250122";
 
   src = fetchFromGitHub {
     owner = "bepaald";
     repo = "signalbackup-tools";
     rev = version;
-    hash = "sha256-HZNjkOuJOoOSPmJHu6QTYzyxgS4dSC6lWB++xF4rRnI=";
+    hash = "sha256-rsA0i87zC6hyQa8xIyveID/nNwAD2YMG3BHYtWKxg1I=";
   };
 
   nativeBuildInputs = [
@@ -35,10 +33,6 @@ stdenv.mkDerivation rec {
     sqlite
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     dbus
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # Needed for `utimensat` on `x86_64-darwin`
-    apple-sdk_11
-    (darwinMinVersionHook "11.3")
   ];
 
   installPhase = ''

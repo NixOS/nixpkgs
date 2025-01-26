@@ -2,13 +2,12 @@
   buildGoModule,
   bzip2,
   callPackage,
-  cbconvert,
   fetchFromGitHub,
   lib,
   libunarr,
   mupdf-headless,
   nix-update-script,
-  testers,
+  versionCheckHook,
   zlib,
 }:
 
@@ -42,13 +41,13 @@ buildGoModule rec {
     zlib
   ];
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "version";
+
   passthru = {
     gui = callPackage ./gui.nix { };
     updateScript = nix-update-script { };
-    tests.version = testers.testVersion {
-      package = cbconvert;
-      command = "cbconvert version";
-    };
   };
 
   meta = {

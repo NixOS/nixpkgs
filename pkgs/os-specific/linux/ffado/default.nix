@@ -46,16 +46,30 @@ stdenv.mkDerivation rec {
     hash = "sha256-xELFL60Ryv1VE7tOhGyFHxAchIT4karFRe0ZDo/U0Q8=";
   };
 
-  prePatch = ''
-    substituteInPlace ./support/tools/ffado-diag.in \
-      --replace /lib/modules/ "/run/booted-system/kernel-modules/lib/modules/"
-  '';
+  prePatch =
+    ''
+      substituteInPlace ./support/tools/ffado-diag.in \
+        --replace /lib/modules/ "/run/booted-system/kernel-modules/lib/modules/"
+
+      # prevent build tools from leaking into closure
+      substituteInPlace support/tools/SConscript --replace-fail \
+        'support/tools/ffado-diag --static' \
+        "echo '"'See `nix-store --query --tree ${placeholder "out"}`.'"'"
+    ''
+    + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      # skip the CC sanity check, since that requires invoking cross-compiled binaries during build
+      substituteInPlace SConstruct \
+        --replace-fail 'conf.CompilerCheck()' 'True' \
+        --replace-fail "pkg-config" "$PKG_CONFIG"
+      substituteInPlace admin/pkgconfig.py \
+        --replace-fail "pkg-config" "$PKG_CONFIG"
+    '';
 
   nativeBuildInputs =
     [
       (scons.override {
         # SConstruct script depends on distutils removed in Python 3.12
-        python3Packages = python311.pkgs;
+        python3Packages = python311.pythonOnBuildForHost.pkgs;
       })
       pkg-config
       which
@@ -68,6 +82,8 @@ stdenv.mkDerivation rec {
 
   prefixKey = "PREFIX=";
   sconsFlags = [
+    "CUSTOM_ENV=True" # tell SConstruct to use nixpkgs' CC/CXX/CFLAGS
+    "DETECT_USERSPACE_ENV=False"
     "DEBUG=False"
     "ENABLE_ALL=True"
     "BUILD_TESTS=True"
@@ -79,29 +95,27 @@ stdenv.mkDerivation rec {
     "PYTHON_INTERPRETER=${python.interpreter}"
   ];
 
-  buildInputs = [
-    dbus
-    dbus_cplusplus
-    glibmm
-    libavc1394
-    libconfig
-    libiec61883
-    libraw1394
-    libxmlxx3
-    python
-  ] ++ lib.optionals (!stdenv.hostPlatform.isGnu) [
-    argp-standalone
-  ];
+  buildInputs =
+    [
+      dbus
+      dbus_cplusplus
+      glibmm
+      libavc1394
+      libconfig
+      libiec61883
+      libraw1394
+      libxmlxx3
+      python
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isGnu) [
+      argp-standalone
+    ];
 
   NIX_LDFLAGS = lib.optionalString (!stdenv.hostPlatform.isGnu) "-largp";
 
   enableParallelBuilding = true;
   dontWrapQtApps = true;
-
-  postInstall = ''
-    # prevent build tools from leaking into closure
-    echo 'See `nix-store --query --tree ${placeholder "out"}`.' > $out/lib/libffado/static_info.txt
-  '';
+  strictDeps = true;
 
   preFixup = lib.optionalString withMixer ''
     wrapQtApp "$bin/bin/ffado-mixer"

@@ -1,4 +1,8 @@
-{ lib , fetchurl , buildDunePackage }:
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+}:
 
 buildDunePackage rec {
   pname = "res";
@@ -21,4 +25,3 @@ buildDunePackage rec {
     maintainers = with lib.maintainers; [ sixstring982 ];
   };
 }
-

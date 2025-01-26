@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, postgresql, gitUpdater, buildPostgresqlExtension }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  postgresql,
+  gitUpdater,
+  buildPostgresqlExtension,
+}:
 
 buildPostgresqlExtension rec {
   pname = "hypopg";

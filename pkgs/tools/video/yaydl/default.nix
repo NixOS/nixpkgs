@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "yaydl";
-  version = "0.15.5";
+  version = "0.17.2";
 
   src = fetchFromGitHub {
     owner = "dertuxmalwieder";
     repo = pname;
     rev = "release-${version}";
-    sha256 = "sha256-/GoRMdbTaRDZJaVXdsN+YKpWCgecOhqhRf3iaL0rmE8=";
+    sha256 = "sha256-r+UkwEtuGL6los9ohv86KA/3qsaEkpnI4yV/UnYelgk=";
   };
 
-  cargoHash = "sha256-f81z4ssKyGheuI2WWweFBW8AoafsVgPkX1lYCHDSaaM=";
+  cargoHash = "sha256-nEZBrtfUFybXIp7PBbR6X32GfIkjNylqpxaPOqNy+ww=";
 
   nativeBuildInputs = [
     pkg-config

@@ -1,12 +1,19 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.uvcvideo;
 
-  uvcdynctrl-udev-rules = packages: pkgs.callPackage ./uvcdynctrl-udev-rules.nix {
-    drivers = packages;
-    udevDebug = false;
-  };
+  uvcdynctrl-udev-rules =
+    packages:
+    pkgs.callPackage ./uvcdynctrl-udev-rules.nix {
+      drivers = packages;
+      udevDebug = false;
+    };
 
 in
 

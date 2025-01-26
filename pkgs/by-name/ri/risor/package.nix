@@ -1,8 +1,9 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, testers
-, risor
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  risor,
 }:
 
 buildGoModule rec {
@@ -45,4 +46,3 @@ buildGoModule rec {
     maintainers = with maintainers; [ figsoda ];
   };
 }
-

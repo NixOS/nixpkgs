@@ -1,37 +1,37 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, gettext
-, itstool
-, dbus-glib
-, glib
-, gtk3
-, gtksourceview4
-, gucharmap
-, libmateweather
-, libnl
-, libwnck
-, libgtop
-, libxml2
-, libnotify
-, mate-desktop
-, mate-panel
-, polkit
-, upower
-, wirelesstools
-, hicolor-icon-theme
-, wrapGAppsHook3
-, mateUpdateScript
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gettext,
+  itstool,
+  dbus-glib,
+  glib,
+  gtk3,
+  gucharmap,
+  libmateweather,
+  libnl,
+  libwnck,
+  libgtop,
+  libxml2,
+  libnotify,
+  mate-desktop,
+  mate-panel,
+  polkit,
+  upower,
+  wirelesstools,
+  hicolor-icon-theme,
+  wrapGAppsHook3,
+  mateUpdateScript,
 }:
 
 stdenv.mkDerivation rec {
   pname = "mate-applets";
-  version = "1.28.0";
+  version = "1.28.1";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "G2vva9XTJvudyCj/kQ5LG5KUtGYMMR3ByQMQ/Zw1ZoY=";
+    sha256 = "pZZxQVJ9xbFy0yKmADwjruwlMWD2ULs2QwoG3a76fi4=";
   };
 
   nativeBuildInputs = [
@@ -44,7 +44,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     dbus-glib
     gtk3
-    gtksourceview4
     gucharmap
     hicolor-icon-theme
     libgtop
@@ -60,7 +59,10 @@ stdenv.mkDerivation rec {
     wirelesstools
   ];
 
-  configureFlags = [ "--enable-suid=no" "--enable-in-process" ];
+  configureFlags = [
+    "--enable-suid=no"
+    "--enable-in-process"
+  ];
 
   env.NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
@@ -72,7 +74,10 @@ stdenv.mkDerivation rec {
     description = "Applets for use with the MATE panel";
     mainProgram = "mate-cpufreq-selector";
     homepage = "https://mate-desktop.org";
-    license = with licenses; [ gpl2Plus lgpl2Plus ];
+    license = with licenses; [
+      gpl2Plus
+      lgpl2Plus
+    ];
     platforms = platforms.linux;
     maintainers = teams.mate.members;
   };

@@ -1,4 +1,10 @@
-{ config, lib, pkgs, options, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  options,
+  ...
+}:
 
 let
   cfg = config.services.prometheus.exporters.pihole;
@@ -11,8 +17,11 @@ let
 in
 {
   imports = [
-    (mkRemovedOptionModule [ "interval"] "This option has been removed.")
-    ({ options.warnings = options.warnings; options.assertions = options.assertions; })
+    (mkRemovedOptionModule [ "interval" ] "This option has been removed.")
+    ({
+      options.warnings = options.warnings;
+      options.assertions = options.assertions;
+    })
   ];
 
   port = 9617;
@@ -50,7 +59,10 @@ in
       '';
     };
     protocol = mkOption {
-      type = types.enum [ "http" "https" ];
+      type = types.enum [
+        "http"
+        "https"
+      ];
       default = "http";
       example = "https";
       description = ''

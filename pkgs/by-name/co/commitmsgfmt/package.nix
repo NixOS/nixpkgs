@@ -1,8 +1,9 @@
-{ lib
-, rustPlatform
-, fetchFromGitLab
-, testers
-, commitmsgfmt
+{
+  lib,
+  rustPlatform,
+  fetchFromGitLab,
+  testers,
+  commitmsgfmt,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "commitmsgfmt";

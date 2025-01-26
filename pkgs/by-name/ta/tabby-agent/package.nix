@@ -4,22 +4,22 @@
   fetchFromGitHub,
   nix-update-script,
   nodejs,
-  pnpm,
+  pnpm_9,
   wrapGAppsHook3,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "tabby-agent";
-  version = "0.18.0";
+  version = "0.23.0";
 
   src = fetchFromGitHub {
     owner = "TabbyML";
     repo = "tabby";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-8clEBWAT+HI2eecOsmldgRcA58Ehq9bZT4ZwUMm494g=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-VuyfKIfOJ6+LTiNCO/SQMHk81KffF/dUfxMGT2go6RM=";
   };
 
   nativeBuildInputs = [
-    pnpm.configHook
+    pnpm_9.configHook
     wrapGAppsHook3
   ];
 
@@ -46,9 +46,9 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-WBhkrgLTTR5f8ZVmUfzMbFw/6jIGoLcUspHCsNpOxx4=";
+    hash = "sha256-RMa4fuR6L1BM+QmLsZ7i42jtGAQXkVQvv1hh0lr+Ky8=";
   };
 
   passthru.updateScript = nix-update-script {

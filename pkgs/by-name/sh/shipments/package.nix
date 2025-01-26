@@ -1,15 +1,16 @@
-{ desktop-file-utils
-, fetchFromSourcehut
-, gobject-introspection
-, gtk3
-, lib
-, libhandy
-, meson
-, ninja
-, pkg-config
-, python3
-, stdenv
-, wrapGAppsHook3
+{
+  desktop-file-utils,
+  fetchFromSourcehut,
+  gobject-introspection,
+  gtk3,
+  lib,
+  libhandy,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  stdenv,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {
@@ -35,10 +36,12 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gtk3
     libhandy
-    (python3.withPackages (ps: with ps; [
-      pygobject3
-      requests
-    ]))
+    (python3.withPackages (
+      ps: with ps; [
+        pygobject3
+        requests
+      ]
+    ))
   ];
 
   meta = with lib; {

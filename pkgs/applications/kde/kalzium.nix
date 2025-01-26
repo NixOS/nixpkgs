@@ -1,4 +1,16 @@
-{ mkDerivation, lib, extra-cmake-modules, kdoctools, ki18n, kio, openbabel, qtscript, kparts, kplotting, kunitconversion }:
+{
+  mkDerivation,
+  lib,
+  extra-cmake-modules,
+  kdoctools,
+  ki18n,
+  kio,
+  openbabel,
+  qtscript,
+  kparts,
+  kplotting,
+  kunitconversion,
+}:
 
 mkDerivation {
   pname = "kalzium";

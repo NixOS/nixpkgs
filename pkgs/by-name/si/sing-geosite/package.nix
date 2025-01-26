@@ -1,13 +1,13 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, substituteAll
-, v2ray-domain-list-community
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  replaceVars,
+  v2ray-domain-list-community,
 }:
 
 let
-  patch = substituteAll {
-    src = ./main.go;
+  patch = replaceVars ./main.go {
     geosite_data = "${v2ray-domain-list-community}/share/v2ray/geosite.dat";
   };
 in

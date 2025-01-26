@@ -24,7 +24,7 @@
   glib,
   abseil-cpp,
   pipewire,
-  mesa,
+  libgbm,
   libdrm,
   libGL,
   apple-sdk_15,
@@ -47,7 +47,7 @@ stdenv.mkDerivation {
     substituteInPlace src/modules/desktop_capture/linux/wayland/egl_dmabuf.cc \
       --replace-fail '"libEGL.so.1"' '"${lib.getLib libGL}/lib/libEGL.so.1"' \
       --replace-fail '"libGL.so.1"' '"${lib.getLib libGL}/lib/libGL.so.1"' \
-      --replace-fail '"libgbm.so.1"' '"${lib.getLib mesa}/lib/libgbm.so.1"' \
+      --replace-fail '"libgbm.so.1"' '"${lib.getLib libgbm}/lib/libgbm.so.1"' \
       --replace-fail '"libdrm.so.2"' '"${lib.getLib libdrm}/lib/libdrm.so.2"'
   '';
 
@@ -85,7 +85,7 @@ stdenv.mkDerivation {
       libXi
       glib
       pipewire
-      mesa
+      libgbm
       libdrm
       libGL
     ]

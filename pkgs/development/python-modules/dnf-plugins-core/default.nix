@@ -34,7 +34,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rpm-software-management";
     repo = "dnf-plugins-core";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-7MPCLnclRT07m6CrGguDxSB+sIybp4tMcExU9+Sz9EM=";
   };
 

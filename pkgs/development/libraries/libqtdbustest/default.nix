@@ -1,17 +1,18 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, fetchpatch
-, testers
-, cmake
-, cmake-extras
-, dbus
-, dbus-test-runner
-, gtest
-, pkg-config
-, procps
-, python3
-, qtbase
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  fetchpatch,
+  testers,
+  cmake,
+  cmake-extras,
+  dbus,
+  dbus-test-runner,
+  gtest,
+  pkg-config,
+  procps,
+  python3,
+  qtbase,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -45,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  postPatch =  lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
+  postPatch = lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
     # Don't build tests when we're not running them
     sed -i -e '/add_subdirectory(tests)/d' CMakeLists.txt
   '';
@@ -64,9 +65,11 @@ stdenv.mkDerivation (finalAttrs: {
     dbus
     dbus-test-runner
     procps
-    (python3.withPackages (ps: with ps; [
-      python-dbusmock
-    ]))
+    (python3.withPackages (
+      ps: with ps; [
+        python-dbusmock
+      ]
+    ))
   ];
 
   checkInputs = [

@@ -1,22 +1,37 @@
-{ lib, stdenv, fetchurl, flex, bison, readline, libssh, nixosTests }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  flex,
+  bison,
+  readline,
+  libssh,
+  nixosTests,
+}:
 
 stdenv.mkDerivation rec {
   pname = "bird";
-  version = "2.15.1";
+  version = "2.16.1";
 
   src = fetchurl {
     url = "ftp://bird.network.cz/pub/bird/${pname}-${version}.tar.gz";
-    hash = "sha256-SOhcYi3hZHVsEy6netGoqVzJ/QE3/9DYgnRlic51x10=";
+    hash = "sha256-9uWcvMrKYmaK6gIGhyS9QnuexEnH4PD8VoFQOYjHNbQ=";
   };
 
-  nativeBuildInputs = [ flex bison ];
-  buildInputs = [ readline libssh ];
+  nativeBuildInputs = [
+    flex
+    bison
+  ];
+  buildInputs = [
+    readline
+    libssh
+  ];
 
   patches = [
     ./dont-create-sysconfdir-2.patch
   ];
 
-  CPP="${stdenv.cc.targetPrefix}cpp -E";
+  CPP = "${stdenv.cc.targetPrefix}cpp -E";
 
   configureFlags = [
     "--localstatedir=/var"

@@ -6,18 +6,18 @@
 
 buildGoModule rec {
   pname = "c3-lsp";
-  version = "0.3.2";
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "pherrymason";
     repo = "c3-lsp";
     rev = "v${version}";
-    hash = "sha256-HD3NE2L1ge0pf8vtrKkYh4GIZg6lSPTZGFQ+LPbDup4=";
+    hash = "sha256-1EuDXQGzqNM19SRokM9GGzA2ZcD0XaCbywErVSjINIM=";
   };
 
   sourceRoot = "${src.name}/server";
 
-  vendorHash = "sha256-y+Qs3zuvTq/KRc1ziH0R7E10et+MaQW9xOsFmSdI7PM=";
+  vendorHash = "sha256-7g0Z392ksrvV+D9nMw325BykwLd9mvXRS1Zv6RNSs0w=";
 
   postInstall = ''
     mv $out/bin/lsp $out/bin/c3-lsp

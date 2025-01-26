@@ -9,13 +9,13 @@
 
 buildGoModule rec {
   pname = "k3sup";
-  version = "0.13.7";
+  version = "0.13.8";
 
   src = fetchFromGitHub {
     owner = "alexellis";
     repo = "k3sup";
     rev = version;
-    sha256 = "sha256-B9Mo0+dqF15LuhCytMBax2gKjHl9mBkxLXCdb9f0Big=";
+    sha256 = "sha256-WmvCmG/wk63VnfJTFk3HhiaLzCe9O6kdUc7GpYNAwP4=";
   };
 
   nativeBuildInputs = [ makeWrapper installShellFiles ];
@@ -27,7 +27,7 @@ buildGoModule rec {
       --replace "/bin/bash" "${bash}/bin/bash"
   '';
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   ldflags = [
     "-s" "-w"

@@ -1,4 +1,11 @@
-{ lib, stdenv, callPackage, makeWrapper, jq, nurl }:
+{
+  lib,
+  stdenv,
+  callPackage,
+  makeWrapper,
+  jq,
+  nurl,
+}:
 
 stdenv.mkDerivation {
   name = "swiftpm2nix";
@@ -10,7 +17,12 @@ stdenv.mkDerivation {
   installPhase = ''
     install -vD ${./swiftpm2nix.sh} $out/bin/swiftpm2nix
     wrapProgram $out/bin/$name \
-      --prefix PATH : ${lib.makeBinPath [ jq nurl ]} \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          jq
+          nurl
+        ]
+      } \
   '';
 
   preferLocalBuild = true;

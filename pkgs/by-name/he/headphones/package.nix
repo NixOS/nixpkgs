@@ -1,4 +1,9 @@
-{ lib, fetchFromGitHub, python3, makeWrapper }:
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+  makeWrapper,
+}:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "headphones";
@@ -32,8 +37,8 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Automatic music downloader for SABnzbd";
-    license     = licenses.gpl3Plus;
-    homepage    = "https://github.com/rembo10/headphones";
+    license = licenses.gpl3Plus;
+    homepage = "https://github.com/rembo10/headphones";
     maintainers = with lib.maintainers; [ rembo10 ];
     mainProgram = "headphones";
   };

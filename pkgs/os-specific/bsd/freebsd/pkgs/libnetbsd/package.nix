@@ -25,4 +25,6 @@ mkDerivation {
     "STRIP=-s" # flag to install, not command
     "MK_WERROR=no"
   ] ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) "INSTALL=boot-install";
+
+  alwaysKeepStatic = true;
 }

@@ -7,13 +7,13 @@
 
 stdenvNoCC.mkDerivation {
   pname = "plymouth-vortex-ubuntu-theme";
-  version = "0-unstable-2024-05-05";
+  version = "0-unstable-2024-11-20";
 
   src = fetchFromGitHub {
     owner = "emanuele-scarsella";
     repo = "vortex-ubuntu-plymouth-theme";
-    rev = "331a201918a3b026dd200659403c1cf779c718f0";
-    hash = "sha256-RSWfuKCdsuFA2e5kb0OXnxW+QV7b2iHVvZEKVHoLgMw=";
+    rev = "5b3c88102fd8f322626c01514deedd7ba8e7ebdd";
+    hash = "sha256-AuYLjyOfpmwE4pFhKDQdR1uC+6Rr5FWUC5h9yWesXRE=";
   };
 
   dontBuild = true;

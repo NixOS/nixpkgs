@@ -1009,7 +1009,8 @@ in
             };
             ipv6 = mkOption {
               type = types.bool;
-              default = true;
+              default = config.networking.enableIPv6;
+              defaultText = lib.literalExpression "config.networking.enableIPv6";
               description = ''
                 By default, nginx will look up both IPv4 and IPv6 addresses while resolving.
                 If looking up of IPv6 addresses is not desired, the ipv6=off parameter can be
@@ -1305,8 +1306,7 @@ in
         # System Call Filtering
         SystemCallArchitectures = "native";
         SystemCallFilter = [ "~@cpu-emulation @debug @keyring @mount @obsolete @privileged @setuid" ]
-          ++ optional cfg.enableQuicBPF [ "bpf" ]
-          ++ optionals ((cfg.package != pkgs.tengine) && (cfg.package != pkgs.openresty) && (!lib.any (mod: (mod.disableIPC or false)) cfg.package.modules)) [ "~@ipc" ];
+          ++ optional cfg.enableQuicBPF [ "bpf" ];
       };
     };
 
@@ -1333,7 +1333,14 @@ in
       restartTriggers = optionals cfg.enableReload [ configFile ];
       # Block reloading if not all certs exist yet.
       # Happens when config changes add new vhosts/certs.
-      unitConfig.ConditionPathExists = optionals (sslServices != []) (map (certName: certs.${certName}.directory + "/fullchain.pem") vhostCertNames);
+      unitConfig = {
+        ConditionPathExists = optionals (sslServices != []) (map (certName: certs.${certName}.directory + "/fullchain.pem") vhostCertNames);
+        # Disable rate limiting for this, because it may be triggered quickly a bunch of times
+        # if a lot of certificates are renewed in quick succession. The reload itself is cheap,
+        # so even doing a lot of them in a short burst is fine.
+        # FIXME: there's probably a better way to do this.
+        StartLimitIntervalSec = 0;
+      };
       serviceConfig = {
         Type = "oneshot";
         TimeoutSec = 60;

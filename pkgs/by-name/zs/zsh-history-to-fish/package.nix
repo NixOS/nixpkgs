@@ -1,6 +1,7 @@
-{ lib
-, fetchPypi
-, python3
+{
+  lib,
+  fetchPypi,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -22,6 +23,13 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [
     "zsh_history_to_fish"
+  ];
+
+  patches = [
+    # Patch from currently-unmerged PR, fixing runtime error.
+    # Should be removed when PR is merged or error is otherwise fixed.
+    # Check https://github.com/rsalmei/zsh-history-to-fish/pull/15 if you're in the future
+    ./fix-runtime-error.patch
   ];
 
   meta = with lib; {

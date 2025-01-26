@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, buildGoModule }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildGoModule,
+}:
 
 buildGoModule {
   pname = "bosun";
@@ -13,9 +18,15 @@ buildGoModule {
 
   vendorHash = "sha256-5mVI5cyuIB+6KHlTpDxSNGU7yBsGQC4IA+iDgvVFVZM=";
 
-  subPackages = [ "cmd/bosun" "cmd/scollector" ];
+  subPackages = [
+    "cmd/bosun"
+    "cmd/scollector"
+  ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   meta = with lib; {
     description = "Time Series Alerting Framework";

@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "django-oauth-toolkit";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Ya0KlX+vtLXN2Fgk0Gv7KemJCUTwkaH+4GQA1ByUlBY=";
   };
 

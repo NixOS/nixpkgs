@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, libSM
-, libXdmcp
-, libpthreadstubs
-, lxqt-build-tools
-, openbox
-, pcre
-, pkg-config
-, qtbase
-, qttools
-, qtwayland
-, wrapQtAppsHook
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libSM,
+  libXdmcp,
+  libpthreadstubs,
+  lxqt-build-tools,
+  openbox,
+  pcre,
+  pkg-config,
+  qtbase,
+  qttools,
+  qtwayland,
+  wrapQtAppsHook,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {

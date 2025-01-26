@@ -1,10 +1,11 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, glib
-, pkg-config
-, wrapGAppsHook4
-, gtk4
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  glib,
+  pkg-config,
+  wrapGAppsHook4,
+  gtk4,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,7 +21,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-cUE2IZOunR/NIo/qytORRfNqCsf87LfpKA8o/v4Nkhk=";
 
-  nativeBuildInputs = [ glib pkg-config wrapGAppsHook4 ];
+  nativeBuildInputs = [
+    glib
+    pkg-config
+    wrapGAppsHook4
+  ];
 
   buildInputs = [ gtk4 ];
 

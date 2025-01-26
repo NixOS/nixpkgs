@@ -1,4 +1,8 @@
-{ fetchFromGitHub, rustPlatform, lib }:
+{
+  fetchFromGitHub,
+  rustPlatform,
+  lib,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "rm-improved";

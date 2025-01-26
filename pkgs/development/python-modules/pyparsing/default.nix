@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyparsing";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-caHkwMFL1IFCQ+yZTp9o4yXfemoPx1xL4Nvb85oJzEI=";
   };
 

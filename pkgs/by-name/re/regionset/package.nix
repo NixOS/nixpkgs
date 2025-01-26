@@ -1,6 +1,12 @@
-{ lib, stdenv, fetchurl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 
-let version = "0.2"; in
+let
+  version = "0.2";
+in
 stdenv.mkDerivation {
   pname = "regionset";
   inherit version;

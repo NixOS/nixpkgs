@@ -1,4 +1,9 @@
-{ lib, stdenvNoCC, fetchurl, b43FirmwareCutter }:
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  b43FirmwareCutter,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "b43-firmware";

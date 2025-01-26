@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, Libsystem
-, SystemConfiguration
-, installShellFiles
-, libiconv
-, rustPlatform
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  Libsystem,
+  SystemConfiguration,
+  installShellFiles,
+  libiconv,
+  rustPlatform,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,11 +22,13 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-sTpxcJs5I7LzVw56ka5PlFixJSiJeCae9serS0FhmuA=";
 
-  nativeBuildInputs = [
-    installShellFiles
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    rustPlatform.bindgenHook
-  ];
+  nativeBuildInputs =
+    [
+      installShellFiles
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      rustPlatform.bindgenHook
+    ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     Libsystem

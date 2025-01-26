@@ -76,17 +76,14 @@ install_man('accton/accton.8')
 
 executable(
     'arch',
-    build_by_default : sdk_version.version_compare('>=11'),
     dependencies : [ core_foundation ],
-    install : sdk_version.version_compare('>=11'),
+    install : true,
     sources : 'arch/arch.c',
 )
-if sdk_version.version_compare('>=11')
-    install_man(
-        'arch/arch.1',
-        'arch/machine.1',
-    )
-endif
+install_man(
+    'arch/arch.1',
+    'arch/machine.1',
+)
 
 executable(
     'at',
@@ -192,8 +189,8 @@ install_man('fs_usage/fs_usage.1')
 executable(
     'gcore',
     # Requires XPC private APIs
-    build_by_default : false and sdk_version.version_compare('>=11'),
-    install : false and sdk_version.version_compare('>=11'),
+    build_by_default : false,
+    install : false,
     sources : [
         'gcore/convert.c',
         'gcore/corefile.c',
@@ -359,13 +356,10 @@ install_man('mkfile/mkfile.8')
 
 executable(
     'mslutil',
-    build_by_default : sdk_version.version_compare('>=10.13'),
-    install : sdk_version.version_compare('>=10.13'),
+    install : true,
     sources : 'mslutil/mslutil.c',
 )
-if sdk_version.version_compare('>=10.13')
-    install_man('mslutil/mslutil.1')
-endif
+install_man('mslutil/mslutil.1')
 
 executable(
     'newgrp',
@@ -495,8 +489,8 @@ executable('shutdown',
 executable(
     'stackshot',
     # Requires private entitlements
-    build_by_default : false and sdk_version.version_compare('>=10.13'),
-    install : false and sdk_version.version_compare('>=10.13'),
+    build_by_default : false,
+    install : false,
     sources : 'stackshot/stackshot.c',
 )
 # No man pages for `stackshot`.
@@ -520,13 +514,10 @@ install_man(
 
 executable(
     'taskpolicy',
-    build_by_default : sdk_version.version_compare('>=11'),
-    install : sdk_version.version_compare('>=11'),
+    install : true,
     sources : 'taskpolicy/taskpolicy.c',
 )
-if sdk_version.version_compare('>=11')
-    install_man('taskpolicy/taskpolicy.8')
-endif
+install_man('taskpolicy/taskpolicy.8')
 
 executable(
     'vifs',
@@ -546,13 +537,10 @@ executable(
 install_man('vipw/vipw.8')
 
 executable('vm_purgeable_stat',
-    build_by_default : sdk_version.version_compare('>=11'),
-    install : sdk_version.version_compare('>=11'),
+    install : true,
     sources : 'vm_purgeable_stat/vm_purgeable_stat.c',
 )
-if sdk_version.version_compare('>=11')
-    install_man('vm_purgeable_stat/vm_purgeable_stat.1')
-endif
+install_man('vm_purgeable_stat/vm_purgeable_stat.1')
 
 executable(
     'vm_stat',
@@ -593,18 +581,15 @@ install_man('zic/zic.8')
 
 executable(
     'zlog',
-    build_by_default : sdk_version.version_compare('>=11'),
     c_args : '-DKERN_NOT_FOUND=56',
     dependencies : [ core_foundation, core_symbolication ],
-    install : sdk_version.version_compare('>=11'),
+    install : true,
     sources : [
         'zlog/SymbolicationHelper.c',
         'zlog/zlog.c',
     ],
 )
-if sdk_version.version_compare('>=11')
-    install_man('zlog/zlog.1')
-endif
+install_man('zlog/zlog.1')
 
 executable(
     'zprint',

@@ -1,8 +1,9 @@
-{ pkgs
-, lib
-, buildGoModule
-, fetchFromGitHub
-, nixosTests
+{
+  pkgs,
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
 }:
 
 buildGoModule rec {

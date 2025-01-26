@@ -12,13 +12,13 @@
 
 buildNpmPackage rec {
   pname = "blockbench";
-  version = "4.11.2";
+  version = "4.12.0";
 
   src = fetchFromGitHub {
     owner = "JannisX11";
     repo = "blockbench";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-rUMzn+3j+RL8DY8euS6a4MmdoIAVLXxXu9wvKNmK/TU=";
+    tag = "v${version}";
+    hash = "sha256-1pIIy2ifbV05hnmBoUcMfs0KDiBQDS6opwFqj6ECTIA=";
   };
 
   nativeBuildInputs =
@@ -28,7 +28,7 @@ buildNpmPackage rec {
       copyDesktopItems
     ];
 
-  npmDepsHash = "sha256-0hS+AjfYvkdxyM6CtXYgvjt49GmcCvyAdEFWfK8uaHc=";
+  npmDepsHash = "sha256-ytuAyEuf4zZm1hm/RXdltjisPNsmYrVnTfL1U3ULcCw=";
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
 
@@ -71,7 +71,7 @@ buildNpmPackage rec {
 
       makeWrapper ${lib.getExe electron} $out/bin/blockbench \
           --add-flags $out/share/blockbench/resources/app.asar \
-          --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+          --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
           --inherit-argv0
     ''}
 

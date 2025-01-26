@@ -1,4 +1,8 @@
-{ lib, fetchFromGitHub, python3 }:
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+}:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "git-crecord";
@@ -7,7 +11,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "andrewshadura";
     repo = "git-crecord";
-    rev = "refs/tags/${version}";
+    tag = version;
     sha256 = "sha256-zsrMAD9EU+TvkWfWl9x6WbMXuw7YEz50LxQzSFVkKdQ=";
   };
 
