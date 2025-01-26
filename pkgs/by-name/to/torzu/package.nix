@@ -151,6 +151,7 @@ stdenv.mkDerivation (finalAttrs: {
   # making the build fail, as that path does not exist
   dontFixCmake = true;
 
+  __structuredAttrs = true;
   cmakeFlags = [
     # actually has a noticeable performance impact
     (lib.cmakeBool "YUZU_ENABLE_LTO" true)
@@ -178,6 +179,9 @@ stdenv.mkDerivation (finalAttrs: {
     # We dont want to bother upstream with potentially outdated compat reports
     (lib.cmakeBool "YUZU_ENABLE_COMPATIBILITY_REPORTING" false)
     (lib.cmakeBool "ENABLE_COMPATIBILITY_LIST_DOWNLOAD" false) # We provide this deterministically
+
+    (lib.cmakeFeature "TITLE_BAR_FORMAT_IDLE" "${finalAttrs.pname} | ${finalAttrs.version} (nixpkgs) {}")
+    (lib.cmakeFeature "TITLE_BAR_FORMAT_RUNNING" "${finalAttrs.pname} | ${finalAttrs.version} (nixpkgs) | {}")
   ];
 
   env = {
@@ -191,21 +195,11 @@ stdenv.mkDerivation (finalAttrs: {
     "--prefix LD_LIBRARY_PATH : ${vulkan-loader}/lib"
   ];
 
-  # Setting this through cmakeFlags does not work.
-  # https://github.com/NixOS/nixpkgs/issues/114044
-  preConfigure = lib.concatStringsSep "\n" [
-    ''
-      cmakeFlagsArray+=(
-        "-DTITLE_BAR_FORMAT_IDLE=${finalAttrs.pname} | ${finalAttrs.version} (nixpkgs) {}"
-        "-DTITLE_BAR_FORMAT_RUNNING=${finalAttrs.pname} | ${finalAttrs.version} (nixpkgs) | {}"
-      )
-    ''
+  preConfigure = ''
     # provide pre-downloaded tz data
-    ''
-      mkdir -p build/externals/nx_tzdb
-      ln -s ${nx_tzdb} build/externals/nx_tzdb/nx_tzdb
-    ''
-  ];
+    mkdir -p build/externals/nx_tzdb
+    ln -s ${nx_tzdb} build/externals/nx_tzdb/nx_tzdb
+  '';
 
   postConfigure = ''
     ln -sf ${compat-list} ./dist/compatibility_list/compatibility_list.json
