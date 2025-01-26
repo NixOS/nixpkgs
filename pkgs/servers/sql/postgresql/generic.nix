@@ -7,7 +7,7 @@ let
       fetchpatch,
       fetchurl,
       lib,
-      substituteAll,
+      replaceVars,
       writeShellScriptBin,
 
       # source specification
@@ -304,8 +304,7 @@ let
             hash = "sha256-EQJkDR0eb7QWCjyMzXMn+Vbcwx3MMdC83oN7XSVJP0U=";
           })
 
-          (substituteAll {
-            src = ./patches/locale-binary-path.patch;
+          (replaceVars ./patches/locale-binary-path.patch {
             locale = "${
               if stdenv.hostPlatform.isDarwin then darwin.adv_cmds else lib.getBin stdenv.cc.libc
             }/bin/locale";
