@@ -1967,6 +1967,14 @@ Note this method is preferred over adding parameters to builders, as that can
 result in packages depending on different variants and thereby causing
 collisions.
 
+::: {.note}
+The `optional-dependencies` attribute should only be used for dependency groups
+as defined in package metadata. If a package gracefully handles missing
+dependencies in runtime but doesn't advertise it through package metadata, then
+these dependencies should not be listed at all. (One may still have to list
+them in `nativeCheckInputs` to pass test suite.)
+:::
+
 ### How to contribute a Python package to nixpkgs? {#tools}
 
 Packages inside nixpkgs must use the [`buildPythonPackage`](#buildpythonpackage-function) or [`buildPythonApplication`](#buildpythonapplication-function) function directly,
