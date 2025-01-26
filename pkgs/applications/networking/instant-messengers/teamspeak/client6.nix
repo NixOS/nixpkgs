@@ -21,19 +21,20 @@
   libpulseaudio,
   libxkbcommon,
   libgbm,
+  libGL,
   nss,
   udev,
   xorg,
 }:
 
 stdenv.mkDerivation rec {
-  pname = "teamspeak5-client";
-  version = "5.0.0-beta77";
+  pname = "teamspeak6-client";
+  version = "6.0.0-beta2";
 
   src = fetchurl {
     # check https://teamspeak.com/en/downloads/#ts5 for version and checksum
     url = "https://files.teamspeak-services.com/pre_releases/client/${version}/teamspeak-client.tar.gz";
-    sha256 = "6f3bf97b120d3c799cefc90c448e45836708a826d7caa07ad32b5c868eb9181b";
+    sha256 = "de334fbf7b90d91ced475a785d034b520e4856bbd6fdd71db6a5dd88624a552b";
   };
 
   sourceRoot = ".";
@@ -60,6 +61,7 @@ stdenv.mkDerivation rec {
     xorg.libXdamage
     xorg.libXfixes
     xorg.libxshmfence
+    xorg.libXtst
   ];
 
   nativeBuildInputs = [
@@ -96,7 +98,7 @@ stdenv.mkDerivation rec {
     cp logo-256.png $out/share/icons/hicolor/64x64/apps/${pname}.png
 
     makeWrapper $out/share/${pname}/TeamSpeak $out/bin/TeamSpeak \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ udev ]}"
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ udev libGL ]}"
 
     runHook postInstall
   '';
