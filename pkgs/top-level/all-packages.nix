@@ -17732,7 +17732,7 @@ with pkgs;
                 [(
                   { lib, ... }: {
                     config.nixpkgs.pkgs = lib.mkDefault pkgs;
-                    config.nixpkgs.localSystem = lib.mkDefault stdenv.hostPlatform;
+                    config.nixpkgs.localSystem = lib.mkDefault ({ config = lib.systems.parse.tripleFromSystem stdenv.hostPlatform; });
                   }
                 )] ++ (
                   if builtins.isList configuration
