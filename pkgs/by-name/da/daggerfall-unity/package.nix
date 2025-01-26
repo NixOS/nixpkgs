@@ -73,9 +73,10 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir --parents "$out/bin" "$out/share/doc"
+    mkdir --parents "$out/bin" "$out/share/doc" "$out/share/pixmaps/"
     cp --recursive * "$out"
     ln --symbolic "../${finalAttrs.meta.mainProgram}" "$out/bin/"
+    ln --symbolic ../../DaggerfallUnity_Data/Resources/UnityPlayer.png "$out/share/pixmaps/"
 
     ${lib.strings.concatMapStringsSep "\n" (file: ''
       cp "${file}" "$out/share/doc/${file.name}"
