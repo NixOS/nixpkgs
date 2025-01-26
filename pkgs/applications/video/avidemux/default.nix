@@ -64,6 +64,13 @@ stdenv.mkDerivation rec {
   patches = [
     ./dynamic_install_dir.patch
     ./bootstrap_logging.patch
+    # x265 API change in 4.1 breaks build
+    # See discussion in https://avidemux.org/smif/index.php/topic,19995.msg97494.html#msg97494
+    (fetchpatch {
+      name = "fix_build_with_x265_4_1.patch";
+      url = "https://github.com/mean00/avidemux2/commit/c16d32a67cdb012db093472ad3776713939a30d1.patch";
+      hash = "sha256-5QqocvYaY/phyvSX2lhTzeAi+z9Wgqs+ITR0cXReps4=";
+    })
   ];
 
   postPatch = ''
