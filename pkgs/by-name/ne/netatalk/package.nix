@@ -22,6 +22,8 @@
   openldap,
   glib,
   dbus,
+  docbook-xsl-nons,
+  libxslt,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -56,6 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     perl
     dbus
+    docbook-xsl-nons
+    libxslt
   ];
 
   mesonFlags = [
@@ -67,6 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dwith-lockfile-path=/run/lock/"
     "-Dwith-cracklib=true"
     "-Dwith-cracklib-path=${cracklib.out}"
+    "-Dwith-docbook-path=${docbook-xsl-nons.out}/share/xml/docbook-xsl-nons/"
   ];
 
   enableParallelBuilding = true;
