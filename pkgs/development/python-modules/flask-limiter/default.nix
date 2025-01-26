@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "flask-limiter";
-  version = "3.10.0";
+  version = "3.10.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "alisaifee";
     repo = "flask-limiter";
     tag = version;
-    hash = "sha256-spE0gVrPlbz0JDXGznJ6RN2uNAsQn7tbHxWGU98221M=";
+    hash = "sha256-AfreBLyJDogXnxB5cIoT766VFiHIIoVKAoBIra6Q+xs=";
   };
 
   postPatch = ''
