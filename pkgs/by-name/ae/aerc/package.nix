@@ -92,7 +92,10 @@ buildGoModule rec {
     description = "Email client for your terminal";
     homepage = "https://aerc-mail.org/";
     changelog = "https://git.sr.ht/~rjarry/aerc/tree/${version}/item/CHANGELOG.md";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      defelo
+      sikmir
+    ];
     mainProgram = "aerc";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
