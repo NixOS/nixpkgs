@@ -6,6 +6,7 @@
   openssl,
   stdenv,
   installShellFiles,
+  nix-update-script,
   darwin,
 }:
 
@@ -28,9 +29,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildInputs =
-    [
-      openssl
-    ]
+    [ openssl ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.Security
       darwin.apple_sdk.frameworks.SystemConfiguration
@@ -45,6 +44,8 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion --fish --name flake-edit.fish target/assets/flake-edit.fish
     installShellCompletion --zsh --name _flake-edit target/assets/_flake-edit
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Edit your flake inputs with ease";
