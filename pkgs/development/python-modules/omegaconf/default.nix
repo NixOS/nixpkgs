@@ -10,6 +10,7 @@
   pydevd,
   pytest-mock,
   pytestCheckHook,
+  pythonAtLeast,
   pythonOlder,
   pyyaml,
   substituteAll,
@@ -70,7 +71,17 @@ buildPythonPackage rec {
     "ignore::DeprecationWarning"
   ];
 
-  disabledTests = [ "test_eq" ];
+  disabledTests =
+    [
+      # assert (1560791320562868035 == 1560791320562868035) == False
+      "test_eq"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.13") [
+      # pathlib._local.Path != pathlib.Path type check mismatch
+      "test_errors"
+      "test_to_yaml"
+      "test_type_str"
+    ];
 
   meta = with lib; {
     description = "Framework for configuring complex applications";
