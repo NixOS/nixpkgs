@@ -35,12 +35,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     file
+    glib
   ];
 
   buildInputs = [
     vpnc
     networkmanager
-    glib
   ] ++ lib.optionals withGnome [
     gtk3
     gtk4
@@ -54,6 +54,8 @@ stdenv.mkDerivation rec {
     "--with-gtk4=${if withGnome then "yes" else "no"}"
     "--enable-absolute-paths"
   ];
+
+  strictDeps = true;
 
   passthru = {
     updateScript = gnome.updateScript {
