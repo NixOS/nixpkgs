@@ -27,6 +27,9 @@
   nv-codec-headers-12,
   pkg-config,
   qt6,
+  spirv-tools,
+  spirv-headers,
+  vulkan-utility-libraries,
   vulkan-headers,
   vulkan-loader,
   yasm,
@@ -147,7 +150,10 @@ stdenv.mkDerivation (finalAttrs: {
     # intentionally omitted: renderdoc - heavy, developer only
     SDL2
     # intentionally omitted: stb - header only libraries, vendor uses git snapshot
+    spirv-tools
+    spirv-headers
     vulkan-memory-allocator
+    vulkan-utility-libraries
     # intentionally omitted: xbyak - prefer vendored version for compatibility
     zlib
     zstd
@@ -167,10 +173,11 @@ stdenv.mkDerivation (finalAttrs: {
 
     # use system libraries
     # NB: "external" here means "from the externals/ directory in the source",
-    # so "off" means "use system"
+    # so "false" means "use system"
     (lib.cmakeBool "YUZU_USE_EXTERNAL_SDL2" false)
-    (lib.cmakeBool "YUZU_USE_EXTERNAL_VULKAN_HEADERS" true)
-    "-DVulkan_INCLUDE_DIRS=${vulkan-headers}/include"
+    (lib.cmakeBool "YUZU_USE_EXTERNAL_VULKAN_HEADERS" false)
+    (lib.cmakeBool "YUZU_USE_EXTERNAL_VULKAN_UTILITY_LIBRARIES" false)
+    (lib.cmakeBool "YUZU_USE_EXTERNAL_VULKAN_SPIRV_TOOLS" false)
 
     # # don't use system ffmpeg, suyu uses internal APIs
     # (lib.cmakeBool "YUZU_USE_BUNDLED_FFMPEG" true)
