@@ -19,6 +19,16 @@
       "agpl"
     ]
   },
+  "collectives": {
+    "hash": "sha256-IAnJZuaj6KW6kF4daIKxvCEDCViWu30gogm8q2/ooQs=",
+    "url": "https://github.com/nextcloud/collectives/releases/download/v2.16.0/collectives-2.16.0.tar.gz",
+    "version": "2.16.0",
+    "description": "Collectives is a Nextcloud App for activist and community projects to organize together.\nCome and gather in collectives to build shared knowledge.\n\n* 👥 **Collective and non-hierarchical workflow by heart**: Collectives are\n  tied to a [Nextcloud Team](https://github.com/nextcloud/circles) and\n  owned by the collective.\n* 📝 **Collaborative page editing** like known from Etherpad thanks to the\n  [Text app](https://github.com/nextcloud/text).\n* 🔤 **Well-known [Markdown](https://en.wikipedia.org/wiki/Markdown) syntax**\n  for page formatting.\n\n## Installation\n\nIn your Nextcloud instance, simply navigate to **»Apps«**, find the\n**»Teams«** and **»Collectives«** apps and enable them.",
+    "homepage": "https://github.com/nextcloud/collectives",
+    "licenses": [
+      "agpl"
+    ]
+  },
   "contacts": {
     "hash": "sha256-hqCDr7qEqsi8tZ9Woz9hsUm1HENK16FNz4pcQCto8S4=",
     "url": "https://github.com/nextcloud-releases/contacts/releases/download/v6.0.2/contacts-v6.0.2.tar.gz",
