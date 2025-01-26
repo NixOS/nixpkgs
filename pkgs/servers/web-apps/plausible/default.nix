@@ -81,7 +81,8 @@ let
     pname = "mjml-native";
     version = "";
     src = "${mixFodDeps}/mjml/native/mjml_nif";
-    cargoHash = "sha256-W4r8W+JGTE6j4gDogL5Yulr0mbaXjDbwDTwhzMbbDcQ=";
+    useFetchCargoVendor = true;
+    cargoHash = "sha256-zDWOik65PWAMpIDDcG+DibprPVW/k+Q83+fjFI5vWaY=";
     doCheck = false;
 
     env = {
