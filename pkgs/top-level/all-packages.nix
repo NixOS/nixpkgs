@@ -6653,9 +6653,6 @@ with pkgs;
   cargo-tarpaulin = callPackage ../development/tools/analysis/cargo-tarpaulin {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
-  cargo-asm = callPackage ../development/tools/rust/cargo-asm {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
   cargo-bazel = callPackage ../development/tools/rust/cargo-bazel {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
