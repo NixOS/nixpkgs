@@ -60,7 +60,7 @@ let
     meta = {
       description = "GUI program developed by vue3";
       license = with lib.licenses; [ gpl3Plus ];
-      maintainers = with lib.maintainers; [ aucub ];
+      maintainers = with lib.maintainers; [ ];
       platforms = lib.platforms.linux;
     };
   });
@@ -132,7 +132,7 @@ buildGoModule {
     homepage = "https://github.com/GUI-for-Cores/GUI.for.SingBox";
     mainProgram = "GUI.for.SingBox";
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ aucub ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };
 }
