@@ -308,9 +308,11 @@ let
         #
         pythonCatchConflictsHook
       ]
-      ++ optionals (attrs ? pythonRelaxDeps || attrs ? pythonRemoveDeps) [
-        pythonRelaxDepsHook
-      ]
+      ++
+        optionals (finalAttrs.pythonRelaxDeps or [ ] != [ ] || finalAttrs.pythonRemoveDeps or [ ] != [ ])
+          [
+            pythonRelaxDepsHook
+          ]
       ++ optionals removeBinBytecode [
         pythonRemoveBinBytecodeHook
       ]
