@@ -138,6 +138,7 @@ stdenv.mkDerivation (finalAttrs: {
     # intentionally omitted: renderdoc - heavy, developer only
     SDL2
     # intentionally omitted: stb - header only libraries, vendor uses git snapshot
+    simpleini
     spirv-tools
     spirv-headers
     vulkan-memory-allocator
