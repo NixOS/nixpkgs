@@ -7,6 +7,10 @@
   gtk-engine-murrine,
   sassc,
   border-radius ? null, # Suggested: 2 < value < 16
+  theme ? [ "all" ],
+  color ? [ ],
+  icon ? [ "nixos" ],
+  size ? [ ],
   tweaks ? [ ], # can be "solid" "compact" "black" "primary" "macos" "submenu" "nord|dracula"
   withWallpapers ? false,
 }:
@@ -62,7 +66,11 @@ lib.checkListOfEnum "${pname}: theme tweaks" validTweaks tweaks
 
     installPhase = ''
       runHook preInstall
-      bash install.sh -d $out/share/themes -t all \
+      bash install.sh -d $out/share/themes \
+        ${lib.optionalString (theme != [ ]) "--theme " + builtins.toString theme} \
+        ${lib.optionalString (color != [ ]) "--color " + builtins.toString color} \
+        ${lib.optionalString (icon != [ ]) "--icon " + builtins.toString icon} \
+        ${lib.optionalString (size != [ ]) "--size " + builtins.toString size} \
         ${lib.optionalString (tweaks != [ ]) "--tweaks " + builtins.toString tweaks} \
         ${lib.optionalString (border-radius != null) (
           "--round " + builtins.toString border-radius + "px"
