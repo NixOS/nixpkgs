@@ -19,7 +19,7 @@
 buildPythonPackage rec {
   pname = "adblock";
   version = "0.6.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -45,10 +45,9 @@ buildPythonPackage rec {
       --replace "0.0.0" "${version}"
   '';
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-1xmYmF5P7a5O9MilxDy+CVhmWMGRetdM2fGvTPy7JmM=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-fetJX6HQxRZ/Az7rJeU9S+s8ttgNPnJEvTLfzGt4xjk=";
   };
 
   nativeBuildInputs =
