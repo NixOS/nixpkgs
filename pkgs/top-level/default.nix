@@ -46,6 +46,11 @@
   ...
 } @ args:
 
+# Passing fully elaborated systems to localSystem or crossSystem will break composability
+# of package sets.
+assert builtins.isAttrs localSystem -> !(localSystem ? parsed);
+assert builtins.isAttrs crossSystem -> !(crossSystem ? parsed);
+
 let # Rename the function arguments
   config0 = config;
   crossSystem0 = crossSystem;
