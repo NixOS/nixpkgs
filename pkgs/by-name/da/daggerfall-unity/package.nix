@@ -73,8 +73,9 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir --parents "$out/share/doc/"
+    mkdir --parents "$out/bin" "$out/share/doc"
     cp --recursive * "$out"
+    ln --symbolic "../${finalAttrs.meta.mainProgram}" "$out/bin/"
 
     ${lib.strings.concatMapStringsSep "\n" (file: ''
       cp "${file}" "$out/share/doc/${file.name}"
