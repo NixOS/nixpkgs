@@ -1,8 +1,6 @@
 --- lib/AsmParser/LLParser.cpp	2015-12-21 09:07:14.000000000 -0500
 +++ lib/AsmParser/LLParser.cpp	2016-04-11 13:38:21.988165739 -0400
 @@ -1835,8 +1835,14 @@
-     // If the type hasn't been defined yet, create a forward definition and
-     // remember where that forward def'n was seen (in case it never is defined).
      if (!Entry.first) {
 -      Entry.first = StructType::create(Context, Lex.getStrVal());
 -      Entry.second = Lex.getLoc();
