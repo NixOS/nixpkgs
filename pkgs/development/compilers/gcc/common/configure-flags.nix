@@ -127,11 +127,18 @@ let
           }"
           "--enable-nls"
         ]
-        ++ lib.optionals (targetPlatform.libc == "uclibc" || targetPlatform.libc == "musl") [
-          # libsanitizer requires netrom/netrom.h which is not
-          # available in uclibc.
-          "--disable-libsanitizer"
-        ]
+        ++
+          lib.optionals
+            (lib.elem targetPlatform.libc [
+              "mlibc"
+              "musl"
+              "uclibc"
+            ])
+            [
+              # libsanitizer requires netrom/netrom.h which is not
+              # available in uclibc.
+              "--disable-libsanitizer"
+            ]
         ++ lib.optional (
           targetPlatform.libc == "newlib" || targetPlatform.libc == "newlib-nano"
         ) "--with-newlib"
@@ -274,6 +281,7 @@ let
       "--with-gnu-as"
       "--without-gnu-ld"
     ]
+    ++ lib.optional (targetPlatform.libc == "mlibc") "--disable-libsanitizer"
     ++
       lib.optional (targetPlatform.libc == "musl")
         # musl at least, disable: https://git.buildroot.net/buildroot/commit/?id=873d4019f7fb00f6a80592224236b3ba7d657865
