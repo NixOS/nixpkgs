@@ -3565,6 +3565,17 @@
     githubId = 382011;
     name = "c4605";
   };
+  c4thebomb = {
+    name = "Ceferino Patino";
+    email = "c4patino@gmail.com";
+    github = "c4thebomb";
+    githubId = 79673111;
+    keys = [
+      {
+        fingerprint = "EA60 D516 A926 7532 369D  3E67 E161 DF22 9EC1 280E";
+      }
+    ];
+  };
   caarlos0 = {
     name = "Carlos A Becker";
     email = "carlos@becker.software";
