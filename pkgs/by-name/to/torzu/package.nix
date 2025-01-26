@@ -2,7 +2,6 @@
   lib,
   stdenv,
   SDL2,
-  autoconf,
   boost,
   catch2_3,
   cmake,
@@ -18,13 +17,11 @@
   glslang,
   libopus,
   libusb1,
-  libva,
   lz4,
   python3,
   unzip,
   nix-update-script,
   nlohmann_json,
-  nv-codec-headers-12,
   pkg-config,
   qt6,
   spirv-tools,
@@ -32,7 +29,6 @@
   vulkan-utility-libraries,
   vulkan-headers,
   vulkan-loader,
-  yasm,
   simpleini,
   zlib,
   vulkan-memory-allocator,
@@ -126,15 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
     # intentionally omitted: dynarmic - prefer vendored version for compatibility
     enet
 
-    # ffmpeg deps (also includes vendored)
-    # we do not use internal ffmpeg because cuda errors
-    autoconf
-    yasm
-    libva # for accelerated video decode on non-nvidia
-    nv-codec-headers-12 # for accelerated video decode on nvidia
     ffmpeg-headless
-    # end ffmpeg deps
-
     fmt
     # intentionally omitted: gamemode - loaded dynamically at runtime
     # intentionally omitted: httplib - upstream requires an older version than what we have
@@ -178,9 +166,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "YUZU_USE_EXTERNAL_VULKAN_HEADERS" false)
     (lib.cmakeBool "YUZU_USE_EXTERNAL_VULKAN_UTILITY_LIBRARIES" false)
     (lib.cmakeBool "YUZU_USE_EXTERNAL_VULKAN_SPIRV_TOOLS" false)
-
-    # # don't use system ffmpeg, suyu uses internal APIs
-    # (lib.cmakeBool "YUZU_USE_BUNDLED_FFMPEG" true)
 
     # don't check for missing submodules
     (lib.cmakeBool "YUZU_CHECK_SUBMODULES" false)
