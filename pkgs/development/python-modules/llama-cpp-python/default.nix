@@ -4,6 +4,7 @@
   gcc13Stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
 
   # nativeBuildInputs
   cmake,
@@ -50,6 +51,16 @@ buildPythonPackage rec {
     fetchSubmodules = true;
   };
   # src = /home/gaetan/llama-cpp-python;
+
+  patches = [
+    # fix segfault when running tests due to missing default Metal devices
+    (fetchpatch2 {
+      url = "https://github.com/ggerganov/llama.cpp/commit/acd38efee316f3a5ed2e6afcbc5814807c347053.patch?full_index=1";
+      stripLen = 1;
+      extraPrefix = "vendor/llama.cpp/";
+      hash = "sha256-71+Lpg9z5KPlaQTX9D85KS2LXFWLQNJJ18TJyyq3/pU=";
+    })
+  ];
 
   dontUseCmakeConfigure = true;
   SKBUILD_CMAKE_ARGS = lib.strings.concatStringsSep ";" (
