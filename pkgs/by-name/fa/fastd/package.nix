@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fastd";
-  version = "22";
+  version = "23";
 
   src = fetchFromGitHub {
     owner = "Neoraider";
     repo = "fastd";
-    rev = "v${version}";
-    sha256 = "0qni32j7d3za9f87m68wq8zgalvfxdrx1zxi6l4x7vvmpcw5nhpq";
+    tag = "v${version}";
+    hash = "sha256-Sz6VEjKziL/w2a4VWFfMPDYvm7UZh5A/NmzP10rJ2r8=";
   };
 
   nativeBuildInputs = [
