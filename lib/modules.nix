@@ -844,8 +844,6 @@ let
 
     in warnDeprecation opt //
       { value = addErrorContext "while evaluating the option `${showOption loc}':" value;
-        # raw value before "apply" above
-        rawValue = addErrorContext "while evaluating the option `${showOption loc}':" res.mergedValue;
         inherit (res.defsFinal') highestPrio;
         definitions = map (def: def.value) res.defsFinal;
         files = map (def: def.file) res.defsFinal;
