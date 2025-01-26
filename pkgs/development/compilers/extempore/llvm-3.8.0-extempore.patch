@@ -1,0 +1,48 @@
+--- lib/AsmParser/LLParser.cpp	2015-12-21 09:07:14.000000000 -0500
++++ lib/AsmParser/LLParser.cpp	2016-04-11 13:38:21.988165739 -0400
+@@ -1835,8 +1835,14 @@
+     // If the type hasn't been defined yet, create a forward definition and
+     // remember where that forward def'n was seen (in case it never is defined).
+     if (!Entry.first) {
+-      Entry.first = StructType::create(Context, Lex.getStrVal());
+-      Entry.second = Lex.getLoc();
++      // this here for extempore
++      if (M->getTypeByName(Lex.getStrVal())) {
++        Entry.first = M->getTypeByName(Lex.getStrVal());
++        Entry.second = SMLoc();
++      } else {
++        Entry.first = StructType::create(Context, Lex.getStrVal());
++        Entry.second = Lex.getLoc();
++      }
+     }
+     Result = Entry.first;
+     Lex.Lex();
+--- lib/ExecutionEngine/MCJIT/MCJIT.cpp	2015-11-05 14:24:56.000000000 -0500
++++ lib/ExecutionEngine/MCJIT/MCJIT.cpp	2016-04-11 13:39:15.556164550 -0400
+@@ -529,6 +529,15 @@
+         rv.IntVal = APInt(32, PF(ArgValues[0].IntVal.getZExtValue()));
+         return rv;
+       }
++      if (FTy->getNumParams() == 1 &&
++          RetTy->isVoidTy() &&
++          FTy->getParamType(0)->isPointerTy()) {
++        GenericValue rv;
++        void (*PF)(char *) = (void(*)(char *))FPtr;
++        char* mzone = (char*) GVTOP(ArgValues[0]);
++        PF(mzone);
++        return rv;
++      }
+       break;
+     }
+   }
+--- include/llvm/IR/ValueMap.h	2015-08-04 00:30:24.000000000 +0200
++++ include/llvm/IR/ValueMap.h	2018-07-14 21:09:09.769502736 +0200
+@@ -99,7 +99,7 @@
+   explicit ValueMap(const ExtraData &Data, unsigned NumInitBuckets = 64)
+       : Map(NumInitBuckets), Data(Data) {}
+
+-  bool hasMD() const { return MDMap; }
++  bool hasMD() const { return static_cast<bool>(MDMap); }
+   MDMapT &MD() {
+     if (!MDMap)
+       MDMap.reset(new MDMapT);
