@@ -59,7 +59,10 @@ stdenv.mkDerivation rec {
       bsd3
     ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [
+      fpletz
+      herbetom
+    ];
     mainProgram = "fastd";
   };
 }
