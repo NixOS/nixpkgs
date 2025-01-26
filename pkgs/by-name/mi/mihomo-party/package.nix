@@ -3,7 +3,6 @@
   stdenv,
   fetchurl,
   dpkg,
-  wrapGAppsHook3,
   autoPatchelfHook,
   nss,
   nspr,
@@ -13,37 +12,32 @@
   udev,
   libayatana-appindicator,
   libGL,
+  makeWrapper,
 }:
-let
-  version = "1.5.12";
+
+stdenv.mkDerivation rec {
+  pname = "mihomo-party";
+  version = "1.6.0";
+
   src =
     let
-      inherit (stdenv.hostPlatform) system;
-      selectSystem = attrs: attrs.${system};
-      suffix = selectSystem {
+      selectSystem = attrs: attrs.${stdenv.hostPlatform.system};
+      arch = selectSystem {
         x86_64-linux = "amd64";
         aarch64-linux = "arm64";
       };
-      hash = selectSystem {
-        x86_64-linux = "sha256-1vJ2FcJOcpNyfSm5HyLkexsULBBPlI0AW2jXuhK8khA=";
-        aarch64-linux = "sha256-P+zCO6HxcQJAGIVxOSRga+1Bqtn31mw2v+/EyEDpgF8=";
-      };
     in
     fetchurl {
-      url = "https://github.com/mihomo-party-org/mihomo-party/releases/download/v${version}/mihomo-party-linux-${version}-${suffix}.deb";
-      inherit hash;
+      url = "https://github.com/mihomo-party-org/mihomo-party/releases/download/v${version}/mihomo-party-linux-${version}-${arch}.deb";
+      hash = selectSystem {
+        x86_64-linux = "sha256-dcjw4qGs6Q04LzY2cQLB8DrLybXFH8qFGZfLGz2aBM0=";
+        aarch64-linux = "sha256-brDWmEwRaRCzmVVqKrX4NWhIICEZulnepWpGMxk2gPE=";
+      };
     };
-in
-stdenv.mkDerivation {
-  inherit version src;
-
-  pname = "mihomo-party";
-
-  passthru.updateScript = ./update.sh;
 
   nativeBuildInputs = [
     dpkg
-    wrapGAppsHook3
+    makeWrapper
     autoPatchelfHook
   ];
 
@@ -64,8 +58,9 @@ stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
 
-    mkdir $out
-    cp -r opt/mihomo-party usr/share $out
+    mkdir -p $out/app
+    cp -r opt/mihomo-party $out/app/mihomo-party
+    cp -r usr/share $out/share
     substituteInPlace $out/share/applications/mihomo-party.desktop \
       --replace-fail "/opt/mihomo-party/mihomo-party" "mihomo-party"
 
@@ -74,13 +69,11 @@ stdenv.mkDerivation {
 
   preFixup = ''
     mkdir $out/bin
-    makeWrapper $out/mihomo-party/mihomo-party $out/bin/mihomo-party \
-      --prefix LD_LIBRARY_PATH : "${
-        lib.makeLibraryPath [
-          libGL
-        ]
-      }"
+    makeWrapper $out/app/mihomo-party/mihomo-party $out/bin/mihomo-party \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libGL ]}
   '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Another Mihomo GUI";
