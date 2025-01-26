@@ -13182,6 +13182,12 @@
     githubId = 74221543;
     name = "Moritz Goltdammer";
   };
+  linuxmobile = {
+    email = "bdiez19@gmail.com";
+    github = "linuxmobile";
+    githubId = 10554636;
+    name = "Braian A. Diez";
+  };
   lionello = {
     email = "lio@lunesu.com";
     github = "lionello";
