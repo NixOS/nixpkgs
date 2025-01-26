@@ -59,6 +59,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-x8p9tIsJCXQ+rvNCUNoCwZvGHU8dzt1mA/EJQJU2q1Y=";
   };
 
+  # FIXME: avoid rebuilding lots of darwin packages for now; eventfd looks linux-only
+  patches = lib.optionals stdenv.isLinux [
+    # https://github.com/curl/curl/issues/15725
+    ./fix-eventfd-free.patch
+  ];
+
   # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
   # necessary for FreeBSD code path in configure
   postPatch = ''

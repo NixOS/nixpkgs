@@ -23,9 +23,9 @@
   gnome,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sysprof";
-  version = "47.0";
+  version = "47.2";
 
   outputs = [
     "out"
@@ -34,8 +34,8 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    hash = "sha256-dCTGKUNGYGVCiMBCSJmMNX0c6H7hVZ/UTfGYCZLvXfU=";
+    url = "mirror://gnome/sources/sysprof/${lib.versions.major finalAttrs.version}/sysprof-${finalAttrs.version}.tar.xz";
+    hash = "sha256-5LXt6f2XjsPw1aDUTQQpptIBw2K/bLRScxkDGuRixU8=";
   };
 
   nativeBuildInputs = [
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "sysprof";
     };
   };
 
@@ -88,4 +88,4 @@ stdenv.mkDerivation rec {
     maintainers = teams.gnome.members;
     platforms = platforms.unix;
   };
-}
+})

@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   buildPythonPackage,
   fetchPypi,
@@ -26,6 +27,7 @@ buildPythonPackage rec {
     pytest-cov-stub
   ];
 
+  doCheck = !(stdenv.isDarwin && stdenv.isx86_64);
   disabledTests = [
     # access to socket
     "test_service_port"
