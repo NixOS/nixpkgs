@@ -12972,8 +12972,6 @@ with pkgs;
 
   ausweisapp = qt6Packages.callPackage ../applications/misc/ausweisapp { };
 
-  avidemux = libsForQt5.callPackage ../applications/video/avidemux { };
-
   awesome = callPackage ../applications/window-managers/awesome {
     cairo = cairo.override { xcbSupport = true; };
     inherit (texFunctions) fontsConf;
