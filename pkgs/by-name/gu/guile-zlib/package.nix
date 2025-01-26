@@ -10,14 +10,14 @@
 
 stdenv.mkDerivation rec {
   pname = "guile-zlib";
-  version = "0.2.1";
+  version = "0.2.2";
 
   src = fetchFromGitea {
     domain = "notabug.org";
     owner = "guile-zlib";
     repo = "guile-zlib";
     rev = "v${version}";
-    hash = "sha256-WwvrLZIrv8oSDXckdoG0RaPUQbqr02tdGrcdLYea7ic=";
+    hash = "sha256-aaZhwHimQq408DNtHy442kh/EYdRdxP0Z1tQGDKmkmc=";
   };
 
   strictDeps = true;

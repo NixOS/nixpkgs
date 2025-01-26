@@ -10,18 +10,17 @@
   icu,
   cyrus_sasl,
   snappy,
-  darwin,
 }:
 
 stdenv.mkDerivation rec {
   pname = "mongoc";
-  version = "1.29.1";
+  version = "1.29.2";
 
   src = fetchFromGitHub {
     owner = "mongodb";
     repo = "mongo-c-driver";
     tag = version;
-    hash = "sha256-81UgJ5GboznaK9omhr3ZMOeOQbIru33Ic42tQAazSzw=";
+    hash = "sha256-nhAbe85onBgWDu20yxR9xapOpca28ayP7peXf4H6i+Y=";
   };
 
   nativeBuildInputs = [
@@ -29,18 +28,14 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      openssl
-      zlib
-      zstd
-      icu
-      cyrus_sasl
-      snappy
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk_11_0.frameworks.Security
-    ];
+  buildInputs = [
+    openssl
+    zlib
+    zstd
+    icu
+    cyrus_sasl
+    snappy
+  ];
 
   cmakeFlags = [
     "-DBUILD_VERSION=${version}"
