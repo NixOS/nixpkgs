@@ -152,6 +152,8 @@ mkDerivation rec {
   dontWrapQtApps = true;
   preferLocalBuild = true;
 
+  passthru.updateScript = ./update-teamviewer.sh;
+
   meta = with lib; {
     homepage = "https://www.teamviewer.com";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
