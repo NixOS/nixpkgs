@@ -17,8 +17,8 @@
     #
     # Ensure you also check ../mattermostLatest/package.nix.
     regex = "^v(9\\.11\\.[0-9]+)$";
-    version = "9.11.7";
-    srcHash = "sha256-KeGpYy3jr7/B2mtBk9em2MXJBJR2+Wajmvtz/yT4SG8=";
+    version = "9.11.8";
+    srcHash = "sha256-mTEAsY3Dw5n6sqLWyNfS4EGgZuUOol27UwqsZ2kEXZY=";
     vendorHash = "sha256-alLPBfnA1o6bUUgPRqvYW/98UKR9wltmFTzKIGtVEm4=";
     npmDepsHash = "sha256-ysz38ywGxJ5DXrrcDmcmezKbc5Y7aug9jOWUzHRAs/0=";
   },

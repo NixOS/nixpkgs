@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     python3
   ];
 
-  makeFlags = [
+  makeFlags = kernel.moduleMakeFlags ++ [
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "SPAAS=false"
   ];

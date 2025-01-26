@@ -22,14 +22,11 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ pahole ];
   nativeBuildInputs = [ kmod ] ++ kernel.moduleBuildDependencies;
 
-  # kernel makeFlags contain O=$$(buildRoot), that upstream passes through to make and causes build failure, so we filter it out here
-  makeFlags =
-    (lib.filter (flag: lib.head (lib.strings.splitString "=" flag) != "O") kernel.makeFlags)
-    ++ [
-      "KERNELRELEASE=${kernel.modDirVersion}"
-      "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-      "INSTALL_MOD_PATH=${placeholder "out"}"
-    ];
+  makeFlags = kernel.moduleMakeFlags ++ [
+    "KERNELRELEASE=${kernel.modDirVersion}"
+    "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+    "INSTALL_MOD_PATH=${placeholder "out"}"
+  ];
 
   meta = {
     broken = stdenv.hostPlatform.isAarch64 || (lib.versionOlder kernel.version "5.5");
