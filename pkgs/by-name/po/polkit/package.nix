@@ -141,7 +141,7 @@ stdenv.mkDerivation rec {
       # location using DESTDIR and then move it to proper one in postInstall.
       DESTDIR = "dest";
     }
-    // lib.optionalAttrs stdenv.cc.isGNU {
+    // lib.optionalAttrs (stdenv.cc.isGNU || stdenv.cc.isClang) {
       NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
     };
 
