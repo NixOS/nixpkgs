@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fluidsynth";
-  version = "2.4.2";
+  version = "2.4.3";
 
   src = fetchFromGitHub {
     owner = "FluidSynth";
     repo = "fluidsynth";
     rev = "v${version}";
-    hash = "sha256-rpTL1eOm3PQIBuxoPEZwj64QXasNQN80kGSW7h6dDdw=";
+    hash = "sha256-LaJcWrHgt/RzlDQmpzOjF/9ugD5d+8XWRt7pU3SM5Rk=";
   };
 
   outputs = [ "out" "dev" "man" ];
