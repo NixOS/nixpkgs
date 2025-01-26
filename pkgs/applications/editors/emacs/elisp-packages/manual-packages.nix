@@ -27,6 +27,8 @@ lib.packagesFromDirectoryRecursive {
       ;
   };
 
+  straight = callPackage ./manual-packages/straight { inherit (pkgs) git; };
+
   structured-haskell-mode = self.shm;
 
   texpresso = callPackage ./manual-packages/texpresso { inherit (pkgs) texpresso; };
