@@ -8786,6 +8786,8 @@ with pkgs;
     protobuf = protobuf_21;
   };
 
+  gamt  = callPackage ../by-name/am/amtterm/package.nix { withGamt = true; };
+
   gcovr = with python3Packages; toPythonApplication gcovr;
 
   gcr = callPackage ../development/libraries/gcr { };
