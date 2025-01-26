@@ -186,6 +186,15 @@ in
   })
 ]
 
+## mlibc
+++ optionals (stdenv.targetPlatform.isMlibc && atLeast14) [
+  # Only the second patch adds support for linux-mlibc, but it needs
+  # the first one to apply cleanly.
+  ./add-managarm-target.patch
+  ./add-mlibc-target.patch
+  ./add-loongarch64-linux-mlibc-target.patch
+]
+
 ## Darwin
 
 # Fixes detection of Darwin on x86_64-darwin. Otherwise, GCC uses a deployment target of 10.5, which crashes ld64.
