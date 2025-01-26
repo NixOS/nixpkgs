@@ -1765,10 +1765,6 @@ with pkgs;
 
   fluffychat-web = fluffychat.override { targetFlutterPlatform = "web"; };
 
-  gbl = callPackage ../tools/archivers/gbl {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
   genpass = callPackage ../tools/security/genpass { };
 
   gammaray = qt6Packages.callPackage ../development/tools/gammaray { };

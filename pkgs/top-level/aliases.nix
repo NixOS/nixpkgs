@@ -443,6 +443,7 @@ mapAliases {
   g4music = gapless; # Added 2024-07-26
   g4py = throw "'g4py' has been renamed to/replaced by 'python3Packages.geant4'"; # Converted to throw 2024-10-17
   gamin = throw "'gamin' has been removed as it is unmaintained upstream"; # Added 2024-04-19
+  gbl = throw "'gbl' has been removed because the upstream repository no longer exists"; # Added 2025-01-26
   gcc48 = throw "gcc48 has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2024-09-10
   gcc49 = throw "gcc49 has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2024-09-11
   gcc49Stdenv = throw "gcc49Stdenv has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2024-09-11
