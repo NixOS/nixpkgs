@@ -6,15 +6,18 @@
   nss,
   nspr,
   libusb1,
-  qtbase,
-  qtmultimedia,
-  qtserialport,
   cups,
   autoPatchelfHook,
   libgpg-error,
   e2fsprogs,
   makeDesktopItem,
   copyDesktopItems,
+  xorg,
+  libGL,
+  alsa-lib,
+  freetype,
+  fontconfig,
+  makeWrapper,
 }:
 
 stdenv.mkDerivation rec {
@@ -30,18 +33,22 @@ stdenv.mkDerivation rec {
     p7zip
     autoPatchelfHook
     copyDesktopItems
+    makeWrapper
   ];
 
   buildInputs = [
     nss
     nspr
     libusb1
-    qtbase
-    qtmultimedia
-    qtserialport
     cups
     libgpg-error
     e2fsprogs
+    xorg.libX11
+    xorg.libxcb
+    libGL
+    alsa-lib
+    freetype
+    fontconfig
   ];
 
   unpackPhase = ''
@@ -61,15 +68,19 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin $out/app
+    mkdir -p $out/app
     cp -ar LightBurn $out/app/lightburn
-    ln -s $out/app/lightburn/AppRun $out/bin/lightburn
     install -Dm644 $out/app/lightburn/LightBurn.png $out/share/pixmaps/lightburn.png
 
     runHook postInstall
   '';
 
-  dontWrapQtApps = true;
+  postFixup = ''
+    mkdir $out/bin
+    makeWrapper $out/app/lightburn/AppRun $out/bin/lightburn \
+      --unset QT_PLUGIN_PATH \
+      --unset QML2_IMPORT_PATH
+  '';
 
   meta = {
     description = "Layout, editing, and control software for your laser cutter";
