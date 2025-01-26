@@ -202,6 +202,7 @@ let
       ListenAddress = "${cfg.host}:${toString cfg.port}";
       LocalModeSocketLocation = cfg.socket.path;
       EnableLocalMode = cfg.socket.enable;
+      EnableSecurityFixAlert = cfg.telemetry.enableSecurityAlerts;
     };
     TeamSettings.SiteName = cfg.siteName;
     SqlSettings.DriverName = cfg.database.driver;
@@ -233,7 +234,13 @@ let
     FileSettings.Directory = cfg.dataDir;
     PluginSettings.Directory = "${pluginDir}/server";
     PluginSettings.ClientDirectory = "${pluginDir}/client";
-    LogSettings.FileLocation = cfg.logDir;
+    LogSettings = {
+      FileLocation = cfg.logDir;
+
+      # Reaches out to Mattermost's servers for telemetry; disable it by default.
+      # https://docs.mattermost.com/configure/environment-configuration-settings.html#enable-diagnostics-and-error-reporting
+      EnableDiagnostics = cfg.telemetry.enableDiagnostics;
+    };
   } cfg.settings;
 
   mattermostConf = recursiveUpdate mattermostConfWithoutPlugins (
@@ -472,6 +479,26 @@ in
           This is a list of paths to .tar.gz files or derivations evaluating to
           .tar.gz files.
         '';
+      };
+
+      telemetry = {
+        enableSecurityAlerts = mkOption {
+          type = types.bool;
+          default = true;
+          description = ''
+            True if we should enable security update checking. This reaches out to Mattermost's servers:
+            https://docs.mattermost.com/manage/telemetry.html#security-update-check-feature
+          '';
+        };
+
+        enableDiagnostics = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            True if we should enable sending diagnostic data. This reaches out to Mattermost's servers:
+            https://docs.mattermost.com/manage/telemetry.html#error-and-diagnostics-reporting-feature
+          '';
+        };
       };
 
       environment = mkOption {
