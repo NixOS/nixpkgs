@@ -6221,7 +6221,7 @@ with pkgs;
 
   pscid = nodePackages.pscid;
 
-  coreboot-toolchain = recurseIntoAttrs (callPackage ../development/tools/misc/coreboot-toolchain { });
+  coreboot-toolchain = recurseIntoAttrs (callPackage ../by-name/co/coreboot-toolchain/package.nix { });
 
   spicedb     = callPackage ../servers/spicedb { };
   spicedb-zed = callPackage ../servers/spicedb/zed.nix { };
