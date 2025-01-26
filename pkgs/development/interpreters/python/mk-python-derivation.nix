@@ -314,7 +314,7 @@ let
       ++ optionals removeBinBytecode [
         pythonRemoveBinBytecodeHook
       ]
-      ++ optionals (hasSuffix "zip" (attrs.src.name or "")) [
+      ++ optionals (hasSuffix "zip" (finalAttrs.src.name or "")) [
         unzip
       ]
       ++ optionals (format' == "setuptools") [
