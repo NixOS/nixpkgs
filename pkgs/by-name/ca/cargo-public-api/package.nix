@@ -11,15 +11,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-public-api";
-  version = "0.42.0";
+  version = "0.43.0";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-vQhKvL9vRUq7WqtJ25v12DuCzO90bgXLmwu2Mm1jbig=";
+    hash = "sha256-oAtAfoWJ4YZ9YcU7DQtj6QqF1DSEMOUjauQxqo1a6GA=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-oYzHIohBKLj6PE8OJaKy/7RJG0YZZEFiT5xt77ekSDg=";
+  cargoHash = "sha256-VcblQw9EZSvV8rw9Krp5ZTXwVdZJe0FqJbqpptkpJfU=";
 
   nativeBuildInputs = [ pkg-config ];
 
