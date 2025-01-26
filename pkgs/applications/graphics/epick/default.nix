@@ -19,8 +19,9 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "vv9k";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-k0WQu1n1sAHVor58jr060vD5/2rDrt1k5zzJlrK9WrU=";
+    # Upstream has rewritten tags on multiple occasions.
+    rev = "14ee92e049780406fffdc1e4a83bf1433775663f";
+    sha256 = "sha256-gjqAQrGJ9KFdzn2a3fOgu0VJ9zrX5stsbzriOGJaD/4=";
   };
 
   cargoHash = "sha256-OQZPOiMTpoWabxHa3TJG8L3zq8WxMeFttw8xggSXsMA=";
