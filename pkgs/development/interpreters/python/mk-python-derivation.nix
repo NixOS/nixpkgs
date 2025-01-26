@@ -108,7 +108,6 @@ let
     "disabledTests"
     "pytestFlagsArray"
     "unittestFlagsArray"
-    "outputs"
     "stdenv"
     "dependencies"
     "optional-dependencies"
