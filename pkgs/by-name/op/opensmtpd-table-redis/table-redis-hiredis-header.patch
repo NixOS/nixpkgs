@@ -1,0 +1,13 @@
+diff --git a/table_redis.c b/table_redis.c
+index aa13a8f..150cec9 100644
+--- a/table_redis.c
++++ b/table_redis.c
+@@ -29,7 +29,7 @@
+ #include <time.h>
+ #include <unistd.h>
+ 
+-#include <hiredis.h>
++#include <hiredis/hiredis.h>
+ 
+ #include "dict.h"
+ #include "log.h"
