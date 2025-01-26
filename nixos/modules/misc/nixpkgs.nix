@@ -70,24 +70,19 @@ let
     ++ lib.optional (opt.localSystem.highestPrio < (lib.mkOptionDefault { }).priority) opt.localSystem
     ++ lib.optional (opt.crossSystem.highestPrio < (lib.mkOptionDefault { }).priority) opt.crossSystem;
 
-  # pkgs/top-level/default.nix takes great strides to pass the *original* localSystem/crossSystem args
-  # on to nixpkgsFun to create package sets like pkgsStatic, pkgsMusl. This is to be able to infer default
-  # values again. Since cfg.xxxPlatform and cfg.xxxSystem are elaborated via apply, those can't be passed
-  # directly. Instead we use the rawValue before the apply/elaboration step, via opt.xxx.rawValue.
   defaultPkgs =
     if opt.hostPlatform.isDefined then
       let
-        # This compares elaborated systems on purpose, **not** using rawValue.
         isCross = cfg.buildPlatform != cfg.hostPlatform;
         systemArgs =
           if isCross then
             {
-              localSystem = opt.buildPlatform.rawValue;
-              crossSystem = opt.hostPlatform.rawValue;
+              localSystem = cfg.buildPlatform;
+              crossSystem = cfg.hostPlatform;
             }
           else
             {
-              localSystem = opt.hostPlatform.rawValue;
+              localSystem = cfg.hostPlatform;
             };
       in
       import ../../.. (
@@ -101,9 +96,9 @@ let
         inherit (cfg)
           config
           overlays
+          localSystem
+          crossSystem
           ;
-        localSystem = opt.localSystem.rawValue;
-        crossSystem = opt.crossSystem.rawValue;
       };
 
   finalPkgs = if opt.pkgs.isDefined then cfg.pkgs.appendOverlays cfg.overlays else defaultPkgs;
