@@ -106,7 +106,6 @@ let
     "doInstallCheck"
     "pyproject"
     "format"
-    "outputs"
     "stdenv"
     "dependencies"
     "optional-dependencies"
