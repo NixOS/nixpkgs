@@ -7,6 +7,7 @@
   imports = [
     ../../profiles/minimal.nix
     ./installation-cd-base.nix
+    ./latest-kernel.nix
   ];
 
   documentation.man.enable = lib.mkOverride 500 true;
