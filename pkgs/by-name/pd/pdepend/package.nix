@@ -4,7 +4,7 @@
   lib,
 }:
 
-php.buildComposerProject (finalAttrs: {
+php.buildComposerProject2 (finalAttrs: {
   pname = "pdepend";
   version = "2.16.2";
 
@@ -16,7 +16,7 @@ php.buildComposerProject (finalAttrs: {
   };
 
   composerLock = ./composer.lock;
-  vendorHash = "sha256-Rvvy6MI0q+T2W7xzf2UqWIbsqgrWhgqVnzhphQ3iw9g=";
+  vendorHash = "sha256-szKVZhWcd8p4307irNqgSAK2+hl8AW+gCPyf0EEco8A=";
 
   meta = {
     changelog = "https://github.com/pdepend/pdepend/releases/tag/${finalAttrs.version}";
