@@ -17,17 +17,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "git-warp-time";
-  version = "0.8.4";
+  version = "0.8.5";
 
   src = fetchurl {
     url = "https://github.com/alerque/git-warp-time/releases/download/v${finalAttrs.version}/git-warp-time-${finalAttrs.version}.tar.zst";
-    hash = "sha256-Xh30nA77cJ7+UfKlIslnyD+93AtnQ+8P3sCFsG0DAUk=";
+    hash = "sha256-bt94Y1EIcLzz1v2Nwyde63y6FWD+iaFkoEYoQpWVWGY=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit (finalAttrs) pname version src;
     nativeBuildInputs = [ zstd ];
-    hash = "sha256-bmClqtH1xU2KOKVbCOrgN14jpLKiA2ZMzWwrOiufwnQ=";
+    dontConfigure = true;
+    hash = "sha256-qUhMTuvli4hUyHrFWmyaB1Rc/DS9Epae9S/mp6c9LSw=";
   };
 
   nativeBuildInputs = [
