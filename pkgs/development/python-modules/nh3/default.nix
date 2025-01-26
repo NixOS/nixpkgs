@@ -23,10 +23,10 @@ buildPythonPackage {
   format = "pyproject";
   disabled = pythonOlder "3.8";
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-NmSOmM3OHiBx1xwlV2QyliQxDMNFApOlEehxfwyEU0I=";
+    hash = "sha256-cYdwN/PpG1ae6lBRk5usXSwBjH37BpQEp5JLLQ2NRNU=";
   };
 
   nativeBuildInputs = with rustPlatform; [
