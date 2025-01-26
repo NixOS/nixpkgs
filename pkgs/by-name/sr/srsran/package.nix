@@ -31,6 +31,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-3cQMZ75I4cyHpik2d/eBuzw7M4OgbKqroCddycw4uW8=";
   };
 
+  outputs = [
+    "out"
+    "dev"
+  ];
+
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -57,6 +62,9 @@ stdenv.mkDerivation rec {
     (lib.cmakeBool "ENABLE_AVX512" enableAvx512)
   ];
 
+  postInstall = lib.optionalString (!stdenv.hostPlatform.isStatic) ''
+    rm $out/lib/*.a
+  '';
 
   meta = with lib; {
     homepage = "https://www.srslte.com/";
