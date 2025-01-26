@@ -26,6 +26,7 @@ In Nixpkgs, `cargo-tauri.hook` overrides the default build and install phases.
 rustPlatform.buildRustPackage rec {
   # . . .
 
+  useFetchCargoVendor = true;
   cargoHash = "...";
 
   # Assuming our app's frontend uses `npm` as a package manager
