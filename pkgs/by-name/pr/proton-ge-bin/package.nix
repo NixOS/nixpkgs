@@ -70,6 +70,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       NotAShelf
+      Scrumplex
       shawn8901
     ];
     platforms = [ "x86_64-linux" ];
