@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "swapview";
-  version = "0.1.0";
+  version = "0.1.0-unstable-2023-12-03";
 
   src = fetchFromGitHub {
     owner = "lilydjwg";
     repo = "swapview";
-    rev = "v${version}";
-    sha256 = "0339biydk997j5r72vzp7djwkscsz89xr3936nshv23fmxjh2rzj";
+    rev = "cc8e863acd2084413b91572357dab34551c27ed7";
+    sha256 = "sha256-H5jMdmtZoN9nQfjXFQyYbuvPY58jmEP2j/XWGdBocFo=";
   };
 
-  cargoHash = "sha256-v3Fd08s70YX7pEIWYcgpC2daerfZhtzth4haKfUy0Q8=";
+  cargoHash = "sha256-hAesRDDHcZEa4sq7Wj1S1p4i9MDaGA5l1iW50jeOSeM=";
 
   meta = with lib; {
     description = "Simple program to view processes' swap usage on Linux";
