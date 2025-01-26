@@ -469,6 +469,7 @@ let
         mainProgram = launcherName;
         hydraPlatforms = [];
         priority = (browser.meta.priority or lib.meta.defaultPriority) - 1; # prefer wrapper over the package
+        platforms = lib.lists.remove lib.platforms.darwin browser.meta.platforms;
       };
     });
 in lib.makeOverridable wrapper
