@@ -11,7 +11,7 @@ php.buildComposerProject2 (finalAttrs: {
   src = fetchFromGitHub {
     owner = "pdepend";
     repo = "pdepend";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-2Ruubcm9IWZYu2LGeGeKm1tmHca0P5xlKYkuBCCV9ag=";
   };
 
