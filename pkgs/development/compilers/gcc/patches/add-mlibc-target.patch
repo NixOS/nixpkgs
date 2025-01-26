@@ -1,0 +1,75 @@
+From b5cdfff8afc4a668e65541eec5b512d080116a43 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Arsen=20Arsenovi=C4=87?= <arsen@aarsen.me>
+Date: Mon, 3 Jul 2023 11:38:38 +0200
+Subject: [PATCH] *: add mlibc target
+
+---
+ libstdc++-v3/configure.host |  2 +-
+ libstdc++-v3/crossconfig.m4 |  2 +-
+ libtool.m4                  | 20 ++++++++++----------
+ 3 files changed, 12 insertions(+), 12 deletions(-)
+
+diff --git a/libstdc++-v3/configure.host b/libstdc++-v3/configure.host
+index 7bc4307161687..8ebd90eb91699 100644
+--- a/libstdc++-v3/configure.host
++++ b/libstdc++-v3/configure.host
+@@ -255,7 +255,7 @@ case "${host_os}" in
+   freebsd*)
+     os_include_dir="os/bsd/freebsd"
+     ;;
+-  linux-musl*)
++  linux-musl* | linux-mlibc*)
+     os_include_dir="os/generic"
+     ;;
+   gnu* | linux* | kfreebsd*-gnu | uclinux*)
+diff --git a/libstdc++-v3/crossconfig.m4 b/libstdc++-v3/crossconfig.m4
+index e34aa02d45b9d..e6bc6dd50e687 100644
+--- a/libstdc++-v3/crossconfig.m4
++++ b/libstdc++-v3/crossconfig.m4
+@@ -299,7 +299,7 @@ dnl # functions in the list guarded by
+ dnl # long_double_math_on_this_cpu in configure.ac, right after
+ dnl # the expansion of the present macro.
+     ;;
+-  *-managarm*)
++  *-mlibc*)
+     GLIBCXX_CHECK_COMPILER_FEATURES
+     GLIBCXX_CHECK_LINKER_FEATURES
+     GLIBCXX_CHECK_MATH_SUPPORT
+diff --git a/libtool.m4 b/libtool.m4
+index 06c06a244b7c5..aed5e51febf19 100644
+--- a/libtool.m4
++++ b/libtool.m4
+@@ -2517,6 +2517,16 @@ linux*oldld* | linux*aout* | linux*coff*)
+   dynamic_linker=no
+   ;;
+ 
++managarm* | linux*-mlibc*)
++  version_type=linux
++  need_lib_prefix=no
++  need_version=no
++  library_names_spec='${libname}${release}${shared_ext}$versuffix ${libname}${release}${shared_ext}${major} ${libname}${shared_ext}'
++  soname_spec='${libname}${release}${shared_ext}$major'
++  shlibpath_var=LD_LIBRARY_PATH
++  hardcode_into_libs=yes
++  ;;
++
+ # This must be Linux ELF.
+ 
+ # uclinux* changes (here and below) have been submitted to the libtool
+@@ -2568,16 +2578,6 @@ linux* | k*bsd*-gnu | kopensolaris*-gnu | gnu* | uclinuxfdpiceabi)
+   dynamic_linker='GNU/Linux ld.so'
+   ;;
+ 
+-managarm*)
+-  version_type=linux
+-  need_lib_prefix=no
+-  need_version=no
+-  library_names_spec='${libname}${release}${shared_ext}$versuffix ${libname}${release}${shared_ext}${major} ${libname}${shared_ext}'
+-  soname_spec='${libname}${release}${shared_ext}$major'
+-  shlibpath_var=LD_LIBRARY_PATH
+-  hardcode_into_libs=yes
+-  ;;
+-
+ netbsd*)
+   version_type=sunos
+   need_lib_prefix=no

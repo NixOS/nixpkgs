@@ -1,0 +1,21 @@
+From f073ccf60261547ee176accb6df800b620a6cc80 Mon Sep 17 00:00:00 2001
+From: sanana <umutinanerdogan@pm.me>
+Date: Sat, 5 Jul 2025 12:48:00 +0300
+Subject: [PATCH] gcc: add loongarch64-linux-mlibc target
+
+---
+ gcc/config.gcc | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/gcc/config.gcc b/gcc/config.gcc
+index dc350422f3961..d56088b8388a8 100644
+--- a/gcc/config.gcc
++++ b/gcc/config.gcc
+@@ -5137,6 +5137,7 @@ case "${target}" in
+ 
+ 		case ${target} in
+ 		  *-linux-gnu*) triplet_os="linux-gnu";;
++		  *-linux-mlibc*) triplet_os="linux-mlibc";;
+ 		  *-linux-musl*) triplet_os="linux-musl";;
+ 		  *-elf*) triplet_os="elf";;
+ 		  *)
