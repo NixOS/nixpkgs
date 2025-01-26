@@ -14,6 +14,10 @@
   soapysdr-with-plugins,
   libbladeRF,
   zeromq,
+  enableAvx ? stdenv.hostPlatform.avxSupport,
+  enableAvx2 ? stdenv.hostPlatform.avx2Support,
+  enableFma ? stdenv.hostPlatform.fmaSupport,
+  enableAvx512 ? stdenv.hostPlatform.avx512Support,
 }:
 
 stdenv.mkDerivation rec {
@@ -45,7 +49,14 @@ stdenv.mkDerivation rec {
     zeromq
   ];
 
-  cmakeFlags = [ "-DENABLE_WERROR=OFF" ];
+  cmakeFlags = [
+    "-DENABLE_WERROR=OFF"
+    (lib.cmakeBool "ENABLE_AVX" enableAvx)
+    (lib.cmakeBool "ENABLE_AVX2" enableAvx2)
+    (lib.cmakeBool "ENABLE_FMA" enableFma)
+    (lib.cmakeBool "ENABLE_AVX512" enableAvx512)
+  ];
+
 
   meta = with lib; {
     homepage = "https://www.srslte.com/";
