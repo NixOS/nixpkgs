@@ -3,10 +3,13 @@
   lib,
   stdenv,
   makeWrapper,
+  gtk3,
   openssl,
   perl,
   perlPackages,
   pkg-config,
+  vte,
+  withGamt ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -18,7 +21,12 @@ stdenv.mkDerivation (finalAttrs: {
       perl
       SOAPLite
     ])
-    ++ [ openssl ];
+    ++ [ openssl ]
+
+    ++ lib.optionals withGamt [
+      gtk3
+      vte
+    ];
   nativeBuildInputs = [
     makeWrapper
     pkg-config
