@@ -205,9 +205,9 @@ let
     finalAttrs:
     let
       format' =
-        assert (pyproject != null) -> (format == null);
-        if pyproject != null then
-          if pyproject then "pyproject" else "other"
+        assert (finalAttrs.passthru.pyproject != null) -> (format == null);
+        if finalAttrs.passthru.pyproject != null then
+          if finalAttrs.passthru.pyproject then "pyproject" else "other"
         else if format != null then
           format
         else
@@ -262,11 +262,11 @@ let
         in
         attrName: inputs: map (checkDrv attrName) inputs;
 
-      isBootstrapInstallPackage = isBootstrapInstallPackage' (attrs.pname or null);
+      isBootstrapInstallPackage = isBootstrapInstallPackage' (finalAttrs.pname or null);
 
-      isBootstrapPackage = isBootstrapInstallPackage || isBootstrapPackage' (attrs.pname or null);
+      isBootstrapPackage = isBootstrapInstallPackage || isBootstrapPackage' (finalAttrs.pname or null);
 
-      isSetuptoolsDependency = isSetuptoolsDependency' (attrs.pname or null);
+      isSetuptoolsDependency = isSetuptoolsDependency' (finalAttrs.pname or null);
 
       name = namePrefix + attrs.name or "${finalAttrs.pname}-${finalAttrs.version}";
 
@@ -396,7 +396,10 @@ let
       outputs = outputs ++ optional withDistOutput "dist";
 
       passthru = {
-        inherit disabled;
+        inherit
+          disabled
+          pyproject
+          ;
       }
       // {
         updateScript =
