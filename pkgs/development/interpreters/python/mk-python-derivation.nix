@@ -415,19 +415,13 @@ let
         inherit
           disabled
           pyproject
+          build-system
+          dependencies
+          optional-dependencies
           ;
       }
       // {
         updateScript = nix-update-script { };
-      }
-      // optionalAttrs (dependencies != [ ]) {
-        inherit dependencies;
-      }
-      // optionalAttrs (optional-dependencies != { }) {
-        inherit optional-dependencies;
-      }
-      // optionalAttrs (build-system != [ ]) {
-        inherit build-system;
       }
       // attrs.passthru or { };
 
