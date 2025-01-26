@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ kmod ] ++ kernel.moduleBuildDependencies;
 
-  makeFlags = kernel.makeFlags ++ [
+  makeFlags = kernel.moduleMakeFlags ++ [
     "KVER=${kernel.modDirVersion}"
     "KSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
