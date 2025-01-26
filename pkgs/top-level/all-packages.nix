@@ -8135,10 +8135,6 @@ with pkgs;
 
   openai-whisper = with python3.pkgs; toPythonApplication openai-whisper;
 
-  openai-whisper-cpp = darwin.apple_sdk_11_0.callPackage ../tools/audio/openai-whisper-cpp {
-    inherit (darwin.apple_sdk_11_0.frameworks) Accelerate CoreGraphics CoreML CoreVideo MetalKit;
-  };
-
   openocd-rp2040 = openocd.overrideAttrs (old: {
     pname = "openocd-rp2040";
     src = fetchFromGitHub {
@@ -8408,6 +8404,10 @@ with pkgs;
 
   whatstyle = callPackage ../development/tools/misc/whatstyle {
     inherit (llvmPackages) clang-unwrapped;
+  };
+
+  whisper-cpp-vulkan = whisper-cpp.override {
+    vulkanSupport = true;
   };
 
   watson-ruby = callPackage ../development/tools/misc/watson-ruby { };
@@ -17143,6 +17143,7 @@ with pkgs;
     coqPackages_8_18 coq_8_18
     coqPackages_8_19 coq_8_19
     coqPackages_8_20 coq_8_20
+    coqPackages_9_0 coq_9_0
     coqPackages      coq
   ;
 

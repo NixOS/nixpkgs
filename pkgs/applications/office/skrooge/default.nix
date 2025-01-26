@@ -31,11 +31,11 @@
 
 mkDerivation rec {
   pname = "skrooge";
-  version = "2.33.0";
+  version = "25.1.0";
 
   src = fetchurl {
     url = "mirror://kde/stable/skrooge/skrooge-${version}.tar.xz";
-    hash = "sha256-9K4/r3I9VNdUKHi4FCo0SxR+QzewvEKGOQevRM/r9GU=";
+    hash = "sha256-t8A9egotR2XoMBo5uoH2RBPEo3H6nPSJS5Oi4MkSVww=";
   };
 
   nativeBuildInputs = [
