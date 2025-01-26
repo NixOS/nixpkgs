@@ -303,7 +303,26 @@ rec {
 
     in
     if missingArgs == { } then
-      makeOverridable f allArgs
+      if fargs ? mkPackage then
+        if fargs != { mkPackage = false; } then
+          # If your file is e.g. an attrset with a package and something else,
+          # use `{ callPackage }: { foo = callPackage ({ mkPackage}: ...); ... }`
+          # Explaining that in the error message would be too verbose and confusing.
+          # TODO: link to docs
+          throw ''
+            callPackage: A package function that uses `mkPackage` must only have `{ mkPackage }:` as its arguments.
+            Any other dependencies should be taken from the `mkPackage` callback.
+            Otherwise, such dependencies will not be overridable.
+
+            To illustrate, a dependency `foo` can be retrieved with:
+            { mkPackage }: mkPackage ({ layers, foo }: [
+              ...
+            ])
+          ''
+        else
+          f allArgs
+      else
+        makeOverridable f allArgs
     # This needs to be an abort so it can't be caught with `builtins.tryEval`,
     # which is used by nix-env and ofborg to filter out packages that don't evaluate.
     # This way we're forced to fix such errors in Nixpkgs,
@@ -448,8 +467,11 @@ rec {
 
       commonAttrs =
         {
-          inherit (drv) name system meta;
+          inherit (drv) name meta;
           inherit outputs;
+        }
+        // optionalAttrs (drv ? system) {
+          inherit (drv) system;
         }
         // optionalAttrs (drv._hydraAggregate or false) {
           _hydraAggregate = true;
