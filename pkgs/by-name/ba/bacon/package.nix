@@ -1,23 +1,39 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
+  pkg-config,
+  alsa-lib,
   versionCheckHook,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "bacon";
-  version = "3.8.0";
+  version = "3.9.0";
 
   src = fetchFromGitHub {
     owner = "Canop";
     repo = "bacon";
     tag = "v${version}";
-    hash = "sha256-IWjG1esLwiEnESmnDE5kpuMu+LFaNrIomgrZoktkA2Q=";
+    hash = "sha256-LnJlE4ostOl+pr+d7ZsAfKvG4C45qt4pedWpeiTchPU=";
   };
 
-  cargoHash = "sha256-IQ8vTr5Z17ylcOCQ+iqKP6+tawZXd+pMiYoSH5h7Zjg=";
+  cargoHash = "sha256-KS1SXrRqjvRom2zZOaaZZOMK2CRUwVmtXC2ilDfaEG0=";
+
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs =
+    lib.optionals stdenv.hostPlatform.isLinux [
+      alsa-lib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # bindgenHook is only included on darwin as it is needed to build `coreaudio-sys`, a darwin-specific crate
+      rustPlatform.bindgenHook
+    ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = [ "--version" ];
