@@ -5,11 +5,11 @@
 }:
 let
   pname = "chatbox";
-  version = "1.7.0";
+  version = "1.9.3";
 
   src = fetchurl {
     url = "https://download.chatboxai.app/releases/Chatbox-${version}-x86_64.AppImage";
-    hash = "sha256-cav/WElmWz/pkEtQk6v4rwtDzFy5h0BtdCbuKXNm7rI=";
+    hash = "sha256-7huaZC+vOO8nM0Mc48hMT6Jp0OCgC96yPzmNkBEir1w=";
   };
 
   appimageContents = appimageTools.extract { inherit pname version src; };
