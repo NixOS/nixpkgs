@@ -39,6 +39,13 @@ let
   selectedAlg = compressionAlgs.${cfg.compressionAlg};
   compressionCmd = selectedAlg.cmd compressionLevelFlag;
 
+  shouldUseSingleTransaction =
+    db:
+    if lib.isBool cfg.singleTransaction then
+      cfg.singleTransaction
+    else
+      lib.elem db cfg.singleTransaction;
+
   backupScript = ''
     set -o pipefail
     failed=""
@@ -51,7 +58,7 @@ let
 
   backupDatabaseScript = db: ''
     dest="${cfg.location}/${db}${selectedAlg.ext}"
-    if ${pkgs.mariadb}/bin/mysqldump ${lib.optionalString cfg.singleTransaction "--single-transaction"} ${db} | ${compressionCmd} > $dest.tmp; then
+    if ${pkgs.mariadb}/bin/mysqldump ${lib.optionalString (shouldUseSingleTransaction db) "--single-transaction"} ${db} | ${compressionCmd} > $dest.tmp; then
       mv $dest.tmp $dest
       echo "Backed up to $dest"
     else
@@ -126,9 +133,13 @@ in
 
       singleTransaction = lib.mkOption {
         default = false;
-        type = lib.types.bool;
+        type = lib.types.oneOf [
+          lib.types.bool
+          (lib.types.listOf lib.types.str)
+        ];
         description = ''
-          Whether to create database dump in a single transaction
+          Whether to create database dump in a single transaction.
+          Can be either a boolean for all databases or a list of database names.
         '';
       };
 
