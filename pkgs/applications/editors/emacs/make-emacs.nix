@@ -34,6 +34,7 @@
   libXcursor,
   libXi,
   libXpm,
+  libXrandr,
   libgccjit,
   libjpeg,
   libotf,
@@ -346,6 +347,7 @@ mkDerivation (finalAttrs: {
       giflib
       libXaw
       libXpm
+      libXrandr
       libjpeg
       libpng
       librsvg
