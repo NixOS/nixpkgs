@@ -13,9 +13,10 @@
   xapp,
 }:
 
-stdenv.mkDerivation rec {
+python3Packages.buildPythonApplication rec {
   pname = "blueberry";
   version = "1.4.8";
+  format = "other";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
@@ -26,7 +27,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     gobject-introspection
-    python3Packages.wrapPython
     wrapGAppsHook3
   ];
 
@@ -34,7 +34,6 @@ stdenv.mkDerivation rec {
     bluez-tools
     gnome-bluetooth_1_0
     libnotify
-    python3Packages.python
     util-linux
     xapp
   ];
