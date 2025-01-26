@@ -402,6 +402,9 @@ let
           inherit
             disabled
             pyproject
+            build-system
+            dependencies
+            optional-dependencies
             ;
         }
         // {
@@ -413,15 +416,6 @@ let
               update-python-libraries
               filename
             ];
-        }
-        // optionalAttrs (dependencies != [ ]) {
-          inherit dependencies;
-        }
-        // optionalAttrs (optional-dependencies != { }) {
-          inherit optional-dependencies;
-        }
-        // optionalAttrs (build-system != [ ]) {
-          inherit build-system;
         }
         // attrs.passthru or { };
 
