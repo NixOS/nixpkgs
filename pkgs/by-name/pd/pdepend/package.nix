@@ -2,6 +2,7 @@
   php,
   fetchFromGitHub,
   lib,
+  versionCheckHook,
 }:
 
 php.buildComposerProject2 (finalAttrs: {
@@ -17,6 +18,10 @@ php.buildComposerProject2 (finalAttrs: {
 
   composerLock = ./composer.lock;
   vendorHash = "sha256-szKVZhWcd8p4307irNqgSAK2+hl8AW+gCPyf0EEco8A=";
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "--version";
 
   meta = {
     changelog = "https://github.com/pdepend/pdepend/releases/tag/${finalAttrs.version}";
