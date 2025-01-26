@@ -56,6 +56,10 @@ buildPythonPackage rec {
     ]
   );
 
+  preBuild = ''
+    export CMAKE_BUILD_PARALLEL_LEVEL="$NIX_BUILD_CORES"
+  '';
+
   nativeBuildInputs = [
     cmake
     ninja
