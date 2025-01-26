@@ -16,6 +16,8 @@
   usage,
   mise,
   testers,
+  runCommand,
+  jq,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -90,7 +92,30 @@ rustPlatform.buildRustPackage rec {
 
   passthru = {
     updateScript = nix-update-script { };
-    tests.version = testers.testVersion { package = mise; };
+    tests = {
+      version = testers.testVersion { package = mise; };
+      usageCompat =
+        # should not crash
+        runCommand "mise-usage-compatibility"
+          {
+            nativeBuildInputs = [
+              mise
+              usage
+              jq
+            ];
+          }
+          ''
+            export HOME=$(mktemp -d)
+
+            spec="$(mise usage)"
+            for shl in bash fish zsh; do
+              echo "testing $shl"
+              usage complete-word --shell $shl --spec "$spec"
+            done
+
+            touch $out
+          '';
+    };
   };
 
   meta = {
