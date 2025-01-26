@@ -26,8 +26,9 @@
 browser:
 
 let
+  appName = browser.binaryName or (lib.getName browser);
   wrapper =
-    { applicationName ? browser.binaryName or (lib.getName browser)
+    { applicationName ? appName
     , pname ? applicationName
     , version ? lib.getVersion browser
     , desktopName ? # applicationName with first letter capitalized
@@ -472,4 +473,8 @@ let
         platforms = lib.lists.remove lib.platforms.darwin browser.meta.platforms;
       };
     });
-in lib.makeOverridable wrapper
+in
+  if stdenv.isDarwin then
+    throw "Wrapped app is not supported on MacOS. Use ${appName}-unwrapped instead."
+  else
+    lib.makeOverridable wrapper
