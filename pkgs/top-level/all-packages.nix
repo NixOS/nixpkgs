@@ -11688,10 +11688,11 @@ with pkgs;
     asciidoc = asciidoc-full;
   };
 
-  postgresqlVersions = import ../servers/sql/postgresql pkgs;
-  inherit (postgresqlVersions)
-    libpq
+  inherit (import ../servers/sql/postgresql pkgs)
+    postgresqlVersions
+    libpq;
 
+  inherit (postgresqlVersions)
     postgresql_13
     postgresql_14
     postgresql_15
