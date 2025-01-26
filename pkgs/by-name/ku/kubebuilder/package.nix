@@ -13,13 +13,13 @@
 
 buildGoModule rec {
   pname = "kubebuilder";
-  version = "4.4.0";
+  version = "4.5.0";
 
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
     repo = "kubebuilder";
     rev = "v${version}";
-    hash = "sha256-OLObVesASAOJxWXVJ5izJ8g6r7LCr1Or4JX2cF2RaVc=";
+    hash = "sha256-tkBSyLtorD4yMaDq8DIn5Nbl6TbBeRlRO44nR/22iNI=";
   };
 
   vendorHash = "sha256-xZF4t5SMe3iKH+Hr1xhVHWiwTpxEJ3kWlR0QB4RSNhk=";
