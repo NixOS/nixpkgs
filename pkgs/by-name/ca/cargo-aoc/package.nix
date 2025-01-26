@@ -2,9 +2,8 @@
   lib,
   rustPlatform,
   fetchCrate,
-  testers,
+  versionCheckHook,
   nix-update-script,
-  cargo-aoc,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "cargo-aoc";
@@ -17,10 +16,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-LhPsiO0Fnx9Tf+itaaVaO1XgqM00m+UQMlUJYY8isXY=";
 
-  passthru = {
-    tests.version = testers.testVersion { package = cargo-aoc; };
-    updateScript = nix-update-script { };
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Simple CLI tool that aims to be a helper for Advent of Code";
