@@ -10,7 +10,7 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "harlequin";
-  version = "1.25.2-unstable-2024-12-30";
+  version = "1.25.2";
   pyproject = true;
 
   src = fetchFromGitHub {
