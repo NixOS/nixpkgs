@@ -361,13 +361,13 @@ let
           pythonOutputDistHook
         ]
         ++ nativeBuildInputs
-        ++ build-system;
+        ++ finalAttrs.passthru.build-system;
 
       buildInputs = validatePythonMatches "buildInputs" (buildInputs ++ pythonPath);
 
       propagatedBuildInputs = validatePythonMatches "propagatedBuildInputs" (
         propagatedBuildInputs
-        ++ dependencies
+        ++ finalAttrs.passthru.dependencies
         ++ [
           # we propagate python even for packages transformed with 'toPythonApplication'
           # this pollutes the PATH but avoids rebuilds
