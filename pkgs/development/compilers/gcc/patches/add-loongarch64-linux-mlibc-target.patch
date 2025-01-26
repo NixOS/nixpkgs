@@ -1,0 +1,58 @@
+From a3952b28ca25f252ab24c6cbfda45850f945cd64 Mon Sep 17 00:00:00 2001
+From: sanana <umutinanerdogan@pm.me>
+Date: Sat, 5 Jul 2025 12:48:00 +0300
+Subject: [PATCH] gcc,libgcc: add loongarch64-linux-mlibc target
+
+---
+ gcc/config.gcc                 | 1 +
+ libgcc/config.host             | 6 +++---
+ libgcc/config/loongarch/crti.S | 1 +
+ libgcc/config/loongarch/crtn.S | 1 +
+ 4 files changed, 6 insertions(+), 3 deletions(-)
+ create mode 100644 libgcc/config/loongarch/crti.S
+ create mode 100644 libgcc/config/loongarch/crtn.S
+
+diff --git a/gcc/config.gcc b/gcc/config.gcc
+index dc350422f3961..d56088b8388a8 100644
+--- a/gcc/config.gcc
++++ b/gcc/config.gcc
+@@ -5137,6 +5137,7 @@ case "${target}" in
+ 
+ 		case ${target} in
+ 		  *-linux-gnu*) triplet_os="linux-gnu";;
++		  *-linux-mlibc*) triplet_os="linux-mlibc";;
+ 		  *-linux-musl*) triplet_os="linux-musl";;
+ 		  *-elf*) triplet_os="elf";;
+ 		  *)
+diff --git a/libgcc/config.host b/libgcc/config.host
+index 6317343ea9548..ca3f84d599c2f 100644
+--- a/libgcc/config.host
++++ b/libgcc/config.host
+@@ -1010,10 +1010,10 @@ lm32-*-uclinux*)
+ 	;;
+ loongarch*-linux*)
+ 	extra_parts="$extra_parts crtfastmath.o"
+-	tmake_file="${tmake_file} t-crtfm loongarch/t-crtstuff"
++	tmake_file="${tmake_file} t-crtfm loongarch/t-crtstuff t-slibgcc-libgcc"
+ 	case ${host} in
+-	  *)
+-	    tmake_file="${tmake_file} t-slibgcc-libgcc"
++	  *-mlibc*)
++	    extra_parts="$extra_parts crti.o crtn.o"
+ 	    ;;
+ 	esac
+ 	md_unwind_header=loongarch/linux-unwind.h
+diff --git a/libgcc/config/loongarch/crti.S b/libgcc/config/loongarch/crti.S
+new file mode 100644
+index 0000000000000..89bac706c63be
+--- /dev/null
++++ b/libgcc/config/loongarch/crti.S
+@@ -0,0 +1 @@
++/* crti.S is empty because .init_array/.fini_array are used exclusively. */
+diff --git a/libgcc/config/loongarch/crtn.S b/libgcc/config/loongarch/crtn.S
+new file mode 100644
+index 0000000000000..ca6ee7b6fba8f
+--- /dev/null
++++ b/libgcc/config/loongarch/crtn.S
+@@ -0,0 +1 @@
++/* crtn.S is empty because .init_array/.fini_array are used exclusively. */
