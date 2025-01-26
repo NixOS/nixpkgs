@@ -58,7 +58,6 @@ buildGoModule rec {
     license = licenses.mit;
     maintainers = with maintainers; [
       adamcstephens
-      kranzes
       emilylange
       christoph-heiss
     ];
