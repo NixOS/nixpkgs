@@ -1,0 +1,43 @@
+From 7cfa16c53f981738fcd2b2bc81388980af7d55e0 Mon Sep 17 00:00:00 2001
+From: wxt <3264117476@qq.com>
+Date: Sun, 26 Jan 2025 16:25:59 +0800
+Subject: [PATCH] python 3.13
+
+---
+ tests/txt/options.txt | 17 +++++++----------
+ 1 file changed, 7 insertions(+), 10 deletions(-)
+
+diff --git a/tests/txt/options.txt b/tests/txt/options.txt
+index 6d61e4b..81fc3f1 100644
+--- a/tests/txt/options.txt
++++ b/tests/txt/options.txt
+@@ -8,19 +8,16 @@ options:
+   -V, --version         show program's version number and exit
+   --print-completion {bash,zsh,tcsh}
+                         print shell completion script
+-  -n NAME, --name NAME  description for the first paragraph, default: Name
+-  -s SECTION, --section SECTION
++  -n, --name NAME       description for the first paragraph, default: Name
++  -s, --section SECTION
+                         section number for manual page, default: 1
+-  -m MANUAL, --manual MANUAL
+-                        name of manual. default: User Commands
+-  -S SOURCE, --source SOURCE
+-                        source of program (FSF, Debian, ...). default:
+-  -p INFO_PAGE, --info-page INFO_PAGE
++  -m, --manual MANUAL   name of manual. default: User Commands
++  -S, --source SOURCE   source of program (FSF, Debian, ...). default:
++  -p, --info-page INFO_PAGE
+                         name of Texinfo manual, default:
+-  -i INCLUDE, --include INCLUDE
++  -i, --include INCLUDE
+                         include material from a file
+-  -o OUTPUT, --output OUTPUT
+-                        send output
++  -o, --output OUTPUT   send output
+   --template {man,markdown}
+                         built-in template name. default: man
+   --template-file TEMPLATE_FILE
+-- 
+2.47.1
+
