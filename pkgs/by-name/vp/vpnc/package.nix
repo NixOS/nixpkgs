@@ -1,6 +1,8 @@
 {
   lib,
   stdenv,
+  bash,
+  buildPackages,
   fetchFromGitHub,
   makeWrapper,
   pkg-config,
@@ -24,7 +26,11 @@ stdenv.mkDerivation {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ makeWrapper ] ++ lib.optional (!opensslSupport) pkg-config;
+  nativeBuildInputs = [
+    makeWrapper
+    perl
+  ] ++ lib.optional (!opensslSupport) pkg-config;
+
   buildInputs = [
     libgcrypt
     perl
@@ -40,15 +46,25 @@ stdenv.mkDerivation {
     NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
   };
 
-  postPatch = ''
-    patchShebangs src/makeman.pl
-  '';
+  postPatch =
+    ''
+      substituteInPlace src/vpnc-disconnect \
+        --replace-fail /bin/sh ${lib.getExe' bash "sh"}
+      patchShebangs src/makeman.pl
+    ''
+    + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      # manpage generation invokes the build vpnc, which must be emulating when cross compiling
+      substituteInPlace src/makeman.pl --replace-fail \
+        '$vpnc --long-help' \
+        '${stdenv.hostPlatform.emulator buildPackages} $vpnc --long-help'
+    '';
 
   enableParallelBuilding = true;
   # Missing install depends:
   #   install: target '...-vpnc-unstable-2021-11-04/share/doc/vpnc': No such file or directory
   #   make: *** [Makefile:149: install-doc] Error 1
   enableParallelInstalling = false;
+  strictDeps = true;
 
   meta = with lib; {
     homepage = "https://davidepucci.it/doc/vpnc/";
