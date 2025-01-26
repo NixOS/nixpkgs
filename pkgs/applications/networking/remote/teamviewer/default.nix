@@ -162,6 +162,7 @@ mkDerivation rec {
       jagajaga
       jraygauthier
       gador
+      c4thebomb
     ];
   };
 }
