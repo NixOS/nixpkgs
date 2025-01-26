@@ -26,12 +26,14 @@ stdenv.mkDerivation {
     fetchSubmodules = true;
   };
 
-  patches = [
-    # Include chawan's man pages in mancha's search path
-    (replaceVars ./mancha-augment-path.diff {
-      out = placeholder "out";
-    })
-  ];
+  patches = [ ./mancha-augment-path.diff ];
+
+  # Include chawan's man pages in mancha's search path
+  postPatch = ''
+    # As we need the $out reference, we can't use `replaceVars` here.
+    substituteInPlace adapter/protocol/man.nim \
+      --replace-fail '@out@' "$out"
+  '';
 
   env.NIX_CFLAGS_COMPILE = toString (
     lib.optional stdenv.cc.isClang "-Wno-error=implicit-function-declaration"

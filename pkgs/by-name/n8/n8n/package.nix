@@ -7,6 +7,7 @@
   pnpm_9,
   python3,
   node-gyp,
+  cctools,
   xcbuild,
   libkrb5,
   libmongocrypt,
@@ -30,12 +31,17 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Am9R2rfQiw1IPd22/UraqzEqvVeB5XuSrrLSYXWsWfU=";
   };
 
-  nativeBuildInputs = [
-    pnpm_9.configHook
-    python3 # required to build sqlite3 bindings
-    node-gyp # required to build sqlite3 bindings
-    makeWrapper
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin [ xcbuild ];
+  nativeBuildInputs =
+    [
+      pnpm_9.configHook
+      python3 # required to build sqlite3 bindings
+      node-gyp # required to build sqlite3 bindings
+      makeWrapper
+    ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin [
+      cctools
+      xcbuild
+    ];
 
   buildInputs = [
     nodejs
