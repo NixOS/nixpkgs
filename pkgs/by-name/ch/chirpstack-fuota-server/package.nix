@@ -7,7 +7,7 @@
 }:
 buildGoModule rec {
   pname = "chirpstack-fuota-server";
-  version = "3.0.0-test.4-unstable-2024-04-02";
+  version = "3.0.0-test.4";
 
   src = fetchFromGitHub {
     owner = "chirpstack";
