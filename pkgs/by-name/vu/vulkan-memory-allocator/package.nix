@@ -3,6 +3,7 @@
   stdenvNoCC,
   fetchFromGitHub,
   cmake,
+  nix-update-script,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -27,6 +28,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   ];
 
   strictDeps = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Easy to integrate Vulkan memory allocation library";
