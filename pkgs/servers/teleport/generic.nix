@@ -244,6 +244,7 @@ buildGoModule rec {
       tomberek
       freezeboy
       techknowlogick
+      juliusfreudenberger
     ];
     platforms = platforms.unix;
     # go-libfido2 is broken on platforms with less than 64-bit because it defines an array
