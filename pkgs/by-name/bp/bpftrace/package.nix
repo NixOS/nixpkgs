@@ -58,10 +58,6 @@ stdenv.mkDerivation rec {
     "-DSYSTEM_INCLUDE_PATHS=${glibc.dev}/include"
   ];
 
-  postPatch = ''
-    substituteInPlace CMakeLists.txt --replace "set(MAX_LLVM_MAJOR 18)" "set(MAX_LLVM_MAJOR 19)"
-  '';
-
   # Pull BPF scripts into $PATH (next to their bcc program equivalents), but do
   # not move them to keep `${pkgs.bpftrace}/share/bpftrace/tools/...` working.
   postInstall = ''
