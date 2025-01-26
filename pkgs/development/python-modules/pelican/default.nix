@@ -61,7 +61,7 @@ buildPythonPackage rec {
 
   build-system = [ pdm-backend ];
 
-  pythonRelaxDeps = [ "unidecode" ];
+  pythonRelaxDeps = [ "pygments" ];
 
   buildInputs = [
     glibcLocales
