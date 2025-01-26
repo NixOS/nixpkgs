@@ -91,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
       desktopName = "Daggerfall Unity";
       comment = finalAttrs.meta.description;
       icon = "UnityPlayer";
-      exec = "DaggerfallUnity.x86_64";
+      exec = finalAttrs.meta.mainProgram;
       categories = [ "Game" ];
     })
   ];
