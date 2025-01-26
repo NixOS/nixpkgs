@@ -12,7 +12,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "6.1.0";
+  version = "6.1.1";
   pname = "icalendar";
   pyproject = true;
 
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "collective";
     repo = "icalendar";
     tag = "v${version}";
-    hash = "sha256-P+cUwNFSBjyTzqdBnIricoM3rUWUXQc8k1912jil79Q=";
+    hash = "sha256-PP4wBItPv5pPQKkGX4mGPl2RUGxOALOss++imzK4G4E=";
   };
 
   patches = [
