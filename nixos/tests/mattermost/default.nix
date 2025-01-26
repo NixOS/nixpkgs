@@ -94,6 +94,7 @@ import ../make-test-python.nix (
         makeMattermost
           {
             mutableConfig = true;
+            preferNixConfig = false;
             settings.SupportSettings.HelpLink = "https://search.nixos.org";
           }
           {
@@ -105,7 +106,6 @@ import ../make-test-python.nix (
           };
       postgresMostlyMutable = makeMattermost {
         mutableConfig = true;
-        preferNixConfig = true;
         plugins = with pkgs; [
           # Build the demo plugin.
           (mattermost.buildPlugin {
