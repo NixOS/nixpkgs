@@ -5528,10 +5528,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  xsv = callPackage ../tools/text/xsv {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
   xtreemfs = callPackage ../tools/filesystems/xtreemfs { };
 
   xorriso = libisoburn;
