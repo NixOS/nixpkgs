@@ -462,7 +462,10 @@ in
 
       preferNixConfig = mkOption {
         type = types.bool;
-        default = false;
+        default = versionAtLeast config.system.stateVersion "25.05";
+        defaultText = ''
+          versionAtLeast config.system.stateVersion "25.05";
+        '';
         description = ''
           If both mutableConfig and this option are set, the Nix configuration
           will take precedence over any settings configured in the server
