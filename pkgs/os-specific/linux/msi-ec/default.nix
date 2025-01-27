@@ -5,6 +5,7 @@
   linuxPackages,
   git,
   kernel ? linuxPackages.kernel,
+  kernelModuleMakeFlags,
 }:
 stdenv.mkDerivation {
   pname = "msi-ec-kmods";
@@ -23,7 +24,7 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "pic" ];
 
-  makeFlags = kernel.moduleMakeFlags ++ [
+  makeFlags = kernelModuleMakeFlags ++ [
     "KERNELDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "INSTALL_MOD_PATH=$(out)"
   ];
