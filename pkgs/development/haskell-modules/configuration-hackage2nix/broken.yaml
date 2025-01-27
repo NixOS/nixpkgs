@@ -3523,7 +3523,6 @@ broken-packages:
   - libsystemd-daemon # failure in job https://hydra.nixos.org/build/233207090 at 2023-09-02
   - libtagc # failure in job https://hydra.nixos.org/build/233223631 at 2023-09-02
   - libtelnet # failure in job https://hydra.nixos.org/build/233209594 at 2023-09-02
-  - libtorch-ffi-helper # doesn't support ghc >= 9.8 before 2.0.0.1
   - libvirt-hs # failure in job https://hydra.nixos.org/build/253697570 at 2024-03-31
   - libxls # failure in job https://hydra.nixos.org/build/233257847 at 2023-09-02
   - libxlsxwriter-hs # failure in job https://hydra.nixos.org/build/233244798 at 2023-09-02
@@ -3864,7 +3863,6 @@ broken-packages:
   - mmzk-typeid # failure in job https://hydra.nixos.org/build/233258612 at 2023-09-02
   - Mobile-Legends-Hack-Cheats # failure in job https://hydra.nixos.org/build/233194849 at 2023-09-02
   - mockazo # failure in job https://hydra.nixos.org/build/233234923 at 2023-09-02
-  - mockcat # failure in job https://hydra.nixos.org/build/275146693 at 2024-10-21
   - mock-httpd # failure in job https://hydra.nixos.org/build/233191481 at 2023-09-02
   - mock-time # failure in job https://hydra.nixos.org/build/252737870 at 2024-03-16
   - modbus-tcp # failure in job https://hydra.nixos.org/build/233230661 at 2023-09-02
@@ -4700,7 +4698,6 @@ broken-packages:
   - posix-acl # failure in job https://hydra.nixos.org/build/233222892 at 2023-09-02
   - posix-filelock # failure in job https://hydra.nixos.org/build/252726822 at 2024-03-16
   - posix-realtime # failure in job https://hydra.nixos.org/build/233191463 at 2023-09-02
-  - posix-timer # failure in job https://hydra.nixos.org/build/282175703 at 2024-12-23
   - posix-waitpid # failure in job https://hydra.nixos.org/build/233206551 at 2023-09-02
   - posplyu # failure in job https://hydra.nixos.org/build/233230437 at 2023-09-02
   - postcodes # failure in job https://hydra.nixos.org/build/233247290 at 2023-09-02
