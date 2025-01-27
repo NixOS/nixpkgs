@@ -37,13 +37,13 @@
 }:
 mkDerivation rec {
   pname = "megasync";
-  version = "5.6.1.0";
+  version = "5.7.1.0";
 
   src = fetchFromGitHub rec {
     owner = "meganz";
     repo = "MEGAsync";
     rev = "v${version}_Linux";
-    hash = "sha256-EjXmx+beYH3J60RidkEbZHFS5ZAOpJKmNC+WCIM84RA=";
+    hash = "sha256-lbAI17CyHrppMnxQDV5g0IE+I7Y0DwU+h5MSFZclD2A=";
     fetchSubmodules = false; # DesignTokensImporter cannot be fetched, see #1010 in github:meganz/megasync
     leaveDotGit = true;
     postFetch = ''
@@ -94,16 +94,17 @@ mkDerivation rec {
 
   patches = [
     (fetchpatch {
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/020-megasync-sdk-fix-cmake-dependencies-detection.patch?h=megasync&id=4b1eca5bc0d75709dee3a1260264d1b6386d3398";
-      hash = "sha256-y3WhLkawFzQRzzRBpioiyAT3F1NDQvYBOm2888g5V5c=";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/020-megasync-sdk-fix-cmake-dependencies-detection.patch?h=megasync&id=ff59780039697591e7e3a966db058b23bee0451c";
+      hash = "sha256-hQY6tMwiV3B6M6WiFdOESdhahAtuWjdoj2eI2mst/K8=";
       extraPrefix = "src/MEGASync/mega/";
       stripLen = true;
     })
     (fetchpatch {
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/030-megasync-app-fix-cmake-dependencies-detection.patch?h=megasync&id=4b1eca5bc0d75709dee3a1260264d1b6386d3398";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/030-megasync-app-fix-cmake-dependencies-detection.patch?h=megasync&id=ff59780039697591e7e3a966db058b23bee0451c";
       hash = "sha256-11XWctv1veUEguc9Xvz2hMYw26CaCwu6M4hyA+5r81U=";
     })
     ./megasync-fix-cmake-install-bindir.patch
+    ./megasync-disable-isolated-gfx.patch # it requires freeimage. Did not work when set as cmakeFlag
     ./dont-fetch-clang-format.patch
   ];
 
