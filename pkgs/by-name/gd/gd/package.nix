@@ -72,10 +72,6 @@ stdenv.mkDerivation rec {
     "out"
   ];
 
-  postFixup = ''
-    moveToOutput "bin/gdlib-config" $dev
-  '';
-
   enableParallelBuilding = true;
 
   doCheck = false; # fails 2 tests

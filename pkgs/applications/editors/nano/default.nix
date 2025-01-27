@@ -7,7 +7,7 @@
   texinfo,
   writeScript,
   common-updater-scripts,
-  git,
+  gitMinimal,
   nix,
   coreutils,
   gnused,
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
       PATH=${
         lib.makeBinPath [
           common-updater-scripts
-          git
+          gitMinimal
           nix
           coreutils
           gnused

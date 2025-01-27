@@ -17,16 +17,22 @@ stdenv.mkDerivation rec {
   buildInputs = [ fastjet ];
 
   postPatch = ''
-    for f in Makefile.in */Makefile; do
+    for f in Makefile.in */Makefile scripts/internal/Template/Makefile; do
       substituteInPlace "$f" --replace "CXX=g++" ""
+      substituteInPlace "$f" --replace-quiet "ar " "${stdenv.cc.targetPrefix}ar "
+      substituteInPlace "$f" --replace-quiet "ranlib " "${stdenv.cc.targetPrefix}ranlib "
     done
-    patchShebangs ./utils/check.sh ./utils/install-sh
+    patchShebangs --build ./utils/check.sh ./utils/install-sh
   '';
 
   # Written in shell manually, does not support autoconf-style
   # --build=/--host= options:
   #   Error: --build=x86_64-unknown-linux-gnu: unrecognised argument
   configurePlatforms = [ ];
+
+  configureFlags = [
+    "--fastjet-config=${lib.getExe' (lib.getDev fastjet) "fastjet-config"}"
+  ];
 
   enableParallelBuilding = true;
 

@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-JFuqaGwCSfEIncBgLu6gGaOvAC5vojKFjruWcuSghS0=";
   };
 
-  cargoHash = "sha256-mH1YpuYahdHFS+1cK9dryHbUqjewdbkNGxRBUOd2Hws=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-CXIfE1EsNwm4vsybQSdfKewBYpzBh+uQu1jYAm8DDtI=";
 
   meta = with lib; {
     description = "High performance csv viewer with cjk/emoji support";

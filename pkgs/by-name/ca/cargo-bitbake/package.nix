@@ -20,7 +20,8 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];
 
-  cargoHash = "sha256-LYdQ0FLfCopY8kPTCmiW0Qyx6sHA4nlb+hK9hXezGLg=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-drupV59sBuR6AZ7jVO2EJn62I6XX5vv3QR+Mu8cLklk=";
 
   meta = with lib; {
     description = "Cargo extension that can generate BitBake recipes utilizing the classes from meta-rust";

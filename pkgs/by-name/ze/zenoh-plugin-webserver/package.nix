@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-DduYSy8jO0LtpEadhBhVFW5uht9LFmTbmSJ0jGTh/TQ=";
   };
 
-  cargoHash = "sha256-W1vmrKP4aS6O/+8sCzPb5Rs9kAm8ePnowtYEhcS7yMo=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-YFCu3e3SGAelAneJ/LwXZy3c6kz76qG4B8tsBVOPynI=";
 
   meta = {
     description = "Implements an HTTP server mapping URLs to zenoh paths";

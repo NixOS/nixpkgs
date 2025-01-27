@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   sqlite,
-  postgresql,
+  libpq,
   zlib,
   acl,
   ncurses,
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [
-      postgresql
+      libpq
       sqlite
       zlib
       ncurses
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   configureFlags =
     [
       "--with-sqlite3=${sqlite.dev}"
-      "--with-postgresql=${lib.getDev postgresql}"
+      "--with-postgresql=${lib.getDev libpq}"
       "--with-logdir=/var/log/bacula"
       "--with-working-dir=/var/lib/bacula"
       "--mandir=\${out}/share/man"

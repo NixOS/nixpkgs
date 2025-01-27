@@ -18,6 +18,7 @@ in
   # Required by various phases
   callPackage,
   jq,
+  llvm,
 }:
 
 let
@@ -37,8 +38,10 @@ let
       (callPackage ./common/remove-disallowed-packages.nix { })
     ]
     # Only process stubs and convert them to tbd-v4 if jq is available. This can be made unconditional once
-    # the bootstrap tools have jq and libtapi.
-    ++ lib.optional (jq != null) (callPackage ./common/process-stubs.nix { })
+    # the bootstrap tools have jq and llvm-readtapi.
+    ++ lib.optional (jq != null && lib.getName llvm != "bootstrap-stage0-llvm") (
+      callPackage ./common/process-stubs.nix { }
+    )
     # Avoid infinite recursions by not propagating certain packages, so they can themselves build with the SDK.
     ++ lib.optionals (!enableBootstrap) [
       (callPackage ./common/propagate-inputs.nix { })
@@ -58,6 +61,12 @@ stdenvNoCC.mkDerivation (
     src = fetchSDK sdkInfo;
 
     dontConfigure = true;
+
+    # TODO(@connorbaker):
+    # This is a quick fix unblock builds broken by https://github.com/NixOS/nixpkgs/pull/370750.
+    # Fails due to a reflexive symlink:
+    # $out/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.3.sdk/System/Library/PrivateFrameworks/CoreSymbolication.framework/Versions/A/A
+    dontCheckForBrokenSymlinks = true;
 
     strictDeps = true;
 

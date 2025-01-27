@@ -1,8 +1,9 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, git
-, nix-update-script
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  gitMinimal,
+  nix-update-script,
 }:
 
 buildGoModule {
@@ -19,7 +20,7 @@ buildGoModule {
   vendorHash = "sha256-7bpoUxhoVc74bN9/B6TWyufSvDRD90KpIXUMKK+3BcU=";
 
   nativeCheckInputs = [
-    git
+    gitMinimal
   ];
 
   preCheck = ''
@@ -28,7 +29,10 @@ buildGoModule {
   '';
 
   passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version" "branch" ];
+    extraArgs = [
+      "--version"
+      "branch"
+    ];
   };
 
   meta = {

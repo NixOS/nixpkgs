@@ -13,7 +13,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-dsSt0JC3e1IItyY16tosxD83XUdttHVIT40QsW9iUFU=";
   };
 
-  cargoHash = "sha256-siYwv14AzoQnub+Xcb3UCdEnCIOYremqNve5xyMhixc=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-5AXEXuw3aKT8ghzEclwZYSOQvKcy90OvZbAVVkNJq1U=";
 
   meta = {
     description = "Pull parser for CommonMark written in Rust";

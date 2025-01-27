@@ -3,7 +3,7 @@
   stdenv,
   auditwheel,
   buildPythonPackage,
-  git,
+  gitMinimal,
   greenlet,
   fetchFromGitHub,
   pyee,
@@ -71,7 +71,7 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
-    git
+    gitMinimal
     setuptools-scm
     setuptools
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [ auditwheel ];

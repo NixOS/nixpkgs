@@ -11,7 +11,7 @@ discover_modules() {
 
     while IFS= read -r lua_file; do
         # Ignore certain infra directories
-        if [[ "$lua_file" =~ debug/|scripts?/|tests?/|spec/ || "$lua_file" =~ .*\meta.lua ]]; then
+        if [[ "$lua_file" =~ (^|/)(debug|script|scripts|test|tests|spec)(/|$) || "$lua_file" =~ .*\meta.lua ]]; then
             continue
         # Ignore optional telescope and lualine modules
         elif [[ "$lua_file" =~ ^lua/telescope/_extensions/(.+)\.lua || "$lua_file" =~ ^lua/lualine/(.+)\.lua ]]; then

@@ -43,7 +43,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-h3Mp67AKuzzeO6l7jN6yrQAHpYSsaOp1Y+qJoamK82U=";
   };
 
-  cargoHash = "sha256-uWnW4Ov5MoDh3xkmTsNSin9WI0SJAoDGa+n8IMNvo4Y=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-HxEd6A+e1N62LyoVPEDuq7xYEhQTjKYlif27rZTrXBQ=";
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optional withClipboard python3;
 

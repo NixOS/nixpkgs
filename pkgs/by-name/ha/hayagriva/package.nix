@@ -13,7 +13,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-B0q5jwJVDpxywTuSspsfDameDfEkok5oTz/Oty9LkOI=";
   };
 
-  cargoHash = "sha256-N+3W4x5p5qas47uwVT0NrJNe9udE+0rQLx/ypo1pbR4=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-1YCmPGxDDnZmty8vMDUec45ZYXZbFA8GAT6UJQxa/4M=";
 
   buildFeatures = [ "cli" ];
 

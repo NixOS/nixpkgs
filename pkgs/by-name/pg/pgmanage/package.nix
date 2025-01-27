@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  postgresql,
+  libpq,
   openssl,
   nixosTests,
 }:
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    postgresql
+    libpq
     openssl
   ];
 

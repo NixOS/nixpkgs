@@ -21,7 +21,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-sVQ6UgQvSTEIxXPxISeTI9tqAdJlxQpLxq1h4I31r6k=";
   };
 
-  cargoHash = "sha256-abHczsRzWDST6ji7yi/Iox1o8QHGjt5T7/KDwsYGYMk=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-vaCmRr1hXF0BSg/dl3LYyd7c1MdPKIv6KgDgGEzqqJQ=";
 
   # tests need a working nix install with access to the internet
   doCheck = false;

@@ -6,7 +6,7 @@
   mono,
   makeWrapper,
   icoutils,
-  substituteAll,
+  replaceVars,
   xsel,
   xorg,
   xdotool,
@@ -37,8 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ icoutils ];
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       xsel = "${xsel}/bin/xsel";
       xprop = "${xorg.xprop}/bin/xprop";
       xdotool = "${xdotool}/bin/xdotool";

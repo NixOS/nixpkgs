@@ -27,7 +27,7 @@
 , ninja
 , openssl
 , pdal
-, postgresql
+, libpq
 , proj
 , protobuf
 , python3
@@ -119,7 +119,7 @@ in mkDerivation rec {
     netcdf
     openssl
     pdal
-    postgresql
+    libpq
     proj
     protobuf
     qca-qt5

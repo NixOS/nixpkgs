@@ -19,7 +19,8 @@
 let
   version = "1.1.0";
   hash = "sha256-gdrhzyhxRHZkALB3SG/aWOdA5iMYkel3Cjk5VBy3E4M=";
-  cargoHash = "sha256-MLPXcPA90YZY55jwC7XUZ6KVJf4Pn8w19iT5E2HqZV0=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-1KtS/lzVUEDiDCo3b8RFDYeTMsbHk2tIdniFZfoTxYk=";
 
   noDefaultFeatures = lib.warnIf
     (args ? buildNoDefaultFeatures)

@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-Rw5uwfUPTkIbiOQDohBRoAm0momljJRSYP+VmEOOw/k=";
   };
 
-  cargoHash = "sha256-SfTt49J6D7RESo6iO3b/l0+Vu1dEW+PG0M2RIko2OJ4=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-qG7pkgSMdWDlODPOaWHFhGkSyXP9kcrh/lK4CVGVOz8=";
 
   meta = with lib; {
     description = "Generate a THIRDPARTY file with all licenses in a cargo project";

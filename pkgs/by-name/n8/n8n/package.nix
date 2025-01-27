@@ -11,7 +11,7 @@
   xcbuild,
   libkrb5,
   libmongocrypt,
-  postgresql,
+  libpq,
   makeWrapper,
 }:
 
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     nodejs
     libkrb5
     libmongocrypt
-    postgresql
+    libpq
   ];
 
   buildPhase = ''

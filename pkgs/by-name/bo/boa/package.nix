@@ -31,7 +31,8 @@ rustPlatform.buildRustPackage rec {
     })
   ];
 
-  cargoHash = "sha256-UIUXayJwTrWbLm1UKnIXy1Df8a7ZoBzdNm/uZ1+H+SQ=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-1/92dyuEV+Xib0znEAgQOOmbsyjK/f2lYsXuPahLuw4=";
 
   cargoBuildFlags = [
     "--package"

@@ -9,7 +9,7 @@
   pkg-config,
   pantheon,
   python3,
-  substituteAll,
+  replaceVars,
   glib,
   gtk3,
   dosfstools,
@@ -33,8 +33,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       ext4 = "${e2fsprogs}/bin/mkfs.ext4";
       exfat = "${exfat}/bin/mkfs.exfat";
       fat = "${dosfstools}/bin/mkfs.fat";

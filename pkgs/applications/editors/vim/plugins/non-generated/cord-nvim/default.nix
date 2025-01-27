@@ -19,7 +19,8 @@ let
     pname = "cord.nvim-rust";
     inherit version src;
 
-    cargoHash = "sha256-wYXJ4+8b3PtHzL2jdplNHrjIBzbAzA7jdvLZ7Vz+Yz8=";
+    useFetchCargoVendor = true;
+    cargoHash = "sha256-UJdSQNaYaZxvmfuHwePzGhQ3Pv+Cm7YaRK1L0CJhtEc=";
 
     installPhase =
       let

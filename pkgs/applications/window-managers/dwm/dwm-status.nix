@@ -52,7 +52,8 @@ rustPlatform.buildRustPackage rec {
     xorg.libX11
   ];
 
-  cargoHash = "sha256-CNhRMJZJMMKh5L308a93YL0kJLkt6DdlmILMVPQV90Q=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-G31p8iVRUODD4hUssXaOqEOUTW+C+GZMy/L/tgumDtA=";
 
   postInstall = lib.optionalString (bins != [ ]) ''
     wrapProgram $out/bin/dwm-status --prefix "PATH" : "${lib.makeBinPath bins}"

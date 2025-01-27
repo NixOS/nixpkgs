@@ -459,7 +459,7 @@ self: super:
   transset = addMainProgram super.transset { };
 
   utilmacros = super.utilmacros.overrideAttrs (attrs: { # not needed for releases, we propagate the needed tools
-    propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ automake autoconf libtool ];
+    propagatedNativeBuildInputs = attrs.propagatedNativeBuildInputs or [] ++ [ automake autoconf libtool ];
   });
 
   viewres = addMainProgram super.viewres { };
@@ -721,7 +721,7 @@ self: super:
     '';
   in
     xorg.xkeyboardconfig.overrideAttrs (old: {
-      buildInputs = old.buildInputs ++ [ automake ];
+      nativeBuildInputs = old.nativeBuildInputs ++ [ automake ];
       postPatch   = lib.concatStrings (lib.mapAttrsToList patchIn layouts);
     });
 
