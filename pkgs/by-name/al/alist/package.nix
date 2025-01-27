@@ -11,14 +11,14 @@
 }:
 buildGoModule rec {
   pname = "alist";
-  version = "3.41.0";
-  webVersion = "3.41.0";
+  version = "3.42.0";
+  webVersion = "3.42.0";
 
   src = fetchFromGitHub {
     owner = "AlistGo";
     repo = "alist";
     tag = "v${version}";
-    hash = "sha256-DzqSkcyDRyiHM0yh7A+dZj7TnjhDVQoHHgV5piVcu1g=";
+    hash = "sha256-qUW9bA2TeAVve77i43+ITxClLaO3aqm5959itf+iFqs=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -32,11 +32,11 @@ buildGoModule rec {
   };
   web = fetchzip {
     url = "https://github.com/AlistGo/alist-web/releases/download/${webVersion}/dist.tar.gz";
-    hash = "sha256-1IXvst9VfxuIjUrgmJxTYm8jJQStMK+RlQibQ3fTDGs=";
+    hash = "sha256-g2+qdLrxuyuqxlyVk32BKJCbMfXNs29KLEPxAkTQHjU=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-p6JqYmcQR6W7RE7F6NGxoiTxSOESuYjpke0rLRlxeSM=";
+  vendorHash = "sha256-uid+uT4eOtDsCNsKqGqPc4vMDnKUatG4V2n0Z7r6ccY=";
 
   buildInputs = [ fuse ];
 
@@ -68,6 +68,7 @@ buildGoModule rec {
         "TestHTTPAll"
         "TestWebsocketAll"
         "TestWebsocketCaller"
+        "TestDownloadOrder"
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
