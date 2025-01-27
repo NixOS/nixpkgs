@@ -33,12 +33,10 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (fetchpatch {
-      name = "support-libgit2-1.8.patch";
-      # https://gitlab.gnome.org/GNOME/libgit2-glib/-/merge_requests/40
-      url = "https://gitlab.gnome.org/GNOME/libgit2-glib/-/commit/a76fdf96c3af9ce9d21a3985c4be8a1aa6eea661.patch";
-      hash = "sha256-ysU8pAixyftensfEC9bE0RUFMPMei0jYT26WKN5uOFE=";
-    })
+    # See:
+    # * <https://gitlab.gnome.org/GNOME/libgit2-glib/-/merge_requests/40>
+    # * <https://gitlab.gnome.org/GNOME/libgit2-glib/-/merge_requests/46>
+    ./libgit2-1.9.0.patch
   ];
 
   nativeBuildInputs = [
