@@ -5366,10 +5366,6 @@ with pkgs;
 
   wireguard-tools = callPackage ../tools/networking/wireguard-tools { };
 
-  wireguard-vanity-address = callPackage ../tools/networking/wireguard-vanity-address {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
   wg-netmanager = callPackage ../tools/networking/wg-netmanager {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
