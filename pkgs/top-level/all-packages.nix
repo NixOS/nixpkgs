@@ -2574,10 +2574,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  sheesy-cli = callPackage ../tools/security/sheesy-cli {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
   steampipePackages = recurseIntoAttrs (
     callPackage ../tools/misc/steampipe-packages { }
   );
