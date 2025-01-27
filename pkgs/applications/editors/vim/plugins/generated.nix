@@ -6529,18 +6529,6 @@ final: prev:
     meta.homepage = "https://github.com/nvim-java/lua-async/";
   };
 
-  lua-async-await = buildVimPlugin {
-    pname = "lua-async-await";
-    version = "2024-03-31";
-    src = fetchFromGitHub {
-      owner = "nvim-java";
-      repo = "lua-async";
-      rev = "652d94df34e97abe2d4a689edbc4270e7ead1a98";
-      sha256 = "0jpw9008xghqmzjnikwq417p497lj7v9hkjbrach5p652yca07s8";
-    };
-    meta.homepage = "https://github.com/nvim-java/lua-async/";
-  };
-
   lualine-lsp-progress = buildVimPlugin {
     pname = "lualine-lsp-progress";
     version = "2021-10-23";
