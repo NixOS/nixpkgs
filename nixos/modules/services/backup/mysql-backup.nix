@@ -8,6 +8,17 @@ let
   cfg = config.services.mysqlBackup;
   defaultUser = "mysqlbackup";
 
+  dumpBinary =
+    if
+      (
+        lib.getName config.services.mysql.package == lib.getName pkgs.mariadb
+        && lib.versionAtLeast config.services.mysql.package.version "11.0.0"
+      )
+    then
+      "${config.services.mysql.package}/bin/mariadb-dump"
+    else
+      "${config.services.mysql.package}/bin/mysqldump";
+
   compressionAlgs = {
     gzip = rec {
       pkg = pkgs.gzip;
@@ -58,7 +69,7 @@ let
 
   backupDatabaseScript = db: ''
     dest="${cfg.location}/${db}${selectedAlg.ext}"
-    if ${pkgs.mariadb}/bin/mysqldump ${lib.optionalString (shouldUseSingleTransaction db) "--single-transaction"} ${db} | ${compressionCmd} > $dest.tmp; then
+    if ${dumpBinary} ${lib.optionalString (shouldUseSingleTransaction db) "--single-transaction"} ${db} | ${compressionCmd} > $dest.tmp; then
       mv $dest.tmp $dest
       echo "Backed up to $dest"
     else
