@@ -2,7 +2,7 @@ diff --git a/pyproject.toml b/pyproject.toml
 index fa23446..6a7705c 100644
 --- a/pyproject.toml
 +++ b/pyproject.toml
-@@ -40,7 +40,15 @@ use_parentheses = true
+@@ -40,7 +40,20 @@ use_parentheses = true
  datas = "datas" # PyInstaller's argument
  
  [tool.poetry]
@@ -12,7 +12,12 @@ index fa23446..6a7705c 100644
 +authors = []
 +description = ""
 +packages = [ { include = "voicevox_engine" } ]
-+include = [ "resources/**/*", "run.py", "engine_manifest.json", "presets.yaml"]
++include = [
++  { path = "resources/**/*", format = ["sdist", "wheel"] },
++  { path = "run.py", format = ["sdist", "wheel"] },
++  { path = "engine_manifest.json", format = ["sdist", "wheel"] },
++  { path = "presets.yaml", format = ["sdist", "wheel"] }
++]
 +
 +[tool.poetry.scripts]
 +voicevox-engine = "run:main"
