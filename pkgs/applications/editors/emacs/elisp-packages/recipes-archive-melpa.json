@@ -97273,26 +97273,28 @@
   "repo": "rjekker/password-store-menu",
   "unstable": {
    "version": [
-    20250120,
-    1455
+    20250127,
+    1459
    ],
    "deps": [
-    "password-store"
+    "password-store",
+    "transient"
    ],
-   "commit": "479c5c6e09ee57ff3737cb69d744acbcc81725ea",
-   "sha256": "01q2kfwd9axaxam4wrnd5sq2swdvfswlmann1bfiv1jhswhhvd09"
+   "commit": "bb765da3d519d87306e13e983bc2847d3abe84a1",
+   "sha256": "02sqwhqgyrw8rgwfhxz0pmiibiq2y8iafxaf9g6vwgcygiq2bnk6"
   },
   "stable": {
    "version": [
     1,
     1,
-    0
+    1
    ],
    "deps": [
-    "password-store"
+    "password-store",
+    "transient"
    ],
-   "commit": "479c5c6e09ee57ff3737cb69d744acbcc81725ea",
-   "sha256": "01q2kfwd9axaxam4wrnd5sq2swdvfswlmann1bfiv1jhswhhvd09"
+   "commit": "bb765da3d519d87306e13e983bc2847d3abe84a1",
+   "sha256": "02sqwhqgyrw8rgwfhxz0pmiibiq2y8iafxaf9g6vwgcygiq2bnk6"
   }
  },
  {
