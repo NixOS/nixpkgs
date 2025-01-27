@@ -1,5 +1,5 @@
 diff --git a/setup_onnxruntime.py b/setup_onnxruntime.py
-index cd698d1..c6e8a33 100644
+index e9572e9d84e3..f5f3b32c3beb 100644
 --- a/setup_onnxruntime.py
 +++ b/setup_onnxruntime.py
 @@ -6,7 +6,6 @@ from pathlib import Path
@@ -10,13 +10,14 @@ index cd698d1..c6e8a33 100644
  
  
  def read_txt(txt_path: Union[Path, str]) -> List[str]:
-@@ -26,16 +25,7 @@ def get_readme():
+@@ -25,17 +24,7 @@ def get_readme():
+ 
  
  MODULE_NAME = "rapidocr_onnxruntime"
- 
+-
 -obtainer = GetPyPiLatestVersion()
 -latest_version = obtainer(MODULE_NAME)
--VERSION_NUM = obtainer.version_add_one(latest_version)
+-VERSION_NUM = obtainer.version_add_one(latest_version, add_patch=True)
 -
 -if len(sys.argv) > 2:
 -    match_str = " ".join(sys.argv[2:])
@@ -27,4 +28,4 @@ index cd698d1..c6e8a33 100644
 +VERSION_NUM = "@version@"
  
  project_urls = {
-     "Documentation": "https://rapidai.github.io/RapidOCRDocs/docs/install_usage/rapidocr/usage/",
+     "Documentation": "https://rapidai.github.io/RapidOCRDocs",

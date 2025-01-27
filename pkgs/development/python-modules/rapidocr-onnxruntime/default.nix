@@ -21,13 +21,13 @@
   requests,
 }:
 let
-  version = "1.4.1";
+  version = "1.4.4";
 
   src = fetchFromGitHub {
     owner = "RapidAI";
     repo = "RapidOCR";
     tag = "v${version}";
-    hash = "sha256-6ohh4NSYqJ+i1JRdsKbcJZns07c+roVJ87r0lvBbExU=";
+    hash = "sha256-x0VELDKOffxbV3v0aDFJFuDC4YfsGM548XWgINmRc3M=";
   };
 
   models =
