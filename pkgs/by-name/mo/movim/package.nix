@@ -123,47 +123,63 @@ php.buildComposerProject2 (finalAttrs: {
   '';
 
   preBuild =
-    lib.optionalString minify.script.enable ''
-      find ./public -type f -iname "*.js" -print0 \
-        | xargs -0 -n 1 -P $NIX_BUILD_CORES ${writeShellScript "movim_script_minify" ''
-          file="$1"
-          tmp="$(mktemp)"
-          esbuild $file --minify --target=${lib.escapeShellArg minify.script.target} --outfile=$tmp
-          [[ "$(stat -c %s $tmp)" -lt "$(stat -c %s $file)" ]] && mv $tmp $file
-        ''}
-    ''
-    + lib.optionalString minify.style.enable ''
-      find ./public -type f -iname "*.css" -print0 \
-        | xargs -0 -n 1 -P $NIX_BUILD_CORES ${writeShellScript "movim_style_minify" ''
-          export BROWSERLIST="${lib.escapeShellArg minify.style.browserslist}"
-          file="$1"
-          tmp="$(mktemp)"
-          lightningcss $file --minify --browserslist --output-file=$tmp
-          [[ "$(stat -c %s $tmp)" -lt "$(stat -c %s $file)" ]] && mv $tmp $file
-        ''}
-    ''
-    + lib.optionalString minify.svg.enable ''
-      find ./public -type f -iname "*.svg" -a -not -path "*/emojis/*" -print0 \
-        | xargs -0 -n 1 -P $NIX_BUILD_CORES ${writeShellScript "movim_svg_minify" ''
-          file="$1"
-          tmp="$(mktemp)"
-          scour -i $file -o $tmp --disable-style-to-xml --enable-comment-stripping --enable-viewboxing --indent=tab
-          [[ "$(stat -c %s $tmp)" -lt "$(stat -c %s $file)" ]] && mv $tmp $file
-        ''}
-    '';
+    lib.optionalString minify.script.enable
+      # sh
+      ''
+        find ./public -type f -iname "*.js" -print0 \
+          | xargs -0 -n 1 -P $NIX_BUILD_CORES ${writeShellScript "movim_script_minify" ''
+            file="$1"
+            tmp="$(mktemp)"
+            esbuild $file --minify --target=${lib.escapeShellArg minify.script.target} --outfile=$tmp
+            [ "$(stat -c %s $tmp)" -lt "$(stat -c %s $file)" ] && mv $tmp $file
+          ''}
+      ''
+    +
+      lib.optionalString minify.style.enable
+        # sh
+        ''
+          find ./public -type f -iname "*.css" -print0 \
+            | xargs -0 -n 1 -P $NIX_BUILD_CORES ${writeShellScript "movim_style_minify" ''
+              export BROWSERLIST="${lib.escapeShellArg minify.style.browserslist}"
+              file="$1"
+              tmp="$(mktemp)"
+              lightningcss $file --minify --browserslist --output-file=$tmp
+              [ "$(stat -c %s $tmp)" -lt "$(stat -c %s $file)" ] && mv $tmp $file
+            ''}
+        ''
+    +
+      lib.optionalString minify.svg.enable
+        # sh
+        ''
+          find ./public -type f -iname "*.svg" -a -not -path "*/emojis/*" -print0 \
+            | xargs -0 -n 1 -P $NIX_BUILD_CORES ${writeShellScript "movim_svg_minify" ''
+              file="$1"
+              tmp="$(mktemp)"
+              scour -i $file -o $tmp --disable-style-to-xml --enable-comment-stripping --enable-viewboxing --indent=tab
+              [ "$(stat -c %s $tmp)" -lt "$(stat -c %s $file)" ] && mv $tmp $file
+            ''}
+        '';
 
   postInstall = ''
     mkdir -p $out/bin
-    echo "#!${lib.getExe dash}" > $out/bin/movim
-    echo "${lib.getExe finalAttrs.php} $out/share/php/${finalAttrs.pname}/daemon.php \"\$@\"" >> $out/bin/${finalAttrs.meta.mainProgram}
-    chmod +x $out/bin/${finalAttrs.meta.mainProgram}
+    cat << EOF > $out/bin/movim
+    #!${lib.getExe dash}
+    ${lib.getExe finalAttrs.php} $out/share/php/${finalAttrs.pname}/daemon.php "\$@"
+    EOF
+    chmod +x $out/bin/movim
 
-
-    mkdir -p $out/share/{bash-completion/completion,fish/vendor_completions.d,zsh/site-functions}
+    mkdir -p \
+      $out/share/bash-completion/completion \
+      $out/share/fish/vendor_completions.d \
+      $out/share/zsh/site-functions
     $out/bin/movim completion bash | sed "s/daemon.php/movim/g" > $out/share/bash-completion/completion/movim.bash
     $out/bin/movim completion fish | sed "s/daemon.php/movim/g" > $out/share/fish/vendor_completions.d/movim.fish
     $out/bin/movim completion zsh | sed "s/daemon.php/movim/g" > $out/share/zsh/site-functions/_movim
-    chmod +x $out/share/{bash-completion/completion/movim.bash,fish/vendor_completions.d/movim.fish,zsh/site-functions/_movim}
+
+    chmod +x \
+      $out/share/bash-completion/completion/movim.bash \
+      $out/share/fish/vendor_completions.d/movim.fish \
+      $out/share/zsh/site-functions/_movim
   '';
 
   passthru = {
