@@ -810,6 +810,7 @@ in {
   parsedmarc = handleTest ./parsedmarc {};
   password-option-override-ordering = handleTest ./password-option-override-ordering.nix {};
   pdns-recursor = handleTest ./pdns-recursor.nix {};
+  pds = handleTest ./pds.nix {};
   peerflix = handleTest ./peerflix.nix {};
   peering-manager = handleTest ./web-apps/peering-manager.nix {};
   peertube = handleTestOn ["x86_64-linux"] ./web-apps/peertube.nix {};
