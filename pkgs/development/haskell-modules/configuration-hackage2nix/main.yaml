@@ -665,6 +665,7 @@ package-maintainers:
     - smtp-mail
     - pdftotext
     - warp-systemd
+    - amazonka
   wolfgangwalther:
     - postgrest
 
