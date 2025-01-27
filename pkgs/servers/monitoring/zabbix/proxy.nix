@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   pkg-config,
+  curl,
   libevent,
   libiconv,
   openssl,
@@ -44,6 +45,7 @@ import ./versions.nix (
     nativeBuildInputs = [ pkg-config ];
     buildInputs =
       [
+        curl
         libevent
         libiconv
         openssl
@@ -62,6 +64,7 @@ import ./versions.nix (
         "--enable-ipv6"
         "--enable-proxy"
         "--with-iconv"
+        "--with-libcurl"
         "--with-libevent"
         "--with-libpcre"
         "--with-openssl=${openssl.dev}"
