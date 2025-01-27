@@ -7,7 +7,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  autoconf269,
+  autoconf,
   automake,
   bash,
   libtool,
@@ -56,24 +56,22 @@ assert
 
 let
   ffcallAvailable = stdenv.hostPlatform.isLinux && (libffcall != null);
-  # Some modules need autoreconf called in their directory.
-  shouldReconfModule = name: name != "asdf";
 in
 
 stdenv.mkDerivation {
-  version = "2.50pre20230112";
+  version = "2.49.95-unstable-2024-12-28";
   pname = "clisp";
 
   src = fetchFromGitLab {
     owner = "gnu-clisp";
     repo = "clisp";
-    rev = "bf72805c4dace982a6d3399ff4e7f7d5e77ab99a";
-    hash = "sha256-sQoN2FUg9BPaCgvCF91lFsU/zLja1NrgWsEIr2cPiqo=";
+    rev = "c3ec11bab87cfdbeba01523ed88ac2a16b22304d";
+    hash = "sha256-xXGx2FlS0l9huVMHqNbcAViLjxK8szOFPT0J8MpGp9w=";
   };
 
   strictDeps = true;
   nativeBuildInputs = [
-    autoconf269
+    autoconf
     automake
     libtool
   ];
@@ -98,10 +96,6 @@ stdenv.mkDerivation {
       libXext
     ];
 
-  patches = [
-    ./gnulib_aarch64.patch
-  ];
-
   # First, replace port 9090 (rather low, can be used)
   # with 64237 (much higher, IANA private area, not
   # anything rememberable).
@@ -111,22 +105,6 @@ stdenv.mkDerivation {
     sed -i 's@1\.16\.2@${automake.version}@' src/aclocal.m4
     find . -type f | xargs sed -e 's/-lICE/-lXau &/' -i
   '';
-
-  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin (
-    ''
-      (
-        cd src
-        autoreconf -f -i -I m4 -I glm4
-      )
-    ''
-    + lib.concatMapStrings (x: ''
-      (
-        root="$PWD"
-        cd modules/${x}
-        autoreconf -f -i -I "$root/src" -I "$root/src/m4" -I "$root/src/glm4"
-      )
-    '') (builtins.filter shouldReconfModule withModules)
-  );
 
   configureFlags =
     [ "builddir" ]
