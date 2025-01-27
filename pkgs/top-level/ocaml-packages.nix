@@ -1678,6 +1678,8 @@ let
       readline = pkgs.readline;
     };
 
+    reanalyze = callPackage ../development/tools/ocaml/reanalyze { };
+
     reason = callPackage ../development/compilers/reason { };
 
     reason-native = lib.recurseIntoAttrs (callPackage ../development/ocaml-modules/reason-native { });
