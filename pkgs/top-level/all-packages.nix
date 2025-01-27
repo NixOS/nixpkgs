@@ -18184,8 +18184,6 @@ with pkgs;
 
   discordo = callPackage ../applications/networking/discordo/default.nix { };
 
-  golden-cheetah = libsForQt5.callPackage ../applications/misc/golden-cheetah { };
-
   tomb = callPackage ../by-name/to/tomb/package.nix {
     pinentry = pinentry-curses;
   };
