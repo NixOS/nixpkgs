@@ -50,7 +50,6 @@ let
           cp -r ${monorepoSrc}/clang "$out"
           cp -r ${monorepoSrc}/clang-tools-extra "$out"
           cp -r ${monorepoSrc}/mlir "$out"
-          cp -r ${monorepoSrc}/lldb "$out"
         ''
       )
     else
@@ -87,7 +86,6 @@ let
             "llvm"
             "clang"
             "clang-tools-extra"
-            "lldb"
           ]
           ++ lib.optionals (lib.versionAtLeast release_version "16") [
             "mlir"
@@ -101,7 +99,6 @@ let
       [
         "clang-tblgen"
         "llvm-tblgen"
-        "lldb-tblgen"
       ]
       ++ lib.optionals (lib.versionAtLeast release_version "15") [
         "clang-tidy-confusable-chars-gen"
@@ -117,10 +114,6 @@ let
 
     installPhase = ''
       mkdir -p $out
-
-      # Remove useless files
-      rm -f bin/{lldb-dotest,lldb-repro,llvm-lit,update_core_linalg_named_ops.sh}
-
       cp -ar bin $out/bin
     '';
   });
