@@ -347,6 +347,8 @@ self: super: builtins.intersectAttrs super {
   # Add necessary reference to gtk3 package
   gi-dbusmenugtk3 = addPkgconfigDepend pkgs.gtk3 super.gi-dbusmenugtk3;
 
+  gi-ayatana-appindicator3 = addPkgconfigDepend pkgs.libayatana-appindicator super.gi-ayatana-appindicator3;
+
   nix-serve-ng = (overrideCabal (old: {
     src = pkgs.fetchFromGitHub {
       repo = "nix-serve-ng";
