@@ -68,7 +68,7 @@ extra-packages:
   - ghc-lib-parser == 9.2.*             # 2022-02-17: preserve for GHC 8.10, 9.0
   - ghc-lib-parser == 9.8.*             # 2024-05-19: preserve for GHC 9.8
   - ghc-lib == 9.10.*                   # 2024-12-30: preserve for GHC 9.10/ghc-tags 1.9
-  - ghc-lib-parser == 9.10.*            # 2024-12-26: preserve for ghc-syntax-highlighter == 0.0.12.0
+  - ghc-lib-parser == 9.10.*            # 2024-12-26: preserve for GHC 9.10
   - ghc-lib-parser-ex == 9.10.*         # 2024-12-26: preserve for 9.10 HLS
   - ghc-lib-parser-ex == 9.2.*          # 2022-07-13: preserve for GHC 8.10, 9.0
   - ghc-lib-parser-ex == 9.8.*          # 2024-05-19: preserve for GHC 9.8
