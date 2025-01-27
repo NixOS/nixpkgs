@@ -45,7 +45,23 @@ let
       settingsFormat.generate "caddy.json" cfg.settings
     else
       let
-        Caddyfile = pkgs.writeTextDir "Caddyfile" ''
+        writeCaddyfile =
+          text:
+          pkgs.runCommandLocal "Caddyfile"
+            {
+              inherit text;
+              passAsFile = [ "text" ];
+            }
+            ''
+              mkdir -p $out
+              cp "$textPath" $out/Caddyfile
+
+              # 'validate' cannot be used for validation, due to log location access
+              # See https://github.com/caddyserver/caddy/issues/6788
+              ${lib.getExe cfg.package} adapt --config $out/Caddyfile
+            '';
+
+        Caddyfile = writeCaddyfile ''
           {
             ${cfg.globalConfig}
           }
