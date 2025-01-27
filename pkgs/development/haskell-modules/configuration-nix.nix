@@ -1256,7 +1256,7 @@ self: super: builtins.intersectAttrs super {
     )
     fourmolu
     fourmolu_0_15_0_0
-    fourmolu_0_16_2_0
+    fourmolu_0_17_0_0
     ;
 
   # Test suite needs to execute 'disco' binary
