@@ -348,7 +348,7 @@ in
       preStart = ''
         # remove old papaerless-manage symlink
         # TODO: drop with NixOS 25.11
-        [[ -L ${cfg.dataDir}/paperless-manage ]] && rm ${cfg.dataDir}/paperless-manage
+        [[ -L '${cfg.dataDir}/paperless-manage' ]] && rm '${cfg.dataDir}/paperless-manage'
 
         # Auto-migrate on first run or if the package has changed
         versionFile="${cfg.dataDir}/src-version"
