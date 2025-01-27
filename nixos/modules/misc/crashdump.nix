@@ -6,8 +6,8 @@
 }:
 let
   crashdump = config.boot.crashDump;
-
   kernelParams = lib.concatStringsSep " " crashdump.kernelParams;
+  architectureOptions = lib.concatStringsSep " " crashdump.architectureOptions;
 
 in
 ###### interface
@@ -45,6 +45,16 @@ in
             Parameters that will be passed to the kernel kexec-ed on crash.
           '';
         };
+        architectureOptions = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
+          default = [
+            "--reset-vga"
+            "--console-vga"
+          ];
+          description = ''
+            Architecture options that will be passed to kexec.
+          '';
+        };
       };
     };
   };
@@ -55,9 +65,10 @@ in
     boot = {
       postBootCommands = ''
         echo "loading crashdump kernel...";
-        ${pkgs.kexec-tools}/sbin/kexec -p /run/current-system/kernel \
+        ${pkgs.kexec-tools}/sbin/kexec \
+        --load-panic /run/current-system/kernel \
         --initrd=/run/current-system/initrd \
-        --reset-vga --console-vga \
+        ${architectureOptions} \
         --command-line="init=$(readlink -f /run/current-system/init) irqpoll maxcpus=1 reset_devices ${kernelParams}"
       '';
       kernelParams = [
