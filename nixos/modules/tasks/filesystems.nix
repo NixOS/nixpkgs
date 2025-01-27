@@ -300,7 +300,7 @@ in
       example = "32m";
       type = types.str;
       description = ''
-        Size limit for the /dev tmpfs. Look at mount(8), tmpfs size option,
+        Size limit for the /dev tmpfs. Look at {manpage}`mount(8)`, tmpfs size option,
         for the accepted syntax.
       '';
     };
@@ -310,7 +310,7 @@ in
       example = "256m";
       type = types.str;
       description = ''
-        Size limit for the /dev/shm tmpfs. Look at mount(8), tmpfs size option,
+        Size limit for the /dev/shm tmpfs. Look at {manpage}`mount(8)`, tmpfs size option,
         for the accepted syntax.
       '';
     };
@@ -320,7 +320,7 @@ in
       example = "256m";
       type = types.str;
       description = ''
-        Size limit for the /run tmpfs. Look at mount(8), tmpfs size option,
+        Size limit for the /run tmpfs. Look at {manpage}`mount(8)`, tmpfs size option,
         for the accepted syntax.
       '';
     };
