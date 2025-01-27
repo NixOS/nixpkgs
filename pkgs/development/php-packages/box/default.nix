@@ -11,7 +11,7 @@ php82.buildComposerProject2 (finalAttrs: {
   src = fetchFromGitHub {
     owner = "box-project";
     repo = "box";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-gYIAP9pTjahNkpNNXx0c8sQm+9Kaq6/IAo/xI5bNy7Y=";
   };
 
