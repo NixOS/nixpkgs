@@ -6695,9 +6695,6 @@ with pkgs;
   cargo-hf2 = callPackage ../development/tools/rust/cargo-hf2 {
     inherit (darwin.apple_sdk.frameworks) AppKit;
   };
-  cargo-inspect = callPackage ../development/tools/rust/cargo-inspect {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
   cargo-lambda = callPackage ../development/tools/rust/cargo-lambda {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
   };
