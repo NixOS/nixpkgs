@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "commandergenius";
-  version = "3.5.1";
+  version = "3.5.2";
 
   src = fetchFromGitLab {
     owner = "Dringgstein";
     repo = "Commander-Genius";
     rev = "v${version}";
-    hash = "sha256-sWnx2UdnuuLcTxhuXhfG2ssnFvuGi9kOBrpc4jiKgTs=";
+    hash = "sha256-4WfHdgn8frcDVa3Va6vo/jZihf09vIs+bNdAxScgovE=";
   };
 
   buildInputs = [
