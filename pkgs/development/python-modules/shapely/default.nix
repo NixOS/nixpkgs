@@ -7,7 +7,7 @@
   pytestCheckHook,
   pythonOlder,
 
-  cython_0,
+  cython,
   geos,
   numpy,
   oldest-supported-numpy,
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
-    cython_0
+    cython
     geos # for geos-config
     oldest-supported-numpy
     setuptools

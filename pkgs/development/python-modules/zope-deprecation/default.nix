@@ -1,21 +1,27 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   setuptools,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "zope-deprecation";
-  version = "5.0";
+  version = "5.1";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "zope.deprecation";
-    inherit version;
-    hash = "sha256-t8MtM5IDayFFxAsxA+cyLbaGYqsJtyZ6/hUyqdk/ZA8=";
+  src = fetchFromGitHub {
+    owner = "zopefoundation";
+    repo = "zope.deprecation";
+    tag = version;
+    hash = "sha256-5gqZuO3fGXkQl493QrvK7gl77mDteUp7tpo4DhSRI+o=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools <= 75.6.0" "setuptools"
+  '';
 
   build-system = [ setuptools ];
 

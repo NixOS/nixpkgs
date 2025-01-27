@@ -11,10 +11,7 @@
   numpy_1,
   llvmlite,
   libcxx,
-  importlib-metadata,
-  fetchpatch,
   substituteAll,
-  runCommand,
   writers,
   numba,
   pytestCheckHook,
@@ -36,11 +33,11 @@ let
   cudatoolkit = cudaPackages.cuda_nvcc;
 in
 buildPythonPackage rec {
-  version = "0.61.0dev0";
+  version = "0.61.0";
   pname = "numba";
   pyproject = true;
 
-  disabled = pythonOlder "3.8" || pythonAtLeast "3.13";
+  disabled = pythonOlder "3.10" || pythonAtLeast "3.14";
 
   src = fetchFromGitHub {
     owner = "numba";
@@ -58,17 +55,7 @@ buildPythonPackage rec {
     # use `forceFetchGit = true;`.` If in the future we'll observe the hash
     # changes too often, we can always use forceFetchGit, and inject the
     # relevant strings ourselves, using `substituteInPlace`, in postFetch.
-    hash = "sha256-KF9YQ6/FIfUQTJCAMgfIqnb/D8mdMbCC/tJvfYlSkgI=";
-    # TEMPORARY: The way upstream knows it's source version is explained above,
-    # and without this upstream sets the version in ${python.sitePackages} as
-    # 0.61.0dev0, which causes dependent packages fail to find a valid
-    # version of numba.
-    postFetch = ''
-      substituteInPlace $out/numba/_version.py \
-        --replace-fail \
-          'git_refnames = " (tag: ${version})"' \
-          'git_refnames = " (tag: 0.61.0, release0.61)"'
-    '';
+    hash = "sha256-4CaTJPaQduJqD0NQOPp1qsDr/BeCjbfZhulVW/x2ZAU=";
   };
 
   postPatch = ''
@@ -76,6 +63,15 @@ buildPythonPackage rec {
       --replace-fail \
         "dldir = [" \
         "dldir = [ '${addDriverRunpath.driverLink}/lib', "
+
+    substituteInPlace setup.py \
+      --replace-fail \
+        'max_numpy_run_version = "2.2"' \
+        'max_numpy_run_version = "3"'
+    substituteInPlace numba/__init__.py \
+      --replace-fail \
+        'numpy_version > (2, 1)' \
+        'numpy_version >= (3, 0)'
   '';
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-I${lib.getDev libcxx}/include/c++/v1";
@@ -92,29 +88,20 @@ buildPythonPackage rec {
 
   buildInputs = lib.optionals cudaSupport [ cudaPackages.cuda_cudart ];
 
+  pythonRelaxDeps = [ "numpy" ];
+
   dependencies = [
     numpy
     llvmlite
-    setuptools
-  ] ++ lib.optionals (pythonOlder "3.9") [ importlib-metadata ];
+  ];
 
-  patches =
-    [
-      (fetchpatch {
-        # TODO Remove at the next release of numba (>0.60.0)
-        # https://github.com/numba/numba/pull/9683
-        name = "fix-numpy-2-0-1-compat";
-        url = "https://github.com/numba/numba/commit/afb3d168efa713c235d1bb4586722ad6e5dbb0c1.patch";
-        hash = "sha256-WB+XKxsF2r5ZdgW2Yrg9HutpgufBfk48i+5YLQnKLFY=";
-      })
-    ]
-    ++ lib.optionals cudaSupport [
-      (substituteAll {
-        src = ./cuda_path.patch;
-        cuda_toolkit_path = cudatoolkit;
-        cuda_toolkit_lib_path = lib.getLib cudatoolkit;
-      })
-    ];
+  patches = lib.optionals cudaSupport [
+    (substituteAll {
+      src = ./cuda_path.patch;
+      cuda_toolkit_path = cudatoolkit;
+      cuda_toolkit_lib_path = lib.getLib cudatoolkit;
+    })
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -167,6 +154,7 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
+    changelog = "https://numba.readthedocs.io/en/stable/release/${version}-notes.html";
     description = "Compiling Python code using LLVM";
     homepage = "https://numba.pydata.org/";
     license = licenses.bsd2;

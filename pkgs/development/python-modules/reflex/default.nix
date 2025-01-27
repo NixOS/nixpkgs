@@ -47,7 +47,7 @@
 
 buildPythonPackage rec {
   pname = "reflex";
-  version = "0.6.2.post1";
+  version = "0.6.8";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -56,7 +56,7 @@ buildPythonPackage rec {
     owner = "reflex-dev";
     repo = "reflex";
     tag = "v${version}";
-    hash = "sha256-JW1hebcoBMMEirJkJ5Cquh23p9Gv3RU5AxPbXUcwPK4=";
+    hash = "sha256-fpFjVX48+FOnC3x7LT5DSXiUHpFLkD4gm/HGHZpS2ZY=";
   };
 
   pythonRelaxDeps = [
@@ -145,7 +145,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Web apps in pure Python";
     homepage = "https://github.com/reflex-dev/reflex";
-    changelog = "https://github.com/reflex-dev/reflex/releases/tag/v${version}";
+    changelog = "https://github.com/reflex-dev/reflex/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ pbsds ];
     mainProgram = "reflex";

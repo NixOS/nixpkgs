@@ -7,15 +7,16 @@
 
 buildPythonPackage rec {
   pname = "types-python-dateutil";
-  version = "2.9.0.20240906";
+  version = "2.9.0.20241206";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-lwbDtoKEwlrf/Ecxnsx5R+W7hrN3P4Q8c5Bv1Zi8F24=";
+    pname = "types_python_dateutil";
+    inherit version;
+    hash = "sha256-GPSTQUwm/7ppKnI2n+p6FUxQJkYwHr/j1WoEs3ZyhMs=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   # Modules doesn't have tests
   doCheck = false;

@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "mdformat-tables";
-  version = "0.4.1";
+  version = "1.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "executablebooks";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-Q61GmaRxjxJh9GjyR8QCZOH0njFUtAWihZ9lFQJ2nQQ=";
+    tag = "v${version}";
+    hash = "sha256-7MbpGBGprhGrQ9P31HUU2h0bjyHWap6DETVN/dCDA1w=";
   };
 
   nativeBuildInputs = [ flit-core ];

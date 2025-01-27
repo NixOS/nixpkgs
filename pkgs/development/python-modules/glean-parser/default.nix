@@ -1,12 +1,12 @@
 {
   lib,
-  appdirs,
   buildPythonPackage,
   click,
   diskcache,
   fetchPypi,
   jinja2,
   jsonschema,
+  platformdirs,
   pytestCheckHook,
   pyyaml,
   setuptools,
@@ -15,13 +15,13 @@
 
 buildPythonPackage rec {
   pname = "glean-parser";
-  version = "14.5.2";
+  version = "16.2.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "glean_parser";
     inherit version;
-    hash = "sha256-7EZtFRYYk477A/F8FsrrEmZr2InGRWK440vNLZXgcvc=";
+    hash = "sha256-T2eUtBtuacvOruKluDWnTN/kQ9H79OJlasQLpyzCdFg=";
   };
 
   postPatch = ''
@@ -35,12 +35,12 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    appdirs
     click
     diskcache
     jinja2
     jsonschema
     pyyaml
+    platformdirs
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];

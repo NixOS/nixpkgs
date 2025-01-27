@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "amshan";
-  version = "2.1.1";
+  version = "2021.12.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "toreamun";
     repo = "amshan";
-    rev = version;
-    hash = "sha256-aw0wTqb2s84STVUN55h6L926pXwaMSppBCfXZVb87w0=";
+    tag = version;
+    hash = "sha256-eL8YzQB6Vj4l3cYFgWve88vLojvcxMtr2xvTUKT+Ekk=";
   };
 
   build-system = [

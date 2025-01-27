@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "parsel";
-  version = "1.9.1";
+  version = "1.10.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-FOANwHcxyQMNtiDBlfyuiEtbSEjp+cUjxhGfcIzPqaw=";
+    hash = "sha256-FPF9uVWfUbQzV7nf5DzshwqO+16khXq7Yk7G/4DYoIA=";
   };
 
   build-system = [ setuptools ];
