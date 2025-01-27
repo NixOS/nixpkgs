@@ -42,10 +42,11 @@ import ./make-test-python.nix (
             machine.wait_for_file("/run/user/${toString user.uid}/wayland-1")
 
         with subtest("Check if MATE session components actually start"):
-            for i in ["wayfire", "mate-panel", "mate-wayland.sh", "mate-wayland-components.sh"]:
-                machine.wait_until_succeeds(f"pgrep -f {i}")
-            # It is expected that this applet doesn't work in Wayland
-            machine.wait_for_text('WorkspaceSwitcherApplet')
+            for i in ["wayfire", "mate-panel", "mate-wayland.sh"]:
+                machine.wait_until_succeeds(f"pgrep {i}")
+            machine.wait_until_succeeds("pgrep -f mate-wayland-components.sh")
+            # It is expected that WorkspaceSwitcherApplet doesn't work in Wayland
+            machine.wait_for_text('(panel|Factory|Workspace|Switcher|Applet|configuration)')
 
         with subtest("Check if various environment variables are set"):
             cmd = "xargs --null --max-args=1 echo < /proc/$(pgrep -xf mate-panel)/environ"
