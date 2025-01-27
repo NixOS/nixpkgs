@@ -105,7 +105,7 @@ in
         ];
         description = ''
           A list of extra command line arguments to pass to gpsd.
-          Check gpsd(8) mangpage for possible arguments.
+          Check {manpage}`gpsd(8)` mangpage for possible arguments.
         '';
       };
 
