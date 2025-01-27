@@ -2046,11 +2046,6 @@ self: super: {
   # https://github.com/faylang/fay/pull/474
   fay = doJailbreak super.fay;
 
-  # Requests version 2 of tls, can be removed once it's the default
-  diohsc = super.diohsc.overrideScope (self: super: {
-    tls = self.tls_2_0_6;
-  });
-
   # Need https://github.com/obsidiansystems/cli-extras/pull/12 and more
   cli-extras = doJailbreak super.cli-extras;
 
