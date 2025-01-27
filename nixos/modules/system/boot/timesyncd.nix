@@ -28,7 +28,7 @@ in
           `timesyncd.conf` file as opposed to setting this option to null which
           will remove `NTP=` entirely.
 
-          See man:{manpage}`timesyncd.conf(5)` for details.
+          See {manpage}`timesyncd.conf(5)` for details.
         '';
       };
       fallbackServers = mkOption {
@@ -42,7 +42,7 @@ in
           `timesyncd.conf` file as opposed to setting this option to null which
           will remove `FallbackNTP=` entirely.
 
-          See man:{manpage}`timesyncd.conf(5)` for details.
+          See {manpage}`timesyncd.conf(5)` for details.
         '';
       };
       extraConfig = mkOption {
