@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   preBuild = ''
-    make -C libtools
+    make -C libtools CROSS_COMPILE=${stdenv.cc.targetPrefix}
   '';
 
   installPhase = ''

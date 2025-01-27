@@ -65,7 +65,7 @@ let
       mainProgram = "HiddifyCli";
       license = lib.licenses.cc-by-nc-sa-40;
       platforms = lib.platforms.linux;
-      maintainers = with lib.maintainers; [ aucub ];
+      maintainers = with lib.maintainers; [ ];
     };
   };
 in
@@ -148,6 +148,6 @@ flutter324.buildFlutterApplication {
     mainProgram = "hiddify";
     license = lib.licenses.cc-by-nc-sa-40;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ aucub ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

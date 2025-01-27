@@ -28,7 +28,7 @@ flutter.buildFlutterApplication {
     homepage = "https://github.com/kra-mo/sly";
     mainProgram = "sly";
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ aucub ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };
 }

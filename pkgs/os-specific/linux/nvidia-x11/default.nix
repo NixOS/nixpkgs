@@ -70,6 +70,10 @@ rec {
     openSha256 = "sha256-hjpwTR4I0MM5dEjQn7MKM3RY1a4Mt6a61Ii9KW2KbiY=";
     settingsSha256 = "sha256-Wk6IlVvs23cB4s0aMeZzSvbOQqB1RnxGMv3HkKBoIgY=";
     persistencedSha256 = "sha256-yQFrVk4i2dwReN0XoplkJ++iA1WFhnIkP7ns4ORmkFA=";
+    patchesOpen = [
+      ./nvidia-nv-Convert-symbol-namespace-to-string-literal.patch
+      ./crypto-Add-fix-for-6.13-Module-compilation.patch
+    ];
   };
 
   latest = selectHighestVersion production (generic {
@@ -79,6 +83,15 @@ rec {
     openSha256 = "sha256-Fxo0t61KQDs71YA8u7arY+503wkAc1foaa51vi2Pl5I=";
     settingsSha256 = "sha256-VUetj3LlOSz/LB+DDfMCN34uA4bNTTpjDrb6C6Iwukk=";
     persistencedSha256 = "sha256-wnDjC099D8d9NJSp9D0CbsL+vfHXyJFYYgU3CwcqKww=";
+    patches = [
+      ./fix-for-linux-6.13.patch
+    ];
+    patchesOpen = [
+      ./nvidia-nv-Convert-symbol-namespace-to-string-literal.patch
+      ./crypto-Add-fix-for-6.13-Module-compilation.patch
+      ./Use-linux-aperture.c-for-removing-conflict.patch
+      ./TTM-fbdev-emulation-for-Linux-6.13.patch
+    ];
   });
 
   beta = selectHighestVersion latest (generic {

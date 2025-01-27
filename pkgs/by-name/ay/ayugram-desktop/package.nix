@@ -53,7 +53,7 @@ telegram-desktop.override {
         '';
         homepage = "https://github.com/AyuGram/AyuGramDesktop";
         changelog = "https://github.com/AyuGram/AyuGramDesktop/releases/tag/v${finalAttrs.version}";
-        maintainers = with lib.maintainers; [ aucub ];
+        maintainers = with lib.maintainers; [ ];
       };
     }
   );
