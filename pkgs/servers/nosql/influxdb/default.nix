@@ -43,7 +43,8 @@ let
         --replace-fail "deny(warnings, missing_docs))]" "deny(warnings))]"
     '';
     sourceRoot = "${src.name}/libflux";
-    cargoHash = "sha256-O+t4f4P5291BuyARH6Xf3LejMFEQEBv+qKtyjHRhclA=";
+    useFetchCargoVendor = true;
+    cargoHash = "sha256-wJVvpjaBUae3FK3lQaQov4t0UEsH86tB8B8bsSFGGBU=";
     nativeBuildInputs = [ rustPlatform.bindgenHook ];
     buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
     pkgcfg = ''

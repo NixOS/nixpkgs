@@ -21,7 +21,7 @@ lib.throwIf (enableDragAndDrop && !hasDndSupport)
   python3.pkgs.buildPythonApplication
   rec {
     pname = "tuifimanager";
-    version = "5.0.9";
+    version = "5.1.5";
 
     pyproject = true;
 
@@ -29,7 +29,7 @@ lib.throwIf (enableDragAndDrop && !hasDndSupport)
       owner = "GiorgosXou";
       repo = "TUIFIManager";
       tag = "v.${version}";
-      hash = "sha256-15PXua3kLf3Mpgft2msFBn+fS2bzfTAIC9bmOkNKqlU=";
+      hash = "sha256-5ShrmjEFKGdmaGBFjMnIfcM6p8AZd13uIEFwDVAkU/8=";
     };
 
     build-system = with python3.pkgs; [
