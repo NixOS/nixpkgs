@@ -4,7 +4,7 @@
   php,
 }:
 
-php.buildComposerProject (finalAttrs: {
+php.buildComposerProject2 (finalAttrs: {
   pname = "phpmd";
   version = "2.15.0";
 
@@ -18,7 +18,7 @@ php.buildComposerProject (finalAttrs: {
   # Missing `composer.lock` from the repository.
   # Issue open at https://github.com/phpmd/phpmd/issues/1056
   composerLock = ./composer.lock;
-  vendorHash = "sha256-vr0wQkfhXHLEz8Q5nEq5Bocu1U1nDhXUlaHBsysvuRQ=";
+  vendorHash = "sha256-AahAs3Gq1OQ+CW3+rU8NnWcR3hKzVNq7s3llsO4mQ38=";
 
   meta = {
     changelog = "https://github.com/phpmd/phpmd/releases/tag/${finalAttrs.version}";
