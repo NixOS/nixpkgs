@@ -72,7 +72,7 @@ in
       description = ''
         File containing the MINIO_ROOT_USER, default is "minioadmin", and
         MINIO_ROOT_PASSWORD (length >= 8), default is "minioadmin"; in the format of
-        an EnvironmentFile=, as described by systemd.exec(5).
+        an EnvironmentFile=, as described by {manpage}`systemd.exec(5)`.
       '';
       example = "/etc/nixos/minio-root-credentials";
     };

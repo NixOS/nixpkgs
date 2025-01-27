@@ -65,7 +65,7 @@ in
           on or off. We can't do much to fix these problems, but this is a way
           for users to make the laptop panel vanish, a state that might be used
           by a couple of user-space daemons. On Linux systems, see also
-          logind.conf(5).
+          {manpage}`logind.conf(5)`.
         '';
       };
 

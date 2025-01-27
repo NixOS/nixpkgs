@@ -29,7 +29,7 @@ in
       type = types.lines;
       example = "Storage=journal";
       description = ''
-        Extra config options for systemd-coredump. See coredump.conf(5) man page
+        Extra config options for systemd-coredump. See {manpage}`coredump.conf(5)` man page
         for available options.
       '';
     };

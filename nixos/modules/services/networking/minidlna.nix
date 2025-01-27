@@ -12,7 +12,7 @@ in {
 
   options.services.minidlna.settings = lib.mkOption {
     default = {};
-    description = "Configuration for `minidlna.conf(5)`.";
+    description = "Configuration for {manpage}`minidlna.conf(5)`.";
     type = lib.types.submodule {
       freeformType = format.type;
 

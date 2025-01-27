@@ -151,7 +151,7 @@ let
           ];
           description = ''
             This option specifies disk mount options to be passed to the `mount -o` command.
-            For more information, see the `mount(8)` manual page.
+            For more information, see the {manpage}`mount(8)` manual page.
           '';
         };
 
