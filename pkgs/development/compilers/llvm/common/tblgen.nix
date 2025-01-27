@@ -79,22 +79,30 @@ let
       python3
     ];
 
-    cmakeFlags = [
-      # Projects with tablegen-like tools.
-      "-DLLVM_ENABLE_PROJECTS=${
-        lib.concatStringsSep ";" (
-          [
-            "llvm"
-            "clang"
-            "clang-tools-extra"
-            "lldb"
-          ]
-          ++ lib.optionals (lib.versionAtLeast release_version "16") [
-            "mlir"
-          ]
-        )
-      }"
-    ] ++ devExtraCmakeFlags;
+    cmakeFlags =
+      [
+        # Projects with tablegen-like tools.
+        "-DLLVM_ENABLE_PROJECTS=${
+          lib.concatStringsSep ";" (
+            [
+              "llvm"
+              "clang"
+              "clang-tools-extra"
+              "lldb"
+            ]
+            ++ lib.optionals (lib.versionAtLeast release_version "16") [
+              "mlir"
+            ]
+          )
+        }"
+      ]
+      # LLDB test suite requires libc++ on darwin, but we need compile only lldb-tblgen
+      # These flags are needed only for evaluating the CMake file.
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        "-DLLDB_INCLUDE_TESTS=OFF"
+        "-DLIBXML2_INCLUDE_DIR=/non-existent"
+      ]
+      ++ devExtraCmakeFlags;
 
     # List of tablegen targets.
     ninjaFlags =
