@@ -39,7 +39,10 @@ stdenv.mkDerivation {
     installShellCompletion --zsh  shell-completion/zsh/_aerospace
   '';
 
-  passthru.tests.can-print-version = [ versionCheckHook ];
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
 
   passthru.updateScript = gitUpdater {
     url = "https://github.com/nikitabobko/AeroSpace.git";
