@@ -8,13 +8,13 @@
 
 buildGoModule {
   pname = "packwiz";
-  version = "0-unstable-2024-10-15";
+  version = "0-unstable-2025-01-19";
 
   src = fetchFromGitHub {
     owner = "packwiz";
     repo = "packwiz";
-    rev = "0626c00149a8d9a5e9f76e5640e7b8b95c064350";
-    sha256 = "sha256-eAGfLUcyjDR2oJjLK3+DiuICTqoOcIwO5wL350w6vGw=";
+    rev = "241f24b550f6fe838913a56bdd58bac2fc53254a";
+    sha256 = "sha256-VmNsWzsFVNRciNIPUXUVos4cBdpawgN1/nPwMjNpx+0=";
   };
   passthru.updateScript = unstableGitUpdater { };
 

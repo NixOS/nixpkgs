@@ -18,7 +18,7 @@ To enable FoundationDB, add the following to your
 ```nix
 {
   services.foundationdb.enable = true;
-  services.foundationdb.package = pkgs.foundationdb73; # FoundationDB 7.r3.x
+  services.foundationdb.package = pkgs.foundationdb73; # FoundationDB 7.3.x
 }
 ```
 

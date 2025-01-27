@@ -622,7 +622,11 @@ in {
   monado = handleTest ./monado.nix {};
   monetdb = handleTest ./monetdb.nix {};
   monica = handleTest ./web-apps/monica.nix {};
-  mongodb = handleTest ./mongodb.nix {};
+  mongodb = runTest ./mongodb.nix;
+  mongodb-ce = runTest ({ config, ... }: {
+    imports = [ ./mongodb.nix ];
+    defaults.services.mongodb.package = config.node.pkgs.mongodb-ce;
+  });
   moodle = handleTest ./moodle.nix {};
   moonraker = handleTest ./moonraker.nix {};
   mopidy = handleTest ./mopidy.nix {};
@@ -978,6 +982,7 @@ in {
   stalwart-mail = handleTest ./stalwart-mail.nix {};
   stargazer = runTest ./web-servers/stargazer.nix;
   starship = handleTest ./starship.nix {};
+  stash = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./stash.nix {};
   static-web-server = handleTest ./web-servers/static-web-server.nix {};
   step-ca = handleTestOn ["x86_64-linux"] ./step-ca.nix {};
   stratis = handleTest ./stratis {};

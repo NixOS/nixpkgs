@@ -4,6 +4,7 @@
   cairo,
   elfutils,
   fetchFromGitHub,
+  fetchpatch,
   glib,
   gobject-introspection,
   gtksourceview3,
@@ -36,6 +37,11 @@ stdenv.mkDerivation rec {
   patches = [
     # pass through NIX_* environment variables to scons.
     ./scons-nix-env.patch
+    # fixes https://github.com/sahib/rmlint/issues/664
+    (fetchpatch {
+      url = "https://github.com/sahib/rmlint/commit/f0ca57ec907f7199e3670038d60b4702d1e1d8e2.patch";
+      hash = "sha256-715X+R2BcQIaUV76hoO+EXPfNheOfw4OIHsqSoruIUI=";
+    })
   ];
 
   nativeBuildInputs =

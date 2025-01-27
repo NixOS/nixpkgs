@@ -136,18 +136,13 @@ in
           serviceConfig = {
             DynamicUser = true;
             User = "wyoming-piper";
-            StateDirectory = [
-              "wyoming/piper"
-              "wyoming/piper/models"
-            ];
+            StateDirectory = [ "wyoming/piper" ];
             # https://github.com/home-assistant/addons/blob/master/piper/rootfs/etc/s6-overlay/s6-rc.d/piper/run
             ExecStart = escapeSystemdExecArgs (
               [
                 (lib.getExe cfg.package)
                 "--data-dir"
                 "/var/lib/wyoming/piper"
-                "--download-dir"
-                "/var/lib/wyoming/piper/models"
                 "--uri"
                 options.uri
                 "--piper"

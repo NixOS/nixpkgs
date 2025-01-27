@@ -95,9 +95,6 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "refine";
     platforms = lib.platforms.linux;
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [
-      getchoo
-      aucub
-    ];
+    maintainers = with lib.maintainers; [ getchoo ];
   };
 }
