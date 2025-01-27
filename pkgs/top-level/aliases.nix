@@ -202,6 +202,7 @@ mapAliases {
   cargo-deps = throw "cargo-deps has been removed as the repository is deleted"; # Added 2024-04-09
   cargo-espflash = espflash;
   cargo-kcov = throw "'cargo-kcov' has been removed due to lack of upstream maintenance"; # Added 2025-01-25
+  cargo-inspect = throw "'cargo-inspect' has been removed due to lack of upstream maintenance. Upstream recommends cargo-expand."; # Added 2025-01-26
   cawbird = throw "cawbird has been abandoned upstream and is broken anyways due to Twitter closing its API";
   certmgr-selfsigned = certmgr; # Added 2023-11-30
   cgal_4 = throw "cgal_4 has been removed as it is obsolete use cgal instead"; # Added 2024-12-30
