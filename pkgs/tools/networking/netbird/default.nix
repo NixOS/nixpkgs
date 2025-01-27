@@ -125,6 +125,6 @@ buildGoModule rec {
       vrifox
       saturn745
     ];
-    mainProgram = "netbird";
+    mainProgram = if ui then "netbird-ui" else "netbird";
   };
 }
