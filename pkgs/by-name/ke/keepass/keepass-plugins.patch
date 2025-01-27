@@ -1,0 +1,25 @@
+From 4cb0b18f5326a07927453897180289a4b254ac4f Mon Sep 17 00:00:00 2001
+From: Pascal Winkelmann <pascal@wnklmnn.de>
+Date: Tue, 19 May 2020 10:43:49 +0200
+Subject: [PATCH] loadplugin
+
+---
+ KeePass/Forms/MainForm.cs | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/KeePass/Forms/MainForm.cs b/KeePass/Forms/MainForm.cs
+index 347eaf5..b92e1e2 100644
+--- a/KeePass/Forms/MainForm_Functions.cs
++++ b/KeePass/Forms/MainForm_Functions.cs
+@@ -312,7 +312,$OUTPUT_LC$ @@ namespace KeePass.Forms
+ 				ToolStripItemCollection tsicT = m_ctxTray.Items;
+ 				ToolStripItem tsiPrevT = m_ctxTrayOptions;
+ 
+-				m_pluginManager.LoadAllPlugins();
+$DO_LOADS$+
+ 
+ 				m_pluginManager.AddMenuItems(PluginMenuType.Main, tsicM, tsiPrevM);
+ 				m_pluginManager.AddMenuItems(PluginMenuType.Group, tsicGM, tsiPrevGM);
+-- 
+2.25.4
+

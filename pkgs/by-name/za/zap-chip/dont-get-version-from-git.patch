@@ -1,0 +1,28 @@
+diff --git a/src-script/script-util.js b/src-script/script-util.js
+index 1897c2b8..aaf9a08b 100644
+--- a/src-script/script-util.js
++++ b/src-script/script-util.js
+@@ -196,23 +194,6 @@ async function rebuildBackendIfNeeded() {
+  * ads the timestamp and saves it into .version.json
+  */
+ async function stampVersion() {
+-  try {
+-    let out = await getStdout('{"hash": null,"date": null}', 'git', [
+-      'log',
+-      '-1',
+-      '--format={"hash": "%H","timestamp": %ct}'
+-    ])
+-    let version = JSON.parse(out)
+-    let d = new Date(version.timestamp * 1000) // git gives seconds, Date needs milliseconds
+-    let result = await setPackageJsonVersion(d, 'real')
+-    version.date = d
+-    version.zapVersion = result.version
+-    let versionFile = path.join(__dirname, '../.version.json')
+-    console.log(`🔍 Git commit: ${version.hash} from ${version.date}`)
+-    await fsp.writeFile(versionFile, JSON.stringify(version))
+-  } catch (err) {
+-    console.log(`Error retrieving version: ${err}`)
+-  }
+ }
+ 
+ /**

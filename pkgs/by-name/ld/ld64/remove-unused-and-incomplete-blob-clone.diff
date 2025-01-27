@@ -1,0 +1,14 @@
+diff --git a/src/ld/code-sign-blobs/blob.h b/src/ld/code-sign-blobs/blob.h
+index 19c63a9..1dfb380 100644
+--- a/src/ld/code-sign-blobs/blob.h
++++ b/src/ld/code-sign-blobs/blob.h
+@@ -180,9 +180,6 @@ public:
+ 		return NULL;
+ 	}
+ 	
+-	BlobType *clone() const
+-	{ assert(validateBlob()); return specific(this->BlobCore::clone());	}
+-
+ 	static BlobType *readBlob(int fd)
+ 	{ return specific(BlobCore::readBlob(fd, _magic, sizeof(BlobType), 0), true); }
+ 

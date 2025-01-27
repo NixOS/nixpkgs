@@ -1,0 +1,32 @@
+Index: strongswan-5.2.1/src/starter/confread.c
+===================================================================
+--- strongswan-5.2.1.orig/src/starter/confread.c
++++ strongswan-5.2.1/src/starter/confread.c
+@@ -43,7 +43,7 @@
+ static const char ike_defaults[] = "aes128-sha1-modp2048,3des-sha1-modp1536";
+ static const char esp_defaults[] = "aes128-sha1,3des-sha1";
+ 
+-static const char firewall_defaults[] = IPSEC_SCRIPT " _updown iptables";
++static const char firewall_defaults[] = IPSEC_SBINDIR "/" IPSEC_SCRIPT " _updown iptables";
+ 
+ /**
+  * Provided by GPERF
+Index: strongswan-5.2.1/src/starter/Makefile.am
+===================================================================
+--- strongswan-5.2.1.orig/src/starter/Makefile.am
++++ strongswan-5.2.1/src/starter/Makefile.am
+@@ -18,10 +18,12 @@ AM_CPPFLAGS = \
+ 	-I$(top_srcdir)/src/libhydra \
+ 	-I$(top_srcdir)/src/starter \
+ 	-I$(top_srcdir)/src/stroke \
+-	-DIPSEC_DIR=\"${ipsecdir}\" \
++	-DIPSEC_BINDIR=\"${bindir}\" \
+ 	-DIPSEC_CONFDIR=\"${sysconfdir}\" \
+-	-DIPSEC_PIDDIR=\"${piddir}\" \
++	-DIPSEC_DIR=\"${ipsecdir}\" \
+ 	-DIPSEC_EAPDIR=\"${eapdir}\" \
++	-DIPSEC_PIDDIR=\"${piddir}\" \
++	-DIPSEC_SBINDIR=\"${sbindir}\" \
+ 	-DIPSEC_SCRIPT=\"${ipsec_script}\" \
+ 	-DDEV_RANDOM=\"${random_device}\" \
+ 	-DDEV_URANDOM=\"${urandom_device}\" \

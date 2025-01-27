@@ -1,0 +1,12 @@
+diff --git a/lib/libc/Makefile b/lib/libc/Makefile
+index 4bb4b67fcbb..1c8a8e08e60 100644
+--- a/lib/libc/Makefile
++++ b/lib/libc/Makefile
+@@ -6,7 +6,6 @@
+ .include <bsd.own.mk>
+
+ LIB=c
+-LIBREBUILD=y
+ CLEANFILES+=tags Symbols.map
+ CFLAGS+=-Wimplicit
+ #CFLAGS+=-Werror

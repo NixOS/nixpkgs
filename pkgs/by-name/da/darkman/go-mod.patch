@@ -1,0 +1,28 @@
+diff --git a/go.mod b/go.mod
+index 2d396a4..c4fea4b 100644
+--- a/go.mod
++++ b/go.mod
+@@ -1,14 +1,19 @@
+ module gitlab.com/WhyNotHugo/darkman
+ 
+-go 1.16
++go 1.18
+ 
+ require (
+ 	github.com/adrg/xdg v0.3.3
+ 	github.com/godbus/dbus/v5 v5.0.4
+-	github.com/kr/pretty v0.2.0 // indirect
+ 	github.com/rxwycdh/rxhash v0.0.0-20230131062142-10b7a38b400d
+ 	github.com/sj14/astral v0.1.2
+-	github.com/spf13/cobra v1.7.0 // indirect
+-	gopkg.in/check.v1 v1.0.0-20190902080502-41f04d3bba15 // indirect
++	github.com/spf13/cobra v1.7.0
+ 	gopkg.in/yaml.v3 v3.0.1
+ )
++
++require (
++	github.com/inconshreveable/mousetrap v1.1.0 // indirect
++	github.com/kr/pretty v0.2.0 // indirect
++	github.com/spf13/pflag v1.0.5 // indirect
++	gopkg.in/check.v1 v1.0.0-20190902080502-41f04d3bba15 // indirect
++)

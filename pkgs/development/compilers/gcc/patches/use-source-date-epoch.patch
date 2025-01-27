@@ -1,0 +1,52 @@
+https://gcc.gnu.org/ml/gcc-patches/2015-06/msg02210.html
+
+diff --git a/libcpp/macro.c b/libcpp/macro.c
+index 1e0a0b5..a52e3cb 100644
+--- a/libcpp/macro.c
++++ b/libcpp/macro.c
+@@ -349,14 +349,38 @@ _cpp_builtin_macro_text (cpp_reader *pfile, cpp_hashnode *node)
+ 	     slow on some systems.  */
+ 	  time_t tt;
+ 	  struct tm *tb = NULL;
++	  char *source_date_epoch;
+ 
+-	  /* (time_t) -1 is a legitimate value for "number of seconds
+-	     since the Epoch", so we have to do a little dance to
+-	     distinguish that from a genuine error.  */
+-	  errno = 0;
+-	  tt = time(NULL);
+-	  if (tt != (time_t)-1 || errno == 0)
+-	    tb = localtime (&tt);
++	  /* Allow the date and time to be set externally by an exported
++	     environment variable to enable reproducible builds. */
++	  source_date_epoch = getenv ("SOURCE_DATE_EPOCH");
++	  if (source_date_epoch)
++	    {
++	      errno = 0;
++	      tt = (time_t) strtol (source_date_epoch, NULL, 10);
++	      if (errno == 0)
++	        {
++		  tb = gmtime (&tt);
++		  if (tb == NULL)
++		    cpp_error (pfile, CPP_DL_ERROR,
++			       "SOURCE_DATE_EPOCH=\"%s\" is not a valid date",
++			       source_date_epoch);
++	        }
++	      else
++		cpp_error (pfile, CPP_DL_ERROR,
++			   "SOURCE_DATE_EPOCH=\"%s\" is not a valid number",
++			   source_date_epoch);
++	    }
++	  else
++	    {
++	    /* (time_t) -1 is a legitimate value for "number of seconds
++	       since the Epoch", so we have to do a little dance to
++	       distinguish that from a genuine error.  */
++	    errno = 0;
++	    tt = time(NULL);
++	    if (tt != (time_t)-1 || errno == 0)
++	      tb = localtime (&tt);
++	  }
+ 
+ 	  if (tb)
+ 	    {
