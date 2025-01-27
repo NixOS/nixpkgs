@@ -3814,7 +3814,6 @@ broken-packages:
   - MicroHs # failure in job https://hydra.nixos.org/build/276379260 at 2024-11-06
   - microlens-each # failure in job https://hydra.nixos.org/build/233253621 at 2023-09-02
   - microlens-process # failure in job https://hydra.nixos.org/build/233190805 at 2023-09-02
-  - microlens-pro # failure in job https://hydra.nixos.org/build/252733422 at 2024-03-16
   - micrologger # failure in job https://hydra.nixos.org/build/233196212 at 2023-09-02
   - micro-recursion-schemes # failure in job https://hydra.nixos.org/build/233214118 at 2023-09-02
   - microsoft-translator # failure in job https://hydra.nixos.org/build/233235928 at 2023-09-02
