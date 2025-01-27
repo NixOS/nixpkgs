@@ -2,13 +2,11 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  qtbase,
+  libsForQt5,
   openrgb,
   glib,
   openal,
-  qmake,
   pkg-config,
-  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -29,13 +27,13 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s ${openrgb.src} OpenRGB
   '';
 
-  nativeBuildInputs = [
+  nativeBuildInputs = with libsForQt5; [
     qmake
     pkg-config
     wrapQtAppsHook
   ];
 
-  buildInputs = [
+  buildInputs = with libsForQt5; [
     qtbase
     glib
     openal
