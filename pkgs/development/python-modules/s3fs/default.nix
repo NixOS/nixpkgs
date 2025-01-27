@@ -5,46 +5,56 @@
   buildPythonPackage,
   docutils,
   fetchPypi,
+  flask,
+  flask-cors,
   fsspec,
+  moto,
+  pytestCheckHook,
   pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "s3fs";
-  version = "2024.9.0";
-  format = "setuptools";
+  version = "2024.12.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ZJNwWrtQN01reZT5YW0nrb3YohnIY1EAvcKGOC79kfU=";
+    hash = "sha256-Gw86j1lGzKW6KYcdZ5KrHkUo7XYjJ9iu+vyBtzuZ/VY=";
   };
-
-  postPatch = ''
-    sed -i 's/fsspec==.*/fsspec/' requirements.txt
-  '';
 
   buildInputs = [ docutils ];
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiobotocore
     aiohttp
     fsspec
   ];
 
-  # Depends on `moto` which has a long dependency chain with exact
-  # version requirements that can't be made to work with current
-  # pythonPackages.
-  doCheck = false;
-
   pythonImportsCheck = [ "s3fs" ];
 
-  meta = with lib; {
+  nativeCheckInputs = [
+    flask
+    flask-cors
+    moto
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # require network access
+    "test_async_close"
+  ];
+
+  meta = {
     description = "Pythonic file interface for S3";
     homepage = "https://github.com/fsspec/s3fs";
     changelog = "https://github.com/fsspec/s3fs/raw/${version}/docs/source/changelog.rst";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ teh ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ teh ];
   };
 }

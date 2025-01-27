@@ -44,7 +44,8 @@ rustPlatform.buildRustPackage rec {
   buildNoDefaultFeatures = true;
   buildFeatures = [ "git2" ];
 
-  cargoHash = "sha256-w34+3zRn4ZGA2aZZ3+lZqo4/QcDSpmt1HNb+gZtAavI=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-EbJi0/0ahEUOgRhW51ddw8ZQiwl0ilEvb5ssFaQA2AA=";
 
   # maa-cli would only seach libMaaCore.so and resources in itself's path
   # https://github.com/MaaAssistantArknights/maa-cli/issues/67

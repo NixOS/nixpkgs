@@ -13,7 +13,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-TgOxRd8s2Vb4pNVPmFt2E5VnRHIEt6YlnTNyr91l6P8=";
   };
 
-  cargoHash = "sha256-eHKivxnbOk3K2JEVIVHhaEds6Gr2TcYUnFuallHRV/0=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-a2RfwS45B2PrId4kxIx1Ko+tjED4ZU+WziOxa79q2/E=";
 
   meta = with lib; {
     description = "Markdown to groff (man page) converter";

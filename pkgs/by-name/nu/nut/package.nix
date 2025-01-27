@@ -17,7 +17,7 @@
   net-snmp,
   openssl,
   pkg-config,
-  substituteAll,
+  replaceVars,
   systemd,
   udev,
   gnused,
@@ -40,8 +40,7 @@ stdenv.mkDerivation rec {
     # trying to install directly into /etc/nut which predictably fails
     ./nutshutdown-conf-default.patch
 
-    (substituteAll {
-      src = ./hardcode-paths.patch;
+    (replaceVars ./hardcode-paths.patch {
       avahi = "${avahi}/lib";
       freeipmi = "${freeipmi}/lib";
       libgpiod = "${libgpiod_1}/lib";

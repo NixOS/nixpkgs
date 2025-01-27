@@ -19,6 +19,7 @@
   gdk-pixbuf,
   liboping,
   libpcap,
+  libpq,
   libsigrok,
   libvirt,
   libxml2,
@@ -31,7 +32,6 @@
   openldap,
   openipmi,
   perl,
-  postgresql,
   protobufc,
   python3,
   rabbitmq-c,
@@ -132,7 +132,7 @@ let
     perl.buildInputs = [ perl ];
     pinba.buildInputs = [ protobufc ];
     ping.buildInputs = [ liboping ];
-    postgresql.buildInputs = [ postgresql ];
+    postgresql.buildInputs = [ libpq ];
     python.buildInputs = [ python3 ];
     redis.buildInputs = [ hiredis ];
     rrdcached.buildInputs = [

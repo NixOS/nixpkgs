@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  postgresql,
+  libpq,
   autoPatchelfHook,
   writeScript,
 }:
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     stdenv.cc.cc
-    postgresql.lib
+    libpq
   ];
 
   nativeBuildInputs = [ autoPatchelfHook ];

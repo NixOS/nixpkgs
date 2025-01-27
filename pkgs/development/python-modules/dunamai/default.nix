@@ -7,7 +7,7 @@
   importlib-metadata,
   packaging,
   pytestCheckHook,
-  git,
+  gitMinimal,
 }:
 
 buildPythonPackage rec {
@@ -38,7 +38,7 @@ buildPythonPackage rec {
   '';
 
   nativeCheckInputs = [
-    git
+    gitMinimal
     pytestCheckHook
   ];
 

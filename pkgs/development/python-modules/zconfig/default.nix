@@ -7,7 +7,6 @@
   manuel,
   pygments,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   zope-testrunner,
 }:
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "zconfig";
   version = "4.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
@@ -44,11 +41,11 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "-s" ];
 
-  meta = with lib; {
+  meta = {
     description = "Structured Configuration Library";
     homepage = "https://github.com/zopefoundation/ZConfig";
     changelog = "https://github.com/zopefoundation/ZConfig/blob/${version}/CHANGES.rst";
-    license = licenses.zpl20;
+    license = lib.licenses.zpl21;
     maintainers = [ ];
   };
 }

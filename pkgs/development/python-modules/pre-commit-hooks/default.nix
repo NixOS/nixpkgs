@@ -3,7 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  git,
+  gitMinimal,
   pytestCheckHook,
   pythonOlder,
   ruamel-yaml,
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ ruamel-yaml ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   nativeCheckInputs = [
-    git
+    gitMinimal
     pytestCheckHook
   ];
 

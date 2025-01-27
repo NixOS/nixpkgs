@@ -6,10 +6,10 @@
   installShellFiles,
   libiconv,
   libmysqlclient,
+  libpq,
   nix-update-script,
   openssl,
   pkg-config,
-  postgresql,
   rustPlatform,
   sqlite,
   testers,
@@ -35,7 +35,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-jKTQxlmpTlb0eITwNbnYfONknGhHsO/nzdup04ikEB0=";
   };
 
-  cargoHash = "sha256-+QbCPHczxCkDOFo/PDFTK0xReCWoz8AiLNwXA3aG9N0=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-mMXLivUWH5LIdFbAxgkha8oEYZFt0eUVCxtyPlBPpVI=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -45,7 +46,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs =
     [ openssl ]
     ++ lib.optional sqliteSupport sqlite
-    ++ lib.optional postgresqlSupport postgresql
+    ++ lib.optional postgresqlSupport libpq
     ++ lib.optionals mysqlSupport [
       libmysqlclient
       zlib

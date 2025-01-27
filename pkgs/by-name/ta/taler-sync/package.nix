@@ -9,9 +9,9 @@
   gnunet,
   jansson,
   libmicrohttpd,
+  libpq,
   libsodium,
   libtool,
-  postgresql,
   taler-exchange,
   taler-merchant,
   runtimeShell,
@@ -41,9 +41,9 @@ stdenv.mkDerivation (finalAttrs: {
     jansson
     libgcrypt
     libmicrohttpd
+    libpq
     libsodium
     libtool
-    postgresql
     taler-exchange
     taler-merchant
   ];

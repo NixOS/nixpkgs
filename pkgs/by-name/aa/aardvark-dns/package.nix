@@ -16,7 +16,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-VXuTHc/t+5QidTqMptoQqircHTtYzeEXfFFII8jeOrI=";
   };
 
-  cargoHash = "sha256-MHNIb1hNoL/62aUDNs0wd4086m3Zm4bnRp+VKXE4gJs=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-ydvvV3w8VmfdSTXeJvMuN0oqkkZdWs6/9KocalRGWpg=";
 
   passthru.tests = { inherit (nixosTests) podman; };
 

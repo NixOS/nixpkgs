@@ -35,10 +35,10 @@ stdenv.mkDerivation (finalAttrs: {
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
     sourceRoot = "${finalAttrs.src.name}/${finalAttrs.cargoRoot}";
-    hash = "sha256-Teno9y+busOGbreer2RzT+3sigRKvJbO1obfo0QpcPU=";
+    hash = "sha256-UyVIBctAbzslqID44+9zTXyx7wL4UosTQHqMdAX9mmE=";
   };
 
   nativeBuildInputs = [

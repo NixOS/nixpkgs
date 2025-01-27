@@ -4,7 +4,7 @@
   stdenv,
   systemd,
   meson,
-  substituteAll,
+  replaceVars,
   swaybg,
   ninja,
   pkg-config,
@@ -64,8 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
         hash = "sha256-UTZ2DNEsGi5RYrgZThHkYz3AnnIl/KxieinA1WUZRq4=";
       })
 
-      (substituteAll {
-        src = ./fix-paths.patch;
+      (replaceVars ./fix-paths.patch {
         inherit swaybg;
       })
     ]

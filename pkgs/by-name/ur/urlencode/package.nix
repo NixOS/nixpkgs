@@ -14,7 +14,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-LvLUbtMPVbYZMUb9vWhTscYfZPtEM5GrZme3azvVlPE=";
   };
 
-  cargoHash = "sha256-UPw+/wVOEM+kciOr70P+gdMCxtCKQ/SXsNAWA44v4v8=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-rHoqBrDFQ31jIHFZbHwjKHPDgMzM7gUCIhew03OYN6M=";
 
   meta = with lib; {
     description = "CLI utility for URL-encoding or -decoding strings";

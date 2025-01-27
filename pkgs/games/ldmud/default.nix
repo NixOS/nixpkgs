@@ -16,7 +16,7 @@
 , mysqlSupport ? false
 , libmysqlclient
 , postgresSupport ? false
-, postgresql
+, libpq
 , sqliteSupport ? false
 , sqlite
 , tlsSupport ? false
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     [ autoreconfHook pkg-config bison ];
   buildInputs = [ libgcrypt libxcrypt pcre json_c libxml2 ]
     ++ lib.optional mccpSupport zlib ++ lib.optional mysqlSupport libmysqlclient
-    ++ lib.optional postgresSupport postgresql
+    ++ lib.optional postgresSupport libpq
     ++ lib.optional sqliteSupport sqlite ++ lib.optional tlsSupport openssl
     ++ lib.optional pythonSupport python310
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];

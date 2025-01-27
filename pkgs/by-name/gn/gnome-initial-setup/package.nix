@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchurl,
-  substituteAll,
+  replaceVars,
   dconf,
   gettext,
   meson,
@@ -45,8 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    (substituteAll {
-      src = ./0001-fix-paths.patch;
+    (replaceVars ./0001-fix-paths.patch {
       inherit tzdata;
       tecla = gnome-tecla;
     })

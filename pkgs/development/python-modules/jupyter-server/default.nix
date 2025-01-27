@@ -35,22 +35,22 @@
 
 buildPythonPackage rec {
   pname = "jupyter-server";
-  version = "2.14.2";
+  version = "2.15.0";
   pyproject = true;
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "jupyter_server";
     inherit version;
-    hash = "sha256-ZglQIaqWOM7SdsJIsdgYYuTFDyktV1kgu+lg3hxWsSs=";
+    hash = "sha256-nURrhpe09zN6G3zcrEB3i6vdk7phS21oqxwMkY8cQIQ=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-jupyter-builder
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     argon2-cffi
     jinja2
     tornado
@@ -73,6 +73,8 @@ buildPythonPackage rec {
 
   # https://github.com/NixOS/nixpkgs/issues/299427
   stripExclude = lib.optionals stdenv.hostPlatform.isDarwin [ "favicon.ico" ];
+
+  pythonImportsCheck = [ "jupyter_server" ];
 
   nativeCheckInputs = [
     ipykernel
@@ -123,12 +125,12 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/jupyter-server/jupyter_server/blob/v${version}/CHANGELOG.md";
     description = "Backend—i.e. core services, APIs, and REST endpoints—to Jupyter web applications";
     mainProgram = "jupyter-server";
     homepage = "https://github.com/jupyter-server/jupyter_server";
-    license = licenses.bsdOriginal;
+    license = lib.licenses.bsdOriginal;
     maintainers = lib.teams.jupyter.members;
   };
 }

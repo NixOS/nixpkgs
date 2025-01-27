@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-8LBMyCmt4HTYgprChfPSFZm6uQ7yFmJ0+srAUz785MA=";
   };
 
-  cargoHash = "sha256-Z2LNFlHWS3IdjXlwdIizkjNFaPqTbMf0i6Y6jigKCzg=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-vE7i5jcNl1Rx3znVGLCi8foQZDlXr5e1p1VEMKBBS8Y=";
 
   meta = with lib; {
     description = "CommonMark-compatible GitHub Flavored Markdown parser and formatter";

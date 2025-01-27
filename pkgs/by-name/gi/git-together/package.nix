@@ -24,7 +24,8 @@ rustPlatform.buildRustPackage rec {
 
   OPENSSL_NO_VENDOR = true;
 
-  cargoHash = "sha256-mIkhXVuSgcsQf4be7NT0R8rkN9tdgim41gqjbq3ndPA=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-5LKKjHzIlXw0bUmF7GDCVW0cptCxohq6CNPIrMZKorM=";
 
   meta = with lib; {
     changelog = "https://github.com/kejadlen/git-together/releases/tag/${src.rev}";

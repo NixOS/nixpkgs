@@ -73,7 +73,7 @@
   # optional dependencies
   cups,
   libmysqlclient,
-  postgresql,
+  libpq,
   withGtk3 ? false,
   gtk3,
   withLibinput ? false,
@@ -176,9 +176,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional withGtk3 gtk3
     ++ lib.optional withLibinput libinput
     ++ lib.optional (libmysqlclient != null && !stdenv.hostPlatform.isMinGW) libmysqlclient
-    ++ lib.optional (
-      postgresql != null && lib.meta.availableOn stdenv.hostPlatform postgresql
-    ) postgresql;
+    ++ lib.optional (libpq != null && lib.meta.availableOn stdenv.hostPlatform libpq) libpq;
 
   nativeBuildInputs = [
     bison

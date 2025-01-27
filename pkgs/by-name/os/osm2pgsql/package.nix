@@ -10,7 +10,7 @@
   cli11,
   zlib,
   boost,
-  postgresql,
+  libpq,
   python3,
   withLuaJIT ? false,
   lua,
@@ -49,9 +49,9 @@ stdenv.mkDerivation (finalAttrs: {
       expat
       fmt_11
       libosmium
+      libpq
       nlohmann_json
       opencv
-      postgresql
       potrace
       proj
       protozero

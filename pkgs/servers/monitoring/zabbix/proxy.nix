@@ -19,7 +19,7 @@
   mysqlSupport ? false,
   libmysqlclient,
   postgresqlSupport ? false,
-  postgresql,
+  libpq,
 }:
 
 # ensure exactly one database type is selected
@@ -55,7 +55,7 @@ import ./versions.nix (
       ++ optional sqliteSupport sqlite
       ++ optional sshSupport libssh2
       ++ optional mysqlSupport libmysqlclient
-      ++ optional postgresqlSupport postgresql;
+      ++ optional postgresqlSupport libpq;
 
     configureFlags =
       [

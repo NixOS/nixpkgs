@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-CVvcrytEG2q6kPiGBMfy/oQCD63Gm2AenvLUhCUx6fw=";
   };
 
-  cargoHash = "sha256-zUeCthQ2fQ1P0gxN5XXg6a+Op8JFMrzU02Mh0mpwv30=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-NxCc5DGbeHJ3M2V4h/u0lvzEkSbFU+rMcSnu+kJ0rXM=";
 
   meta = {
     changelog = "https://github.com/antonWetzel/prettypst/blob/${src.rev}/changelog.md";

@@ -2,7 +2,7 @@
   lib,
   fetchPypi,
   buildPythonPackage,
-  postgresql,
+  libpq,
   unittestCheckHook,
 }:
 
@@ -18,12 +18,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     unittestCheckHook
-    postgresql
   ];
 
   unittestFlagsArray = [ "test" ];
 
-  propagatedBuildInputs = [ postgresql ];
+  propagatedBuildInputs = [ libpq ];
 
   meta = with lib; {
     homepage = "https://github.com/markdrago/pgsanity";

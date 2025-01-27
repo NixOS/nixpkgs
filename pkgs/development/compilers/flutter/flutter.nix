@@ -22,7 +22,7 @@
   callPackage,
   makeWrapper,
   darwin,
-  git,
+  gitMinimal,
   which,
   jq,
   flutterTools ? null,
@@ -64,7 +64,7 @@ let
     nativeBuildInputs = [
       makeWrapper
       jq
-      git
+      gitMinimal
     ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ];
     strictDeps = true;
 
