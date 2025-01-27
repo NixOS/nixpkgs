@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, kernel, kmod }:
+{ lib, stdenv, fetchFromGitHub, kernel, kmod, kernelModuleMakeFlags }:
 
 let version = "0.13.2";
 
@@ -28,7 +28,7 @@ in stdenv.mkDerivation {
 
   outputs = [ "out" "bin" ];
 
-  makeFlags = kernel.moduleMakeFlags ++ [
+  makeFlags = kernelModuleMakeFlags ++ [
     "KERNELRELEASE=${kernel.modDirVersion}"
     "KERNEL_DIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];

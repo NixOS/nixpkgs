@@ -1843,6 +1843,12 @@
     githubId = 53097078;
     name = "AJ Reifsnyder";
   };
+  arexon = {
+    email = "arexonreal@gmail.com";
+    github = "arexon";
+    githubId = 65680034;
+    name = "arexon";
+  };
   arezvov = {
     email = "alex@rezvov.ru";
     github = "arezvov";
@@ -24562,17 +24568,6 @@
     email = "wayne.warren.s@gmail.com";
     github = "waynr";
     githubId = 1441126;
-  };
-  wbondanza_devoteam = {
-    name = "Wilson Bondanza";
-    email = "wilson.bondanza@devoteam.com";
-    github = "wbondanza-devoteam";
-    githubId = 195292349;
-    keys = [
-      {
-        fingerprint = "61F3 9F46 606D 655F 4E8D  6C82 B623 05E6 1563 8A9E";
-      }
-    ];
   };
   wchresta = {
     email = "wchresta.nix@chrummibei.ch";
