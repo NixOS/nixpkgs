@@ -1695,13 +1695,6 @@ self: super: {
     sha256 = "1c5ck2ibag2gcyag6rjivmlwdlp5k0dmr8nhk7wlkzq2vh7zgw63";
   }) super.splot;
 
-  # 2023-07-27: Fix build with newer monad-logger: https://github.com/obsidiansystems/monad-logger-extras/pull/5
-  # 2024-03-02: jailbreak for ansi-terminal <0.12, mtl <2.3
-  monad-logger-extras = appendPatch (fetchpatch {
-    url = "https://github.com/obsidiansystems/monad-logger-extras/commit/55d414352e740a5ecacf313732074d9b4cf2a6b3.patch";
-    sha256 = "sha256-xsQbr/QIrgWR0uwDPtV0NRTbVvP0tR9bY9NMe1JzqOw=";
-  }) (doJailbreak super.monad-logger-extras);
-
   # Support ansi-terminal 1.1: https://github.com/facebookincubator/retrie/pull/73
   retrie = appendPatch (fetchpatch {
     url = "https://github.com/facebookincubator/retrie/commit/b0df07178133b5b049e3e7764acba0e5e3fa57af.patch";
