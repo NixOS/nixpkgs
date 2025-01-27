@@ -60,8 +60,7 @@ mkYarnPackage rec {
         # build native sqlite bindings
         npm run build-release --offline --nodedir="${nodeSources}"
         find build -type f -exec \
-          ${removeReferencesTo}/bin/remove-references-to \
-          -t "${nodeSources}" {} \;
+          ${lib.getExe removeReferencesTo} -t "${nodeSources}" {} \;
       '';
     };
   };
@@ -88,7 +87,7 @@ mkYarnPackage rec {
     mkdir -p $out/share
     cp -a . $out/share/draupnir
 
-    makeWrapper ${nodejs}/bin/node $out/bin/draupnir \
+    makeWrapper ${lib.getExe nodejs} $out/bin/draupnir \
       --add-flags $out/share/draupnir/deps/draupnir/lib/index.js
 
     runHook postInstall
