@@ -2048,7 +2048,6 @@ broken-packages:
   - ghc-usage # failure in job https://hydra.nixos.org/build/233199565 at 2023-09-02
   - gh-labeler # failure in job https://hydra.nixos.org/build/233233139 at 2023-09-02
   - giak # failure in job https://hydra.nixos.org/build/233242229 at 2023-09-02
-  - gi-ayatana-appindicator3 # failure in job https://hydra.nixos.org/build/253681898 at 2024-03-31
   - gibberish # failure in job https://hydra.nixos.org/build/255688714 at 2024-04-16
   - gi-clutter # failure in job https://hydra.nixos.org/build/233252753 at 2023-09-02
   - gi-coglpango # failure in job https://hydra.nixos.org/build/233194401 at 2023-09-02
