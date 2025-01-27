@@ -55,7 +55,6 @@ self: super: {
   # Version upgrades
   #
   megaparsec = doDistribute self.megaparsec_9_7_0;
-  ghc-syntax-highlighter = self.ghc-syntax-highlighter_0_0_12_0;
   ghc-tags = self.ghc-tags_1_8;
 
   #
