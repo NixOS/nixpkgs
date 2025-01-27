@@ -17935,6 +17935,8 @@ self: super: with self; {
 
   w3lib = callPackage ../development/python-modules/w3lib { };
 
+  wadler-lindig = callPackage ../development/python-modules/wadler-lindig { };
+
   wadllib = callPackage ../development/python-modules/wadllib { };
 
   wagtail = callPackage ../development/python-modules/wagtail { };
