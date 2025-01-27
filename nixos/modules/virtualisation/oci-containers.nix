@@ -155,7 +155,7 @@ let
             [Docker engine documentation](https://docs.docker.com/engine/logging/configure/)
 
             For Podman:
-            Refer to the docker-run(1) man page.
+            Refer to the {manpage}`docker-run(1)` man page.
           '';
         };
 

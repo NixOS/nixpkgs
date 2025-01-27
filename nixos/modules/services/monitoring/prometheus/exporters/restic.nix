@@ -54,7 +54,7 @@ in
       default = null;
       description = ''
         File containing the credentials to access the repository, in the
-        format of an EnvironmentFile as described by systemd.exec(5)
+        format of an EnvironmentFile as described by {manpage}`systemd.exec(5)`
       '';
     };
 

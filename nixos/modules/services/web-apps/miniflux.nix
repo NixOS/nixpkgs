@@ -72,7 +72,7 @@ in
         description = ''
           File containing the ADMIN_USERNAME and
           ADMIN_PASSWORD (length >= 6) in the format of
-          an EnvironmentFile=, as described by systemd.exec(5).
+          an EnvironmentFile=, as described by {manpage}`systemd.exec(5)`.
         '';
         example = "/etc/nixos/miniflux-admin-credentials";
       };
