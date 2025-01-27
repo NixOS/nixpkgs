@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "python-swiftclient";
   version = "4.6.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
@@ -23,17 +23,13 @@ buildPythonPackage rec {
     hash = "sha256-1NGFQEE4k/wWrYd5HXQPgj92NDXoIS5o61PWDaJjgjM=";
   };
 
-  # remove duplicate script that will be created by setuptools from the
-  # entry_points section of setup.cfg
-  postPatch = ''
-    sed -i '/^scripts =/d' setup.cfg
-    sed -i '/bin\/swift/d' setup.cfg
-  '';
-
   nativeBuildInputs = [ installShellFiles ];
 
-  propagatedBuildInputs = [
+  build-system = [
     pbr
+  ];
+
+  dependencies = [
     python-keystoneclient
   ];
 
