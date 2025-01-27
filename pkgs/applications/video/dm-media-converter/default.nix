@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
     libX11
     ffmpeg
     qtbase
+    numactl
   ];
 
   sourceRoot = ".";
