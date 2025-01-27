@@ -12,7 +12,7 @@ php81.buildComposerProject2 (finalAttrs: {
   src = fetchFromGitHub {
     owner = "netz98";
     repo = "n98-magerun";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-/RffdYgl2cs8mlq4vHtzUZ6j0viV8Ot/cB/cB1dstFM=";
   };
 
