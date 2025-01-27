@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "freetype-py";
-  version = "2.3.0";
+  version = "2.5.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+bZM4ycqXDWNzugkgAoy1wmX+4cqCWWlV63KIPznpdA=";
+    hash = "sha256-z+JoahdNDdPXGp2O6b9qLCP1hyOFz4zp8kr4PQduL70=";
     extension = "zip";
   };
 
@@ -26,11 +26,6 @@ buildPythonPackage rec {
       freetype = "${freetype.out}/lib/libfreetype${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail ', "certifi", "cmake"' ""
-  '';
 
   build-system = [
     setuptools

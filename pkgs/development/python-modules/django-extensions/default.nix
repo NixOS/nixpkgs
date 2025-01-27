@@ -78,6 +78,8 @@ buildPythonPackage rec {
   disabledTests = [
     # Mismatch in expectation of exception message
     "test_installed_apps_no_resolve_conflicts_function"
+    # pygments compat issue
+    "test_should_highlight_python_syntax_with_name"
   ];
 
   disabledTestPaths = [

@@ -56,6 +56,8 @@ buildPythonPackage rec {
       "--version-regex"
       "langchain-ollama==(.*)"
     ];
+    # updates the wrong fetcher rev attribute
+    skipBulkUpdate = true;
   };
 
   meta = {

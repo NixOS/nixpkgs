@@ -29,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "shiny";
-  version = "0.10.2";
+  version = "1.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "posit-dev";
     repo = "py-shiny";
     tag = "v${version}";
-    hash = "sha256-s1j9bMAapO0iRXsuNxiwlNaVv2EoWcl9U7WnHwQe9n8=";
+    hash = "sha256-8bo2RHuIP7X7EaOlHd+2m4XU287owchAwiqPnpjKFjI=";
   };
 
   build-system = [ setuptools ];
@@ -68,7 +68,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/posit-dev/py-shiny/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/posit-dev/py-shiny/blob/${src.tag}/CHANGELOG.md";
     description = "Build fast, beautiful web applications in Python";
     license = lib.licenses.mit;
     homepage = "https://shiny.posit.co/py";

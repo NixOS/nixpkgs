@@ -40,6 +40,8 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
+  pythonRelaxDeps = [ "async-timeout" ];
+
   dependencies = [
     aiohttp
     async-timeout

@@ -5,43 +5,68 @@
   pythonOlder,
 
   # build-system
-  setuptools-scm,
+  hatchling,
+  hatch-vcs,
 
   # dependencies
   asciitree,
+  donfig,
   numpy,
   fasteners,
   numcodecs,
 
   # tests
+  aiohttp,
+  botocore,
+  fsspec,
+  hypothesis,
+  pytest-asyncio,
   pytestCheckHook,
+  requests,
+  rich,
 }:
 
 buildPythonPackage rec {
   pname = "zarr";
-  version = "2.18.3";
+  version = "3.0.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-JYDYy23YRiF3GhDTHE13fcqKJ3BqGomyn0LS034t9c4=";
+    hash = "sha256-AzhZxWA9ycKeU69JTt4ktC8bdh0rtiVGaZCjuKmvt5I=";
   };
 
   build-system = [
-    setuptools-scm
+    hatchling
+    hatch-vcs
   ];
 
   dependencies = [
     asciitree
+    donfig
     numpy
     fasteners
     numcodecs
-  ] ++ numcodecs.optional-dependencies.msgpack;
+  ] ++ numcodecs.optional-dependencies.crc32c;
 
   nativeCheckInputs = [
+    aiohttp
+    botocore
+    fsspec
+    hypothesis
+    pytest-asyncio
     pytestCheckHook
+    requests
+    rich
+  ];
+
+  disabledTests = [
+    # flaky
+    "test_vindex"
+    "test_zarr_hierarchy"
+    "test_zarr_store"
   ];
 
   pythonImportsCheck = [ "zarr" ];
