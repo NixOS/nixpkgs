@@ -114,6 +114,9 @@ buildPythonPackage rec {
       # Current thread 0x00000001f3decf40 (most recent call first):
       #   File "/private/tmp/nix-build-python3.12-llama-cpp-python-0.3.2.drv-0/source/llama_cpp/_internals.py", line 51 in __init__
       lib.systems.inspect.patterns.isDarwin
+
+      # cc1: error: unknown value ‘native+nodotprod+noi8mm+nosve’ for ‘-mcpu’
+      "aarch64-linux"
     ];
   };
 }

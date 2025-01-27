@@ -6693,9 +6693,6 @@ with pkgs;
   cargo-hf2 = callPackage ../development/tools/rust/cargo-hf2 {
     inherit (darwin.apple_sdk.frameworks) AppKit;
   };
-  cargo-inspect = callPackage ../development/tools/rust/cargo-inspect {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
   cargo-lambda = callPackage ../development/tools/rust/cargo-lambda {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
   };
@@ -14778,10 +14775,6 @@ with pkgs;
     nodejs = nodejs_18;
   };
 
-  photoqt = callPackage ../by-name/ph/photoqt/package.nix {
-    stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
-  };
-
   photoflare = libsForQt5.callPackage ../applications/graphics/photoflare { };
 
   phototonic = libsForQt5.callPackage ../applications/graphics/phototonic { };
@@ -18191,8 +18184,6 @@ with pkgs;
   discord-screenaudio = qt6Packages.callPackage ../applications/networking/instant-messengers/discord-screenaudio { };
 
   discordo = callPackage ../applications/networking/discordo/default.nix { };
-
-  golden-cheetah = libsForQt5.callPackage ../applications/misc/golden-cheetah { };
 
   tomb = callPackage ../by-name/to/tomb/package.nix {
     pinentry = pinentry-curses;
