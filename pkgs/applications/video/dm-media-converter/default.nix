@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Cross-platform FFmpeg frontend (GUI) exposing some of its features.";
+    description = "Cross-platform FFmpeg GUI supporting many common encoding options";
     homepage = "https://sites.google.com/site/dmsimpleapps";
     license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ kilgarragh ];
