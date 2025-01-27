@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, kernel }:
+{ stdenv, lib, fetchFromGitHub, kernel, kernelModuleMakeFlags }:
 
 stdenv.mkDerivation rec {
   name = "virtio_vmmci";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     CONFIG_RTC_HCTOSYS yes
   '';
 
-  makeFlags = kernel.moduleMakeFlags ++ [
+  makeFlags = kernelModuleMakeFlags ++ [
     "DEPMOD=echo"
     "INSTALL_MOD_PATH=$(out)"
     "KERNELRELEASE=${kernel.modDirVersion}"

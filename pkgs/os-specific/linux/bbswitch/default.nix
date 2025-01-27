@@ -4,6 +4,7 @@
   fetchFromGitHub,
   fetchpatch,
   kernel,
+  kernelModuleMakeFlags,
   runtimeShell,
 }:
 
@@ -41,7 +42,7 @@ stdenv.mkDerivation {
       --replace "/lib/modules" "${kernel.dev}/lib/modules"
   '';
 
-  makeFlags = kernel.moduleMakeFlags;
+  makeFlags = kernelModuleMakeFlags;
 
   installPhase = ''
     mkdir -p $out/lib/modules/${kernel.modDirVersion}/misc

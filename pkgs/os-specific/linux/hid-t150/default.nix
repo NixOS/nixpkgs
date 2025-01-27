@@ -3,6 +3,7 @@
   lib,
   fetchFromGitHub,
   kernel,
+  kernelModuleMakeFlags,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +22,7 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "${src.name}/hid-t150";
 
-  makeFlags = kernel.moduleMakeFlags ++ [
+  makeFlags = kernelModuleMakeFlags ++ [
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "INSTALL_MOD_PATH=${placeholder "out"}"
   ];

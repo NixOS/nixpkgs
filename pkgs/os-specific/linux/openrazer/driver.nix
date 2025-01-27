@@ -2,6 +2,7 @@
   coreutils,
   fetchFromGitHub,
   kernel,
+  kernelModuleMakeFlags,
   stdenv,
   lib,
   util-linux,
@@ -20,7 +21,7 @@ stdenv.mkDerivation (
 
     nativeBuildInputs = kernel.moduleBuildDependencies;
 
-    makeFlags = kernel.moduleMakeFlags ++ [
+    makeFlags = kernelModuleMakeFlags ++ [
       "KERNELDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     ];
 

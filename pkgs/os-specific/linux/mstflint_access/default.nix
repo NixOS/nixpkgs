@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, kernel, kmod, mstflint }:
+{ lib, stdenv, fetchurl, kernel, kmod, mstflint, kernelModuleMakeFlags }:
 
 stdenv.mkDerivation rec {
   pname = "mstflint_access";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ kmod ] ++ kernel.moduleBuildDependencies;
 
-  makeFlags = kernel.moduleMakeFlags ++ [
+  makeFlags = kernelModuleMakeFlags ++ [
     "KVER=${kernel.modDirVersion}"
     "KSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];

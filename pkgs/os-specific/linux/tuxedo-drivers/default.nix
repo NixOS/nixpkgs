@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitLab,
   kernel,
+  kernelModuleMakeFlags,
   kmod,
   pahole,
 }:
@@ -22,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ pahole ];
   nativeBuildInputs = [ kmod ] ++ kernel.moduleBuildDependencies;
 
-  makeFlags = kernel.moduleMakeFlags ++ [
+  makeFlags = kernelModuleMakeFlags ++ [
     "KERNELRELEASE=${kernel.modDirVersion}"
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "INSTALL_MOD_PATH=${placeholder "out"}"

@@ -4,6 +4,7 @@
   fetchFromGitHub,
   fetchpatch2,
   kernel,
+  kernelModuleMakeFlags,
 }:
 
 stdenv.mkDerivation rec {
@@ -31,7 +32,7 @@ stdenv.mkDerivation rec {
     cd src
   '';
 
-  makeFlags = kernel.moduleMakeFlags ++ [
+  makeFlags = kernelModuleMakeFlags ++ [
     "-C"
     "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "M=$(PWD)"

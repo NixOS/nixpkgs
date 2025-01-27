@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   kernel,
+  kernelModuleMakeFlags,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +21,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ kernel ];
 
-  makeFlags = kernel.moduleMakeFlags ++ [
+  makeFlags = kernelModuleMakeFlags ++ [
     "BUILD_DIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
 
