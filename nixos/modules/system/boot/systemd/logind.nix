@@ -29,7 +29,7 @@ in
       example = "IdleAction=lock";
       description = ''
         Extra config options for systemd-logind.
-        See [logind.conf(5)](https://www.freedesktop.org/software/systemd/man/logind.conf.html)
+        See {manpage}`logind.conf(5)`
         for available options.
       '';
     };
