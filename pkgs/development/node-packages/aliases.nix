@@ -50,7 +50,6 @@ mapAliases {
   "@nestjs/cli" = pkgs.nest-cli; # Added 2023-05-06
   "@tailwindcss/language-server" = pkgs.tailwindcss-language-server; # added 2024-01-22
   "@volar/vue-language-server" = pkgs.vue-language-server; # added 2024-06-15
-  "@volar/vue-typescript-plugin" = pkgs.vue-typescript-plugin; # added 2025-01-16
   "@vue/language-server" = pkgs.vue-language-server; # added 2024-06-15
   "@withgraphite/graphite-cli" = pkgs.graphite-cli; # added 2024-01-25
   "@zwave-js/server" = pkgs.zwave-js-server; # Added 2023-09-09
