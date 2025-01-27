@@ -2,6 +2,7 @@
   lib,
   php82,
   fetchFromGitHub,
+  versionCheckHook,
 }:
 
 php82.buildComposerProject2 (finalAttrs: {
@@ -16,6 +17,9 @@ php82.buildComposerProject2 (finalAttrs: {
   };
 
   vendorHash = "sha256-TAubvl+rsdQdqKz+lRg1oX/ENuRyHoJQVmL1ELz24fg=";
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     changelog = "https://github.com/box-project/box/releases/tag/${finalAttrs.version}";
