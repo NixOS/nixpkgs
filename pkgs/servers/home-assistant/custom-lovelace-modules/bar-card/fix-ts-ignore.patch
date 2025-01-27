@@ -1,0 +1,15 @@
+diff --git a/src/editor.ts b/src/editor.ts
+index 3974022..5f702c9 100644
+--- a/src/editor.ts
++++ b/src/editor.ts
+@@ -1325,8 +1325,10 @@ export class BarCardEditor extends LitElement implements LovelaceCardEditor {
+     `;
+   }
+ }
++// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+ // @ts-ignore
+ window.customCards = window.customCards || [];
++// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+ // @ts-ignore
+ window.customCards.push({
+   type: 'bar-card',
