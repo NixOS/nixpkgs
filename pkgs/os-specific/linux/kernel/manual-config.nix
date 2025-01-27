@@ -432,28 +432,26 @@ let
     "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
   ] ++ (stdenv.hostPlatform.linux-kernel.makeFlags or [])
     ++ extraMakeFlags;
+in
 
-  finalKernel = stdenv.mkDerivation (
-    builtins.foldl' lib.recursiveUpdate {} [
-      (drvAttrs config stdenv.hostPlatform.linux-kernel kernelPatches configfile)
-      {
-        inherit pname version;
+stdenv.mkDerivation (
+  builtins.foldl' lib.recursiveUpdate {} [
+    (drvAttrs config stdenv.hostPlatform.linux-kernel kernelPatches configfile)
+    {
+      inherit pname version;
 
-        enableParallelBuilding = true;
+      enableParallelBuilding = true;
 
-        hardeningDisable = [ "bindnow" "format" "fortify" "stackprotector" "pic" "pie" ];
+      hardeningDisable = [ "bindnow" "format" "fortify" "stackprotector" "pic" "pie" ];
 
-        makeFlags = [
-          "O=$(buildRoot)"
-        ] ++ commonMakeFlags;
+      makeFlags = [
+        "O=$(buildRoot)"
+      ] ++ commonMakeFlags;
 
-        passthru.moduleMakeFlags = [
-          "KBUILD_OUTPUT=${finalKernel.dev}/lib/modules/${finalKernel.modDirVersion}/build"
-        ] ++ commonMakeFlags;
+      passthru = { inherit commonMakeFlags; };
 
-        karch = stdenv.hostPlatform.linuxArch;
-      }
-      (optionalAttrs (pos != null) { inherit pos; })
-    ]
-  );
-in finalKernel)
+      karch = stdenv.hostPlatform.linuxArch;
+    }
+    (optionalAttrs (pos != null) { inherit pos; })
+  ]
+))

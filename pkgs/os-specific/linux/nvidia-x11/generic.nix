@@ -40,6 +40,8 @@
 , fetchurl
 , fetchzip
 , kernel ? null
+
+, kernelModuleMakeFlags ? []
 , perl
 , nukeReferences
 , which
@@ -196,7 +198,7 @@ let
     kernelVersion = if libsOnly then null else kernel.modDirVersion;
 
     makeFlags = lib.optionals (!libsOnly) (
-      kernel.moduleMakeFlags
+      kernelModuleMakeFlags
       ++ [
         "IGNORE_PREEMPT_RT_PRESENCE=1"
         "NV_BUILD_SUPPORTS_HMM=1"
