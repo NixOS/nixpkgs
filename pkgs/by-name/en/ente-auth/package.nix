@@ -17,14 +17,14 @@ let
 in
 flutter324.buildFlutterApplication rec {
   pname = "ente-auth";
-  version = "4.2.8";
+  version = "4.3.1";
 
   src = fetchFromGitHub {
     owner = "ente-io";
     repo = "ente";
     sparseCheckout = [ "auth" ];
     tag = "auth-v${version}";
-    hash = "sha256-1vIM2MrQF0DO+5SEzIAUeZxOks6PKs3kkTdc09aCk2A=";
+    hash = "sha256-vPsF2MxGko5tMgp/WmYIw/XoSPgpKFRasNZfRpiNV9E=";
   };
 
   sourceRoot = "${src.name}/auth";
@@ -42,11 +42,11 @@ flutter324.buildFlutterApplication rec {
   '';
 
   gitHashes = {
-    desktop_webview_window = "sha256-jdNMpzFBgw53asWlGzWUS+hoPdzcL6kcJt2KzjxXf2E=";
-    ente_crypto_dart = "sha256-XBzQ268E0cYljJH6gDS5O0Pmie/GwuhMDlQPfopSqJM=";
+    ente_crypto_dart = "sha256-xBBK9BdXh4+OTj+Jkf3zh5sMZjXtvhyuE1R5LFE8iTY=";
     flutter_local_authentication = "sha256-r50jr+81ho+7q2PWHLf4VnvNJmhiARZ3s4HUpThCgc0=";
-    flutter_secure_storage_linux = "sha256-x45jrJ7pvVyhZlpqRSy3CbwT4Lna6yi/b2IyAilWckg=";
+    flutter_secure_storage_linux = "sha256-Rp+b6ZRH7F5AnM5UvYzfVjprXkpeeA7V6Ep/oYqDeiM=";
     sqflite = "sha256-+XTVtkFJ94VifwnutvUuAqqiyWwrcEiZ3Uz0H4D9zWA=";
+    figma_squircle = "sha256-FLjABaJzrK3H5svbRb6306FxD5L6dMfddFXpXpYgH3s=";
   };
 
   nativeBuildInputs = [
