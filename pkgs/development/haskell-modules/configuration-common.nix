@@ -2978,13 +2978,6 @@ self: super: {
   # https://github.com/jonschoning/espial/issues/61
   espial = doJailbreak super.espial;
 
-  # https://github.com/dpwright/HaskellNet-SSL/pull/33 Use crypton-connection instead of connection
-  HaskellNet-SSL = appendPatch (pkgs.fetchpatch {
-    name = "HaskellNet-SSL-crypton-connection.patch";
-    url = "https://github.com/dpwright/HaskellNet-SSL/pull/34/commits/cab639143efb65acf96abb35ae6c48db8d37867c.patch";
-    hash = "sha256-hT4IZw70DxTw6iMofQHjPycz6IE6U76df72ftR2UB6Q=";
-  }) (super.HaskellNet-SSL.override { connection = self.crypton-connection; });
-
   # https://github.com/isovector/type-errors/issues/9
   type-errors = dontCheck super.type-errors;
 
