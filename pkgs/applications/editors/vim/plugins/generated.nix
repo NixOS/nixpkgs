@@ -1302,6 +1302,18 @@ final: prev:
     meta.homepage = "https://github.com/Saghen/blink.compat/";
   };
 
+  blink-copilot = buildVimPlugin {
+    pname = "blink-copilot";
+    version = "2025-01-27";
+    src = fetchFromGitHub {
+      owner = "fang2hou";
+      repo = "blink-copilot";
+      rev = "7e63f20b8e96191e5c87bf96fc35da3547993be2";
+      sha256 = "10lm90xa7w3ww94acivshnzkp4q2bfrq9zff2z5amrp3cxlga0rf";
+    };
+    meta.homepage = "https://github.com/fang2hou/blink-copilot/";
+  };
+
   blink-emoji-nvim = buildVimPlugin {
     pname = "blink-emoji.nvim";
     version = "2025-01-04";
