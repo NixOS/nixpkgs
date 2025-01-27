@@ -4,8 +4,6 @@
   fetchFromGitHub,
   setuptools,
   pytestCheckHook,
-  sphinxHook,
-  sphinx-rtd-theme,
 }:
 
 buildPythonPackage rec {
@@ -21,16 +19,6 @@ buildPythonPackage rec {
   };
 
   build-system = [ setuptools ];
-
-  nativeBuildInputs = [
-    sphinxHook
-    sphinx-rtd-theme
-  ];
-
-  outputs = [
-    "out"
-    "doc"
-  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
