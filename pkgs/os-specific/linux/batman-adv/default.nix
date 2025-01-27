@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   kernel,
+  kernelModuleMakeFlags,
 }:
 
 let
@@ -19,7 +20,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
-  makeFlags = kernel.moduleMakeFlags ++ [
+  makeFlags = kernelModuleMakeFlags ++ [
     "KERNELPATH=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
 

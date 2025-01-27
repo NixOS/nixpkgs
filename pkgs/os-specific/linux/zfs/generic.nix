@@ -34,6 +34,7 @@ let
 
       # Kernel dependencies
       kernel ? null,
+      kernelModuleMakeFlags ? [ ],
       enablePython ? true,
       ...
     }@outerArgs:
@@ -191,10 +192,10 @@ let
             "--with-linux=${kernel.dev}/lib/modules/${kernel.modDirVersion}/source"
             "--with-linux-obj=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
           ]
-          ++ kernel.moduleMakeFlags
+          ++ kernelModuleMakeFlags
         );
 
-      makeFlags = optionals buildKernel kernel.moduleMakeFlags;
+      makeFlags = optionals buildKernel kernelModuleMakeFlags;
 
       enableParallelBuilding = true;
 
@@ -264,6 +265,7 @@ let
       outputs = [ "out" ] ++ optionals buildUser [ "dev" ];
 
       passthru = {
+        inherit kernel;
         inherit enableMail kernelModuleAttribute;
         latestCompatibleLinuxPackages = lib.warn "zfs.latestCompatibleLinuxPackages is deprecated and is now pointing at the default kernel. If using the stable LTS kernel (default `linuxPackages` is not possible then you must explicitly pin a specific kernel release. For example, `boot.kernelPackages = pkgs.linuxPackages_6_6`. Please be aware that non-LTS kernels are likely to go EOL before ZFS supports the latest supported non-LTS release, requiring manual intervention." linuxPackages;
 

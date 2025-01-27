@@ -3,6 +3,7 @@
   lib,
   fetchFromGitHub,
   kernel,
+  kernelModuleMakeFlags,
   nvidia_x11,
   hash,
   patches ? [ ],
@@ -25,7 +26,7 @@ stdenv.mkDerivation (
 
     nativeBuildInputs = kernel.moduleBuildDependencies;
 
-    makeFlags = kernel.moduleMakeFlags ++ [
+    makeFlags = kernelModuleMakeFlags ++ [
       "SYSSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/source"
       "SYSOUT=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
       "MODLIB=$(out)/lib/modules/${kernel.modDirVersion}"

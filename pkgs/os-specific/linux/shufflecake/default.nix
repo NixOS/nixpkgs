@@ -1,6 +1,7 @@
 {
   lib,
   kernel,
+  kernelModuleMakeFlags,
   stdenv,
   fetchFromGitea,
   libgcrypt,
@@ -22,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     libgcrypt
     lvm2
   ];
-  makeFlags = kernel.moduleMakeFlags ++ [
+  makeFlags = kernelModuleMakeFlags ++ [
     "KERNEL_DIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
 
