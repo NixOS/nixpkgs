@@ -165,7 +165,7 @@ self: super: {
 
   # jacinda needs latest version of alex and happy
   jacinda = super.jacinda.override {
-    happy = self.happy_2_1_3;
+    happy = self.happy_2_1_4;
   };
 
   # Test suite hangs on 32bit. Unclear if this is a bug or not, but if so, then
