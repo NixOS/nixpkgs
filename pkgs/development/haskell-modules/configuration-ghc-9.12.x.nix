@@ -67,4 +67,13 @@ self: super: {
 
   # Test suite issues
   call-stack = dontCheck super.call-stack; # https://github.com/sol/call-stack/issues/19
+
+  # Cabal 3.14 regression (incorrect datadir in tests): https://github.com/haskell/cabal/issues/10717
+  alex = overrideCabal (drv: {
+    preCheck =
+      drv.preCheck or ""
+      + ''
+        export alex_datadir="$(pwd)/data"
+      '';
+  }) super.alex;
 }
