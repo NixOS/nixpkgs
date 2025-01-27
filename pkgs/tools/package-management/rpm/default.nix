@@ -101,6 +101,8 @@ stdenv.mkDerivation rec {
       "-DWITH_DBUS=OFF"
       # libselinux is missing propagatedBuildInputs
       "-DWITH_SELINUX=OFF"
+
+      "-DCMAKE_INSTALL_LOCALSTATEDIR=/var"
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       "-DMKTREE_BACKEND=rootfs"
