@@ -6904,3 +6904,16 @@ broken-packages:
   - zxcvbn-dvorak # failure in job https://hydra.nixos.org/build/233194326 at 2023-09-02
   - zydiskell # failure in job https://hydra.nixos.org/build/233259592 at 2023-09-02
   - zyre2 # failure in job https://hydra.nixos.org/build/233215215 at 2023-09-02
+  - gogol-autoscaler # failure in job https://hydra.nixos.org/build/286424983 at 2025-01-25
+  - gogol-cloudmonitoring # failure in job https://hydra.nixos.org/build/286425107 at 2025-01-25
+  - gogol-freebasesearch # failure in job https://hydra.nixos.org/build/286425212 at 2025-01-25
+  - gogol-latencytest # failure in job https://hydra.nixos.org/build/286425310 at 2025-01-25
+  - gogol-maps-coordinate # failure in job https://hydra.nixos.org/build/286425367 at 2025-01-25
+  - gogol-maps-engine # failure in job https://hydra.nixos.org/build/286425135 at 2025-01-25
+  - gogol-photoslibrary # failure in job https://hydra.nixos.org/build/286425346 at 2025-01-25
+  - gogol-prediction # failure in job https://hydra.nixos.org/build/286425008 at 2025-01-25
+  - gogol-resourceviews # failure in job https://hydra.nixos.org/build/286425105 at 2025-01-25
+  - gogol-taskqueue # failure in job https://hydra.nixos.org/build/286425106 at 2025-01-25
+  - gogol-useraccounts # failure in job https://hydra.nixos.org/build/286425223 at 2025-01-25
+  - gogol-admin-emailmigration # failure in job https://hydra.nixos.org/build/286425186 at 2025-01-25
+  - gogol-affiliates # failure in job https://hydra.nixos.org/build/286424930 at 2025-01-25
