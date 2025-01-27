@@ -95,6 +95,8 @@ buildPythonPackage rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # SystemError: nanobind::detail::nb_func_error_except(): exception could not be translated!
+      # reported at: https://github.com/jax-ml/jax/issues/26106
+      "--deselect tests/pjit_test.py::PJitErrorTest::testAxisResourcesMismatch"
       "--deselect tests/shape_poly_test.py::ShapePolyTest"
       "--deselect tests/tree_util_test.py::TreeTest"
     ];
@@ -150,6 +152,7 @@ buildPythonPackage rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # SystemError: nanobind::detail::nb_func_error_except(): exception could not be translated!
+      # reported at: https://github.com/jax-ml/jax/issues/26106
       "testInAxesPyTreePrefixMismatchError"
       "testInAxesPyTreePrefixMismatchErrorKwargs"
       "testOutAxesPyTreePrefixMismatchError"
