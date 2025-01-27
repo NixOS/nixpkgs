@@ -35,7 +35,10 @@ buildPythonPackage rec {
     hash = "sha256-xIa7QeflS7JxkPoV8KqFfuLfHPpnrBGLeOFSa17IHyk=";
   };
 
-  pythonRelaxDeps = [ "defusedxml" ];
+  pythonRelaxDeps = [
+    "async-timeout"
+    "defusedxml"
+  ];
 
   build-system = [ setuptools ];
 

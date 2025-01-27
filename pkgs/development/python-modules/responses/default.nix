@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "responses";
-  version = "0.25.3";
+  version = "0.25.6";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "getsentry";
     repo = pname;
     tag = version;
-    hash = "sha256-+iRrmRAe8RWcts2LMFvykroQ5sL7+hW6Wrs7Kd1mzBM=";
+    hash = "sha256-Y7q1tN4bQmGV9sryMJRXi1ztoACHdBb0Sa4c35E1Nps=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -54,7 +54,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module for mocking out the requests Python library";
     homepage = "https://github.com/getsentry/responses";
-    changelog = "https://github.com/getsentry/responses/blob/${version}/CHANGES";
+    changelog = "https://github.com/getsentry/responses/blob/${src.tag}/CHANGES";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

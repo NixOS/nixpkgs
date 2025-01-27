@@ -48,6 +48,9 @@ buildPythonPackage rec {
       --replace "[python," "["
 
     patchShebangs --build packaging/cli-doc/build.py
+
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools >= 66.1.0, <= 75.6.0" setuptools
   '';
 
   nativeBuildInputs = [

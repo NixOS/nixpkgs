@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "azure-kusto-ingest";
-  version = "4.6.1";
+  version = "4.6.3";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "Azure";
     repo = "azure-kusto-python";
     tag = "v${version}";
-    hash = "sha256-rm8G3/WAUlK1/80uk3uiTqDA5hUIr+VVZEmPe0mYBjI=";
+    hash = "sha256-VndOEvSi4OMf/yAjNl34X9IFF0T+wNfjlPW8NfdrwUo=";
   };
 
   sourceRoot = "${src.name}/${pname}";
@@ -61,7 +61,7 @@ buildPythonPackage rec {
   meta = {
     description = "Module for Kusto Ingest";
     homepage = "https://github.com/Azure/azure-kusto-python/tree/master/azure-kusto-ingest";
-    changelog = "https://github.com/Azure/azure-kusto-python/releases/tag/v${version}";
+    changelog = "https://github.com/Azure/azure-kusto-python/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pyrox0 ];
   };
