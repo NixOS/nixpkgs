@@ -59,6 +59,8 @@ self: super: {
 
   htree = doDistribute self.htree_0_2_0_0;
   tagged = doDistribute self.tagged_0_8_9;
+  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_12_1_20250105;
+  ghc-lib = doDistribute self.ghc-lib_9_12_1_20250105;
 
   #
   # Jailbreaks
