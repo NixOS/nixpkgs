@@ -1308,7 +1308,8 @@ self: super: {
 
   # Generate cli completions for dhall.
   dhall = self.generateOptparseApplicativeCompletions [ "dhall" ] super.dhall;
-  dhall-json = self.generateOptparseApplicativeCompletions ["dhall-to-json" "dhall-to-yaml"] super.dhall-json;
+  # 2025-01-27: allow aeson >= 2.2, 9.8 versions of text and bytestring
+  dhall-json = self.generateOptparseApplicativeCompletions ["dhall-to-json" "dhall-to-yaml"] (doJailbreak super.dhall-json);
   # 2023-12-19: jailbreaks due to hnix-0.17 https://github.com/dhall-lang/dhall-haskell/pull/2559
   # until dhall-nix 1.1.26+, dhall-nixpkgs 1.0.10+
   dhall-nix = self.generateOptparseApplicativeCompletions [ "dhall-to-nix" ] (doJailbreak super.dhall-nix);
