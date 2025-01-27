@@ -108,6 +108,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
+  # Multiple tests spin up & speak to D-Bus, avoid cross-talk causing failures
+  enableParallelChecking = false;
+
   postInstall = ''
     substituteInPlace $out/etc/dbus-1/services/com.lomiri.connectivity1.service \
       --replace-fail '/bin/false' '${lib.getExe' coreutils "false"}'
