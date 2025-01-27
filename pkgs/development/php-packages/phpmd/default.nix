@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   php,
+  versionCheckHook,
 }:
 
 php.buildComposerProject2 (finalAttrs: {
@@ -19,6 +20,10 @@ php.buildComposerProject2 (finalAttrs: {
   # Issue open at https://github.com/phpmd/phpmd/issues/1056
   composerLock = ./composer.lock;
   vendorHash = "sha256-AahAs3Gq1OQ+CW3+rU8NnWcR3hKzVNq7s3llsO4mQ38=";
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   meta = {
     changelog = "https://github.com/phpmd/phpmd/releases/tag/${finalAttrs.version}";
