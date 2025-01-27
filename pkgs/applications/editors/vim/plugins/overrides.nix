@@ -760,6 +760,7 @@ in
       # Optional integrations
       fzf-lua
       telescope-nvim
+      snacks-nvim
     ];
     dependencies = with self; [
       copilot-lua
@@ -3356,6 +3357,15 @@ in
       description = "Simple color selector/picker plugin";
       license = lib.licenses.publicDomain;
     };
+  };
+
+  vimade = super.vimade.overrideAttrs {
+    checkInputs = with self; [
+      # Optional providers
+      hlchunk-nvim
+      mini-nvim
+      snacks-nvim
+    ];
   };
 
   vim-addon-actions = super.vim-addon-actions.overrideAttrs {
