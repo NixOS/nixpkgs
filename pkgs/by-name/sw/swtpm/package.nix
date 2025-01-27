@@ -99,7 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
     # stat: invalid option -- '%'
     # This is caused by the stat program not being the BSD version,
     # as is expected by the test
-    substituteInPlace tests/common --replace \
+    substituteInPlace tests/common tests/sed-inplace --replace \
         'if [[ "$(uname -s)" =~ (Linux|CYGWIN_NT-) ]]; then' \
         'if [[ "$(uname -s)" =~ (Linux|Darwin|CYGWIN_NT-) ]]; then'
 
