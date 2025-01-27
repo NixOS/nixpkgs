@@ -50,6 +50,10 @@ stdenvNoCC.mkDerivation {
     installShellCompletion --bash --name up <(echo complete -C up up)
   '';
 
+  # FIXME: error when running `env -i up`:
+  # "up: error: $HOME is not defined"
+  doInstallCheck = false;
+  versionCheckProgram = "${placeholder "out"}/bin/up";
   versionCheckProgramArg = "version";
 
   nativeInstallCheckInputs = [
@@ -62,10 +66,6 @@ stdenvNoCC.mkDerivation {
     ./update.sh
     "${version-channel}"
   ];
-
-  passthru.tests = {
-    versionCheck = versionCheckHook;
-  };
 
   meta = {
     description = "CLI for interacting with Upbound Cloud, Upbound Enterprise, and Universal Crossplane (UXP)";

@@ -6,14 +6,14 @@
 
 buildPythonPackage rec {
   pname = "imgsize";
-  version = "2.1";
+  version = "3.0.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ojii";
     repo = pname;
-    rev = version;
-    sha256 = "0k24qj4i996fz7lpjrs36il6lp51rh13b0j2wip87cy5v9109m2d";
+    tag = version;
+    sha256 = "sha256-i0YCt5jTnDAxnaxKSTloWrQn27yLAvZnghZlCgwZh0Q=";
   };
 
   meta = with lib; {

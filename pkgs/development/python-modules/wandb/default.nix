@@ -90,7 +90,8 @@ let
 
     sourceRoot = "${src.name}/gpu_stats";
 
-    cargoHash = "sha256-4udGG4I2Hr8r84c4WX6QGG/+bcHK4csXqwddvIiKmkw=";
+    useFetchCargoVendor = true;
+    cargoHash = "sha256-eeL486wQappwWG1De+RUIWe8JuBDx0clyU79eyZmf8M=";
 
     buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.IOKit

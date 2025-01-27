@@ -7,17 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "inori";
-  version = "0.2.2";
+  version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "eshrh";
     repo = "inori";
     tag = "v${version}";
-    hash = "sha256-yd1kIlPepVbeTEFzjxTDWEh8o4m6dh/ya9GitqYHHT8=";
+    hash = "sha256-g+OH8sjfByrVsI1KogkluvAqNyYz7Fba2aeJkFhCgPU=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-qGlDelNYIBbNzeD0AEYh8JrsrfpZGyfXX5mGi+ds2JI=";
+  cargoHash = "sha256-BSTl/eeK2DwkJ+qhcVJlnCMfxLuPdQdFEx5OPPMnSMs=";
 
   passthru.updateScript = nix-update-script { };
 

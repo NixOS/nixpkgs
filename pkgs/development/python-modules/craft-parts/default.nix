@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "craft-parts";
-  version = "2.1.4";
+  version = "2.2.2";
 
   pyproject = true;
 
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     owner = "canonical";
     repo = "craft-parts";
     tag = version;
-    hash = "sha256-z0Om1/0Y6fDFHXB0GKFelmYwNwTH7loTtRjXtmjsjkY=";
+    hash = "sha256-6ufcay1C2Qv3nnG0augnPWzwBVDMj1ypRwzHRAhHARA=";
   };
 
   patches = [ ./bash-path.patch ];
@@ -106,7 +106,7 @@ buildPythonPackage rec {
   meta = {
     description = "Software artifact parts builder from Canonical";
     homepage = "https://github.com/canonical/craft-parts";
-    changelog = "https://github.com/canonical/craft-parts/releases/tag/${version}";
+    changelog = "https://github.com/canonical/craft-parts/releases/tag/${src.tag}";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ jnsgruk ];
     platforms = lib.platforms.linux;

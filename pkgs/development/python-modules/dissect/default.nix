@@ -35,7 +35,7 @@
 
 buildPythonPackage rec {
   pname = "dissect";
-  version = "3.17";
+  version = "3.17.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -44,7 +44,7 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect";
     tag = version;
-    hash = "sha256-0AVdihnnH3LMqHKwX5Ll4Nwt8LYfW4GktECvVCyyex8=";
+    hash = "sha256-sD3NeZxc6VKo/tn16YVWZYk3hlOVtSf/xtzEuhXW5vs=";
   };
 
   pythonRelaxDeps = true;
@@ -91,7 +91,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Dissect meta module";
     homepage = "https://github.com/fox-it/dissect";
-    changelog = "https://github.com/fox-it/dissect/releases/tag/${version}";
+    changelog = "https://github.com/fox-it/dissect/releases/tag/${src.tag}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fab ];
   };

@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "phonopy";
-  version = "2.29.1";
+  version = "2.34.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MabBtEOyM82R0NbdVaY+2f9GT8rT44xjOi/o38GSRp8=";
+    hash = "sha256-54lKi1zuT/m8pftZc5Oq9advU7hqcrLi/PUX/DL4g2U=";
   };
 
   nativeBuildInputs = [

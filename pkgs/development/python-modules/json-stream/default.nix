@@ -2,7 +2,7 @@
   lib,
   stdenv,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   iconv,
   pytestCheckHook,
   pythonOlder,
@@ -13,14 +13,16 @@
 
 buildPythonPackage rec {
   pname = "json-stream";
-  version = "2.3.2";
-  format = "pyproject";
+  version = "2.3.3";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-uLRQ6o6OPCOenn440S/tk053o1PBSyl/juNFpc6yW5E=";
+  src = fetchFromGitHub {
+    owner = "daggaz";
+    repo = "json-stream";
+    tag = "v${version}";
+    hash = "sha256-/GDEC/Poy84TGuXM34OW4+K/qMJELFfO+lNQ5M5VsdI=";
   };
 
   nativeBuildInputs = [ setuptools ];
