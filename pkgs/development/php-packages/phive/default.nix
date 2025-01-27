@@ -11,7 +11,7 @@ php.buildComposerProject2 (finalAttrs: {
   src = fetchFromGitHub {
     owner = "phar-io";
     repo = "phive";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-6vNhmIDE3kwZGMrDnGNGVV6/lb32Yb3ooWDYOC7SUcs=";
   };
 
