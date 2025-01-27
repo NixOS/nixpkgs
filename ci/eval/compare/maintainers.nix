@@ -45,14 +45,6 @@ let
     pkg: pkg // { maintainers = (pkg.package.meta or { }).maintainers or [ ]; }
   ) attrsWithPackages;
 
-  attrsWeCanPing = builtins.filter (
-    pkg:
-    if (builtins.length pkg.maintainers) > 0 then
-      true
-    else
-      builtins.trace "Package has no maintainers: ${pkg.name}" false
-  ) attrsWithMaintainers;
-
   relevantFilenames =
     drv:
     (lib.lists.unique (
@@ -109,12 +101,6 @@ let
     }
   ) { } listToPing;
 
-  textForPackages =
-    packages: lib.strings.concatStringsSep ", " (builtins.map (pkg: pkg.packageName) packages);
-
-  textPerMaintainer = lib.attrsets.mapAttrs (
-    maintainer: packages: "- @${maintainer} for ${textForPackages packages}"
-  ) byMaintainer;
 
   packagesPerMaintainer = lib.attrsets.mapAttrs (
     maintainer: packages: builtins.map (pkg: pkg.packageName) packages
