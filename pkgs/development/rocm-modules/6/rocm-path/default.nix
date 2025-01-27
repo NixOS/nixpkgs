@@ -3,6 +3,7 @@
   linkFarm,
   clr,
   hipblas,
+  hipblas-common,
   rocblas,
   rocsolver,
   rocsparse,
@@ -14,6 +15,7 @@ symlinkJoin {
   name = "rocm-path-${clr.version}";
   paths = [
     clr
+    hipblas-common
     hipblas
     rocblas
     rocsolver
