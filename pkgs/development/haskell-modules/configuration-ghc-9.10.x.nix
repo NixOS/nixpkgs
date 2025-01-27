@@ -61,7 +61,8 @@ self: super: {
   # Upgrade to accommodate new core library versions, where the authors have
   # already made the relevant changes.
   extensions = doDistribute self.extensions_0_1_0_2;
-  fourmolu = doDistribute self.fourmolu_0_16_2_0;
+  # Test suite tightens bound on Diff
+  fourmolu = dontCheck (doDistribute self.fourmolu_0_17_0_0);
   ghc-lib = doDistribute self.ghc-lib_9_10_1_20250103;
   ghc-lib-parser = doDistribute self.ghc-lib-parser_9_10_1_20250103;
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_10_0_0;
