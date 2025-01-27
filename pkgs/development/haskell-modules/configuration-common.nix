@@ -1580,7 +1580,7 @@ self: super: {
   dhall-lsp-server = lib.pipe
     (super.dhall-lsp-server.overrideScope (lself: lsuper: {
       lsp = doJailbreak lself.lsp_2_1_0_0;  # sorted-list <0.2.2
-      lsp-types = lself.lsp-types_2_0_2_0;
+      lsp-types = doJailbreak lself.lsp-types_2_1_1_0;  # lens <5.3
     }))
     [
       doJailbreak
