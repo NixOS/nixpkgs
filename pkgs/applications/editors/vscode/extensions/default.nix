@@ -2391,8 +2391,8 @@ let
           version = "2.5.2";
           hash = "sha256-0CFYL6rBecB8rNnk4IAtg03ZPdSJ9qxwnVdhdQedxsQ=";
         };
-        meta ={
-          description ="Ungit in Visual Studio Code.";
+        meta = {
+          description = "Ungit in Visual Studio Code.";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=Hirse.vscode-ungit";
           homepage = "https://github.com/hirse/vscode-ungit";
           license = lib.licenses.mit;
