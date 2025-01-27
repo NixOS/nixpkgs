@@ -22994,6 +22994,12 @@
     githubId = 5409166;
     name = "Rishi Desai";
   };
+  therobot2105 = {
+    email = "felix.kimmel@web.de";
+    github = "TheRobot2105";
+    githubId = 91203390;
+    name = "Felix Kimmel";
+  };
   thesola10 = {
     email = "me@thesola.io";
     github = "Thesola10";
