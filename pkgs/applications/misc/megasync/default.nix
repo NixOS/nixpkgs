@@ -135,6 +135,6 @@ mkDerivation rec {
       "i686-linux"
       "x86_64-linux"
     ];
-    maintainers = [ ];
+    maintainers = [ maintainers.hackerncoder ];
   };
 }
