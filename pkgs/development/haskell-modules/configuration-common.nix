@@ -1975,14 +1975,6 @@ self: super: {
   # Missing test files in 1.8.1.0, fixed in 1.8.1.1
   sequence-formats = dontCheck super.sequence-formats;
 
-  # filepath-bytestring indicates via bounds which version it has been tested
-  # to be equivalent to. We can be somewhat sure that it's fine to relax the
-  # bounds since we run the equivalency test suite.
-  # The only behavioral change for 1.5.2.0.0 is a fix that's included in 1.4.100.4
-  # of upstream filepath anyways:
-  # https://git.joeyh.name/index.cgi/haskell-filepath-bytestring.git/commit/?id=c447335c01f819910bb8434b215356cee8e6ecfc
-  filepath-bytestring = doJailbreak super.filepath-bytestring;
-
   # Break out of overspecified constraint on QuickCheck.
   haddock-library = doJailbreak super.haddock-library;
 
