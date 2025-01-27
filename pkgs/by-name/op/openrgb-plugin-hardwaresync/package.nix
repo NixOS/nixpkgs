@@ -2,14 +2,12 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  qtbase,
+  libsForQt5,
   openrgb,
   glib,
   libgtop,
   lm_sensors,
-  qmake,
   pkg-config,
-  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -31,14 +29,14 @@ stdenv.mkDerivation (finalAttrs: {
     rm -r dependencies/lhwm-cpp-wrapper
   '';
 
-  buildInputs = [
+  buildInputs = with libsForQt5; [
     qtbase
     glib
     libgtop
     lm_sensors
   ];
 
-  nativeBuildInputs = [
+  nativeBuildInputs = with libsForQt5; [
     qmake
     pkg-config
     wrapQtAppsHook
