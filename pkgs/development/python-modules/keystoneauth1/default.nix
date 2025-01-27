@@ -58,7 +58,6 @@ buildPythonPackage rec {
   optional-dependencies = {
     betamax = [
       betamax
-      fixtures
       pyyaml
     ];
     kerberos = [ requests-kerberos ];
@@ -67,6 +66,7 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    fixtures
     hacking
     oslo-config
     oslo-utils
