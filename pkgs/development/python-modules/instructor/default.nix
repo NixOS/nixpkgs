@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # build-system
   poetry-core,
@@ -74,15 +75,22 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "instructor" ];
 
-  disabledTests = [
-    # Tests require OpenAI API key
-    "successfully"
-    "test_mode_functions_deprecation_warning"
-    "test_partial"
+  disabledTests =
+    [
+      # Tests require OpenAI API key
+      "successfully"
+      "test_mode_functions_deprecation_warning"
+      "test_partial"
 
-    # Requires unpackaged `vertexai`
-    "test_json_preserves_description_of_non_english_characters_in_json_mode"
-  ];
+      # Requires unpackaged `vertexai`
+      "test_json_preserves_description_of_non_english_characters_in_json_mode"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.13") [
+      # ModuleNotFoundError: No module named 'imghdr'
+      # Removed in Python 3.13: https://docs.python.org/3/library/imghdr.html
+      "test_raw_base64_autodetect_jpeg"
+      "test_raw_base64_autodetect_png"
+    ];
 
   disabledTestPaths = [
     # Tests require OpenAI API key
