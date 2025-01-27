@@ -11,7 +11,7 @@ php.buildComposerProject2 (finalAttrs: {
   src = fetchFromGitHub {
     owner = "phpmd";
     repo = "phpmd";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-nTuJGzOZnkqrfE9R9Vujz/zGJRLlj8+yRZmmnxWrieQ=";
   };
 
