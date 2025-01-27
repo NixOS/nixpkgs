@@ -16,6 +16,7 @@
   cppunit,
   esi ? false,
   ipv6 ? true,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -79,6 +80,8 @@ stdenv.mkDerivation (finalAttrs: {
         --replace "/bin/true" "$(realpath fake-true)"
     done
   '';
+
+  passthru.tests.squid = nixosTests.squid;
 
   meta = with lib; {
     description = "Caching proxy for the Web supporting HTTP, HTTPS, FTP, and more";
