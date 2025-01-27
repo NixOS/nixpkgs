@@ -8,7 +8,7 @@ name: Check that Nix files are formatted
 
 on:
   pull_request_target:
-    types: [opened, synchronize, reopened, edited]
+  workflow_call:
 
 permissions: {}
 

@@ -2,6 +2,7 @@ name: Eval
 
 on:
   pull_request_target:
+  workflow_call:
   push:
     # Keep this synced with ci/request-reviews/dev-branches.txt
     branches:
