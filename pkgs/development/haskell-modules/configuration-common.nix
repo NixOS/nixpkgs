@@ -1582,19 +1582,6 @@ self: super: {
       lsp-types = lself.lsp-types_2_0_2_0;
     }))
     [
-      # Use latest main branch version of dhall-lsp-server.
-      (assert super.dhall-lsp-server.version == "1.1.3"; overrideSrc {
-        version = "unstable-2024-02-19";
-        src = pkgs.fetchFromGitHub {
-          owner = "dhall-lang";
-          repo = "dhall-haskell";
-          rev = "277d8b1b3637ba2ce125783cc1936dc9591e67a7";
-          hash = "sha256-YvL3XEltU9sdU45ULHeD3j1mPGZoO1J81MW7f2+10ok=";
-        } + "/dhall-lsp-server";
-      })
-      # New version needs an extra dependency
-      (addBuildDepend self.text-rope)
-      # bounds too strict: mtl <2.3, transformers <0.6
       doJailbreak
     ];
 
