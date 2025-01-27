@@ -37,13 +37,13 @@ in
     onCalendar = lib.mkOption {
       type = lib.types.str;
       default = "*:0/3"; # every 3 minutes
-      description = "How often is offlineimap started. Default is '*:0/3' meaning every 3 minutes. See systemd.time(7) for more information about the format.";
+      description = "How often is offlineimap started. Default is '*:0/3' meaning every 3 minutes. See {manpage}`systemd.time(7)` for more information about the format.";
     };
 
     timeoutStartSec = lib.mkOption {
       type = lib.types.str;
       default = "120sec"; # Kill if still alive after 2 minutes
-      description = "How long waiting for offlineimap before killing it. Default is '120sec' meaning every 2 minutes. See systemd.time(7) for more information about the format.";
+      description = "How long waiting for offlineimap before killing it. Default is '120sec' meaning every 2 minutes. See {manpage}`systemd.time(7)` for more information about the format.";
     };
   };
   config = lib.mkIf (cfg.enable || cfg.install) {

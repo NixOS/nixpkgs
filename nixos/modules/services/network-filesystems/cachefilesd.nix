@@ -35,7 +35,7 @@ in
         type = lib.types.lines;
         default = "";
         example = "brun 10%";
-        description = "Additional configuration file entries. See cachefilesd.conf(5) for more information.";
+        description = "Additional configuration file entries. See {manpage}`cachefilesd.conf(5)` for more information.";
       };
 
     };

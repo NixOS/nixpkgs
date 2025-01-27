@@ -546,7 +546,7 @@ in
         type = lib.types.lines;
         default = "";
         description = ''
-          Additional entries to put verbatim into aliases file, cf. man-page aliases(8).
+          Additional entries to put verbatim into aliases file, cf. man-page {manpage}`aliases(8)`.
         '';
       };
 
@@ -631,7 +631,7 @@ in
         type = lib.types.lines;
         default = "";
         description = ''
-          Entries for the virtual alias map, cf. man-page virtual(5).
+          Entries for the virtual alias map, cf. man-page {manpage}`virtual(5)`.
         '';
       };
 
@@ -654,7 +654,7 @@ in
           List of accepted local users. Specify a bare username, an
           `"@domain.tld"` wild-card, or a complete
           `"user@domain.tld"` address. If set, these names end
-          up in the local recipient map -- see the local(8) man-page -- and
+          up in the local recipient map -- see the {manpage}`local(8)` man-page -- and
           effectively replace the system user database lookup that's otherwise
           used by default.
         '';
@@ -664,7 +664,7 @@ in
         default = "";
         type = lib.types.lines;
         description = ''
-          Entries for the transport map, cf. man-page transport(8).
+          Entries for the transport map, cf. man-page {manpage}`transport(8)`.
         '';
       };
 

@@ -173,7 +173,7 @@ in
         type = str;
         default = "daily";
         description = ''
-          Specification (in the format described by systemd.time(7)) of the
+          Specification (in the format described by {manpage}`systemd.time(7)`) of the
           time at which the LoTW upload will occur.
         '';
       };
@@ -191,7 +191,7 @@ in
         type = str;
         default = "daily";
         description = ''
-          Specification (in the format described by systemd.time(7)) of the time
+          Specification (in the format described by {manpage}`systemd.time(7)`) of the time
           at which the Clublog upload will occur.
         '';
       };
@@ -210,7 +210,7 @@ in
         type = str;
         default = "weekly";
         description = ''
-          Specification (in the format described by systemd.time(7)) of the
+          Specification (in the format described by {manpage}`systemd.time(7)`) of the
           time at which the LoTW user update will occur.
         '';
       };
@@ -228,7 +228,7 @@ in
         type = str;
         default = "monthly";
         description = ''
-          Specification (in the format described by systemd.time(7)) of the
+          Specification (in the format described by {manpage}`systemd.time(7)`) of the
           time at which the DOK update will occur.
         '';
       };
@@ -247,7 +247,7 @@ in
         type = str;
         default = "monthly";
         description = ''
-          Specification (in the format described by systemd.time(7)) of the time
+          Specification (in the format described by {manpage}`systemd.time(7)`) of the time
           at which the Clublog SCP update will occur.
         '';
       };
@@ -266,7 +266,7 @@ in
         type = str;
         default = "monthly";
         description = ''
-          Specification (in the format described by systemd.time(7)) of the time
+          Specification (in the format described by {manpage}`systemd.time(7)`) of the time
           at which the WWFF update will occur.
         '';
       };
@@ -284,7 +284,7 @@ in
         type = str;
         default = "daily";
         description = ''
-          Specification (in the format described by systemd.time(7)) of the
+          Specification (in the format described by {manpage}`systemd.time(7)`) of the
           time at which the QRZ upload will occur.
         '';
       };
@@ -302,7 +302,7 @@ in
         type = str;
         default = "monthly";
         description = ''
-          Specification (in the format described by systemd.time(7)) of the time
+          Specification (in the format described by {manpage}`systemd.time(7)`) of the time
           at which the SOTA update will occur.
         '';
       };

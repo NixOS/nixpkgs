@@ -204,7 +204,7 @@ let
       homeMode = mkOption {
         type = types.strMatching "[0-7]{1,5}";
         default = "700";
-        description = "The user's home directory mode in numeric format. See chmod(1). The mode is only applied if {option}`users.users.<name>.createHome` is true.";
+        description = "The user's home directory mode in numeric format. See {manpage}`chmod(1)`. The mode is only applied if {option}`users.users.<name>.createHome` is true.";
       };
 
       cryptHomeLuks = mkOption {

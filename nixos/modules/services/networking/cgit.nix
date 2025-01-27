@@ -146,7 +146,7 @@ in
               };
 
               repos = lib.mkOption {
-                description = "cgit repository settings, see cgitrc(5)";
+                description = "cgit repository settings, see {manpage}`cgitrc(5)`";
                 type = with lib.types; attrsOf (attrsOf settingType);
                 default = { };
                 example = {
@@ -165,7 +165,7 @@ in
               };
 
               settings = lib.mkOption {
-                description = "cgit configuration, see cgitrc(5)";
+                description = "cgit configuration, see {manpage}`cgitrc(5)`";
                 type = lib.types.attrsOf repeatedSettingType;
                 default = { };
                 example = lib.literalExpression ''

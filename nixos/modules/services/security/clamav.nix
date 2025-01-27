@@ -53,7 +53,7 @@ in
           type = lib.types.str;
           default = "hourly";
           description = ''
-            How often freshclam is invoked. See systemd.time(7) for more
+            How often freshclam is invoked. See {manpage}`systemd.time(7)` for more
             information about the format.
           '';
         };
@@ -74,7 +74,7 @@ in
           type = lib.types.str;
           default = "hourly";
           description = ''
-            How often freshclam is invoked. See systemd.time(7) for more
+            How often freshclam is invoked. See {manpage}`systemd.time(7)` for more
             information about the format.
           '';
         };
@@ -105,7 +105,7 @@ in
           type = lib.types.str;
           default = "*-*-* 04:00:00";
           description = ''
-            How often clamdscan is invoked. See systemd.time(7) for more
+            How often clamdscan is invoked. See {manpage}`systemd.time(7)` for more
             information about the format.
             By default this runs using 10 cores at most, be sure to run it at a time of low traffic.
           '';
