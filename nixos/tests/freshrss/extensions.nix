@@ -17,7 +17,7 @@ import ../make-test-python.nix (
     testScript = ''
       machine.wait_for_unit("multi-user.target")
       machine.wait_for_open_port(80)
-      response = machine.succeed("curl -vvv -s http://127.0.0.1:80/i/?c=extension")
+      response = machine.succeed("curl -vvv -s http://localhost:80/i/?c=extension")
       assert '<span class="ext_name disabled">YouTube Video Feed</span>' in response, "Extension not present in extensions page."
     '';
   }
