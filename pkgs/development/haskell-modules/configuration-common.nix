@@ -2385,6 +2385,11 @@ self: super: {
         url = "https://github.com/minio/minio-hs/commit/786cf1881f0b62b7539e63547e76afc3c1ade36a.patch";
         sha256 = "sha256-zw0/jhKzShpqV1sUyxWTl73sQOzm6kA/yQOZ9n0L1Ag";
       })
+      (pkgs.fetchpatch {
+        name = "compatibility-with-crypton-connection-0-4-0.patch";
+        url = "https://github.com/minio/minio-hs/commit/e2169892a5fea444aaf9e551243da811003d3188.patch";
+        sha256 = "sha256-hWphiArv7gZWiDewLHDeU4RASGOE9Z1liahTmAGQIgQ=";
+      })
     ];
   }) (super.minio-hs.override { connection = self.crypton-connection; });
 
