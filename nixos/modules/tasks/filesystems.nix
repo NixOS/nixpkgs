@@ -68,7 +68,10 @@ let
       options = mkOption {
         default = [ "defaults" ];
         example = [ "data=journal" ];
-        description = "Options used to mount the file system.";
+        description = ''
+          Options used to mount the file system.
+          See {manpage}`mount(8)` for common options.
+        '';
         type = types.nonEmptyListOf nonEmptyStr;
       };
 
