@@ -2384,6 +2384,22 @@ let
         };
       };
 
+      hirse.vscode-ungit = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-ungit";
+          publisher = "hirse";
+          version = "2.5.2";
+          hash = "sha256-0CFYL6rBecB8rNnk4IAtg03ZPdSJ9qxwnVdhdQedxsQ=";
+        };
+        meta = {
+          description = "Ungit in Visual Studio Code.";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=Hirse.vscode-ungit";
+          homepage = "https://github.com/hirse/vscode-ungit";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.therobot2105 ];
+        };
+      };
+
       hiukky.flate = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "flate";
