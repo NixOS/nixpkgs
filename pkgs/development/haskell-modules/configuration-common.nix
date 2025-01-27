@@ -1632,31 +1632,12 @@ self: super: {
   # Too strict upper bounds on text
   lsql-csv = doJailbreak super.lsql-csv;
 
-  inherit (
-    let
-      useUpstream = pkg: version: lib.warnIf (lib.versionAtLeast super.${pkg}.version version) "${pkg} version override is no longer needed and should be removed" (
-        overrideSrc rec {
-          inherit version;
-          src = (pkgs.fetchFromGitHub {
-            owner = "reflex-frp";
-            repo = "reflex-dom";
-            rev = "reflex-dom-0.6.3.2";
-            hash = "sha256-CTyU/+7mzzMhqUAC8uJ8f+kZ5a8xquW104FpRowy5Eg=";
-          }) + "/" + pkg;
-        });
-    in {
-      reflex-dom = useUpstream "reflex-dom" "0.6.3.2" super.reflex-dom;
-
-      # Tests disabled and broken override needed because of missing lib chrome-test-utils: https://github.com/reflex-frp/reflex-dom/issues/392
-      reflex-dom-core = lib.pipe super.reflex-dom-core [
-        doDistribute
-        dontCheck
-        unmarkBroken
-        (useUpstream "reflex-dom-core" "0.8.1.1")
-      ];
-    })
-    reflex-dom
-    reflex-dom-core;
+  # Tests disabled and broken override needed because of missing lib chrome-test-utils: https://github.com/reflex-frp/reflex-dom/issues/392
+  reflex-dom-core = lib.pipe super.reflex-dom-core [
+    doDistribute
+    dontCheck
+    unmarkBroken
+  ];
 
   # Tests disabled because they assume to run in the whole jsaddle repo and not the hackage tarball of jsaddle-warp.
   jsaddle-warp = dontCheck super.jsaddle-warp;
@@ -1890,17 +1871,6 @@ self: super: {
   # ghc-8.8:
   # https://github.com/adnelson/semver-range/issues/15
   semver-range = dontCheck super.semver-range;
-
-  reflex = lib.warnIf (lib.versionAtLeast super.reflex.version "0.9.3.2") "reflex version override is no longer needed and should be removed"
-    (overrideSrc rec {
-      version = "0.9.3.2";
-      src = (pkgs.fetchFromGitHub {
-        owner = "reflex-frp";
-        repo = "reflex";
-        rev = "v0.9.3.2";
-        hash = "sha256-IJMoYoIN8OWOmyOMSvr1aFXofWsyEetCUY7hO141ThE=";
-      });
-    } super.reflex);
 
   # 2024-03-02: vty <5.39 - https://github.com/reflex-frp/reflex-ghci/pull/33
   reflex-ghci = assert super.reflex-ghci.version == "0.2.0.1"; doJailbreak super.reflex-ghci;
