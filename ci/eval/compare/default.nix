@@ -69,7 +69,6 @@ let
     groupByPlatform
     extractPackageNames
     getLabels
-    uniqueStrings
     ;
 
   getAttrs = dir: builtins.fromJSON (builtins.readFile "${dir}/outpaths.json");
@@ -81,7 +80,7 @@ let
   # - values: lists of `packagePlatformPath`s
   diffAttrs = diff beforeAttrs afterAttrs;
 
-  rebuilds = uniqueStrings (diffAttrs.added ++ diffAttrs.changed);
+  rebuilds = diffAttrs.added ++ diffAttrs.changed;
   rebuildsPackagePlatformAttrs = convertToPackagePlatformAttrs rebuilds;
 
   changed-paths =
@@ -110,7 +109,7 @@ let
     );
 
   maintainers = import ./maintainers.nix {
-    changedattrs = lib.unique (map (a: a.packagePath) rebuildsPackagePlatformAttrs);
+    changedattrs = lib.attrNames (lib.groupBy (a: a.name) rebuildsPackagePlatformAttrs);
     changedpathsjson = touchedFilesJson;
   };
 in
