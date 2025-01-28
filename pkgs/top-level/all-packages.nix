@@ -8285,6 +8285,10 @@ with pkgs;
 
   sloc = nodePackages.sloc;
 
+  slurm = callPackage ../by-name/sl/slurm/package.nix {
+    nvml = cudaPackages.cuda_nvml_dev;
+  };
+
   snowman = qt5.callPackage ../development/tools/analysis/snowman { };
 
   sparse = callPackage ../development/tools/analysis/sparse {
