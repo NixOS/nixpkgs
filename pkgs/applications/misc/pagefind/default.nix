@@ -12,19 +12,13 @@
   npmHooks,
   python3,
   rustc,
-  wasm-bindgen-cli,
+  wasm-bindgen-cli_0_2_92,
   wasm-pack,
 }:
 
 # TODO: package python bindings
 
 let
-
-  wasm-bindgen-92 = wasm-bindgen-cli.override {
-    version = "0.2.92";
-    hash = "sha256-1VwY8vQy7soKEgbki4LD+v259751kKxSxmo/gqE6yV0=";
-    cargoHash = "sha256-aACJ+lYNEU8FFBs158G1/JG8sc6Rq080PeKCMnwdpH0=";
-  };
 
   # the lindera-unidic v0.32.2 crate uses [1] an outdated unidic-mecab fork [2] and builds it in pure rust
   # [1] https://github.com/lindera/lindera/blob/v0.32.2/lindera-unidic/build.rs#L5-L11
@@ -121,7 +115,7 @@ rustPlatform.buildRustPackage rec {
       nodejs
       rustc
       rustc.llvmPackages.lld
-      wasm-bindgen-92
+      wasm-bindgen-cli_0_2_92
       wasm-pack
       httplz
     ]
