@@ -15,13 +15,13 @@
 
 buildPythonPackage rec {
   pname = "clustershell";
-  version = "1.9.2";
+  version = "1.9.3";
   pyproject = true;
 
   src = fetchPypi {
     pname = "ClusterShell";
     inherit version;
-    hash = "sha256-rsF/HG4GNBC+N49b+sDO2AyUI1G44wJNBUwQNPzShD0=";
+    hash = "sha256-4oTA5rP+CgzWvmffcd+/aqMhGIlz22g6BX9WN1UvvIw=";
   };
 
   build-system = [
