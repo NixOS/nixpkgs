@@ -15,7 +15,7 @@ buildDotnetModule rec {
     hash = "sha256-hUURXPKhiI3n1BrW8IzVVmPuJyO4AxM8D5uluaJXk+4=";
   };
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_8_0_4xx;
   projectFile = "src/gei/gei.csproj";
   nugetDeps = ./deps.json; # File generated with `nix-build -A gh-gei.passthru.fetch-deps`.
 
