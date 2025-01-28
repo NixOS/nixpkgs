@@ -15,6 +15,7 @@
 , bzip2
 , expat
 , libffi
+, libuuid
 , libxcrypt
 , mpdecimal
 , ncurses
@@ -166,6 +167,7 @@ let
     bzip2
     expat
     libffi
+    libuuid
     libxcrypt
     mpdecimal
     ncurses
