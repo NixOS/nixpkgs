@@ -80,6 +80,11 @@ let
           liberation_ttf_v1
         ];
 
+        extraBuildCommands = ''
+          mkdir -p $out/var/{lib/onlyoffice,www}
+          cp -ar ${onlyoffice-documentserver}/var/www/* $out/var/www/
+        '';
+
         extraBwrapArgs = [
           "--bind var/lib/onlyoffice/ var/lib/onlyoffice/"
           "--bind var/lib/onlyoffice/documentserver/sdkjs/common/ var/www/onlyoffice/documentserver/sdkjs/common/"
