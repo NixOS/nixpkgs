@@ -521,6 +521,20 @@ with lib.maintainers;
     shortName = "Home Assistant";
   };
 
+  hyprland = {
+    members = [
+      donovanglover
+      fufexan
+      johnrtitor
+      khaneliman
+      NotAShelf
+    ];
+    githubTeams = [ "hyprland" ];
+    scope = "Maintain Hyprland compositor and ecosystem";
+    shortName = "Hyprland";
+    enableFeatureFreezePing = true;
+  };
+
   infisical = {
     members = [ akhilmhdh ];
     scope = "Maintain Infisical";
