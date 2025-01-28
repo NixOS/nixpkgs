@@ -60,5 +60,8 @@ buildPythonPackage rec {
     homepage = "https://github.com/scikit-tda/scikit-tda";
     license = licenses.mit;
     maintainers = [ ];
+    # No downstream maintainer since 2023, and package is broken since scikit
+    # 1.6.1
+    broken = true;
   };
 }
