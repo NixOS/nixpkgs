@@ -4,18 +4,12 @@
   rustPlatform,
   rustc,
   wasm-pack,
-  wasm-bindgen-cli,
+  wasm-bindgen-cli_0_2_95,
   binaryen,
 }:
 
 let
   version = "0.1.1";
-
-  wasm-bindgen-cli-95 = wasm-bindgen-cli.override {
-    version = "0.2.95";
-    hash = "sha256-prMIreQeAcbJ8/g3+pMp1Wp9H5u+xLqxRxL+34hICss=";
-    cargoHash = "sha256-6iMebkD7FQvixlmghGGIvpdGwFNLfnUcFke/Rg8nPK4=";
-  };
 in
 rustPlatform.buildRustPackage {
   pname = "tpsecore";
@@ -32,7 +26,7 @@ rustPlatform.buildRustPackage {
 
   nativeBuildInputs = [
     wasm-pack
-    wasm-bindgen-cli-95
+    wasm-bindgen-cli_0_2_95
     binaryen
     rustc.llvmPackages.lld
   ];
