@@ -15,6 +15,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-r6Lx3WJx/StkW6MLjzq0Cv02VONUJBoxy9UQAPfm/Hc=";
   };
 
+  patches = [
+    # We copy the bootstrap file from the store, where it's read-only,
+    # so future attempts to update it with bare "cp" will fail.
+    # So, use "cp -f" to force an overwrite.
+    ./force-overwrite-bootstrap.patch
+  ];
+
   makeFlags = [
     "DESTDIR=$(out)"
     "PREFIX="
