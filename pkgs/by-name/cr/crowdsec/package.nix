@@ -42,6 +42,10 @@ buildGoModule rec {
     mkdir -p $out/share/crowdsec
     cp -r ./config $out/share/crowdsec/
 
+    mkdir -p $out/lib/systemd/system
+    substitute ./config/crowdsec.service $out/lib/systemd/system/crowdsec.service \
+      --replace-fail /usr/local $out
+
     installShellCompletion --cmd cscli \
       --bash <($out/bin/cscli completion bash) \
       --fish <($out/bin/cscli completion fish) \
