@@ -11,7 +11,8 @@ rustPlatform.buildRustPackage rec {
   src = stalwart-mail.src;
 
   buildAndTestSubdir = "crates/cli";
-  cargoHash = "sha256-9gqk26qCic1N8LHXLX3fWyk/oQr3QifbmPzAEWL6ZHo=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-k0pNNLwFRLI7eHjVwHGjgrnX4moWOwoWvMiyPfGMgCo=";
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
