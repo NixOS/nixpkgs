@@ -887,10 +887,7 @@ impl std::fmt::Display for Job {
 
 fn new_dbus_proxies(
     conn: &LocalConnection,
-) -> (
-    Proxy<'_, &LocalConnection>,
-    Proxy<'_, &LocalConnection>,
-) {
+) -> (Proxy<'_, &LocalConnection>, Proxy<'_, &LocalConnection>) {
     (
         conn.with_proxy(
             "org.freedesktop.systemd1",
@@ -1221,16 +1218,16 @@ won't take effect until you reboot the system.
                     unit.as_str(),
                     "suspend.target" | "hibernate.target" | "hybrid-sleep.target"
                 ) || parse_systemd_bool(
-                        Some(&new_unit_info),
-                        "Unit",
-                        "RefuseManualStart",
-                        false,
-                    ) || parse_systemd_bool(
-                        Some(&new_unit_info),
-                        "Unit",
-                        "X-OnlyManualStart",
-                        false,
-                    )) {
+                    Some(&new_unit_info),
+                    "Unit",
+                    "RefuseManualStart",
+                    false,
+                ) || parse_systemd_bool(
+                    Some(&new_unit_info),
+                    "Unit",
+                    "X-OnlyManualStart",
+                    false,
+                )) {
                     units_to_start.insert(unit.to_string(), ());
                     record_unit(START_LIST_FILE, unit);
                     // Don't spam the user with target units that always get started.
