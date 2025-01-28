@@ -1,0 +1,24 @@
+diff --git a/clingwrapper/setup.py b/clingwrapper/setup.py
+index f94d93a..1566b9e 100755
+--- a/clingwrapper/setup.py
++++ b/clingwrapper/setup.py
+@@ -53,17 +53,10 @@ def _get_config_exec():
+     return [sys.executable, '-m', 'cppyy_backend._cling_config']
+
+ def get_include_path():
+-    config_exec_args = _get_config_exec()
+-    config_exec_args.append('--incdir')
+-    cli_arg = subprocess.check_output(config_exec_args)
+-    return cli_arg.decode("utf-8").strip()
++    %includes_placeholder%
+
+ def get_cflags():
+-    config_exec_args = _get_config_exec()
+-    config_exec_args.append('--auxcflags')
+-    cli_arg = subprocess.check_output(config_exec_args)
+-    return cli_arg.decode("utf-8").strip()
+-
++    %cflags_placeholder%
+
+ #
+ # customized commands
