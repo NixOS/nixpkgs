@@ -91,7 +91,7 @@ buildGoModule rec {
         ''
           mv $out/bin/${lib.last (lib.splitString "/" module)} $out/bin/${binary}
         ''
-        + lib.optionalString (!ui) ''
+        + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform && !ui) ''
           installShellCompletion --cmd ${binary} \
             --bash <($out/bin/${binary} completion bash) \
             --fish <($out/bin/${binary} completion fish) \
