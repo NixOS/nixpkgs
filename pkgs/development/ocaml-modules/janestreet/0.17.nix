@@ -212,6 +212,10 @@ with self;
       ctypes-foreign
       openssl
     ];
+    patches = fetchpatch {
+      url = "https://raw.githubusercontent.com/ocaml/opam-source-archives/main/patches/async_ssl/no-incompatible-pointer-types-017.patch";
+      hash = "sha256-bpfIi97/b1hIwsFzsmhFAZV1w8CdaMxXoi72ScSYMjY=";
+    };
   };
 
   async_unix = janePackage {
