@@ -139,7 +139,7 @@ fn parse_os_release() -> Result<HashMap<String, String>> {
         }))
 }
 
-fn do_pre_switch_check(command: &str, toplevel: &Path) -> Result<()> {
+fn do_pre_switch_check(command: &str, toplevel: &Path, action: &Action) -> Result<()> {
     let mut cmd_split = command.split_whitespace();
     let Some(argv0) = cmd_split.next() else {
         bail!("missing first argument in install bootloader commands");
@@ -148,6 +148,7 @@ fn do_pre_switch_check(command: &str, toplevel: &Path) -> Result<()> {
     match std::process::Command::new(argv0)
         .args(cmd_split.collect::<Vec<&str>>())
         .arg(toplevel)
+        .arg::<&str>(action.into())
         .spawn()
         .map(|mut child| child.wait())
     {
@@ -1053,7 +1054,7 @@ fn do_system_switch(action: Action) -> anyhow::Result<()> {
         .unwrap_or_default()
         != "1"
     {
-        do_pre_switch_check(&pre_switch_check, &toplevel)?;
+        do_pre_switch_check(&pre_switch_check, &toplevel, action)?;
     }
 
     if *action == Action::Check {
