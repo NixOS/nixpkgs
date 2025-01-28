@@ -96,6 +96,8 @@ stdenv.mkDerivation {
     domination-starts = nixosTests.domination;
   };
 
+  passthru.updateScript = ./update.tcl;
+
   meta = with lib; {
     homepage = "https://domination.sourceforge.net/";
     downloadPage = "https://domination.sourceforge.net/download.shtml";
