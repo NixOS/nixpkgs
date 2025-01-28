@@ -2,6 +2,7 @@
   lib,
   python3,
   fetchFromGitHub,
+  fetchpatch,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -15,6 +16,14 @@ python3.pkgs.buildPythonApplication rec {
     tag = version;
     hash = "sha256-QmP6yfVnlYoNVa4EUtKR9xbCnQW2V6deV0+hN9IGtic=";
   };
+
+  patches = [
+    # scikit-learn 1.6.1 support
+    (fetchpatch {
+      url = "https://github.com/natarajan-chidambaram/RABBIT/commit/e1eb159c5beaef013a3e78e5570a0f7b16636ce6.patch";
+      hash = "sha256-dxo7Ex7MIyyK9Agys+V/MLJgUvnbKBiVrhz1T+NRZ1Y=";
+    })
+  ];
 
   pythonRelaxDeps = [
     "numpy"
