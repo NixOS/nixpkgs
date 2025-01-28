@@ -5,20 +5,21 @@
 , fetchFromGitHub
 , pkg-config
 , installShellFiles
+,  versionCheckHook
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "aichat";
-  version = "0.26.0";
+  version = "0.27.0";
 
   src = fetchFromGitHub {
     owner = "sigoden";
     repo = "aichat";
     rev = "v${version}";
-    hash = "sha256-Hqrwko/HZTHlKzXuqm835fpygOO9wsQx1XkJddH/EUc=";
+    hash = "sha256-rKvnbauJpyZnJuLtGSjJKwe9wy/y/KLPyorH5u9t0H8=";
   };
 
-  cargoHash = "sha256-4CcwzaPIO+upISizpXHGYfKh9YD4foJAqx7TGgLCHZI=";
+  cargoHash = "sha256-++UXa5moUc7fhK2GJHm8bvvpBeL2MfRav7OnPldpsZ4=";
 
   nativeBuildInputs = [
     pkg-config
@@ -35,11 +36,16 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion ./scripts/completions/aichat.{bash,fish,zsh}
   '';
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = [ "--version" ];
+
+  meta = {
     description = "Use GPT-4(V), Gemini, LocalAI, Ollama and other LLMs in the terminal";
     homepage = "https://github.com/sigoden/aichat";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mwdomino ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mwdomino ];
     mainProgram = "aichat";
   };
 }
