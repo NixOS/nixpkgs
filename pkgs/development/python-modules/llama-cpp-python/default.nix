@@ -1,8 +1,10 @@
 {
   lib,
   stdenv,
+  gcc13Stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
 
   # nativeBuildInputs
   cmake,
@@ -33,6 +35,9 @@
   cudaPackages ? { },
 
 }:
+let
+  stdenvTarget = if cudaSupport then gcc13Stdenv else stdenv;
+in
 buildPythonPackage rec {
   pname = "llama-cpp-python";
   version = "0.3.6";
@@ -46,6 +51,16 @@ buildPythonPackage rec {
     fetchSubmodules = true;
   };
   # src = /home/gaetan/llama-cpp-python;
+
+  patches = [
+    # fix segfault when running tests due to missing default Metal devices
+    (fetchpatch2 {
+      url = "https://github.com/ggerganov/llama.cpp/commit/acd38efee316f3a5ed2e6afcbc5814807c347053.patch?full_index=1";
+      stripLen = 1;
+      extraPrefix = "vendor/llama.cpp/";
+      hash = "sha256-71+Lpg9z5KPlaQTX9D85KS2LXFWLQNJJ18TJyyq3/pU=";
+    })
+  ];
 
   dontUseCmakeConfigure = true;
   SKBUILD_CMAKE_ARGS = lib.strings.concatStringsSep ";" (
@@ -76,6 +91,8 @@ buildPythonPackage rec {
     ]
   );
 
+  stdenv = stdenvTarget;
+
   dependencies = [
     diskcache
     jinja2
@@ -99,7 +116,11 @@ buildPythonPackage rec {
 
   passthru = {
     updateScript = gitUpdater { rev-prefix = "v"; };
-    tests.llama-cpp-python = llama-cpp-python.override { cudaSupport = true; };
+    tests = lib.optionalAttrs stdenvTarget.hostPlatform.isLinux {
+      withCuda = llama-cpp-python.override {
+        cudaSupport = true;
+      };
+    };
   };
 
   meta = {
@@ -109,12 +130,6 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kirillrdy ];
     badPlatforms = [
-      # Segfaults during tests:
-      # tests/test_llama.py .Fatal Python error: Segmentation fault
-      # Current thread 0x00000001f3decf40 (most recent call first):
-      #   File "/private/tmp/nix-build-python3.12-llama-cpp-python-0.3.2.drv-0/source/llama_cpp/_internals.py", line 51 in __init__
-      lib.systems.inspect.patterns.isDarwin
-
       # cc1: error: unknown value ‘native+nodotprod+noi8mm+nosve’ for ‘-mcpu’
       "aarch64-linux"
     ];

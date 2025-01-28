@@ -1616,6 +1616,10 @@ in
     ];
   };
 
+  LuaSnip-snippets-nvim = super.LuaSnip-snippets-nvim.overrideAttrs {
+    checkInputs = [ self.luasnip ];
+  };
+
   lz-n = neovimUtils.buildNeovimPlugin {
     luaAttr = luaPackages.lz-n;
   };
@@ -2761,6 +2765,10 @@ in
   };
 
   renamer-nvim = super.renamer-nvim.overrideAttrs {
+    dependencies = [ self.plenary-nvim ];
+  };
+
+  repolink-nvim = super.repolink-nvim.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
   };
 
