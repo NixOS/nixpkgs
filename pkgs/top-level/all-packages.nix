@@ -18098,8 +18098,6 @@ with pkgs;
     callPackage ../applications/networking/znc/modules.nix { }
   );
 
-  zrok = callPackage ../tools/networking/zrok { };
-
   bullet = callPackage ../development/libraries/bullet {
     inherit (darwin.apple_sdk.frameworks) Cocoa OpenGL;
   };
