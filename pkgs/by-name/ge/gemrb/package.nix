@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  runCommandNoCC,
+  runCommand,
   fetchFromGitHub,
   cmake,
   pkg-config,
@@ -37,7 +37,7 @@ let
     hash = "sha256-+aPnOJQGRblqcrblVU5ZwA8CZqeT19rxEtn3GLuofYU=";
   };
 
-  icons = runCommandNoCC "gemrb-icons" { nativeBuildInputs = [ imagemagick ]; } ''
+  icons = runCommand "gemrb-icons" { nativeBuildInputs = [ imagemagick ]; } ''
     for s in 48 64 96 128 256 512 1024; do
       size=''${s}x''${s}
       dir=$out/share/icons/hicolor/$size
