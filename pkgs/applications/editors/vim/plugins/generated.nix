@@ -195,6 +195,18 @@ final: prev:
     meta.homepage = "https://github.com/Yggdroot/LeaderF/";
   };
 
+  LuaSnip-snippets-nvim = buildVimPlugin {
+    pname = "LuaSnip-snippets.nvim";
+    version = "2022-03-17";
+    src = fetchFromGitHub {
+      owner = "molleweide";
+      repo = "LuaSnip-snippets.nvim";
+      rev = "d7e40e4cce622eab2316607dbcd8d6039bcb9fe0";
+      sha256 = "063fz3f9byzmb1qavhrjdcphr3nk4l4d19h7mzj5sx4wv7cn8nl8";
+    };
+    meta.homepage = "https://github.com/molleweide/LuaSnip-snippets.nvim/";
+  };
+
   MatchTagAlways = buildVimPlugin {
     pname = "MatchTagAlways";
     version = "2017-05-20";
