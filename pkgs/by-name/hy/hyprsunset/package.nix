@@ -53,10 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Application to enable a blue-light filter on Hyprland";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [
-      fufexan
-      johnrtitor
-    ];
+    maintainers = lib.teams.hyprland.members;
     mainProgram = "hyprsunset";
   };
 })

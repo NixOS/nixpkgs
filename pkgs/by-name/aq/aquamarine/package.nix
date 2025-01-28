@@ -71,10 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "A very light linux rendering backend library";
     homepage = "https://github.com/hyprwm/aquamarine";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [
-      fufexan
-      johnrtitor
-    ];
+    maintainers = lib.teams.hyprland.members;
     platforms = lib.platforms.linux ++ lib.platforms.freebsd;
   };
 })

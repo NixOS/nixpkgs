@@ -217,12 +217,7 @@ customStdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/hyprwm/Hyprland";
     description = "Dynamic tiling Wayland compositor that doesn't sacrifice on its looks";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [
-      fufexan
-      johnrtitor
-      khaneliman
-      wozeparrot
-    ];
+    maintainers = lib.teams.hyprland.members;
     mainProgram = "Hyprland";
     platforms = lib.platforms.linux ++ lib.platforms.freebsd;
   };

@@ -28,5 +28,5 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ johnrtitor ];
+  meta.maintainers = lib.teams.hyprland.members;
 }
