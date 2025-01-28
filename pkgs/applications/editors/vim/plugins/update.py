@@ -112,6 +112,7 @@ class VimEditor(pluginupdate.Editor):
     version = "{plugin.version}";
     src = {src_nix};
     meta.homepage = "{repo.uri}";
+    meta.hydraPlatforms = [ ];
   }};
 
 """.format(
