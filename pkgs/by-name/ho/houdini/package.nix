@@ -1,7 +1,8 @@
 { lib, stdenv, writeScript, ncurses5, callPackage, buildFHSEnv, unwrapped ? callPackage ./runtime.nix {} }:
 
-buildFHSEnv rec {
-  inherit (unwrapped) pname version;
+buildFHSEnv {
+  pname = "houdini";
+  inherit (unwrapped) version;
 
   # houdini spawns hserver (and other license tools) that is supposed to live beyond the lifespan of houdini process
   dieWithParent = false;
@@ -76,7 +77,8 @@ buildFHSEnv rec {
       "houdini/sbin/sesinetd"
     ];
   in ''
-    WRAPPER=$out/bin/houdini
+    mv $out/bin/houdini $out/bin/houdini-wrapper
+    WRAPPER=$out/bin/houdini-wrapper
     EXECUTABLES="${lib.concatStringsSep " " executables}"
     for executable in $EXECUTABLES; do
       mkdir -p $out/$(dirname $executable)

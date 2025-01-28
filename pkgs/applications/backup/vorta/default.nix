@@ -1,29 +1,29 @@
 {
   lib,
+  stdenv,
   python3Packages,
   fetchFromGitHub,
   wrapQtAppsHook,
-  borgbackup,
-  qtbase,
   qtwayland,
-  stdenv,
+  borgbackup,
+  versionCheckHook,
   makeFontsConf,
+  qtbase,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "vorta";
-  version = "0.9.1";
+  version = "0.10.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "borgbase";
     repo = "vorta";
-    rev = "v${version}";
-    hash = "sha256-wGlnldS2p92NAYAyRPqKjSneIlbdsOiJ0N42n/mMGFI=";
+    tag = "v${version}";
+    hash = "sha256-VhM782mFWITA0VlKw0sBIu/UxUqlFLgq5XVdCpQggCw=";
   };
 
   nativeBuildInputs = [
-    python3Packages.setuptools
     wrapQtAppsHook
   ];
 
@@ -31,18 +31,22 @@ python3Packages.buildPythonApplication rec {
     qtwayland
   ];
 
-  propagatedBuildInputs = with python3Packages; [
-    peewee
-    pyqt6
-    psutil
-    secretstorage
+  build-system = with python3Packages; [
     setuptools
+  ];
+
+  dependencies = with python3Packages; [
+    packaging
+    peewee
     platformdirs
+    psutil
+    pyqt6
+    secretstorage
   ];
 
   postPatch = ''
     substituteInPlace src/vorta/assets/metadata/com.borgbase.Vorta.desktop \
-    --replace com.borgbase.Vorta "com.borgbase.Vorta-symbolic"
+    --replace-fail com.borgbase.Vorta "com.borgbase.Vorta-symbolic"
   '';
 
   postInstall = ''
@@ -61,7 +65,9 @@ python3Packages.buildPythonApplication rec {
     pytest-qt
     pytest-mock
     pytestCheckHook
+    versionCheckHook
   ];
+  versionCheckProgramArg = [ "--version" ];
 
   preCheck =
     let
@@ -78,20 +84,24 @@ python3Packages.buildPythonApplication rec {
       export QT_QPA_PLATFORM=offscreen
     '';
 
-  disabledTestPaths = [
-    # QObject::connect: No such signal QPlatformNativeInterface::systemTrayWindowChanged(QScreen*)
-    "tests/test_excludes.py"
-    "tests/integration"
-    "tests/unit"
-  ];
+  disabledTestPaths =
+    [
+      # QObject::connect: No such signal QPlatformNativeInterface::systemTrayWindowChanged(QScreen*)    "tests/test_excludes.py"
+      "tests/integration"
+      "tests/unit"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      # Darwin-only test
+      "tests/network_manager/test_darwin.py"
+    ];
 
-  meta = with lib; {
-    changelog = "https://github.com/borgbase/vorta/releases/tag/${src.rev}";
+  meta = {
+    changelog = "https://github.com/borgbase/vorta/releases/tag/v${version}";
     description = "Desktop Backup Client for Borg";
     homepage = "https://vorta.borgbase.com/";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ma27 ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ ma27 ];
+    platforms = lib.platforms.linux;
     mainProgram = "vorta";
   };
 }

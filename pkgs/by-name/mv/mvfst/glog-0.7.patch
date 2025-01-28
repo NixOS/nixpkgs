@@ -1,0 +1,26 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index a878c7c473..c76c989f91 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -52,7 +52,7 @@
+ find_package(fmt REQUIRED)
+ find_package(folly REQUIRED)
+ find_package(Fizz REQUIRED)
+-find_package(Glog REQUIRED)
++find_package(Glog CONFIG REQUIRED)
+ find_package(Threads)
+ 
+ SET(GFLAG_DEPENDENCIES "")
+diff --git a/cmake/QuicTest.cmake b/cmake/QuicTest.cmake
+index e7d9f0c0c3..5f4525189c 100644
+--- a/cmake/QuicTest.cmake
++++ b/cmake/QuicTest.cmake
+@@ -50,7 +50,7 @@
+   target_link_libraries(${QUIC_TEST_TARGET} PUBLIC
+     "${QUIC_TEST_DEPENDS}"
+     ${LIBGMOCK_LIBRARIES}
+-    ${GLOG_LIBRARY}
++    glog::glog
+   )
+ 
+   # Per https://github.com/facebook/mvfst/pull/9, disable some warnings

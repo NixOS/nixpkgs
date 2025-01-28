@@ -1,26 +1,21 @@
 {
   lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-
-  # build-system
-  setuptools,
-  setuptools-scm,
-
-  # dependencies
-  django,
-
-  # tests
   beautifulsoup4,
+  buildPythonPackage,
+  django,
+  fetchFromGitHub,
+  jinja2,
   pillow,
   pytest-django,
   pytestCheckHook,
+  pythonOlder,
+  setuptools-scm,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "django-bootstrap5";
-  version = "24.1";
+  version = "24.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -29,7 +24,7 @@ buildPythonPackage rec {
     owner = "zostera";
     repo = "django-bootstrap5";
     rev = "v${version}";
-    hash = "sha256-JbmwEPkj34tsK3tUtb56FPjU0emwERVXEc4fzlepdXY=";
+    hash = "sha256-8e0Pi4uSvQhiLYiMgOqWJWDc/KPMXxyU5pnT9jvFZLU=";
   };
 
   build-system = [
@@ -37,13 +32,19 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
+  dependencies = [ django ];
+
+  optional-dependencies = {
+    jinja = [ jinja2 ];
+  };
+
   nativeCheckInputs = [
     beautifulsoup4
     (django.override { withGdal = true; })
     pillow
     pytest-django
     pytestCheckHook
-  ];
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   preCheck = ''
     export DJANGO_SETTINGS_MODULE=tests.app.settings

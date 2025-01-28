@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-filemanager-app";
-  version = "1.1.2";
+  version = "1.1.3";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/apps/lomiri-filemanager-app";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-XA1Gdb0Kpc3BEifmgHhQ38moKkCkYbhpr8wptnddZlk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-qOzQba1NJBH1hE3XYQQowfkggLlaZl6Vz8uVW7dCzWI=";
   };
 
   postPatch = ''

@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "velero";
-  version = "1.15.1";
+  version = "1.15.2";
 
   src = fetchFromGitHub {
     owner = "vmware-tanzu";
     repo = "velero";
     rev = "v${version}";
-    hash = "sha256-ypNpIEj6hw77cjXkYJ9zsKY0bFP7Nwa2skd1wdONsJY=";
+    hash = "sha256-WClNupUW1Nd5Xnx58KYDRLz1/2kNCOR4AoAsUv78yPE=";
   };
 
   ldflags = [

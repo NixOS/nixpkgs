@@ -52,4 +52,4 @@ extend-select = [
 
 [tool.pytest.ini_options]
 pythonpath = ["."]
-addopts = ["--import-mode=importlib"]
+addopts = "--import-mode=importlib"

@@ -319,8 +319,8 @@ in
 
     system.extraSystemBuilderCmds =
       optionalString
-        config.system.copySystemConfiguration
-        ''ln -s '${import ../../../lib/from-env.nix "NIXOS_CONFIG" <nixos-config>}' \
+        config.system.copySystemConfiguration ''
+          ln -s '${import ../../../lib/from-env.nix "NIXOS_CONFIG" <nixos-config>}' \
             "$out/configuration.nix"
         '' +
       optionalString
@@ -343,7 +343,7 @@ in
       perl = pkgs.perl.withPackages (p: with p; [ ConfigIniFiles FileSlurp ]);
       # End if legacy environment variables
 
-      preSwitchCheck = config.system.preSwitchChecks.script;
+      preSwitchCheck = config.system.preSwitchChecksScript;
 
       # Not actually used in the builder. `passedChecks` is just here to create
       # the build dependencies. Checks are similar to build dependencies in the

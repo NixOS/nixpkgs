@@ -7,22 +7,22 @@
   nix-update-script,
 }:
 let
-  version = "0.3.7";
+  version = "0.3.10";
 in
 rustPlatform.buildRustPackage {
   pname = "lla";
   inherit version;
 
   src = fetchFromGitHub {
-    owner = "triyanox";
+    owner = "chaqchase";
     repo = "lla";
     tag = "v${version}";
-    hash = "sha256-8BnYLC5SGFvk9srRyLxflDgfVbbGMSHXBOjXQLMLIi8=";
+    hash = "sha256-/6p23JW3ZaSuDf34IWcTggR92/zUTMRerQ32bTsRujo=";
   };
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 
-  cargoHash = "sha256-H/BnJiR9+wcddAEWkKaqamTEDgjTUOMq1AiGWQAfjDM=";
+  cargoHash = "sha256-U0peFuyWZ0RP1Chtj7WY646fIQ8Q+HB2gtnhTO3hhiM=";
 
   cargoBuildFlags = [ "--workspace" ];
 
@@ -37,13 +37,15 @@ rustPlatform.buildRustPackage {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "Modern alternative to ls";
+    description = "Blazing-fast `ls` replacement with superpowers";
     longDescription = ''
-      `lla` is a high-performance, extensible alternative to the traditional ls command, written in Rust.
-      It offers enhanced functionality, customizable output, and a plugin system for extended capabilities.
+      `lla` is a modern `ls` replacement that transforms how developers interact with their filesystem.
+      Built with Rust's performance capabilities and designed with user experience in mind,
+      `lla` combines the familiarity of ls with powerful features like specialized views,
+      Git integration, and a robust plugin system with an extensible list of plugins to add more functionality.
     '';
-    homepage = "https://github.com/triyanox/lla";
-    changelog = "https://github.com/triyanox/lla/blob/refs/tags/v${version}/CHANGELOG.md";
+    homepage = "https://lla.chaqchase.com";
+    changelog = "https://github.com/chaqchase/lla/blob/refs/tags/v${version}/CHANGELOG.md";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ pluiedev ];
     platforms = lib.platforms.unix;

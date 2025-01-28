@@ -10,7 +10,7 @@
   moonfire-nvr,
   darwin,
   nodejs,
-  pnpm,
+  pnpm_9,
 }:
 
 let
@@ -28,9 +28,9 @@ let
     sourceRoot = "${src.name}/ui";
     nativeBuildInputs = [
       nodejs
-      pnpm.configHook
+      pnpm_9.configHook
     ];
-    pnpmDeps = pnpm.fetchDeps {
+    pnpmDeps = pnpm_9.fetchDeps {
       inherit (finalAttrs) pname version src;
       sourceRoot = "${finalAttrs.src.name}/ui";
       hash = "sha256-7fMhUFlV5lz+A9VG8IdWoc49C2CTdLYQlEgBSBqJvtw=";

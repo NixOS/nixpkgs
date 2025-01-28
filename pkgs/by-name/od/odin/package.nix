@@ -91,7 +91,6 @@ stdenv.mkDerivation {
     mainProgram = "odin";
     maintainers = with lib.maintainers; [
       astavie
-      znaniye
     ];
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isMusl;

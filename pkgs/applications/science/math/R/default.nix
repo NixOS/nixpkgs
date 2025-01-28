@@ -28,12 +28,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontUseImakeConfigure = true;
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    bison
+    imake
+    perl
+    pkg-config
+    tzdata
+    which
+  ];
   buildInputs = [
     bzip2 gfortran libX11 libXmu libXt libXt libjpeg libpng libtiff ncurses
-    pango pcre2 perl readline (texliveSmall.withPackages (ps: with ps; [ inconsolata helvetic ps.texinfo fancyvrb cm-super rsfs ])) xz zlib less texinfo graphviz icu
-    bison imake which blas lapack curl tcl tk jdk tzdata
+    pango pcre2 readline (texliveSmall.withPackages (ps: with ps; [ inconsolata helvetic ps.texinfo fancyvrb cm-super rsfs ])) xz zlib less texinfo graphviz icu
+    which blas lapack curl tcl tk jdk
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa Foundation libobjc libcxx ];
+  strictDeps = true;
 
   patches = [
     ./no-usr-local-search-paths.patch
@@ -75,6 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
       FC="${gfortran}/bin/gfortran" F77="${gfortran}/bin/gfortran"
       JAVA_HOME="${jdk}"
       RANLIB=$(type -p ranlib)
+      CURL_CONFIG="${lib.getExe' (lib.getDev curl) "curl-config"}"
       r_cv_have_curl728=yes
       R_SHELL="${stdenv.shell}"
   '' + lib.optionalString stdenv.hostPlatform.isDarwin ''

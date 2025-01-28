@@ -12,6 +12,8 @@
   libgtop,
   libgudev,
   libsoup_3,
+  gettext,
+  glib,
   granite7,
   gtk4,
   packagekit,
@@ -35,6 +37,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    gettext # msgfmt
+    glib # glib-compile-resources
     meson
     ninja
     pkg-config

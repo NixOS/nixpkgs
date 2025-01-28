@@ -8,22 +8,24 @@
   texinfo,
   which,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "tcc";
-  version = "0.9.27-unstable-2022-07-15";
+  version = "0.9.27-unstable-2025-01-06";
+
+  outputs = [
+    "dev"
+    "doc"
+    "info"
+    "lib"
+    "man"
+    "out"
+  ];
 
   src = fetchFromRepoOrCz {
     repo = "tinycc";
-    rev = "af1abf1f45d45b34f0b02437f559f4dfdba7d23c";
-    hash = "sha256-jY0P2GErmo//YBaz6u4/jj/voOE3C2JaIDRmo0orXN8=";
+    rev = "f6385c05308f715bdd2c06336801193a21d69b50";
+    hash = "sha256-tO3N+NplYy8QUOC2N3x0CO5Ui75j9bQzLSZQF1HQyhY=";
   };
-
-  outputs = [
-    "out"
-    "info"
-    "man"
-  ];
 
   nativeBuildInputs = [
     copyPkgconfigItems
@@ -57,23 +59,36 @@ stdenv.mkDerivation (finalAttrs: {
       (makePkgconfigItem libtcc-pcitem)
     ];
 
-  postPatch = ''
-    patchShebangs texi2pod.pl
-  '';
-
   configureFlags =
     [
       "--cc=$CC"
       "--ar=$AR"
       "--crtprefix=${lib.getLib stdenv.cc.libc}/lib"
       "--sysincludepaths=${lib.getDev stdenv.cc.libc}/include:{B}/include"
-      "--libpaths=${lib.getLib stdenv.cc.libc}/lib"
+      # The first libpath will be the one in which tcc will look for libtcc1.a,
+      # which is need for its tests.
+      "--libpaths=$lib/lib/tcc:$lib/lib:${lib.getLib stdenv.cc.libc}/lib"
       # build cross compilers
       "--enable-cross"
     ]
     ++ lib.optionals stdenv.hostPlatform.isMusl [
       "--config-musl"
     ];
+
+  enableParallelBuilding = true;
+
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=implicit-int"
+    "-Wno-error=int-conversion"
+  ];
+
+  # Test segfault for static build
+  doInstallCheck =
+    !stdenv.hostPlatform.isStatic && stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+
+  postPatch = ''
+    patchShebangs texi2pod.pl
+  '';
 
   preConfigure =
     let
@@ -90,21 +105,14 @@ stdenv.mkDerivation (finalAttrs: {
       configureFlagsArray+=("--elfinterp=$(< $NIX_CC/nix-support/dynamic-linker)")
     '';
 
-  env.NIX_CFLAGS_COMPILE = toString (
-    lib.optionals stdenv.cc.isClang [
-      "-Wno-error=implicit-int"
-      "-Wno-error=int-conversion"
-    ]
-  );
+  installCheckTarget = "test";
 
-  # Test segfault for static build
-  doCheck = !stdenv.hostPlatform.isStatic;
-
-  checkTarget = "test";
   # https://www.mail-archive.com/tinycc-devel@nongnu.org/msg10142.html
-  preCheck = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
-    rm tests/tests2/{108,114}*
-  '';
+  preInstallCheck =
+    lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64)
+      ''
+        rm tests/tests2/{108,114}*
+      '';
 
   meta = {
     homepage = "https://repo.or.cz/tinycc.git";
@@ -134,12 +142,11 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "tcc";
     maintainers = with lib.maintainers; [
       joachifm
-      AndersonTorres
+      onemoresuza
     ];
     platforms = lib.platforms.unix;
     # https://www.mail-archive.com/tinycc-devel@nongnu.org/msg10199.html
     broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
   };
 })
-# TODO: more multiple outputs
 # TODO: self-compilation

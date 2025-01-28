@@ -16,4 +16,4 @@ dropIconThemeCache() {
     fi
 }
 
-preFixupPhases="${preFixupPhases-} dropIconThemeCache"
+appendToVar preFixupPhases dropIconThemeCache

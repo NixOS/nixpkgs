@@ -237,6 +237,11 @@ if [ "$NIX_SET_BUILD_ID_@suffixSalt@" = 1 ] && ! (( "$relocatable" )); then
     extraAfter+=(--build-id="${NIX_BUILD_ID_STYLE:-sha1}")
 fi
 
+# if a ld-wrapper-hook exists, run it.
+if [[ -e @out@/nix-support/ld-wrapper-hook ]]; then
+    linker=@prog@
+    source @out@/nix-support/ld-wrapper-hook
+fi
 
 # Optionally print debug info.
 if (( "${NIX_DEBUG:-0}" >= 1 )); then

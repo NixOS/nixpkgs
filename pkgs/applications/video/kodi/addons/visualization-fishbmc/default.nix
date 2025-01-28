@@ -11,13 +11,13 @@
 buildKodiBinaryAddon rec {
   pname = "visualization-fishbmc";
   namespace = "visualization.fishbmc";
-  version = "20.2.0";
+  version = "21.0.1";
 
   src = fetchFromGitHub {
     owner = "xbmc";
     repo = namespace;
     rev = "${version}-${rel}";
-    hash = "sha256-MgeSIKAy0N2NMGsU/15tKtDb34CROjcMaKjGyySl9Z0=";
+    hash = "sha256-JAiWkW9iaOq+Q2tArxJ+S7sXQM2K010uT09j30rTY0I=";
   };
 
   extraBuildInputs = [

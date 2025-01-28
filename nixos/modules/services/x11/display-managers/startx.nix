@@ -27,7 +27,7 @@ in
           which allows users to start X manually via the "startx" command
           from a vt shell. The X server runs under the user's id, not as root.
           The user must provide a ~/.xinitrc file containing session startup
-          commands, see startx(1). This is not automatically generated
+          commands, see {manpage}`startx(1)`. This is not automatically generated
           from the desktopManager and windowManager settings.
         '';
       };

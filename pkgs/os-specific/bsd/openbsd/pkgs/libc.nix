@@ -7,6 +7,7 @@
   libm,
   librpcsvc,
   libutil,
+  libexecinfo,
   rtld,
   version,
 }:
@@ -36,6 +37,7 @@ symlinkJoin rec {
           librthread
           librpcsvc
           libutil
+          libexecinfo
         ]
         ++ (lib.optional (!stdenvNoLibc.hostPlatform.isStatic) rtld)
       );

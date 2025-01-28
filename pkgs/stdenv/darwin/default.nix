@@ -1198,7 +1198,6 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
               ld64.out
               libffi.out
               libtapi.out
-              libunistring.out
               libxml2.out
               ncurses.dev
               ncurses.man

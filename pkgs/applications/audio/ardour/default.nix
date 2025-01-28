@@ -160,7 +160,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals videoSupport [ harvid xjadeo ];
 
   wafConfigureFlags = [
-    "--cxx11"
+    "--cxx17"
     "--docs"
     "--freedesktop"
     "--no-phone-home"

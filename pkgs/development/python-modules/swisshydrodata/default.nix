@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "swisshydrodata";
-  version = "0.2.1";
+  version = "0.2.2";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "Bouni";
     repo = "swisshydrodata";
     tag = version;
-    hash = "sha256-RcVwo61HZ02JEOHsSY/W8j2OTBN25oR2JunLZ5i6yVI=";
+    hash = "sha256-e3h/FStzhyaI//bRvT57lA6+06hVqhL2aztI115bsvU=";
   };
 
   build-system = [ setuptools ];

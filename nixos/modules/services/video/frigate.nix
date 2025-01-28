@@ -403,7 +403,7 @@ in
               }
             '';
           };
-          "~* /api/.*\.(jpg|jpeg|png|webp|gif)$" = {
+          "~* /api/.*\\.(jpg|jpeg|png|webp|gif)$" = {
             proxyPass = "http://frigate-api";
             recommendedProxySettings = true;
             extraConfig = nginxAuthRequest + nginxProxySettings + ''

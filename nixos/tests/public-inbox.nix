@@ -9,6 +9,11 @@ import ./make-test-python.nix (
         -subj '/CN=machine.${domain}'
       install -D -t $out key.pem cert.pem
     '';
+
+    gitRepositories = [
+      "repo1"
+      "repo2"
+    ];
   in
   {
     name = "public-inbox";
@@ -23,13 +28,7 @@ import ./make-test-python.nix (
         ...
       }:
       let
-        inherit (config.services) gitolite public-inbox;
-        # Git repositories paths in Gitolite.
-        # Only their baseNameOf is used for configuring public-inbox.
-        repositories = [
-          "user/repo1"
-          "user/repo2"
-        ];
+        inherit (config.services) public-inbox;
       in
       {
         virtualisation.diskSize = 1 * 1024;
@@ -80,7 +79,7 @@ import ./make-test-python.nix (
           };
           inboxes =
             lib.recursiveUpdate
-              (lib.genAttrs (map baseNameOf repositories) (repo: {
+              (lib.genAttrs gitRepositories (repo: {
                 address = [
                   # Routed to the "public-inbox:" transport in services.postfix.transport
                   "${repo}@${domain}"
@@ -104,22 +103,13 @@ import ./make-test-python.nix (
               };
           settings.coderepo = lib.listToAttrs (
             map (
-              path:
-              lib.nameValuePair (baseNameOf path) {
-                dir = "/var/lib/gitolite/repositories/${path}.git";
-                cgitUrl = "https://git.${domain}/${path}.git";
+              repositoryName:
+              lib.nameValuePair repositoryName {
+                dir = "/var/lib/public-inbox/repositories/${repositoryName}.git";
+                cgitUrl = "https://git.${domain}/${repositoryName}.git";
               }
-            ) repositories
+            ) gitRepositories
           );
-        };
-
-        # Use gitolite to store Git repositories listed in coderepo entries
-        services.gitolite = {
-          enable = true;
-          adminPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJmoTOQnGqX+//us5oye8UuE+tQBx9QEM7PN13jrwgqY root@localhost";
-        };
-        systemd.services.public-inbox-httpd = {
-          serviceConfig.SupplementaryGroups = [ gitolite.group ];
         };
 
         # Use nginx as a reverse proxy for public-inbox-httpd
@@ -181,6 +171,7 @@ import ./make-test-python.nix (
         };
 
         environment.systemPackages = [
+          pkgs.gitMinimal
           pkgs.mailutils
           pkgs.openssl
         ];
@@ -189,19 +180,28 @@ import ./make-test-python.nix (
 
     testScript = ''
       start_all()
+
+      # The threshold and/or hardening may have to be changed with new features/checks
+      with subtest("systemd hardening thresholds"):
+        print(machine.succeed("systemd-analyze security public-inbox-httpd.service --threshold=5 --no-pager"))
+        print(machine.succeed("systemd-analyze security public-inbox-imapd.service --threshold=5 --no-pager"))
+        print(machine.succeed("systemd-analyze security public-inbox-nntpd.service --threshold=4 --no-pager"))
+
       machine.wait_for_unit("multi-user.target")
       machine.wait_for_unit("public-inbox-init.service")
 
-      # Very basic check that Gitolite can work;
-      # Gitolite is not needed for the rest of this testScript
-      machine.wait_for_unit("gitolite-init.service")
+      machine.succeed(
+        ${lib.concatMapStrings (repositoryName: ''
+          "sudo -u public-inbox git init --bare -b main /var/lib/public-inbox/repositories/${repositoryName}.git",
+        '') gitRepositories}
+      )
 
       # List inboxes through public-inbox-httpd
+      machine.wait_for_unit("public-inbox-httpd.socket")
       machine.wait_for_unit("nginx.service")
       machine.succeed("curl -L https://machine.${domain} | grep repo1@${domain}")
       # The repo2 inbox is hidden
       machine.fail("curl -L https://machine.${domain} | grep repo2@${domain}")
-      machine.wait_for_unit("public-inbox-httpd.service")
 
       # Send a mail and read it through public-inbox-httpd
       # Must work too when using a recipientDelimiter.
@@ -220,8 +220,7 @@ import ./make-test-python.nix (
       machine.succeed("curl -L 'https://machine.${domain}/inbox/repo1/repo1@root-1/T/#u' | grep 'This is a testing mail.'")
 
       # Read a mail through public-inbox-imapd
-      machine.wait_for_open_port(993)
-      machine.wait_for_unit("public-inbox-imapd.service")
+      machine.wait_for_unit("public-inbox-imapd.socket")
       machine.succeed("openssl s_client -ign_eof -crlf -connect machine.${domain}:993 <${pkgs.writeText "imap-commands" ''
         tag login anonymous@${domain} anonymous
         tag SELECT INBOX.comp.${orga}.repo1.0
@@ -230,8 +229,7 @@ import ./make-test-python.nix (
       ''} | grep '^Message-ID: <repo1@root-1>'")
 
       # TODO: Read a mail through public-inbox-nntpd
-      #machine.wait_for_open_port(563)
-      #machine.wait_for_unit("public-inbox-nntpd.service")
+      #machine.wait_for_unit("public-inbox-nntpd.socket")
 
       # Delete a mail.
       # Note that the use of an extension not listed in the addresses

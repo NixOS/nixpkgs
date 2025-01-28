@@ -98,7 +98,7 @@ makeScopeWithSplicing' {
   qtspell = callPackage ../development/libraries/qtspell { };
 
   qwlroots = callPackage ../development/libraries/qwlroots {
-    wlroots = pkgs.wlroots_0_17;
+    wlroots = pkgs.wlroots_0_18;
   };
 
   qxlsx = callPackage ../development/libraries/qxlsx { };
@@ -126,5 +126,6 @@ makeScopeWithSplicing' {
   xwaylandvideobridge = kdePackages.callPackage ../tools/wayland/xwaylandvideobridge { };
   });
 } // lib.optionalAttrs config.allowAliases {
+  # when removing, don't forget to remove a workaround in `pkgs/kde/default.nix`
   stdenv = lib.warn "qt6Packages.stdenv is deprecated. Use stdenv instead." stdenv; # Added for 25.05
 }

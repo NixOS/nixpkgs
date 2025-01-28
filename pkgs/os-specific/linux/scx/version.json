@@ -2,7 +2,7 @@
   "scx": {
     "version": "1.0.8",
     "hash": "sha256-eXui9fvi8C/HHp8wU7STrDC8b950YZzyhoLoGHXZ6S8=",
-    "cargoHash": "sha256-ymFO6w4Y/VIKrnf0uF0Sso4OSc1MY2CeEwaXsAL5cgo="
+    "cargoHash": "sha256-TdwymmaP6rG+Shh/9ByhXIlo+9yZapi9vWN5/5Rd3RY="
   },
   "bpftool": {
     "rev": "183e7010387d1fc9f08051426e9a9fbd5f8d409e",

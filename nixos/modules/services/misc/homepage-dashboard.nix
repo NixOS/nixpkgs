@@ -240,7 +240,7 @@ in
 
         environment = {
           HOMEPAGE_CONFIG_DIR = configDir;
-          HOMEPAGE_CACHE_DIR = "/var/cache/homepage-dashboard";
+          NIXPKGS_HOMEPAGE_CACHE_DIR = "/var/cache/homepage-dashboard";
           PORT = toString cfg.listenPort;
           LOG_TARGETS = lib.mkIf managedConfig "stdout";
         };
@@ -254,6 +254,14 @@ in
           ExecStart = lib.getExe cfg.package;
           Restart = "on-failure";
         };
+
+        preStart = ''
+          # Related:
+          # * https://github.com/NixOS/nixpkgs/issues/346016 ("homepage-dashboard: cache dir is not cleared upon version upgrade")
+          # * https://github.com/gethomepage/homepage/discussions/4560 ("homepage NixOS package does not clear cache on upgrade leaving broken state")
+          # * https://github.com/vercel/next.js/discussions/58864 ("Feature Request: Allow configuration of cache dir")
+          rm -rf "$NIXPKGS_HOMEPAGE_CACHE_DIR"/*
+        '';
       };
 
       networking.firewall = lib.mkIf cfg.openFirewall {

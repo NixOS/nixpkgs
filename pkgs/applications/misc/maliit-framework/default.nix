@@ -4,6 +4,8 @@
   fetchFromGitHub,
   fetchpatch,
 
+  qtbase,
+
   at-spi2-atk,
   at-spi2-core,
   libepoxy,
@@ -68,7 +70,7 @@ mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DQT5_PLUGINS_INSTALL_DIR=${placeholder "out"}/$qtPluginPrefix"
+    "-DQT5_PLUGINS_INSTALL_DIR=${placeholder "out"}/${qtbase.qtPluginPrefix}"
   ];
 
   meta = with lib; {

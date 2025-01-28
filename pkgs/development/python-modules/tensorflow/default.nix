@@ -22,7 +22,6 @@
   packaging,
   setuptools,
   wheel,
-  keras-preprocessing,
   google-pasta,
   opt-einsum,
   astunparse,
@@ -197,7 +196,6 @@ let
     google-pasta
     grpcio
     h5py
-    keras-preprocessing
     numpy
     opt-einsum
     packaging
@@ -449,9 +447,6 @@ let
         rm -f .bazelversion
         patchShebangs .
       ''
-      + lib.optionalString (stdenv.hostPlatform.system == "x86_64-darwin") ''
-        cat ${./com_google_absl_fix_macos.patch} >> third_party/absl/com_google_absl_fix_mac_and_nvcc_build.patch
-      ''
       + lib.optionalString (!withTensorboard) ''
         # Tensorboard pulls in a bunch of dependencies, some of which may
         # include security vulnerabilities. So we make it optional.
@@ -651,7 +646,6 @@ buildPythonPackage {
     google-pasta
     grpcio
     h5py
-    keras-preprocessing
     numpy
     opt-einsum
     packaging

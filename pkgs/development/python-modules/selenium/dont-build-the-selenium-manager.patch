@@ -1,37 +1,55 @@
-From e52d75248a5d18bcf965591eb240a11a23147634 Mon Sep 17 00:00:00 2001
-From: Pavel Sobolev <contact@paveloom.dev>
-Date: Sat, 3 Aug 2024 22:38:49 +0300
-Subject: [PATCH] Don't build the Selenium Manager.
-
----
- py/setup.py | 7 -------
- 1 file changed, 7 deletions(-)
-
+diff --git a/py/pyproject.toml b/py/pyproject.toml
+index e99a03cd5d..1061adbdf5 100644
+--- a/py/pyproject.toml
++++ b/py/pyproject.toml
+@@ -1,5 +1,5 @@
+ [build-system]
+-requires = ["setuptools", "setuptools-rust"]
++requires = ["setuptools"]
+ build-backend = "setuptools.build_meta"
+ 
+ [project]
 diff --git a/py/setup.py b/py/setup.py
-index a71007f..fdda74e 100755
+deleted file mode 100755
+index 0f93e33f0e..0000000000
 --- a/py/setup.py
-+++ b/py/setup.py
-@@ -19,7 +19,6 @@ from distutils.command.install import INSTALL_SCHEMES
- from os.path import dirname, join, abspath
- from setuptools import setup
- from setuptools.command.install import install
++++ /dev/null
+@@ -1,38 +0,0 @@
+-# Licensed to the Software Freedom Conservancy (SFC) under one
+-# or more contributor license agreements.  See the NOTICE file
+-# distributed with this work for additional information
+-# regarding copyright ownership.  The SFC licenses this file
+-# to you under the Apache License, Version 2.0 (the
+-# "License"); you may not use this file except in compliance
+-# with the License.  You may obtain a copy of the License at
+-#
+-#   http://www.apache.org/licenses/LICENSE-2.0
+-#
+-# Unless required by applicable law or agreed to in writing,
+-# software distributed under the License is distributed on an
+-# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+-# KIND, either express or implied.  See the License for the
+-# specific language governing permissions and limitations
+-# under the License.
+-
+-from distutils.command.install import INSTALL_SCHEMES
+-from os.path import dirname, join, abspath
+-from setuptools import setup
+-from setuptools.command.install import install
 -from setuptools_rust import Binding, RustExtension
-
-
- for scheme in INSTALL_SCHEMES.values():
-@@ -84,12 +83,6 @@ setup_args = {
-         "typing_extensions~=4.9",
-         "websocket-client~=1.8",
-     ],
+-
+-
+-for scheme in INSTALL_SCHEMES.values():
+-    scheme['data'] = scheme['purelib']
+-
+-setup_args = {
+-    'cmdclass': {'install': install},
 -    'rust_extensions': [
 -        RustExtension(
 -            {"selenium-manager": "selenium.webdriver.common.selenium-manager"},
 -            binding=Binding.Exec
 -        )
 -    ],
-     'zip_safe': False
- }
-
---
-2.45.2
-
+-}
+-
+-setup(**setup_args)

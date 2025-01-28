@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "dep-logic";
-  version = "0.4.9";
+  version = "0.4.10";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "pdm-project";
     repo = "dep-logic";
     tag = version;
-    hash = "sha256-5PEHkxwIgDz3Qs993qI4eaQZ5Him4i/MAnUam820AWc=";
+    hash = "sha256-hmJUX/8rVSn6p+KFmFsMWmb2t5A5MkzcG7HiJ/0J6J0=";
   };
 
   nativeBuildInputs = [ pdm-backend ];

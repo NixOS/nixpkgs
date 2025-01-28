@@ -47,7 +47,7 @@ in
           `config` to `[ { foo.x = 42; } { bar.y = 42; }]` will put the `foo`
           section before the `bar` section unlike the default alphabetical
           order, which can be helpful for sections such as `include` and
-          `includeIf`. See the CONFIGURATION FILE section of git-config(1) for
+          `includeIf`. See the CONFIGURATION FILE section of {manpage}`git-config(1)` for
           more information.
         '';
       };

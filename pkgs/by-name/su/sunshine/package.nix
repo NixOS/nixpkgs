@@ -45,6 +45,7 @@
   libappindicator,
   libnotify,
   miniupnpc,
+  nlohmann_json,
   config,
   cudaSupport ? config.cudaSupport,
   cudaPackages ? { },
@@ -54,31 +55,21 @@ let
 in
 stdenv'.mkDerivation rec {
   pname = "sunshine";
-  version = "0.23.1";
+  version = "2025.122.141614";
 
   src = fetchFromGitHub {
     owner = "LizardByte";
     repo = "Sunshine";
-    rev = "v${version}";
-    hash = "sha256-D5ee5m2ZTKVqZDH07nzJuFEbZBQ4xW7m4nYnJQe0EaA=";
+    tag = "v${version}";
+    hash = "sha256-rHf+lj5dycXA//fu3RPuimYz2hrJnoVt7GA2xuHGXJk=";
     fetchSubmodules = true;
   };
-
-  patches = [
-    # fix(upnp): support newer miniupnpc library (#2782)
-    # Manually cherry-picked on to 0.23.1.
-    ./0001-fix-upnp-support-newer-miniupnpc-library-2782.patch
-
-    # port of https://github.com/LizardByte/Sunshine/commit/e90b71ce62b7744bb18ffc7823b1e895786ffb0a
-    # remove on update
-    ./boost-186.patch
-  ];
 
   # build webui
   ui = buildNpmPackage {
     inherit src version;
     pname = "sunshine-ui";
-    npmDepsHash = "sha256-9FuMtxTwrU9UIhZXQn/tmGN0IHZBdunV0cY/EElj4bA=";
+    npmDepsHash = "sha256-sWCmx1dMEyRyuYeeuqAjHZLVnckskgQO4saFM64s4Y4=";
 
     # use generated package-lock.json as upstream does not provide one
     postPatch = ''
@@ -145,9 +136,11 @@ stdenv'.mkDerivation rec {
       libappindicator
       libnotify
       miniupnpc
+      nlohmann_json
     ]
     ++ lib.optionals cudaSupport [
       cudaPackages.cudatoolkit
+      cudaPackages.cuda_cudart
     ]
     ++ lib.optionals stdenv.hostPlatform.isx86_64 [
       intel-media-sdk
@@ -161,18 +154,40 @@ stdenv'.mkDerivation rec {
     libglvnd
   ];
 
-  cmakeFlags = [
-    "-Wno-dev"
-    # upstream tries to use systemd and udev packages to find these directories in FHS; set the paths explicitly instead
-    (lib.cmakeFeature "UDEV_RULES_INSTALL_DIR" "lib/udev/rules.d")
-    (lib.cmakeFeature "SYSTEMD_USER_UNIT_INSTALL_DIR" "lib/systemd/user")
-  ];
+  cmakeFlags =
+    [
+      "-Wno-dev"
+      # upstream tries to use systemd and udev packages to find these directories in FHS; set the paths explicitly instead
+      (lib.cmakeBool "UDEV_FOUND" true)
+      (lib.cmakeBool "SYSTEMD_FOUND" true)
+      (lib.cmakeFeature "UDEV_RULES_INSTALL_DIR" "lib/udev/rules.d")
+      (lib.cmakeFeature "SYSTEMD_USER_UNIT_INSTALL_DIR" "lib/systemd/user")
+      (lib.cmakeBool "BOOST_USE_STATIC" false)
+      (lib.cmakeBool "BUILD_DOCS" false)
+      (lib.cmakeFeature "SUNSHINE_PUBLISHER_NAME" "nixpkgs")
+      (lib.cmakeFeature "SUNSHINE_PUBLISHER_WEBSITE" "https://nixos.org")
+      (lib.cmakeFeature "SUNSHINE_PUBLISHER_ISSUE_URL" "https://github.com/NixOS/nixpkgs/issues")
+    ]
+    ++ lib.optionals (!cudaSupport) [
+      (lib.cmakeBool "SUNSHINE_ENABLE_CUDA" false)
+    ];
+
+  env = {
+    # needed to trigger CMake version configuration
+    BUILD_VERSION = "${version}";
+    BRANCH = "master";
+    COMMIT = "";
+  };
 
   postPatch = ''
     # remove upstream dependency on systemd and udev
     substituteInPlace cmake/packaging/linux.cmake \
       --replace-fail 'find_package(Systemd)' "" \
       --replace-fail 'find_package(Udev)' ""
+
+    # don't look for npm since we build webui separately
+    substituteInPlace cmake/targets/common.cmake \
+      --replace-fail 'find_program(NPM npm REQUIRED)' ""
 
     substituteInPlace packaging/linux/sunshine.desktop \
       --subst-var-by PROJECT_NAME 'Sunshine' \

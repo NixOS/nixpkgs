@@ -5,7 +5,7 @@
   buildGoModule,
   callPackage,
   gnumake,
-  pnpm,
+  pnpm_9,
   nodejs,
   ocis,
 }:
@@ -44,10 +44,10 @@ buildGoModule rec {
   nativeBuildInputs = [
     gnumake
     nodejs
-    pnpm.configHook
+    pnpm_9.configHook
   ];
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version src;
     sourceRoot = "${src.name}/services/idp";
     hash = "sha256-gNlN+u/bobnTsXrsOmkDcWs67D/trH3inT5AVQs3Brs=";

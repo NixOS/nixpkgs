@@ -49,14 +49,12 @@ stdenv.mkDerivation (finalAttrs: {
     "-DFLB_METRICS=ON"
     "-DFLB_HTTP_SERVER=ON"
     "-DFLB_OUT_PGSQL=ON"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.13" ];
+  ];
 
   env.NIX_CFLAGS_COMPILE = toString (
-    # Used by the embedded luajit, but is not predefined on older mac SDKs.
-    lib.optionals stdenv.hostPlatform.isDarwin [ "-DTARGET_OS_IPHONE=0" ]
     # Assumes GNU version of strerror_r, and the posix version has an
     # incompatible return type.
-    ++ lib.optionals (!stdenv.hostPlatform.isGnu) [ "-Wno-int-conversion" ]
+    lib.optionals (!stdenv.hostPlatform.isGnu) [ "-Wno-int-conversion" ]
   );
 
   outputs = [

@@ -42,7 +42,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "SDK to perform actions on Outscale API";
-    homepage = "http://github.com/outscale/osc-sdk-python";
+    homepage = "https://github.com/outscale/osc-sdk-python";
     license = licenses.bsd3;
     maintainers = with maintainers; [ nicolas-goudry ];
   };

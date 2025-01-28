@@ -54,6 +54,9 @@ stdenv.mkDerivation rec {
     "all"
   ];
 
+  # GCC 14 makes these errors by default
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration -Wno-error=return-mismatch -Wno-error=implicit-int";
+
   outputs = [
     "out"
     "doc"

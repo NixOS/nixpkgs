@@ -97,7 +97,7 @@ let
         default = null;
         description = ''
           Type of the route.  See the `Route types` section
-          in the `ip-route(8)` manual page for the details.
+          in the {manpage}`ip-route(8)` manual page for the details.
 
           Note that `prohibit`, `blackhole`,
           `unreachable`, and `throw` cannot
@@ -118,7 +118,7 @@ let
         example = { mtu = "1492"; window = "524288"; };
         description = ''
           Other route options. See the symbol `OPTIONS`
-          in the `ip-route(8)` manual page for the details.
+          in the {manpage}`ip-route(8)` manual page for the details.
           You may also specify `metric`,
           `src`, `protocol`,
           `scope`, `from`

@@ -6,6 +6,7 @@
   cmake,
   extra-cmake-modules,
   boost,
+  gettext,
   libime,
   fcitx5,
   fcitx5-qt,
@@ -45,7 +46,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
-    boost
+    gettext
     fcitx5-lua
   ];
 
@@ -55,6 +56,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
+    boost
     fcitx5
     fcitx5-qt
     libime

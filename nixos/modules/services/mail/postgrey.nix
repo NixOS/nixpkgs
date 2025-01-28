@@ -119,7 +119,7 @@ in
       greylistAction = mkOption {
         type = str;
         default = "DEFER_IF_PERMIT";
-        description = "Response status for greylisted messages (see access(5))";
+        description = "Response status for greylisted messages (see {manpage}`access(5)`)";
       };
       greylistHeader = mkOption {
         type = str;
@@ -170,12 +170,12 @@ in
       whitelistClients = mkOption {
         type = listOf path;
         default = [ ];
-        description = "Client address whitelist files (see postgrey(8))";
+        description = "Client address whitelist files (see {manpage}`postgrey(8)`)";
       };
       whitelistRecipients = mkOption {
         type = listOf path;
         default = [ ];
-        description = "Recipient address whitelist files (see postgrey(8))";
+        description = "Recipient address whitelist files (see {manpage}`postgrey(8)`)";
       };
     };
   };

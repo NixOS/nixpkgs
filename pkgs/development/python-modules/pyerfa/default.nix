@@ -24,6 +24,7 @@ buildPythonPackage rec {
 
   build-system = [
     jinja2
+    numpy
     packaging
     setuptools
     setuptools-scm

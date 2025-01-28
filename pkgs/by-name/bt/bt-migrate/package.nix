@@ -61,5 +61,6 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ ambroisie ];
     mainProgram = "BtMigrate";
     platforms = platforms.all;
+    broken = true; # https://github.com/mikedld/bt-migrate/issues/26
   };
 }

@@ -117,7 +117,7 @@ in
       advertisedAddresses = mkOption {
         type = types.listOf types.str;
         default = [ ];
-        description = "List of IP addresses this server is advertised under. See NetInfo(5)";
+        description = "List of IP addresses this server is advertised under. See {manpage}`NetInfo(5)`";
       };
 
       cellName = mkOption {

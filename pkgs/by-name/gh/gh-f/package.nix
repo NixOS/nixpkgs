@@ -25,13 +25,13 @@ let
 in
 stdenvNoCC.mkDerivation rec {
   pname = "gh-f";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "gennaro-tedesco";
     repo = "gh-f";
     rev = "v${version}";
-    hash = "sha256-rdHQIhrU0nzIURnmPGyzSkew6FVn4Z6J1rn3HvyDpJI=";
+    hash = "sha256-62FVFW2KLdH0uonIf3OVBFMGLcCteMjydaLAjWtxwUo=";
   };
 
   nativeBuildInputs = [

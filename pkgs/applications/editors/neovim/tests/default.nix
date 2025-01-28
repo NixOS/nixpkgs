@@ -13,6 +13,7 @@ Here are some common neovim flags used in the tests:
 , neovim-unwrapped
 , fetchFromGitLab
 , runCommandLocal
+, testers
 , pkgs
 }:
 let
@@ -107,8 +108,7 @@ in
 
   inherit nmt;
 
-  # Disabled because of https://github.com/NixOS/nixpkgs/pull/352727
-  # failed_check = pkgs.testers.testBuildFailure nvim-run-failing-check;
+  failed_check = testers.testBuildFailure nvim-run-failing-check;
 
   vim_empty_config = vimUtils.vimrcFile { beforePlugins = ""; customRC = ""; };
 

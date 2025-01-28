@@ -10,17 +10,15 @@
 }:
 beamPackages.mixRelease rec {
   pname = "akkoma";
-  version = "3.13.2";
+  version = "3.14.1";
 
   src = fetchFromGitea {
     domain = "akkoma.dev";
     owner = "AkkomaGang";
     repo = "akkoma";
     rev = "v${version}";
-    hash = "sha256-WZAkpJIPzAbqXawNiM3JqE9tJzxrNs/2dGAWVMwLpN4=";
+    hash = "sha256-Ygb51jQatdyX/DzJk84X1AEliBGD938f83UnI5OqBPM=";
   };
-
-  patches = [ ./0001-fix-tzdata.patch ];
 
   postPatch = ''
     # Remove dependency on OS_Mon
@@ -31,7 +29,7 @@ beamPackages.mixRelease rec {
   postBuild = ''
     # Digest and compress static files
     rm -f priv/static/READ_THIS_BEFORE_TOUCHING_FILES_HERE
-    mix phx.digest --no-deps-check
+    mix phx.digest --no-compile
   '';
 
   mixNixDeps = import ./mix.nix {
@@ -76,8 +74,8 @@ beamPackages.mixRelease rec {
             group = "pleroma";
             owner = "elixir-libraries";
             repo = "elixir-captcha";
-            rev = "90f6ce7672f70f56708792a98d98bd05176c9176";
-            hash = "sha256-s7EuAhmCsQA/4p2NJHJSWB/DZ5hA+7EelPsUOvKr2Po=";
+            rev = "6630c42aaaab124e697b4e513190c89d8b64e410";
+            hash = "sha256-KLsKBfCt6bUylSTTqRQi6ic0MyimanvIZRhU4Iv5Fmw=";
           };
 
           # the binary is not getting installed by default
@@ -107,21 +105,9 @@ beamPackages.mixRelease rec {
             hash = "sha256-CtmQHVl+VTpemne+nxbkYGcErrgCo+t3ZBPbkFSpyF0=";
           };
         };
-        linkify = beamPackages.buildMix rec {
-          name = "linkify";
-          version = "0.5.2";
-
-          src = fetchFromGitea {
-            domain = "akkoma.dev";
-            owner = "AkkomaGang";
-            repo = "linkify";
-            rev = "2567e2c1073fa371fd26fd66dfa5bc77b6919c16";
-            hash = "sha256-e3wzlbRuyw/UB5Tb7IozX/WR1T+sIBf9C/o5Thki9vg=";
-          };
-        };
         mfm_parser = beamPackages.buildMix rec {
           name = "mfm_parser";
-          version = "0.1.1";
+          version = "0.1.0";
 
           src = fetchFromGitea {
             domain = "akkoma.dev";
@@ -171,14 +157,14 @@ beamPackages.mixRelease rec {
         };
         http_signatures = beamPackages.buildMix rec {
           name = "http_signatures";
-          version = "0.1.2";
+          version = "0.1.3";
 
           src = fetchFromGitea {
             domain = "akkoma.dev";
             owner = "AkkomaGang";
             repo = "http_signatures";
-            rev = "6640ce7d24c783ac2ef56e27d00d12e8dc85f396";
-            hash = "sha256-Q/IoVbM/TBgGCmx8AxiBHF2hARb0FbPml8N1HjN3CsE=";
+            rev = "d44c43d66758c6a73eaa4da9cffdbee0c5da44ae";
+            hash = "sha256-o5xF++AIJLVMFuQwldNyWpYJGWFHZZTfGy1V80TZzR8=";
           };
 
           beamDeps = with final; [ credo ex_doc dialyxir temple ];
@@ -189,7 +175,7 @@ beamPackages.mixRelease rec {
         };
         majic = beamPackages.buildMix {
           name = "majic";
-          version = "0.1.2";
+          version = "1.0.0";
 
           src = fetchFromGitea {
             domain = "akkoma.dev";
@@ -219,11 +205,11 @@ beamPackages.mixRelease rec {
     elixirPackage = beamPackages.elixir;
   };
 
-  meta = with lib; {
+  meta = {
     description = "ActivityPub microblogging server";
     homepage = "https://akkoma.social";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ mvs ];
-    platforms = platforms.unix;
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ mvs ];
+    platforms = lib.platforms.unix;
   };
 }

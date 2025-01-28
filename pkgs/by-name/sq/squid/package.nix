@@ -14,15 +14,17 @@
   pkg-config,
   systemd,
   cppunit,
+  esi ? false,
+  ipv6 ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "squid";
-  version = "6.10";
+  version = "6.12";
 
   src = fetchurl {
     url = "http://www.squid-cache.org/Versions/v6/squid-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Cwexh+cj8Edw3SW+uJrsEgMKFYaWqoiS2HyLJoU0CKc=";
+    hash = "sha256-8986uyYDpRMmbySl1Gmanw12ufVU0YSLZ/nFHNOzy1A=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -46,7 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags =
     [
-      "--enable-ipv6"
       "--disable-strict-error-checking"
       "--disable-arch-native"
       "--with-openssl"
@@ -57,6 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
       "--enable-x-accelerator-vary"
       "--enable-htcp"
     ]
+    ++ (if ipv6 then [ "--enable-ipv6" ] else [ "--disable-ipv6" ])
+    ++ lib.optional (!esi) "--disable-esi"
     ++ lib.optional (
       stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isMusl
     ) "--enable-linux-netfilter";

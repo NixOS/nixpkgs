@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-# ! nix-shell -i python3 -p python3 python3.pkgs.xmltodict
+#! nix-shell -i python3 -p python3 python3.pkgs.xmltodict
 import os
 from argparse import ArgumentParser
 from xmltodict import parse

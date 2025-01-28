@@ -92,10 +92,6 @@ stdenv.mkDerivation rec {
       install -Dm644 share/pixmaps/groestlcoin256.png $out/share/pixmaps/groestlcoin.png
     '';
 
-  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    export MACOSX_DEPLOYMENT_TARGET=10.13
-  '';
-
   configureFlags =
     [
       "--with-boost-libdir=${boost.out}/lib"

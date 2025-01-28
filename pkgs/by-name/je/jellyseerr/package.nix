@@ -16,18 +16,18 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "jellyseerr";
-  version = "2.1.0";
+  version = "2.2.3";
 
   src = fetchFromGitHub {
     owner = "Fallenbagel";
     repo = "jellyseerr";
     rev = "v${version}";
-    hash = "sha256-5kaeqhjUy9Lgx4/uFcGRlAo+ROEOdTWc2m49rq8R8Hs=";
+    hash = "sha256-JkbmCyunaMngAKUNLQHxfa1pktXxTjeL6ngvIgiAsGo=";
   };
 
   pnpmDeps = pnpm.fetchDeps {
     inherit pname version src;
-    hash = "sha256-xu6DeaBArQmnqEnIgjc1DTZujQebSkjuai9tMHeQWCk=";
+    hash = "sha256-1r2+aeRb6zdpqqimufibVRjeAdvwHL0GiQSu5pHBh+U=";
   };
 
   buildInputs = [ sqlite ];

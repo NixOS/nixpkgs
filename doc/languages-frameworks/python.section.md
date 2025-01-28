@@ -57,7 +57,6 @@ sets are
 * `pkgs.python313Packages`
 * `pkgs.python314Packages`
 * `pkgs.pypy27Packages`
-* `pkgs.pypy39Packages`
 * `pkgs.pypy310Packages`
 
 and the aliases
@@ -66,7 +65,7 @@ and the aliases
 * `pkgs.python3Packages` pointing to `pkgs.python312Packages`
 * `pkgs.pythonPackages` pointing to `pkgs.python2Packages`
 * `pkgs.pypy2Packages` pointing to `pkgs.pypy27Packages`
-* `pkgs.pypy3Packages` pointing to `pkgs.pypy39Packages`
+* `pkgs.pypy3Packages` pointing to `pkgs.pypy310Packages`
 * `pkgs.pypyPackages` pointing to `pkgs.pypy2Packages`
 
 
@@ -213,7 +212,7 @@ because their behaviour is different:
 * `dependencies ? []`: Aside from propagating dependencies,
   `buildPythonPackage` also injects code into and wraps executables with the
   paths included in this list. Items listed in `install_requires` go here.
-* `optional-dependencies ? { }`: Optional feature flagged dependencies.  Items listed in `extras_requires` go here.
+* `optional-dependencies ? { }`: Optional feature flagged dependencies.  Items listed in `extras_require` go here.
 
 
 ##### Overriding Python packages {#overriding-python-packages}

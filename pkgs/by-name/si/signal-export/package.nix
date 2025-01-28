@@ -6,25 +6,26 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "signal-export";
-  version = "1.8.2";
+  version = "3.2.2";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Hm0BVF2RUsxDacsAB3MJtk1t9FYmBPjeb5JzwaLkZ14=";
+    inherit version;
+    pname = "signal_export";
+    hash = "sha256-QHTix56hdujxWr+pjCg6zu15tCB7YoDSzmNpWwWOHN0=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
-    setuptools-scm
+  build-system = with python3.pkgs; [
+    pdm-backend
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
-    setuptools
     typer
     beautifulsoup4
     emoji
     markdown
-    pysqlcipher3
+    pycryptodome
+    sqlcipher3-wheels
   ];
 
   passthru.updateScript = nix-update-script { };

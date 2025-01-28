@@ -23,10 +23,10 @@ let
     # certain plugins need a custom configuration (available in passthru.initLua)
     # to work with nix.
     # if true, the wrapper automatically appends those snippets when necessary
-    , autoconfigure ? false
+    , autoconfigure ? true
 
     # append to PATH runtime deps of plugins
-    , autowrapRuntimeDeps ? false
+    , autowrapRuntimeDeps ? true
 
     # should contain all args but the binary. Can be either a string or list
     , wrapperArgs ? []

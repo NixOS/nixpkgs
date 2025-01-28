@@ -14,7 +14,7 @@ Original-Author: Eelco Dolstra <eelco.dolstra@logicblox.com>
  2 files changed, 6 insertions(+), 2 deletions(-)
 
 diff --git a/src/shared/fstab-util.c b/src/shared/fstab-util.c
-index eac5bb8d3b..d8187bfa99 100644
+index d6a256c4a7..f74d5198f1 100644
 --- a/src/shared/fstab-util.c
 +++ b/src/shared/fstab-util.c
 @@ -66,6 +66,8 @@ bool fstab_is_extrinsic(const char *mount, const char *opts) {
@@ -27,7 +27,7 @@ index eac5bb8d3b..d8187bfa99 100644
                          "/etc"))
                  return true;
 diff --git a/src/shutdown/umount.c b/src/shutdown/umount.c
-index ca6d36e054..0a9227c9a8 100644
+index 4bc01c75e0..ede9ac7b87 100644
 --- a/src/shutdown/umount.c
 +++ b/src/shutdown/umount.c
 @@ -170,8 +170,10 @@ int mount_points_list_get(const char *mountinfo, MountPoint **head) {

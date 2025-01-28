@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "yamale";
-  version = "5.2.1";
+  version = "6.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -20,17 +20,20 @@ buildPythonPackage rec {
     owner = "23andMe";
     repo = "yamale";
     tag = version;
-    hash = "sha256-iiiQAZ050FintRSV3l2zfikTNmphhJgrn+4tUHORiSk=";
+    hash = "sha256-Ij9jhGMYHUStZ/xR5GUg/eF6YQdtIfpLU7g1pev6wJU=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     pyyaml
-    ruamel-yaml
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  optional-dependencies = {
+    ruamel = [ ruamel-yaml ];
+  };
+
+  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.ruamel;
 
   pythonImportsCheck = [ "yamale" ];
 

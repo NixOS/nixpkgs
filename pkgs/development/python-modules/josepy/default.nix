@@ -2,34 +2,23 @@
   lib,
   buildPythonPackage,
   cryptography,
-  fetchPypi,
-  fetchpatch,
+  fetchFromGitHub,
   poetry-core,
   pyopenssl,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "josepy";
-  version = "1.14.0";
+  version = "1.15.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-MIs7+c6CWtTUu6djcs8ZtdwcLOlqnSmPlkKXXmS9E90=";
+  src = fetchFromGitHub {
+    owner = "certbot";
+    repo = "josepy";
+    tag = "v${version}";
+    hash = "sha256-fK4JHDP9eKZf2WO+CqRdEjGwJg/WNLvoxiVrb5xQxRc=";
   };
-
-  patches = [
-    # don't fail tests on openssl deprecation warning, upstream is working on proper fix
-    # FIXME: remove for next update
-    (fetchpatch {
-      url = "https://github.com/certbot/josepy/commit/350410fc1d38c4ac8422816b6865ac8cd9c60fc7.diff";
-      hash = "sha256-QGbzonXb5BtTTWDeDqnZhbS6gHce99vIOm/H8QYeGXY=";
-    })
-  ];
 
   nativeBuildInputs = [ poetry-core ];
 

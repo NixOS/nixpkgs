@@ -14,12 +14,13 @@
   pytestCheckHook,
   pythonOlder,
   syrupy,
+  time-machine,
   tzlocal,
 }:
 
 buildPythonPackage rec {
   pname = "aioautomower";
-  version = "2024.12.0";
+  version = "2025.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -28,7 +29,7 @@ buildPythonPackage rec {
     owner = "Thomas55555";
     repo = "aioautomower";
     tag = version;
-    hash = "sha256-JLlmvd6Hgf1a3YU9xfbw8plEbRDNgCzxF3PpveGsrPg=";
+    hash = "sha256-MEZdYOpBAHmWidzq+7SpEFsHNYlSaIQ4utnGK9Y3/NE=";
   };
 
   postPatch = ''
@@ -53,6 +54,7 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-cov-stub
     pytestCheckHook
+    time-machine
     syrupy
   ];
 

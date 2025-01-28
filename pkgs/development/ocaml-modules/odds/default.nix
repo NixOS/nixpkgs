@@ -9,7 +9,7 @@ buildDunePackage rec {
   pname = "odds";
   version = "1.2";
 
-  minimalOcamlVersion = "5.0.0";
+  minimalOCamlVersion = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "raphael-proust";
@@ -18,7 +18,7 @@ buildDunePackage rec {
     hash = "sha256-tPDowkpsJQKCoeuXOb9zPORoudUvkRBZ3OzkH2QE2zg=";
   };
 
-  propagatedBuildInputs = [
+  buildInputs = [
     cmdliner
   ];
 

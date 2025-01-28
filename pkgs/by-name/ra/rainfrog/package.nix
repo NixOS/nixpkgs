@@ -9,7 +9,7 @@
   rainfrog,
 }:
 let
-  version = "0.2.10";
+  version = "0.2.11";
 in
 rustPlatform.buildRustPackage {
   inherit version;
@@ -19,10 +19,10 @@ rustPlatform.buildRustPackage {
     owner = "achristmascarl";
     repo = "rainfrog";
     tag = "v${version}";
-    hash = "sha256-hIhg6OeWCp27OPHg10ifjsSvPrBHQMnn4P3CmyYmdDk=";
+    hash = "sha256-gtiwkgNyqq+KMATkzaLOjPB6jcjVAM2qq6zwZ1WGkPE=";
   };
 
-  cargoHash = "sha256-MYqVo+7xQzF55rEqUJNcB1SAEoxowHl+vOINCyr59nA=";
+  cargoHash = "sha256-u0BmDtOIlYfHEAiDp+BnY1/ne3tKwmy/Cem6+5CX3GE=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
     with darwin.apple_sdk.frameworks;

@@ -47,6 +47,18 @@
   "ch-installation": [
     "index.html#ch-installation"
   ],
+  "sec-mattermost": [
+    "index.html#sec-mattermost"
+  ],
+  "sec-mattermost-derivation": [
+    "index.html#sec-mattermost-derivation"
+  ],
+  "sec-mattermost-plugins": [
+    "index.html#sec-mattermost-plugins"
+  ],
+  "sec-mattermost-plugins-build": [
+    "index.html#sec-mattermost-plugins-build"
+  ],
   "sec-obtaining": [
     "index.html#sec-obtaining"
   ],
@@ -874,6 +886,12 @@
   ],
   "module-services-networking-dnsmasq-references": [
     "index.html#module-services-networking-dnsmasq-references"
+  ],
+  "module-service-doh-server": [
+    "index.html#module-service-doh-server"
+  ],
+  "module-service-doh-server-quick-start": [
+    "index.html#module-service-doh-server-quick-start"
   ],
   "module-services-samba": [
     "index.html#module-services-samba"
@@ -1903,6 +1921,9 @@
   ],
   "sec-nixpkgs-release-25.05-lib-breaking": [
     "release-notes.html#sec-nixpkgs-release-25.05-lib-breaking"
+  ],
+  "sec-nixpkgs-release-25.05-lib-deprecations": [
+    "release-notes.html#sec-nixpkgs-release-25.05-lib-deprecations"
   ],
   "sec-release-24.11": [
     "release-notes.html#sec-release-24.11"

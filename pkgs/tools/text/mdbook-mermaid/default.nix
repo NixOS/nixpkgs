@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mdbook-mermaid";
-  version = "0.14.0";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "badboy";
     repo = pname;
     tag = "v${version}";
-    hash = "sha256-elDKxtGMLka9Ss5CNnzw32ndxTUliNUgPXp7e4KUmBo=";
+    hash = "sha256-hqz2zUdDZjbe3nq4YpL68XJ64qpbjANag9S2uAM5nXg=";
   };
 
-  cargoHash = "sha256-BnbllOsidqDEfKs0pd6AzFjzo51PKm9uFSwmOGTW3ug=";
+  cargoHash = "sha256-KrvrmodsoAvNxjJqdKTXva32dtlKINPGHwfxcK1VDwY=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     CoreServices

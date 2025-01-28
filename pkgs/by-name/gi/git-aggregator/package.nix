@@ -1,17 +1,19 @@
 {
   lib,
   python3Packages,
-  fetchPypi,
+  fetchFromGitHub,
   git,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "git-aggregator";
-  version = "2.1.0";
+  version = "4.0.2";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-79xNPzYP1j71sU5wZM5e2xTqQExqQEdxXPxbk4T/Scw=";
+  src = fetchFromGitHub {
+    owner = "acsone";
+    repo = "git-aggregator";
+    tag = version;
+    hash = "sha256-6o+bf3s5KyRQWA7hp3xk76AfxBdzP0lOBOozgwe3Wtw=";
   };
 
   nativeBuildInputs = with python3Packages; [

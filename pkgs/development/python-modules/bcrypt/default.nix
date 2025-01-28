@@ -5,7 +5,7 @@
   rustPlatform,
   rustc,
   setuptools,
-  setuptools-rust,
+  setuptoolsRustBuildHook,
   fetchPypi,
   pythonOlder,
   pytestCheckHook,
@@ -41,7 +41,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
-    setuptools-rust
+    setuptoolsRustBuildHook
     rustPlatform.cargoSetupHook
     cargo
     rustc

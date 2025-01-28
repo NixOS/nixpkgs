@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "deepin-desktop-schemas";
-  version = "6.0.6";
+  version = "6.0.7";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-zheIZ3Z0vm0/0F9hFcdlYwhE3/PRunxUCT8KSe4T3wk=";
+    hash = "sha256-Zp80Yz0qkFAwpQJPgs/gcfCG2DMtvpKdVKRlqOTmaCk=";
   };
 
   vendorHash = "sha256-q6ugetchJLv2JjZ9+nevUI0ptizh2V+6SByoY/eFJJQ=";
@@ -24,7 +24,7 @@ buildGoModule rec {
     for file in $(grep -rl "/usr/share")
     do
       substituteInPlace $file \
-        --replace "/usr/share" "/run/current-system/sw/share"
+        --replace-fail "/usr/share" "/run/current-system/sw/share"
     done
   '';
 
@@ -47,11 +47,11 @@ buildGoModule rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GSettings deepin desktop-wide schemas";
     homepage = "https://github.com/linuxdeepin/deepin-desktop-schemas";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.deepin.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = lib.teams.deepin.members;
   };
 }

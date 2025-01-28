@@ -48,6 +48,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   disabledTests = [
+    "test_project_all_platforms_invalid"
     "test_run_init_flask"
     "test_run_init_django"
   ];

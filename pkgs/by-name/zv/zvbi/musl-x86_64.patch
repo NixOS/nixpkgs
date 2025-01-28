@@ -1,0 +1,81 @@
+From ae143105863a9b8ecc9e46b91df011360e617f8f Mon Sep 17 00:00:00 2001
+From: Alyssa Ross <hi@alyssa.is>
+Date: Fri, 20 Dec 2024 16:14:08 +0100
+Subject: [PATCH] Use standard va_copy(), not GNU __va_copy()
+
+va_copy() was standardized in C99.  My musl toolchain provides
+va_copy(), not __va_copy().  The Glibc documentation recommends
+using va_copy() if defined, and otherwise falling back to an
+assignment.
+
+Link: https://sourceware.org/glibc/manual/2.40/html_node/Argument-Macros.html#index-va_005fcopy-1
+---
+ src/export.c | 4 ++--
+ src/misc.c   | 4 ++--
+ src/misc.h   | 6 +++---
+ 3 files changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/src/export.c b/src/export.c
+index beb325f..26ae63a 100644
+--- a/src/export.c
++++ b/src/export.c
+@@ -1472,7 +1472,7 @@ vbi_export_vprintf		(vbi_export *		e,
+ 		return TRUE;
+ 	}
+ 
+-	__va_copy (ap2, ap);
++	va_copy (ap2, ap);
+ 
+ 	offset = e->buffer.offset;
+ 
+@@ -1509,7 +1509,7 @@ vbi_export_vprintf		(vbi_export *		e,
+ 		}
+ 
+ 		/* vsnprintf() may advance ap. */
+-		__va_copy (ap, ap2);
++		va_copy (ap, ap2);
+ 	}
+ 
+ 	_vbi_export_malloc_error (e);
+diff --git a/src/misc.c b/src/misc.c
+index 834cc89..288f83d 100644
+--- a/src/misc.c
++++ b/src/misc.c
+@@ -156,7 +156,7 @@ _vbi_vasprintf			(char **		dstp,
+ 	buf = NULL;
+ 	size = 64;
+ 
+-	__va_copy (ap2, ap);
++	va_copy (ap2, ap);
+ 
+ 	for (;;) {
+ 
+@@ -183,7 +183,7 @@ _vbi_vasprintf			(char **		dstp,
+ 		}
+ 
+ 		/* vsnprintf() may advance ap. */
+-		__va_copy (ap, ap2);
++		va_copy (ap, ap2);
+ 	}
+ 
+ 	vbi_free (buf);
+diff --git a/src/misc.h b/src/misc.h
+index 107a982..dbe91b8 100644
+--- a/src/misc.h
++++ b/src/misc.h
+@@ -423,9 +423,9 @@ _vbi_time_max			(void)
+ }
+ #endif
+ 
+-/* __va_copy is a GNU extension. */
+-#ifndef __va_copy
+-#  define __va_copy(ap1, ap2) do { ap1 = ap2; } while (0)
++/* va_copy is C99. */
++#ifndef va_copy
++#  define va_copy(ap1, ap2) do { ap1 = ap2; } while (0)
+ #endif
+ 
+ /* Use this instead of strncpy(). strlcpy() is a BSD extension. */
+-- 
+2.47.0
+

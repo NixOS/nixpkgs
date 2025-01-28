@@ -6,8 +6,19 @@ let
 
   cfg = config.services.squid;
 
+  configWriter =
+    if cfg.validateConfig then
+      (
+        content:
+        pkgs.writers.makeScriptWriter {
+          check = "${cfg.package}/bin/squid -k parse -f";
+          interpreter = "${cfg.package}/bin/squid";
+        } "squid.conf" content
+      )
+    else
+      (content: pkgs.writeText "squid.conf" content);
 
-  squidConfig = pkgs.writeText "squid.conf"
+  squidConfig = configWriter
     (if cfg.configText != null then cfg.configText else
     ''
     #
@@ -109,6 +120,12 @@ in
         type = types.bool;
         default = false;
         description = "Whether to run squid web proxy.";
+      };
+
+      validateConfig = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Validate config syntax.";
       };
 
       package = mkPackageOption pkgs "squid" { };

@@ -23,7 +23,7 @@ let
 in
 {
   meta = {
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
   };
 
   options.services.earlyoom = {
@@ -139,9 +139,14 @@ in
       default = [ ];
       example = [
         "-g"
-        "--prefer '(^|/)(java|chromium)$'"
+        "--prefer"
+        "(^|/)(java|chromium)$"
       ];
-      description = "Extra command-line arguments to be passed to earlyoom.";
+      description = ''
+        Extra command-line arguments to be passed to earlyoom. Each element in
+        the value list will be escaped as an argument without further
+        word-breaking.
+      '';
     };
   };
 

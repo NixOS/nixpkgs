@@ -1,12 +1,12 @@
 {
   buildPythonPackage,
-  pkgs,
+  ruff,
   rustPlatform,
   installShellFiles,
 }:
 
 buildPythonPackage {
-  inherit (pkgs.ruff)
+  inherit (ruff)
     pname
     version
     src

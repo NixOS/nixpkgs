@@ -55,6 +55,7 @@ buildGo123Module {
     "cmd/derper"
     "cmd/derpprobe"
     "cmd/tailscaled"
+    "cmd/tsidp"
   ];
 
   ldflags = [

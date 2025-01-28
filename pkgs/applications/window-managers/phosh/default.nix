@@ -16,6 +16,7 @@
 , pulseaudio
 , evince
 , glib
+, modemmanager
 , gtk4
 , gnome-bluetooth
 , gnome-control-center
@@ -41,12 +42,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "phosh";
-  version = "0.41.1";
+  version = "0.44.1";
 
   src = fetchurl {
     # Release tarball which includes subprojects gvc and libcall-ui
     url = with finalAttrs; "https://sources.phosh.mobi/releases/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-Oc6Dltjj+2D3LWZz1eYArqEKEJYYqJPSrScEkxyNhX0=";
+    hash = "sha256-rczGr7YSmVFu13oa3iSTmSQ4jsjl7lv38zQtD7WmDis=";
   };
 
   nativeBuildInputs = [
@@ -70,6 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     evolution-data-server
     pulseaudio
     glib
+    modemmanager
     gcr
     networkmanager
     polkit

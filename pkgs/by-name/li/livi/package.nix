@@ -16,14 +16,14 @@
 
 stdenv.mkDerivation rec {
   pname = "livi";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitLab {
     owner = "guidog";
     repo = "livi";
     domain = "gitlab.gnome.org";
     rev = "v${version}";
-    hash = "sha256-4CWH8TWxuDGYlOilxyCa/HL/vtO6A9u/x39s1OLDODo";
+    hash = "sha256-13hvpYlMDfB6Y0yH2MaowuylKUk1AGv6R7j4E156YpI=";
   };
   nativeBuildInputs = [
     meson

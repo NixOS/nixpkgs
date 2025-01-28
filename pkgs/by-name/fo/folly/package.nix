@@ -3,6 +3,7 @@
   stdenv,
 
   fetchFromGitHub,
+  fetchpatch,
 
   cmake,
   ninja,
@@ -39,7 +40,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "folly";
-  version = "2024.11.18.00";
+  version = "2025.01.06.00";
 
   # split outputs to reduce downstream closure sizes
   outputs = [
@@ -51,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "facebook";
     repo = "folly";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CX4YzNs64yeq/nDDaYfD5y8GKrxBueW4y275edPoS0c=";
+    hash = "sha256-GxHOs6jfjiKQWWFs03O/sI92OvpPsf+Xilnawb8Nygs=";
   };
 
   nativeBuildInputs = [
@@ -115,8 +116,20 @@ stdenv.mkDerivation (finalAttrs: {
     ]
   );
 
-  # Temporary fix until next `staging` cycle.
-  doCheck = !stdenv.cc.isClang;
+  doCheck = true;
+
+  patches = [
+    # The base template for std::char_traits has been removed in LLVM 19
+    # https://releases.llvm.org/19.1.0/projects/libcxx/docs/ReleaseNotes.html
+    ./char_traits.patch
+
+    # <https://github.com/facebook/folly/issues/2171>
+    (fetchpatch {
+      name = "folly-fix-glog-0.7.patch";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/fix-cmake-find-glog.patch?h=folly&id=4b68f47338d4b20111e3ffa1291433120bb899f0";
+      hash = "sha256-QGNpS5UNEm+0PW9+agwUVILzpK9t020KXDGyP03OAwE=";
+    })
+  ];
 
   # https://github.com/NixOS/nixpkgs/issues/144170
   postPatch = ''
@@ -163,6 +176,8 @@ stdenv.mkDerivation (finalAttrs: {
           ]
           ++ lib.optionals stdenv.hostPlatform.isDarwin [
             "buffered_atomic_test.BufferedAtomic.singleThreadUnguardedAccess"
+            "io_async_notification_queue_test.NotificationQueueTest.UseAfterFork"
+            "container_heap_vector_types_test.HeapVectorTypes.SimpleSetTes"
           ]
         )
       )

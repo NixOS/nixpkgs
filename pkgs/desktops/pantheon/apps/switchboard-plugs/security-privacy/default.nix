@@ -9,6 +9,7 @@
   vala,
   elementary-settings-daemon,
   libgee,
+  gettext,
   granite7,
   gsettings-desktop-schemas,
   gala,
@@ -31,6 +32,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    gettext # msgfmt
     meson
     ninja
     pkg-config

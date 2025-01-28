@@ -103,7 +103,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/UKPLab/sentence-transformers/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dit7ya ];
-    # Segmentation fault at import
-    broken = stdenv.hostPlatform.system == "x86_64-darwin";
   };
 }

@@ -9,6 +9,7 @@ import sys
 import tomllib
 from pathlib import Path
 from typing import Any, TypedDict, cast
+from urllib.parse import unquote
 
 import requests
 from requests.adapters import HTTPAdapter, Retry
@@ -19,6 +20,15 @@ eprint = functools.partial(print, file=sys.stderr)
 def load_toml(path: Path) -> dict[str, Any]:
     with open(path, "rb") as f:
         return tomllib.load(f)
+
+
+def get_lockfile_version(cargo_lock_toml: dict[str, Any]) -> int:
+    # lockfile v1 and v2 don't have the `version` key, so assume v2
+    version = cargo_lock_toml.get("version", 2)
+
+    # TODO: add logic for differentiating between v1 and v2
+
+    return version
 
 
 def download_file_with_checksum(url: str, destination_path: Path) -> str:
@@ -93,20 +103,29 @@ class GitSourceInfo(TypedDict):
     git_sha_rev: str
 
 
-def parse_git_source(source: str) -> GitSourceInfo:
+def parse_git_source(source: str, lockfile_version: int) -> GitSourceInfo:
     match = GIT_SOURCE_REGEX.match(source)
     if match is None:
         raise Exception(f"Unable to process git source: {source}.")
-    return cast(GitSourceInfo, match.groupdict(default=None))
+
+    source_info = cast(GitSourceInfo, match.groupdict(default=None))
+
+    # the source URL is URL-encoded in lockfile_version >=4
+    # since we just used regex to parse it we have to manually decode the escaped branch/tag name
+    if lockfile_version >= 4 and source_info["value"] is not None:
+        source_info["value"] = unquote(source_info["value"])
+
+    return source_info
 
 
 def create_vendor_staging(lockfile_path: Path, out_dir: Path) -> None:
-    cargo_toml = load_toml(lockfile_path)
+    cargo_lock_toml = load_toml(lockfile_path)
+    lockfile_version = get_lockfile_version(cargo_lock_toml)
 
     git_packages: list[dict[str, Any]] = []
     registry_packages: list[dict[str, Any]] = []
 
-    for pkg in cargo_toml["package"]:
+    for pkg in cargo_lock_toml["package"]:
         # ignore local dependenices
         if "source" not in pkg.keys():
             eprint(f"Skipping local dependency: {pkg["name"]}")
@@ -122,7 +141,7 @@ def create_vendor_staging(lockfile_path: Path, out_dir: Path) -> None:
 
     git_sha_rev_to_url: dict[str, str] = {}
     for pkg in git_packages:
-        source_info = parse_git_source(pkg["source"])
+        source_info = parse_git_source(pkg["source"], lockfile_version)
         git_sha_rev_to_url[source_info["git_sha_rev"]] = source_info["url"]
 
     out_dir.mkdir(exist_ok=True)
@@ -207,7 +226,8 @@ def create_vendor(vendor_staging_dir: Path, out_dir: Path) -> None:
     out_dir.mkdir(exist_ok=True)
     shutil.copy(lockfile_path, out_dir / "Cargo.lock")
 
-    cargo_toml = load_toml(lockfile_path)
+    cargo_lock_toml = load_toml(lockfile_path)
+    lockfile_version = get_lockfile_version(cargo_lock_toml)
 
     config_lines = [
         '[source.vendored-sources]',
@@ -217,7 +237,7 @@ def create_vendor(vendor_staging_dir: Path, out_dir: Path) -> None:
     ]
 
     seen_source_keys = set()
-    for pkg in cargo_toml["package"]:
+    for pkg in cargo_lock_toml["package"]:
 
         # ignore local dependenices
         if "source" not in pkg.keys():
@@ -230,7 +250,8 @@ def create_vendor(vendor_staging_dir: Path, out_dir: Path) -> None:
 
         if source.startswith("git+"):
 
-            source_info = parse_git_source(pkg["source"])
+            source_info = parse_git_source(pkg["source"], lockfile_version)
+
             git_sha_rev = source_info["git_sha_rev"]
             git_tree = vendor_staging_dir / "git" / git_sha_rev
 

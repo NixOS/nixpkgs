@@ -5,7 +5,6 @@
   pkgs,
   boost,
   cmake,
-  coreutils,
   jq,
   ncurses,
   python3,

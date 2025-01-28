@@ -416,6 +416,9 @@ rec {
     uclibceabihf = { float = "hard"; };
     uclibc       = {};
 
+    # LLVM libc
+    llvm         = {};
+
     unknown = {};
   };
 

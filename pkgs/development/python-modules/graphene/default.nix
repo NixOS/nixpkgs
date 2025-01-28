@@ -1,6 +1,5 @@
 {
   lib,
-  aniso8601,
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
@@ -11,42 +10,38 @@
   pytest-mock,
   pytest7CheckHook,
   pythonOlder,
-  pytz,
-  snapshottest,
+  typing-extensions,
+  python-dateutil,
 }:
 
 buildPythonPackage rec {
   pname = "graphene";
-  version = "3.3.0";
+  version = "3.4.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "graphql-python";
     repo = "graphene";
     tag = "v${version}";
-    hash = "sha256-DGxicCXZp9kW/OFkr0lAWaQ+GaECx+HD8+X4aW63vgQ=";
+    hash = "sha256-K1IGKK3nTsRBe2D/cKJ/ahnAO5xxjf4gtollzTwt1zU=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
-    aniso8601
     graphql-core
     graphql-relay
+    python-dateutil
+    typing-extensions
   ];
-
-  # snaphottest->fastdiff->wasmer dependency chain does not support 3.12.
-  doCheck = pythonOlder "3.12";
 
   nativeCheckInputs = [
     pytest7CheckHook
     pytest-asyncio
     pytest-benchmark
     pytest-mock
-    pytz
-    snapshottest
   ];
 
   pytestFlagsArray = [ "--benchmark-disable" ];

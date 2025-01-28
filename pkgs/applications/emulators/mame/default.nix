@@ -7,6 +7,7 @@
   SDL2_ttf,
   copyDesktopItems,
   expat,
+  fetchurl,
   flac,
   fontconfig,
   glm,
@@ -18,7 +19,6 @@
   libpulseaudio,
   makeDesktopItem,
   makeWrapper,
-  papirus-icon-theme,
   pkg-config,
   portaudio,
   portmidi,
@@ -28,6 +28,7 @@
   rapidjson,
   sqlite,
   utf8proc,
+  versionCheckHook,
   which,
   writeScript,
   zlib,
@@ -156,7 +157,10 @@ stdenv.mkDerivation rec {
   # to the final package after we figure out how they work
   installPhase =
     let
-      icon = "${papirus-icon-theme}/share/icons/Papirus/32x32/apps/mame.svg";
+      icon = fetchurl {
+        url = "https://raw.githubusercontent.com/PapirusDevelopmentTeam/papirus-icon-theme/refs/heads/master/Papirus/32x32/apps/mame.svg";
+        hash = "sha256-s44Xl9UGizmddd/ugwABovM8w35P0lW9ByB69MIpG+E=";
+      };
     in
     ''
       runHook preInstall
@@ -188,6 +192,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = [ "-h" ];
+
   passthru.updateScript = writeScript "mame-update-script" ''
     #!/usr/bin/env nix-shell
     #!nix-shell -i bash -p curl common-updater-scripts jq
@@ -198,7 +206,7 @@ stdenv.mkDerivation rec {
     update-source-version mame "''${latest_version/mame0/0.}"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.mamedev.org/";
     description = "Multi-purpose emulation framework";
     longDescription = ''
@@ -216,13 +224,15 @@ stdenv.mkDerivation rec {
       focus.
     '';
     changelog = "https://github.com/mamedev/mame/releases/download/mame${srcVersion}/whatsnew_${srcVersion}.txt";
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd3
       gpl2Plus
     ];
-    maintainers = with maintainers; [ thiagokokada ];
-    platforms = platforms.unix;
-    broken = stdenv.hostPlatform.isDarwin;
+    maintainers = with lib.maintainers; [
+      thiagokokada
+      DimitarNestorov
+    ];
+    platforms = lib.platforms.unix;
     mainProgram = "mame";
   };
 }

@@ -8,7 +8,6 @@
   xorg,
   runCommand,
   _7zz,
-  archiver,
   brotli,
   upx,
   zpaq,
@@ -72,7 +71,6 @@ stdenv.mkDerivation rec {
     wrapProgram $out/lib/peazip/peazip --prefix PATH : ${
       lib.makeBinPath [
         _7z
-        archiver
         brotli
         upx
         zpaq

@@ -7,7 +7,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "flexget";
-  version = "3.13.5";
+  version = "3.13.6";
   pyproject = true;
 
   # Fetch from GitHub in order to use `requirements.in`
@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
     owner = "Flexget";
     repo = "Flexget";
     tag = "v${version}";
-    hash = "sha256-R6E5NWnrnezJsDm+Nnqgibv4e6mXVrOrKaCl/MBqUnY=";
+    hash = "sha256-I6AQtoGk/YUDM5DzegvLi8QmVvoma16zJGZ8BMUUN3c=";
   };
 
   # relax dep constrains, keep environment constraints
