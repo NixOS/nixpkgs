@@ -4,7 +4,7 @@
   fetchFromGitHub,
   alsa-lib,
   copyDesktopItems,
-  gtk3,
+  wrapGAppsHook3,
   makeDesktopItem,
   pkg-config,
 }:
@@ -23,11 +23,11 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     copyDesktopItems
     pkg-config
+    wrapGAppsHook3
   ];
 
   buildInputs = [
     alsa-lib
-    gtk3
   ];
 
   postPatch = ''
