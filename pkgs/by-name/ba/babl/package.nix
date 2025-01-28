@@ -5,9 +5,13 @@
   meson,
   ninja,
   pkg-config,
-  gi-docgen,
-  gobject-introspection,
   lcms2,
+  withIntrospection ?
+    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages,
+  buildPackages,
+  gobject-introspection,
+  gi-docgen,
   vala,
 }:
 
@@ -15,11 +19,14 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "babl";
   version = "0.1.110";
 
-  outputs = [
-    "out"
-    "dev"
-    "devdoc"
-  ];
+  outputs =
+    [
+      "out"
+      "dev"
+    ]
+    ++ lib.optionals withIntrospection [
+      "devdoc"
+    ];
 
   src = fetchurl {
     url = "https://download.gimp.org/pub/babl/${lib.versions.majorMinor finalAttrs.version}/babl-${finalAttrs.version}.tar.xz";
@@ -33,14 +40,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    gi-docgen
-    gobject-introspection
-    vala
-  ];
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+      pkg-config
+
+    ]
+    ++ lib.optionals withIntrospection [
+      gi-docgen
+      gobject-introspection
+      vala
+    ];
 
   buildInputs = [
     lcms2
@@ -49,7 +60,8 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [
     (lib.mesonOption "prefix-dev" (placeholder "dev"))
     (lib.mesonBool "with-docs" true)
-    (lib.mesonBool "enable-gir" true)
+    (lib.mesonEnable "gi-docgen" withIntrospection)
+    (lib.mesonBool "enable-gir" withIntrospection)
   ];
 
   postPatch = ''
