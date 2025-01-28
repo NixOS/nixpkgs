@@ -6,7 +6,7 @@
 buildNimPackage (
   final: prev: rec {
     pname = "nimlangserver";
-    version = "1.8.0";
+    version = "1.8.1";
 
     # nix build ".#nimlangserver.src"
     # nix run "github:daylinmorgan/nnl" -- result/nimble.lock -o:pkgs/by-name/ni/nimlangserver/lock.json --prefetch-git:bearssl,zlib
@@ -16,7 +16,7 @@ buildNimPackage (
       owner = "nim-lang";
       repo = "langserver";
       rev = "v${version}";
-      hash = "sha256-JyBjHAP/sxQfQ1XvyeZyHsu0Er5D7ePDGyJK7Do5kyk=";
+      hash = "sha256-j5YnTGPtt0WhRvNfpgO9tjAqZJA5Kt1FE1Mjqn0/DNY=";
     };
 
     doCheck = false;
