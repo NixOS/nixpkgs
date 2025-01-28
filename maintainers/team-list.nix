@@ -46,10 +46,11 @@ with lib.maintainers;
 
   android = {
     members = [
-      numinit
-      hadilq
-      RossComputerGuy
       adrian-gierakowski
+      hadilq
+      johnrtitor
+      numinit
+      RossComputerGuy
     ];
     scope = "Maintain Android-related tooling in nixpkgs.";
     githubTeams = [ "android" ];
