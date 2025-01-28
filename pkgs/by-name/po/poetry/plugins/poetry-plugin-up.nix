@@ -43,7 +43,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/MousaZeidBaker/poetry-plugin-up/releases/tag/${version}";
     license = licenses.mit;
     maintainers = [ maintainers.k900 ];
-    # https://github.com/MousaZeidBaker/poetry-plugin-up/pull/70
-    broken = lib.versionAtLeast poetry.version "2";
   };
 }
