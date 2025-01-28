@@ -4,12 +4,12 @@
   flutter,
 }:
 let
-  version = "0.4.0";
+  version = "1.0.0";
   src = fetchFromGitHub {
     owner = "kra-mo";
     repo = "sly";
     rev = "v${version}";
-    hash = "sha256-P7LhhXQQDRsDQ8bZgfvWazLRMYVGhFhMTD41fgs718g=";
+    hash = "sha256-pFTP+oDY3pCSgO26ZtqUR+puMJSFZAEdbM2AqmfkNX8=";
   };
 in
 flutter.buildFlutterApplication {
