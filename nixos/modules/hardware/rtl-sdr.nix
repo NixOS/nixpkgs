@@ -19,6 +19,7 @@ in
         This is a prerequisite to using devices supported by rtl-sdr without being root, since rtl-sdr USB descriptors will be owned by plugdev through udev.
       '';
     };
+    package = lib.mkPackageOption pkgs "rtl-sdr" { };
   };
 
   config = lib.mkIf cfg.enable {
@@ -27,7 +28,8 @@ in
       "e4000"
       "rtl2832"
     ];
-    services.udev.packages = [ pkgs.rtl-sdr ];
+    services.udev.packages = [ cfg.package ];
+    environment.systemPackages = [ cfg.package ];
     users.groups.plugdev = { };
   };
 }
