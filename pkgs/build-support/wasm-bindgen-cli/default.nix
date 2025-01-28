@@ -9,16 +9,18 @@
   stdenv,
   curl,
   darwin,
-  version ? "0.2.100",
-  hash ? "sha256-3RJzK7mkYFrs7C/WkhW9Rr4LdP5ofb2FdYGz1P7Uxog=",
-  cargoHash ? "sha256-tD0OY2PounRqsRiFh8Js5nyknQ809ZcHMvCOLrvYHRE=",
+}:
+
+{
+  version ? src.version,
+  src,
+  cargoDeps,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wasm-bindgen-cli";
-  inherit version hash cargoHash;
 
-  src = fetchCrate { inherit pname version hash; };
+  inherit version src cargoDeps;
 
   nativeBuildInputs = [ pkg-config ];
 
