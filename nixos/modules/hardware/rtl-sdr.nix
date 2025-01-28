@@ -32,4 +32,6 @@ in
     environment.systemPackages = [ cfg.package ];
     users.groups.plugdev = { };
   };
+
+  meta.maintainers = with lib.maintainers; [ pandapip1 ];
 }
