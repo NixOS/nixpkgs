@@ -106,6 +106,9 @@ rustPlatform.buildRustPackage {
       -p:Deterministic=true
   '';
 
+  # NuGet.targets(156,5): error : Unable to load the service index for source https://api.nuget.org/v3/index.json.
+  NuGetAudit = "false";
+
   passthru = {
     inherit (dotnetBuild) fetch-deps;
   };
