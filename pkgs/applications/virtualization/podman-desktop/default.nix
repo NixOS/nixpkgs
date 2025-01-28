@@ -5,7 +5,7 @@
 , copyDesktopItems
 , electron
 , nodejs
-, pnpm
+, pnpm_9
 , makeDesktopItem
 , autoSignDarwinBinariesHook
 , nix-update-script
@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-07lf9jy22JUT+Vc5y9Tu1nkWaXU5RTdu3GibcvQsSs8=";
   };
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
     hash = "sha256-LPsNRd1c/cQeyBn3LZKnKeAsZ981sOkLYTnXIZL82LA=";
   };
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
   nativeBuildInputs = [
-    makeWrapper nodejs pnpm.configHook
+    makeWrapper nodejs pnpm_9.configHook
   ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     copyDesktopItems
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [

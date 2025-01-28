@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "aiohomeconnect";
-  version = "0.7.5";
+  version = "0.11.4";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "MartinHjelmare";
     repo = "aiohomeconnect";
     tag = "v${version}";
-    hash = "sha256-1+2ezwmlzLYbrODGNoOzd9Gbjl/5BzarmXr8eiaKZ9c=";
+    hash = "sha256-feAjp1DjZeNTOf0lWN23pap7oDiqSx0v6tf6uIVf1fU=";
   };
 
   pythonRelaxDeps = [ "httpx" ];

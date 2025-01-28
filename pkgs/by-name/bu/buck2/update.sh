@@ -36,7 +36,12 @@ for arch in "${ARCHS[@]}"; do
     IFS=: read -r arch_name arch_target <<< "$arch"
     sha256hash="$(nix-prefetch-url --type sha256 "https://github.com/facebook/buck2/releases/download/${VERSION}/buck2-${arch_target}.zst")"
     srihash="$(nix hash to-sri --type sha256 "$sha256hash")"
-    echo ", \"$arch_name\": \"$srihash\"" >> "$HFILE"
+    echo ", \"buck2-$arch_name\": \"$srihash\"" >> "$HFILE"
+
+    IFS=: read -r arch_name arch_target <<< "$arch"
+    sha256hash="$(nix-prefetch-url --type sha256 "https://github.com/facebook/buck2/releases/download/${VERSION}/rust-project-${arch_target}.zst")"
+    srihash="$(nix hash to-sri --type sha256 "$sha256hash")"
+    echo ", \"rust-project-$arch_name\": \"$srihash\"" >> "$HFILE"
 done
 echo "}" >> "$HFILE"
 

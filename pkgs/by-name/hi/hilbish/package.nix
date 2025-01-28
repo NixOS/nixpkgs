@@ -6,19 +6,19 @@
 
 buildGoModule rec {
   pname = "hilbish";
-  version = "2.3.3";
+  version = "2.3.4";
 
   src = fetchFromGitHub {
     owner = "Rosettea";
     repo = "Hilbish";
     tag = "v${version}";
-    hash = "sha256-rDE9zxkCnnvc1OWd4Baei/Bw9KdFRV7DOorxLSD/KhM";
+    hash = "sha256-rEBUrDdJBCywuSmsxFLl4+uSwz06km2nztH5aCGcGiE=";
     fetchSubmodules = true;
   };
 
   subPackages = [ "." ];
 
-  vendorHash = "sha256-8t3JBQEAmWcAlgA729IRpiewlgnRd5DQxHLTfwquE3o";
+  vendorHash = "sha256-8t3JBQEAmWcAlgA729IRpiewlgnRd5DQxHLTfwquE3o=";
 
   ldflags = [
     "-s"

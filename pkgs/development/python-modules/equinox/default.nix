@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -45,6 +46,11 @@ buildPythonPackage rec {
     optax
     pytest-xdist
     pytestCheckHook
+  ];
+
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # SystemError: nanobind::detail::nb_func_error_except(): exception could not be translated!
+    "test_filter"
   ];
 
   pythonImportsCheck = [ "equinox" ];

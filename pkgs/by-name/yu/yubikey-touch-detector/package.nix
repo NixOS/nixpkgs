@@ -4,22 +4,28 @@
   gpgme,
   buildGoModule,
   fetchFromGitHub,
+  installShellFiles,
   pkg-config,
+  scdoc,
 }:
 
 buildGoModule rec {
   pname = "yubikey-touch-detector";
-  version = "1.12.2";
+  version = "1.12.5";
 
   src = fetchFromGitHub {
     owner = "maximbaz";
     repo = "yubikey-touch-detector";
     rev = version;
-    hash = "sha256-vhaJSgQUBYBXfQHHR7cR3zHCZstwRD/jXhqYR1vqMqA=";
+    hash = "sha256-eNRwDGTNxBtDepQvf2TXCH/5fb4kRYBn80tzvI4fzME=";
   };
   vendorHash = "sha256-x8Fmhsk6MtgAtLxgH/V3KusM0BXAOaSU+2HULR5boJQ=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    scdoc
+    installShellFiles
+  ];
 
   buildInputs = [
     libnotify
@@ -37,6 +43,9 @@ buildGoModule rec {
 
     substituteInPlace $out/lib/systemd/user/*.service \
       --replace /usr/bin/yubikey-touch-detector "$out/bin/yubikey-touch-detector"
+
+    scdoc < yubikey-touch-detector.1.scd > yubikey-touch-detector.1
+    installManPage yubikey-touch-detector.1
   '';
 
   meta = with lib; {

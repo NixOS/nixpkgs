@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitLab,
-  fetchpatch,
   gitUpdater,
   makeFontsConf,
   testers,
@@ -22,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-api";
-  version = "0.2.1";
+  version = "0.2.2";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-api";
-    rev = finalAttrs.version;
-    hash = "sha256-UTl0vObSlEvHuLmDt7vS3yEqZWGklJ9tVwlUAtRSTlU=";
+    tag = finalAttrs.version;
+    hash = "sha256-+ttmtvt18NMKYfGntEXgBOSJ3lW9Bf55327XYIzxMh8=";
   };
 
   outputs = [
@@ -37,19 +36,11 @@ stdenv.mkDerivation (finalAttrs: {
     "doc"
   ];
 
-  patches = [
-    (fetchpatch {
-      name = "0001-lomiri-api-Add-missing-headers-for-GCC13.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-api/-/commit/029b42a9b4d5467951595dff8bc536eb5a9e3ef7.patch";
-      hash = "sha256-eWrDQGrwf22X49rtUAVbrd+QN+OwyGacVLCWYFsS02o=";
-    })
-  ];
-
   postPatch = ''
     patchShebangs $(find test -name '*.py')
 
-    substituteInPlace data/*.pc.in \
-      --replace "\''${prefix}/@CMAKE_INSTALL_LIBDIR@" "\''${prefix}/lib"
+    substituteInPlace data/liblomiri-api.pc.in \
+      --replace "\''${prefix}/@CMAKE_INSTALL_LIBDIR@" '@CMAKE_INSTALL_FULL_LIBDIR@'
 
     # Variable is queried via pkg-config by reverse dependencies
     # TODO This is likely not supposed to be the regular Qt QML import prefix
@@ -84,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontWrapQtApps = true;
 
-  FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
+  env.FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
 
   preBuild = ''
     # Makes fontconfig produce less noise in logs
@@ -104,15 +95,15 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Lomiri API Library for integrating with the Lomiri shell";
     homepage = "https://gitlab.com/ubports/development/core/lomiri-api";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl3Only
       gpl3Only
     ];
-    maintainers = teams.lomiri.members;
-    platforms = platforms.linux;
+    maintainers = lib.teams.lomiri.members;
+    platforms = lib.platforms.linux;
     pkgConfigModules = [
       "liblomiri-api"
       "lomiri-shell-api"

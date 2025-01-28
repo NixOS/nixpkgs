@@ -2,7 +2,7 @@ let
   cert =
     pkgs:
     pkgs.runCommand "selfSignedCerts" { buildInputs = [ pkgs.openssl ]; } ''
-      openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -nodes -subj '/CN=example.com/CN=muc.example.com' -days 36500
+      openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -nodes -subj '/CN=example.com/CN=muc.example.com/CN=matrix.example.com' -days 36500
       mkdir -p $out
       cp key.pem cert.pem $out
     '';
@@ -20,12 +20,12 @@ import ../make-test-python.nix (
         {
           security.pki.certificateFiles = [ "${cert pkgs}/cert.pem" ];
           networking.extraHosts = ''
-            ${nodes.server.config.networking.primaryIPAddress} example.com
+            ${nodes.server.networking.primaryIPAddress} example.com
           '';
 
           environment.systemPackages = [
             (pkgs.callPackage ./xmpp-sendmessage.nix {
-              connectTo = nodes.server.config.networking.primaryIPAddress;
+              connectTo = nodes.server.networking.primaryIPAddress;
             })
           ];
         };
@@ -35,6 +35,7 @@ import ../make-test-python.nix (
           security.pki.certificateFiles = [ "${cert pkgs}/cert.pem" ];
           networking.extraHosts = ''
             ${config.networking.primaryIPAddress} example.com
+            ${config.networking.primaryIPAddress} matrix.example.com
           '';
 
           services.ejabberd = {
@@ -65,6 +66,12 @@ import ../make-test-python.nix (
                   port: 5269
                   ip: "::"
                   module: ejabberd_s2s_in
+                -
+                  port: 8448
+                  module: ejabberd_http
+                  tls: true
+                  request_handlers:
+                    "/_matrix": mod_matrix_gw
                 -
                   port: 5347
                   ip: "127.0.0.1"
@@ -275,9 +282,15 @@ import ../make-test-python.nix (
                   plugins:
                     - "pep"
                 mod_push: {}
+                mod_matrix_gw:
+                  key_name: key1
+                  key: MATRIX_SECRET
             '';
           };
 
+          systemd.services.ejabberd.serviceConfig.EnvironmentFile = pkgs.writeText "ejabberd.env" ''
+            EJABBERD_MACRO_MATRIX_SECRET=SU4mu/j8b8A1i1EdyxIcKlFlrp+eSRBIlZwGyHP7Mfo=
+          '';
           networking.firewall.enable = false;
         };
     };
@@ -290,6 +303,8 @@ import ../make-test-python.nix (
         server.wait_for_unit("ejabberd.service")
 
         assert "status: started" in server.succeed(ejabberd_prefix + "status")
+
+        server.succeed("curl https://matrix.example.com:8448/_matrix/key/v2/server")
 
         server.succeed(
             ejabberd_prefix + "register azurediamond example.com hunter2",

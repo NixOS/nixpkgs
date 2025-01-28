@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "python-gvm";
-  version = "24.12.0";
+  version = "25.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "greenbone";
     repo = "python-gvm";
     tag = "v${version}";
-    hash = "sha256-6K9Gv2ycQuCeH5GxtRfpwRqTQxpuqRZC82EvQCFSX4k=";
+    hash = "sha256-z78JnyAyWqNqFGuauIXitPO0D0WtHicBlD6Jno4G74Y=";
   };
 
   build-system = [ poetry-core ];

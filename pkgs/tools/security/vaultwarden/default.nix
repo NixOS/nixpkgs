@@ -22,17 +22,17 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "vaultwarden";
-  version = "1.32.7";
+  version = "1.33.0";
 
   src = fetchFromGitHub {
     owner = "dani-garcia";
     repo = "vaultwarden";
     rev = version;
-    hash = "sha256-mxZQ1San8zlyvZoBRF9Eb7/mbs374MOgC4baOCFyPoc=";
+    hash = "sha256-2lZfPPHHAoY12cXpkeJnvMab+C3T5O7KdmVpKqRQkgQ=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-OKfu+G+bS72HJDDLhRp9PMji/baBsh7JaYEZgQYdjTw=";
+  cargoHash = "sha256-f+884HV9oopvr/2UfWk0sw2DW2cU3c16F+5vGc6+IL0=";
 
   # used for "Server Installed" version in admin panel
   env.VW_VERSION = version;

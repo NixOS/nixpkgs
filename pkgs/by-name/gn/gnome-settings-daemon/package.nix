@@ -2,6 +2,7 @@
   stdenv,
   lib,
   substituteAll,
+  buildPackages,
   fetchurl,
   meson,
   ninja,
@@ -59,12 +60,18 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  depsBuildBuild = [
+    buildPackages.stdenv.cc
+    pkg-config
+  ];
+
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
     perl
     gettext
+    glib
     libxml2
     libxslt
     docbook_xsl

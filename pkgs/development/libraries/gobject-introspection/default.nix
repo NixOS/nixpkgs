@@ -16,7 +16,8 @@
   cctools,
   cairo,
   gnome,
-  substituteAll,
+  replaceVars,
+  replaceVarsWith,
   buildPackages,
   gobject-introspection-unwrapped,
   nixStoreDir ? builtins.storeDir,
@@ -63,17 +64,18 @@ stdenv.mkDerivation (finalAttrs: {
       # Make g-ir-scanner put absolute path to GIR files it generates
       # so that programs can just dlopen them without having to muck
       # with LD_LIBRARY_PATH environment variable.
-      (substituteAll {
-        src = ./absolute_shlib_path.patch;
+      (replaceVars ./absolute_shlib_path.patch {
         inherit nixStoreDir;
       })
     ]
     ++ lib.optionals x11Support [
       # Hardcode the cairo shared library path in the Cairo gir shipped with this package.
       # https://github.com/NixOS/nixpkgs/issues/34080
-      (substituteAll {
-        src = ./absolute_gir_path.patch;
+      (replaceVars ./absolute_gir_path.patch {
         cairoLib = "${lib.getLib cairo}/lib";
+        # original source code in patch's context
+        CAIRO_GIR_PACKAGE = null;
+        CAIRO_SHARED_LIBRARY = null;
       })
     ];
 
@@ -117,12 +119,14 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
       "-Dgi_cross_ldd_wrapper=${
-        substituteAll {
+        replaceVarsWith {
           name = "g-ir-scanner-lddwrapper";
           isExecutable = true;
           src = ./wrappers/g-ir-scanner-lddwrapper.sh;
-          inherit (buildPackages) bash;
-          buildlddtree = "${buildPackages.pax-utils}/bin/lddtree";
+          replacements = {
+            inherit (buildPackages) bash;
+            buildlddtree = "${buildPackages.pax-utils}/bin/lddtree";
+          };
         }
       }"
       "-Dgi_cross_binary_wrapper=${stdenv.hostPlatform.emulator buildPackages}"

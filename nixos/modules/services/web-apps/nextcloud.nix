@@ -299,7 +299,7 @@ in {
     package = mkOption {
       type = types.package;
       description = "Which package to use for the Nextcloud instance.";
-      relatedPackages = [ "nextcloud28" "nextcloud29" "nextcloud30" ];
+      relatedPackages = [ "nextcloud29" "nextcloud30" ];
     };
     phpPackage = mkPackageOption pkgs "php" {
       example = "php82";
@@ -770,15 +770,17 @@ in {
       description = ''
         Extra options which should be appended to Nextcloud's config.php file.
       '';
-      example = literalExpression '' {
-        redis = {
-          host = "/run/redis/redis.sock";
-          port = 0;
-          dbindex = 0;
-          password = "secret";
-          timeout = 1.5;
-        };
-      } '';
+      example = literalExpression ''
+        {
+          redis = {
+            host = "/run/redis/redis.sock";
+            port = 0;
+            dbindex = 0;
+            password = "secret";
+            timeout = 1.5;
+          };
+        }
+      '';
     };
 
     secretFile = mkOption {

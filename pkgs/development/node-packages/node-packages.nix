@@ -60444,7 +60444,7 @@ in
     buildInputs = globalBuildInputs;
     meta = {
       description = "CSSLint";
-      homepage = "http://csslint.net/";
+      homepage = "https://csslint.net/";
       license = "MIT";
     };
     production = true;
@@ -66848,7 +66848,7 @@ in
     buildInputs = globalBuildInputs;
     meta = {
       description = "Static analysis tool for JavaScript";
-      homepage = "http://jshint.com/";
+      homepage = "https://jshint.com/";
       license = "MIT";
     };
     production = true;

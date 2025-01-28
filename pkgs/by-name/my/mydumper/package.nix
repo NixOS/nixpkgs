@@ -25,13 +25,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mydumper";
-  version = "0.17.0-1";
+  version = "0.17.1-1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     tag = "v${version}";
-    hash = "sha256-ZLLctIBbw95iQ1LpBEGZBNlBxQy2oyductmOQXckN2Q=";
+    hash = "sha256-PidivIe9zzLeRpn9ECfF6qVmkP/Xd+6kIYQXo64V9fM=";
     # as of mydumper v0.16.5-1, mydumper extracted its docs into a submodule
     fetchSubmodules = true;
   };
@@ -45,8 +45,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
+    # for docs
     sphinx
     python3Packages.furo
+    python3Packages.sphinx-copybutton
+    python3Packages.sphinx-inline-tabs
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];

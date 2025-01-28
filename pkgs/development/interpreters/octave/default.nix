@@ -106,11 +106,14 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-gJ+jmnrMhIFb9NxNLX5rIoznWgfzskE/MxOqjgqqMoc=";
   };
 
+  postPatch = ''
+    patchShebangs --build build-aux/*.pl
+  '';
+
   buildInputs =
     [
       readline
       ncurses
-      perl
       flex
       qhull
       graphicsmagick
@@ -157,6 +160,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
   nativeBuildInputs =
     [
+      perl
       pkg-config
       gfortran
       texinfo

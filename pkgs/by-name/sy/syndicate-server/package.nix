@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     description = "Syndicate broker server";
-    homepage = "http://synit.org/";
+    homepage = "https://synit.org/";
     license = lib.licenses.asl20;
     mainProgram = "syndicate-server";
     maintainers = with lib.maintainers; [ ehmry ];

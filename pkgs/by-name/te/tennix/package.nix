@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://icculus.org/tennix/";
+    homepage = "https://icculus.org/tennix/";
     description = "Classic Championship Tour 2011";
     mainProgram = "tennix";
     license = licenses.gpl2Plus;

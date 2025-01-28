@@ -5,30 +5,30 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "protozero";
-  version = "1.7.1";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "mapbox";
     repo = "protozero";
-    rev = "v${version}";
-    sha256 = "sha256-R8lGewsEOxPNbKlkIeiM4yIwUcTzi2Dm0+xJ2WrBTBQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-kqR0YLxkRu8WclxaoR/zx+2sRTEZus7dUTbqjBkv12U=";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with lib; {
+  meta = {
     description = "Minimalistic protocol buffer decoder and encoder in C++";
     homepage = "https://github.com/mapbox/protozero";
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd2
       asl20
     ];
     changelog = [
-      "https://github.com/mapbox/protozero/releases/tag/v${version}"
-      "https://github.com/mapbox/protozero/blob/v${version}/CHANGELOG.md"
+      "https://github.com/mapbox/protozero/releases/tag/v${finalAttrs.version}"
+      "https://github.com/mapbox/protozero/blob/v${finalAttrs.version}/CHANGELOG.md"
     ];
-    maintainers = with maintainers; teams.geospatial.members ++ [ das-g ];
+    maintainers = lib.teams.geospatial.members ++ (with lib.maintainers; [ das-g ]);
   };
-}
+})

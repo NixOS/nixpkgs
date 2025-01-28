@@ -24,13 +24,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "niri";
-  version = "0.1.10.1";
+  version = "25.01";
 
   src = fetchFromGitHub {
     owner = "YaLTeR";
     repo = "niri";
     tag = "v${version}";
-    hash = "sha256-Qjf7alRbPPERfiZsM9EMKX+HwjESky1tieh5PJIkLwE=";
+    hash = "sha256-AJ1rlgNOPb3/+DbS5hkhm21t6Oz8IgqLllwmZt0lyzk=";
   };
 
   postPatch = ''
@@ -39,13 +39,8 @@ rustPlatform.buildRustPackage rec {
       --replace-fail '/usr/bin' "$out/bin"
   '';
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "libspa-0.8.0" = "sha256-kp5x5QhmgEqCrt7xDRfMFGoTK5IXOuvW2yOW02B8Ftk=";
-      "smithay-0.3.0" = "sha256-nSM7LukWHO2n2eWz5ipFNkTCYDvx/VvPXnKVngJFU0U=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-eGI3i7FnjZGEfcGvEpNLOog8cgExBJuGoXM/oHsui0M=";
 
   strictDeps = true;
 
@@ -106,6 +101,12 @@ rustPlatform.buildRustPackage rec {
       ]
     );
   };
+
+  preCheck = ''
+    export XDG_RUNTIME_DIR=$(mktemp -d)
+    # See https://github.com/YaLTeR/niri/issues/953
+    export RAYON_NUM_THREADS=1
+  '';
 
   passthru = {
     providedSessions = [ "niri" ];

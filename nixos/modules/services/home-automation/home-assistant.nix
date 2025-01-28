@@ -317,11 +317,11 @@ in {
             };
 
             unit_system = mkOption {
-              type = types.nullOr (types.enum [ "metric" "imperial" ]);
+              type = types.nullOr (types.enum [ "metric" "us_customary" ]);
               default = null;
               example = "metric";
               description = ''
-                The unit system to use. This also sets temperature_unit, Celsius for Metric and Fahrenheit for Imperial.
+                The unit system to use. This also sets temperature_unit, Celsius for Metric and Fahrenheit for US Customary.
               '';
             };
 
@@ -708,6 +708,9 @@ in {
           "zha"
           "zwave"
           "zwave_js"
+
+          # Custom components, maintained manually.
+          "amshan"
         ];
       in {
         ExecStart = escapeSystemdExecArgs ([

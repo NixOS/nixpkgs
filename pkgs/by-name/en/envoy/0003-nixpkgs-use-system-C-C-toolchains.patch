@@ -1,4 +1,4 @@
-From 3ecb08a7603a07310d1a38c0f47bc54bbe1f11c8 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Paul Meyer <49727155+katexochen@users.noreply.github.com>
 Date: Mon, 22 Apr 2024 11:59:22 +0200
 Subject: [PATCH] nixpkgs: use system C/C++ toolchains
@@ -9,7 +9,7 @@ Signed-off-by: Paul Meyer <49727155+katexochen@users.noreply.github.com>
  1 file changed, 5 insertions(+), 1 deletion(-)
 
 diff --git a/bazel/dependency_imports.bzl b/bazel/dependency_imports.bzl
-index addee4f6af..dc1967e43b 100644
+index addee4f6af74ea78ae778b73384e01db83ac6694..dc1967e43b2b71358d2767a3d83b52819987290d 100644
 --- a/bazel/dependency_imports.bzl
 +++ b/bazel/dependency_imports.bzl
 @@ -26,7 +26,11 @@ JQ_VERSION = "1.7"

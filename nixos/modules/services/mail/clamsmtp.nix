@@ -43,7 +43,7 @@ in
                 default = "";
                 example = "X-Virus-Scanned: ClamAV using ClamSMTP";
                 description = ''
-                  A header to add to scanned messages. See clamsmtpd.conf(5) for
+                  A header to add to scanned messages. See {manpage}`clamsmtpd.conf(5)` for
                   more details. Empty means no header.
                 '';
               };
@@ -65,7 +65,7 @@ in
                 example = "127.0.0.1:10025";
                 description = ''
                   Address to wait for incoming SMTP connections on. See
-                  clamsmtpd.conf(5) for more details.
+                  {manpage}`clamsmtpd.conf(5)` for more details.
                 '';
               };
 
@@ -118,7 +118,7 @@ in
                 default = null;
                 description = ''
                   Command to run when a virus is found. Please see VIRUS ACTION in
-                  clamsmtpd(8) for a discussion of this option and its safe use.
+                  {manpage}`clamsmtpd(8)` for a discussion of this option and its safe use.
                 '';
               };
 

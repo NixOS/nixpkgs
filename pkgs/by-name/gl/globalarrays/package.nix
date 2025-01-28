@@ -30,6 +30,8 @@ stdenv.mkDerivation rec {
     openssh
   ];
 
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+
   preConfigure = ''
     configureFlagsArray+=( "--enable-i8" \
                            "--with-mpi" \

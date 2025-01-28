@@ -48,7 +48,7 @@ let
       "x86_64-linux"
       "x86_64-darwin"
     ];
-    maintainers = with lib.maintainers; [ aucub ];
+    maintainers = with lib.maintainers; [ ];
   };
 
   linux = stdenv.mkDerivation {

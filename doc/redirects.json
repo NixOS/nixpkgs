@@ -1,6 +1,21 @@
 {
+  "chap-build-helpers-finalAttrs": [
+    "index.html#chap-build-helpers-finalAttrs"
+  ],
   "chap-release-notes": [
     "release-notes.html#chap-release-notes"
+  ],
+  "ex-build-helpers-extendMkDerivation": [
+    "index.html#ex-build-helpers-extendMkDerivation"
+  ],
+  "neovim": [
+    "index.html#neovim"
+  ],
+  "neovim-custom-configuration": [
+    "index.html#neovim-custom-configuration"
+  ],
+  "neovim-luarocks-based-plugins": [
+    "index.html#neovim-luarocks-based-plugins"
   ],
   "nixpkgs-manual": [
     "index.html#nixpkgs-manual"
@@ -31,6 +46,9 @@
   ],
   "sec-allow-insecure": [
     "index.html#sec-allow-insecure"
+  ],
+  "sec-build-helper-extendMkDerivation": [
+    "index.html#sec-build-helper-extendMkDerivation"
   ],
   "sec-modify-via-packageOverrides": [
     "index.html#sec-modify-via-packageOverrides"
@@ -3763,7 +3781,8 @@
   "vim": [
     "index.html#vim"
   ],
-  "custom-configuration": [
+  "vim-custom-configuration": [
+    "index.html#vim-custom-configuration",
     "index.html#custom-configuration"
   ],
   "managing-plugins-with-vim-packages": [
@@ -3772,10 +3791,12 @@
   "what-if-your-favourite-vim-plugin-isnt-already-packaged": [
     "index.html#what-if-your-favourite-vim-plugin-isnt-already-packaged"
   ],
-  "vim-plugin-specificities": [
-    "index.html#vim-plugin-specificities"
+  "neovim-plugin-specificities": [
+    "index.html#neovim-plugin-specificities",
+    "neovim-plugin-specificities#vim-plugin-specificities"
   ],
-  "vim-plugin-treesitter": [
+  "neovim-plugin-treesitter": [
+    "index.html#neovim-plugin-treesitter",
     "index.html#vim-plugin-treesitter"
   ],
   "managing-plugins-with-vim-plug": [
@@ -3790,7 +3811,8 @@
   "testing-neovim-plugins-neovim-require-check": [
     "index.html#testing-neovim-plugins-neovim-require-check"
   ],
-  "vim-plugin-required-snippet": [
+  "neovim-plugin-required-snippet": [
+    "index.html#neovim-plugin-required-snippet",
     "index.html#vim-plugin-required-snippet"
   ],
   "updating-plugins-in-nixpkgs": [

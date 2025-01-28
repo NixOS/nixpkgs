@@ -47,6 +47,18 @@
   "ch-installation": [
     "index.html#ch-installation"
   ],
+  "sec-mattermost": [
+    "index.html#sec-mattermost"
+  ],
+  "sec-mattermost-derivation": [
+    "index.html#sec-mattermost-derivation"
+  ],
+  "sec-mattermost-plugins": [
+    "index.html#sec-mattermost-plugins"
+  ],
+  "sec-mattermost-plugins-build": [
+    "index.html#sec-mattermost-plugins-build"
+  ],
   "sec-obtaining": [
     "index.html#sec-obtaining"
   ],
@@ -824,6 +836,12 @@
   "module-services-netbird-multiple-connections": [
     "index.html#module-services-netbird-multiple-connections"
   ],
+  "module-services-netbird-firewall": [
+    "index.html#module-services-netbird-firewall"
+  ],
+  "module-services-netbird-customization": [
+    "index.html#module-services-netbird-customization"
+  ],
   "module-services-mosquitto": [
     "index.html#module-services-mosquitto"
   ],
@@ -874,6 +892,12 @@
   ],
   "module-services-networking-dnsmasq-references": [
     "index.html#module-services-networking-dnsmasq-references"
+  ],
+  "module-service-doh-server": [
+    "index.html#module-service-doh-server"
+  ],
+  "module-service-doh-server-quick-start": [
+    "index.html#module-service-doh-server-quick-start"
   ],
   "module-services-samba": [
     "index.html#module-services-samba"

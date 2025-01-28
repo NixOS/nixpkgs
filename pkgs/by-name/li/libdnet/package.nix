@@ -26,9 +26,11 @@ stdenv.mkDerivation (finalAttrs: {
     automake
     autoconf
     pkg-config
-    check
   ];
-  buildInputs = [ libtool ];
+  buildInputs = [
+    check
+    libtool
+  ];
 
   # .so endings are missing (quick and dirty fix)
   postInstall = ''

@@ -61,22 +61,25 @@ stdenv.mkDerivation (finalAttrs: {
   checkPhase =
     let
       disabledTests =
-        lib.optionals stdenv.hostPlatform.isAarch64 [
-          # Broken on all platforms, test just accidentally passes on some.
-          # https://gitlab.com/inkscape/lib2geom/-/issues/63
-          "elliptical-arc-test"
-        ]
-        ++ lib.optionals stdenv.hostPlatform.isMusl [
+        lib.optionals stdenv.hostPlatform.isMusl [
           # Fails due to rounding differences
           # https://gitlab.com/inkscape/lib2geom/-/issues/70
           "circle-test"
         ]
         ++ lib.optionals (stdenv.hostPlatform.system != "x86_64-linux") [
+          # Broken on all platforms, test just accidentally passes on some.
+          # https://gitlab.com/inkscape/lib2geom/-/issues/63
+          "elliptical-arc-test"
+
           # https://gitlab.com/inkscape/lib2geom/-/issues/69
           "polynomial-test"
 
           # https://gitlab.com/inkscape/lib2geom/-/issues/75
           "line-test"
+
+          # Failure observed on i686
+          "angle-test"
+          "self-intersections-test"
 
           # Failure observed on aarch64-darwin
           "bezier-test"

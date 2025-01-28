@@ -3,41 +3,69 @@
   buildPythonPackage,
   fetchFromGitHub,
   h5py,
+  hatch-vcs,
+  hatchling,
+  igraph,
   numpy,
-  six,
-  wasserstein,
+  pot,
   pytestCheckHook,
+  pythonOlder,
+  scikit-learn,
+  tensorflow,
+  tf-keras,
+  wasserstein,
 }:
 
 buildPythonPackage rec {
   pname = "energyflow";
-  version = "1.3.3";
+  version = "1.4.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pkomiske";
     repo = "EnergyFlow";
     tag = "v${version}";
-    hash = "sha256-Ioyk0IpyxcDdL2+3zkUa6yydavyphoh4do7GCz5nG60=";
+    hash = "sha256-4RzhpeOOty8IaVGByHD+PyeaeWgR7ZF98mSCJYoM9wY=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "setup_requires=" "" \
-      --replace "pytest-runner" ""
-  '';
+  build-system = [
+    hatch-vcs
+    hatchling
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     h5py
     numpy
-    six
     wasserstein
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-  pytestFlagsArray = [ "energyflow/tests" ];
-  disabledTestPaths = [
-    "energyflow/tests/test_archs.py" # requires tensorflow
-    "energyflow/tests/test_emd.py" # requires "ot"
+  optional-dependencies = {
+    all = [
+      igraph
+      scikit-learn
+      tensorflow
+    ];
+    archs = [
+      scikit-learn
+      tensorflow
+    ];
+    generation = [ igraph ];
+  };
+
+  nativeCheckInputs = [
+    pot
+    pytestCheckHook
+    tf-keras
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+
+  disabledTests = [
+    # Issues with array
+    "test_emd_equivalence"
+    "test_gdim"
+    "test_n_jobs"
+    "test_periodic_phi"
   ];
 
   pythonImportsCheck = [ "energyflow" ];
@@ -45,6 +73,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python package for the EnergyFlow suite of tools";
     homepage = "https://energyflow.network/";
+    changelog = "https://github.com/thaler-lab/EnergyFlow/releases/tag/v${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ veprbl ];
   };

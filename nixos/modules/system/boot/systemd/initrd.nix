@@ -163,7 +163,7 @@ in
       type = types.lines;
       example = "DefaultLimitCORE=infinity";
       description = ''
-        Extra config options for systemd. See systemd-system.conf(5) man page
+        Extra config options for systemd. See {manpage}`systemd-system.conf(5)` man page
         for available options.
       '';
     };

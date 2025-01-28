@@ -29,6 +29,10 @@
   bubblewrap,
   autoconf,
   gnupg,
+
+  # Disable the unshare RPM plugin, which can be useful if
+  # RPM is ran within the Nix sandbox.
+  disableUnshare ? true,
 }:
 
 stdenv.mkDerivation rec {
@@ -97,6 +101,8 @@ stdenv.mkDerivation rec {
       "-DWITH_DBUS=OFF"
       # libselinux is missing propagatedBuildInputs
       "-DWITH_SELINUX=OFF"
+
+      "-DCMAKE_INSTALL_LOCALSTATEDIR=/var"
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       "-DMKTREE_BACKEND=rootfs"
@@ -112,6 +118,9 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "-DWITH_LIBELF=OFF"
       "-DWITH_LIBDW=OFF"
+    ]
+    ++ lib.optionals disableUnshare [
+      "-DHAVE_UNSHARE=OFF"
     ];
 
   # rpm/rpmlib.h includes popt.h, and then the pkg-config file mentions these as linkage requirements

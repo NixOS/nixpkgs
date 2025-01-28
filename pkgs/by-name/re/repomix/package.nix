@@ -37,7 +37,7 @@ buildNpmPackage rec {
     homepage = "https://github.com/yamadashy/repomix";
     changelog = "https://github.com/yamadashy/repomix/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ thinnerthinker ];
+    maintainers = with lib.maintainers; [ boralg ];
     mainProgram = "repomix";
   };
 }

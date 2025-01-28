@@ -1,0 +1,13 @@
+diff --git a/ajantv2/src/ntv2devicescanner.cpp b/ajantv2/src/ntv2devicescanner.cpp
+index 448e48d372..6b46f9f69d 100644
+--- a/ajantv2/src/ntv2devicescanner.cpp
++++ b/ajantv2/src/ntv2devicescanner.cpp
+@@ -137,7 +137,7 @@
+ 		}
+ 	#endif	//	!defined(NTV2_DEPRECATE_16_3)
+ 
+-NTV2DeviceInfoList	GetDeviceInfoList (void)
++NTV2DeviceInfoList	CNTV2DeviceScanner::GetDeviceInfoList (void)
+ {
+ 	AJAAutoLock tmpLock(&sDevInfoListLock);
+ 	return sDevInfoList;

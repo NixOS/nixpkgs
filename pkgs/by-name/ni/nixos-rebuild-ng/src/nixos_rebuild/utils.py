@@ -2,7 +2,7 @@ import logging
 from collections.abc import Mapping, Sequence
 from typing import Any, assert_never, override
 
-type Arg = bool | str | list[str] | int | None
+type Arg = bool | str | list[str] | list[list[str]] | int | None
 type Args = dict[str, Arg]
 
 
@@ -43,9 +43,13 @@ def dict_to_flags(d: Args | None) -> list[str]:
                 flags.append(flag)
                 flags.append(value)
             case list():
-                flags.append(flag)
-                for v in value:
-                    flags.append(v)
+                for vs in value:
+                    flags.append(flag)
+                    if isinstance(vs, list):
+                        for v in vs:
+                            flags.append(v)
+                    else:
+                        flags.append(vs)
             case _:
                 assert_never(value)
     return flags

@@ -10,6 +10,7 @@
   pcre2,
   libiconv,
   darwin,
+  php,
 }:
 
 buildPecl rec {
@@ -24,11 +25,9 @@ buildPecl rec {
     hash = "sha256-Kx2HaWvRT+mFIs0LAAptx6nm9DQ83QEuyHNcEPEr7A4=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "datadog-profiling-5.0.0" = "sha256-/Z1vGpAHpU5EO80NXnzyAHN4s3iyA1jOquBS8MH1nOo=";
-    };
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit src;
+    hash = "sha256-cwhE6M8r8QnrIiNgEekI25GcKTByySrZsigPd9/Fq7o=";
   };
 
   env.NIX_CFLAGS_COMPILE = "-O2";
@@ -67,5 +66,6 @@ buildPecl rec {
       bsd3
     ];
     maintainers = lib.teams.php.members;
+    broken = lib.versionAtLeast php.version "8.4";
   };
 }

@@ -29,6 +29,8 @@ let
           cargoHash
           ;
 
+        useFetchCargoVendor = true;
+
         nativeBuildInputs = [ protobuf ];
 
         buildInputs = lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Security;
@@ -58,12 +60,12 @@ in
 {
   sshx = mkSshxPackage {
     pname = "sshx";
-    cargoHash = "sha256-PMSKhlHSjXKh/Jxvl2z+c1zDDyuVPzQapvdCdcuaFYc=";
+    cargoHash = "sha256-wXElkSaVWoUNhm2UOv8Q+UabgrVKqxwDUsk/JJaZzMw=";
   };
 
   sshx-server = mkSshxPackage rec {
     pname = "sshx-server";
-    cargoHash = "sha256-ySsTjNoI/nuz2qtZ4M2Fd9zy239+E61hUCq1r/ahgsA=";
+    cargoHash = "sha256-wXElkSaVWoUNhm2UOv8Q+UabgrVKqxwDUsk/JJaZzMw=";
 
     postPatch = ''
       substituteInPlace crates/sshx-server/src/web.rs \

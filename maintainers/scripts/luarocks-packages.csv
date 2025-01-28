@@ -122,6 +122,7 @@ nlua,,,,,,teto
 nui.nvim,,,,,,mrcjkb
 nvim-cmp,https://raw.githubusercontent.com/hrsh7th/nvim-cmp/main/nvim-cmp-scm-1.rockspec,,,,,
 nvim-nio,,,,,,mrcjkb
+orgmode,,,,,,
 pathlib.nvim,,,,,,
 papis-nvim,,,,,,GaetanLepage
 penlight,,,,,,alerque
@@ -148,6 +149,7 @@ tiktoken_core,,,,,,natsukium
 tl,,,,,,mephistophiles
 toml-edit,,,,,5.1,mrcjkb
 tree-sitter-norg,,,,,5.1,mrcjkb
+tree-sitter-orgmode,,,,,,
 vstruct,,,,,,
 vusted,,,,,,figsoda
 xml2lua,,,,,,teto

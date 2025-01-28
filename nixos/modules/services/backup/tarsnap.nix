@@ -60,8 +60,8 @@ in
           `"/root/tarsnap.key"`.
 
           It's recommended for backups that you generate a key for every archive
-          using `tarsnap-keygen(1)`, and then generate a
-          write-only tarsnap key using `tarsnap-keymgmt(1)`,
+          using {manpage}`tarsnap-keygen(1)`, and then generate a
+          write-only tarsnap key using {manpage}`tarsnap-keymgmt(1)`,
           and keep your master key(s) for a particular machine off-site.
 
           The keyfile name should be given as a string and not a path, to
@@ -86,11 +86,11 @@ in
                     Use this option if you want to run multiple backups
                     concurrently - each archive must have a unique key. You can
                     generate a write-only key derived from your master key (which
-                    is recommended) using `tarsnap-keymgmt(1)`.
+                    is recommended) using {manpage}`tarsnap-keymgmt(1)`.
 
                     Note: every archive must have an individual master key. You
                     must generate multiple keys with
-                    `tarsnap-keygen(1)`, and then generate write
+                    {manpage}`tarsnap-keygen(1)`, and then generate write
                     only keys from those.
 
                     The keyfile name should be given as a string and not a path, to

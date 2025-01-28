@@ -249,6 +249,7 @@ in
             ExecReload = "${dhcpcd}/sbin/dhcpcd --rebind";
             Restart = "always";
             AmbientCapabilities = [ "CAP_NET_ADMIN" "CAP_NET_RAW" "CAP_NET_BIND_SERVICE" ];
+            CapabilityBoundingSet = [ "CAP_NET_ADMIN" "CAP_NET_RAW" "CAP_NET_BIND_SERVICE" ];
             ReadWritePaths = [ "/proc/sys/net/ipv4" ]
               ++ lib.optional cfgN.enableIPv6 "/proc/sys/net/ipv6"
               ++ lib.optionals useResolvConf ([ "/run/resolvconf" ] ++ config.networking.resolvconf.subscriberFiles);
@@ -276,7 +277,7 @@ in
             RestrictSUIDSGID = true;
             SystemCallFilter = [
               "@system-service"
-              "~@aio" "~@chown" "~@keyring" "~@memlock"
+              "~@aio" "~@keyring" "~@memlock" "~@mount" "~@privileged" "~@resources"
             ];
             SystemCallArchitectures = "native";
             UMask = "0027";

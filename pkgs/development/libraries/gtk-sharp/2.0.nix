@@ -64,11 +64,7 @@ stdenv.mkDerivation rec {
     ./bootstrap-${lib.versions.majorMinor version}
   '';
 
-  env.NIX_CFLAGS_COMPILE = toString (
-    lib.optionals stdenv.cc.isClang [
-      "-Wno-error=int-conversion"
-    ]
-  );
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=int-conversion";
 
   dontStrip = true;
 

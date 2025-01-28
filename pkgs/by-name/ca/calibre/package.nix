@@ -35,11 +35,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "calibre";
-  version = "7.22.0";
+  version = "7.24.0";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${finalAttrs.version}/calibre-${finalAttrs.version}.tar.xz";
-    hash = "sha256-RmCte6tok0F/ts5cacAFBksNYfnLylY4JCmTyb+6IUk=";
+    hash = "sha256-ftqi6ANY/w4CdcMUAzRn9GOpNbSz36mnNcGHv8ffKbQ=";
   };
 
   patches = [
@@ -104,6 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
         beautifulsoup4
         css-parser
         cssselect
+        fonttools
         python-dateutil
         dnspython
         faust-cchardet
@@ -206,7 +207,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   doInstallCheck = true;
   installCheckInputs = with python3Packages; [
-    fonttools
     psutil
   ];
   installCheckPhase = ''

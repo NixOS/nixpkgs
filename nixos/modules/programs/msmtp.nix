@@ -34,7 +34,7 @@ in
         };
         description = ''
           Default values applied to all accounts.
-          See msmtp(1) for the available options.
+          See {manpage}`msmtp(1)` for the available options.
         '';
       };
 
@@ -52,7 +52,7 @@ in
         description = ''
           Named accounts and their respective configurations.
           The special name "default" allows a default account to be defined.
-          See msmtp(1) for the available options.
+          See {manpage}`msmtp(1)` for the available options.
 
           Use `programs.msmtp.extraConfig` instead of this attribute set-based
           option if ordered account inheritance is needed.
@@ -68,7 +68,7 @@ in
         default = "";
         description = ''
           Extra lines to add to the msmtp configuration verbatim.
-          See msmtp(1) for the syntax and available options.
+          See {manpage}`msmtp(1)` for the syntax and available options.
         '';
       };
     };

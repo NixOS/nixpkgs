@@ -211,7 +211,8 @@ in {
             masterAuth = lib.mkOption {
               type = with types; nullOr str;
               default = null;
-              description = ''If the master is password protected (using the requirePass configuration)
+              description = ''
+              If the master is password protected (using the requirePass configuration)
               it is possible to tell the slave to authenticate before starting the replication synchronization
               process, otherwise the master will refuse the slave request.
               (STORED PLAIN TEXT, WORLD-READABLE IN NIX STORE)'';

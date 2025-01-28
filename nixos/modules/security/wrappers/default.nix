@@ -214,7 +214,7 @@ in
       example = "10G";
       type = lib.types.str;
       description = ''
-        Size limit for the /run/wrappers tmpfs. Look at mount(8), tmpfs size option,
+        Size limit for the /run/wrappers tmpfs. Look at {manpage}`mount(8)`, tmpfs size option,
         for the accepted syntax. WARNING: don't set to less than 64MB.
       '';
     };

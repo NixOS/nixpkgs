@@ -15,16 +15,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-dist";
-  version = "0.23.0";
+  version = "0.28.0";
 
   src = fetchFromGitHub {
     owner = "axodotdev";
     repo = "cargo-dist";
     rev = "v${version}";
-    hash = "sha256-R6uTuU+U9fAUx7JP2QD+mTaoSipuaOlqPiiPdXqgfhw=";
+    hash = "sha256-0mKCwb7nvl8BRtQyweItkMT0PrKRGTvpB9Acgro7QSM=";
   };
 
-  cargoHash = "sha256-Hx3xo4PVObtSk68pUIqCbploKN7AxbRD36uOl/QaVkM=";
+  cargoHash = "sha256-D55UXup19R1fBAqzVSDWHH9ORQtWIf+o1UV36hODE4E=";
 
   nativeBuildInputs = [
     pkg-config
@@ -51,14 +51,14 @@ rustPlatform.buildRustPackage rec {
 
   # remove tests that require internet access
   postPatch = ''
-    rm cargo-dist/tests/integration-tests.rs
+    rm cargo-dist/tests/cli-tests.rs cargo-dist/tests/integration-tests.rs
   '';
 
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Tool for building final distributable artifacts and uploading them to an archive";
-    mainProgram = "cargo-dist";
+    mainProgram = "dist";
     homepage = "https://github.com/axodotdev/cargo-dist";
     changelog = "https://github.com/axodotdev/cargo-dist/blob/${src.rev}/CHANGELOG.md";
     license = with licenses; [

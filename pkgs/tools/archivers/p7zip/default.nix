@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "p7zip";
-  version = "17.05";
+  version = "17.06";
 
   src = fetchFromGitHub {
     owner = "p7zip-project";
@@ -15,8 +15,8 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     sha256 =
       {
-        free = "sha256-5r7M9BVcAryZNTkqJ/BfHnSSWov1PwoZhUnLBwEbJoA=";
-        unfree = "sha256-z3qXgv/TkNRbb85Ew1OcJNxoyssfzHShc0b0/4NZOb0=";
+        free = "sha256-NHlacZFal4xMYyFMshibeAw86cS1RXXyXweXKFHQAT8=";
+        unfree = "sha256-kSJHgnuUxO9DJwSOE1hffp9PfU39V+VE87I3CpeRGiY=";
       }
       .${if enableUnfree then "unfree" else "free"};
     # remove the unRAR related code from the src drv

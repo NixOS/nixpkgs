@@ -870,6 +870,7 @@ in
     # Create the ISO image.
     image.extension = if config.isoImage.compressImage then "iso.zst" else "iso";
     image.filePath = "iso/${config.image.fileName}";
+    image.baseName = "nixos${lib.optionalString (config.isoImage.edition != "") "-${config.isoImage.edition}" }-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}";
     system.build.image = config.system.build.isoImage;
     system.build.isoImage = pkgs.callPackage ../../../lib/make-iso9660-image.nix ({
       inherit (config.isoImage) compressImage volumeID contents;

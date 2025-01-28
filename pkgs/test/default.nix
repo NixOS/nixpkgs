@@ -155,6 +155,8 @@ with pkgs;
 
   nixos-functions = callPackage ./nixos-functions { };
 
+  nixosOptionsDoc = callPackage ../../nixos/lib/make-options-doc/tests.nix { };
+
   overriding = callPackage ./overriding.nix { };
 
   texlive = callPackage ./texlive { };

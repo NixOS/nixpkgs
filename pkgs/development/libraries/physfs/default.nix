@@ -14,7 +14,7 @@ let
     };
 
     patches = [
-      ./dont-set-cmake-skip-rpath-${version}.patch
+      (./. + "/dont-set-cmake-skip-rpath-${version}.patch")
     ];
 
     nativeBuildInputs = [ cmake doxygen ];

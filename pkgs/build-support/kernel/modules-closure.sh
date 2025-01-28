@@ -1,5 +1,3 @@
-source $stdenv/setup
-
 # When no modules are built, the $out/lib/modules directory will not
 # exist. Because the rest of the script assumes it does exist, we
 # handle this special case first.

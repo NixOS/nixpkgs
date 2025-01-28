@@ -105,6 +105,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
+  # Starts & talks to D-Bus, breaks under parallelism
+  enableParallelChecking = false;
+
   passthru = {
     ayatana-indicators = {
       ayatana-indicator-sound = [

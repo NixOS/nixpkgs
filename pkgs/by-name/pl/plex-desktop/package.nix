@@ -69,25 +69,25 @@ let
       hash = "sha512-3ofO4a8HDWeUfjsv+4A5bC0jlQwxIew1CnL39Oa0bjnqShwRQjMW1vSHOjsJ1AHMkbp3h5W/2tFRxPL2C/Heqg==";
     };
 
-    nativeBuildInputs = [ squashfsTools ];
+    nativeBuildInputs = [
+      autoPatchelfHook
+      makeShellWrapper
+      squashfsTools
+    ];
 
     buildInputs = [
       alsa-lib
-      autoPatchelfHook
       dbus
       elfutils
       expat
       glib
-      glibc
       libGL
       libapparmor
       libbsd
       libedit
       libffi_3_3
       libgcrypt
-      makeShellWrapper
       sqlite
-      squashfsTools
       stdenv.cc.cc
       tcp_wrappers
       udev
@@ -96,6 +96,8 @@ let
       xz
       zstd
     ];
+
+    strictDeps = true;
 
     unpackPhase = ''
       runHook preUnpack

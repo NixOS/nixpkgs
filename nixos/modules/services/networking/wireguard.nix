@@ -127,7 +127,8 @@ let
         default = null;
         type = with types; nullOr str;
         example = "container";
-        description = ''The pre-existing network namespace in which the
+        description = ''
+        The pre-existing network namespace in which the
         WireGuard interface is created, and which retains the socket even if the
         interface is moved via {option}`interfaceNamespace`. When
         `null`, the interface is created in the init namespace.
@@ -139,7 +140,8 @@ let
         default = null;
         type = with types; nullOr str;
         example = "init";
-        description = ''The pre-existing network namespace the WireGuard
+        description = ''
+        The pre-existing network namespace the WireGuard
         interface is moved to. The special value `init` means
         the init namespace. When `null`, the interface is not
         moved.
@@ -262,7 +264,8 @@ let
       allowedIPs = mkOption {
         example = [ "10.192.122.3/32" "10.192.124.1/24" ];
         type = with types; listOf str;
-        description = ''List of IP (v4 or v6) addresses with CIDR masks from
+        description = ''
+        List of IP (v4 or v6) addresses with CIDR masks from
         which this peer is allowed to send incoming traffic and to which
         outgoing traffic for this peer is directed. The catch-all 0.0.0.0/0 may
         be specified for matching all IPv4 addresses, and ::/0 may be specified
@@ -328,7 +331,8 @@ let
         default = null;
         type = with types; nullOr int;
         example = 25;
-        description = ''This is optional and is by default off, because most
+        description = ''
+        This is optional and is by default off, because most
         users will not need it. It represents, in seconds, between 1 and 65535
         inclusive, how often to send an authenticated empty packet to the peer,
         for the purpose of keeping a stateful firewall or NAT mapping valid

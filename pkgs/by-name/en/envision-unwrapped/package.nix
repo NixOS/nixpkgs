@@ -67,7 +67,6 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     rustPlatform.cargoSetupHook
     rustc
-    versionCheckHook
     wrapGAppsHook4
   ];
 
@@ -85,6 +84,14 @@ stdenv.mkDerivation (finalAttrs: {
     pango
     vte-gtk4
     zlib
+  ];
+
+  # FIXME: error when running `env -i envision`:
+  # "HOME env var not defined: NotPresent"
+  doInstallCheck = false;
+  versionCheckProgram = "${placeholder "out"}/bin/envision";
+  nativeInstallCheckInputs = [
+    versionCheckHook
   ];
 
   postInstall = ''

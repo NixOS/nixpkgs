@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   buildGoModule,
   pkg-config,
   deepin-gettext-tools,
@@ -48,12 +48,10 @@ buildGoModule rec {
 
   patches = [
     ./0001-dont-set-PATH.diff
-    (substituteAll {
-      src = ./0002-fix-custom-wallpapers-path.diff;
+    (replaceVars ./0002-fix-custom-wallpapers-path.diff {
       inherit coreutils;
     })
-    (substituteAll {
-      src = ./0003-aviod-use-hardcode-path.diff;
+    (replaceVars ./0003-aviod-use-hardcode-path.diff {
       inherit dbus;
     })
   ];

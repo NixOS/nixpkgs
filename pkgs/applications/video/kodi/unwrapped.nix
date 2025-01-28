@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, fetchzip
+{ stdenv, lib, fetchFromGitHub, fetchzip
 , autoconf, automake, libtool, makeWrapper
 , pkg-config, cmake, yasm, python3Packages
 , libxcrypt, libgcrypt, libgpg-error, libunistring
@@ -87,23 +87,15 @@ let
 
 in stdenv.mkDerivation (finalAttrs: {
     pname = "kodi";
-    version = "21.1";
+    version = "21.2";
     kodiReleaseName = "Omega";
 
     src = fetchFromGitHub {
       owner = "xbmc";
       repo  = "xbmc";
       rev   = "${finalAttrs.version}-${finalAttrs.kodiReleaseName}";
-      hash  = "sha256-NjId1T1cw9dl0Fx1QDsijiN1VUpuQ/EFl1kxWSESCR4=";
+      hash  = "sha256-RdTJcq6FPerQx05dU3r8iyaorT4L7162hg5RdywsA88=";
     };
-
-    patches = [
-      ./no-python-lib.patch
-      (fetchpatch {
-        url = "https://github.com/xbmc/xbmc/commit/32b04718c65a90f87e409674c4ef984b087b8657.patch";
-        hash = "sha256-I79thepzDOfw55r9gfaOp/Ri2FA0gouc+RgTc2Zh1Sw=";
-      })
-    ];
 
     # make  derivations declared in the let binding available here, so
     # they can be overridden

@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "stringzilla";
-  version = "3.11.1";
+  version = "3.11.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ashvardanian";
     repo = "stringzilla";
     tag = "v${version}";
-    hash = "sha256-8HcX0P/PCaJAV333oSYZJ6xVKwYet/CF8vnEe9/dMo4=";
+    hash = "sha256-2qmcjRNjCyErzwto2DqdDU9NX4+hqeibhDM85c81TgU=";
   };
 
   build-system = [

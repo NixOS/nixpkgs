@@ -17,7 +17,7 @@
   libunwind,
   libusb1,
   magic-enum,
-  mesa,
+  libgbm,
   pkg-config,
   pugixml,
   qt6,
@@ -37,13 +37,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shadps4";
-  version = "0.5.0-unstable-2025-01-02";
+  version = "0.5.0-unstable-2025-01-20";
 
   src = fetchFromGitHub {
     owner = "shadps4-emu";
     repo = "shadPS4";
-    rev = "596f4cdf0e66a97c9d2d4272091d8c0167a5b8e1";
-    hash = "sha256-apwAl8TCzSKchqYGHV0UsMSGErF4GgiwhlwmOPWpeLs=";
+    rev = "95a30b2b3e1aa4e20c3db632955cc67bbded0fb1";
+    hash = "sha256-52BhGKSUv+9asACNkppxiNm3Gja7r3LcXOIwhQR5ALs=";
     fetchSubmodules = true;
   };
 
@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libX11
     xorg.libXext
     magic-enum
-    mesa
+    libgbm
     pugixml
     qt6.qtbase
     qt6.qtdeclarative

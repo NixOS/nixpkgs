@@ -14,26 +14,26 @@
 
 buildPythonPackage rec {
   pname = "zconfig";
-  version = "4.1";
+  version = "4.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-tqed2hV/NpjIdo0s7cJjIW6K8kDTz50JoCpkKREU6yA=";
+    hash = "sha256-oOS1J3xM7oBgzjNaV4rEWPgsJArpaxZlkgDbxNmL/M4=";
   };
 
   patches = lib.optional stdenv.hostPlatform.isMusl ./remove-setlocale-test.patch;
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   buildInputs = [
     docutils
     manuel
   ];
 
-  propagatedBuildInputs = [ zope-testrunner ];
+  dependencies = [ zope-testrunner ];
 
   nativeCheckInputs = [
     pygments

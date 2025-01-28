@@ -3,8 +3,8 @@
   coreutils,
   fetchFromGitHub,
   git,
-  gitUpdater,
   glibcLocales,
+  nix-update-script,
   pythonPackages,
 }:
 
@@ -12,7 +12,7 @@ let
 
   argset = {
     pname = "xonsh";
-    version = "0.19.0";
+    version = "0.19.1";
     pyproject = true;
 
     # PyPI package ships incomplete tests
@@ -20,7 +20,7 @@ let
       owner = "xonsh";
       repo = "xonsh";
       rev = "refs/tags/${argset.version}";
-      hash = "sha256-rt402MKnhjC/AYz9Rm6B5RkivcVxveVW2rM/nT/xcNo=";
+      hash = "sha256-20egNKlJjJO1wdy1anApz0ADBnaHPUSqhfrsPe3QQIs=";
     };
 
     nativeBuildInputs = with pythonPackages; [
@@ -112,7 +112,7 @@ let
       shellPath = "/bin/xonsh";
       python = pythonPackages.python; # To the wrapper
       wrapper = throw "The top-level xonsh package is now wrapped. Use it directly.";
-      updateScript = gitUpdater { };
+      updateScript = nix-update-script { };
     };
 
     meta = {
