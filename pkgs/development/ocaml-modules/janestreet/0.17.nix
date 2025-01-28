@@ -1557,8 +1557,8 @@ with self;
     // (
       if lib.versionAtLeast ocaml.version "5.3" then
         {
-          version = "0.17.1";
-          hash = "sha256-kcGXqO1kFYds8KwLvpIQ7OKhqnp6JZs8WYYLi7o/nBw=";
+          version = "0.17.2";
+          hash = "sha256-AQJSdKtF6p/aG5Lx8VHVEOsisH8ep+iiml6DtW+Hdik=";
         }
       else
         {
