@@ -16340,8 +16340,6 @@ with pkgs;
   # used as base package for iortcw forks
   iortcw_sp = callPackage ../games/iortcw/sp.nix { };
 
-  ja2-stracciatella = callPackage ../games/ja2-stracciatella { };
-
   katagoWithCuda = katago.override {
     backend = "cuda";
     cudaPackages = cudaPackages_12;
