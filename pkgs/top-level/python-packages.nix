@@ -14933,6 +14933,8 @@ self: super: with self; {
 
   sklearn-deap = callPackage ../development/python-modules/sklearn-deap { };
 
+  sklearn-compat = callPackage ../development/python-modules/sklearn-compat { };
+
   skodaconnect = callPackage ../development/python-modules/skodaconnect { };
 
   skops = callPackage ../development/python-modules/skops { };
