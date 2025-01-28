@@ -293,8 +293,6 @@ with pkgs;
     perlPackages = perl538Packages;
   };
 
-  cocogitto = callPackage ../development/tools/cocogitto { };
-
   coldsnap = callPackage ../tools/admin/coldsnap { };
 
   collision = callPackage ../applications/misc/collision { };
