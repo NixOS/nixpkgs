@@ -1,4 +1,4 @@
-{ lib, fetchurl, buildDunePackage, ocaml, findlib
+{ stdenv, lib, fetchurl, buildDunePackage, ocaml, findlib
 , alcotest
 , astring, cppo, fmt, logs, ocaml-version, camlp-streams, lwt, re, csexp
 , gitUpdater
@@ -14,6 +14,12 @@ buildDunePackage rec {
     url = "https://github.com/realworldocaml/mdx/releases/download/${version}/mdx-${version}.tbz";
     hash = "sha256-wtpY19UYLxXARvsyC7AsFmAtLufLmfNJ4/SEHCY2UCk=";
   };
+
+  # nice fails in darwin sandbox with EPERM
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace test/bin/mdx-test/expect/os_type/test-case.md \
+      --replace-fail Unix.nice ""
+  '';
 
   nativeBuildInputs = [ cppo ];
   propagatedBuildInputs = [
