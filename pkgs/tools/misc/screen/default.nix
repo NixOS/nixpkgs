@@ -21,9 +21,6 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--enable-telnet"
     "--enable-pam"
-    "--with-sys-screenrc=/etc/screenrc"
-    "--enable-colors256"
-    "--enable-rxvt_osc"
   ];
 
   # We need _GNU_SOURCE so that mallocmock_reset() is defined: https://savannah.gnu.org/bugs/?66416
