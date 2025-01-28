@@ -11,9 +11,9 @@ buildWasmBindgenCli rec {
     hash = "sha256-DDdu5mM3gneraM85pAepBXWn3TMofarVR4NbjMdz3r0=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     inherit (src) pname version;
-    hash = "sha256-birrg+XABBHHKJxfTKAMSlmTVYLmnmqMDfRnmG6g/YQ=";
+    hash = "sha256-s8srI+lu+DgQ+5BbaEXC4Ja/BL+K22LIl5Gd1PwNZZk=";
   };
 }
