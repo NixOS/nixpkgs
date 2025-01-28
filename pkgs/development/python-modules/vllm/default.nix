@@ -25,7 +25,6 @@
   uvicorn,
   pydantic,
   aioprometheus,
-  pynvml,
   openai,
   pyzmq,
   tiktoken,
@@ -149,7 +148,6 @@ buildPythonPackage rec {
     ++ aioprometheus.optional-dependencies.starlette
     ++ lib.optionals cudaSupport [
       cupy
-      pynvml
     ];
 
   dontUseCmakeConfigure = true;

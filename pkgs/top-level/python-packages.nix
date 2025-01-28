@@ -27,6 +27,8 @@ self: super: with self; {
 
   aafigure = callPackage ../development/python-modules/aafigure { };
 
+  airportsdata = callPackage ../development/python-modules/airportsdata { };
+
   aardwolf = callPackage ../development/python-modules/aardwolf { };
 
   abjad = callPackage ../development/python-modules/abjad { };
@@ -2995,6 +2997,8 @@ self: super: with self; {
 
   datalad-next = callPackage ../development/python-modules/datalad-next { };
 
+  datamodel-code-generator = callPackage ../development/python-modules/datamodel-code-generator { };
+
   datamodeldict = callPackage ../development/python-modules/datamodeldict { };
 
   datapoint = callPackage ../development/python-modules/datapoint { };
@@ -3128,6 +3132,10 @@ self: super: with self; {
   deepl = callPackage ../development/python-modules/deepl { };
 
   deepmerge = callPackage ../development/python-modules/deepmerge { };
+
+  deepsearch-glm = callPackage ../development/python-modules/deepsearch-glm {
+    inherit (pkgs) loguru sentencepiece fasttext;
+  };
 
   deepsearch-toolkit = callPackage ../development/python-modules/deepsearch-toolkit { };
 
@@ -5081,6 +5089,8 @@ self: super: with self; {
 
   gcovr = callPackage ../development/python-modules/gcovr { };
 
+  gcp-storage-emulator = callPackage ../development/python-modules/gcp-storage-emulator { };
+
   gcsa = callPackage ../development/python-modules/gcsa { };
 
   gcsfs = callPackage ../development/python-modules/gcsfs { };
@@ -5137,6 +5147,8 @@ self: super: with self; {
   genshi = callPackage ../development/python-modules/genshi { };
 
   gensim = callPackage ../development/python-modules/gensim { };
+
+  genson = callPackage ../development/python-modules/genson { };
 
   gentools = callPackage ../development/python-modules/gentools { };
 
@@ -6596,11 +6608,7 @@ self: super: with self; {
 
   jaxlib-bin = callPackage ../development/python-modules/jaxlib/bin.nix { };
 
-  jaxlib-build = callPackage ../development/python-modules/jaxlib rec {
-    # Some platforms don't have `cudaSupport` defined, hence the need for 'or false'.
-    inherit (pkgs.config) cudaSupport;
-    IOKit = pkgs.darwin.apple_sdk_11_0.IOKit;
-  };
+  jaxlib-build = callPackage ../development/python-modules/jaxlib { };
 
   jaxlib = jaxlib-bin;
 
@@ -6961,11 +6969,7 @@ self: super: with self; {
 
   keke = callPackage ../development/python-modules/keke { };
 
-  keras-applications = callPackage ../development/python-modules/keras-applications { };
-
   keras = callPackage ../development/python-modules/keras { };
-
-  keras-preprocessing = callPackage ../development/python-modules/keras-preprocessing { };
 
   kerberos = callPackage ../development/python-modules/kerberos { };
 
@@ -7108,7 +7112,7 @@ self: super: with self; {
 
   langchain-openai = callPackage ../development/python-modules/langchain-openai { };
 
-  langchain-standard-tests = callPackage ../development/python-modules/langchain-standard-tests { };
+  langchain-tests = callPackage ../development/python-modules/langchain-tests { };
 
   langchain-text-splitters = callPackage ../development/python-modules/langchain-text-splitters { };
 
@@ -8153,6 +8157,8 @@ self: super: with self; {
   mezzanine = callPackage ../development/python-modules/mezzanine { };
 
   mf2py = callPackage ../development/python-modules/mf2py { };
+
+  mficlient = callPackage ../development/python-modules/mficlient { };
 
   mhcflurry = callPackage ../development/python-modules/mhcflurry { };
 
@@ -10317,6 +10323,8 @@ self: super: with self; {
 
   outlines = callPackage ../development/python-modules/outlines { };
 
+  outlines-core = callPackage ../development/python-modules/outlines-core { };
+
   overly = callPackage ../development/python-modules/overly { };
 
   overpy = callPackage ../development/python-modules/overpy { };
@@ -10454,8 +10462,6 @@ self: super: with self; {
   pipdeptree = callPackage ../development/python-modules/pipdeptree { };
 
   pipe = callPackage ../development/python-modules/pipe { };
-
-  pipenv-poetry-migrate = callPackage ../development/python-modules/pipenv-poetry-migrate { };
 
   piper-phonemize = callPackage ../development/python-modules/piper-phonemize {
     onnxruntime-native = pkgs.onnxruntime;
@@ -12361,6 +12367,8 @@ self: super: with self; {
 
   pypdf3 = callPackage ../development/python-modules/pypdf3 { };
 
+  pypdfium2 = callPackage ../development/python-modules/pypdfium2 { };
+
   pypeg2 = callPackage ../development/python-modules/pypeg2 { };
 
   pyperclip = callPackage ../development/python-modules/pyperclip { };
@@ -14141,6 +14149,8 @@ self: super: with self; {
   reuse = callPackage ../development/python-modules/reuse { };
 
   reverse-geocode = callPackage ../development/python-modules/reverse-geocode { };
+
+  rfc3161-client = callPackage ../development/python-modules/rfc3161-client { };
 
   rfc3339 = callPackage ../development/python-modules/rfc3339 { };
 

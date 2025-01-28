@@ -639,7 +639,7 @@ in
           ${lib.escapeShellArg cfg.name} \
           admin
 
-        ${php}/bin/php ${pkg}/share/mediawiki/maintenance/update.php --conf ${mediawikiConfig} --quick
+        ${php}/bin/php ${pkg}/share/mediawiki/maintenance/update.php --conf ${mediawikiConfig} --quick --skip-external-dependencies
       '';
 
       serviceConfig = {

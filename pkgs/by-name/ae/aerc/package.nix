@@ -2,7 +2,6 @@
   lib,
   buildGoModule,
   fetchFromSourcehut,
-  fetchpatch,
   ncurses,
   notmuch,
   scdoc,
@@ -10,17 +9,19 @@
   w3m,
   dante,
   gawk,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 buildGoModule rec {
   pname = "aerc";
-  version = "0.19.0";
+  version = "0.20.0";
 
   src = fetchFromSourcehut {
     owner = "~rjarry";
     repo = "aerc";
     rev = version;
-    hash = "sha256-YlpR85jB6Il3UW4MTaf8pkilRVjkO0q/D/Yu+OiBX6Y=";
+    hash = "sha256-0ZSmmmj5PpSORL0s0SSNoZGzct9Ps8j0ILAUCpJOOBw=";
   };
 
   proxyVendor = true;
@@ -31,9 +32,7 @@ buildGoModule rec {
     python3Packages.wrapPython
   ];
 
-  patches = [
-    ./runtime-libexec.patch
-  ];
+  patches = [ ./runtime-libexec.patch ];
 
   postPatch = ''
     substituteAllInPlace config/aerc.conf
@@ -47,9 +46,7 @@ buildGoModule rec {
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  pythonPath = [
-    python3Packages.vobject
-  ];
+  pythonPath = [ python3Packages.vobject ];
 
   buildInputs = [
     python3Packages.python
@@ -85,12 +82,22 @@ buildGoModule rec {
     patchShebangs $out/libexec/aerc/filters
   '';
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Email client for your terminal";
     homepage = "https://aerc-mail.org/";
-    maintainers = [ ];
+    changelog = "https://git.sr.ht/~rjarry/aerc/tree/${version}/item/CHANGELOG.md";
+    maintainers = with lib.maintainers; [
+      defelo
+      sikmir
+    ];
     mainProgram = "aerc";
-    license = licenses.mit;
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
 }

@@ -3,6 +3,8 @@
   lib,
   fetchFromGitLab,
   cmake,
+  gettext,
+  glib,
   pkg-config,
   libdrm,
   libGL,
@@ -28,6 +30,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
+    gettext # msgfmt
+    glib # glib-compile-resources
     pkg-config
   ];
   buildInputs = [
@@ -41,6 +45,7 @@ stdenv.mkDerivation rec {
     pciutils
   ];
 
+  # tries to download googletest
   cmakeFlags = [ "-DENABLE_UNIT_TESTS=off" ];
 
   postInstall = ''

@@ -8,5 +8,8 @@ import ./generic.nix {
     ./0c37b7e3ec65b4d0e166e2127d9f1835320165b8.patch
   ];
   lts = true;
-  updateScriptArgs = "--lts --regex '6.0.*'";
+  nixUpdateExtraArgs = [
+    "--version-regex=^v(6\\.0\\.[0-9]+)$"
+    "--override-filename=pkgs/by-name/in/incus/lts.nix"
+  ];
 }

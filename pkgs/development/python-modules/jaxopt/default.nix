@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
@@ -43,6 +42,12 @@ buildPythonPackage rec {
       url = "https://github.com/google/jaxopt/commit/48b09dc4cc93b6bc7e6764ed5d333f9b57f3493b.patch";
       hash = "sha256-v+617W7AhxA1Dzz+DBtljA4HHl89bRTuGi1QfatobNY=";
     })
+    # fix invalid string escape sequences
+    (fetchpatch {
+      name = "fix-escape-sequences.patch";
+      url = "https://github.com/google/jaxopt/commit/f5bb530f5f000d0739c9b26eee2d32211eb99f40.patch";
+      hash = "sha256-E0ZXIfzWxKHuiBn4lAWf7AjNtll7OJU/NGZm6PTmhzo=";
+    })
   ];
 
   build-system = [ setuptools ];
@@ -71,39 +76,26 @@ buildPythonPackage rec {
     "jaxopt.tree_util"
   ];
 
-  disabledTests =
-    [
-      # https://github.com/google/jaxopt/issues/592
-      "test_solve_sparse"
+  disabledTests = [
+    # https://github.com/google/jaxopt/issues/592
+    "test_solve_sparse"
 
-      # AssertionError: Not equal to tolerance rtol=1e-06, atol=1e-06
-      # https://github.com/google/jaxopt/issues/618
-      "test_binary_logit_log_likelihood"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
-      # https://github.com/google/jaxopt/issues/577
-      "test_binary_logit_log_likelihood"
-      "test_solve_sparse"
-      "test_logreg_with_intercept_manual_loop3"
+    # https://github.com/google/jaxopt/issues/593
+    # Makes the test suite crash
+    "test_dtype_consistency"
 
-      # Flaky (AssertionError)
-      "test_inv_hessian_product_pytree3"
+    # AssertionError: Not equal to tolerance rtol=1e-06, atol=1e-06
+    # https://github.com/google/jaxopt/issues/618
+    "test_binary_logit_log_likelihood"
 
-      # https://github.com/google/jaxopt/issues/593
-      # Makes the test suite crash
-      "test_dtype_consistency"
-      # AssertionError: Array(0.01411963, dtype=float32) not less than or equal to 0.01
-      "test_multiclass_logreg6"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Fatal Python error: Aborted
-      "test_dtype_consistency"
-
-      # AssertionError (flaky numerical tests)
-      "test_logreg_with_intercept_manual_loop3"
-      "test_binary_logit_log_likelihood"
-      "test_inv_hessian_product_pytree3"
-    ];
+    # AssertionError (flaky numerical tests)
+    "test_Rosenbrock2"
+    "test_Rosenbrock5"
+    "test_gradient1"
+    "test_inv_hessian_product_pytree3"
+    "test_logreg_with_intercept_manual_loop3"
+    "test_multiclass_logreg6"
+  ];
 
   meta = {
     homepage = "https://jaxopt.github.io";

@@ -760,6 +760,7 @@ in
       # Optional integrations
       fzf-lua
       telescope-nvim
+      snacks-nvim
     ];
     dependencies = with self; [
       copilot-lua
@@ -2255,7 +2256,7 @@ in
 
   nvim-java = super.nvim-java.overrideAttrs {
     dependencies = with self; [
-      lua-async-await
+      lua-async
       mason-nvim
       nui-nvim
       nvim-dap
@@ -3358,6 +3359,15 @@ in
     };
   };
 
+  vimade = super.vimade.overrideAttrs {
+    checkInputs = with self; [
+      # Optional providers
+      hlchunk-nvim
+      mini-nvim
+      snacks-nvim
+    ];
+  };
+
   vim-addon-actions = super.vim-addon-actions.overrideAttrs {
     dependencies = with self; [
       vim-addon-mw-utils
@@ -3822,6 +3832,7 @@ in
       maintainers = with maintainers; [
         marcweber
         jagajaga
+        mel
       ];
       platforms = platforms.unix;
     };

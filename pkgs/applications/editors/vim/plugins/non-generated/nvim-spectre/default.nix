@@ -7,12 +7,12 @@
   vimUtils,
 }:
 let
-  version = "0-unstable-2024-10-27";
+  version = "0-unstable-2025-01-13";
   src = fetchFromGitHub {
     owner = "nvim-pack";
     repo = "nvim-spectre";
-    rev = "08be31c104df3b4b049607694ebb2b6ced4f928b";
-    sha256 = "04v1gypga9fhmkddis5yyppvmpq0b1b7zpvbfjlxfp2z498l5n2v";
+    rev = "ddd7383e856a7c939cb4f5143278fe041bbb8cb9";
+    sha256 = "sha256-pZ7AH1U95IWMmhk/uBO0Lsxx78H5H9ygPxk/HIqFFlY=";
   };
 
   spectre_oxi = rustPlatform.buildRustPackage {
@@ -20,7 +20,7 @@ let
     inherit version src;
     sourceRoot = "${src.name}/spectre_oxi";
 
-    cargoHash = "sha256-jVNeK1BeCzQaS5G561iWB3xEupzjIgnbUpEo1IVr9nQ=";
+    cargoHash = "sha256-UieSVIITsk6iqd68JKFYYBTSDm4kPs+a9V+Y0gB9kFU=";
 
     preCheck = ''
       mkdir tests/tmp/

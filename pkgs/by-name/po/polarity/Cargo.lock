@@ -133,7 +133,7 @@ dependencies = [
  "proc-macro2",
  "quote",
  "serde",
- "syn 2.0.94",
+ "syn 2.0.95",
 ]
 
 [[package]]
@@ -171,7 +171,6 @@ dependencies = [
 name = "ast"
 version = "0.1.0"
 dependencies = [
- "codespan",
  "derivative",
  "fxhash",
  "miette",
@@ -329,7 +328,7 @@ checksum = "1b1244b10dcd56c92219da4e14caa97e312079e185f04ba3eea25061561dc0a0"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.94",
+ "syn 2.0.95",
 ]
 
 [[package]]
@@ -346,7 +345,7 @@ checksum = "3c87f3f15e7794432337fc718554eaa4dc8f04c9677a950ffe366f20a162ae42"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.94",
+ "syn 2.0.95",
 ]
 
 [[package]]
@@ -556,7 +555,7 @@ dependencies = [
  "heck",
  "proc-macro2",
  "quote",
- "syn 2.0.94",
+ "syn 2.0.95",
 ]
 
 [[package]]
@@ -564,14 +563,6 @@ name = "clap_lex"
 version = "0.7.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f46ad14479a25103f283c0f10005961cf086d8dc42205bb44c46ac563475dca6"
-
-[[package]]
-name = "codespan"
-version = "0.11.1"
-source = "git+https://github.com/polarity-lang/codespan.git?rev=91e4f64801cee923661097eb35e05a782996d8ea#91e4f64801cee923661097eb35e05a782996d8ea"
-dependencies = [
- "url",
-]
 
 [[package]]
 name = "colorchoice"
@@ -748,7 +739,7 @@ checksum = "97369cbbc041bc366949bc74d34658d6cda5621039731c6310521892a3a20ae0"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.94",
+ "syn 2.0.95",
 ]
 
 [[package]]
@@ -782,11 +773,12 @@ dependencies = [
  "ast",
  "async-trait",
  "backend",
- "codespan",
  "elaborator",
  "log",
  "lowering",
+ "lsp-types",
  "miette",
+ "miette_util",
  "parser",
  "printer",
  "ropey",
@@ -807,7 +799,6 @@ name = "elaborator"
 version = "0.1.0"
 dependencies = [
  "ast",
- "codespan",
  "derivative",
  "log",
  "miette",
@@ -1059,7 +1050,7 @@ checksum = "162ee34ebcb7c64a8abebc059ce0fee27c2262618d7b60ed8faf72fef13c3650"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.94",
+ "syn 2.0.95",
 ]
 
 [[package]]
@@ -1436,7 +1427,7 @@ checksum = "1ec89e9337638ecdc08744df490b221a7399bf8d164eb52a665454e60e075ad6"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.94",
+ "syn 2.0.95",
 ]
 
 [[package]]
@@ -1702,7 +1693,7 @@ dependencies = [
  "proc-macro2",
  "quote",
  "regex-syntax 0.8.5",
- "syn 2.0.94",
+ "syn 2.0.95",
 ]
 
 [[package]]
@@ -1719,12 +1710,12 @@ name = "lowering"
 version = "0.1.0"
 dependencies = [
  "ast",
- "codespan",
  "log",
  "miette",
  "miette_util",
  "num-bigint",
  "parser",
+ "printer",
  "thiserror",
  "url",
 ]
@@ -1762,7 +1753,6 @@ version = "0.1.0"
 dependencies = [
  "ast",
  "async-lock 2.8.0",
- "codespan",
  "driver",
  "miette",
  "miette_util",
@@ -1843,14 +1833,13 @@ checksum = "23c9b935fbe1d6cbd1dac857b54a688145e2d93f48db36010514d0f612d0ad67"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.94",
+ "syn 2.0.95",
 ]
 
 [[package]]
 name = "miette_util"
 version = "0.1.0"
 dependencies = [
- "codespan",
  "miette",
 ]
 
@@ -2036,7 +2025,7 @@ checksum = "a948666b637a0f465e8564c73e89d4dde00d72d4d473cc972f390fc3dcee7d9c"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.94",
+ "syn 2.0.95",
 ]
 
 [[package]]
@@ -2105,13 +2094,13 @@ dependencies = [
 name = "parser"
 version = "0.1.0"
 dependencies = [
- "codespan",
  "derivative",
  "lalrpop 0.19.12",
  "lalrpop 0.20.2",
  "lalrpop-util 0.20.2",
  "logos",
  "miette",
+ "miette_util",
  "num-bigint",
  "thiserror",
  "url",
@@ -2646,7 +2635,7 @@ checksum = "5a9bf7cf98d04a2b28aead066b7496853d4779c9cc183c440dbac457641e19a0"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.94",
+ "syn 2.0.95",
 ]
 
 [[package]]
@@ -2669,7 +2658,7 @@ checksum = "6c64451ba24fc7a6a2d60fc75dd9c83c90903b19028d4eff35e88fc1e86564e9"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.94",
+ "syn 2.0.95",
 ]
 
 [[package]]
@@ -2798,9 +2787,9 @@ dependencies = [
 
 [[package]]
 name = "syn"
-version = "2.0.94"
+version = "2.0.95"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "987bc0be1cdea8b10216bd06e2ca407d40b9543468fafd3ddfb02f36e77f71f3"
+checksum = "46f71c0377baf4ef1cc3e3402ded576dccc315800fbc62dfc7fe04b009773b4a"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -2824,7 +2813,7 @@ checksum = "c8af7666ab7b6390ab78131fb5b0fce11d6b7a6951602017c35fa82800708971"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.94",
+ "syn 2.0.95",
 ]
 
 [[package]]
@@ -3047,7 +3036,7 @@ checksum = "4fee6c4efc90059e10f81e6d42c60a18f76588c3d74cb83a0b242a2b6c7504c1"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.94",
+ "syn 2.0.95",
 ]
 
 [[package]]
@@ -3206,7 +3195,7 @@ source = "git+https://github.com/tower-lsp/tower-lsp?rev=19f5a87810ff4b643d2bc39
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.94",
+ "syn 2.0.95",
 ]
 
 [[package]]
@@ -3234,7 +3223,7 @@ checksum = "395ae124c09f9e6918a2310af6038fba074bcf474ac352496d5910dd59a2226d"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.94",
+ "syn 2.0.95",
 ]
 
 [[package]]
@@ -3251,9 +3240,9 @@ name = "transformations"
 version = "0.1.0"
 dependencies = [
  "ast",
- "codespan",
  "derivative",
  "miette",
+ "miette_util",
  "thiserror",
  "url",
 ]
@@ -3430,7 +3419,7 @@ dependencies = [
  "log",
  "proc-macro2",
  "quote",
- "syn 2.0.94",
+ "syn 2.0.95",
  "wasm-bindgen-shared",
 ]
 
@@ -3466,7 +3455,7 @@ checksum = "30d7a95b763d3c45903ed6c81f156801839e5ee968bb07e534c44df0fcd330c2"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.94",
+ "syn 2.0.95",
  "wasm-bindgen-backend",
  "wasm-bindgen-shared",
 ]
@@ -3681,7 +3670,7 @@ checksum = "2380878cad4ac9aac1e2435f3eb4020e8374b5f13c296cb75b4620ff8e229154"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.94",
+ "syn 2.0.95",
  "synstructure",
 ]
 
@@ -3703,7 +3692,7 @@ checksum = "fa4f8080344d4671fb4e831a13ad1e68092748387dfc4f55e356242fae12ce3e"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.94",
+ "syn 2.0.95",
 ]
 
 [[package]]
@@ -3723,7 +3712,7 @@ checksum = "595eed982f7d355beb85837f651fa22e90b3c044842dc7f2c2842c086f295808"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.94",
+ "syn 2.0.95",
  "synstructure",
 ]
 
@@ -3752,5 +3741,5 @@ checksum = "6eafa6dfb17584ea3e2bd6e76e0cc15ad7af12b09abdd1ca55961bed9b1063c6"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.94",
+ "syn 2.0.95",
 ]

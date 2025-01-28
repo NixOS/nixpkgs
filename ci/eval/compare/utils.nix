@@ -212,13 +212,25 @@ rec {
             else if rebuildCount <= 500 then
               [ "101-500" ]
             else if rebuildCount <= 1000 then
-              [ "501-1000" ]
+              [
+                "501-1000"
+                "501+"
+              ]
             else if rebuildCount <= 2500 then
-              [ "1001-2500" ]
+              [
+                "1001-2500"
+                "501+"
+              ]
             else if rebuildCount <= 5000 then
-              [ "2501-5000" ]
+              [
+                "2501-5000"
+                "501+"
+              ]
             else
-              [ "5001+" ];
+              [
+                "5001+"
+                "501+"
+              ];
         in
         lib.forEach numbers (number: "10.rebuild-${kernel}: ${number}")
       ) rebuildCountByKernel

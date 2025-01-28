@@ -90,35 +90,80 @@ def make_command(args: list) -> str:
     return " ".join(map(shlex.quote, (map(str, args))))
 
 
+def _preprocess_screenshot(screenshot_path: str, negate: bool = False) -> str:
+    magick_args = [
+        "-filter",
+        "Catrom",
+        "-density",
+        "72",
+        "-resample",
+        "300",
+        "-contrast",
+        "-normalize",
+        "-despeckle",
+        "-type",
+        "grayscale",
+        "-sharpen",
+        "1",
+        "-posterize",
+        "3",
+    ]
+    out_file = screenshot_path
+
+    if negate:
+        magick_args.append("-negate")
+        out_file += ".negative"
+
+    magick_args += [
+        "-gamma",
+        "100",
+        "-blur",
+        "1x65535",
+    ]
+    out_file += ".png"
+
+    ret = subprocess.run(
+        ["magick", "convert"] + magick_args + [screenshot_path, out_file],
+        capture_output=True,
+    )
+
+    if ret.returncode != 0:
+        raise Exception(
+            f"Image processing failed with exit code {ret.returncode}, stdout: {ret.stdout.decode()}, stderr: {ret.stderr.decode()}"
+        )
+
+    return out_file
+
+
 def _perform_ocr_on_screenshot(
     screenshot_path: str, model_ids: Iterable[int]
 ) -> list[str]:
     if shutil.which("tesseract") is None:
         raise Exception("OCR requested but enableOCR is false")
 
-    magick_args = (
-        "-filter Catrom -density 72 -resample 300 "
-        + "-contrast -normalize -despeckle -type grayscale "
-        + "-sharpen 1 -posterize 3 -negate -gamma 100 "
-        + "-blur 1x65535"
-    )
-
-    tess_args = "-c debug_file=/dev/null --psm 11"
-
-    cmd = f"magick convert {magick_args} '{screenshot_path}' '{screenshot_path}.png'"
-    ret = subprocess.run(cmd, shell=True, capture_output=True)
-    if ret.returncode != 0:
-        raise Exception(
-            f"Image processing failed with exit code {ret.returncode}, stdout: {ret.stdout.decode()}, stderr: {ret.stderr.decode()}"
-        )
+    processed_image = _preprocess_screenshot(screenshot_path, negate=False)
+    processed_negative = _preprocess_screenshot(screenshot_path, negate=True)
 
     model_results = []
-    for model_id in model_ids:
-        cmd = f"tesseract '{screenshot_path}.png' - {tess_args} --oem '{model_id}'"
-        ret = subprocess.run(cmd, shell=True, capture_output=True)
-        if ret.returncode != 0:
-            raise Exception(f"OCR failed with exit code {ret.returncode}")
-        model_results.append(ret.stdout.decode("utf-8"))
+    for image in [screenshot_path, processed_image, processed_negative]:
+        for model_id in model_ids:
+            ret = subprocess.run(
+                [
+                    "tesseract",
+                    image,
+                    "-",
+                    "--oem",
+                    str(model_id),
+                    "-c",
+                    "debug_file=/dev/null",
+                    "--psm",
+                    "11",
+                ],
+                capture_output=True,
+            )
+            if ret.returncode != 0:
+                raise Exception(f"OCR failed with exit code {ret.returncode}")
+            model_results.append(ret.stdout.decode("utf-8"))
 
     return model_results
 

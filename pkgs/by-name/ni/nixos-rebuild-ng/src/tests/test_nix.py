@@ -6,6 +6,7 @@ from typing import Any
 from unittest.mock import ANY, call, patch
 
 import pytest
+from pytest import MonkeyPatch
 
 import nixos_rebuild.models as m
 import nixos_rebuild.nix as n
@@ -51,7 +52,8 @@ def test_build(mock_run: Any, monkeypatch: Any) -> None:
     autospec=True,
     return_value=CompletedProcess([], 0, stdout=" \n/path/to/file\n "),
 )
-def test_build_flake(mock_run: Any) -> None:
+def test_build_flake(mock_run: Any, monkeypatch: MonkeyPatch, tmpdir: Path) -> None:
+    monkeypatch.chdir(tmpdir)
     flake = m.Flake.parse(".#hostname")
 
     assert n.build_flake(
@@ -165,7 +167,10 @@ def test_build_remote(mock_uuid4: Any, mock_run: Any, monkeypatch: Any) -> None:
     autospec=True,
     return_value=CompletedProcess([], 0, stdout=" \n/path/to/file\n "),
 )
-def test_build_remote_flake(mock_run: Any, monkeypatch: Any) -> None:
+def test_build_remote_flake(
+    mock_run: Any, monkeypatch: MonkeyPatch, tmpdir: Path
+) -> None:
+    monkeypatch.chdir(tmpdir)
     flake = m.Flake.parse(".#hostname")
     build_host = m.Remote("user@host", [], None)
     monkeypatch.setenv("NIX_SSHOPTS", "--ssh opts")
@@ -287,7 +292,7 @@ def test_copy_closure(monkeypatch: Any) -> None:
 @patch(get_qualified_name(n.run_wrapper, n), autospec=True)
 def test_edit(mock_run: Any, monkeypatch: Any, tmpdir: Any) -> None:
     # Flake
-    flake = m.Flake.parse(".#attr")
+    flake = m.Flake.parse(f"{tmpdir}#attr")
     n.edit(flake, {"commit_lock_file": True})
     mock_run.assert_called_with(
         [
@@ -297,7 +302,7 @@ def test_edit(mock_run: Any, monkeypatch: Any, tmpdir: Any) -> None:
             "edit",
             "--commit-lock-file",
             "--",
-            ".#nixosConfigurations.attr",
+            f"{tmpdir}#nixosConfigurations.attr",
         ],
         check=False,
     )

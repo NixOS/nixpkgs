@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
     libsndfile
     libtiff
     lz4
-    mesa
+    mesa # actually uses eglmesaext
     openssl
     systemd
     udev

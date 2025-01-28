@@ -100,13 +100,13 @@ in
             lomiri-session # wrappers to properly launch the session
             lomiri-sounds
             lomiri-system-settings
+            lomiri-telephony-service
             lomiri-terminal-app
             lomiri-thumbnailer
             lomiri-url-dispatcher
             mediascanner2 # TODO possibly needs to be kicked off by graphical-session.target
             morph-browser
             qtmir # not having its desktop file for Xwayland available causes any X11 application to crash the session
-            telephony-service
             teleports
           ]);
       };
@@ -152,7 +152,7 @@ in
           )
           ++ (
             with pkgs.lomiri;
-            [ telephony-service ]
+            [ lomiri-telephony-service ]
             ++ lib.optionals config.networking.networkmanager.enable [ lomiri-indicator-network ]
           );
       };

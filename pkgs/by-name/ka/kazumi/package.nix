@@ -114,7 +114,7 @@ flutter327.buildFlutterApplication rec {
     homepage = "https://github.com/Predidit/Kazumi";
     mainProgram = "kazumi";
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ aucub ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };
 }

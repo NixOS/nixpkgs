@@ -112,15 +112,21 @@ let
         provider:
         if provider ? override then
           # use opentofu plugin registry over terraform's
-          provider.override (oldArgs: {
-            provider-source-address =
-              lib.replaceStrings
-                [ "https://registry.terraform.io/providers" ]
-                [
-                  "registry.opentofu.org"
-                ]
-                oldArgs.homepage;
-          })
+          provider.override (
+            oldArgs:
+            if (builtins.hasAttr "homepage" oldArgs) then
+              {
+                provider-source-address =
+                  lib.replaceStrings
+                    [ "https://registry.terraform.io/providers" ]
+                    [
+                      "registry.opentofu.org"
+                    ]
+                    oldArgs.homepage;
+              }
+            else
+              { }
+          )
         else
           provider
       ) (plugins package.plugins);

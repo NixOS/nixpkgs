@@ -55,13 +55,13 @@ let
 in
 stdenv'.mkDerivation rec {
   pname = "sunshine";
-  version = "2025.118.151840";
+  version = "2025.122.141614";
 
   src = fetchFromGitHub {
     owner = "LizardByte";
     repo = "Sunshine";
     tag = "v${version}";
-    hash = "sha256-sTZUHc1385qOmy2w3fjItIidCxnWeEjAaOFxfLBB65c=";
+    hash = "sha256-rHf+lj5dycXA//fu3RPuimYz2hrJnoVt7GA2xuHGXJk=";
     fetchSubmodules = true;
   };
 
@@ -140,6 +140,7 @@ stdenv'.mkDerivation rec {
     ]
     ++ lib.optionals cudaSupport [
       cudaPackages.cudatoolkit
+      cudaPackages.cuda_cudart
     ]
     ++ lib.optionals stdenv.hostPlatform.isx86_64 [
       intel-media-sdk

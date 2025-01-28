@@ -28,23 +28,23 @@ let
 
   version =
     let
-      x86_64-darwin = "3.37.5164";
+      x86_64-darwin = "3.39.5211";
     in
     {
       inherit x86_64-darwin;
       aarch64-darwin = x86_64-darwin;
-      x86_64-linux = "3.37.3607";
+      x86_64-linux = "3.39.3653";
     }
     .${system} or throwSystem;
 
   hash =
     let
-      x86_64-darwin = "sha256-xQ6EaZFE6qdpgFj1Lom37wT8URd5FsRwG89YeM/+U7k=";
+      x86_64-darwin = "sha256-k6CIqHt67AFL70zdK0/91aQcpbb00OIggk5TF7y1IOY=";
     in
     {
       inherit x86_64-darwin;
       aarch64-darwin = x86_64-darwin;
-      x86_64-linux = "sha256-mckFxxrWnxeVGgJ//efPTdtHt5nVII1lXu/BT61TKxE=";
+      x86_64-linux = "sha256-BbY+7fGAWW5CR/z4GeoBl5aOewCRuWzQjpQX4x1rzls=";
     }
     .${system} or throwSystem;
 

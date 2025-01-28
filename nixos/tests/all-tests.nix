@@ -587,7 +587,7 @@ in {
   mate = handleTest ./mate.nix {};
   mate-wayland = handleTest ./mate-wayland.nix {};
   matter-server = handleTest ./matter-server.nix {};
-  matomo = handleTest ./matomo.nix {};
+  matomo = runTest ./matomo.nix;
   matrix-appservice-irc = runTest ./matrix/appservice-irc.nix;
   matrix-conduit = handleTest ./matrix/conduit.nix {};
   matrix-synapse = handleTest ./matrix/synapse.nix {};
@@ -622,7 +622,11 @@ in {
   monado = handleTest ./monado.nix {};
   monetdb = handleTest ./monetdb.nix {};
   monica = handleTest ./web-apps/monica.nix {};
-  mongodb = handleTest ./mongodb.nix {};
+  mongodb = runTest ./mongodb.nix;
+  mongodb-ce = runTest ({ config, ... }: {
+    imports = [ ./mongodb.nix ];
+    defaults.services.mongodb.package = config.node.pkgs.mongodb-ce;
+  });
   moodle = handleTest ./moodle.nix {};
   moonraker = handleTest ./moonraker.nix {};
   mopidy = handleTest ./mopidy.nix {};
@@ -806,6 +810,7 @@ in {
   parsedmarc = handleTest ./parsedmarc {};
   password-option-override-ordering = handleTest ./password-option-override-ordering.nix {};
   pdns-recursor = handleTest ./pdns-recursor.nix {};
+  pds = handleTest ./pds.nix {};
   peerflix = handleTest ./peerflix.nix {};
   peering-manager = handleTest ./web-apps/peering-manager.nix {};
   peertube = handleTestOn ["x86_64-linux"] ./web-apps/peertube.nix {};
@@ -978,6 +983,7 @@ in {
   stalwart-mail = handleTest ./stalwart-mail.nix {};
   stargazer = runTest ./web-servers/stargazer.nix;
   starship = handleTest ./starship.nix {};
+  stash = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./stash.nix {};
   static-web-server = handleTest ./web-servers/static-web-server.nix {};
   step-ca = handleTestOn ["x86_64-linux"] ./step-ca.nix {};
   stratis = handleTest ./stratis {};
@@ -1143,6 +1149,7 @@ in {
   v2ray = handleTest ./v2ray.nix {};
   varnish60 = handleTest ./varnish.nix { package = pkgs.varnish60; };
   varnish75 = handleTest ./varnish.nix { package = pkgs.varnish75; };
+  varnish76 = handleTest ./varnish.nix { package = pkgs.varnish76; };
   vault = handleTest ./vault.nix {};
   vault-agent = handleTest ./vault-agent.nix {};
   vault-dev = handleTest ./vault-dev.nix {};

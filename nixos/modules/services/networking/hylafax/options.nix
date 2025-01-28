@@ -194,7 +194,7 @@ in
         will be symlinked to the location given here.
         This file must exist and be
         readable only by the `uucp` user.
-        See hosts.hfaxd(5) for details.
+        See {manpage}`hosts.hfaxd(5)` for details.
         This configuration permits access for all users:
         ```
           environment.etc."hosts.hfaxd" = {
@@ -299,7 +299,7 @@ in
       description = ''
         purging old files from the spooling area with
         {file}`faxcron` with the given frequency
-        (see systemd.time(7))
+        (see {manpage}`systemd.time(7)`)
       '';
     };
     faxcron.infoDays = mkOption {
@@ -339,7 +339,7 @@ in
       description = ''
         Purge old files from the spooling area with
         {file}`faxcron` with the given frequency
-        (see systemd.time(7)).
+        (see {manpage}`systemd.time(7)`).
       '';
     };
     faxqclean.archiving = mkOption {
@@ -356,7 +356,7 @@ in
         `as-flagged` archives jobs that
         have been flagged for archiving by sendfax,
         `always` forces archiving of all jobs.
-        See also sendfax(1) and faxqclean(8).
+        See also {manpage}`sendfax(1)` and {manpage}`faxqclean(8)`.
       '';
     };
     faxqclean.doneqMinutes = mkOption {

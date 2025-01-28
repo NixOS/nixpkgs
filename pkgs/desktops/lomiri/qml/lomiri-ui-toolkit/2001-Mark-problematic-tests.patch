@@ -1,16 +1,19 @@
-From c1a69117793acec6841898f219935852cadc78d3 Mon Sep 17 00:00:00 2001
+From 6f7fa32c524b2ae7e86c13dd55760506b4cd547d Mon Sep 17 00:00:00 2001
 From: OPNA2608 <opna2608@protonmail.com>
-Date: Wed, 15 Jan 2025 18:45:02 +0100
+Date: Sat, 25 Jan 2025 08:08:42 +0100
 Subject: [PATCH] Mark problematic tests
 
+- test_defaultLabelsQmlContext in tst_slotslayout.13.qml seems not properly written,
+  fails consistently on aarch64-linux Hydra:
+  https://gitlab.com/ubports/development/core/lomiri-ui-toolkit/-/issues/45
 - tst_textinput_touch.SEGFAULT.11.qml is flaky:
   https://gitlab.com/ubports/development/core/lomiri-ui-toolkit/-/issues/43
 ---
- tests/checkresults.sh | 28 ++++++++++++++++++++++------
- 1 file changed, 22 insertions(+), 6 deletions(-)
+ tests/checkresults.sh | 29 +++++++++++++++++++++++------
+ 1 file changed, 23 insertions(+), 6 deletions(-)
 
 diff --git a/tests/checkresults.sh b/tests/checkresults.sh
-index fc498985e..ade361236 100755
+index fc498985e..86619937d 100755
 --- a/tests/checkresults.sh
 +++ b/tests/checkresults.sh
 @@ -22,6 +22,7 @@ ERRORS_PATTERN='<failure'
@@ -21,12 +24,13 @@ index fc498985e..ade361236 100755
  EXCEPTED=0
  for _XML in $*; do
      _TESTNAME=$(basename $_XML | sed -r 's@(.+)\.xml@\1@' -)
-@@ -31,7 +32,12 @@ for _XML in $*; do
+@@ -31,7 +32,13 @@ for _XML in $*; do
        exit 1
      fi
  
 -    EXCEPTIONS='components_benchmark \
 +    ERROR_EXCEPTIONS='\
++                tst_slotslayout.13.qml \
 +                tst_textinput_touch.SEGFAULT.11.qml \
 +                '
 +
@@ -35,7 +39,7 @@ index fc498985e..ade361236 100755
                  tst_tabbar.11.qml \
                  tst_datepicker.bug1567840.SEGFAULT.12.qml \
                  tst_datepicker.bug1567840.SEGFAULT.13.qml \
-@@ -54,17 +60,22 @@ for _XML in $*; do
+@@ -54,17 +61,22 @@ for _XML in $*; do
      WARNINGS=$(grep -c -P "$WARNINGS_PATTERN" $_XML)
      ERRORS=$(grep -c -P "$ERRORS_PATTERN" $_XML)
      if [ $ERRORS -ne 0 ]; then
@@ -62,7 +66,7 @@ index fc498985e..ade361236 100755
        WOOT_FILES="${WOOT_FILES}  ${_TESTNAME}\n"
      fi
  done
-@@ -82,6 +93,11 @@ if [ -n "$FATAL_WARNINGS_FILES" ]; then
+@@ -82,6 +94,11 @@ if [ -n "$FATAL_WARNINGS_FILES" ]; then
      echo -e "$FATAL_WARNINGS_FILES"
  fi
  
@@ -74,7 +78,7 @@ index fc498985e..ade361236 100755
  if [ -n "$EXCEPTED_FILES" ]; then
      echo The following tests issued $EXCEPTED expected warnings:
      echo -e "$EXCEPTED_FILES"
-@@ -89,7 +105,7 @@ fi
+@@ -89,7 +106,7 @@ fi
  
  if [ -n "$WOOT_FILES" ]; then
      echo Woot! Known problematic tests passed!
@@ -84,5 +88,5 @@ index fc498985e..ade361236 100755
  fi
  
 -- 
-2.47.0
+2.47.1
 

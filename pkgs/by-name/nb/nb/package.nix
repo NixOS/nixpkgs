@@ -6,6 +6,7 @@
   testers,
   nix-update-script,
   nb,
+  bashInteractive,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,6 +21,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ installShellFiles ];
+
+  buildInputs = [ bashInteractive ];
 
   dontBuild = true;
 

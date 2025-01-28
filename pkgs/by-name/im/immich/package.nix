@@ -1,6 +1,5 @@
 {
   lib,
-  stdenvNoCC,
   buildNpmPackage,
   fetchFromGitHub,
   fetchpatch2,
@@ -129,21 +128,6 @@ let
     '';
   };
 
-  node-addon-api = stdenvNoCC.mkDerivation rec {
-    pname = "node-addon-api";
-    version = "8.3.0";
-    src = fetchFromGitHub {
-      owner = "nodejs";
-      repo = "node-addon-api";
-      tag = "v${version}";
-      hash = "sha256-7KkJkMNX352XnWTOC6mJB+IcFrda20UENcNwoXWDm+s=";
-    };
-    installPhase = ''
-      mkdir $out
-      cp -r *.c *.h *.gyp *.gypi index.js package-support.json package.json tools $out/
-    '';
-  };
-
   vips' = vips.overrideAttrs (prev: {
     mesonFlags = prev.mesonFlags ++ [ "-Dtiff=disabled" ];
   });
@@ -180,27 +164,9 @@ buildNpmPackage' {
   # Required because vips tries to write to the cache dir
   makeCacheWritable = true;
 
-  # we manually build sharp from source later on
-  # FIXME figure out why otherwise it fails with
-  #     error: 'NewOrCopy' is not a member of 'Napi::Buffer<char>'
-  env.SHARP_IGNORE_GLOBAL_LIBVIPS = 1;
+  env.SHARP_FORCE_GLOBAL_LIBVIPS = 1;
 
   preBuild = ''
-    unset SHARP_IGNORE_GLOBAL_LIBVIPS
-    export SHARP_FORCE_GLOBAL_LIBVIPS=1
-
-    pushd node_modules/sharp
-
-    mkdir node_modules
-    ln -s ${node-addon-api} node_modules/node-addon-api
-
-    node install/check
-
-    rm -r node_modules
-
-    popd
-    rm -r node_modules/@img/sharp*
-
     # If exiftool-vendored.pl isn't found, exiftool is searched for on the PATH
     rm -r node_modules/exiftool-vendored.*
   '';

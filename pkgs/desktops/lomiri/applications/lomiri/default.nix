@@ -35,12 +35,13 @@
   lomiri-app-launch,
   lomiri-download-manager,
   lomiri-indicator-network,
-  lomiri-ui-toolkit,
+  lomiri-notifications,
   lomiri-settings-components,
   lomiri-system-settings-unwrapped,
   lomiri-schemas,
-  lomiri-notifications,
+  lomiri-telephony-service,
   lomiri-thumbnailer,
+  lomiri-ui-toolkit,
   maliit-keyboard,
   mir_2_15,
   nixos-icons,
@@ -55,7 +56,6 @@
   qtmir,
   qtmultimedia,
   qtsvg,
-  telephony-service,
   wrapGAppsHook3,
   wrapQtAppsHook,
   xwayland,
@@ -210,9 +210,9 @@ stdenv.mkDerivation (finalAttrs: {
     hfd-service
     lomiri-notifications
     lomiri-settings-components
+    lomiri-telephony-service
     lomiri-thumbnailer
     qtmultimedia
-    telephony-service
   ];
 
   nativeCheckInputs = [ (python3.withPackages (ps: with ps; [ python-dbusmock ])) ];

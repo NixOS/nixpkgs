@@ -37,14 +37,14 @@ mkCoqDerivation {
       [
         {
           cases = [
-            (isGe "8.17")
+            (range "8.17" "9.0")
             (isGe "2.1.0")
           ];
           out = "2.0.2";
         }
         {
           cases = [
-            (isGe "8.17")
+            (range "8.17" "8.20")
             (isGe "2.0.0")
           ];
           out = "2.0.1";

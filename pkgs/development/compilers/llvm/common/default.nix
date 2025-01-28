@@ -130,6 +130,11 @@ let
               ];
               "llvm/gnu-install-dirs-polly.patch" = [
                 {
+                  after = "20";
+                  path = ../20;
+                }
+                {
+                  before = "20";
                   after = "18";
                   path = ../18;
                 }
@@ -316,20 +321,6 @@ let
           "${patchDir}/${p}";
       };
   };
-
-  lldbPlugins = lib.makeExtensible (
-    lldbPlugins:
-    let
-      callPackage = newScope (
-        lldbPlugins
-        // {
-          inherit stdenv;
-          inherit (tools) lldb;
-        }
-      );
-    in
-    lib.recurseIntoAttrs { llef = callPackage ./lldb-plugins/llef.nix { }; }
-  );
 
   tools = lib.makeExtensible (
     tools:
@@ -533,7 +524,8 @@ let
             (metadata.getVersionFile "clang/purity.patch")
             # https://reviews.llvm.org/D51899
             (metadata.getVersionFile "clang/gnu-install-dirs.patch")
-
+          ]
+          ++ lib.optionals (lib.versionOlder metadata.release_version "20") [
             # https://github.com/llvm/llvm-project/pull/116476
             # prevent clang ignoring warnings / errors for unsuppored
             # options when building & linking a source file with trailing
@@ -670,6 +662,14 @@ let
             }
           );
       };
+
+      lldbPlugins = lib.makeExtensible (
+        lldbPlugins:
+        let
+          callPackage = newScope ( lldbPlugins // tools // args // metadata );
+        in
+        lib.recurseIntoAttrs { llef = callPackage ./lldb-plugins/llef.nix { }; }
+      );
 
       lldb = callPackage ./lldb.nix (
         {
@@ -1069,7 +1069,7 @@ let
         ++ lib.optionals (lib.versionAtLeast metadata.release_version "13") [
           (metadata.getVersionFile "compiler-rt/armv6-scudo-libatomic.patch")
         ]
-        ++ lib.optional (lib.versionAtLeast metadata.release_version "19") (fetchpatch {
+        ++ lib.optional (lib.versions.major metadata.release_version == "19") (fetchpatch {
           url = "https://github.com/llvm/llvm-project/pull/99837/commits/14ae0a660a38e1feb151928a14f35ff0f4487351.patch";
           hash = "sha256-JykABCaNNhYhZQxCvKiBn54DZ5ZguksgCHnpdwWF2no=";
           relative = "compiler-rt";
@@ -1222,7 +1222,7 @@ let
   noExtend = extensible: lib.attrsets.removeAttrs extensible [ "extend" ];
 in
 {
-  inherit tools libraries lldbPlugins;
+  inherit tools libraries;
   inherit (metadata) release_version;
 }
 // (noExtend libraries)

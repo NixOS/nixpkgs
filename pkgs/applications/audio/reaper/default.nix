@@ -85,6 +85,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional pulseaudioSupport libpulseaudio;
 
   dontBuild = true;
+  dontStrip = true;
 
   installPhase =
     if stdenv.hostPlatform.isDarwin then

@@ -55,7 +55,7 @@ flutter324.buildFlutterApplication rec {
     homepage = "https://github.com/HemantKArya/BloomeeTunes";
     mainProgram = "bloomee";
     license = with lib.licenses; [ gpl2Plus ];
-    maintainers = with lib.maintainers; [ aucub ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };
 }

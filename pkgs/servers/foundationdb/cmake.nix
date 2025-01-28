@@ -135,6 +135,8 @@ let
           license     = licenses.asl20;
           platforms   = [ "x86_64-linux" ]
             ++ lib.optionals (!(avxEnabled version)) [ "aarch64-linux" ];
+          # Fails when cross-compiling with "/bin/sh: gcc-ar: not found"
+          broken = stdenv.buildPlatform != stdenv.hostPlatform;
           maintainers = with maintainers; [ thoughtpolice lostnet ];
        };
     };

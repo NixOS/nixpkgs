@@ -15,6 +15,7 @@
   musl,
   nss,
   patchelf,
+  openssl,
   stdenv,
   xorg,
 }:
@@ -48,6 +49,7 @@ stdenv.mkDerivation {
       musl
       nss
       stdenv.cc.cc
+      openssl
       xorg.libX11
       xorg.libXcomposite
       xorg.libXdamage

@@ -15,6 +15,7 @@
   libmicrohttpd,
   perl,
   python3,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation rec {
@@ -27,7 +28,13 @@ stdenv.mkDerivation rec {
     tag = version;
     hash = "sha256-8w8ZT3D/+8Pxl9z2KTXeydVxE5xiPjxZevgmMFgrblU=";
   };
-
+  patches = [
+    # Fix build error with GCC 14 due to stricter C++20 compliance (template-id in constructors)
+    (fetchpatch {
+      url = "https://github.com/OpenLightingProject/ola/commit/d9b9c78645c578adb7c07b692842e841c48310be.patch";
+      hash = "sha256-BplSqQv8ztWMpiX/M3/3wvf6LsPTBglh48gHlUoM6rw=";
+    })
+  ];
   nativeBuildInputs = [
     autoreconfHook
     bison

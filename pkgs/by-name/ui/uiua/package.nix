@@ -36,6 +36,7 @@ lib.fix (
   rustPlatform.buildRustPackage rec {
     pname = "uiua";
     inherit (versionInfo) version cargoHash;
+    useFetchCargoVendor = true;
 
     src = fetchFromGitHub {
       owner = "uiua-lang";

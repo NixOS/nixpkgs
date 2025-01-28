@@ -267,6 +267,7 @@
   ./programs/ns-usbloader.nix
   ./programs/oblogout.nix
   ./programs/oddjobd.nix
+  ./programs/opengamepadui.nix
   ./programs/openvpn3.nix
   ./programs/obs-studio.nix
   ./programs/partition-manager.nix
@@ -631,6 +632,7 @@
   ./services/hardware/pcscd.nix
   ./services/hardware/pommed.nix
   ./services/hardware/power-profiles-daemon.nix
+  ./services/hardware/powerstation.nix
   ./services/hardware/rasdaemon.nix
   ./services/hardware/ratbagd.nix
   ./services/hardware/sane.nix
@@ -862,8 +864,6 @@
   ./services/misc/redlib.nix
   ./services/misc/redmine.nix
   ./services/misc/renovate.nix
-  ./services/misc/ripple-data-api.nix
-  ./services/misc/rippled.nix
   ./services/misc/rmfakecloud.nix
   ./services/misc/rkvm.nix
   ./services/misc/rshim.nix
@@ -1547,6 +1547,7 @@
   ./services/web-apps/mobilizon.nix
   ./services/web-apps/openwebrx.nix
   ./services/web-apps/outline.nix
+  ./services/web-apps/pds.nix
   ./services/web-apps/peering-manager.nix
   ./services/web-apps/peertube.nix
   ./services/web-apps/pgpkeyserver-lite.nix
@@ -1577,6 +1578,7 @@
   ./services/web-apps/snipe-it.nix
   ./services/web-apps/sogo.nix
   ./services/web-apps/stirling-pdf.nix
+  ./services/web-apps/stash.nix
   ./services/web-apps/trilium.nix
   ./services/web-apps/tt-rss.nix
   ./services/web-apps/vikunja.nix

@@ -1,7 +1,7 @@
 {
   lib,
   rustPlatform,
-  fetchFromSourcehut,
+  fetchFromGitHub,
   stdenv,
   pkg-config,
   darwin,
@@ -22,14 +22,15 @@ rustPlatform.buildRustPackage rec {
   pname = "neverest";
   version = "1.0.0-beta";
 
-  src = fetchFromSourcehut {
-    owner = "~soywod";
-    repo = "neverest-cli";
+  src = fetchFromGitHub {
+    owner = "pimalaya";
+    repo = "neverest";
     rev = "v${version}";
     hash = "sha256-3PSJyhxrOCiuHUeVHO77+NecnI5fN5EZfPhYizuYvtE=";
   };
 
-  cargoHash = "sha256-i5or8oBtjGqOfTfwB7dYXn/OPgr5WEWNEvC0WdCCG+c=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-K+LKRokfE8i4Huti0aQm4UrpConTcxVwJ2DyeOLjNKA=";
 
   nativeBuildInputs = [
     pkg-config

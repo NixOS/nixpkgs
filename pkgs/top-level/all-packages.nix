@@ -411,18 +411,18 @@ with pkgs;
 
   dotnetCorePackages = recurseIntoAttrs (callPackage ../development/compilers/dotnet {});
 
-  dotnet-sdk_6 = dotnetCorePackages.sdk_6_0;
-  dotnet-sdk_7 = dotnetCorePackages.sdk_7_0;
+  dotnet-sdk_6 = dotnetCorePackages.sdk_6_0-bin;
+  dotnet-sdk_7 = dotnetCorePackages.sdk_7_0-bin;
   dotnet-sdk_8 = dotnetCorePackages.sdk_8_0;
   dotnet-sdk_9 = dotnetCorePackages.sdk_9_0;
 
-  dotnet-runtime_6 = dotnetCorePackages.runtime_6_0;
-  dotnet-runtime_7 = dotnetCorePackages.runtime_7_0;
+  dotnet-runtime_6 = dotnetCorePackages.runtime_6_0-bin;
+  dotnet-runtime_7 = dotnetCorePackages.runtime_7_0-bin;
   dotnet-runtime_8 = dotnetCorePackages.runtime_8_0;
   dotnet-runtime_9 = dotnetCorePackages.runtime_9_0;
 
-  dotnet-aspnetcore_6 = dotnetCorePackages.aspnetcore_6_0;
-  dotnet-aspnetcore_7 = dotnetCorePackages.aspnetcore_7_0;
+  dotnet-aspnetcore_6 = dotnetCorePackages.aspnetcore_6_0-bin;
+  dotnet-aspnetcore_7 = dotnetCorePackages.aspnetcore_7_0-bin;
   dotnet-aspnetcore_8 = dotnetCorePackages.aspnetcore_8_0;
   dotnet-aspnetcore_9 = dotnetCorePackages.aspnetcore_9_0;
 
@@ -1009,8 +1009,6 @@ with pkgs;
 
   kanata-with-cmd = kanata.override { withCmd = true; };
 
-  kdocker = libsForQt5.callPackage ../tools/X11/kdocker { };
-
   ksnip = libsForQt5.callPackage ../tools/misc/ksnip { };
 
   linux-router-without-wifi = linux-router.override { useWifiDependencies = false; };
@@ -1254,10 +1252,6 @@ with pkgs;
 
   git-up = callPackage ../applications/version-management/git-up {
     pythonPackages = python3Packages;
-  };
-
-  git-workspace = callPackage ../applications/version-management/git-workspace {
-    inherit (darwin.apple_sdk.frameworks) Security;
   };
 
   gitlint = python3Packages.callPackage ../applications/version-management/gitlint { };
@@ -1914,10 +1908,6 @@ with pkgs;
     novacomd = callPackage ../development/mobile/webos/novacomd.nix { };
   };
 
-  anevicon = callPackage ../tools/networking/anevicon {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
   aoc-cli = callPackage ../tools/misc/aoc-cli {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -2222,7 +2212,11 @@ with pkgs;
   easyaudiosync = qt6Packages.callPackage ../applications/audio/easyaudiosync {};
 
   easycrypt = callPackage ../applications/science/logic/easycrypt {
-    why3 = pkgs.why3.override { ideSupport = false; };
+    why3 = pkgs.why3.override {
+      ideSupport = false;
+      version = "1.7.2";
+      coqPackages = { coq = null; flocq = null; };
+    };
   };
 
   easycrypt-runtest = callPackage ../applications/science/logic/easycrypt/runtest.nix { };
@@ -2577,10 +2571,6 @@ with pkgs;
   scour = with python3Packages; toPythonApplication scour;
 
   sheldon = callPackage ../tools/misc/sheldon {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
-  sheesy-cli = callPackage ../tools/security/sheesy-cli {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
@@ -4156,8 +4146,6 @@ with pkgs;
 
   libirc = libsForQt5.callPackage ../development/libraries/libirc { };
 
-  libmongocrypt = darwin.apple_sdk_11_0.callPackage ../development/libraries/libmongocrypt { };
-
   libportal-gtk3 = libportal.override { variant = "gtk3"; };
   libportal-gtk4 = libportal.override { variant = "gtk4"; };
   libportal-qt5 = libportal.override { variant = "qt5"; };
@@ -4668,10 +4656,6 @@ with pkgs;
   };
 
   pfstools = libsForQt5.callPackage ../tools/graphics/pfstools { };
-
-  phoc = callPackage ../applications/misc/phoc {
-    wlroots = wlroots_0_17;
-  };
 
   piper-train = callPackage ../tools/audio/piper/train.nix { };
   piper-tts = callPackage ../tools/audio/piper { };
@@ -5382,10 +5366,6 @@ with pkgs;
 
   wireguard-tools = callPackage ../tools/networking/wireguard-tools { };
 
-  wireguard-vanity-address = callPackage ../tools/networking/wireguard-vanity-address {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
   wg-netmanager = callPackage ../tools/networking/wg-netmanager {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -5476,9 +5456,9 @@ with pkgs;
   unzipNLS = lowPrio (unzip.override { enableNLS = true; });
 
   inherit (callPackages ../servers/varnish { })
-    varnish60 varnish75;
+    varnish60 varnish75 varnish76;
   inherit (callPackages ../servers/varnish/packages.nix { })
-    varnish60Packages varnish75Packages;
+    varnish60Packages varnish75Packages varnish76Packages;
 
   varnishPackages = varnish75Packages;
   varnish = varnishPackages.varnish;
@@ -6703,9 +6683,6 @@ with pkgs;
   cargo-hf2 = callPackage ../development/tools/rust/cargo-hf2 {
     inherit (darwin.apple_sdk.frameworks) AppKit;
   };
-  cargo-inspect = callPackage ../development/tools/rust/cargo-inspect {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
   cargo-lambda = callPackage ../development/tools/rust/cargo-lambda {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
   };
@@ -6748,8 +6725,6 @@ with pkgs;
   rustup-toolchain-install-master = callPackage ../development/tools/rust/rustup-toolchain-install-master {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
-  scala_2_10 = callPackage ../development/compilers/scala/2.x.nix { majorVersion = "2.10"; jre = jdk8; };
-  scala_2_11 = callPackage ../development/compilers/scala/2.x.nix { majorVersion = "2.11"; jre = jdk8; };
   scala_2_12 = callPackage ../development/compilers/scala/2.x.nix { majorVersion = "2.12"; };
   scala_2_13 = callPackage ../development/compilers/scala/2.x.nix { majorVersion = "2.13"; };
   scala_3 = callPackage ../development/compilers/scala { };
@@ -7955,6 +7930,10 @@ with pkgs;
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
   };
 
+  framac = callPackage ../by-name/fr/framac/package.nix {
+    why3 = why3.override { version = "1.7.2"; coqPackages = coqPackages_8_18; };
+  };
+
   fswatch = callPackage ../development/tools/misc/fswatch {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
     autoreconfHook = buildPackages.autoreconfHook269;
@@ -8142,10 +8121,6 @@ with pkgs;
   openai = with python3Packages; toPythonApplication openai;
 
   openai-whisper = with python3.pkgs; toPythonApplication openai-whisper;
-
-  openai-whisper-cpp = darwin.apple_sdk_11_0.callPackage ../tools/audio/openai-whisper-cpp {
-    inherit (darwin.apple_sdk_11_0.frameworks) Accelerate CoreGraphics CoreML CoreVideo MetalKit;
-  };
 
   openocd-rp2040 = openocd.overrideAttrs (old: {
     pname = "openocd-rp2040";
@@ -8416,6 +8391,10 @@ with pkgs;
 
   whatstyle = callPackage ../development/tools/misc/whatstyle {
     inherit (llvmPackages) clang-unwrapped;
+  };
+
+  whisper-cpp-vulkan = whisper-cpp.override {
+    vulkanSupport = true;
   };
 
   watson-ruby = callPackage ../development/tools/misc/watson-ruby { };
@@ -9546,7 +9525,7 @@ with pkgs;
     extraOnly = true;
   };
 
-  libgda = callPackage ../development/libraries/libgda { };
+  libgda5 = callPackage ../development/libraries/libgda/5.x.nix { };
 
   libgda6 = callPackage ../development/libraries/libgda/6.x.nix { };
 
@@ -10777,6 +10756,7 @@ with pkgs;
 
   vigra = callPackage ../development/libraries/vigra {
     hdf5 = hdf5.override { usev110Api = true; };
+    openexr = openexr_3;
   };
 
   vte-gtk4 = vte.override {
@@ -11874,9 +11854,6 @@ with pkgs;
   };
 
   tt-rss = callPackage ../servers/tt-rss { };
-  inherit (callPackages ../servers/web-apps/matomo {})
-    matomo
-    matomo-beta;
 
   unpackerr = callPackage ../servers/unpackerr {
     inherit (darwin.apple_sdk.frameworks) Cocoa WebKit;
@@ -12993,10 +12970,6 @@ with pkgs;
 
   barrier = libsForQt5.callPackage ../applications/misc/barrier { };
 
-  bespokesynth = darwin.apple_sdk_11_0.callPackage ../applications/audio/bespokesynth {
-    inherit (darwin.apple_sdk_11_0.frameworks) Accelerate Cocoa WebKit CoreServices CoreAudioKit IOBluetooth MetalKit;
-  };
-
   bespokesynth-with-vst2 = bespokesynth.override {
     enableVST2 = true;
   };
@@ -13783,6 +13756,7 @@ with pkgs;
 
   hugin = callPackage ../applications/graphics/hugin {
     wxGTK = wxGTK32;
+    openexr = openexr_3;
   };
 
   huggle = libsForQt5.callPackage ../applications/misc/huggle { };
@@ -13978,6 +13952,7 @@ with pkgs;
 
   imagemagick = lowPrio (callPackage ../applications/graphics/ImageMagick {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices Foundation;
+    openexr = openexr_3;
   });
 
   imagemagickBig = lowPrio (imagemagick.override {
@@ -14374,12 +14349,6 @@ with pkgs;
 
   mldonkey = callPackage ../applications/networking/p2p/mldonkey {
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
-  };
-
-  mmex = callPackage ../applications/office/mmex {
-    wxGTK32 = wxGTK32.override {
-      withWebKit = true;
-    };
   };
 
   mmlgui = callPackage ../applications/audio/mmlgui {
@@ -14791,10 +14760,6 @@ with pkgs;
 
   peertube = callPackage ../servers/peertube {
     nodejs = nodejs_18;
-  };
-
-  photoqt = callPackage ../by-name/ph/photoqt/package.nix {
-    stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
   };
 
   photoflare = libsForQt5.callPackage ../applications/graphics/photoflare { };
@@ -16689,6 +16654,7 @@ with pkgs;
   warsow = callPackage ../games/warsow { };
 
   wesnoth = callPackage ../games/wesnoth {
+    boost = boost186;
     inherit (darwin.apple_sdk.frameworks) Cocoa Foundation;
     # wesnoth requires lua built with c++, see https://github.com/wesnoth/wesnoth/pull/8234
     lua = lua5_4.override {
@@ -16794,9 +16760,6 @@ with pkgs;
   gnome-extensions-cli = python3Packages.callPackage ../desktops/gnome/misc/gnome-extensions-cli { };
 
   gnome-session-ctl = callPackage ../by-name/gn/gnome-session/ctl.nix { };
-
-  # Using 43 to match Mutter used in Pantheon
-  gnustep = recurseIntoAttrs (callPackage ../desktops/gnustep { });
 
   lomiri = recurseIntoAttrs (callPackage ../desktops/lomiri { });
 
@@ -17160,6 +17123,7 @@ with pkgs;
     coqPackages_8_18 coq_8_18
     coqPackages_8_19 coq_8_19
     coqPackages_8_20 coq_8_20
+    coqPackages_9_0 coq_9_0
     coqPackages      coq
   ;
 
@@ -17242,9 +17206,7 @@ with pkgs;
     stdenv = gccStdenv;
   };
 
-  why3 = callPackage ../applications/science/logic/why3 {
-    coqPackages = coqPackages_8_18;
-  };
+  why3 = callPackage ../applications/science/logic/why3 { };
 
   yices = callPackage ../applications/science/logic/yices {
     gmp-static = gmp.override { withStatic = true; };
@@ -17687,8 +17649,6 @@ with pkgs;
     icu = icu71;
   };
 
-  mongoc = darwin.apple_sdk_11_0.callPackage ../development/libraries/mongoc { };
-
   mongocxx = callPackage ../development/libraries/mongocxx/default.nix { };
 
   muse = libsForQt5.callPackage ../applications/audio/muse { };
@@ -18110,7 +18070,7 @@ with pkgs;
   });
 
   wine-wayland = lowPrio (winePackages.full.override {
-    wineRelease = "wayland";
+    x11Support = false;
   });
 
   inherit (callPackage ../servers/web-apps/wordpress {})
@@ -18211,8 +18171,6 @@ with pkgs;
   discord-screenaudio = qt6Packages.callPackage ../applications/networking/instant-messengers/discord-screenaudio { };
 
   discordo = callPackage ../applications/networking/discordo/default.nix { };
-
-  golden-cheetah = libsForQt5.callPackage ../applications/misc/golden-cheetah { };
 
   tomb = callPackage ../by-name/to/tomb/package.nix {
     pinentry = pinentry-curses;

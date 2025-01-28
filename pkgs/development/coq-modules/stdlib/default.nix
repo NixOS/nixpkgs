@@ -14,17 +14,13 @@
   inherit version;
   defaultVersion =
     with lib.versions;
-    lib.switch
-      [ coq.version ]
-      [
-        {
-          cases = [ (isLt "8.21") ];
-          out = "8.20";
-        }
-      ]
-      null;
-  releaseRev = v: "v${v}";
+    lib.switch coq.version [
+      { case = isEq "9.0"; out = "9.0+rc1"; }
+      { case = isLt "8.21"; out = "8.20"; }
+    ] null;
+  releaseRev = v: "V${v}";
 
+  release."9.0+rc1".sha256 = "sha256-raHwniQdpAX1HGlMofM8zVeXcmlUs+VJZZg5VF43k/M=";
   release."8.20".sha256 = "sha256-AcoS4edUYCfJME1wx8UbuSQRF3jmxhArcZyPIoXcfu0=";
 
   useDune = true;

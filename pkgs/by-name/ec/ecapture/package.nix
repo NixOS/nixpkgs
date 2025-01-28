@@ -16,18 +16,19 @@
   mariadb,
   openssl,
   bash,
+  zsh,
   nix-update-script,
 }:
 
 buildGoModule rec {
   pname = "ecapture";
-  version = "0.9.2";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "gojue";
     repo = "ecapture";
     tag = "v${version}";
-    hash = "sha256-UPWREeyB2YLYU3B4Rxr5oPoOfksL/lnllWyaFxhAe/0=";
+    hash = "sha256-nqNFbZrmCleWcRM2HsbgmCHqsar3KmiGYxt55ZqhY+U=";
     fetchSubmodules = true;
   };
 
@@ -72,6 +73,12 @@ buildGoModule rec {
 
     substituteInPlace user/config/config_nspr_linux.go \
       --replace-fail '/usr/lib/firefox/libnspr4.so' '${lib.getLib nspr}/lib/libnspr4.so'
+
+    substituteInPlace user/config/config_zsh.go \
+      --replace-fail '/bin/zsh' '${lib.getExe zsh}'
+
+    substituteInPlace user/module/probe_zsh.go \
+      --replace-fail '/bin/zsh' '${lib.getExe zsh}'
 
     substituteInPlace cli/cmd/postgres.go \
       --replace-fail '/usr/bin/postgres' '${postgresql}/bin/postgres'
