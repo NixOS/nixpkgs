@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-eventhub";
-  version = "11.1.0";
+  version = "11.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "azure_mgmt_eventhub";
     inherit version;
-    hash = "sha256-47j+CauuZ8XaiE57bw3kTi+CfFuACaZSuVH7LSD8s5I=";
+    hash = "sha256-McR/GPc9LYM0XN5ZCVaOKIWMJUijWxDiMZS0dnqc5+M=";
   };
 
   build-system = [ setuptools ];
