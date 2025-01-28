@@ -32,15 +32,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
   ];
-  buildInputs =
-    [
-      ncurses
-      libxcrypt
-    ]
-    ++ lib.optional stdenv.hostPlatform.isLinux pam
-    ++ lib.optional stdenv.hostPlatform.isDarwin utmp;
+  buildInputs = [
+    ncurses
+    libxcrypt
+    pam
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin utmp;
 
-  doCheck = true;
+  # The test suite seems to have some glibc malloc hooks that don't exist/link on macOS
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
     homepage = "https://www.gnu.org/software/screen/";
@@ -71,7 +70,5 @@ stdenv.mkDerivation rec {
 
     platforms = platforms.unix;
     maintainers = [ ];
-    # checking for PAM support... configure: error: no
-    broken = stdenv.hostPlatform.isDarwin;
   };
 }
