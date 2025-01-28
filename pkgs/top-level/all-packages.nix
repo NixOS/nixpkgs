@@ -17964,8 +17964,6 @@ with pkgs;
 
   unityhub = callPackage ../development/tools/unityhub { };
 
-  urbit = callPackage ../misc/urbit { };
-
   unixcw = libsForQt5.callPackage ../applications/radio/unixcw { };
 
   vaultenv = haskell.lib.justStaticExecutables haskellPackages.vaultenv;
