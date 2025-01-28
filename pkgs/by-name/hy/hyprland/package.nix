@@ -13,6 +13,7 @@
   cairo,
   epoll-shim,
   git,
+  glaze,
   hyprcursor,
   hyprgraphics,
   hyprland-qtutils,
@@ -85,14 +86,14 @@ assert assertMsg (!hidpiXWayland)
 
 customStdenv.mkDerivation (finalAttrs: {
   pname = "hyprland" + optionalString debug "-debug";
-  version = "0.46.2";
+  version = "0.47.0";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprland";
     fetchSubmodules = true;
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dj9dpVwpyTmUyVu4jtaIU39bHgVkoZjv6cgYfWyHc9E=";
+    hash = "sha256-rxvLiGNRUSVYPFsKIsqEbhxpR0sbWmHoo3azZKQ9fTY=";
   };
 
   postPatch = ''
@@ -143,6 +144,7 @@ customStdenv.mkDerivation (finalAttrs: {
     [
       aquamarine
       cairo
+      glaze
       git
       hyprcursor.dev
       hyprgraphics
