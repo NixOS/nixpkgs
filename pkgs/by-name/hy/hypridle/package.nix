@@ -48,11 +48,11 @@ gcc14Stdenv.mkDerivation (finalAttrs: {
     description = "Hyprland's idle daemon";
     homepage = "https://github.com/hyprwm/hypridle";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [
-      iogamaster
-      johnrtitor
-      khaneliman
-    ];
+    maintainers =
+      lib.teams.hyprland.members
+      ++ (with lib.maintainers; [
+        iogamaster
+      ]);
     mainProgram = "hypridle";
     platforms = [
       "aarch64-linux"

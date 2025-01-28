@@ -33,10 +33,7 @@ let
               homepage = "https://github.com/hyprwm/hyprland-plugins";
               description = "Hyprland ${description} plugin";
               license = lib.licenses.bsd3;
-              maintainers = with lib.maintainers; [
-                fufexan
-                johnrtitor
-              ];
+              maintainers = lib.teams.hyprland.members;
               inherit (hyprland.meta) platforms;
             };
           }

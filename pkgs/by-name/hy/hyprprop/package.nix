@@ -65,7 +65,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "An xprop replacement for Hyprland";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ khaneliman ];
+    maintainers = lib.teams.hyprland.members;
     mainProgram = "hyprprop";
   };
 })
