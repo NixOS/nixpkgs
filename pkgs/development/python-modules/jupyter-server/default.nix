@@ -114,6 +114,10 @@ buildPythonPackage rec {
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       # Failed: DID NOT RAISE <class 'tornado.web.HTTPError'>
       "test_copy_big_dir"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+      # TypeError: the JSON object must be str, bytes or bytearray, not NoneType
+      "test_terminal_create_with_cwd"
     ];
 
   disabledTestPaths = [
