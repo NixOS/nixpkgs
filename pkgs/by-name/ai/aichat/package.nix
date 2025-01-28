@@ -1,11 +1,11 @@
-{ lib
-, stdenv
-, darwin
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, installShellFiles
-,  versionCheckHook
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  installShellFiles,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -15,21 +15,16 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "sigoden";
     repo = "aichat";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-rKvnbauJpyZnJuLtGSjJKwe9wy/y/KLPyorH5u9t0H8=";
   };
 
-  cargoHash = "sha256-++UXa5moUc7fhK2GJHm8bvvpBeL2MfRav7OnPldpsZ4=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-WtEV+JkSaegshF8VB/OfuvnnKX5hDshCC/v5B2McA6M=";
 
   nativeBuildInputs = [
     pkg-config
     installShellFiles
-  ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.AppKit
-    darwin.apple_sdk.frameworks.CoreFoundation
-    darwin.apple_sdk.frameworks.Security
   ];
 
   postInstall = ''
@@ -40,6 +35,11 @@ rustPlatform.buildRustPackage rec {
     versionCheckHook
   ];
   versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Use GPT-4(V), Gemini, LocalAI, Ollama and other LLMs in the terminal";
