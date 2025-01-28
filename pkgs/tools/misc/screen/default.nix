@@ -71,5 +71,7 @@ stdenv.mkDerivation rec {
 
     platforms = platforms.unix;
     maintainers = [ ];
+    # checking for PAM support... configure: error: no
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }
