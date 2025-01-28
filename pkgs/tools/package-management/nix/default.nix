@@ -173,14 +173,14 @@ in lib.makeExtensible (self: ({
   };
 
   nix_2_24 = common {
-    version = "2.24.11";
-    hash = "sha256-ZizmbJM+DbhkaizxbjKg9fNfMrxh3PfAZ6jApQrazks=";
+    version = "2.24.12";
+    hash = "sha256-lPiheE0D146tstoUInOUf1451stezrd8j6H6w7+RCv8=";
     self_attribute_name = "nix_2_24";
   };
 
   nix_2_25 = common {
-    version = "2.25.4";
-    hash = "sha256-cB/1vIYk8LWvL71hiKFu8froJHTUAfsYOOxBlBeNglI=";
+    version = "2.25.5";
+    hash = "sha256-9xrQhrqHCSqWsQveykZvG/ZMu0se66fUQw3xVSg6BpQ=";
     self_attribute_name = "nix_2_25";
   };
 

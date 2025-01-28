@@ -3,6 +3,7 @@
   lib,
   fetchFromGitHub,
   kernel,
+  kernelModuleMakeFlags,
   bc,
 }:
 
@@ -25,7 +26,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = kernel.moduleBuildDependencies ++ [ bc ];
 
-  makeFlags = kernel.moduleMakeFlags ++ [
+  makeFlags = kernelModuleMakeFlags ++ [
     "KSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
 

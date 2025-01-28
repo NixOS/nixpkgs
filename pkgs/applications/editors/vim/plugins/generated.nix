@@ -1302,6 +1302,18 @@ final: prev:
     meta.homepage = "https://github.com/Saghen/blink.compat/";
   };
 
+  blink-copilot = buildVimPlugin {
+    pname = "blink-copilot";
+    version = "2025-01-27";
+    src = fetchFromGitHub {
+      owner = "fang2hou";
+      repo = "blink-copilot";
+      rev = "7e63f20b8e96191e5c87bf96fc35da3547993be2";
+      sha256 = "10lm90xa7w3ww94acivshnzkp4q2bfrq9zff2z5amrp3cxlga0rf";
+    };
+    meta.homepage = "https://github.com/fang2hou/blink-copilot/";
+  };
+
   blink-emoji-nvim = buildVimPlugin {
     pname = "blink-emoji.nvim";
     version = "2025-01-04";
@@ -6507,18 +6519,6 @@ final: prev:
 
   lua-async = buildVimPlugin {
     pname = "lua-async";
-    version = "2024-03-31";
-    src = fetchFromGitHub {
-      owner = "nvim-java";
-      repo = "lua-async";
-      rev = "652d94df34e97abe2d4a689edbc4270e7ead1a98";
-      sha256 = "0jpw9008xghqmzjnikwq417p497lj7v9hkjbrach5p652yca07s8";
-    };
-    meta.homepage = "https://github.com/nvim-java/lua-async/";
-  };
-
-  lua-async-await = buildVimPlugin {
-    pname = "lua-async-await";
     version = "2024-03-31";
     src = fetchFromGitHub {
       owner = "nvim-java";
