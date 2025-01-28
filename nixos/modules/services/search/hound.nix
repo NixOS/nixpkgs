@@ -8,7 +8,7 @@ let
   cfg = config.services.hound;
   settingsFormat = pkgs.formats.json { };
   houndConfigFile = pkgs.writeTextFile {
-    name = "hound-config";
+    name = "hound-config.json";
     text = builtins.toJSON cfg.settings;
     checkPhase = ''
       ${cfg.package}/bin/houndd -check-conf -conf $out
