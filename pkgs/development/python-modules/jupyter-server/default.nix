@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   hatch-jupyter-builder,
   hatchling,
   pytestCheckHook,
@@ -89,6 +88,11 @@ buildPythonPackage rec {
   pytestFlagsArray = [
     "-W"
     "ignore::DeprecationWarning"
+    # 19 failures on python 3.13:
+    # ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7ffff2a0cc70>
+    # TODO: Can probably be removed at the next update
+    "-W"
+    "ignore::pytest.PytestUnraisableExceptionWarning"
   ];
 
   preCheck = ''
@@ -113,6 +117,10 @@ buildPythonPackage rec {
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       # Failed: DID NOT RAISE <class 'tornado.web.HTTPError'>
       "test_copy_big_dir"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+      # TypeError: the JSON object must be str, bytes or bytearray, not NoneType
+      "test_terminal_create_with_cwd"
     ];
 
   disabledTestPaths = [

@@ -18,8 +18,6 @@ let
 
     nativeBuildInputs = [ makeWrapper ];
 
-    phases = [ "buildPhase" "fixupPhase" ];
-
     buildPhase = ''
       makeWrapper {$tesseractBase,$out}/bin/tesseract --set-default TESSDATA_PREFIX $out/share/tessdata
 
