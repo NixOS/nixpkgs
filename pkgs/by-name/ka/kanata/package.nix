@@ -22,28 +22,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-cG9so0x0y8CbTxLOxSQwn5vG72KxHJzzTIH4lQA4MvE=";
   };
 
-  cargoHash = "sha256-QQrFUJ24Qnrx8+7+h9riycXZSQUdH1sXMhpDzU9AXiI=";
-
-  # the dependency native-windows-gui contains both README.md and readme.md,
-  # which causes a hash mismatch on systems with a case-insensitive filesystem
-  # this removes the readme files and updates cargo's checksum file accordingly
-  depsExtraArgs = {
-    nativeBuildInputs = [
-      jq
-      moreutils
-    ];
-
-    postBuild = ''
-      pushd $name/native-windows-gui
-
-      rm --force --verbose README.md readme.md
-      jq 'del(.files."README.md") | del(.files."readme.md")' \
-        .cargo-checksum.json -c \
-        | sponge .cargo-checksum.json
-
-      popd
-    '';
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-VKvle1hQae+0Vbvd7Epq3cDqG8OV5J2mowF5lue59oc=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.IOKit ];
 
