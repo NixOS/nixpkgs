@@ -159,21 +159,6 @@ scope: {
     enableLargeConfig = true;
   };
 
-  # TODO Hack until https://github.com/NixOS/nixpkgs/issues/45462 is fixed.
-  boost =
-    (pkgs.boost.override {
-      extraB2Args = [
-        "--with-container"
-        "--with-context"
-        "--with-coroutine"
-      ];
-    }).overrideAttrs
-      (old: {
-        # Need to remove `--with-*` to use `--with-libraries=...`
-        buildPhase = lib.replaceStrings [ "--without-python" ] [ "" ] old.buildPhase;
-        installPhase = lib.replaceStrings [ "--without-python" ] [ "" ] old.installPhase;
-      });
-
   libgit2 = libgit2-thin-packfile;
 
   inherit resolvePath filesetToSource;
