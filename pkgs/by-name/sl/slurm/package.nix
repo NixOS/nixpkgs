@@ -2,6 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  runCommand,
+  config,
   pkg-config,
   libtool,
   curl,
@@ -33,6 +35,8 @@
   enableX11 ? true,
   enableGtk2 ? false,
   gtk2,
+  enableNVML ? config.cudaSupport,
+  nvml,
 }:
 
 stdenv.mkDerivation rec {
@@ -113,7 +117,14 @@ stdenv.mkDerivation rec {
       http-parser
     ]
     ++ lib.optionals enableX11 [ xorg.xauth ]
-    ++ lib.optionals enableGtk2 [ gtk2 ];
+    ++ lib.optionals enableGtk2 [ gtk2 ]
+    ++ lib.optionals enableNVML [
+      (runCommand "collect-nvml" { } ''
+        mkdir $out
+        ln -s ${nvml.dev}/include $out/include
+        ln -s ${nvml.lib}/lib/stubs $out/lib
+      '')
+    ];
 
   configureFlags =
     [
@@ -132,7 +143,8 @@ stdenv.mkDerivation rec {
       "--without-rpath" # Required for configure to pick up the right dlopen path
     ]
     ++ (lib.optional enableGtk2 "--disable-gtktest")
-    ++ (lib.optional (!enableX11) "--disable-x11");
+    ++ (lib.optional (!enableX11) "--disable-x11")
+    ++ (lib.optional (enableNVML) "--with-nvml");
 
   preConfigure = ''
     patchShebangs ./doc/html/shtml2html.py
