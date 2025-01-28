@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   hatch-jupyter-builder,
   hatchling,
   pytestCheckHook,
@@ -37,7 +36,6 @@ buildPythonPackage rec {
   pname = "jupyter-server";
   version = "2.14.2";
   pyproject = true;
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "jupyter_server";
@@ -45,12 +43,12 @@ buildPythonPackage rec {
     hash = "sha256-ZglQIaqWOM7SdsJIsdgYYuTFDyktV1kgu+lg3hxWsSs=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-jupyter-builder
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     argon2-cffi
     jinja2
     tornado
@@ -87,6 +85,11 @@ buildPythonPackage rec {
   pytestFlagsArray = [
     "-W"
     "ignore::DeprecationWarning"
+    # 19 failures on python 3.13:
+    # ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7ffff2a0cc70>
+    # TODO: Can probably be removed at the next update
+    "-W"
+    "ignore::pytest.PytestUnraisableExceptionWarning"
   ];
 
   preCheck = ''
@@ -123,12 +126,12 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/jupyter-server/jupyter_server/blob/v${version}/CHANGELOG.md";
     description = "Backend—i.e. core services, APIs, and REST endpoints—to Jupyter web applications";
     mainProgram = "jupyter-server";
     homepage = "https://github.com/jupyter-server/jupyter_server";
-    license = licenses.bsdOriginal;
+    license = lib.licenses.bsdOriginal;
     maintainers = lib.teams.jupyter.members;
   };
 }
