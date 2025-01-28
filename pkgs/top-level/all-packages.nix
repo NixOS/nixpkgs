@@ -1906,10 +1906,6 @@ with pkgs;
     novacomd = callPackage ../development/mobile/webos/novacomd.nix { };
   };
 
-  anevicon = callPackage ../tools/networking/anevicon {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
   aoc-cli = callPackage ../tools/misc/aoc-cli {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -2573,10 +2569,6 @@ with pkgs;
   scour = with python3Packages; toPythonApplication scour;
 
   sheldon = callPackage ../tools/misc/sheldon {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
-  sheesy-cli = callPackage ../tools/security/sheesy-cli {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
@@ -5371,10 +5363,6 @@ with pkgs;
   whatweb = callPackage ../tools/security/whatweb { };
 
   wireguard-tools = callPackage ../tools/networking/wireguard-tools { };
-
-  wireguard-vanity-address = callPackage ../tools/networking/wireguard-vanity-address {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
 
   wg-netmanager = callPackage ../tools/networking/wg-netmanager {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -18083,7 +18071,7 @@ with pkgs;
   });
 
   wine-wayland = lowPrio (winePackages.full.override {
-    wineRelease = "wayland";
+    x11Support = false;
   });
 
   inherit (callPackage ../servers/web-apps/wordpress {})
