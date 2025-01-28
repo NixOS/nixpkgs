@@ -209,7 +209,7 @@ stdenv.mkDerivation (finalAttrs: {
                   nix
                 ]
               }
-              update-source-version librsvg --ignore-same-version --source-key=cargoDeps > /dev/null
+              update-source-version librsvg --ignore-same-version --source-key=cargoDeps.vendorStaging > /dev/null
             ''
           ];
           # Experimental feature: do not copy!
