@@ -10,8 +10,6 @@
   fltk,
   rapidjson,
   gtest,
-  Carbon,
-  Cocoa,
 }:
 let
   version = "0.17.0";
@@ -46,17 +44,12 @@ stdenv.mkDerivation {
     cmake
     python3
   ];
-  buildInputs =
-    [
-      SDL2
-      fltk
-      rapidjson
-      gtest
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Carbon
-      Cocoa
-    ];
+  buildInputs = [
+    SDL2
+    fltk
+    rapidjson
+    gtest
+  ];
 
   patches = [
     ./remove-rust-buildstep.patch
