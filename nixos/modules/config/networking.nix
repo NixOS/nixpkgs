@@ -12,40 +12,42 @@ in
 {
   imports = [
     (lib.mkRemovedOptionModule [ "networking" "hostConf" ] "Use environment.etc.\"host.conf\" instead.")
+    (lib.mkRemovedOptionModule [ "networking" "hosts" ] "Use networking.hostFile.hosts instead.")
+    (lib.mkRemovedOptionModule [ "networking" "hostFiles" ] "Use networking.hostFile.hostFiles instead.")
+    (lib.mkRemovedOptionModule [ "networking" "extraHosts" ] "Use networking.hostFile.extraHosts instead.")
   ];
 
   options = {
-
-    networking.hosts = lib.mkOption {
-      type = lib.types.attrsOf (lib.types.listOf lib.types.str);
-      example = lib.literalExpression ''
-        {
-          "127.0.0.1" = [ "foo.bar.baz" ];
-          "192.168.0.2" = [ "fileserver.local" "nameserver.local" ];
-        };
-      '';
-      description = ''
-        Locally defined maps of hostnames to IP addresses.
-      '';
-    };
-
-    networking.hostFiles = lib.mkOption {
-      type = lib.types.listOf lib.types.path;
-      defaultText = lib.literalMD "Hosts from {option}`networking.hosts` and {option}`networking.extraHosts`";
-      example = lib.literalExpression ''[ "''${pkgs.my-blocklist-package}/share/my-blocklist/hosts" ]'';
-      description = ''
-        Files that should be concatenated together to form {file}`/etc/hosts`.
-      '';
-    };
-
-    networking.extraHosts = lib.mkOption {
-      type = lib.types.lines;
-      default = "";
-      example = "192.168.0.1 lanlocalhost";
-      description = ''
-        Additional verbatim entries to be appended to {file}`/etc/hosts`.
-        For adding hosts from derivation results, use {option}`networking.hostFiles` instead.
-      '';
+    networking.hostFile = {
+      hosts = lib.mkOption {
+        type = lib.types.attrsOf (lib.types.listOf lib.types.str);
+        example = lib.literalExpression ''
+          {
+            "127.0.0.1" = [ "foo.bar.baz" ];
+            "192.168.0.2" = [ "fileserver.local" "nameserver.local" ];
+          };
+        '';
+        description = ''
+          Locally defined maps of hostnames to IP addresses.
+        '';
+      };
+      hostFiles = lib.mkOption {
+        type = lib.types.listOf lib.types.path;
+        defaultText = lib.literalMD "Hosts from {option}`networking.hosts` and {option}`networking.extraHosts`";
+        example = lib.literalExpression ''[ "''${pkgs.my-blocklist-package}/share/my-blocklist/hosts" ]'';
+        description = ''
+          Files that should be concatenated together to form {file}`/etc/hosts`.
+        '';
+      };
+      extraHosts = lib.mkOption {
+        type = lib.types.lines;
+        default = "";
+        example = "192.168.0.1 lanlocalhost";
+        description = ''
+          Additional verbatim entries to be appended to {file}`/etc/hosts`.
+          For adding hosts from derivation results, use {option}`networking.hostFiles` instead.
+        '';
+      };
     };
 
     networking.timeServers = lib.mkOption {
@@ -165,7 +167,7 @@ in
       "127.0.0.2" = hostnames;
     };
 
-    networking.hostFiles = let
+    networking.hostFile.hostFiles = let
       # Note: localhostHosts has to appear first in /etc/hosts so that 127.0.0.1
       # resolves back to "localhost" (as some applications assume) instead of
       # the FQDN! By default "networking.hosts" also contains entries for the
@@ -178,8 +180,8 @@ in
         let
           oneToString = set: ip: ip + " " + lib.concatStringsSep " " set.${ip} + "\n";
           allToString = set: lib.concatMapStrings (oneToString set) (lib.attrNames set);
-        in pkgs.writeText "string-hosts" (allToString (lib.filterAttrs (_: v: v != []) cfg.hosts));
-      extraHosts = pkgs.writeText "extra-hosts" cfg.extraHosts;
+        in pkgs.writeText "string-hosts" (allToString (lib.filterAttrs (_: v: v != []) cfg.hostFile.hosts));
+      extraHosts = pkgs.writeText "extra-hosts" cfg.hostFile.extraHosts;
     in lib.mkBefore [ localhostHosts stringHosts extraHosts ];
 
     environment.etc =
@@ -190,7 +192,7 @@ in
         protocols.source  = pkgs.iana-etc + "/etc/protocols";
 
         # /etc/hosts: Hostname-to-IP mappings.
-        hosts.source = pkgs.concatText "hosts" cfg.hostFiles;
+        hosts.source = pkgs.concatText "hosts" cfg.hostFile.hostFiles;
 
         # /etc/netgroup: Network-wide groups.
         netgroup.text = lib.mkDefault "";
