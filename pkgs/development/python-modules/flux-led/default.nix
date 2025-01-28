@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "flux-led";
-  version = "1.1.0";
+  version = "1.1.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "Danielhiversen";
     repo = "flux_led";
     tag = version;
-    hash = "sha256-7gWqlb2PNRI50Xe8lv2Kim7wUYVzuQMa4BAbg2a7NvM=";
+    hash = "sha256-lFOxf9+O1APreIL/wQTZ+zSMx/MxPTRQrFWgw324myY=";
   };
 
   postPatch = ''
