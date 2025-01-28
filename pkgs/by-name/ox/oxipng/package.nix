@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   rustPlatform,
+  qemu,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,6 +19,9 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-4PCLtBJliK3uteL8EVKLBVR2YZW1gwQOiSLQok+rqug=";
+
+  # See https://github.com/shssoichiro/oxipng/blob/14b8b0e93a/.cargo/config.toml#L5
+  nativeCheckInputs = [ qemu ];
 
   meta = {
     homepage = "https://github.com/shssoichiro/oxipng";
