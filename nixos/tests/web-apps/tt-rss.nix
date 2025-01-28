@@ -12,6 +12,12 @@ import ../make-test-python.nix (
           selfUrlPath = "http://localhost/";
           pluginPackages = with pkgs; [
             tt-rss-plugin-auth-ldap
+            tt-rss-plugin-feediron
+          ];
+          plugins = [
+            "auth_internal"
+            "feediron"
+            "note"
           ];
           singleUserMode = true;
           themePackages = with pkgs; [ tt-rss-theme-feedly ];
@@ -33,7 +39,7 @@ import ../make-test-python.nix (
       assert "feedly" in preference_page
 
       plugins = json.loads(machine.succeed(f"curl -sSfL --cookie cjar --cookie-jar cjar 'http://localhost/backend.php' -X POST --data-raw 'op=Pref_Prefs&method=getPluginsList&csrf_token={csrf_token}'"))["plugins"]
-      expected_plugins = ["auth_ldap"];
+      expected_plugins = ["auth_internal", "auth_ldap", "feediron", "note"];
       found_plugins = [p["name"] for p in plugins if p["name"] in expected_plugins]
       assert len(found_plugins) == len(expected_plugins), f"Expected plugins {expected_plugins}, found {found_plugins}"
     '';
