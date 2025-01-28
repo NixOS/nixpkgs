@@ -7490,9 +7490,7 @@ with pkgs;
 
   fortran-language-server = python3.pkgs.callPackage ../development/tools/language-servers/fortran-language-server { };
 
-  inherit (callPackages ../development/tools/language-servers/nixd {
-    llvmPackages = llvmPackages_16;
-  }) nixf nixt nixd;
+  inherit (callPackages ../development/tools/language-servers/nixd { }) nixf nixt nixd;
 
   ansible-later = callPackage ../tools/admin/ansible/later.nix { };
 
