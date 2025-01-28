@@ -6,12 +6,13 @@
   fetchpatch,
   llvmPackages,
   zlib,
-  cython_0,
-  oldest-supported-numpy,
+  cython,
+  numpy,
   setuptools,
+  versioneer,
   wheel,
   astunparse,
-  numpy,
+  netcdf4,
   packaging,
   pyparsing,
   scipy,
@@ -26,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "mdtraj";
-  version = "1.10.0";
+  version = "1.10.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mdtraj";
     repo = "mdtraj";
     tag = version;
-    hash = "sha256-hNv/humEZOX4W7cOlJSAodk9pIi18//YJNSWNiEFiVg=";
+    hash = "sha256-0hSMKrY3p29IUmMuLsNUK4s/AM5zCzAh6Udg/xbeky0=";
   };
 
   patches = [
@@ -48,16 +49,17 @@ buildPythonPackage rec {
   ];
 
   build-system = [
-    cython_0
-    oldest-supported-numpy
+    cython
+    numpy
     setuptools
+    versioneer
     wheel
   ];
 
   buildInputs = [ zlib ] ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
   dependencies = [
-    astunparse
+    netcdf4
     numpy
     packaging
     pyparsing
@@ -84,6 +86,7 @@ buildPythonPackage rec {
     # require network access
     "test_pdb_from_url"
     "test_1vii_url_and_gz"
+    "test_3"
 
     # fail due to data race
     "test_read_atomindices_1"
