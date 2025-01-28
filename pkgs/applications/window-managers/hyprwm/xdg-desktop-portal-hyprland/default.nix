@@ -24,6 +24,7 @@
   wayland,
   wayland-protocols,
   wayland-scanner,
+  debug ? false,
 }:
 gcc14Stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-desktop-portal-hyprland";
@@ -64,6 +65,10 @@ gcc14Stdenv.mkDerivation (finalAttrs: {
     wayland-protocols
     wayland-scanner
   ];
+
+  cmakeBuildType = if debug then "Debug" else "RelWithDebInfo";
+
+  dontStrip = debug;
 
   dontWrapQtApps = true;
 
