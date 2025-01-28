@@ -21,7 +21,7 @@
 
 let
   version = "469d";
-  srcs = {
+  srcs = rec {
     x86_64-linux = fetchurl {
       url = "https://github.com/OldUnreal/UnrealTournamentPatches/releases/download/v${version}/OldUnreal-UTPatch${version}-Linux-amd64.tar.bz2";
       hash = "sha256-aoGzWuakwN/OL4+xUq8WEpd2c1rrNN/DkffI2vDVGjs=";
@@ -38,6 +38,8 @@ let
       url = "https://github.com/OldUnreal/UnrealTournamentPatches/releases/download/v${version}/OldUnreal-UTPatch${version}-macOS-Sonoma.dmg";
       hash = "sha256-TbhJbOH4E5WOb6XR9dmqLkXziK3/CzhNjd1ypBkkmvw=";
     };
+    # fat binary
+    aarch64-darwin = x86_64-darwin;
   };
   unpackIso =
     runCommand "ut1999-iso"
@@ -56,11 +58,12 @@ let
         cp -r Music Sounds Textures Maps $out
       '';
   systemDir =
-    {
+    rec {
       x86_64-linux = "System64";
       aarch64-linux = "SystemARM64";
-      x86_64-darwin = "System";
       i686-linux = "System";
+      x86_64-darwin = "System";
+      aarch64-darwin = x86_64-darwin;
     }
     .${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
 in
@@ -98,43 +101,49 @@ stdenv.mkDerivation {
     in
     ''
       runHook preInstall
-
+      mkdir -p $out
+    ''
+    + lib.optionalString (stdenv.hostPlatform.isLinux) ''
       mkdir -p $out/bin
+    ''
+    + ''
       cp -r ${if stdenv.hostPlatform.isDarwin then "UnrealTournament.app" else "./*"} $out
       chmod -R 755 $out
       cd ${outPrefix}
-
-      # NOTE: OldUnreal patch doesn't include these folders but could in the future
-      rm -rf ./{Music,Sounds,Maps}
-      ln -s ${unpackIso}/{Music,Sounds,Maps} .
-
-      # TODO: unpack compressed maps with ucc
-
-      cp -n ${unpackIso}/Textures/* ./Textures || true
-      cp -n ${unpackIso}/System/*.{u,int} ./System || true
+      # NOTE: OldUnreal patch doesn't include these folders on linux but could in the future
+      # on darwin it does, but they are empty
+      rm -rf ./{Music,Sounds}
+      ln -s ${unpackIso}/{Music,Sounds} .
     ''
     + lib.optionalString (stdenv.hostPlatform.isLinux) ''
+      # maps need no post-processing on linux, therefore linking them is ok
+      rm -rf ./Maps
+      ln -s ${unpackIso}/Maps .
+    ''
+    + lib.optionalString (stdenv.hostPlatform.isDarwin) ''
+      # Maps need post-processing on darwin, therefore need to be copied
+      cp -n ${unpackIso}/Maps/* ./Maps || true
+      # unpack compressed maps with ucc (needs absolute paths)
+      for map in $PWD/Maps/*.uz; do ./UCC decompress $map; done
+      mv ${systemDir}/*.unr ./Maps || true
+      rm ./Maps/*.uz
+    ''
+    + ''
+      cp -n ${unpackIso}/Textures/* ./Textures || true
+    ''
+    + lib.optionalString (stdenv.hostPlatform.isLinux) ''
+      cp -n ${unpackIso}/System/*.{u,int} ./System || true
       ln -s "$out/${systemDir}/ut-bin" "$out/bin/ut1999"
       ln -s "$out/${systemDir}/ucc-bin" "$out/bin/ut1999-ucc"
 
       install -D "${./ut1999.svg}" "$out/share/pixmaps/ut1999.svg"
-      ${imagemagick}/bin/magick -background none ${./ut1999.svg} -resize 16x16 ut1999_16x16.png
-      ${imagemagick}/bin/magick -background none ${./ut1999.svg} -resize 24x24 ut1999_24x24.png
-      ${imagemagick}/bin/magick -background none ${./ut1999.svg} -resize 32x32 ut1999_32x32.png
-      ${imagemagick}/bin/magick -background none ${./ut1999.svg} -resize 48x48 ut1999_48x48.png
-      ${imagemagick}/bin/magick -background none ${./ut1999.svg} -resize 64x64 ut1999_64x64.png
-      ${imagemagick}/bin/magick -background none ${./ut1999.svg} -resize 128x128 ut1999_128x128.png
-      ${imagemagick}/bin/magick -background none ${./ut1999.svg} -resize 192x192 ut1999_192x192.png
-      ${imagemagick}/bin/magick -background none ${./ut1999.svg} -resize 256x256 ut1999_256x256.png
-      install -D "ut1999_16x16.png" "$out/share/icons/hicolor/16x16/apps/ut1999.png"
-      install -D "ut1999_24x24.png" "$out/share/icons/hicolor/24x24/apps/ut1999.png"
-      install -D "ut1999_32x32.png" "$out/share/icons/hicolor/32x32/apps/ut1999.png"
-      install -D "ut1999_48x48.png" "$out/share/icons/hicolor/48x48/apps/ut1999.png"
-      install -D "ut1999_64x64.png" "$out/share/icons/hicolor/64x64/apps/ut1999.png"
-      install -D "ut1999_128x128.png" "$out/share/icons/hicolor/128x128/apps/ut1999.png"
-      install -D "ut1999_192x192.png" "$out/share/icons/hicolor/192x192/apps/ut1999.png"
-      install -D "ut1999_256x256.png" "$out/share/icons/hicolor/256x256/apps/ut1999.png"
+      for size in 16 24 32 48 64 128 192 256; do
+        square=$(printf "%sx%s" $size $size)
+        ${imagemagick}/bin/magick -background none ${./ut1999.svg} -resize $square ut1999_$square.png
+        install -D "ut1999_$square.png" "$out/share/icons/hicolor/$square/apps/ut1999.png"
+      done
 
+      # TODO consider to remove shared libraries that can be provided by nixpkgs for darwin too
       # Remove bundled libraries to use native versions instead
       rm $out/${systemDir}/libmpg123.so* \
         $out/${systemDir}/libopenal.so* \
