@@ -126,6 +126,7 @@ let
     version = buildNumber;
     inherit src;
     sourceRoot = "${src.name}/native/restarter";
+    useFetchCargoVendor = true;
     cargoHash = restarterHash;
 
     # Allow static linking

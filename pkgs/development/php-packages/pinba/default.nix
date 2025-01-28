@@ -15,6 +15,10 @@ buildPecl rec {
     sha256 = "0wqcqq6sb51wiawa37hbd1h9dbvmyyndzdvz87xqji7lpr9vn8jy";
   };
 
+  # Fix GCC 14 build.
+  # from incompatible pointer type [-Wincompatible-pointer-types
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+
   meta = with lib; {
     description = "PHP extension for Pinba";
     longDescription = ''

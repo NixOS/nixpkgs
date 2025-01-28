@@ -6,19 +6,19 @@
 
 php.buildComposerProject2 (finalAttrs: {
   pname = "psalm";
-  version = "5.26.1";
+  version = "6.0.0";
 
   src = fetchFromGitHub {
     owner = "vimeo";
     repo = "psalm";
     tag = finalAttrs.version;
-    hash = "sha256-TZm7HByPoCB4C0tdU5rzTfjMQEnhRhWPEiNR0bQDkTs=";
+    hash = "sha256-RH4uPln90WrTdDF1S4i6e2OikPmIjTW3aM4gpM2qxgg=";
   };
 
   # Missing `composer.lock` from the repository.
   # Issue open at https://github.com/vimeo/psalm/issues/10446
   composerLock = ./composer.lock;
-  vendorHash = "sha256-po43yrMlvX7Y91Z3D5IYSpY7FOS6+tL/+a3AozopZ9Q=";
+  vendorHash = "sha256-WdWlG4tX/wLB2nj4iiqkIhEe2coYfG3q+0JoXescWbM=";
 
   meta = {
     changelog = "https://github.com/vimeo/psalm/releases/tag/${finalAttrs.version}";

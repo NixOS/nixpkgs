@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   kernel,
+  kernelModuleMakeFlags,
 }:
 
 stdenv.mkDerivation {
@@ -17,7 +18,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
-  makeFlags = kernel.moduleMakeFlags;
+  makeFlags = kernelModuleMakeFlags;
 
   hardeningDisable = [ "pic" ];
 

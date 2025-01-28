@@ -163,7 +163,7 @@ in
         default = 10;
       };
       ioSchedulingClass = mkOption {
-        description = "IO scheduling class for btrbk (see ionice(1) for a quick description). Applies to local instances, and remote ones connecting by ssh if set to idle.";
+        description = "IO scheduling class for btrbk (see {manpage}`ionice(1)` for a quick description). Applies to local instances, and remote ones connecting by ssh if set to idle.";
         type = types.enum [
           "idle"
           "best-effort"
@@ -181,7 +181,7 @@ in
                 type = types.nullOr types.str;
                 default = "daily";
                 description = ''
-                  How often this btrbk instance is started. See systemd.time(7) for more information about the format.
+                  How often this btrbk instance is started. See {manpage}`systemd.time(7)` for more information about the format.
                   Setting it to null disables the timer, thus this instance can only be started manually.
                 '';
               };

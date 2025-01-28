@@ -283,7 +283,7 @@ in
         # It's similar to Nix daemon so there's no question whether or not this
         # should be sandboxed.
         systemd.services.guix-daemon = {
-          environment = serviceEnv;
+          environment = serviceEnv // config.networking.proxy.envVars;
           script = ''
             exec ${lib.getExe' package "guix-daemon"} \
               --build-users-group=${cfg.group} \
