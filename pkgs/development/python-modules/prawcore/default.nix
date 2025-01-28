@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "prawcore";
-  version = "2.4.0";
+  version = "3.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "praw-dev";
     repo = "prawcore";
     tag = "v${version}";
-    hash = "sha256-tECZRx6VgyiJDKHvj4Rf1sknFqUhz3sDFEsAMOeB7/g=";
+    hash = "sha256-ZWOQZSMWsqd9accQJIHcPHVvyrvit3TvFbvo/vvsYvs=";
   };
 
   nativeBuildInputs = [ flit-core ];
