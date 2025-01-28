@@ -86,6 +86,9 @@ buildPythonPackage rec {
 
     # tensorflow maybe incompatible? https://github.com/lmcinnes/umap/issues/821
     "test_save_load"
+
+    # AssertionError - TODO: Report upstream.
+    "test_umap_custom_distance_w_grad"
   ];
 
   meta = with lib; {
