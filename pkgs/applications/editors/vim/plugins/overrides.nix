@@ -2764,6 +2764,10 @@ in
     dependencies = [ self.plenary-nvim ];
   };
 
+  repolink-nvim = super.repolink-nvim.overrideAttrs {
+    dependencies = [ self.plenary-nvim ];
+  };
+
   # needs  "http" and "json" treesitter grammars too
   rest-nvim = super.rest-nvim.overrideAttrs {
     dependencies = with self; [
