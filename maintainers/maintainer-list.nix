@@ -7810,6 +7810,12 @@
     githubId = 24463229;
     name = "Forden";
   };
+  ForgottenBeast = {
+    email = "forgottenbeast@riseup.net";
+    github = "ForgottenBeast";
+    githubId = 5754552;
+    name = "ForgottenBeast";
+  };
   forkk = {
     email = "forkk@forkk.net";
     github = "Forkk";
