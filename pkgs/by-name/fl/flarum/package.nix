@@ -3,7 +3,7 @@
 , fetchFromGitHub
 }:
 
-php.buildComposerProject (finalAttrs: {
+php.buildComposerProject2 (finalAttrs: {
   pname = "flarum";
   version = "1.8.1";
 
@@ -16,7 +16,7 @@ php.buildComposerProject (finalAttrs: {
 
   composerLock = ./composer.lock;
   composerStrictValidation = false;
-  vendorHash = "sha256-m+x/4A/DcMv7mMfQjpH1vsVqXuMHhSHeX3sgI43uJLI=";
+  vendorHash = "sha256-pup+ZfPEnqoA3wEXQNn4pWTYXri6d4XzMfuc8k1SeQk=";
 
   meta = with lib; {
     changelog = "https://github.com/flarum/framework/blob/main/CHANGELOG.md";
