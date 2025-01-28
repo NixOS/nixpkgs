@@ -17952,8 +17952,6 @@ with pkgs;
 
   terraform-landscape = callPackage ../applications/networking/cluster/terraform-landscape { };
 
-  terraspace = callPackage ../applications/networking/cluster/terraspace { };
-
   tftui = python3Packages.callPackage ../applications/networking/cluster/tftui { };
 
   touchosc = callPackage ../applications/audio/touchosc { };
