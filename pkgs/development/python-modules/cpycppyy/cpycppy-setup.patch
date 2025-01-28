@@ -1,0 +1,16 @@
+diff --git a/setup.py b/setup.py
+index 0bab79e..0548d03 100755
+--- a/setup.py
++++ b/setup.py
+@@ -40,10 +40,7 @@ def _get_config_exec():
+     return [sys.executable, '-m', 'cppyy_backend._cling_config']
+ 
+ def get_cflags():
+-    config_exec_args = _get_config_exec()
+-    config_exec_args.append('--auxcflags')
+-    cli_arg = subprocess.check_output(config_exec_args)
+-    return cli_arg.decode("utf-8").strip()
++    %cflags_placeholder%
+ 
+ 
+ #
