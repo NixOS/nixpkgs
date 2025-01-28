@@ -819,7 +819,6 @@ self: super: {
   translatable-intset = dontCheck super.translatable-intset;
   ua-parser = dontCheck super.ua-parser;
   unagi-chan = dontCheck super.unagi-chan;
-  universe-some = dontCheck super.universe-some;
   wai-logger = dontCheck super.wai-logger;
   WebBits = dontCheck super.WebBits;                    # http://hydra.cryp.to/build/499604/log/raw
   webdriver = dontCheck super.webdriver;
@@ -2019,9 +2018,6 @@ self: super: {
   # https://github.com/faylang/fay/pull/474
   fay = doJailbreak super.fay;
 
-  # Need https://github.com/obsidiansystems/cli-extras/pull/12 and more
-  cli-extras = doJailbreak super.cli-extras;
-
   cli-git = addBuildTool pkgs.git super.cli-git;
 
   # Need https://github.com/obsidiansystems/cli-nix/pull/5 and more
@@ -2030,21 +2026,10 @@ self: super: {
     pkgs.nix-prefetch-git
   ] super.cli-nix;
 
-  nix-thunk = doJailbreak super.nix-thunk;
-
   # list `modbus` in librarySystemDepends, correct to `libmodbus`
   libmodbus = doJailbreak (addExtraLibrary pkgs.libmodbus super.libmodbus);
 
   ginger = doJailbreak super.ginger;
-
-  # 2024-05-05 syntax changes: https://github.com/obsidiansystems/haveibeenpwned/pull/9
-  haveibeenpwned = appendPatch
-    (fetchpatch {
-      url = "https://github.com/obsidiansystems/haveibeenpwned/pull/9/commits/14c134eec7de12f755b2d4667727762a8a1a6476.patch";
-      sha256 = "sha256-fau5+b6tufJ+MscrLgbYvvBsekPe8R6QAy/4H31dcQ4";
-    })
-    (doJailbreak super.haveibeenpwned);
-
 
   # Too strict version bounds on ghc-events
   # https://github.com/mpickering/hs-speedscope/issues/16
