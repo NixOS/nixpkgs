@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   autoreconfHook,
   ncurses,
   libxcrypt,
@@ -36,6 +37,14 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optional stdenv.hostPlatform.isLinux pam
     ++ lib.optional stdenv.hostPlatform.isDarwin utmp;
+
+  patches = [
+    # fixes cross build
+    (fetchpatch {
+      url = "https://git.openwrt.org/?p=feed/packages.git;a=blob_plain;f=utils/screen/patches/010-ptyh.patch;hb=4df02492c2770d085e81bbd6ae200581a0b339c9";
+      hash = "sha256-pDlSGKQYGz0lSXzgqFmGLxFf6XnShzI2Vg0VLMy354M=";
+    })
+  ];
 
   doCheck = true;
 
