@@ -4,6 +4,7 @@
   cmake,
   pkg-config,
   fetchFromGitHub,
+  hyprland-qt-support,
   hyprutils,
   kdePackages,
   polkit,
@@ -27,6 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    hyprland-qt-support
     hyprutils
     kdePackages.kirigami-addons
     kdePackages.polkit-qt-1
