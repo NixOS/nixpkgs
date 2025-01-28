@@ -8,6 +8,7 @@
   pyyaml,
   openssh,
   unittestCheckHook,
+  installShellFiles,
   bc,
   hostname,
   bash,
@@ -51,6 +52,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pyyaml ];
 
+  nativeBuildInputs = [ installShellFiles ];
+
   nativeCheckInputs = [
     bc
     hostname
@@ -78,6 +81,10 @@ buildPythonPackage rec {
     rm tests/TaskDistantPdshTest.py
     rm tests/TaskRLimitsTest.py
     rm tests/TreeGatewayTest.py
+  '';
+
+  postInstall = ''
+    installShellCompletion --bash bash_completion.d/*
   '';
 
   meta = with lib; {
