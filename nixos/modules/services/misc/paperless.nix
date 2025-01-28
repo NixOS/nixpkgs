@@ -37,7 +37,7 @@ let
     ${lib.toShellVars env}
     ${lib.optionalString (cfg.environmentFile != null) "source ${cfg.environmentFile}"}
 
-    cd ${cfg.dataDir}
+    cd '${cfg.dataDir}'
     sudo=exec
     if [[ "$USER" != ${cfg.user} ]]; then
       ${
