@@ -10,14 +10,13 @@
 }:
 
 stdenv.mkDerivation {
-  version = "111.15329";
-
   pname = "vboot_reference";
+  version = "135.16209";
 
   src = fetchFromGitiles {
     url = "https://chromium.googlesource.com/chromiumos/platform/vboot_reference";
-    rev = "1a1cb5c9a38030a5868e2aaad295c68432c680fd"; # refs/heads/release-R111-15329.B
-    sha256 = "sha256-56/hqqFiKHw0/ah0D20U1ueIU2iq8I4Wn5DiEWxB9qA=";
+    rev = "bf4b21294a1c2c6b94f400819d3fce4a905b3afe"; # refs/heads/release-R135-16209.B
+    hash = "sha256-frg7NkK173wAHJRedtbJI5jI8Kee/VkByh5DCUzD9OA=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -32,7 +31,7 @@ stdenv.mkDerivation {
 
   env.NIX_CFLAGS_COMPILE = toString [
     # This apparently doesn't work as expected:
-    #  - https://chromium.googlesource.com/chromiumos/platform/vboot_reference/+/refs/heads/release-R111-15329.B/Makefile#439
+    #  - https://chromium.googlesource.com/chromiumos/platform/vboot_reference/+/refs/heads/release-R135-16209.B/Makefile#493
     # Let's apply the same flag manually.
     "-Wno-error=deprecated-declarations"
   ];
@@ -54,7 +53,7 @@ stdenv.mkDerivation {
     "HOST_ARCH=${stdenv.hostPlatform.parsed.cpu.name}"
     "USE_FLASHROM=0"
     # Upstream has weird opinions about DESTDIR
-    # https://chromium.googlesource.com/chromiumos/platform/vboot_reference/+/refs/heads/release-R111-15329.B/Makefile#51
+    # https://chromium.googlesource.com/chromiumos/platform/vboot_reference/+/refs/heads/release-R135-16209.B/Makefile#51
     "UB_DIR=${placeholder "out"}/bin"
     "UL_DIR=${placeholder "out"}/lib"
     "UI_DIR=${placeholder "out"}/include/vboot"
