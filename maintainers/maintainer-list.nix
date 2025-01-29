@@ -9532,6 +9532,12 @@
     githubId = 1592375;
     name = "Walter Huf";
   };
+  huggy = {
+    email = "nixpkgs@huggy.moe";
+    github = "makeding";
+    githubId = 6511667;
+    name = "huggy";
+  };
   hughmandalidis = {
     name = "Hugh Mandalidis";
     email = "mandalidis.hugh@gmail.com";
@@ -14243,6 +14249,12 @@
     githubId = 585424;
     name = "Massimo Gengarelli";
   };
+  MasterEvarior = {
+    email = "nix-maintainer@giannin.ch";
+    github = "MasterEvarior";
+    githubId = 36074738;
+    name = "MasterEvarior";
+  };
   matdibu = {
     email = "contact@mateidibu.dev";
     github = "matdibu";
@@ -15743,6 +15755,13 @@
     github = "MtP76";
     githubId = 2176611;
     name = "Marko Poikonen";
+  };
+  mtpham99 = {
+    name = "Matthew Pham";
+    email = "mtpham.nixos@protonmail.com";
+    github = "mtpham99";
+    githubId = 72663763;
+    keys = [ { fingerprint = "DB3E A12D B291 594A 79C5 F6B3 10AB 6868 37F6 FA3F"; } ];
   };
   mtreca = {
     email = "maxime.treca@gmail.com";
@@ -17348,6 +17367,12 @@
     github = "otwieracz";
     githubId = 108072;
     name = "Slawomir Gonet";
+  };
+  oughie = {
+    name = "Oughie";
+    email = "oughery@gmail.com";
+    github = "Oughie";
+    githubId = 123173954;
   };
   outfoxxed = {
     name = "outfoxxed";
