@@ -195,6 +195,18 @@ final: prev:
     meta.homepage = "https://github.com/Yggdroot/LeaderF/";
   };
 
+  LuaSnip-snippets-nvim = buildVimPlugin {
+    pname = "LuaSnip-snippets.nvim";
+    version = "2022-03-17";
+    src = fetchFromGitHub {
+      owner = "molleweide";
+      repo = "LuaSnip-snippets.nvim";
+      rev = "d7e40e4cce622eab2316607dbcd8d6039bcb9fe0";
+      sha256 = "063fz3f9byzmb1qavhrjdcphr3nk4l4d19h7mzj5sx4wv7cn8nl8";
+    };
+    meta.homepage = "https://github.com/molleweide/LuaSnip-snippets.nvim/";
+  };
+
   MatchTagAlways = buildVimPlugin {
     pname = "MatchTagAlways";
     version = "2017-05-20";
@@ -11322,6 +11334,18 @@ final: prev:
       sha256 = "0qisyii60gn5siahxc30xham2asmkrch8ph2fs9qk1kdr64h33d5";
     };
     meta.homepage = "https://github.com/gabrielpoca/replacer.nvim/";
+  };
+
+  repolink-nvim = buildVimPlugin {
+    pname = "repolink.nvim";
+    version = "2023-12-08";
+    src = fetchFromGitHub {
+      owner = "9seconds";
+      repo = "repolink.nvim";
+      rev = "55edfedbaef3e894d2ab5107ea7fadc64cb8258d";
+      sha256 = "1pa75cmb1fyxz4b9lam4vbgkcy2g3lfj0f31s17cppzapk0aqh6a";
+    };
+    meta.homepage = "https://github.com/9seconds/repolink.nvim/";
   };
 
   resession-nvim = buildVimPlugin {

@@ -2,15 +2,12 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  qmake,
-  wrapQtAppsHook,
+  libsForQt5,
   libusb1,
   hidapi,
   pkg-config,
   coreutils,
   mbedtls_2,
-  qtbase,
-  qttools,
   symlinkJoin,
   openrgb,
 }:
@@ -26,12 +23,13 @@ stdenv.mkDerivation rec {
     hash = "sha256-XBLj4EfupyeVHRc0pVI7hrXFoCNJ7ak2yO0QSfhBsGU=";
   };
 
-  nativeBuildInputs = [
+  nativeBuildInputs = with libsForQt5; [
     qmake
     pkg-config
     wrapQtAppsHook
   ];
-  buildInputs = [
+
+  buildInputs = with libsForQt5; [
     libusb1
     hidapi
     mbedtls_2
