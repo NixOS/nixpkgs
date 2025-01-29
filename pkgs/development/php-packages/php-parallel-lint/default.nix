@@ -4,7 +4,7 @@
   php,
 }:
 
-php.buildComposerProject (finalAttrs: {
+php.buildComposerProject2 (finalAttrs: {
   pname = "php-parallel-lint";
   version = "1.4.0";
 
@@ -16,7 +16,7 @@ php.buildComposerProject (finalAttrs: {
   };
 
   composerLock = ./composer.lock;
-  vendorHash = "sha256-NZLGeX1i+E621UGYeWn5tKufDbCLv4iD1VXJcnhfleY=";
+  vendorHash = "sha256-ySdLlqlGKZ6LgmAOBMkBNoCAqWrgMwE/Cj6ZEPEsCko=";
 
   meta = {
     description = "Tool to check syntax of PHP files faster than serial check with fancier output";
