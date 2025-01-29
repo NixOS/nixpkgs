@@ -24,6 +24,7 @@ in
         HBOX_STORAGE_DATA = "/var/lib/homebox/data";
         HBOX_STORAGE_SQLITE_URL = "/var/lib/homebox/data/homebox.db?_pragma=busy_timeout=999&_pragma=journal_mode=WAL&_fk=1";
         HBOX_OPTIONS_ALLOW_REGISTRATION = "false";
+        HBOX_OPTIONS_CHECK_GITHUB_RELEASE = "false";
         HBOX_MODE = "production";
       '';
       description = ''
@@ -43,6 +44,7 @@ in
       HBOX_STORAGE_DATA = mkDefault "/var/lib/homebox/data";
       HBOX_STORAGE_SQLITE_URL = mkDefault "/var/lib/homebox/data/homebox.db?_pragma=busy_timeout=999&_pragma=journal_mode=WAL&_fk=1";
       HBOX_OPTIONS_ALLOW_REGISTRATION = mkDefault "false";
+      HBOX_OPTIONS_CHECK_GITHUB_RELEASE = mkDefault "false";
       HBOX_MODE = mkDefault "production";
     };
     systemd.services.homebox = {
