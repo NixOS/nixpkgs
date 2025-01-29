@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  flit-core,
+  poetry-core,
   microsoft-kiota-abstractions,
   pytest-asyncio,
   pytest-mock,
@@ -13,19 +13,21 @@
 
 buildPythonPackage rec {
   pname = "microsoft-kiota-serialization-text";
-  version = "1.0.0";
+  version = "1.9.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "microsoft";
-    repo = "kiota-serialization-text-python";
-    tag = "v${version}";
-    hash = "sha256-jPuRfvqO4n5/PjSOS5NMCawaYRhXmrZtfg6LgYFCv7o=";
+    repo = "kiota-python";
+    tag = "microsoft-kiota-serialization-text-v${version}";
+    hash = "sha256-ESRnI8prXG1h5H5RVD4eOQ1sQYSEMMLVHSk8yhzFGVw=";
   };
 
-  build-system = [ flit-core ];
+  sourceRoot = "source/packages/serialization/text/";
+
+  build-system = [ poetry-core ];
 
   dependencies = [
     microsoft-kiota-abstractions
@@ -42,8 +44,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Text serialization implementation for Kiota generated clients in Python";
-    homepage = "https://github.com/microsoft/kiota-serialization-text-python";
-    changelog = "https://github.com/microsoft/kiota-serialization-text-python/blob/${version}/CHANGELOG.md";
+    homepage = "https://github.com/microsoft/kiota-python/tree/main/packages/serialization/text";
+    changelog = "https://github.com/microsoft/kiota-python/releases/tag/microsoft-kiota-serialization-text-v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
