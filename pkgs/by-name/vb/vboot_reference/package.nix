@@ -31,13 +31,11 @@ stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace "ar qc" '${stdenv.cc.bintools.targetPrefix}ar qc'
+      --replace-fail "ar qc" '${stdenv.cc.bintools.targetPrefix}ar qc'
     # Drop flag unrecognized by GCC 9 (for e.g. aarch64-linux)
     substituteInPlace Makefile \
-      --replace "-Wno-unknown-warning" ""
-  '';
+      --replace-fail "-Wno-unknown-warning" ""
 
-  preBuild = ''
     patchShebangs scripts
   '';
 
