@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "noseyparker";
-  version = "0.22.0";
+  version = "0.23.0";
 
   src = fetchFromGitHub {
     owner = "praetorian-inc";
     repo = "noseyparker";
     rev = "v${version}";
-    hash = "sha256-HRuqeKV0Y8kf/KBSHIK25Xrpr7tJODQQa4BoqxiulzU=";
+    hash = "sha256-n+lX49BwipIPQ2ZeQT+DFO2ILHHAU2VsOnhASOGX5RE=";
   };
 
-  cargoHash = "sha256-/EeKoR4IHNwQj8Ohs46U2BYJWkutJ1XWhW6xsR+k7Yg=";
+  cargoHash = "sha256-/W3RBssypxampQv9EgH6krJ2vxOX8cbKeJOmRmxFL7c=";
 
   nativeCheckInputs = [
     git
