@@ -246,7 +246,7 @@ rec {
       lib,
       callPackage,
       mitm-cache,
-      substituteAll,
+      replaceVars,
       symlinkJoin,
       concatTextFile,
       makeSetupHook,
@@ -266,11 +266,10 @@ rec {
             name = "setup-hook.sh";
             files = [
               (mitm-cache.setupHook)
-              (substituteAll {
-                src = ./setup-hook.sh;
+              (replaceVars ./setup-hook.sh {
                 # jdk used for keytool
                 inherit (gradle) jdk;
-                init_script = ./init-build.gradle;
+                init_script = "${./init-build.gradle}";
               })
             ];
           }))

@@ -39,6 +39,7 @@ mapAliases {
   "@antora/cli" = pkgs.antora; # Added 2023-05-06
   "@astrojs/language-server" = pkgs.astro-language-server; # Added 2024-02-12
   "@bitwarden/cli" = pkgs.bitwarden-cli; # added 2023-07-25
+  "@commitlint/config-conventional" = throw "@commitlint/config-conventional has been dropped, as it is a library and your JS project should lock it instead."; # added 2024-12-16
   "@emacs-eask/cli" = pkgs.eask; # added 2023-08-17
   "@forge/cli" = throw "@forge/cli was removed because it was broken"; # added 2023-09-20
   "@githubnext/github-copilot-cli" = pkgs.github-copilot-cli; # Added 2023-05-02
@@ -182,6 +183,7 @@ mapAliases {
   surge = pkgs.surge-cli; # Added 2023-09-08
   inherit (pkgs) svelte-language-server; # Added 2024-05-12
   swagger = throw "swagger was removed because it was broken and abandoned upstream"; # added 2023-09-09
+  inherit (pkgs) tailwindcss; # added 2024-12-04
   teck-programmer = throw "teck-programmer was removed because it was broken and unmaintained"; # added 2024-08-23
   tedicross = throw "tedicross was removed because it was broken"; # added 2023-09-09
   inherit (pkgs) terser; # Added 2023-08-31

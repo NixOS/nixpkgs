@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
-  setuptools,
+  hatchling,
   pytestCheckHook,
   pytest-cov-stub,
   huggingface-hub,
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     hash = "sha256-23Wy/VSd/CvpqT/zDX4ApplfsUwbjOj9q+T8YCKs8X4=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   dependencies = [
     huggingface-hub
