@@ -72,8 +72,7 @@ stdenv.mkDerivation rec {
     description = "TeamSpeak voice communication server";
     homepage = "https://teamspeak.com/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    # See distribution-permit.txt for a confirmation that nixpkgs is allowed to distribute TeamSpeak.
-    license = licenses.unfreeRedistributable;
+    license = licenses.teamspeak;
     platforms = platforms.linux;
     maintainers = with maintainers; [
       arobyn

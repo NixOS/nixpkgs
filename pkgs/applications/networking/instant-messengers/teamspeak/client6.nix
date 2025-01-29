@@ -111,11 +111,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   meta = {
     description = "TeamSpeak voice communication tool (beta version)";
     homepage = "https://teamspeak.com/";
-    license = {
-      fullName = "Teamspeak client license";
-      url = "https://www.teamspeak.com/en/privacy-and-terms/";
-      free = false;
-    };
+    license = lib.licenses.teamspeak;
     mainProgram = "TeamSpeak";
     maintainers = with lib.maintainers; [
       gepbird
