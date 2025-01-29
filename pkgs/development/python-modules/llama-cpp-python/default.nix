@@ -64,12 +64,25 @@ buildPythonPackage rec {
 
   dontUseCmakeConfigure = true;
   SKBUILD_CMAKE_ARGS = lib.strings.concatStringsSep ";" (
-    lib.optionals cudaSupport [
+    # Set GGML_NATIVE=off. Otherwise, cmake attempts to build with
+    # -march=native* which is either a no-op (if cc-wrapper is able to ignore
+    # it), or an attempt to build a non-reproducible binary.
+    #
+    # This issue was spotted when cmake rules appended feature modifiers to
+    # -mcpu, breaking linux build as follows:
+    #
+    # cc1: error: unknown value ‘native+nodotprod+noi8mm+nosve’ for ‘-mcpu’
+    [ "-DGGML_NATIVE=off" ]
+    ++ lib.optionals cudaSupport [
       "-DGGML_CUDA=on"
       "-DCUDAToolkit_ROOT=${lib.getDev cudaPackages.cuda_nvcc}"
       "-DCMAKE_CUDA_COMPILER=${lib.getExe cudaPackages.cuda_nvcc}"
     ]
   );
+
+  preBuild = ''
+    export CMAKE_BUILD_PARALLEL_LEVEL="$NIX_BUILD_CORES"
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -128,10 +141,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/abetlen/llama-cpp-python";
     changelog = "https://github.com/abetlen/llama-cpp-python/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ kirillrdy ];
-    badPlatforms = [
-      # cc1: error: unknown value ‘native+nodotprod+noi8mm+nosve’ for ‘-mcpu’
-      "aarch64-linux"
+    maintainers = with lib.maintainers; [
+      booxter
+      kirillrdy
     ];
   };
 }
