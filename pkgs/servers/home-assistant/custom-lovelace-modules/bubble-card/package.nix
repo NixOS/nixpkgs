@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation rec {
   pname = "bubble-card";
-  version = "2.3.4";
+  version = "2.4.0";
 
   dontBuild = true;
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "Clooos";
     repo = "Bubble-Card";
     rev = "v${version}";
-    hash = "sha256-90If8QKlxacJZoEG3+IFHPd9cuFJS5Ki9XMdTaq67IA=";
+    hash = "sha256-Hn6jH7lT+bjkOM/iRCmD1B8l6ZRqjNTmVMj4IN7ixE4=";
   };
 
   installPhase = ''
