@@ -11,6 +11,7 @@
 , pkg-config
 , curl
 , libavif
+, libGL
 , libjxl
 , libpulseaudio
 , libwebp
@@ -48,13 +49,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ladybird";
-  version = "0-unstable-2024-12-30";
+  version = "0-unstable-2025-01-28";
 
   src = fetchFromGitHub {
     owner = "LadybirdWebBrowser";
     repo = "ladybird";
-    rev = "4324439006a6df1179440ce4f415b67658919957";
-    hash = "sha256-vg2Nb85+fegs7Idika9Mbq+f27wrIO48pWQSUidLKwE=";
+    rev = "eca68aad8846f20f64167cf53dc1f432abe1590e";
+    hash = "sha256-8vENHJ6BdMAEhlt54IU9+i4iVPnGp0R42v6zykGrrg4=";
   };
 
   postPatch = ''
@@ -108,6 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
     ffmpeg
     fontconfig
     libavif
+    libGL
     libjxl
     libwebp
     libxcrypt
@@ -140,6 +142,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # FIXME: Add an option to -DENABLE_QT=ON on macOS to use Qt rather than Cocoa for the GUI
+
+  # ld: [...]/OESVertexArrayObject.cpp.o: undefined reference to symbol 'glIsVertexArrayOES'
+  # ld: [...]/libGL.so.1: error adding symbols: DSO missing from command line
+  # https://github.com/LadybirdBrowser/ladybird/issues/371#issuecomment-2616415434
+  env.NIX_LDFLAGS = "-lGL";
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications $out/bin
