@@ -141,6 +141,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/abetlen/llama-cpp-python";
     changelog = "https://github.com/abetlen/llama-cpp-python/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ kirillrdy ];
+    maintainers = with lib.maintainers; [
+      booxter
+      kirillrdy
+    ];
   };
 }
