@@ -15,18 +15,18 @@
 
 buildGoModule rec {
   pname = "picocrypt";
-  version = "1.45";
+  version = "1.46";
 
   src = fetchFromGitHub {
     owner = "Picocrypt";
     repo = "Picocrypt";
     tag = version;
-    hash = "sha256-VJCLbMthxb2eWN20pXA6GOzR1FDN97KCU6ligKbKQkY=";
+    hash = "sha256-2kY/EK/tICA5vVT79Qy3oHKMWuoEPwXUI7FYnFuiLVQ=";
   };
 
   sourceRoot = "${src.name}/src";
 
-  vendorHash = "sha256-ufMxDyK4EPTYLGc0AJ6EARIFCPwz+5OgZzQSGnP+WLA=";
+  vendorHash = "sha256-fcDsPUDsZsgwI2MudvNaGKIIe55JsMCNgDs7Jz2HF9A=";
 
   ldflags = [
     "-s"
@@ -69,7 +69,7 @@ buildGoModule rec {
   meta = {
     description = "Very small, very simple, yet very secure encryption tool, written in Go";
     homepage = "https://github.com/Picocrypt/Picocrypt";
-    changelog = "https://github.com/Picocrypt/Picocrypt/blob/main/Changelog.md";
+    changelog = "https://github.com/Picocrypt/Picocrypt/blob/${version}/Changelog.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ ryand56 ];
     mainProgram = "picocrypt-gui";
