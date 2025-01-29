@@ -13,8 +13,13 @@ let
           /**
             Patch the Nixpkgs library
 
+            A function that applies patches onto the nixpkgs library.
+            Usage is discouraged for most scenarios.
+
+            :::{.note}
             The name `extends` is a bit misleading, as it doesn't actually extend the library, but rather patches it.
             It is merely a consequence of being implemented by `makeExtensible`.
+            :::
 
             # Inputs
 
