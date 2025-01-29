@@ -30,13 +30,8 @@ let
     "ghcjs810"
   ];
 
-  haskellLibUncomposable = import ../development/haskell-modules/lib {
-    inherit (pkgs) lib;
-    inherit pkgs;
-  };
-
   callPackage = newScope {
-    haskellLib = haskellLibUncomposable.compose;
+    haskellLib = pkgs.haskell.lib.compose;
     overrides = pkgs.haskell.packageOverrides;
   };
 
@@ -61,7 +56,10 @@ let
 
 in
 {
-  lib = haskellLibUncomposable;
+  lib = import ../development/haskell-modules/lib {
+    inherit (pkgs) lib;
+    inherit pkgs;
+  };
 
   package-list = callPackage ../development/haskell-modules/package-list.nix { };
 
