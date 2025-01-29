@@ -29,13 +29,6 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  env.NIX_CFLAGS_COMPILE = toString [
-    # This apparently doesn't work as expected:
-    #  - https://chromium.googlesource.com/chromiumos/platform/vboot_reference/+/refs/heads/release-R135-16209.B/Makefile#493
-    # Let's apply the same flag manually.
-    "-Wno-error=deprecated-declarations"
-  ];
-
   postPatch = ''
     substituteInPlace Makefile \
       --replace "ar qc" '${stdenv.cc.bintools.targetPrefix}ar qc'
