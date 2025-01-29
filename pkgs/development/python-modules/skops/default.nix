@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
-  setuptools,
+  hatchling,
   pytestCheckHook,
   pytest-cov-stub,
   huggingface-hub,
@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "skops";
-  version = "0.10";
+  version = "0.11.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -26,10 +26,10 @@ buildPythonPackage rec {
     owner = "skops-dev";
     repo = "skops";
     tag = "v${version}";
-    hash = "sha256-2uX5sGVdTnZEbl0VXI8E7h1pQYQVbpQeUKUchCZpgg4=";
+    hash = "sha256-23Wy/VSd/CvpqT/zDX4ApplfsUwbjOj9q+T8YCKs8X4=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   dependencies = [
     huggingface-hub
