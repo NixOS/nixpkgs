@@ -10,10 +10,7 @@
   # sourceExecutableName is the name of the binary in the source archive over
   # which we have no control and it is needed to run the insider version as
   # documented in https://wiki.nixos.org/wiki/Visual_Studio_Code#Insiders_Build
-  # On MacOS the insider binary is still called code instead of code-insiders as
-  # of 2023-08-06.
-  sourceExecutableName ?
-    "code" + lib.optionalString (isInsiders && stdenv.hostPlatform.isLinux) "-insiders",
+  sourceExecutableName ? "code" + lib.optionalString isInsiders "-insiders",
   commandLineArgs ? "",
   useVSCodeRipgrep ? stdenv.hostPlatform.isDarwin,
 }:
@@ -34,20 +31,30 @@ let
 
   archive_fmt = if stdenv.hostPlatform.isDarwin then "zip" else "tar.gz";
 
-  sha256 =
-    {
-      x86_64-linux = "0grp4295kdamdc7w7bf06dzp4fcx41ry2jif9yx983dd0wgcgbrn";
-      x86_64-darwin = "0yjjf5zqrgpj27kivn03i77by8f0535xxa6l5767d274jx35dj4s";
-      aarch64-linux = "1a8b53bd687sfdvfqzdgrf2ij4969zv9f15qy9wihkc4vzrjlgf9";
-      aarch64-darwin = "12zxvwqhavs6srvx5alhxcfwicayqs5caxmf2wcjb2qjxrlij6ik";
-      armv7l-linux = "08bpcylq6izac4dp5xalgrxzm06jpcm245qdrp95qf0c5gb6rlp2";
-    }
-    .${system} or throwSystem;
+  # Flattening to make the update script easier to maintain
+  hashes = {
+    stable.x86_64-linux = "0grp4295kdamdc7w7bf06dzp4fcx41ry2jif9yx983dd0wgcgbrn";
+    stable.x86_64-darwin = "0yjjf5zqrgpj27kivn03i77by8f0535xxa6l5767d274jx35dj4s";
+    stable.aarch64-linux = "1a8b53bd687sfdvfqzdgrf2ij4969zv9f15qy9wihkc4vzrjlgf9";
+    stable.aarch64-darwin = "12zxvwqhavs6srvx5alhxcfwicayqs5caxmf2wcjb2qjxrlij6ik";
+    stable.armv7l-linux = "08bpcylq6izac4dp5xalgrxzm06jpcm245qdrp95qf0c5gb6rlp2";
+    insider.x86_64-linux = "1s87yhw3mi338wv3sgq0xd3w71f02jg6ywxvx0vi625w6fvn85wn";
+    insider.x86_64-darwin = "1w9bqkmylyrynv376pxxbsa8hy6b7x3w25xhgdnv71bcvkp69b5p";
+    insider.aarch64-linux = "1i38fkkr2yx61q181m2vlh9vqa26i53g0iwzggi6pmd9kkfb02mf";
+    insider.aarch64-darwin = "1gsgrhqngkfg6m72icpcmnrz5dif7kzm7ijsy33w8abshfkxqs05";
+    insider.armv7l-linux = "063wd8ki9a4q2fbvs520swmc2gj2n4w4yl558fhlxl1s7qsy6hy9";
+  };
+
+  sha256 = hashes.${if isInsiders then "insider" else "stable"}.${system} or throwSystem;
+
+  # Stable and insider distributed separately
+  stableVersion = "1.96.4";
+  insiderVersion = "1.97.0-insider";
 in
 callPackage ./generic.nix rec {
   # Please backport all compatible updates to the stable release.
   # This is important for the extension ecosystem.
-  version = "1.96.4";
+  version = if !isInsiders then stableVersion else insiderVersion;
   pname = "vscode" + lib.optionalString isInsiders "-insiders";
 
   # This is used for VS Code - Remote SSH test
@@ -60,7 +67,9 @@ callPackage ./generic.nix rec {
 
   src = fetchurl {
     name = "VSCode_${version}_${plat}.${archive_fmt}";
-    url = "https://update.code.visualstudio.com/${version}/${plat}/stable";
+    url = "https://update.code.visualstudio.com/${version}/${plat}/${
+      if isInsiders then "insider" else "stable"
+    }";
     inherit sha256;
   };
 
@@ -94,7 +103,7 @@ callPackage ./generic.nix rec {
       Open source source code editor developed by Microsoft for Windows,
       Linux and macOS
     '';
-    mainProgram = "code";
+    mainProgram = "code" + lib.optionalString isInsiders "-insiders";
     longDescription = ''
       Open source source code editor developed by Microsoft for Windows,
       Linux and macOS. It includes support for debugging, embedded Git
