@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
     homepage = "https://teamspeak.com/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.teamspeak;
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [
       arobyn
       gerschtli
