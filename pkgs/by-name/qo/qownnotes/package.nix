@@ -10,6 +10,8 @@
   nixosTests,
   installShellFiles,
   xvfb-run,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 let
@@ -78,6 +80,16 @@ stdenv.mkDerivation {
 
   # Tests QOwnNotes using the NixOS module by launching xterm:
   passthru.tests.basic-nixos-module-functionality = nixosTests.qownnotes;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Plain-text file notepad and todo-list manager with markdown support and Nextcloud/ownCloud integration";
