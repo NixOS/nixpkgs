@@ -23,7 +23,7 @@ rec {
     inherit cargo;
   };
 
-  fetchCargoVendor = buildPackages.callPackage ../../../build-support/rust/fetch-cargo-vendor.nix {
+  fetchCargoVendor = buildPackages.callPackage ../../../build-support/rust/fetch-cargo-vendor {
     inherit cargo;
   };
 

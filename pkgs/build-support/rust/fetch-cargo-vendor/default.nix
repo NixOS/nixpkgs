@@ -19,16 +19,36 @@ let
       "E501"
       "W503"
     ];
-  } (builtins.readFile ./replace-workspace-values.py);
+  } (builtins.readFile ../replace-workspace-values.py);
 
-  fetchCargoVendorUtil = writers.writePython3Bin "fetch-cargo-vendor-util" {
-    libraries = with python3Packages; [
-      requests
-    ];
-    flakeIgnore = [
-      "E501"
-    ];
-  } (builtins.readFile ./fetch-cargo-vendor-util.py);
+  fetchCargoVendor-create-staging =
+    runCommand "fetch-cargo-vendor-create-staging"
+      {
+        buildInputs = [ (python3Packages.python.withPackages (ps: [ ps.requests ])) ];
+      }
+      ''
+        baseDir="$out/share/fetch-cargo-vendor"
+        install -Dm644 ${./common.py} "$baseDir/common.py"
+        install -Dm755 ${./create-staging.py} "$baseDir/create-staging.py"
+        mkdir -p "$out/bin"
+        ln -s "$baseDir/create-staging.py" "$out/bin/fcv-create-staging"
+        patchShebangs "$baseDir/create-staging.py"
+      '';
+
+  fetchCargoVendor-create =
+    runCommand "fetch-cargo-vendor-create"
+      {
+        buildInputs = [ python3Packages.python ];
+      }
+      ''
+        baseDir="$out/share/fetch-cargo-vendor"
+        install -Dm644 ${./common.py} "$baseDir/common.py"
+        install -Dm755 ${./create.py} "$baseDir/create.py"
+        mkdir -p "$out/bin"
+        ln -s "$baseDir/create.py" "$out/bin/fcv-create"
+        patchShebangs "$baseDir/create.py"
+      '';
+
 in
 
 {
@@ -58,7 +78,7 @@ let
 
       nativeBuildInputs =
         [
-          fetchCargoVendorUtil
+          fetchCargoVendor-create-staging
           cacert
         ]
         ++ lib.optionals allowGitDependencies [
@@ -73,7 +93,7 @@ let
           cd "$cargoRoot"
         fi
 
-        fetch-cargo-vendor-util create-vendor-staging ./Cargo.lock "$out"
+        fcv-create-staging ./Cargo.lock "$out"
 
         runHook postBuild
       '';
@@ -93,11 +113,11 @@ runCommand "${name}-vendor"
   {
     inherit vendorStaging;
     nativeBuildInputs = [
-      fetchCargoVendorUtil
+      fetchCargoVendor-create
       cargo
       replaceWorkspaceValues
     ];
   }
   ''
-    fetch-cargo-vendor-util create-vendor "$vendorStaging" "$out"
+    fcv-create "$vendorStaging" "$out"
   ''
