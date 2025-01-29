@@ -244,7 +244,7 @@ in
 buildPythonPackage rec {
   pname = "torch";
   # Don't forget to update torch-bin to the same version.
-  version = "2.5.1";
+  version = "2.6.0";
   pyproject = true;
 
   outputs = [
@@ -296,19 +296,19 @@ buildPythonPackage rec {
     + lib.optionalString rocmSupport ''
       # https://github.com/facebookincubator/gloo/pull/297
       substituteInPlace third_party/gloo/cmake/Hipify.cmake \
-        --replace "\''${HIPIFY_COMMAND}" "python \''${HIPIFY_COMMAND}"
+        --replace-fail "\''${HIPIFY_COMMAND}" "python \''${HIPIFY_COMMAND}"
 
       # Replace hard-coded rocm paths
       substituteInPlace caffe2/CMakeLists.txt \
-        --replace "/opt/rocm" "${rocmtoolkit_joined}" \
-        --replace "hcc/include" "hip/include" \
-        --replace "rocblas/include" "include/rocblas" \
-        --replace "hipsparse/include" "include/hipsparse"
+        --replace-fail "/opt/rocm" "${rocmtoolkit_joined}" \
+        --replace-fail "hcc/include" "hip/include" \
+        --replace-fail "rocblas/include" "include/rocblas" \
+        --replace-fail "hipsparse/include" "include/hipsparse"
 
       # Doesn't pick up the environment variable?
       substituteInPlace third_party/kineto/libkineto/CMakeLists.txt \
-        --replace "\''$ENV{ROCM_SOURCE_DIR}" "${rocmtoolkit_joined}" \
-        --replace "/opt/rocm" "${rocmtoolkit_joined}"
+        --replace-fail "\''$ENV{ROCM_SOURCE_DIR}" "${rocmtoolkit_joined}" \
+        --replace-fail "/opt/rocm" "${rocmtoolkit_joined}"
 
       # Strangely, this is never set in cmake
       substituteInPlace cmake/public/LoadHIP.cmake \
@@ -318,7 +318,7 @@ buildPythonPackage rec {
     # Detection of NCCL version doesn't work particularly well when using the static binary.
     + lib.optionalString cudaSupport ''
       substituteInPlace cmake/Modules/FindNCCL.cmake \
-        --replace \
+        --replace-fail \
           'message(FATAL_ERROR "Found NCCL header version and library version' \
           'message(WARNING "Found NCCL header version and library version'
     ''
@@ -584,11 +584,11 @@ buildPythonPackage rec {
       # Fix up library paths for split outputs
       substituteInPlace \
         $dev/share/cmake/Torch/TorchConfig.cmake \
-        --replace \''${TORCH_INSTALL_PREFIX}/lib "$lib/lib"
+        --replace-fail \''${TORCH_INSTALL_PREFIX}/lib "$lib/lib"
 
       substituteInPlace \
         $dev/share/cmake/Caffe2/Caffe2Targets-release.cmake \
-        --replace \''${_IMPORT_PREFIX}/lib "$lib/lib"
+        --replace-fail \''${_IMPORT_PREFIX}/lib "$lib/lib"
 
       mkdir $lib
       mv $out/${python.sitePackages}/torch/lib $lib/lib
@@ -596,10 +596,10 @@ buildPythonPackage rec {
     ''
     + lib.optionalString rocmSupport ''
       substituteInPlace $dev/share/cmake/Tensorpipe/TensorpipeTargets-release.cmake \
-        --replace "\''${_IMPORT_PREFIX}/lib64" "$lib/lib"
+        --replace-fail "\''${_IMPORT_PREFIX}/lib64" "$lib/lib"
 
       substituteInPlace $dev/share/cmake/ATen/ATenConfig.cmake \
-        --replace "/build/source/torch/include" "$dev/include"
+        --replace-fail "/build/source/torch/include" "$dev/include"
     '';
 
   postFixup =
