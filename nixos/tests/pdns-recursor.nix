@@ -7,7 +7,9 @@ import ./make-test-python.nix (
       { ... }:
       {
         services.pdns-recursor.enable = true;
-        services.pdns-recursor.exportHosts = true;
+        services.pdns-recursor.settings = {
+          export_etc_hosts = true;
+        };
         networking.hosts."192.0.2.1" = [ "example.com" ];
       };
 

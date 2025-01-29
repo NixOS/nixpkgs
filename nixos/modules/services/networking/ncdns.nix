@@ -199,7 +199,7 @@ in
   config = lib.mkIf cfg.enable {
 
     services.pdns-recursor = lib.mkIf cfgs.pdns-recursor.resolveNamecoin {
-      forwardZonesRecurse.bit = "${cfg.address}:${toString cfg.port}";
+      settings.recursor.forward_zones_recurse.bit = "${cfg.address}:${toString cfg.port}";
       luaConfig =
         if cfg.dnssec.enable
           then ''readTrustAnchorsFromFile("${cfg.dnssec.keys.public}")''

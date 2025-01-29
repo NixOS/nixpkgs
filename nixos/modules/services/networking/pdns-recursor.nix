@@ -102,123 +102,123 @@ in
                 };
               };
             };
+          };
 
-            logging = mkOption {
-              type = types.submodule {
-                freeformType = settingsFormat.type;
-              };
+          logging = mkOption {
+            type = types.submodule {
+              freeformType = settingsFormat.type;
             };
+          };
 
-            nod = mkOption {
-              type = types.submodule {
-                freeformType = settingsFormat.type;
-              };
+          nod = mkOption {
+            type = types.submodule {
+              freeformType = settingsFormat.type;
             };
+          };
 
-            outgoing = mkOption {
-              type = types.submodule {
-                freeformType = settingsFormat.type;
-              };
+          outgoing = mkOption {
+            type = types.submodule {
+              freeformType = settingsFormat.type;
             };
+          };
 
-            packetcache = mkOption {
-              type = types.submodule {
-                freeformType = settingsFormat.type;
-              };
+          packetcache = mkOption {
+            type = types.submodule {
+              freeformType = settingsFormat.type;
             };
+          };
 
-            recordcache = mkOption {
-              type = types.submodule {
-                freeformType = settingsFormat.type;
-              };
+          recordcache = mkOption {
+            type = types.submodule {
+              freeformType = settingsFormat.type;
             };
+          };
 
-            recursor = mkOption {
-              type = types.submodule {
-                freeformType = settingsFormat.type;
-                options = {
-                  export_etc_hosts = mkOption {
-                    type = types.bool;
-                    default = false;
-                    description = ''
-                      Whether to export names and IP addresses defined in /etc/hosts.
-                    '';
+          recursor = mkOption {
+            type = types.submodule {
+              freeformType = settingsFormat.type;
+              options = {
+                export_etc_hosts = mkOption {
+                  type = types.bool;
+                  default = false;
+                  description = ''
+                    Whether to export names and IP addresses defined in /etc/hosts.
+                  '';
+                };
+
+                forward_zones = mkOption {
+                  type = types.attrs;
+                  default = { };
+                  description = ''
+                    DNS zones to be forwarded to other authoritative servers.
+                  '';
+                };
+
+                forward_zones_recurse = mkOption {
+                  type = types.attrs;
+                  example = {
+                    eth = "[::1]:5353";
                   };
+                  default = { };
+                  description = ''
+                    DNS zones to be forwarded to other recursive servers.
+                  '';
+                };
 
-                  forward_zones = mkOption {
-                    type = types.attrs;
-                    default = { };
-                    description = ''
-                      DNS zones to be forwarded to other authoritative servers.
-                    '';
-                  };
-
-                  forward_zones_recurse = mkOption {
-                    type = types.attrs;
-                    example = {
-                      eth = "[::1]:5353";
-                    };
-                    default = { };
-                    description = ''
-                      DNS zones to be forwarded to other recursive servers.
-                    '';
-                  };
-
-                  serve_rfc1918 = mkOption {
-                    type = types.bool;
-                    default = true;
-                    description = ''
-                      Whether to directly resolve the RFC1918 reverse-mapping domains:
-                      `10.in-addr.arpa`,
-                      `168.192.in-addr.arpa`,
-                      `16-31.172.in-addr.arpa`
-                      This saves load on the AS112 servers.
-                    '';
-                  };
+                serve_rfc1918 = mkOption {
+                  type = types.bool;
+                  default = true;
+                  description = ''
+                    Whether to directly resolve the RFC1918 reverse-mapping domains:
+                    `10.in-addr.arpa`,
+                    `168.192.in-addr.arpa`,
+                    `16-31.172.in-addr.arpa`
+                    This saves load on the AS112 servers.
+                  '';
                 };
               };
             };
+          };
 
-            snmp = mkOption {
-              type = types.submodule {
-                freeformType = settingsFormat.type;
-              };
+          snmp = mkOption {
+            type = types.submodule {
+              freeformType = settingsFormat.type;
             };
+          };
 
-            webservice = mkOption {
-              type = types.submodule {
-                freeformType = settingsFormat.type;
-                options = {
-                  address = mkOption {
-                    type = types.str;
-                    default = "0.0.0.0";
-                    description = ''
-                      IP address Recursor REST API server will bind to.
-                    '';
-                  };
+          webservice = mkOption {
+            type = types.submodule {
+              freeformType = settingsFormat.type;
+              options = {
+                address = mkOption {
+                  type = types.str;
+                  default = "0.0.0.0";
+                  description = ''
+                    IP address Recursor REST API server will bind to.
+                  '';
+                };
 
-                  port = mkOption {
-                    type = types.port;
-                    default = 8082;
-                    description = ''
-                      Port number Recursor REST API server will bind to.
-                    '';
-                  };
+                port = mkOption {
+                  type = types.port;
+                  default = 8082;
+                  description = ''
+                    Port number Recursor REST API server will bind to.
+                  '';
+                };
 
-                  allow_from = mkOption {
-                    type = types.listOf types.str;
-                    default = [
-                      "127.0.0.1"
-                      "::1"
-                    ];
-                    example = [
-                      "0.0.0.0/0"
-                      "::/0"
-                    ];
-                    description = ''
-                      IP address ranges of clients allowed to make API requests.
-                    '';
-                  };
+                allow_from = mkOption {
+                  type = types.listOf types.str;
+                  default = [
+                    "127.0.0.1"
+                    "::1"
+                  ];
+                  example = [
+                    "0.0.0.0/0"
+                    "::/0"
+                  ];
+                  description = ''
+                    IP address ranges of clients allowed to make API requests.
+                  '';
                 };
               };
             };
@@ -279,35 +279,38 @@ in
 
   imports = [
     (mkRenamedOptionModule
-      ["services" "pdns-recursor" "dns"]
-      ["services" "pdns-recursor" "incoming"])
+      ["services" "pdns-recursor" "dns" "address"]
+      ["services" "pdns-recursor" "settings" "incoming" "listen"])
     (mkRenamedOptionModule
       ["services" "pdns-recursor" "dns" "allowFrom"]
-      ["services" "pdns-recursor" "incoming" "allow_from"])
+      ["services" "pdns-recursor" "settings" "incoming" "allow_from"])
     (mkRenamedOptionModule
-      ["services" "pdns-recursor" "dns" "address"]
-      ["services" "pdns-recursor" "incoming" "listen"])
+      ["services" "pdns-recursor" "dns" "port"]
+      ["services" "pdns-recursor" "settings" "incoming" "port"])
     (mkRenamedOptionModule
-      ["services" "pdns-recursor" "api"]
-      ["services" "pdns-recursor" "webservice"])
+      ["services" "pdns-recursor" "api" "address"]
+      ["services" "pdns-recursor" "settings" "webservice" "address"])
     (mkRenamedOptionModule
       ["services" "pdns-recursor" "api" "allowFrom"]
-      ["services" "pdns-recursor" "webservice" "allow_from"])
+      ["services" "pdns-recursor" "settings" "webservice" "allow_from"])
+    (mkRenamedOptionModule
+      ["services" "pdns-recursor" "api" "port"]
+      ["services" "pdns-recursor" "settings" "webservice" "port"])
     (mkRenamedOptionModule
       ["services" "pdns-recursor" "exportHosts"]
-      ["services" "pdns-recursor" "recursor" "export_etc_hosts"])
+      ["services" "pdns-recursor" "settings" "recursor" "export_etc_hosts"])
     (mkRenamedOptionModule
       ["services" "pdns-recursor" "forwardZones"]
-      ["services" "pdns-recursor" "recursor" "forward_zones"])
+      ["services" "pdns-recursor" "settings" "recursor" "forward_zones"])
     (mkRenamedOptionModule
       ["services" "pdns-recursor" "forwardZonesRecurse"]
-      ["services" "pdns-recursor" "recursor" "forward_zones_recurse"])
+      ["services" "pdns-recursor" "settings" "recursor" "forward_zones_recurse"])
     (mkRenamedOptionModule
       ["services" "pdns-recursor" "serveRFC1918"]
-      ["services" "pdns-recursor" "recursor" "serve_rfc1918"])
+      ["services" "pdns-recursor" "settings" "recursor" "serve_rfc1918"])
     (mkRenamedOptionModule
       ["services" "pdns-recursor" "dnssecValidation"]
-      ["services" "pdns-recursor" "dnssec" "validation"])
+      ["services" "pdns-recursor" "settings" "dnssec" "validation"])
     (mkRemovedOptionModule [
       "services"
       "pdns-recursor"
