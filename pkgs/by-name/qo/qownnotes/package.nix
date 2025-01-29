@@ -14,16 +14,13 @@
   nix-update-script,
 }:
 
-let
+stdenv.mkDerivation (finalAttrs: {
   pname = "qownnotes";
   appname = "QOwnNotes";
   version = "25.1.6";
-in
-stdenv.mkDerivation {
-  inherit pname version;
 
   src = fetchurl {
-    url = "https://github.com/pbek/QOwnNotes/releases/download/v${version}/qownnotes-${version}.tar.xz";
+    url = "https://github.com/pbek/QOwnNotes/releases/download/v${finalAttrs.version}/qownnotes-${finalAttrs.version}.tar.xz";
     hash = "sha256-EmkOuxXH7XSpWrw3rtLPQ4XCX93RDbhnUR1edsNVJLk=";
   };
 
@@ -54,28 +51,28 @@ stdenv.mkDerivation {
   # Install shell completion on Linux (with xvfb-run)
   postInstall =
     lib.optionalString stdenv.hostPlatform.isLinux ''
-      installShellCompletion --cmd ${appname} \
-        --bash <(xvfb-run $out/bin/${appname} --completion bash) \
-        --fish <(xvfb-run $out/bin/${appname} --completion fish)
-      installShellCompletion --cmd ${pname} \
-        --bash <(xvfb-run $out/bin/${appname} --completion bash) \
-        --fish <(xvfb-run $out/bin/${appname} --completion fish)
+      installShellCompletion --cmd ${finalAttrs.appname} \
+        --bash <(xvfb-run $out/bin/${finalAttrs.appname} --completion bash) \
+        --fish <(xvfb-run $out/bin/${finalAttrs.appname} --completion fish)
+      installShellCompletion --cmd ${finalAttrs.pname} \
+        --bash <(xvfb-run $out/bin/${finalAttrs.appname} --completion bash) \
+        --fish <(xvfb-run $out/bin/${finalAttrs.appname} --completion fish)
     ''
     # Install shell completion on macOS
     + lib.optionalString stdenv.isDarwin ''
-      installShellCompletion --cmd ${pname} \
-        --bash <($out/bin/${appname} --completion bash) \
-        --fish <($out/bin/${appname} --completion fish)
+      installShellCompletion --cmd ${finalAttrs.pname} \
+        --bash <($out/bin/${finalAttrs.appname} --completion bash) \
+        --fish <($out/bin/${finalAttrs.appname} --completion fish)
     ''
     # Create a lowercase symlink for Linux
     + lib.optionalString stdenv.hostPlatform.isLinux ''
-      ln -s $out/bin/${appname} $out/bin/${pname}
+      ln -s $out/bin/${finalAttrs.appname} $out/bin/${finalAttrs.pname}
     ''
     # Rename application for macOS as lowercase binary
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       # Prevent "same file" error
-      mv $out/bin/${appname} $out/bin/${pname}.bin
-      mv $out/bin/${pname}.bin $out/bin/${pname}
+      mv $out/bin/${finalAttrs.appname} $out/bin/${finalAttrs.pname}.bin
+      mv $out/bin/${finalAttrs.pname}.bin $out/bin/${finalAttrs.pname}
     '';
 
   # Tests QOwnNotes using the NixOS module by launching xterm:
@@ -95,7 +92,7 @@ stdenv.mkDerivation {
     description = "Plain-text file notepad and todo-list manager with markdown support and Nextcloud/ownCloud integration";
     homepage = "https://www.qownnotes.org/";
     changelog = "https://www.qownnotes.org/changelog.html";
-    downloadPage = "https://github.com/pbek/QOwnNotes/releases/tag/v${version}";
+    downloadPage = "https://github.com/pbek/QOwnNotes/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
       pbek
@@ -104,4 +101,4 @@ stdenv.mkDerivation {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})
