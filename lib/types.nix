@@ -914,7 +914,8 @@ rec {
         in mergedOption.type;
     };
 
-    submoduleWith =
+    submoduleWith = deprecated "lib.types.submoduleWith is deprecated, use types.moduleWith instead." moduleWith;
+    moduleWith =
       { modules
       , specialArgs ? {}
       , shorthandOnlyDefinesConfig ? false
