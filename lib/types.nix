@@ -90,6 +90,9 @@ let
     '' payload.elemType;
   };
 
+  # Custom that doesn't abort if NIX_ABORT_ON_WARN is set.
+  # This is needed for deprecations that are to big to change at once
+  deprecated = msg: v: builtins.trace "[1;35mDeprecation warning:[0m ${msg}" v;
 
   outer_types =
 rec {
