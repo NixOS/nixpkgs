@@ -15253,7 +15253,7 @@ with pkgs;
 
   tamgamp.lv2 = callPackage ../applications/audio/tamgamp.lv2 { };
 
-  teamspeak5_client = callPackage ../applications/networking/instant-messengers/teamspeak/client5.nix { };
+  teamspeak6-client = callPackage ../applications/networking/instant-messengers/teamspeak/client6.nix { };
   teamspeak_server = callPackage ../applications/networking/instant-messengers/teamspeak/server.nix { };
 
   telegram-desktop = kdePackages.callPackage ../applications/networking/instant-messengers/telegram/telegram-desktop {
