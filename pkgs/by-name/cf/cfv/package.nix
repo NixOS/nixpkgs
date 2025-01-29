@@ -24,6 +24,7 @@ python3.pkgs.buildPythonApplication rec {
   checkPhase = ''
     runHook preCheck
     cd test
+    ulimit -n 4096
     python3 test.py
     runHook postCheck
   '';
