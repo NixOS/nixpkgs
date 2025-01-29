@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
+
   buildInputs = [
     zlib
     cups
@@ -29,7 +30,7 @@ stdenv.mkDerivation rec {
     "-DCUPS_DATA_DIR=share/cups"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "CUPS driver for Brother laser printers";
     longDescription = ''
       Although most Brother printers support a standard printer language such as PCL or PostScript, not all do. If you have a monochrome Brother laser printer (or multi-function device) and the other open source drivers don't work, this one might help.
@@ -68,8 +69,8 @@ stdenv.mkDerivation rec {
           Lenovo M7605D
     '';
     homepage = "https://github.com/pdewacht/brlaser";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ StijnDW ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ StijnDW ];
   };
 }
