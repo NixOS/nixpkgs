@@ -14,6 +14,7 @@
 , clang-unwrapped
 , perl
 , pkg-config
+, python3
 , version
 , devExtraCmakeFlags ? []
 }:
@@ -45,6 +46,7 @@ stdenv.mkDerivation (rec {
 
   nativeBuildInputs = [
     cmake
+    python3.pythonOnBuildForHost
   ] ++ lib.optionals (lib.versionAtLeast release_version "15") [
     ninja
   ] ++ [ perl ] ++ lib.optionals (lib.versionAtLeast release_version "14") [
@@ -53,6 +55,7 @@ stdenv.mkDerivation (rec {
 
   buildInputs = [
     (if stdenv.buildPlatform == stdenv.hostPlatform then llvm else targetLlvm)
+    python3
   ];
 
   cmakeFlags = lib.optionals (lib.versions.major release_version == "13") [
