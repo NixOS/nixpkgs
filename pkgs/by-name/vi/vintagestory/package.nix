@@ -100,6 +100,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [
       artturin
       gigglesquid
+      niraethm
     ];
   };
 }
