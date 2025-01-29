@@ -5037,7 +5037,6 @@ broken-packages:
   - reflex-dom-retractable # failure in job https://hydra.nixos.org/build/233198362 at 2023-09-02
   - reflex-dom-svg # failure in job https://hydra.nixos.org/build/233193544 at 2023-09-02
   - reflex-external-ref # failure in job https://hydra.nixos.org/build/233215834 at 2023-09-02
-  - reflex-gadt-api # failure in job https://hydra.nixos.org/build/260124380 at 2024-05-19
   - reflex-jsx # failure in job https://hydra.nixos.org/build/233207137 at 2023-09-02
   - reflex-orphans # failure in job https://hydra.nixos.org/build/233249128 at 2023-09-02
   - reflex-test-host # failure in job https://hydra.nixos.org/build/233220665 at 2023-09-02
@@ -6489,7 +6488,6 @@ broken-packages:
   - verify # failure in job https://hydra.nixos.org/build/233239874 at 2023-09-02
   - verilog # failure in job https://hydra.nixos.org/build/233211999 at 2023-09-02
   - versioning # failure in job https://hydra.nixos.org/build/233205892 at 2023-09-02
-  - vessel # failure in job https://hydra.nixos.org/build/260124469 at 2024-05-19
   - vformat # failure in job https://hydra.nixos.org/build/233222840 at 2023-09-02
   - vgrep # failure in job https://hydra.nixos.org/build/233210982 at 2023-09-02
   - vhd # failure in job https://hydra.nixos.org/build/233230229 at 2023-09-02
