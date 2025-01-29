@@ -2,6 +2,7 @@
   fetchFromGitHub,
   lib,
   php,
+  versionCheckHook,
 }:
 
 php.buildComposerProject2 (finalAttrs: {
@@ -17,6 +18,10 @@ php.buildComposerProject2 (finalAttrs: {
 
   composerLock = ./composer.lock;
   vendorHash = "sha256-ySdLlqlGKZ6LgmAOBMkBNoCAqWrgMwE/Cj6ZEPEsCko=";
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+  versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
 
   meta = {
     description = "Tool to check syntax of PHP files faster than serial check with fancier output";
