@@ -278,7 +278,7 @@ in
     };
 
     luaConfig = mkOption {
-      type = settingsFormat.type;
+      type = types.lines;
       default = "";
       description = ''
         The content Lua configuration file for PowerDNS Recursor. See
