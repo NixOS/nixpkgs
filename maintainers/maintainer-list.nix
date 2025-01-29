@@ -21233,6 +21233,12 @@
     github = "ein-shved";
     githubId = 3513222;
   };
+  ShyAssassin = {
+    name = "[Assassin]";
+    githubId = 49711232;
+    github = "ShyAssassin";
+    email = "ShyAssassin@assassin.dev";
+  };
   shyim = {
     email = "s.sayakci@gmail.com";
     github = "shyim";
