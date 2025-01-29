@@ -15,7 +15,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "etesync";
     repo = "server";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-W2u/d8X8luOzgy1CLNgujnwaoO1pR1QO1Ma7i4CGkdU=";
   };
 

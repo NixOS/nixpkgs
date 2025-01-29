@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "repo-helper";
     repo = "hatch-requirements-txt";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Kd3rDfTBn/t/NiSJMPkHRWD5solUF7MAN8EiZokxHrk=";
   };
 

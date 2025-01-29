@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jeroenterheerdt";
     repo = "python-egardia";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-lQ/7tH74MllwFe2kF5OcYSb4rQd+yJU1W6ztG4Z6Y0U=";
   };
 

@@ -30,10 +30,12 @@ stdenv.mkDerivation rec {
     fftwMpi
   ];
 
+  # Required for compilation with gcc-14
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+
   preConfigure = ''
     mkdir build && cd build
 
-    export PATH=$PATH:${mpi}/bin
     configureFlagsArray+=(
       --with-mpi=${lib.getDev mpi}
       CC=mpicc

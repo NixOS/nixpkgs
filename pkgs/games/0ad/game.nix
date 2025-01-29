@@ -10,7 +10,7 @@
   libidn,
   pkg-config,
   spidermonkey_78,
-  boost,
+  boost183,
   icu,
   libxml2,
   libpng,
@@ -43,7 +43,7 @@
 let
   # the game requires a special version 78.6.0 of spidermonkey, otherwise
   # we get compilation errors. We override the src attribute of spidermonkey_78
-  # in order to reuse that declartion, while giving it a different source input.
+  # in order to reuse that declaration, while giving it a different source input.
   spidermonkey_78_6 = spidermonkey_78.overrideAttrs (old: rec {
     version = "78.6.0";
     src = fetchurl {
@@ -72,7 +72,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     spidermonkey_78_6
-    boost
+    # boost 1.86 fails with the following error:
+    # error: 'boost::filesystem::wpath' {aka 'class boost::filesystem::path'} has no member named 'leaf'
+    boost183
     icu
     libxml2
     libpng
@@ -106,6 +108,8 @@ stdenv.mkDerivation rec {
     "-I${SDL2}/include/SDL2"
     "-I${fmt.dev}/include"
     "-I${nvidia-texture-tools.dev}/include"
+    # TODO: drop with next update
+    "-Wno-error=implicit-function-declaration"
   ];
 
   NIX_CFLAGS_LINK = toString [

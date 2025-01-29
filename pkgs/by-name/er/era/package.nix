@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "kyoheiu";
     repo = "era";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-OOPVLY9kg4TmKSrpHgsOmAmeDPbX5df0bX51lA6DvcY=";
   };
 

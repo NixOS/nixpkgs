@@ -21,15 +21,15 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "hashes";
-  version = "1.1.0";
+  version = "1.1.1";
 
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "zefr0x";
     repo = "hashes";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-BmfSCHs+JcpsAG8AhaYf+SDFI+LdJKMKgBIodd66qmw=";
+    tag = "v${version}";
+    hash = "sha256-4khMRtKvYQkTwhiqv7FUy/jroGboNTdG1Q6wlTD4cwA=";
   };
 
   nativeBuildInputs = [

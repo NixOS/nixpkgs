@@ -13,7 +13,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "antroids";
     repo = "application-title-bar";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-K4wbEWmeXDxVkVSHCPU8u49A211ZXR1As1k47/ibj/c=";
   };
 

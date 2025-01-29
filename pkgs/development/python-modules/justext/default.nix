@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "miso-belica";
     repo = "jusText";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-9i7hzCK/ijh8xw9l2ZbVhVj5IBf0WD/49/R1tSWgqrQ=";
   };
 

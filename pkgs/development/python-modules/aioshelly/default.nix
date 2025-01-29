@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "aioshelly";
-  version = "12.1.0";
+  version = "12.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -24,8 +24,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "aioshelly";
-    rev = "refs/tags/${version}";
-    hash = "sha256-QcVyWabELa1bB2MOwQNPItXLgeOXlFpRh69dS+m1FLI=";
+    tag = version;
+    hash = "sha256-ZijjqUvCcCVWhFlHzXN0xpAjn+3OCYf6rmBApxfT2c4=";
   };
 
   build-system = [ setuptools ];

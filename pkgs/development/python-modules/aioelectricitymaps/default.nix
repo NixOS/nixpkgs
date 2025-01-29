@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jpbede";
     repo = "aioelectricitymaps";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-l6D5Cr2d89n+Ac5V5geBUY0sOiEO3sci9244K0MI+dc=";
   };
 

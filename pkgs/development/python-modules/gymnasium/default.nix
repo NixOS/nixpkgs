@@ -39,7 +39,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Farama-Foundation";
     repo = "gymnasium";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Qchuz08yJ0giVrtKLC9vBgr28JrHQyAOCuoS239ivVw=";
   };
 

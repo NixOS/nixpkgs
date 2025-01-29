@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   zig_0_13,
-  apple-sdk_11,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -19,12 +18,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     zig_0_13.hook
-  ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    # The package failed to build on x86_64-darwin because the default was the 10.12 SDK
-    # Once the default on all platforms has been raised to the 11.0 SDK or higher, this can be removed.
-    apple-sdk_11
   ];
 
   postPatch = ''

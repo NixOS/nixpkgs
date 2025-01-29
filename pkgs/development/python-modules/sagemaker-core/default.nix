@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "sagemaker-core";
-  version = "1.0.11";
+  version = "1.0.19";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "sagemaker-core";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-6r8roHMJ4s/+mGiPeMVZ9wagdXNJQ3+tUFZ/7T+NQBc=";
+    tag = "v${version}";
+    hash = "sha256-y5nD5PnLx+c7fSkjDdqFMI9aBHIgrtqdkft00muFr6k=";
   };
 
   build-system = [
@@ -40,6 +40,7 @@ buildPythonPackage rec {
   ];
 
   pythonRelaxDeps = [
+    "boto3"
     "importlib-metadata"
     "mock"
   ];
@@ -75,7 +76,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python SDK designed to provide an object-oriented interface for interacting with Amazon SageMaker resources";
     homepage = "https://github.com/aws/sagemaker-core";
-    changelog = "https://github.com/aws/sagemaker-core/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/aws/sagemaker-core/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };

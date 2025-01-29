@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rom1504";
     repo = "CLIP";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-4A8R9aEiOWC05uhMQslhVSkQ4hyjs6VsqkFi76miodY=";
   };
 

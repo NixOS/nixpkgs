@@ -16,17 +16,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cosmic-notifications";
-  version = "1.0.0-alpha.2";
+  version = "1.0.0-alpha.5.1";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-notifications";
     rev = "epoch-${version}";
-    hash = "sha256-tCizZePze94tbJbR91N9rfUhrLFTAMW2oL9ByKOeDAU=";
+    hash = "sha256-xUyBXHhpYgwr3A34oLF5l1xB8f++wtx0mTr2p8WX89o=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-36M7hDt8kd2Q94AR3IJhC2lKDLW2wRWWeqh3rEaRPTo=";
+  cargoHash = "sha256-froRGGsK5qoia5wHtxLhljKueMCYafhika9Drsp906E=";
 
   postPatch = ''
     substituteInPlace justfile --replace-fail '#!/usr/bin/env' "#!$(command -v env)"

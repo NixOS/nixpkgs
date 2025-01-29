@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "pymicro-vad";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-wpsUy+f4eSGlq6L2FOtnA0qJgMh5ZdfiH31aaU61cVw=";
   };
 

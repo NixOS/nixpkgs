@@ -11,19 +11,20 @@
 , granite7
 , gsettings-desktop-schemas
 , gtk4
+, pantheon-wayland
 , systemd
 , xorg
 }:
 
 stdenv.mkDerivation rec {
   pname = "xdg-desktop-portal-pantheon";
-  version = "7.2.0";
+  version = "8.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "portals";
     rev = version;
-    sha256 = "sha256-0pXb4GPUThHfe0mCqoYuQzMgRCeejsEI3fK7PxjrtJM=";
+    sha256 = "sha256-pf7xQwsBRjjyOMUPe7fJp1vOhhBmuXJ6Uf4YosxbHtw=";
   };
 
   nativeBuildInputs = [
@@ -39,6 +40,7 @@ stdenv.mkDerivation rec {
     granite7
     gsettings-desktop-schemas
     gtk4
+    pantheon-wayland
     systemd
     xorg.libX11
   ];

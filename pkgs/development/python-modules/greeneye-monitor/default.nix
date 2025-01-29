@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jkeljo";
     repo = "greeneye-monitor";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-7EDuQ+wECcTzxkEufMpg3WSzosWeiwfxcVIVtQi+0BI=";
   };
 

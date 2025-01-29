@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ncnn";
-  version = "20240820";
+  version = "20241226";
 
   src = fetchFromGitHub {
     owner = "Tencent";
     repo = pname;
     rev = version;
-    hash = "sha256-KFRWpPajSqYeasPKaNMVe0WTIXwCI5v9GLo5ygN/22M=";
+    hash = "sha256-XmIuXR/uxJbXaB0G+tS9I47Pke20qj8jI1vqnDDgrpE=";
   };
 
   patches = [

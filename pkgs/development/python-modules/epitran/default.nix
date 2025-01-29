@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dmort27";
     repo = "epitran";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-AH4q8J5oMaUVJ559qe/ZlJXlCcGdxWnxMhnZKCH5Rlk=";
   };
 

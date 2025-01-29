@@ -14,7 +14,6 @@
 , flann
 , gettext
 , glew
-, ilmbase
 , lcms2
 , lensfun
 , libjpeg
@@ -52,7 +51,6 @@ stdenv.mkDerivation rec {
     flann
     gettext
     glew
-    ilmbase
     lcms2
     lensfun
     libjpeg
@@ -77,8 +75,6 @@ stdenv.mkDerivation rec {
 
   # disable installation of the python scripting interface
   cmakeFlags = [ "-DBUILD_HSI:BOOl=OFF" ];
-
-  env.NIX_CFLAGS_COMPILE = "-I${ilmbase.dev}/include/OpenEXR";
 
   postInstall = ''
     for p in $out/bin/*; do

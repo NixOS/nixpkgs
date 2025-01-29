@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "browniebroke";
     repo = "deezer-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-3TYgOa8NWGhkVIT5HkDdpHGyj7FzP8n02a36KHW6IC4=";
   };
 

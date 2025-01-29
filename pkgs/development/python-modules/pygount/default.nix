@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "roskakori";
     repo = "pygount";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-PFqcSnJoGL4bXFy3hu3Iurbb8QK1NqCDs8aJmMxP4Hc=";
   };
 

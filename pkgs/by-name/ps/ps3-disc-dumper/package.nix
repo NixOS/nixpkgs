@@ -14,13 +14,14 @@ buildDotnetModule rec {
   src = fetchFromGitHub {
     owner = "13xforever";
     repo = "ps3-disc-dumper";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ax2Q1VodzktXSdZBvO1fys+xigk/jzbMWHxqoLIKE7w=";
   };
 
   dotnet-sdk = dotnetCorePackages.sdk_9_0;
   dotnet-runtime = dotnetCorePackages.sdk_9_0;
   dotnetFlags = [ "-p:TargetFramework=net9.0" ];
+  dotnetRestoreFlags = [ "-p:Configuration=${buildType}" ];
   buildType = "Linux";
   projectFile = "UI.Avalonia/UI.Avalonia.csproj";
   nugetDeps = ./deps.json;

@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Moustachauve";
     repo = "pytechnove";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-umtM2fIyEiimt/X2SvgqjaTYGutvJHkSJ3pRfwSbOfQ=";
   };
 

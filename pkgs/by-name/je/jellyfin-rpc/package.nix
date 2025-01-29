@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "Radiicall";
     repo = "jellyfin-rpc";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-sr82lTOr6RUvYD0CVZMyyRAFjai1oLnRWIszuu7/jE0=";
   };
 

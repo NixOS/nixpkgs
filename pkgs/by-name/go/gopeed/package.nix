@@ -14,11 +14,11 @@
 }:
 stdenv.mkDerivation rec {
   pname = "gopeed";
-  version = "1.6.5";
+  version = "1.6.6";
 
   src = fetchurl {
     url = "https://github.com/GopeedLab/gopeed/releases/download/v${version}/Gopeed-v${version}-linux-amd64.deb";
-    hash = "sha256-pFxFw8ZNV8u0Wbeh5/j/EpuH9GiyjFVyLl2M7jUr7tc=";
+    hash = "sha256-Q2eCOah5Pz5kOiHjvB0CzC0iL8m4XAjAJzYxQ+YyBoY=";
   };
 
   nativeBuildInputs = [
@@ -60,6 +60,6 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ aucub ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

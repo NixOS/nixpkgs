@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Blueswen";
     repo = "mkdocs-redoc-tag";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-TOGFch+Uto3qeVMaHqK8SEy0v0cKtHofoGE8T1mnBOk=";
   };
 

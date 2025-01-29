@@ -12,6 +12,12 @@ stdenv.mkDerivation rec {
   strictDeps = true;
   buildInputs = [ bash ];
 
+  # Make sure that Rush looks for rush.rc in a directory that users can
+  # modify easily.
+  configureFlags = [ "--sysconfdir=/etc" ];
+  # Prevent “make install” from trying to copy something to
+  # /etc/rush.rc.
+  installFlags = [ "sysconfdir=$(out)/etc" ];
   postInstall = ''
     substituteInPlace $out/bin/rush-po \
       --replace "exec perl" "exec ${lib.getExe perl}"

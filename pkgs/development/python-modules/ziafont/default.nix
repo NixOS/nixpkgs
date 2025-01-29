@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cdelker";
     repo = "ziafont";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-S7IDL3ItP14/GrCUtSTT+JWuqRAY/Po0Kerq8mggDdg=";
   };
 

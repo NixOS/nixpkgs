@@ -73,7 +73,7 @@ jobs:
 
   build:
     name: Build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: get-merge-commit
     steps:
       - uses: actions/checkout@<VERSION>

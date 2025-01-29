@@ -45,6 +45,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+  # Disable automated version-check
+  buildNoDefaultFeatures = true;
+  checkNoDefaultFeatures = true;
+
   installPhase = ''
     runHook preInstall
 

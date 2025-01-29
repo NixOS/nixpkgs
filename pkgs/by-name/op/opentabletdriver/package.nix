@@ -26,7 +26,7 @@ buildDotnetModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "OpenTabletDriver";
     repo = "OpenTabletDriver";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ILnwHfcV/tW59TLDpAeDwJK708IQfMFBOYuqRtED0kw=";
   };
 

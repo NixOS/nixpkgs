@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hunterjm";
     repo = "aiodukeenergy";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-aDBleEp3ZlY1IfFCbsUEU+wzYgjNaJeip8crHlh5qHE=";
   };
 

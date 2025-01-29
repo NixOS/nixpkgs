@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "seamustuohy";
     repo = "RTFDE";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-zmcf9wqlKz55dOIchUC9sgW0PcTCPc52IkbIonOFlmU=";
   };
 

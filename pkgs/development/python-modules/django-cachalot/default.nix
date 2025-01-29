@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "noripyt";
     repo = "django-cachalot";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Fi5UvqH2bVb4v/GWDkEYIcBMBVos+35g4kcEnZTOQvw=";
   };
 

@@ -5,10 +5,12 @@
   fetchFromGitHub,
   flaky,
   google-cloud-storage,
+  legacy-cgi,
   mock,
   pillow,
   pymongo,
   pytestCheckHook,
+  pythonAtLeast,
   pythonOlder,
   requests,
   setuptools,
@@ -25,16 +27,16 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "amol-";
     repo = "depot";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-693H/u+Wg2G9sdoUkC6DQo9WkmIlKnh8NKv3ufK/eyQ=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     anyascii
     google-cloud-storage
-  ];
+  ] ++ lib.optionals (pythonAtLeast "3.13") [ legacy-cgi ];
 
   nativeCheckInputs = [
     flaky
@@ -55,6 +57,8 @@ buildPythonPackage rec {
     "tests/test_fields_ming.py"
     "tests/test_wsgi_middleware.py"
   ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.13") [ "test_notexisting" ];
 
   pythonImportsCheck = [ "depot" ];
 

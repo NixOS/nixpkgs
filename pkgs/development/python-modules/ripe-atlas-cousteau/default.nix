@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "RIPE-NCC";
     repo = "ripe-atlas-cousteau";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-z8ZXOiCVYughrbmXfnwtks7NPmYpII2BA0+8mr1cdSQ=";
   };
 

@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pytest-dev";
     repo = "pytest-selenium";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-fIyos73haqTAgp5WVvMwJswQAtXnsnUeXKjPweXLGRM=";
   };
 

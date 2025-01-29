@@ -17,7 +17,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "aandrew-me";
     repo = "ytDownloader";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-914sEFUVwiHMXwnwZjdeSQmeSPRREeoihLKYYTTKAcs=";
   };
 

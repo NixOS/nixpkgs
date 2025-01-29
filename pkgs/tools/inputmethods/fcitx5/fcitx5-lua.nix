@@ -22,12 +22,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
+    gettext
   ];
 
   buildInputs = [
     fcitx5
     lua
-    gettext
   ];
 
   passthru = {

@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "audiusGmbH";
     repo = "audiness";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-+5NDea4p/JWEk305EhAtab3to36a74KR50eosw6c5qI=";
   };
 

@@ -24,7 +24,7 @@ let
   src = fetchFromGitHub {
     owner = "vrc-get";
     repo = "vrc-get";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     fetchSubmodules = true;
     hash = "sha256-jkhjJTb/U2dXj/vyaip+gWoqIOdfFKSExeDl0T11DE4=";
   };
@@ -105,6 +105,9 @@ rustPlatform.buildRustPackage {
       -p:ContinuousIntegrationBuild=true \
       -p:Deterministic=true
   '';
+
+  # NuGet.targets(156,5): error : Unable to load the service index for source https://api.nuget.org/v3/index.json.
+  NuGetAudit = "false";
 
   passthru = {
     inherit (dotnetBuild) fetch-deps;

@@ -48,11 +48,11 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString isMinimalBuild "-minimal"
     + lib.optionalString cursesUI "-cursesUI"
     + lib.optionalString qt5UI "-qt5UI";
-  version = "3.30.5";
+  version = "3.31.3";
 
   src = fetchurl {
     url = "https://cmake.org/files/v${lib.versions.majorMinor finalAttrs.version}/cmake-${finalAttrs.version}.tar.gz";
-    hash = "sha256-n1XhpAUI8vKbfgZfoIwp+CxAL6BALag5//5koldVqG0=";
+    hash = "sha256-+sRbxtQQtJsxE6uGYHSIjWyencgaFBh0RG6yOaw4y4c=";
   };
 
   patches = [
@@ -61,6 +61,9 @@ stdenv.mkDerivation (finalAttrs: {
     ./000-nixpkgs-cmake-prefix-path.diff
     # Don't search in non-Nix locations such as /usr, but do search in our libc.
     ./001-search-path.diff
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    # TODO: Remove these in `staging`.
+
     # Don't depend on frameworks.
     ./002-application-services.diff
     # Derived from https://github.com/libuv/libuv/commit/1a5d4f08238dd532c3718e210078de1186a5920d
@@ -68,7 +71,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional stdenv.hostPlatform.isCygwin ./004-cygwin.diff
   # Derived from https://github.com/curl/curl/commit/31f631a142d855f069242f3e0c643beec25d1b51
-  ++ lib.optional (stdenv.hostPlatform.isDarwin && isMinimalBuild) ./005-remove-systemconfiguration-dep.diff
   # On Darwin, always set CMAKE_SHARED_LIBRARY_RUNTIME_C_FLAG.
   ++ lib.optional stdenv.hostPlatform.isDarwin ./006-darwin-always-set-runtime-c-flag.diff
   # On platforms where ps is not part of stdenv, patch the invocation of ps to use an absolute path.

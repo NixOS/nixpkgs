@@ -37,10 +37,6 @@ stdenv.mkDerivation (finalAttrs: {
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace test/meson.build \
       --replace "[ 'cgl_epoxy_api', [ 'cgl_epoxy_api.c' ] ]," ""
-  ''
-  + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
-    substituteInPlace test/meson.build \
-      --replace "[ 'cgl_core', [ 'cgl_core.c' ] ]," ""
   '';
 
   outputs = [ "out" "dev" ];

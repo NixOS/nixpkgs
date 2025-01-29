@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "silviolleite";
     repo = "django-pwa";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-tP1+Jm9hdvN/ZliuVHN8tqy24/tOK1LUUiJv1xUqRrY=";
   };
 

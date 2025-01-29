@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "rpm-software-management";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-O8pN2WFHWxZpr2JEPsQOmkc+7qnMVnptmGJCVxMmSLo=";
   };
 

@@ -164,7 +164,7 @@ in
       enable = true;
       virtualHosts."${cfg.domain}" = {
         root = "${cfg.stateDir}/public";
-        locations."~ \.php$".extraConfig = ''
+        locations."~ \\.php$".extraConfig = ''
           fastcgi_pass unix:${config.services.phpfpm.pools.flarum.socket};
           fastcgi_index site.php;
         '';

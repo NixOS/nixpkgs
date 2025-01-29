@@ -1,4 +1,5 @@
 {
+  lib,
   stdenv,
   jq,
   element-web-unwrapped,
@@ -22,7 +23,7 @@ else
       mkdir -p $out
       ln -s ${element-web-unwrapped}/* $out
       rm $out/config.json
-      jq -s '.[0] * $conf' "${element-web-unwrapped}/config.json" --argjson "conf" '${builtins.toJSON conf}' > "$out/config.json"
+      jq -s '.[0] * $conf' "${element-web-unwrapped}/config.json" --argjson "conf" ${lib.escapeShellArg (builtins.toJSON conf)} > "$out/config.json"
 
       runHook postInstall
     '';

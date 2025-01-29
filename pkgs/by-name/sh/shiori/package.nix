@@ -9,7 +9,7 @@
 
 buildGoModule rec {
   pname = "shiori";
-  version = "1.7.2";
+  version = "1.7.4";
 
   vendorHash = "sha256-RTnaDAl79LScbeKKAGJOI/YOiHEwwlxS2CmNhw80KL0=";
 
@@ -19,7 +19,7 @@ buildGoModule rec {
     owner = "go-shiori";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-QNcMPeLq5L7Q+nmADWZnl4wV5oM6v+NZbAFsba2fKCk=";
+    sha256 = "sha256-T4EFwvejLgNkcykPjSHU8WXJwqSqYPFaAD+9JX+uiJU=";
   };
 
   ldflags = [

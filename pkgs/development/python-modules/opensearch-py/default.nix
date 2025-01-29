@@ -36,7 +36,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "opensearch-project";
     repo = "opensearch-py";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-rPHpGKEIINAEUu2UkJwAM60i0hTzXd1ec6WD50RrgL8=";
   };
 

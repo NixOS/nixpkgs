@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "zenn-dev";
     repo = "zenn-editor";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-1+5UaSYtY00F+1oJfovLIBPnmfRnKpIkQHpxb93rO2k=";
     # turborepo requires .git directory
     leaveDotGit = true;

@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "chezou";
     repo = "tabula-py";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-PQbwm9ho3XtpmZ7N7ASkrV8gk9Jom+yQKlt2fUa948s=";
   };
 

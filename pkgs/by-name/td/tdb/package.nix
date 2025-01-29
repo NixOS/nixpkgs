@@ -7,7 +7,6 @@
 , readline
 , libxslt
 , libxcrypt
-, apple-sdk_11
 , docbook-xsl-nons
 , docbook_xml_dtd_45
 }:
@@ -34,8 +33,6 @@ stdenv.mkDerivation rec {
     python3
     readline # required to build python
     libxcrypt
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_11
   ];
 
   # otherwise the configure script fails with

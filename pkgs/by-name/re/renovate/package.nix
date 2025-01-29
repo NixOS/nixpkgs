@@ -14,20 +14,15 @@
   yq-go,
 }:
 
-let
-  # fix build error, `no member named 'aligned_alloc'` on x86_64-darwin
-  # https://github.com/NixOS/nixpkgs/issues/272156#issuecomment-1839904283
-  stdenv' = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
-in
-stdenv'.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "renovate";
-  version = "39.82.6";
+  version = "39.137.1";
 
   src = fetchFromGitHub {
     owner = "renovatebot";
     repo = "renovate";
     tag = finalAttrs.version;
-    hash = "sha256-RV3rOzs0dPQK0rYGU6URqTcvqGMXCrke5wSSVo/Wd5s=";
+    hash = "sha256-E3J+jEd21j5r4iaa4D2mNbWcwfwyzcaHTHiD3jBVXlQ=";
   };
 
   postPatch = ''
@@ -41,11 +36,11 @@ stdenv'.mkDerivation (finalAttrs: {
     pnpm_9.configHook
     python3
     yq-go
-  ] ++ lib.optional stdenv'.hostPlatform.isDarwin xcbuild;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin xcbuild;
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-c8bnNBkWyJspRvwoQTlExChM1PXi6Hw466xqT11s7Ys=";
+    hash = "sha256-ljhRpFMafpB0xbmGVoh8Icwm0c0dr7JPqAA/6sln03w=";
   };
 
   env.COREPACK_ENABLE_STRICT = 0;

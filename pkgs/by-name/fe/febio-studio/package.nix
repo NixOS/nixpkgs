@@ -9,8 +9,6 @@
   qt6Packages,
   febio,
   glew,
-  apple-sdk_11,
-  darwinMinVersionHook,
   fetchpatch,
   sshSupport ? true,
   openssl,
@@ -74,11 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optional tetgenSupport tetgen
     ++ lib.optional ffmpegSupport ffmpeg
-    ++ lib.optional dicomSupport dcmtk
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_11
-      (darwinMinVersionHook "10.15")
-    ];
+    ++ lib.optional dicomSupport dcmtk;
 
   meta = {
     description = "FEBio Suite Solver";

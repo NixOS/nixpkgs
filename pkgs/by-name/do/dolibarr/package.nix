@@ -6,15 +6,15 @@
   stateDir ? "/var/lib/dolibarr",
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dolibarr";
-  version = "20.0.2";
+  version = "20.0.3";
 
   src = fetchFromGitHub {
     owner = "Dolibarr";
     repo = "dolibarr";
-    tag = version;
-    hash = "sha256-5OEZpBxTYXhO27ea/GBmJI9uDLRDgMNc9ehQ7mvvSrY=";
+    tag = finalAttrs.version;
+    hash = "sha256-JqCDFdOkVQb9zH/ZCm7LsQktYDXXaB+0lS3HWqxE3YM=";
   };
 
   dontBuild = true;
@@ -40,9 +40,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Enterprise resource planning (ERP) and customer relationship manager (CRM) server";
-    changelog = "https://github.com/Dolibarr/dolibarr/releases/tag/${src.tag}";
+    changelog = "https://github.com/Dolibarr/dolibarr/releases/tag/${finalAttrs.version}";
     homepage = "https://dolibarr.org/";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

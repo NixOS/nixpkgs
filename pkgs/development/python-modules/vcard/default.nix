@@ -14,7 +14,7 @@ buildPythonPackage rec {
   version = "0.16.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8" || pythonAtLeast "3.12";
+  disabled = pythonOlder "3.8" || pythonAtLeast "3.13";
 
   src = fetchFromGitLab {
     owner = "engmark";

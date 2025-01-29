@@ -364,7 +364,7 @@ let
         if class != null
         then
           m:
-            if m._class != null -> m._class == class
+            if m._class == null || m._class == class
             then m
             else
               throw "The module ${m._file or m.key} was imported into ${class} instead of ${m._class}."

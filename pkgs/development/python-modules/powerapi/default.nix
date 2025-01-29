@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "powerapi-ng";
     repo = "powerapi";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-iFWCrO9frMK68kefmKQrXra1g5efDCj2ZOlVwxDNvXw=";
   };
 

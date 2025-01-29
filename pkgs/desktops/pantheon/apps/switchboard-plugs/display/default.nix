@@ -9,6 +9,8 @@
   vala,
   libadwaita,
   libgee,
+  gettext,
+  glib,
   granite7,
   gtk4,
   switchboard,
@@ -26,6 +28,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    gettext # msgfmt
+    glib # glib-compile-resources
     meson
     ninja
     pkg-config

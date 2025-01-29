@@ -1,4 +1,5 @@
 {
+  bash,
   boost,
   faust,
   lv2,
@@ -8,6 +9,10 @@
 faust.wrapWithBuildEnv {
 
   baseName = "faust2lv2";
+
+  buildInputs = [
+    bash
+  ];
 
   propagatedBuildInputs = [
     boost

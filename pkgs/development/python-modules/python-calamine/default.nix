@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "python-calamine";
-  version = "0.2.3";
+  version = "0.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dimastbk";
     repo = "python-calamine";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-zZqhvfpkkbWLhPJIthDgxqvPUMpaXkyptuzY2fcecHU=";
+    tag = "v${version}";
+    hash = "sha256-XR8KzLMQDXy9nt0Z/FRBFaWdOp8RcIIpJjDf5f9h1BE=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {

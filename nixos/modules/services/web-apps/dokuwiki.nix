@@ -436,7 +436,7 @@ in
             extraConfig = "internal;";
           };
 
-          "~ ^/lib.*\.(js|css|gif|png|ico|jpg|jpeg)$" = {
+          "~ ^/lib.*\\.(js|css|gif|png|ico|jpg|jpeg)$" = {
             extraConfig = "expires 365d;";
           };
 

@@ -17,11 +17,12 @@
   librsvg,
   python3Packages,
   blueprint-compiler,
+  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "eartag";
-  version = "0.6.3";
+  version = "0.6.4";
   format = "other";
 
   src = fetchFromGitLab {
@@ -29,7 +30,7 @@ python3Packages.buildPythonApplication rec {
     owner = "World";
     repo = pname;
     rev = version;
-    hash = "sha256-eo6Vboo2Kn39M0r1OeqRFG3ug6frxzMKler5qT9KysY=";
+    hash = "sha256-K93sj84MdDCQgIMghkjpGIieSrlnlQiw85JSgggRlf4=";
   };
 
   postPatch = ''
@@ -72,6 +73,10 @@ python3Packages.buildPythonApplication rec {
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/World/eartag";

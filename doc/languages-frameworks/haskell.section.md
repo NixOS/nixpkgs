@@ -57,7 +57,7 @@ Available compilers are collected under `haskell.compiler`.
 Each of those compiler versions has a corresponding attribute set `packages` built with
 it. However, the non-standard package sets are not tested regularly and, as a
 result, contain fewer working packages. The corresponding package set for GHC
-9.4.5 is `haskell.packages.ghc945`. In fact `haskellPackages` (at the time of writing) is just an alias
+9.4.8 is `haskell.packages.ghc948`. In fact `haskellPackages` (at the time of writing) is just an alias
 for `haskell.packages.ghc966`:
 
 Every package set also re-exposes the GHC used to build its packages as `haskell.packages.*.ghc`.
@@ -764,7 +764,7 @@ that depend on that library, you may want to use:
 
 ```nix
 haskellPackages.haskell-ci.overrideScope (self: super: {
-  Cabal = self.Cabal_3_14_0_0;
+  Cabal = self.Cabal_3_14_1_0;
 })
 ```
 

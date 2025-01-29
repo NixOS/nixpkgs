@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "cisagov";
     repo = "ioc-scanner";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-SCyCANZfi7PqexM2Kc8WJwwEEiBQxPBg0ggWsK9WB4k=";
   };
 

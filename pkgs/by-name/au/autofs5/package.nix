@@ -44,6 +44,10 @@ stdenv.mkDerivation rec {
       url = "mirror://kernel/linux/daemons/autofs/v5/patches-5.2.0/autofs-5.1.9-fix-crash-in-make_options_string.patch";
       hash = "sha256-YjTdJ50iNhJ2UjFdrKYEFNt04z0PfmElbFa4GuSskLA=";
     })
+    (fetchpatch {
+      url = "mirror://kernel/linux/daemons/autofs/v5/patches-5.2.0/autofs-5.1.9-Fix-incompatible-function-pointer-types-in-cyrus-sasl-module.patch";
+      hash = "sha256-erLlqZtVmYqUOsk3S7S50yA0VB8Gzibsv+X50+gcA58=";
+    })
   ];
 
   preConfigure = ''

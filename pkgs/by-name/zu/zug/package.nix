@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   boost,
 }:
@@ -15,6 +16,12 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     hash = "sha256-7xTMDhPIx1I1PiYNanGUsK8pdrWuemMWM7BW+NQs2BQ=";
   };
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/arximboldi/zug/commit/c8c74ada30d931e40636c13763b892f20d3ce1ae.patch";
+      hash = "sha256-0x+ScRnziBeyHWYJowcVb2zahkcK2qKrMVVk2twhtHA=";
+    })
+  ];
   nativeBuildInputs = [
     cmake
   ];

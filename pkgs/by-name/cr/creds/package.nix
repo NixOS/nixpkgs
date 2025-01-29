@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "ihebski";
     repo = "DefaultCreds-cheat-sheet";
-    rev = "refs/tags/creds-v${version}";
+    tag = "creds-v${version}";
     hash = "sha256-CtwGSF3EGcPqL49paNRCsB2qxYjKpCLqyRsC67nAyVk=";
   };
 

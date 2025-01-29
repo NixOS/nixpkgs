@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   cmake,
   blas,
   lapack,
@@ -59,6 +60,10 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./fix-python.patch
+    (fetchpatch {
+      url = "https://gitlab.onelab.info/gmsh/gmsh/-/commit/7d5094fb0a5245cb435afd3f3e8c35e2ecfe70fd.patch";
+      hash = "sha256-3atm1NGsMI4KEct2xakRG6EasRpF6YRI4raoVYxBV4g=";
+    })
   ];
 
   postPatch = ''

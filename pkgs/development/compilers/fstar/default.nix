@@ -86,7 +86,6 @@ stdenv.mkDerivation {
     license = licenses.asl20;
     maintainers = with maintainers; [
       gebner
-      pnmadelaine
     ];
     mainProgram = "fstar.exe";
     platforms = with platforms; darwin ++ linux;

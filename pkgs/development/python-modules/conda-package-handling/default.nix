@@ -11,7 +11,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "conda";
     repo = "conda-package-handling";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-AvuxHl3gUH7zIyMhZGeXqpMy0rJ99wj1/SrdTvlaX9A=";
   };
 

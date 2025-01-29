@@ -21,10 +21,11 @@ import ./make-test-python.nix (
           };
           services.cockpit = {
             enable = true;
+            port = 7890;
             openFirewall = true;
             settings = {
               WebService = {
-                Origins = "https://server:9090";
+                Origins = "https://server:7890";
               };
             };
           };
@@ -65,16 +66,16 @@ import ./make-test-python.nix (
                     driver.implicitly_wait(10)
 
                     log("Opening homepage")
-                    driver.get("https://server:9090")
-
-                    wait = WebDriverWait(driver, 60)
+                    driver.get("https://server:7890")
 
 
-                    def wait_elem(by, query):
+                    def wait_elem(by, query, timeout=10):
+                        wait = WebDriverWait(driver, timeout)
                         wait.until(EC.presence_of_element_located((by, query)))
 
 
-                    def wait_title_contains(title):
+                    def wait_title_contains(title, timeout=10):
+                        wait = WebDriverWait(driver, timeout)
                         wait.until(EC.title_contains(title))
 
 
@@ -107,7 +108,7 @@ import ./make-test-python.nix (
                     driver.find_element(By.CSS_SELECTOR, 'button#login-button').click()
 
                     # driver.implicitly_wait(1)
-                    # driver.get("https://server:9090/system")
+                    # driver.get("https://server:7890/system")
 
                     log("Waiting dashboard to load")
                     wait_title_contains("${user}@server")
@@ -120,6 +121,12 @@ import ./make-test-python.nix (
                     driver.switch_to.frame(container_iframe)
 
                     assert "Web console is running in limited access mode" in driver.page_source
+
+                    log("Clicking the sudo button")
+                    driver.switch_to.default_content()
+                    driver.find_element(By.CSS_SELECTOR, 'button.ct-locked').click()
+                    log("Checking that /nonexistent is not a thing")
+                    assert '/nonexistent' not in driver.page_source
 
                     driver.close()
                   '';
@@ -136,14 +143,10 @@ import ./make-test-python.nix (
     testScript = ''
       start_all()
 
-      server.wait_for_open_port(9090)
-      server.wait_for_unit("network.target")
-      server.wait_for_unit("multi-user.target")
-      server.systemctl("start", "polkit")
+      server.wait_for_unit("sockets.target")
+      server.wait_for_open_port(7890)
 
-      client.wait_for_unit("multi-user.target")
-
-      client.succeed("curl -k https://server:9090 -o /dev/stderr")
+      client.succeed("curl -k https://server:7890 -o /dev/stderr")
       print(client.succeed("whoami"))
       client.succeed('PYTHONUNBUFFERED=1 selenium-script')
     '';

@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "flxo";
     repo = "rogcat";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-nXKvepuiBDIGo8Gga5tbbT/mnC6z+HipV5XYtlrURRU=";
   };
 

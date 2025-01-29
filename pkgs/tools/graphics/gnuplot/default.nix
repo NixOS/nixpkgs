@@ -41,11 +41,11 @@ let
 in
 (if withQt then mkDerivation else stdenv.mkDerivation) rec {
   pname = "gnuplot";
-  version = "6.0.1";
+  version = "6.0.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/gnuplot/${pname}-${version}.tar.gz";
-    sha256 = "sha256-6FpmDBoqGAj/JPfmmYH/y6xmpFydz3EbZWELJupxN5o=";
+    sha256 = "sha256-9oo7C7t7u7Q3ZJZ0EG2UUiwAvy8oXM4MGcMYCx7n5zg=";
   };
 
   nativeBuildInputs = [

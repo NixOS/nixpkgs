@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "led-ble";
-  version = "1.1.1";
+  version = "1.1.4";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -21,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "led-ble";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-FPF/jPsXVk16UDpfglmVy01sOpv/XAwx+dCYCbJnFZQ=";
+    tag = "v${version}";
+    hash = "sha256-+4qzAeFzU1Bdt9kvegBtaENh/dlRA0jbAUFr3WuSFsg=";
   };
 
   build-system = [ poetry-core ];

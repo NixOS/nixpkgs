@@ -2,13 +2,12 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  libsForQt5,
+  qt6Packages,
   fpc,
   lazarus,
   xorg,
   runCommand,
   _7zz,
-  archiver,
   brotli,
   upx,
   zpaq,
@@ -17,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "peazip";
-  version = "10.1.0";
+  version = "10.2.0";
 
   src = fetchFromGitHub {
     owner = "peazip";
     repo = pname;
     rev = version;
-    hash = "sha256-jYm3Ngwby75eUFM59tCQ7KWVywQOj+IzuPpATD+QhLo=";
+    hash = "sha256-TyfLqT9VNSViJOWwM3KgL2tvCZE14bLlT/6DgF9IAOE=";
   };
   sourceRoot = "${src.name}/peazip-sources";
 
@@ -33,15 +32,19 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    libsForQt5.wrapQtAppsHook
+    qt6Packages.wrapQtAppsHook
     lazarus
     fpc
   ];
 
-  buildInputs = [
-    xorg.libX11
-    libsForQt5.libqtpas
-  ];
+  buildInputs =
+    [
+      xorg.libX11
+    ]
+    ++ (with qt6Packages; [
+      qtbase
+      libqtpas
+    ]);
 
   NIX_LDFLAGS = "--as-needed -rpath ${lib.makeLibraryPath buildInputs}";
 
@@ -50,8 +53,8 @@ stdenv.mkDerivation rec {
     export HOME=$(mktemp -d)
     pushd dev
     lazbuild --lazarusdir=${lazarus}/share/lazarus --add-package metadarkstyle/metadarkstyle.lpk
-    lazbuild --lazarusdir=${lazarus}/share/lazarus --widgetset=qt5 --build-all project_pea.lpi
-    lazbuild --lazarusdir=${lazarus}/share/lazarus --widgetset=qt5 --build-all project_peach.lpi
+    lazbuild --lazarusdir=${lazarus}/share/lazarus --widgetset=qt6 --build-all project_pea.lpi
+    lazbuild --lazarusdir=${lazarus}/share/lazarus --widgetset=qt6 --build-all project_peach.lpi
     popd
   '';
 
@@ -68,7 +71,6 @@ stdenv.mkDerivation rec {
     wrapProgram $out/lib/peazip/peazip --prefix PATH : ${
       lib.makeBinPath [
         _7z
-        archiver
         brotli
         upx
         zpaq

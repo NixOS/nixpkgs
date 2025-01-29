@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "coveooss";
     repo = "json-schema-for-humans";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-0nen6oJOWdihm/EWKSGQLlD70pRxezhCHykBJxlSFHo=";
   };
 

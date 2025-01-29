@@ -38,8 +38,9 @@ stdenv.mkDerivation rec {
     lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
       # For cross builds, provide answers to the configure time tests.
       # These answers are valid on x86_64-linux and aarch64-linux.
+      # TODO: provide all valid answers for BSD.
       "ac_cv_file__dev_zero=yes"
-      "ac_cv_func_setpgrp_void=yes"
+      "ac_cv_func_setpgrp_void=${if stdenv.hostPlatform.isBSD then "no" else "yes"}"
       "apr_cv_tcp_nodelay_with_cork=yes"
       "ac_cv_define_PTHREAD_PROCESS_SHARED=yes"
       "apr_cv_process_shared_works=yes"

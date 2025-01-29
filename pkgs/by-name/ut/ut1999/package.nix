@@ -7,11 +7,11 @@
   fetchurl,
   makeDesktopItem,
   copyDesktopItems,
+  libarchive,
   imagemagick,
   runCommand,
   libgcc,
   wxGTK32,
-  innoextract,
   libGL,
   SDL2,
   openal,
@@ -21,7 +21,7 @@
 
 let
   version = "469d";
-  srcs = {
+  srcs = rec {
     x86_64-linux = fetchurl {
       url = "https://github.com/OldUnreal/UnrealTournamentPatches/releases/download/v${version}/OldUnreal-UTPatch${version}-Linux-amd64.tar.bz2";
       hash = "sha256-aoGzWuakwN/OL4+xUq8WEpd2c1rrNN/DkffI2vDVGjs=";
@@ -38,35 +38,32 @@ let
       url = "https://github.com/OldUnreal/UnrealTournamentPatches/releases/download/v${version}/OldUnreal-UTPatch${version}-macOS-Sonoma.dmg";
       hash = "sha256-TbhJbOH4E5WOb6XR9dmqLkXziK3/CzhNjd1ypBkkmvw=";
     };
+    # fat binary
+    aarch64-darwin = x86_64-darwin;
   };
-  unpackGog =
-    runCommand "ut1999-gog"
+  unpackIso =
+    runCommand "ut1999-iso"
       {
-        src = requireFile rec {
-          name = "setup_ut_goty_2.0.0.5.exe";
-          hash = "sha256-TMJX1U2XZZxQYvK/GG0KjGlZVh0R5C2Pzy6sB/GSaAM=";
-          message = ''
-            Unreal Tournament 1999 requires the official GOG package, version 2.0.0.5.
-
-            Once you download the file, run the following command:
-
-            nix-prefetch-url file://\$PWD/${name}
-          '';
+        # This upload of the game is officially sanctioned by OldUnreal (who has received permission from Epic Games to link to archive.org) and the UT99.org community
+        # This is a copy of the original Unreal Tournament: Game of the Year Edition (also known as UT or UT99).
+        src = fetchurl {
+          url = "https://archive.org/download/ut-goty/UT_GOTY_CD1.iso";
+          hash = "sha256-4YSYTKiPABxd3VIDXXbNZOJm4mx0l1Fhte1yNmx0cE8=";
         };
-
-        nativeBuildInputs = [ innoextract ];
+        nativeBuildInputs = [ libarchive ];
       }
       ''
-        innoextract --extract --exclude-temp "$src"
+        bsdtar -xvf "$src"
         mkdir $out
-        cp -r app/* $out
+        cp -r Music Sounds Textures Maps $out
       '';
   systemDir =
-    {
+    rec {
       x86_64-linux = "System64";
       aarch64-linux = "SystemARM64";
-      x86_64-darwin = "System";
       i686-linux = "System";
+      x86_64-darwin = "System";
+      aarch64-darwin = x86_64-darwin;
     }
     .${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
 in
@@ -92,7 +89,6 @@ stdenv.mkDerivation {
     lib.optionals stdenv.hostPlatform.isLinux [
       copyDesktopItems
       autoPatchelfHook
-      imagemagick
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       undmg
@@ -105,30 +101,56 @@ stdenv.mkDerivation {
     in
     ''
       runHook preInstall
-
+      mkdir -p $out
+    ''
+    + lib.optionalString (stdenv.hostPlatform.isLinux) ''
       mkdir -p $out/bin
+    ''
+    + ''
       cp -r ${if stdenv.hostPlatform.isDarwin then "UnrealTournament.app" else "./*"} $out
       chmod -R 755 $out
       cd ${outPrefix}
-
-      rm -rf ./{Music,Sounds,Maps}
-      ln -s ${unpackGog}/{Music,Sounds,Maps} .
-
-      cp -n ${unpackGog}/Textures/* ./Textures || true
-      cp -n ${unpackGog}/System/*.{u,int} ./System || true
+      # NOTE: OldUnreal patch doesn't include these folders on linux but could in the future
+      # on darwin it does, but they are empty
+      rm -rf ./{Music,Sounds}
+      ln -s ${unpackIso}/{Music,Sounds} .
     ''
     + lib.optionalString (stdenv.hostPlatform.isLinux) ''
+      # maps need no post-processing on linux, therefore linking them is ok
+      rm -rf ./Maps
+      ln -s ${unpackIso}/Maps .
+    ''
+    + lib.optionalString (stdenv.hostPlatform.isDarwin) ''
+      # Maps need post-processing on darwin, therefore need to be copied
+      cp -n ${unpackIso}/Maps/* ./Maps || true
+      # unpack compressed maps with ucc (needs absolute paths)
+      for map in $PWD/Maps/*.uz; do ./UCC decompress $map; done
+      mv ${systemDir}/*.unr ./Maps || true
+      rm ./Maps/*.uz
+    ''
+    + ''
+      cp -n ${unpackIso}/Textures/* ./Textures || true
+    ''
+    + lib.optionalString (stdenv.hostPlatform.isLinux) ''
+      cp -n ${unpackIso}/System/*.{u,int} ./System || true
       ln -s "$out/${systemDir}/ut-bin" "$out/bin/ut1999"
       ln -s "$out/${systemDir}/ucc-bin" "$out/bin/ut1999-ucc"
 
-      convert "${unpackGog}/gfw_high.ico" "ut1999.png"
-      install -D ut1999-5.png "$out/share/icons/hicolor/256x256/apps/ut1999.png"
+      install -D "${./ut1999.svg}" "$out/share/pixmaps/ut1999.svg"
+      for size in 16 24 32 48 64 128 192 256; do
+        square=$(printf "%sx%s" $size $size)
+        ${imagemagick}/bin/magick -background none ${./ut1999.svg} -resize $square ut1999_$square.png
+        install -D "ut1999_$square.png" "$out/share/icons/hicolor/$square/apps/ut1999.png"
+      done
 
+      # TODO consider to remove shared libraries that can be provided by nixpkgs for darwin too
       # Remove bundled libraries to use native versions instead
       rm $out/${systemDir}/libmpg123.so* \
         $out/${systemDir}/libopenal.so* \
         $out/${systemDir}/libSDL2* \
         $out/${systemDir}/libxmp.so*
+        # NOTE: what about fmod?
+        #$out/${systemDir}/libfmod.so*
     ''
     + ''
       runHook postInstall

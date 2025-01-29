@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "trallnag";
     repo = "prometheus-fastapi-instrumentator";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-yvKdhQdbY0+jEc8TEHNNgtdnqE0abnd4MN/JZFQwQ2E=";
   };
 

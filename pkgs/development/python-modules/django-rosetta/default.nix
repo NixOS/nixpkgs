@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mbi";
     repo = "django-rosetta";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-b+iCUA3i3Ej6S5XcGQhBIEIJFx6vOL2sq3xkkA9wqek=";
   };
 

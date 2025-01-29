@@ -8,6 +8,7 @@
   fetchPypi,
   filelock,
   git,
+  git-annex,
   nibabel,
   nipype,
   pydicom,
@@ -53,6 +54,7 @@ buildPythonPackage rec {
     dcm2niix
     pytestCheckHook
     git
+    git-annex
   ];
 
   preCheck = ''

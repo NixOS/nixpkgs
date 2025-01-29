@@ -1,28 +1,31 @@
 {
   lib,
+  stdenv,
   python3Packages,
   fetchFromGitHub,
-  harlequin,
-  testers,
   nix-update-script,
-  versionCheckHook,
   glibcLocales,
+  versionCheckHook,
   withPostgresAdapter ? true,
   withBigQueryAdapter ? true,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "harlequin";
-  version = "1.25.2";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tconbeer";
     repo = "harlequin";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ov9pMvFzJAMfOM7JeSgnp6dZ424GiRaH7W5OCKin9Jk=";
+    tag = "v${version}";
+    hash = "sha256-IUzN+rWL69TUUS9npcmfSAPqy/8SYNusNAN/muCMqNI=";
   };
 
-  pythonRelaxDeps = [ "textual" ];
+  pythonRelaxDeps = [
+    "numpy"
+    "pyarrow"
+    "textual"
+  ];
 
   build-system = with python3Packages; [ poetry-core ];
 
@@ -63,20 +66,22 @@ python3Packages.buildPythonApplication rec {
     export HOME=$(mktemp -d)
   '';
 
-  nativeCheckInputs =
-    [
-      versionCheckHook
-    ]
-    ++ (with python3Packages; [
-      pytest-asyncio
-      pytestCheckHook
-    ]);
-
-  disabledTests = [
-    # Tests require network access
-    "test_connect_extensions"
-    "test_connect_prql"
+  nativeCheckInputs = with python3Packages; [
+    pytest-asyncio
+    pytestCheckHook
+    versionCheckHook
   ];
+
+  disabledTests =
+    [
+      # Tests require network access
+      "test_connect_extensions"
+      "test_connect_prql"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-darwin") [
+      # Test incorrectly tries to load a dylib compiled for x86_64
+      "test_load_extension"
+    ];
 
   disabledTestPaths = [
     # Tests requires more setup

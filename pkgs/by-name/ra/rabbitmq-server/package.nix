@@ -112,13 +112,16 @@ stdenv.mkDerivation rec {
   doInstallCheck = true;
   installCheckPhase = ''
     runHook preInstallCheck
-    out="$(env - LANG=C.utf8 HOME=/build ${placeholder "out"}/bin/rabbitmqctl version)"
+    out="$(env - LANG=C.utf8 HOME=$TMPDIR ${placeholder "out"}/bin/rabbitmqctl version)"
     if [[ "$out" != "$version" ]]; then
       echo "Rabbitmq should report version $version, but thinks it's version $out" >&2
       exit 1
     fi
     runHook postInstallCheck
   '';
+
+  # Needed for the check in installCheckPhase
+  __darwinAllowLocalNetworking = true;
 
   passthru.tests = {
     vm-test = nixosTests.rabbitmq;

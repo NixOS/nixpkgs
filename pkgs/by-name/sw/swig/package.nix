@@ -20,12 +20,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-hFHEE9wy8Lja9G396tI4fj4LhOkpPKJkDuy1L62AXr4=";
   };
 
-  PCRE_CONFIG = "${pcre2.dev}/bin/pcre-config";
+  strictDeps = true;
   nativeBuildInputs = [
     autoconf
     automake
     libtool
     bison
+    pcre2
   ];
   buildInputs = [ pcre2 ];
 

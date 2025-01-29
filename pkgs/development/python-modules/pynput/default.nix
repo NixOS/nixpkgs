@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "moses-palmer";
     repo = "pynput";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-6PwfFU1f/osEamSX9kxpOl2wDnrQk5qq1kHi2BgSHes=";
   };
   passthru.updateScript = gitUpdater {

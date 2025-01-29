@@ -28,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "softlayer";
-  version = "6.2.5";
+  version = "6.2.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "softlayer";
     repo = "softlayer-python";
     tag = "v${version}";
-    hash = "sha256-wDLMVonPUexoaZ60kRBILmr5l46yajzACozCp6uETGY=";
+    hash = "sha256-qBhnHFFlP4pqlN/SETXEqYyre/ap60wHe9eCfyiB+kA=";
   };
 
   build-system = [

@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "KyleKing";
     repo = "mdformat-gfm-alerts";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-2EYdNCyS1LxcEnCXkOugAAGx5XLWV4cWTNkXjR8RVQo=";
   };
 

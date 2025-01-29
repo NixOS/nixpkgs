@@ -8,6 +8,7 @@ let
   inherit (lib)
     getExe'
     literalExpression
+    maintainers
     mkEnableOption
     mkIf
     mkOption
@@ -25,7 +26,7 @@ in
   ];
 
   meta = {
-    maintainers = [ lib.maintainers.kjeremy ];
+    maintainers = [ maintainers.kjeremy ];
   };
 
   options.virtualisation.vmware.guest = {

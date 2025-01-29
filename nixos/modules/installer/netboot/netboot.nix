@@ -1,11 +1,15 @@
 # This module creates netboot media containing the given NixOS
 # configuration.
 
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, modulesPath, ... }:
 
 with lib;
 
 {
+  imports = [
+    ../../image/file-options.nix
+  ];
+
   options = {
 
     netboot.squashfsCompression = mkOption {
@@ -128,6 +132,21 @@ with lib;
         path = config.system.build.kexecScript;
       }
     ];
+
+    image.extension = "tar.xz";
+    image.filePath = "tarball/${config.image.fileName}";
+    system.nixos.tags = [ "kexec" ];
+    system.build.image = config.system.build.kexecTarball;
+    system.build.kexecTarball = pkgs.callPackage "${toString modulesPath}/../lib/make-system-tarball.nix" {
+      fileName = config.image.baseName;
+      storeContents = [
+        {
+          object = config.system.build.kexecScript;
+          symlink = "/kexec_nixos";
+        }
+      ];
+      contents = [];
+    };
 
     boot.loader.timeout = 10;
 

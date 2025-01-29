@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mdz";
     repo = "python-smarttub";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ErGBOO5aes4Avmt2M6rkZPmjwsCMZdNnLhMDYhlULzU=";
   };
 

@@ -27,6 +27,10 @@
 , # Allow a configuration attribute set to be passed in as an argument.
   config ? {}
 
+, # Temporary hack to let Nixpkgs forbid internal use of `lib.fileset`
+  # until <https://github.com/NixOS/nix/issues/11503> is fixed.
+  __allowFileset ? true
+
 , # List of overlays layers used to extend Nixpkgs.
   overlays ? []
 
@@ -47,7 +51,24 @@ let # Rename the function arguments
   crossSystem0 = crossSystem;
 
 in let
-  lib = import ../../lib;
+  pristineLib = import ../../lib;
+
+  lib =
+    if __allowFileset then
+      pristineLib
+    else
+      pristineLib.extend (_: _: {
+        fileset = abort ''
+
+          The use of `lib.fileset` is currently forbidden in Nixpkgs due to the
+          upstream Nix bug <https://github.com/NixOS/nix/issues/11503>. This
+          causes difficult‐to‐debug errors when combined with chroot stores,
+          such as in the NixOS installer.
+
+          For packages that require source to be vendored inside Nixpkgs,
+          please use a subdirectory of the package instead.
+        '';
+      });
 
   inherit (lib) throwIfNot;
 

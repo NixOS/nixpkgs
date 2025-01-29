@@ -606,12 +606,12 @@ in rec {
 
   in
   # TODO: As discussed in #356502, deprecated functionality should be removed sometime after 25.11.
-  lib.warnIf (!escape && lib.oldestSupportedReleaseIsAtLeast 2505) "Using `lib.generators.toPlist` without `escape = true` is deprecated"
-  ''<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-${expr "" v}
-</plist>'';
+  lib.warnIf (!escape && lib.oldestSupportedReleaseIsAtLeast 2505) "Using `lib.generators.toPlist` without `escape = true` is deprecated" ''
+  <?xml version="1.0" encoding="UTF-8"?>
+  <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+  <plist version="1.0">
+  ${expr "" v}
+  </plist>'';
 
   /**
     Translate a simple Nix expression to Dhall notation.

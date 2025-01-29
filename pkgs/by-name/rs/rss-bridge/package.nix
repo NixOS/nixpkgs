@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rss-bridge";
-  version = "2024-02-02";
+  version = "2025-01-02";
 
   src = fetchFromGitHub {
     owner = "RSS-Bridge";
     repo = "rss-bridge";
     rev = version;
-    sha256 = "sha256-VycEgu7uHYwDnNE1eoVxgaWZAnC6mZLBxT8Le3PI4Rs=";
+    sha256 = "sha256-6Ise+qptY2wLkNveT/mzL0nWrX6OhxAlOJkF2+BmSTE=";
   };
 
   installPhase = ''

@@ -213,7 +213,7 @@ let
       '';
 
       meta = with lib; {
-        homepage = "http://xuxen.eus/";
+        homepage = "https://xuxen.eus/";
         description = shortDescription;
         longDescription = longDescription;
         license = licenses.gpl2;

@@ -1,13 +1,23 @@
 {
+  csv = {
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "0zfn40dvgjk1xv1z8l11hr9jfg3jncwsc9yhzsz4l4rivkpivg8b";
+      type = "gem";
+    };
+    version = "3.3.0";
+  };
   enumerable-statistics = {
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0dlnfncz0lbyczakgdlys44pksj6h447npj665xk41b36y0lbf7f";
+      sha256 = "1cqksgv0cf69cd30kxk2r0lq1y784wn5nvlyabfqilf1vvy6j38y";
       type = "gem";
     };
-    version = "2.0.7";
+    version = "2.0.8";
   };
   unicode_plot = {
     dependencies = ["enumerable-statistics"];
@@ -21,14 +31,14 @@
     version = "0.0.5";
   };
   youplot = {
-    dependencies = ["unicode_plot"];
+    dependencies = ["csv" "unicode_plot"];
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0imy65wjkgdkpqfympbz8lp2ih866538vk55fwz9a909ib9sbdri";
+      sha256 = "1p1vbb7p4h5a4r2rwl64gwv6cmf350grjn97zrpjhvrjih81y3yg";
       type = "gem";
     };
-    version = "0.4.5";
+    version = "0.4.6";
   };
 }

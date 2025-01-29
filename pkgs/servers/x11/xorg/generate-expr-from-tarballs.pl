@@ -258,11 +258,16 @@ open OUT, ">default.nix";
 print OUT "";
 print OUT <<EOF;
 # THIS IS A GENERATED FILE.  DO NOT EDIT!
-{ lib, pixman }:
+{
+  lib,
+  pixman,
+  luit,
+}:
 
 self: with self; {
 
   inherit pixman;
+  inherit luit;
 
 EOF
 

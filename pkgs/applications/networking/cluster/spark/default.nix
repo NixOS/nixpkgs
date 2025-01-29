@@ -97,12 +97,12 @@ in
   # a new NixOS release.
   spark_3_5 = spark rec {
     pname = "spark";
-    version = "3.5.1";
-    hash = "sha256-ez6Hm8Ss3nl4mxOHyh67ugYH81/thNRMCja6MQ+9Tpg=";
+    version = "3.5.4";
+    hash = "sha256-rSr7UH1dZIkUYW6ehc/dYxlmN9yVjEKwrwLMT+uMd/0=";
   };
   spark_3_4 = spark rec {
     pname = "spark";
-    version = "3.4.3";
-    hash = "sha256-ifeytk08oaEyiEawwWbUWWuoynGTJNvnrkOW/CjeaSk=";
+    version = "3.4.4";
+    hash = "sha256-GItHmthLhG7y0XSF3QINCyE7wYFb0+lPZmYLUuMa4Ww=";
   };
 }

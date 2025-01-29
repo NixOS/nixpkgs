@@ -17,6 +17,7 @@
   hicolor-icon-theme,
   meson,
   ninja,
+  nix-update-script,
   pkg-config,
   python3,
   webkitgtk_6_0,
@@ -82,6 +83,10 @@ stdenv.mkDerivation rec {
     sed -e '2iimports.package._findEffectiveEntryPointName = () => "re.sonny.Tangram"' \
       -i $out/bin/re.sonny.Tangram
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Run web apps on your desktop";

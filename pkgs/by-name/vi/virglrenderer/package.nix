@@ -11,7 +11,7 @@
   libX11,
   libdrm,
   libgbm,
-  vaapiSupport ? true,
+  vaapiSupport ? !stdenv.hostPlatform.isDarwin,
   libva,
   gitUpdater,
 }:
@@ -27,13 +27,17 @@ stdenv.mkDerivation rec {
 
   separateDebugInfo = true;
 
-  buildInputs = [
-    libGLU
-    libepoxy
-    libX11
-    libdrm
-    libgbm
-  ] ++ lib.optionals vaapiSupport [ libva ];
+  buildInputs =
+    [
+      libepoxy
+    ]
+    ++ lib.optionals vaapiSupport [ libva ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libGLU
+      libX11
+      libdrm
+      libgbm
+    ];
 
   nativeBuildInputs = [
     meson
@@ -58,7 +62,7 @@ stdenv.mkDerivation rec {
     mainProgram = "virgl_test_server";
     homepage = "https://virgil3d.github.io/";
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.xeji ];
   };
 }

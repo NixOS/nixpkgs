@@ -34,7 +34,7 @@ python.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "tiiuae";
     repo = "sbomnix";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-LMrsJnJXmn+rneIslAaoIpwOyPVIVjOyu49O+7J/nIs=";
 
     # Remove documentation as it contains references to nix store

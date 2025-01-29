@@ -16,7 +16,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "Foxboron";
     repo = "sbctl";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-BLSvjo6GCqpECJPJtQ6C2zEz1p03uyvxTYa+DoxZ78s=";
   };
 

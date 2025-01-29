@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sander1988";
     repo = "pyIndego";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-x8/MSbn+urmArQCyxZU1JEUyATJsPzp7bflymE+1rkk=";
   };
 

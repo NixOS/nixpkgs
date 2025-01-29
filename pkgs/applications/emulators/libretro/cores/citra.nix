@@ -1,48 +1,51 @@
 {
   lib,
+  cmake,
   fetchFromGitHub,
-  boost,
-  ffmpeg_6,
-  gcc12Stdenv,
   libGL,
   libGLU,
+  libX11,
   mkLibretroCore,
-  nasm,
 }:
-mkLibretroCore rec {
+mkLibretroCore {
   core = "citra";
-  version = "0-unstable-2024-04-01";
+  version = "0-unstable-2024-12-03";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "citra";
-    # TODO: upstream migrated to cmake, this is the latest rev without it
-    rev = "36b600692905ebd457cbc9321e2f521938eced16";
-    hash = "sha256-ZJcsdFgLBda4xS4Z6I8Pu+6B9TYwak//0CbloDK3Yg0=";
+    rev = "a31aff7e1a3a66f525b9ea61633d2c5e5b0c8b31";
+    hash = "sha256-HlhY4AeFQSabrmPQWLygjPGTWkIh0U0Hv1Fv4YFu9xg=";
     fetchSubmodules = true;
   };
 
   makefile = "Makefile";
-  makeFlags = [
-    "HAVE_FFMPEG_STATIC=0"
-    # https://github.com/libretro/citra/blob/1a66174355b5ed948de48ef13c0ed508b6d6169f/Makefile#L87-L90
-    "GIT_REV=${src.rev}"
-    "GIT_DESC=${lib.substring 0 7 src.rev}"
-    "GIT_BRANCH=master"
-    "BUILD_DATE=01/01/1970_00:00"
-  ];
 
   extraBuildInputs = [
-    boost
-    ffmpeg_6
     libGL
     libGLU
-    nasm
+    libX11
   ];
 
-  # FIXME: build fail with GCC13:
-  # error: 'mic_device_name' has incomplete type
-  stdenv = gcc12Stdenv;
+  extraNativeBuildInputs = [ cmake ];
+
+  # This changes `ir/opt` to `ir/var/empty` in `externals/dynarmic/src/dynarmic/CMakeLists.txt`
+  # making the build fail, as that path does not exist
+  dontFixCmake = true;
+
+  # https://github.com/libretro/citra/blob/a31aff7e1a3a66f525b9ea61633d2c5e5b0c8b31/.gitlab-ci.yml#L6
+  cmakeFlags = [
+    (lib.cmakeBool "ENABLE_TESTS" false)
+    (lib.cmakeBool "ENABLE_DEDICATED_ROOM" false)
+    (lib.cmakeBool "ENABLE_SDL2" false)
+    (lib.cmakeBool "ENABLE_QT" false)
+    (lib.cmakeBool "ENABLE_WEB_SERVICE" false)
+    (lib.cmakeBool "ENABLE_SCRIPTING" false)
+    (lib.cmakeBool "ENABLE_OPENAL" false)
+    (lib.cmakeBool "ENABLE_LIBUSB" false)
+    (lib.cmakeBool "CITRA_ENABLE_BUNDLE_TARGET" false)
+    (lib.cmakeBool "CITRA_WARNINGS_AS_ERRORS" false)
+  ];
 
   meta = {
     description = "Port of Citra to libretro";

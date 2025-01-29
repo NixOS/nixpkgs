@@ -98,5 +98,5 @@ substituteAllFiles {
 }
 ```
 
-in the resulting derivation, every instance of `@hello@` will be replaced with `there` in `$out/foo.txt` and` `$out/bar.txt`; `baz.txt` will not be processed nor will it appear in `$out`.
+in the resulting derivation, every instance of `@hello@` will be replaced with `there` in `$out/foo.txt` and `$out/bar.txt`; `baz.txt` will not be processed nor will it appear in `$out`.
 :::

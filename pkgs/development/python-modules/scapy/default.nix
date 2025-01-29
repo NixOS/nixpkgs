@@ -40,7 +40,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "secdev";
     repo = "scapy";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-m2L30aEpPp9cfW652yd+0wFkNlMij6FF1RzWZbwJ79A=";
   };
 

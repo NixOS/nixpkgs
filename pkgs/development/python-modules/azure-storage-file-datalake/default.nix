@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "azure-sdk-for-python";
-    rev = "refs/tags/azure-storage-file-datalake_${version}";
+    tag = "azure-storage-file-datalake_${version}";
     hash = "sha256-FT51a7yuSMLJSnMFK9N09Rc8p/uaoYCcj9WliSvY6UA=";
   };
 

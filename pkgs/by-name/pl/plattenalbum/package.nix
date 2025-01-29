@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "SoongNoonien";
     repo = "plattenalbum";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-tbgSgbj77GvTgnI5eGu4cxYDie1gNa+5z053c0Nnu+Y=";
   };
 

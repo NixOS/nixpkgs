@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Bluetooth bluesnarfing utility";
-    homepage = "http://www.alighieri.org/project.html";
+    homepage = "https://www.alighieri.org/project.html";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ fgaz ];
     platforms = lib.platforms.linux;

@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bpftrace";
-  version = "0.21.2";
+  version = "0.22.1";
 
   src = fetchFromGitHub {
     owner = "bpftrace";
     repo = "bpftrace";
     rev = "v${version}";
-    hash = "sha256-/2m+5iFE7R+ZEc/VcgWAhkLD/jEK88roUUOUyYODi0U=";
+    hash = "sha256-3qtErf3+T73DE40d6F8vFK1TdHcM/56AYFGGzxpRIug=";
   };
 
   buildInputs = with llvmPackages; [
@@ -52,30 +52,10 @@ stdenv.mkDerivation rec {
     util-linux
   ];
 
-  # tests aren't built, due to gtest shenanigans. see:
-  #
-  #     https://github.com/bpftrace/bpftrace/issues/161#issuecomment-453606728
-  #     https://github.com/bpftrace/bpftrace/pull/363
-  #
   cmakeFlags = [
-    "-DBUILD_TESTING=FALSE"
     "-DLIBBCC_INCLUDE_DIRS=${bcc}/include"
     "-DINSTALL_TOOL_DOCS=OFF"
     "-DSYSTEM_INCLUDE_PATHS=${glibc.dev}/include"
-  ];
-
-  patches = [
-    (fetchpatch {
-      name = "runqlat-bt-no-includes.patch";
-      url = "https://github.com/bpftrace/bpftrace/pull/3262.patch";
-      hash = "sha256-9yqaZeG1Uf2cC9Aa40c2QUTQRl8n2NO1nq278hf9P4M=";
-    })
-    (fetchpatch {
-      name = "kheaders-not-found-message-only-on-error.patch";
-      url = "https://github.com/bpftrace/bpftrace/pull/3265.patch";
-      hash = "sha256-8AICMzwq5Evy9+hmZhFjccw/HmgZ9t+YIoHApjLv6Uc=";
-      excludes = [ "CHANGELOG.md" ];
-    })
   ];
 
   # Pull BPF scripts into $PATH (next to their bcc program equivalents), but do
@@ -107,6 +87,7 @@ stdenv.mkDerivation rec {
       thoughtpolice
       martinetd
       mfrw
+      illustris
     ];
     platforms = platforms.linux;
   };

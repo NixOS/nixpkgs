@@ -14,25 +14,24 @@ assert blas.isILP64 == lapack.isILP64;
 
 stdenv.mkDerivation rec {
   pname = "scalapack";
-  version = "2.2.1";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "Reference-ScaLAPACK";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-GNVGWrIWdfyTfbz7c31Vjt9eDlVzCd/aLHoWq2DMyX4=";
+    tag = "v${version}";
+    hash = "sha256-KDMW/D7ubGaD2L7eTwULJ04fAYDPAKl8xKPZGZMkeik=";
   };
 
   passthru = { inherit (blas) isILP64; };
 
   __structuredAttrs = true;
 
-  # upstream patch, remove with next release
   patches = [
     (fetchpatch {
-      name = "gcc-10";
-      url = "https://github.com/Reference-ScaLAPACK/scalapack/commit/a0f76fc0c1c16646875b454b7d6f8d9d17726b5a.patch";
-      sha256 = "0civn149ikghakic30bynqg1bal097hr7i12cm4kq3ssrhq073bp";
+      name = "version-string";
+      url = "https://github.com/Reference-ScaLAPACK/scalapack/commit/76cc1ed3032e9a4158a4513c9047c3746b269f04.patch";
+      hash = "sha256-kmllLa9GUeTrHRYeS0yIk9I8LwaIoEytdyQGRuinn3A=";
     })
   ];
 

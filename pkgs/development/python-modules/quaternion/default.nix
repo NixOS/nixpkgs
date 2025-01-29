@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "moble";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-i+UPi+DrhItplfc6EvDhmr3CEH2/cHODoHVBElM7jY8=";
   };
 

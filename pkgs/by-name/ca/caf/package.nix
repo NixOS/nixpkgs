@@ -25,8 +25,6 @@ stdenv.mkDerivation rec {
     "-DCAF_ENABLE_EXAMPLES:BOOL=OFF"
   ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-faligned-allocation";
-
   doCheck = !stdenv.hostPlatform.isDarwin;
   checkTarget = "test";
 

@@ -6,7 +6,6 @@
   rustPlatform,
   installShellFiles,
   pkg-config,
-  apple-sdk_11,
   withPCRE2 ? true,
   pcre2,
 }:
@@ -29,9 +28,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-b+iA8iTYWlczBpNq9eyHrWG8LMU4WPBzaU6pQRht+yE=";
 
   nativeBuildInputs = [ installShellFiles ] ++ lib.optional withPCRE2 pkg-config;
-  buildInputs =
-    lib.optional withPCRE2 pcre2
-    ++ lib.optional stdenv.hostPlatform.isDarwin apple-sdk_11;
+  buildInputs = lib.optional withPCRE2 pcre2;
 
   buildFeatures = lib.optional withPCRE2 "pcre2";
 

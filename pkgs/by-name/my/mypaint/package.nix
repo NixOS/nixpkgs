@@ -35,7 +35,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "mypaint";
     repo = "mypaint";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-rVKcxzWZRLcuxK8xRyRgvitXAh4uOEyqHswLeTdA2Mk=";
     fetchSubmodules = true;
   };
@@ -130,6 +130,10 @@ buildPythonApplication rec {
     runHook postInstall
   '';
 
+  # tests require unmaintained and removed nose, it should switch to pytest
+  # https://github.com/mypaint/mypaint/issues/1191
+  doCheck = false;
+
   checkPhase = ''
     runHook preCheck
 
@@ -138,11 +142,11 @@ buildPythonApplication rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Graphics application for digital painters";
     homepage = "http://mypaint.org/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ jtojnar ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ jtojnar ];
   };
 }

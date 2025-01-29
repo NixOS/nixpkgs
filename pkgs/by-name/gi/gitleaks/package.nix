@@ -3,7 +3,6 @@
   stdenv,
   buildGoModule,
   fetchFromGitHub,
-  gitleaks,
   installShellFiles,
   nix-update-script,
   versionCheckHook,
@@ -11,16 +10,16 @@
 
 buildGoModule rec {
   pname = "gitleaks";
-  version = "8.22.0";
+  version = "8.23.2";
 
   src = fetchFromGitHub {
     owner = "zricethezav";
     repo = "gitleaks";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-f3dSKYRkXt/YT5PgFS7pclRcKvfGl2sFopqfJkEwnhw=";
+    tag = "v${version}";
+    hash = "sha256-lwjGoDMNRgYDHI+8IjOD8sWJMUgv/Bg3pUzrUrcYiR4=";
   };
 
-  vendorHash = "sha256-qjchUWWnG2CYXTM4aGkh+UgaJuPQ6yEpetXJ5ORqNuE=";
+  vendorHash = "sha256-hq3v//fhCUOvKPBZ/+YrLIc4nDLxR9Yc+MeIXY7TArA=";
 
   ldflags = [
     "-s"

@@ -6,22 +6,15 @@ let
   cfg = config.virtualisation.hypervGuest;
 
 in {
+  imports = [
+    (mkRemovedOptionModule [ "virtualisation" "hypervGuest" "videoMode" ]
+      "The video mode can now be configured via standard tools, or in Hyper-V VM settings."
+    )
+  ];
+
   options = {
     virtualisation.hypervGuest = {
       enable = mkEnableOption "Hyper-V Guest Support";
-
-      videoMode = mkOption {
-        type = types.str;
-        default = "1152x864";
-        example = "1024x768";
-        description = ''
-          Resolution at which to initialize the video adapter.
-
-          Supports screen resolution up to Full HD 1920x1080 with 32 bit color
-          on Windows Server 2012, and 1600x1200 with 16 bit color on Windows
-          Server 2008 R2 or earlier.
-        '';
-      };
     };
   };
 
@@ -34,7 +27,7 @@ in {
       initrd.availableKernelModules = [ "hyperv_keyboard" ];
 
       kernelParams = [
-        "video=hyperv_fb:${cfg.videoMode}" "elevator=noop"
+        "elevator=noop"
       ];
     };
 

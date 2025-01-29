@@ -15,13 +15,13 @@
 }:
 
 let
-  version = "2024.12.1";
+  version = "2024.12.2";
 
   src = fetchFromGitHub {
     owner = "goauthentik";
     repo = "authentik";
     rev = "version/${version}";
-    hash = "sha256-CkUmsVKzAQ/VWIhtxWxlcGtrWVa8hxqsMqvfcsG5ktA=";
+    hash = "sha256-Z3rFFrXrOKaF9NpY/fInsEbzdOWnWqLfEYl7YX9hFEU=";
   };
 
   meta = with lib; {
@@ -343,6 +343,11 @@ stdenvNoCC.mkDerivation {
   postPatch = ''
     rm Makefile
     patchShebangs lifecycle/ak
+
+    # This causes issues in systemd services
+    substituteInPlace lifecycle/ak \
+      --replace-fail 'printf' '>&2 printf' \
+      --replace-fail '>/dev/stderr' ""
   '';
 
   installPhase = ''

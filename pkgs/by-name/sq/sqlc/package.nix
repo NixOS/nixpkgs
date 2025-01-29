@@ -9,7 +9,7 @@
 }:
 
 let
-  version = "1.27.0";
+  version = "1.28.0";
 in
 buildGoModule {
   pname = "sqlc";
@@ -19,11 +19,11 @@ buildGoModule {
     owner = "sqlc-dev";
     repo = "sqlc";
     rev = "v${version}";
-    hash = "sha256-wxQ+YPsDX0Z6B8whlQ/IaT2dRqapPL8kOuFEc6As1rU=";
+    hash = "sha256-kACZusfwEIO78OooNGMXCXQO5iPYddmsHCsbJ3wkRQs=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-ndOw3uShF5TngpxYNumoK3H3R9v4crfi5V3ZCoSqW90=";
+  vendorHash = "sha256-5KVCG92aWVx2J78whEwhEhqsRNlw4xSdIPbSqYM+1QI=";
 
   subPackages = [ "cmd/sqlc" ];
 

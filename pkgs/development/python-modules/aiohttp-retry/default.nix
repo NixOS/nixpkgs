@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "inyutin";
     repo = "aiohttp_retry";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-9riIGQDxC+Ee16itSWJWobPkmuy7Mkn2eyTkevIGse8=";
   };
 

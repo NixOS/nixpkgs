@@ -8,23 +8,23 @@
 
 let
   hlsJs = fetchurl {
-    url = "https://cdn.jsdelivr.net/npm/hls.js@v1.5.18/dist/hls.min.js";
-    hash = "sha256-X/LXFN4wvkKPx3sT4B25pLTPAV6bTWs+iGS2XT19Ptc=";
+    url = "https://cdn.jsdelivr.net/npm/hls.js@v1.5.20/dist/hls.min.js";
+    hash = "sha256-0BbBIwSW7lnz9bAcFszkzAG1odPTV63sIAyQixMevkk=";
   };
 in
 buildGoModule rec {
   pname = "mediamtx";
   # check for hls.js version updates in internal/servers/hls/hlsjsdownloader/VERSION
-  version = "1.10.0";
+  version = "1.11.2";
 
   src = fetchFromGitHub {
     owner = "bluenviron";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-nz+8soxZ6lyc0saB4U3tDsTtqA0kV886M95cA3Gn3R0=";
+    hash = "sha256-+NT3YheDdlTPnyGLUl9mpyYx2kvN1lw2jDRdAboTSdc=";
   };
 
-  vendorHash = "sha256-Csa8G+ji/OoTItu3XbGOySqmNMVdr7QqE8SNCba8cbI=";
+  vendorHash = "sha256-aDBjxt3f7z/9LwYJ5KyteODGFO5u+7m/rovOd9363Fg=";
 
   postPatch = ''
     cp ${hlsJs} internal/servers/hls/hls.min.js

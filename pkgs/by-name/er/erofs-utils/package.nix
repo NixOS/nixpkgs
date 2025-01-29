@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "erofs-utils";
-  version = "1.8.3";
+  version = "1.8.4";
   outputs = [
     "out"
     "man"
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git/snapshot/erofs-utils-${finalAttrs.version}.tar.gz";
-    hash = "sha256-PFzANgPqCLqa5eBCDurqX/F+0p4igGhTEDVsvyUwToU=";
+    hash = "sha256-eRWHqgdLufn6IYx2LMH2CwFeL1G8ss6R9oLwQ4VqtJQ=";
   };
 
   nativeBuildInputs = [

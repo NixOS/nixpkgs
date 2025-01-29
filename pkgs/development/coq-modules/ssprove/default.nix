@@ -24,6 +24,13 @@
         {
           cases = [
             (range "8.18" "8.20")
+            "2.3.0"
+          ];
+          out = "0.2.3";
+        }
+        {
+          cases = [
+            (range "8.18" "8.20")
             (range "2.1.0" "2.2.0")
           ];
           out = "0.2.2";
@@ -47,6 +54,7 @@
 
   releaseRev = v: "v${v}";
 
+  release."0.2.3".sha256 = "sha256-Y3dmNIF36IuIgrVILteofOv8e5awKfq93S4YN7enswI=";
   release."0.2.2".sha256 = "sha256-tBF8equJd6hKZojpe+v9h6Tg9xEnMTVFgOYK7ZnMfxk=";
   release."0.2.1".sha256 = "sha256-X00q5QFxdcGWeNqOV/PLTOqQyyfqFEinbGUTO7q8bC4=";
   release."0.2.0".sha256 = "sha256-GDkWH0LUsW165vAUoYC5of9ndr0MbfBtmrPhsJVXi3o=";

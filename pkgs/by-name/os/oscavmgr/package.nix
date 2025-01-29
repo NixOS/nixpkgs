@@ -7,6 +7,7 @@
   openxr-loader,
   pkg-config,
   rustPlatform,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -16,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "galister";
     repo = "oscavmgr";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-05dNBzf1f92bVNLbRaUB6KUae+wY3V8mUxDgAb+g1T4=";
   };
 
@@ -31,6 +32,9 @@ rustPlatform.buildRustPackage rec {
     openssl
     openxr-loader
   ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   postPatch = ''
     alvr_session=$(echo $cargoDepsCopy/alvr_session-*/)

@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Ferdi265";
     repo = "wl-restart";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-wLaZBqw/Yx0Oc7s3ffAmx3zakjhEBHM09uJcfsVHbnQ=";
   };
 

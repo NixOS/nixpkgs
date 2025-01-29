@@ -4,6 +4,7 @@
   cmake,
   pkg-config,
   fetchFromGitHub,
+  hyprland-qt-support,
   hyprutils,
   kdePackages,
   polkit,
@@ -11,13 +12,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprpolkitagent";
-  version = "0.1.1";
+  version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprpolkitagent";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-fhG6YqByDW0DAixXXX6AwTJOH3MqDlQ2XrVvpusZ3Ek=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-K1nSPFlh5VBWNagcaZ/157gfifAXTH8lzeyfYt/UEX8=";
   };
 
   nativeBuildInputs = [
@@ -27,6 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    hyprland-qt-support
     hyprutils
     kdePackages.kirigami-addons
     kdePackages.polkit-qt-1
@@ -40,10 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Polkit authentication agent written in QT/QML";
     homepage = "https://github.com/hyprwm/hyprpolkitagent";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [
-      fufexan
-      johnrtitor
-    ];
+    maintainers = lib.teams.hyprland.members;
     mainProgram = "hyprpolkitagent";
     platforms = lib.platforms.linux;
   };

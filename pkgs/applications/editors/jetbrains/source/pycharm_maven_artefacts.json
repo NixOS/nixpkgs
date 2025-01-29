@@ -1170,104 +1170,104 @@
         "path": "org/jetbrains/kotlin/kotlin-tooling-core/1.9.20-dev-8162/kotlin-tooling-core-1.9.20-dev-8162.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/allopen-compiler-plugin-for-ide/2.1.20-dev-1411/allopen-compiler-plugin-for-ide-2.1.20-dev-1411.jar",
+        "url": "org/jetbrains/kotlin/allopen-compiler-plugin-for-ide/2.1.20-ij243-27/allopen-compiler-plugin-for-ide-2.1.20-ij243-27.jar",
         "hash": "c8adcf05d31e8c8b95c424ff7f4fcea7d1d2fd6c9bf240d4d195209ca4638247",
-        "path": "org/jetbrains/kotlin/allopen-compiler-plugin-for-ide/2.1.20-dev-1411/allopen-compiler-plugin-for-ide-2.1.20-dev-1411.jar"
+        "path": "org/jetbrains/kotlin/allopen-compiler-plugin-for-ide/2.1.20-ij243-27/allopen-compiler-plugin-for-ide-2.1.20-ij243-27.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/analysis-api-for-ide/2.1.20-dev-1411/analysis-api-for-ide-2.1.20-dev-1411.jar",
+        "url": "org/jetbrains/kotlin/analysis-api-for-ide/2.1.20-ij243-27/analysis-api-for-ide-2.1.20-ij243-27.jar",
         "hash": "1b444fb7269f7cdd1b507dd3673c837ca842e80186606fac452538cf39604983",
-        "path": "org/jetbrains/kotlin/analysis-api-for-ide/2.1.20-dev-1411/analysis-api-for-ide-2.1.20-dev-1411.jar"
+        "path": "org/jetbrains/kotlin/analysis-api-for-ide/2.1.20-ij243-27/analysis-api-for-ide-2.1.20-ij243-27.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/analysis-api-fe10-for-ide/2.1.20-dev-1411/analysis-api-fe10-for-ide-2.1.20-dev-1411.jar",
+        "url": "org/jetbrains/kotlin/analysis-api-fe10-for-ide/2.1.20-ij243-27/analysis-api-fe10-for-ide-2.1.20-ij243-27.jar",
         "hash": "cbdbf36ad3b26ff90a88b97d35b8f753cb93495ee65618b195f8c56f1c8fb5ee",
-        "path": "org/jetbrains/kotlin/analysis-api-fe10-for-ide/2.1.20-dev-1411/analysis-api-fe10-for-ide-2.1.20-dev-1411.jar"
+        "path": "org/jetbrains/kotlin/analysis-api-fe10-for-ide/2.1.20-ij243-27/analysis-api-fe10-for-ide-2.1.20-ij243-27.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/analysis-api-impl-base-for-ide/2.1.20-dev-1411/analysis-api-impl-base-for-ide-2.1.20-dev-1411.jar",
+        "url": "org/jetbrains/kotlin/analysis-api-impl-base-for-ide/2.1.20-ij243-27/analysis-api-impl-base-for-ide-2.1.20-ij243-27.jar",
         "hash": "2670c1ef5d0fee7703e85a02adbf332491f4adcbd7f4c73c37ad321284614273",
-        "path": "org/jetbrains/kotlin/analysis-api-impl-base-for-ide/2.1.20-dev-1411/analysis-api-impl-base-for-ide-2.1.20-dev-1411.jar"
+        "path": "org/jetbrains/kotlin/analysis-api-impl-base-for-ide/2.1.20-ij243-27/analysis-api-impl-base-for-ide-2.1.20-ij243-27.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/analysis-api-impl-base-tests-for-ide/2.1.20-dev-1411/analysis-api-impl-base-tests-for-ide-2.1.20-dev-1411.jar",
+        "url": "org/jetbrains/kotlin/analysis-api-impl-base-tests-for-ide/2.1.20-ij243-27/analysis-api-impl-base-tests-for-ide-2.1.20-ij243-27.jar",
         "hash": "9244f9542fc33b743fd4eb95cb9afad94469af83cc41cd1145c837b2ea0b6438",
-        "path": "org/jetbrains/kotlin/analysis-api-impl-base-tests-for-ide/2.1.20-dev-1411/analysis-api-impl-base-tests-for-ide-2.1.20-dev-1411.jar"
+        "path": "org/jetbrains/kotlin/analysis-api-impl-base-tests-for-ide/2.1.20-ij243-27/analysis-api-impl-base-tests-for-ide-2.1.20-ij243-27.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/analysis-api-k2-for-ide/2.1.20-dev-1411/analysis-api-k2-for-ide-2.1.20-dev-1411.jar",
-        "hash": "e9e4e766955bf04a09ff4b4c774966aa33c4226683426ef7ee86d3a2c9e87815",
-        "path": "org/jetbrains/kotlin/analysis-api-k2-for-ide/2.1.20-dev-1411/analysis-api-k2-for-ide-2.1.20-dev-1411.jar"
+        "url": "org/jetbrains/kotlin/analysis-api-k2-for-ide/2.1.20-ij243-27/analysis-api-k2-for-ide-2.1.20-ij243-27.jar",
+        "hash": "1d7563eb83797d89a82fc68dc5f4a83cc45a0f2c7600c29c5967ddc00e28d99b",
+        "path": "org/jetbrains/kotlin/analysis-api-k2-for-ide/2.1.20-ij243-27/analysis-api-k2-for-ide-2.1.20-ij243-27.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/analysis-api-k2-tests-for-ide/2.1.20-dev-1411/analysis-api-k2-tests-for-ide-2.1.20-dev-1411.jar",
-        "hash": "12e9d0a4b739d4c153650cc6b5f6f0133265e1e775191187753010007478af58",
-        "path": "org/jetbrains/kotlin/analysis-api-k2-tests-for-ide/2.1.20-dev-1411/analysis-api-k2-tests-for-ide-2.1.20-dev-1411.jar"
+        "url": "org/jetbrains/kotlin/analysis-api-k2-tests-for-ide/2.1.20-ij243-27/analysis-api-k2-tests-for-ide-2.1.20-ij243-27.jar",
+        "hash": "50e8f50d80e7e8c9ebbf15f423a82ebc277ced66370509d7e8b9680fc1f4930f",
+        "path": "org/jetbrains/kotlin/analysis-api-k2-tests-for-ide/2.1.20-ij243-27/analysis-api-k2-tests-for-ide-2.1.20-ij243-27.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/analysis-api-platform-interface-for-ide/2.1.20-dev-1411/analysis-api-platform-interface-for-ide-2.1.20-dev-1411.jar",
+        "url": "org/jetbrains/kotlin/analysis-api-platform-interface-for-ide/2.1.20-ij243-27/analysis-api-platform-interface-for-ide-2.1.20-ij243-27.jar",
         "hash": "208a3912cd03910dc8e8bc66ee080bea29f6690ecaf1540b24ade4052841cd0c",
-        "path": "org/jetbrains/kotlin/analysis-api-platform-interface-for-ide/2.1.20-dev-1411/analysis-api-platform-interface-for-ide-2.1.20-dev-1411.jar"
+        "path": "org/jetbrains/kotlin/analysis-api-platform-interface-for-ide/2.1.20-ij243-27/analysis-api-platform-interface-for-ide-2.1.20-ij243-27.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/android-extensions-compiler-plugin-for-ide/2.1.20-dev-1411/android-extensions-compiler-plugin-for-ide-2.1.20-dev-1411.jar",
+        "url": "org/jetbrains/kotlin/android-extensions-compiler-plugin-for-ide/2.1.20-ij243-27/android-extensions-compiler-plugin-for-ide-2.1.20-ij243-27.jar",
         "hash": "273cb56b099731bfcd042f5723d8927eb6595e60c503e2cbbf8e50279bbf6c1c",
-        "path": "org/jetbrains/kotlin/android-extensions-compiler-plugin-for-ide/2.1.20-dev-1411/android-extensions-compiler-plugin-for-ide-2.1.20-dev-1411.jar"
+        "path": "org/jetbrains/kotlin/android-extensions-compiler-plugin-for-ide/2.1.20-ij243-27/android-extensions-compiler-plugin-for-ide-2.1.20-ij243-27.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/assignment-compiler-plugin-for-ide/2.1.20-dev-1411/assignment-compiler-plugin-for-ide-2.1.20-dev-1411.jar",
+        "url": "org/jetbrains/kotlin/assignment-compiler-plugin-for-ide/2.1.20-ij243-27/assignment-compiler-plugin-for-ide-2.1.20-ij243-27.jar",
         "hash": "51d89282a038b9f9c5624a7047f3b05bd944afd9873855f8afc0d56369ea7235",
-        "path": "org/jetbrains/kotlin/assignment-compiler-plugin-for-ide/2.1.20-dev-1411/assignment-compiler-plugin-for-ide-2.1.20-dev-1411.jar"
+        "path": "org/jetbrains/kotlin/assignment-compiler-plugin-for-ide/2.1.20-ij243-27/assignment-compiler-plugin-for-ide-2.1.20-ij243-27.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/compose-compiler-plugin-for-ide/2.1.20-dev-1411/compose-compiler-plugin-for-ide-2.1.20-dev-1411.jar",
+        "url": "org/jetbrains/kotlin/compose-compiler-plugin-for-ide/2.1.20-ij243-27/compose-compiler-plugin-for-ide-2.1.20-ij243-27.jar",
         "hash": "98cab727bfb519b915b9daebd1ef65bef7970948d553edbd77b414d567371d1c",
-        "path": "org/jetbrains/kotlin/compose-compiler-plugin-for-ide/2.1.20-dev-1411/compose-compiler-plugin-for-ide-2.1.20-dev-1411.jar"
+        "path": "org/jetbrains/kotlin/compose-compiler-plugin-for-ide/2.1.20-ij243-27/compose-compiler-plugin-for-ide-2.1.20-ij243-27.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/incremental-compilation-impl-tests-for-ide/2.1.20-dev-1411/incremental-compilation-impl-tests-for-ide-2.1.20-dev-1411.jar",
+        "url": "org/jetbrains/kotlin/incremental-compilation-impl-tests-for-ide/2.1.20-ij243-27/incremental-compilation-impl-tests-for-ide-2.1.20-ij243-27.jar",
         "hash": "04b1014cb80ed3734acc384c5b73b73326c10367fcf6f4ed326d58f5de676b32",
-        "path": "org/jetbrains/kotlin/incremental-compilation-impl-tests-for-ide/2.1.20-dev-1411/incremental-compilation-impl-tests-for-ide-2.1.20-dev-1411.jar"
+        "path": "org/jetbrains/kotlin/incremental-compilation-impl-tests-for-ide/2.1.20-ij243-27/incremental-compilation-impl-tests-for-ide-2.1.20-ij243-27.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/js-plain-objects-compiler-plugin-for-ide/2.1.20-dev-1411/js-plain-objects-compiler-plugin-for-ide-2.1.20-dev-1411.jar",
+        "url": "org/jetbrains/kotlin/js-plain-objects-compiler-plugin-for-ide/2.1.20-ij243-27/js-plain-objects-compiler-plugin-for-ide-2.1.20-ij243-27.jar",
         "hash": "b0c84299e91a2fe55e4d23f474442fc1d2e547be95e0cedd1725347c15884619",
-        "path": "org/jetbrains/kotlin/js-plain-objects-compiler-plugin-for-ide/2.1.20-dev-1411/js-plain-objects-compiler-plugin-for-ide-2.1.20-dev-1411.jar"
+        "path": "org/jetbrains/kotlin/js-plain-objects-compiler-plugin-for-ide/2.1.20-ij243-27/js-plain-objects-compiler-plugin-for-ide-2.1.20-ij243-27.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/kotlin-build-common-tests-for-ide/2.1.20-dev-1411/kotlin-build-common-tests-for-ide-2.1.20-dev-1411.jar",
+        "url": "org/jetbrains/kotlin/kotlin-build-common-tests-for-ide/2.1.20-ij243-27/kotlin-build-common-tests-for-ide-2.1.20-ij243-27.jar",
         "hash": "477d2ee6473418d930ea1c51dcf82750465dd8b60410432c03ea4012db4fabaf",
-        "path": "org/jetbrains/kotlin/kotlin-build-common-tests-for-ide/2.1.20-dev-1411/kotlin-build-common-tests-for-ide-2.1.20-dev-1411.jar"
+        "path": "org/jetbrains/kotlin/kotlin-build-common-tests-for-ide/2.1.20-ij243-27/kotlin-build-common-tests-for-ide-2.1.20-ij243-27.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/kotlin-compiler-cli-for-ide/2.1.20-dev-1411/kotlin-compiler-cli-for-ide-2.1.20-dev-1411.jar",
+        "url": "org/jetbrains/kotlin/kotlin-compiler-cli-for-ide/2.1.20-ij243-27/kotlin-compiler-cli-for-ide-2.1.20-ij243-27.jar",
         "hash": "67c21a14263fc9e4bdef697f378ff2718642c510f11f700155e7d35bf074db11",
-        "path": "org/jetbrains/kotlin/kotlin-compiler-cli-for-ide/2.1.20-dev-1411/kotlin-compiler-cli-for-ide-2.1.20-dev-1411.jar"
+        "path": "org/jetbrains/kotlin/kotlin-compiler-cli-for-ide/2.1.20-ij243-27/kotlin-compiler-cli-for-ide-2.1.20-ij243-27.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/kotlin-compiler-common-for-ide/2.1.20-dev-1411/kotlin-compiler-common-for-ide-2.1.20-dev-1411.jar",
-        "hash": "0a6cc1518e695c417a415a5e9d623afdbe0ef61a5466af525fcbc1951a1bff0c",
-        "path": "org/jetbrains/kotlin/kotlin-compiler-common-for-ide/2.1.20-dev-1411/kotlin-compiler-common-for-ide-2.1.20-dev-1411.jar"
+        "url": "org/jetbrains/kotlin/kotlin-compiler-common-for-ide/2.1.20-ij243-27/kotlin-compiler-common-for-ide-2.1.20-ij243-27.jar",
+        "hash": "0f179e0b0cf96b50c51efd5f28f7800c73dbe4b807b98cd42714832150fd8451",
+        "path": "org/jetbrains/kotlin/kotlin-compiler-common-for-ide/2.1.20-ij243-27/kotlin-compiler-common-for-ide-2.1.20-ij243-27.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/kotlin-compiler-fe10-for-ide/2.1.20-dev-1411/kotlin-compiler-fe10-for-ide-2.1.20-dev-1411.jar",
+        "url": "org/jetbrains/kotlin/kotlin-compiler-fe10-for-ide/2.1.20-ij243-27/kotlin-compiler-fe10-for-ide-2.1.20-ij243-27.jar",
         "hash": "415c64817d712c51321be1164109f7e4e0d07adb04e57e47409cb9826c487ad6",
-        "path": "org/jetbrains/kotlin/kotlin-compiler-fe10-for-ide/2.1.20-dev-1411/kotlin-compiler-fe10-for-ide-2.1.20-dev-1411.jar"
+        "path": "org/jetbrains/kotlin/kotlin-compiler-fe10-for-ide/2.1.20-ij243-27/kotlin-compiler-fe10-for-ide-2.1.20-ij243-27.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/kotlin-compiler-fir-for-ide/2.1.20-dev-1411/kotlin-compiler-fir-for-ide-2.1.20-dev-1411.jar",
+        "url": "org/jetbrains/kotlin/kotlin-compiler-fir-for-ide/2.1.20-ij243-27/kotlin-compiler-fir-for-ide-2.1.20-ij243-27.jar",
         "hash": "babfd8f49f1fe2b2e57fd1ff4c39c54f73624157cdbcda67a31260efd1c5ca03",
-        "path": "org/jetbrains/kotlin/kotlin-compiler-fir-for-ide/2.1.20-dev-1411/kotlin-compiler-fir-for-ide-2.1.20-dev-1411.jar"
+        "path": "org/jetbrains/kotlin/kotlin-compiler-fir-for-ide/2.1.20-ij243-27/kotlin-compiler-fir-for-ide-2.1.20-ij243-27.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/kotlin-compiler-ir-for-ide/2.1.20-dev-1411/kotlin-compiler-ir-for-ide-2.1.20-dev-1411.jar",
+        "url": "org/jetbrains/kotlin/kotlin-compiler-ir-for-ide/2.1.20-ij243-27/kotlin-compiler-ir-for-ide-2.1.20-ij243-27.jar",
         "hash": "531d54d53c6ea8406f6b461dc555b5f816f8a10497fc07238b215b7e28d70a8a",
-        "path": "org/jetbrains/kotlin/kotlin-compiler-ir-for-ide/2.1.20-dev-1411/kotlin-compiler-ir-for-ide-2.1.20-dev-1411.jar"
+        "path": "org/jetbrains/kotlin/kotlin-compiler-ir-for-ide/2.1.20-ij243-27/kotlin-compiler-ir-for-ide-2.1.20-ij243-27.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/kotlin-compiler-tests-for-ide/2.1.20-dev-1411/kotlin-compiler-tests-for-ide-2.1.20-dev-1411.jar",
+        "url": "org/jetbrains/kotlin/kotlin-compiler-tests-for-ide/2.1.20-ij243-27/kotlin-compiler-tests-for-ide-2.1.20-ij243-27.jar",
         "hash": "66c7ae509ad0e1594620e177040d57af4fe5efb4e31b4f3156e83bc3fd2bce0a",
-        "path": "org/jetbrains/kotlin/kotlin-compiler-tests-for-ide/2.1.20-dev-1411/kotlin-compiler-tests-for-ide-2.1.20-dev-1411.jar"
+        "path": "org/jetbrains/kotlin/kotlin-compiler-tests-for-ide/2.1.20-ij243-27/kotlin-compiler-tests-for-ide-2.1.20-ij243-27.jar"
     },
     {
         "url": "org/jetbrains/kotlin/kotlin-dist-for-ide/2.0.21-release-482/kotlin-dist-for-ide-2.0.21-release-482.jar",
@@ -1275,14 +1275,14 @@
         "path": "org/jetbrains/kotlin/kotlin-dist-for-ide/2.0.21-release-482/kotlin-dist-for-ide-2.0.21-release-482.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/kotlin-gradle-statistics-for-ide/2.1.20-dev-1411/kotlin-gradle-statistics-for-ide-2.1.20-dev-1411.jar",
+        "url": "org/jetbrains/kotlin/kotlin-gradle-statistics-for-ide/2.1.20-ij243-27/kotlin-gradle-statistics-for-ide-2.1.20-ij243-27.jar",
         "hash": "b0c2200a590800499bb0cd1dc475627753ef87b3f71f354848a8330eb18a169b",
-        "path": "org/jetbrains/kotlin/kotlin-gradle-statistics-for-ide/2.1.20-dev-1411/kotlin-gradle-statistics-for-ide-2.1.20-dev-1411.jar"
+        "path": "org/jetbrains/kotlin/kotlin-gradle-statistics-for-ide/2.1.20-ij243-27/kotlin-gradle-statistics-for-ide-2.1.20-ij243-27.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/kotlin-jps-common-for-ide/2.1.20-dev-1411/kotlin-jps-common-for-ide-2.1.20-dev-1411.jar",
+        "url": "org/jetbrains/kotlin/kotlin-jps-common-for-ide/2.1.20-ij243-27/kotlin-jps-common-for-ide-2.1.20-ij243-27.jar",
         "hash": "386a37676bf6e05213a874c81fc15a28d8da1f86c5b6d458e9d958c9fa3549f4",
-        "path": "org/jetbrains/kotlin/kotlin-jps-common-for-ide/2.1.20-dev-1411/kotlin-jps-common-for-ide-2.1.20-dev-1411.jar"
+        "path": "org/jetbrains/kotlin/kotlin-jps-common-for-ide/2.1.20-ij243-27/kotlin-jps-common-for-ide-2.1.20-ij243-27.jar"
     },
     {
         "url": "org/jetbrains/kotlin/kotlin-jps-plugin-classpath/2.0.21-release-482/kotlin-jps-plugin-classpath-2.0.21-release-482.jar",
@@ -1290,9 +1290,9 @@
         "path": "org/jetbrains/kotlin/kotlin-jps-plugin-classpath/2.0.21-release-482/kotlin-jps-plugin-classpath-2.0.21-release-482.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/kotlin-jps-plugin-classpath/2.1.20-dev-1411/kotlin-jps-plugin-classpath-2.1.20-dev-1411.jar",
-        "hash": "6e5d3a9b59a9ccf3c0b77b5a8d9f573d83e8f23914e264d3c75d1f1e2d641d43",
-        "path": "org/jetbrains/kotlin/kotlin-jps-plugin-classpath/2.1.20-dev-1411/kotlin-jps-plugin-classpath-2.1.20-dev-1411.jar"
+        "url": "org/jetbrains/kotlin/kotlin-jps-plugin-classpath/2.1.20-ij243-27/kotlin-jps-plugin-classpath-2.1.20-ij243-27.jar",
+        "hash": "adcc0c81e59b0586d9457077423cad639577bf9220a28bd39a0ae2a972345bfd",
+        "path": "org/jetbrains/kotlin/kotlin-jps-plugin-classpath/2.1.20-ij243-27/kotlin-jps-plugin-classpath-2.1.20-ij243-27.jar"
     },
     {
         "url": "org/jetbrains/kotlin/kotlin-jps-plugin-tests-for-ide/2.0.21-release-482/kotlin-jps-plugin-tests-for-ide-2.0.21-release-482.jar",
@@ -1300,64 +1300,64 @@
         "path": "org/jetbrains/kotlin/kotlin-jps-plugin-tests-for-ide/2.0.21-release-482/kotlin-jps-plugin-tests-for-ide-2.0.21-release-482.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/kotlin-script-runtime/2.1.20-dev-1411/kotlin-script-runtime-2.1.20-dev-1411.jar",
-        "hash": "bf2e155d2bb465376a25c23fa87da531d33c3b2d56586d5ec07b13963133e350",
-        "path": "org/jetbrains/kotlin/kotlin-script-runtime/2.1.20-dev-1411/kotlin-script-runtime-2.1.20-dev-1411.jar"
+        "url": "org/jetbrains/kotlin/kotlin-script-runtime/2.1.20-ij243-27/kotlin-script-runtime-2.1.20-ij243-27.jar",
+        "hash": "c8b80761147ec3696cdb967fe8c989d57a0364d808bf5317ae79f660eeba1bd6",
+        "path": "org/jetbrains/kotlin/kotlin-script-runtime/2.1.20-ij243-27/kotlin-script-runtime-2.1.20-ij243-27.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/kotlin-scripting-common/2.1.20-dev-1411/kotlin-scripting-common-2.1.20-dev-1411.jar",
-        "hash": "062d9797abf740afac3024e04142ca51f89718a145d2fc19e34897b6be8ee504",
-        "path": "org/jetbrains/kotlin/kotlin-scripting-common/2.1.20-dev-1411/kotlin-scripting-common-2.1.20-dev-1411.jar"
+        "url": "org/jetbrains/kotlin/kotlin-scripting-common/2.1.20-ij243-27/kotlin-scripting-common-2.1.20-ij243-27.jar",
+        "hash": "56cce8ba74fad85b31f8a51c55ebb723d90e25bdb6fc5a6848684c32ba88bcbf",
+        "path": "org/jetbrains/kotlin/kotlin-scripting-common/2.1.20-ij243-27/kotlin-scripting-common-2.1.20-ij243-27.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/kotlin-scripting-compiler-impl/2.1.20-dev-1411/kotlin-scripting-compiler-impl-2.1.20-dev-1411.jar",
-        "hash": "01e7966a5b8a2528cad1d0b90a8b4a471b96f13a7060e78df4a6641971d2890b",
-        "path": "org/jetbrains/kotlin/kotlin-scripting-compiler-impl/2.1.20-dev-1411/kotlin-scripting-compiler-impl-2.1.20-dev-1411.jar"
+        "url": "org/jetbrains/kotlin/kotlin-scripting-compiler-impl/2.1.20-ij243-27/kotlin-scripting-compiler-impl-2.1.20-ij243-27.jar",
+        "hash": "ca7cd3385bccd1834e10b1400aa72e4b818fb9d87846713dd6999a1db3faa081",
+        "path": "org/jetbrains/kotlin/kotlin-scripting-compiler-impl/2.1.20-ij243-27/kotlin-scripting-compiler-impl-2.1.20-ij243-27.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/kotlin-scripting-jvm/2.1.20-dev-1411/kotlin-scripting-jvm-2.1.20-dev-1411.jar",
-        "hash": "38d5d4ae2bd8e1bcc698b4c74bba2626dee575bb20a054416a59e952f578ab3c",
-        "path": "org/jetbrains/kotlin/kotlin-scripting-jvm/2.1.20-dev-1411/kotlin-scripting-jvm-2.1.20-dev-1411.jar"
+        "url": "org/jetbrains/kotlin/kotlin-scripting-jvm/2.1.20-ij243-27/kotlin-scripting-jvm-2.1.20-ij243-27.jar",
+        "hash": "158a331bea55564b095d35f3809380191049805e49764b9b4e2bf000dfe83efd",
+        "path": "org/jetbrains/kotlin/kotlin-scripting-jvm/2.1.20-ij243-27/kotlin-scripting-jvm-2.1.20-ij243-27.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/kotlinx-serialization-compiler-plugin-for-ide/2.1.20-dev-1411/kotlinx-serialization-compiler-plugin-for-ide-2.1.20-dev-1411.jar",
+        "url": "org/jetbrains/kotlin/kotlinx-serialization-compiler-plugin-for-ide/2.1.20-ij243-27/kotlinx-serialization-compiler-plugin-for-ide-2.1.20-ij243-27.jar",
         "hash": "8e6298709f8069827106bba06affea8d6bcbbce292ffb1b6403f9744c0ea759c",
-        "path": "org/jetbrains/kotlin/kotlinx-serialization-compiler-plugin-for-ide/2.1.20-dev-1411/kotlinx-serialization-compiler-plugin-for-ide-2.1.20-dev-1411.jar"
+        "path": "org/jetbrains/kotlin/kotlinx-serialization-compiler-plugin-for-ide/2.1.20-ij243-27/kotlinx-serialization-compiler-plugin-for-ide-2.1.20-ij243-27.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/lombok-compiler-plugin-for-ide/2.1.20-dev-1411/lombok-compiler-plugin-for-ide-2.1.20-dev-1411.jar",
+        "url": "org/jetbrains/kotlin/lombok-compiler-plugin-for-ide/2.1.20-ij243-27/lombok-compiler-plugin-for-ide-2.1.20-ij243-27.jar",
         "hash": "37f0d61c72d7dbcbf91b079d150b3d29234875d7a74ceb9e0523dcfdb2656dba",
-        "path": "org/jetbrains/kotlin/lombok-compiler-plugin-for-ide/2.1.20-dev-1411/lombok-compiler-plugin-for-ide-2.1.20-dev-1411.jar"
+        "path": "org/jetbrains/kotlin/lombok-compiler-plugin-for-ide/2.1.20-ij243-27/lombok-compiler-plugin-for-ide-2.1.20-ij243-27.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/low-level-api-fir-for-ide/2.1.20-dev-1411/low-level-api-fir-for-ide-2.1.20-dev-1411.jar",
+        "url": "org/jetbrains/kotlin/low-level-api-fir-for-ide/2.1.20-ij243-27/low-level-api-fir-for-ide-2.1.20-ij243-27.jar",
         "hash": "eb22464cad954a6b922e69d1594883e7ec05c6bbecf74874610b931dc2e140c1",
-        "path": "org/jetbrains/kotlin/low-level-api-fir-for-ide/2.1.20-dev-1411/low-level-api-fir-for-ide-2.1.20-dev-1411.jar"
+        "path": "org/jetbrains/kotlin/low-level-api-fir-for-ide/2.1.20-ij243-27/low-level-api-fir-for-ide-2.1.20-ij243-27.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/noarg-compiler-plugin-for-ide/2.1.20-dev-1411/noarg-compiler-plugin-for-ide-2.1.20-dev-1411.jar",
+        "url": "org/jetbrains/kotlin/noarg-compiler-plugin-for-ide/2.1.20-ij243-27/noarg-compiler-plugin-for-ide-2.1.20-ij243-27.jar",
         "hash": "27ec611f8efc1e7d59d1f153cd1b7605ef38aa266095b3cca9280a976d3972a8",
-        "path": "org/jetbrains/kotlin/noarg-compiler-plugin-for-ide/2.1.20-dev-1411/noarg-compiler-plugin-for-ide-2.1.20-dev-1411.jar"
+        "path": "org/jetbrains/kotlin/noarg-compiler-plugin-for-ide/2.1.20-ij243-27/noarg-compiler-plugin-for-ide-2.1.20-ij243-27.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/parcelize-compiler-plugin-for-ide/2.1.20-dev-1411/parcelize-compiler-plugin-for-ide-2.1.20-dev-1411.jar",
+        "url": "org/jetbrains/kotlin/parcelize-compiler-plugin-for-ide/2.1.20-ij243-27/parcelize-compiler-plugin-for-ide-2.1.20-ij243-27.jar",
         "hash": "062fae0ea84b4bc8ab80dcc94100263f741e8e8a7e5a1ba62aaa0d0b75c0239e",
-        "path": "org/jetbrains/kotlin/parcelize-compiler-plugin-for-ide/2.1.20-dev-1411/parcelize-compiler-plugin-for-ide-2.1.20-dev-1411.jar"
+        "path": "org/jetbrains/kotlin/parcelize-compiler-plugin-for-ide/2.1.20-ij243-27/parcelize-compiler-plugin-for-ide-2.1.20-ij243-27.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/sam-with-receiver-compiler-plugin-for-ide/2.1.20-dev-1411/sam-with-receiver-compiler-plugin-for-ide-2.1.20-dev-1411.jar",
+        "url": "org/jetbrains/kotlin/sam-with-receiver-compiler-plugin-for-ide/2.1.20-ij243-27/sam-with-receiver-compiler-plugin-for-ide-2.1.20-ij243-27.jar",
         "hash": "8baba2c6e065e2895dcf483a067ed4f2088408e2b5a2522ef4f375ed27ab908b",
-        "path": "org/jetbrains/kotlin/sam-with-receiver-compiler-plugin-for-ide/2.1.20-dev-1411/sam-with-receiver-compiler-plugin-for-ide-2.1.20-dev-1411.jar"
+        "path": "org/jetbrains/kotlin/sam-with-receiver-compiler-plugin-for-ide/2.1.20-ij243-27/sam-with-receiver-compiler-plugin-for-ide-2.1.20-ij243-27.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/scripting-compiler-plugin-for-ide/2.1.20-dev-1411/scripting-compiler-plugin-for-ide-2.1.20-dev-1411.jar",
+        "url": "org/jetbrains/kotlin/scripting-compiler-plugin-for-ide/2.1.20-ij243-27/scripting-compiler-plugin-for-ide-2.1.20-ij243-27.jar",
         "hash": "83ec2e236bfb4e66c766aa84e83582fd83dbb290162fff6140627742ba1169fb",
-        "path": "org/jetbrains/kotlin/scripting-compiler-plugin-for-ide/2.1.20-dev-1411/scripting-compiler-plugin-for-ide-2.1.20-dev-1411.jar"
+        "path": "org/jetbrains/kotlin/scripting-compiler-plugin-for-ide/2.1.20-ij243-27/scripting-compiler-plugin-for-ide-2.1.20-ij243-27.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/symbol-light-classes-for-ide/2.1.20-dev-1411/symbol-light-classes-for-ide-2.1.20-dev-1411.jar",
+        "url": "org/jetbrains/kotlin/symbol-light-classes-for-ide/2.1.20-ij243-27/symbol-light-classes-for-ide-2.1.20-ij243-27.jar",
         "hash": "67cdd930333a1fee46b45e997560cb5279c6c92f060fffd44832255104834531",
-        "path": "org/jetbrains/kotlin/symbol-light-classes-for-ide/2.1.20-dev-1411/symbol-light-classes-for-ide-2.1.20-dev-1411.jar"
+        "path": "org/jetbrains/kotlin/symbol-light-classes-for-ide/2.1.20-ij243-27/symbol-light-classes-for-ide-2.1.20-ij243-27.jar"
     },
     {
         "url": "org/jetbrains/kotlinx/kotlinx-collections-immutable-jvm/0.3.8/kotlinx-collections-immutable-jvm-0.3.8.jar",
@@ -1735,9 +1735,9 @@
         "path": "net/sf/kxml/kxml2/2.3.0/kxml2-2.3.0.jar"
     },
     {
-        "url": "com/android/tools/layoutlib/layoutlib/14.0.11/layoutlib-14.0.11.jar",
-        "hash": "9a8ab05c9617ec18a3bd8546ef9d56b4ea6271208ade27710b0baf564fe4dd59",
-        "path": "com/android/tools/layoutlib/layoutlib/14.0.11/layoutlib-14.0.11.jar"
+        "url": "com/android/tools/layoutlib/layoutlib/15.0.3/layoutlib-15.0.3.jar",
+        "hash": "b8e1002333aedb972e000c52bb38672642344e3403b797592344578f62df62c1",
+        "path": "com/android/tools/layoutlib/layoutlib/15.0.3/layoutlib-15.0.3.jar"
     },
     {
         "url": "org/apache/thrift/libthrift/0.19.0/libthrift-0.19.0.jar",
@@ -2340,14 +2340,14 @@
         "path": "org/sqlite/native/3.42.0-jb.1/native-3.42.0-jb.1.jar"
     },
     {
-        "url": "org/jetbrains/intellij/deps/studio-platform/2024.2.1-rc01-200/studio-platform-2024.2.1-rc01-200.jar",
-        "hash": "fcf0efc999f8896bd1ab78d78d9da7a29dcd12411d3ccda6696cf10e2170962d",
-        "path": "org/jetbrains/intellij/deps/studio-platform/2024.2.1-rc01-200/studio-platform-2024.2.1-rc01-200.jar"
+        "url": "org/jetbrains/intellij/deps/studio-platform/2024.2.2-canary5-202/studio-platform-2024.2.2-canary5-202.jar",
+        "hash": "e53a880874df8e81512de5697fbfec19ea3d5e2d3646094fd0221f0a04e8f3a9",
+        "path": "org/jetbrains/intellij/deps/studio-platform/2024.2.2-canary5-202/studio-platform-2024.2.2-canary5-202.jar"
     },
     {
-        "url": "org/jetbrains/intellij/deps/studio-test-platform/2024.2.1-rc01-200/studio-test-platform-2024.2.1-rc01-200.jar",
-        "hash": "5cb9a228b610104e3a0993a637ade612a4e84c3842939149707f77d3ffc045ed",
-        "path": "org/jetbrains/intellij/deps/studio-test-platform/2024.2.1-rc01-200/studio-test-platform-2024.2.1-rc01-200.jar"
+        "url": "org/jetbrains/intellij/deps/studio-test-platform/2024.2.2-canary5-202/studio-test-platform-2024.2.2-canary5-202.jar",
+        "hash": "0607a695a007e4c643ed3abc3f47e6d943ddea44e19ddc074c983e5f42aa081b",
+        "path": "org/jetbrains/intellij/deps/studio-test-platform/2024.2.2-canary5-202/studio-test-platform-2024.2.2-canary5-202.jar"
     },
     {
         "url": "org/swinglabs/swingx-core/1.6.2-2/swingx-core-1.6.2-2.jar",
@@ -6095,39 +6095,39 @@
         "path": "org/jetbrains/intellij/deps/android/tools/base/backgroundtask_inspector_java_proto/232.1.23.0/backgroundtask_inspector_java_proto-232.1.23.0.jar"
     },
     {
-        "url": "org/jetbrains/skiko/skiko-awt-runtime-all/0.8.9/skiko-awt-runtime-all-0.8.9.jar",
-        "hash": "8d1825a1ab736c5eb8fe7b9d4966f82525f1f55dbb8c8a9750da96a7caceb430",
-        "path": "org/jetbrains/skiko/skiko-awt-runtime-all/0.8.9/skiko-awt-runtime-all-0.8.9.jar"
+        "url": "org/jetbrains/skiko/skiko-awt-runtime-all/0.8.12/skiko-awt-runtime-all-0.8.12.jar",
+        "hash": "5f484588775569f3e0d18a63e1f370f74452d74e6bcc2bed15b8b9c5e4b1dadb",
+        "path": "org/jetbrains/skiko/skiko-awt-runtime-all/0.8.12/skiko-awt-runtime-all-0.8.12.jar"
     },
     {
-        "url": "org/jetbrains/compose/ui/ui-test-junit4-desktop/1.7.0-dev1743/ui-test-junit4-desktop-1.7.0-dev1743.jar",
+        "url": "org/jetbrains/compose/ui/ui-test-junit4-desktop/1.7.0-beta02/ui-test-junit4-desktop-1.7.0-beta02.jar",
         "hash": "f1e334b73d49ceab00afe776a4c393de77b4fc805e9ff488dac596a2663b1dc1",
-        "path": "org/jetbrains/compose/ui/ui-test-junit4-desktop/1.7.0-dev1743/ui-test-junit4-desktop-1.7.0-dev1743.jar"
+        "path": "org/jetbrains/compose/ui/ui-test-junit4-desktop/1.7.0-beta02/ui-test-junit4-desktop-1.7.0-beta02.jar"
     },
     {
-        "url": "org/jetbrains/compose/ui/ui-test-desktop/1.7.0-dev1743/ui-test-desktop-1.7.0-dev1743.jar",
-        "hash": "b93fdaf4ac452198b343c99b1d6b8190c04f61ff4c8eff3b7ccfd7d6671b7447",
-        "path": "org/jetbrains/compose/ui/ui-test-desktop/1.7.0-dev1743/ui-test-desktop-1.7.0-dev1743.jar"
+        "url": "org/jetbrains/compose/ui/ui-test-desktop/1.7.0-beta02/ui-test-desktop-1.7.0-beta02.jar",
+        "hash": "34dfab5b4fa8b2913f00facdddc049e2fef4b176f8e7cde0ad306485674c3b5c",
+        "path": "org/jetbrains/compose/ui/ui-test-desktop/1.7.0-beta02/ui-test-desktop-1.7.0-beta02.jar"
     },
     {
-        "url": "org/jetbrains/jewel/jewel-markdown-int-ui-standalone-styling-242/0.22.1/jewel-markdown-int-ui-standalone-styling-242-0.22.1.jar",
-        "hash": "be1234c3903af6538ea8ab8fd5dcb8d981ebdd855eeb93375d92b6a7e2f2e1d4",
-        "path": "org/jetbrains/jewel/jewel-markdown-int-ui-standalone-styling-242/0.22.1/jewel-markdown-int-ui-standalone-styling-242-0.22.1.jar"
+        "url": "org/jetbrains/jewel/jewel-markdown-int-ui-standalone-styling-242/0.25.0/jewel-markdown-int-ui-standalone-styling-242-0.25.0.jar",
+        "hash": "5cd0874b1aa1ee4925c315cc599412b497d056c601be1fb5ca81209686cec674",
+        "path": "org/jetbrains/jewel/jewel-markdown-int-ui-standalone-styling-242/0.25.0/jewel-markdown-int-ui-standalone-styling-242-0.25.0.jar"
     },
     {
-        "url": "org/jetbrains/jewel/jewel-int-ui-standalone-242/0.22.1/jewel-int-ui-standalone-242-0.22.1.jar",
-        "hash": "0a6b9d4682e389057215fe8a076efd7a488c4356df1046f3dfbb951a60ab1d1b",
-        "path": "org/jetbrains/jewel/jewel-int-ui-standalone-242/0.22.1/jewel-int-ui-standalone-242-0.22.1.jar"
+        "url": "org/jetbrains/jewel/jewel-int-ui-standalone-242/0.25.0/jewel-int-ui-standalone-242-0.25.0.jar",
+        "hash": "b45ecb2a78ba691c0df2886d8adffb67106d6644cdbd628edd005b8c2688ebdc",
+        "path": "org/jetbrains/jewel/jewel-int-ui-standalone-242/0.25.0/jewel-int-ui-standalone-242-0.25.0.jar"
     },
     {
-        "url": "org/jetbrains/jewel/jewel-markdown-ide-laf-bridge-styling-242/0.22.1/jewel-markdown-ide-laf-bridge-styling-242-0.22.1.jar",
-        "hash": "c95a80492bfe83213d89cc2b051cf31d782046832320498510cbcd137d4da9d2",
-        "path": "org/jetbrains/jewel/jewel-markdown-ide-laf-bridge-styling-242/0.22.1/jewel-markdown-ide-laf-bridge-styling-242-0.22.1.jar"
+        "url": "org/jetbrains/jewel/jewel-markdown-ide-laf-bridge-styling-242/0.25.0/jewel-markdown-ide-laf-bridge-styling-242-0.25.0.jar",
+        "hash": "a48fdb886bf182f54351b4f6212e5af3f2f829acbc3b2c9a6aed59c4c72f8424",
+        "path": "org/jetbrains/jewel/jewel-markdown-ide-laf-bridge-styling-242/0.25.0/jewel-markdown-ide-laf-bridge-styling-242-0.25.0.jar"
     },
     {
-        "url": "org/jetbrains/jewel/jewel-markdown-core-242/0.22.1/jewel-markdown-core-242-0.22.1.jar",
-        "hash": "4fc7147440e975f10133f8e6f0232c249ff9b07d03e7eaf6f86f4540fda62ac2",
-        "path": "org/jetbrains/jewel/jewel-markdown-core-242/0.22.1/jewel-markdown-core-242-0.22.1.jar"
+        "url": "org/jetbrains/jewel/jewel-markdown-core-242/0.25.0/jewel-markdown-core-242-0.25.0.jar",
+        "hash": "40713997b5b7daf5c3563eec8a6b769fbb775018fb1112aa16a8086af73c0222",
+        "path": "org/jetbrains/jewel/jewel-markdown-core-242/0.25.0/jewel-markdown-core-242-0.25.0.jar"
     },
     {
         "url": "org/commonmark/commonmark/0.22.0/commonmark-0.22.0.jar",
@@ -6135,29 +6135,29 @@
         "path": "org/commonmark/commonmark/0.22.0/commonmark-0.22.0.jar"
     },
     {
-        "url": "org/jetbrains/jewel/jewel-ide-laf-bridge-242/0.22.1/jewel-ide-laf-bridge-242-0.22.1.jar",
-        "hash": "640d563e1eec402c43df6c19771b9af27b1ae61d04932e0b69c68cd2e03736ce",
-        "path": "org/jetbrains/jewel/jewel-ide-laf-bridge-242/0.22.1/jewel-ide-laf-bridge-242-0.22.1.jar"
+        "url": "org/jetbrains/jewel/jewel-ide-laf-bridge-242/0.25.0/jewel-ide-laf-bridge-242-0.25.0.jar",
+        "hash": "b7a484a4388360171ba5d61eb511608720331d42d41627ff7342e514347f6a23",
+        "path": "org/jetbrains/jewel/jewel-ide-laf-bridge-242/0.25.0/jewel-ide-laf-bridge-242-0.25.0.jar"
     },
     {
-        "url": "org/jetbrains/jewel/jewel-ide-laf-bridge-242/0.22.1/jewel-ide-laf-bridge-242-0.22.1.jar",
-        "hash": "640d563e1eec402c43df6c19771b9af27b1ae61d04932e0b69c68cd2e03736ce",
-        "path": "org/jetbrains/jewel/jewel-ide-laf-bridge-242/0.22.1/jewel-ide-laf-bridge-242-0.22.1.jar"
+        "url": "org/jetbrains/jewel/jewel-ide-laf-bridge-242/0.25.0/jewel-ide-laf-bridge-242-0.25.0.jar",
+        "hash": "b7a484a4388360171ba5d61eb511608720331d42d41627ff7342e514347f6a23",
+        "path": "org/jetbrains/jewel/jewel-ide-laf-bridge-242/0.25.0/jewel-ide-laf-bridge-242-0.25.0.jar"
     },
     {
-        "url": "org/jetbrains/jewel/jewel-ui-242/0.22.1/jewel-ui-242-0.22.1.jar",
-        "hash": "86b4a2026893831af5351aa0ca696488d1da0b252c08920843ed926c4f690b09",
-        "path": "org/jetbrains/jewel/jewel-ui-242/0.22.1/jewel-ui-242-0.22.1.jar"
+        "url": "org/jetbrains/jewel/jewel-ui-242/0.25.0/jewel-ui-242-0.25.0.jar",
+        "hash": "5f44765bb9566775bc8578c7a4843128b6b5e6560b516dc07bb0773c4220db34",
+        "path": "org/jetbrains/jewel/jewel-ui-242/0.25.0/jewel-ui-242-0.25.0.jar"
     },
     {
-        "url": "org/jetbrains/jewel/jewel-foundation-242/0.22.1/jewel-foundation-242-0.22.1.jar",
-        "hash": "53ae086fa6249c1ac8d52f43d19263491b034f4a4c7c81919aa7cfa3dc8d9598",
-        "path": "org/jetbrains/jewel/jewel-foundation-242/0.22.1/jewel-foundation-242-0.22.1.jar"
+        "url": "org/jetbrains/jewel/jewel-foundation-242/0.25.0/jewel-foundation-242-0.25.0.jar",
+        "hash": "05cba8a5cf9dd9fc28777c6cb67de1ea05b00fa1d2730e1397e72d8a9d565a92",
+        "path": "org/jetbrains/jewel/jewel-foundation-242/0.25.0/jewel-foundation-242-0.25.0.jar"
     },
     {
-        "url": "org/jetbrains/compose/foundation/foundation-desktop/1.7.0-dev1743/foundation-desktop-1.7.0-dev1743.jar",
-        "hash": "b53763dbce2f2e29827f8fb6e29a290c38860c0a108e8b61c04541d706539832",
-        "path": "org/jetbrains/compose/foundation/foundation-desktop/1.7.0-dev1743/foundation-desktop-1.7.0-dev1743.jar"
+        "url": "org/jetbrains/compose/foundation/foundation-desktop/1.7.0-beta02/foundation-desktop-1.7.0-beta02.jar",
+        "hash": "2c63f62672141736696afe3dba275d651c01372a4a425c50d63e0c2955e7c08f",
+        "path": "org/jetbrains/compose/foundation/foundation-desktop/1.7.0-beta02/foundation-desktop-1.7.0-beta02.jar"
     },
     {
         "url": "androidx/annotation/annotation-jvm/1.8.0/annotation-jvm-1.8.0.jar",
@@ -6170,44 +6170,39 @@
         "path": "androidx/collection/collection-jvm/1.4.0/collection-jvm-1.4.0.jar"
     },
     {
-        "url": "org/jetbrains/compose/animation/animation-desktop/1.7.0-dev1743/animation-desktop-1.7.0-dev1743.jar",
-        "hash": "3cd2a181afcbdf189310710d95530cd7c16c4111fd83c362de5e9caafe547be6",
-        "path": "org/jetbrains/compose/animation/animation-desktop/1.7.0-dev1743/animation-desktop-1.7.0-dev1743.jar"
+        "url": "org/jetbrains/compose/animation/animation-desktop/1.7.0-beta02/animation-desktop-1.7.0-beta02.jar",
+        "hash": "5628022a524e81603b2c62303b967863203d86bdad898f7d66f71e6e9c511ede",
+        "path": "org/jetbrains/compose/animation/animation-desktop/1.7.0-beta02/animation-desktop-1.7.0-beta02.jar"
     },
     {
-        "url": "org/jetbrains/compose/animation/animation-core-desktop/1.7.0-dev1743/animation-core-desktop-1.7.0-dev1743.jar",
-        "hash": "19b9d7ba4659a676d94f6a3fd010f75ddb04cf64d0be97ced4dae91b4dea8a79",
-        "path": "org/jetbrains/compose/animation/animation-core-desktop/1.7.0-dev1743/animation-core-desktop-1.7.0-dev1743.jar"
+        "url": "org/jetbrains/compose/animation/animation-core-desktop/1.7.0-beta02/animation-core-desktop-1.7.0-beta02.jar",
+        "hash": "31c475b8534a8307de86f36aa095c9ea9fae2fbc3a9c2ecf30bc3317ead6d487",
+        "path": "org/jetbrains/compose/animation/animation-core-desktop/1.7.0-beta02/animation-core-desktop-1.7.0-beta02.jar"
     },
     {
-        "url": "org/jetbrains/compose/ui/ui-geometry-desktop/1.7.0-dev1743/ui-geometry-desktop-1.7.0-dev1743.jar",
+        "url": "org/jetbrains/compose/ui/ui-geometry-desktop/1.7.0-beta02/ui-geometry-desktop-1.7.0-beta02.jar",
         "hash": "4b86c961c0b4bce7995329fd57d4339ede11cb75d7ec90bc1b9913396addb30f",
-        "path": "org/jetbrains/compose/ui/ui-geometry-desktop/1.7.0-dev1743/ui-geometry-desktop-1.7.0-dev1743.jar"
+        "path": "org/jetbrains/compose/ui/ui-geometry-desktop/1.7.0-beta02/ui-geometry-desktop-1.7.0-beta02.jar"
     },
     {
-        "url": "org/jetbrains/compose/foundation/foundation-layout-desktop/1.7.0-dev1743/foundation-layout-desktop-1.7.0-dev1743.jar",
+        "url": "org/jetbrains/compose/foundation/foundation-layout-desktop/1.7.0-beta02/foundation-layout-desktop-1.7.0-beta02.jar",
         "hash": "d2c867c13ff6632f9880e67dabab2e930007b008b9b22950fc2cc075008eceb6",
-        "path": "org/jetbrains/compose/foundation/foundation-layout-desktop/1.7.0-dev1743/foundation-layout-desktop-1.7.0-dev1743.jar"
+        "path": "org/jetbrains/compose/foundation/foundation-layout-desktop/1.7.0-beta02/foundation-layout-desktop-1.7.0-beta02.jar"
     },
     {
-        "url": "org/jetbrains/compose/runtime/runtime-desktop/1.7.0-dev1743/runtime-desktop-1.7.0-dev1743.jar",
-        "hash": "e55e98e7da0a42c8c5a05c7b78a6401e86f68e7ec970ed16a8584712f3853a67",
-        "path": "org/jetbrains/compose/runtime/runtime-desktop/1.7.0-dev1743/runtime-desktop-1.7.0-dev1743.jar"
+        "url": "org/jetbrains/compose/ui/ui-desktop/1.7.0-beta02/ui-desktop-1.7.0-beta02.jar",
+        "hash": "781f0bbff8b4efbc5c859272babd985df7cb4692a68645c25551eb4417075cca",
+        "path": "org/jetbrains/compose/ui/ui-desktop/1.7.0-beta02/ui-desktop-1.7.0-beta02.jar"
     },
     {
-        "url": "org/jetbrains/compose/ui/ui-desktop/1.7.0-dev1743/ui-desktop-1.7.0-dev1743.jar",
-        "hash": "a5051996d7a52e9aa8aea29abfc673e32ee78d11833e06f5596415798ebff6e3",
-        "path": "org/jetbrains/compose/ui/ui-desktop/1.7.0-dev1743/ui-desktop-1.7.0-dev1743.jar"
-    },
-    {
-        "url": "androidx/lifecycle/lifecycle-common-jvm/2.8.0/lifecycle-common-jvm-2.8.0.jar",
+        "url": "androidx/lifecycle/lifecycle-common-jvm/2.8.4/lifecycle-common-jvm-2.8.4.jar",
         "hash": "61c873a7327c946ec033c310bb98f3f92eeabcede0e1a5200ab8a1896483c7bf",
-        "path": "androidx/lifecycle/lifecycle-common-jvm/2.8.0/lifecycle-common-jvm-2.8.0.jar"
+        "path": "androidx/lifecycle/lifecycle-common-jvm/2.8.4/lifecycle-common-jvm-2.8.4.jar"
     },
     {
-        "url": "androidx/lifecycle/lifecycle-runtime-desktop/2.8.0/lifecycle-runtime-desktop-2.8.0.jar",
+        "url": "androidx/lifecycle/lifecycle-runtime-desktop/2.8.4/lifecycle-runtime-desktop-2.8.4.jar",
         "hash": "10bfe53bb2752f967751a5102cdb785eeea54e1d4df6bde88fb0f50b0a49156c",
-        "path": "androidx/lifecycle/lifecycle-runtime-desktop/2.8.0/lifecycle-runtime-desktop-2.8.0.jar"
+        "path": "androidx/lifecycle/lifecycle-runtime-desktop/2.8.4/lifecycle-runtime-desktop-2.8.4.jar"
     },
     {
         "url": "androidx/arch/core/core-common/2.2.0/core-common-2.2.0.jar",
@@ -6215,48 +6210,58 @@
         "path": "androidx/arch/core/core-common/2.2.0/core-common-2.2.0.jar"
     },
     {
-        "url": "androidx/annotation/annotation/1.1.0/annotation-1.1.0.jar",
-        "hash": "d38d63edb30f1467818d50aaf05f8a692dea8b31392a049bfa991b159ad5b692",
-        "path": "androidx/annotation/annotation/1.1.0/annotation-1.1.0.jar"
+        "url": "androidx/lifecycle/lifecycle-viewmodel-desktop/2.8.4/lifecycle-viewmodel-desktop-2.8.4.jar",
+        "hash": "21ec0e77dc02ed0d6bfe6f3cba7f43e25400446d89ded8568ee165437e0c1922",
+        "path": "androidx/lifecycle/lifecycle-viewmodel-desktop/2.8.4/lifecycle-viewmodel-desktop-2.8.4.jar"
     },
     {
-        "url": "androidx/lifecycle/lifecycle-viewmodel-desktop/2.8.0/lifecycle-viewmodel-desktop-2.8.0.jar",
-        "hash": "5c28f3ba9732f2180685038dbe674059fd9b7843c721cd0f6c73f3dbfcb2683c",
-        "path": "androidx/lifecycle/lifecycle-viewmodel-desktop/2.8.0/lifecycle-viewmodel-desktop-2.8.0.jar"
+        "url": "org/jetbrains/androidx/lifecycle/lifecycle-runtime-compose-desktop/2.8.2/lifecycle-runtime-compose-desktop-2.8.2.jar",
+        "hash": "c1e51a246e69e237e87d289be08bebd8d406ffe9ff60a125e8f2072db6119966",
+        "path": "org/jetbrains/androidx/lifecycle/lifecycle-runtime-compose-desktop/2.8.2/lifecycle-runtime-compose-desktop-2.8.2.jar"
     },
     {
-        "url": "org/jetbrains/androidx/lifecycle/lifecycle-runtime-compose-desktop/2.8.0-dev1743/lifecycle-runtime-compose-desktop-2.8.0-dev1743.jar",
-        "hash": "0586442d33274e3a7cc41ddcb9c706304d6300eaa6d57f43857f1a62dd2c1628",
-        "path": "org/jetbrains/androidx/lifecycle/lifecycle-runtime-compose-desktop/2.8.0-dev1743/lifecycle-runtime-compose-desktop-2.8.0-dev1743.jar"
+        "url": "androidx/annotation/annotation/1.8.0/annotation-1.8.0.jar",
+        "hash": "fe70ace6f942a5fc29045bb2fe25b4e77bdc742dc69f76ed65b39c3ae185888e",
+        "path": "androidx/annotation/annotation/1.8.0/annotation-1.8.0.jar"
     },
     {
-        "url": "org/jetbrains/compose/runtime/runtime-saveable-desktop/1.7.0-dev1743/runtime-saveable-desktop-1.7.0-dev1743.jar",
+        "url": "org/jetbrains/compose/runtime/runtime-saveable-desktop/1.7.0-beta02/runtime-saveable-desktop-1.7.0-beta02.jar",
         "hash": "4306363be90eaabe74b900db4c32ed1f15c7548e5b30a7093c4ee40c436b9b8c",
-        "path": "org/jetbrains/compose/runtime/runtime-saveable-desktop/1.7.0-dev1743/runtime-saveable-desktop-1.7.0-dev1743.jar"
+        "path": "org/jetbrains/compose/runtime/runtime-saveable-desktop/1.7.0-beta02/runtime-saveable-desktop-1.7.0-beta02.jar"
     },
     {
-        "url": "org/jetbrains/compose/ui/ui-graphics-desktop/1.7.0-dev1743/ui-graphics-desktop-1.7.0-dev1743.jar",
-        "hash": "5acc2058c905ceca092cfe8cd91bb082df7fce6126c971d826ca64b538dc7b92",
-        "path": "org/jetbrains/compose/ui/ui-graphics-desktop/1.7.0-dev1743/ui-graphics-desktop-1.7.0-dev1743.jar"
+        "url": "org/jetbrains/compose/ui/ui-graphics-desktop/1.7.0-beta02/ui-graphics-desktop-1.7.0-beta02.jar",
+        "hash": "6f09b8790a0d3c8c0231c5962a39f2e354ca3148098318049de5e51cf6684b94",
+        "path": "org/jetbrains/compose/ui/ui-graphics-desktop/1.7.0-beta02/ui-graphics-desktop-1.7.0-beta02.jar"
     },
     {
-        "url": "org/jetbrains/compose/ui/ui-unit-desktop/1.7.0-dev1743/ui-unit-desktop-1.7.0-dev1743.jar",
+        "url": "org/jetbrains/compose/ui/ui-unit-desktop/1.7.0-beta02/ui-unit-desktop-1.7.0-beta02.jar",
         "hash": "598b52e257ed674145694b9790a7383a90fed2ec7154ba09ace4aa983c65b1a2",
-        "path": "org/jetbrains/compose/ui/ui-unit-desktop/1.7.0-dev1743/ui-unit-desktop-1.7.0-dev1743.jar"
+        "path": "org/jetbrains/compose/ui/ui-unit-desktop/1.7.0-beta02/ui-unit-desktop-1.7.0-beta02.jar"
     },
     {
-        "url": "org/jetbrains/compose/ui/ui-text-desktop/1.7.0-dev1743/ui-text-desktop-1.7.0-dev1743.jar",
-        "hash": "c690d309b6558a05370e3b239956458c7244dfae2e567115d107b454c8da3461",
-        "path": "org/jetbrains/compose/ui/ui-text-desktop/1.7.0-dev1743/ui-text-desktop-1.7.0-dev1743.jar"
+        "url": "org/jetbrains/compose/ui/ui-text-desktop/1.7.0-beta02/ui-text-desktop-1.7.0-beta02.jar",
+        "hash": "80e07e4ca739f7b6122f63e9a17e6853b947220ecb1180f8dcaf419d0e468996",
+        "path": "org/jetbrains/compose/ui/ui-text-desktop/1.7.0-beta02/ui-text-desktop-1.7.0-beta02.jar"
     },
     {
-        "url": "org/jetbrains/compose/ui/ui-util-desktop/1.7.0-dev1743/ui-util-desktop-1.7.0-dev1743.jar",
+        "url": "org/jetbrains/compose/ui/ui-util-desktop/1.7.0-beta02/ui-util-desktop-1.7.0-beta02.jar",
         "hash": "161dcc73b929da61cee50045e96fb02f1633c36f18a2ef38b5c2c44c38606b52",
-        "path": "org/jetbrains/compose/ui/ui-util-desktop/1.7.0-dev1743/ui-util-desktop-1.7.0-dev1743.jar"
+        "path": "org/jetbrains/compose/ui/ui-util-desktop/1.7.0-beta02/ui-util-desktop-1.7.0-beta02.jar"
     },
     {
-        "url": "org/jetbrains/skiko/skiko-awt/0.8.9/skiko-awt-0.8.9.jar",
-        "hash": "c7f5c1253a1f7ea5876aa122309b517cce1b4d1522eb65eedd8579ec83e5a083",
-        "path": "org/jetbrains/skiko/skiko-awt/0.8.9/skiko-awt-0.8.9.jar"
+        "url": "org/jetbrains/skiko/skiko-awt/0.8.12/skiko-awt-0.8.12.jar",
+        "hash": "4ecb815bf90b2d6fbc241073fe37c893fb3499f2041c3655064a02ce80daeb9b",
+        "path": "org/jetbrains/skiko/skiko-awt/0.8.12/skiko-awt-0.8.12.jar"
+    },
+    {
+        "url": "org/jetbrains/compose/components/components-resources-desktop/1.7.0-beta02/components-resources-desktop-1.7.0-beta02.jar",
+        "hash": "1584b739e8f1869e4f340519dc984d4a44582a80ef323e655999ddb18dd954c2",
+        "path": "org/jetbrains/compose/components/components-resources-desktop/1.7.0-beta02/components-resources-desktop-1.7.0-beta02.jar"
+    },
+    {
+        "url": "org/jetbrains/compose/runtime/runtime-desktop/1.7.0-beta02/runtime-desktop-1.7.0-beta02.jar",
+        "hash": "76e3250547b9ca3cb1a49c272933b25cb3bccbc9ba12775dd6161a63d9aa7cf1",
+        "path": "org/jetbrains/compose/runtime/runtime-desktop/1.7.0-beta02/runtime-desktop-1.7.0-beta02.jar"
     }
 ]

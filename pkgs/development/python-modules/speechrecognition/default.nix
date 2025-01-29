@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Uberi";
     repo = "speech_recognition";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-2yc5hztPBOysHxUQcS76ioCXmqNqjid6QUF4qPlIt24=";
   };
 

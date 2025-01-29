@@ -106,11 +106,14 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-gJ+jmnrMhIFb9NxNLX5rIoznWgfzskE/MxOqjgqqMoc=";
   };
 
+  postPatch = ''
+    patchShebangs --build build-aux/*.pl
+  '';
+
   buildInputs =
     [
       readline
       ncurses
-      perl
       flex
       qhull
       graphicsmagick
@@ -157,6 +160,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
   nativeBuildInputs =
     [
+      perl
       pkg-config
       gfortran
       texinfo
@@ -183,7 +187,6 @@ stdenv.mkDerivation (finalAttrs: {
       "--with-lapack=lapack"
       (if use64BitIdx then "--enable-64" else "--disable-64")
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ "--enable-link-all-dependencies" ]
     ++ lib.optionals enableReadline [ "--enable-readline" ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ "--with-x=no" ]
     ++ lib.optionals enableQt [ "--with-qt=5" ];

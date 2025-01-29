@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Yubico";
     repo = "yubico-piv-tool";
-    rev = "refs/tags/yubico-piv-tool-${finalAttrs.version}";
+    tag = "yubico-piv-tool-${finalAttrs.version}";
     hash = "sha256-ow9SS7YGCZzSxds3WKsHx9/Vxloy9RqvDjpIBJUBSb0=";
   };
 

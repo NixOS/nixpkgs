@@ -38,7 +38,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Diaoul";
     repo = "subliminal";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-g7gg2qdLKl7bg/nNXRWN9wZaNShOOc38sVASZrIycMU=";
   };
 

@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libtool";
-  version = "2.4.7";
+  version = "2.5.4";
 
   src = fetchurl {
     url = "mirror://gnu/libtool/${pname}-${version}.tar.gz";
-    sha256 = "sha256-BOlsJATqcMWQxUbrpCAqThJyLGQAFsErmy8c49SB6ag=";
+    sha256 = "sha256-2o67LOTc9GuQCY2vliz/po9LT2LqYPeY0O8Skp7eat8=";
   };
 
   outputs = [ "out" "lib" ];

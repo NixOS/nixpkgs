@@ -31,7 +31,7 @@ let
   '';
 in
 {
-  meta.maintainers = with lib.maintainers; [ ];
+  meta.maintainers = with lib.maintainers; [ jvanbruegge ];
 
   options.services.tandoor-recipes = {
     enable = lib.mkOption {

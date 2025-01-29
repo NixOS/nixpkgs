@@ -1,6 +1,7 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -I nixpkgs=channel:nixpkgs-unstable -i python3 -p "python3.withPackages (ps: with ps; [ aiohttp packaging ])" -p git nurl pyright ruff isort
 
+import argparse
 import asyncio
 import json
 import os
@@ -226,7 +227,7 @@ class HomeAssistant:
         ])
 
 
-async def main():
+async def main(target_version: Optional[str] = None):
     headers = {}
     if token := os.environ.get("GITHUB_TOKEN", None):
         headers.update({"GITHUB_TOKEN": token})
@@ -235,7 +236,7 @@ async def main():
         hass = HomeAssistant(client)
 
         core_current = str(await Nix.eval("home-assistant.version"))
-        core_latest = await hass.get_latest_core_version()
+        core_latest = target_version or await hass.get_latest_core_version()
 
         if Version(core_latest) > Version(core_current):
             print(f"New Home Assistant version {core_latest} is available")
@@ -257,7 +258,12 @@ async def main():
         await asyncio.sleep(0)
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("version", nargs="?")
+    args = parser.parse_args()
+
     run_sync(["pyright", __file__])
     run_sync(["ruff", "check", "--ignore=E501", __file__])
     run_sync(["isort", __file__])
-    asyncio.run(main())
+
+    asyncio.run(main(args.version))

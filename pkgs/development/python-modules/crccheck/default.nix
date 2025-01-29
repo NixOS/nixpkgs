@@ -19,7 +19,7 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "MartinScharrer";
     repo = "crccheck";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-nujt3RWupvCtk7gORejtSwqqVjW9VwztOVGXBHW9T+k=";
   };
 

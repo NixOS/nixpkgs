@@ -45,7 +45,6 @@
   libidn,
   libedit,
   readline,
-  apple_sdk,
   libGL,
   libGLU,
   libgbm,
@@ -175,25 +174,6 @@ clangStdenv.mkDerivation (finalAttrs: {
       libedit
       readline
     ]
-    ++
-      lib.optional
-        (
-          clangStdenv.hostPlatform.isDarwin
-          && lib.versionOlder clangStdenv.hostPlatform.darwinSdkVersion "11.0"
-        )
-        (
-          # this can likely be removed as:
-          # "libproc.h is included in the 10.12 SDK Libsystem and should be identical to this one."
-          # but the package is marked broken on darwin so unable to test
-
-          # Pull a header that contains a definition of proc_pid_rusage().
-          # (We pick just that one because using the other headers from `sdk` is not
-          # compatible with our C++ standard library. This header is already in
-          # the standard library on aarch64)
-          runCommand "webkitgtk_headers" { } ''
-            install -Dm444 "${lib.getDev apple_sdk.sdk}"/include/libproc.h "$out"/include/libproc.h
-          ''
-        )
     ++ lib.optionals clangStdenv.hostPlatform.isLinux [
       libseccomp
       libmanette

@@ -13,16 +13,16 @@
 
 buildGoModule rec {
   pname = "nwg-look";
-  version = "0.2.7";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = "nwg-look";
     rev = "v${version}";
-    hash = "sha256-qUNTJkNHWoJisLH0SU23UQuamEL27MMRnxw0kBxzWLk=";
+    hash = "sha256-fvL7AGplIGlSEXlV3lCrBogAu2rD2XZKYTfHKK6Ztjc=";
   };
 
-  vendorHash = "sha256-qHWy9OCxENrrWk00YoRveSjqYWIy/fe4Fyc8tc4n34E=";
+  vendorHash = "sha256-J9Wc5MCgztzzYnjm3lAREmYLGPyuCX9Xr+qhAwf9Fzg=";
 
   ldflags = [ "-s" "-w" ];
 
@@ -64,7 +64,7 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://github.com/nwg-piotr/nwg-look";
-    description = "Nwg-look is a GTK3 settings editor, designed to work properly in wlroots-based Wayland environment";
+    description = "GTK settings editor, designed to work properly in wlroots-based Wayland environment";
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ max-amb ];

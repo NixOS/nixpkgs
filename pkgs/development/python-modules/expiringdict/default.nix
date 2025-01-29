@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mailgun";
     repo = "expiringdict";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-vRhJSHIqc51I+s/wndtfANM44CKW3QS1iajqyoSBf0I=";
   };
 

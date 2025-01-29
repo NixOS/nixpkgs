@@ -20,8 +20,16 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-drxJtlvBpkK3I7Ob3+pH4KLUq53GWXe1pmv7CI3bbP4=";
   };
 
+  cargoPatches = [
+    (fetchpatch {
+      name = "kvm-ioctls-0.19.1.patch";
+      url = "https://github.com/cloud-hypervisor/cloud-hypervisor/commit/eaa21946993276434403d41419a34e564935c8e9.patch";
+      hash = "sha256-G7B0uGl/RAkwub8x1jNNgBrC0dwq/Gv46XpbtTZWD5M=";
+    })
+  ];
+
   useFetchCargoVendor = true;
-  cargoHash = "sha256-wifctp30ApnxtRMlzksoSGrIJUT1cB0p1RBxfyITuZI=";
+  cargoHash = "sha256-F6ukvSwMHRHXoZKgXEFnTAN1B80GsQDW8iqZAvsREr4=";
 
   separateDebugInfo = true;
 

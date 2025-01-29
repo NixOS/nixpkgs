@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "amrudesh1";
     repo = "morf";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-3PJ+YtKSH6HHAXBSHO8iMP2HFiuW1RQ0N8iUjQD7NBw=";
   };
 

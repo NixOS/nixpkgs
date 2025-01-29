@@ -15,16 +15,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tiny";
-  version = "0.12.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "osa1";
     repo = "tiny";
     rev = "v${version}";
-    hash = "sha256-VlKhOHNggT+FbMvE/N2JQOJf0uB1N69HHdP09u89qSk=";
+    hash = "sha256-phjEae2SS3zkSpuhhE4iscUM8ij8DT47YLIMATMG/+Q=";
   };
 
-  cargoHash = "sha256-AhQCfLCoJU7o8s+XL3hDOPmZi9QjOxXSA9uglA1KSuY=";
+  cargoHash = "sha256-DvFrRH6wObMvkRxS8vh3tlCrZNAiuZHfN0ARagMfG2k=";
 
   nativeBuildInputs = lib.optional stdenv.hostPlatform.isLinux pkg-config;
   buildInputs =

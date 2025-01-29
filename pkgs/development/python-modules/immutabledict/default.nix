@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "corenting";
     repo = "immutabledict";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-v2oOzvAa8KONZDQuxouai2B9d1RY4kZG/px2wl0KAyM=";
   };
 
@@ -26,6 +26,11 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "immutabledict" ];
 
   nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTests = [
+    # fails if builder load is highly variable
+    "test_performance"
+  ];
 
   meta = with lib; {
     description = "Fork of frozendict, an immutable wrapper around dictionaries";

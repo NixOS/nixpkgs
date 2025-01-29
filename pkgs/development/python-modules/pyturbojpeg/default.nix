@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lilohuang";
     repo = "PyTurboJPEG";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-JPjGZGVMZH6sDNRdV6kWsCpEjLT2aMrTy+bI4mRbdpw=";
   };
 

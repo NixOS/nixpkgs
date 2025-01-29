@@ -37,11 +37,18 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     autoreconfHook
+    libxml2 # xml2-config (only checked for, not used)
+  ];
+
+  # set *-config for cross builds
+  configureFlags = [
+    "FREETYPECONFIG=${lib.getExe' (lib.getDev freetype) "freetype-config"}"
+    "XML2_CONFIG=${lib.getExe' (lib.getDev libxml2) "xml2-config"}"
   ];
 
   meta = with lib; {
     description = "Tools for generating DVD files to be played on standalone DVD players";
-    homepage = "https://dvdauthor.sourceforge.net/";
+    homepage = "https://dvdauthor.sourceforge.net/"; # or https://github.com/ldo/dvdauthor
     license = licenses.gpl2;
     platforms = platforms.linux ++ platforms.darwin;
   };

@@ -27,7 +27,7 @@ import ./make-test-python.nix (
           services.xrdp.audio.enable = true;
           services.xrdp.defaultWindowManager = "${pkgs.xterm}/bin/xterm";
 
-          hardware.pulseaudio = {
+          services.pulseaudio = {
             enable = true;
           };
 
@@ -65,7 +65,7 @@ import ./make-test-python.nix (
           services.xrdp.audio.enable = true;
           services.xrdp.defaultWindowManager = "${pkgs.icewm}/bin/icewm";
 
-          hardware.pulseaudio = {
+          services.pulseaudio = {
             enable = true;
           };
         };

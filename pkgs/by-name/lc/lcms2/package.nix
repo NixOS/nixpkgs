@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     "out"
   ];
 
-  propagatedBuildInputs = [
+  buildInputs = [
     libtiff
     libjpeg
     zlib

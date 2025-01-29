@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bxlab";
     repo = "bx-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-I5yc8i9xoievaZbgwHSQQSVvs1VnNa66Q883T4dCYYw=";
   };
 

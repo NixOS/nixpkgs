@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   nix-update-script,
   gnome-power-manager,
   pkg-config,
@@ -10,6 +10,7 @@
   ninja,
   vala,
   elementary-settings-daemon,
+  gettext,
   gtk3,
   granite,
   libgtop,
@@ -31,13 +32,13 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       gnome_power_manager = gnome-power-manager;
     })
   ];
 
   nativeBuildInputs = [
+    gettext # msgfmt
     meson
     ninja
     pkg-config

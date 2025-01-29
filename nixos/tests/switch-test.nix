@@ -611,6 +611,10 @@ in {
     other = {
       system.switch.enable = true;
       users.mutableUsers = true;
+      system.preSwitchChecks.succeeds = ''
+        echo this will succeed
+        true
+      '';
       specialisation.failingCheck.configuration.system.preSwitchChecks.failEveryTime = ''
         echo this will fail
         false

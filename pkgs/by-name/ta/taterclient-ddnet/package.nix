@@ -28,25 +28,24 @@
   spirv-tools,
   gtest,
   glew,
-  apple-sdk_11,
 }:
 let
   clientExecutable = "TaterClient-DDNet";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "taterclient-ddnet";
-  version = "9.0.2";
+  version = "10.0.3";
 
   src = fetchFromGitHub {
     owner = "sjrc6";
     repo = "taterclient-ddnet";
-    rev = "refs/tags/V${finalAttrs.version}";
-    hash = "sha256-hGbeIhtAZcgaPCsDUmZqq8mLGi1yVvauha4wGMBbmBc=";
+    tag = "V${finalAttrs.version}";
+    hash = "sha256-RhOZuPsjyXq5UcM+5dawDi1BfjMMQ3K9O3PHkCg5sDI=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit (finalAttrs) pname src version;
-    hash = "sha256-iykFbo1zSeG9r9cIr8CGjd9GtCGcQ6vH73xpEl8J3i8=";
+    hash = "sha256-NDeHpf1iYApP/Y/DE7FGBu67ld6A0+8227oTVlOMe1M=";
   };
 
   nativeBuildInputs = [
@@ -95,6 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "CLIENT" true)
     (lib.cmakeBool "SERVER" false)
     (lib.cmakeBool "TOOLS" false)
+    (lib.cmakeBool "DISCORD" false)
     (lib.cmakeFeature "CLIENT_EXECUTABLE" clientExecutable)
   ];
 

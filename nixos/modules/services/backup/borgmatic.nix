@@ -8,6 +8,50 @@ let
   cfg = config.services.borgmatic;
   settingsFormat = pkgs.formats.yaml { };
 
+  postgresql = config.services.postgresql.package;
+  mysql = config.services.mysql.package;
+  requireSudo =
+    s:
+    s ? postgresql_databases
+    && lib.any (d: d ? username && !(d ? password) && !(d ? pg_dump_command)) s.postgresql_databases;
+  addRequiredBinaries =
+    s:
+    s
+    // {
+      postgresql_databases = map (
+        d:
+        let
+          as_user = if d ? username && !(d ? password) then "${pkgs.sudo}/bin/sudo -u ${d.username} " else "";
+        in
+        {
+          pg_dump_command =
+            if d.name == "all" then
+              "${as_user}${postgresql}/bin/pg_dumpall"
+            else
+              "${as_user}${postgresql}/bin/pg_dump";
+          pg_restore_command = "${as_user}${postgresql}/bin/pg_restore";
+          psql_command = "${as_user}${postgresql}/bin/psql";
+        }
+        // d
+      ) (s.postgresql_databases or [ ]);
+      mariadb_databases = map (
+        d:
+        {
+          mariadb_dump_command = "${mysql}/bin/mariadb-dump";
+          mariadb_command = "${mysql}/bin/mariadb";
+        }
+        // d
+      ) (s.mariadb_databases or [ ]);
+      mysql_databases = map (
+        d:
+        {
+          mysql_dump_command = "${mysql}/bin/mysqldump";
+          mysql_command = "${mysql}/bin/mysql";
+        }
+        // d
+      ) (s.mysql_databases or [ ]);
+    };
+
   repository =
     with lib.types;
     submodule {
@@ -72,7 +116,10 @@ let
       };
     };
 
-  cfgfile = settingsFormat.generate "config.yaml" cfg.settings;
+  cfgfile = settingsFormat.generate "config.yaml" (addRequiredBinaries cfg.settings);
+
+  anycfgRequiresSudo =
+    requireSudo cfg.settings || lib.any requireSudo (lib.attrValues cfg.configurations);
 in
 {
   options.services.borgmatic = {
@@ -106,7 +153,7 @@ in
         // lib.mapAttrs' (
           name: value:
           lib.nameValuePair "borgmatic.d/${name}.yaml" {
-            source = settingsFormat.generate "${name}.yaml" value;
+            source = settingsFormat.generate "${name}.yaml" (addRequiredBinaries value);
           }
         ) cfg.configurations;
       borgmaticCheck =
@@ -132,6 +179,11 @@ in
       environment.etc = configFiles;
 
       systemd.packages = [ pkgs.borgmatic ];
+      systemd.services.borgmatic.path = [ pkgs.coreutils ];
+      systemd.services.borgmatic.serviceConfig = lib.optionalAttrs anycfgRequiresSudo {
+        NoNewPrivileges = false;
+        CapabilityBoundingSet = "CAP_DAC_READ_SEARCH CAP_NET_RAW CAP_SETUID CAP_SETGID";
+      };
 
       # Workaround: https://github.com/NixOS/nixpkgs/issues/81138
       systemd.timers.borgmatic.wantedBy = [ "timers.target" ];

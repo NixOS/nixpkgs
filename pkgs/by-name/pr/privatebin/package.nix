@@ -11,7 +11,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "PrivateBin";
     repo = "PrivateBin";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-LdTteUED/pq4Z4IOBttLPm3K9gx1xVqP24QQ48uvuyI=";
   };
 

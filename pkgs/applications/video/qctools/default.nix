@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "qctools";
-  version = "1.3.1";
+  version = "1.4";
 
   src = fetchurl {
     url = "https://mediaarea.net/download/source/${pname}/${version}/${pname}_${version}.tar.xz";
-    hash = "sha256-ClF8KiVjV2JTCjz/ueioojhiHZf8UW9WONaJrIx4Npo=";
+    hash = "sha256-1WqCP/4PV8hQT8ubPxHGTwZrRnOPm+msEPBGR4gkWhA=";
   };
 
   sourceRoot = "${pname}/Project/QtCreator";

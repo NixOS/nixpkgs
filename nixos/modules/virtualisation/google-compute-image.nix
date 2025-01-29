@@ -88,9 +88,13 @@ in
           ]
         }
         pushd $out
-        tar -Sc $diskImage | gzip -${toString cfg.compressionLevel} > \
+        # RTFM:
+        # https://cloud.google.com/compute/docs/images/create-custom
+        # https://cloud.google.com/compute/docs/import/import-existing-image
+        mv $diskImage disk.raw
+        tar -Sc disk.raw | gzip -${toString cfg.compressionLevel} > \
           ${config.image.fileName}
-        rm $diskImage
+        rm disk.raw
         popd
       '';
       format = "raw";

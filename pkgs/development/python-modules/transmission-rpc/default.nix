@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Trim21";
     repo = "transmission-rpc";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-t07TuLLHfbxvWh+7854OMigfGC8jHzvpd4QO3v0M15I=";
   };
 

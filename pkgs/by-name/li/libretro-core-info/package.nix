@@ -7,13 +7,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "libretro-core-info";
-  version = "1.19.0";
+  version = "1.20.0";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "libretro-core-info";
     rev = "v${version}";
-    hash = "sha256-dMMX9i2xPKay6BKC52fYxElcGSllHkSZyOXX/t3l6Io=";
+    hash = "sha256-T/La/Y9txRX8SHAyOi45KcQA8zb3puXdfTKlPSm42+U=";
   };
 
   makeFlags = [

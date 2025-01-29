@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pmix";
-  version = "5.0.5";
+  version = "5.0.6";
 
   src = fetchFromGitHub {
     repo = "openpmix";
     owner = "openpmix";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-iyvD6uR+kHAs5uLD3NPBVSQUslAsH40dwtszhAsJvqw=";
+    hash = "sha256-uzsUqf4ZmXmz3vTtD01RkILPxrtCiQ5RMyZ57KAKG1U=";
     fetchSubmodules = true;
   };
 
@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
       # Pin the compiler to the current version in a cross compiler friendly way.
       # Same pattern as for openmpi (see https://github.com/NixOS/nixpkgs/pull/58964#discussion_r275059427).
       substituteInPlace "''${!outputDev}"/share/pmix/pmixcc-wrapper-data.txt \
-        --replace-fail compiler=gcc \
+        --replace-fail compiler=${stdenv.cc.targetPrefix}gcc \
           compiler=${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}cc
     '';
 

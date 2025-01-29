@@ -21,14 +21,16 @@ stdenv.mkDerivation rec {
     hash = "sha256-QfuetGPY6u4OhFiE5/CoVEpdODWnd1PHWBtM3ymsZ98=";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
     xorgproto
     uthash
   ];
 
   buildInputs = [
+    extra-cmake-modules
     xcbutil
     xcbutilkeysyms
   ];

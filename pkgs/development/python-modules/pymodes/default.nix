@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "junzis";
     repo = "pyModeS";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-rVxqtT/sBFQM2Y+GPR2Tc5J2skavvjxwPB7paDBqYRQ=";
   };
 

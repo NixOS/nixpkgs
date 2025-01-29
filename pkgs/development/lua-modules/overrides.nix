@@ -765,7 +765,7 @@ in
     ];
 
     meta = {
-      homepage = "http://pjb.com.au/comp/lua/readline.html";
+      homepage = "https://pjb.com.au/comp/lua/readline.html";
       description = "Interface to the readline library";
       license.fullName = "MIT/X11";
       broken = (luaOlder "5.1") || (luaAtLeast "5.5");
@@ -838,6 +838,12 @@ in
     nativeBuildInputs = oa.nativeBuildInputs ++ [ cargo rustPlatform.cargoSetupHook ];
   });
 
+  tl = prev.tl.overrideAttrs ({
+    preConfigure = ''
+      rm luarocks.lock
+    '';
+  });
+
   toml-edit = prev.toml-edit.overrideAttrs (oa: {
 
     cargoDeps = rustPlatform.fetchCargoTarball {
@@ -866,9 +872,21 @@ in
     ];
   });
 
-  tl = prev.tl.overrideAttrs ({
-    preConfigure = ''
-      rm luarocks.lock
+  tree-sitter-orgmode = prev.tree-sitter-orgmode.overrideAttrs (oa: {
+    propagatedBuildInputs =
+      let
+        # HACK: luarocks-nix puts rockspec build dependencies in the nativeBuildInputs,
+        # but that doesn't seem to work
+        lua = lib.head oa.propagatedBuildInputs;
+      in
+      oa.propagatedBuildInputs
+      ++ [
+        lua.pkgs.luarocks-build-treesitter-parser
+        tree-sitter
+      ];
+
+    preInstall = ''
+      export HOME="$TMPDIR";
     '';
   });
 
@@ -877,12 +895,6 @@ in
   });
 
   vusted = prev.vusted.overrideAttrs (_: {
-    postConfigure = ''
-      cat ''${rockspecFilename}
-      substituteInPlace ''${rockspecFilename} \
-        --replace-fail '"luasystem = 0.2.1",' "'luasystem >= 0.2',"
-    '';
-
     # make sure vusted_entry.vim doesn't get wrapped
     postInstall = ''
       chmod -x $out/bin/vusted_entry.vim

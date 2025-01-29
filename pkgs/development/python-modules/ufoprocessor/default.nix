@@ -14,32 +14,32 @@
 
 buildPythonPackage rec {
   pname = "ufoprocessor";
-  version = "1.9.0";
+  version = "1.13.3";
+  pyproject = true;
 
   src = fetchPypi {
-    pname = "ufoProcessor";
-    inherit version;
-    sha256 = "0ns11aamgavgsfj8qf5kq7dvzmgl0mhr1cbych2f075ipfdvva5s";
-    extension = "zip";
+    inherit pname version;
+    sha256 = "1187g7xs6z8i2hzfkqhfd59qsdvzydqnmwhaz71nsi1zf5bw59gw";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
-    defcon
-    lxml
-    fonttools
-    fs
-    fontmath
-    fontparts
-    mutatormath
-  ];
+  dependencies =
+    [
+      defcon
+      fontmath
+      fontparts
+      fonttools
+      mutatormath
+    ]
+    ++ defcon.optional-dependencies.lxml
+    ++ fonttools.optional-dependencies.lxml
+    ++ fonttools.optional-dependencies.ufo;
 
   checkPhase = ''
     runHook preCheck
     for t in Tests/*.py; do
-      # https://github.com/LettError/ufoProcessor/issues/32
-      [[ "$(basename "$t")" = "tests_fp.py" ]] || python "$t"
+      python "$t"
     done
     runHook postCheck
   '';

@@ -18,6 +18,7 @@
   gtk4,
   libadwaita,
   libsecret,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,10 +33,9 @@ stdenv.mkDerivation rec {
     hash = "sha256-DtLGD7+Ydj2fvEHU+bDQDMC/E/9VgrlVNMCG6OlPmfg=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-8nFkc77FiLxMA1hMm8k5VB84l+pQeL0JSzYDytXrNUE=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-1JFXSVs9HPPzh+IjH4RGugrZEifPVcQho9B3hLSTL6s=";
   };
 
   patches = [
@@ -67,6 +67,10 @@ stdenv.mkDerivation rec {
     libadwaita
     libsecret
   ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Simple backups based on borg";

@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gnumpi";
     repo = "pyegps";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-iixk2sFa4KAayKFmQKtPjvoIYgxCMXnfkliKhyO2ba4=";
   };
 

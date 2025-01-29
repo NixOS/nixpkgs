@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ente-io";
     repo = "ente";
     sparseCheckout = [ "web" ];
-    rev = "refs/tags/photos-v${finalAttrs.version}";
+    tag = "photos-v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-DqfUUXY79CndEqPT8TR4PasLtaSCtqZaV2kp10Vu4PQ=";
   };

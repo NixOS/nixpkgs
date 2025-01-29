@@ -130,6 +130,11 @@ let
               ];
               "llvm/gnu-install-dirs-polly.patch" = [
                 {
+                  after = "20";
+                  path = ../20;
+                }
+                {
+                  before = "20";
                   after = "18";
                   path = ../18;
                 }
@@ -317,20 +322,6 @@ let
       };
   };
 
-  lldbPlugins = lib.makeExtensible (
-    lldbPlugins:
-    let
-      callPackage = newScope (
-        lldbPlugins
-        // {
-          inherit stdenv;
-          inherit (tools) lldb;
-        }
-      );
-    in
-    lib.recurseIntoAttrs { llef = callPackage ./lldb-plugins/llef.nix { }; }
-  );
-
   tools = lib.makeExtensible (
     tools:
     let
@@ -515,13 +506,26 @@ let
       # we need to reintroduce `outputSpecified` to get the expected behavior e.g. of lib.get*
       llvm = tools.libllvm;
 
+      tblgen = callPackage ./tblgen.nix {
+        patches = builtins.filter
+          # Crude method to drop polly patches if present, they're not needed for tblgen.
+          (p: (!lib.hasInfix "-polly" p)) tools.libllvm.patches;
+        clangPatches = [
+          # Would take tools.libclang.patches, but this introduces a cycle due
+          # to replacements depending on the llvm outpath (e.g. the LLVMgold patch).
+          # So take the only patch known to be necessary.
+          (metadata.getVersionFile "clang/gnu-install-dirs.patch")
+        ];
+      };
+
       libclang = callPackage ./clang {
         patches =
           [
             (metadata.getVersionFile "clang/purity.patch")
             # https://reviews.llvm.org/D51899
             (metadata.getVersionFile "clang/gnu-install-dirs.patch")
-
+          ]
+          ++ lib.optionals (lib.versionOlder metadata.release_version "20") [
             # https://github.com/llvm/llvm-project/pull/116476
             # prevent clang ignoring warnings / errors for unsuppored
             # options when building & linking a source file with trailing
@@ -659,6 +663,14 @@ let
           );
       };
 
+      lldbPlugins = lib.makeExtensible (
+        lldbPlugins:
+        let
+          callPackage = newScope ( lldbPlugins // tools // args // metadata );
+        in
+        lib.recurseIntoAttrs { llef = callPackage ./lldb-plugins/llef.nix { }; }
+      );
+
       lldb = callPackage ./lldb.nix (
         {
           patches =
@@ -701,7 +713,21 @@ let
               # FIXME: do we need this after 15?
               (metadata.getVersionFile "lldb/procfs.patch")
             ]
-            ++ lib.optional (lib.versionOlder metadata.release_version "17") resourceDirPatch
+            ++ lib.optional (lib.versionOlder metadata.release_version "18") (fetchpatch {
+              name = "libcxx-19-char_traits.patch";
+              url = "https://github.com/llvm/llvm-project/commit/68744ffbdd7daac41da274eef9ac0d191e11c16d.patch";
+              stripLen = 1;
+              hash = "sha256-QCGhsL/mi7610ZNb5SqxjRGjwJeK2rwtsFVGeG3PUGc=";
+            })
+            ++ lib.optionals (lib.versionOlder metadata.release_version "17") [
+              resourceDirPatch
+              (fetchpatch {
+                name = "add-cstdio.patch";
+                url = "https://github.com/llvm/llvm-project/commit/73e15b5edb4fa4a77e68c299a6e3b21e610d351f.patch";
+                stripLen = 1;
+                hash = "sha256-eFcvxZaAuBsY/bda1h9212QevrXyvCHw8Cr9ngetDr0=";
+              })
+            ]
             ++ lib.optional (lib.versionOlder metadata.release_version "14") (
               metadata.getVersionFile "lldb/gnu-install-dirs.patch"
             )
@@ -1043,147 +1069,160 @@ let
         ++ lib.optionals (lib.versionAtLeast metadata.release_version "13") [
           (metadata.getVersionFile "compiler-rt/armv6-scudo-libatomic.patch")
         ]
-        ++ lib.optional (lib.versionAtLeast metadata.release_version "19") (fetchpatch {
+        ++ lib.optional (lib.versions.major metadata.release_version == "19") (fetchpatch {
           url = "https://github.com/llvm/llvm-project/pull/99837/commits/14ae0a660a38e1feb151928a14f35ff0f4487351.patch";
           hash = "sha256-JykABCaNNhYhZQxCvKiBn54DZ5ZguksgCHnpdwWF2no=";
           relative = "compiler-rt";
         });
     in
-    {
-      compiler-rt-libc = callPackage ./compiler-rt (
-        let
-          # temp rename to avoid infinite recursion
+    (
+      {
+        compiler-rt-libc = callPackage ./compiler-rt (
+          let
+            # temp rename to avoid infinite recursion
+            stdenv =
+              # Darwin needs to use a bootstrap stdenv to avoid an infinite recursion when cross-compiling.
+              if args.stdenv.hostPlatform.isDarwin then
+                overrideCC darwin.bootstrapStdenv buildLlvmTools.clangWithLibcAndBasicRtAndLibcxx
+              else if args.stdenv.hostPlatform.useLLVM or false then
+                overrideCC args.stdenv buildLlvmTools.clangWithLibcAndBasicRtAndLibcxx
+              else
+                args.stdenv;
+          in
+          {
+            patches = compiler-rtPatches;
+            inherit stdenv;
+          }
+          // lib.optionalAttrs (stdenv.hostPlatform.useLLVM or false) {
+            libxcrypt = (libxcrypt.override { inherit stdenv; }).overrideAttrs (old: {
+              configureFlags = old.configureFlags ++ [ "--disable-symvers" ];
+            });
+          }
+        );
+
+        compiler-rt-no-libc = callPackage ./compiler-rt {
+          patches = compiler-rtPatches;
+          doFakeLibgcc = stdenv.hostPlatform.useLLVM or false;
           stdenv =
             # Darwin needs to use a bootstrap stdenv to avoid an infinite recursion when cross-compiling.
-            if args.stdenv.hostPlatform.isDarwin then
-              overrideCC darwin.bootstrapStdenv buildLlvmTools.clangWithLibcAndBasicRtAndLibcxx
-            else if args.stdenv.hostPlatform.useLLVM or false then
-              overrideCC args.stdenv buildLlvmTools.clangWithLibcAndBasicRtAndLibcxx
+            if stdenv.hostPlatform.isDarwin then
+              overrideCC darwin.bootstrapStdenv buildLlvmTools.clangNoLibcNoRt
             else
-              args.stdenv;
-        in
-        {
-          patches = compiler-rtPatches;
-          inherit stdenv;
-        }
-        // lib.optionalAttrs (stdenv.hostPlatform.useLLVM or false) {
-          libxcrypt = (libxcrypt.override { inherit stdenv; }).overrideAttrs (old: {
-            configureFlags = old.configureFlags ++ [ "--disable-symvers" ];
-          });
-        }
-      );
+              overrideCC stdenv buildLlvmTools.clangNoLibcNoRt;
+        };
 
-      compiler-rt-no-libc = callPackage ./compiler-rt {
-        patches = compiler-rtPatches;
-        doFakeLibgcc = stdenv.hostPlatform.useLLVM or false;
-        stdenv =
-          # Darwin needs to use a bootstrap stdenv to avoid an infinite recursion when cross-compiling.
-          if stdenv.hostPlatform.isDarwin then
-            overrideCC darwin.bootstrapStdenv buildLlvmTools.clangNoLibcNoRt
+        compiler-rt =
+          if
+            stdenv.hostPlatform.libc == null
+            # Building the with-libc compiler-rt and WASM doesn't yet work,
+            # because wasilibc doesn't provide some expected things. See
+            # compiler-rt's file for further details.
+            || stdenv.hostPlatform.isWasm
+            # Failing `#include <term.h>` in
+            # `lib/sanitizer_common/sanitizer_platform_limits_freebsd.cpp`
+            # sanitizers, not sure where to get it.
+            || stdenv.hostPlatform.isFreeBSD
+          then
+            libraries.compiler-rt-no-libc
           else
-            overrideCC stdenv buildLlvmTools.clangNoLibcNoRt;
-      };
+            libraries.compiler-rt-libc;
 
-      compiler-rt =
-        if
-          stdenv.hostPlatform.libc == null
-          # Building the with-libc compiler-rt and WASM doesn't yet work,
-          # because wasilibc doesn't provide some expected things. See
-          # compiler-rt's file for further details.
-          || stdenv.hostPlatform.isWasm
-          # Failing `#include <term.h>` in
-          # `lib/sanitizer_common/sanitizer_platform_limits_freebsd.cpp`
-          # sanitizers, not sure where to get it.
-          || stdenv.hostPlatform.isFreeBSD
-        then
-          libraries.compiler-rt-no-libc
-        else
-          libraries.compiler-rt-libc;
+        stdenv = overrideCC stdenv buildLlvmTools.clang;
 
-      stdenv = overrideCC stdenv buildLlvmTools.clang;
+        libcxxStdenv = overrideCC stdenv buildLlvmTools.libcxxClang;
 
-      libcxxStdenv = overrideCC stdenv buildLlvmTools.libcxxClang;
-
-      libcxx = callPackage ./libcxx (
-        {
-          patches = lib.optionals (lib.versionOlder metadata.release_version "16") (
-            lib.optional (lib.versions.major metadata.release_version == "15")
-              # See:
-              #   - https://reviews.llvm.org/D133566
-              #   - https://github.com/NixOS/nixpkgs/issues/214524#issuecomment-1429146432
-              # !!! Drop in LLVM 16+
-              (
-                fetchpatch {
-                  url = "https://github.com/llvm/llvm-project/commit/57c7bb3ec89565c68f858d316504668f9d214d59.patch";
-                  hash = "sha256-B07vHmSjy5BhhkGSj3e1E0XmMv5/9+mvC/k70Z29VwY=";
-                }
-              )
-            ++ [
-              (substitute {
-                src = ./libcxxabi/wasm.patch;
+        libcxx = callPackage ./libcxx (
+          {
+            patches = lib.optionals (lib.versionOlder metadata.release_version "16") (
+              lib.optional (lib.versions.major metadata.release_version == "15")
+                # See:
+                #   - https://reviews.llvm.org/D133566
+                #   - https://github.com/NixOS/nixpkgs/issues/214524#issuecomment-1429146432
+                # !!! Drop in LLVM 16+
+                (
+                  fetchpatch {
+                    url = "https://github.com/llvm/llvm-project/commit/57c7bb3ec89565c68f858d316504668f9d214d59.patch";
+                    hash = "sha256-B07vHmSjy5BhhkGSj3e1E0XmMv5/9+mvC/k70Z29VwY=";
+                  }
+                )
+              ++ [
+                (substitute {
+                  src = ./libcxxabi/wasm.patch;
+                  substitutions = [
+                    "--replace-fail"
+                    "/cmake/"
+                    "/llvm/cmake/"
+                  ];
+                })
+              ]
+              ++ lib.optional stdenv.hostPlatform.isMusl (substitute {
+                src = ./libcxx/libcxx-0001-musl-hacks.patch;
                 substitutions = [
                   "--replace-fail"
-                  "/cmake/"
-                  "/llvm/cmake/"
+                  "/include/"
+                  "/libcxx/include/"
                 ];
               })
-            ]
-            ++ lib.optional stdenv.hostPlatform.isMusl (substitute {
-              src = ./libcxx/libcxx-0001-musl-hacks.patch;
-              substitutions = [
-                "--replace-fail"
-                "/include/"
-                "/libcxx/include/"
-              ];
-            })
-          );
-          stdenv =
-            if stdenv.hostPlatform.isDarwin then
-              overrideCC darwin.bootstrapStdenv buildLlvmTools.clangWithLibcAndBasicRt
-            else
-              overrideCC stdenv buildLlvmTools.clangWithLibcAndBasicRt;
-        }
-        // lib.optionalAttrs (lib.versionOlder metadata.release_version "14") {
-          # TODO: remove this, causes LLVM 13 packages rebuild.
-          inherit (metadata) monorepoSrc; # Preserve bug during #307211 refactor.
-        }
-      );
-
-      libunwind = callPackage ./libunwind {
-        patches = lib.optional (lib.versionOlder metadata.release_version "17") (
-          metadata.getVersionFile "libunwind/gnu-install-dirs.patch"
+            );
+            stdenv =
+              if stdenv.hostPlatform.isDarwin then
+                overrideCC darwin.bootstrapStdenv buildLlvmTools.clangWithLibcAndBasicRt
+              else
+                overrideCC stdenv buildLlvmTools.clangWithLibcAndBasicRt;
+          }
+          // lib.optionalAttrs (lib.versionOlder metadata.release_version "14") {
+            # TODO: remove this, causes LLVM 13 packages rebuild.
+            inherit (metadata) monorepoSrc; # Preserve bug during #307211 refactor.
+          }
         );
-        stdenv = overrideCC stdenv buildLlvmTools.clangWithLibcAndBasicRt;
-      };
 
-      openmp = callPackage ./openmp {
-        patches =
-          lib.optional (
-            lib.versionAtLeast metadata.release_version "15" && lib.versionOlder metadata.release_version "19"
-          ) (metadata.getVersionFile "openmp/fix-find-tool.patch")
-          ++ lib.optional (
-            lib.versionAtLeast metadata.release_version "14" && lib.versionOlder metadata.release_version "18"
-          ) (metadata.getVersionFile "openmp/gnu-install-dirs.patch")
-          ++ lib.optional (lib.versionAtLeast metadata.release_version "14") (
-            metadata.getVersionFile "openmp/run-lit-directly.patch"
-          )
-          ++
-            lib.optional (lib.versionOlder metadata.release_version "14")
-              # Fix cross.
-              (
-                fetchpatch {
-                  url = "https://github.com/llvm/llvm-project/commit/5e2358c781b85a18d1463fd924d2741d4ae5e42e.patch";
-                  hash = "sha256-UxIlAifXnexF/MaraPW0Ut6q+sf3e7y1fMdEv1q103A=";
-                }
-              );
-      };
-    }
+        libunwind = callPackage ./libunwind {
+          patches = lib.optional (lib.versionOlder metadata.release_version "17") (
+            metadata.getVersionFile "libunwind/gnu-install-dirs.patch"
+          );
+          stdenv = overrideCC stdenv buildLlvmTools.clangWithLibcAndBasicRt;
+        };
+
+        openmp = callPackage ./openmp {
+          patches =
+            lib.optional (
+              lib.versionAtLeast metadata.release_version "15" && lib.versionOlder metadata.release_version "19"
+            ) (metadata.getVersionFile "openmp/fix-find-tool.patch")
+            ++ lib.optional (
+              lib.versionAtLeast metadata.release_version "14" && lib.versionOlder metadata.release_version "18"
+            ) (metadata.getVersionFile "openmp/gnu-install-dirs.patch")
+            ++ lib.optional (lib.versionAtLeast metadata.release_version "14") (
+              metadata.getVersionFile "openmp/run-lit-directly.patch"
+            )
+            ++
+              lib.optional (lib.versionOlder metadata.release_version "14")
+                # Fix cross.
+                (
+                  fetchpatch {
+                    url = "https://github.com/llvm/llvm-project/commit/5e2358c781b85a18d1463fd924d2741d4ae5e42e.patch";
+                    hash = "sha256-UxIlAifXnexF/MaraPW0Ut6q+sf3e7y1fMdEv1q103A=";
+                  }
+                );
+        };
+      }
+      // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "20") {
+        libc-overlay = callPackage ./libc {
+          isFullBuild = false;
+        };
+
+        libc-full = callPackage ./libc {
+          isFullBuild = true;
+        };
+
+        libc = if stdenv.targetPlatform.libc == "llvm" then libraries.libc-full else libraries.libc-overlay;
+      }
+    )
   );
 
   noExtend = extensible: lib.attrsets.removeAttrs extensible [ "extend" ];
 in
 {
-  inherit tools libraries lldbPlugins;
+  inherit tools libraries;
   inherit (metadata) release_version;
 }
 // (noExtend libraries)

@@ -10,7 +10,7 @@
   moonfire-nvr,
   darwin,
   nodejs,
-  pnpm,
+  pnpm_9,
 }:
 
 let
@@ -19,7 +19,7 @@ let
   src = fetchFromGitHub {
     owner = "scottlamb";
     repo = "moonfire-nvr";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-kh+SPM08pnVFxKSZ6Gb2LP7Wa8j0VopknZK2urMIFNk=";
   };
   ui = stdenv.mkDerivation (finalAttrs: {
@@ -28,9 +28,9 @@ let
     sourceRoot = "${src.name}/ui";
     nativeBuildInputs = [
       nodejs
-      pnpm.configHook
+      pnpm_9.configHook
     ];
-    pnpmDeps = pnpm.fetchDeps {
+    pnpmDeps = pnpm_9.fetchDeps {
       inherit (finalAttrs) pname version src;
       sourceRoot = "${finalAttrs.src.name}/ui";
       hash = "sha256-7fMhUFlV5lz+A9VG8IdWoc49C2CTdLYQlEgBSBqJvtw=";

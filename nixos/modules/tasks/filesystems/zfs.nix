@@ -889,6 +889,7 @@ in
         after = [ "zfs-import.target" ];
         serviceConfig = {
           Type = "simple";
+          IOSchedulingClass = "idle";
         };
         script = ''
           # shellcheck disable=SC2046

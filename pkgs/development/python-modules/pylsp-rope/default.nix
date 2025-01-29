@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-rope";
     repo = "pylsp-rope";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-gEmSZQZ2rtSljN8USsUiqsP2cr54k6kwvsz8cjam9dU=";
   };
 

@@ -105,27 +105,27 @@ in
         virtualHosts.${cfg.hostname} = {
           locations = {
             # /etc/nginx/includes/ds-docservice.conf
-            "~ ^(\/[\d]+\.[\d]+\.[\d]+[\.|-][\d]+)?\/(web-apps\/apps\/api\/documents\/api\.js)$".extraConfig =
+            "~ ^(\\/[\\d]+\\.[\\d]+\\.[\\d]+[\\.|-][\\d]+)?\\/(web-apps\\/apps\\/api\\/documents\\/api\\.js)$".extraConfig =
               ''
                 expires -1;
                 alias ${cfg.package}/var/www/onlyoffice/documentserver/$2;
               '';
-            "~ ^(\/[\d]+\.[\d]+\.[\d]+[\.|-][\d]+)?\/(web-apps)(\/.*\.json)$".extraConfig = ''
+            "~ ^(\\/[\\d]+\\.[\\d]+\\.[\\d]+[\\.|-][\\d]+)?\\/(web-apps)(\\/.*\\.json)$".extraConfig = ''
               expires 365d;
               error_log /dev/null crit;
               alias ${cfg.package}/var/www/onlyoffice/documentserver/$2$3;
             '';
-            "~ ^(\/[\d]+\.[\d]+\.[\d]+[\.|-][\d]+)?\/(sdkjs-plugins)(\/.*\.json)$".extraConfig = ''
+            "~ ^(\\/[\\d]+\\.[\\d]+\\.[\\d]+[\\.|-][\\d]+)?\\/(sdkjs-plugins)(\\/.*\\.json)$".extraConfig = ''
               expires 365d;
               error_log /dev/null crit;
               alias ${cfg.package}/var/www/onlyoffice/documentserver/$2$3;
             '';
-            "~ ^(\/[\d]+\.[\d]+\.[\d]+[\.|-][\d]+)?\/(web-apps|sdkjs|sdkjs-plugins|fonts)(\/.*)$".extraConfig =
+            "~ ^(\\/[\\d]+\\.[\\d]+\\.[\\d]+[\\.|-][\\d]+)?\\/(web-apps|sdkjs|sdkjs-plugins|fonts)(\\/.*)$".extraConfig =
               ''
                 expires 365d;
                 alias ${cfg.package}/var/www/onlyoffice/documentserver/$2$3;
               '';
-            "~* ^(\/cache\/files.*)(\/.*)".extraConfig = ''
+            "~* ^(\\/cache\\/files.*)(\\/.*)".extraConfig = ''
               alias /var/lib/onlyoffice/documentserver/App_Data$1;
               add_header Content-Disposition "attachment; filename*=UTF-8''$arg_filename";
 
@@ -141,12 +141,12 @@ in
                 return 410;
               }
             '';
-            "~* ^(\/[\d]+\.[\d]+\.[\d]+[\.|-][\d]+)?\/(internal)(\/.*)$".extraConfig = ''
+            "~* ^(\\/[\\d]+\\.[\\d]+\\.[\\d]+[\\.|-][\\d]+)?\\/(internal)(\\/.*)$".extraConfig = ''
               allow 127.0.0.1;
               deny all;
               proxy_pass http://onlyoffice-docservice/$2$3;
             '';
-            "~* ^(\/[\d]+\.[\d]+\.[\d]+[\.|-][\d]+)?\/(info)(\/.*)$".extraConfig = ''
+            "~* ^(\\/[\\d]+\\.[\\d]+\\.[\\d]+[\\.|-][\\d]+)?\\/(info)(\\/.*)$".extraConfig = ''
               allow 127.0.0.1;
               deny all;
               proxy_pass http://onlyoffice-docservice/$2$3;
@@ -154,19 +154,19 @@ in
             "/".extraConfig = ''
               proxy_pass http://onlyoffice-docservice;
             '';
-            "~ ^(\/[\d]+\.[\d]+\.[\d]+[\.|-][\d]+)?(\/doc\/.*)".extraConfig = ''
+            "~ ^(\\/[\\d]+\\.[\\d]+\\.[\\d]+[\\.|-][\\d]+)?(\\/doc\\/.*)".extraConfig = ''
               proxy_pass http://onlyoffice-docservice$2;
               proxy_http_version 1.1;
             '';
             "/${cfg.package.version}/".extraConfig = ''
               proxy_pass http://onlyoffice-docservice/;
             '';
-            "~ ^(\/[\d]+\.[\d]+\.[\d]+[\.|-][\d]+)?\/(dictionaries)(\/.*)$".extraConfig = ''
+            "~ ^(\\/[\\d]+\\.[\\d]+\\.[\\d]+[\\.|-][\\d]+)?\\/(dictionaries)(\\/.*)$".extraConfig = ''
               expires 365d;
               alias ${cfg.package}/var/www/onlyoffice/documentserver/$2$3;
             '';
             # /etc/nginx/includes/ds-example.conf
-            "~ ^(\/welcome\/.*)$".extraConfig = ''
+            "~ ^(\\/welcome\\/.*)$".extraConfig = ''
               expires 365d;
               alias ${cfg.package}/var/www/onlyoffice/documentserver-example$1;
               index docker.html;

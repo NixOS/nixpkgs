@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "elastic";
     repo = "elastic-transport-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-5bNsJd0td3aQR+PvDBHg0/f+qPyt/ckWmeDrQJzxhYY=";
   };
 

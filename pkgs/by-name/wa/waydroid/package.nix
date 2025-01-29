@@ -27,9 +27,17 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "waydroid";
     repo = "waydroid";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-LejyuGYgW46++95XROuWc13Q+w0l+AzGAl9ekfmAIEk=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/waydroid/waydroid/commit/af296c90a788dde0b33813b12607cfab2fa65b98.patch";
+      hash = "sha256-1vkEKk00dbBLbbBxZIhcoOYUP976SJlaWyzYSWBy0nU=";
+      revert = true;
+    })
+  ];
 
   nativeBuildInputs = [
     gobject-introspection

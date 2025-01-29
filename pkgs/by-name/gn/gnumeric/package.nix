@@ -2,13 +2,17 @@
   lib,
   stdenv,
   fetchurl,
+  autoconf,
+  automake,
   pkg-config,
   intltool,
+  libxml2,
   perlPackages,
   goffice,
   gnome,
   adwaita-icon-theme,
   wrapGAppsHook3,
+  glib,
   gtk3,
   bison,
   python3Packages,
@@ -30,14 +34,20 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--disable-component" ];
 
   nativeBuildInputs = [
+    autoconf
+    automake
     pkg-config
     intltool
     bison
     itstool
+    glib # glib-compile-resources
+    libxml2 # xmllint
+    python.pythonOnBuildForHost
     wrapGAppsHook3
   ];
 
   # ToDo: optional libgda, introspection?
+  # TODO: fix Perl plugin when cross-compiling
   buildInputs =
     [
       goffice
@@ -52,6 +62,11 @@ stdenv.mkDerivation rec {
     ]);
 
   enableParallelBuilding = true;
+
+  postPatch = ''
+    substituteInPlace configure.ac \
+      --replace-fail 'GLIB_COMPILE_RESOURCES=' 'GLIB_COMPILE_RESOURCES="glib-compile-resources"#'
+  '';
 
   passthru = {
     updateScript = gnome.updateScript {

@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , nix-update-script
 , linkFarm
-, substituteAll
+, replaceVars
 , elementary-greeter
 , pkg-config
 , meson
@@ -14,6 +14,7 @@
 , granite
 , libgee
 , libhandy
+, gnome-desktop
 , gnome-settings-daemon
 , mutter
 , elementary-icon-theme
@@ -24,28 +25,30 @@
 , gdk-pixbuf
 , dbus
 , accountsservice
+, wayland-scanner
 , wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-greeter";
-  version = "7.0.0";
+  version = "8.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "greeter";
     rev = version;
-    sha256 = "sha256-m/xuaMCAPoqhl/M547mdafBPBu3UhHmVmBIUKQoS5L8=";
+    sha256 = "sha256-fx3KHMF6UhIFXyJHQ4dKJnVidsNMBk7AvHzaF3ELH1k=";
   };
 
   patches = [
     ./sysconfdir-install.patch
     # Needed until https://github.com/elementary/greeter/issues/360 is fixed
-    (substituteAll {
-      src = ./hardcode-fallback-background.patch;
+    (replaceVars ./hardcode-fallback-background.patch {
       default_wallpaper = "${nixos-artwork.wallpapers.simple-dark-gray.gnomeFilePath}";
     })
   ];
+
+  depsBuildBuild = [ pkg-config ];
 
   nativeBuildInputs = [
     desktop-file-utils
@@ -53,12 +56,14 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     vala
+    wayland-scanner
     wrapGAppsHook3
   ];
 
   buildInputs = [
     accountsservice
     elementary-icon-theme
+    gnome-desktop
     gnome-settings-daemon
     gdk-pixbuf
     granite

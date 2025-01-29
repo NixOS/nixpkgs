@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "auth0";
     repo = "auth0-python";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-g6sbxPglKDGbDMiB9crnua86y6TPIbLiFddeymrLAP0=";
   };
 

@@ -14,7 +14,7 @@ let
   src = fetchFromGitHub {
     owner = "ekzhang";
     repo = "sshx";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-RIQRX4sXlMl73Opi6hK2WD/erdAMNrm40IasHasikuw=";
   };
 
@@ -28,6 +28,8 @@ let
           src
           cargoHash
           ;
+
+        useFetchCargoVendor = true;
 
         nativeBuildInputs = [ protobuf ];
 
@@ -58,12 +60,12 @@ in
 {
   sshx = mkSshxPackage {
     pname = "sshx";
-    cargoHash = "sha256-PMSKhlHSjXKh/Jxvl2z+c1zDDyuVPzQapvdCdcuaFYc=";
+    cargoHash = "sha256-wXElkSaVWoUNhm2UOv8Q+UabgrVKqxwDUsk/JJaZzMw=";
   };
 
   sshx-server = mkSshxPackage rec {
     pname = "sshx-server";
-    cargoHash = "sha256-ySsTjNoI/nuz2qtZ4M2Fd9zy239+E61hUCq1r/ahgsA=";
+    cargoHash = "sha256-wXElkSaVWoUNhm2UOv8Q+UabgrVKqxwDUsk/JJaZzMw=";
 
     postPatch = ''
       substituteInPlace crates/sshx-server/src/web.rs \

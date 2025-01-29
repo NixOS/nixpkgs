@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "freekode";
     repo = "pyopenweathermap";
     # https://github.com/freekode/pyopenweathermap/issues/2
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-UcnELAJf0Ltf0xJOlyzsHb4HQGSBTJ+/mOZ/XSTkA0w=";
   };
 

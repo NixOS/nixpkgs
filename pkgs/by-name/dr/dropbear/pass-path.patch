@@ -1,7 +1,7 @@
-diff --git a/svr-chansession.c b/svr-chansession.c
+diff --git a/src/svr-chansession.c b/src/svr-chansession.c
 index 9ae2e60..2db7598 100644
---- a/svr-chansession.c
-+++ b/svr-chansession.c
+--- a/src/svr-chansession.c
++++ b/src/svr-chansession.c
 @@ -948,6 +948,8 @@ static void addchildpid(struct ChanSess *chansess, pid_t pid) {
  static void execchild(const void *user_data) {
  	const struct ChanSess *chansess = user_data;

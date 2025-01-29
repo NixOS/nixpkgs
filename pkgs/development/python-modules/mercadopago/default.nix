@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mercadopago";
     repo = "sdk-python";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-u4/e/shfTyrucf+uj5nqAkeugX9JZjXBrNtoOkpff8c=";
   };
 

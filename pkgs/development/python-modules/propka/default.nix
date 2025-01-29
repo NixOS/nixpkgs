@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jensengroup";
     repo = "propka";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-EJQqCe4WPOpqsSxxfbTjF0qETpSPYqpixpylweTCjko=";
   };
 

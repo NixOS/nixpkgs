@@ -80,9 +80,10 @@ in
         let
           args = lib.map lib.escapeShellArg (
             [
-              "-l"
+              "--verbose"
+              "--user"
               cfg.username
-              "-i"
+              "--identity-file"
               cfg.identityFilePath
               cfg.host
               cfg.remoteFilesystem
@@ -92,7 +93,7 @@ in
             ++ (lib.optional cfg.followDelete "--follow-delete")
           );
         in
-        "${lib.getExe cfg.package} ${lib.concatStringSep " " args}";
+        "${lib.getExe cfg.package} ${lib.concatStringsSep " " args}";
       wantedBy = [
         "zfs-snapshot-daily.service"
         "zfs-snapshot-frequent.service"

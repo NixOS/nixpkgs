@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nengo";
     repo = "nengo";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-b9mPjKdewIqIeRrddV1/M3bghSyox7Lz6VbfSLCHZjA=";
   };
 

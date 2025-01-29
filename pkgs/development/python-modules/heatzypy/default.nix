@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Cyr-ius";
     repo = "heatzypy";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-+iT3lE54xt7usz9v9JZqwQa0Xf1eLlN5VuQrjzmWo6Y=";
   };
 

@@ -148,22 +148,22 @@ stdenv.mkDerivation {
 
   postPatch = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     substituteInPlace cmake/builtin-config-ix.cmake \
-      --replace 'set(X86 i386)' 'set(X86 i386 i486 i586 i686)'
+      --replace-fail 'set(X86 i386)' 'set(X86 i386 i486 i586 i686)'
   '' + lib.optionalString (!haveLibc) ((lib.optionalString (lib.versions.major release_version == "18") ''
     substituteInPlace lib/builtins/aarch64/sme-libc-routines.c \
-      --replace "<stdlib.h>" "<stddef.h>"
+      --replace-fail "<stdlib.h>" "<stddef.h>"
   '') + ''
     substituteInPlace lib/builtins/int_util.c \
-      --replace "#include <stdlib.h>" ""
+      --replace-fail "#include <stdlib.h>" ""
   '' + (lib.optionalString (!stdenv.hostPlatform.isFreeBSD)
     # On FreeBSD, assert/static_assert are macros and allowing them to be implicitly declared causes link errors.
     # see description above for why we're nuking assert.h normally but that doesn't work here.
     # instead, we add the freebsd.include dependency explicitly
     ''
     substituteInPlace lib/builtins/clear_cache.c \
-      --replace "#include <assert.h>" ""
+      --replace-fail "#include <assert.h>" ""
     substituteInPlace lib/builtins/cpu_model${lib.optionalString (lib.versionAtLeast release_version "18") "/x86"}.c \
-      --replace "#include <assert.h>" ""
+      --replace-fail "#include <assert.h>" ""
   '')) + lib.optionalString (lib.versionAtLeast release_version "13" && lib.versionOlder release_version "14") ''
     # https://github.com/llvm/llvm-project/blob/llvmorg-14.0.6/libcxx/utils/merge_archives.py
     # Seems to only be used in v13 though it's present in v12 and v14, and dropped in v15.

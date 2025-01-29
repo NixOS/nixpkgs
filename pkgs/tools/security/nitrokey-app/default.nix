@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Nitrokey";
     repo = "nitrokey-app";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-c6EC5uuMna07xVHDRFq0UDwuSeopZTmZGZ9ZD5zaq8Y=";
   };
 

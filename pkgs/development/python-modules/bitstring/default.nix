@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "scott-griffiths";
     repo = pname;
-    rev = "refs/tags/bitstring-${version}";
+    tag = "bitstring-${version}";
     hash = "sha256-m2LZdUWOMxzr/biZhD1nWagab8PohHTcr+U1di0nkrU=";
   };
 

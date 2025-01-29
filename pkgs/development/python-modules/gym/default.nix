@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "openai";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-uJgm8l1SxIRC5PV6BIH/ht/1ucGT5UaUhkFMdusejgA=";
   };
 
@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Toolkit for developing and comparing your reinforcement learning agents";
-    homepage = "https://gym.openai.com/";
+    homepage = "https://www.gymlibrary.dev/";
     license = licenses.mit;
     maintainers = with maintainers; [ hyphon81 ];
   };

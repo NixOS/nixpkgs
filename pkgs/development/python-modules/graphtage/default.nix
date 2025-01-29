@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "trailofbits";
     repo = "graphtage";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Bz2T8tVdVOdXt23yPITkDNL46Y5LZPhY3SXZ5bF3CHw=";
   };
 

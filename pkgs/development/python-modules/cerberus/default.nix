@@ -10,19 +10,19 @@
 
 buildPythonPackage rec {
   pname = "cerberus";
-  version = "1.3.5";
-  format = "pyproject";
+  version = "1.3.7";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pyeve";
     repo = "cerberus";
-    rev = "refs/tags/${version}";
-    hash = "sha256-4sVNM4zHc9nsrntmJVdE9nm47CSF0UOJPPI9z3Z2YDc=";
+    tag = version;
+    hash = "sha256-KYZpd8adKXahSc/amQHZMFdJtEtZLklZZgwfkYu8/qY=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
     poetry-core
     setuptools
   ];

@@ -4,8 +4,6 @@
   fetchpatch,
   sasl,
   boost,
-  Security,
-  CoreFoundation,
   cctools,
   avxSupport ? stdenv.hostPlatform.avxSupport,
 }:
@@ -15,8 +13,6 @@ let
     inherit
       sasl
       boost
-      Security
-      CoreFoundation
       cctools
       stdenv
       ;

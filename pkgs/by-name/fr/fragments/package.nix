@@ -12,6 +12,7 @@
   libadwaita,
   meson,
   ninja,
+  nix-update-script,
   openssl,
   pkg-config,
   rustPlatform,
@@ -66,6 +67,10 @@ stdenv.mkDerivation rec {
       --prefix PATH : "${lib.makeBinPath [ transmission_4 ]}"
     )
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/World/Fragments";

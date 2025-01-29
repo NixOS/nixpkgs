@@ -38,7 +38,7 @@ stdenv.mkDerivation {
       recursive-bisection, multilevel k-way, and multi-constraint partitioning
       schemes
     '';
-    homepage = "http://glaros.dtc.umn.edu/gkhome/metis/parmetis/overview";
+    homepage = "https://github.com/KarypisLab/ParMETIS";
     platforms = platforms.all;
     license = licenses.unfree;
     maintainers = [ maintainers.costrouc ];

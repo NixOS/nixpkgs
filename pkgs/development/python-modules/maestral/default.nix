@@ -39,7 +39,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SamSchott";
     repo = "maestral";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-akh0COltpUU4Z4kfubg6A7k6W8ICoqVYkmFpMkTC8H8=";
   };
 

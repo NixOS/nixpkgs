@@ -19,7 +19,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "persepolisdm";
     repo = "persepolis";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-ffEXPkpHGwvVzUxO6sjAEKYbxRod7o8f7DWR5AN+SkA=";
   };
 

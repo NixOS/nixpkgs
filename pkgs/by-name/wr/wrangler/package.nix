@@ -10,6 +10,7 @@
   llvmPackages,
   musl,
   xorg,
+  gitUpdater,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wrangler";
@@ -26,6 +27,8 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) pname version src;
     hash = "sha256-8EItfBV2n2rnXPCTYjDZlr/tdlEn8YOdIzOsj35w5gQ=";
   };
+
+  passthru.updateScript = gitUpdater { rev-prefix = "wrangler@"; };
 
   buildInputs =
     [

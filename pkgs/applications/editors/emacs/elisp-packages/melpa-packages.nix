@@ -761,6 +761,9 @@ let
         # Optimizer error: too much on the stack
         ack-menu = ignoreCompilationError super.ack-menu;
 
+        # https://github.com/skeeto/emacs-aio/issues/31
+        aio = ignoreCompilationError super.aio;
+
         # https://github.com/gongo/airplay-el/issues/2
         airplay = addPackageRequires super.airplay [ self.request-deferred ];
 
@@ -953,11 +956,18 @@ let
         # missing optional dependencies
         conda = addPackageRequires super.conda [ self.projectile ];
 
-        consult-gh = super.consult-gh.overrideAttrs (old: {
-          propagatedUserEnvPkgs = old.propagatedUserEnvPkgs or [ ] ++ [ pkgs.gh ];
-        });
+        # needs network during compilation, also native-ice
+        consult-gh = ignoreCompilationError (
+          super.consult-gh.overrideAttrs (old: {
+            propagatedUserEnvPkgs = old.propagatedUserEnvPkgs or [ ] ++ [ pkgs.gh ];
+          })
+        );
 
-        consult-gh-forge = buildWithGit super.consult-gh-forge;
+        # needs network during compilation
+        consult-gh-embark = ignoreCompilationError super.consult-gh-embark;
+
+        # needs network during compilation
+        consult-gh-forge = ignoreCompilationError (buildWithGit super.consult-gh-forge);
 
         counsel-gtags = ignoreCompilationError super.counsel-gtags; # elisp error
 
@@ -1395,7 +1405,7 @@ let
         org-gtd = ignoreCompilationError super.org-gtd; # elisp error
 
         # needs newer org than the Eamcs 29.4 builtin one
-        org-link-beautify = addPackageRequires super.org-link-beautify [ self.org ];
+        org-link-beautify = addPackageRequires super.org-link-beautify [ self.org self.qrencode ];
 
         # TODO report to upstream
         org-kindle = addPackageRequires super.org-kindle [ self.dash ];

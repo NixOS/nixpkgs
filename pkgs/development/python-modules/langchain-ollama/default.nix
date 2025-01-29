@@ -11,7 +11,7 @@
   ollama,
 
   # testing
-  langchain-standard-tests,
+  langchain-tests,
   pytestCheckHook,
   pytest-asyncio,
   syrupy,
@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-ollama";
-  version = "0.2.0";
+  version = "0.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    rev = "refs/tags/langchain-ollama==${version}";
-    hash = "sha256-NtlJqIevdaoOO4oDqKsL4OFbw8tHb3FjV9LrTytOGKE=";
+    tag = "langchain-ollama==${version}";
+    hash = "sha256-Ex8GndMHPHwSSMKu1JxnfGpRj55fh3TR19b3E+KrLUs=";
   };
 
   sourceRoot = "${src.name}/libs/partners/ollama";
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    langchain-standard-tests
+    langchain-tests
     pytestCheckHook
     pytest-asyncio
     syrupy

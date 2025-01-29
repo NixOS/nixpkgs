@@ -93,7 +93,7 @@ let
   # The idea is to match everything that looks like `$term =`
   # but not `# $term something something`
   # or `# $term = some value` because those are comments.
-  configContainsSetting = lines: term: (match "^[^#]*\b${term}\b.*=" lines) != null;
+  configContainsSetting = lines: term: (match "[[:blank:]]*${term}[[:blank:]]*=.*" lines) != null;
 
   warnAboutExtraConfigCollisions = map mkExtraConfigCollisionWarning (
     filter (configContainsSetting cfg.extraConfig) automaticallySetPluginSettings

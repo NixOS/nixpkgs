@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "saivert";
     repo = "pwvucontrol";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-v8xANTbaIPIAPoukP8rcVzM6NHNpS2Ej/nfdmg3Vgvg=";
   };
 

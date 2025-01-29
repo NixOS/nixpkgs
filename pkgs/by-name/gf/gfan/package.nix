@@ -19,6 +19,14 @@ stdenv.mkDerivation rec {
   patches =
     [
       ./gfan-0.6.2-cddlib-prefix.patch
+      (fetchpatch {
+        # removes dead code with invalid member reference in gfanlib
+        name = "clang-19.patch";
+        url = "https://github.com/Singular/Singular/commit/d3f73432d73ac0dd041af83cb35301498e9b57d9.patch";
+        stripLen = 2;
+        extraPrefix = "src/";
+        hash = "sha256-jPGMYx/GOFV7Tk3CqaRWeX/UHkzjeL57eZj4r40s8/g=";
+      })
     ]
     ++ lib.optionals (stdenv.cc.isClang) [
       (fetchpatch {

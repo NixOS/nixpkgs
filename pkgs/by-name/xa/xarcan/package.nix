@@ -21,6 +21,7 @@
   libxkbfile,
   libxshmfence,
   libgbm,
+  mesa,
   meson,
   nettle,
   ninja,
@@ -75,6 +76,7 @@ stdenv.mkDerivation (finalPackages: {
     libxkbfile
     libxshmfence
     libgbm
+    mesa # uses dri_interface.h
     nettle
     openssl
     pixman

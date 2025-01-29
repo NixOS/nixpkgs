@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Matmaus";
     repo = "LnkParse3";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-oyULNRjC0pcVUOeTjjW3g3mB7KySYcwAS+/KwQEIkK4=";
   };
 

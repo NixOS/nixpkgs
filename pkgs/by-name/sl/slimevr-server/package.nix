@@ -4,13 +4,14 @@
   runCommand,
   replaceVars,
   slimevr,
-  jdk17_headless,
+  jdk17,
   gradle,
   hidapi,
   makeWrapper,
 }:
 let
-  java = jdk17_headless;
+  # JDK can't be headless while SlimeVR uses JavaOSC 0.8.
+  java = jdk17;
   # Without this the hidapi bundled with `org.hid4java:hid4java` will be used.
   # The bundled version won't be able to find `libudev.so.1`.
   javaOptions =

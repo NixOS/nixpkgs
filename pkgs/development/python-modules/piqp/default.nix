@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "PREDICT-EPFL";
     repo = "piqp";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-/lADjg4NyDdV9yeYBW2gbPydY8TfV247B/dI/ViRVlI=";
   };
 

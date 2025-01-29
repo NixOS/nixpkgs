@@ -19,6 +19,7 @@
   libadwaita,
   openssl,
   pango,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -32,10 +33,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-F2ZyATDKnUgEOAI++54fR6coJOr9rtyGm5TzsKzkDmg=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit (finalAttrs) src;
-    name = "${finalAttrs.pname}-${finalAttrs.version}";
-    hash = "sha256-H4x7D25UzDdAEad7QEsZZGLXhfiUupm3mTrNho+ShFo=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-mQyGQXEFmMkTvkZcniws/11u1RqnsxgNi9dvYn1Mx0o=";
   };
 
   nativeBuildInputs = [
@@ -60,6 +60,10 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
     pango
   ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Straight-forward and modern application to create bootable drives";

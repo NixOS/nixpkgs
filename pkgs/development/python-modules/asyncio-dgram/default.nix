@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jsbronder";
     repo = "asyncio-dgram";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-9aO3xFmoR74uZSzxBPRVvz0QSW15TAdWEszLBX8AUR4=";
   };
 

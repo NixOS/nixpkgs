@@ -52,6 +52,10 @@ let
 
     # Remove build dates from output filenames for easier reference
     ./0003-Remove-build-datestamp.patch
+
+    # Fix build on Gradle 8.12
+    # Upstream: https://github.com/NationalSecurityAgency/ghidra/commit/20285e267d110cfa585676dfd40804a59031598b
+    ./0004-Fix-build-on-Gradle-8.12.patch
   ];
 
   postPatch = ''

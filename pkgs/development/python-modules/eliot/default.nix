@@ -34,7 +34,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "itamarst";
     repo = "eliot";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-KqAXOMrRawzjpt5do2KdqpMMgpBtxeZ+X+th0WwBl+U=";
   };
 

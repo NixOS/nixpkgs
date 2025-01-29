@@ -9,16 +9,16 @@
 
 buildGoModule rec {
   pname = "dockle";
-  version = "0.4.14";
+  version = "0.4.15";
 
   src = fetchFromGitHub {
     owner = "goodwithtech";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-ZAk51juPFSaDQYfzsf7HXigL4aIk8V+tGA9lZqHBOsY=";
+    hash = "sha256-YoDgTKhXpN4UVF/+NDFxaEFwMj81RJaqfjr29t1UdLY=";
   };
 
-  vendorHash = "sha256-+AtvnplvPWkUwmxfB7rjYcLTQibQsObFT1QRR0FXAe0=";
+  vendorHash = "sha256-RMuTsPgqQoD2pdEaflNOOBZK5R8LbtcBzpAGocG8OGk=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [

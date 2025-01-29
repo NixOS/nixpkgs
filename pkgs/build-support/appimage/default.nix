@@ -11,19 +11,22 @@
 }:
 
 rec {
-  appimage-exec = pkgs.substituteAll {
+  appimage-exec = pkgs.replaceVarsWith {
     src = ./appimage-exec.sh;
     isExecutable = true;
     dir = "bin";
-    path = lib.makeBinPath [
-      bash
-      binutils-unwrapped
-      coreutils
-      gawk
-      libarchive
-      pv
-      squashfsTools
-    ];
+    replacements = {
+      inherit (pkgs) runtimeShell;
+      path = lib.makeBinPath [
+        bash
+        binutils-unwrapped
+        coreutils
+        gawk
+        libarchive
+        pv
+        squashfsTools
+      ];
+    };
   };
 
   extract = args@{ pname, version, name ? null, postExtract ? "", src, ... }:
@@ -153,7 +156,6 @@ rec {
       libuuid
       libogg
       libvorbis
-      SDL
       SDL2_image
       glew110
       openssl
@@ -176,9 +178,6 @@ rec {
       libtiff
       pixman
       speex
-      SDL_image
-      SDL_ttf
-      SDL_mixer
       SDL2_ttf
       SDL2_mixer
       libappindicator-gtk2

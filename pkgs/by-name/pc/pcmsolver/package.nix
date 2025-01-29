@@ -42,6 +42,9 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
+  # Required for build with gcc-14
+  env.NIX_CFLAGS_COMPILE = "-std=c++14";
+
   cmakeFlags = [ "-DENABLE_OPENMP=ON" ];
 
   hardeningDisable = [ "format" ];

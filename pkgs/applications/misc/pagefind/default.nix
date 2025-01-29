@@ -43,7 +43,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "cloudcannon";
     repo = "pagefind";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-NIEiXwuy8zuUDxPsD4Hiq3x4cOG3VM+slfNIBSJU2Mk=";
   };
 

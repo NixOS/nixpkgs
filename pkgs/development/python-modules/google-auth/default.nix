@@ -70,7 +70,11 @@ buildPythonPackage rec {
       freezegun
       grpcio
       mock
+    ]
+    ++ lib.optionals (pythonOlder "3.13") [
       oauth2client
+    ]
+    ++ [
       pytest-asyncio
       pytest-localserver
       pytestCheckHook

@@ -10,7 +10,7 @@
   libimobiledevice,
   gperf,
   libtirpc,
-  openexr,
+  openexr_3,
   taglib,
   libappimage,
 }:
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     libimobiledevice
     gperf
     libtirpc
-    openexr
+    openexr_3
     taglib
     libappimage
   ];

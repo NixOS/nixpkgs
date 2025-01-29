@@ -4,14 +4,14 @@
 
 stdenv.mkDerivation rec {
   pname = "xterm";
-  version = "395";
+  version = "396";
 
   src = fetchurl {
     urls = [
       "ftp://ftp.invisible-island.net/xterm/${pname}-${version}.tgz"
       "https://invisible-mirror.net/archives/xterm/${pname}-${version}.tgz"
     ];
-    hash = "sha256-KG48qlk46uOOICgnYhVnYp3+quaJ6AcLQTyhE5gJPcg=";
+    hash = "sha256-Q/lLbQ7stCGamfRjUudG8qtVWOQNki1BGs/5bMd4pqU=";
   };
 
   patches = [ ./sixel-256.support.patch ];

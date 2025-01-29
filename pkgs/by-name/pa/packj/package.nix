@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "ossillate-inc";
     repo = "packj";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-OWcJE2Gtjgoj9bCGZcHDfAFLWRP4wdENeJAnILMdUXY=";
   };
 

@@ -83,12 +83,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ ehmry ];
     platforms = platforms.unix;
-
-    # TODO: Remove once nixpkgs uses newer SDKs that supports '*at' functions.
-    # Probably MacOS SDK 10.13 or later. Check the current version in
-    # ../../../../os-specific/darwin/apple-sdk/default.nix
-    #
-    # https://github.com/gittup/tup/commit/3697c74
-    broken = stdenv.hostPlatform.isDarwin;
   };
 }

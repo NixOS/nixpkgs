@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "akx";
     repo = "aioruuvigateway";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Etv+kPFYEK79hpDeNmDfuyNj1vJ6udry1u+TRO5gLV4=";
   };
 

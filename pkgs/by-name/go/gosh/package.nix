@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "redcode-labs";
     repo = "GoSH";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-h4WqaN2okAeaU/+0fs8zLYDtyQLuLkCDdGrkGz8rdhg=";
   };
 

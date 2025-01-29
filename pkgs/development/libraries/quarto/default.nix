@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, pandoc_3_5
+, pandoc_3_6
 , typst
 , esbuild
 , deno
@@ -38,7 +38,7 @@ stdenv.mkDerivation (final: {
   preFixup = ''
     wrapProgram $out/bin/quarto \
       --prefix QUARTO_DENO : ${lib.getExe deno} \
-      --prefix QUARTO_PANDOC : ${lib.getExe pandoc_3_5} \
+      --prefix QUARTO_PANDOC : ${lib.getExe pandoc_3_6} \
       --prefix QUARTO_ESBUILD : ${lib.getExe esbuild} \
       --prefix QUARTO_DART_SASS : ${lib.getExe dart-sass} \
       --prefix QUARTO_TYPST : ${lib.getExe typst} \

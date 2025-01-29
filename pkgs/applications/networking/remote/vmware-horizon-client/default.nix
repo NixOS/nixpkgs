@@ -88,6 +88,7 @@ let
       harfbuzz
       liberation_ttf
       libjpeg
+      libpng
       libpulseaudio
       libtiff
       libudev0-shim

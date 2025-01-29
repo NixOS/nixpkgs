@@ -4,6 +4,9 @@
   fetchFromGitHub,
   fetchpatch,
   autoreconfHook,
+  bash,
+  buildPackages,
+  coreutils,
   nixosTests,
   perl,
 }:
@@ -54,8 +57,29 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  postPatch = ''
+    for f in scripts/*; do
+      substituteInPlace $f \
+        --replace-quiet "@SHELL@" "${lib.getExe bash}" \
+        --replace-quiet "@CHROOT@" "${lib.getExe' coreutils "chroot"}" \
+        --replace-quiet "@ECHO@" "${lib.getExe' coreutils "echo"}" \
+        --replace-quiet "@ENV@" "${lib.getExe' coreutils "env"}" \
+        --replace-quiet "@MKFIFO@" "${lib.getExe' coreutils "mkfifo"}" \
+        --replace-quiet "@SEQ@" "${lib.getExe' coreutils "seq"}"
+    done
+  '';
+
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ perl ];
+
+  buildInputs = [
+    bash
+    perl
+  ];
+
+  configureFlags = [
+    # pass in correct pod2man when cross-compiling
+    "ac_cv_path_POD2MAN=${lib.getExe' buildPackages.perl "pod2man"}"
+  ];
 
   passthru = {
     tests = {
@@ -63,6 +87,10 @@ stdenv.mkDerivation rec {
       nixos-etc = nixosTests.etc.test-etc-fakeroot;
     };
   };
+
+  preFixup = ''
+    patchShebangs --host $out/bin
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/dex4er/fakechroot";

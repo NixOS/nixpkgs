@@ -1,4 +1,5 @@
 {
+  bash,
   faust,
   jack2,
   qtbase,
@@ -30,6 +31,10 @@ faust.wrapWithBuildEnv {
   scripts = [
     "faust2jaqt"
     "faust2jackserver"
+  ];
+
+  buildInputs = [
+    bash
   ];
 
   propagatedBuildInputs = [

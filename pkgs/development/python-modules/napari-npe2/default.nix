@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "napari";
     repo = "npe2";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-HjMf5J1n5NKqtunRQ7cqZiTZMTNmcq5j++O03Sxwvqw=";
   };
 

@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "python-db-dtypes-pandas";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-InotzUk1lEuTD1tAojpEGfFyjrCDoGaa8JMDUdRd+Hw=";
   };
 

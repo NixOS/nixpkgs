@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "drivendataorg";
     repo = "cloudpathlib";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-VjoQc9nzwcMh9kiqWXsJNE5X7e7/sVGId5jgFTLZQy4=";
   };
 

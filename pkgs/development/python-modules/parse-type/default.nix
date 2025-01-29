@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jenisys";
     repo = "parse_type";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-oKPyzEKrP9umnDzPC3HwSgWmWkCg/h0ChYVrpseklf8=";
   };
 

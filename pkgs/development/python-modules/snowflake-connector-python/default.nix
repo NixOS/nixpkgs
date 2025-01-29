@@ -38,7 +38,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "snowflakedb";
     repo = "snowflake-connector-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-6poMWKQB/NR40W39KDJwBgYGeAHsr4f1GJhPxYiTc1k=";
   };
 

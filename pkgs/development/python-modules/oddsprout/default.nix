@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "trag1c";
     repo = "oddsprout";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-BOUYq4yny3ScgzCzx2cpeK4e7nxxwTj8mJ42nr59mFA=";
   };
 

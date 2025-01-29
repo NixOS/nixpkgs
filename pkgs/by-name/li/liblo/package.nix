@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "liblo";
-  version = "0.31";
+  version = "0.32";
 
   src = fetchurl {
     url = "mirror://sourceforge/liblo/liblo/${version}/${pname}-${version}.tar.gz";
-    sha256 = "0l67rkdhfa8cffa0nynql3lh2xlbn1454h6qxhjddp1029p48krb";
+    sha256 = "sha256-XfBfKgOV/FrJD2tTi4yCuyGUFAb9GnCnZcczakfXAgg=";
   };
 
   doCheck = false; # fails 1 out of 3 tests

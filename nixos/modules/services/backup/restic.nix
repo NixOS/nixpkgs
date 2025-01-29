@@ -23,7 +23,7 @@ in
           default = null;
           description = ''
             file containing the credentials to access the repository, in the
-            format of an EnvironmentFile as described by systemd.exec(5)
+            format of an EnvironmentFile as described by {manpage}`systemd.exec(5)`
           '';
         };
 
@@ -412,7 +412,7 @@ in
       ]}
       PATH=${config.systemd.services."restic-backups-${name}".environment.PATH}:$PATH
 
-      exec ${resticCmd} $@
+      exec ${resticCmd} "$@"
     '') (lib.filterAttrs (_: v: v.createWrapper) config.services.restic.backups);
   };
 }

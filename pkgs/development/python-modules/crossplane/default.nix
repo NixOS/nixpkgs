@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nginxinc";
     repo = "crossplane";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-DfIF+JvjIREi7zd5ZQ7Co/CIKC5iUeOgR/VLDPmrtTQ=";
   };
 

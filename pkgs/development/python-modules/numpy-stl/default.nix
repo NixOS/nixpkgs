@@ -12,15 +12,15 @@
 
 buildPythonPackage rec {
   pname = "numpy-stl";
-  version = "3.1.2";
+  version = "3.2.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "numpy_stl";
     inherit version;
-    hash = "sha256-crRpUN+jZC3xx7hzz6eKVIUzckuQdHjFZ9tC/fV+49I=";
+    hash = "sha256-WiDD95zdqgq8akuZ9Uhqzu1PiBUvKbGaV6zIROGD/U0=";
   };
 
   build-system = [ setuptools ];

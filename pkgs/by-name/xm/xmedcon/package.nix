@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "xmedcon";
-  version = "0.24.1";
+  version = "0.25.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-VIZRRSIesH0KzgzoPgonRRX8qilcb5cR8HcMNd1UbFg=";
+    sha256 = "sha256-UKM68H2AGfe4+keW/0ZxQwPsF2tTAZQCEZT9var+MHs=";
   };
 
   buildInputs = [

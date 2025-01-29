@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "GenericMappingTools";
     repo = "gmt";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-KKIYhljCtk9t9CuvTLsSGvUkUwazWTm9ymBB3wLwSoI=";
   };
 

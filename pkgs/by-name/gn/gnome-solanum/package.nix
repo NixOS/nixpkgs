@@ -18,6 +18,7 @@
   gtk4,
   gst_all_1,
   libadwaita,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -65,6 +66,10 @@ stdenv.mkDerivation rec {
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-bad
   ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/World/Solanum";

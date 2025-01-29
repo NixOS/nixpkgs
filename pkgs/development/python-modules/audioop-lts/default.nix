@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "AbstractUmbra";
     repo = "audioop";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-tx5/dcyEfHlYRohfYW/t0UkLiZ9LJHmI8g3sC3+DGAE=";
   };
 

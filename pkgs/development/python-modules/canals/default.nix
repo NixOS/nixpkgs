@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "deepset-ai";
     repo = "canals";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-xoJqj/zPBPPCheBxA+8EFRJqUnlP+4aWLEh42q1X1mM=";
   };
 

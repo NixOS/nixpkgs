@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "canonical";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-sWA04CoVMR8380/PXSkMo/Ml2Gk1RNQxPC12CMVqxwE=";
   };
 

@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = "gvm-libs";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-VYFAy6VVASNOBLs39qukePYr5pV0IR1qjztv+veNCVc=";
   };
 

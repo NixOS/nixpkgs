@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "coursera-dl";
     repo = "coursera-dl";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-c+ElGIrd4ZhMfWtsNHrHRO3HaRRtEQuGlCSBrvPnbyo=";
   };
 

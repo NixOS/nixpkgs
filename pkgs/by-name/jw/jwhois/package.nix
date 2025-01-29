@@ -33,11 +33,6 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $out/bin/jwhois $out/bin/whois
   '';
 
-  # Work around error from <stdio.h> on aarch64-darwin:
-  #     error: 'TARGET_OS_IPHONE' is not defined, evaluates to 0 [-Werror,-Wundef-prefix=TARGET_OS_]
-  # TODO: this should probably be fixed at a lower level than this?
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-undef-prefix";
-
   env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-liconv";
 
   meta = {

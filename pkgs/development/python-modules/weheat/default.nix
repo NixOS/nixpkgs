@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "wefabricate";
     repo = "wh-python";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-hd0mqdcj+rvrYCvxhK3ewuiDekWUgTD7JypjL/EMqv8=";
   };
 

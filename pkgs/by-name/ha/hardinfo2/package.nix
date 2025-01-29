@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAtrs: {
   src = fetchFromGitHub {
     owner = "hardinfo2";
     repo = "hardinfo2";
-    rev = "refs/tags/release-${finalAtrs.version}";
+    tag = "release-${finalAtrs.version}";
     hash = "sha256-UgVryuUkD9o2SvwA9VbX/kCaAo3+Osf6FxlYyaRX1Ag=";
   };
 
@@ -90,6 +90,6 @@ stdenv.mkDerivation (finalAtrs: {
     ];
     maintainers = with lib.maintainers; [ sigmanificient ];
     platforms = lib.platforms.linux;
-    mainProgram = "hardinfo";
+    mainProgram = "hardinfo2";
   };
 })

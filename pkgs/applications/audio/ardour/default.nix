@@ -29,7 +29,6 @@
 , libltc
 , libogg
 , libpulseaudio
-, librdf_raptor
 , librdf_rasqal
 , libsamplerate
 , libsigcxx
@@ -133,7 +132,6 @@ stdenv.mkDerivation rec {
     libltc
     libogg
     libpulseaudio
-    librdf_raptor
     librdf_rasqal
     libsamplerate
     libsigcxx
@@ -162,7 +160,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals videoSupport [ harvid xjadeo ];
 
   wafConfigureFlags = [
-    "--cxx11"
+    "--cxx17"
     "--docs"
     "--freedesktop"
     "--no-phone-home"

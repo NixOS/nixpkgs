@@ -21,7 +21,7 @@
 }:
 
 let
-  version = "0.24.0";
+  version = "0.25.0";
 in
 
 rustPlatform.buildRustPackage {
@@ -29,13 +29,13 @@ rustPlatform.buildRustPackage {
   inherit version;
 
   src = fetchFromGitHub {
-    owner = "martinvonz";
+    owner = "jj-vcs";
     repo = "jj";
-    rev = "v${version}";
-    hash = "sha256-XsD4P2UygZFcnlV2o3E/hRRgsGjwKw1r9zniEeAk758";
+    tag = "v${version}";
+    hash = "sha256-5J1ZfPNyniUK5D3Pt1aKuJ+/8vad3JPxCztBRY591N8=";
   };
 
-  cargoHash = "sha256-9JwRdeHo8JkwRQwPA+UsIEWar4gYQS4SIM/uj1TU2yg";
+  cargoHash = "sha256-kuZ1zvb6H5QWjJSUYMq5tEywsQMC6187YJPUT1r4S5o=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -110,8 +110,8 @@ rustPlatform.buildRustPackage {
 
   meta = {
     description = "Git-compatible DVCS that is both simple and powerful";
-    homepage = "https://github.com/martinvonz/jj";
-    changelog = "https://github.com/martinvonz/jj/blob/v${version}/CHANGELOG.md";
+    homepage = "https://github.com/jj-vcs/jj";
+    changelog = "https://github.com/jj-vcs/jj/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       _0x4A6F

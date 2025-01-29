@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  utils,
   ...
 }:
 
@@ -9,7 +10,6 @@ let
   cfg = config.services.wyoming.faster-whisper;
 
   inherit (lib)
-    escapeShellArgs
     mkOption
     mkEnableOption
     mkPackageOption
@@ -18,6 +18,10 @@ let
 
   inherit (builtins)
     toString
+    ;
+
+  inherit (utils)
+    escapeSystemdExecArgs
     ;
 
 in
@@ -29,7 +33,7 @@ in
     servers = mkOption {
       default = { };
       description = ''
-        Attribute set of faster-whisper instances to spawn.
+        Attribute set of wyoming-faster-whisper instances to spawn.
       '';
       type = types.attrsOf (
         types.submodule (
@@ -43,9 +47,33 @@ in
                 default = "tiny-int8";
                 example = "Systran/faster-distil-whisper-small.en";
                 description = ''
-                  Name of the voice model to use.
+                  Name of the voice model to use. Can also be a HuggingFace model ID or a path to
+                  a custom model directory.
 
-                  Check the [2.0.0 release notes](https://github.com/rhasspy/wyoming-faster-whisper/releases/tag/v2.0.0) for possible values.
+                  Compressed models (`int8`) are slightly less accurate, but smaller and faster.
+
+                  Available models:
+                  - `tiny-int8` (compressed)
+                  - `tiny`
+                  - `tiny.en` (English only)
+                  - `base-int8` (compressed)
+                  - `base`
+                  - `base.en` (English only)
+                  - `small-int8` (compressed)
+                  - `distil-small.en` (distilled, English only)
+                  - `small`
+                  - `small.en` (English only)
+                  - `medium-int8` (compressed)
+                  - `distil-medium.en` (distilled, English only)
+                  - `medium`
+                  - `medium.en` (English only)
+                  - `large`
+                  - `large-v1`
+                  - `distil-large-v2` (distilled, English only)
+                  - `large-v2`
+                  - `distil-large-v3` (distilled, English only)
+                  - `large-v3`
+                  - `turbo` (faster than large-v3)
                 '';
               };
 
@@ -171,6 +199,7 @@ in
                   "uz"
                   "vi"
                   "yi"
+                  "yue"
                   "yo"
                   "zh"
                 ];
@@ -180,12 +209,26 @@ in
                 '';
               };
 
+              initialPrompt = mkOption {
+                type = nullOr str;
+                default = null;
+                example = ''
+                  The following conversation takes place in the universe of Wizard of Oz. Key terms include 'Yellow Brick Road' (the path to follow), 'Emerald City' (the ultimate goal), and 'Ruby Slippers' (the magical tools to succeed). Keep these in mind as they guide the journey.
+                '';
+                description = ''
+                  Optional text to provide as a prompt for the first window. This can be used to provide, or
+                  "prompt-engineer" a context for transcription, e.g. custom vocabularies or proper nouns
+                  to make it more likely to predict those word correctly.
+                '';
+              };
+
               beamSize = mkOption {
                 type = ints.unsigned;
-                default = 1;
+                default = 0;
                 example = 5;
                 description = ''
                   The number of beams to use in beam search.
+                  Use `0` to automatically select a value based on the CPU.
                 '';
                 apply = toString;
               };
@@ -196,7 +239,6 @@ in
                 description = ''
                   Extra arguments to pass to the server commandline.
                 '';
-                apply = escapeShellArgs;
               };
             };
           }
@@ -233,18 +275,30 @@ in
           serviceConfig = {
             DynamicUser = true;
             User = "wyoming-faster-whisper";
-            StateDirectory = "wyoming/faster-whisper";
+            StateDirectory = [ "wyoming/faster-whisper" ];
             # https://github.com/home-assistant/addons/blob/master/whisper/rootfs/etc/s6-overlay/s6-rc.d/whisper/run
-            ExecStart = ''
-              ${cfg.package}/bin/wyoming-faster-whisper \
-                --data-dir $STATE_DIRECTORY \
-                --download-dir $STATE_DIRECTORY \
-                --uri ${options.uri} \
-                --device ${options.device} \
-                --model ${options.model} \
-                --language ${options.language} \
-                --beam-size ${options.beamSize} ${options.extraArgs}
-            '';
+            ExecStart = escapeSystemdExecArgs (
+              [
+                (lib.getExe cfg.package)
+                "--data-dir"
+                "/var/lib/wyoming/faster-whisper"
+                "--uri"
+                options.uri
+                "--device"
+                options.device
+                "--model"
+                options.model
+                "--language"
+                options.language
+                "--beam-size"
+                options.beamSize
+              ]
+              ++ lib.optionals (options.initialPrompt != null) [
+                "--initial-prompt"
+                options.initialPrompt
+              ]
+              ++ options.extraArgs
+            );
             CapabilityBoundingSet = "";
             DeviceAllow =
               if
@@ -273,7 +327,8 @@ in
             ProtectKernelTunables = true;
             ProtectControlGroups = true;
             ProtectProc = "invisible";
-            ProcSubset = "pid";
+            # "all" is required because faster-whisper accesses /proc/cpuinfo to determine cpu capabilities
+            ProcSubset = "all";
             RestrictAddressFamilies = [
               "AF_INET"
               "AF_INET6"

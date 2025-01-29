@@ -1333,7 +1333,14 @@ in
       restartTriggers = optionals cfg.enableReload [ configFile ];
       # Block reloading if not all certs exist yet.
       # Happens when config changes add new vhosts/certs.
-      unitConfig.ConditionPathExists = optionals (sslServices != []) (map (certName: certs.${certName}.directory + "/fullchain.pem") vhostCertNames);
+      unitConfig = {
+        ConditionPathExists = optionals (sslServices != []) (map (certName: certs.${certName}.directory + "/fullchain.pem") vhostCertNames);
+        # Disable rate limiting for this, because it may be triggered quickly a bunch of times
+        # if a lot of certificates are renewed in quick succession. The reload itself is cheap,
+        # so even doing a lot of them in a short burst is fine.
+        # FIXME: there's probably a better way to do this.
+        StartLimitIntervalSec = 0;
+      };
       serviceConfig = {
         Type = "oneshot";
         TimeoutSec = 60;

@@ -64,6 +64,7 @@ let
     wxpython
     setuptools
     natsort
+    pyasyncore
   ]);
 
 in stdenv.mkDerivation {

@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "1oom-fork";
     repo = "1oom";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-xEHFuCOyuWmee6kgOc0WUk1iWWFqfFb42F7shGZmutQ=";
   };
 

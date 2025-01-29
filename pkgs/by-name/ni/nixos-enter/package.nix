@@ -1,19 +1,21 @@
 {
   lib,
-  substituteAll,
+  replaceVarsWith,
   runtimeShell,
   installShellFiles,
   util-linuxMinimal,
 }:
-substituteAll {
+replaceVarsWith {
   name = "nixos-enter";
   src = ./nixos-enter.sh;
 
-  inherit runtimeShell;
+  replacements = {
+    inherit runtimeShell;
 
-  path = lib.makeBinPath [
-    util-linuxMinimal
-  ];
+    path = lib.makeBinPath [
+      util-linuxMinimal
+    ];
+  };
 
   dir = "bin";
   isExecutable = true;

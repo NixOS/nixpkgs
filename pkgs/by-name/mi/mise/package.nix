@@ -16,20 +16,22 @@
   usage,
   mise,
   testers,
+  runCommand,
+  jq,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "mise";
-  version = "2024.12.17";
+  version = "2025.1.6";
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "mise";
     rev = "v${version}";
-    hash = "sha256-kdI7GEtUlVUJYN7ch8RjG1aWBMDkvLkdUGfyqWv4yAQ=";
+    hash = "sha256-eMKrRrthV37ndsF47jjNxigsJ5WDsCDCit9J88l5dHE=";
   };
 
-  cargoHash = "sha256-7ORbX2rWZ4tuf7qQo5lwTpHGFNCpo8R5ywJDdBjZcMU=";
+  cargoHash = "sha256-Mh7vyIVkQ0N1dYD4KVue0eiBm+z0JFPt89qYpu+wVd0=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -89,7 +91,30 @@ rustPlatform.buildRustPackage rec {
 
   passthru = {
     updateScript = nix-update-script { };
-    tests.version = testers.testVersion { package = mise; };
+    tests = {
+      version = testers.testVersion { package = mise; };
+      usageCompat =
+        # should not crash
+        runCommand "mise-usage-compatibility"
+          {
+            nativeBuildInputs = [
+              mise
+              usage
+              jq
+            ];
+          }
+          ''
+            export HOME=$(mktemp -d)
+
+            spec="$(mise usage)"
+            for shl in bash fish zsh; do
+              echo "testing $shl"
+              usage complete-word --shell $shl --spec "$spec"
+            done
+
+            touch $out
+          '';
+    };
   };
 
   meta = {

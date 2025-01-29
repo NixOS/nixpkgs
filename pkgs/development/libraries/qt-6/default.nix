@@ -136,6 +136,7 @@ let
       qtmultimedia = callPackage ./modules/qtmultimedia {
         inherit (gst_all_1)
           gstreamer
+          gst-plugins-bad
           gst-plugins-base
           gst-plugins-good
           gst-libav
@@ -163,7 +164,7 @@ let
       qtwayland = callPackage ./modules/qtwayland.nix { };
       qtwebchannel = callPackage ./modules/qtwebchannel.nix { };
       qtwebengine = callPackage ./modules/qtwebengine {
-        inherit (darwin) autoSignDarwinBinariesHook bootstrap_cmds;
+        inherit (darwin) bootstrap_cmds;
       };
       qtwebsockets = callPackage ./modules/qtwebsockets.nix { };
       qtwebview = callPackage ./modules/qtwebview.nix { };

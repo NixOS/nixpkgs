@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   fetchpatch,
+  fetchDebianPatch,
   autoreconfHook,
   pkg-config,
   gtk2,
@@ -30,6 +31,12 @@ stdenv.mkDerivation (finalAttrs: {
       name = "fno-common.patch";
       url = "https://savannah.gnu.org/bugs/download.php?file_id=49534";
       hash = "sha256-Ar5SyVIEp8/knDHm+4f0KWAH+A5gGhXGezEqL7xkQhI=";
+    })
+    (fetchDebianPatch {
+      inherit (finalAttrs) pname version;
+      debianRevision = "9.2";
+      patch = "fix-implicit-declarations.patch";
+      hash = "sha256-ct/ATuiC6b7rw9n2wsRNKvfj02i7V20bMOzL7pKDd0A=";
     })
   ];
 

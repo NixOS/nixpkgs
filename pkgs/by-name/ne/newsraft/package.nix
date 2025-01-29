@@ -14,14 +14,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "newsraft";
-  version = "0.27";
+  version = "0.28";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "newsraft";
     repo = "newsraft";
     rev = "newsraft-${finalAttrs.version}";
-    hash = "sha256-MtdFnoB6Dc3xvTCc2PMIp5VsZiU5JE58q6WctM3mDZw=";
+    hash = "sha256-iRoQLGmiAPpt9ZpvHpytIWHldkvV/5qVjurypCycJYI=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -38,12 +38,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Feed reader for terminal";
     homepage = "https://codeberg.org/grisha/newsraft";
-    license = licenses.isc;
-    maintainers = with maintainers; [ arthsmn ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [
+      arthsmn
+      luftmensch-luftmensch
+    ];
     mainProgram = "newsraft";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 })

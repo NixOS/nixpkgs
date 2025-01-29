@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Jc2k";
     repo = "aiohomekit";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-E7N/FFUFsur0y9H5Pp7ol/9bytwUU5EG8E68TMF5tJ8=";
   };
 

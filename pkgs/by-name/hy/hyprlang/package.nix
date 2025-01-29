@@ -39,9 +39,10 @@ gcc14Stdenv.mkDerivation (finalAttrs: {
     description = "Official implementation library for the hypr config language";
     license = lib.licenses.lgpl3Only;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [
-      iogamaster
-      fufexan
-    ];
+    maintainers =
+      lib.teams.hyprland.members
+      ++ (with lib.maintainers; [
+        iogamaster
+      ]);
   };
 })

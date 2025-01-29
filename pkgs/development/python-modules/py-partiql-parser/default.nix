@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "getmoto";
     repo = "py-partiql-parser";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-uEpgcY2bBaeFaK/0gWg1ef81FmKJy7m5G21aETW9QXU=";
   };
 

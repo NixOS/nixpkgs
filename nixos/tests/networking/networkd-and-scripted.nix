@@ -238,6 +238,18 @@ let
                 }
               ];
             };
+
+            # virtio-net reports its speed and duplex as "unknown" by default,
+            # which confuses the 802.3ad logic. However, you can just tell it
+            # to pretend to have any link speed with ethtool, so do that.
+            systemd.services.fake-link-settings = {
+              path = [ pkgs.ethtool ];
+              script = ''
+                ethtool -s enp1s0 speed 1000 duplex full
+                ethtool -s enp2s0 speed 1000 duplex full
+              '';
+              wantedBy = [ "network.target" ];
+            };
           };
       in
       {

@@ -15,7 +15,7 @@ buildGo123Module rec {
   src = fetchFromGitHub {
     owner = "terrastruct";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Sd4AkXKQVRJIgQTb7BbDNb8DbULyoWX8TuFtiu+Km5Y=";
   };
 

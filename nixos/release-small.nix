@@ -64,6 +64,11 @@ rec {
         proxy
         simple
         ;
+      latestKernel = {
+        inherit (nixos'.tests.latestKernel)
+          login
+          ;
+      };
       installer = {
         inherit (nixos'.tests.installer)
           lvm
@@ -137,6 +142,7 @@ rec {
           "nixos.tests.ipv6"
           "nixos.tests.installer.simpleUefiSystemdBoot"
           "nixos.tests.login"
+          "nixos.tests.latestKernel.login"
           "nixos.tests.misc"
           "nixos.tests.nat.firewall"
           "nixos.tests.nat.standalone"

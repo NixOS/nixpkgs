@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "argon-rbx";
     repo = "argon";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-msKrPLB+38PU7LEw92xEqFy6JxwMjttBaobIOhU7eWw=";
   };
 

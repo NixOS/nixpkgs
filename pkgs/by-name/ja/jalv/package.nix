@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "drobilla";
     repo = "jalv";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-MAQoc+WcuoG6Psa44VRaZ2TWB2LBpvf6EmqbUZPUf38=";
   };
 

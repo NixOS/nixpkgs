@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Ludy87";
     repo = "pyecotrend-ista";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-TZDHEaDc7UACIAHNX1fStJH74qLKf+krWbTDtemXahA=";
   };
 

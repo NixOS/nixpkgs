@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "allenporter";
     repo = "rtsp-to-webrtc-client";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-D022d2CDKtHTuvEGo8GkOGWHi5sV4g6UwNB9xS2xxIs=";
   };
 

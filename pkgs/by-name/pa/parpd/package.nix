@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "NetworkConfiguration";
     repo = "parpd";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-6qmoAW9jm7xMRHZUMQLpe0N+UeVnQP8dC4+Iq+d5Eaw=";
   };
 

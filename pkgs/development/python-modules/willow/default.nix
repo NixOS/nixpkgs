@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "wagtail";
     repo = "Willow";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-H/UXE6gA6x849aqBcUgl3JYZ87OMNpuFyWGSsgqW1Rk=";
   };
 

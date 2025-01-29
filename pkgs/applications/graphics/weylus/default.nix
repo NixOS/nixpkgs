@@ -104,6 +104,12 @@ rustPlatform.buildRustPackage rec {
     install -vDm755 weylus.desktop $out/share/applications/weylus.desktop
   '';
 
+  env = {
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-incompatible-pointer-types"
+    ];
+  };
+
   meta = with lib; {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Use your tablet as graphic tablet/touch screen on your computer";

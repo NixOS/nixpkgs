@@ -49,6 +49,13 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  env = {
+    # https://github.com/google/flax/issues/4491
+    # Upstream should update Cargo.lock
+    # Enabling `PYO3_USE_ABI3_FORWARD_COMPATIBILITY` allows us to temporarily avoid the issue
+    PYO3_USE_ABI3_FORWARD_COMPATIBILITY = true;
+  };
+
   # This package does not have tests (yet ?)
   doCheck = false;
 

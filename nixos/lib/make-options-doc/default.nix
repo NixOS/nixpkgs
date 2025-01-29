@@ -1,3 +1,5 @@
+# Tests: ./tests.nix
+
 /**
   Generates documentation for [nix modules](https://nix.dev/tutorials/module-system/index.html).
 
@@ -193,12 +195,16 @@ rec {
   optionsCommonMark =
     pkgs.runCommand "options.md"
       {
+        __structuredAttrs = true;
         nativeBuildInputs = [ pkgs.nixos-render-docs ];
+        # For overriding
+        extraArgs = [ ];
       }
       ''
         nixos-render-docs -j $NIX_BUILD_CORES options commonmark \
           --manpage-urls ${pkgs.path + "/doc/manpage-urls.json"} \
           --revision ${lib.escapeShellArg revision} \
+          ''${extraArgs[@]} \
           ${optionsJSON}/share/doc/nixos/options.json \
           $out
       '';

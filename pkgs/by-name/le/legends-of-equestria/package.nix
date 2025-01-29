@@ -29,7 +29,7 @@
 
 let
   pname = "legends-of-equestria";
-  version = "2024.05.01";
+  version = "2024.06.02";
   description = "Free-to-play MMORPG";
   runtimeDeps =
     [
@@ -73,9 +73,9 @@ stdenv.mkDerivation {
           megacmd
           unzip
         ];
-        url = "https://mega.nz/file/NjIwwJoK#MVi3C3FAcSQPd7FRpQc0CoStBG8jSFuPn0jD-pG3zY0";
+        url = "https://mega.nz/file/Z3oAGYDa#01EfQICR4k5BK56hWFckYKsfgdV36KoU91TvSBwKgxY";
         outputHashAlgo = "sha256";
-        outputHash = "VXBtEB3G5MTrWn9OOvmCG3sDoasjbKkLJruhdQZa4SQ=";
+        outputHash = "vpVIaRPrZih+ydWszsBF/JgO0AXh2rF/yOpBuI+V0m4=";
         outputHashMode = "recursive";
       }
       ''
@@ -102,7 +102,7 @@ stdenv.mkDerivation {
 
     loeHome=$out/lib/${pname}
     mkdir -p $loeHome
-    cp -r LoE/* $loeHome
+    cp -r Linux/* $loeHome
 
     makeWrapper $loeHome/LoE.x86_64 $out/bin/LoE \
       --suffix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeDeps}"

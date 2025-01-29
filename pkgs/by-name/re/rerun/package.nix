@@ -19,7 +19,6 @@
   openssl,
   vulkan-loader,
   wayland,
-  apple-sdk_11,
 
   versionCheckHook,
 
@@ -63,21 +62,14 @@ rustPlatform.buildRustPackage rec {
     rustfmt
   ];
 
-  buildInputs =
-    [
-      freetype
-      glib
-      gtk3
-      (lib.getDev openssl)
-      libxkbcommon
-      vulkan-loader
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ (lib.getLib wayland) ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Undefined symbols for architecture x86_64: "_NSAccessibilityTabButtonSubrole"
-      # ld: symbol(s) not found for architecture x86_64
-      apple-sdk_11
-    ];
+  buildInputs = [
+    freetype
+    glib
+    gtk3
+    (lib.getDev openssl)
+    libxkbcommon
+    vulkan-loader
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ (lib.getLib wayland) ];
 
   addDlopenRunpaths = map (p: "${lib.getLib p}/lib") (
     lib.optionals stdenv.hostPlatform.isLinux [

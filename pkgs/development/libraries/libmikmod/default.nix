@@ -14,11 +14,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "libmikmod";
-  version = "3.3.11.1";
+  version = "3.3.12";
 
   src = fetchurl {
     url = "mirror://sourceforge/mikmod/libmikmod-${version}.tar.gz";
-    sha256 = "06bdnhb0l81srdzg6gn2v2ydhhaazza7rshrcj3q8dpqr3gn97dd";
+    sha256 = "sha256-re9iFIY1FqSltE6/LHHvhOzf6zRElz2suscJEcm8Z+k=";
   };
 
   buildInputs =

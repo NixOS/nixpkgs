@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "wolfSSL";
     repo = "wolfssl";
-    rev = "refs/tags/v${finalAttrs.version}-stable";
+    tag = "v${finalAttrs.version}-stable";
     hash = "sha256-/dtW1E1wYfQEuotclUEOK5+Vg4S7vt1xWhr1lEtu60w=";
   };
 

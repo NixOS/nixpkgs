@@ -24,11 +24,12 @@
   rich,
   tomlkit,
   gradio,
+  safehttpx,
 }:
 
 buildPythonPackage rec {
   pname = "gradio-client";
-  version = "1.4.0";
+  version = "1.5.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -38,9 +39,9 @@ buildPythonPackage rec {
     owner = "gradio-app";
     repo = "gradio";
     # not to be confused with @gradio/client@${version}
-    rev = "refs/tags/gradio_client@${version}";
+    tag = "gradio_client@${version}";
     sparseCheckout = [ "client/python" ];
-    hash = "sha256-pS7yrqBuq/Pe7sEfReAM6OL2qFQVA+vWra36UuhyDkk=";
+    hash = "sha256-u4GQYtCeAMDqRRbZGtjfqIHwuHyxUpw6kRE75SJMALg=";
   };
   prePatch = ''
     cd client/python
@@ -75,6 +76,7 @@ buildPythonPackage rec {
     pydub
     rich
     tomlkit
+    safehttpx
     gradio.sans-reverse-dependencies
   ];
   # ensuring we don't propagate this intermediate build

@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "strictdoc-project";
     repo = "strictdoc";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-0X74Lv25pUdOUgQzqQU6p+fjuxhC/JqfKEFI7c5t67U=";
   };
 

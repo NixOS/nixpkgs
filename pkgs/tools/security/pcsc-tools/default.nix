@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "LudovicRousseau";
     repo = "pcsc-tools";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-5a3sVcFEFzBkbRKUqlCPV7sL3O17G7hDVpxLpAWofdE=";
   };
 

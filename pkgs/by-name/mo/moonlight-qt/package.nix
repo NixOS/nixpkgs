@@ -19,7 +19,6 @@
   libxkbcommon,
   wayland,
   libdrm,
-  apple-sdk_11,
   nix-update-script,
 }:
 
@@ -70,9 +69,6 @@ stdenv.mkDerivation (finalAttrs: {
       qt6.qtwayland
       wayland
       libdrm
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_11
     ];
 
   qmakeFlags = [ "CONFIG+=disable-prebuilts" ];

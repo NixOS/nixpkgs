@@ -38,19 +38,18 @@ let
 in
 buildDotnetModule rec {
   pname = "Dafny";
-  version = "4.8.0";
+  version = "4.9.1";
 
   src = fetchFromGitHub {
     owner = "dafny-lang";
     repo = "dafny";
-    rev = "v${version}";
-    hash = "sha256-x/fX4o+R72Pl02u1Zsr80Rh/4Wb/aKw90fhAGmsfFUI=";
+    tag = "v${version}";
+    hash = "sha256-fCBaOF1mDrqJaUiATZAhzLjlK3NGVFnxdOwgHbOkkgY=";
   };
 
   postPatch =
     let
-      # This file wasn't updated between 4.6.0 and 4.7.0.
-      runtimeJarVersion = "4.6.0";
+      runtimeJarVersion = "4.9.1";
     in
     ''
       cp ${writeScript "fake-gradlew-for-dafny" ''
@@ -65,11 +64,18 @@ buildDotnetModule rec {
       # frameworks, you must specify the framework for the published
       # application."
       substituteInPlace Source/DafnyRuntime/DafnyRuntime.csproj \
-        --replace-warn TargetFrameworks TargetFramework \
-        --replace-warn "netstandard2.0;net452" net6.0
+        --replace-fail TargetFrameworks TargetFramework \
+        --replace-fail "netstandard2.0;net452" net8.0
+
+      for f in Source/**/*.csproj ; do
+        [[ "$f" == "Source/DafnyRuntime/DafnyRuntime.csproj" ]] && continue;
+
+        substituteInPlace $f \
+          --replace-fail net6.0 net8.0
+      done
     '';
 
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
   nativeBuildInputs = [ jdk11 ];
   nugetDeps = ./deps.json;
 

@@ -44,6 +44,20 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
+  android = {
+    members = [
+      adrian-gierakowski
+      hadilq
+      johnrtitor
+      numinit
+      RossComputerGuy
+    ];
+    scope = "Maintain Android-related tooling in nixpkgs.";
+    githubTeams = [ "android" ];
+    shortName = "Android";
+    enableFeatureFreezePing = true;
+  };
+
   bazel = {
     members = [
       mboes
@@ -184,6 +198,7 @@ with lib.maintainers;
       siraben
       vbgl
       alizter
+      stepbrobd
     ];
     scope = "Maintain the Coq theorem prover and related packages.";
     shortName = "Coq";
@@ -505,6 +520,20 @@ with lib.maintainers;
     ];
     scope = "Maintain the Home Assistant ecosystem";
     shortName = "Home Assistant";
+  };
+
+  hyprland = {
+    members = [
+      donovanglover
+      fufexan
+      johnrtitor
+      khaneliman
+      NotAShelf
+    ];
+    githubTeams = [ "hyprland" ];
+    scope = "Maintain Hyprland compositor and ecosystem";
+    shortName = "Hyprland";
+    enableFeatureFreezePing = true;
   };
 
   infisical = {

@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "BenLangmead";
     repo = "bowtie2";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-ZbmVOItfAgKdsMrvQIXgKiPtoQJZYfGblCGDoNPjvTU=";
   };
@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Ultrafast and memory-efficient tool for aligning sequencing reads to long reference sequences";
     license = licenses.gpl3Plus;
     homepage = "http://bowtie-bio.sf.net/bowtie2";
-    changelog = "https://github.com/BenLangmead/bowtie2/releases/tag/${lib.removePrefix "refs/tags/" finalAttrs.src.rev}";
+    changelog = "https://github.com/BenLangmead/bowtie2/releases/tag/v${finalAttrs.version}";
     maintainers = with maintainers; [ rybern ];
     platforms = platforms.all;
     mainProgram = "bowtie2";

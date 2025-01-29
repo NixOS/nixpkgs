@@ -43,7 +43,7 @@ let
     src = fetchFromGitHub {
       owner = "scikit-image";
       repo = "scikit-image";
-      rev = "refs/tags/v${version}";
+      tag = "v${version}";
       hash = "sha256-zhW7P2ss7n9LXRXiBMsifxCGGKXgZFbGLl3K4u4xzfE=";
     };
 
@@ -160,7 +160,7 @@ let
     meta = {
       description = "Image processing routines for SciPy";
       homepage = "https://scikit-image.org";
-      changelog = "https://github.com/scikit-image/scikit-image/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
+      changelog = "https://github.com/scikit-image/scikit-image/releases/tag/v${version}";
       license = lib.licenses.bsd3;
       maintainers = with lib.maintainers; [ yl3dy ];
     };

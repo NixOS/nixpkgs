@@ -50,7 +50,7 @@ let
     meta = {
       homepage = "https://github.com/Predidit/open_chinese_convert_bridge";
       license = with lib.licenses; [ gpl3Plus ];
-      maintainers = with lib.maintainers; [ aucub ];
+      maintainers = with lib.maintainers; [ ];
     };
   };
 in
@@ -164,7 +164,7 @@ flutter327.buildFlutterApplication rec {
     homepage = "https://github.com/Predidit/oneAnime";
     mainProgram = "oneanime";
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ aucub ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };
 }

@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     # a more conservative version of https://github.com/sagemath/sage/pull/37951
     ./patches/gap-element-crash.patch
 
-    # https://github.com/sagemath/sage/pull/38940, positively reviewed, to land in 10.6.beta0
+    # https://github.com/sagemath/sage/pull/38940, landed in 10.6.beta0
     (fetchpatch {
       name = "simplicial-sets-flaky-test.patch";
       url = "https://github.com/sagemath/sage/commit/1830861c5130d30b891e8c643308e1ceb91ce2b5.diff";
@@ -76,6 +76,12 @@ stdenv.mkDerivation rec {
   # should come from or be proposed to upstream. This list will probably never
   # be empty since dependencies update all the time.
   packageUpgradePatches = [
+    # https://github.com/sagemath/sage/pull/38887, landed in 10.6.beta0
+    (fetchpatch {
+      name = "libbraiding-1.3-update.patch";
+      url = "https://github.com/sagemath/sage/commit/f10a6d04599795732c1d99e2da0a4839ccdcb4f5.diff";
+      hash = "sha256-xB0xg8dGLnSMdFK3/B5hkI9yzI5N3lUMhPZ89lDsp3s=";
+    })
   ];
 
   patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;

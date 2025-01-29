@@ -32,11 +32,11 @@ assert
   ] excludePorts == [ ];
 stdenv.mkDerivation (finalAttrs: {
   pname = "sdcc";
-  version = "4.4.0";
+  version = "4.5.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/sdcc/sdcc-src-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-rowSFl6xdoDf9EsyjYh5mWMGtyQe+jqDsuOy0veQanU=";
+    hash = "sha256-1QMEN/tDa7HZOo29v7RrqqYGEzGPT7P1hx1ygV0e7YA=";
   };
 
   outputs = [

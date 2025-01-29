@@ -54,6 +54,7 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [
+    ./fix-gcc14-pr122.patch # manual port of https://github.com/lxde/lxterminal/pull/122
     ./respect-xml-catalog-files-var.patch
   ];
 

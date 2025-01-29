@@ -301,13 +301,9 @@ in
             ExecStart = "@${dhcpcd}/sbin/dhcpcd dhcpcd --quiet ${lib.optionalString cfg.persistent "--persistent"} --config ${dhcpcdConf}";
             ExecReload = "${dhcpcd}/sbin/dhcpcd --rebind";
             Restart = "always";
-            AmbientCapabilities = [
-              "CAP_NET_ADMIN"
-              "CAP_NET_RAW"
-              "CAP_NET_BIND_SERVICE"
-            ];
-            ReadWritePaths =
-              [ "/proc/sys/net/ipv4" ]
+            AmbientCapabilities = [ "CAP_NET_ADMIN" "CAP_NET_RAW" "CAP_NET_BIND_SERVICE" ];
+            CapabilityBoundingSet = [ "CAP_NET_ADMIN" "CAP_NET_RAW" "CAP_NET_BIND_SERVICE" ];
+            ReadWritePaths = [ "/proc/sys/net/ipv4" ]
               ++ lib.optional cfgN.enableIPv6 "/proc/sys/net/ipv6"
               ++ lib.optionals useResolvConf (
                 [ "/run/resolvconf" ] ++ config.networking.resolvconf.subscriberFiles
@@ -342,10 +338,7 @@ in
             RestrictSUIDSGID = true;
             SystemCallFilter = [
               "@system-service"
-              "~@aio"
-              "~@chown"
-              "~@keyring"
-              "~@memlock"
+              "~@aio" "~@keyring" "~@memlock" "~@mount" "~@privileged" "~@resources"
             ];
             SystemCallArchitectures = "native";
             UMask = "0027";
@@ -369,7 +362,18 @@ in
         /run/current-system/systemd/bin/systemctl reload dhcpcd.service
       '';
 
-    })
-  ];
+    security.polkit.extraConfig = lib.mkIf config.services.resolved.enable ''
+      polkit.addRule(function(action, subject) {
+          if (action.id == 'org.freedesktop.resolve1.revert' ||
+              action.id == 'org.freedesktop.resolve1.set-dns-servers' ||
+              action.id == 'org.freedesktop.resolve1.set-domains') {
+              if (subject.user == '${config.systemd.services.dhcpcd.serviceConfig.User}') {
+                  return polkit.Result.YES;
+              }
+          }
+      });
+    '';
+
+  };
 
 }

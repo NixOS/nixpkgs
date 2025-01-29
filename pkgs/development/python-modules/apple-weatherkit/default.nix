@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tjhorner";
     repo = "python-weatherkit";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-JvN8GmlTxz9VGttIFVG6q//c+BhP2pt1tBOhnJhNwJg=";
   };
 

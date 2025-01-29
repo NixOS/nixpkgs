@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cloudevents";
     repo = "sdk-python";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-YIvEAofWmnUblRd4jV3Zi3VdfocOnD05CMVm/abngyg=";
   };
 

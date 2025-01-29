@@ -20,6 +20,9 @@ stdenv.mkDerivation rec {
       s:mkdir:mkdir -p:g
       s:^CFLAGS:#CFLAGS:
     ' Makefile
+
+    sed -i '28i#include <time.h>' xtserv.c
+    sed -i '35i#include <time.h>' xtbot.c
   '';
   buildInputs = [ xorg.libX11 ];
 

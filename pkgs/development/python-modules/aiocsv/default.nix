@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "MKuranowski";
     repo = "aiocsv";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-NnRLBXvQj25dSHc8ZnUaPT8Oiy2EyHLIb8IJPQliyPg=";
   };
 

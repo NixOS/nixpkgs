@@ -12,7 +12,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "neovim";
     repo = "node-client";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-0vPw2hCGUDepSpF1gp/lI71EgwGsCSnw7ePP7ElHsTQ=";
   };
 

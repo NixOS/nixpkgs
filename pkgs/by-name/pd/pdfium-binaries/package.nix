@@ -4,7 +4,7 @@
   stdenv,
 }:
 let
-  version = "6899";
+  version = "6968";
   src =
     let
       inherit (stdenv.hostPlatform) system;
@@ -16,10 +16,10 @@ let
         aarch64-darwin = "mac-arm64";
       };
       hash = selectSystem {
-        x86_64-linux = "sha256-JPXgjdGfQK1BztK3opqKfg5P2lAnmkcVj3qk2Ck8vHg=";
-        aarch64-linux = "sha256-za1d1jKM3LdeBFttBBHQ+Nx1O4KC6FFwotuRHTj8tFk=";
-        x86_64-darwin = "sha256-K2Sr4z4+WWmK9OxvkZB0k9LQDxCNnUvL0RArG5v2aYs=";
-        aarch64-darwin = "sha256-wLa61Af4G47AE99M+uPlBjR2rdP5yUenoW9gsrOmZpw=";
+        x86_64-linux = "sha256-jITBi7w8jhZVkwimFp4nmWpQahPWXAGIJj/zHe5TVCU=";
+        aarch64-linux = "sha256-rDyLhRuRzw/R9Z1ZuSadXKJ+74U+RVJIC9NSCddd5lg=";
+        x86_64-darwin = "sha256-ofqKS54ZKcXLVGEs2mhFGC4W7+d87JfhCS+HqcJkzTg=";
+        aarch64-darwin = "sha256-g8iHsGVp/wCu4FU9ds6RBzabuMIONPA1H/M14BNjPu8=";
       };
     in
     fetchzip {
@@ -48,7 +48,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/bblanchon/pdfium-binaries";
     license = with lib.licenses; [ asl20 ];
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
-    maintainers = with lib.maintainers; [ aucub ];
+    maintainers = with lib.maintainers; [ ];
     platforms = [
       "aarch64-linux"
       "aarch64-darwin"

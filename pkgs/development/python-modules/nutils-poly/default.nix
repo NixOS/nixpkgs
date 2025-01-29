@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nutils";
     repo = "poly-py";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-dxFv4Az3uz6Du5dk5KZJ+unVbt3aZjxXliAQZhmBWDM=";
   };
 

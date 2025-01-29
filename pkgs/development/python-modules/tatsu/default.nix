@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "neogeny";
     repo = "TatSu";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-FRNQz3JtsFw1nch+ffGMzZF1+gq7XifPok9qsUiRPs8=";
   };
 

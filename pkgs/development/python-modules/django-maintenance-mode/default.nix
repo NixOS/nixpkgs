@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fabiocaccamo";
     repo = "django-maintenance-mode";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-rZo0yru+y5TkdULBQDMGAVb494PSLtbnNX/7cuphKNk=";
   };
 

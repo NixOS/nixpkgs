@@ -22,7 +22,7 @@ python3.pkgs.buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Stunkymonkey";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-jKPqgd0sSt/qKPqbYbvdeGuo78R5gp1R5tSTPAzz+IU=";
   };
 

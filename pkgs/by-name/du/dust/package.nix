@@ -1,9 +1,7 @@
 {
-  stdenv,
   lib,
   fetchFromGitHub,
   rustPlatform,
-  apple-sdk_11,
   installShellFiles,
 }:
 
@@ -29,8 +27,6 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-o9ynFkdx6a8kHS06NQN7BzWrOIxvdVwnUHmxt4cnmQU=";
 
   nativeBuildInputs = [ installShellFiles ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_11 ];
 
   doCheck = false;
 

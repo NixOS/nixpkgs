@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SigmaHQ";
     repo = "pySigma-backend-sqlite";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-PQByKARf0OOMC9LRTz3XVrFZp6ODSggMJeA6PNK/AuA=";
   };
 

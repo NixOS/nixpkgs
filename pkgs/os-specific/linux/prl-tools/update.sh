@@ -37,5 +37,4 @@ sha256="$(nix store prefetch-file $dmg_url --json | jq -r '.hash')"
 sed -i -e "s,version = \"$old_version\",version = \"$version\"," \
     -e "s,hash = \"sha256-.*\",hash = \"$sha256\"," "$path"
 
-git commit -qm "linuxPackages_latest.prl-tools: $old_version -> $version" "$path"
 echo "Updated linuxPackages_latest.prl-tools $old_version -> $version"

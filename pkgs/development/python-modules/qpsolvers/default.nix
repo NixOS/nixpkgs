@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "qpsolvers";
     repo = "qpsolvers";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-/yIFLxy2gjEFg/J9A5pcbrVmq4A3Tz2efEAntH0Twk8=";
   };
 

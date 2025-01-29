@@ -462,6 +462,14 @@ let
       orga = "kaermorchen";
       repo = "tree-sitter-twig";
     };
+    "tree-sitter-hyprlang" = {
+      orga = "tree-sitter-grammars";
+      repo = "tree-sitter-hyprlang";
+    };
+    "tree-sitter-kdl" = {
+      orga = "tree-sitter-grammars";
+      repo = "tree-sitter-kdl";
+    };
   };
 
   allGrammars =

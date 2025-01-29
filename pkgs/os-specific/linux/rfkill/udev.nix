@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  substituteAll,
+  replaceVarsWith,
 }:
 
 # Provides a facility to hook into rfkill changes.
@@ -29,8 +29,8 @@
 # in the rfkill package.
 
 let
-  rfkillHook = substituteAll {
-    inherit (stdenv) shell;
+  rfkillHook = replaceVarsWith {
+    replacements = { inherit (stdenv) shell; };
     isExecutable = true;
     src = ./rfkill-hook.sh;
   };

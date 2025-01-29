@@ -42,7 +42,7 @@ let
     src = fetchFromGitHub {
       owner = "AFLplusplus";
       repo = "AFLplusplus";
-      rev = "refs/tags/v${version}";
+      tag = "v${version}";
       hash = "sha256-DKwPRxSO+JEJYWLldnfrAYqzwqukNzrbo4R5FzJqzzg=";
     };
 

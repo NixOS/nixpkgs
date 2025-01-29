@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "django-axes";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Ci1+xC0MQKPxev4P70QnU+TSEAxiqYwIIOlqN1Lyido=";
   };
 

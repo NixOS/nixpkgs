@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mmatl";
     repo = "pyrender";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-V2G8QWXMxFDQpT4XDOJhIFI2V9VhDQCaXYBb/QVLxgM=";
   };
 
@@ -38,6 +38,13 @@ buildPythonPackage rec {
       name = "relax-pyopengl.patch";
       url = "https://github.com/mmatl/pyrender/commit/7c613e8aed7142df9ff40767a8f10b7a19b6255c.patch";
       hash = "sha256-SXRV9RC3PfQGjjIQ+n97HZrSDPae3rAHnTBiHXSFLaY=";
+    })
+    # fix on numpy 2.0 (np.infty -> np.inf)
+    # https://github.com/mmatl/pyrender/pull/292
+    (fetchpatch {
+      name = "fix-numpy2.patch";
+      url = "https://github.com/mmatl/pyrender/commit/5408c7b45261473511d2399ab625efe11f0b6991.patch";
+      hash = "sha256-RIv6lMpxMmops5Tb1itzYdT7GkhPScVWslBXITR3IBM=";
     })
   ];
 

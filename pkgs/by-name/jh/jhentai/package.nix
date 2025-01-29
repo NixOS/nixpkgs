@@ -13,7 +13,7 @@ flutter.buildFlutterApplication rec {
   src = fetchFromGitHub {
     owner = "jiangtian616";
     repo = "JHenTai";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-LL1TyLF37NtwTRN9vhHBY+xHDg0E0ACt2ilacIKpduU=";
   };
 
@@ -63,7 +63,7 @@ flutter.buildFlutterApplication rec {
     homepage = "https://github.com/jiangtian616/JHenTai";
     mainProgram = "jhentai";
     license = with lib.licenses; [ asl20 ];
-    maintainers = with lib.maintainers; [ aucub ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };
 }

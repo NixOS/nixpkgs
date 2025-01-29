@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "okta";
-  version = "2.9.9";
+  version = "2.9.10";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-RgB1trUSAxrCpGJxyLt6lzQXHcVPVnqIUacynalUUzY=";
+    hash = "sha256-hLdq5AlTaCZ9x/x5VL4Q673th2HnE7haAaOp5zOQdjQ=";
   };
 
   pythonRelaxDeps = [ "aenum" ];

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   version = "1.8.7";
 
   src = fetchurl {
-    url = "http://www.tkgate.org/downloads/tkgate-${version}.tgz";
+    url = "https://www.tkgate.org/downloads/tkgate-${version}.tgz";
     sha256 = "1pqywkidfpdbj18i03h97f4cimld4fb3mqfy8jjsxs12kihm18fs";
   };
 
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Event driven digital circuit simulator with a TCL/TK-based graphical editor";
     mainProgram = "gmac";
-    homepage = "http://www.tkgate.org/";
+    homepage = "https://www.tkgate.org/";
     license = lib.licenses.gpl2Plus;
     hydraPlatforms = lib.platforms.linux;
   };

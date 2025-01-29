@@ -1,8 +1,9 @@
 import logging
 from collections.abc import Mapping, Sequence
-from typing import Any, TypeAlias, assert_never, override
+from typing import Any, assert_never, override
 
-Args: TypeAlias = bool | str | list[str] | int | None
+type Arg = bool | str | list[str] | list[list[str]] | int | None
+type Args = dict[str, Arg]
 
 
 class LogFormatter(logging.Formatter):
@@ -19,7 +20,10 @@ class LogFormatter(logging.Formatter):
         return formatter.format(record)
 
 
-def dict_to_flags(d: Mapping[str, Args]) -> list[str]:
+def dict_to_flags(d: Args | None) -> list[str]:
+    if not d:
+        return []
+
     flags = []
     for key, value in d.items():
         flag = f"--{'-'.join(key.split('_'))}"
@@ -39,9 +43,13 @@ def dict_to_flags(d: Mapping[str, Args]) -> list[str]:
                 flags.append(flag)
                 flags.append(value)
             case list():
-                flags.append(flag)
-                for v in value:
-                    flags.append(v)
+                for vs in value:
+                    flags.append(flag)
+                    if isinstance(vs, list):
+                        for v in vs:
+                            flags.append(v)
+                    else:
+                        flags.append(vs)
             case _:
                 assert_never(value)
     return flags

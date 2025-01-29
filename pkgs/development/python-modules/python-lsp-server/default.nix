@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
   pythonOlder,
 
   # build-system
@@ -52,7 +53,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-lsp";
     repo = "python-lsp-server";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-oFqa7DtFpJmDZrw+GJqrFH3QqnMAu9159q3IWT9vRko=";
   };
 
@@ -127,9 +128,14 @@ buildPythonPackage rec {
     "test_jedi_completion_with_fuzzy_enabled"
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
+  preCheck =
+    ''
+      export HOME=$(mktemp -d);
+    ''
+    # https://github.com/python-lsp/python-lsp-server/issues/605
+    + lib.optionalString (pythonAtLeast "3.13") ''
+      substituteInPlace test/conftest.py --replace-fail logging.DEBUG logging.INFO
+    '';
 
   pythonImportsCheck = [
     "pylsp"

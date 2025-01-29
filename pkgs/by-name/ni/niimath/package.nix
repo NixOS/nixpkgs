@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "rordenlab";
     repo = "niimath";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-3XgB4q0HXLo9rEQBzC+2dxN81r9n8kkj2OC5d+WFmEs=";
   };
 

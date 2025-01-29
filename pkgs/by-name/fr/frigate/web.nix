@@ -1,5 +1,6 @@
 {
   buildNpmPackage,
+  frigate,
   src,
   version,
 }:
@@ -28,7 +29,11 @@ buildNpmPackage {
 
   npmDepsHash = "sha256-PLs3oCWQjK38eHgdQt2Qkj7YqkfanC8JnLMpzMjNfxU=";
 
+  env.NODE_OPTIONS = "--no-experimental-require-module";
+
   installPhase = ''
     cp -rv dist/ $out
   '';
+
+  inherit (frigate) meta;
 }

@@ -35,7 +35,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-escpos";
     repo = "python-escpos";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-f7qA1+8PwnXS526jjULEoyn0ejnvsneuWDt863p4J2g=";
     fetchSubmodules = true;
   };

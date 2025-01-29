@@ -6,7 +6,6 @@
   libevent,
   pkg-config,
   libprom,
-  libpromhttp,
   libmicrohttpd,
   sqlite,
   nixosTests,
@@ -19,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "coturn";
     repo = "coturn";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-GG8aQJoCBV5wolPEzSuZhqNn//ytaTAptjY42YKga4E=";
   };
 
@@ -31,7 +30,6 @@ stdenv.mkDerivation rec {
     openssl
     (libevent.override { inherit openssl; })
     libprom
-    libpromhttp
     libmicrohttpd
     sqlite.dev
   ];

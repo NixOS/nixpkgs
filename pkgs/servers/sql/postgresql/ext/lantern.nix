@@ -58,8 +58,5 @@ buildPostgresqlExtension (finalAttrs: {
     license = licenses.agpl3Only;
     maintainers = [ ];
     platforms = postgresql.meta.platforms;
-    # error: use of undeclared identifier 'aligned_alloc'
-    broken =
-      stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13";
   };
 })

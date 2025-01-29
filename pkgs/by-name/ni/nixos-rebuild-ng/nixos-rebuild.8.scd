@@ -22,8 +22,9 @@ _nixos-rebuild_ \[--verbose] [--max-jobs MAX_JOBS] [--cores CORES] [--log-format
 	\[--no-update-lock-file] [--no-write-lock-file] [--no-registries] [--commit-lock-file] [--update-input UPDATE_INPUT] [--override-input OVERRIDE_INPUT OVERRIDE_INPUT]++
 	\[--no-build-output] [--use-substitutes] [--help] [--file FILE] [--attr ATTR] [--flake [FLAKE]] [--no-flake] [--install-bootloader] [--profile-name PROFILE_NAME]++
 	\[--specialisation SPECIALISATION] [--rollback] [--upgrade] [--upgrade-all] [--json] [--ask-sudo-password] [--sudo] [--fast]++
+	\[--image-variant VARIANT]++
 	\[--build-host BUILD_HOST] [--target-host TARGET_HOST]++
-	\[{switch,boot,test,build,edit,repl,dry-build,dry-run,dry-activate,build-vm,build-vm-with-bootloader,list-generations}]
+	\[{switch,boot,test,build,edit,repl,dry-build,dry-run,dry-activate,build-image,build-vm,build-vm-with-bootloader,list-generations}]
 
 # DESCRIPTION
 
@@ -105,6 +106,13 @@ It must be one of the following:
 
 *repl*
 	Opens the configuration in *nix repl*.
+
+*build-image*
+	Build a disk-image variant, pre-configured for the given
+	platform/provider. Select a variant with the *--image-variant* option
+	or run without any options to get a list of available variants.
+
+		$ nixos-rebuild build-image --image-variant proxmox
 
 *build-vm*
 	Build a script that starts a NixOS virtual machine with the desired
@@ -205,6 +213,11 @@ It must be one of the following:
 *--specialisation* _name_, *-c* _name_
 	Activates given specialisation; when not specified, switching and testing
 	will activate the base, unspecialised system.
+
+*--image-variant* _variant_
+	Selects an image variant to build from the _config.system.build.images_
+	attribute of the given configuration. A list of variants is printed if
+	this option remains unset.
 
 *--build-host* _host_
 	Instead of building the new configuration locally, use the specified host

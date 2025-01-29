@@ -3,28 +3,35 @@
   stdenv,
   buildNpmPackage,
   fetchFromGitHub,
-  testers,
-  balena-cli,
+  nodejs_20,
+  versionCheckHook,
   node-gyp,
   python3,
   udev,
   cctools,
   apple-sdk_12,
-  darwinMinVersionHook,
 }:
 
-buildNpmPackage rec {
+let
+  buildNpmPackage' = buildNpmPackage.override {
+    nodejs = nodejs_20;
+  };
+  node-gyp' = node-gyp.override {
+    nodejs = nodejs_20;
+  };
+in
+buildNpmPackage' rec {
   pname = "balena-cli";
-  version = "20.1.2";
+  version = "20.2.3";
 
   src = fetchFromGitHub {
     owner = "balena-io";
     repo = "balena-cli";
     rev = "v${version}";
-    hash = "sha256-E27EHOxi54ZyNCoJuV/P6wjlJ29/JAQc/YqikP5SgZ8=";
+    hash = "sha256-sJksNbsGBzH1tjqAv0kX++J7NCj1fu64Bi/i3Tp8R9E=";
   };
 
-  npmDepsHash = "sha256-dXvqgv+0jwDyyZrTN5/t/QnrLRJl8rBNdCq4+iex9eI=";
+  npmDepsHash = "sha256-t1ZTQOuEvRcy9Zl9qqi8DDH2EVkjrBaTX4pTuRGl2ww=";
 
   postPatch = ''
     ln -s npm-shrinkwrap.json package-lock.json
@@ -33,8 +40,9 @@ buildNpmPackage rec {
 
   nativeBuildInputs =
     [
-      node-gyp
+      node-gyp'
       python3
+      versionCheckHook
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       cctools
@@ -48,16 +56,10 @@ buildNpmPackage rec {
       apple-sdk_12
     ];
 
-  passthru.tests.version = testers.testVersion {
-    package = balena-cli;
-    command = ''
-      # Override default cache directory so Balena CLI's unavoidable update check does not fail due to write permissions
-      BALENARC_DATA_DIRECTORY=./ balena --version
-    '';
-    inherit version;
-  };
+  doInstallCheck = true;
+  versionCheckProgram = "${placeholder "out"}/bin/balena";
 
-  meta = with lib; {
+  meta = {
     description = "Command line interface for balenaCloud or openBalena";
     longDescription = ''
       The balena CLI is a Command Line Interface for balenaCloud or openBalena. It is a software
@@ -67,10 +69,10 @@ buildNpmPackage rec {
     '';
     homepage = "https://github.com/balena-io/balena-cli";
     changelog = "https://github.com/balena-io/balena-cli/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = [
-      maintainers.kalebpace
-      maintainers.doronbehar
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      kalebpace
+      doronbehar
     ];
     mainProgram = "balena";
   };

@@ -9,37 +9,43 @@
   pythonOlder,
   requests,
   requests-oauthlib,
-  six,
+  setuptools,
   vcrpy,
 }:
 
 buildPythonPackage rec {
   pname = "tweepy";
-  version = "4.14.0";
-  format = "setuptools";
+  version = "4.15.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ugqa85l0eWVtMUl5d+BjEWvTyH8c5NVtsnPflkHTWh8=";
+    owner = "tweepy";
+    repo = "tweepy";
+    tag = "v${version}";
+    hash = "sha256-vbiMwaJh4cN7OY7eYu2s8azs3A0KXvW/kRPVCx50ZVA=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    async-lru
+  build-system = [ setuptools ];
+
+  dependencies = [
     oauthlib
     requests
     requests-oauthlib
-    six
   ];
+
+  optional-dependencies = {
+    async = [
+      aiohttp
+      async-lru
+    ];
+  };
 
   nativeCheckInputs = [
     pytestCheckHook
     vcrpy
-  ];
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "tweepy" ];
 

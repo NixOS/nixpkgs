@@ -7,6 +7,7 @@
   meson,
   ninja,
   pkg-config,
+  unstableGitUpdater,
   vulkan-headers,
   vulkan-loader,
   wayland-scanner,
@@ -15,7 +16,7 @@
 
 stdenv.mkDerivation rec {
   pname = "vulkan-hdr-layer-kwin6";
-  version = "0-unstable-2024-10-19";
+  version = "0-unstable-2024-12-27";
 
   depsBuildBuild = [ pkg-config ];
 
@@ -39,10 +40,12 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Zamundaaa";
     repo = "VK_hdr_layer";
-    rev = "e173f2617262664901039e3c821929afce05d2c1";
-    hash = "sha256-hBxRwbn29zFeHcRpfMF6I4piSASpN2AvZY0ci5Utj4U=";
+    rev = "1534ef826bfecf525a6c3154f2e3b52d640a79cf";
+    hash = "sha256-LaI7axY+O6MQ/7xdGlTO3ljydFAvqqdZpUI7A+B2Ilo=";
     fetchSubmodules = true;
   };
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = {
     description = "Vulkan Wayland HDR WSI Layer (Xaver Hugl's fork for KWin 6)";

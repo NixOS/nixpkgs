@@ -55,6 +55,8 @@ stdenv.mkDerivation rec {
     shopt -s extglob
     rm -rf deps/!(abc|sanitizers-cmake|subprocess)/*
     shopt -u extglob
+    # https://github.com/emsec/hal/issues/602
+    sed -i 1i'#include <algorithm>' include/hal_core/utilities/utils.h
   '';
 
   nativeBuildInputs = [

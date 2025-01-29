@@ -10,7 +10,6 @@
   common-updater-scripts,
   git,
   nix,
-  nixfmt-classic,
   jq,
   coreutils,
   gnused,
@@ -99,7 +98,6 @@ stdenv.mkDerivation rec {
           curl
           cacert
           git
-          nixfmt-classic
           nix
           jq
           coreutils
@@ -111,11 +109,8 @@ stdenv.mkDerivation rec {
       latestSha="$(curl -L -s https://api.github.com/repos/ohmyzsh/ohmyzsh/commits\?sha\=master\&since\=$oldVersion | jq -r '.[0].sha')"
 
       if [ ! "null" = "$latestSha" ]; then
-        nixpkgs="$(git rev-parse --show-toplevel)"
-        default_nix="$nixpkgs/pkgs/shells/zsh/oh-my-zsh/default.nix"
         latestDate="$(curl -L -s https://api.github.com/repos/ohmyzsh/ohmyzsh/commits/$latestSha | jq '.commit.committer.date' | sed 's|"\(.*\)T.*|\1|g')"
         update-source-version oh-my-zsh "$latestDate" --rev="$latestSha"
-        nixfmt "$default_nix"
       else
         echo "${pname} is already up-to-date"
       fi

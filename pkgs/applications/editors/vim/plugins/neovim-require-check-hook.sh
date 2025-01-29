@@ -51,7 +51,8 @@ run_require_checks() {
 
     export HOME="$TMPDIR"
     local deps="${dependencies[*]}"
-    local checks="${nativeBuildInputs[*]}"
+    local nativeCheckInputs="${nativeBuildInputs[*]}"
+    local checkInputs="${buildInputs[*]}"
     set +e
     for name in "${nvimRequireCheck[@]}"; do
         local skip=false
@@ -67,7 +68,8 @@ run_require_checks() {
             echo "Attempting to require module: $name"
             if @nvimBinary@ -es --headless -n -u NONE -i NONE --clean -V1 \
                 --cmd "set rtp+=$out,${deps// /,}" \
-                --cmd "set rtp+=$out,${checks// /,}" \
+                --cmd "set rtp+=$out,${nativeCheckInputs// /,}" \
+                --cmd "set rtp+=$out,${checkInputs// /,}" \
                 --cmd "lua require('$name')"; then
                 check_passed=true
                 successful_modules+=("$name")

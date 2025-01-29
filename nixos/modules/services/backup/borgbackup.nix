@@ -44,8 +44,8 @@ let
     borgWrapper () {
       local result
       borg "$@" && result=$? || result=$?
-      if [[ -z "${toString cfg.failOnWarnings}" ]] && [[ "$result" == 1 ]]; then
-        echo "ignoring warning return value 1"
+      if [[ -z "${toString cfg.failOnWarnings}" ]] && [[ "$result" == 1 || ("$result" -ge 100 && "$result" -le 127) ]]; then
+        echo "ignoring warning return value $result"
         return 0
       else
         return "$result"
@@ -106,7 +106,7 @@ let
       path =  [
         config.services.borgbackup.package pkgs.openssh
       ];
-      script = "exec " + lib.optionalString cfg.inhibitsSleep ''\
+      script = "exec " + lib.optionalString cfg.inhibitsSleep ''
         ${pkgs.systemd}/bin/systemd-inhibit \
             --who="borgbackup" \
             --what="sleep" \
@@ -183,7 +183,7 @@ let
       mode != "none" -> passCommand != null || passphrase != null;
     message =
       "passCommand or passphrase has to be specified because"
-      + '' borgbackup.jobs.${name}.encryption != "none"'';
+      + " borgbackup.jobs.${name}.encryption != \"none\"";
   };
 
   mkRepoService = name: cfg:

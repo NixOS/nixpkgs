@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "jonof";
     repo = "jfsw";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     fetchSubmodules = true;
     hash = "sha256-bOUgRa9zWufTFEj5huXAKeRerV8PqfqQVDoVUvRrj2I=";
   };

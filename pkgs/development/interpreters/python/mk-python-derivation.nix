@@ -397,7 +397,10 @@ let
         outputs = outputs ++ optional withDistOutput "dist";
 
         passthru =
-          attrs.passthru or { }
+          {
+            inherit disabled;
+          }
+          // attrs.passthru or { }
           // {
             updateScript =
               let

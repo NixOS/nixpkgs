@@ -14,6 +14,12 @@ stdenv.mkDerivation {
 
   postUnpack = "sourceRoot=\${sourceRoot}/libiberty";
 
+  # needed until config scripts are updated to not use /usr/bin/uname on FreeBSD native
+  # updateAutotoolsGnuConfigScriptsHook doesn't seem to work here
+  postPatch = ''
+    substituteInPlace ../config.guess --replace-fail /usr/bin/uname uname
+  '';
+
   configureFlags = [ "--enable-install-libiberty" ]
     ++ lib.optional (!staticBuild) "--enable-shared";
 

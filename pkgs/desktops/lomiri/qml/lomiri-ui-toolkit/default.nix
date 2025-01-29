@@ -10,6 +10,7 @@
   gdb,
   glib,
   lttng-ust,
+  mesa,
   perl,
   pkg-config,
   python3,
@@ -44,13 +45,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-ui-toolkit";
-  version = "1.3.5100";
+  version = "1.3.5110";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-ui-toolkit";
     rev = finalAttrs.version;
-    hash = "sha256-r+wUCl+ywFcgFYo7BjBoXiulQptd1Zd3LJchXiMtx4I=";
+    hash = "sha256-j2Fowwj+ArdfJacqBSWksPk+wXRoTpL/Jrgme2tUSC8=";
   };
 
   outputs = [
@@ -149,6 +150,7 @@ stdenv.mkDerivation (finalAttrs: {
     dbus-test-runner
     dpkg # `dpkg-architecture -qDEB_HOST_ARCH` response decides how tests are run
     gdb
+    mesa.llvmpipeHook # ShapeMaterial needs an OpenGL context: https://gitlab.com/ubports/development/core/lomiri-ui-toolkit/-/issues/35
     xvfb-run
   ];
 

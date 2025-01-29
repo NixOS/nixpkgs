@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  buildGoModule,
+  buildGo122Module,
   coreutils,
   fetchFromGitHub,
   fetchpatch,
@@ -14,7 +14,12 @@
   pulumiPackages,
 }:
 
-buildGoModule rec {
+# Using go 1.22 as pulumi 3.122.0 will not build with 1.23.
+# Issue: https://github.com/NixOS/nixpkgs/issues/351955
+# Upgrading pulumi version should fix it, but requires more involved changes, so
+# this is a temporary workaround.
+# Upgrade: https://github.com/NixOS/nixpkgs/pull/352221
+buildGo122Module rec {
   pname = "pulumi";
   version = "3.122.0";
 

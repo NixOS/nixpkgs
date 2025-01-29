@@ -5,7 +5,7 @@
   ...
 }:
 let
-  pcmciaUtils = pkgs.pcmciaUtils.passthru.function {
+  pcmciaUtils = pkgs.pcmciaUtils.overrideAttrs {
     inherit (config.hardware.pcmcia) firmware config;
   };
 in

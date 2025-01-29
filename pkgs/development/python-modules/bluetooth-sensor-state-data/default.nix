@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "bluetooth-sensor-state-data";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Gsg6Gbb+nvrKr7vn9zUuPTPtSjqFJyMk7oLt7LUUn5A=";
   };
 

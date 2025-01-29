@@ -18,6 +18,8 @@ buildGoModule rec {
 
   vendorHash = null;
 
+  env.CGO_ENABLED = 0;
+
   subPackages = [
     "cmd/slim"
     "cmd/slim-sensor"

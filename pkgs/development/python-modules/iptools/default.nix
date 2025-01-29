@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bd808";
     repo = "python-iptools";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-340Wc4QGwUqEEANM5EQzFaXxIWVf2fDr4qfCuxNEVBQ=";
   };
 

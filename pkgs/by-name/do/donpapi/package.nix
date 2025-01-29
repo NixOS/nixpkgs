@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "login-securite";
     repo = "DonPAPI";
-    rev = "refs/tags/V${version}";
+    tag = "V${version}";
     hash = "sha256-60aGnsr36X3mf91nH9ud0xyLBqKgzZ4ALucrLGpAuzQ=";
   };
 

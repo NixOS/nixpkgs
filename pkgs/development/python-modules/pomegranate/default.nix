@@ -24,7 +24,7 @@ buildPythonPackage rec {
     repo = pname;
     owner = "jmschrei";
     # no tags for recent versions: https://github.com/jmschrei/pomegranate/issues/974
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-PoDAtNm/snq4isotkoCTVYUuwr9AKKwiXIojUFMH/YE=";
   };
 

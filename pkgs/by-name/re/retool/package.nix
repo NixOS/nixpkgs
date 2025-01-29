@@ -16,7 +16,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "unexpectedpanda";
     repo = "retool";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-KGBpGZAC0SjStp0aulxVRJMmNwlpvSG0i0rtZgvFCpc=";
   };
 

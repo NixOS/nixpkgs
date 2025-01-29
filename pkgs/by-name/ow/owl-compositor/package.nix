@@ -1,7 +1,8 @@
 { lib
 , clangStdenv
 , fetchFromGitHub
-, gnustep
+, gnustep-back
+, wrapGNUstepAppsHook
 , libxkbcommon
 , makeWrapper
 , wayland
@@ -41,8 +42,7 @@ stdenv.mkDerivation {
     darwin.DarwinTools
     darwin.bootstrap_cmds
   ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    gnustep.make
-    gnustep.wrapGNUstepAppsHook
+    wrapGNUstepAppsHook
   ];
 
   buildInputs = [
@@ -51,9 +51,7 @@ stdenv.mkDerivation {
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Cocoa
   ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    gnustep.back
-    gnustep.base
-    gnustep.gui
+    gnustep-back
   ];
 
   preConfigure = ''

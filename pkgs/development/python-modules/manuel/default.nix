@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "manuel";
-  version = "1.12.4";
+  version = "1.13.0";
   format = "setuptools";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-A5Wq32mR+SSseVz61Z2l3AYYcyqMxYrQ9HSWWrco9/Q=";
+    hash = "sha256-XWMSDej6bZJ3gLaa4oqj6dFmmxCvPTJ4Xz+6EaW+iFo=";
   };
 
   patches = lib.optionals (lib.versionAtLeast python.version "3.11") [

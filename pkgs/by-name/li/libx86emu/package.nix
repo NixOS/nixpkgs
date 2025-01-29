@@ -29,6 +29,9 @@ stdenv.mkDerivation rec {
     "shared"
     "CC=${stdenv.cc.targetPrefix}cc"
   ];
+
+  NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";
+
   enableParallelBuilding = true;
 
   installFlags = [

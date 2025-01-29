@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "libnano";
     repo = "primer3-py";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-O8BFjkjG9SfknSrK34s9EJnqTrtCf4zW9A+N+/MHl2w=";
   };
 

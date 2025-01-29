@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "eugene-eeo";
     repo = "tinyrecord";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-mF4hpHuNyiQ5DurRnyLck5e/Vp26GCLkhD8eeSB4NYs=";
   };
 

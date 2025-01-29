@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "davidchalifoux";
     repo = "kaput-cli";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-sy8k9L9rmiRFzvhLc+hYl9OqmmP8INLxMNRjAx7/V8g=";
   };
 

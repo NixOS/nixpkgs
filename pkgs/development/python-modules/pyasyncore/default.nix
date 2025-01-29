@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "simonrob";
     repo = "pyasyncore";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ptqOsbkY7XYZT5sh6vctfxZ7BZPX2eLjo6XwZfcmtgk=";
   };
 

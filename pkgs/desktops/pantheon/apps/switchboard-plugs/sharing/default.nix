@@ -9,6 +9,7 @@
   vala,
   elementary-bluetooth-daemon,
   libgee,
+  gettext,
   granite7,
   gtk4,
   switchboard,
@@ -26,6 +27,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    gettext # msgfmt
     meson
     ninja
     pkg-config
