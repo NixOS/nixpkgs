@@ -9,8 +9,8 @@ let
   pname = "bililiverecorder";
 
   dotnet = with dotnetCorePackages; combinePackages [
-    runtime_6_0
-    aspnetcore_6_0
+    runtime_6_0-bin
+    aspnetcore_6_0-bin
   ];
 
   version = "2.13.0";

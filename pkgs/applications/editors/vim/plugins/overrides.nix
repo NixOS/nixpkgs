@@ -760,6 +760,7 @@ in
       # Optional integrations
       fzf-lua
       telescope-nvim
+      snacks-nvim
     ];
     dependencies = with self; [
       copilot-lua
@@ -1613,6 +1614,10 @@ in
     nvimSkipModule = [
       "luasnip-latex-snippets.luasnippets.tex.utils.init"
     ];
+  };
+
+  LuaSnip-snippets-nvim = super.LuaSnip-snippets-nvim.overrideAttrs {
+    checkInputs = [ self.luasnip ];
   };
 
   lz-n = neovimUtils.buildNeovimPlugin {
@@ -2763,6 +2768,10 @@ in
     dependencies = [ self.plenary-nvim ];
   };
 
+  repolink-nvim = super.repolink-nvim.overrideAttrs {
+    dependencies = [ self.plenary-nvim ];
+  };
+
   # needs  "http" and "json" treesitter grammars too
   rest-nvim = super.rest-nvim.overrideAttrs {
     dependencies = with self; [
@@ -3356,6 +3365,15 @@ in
       description = "Simple color selector/picker plugin";
       license = lib.licenses.publicDomain;
     };
+  };
+
+  vimade = super.vimade.overrideAttrs {
+    checkInputs = with self; [
+      # Optional providers
+      hlchunk-nvim
+      mini-nvim
+      snacks-nvim
+    ];
   };
 
   vim-addon-actions = super.vim-addon-actions.overrideAttrs {
