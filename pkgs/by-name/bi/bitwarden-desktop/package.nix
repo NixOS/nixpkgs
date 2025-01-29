@@ -3,13 +3,10 @@
   buildNpmPackage,
   cargo,
   copyDesktopItems,
-  electron_32,
+  electron_33,
   fetchFromGitHub,
-  glib,
   gnome-keyring,
-  gtk3,
   jq,
-  libsecret,
   makeDesktopItem,
   makeWrapper,
   napi-rs-cli,
@@ -17,7 +14,6 @@
   nodejs_20,
   patchutils_0_4_2,
   pkg-config,
-  python3,
   runCommand,
   rustc,
   rustPlatform,
@@ -27,7 +23,7 @@
 let
   description = "Secure and free password manager for all of your devices";
   icon = "bitwarden";
-  electron = electron_32;
+  electron = electron_33;
 
   bitwardenDesktopNativeArch =
     {
@@ -40,13 +36,13 @@ let
 in
 buildNpmPackage rec {
   pname = "bitwarden-desktop";
-  version = "2024.11.1";
+  version = "2025.1.1";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     rev = "desktop-v${version}";
-    hash = "sha256-4QTQgW8k3EMf07Xqs2B+VXQOUPzoOgaNvoC02x4zvu8=";
+    hash = "sha256-0NXrTBkCyo9Hw+fyFTfXfa1efBlaM6xWd9Uvsbathpw=";
   };
 
   patches = [
@@ -71,11 +67,10 @@ buildNpmPackage rec {
     "--legacy-peer-deps"
   ];
   npmWorkspace = "apps/desktop";
-  npmDepsHash = "sha256-YzhCyNMvfXGmgOpl3qWj1Pqd1hY8CJ9QLwQds5ZMnqg=";
+  npmDepsHash = "sha256-DDsPkvLGOhjmdYEOmhZfe4XHGFyowvWO24YcCA5griM=";
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    name = "${pname}-${version}";
-    inherit src;
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
     patches = map (
       patch:
       runCommand (builtins.baseNameOf patch) { nativeBuildInputs = [ patchutils_0_4_2 ]; } ''
@@ -84,7 +79,7 @@ buildNpmPackage rec {
     ) patches;
     patchFlags = [ "-p4" ];
     sourceRoot = "${src.name}/${cargoRoot}";
-    hash = "sha256-aurjpVzWET30O+ysyE4ZzauMe8kHjOL169tfKUR1Vpg=";
+    hash = "sha256-IL8+n+rhRbvRO1jxJSy9PjUMb/tI4S/gzpUNOojBPWk=";
   };
   cargoRoot = "apps/desktop/desktop_native";
 
@@ -97,16 +92,9 @@ buildNpmPackage rec {
     makeWrapper
     napi-rs-cli
     pkg-config
-    (python3.withPackages (ps: with ps; [ setuptools ]))
     rustc
     rustPlatform.cargoCheckHook
     rustPlatform.cargoSetupHook
-  ];
-
-  buildInputs = [
-    glib
-    gtk3
-    libsecret
   ];
 
   preBuild = ''
