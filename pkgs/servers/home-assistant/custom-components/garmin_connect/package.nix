@@ -6,16 +6,16 @@
   tzlocal,
 }:
 
-buildHomeAssistantComponent {
+buildHomeAssistantComponent rec {
   owner = "cyberjunky";
   domain = "garmin_connect";
-  version = "0.2.22";
+  version = "0.2.29";
 
   src = fetchFromGitHub {
     owner = "cyberjunky";
     repo = "home-assistant-garmin_connect";
-    rev = "d42edcabc67ba6a7f960e849c8aaec1aabef87c0";
-    hash = "sha256-KqbP6TpH9B0/AjtsW5TcWSNgUhND+w8rO6X8fHqtsDI=";
+    tag = version;
+    hash = "sha256-0zyOcuVgso086xME9H8L9OH2st7FqrPWOi6kksTM/f4=";
   };
 
   dependencies = [
