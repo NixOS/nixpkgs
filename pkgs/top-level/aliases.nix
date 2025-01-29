@@ -199,6 +199,7 @@ mapAliases {
   calculix = calculix-ccx; # Added 2024-12-18
   calligra = kdePackages.calligra; # Added 2024-09-27
   callPackage_i686 = pkgsi686Linux.callPackage;
+  cargo-asm = throw "'cargo-asm' has been removed due to lack of upstream maintenance. Consider 'cargo-show-asm' as an alternative.";
   cask = emacs.pkgs.cask; # Added 2022-11-12
   canonicalize-jars-hook = stripJavaArchivesHook; # Added 2024-03-17
   cargo-deps = throw "cargo-deps has been removed as the repository is deleted"; # Added 2024-04-09
