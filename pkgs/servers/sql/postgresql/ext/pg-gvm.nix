@@ -14,13 +14,13 @@
 
 buildPostgresqlExtension (finalAttrs: {
   pname = "pg-gvm";
-  version = "22.6.6";
+  version = "22.6.7";
 
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = "pg-gvm";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-4620xHKh6dB3eIoBVZDf+qxLxmCCfFvdNDN/KnegWWA=";
+    hash = "sha256-Sa9ltW3KV/69OCxD3gRcp5owL0oW+z3fs4fRBHbSh30=";
   };
 
   strictDeps = true;
