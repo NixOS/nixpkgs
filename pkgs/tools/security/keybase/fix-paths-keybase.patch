@@ -1,0 +1,16 @@
+diff --git a/go/libkb/gpg_cli.go b/go/libkb/gpg_cli.go
+index 3c7c6257..ae8f7e2f 100644
+--- a/go/libkb/gpg_cli.go
++++ b/go/libkb/gpg_cli.go
+@@ -54,9 +54,9 @@ func (g *GpgCLI) Configure(mctx MetaContext) (err error) {
+ 	if len(prog) > 0 {
+ 		err = canExec(prog)
+ 	} else {
+-		prog, err = exec.LookPath("gpg2")
++		prog, err = exec.LookPath("@gpg2@")
+ 		if err != nil {
+-			prog, err = exec.LookPath("gpg")
++			prog, err = exec.LookPath("@gpg@")
+ 		}
+ 	}
+ 	if err != nil {

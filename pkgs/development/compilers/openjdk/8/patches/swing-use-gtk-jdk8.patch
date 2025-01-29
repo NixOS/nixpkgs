@@ -1,0 +1,26 @@
+diff -ru3 a/jdk/src/share/classes/javax/swing/UIManager.java b/jdk/src/share/classes/javax/swing/UIManager.java
+--- a/jdk/src/share/classes/javax/swing/UIManager.java	2016-07-26 00:41:37.000000000 +0300
++++ b/jdk/src/share/classes/javax/swing/UIManager.java	2016-10-02 22:46:01.890071761 +0300
+@@ -607,11 +607,9 @@
+         if (osType == OSInfo.OSType.WINDOWS) {
+             return "com.sun.java.swing.plaf.windows.WindowsLookAndFeel";
+         } else {
+-            String desktop = AccessController.doPrivileged(new GetPropertyAction("sun.desktop"));
+             Toolkit toolkit = Toolkit.getDefaultToolkit();
+-            if ("gnome".equals(desktop) &&
+-                    toolkit instanceof SunToolkit &&
+-                    ((SunToolkit) toolkit).isNativeGTKAvailable()) {
++            if (toolkit instanceof SunToolkit &&
++                    ((SunToolkit) toolkit).isNativeGTKAvailable()) {
+                 // May be set on Linux and Solaris boxs.
+                 return "com.sun.java.swing.plaf.gtk.GTKLookAndFeel";
+             }
+@@ -1341,7 +1339,7 @@
+             lafName = (String) lafData.remove("defaultlaf");
+         }
+         if (lafName == null) {
+-            lafName = getCrossPlatformLookAndFeelClassName();
++            lafName = getSystemLookAndFeelClassName();
+         }
+         lafName = swingProps.getProperty(defaultLAFKey, lafName);
+ 

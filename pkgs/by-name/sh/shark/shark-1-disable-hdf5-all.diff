@@ -1,0 +1,21 @@
+diff -burN Shark.orig/CMakeLists.txt Shark/CMakeLists.txt
+--- Shark.orig/CMakeLists.txt	2016-09-02 17:04:54.000000000 +0200
++++ Shark/CMakeLists.txt	2017-07-31 16:41:18.563473752 +0200
+@@ -194,6 +194,8 @@
+ #####################################################################
+ #           HDF5 configuration
+ #####################################################################
++option(ENABLE_HDF5 "Use HDF5" ON)
++if(ENABLE_HDF5)
+ find_package(HDF5 COMPONENTS C CXX HL QUIET)
+ mark_as_advanced(HDF5_DIR)
+ if(HDF5_FOUND)
+@@ -215,7 +217,7 @@
+ else()
+ 	message(STATUS "HDF5 not found, skip")
+ endif()
+-
++endif() #ENABLE_HDF5
+ #####################################################################
+ #           ATLAS configuration
+ #####################################################################

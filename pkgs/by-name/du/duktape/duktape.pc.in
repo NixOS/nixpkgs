@@ -1,0 +1,10 @@
+prefix=@out@
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: duktape
+Description: An embeddable Javascript engine, with a focus on portability and compact footprint
+Version: @version@
+Libs: -L${libdir} -lduktape
+Cflags: -I${includedir}

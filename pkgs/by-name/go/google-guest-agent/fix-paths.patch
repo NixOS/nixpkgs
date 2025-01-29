@@ -1,0 +1,43 @@
+diff --git a/google-guest-agent.service b/google-guest-agent.service
+index 79b8e39..a39097b 100644
+--- a/google-guest-agent.service
++++ b/google-guest-agent.service
+@@ -14,7 +14,7 @@ PartOf=network.service networking.service NetworkManager.service systemd-network
+ 
+ [Service]
+ Type=notify
+-ExecStart=/usr/bin/google_guest_agent
++ExecStart=@out@/bin/google_guest_agent
+ OOMScoreAdjust=-999
+ Restart=always
+ 
+diff --git a/google-shutdown-scripts.service b/google-shutdown-scripts.service
+index 16bb9c2..ae02067 100644
+--- a/google-shutdown-scripts.service
++++ b/google-shutdown-scripts.service
+@@ -5,10 +5,10 @@ After=network-online.target rsyslog.service
+ 
+ [Service]
+ Type=oneshot
+-ExecStart=/bin/true
++ExecStart=@true@
+ RemainAfterExit=true
+ # This service does nothing on start, and runs shutdown scripts on stop.
+-ExecStop=/usr/bin/google_metadata_script_runner shutdown
++ExecStop=@out@/bin/google_metadata_script_runner shutdown
+ TimeoutStopSec=0
+ KillMode=process
+ 
+diff --git a/google-startup-scripts.service b/google-startup-scripts.service
+index dfc9838..2465265 100644
+--- a/google-startup-scripts.service
++++ b/google-startup-scripts.service
+@@ -6,7 +6,7 @@ Before=apt-daily.service
+ 
+ [Service]
+ Type=oneshot
+-ExecStart=/usr/bin/google_metadata_script_runner startup
++ExecStart=@out@/bin/google_metadata_script_runner startup
+ #TimeoutStartSec is ignored for Type=oneshot service units.
+ KillMode=process
+ 
