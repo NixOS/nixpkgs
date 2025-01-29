@@ -850,8 +850,13 @@ rec {
     };
 
     # A submodule (like typed attribute set). See NixOS manual.
-    submodule = modules: submoduleWith {
+    submodule = deprecated "lib.types.submodule is deprecated, use lib.types.module instead" (modules: submoduleWith {
       shorthandOnlyDefinesConfig = true;
+      modules = toList modules;
+    });
+
+    # Shorthand of moduleWith { modules = ...; }
+    module = modules: moduleWith {
       modules = toList modules;
     };
 
