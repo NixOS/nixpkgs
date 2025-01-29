@@ -13,6 +13,7 @@
   zlib,
   version,
   hash,
+  replaceVars,
   versionCheckHook,
 
   # downstream dependencies
@@ -36,9 +37,9 @@ stdenv.mkDerivation (finalAttrs: {
     inherit hash;
   };
 
-  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+  postPatch = lib.optionalString (stdenv.hostPlatform.isDarwin && lib.versionOlder version "29") ''
     substituteInPlace src/google/protobuf/testing/googletest.cc \
-      --replace 'tmpnam(b)' '"'$TMPDIR'/foo"'
+      --replace-fail 'tmpnam(b)' '"'$TMPDIR'/foo"'
   '';
 
   patches = lib.optionals (lib.versionOlder version "22") [
@@ -50,15 +51,17 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  nativeBuildInputs =
-    [
-      cmake
-    ]
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-      # protoc of the same version must be available for build. For non-cross builds, it's able to
-      # re-use the executable generated as part of the build
+  # hook to provide the path to protoc executable, used at build time
+  build_protobuf =
+    if (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) then
       buildPackages."protobuf_${lib.versions.major version}"
-    ];
+    else
+      (placeholder "out");
+  setupHook = ./setup-hook.sh;
+
+  nativeBuildInputs = [
+    cmake
+  ];
 
   buildInputs = [
     gtest
