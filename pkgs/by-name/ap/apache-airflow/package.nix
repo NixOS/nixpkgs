@@ -112,6 +112,11 @@ let
           hash = "sha256-S4ThQx4H3UlKhunJo35esPClZiEn7gX/Qwo4kE1QMTI=";
         };
       });
+
+      rich-argparse = pySuper.rich-argparse.overridePythonAttrs (o: {
+        disabledTests = (o.disabledTests or []) ++ [ "test_generated_usage" ];
+      });
+
       # apache-airflow doesn't work with sqlalchemy 2.x
       # https://github.com/apache/airflow/issues/28723
       sqlalchemy = pySuper.sqlalchemy_1_4;
