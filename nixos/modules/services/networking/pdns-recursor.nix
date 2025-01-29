@@ -19,16 +19,27 @@ in
     enable = mkEnableOption "PowerDNS Recursor, a recursive DNS server";
 
     settings = mkOption {
+      description = ''
+        Global configuration transcribed in YAML format
+      '';
       type = types.submodule {
         options = {
 
           carbon = mkOption {
+            default = { };
+            description = ''
+              Global carbon configuration transcribed in YAML format
+            '';
             type = types.submodule {
               freeformType = settingsFormat.type;
             };
           };
 
           dnssec = mkOption {
+            default = { };
+            description = ''
+              Global dnssec configuration transcribed in YAML format
+            '';
             type = types.submodule {
               freeformType = settingsFormat.type;
               options = {
@@ -51,12 +62,20 @@ in
           };
 
           ecs = mkOption {
+            default = { };
+            description = ''
+              Global ecs configuration transcribed in YAML format
+            '';
             type = types.submodule {
               freeformType = settingsFormat.type;
             };
           };
 
           incoming = mkOption {
+            default = { };
+            description = ''
+              Global incoming configuration transcribed in YAML format
+            '';
             type = types.submodule {
               freeformType = settingsFormat.type;
               options = {
@@ -83,7 +102,7 @@ in
                 };
 
                 listen = mkOption {
-                  type = listOf types.str;
+                  type = types.listOf types.str;
                   default = [
                     "::"
                     "0.0.0.0"
@@ -105,36 +124,59 @@ in
           };
 
           logging = mkOption {
+            default = { };
+            description = ''
+              Global logging configuration transcribed in YAML format
+            '';
             type = types.submodule {
               freeformType = settingsFormat.type;
             };
           };
 
           nod = mkOption {
+            default = { };
+            description = ''
+              Global nod configuration transcribed in YAML format
+            '';
             type = types.submodule {
               freeformType = settingsFormat.type;
             };
           };
 
           outgoing = mkOption {
+            default = { };
+            description = ''
+              Global outgoing configuration transcribed in YAML format
+            '';
             type = types.submodule {
               freeformType = settingsFormat.type;
             };
           };
 
           packetcache = mkOption {
+            default = { };
+            description = ''
+              Global packetcache configuration transcribed in YAML format
+            '';
             type = types.submodule {
               freeformType = settingsFormat.type;
             };
           };
 
           recordcache = mkOption {
+            default = { };
+            description = ''
+              Global recordcache configuration transcribed in YAML format
+            '';
             type = types.submodule {
               freeformType = settingsFormat.type;
             };
           };
 
           recursor = mkOption {
+            description = ''
+              Global recursor configuration transcribed in YAML format
+            '';
             type = types.submodule {
               freeformType = settingsFormat.type;
               options = {
@@ -181,12 +223,20 @@ in
           };
 
           snmp = mkOption {
+            default = { };
+            description = ''
+              Global snmp configuration transcribed in YAML format
+            '';
             type = types.submodule {
               freeformType = settingsFormat.type;
             };
           };
 
           webservice = mkOption {
+            default = { };
+            description = ''
+              Global webservice configuration transcribed in YAML format
+            '';
             type = types.submodule {
               freeformType = settingsFormat.type;
               options = {
