@@ -518,31 +518,31 @@ let
 
     ffmpeg = callPackage ../development/ocaml-modules/ffmpeg { };
     ffmpeg-av = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-av.nix {
-      ffmpeg = pkgs.ffmpeg_6;
+      inherit (pkgs) ffmpeg;
       inherit (pkgs.darwin.apple_sdk.frameworks) AudioToolbox VideoToolbox;
     };
     ffmpeg-avcodec = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-avcodec.nix {
-      ffmpeg = pkgs.ffmpeg_6;
+      inherit (pkgs) ffmpeg;
       inherit (pkgs.darwin.apple_sdk.frameworks) AudioToolbox VideoToolbox;
     };
     ffmpeg-avdevice = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-avdevice.nix {
-      ffmpeg = pkgs.ffmpeg_6;
+      inherit (pkgs) ffmpeg;
       inherit (pkgs.darwin.apple_sdk.frameworks) AppKit AudioToolbox AVFoundation Cocoa CoreImage ForceFeedback OpenGL VideoToolbox;
     };
     ffmpeg-avfilter = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-avfilter.nix {
-      ffmpeg = pkgs.ffmpeg_6;
+      inherit (pkgs) ffmpeg;
       inherit (pkgs.darwin.apple_sdk.frameworks) AppKit CoreImage OpenGL VideoToolbox;
     };
     ffmpeg-avutil = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-avutil.nix {
-      ffmpeg = pkgs.ffmpeg_6;
+      inherit (pkgs) ffmpeg;
       inherit (pkgs.darwin.apple_sdk.frameworks) AudioToolbox VideoToolbox;
     };
     ffmpeg-swresample = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-swresample.nix {
-      ffmpeg = pkgs.ffmpeg_6;
+      inherit (pkgs) ffmpeg;
       inherit (pkgs.darwin.apple_sdk.frameworks) VideoToolbox;
     };
     ffmpeg-swscale = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-swscale.nix {
-      ffmpeg = pkgs.ffmpeg_6;
+      inherit (pkgs) ffmpeg;
       inherit (pkgs.darwin.apple_sdk.frameworks) VideoToolbox;
     };
 
@@ -1082,6 +1082,8 @@ let
     mec = callPackage ../development/ocaml-modules/mec { };
 
     melange = callPackage ../development/tools/ocaml/melange { };
+
+    mem_usage = callPackage ../development/ocaml-modules/mem_usage { };
 
     memprof-limits = callPackage ../development/ocaml-modules/memprof-limits { };
 
