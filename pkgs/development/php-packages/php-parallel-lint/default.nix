@@ -11,7 +11,7 @@ php.buildComposerProject2 (finalAttrs: {
   src = fetchFromGitHub {
     owner = "php-parallel-lint";
     repo = "PHP-Parallel-Lint";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-g5e/yfvfq55MQDux3JRDvhaYEay68Q4u1VfIwDRgv7I=";
   };
 
