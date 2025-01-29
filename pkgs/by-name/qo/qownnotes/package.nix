@@ -79,17 +79,17 @@ stdenv.mkDerivation {
   # Tests QOwnNotes using the NixOS module by launching xterm:
   passthru.tests.basic-nixos-module-functionality = nixosTests.qownnotes;
 
-  meta = with lib; {
+  meta = {
     description = "Plain-text file notepad and todo-list manager with markdown support and Nextcloud/ownCloud integration";
     homepage = "https://www.qownnotes.org/";
     changelog = "https://www.qownnotes.org/changelog.html";
     downloadPage = "https://github.com/pbek/QOwnNotes/releases/tag/v${version}";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [
       pbek
       totoroot
       matthiasbeyer
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }
