@@ -570,7 +570,6 @@ dont-distribute-packages:
  - aviation-weight-balance
  - awesomium
  - awesomium-glut
- - aws-arn
  - aws-configuration-tools
  - aws-dynamodb-conduit
  - aws-dynamodb-streams
@@ -778,7 +777,6 @@ dont-distribute-packages:
  - category
  - category-extras
  - cattrap
- - cauldron
  - cctools-workqueue
  - cef3-simple
  - ceilometer-common
@@ -798,7 +796,7 @@ dont-distribute-packages:
  - chart-cli
  - chart-svg
  - chart-svg-various
- - chart-svg_0_8_0_0
+ - chart-svg_0_8_0_3
  - chart-unit
  - chassis
  - chatty
@@ -961,14 +959,14 @@ dont-distribute-packages:
  - copilot-cbmc
  - copilot-frp-sketch
  - copilot-language
- - copilot-language_4_1
+ - copilot-language_4_2
  - copilot-libraries
- - copilot-libraries_4_1
+ - copilot-libraries_4_2
  - copilot-sbv
  - copilot-theorem
- - copilot-theorem_4_1
+ - copilot-theorem_4_2
  - copilot-verifier
- - copilot_4_1
+ - copilot_4_2
  - corenlp-parser
  - coroutine-enumerator
  - coroutine-iteratee
@@ -985,7 +983,6 @@ dont-distribute-packages:
  - cqrs-test
  - cqrs-testkit
  - crackNum
- - crackNum_3_15
  - craft
  - craftwerk-cairo
  - craftwerk-gtk
@@ -1159,7 +1156,6 @@ dont-distribute-packages:
  - distribution-plot
  - dixi
  - dl-fedora
- - dl-fedora_1_2_1
  - dmenu-pkill
  - dmenu-pmount
  - dmenu-search
@@ -1358,10 +1354,10 @@ dont-distribute-packages:
  - finitary-derive
  - finitary-optics
  - finite-table
- - firestore
  - firstify
  - fishfood
  - fix-parser-simple
+ - fixed-generic
  - fixed-point-vector
  - fixed-point-vector-space
  - fixhs
@@ -1400,9 +1396,11 @@ dont-distribute-packages:
  - fpnla-examples
  - frame-markdown
  - freckle-app
+ - freckle-ecs
  - freckle-http
  - freckle-memcached
  - freckle-otel
+ - freckle-stats
  - free-functors
  - free-game
  - free-theorems-seq-webui
@@ -1414,6 +1412,7 @@ dont-distribute-packages:
  - freer-simple-profiling
  - freer-simple-random
  - freer-simple-time
+ - frequent-substring
  - fresnel-fused-effects
  - friday-devil
  - friday-juicypixels
@@ -1424,7 +1423,6 @@ dont-distribute-packages:
  - frpnow-gtk3
  - frpnow-vty
  - fs-api
- - fs-sim
  - ftdi
  - ftp-client-conduit
  - ftree
@@ -1490,7 +1488,6 @@ dont-distribute-packages:
  - ghci-pretty
  - ghcjs-dom-webkit
  - ghcjs-hplay
- - ghcup
  - ght
  - gi-cairo-again
  - gi-ges
@@ -1551,6 +1548,7 @@ dont-distribute-packages:
  - gore-and-ash-sync
  - gps
  - gps2htmlReport
+ - gpu-vulkan
  - grab-form
  - graflog
  - grammar-combinators
@@ -1559,6 +1557,7 @@ dont-distribute-packages:
  - grapefruit-records
  - grapefruit-ui
  - grapefruit-ui-gtk
+ - grapesy
  - graph-rewriting-cl
  - graph-rewriting-gl
  - graph-rewriting-lambdascope
@@ -1581,6 +1580,7 @@ dont-distribute-packages:
  - gridland
  - grisette
  - grisette-monad-coroutine
+ - grisette_0_11_0_0
  - gross
  - groundhog-converters
  - groundhog-inspector
@@ -1590,6 +1590,7 @@ dont-distribute-packages:
  - groundhog-th
  - grpc-etcd-client
  - grpc-haskell
+ - grpc-spec
  - gruff
  - gruff-examples
  - gsc-weighting
@@ -1749,7 +1750,6 @@ dont-distribute-packages:
  - haskoin-bitcoind
  - haskoin-crypto
  - haskoin-node
- - haskoin-node_1_1_3
  - haskoin-protocol
  - haskoin-script
  - haskoon
@@ -1758,7 +1758,6 @@ dont-distribute-packages:
  - haskore-realtime
  - haskore-supercollider
  - haskore-synthesizer
- - hasktorch
  - hasktorch-ffi-thc
  - hasktorch-indef
  - hasktorch-signatures
@@ -1772,7 +1771,6 @@ dont-distribute-packages:
  - hasloGUI
  - hasmtlib
  - hasql-cursor-query
- - hasql-interpolate_1_0_1_0
  - hasql-postgres
  - hasql-postgres-options
  - hasql-queue
@@ -1830,7 +1828,6 @@ dont-distribute-packages:
  - helics
  - helics-wai
  - helium
- - hell
  - hellage
  - hellnet
  - hemokit
@@ -1894,20 +1891,13 @@ dont-distribute-packages:
  - hls
  - hls-call-hierarchy-plugin
  - hls-exactprint-utils
- - hls-gadt-plugin
- - hls-refactor-plugin
- - hls-rename-plugin
- - hls-retrie-plugin
  - hls-semantic-tokens-plugin
- - hls-splice-plugin
  - hmark
  - hmatrix-sundials
  - hmeap
  - hmeap-utils
  - hmep
  - hmt-diagrams
- - hnix-store-json
- - hnix-store-remote_0_7_0_0
  - hnormalise
  - hoauth2-demo
  - hoauth2-providers-tutorial
@@ -2132,7 +2122,6 @@ dont-distribute-packages:
  - instrument-cloudwatch
  - integreat
  - intel-aes
- - intel-powermon
  - interpolatedstring-qq
  - interpolatedstring-qq-mwotton
  - intro-prelude
@@ -2270,13 +2259,12 @@ dont-distribute-packages:
  - knit-haskell
  - koji-install
  - koji-tool
- - koji-tool_1_2
  - korfu
  - ks-test
  - kubernetes-client
  - kure-your-boilerplate
  - kurita
- - kvitable_1_1_0_1
+ - kvitable
  - laborantin-hs
  - labsat
  - labyrinth
@@ -2357,7 +2345,6 @@ dont-distribute-packages:
  - liblawless
  - liblinear-enumerator
  - libmolude
- - libraft
  - librarian
  - librato
  - libriscv
@@ -2784,8 +2771,6 @@ dont-distribute-packages:
  - opentracing-zipkin-common
  - opentracing-zipkin-v1
  - opentracing-zipkin-v2
- - opt-env-conf
- - opt-env-conf-test
  - optima-for-hasql
  - optimal-blocks
  - optimusprime
@@ -2968,7 +2953,6 @@ dont-distribute-packages:
  - poseidon
  - poseidon-postgis
  - postgresql-common-persistent
- - postgresql-libpq_0_11_0_0
  - postgresql-pure
  - postgresql-simple-ltree
  - postgresql-simple-queue
@@ -2984,6 +2968,7 @@ dont-distribute-packages:
  - potoki-zlib
  - powerqueue-sqs
  - ppad-base58
+ - ppad-hkdf
  - ppad-hmac-drbg
  - ppad-secp256k1
  - pqueue-mtl
@@ -2995,6 +2980,7 @@ dont-distribute-packages:
  - presto-hdbc
  - pretty-diff
  - prettychart
+ - prettychart_0_3_0_1
  - preview
  - primal-memory
  - primitive-containers
@@ -3201,7 +3187,6 @@ dont-distribute-packages:
  - reserve
  - resin
  - resource-pool-catchio
- - resource-registry
  - resource-simple
  - respond
  - rest-client
@@ -3299,7 +3284,7 @@ dont-distribute-packages:
  - samtools-conduit
  - samtools-enumerator
  - samtools-iteratee
- - sandwich-webdriver_0_3_0_0
+ - sandwich-webdriver
  - sarsi
  - sasha
  - sasl
@@ -3447,6 +3432,7 @@ dont-distribute-packages:
  - simple-postgresql-orm
  - simpleirc-lens
  - simseq
+ - singletons-base_3_5
  - siphon
  - siren-json
  - sirkel
@@ -3552,7 +3538,8 @@ dont-distribute-packages:
  - sr-extra
  - srt-dhall
  - srt-formatting
- - srtree_2_0_0_2
+ - srtree
+ - srtree_2_0_0_4
  - sscgi
  - sshd-lint
  - sssp
@@ -3631,10 +3618,8 @@ dont-distribute-packages:
  - syb-with-class-instances-text
  - sydtest-amqp
  - sydtest-webdriver-screenshot
- - sydtest-webdriver-screenshot_0_1_0_0
  - sydtest-webdriver-yesod
  - sydtest-yesod
- - sydtest_0_19_0_0
  - sylvia
  - symantic-atom
  - symantic-http-demo
@@ -3671,6 +3656,7 @@ dont-distribute-packages:
  - tamarin-prover-term
  - tamarin-prover-theory
  - tar-bytestring
+ - tar_0_6_4_0
  - target
  - task
  - task-distribution
@@ -3682,6 +3668,7 @@ dont-distribute-packages:
  - tasty-jenkins-xml
  - tasty-laws
  - tasty-lens
+ - tasty-sugar
  - tateti-tateti
  - tbox
  - tccli
@@ -3992,7 +3979,6 @@ dont-distribute-packages:
  - werewolf-slack
  - wgpu-hs
  - what4
- - what4_1_6_2
  - wheb-mongo
  - wheb-redis
  - wheb-strapped
