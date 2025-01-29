@@ -5,6 +5,7 @@
   lib,
   libqt5pas,
   libX11,
+  numactl,
   qtbase,
   stdenv,
   wrapQtAppsHook,
