@@ -1,0 +1,45 @@
+GEM
+  specs:
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    activesupport (7.0.3)
+      concurrent-ruby (~> 1.0, >= 1.0.2)
+      i18n (>= 1.6, < 2)
+      minitest (>= 5.1)
+      tzinfo (~> 2.0)
+    concurrent-ruby (1.1.10)
+    gitlab-triage (1.23.1)
+      activesupport (>= 5.1)
+      globalid (~> 0.4)
+      graphql-client (~> 0.16)
+      httparty (~> 0.17)
+    globalid (0.6.0)
+      activesupport (>= 5.0)
+    graphql (2.0.11)
+    graphql-client (0.18.0)
+      activesupport (>= 3.0)
+      graphql
+    httparty (0.20.0)
+      mime-types (~> 3.0)
+      multi_xml (>= 0.5.2)
+    i18n (1.10.0)
+      concurrent-ruby (~> 1.0)
+    mime-types (3.4.1)
+      mime-types-data (~> 3.2015)
+    mime-types-data (3.2022.0105)
+    minitest (5.16.2)
+    multi_xml (0.6.0)
+    tzinfo (2.0.4)
+      concurrent-ruby (~> 1.0)
+
+PLATFORMS
+  ruby
+  x86_64-linux
+
+DEPENDENCIES
+  gitlab-triage!
+
+BUNDLED WITH
+   2.3.9

@@ -1,0 +1,13 @@
+diff --git a/libexec/rtld-elf/Makefile b/libexec/rtld-elf/Makefile
+index 0dbd2b8aa935..241d7a78e208 100644
+--- a/libexec/rtld-elf/Makefile
++++ b/libexec/rtld-elf/Makefile
+@@ -54,7 +54,7 @@ NO_WCAST_ALIGN=	yes
+ INSTALLFLAGS=	-C -b
+ PRECIOUSPROG=
+ BINDIR=		/libexec
+-SYMLINKS=	../..${BINDIR}/${PROG} ${LIBEXECDIR}/${PROG}
++SYMLINKS=	${BINDIR}/${PROG} ${LIBEXECDIR}/${PROG}
+ MLINKS?=	rtld.1 ld-elf.so.1.1 \
+ 		rtld.1 ld.so.1
+ 

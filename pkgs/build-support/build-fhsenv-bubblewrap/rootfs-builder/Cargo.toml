@@ -1,0 +1,11 @@
+[package]
+name = "rootfs-builder"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = "*"
+serde = { version = "*", features = ["derive"] }
+serde_json = "*"
+walkdir = "*"
+goblin = "*"

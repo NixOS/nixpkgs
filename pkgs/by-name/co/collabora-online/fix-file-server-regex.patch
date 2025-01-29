@@ -1,0 +1,15 @@
+In the nix build, COOLWSD_VERSION_HASH becomes the same as COOLWSD_VERSION, e.g.
+`24.04.3.5`.  The web server that serves files from
+`/browser/$COOLWSD_VERSION_HASH`, doesn't expect the hash to contain dots.
+
+--- a/wsd/FileServer.cpp
++++ b/wsd/FileServer.cpp
+@@ -933,7 +933,7 @@ std::string FileServerRequestHandler::getRequestPathname(const HTTPRequest& requ
+ 
+     std::string path(requestUri.getPath());
+ 
+-    Poco::RegularExpression gitHashRe("/([0-9a-f]+)/");
++    Poco::RegularExpression gitHashRe("/([0-9a-f.]+)/");
+     std::string gitHash;
+     if (gitHashRe.extract(path, gitHash))
+     {
