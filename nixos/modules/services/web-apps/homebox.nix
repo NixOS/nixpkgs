@@ -29,7 +29,7 @@ in
       '';
       description = ''
         The homebox configuration as Environment variables. For definitions and available options see the upstream
-        [documentation](https://homebox.software/en/quick-start.html#env-variables-configuration).
+        [documentation](https://homebox.software/en/configure-homebox.html).
       '';
     };
   };
