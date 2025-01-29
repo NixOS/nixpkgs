@@ -2,12 +2,13 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  nodejs_22,
+  nodejs_23,
   pnpm_9,
+  cacert,
 }:
 
 let
-  version = "0.0.27";
+  version = "0.14.1";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "tailwindcss-language-server";
@@ -16,8 +17,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "tailwindlabs";
     repo = "tailwindcss-intellisense";
-    rev = "@tailwindcss/language-server@v${finalAttrs.version}";
-    hash = "sha256-FphKiGMTMQj/tBmrwkPVlb+dEGjf+N4EgZtOVg7iL2M=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-8hP61zBsNWolA60yzSBb+fPlRuHCTvRfnC1DduB4KkA=";
   };
 
   pnpmDeps = pnpm_9.fetchDeps {
@@ -28,21 +29,24 @@ stdenv.mkDerivation (finalAttrs: {
       pnpmWorkspaces
       prePnpmInstall
       ;
-    hash = "sha256-kLB84P2Zb3gXpNlXCnQFIxz8xibACB39URIhy6Na9p8=";
+    hash = "sha256-bxapagJcVPFxtKUuS4ATKr6rpAaDIFiccSANG0p3Ybc=";
   };
 
   nativeBuildInputs = [
-    nodejs_22
+    nodejs_23
     pnpm_9.configHook
   ];
 
-  buildInputs = [ nodejs_22 ];
+  buildInputs = [
+    nodejs_23
+  ];
 
   pnpmWorkspaces = [ "@tailwindcss/language-server..." ];
   prePnpmInstall = ''
     # Warning section for "pnpm@v8"
     # https://pnpm.io/cli/install#--filter-package_selector
     pnpm config set dedupe-peer-dependents false
+    export NODE_EXTRA_CA_CERTS="${cacert}/etc/ssl/certs/ca-bundle.crt"
   '';
 
   buildPhase = ''
