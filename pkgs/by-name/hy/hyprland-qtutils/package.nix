@@ -5,6 +5,7 @@
   cmake,
   pkg-config,
   hyprutils,
+  hyprland-qt-support,
   pciutils,
   qt6,
 }:
@@ -30,6 +31,7 @@ gcc14Stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     hyprutils
+    hyprland-qt-support
     qt6.qtbase
     qt6.qtsvg
     qt6.qtwayland
