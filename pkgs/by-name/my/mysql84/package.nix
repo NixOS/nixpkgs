@@ -2,6 +2,8 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
+  substitute,
   bison,
   cmake,
   pkg-config,
@@ -27,11 +29,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mysql";
-  version = "8.4.3";
+  version = "8.4.4";
 
   src = fetchurl {
     url = "https://dev.mysql.com/get/Downloads/MySQL-${lib.versions.majorMinor finalAttrs.version}/mysql-${finalAttrs.version}.tar.gz";
-    hash = "sha256-eslWTEeAIvcwBf+Ju7QPZ7OB/AbVUYQWvf/sdeYluBg=";
+    hash = "sha256-+ykO90iJRDQIUknDG8pSrHGFMSREarIYuzvFAr8AgqU=";
   };
 
   nativeBuildInputs = [
@@ -42,6 +44,23 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./no-force-outline-atomics.patch # Do not force compilers to turn on -moutline-atomics switch
+    # (substitute {
+    #   src = fetchpatch {
+    #     url = "https://github.com/mysql/mysql-server/commit/3a51d7fca76e02257f5c42b6a4fc0c5426bf0421.patch";
+    #     hash = "sha256-MFmY/HyDoMw3lD64qJkfdadXVkk+gukSs2f80Q/SKlY=";
+    #   };
+    #   substitutions = [
+    #     "--replace-fail" "/mysys/stream_cipher.h" "/sql/stream_cipher.h"
+    #   ];
+    # })
+    # (fetchpatch {
+    #   url = "https://github.com/mysql/mysql-server/commit/94691ac8f5156c7e6c16a954a10bce08bd9d4a7f.patch";
+    #   hash = "sha256-Jp5Nch1cIgjoYau9GeTQgTPwVvpFI8kMXRHN2w3CMaA=";
+    # })
+    # (fetchpatch {
+    #   url = "https://github.com/mysql/mysql-server/commit/4a5c00d26f95faa986ffed7a15ee15e868e9dcf2.patch";
+    #   hash = "sha256-MEl1lQlDYtFjHk0+S02RQFnxMr+YeFxAyNjpDtVHyeE=";
+    # })
   ];
 
   ## NOTE: MySQL upstream frequently twiddles the invocations of libtool. When updating, you might proactively grep for libtool references.
