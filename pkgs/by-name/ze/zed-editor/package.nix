@@ -292,16 +292,6 @@ rustPlatform.buildRustPackage rec {
   versionCheckProgramArg = [ "--version" ];
   doInstallCheck = true;
 
-  # The darwin Applications directory is not stripped by default, see
-  # https://github.com/NixOS/nixpkgs/issues/367169
-  # This setting is not platform-guarded as it doesn't do any harm on Linux,
-  # where this directory simply does not exist.
-  stripDebugList = [
-    "bin"
-    "libexec"
-    "Applications"
-  ];
-
   passthru = {
     updateScript = gitUpdater {
       rev-prefix = "v";

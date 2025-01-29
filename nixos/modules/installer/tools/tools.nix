@@ -4,7 +4,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  makeProg = args: pkgs.substituteAll (args // {
+  makeProg = args: pkgs.replaceVarsWith (args // {
     dir = "bin";
     isExecutable = true;
     nativeBuildInputs = [
@@ -18,28 +18,32 @@ let
   nixos-generate-config = makeProg {
     name = "nixos-generate-config";
     src = ./nixos-generate-config.pl;
-    perl = "${pkgs.perl.withPackages (p: [ p.FileSlurp ])}/bin/perl";
-    hostPlatformSystem = pkgs.stdenv.hostPlatform.system;
-    detectvirt = "${config.systemd.package}/bin/systemd-detect-virt";
-    btrfs = "${pkgs.btrfs-progs}/bin/btrfs";
-    inherit (config.system.nixos-generate-config) configuration desktopConfiguration;
-    xserverEnabled = config.services.xserver.enable;
+    replacements = {
+      perl = "${pkgs.perl.withPackages (p: [ p.FileSlurp ])}/bin/perl";
+      hostPlatformSystem = pkgs.stdenv.hostPlatform.system;
+      detectvirt = "${config.systemd.package}/bin/systemd-detect-virt";
+      btrfs = "${pkgs.btrfs-progs}/bin/btrfs";
+      inherit (config.system.nixos-generate-config) configuration desktopConfiguration;
+      xserverEnabled = config.services.xserver.enable;
+    };
     manPage = ./manpages/nixos-generate-config.8;
   };
 
   nixos-version = makeProg {
     name = "nixos-version";
     src = ./nixos-version.sh;
-    inherit (pkgs) runtimeShell;
-    inherit (config.system.nixos) version codeName revision;
-    inherit (config.system) configurationRevision;
-    json = builtins.toJSON ({
-      nixosVersion = config.system.nixos.version;
-    } // lib.optionalAttrs (config.system.nixos.revision != null) {
-      nixpkgsRevision = config.system.nixos.revision;
-    } // lib.optionalAttrs (config.system.configurationRevision != null) {
-      configurationRevision = config.system.configurationRevision;
-    });
+    replacements = {
+      inherit (pkgs) runtimeShell;
+      inherit (config.system.nixos) version codeName revision;
+      inherit (config.system) configurationRevision;
+      json = builtins.toJSON ({
+        nixosVersion = config.system.nixos.version;
+      } // lib.optionalAttrs (config.system.nixos.revision != null) {
+        nixpkgsRevision = config.system.nixos.revision;
+      } // lib.optionalAttrs (config.system.configurationRevision != null) {
+        configurationRevision = config.system.configurationRevision;
+      });
+    };
     manPage = ./manpages/nixos-version.8;
   };
 
