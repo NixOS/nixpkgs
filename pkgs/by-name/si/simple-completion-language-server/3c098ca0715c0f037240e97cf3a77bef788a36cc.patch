@@ -1,0 +1,57 @@
+From 3c098ca0715c0f037240e97cf3a77bef788a36cc Mon Sep 17 00:00:00 2001
+From: Piotr Osiewicz <24362066+osiewicz@users.noreply.github.com>
+Date: Wed, 19 Jun 2024 11:34:08 +0200
+Subject: [PATCH] 0.1.1: Add SCLS_CONFIG_SUBDIRECTORY to override default
+ lookup dir
+
+---
+ src/main.rs  | 12 +++++++-----
+ 1 files changed, 7 insertions(+), 5 deletions(-)
+
+diff --git a/src/main.rs b/src/main.rs
+index 8a9d612..850732b 100644
+--- a/src/main.rs
++++ b/src/main.rs
+@@ -1,5 +1,5 @@
+ use etcetera::base_strategy::{choose_base_strategy, BaseStrategy};
+-use std::collections::HashMap;
++use std::{collections::HashMap, path::PathBuf};
+ use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
+ use xshell::{cmd, Shell};
+
+@@ -132,7 +132,9 @@ async fn main() {
+
+     let strategy = choose_base_strategy().expect("Unable to find the config directory!");
+     let mut config_dir = strategy.config_dir();
+-    config_dir.push("helix");
++    let config_subdirectory_name =
++        std::env::var("SCLS_CONFIG_SUBDIRECTORY").unwrap_or_else(|_| "helix".to_owned());
++    config_dir.push(config_subdirectory_name);
+
+     let start_options = StartOptions {
+         home_dir: etcetera::home_dir()
+@@ -141,21 +143,21 @@ async fn main() {
+             .expect("Unable to get home dir as string!")
+             .to_string(),
+         snippets_path: std::env::var("SNIPPETS_PATH")
+-            .map(std::path::PathBuf::from)
++            .map(PathBuf::from)
+             .unwrap_or_else(|_| {
+                 let mut filepath = config_dir.clone();
+                 filepath.push("snippets");
+                 filepath
+             }),
+         external_snippets_config_path: std::env::var("EXTERNAL_SNIPPETS_CONFIG")
+-            .map(std::path::PathBuf::from)
++            .map(PathBuf::from)
+             .unwrap_or_else(|_| {
+                 let mut filepath = config_dir.clone();
+                 filepath.push("external-snippets.toml");
+                 filepath
+             }),
+         unicode_input_path: std::env::var("UNICODE_INPUT_PATH")
+-            .map(std::path::PathBuf::from)
++            .map(PathBuf::from)
+             .unwrap_or_else(|_| {
+                 let mut filepath = config_dir.clone();
+                 filepath.push("unicode-input");
