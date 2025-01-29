@@ -18,203 +18,210 @@ in
   options.services.pdns-recursor = {
     enable = mkEnableOption "PowerDNS Recursor, a recursive DNS server";
 
-    carbon = mkOption {
+    settings = mkOption {
       type = types.submodule {
-        freeformType = settingsFormat.type;
-      };
-    };
-
-    dnssec = mkOption {
-      type = types.submodule {
-        freeformType = settingsFormat.type;
         options = {
-          validation = mkOption {
-            type = types.enum [
-              "off"
-              "process-no-validate"
-              "process"
-              "log-fail"
-              "validate"
-            ];
-            default = "validate";
-            description = ''
-              Controls the level of DNSSEC processing done by the PowerDNS Recursor.
-              See https://doc.powerdns.com/md/recursor/dnssec/ for a detailed explanation.
-            '';
-          };
-        };
-      };
-    };
 
-    ecs = mkOption {
-      type = types.submodule {
-        freeformType = settingsFormat.type;
-      };
-    };
-
-    incoming = mkOption {
-      type = types.submodule {
-        freeformType = settingsFormat.type;
-        options = {
-          allow_from = mkOption {
-            type = types.listOf types.str;
-            default = [
-              "127.0.0.0/8"
-              "10.0.0.0/8"
-              "100.64.0.0/10"
-              "169.254.0.0/16"
-              "192.168.0.0/16"
-              "172.16.0.0/12"
-              "::1/128"
-              "fc00::/7"
-              "fe80::/10"
-            ];
-            example = [
-              "0.0.0.0/0"
-              "::/0"
-            ];
-            description = ''
-              IP address ranges of clients allowed to make DNS queries.
-            '';
-          };
-
-          listen = mkOption {
-            type = listOf types.str;
-            default = [
-              "::"
-              "0.0.0.0"
-            ];
-            description = ''
-              IP addresses Recursor DNS server will bind to.
-            '';
-          };
-
-          port = mkOption {
-            type = types.port;
-            default = 53;
-            description = ''
-              Port number Recursor DNS server will bind to.
-            '';
-          };
-        };
-      };
-    };
-
-    logging = mkOption {
-      type = types.submodule {
-        freeformType = settingsFormat.type;
-      };
-    };
-
-    nod = mkOption {
-      type = types.submodule {
-        freeformType = settingsFormat.type;
-      };
-    };
-
-    outgoing = mkOption {
-      type = types.submodule {
-        freeformType = settingsFormat.type;
-      };
-    };
-
-    packetcache = mkOption {
-      type = types.submodule {
-        freeformType = settingsFormat.type;
-      };
-    };
-
-    recordcache = mkOption {
-      type = types.submodule {
-        freeformType = settingsFormat.type;
-      };
-    };
-
-    recursor = mkOption {
-      type = types.submodule {
-        freeformType = settingsFormat.type;
-        options = {
-          export_etc_hosts = mkOption {
-            type = types.bool;
-            default = false;
-            description = ''
-              Whether to export names and IP addresses defined in /etc/hosts.
-            '';
-          };
-
-          forward_zones = mkOption {
-            type = types.attrs;
-            default = { };
-            description = ''
-              DNS zones to be forwarded to other authoritative servers.
-            '';
-          };
-
-          forward_zones_recurse = mkOption {
-            type = types.attrs;
-            example = {
-              eth = "[::1]:5353";
+          carbon = mkOption {
+            type = types.submodule {
+              freeformType = settingsFormat.type;
             };
-            default = { };
-            description = ''
-              DNS zones to be forwarded to other recursive servers.
-            '';
           };
 
-          serve_rfc1918 = mkOption {
-            type = types.bool;
-            default = true;
-            description = ''
-              Whether to directly resolve the RFC1918 reverse-mapping domains:
-              `10.in-addr.arpa`,
-              `168.192.in-addr.arpa`,
-              `16-31.172.in-addr.arpa`
-              This saves load on the AS112 servers.
-            '';
-          };
-        };
-      };
-    };
-
-    snmp = mkOption {
-      type = types.submodule {
-        freeformType = settingsFormat.type;
-      };
-    };
-
-    webservice = mkOption {
-      type = types.submodule {
-        freeformType = settingsFormat.type;
-        options = {
-          address = mkOption {
-            type = types.str;
-            default = "0.0.0.0";
-            description = ''
-              IP address Recursor REST API server will bind to.
-            '';
+          dnssec = mkOption {
+            type = types.submodule {
+              freeformType = settingsFormat.type;
+              options = {
+                validation = mkOption {
+                  type = types.enum [
+                    "off"
+                    "process-no-validate"
+                    "process"
+                    "log-fail"
+                    "validate"
+                  ];
+                  default = "validate";
+                  description = ''
+                    Controls the level of DNSSEC processing done by the PowerDNS Recursor.
+                    See https://doc.powerdns.com/md/recursor/dnssec/ for a detailed explanation.
+                  '';
+                };
+              };
+            };
           };
 
-          port = mkOption {
-            type = types.port;
-            default = 8082;
-            description = ''
-              Port number Recursor REST API server will bind to.
-            '';
+          ecs = mkOption {
+            type = types.submodule {
+              freeformType = settingsFormat.type;
+            };
           };
 
-          allow_from = mkOption {
-            type = types.listOf types.str;
-            default = [
-              "127.0.0.1"
-              "::1"
-            ];
-            example = [
-              "0.0.0.0/0"
-              "::/0"
-            ];
-            description = ''
-              IP address ranges of clients allowed to make API requests.
-            '';
+          incoming = mkOption {
+            type = types.submodule {
+              freeformType = settingsFormat.type;
+              options = {
+                allow_from = mkOption {
+                  type = types.listOf types.str;
+                  default = [
+                    "127.0.0.0/8"
+                    "10.0.0.0/8"
+                    "100.64.0.0/10"
+                    "169.254.0.0/16"
+                    "192.168.0.0/16"
+                    "172.16.0.0/12"
+                    "::1/128"
+                    "fc00::/7"
+                    "fe80::/10"
+                  ];
+                  example = [
+                    "0.0.0.0/0"
+                    "::/0"
+                  ];
+                  description = ''
+                    IP address ranges of clients allowed to make DNS queries.
+                  '';
+                };
+
+                listen = mkOption {
+                  type = listOf types.str;
+                  default = [
+                    "::"
+                    "0.0.0.0"
+                  ];
+                  description = ''
+                    IP addresses Recursor DNS server will bind to.
+                  '';
+                };
+
+                port = mkOption {
+                  type = types.port;
+                  default = 53;
+                  description = ''
+                    Port number Recursor DNS server will bind to.
+                  '';
+                };
+              };
+            };
+
+            logging = mkOption {
+              type = types.submodule {
+                freeformType = settingsFormat.type;
+              };
+            };
+
+            nod = mkOption {
+              type = types.submodule {
+                freeformType = settingsFormat.type;
+              };
+            };
+
+            outgoing = mkOption {
+              type = types.submodule {
+                freeformType = settingsFormat.type;
+              };
+            };
+
+            packetcache = mkOption {
+              type = types.submodule {
+                freeformType = settingsFormat.type;
+              };
+            };
+
+            recordcache = mkOption {
+              type = types.submodule {
+                freeformType = settingsFormat.type;
+              };
+            };
+
+            recursor = mkOption {
+              type = types.submodule {
+                freeformType = settingsFormat.type;
+                options = {
+                  export_etc_hosts = mkOption {
+                    type = types.bool;
+                    default = false;
+                    description = ''
+                      Whether to export names and IP addresses defined in /etc/hosts.
+                    '';
+                  };
+
+                  forward_zones = mkOption {
+                    type = types.attrs;
+                    default = { };
+                    description = ''
+                      DNS zones to be forwarded to other authoritative servers.
+                    '';
+                  };
+
+                  forward_zones_recurse = mkOption {
+                    type = types.attrs;
+                    example = {
+                      eth = "[::1]:5353";
+                    };
+                    default = { };
+                    description = ''
+                      DNS zones to be forwarded to other recursive servers.
+                    '';
+                  };
+
+                  serve_rfc1918 = mkOption {
+                    type = types.bool;
+                    default = true;
+                    description = ''
+                      Whether to directly resolve the RFC1918 reverse-mapping domains:
+                      `10.in-addr.arpa`,
+                      `168.192.in-addr.arpa`,
+                      `16-31.172.in-addr.arpa`
+                      This saves load on the AS112 servers.
+                    '';
+                  };
+                };
+              };
+            };
+
+            snmp = mkOption {
+              type = types.submodule {
+                freeformType = settingsFormat.type;
+              };
+            };
+
+            webservice = mkOption {
+              type = types.submodule {
+                freeformType = settingsFormat.type;
+                options = {
+                  address = mkOption {
+                    type = types.str;
+                    default = "0.0.0.0";
+                    description = ''
+                      IP address Recursor REST API server will bind to.
+                    '';
+                  };
+
+                  port = mkOption {
+                    type = types.port;
+                    default = 8082;
+                    description = ''
+                      Port number Recursor REST API server will bind to.
+                    '';
+                  };
+
+                  allow_from = mkOption {
+                    type = types.listOf types.str;
+                    default = [
+                      "127.0.0.1"
+                      "::1"
+                    ];
+                    example = [
+                      "0.0.0.0/0"
+                      "::/0"
+                    ];
+                    description = ''
+                      IP address ranges of clients allowed to make API requests.
+                    '';
+                  };
+                };
+              };
+            };
           };
         };
       };
@@ -235,13 +242,15 @@ in
     environment.etc."pdns-recursor".source = configFile;
 
     services.pdns-recursor.settings = mkDefault {
-      logging = {
-        disable_syslog = true;
-        timestamp = false;
-      };
-      recursor = {
-        lua_config_file = pkgs.writeText "recursor.lua" cfg.luaConfig;
-        write_pid = false;
+      settings = {
+        logging = {
+          disable_syslog = true;
+          timestamp = false;
+        };
+        recursor = {
+          lua_config_file = pkgs.writeText "recursor.lua" cfg.luaConfig;
+          write_pid = false;
+        };
       };
     };
 
