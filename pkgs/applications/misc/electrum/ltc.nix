@@ -85,6 +85,7 @@ python3.pkgs.buildPythonApplication {
       ckcc-protocol
       keepkey
       trezor
+      distutils
     ]
     ++ lib.optionals enableQt [
       pyqt5
