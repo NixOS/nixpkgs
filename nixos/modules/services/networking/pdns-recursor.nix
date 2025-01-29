@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -8,7 +13,8 @@ let
   configFile = (settingsFormat.generate "recursor.yml" cfg.settings);
 
   settingsFormat = pkgs.formats.yaml { };
-in {
+in
+{
   options.services.pdns-recursor = {
     enable = mkEnableOption "PowerDNS Recursor, a recursive DNS server";
 
@@ -82,7 +88,10 @@ in {
                     "fc00::/7"
                     "fe80::/10"
                   ];
-                  example = [ "0.0.0.0/0" "::/0" ];
+                  example = [
+                    "0.0.0.0/0"
+                    "::/0"
+                  ];
                   description = ''
                     IP address ranges of clients allowed to make DNS queries.
                   '';
@@ -90,7 +99,10 @@ in {
 
                 listen = mkOption {
                   type = types.listOf types.str;
-                  default = [ "::" "0.0.0.0" ];
+                  default = [
+                    "::"
+                    "0.0.0.0"
+                  ];
                   description = ''
                     IP addresses Recursor DNS server will bind to.
                   '';
@@ -172,7 +184,9 @@ in {
 
                 forward_zones_recurse = mkOption {
                   type = types.attrs;
-                  example = { eth = "[::1]:5353"; };
+                  example = {
+                    eth = "[::1]:5353";
+                  };
                   default = { };
                   description = ''
                     DNS zones to be forwarded to other recursive servers.
@@ -228,8 +242,14 @@ in {
 
                 allow_from = mkOption {
                   type = types.listOf types.str;
-                  default = [ "127.0.0.1" "::1" ];
-                  example = [ "0.0.0.0/0" "::/0" ];
+                  default = [
+                    "127.0.0.1"
+                    "::1"
+                  ];
+                  example = [
+                    "0.0.0.0/0"
+                    "::/0"
+                  ];
                   description = ''
                     IP address ranges of clients allowed to make API requests.
                   '';
@@ -292,89 +312,123 @@ in {
   };
 
   imports = [
-    (mkRenamedOptionModule [ "services" "pdns-recursor" "dns" "address" ] [
-      "services"
-      "pdns-recursor"
-      "settings"
-      "incoming"
-      "listen"
-    ])
-    (mkRenamedOptionModule [ "services" "pdns-recursor" "dns" "allowFrom" ] [
-      "services"
-      "pdns-recursor"
-      "settings"
-      "incoming"
-      "allow_from"
-    ])
-    (mkRenamedOptionModule [ "services" "pdns-recursor" "dns" "port" ] [
-      "services"
-      "pdns-recursor"
-      "settings"
-      "incoming"
-      "port"
-    ])
-    (mkRenamedOptionModule [ "services" "pdns-recursor" "api" "address" ] [
-      "services"
-      "pdns-recursor"
-      "settings"
-      "webservice"
-      "address"
-    ])
-    (mkRenamedOptionModule [ "services" "pdns-recursor" "api" "allowFrom" ] [
-      "services"
-      "pdns-recursor"
-      "settings"
-      "webservice"
-      "allow_from"
-    ])
-    (mkRenamedOptionModule [ "services" "pdns-recursor" "api" "port" ] [
-      "services"
-      "pdns-recursor"
-      "settings"
-      "webservice"
-      "port"
-    ])
-    (mkRenamedOptionModule [ "services" "pdns-recursor" "exportHosts" ] [
-      "services"
-      "pdns-recursor"
-      "settings"
-      "recursor"
-      "export_etc_hosts"
-    ])
-    (mkRenamedOptionModule [ "services" "pdns-recursor" "forwardZones" ] [
-      "services"
-      "pdns-recursor"
-      "settings"
-      "recursor"
-      "forward_zones"
-    ])
-    (mkRenamedOptionModule [
-      "services"
-      "pdns-recursor"
-      "forwardZonesRecurse"
-    ] [
-      "services"
-      "pdns-recursor"
-      "settings"
-      "recursor"
-      "forward_zones_recurse"
-    ])
-    (mkRenamedOptionModule [ "services" "pdns-recursor" "serveRFC1918" ] [
-      "services"
-      "pdns-recursor"
-      "settings"
-      "recursor"
-      "serve_rfc1918"
-    ])
-    (mkRenamedOptionModule [ "services" "pdns-recursor" "dnssecValidation" ] [
-      "services"
-      "pdns-recursor"
-      "settings"
-      "dnssec"
-      "validation"
-    ])
+    (mkRenamedOptionModule
+      [ "services" "pdns-recursor" "dns" "address" ]
+      [
+        "services"
+        "pdns-recursor"
+        "settings"
+        "incoming"
+        "listen"
+      ]
+    )
+    (mkRenamedOptionModule
+      [ "services" "pdns-recursor" "dns" "allowFrom" ]
+      [
+        "services"
+        "pdns-recursor"
+        "settings"
+        "incoming"
+        "allow_from"
+      ]
+    )
+    (mkRenamedOptionModule
+      [ "services" "pdns-recursor" "dns" "port" ]
+      [
+        "services"
+        "pdns-recursor"
+        "settings"
+        "incoming"
+        "port"
+      ]
+    )
+    (mkRenamedOptionModule
+      [ "services" "pdns-recursor" "api" "address" ]
+      [
+        "services"
+        "pdns-recursor"
+        "settings"
+        "webservice"
+        "address"
+      ]
+    )
+    (mkRenamedOptionModule
+      [ "services" "pdns-recursor" "api" "allowFrom" ]
+      [
+        "services"
+        "pdns-recursor"
+        "settings"
+        "webservice"
+        "allow_from"
+      ]
+    )
+    (mkRenamedOptionModule
+      [ "services" "pdns-recursor" "api" "port" ]
+      [
+        "services"
+        "pdns-recursor"
+        "settings"
+        "webservice"
+        "port"
+      ]
+    )
+    (mkRenamedOptionModule
+      [ "services" "pdns-recursor" "exportHosts" ]
+      [
+        "services"
+        "pdns-recursor"
+        "settings"
+        "recursor"
+        "export_etc_hosts"
+      ]
+    )
+    (mkRenamedOptionModule
+      [ "services" "pdns-recursor" "forwardZones" ]
+      [
+        "services"
+        "pdns-recursor"
+        "settings"
+        "recursor"
+        "forward_zones"
+      ]
+    )
+    (mkRenamedOptionModule
+      [
+        "services"
+        "pdns-recursor"
+        "forwardZonesRecurse"
+      ]
+      [
+        "services"
+        "pdns-recursor"
+        "settings"
+        "recursor"
+        "forward_zones_recurse"
+      ]
+    )
+    (mkRenamedOptionModule
+      [ "services" "pdns-recursor" "serveRFC1918" ]
+      [
+        "services"
+        "pdns-recursor"
+        "settings"
+        "recursor"
+        "serve_rfc1918"
+      ]
+    )
+    (mkRenamedOptionModule
+      [ "services" "pdns-recursor" "dnssecValidation" ]
+      [
+        "services"
+        "pdns-recursor"
+        "settings"
+        "dnssec"
+        "validation"
+      ]
+    )
     (mkRemovedOptionModule [ "services" "pdns-recursor" "extraConfig" ]
-      "Declare additional parameters in the format following the YAML format of the official documentation in services.pdns-recursor.settings.")
+      "Declare additional parameters in the format following the YAML format of the official documentation in services.pdns-recursor.settings."
+    )
   ];
 
   meta.maintainers = with lib.maintainers; [ rnhmjoj ];
