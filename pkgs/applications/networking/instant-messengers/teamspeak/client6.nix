@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchurl,
   autoPatchelfHook,
   copyDesktopItems,
@@ -27,13 +27,13 @@
   xorg,
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "teamspeak6-client";
   version = "6.0.0-beta2";
 
   src = fetchurl {
     # check https://teamspeak.com/en/downloads/#ts6 for version and checksum
-    url = "https://files.teamspeak-services.com/pre_releases/client/${version}/teamspeak-client.tar.gz";
+    url = "https://files.teamspeak-services.com/pre_releases/client/${finalAttrs.version}/teamspeak-client.tar.gz";
     hash = "sha256-3jNPv3uQ2RztR1p4XQNLUg5IVrvW/dcdtqXdiGJKVSs=";
   };
 
@@ -74,8 +74,8 @@ stdenv.mkDerivation rec {
     (makeDesktopItem {
       name = "TeamSpeak";
       exec = "TeamSpeak";
-      icon = pname;
-      desktopName = pname;
+      icon = "teamspeak6-client";
+      desktopName = "teamspeak6-client";
       comment = "TeamSpeak Voice Communication Client";
       categories = [
         "Audio"
@@ -92,18 +92,23 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin $out/share/${pname} $out/share/icons/hicolor/64x64/apps/
+    mkdir -p $out/bin $out/share/teamspeak6-client $out/share/icons/hicolor/64x64/apps/
 
-    cp -a * $out/share/${pname}
-    cp logo-256.png $out/share/icons/hicolor/64x64/apps/${pname}.png
+    cp -a * $out/share/teamspeak6-client
+    cp logo-256.png $out/share/icons/hicolor/64x64/apps/teamspeak6-client.png
 
-    makeWrapper $out/share/${pname}/TeamSpeak $out/bin/TeamSpeak \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ udev libGL ]}"
+    makeWrapper $out/share/teamspeak6-client/TeamSpeak $out/bin/TeamSpeak \
+      --prefix LD_LIBRARY_PATH : "${
+        lib.makeLibraryPath [
+          udev
+          libGL
+        ]
+      }"
 
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "TeamSpeak voice communication tool (beta version)";
     homepage = "https://teamspeak.com/";
     license = {
@@ -111,7 +116,11 @@ stdenv.mkDerivation rec {
       url = "https://www.teamspeak.com/en/privacy-and-terms/";
       free = false;
     };
-    maintainers = with maintainers; [ jojosch ];
+    mainProgram = "TeamSpeak";
+    maintainers = with lib.maintainers; [
+      gepbird
+      jojosch
+    ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})
