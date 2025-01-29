@@ -8,7 +8,7 @@
 stdenv.mkDerivation rec {
 
   pname = "code-nautilus";
-  version = "8ea0ce78f3f1f7a6af5f9e9cf93fc3e70015f61e";
+  version = "0-unstable-2024-09-11";
 
   src = fetchFromGitHub {
     owner = "harry-cpp";
