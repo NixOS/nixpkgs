@@ -54,7 +54,7 @@ def replace_key(
                 final["optional"] = True
 
             if "package" in local_dep:
-                final["package"] = local_dep.pop("package)
+                final["package"] = local_dep.pop("package")
 
             if local_dep:
                 raise Exception(f"Unhandled keys in inherited dependency {key}: {local_dep}")
