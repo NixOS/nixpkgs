@@ -7596,10 +7596,6 @@ with pkgs;
   buildozer = bazel-buildtools;
   unused_deps = bazel-buildtools;
 
-  rebazel = callPackage ../development/tools/rebazel {
-    inherit (darwin.apple_sdk.frameworks) CoreServices;
-  };
-
   buildBazelPackage = darwin.apple_sdk_11_0.callPackage ../build-support/build-bazel-package { };
 
   binutils-unwrapped = callPackage ../development/tools/misc/binutils {

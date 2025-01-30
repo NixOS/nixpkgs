@@ -1200,6 +1200,7 @@ mapAliases {
   rambox-pro = rambox; # Added 2022-12-12
   rapidjson-unstable = lib.warnOnInstantiate "'rapidjson-unstable' has been renamed to 'rapidjson'" rapidjson; # Added 2024-07-28
   rargs = throw "'rargs' has been removed due to lack of upstream maintenance"; # Added 2025-01-25
+  rebazel = throw "'rebazel' has been removed due to lack of upstream maintenance"; # Added 2025-01-26
   redocly-cli = redocly; # Added 2024-04-14
   redpanda = redpanda-client; # Added 2023-10-14
   redpanda-server = throw "'redpanda-server' has been removed because it was broken for a long time"; # Added 2024-06-10
