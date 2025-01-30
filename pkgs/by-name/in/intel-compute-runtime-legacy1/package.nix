@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "Intel Graphics Compute Runtime for OpenCL with support for Gen8, Gen9 and Gen11 GPUs.d";
+    description = "Intel Graphics Compute Runtime oneAPI Level Zero and OpenCL with support for Gen8, Gen9 and Gen11 GPUs";
     mainProgram = "ocloc";
     homepage = "https://github.com/intel/compute-runtime";
     changelog = "https://github.com/intel/compute-runtime/releases/tag/${version}";
