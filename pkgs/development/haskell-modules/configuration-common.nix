@@ -62,7 +62,8 @@ self: super: {
           postInstall = ''
             ${old.postInstall or ""}
             remove-references-to -t ${scope.HTTP} "$out/bin/.cabal-wrapped"
-            remove-references-to -t ${scope.Cabal} "$out/bin/.cabal-wrapped"
+            # if we don't override Cabal, it is taken from ghc's core libs
+            remove-references-to -t ${if scope.Cabal != null then scope.Cabal else scope.ghc} "$out/bin/.cabal-wrapped"
           '';
         }) cabal-install;
 
