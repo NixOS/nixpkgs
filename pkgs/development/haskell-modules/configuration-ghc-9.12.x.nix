@@ -57,7 +57,7 @@ self: super: {
   unix = null;
   xhtml = null;
 
-  doctest = lib.pipe super.doctest [
+  doctest = lib.pipe self.doctest_0_23_0 [
     (lib.warnIf (lib.versionAtLeast super.doctest.version "0.23.0.1")
       "version override for haskell.packages.ghc912.doctest may no longer be needed"
       (overrideSrc {
@@ -73,6 +73,8 @@ self: super: {
     (overrideCabal (drv: {
       testFlags = drv.testFlags or [ ] ++ [
         # These tests require cabal-install
+        "--skip=/Cabal.Options"
+        "--skip=/Cabal.Paths/paths"
         "--skip=/Cabal.ReplOptions"
       ];
     }))
