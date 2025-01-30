@@ -10034,6 +10034,8 @@ self: super: with self; {
 
   paragraphs = callPackage ../development/python-modules/paragraphs { };
 
+  parallel-ssh = callPackage ../development/python-modules/parallel-ssh { };
+
   param = callPackage ../development/python-modules/param { };
 
   parameter-expansion-patched = callPackage ../development/python-modules/parameter-expansion-patched { };
@@ -15543,6 +15545,10 @@ self: super: with self; {
   sshpubkeys = callPackage ../development/python-modules/sshpubkeys { };
 
   sshtunnel = callPackage ../development/python-modules/sshtunnel { };
+
+  ssh-python = callPackage ../development/python-modules/ssh-python { };
+
+  ssh2-python = callPackage ../development/python-modules/ssh2-python { };
 
   sslib = callPackage ../development/python-modules/sslib { };
 
