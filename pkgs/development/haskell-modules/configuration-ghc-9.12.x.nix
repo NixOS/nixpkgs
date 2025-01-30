@@ -90,6 +90,7 @@ self: super: {
   # Jailbreaks
   #
   lucid = doJailbreak super.lucid; # base <4.21
+  ed25519 = doJailbreak super.ed25519; # https://github.com/thoughtpolice/hs-ed25519/issues/39
 
   # Test suite issues
   call-stack = dontCheck super.call-stack; # https://github.com/sol/call-stack/issues/19
