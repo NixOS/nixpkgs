@@ -9,7 +9,7 @@ import ./make-test-python.nix (
       {
 
         systemd.services.unprivileged_service = {
-          lockdownByDefault = true;
+          lockdownByDefault = "rev1";
           wantedBy = [ "multi-user.target" ];
           serviceConfig = {
             ExecStart = lib.getExe pkgs.hello;
