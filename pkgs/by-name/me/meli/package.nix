@@ -12,6 +12,7 @@
   mandoc,
   rustfmt,
   file,
+  writableTmpDirAsHomeHook,
 
   # build inputs
   openssl,
@@ -58,6 +59,7 @@ rustPlatform.buildRustPackage rec {
   nativeCheckInputs = [
     file
     gnum4
+    writableTmpDirAsHomeHook
   ];
 
   postInstall = ''
@@ -66,10 +68,6 @@ rustPlatform.buildRustPackage rec {
     wrapProgram $out/bin/meli \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ gpgme ]} \
       --prefix PATH : ${lib.makeBinPath [ gnum4 ]}
-  '';
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
   '';
 
   checkFlags = [
