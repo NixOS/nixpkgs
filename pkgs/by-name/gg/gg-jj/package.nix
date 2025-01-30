@@ -37,13 +37,18 @@ stdenv.mkDerivation (finalAttrs: {
   buildAndTestSubdir = "src-tauri";
 
   # FIXME: Switch back to cargoHash when https://github.com/NixOS/nixpkgs/issues/356811 is fixed
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit (finalAttrs) pname version src patches;
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      patches
+      ;
     # Tries to apply patches inside cargoRoot.
     prePatch = "pushd ..";
     postPatch = "popd";
     sourceRoot = "${finalAttrs.src.name}/${finalAttrs.cargoRoot}";
-    hash = "sha256-inwETdMRKmJklkdjkcGuJuHaXwa5GyJEk7zo2r2li+M=";
+    hash = "sha256-zEYU5l57VxVKKhoGfa77kT05vwoLyAu9eyt7C9dhAGM=";
   };
 
   npmDeps = fetchNpmDeps {
