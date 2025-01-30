@@ -28,10 +28,10 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-pucGVKEjQNihlHmFxhgJSiX7sxpQYrCpSwhZByBtbe8=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-AZi3QIPHqfxfCGcZAAD0rzmzLH6tUxhuq+Tc38qdUKc=";
+    hash = "sha256-1BFVW89+1js5mn/EPxkuHaUfkFn/dNlMlH1pN2lDcwE=";
   };
 
   postPatch = ''
