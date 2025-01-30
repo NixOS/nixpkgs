@@ -99,7 +99,6 @@ self: super: {
   # Test suite issues
   #
   call-stack = dontCheck super.call-stack; # https://github.com/sol/call-stack/issues/19
-  lifted-base = dontCheck super.lifted-base; # doesn't compile with transformers ==0.6.*
   primitive-unlifted = dontCheck super.primitive-unlifted; # doesn't compile with primitive ==0.9.*
   bsb-http-chunked = pkgs.haskell.lib.dontCheck super.bsb-http-chunked; # https://github.com/sjakobi/bsb-http-chunked/issues/45
   hinotify = pkgs.haskell.lib.dontCheck super.hinotify; # https://github.com/kolmodin/hinotify/issues/38

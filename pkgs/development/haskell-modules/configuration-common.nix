@@ -265,7 +265,10 @@ self: super: {
   cabal-plan = doJailbreak super.cabal-plan;
 
   # support for transformers >= 0.6
-  fused-effects-readline = doJailbreak super.fused-effects-readline;
+  lifted-base = appendPatch (fetchpatch {
+    url = "https://github.com/basvandijk/lifted-base/commit/6b61483ec7fd0d5d5d56ccb967860d42740781e8.patch";
+    sha256 = "sha256-b29AVDiEMcShceRJyKEauK/411UkOh3ME9AnKEYvcEs=";
+  }) super.lifted-base;
 
   leveldb-haskell = overrideCabal (drv: {
     version = "2024-05-05-unstable";
