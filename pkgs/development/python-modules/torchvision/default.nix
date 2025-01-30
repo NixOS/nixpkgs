@@ -22,6 +22,7 @@
 
   # tests
   pytest,
+  writableTmpDirAsHomeHook,
 }:
 
 let
@@ -29,7 +30,7 @@ let
   inherit (cudaPackages) backendStdenv;
 
   pname = "torchvision";
-  version = "0.20.1";
+  version = "0.21.0";
 in
 buildPythonPackage {
   inherit pname version;
@@ -38,7 +39,7 @@ buildPythonPackage {
     owner = "pytorch";
     repo = "vision";
     tag = "v${version}";
-    hash = "sha256-BXvi4LoO2LZtNSE8lvFzcN4H2nN2fRg5/s7KRci7rMM=";
+    hash = "sha256-eDWw1Lt/sUc2Xt6cqOM5xaOfmsm+NEL5lZO+cIJKMtU=";
   };
 
   nativeBuildInputs = [
@@ -83,15 +84,19 @@ buildPythonPackage {
       export FORCE_CUDA=1
     '';
 
-  # tries to download many datasets for tests
+  # tests download big datasets, models, require internet connection, etc.
   doCheck = false;
 
   pythonImportsCheck = [ "torchvision" ];
-  checkPhase = ''
-    HOME=$TMPDIR py.test test --ignore=test/test_datasets_download.py
-  '';
 
-  nativeCheckInputs = [ pytest ];
+  nativeCheckInputs = [
+    pytest
+    writableTmpDirAsHomeHook
+  ];
+
+  checkPhase = ''
+    py.test test --ignore=test/test_datasets_download.py
+  '';
 
   meta = {
     description = "PyTorch vision library";
