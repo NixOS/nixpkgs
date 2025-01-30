@@ -7,6 +7,7 @@
   git,
   cargo,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
   darwin,
   nix-update-script,
 }:
@@ -63,16 +64,13 @@ python3Packages.buildPythonApplication rec {
     ++ [
       cargo
       versionCheckHook
+      writableTmpDirAsHomeHook
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.ps
     ];
 
   versionCheckProgramArg = [ "--version" ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
 
   pytestFlagsArray =
     [
