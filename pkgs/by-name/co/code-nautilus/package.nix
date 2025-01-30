@@ -22,8 +22,7 @@ stdenv.mkDerivation rec {
     cat code-nautilus-raw.py >> code-nautilus.py
   '';
   buildInputs = [
-    nautilus-python
-    python3.pkgs.pygobject3
+    (python3.withPackages (ps: [ ps.pygobject3 ]))
   ];
 
   installPhase = ''
