@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "iperf";
-  version = "2.1.4";
+  version = "2.2.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/iperf2/files/${pname}-${version}.tar.gz";
-    sha256 = "1yflnj2ni988nm0p158q8lnkiq2gn2chmvsglyn2gqmqhwp3jaq6";
+    sha256 = "1yyqzgz526xn6v2hrdiizviddx3xphjg93ihh7mdncw0wakv0jkm";
   };
 
   hardeningDisable = [ "format" ];
