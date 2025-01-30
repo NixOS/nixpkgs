@@ -76,14 +76,14 @@ let
 in
 buildPythonPackage rec {
   pname = "torchaudio";
-  version = "2.5.1";
+  version = "2.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "audio";
     tag = "v${version}";
-    hash = "sha256-BRn4EZ7bIujGA6b/tdMu9yDqJNEaf/f1Kj45aLHC/JI=";
+    hash = "sha256-WNdDBB2nShbPPW7GU5cMij00u5PUdN+j5pm41yrKnCA=";
   };
 
   patches = [ ./0001-setup.py-propagate-cmakeFlags.patch ];
@@ -91,13 +91,13 @@ buildPythonPackage rec {
   postPatch =
     ''
       substituteInPlace setup.py \
-        --replace 'print(" --- Initializing submodules")' "return" \
-        --replace "_fetch_archives(_parse_sources())" "pass"
+        --replace-fail 'print(" --- Initializing submodules")' "return" \
+        --replace-fail "_fetch_archives(_parse_sources())" "pass"
     ''
     + lib.optionalString rocmSupport ''
       # There is no .info/version-dev, only .info/version
       substituteInPlace cmake/LoadHIP.cmake \
-        --replace "/.info/version-dev" "/.info/version"
+        --replace-fail "/.info/version-dev" "/.info/version"
     '';
 
   env = {
