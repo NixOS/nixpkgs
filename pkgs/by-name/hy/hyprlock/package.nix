@@ -64,6 +64,14 @@ gcc14Stdenv.mkDerivation (finalAttrs: {
     wayland-protocols
   ];
 
+  # Install hyprlock config in location upstream looks
+  # https://github.com/hyprwm/hyprlock/blob/c976b6a1d135d3743556dc225c80e24918ef1fd5/src/config/ConfigManager.cpp#L185-L191
+  # https://github.com/hyprwm/hyprutils/blob/6a8bc9d2a4451df12f5179dc0b1d2d46518a90ab/src/path/Path.cpp#L71-L72
+  postInstall = ''
+    mkdir -p $out/etc/xdg/hypr
+    ln -s $out/share/hypr/hyprlock.conf $out/etc/xdg/hypr/hyprlock.conf
+  '';
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
