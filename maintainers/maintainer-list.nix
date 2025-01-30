@@ -24312,6 +24312,16 @@
     githubId = 186027;
     name = "Tarinaky";
   };
+  tarneo = {
+    email = "tarneo@tarneo.fr";
+    github = "tarneaux";
+    githubId = 62650051;
+    name = "Tarneo";
+    keys = [
+      { fingerprint = "74E9 F0A2 0B52 F743 674B  04A5 4E70 72A7 8326 617F"; }
+      { fingerprint = "BB7E 3E76 C8DB 37AF 94F3  22DF A106 AD72 EA62 ADDF"; }
+    ];
+  };
   tasmo = {
     email = "tasmo@tasmo.de";
     github = "tasmo";
