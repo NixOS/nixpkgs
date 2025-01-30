@@ -49,6 +49,10 @@ stdenv.mkDerivation (finalAttrs: {
     "doc"
   ];
 
+  patches = [
+    ./1001-test-secret-agent-Make-GetServerInformation-not-leak-into-tests.patch
+  ];
+
   postPatch = ''
     # Override original prefixes
     substituteInPlace data/CMakeLists.txt \
