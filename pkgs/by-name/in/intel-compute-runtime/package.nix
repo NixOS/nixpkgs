@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Intel Graphics Compute Runtime for OpenCL. Replaces Beignet for Gen8 (Broadwell) and beyond";
+    description = "Intel Graphics Compute Runtime oneAPI Level Zero and  OpenCL, supporting 12th Gen and newer";
     mainProgram = "ocloc";
     homepage = "https://github.com/intel/compute-runtime";
     changelog = "https://github.com/intel/compute-runtime/releases/tag/${version}";
