@@ -101,6 +101,7 @@ rustPlatform.buildRustPackage rec {
         --set-default MULLVAD_RESOURCE_DIR "$out/share/mullvad"
     '';
 
+  __darwinAllowLocalNetworking = true;
   passthru = {
     inherit libwg;
     inherit openvpn-mullvad;
