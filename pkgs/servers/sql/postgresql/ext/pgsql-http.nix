@@ -9,13 +9,13 @@
 
 buildPostgresqlExtension rec {
   pname = "pgsql-http";
-  version = "1.6.2";
+  version = "1.6.3";
 
   src = fetchFromGitHub {
     owner = "pramsey";
     repo = "pgsql-http";
     rev = "v${version}";
-    hash = "sha256-I9NDCXA6jColx/iFsvc3ujVbh3tjpqTgoW9VIzD2OTk=";
+    hash = "sha256-Ij8BaNj2SOwDfjgLxrpLFvvPCzSahXyyckRPGmcqKtE=";
   };
 
   buildInputs = [ curl ];
