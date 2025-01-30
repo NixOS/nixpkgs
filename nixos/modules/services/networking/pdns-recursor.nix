@@ -10,9 +10,52 @@ with lib;
 let
   cfg = config.services.pdns-recursor;
 
-  configFile = (settingsFormat.generate "recursor.yml" cfg.settings);
+  cfgName = "recursor";
+
+  configDir =
+    pkgs.runCommand "${cfgName}.yml"
+      {
+        nativeBuildInputs = [ pkgs.remarshal ];
+        passAsFile = [ "value" ];
+        value = builtins.toJSON cfg.settings;
+      }
+      ''
+        mkdir "$out"
+        json2yaml -i "$valuePath" -o "$out/${cfgName}.yml"
+      '';
 
   settingsFormat = pkgs.formats.yaml { };
+
+  forwardZone = types.submodule {
+    options = {
+      zone = mkOption {
+        description = ''
+          zone
+        '';
+        type = types.str;
+      };
+      forwarders = mkOption {
+        description = ''
+          forwarders
+        '';
+        type = types.listOf types.str;
+      };
+      recurse = mkOption {
+        description = ''
+          recurse ?
+        '';
+        type = types.bool;
+        default = false;
+      };
+      notify_allowed = mkOption {
+        description = ''
+          Notify allowed ?
+        '';
+        type = types.bool;
+        default = false;
+      };
+    };
+  };
 in
 {
   options.services.pdns-recursor = {
@@ -175,7 +218,7 @@ in
                 };
 
                 forward_zones = mkOption {
-                  type = types.attrs;
+                  type = types.listOf forwardZone;
                   default = { };
                   description = ''
                     DNS zones to be forwarded to other authoritative servers.
@@ -183,7 +226,7 @@ in
                 };
 
                 forward_zones_recurse = mkOption {
-                  type = types.attrs;
+                  type = types.listOf forwardZone;
                   example = {
                     eth = "[::1]:5353";
                   };
@@ -273,7 +316,7 @@ in
 
   config = mkIf cfg.enable {
 
-    environment.etc."pdns-recursor".source = configFile;
+    environment.etc."pdns-recursor".source = configDir;
 
     services.pdns-recursor.settings = mkDefault {
       settings = {
@@ -296,7 +339,7 @@ in
       serviceConfig = {
         ExecStart = [
           ""
-          "${pkgs.pdns-recursor}/bin/pdns_recursor --config-dir=${configFile}"
+          "${pkgs.pdns-recursor}/bin/pdns_recursor --config-dir=${configDir}"
         ];
       };
     };
