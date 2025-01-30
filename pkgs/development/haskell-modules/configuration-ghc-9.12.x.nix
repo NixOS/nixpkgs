@@ -57,6 +57,28 @@ self: super: {
   unix = null;
   xhtml = null;
 
+  doctest = lib.pipe super.doctest [
+    (lib.warnIf (lib.versionAtLeast super.doctest.version "0.23.0.1")
+      "version override for haskell.packages.ghc912.doctest may no longer be needed"
+      (overrideSrc {
+        # Not yet on hackage: https://github.com/sol/doctest/pull/462
+        src = pkgs.fetchFromGitHub {
+          owner = "sol";
+          repo = "doctest";
+          rev = "77373c5d84cd5e59ea86ec30b9ada874f50fad9e";
+          hash = "sha256-nPfVDnHlKL2DYo9+IDKxA2AvRnjLQ8kr8YGHHD9APvM=";
+        };
+      })
+    )
+    (overrideCabal (drv: {
+      testFlags = drv.testFlags or [ ] ++ [
+        # These tests require cabal-install
+        "--skip=/Cabal.ReplOptions"
+      ];
+    }))
+    doDistribute
+  ];
+
   htree = doDistribute self.htree_0_2_0_0;
   tagged = doDistribute self.tagged_0_8_9;
   ghc-syntax-highlighter = doDistribute self.ghc-syntax-highlighter_0_0_13_0;
