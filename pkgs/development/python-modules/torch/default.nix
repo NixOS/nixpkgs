@@ -232,8 +232,8 @@ let
     domain = "codeberg.org";
     owner = "gm6k";
     repo = "git-unroll";
-    rev = "96bf24f2af153310ec59979c123a8cefda8636db";
-    hash = "sha256-BTlq2Pm4l/oypBzKKpxExVPyQ0CcAP8llUnl/fd3DUU=";
+    rev = "9243bb8a6a9f6875e21a5c64320b66f7fdaf9b3f";
+    hash = "sha256-1MjbB1EVgmU0HlUibrKOkjmxQ8wseocSJENiAqyHcjU=";
   };
 
   unroll-src = writeShellScript "unroll-src" ''
