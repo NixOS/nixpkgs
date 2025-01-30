@@ -21,14 +21,14 @@
 }:
 buildPythonPackage rec {
   pname = "pwndbg";
-  version = "2024.08.29";
+  version = "2025.01.20";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pwndbg";
     repo = "pwndbg";
-    rev = version;
-    hash = "sha256-mpkUEP0GBwOfbbpogupmDvCo8dkbSGy1YtH8T55rX9g=";
+    tag = version;
+    hash = "sha256-2aoyB+B9qs2/L+KbCxsiGnha+WCJdm/AGmwEr5zB/0E=";
   };
 
   nativeBuildInputs = [
