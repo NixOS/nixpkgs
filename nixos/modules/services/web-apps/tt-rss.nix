@@ -592,8 +592,10 @@ let
             index = "index.php";
           };
 
-          locations."^~ /feed-icons" = {
-            root = "${cfg.root}";
+          # some clients might still access this old path directly, forward them to the API instead
+          # e.g. https://apps.apple.com/de/app/tiny-reader-rss/id689519762 at version 2.2.0
+          locations."~* /feed-icons/(\\d+)\\.ico" = {
+            return = "301 /public.php?op=feed_icon&id=$1";
           };
 
           locations."~ \\.php$" = {
