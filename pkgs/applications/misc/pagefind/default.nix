@@ -41,7 +41,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-NIEiXwuy8zuUDxPsD4Hiq3x4cOG3VM+slfNIBSJU2Mk=";
   };
 
-  cargoHash = "sha256-dfE4pfArW9hTPi7LCC9l274dNd1r0RAh50cciUGnv58=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-e1JSK8RnBPGcAmgxJZ7DaYhMMaUqO412S9YvaqXll3E=";
 
   env.npmDeps_web_js = fetchNpmDeps {
     name = "npm-deps-web-js";
@@ -58,10 +59,10 @@ rustPlatform.buildRustPackage rec {
     src = "${src}/pagefind_ui/modular";
     hash = "sha256-O0RqZUsRFtByxMQdwNGNcN38Rh+sDqqNo9YlBcrnsF4=";
   };
-  env.cargoDeps_web = rustPlatform.fetchCargoTarball {
+  env.cargoDeps_web = rustPlatform.fetchCargoVendor {
     name = "cargo-deps-web";
     src = "${src}/pagefind_web/";
-    hash = "sha256-vDkVXyDePKgYTYE5ZTLLfOHwPYfgaqP9p5/fKCQQi0g=";
+    hash = "sha256-xFVMWX3q3za1w8v58Eysk6vclPd4qpCuQMjMcwwHoh0=";
   };
 
   postPatch = ''
