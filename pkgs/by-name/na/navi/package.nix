@@ -12,17 +12,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "navi";
-  version = "2.23.0";
+  version = "2.24.0";
 
   src = fetchFromGitHub {
     owner = "denisidoro";
     repo = "navi";
     rev = "v${version}";
-    sha256 = "sha256-pqBTrHBvsuosyQqCnSiI3+pOe2J6XeIQ8dai+kTVFjc=";
+    hash = "sha256-zvqxVu147u/m/4B3fhbuQ46txGMrlgQv9d4GGiR8SoQ=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-KbtP7zJJDBRy0ZSka8/4G0ftXB8r7//hgUzgT6E7fP8=";
+  cargoHash = "sha256-tQCm8KMVWo6KiKVOMDitHtDXwYGM7INXcT+7fEEiIiI=";
 
   nativeBuildInputs = [ makeWrapper ];
 
