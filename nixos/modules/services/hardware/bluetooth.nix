@@ -9,7 +9,6 @@ let
   package = cfg.package;
 
   inherit (lib)
-    mkDefault
     mkEnableOption
     mkIf
     mkOption
@@ -18,9 +17,7 @@ let
     mkRemovedOptionModule
     concatStringsSep
     escapeShellArgs
-    literalExpression
     optional
-    optionals
     optionalAttrs
     recursiveUpdate
     types
@@ -146,10 +143,34 @@ in
           {
             wantedBy = [ "bluetooth.target" ];
             aliases = [ "dbus-org.bluez.service" ];
-            serviceConfig.ExecStart = [
-              ""
-              "${package}/libexec/bluetooth/bluetoothd ${escapeShellArgs args}"
-            ];
+            serviceConfig = {
+              ExecStart = [
+                ""
+                "${package}/libexec/bluetooth/bluetoothd ${escapeShellArgs args}"
+              ];
+              CapabilityBoundingSet = [
+                "CAP_NET_BIND_SERVICE" # sockets and tethering
+              ];
+              NoNewPrivileges = true;
+              RestrictNamespaces = true;
+              ProtectControlGroups = true;
+              MemoryDenyWriteExecute = true;
+              RestrictSUIDSGID = true;
+              SystemCallArchitectures = "native";
+              SystemCallFilter = "@system-service";
+              LockPersonality = true;
+              RestrictRealtime = true;
+              ProtectProc = "invisible";
+              PrivateTmp = true;
+
+              PrivateUsers = false;
+
+              # loading hardware modules
+              ProtectKernelModules = false;
+              ProtectKernelTunables = false;
+
+              PrivateNetwork = false; # tethering
+            };
             # restarting can leave people without a mouse/keyboard
             unitConfig.X-RestartIfChanged = false;
           };
