@@ -9,7 +9,6 @@
   numpy,
   pillow,
   pytestCheckHook,
-  python,
 }:
 
 let
@@ -17,7 +16,7 @@ let
 
   headers = fetchurl {
     url = "https://pdfium.googlesource.com/pdfium/+archive/refs/heads/chromium/${pdfiumVersion}/public.tar.gz";
-    hash = "sha256-vKfs4Jd8LEtA3aTI+DcJMS0VOErq1IR1eThnMlxiER0=";
+    hash = "sha256-RJOhv9v/uI8jYh0hoM7FxGu2lcVV+7BjLkiZW0eX4hk=";
   };
 
   # They demand their own fork of ctypesgen
