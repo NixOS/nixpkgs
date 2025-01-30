@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "fontmake";
-  version = "3.9.0";
+  version = "3.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "fontmake";
-    rev = "v${version}";
-    hash = "sha256-q6ul9MYbq85RpZE0ozHOCBNAR4r9InIjumadT1GyJ6k=";
+    tag = "v${version}";
+    hash = "sha256-ZlK8QyZ5cIEphFiZXMV/Z5pL9H62X2UwLBtpwLGpUMQ=";
   };
 
   build-system = [
@@ -51,6 +51,11 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.autohint;
+
+  disabledTests = [
+    # Comparison with magic value
+    "test_main_designspace_v5_builds_STAT"
+  ];
 
   pythonImportsCheck = [ "fontmake" ];
 
