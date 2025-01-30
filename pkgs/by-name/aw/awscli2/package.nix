@@ -10,6 +10,8 @@
   nix-update-script,
   testers,
   awscli2,
+  addBinToPathHook,
+  writableTmpDirAsHomeHook,
 }:
 
 let
@@ -121,9 +123,11 @@ py.pkgs.buildPythonApplication rec {
   ];
 
   nativeCheckInputs = with py.pkgs; [
+    addBinToPathHook
     jsonschema
     mock
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
 
   postInstall =
@@ -135,11 +139,6 @@ py.pkgs.buildPythonApplication rec {
     + lib.optionalString (!stdenv.hostPlatform.isWindows) ''
       rm $out/bin/aws.cmd
     '';
-
-  preCheck = ''
-    export PATH=$PATH:$out/bin
-    export HOME=$(mktemp -d)
-  '';
 
   # Propagating dependencies leaks them through $PYTHONPATH which causes issues
   # when used in nix-shell.
