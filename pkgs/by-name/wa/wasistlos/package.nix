@@ -27,12 +27,12 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "whatsapp-for-linux";
+  pname = "wasistlos";
   version = "1.7.0";
 
   src = fetchFromGitHub {
-    owner = "eneshecan";
-    repo = "whatsapp-for-linux";
+    owner = "xeco23";
+    repo = "WasIstLos";
     rev = "v${finalAttrs.version}";
     hash = "sha256-h07Qf34unwtyc1VDtCCkukgBDJIvYNgESwAylbsjVsQ=";
   };
@@ -70,9 +70,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    homepage = "https://github.com/eneshecan/whatsapp-for-linux";
-    description = "Whatsapp desktop messaging app";
-    mainProgram = "whatsapp-for-linux";
+    homepage = "https://github.com/xeco23/WasIstLos";
+    description = "Unofficial WhatsApp desktop application";
+    mainProgram = "wasistlos";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ bartuka ];
     platforms = [
