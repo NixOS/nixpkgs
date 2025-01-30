@@ -1,5 +1,9 @@
 { pkgs, haskellLib }:
 
+let
+  inherit (pkgs) lib;
+in
+
 with haskellLib;
 
 # cabal2nix doesn't properly add dependencies conditional on arch(javascript)
@@ -27,7 +31,10 @@ with haskellLib;
   patch = haskellLib.disableParallelBuilding super.patch;
   reflex-dom-core = haskellLib.disableParallelBuilding super.reflex-dom-core;
 
-  reflex-dom = super.reflex-dom.override (drv: {
-    jsaddle-webkit2gtk = null;
-  });
+  reflex-dom =
+    lib.warn "reflex-dom builds with JS backend but it is missing fixes for working at runtime"
+      super.reflex-dom.override
+      (drv: {
+        jsaddle-webkit2gtk = null;
+      });
 })
