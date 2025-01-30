@@ -16,6 +16,7 @@
 , shadowsocks-rust
 , installShellFiles
 , writeShellScriptBin
+, versionCheckHook,
 }:
 let
   # NOTE(cole-h): This is necessary because wireguard-go-rs executes go in its build.rs (whose goal
@@ -33,7 +34,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "mullvad";
     repo = "mullvadvpn-app";
-    rev = version;
+    tag = version;
     fetchSubmodules = true;
     hash = "sha256-5GcYiyvulsOFepguBcBec98juw22YTbT7yvZJUOJUwc=";
   };
@@ -102,15 +103,24 @@ rustPlatform.buildRustPackage rec {
     '';
 
   __darwinAllowLocalNetworking = true;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
+
   passthru = {
     inherit libwg;
     inherit openvpn-mullvad;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Mullvad VPN command-line client tools";
     homepage = "https://github.com/mullvad/mullvadvpn-app";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ cole-h ];
+    changelog = "https://github.com/mullvad/mullvadvpn-app/blob/2025.2/CHANGELOG.md";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ cole-h ];
+    mainProgram = "mullvad";
   };
 }
