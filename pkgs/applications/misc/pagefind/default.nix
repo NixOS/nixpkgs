@@ -82,8 +82,9 @@ rustPlatform.buildRustPackage rec {
 
     # patch a build-time dependency download
     (
-      cd $cargoDepsCopy/lindera-unidic
-      oldHash=$(sha256sum build.rs | cut -d " " -f 1)
+      realpath $cargoDepsCopy/* | grep lindera-unidic # debug for when version number changes
+      cd $cargoDepsCopy/lindera-unidic-0.32.2
+      #oldHash=$(sha256sum build.rs | cut -d " " -f 1)
 
       # serve lindera-unidic on localhost vacant port
       httplz_port="${
@@ -102,8 +103,9 @@ rustPlatform.buildRustPackage rec {
           "https://dlwqk3ibdg1xh.cloudfront.net/unidic-mecab-2.1.2.tar.gz" \
           "http://localhost:$httplz_port/unidic-mecab-2.1.2.tar.gz"
 
-      newHash=$(sha256sum build.rs | cut -d " " -f 1)
-      substituteInPlace .cargo-checksum.json --replace-fail $oldHash $newHash
+      # not needed with useFetchCargoVendor=true, but kept in case it is required again
+      #newHash=$(sha256sum build.rs | cut -d " " -f 1)
+      #substituteInPlace .cargo-checksum.json --replace-fail $oldHash $newHash
     )
   '';
 
