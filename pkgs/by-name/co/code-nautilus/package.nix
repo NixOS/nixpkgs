@@ -16,11 +16,7 @@ stdenv.mkDerivation rec {
     rev = "8ea0ce78f3f1f7a6af5f9e9cf93fc3e70015f61e";
     sha256 = "u10laS3BwUVCJYlQ6WivU7o/sFFv6cTeV+uxBEdD7oA=";
   };
-  postPatch = ''
-    mv code-nautilus.py code-nautilus-raw.py
-    echo "#!/usr/bin/env python3" > code-nautilus.py
-    cat code-nautilus-raw.py >> code-nautilus.py
-  '';
+
   buildInputs = [
     (python3.withPackages (ps: [ ps.pygobject3 ]))
   ];
