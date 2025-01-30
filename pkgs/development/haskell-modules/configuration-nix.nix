@@ -113,6 +113,12 @@ self: super: builtins.intersectAttrs super {
     '' + drv.preCheck or "";
   }) super.agda2lagda;
 
+  # scrypt requires SSE2
+  password = super.password.override
+    (lib.optionalAttrs (!(lib.meta.availableOn pkgs.stdenv.hostPlatform self.scrypt)) {
+      scrypt = null;
+    });
+
   audacity = enableCabalFlag "buildExamples" (overrideCabal (drv: {
       executableHaskellDepends = [self.optparse-applicative self.soxlib];
     }) super.audacity);
