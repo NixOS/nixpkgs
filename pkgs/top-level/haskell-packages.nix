@@ -17,20 +17,19 @@ let
     "ghc8107"
   ];
 
-  # TODO(sterni): automagic
-  nativeBignumExcludes = integerSimpleIncludes ++ [
-    # haskell.compiler sub groups
-    "integer-simple"
-    "native-bignum"
-    # Binary GHCs
-    "ghc865Binary"
-    "ghc8107Binary"
-    "ghc924Binary"
-    "ghc963Binary"
-    # ghcjs
-    "ghcjs"
-    "ghcjs810"
-  ];
+  # Matches all attributes in compiler that support native-bignum only builds
+  nativeBignumIncludePred =
+    name:
+    !(
+      lib.hasSuffix "Binary" name
+      || lib.hasPrefix "ghcjs" name
+      || lib.elem name integerSimpleIncludes
+      || lib.elem name [
+        # haskell.compiler sub groups
+        "integer-simple"
+        "native-bignum"
+      ]
+    );
 
   callPackage = newScope {
     haskellLib = pkgs.haskell.lib.compose;
@@ -288,9 +287,7 @@ in
       # with "native" and "gmp" backends.
       native-bignum =
         let
-          nativeBignumGhcNames = pkgs.lib.filter (name: !(builtins.elem name nativeBignumExcludes)) (
-            pkgs.lib.attrNames compiler
-          );
+          nativeBignumGhcNames = pkgs.lib.filter nativeBignumIncludePred (pkgs.lib.attrNames compiler);
         in
         pkgs.recurseIntoAttrs (
           pkgs.lib.genAttrs nativeBignumGhcNames (
@@ -512,7 +509,7 @@ in
 
       native-bignum =
         let
-          nativeBignumGhcNames = pkgs.lib.filter (name: !(builtins.elem name nativeBignumExcludes)) (
+          nativeBignumGhcNames = pkgs.lib.filter nativeBignumIncludePred (
             pkgs.lib.attrNames compiler
           );
         in
