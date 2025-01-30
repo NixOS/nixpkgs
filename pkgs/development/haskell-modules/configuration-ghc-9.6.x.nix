@@ -103,7 +103,6 @@ self: super:
   # Jailbreaks for servant <0.20
   servant-lucid = doJailbreak super.servant-lucid;
 
-  lifted-base = dontCheck super.lifted-base;
   hw-prim = dontCheck (doJailbreak super.hw-prim);
   stm-containers = dontCheck super.stm-containers;
   regex-tdfa = dontCheck super.regex-tdfa;
