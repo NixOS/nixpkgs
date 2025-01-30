@@ -13,7 +13,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sydbox";
-  version = "3.29.4";
+  version = "3.30.0";
 
   outputs = [
     "out"
@@ -24,11 +24,11 @@ rustPlatform.buildRustPackage rec {
     domain = "gitlab.exherbo.org";
     owner = "Sydbox";
     repo = "sydbox";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-k7qh375SuonybwgECI9Bl898FFigVxJ4L174AUDxntk=";
+    tag = "v${version}";
+    hash = "sha256-EbdJuJefFQaL6e+2AcsPF4eXin3ky+jlt4s68mSusoc=";
   };
 
-  cargoHash = "sha256-iupVEo7ZEcKfPw3MbZoQqwWw9lKAbcFKeiLy+1DwXHU=";
+  cargoHash = "sha256-HFrt8Hf8aSEybTf/k98OLcZmGeHnug9R/V7SRxk7vI8=";
 
   nativeBuildInputs = [
     mandoc
@@ -79,7 +79,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "seccomp-based application sandbox";
     homepage = "https://gitlab.exherbo.org/sydbox/sydbox";
-    changelog = "https://gitlab.exherbo.org/sydbox/sydbox/-/blob/v${version}/ChangeLog.md";
+    changelog = "https://gitlab.exherbo.org/sydbox/sydbox/-/blob/${src.tag}/ChangeLog.md";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       mvs
