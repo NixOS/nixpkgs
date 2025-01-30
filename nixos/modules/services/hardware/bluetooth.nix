@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  utils,
   ...
 }:
 let
@@ -16,7 +17,6 @@ let
     mkRenamedOptionModule
     mkRemovedOptionModule
     concatStringsSep
-    escapeShellArgs
     optional
     optionalAttrs
     recursiveUpdate
@@ -146,7 +146,7 @@ in
             serviceConfig = {
               ExecStart = [
                 ""
-                "${package}/libexec/bluetooth/bluetoothd ${escapeShellArgs args}"
+                "${package}/libexec/bluetooth/bluetoothd ${utils.escapeSystemdExecArgs args}"
               ];
               CapabilityBoundingSet = [
                 "CAP_NET_BIND_SERVICE" # sockets and tethering
