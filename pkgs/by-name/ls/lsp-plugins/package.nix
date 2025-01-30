@@ -1,28 +1,27 @@
 {
   lib,
   stdenv,
-  fetchurl,
-  pkg-config,
-  makeWrapper,
-  libsndfile,
-  jack2,
-  libGLU,
-  libGL,
-  lv2,
   cairo,
+  fetchurl,
+  gst_all_1,
+  jack2,
   ladspaH,
-  php,
+  libGL,
+  libGLU,
   libXrandr,
+  libsndfile,
+  lv2,
+  php82,
+  pkg-config,
 }:
 
-stdenv.mkDerivation rec {
-  pname = "lsp-plugins";
-  version = "1.2.16";
+let
+  php = php82;
+in
 
-  src = fetchurl {
-    url = "https://github.com/lsp-plugins/lsp-plugins/releases/download/${version}/lsp-plugins-src-${version}.tar.gz";
-    sha256 = "sha256-w2BUIF44z78syLroQk2asVXA5bt9P9POiuwxpnlkc8o=";
-  };
+stdenv.mkDerivation (finalAttrs: {
+  pname = "lsp-plugins";
+  version = "1.2.20";
 
   outputs = [
     "out"
@@ -30,39 +29,57 @@ stdenv.mkDerivation rec {
     "doc"
   ];
 
+  src = fetchurl {
+    url = "https://github.com/lsp-plugins/lsp-plugins/releases/download/${finalAttrs.version}/lsp-plugins-src-${finalAttrs.version}.tar.gz";
+    hash = "sha256-yohg3Ka/see8q6NCwVPl/F06AlyR22akQz43gp+1kck=";
+  };
+
+  # By default, GStreamer plugins are installed right alongside GStreamer itself
+  # We can't do that in Nixpkgs, so lets install it to $out/lib like other plugins
+  postPatch = ''
+    substituteInPlace modules/lsp-plugin-fw/src/Makefile \
+      --replace-fail '$(shell pkg-config --variable=pluginsdir gstreamer-1.0)' '$(LIBDIR)/gstreamer-1.0'
+  '';
+
   nativeBuildInputs = [
+    php
     pkg-config
-    (php.withExtensions (_: [ ]))
-    makeWrapper
   ];
+
   buildInputs = [
-    jack2
-    libsndfile
-    libGLU
-    libGL
-    lv2
     cairo
+    gst_all_1.gst-plugins-base
+    gst_all_1.gstreamer
+    jack2
     ladspaH
+    libGL
+    libGLU
     libXrandr
+    libsndfile
+    lv2
   ];
 
   makeFlags = [
-    "PREFIX=${placeholder "out"}"
     "ETCDIR=${placeholder "out"}/etc"
+    "PREFIX=${placeholder "out"}"
     "SHAREDDIR=${placeholder "out"}/share"
   ];
 
   env.NIX_CFLAGS_COMPILE = "-DLSP_NO_EXPERIMENTAL";
 
   configurePhase = ''
-    make config PREFIX=${placeholder "out"}
+    runHook preConfigure
+
+    make $makeFlags config
+
+    runHook postConfigure
   '';
 
   doCheck = true;
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Collection of open-source audio plugins";
     longDescription = ''
       Compatible with the following formats:
@@ -123,11 +140,12 @@ stdenv.mkDerivation rec {
       - Trigger
     '';
     homepage = "https://lsp-plug.in";
-    maintainers = with maintainers; [
+    changelog = "https://github.com/lsp-plugins/lsp-plugins/releases/tag/${finalAttrs.version}";
+    maintainers = with lib.maintainers; [
       magnetophon
       PowerUser64
     ];
-    license = licenses.gpl2;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
   };
-}
+})
