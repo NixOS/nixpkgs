@@ -14,6 +14,7 @@
   soapysdr-with-plugins,
   libbladeRF,
   zeromq,
+  enableLteRates ? false,
   enableAvx ? stdenv.hostPlatform.avxSupport,
   enableAvx2 ? stdenv.hostPlatform.avx2Support,
   enableFma ? stdenv.hostPlatform.fmaSupport,
@@ -56,6 +57,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DENABLE_WERROR=OFF"
+    (lib.cmakeBool "ENABLE_LTE_RATES" enableLteRates)
     (lib.cmakeBool "ENABLE_AVX" enableAvx)
     (lib.cmakeBool "ENABLE_AVX2" enableAvx2)
     (lib.cmakeBool "ENABLE_FMA" enableFma)
