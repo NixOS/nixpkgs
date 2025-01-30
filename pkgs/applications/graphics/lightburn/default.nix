@@ -19,11 +19,11 @@
 
 stdenv.mkDerivation rec {
   pname = "lightburn";
-  version = "1.7.04";
+  version = "1.7.05";
 
   src = fetchurl {
     url = "https://release.lightburnsoftware.com/LightBurn/Release/LightBurn-v${version}/LightBurn-Linux64-v${version}.7z";
-    hash = "sha256-zO6lQTlBARHmYIdq/xHwFg+6FLbkAIAWAG30Tpw8Z4c=";
+    hash = "sha256-5FoGhUqdTPTd93r0qV1OiGKpvh4NrmFkgVePKbkYf/A=";
   };
 
   nativeBuildInputs = [
