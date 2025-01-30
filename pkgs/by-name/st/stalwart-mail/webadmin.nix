@@ -31,7 +31,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-na1HEueX8w7kuDp8LEtJ0nD1Yv39cyk6sEMpS1zix2s=";
   };
 
-  cargoHash = "sha256-uyLGrCZvKiePHFG0C++ELwT/1FTH8c4baAUxV2ueHZ8=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-rXpyPLe28YgUkDJNBEA0HGSpmcHOik9em1uwLuYAU8I=";
 
   postPatch = ''
     # Using local tailwindcss for compilation
