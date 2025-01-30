@@ -7,14 +7,14 @@
 }:
 buildLua (finalAttrs: {
   pname = "modernx";
-  version = "0.2.4";
+  version = "0.2.5";
 
   scriptPath = "modernz.lua";
   src = fetchFromGitHub {
     owner = "Samillion";
     repo = "ModernZ";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-njFVAxrO5mGaf5zSA4EZN31SakWcroBZuGXYvTnqi68=";
+    hash = "sha256-7qzN9GiZbqzQMY2a0+CgXWirv7FUwIQbmH7ZzknlHlU=";
   };
 
   postInstall = ''
