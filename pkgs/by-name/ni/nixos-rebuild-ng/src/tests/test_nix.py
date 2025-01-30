@@ -333,7 +333,7 @@ def test_edit(mock_run: Any, monkeypatch: Any, tmpdir: Any) -> None:
         """,
     ),
 )
-def test_get_build_image_variants(mock_run: Any) -> None:
+def test_get_build_image_variants(mock_run: Any, tmp_path: Path) -> None:
     build_attr = m.BuildAttr("<nixpkgs/nixos>", None)
     assert n.get_build_image_variants(build_attr) == {
         "azure": "nixos-image-azure-25.05.20250102.6df2492-x86_64-linux.vhd",
@@ -357,7 +357,7 @@ def test_get_build_image_variants(mock_run: Any) -> None:
         stdout=PIPE,
     )
 
-    build_attr = m.BuildAttr(Path("/tmp"), "preAttr")
+    build_attr = m.BuildAttr(Path(tmp_path), "preAttr")
     assert n.get_build_image_variants(build_attr, {"inst_flag": True}) == {
         "azure": "nixos-image-azure-25.05.20250102.6df2492-x86_64-linux.vhd",
         "vmware": "nixos-image-vmware-25.05.20250102.6df2492-x86_64-linux.vmdk",
@@ -369,10 +369,10 @@ def test_get_build_image_variants(mock_run: Any) -> None:
             "--strict",
             "--json",
             "--expr",
-            textwrap.dedent("""
+            textwrap.dedent(f"""
             let
-              value = import "/tmp";
-              set = if builtins.isFunction value then value {} else value;
+              value = import "{tmp_path}";
+              set = if builtins.isFunction value then value {{}} else value;
             in
               builtins.mapAttrs (n: v: v.passthru.filePath) set.preAttr.config.system.build.images
             """),
