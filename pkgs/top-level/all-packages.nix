@@ -3625,6 +3625,12 @@ with pkgs;
 
   hdf5-fortran = hdf5.override { fortranSupport = true; };
 
+  hdf5-fortran-mpi = hdf5.override {
+    fortranSupport = true;
+    mpiSupport = true;
+    cppSupport = false;
+  };
+
   hdf5-threadsafe = hdf5.override { threadsafe = true; };
 
   heaptrack = libsForQt5.callPackage ../development/tools/profiling/heaptrack { };
@@ -17071,6 +17077,15 @@ with pkgs;
   xflr5 = libsForQt5.callPackage ../applications/science/physics/xflr5 { };
 
   ### SCIENCE/PROGRAMMING
+
+  ### SCIENCE/GEOLOGY
+  pflotran = callPackage ../by-name/pf/pflotran/package.nix {
+    petsc = petsc.override {
+      hdf5-support = true;
+      hdf5 = hdf5-fortran-mpi;
+      petsc-optimized = true;
+    };
+  };
 
   ### SCIENCE/LOGIC
 
