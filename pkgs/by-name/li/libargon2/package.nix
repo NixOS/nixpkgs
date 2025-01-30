@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isStatic [
       "LIBRARIES=$(LIB_ST)"
+      "LINKED_LIB_EXT="
     ];
 
   meta = with lib; {
