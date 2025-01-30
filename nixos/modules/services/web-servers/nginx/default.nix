@@ -655,6 +655,16 @@ in
           Supported Nginx forks include `angie`, `openresty` and `tengine`.
           For HTTP/3 support use `nginxQuic` or `angieQuic`.
         '';
+        relatedPackages = [
+          "angie"
+          "angieQuic"
+          "nginxStable"
+          "nginxMainline"
+          "nginxQuic"
+          "nginxShibboleth"
+          "openresty"
+          "tengine"
+        ];
       };
 
       additionalModules = mkOption {
