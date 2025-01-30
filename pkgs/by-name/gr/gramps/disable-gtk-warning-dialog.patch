@@ -1,0 +1,14 @@
+diff --git a/gramps/gui/grampsgui.py b/gramps/gui/grampsgui.py
+index 0c0d4c3..522f65a 100644
+--- a/gramps/gui/grampsgui.py
++++ b/gramps/gui/grampsgui.py
+@@ -573,9 +573,6 @@ class Gramps:
+         dbstate = DbState()
+         self._vm = ViewManager(app, dbstate, config.get("interface.view-categories"))
+ 
+-        if lin() and glocale.lang != "C" and not gettext.find(GTK_GETTEXT_DOMAIN):
+-            _display_gtk_gettext_message(parent=self._vm.window)
+-
+         _display_translator_message(parent=self._vm.window)
+ 
+         self._vm.init_interface()

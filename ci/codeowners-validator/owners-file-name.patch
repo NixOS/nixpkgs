@@ -1,0 +1,15 @@
+diff --git a/pkg/codeowners/owners.go b/pkg/codeowners/owners.go
+index 6910bd2..e0c95e9 100644
+--- a/pkg/codeowners/owners.go
++++ b/pkg/codeowners/owners.go
+@@ -39,6 +39,10 @@ func NewFromPath(repoPath string) ([]Entry, error) {
+ // openCodeownersFile finds a CODEOWNERS file and returns content.
+ // see: https://help.github.com/articles/about-code-owners/#codeowners-file-location
+ func openCodeownersFile(dir string) (io.Reader, error) {
++	if file, ok := os.LookupEnv("OWNERS_FILE"); ok {
++		return fs.Open(file)
++	}
++
+ 	var detectedFiles []string
+ 	for _, p := range []string{".", "docs", ".github"} {
+ 		pth := path.Join(dir, p)

@@ -1,0 +1,47 @@
+diff --git a/lua/Makefile.linux b/lua/Makefile.linux
+index 9f5aa68..77660d4 100644
+--- a/lua/Makefile.linux
++++ b/lua/Makefile.linux
+@@ -37,5 +37,5 @@ nfd_zenity.o: src/nfd_zenity.c
+ clean: 
+ 	rm nfd_common.o nfd_gtk.o nfd_wrap_lua.o nfd.so
+ 
+-install: nfd.so
+-	cp nfd.so $(INST_LIBDIR)
++install:
++	cp nfd*.so $(INST_LIBDIR)
+diff --git a/lua/nfd-scm-1.rockspec b/lua/nfd-scm-1.rockspec
+index 503399d..2d0a7da 100644
+--- a/lua/nfd-scm-1.rockspec
++++ b/lua/nfd-scm-1.rockspec
+@@ -17,9 +17,6 @@ supported_platforms = { "linux", "macosx", "windows" }
+ external_dependencies = {
+    platforms = {
+       linux = {
+-         gtk3 = {
+-            library = "gtk-3",
+-         }
+       }
+    }
+ }
+@@ -28,6 +25,7 @@ build = {
+       linux = {
+          type = "make",
+          makefile = "lua/Makefile.linux",
++         build_target = "nfd_zenity.so",
+          build_variables = {
+             CFLAGS="$(CFLAGS)",
+             LIBFLAG="$(LIBFLAG)",
+diff --git a/src/nfd_zenity.c b/src/nfd_zenity.c
+index 43ccc6d..3fcdea0 100644
+--- a/src/nfd_zenity.c
++++ b/src/nfd_zenity.c
+@@ -109,6 +109,8 @@ ZenityCommon(char**      command,
+         command[i] = tmp;
+     }
+ 
++    // caller always sets command[0] to "zenity"
++    command[0] = strdup("@zenity@/bin/zenity");
+     AddFiltersToCommandArgs(command, commandLen, filterList);
+ 
+     int byteCount = 0;

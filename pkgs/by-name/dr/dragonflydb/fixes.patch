@@ -1,0 +1,132 @@
+diff --git a/helio/cmake/third_party.cmake b/helio/cmake/third_party.cmake
+index aeb78d9..e9d4e6b 100644
+--- a/helio/cmake/third_party.cmake
++++ b/helio/cmake/third_party.cmake
+@@ -143,7 +143,7 @@ endfunction()
+ 
+ FetchContent_Declare(
+   gtest
+-  URL https://github.com/google/googletest/archive/release-1.11.0.zip
++  DOWNLOAD_COMMAND true
+ )
+ 
+ FetchContent_GetProperties(gtest)
+@@ -154,7 +154,7 @@ endif ()
+ 
+ FetchContent_Declare(
+   benchmark
+-  URL https://github.com/google/benchmark/archive/v1.6.1.tar.gz
++  DOWNLOAD_COMMAND true
+ )
+ 
+ FetchContent_GetProperties(benchmark)
+@@ -169,7 +169,7 @@ endif ()
+ 
+ FetchContent_Declare(
+   abseil_cpp
+-  URL https://github.com/abseil/abseil-cpp/archive/20211102.0.tar.gz
++  DOWNLOAD_COMMAND true
+   PATCH_COMMAND patch -p1 < "${CMAKE_CURRENT_LIST_DIR}/../patches/abseil-20211102.patch"
+ )
+ 
+@@ -183,11 +183,7 @@ endif()
+ 
+ FetchContent_Declare(
+   glog
+-  GIT_REPOSITORY https://github.com/romange/glog
+-  GIT_TAG Absl
+-
+-  GIT_PROGRESS    TRUE
+-  GIT_SHALLOW     TRUE
++  DOWNLOAD_COMMAND true
+ )
+ 
+ FetchContent_GetProperties(glog)
+@@ -233,10 +229,7 @@ endif()
+ 
+ add_third_party(
+   gperf
+-  URL https://github.com/gperftools/gperftools/archive/gperftools-2.9.1.tar.gz
+-  #GIT_REPOSITORY https://github.com/gperftools/gperftools
+-  #GIT_TAG gperftools-2.9.1
+-  GIT_SHALLOW TRUE
++  DOWNLOAD_COMMAND true
+   PATCH_COMMAND autoreconf -i   # update runs every time for some reason
+   # CMAKE_PASS_FLAGS "-DGPERFTOOLS_BUILD_HEAP_PROFILER=OFF -DGPERFTOOLS_BUILD_HEAP_CHECKER=OFF \
+   #                   -DGPERFTOOLS_BUILD_DEBUGALLOC=OFF -DBUILD_TESTING=OFF  \
+@@ -260,11 +253,12 @@ else()
+ endif()
+ 
+ add_third_party(mimalloc
+-  URL https://github.com/microsoft/mimalloc/archive/refs/tags/v2.0.5.tar.gz
++  DOWNLOAD_COMMAND true
+ 
+   # Add -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_FLAGS=-O0 to debug
+   CMAKE_PASS_FLAGS "-DCMAKE_BUILD_TYPE=Release -DMI_BUILD_SHARED=OFF -DMI_BUILD_TESTS=OFF \
+-                    -DMI_INSTALL_TOPLEVEL=ON -DMI_OVERRIDE=${MI_OVERRIDE} -DCMAKE_C_FLAGS=-g"
++                    -DMI_INSTALL_TOPLEVEL=ON -DMI_OVERRIDE=${MI_OVERRIDE} -DCMAKE_C_FLAGS=-g \
++                    -DCMAKE_INSTALL_LIBDIR=${THIRD_PARTY_LIB_DIR}/mimalloc/lib"
+ 
+   BUILD_COMMAND make -j4 mimalloc-static
+   INSTALL_COMMAND make install
+@@ -274,7 +268,7 @@ add_third_party(mimalloc
+ )
+ 
+ add_third_party(jemalloc
+-  URL https://github.com/jemalloc/jemalloc/releases/download/5.2.1/jemalloc-5.2.1.tar.bz2
++  URL REPLACEJEMALLOCURL
+   PATCH_COMMAND ./autogen.sh
+   CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${THIRD_PARTY_LIB_DIR}/jemalloc --with-jemalloc-prefix=je_ --disable-libdl
+ )
+@@ -282,24 +276,23 @@ add_third_party(jemalloc
+ 
+ add_third_party(
+   xxhash
+-  URL https://github.com/Cyan4973/xxHash/archive/v0.8.0.tar.gz
++  DOWNLOAD_COMMAND true
+   SOURCE_SUBDIR cmake_unofficial
+-  CMAKE_PASS_FLAGS "-DCMAKE_POSITION_INDEPENDENT_CODE=ON -DBUILD_SHARED_LIBS=OFF"
++  CMAKE_PASS_FLAGS "-DCMAKE_POSITION_INDEPENDENT_CODE=ON -DBUILD_SHARED_LIBS=OFF \
++                    -DCMAKE_INSTALL_LIBDIR=${THIRD_PARTY_LIB_DIR}/xxhash/lib"
+ )
+ 
+ 
+ add_third_party(
+   uring
+-  GIT_REPOSITORY https://github.com/axboe/liburing.git
+-  GIT_TAG liburing-2.1
++  DOWNLOAD_COMMAND true
+   CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${THIRD_PARTY_LIB_DIR}/uring
+   BUILD_IN_SOURCE 1
+ )
+ 
+ add_third_party(
+   rapidjson
+-  GIT_REPOSITORY https://github.com/Tencent/rapidjson.git
+-  GIT_TAG 1a803826f1197b5e30703afe4b9c0e7dd48074f5
++  DOWNLOAD_COMMAND true
+   CMAKE_PASS_FLAGS "-DRAPIDJSON_BUILD_TESTS=OFF -DRAPIDJSON_BUILD_EXAMPLES=OFF \
+                     -DRAPIDJSON_BUILD_DOC=OFF"
+   LIB "none"
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 0dc0824..d5b38b3 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -1,6 +1,6 @@
+ add_third_party(
+   lua
+-  URL https://github.com/lua/lua/archive/refs/tags/v5.4.4.tar.gz
++  URL REPLACELUAURL
+   PATCH_COMMAND patch -p1 -i "${CMAKE_SOURCE_DIR}/patches/lua-v5.4.4.patch"
+   CONFIGURE_COMMAND echo
+   BUILD_IN_SOURCE 1
+@@ -11,7 +11,8 @@ add_third_party(
+ 
+ add_third_party(
+   dconv
+-  URL https://github.com/google/double-conversion/archive/refs/tags/v3.2.0.tar.gz
++  DOWNLOAD_COMMAND true
++  CMAKE_PASS_FLAGS "-DCMAKE_INSTALL_LIBDIR=${THIRD_PARTY_LIB_DIR}/dconv/lib"
+   LIB libdouble-conversion.a
+ )
+ 

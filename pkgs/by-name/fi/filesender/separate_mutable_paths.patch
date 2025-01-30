@@ -1,0 +1,122 @@
+diff --git a/classes/utils/Config.class.php b/classes/utils/Config.class.php
+index a4d819bc..318defdf 100644
+--- a/classes/utils/Config.class.php
++++ b/classes/utils/Config.class.php
+@@ -30,7 +30,7 @@
+  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  */
+ 
+-if (!defined('FILESENDER_BASE')) {        // Require environment (fatal)
++if (!defined('FILESENDER_BASE') || !defined("FILESENDER_CONFIG_DIR")) {        // Require environment (fatal)
+     die('Missing environment');
+ }
+ 
+@@ -116,7 +116,7 @@ class Config
+         }
+         
+         // Check if main config exists
+-        $main_config_file = FILESENDER_BASE.'/config/config.php';
++        $main_config_file = FILESENDER_CONFIG_DIR.'/config.php';
+         if (!file_exists($main_config_file)) {
+             throw new ConfigFileMissingException($main_config_file);
+         }
+@@ -136,7 +136,7 @@ class Config
+ 
+ 
+         // load password file if it is there
+-        $pass_config_file = FILESENDER_BASE.'/config/config-passwords.php';
++        $pass_config_file = FILESENDER_CONFIG_DIR.'/config-passwords.php';
+         if (file_exists($pass_config_file)) {
+             $config = array();
+             include_once($pass_config_file);
+@@ -153,7 +153,7 @@ class Config
+                 throw new ConfigBadParameterException('virtualhost');
+             }
+             
+-            $config_file = FILESENDER_BASE.'/config/'.$virtualhost.'/config.php';
++            $config_file = FILESENDER_CONFIG_DIR.$virtualhost.'/config.php';
+             if (!file_exists($config_file)) {
+                 throw new ConfigFileMissingException($config_file);
+             } // Should exist even if empty
+@@ -175,7 +175,7 @@ class Config
+                         }
+                         foreach ($regex_and_configs as $regex => $extra_config_name) {
+                                 if (preg_match('`'.$regex.'`', $auth_attrs[$attr])) {
+-                                        $extra_config_file = FILESENDER_BASE.'/config/config-' . $extra_config_name . '.php';
++                                        $extra_config_file = FILESENDER_CONFIG_DIR.'/config-' . $extra_config_name . '.php';
+                                         if (file_exists($extra_config_file)) {
+                                                 $config = array();
+                                                 include_once($extra_config_file);
+@@ -204,7 +204,7 @@ class Config
+         // Load config overrides if any
+         $overrides_cfg = self::get('config_overrides');
+         if ($overrides_cfg) {
+-            $overrides_file = FILESENDER_BASE.'/config/'.($virtualhost ? $virtualhost.'/' : '').'config_overrides.json';
++            $overrides_file = FILESENDER_CONFIG_DIR.($virtualhost ? $virtualhost.'/' : '').'config_overrides.json';
+             
+             $overrides = file_exists($overrides_file) ? json_decode(trim(file_get_contents($overrides_file))) : new StdClass();
+             
+@@ -431,7 +431,7 @@ class Config
+     public static function getVirtualhosts()
+     {
+         $virtualhosts = array();
+-        foreach (scandir(FILESENDER_BASE.'/config') as $item) {
++        foreach (scandir(FILESENDER_CONFIG_DIR) as $item) {
+             if (!preg_match('`^(.+)\.conf\.php$`', $item, $match)) {
+                 continue;
+             }
+diff --git a/config/csrf-protector-config.php b/config/csrf-protector-config.php
+index 83759ca4..ea4a3173 100755
+--- a/config/csrf-protector-config.php
++++ b/config/csrf-protector-config.php
+@@ -40,7 +40,7 @@ return array(
+ 	 // The following should be set correctly from your config.php
+ 	 // information
+ 	"jsUrl" => $config['site_url'] . "/js/csrfprotector.js",
+-	"logDirectory" => FILESENDER_BASE.'/log/',
++	"logDirectory" => FILESENDER_LOG_DIR,
+ 
+         // I found that leaving this with the _ as default
+         // caused the implicit token to be stripped
+diff --git a/includes/ConfigDefaults.php b/includes/ConfigDefaults.php
+index 733550e7..8d99b5f0 100644
+--- a/includes/ConfigDefaults.php
++++ b/includes/ConfigDefaults.php
+@@ -224,7 +224,7 @@ $default = array(
+     'log_facilities' => array(
+         array(
+             'type' => 'file',
+-            'path' => FILESENDER_BASE.'/log/',
++            'path' => FILESENDER_LOG_DIR,
+             'rotate' => 'hourly'
+         )
+     ),
+diff --git a/includes/ConfigValidation.php b/includes/ConfigValidation.php
+index 5c1e7f61..b1fb57e4 100644
+--- a/includes/ConfigValidation.php
++++ b/includes/ConfigValidation.php
+@@ -31,9 +31,9 @@
+  */
+ 
+ // Require environment (fatal)
+-if(!defined('FILESENDER_BASE')) die('Missing environment');
++if(!defined('FILESENDER_BASE') || !defined("FILESENDER_CONFIG_DIR")) die('Missing environment');
+ 
+-if(!file_exists(FILESENDER_BASE.'/config/config.php'))
++if(!file_exists(FILESENDER_CONFIG_DIR.'/config.php'))
+     die('Configuration file not found');
+ 
+ ConfigValidator::addCheck('site_url', 'string');
+diff --git a/includes/init.php b/includes/init.php
+index ba7fa82f..31812c54 100644
+--- a/includes/init.php
++++ b/includes/init.php
+@@ -35,6 +35,8 @@ if(PHP_INT_SIZE !== 8) {
+ }
+ 
+ define('FILESENDER_BASE', dirname( __DIR__ ));
++define('FILESENDER_CONFIG_DIR', getenv('FILESENDER_CONFIG_DIR', true) ?: (FILESENDER_BASE.'/config'));
++define('FILESENDER_LOG_DIR', getenv('FILESENDER_LOG_DIR', true) ?: (FILESENDER_BASE.'/log'));
+ 
+ // Include classes autoloader
+ require_once(FILESENDER_BASE.'/classes/autoload.php');

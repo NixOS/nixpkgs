@@ -1,0 +1,24 @@
+diff --git a/protege-desktop/pom.xml b/protege-desktop/pom.xml
+index 2f599708..60059308 100644
+--- a/protege-desktop/pom.xml
++++ b/protege-desktop/pom.xml
+@@ -110,9 +110,6 @@
+ 							</archiverConfig>
+ 							<descriptors>
+ 								<descriptor>src/main/assembly/protege-platform-independent.xml</descriptor>
+-								<descriptor>src/main/assembly/protege-os-x.xml</descriptor>
+-								<descriptor>src/main/assembly/protege-win.xml</descriptor>
+-								<descriptor>src/main/assembly/protege-linux.xml</descriptor>
+ 							</descriptors>
+ 						</configuration>
+ 					</execution>
+@@ -165,9 +162,6 @@
+ 									</archiverConfig>
+ 									<descriptors>
+ 										<descriptor>src/main/assembly/protege-platform-independent.xml</descriptor>
+-										<descriptor>src/main/assembly/protege-os-x.xml</descriptor>
+-										<descriptor>src/main/assembly/protege-win.xml</descriptor>
+-										<descriptor>src/main/assembly/protege-linux.xml</descriptor>
+ 									</descriptors>
+ 								</configuration>
+ 							</execution>

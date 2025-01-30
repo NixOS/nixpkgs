@@ -1,0 +1,14 @@
+# Resolves the compilation issue reported at https://github.com/NixOS/nixpkgs/pull/180681#issuecomment-1192304711
+# An identical issue was previously reported in Gentoo: https://bugs.gentoo.org/723186
+# This patch is taken from the solution of Alfredo Tupone (https://gitweb.gentoo.org/repo/gentoo.git/commit/?id=24688d64544b43f2c14be54531ad8764419dde09)
+--- a/lgmon3/src/cnijlgmon3.c	2022-07-22 12:44:32.194641628 +0100
++++ b/lgmon3/src/cnijlgmon3.c	2022-07-22 12:43:53.954817724 +0100
+@@ -55,7 +55,7 @@
+ int (*GET_STATUS)(char *, int, int *, int * , char *);
+ int (*GET_STATUS2)(char *, int, char *, int *, int * , char *, char *);
+ int (*GET_STATUS2_MAINTENANCE)(char *, int, char *, int *, int * , char *, char *);
+-int (*GET_PROTOCOL)(char *, size_t);
++static int (*GET_PROTOCOL)(char *, size_t);
+ 
+ 
+  int main(int argc, char *argv[])

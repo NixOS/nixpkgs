@@ -1,0 +1,22 @@
+--- a/get-edid/classic.c
++++ b/get-edid/classic.c
+@@ -26,7 +26,7 @@ typedef byte* real_ptr;
+ #define dosmemput(buffer,length,offset) memcpy(offset,buffer,length)
+ 
+ #define display(...) if (quiet == 0) { fprintf(stderr, __VA_ARGS__); }
+-int quiet;
++extern int quiet;
+ 
+ real_ptr far_ptr_to_real_ptr( uint32 farptr )
+ {
+--- a/get-edid/i2c.c
++++ b/get-edid/i2c.c
+@@ -15,7 +15,7 @@
+ 
+ //Ideas (but not too much actual code) taken from i2c-tools. Thanks guys.
+ 
+-int quiet;
++extern int quiet;
+ 
+ #define display(...) if (quiet == 0) { fprintf(stderr, __VA_ARGS__); }
+ 
