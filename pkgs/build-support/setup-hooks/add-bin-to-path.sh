@@ -5,10 +5,8 @@ export PATH
 
 addBinToPath () {
     # shellcheck disable=SC2154
-    if [ -d "$out/bin" ]; then
-        PATH="$out/bin:$PATH"
-        export PATH
-    fi
+    PATH="$out/bin:$PATH"
+    export PATH
 }
 
 # shellcheck disable=SC2154
