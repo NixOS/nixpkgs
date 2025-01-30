@@ -18,20 +18,20 @@ let
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "1.122.0";
+  version = "1.123.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "synapse";
     rev = "v${version}";
-    hash = "sha256-pucGVKEjQNihlHmFxhgJSiX7sxpQYrCpSwhZByBtbe8=";
+    hash = "sha256-fbT0DMz6F76e/IRb0e1nFEOxmtIDQ53it8zi88jiUDU=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-1BFVW89+1js5mn/EPxkuHaUfkFn/dNlMlH1pN2lDcwE=";
+    hash = "sha256-Lfs7myNxWoPZI4USoK+aaTPLjT2EoEvnVnXFwdcKofE=";
   };
 
   postPatch = ''
