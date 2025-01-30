@@ -9,6 +9,7 @@
   nodejs,
   python3,
   nixosTests,
+  writableTmpDirAsHomeHook,
 }:
 
 let
@@ -17,7 +18,7 @@ let
   src = fetchFromGitHub {
     owner = "hedgedoc";
     repo = "hedgedoc";
-    rev = version;
+    tag = version;
     hash = "sha256-cRIpcoD9WzLYxKYpkvhRxUmeyJR5z2QyqApzWvQND+s=";
   };
 
@@ -31,10 +32,10 @@ let
       gitMinimal # needed to download git dependencies
       nodejs # needed for npm to download git dependencies
       yarn
+      writableTmpDirAsHomeHook
     ];
 
     buildPhase = ''
-      export HOME=$(mktemp -d)
       yarn config set enableTelemetry 0
       yarn config set cacheFolder $out
       yarn config set --json supportedArchitectures.os '[ "linux" ]'
