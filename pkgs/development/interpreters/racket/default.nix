@@ -60,6 +60,15 @@ minimal.overrideAttrs (
       wrapGAppsHook3
     ];
 
+    patches = prevAttrs.patches or [ ] ++ [
+      /*
+        Hardcode variant detection because nixpkgs wraps the Racket binary making it
+        fail to detect its variant at runtime.
+        https://github.com/NixOS/nixpkgs/issues/114993#issuecomment-812951247
+      */
+      ./patches/force-cs-variant.patch
+    ];
+
     preBuild =
       let
         libPaths = makeLibPaths finalAttrs.buildInputs;
