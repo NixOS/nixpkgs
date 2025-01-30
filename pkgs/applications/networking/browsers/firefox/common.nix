@@ -5,7 +5,7 @@
 , updateScript ? null
 , binaryName ? "firefox"
 , application ? "browser"
-, applicationName ? "Mozilla Firefox"
+, applicationName ? "Firefox"
 , branding ? null
 , requireSigning ? true
 , allowAddonSideload ? false
@@ -119,7 +119,7 @@ in
 , pipewireSupport ? waylandSupport && webrtcSupport
 , pulseaudioSupport ? stdenv.hostPlatform.isLinux, libpulseaudio
 , sndioSupport ? stdenv.hostPlatform.isLinux, sndio
-, waylandSupport ? true, libxkbcommon, libdrm
+, waylandSupport ? !stdenv.hostPlatform.isDarwin, libxkbcommon, libdrm
 
 ## privacy-related options
 
@@ -200,12 +200,15 @@ let
     done
   '';
 
-  distributionIni = pkgs.writeText "distribution.ini" (lib.generators.toINI {} {
+  distributionIni = let
+    platform = if stdenv.hostPlatform.isDarwin then "Nix on MacOS" else "NixOS";
+  in
+    pkgs.writeText "distribution.ini" (lib.generators.toINI {} {
     # Some light branding indicating this build uses our distro preferences
     Global = {
       id = "nixos";
       version = "1.0";
-      about = "${applicationName} for NixOS";
+      about = "${applicationName} for ${platform}";
     };
     Preferences = {
       # These values are exposed through telemetry
@@ -593,11 +596,9 @@ buildStdenv.mkDerivation {
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications
-    cp -r dist/${binaryName}/*.app $out/Applications
+    cp -r dist/${binaryName}/*.app "$out/Applications/${applicationName}.app"
 
-    appBundlePath=(dist/${binaryName}/*.app)
-    appBundle=''${appBundlePath[0]#dist/${binaryName}}
-    resourceDir=$out/Applications/$appBundle/Contents/Resources
+    resourceDir="$out/Applications/${applicationName}.app/Contents/Resources"
 
   '' + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     # Remove SDK cruft. FIXME: move to a separate output?
@@ -622,7 +623,7 @@ buildStdenv.mkDerivation {
   # Some basic testing
   doInstallCheck = true;
   installCheckPhase = lib.optionalString buildStdenv.hostPlatform.isDarwin ''
-    bindir=$out/Applications/$appBundle/Contents/MacOS
+    bindir="$out/Applications/${applicationName}.app/Contents/MacOS"
   '' + lib.optionalString (!buildStdenv.hostPlatform.isDarwin) ''
     bindir=$out/bin
   '' + ''
@@ -630,6 +631,7 @@ buildStdenv.mkDerivation {
   '';
 
   passthru = {
+    inherit applicationName;
     inherit application extraPatches;
     inherit updateScript;
     inherit alsaSupport;

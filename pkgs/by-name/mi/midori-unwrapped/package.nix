@@ -53,6 +53,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     inherit gtk3;
+    applicationName = "Midori";
   };
 
   meta = with lib; {
