@@ -4,8 +4,7 @@
   fetchurl,
   jre,
   makeWrapper,
-  testers,
-  bfg-repo-cleaner,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -31,9 +30,12 @@ stdenv.mkDerivation rec {
     makeWrapper "${jre}/bin/java" $out/bin/bfg --add-flags "-cp $out/share/java/$jarName com.madgag.git.bfg.cli.Main"
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = bfg-repo-cleaner;
-  };
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
+  versionCheckProgramArg = [ "--version" ];
 
   meta = with lib; {
     homepage = "https://rtyley.github.io/bfg-repo-cleaner/";
