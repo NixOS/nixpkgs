@@ -9711,6 +9711,11 @@
     githubId = 3661115;
     name = "Ingo Blechschmidt";
   };
+  ibrokemypie = {
+    github = "ibrokemypie";
+    githubId = 7827846;
+    name = "ibrokemypie";
+  };
   icewind1991 = {
     name = "Robin Appelman";
     email = "robin@icewind.nl";
