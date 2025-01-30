@@ -7262,6 +7262,17 @@ self: super: with self; {
     inherit python;
   });
 
+  lgpio = toPythonModule (pkgs.lgpio.override {
+    inherit buildPythonPackage;
+    pyProject = "PY_LGPIO";
+    lgpioWithoutPython = pkgs.lgpio;
+  });
+
+  rgpio = toPythonModule (pkgs.lgpio.override {
+    inherit buildPythonPackage;
+    pyProject = "PY_RGPIO";
+  });
+
   libagent = callPackage ../development/python-modules/libagent { };
 
   pa-ringbuffer = callPackage ../development/python-modules/pa-ringbuffer { };
@@ -10372,6 +10383,10 @@ self: super: with self; {
   pymeta3 = callPackage ../development/python-modules/pymeta3 { };
 
   pypemicro = callPackage ../development/python-modules/pypemicro { };
+
+  pigpio = toPythonModule (pkgs.pigpio.override {
+    inherit buildPythonPackage;
+  });
 
   pymeshlab = toPythonModule (pkgs.libsForQt5.callPackage ../applications/graphics/pymeshlab { });
 
