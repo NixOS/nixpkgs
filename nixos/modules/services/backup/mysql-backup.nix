@@ -175,6 +175,12 @@ in
           || selectedAlg.minLevel <= cfg.compressionLevel && cfg.compressionLevel <= selectedAlg.maxLevel;
         message = "${cfg.compressionAlg} compression level must be between ${toString selectedAlg.minLevel} and ${toString selectedAlg.maxLevel}";
       }
+      {
+        assertion =
+          !(lib.isList cfg.singleTransaction)
+          || lib.all (db: lib.elem db cfg.databases) cfg.singleTransaction;
+        message = "All databases in singleTransaction must be included in the databases option";
+      }
     ];
 
     # ensure unix user to be used to perform backup exist.
