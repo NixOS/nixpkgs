@@ -247,8 +247,7 @@ let
       # 2024-12-21: Support range >= 13 && < 20
       llvmVersion = 19;
     };
-    # TODO(@sternenseemann): add one to odd minor versions
-    "9.13" = {
+    "9.14" = {
       bootPkgsAttr =
         # No suitable bindist packaged yet
         "ghc9101";
@@ -333,10 +332,15 @@ in
       ghc912 = compiler.ghc9121;
       ghcHEAD =
         let
-          headMajorMinor = "9.13";
-          ghc = makeGhc ../development/compilers/ghc/head.nix ghcRules.${headMajorMinor};
+          major = 9;
+          minor = 13;
+          ghc = makeGhc
+            ../development/compilers/ghc/head.nix
+            # GHC's master branch always has an odd version minor number.
+            # Our rules/configurations use the even version number of the following release.
+            ghcRules."${toString major}.${toString (minor + 1)}";
         in
-        assert lib.hasPrefix headMajorMinor ghc.version;
+        assert lib.hasPrefix "${toString major}.${toString minor}" ghc.version;
         ghc;
     }
     // ghcsByVersion;
