@@ -124,12 +124,14 @@ let
     # WARNING: breaks dbus
     DynamicUser = true;
   };
+
+  latest = "rev1";
 in
 {
   options.systemd.services = lib.mkOption {
     type = types.attrsOf (
       types.submodule (
-        { config, ... }:
+        { config, name, ... }:
         {
           options.lockdownByDefault = lib.mkOption {
             type = types.nullOr (types.enum (builtins.attrNames hardeningConfigs));
@@ -140,7 +142,13 @@ in
             '';
           };
           config = lib.mkIf (config.lockdownByDefault != null) {
-            serviceConfig = builtins.mapAttrs (n: v: mkDefault v) hardeningConfigs."${config.lockdownByDefault}";
+            serviceConfig =
+              let
+                rev = lib.warnIf (
+                  config.lockdownByDefault != latest
+                ) "systemd.services.${name} uses an outdated hardening profile revision" config.lockdownByDefault;
+              in
+              builtins.mapAttrs (n: v: mkDefault v) hardeningConfigs."${rev}";
           };
         }
       )
