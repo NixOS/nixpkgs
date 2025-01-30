@@ -5,6 +5,7 @@
   pkgs,
   newScope,
   stdenv,
+  lib,
 }:
 
 let
@@ -16,6 +17,7 @@ let
     "ghc8107"
   ];
 
+  # TODO(sterni): automagic
   nativeBignumExcludes = integerSimpleIncludes ++ [
     # haskell.compiler sub groups
     "integer-simple"
@@ -54,6 +56,206 @@ let
   # Use this rather than `rec { ... }` below for sake of overlays.
   inherit (pkgs.haskell) compiler packages;
 
+  # Given a list of version components (think builtins.splitVersion) return
+  # all matching rules from ghcRules, merged by precedence.
+  #
+  # Rules match if their version is the same exactly or
+  # if the rule's attribute name is a prefix of the given GHC version.
+  # Longer matching prefixes takes precedence.
+  matchGhcRules =
+    versionParts:
+    let
+      version = lib.concatStringsSep "." versionParts;
+    in
+    lib.pipe ghcRules # see below
+      [
+        (lib.filterAttrs (
+          versionPrefix: _: versionPrefix == version || lib.hasPrefix "${versionPrefix}." version
+        ))
+        builtins.attrValues
+        # Thanks to lexical ordering, rules with a longer matching prefix will take precedence.
+        # ATTN: This merging behavior is not exercised by current (2025-01-30) code.
+        lib.mergeAttrsList
+      ];
+
+  makeGhc =
+    filename:
+    {
+      bootPkgsAttr,
+      llvmVersion,
+      python3Attr ? "python3",
+      ...
+    }:
+    callPackage filename {
+      # Note [GHC boot pkgsBuildBuild]
+      # Always get boot compilers from `pkgsBuildBuild`. The boot (stage0) compiler
+      # is used to build another compiler (stage1) that'll be used to build the
+      # final compiler (stage2) (except when building a cross-compiler). This means
+      # that stage1's host platform is the same as stage0: build. Consequently,
+      # stage0 needs to be build->build.
+      #
+      # Note that we use bb.haskell.packages.*. haskell.packages.*.ghc is similar to
+      # stdenv: The ghc comes from the previous package set, i.e. this predicate holds:
+      # `name: pkgs: pkgs.haskell.packages.${name}.ghc == pkgs.buildPackages.haskell.compiler.${name}.ghc`.
+      # This isn't problematic since pkgsBuildBuild.buildPackages is also build->build,
+      # just something to keep in mind.
+      bootPkgs = pkgsBuildBuild.haskell.packages.${bootPkgsAttr};
+      llvmPackages = pkgs."llvmPackages_${toString llvmVersion}";
+      buildTargetLlvmPackages = pkgsBuildTarget."llvmPackages_${toString llvmVersion}";
+
+      # Common
+      inherit (buildPackages.${python3Attr}.pkgs) sphinx; # a distutils issue with 3.12
+      python3 = buildPackages.${python3Attr}; # so that we don't have two of them
+      # Need to use apple's patched xattr until
+      # https://github.com/xattr/xattr/issues/44 and
+      # https://github.com/xattr/xattr/issues/55 are solved.
+      inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
+    };
+
+  # Find all GHC Nix expressions in the tree and automatically callGhc them.
+  # Think ghcs by version like pkgs by name, though there is e.g. no sharding.
+  parseGhcFilename = builtins.match "([0-9]+)\\.([0-9]+)\\.([0-9]+)\\.nix";
+  ghcsByVersion =
+    let
+      exprDir = ../development/compilers/ghc;
+    in
+    lib.pipe exprDir [
+      builtins.readDir
+      (builtins.mapAttrs (f: _: parseGhcFilename f))
+      (lib.filterAttrs (_: parsed: parsed != null))
+      (lib.mapAttrs' (
+        filename: versionParts: {
+          name = "ghc${lib.concatStrings versionParts}";
+          value = makeGhc (exprDir + "/${filename}") (matchGhcRules versionParts);
+        }
+      ))
+    ];
+
+  # Rules governing external arguments passed to GHC expressions. These mostly
+  # control what version of dependencies are picked in cases where GHC supports
+  # multiple versions (so it takes a generically named input).
+  # See matchGhcRules above on how rules are picked for a specific GHC version.
+  #
+  # Rule fields:
+  #
+  # - defaultVersion (only if rule's attribute is a release series):
+  #   see generateDefaultVersions and toGhcReleaseSeriesVersion.
+  # - bootPkgsAttr: attribute name of the package set (in haskell.packages) for
+  #   bootstrapping hadrian and GHC.
+  # - llvmVersion: Major version of LLVM to use for -fllvm, e.g. 15.
+  # - python3Attr: attribute name of python (in pkgs) to use for bootstrapping
+  #   the GHC configure script (if necessary) and sphinx.
+  ghcRules = {
+    "8.10" = {
+      bootPkgsAttr =
+        # the oldest ghc with aarch64-darwin support is 8.10.5
+        if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
+          # to my (@a-m-joseph) knowledge there are no newer official binaries for this platform
+          "ghc865Binary"
+        else
+          "ghc8107Binary";
+      llvmVersion = 12;
+      # TODO(@sternenseemann): can we use the default python now?
+      python3Attr = "python311";
+    };
+    "9.0" = {
+      bootPkgsAttr =
+        # the oldest ghc with aarch64-darwin support is 8.10.5
+        if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
+          "ghc810"
+        else
+          "ghc8107Binary";
+      llvmVersion = 12;
+      # TODO(@sternenseemann): can we use the default python now?
+      python3Attr = "python311";
+    };
+    "9.2" = {
+      bootPkgsAttr =
+        if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
+          "ghc810"
+        else
+          "ghc8107Binary";
+      llvmVersion = 12;
+      # TODO(@sternenseemann): can we use the default python now?
+      python3Attr = "python311";
+    };
+    "9.4" = {
+      bootPkgsAttr =
+        # Building with 9.2 is broken due to
+        # https://gitlab.haskell.org/ghc/ghc/-/issues/21914
+        # Use 8.10 as a workaround where possible to keep bootstrap path short.
+
+        # On ARM text won't build with GHC 8.10.*
+        if stdenv.buildPlatform.isAarch then
+          # TODO(@sternenseemann): package bindist
+          "ghc902"
+        # No suitable bindists for powerpc64le
+        else if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
+          "ghc902"
+        else
+          "ghc8107Binary";
+      # Support range >= 10 && < 14
+      llvmVersion = 12;
+    };
+    "9.6" = {
+      bootPkgsAttr =
+        # For GHC 9.2 no armv7l bindists are available.
+        if stdenv.buildPlatform.isAarch32 then
+          "ghc928"
+        else if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
+          "ghc928"
+        else
+          "ghc924Binary";
+      # Support range >= 11 && < 16
+      llvmVersion = 15;
+    };
+    "9.8" = {
+      bootPkgsAttr =
+        # For GHC 9.6 no armv7l bindists are available.
+        if stdenv.buildPlatform.isAarch32 then
+          "ghc963"
+        else if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
+          "ghc963"
+        else
+          "ghc963Binary";
+      # Support range >= 11 && < 16
+      llvmVersion = 15;
+    };
+    "9.10" = {
+      bootPkgsAttr =
+        # For GHC 9.6 no armv7l bindists are available.
+        if stdenv.buildPlatform.isAarch32 then
+          "ghc963"
+        else if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
+          "ghc963"
+        else if stdenv.buildPlatform.isDarwin then
+          # it seems like the GHC 9.6.* bindists are built with a different
+          # toolchain than we are using (which I'm guessing from the fact
+          # that 9.6.4 bindists pass linker flags our ld doesn't support).
+          # With both 9.6.3 and 9.6.4 binary it is impossible to link against
+          # the clock package (probably a hsc2hs problem).
+          "ghc963"
+        else
+          "ghc963Binary";
+      # Support range >= 11 && < 16
+      llvmVersion = 15;
+    };
+    "9.12" = {
+      bootPkgsAttr =
+        # No suitable bindist packaged yet
+        "ghc9101";
+      # 2024-12-21: Support range >= 13 && < 20
+      llvmVersion = 19;
+    };
+    # TODO(@sternenseemann): add one to odd minor versions
+    "9.13" = {
+      bootPkgsAttr =
+        # No suitable bindist packaged yet
+        "ghc9101";
+      # Support range >= 11 && < 16
+      llvmVersion = 18;
+    };
+  };
 in
 {
   lib = import ../development/haskell-modules/lib {
@@ -63,388 +265,12 @@ in
 
   package-list = callPackage ../development/haskell-modules/package-list.nix { };
 
-  # Always get boot compilers from `pkgsBuildBuild`. The boot (stage0) compiler
-  # is used to build another compiler (stage1) that'll be used to build the
-  # final compiler (stage2) (except when building a cross-compiler). This means
-  # that stage1's host platform is the same as stage0: build. Consequently,
-  # stage0 needs to be build->build.
-  #
-  # Note that we use bb.haskell.packages.*. haskell.packages.*.ghc is similar to
-  # stdenv: The ghc comes from the previous package set, i.e. this predicate holds:
-  # `name: pkgs: pkgs.haskell.packages.${name}.ghc == pkgs.buildPackages.haskell.compiler.${name}.ghc`.
-  # This isn't problematic since pkgsBuildBuild.buildPackages is also build->build,
-  # just something to keep in mind.
   compiler =
     let
+      # See Note [GHC boot pkgsBuildBuild]
       bb = pkgsBuildBuild.haskell;
     in
     {
-      ghc865Binary = callPackage ../development/compilers/ghc/8.6.5-binary.nix {
-        # Should be llvmPackages_6 which has been removed from nixpkgs
-        llvmPackages = null;
-      };
-
-      ghc8107Binary = callPackage ../development/compilers/ghc/8.10.7-binary.nix {
-        llvmPackages = pkgs.llvmPackages_12;
-      };
-
-      ghc924Binary = callPackage ../development/compilers/ghc/9.2.4-binary.nix {
-        llvmPackages = pkgs.llvmPackages_12;
-      };
-
-      ghc963Binary = callPackage ../development/compilers/ghc/9.6.3-binary.nix {
-        llvmPackages = pkgs.llvmPackages_15;
-      };
-
-      ghc8107 = callPackage ../development/compilers/ghc/8.10.7.nix {
-        bootPkgs =
-          # the oldest ghc with aarch64-darwin support is 8.10.5
-          if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
-            # to my (@a-m-joseph) knowledge there are no newer official binaries for this platform
-            bb.packages.ghc865Binary
-          else
-            bb.packages.ghc8107Binary;
-        inherit (buildPackages.python311Packages) sphinx; # a distutils issue with 3.12
-        python3 = buildPackages.python311; # so that we don't have two of them
-        # Need to use apple's patched xattr until
-        # https://github.com/xattr/xattr/issues/44 and
-        # https://github.com/xattr/xattr/issues/55 are solved.
-        inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
-        buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
-        llvmPackages = pkgs.llvmPackages_12;
-      };
-      ghc810 = compiler.ghc8107;
-      ghc902 = callPackage ../development/compilers/ghc/9.0.2.nix {
-        bootPkgs =
-          # the oldest ghc with aarch64-darwin support is 8.10.5
-          if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
-            bb.packages.ghc810
-          else
-            bb.packages.ghc8107Binary;
-        inherit (buildPackages.python311Packages) sphinx; # a distutils issue with 3.12
-        python3 = buildPackages.python311; # so that we don't have two of them
-        inherit (buildPackages.darwin) autoSignDarwinBinariesHook xattr;
-        buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
-        llvmPackages = pkgs.llvmPackages_12;
-      };
-      ghc90 = compiler.ghc902;
-      ghc925 = callPackage ../development/compilers/ghc/9.2.5.nix {
-        bootPkgs =
-          if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
-            bb.packages.ghc810
-          else
-            bb.packages.ghc8107Binary;
-        inherit (buildPackages.python311Packages) sphinx; # a distutils issue with 3.12
-        python3 = buildPackages.python311; # so that we don't have two of them
-        # Need to use apple's patched xattr until
-        # https://github.com/xattr/xattr/issues/44 and
-        # https://github.com/xattr/xattr/issues/55 are solved.
-        inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
-        buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
-        llvmPackages = pkgs.llvmPackages_12;
-      };
-      ghc926 = callPackage ../development/compilers/ghc/9.2.6.nix {
-        bootPkgs =
-          if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
-            bb.packages.ghc810
-          else
-            bb.packages.ghc8107Binary;
-        inherit (buildPackages.python311Packages) sphinx; # a distutils issue with 3.12
-        python3 = buildPackages.python311; # so that we don't have two of them
-        # Need to use apple's patched xattr until
-        # https://github.com/xattr/xattr/issues/44 and
-        # https://github.com/xattr/xattr/issues/55 are solved.
-        inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
-        buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
-        llvmPackages = pkgs.llvmPackages_12;
-      };
-      ghc927 = callPackage ../development/compilers/ghc/9.2.7.nix {
-        bootPkgs =
-          if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
-            bb.packages.ghc810
-          else
-            bb.packages.ghc8107Binary;
-        inherit (buildPackages.python311Packages) sphinx; # a distutils issue with 3.12
-        python3 = buildPackages.python311; # so that we don't have two of them
-        # Need to use apple's patched xattr until
-        # https://github.com/xattr/xattr/issues/44 and
-        # https://github.com/xattr/xattr/issues/55 are solved.
-        inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
-        buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
-        llvmPackages = pkgs.llvmPackages_12;
-      };
-      ghc928 = callPackage ../development/compilers/ghc/9.2.8.nix {
-        bootPkgs =
-          if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
-            bb.packages.ghc810
-          else
-            bb.packages.ghc8107Binary;
-        inherit (buildPackages.python311Packages) sphinx; # a distutils issue with 3.12
-        python3 = buildPackages.python311; # so that we don't have two of them
-        # Need to use apple's patched xattr until
-        # https://github.com/xattr/xattr/issues/44 and
-        # https://github.com/xattr/xattr/issues/55 are solved.
-        inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
-        buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
-        llvmPackages = pkgs.llvmPackages_12;
-      };
-      ghc92 = compiler.ghc928;
-      ghc947 = callPackage ../development/compilers/ghc/9.4.7.nix {
-        bootPkgs =
-          # Building with 9.2 is broken due to
-          # https://gitlab.haskell.org/ghc/ghc/-/issues/21914
-          # Use 8.10 as a workaround where possible to keep bootstrap path short.
-
-          # On ARM text won't build with GHC 8.10.*
-          if stdenv.buildPlatform.isAarch then
-            # TODO(@sternenseemann): package bindist
-            bb.packages.ghc902
-          # No suitable bindists for powerpc64le
-          else if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
-            bb.packages.ghc902
-          else
-            bb.packages.ghc8107Binary;
-        inherit (buildPackages.python3Packages) sphinx;
-        # Need to use apple's patched xattr until
-        # https://github.com/xattr/xattr/issues/44 and
-        # https://github.com/xattr/xattr/issues/55 are solved.
-        inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
-        # Support range >= 10 && < 14
-        buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
-        llvmPackages = pkgs.llvmPackages_12;
-      };
-      ghc948 = callPackage ../development/compilers/ghc/9.4.8.nix {
-        bootPkgs =
-          # Building with 9.2 is broken due to
-          # https://gitlab.haskell.org/ghc/ghc/-/issues/21914
-          # Use 8.10 as a workaround where possible to keep bootstrap path short.
-
-          # On ARM text won't build with GHC 8.10.*
-          if stdenv.buildPlatform.isAarch then
-            # TODO(@sternenseemann): package bindist
-            bb.packages.ghc902
-          # No suitable bindists for powerpc64le
-          else if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
-            bb.packages.ghc902
-          else
-            bb.packages.ghc8107Binary;
-        inherit (buildPackages.python3Packages) sphinx;
-        # Need to use apple's patched xattr until
-        # https://github.com/xattr/xattr/issues/44 and
-        # https://github.com/xattr/xattr/issues/55 are solved.
-        inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
-        # Support range >= 10 && < 14
-        buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
-        llvmPackages = pkgs.llvmPackages_12;
-      };
-      ghc94 = compiler.ghc948;
-      ghc963 = callPackage ../development/compilers/ghc/9.6.3.nix {
-        bootPkgs =
-          # For GHC 9.2 no armv7l bindists are available.
-          if stdenv.buildPlatform.isAarch32 then
-            bb.packages.ghc928
-          else if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
-            bb.packages.ghc928
-          else
-            bb.packages.ghc924Binary;
-        inherit (buildPackages.python3Packages) sphinx;
-        # Need to use apple's patched xattr until
-        # https://github.com/xattr/xattr/issues/44 and
-        # https://github.com/xattr/xattr/issues/55 are solved.
-        inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
-        # Support range >= 11 && < 16
-        buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_15;
-        llvmPackages = pkgs.llvmPackages_15;
-      };
-      ghc964 = callPackage ../development/compilers/ghc/9.6.4.nix {
-        bootPkgs =
-          # For GHC 9.2 no armv7l bindists are available.
-          if stdenv.buildPlatform.isAarch32 then
-            bb.packages.ghc928
-          else if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
-            bb.packages.ghc928
-          else
-            bb.packages.ghc924Binary;
-        inherit (buildPackages.python3Packages) sphinx;
-        # Need to use apple's patched xattr until
-        # https://github.com/xattr/xattr/issues/44 and
-        # https://github.com/xattr/xattr/issues/55 are solved.
-        inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
-        # Support range >= 11 && < 16
-        buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_15;
-        llvmPackages = pkgs.llvmPackages_15;
-      };
-      ghc965 = callPackage ../development/compilers/ghc/9.6.5.nix {
-        bootPkgs =
-          # For GHC 9.2 no armv7l bindists are available.
-          if stdenv.buildPlatform.isAarch32 then
-            bb.packages.ghc928
-          else if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
-            bb.packages.ghc928
-          else
-            bb.packages.ghc924Binary;
-        inherit (buildPackages.python3Packages) sphinx;
-        # Need to use apple's patched xattr until
-        # https://github.com/xattr/xattr/issues/44 and
-        # https://github.com/xattr/xattr/issues/55 are solved.
-        inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
-        # Support range >= 11 && < 16
-        buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_15;
-        llvmPackages = pkgs.llvmPackages_15;
-      };
-      ghc966 = callPackage ../development/compilers/ghc/9.6.6.nix {
-        bootPkgs =
-          # For GHC 9.2 no armv7l bindists are available.
-          if stdenv.buildPlatform.isAarch32 then
-            bb.packages.ghc928
-          else if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
-            bb.packages.ghc928
-          else
-            bb.packages.ghc924Binary;
-        inherit (buildPackages.python3Packages) sphinx;
-        # Need to use apple's patched xattr until
-        # https://github.com/xattr/xattr/issues/44 and
-        # https://github.com/xattr/xattr/issues/55 are solved.
-        inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
-        # Support range >= 11 && < 16
-        buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_15;
-        llvmPackages = pkgs.llvmPackages_15;
-      };
-      ghc96 = compiler.ghc966;
-      ghc981 = callPackage ../development/compilers/ghc/9.8.1.nix {
-        bootPkgs =
-          # For GHC 9.6 no armv7l bindists are available.
-          if stdenv.buildPlatform.isAarch32 then
-            bb.packages.ghc963
-          else if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
-            bb.packages.ghc963
-          else
-            bb.packages.ghc963Binary;
-        inherit (buildPackages.python3Packages) sphinx;
-        # Need to use apple's patched xattr until
-        # https://github.com/xattr/xattr/issues/44 and
-        # https://github.com/xattr/xattr/issues/55 are solved.
-        inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
-        # Support range >= 11 && < 16
-        buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_15;
-        llvmPackages = pkgs.llvmPackages_15;
-      };
-      ghc982 = callPackage ../development/compilers/ghc/9.8.2.nix {
-        bootPkgs =
-          # For GHC 9.6 no armv7l bindists are available.
-          if stdenv.buildPlatform.isAarch32 then
-            bb.packages.ghc963
-          else if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
-            bb.packages.ghc963
-          else
-            bb.packages.ghc963Binary;
-        inherit (buildPackages.python3Packages) sphinx;
-        # Need to use apple's patched xattr until
-        # https://github.com/xattr/xattr/issues/44 and
-        # https://github.com/xattr/xattr/issues/55 are solved.
-        inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
-        # Support range >= 11 && < 16
-        buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_15;
-        llvmPackages = pkgs.llvmPackages_15;
-      };
-      ghc983 = callPackage ../development/compilers/ghc/9.8.3.nix {
-        bootPkgs =
-          # For GHC 9.6 no armv7l bindists are available.
-          if stdenv.buildPlatform.isAarch32 then
-            bb.packages.ghc963
-          else if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
-            bb.packages.ghc963
-          else
-            bb.packages.ghc963Binary;
-        inherit (buildPackages.python3Packages) sphinx;
-        # Need to use apple's patched xattr until
-        # https://github.com/xattr/xattr/issues/44 and
-        # https://github.com/xattr/xattr/issues/55 are solved.
-        inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
-        # Support range >= 11 && < 16
-        buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_15;
-        llvmPackages = pkgs.llvmPackages_15;
-      };
-      ghc984 = callPackage ../development/compilers/ghc/9.8.4.nix {
-        bootPkgs =
-          # For GHC 9.6 no armv7l bindists are available.
-          if stdenv.buildPlatform.isAarch32 then
-            bb.packages.ghc963
-          else if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
-            bb.packages.ghc963
-          else
-            bb.packages.ghc963Binary;
-        inherit (buildPackages.python3Packages) sphinx;
-        # Need to use apple's patched xattr until
-        # https://github.com/xattr/xattr/issues/44 and
-        # https://github.com/xattr/xattr/issues/55 are solved.
-        inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
-        # Support range >= 11 && < 16
-        buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_15;
-        llvmPackages = pkgs.llvmPackages_15;
-      };
-      ghc98 = compiler.ghc984;
-      ghc9101 = callPackage ../development/compilers/ghc/9.10.1.nix {
-        bootPkgs =
-          # For GHC 9.6 no armv7l bindists are available.
-          if stdenv.buildPlatform.isAarch32 then
-            bb.packages.ghc963
-          else if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
-            bb.packages.ghc963
-          else if stdenv.buildPlatform.isDarwin then
-            # it seems like the GHC 9.6.* bindists are built with a different
-            # toolchain than we are using (which I'm guessing from the fact
-            # that 9.6.4 bindists pass linker flags our ld doesn't support).
-            # With both 9.6.3 and 9.6.4 binary it is impossible to link against
-            # the clock package (probably a hsc2hs problem).
-            bb.packages.ghc963
-          else
-            bb.packages.ghc963Binary;
-        inherit (buildPackages.python3Packages) sphinx;
-        # Need to use apple's patched xattr until
-        # https://github.com/xattr/xattr/issues/44 and
-        # https://github.com/xattr/xattr/issues/55 are solved.
-        inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
-        # 2023-01-15: Support range >= 11 && < 16
-        buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_15;
-        llvmPackages = pkgs.llvmPackages_15;
-      };
-      ghc910 = compiler.ghc9101;
-      ghc9121 = callPackage ../development/compilers/ghc/9.12.1.nix {
-        bootPkgs =
-          # No suitable bindist packaged yet
-          bb.packages.ghc9101;
-        inherit (buildPackages.python3Packages) sphinx;
-        # Need to use apple's patched xattr until
-        # https://github.com/xattr/xattr/issues/44 and
-        # https://github.com/xattr/xattr/issues/55 are solved.
-        inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
-        # 2024-12-21: Support range >= 13 && < 20
-        buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_19;
-        llvmPackages = pkgs.llvmPackages_19;
-      };
-      ghc912 = compiler.ghc9121;
-      ghcHEAD = callPackage ../development/compilers/ghc/head.nix {
-        bootPkgs =
-          # No suitable bindist packaged yet
-          bb.packages.ghc9101;
-        inherit (buildPackages.python3Packages) sphinx;
-        # Need to use apple's patched xattr until
-        # https://github.com/xattr/xattr/issues/44 and
-        # https://github.com/xattr/xattr/issues/55 are solved.
-        inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
-        # 2023-01-15: Support range >= 11 && < 16
-        buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_18;
-        llvmPackages = pkgs.llvmPackages_18;
-      };
-
-      ghcjs = compiler.ghcjs810;
-      ghcjs810 = callPackage ../development/compilers/ghcjs/8.10 {
-        bootPkgs = bb.packages.ghc810;
-        ghcjsSrcJson = ../development/compilers/ghcjs/8.10/git.json;
-        stage0 = ../development/compilers/ghcjs/8.10/stage0.nix;
-      };
-
       # The integer-simple attribute set contains all the GHC compilers
       # build with integer-simple instead of integer-gmp.
       integer-simple =
@@ -472,18 +298,59 @@ in
             name: compiler.${name}.override { enableNativeBignum = true; }
           )
         );
-    };
+
+      ghc865Binary = callPackage ../development/compilers/ghc/8.6.5-binary.nix {
+        # Should be llvmPackages_6 which has been removed from nixpkgs
+        llvmPackages = null;
+      };
+
+      ghc8107Binary = callPackage ../development/compilers/ghc/8.10.7-binary.nix {
+        llvmPackages = pkgs.llvmPackages_12;
+      };
+
+      ghc924Binary = callPackage ../development/compilers/ghc/9.2.4-binary.nix {
+        llvmPackages = pkgs.llvmPackages_12;
+      };
+
+      ghc963Binary = callPackage ../development/compilers/ghc/9.6.3-binary.nix {
+        llvmPackages = pkgs.llvmPackages_15;
+      };
+      ghcjs = compiler.ghcjs810;
+      ghcjs810 = callPackage ../development/compilers/ghcjs/8.10 {
+        bootPkgs = bb.packages.ghc810;
+        ghcjsSrcJson = ../development/compilers/ghcjs/8.10/git.json;
+        stage0 = ../development/compilers/ghcjs/8.10/stage0.nix;
+      };
+
+      # TODO(sterni): default via ghcRules
+      ghc810 = compiler.ghc8107;
+      ghc90 = compiler.ghc902;
+      ghc92 = compiler.ghc928;
+      ghc94 = compiler.ghc948;
+      ghc96 = compiler.ghc966;
+      ghc98 = compiler.ghc984;
+      ghc910 = compiler.ghc9101;
+      ghc912 = compiler.ghc9121;
+      ghcHEAD =
+        let
+          headMajorMinor = "9.13";
+          ghc = makeGhc ../development/compilers/ghc/head.nix ghcRules.${headMajorMinor};
+        in
+        assert lib.hasPrefix headMajorMinor ghc.version;
+        ghc;
+    }
+    // ghcsByVersion;
 
   # Default overrides that are applied to all package sets.
   packageOverrides = self: super: { };
 
   # Always get compilers from `buildPackages`
+  # TODO(sterni): generate automatically
   packages =
     let
       bh = buildPackages.haskell;
     in
     {
-
       ghc865Binary = callPackage ../development/haskell-modules {
         buildHaskellPackages = bh.packages.ghc865Binary;
         ghc = bh.compiler.ghc865Binary;
