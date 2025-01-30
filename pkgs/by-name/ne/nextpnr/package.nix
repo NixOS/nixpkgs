@@ -10,11 +10,10 @@
   python3Packages,
   icestorm,
   trellis,
+  libGL,
   llvmPackages,
-
   enableGui ? false,
-  wrapQtAppsHook ? null,
-  qtbase ? null,
+  libsForQt5 ? null,
   OpenGL ? null,
 }:
 
@@ -47,6 +46,8 @@ in
 stdenv.mkDerivation rec {
   inherit pname version;
 
+  enableParallelBuilding = true;
+
   srcs = [
     main_src
     test_src
@@ -65,14 +66,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     python3
-  ] ++ (lib.optional enableGui wrapQtAppsHook);
+  ] ++ (lib.optional enableGui libsForQt5.wrapQtAppsHook);
   buildInputs =
     [
       boostPython
       eigen
       python3Packages.apycula
     ]
-    ++ (lib.optional enableGui qtbase)
+    ++ (lib.optionals enableGui [ libsForQt5.qtbase libGL ])
     ++ (lib.optional stdenv.cc.isClang llvmPackages.openmp);
 
   cmakeFlags =
