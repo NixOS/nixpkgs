@@ -9,7 +9,6 @@ with python3Packages;
 buildPythonPackage rec {
   pname = "manga-ocr";
   version = "0.1.14";
-  disabled = pythonOlder "3.7";
   format = "pyproject";
 
   src = fetchFromGitHub {
@@ -37,12 +36,8 @@ buildPythonPackage rec {
     unidic-lite
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "numpy<2" "numpy"
-  '';
-
   meta = with lib; {
+    mainProgram = "manga_ocr";
     description = "Optical character recognition for Japanese text, with the main focus being Japanese manga";
     homepage = "https://github.com/kha-white/manga-ocr";
     changelog = "https://github.com/kha-white/manga-ocr/releases/tag/${src.tag}";
