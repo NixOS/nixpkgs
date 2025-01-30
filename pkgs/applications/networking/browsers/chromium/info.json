@@ -766,7 +766,7 @@
     }
   },
   "ungoogled-chromium": {
-    "version": "132.0.6834.110",
+    "version": "132.0.6834.159",
     "deps": {
       "depot_tools": {
         "rev": "41d43a2a2290450aeab946883542f8049b155c87",
@@ -777,16 +777,16 @@
         "hash": "sha256-zZoD5Bx7wIEP2KJkHef6wHrxU3px+8Vseq29QcK32bg="
       },
       "ungoogled-patches": {
-        "rev": "132.0.6834.110-1",
-        "hash": "sha256-pFuRsGnOXAECat5B0fUi9aw8Wdqbu1EBwyHNCBMoOpw="
+        "rev": "132.0.6834.159-1",
+        "hash": "sha256-sot7YixPnt8ALPR2IIPgR1NtN/Oc14qlzyB3Vny+DAM="
       },
       "npmHash": "sha256-H1/h3x+Cgp1x94Ze3UPPHxRVpylZDvpMXMOuS+jk2dw="
     },
     "DEPS": {
       "src": {
         "url": "https://chromium.googlesource.com/chromium/src.git",
-        "rev": "df453a35f099772fdb954e33551388add2ca3cde",
-        "hash": "sha256-deLCukHvNv6mUp33hHHFgeKD45SQs517xoRfCfReLAA=",
+        "rev": "2d77d3fc4452661469b78f115e0aed4d71269739",
+        "hash": "sha256-LbLIxN13fx6zzU5xzGvkTpw7tKRQBel2PYhflHLbWE8=",
         "recompress": true
       },
       "src/third_party/clang-format/script": {
@@ -1526,8 +1526,8 @@
       },
       "src/v8": {
         "url": "https://chromium.googlesource.com/v8/v8.git",
-        "rev": "625e932f21c984db3f9fba8b56b9afa4e977994c",
-        "hash": "sha256-19uEppABiuh+zHjgwAj/BPee/ClB/FKfzHxLKrdNhOE="
+        "rev": "210ec27ca748c70580fe374f9811761667312b41",
+        "hash": "sha256-pfkztEU22T15H2amf+b5bpALQ6Er1YAxZoxbbfb2YU8="
       }
     }
   }
