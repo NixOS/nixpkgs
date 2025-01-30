@@ -58,18 +58,14 @@ self: super: {
   xhtml = null;
 
   doctest = lib.pipe self.doctest_0_23_0 [
-    (lib.warnIf (lib.versionAtLeast super.doctest.version "0.23.0.1")
-      "version override for haskell.packages.ghc912.doctest may no longer be needed"
-      (overrideSrc {
-        # Not yet on hackage: https://github.com/sol/doctest/pull/462
-        src = pkgs.fetchFromGitHub {
-          owner = "sol";
-          repo = "doctest";
-          rev = "77373c5d84cd5e59ea86ec30b9ada874f50fad9e";
-          hash = "sha256-nPfVDnHlKL2DYo9+IDKxA2AvRnjLQ8kr8YGHHD9APvM=";
-        };
+    (appendPatches [
+      (pkgs.fetchpatch {
+        name = "doctest-0.23.0-ghc-9.12.patch";
+        url = "https://github.com/sol/doctest/commit/77373c5d84cd5e59ea86ec30b9ada874f50fad9e.patch";
+        sha256 = "07dx99lna17fni1ccbklijx1ckkf2p4kk9wvkwib0ihmra70zpn2";
+        includes = [ "test/**" ];
       })
-    )
+    ])
     (overrideCabal (drv: {
       testFlags = drv.testFlags or [ ] ++ [
         # These tests require cabal-install
