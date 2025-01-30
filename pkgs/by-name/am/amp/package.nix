@@ -11,6 +11,7 @@
   libgit2,
   darwin,
   curl,
+  writableTmpDirAsHomeHook,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,7 +21,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "jmacdonald";
     repo = "amp";
-    rev = version;
+    tag = version;
     hash = "sha256-xNadwz2agPbxvgUqrUf1+KsWTmeNh8hJIWcNwTzzM/M=";
   };
 
@@ -48,8 +49,9 @@ rustPlatform.buildRustPackage rec {
       ]
     );
 
-  # Tests need to write to the theme directory in HOME.
-  preCheck = "export HOME=`mktemp -d`";
+  nativeCheckInputs = [
+    writableTmpDirAsHomeHook
+  ];
 
   meta = {
     description = "Modern text editor inspired by Vim";
