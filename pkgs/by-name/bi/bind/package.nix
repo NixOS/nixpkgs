@@ -10,6 +10,7 @@
   libtool,
   libxml2,
   openssl,
+  liburcu,
   libuv,
   nghttp2,
   jemalloc,
@@ -26,11 +27,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bind";
-  version = "9.18.28";
+  version = "9.20.4";
 
   src = fetchurl {
     url = "https://downloads.isc.org/isc/bind9/${finalAttrs.version}/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
-    hash = "sha256-58zpoWX3thnu/Egy8KjcFrAF0p44kK7WAIxQbqKGpec=";
+    hash = "sha256-Oo4aBeAOPpvAK9/97Xhi+vdya6drqZf0KrSHd3vYIQs=";
   };
 
   outputs = [
@@ -40,10 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
     "man"
     "dnsutils"
     "host"
-  ];
-
-  patches = [
-    ./dont-keep-configure-flags.patch
   ];
 
   nativeBuildInputs = [
@@ -56,6 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
       libtool
       libxml2
       openssl
+      liburcu
       libuv
       nghttp2
       jemalloc
