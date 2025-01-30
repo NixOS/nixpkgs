@@ -37,7 +37,7 @@ rec {
 
   meta = with lib; {
     description = "Most popular clone of the VI editor";
-    homepage = "http://www.vim.org";
+    homepage = "https://www.vim.org";
     license = licenses.vim;
     maintainers = with maintainers; [
       das_j

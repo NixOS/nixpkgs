@@ -8,17 +8,17 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "pay-respects";
-  version = "0.6.11";
+  version = "0.6.12";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "iff";
     repo = "pay-respects";
     rev = "v${version}";
-    hash = "sha256-4m8/sp6r2Xb2SsNcatMv0+mWHBx+XKD0LEzrEwuWIEA=";
+    hash = "sha256-lDIhI9CnWwVVGyAJAS3gDUEkeXShTvPd8JKC1j9/9yU=";
   };
 
-  cargoHash = "sha256-obuMixkXqWUuZFqs3mJyMpHx4RY70ZpE3H9GzqFmt6k=";
+  cargoHash = "sha256-3uSZtf2sbz74+V7LeHWWQWglrGRpiUSNAedVngjrH1Q=";
 
   nativeBuildInputs = [
     pkg-config

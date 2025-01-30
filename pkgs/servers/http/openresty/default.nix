@@ -39,6 +39,10 @@ callPackage ../nginx/generic.nix args rec {
   buildInputs = [ postgresql ];
 
   postPatch = ''
+    substituteInPlace bundle/nginx-${nginxVersion}/src/http/ngx_http_core_module.c \
+      --replace-fail '@nixStoreDir@' "$NIX_STORE" \
+      --replace-fail '@nixStoreDirLen@' "''${#NIX_STORE}"
+
     patchShebangs configure bundle/
   '';
 

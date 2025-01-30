@@ -82,7 +82,7 @@ class VimEditor(pluginupdate.Editor):
             f.write(
                 textwrap.dedent(
                     """
-                { lib, buildVimPlugin, buildNeovimPlugin, fetchFromGitHub, fetchgit }:
+                { lib, buildVimPlugin, buildNeovimPlugin, fetchFromGitHub }:
 
                 final: prev:
                 {
