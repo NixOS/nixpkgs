@@ -20,7 +20,7 @@ from .helpers import get_qualified_name
     autospec=True,
     return_value=CompletedProcess([], 0, stdout=" \n/path/to/file\n "),
 )
-def test_build(mock_run: Any, monkeypatch: Any) -> None:
+def test_build(mock_run: Any) -> None:
     assert n.build(
         "config.system.build.attr",
         m.BuildAttr("<nixpkgs/nixos>", None),
@@ -79,7 +79,7 @@ def test_build_flake(mock_run: Any, monkeypatch: MonkeyPatch, tmpdir: Path) -> N
 
 @patch(get_qualified_name(n.run_wrapper, n), autospec=True)
 @patch(get_qualified_name(n.uuid4, n), autospec=True)
-def test_build_remote(mock_uuid4: Any, mock_run: Any, monkeypatch: Any) -> None:
+def test_build_remote(mock_uuid4: Any, mock_run: Any, monkeypatch: MonkeyPatch) -> None:
     build_host = m.Remote("user@host", [], None)
     monkeypatch.setenv("NIX_SSHOPTS", "--ssh opts")
 
@@ -226,7 +226,7 @@ def test_build_remote_flake(
     )
 
 
-def test_copy_closure(monkeypatch: Any) -> None:
+def test_copy_closure(monkeypatch: MonkeyPatch) -> None:
     closure = Path("/path/to/closure")
     with patch(get_qualified_name(n.run_wrapper, n), autospec=True) as mock_run:
         n.copy_closure(closure, None)
@@ -290,7 +290,7 @@ def test_copy_closure(monkeypatch: Any) -> None:
 
 
 @patch(get_qualified_name(n.run_wrapper, n), autospec=True)
-def test_edit(mock_run: Any, monkeypatch: Any, tmpdir: Any) -> None:
+def test_edit(mock_run: Any, monkeypatch: MonkeyPatch, tmpdir: Path) -> None:
     # Flake
     flake = m.Flake.parse(f"{tmpdir}#attr")
     n.edit(flake, {"commit_lock_file": True})
@@ -309,8 +309,8 @@ def test_edit(mock_run: Any, monkeypatch: Any, tmpdir: Any) -> None:
 
     # Classic
     with monkeypatch.context() as mp:
-        default_nix = tmpdir.join("default.nix")
-        default_nix.write("{}")
+        default_nix = tmpdir / "default.nix"
+        default_nix.write_text("{}", encoding="utf-8")
 
         mp.setenv("NIXOS_CONFIG", str(tmpdir))
         mp.setenv("EDITOR", "editor")
@@ -687,7 +687,7 @@ def test_set_profile(mock_run: Any) -> None:
 
 
 @patch(get_qualified_name(n.run_wrapper, n), autospec=True)
-def test_switch_to_configuration(mock_run: Any, monkeypatch: Any) -> None:
+def test_switch_to_configuration(mock_run: Any, monkeypatch: MonkeyPatch) -> None:
     profile_path = Path("/path/to/profile")
     config_path = Path("/path/to/config")
 
