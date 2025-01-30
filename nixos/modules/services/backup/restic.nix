@@ -292,6 +292,15 @@ in
                 having to manually specify most options.
               '';
             };
+
+            progressFps = lib.mkOption {
+              type = with lib.types; nullOr numbers.nonnegative;
+              default = null;
+              description = ''
+                Controls the frequency of progress reporting.
+              '';
+              example = 0.1;
+            };
           };
         }
       )
@@ -376,7 +385,10 @@ in
               lib.mapAttrs' (
                 name: value: lib.nameValuePair (rcloneAttrToConf name) (toRcloneVal value)
               ) backup.rcloneConfig
-            );
+            )
+            // lib.optionalAttrs (backup.progressFps != null) {
+              RESTIC_PROGRESS_FPS = toString backup.progressFps;
+            };
           path = [ config.programs.ssh.package ];
           restartIfChanged = false;
           wants = [ "network-online.target" ];
