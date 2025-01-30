@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     repo = "shopware-cli";
     owner = "FriendsOfShopware";
-    rev = version;
+    tag = version;
     hash = "sha256-nFjm1z7QXuUkZ4sVRY0KdFpo0SXBTmJNA28YJpAyG2w=";
   };
 
@@ -30,7 +30,6 @@ buildGoModule rec {
   vendorHash = "sha256-7DVC68tKoEwaTbF6Lkv1Ib1imZojTPW3G/QS3W6N8ys=";
 
   postInstall = ''
-    export HOME="$(mktemp -d)"
     installShellCompletion --cmd shopware-cli \
       --bash <($out/bin/shopware-cli completion bash) \
       --zsh <($out/bin/shopware-cli completion zsh) \
