@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "pololu";
     repo = "pololu-jrk-g2-software";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-CNXExdA0hKfZFCgLHQ7uNWwpHKggewwdb5shnFjM5L4=";
   };
 
