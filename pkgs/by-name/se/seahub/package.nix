@@ -8,14 +8,14 @@
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "seahub";
-  version = "11.0.12";
+  version = "12.0.7";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "haiwen";
     repo = "seahub";
-    rev = "d998361dd890cac3f6d6ebec3af47a589e0332bc"; # using a fixed revision because upstream may re-tag releases :/
-    hash = "sha256-n56sRZ9TVb37JA0+12ZoF2Mt7dADjaYk7V0PmdBY0EU=";
+    rev = "670aeea6d68b988fbb5dcc9ff186d7d408982c20"; # using a fixed revision because upstream may re-tag releases :/
+    hash = "sha256-3fKRmqvNT/sJ5eMDQM0Bni9vjLDqVfPQ+3bQok/6lqY=";
   };
 
   dontBuild = true;

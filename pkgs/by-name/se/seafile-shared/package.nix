@@ -1,32 +1,32 @@
 {
-  lib,
   stdenv,
+  lib,
   fetchFromGitHub,
   autoreconfHook,
+  pkg-config,
   curl,
+  libargon2,
   libevent,
   libsearpc,
   libuuid,
-  pkg-config,
+  libwebsockets,
   python3,
   sqlite,
   vala,
-  libwebsockets,
 }:
 
 stdenv.mkDerivation rec {
   pname = "seafile-shared";
-  version = "9.0.8";
+  version = "9.0.11";
 
   src = fetchFromGitHub {
     owner = "haiwen";
     repo = "seafile";
     rev = "v${version}";
-    sha256 = "sha256-IpRCgPxYy1El4EEvVEfzAlbxP/osQUb7pCP3/BhkecU=";
+    sha256 = "sha256-mPy7FdCpMask9hOE39/hX+Z6enJt7NI4D3T9VDXBDdw=";
   };
 
   nativeBuildInputs = [
-    libwebsockets
     autoreconfHook
     vala
     pkg-config
@@ -35,11 +35,13 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libuuid
-    sqlite
-    libsearpc
-    libevent
     curl
+    libargon2
+    libevent
+    libsearpc
+    libuuid
+    libwebsockets
+    sqlite
   ];
 
   configureFlags = [

@@ -2,24 +2,23 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch,
+  cmake,
+  autoreconfHook,
   pkg-config,
   python3,
-  autoreconfHook,
-  libuuid,
-  libmysqlclient,
-  sqlite,
-  glib,
-  libevent,
-  libsearpc,
-  openssl,
   fuse,
+  glib,
   libarchive,
+  libargon2,
+  libevent,
   libjwt,
-  curl,
-  which,
+  libmysqlclient,
+  libsearpc,
+  libuuid,
+  openssl,
+  sqlite,
   vala,
-  cmake,
+  which,
   oniguruma,
   nixosTests,
 }:
@@ -39,43 +38,36 @@ let
 in
 stdenv.mkDerivation {
   pname = "seafile-server";
-  version = "11.0.12";
+  version = "12.0.7";
 
   src = fetchFromGitHub {
     owner = "haiwen";
     repo = "seafile-server";
-    rev = "5e6c0974e6abe5d92b8ba1db41c6ddbc1029f2d5"; # using a fixed revision because upstream may re-tag releases :/
-    hash = "sha256-BVa4QZiHPkqRB5FvDlCSbEVxdnyxVy2KuCDb2orRMuI=";
+    rev = "e2d771852ff5f7b37d9ac889d80e02bb4da2cf1c"; # using a fixed revision because upstream may re-tag releases :/
+    hash = "sha256-ZW8l+jkAVC69w+k2rPZbGrQuL5VgWGipkf66fcCBvXA=";
   };
 
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
+    python3
+    vala
+    which
   ];
 
   buildInputs = [
-    libuuid
-    libmysqlclient
-    sqlite
-    glib
-    libsearpc
-    libevent
-    python3
     fuse
+    glib
     libarchive
-    libjwt
-    which
-    vala
+    libargon2
+    libevent
     libevhtp
+    libjwt
+    libmysqlclient
+    libsearpc
+    libuuid
     oniguruma
-  ];
-
-  patches = [
-    # https://github.com/haiwen/seafile-server/pull/658
-    (fetchpatch {
-      url = "https://github.com/haiwen/seafile-server/commit/8029a11a731bfe142af43f230f47b93811ebaaaa.patch";
-      hash = "sha256-AWNDXIyrKXgqgq3p0m8+s3YH8dKxWnf7uEMYzSsjmX4=";
-    })
+    sqlite
   ];
 
   postInstall = ''
