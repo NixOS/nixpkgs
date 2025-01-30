@@ -17776,6 +17776,8 @@ self: super: with self; {
 
   uv = callPackage ../development/python-modules/uv { };
 
+  uv-dynamic-versioning = callPackage ../development/python-modules/uv-dynamic-versioning { };
+
   uvcclient = callPackage ../development/python-modules/uvcclient { };
 
   uvicorn = callPackage ../development/python-modules/uvicorn { };
