@@ -42,6 +42,11 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Some tests require a browser
     "tests/test_utilities.py"
+
+    # Temporary fix for selenium packaging issue.
+    # https://github.com/SeleniumHQ/selenium/pull/14823
+    # Drop when selenium 4.28.0 is merged.
+    "tests/test_iframe.py"
   ];
 
   disabledTests = [
