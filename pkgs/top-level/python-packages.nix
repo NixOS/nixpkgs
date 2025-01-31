@@ -7264,6 +7264,8 @@ self: super: with self; {
     inherit python;
   });
 
+  lib4package = callPackage ../development/python-modules/lib4package { };
+
   libagent = callPackage ../development/python-modules/libagent { };
 
   pa-ringbuffer = callPackage ../development/python-modules/pa-ringbuffer { };
