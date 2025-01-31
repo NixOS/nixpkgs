@@ -17365,10 +17365,6 @@ with pkgs;
     jre = openjdk17;
   };
 
-  faiss = callPackage ../development/libraries/science/math/faiss {
-    pythonPackages = python3Packages;
-  };
-
   faissWithCuda = faiss.override {
     cudaSupport = true;
   };
