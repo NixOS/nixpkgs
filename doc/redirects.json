@@ -20,6 +20,9 @@
   "nixpkgs-manual": [
     "index.html#nixpkgs-manual"
   ],
+  "no-broken-symlinks.sh": [
+    "index.html#no-broken-symlinks.sh"
+  ],
   "preface": [
     "index.html#preface"
   ],
