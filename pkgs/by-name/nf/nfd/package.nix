@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "named-data";
     repo = "NFD";
-    rev = "NFD-${version}";
+    tag = "NFD-${version}";
     hash = "sha256-HbKPO3gwQWOZf4QZE+N7tAiqsNl1GrcwE4EUGjWmf5s=";
   };
 
@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
     sphinx
     wafHook
   ];
+
   buildInputs =
     [
       libpcap
@@ -43,16 +44,17 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optional withWebSocket websocketpp
     ++ lib.optional withSystemd systemd;
+
   wafConfigureFlags = [
     "--boost-includes=${boost.dev}/include"
     "--boost-libs=${boost.out}/lib"
   ] ++ lib.optional (!withWebSocket) "--without-websocket";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://named-data.net/";
     description = "Named Data Networking (NDN) Forwarding Daemon";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ bertof ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ bertof ];
   };
 }
