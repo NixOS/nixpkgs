@@ -21,6 +21,10 @@ buildPythonPackage rec {
     repo = "changelog-chug";
     rev = "release/${version}";
     hash = "sha256-SPwFkmRQMpdsVmzZE4mB2J9wsfvE1K21QDkOQ2XPlow=";
+    # HACK: sourcehut can't generate tarballs from tags with slashes properly,
+    # so force using git clone.
+    # See: https://todo.sr.ht/~sircmpwn/git.sr.ht/323
+    fetchSubmodules = true;
   };
 
   build-system = [
