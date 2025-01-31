@@ -1727,6 +1727,8 @@ self: super: with self; {
 
   bjoern = callPackage ../development/python-modules/bjoern { };
 
+  bk7231tools = callPackage ../development/python-modules/bk7231tools { };
+
   bkcharts = callPackage ../development/python-modules/bkcharts { };
 
   black = callPackage ../development/python-modules/black { };
@@ -4466,7 +4468,7 @@ self: super: with self; {
   faiss = callPackage ../development/python-modules/faiss {
     faiss-build = pkgs.faiss.override {
       pythonSupport = true;
-      pythonPackages = self;
+      python3Packages = self;
     };
   };
 
@@ -7675,6 +7677,8 @@ self: super: with self; {
     llvm = pkgs.llvm_15;
   };
 
+  lm-eval = callPackage ../development/python-modules/lm-eval { };
+
   lm-format-enforcer = callPackage ../development/python-modules/lm-format-enforcer { };
 
   lmdb = callPackage ../development/python-modules/lmdb {
@@ -9525,6 +9529,8 @@ self: super: with self; {
   py-aosmith = callPackage ../development/python-modules/py-aosmith { };
 
   py-ccm15 = callPackage ../development/python-modules/py-ccm15 { };
+
+  py-datastruct = callPackage ../development/python-modules/py-datastruct { };
 
   py-deprecate = callPackage ../development/python-modules/py-deprecate { };
 
@@ -16479,6 +16485,8 @@ self: super: with self; {
 
   tqdm = callPackage ../development/python-modules/tqdm { };
 
+  tqdm-multiprocess = callPackage ../development/python-modules/tqdm-multiprocess { };
+
   traceback2 = callPackage ../development/python-modules/traceback2 { };
 
   tracerite = callPackage ../development/python-modules/tracerite { };
@@ -18233,6 +18241,8 @@ self: super: with self; {
   woob = callPackage ../development/python-modules/woob { };
 
   woodblock = callPackage ../development/python-modules/woodblock { };
+
+  word2number = callPackage ../development/python-modules/word2number { };
 
   wordcloud = callPackage ../development/python-modules/wordcloud { };
 

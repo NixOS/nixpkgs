@@ -18,11 +18,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "oils-for-unix";
-  version = "0.24.0";
+  version = "0.26.0";
 
   src = fetchurl {
-    url = "https://www.oilshell.org/download/oils-for-unix-${version}.tar.gz";
-    hash = "sha256-30r+2U1TswOngs4DgMOT1g9tIZIe8qJZIrQAgordmPM=";
+    url = "https://www.oils.pub/download/oils-for-unix-${version}.tar.gz";
+    hash = "sha256-K1spWld6J2OBQgO0o0iAygMGeinuuAr0hXtgkjFNbu0=";
   };
 
   postPatch = ''
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Unix shell with JSON-compatible structured data. It's our upgrade path from bash to a better language and runtime";
-    homepage = "https://www.oilshell.org/";
+    homepage = "https://www.oils.pub/";
 
     license = lib.licenses.asl20;
 
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
       mkg20001
       melkor333
     ];
-    changelog = "https://www.oilshell.org/release/${version}/changelog.html";
+    changelog = "https://www.oils.pub/release/${version}/changelog.html";
   };
 
   passthru = {
