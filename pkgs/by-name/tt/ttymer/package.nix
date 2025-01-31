@@ -12,7 +12,6 @@ buildGoModule rec {
     repo = "ttymer";
     tag = "v${version}";
     hash = "sha256-a3+TAGBz1br2TCu9FxtUN4G3H84NZwwV/fFg5/HbJ2k=";
-
   };
 
   vendorHash = null;
