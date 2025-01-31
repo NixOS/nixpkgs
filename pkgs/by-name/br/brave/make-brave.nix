@@ -148,10 +148,21 @@ let
 
   enableFeatures =
     optionals enableVideoAcceleration [
+      "AcceleratedVideoEncoder"
       "VaapiVideoDecoder"
       "VaapiVideoEncoder"
+      "VaapiIgnoreDriverChecks"
     ]
-    ++ optional enableVulkan "Vulkan";
+    ++ optionals (enableVideoAcceleration && !enableVulkan) [
+      "AcceleratedVideoDecodeLinuxGL"
+    ]
+    # As of right now DefaultANGLEVulkan and VulkanFromANGLE flags have not been set since I am not able to get it working
+    # More information on vulkan:
+    # https://chromium.googlesource.com/chromium/src/+/5482210941a94d70406b8da962426e4faca7fce4/docs/gpu/vaapi.md#vaapi-on-linux-with-vulkan
+    ++ optionals enableVulkan [
+      "VaapiOnNvidiaGPUs"
+      "Vulkan"
+    ];
 
   disableFeatures =
     [ "OutdatedBuildDetector" ] # disable automatic updates
