@@ -129,8 +129,9 @@ let
               "goerli"
               "holesky"
               "rinkeby"
-              "yolov2"
               "ropsten"
+              "sepolia"
+              "yolov2"
             ]
           );
           default = null;
