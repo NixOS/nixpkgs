@@ -12,24 +12,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ast-grep";
-  version = "0.33.1";
+  version = "0.34.3";
 
   src = fetchFromGitHub {
     owner = "ast-grep";
     repo = "ast-grep";
     tag = version;
-    hash = "sha256-p7SJhkCoo4jBDyr+Z2+qxjUwWXWpVMuXd2/DDOM7Z/Q=";
+    hash = "sha256-r82BDCncRUSmIBQFwsrKDwKEKmvGm/lKtz1rYC47Ems=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-l2fvQqkyAsLGm+KStc2CaTeLrxvNmQgNFd79pLiCk/Y=";
+  cargoHash = "sha256-hxIeRkKPuLftAYAsdk2Hq1+ittGeWDIl9Rryi7MLg90=";
 
   nativeBuildInputs = [ installShellFiles ];
-
-  # error: linker `aarch64-linux-gnu-gcc` not found
-  postPatch = ''
-    rm .cargo/config.toml
-  '';
 
   cargoBuildFlags = [
     "--package ast-grep --bin ast-grep"
@@ -53,21 +48,6 @@ rustPlatform.buildRustPackage rec {
     ''
   );
 
-  checkFlags =
-    [
-      # disable flaky test
-      "--skip=test::test_load_parser_mac"
-
-      # BUG: Broke by 0.12.1 update (https://github.com/NixOS/nixpkgs/pull/257385)
-      # Please check if this is fixed in future updates of the package
-      "--skip=verify::test_case::tests::test_unmatching_id"
-    ]
-    ++ lib.optionals (with stdenv.hostPlatform; (isDarwin && isx86_64) || (isLinux && isAarch64)) [
-      # x86_64-darwin: source/benches/fixtures/json-mac.so\' (no such file), \'/private/tmp/nix-build-.../source/benches/fixtures/json-mac.so\' (mach-o file, but is an incompatible architecture (have \'arm64\', need \'x86_64h\' or \'x86_64\'))" })
-      # aarch64-linux: /build/source/benches/fixtures/json-linux.so: cannot open shared object file: No such file or directory"
-      "--skip=test::test_load_parser"
-      "--skip=test::test_register_lang"
-    ];
   nativeInstallCheckInputs = [
     versionCheckHook
   ];

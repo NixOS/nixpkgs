@@ -13,7 +13,7 @@
 let
   inherit (darwin.apple_sdk.frameworks) CoreServices;
   pname = "cargo-mobile2";
-  version = "0.17.4";
+  version = "0.17.5";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage {
     owner = "tauri-apps";
     repo = pname;
     rev = "cargo-mobile2-v${version}";
-    hash = "sha256-1lrimBdJwur5b4wB8hZVUtJEbgXoib0ytzjzhkqNE6c=";
+    hash = "sha256-eaKj2S1qiG6qQd7yG4RrK/a+1IsgBybodSTfERDvGE4=";
   };
 
   # Manually specify the sourceRoot since this crate depends on other crates in the workspace. Relevant info at
@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage {
   # sourceRoot = "${src.name}/tooling/cli";
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-ay3mB3FahVCx43ZnLSRwk9QR8R7KROCZSf+zfVqQKTY=";
+  cargoHash = "sha256-IW/2Xp52TlqYtvXZqSDv9/Uv9B/thM360ecbbWLXPNE=";
 
   preBuild = ''
     mkdir -p $out/share/

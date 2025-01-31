@@ -32,7 +32,6 @@
   httpretty,
   pytest-mock,
   pytest-xdist,
-  darwin,
 }:
 
 buildPythonPackage rec {
@@ -110,17 +109,13 @@ buildPythonPackage rec {
       --zsh <($out/bin/poetry completions zsh) \
   '';
 
-  nativeCheckInputs =
-    [
-      deepdiff
-      pytestCheckHook
-      httpretty
-      pytest-mock
-      pytest-xdist
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.ps
-    ];
+  nativeCheckInputs = [
+    deepdiff
+    pytestCheckHook
+    httpretty
+    pytest-mock
+    pytest-xdist
+  ];
 
   preCheck = (
     ''
