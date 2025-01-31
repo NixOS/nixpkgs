@@ -24,8 +24,8 @@ let
   # base_version is of the form major.minor.patch
   # vc_version is of the form YYMMDDCC
   # version corresponds to the tag on GitHub
-  base_version = "8.3.1";
-  vc_version = "24090601";
+  base_version = "8.3.4";
+  vc_version = "24120703";
   version = "${base_version}.${vc_version}";
 in
 stdenv.mkDerivation {
@@ -36,7 +36,7 @@ stdenv.mkDerivation {
     owner = "renpy";
     repo = "renpy";
     rev = version;
-    hash = "sha256-k8mcDzaFngRF3Xl9cinUFU0T9sjxNIVrECUguARJVZ4=";
+    hash = "sha256-GM6cx9yP5bgKWMSYOkZS9hE33/HJnsv4KmlB23jbkqg=";
   };
 
   nativeBuildInputs = [
