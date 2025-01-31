@@ -18,11 +18,11 @@ let
   defaultMinifyOpts = {
     script = {
       enable = false;
-      target = "es2021";
+      target = "es2020";
     };
     style = {
       enable = false;
-      browserslist = "defaults, Firefox ESR, last 20 Firefox major versions, last 20 Chrome major versions, last 3 Safari major versions, last 1 KaiOS version, and supports css-variables";
+      browserslist = "defaults, Firefox ESR, Firefox 91, last 20 Firefox major versions, last 20 Chrome major versions, last 3 Safari major versions, last 1 KaiOS version, and supports css-variables";
     };
     svg = {
       enable = false;
