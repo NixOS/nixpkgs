@@ -4448,7 +4448,7 @@ self: super: with self; {
   faiss = callPackage ../development/python-modules/faiss {
     faiss-build = pkgs.faiss.override {
       pythonSupport = true;
-      pythonPackages = self;
+      python3Packages = self;
     };
   };
 

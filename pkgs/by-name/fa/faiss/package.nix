@@ -7,7 +7,7 @@
   cudaPackages ? { },
   cudaSupport ? config.cudaSupport,
   pythonSupport ? true,
-  pythonPackages,
+  python3Packages,
   llvmPackages,
   blas,
   swig,
@@ -67,9 +67,9 @@ stdenv.mkDerivation {
       autoAddDriverRunpath
     ]
     ++ lib.optionals pythonSupport [
-      pythonPackages.python
-      pythonPackages.setuptools
-      pythonPackages.pip
+      python3Packages.python
+      python3Packages.setuptools
+      python3Packages.pip
     ];
 
   buildInputs =
@@ -77,7 +77,7 @@ stdenv.mkDerivation {
       blas
       swig
     ]
-    ++ lib.optionals pythonSupport [ pythonPackages.numpy ]
+    ++ lib.optionals pythonSupport [ python3Packages.numpy ]
     ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ]
     ++ lib.optionals cudaSupport cudaComponents;
 
