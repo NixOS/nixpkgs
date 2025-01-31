@@ -116,8 +116,6 @@
 , "keyoxide"
 , "lcov-result-merger"
 , "lerna"
-, "less"
-, "less-plugin-clean-css"
 , "live-server"
 , "livedown"
 , "localtunnel"
