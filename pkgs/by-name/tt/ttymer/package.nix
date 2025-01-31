@@ -16,6 +16,8 @@ buildGoModule rec {
 
   vendorHash = null;
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Simple command line timer for linux written in go";
     homepage = "https://github.com/darwincereska/ttymer";
