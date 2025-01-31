@@ -1,9 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchpatch,
   fetchFromGitHub,
-  stdenv,
 
   # nativeBuildInputs
   cmake,
@@ -15,41 +13,35 @@
   # build-system
   setuptools,
 
-  # checks
+  # dependencies
   absl-py,
   attrs,
   numpy,
   wrapt,
 }:
-let
-  patchCMakeAbseil = fetchpatch {
-    name = "0001-don-t-rebuild-abseil.patch";
-    url = "https://raw.githubusercontent.com/conda-forge/dm-tree-feedstock/93a91aa2c13240cecf88133e2885ade9121b464a/recipe/patches/0001-don-t-rebuild-abseil.patch";
-    hash = "sha256-bho7lXAV5xHkPmWy94THJtx+6i+px5w6xKKfThvBO/M=";
-  };
-  patchCMakePybind = fetchpatch {
-    name = "0002-don-t-fetch-pybind11.patch";
-    url = "https://raw.githubusercontent.com/conda-forge/dm-tree-feedstock/93a91aa2c13240cecf88133e2885ade9121b464a/recipe/patches/0002-don-t-fetch-pybind11.patch";
-    hash = "sha256-41XIouQ4Fm1yewaxK9erfcnkGBS6vgdvMm/DyF0rsKg=";
-  };
-in
 buildPythonPackage rec {
   pname = "dm-tree";
-  version = "0.1.8";
+  version = "0.1.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "deepmind";
     repo = "tree";
     tag = version;
-    hash = "sha256-VvSJTuEYjIz/4TTibSLkbg65YmcYqHImTHOomeorMJc=";
+    hash = "sha256-cHuaqA89r90TCPVHNP7B1cfK+WxqmfTXndJ/dRdmM24=";
   };
 
-  patches = [
-    patchCMakeAbseil
-    patchCMakePybind
-  ] ++ (lib.optional stdenv.hostPlatform.isDarwin ./0003-don-t-configure-apple.patch);
-
+  # Allows to forward cmake args through the conventional `cmakeFlags`
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail \
+        "cmake_args = [" \
+        'cmake_args = [ *os.environ.get("cmakeFlags", "").split(),'
+  '';
+  cmakeFlags = [
+    (lib.cmakeBool "USE_SYSTEM_ABSEIL" true)
+    (lib.cmakeBool "USE_SYSTEM_PYBIND11" true)
+  ];
   dontUseCmakeConfigure = true;
 
   nativeBuildInputs = [
@@ -64,7 +56,9 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  nativeCheckInputs = [
+  # It is unclear whether those are runtime dependencies or simply test dependencies
+  # https://github.com/google-deepmind/tree/issues/127
+  dependencies = [
     absl-py
     attrs
     numpy
