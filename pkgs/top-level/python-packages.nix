@@ -10591,6 +10591,8 @@ self: super: with self; {
 
   pycketcasts = callPackage ../development/python-modules/pycketcasts { };
 
+  pycodec2 = callPackage ../development/python-modules/pycodec2 { };
+
   pycolorecho = callPackage ../development/python-modules/pycolorecho { };
 
   pycomm3 = callPackage ../development/python-modules/pycomm3 { };
