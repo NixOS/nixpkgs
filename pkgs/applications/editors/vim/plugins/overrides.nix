@@ -44,12 +44,14 @@
   nodejs,
   notmuch,
   openscad,
+  openssh,
   parinfer-rust,
   phpactor,
   ranger,
   ripgrep,
   skim,
   sqlite,
+  sshfs,
   statix,
   stylish-haskell,
   tabnine,
@@ -2794,6 +2796,17 @@ in
       plenary-nvim
     ];
     nvimSkipModule = "repro";
+  };
+
+  remote-sshfs-nvim = super.remote-sshfs-nvim.overrideAttrs {
+    dependencies = with self; [
+      telescope-nvim
+      plenary-nvim
+    ];
+    runtimeDeps = [
+      openssh
+      sshfs
+    ];
   };
 
   renamer-nvim = super.renamer-nvim.overrideAttrs {

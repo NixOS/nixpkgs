@@ -16309,10 +16309,6 @@ with pkgs;
   # used as base package for iortcw forks
   iortcw_sp = callPackage ../games/iortcw/sp.nix { };
 
-  ja2-stracciatella = callPackage ../games/ja2-stracciatella {
-    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
-  };
-
   katagoWithCuda = katago.override {
     backend = "cuda";
     cudaPackages = cudaPackages_12;
