@@ -514,6 +514,7 @@ with pkgs;
     antlr = antlr4_10;
     icu =  icu73;
     protobuf = protobuf_24;
+    stdenv = if stdenv.hostPlatform.isDarwin then llvmPackages_18.stdenv else stdenv;
   };
 
   fetchpatch = callPackage ../build-support/fetchpatch {
