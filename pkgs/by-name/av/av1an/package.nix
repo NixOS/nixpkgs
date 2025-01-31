@@ -81,6 +81,7 @@ symlinkJoin {
       license
       maintainers
       mainProgram
+      broken
       ;
   };
 }
