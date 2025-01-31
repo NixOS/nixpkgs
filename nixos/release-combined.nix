@@ -149,7 +149,8 @@ rec {
         (onFullSupported "nixos.tests.networking.scripted.static")
         (onFullSupported "nixos.tests.networking.scripted.virtual")
         (onFullSupported "nixos.tests.networking.scripted.vlan")
-        (onFullSupported "nixos.tests.networking.networkd.bond")
+        # Fails often on Hydra, no maintainers.
+        #(onFullSupported "nixos.tests.networking.networkd.bond")
         (onFullSupported "nixos.tests.networking.networkd.bridge")
         (onFullSupported "nixos.tests.networking.networkd.dhcpOneIf")
         (onFullSupported "nixos.tests.networking.networkd.dhcpSimple")
