@@ -17,14 +17,14 @@ let
 in
 flutter324.buildFlutterApplication rec {
   pname = "ente-auth";
-  version = "4.3.1";
+  version = "4.3.2";
 
   src = fetchFromGitHub {
     owner = "ente-io";
     repo = "ente";
     sparseCheckout = [ "auth" ];
     tag = "auth-v${version}";
-    hash = "sha256-vPsF2MxGko5tMgp/WmYIw/XoSPgpKFRasNZfRpiNV9E=";
+    hash = "sha256-/WWodQcMibwXVexI+XbTZYRkIMtfNHk3bJVBPJHcoqI=";
   };
 
   sourceRoot = "${src.name}/auth";
