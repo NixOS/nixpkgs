@@ -6,6 +6,7 @@
 buildGoModule rec {
   pname = "ttymer";
   version = "1.0.1";
+
   src = fetchFromGitHub {
     owner = "darwincereska";
     repo = "ttymer";
