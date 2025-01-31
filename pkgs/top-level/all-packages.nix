@@ -2873,7 +2873,6 @@ with pkgs;
   kramdown-asciidoc = callPackage ../tools/typesetting/kramdown-asciidoc { };
 
   rocmPackages = rocmPackages_6;
-  rocmPackages_5 = recurseIntoAttrs (callPackage ../development/rocm-modules/5 { });
   rocmPackages_6 = recurseIntoAttrs (callPackage ../development/rocm-modules/6 { });
 
   sonobuoy = callPackage ../applications/networking/cluster/sonobuoy { };
