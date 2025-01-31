@@ -57,7 +57,7 @@ buildPythonPackage rec {
   postInstall = ''
     cmake ../${pname}-${version}
     make
-    cp libcppyy${stdenv.hostPlatform.extensions.sharedLibrary} $out/${python3.sitePackages}/
+    cp libcppyy.so $out/${python3.sitePackages}/
   '';
 
   meta = with lib; {

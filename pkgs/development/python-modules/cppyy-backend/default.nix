@@ -35,14 +35,18 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ cppyy-cling ];
 
   configurePhase = ''
+    runHook preConfigure
     cd clingwrapper
     sed -i "s|%includes_placeholder%|return '\${cppyy-cling}/${python.sitePackages}/cppyy_backend/include'|" setup.py
     sed -i "s|%cflags_placeholder%|return '${lib.optionalString stdenv.hostPlatform.isLinux "-pthread"} -std=c++2a'|" setup.py
+    runHook postConfigure
   '';
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out
     env PIP_PREFIX=$out pip install dist/*.whl --no-use-pep517 --no-deps
+    runHook postInstall
   '';
 
   dontUseCmakeConfigure = true;

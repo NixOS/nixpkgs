@@ -2,9 +2,14 @@
   lib,
   fetchFromGitHub,
   fetchurl,
+  zlib,
   cmake,
+  pkg-config,
   setuptools,
+  darwin,
   buildPythonPackage,
+  clang-tools,
+  stdenv,
   rootVersion ? "6.32.08",
 }:
 buildPythonPackage rec {
@@ -38,7 +43,17 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  patchPhase = ''
+  buildInputs = [
+    zlib
+  ] ++ (lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.DarwinTools
+  ]);
+
+  patches = [
+    ./cling-setup.patch
+  ];
+
+  postPatch = ''
     # facilitate generation of compiledata.h
     patchShebangs source/cling/src/build/unix/compiledata.sh
 
