@@ -9,7 +9,7 @@
   nodejs,
   npmHooks,
   llvmPackages,
-  wasm-bindgen-cli,
+  wasm-bindgen-cli_0_2_93,
   binaryen,
   zip,
 }:
@@ -46,11 +46,8 @@ rustPlatform.buildRustPackage rec {
     tailwindcss
     trunk
     # needs to match with wasm-bindgen version in upstreams Cargo.lock
-    (wasm-bindgen-cli.override {
-      version = "0.2.93";
-      hash = "sha256-DDdu5mM3gneraM85pAepBXWn3TMofarVR4NbjMdz3r0=";
-      cargoHash = "sha256-birrg+XABBHHKJxfTKAMSlmTVYLmnmqMDfRnmG6g/YQ=";
-    })
+    wasm-bindgen-cli_0_2_93
+
     zip
   ];
 
