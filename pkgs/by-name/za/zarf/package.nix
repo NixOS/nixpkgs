@@ -8,7 +8,7 @@
 
 buildGoModule rec {
   pname = "zarf";
-  version = "0.46.0";
+  version = "0.48.0";
 
   src = fetchFromGitHub {
     owner = "zarf-dev";
