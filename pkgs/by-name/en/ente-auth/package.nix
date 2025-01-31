@@ -30,6 +30,7 @@ flutter324.buildFlutterApplication rec {
   sourceRoot = "${src.name}/auth";
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
+  gitHashes = lib.importJSON ./git-hashes.json;
 
   patches = [
     # Disable update notifications and auto-update functionality
@@ -40,14 +41,6 @@ flutter324.buildFlutterApplication rec {
     rmdir assets/simple-icons
     ln -s ${simple-icons} assets/simple-icons
   '';
-
-  gitHashes = {
-    ente_crypto_dart = "sha256-xBBK9BdXh4+OTj+Jkf3zh5sMZjXtvhyuE1R5LFE8iTY=";
-    flutter_local_authentication = "sha256-r50jr+81ho+7q2PWHLf4VnvNJmhiARZ3s4HUpThCgc0=";
-    flutter_secure_storage_linux = "sha256-Rp+b6ZRH7F5AnM5UvYzfVjprXkpeeA7V6Ep/oYqDeiM=";
-    sqflite = "sha256-+XTVtkFJ94VifwnutvUuAqqiyWwrcEiZ3Uz0H4D9zWA=";
-    figma_squircle = "sha256-FLjABaJzrK3H5svbRb6306FxD5L6dMfddFXpXpYgH3s=";
-  };
 
   nativeBuildInputs = [
     copyDesktopItems
