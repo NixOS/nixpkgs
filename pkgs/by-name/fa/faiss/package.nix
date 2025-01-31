@@ -25,7 +25,7 @@
 
 let
   pname = "faiss";
-  version = "1.9.0";
+  version = "1.10.0";
 
   inherit (cudaPackages) flags backendStdenv;
 
@@ -50,15 +50,8 @@ stdenv.mkDerivation {
     owner = "facebookresearch";
     repo = "faiss";
     tag = "v${version}";
-    hash = "sha256-P8TynU6jz5NbcWLdI7n4LX5Gdz0Ks72bmOzQ3LGjQCQ=";
+    hash = "sha256-Jws6AW0rj6N/MOoaxK6N7KaPkjCYN47Il0xzyKZ7Wc0=";
   };
-
-  postPatch = lib.optionalString pythonSupport ''
-    substituteInPlace faiss/python/loader.py \
-      --replace-fail \
-      "# platform-dependent legacy fallback using numpy.distutils.cpuinfo" \
-      "return False"
-  '';
 
   nativeBuildInputs =
     [ cmake ]
