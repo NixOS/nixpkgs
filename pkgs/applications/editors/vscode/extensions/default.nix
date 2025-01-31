@@ -4039,7 +4039,7 @@ let
         };
       };
 
-      platformio.platformio-vscode-ide = callPackage ./platformio.platformio-vscode-ide {};
+      platformio.platformio-vscode-ide = callPackage ./platformio.platformio-vscode-ide { };
 
       pollywoggames.pico8-ls = buildVscodeMarketplaceExtension {
         mktplcRef = {
