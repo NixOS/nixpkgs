@@ -16,11 +16,12 @@
   nixosTests,
   xcbuild,
   faketty,
+  git,
 }:
 
 buildGoModule rec {
   pname = "grafana";
-  version = "11.3.2";
+  version = "11.3.3";
 
   subPackages = [
     "pkg/cmd/grafana"
@@ -32,7 +33,7 @@ buildGoModule rec {
     owner = "grafana";
     repo = "grafana";
     rev = "v${version}";
-    hash = "sha256-m/bdcJ5HuQhDYtLLqtm+TSfXYPkEUZaNQRMIfcqA79s=";
+    hash = "sha256-E/yuPzoB5g0obIsRJ+5AcsNuZbMKHfl23+i1YMN7Tig=";
   };
 
   # borrowed from: https://github.com/NixOS/nixpkgs/blob/d70d9425f49f9aba3c49e2c389fe6d42bac8c5b0/pkgs/development/tools/analysis/snyk/default.nix#L20-L22
@@ -56,6 +57,7 @@ buildGoModule rec {
       jq
       moreutils
       python3
+      git
       # @esfx/equatable@npm:1.0.2 fails to build on darwin as it requires `xcbuild`
     ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcbuild ];
     buildPhase = ''
@@ -74,9 +76,9 @@ buildGoModule rec {
     outputHashMode = "recursive";
     outputHash =
       rec {
-        x86_64-linux = "sha256-5/l0vXVjHC4oG7ahVscJOwS74be7F8jei9nq6m2v2tQ=";
+        x86_64-linux = "sha256-KmrbfE4QQV/PBoR/SdNqSJxF01xqZFMI4dz1JZ+E4Kg=";
         aarch64-linux = x86_64-linux;
-        aarch64-darwin = "sha256-+texKSlcvtoi83ySEXy2E4SqnfyQ0l4MixTBpdemWvI=";
+        aarch64-darwin = "sha256-pfEf49Cvx9P74SIUqQj4emwX+VBYfa7+BXu+nL1kBc8=";
         x86_64-darwin = aarch64-darwin;
       }
       .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
@@ -84,7 +86,7 @@ buildGoModule rec {
 
   disallowedRequisites = [ offlineCache ];
 
-  vendorHash = "sha256-3dRXvBmorItNa2HAFhEhMxKwD4LSKSgTUSjukOV2RSg=";
+  vendorHash = "sha256-m4Uu6cY9tT3Mn70xWqLz/8zom1koTL0uxyX/4Q5iBGY=";
 
   proxyVendor = true;
 
