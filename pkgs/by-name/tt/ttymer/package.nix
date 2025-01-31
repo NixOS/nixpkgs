@@ -24,5 +24,6 @@ buildGoModule rec {
     changelog = "https://github.com/darwincereska/ttymer/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ darwincereska ];
+    mainProgram = "ttymer";
   };
 }
