@@ -29,13 +29,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zipline";
-  version = "3.7.11";
+  version = "3.7.12";
 
   src = fetchFromGitHub {
     owner = "diced";
     repo = "zipline";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sogsPx6vh+1+ew9o3/0B4yU9I/Gllo9XLJqvMvGZ89Q=";
+    hash = "sha256-i3IGcSxIhy8jmCMsDJGGszYoFsShBfbv7SjTQL1dDM0=";
   };
 
   patches = [
