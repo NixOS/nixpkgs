@@ -5,7 +5,7 @@
   nixosTests,
 }:
 
-php.buildComposerProject (finalAttrs: {
+php.buildComposerProject2 (finalAttrs: {
   pname = "kimai";
   version = "2.28.0";
 
@@ -26,7 +26,6 @@ php.buildComposerProject (finalAttrs: {
         mbstring
         pdo
         tokenizer
-        xml
         xsl
         zip
       ])
@@ -39,7 +38,7 @@ php.buildComposerProject (finalAttrs: {
     '';
   };
 
-  vendorHash = "sha256-xa0vdlCxKe5QPsqVZ61HcUcxnYYbb7w+Qn3PBEmUkH0=";
+  vendorHash = "sha256-E0l6eeMlXFmsZ1v27/v4DbbmiINxXf+t2H/Xcr/hocs=";
 
   composerNoPlugins = false;
   composerNoScripts = false;
