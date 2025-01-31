@@ -10277,6 +10277,8 @@ self: super: with self; {
 
   pgpy = callPackage ../development/python-modules/pgpy { };
 
+  pgpy-dtc = callPackage ../development/python-modules/pgpy-dtc { };
+
   pgsanity = callPackage ../development/python-modules/pgsanity { };
 
   pgspecial = callPackage ../development/python-modules/pgspecial { };
