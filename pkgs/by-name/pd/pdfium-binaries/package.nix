@@ -5,6 +5,7 @@
   python3Packages,
 }:
 let
+  # also update rev of headers in python3Packages.pypdfium2
   version = "6968";
   src =
     let
