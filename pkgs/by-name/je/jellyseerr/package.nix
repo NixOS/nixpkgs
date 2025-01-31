@@ -4,30 +4,30 @@
   fetchFromGitHub,
   stdenv,
   makeWrapper,
-  nodejs_20,
+  nodejs_22,
   python3,
   sqlite,
   nix-update-script,
 }:
 
 let
-  nodejs = nodejs_20;
+  nodejs = nodejs_22;
   pnpm = pnpm_9.override { inherit nodejs; };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jellyseerr";
-  version = "2.2.3";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "Fallenbagel";
     repo = "jellyseerr";
-    rev = "v${version}";
-    hash = "sha256-JkbmCyunaMngAKUNLQHxfa1pktXxTjeL6ngvIgiAsGo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-vAMuiHcf13CDyOB0k36DXUk+i6K6h/R7dmBLJsMkzNA=";
   };
 
   pnpmDeps = pnpm.fetchDeps {
-    inherit pname version src;
-    hash = "sha256-1r2+aeRb6zdpqqimufibVRjeAdvwHL0GiQSu5pHBh+U=";
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-iSzs+lMQzcFjUz4K3rYP0I6g/wVz6u49FSQuPHXbVRM=";
   };
 
   buildInputs = [ sqlite ];
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Fork of overseerr for jellyfin support";
     homepage = "https://github.com/Fallenbagel/jellyseerr";
     longDescription = ''
@@ -79,9 +79,9 @@ stdenv.mkDerivation rec {
       requests for your media library. It is a a fork of Overseerr built to
       bring support for Jellyfin & Emby media servers!
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ camillemndn ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.camillemndn ];
+    platforms = lib.platforms.linux;
     mainProgram = "jellyseerr";
   };
-}
+})
