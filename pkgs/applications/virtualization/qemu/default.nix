@@ -226,6 +226,9 @@ stdenv.mkDerivation (finalAttrs: {
     # injected by the pkgsStatic stdenv
     # <https://github.com/NixOS/nixpkgs/issues/83667>
     rm -f $out/nix-support/propagated-build-inputs
+  '' + lib.optionalString finalAttrs.separateDebugInfo ''
+    # HACK: remove broken symlink created by hook
+    rm $debug/lib/debug/s390-ccw.img
   '';
   preBuild = "cd build";
 
