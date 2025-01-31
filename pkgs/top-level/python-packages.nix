@@ -16304,6 +16304,8 @@ self: super: with self; {
 
   titlecase = callPackage ../development/python-modules/titlecase { };
 
+  tivars = callPackage ../development/python-modules/tivars { };
+
   tld = callPackage ../development/python-modules/tld { };
 
   tlds = callPackage ../development/python-modules/tlds { };
