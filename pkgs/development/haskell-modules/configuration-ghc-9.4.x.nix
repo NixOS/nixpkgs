@@ -89,9 +89,6 @@ in
     ] ++ drv.testFlags or [ ];
   }) (doJailbreak super.hpack);
 
-  # https://github.com/sjakobi/bsb-http-chunked/issues/38
-  bsb-http-chunked = dontCheck super.bsb-http-chunked;
-
   # 2022-08-01: Tests are broken on ghc 9.2.4: https://github.com/wz1000/HieDb/issues/46
   hiedb = dontCheck super.hiedb;
 

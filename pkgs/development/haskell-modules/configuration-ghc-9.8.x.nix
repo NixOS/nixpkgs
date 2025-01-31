@@ -95,7 +95,6 @@ self: super: {
   # Test suite issues
   #
   unordered-containers = dontCheck super.unordered-containers; # ChasingBottoms doesn't support base 4.20
-  bsb-http-chunked = dontCheck super.bsb-http-chunked; # umaintained, test suite doesn't compile anymore
   pcre-heavy = dontCheck super.pcre-heavy; # GHC warnings cause the tests to fail
 
   #
