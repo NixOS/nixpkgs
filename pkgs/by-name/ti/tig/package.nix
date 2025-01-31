@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tig";
-  version = "2.5.10";
+  version = "2.5.11";
 
   src = fetchFromGitHub {
     owner = "jonas";
     repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "sha256-WTrw7WaSqC2fp76fPvfogWTibev0Hg0LW2x4umc3+1Q=";
+    sha256 = "sha256-LFuuhivEg5J7TmrAv/WsKWMsbip0PszuKLPgLLeRzkA=";
   };
 
   nativeBuildInputs = [
