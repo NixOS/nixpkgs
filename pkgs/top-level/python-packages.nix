@@ -9380,6 +9380,8 @@ self: super: with self; {
 
   py-ccm15 = callPackage ../development/python-modules/py-ccm15 { };
 
+  py-datastruct = callPackage ../development/python-modules/py-datastruct { };
+
   py-deprecate = callPackage ../development/python-modules/py-deprecate { };
 
   py-ecc = callPackage ../development/python-modules/py-ecc { };
