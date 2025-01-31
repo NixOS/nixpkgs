@@ -11620,6 +11620,11 @@
     githubId = 1792886;
     name = "Julien Malka";
   };
+  juliusfreudenberger = {
+    name = "Julius Freudenberger";
+    github = "JuliusFreudenberger";
+    githubId = 13383409;
+  };
   juliusrickert = {
     email = "nixpkgs@juliusrickert.de";
     github = "juliusrickert";
