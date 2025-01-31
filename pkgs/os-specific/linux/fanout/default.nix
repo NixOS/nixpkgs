@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   kernel,
+  kernelModuleMakeFlags,
   kmod,
   nixosTests,
 }:
@@ -33,7 +34,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ kmod ] ++ kernel.moduleBuildDependencies;
 
-  makeFlags = kernel.moduleMakeFlags ++ [
+  makeFlags = kernelModuleMakeFlags ++ [
     "KERNELDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
 

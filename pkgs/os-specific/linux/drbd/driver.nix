@@ -3,6 +3,7 @@
   lib,
   fetchurl,
   kernel,
+  kernelModuleMakeFlags,
   flex,
   coccinelle,
   python3,
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
     python3
   ];
 
-  makeFlags = kernel.moduleMakeFlags ++ [
+  makeFlags = kernelModuleMakeFlags ++ [
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "SPAAS=false"
   ];
