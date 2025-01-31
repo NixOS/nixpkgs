@@ -11017,6 +11017,8 @@ self: super: with self; {
 
   podcats = callPackage ../development/python-modules/podcats { };
 
+  podgen = callPackage ../development/python-modules/podgen { };
+
   podman = callPackage ../development/python-modules/podman { };
 
   poetry-core = callPackage ../development/python-modules/poetry-core { };
@@ -16329,6 +16331,8 @@ self: super: with self; {
   tinytuya = callPackage ../development/python-modules/tinytuya { };
 
   titlecase = callPackage ../development/python-modules/titlecase { };
+
+  tivars = callPackage ../development/python-modules/tivars { };
 
   tld = callPackage ../development/python-modules/tld { };
 

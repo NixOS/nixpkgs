@@ -51,5 +51,10 @@ python3Packages.buildPythonApplication {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ happysalada ];
     mainProgram = "whisper-ctranslate2";
+    badPlatforms = [
+      # terminate called after throwing an instance of 'onnxruntime::OnnxRuntimeException'
+      #   what():  /build/source/include/onnxruntime/core/common/logging/logging.h:320 static const onnxruntime::logging::Logger& onnxruntime::logging::LoggingManager::DefaultLogger() Attempt to use DefaultLogger but none has been registered.
+      "aarch64-linux"
+    ];
   };
 }
