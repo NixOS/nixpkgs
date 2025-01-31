@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -28,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "sentence-transformers";
-  version = "3.3.1";
+  version = "3.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "UKPLab";
     repo = "sentence-transformers";
     tag = "v${version}";
-    hash = "sha256-D8LHzEVHRuayod084B05cL3OvZiO1ByDZLxROGxTD0I=";
+    hash = "sha256-TNqCukHdjQYxK/UkAV/lm+TTAm5NyoZjVPUyHPyE3Ko=";
   };
 
   build-system = [ setuptools ];
@@ -64,14 +63,18 @@ buildPythonPackage rec {
 
   disabledTests = [
     # Tests require network access
+    "test_LabelAccuracyEvaluator"
+    "test_ParaphraseMiningEvaluator"
+    "test_TripletEvaluator"
     "test_cmnrl_same_grad"
     "test_forward"
     "test_initialization_with_embedding_dim"
     "test_initialization_with_embedding_weights"
-    "test_LabelAccuracyEvaluator"
+    "test_loading_model2vec"
+    "test_model_card_base"
     "test_model_card_reuse"
+    "test_nanobeir_evaluator"
     "test_paraphrase_mining"
-    "test_ParaphraseMiningEvaluator"
     "test_save_and_load"
     "test_simple_encode"
     "test_tokenize"

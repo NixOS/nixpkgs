@@ -282,7 +282,7 @@ stdenv.mkDerivation {
     # b2 needs to be explicitly told how to find Python when cross-compiling
     + lib.optionalString enablePython ''
       cat << EOF >> user-config.jam
-      using python : : ${python.interpreter}
+      using python : : ${python.pythonOnBuildForHost.interpreter}
         : ${python}/include/python${python.pythonVersion}
         : ${python}/lib
         ;

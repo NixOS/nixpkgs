@@ -51,6 +51,10 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
+    python3
+    libsearpc # searpc-codegen.py
+    vala # valac
+    which
   ];
 
   buildInputs = [
@@ -64,8 +68,6 @@ stdenv.mkDerivation {
     fuse
     libarchive
     libjwt
-    which
-    vala
     libevhtp
     oniguruma
   ];
