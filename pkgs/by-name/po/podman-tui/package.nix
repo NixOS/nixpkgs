@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, buildGoModule, testers, podman-tui }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildGoModule,
+  testers,
+  podman-tui,
+}:
 
 buildGoModule rec {
   pname = "podman-tui";
@@ -15,15 +22,15 @@ buildGoModule rec {
 
   env.CGO_ENABLED = 0;
 
-  tags = [ "containers_image_openpgp" "remote" ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin "darwin";
+  tags = [
+    "containers_image_openpgp"
+    "remote"
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin "darwin";
 
-  ldflags = [ "-s" "-w" ];
-
-  preCheck = ''
-    export USER="$(whoami)"
-    export HOME="$(mktemp -d)"
-  '';
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   checkFlags =
     let
