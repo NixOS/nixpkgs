@@ -8,11 +8,16 @@
   re,
   yojson,
   nixosTests,
+  version ? "2.16.0",
 }:
-
-buildDunePackage rec {
+let
+  atdgen-codec-runtime-override = atdgen-codec-runtime.override {
+    inherit version;
+  };
+in
+buildDunePackage {
   pname = "atd";
-  inherit (atdgen-codec-runtime) version src;
+  inherit (atdgen-codec-runtime-override) version src;
 
   minimalOCamlVersion = "4.08";
 
@@ -28,11 +33,11 @@ buildDunePackage rec {
     smoke-test = nixosTests.atd;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Syntax for cross-language type definitions";
     homepage = "https://github.com/mjambon/atd";
-    license = licenses.mit;
-    maintainers = with maintainers; [ aij ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ aij ];
     mainProgram = "atdcat";
   };
 }
