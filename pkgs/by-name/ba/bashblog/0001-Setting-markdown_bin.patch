@@ -1,0 +1,25 @@
+From 1990ac93c9dbf3ada0eb2f045ef1aa95bbef7018 Mon Sep 17 00:00:00 2001
+From: "P. R. d. O" <d.ol.rod@tutanota.com>
+Date: Thu, 21 Apr 2022 07:40:30 -0600
+Subject: [PATCH] Setting markdown_bin
+
+---
+ bb.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/bb.sh b/bb.sh
+index 9d8e645..40fb54d 100755
+--- a/bb.sh
++++ b/bb.sh
+@@ -160,7 +160,7 @@ global_variables() {
+ 
+     # Markdown location. Trying to autodetect by default.
+     # The invocation must support the signature 'markdown_bin in.md > out.html'
+-    [[ -f Markdown.pl ]] && markdown_bin=./Markdown.pl || markdown_bin=$(which Markdown.pl 2>/dev/null || which markdown 2>/dev/null)
++    markdown_bin=@markdown_path@
+ }
+ 
+ # Check for the validity of some variables
+-- 
+2.35.1
+

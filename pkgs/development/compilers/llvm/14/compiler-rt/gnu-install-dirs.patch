@@ -1,0 +1,42 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 3a41aa43e406..f000cee6eae0 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -5,6 +5,8 @@
+
+ cmake_minimum_required(VERSION 3.13.4)
+
++include(GNUInstallDirs)
++
+ # Check if compiler-rt is built as a standalone project.
+ if (CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR OR COMPILER_RT_STANDALONE_BUILD)
+   project(CompilerRT C CXX ASM)
+diff --git a/cmake/base-config-ix.cmake b/cmake/base-config-ix.cmake
+index d7b0124f3546..3e111146df4d 100644
+--- a/cmake/base-config-ix.cmake
++++ b/cmake/base-config-ix.cmake
+@@ -67,7 +67,7 @@ if (LLVM_TREE_AVAILABLE)
+ else()
+     # Take output dir and install path from the user.
+   set(COMPILER_RT_OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR} CACHE PATH
+-    "Path where built compiler-rt libraries should be stored.")
++    "Path where built compiler-rt build artifacts should be stored.")
+   set(COMPILER_RT_EXEC_OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/bin CACHE PATH
+     "Path where built compiler-rt executables should be stored.")
+   set(COMPILER_RT_INSTALL_PATH "" CACHE PATH
+@@ -99,13 +99,13 @@ endif()
+ if(LLVM_ENABLE_PER_TARGET_RUNTIME_DIR AND NOT APPLE)
+   set(COMPILER_RT_OUTPUT_LIBRARY_DIR
+     ${COMPILER_RT_OUTPUT_DIR}/lib)
+-  extend_path(default_install_path "${COMPILER_RT_INSTALL_PATH}" lib)
++  extend_path(default_install_path "${COMPILER_RT_INSTALL_PATH}" "${CMAKE_INSTALL_LIBDIR}")
+   set(COMPILER_RT_INSTALL_LIBRARY_DIR "${default_install_path}" CACHE PATH
+     "Path where built compiler-rt libraries should be installed.")
+ else(LLVM_ENABLE_PER_TARGET_RUNTIME_DIR AND NOT APPLE)
+   set(COMPILER_RT_OUTPUT_LIBRARY_DIR
+     ${COMPILER_RT_OUTPUT_DIR}/lib/${COMPILER_RT_OS_DIR})
+-  extend_path(default_install_path "${COMPILER_RT_INSTALL_PATH}" "lib/${COMPILER_RT_OS_DIR}")
++  extend_path(default_install_path "${COMPILER_RT_INSTALL_PATH}" "${CMAKE_INSTALL_LIBDIR}/${COMPILER_RT_OS_DIR}")
+   set(COMPILER_RT_INSTALL_LIBRARY_DIR "${default_install_path}" CACHE PATH
+     "Path where built compiler-rt libraries should be installed.")
+ endif()
