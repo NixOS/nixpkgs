@@ -19,6 +19,7 @@ buildGoModule rec {
   meta = {
     description = "Simple command line timer for linux written in go";
     homepage = "https://github.com/darwincereska/ttymer";
+    changelog = "https://github.com/darwincereska/ttymer/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ darwincereska ];
   };
