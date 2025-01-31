@@ -10,7 +10,7 @@ php.buildComposerProject2 (finalAttrs: {
   src = fetchFromGitHub {
     owner = "simplesamlphp";
     repo = "simplesamlphp";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Qmy9fuZq8MBqvYV6/u3Dg92pHHicuUhdNeB22u4hwwA=";
   };
 
