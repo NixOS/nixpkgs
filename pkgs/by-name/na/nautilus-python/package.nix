@@ -46,6 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk-doc
     docbook-xsl-nons
     docbook_xml_dtd_412
+    python3.pythonOnBuildForHost
   ];
 
   buildInputs = [

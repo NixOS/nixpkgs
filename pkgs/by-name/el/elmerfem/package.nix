@@ -58,6 +58,8 @@ stdenv.mkDerivation rec {
 
   storepath = placeholder "out";
 
+  NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+
   cmakeFlags = [
     "-DELMER_INSTALL_LIB_DIR=${storepath}/lib"
     "-DWITH_OpenMP:BOOLEAN=TRUE"

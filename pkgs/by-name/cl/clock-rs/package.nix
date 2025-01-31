@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "06spnadlgy7902bqhhi6019ay5y55qfrarsfidp938icali9q5pi";
   };
 
-  cargoHash = "sha256-ir/IwhREheMSdElLYqp3/zHE54BMAK5/7f5/wyTd1yc=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-3XIPrKt6oYugIo5erBE/od55AvBGEZe46l8DMXhhzF4=";
 
   meta = {
     description = "Modern, digital clock that effortlessly runs in your terminal";
