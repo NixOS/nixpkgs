@@ -55,6 +55,32 @@ let
   # Use this rather than `rec { ... }` below for sake of overlays.
   inherit (pkgs.haskell) compiler packages;
 
+  # - We refer to the first two parts of released GHC's version numbers as
+  #   release series, e.g. "9.8".
+  # - The second part is always even for releases (and alphas/release candidates),
+  #   GHCs master branch uses an odd part.
+  # - In nixpkgs all common infrastructure is identified by the (stable) release
+  #   series. Uneven version numbers (e.g. ghcHEAD) should use the next even
+  #   one for identifying configurations etc. to use.
+  #
+  # To aid with this toGhcReleaseSeriesVersion takes a full GHC version number
+  # and returns the matching (even) release series.
+  toGhcReleaseSeriesVersion =
+    version:
+    let
+      parts = lib.splitVersion version;
+    in
+    lib.concatStringsSep "." (
+      lib.genList (
+        i:
+        let
+          part = lib.elemAt parts i;
+          parsed = lib.toInt part;
+        in
+        if i == 1 && lib.mod parsed 2 == 1 then toString (parsed + 1) else part
+      ) (lib.length parts)
+    );
+
   # Given a list of version components (think builtins.splitVersion) return
   # all matching rules from ghcRules, merged by precedence.
   #
@@ -329,15 +355,15 @@ in
       ghc912 = compiler.ghc9121;
       ghcHEAD =
         let
-          major = 9;
-          minor = 13;
-          ghc = makeGhc
-            ../development/compilers/ghc/head.nix
-            # GHC's master branch always has an odd version minor number.
-            # Our rules/configurations use the even version number of the following release.
-            ghcRules."${toString major}.${toString (minor + 1)}";
+          # TODO(@sternensemann): can we avoid tracking the version in two places?
+          majorMinor = "9.13";
+          ghc =
+            makeGhc ../development/compilers/ghc/head.nix
+              # GHC's master branch always has an odd version minor number.
+              # Our rules/configurations use the even version number of the following release.
+              ghcRules.${toGhcReleaseSeriesVersion majorMinor};
         in
-        assert lib.hasPrefix "${toString major}.${toString minor}" ghc.version;
+        assert lib.hasPrefix majorMinor ghc.version;
         ghc;
     }
     // ghcsByVersion;
