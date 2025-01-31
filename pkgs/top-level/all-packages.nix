@@ -6382,8 +6382,6 @@ with pkgs;
     withQt = true;
   };
 
-  lessc = nodePackages.less;
-
   lobster = callPackage ../development/compilers/lobster {
     inherit (darwin.apple_sdk.frameworks)
       CoreFoundation Cocoa AudioToolbox OpenGL Foundation ForceFeedback;
