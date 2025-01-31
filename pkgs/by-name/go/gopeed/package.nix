@@ -68,6 +68,8 @@ flutter324.buildFlutterApplication {
     install -Dm644 assets/icon/icon_1024.png $out/share/icons/hicolor/1024x1024/apps/com.gopeed.Gopeed.png
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = metaCommon // {
     mainProgram = "gopeed";
   };
