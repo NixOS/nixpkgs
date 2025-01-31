@@ -12464,6 +12464,12 @@
     githubId = 787421;
     name = "Kevin Quick";
   };
+  kr-nn = {
+    name = "Kyle Robinson";
+    email = "kyle@nocturnalnerd.xyz";
+    github = "kr-nn";
+    githubId = 84939608;
+  };
   kraanzu = {
     name = "Murli Tawari";
     email = "kraanzu@gmail.com";
