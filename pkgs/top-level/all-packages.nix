@@ -3117,7 +3117,6 @@ with pkgs;
   };
 
   rocmPackages = rocmPackages_6;
-  rocmPackages_5 = recurseIntoAttrs (callPackage ../development/rocm-modules/5 { });
   rocmPackages_6 = recurseIntoAttrs (callPackage ../development/rocm-modules/6 { });
 
   solo2-cli = callPackage ../tools/security/solo2-cli {
