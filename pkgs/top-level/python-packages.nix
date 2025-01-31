@@ -1725,6 +1725,8 @@ self: super: with self; {
 
   bjoern = callPackage ../development/python-modules/bjoern { };
 
+  bk7231tools = callPackage ../development/python-modules/bk7231tools { };
+
   bkcharts = callPackage ../development/python-modules/bkcharts { };
 
   black = callPackage ../development/python-modules/black { };
