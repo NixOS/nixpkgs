@@ -5,7 +5,6 @@
   rustPlatform,
   cargo,
   rustc,
-  python,
 }:
 
 python3Packages.buildPythonApplication rec {
