@@ -378,6 +378,37 @@ in
       bh = buildPackages.haskell;
     in
     {
+      # The integer-simple attribute set contains package sets for all the GHC compilers
+      # using integer-simple instead of integer-gmp.
+      integer-simple =
+        let
+          integerSimpleGhcNames = pkgs.lib.filter (name: builtins.elem name integerSimpleIncludes) (
+            pkgs.lib.attrNames packages
+          );
+        in
+        pkgs.lib.genAttrs integerSimpleGhcNames (
+          name:
+          packages.${name}.override (oldAttrs: {
+            ghc = bh.compiler.integer-simple.${name};
+            buildHaskellPackages = bh.packages.integer-simple.${name};
+            overrides = pkgs.lib.composeExtensions (oldAttrs.overrides or (_: _: { })) (
+              _: _: { integer-simple = null; }
+            );
+          })
+        );
+
+      native-bignum =
+        let
+          nativeBignumGhcNames = pkgs.lib.filter nativeBignumIncludePred (pkgs.lib.attrNames compiler);
+        in
+        pkgs.lib.genAttrs nativeBignumGhcNames (
+          name:
+          packages.${name}.override {
+            ghc = bh.compiler.native-bignum.${name};
+            buildHaskellPackages = bh.packages.native-bignum.${name};
+          }
+        );
+
       ghc865Binary = callPackage ../development/haskell-modules {
         buildHaskellPackages = bh.packages.ghc865Binary;
         ghc = bh.compiler.ghc865Binary;
@@ -402,109 +433,6 @@ in
         compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.6.x.nix { };
         packageSetConfig = bootstrapPackageSet;
       };
-      ghc8107 = callPackage ../development/haskell-modules {
-        buildHaskellPackages = bh.packages.ghc8107;
-        ghc = bh.compiler.ghc8107;
-        compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.10.x.nix { };
-      };
-      ghc810 = packages.ghc8107;
-      ghc902 = callPackage ../development/haskell-modules {
-        buildHaskellPackages = bh.packages.ghc902;
-        ghc = bh.compiler.ghc902;
-        compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.0.x.nix { };
-      };
-      ghc90 = packages.ghc902;
-      ghc925 = callPackage ../development/haskell-modules {
-        buildHaskellPackages = bh.packages.ghc925;
-        ghc = bh.compiler.ghc925;
-        compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.2.x.nix { };
-      };
-      ghc926 = callPackage ../development/haskell-modules {
-        buildHaskellPackages = bh.packages.ghc926;
-        ghc = bh.compiler.ghc926;
-        compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.2.x.nix { };
-      };
-      ghc927 = callPackage ../development/haskell-modules {
-        buildHaskellPackages = bh.packages.ghc927;
-        ghc = bh.compiler.ghc927;
-        compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.2.x.nix { };
-      };
-      ghc928 = callPackage ../development/haskell-modules {
-        buildHaskellPackages = bh.packages.ghc928;
-        ghc = bh.compiler.ghc928;
-        compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.2.x.nix { };
-      };
-      ghc92 = packages.ghc928;
-      ghc947 = callPackage ../development/haskell-modules {
-        buildHaskellPackages = bh.packages.ghc947;
-        ghc = bh.compiler.ghc947;
-        compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.4.x.nix { };
-      };
-      ghc948 = callPackage ../development/haskell-modules {
-        buildHaskellPackages = bh.packages.ghc948;
-        ghc = bh.compiler.ghc948;
-        compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.4.x.nix { };
-      };
-      ghc94 = packages.ghc948;
-      ghc963 = callPackage ../development/haskell-modules {
-        buildHaskellPackages = bh.packages.ghc963;
-        ghc = bh.compiler.ghc963;
-        compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.6.x.nix { };
-      };
-      ghc964 = callPackage ../development/haskell-modules {
-        buildHaskellPackages = bh.packages.ghc964;
-        ghc = bh.compiler.ghc964;
-        compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.6.x.nix { };
-      };
-      ghc965 = callPackage ../development/haskell-modules {
-        buildHaskellPackages = bh.packages.ghc965;
-        ghc = bh.compiler.ghc965;
-        compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.6.x.nix { };
-      };
-      ghc966 = callPackage ../development/haskell-modules {
-        buildHaskellPackages = bh.packages.ghc966;
-        ghc = bh.compiler.ghc966;
-        compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.6.x.nix { };
-      };
-      ghc96 = packages.ghc966;
-      ghc981 = callPackage ../development/haskell-modules {
-        buildHaskellPackages = bh.packages.ghc981;
-        ghc = bh.compiler.ghc981;
-        compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.8.x.nix { };
-      };
-      ghc982 = callPackage ../development/haskell-modules {
-        buildHaskellPackages = bh.packages.ghc982;
-        ghc = bh.compiler.ghc982;
-        compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.8.x.nix { };
-      };
-      ghc983 = callPackage ../development/haskell-modules {
-        buildHaskellPackages = bh.packages.ghc983;
-        ghc = bh.compiler.ghc983;
-        compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.8.x.nix { };
-      };
-      ghc984 = callPackage ../development/haskell-modules {
-        buildHaskellPackages = bh.packages.ghc984;
-        ghc = bh.compiler.ghc984;
-        compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.8.x.nix { };
-      };
-      ghc98 = packages.ghc984;
-      ghc9101 = callPackage ../development/haskell-modules {
-        buildHaskellPackages = bh.packages.ghc9101;
-        ghc = bh.compiler.ghc9101;
-        compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.10.x.nix { };
-      };
-      ghc910 = packages.ghc9101;
-      ghc9121 = callPackage ../development/haskell-modules {
-        buildHaskellPackages = bh.packages.ghc9121;
-        ghc = bh.compiler.ghc9121;
-        compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.12.x.nix { };
-      };
-      ghc912 = packages.ghc9121;
-      ghcHEAD = callPackage ../development/haskell-modules {
-        buildHaskellPackages = bh.packages.ghcHEAD;
-        ghc = bh.compiler.ghcHEAD;
-        compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.14.x.nix { };
-      };
 
       ghcjs = packages.ghcjs810;
       ghcjs810 = callPackage ../development/haskell-modules rec {
@@ -514,37 +442,28 @@ in
         packageSetConfig = callPackage ../development/haskell-modules/configuration-ghcjs-8.x.nix { };
       };
 
-      # The integer-simple attribute set contains package sets for all the GHC compilers
-      # using integer-simple instead of integer-gmp.
-      integer-simple =
-        let
-          integerSimpleGhcNames = pkgs.lib.filter (name: builtins.elem name integerSimpleIncludes) (
-            pkgs.lib.attrNames packages
-          );
-        in
-        pkgs.lib.genAttrs integerSimpleGhcNames (
-          name:
-          packages.${name}.override (oldAttrs: {
-            ghc = bh.compiler.integer-simple.${name};
-            buildHaskellPackages = bh.packages.integer-simple.${name};
-            overrides = pkgs.lib.composeExtensions (oldAttrs.overrides or (_: _: { })) (
-              _: _: { integer-simple = null; }
-            );
-          })
-        );
-
-      native-bignum =
-        let
-          nativeBignumGhcNames = pkgs.lib.filter nativeBignumIncludePred (
-            pkgs.lib.attrNames compiler
-          );
-        in
-        pkgs.lib.genAttrs nativeBignumGhcNames (
-          name:
-          packages.${name}.override {
-            ghc = bh.compiler.native-bignum.${name};
-            buildHaskellPackages = bh.packages.native-bignum.${name};
-          }
-        );
-    };
+      # TODO(sterni): default via ghcRules
+      ghc810 = packages.ghc8107;
+      ghc90 = packages.ghc902;
+      ghc92 = packages.ghc928;
+      ghc94 = packages.ghc948;
+      ghc96 = packages.ghc966;
+      ghc98 = packages.ghc984;
+      ghc910 = packages.ghc9101;
+      ghc912 = packages.ghc9121;
+    }
+    // lib.mapAttrs (
+      name: compiler:
+      callPackage ../development/haskell-modules {
+        # Even though we are passed the compiler by value, use the pkgs fix point to aid overlaying
+        # TODO(@sternenseemann): also use the fix point for the list of compilers,
+        # so overlays can add compilers and have their package sets created automatically (low prio).
+        ghc = bh.compiler.${name};
+        buildHaskellPackages = bh.packages.${name};
+        compilerConfig = callPackage (
+          ../development/haskell-modules
+          + "/configuration-ghc-${lib.versions.majorMinor (toGhcReleaseSeriesVersion compiler.version)}.x.nix"
+        ) { };
+      }
+    ) (ghcsByVersion // { inherit (bh.compiler) ghcHEAD; });
 }
