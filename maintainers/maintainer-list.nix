@@ -18467,6 +18467,13 @@
     githubId = 246631;
     keys = [ { fingerprint = "3E46 7EF1 54AA A1D0 C7DF  A694 E45C B17F 1940 CA52"; } ];
   };
+  prestonhager = {
+    name = "Preston Hager";
+    email = "preston@hagerfamily.com";
+    github = "PrestonHager";
+    githubId = 15862207;
+    keys = [ { fingerprint = "3C5C CAEA 1F71 F5A0 29C0  98F5 F2FF 516B 32A2 B82E"; } ];
+  };
   priegger = {
     email = "philipp@riegger.name";
     github = "priegger";
