@@ -756,6 +756,13 @@ self: super: {
   katt = dontCheck super.katt;
   language-slice = dontCheck super.language-slice;
 
+  # Bogus lower bound on data-default-class added via Hackage revison
+  # https://github.com/mrkkrp/req/pull/180#issuecomment-2628201485
+  req = overrideCabal {
+    revision = null;
+    editedCabalFile = null;
+  } super.req;
+
   # Group of libraries by same upstream maintainer for interacting with
   # Telegram messenger. Bit-rotted a bit since 2020.
   tdlib = appendPatch (fetchpatch {
