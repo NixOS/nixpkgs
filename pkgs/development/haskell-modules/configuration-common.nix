@@ -3024,6 +3024,29 @@ self: super: {
       sha256 = "sha256-IxtyHFKygbrUK7JTAytWBZVHh+M1xQTv2IPCG3mjTGE=";
       stripLen = 1;
     }) super.yesod-core;
+
+  bsb-http-chunked = lib.pipe super.bsb-http-chunked [
+    (lib.warnIf
+      (lib.versionOlder "0.0.0.4" super.bsb-http-chunked.version)
+      "override for haskellPackages.bsb-http-chunked may no longer be needed"
+    )
+    # Last released in 2018
+    # https://github.com/sjakobi/bsb-http-chunked/issues/38
+    # https://github.com/sjakobi/bsb-http-chunked/issues/45
+    (overrideSrc {
+      src = pkgs.fetchFromGitHub {
+        owner = "sjakobi";
+        repo = "bsb-http-chunked";
+        rev = "c0ecd72fe2beb1cf7de9340cc8b4a31045460532";
+        hash = "sha256-+UDxfywXPjxPuFupcB8veyMYWVQCKha64me9HADtFGg=";
+      };
+    })
+    # https://github.com/sjakobi/bsb-http-chunked/pull/49
+    (appendPatch (fetchpatch {
+      url = "https://github.com/sjakobi/bsb-http-chunked/commit/689bf9ce12b8301d0e13a68e4a515c2779b62947.patch";
+      sha256 = "sha256-ZdCXMhni+RGisRODiElObW5c4hKy2giWQmWnatqeRJo=";
+    }))
+  ];
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
 
 # Gogol Packages
