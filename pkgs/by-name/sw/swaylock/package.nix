@@ -13,6 +13,8 @@
   cairo,
   gdk-pixbuf,
   pam,
+  wrapGAppsNoGuiHook,
+  librsvg
 }:
 
 stdenv.mkDerivation rec {
@@ -22,7 +24,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "swaywm";
     repo = "swaylock";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-1+AXxw1gH0SKAxUa0JIhSzMbSmsfmBPCBY5IKaYtldg=";
   };
 
@@ -34,6 +36,8 @@ stdenv.mkDerivation rec {
     pkg-config
     scdoc
     wayland-scanner
+    wrapGAppsNoGuiHook
+    gdk-pixbuf
   ];
   buildInputs = [
     wayland
@@ -42,6 +46,7 @@ stdenv.mkDerivation rec {
     cairo
     gdk-pixbuf
     pam
+    librsvg
   ];
 
   mesonFlags = [
