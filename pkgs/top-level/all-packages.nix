@@ -163,6 +163,13 @@ with pkgs;
 
   __flattenIncludeHackHook = callPackage ../build-support/setup-hooks/flatten-include-hack { };
 
+  addBinToPathHook = callPackage (
+    { makeSetupHook }:
+    makeSetupHook {
+      name = "add-bin-to-path-hook";
+    } ../build-support/setup-hooks/add-bin-to-path.sh
+  ) { };
+
   autoreconfHook = callPackage (
     { makeSetupHook, autoconf, automake, gettext, libtool }:
     makeSetupHook {
@@ -852,6 +859,13 @@ with pkgs;
   setupDebugInfoDirs = makeSetupHook {
     name = "setup-debug-info-dirs-hook";
   } ../build-support/setup-hooks/setup-debug-info-dirs.sh;
+
+  writableTmpDirAsHomeHook = callPackage (
+    { makeSetupHook }:
+    makeSetupHook {
+      name = "writable-tmpdir-as-home-hook";
+    } ../build-support/setup-hooks/writable-tmpdir-as-home.sh
+  ) { };
 
   useOldCXXAbi = makeSetupHook {
     name = "use-old-cxx-abi-hook";
@@ -1762,10 +1776,6 @@ with pkgs;
   foxdot = with python3Packages; toPythonApplication foxdot;
 
   fluffychat-web = fluffychat.override { targetFlutterPlatform = "web"; };
-
-  gbl = callPackage ../tools/archivers/gbl {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
 
   genpass = callPackage ../tools/security/genpass { };
 
@@ -3612,6 +3622,12 @@ with pkgs;
   hdf5-cpp = hdf5.override { cppSupport = true; };
 
   hdf5-fortran = hdf5.override { fortranSupport = true; };
+
+  hdf5-fortran-mpi = hdf5.override {
+    fortranSupport = true;
+    mpiSupport = true;
+    cppSupport = false;
+  };
 
   hdf5-threadsafe = hdf5.override { threadsafe = true; };
 
@@ -12718,10 +12734,6 @@ with pkgs;
 
   polychromatic = qt6Packages.callPackage ../applications/misc/polychromatic { };
 
-  powerline-rs = callPackage ../tools/misc/powerline-rs {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
   qogir-kde = libsForQt5.callPackage ../data/themes/qogir-kde { };
 
   ricochet-refresh = callPackage ../by-name/ri/ricochet-refresh/package.nix {
@@ -14217,8 +14229,6 @@ with pkgs;
     libsoundio = null;
     portaudio = null;
   };
-
-  lsp-plugins = callPackage ../applications/audio/lsp-plugins { php = php82; };
 
   luminanceHDR = libsForQt5.callPackage ../applications/graphics/luminance-hdr { };
 
@@ -17068,6 +17078,15 @@ with pkgs;
   xflr5 = libsForQt5.callPackage ../applications/science/physics/xflr5 { };
 
   ### SCIENCE/PROGRAMMING
+
+  ### SCIENCE/GEOLOGY
+  pflotran = callPackage ../by-name/pf/pflotran/package.nix {
+    petsc = petsc.override {
+      hdf5-support = true;
+      hdf5 = hdf5-fortran-mpi;
+      petsc-optimized = true;
+    };
+  };
 
   ### SCIENCE/LOGIC
 

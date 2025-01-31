@@ -13,11 +13,11 @@ mkKdeDerivation rec {
   pname = "angelfish";
   inherit (sources.${pname}) version;
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     # include version in the name so we invalidate the FOD
     name = "${pname}-${version}";
     src = sources.${pname};
-    hash = "sha256-offD53HaPG0GQk+aPjRzhhc8d8wfHYmdaJ0X8NtluMU=";
+    hash = "sha256-5TMHytHLIjdzY6O1+V9do/JCfxFfBkYD+bd+FNLlrMk=";
   };
 
   extraNativeBuildInputs = [

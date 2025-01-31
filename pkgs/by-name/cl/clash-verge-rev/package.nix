@@ -30,7 +30,7 @@ let
     hash = "sha256-kZf5O3n0xmNUN0G4hAWQDN9Oj9K7PtLpv6jnhh1C5Hg=";
   };
 
-  service-cargo-hash = "sha256-uo/2QBsZzoTdwRiW0Kr7GGiQCpQH4lW4h5XHqWd5sTU=";
+  service-cargo-hash = "sha256-Sof0jnU5+IGWMmbqVqJmhUzDO6CRlFpwwzYx9Z5tZbk=";
 
   service = callPackage ./service.nix {
     inherit
