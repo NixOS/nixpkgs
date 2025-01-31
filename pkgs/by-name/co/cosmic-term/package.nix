@@ -78,19 +78,9 @@ rustPlatform.buildRustPackage rec {
     "-Wl,--pop-state"
   ];
 
-  # LD_LIBRARY_PATH can be removed once tiny-xlib is bumped above 0.2.2
   postInstall = ''
     wrapProgram "$out/bin/cosmic-term" \
-      --suffix XDG_DATA_DIRS : "${cosmic-icons}/share" \
-      --prefix LD_LIBRARY_PATH : ${
-        lib.makeLibraryPath [
-          libxkbcommon
-          vulkan-loader
-          xorg.libX11
-          xorg.libXcursor
-          xorg.libXi
-        ]
-      }
+      --suffix XDG_DATA_DIRS : "${cosmic-icons}/share"
   '';
 
   meta = with lib; {
