@@ -2,17 +2,20 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+
+  go-bindata,
+  makeWrapper,
 }:
 
 buildGoModule rec {
   pname = "go-bindata-assetfs";
-  version = "unstable-2022-04-12";
+  version = "unstable-2025-02-01";
 
   src = fetchFromGitHub {
-    owner = "elazarl";
+    owner = "elezarl";
     repo = "go-bindata-assetfs";
-    rev = "de3be3ce9537d87338bf26ac211d02d4fa568bb8";
-    hash = "sha256-yQgIaTl06nmIu8BfmQzrvEnlPQ2GQ/2nnvTmYXCL1oI=";
+    rev = "d06c361cdac6293509ed6ecb3d8ef0d46066a0f7";
+    hash = "sha256-rLeQbcv6V0Uc8iBEGMMnqxXcDJ2e91K96ZeYEYG6UCI=";
   };
 
   vendorHash = null;
@@ -21,6 +24,15 @@ buildGoModule rec {
     "-s"
     "-w"
   ];
+
+  nativeBuildInputs = [
+    go-bindata
+    makeWrapper
+  ];
+  postInstall = ''
+    wrapProgram $out/bin/go-bindata-assetfs \
+      --prefix PATH : ${go-bindata}/bin
+  '';
 
   meta = with lib; {
     description = "Serve embedded files from jteeuwen/go-bindata";
