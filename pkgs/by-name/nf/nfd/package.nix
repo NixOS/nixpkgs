@@ -12,7 +12,7 @@
   wafHook,
   websocketpp,
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  withWebSocket ? true,
+  withWebSocket ? false,
 }:
 
 stdenv.mkDerivation rec {
