@@ -514,6 +514,7 @@ with pkgs;
     antlr = antlr4_10;
     icu =  icu73;
     protobuf = protobuf_24;
+    stdenv = if stdenv.hostPlatform.isDarwin then llvmPackages_18.stdenv else stdenv;
   };
 
   fetchpatch = callPackage ../build-support/fetchpatch {
@@ -17365,10 +17366,6 @@ with pkgs;
 
   cytoscape = callPackage ../applications/science/misc/cytoscape {
     jre = openjdk17;
-  };
-
-  faiss = callPackage ../development/libraries/science/math/faiss {
-    pythonPackages = python3Packages;
   };
 
   faissWithCuda = faiss.override {
