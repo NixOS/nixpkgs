@@ -3,14 +3,13 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
-
   # nativeBuildInputs
   binaryen,
   lld,
   pkg-config,
   protobuf,
   rustfmt,
-
+  nasm,
   # buildInputs
   freetype,
   glib,
@@ -19,12 +18,19 @@
   openssl,
   vulkan-loader,
   wayland,
-
   versionCheckHook,
-
   # passthru
   nix-update-script,
   python3Packages,
+  # Expose features to the user for the wasm web viewer build
+  # So he can easily override them
+  # We omit the "analytics" feature because it is opt-out and not opt-in.
+  # More information can be found in there README:
+  # https://raw.githubusercontent.com/rerun-io/rerun/5a9794990c4903c088ad77174e65eb2573162d97/crates/utils/re_analytics/README.md
+  buildWebViewerFeatures ? [
+    "grpc"
+    "map_view"
+  ],
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -49,7 +55,38 @@ rustPlatform.buildRustPackage rec {
   cargoBuildFlags = [ "--package rerun-cli" ];
   cargoTestFlags = [ "--package rerun-cli" ];
   buildNoDefaultFeatures = true;
-  buildFeatures = [ "native_viewer" ];
+  buildFeatures = [
+    "native_viewer"
+    "web_viewer"
+    "nasm"
+  ];
+
+  # Forward as a bash environment variable to the preBuild hook
+  inherit buildWebViewerFeatures;
+
+  # When web_viewer is compiled, the wasm webviewer first needs to be built
+  # If this doesn't exist, the build will fail. More information: https://github.com/rerun-io/rerun/issues/6028
+  # The command is taken from https://github.com/rerun-io/rerun/blob/dd025f1384f9944d785d0fb75ca4ca1cd1792f17/pixi.toml#L198C72-L198C187
+  # Note that cargoBuildFeatures reference what buildFeatures is set to in stdenv.mkDerivation,
+  # so that user can easily create an overlay to set cargoBuildFeatures to what he needs
+  preBuild = ''
+    if [[ " $cargoBuildFeatures " == *" web_viewer "* ]]; then
+      # transform the environment variable that is a space separated list into a comma separated list
+      buildWebViewerFeatures=$(echo $buildWebViewerFeatures | tr ' ' ',')
+      # Create the features option only if there are features to pass
+      buildWebViewerFeaturesCargoOption=""
+      if [[ ! -z "$buildWebViewerFeatures" ]]; then
+        buildWebViewerFeaturesCargoOption="--features $buildWebViewerFeatures"
+        echo "Features passed to the web viewer build: $buildWebViewerFeatures"
+      else
+        echo "No features will be passed to the web viewer build"
+      fi
+      echo "Building the wasm web viewer for rerun's web_viewer feature"
+      cargo run -p re_dev_tools -- build-web-viewer --no-default-features $buildWebViewerFeaturesCargoOption --release -g
+    else
+      echo "web_viewer feature not enabled, skipping web viewer build."
+    fi
+  '';
 
   nativeBuildInputs = [
     (lib.getBin binaryen) # wasm-opt
@@ -60,6 +97,7 @@ rustPlatform.buildRustPackage rec {
     pkg-config
     protobuf
     rustfmt
+    nasm
   ];
 
   buildInputs = [
