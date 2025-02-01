@@ -60,7 +60,8 @@ buildGoModule rec {
       cacert
       jq
       moreutils
-      python3
+      # required to run old node-gyp
+      (python3.withPackages (ps: [ ps.distutils ]))
       git
       # @esfx/equatable@npm:1.0.2 fails to build on darwin as it requires `xcbuild`
     ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcbuild ];
@@ -102,7 +103,8 @@ buildGoModule rec {
     jq
     moreutils
     removeReferencesTo
-    python3
+    # required to run old node-gyp
+    (python3.withPackages (ps: [ ps.distutils ]))
     faketty
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcbuild ];
 
