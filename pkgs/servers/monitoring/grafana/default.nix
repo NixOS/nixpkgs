@@ -8,7 +8,7 @@
   wire,
   yarn,
   nodejs,
-  python3,
+  python311,
   cacert,
   jq,
   moreutils,
@@ -60,7 +60,7 @@ buildGoModule rec {
       cacert
       jq
       moreutils
-      python3
+      python311
       git
       # @esfx/equatable@npm:1.0.2 fails to build on darwin as it requires `xcbuild`
     ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcbuild ];
@@ -102,7 +102,7 @@ buildGoModule rec {
     jq
     moreutils
     removeReferencesTo
-    python3
+    python311
     faketty
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcbuild ];
 
