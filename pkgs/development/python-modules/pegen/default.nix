@@ -12,18 +12,18 @@
 buildPythonPackage rec {
   pname = "pegen";
   version = "0.3.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "we-like-parsers";
-    repo = pname;
+    repo = "pegen";
     tag = "v${version}";
     hash = "sha256-P4zX8za9lBlXhNPkQe9p136ggZEJh6fHfBr+DQKvtTg=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
