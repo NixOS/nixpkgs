@@ -66,6 +66,9 @@ mkAppleDerivation (finalAttrs: {
     # The Darwin SDK puts the headers in `include/ffi`. Add a symlink for compatibility.
     ''
       ln -s "$dev/include" "$dev/include/ffi"
+      # Make sure Apple’s header with availability annotations is installed in place of the generated one.
+      # Use `macCatalyst` instead of `iosmac` to avoid errors due to invalid availability annotations.
+      substitute darwin/include/ffi.h "$dev/include/ffi.h" --replace-fail iosmac macCatalyst
     ''
     # Install the trampoline dylib since it is build manually.
     + lib.optionalString stdenv.hostPlatform.isAarch64 ''
