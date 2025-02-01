@@ -97,5 +97,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     mainProgram = "pixelflasher";
     platforms = lib.platforms.all;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })
