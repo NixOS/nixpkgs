@@ -9,33 +9,46 @@
   numpy,
   pytest-xdist,
   pytestCheckHook,
+  pkg-config,
+  isa-l,
+  c-blosc2,
 }:
 
 buildPythonPackage rec {
   pname = "cramjam";
-  version = "2.8.3";
+  version = "2.9.1"; # make sure to update maturinBuildFlags
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "milesgranger";
     repo = "pyrus-cramjam";
     tag = "v${version}";
-    hash = "sha256-1KD5/oZjfdXav1ZByQoyyiDSzbmY4VJsSJg/FtUFdDE=";
+    hash = "sha256-s+dKoZftI+aXcie1quAo/Xmlt1BQrzoCjwesDiaNABY=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    hash = "sha256-Gpj/LUCx/ivYlmxNJnEZr8caEfV4OaQwEPNjz7vobsw=";
+    name = "${pname}-${version}";
+    hash = "sha256-xrqlVgAUTsqz7AOQdPCSxjRd/Z3ZVpr0qphw6qN6Wys=";
   };
-
-  buildAndTestSubdir = "cramjam-python";
 
   nativeBuildInputs = with rustPlatform; [
     cargoSetupHook
     maturinBuildHook
+    pkg-config
   ];
 
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
+  buildInputs = [
+    isa-l
+    c-blosc2
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
+
+  maturinBuildFlags = [
+    "--no-default-features"
+    "--features"
+    # default features from Cargo.toml, modified to specify -shared
+    "extension-module,snappy,lz4,bzip2,brotli,xz,zstd,gzip,zlib,deflate,blosc2-shared,use-system-isal-shared,igzip-shared,ideflate-shared,izlib-shared,use-system-blosc2-shared"
+  ];
 
   nativeCheckInputs = [
     hypothesis
@@ -44,14 +57,32 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "cramjam-python/tests" ];
+  # fix Hypothesis timeouts
+  preCheck = ''
+    echo >> tests/conftest.py <<EOF
+
+    import hypothesis
+
+    hypothesis.settings.register_profile(
+      "ci",
+      deadline=None,
+      print_blob=True,
+      derandomize=True,
+    )
+    EOF
+  '';
+
+  pytestFlagsArray = [
+    "tests"
+    "--hypothesis-profile"
+    "ci"
+  ];
 
   disabledTestPaths = [
-    "cramjam-python/benchmarks/test_bench.py"
     # test_variants.py appears to be flaky
     #
     # https://github.com/NixOS/nixpkgs/pull/311584#issuecomment-2117656380
-    "cramjam-python/tests/test_variants.py"
+    "tests/test_variants.py"
   ];
 
   pythonImportsCheck = [ "cramjam" ];
