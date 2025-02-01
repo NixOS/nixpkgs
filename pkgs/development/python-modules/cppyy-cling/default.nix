@@ -37,7 +37,9 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     cmake
-  ];
+  ] ++ (lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.DarwinTools
+  ]);
 
   propagatedBuildInputs = [
     setuptools
@@ -45,9 +47,7 @@ buildPythonPackage rec {
 
   buildInputs = [
     zlib
-  ] ++ (lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.DarwinTools
-  ]);
+  ];
 
   patches = [
     ./cling-setup.patch
